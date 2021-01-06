@@ -1,0 +1,3 @@
+        <#if memory.name=="BOARD_SDRAM">
+        *(.bss*)
+        </#if>

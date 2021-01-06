@@ -1,0 +1,1 @@
+        *(EXCLUDE_FILE(*flexspi_hyper_flash_ops.o *fsl_flexspi.o *fsl_clock.o) .text*)

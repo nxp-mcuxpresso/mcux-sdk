@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ksdk:examples xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd manifest.xsd">
+  <externalDefinitions>
+    <definition extID="utility.debug_console_lite.LPC54S018"/>
+    <definition extID="platform.utilities.assert_lite.LPC54S018"/>
+    <definition extID="platform.drivers.puf.LPC54S018"/>
+    <definition extID="platform.drivers.common.LPC54S018"/>
+    <definition extID="platform.drivers.clock.LPC54S018"/>
+    <definition extID="platform.drivers.power.LPC54S018"/>
+    <definition extID="platform.drivers.lpc_iocon.LPC54S018"/>
+    <definition extID="platform.drivers.lpc_gpio.LPC54S018"/>
+    <definition extID="platform.drivers.inputmux.LPC54S018"/>
+    <definition extID="device.LPC54S018_CMSIS.LPC54S018"/>
+    <definition extID="component.usart_adapter.LPC54S018"/>
+    <definition extID="component.lists.LPC54S018"/>
+    <definition extID="platform.drivers.flexcomm_usart.LPC54S018"/>
+    <definition extID="device.LPC54S018_startup.LPC54S018"/>
+    <definition extID="platform.drivers.flexcomm.LPC54S018"/>
+    <definition extID="platform.drivers.emc.LPC54S018"/>
+    <definition extID="platform.Include_core_cm4.LPC54S018"/>
+    <definition extID="platform.Include_common.LPC54S018"/>
+    <definition extID="platform.Include_dsp.LPC54S018"/>
+    <definition extID="platform.drivers.reset.LPC54S018"/>
+    <definition extID="platform.drivers.inputmux_connections.LPC54S018"/>
+    <definition extID="platform.utilities.misc_utilities.LPC54S018"/>
+    <definition extID="device.LPC54S018_system.LPC54S018"/>
+    <definition extID="iar"/>
+    <definition extID="mcuxpresso"/>
+    <definition extID="mdk"/>
+    <definition extID="armgcc"/>
+    <definition extID="com.nxp.mcuxpresso"/>
+  </externalDefinitions>
+  <example id="lpcxpresso54s018_puf" name="puf" dependency="utility.debug_console_lite.LPC54S018 platform.utilities.assert_lite.LPC54S018 platform.drivers.puf.LPC54S018 platform.drivers.common.LPC54S018 platform.drivers.clock.LPC54S018 platform.drivers.power.LPC54S018 platform.drivers.lpc_iocon.LPC54S018 platform.drivers.lpc_gpio.LPC54S018 platform.drivers.inputmux.LPC54S018 device.LPC54S018_CMSIS.LPC54S018 component.usart_adapter.LPC54S018 component.lists.LPC54S018 platform.drivers.flexcomm_usart.LPC54S018 device.LPC54S018_startup.LPC54S018 platform.drivers.flexcomm.LPC54S018 platform.drivers.emc.LPC54S018 platform.Include_core_cm4.LPC54S018 platform.Include_common.LPC54S018 platform.Include_dsp.LPC54S018 platform.drivers.reset.LPC54S018 platform.drivers.inputmux_connections.LPC54S018 platform.utilities.misc_utilities.LPC54S018 device.LPC54S018_system.LPC54S018" category="driver_examples/puf">
+    <projects>
+      <project type="com.crt.advproject.projecttype.exe" nature="org.eclipse.cdt.core.cnature"/>
+    </projects>
+    <toolchainSettings>
+      <toolchainSetting id_refs="com.nxp.mcuxpresso">
+        <option id="gnu.c.compiler.option.preprocessor.def.symbols" type="stringList">
+          <value>CPU_LPC54S018</value>
+          <value>__USE_CMSIS</value>
+          <value>W25Q128JVFM</value>
+          <value>CPU_LPC54S018JET180=1</value>
+        </option>
+        <option id="com.crt.advproject.gas.fpu" type="enum">
+          <value>com.crt.advproject.gas.fpu.fpv4.hard</value>
+        </option>
+        <option id="com.crt.advproject.gcc.fpu" type="enum">
+          <value>com.crt.advproject.gcc.fpu.fpv4.hard</value>
+        </option>
+        <option id="gnu.c.compiler.option.optimization.flags" type="string">
+          <value>-fno-common</value>
+        </option>
+        <option id="com.crt.advproject.c.misc.dialect" type="enum">
+          <value>com.crt.advproject.misc.dialect.gnu99</value>
+        </option>
+        <option id="gnu.c.compiler.option.misc.other" type="string">
+          <value>-c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin</value>
+        </option>
+        <option id="gnu.c.compiler.option.warnings.allwarn" type="boolean">
+          <value>false</value>
+        </option>
+        <option id="com.crt.advproject.link.fpu" type="enum">
+          <value>com.crt.advproject.link.fpu.fpv4.hard</value>
+        </option>
+        <option id="gnu.c.link.option.nostdlibs" type="boolean">
+          <value>true</value>
+        </option>
+        <option id="com.crt.advproject.link.memory.load.image" type="string">
+          <value>true;SRAMX</value>
+        </option>
+        <option id="com.crt.advproject.link.memory.data" type="string">
+          <value>SRAM_0_1_2_3</value>
+        </option>
+        <option id="com.crt.advproject.link.memory.heapAndStack" type="string">
+          <value>&amp;Heap:Default;Default;Default&amp;Stack:Default;Default;0x800</value>
+        </option>
+      </toolchainSetting>
+    </toolchainSettings>
+    <include_paths>
+      <include_path path="boards/lpcxpresso54s018/driver_examples/puf" project_relative_path="board" type="c_include"/>
+      <include_path path="boards/lpcxpresso54s018/driver_examples/puf" project_relative_path="lpcxpresso54s018/driver_examples/puf" type="c_include"/>
+      <include_path path="boards/lpcxpresso54s018" project_relative_path="board" type="c_include"/>
+    </include_paths>
+    <source path="boards/lpcxpresso54s018/driver_examples/puf/iar" project_relative_path="./" type="workspace" toolchain="iar">
+      <files mask="puf.ewd"/>
+      <files mask="puf.ewp"/>
+      <files mask="puf.eww"/>
+    </source>
+    <source path="boards/lpcxpresso54s018/driver_examples/puf/mdk" project_relative_path="./" type="workspace" toolchain="mdk">
+      <files mask="puf.uvprojx"/>
+      <files mask="puf.uvoptx"/>
+      <files mask="JLinkSettings.ini"/>
+      <files mask="puf.uvmpw"/>
+    </source>
+    <source path="boards/lpcxpresso54s018/driver_examples/puf/armgcc" project_relative_path="./" type="workspace" toolchain="armgcc">
+      <files mask="build_all.bat"/>
+      <files mask="build_all.sh"/>
+      <files mask="clean.bat"/>
+      <files mask="clean.sh"/>
+      <files mask="CMakeLists.txt"/>
+      <files mask="flags.cmake"/>
+      <files mask="config.cmake"/>
+      <files mask="build_debug.bat"/>
+      <files mask="build_debug.sh"/>
+      <files mask="build_release.bat"/>
+      <files mask="build_release.sh"/>
+    </source>
+    <source path="boards/lpcxpresso54s018/driver_examples/puf" project_relative_path="source" type="src">
+      <files mask="puf.c"/>
+    </source>
+    <source path="boards/lpcxpresso54s018/driver_examples/puf" project_relative_path="board" type="src">
+      <files mask="pin_mux.c"/>
+    </source>
+    <source path="boards/lpcxpresso54s018/driver_examples/puf" project_relative_path="board" type="c_include">
+      <files mask="pin_mux.h"/>
+    </source>
+    <source path="boards/lpcxpresso54s018" project_relative_path="board" type="src">
+      <files mask="board.c"/>
+      <files mask="clock_config.c"/>
+    </source>
+    <source path="boards/lpcxpresso54s018" project_relative_path="board" type="c_include">
+      <files mask="board.h"/>
+      <files mask="clock_config.h"/>
+    </source>
+    <source path="boards/lpcxpresso54s018/driver_examples/puf" project_relative_path="doc" type="doc" toolchain="iar mdk mcuxpresso armgcc">
+      <files mask="readme.txt"/>
+    </source>
+    <source path="boards/lpcxpresso54s018/driver_examples/puf/iar" project_relative_path="LPC54S018/iar" type="linker" toolchain="iar">
+      <files mask="LPC54S018_spifi_flash.icf"/>
+    </source>
+    <source path="boards/lpcxpresso54s018/driver_examples/puf/mdk" project_relative_path="LPC54S018/arm" type="linker" toolchain="mdk">
+      <files mask="LPC54S018_spifi_flash.scf"/>
+    </source>
+    <source path="boards/lpcxpresso54s018/driver_examples/puf/armgcc" project_relative_path="LPC54S018/gcc" type="linker" toolchain="armgcc">
+      <files mask="LPC54S018_spifi_flash.ld"/>
+    </source>
+    <source path="boards/lpcxpresso54s018/driver_examples/puf/mdk" project_relative_path="lpcxpresso54s018" type="configuration" toolchain="mdk">
+      <files mask="jlink_sramx_debug.ini"/>
+    </source>
+    <source path="boards/lpcxpresso54s018/driver_examples/puf/iar" project_relative_path="lpcxpresso54s018" type="other" toolchain="iar">
+      <files mask="jlink_qspi_plain_load.mac"/>
+    </source>
+  </example>
+</ksdk:examples>

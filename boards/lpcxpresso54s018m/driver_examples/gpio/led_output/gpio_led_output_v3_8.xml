@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ksdk:examples xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd manifest.xsd">
+  <externalDefinitions>
+    <definition extID="utility.debug_console_lite.LPC54S018M"/>
+    <definition extID="platform.utilities.assert_lite.LPC54S018M"/>
+    <definition extID="platform.drivers.lpc_gpio.LPC54S018M"/>
+    <definition extID="platform.drivers.common.LPC54S018M"/>
+    <definition extID="platform.drivers.clock.LPC54S018M"/>
+    <definition extID="platform.drivers.power.LPC54S018M"/>
+    <definition extID="platform.drivers.lpc_iocon.LPC54S018M"/>
+    <definition extID="platform.drivers.inputmux.LPC54S018M"/>
+    <definition extID="device.LPC54S018M_CMSIS.LPC54S018M"/>
+    <definition extID="component.usart_adapter.LPC54S018M"/>
+    <definition extID="component.lists.LPC54S018M"/>
+    <definition extID="platform.drivers.flexcomm_usart.LPC54S018M"/>
+    <definition extID="device.LPC54S018M_startup.LPC54S018M"/>
+    <definition extID="platform.drivers.flexcomm.LPC54S018M"/>
+    <definition extID="platform.drivers.emc.LPC54S018M"/>
+    <definition extID="platform.Include_core_cm4.LPC54S018M"/>
+    <definition extID="platform.Include_common.LPC54S018M"/>
+    <definition extID="platform.Include_dsp.LPC54S018M"/>
+    <definition extID="platform.drivers.reset.LPC54S018M"/>
+    <definition extID="platform.drivers.inputmux_connections.LPC54S018M"/>
+    <definition extID="platform.utilities.misc_utilities.LPC54S018M"/>
+    <definition extID="device.LPC54S018M_system.LPC54S018M"/>
+    <definition extID="iar"/>
+    <definition extID="mdk"/>
+    <definition extID="mcuxpresso"/>
+    <definition extID="armgcc"/>
+    <definition extID="com.nxp.mcuxpresso"/>
+  </externalDefinitions>
+  <example id="lpcxpresso54s018m_gpio_led_output" name="gpio_led_output" dependency="utility.debug_console_lite.LPC54S018M platform.utilities.assert_lite.LPC54S018M platform.drivers.lpc_gpio.LPC54S018M platform.drivers.common.LPC54S018M platform.drivers.clock.LPC54S018M platform.drivers.power.LPC54S018M platform.drivers.lpc_iocon.LPC54S018M platform.drivers.inputmux.LPC54S018M device.LPC54S018M_CMSIS.LPC54S018M component.usart_adapter.LPC54S018M component.lists.LPC54S018M platform.drivers.flexcomm_usart.LPC54S018M device.LPC54S018M_startup.LPC54S018M platform.drivers.flexcomm.LPC54S018M platform.drivers.emc.LPC54S018M platform.Include_core_cm4.LPC54S018M platform.Include_common.LPC54S018M platform.Include_dsp.LPC54S018M platform.drivers.reset.LPC54S018M platform.drivers.inputmux_connections.LPC54S018M platform.utilities.misc_utilities.LPC54S018M device.LPC54S018M_system.LPC54S018M" category="driver_examples/gpio">
+    <projects>
+      <project type="com.crt.advproject.projecttype.exe" nature="org.eclipse.cdt.core.cnature"/>
+    </projects>
+    <toolchainSettings>
+      <toolchainSetting id_refs="com.nxp.mcuxpresso">
+        <option id="gnu.c.compiler.option.preprocessor.def.symbols" type="stringList">
+          <value>CPU_LPC54S018M</value>
+          <value>__USE_CMSIS</value>
+          <value>CPU_LPC54S018J4MET180=1</value>
+        </option>
+        <option id="com.crt.advproject.gas.fpu" type="enum">
+          <value>com.crt.advproject.gas.fpu.fpv4.hard</value>
+        </option>
+        <option id="com.crt.advproject.gcc.fpu" type="enum">
+          <value>com.crt.advproject.gcc.fpu.fpv4.hard</value>
+        </option>
+        <option id="gnu.c.compiler.option.optimization.flags" type="string">
+          <value>-fno-common</value>
+        </option>
+        <option id="com.crt.advproject.c.misc.dialect" type="enum">
+          <value>com.crt.advproject.misc.dialect.gnu99</value>
+        </option>
+        <option id="gnu.c.compiler.option.misc.other" type="string">
+          <value>-c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin</value>
+        </option>
+        <option id="gnu.c.compiler.option.warnings.allwarn" type="boolean">
+          <value>false</value>
+        </option>
+        <option id="com.crt.advproject.link.fpu" type="enum">
+          <value>com.crt.advproject.link.fpu.fpv4.hard</value>
+        </option>
+        <option id="gnu.c.link.option.nostdlibs" type="boolean">
+          <value>true</value>
+        </option>
+        <option id="com.crt.advproject.link.memory.load.image" type="string">
+          <value>true;SRAMX</value>
+        </option>
+        <option id="com.crt.advproject.link.memory.data" type="string">
+          <value>SRAM_0_1_2_3</value>
+        </option>
+      </toolchainSetting>
+    </toolchainSettings>
+    <include_paths>
+      <include_path path="boards/lpcxpresso54s018m/driver_examples/gpio/led_output" project_relative_path="board" type="c_include"/>
+      <include_path path="boards/lpcxpresso54s018m/driver_examples/gpio/led_output" project_relative_path="lpcxpresso54s018m/driver_examples/gpio/led_output" type="c_include"/>
+      <include_path path="boards/lpcxpresso54s018m" project_relative_path="board" type="c_include"/>
+    </include_paths>
+    <source path="boards/lpcxpresso54s018m/driver_examples/gpio/led_output/iar" project_relative_path="./" type="workspace" toolchain="iar">
+      <files mask="gpio_led_output.ewd"/>
+      <files mask="gpio_led_output.ewp"/>
+      <files mask="gpio_led_output.eww"/>
+    </source>
+    <source path="boards/lpcxpresso54s018m/driver_examples/gpio/led_output/mdk" project_relative_path="./" type="workspace" toolchain="mdk">
+      <files mask="gpio_led_output.uvprojx"/>
+      <files mask="gpio_led_output.uvoptx"/>
+      <files mask="JLinkSettings.ini"/>
+      <files mask="gpio_led_output.uvmpw"/>
+    </source>
+    <source path="boards/lpcxpresso54s018m/driver_examples/gpio/led_output/armgcc" project_relative_path="./" type="workspace" toolchain="armgcc">
+      <files mask="build_all.bat"/>
+      <files mask="build_all.sh"/>
+      <files mask="clean.bat"/>
+      <files mask="clean.sh"/>
+      <files mask="CMakeLists.txt"/>
+      <files mask="flags.cmake"/>
+      <files mask="config.cmake"/>
+      <files mask="build_debug.bat"/>
+      <files mask="build_debug.sh"/>
+      <files mask="build_release.bat"/>
+      <files mask="build_release.sh"/>
+    </source>
+    <source path="boards/lpcxpresso54s018m/driver_examples/gpio/led_output" project_relative_path="source" type="src">
+      <files mask="gpio_led_output.c"/>
+    </source>
+    <source path="boards/lpcxpresso54s018m/driver_examples/gpio/led_output" project_relative_path="board" type="src">
+      <files mask="pin_mux.c"/>
+    </source>
+    <source path="boards/lpcxpresso54s018m/driver_examples/gpio/led_output" project_relative_path="board" type="c_include">
+      <files mask="pin_mux.h"/>
+    </source>
+    <source path="boards/lpcxpresso54s018m" project_relative_path="board" type="src">
+      <files mask="board.c"/>
+      <files mask="clock_config.c"/>
+    </source>
+    <source path="boards/lpcxpresso54s018m" project_relative_path="board" type="c_include">
+      <files mask="board.h"/>
+      <files mask="clock_config.h"/>
+    </source>
+    <source path="boards/lpcxpresso54s018m/driver_examples/gpio/led_output" project_relative_path="doc" type="doc" toolchain="iar mdk mcuxpresso armgcc">
+      <files mask="readme.txt"/>
+    </source>
+    <source path="boards/lpcxpresso54s018m/driver_examples/gpio/led_output/iar" project_relative_path="LPC54S018M/iar" type="linker" toolchain="iar">
+      <files mask="LPC54S018J4M_spifi_flash.icf"/>
+    </source>
+    <source path="boards/lpcxpresso54s018m/driver_examples/gpio/led_output/mdk" project_relative_path="LPC54S018M/arm" type="linker" toolchain="mdk">
+      <files mask="LPC54S018J4M_spifi_flash.scf"/>
+    </source>
+    <source path="boards/lpcxpresso54s018m/driver_examples/gpio/led_output/armgcc" project_relative_path="LPC54S018M/gcc" type="linker" toolchain="armgcc">
+      <files mask="LPC54S018J4M_spifi_flash.ld"/>
+    </source>
+    <source path="boards/lpcxpresso54s018m/driver_examples/gpio/led_output/mdk" project_relative_path="lpcxpresso54s018m" type="configuration" toolchain="mdk">
+      <files mask="jlink_sramx_debug.ini"/>
+    </source>
+    <source path="boards/lpcxpresso54s018m/driver_examples/gpio/led_output/iar" project_relative_path="lpcxpresso54s018m" type="other" toolchain="iar">
+      <files mask="jlink_qspi_plain_load.mac"/>
+    </source>
+  </example>
+</ksdk:examples>

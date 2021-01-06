@@ -1,0 +1,1468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_SUPER" name="SDKVersion 2.9.0 SuperSet" brief="This is SDK version 2.9.0 manifest file." format_version="3.8" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.8.xsd">
+  <!--Timestamp (UTC): 2021-01-14 13:21:35.223203-->
+  <!--This manifest is generated based on sdk repo commit: 3073e476325c80265f0c6d9a806af8fd0bfd767b-->
+  <defines>
+    <define name="CPU_$|package|" value=""/>
+    <define name="CPU_$|package|_$|core|" value=""/>
+    <define name="CPU_$|package|_$|core_name|" value=""/>
+  </defines>
+  <externalDefinitions>
+    <definition extID="lpc845breakout"/>
+  </externalDefinitions>
+  <ksdk id="MCUXpressoSDK290" name="MCUXpressoSDK290" version="2.9.0"/>
+  <compilers>
+    <compiler id="compiler_gcc" name="gcc" type="gcc"/>
+  </compilers>
+  <toolchainSettings>
+    <toolchainSetting id="com.nxp.mcuxpresso" name="mcuxpresso" version="11.3.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" toolchain="mcuxpresso">
+      <option id="gnu.cpp.compiler.option.optimization.flags" type="string" user_name="">
+        <value>-fno-common</value>
+      </option>
+      <option id="gnu.c.compiler.option.optimization.flags" type="string" user_name="">
+        <value>-fno-common</value>
+      </option>
+      <option id="gnu.cpp.link.option.nostdlibs" type="boolean" user_name="">
+        <value>true</value>
+      </option>
+      <option id="com.crt.advproject.link.cpp.flashconfigenable" type="boolean" user_name="">
+        <value>true</value>
+      </option>
+      <option id="com.crt.advproject.link.flashconfigenable" type="boolean" user_name="">
+        <value>true</value>
+      </option>
+      <option id="gnu.c.link.option.nostdlibs" type="boolean" user_name="">
+        <value>true</value>
+      </option>
+    </toolchainSetting>
+  </toolchainSettings>
+  <toolchains>
+    <toolchain id="armgcc" name="GCC_ARM_Embedded" version="9.3.1" full_name="GCC ARM Embedded" compiler="compiler_gcc" type="armgcc" vendor="GCC ARM Embedded" vendor_url="http://launchpad.net/gcc-arm-embedded"/>
+    <toolchain id="mcuxpresso" name="MCUXpresso_IDE" version="11.3.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" type="mcuxpresso" vendor="NXP Semiconductors" vendor_url="http://www.nxp.com">
+      <debug>
+        <debug_configuration id="com.crt.advproject.config.exe.release" name="Release Configuration" probe="LinkServer">
+          <scripts>
+            <script type="init" silent="false" emulators="${gdb.stub} -mi -info-emu">
+              <script>
+set remotetimeout 60000
+##target_extended_remote##
+set mem inaccessible-by-default ${mem.access}
+mon ondisconnect ${ondisconnect}
+set arm force-mode thumb
+${load}</script>
+            </script>
+            <script type="run" silent="false" emulators="${gdb.stub} -mi -info-emu">
+              <script>${run}</script>
+            </script>
+          </scripts>
+          <params>
+            <params id="vector.catch.release.mcuxpresso" name="vector.catch" value="false"/>
+            <params id="internal.cache.release.mcuxpresso" name="internal.cache" value="Disable"/>
+          </params>
+        </debug_configuration>
+        <debug_configuration id="com.crt.advproject.config.exe.debug" name="Debug Configuration" probe="LinkServer">
+          <scripts>
+            <script type="init" silent="false" emulators="${gdb.stub} -mi -info-emu">
+              <script>
+set remotetimeout 60000
+##target_extended_remote##
+set mem inaccessible-by-default ${mem.access}
+mon ondisconnect ${ondisconnect}
+set arm force-mode thumb
+${load}</script>
+            </script>
+            <script type="run" silent="false" emulators="${gdb.stub} -mi -info-emu">
+              <script>${run}</script>
+            </script>
+          </scripts>
+          <params>
+            <params id="vector.catch.debug.mcuxpresso" name="vector.catch" value="false"/>
+            <params id="internal.cache.debug.mcuxpresso" name="internal.cache" value="Disable"/>
+          </params>
+        </debug_configuration>
+        <debug_configuration id="com.nxp.mcuxpresso.core.debug.support.segger.debug" name="Debug Configuration" probe="Segger"/>
+        <debug_configuration id="com.nxp.mcuxpresso.core.debug.support.segger.release" name="Release Configuration" probe="Segger"/>
+      </debug>
+    </toolchain>
+  </toolchains>
+  <boards>
+    <board id="lpcxpresso845max" name="LPCXpresso845MAX" href="https://www.nxp.com/pip/OM13097" version="1.0.0" package="LPC845M301JBD64">
+      <description>LPCXpresso Development Board for the LPC84x family of MCUs</description>
+      <image path="boards/lpcxpresso845max" type="image">
+        <files mask="lpcxpresso845max.png"/>
+      </image>
+      <examples>
+        <example id="lpcxpresso845max_crc" name="crc" brief="The CRC Example project is a demonstration program that uses the KSDK software to generate checksumsfor an ASCII string. Several CRC protocols are implemented using the CRC driver API." toolchain="armgcc mcuxpresso" compiler="compiler_gcc" category="driver_examples" path="boards/lpcxpresso845max/driver_examples/crc">
+          <external path="boards/lpcxpresso845max/driver_examples/crc" type="xml">
+            <files mask="crc_v3_8.xml"/>
+          </external>
+        </example>
+        <example id="lpcxpresso845max_dma_memory_to_memory" name="dma_memory_to_memory" brief="The DMA memory to memory example is a simple demonstration program that uses the SDK software.It executes one shot transfer from source buffer to destination buffer using the SDK DMA drivers.The purpose of this example is to show how to use the DMA and to provide a simple example fordebugging and further development." toolchain="armgcc mcuxpresso" compiler="compiler_gcc" category="driver_examples/dma" path="boards/lpcxpresso845max/driver_examples/dma/memory_to_memory">
+          <external path="boards/lpcxpresso845max/driver_examples/dma/memory_to_memory" type="xml">
+            <files mask="dma_memory_to_memory_v3_8.xml"/>
+          </external>
+        </example>
+        <example id="lpcxpresso845max_dma_wrap_transfer" name="dma_wrap_transfer" brief="The DMA wrap transfer example is a simple demonstration program that uses the SDK software.It executes a wrap transfer from source buffer to destination buffer using the SDK DMA drivers.The purpose of this example is to show how to use the DMA wrap feature." toolchain="armgcc mcuxpresso" compiler="compiler_gcc" category="driver_examples/dma" path="boards/lpcxpresso845max/driver_examples/dma/wrap_transfer">
+          <external path="boards/lpcxpresso845max/driver_examples/dma/wrap_transfer" type="xml">
+            <files mask="dma_wrap_transfer_v3_8.xml"/>
+          </external>
+        </example>
+        <example id="lpcxpresso845max_gpio_led_output" name="gpio_led_output" brief="The GPIO Example project is a demonstration program that uses the KSDK software to manipulate the general-purposeoutputs. The example use LEDs and buttons to demonstrates GPIO API for port and pin manipulation (init, set,clear, and toggle)." toolchain="armgcc mcuxpresso" compiler="compiler_gcc" category="driver_examples/gpio" path="boards/lpcxpresso845max/driver_examples/gpio/led_output">
+          <external path="boards/lpcxpresso845max/driver_examples/gpio/led_output" type="xml">
+            <files mask="gpio_led_output_v3_8.xml"/>
+          </external>
+        </example>
+        <example id="lpcxpresso845max_hello_world" name="hello_world" brief="The HelloWorld demo prints the &quot;Hello World&quot; string to the terminal using the SDK UART drivers and repeat what user input. The purpose of this demo is to show how to use the UART, and to provide a simple project for debugging and further development." toolchain="armgcc mcuxpresso" compiler="compiler_gcc" category="demo_apps" path="boards/lpcxpresso845max/demo_apps/hello_world">
+          <external path="boards/lpcxpresso845max/demo_apps/hello_world" type="xml">
+            <files mask="hello_world_v3_8.xml"/>
+          </external>
+        </example>
+        <example id="lpcxpresso845max_led_blinky" name="led_blinky" brief="The LED Blinky demo application provides a sanity check for the new SDK build environments and board bring up. The LED Blinky demo uses the systick interrupt to realize the function of timing delay. The example takes turns to shine the LED. The purpose of this demo is to provide a simple project for debugging and further development." toolchain="armgcc mcuxpresso" compiler="compiler_gcc" category="demo_apps" path="boards/lpcxpresso845max/demo_apps/led_blinky">
+          <external path="boards/lpcxpresso845max/demo_apps/led_blinky" type="xml">
+            <files mask="led_blinky_v3_8.xml"/>
+          </external>
+        </example>
+      </examples>
+    </board>
+  </boards>
+  <devices>
+    <device id="LPC845" name="LPC845" version="1.0.0" full_name="LPC845" family="LPC84x" platform="LPC">
+      <description>Low-Cost Microcontrollers (MCUs) based on Arm Cortex-M0+ Core</description>
+      <metadataSet>
+        <metadata key="vendor" value="NXP"/>
+      </metadataSet>
+      <core id="core0_LPC845" name="core0" fpu="false" type="cm0plus"/>
+      <memory>
+        <memoryBlock id="PROGRAM_FLASH_LPC845" name="PROGRAM_FLASH" addr="00000000" size="00010000" type="Flash" access="RO"/>
+        <memoryBlock id="SRAM_LPC845" name="SRAM" addr="10000000" size="00003fe0" type="RAM" access="RW"/>
+        <memoryBlock id="IAP_SRAM_LPC845" name="IAP_SRAM" addr="10003fe0" size="00000020" type="RAM" access="RW"/>
+      </memory>
+      <total_memory flash_size_kb="64" ram_size_kb="16"/>
+      <package id="LPC845M301JBD64" name="LPC845M301JBD64"/>
+      <package id="LPC845M301JBD48" name="LPC845M301JBD48"/>
+      <package id="LPC845M301JHI48" name="LPC845M301JHI48"/>
+      <package id="LPC845M301JHI33" name="LPC845M301JHI33"/>
+      <evaluation_boards>
+        <evaluation_board name="lpc845breakout"/>
+        <evaluation_board name="lpcxpresso845max"/>
+      </evaluation_boards>
+      <toolchainSettings>
+        <toolchainSetting id_refs="com.nxp.mcuxpresso">
+          <option id="com.crt.advproject.link.cpp.crpenable" type="boolean" user_name="">
+            <value>true</value>
+          </option>
+          <option id="com.crt.advproject.link.crpenable" type="boolean" user_name="">
+            <value>true</value>
+          </option>
+        </toolchainSetting>
+      </toolchainSettings>
+      <debug_configurations>
+        <debug_configuration id_refs="com.crt.advproject.config.exe.debug com.crt.advproject.config.exe.release">
+          <params>
+            <params id="internal.wiretype.release.LPC845" name="internal.wiretype" value="SWD"/>
+            <params id="internal.has_swo.release.LPC845" name="internal.has_swo" value="false"/>
+            <params id="vector.catch.release.LPC845" name="vector.catch" value="true"/>
+          </params>
+          <drivers>
+            <driver id_refs="PROGRAM_FLASH_LPC845">
+              <driverBinary path="devices/LPC845/mcuxpresso" type="binary">
+                <files mask="LPC84x_64.cfx"/>
+              </driverBinary>
+            </driver>
+          </drivers>
+        </debug_configuration>
+      </debug_configurations>
+      <linkerSettings nature="c_nature">
+        <linker property="start_symbol" value="ResetISR"/>
+        <linker property="text_align" value="4"/>
+        <linker property="data_align" value="4"/>
+        <linker property="bss_align" value="4"/>
+        <linker property="mtb_supported" value="true"/>
+        <linker property="crp_address" value="0x2fc"/>
+      </linkerSettings>
+      <linkerSettings nature="cpp_nature">
+        <linker property="start_symbol" value="ResetISR"/>
+        <linker property="text_align" value="4"/>
+        <linker property="data_align" value="4"/>
+        <linker property="bss_align" value="4"/>
+        <linker property="mtb_supported" value="true"/>
+        <linker property="crp_address" value="0x2fc"/>
+      </linkerSettings>
+    </device>
+  </devices>
+  <components>
+    <component id="project_template.lpc845breakout.LPC845" name="lpc845breakout" brief="Board_project_template lpc845breakout" version="1.0.0" full_name="Board_project_template lpc845breakout" devices="LPC845" device_cores="core0_LPC845" category="Board Support/SDK Project Template" user_visible="true" type="project_template" package_base_path="boards/lpc845breakout/project_template" project_base_path="board">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.lpc_miniusart.LPC845"/>
+          <component_dependency value="component.miniusart_adapter.LPC845"/>
+          <component_dependency value="platform.drivers.power_no_lib.LPC845"/>
+          <component_dependency value="platform.drivers.lpc_gpio.LPC845"/>
+          <component_dependency value="utility.debug_console_lite.LPC845"/>
+          <component_dependency value="platform.drivers.lpc_iocon_lite.LPC845"/>
+          <component_dependency value="platform.drivers.clock.LPC845"/>
+          <component_dependency value="device.LPC845_startup.LPC845"/>
+          <component_dependency value="platform.drivers.swm.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="board.h"/>
+        <files mask="clock_config.h"/>
+        <files mask="pin_mux.h"/>
+        <files mask="peripherals.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="board.c"/>
+        <files mask="clock_config.c"/>
+        <files mask="pin_mux.c"/>
+        <files mask="peripherals.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS.LPC845" name="CMSIS" brief="Cmsis" version="5.6.0" full_name="Cmsis" devices="LPC845" user_visible="true" type="CMSIS" package_base_path="CMSIS" project_base_path="./">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.Include_common.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.Common_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.CAN_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.Ethernet_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.Ethernet_MAC_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.Ethernet_PHY_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.Flash_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.I2C_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.MCI_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.NAND_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.SAI_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.SPI_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.USART_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.USB_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.USB_Device_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.USB_Host_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.WiFi_CMSISInclude.LPC845"/>
+          <component_dependency value="platform.Include_dsp.LPC845"/>
+          <component_dependency value="platform.CMSIS_Driver_Include.GPIO_CMSISInclude.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" project_relative_path="CMSIS" type="doc">
+        <files mask="LICENSE.txt"/>
+      </source>
+      <source relative_path="Include" type="c_include">
+        <files mask="core_cm1.h"/>
+        <files mask="core_cm0.h"/>
+        <files mask="tz_context.h"/>
+        <files mask="core_cm23.h"/>
+        <files mask="cmsis_iccarm.h"/>
+        <files mask="core_armv8mbl.h"/>
+        <files mask="core_cm3.h"/>
+        <files mask="core_cm33.h"/>
+        <files mask="core_cm35p.h"/>
+        <files mask="arm_const_structs.h"/>
+        <files mask="arm_common_tables.h"/>
+        <files mask="cmsis_gcc.h"/>
+        <files mask="cmsis_armclang_ltm.h"/>
+        <files mask="cmsis_compiler.h"/>
+        <files mask="arm_math.h"/>
+        <files mask="core_cm4.h"/>
+        <files mask="core_armv8mml.h"/>
+        <files mask="core_cm7.h"/>
+        <files mask="mpu_armv7.h"/>
+        <files mask="core_dsp.h"/>
+        <files mask="cmsis_armcc.h"/>
+        <files mask="cmsis_version.h"/>
+        <files mask="core_cm0plus.h"/>
+        <files mask="core_sc000.h"/>
+        <files mask="core_sc300.h"/>
+        <files mask="core_armv81mml.h"/>
+        <files mask="cmsis_armclang.h"/>
+        <files mask="mpu_armv8.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="Include" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver" name="CMSIS_Driver" brief="Cmsis_driver" version="2.7.1" full_name="Cmsis_driver" user_visible="true" type="CMSIS" package_base_path="CMSIS/Driver/DriverTemplates" project_base_path="Driver/DriverTemplates">
+      <source relative_path="./" type="src">
+        <files mask="Driver_USBD.c"/>
+        <files mask="Driver_Storage.c"/>
+        <files mask="Driver_SAI.c"/>
+        <files mask="Driver_ETH_PHY.c"/>
+        <files mask="Driver_ETH_MAC.c"/>
+        <files mask="Driver_Flash.c"/>
+        <files mask="Driver_SPI.c"/>
+        <files mask="Driver_USART.c"/>
+        <files mask="Driver_USBH.c"/>
+        <files mask="Driver_MCI.c"/>
+        <files mask="Driver_I2C.c"/>
+        <files mask="Driver_CAN.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.CAN_CMSISInclude.LPC845" name="CAN" brief="Cmsis_driver_include can" version="1.2.0" full_name="Cmsis_driver_include can" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.Common_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_CAN.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.Common_CMSISInclude.LPC845" name="Common" brief="Cmsis_driver_include common" version="2.7.1" full_name="Cmsis_driver_include common" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_Common.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.Ethernet_CMSISInclude.LPC845" name="Ethernet" brief="Cmsis_driver_include ethernet" version="2.1.0" full_name="Cmsis_driver_include ethernet" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.Common_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_ETH.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.Ethernet_MAC_CMSISInclude.LPC845" name="Ethernet_MAC" brief="Cmsis_driver_include ethernet_mac" version="2.1.0" full_name="Cmsis_driver_include ethernet_mac" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.Ethernet_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_ETH_MAC.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.Ethernet_PHY_CMSISInclude.LPC845" name="Ethernet_PHY" brief="Cmsis_driver_include ethernet_phy" version="2.1.0" full_name="Cmsis_driver_include ethernet_phy" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.Ethernet_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_ETH_PHY.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.Flash_CMSISInclude.LPC845" name="Flash" brief="Cmsis_driver_include flash" version="2.2.0" full_name="Cmsis_driver_include flash" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.Common_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_Flash.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.GPIO_CMSISInclude.LPC845" name="GPIO" brief="Cmsis_driver_include gpio" version="2.0.0" full_name="Cmsis_driver_include gpio" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.Common_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_GPIO.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.I2C_CMSISInclude.LPC845" name="I2C" brief="Cmsis_driver_include i2c" version="2.3.0" full_name="Cmsis_driver_include i2c" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.Common_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_I2C.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.MCI_CMSISInclude.LPC845" name="MCI" brief="Cmsis_driver_include mci" version="2.3.0" full_name="Cmsis_driver_include mci" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.Common_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_MCI.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.NAND_CMSISInclude.LPC845" name="NAND" brief="Cmsis_driver_include nand" version="2.3.0" full_name="Cmsis_driver_include nand" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.Common_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_NAND.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.SAI_CMSISInclude.LPC845" name="SAI" brief="Cmsis_driver_include sai" version="1.1.0" full_name="Cmsis_driver_include sai" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.Common_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_SAI.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.SPI_CMSISInclude.LPC845" name="SPI" brief="Cmsis_driver_include spi" version="2.2.0" full_name="Cmsis_driver_include spi" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.Common_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_SPI.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.USART_CMSISInclude.LPC845" name="USART" brief="Cmsis_driver_include usart" version="2.3.0" full_name="Cmsis_driver_include usart" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.Common_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_USART.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.USB_CMSISInclude.LPC845" name="USB" brief="Cmsis_driver_include usb" version="2.2.0" full_name="Cmsis_driver_include usb" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.Common_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_USB.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.USB_Device_CMSISInclude.LPC845" name="USB_Device" brief="Cmsis_driver_include usb_device" version="2.2.0" full_name="Cmsis_driver_include usb_device" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.USB_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_USBD.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.USB_Host_CMSISInclude.LPC845" name="USB_Host" brief="Cmsis_driver_include usb_host" version="2.2.0" full_name="Cmsis_driver_include usb_host" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.USB_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_USBH.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.CMSIS_Driver_Include.WiFi_CMSISInclude.LPC845" name="WiFi" brief="Cmsis_driver_include wifi" version="1.0.0" full_name="Cmsis_driver_include wifi" devices="LPC845" user_visible="false" type="CMSIS_driver" package_base_path="CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+      <dependencies>
+        <component_dependency value="platform.CMSIS_Driver_Include.Common_CMSISInclude.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="Driver_WiFi.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.Include_common.LPC845" name="CMSIS_Include_common" brief="Cmsis_include_common" version="5.3.0" full_name="Cmsis_include_common" devices="LPC845" user_visible="true" type="CMSIS_Include" package_base_path="CMSIS/Include" project_base_path="CMSIS">
+      <source relative_path="./" type="c_include">
+        <files mask="cmsis_armcc.h"/>
+        <files mask="cmsis_armclang.h"/>
+        <files mask="cmsis_armclang_ltm.h"/>
+        <files mask="cmsis_gcc.h"/>
+        <files mask="cmsis_compiler.h"/>
+        <files mask="cmsis_version.h"/>
+        <files mask="cmsis_iccarm.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="CMSIS_Include_common_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.Include_core_cm0plus.LPC845" name="CMSIS_Include_core_cm0plus" brief="Cmsis_include_core_cm0plus" version="5.3.0" full_name="Cmsis_include_core_cm0plus" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="CMSIS_Include" package_base_path="CMSIS/Include" project_base_path="CMSIS">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.Include_common.LPC845"/>
+          <component_dependency value="platform.Include_dsp.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="core_cm0plus.h"/>
+        <files mask="mpu_armv7.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="CMSIS_Include_core_cm0plus_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.Include_dsp.LPC845" name="CMSIS_Include_dsp" brief="Cmsis_include_dsp" version="1.7.0" full_name="Cmsis_include_dsp" devices="LPC845" user_visible="true" type="CMSIS_Include" package_base_path="CMSIS/Include" project_base_path="CMSIS">
+      <source relative_path="./" type="c_include">
+        <files mask="arm_common_tables.h"/>
+        <files mask="arm_const_structs.h"/>
+        <files mask="arm_math.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="CMSIS_Include_dsp_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="COPY_BSD_License.LPC845" name="COPY_BSD_License" brief="COPY of BSD-3-Clause license" version="1.0.0" full_name="COPY of BSD-3-Clause license" devices="LPC845" user_visible="true" type="other" package_base_path="./" project_base_path="src">
+      <source relative_path="./" type="other">
+        <files mask="COPYING-BSD-3"/>
+      </source>
+    </component>
+    <component id="project_template.LPC845.LPC845" name="LPC845" brief="Devices_project_template LPC845" version="1.0.0" full_name="Devices_project_template LPC845" devices="LPC845" device_cores="core0_LPC845" category="Board Support/SDK Project Template" user_visible="true" type="project_template" package_base_path="devices/LPC845/project_template" project_base_path="board">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.lpc_miniusart.LPC845"/>
+          <component_dependency value="component.miniusart_adapter.LPC845"/>
+          <component_dependency value="platform.drivers.power_no_lib.LPC845"/>
+          <component_dependency value="platform.drivers.lpc_gpio.LPC845"/>
+          <component_dependency value="device.LPC845_startup.LPC845"/>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="platform.drivers.lpc_iocon_lite.LPC845"/>
+          <component_dependency value="utility.debug_console_lite.LPC845"/>
+          <component_dependency value="platform.drivers.clock.LPC845"/>
+          <component_dependency value="platform.drivers.reset.LPC845"/>
+          <component_dependency value="platform.drivers.swm.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="board.h"/>
+        <files mask="clock_config.h"/>
+        <files mask="pin_mux.h"/>
+        <files mask="peripherals.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="board.c"/>
+        <files mask="clock_config.c"/>
+        <files mask="pin_mux.c"/>
+        <files mask="peripherals.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="tools.LPC845" name="cmake_toolchain" brief="Cmake_toolchain" version="1.0.0" full_name="Cmake_toolchain" devices="LPC845" user_visible="true" type="other" package_base_path="tools/cmake_toolchain_files" project_base_path="cmake_toolchain_files">
+      <source relative_path="./" type="script">
+        <files mask="armgcc.cmake"/>
+        <files mask="xcc.cmake"/>
+        <files mask="armgcc_force_cpp.cmake"/>
+      </source>
+    </component>
+    <component id="component.button.LPC845" name="button" brief="Component button" version="1.0.0" full_name="Component button" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="software_component" package_base_path="components/button" project_base_path="component/button">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="component.timer_manager.LPC845"/>
+          <component_dependency value="component.lpc_gpio_adapter.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_component_button.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_component_button.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.common_task.LPC845" name="common_task" brief="Component common_task" version="1.0.0" full_name="Component common_task" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="software_component" package_base_path="components/common_task" project_base_path="component/common_task">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="component.osa.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_component_common_task.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_component_common_task.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.ctimer_adapter.LPC845" name="ctimer_adapter" brief="Component ctimer_adapter" version="1.0.0" full_name="Component ctimer_adapter" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="abstraction_layer" package_base_path="components/timer" project_base_path="component/timer">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="platform.drivers.ctimer.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_adapter_timer.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_adapter_ctimer.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.led.LPC845" name="led" brief="Component led" version="1.0.0" full_name="Component led" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="software_component" package_base_path="components/led" project_base_path="component/led">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="component.timer_manager.LPC845"/>
+          <component_dependency value="component.lpc_gpio_adapter.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_component_led.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_component_led.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.lists.LPC845" name="lists" brief="Component lists" version="1.0.0" full_name="Component lists" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="software_component" package_base_path="components/lists" project_base_path="component/lists">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_component_generic_list.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_component_generic_list.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.lpc_crc_adapter.LPC845" name="lpc_crc_adapter" brief="Component lpc_crc_adapter" version="1.0.0" full_name="Component lpc_crc_adapter" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="abstraction_layer" package_base_path="components/crc" project_base_path="component/crc">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="platform.drivers.lpc_crc.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_adapter_crc.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_adapter_lpc_crc.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.lpc_gpio_adapter.LPC845" name="lpc_gpio_adapter" brief="Component lpc_gpio_adapter" version="1.0.0" full_name="Component lpc_gpio_adapter" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="abstraction_layer" package_base_path="components/gpio" project_base_path="component/gpio">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.syscon.LPC845"/>
+          <component_dependency value="platform.drivers.lpc_gpio.LPC845"/>
+          <component_dependency value="platform.drivers.inputmux.LPC845"/>
+          <component_dependency value="platform.drivers.pint.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_adapter_gpio.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_adapter_lpc_gpio.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.mem_manager.LPC845" name="mem_manager" brief="Component mem_manager" version="1.0.0" full_name="Component mem_manager" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="software_component" package_base_path="components/mem_manager" project_base_path="component/mem_manager">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="component.lists.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_component_mem_manager.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_component_mem_manager.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.mem_manager_light.LPC845" name="mem_manager_light" brief="Component mem_manager_light" version="1.0.0" full_name="Component mem_manager_light" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="software_component" package_base_path="components/mem_manager" project_base_path="component/mem_manager">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="component.lists.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_component_mem_manager.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_component_mem_manager_light.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.miniusart_adapter.LPC845" name="miniusart_adapter" brief="Component miniusart_adapter" version="1.0.0" full_name="miniusart_adapter" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="utilities" package_base_path="components/uart" project_base_path="component/uart">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="platform.drivers.lpc_miniusart.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_adapter_uart.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_adapter_miniusart.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="component_miniusart_adapter_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.mrt_adapter.LPC845" name="mrt_adapter" brief="Component mrt_adapter" version="1.0.0" full_name="Component mrt_adapter" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="abstraction_layer" package_base_path="components/timer" project_base_path="component/timer">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="platform.drivers.mrt.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_adapter_timer.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_adapter_mrt.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.osa.LPC845" name="osa" brief="Component osa" version="1.0.0" full_name="Component osa" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="software_component" package_base_path="components/osa" project_base_path="component/osa">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="component.lists.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_os_abstraction.h"/>
+        <files mask="fsl_os_abstraction_config.h"/>
+      </source>
+      <source condition="middleware.baremetal.LPC845" relative_path="./" type="c_include">
+        <files mask="fsl_os_abstraction_bm.h"/>
+      </source>
+      <source condition="middleware.baremetal.LPC845" relative_path="./" type="src">
+        <files mask="fsl_os_abstraction_bm.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.osa_bm.LPC845" name="osa_bm" brief="Component osa_bm" version="1.0.0" full_name="Component osa_bm" devices="LPC845" device_cores="core0_LPC845" user_visible="false" type="software_component" package_base_path="components/osa" project_base_path="component/osa">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="component.lists.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_os_abstraction.h"/>
+        <files mask="fsl_os_abstraction_bm.h"/>
+        <files mask="fsl_os_abstraction_config.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_os_abstraction_bm.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.pwm_ctimer_adapter.LPC845" name="pwm_ctimer_adapter" brief="Component pwm_ctimer_adapter" version="1.0.0" full_name="Component pwm_ctimer_adapter" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="abstraction_layer" package_base_path="components/pwm" project_base_path="component/pwm">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="platform.drivers.ctimer.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_adapter_pwm.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_adapter_pwm_ctimer.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.software_crc_adapter.LPC845" name="software_crc_adapter" brief="Component software_crc_adapter" version="1.0.0" full_name="Component software_crc_adapter" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="abstraction_layer" package_base_path="components/crc" project_base_path="component/crc">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_adapter_crc.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_adapter_software_crc.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.software_rng_adapter.LPC845" name="software_rng_adapter" brief="Component software_rng_adapter" version="1.0.0" full_name="Component software_rng_adapter" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="abstraction_layer" package_base_path="components/rng" project_base_path="component/rng">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_adapter_rng.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_adapter_software_rng.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.timer_manager.LPC845" name="timer_manager" brief="Component timer_manager" version="1.0.0" full_name="Component timer_manager" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="software_component" package_base_path="components/timer_manager" project_base_path="component/timer_manager">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="component.lists.LPC845"/>
+          <any_of>
+            <component_dependency value="component.ctimer_adapter.LPC845"/>
+            <component_dependency value="component.mrt_adapter.LPC845"/>
+          </any_of>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_component_timer_manager.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_component_timer_manager.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="device.LPC845_CMSIS.LPC845" name="LPC845_CMSIS" brief="Device LPC845_cmsis" version="1.0.0" full_name="Device LPC845_cmsis" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="CMSIS_Include" package_base_path="devices/LPC845" project_base_path="device">
+      <dependencies>
+        <component_dependency value="platform.Include_core_cm0plus.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_device_registers.h"/>
+        <files mask="LPC845.h"/>
+        <files mask="LPC845_features.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="device_LPC845_CMSIS_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="device.LPC845_debugger.LPC845" name="LPC845_debugger" brief="Device LPC845_debugger" version="1.0.0" full_name="Device LPC845_debugger" devices="LPC845" user_visible="true" type="debugger" package_base_path="devices/LPC845" project_base_path="LPC845">
+      <source relative_path="./" type="xml">
+        <files mask="LPC845.xml"/>
+      </source>
+    </component>
+    <component id="platform.devices.LPC845_linker.LPC845" name="LPC845_linker" brief="Device LPC845_linker" version="1.0.0" full_name="Device LPC845_linker" devices="LPC845" user_visible="true" type="linker" package_base_path="devices/LPC845" project_base_path="LPC845">
+      <source toolchain="armgcc" relative_path="gcc" type="linker">
+        <files mask="LPC845_flash.ld"/>
+        <files mask="LPC845_ram.ld"/>
+      </source>
+    </component>
+    <component id="device.LPC845_startup.LPC845" name="LPC845_startup" brief="Device LPC845_startup" version="1.1.0" full_name="Device LPC845_startup" devices="LPC845" device_cores="core0_LPC845" category="Device/Startup" user_visible="true" type="startup" package_base_path="devices/LPC845" project_base_path="startup">
+      <dependencies>
+        <component_dependency value="device.LPC845_system.LPC845"/>
+      </dependencies>
+      <source toolchain="armgcc" relative_path="gcc" project_relative_path="./" type="asm_include">
+        <files mask="startup_LPC845.S"/>
+      </source>
+      <source toolchain="mcuxpresso" relative_path="mcuxpresso" project_relative_path="./" type="src_c">
+        <files mask="startup_lpc845.c"/>
+      </source>
+      <source toolchain="mcuxpresso" relative_path="mcuxpresso" project_relative_path="./" type="src_cpp">
+        <files mask="startup_lpc845.cpp"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="device_LPC845_startup_LPC845.cmake" hidden="true"/>
+      </source>
+    </component>
+    <component id="device.LPC845_system.LPC845" name="LPC845_system" brief="Device LPC845_system" version="1.0.0" full_name="Device LPC845_system" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="CMSIS_Include" package_base_path="devices/LPC845" project_base_path="device">
+      <dependencies>
+        <component_dependency value="device.LPC845_CMSIS.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="src">
+        <files mask="system_LPC845.c"/>
+      </source>
+      <source relative_path="./" type="c_include">
+        <files mask="system_LPC845.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="device_LPC845_system_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="docs.LPC845.LPC845" name="LPC845" brief="Docs lpc845" version="1.0.0" full_name="Docs lpc845" devices="LPC845" user_visible="true" type="documentation" package_base_path="docs" project_base_path="docs">
+      <source relative_path="./" type="doc">
+        <files mask="Getting Started with MCUXpresso SDK.pdf"/>
+        <files mask="MCUXpresso SDK Release Notes for LPCXpresso845MAX.pdf"/>
+        <files mask="MCUXpresso SDK Release Notes for LPC845BREAKOUT.pdf"/>
+      </source>
+    </component>
+    <component id="platform.drivers.capt.LPC845" name="capt" brief="CAPT Driver" version="2.1.0" full_name="CAPT Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/capt" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_capt.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_capt.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.clock.LPC845" name="clock" brief="Clock Driver" version="2.1.0" full_name="Clock Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="devices/LPC845/drivers" project_base_path="drivers">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="platform.drivers.power_no_lib.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_clock.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_clock.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_clock_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.common.LPC845" name="common" brief="COMMON Driver" version="2.2.9" full_name="COMMON Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/common" project_base_path="drivers">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.clock.LPC845"/>
+          <component_dependency value="device.LPC845_CMSIS.LPC845"/>
+          <component_dependency value="platform.drivers.reset.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_common.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_common.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_common_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.ctimer.LPC845" name="ctimer" brief="CTimer Driver" version="2.2.1" full_name="CTimer Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/ctimer" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_ctimer.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_ctimer.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.iap.LPC845" name="iap" brief="IAP Driver" version="2.0.4" full_name="IAP Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/iap" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_iap.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_iap.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.inputmux.LPC845" name="inputmux" brief="INPUTMUX Driver" version="2.0.3" full_name="INPUTMUX Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/inputmux" project_base_path="drivers">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="platform.drivers.inputmux_connections.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_inputmux.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_inputmux.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_inputmux_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.inputmux_connections.LPC845" name="inputmux_connections" brief="Inputmux_connections Driver" version="2.0.1" full_name="Inputmux_connections Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="devices/LPC845/drivers" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_inputmux_connections.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_inputmux_connections_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.lpc_acomp.LPC845" name="lpc_acomp" brief="LPC_ACOMP Driver" version="2.1.0" full_name="LPC_ACOMP Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/lpc_acomp" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_acomp.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_acomp.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.lpc_adc.LPC845" name="adc" brief="ADC Driver" version="2.5.0" full_name="ADC Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/lpc_adc" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_adc.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_adc.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.lpc_crc.LPC845" name="lpc_crc" brief="CRC Driver" version="2.1.1" full_name="CRC Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/lpc_crc" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_crc.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_crc.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_lpc_crc_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.lpc_dac.LPC845" name="dac" brief="DAC Driver" version="2.0.2" full_name="DAC Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/lpc_dac" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_dac.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_dac.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.lpc_dma.LPC845" name="dma" brief="DMA Driver" version="2.4.2" full_name="DMA Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/lpc_dma" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="src">
+        <files mask="fsl_dma.c"/>
+      </source>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_dma.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_lpc_dma_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.lpc_gpio.LPC845" name="gpio" brief="GPIO Driver" version="2.1.7" full_name="GPIO Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/lpc_gpio" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_gpio.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_gpio.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_lpc_gpio_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.lpc_i2c.LPC845" name="i2c" brief="I2C Driver" version="2.1.0" full_name="I2C Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/lpc_i2c" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_i2c.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_i2c.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.lpc_iocon_lite.LPC845" name="iocon" brief="IOCON Driver" version="2.0.0" full_name="IOCON Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/lpc_iocon_lite" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_iocon.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_lpc_iocon_lite_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.lpc_minispi.LPC845" name="spi" brief="SPI Driver" version="2.0.4" full_name="SPI Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/lpc_minispi" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_spi.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_spi.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.lpc_miniusart.LPC845" name="usart" brief="USART Driver" version="2.3.0" full_name="Usart Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/lpc_miniusart" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_usart.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_usart.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_lpc_miniusart_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.mrt.LPC845" name="mrt" brief="MRT Driver" version="2.0.3" full_name="MRT Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/mrt" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_mrt.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_mrt.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.pint.LPC845" name="pint" brief="PINT Driver" version="2.1.8" full_name="PINT Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/pint" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_pint.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_pint.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.power_no_lib.LPC845" name="power_no_lib" brief="Power Driver" version="2.0.0" full_name="power_no_lib" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="devices/LPC845/drivers" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_power.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_power.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_power_no_lib_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.reset.LPC845" name="reset" brief="Reset Driver" version="2.0.1" full_name="Reset Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="devices/LPC845/drivers" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_reset.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_reset.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_reset_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.sctimer.LPC845" name="sctimer" brief="SCT Driver" version="2.3.0" full_name="SCT Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/sctimer" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_sctimer.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_sctimer.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.swm.LPC845" name="swm" brief="SWM Driver" version="2.0.2" full_name="SWM Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/swm" project_base_path="drivers">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="platform.drivers.swm_connections.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_swm.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_swm.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_swm_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.swm_connections.LPC845" name="swm_connections" brief="Swm_connections Driver" version="2.0.1" full_name="Swm_connections Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="devices/LPC845/drivers" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_swm_connections.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_swm_connections_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.syscon.LPC845" name="syscon" brief="SYSCON Driver" version="2.0.1" full_name="SYSCON Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/syscon" project_base_path="drivers">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+          <component_dependency value="platform.drivers.syscon_connections.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="src">
+        <files mask="fsl_syscon.c"/>
+      </source>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_syscon.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_syscon_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.syscon_connections.LPC845" name="syscon_connections" brief="Syscon_connections Driver" version="2.0.1" full_name="Syscon_connections Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="devices/LPC845/drivers" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_syscon_connections.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_syscon_connections_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.wkt.LPC845" name="wkt" brief="WKT Driver" version="2.0.2" full_name="WKT Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/wkt" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_wkt.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_wkt.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.wwdt.LPC845" name="wwdt" brief="WWDT Driver" version="2.1.9" full_name="WWDT Driver" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="driver" package_base_path="drivers/wwdt" project_base_path="drivers">
+      <dependencies>
+        <component_dependency value="platform.drivers.common.LPC845"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_wwdt.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_wwdt.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.baremetal.LPC845" name="baremetal" brief="Middleware baremetal" version="1.0.0" full_name="Baremetal" devices="LPC845" user_visible="true" type="OS" package_base_path="middleware" project_base_path="middleware">
+      <defines>
+        <define name="FSL_RTOS_BM" value=""/>
+        <define name="SDK_OS_BAREMETAL" value=""/>
+      </defines>
+    </component>
+    <component id="platform.utilities.misc_utilities.LPC845" name="misc_utilities" brief="Utilities which is needed for particular toolchain like the SBRK function required to address limitation between HEAP and STACK in GCC toolchain library." version="1.0.0" full_name="Utilities miscellaneous" devices="LPC845" user_visible="true" type="utilities" package_base_path="utilities/misc_utilities" project_base_path="utilities">
+      <source toolchain="armgcc" relative_path="./" type="src">
+        <files mask="fsl_sbrk.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="utilities_misc_utilities_LPC845.cmake" hidden="true"/>
+      </source>
+    </component>
+    <component id="platform.utilities.assert_lite.LPC845" name="assert_lite" brief="Utility assert_lite" version="1.0.0" full_name="Utility assert_lite" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="utilities" package_base_path="utilities/assert" project_base_path="utilities">
+      <dependencies>
+        <all>
+          <component_dependency value="component.miniusart_adapter.LPC845"/>
+          <component_dependency value="utility.debug_console_lite.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="src">
+        <files mask="fsl_assert.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="utility_assert_lite_LPC845.cmake" hidden="true"/>
+      </source>
+    </component>
+    <component id="utility.debug_console_lite.LPC845" name="debug_console_lite" brief="Utility debug_console_lite" version="1.0.0" full_name="Utility debug_console_lite" devices="LPC845" device_cores="core0_LPC845" user_visible="true" type="utilities" package_base_path="utilities/debug_console_lite" project_base_path="utilities">
+      <dependencies>
+        <all>
+          <component_dependency value="component.miniusart_adapter.LPC845"/>
+          <component_dependency value="platform.drivers.common.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="src">
+        <files mask="fsl_debug_console.c"/>
+      </source>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_debug_console.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="utility_debug_console_lite_LPC845.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="project_template.lpcxpresso845max.LPC845" name="lpcxpresso845max" brief="Board_project_template lpcxpresso845max" version="1.0.0" full_name="Board_project_template lpcxpresso845max" devices="LPC845" device_cores="core0_LPC845" category="Board Support/SDK Project Template" user_visible="true" type="project_template" package_base_path="boards/lpcxpresso845max/project_template" project_base_path="board">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.lpc_miniusart.LPC845"/>
+          <component_dependency value="component.miniusart_adapter.LPC845"/>
+          <component_dependency value="platform.drivers.power_no_lib.LPC845"/>
+          <component_dependency value="platform.drivers.lpc_gpio.LPC845"/>
+          <component_dependency value="utility.debug_console_lite.LPC845"/>
+          <component_dependency value="platform.drivers.lpc_iocon_lite.LPC845"/>
+          <component_dependency value="platform.drivers.clock.LPC845"/>
+          <component_dependency value="device.LPC845_startup.LPC845"/>
+          <component_dependency value="platform.drivers.swm.LPC845"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="board.h"/>
+        <files mask="clock_config.h"/>
+        <files mask="pin_mux.h"/>
+        <files mask="peripherals.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="board.c"/>
+        <files mask="clock_config.c"/>
+        <files mask="pin_mux.c"/>
+        <files mask="peripherals.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+  </components>
+</ksdk:manifest>

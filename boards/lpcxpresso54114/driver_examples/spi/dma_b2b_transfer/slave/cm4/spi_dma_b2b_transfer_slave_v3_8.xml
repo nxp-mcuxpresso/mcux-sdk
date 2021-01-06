@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ksdk:examples xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd manifest.xsd">
+  <externalDefinitions>
+    <definition extID="cm4_LPC54114J256"/>
+    <definition extID="utility.debug_console_lite.LPC54114"/>
+    <definition extID="platform.utilities.assert_lite.LPC54114"/>
+    <definition extID="platform.drivers.lpc_dma.LPC54114"/>
+    <definition extID="platform.drivers.flexcomm_spi.LPC54114"/>
+    <definition extID="platform.drivers.flexcomm_spi_dma.LPC54114"/>
+    <definition extID="platform.drivers.common.LPC54114"/>
+    <definition extID="platform.drivers.clock.LPC54114"/>
+    <definition extID="platform.drivers.power.LPC54114"/>
+    <definition extID="platform.drivers.lpc_iocon.LPC54114"/>
+    <definition extID="platform.drivers.lpc_gpio.LPC54114"/>
+    <definition extID="platform.drivers.inputmux.LPC54114"/>
+    <definition extID="platform.devices.LPC54114_CMSIS.LPC54114"/>
+    <definition extID="platform.Include_core_cm4.LPC54114"/>
+    <definition extID="platform.devices.LPC54114_startup.LPC54114"/>
+    <definition extID="platform.drivers.flexcomm_usart.LPC54114"/>
+    <definition extID="platform.drivers.flexcomm.LPC54114"/>
+    <definition extID="component.usart_adapter.LPC54114"/>
+    <definition extID="component.lists.LPC54114"/>
+    <definition extID="platform.drivers.reset.LPC54114"/>
+    <definition extID="platform.drivers.inputmux_connections.LPC54114"/>
+    <definition extID="platform.utilities.misc_utilities.LPC54114"/>
+    <definition extID="platform.Include_common.LPC54114"/>
+    <definition extID="platform.Include_dsp.LPC54114"/>
+    <definition extID="platform.devices.LPC54114_system.LPC54114"/>
+    <definition extID="iar"/>
+    <definition extID="mdk"/>
+    <definition extID="mcuxpresso"/>
+    <definition extID="armgcc"/>
+    <definition extID="com.nxp.mcuxpresso"/>
+  </externalDefinitions>
+  <example id="lpcxpresso54114_spi_dma_b2b_transfer_slave" name="spi_dma_b2b_transfer_slave" device_core="cm4_LPC54114J256" dependency="utility.debug_console_lite.LPC54114 platform.utilities.assert_lite.LPC54114 platform.drivers.lpc_dma.LPC54114 platform.drivers.flexcomm_spi.LPC54114 platform.drivers.flexcomm_spi_dma.LPC54114 platform.drivers.common.LPC54114 platform.drivers.clock.LPC54114 platform.drivers.power.LPC54114 platform.drivers.lpc_iocon.LPC54114 platform.drivers.lpc_gpio.LPC54114 platform.drivers.inputmux.LPC54114 platform.devices.LPC54114_CMSIS.LPC54114 platform.Include_core_cm4.LPC54114 platform.devices.LPC54114_startup.LPC54114 platform.drivers.flexcomm_usart.LPC54114 platform.drivers.flexcomm.LPC54114 component.usart_adapter.LPC54114 component.lists.LPC54114 platform.drivers.reset.LPC54114 platform.drivers.inputmux_connections.LPC54114 platform.utilities.misc_utilities.LPC54114 platform.Include_common.LPC54114 platform.Include_dsp.LPC54114 platform.devices.LPC54114_system.LPC54114" category="driver_examples/spi">
+    <projects>
+      <project type="com.crt.advproject.projecttype.exe" nature="org.eclipse.cdt.core.cnature"/>
+    </projects>
+    <memory/>
+    <toolchainSettings>
+      <toolchainSetting id_refs="com.nxp.mcuxpresso">
+        <option id="gnu.c.compiler.option.preprocessor.def.symbols" type="stringList">
+          <value>CORE_M4</value>
+          <value>CPU_LPC54114J256BD64_cm4</value>
+          <value>PRINTF_ADVANCED_ENABLE=1</value>
+        </option>
+        <option id="com.crt.advproject.link.cpp.crpenable" type="boolean">
+          <value>true</value>
+        </option>
+        <option id="com.crt.advproject.link.crpenable" type="boolean">
+          <value>true</value>
+        </option>
+        <option id="com.crt.advproject.gas.fpu" type="enum">
+          <value>com.crt.advproject.gas.fpu.fpv4.hard</value>
+        </option>
+        <option id="com.crt.advproject.gcc.fpu" type="enum">
+          <value>com.crt.advproject.gcc.fpu.fpv4.hard</value>
+        </option>
+        <option id="gnu.c.compiler.option.optimization.flags" type="string">
+          <value>-fno-common</value>
+        </option>
+        <option id="com.crt.advproject.c.misc.dialect" type="enum">
+          <value>com.crt.advproject.misc.dialect.gnu99</value>
+        </option>
+        <option id="gnu.c.compiler.option.misc.other" type="string">
+          <value>-c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin</value>
+        </option>
+        <option id="gnu.c.compiler.option.warnings.allwarn" type="boolean">
+          <value>false</value>
+        </option>
+        <option id="com.crt.advproject.link.fpu" type="enum">
+          <value>com.crt.advproject.link.fpu.fpv4.hard</value>
+        </option>
+        <option id="gnu.c.link.option.nostdlibs" type="boolean">
+          <value>true</value>
+        </option>
+      </toolchainSetting>
+    </toolchainSettings>
+    <include_paths>
+      <include_path path="boards/lpcxpresso54114/driver_examples/spi/dma_b2b_transfer/slave/cm4" project_relative_path="board" type="c_include"/>
+      <include_path path="boards/lpcxpresso54114" project_relative_path="board" type="c_include"/>
+      <include_path path="boards/lpcxpresso54114/driver_examples/spi/dma_b2b_transfer/slave" project_relative_path="board" type="c_include"/>
+    </include_paths>
+    <source path="boards/lpcxpresso54114/driver_examples/spi/dma_b2b_transfer/slave/cm4/iar" project_relative_path="./" type="workspace" toolchain="iar">
+      <files mask="spi_dma_b2b_transfer_slave.ewd"/>
+      <files mask="spi_dma_b2b_transfer_slave.ewp"/>
+      <files mask="spi_dma_b2b_transfer_slave.eww"/>
+    </source>
+    <source path="boards/lpcxpresso54114/driver_examples/spi/dma_b2b_transfer/slave/cm4/mdk" project_relative_path="./" type="workspace" toolchain="mdk">
+      <files mask="spi_dma_b2b_transfer_slave.uvprojx"/>
+      <files mask="spi_dma_b2b_transfer_slave.uvoptx"/>
+      <files mask="spi_dma_b2b_transfer_slave.uvmpw"/>
+    </source>
+    <source path="boards/lpcxpresso54114/driver_examples/spi/dma_b2b_transfer/slave/cm4/armgcc" project_relative_path="./" type="workspace" toolchain="armgcc">
+      <files mask="build_all.bat"/>
+      <files mask="build_all.sh"/>
+      <files mask="clean.bat"/>
+      <files mask="clean.sh"/>
+      <files mask="CMakeLists.txt"/>
+      <files mask="flags.cmake"/>
+      <files mask="config.cmake"/>
+      <files mask="build_debug.bat"/>
+      <files mask="build_debug.sh"/>
+      <files mask="build_release.bat"/>
+      <files mask="build_release.sh"/>
+    </source>
+    <source path="boards/lpcxpresso54114/driver_examples/spi/dma_b2b_transfer/slave/cm4" project_relative_path="source" type="src">
+      <files mask="spi_dma_b2b_transfer_slave.c"/>
+    </source>
+    <source path="boards/lpcxpresso54114/driver_examples/spi/dma_b2b_transfer/slave/cm4" project_relative_path="board" type="src">
+      <files mask="pin_mux.c"/>
+    </source>
+    <source path="boards/lpcxpresso54114/driver_examples/spi/dma_b2b_transfer/slave/cm4" project_relative_path="board" type="c_include">
+      <files mask="pin_mux.h"/>
+    </source>
+    <source path="boards/lpcxpresso54114" project_relative_path="board" type="src">
+      <files mask="board.c"/>
+      <files mask="clock_config.c"/>
+    </source>
+    <source path="boards/lpcxpresso54114" project_relative_path="board" type="c_include">
+      <files mask="board.h"/>
+      <files mask="clock_config.h"/>
+    </source>
+    <source path="boards/lpcxpresso54114/driver_examples/spi/dma_b2b_transfer/slave/cm4" project_relative_path="doc" type="doc" toolchain="iar mdk mcuxpresso armgcc">
+      <files mask="readme.txt"/>
+    </source>
+    <source path="boards/lpcxpresso54114/driver_examples/spi/dma_b2b_transfer/slave/cm4/iar" project_relative_path="LPC54114/iar" type="linker" toolchain="iar">
+      <files mask="LPC54114J256_cm4.icf"/>
+    </source>
+    <source path="boards/lpcxpresso54114/driver_examples/spi/dma_b2b_transfer/slave/cm4/mdk" project_relative_path="LPC54114/arm" type="linker" toolchain="mdk">
+      <files mask="LPC54114J256_cm4.scf"/>
+    </source>
+    <source path="boards/lpcxpresso54114/driver_examples/spi/dma_b2b_transfer/slave/cm4/armgcc" project_relative_path="LPC54114/gcc" type="linker" toolchain="armgcc">
+      <files mask="LPC54114J256_cm4_flash.ld"/>
+    </source>
+  </example>
+</ksdk:examples>

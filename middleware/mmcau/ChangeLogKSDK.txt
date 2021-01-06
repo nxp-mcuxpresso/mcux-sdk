@@ -1,0 +1,17 @@
+/*!
+@page middleware_log Middleware Change Log
+ 
+@section mmcau MMCAU library 
+  The current version is 2.0.1.
+ 
+  - 2.0.1
+    - Bug fixes:
+      - KPSDK-17133 fix bug in fsl_mmcau.c when AES key schedule array is not aligned.
+ 
+  - 2.0.0
+    - New features:
+      - Q4/2013 release of the CAU library.
+      - Added fsl_mmcau.h/fsl_mmcau.c optional layer between application and legacy CAU library (cau_api.h).
+        This API has no alignment requirements.
+ 
+*/

@@ -1,0 +1,1 @@
+set(MCUX_DEVICE "LPC824")

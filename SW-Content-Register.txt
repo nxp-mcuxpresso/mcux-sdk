@@ -1,0 +1,139 @@
+Release Name: MCUXpresso Software Development Kit (SDK)
+Release Version: 2.9.0
+Package License: LA_OPT_NXP_Software_License.txt - Additional Distribution License granted, license in Section 2.3 applies
+
+SDK_Peripheral_Driver      Name: SDK Peripheral Driver                       
+                           Version: 2.x.x                                    
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code                               
+                           Description: Peripheral drivers are designed for  
+                           the most common use cases identified for the      
+                           underlying hardware block.                        
+                           Location: devices/<device>/drivers                
+                           Origin: NXP (BSD-3-Clause)                        
+
+SDK_Examples               Name: SDK examples                                
+                           Version: NA                                       
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code, binary, project files, linker
+                           files                                             
+                           Description: SDK out of box examples to show how  
+                           to use peripheral drivers and integrate           
+                           middleware.                                       
+                           Location: boards/<board>/                         
+                           Origin: NXP (BSD-3-Clause)                        
+
+SDK_Device                 Name: SDK SoC files                               
+                           Version: NA                                       
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code, linker files                 
+                           Description: Device system files, template files, 
+                           IDE related startup and linker files.             
+                           Location: devices/<device>/                       
+                           Origin: NXP (BSD-3-Clause)                        
+
+cmsis                      Name: CMSIS                                       
+                           Version: 5.6.0                                    
+                           Outgoing License: Apache License 2.0              
+                           License File: CMSIS/LICENSE.txt                   
+                           Format: source code                               
+                           Description: Vendor-independent hardware          
+                           abstraction layer for microcontrollers that are   
+                           based on Arm Cortex processors, distributed by    
+                           ARM. cores                                        
+                           Location: CMSIS/                                  
+                           Origin: ARM (Apache-2.0) -                        
+                           https://github.com/ARM-software/CMSIS_5/releases/t
+                           ag/5.6.0                                          
+
+cmsis_gpio                 Name: CMSIS GPIO Interface                        
+                           Version: 2.0.0                                    
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code                               
+                           Description: CMSIS Driver style GPIO interface    
+                           definition created by NXP.                        
+                           Location: CMSIS/Driver/Include/Driver_GPIO.h      
+                           Origin: NXP (BSD-3-Clause)                        
+
+SDK_Components             Name: SDK components and board peripheral drivers 
+                           Version: NA                                       
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code                               
+                           Description: SDK components and board peripheral  
+                           drivers, for example, flash and codec drivers.    
+                           Location: components/                             
+                           Origin: NXP (BSD-3-Clause)                        
+
+mmcau                      Name: mmCAU S/W Library                           
+                           Version: 2.0.1                                    
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code                               
+                           Description: S/W library that works with the      
+                           memory-mapped cryptographic acceleration unit     
+                           present on some MCUXpresso SoCs                   
+                           Location: middleware/mmcau                        
+                           Origin: NXP (BSD-3-Clause)                        
+
+cmsis_drivers              Name: SDK CMSIS Peripheral Drivers                
+                           Version: 2.x.x                                    
+                           Outgoing License: Apache License 2.0              
+                           License File: CMSIS/LICENSE.txt                   
+                           Format: source code                               
+                           Description: CMSIS Peripheral drivers are designed
+                           to provide hardware independent APIs which make   
+                           application reusable across a wide range of       
+                           supported microcontroller devices.                
+                           Location: devices/<device>/cmsis_drivers          
+                           Origin: NXP (Apache License 2.0)                  
+
+dsp_audio_framework        Name: dsp_audio_framework                         
+                           Version: 2.0                                      
+                           Outgoing License: MIT                             
+                           License File:                                     
+                           middleware/dsp/audio_framework/LICENSE.txt        
+                           Format: source code                               
+                           Description: DSP Audio Streamer Framework based on
+                           Xtensa Audio Framework from Cadence Design        
+                           Location: middleware/dsp/audio_framework          
+                           Origin: Cadence Design Systems, Inc. & NXP        
+
+dsp_nn                     Name: dsp_nn                                      
+                           Version: 2.2.0                                    
+                           Outgoing License: Cadence Design Systems License  
+                           Agreement                                         
+                           License File: middleware\dsp\nn\nnlib\LICENSE     
+                           Format: source code, header files, binary files   
+                           Description: DSP Neural Networks Framework based  
+                           on Xtensa Neural Networks Library from Cadence    
+                           Design                                            
+                           Location: middleware/dsp/nn                       
+                           Origin: Cadence Design Systems, Inc. & NXP        
+
+naturedsp_hifi4            Name: naturedsp                                   
+                           Version: 4.0.0                                    
+                           Outgoing License: LA_OPT_NXP_Software_License.txt 
+                           - No distribution permitted, license in Section   
+                           2.2 applies.                                      
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: source code                               
+                           Description: Digital Signal Processing for Xtensa 
+                           HiFi Audio Engines                                
+                           Location: middleware/dsp/naturedsp/hifi4          
+                           Origin: Cadence Design Systems (Proprietary)      
+
+Pedometer_Library          Name: Pedometer Library                           
+                           Version: 1.0                                      
+                           Outgoing License: LA_OPT_NXP_Software_License     
+                           License File:                                     
+                           Format: binary library                            
+                           Description: Pedometer algorithm library for Arm  
+                           Cortex M0+ and M4 processors                      
+                           Location:                                         
+                           middleware/issdk/algorithms/pedometer/lib         
+                           Origin: KEYnetik, Inc                             

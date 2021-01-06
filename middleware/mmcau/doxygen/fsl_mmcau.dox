@@ -1,0 +1,123 @@
+/*!
+
+@defgroup mmcau MMCAU Peripheral Driver
+@details The mmCAU software library uses the mmCAU co-processor that is connected to the ARM Cortex-M4/M0+ Private Peripheral Bus (PPB). 
+In this chapter, CAU refers to both CAU and mmCAU unless explicitly noted. 
+
+# Purpose {#MMCAUPurpose}
+
+The following chapter describes  how to use the mmCAU software library in any application to integrate a cryptographic algorithm or 
+hashing function supported by the software library. NXP products supported by the software library are MCU/MPUs. 
+Check the specific Freescale product for CAU availability.
+
+# Library Features {#MMCAULF}
+
+The library is as compact and generic as possible to simplify the integration with existing cryptographic software. 
+The library has a standard header file with ANSI C prototypes for all functions: "cau_api.h". This software library is thread safe only if CAU registers 
+are saved on a context switch. The mmCAU software library is also compatible to ARM C compiler conventions (EABI). 
+All pointers passed to mmCAU API functions (input and output data blocks, keys, key schedules, and so on) are aligned to 0-modulo-4 addresses.<br>
+For applications that don't need to deal with the aligned addresses, a simple wrapper layer is provided. The wrapper layer consists of the "fsl_mmcau.h" header file 
+and "fsl_mmcau.c" source code file. The only function of the wrapper layer is that it supports unaligned addresses <br>.
+The CAU library supports the following encryption/decryption algorithms and hashing functions:
+<ul>
+    <li>AES128</li>
+    <li>AES192</li>
+    <li>AES256</li>
+    <li>DES</li>
+    <li>MD5</li>
+    <li>SHA1</li>
+    <li>SHA256</li>
+</ul>
+<b>Note:</b> 3DES crypto algorithms are supported by calling the corresponding DES crypto function three times.  
+Hardware support for SHA256 is only present in the CAU version 2. See the appropriate MCU/MPU reference manual for details about availability. 
+Additionally, the cau_sha256_initialize_output() function checks the hardware revision and returns a (-1) value if the CAU lacks SHA256 support.
+
+# CAU and mmCAU software library overview {#MMCAUSLO}
+
+Table 1 shows the crypto algorithms and hashing functions included in the software library:
+<table>
+    <tr>
+        <td width=120 rowspan=6><b>Crypto Algorithms</b></td>
+        <td width=90 rowspan=3>AES128<br>AES192<br>AES256</td>
+        <td>cau_aes_set_key</td>
+    </tr>
+    <tr>
+        <td width=160>cau_aes_encrypt</td>
+    </tr>
+    <tr>
+        <td width=160>cau_aes_decrypt</td>
+    </tr>
+    <tr>
+        <td rowspan=3>DES/3DES</td>
+        <td width=160>cau_des_chk_parity</td>
+    </tr>
+    <tr>
+        <td width=160>cau_des_encrypt</td>
+    </tr>
+    <tr>
+        <td width=160>cau_des_decrypt</td>
+    </tr>
+    <tr>
+        <td rowspan=12><b>Hashing Functions</b></td>
+        <td rowspan=4>MD5</td>
+        <td width=160>cau_md5_initialize_output</td>
+    </tr>
+    <tr>
+        <td width=160>cau_md5_hash_n</td>
+    </tr>
+    <tr>
+        <td width=160>cau_md5_update</td>
+    </tr>
+    <tr>
+        <td width=160>cau_md5_hash</td>
+    </tr>
+    <tr>
+        <td rowspan=4>SHA1</td>
+        <td width=160>cau_sha1_initialize_output</td>
+    </tr>
+    <tr>
+        <td width=160>cau_sha1_hash_n</td>
+    </tr>
+    <tr>
+        <td width=160>cau_sha1_update</td>
+    </tr>
+    <tr>
+        <td width=160>cau_sha1_hash</td>
+    </tr>
+    <tr>
+        <td rowspan=4>SHA256</td>
+        <td width=160>cau_sha256_initialize_output</td>
+    </tr>
+    <tr>
+        <td width=160>cau_sha256_hash_n</td>
+    </tr>
+    <tr>
+        <td width=160>cau_sha256_update</td>
+    </tr>
+    <tr>
+        <td width=160>cau_sha256_hash</td>
+    </tr>
+</table>
+<b><i>Table 1: Library Overview</i></b>
+
+# mmCAU software library usage {#MMCAUSLU}
+
+The software library contains the following files:
+<table>
+    <tr>
+        <td><b>File</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>cau_api.h</td>
+        <td>CAU and mmCAU header file</td>
+    </tr>
+    <tr>
+        <td>lib_mmcau.a</td>
+        <td>mmCAU library</td>
+    </tr>
+</table>
+<b><i>Table 2: File Description</i></b>
+<p>The header file and lib_mmcau.a must always be included in the project. </p>
+
+*/

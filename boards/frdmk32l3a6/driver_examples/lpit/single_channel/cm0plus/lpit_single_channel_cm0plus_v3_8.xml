@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ksdk:examples xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd manifest.xsd">
+  <externalDefinitions>
+    <definition extID="cm0plus_K32L3A60xxx"/>
+    <definition extID="utility.debug_console_lite.K32L3A60"/>
+    <definition extID="platform.utilities.assert_lite.K32L3A60"/>
+    <definition extID="platform.drivers.port.K32L3A60"/>
+    <definition extID="platform.drivers.lpit.K32L3A60"/>
+    <definition extID="platform.drivers.gpio.K32L3A60"/>
+    <definition extID="platform.drivers.clock.K32L3A60"/>
+    <definition extID="platform.drivers.common.K32L3A60"/>
+    <definition extID="platform.drivers.msmc.K32L3A60"/>
+    <definition extID="platform.drivers.lpuart.K32L3A60"/>
+    <definition extID="component.lpuart_adapter.K32L3A60"/>
+    <definition extID="component.lists.K32L3A60"/>
+    <definition extID="platform.devices.K32L3A60_CMSIS.K32L3A60"/>
+    <definition extID="platform.Include_core_cm0plus.K32L3A60"/>
+    <definition extID="platform.devices.K32L3A60_startup.K32L3A60"/>
+    <definition extID="platform.utilities.misc_utilities.K32L3A60"/>
+    <definition extID="platform.Include_common.K32L3A60"/>
+    <definition extID="platform.Include_dsp.K32L3A60"/>
+    <definition extID="platform.devices.K32L3A60_system.K32L3A60"/>
+    <definition extID="mcuxpresso"/>
+    <definition extID="iar"/>
+    <definition extID="mdk"/>
+    <definition extID="armgcc"/>
+    <definition extID="com.nxp.mcuxpresso"/>
+    <definition extID="com.crt.advproject.config.exe.debug"/>
+    <definition extID="com.crt.advproject.config.exe.release"/>
+  </externalDefinitions>
+  <example id="frdmk32l3a6_lpit_single_channel_cm0plus" name="lpit_single_channel_cm0plus" device_core="cm0plus_K32L3A60xxx" dependency="utility.debug_console_lite.K32L3A60 platform.utilities.assert_lite.K32L3A60 platform.drivers.port.K32L3A60 platform.drivers.lpit.K32L3A60 platform.drivers.gpio.K32L3A60 platform.drivers.clock.K32L3A60 platform.drivers.common.K32L3A60 platform.drivers.msmc.K32L3A60 platform.drivers.lpuart.K32L3A60 component.lpuart_adapter.K32L3A60 component.lists.K32L3A60 platform.devices.K32L3A60_CMSIS.K32L3A60 platform.Include_core_cm0plus.K32L3A60 platform.devices.K32L3A60_startup.K32L3A60 platform.utilities.misc_utilities.K32L3A60 platform.Include_common.K32L3A60 platform.Include_dsp.K32L3A60 platform.devices.K32L3A60_system.K32L3A60" category="driver_examples/lpit">
+    <projects>
+      <project type="com.crt.advproject.projecttype.exe" nature="org.eclipse.cdt.core.cnature"/>
+    </projects>
+    <memory>
+      <memoryBlock id="PROGRAM_FLASH_cm0plus_K32L3A60xxx" name="PROGRAM_FLASH_cm0plus" addr="01000000" size="00040000" type="Flash" access="RO"/>
+      <memoryBlock id="SRAM_TCM_cm0plus_K32L3A60xxx" name="SRAM_TCM_cm0plus" addr="09000000" size="00020000" type="RAM" access="RW"/>
+      <memoryBlock id="FLEX_RAM_K32L3A60xxx" name="FLEX_RAM" addr="48000000" size="00001000" type="RAM" access="RW"/>
+      <memoryBlock id="USB_RAM_K32L3A60xxx" name="USB_RAM" addr="48010000" size="00000800" type="RAM" access="RW"/>
+    </memory>
+    <toolchainSettings>
+      <toolchainSetting id_refs="com.nxp.mcuxpresso">
+        <option id="gnu.c.compiler.option.preprocessor.def.symbols" type="stringList">
+          <value>CPU_K32L3A60VPJ1A_cm0plus</value>
+        </option>
+        <option id="com.crt.advproject.gas.fpu" type="enum">
+          <value>com.crt.advproject.gas.fpu.none</value>
+        </option>
+        <option id="gnu.c.compiler.option.optimization.flags" type="string">
+          <value>-fno-common</value>
+        </option>
+        <option id="com.crt.advproject.c.misc.dialect" type="enum">
+          <value>com.crt.advproject.misc.dialect.gnu99</value>
+        </option>
+        <option id="com.crt.advproject.gcc.fpu" type="enum">
+          <value>com.crt.advproject.gcc.fpu.none</value>
+        </option>
+        <option id="gnu.c.compiler.option.misc.other" type="string">
+          <value>-c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin</value>
+        </option>
+        <option id="gnu.c.compiler.option.warnings.allwarn" type="boolean">
+          <value>false</value>
+        </option>
+        <option id="gnu.c.link.option.nostdlibs" type="boolean">
+          <value>true</value>
+        </option>
+        <option id="com.crt.advproject.link.fpu" type="enum">
+          <value>com.crt.advproject.link.fpu.none</value>
+        </option>
+      </toolchainSetting>
+    </toolchainSettings>
+    <debug_configurations>
+      <debug_configuration id_refs="com.crt.advproject.config.exe.debug com.crt.advproject.config.exe.release">
+        <drivers>
+          <driver id_refs="PROGRAM_FLASH_cm0plus_K32L3A60xxx">
+            <driverBinary path="devices/K32L3A60/mcuxpresso" project_relative_path="binary" type="binary">
+              <files mask="FTFE_2K_K32L3A_cm0plus.cfx"/>
+            </driverBinary>
+          </driver>
+        </drivers>
+      </debug_configuration>
+    </debug_configurations>
+    <include_paths>
+      <include_path path="boards/frdmk32l3a6/driver_examples/lpit/single_channel/cm0plus" project_relative_path="board" type="c_include"/>
+      <include_path path="boards/frdmk32l3a6/driver_examples/lpit/single_channel/cm0plus" project_relative_path="frdmk32l3a6/driver_examples/lpit/single_channel/cm0plus" type="c_include"/>
+      <include_path path="boards/frdmk32l3a6" project_relative_path="board" type="c_include"/>
+    </include_paths>
+    <source path="boards/frdmk32l3a6/driver_examples/lpit/single_channel/cm0plus/iar" project_relative_path="./" type="workspace" toolchain="iar">
+      <files mask="lpit_single_channel_cm0plus.ewd"/>
+      <files mask="lpit_single_channel_cm0plus.ewp"/>
+      <files mask="lpit_single_channel_cm0plus.eww"/>
+    </source>
+    <source path="boards/frdmk32l3a6/driver_examples/lpit/single_channel/cm0plus/mdk" project_relative_path="./" type="workspace" toolchain="mdk">
+      <files mask="lpit_single_channel_cm0plus.uvprojx"/>
+      <files mask="lpit_single_channel_cm0plus.uvoptx"/>
+      <files mask="lpit_single_channel_cm0plus.uvmpw"/>
+    </source>
+    <source path="boards/frdmk32l3a6/driver_examples/lpit/single_channel/cm0plus/armgcc" project_relative_path="./" type="workspace" toolchain="armgcc">
+      <files mask="build_all.bat"/>
+      <files mask="build_all.sh"/>
+      <files mask="clean.bat"/>
+      <files mask="clean.sh"/>
+      <files mask="CMakeLists.txt"/>
+      <files mask="flags.cmake"/>
+      <files mask="config.cmake"/>
+      <files mask="build_debug.bat"/>
+      <files mask="build_debug.sh"/>
+      <files mask="build_release.bat"/>
+      <files mask="build_release.sh"/>
+    </source>
+    <source path="boards/frdmk32l3a6/driver_examples/lpit/single_channel/cm0plus" project_relative_path="source" type="src">
+      <files mask="lpit_single_channel.c"/>
+    </source>
+    <source path="boards/frdmk32l3a6/driver_examples/lpit/single_channel/cm0plus" project_relative_path="board" type="src">
+      <files mask="pin_mux.c"/>
+    </source>
+    <source path="boards/frdmk32l3a6/driver_examples/lpit/single_channel/cm0plus" project_relative_path="board" type="c_include">
+      <files mask="pin_mux.h"/>
+    </source>
+    <source path="boards/frdmk32l3a6" project_relative_path="board" type="src">
+      <files mask="board.c"/>
+      <files mask="clock_config.c"/>
+    </source>
+    <source path="boards/frdmk32l3a6" project_relative_path="board" type="c_include">
+      <files mask="board.h"/>
+      <files mask="clock_config.h"/>
+    </source>
+    <source path="boards/frdmk32l3a6/driver_examples/lpit/single_channel/cm0plus" project_relative_path="doc" type="doc" toolchain="iar mdk armgcc">
+      <files mask="readme.txt"/>
+    </source>
+    <source path="boards/frdmk32l3a6/driver_examples/lpit/single_channel/cm0plus/iar" project_relative_path="K32L3A60/iar" type="linker" toolchain="iar">
+      <files mask="K32L3A60xxx_cm0plus_flash.icf"/>
+    </source>
+    <source path="boards/frdmk32l3a6/driver_examples/lpit/single_channel/cm0plus/mdk" project_relative_path="K32L3A60/arm" type="linker" toolchain="mdk">
+      <files mask="K32L3A60xxx_cm0plus_flash.scf"/>
+    </source>
+    <source path="boards/frdmk32l3a6/driver_examples/lpit/single_channel/cm0plus/armgcc" project_relative_path="K32L3A60/gcc" type="linker" toolchain="armgcc">
+      <files mask="K32L3A60xxx_cm0plus_flash.ld"/>
+    </source>
+  </example>
+</ksdk:examples>

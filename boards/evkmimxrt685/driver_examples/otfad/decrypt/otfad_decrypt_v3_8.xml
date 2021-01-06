@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ksdk:examples xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd manifest.xsd">
+  <externalDefinitions>
+    <definition extID="cm33_MIMXRT685S"/>
+    <definition extID="platform.drivers.cache_cache64.MIMXRT685S"/>
+    <definition extID="utility.debug_console_lite.MIMXRT685S"/>
+    <definition extID="platform.utilities.assert_lite.MIMXRT685S"/>
+    <definition extID="platform.drivers.otfad.MIMXRT685S"/>
+    <definition extID="platform.drivers.flexspi.MIMXRT685S"/>
+    <definition extID="platform.drivers.common.MIMXRT685S"/>
+    <definition extID="platform.drivers.clock.MIMXRT685S"/>
+    <definition extID="platform.drivers.power.MIMXRT685S"/>
+    <definition extID="platform.drivers.lpc_gpio.MIMXRT685S"/>
+    <definition extID="platform.drivers.inputmux.MIMXRT685S"/>
+    <definition extID="device.MIMXRT685S_CMSIS.MIMXRT685S"/>
+    <definition extID="component.usart_adapter.MIMXRT685S"/>
+    <definition extID="platform.drivers.flash_config.MIMXRT685S"/>
+    <definition extID="component.lists.MIMXRT685S"/>
+    <definition extID="platform.drivers.flexcomm_usart.MIMXRT685S"/>
+    <definition extID="device.MIMXRT685S_startup.MIMXRT685S"/>
+    <definition extID="platform.drivers.flexcomm.MIMXRT685S"/>
+    <definition extID="platform.drivers.lpc_iopctl.MIMXRT685S"/>
+    <definition extID="platform.drivers.reset.MIMXRT685S"/>
+    <definition extID="platform.Include_core_cm33.MIMXRT685S"/>
+    <definition extID="platform.Include_common.MIMXRT685S"/>
+    <definition extID="platform.Include_dsp.MIMXRT685S"/>
+    <definition extID="platform.drivers.inputmux_connections.MIMXRT685S"/>
+    <definition extID="platform.utilities.misc_utilities.MIMXRT685S"/>
+    <definition extID="iar"/>
+    <definition extID="mdk"/>
+    <definition extID="armgcc"/>
+    <definition extID="mcuxpresso"/>
+    <definition extID="com.nxp.mcuxpresso"/>
+    <definition extID="com.crt.advproject.config.exe.debug"/>
+    <definition extID="com.crt.advproject.config.exe.release"/>
+  </externalDefinitions>
+  <example id="evkmimxrt685_otfad_decrypt" name="otfad_decrypt" device_core="cm33_MIMXRT685S" dependency="platform.drivers.cache_cache64.MIMXRT685S utility.debug_console_lite.MIMXRT685S platform.utilities.assert_lite.MIMXRT685S platform.drivers.otfad.MIMXRT685S platform.drivers.flexspi.MIMXRT685S platform.drivers.common.MIMXRT685S platform.drivers.clock.MIMXRT685S platform.drivers.power.MIMXRT685S platform.drivers.lpc_gpio.MIMXRT685S platform.drivers.inputmux.MIMXRT685S device.MIMXRT685S_CMSIS.MIMXRT685S component.usart_adapter.MIMXRT685S platform.drivers.flash_config.MIMXRT685S component.lists.MIMXRT685S platform.drivers.flexcomm_usart.MIMXRT685S device.MIMXRT685S_startup.MIMXRT685S platform.drivers.flexcomm.MIMXRT685S platform.drivers.lpc_iopctl.MIMXRT685S platform.drivers.reset.MIMXRT685S platform.Include_core_cm33.MIMXRT685S platform.Include_common.MIMXRT685S platform.Include_dsp.MIMXRT685S platform.drivers.inputmux_connections.MIMXRT685S platform.utilities.misc_utilities.MIMXRT685S" category="driver_examples/otfad/decrypt">
+    <projects>
+      <project type="com.crt.advproject.projecttype.exe" nature="org.eclipse.cdt.core.cnature"/>
+    </projects>
+    <memory>
+      <memoryBlock id="QSPI_FLASH_MIMXRT685S" name="QSPI_FLASH" addr="08000000" size="00800000" type="ExtFlash" access="RO"/>
+      <memoryBlock id="SRAM_MIMXRT685S" name="SRAM" addr="00080000" size="00180000" type="RAM" access="RW"/>
+      <memoryBlock id="USB_RAM_MIMXRT685S" name="USB_RAM" addr="40140000" size="00004000" type="RAM" access="RW"/>
+    </memory>
+    <toolchainSettings>
+      <toolchainSetting id_refs="com.nxp.mcuxpresso">
+        <option id="gnu.c.compiler.option.preprocessor.def.symbols" type="stringList">
+          <value>CPU_MIMXRT685SFVKB_cm33</value>
+          <value>BOOT_HEADER_ENABLE=1</value>
+          <value>FSL_SDK_DRIVER_QUICK_ACCESS_ENABLE=1</value>
+        </option>
+        <option id="com.crt.advproject.gas.fpu" type="enum">
+          <value>com.crt.advproject.gas.fpu.fpv5sp.hard</value>
+        </option>
+        <option id="com.crt.advproject.gcc.fpu" type="enum">
+          <value>com.crt.advproject.gcc.fpu.fpv5sp.hard</value>
+        </option>
+        <option id="gnu.c.compiler.option.optimization.flags" type="string">
+          <value>-fno-common</value>
+        </option>
+        <option id="com.crt.advproject.c.misc.dialect" type="enum">
+          <value>com.crt.advproject.misc.dialect.gnu99</value>
+        </option>
+        <option id="gnu.c.compiler.option.misc.other" type="string">
+          <value>-mcpu=cortex-m33 -c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin</value>
+        </option>
+        <option id="gnu.c.compiler.option.warnings.allwarn" type="boolean">
+          <value>false</value>
+        </option>
+        <option id="com.crt.advproject.link.fpu" type="enum">
+          <value>com.crt.advproject.link.fpu.fpv5sp.hard</value>
+        </option>
+        <option id="gnu.c.link.option.nostdlibs" type="boolean">
+          <value>true</value>
+        </option>
+      </toolchainSetting>
+    </toolchainSettings>
+    <debug_configurations>
+      <debug_configuration id_refs="com.crt.advproject.config.exe.debug com.crt.advproject.config.exe.release">
+        <drivers>
+          <driver id_refs="QSPI_FLASH_MIMXRT685S">
+            <driverBinary path="devices/RT685/mcuxpresso" project_relative_path="binary" type="binary">
+              <files mask="MIMXRT600_FlexSPI_B_MXIC_OPI.cfx"/>
+            </driverBinary>
+          </driver>
+        </drivers>
+      </debug_configuration>
+    </debug_configurations>
+    <include_paths>
+      <include_path path="boards/evkmimxrt685/driver_examples/otfad/decrypt" project_relative_path="source" type="c_include"/>
+      <include_path path="boards/evkmimxrt685/driver_examples/otfad/decrypt" project_relative_path="board" type="c_include"/>
+      <include_path path="boards/evkmimxrt685" project_relative_path="board" type="c_include"/>
+    </include_paths>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt/iar" project_relative_path="./" type="workspace" toolchain="iar">
+      <files mask="otfad_decrypt.ewd"/>
+      <files mask="otfad_decrypt.ewp"/>
+      <files mask="otfad_decrypt.eww"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt/mdk" project_relative_path="./" type="workspace" toolchain="mdk">
+      <files mask="otfad_decrypt.uvoptx"/>
+      <files mask="otfad_decrypt.uvprojx"/>
+      <files mask="JLinkSettings.JLinkScript"/>
+      <files mask="JLinkSettings.ini"/>
+      <files mask="otfad_decrypt.uvmpw"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt/armgcc" project_relative_path="./" type="workspace" toolchain="armgcc">
+      <files mask="build_all.bat"/>
+      <files mask="build_all.sh"/>
+      <files mask="clean.bat"/>
+      <files mask="clean.sh"/>
+      <files mask="CMakeLists.txt"/>
+      <files mask="flags.cmake"/>
+      <files mask="config.cmake"/>
+      <files mask="build_debug.bat"/>
+      <files mask="build_debug.sh"/>
+      <files mask="build_release.bat"/>
+      <files mask="build_release.sh"/>
+      <files mask="build_flash_debug.bat"/>
+      <files mask="build_flash_debug.sh"/>
+      <files mask="build_flash_release.bat"/>
+      <files mask="build_flash_release.sh"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt/linkscripts" project_relative_path="linkscripts" type="src" toolchain="mcuxpresso">
+      <files mask="main_data.ldt"/>
+      <files mask="main_text.ldt"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt/iar" project_relative_path="MIMXRT685S/iar" type="linker" toolchain="iar">
+      <files mask="MIMXRT685Sxxxx_cm33_ram.icf"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt/mdk" project_relative_path="MIMXRT685S/arm" type="linker" toolchain="mdk">
+      <files mask="MIMXRT685Sxxxx_cm33_ram.scf"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt/armgcc" project_relative_path="MIMXRT685S/gcc" type="linker" toolchain="armgcc">
+      <files mask="MIMXRT685Sxxxx_cm33_ram.ld"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt/iar" project_relative_path="evkmimxrt685/driver_examples/otfad/decrypt/iar" type="linker" toolchain="iar">
+      <files mask="MIMXRT685Sxxxx_cm33_flash.icf"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt/mdk" project_relative_path="evkmimxrt685/driver_examples/otfad/decrypt/mdk" type="linker" toolchain="mdk">
+      <files mask="MIMXRT685Sxxxx_cm33_flash.scf"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt/armgcc" project_relative_path="evkmimxrt685/driver_examples/otfad/decrypt/armgcc" type="linker" toolchain="armgcc">
+      <files mask="MIMXRT685Sxxxx_cm33_flash.ld"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt" project_relative_path="source" type="src">
+      <files mask="otfad_decrypt.c"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt" project_relative_path="source" type="c_include">
+      <files mask="app.h"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt" project_relative_path="source" type="src">
+      <files mask="flexspi_octal_flash_ops.c"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt" project_relative_path="board" type="src">
+      <files mask="pin_mux.c"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt" project_relative_path="board" type="c_include">
+      <files mask="pin_mux.h"/>
+    </source>
+    <source path="boards/evkmimxrt685" project_relative_path="board" type="src">
+      <files mask="board.c"/>
+      <files mask="clock_config.c"/>
+    </source>
+    <source path="boards/evkmimxrt685" project_relative_path="board" type="c_include">
+      <files mask="board.h"/>
+      <files mask="clock_config.h"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt" project_relative_path="doc" type="doc" toolchain="iar mdk mcuxpresso armgcc">
+      <files mask="readme.txt"/>
+    </source>
+    <source path="boards/evkmimxrt685/driver_examples/otfad/decrypt/mdk" project_relative_path="evkmimxrt685" type="configuration" toolchain="mdk">
+      <files mask="evkmimxrt685_flash.ini"/>
+    </source>
+  </example>
+</ksdk:examples>

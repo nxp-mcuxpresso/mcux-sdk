@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ksdk:examples xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd manifest.xsd">
+  <externalDefinitions>
+    <definition extID="utility.debug_console_lite.MCIMX7U5"/>
+    <definition extID="platform.utilities.assert_lite.MCIMX7U5"/>
+    <definition extID="platform.drivers.port.MCIMX7U5"/>
+    <definition extID="platform.drivers.clock.MCIMX7U5"/>
+    <definition extID="platform.drivers.flexio.MCIMX7U5"/>
+    <definition extID="platform.drivers.common.MCIMX7U5"/>
+    <definition extID="platform.devices.MCIMX7U5_CMSIS.MCIMX7U5"/>
+    <definition extID="component.lpuart_adapter.MCIMX7U5"/>
+    <definition extID="component.lists.MCIMX7U5"/>
+    <definition extID="platform.drivers.lpuart.MCIMX7U5"/>
+    <definition extID="platform.devices.MCIMX7U5_startup.MCIMX7U5"/>
+    <definition extID="platform.drivers.gpio.MCIMX7U5"/>
+    <definition extID="platform.drivers.msmc.MCIMX7U5"/>
+    <definition extID="platform.Include_core_cm4.MCIMX7U5"/>
+    <definition extID="platform.Include_common.MCIMX7U5"/>
+    <definition extID="platform.Include_dsp.MCIMX7U5"/>
+    <definition extID="platform.utilities.misc_utilities.MCIMX7U5"/>
+    <definition extID="iar"/>
+    <definition extID="mcuxpresso"/>
+    <definition extID="armgcc"/>
+    <definition extID="com.nxp.mcuxpresso"/>
+    <definition extID="mdk"/>
+  </externalDefinitions>
+  <example id="evkmcimx7ulp_flexio_pwm" name="flexio_pwm" dependency="utility.debug_console_lite.MCIMX7U5 platform.utilities.assert_lite.MCIMX7U5 platform.drivers.port.MCIMX7U5 platform.drivers.clock.MCIMX7U5 platform.drivers.flexio.MCIMX7U5 platform.drivers.common.MCIMX7U5 platform.devices.MCIMX7U5_CMSIS.MCIMX7U5 component.lpuart_adapter.MCIMX7U5 component.lists.MCIMX7U5 platform.drivers.lpuart.MCIMX7U5 platform.devices.MCIMX7U5_startup.MCIMX7U5 platform.drivers.gpio.MCIMX7U5 platform.drivers.msmc.MCIMX7U5 platform.Include_core_cm4.MCIMX7U5 platform.Include_common.MCIMX7U5 platform.Include_dsp.MCIMX7U5 platform.utilities.misc_utilities.MCIMX7U5" category="driver_examples/flexio">
+    <projects>
+      <project type="com.crt.advproject.projecttype.exe" nature="org.eclipse.cdt.core.cnature"/>
+    </projects>
+    <toolchainSettings>
+      <toolchainSetting id_refs="com.nxp.mcuxpresso">
+        <option id="gnu.c.compiler.option.preprocessor.def.symbols" type="stringList">
+          <value>CPU_MCIMX7U5DVP07</value>
+          <value>CPU_MCIMX7U5DVP07_cm4</value>
+        </option>
+        <option id="com.crt.advproject.gas.fpu" type="enum">
+          <value>com.crt.advproject.gas.fpu.fpv4.hard</value>
+        </option>
+        <option id="com.crt.advproject.gcc.fpu" type="enum">
+          <value>com.crt.advproject.gcc.fpu.fpv4.hard</value>
+        </option>
+        <option id="gnu.c.compiler.option.optimization.flags" type="string">
+          <value>-fno-common</value>
+        </option>
+        <option id="com.crt.advproject.c.misc.dialect" type="enum">
+          <value>com.crt.advproject.misc.dialect.gnu99</value>
+        </option>
+        <option id="gnu.c.compiler.option.misc.other" type="string">
+          <value>-c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin</value>
+        </option>
+        <option id="gnu.c.compiler.option.warnings.allwarn" type="boolean">
+          <value>false</value>
+        </option>
+        <option id="com.crt.advproject.link.fpu" type="enum">
+          <value>com.crt.advproject.link.fpu.fpv4.hard</value>
+        </option>
+        <option id="gnu.c.link.option.nostdlibs" type="boolean">
+          <value>true</value>
+        </option>
+      </toolchainSetting>
+    </toolchainSettings>
+    <include_paths>
+      <include_path path="boards/evkmcimx7ulp/driver_examples/flexio/pwm" project_relative_path="board" type="c_include"/>
+      <include_path path="boards/evkmcimx7ulp/driver_examples/flexio/pwm" project_relative_path="evkmcimx7ulp/driver_examples/flexio/pwm" type="c_include"/>
+      <include_path path="boards/evkmcimx7ulp" project_relative_path="board" type="c_include"/>
+    </include_paths>
+    <source path="boards/evkmcimx7ulp/driver_examples/flexio/pwm/iar" project_relative_path="./" type="workspace" toolchain="iar">
+      <files mask="flexio_pwm.ewd"/>
+      <files mask="flexio_pwm.ewp"/>
+      <files mask="flexio_pwm.eww"/>
+    </source>
+    <source path="boards/evkmcimx7ulp/driver_examples/flexio/pwm/armgcc" project_relative_path="./" type="workspace" toolchain="armgcc">
+      <files mask="build_all.bat"/>
+      <files mask="build_all.sh"/>
+      <files mask="clean.bat"/>
+      <files mask="clean.sh"/>
+      <files mask="CMakeLists.txt"/>
+      <files mask="flags.cmake"/>
+      <files mask="config.cmake"/>
+      <files mask="build_debug.bat"/>
+      <files mask="build_debug.sh"/>
+      <files mask="build_release.bat"/>
+      <files mask="build_release.sh"/>
+      <files mask="build_flash_debug.bat"/>
+      <files mask="build_flash_debug.sh"/>
+      <files mask="build_flash_release.bat"/>
+      <files mask="build_flash_release.sh"/>
+    </source>
+    <source path="boards/evkmcimx7ulp/driver_examples/flexio/pwm" project_relative_path="source" type="src">
+      <files mask="flexio_pwm.c"/>
+    </source>
+    <source path="boards/evkmcimx7ulp/driver_examples/flexio/pwm" project_relative_path="board" type="src">
+      <files mask="pin_mux.c"/>
+    </source>
+    <source path="boards/evkmcimx7ulp/driver_examples/flexio/pwm" project_relative_path="board" type="c_include">
+      <files mask="pin_mux.h"/>
+    </source>
+    <source path="boards/evkmcimx7ulp" project_relative_path="board" type="src">
+      <files mask="board.c"/>
+      <files mask="clock_config.c"/>
+    </source>
+    <source path="boards/evkmcimx7ulp" project_relative_path="board" type="c_include">
+      <files mask="board.h"/>
+      <files mask="clock_config.h"/>
+    </source>
+    <source path="boards/evkmcimx7ulp/driver_examples/flexio/pwm" project_relative_path="board" type="c_include">
+      <files mask="fsl_iomuxc.h"/>
+    </source>
+    <source path="boards/evkmcimx7ulp/driver_examples/flexio/pwm" project_relative_path="doc" type="doc" toolchain="iar mdk armgcc">
+      <files mask="readme.txt"/>
+    </source>
+    <source path="boards/evkmcimx7ulp/driver_examples/flexio/pwm/iar" project_relative_path="MCIMX7U5/iar" type="linker" toolchain="iar">
+      <files mask="MCIMX7U5xxxxx_cm4_ram.icf"/>
+      <files mask="MCIMX7U5xxxxx_cm4_flash.icf"/>
+    </source>
+    <source path="boards/evkmcimx7ulp/driver_examples/flexio/pwm/armgcc" project_relative_path="MCIMX7U5/gcc" type="linker" toolchain="armgcc">
+      <files mask="MCIMX7U5xxxxx_cm4_ram.ld"/>
+      <files mask="MCIMX7U5xxxxx_cm4_flash.ld"/>
+    </source>
+    <source path="boards/evkmcimx7ulp/driver_examples/flexio/pwm" project_relative_path="remoteproc" type="src">
+      <files mask="empty_rsc_table.c"/>
+    </source>
+  </example>
+</ksdk:examples>

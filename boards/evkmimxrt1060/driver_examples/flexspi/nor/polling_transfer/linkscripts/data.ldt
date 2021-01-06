@@ -1,0 +1,4 @@
+        <#if memory.name=="SRAM_ITC">
+        *flexspi_nor_flash_ops.o(.text*)
+        *fsl_flexspi.o(.text*)
+        </#if>

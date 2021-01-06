@@ -1,0 +1,26 @@
+    M_VECTOR_RAM_SIZE = 0x00000180;
+    /* Main DATA section (SRAM) */
+    .data : ALIGN(4)
+    {
+       FILL(0xff)
+       _data = . ;
+       *(vtable)
+       *(.ramfunc*)
+       KEEP(*(CodeQuickAccess))
+       KEEP(*(DataQuickAccess))
+       *flexspi_nor_flash_ops.o(.text .text* .rodata .rodata*)
+       *fsl_flexspi.o(.text .text* .rodata .rodata*)
+       *fsl_edma.o(.text .text* .rodata .rodata*)
+       *fsl_flexspi_edma.o(.text .text* .rodata .rodata*)
+       *(.data*)
+       . = ALIGN(128);
+       __VECTOR_RAM = .;
+       __interrupts_ram_start__ = .; /* Create a global symbol at data start */
+       *(.m_interrupts_ram)     /* This is a user defined section */
+       . += M_VECTOR_RAM_SIZE;
+       . = ALIGN(4) ;
+       __interrupts_ram_end__ = .; /* Define a global symbol at data end */
+       _edata = . ;
+    } > SRAM_DTC AT>PROGRAM_FLASH
+    __VECTOR_TABLE = __vectors_start__;
+    __RAM_VECTOR_TABLE_SIZE_BYTES = (__interrupts_ram_end__ - __interrupts_ram_start__);

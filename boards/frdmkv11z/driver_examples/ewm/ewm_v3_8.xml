@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ksdk:examples xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd manifest.xsd">
+  <externalDefinitions>
+    <definition extID="utility.debug_console_lite.MKV11Z7"/>
+    <definition extID="platform.utilities.assert_lite.MKV11Z7"/>
+    <definition extID="platform.drivers.port.MKV11Z7"/>
+    <definition extID="platform.drivers.gpio.MKV11Z7"/>
+    <definition extID="platform.drivers.ewm.MKV11Z7"/>
+    <definition extID="platform.drivers.clock.MKV11Z7"/>
+    <definition extID="platform.drivers.common.MKV11Z7"/>
+    <definition extID="device.MKV11Z7_CMSIS.MKV11Z7"/>
+    <definition extID="component.uart_adapter.MKV11Z7"/>
+    <definition extID="component.lists.MKV11Z7"/>
+    <definition extID="platform.drivers.uart.MKV11Z7"/>
+    <definition extID="device.MKV11Z7_startup.MKV11Z7"/>
+    <definition extID="platform.drivers.smc.MKV11Z7"/>
+    <definition extID="platform.Include_core_cm0plus.MKV11Z7"/>
+    <definition extID="platform.Include_common.MKV11Z7"/>
+    <definition extID="platform.Include_dsp.MKV11Z7"/>
+    <definition extID="platform.utilities.misc_utilities.MKV11Z7"/>
+    <definition extID="device.MKV11Z7_system.MKV11Z7"/>
+    <definition extID="iar"/>
+    <definition extID="mdk"/>
+    <definition extID="armgcc"/>
+    <definition extID="mcuxpresso"/>
+    <definition extID="com.nxp.mcuxpresso"/>
+  </externalDefinitions>
+  <example id="frdmkv11z_ewm" name="ewm" dependency="utility.debug_console_lite.MKV11Z7 platform.utilities.assert_lite.MKV11Z7 platform.drivers.port.MKV11Z7 platform.drivers.gpio.MKV11Z7 platform.drivers.ewm.MKV11Z7 platform.drivers.clock.MKV11Z7 platform.drivers.common.MKV11Z7 device.MKV11Z7_CMSIS.MKV11Z7 component.uart_adapter.MKV11Z7 component.lists.MKV11Z7 platform.drivers.uart.MKV11Z7 device.MKV11Z7_startup.MKV11Z7 platform.drivers.smc.MKV11Z7 platform.Include_core_cm0plus.MKV11Z7 platform.Include_common.MKV11Z7 platform.Include_dsp.MKV11Z7 platform.utilities.misc_utilities.MKV11Z7 device.MKV11Z7_system.MKV11Z7" category="driver_examples">
+    <projects>
+      <project type="com.crt.advproject.projecttype.exe" nature="org.eclipse.cdt.core.cnature"/>
+    </projects>
+    <toolchainSettings>
+      <toolchainSetting id_refs="com.nxp.mcuxpresso">
+        <option id="gnu.c.compiler.option.preprocessor.def.symbols" type="stringList">
+          <value>CPU_MKV11Z128VLH7</value>
+          <value>FRDM_KV11Z</value>
+          <value>FREEDOM</value>
+        </option>
+        <option id="com.crt.advproject.gas.fpu" type="enum">
+          <value>com.crt.advproject.gas.fpu.none</value>
+        </option>
+        <option id="gnu.c.compiler.option.optimization.flags" type="string">
+          <value>-fno-common</value>
+        </option>
+        <option id="com.crt.advproject.c.misc.dialect" type="enum">
+          <value>com.crt.advproject.misc.dialect.gnu99</value>
+        </option>
+        <option id="com.crt.advproject.gcc.fpu" type="enum">
+          <value>com.crt.advproject.gcc.fpu.none</value>
+        </option>
+        <option id="gnu.c.compiler.option.misc.other" type="string">
+          <value>-c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin</value>
+        </option>
+        <option id="gnu.c.compiler.option.warnings.allwarn" type="boolean">
+          <value>false</value>
+        </option>
+        <option id="gnu.c.link.option.nostdlibs" type="boolean">
+          <value>true</value>
+        </option>
+        <option id="com.crt.advproject.link.fpu" type="enum">
+          <value>com.crt.advproject.link.fpu.none</value>
+        </option>
+      </toolchainSetting>
+    </toolchainSettings>
+    <include_paths>
+      <include_path path="boards/frdmkv11z/driver_examples/ewm" project_relative_path="board" type="c_include"/>
+      <include_path path="boards/frdmkv11z/driver_examples/ewm" project_relative_path="frdmkv11z/driver_examples/ewm" type="c_include"/>
+      <include_path path="boards/frdmkv11z" project_relative_path="board" type="c_include"/>
+    </include_paths>
+    <source path="boards/frdmkv11z/driver_examples/ewm/iar" project_relative_path="./" type="workspace" toolchain="iar">
+      <files mask="ewm.ewd"/>
+      <files mask="ewm.ewp"/>
+      <files mask="ewm.eww"/>
+    </source>
+    <source path="boards/frdmkv11z/driver_examples/ewm/iar/settings" project_relative_path="./" type="workspace" toolchain="iar">
+      <files mask="ewm.dni"/>
+    </source>
+    <source path="boards/frdmkv11z/driver_examples/ewm/mdk" project_relative_path="./" type="workspace" toolchain="mdk">
+      <files mask="ewm.uvprojx"/>
+      <files mask="ewm.uvoptx"/>
+      <files mask="pemicro_connection_settings.ini"/>
+      <files mask="ewm.uvmpw"/>
+    </source>
+    <source path="boards/frdmkv11z/driver_examples/ewm/armgcc" project_relative_path="./" type="workspace" toolchain="armgcc">
+      <files mask="build_all.bat"/>
+      <files mask="build_all.sh"/>
+      <files mask="clean.bat"/>
+      <files mask="clean.sh"/>
+      <files mask="CMakeLists.txt"/>
+      <files mask="flags.cmake"/>
+      <files mask="config.cmake"/>
+      <files mask="build_debug.bat"/>
+      <files mask="build_debug.sh"/>
+      <files mask="build_release.bat"/>
+      <files mask="build_release.sh"/>
+    </source>
+    <source path="boards/frdmkv11z/driver_examples/ewm" project_relative_path="source" type="src">
+      <files mask="ewm.c"/>
+    </source>
+    <source path="boards/frdmkv11z/driver_examples/ewm" project_relative_path="board" type="src">
+      <files mask="pin_mux.c"/>
+    </source>
+    <source path="boards/frdmkv11z/driver_examples/ewm" project_relative_path="board" type="c_include">
+      <files mask="pin_mux.h"/>
+    </source>
+    <source path="boards/frdmkv11z" project_relative_path="board" type="src">
+      <files mask="board.c"/>
+      <files mask="clock_config.c"/>
+    </source>
+    <source path="boards/frdmkv11z" project_relative_path="board" type="c_include">
+      <files mask="board.h"/>
+      <files mask="clock_config.h"/>
+    </source>
+    <source path="boards/frdmkv11z/driver_examples/ewm" project_relative_path="doc" type="doc" toolchain="iar mdk mcuxpresso armgcc">
+      <files mask="readme.txt"/>
+    </source>
+    <source path="boards/frdmkv11z/driver_examples/ewm/iar" project_relative_path="MKV11Z7/iar" type="linker" toolchain="iar">
+      <files mask="MKV11Z128xxx7_flash.icf"/>
+    </source>
+    <source path="boards/frdmkv11z/driver_examples/ewm/mdk" project_relative_path="MKV11Z7/arm" type="linker" toolchain="mdk">
+      <files mask="MKV11Z128xxx7_flash.scf"/>
+    </source>
+    <source path="boards/frdmkv11z/driver_examples/ewm/armgcc" project_relative_path="MKV11Z7/gcc" type="linker" toolchain="armgcc">
+      <files mask="MKV11Z128xxx7_flash.ld"/>
+    </source>
+  </example>
+</ksdk:examples>

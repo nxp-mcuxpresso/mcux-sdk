@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding= "UTF-8" ?>
+<configuration name="" version="1.7" xsi:schemaLocation="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.7 http://mcuxpresso.nxp.com/XSD/mex_configuration_1.7.xsd" uuid="283ddeeb-f5ab-4300-824b-8d9e98b81c05" xmlns="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.7" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <common>
+      <processor>MIMX8QX6xxxFZ</processor>
+      <package>MIMX8QX6AVLFZ</package>
+      <board>MIMX8QX-MEK-REV-B</board>
+      <mcu_data>ksdk2_0</mcu_data>
+      <cores selected="">
+         <core name="Cortex-A35(core #0)" id="a35_0" description="A35 core0"/>
+         <core name="Cortex-A35(core #1)" id="a35_1" description="A35 core1"/>
+         <core name="Cortex-A35(core #2)" id="a35_2" description="A35 core2"/>
+         <core name="Cortex-A35(core #3)" id="a35_3" description="A35 core3"/>
+         <core name="Cortex-M4F" id="m4" description="M4 core"/>
+      </cores>
+      <description></description>
+   </common>
+   <preferences>
+      <validate_boot_init_only>true</validate_boot_init_only>
+      <generate_extended_information>false</generate_extended_information>
+      <generate_code_modified_registers_only>false</generate_code_modified_registers_only>
+   </preferences>
+   <tools>
+      <pins name="Pins" version="7.0" enabled="true" update_project_code="true">
+         <pins_profile>
+            <processor_version>0.7.12</processor_version>
+            <power_domains/>
+         </pins_profile>
+         <functions_list>
+            <function name="BOARD_InitPins">
+               <description>Configures pin routing and optionally pin electrical features.</description>
+               <options>
+                  <callFromInitBoot>false</callFromInitBoot>
+                  <coreID>m4</coreID>
+               </options>
+               <dependencies/>
+               <pins>
+                  <pin peripheral="M40__UART0" signal="uart_rx" pin_num="V32" pin_signal="ADC_IN2">
+                     <pin_features>
+                        <pin_feature name="PULL" value="PULL_0"/>
+                        <pin_feature name="sw_config" value="sw_config_0"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="M40__UART0" signal="uart_tx" pin_num="V30" pin_signal="ADC_IN3">
+                     <pin_features>
+                        <pin_feature name="PULL" value="PULL_0"/>
+                        <pin_feature name="sw_config" value="sw_config_0"/>
+                     </pin_features>
+                  </pin>
+               </pins>
+            </function>
+         </functions_list>
+      </pins>
+   </tools>
+</configuration>

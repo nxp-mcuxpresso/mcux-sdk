@@ -1,0 +1,78 @@
+//  Memory map file to generate linker scripts for programs run on the ISS.
+
+// Customer ID=13270; Build=0x802a5; Copyright (c) 2004-2015 Cadence Design Systems, Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+// CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+// A memory map is a sequence of memory descriptions and
+// optional parameter assignments.
+//
+// Each memory description has the following format:
+//   BEGIN <name>
+//     <addr> [,<paddr>] : <mem-type> : <mem-name> : <size> [,<psize>]
+//                       : [writable] [,executable] [,device] ;
+//     <segment>*
+//   END <name>
+//
+// where each <segment> description has the following format:
+//     <seg-name> : F|C : <start-addr> - <end-addr> [ : STACK ] [ : HEAP ]
+//                : <section-name>* ;
+//
+// Each parameter assignment is a keyword/value pair in the following format:
+//   <keyword> = <value>                (no spaces in <value>)
+// or
+//   <keyword> = "<value>"              (spaces allowed in <value>)
+//
+// The following primitives are also defined:
+//   PLACE SECTIONS( <section-name>* ) { WITH_SECTION(<section-name>)
+//                                       | IN_SEGMENT(<seg-name>) }
+//
+//   NOLOAD <section-name1> [ <section-name2> ... ]
+//
+// Please refer to the Xtensa LSP Reference Manual for more details.
+//
+
+BEGIN sram
+0x0: sysram : sram : 0x480000 : executable, writable ;
+ dsp_core : C : 0x300000 - 0x47ffff :  STACK :  HEAP : .sram.rodata .clib.rodata .rtos.rodata .rodata .sram.literal .literal .rtos.literal .clib.literal .sram.text .text .clib.text .rtos.text .clib.data .clib.percpu.data .rtos.percpu.data .rtos.data .sram.data .data __llvm_prf_names .clib.bss .clib.percpu.bss .rtos.percpu.bss .rtos.bss .sram.bss .bss;
+END sram
+
+BEGIN dram0
+0x24000000: dataRam : dram0 : 0x10000 : writable ;
+ dram0_0 : C : 0x24000000 - 0x2400ffff : .dram0.rodata .ResetVector.literal .Level2InterruptVector.literal .Level3InterruptVector.literal .DebugExceptionVector.literal .NMIExceptionVector.literal .KernelExceptionVector.literal .UserExceptionVector.literal .DoubleExceptionVector.literal .iram0.literal .dram0.data .dram0.bss;
+END dram0
+
+BEGIN iram0
+0x24020000: instRam : iram0 : 0x10000 : executable, writable ;
+ iram0_0 : F : 0x24020000 - 0x240203ff : .ResetVector.text .ResetHandler.literal .ResetHandler.text;
+ iram0_1 : F : 0x24020400 - 0x2402057b : .WindowVectors.text;
+ iram0_2 : F : 0x2402057c - 0x2402059b : .Level2InterruptVector.text;
+ iram0_3 : F : 0x2402059c - 0x240205bb : .Level3InterruptVector.text;
+ iram0_4 : F : 0x240205bc - 0x240205db : .DebugExceptionVector.text;
+ iram0_5 : F : 0x240205dc - 0x240205fb : .NMIExceptionVector.text;
+ iram0_6 : F : 0x240205fc - 0x2402061b : .KernelExceptionVector.text;
+ iram0_7 : F : 0x2402061c - 0x2402063b : .UserExceptionVector.text;
+ iram0_8 : F : 0x2402063c - 0x2402ffff : .DoubleExceptionVector.text .iram0.text;
+END iram0
+BEGIN sram_uncached
+0x20000000: sysram : sram_uncached : 0x480000 : writable ;
+ dsp_uncached : C : 0x20040000 - 0x2007ffff : NonCacheable.init NonCacheable;
+END sram_uncached
