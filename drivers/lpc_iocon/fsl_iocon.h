@@ -81,7 +81,8 @@ typedef struct _iocon_group
 
 #if defined(IOCON_PIO_EGP_SHIFT)
 #define IOCON_GPIO_MODE (0x1 << IOCON_PIO_EGP_SHIFT) /*!< GPIO Mode */
-#define IOCON_I2C_SLEW  (0x0 << IOCON_PIO_EGP_SHIFT) /*!< I2C Slew Rate Control */
+#define IOCON_I2C_MODE  (0x0 << IOCON_PIO_EGP_SHIFT) /*!< I2C Slew Rate Control */
+#define IOCON_I2C_SLEW  IOCON_I2C_MODE /*!< Deprecated name for #IOCON_I2C_MODE */
 #endif
 
 #if defined(IOCON_PIO_SLEW_SHIFT)
