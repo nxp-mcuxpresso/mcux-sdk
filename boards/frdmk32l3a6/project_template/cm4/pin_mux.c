@@ -93,6 +93,7 @@ void BOARD_InitButtonsPins(void)
     CLOCK_EnableClock(kCLOCK_PortA);
     /* Clock Gate Control: Clock enabled. The current clock selection and divider options are locked. */
     CLOCK_EnableClock(kCLOCK_PortE);
+    CLOCK_EnableClock(kCLOCK_Rgpio1);//allow access to GPIOE_BASE address 
 
     gpio_pin_config_t SW2_config = {
         .pinDirection = kGPIO_DigitalInput,
