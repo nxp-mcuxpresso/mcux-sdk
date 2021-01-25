@@ -10,7 +10,6 @@
 #include "board.h"
 #include "fsl_debug_console.h"
 #include "fsl_qspi.h"
-
 #include "fsl_common.h"
 /*******************************************************************************
  * Definitions
@@ -39,9 +38,6 @@ static uint32_t buff[64]; /* Test data */
 static bool isDivNeedRestore = false;
 #endif
 
-/*******************************************************************************
- * Code
- ******************************************************************************/
 uint32_t lut[FSL_FEATURE_QSPI_LUT_DEPTH] =
     {/* Seq0 :Quad Read */
      /* CMD:        0xEB - Quad Read, Single pad */
@@ -131,6 +127,9 @@ qspi_flash_config_t single_config = {.flashA1Size = FLASH_SIZE, /* 4MB */
                                      .endian            = kQSPI_64LittleEndian,
                                      .enableWordAddress = false};
 
+/*******************************************************************************
+ * Code
+ ******************************************************************************/
 /* Use QSPI polling way to program serial flash */
 void qspi_polling(void)
 {
