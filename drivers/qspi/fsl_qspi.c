@@ -350,6 +350,7 @@ void QSPI_SoftwareReset(QuadSPI_Type *base)
 
     /* Reset AHB domain and buffer domian */
     base->MCR |= (QuadSPI_MCR_SWRSTHD_MASK | QuadSPI_MCR_SWRSTSD_MASK);
+    base->BFGENCR = 0;
 
     /* Wait several time for the reset to finish, this method came from IC team */
     for (i = 0; i < 100U; i++)
