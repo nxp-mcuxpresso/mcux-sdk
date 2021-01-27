@@ -1,0 +1,26 @@
+name: Add comment
+
+on:
+  [workflow_dispatch]
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const issues = await github.paginate(github.issues.listForRepo, {
+              owner: "NXPmicro",
+              repo: 'mcux-sdk',
+              state: 'open'
+            })
+            for (const issue of issues) {
+              await github.issues.createComment({
+                issue_number: issue.number,
+                owner: "NXPmicro",
+                repo: "mcux-sdk",
+                body: 'Hi, we are setting up the contribution license model so there will be several days delay on merging your patch. Appreciate for you understanding. '
+              })
+            }
