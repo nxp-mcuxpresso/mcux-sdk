@@ -1,7 +1,8 @@
-name: Add comment
+name: comment on open PR
 
 on:
-  [workflow_dispatch]
+  pull_request_target:
+    types: [opened]
 
 jobs:
   comment:
@@ -11,16 +12,9 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const issues = await github.paginate(github.issues.listForRepo, {
-              owner: "NXPmicro",
-              repo: 'mcux-sdk',
-              state: 'open'
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Hi, we are setting up the contribution license model so there will be several days delay on merging your patch. Appreciate for you understanding.'
             })
-            for (const issue of issues) {
-              await github.issues.createComment({
-                issue_number: issue.number,
-                owner: "NXPmicro",
-                repo: "mcux-sdk",
-                body: 'Hi, we are setting up the contribution license model so there will be several days delay on merging your patch. Appreciate for you understanding. '
-              })
-            }
