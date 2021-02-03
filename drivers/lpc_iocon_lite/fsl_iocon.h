@@ -39,7 +39,7 @@
 typedef struct _iocon_group
 {
     uint32_t ionumber : 8;  /* IO number */
-    uint32_t modefunc : 16; /* Function and mode */
+    uint32_t modefunc : 24; /* Function and mode */
 } iocon_group_t;
 
 /**
