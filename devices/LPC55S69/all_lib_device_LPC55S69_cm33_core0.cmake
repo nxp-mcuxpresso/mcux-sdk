@@ -12,6 +12,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpc_dma
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpc_gpio
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpc_iocon
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pint
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/puf
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -51,3 +52,4 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_core_cm33)
 #    include(driver_reset)
 #    include(driver_flexcomm_spi_dma)
+#    include(driver_pint)
