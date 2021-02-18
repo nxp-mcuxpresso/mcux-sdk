@@ -1,0 +1,12 @@
+# Copyright 2021 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+menuconfig MCUX_SDK
+	bool "MCUXpresso SDK"
+
+if MCUX_SDK
+
+rsource "Kconfig.drivers"
+rsource "Kconfig.devices"
+
+endif # MCUX_SDK
