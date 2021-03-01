@@ -122,7 +122,7 @@ Each commit message should follow below requirements:
     * **What** the change does.
     * **Why** you change the approach, and
     * **How** you know it works - for example, you have verified run test on x board.
-* [Optional] Add sign-off in your commit.
+* Add sign-off in your commit.
 
 Commits must build cleanly when applied on top of each other, thus avoiding breaking bisectability. Each commit must address a single identifiable issue and must be logically self-contained.
 
