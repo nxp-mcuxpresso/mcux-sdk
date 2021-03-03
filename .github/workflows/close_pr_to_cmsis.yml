@@ -1,0 +1,16 @@
+name: Close Pull Request
+
+on:
+  pull_request_target:
+    types: [opened]
+    paths:
+    - 'CMSIS/**'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: superbrothers/close-pull-request@v3
+      with:
+        # Optional. Post a issue comment just before closing a pull request.
+        comment: "We do not accept contributions to files under CMSIS, these files are sourced from https://github.com/ARM-software/CMSIS_5, please contribute to the upstream directly."
