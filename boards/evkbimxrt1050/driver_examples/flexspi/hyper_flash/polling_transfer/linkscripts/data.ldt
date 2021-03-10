@@ -1,5 +1,0 @@
-        <#if memory.name=="SRAM_ITC">
-        *flexspi_hyper_flash_ops.o(.text*)
-        *fsl_flexspi.o(.text*)
-        *fsl_clock.o(.text*)
-        </#if>

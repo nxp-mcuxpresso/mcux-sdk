@@ -92,6 +92,17 @@ cmsis_drivers              Name: SDK CMSIS Peripheral Drivers
                            Location: devices/<device>/cmsis_drivers          
                            Origin: NXP (Apache License 2.0)                  
 
+Pedometer_Library          Name: Pedometer Library                           
+                           Version: 1.0                                      
+                           Outgoing License: LA_OPT_NXP_Software_License     
+                           License File:                                     
+                           Format: binary library                            
+                           Description: Pedometer algorithm library for Arm  
+                           Cortex M0+ and M4 processors                      
+                           Location:                                         
+                           middleware/issdk/algorithms/pedometer/lib         
+                           Origin: KEYnetik, Inc                             
+
 dsp_audio_framework        Name: dsp_audio_framework                         
                            Version: 2.0                                      
                            Outgoing License: MIT                             
@@ -127,13 +138,13 @@ naturedsp_hifi4            Name: naturedsp
                            Location: middleware/dsp/naturedsp/hifi4          
                            Origin: Cadence Design Systems (Proprietary)      
 
-Pedometer_Library          Name: Pedometer Library                           
-                           Version: 1.0                                      
-                           Outgoing License: LA_OPT_NXP_Software_License     
+CRC32-GS                   Name: CRC32 code                                  
+                           Version: NA                                       
+                           Outgoing License: Public domain                   
                            License File:                                     
-                           Format: binary library                            
-                           Description: Pedometer algorithm library for Arm  
-                           Cortex M0+ and M4 processors                      
+                           Format: source code                               
+                           Description: CRC32 code written by Gary S. Brown  
                            Location:                                         
-                           middleware/issdk/algorithms/pedometer/lib         
-                           Origin: KEYnetik, Inc                             
+                           components/codec/tfa9xxx/vas_tfa_drv/tfa_container
+                           _crc32.c                                          
+                           Origin: Gary S. Brown                             

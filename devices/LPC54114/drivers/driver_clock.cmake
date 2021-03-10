@@ -10,8 +10,14 @@ if(NOT DRIVER_CLOCK_INCLUDED)
         ${CMAKE_CURRENT_LIST_DIR}/.
     )
 
+    #OR Logic component
+    if(${MCUX_DEVICE} STREQUAL "LPC54114_cm0plus")
+        include(driver_power)
+    endif()
+    if(${MCUX_DEVICE} STREQUAL "LPC54114_cm4")
+        include(driver_power)
+    endif()
 
-    include(driver_power)
     include(driver_common)
 
 endif()

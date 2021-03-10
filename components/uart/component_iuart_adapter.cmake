@@ -11,10 +11,10 @@ if(NOT COMPONENT_IUART_ADAPTER_INCLUDED)
     )
 
     #OR Logic component
-    if(${MCUX_DEVICE} STREQUAL "MIMX8MM6")
+    if(${MCUX_DEVICE} STREQUAL "MIMX8MQ6")
         include(driver_iuart)
     endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMX8MQ6")
+    if(${MCUX_DEVICE} STREQUAL "MIMX8MM6")
         include(driver_iuart)
     endif()
     if(${MCUX_DEVICE} STREQUAL "MIMX8MN6")

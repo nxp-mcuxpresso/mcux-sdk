@@ -10,10 +10,10 @@ if(NOT DRIVER_DC-FB-COMMON_INCLUDED)
     )
 
     #OR Logic component
-    if(${MCUX_DEVICE} STREQUAL "MIMXRT1064")
+    if(${MCUX_DEVICE} STREQUAL "MIMXRT1052")
         include(driver_video-common)
     endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMXRT1052")
+    if(${MCUX_DEVICE} STREQUAL "MIMXRT1064")
         include(driver_video-common)
     endif()
     if(${MCUX_DEVICE} STREQUAL "MIMXRT1062")

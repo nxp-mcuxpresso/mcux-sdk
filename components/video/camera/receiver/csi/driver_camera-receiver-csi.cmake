@@ -11,10 +11,10 @@ if(NOT DRIVER_CAMERA-RECEIVER-CSI_INCLUDED)
     )
 
     #OR Logic component
-    if(${MCUX_DEVICE} STREQUAL "MIMXRT1064")
+    if(${MCUX_DEVICE} STREQUAL "MIMXRT1052")
         include(driver_camera-receiver-common)
     endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMXRT1052")
+    if(${MCUX_DEVICE} STREQUAL "MIMXRT1064")
         include(driver_camera-receiver-common)
     endif()
     if(${MCUX_DEVICE} STREQUAL "MIMXRT1062")

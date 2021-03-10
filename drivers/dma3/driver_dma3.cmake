@@ -11,13 +11,13 @@ if(NOT DRIVER_DMA3_INCLUDED)
     )
 
     #OR Logic component
-    if(${MCUX_DEVICE} STREQUAL "MIMX8QX6")
-        include(driver_memory)
-    endif()
     if(${MCUX_DEVICE} STREQUAL "MIMX8QM6_cm4_core0")
         include(driver_memory)
     endif()
     if(${MCUX_DEVICE} STREQUAL "MIMX8QM6_cm4_core1")
+        include(driver_memory)
+    endif()
+    if(${MCUX_DEVICE} STREQUAL "MIMX8QX6")
         include(driver_memory)
     endif()
 

@@ -35,3 +35,6 @@ In the hello_world application folder you see the following contents:
 Using MCUXpresso IDE: Check steps in [Run a project using MCUXpresso IDE](run_a_project_using_mcux.md)
 
 Using ARMGCC: Check steps in [Run a project using ARMGCC](run_a_project_using_armgcc.md)
+
+# Create an application from scratch
+TODO

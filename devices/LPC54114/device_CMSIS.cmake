@@ -1,6 +1,6 @@
 if(NOT DEVICE_CMSIS_INCLUDED)
 
-    set(DEVICE_CMSIS_INCLUDED true CACHE BOOL "device_CMSIS component is included.")
+    set(DEVICE_CMSIS_LPC54114_CM4_INCLUDED true CACHE BOOL "device_CMSIS component is included.")
 
     target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
     )
@@ -10,8 +10,11 @@ if(NOT DEVICE_CMSIS_INCLUDED)
     )
 
     #OR Logic component
-    if(CONFIG_USE_CMSIS_Include_core_cm4) 
+    if(CONFIG_DEVICE_LPC54114_cm4) 
         include(CMSIS_Include_core_cm4)
+    endif()
+    if(CONFIG_DEVICE_LPC54114_cm0plus) 
+        include(CMSIS_Include_core_cm0plus)
     endif()
 
 

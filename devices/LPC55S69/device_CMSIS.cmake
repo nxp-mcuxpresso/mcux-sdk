@@ -9,7 +9,13 @@ if(NOT DEVICE_CMSIS_INCLUDED)
         ${CMAKE_CURRENT_LIST_DIR}/.
     )
 
+    #OR Logic component
+    if(${MCUX_DEVICE} STREQUAL "LPC55S69_cm33_core0")
+        include(CMSIS_Include_core_cm33)
+    endif()
+    if(${MCUX_DEVICE} STREQUAL "LPC55S69_cm33_core1")
+        include(CMSIS_Include_core_cm33)
+    endif()
 
-    include(CMSIS_Include_core_cm33)
 
 endif()

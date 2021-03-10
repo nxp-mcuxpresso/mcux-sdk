@@ -11,10 +11,10 @@ if(NOT DRIVER_PHY-DEVICE-LAN8720A_INCLUDED)
     )
 
     #OR Logic component
-    if(${MCUX_DEVICE} STREQUAL "LPC54S018")
+    if(${MCUX_DEVICE} STREQUAL "LPC54628")
         include(driver_phy-common)
     endif()
-    if(${MCUX_DEVICE} STREQUAL "LPC54628")
+    if(${MCUX_DEVICE} STREQUAL "LPC54S018")
         include(driver_phy-common)
     endif()
     if(${MCUX_DEVICE} STREQUAL "LPC54S018M")

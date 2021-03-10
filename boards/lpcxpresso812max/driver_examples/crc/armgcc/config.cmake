@@ -1,1 +1,0 @@
-set(MCUX_DEVICE "LPC812")
