@@ -843,17 +843,15 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
 
         assert(kStatus_SerialManager_Success == status);
 
-#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS) && configSUPPORT_STATIC_ALLOCATION
+#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
+#if  configSUPPORT_STATIC_ALLOCATION
         DEBUG_CONSOLE_CREATE_MUTEX_SEMAPHORE(s_debugConsoleReadSemaphore, &s_debugConsoleReadSemaphoreStatic);
 #else
         DEBUG_CONSOLE_CREATE_MUTEX_SEMAPHORE(s_debugConsoleReadSemaphore);
 #endif
-#if (defined(DEBUG_CONSOLE_RX_ENABLE) && (DEBUG_CONSOLE_RX_ENABLE > 0U))
-#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS) && configSUPPORT_STATIC_ALLOCATION
-        DEBUG_CONSOLE_CREATE_BINARY_SEMAPHORE(s_debugConsoleReadWaitSemaphore, &s_debugConsoleReadWaitSemaphoreStatic);
-#else
-        DEBUG_CONSOLE_CREATE_BINARY_SEMAPHORE(s_debugConsoleReadWaitSemaphore);
 #endif
+#if (defined(DEBUG_CONSOLE_RX_ENABLE) && (DEBUG_CONSOLE_RX_ENABLE > 0U))
+        DEBUG_CONSOLE_CREATE_BINARY_SEMAPHORE(s_debugConsoleReadWaitSemaphore);
 #endif
 
         {
@@ -936,12 +934,9 @@ status_t DbgConsole_Deinit(void)
         }
     }
 #if (defined(DEBUG_CONSOLE_RX_ENABLE) && (DEBUG_CONSOLE_RX_ENABLE > 0U))
-#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS) && configSUPPORT_STATIC_ALLOCATION
-    DEBUG_CONSOLE_DESTROY_BINARY_SEMAPHORE(s_debugConsoleReadWaitSemaphore);
-#else
     DEBUG_CONSOLE_DESTROY_BINARY_SEMAPHORE(s_debugConsoleReadWaitSemaphore);
 #endif
-#endif
+#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
     DEBUG_CONSOLE_DESTROY_MUTEX_SEMAPHORE(s_debugConsoleReadSemaphore);
 #endif
 
