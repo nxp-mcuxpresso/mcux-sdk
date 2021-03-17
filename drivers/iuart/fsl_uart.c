@@ -646,7 +646,11 @@ bool UART_GetStatusFlag(UART_Type *base, uint32_t flag)
 {
     volatile uint32_t *uart_reg;
 
+#ifdef CONFIG_ARM64
+    uart_reg = (uint32_t *)((uint64_t)base + (flag >> 16));
+#else
     uart_reg = (uint32_t *)((uint32_t)base + (flag >> 16));
+#endif
     return (bool)(((*uart_reg) >> (flag & 0x1FU)) & 0x1U);
 }
 
@@ -663,7 +667,11 @@ void UART_ClearStatusFlag(UART_Type *base, uint32_t flag)
     volatile uint32_t *uart_reg = NULL;
     uint32_t uart_mask          = 0;
 
+#ifdef CONFIG_ARM64
+    uart_reg  = (uint32_t *)((uint64_t)base + (flag >> 16));
+#else
     uart_reg  = (uint32_t *)((uint32_t)base + (flag >> 16));
+#endif
     uart_mask = (1UL << (flag & 0x0000001FU));
 
     *uart_reg = uart_mask;
