@@ -86,8 +86,14 @@
 #if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
 
 static SemaphoreHandle_t s_debugConsoleReadSemaphore;
+#if configSUPPORT_STATIC_ALLOCATION
+static StaticSemaphore_t s_debugConsoleReadSemaphoreStatic;
+#endif
 #if (defined(DEBUG_CONSOLE_RX_ENABLE) && (DEBUG_CONSOLE_RX_ENABLE > 0U))
 static SemaphoreHandle_t s_debugConsoleReadWaitSemaphore;
+#if configSUPPORT_STATIC_ALLOCATION
+static StaticSemaphore_t s_debugConsoleReadWaitSemaphoreStatic;
+#endif
 #endif
 
 #elif (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_BM)
@@ -112,7 +118,11 @@ static volatile bool s_debugConsoleReadWaitSemaphore;
 
 /* mutex semaphore */
 /* clang-format off */
+#if configSUPPORT_STATIC_ALLOCATION
+#define DEBUG_CONSOLE_CREATE_MUTEX_SEMAPHORE(mutex, stack) ((mutex) = xSemaphoreCreateMutexStatic(stack))
+#else
 #define DEBUG_CONSOLE_CREATE_MUTEX_SEMAPHORE(mutex) ((mutex) = xSemaphoreCreateMutex())
+#endif
 #define DEBUG_CONSOLE_DESTROY_MUTEX_SEMAPHORE(mutex)   \
         do                                             \
         {                                              \
@@ -152,7 +162,11 @@ static volatile bool s_debugConsoleReadWaitSemaphore;
 }
 
 /* Binary semaphore */
+#if configSUPPORT_STATIC_ALLOCATION
+#define DEBUG_CONSOLE_CREATE_BINARY_SEMAPHORE(binary,stack) ((binary) = xSemaphoreCreateBinaryStatic(stack))
+#else
 #define DEBUG_CONSOLE_CREATE_BINARY_SEMAPHORE(binary) ((binary) = xSemaphoreCreateBinary())
+#endif
 #define DEBUG_CONSOLE_DESTROY_BINARY_SEMAPHORE(binary) \
         do                                             \
         {                                              \
@@ -830,10 +844,18 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
         assert(kStatus_SerialManager_Success == status);
 
 #if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
+#if  configSUPPORT_STATIC_ALLOCATION
+        DEBUG_CONSOLE_CREATE_MUTEX_SEMAPHORE(s_debugConsoleReadSemaphore, &s_debugConsoleReadSemaphoreStatic);
+#else
         DEBUG_CONSOLE_CREATE_MUTEX_SEMAPHORE(s_debugConsoleReadSemaphore);
 #endif
+#endif
 #if (defined(DEBUG_CONSOLE_RX_ENABLE) && (DEBUG_CONSOLE_RX_ENABLE > 0U))
+#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS) && configSUPPORT_STATIC_ALLOCATION
+        DEBUG_CONSOLE_CREATE_BINARY_SEMAPHORE(s_debugConsoleReadWaitSemaphore, &s_debugConsoleReadWaitSemaphoreStatic);
+#else
         DEBUG_CONSOLE_CREATE_BINARY_SEMAPHORE(s_debugConsoleReadWaitSemaphore);
+#endif
 #endif
 
         {
