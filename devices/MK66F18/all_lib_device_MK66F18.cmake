@@ -5,11 +5,14 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/da7212
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/da7212
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyksz8081
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/adc16
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cache/lmem
@@ -28,15 +31,18 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ftm
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpio
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/i2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/llwu
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lptmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pdb
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pit
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pmc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/port
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rcm
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rnga
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rtc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sai
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sdhc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sim
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/smc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sysmpu
@@ -44,17 +50,24 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/vref
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog
+    ${CMAKE_CURRENT_LIST_DIR}/../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
+    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/utilities
 )
 
 
 # Copy the cmake components into projects
+#    include(middleware_usb_device_common_header)
+#    include(driver_llwu)
 #    include(driver_dspi)
 #    include(driver_uart_edma)
+#    include(driver_sai)
 #    include(component_i2c_adapter)
 #    include(CMSIS_Include_dsp)
 #    include(driver_flexcan)
@@ -69,6 +82,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_system)
 #    include(driver_i2c_edma)
 #    include(driver_cmt)
+#    include(utility_debug_console)
 #    include(middleware_mmcau_common_files)
 #    include(utility_assert_lite_MK66F18)
 #    include(driver_cmp)
@@ -76,13 +90,15 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_pdb)
 #    include(driver_adc16)
 #    include(driver_clock)
+#    include(utility_notifier)
 #    include(utility_debug_console_lite)
-#    include(driver_mdio-common)
+#    include(component_osa)
 #    include(driver_edma)
 #    include(driver_ewm)
 #    include(driver_codec_MK66F18)
+#    include(utility_assert)
 #    include(driver_lpuart)
-#    include(middleware_mmcau_cm4_cm7)
+#    include(driver_phy-device-ksz8081)
 #    include(driver_rnga)
 #    include(driver_smc)
 #    include(driver_ftm)
@@ -90,7 +106,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_wdog)
 #    include(driver_cache_lmem)
 #    include(driver_sysmpu)
+#    include(middleware_baremetal)
 #    include(driver_vref)
+#    include(middleware_mmcau_cm4_cm7)
 #    include(driver_flash)
 #    include(component_uart_adapter)
 #    include(driver_mdio-enet)
@@ -98,6 +116,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpuart_edma)
 #    include(device_CMSIS)
 #    include(driver_uart)
+#    include(component_serial_manager_uart_MK66F18)
+#    include(component_osa_bm)
 #    include(utilities_misc_utilities)
 #    include(CMSIS_Include_core_cm4)
 #    include(CMSIS_Include_common)
@@ -105,12 +125,17 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_rtc)
 #    include(driver_dialog7212)
 #    include(driver_crc)
-#    include(driver_phy-device-ksz8081)
+#    include(driver_mdio-common)
+#    include(driver_enet_MK66F18)
+#    include(driver_fxos8700cq)
 #    include(driver_pit)
 #    include(component_codec_i2c_MK66F18)
 #    include(driver_sai_edma)
-#    include(driver_sai)
+#    include(driver_sdhc)
+#    include(driver_pmc)
 #    include(component_da7212_adapter)
 #    include(driver_tpm)
-#    include(driver_enet_MK66F18)
+#    include(utility_shell)
+#    include(middleware_usb_common_header)
+#    include(component_serial_manager_MK66F18)
 #    include(driver_dspi_edma)

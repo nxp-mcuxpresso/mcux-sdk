@@ -1,7 +1,10 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/adc16
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cmp
@@ -16,10 +19,12 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ftm
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpio
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/i2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/llwu
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lptmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pdb
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pit
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pmc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/port
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rcm
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rnga
@@ -29,16 +34,23 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/vref
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog
+    ${CMAKE_CURRENT_LIST_DIR}/../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/utilities
 )
 
 
 # Copy the cmake components into projects
+#    include(middleware_usb_device_common_header)
+#    include(driver_llwu)
 #    include(driver_dspi)
-#    include(driver_uart_edma)
+#    include(component_serial_manager_uart_MK22F51212)
+#    include(component_serial_manager_MK22F51212)
 #    include(CMSIS_Include_dsp)
 #    include(driver_i2c)
 #    include(driver_port)
@@ -49,6 +61,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_dac)
 #    include(device_system)
 #    include(driver_i2c_edma)
+#    include(utility_debug_console)
 #    include(driver_cmp)
 #    include(device_startup)
 #    include(driver_pdb)
@@ -56,26 +69,35 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_clock)
 #    include(utility_assert_lite_MK22F51212)
 #    include(utility_debug_console_lite)
+#    include(component_osa)
 #    include(driver_edma)
 #    include(driver_ewm)
 #    include(driver_lpuart)
 #    include(driver_rnga)
 #    include(driver_ftm)
+#    include(utility_notifier)
 #    include(driver_wdog)
+#    include(middleware_usb_common_header)
+#    include(middleware_baremetal)
 #    include(driver_vref)
 #    include(driver_flash)
 #    include(component_uart_adapter)
+#    include(utility_assert)
 #    include(driver_sim)
 #    include(driver_lpuart_edma)
 #    include(device_CMSIS)
 #    include(driver_uart)
 #    include(utilities_misc_utilities)
 #    include(CMSIS_Include_core_cm4)
+#    include(driver_uart_edma)
 #    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_rtc)
 #    include(driver_smc)
 #    include(driver_crc)
+#    include(driver_fxos8700cq)
 #    include(driver_pit)
+#    include(driver_pmc)
 #    include(driver_rcm)
+#    include(utility_shell)
 #    include(driver_dspi_edma)

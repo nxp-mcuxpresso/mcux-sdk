@@ -1,7 +1,10 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/adc16
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cmp
@@ -33,11 +36,15 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tsi
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tstmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
+    ${CMAKE_CURRENT_LIST_DIR}/../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
+    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/utilities
 )
 
 
@@ -56,12 +63,15 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_system)
 #    include(driver_tpm)
 #    include(driver_lpit)
+#    include(utility_debug_console)
 #    include(driver_cmp)
 #    include(device_startup)
-#    include(driver_adc16)
+#    include(component_serial_manager_K32L2A41A)
 #    include(driver_clock)
+#    include(utility_notifier)
 #    include(utility_debug_console_lite)
 #    include(driver_flexio_uart)
+#    include(component_osa)
 #    include(driver_edma)
 #    include(driver_trng)
 #    include(driver_lpuart)
@@ -69,13 +79,18 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_mmcau_common_files)
 #    include(middleware_mmcau_cm0p)
 #    include(driver_flexio)
+#    include(utility_shell)
 #    include(driver_rcm)
 #    include(CMSIS_Include_core_cm0plus)
 #    include(driver_trgmux)
 #    include(driver_tsi_v4)
 #    include(driver_flexio_i2c_master)
 #    include(driver_sim)
+#    include(middleware_baremetal)
+#    include(driver_adc16)
+#    include(middleware_usb_device_common_header)
 #    include(driver_flash)
+#    include(utility_assert)
 #    include(driver_mmdvsq)
 #    include(driver_lpspi_edma)
 #    include(driver_lpuart_edma)
@@ -91,6 +106,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_smc)
 #    include(driver_crc)
 #    include(driver_wdog32)
+#    include(component_serial_manager_uart_K32L2A41A)
+#    include(driver_fxos8700cq)
 #    include(driver_lptmr)
 #    include(driver_pmc)
 #    include(driver_intmux)
+#    include(middleware_usb_common_header)

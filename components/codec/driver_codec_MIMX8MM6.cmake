@@ -14,6 +14,12 @@ if(NOT DRIVER_CODEC_MIMX8MM6_INCLUDED)
     if(CONFIG_USE_component_wm8524_adapter) 
         include(component_wm8524_adapter)
     endif()
+    if(CONFIG_USE_component_codec_wm8524_adapter) 
+        include(component_codec_wm8524_adapter)
+    endif()
+    if(CONFIG_USE_component_codec_ak4497_adapter) 
+        include(component_codec_ak4497_adapter)
+    endif()
 
     include(driver_common)
 

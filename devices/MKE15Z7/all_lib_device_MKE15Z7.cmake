@@ -1,7 +1,9 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/acmp
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/adc12
@@ -32,9 +34,11 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tsi
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/utilities
 )
 
 
@@ -42,6 +46,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_spi_edma)
 #    include(CMSIS_Include_dsp)
 #    include(component_lpuart_adapter)
+#    include(component_serial_manager_uart_MKE15Z7)
 #    include(driver_port)
 #    include(driver_dmamux)
 #    include(driver_lpspi)
@@ -50,10 +55,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_lists)
 #    include(device_system)
 #    include(driver_lpit)
+#    include(utility_debug_console)
 #    include(driver_acmp)
 #    include(device_startup)
 #    include(driver_pdb)
 #    include(driver_clock)
+#    include(utility_notifier)
 #    include(utility_debug_console_lite)
 #    include(driver_adc12)
 #    include(driver_flexio_uart)
@@ -69,7 +76,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_i2c_master)
 #    include(driver_sim)
 #    include(utility_assert_lite_MKE15Z7)
+#    include(component_serial_manager_MKE15Z7)
 #    include(driver_flash)
+#    include(utility_assert)
 #    include(driver_mmdvsq)
 #    include(driver_lpspi_edma)
 #    include(driver_lpuart_edma)
@@ -83,7 +92,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_smc)
 #    include(driver_crc)
 #    include(driver_wdog32)
+#    include(driver_fxos8700cq)
 #    include(driver_lptmr)
 #    include(driver_pwt)
 #    include(driver_pmc)
 #    include(driver_rcm)
+#    include(utility_shell)

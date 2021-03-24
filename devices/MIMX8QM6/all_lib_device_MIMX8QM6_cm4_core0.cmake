@@ -12,6 +12,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyar8031
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/asmc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cache/lmem
@@ -22,6 +23,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcan
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexspi
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ftm
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpt
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/igpio
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/intmux
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/irqsteer
@@ -39,6 +41,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
@@ -69,6 +72,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_mdio-common)
 #    include(driver_wm8960)
 #    include(component_cs42888_adapter)
+#    include(driver_gpt)
+#    include(utility_assert)
 #    include(driver_lpuart)
 #    include(middleware_mmcau_cm4_cm7)
 #    include(driver_phy-device-ar8031)
@@ -79,27 +84,31 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_mu)
 #    include(driver_lpi2c)
 #    include(driver_flexcan_edma)
+#    include(driver_memory)
 #    include(driver_flexcan)
 #    include(driver_lpuart_edma)
 #    include(device_CMSIS)
 #    include(driver_sema42)
 #    include(driver_lpspi_edma)
 #    include(driver_tstmr)
+#    include(driver_sc_event)
 #    include(utilities_misc_utilities)
 #    include(CMSIS_Include_core_cm4)
 #    include(driver_scfw_api)
 #    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_asmc)
+#    include(utility_debug_console)
 #    include(component_wm8960_adapter)
 #    include(driver_igpio)
 #    include(component_lpi2c_adapter)
 #    include(driver_sai)
 #    include(driver_cs42888)
 #    include(driver_irqsteer)
+#    include(component_codec_i2c_MIMX8QM6_cm4_core0)
 #    include(driver_mdio-enet)
 #    include(driver_intmux)
 #    include(device_startup_MIMX8QM6_cm4_core0)
-#    include(driver_memory)
-#    include(component_codec_i2c_MIMX8QM6_cm4_core0)
+#    include(component_serial_manager_uart_MIMX8QM6_cm4_core0)
+#    include(component_serial_manager_MIMX8QM6_cm4_core0)
 #    include(driver_esai_edma)

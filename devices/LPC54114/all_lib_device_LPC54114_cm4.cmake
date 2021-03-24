@@ -8,6 +8,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/mx25r_flash
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
@@ -30,16 +31,21 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/mrt
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pint
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sctimer
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/utick
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
+    ${CMAKE_CURRENT_LIST_DIR}/../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/utilities
 )
 
 
 # Copy the cmake components into projects
+#    include(middleware_baremetal)
 #    include(driver_codec_LPC54114_cm4)
 #    include(driver_pint)
 #    include(driver_ctimer)
@@ -47,6 +53,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_usart_adapter)
 #    include(driver_lpc_dma)
 #    include(driver_wwdt)
+#    include(utility_debug_console)
+#    include(middleware_usb_device_common_header)
 #    include(component_lists)
 #    include(driver_lpc_gpio)
 #    include(driver_mrt)
@@ -57,18 +65,21 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_clock)
 #    include(utility_debug_console_lite)
 #    include(driver_flexcomm_i2s_dma)
-#    include(driver_inputmux_connections)
+#    include(component_osa)
 #    include(driver_fmeas)
 #    include(driver_mx25r_flash)
 #    include(driver_lpc_crc)
 #    include(utility_assert)
+#    include(driver_utick_LPC54114_cm4)
 #    include(component_codec_i2c_LPC54114_cm4)
 #    include(driver_flexcomm_i2c_dma)
 #    include(component_flexcomm_i2c_adapter)
 #    include(device_system_LPC54114_cm4)
 #    include(component_serial_manager_LPC54114_cm4)
+#    include(middleware_usb_common_header)
 #    include(driver_flexcomm_spi)
 #    include(driver_dmic)
+#    include(utility_shell)
 #    include(driver_lpc_rtc)
 #    include(driver_sctimer)
 #    include(driver_flexcomm_usart)
@@ -83,7 +94,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_incbin)
 #    include(device_startup_LPC54114_cm4)
 #    include(driver_inputmux)
-#    include(utility_debug_console)
+#    include(driver_inputmux_connections)
 #    include(driver_flexcomm_i2c)
 #    include(component_serial_manager_uart_LPC54114_cm4)
 #    include(driver_flexcomm_usart_dma)

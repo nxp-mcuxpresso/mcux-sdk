@@ -12,6 +12,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyar8031
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/srtm
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/srtm/port
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/camera
@@ -52,6 +55,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/mipi_csi2rx
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/mipi_dsi
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/mu
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/prg
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rgpio
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sai
@@ -61,6 +65,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
@@ -76,7 +81,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_camera-device-ov5640)
 #    include(CMSIS_Include_dsp)
 #    include(component_lpuart_adapter)
-#    include(driver_wdog32)
+#    include(driver_srtm)
 #    include(driver_ci_pi)
 #    include(driver_lpi2c_edma)
 #    include(driver_sai_edma)
@@ -86,8 +91,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_system)
 #    include(driver_tpm)
 #    include(driver_isi)
+#    include(utility_debug_console)
 #    include(middleware_mmcau_common_files)
-#    include(CMSIS_Include_common)
+#    include(driver_camera-receiver-isi)
 #    include(device_startup)
 #    include(driver_dpu_irqsteer)
 #    include(driver_clock)
@@ -98,12 +104,15 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_wm8960)
 #    include(component_cs42888_adapter)
 #    include(driver_gpt)
+#    include(utility_assert)
 #    include(driver_lpuart)
+#    include(driver_sema42)
 #    include(driver_lpadc)
 #    include(driver_phy-device-ar8031)
-#    include(driver_enet_MIMX8QX6)
+#    include(component_serial_manager_MIMX8QX6)
 #    include(driver_ftm)
 #    include(driver_display-it6263)
+#    include(driver_enet_MIMX8QX6)
 #    include(driver_ldb_combo_phy)
 #    include(driver_intmux)
 #    include(driver_camera-receiver-common)
@@ -111,13 +120,15 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_debug_console_lite)
 #    include(driver_dma3)
 #    include(driver_display-common)
+#    include(driver_mu)
 #    include(driver_lpi2c)
 #    include(driver_flexcan_edma)
 #    include(driver_flexcan)
 #    include(driver_display-mipi-dsi-cmd)
 #    include(driver_dpr)
 #    include(device_CMSIS)
-#    include(driver_sema42)
+#    include(component_serial_manager_uart_MIMX8QX6)
+#    include(driver_srtm_freertos)
 #    include(utility_assert_lite_MIMX8QX6)
 #    include(driver_lpuart_edma)
 #    include(driver_display-adv7535)
@@ -125,10 +136,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_core_cm4)
 #    include(driver_camera-device-sccb)
 #    include(driver_phy-common)
-#    include(driver_camera-receiver-isi)
+#    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_asmc)
 #    include(driver_scfw_api)
+#    include(driver_wdog32)
 #    include(component_wm8960_adapter)
 #    include(driver_mipi_dsi)
 #    include(driver_camera-common)

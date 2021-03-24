@@ -2,6 +2,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/acmp_1
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/adc_5v12b_ll18_015
@@ -19,6 +20,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog8
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
@@ -43,12 +45,16 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_core_cm0plus)
 #    include(driver_spi)
 #    include(component_uart_adapter)
+#    include(utility_assert)
+#    include(component_serial_manager_MKE02Z4)
+#    include(utility_debug_console)
 #    include(device_CMSIS)
 #    include(driver_uart)
 #    include(utilities_misc_utilities)
 #    include(driver_port_ke02)
 #    include(CMSIS_Include_common)
 #    include(driver_common)
+#    include(component_serial_manager_uart_MKE02Z4)
 #    include(driver_irq)
 #    include(driver_rtc_1)
 #    include(driver_pit)

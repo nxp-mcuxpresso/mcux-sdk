@@ -6,8 +6,10 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8960
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8960
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/adc_12b1msps_sar
@@ -15,6 +17,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/bee
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cache/armv7-m7
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/dcdc_1
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/dcp
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/dmamux
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/edma
@@ -23,6 +26,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexio
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexram
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexspi
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpc_1
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpt
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/igpio
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/kpp
@@ -42,16 +46,20 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/trng
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog01
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbara
+    ${CMAKE_CURRENT_LIST_DIR}/../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/utilities
     ${CMAKE_CURRENT_LIST_DIR}/xip
 )
 
 
 # Copy the cmake components into projects
+#    include(driver_igpio)
 #    include(component_serial_manager_uart_MIMXRT1015)
 #    include(driver_rtwatchdog)
 #    include(driver_flexspi)
@@ -75,6 +83,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_clock)
 #    include(utility_debug_console_lite)
 #    include(driver_flexio_uart)
+#    include(component_osa)
 #    include(driver_edma)
 #    include(driver_ewm)
 #    include(driver_gpt)
@@ -83,11 +92,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_spi)
 #    include(driver_iomuxc)
 #    include(driver_flexio)
+#    include(middleware_usb_device_common_header)
 #    include(driver_wm8960)
 #    include(driver_flexram)
 #    include(driver_bee)
 #    include(driver_flexio_i2c_master)
-#    include(driver_xbara)
+#    include(middleware_usb_common_header)
+#    include(middleware_baremetal)
+#    include(driver_sai_edma)
 #    include(driver_soc_flexram_allocate)
 #    include(utility_assert)
 #    include(driver_lpspi_edma)
@@ -97,6 +109,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_romapi)
 #    include(driver_src)
 #    include(driver_flexio_uart_edma)
+#    include(driver_dcp)
 #    include(driver_ocotp)
 #    include(CMSIS_Include_core_cm7)
 #    include(driver_wdog01)
@@ -111,14 +124,16 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_codec_i2c_MIMXRT1015)
 #    include(component_wm8960_adapter)
 #    include(driver_xip_board)
-#    include(driver_igpio)
+#    include(driver_fxos8700cq)
 #    include(driver_adc_etc)
 #    include(driver_pwm)
 #    include(driver_pit)
 #    include(component_lpi2c_adapter)
 #    include(driver_sai)
-#    include(driver_sai_edma)
+#    include(driver_gpc_1)
 #    include(driver_cache_armv7_m7)
-#    include(driver_dcp)
+#    include(driver_dcdc_1)
+#    include(utility_shell)
+#    include(driver_xbara)
 #    include(component_serial_manager_MIMXRT1015)
 #    include(driver_flexio_i2s_edma)

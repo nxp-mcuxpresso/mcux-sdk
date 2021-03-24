@@ -27,12 +27,14 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/mrt
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pint
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sctimer
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/utick
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/utilities
 )
 
 
@@ -45,6 +47,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_usart_adapter)
 #    include(driver_lpc_rtc)
 #    include(driver_wwdt)
+#    include(utility_shell)
 #    include(component_lists)
 #    include(driver_lpc_gpio)
 #    include(driver_mrt)
@@ -74,6 +77,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_CMSIS)
 #    include(component_ctimer_adapter)
 #    include(driver_lpc_iocon)
+#    include(driver_utick_LPC51U68)
 #    include(utilities_misc_utilities)
 #    include(CMSIS_Include_common)
 #    include(driver_common)

@@ -22,7 +22,7 @@ manifest:
 
   projects:
     - name: mcux-sdk-examples
-      revision: aec2981c3ee12bdaad74aec870ceff3d213e775f
+      revision: 7a5c48e8d73f7e812345b59de5ce2cb98d8bb3d5
       path: examples
 
   self:

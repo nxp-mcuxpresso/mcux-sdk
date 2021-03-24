@@ -8,6 +8,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/cs42888
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8960
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8960
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
@@ -29,11 +30,13 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/adc_12b1msps_sar
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/adc_etc
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/aoi
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/bee
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cache/armv7-m7
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cmp
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/csi
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/dcdc_1
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/dcp
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/dmamux
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/edma
@@ -45,6 +48,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexio
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexram
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexspi
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpc_1
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpt
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/igpio
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/kpp
@@ -67,16 +71,21 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/usdhc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog01
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbara
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbarb
+    ${CMAKE_CURRENT_LIST_DIR}/../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/utilities
     ${CMAKE_CURRENT_LIST_DIR}/xip
 )
 
 
 # Copy the cmake components into projects
+#    include(driver_trng)
 #    include(driver_dmamux)
 #    include(driver_phy-common)
 #    include(device_system)
@@ -88,8 +97,10 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_wm8960)
 #    include(driver_ewm)
 #    include(driver_flexio)
+#    include(driver_aoi)
 #    include(driver_bee)
 #    include(driver_flexio_i2c_master)
+#    include(middleware_baremetal)
 #    include(driver_lpuart_edma)
 #    include(driver_lpspi_edma)
 #    include(driver_wdog01)
@@ -114,6 +125,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_cs42888_adapter)
 #    include(driver_gpt)
 #    include(driver_camera-receiver-common)
+#    include(middleware_usb_common_header)
+#    include(middleware_usb_device_common_header)
 #    include(driver_soc_flexram_allocate)
 #    include(utility_assert)
 #    include(device_CMSIS)
@@ -127,6 +140,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_camera-device-common)
 #    include(component_lpi2c_adapter)
 #    include(driver_video-common)
+#    include(driver_dcdc_1)
 #    include(driver_snvs_hp)
 #    include(driver_lpspi)
 #    include(driver_csi)
@@ -135,9 +149,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_adc_etc)
 #    include(driver_mdio-common)
 #    include(driver_iomuxc)
+#    include(utility_shell)
 #    include(driver_flexram)
 #    include(driver_semc)
 #    include(component_serial_manager_uart_MIMXRT1052)
+#    include(driver_xbarb)
 #    include(driver_xbara)
 #    include(driver_flexcan)
 #    include(utility_debug_console)
@@ -146,6 +162,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_wm8960_adapter)
 #    include(driver_enc)
 #    include(driver_cs42888)
+#    include(driver_sai_edma)
 #    include(driver_dc-fb-elcdif)
 #    include(driver_dcp)
 #    include(driver_enet_MIMXRT1052)
@@ -153,11 +170,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexspi)
 #    include(driver_flexio_spi_edma)
 #    include(driver_qtmr_1)
-#    include(driver_trng)
-#    include(driver_sai_edma)
+#    include(driver_pwm)
+#    include(driver_gpc_1)
 #    include(component_lists)
 #    include(driver_video-i2c)
 #    include(driver_cmp)
+#    include(component_osa)
 #    include(driver_rtwatchdog)
 #    include(driver_lpuart)
 #    include(driver_flexio_spi)
@@ -165,6 +183,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpi2c)
 #    include(CMSIS_Include_common)
 #    include(driver_flexio_i2s)
+#    include(driver_fxos8700cq)
 #    include(driver_elcdif)
 #    include(driver_xip_board)
 #    include(driver_igpio)

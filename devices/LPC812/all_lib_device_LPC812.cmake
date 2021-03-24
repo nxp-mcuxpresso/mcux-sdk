@@ -12,6 +12,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpc_minispi
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpc_miniusart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/mrt
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pint
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sctimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/swm
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/syscon
@@ -50,6 +51,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_common)
 #    include(driver_syscon_connections)
 #    include(driver_iap)
+#    include(driver_pint)
 #    include(driver_syscon)
 #    include(driver_reset)
 #    include(driver_lpc_i2c)

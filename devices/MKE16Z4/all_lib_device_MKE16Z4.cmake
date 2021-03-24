@@ -1,7 +1,9 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/acmp
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/adc12
@@ -30,9 +32,11 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tsi
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/utilities
 )
 
 
@@ -51,19 +55,25 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_startup)
 #    include(driver_pdb)
 #    include(driver_clock)
+#    include(utility_notifier)
 #    include(utility_debug_console_lite)
 #    include(driver_adc12)
 #    include(driver_lpit)
+#    include(driver_fxos8700cq)
 #    include(driver_ewm)
 #    include(driver_lpuart)
 #    include(utility_assert_lite_MKE16Z4)
 #    include(driver_ftm)
 #    include(driver_trgmux)
+#    include(component_serial_manager_MKE16Z4)
 #    include(CMSIS_Include_core_cm0plus)
 #    include(driver_tsi_v5)
+#    include(utility_shell)
 #    include(driver_flash)
+#    include(utility_assert)
 #    include(driver_mmdvsq)
 #    include(driver_sim)
+#    include(utility_debug_console)
 #    include(device_CMSIS)
 #    include(utilities_misc_utilities)
 #    include(driver_lpi2c)
@@ -72,6 +82,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_rtc)
 #    include(driver_smc)
 #    include(driver_crc)
+#    include(component_serial_manager_uart_MKE16Z4)
 #    include(driver_pwt)
 #    include(driver_pmc)
 #    include(driver_rcm)
