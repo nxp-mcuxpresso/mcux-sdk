@@ -49,6 +49,9 @@ struct _srtm_dispatcher
     srtm_list_t services; /*!< SRTM service list head */
 
     srtm_mutex_t mutex; /*!< Mutex for multi-task protection */
+#ifdef SRTM_STATIC_API
+    srtm_semaphore_static_t mutexStatic;
+#endif
 
     srtm_list_t freeRxMsgs;  /*!< Free Rx messages list to hold the callback Rx data */
     srtm_list_t messageQ;    /*!< Message queue to hold the messages to process */
@@ -57,8 +60,17 @@ struct _srtm_dispatcher
     volatile bool stopReq; /*!< SRTM dispatcher stop request flag */
     bool started;          /*!< SRTM dispatcher started flag */
     srtm_sem_t startSig;   /*!< SRTM dispatcher start signal */
+#ifdef SRTM_STATIC_API
+    srtm_semaphore_static_t startSigStatic;
+#endif
     srtm_sem_t stopSig;    /*!< SRTM dispatcher stop signal */
+#ifdef SRTM_STATIC_API
+    srtm_semaphore_static_t stopSigStatic;
+#endif
     srtm_sem_t queueSig;   /*!< SRTM dispatcher messageQ signal */
+#ifdef SRTM_STATIC_API
+    srtm_semaphore_static_t queueSigStatic;
+#endif
 };
 
 /*******************************************************************************

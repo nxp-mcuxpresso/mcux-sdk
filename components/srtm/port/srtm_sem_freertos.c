@@ -27,10 +27,17 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
+#ifdef SRTM_STATIC_API
+srtm_sem_t SRTM_Sem_Create(uint32_t maxCount, uint32_t initCount, srtm_semaphore_static_t *stack)
+{
+    return xSemaphoreCreateCountingStatic(maxCount, initCount, stack);
+}
+#else
 srtm_sem_t SRTM_Sem_Create(uint32_t maxCount, uint32_t initCount)
 {
     return xSemaphoreCreateCounting(maxCount, initCount);
 }
+#endif
 
 void SRTM_Sem_Destroy(srtm_sem_t sem)
 {

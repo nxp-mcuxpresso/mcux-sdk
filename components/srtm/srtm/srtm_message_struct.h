@@ -76,6 +76,9 @@ typedef struct _srtm_message
                 struct
                 {
                     srtm_sem_t sig;       /*!< SRTM request message signal to wait for response */
+#ifdef SRTM_STATIC_API
+                     srtm_semaphore_static_t sigStatic;
+#endif
                     srtm_response_t resp; /*!< SRTM request message response */
                 } sync;                   /*!< SRTM request message from SRTM_Request() */
                 struct

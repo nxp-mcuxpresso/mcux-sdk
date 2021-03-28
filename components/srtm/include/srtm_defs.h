@@ -9,9 +9,10 @@
 #ifndef __SRTM_DEFS_H__
 #define __SRTM_DEFS_H__
 
-#include <stdint.h>
-#include <stdbool.h>
+#include "srtm_config.h"
 #include <assert.h>
+#include <stdbool.h>
+#include <stdint.h>
 
 /*!
  * @addtogroup srtm
@@ -30,6 +31,12 @@
 
 /*! @brief SRTM version definition */
 #define SRTM_MAKE_VERSION(major, minor, bugfix) ((((uint32_t)major) << 16) | (((uint32_t)minor) << 8) | (bugfix))
+
+/*! @brief If SRTM_STATIC is not defined, define srtm_semaphore_static_t as
+ * NULL*/
+#ifndef SRTM_STATIC_API
+typedef NULL srtm_semaphore_static_t;
+#endif
 
 /* IAR ARM build tools */
 #if defined(__ICCARM__)

@@ -26,10 +26,17 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
+#ifdef SRTM_STATIC_API
+srtm_mutex_t SRTM_Mutex_Create(srtm_semaphore_static_t *stack)
+{
+    return xSemaphoreCreateMutexStatic(stack);
+}
+#else
 srtm_mutex_t SRTM_Mutex_Create(void)
 {
     return xSemaphoreCreateMutex();
 }
+#endif
 
 void SRTM_Mutex_Destroy(srtm_mutex_t mutex)
 {

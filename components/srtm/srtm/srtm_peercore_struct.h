@@ -28,6 +28,9 @@ struct _srtm_peercore
 
     srtm_dispatcher_t dispatcher;
     srtm_mutex_t mutex;
+#ifdef SRTM_STATIC_API
+    srtm_semaphore_static_t mutexStatic;
+#endif
 
     bool started;
     srtm_peercore_state_t state;
