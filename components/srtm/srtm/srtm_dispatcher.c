@@ -527,6 +527,9 @@ srtm_status_t SRTM_Dispatcher_Request(srtm_dispatcher_t disp,
     srtm_sem_t signal;
     srtm_status_t status;
     srtm_response_t resp;
+#if defined(SRTM_STATIC_API) && SRTM_STATIC_API
+    srtm_sem_buf_t signalStatic;
+#endif
 
     assert(disp);
     assert(req);
@@ -534,7 +537,7 @@ srtm_status_t SRTM_Dispatcher_Request(srtm_dispatcher_t disp,
     SRTM_DEBUG_MESSAGE(SRTM_DEBUG_VERBOSE_DEBUG, "%s\r\n", __func__);
 
 #if defined(SRTM_STATIC_API) && SRTM_STATIC_API
-    signal = SRTM_Sem_Create(1U, 0U, &req->reqMsg.sync.sigStatic);
+    signal = SRTM_Sem_Create(1U, 0U, &signalStatic);
 #else
     signal = SRTM_Sem_Create(1U, 0U);
 #endif
