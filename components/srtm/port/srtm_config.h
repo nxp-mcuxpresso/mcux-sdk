@@ -14,6 +14,7 @@
 #if configSUPPORT_STATIC_ALLOCATION
 #define SRTM_STATIC_API 1
 typedef StaticSemaphore_t srtm_semaphore_static_t;
+typedef StaticSemaphore_t srtm_mutex_buf_t;
 #endif
 
 #endif

@@ -50,7 +50,7 @@ struct _srtm_dispatcher
 
     srtm_mutex_t mutex; /*!< Mutex for multi-task protection */
 #ifdef SRTM_STATIC_API
-    srtm_semaphore_static_t mutexStatic;
+    srtm_mutex_buf_t mutexStatic;
 #endif
 
     srtm_list_t freeRxMsgs;  /*!< Free Rx messages list to hold the callback Rx data */

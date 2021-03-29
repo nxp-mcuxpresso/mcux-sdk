@@ -27,7 +27,7 @@
  * Code
  ******************************************************************************/
 #ifdef SRTM_STATIC_API
-srtm_mutex_t SRTM_Mutex_Create(srtm_semaphore_static_t *stack)
+srtm_mutex_t SRTM_Mutex_Create(srtm_mutex_buf_t *stack)
 {
     return xSemaphoreCreateMutexStatic(stack);
 }
