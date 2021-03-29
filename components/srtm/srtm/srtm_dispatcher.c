@@ -200,7 +200,7 @@ static void SRTM_Dispatcher_RecycleMessage(srtm_message_t msg, void *param)
 srtm_dispatcher_t SRTM_Dispatcher_Create(void)
 {
     srtm_dispatcher_t disp = (srtm_dispatcher_t)SRTM_Heap_Malloc(sizeof(struct _srtm_dispatcher));
-#ifdef SRTM_STATIC_API
+#if defined(SRTM_STATIC_API) && SRTM_STATIC_API
     srtm_mutex_t mutex     = SRTM_Mutex_Create(&disp->mutexStatic);
     srtm_sem_t startSig    = SRTM_Sem_Create(1U, 0U, &disp->startSigStatic);
     srtm_sem_t stopSig     = SRTM_Sem_Create(1U, 0U, &disp->stopSigStatic);
@@ -533,7 +533,7 @@ srtm_status_t SRTM_Dispatcher_Request(srtm_dispatcher_t disp,
 
     SRTM_DEBUG_MESSAGE(SRTM_DEBUG_VERBOSE_DEBUG, "%s\r\n", __func__);
 
-#ifdef SRTM_STATIC_API
+#if defined(SRTM_STATIC_API) && SRTM_STATIC_API
     signal = SRTM_Sem_Create(1U, 0U, &req->reqMsg.sync.sigStatic);
 #else
     signal = SRTM_Sem_Create(1U, 0U);
@@ -661,7 +661,7 @@ srtm_status_t SRTM_Dispatcher_DeliverMessages(srtm_dispatcher_t disp, srtm_list_
 srtm_status_t SRTM_Dispatcher_CallProc(srtm_dispatcher_t disp, srtm_procedure_t proc, uint32_t timeout)
 {
     srtm_sem_t signal;
-#ifdef SRTM_STATIC_API
+#if defined(SRTM_STATIC_API) && SRTM_STATIC_API
     srtm_sem_buf_t signalStatic;
 #endif
     srtm_status_t status;
@@ -671,7 +671,7 @@ srtm_status_t SRTM_Dispatcher_CallProc(srtm_dispatcher_t disp, srtm_procedure_t 
 
     SRTM_DEBUG_MESSAGE(SRTM_DEBUG_VERBOSE_DEBUG, "%s\r\n", __func__);
 
-#ifdef SRTM_STATIC_API
+#if defined(SRTM_STATIC_API) && SRTM_STATIC_API
     signal = SRTM_Sem_Create(1U, 0U, &signalStatic);
 #else
     signal = SRTM_Sem_Create(1U, 0U);

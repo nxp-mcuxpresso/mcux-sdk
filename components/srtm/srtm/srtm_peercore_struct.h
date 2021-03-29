@@ -28,7 +28,7 @@ struct _srtm_peercore
 
     srtm_dispatcher_t dispatcher;
     srtm_mutex_t mutex;
-#ifdef SRTM_STATIC_API
+#if defined(SRTM_STATIC_API) && SRTM_STATIC_API
     srtm_mutex_buf_t mutexStatic;
 #endif
 

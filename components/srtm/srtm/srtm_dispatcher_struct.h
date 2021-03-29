@@ -49,7 +49,7 @@ struct _srtm_dispatcher
     srtm_list_t services; /*!< SRTM service list head */
 
     srtm_mutex_t mutex; /*!< Mutex for multi-task protection */
-#ifdef SRTM_STATIC_API
+#if defined(SRTM_STATIC_API) && SRTM_STATIC_API
     srtm_mutex_buf_t mutexStatic;
 #endif
 
@@ -60,15 +60,15 @@ struct _srtm_dispatcher
     volatile bool stopReq; /*!< SRTM dispatcher stop request flag */
     bool started;          /*!< SRTM dispatcher started flag */
     srtm_sem_t startSig;   /*!< SRTM dispatcher start signal */
-#ifdef SRTM_STATIC_API
+#if defined(SRTM_STATIC_API) && SRTM_STATIC_API
     srtm_sem_buf_t startSigStatic;
 #endif
     srtm_sem_t stopSig;    /*!< SRTM dispatcher stop signal */
-#ifdef SRTM_STATIC_API
+#if defined(SRTM_STATIC_API) && SRTM_STATIC_API
     srtm_sem_buf_t stopSigStatic;
 #endif
     srtm_sem_t queueSig;   /*!< SRTM dispatcher messageQ signal */
-#ifdef SRTM_STATIC_API
+#if defined(SRTM_STATIC_API) && SRTM_STATIC_API
     srtm_sem_buf_t queueSigStatic;
 #endif
 };

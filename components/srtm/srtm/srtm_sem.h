@@ -39,7 +39,7 @@ extern "C" {
  * @param stack Stack for semaphore data.
  * @return Created semaphore handle, or NULL on failure.
  */
-#ifdef SRTM_STATIC_API
+#if defined(SRTM_STATIC_API) && SRTM_STATIC_API
 srtm_sem_t SRTM_Sem_Create(uint32_t maxCount, uint32_t initCount, srtm_sem_buf_t *stack);
 #else
 srtm_sem_t SRTM_Sem_Create(uint32_t maxCount, uint32_t initCount);
