@@ -662,7 +662,7 @@ srtm_status_t SRTM_Dispatcher_CallProc(srtm_dispatcher_t disp, srtm_procedure_t 
 {
     srtm_sem_t signal;
 #ifdef SRTM_STATIC_API
-    srtm_semaphore_static_t signalStatic;
+    srtm_sem_buf_t signalStatic;
 #endif
     srtm_status_t status;
 
