@@ -212,7 +212,7 @@ srtm_dispatcher_t SRTM_Dispatcher_Create(void)
     srtm_sem_t stopSig     = SRTM_Sem_Create(1U, 0U);
     /* Assume same maximum message number of local and remote in messageQ */
     srtm_sem_t queueSig = SRTM_Sem_Create(SRTM_DISPATCHER_CONFIG_RX_MSG_NUMBER * 2U, 0U);
-   #endif
+#endif
     srtm_message_t msg;
     uint32_t i;
 
