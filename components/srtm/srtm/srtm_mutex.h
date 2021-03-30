@@ -34,9 +34,15 @@ extern "C" {
 /*!
  * @brief Create a mutex.
  *
+ * @param stack Stack for mutex data.
+ *
  * @return Created mutex handle, or NULL on failure.
  */
+#if defined(SRTM_STATIC_API) && SRTM_STATIC_API
+srtm_mutex_t SRTM_Mutex_Create(srtm_mutex_buf_t *stack);
+#else
 srtm_mutex_t SRTM_Mutex_Create(void);
+#endif
 
 /*!
  * @brief Destroy the mutex.
