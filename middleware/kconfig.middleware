@@ -1,0 +1,101 @@
+# Copyright 2021 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "middleware"
+
+    depends on HAS_MIDDLEWARE
+menu "middleware_baremetal"
+
+    depends on HAS_MCUX_SDK_middleware_baremetal || HAS_MCUX_SDK_middleware_issdk_algorithms_pedometer_common || HAS_MCUX_SDK_middleware_issdk_algorithms_pedometer_lib_cm4 || HAS_MCUX_SDK_middleware_issdk_sensor_allregdefs || HAS_MCUX_SDK_middleware_mmcau_cm0p || HAS_MCUX_SDK_middleware_mmcau_cm4_cm7 || HAS_MCUX_SDK_middleware_mmcau_common_files || HAS_MCUX_SDK_middleware_usb_common_header || HAS_MCUX_SDK_middleware_usb_device_common_header
+
+config MCUX_SDK_middleware_baremetal
+    bool "middleware_baremetal"
+    depends on HAS_MCUX_SDK_middleware_baremetal
+    default n
+
+config MCUX_SDK_middleware_issdk_algorithms_pedometer_common
+    bool "middleware_issdk_algorithms_pedometer_common"
+    depends on HAS_MCUX_SDK_middleware_issdk_algorithms_pedometer_common
+    default n
+    select MCUX_SDK_CMSIS_Driver_Include_I2C if HAS_MCUX_SDK_CMSIS_Driver_Include_I2C
+    select MCUX_SDK_CMSIS_Driver_Include_SPI if HAS_MCUX_SDK_CMSIS_Driver_Include_SPI
+
+config MCUX_SDK_middleware_issdk_algorithms_pedometer_lib_cm4
+    bool "middleware_issdk_algorithms_pedometer_lib_cm4"
+    depends on HAS_MCUX_SDK_middleware_issdk_algorithms_pedometer_lib_cm4
+    default n
+
+config MCUX_SDK_middleware_issdk_sensor_allregdefs
+    bool "middleware_issdk_sensor_allregdefs"
+    depends on HAS_MCUX_SDK_middleware_issdk_sensor_allregdefs
+    default n
+    select MCUX_SDK_CMSIS_Driver_Include_I2C if HAS_MCUX_SDK_CMSIS_Driver_Include_I2C
+    select MCUX_SDK_CMSIS_Driver_Include_SPI if HAS_MCUX_SDK_CMSIS_Driver_Include_SPI
+
+config MCUX_SDK_middleware_mmcau_cm0p
+    bool "middleware_mmcau_cm0p"
+    depends on HAS_MCUX_SDK_middleware_mmcau_cm0p
+    default n
+    select MCUX_SDK_driver_clock if HAS_MCUX_SDK_driver_clock
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_middleware_mmcau_common_files if HAS_MCUX_SDK_middleware_mmcau_common_files
+
+config MCUX_SDK_middleware_mmcau_cm4_cm7
+    bool "middleware_mmcau_cm4_cm7"
+    depends on HAS_MCUX_SDK_middleware_mmcau_cm4_cm7
+    default n
+    select MCUX_SDK_driver_clock if HAS_MCUX_SDK_driver_clock
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_middleware_mmcau_common_files if HAS_MCUX_SDK_middleware_mmcau_common_files
+
+config MCUX_SDK_middleware_mmcau_common_files
+    bool "middleware_mmcau_common_files"
+    depends on HAS_MCUX_SDK_middleware_mmcau_common_files
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_middleware_usb_common_header
+    bool "middleware_usb_common_header"
+    depends on HAS_MCUX_SDK_middleware_usb_common_header
+    default n
+    select MCUX_SDK_component_osa if HAS_MCUX_SDK_component_osa
+
+config MCUX_SDK_middleware_usb_device_common_header
+    bool "middleware_usb_device_common_header"
+    depends on HAS_MCUX_SDK_middleware_usb_device_common_header
+    default n
+    select MCUX_SDK_component_osa if HAS_MCUX_SDK_component_osa
+    select MCUX_SDK_middleware_usb_common_header if HAS_MCUX_SDK_middleware_usb_common_header
+
+
+endmenu
+
+
+config HAS_MCUX_SDK_middleware_baremetal
+    bool
+
+config HAS_MCUX_SDK_middleware_issdk_algorithms_pedometer_common
+    bool
+
+config HAS_MCUX_SDK_middleware_issdk_algorithms_pedometer_lib_cm4
+    bool
+
+config HAS_MCUX_SDK_middleware_issdk_sensor_allregdefs
+    bool
+
+config HAS_MCUX_SDK_middleware_mmcau_cm0p
+    bool
+
+config HAS_MCUX_SDK_middleware_mmcau_cm4_cm7
+    bool
+
+config HAS_MCUX_SDK_middleware_mmcau_common_files
+    bool
+
+config HAS_MCUX_SDK_middleware_usb_common_header
+    bool
+
+config HAS_MCUX_SDK_middleware_usb_device_common_header
+    bool
+
+endmenu

@@ -1,0 +1,89 @@
+# Copyright 2021 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "CMSIS"
+
+config MCUX_SDK_CMSIS_Driver_Include_Common
+    bool "CMSIS_Driver_Include_Common"
+    depends on HAS_MCUX_SDK_CMSIS_Driver_Include_Common
+    default n
+
+config MCUX_SDK_CMSIS_Driver_Include_I2C
+    bool "CMSIS_Driver_Include_I2C"
+    depends on HAS_MCUX_SDK_CMSIS_Driver_Include_I2C
+    default n
+    select MCUX_SDK_CMSIS_Driver_Include_Common if HAS_MCUX_SDK_CMSIS_Driver_Include_Common
+
+config MCUX_SDK_CMSIS_Driver_Include_SPI
+    bool "CMSIS_Driver_Include_SPI"
+    depends on HAS_MCUX_SDK_CMSIS_Driver_Include_SPI
+    default n
+    select MCUX_SDK_CMSIS_Driver_Include_Common if HAS_MCUX_SDK_CMSIS_Driver_Include_Common
+
+config MCUX_SDK_CMSIS_Include_common
+    bool "CMSIS_Include_common"
+    depends on HAS_MCUX_SDK_CMSIS_Include_common
+    default n
+
+config MCUX_SDK_CMSIS_Include_core_cm0plus
+    bool "CMSIS_Include_core_cm0plus"
+    depends on HAS_MCUX_SDK_CMSIS_Include_core_cm0plus
+    default n
+    select MCUX_SDK_CMSIS_Include_common if HAS_MCUX_SDK_CMSIS_Include_common
+    select MCUX_SDK_CMSIS_Include_dsp if HAS_MCUX_SDK_CMSIS_Include_dsp
+
+config MCUX_SDK_CMSIS_Include_core_cm33
+    bool "CMSIS_Include_core_cm33"
+    depends on HAS_MCUX_SDK_CMSIS_Include_core_cm33
+    default n
+    select MCUX_SDK_CMSIS_Include_common if HAS_MCUX_SDK_CMSIS_Include_common
+    select MCUX_SDK_CMSIS_Include_dsp if HAS_MCUX_SDK_CMSIS_Include_dsp
+
+config MCUX_SDK_CMSIS_Include_core_cm4
+    bool "CMSIS_Include_core_cm4"
+    depends on HAS_MCUX_SDK_CMSIS_Include_core_cm4
+    default n
+    select MCUX_SDK_CMSIS_Include_common if HAS_MCUX_SDK_CMSIS_Include_common
+    select MCUX_SDK_CMSIS_Include_dsp if HAS_MCUX_SDK_CMSIS_Include_dsp
+
+config MCUX_SDK_CMSIS_Include_core_cm7
+    bool "CMSIS_Include_core_cm7"
+    depends on HAS_MCUX_SDK_CMSIS_Include_core_cm7
+    default n
+    select MCUX_SDK_CMSIS_Include_common if HAS_MCUX_SDK_CMSIS_Include_common
+    select MCUX_SDK_CMSIS_Include_dsp if HAS_MCUX_SDK_CMSIS_Include_dsp
+
+config MCUX_SDK_CMSIS_Include_dsp
+    bool "CMSIS_Include_dsp"
+    depends on HAS_MCUX_SDK_CMSIS_Include_dsp
+    default n
+
+
+config HAS_MCUX_SDK_CMSIS_Driver_Include_Common
+    bool
+
+config HAS_MCUX_SDK_CMSIS_Driver_Include_I2C
+    bool
+
+config HAS_MCUX_SDK_CMSIS_Driver_Include_SPI
+    bool
+
+config HAS_MCUX_SDK_CMSIS_Include_common
+    bool
+
+config HAS_MCUX_SDK_CMSIS_Include_core_cm0plus
+    bool
+
+config HAS_MCUX_SDK_CMSIS_Include_core_cm33
+    bool
+
+config HAS_MCUX_SDK_CMSIS_Include_core_cm4
+    bool
+
+config HAS_MCUX_SDK_CMSIS_Include_core_cm7
+    bool
+
+config HAS_MCUX_SDK_CMSIS_Include_dsp
+    bool
+
+endmenu

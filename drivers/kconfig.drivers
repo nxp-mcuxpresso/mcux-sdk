@@ -1,0 +1,3492 @@
+# Copyright 2021 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "drivers"
+
+config MCUX_SDK_driver_IS42SM16800H
+    bool "driver_IS42SM16800H"
+    depends on HAS_MCUX_SDK_driver_IS42SM16800H
+    default n
+    select MCUX_SDK_driver_sdramc if HAS_MCUX_SDK_driver_sdramc
+
+config MCUX_SDK_driver_acmp
+    bool "driver_acmp"
+    depends on HAS_MCUX_SDK_driver_acmp
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_acmp_1
+    bool "driver_acmp_1"
+    depends on HAS_MCUX_SDK_driver_acmp_1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_adc12
+    bool "driver_adc12"
+    depends on HAS_MCUX_SDK_driver_adc12
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_adc16
+    bool "driver_adc16"
+    depends on HAS_MCUX_SDK_driver_adc16
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_adc_12b1msps_sar
+    bool "driver_adc_12b1msps_sar"
+    depends on HAS_MCUX_SDK_driver_adc_12b1msps_sar
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_adc_5v12b_ll18_015
+    bool "driver_adc_5v12b_ll18_015"
+    depends on HAS_MCUX_SDK_driver_adc_5v12b_ll18_015
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_adc_etc
+    bool "driver_adc_etc"
+    depends on HAS_MCUX_SDK_driver_adc_etc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_aes
+    bool "driver_aes"
+    depends on HAS_MCUX_SDK_driver_aes
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_afe
+    bool "driver_afe"
+    depends on HAS_MCUX_SDK_driver_afe
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_ak4497
+    bool "driver_ak4497"
+    depends on HAS_MCUX_SDK_driver_ak4497
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_codec_i2c_MIMX8MM6 if HAS_MCUX_SDK_component_codec_i2c_MIMX8MM6
+
+config MCUX_SDK_driver_anactrl
+    bool "driver_anactrl"
+    depends on HAS_MCUX_SDK_driver_anactrl
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_aoi
+    bool "driver_aoi"
+    depends on HAS_MCUX_SDK_driver_aoi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_asmc
+    bool "driver_asmc"
+    depends on HAS_MCUX_SDK_driver_asmc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_bee
+    bool "driver_bee"
+    depends on HAS_MCUX_SDK_driver_bee
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_cache_armv7_m7
+    bool "driver_cache_armv7_m7"
+    depends on HAS_MCUX_SDK_driver_cache_armv7_m7
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_cache_cache64
+    bool "driver_cache_cache64"
+    depends on HAS_MCUX_SDK_driver_cache_cache64
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_cache_lmem
+    bool "driver_cache_lmem"
+    depends on HAS_MCUX_SDK_driver_cache_lmem
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_cache_lpcac
+    bool "driver_cache_lpcac"
+    depends on HAS_MCUX_SDK_driver_cache_lpcac
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_cache_lplmem
+    bool "driver_cache_lplmem"
+    depends on HAS_MCUX_SDK_driver_cache_lplmem
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_camera-common
+    bool "driver_camera-common"
+    depends on HAS_MCUX_SDK_driver_camera-common
+    default n
+    select MCUX_SDK_driver_video-common if HAS_MCUX_SDK_driver_video-common
+
+config MCUX_SDK_driver_camera-device-common
+    bool "driver_camera-device-common"
+    depends on HAS_MCUX_SDK_driver_camera-device-common
+    default n
+    select MCUX_SDK_driver_camera-common if HAS_MCUX_SDK_driver_camera-common
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_camera-device-max9286
+    bool "driver_camera-device-max9286"
+    depends on HAS_MCUX_SDK_driver_camera-device-max9286
+    default n
+    select MCUX_SDK_driver_camera-common if HAS_MCUX_SDK_driver_camera-common
+    select MCUX_SDK_driver_video-common if HAS_MCUX_SDK_driver_video-common
+    select MCUX_SDK_driver_camera-device-common if HAS_MCUX_SDK_driver_camera-device-common
+    select MCUX_SDK_driver_video-i2c if HAS_MCUX_SDK_driver_video-i2c
+
+config MCUX_SDK_driver_camera-device-mt9m114
+    bool "driver_camera-device-mt9m114"
+    depends on HAS_MCUX_SDK_driver_camera-device-mt9m114
+    default n
+    select MCUX_SDK_driver_camera-common if HAS_MCUX_SDK_driver_camera-common
+    select MCUX_SDK_driver_video-common if HAS_MCUX_SDK_driver_video-common
+    select MCUX_SDK_driver_camera-device-common if HAS_MCUX_SDK_driver_camera-device-common
+    select MCUX_SDK_driver_video-i2c if HAS_MCUX_SDK_driver_video-i2c
+
+config MCUX_SDK_driver_camera-device-ov5640
+    bool "driver_camera-device-ov5640"
+    depends on HAS_MCUX_SDK_driver_camera-device-ov5640
+    default n
+    select MCUX_SDK_driver_camera-device-sccb if HAS_MCUX_SDK_driver_camera-device-sccb
+    select MCUX_SDK_driver_camera-common if HAS_MCUX_SDK_driver_camera-common
+    select MCUX_SDK_driver_video-common if HAS_MCUX_SDK_driver_video-common
+    select MCUX_SDK_driver_camera-device-common if HAS_MCUX_SDK_driver_camera-device-common
+
+config MCUX_SDK_driver_camera-device-ov7725
+    bool "driver_camera-device-ov7725"
+    depends on HAS_MCUX_SDK_driver_camera-device-ov7725
+    default n
+    select MCUX_SDK_driver_camera-device-sccb if HAS_MCUX_SDK_driver_camera-device-sccb
+    select MCUX_SDK_driver_camera-common if HAS_MCUX_SDK_driver_camera-common
+    select MCUX_SDK_driver_video-common if HAS_MCUX_SDK_driver_video-common
+    select MCUX_SDK_driver_camera-device-common if HAS_MCUX_SDK_driver_camera-device-common
+
+config MCUX_SDK_driver_camera-device-sccb
+    bool "driver_camera-device-sccb"
+    depends on HAS_MCUX_SDK_driver_camera-device-sccb
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_camera-receiver-common
+    bool "driver_camera-receiver-common"
+    depends on HAS_MCUX_SDK_driver_camera-receiver-common
+    default n
+    select MCUX_SDK_driver_camera-common if HAS_MCUX_SDK_driver_camera-common
+    select MCUX_SDK_driver_video-common if HAS_MCUX_SDK_driver_video-common
+
+config MCUX_SDK_driver_camera-receiver-csi
+    bool "driver_camera-receiver-csi"
+    depends on HAS_MCUX_SDK_driver_camera-receiver-csi
+    default n
+    select MCUX_SDK_driver_camera-receiver-common if HAS_MCUX_SDK_driver_camera-receiver-common
+    select MCUX_SDK_driver_camera-common if HAS_MCUX_SDK_driver_camera-common
+    select MCUX_SDK_driver_video-common if HAS_MCUX_SDK_driver_video-common
+    select MCUX_SDK_driver_csi if HAS_MCUX_SDK_driver_csi
+
+config MCUX_SDK_driver_camera-receiver-isi
+    bool "driver_camera-receiver-isi"
+    depends on HAS_MCUX_SDK_driver_camera-receiver-isi
+    default n
+    select MCUX_SDK_driver_camera-receiver-common if HAS_MCUX_SDK_driver_camera-receiver-common
+    select MCUX_SDK_driver_camera-common if HAS_MCUX_SDK_driver_camera-common
+    select MCUX_SDK_driver_video-common if HAS_MCUX_SDK_driver_video-common
+    select MCUX_SDK_driver_isi if HAS_MCUX_SDK_driver_isi
+
+config MCUX_SDK_driver_capt
+    bool "driver_capt"
+    depends on HAS_MCUX_SDK_driver_capt
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_casper
+    bool "driver_casper"
+    depends on HAS_MCUX_SDK_driver_casper
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_cau3
+    bool "driver_cau3"
+    depends on HAS_MCUX_SDK_driver_cau3
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_ci_pi
+    bool "driver_ci_pi"
+    depends on HAS_MCUX_SDK_driver_ci_pi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_clock
+    bool "driver_clock"
+    depends on HAS_MCUX_SDK_driver_clock
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_cmp
+    bool "driver_cmp"
+    depends on HAS_MCUX_SDK_driver_cmp
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_cmp_1
+    bool "driver_cmp_1"
+    depends on HAS_MCUX_SDK_driver_cmp_1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_cmt
+    bool "driver_cmt"
+    depends on HAS_MCUX_SDK_driver_cmt
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_codec_LPC51U68
+    bool "driver_codec_LPC51U68"
+    depends on HAS_MCUX_SDK_driver_codec_LPC51U68
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_LPC51U68
+        config MCUX_SDK_component_wm8904_adapter
+            bool "component_wm8904_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_LPC54114_cm4
+    bool "driver_codec_LPC54114_cm4"
+    depends on HAS_MCUX_SDK_driver_codec_LPC54114_cm4
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_LPC54114_cm4
+        config MCUX_SDK_component_wm8904_adapter
+            bool "component_wm8904_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_LPC54628
+    bool "driver_codec_LPC54628"
+    depends on HAS_MCUX_SDK_driver_codec_LPC54628
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_LPC54628
+        config MCUX_SDK_component_wm8904_adapter
+            bool "component_wm8904_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_LPC54S018
+    bool "driver_codec_LPC54S018"
+    depends on HAS_MCUX_SDK_driver_codec_LPC54S018
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_LPC54S018
+        config MCUX_SDK_component_wm8904_adapter
+            bool "component_wm8904_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_LPC54S018M
+    bool "driver_codec_LPC54S018M"
+    depends on HAS_MCUX_SDK_driver_codec_LPC54S018M
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_LPC54S018M
+        config MCUX_SDK_component_wm8904_adapter
+            bool "component_wm8904_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_LPC55S16
+    bool "driver_codec_LPC55S16"
+    depends on HAS_MCUX_SDK_driver_codec_LPC55S16
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_LPC55S16
+        config MCUX_SDK_component_wm8904_adapter
+            bool "component_wm8904_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_LPC55S28
+    bool "driver_codec_LPC55S28"
+    depends on HAS_MCUX_SDK_driver_codec_LPC55S28
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_LPC55S28
+        config MCUX_SDK_component_wm8904_adapter
+            bool "component_wm8904_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_LPC55S69_cm33_core0
+    bool "driver_codec_LPC55S69_cm33_core0"
+    depends on HAS_MCUX_SDK_driver_codec_LPC55S69_cm33_core0
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_LPC55S69_cm33_core0
+        config MCUX_SDK_component_wm8904_adapter
+            bool "component_wm8904_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MCIMX7U5
+    bool "driver_codec_MCIMX7U5"
+    depends on HAS_MCUX_SDK_driver_codec_MCIMX7U5
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MCIMX7U5
+        config MCUX_SDK_component_wm8960_adapter
+            bool "component_wm8960_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MIMX8MM6
+    bool "driver_codec_MIMX8MM6"
+    depends on HAS_MCUX_SDK_driver_codec_MIMX8MM6
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MIMX8MM6
+        config MCUX_SDK_component_wm8524_adapter
+            bool "component_wm8524_adapter"
+            default n
+    endif
+    if MCUX_SDK_driver_codec_MIMX8MM6
+        config MCUX_SDK_component_codec_wm8524_adapter
+            bool "component_codec_wm8524_adapter"
+            default n
+    endif
+    if MCUX_SDK_driver_codec_MIMX8MM6
+        config MCUX_SDK_component_codec_ak4497_adapter
+            bool "component_codec_ak4497_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MIMX8MN6
+    bool "driver_codec_MIMX8MN6"
+    depends on HAS_MCUX_SDK_driver_codec_MIMX8MN6
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MIMX8MN6
+        config MCUX_SDK_component_wm8524_adapter
+            bool "component_wm8524_adapter"
+            default n
+    endif
+    if MCUX_SDK_driver_codec_MIMX8MN6
+        config MCUX_SDK_component_codec_wm8524_adapter
+            bool "component_codec_wm8524_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MIMX8MQ6
+    bool "driver_codec_MIMX8MQ6"
+    depends on HAS_MCUX_SDK_driver_codec_MIMX8MQ6
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MIMX8MQ6
+        config MCUX_SDK_component_wm8524_adapter
+            bool "component_wm8524_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MIMX8QM6_cm4_core0
+    bool "driver_codec_MIMX8QM6_cm4_core0"
+    depends on HAS_MCUX_SDK_driver_codec_MIMX8QM6_cm4_core0
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MIMX8QM6_cm4_core0
+        config MCUX_SDK_component_wm8960_adapter
+            bool "component_wm8960_adapter"
+            default n
+    endif
+    if MCUX_SDK_driver_codec_MIMX8QM6_cm4_core0
+        config MCUX_SDK_component_cs42888_adapter
+            bool "component_cs42888_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MIMX8QM6_cm4_core1
+    bool "driver_codec_MIMX8QM6_cm4_core1"
+    depends on HAS_MCUX_SDK_driver_codec_MIMX8QM6_cm4_core1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MIMX8QM6_cm4_core1
+        config MCUX_SDK_component_wm8960_adapter
+            bool "component_wm8960_adapter"
+            default n
+    endif
+    if MCUX_SDK_driver_codec_MIMX8QM6_cm4_core1
+        config MCUX_SDK_component_cs42888_adapter
+            bool "component_cs42888_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MIMX8QX6
+    bool "driver_codec_MIMX8QX6"
+    depends on HAS_MCUX_SDK_driver_codec_MIMX8QX6
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MIMX8QX6
+        config MCUX_SDK_component_wm8960_adapter
+            bool "component_wm8960_adapter"
+            default n
+    endif
+    if MCUX_SDK_driver_codec_MIMX8QX6
+        config MCUX_SDK_component_cs42888_adapter
+            bool "component_cs42888_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MIMXRT1011
+    bool "driver_codec_MIMXRT1011"
+    depends on HAS_MCUX_SDK_driver_codec_MIMXRT1011
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MIMXRT1011
+        config MCUX_SDK_component_wm8960_adapter
+            bool "component_wm8960_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MIMXRT1015
+    bool "driver_codec_MIMXRT1015"
+    depends on HAS_MCUX_SDK_driver_codec_MIMXRT1015
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MIMXRT1015
+        config MCUX_SDK_component_wm8960_adapter
+            bool "component_wm8960_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MIMXRT1021
+    bool "driver_codec_MIMXRT1021"
+    depends on HAS_MCUX_SDK_driver_codec_MIMXRT1021
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MIMXRT1021
+        config MCUX_SDK_component_wm8960_adapter
+            bool "component_wm8960_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MIMXRT1024
+    bool "driver_codec_MIMXRT1024"
+    depends on HAS_MCUX_SDK_driver_codec_MIMXRT1024
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MIMXRT1024
+        config MCUX_SDK_component_wm8960_adapter
+            bool "component_wm8960_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MIMXRT1052
+    bool "driver_codec_MIMXRT1052"
+    depends on HAS_MCUX_SDK_driver_codec_MIMXRT1052
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MIMXRT1052
+        config MCUX_SDK_component_wm8960_adapter
+            bool "component_wm8960_adapter"
+            default n
+    endif
+    if MCUX_SDK_driver_codec_MIMXRT1052
+        config MCUX_SDK_component_cs42888_adapter
+            bool "component_cs42888_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MIMXRT1062
+    bool "driver_codec_MIMXRT1062"
+    depends on HAS_MCUX_SDK_driver_codec_MIMXRT1062
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MIMXRT1062
+        config MCUX_SDK_component_wm8960_adapter
+            bool "component_wm8960_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MIMXRT1064
+    bool "driver_codec_MIMXRT1064"
+    depends on HAS_MCUX_SDK_driver_codec_MIMXRT1064
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MIMXRT1064
+        config MCUX_SDK_component_wm8960_adapter
+            bool "component_wm8960_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MIMXRT685S_cm33
+    bool "driver_codec_MIMXRT685S_cm33"
+    depends on HAS_MCUX_SDK_driver_codec_MIMXRT685S_cm33
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MIMXRT685S_cm33
+        config MCUX_SDK_component_wm8904_adapter
+            bool "component_wm8904_adapter"
+            default n
+    endif
+    if MCUX_SDK_driver_codec_MIMXRT685S_cm33
+        config MCUX_SDK_component_tfa9xxx_adapter
+            bool "component_tfa9xxx_adapter"
+            default n
+    endif
+    if MCUX_SDK_driver_codec_MIMXRT685S_cm33
+        config MCUX_SDK_component_cs42888_adapter
+            bool "component_cs42888_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_codec_MK66F18
+    bool "driver_codec_MK66F18"
+    depends on HAS_MCUX_SDK_driver_codec_MK66F18
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_driver_codec_MK66F18
+        config MCUX_SDK_component_da7212_adapter
+            bool "component_da7212_adapter"
+            default n
+    endif
+
+config MCUX_SDK_driver_common
+    bool "driver_common"
+    depends on HAS_MCUX_SDK_driver_common
+    default n
+    select MCUX_SDK_driver_reset if HAS_MCUX_SDK_driver_reset
+    select MCUX_SDK_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
+
+config MCUX_SDK_driver_cop
+    bool "driver_cop"
+    depends on HAS_MCUX_SDK_driver_cop
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_crc
+    bool "driver_crc"
+    depends on HAS_MCUX_SDK_driver_crc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_cs42888
+    bool "driver_cs42888"
+    depends on HAS_MCUX_SDK_driver_cs42888
+    default n
+    select MCUX_SDK_component_codec_i2c_MIMXRT1052 if HAS_MCUX_SDK_component_codec_i2c_MIMXRT1052
+    select MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core0 if HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core0
+    select MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core1 if HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core1
+    select MCUX_SDK_component_codec_i2c_MIMX8QX6 if HAS_MCUX_SDK_component_codec_i2c_MIMX8QX6
+    select MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33 if HAS_MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_csi
+    bool "driver_csi"
+    depends on HAS_MCUX_SDK_driver_csi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_ctimer
+    bool "driver_ctimer"
+    depends on HAS_MCUX_SDK_driver_ctimer
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_cwt
+    bool "driver_cwt"
+    depends on HAS_MCUX_SDK_driver_cwt
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_dac
+    bool "driver_dac"
+    depends on HAS_MCUX_SDK_driver_dac
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_dac12
+    bool "driver_dac12"
+    depends on HAS_MCUX_SDK_driver_dac12
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_dac_1
+    bool "driver_dac_1"
+    depends on HAS_MCUX_SDK_driver_dac_1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_dbi
+    bool "driver_dbi"
+    depends on HAS_MCUX_SDK_driver_dbi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_dbi_flexio_edma
+    bool "driver_dbi_flexio_edma"
+    depends on HAS_MCUX_SDK_driver_dbi_flexio_edma
+    default n
+    select MCUX_SDK_driver_flexio_mculcd if HAS_MCUX_SDK_driver_flexio_mculcd
+    select MCUX_SDK_driver_flexio_mculcd_edma if HAS_MCUX_SDK_driver_flexio_mculcd_edma
+    select MCUX_SDK_driver_dbi if HAS_MCUX_SDK_driver_dbi
+
+config MCUX_SDK_driver_dc-fb-common
+    bool "driver_dc-fb-common"
+    depends on HAS_MCUX_SDK_driver_dc-fb-common
+    default n
+    select MCUX_SDK_driver_video-common if HAS_MCUX_SDK_driver_video-common
+
+config MCUX_SDK_driver_dc-fb-elcdif
+    bool "driver_dc-fb-elcdif"
+    depends on HAS_MCUX_SDK_driver_dc-fb-elcdif
+    default n
+    select MCUX_SDK_driver_dc-fb-common if HAS_MCUX_SDK_driver_dc-fb-common
+    select MCUX_SDK_driver_elcdif if HAS_MCUX_SDK_driver_elcdif
+
+config MCUX_SDK_driver_dcdc_1
+    bool "driver_dcdc_1"
+    depends on HAS_MCUX_SDK_driver_dcdc_1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_dcp
+    bool "driver_dcp"
+    depends on HAS_MCUX_SDK_driver_dcp
+    default n
+    select MCUX_SDK_driver_cache_armv7_m7 if HAS_MCUX_SDK_driver_cache_armv7_m7
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_dialog7212
+    bool "driver_dialog7212"
+    depends on HAS_MCUX_SDK_driver_dialog7212
+    default n
+    select MCUX_SDK_component_codec_i2c_MK66F18 if HAS_MCUX_SDK_component_codec_i2c_MK66F18
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_display-adv7535
+    bool "driver_display-adv7535"
+    depends on HAS_MCUX_SDK_driver_display-adv7535
+    default n
+    select MCUX_SDK_driver_video-i2c if HAS_MCUX_SDK_driver_video-i2c
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_display-common
+    bool "driver_display-common"
+    depends on HAS_MCUX_SDK_driver_display-common
+    default n
+    select MCUX_SDK_driver_video-common if HAS_MCUX_SDK_driver_video-common
+
+config MCUX_SDK_driver_display-it6263
+    bool "driver_display-it6263"
+    depends on HAS_MCUX_SDK_driver_display-it6263
+    default n
+    select MCUX_SDK_driver_video-common if HAS_MCUX_SDK_driver_video-common
+    select MCUX_SDK_driver_display-common if HAS_MCUX_SDK_driver_display-common
+    select MCUX_SDK_driver_video-i2c if HAS_MCUX_SDK_driver_video-i2c
+
+config MCUX_SDK_driver_display-mipi-dsi-cmd
+    bool "driver_display-mipi-dsi-cmd"
+    depends on HAS_MCUX_SDK_driver_display-mipi-dsi-cmd
+    default n
+    select MCUX_SDK_driver_mipi_dsi if HAS_MCUX_SDK_driver_mipi_dsi
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_display-rm67191
+    bool "driver_display-rm67191"
+    depends on HAS_MCUX_SDK_driver_display-rm67191
+    default n
+    select MCUX_SDK_driver_display-mipi-dsi-cmd if HAS_MCUX_SDK_driver_display-mipi-dsi-cmd
+    select MCUX_SDK_driver_display-common if HAS_MCUX_SDK_driver_display-common
+
+config MCUX_SDK_driver_dma
+    bool "driver_dma"
+    depends on HAS_MCUX_SDK_driver_dma
+    default n
+    select MCUX_SDK_driver_dmamux if HAS_MCUX_SDK_driver_dmamux
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_dma3
+    bool "driver_dma3"
+    depends on HAS_MCUX_SDK_driver_dma3
+    default n
+    select MCUX_SDK_driver_memory if HAS_MCUX_SDK_driver_memory
+
+config MCUX_SDK_driver_dmamux
+    bool "driver_dmamux"
+    depends on HAS_MCUX_SDK_driver_dmamux
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_dmic
+    bool "driver_dmic"
+    depends on HAS_MCUX_SDK_driver_dmic
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_dmic_dma
+    bool "driver_dmic_dma"
+    depends on HAS_MCUX_SDK_driver_dmic_dma
+    default n
+    select MCUX_SDK_driver_lpc_dma if HAS_MCUX_SDK_driver_lpc_dma
+    select MCUX_SDK_driver_dmic if HAS_MCUX_SDK_driver_dmic
+
+config MCUX_SDK_driver_dmic_hwvad
+    bool "driver_dmic_hwvad"
+    depends on HAS_MCUX_SDK_driver_dmic_hwvad
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_driver_dmic if HAS_MCUX_SDK_driver_dmic
+
+config MCUX_SDK_driver_dpr
+    bool "driver_dpr"
+    depends on HAS_MCUX_SDK_driver_dpr
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_dpu
+    bool "driver_dpu"
+    depends on HAS_MCUX_SDK_driver_dpu
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_dpu_irqsteer
+    bool "driver_dpu_irqsteer"
+    depends on HAS_MCUX_SDK_driver_dpu_irqsteer
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_dspi
+    bool "driver_dspi"
+    depends on HAS_MCUX_SDK_driver_dspi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_dspi_edma
+    bool "driver_dspi_edma"
+    depends on HAS_MCUX_SDK_driver_dspi_edma
+    default n
+    select MCUX_SDK_driver_dspi if HAS_MCUX_SDK_driver_dspi
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+
+config MCUX_SDK_driver_easrc
+    bool "driver_easrc"
+    depends on HAS_MCUX_SDK_driver_easrc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_easrc_sdma
+    bool "driver_easrc_sdma"
+    depends on HAS_MCUX_SDK_driver_easrc_sdma
+    default n
+    select MCUX_SDK_driver_easrc if HAS_MCUX_SDK_driver_easrc
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_driver_sdma if HAS_MCUX_SDK_driver_sdma
+
+config MCUX_SDK_driver_ecspi
+    bool "driver_ecspi"
+    depends on HAS_MCUX_SDK_driver_ecspi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_edma
+    bool "driver_edma"
+    depends on HAS_MCUX_SDK_driver_edma
+    default n
+    select MCUX_SDK_driver_dmamux if HAS_MCUX_SDK_driver_dmamux
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_eeprom
+    bool "driver_eeprom"
+    depends on HAS_MCUX_SDK_driver_eeprom
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_elcdif
+    bool "driver_elcdif"
+    depends on HAS_MCUX_SDK_driver_elcdif
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_emc
+    bool "driver_emc"
+    depends on HAS_MCUX_SDK_driver_emc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_enc
+    bool "driver_enc"
+    depends on HAS_MCUX_SDK_driver_enc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_enet_MIMX8QM6_cm4_core0
+    bool "driver_enet_MIMX8QM6_cm4_core0"
+    depends on HAS_MCUX_SDK_driver_enet_MIMX8QM6_cm4_core0
+    default n
+    select MCUX_SDK_driver_memory if HAS_MCUX_SDK_driver_memory
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_enet_MIMX8QM6_cm4_core1
+    bool "driver_enet_MIMX8QM6_cm4_core1"
+    depends on HAS_MCUX_SDK_driver_enet_MIMX8QM6_cm4_core1
+    default n
+    select MCUX_SDK_driver_memory if HAS_MCUX_SDK_driver_memory
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_enet_MIMX8QX6
+    bool "driver_enet_MIMX8QX6"
+    depends on HAS_MCUX_SDK_driver_enet_MIMX8QX6
+    default n
+    select MCUX_SDK_driver_memory if HAS_MCUX_SDK_driver_memory
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_enet_MIMXRT1021
+    bool "driver_enet_MIMXRT1021"
+    depends on HAS_MCUX_SDK_driver_enet_MIMXRT1021
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_enet_MIMXRT1024
+    bool "driver_enet_MIMXRT1024"
+    depends on HAS_MCUX_SDK_driver_enet_MIMXRT1024
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_enet_MIMXRT1052
+    bool "driver_enet_MIMXRT1052"
+    depends on HAS_MCUX_SDK_driver_enet_MIMXRT1052
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_enet_MIMXRT1062
+    bool "driver_enet_MIMXRT1062"
+    depends on HAS_MCUX_SDK_driver_enet_MIMXRT1062
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_enet_MIMXRT1064
+    bool "driver_enet_MIMXRT1064"
+    depends on HAS_MCUX_SDK_driver_enet_MIMXRT1064
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_enet_MK64F12
+    bool "driver_enet_MK64F12"
+    depends on HAS_MCUX_SDK_driver_enet_MK64F12
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_enet_MK66F18
+    bool "driver_enet_MK66F18"
+    depends on HAS_MCUX_SDK_driver_enet_MK66F18
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_esai
+    bool "driver_esai"
+    depends on HAS_MCUX_SDK_driver_esai
+    default n
+
+config MCUX_SDK_driver_esai_edma
+    bool "driver_esai_edma"
+    depends on HAS_MCUX_SDK_driver_esai_edma
+    default n
+    select MCUX_SDK_driver_esai if HAS_MCUX_SDK_driver_esai
+
+config MCUX_SDK_driver_ewm
+    bool "driver_ewm"
+    depends on HAS_MCUX_SDK_driver_ewm
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_flash
+    bool "driver_flash"
+    depends on HAS_MCUX_SDK_driver_flash
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_flash_config
+    bool "driver_flash_config"
+    depends on HAS_MCUX_SDK_driver_flash_config
+    default n
+
+config MCUX_SDK_driver_flash_ftmr
+    bool "driver_flash_ftmr"
+    depends on HAS_MCUX_SDK_driver_flash_ftmr
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_flashiap
+    bool "driver_flashiap"
+    depends on HAS_MCUX_SDK_driver_flashiap
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_flexcan
+    bool "driver_flexcan"
+    depends on HAS_MCUX_SDK_driver_flexcan
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_flexcan_edma
+    bool "driver_flexcan_edma"
+    depends on HAS_MCUX_SDK_driver_flexcan_edma
+    default n
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+    select MCUX_SDK_driver_dma3 if HAS_MCUX_SDK_driver_dma3
+    select MCUX_SDK_driver_flexcan if HAS_MCUX_SDK_driver_flexcan
+
+config MCUX_SDK_driver_flexcomm
+    bool "driver_flexcomm"
+    depends on HAS_MCUX_SDK_driver_flexcomm
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_flexcomm_i2c
+    bool "driver_flexcomm_i2c"
+    depends on HAS_MCUX_SDK_driver_flexcomm_i2c
+    default n
+    select MCUX_SDK_driver_flexcomm if HAS_MCUX_SDK_driver_flexcomm
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_flexcomm_i2c_dma
+    bool "driver_flexcomm_i2c_dma"
+    depends on HAS_MCUX_SDK_driver_flexcomm_i2c_dma
+    default n
+    select MCUX_SDK_driver_lpc_dma if HAS_MCUX_SDK_driver_lpc_dma
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_driver_flexcomm if HAS_MCUX_SDK_driver_flexcomm
+    select MCUX_SDK_driver_flexcomm_i2c if HAS_MCUX_SDK_driver_flexcomm_i2c
+
+config MCUX_SDK_driver_flexcomm_i2s
+    bool "driver_flexcomm_i2s"
+    depends on HAS_MCUX_SDK_driver_flexcomm_i2s
+    default n
+    select MCUX_SDK_driver_flexcomm if HAS_MCUX_SDK_driver_flexcomm
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_flexcomm_i2s_dma
+    bool "driver_flexcomm_i2s_dma"
+    depends on HAS_MCUX_SDK_driver_flexcomm_i2s_dma
+    default n
+    select MCUX_SDK_driver_lpc_dma if HAS_MCUX_SDK_driver_lpc_dma
+    select MCUX_SDK_driver_flexcomm_i2s if HAS_MCUX_SDK_driver_flexcomm_i2s
+
+config MCUX_SDK_driver_flexcomm_spi
+    bool "driver_flexcomm_spi"
+    depends on HAS_MCUX_SDK_driver_flexcomm_spi
+    default n
+    select MCUX_SDK_driver_flexcomm if HAS_MCUX_SDK_driver_flexcomm
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_flexcomm_spi_dma
+    bool "driver_flexcomm_spi_dma"
+    depends on HAS_MCUX_SDK_driver_flexcomm_spi_dma
+    default n
+    select MCUX_SDK_driver_flexcomm_spi if HAS_MCUX_SDK_driver_flexcomm_spi
+    select MCUX_SDK_driver_lpc_dma if HAS_MCUX_SDK_driver_lpc_dma
+    select MCUX_SDK_driver_flexcomm if HAS_MCUX_SDK_driver_flexcomm
+
+config MCUX_SDK_driver_flexcomm_usart
+    bool "driver_flexcomm_usart"
+    depends on HAS_MCUX_SDK_driver_flexcomm_usart
+    default n
+    select MCUX_SDK_driver_flexcomm if HAS_MCUX_SDK_driver_flexcomm
+
+config MCUX_SDK_driver_flexcomm_usart_dma
+    bool "driver_flexcomm_usart_dma"
+    depends on HAS_MCUX_SDK_driver_flexcomm_usart_dma
+    default n
+    select MCUX_SDK_driver_lpc_dma if HAS_MCUX_SDK_driver_lpc_dma
+    select MCUX_SDK_driver_flexcomm_usart if HAS_MCUX_SDK_driver_flexcomm_usart
+    select MCUX_SDK_driver_flexcomm if HAS_MCUX_SDK_driver_flexcomm
+
+config MCUX_SDK_driver_flexio
+    bool "driver_flexio"
+    depends on HAS_MCUX_SDK_driver_flexio
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_flexio_i2c_master
+    bool "driver_flexio_i2c_master"
+    depends on HAS_MCUX_SDK_driver_flexio_i2c_master
+    default n
+    select MCUX_SDK_driver_flexio if HAS_MCUX_SDK_driver_flexio
+
+config MCUX_SDK_driver_flexio_i2s
+    bool "driver_flexio_i2s"
+    depends on HAS_MCUX_SDK_driver_flexio_i2s
+    default n
+    select MCUX_SDK_driver_flexio if HAS_MCUX_SDK_driver_flexio
+
+config MCUX_SDK_driver_flexio_i2s_edma
+    bool "driver_flexio_i2s_edma"
+    depends on HAS_MCUX_SDK_driver_flexio_i2s_edma
+    default n
+    select MCUX_SDK_driver_flexio_i2s if HAS_MCUX_SDK_driver_flexio_i2s
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+
+config MCUX_SDK_driver_flexio_mculcd
+    bool "driver_flexio_mculcd"
+    depends on HAS_MCUX_SDK_driver_flexio_mculcd
+    default n
+    select MCUX_SDK_driver_flexio if HAS_MCUX_SDK_driver_flexio
+
+config MCUX_SDK_driver_flexio_mculcd_edma
+    bool "driver_flexio_mculcd_edma"
+    depends on HAS_MCUX_SDK_driver_flexio_mculcd_edma
+    default n
+    select MCUX_SDK_driver_flexio_mculcd if HAS_MCUX_SDK_driver_flexio_mculcd
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+
+config MCUX_SDK_driver_flexio_spi
+    bool "driver_flexio_spi"
+    depends on HAS_MCUX_SDK_driver_flexio_spi
+    default n
+    select MCUX_SDK_driver_flexio if HAS_MCUX_SDK_driver_flexio
+
+config MCUX_SDK_driver_flexio_spi_dma
+    bool "driver_flexio_spi_dma"
+    depends on HAS_MCUX_SDK_driver_flexio_spi_dma
+    default n
+    select MCUX_SDK_driver_dma if HAS_MCUX_SDK_driver_dma
+    select MCUX_SDK_driver_flexio_spi if HAS_MCUX_SDK_driver_flexio_spi
+
+config MCUX_SDK_driver_flexio_spi_edma
+    bool "driver_flexio_spi_edma"
+    depends on HAS_MCUX_SDK_driver_flexio_spi_edma
+    default n
+    select MCUX_SDK_driver_flexio_spi if HAS_MCUX_SDK_driver_flexio_spi
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+
+config MCUX_SDK_driver_flexio_uart
+    bool "driver_flexio_uart"
+    depends on HAS_MCUX_SDK_driver_flexio_uart
+    default n
+    select MCUX_SDK_driver_flexio if HAS_MCUX_SDK_driver_flexio
+
+config MCUX_SDK_driver_flexio_uart_dma
+    bool "driver_flexio_uart_dma"
+    depends on HAS_MCUX_SDK_driver_flexio_uart_dma
+    default n
+    select MCUX_SDK_driver_dma if HAS_MCUX_SDK_driver_dma
+    select MCUX_SDK_driver_flexio_uart if HAS_MCUX_SDK_driver_flexio_uart
+
+config MCUX_SDK_driver_flexio_uart_edma
+    bool "driver_flexio_uart_edma"
+    depends on HAS_MCUX_SDK_driver_flexio_uart_edma
+    default n
+    select MCUX_SDK_driver_flexio_uart if HAS_MCUX_SDK_driver_flexio_uart
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+
+config MCUX_SDK_driver_flexram
+    bool "driver_flexram"
+    depends on HAS_MCUX_SDK_driver_flexram
+    default n
+    select MCUX_SDK_driver_soc_flexram_allocate if HAS_MCUX_SDK_driver_soc_flexram_allocate
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_flexspi
+    bool "driver_flexspi"
+    depends on HAS_MCUX_SDK_driver_flexspi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_flexspi_dma
+    bool "driver_flexspi_dma"
+    depends on HAS_MCUX_SDK_driver_flexspi_dma
+    default n
+    select MCUX_SDK_driver_flexspi if HAS_MCUX_SDK_driver_flexspi
+    select MCUX_SDK_driver_lpc_dma if HAS_MCUX_SDK_driver_lpc_dma
+
+config MCUX_SDK_driver_flexspi_edma
+    bool "driver_flexspi_edma"
+    depends on HAS_MCUX_SDK_driver_flexspi_edma
+    default n
+    select MCUX_SDK_driver_flexspi if HAS_MCUX_SDK_driver_flexspi
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+
+config MCUX_SDK_driver_fmc
+    bool "driver_fmc"
+    depends on HAS_MCUX_SDK_driver_fmc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_fmeas
+    bool "driver_fmeas"
+    depends on HAS_MCUX_SDK_driver_fmeas
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_ft5406
+    bool "driver_ft5406"
+    depends on HAS_MCUX_SDK_driver_ft5406
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_ftm
+    bool "driver_ftm"
+    depends on HAS_MCUX_SDK_driver_ftm
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_fxos8700cq
+    bool "driver_fxos8700cq"
+    depends on HAS_MCUX_SDK_driver_fxos8700cq
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_gint
+    bool "driver_gint"
+    depends on HAS_MCUX_SDK_driver_gint
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_gpc_1
+    bool "driver_gpc_1"
+    depends on HAS_MCUX_SDK_driver_gpc_1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_gpc_2
+    bool "driver_gpc_2"
+    depends on HAS_MCUX_SDK_driver_gpc_2
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_gpio
+    bool "driver_gpio"
+    depends on HAS_MCUX_SDK_driver_gpio
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_gpio_1
+    bool "driver_gpio_1"
+    depends on HAS_MCUX_SDK_driver_gpio_1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_gpt
+    bool "driver_gpt"
+    depends on HAS_MCUX_SDK_driver_gpt
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_hashcrypt
+    bool "driver_hashcrypt"
+    depends on HAS_MCUX_SDK_driver_hashcrypt
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_i2c
+    bool "driver_i2c"
+    depends on HAS_MCUX_SDK_driver_i2c
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_i2c_dma
+    bool "driver_i2c_dma"
+    depends on HAS_MCUX_SDK_driver_i2c_dma
+    default n
+    select MCUX_SDK_driver_dma if HAS_MCUX_SDK_driver_dma
+    select MCUX_SDK_driver_i2c if HAS_MCUX_SDK_driver_i2c
+
+config MCUX_SDK_driver_i2c_edma
+    bool "driver_i2c_edma"
+    depends on HAS_MCUX_SDK_driver_i2c_edma
+    default n
+    select MCUX_SDK_driver_i2c if HAS_MCUX_SDK_driver_i2c
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+
+config MCUX_SDK_driver_i3c
+    bool "driver_i3c"
+    depends on HAS_MCUX_SDK_driver_i3c
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_iap
+    bool "driver_iap"
+    depends on HAS_MCUX_SDK_driver_iap
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_iap1
+    bool "driver_iap1"
+    depends on HAS_MCUX_SDK_driver_iap1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_igpio
+    bool "driver_igpio"
+    depends on HAS_MCUX_SDK_driver_igpio
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_ii2c
+    bool "driver_ii2c"
+    depends on HAS_MCUX_SDK_driver_ii2c
+    default n
+
+config MCUX_SDK_driver_inputmux
+    bool "driver_inputmux"
+    depends on HAS_MCUX_SDK_driver_inputmux
+    default n
+    select MCUX_SDK_driver_inputmux_connections if HAS_MCUX_SDK_driver_inputmux_connections
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_inputmux_connections
+    bool "driver_inputmux_connections"
+    depends on HAS_MCUX_SDK_driver_inputmux_connections
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_intmux
+    bool "driver_intmux"
+    depends on HAS_MCUX_SDK_driver_intmux
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_iomuxc
+    bool "driver_iomuxc"
+    depends on HAS_MCUX_SDK_driver_iomuxc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_ipwm
+    bool "driver_ipwm"
+    depends on HAS_MCUX_SDK_driver_ipwm
+    default n
+
+config MCUX_SDK_driver_irq
+    bool "driver_irq"
+    depends on HAS_MCUX_SDK_driver_irq
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_irqsteer
+    bool "driver_irqsteer"
+    depends on HAS_MCUX_SDK_driver_irqsteer
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_irtc
+    bool "driver_irtc"
+    depends on HAS_MCUX_SDK_driver_irtc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_isi
+    bool "driver_isi"
+    depends on HAS_MCUX_SDK_driver_isi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_iuart
+    bool "driver_iuart"
+    depends on HAS_MCUX_SDK_driver_iuart
+    default n
+
+config MCUX_SDK_driver_iuart_sdma
+    bool "driver_iuart_sdma"
+    depends on HAS_MCUX_SDK_driver_iuart_sdma
+    default n
+    select MCUX_SDK_driver_sdma if HAS_MCUX_SDK_driver_sdma
+    select MCUX_SDK_driver_iuart if HAS_MCUX_SDK_driver_iuart
+
+config MCUX_SDK_driver_kbi
+    bool "driver_kbi"
+    depends on HAS_MCUX_SDK_driver_kbi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_kpp
+    bool "driver_kpp"
+    depends on HAS_MCUX_SDK_driver_kpp
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_ldb
+    bool "driver_ldb"
+    depends on HAS_MCUX_SDK_driver_ldb
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_ldb_combo_phy
+    bool "driver_ldb_combo_phy"
+    depends on HAS_MCUX_SDK_driver_ldb_combo_phy
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_llwu
+    bool "driver_llwu"
+    depends on HAS_MCUX_SDK_driver_llwu
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpadc
+    bool "driver_lpadc"
+    depends on HAS_MCUX_SDK_driver_lpadc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_acomp
+    bool "driver_lpc_acomp"
+    depends on HAS_MCUX_SDK_driver_lpc_acomp
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_adc
+    bool "driver_lpc_adc"
+    depends on HAS_MCUX_SDK_driver_lpc_adc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_crc
+    bool "driver_lpc_crc"
+    depends on HAS_MCUX_SDK_driver_lpc_crc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_dac
+    bool "driver_lpc_dac"
+    depends on HAS_MCUX_SDK_driver_lpc_dac
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_dma
+    bool "driver_lpc_dma"
+    depends on HAS_MCUX_SDK_driver_lpc_dma
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_enet
+    bool "driver_lpc_enet"
+    depends on HAS_MCUX_SDK_driver_lpc_enet
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_gpio
+    bool "driver_lpc_gpio"
+    depends on HAS_MCUX_SDK_driver_lpc_gpio
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_i2c
+    bool "driver_lpc_i2c"
+    depends on HAS_MCUX_SDK_driver_lpc_i2c
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_iocon
+    bool "driver_lpc_iocon"
+    depends on HAS_MCUX_SDK_driver_lpc_iocon
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_iocon_lite
+    bool "driver_lpc_iocon_lite"
+    depends on HAS_MCUX_SDK_driver_lpc_iocon_lite
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_iopctl
+    bool "driver_lpc_iopctl"
+    depends on HAS_MCUX_SDK_driver_lpc_iopctl
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_lcdc
+    bool "driver_lpc_lcdc"
+    depends on HAS_MCUX_SDK_driver_lpc_lcdc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_minispi
+    bool "driver_lpc_minispi"
+    depends on HAS_MCUX_SDK_driver_lpc_minispi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_miniusart
+    bool "driver_lpc_miniusart"
+    depends on HAS_MCUX_SDK_driver_lpc_miniusart
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpc_rtc
+    bool "driver_lpc_rtc"
+    depends on HAS_MCUX_SDK_driver_lpc_rtc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpcmp
+    bool "driver_lpcmp"
+    depends on HAS_MCUX_SDK_driver_lpcmp
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpi2c
+    bool "driver_lpi2c"
+    depends on HAS_MCUX_SDK_driver_lpi2c
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpi2c_edma
+    bool "driver_lpi2c_edma"
+    depends on HAS_MCUX_SDK_driver_lpi2c_edma
+    default n
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+    select MCUX_SDK_driver_dma3 if HAS_MCUX_SDK_driver_dma3
+    select MCUX_SDK_driver_lpi2c if HAS_MCUX_SDK_driver_lpi2c
+
+config MCUX_SDK_driver_lpit
+    bool "driver_lpit"
+    depends on HAS_MCUX_SDK_driver_lpit
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpspi
+    bool "driver_lpspi"
+    depends on HAS_MCUX_SDK_driver_lpspi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpspi_edma
+    bool "driver_lpspi_edma"
+    depends on HAS_MCUX_SDK_driver_lpspi_edma
+    default n
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+    select MCUX_SDK_driver_dma3 if HAS_MCUX_SDK_driver_dma3
+    select MCUX_SDK_driver_lpspi if HAS_MCUX_SDK_driver_lpspi
+
+config MCUX_SDK_driver_lptmr
+    bool "driver_lptmr"
+    depends on HAS_MCUX_SDK_driver_lptmr
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpuart
+    bool "driver_lpuart"
+    depends on HAS_MCUX_SDK_driver_lpuart
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_lpuart_dma
+    bool "driver_lpuart_dma"
+    depends on HAS_MCUX_SDK_driver_lpuart_dma
+    default n
+    select MCUX_SDK_driver_dma if HAS_MCUX_SDK_driver_dma
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+
+config MCUX_SDK_driver_lpuart_edma
+    bool "driver_lpuart_edma"
+    depends on HAS_MCUX_SDK_driver_lpuart_edma
+    default n
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+    select MCUX_SDK_driver_dma3 if HAS_MCUX_SDK_driver_dma3
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+
+config MCUX_SDK_driver_ltc
+    bool "driver_ltc"
+    depends on HAS_MCUX_SDK_driver_ltc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_ltc_edma
+    bool "driver_ltc_edma"
+    depends on HAS_MCUX_SDK_driver_ltc_edma
+    default n
+    select MCUX_SDK_driver_ltc if HAS_MCUX_SDK_driver_ltc
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+
+config MCUX_SDK_driver_mailbox
+    bool "driver_mailbox"
+    depends on HAS_MCUX_SDK_driver_mailbox
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_mcan
+    bool "driver_mcan"
+    depends on HAS_MCUX_SDK_driver_mcan
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_mdio-common
+    bool "driver_mdio-common"
+    depends on HAS_MCUX_SDK_driver_mdio-common
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_mdio-enet
+    bool "driver_mdio-enet"
+    depends on HAS_MCUX_SDK_driver_mdio-enet
+    default n
+    select MCUX_SDK_driver_enet_MIMXRT1052 if HAS_MCUX_SDK_driver_enet_MIMXRT1052
+    select MCUX_SDK_driver_enet_MIMXRT1064 if HAS_MCUX_SDK_driver_enet_MIMXRT1064
+    select MCUX_SDK_driver_enet_MK64F12 if HAS_MCUX_SDK_driver_enet_MK64F12
+    select MCUX_SDK_driver_enet_MK66F18 if HAS_MCUX_SDK_driver_enet_MK66F18
+    select MCUX_SDK_driver_enet_MIMX8QM6_cm4_core0 if HAS_MCUX_SDK_driver_enet_MIMX8QM6_cm4_core0
+    select MCUX_SDK_driver_enet_MIMX8QM6_cm4_core1 if HAS_MCUX_SDK_driver_enet_MIMX8QM6_cm4_core1
+    select MCUX_SDK_driver_enet_MIMX8QX6 if HAS_MCUX_SDK_driver_enet_MIMX8QX6
+    select MCUX_SDK_driver_enet_MIMXRT1021 if HAS_MCUX_SDK_driver_enet_MIMXRT1021
+    select MCUX_SDK_driver_enet_MIMXRT1062 if HAS_MCUX_SDK_driver_enet_MIMXRT1062
+    select MCUX_SDK_driver_enet_MIMXRT1024 if HAS_MCUX_SDK_driver_enet_MIMXRT1024
+    select MCUX_SDK_driver_mdio-common if HAS_MCUX_SDK_driver_mdio-common
+
+config MCUX_SDK_driver_mdio-lpc-enet
+    bool "driver_mdio-lpc-enet"
+    depends on HAS_MCUX_SDK_driver_mdio-lpc-enet
+    default n
+    select MCUX_SDK_driver_lpc_enet if HAS_MCUX_SDK_driver_lpc_enet
+    select MCUX_SDK_driver_mdio-common if HAS_MCUX_SDK_driver_mdio-common
+
+config MCUX_SDK_driver_memory
+    bool "driver_memory"
+    depends on HAS_MCUX_SDK_driver_memory
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_mipi_csi2rx
+    bool "driver_mipi_csi2rx"
+    depends on HAS_MCUX_SDK_driver_mipi_csi2rx
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_mipi_dsi
+    bool "driver_mipi_dsi"
+    depends on HAS_MCUX_SDK_driver_mipi_dsi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_mma8451q
+    bool "driver_mma8451q"
+    depends on HAS_MCUX_SDK_driver_mma8451q
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_mmau
+    bool "driver_mmau"
+    depends on HAS_MCUX_SDK_driver_mmau
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_mmdvsq
+    bool "driver_mmdvsq"
+    depends on HAS_MCUX_SDK_driver_mmdvsq
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_mrt
+    bool "driver_mrt"
+    depends on HAS_MCUX_SDK_driver_mrt
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_mscan
+    bool "driver_mscan"
+    depends on HAS_MCUX_SDK_driver_mscan
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_msmc
+    bool "driver_msmc"
+    depends on HAS_MCUX_SDK_driver_msmc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_mu
+    bool "driver_mu"
+    depends on HAS_MCUX_SDK_driver_mu
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_mx25r_flash
+    bool "driver_mx25r_flash"
+    depends on HAS_MCUX_SDK_driver_mx25r_flash
+    default n
+
+config MCUX_SDK_driver_ocotp
+    bool "driver_ocotp"
+    depends on HAS_MCUX_SDK_driver_ocotp
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_ostimer
+    bool "driver_ostimer"
+    depends on HAS_MCUX_SDK_driver_ostimer
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_otfad
+    bool "driver_otfad"
+    depends on HAS_MCUX_SDK_driver_otfad
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_otp
+    bool "driver_otp"
+    depends on HAS_MCUX_SDK_driver_otp
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_pca9420
+    bool "driver_pca9420"
+    depends on HAS_MCUX_SDK_driver_pca9420
+    default n
+    select MCUX_SDK_driver_power if HAS_MCUX_SDK_driver_power
+
+config MCUX_SDK_driver_pdb
+    bool "driver_pdb"
+    depends on HAS_MCUX_SDK_driver_pdb
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_pdm
+    bool "driver_pdm"
+    depends on HAS_MCUX_SDK_driver_pdm
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_pdm_sdma
+    bool "driver_pdm_sdma"
+    depends on HAS_MCUX_SDK_driver_pdm_sdma
+    default n
+    select MCUX_SDK_driver_pdm if HAS_MCUX_SDK_driver_pdm
+
+config MCUX_SDK_driver_pf1550
+    bool "driver_pf1550"
+    depends on HAS_MCUX_SDK_driver_pf1550
+    default n
+
+config MCUX_SDK_driver_phy-common
+    bool "driver_phy-common"
+    depends on HAS_MCUX_SDK_driver_phy-common
+    default n
+    select MCUX_SDK_driver_mdio-common if HAS_MCUX_SDK_driver_mdio-common
+
+config MCUX_SDK_driver_phy-device-ar8031
+    bool "driver_phy-device-ar8031"
+    depends on HAS_MCUX_SDK_driver_phy-device-ar8031
+    default n
+    select MCUX_SDK_driver_phy-common if HAS_MCUX_SDK_driver_phy-common
+
+config MCUX_SDK_driver_phy-device-ksz8081
+    bool "driver_phy-device-ksz8081"
+    depends on HAS_MCUX_SDK_driver_phy-device-ksz8081
+    default n
+    select MCUX_SDK_driver_phy-common if HAS_MCUX_SDK_driver_phy-common
+
+config MCUX_SDK_driver_phy-device-lan8720a
+    bool "driver_phy-device-lan8720a"
+    depends on HAS_MCUX_SDK_driver_phy-device-lan8720a
+    default n
+    select MCUX_SDK_driver_phy-common if HAS_MCUX_SDK_driver_phy-common
+
+config MCUX_SDK_driver_pint
+    bool "driver_pint"
+    depends on HAS_MCUX_SDK_driver_pint
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_pit
+    bool "driver_pit"
+    depends on HAS_MCUX_SDK_driver_pit
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_plu
+    bool "driver_plu"
+    depends on HAS_MCUX_SDK_driver_plu
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_pmc
+    bool "driver_pmc"
+    depends on HAS_MCUX_SDK_driver_pmc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_pmc0
+    bool "driver_pmc0"
+    depends on HAS_MCUX_SDK_driver_pmc0
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_port
+    bool "driver_port"
+    depends on HAS_MCUX_SDK_driver_port
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_port_ke02
+    bool "driver_port_ke02"
+    depends on HAS_MCUX_SDK_driver_port_ke02
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_port_ke04
+    bool "driver_port_ke04"
+    depends on HAS_MCUX_SDK_driver_port_ke04
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_port_ke06
+    bool "driver_port_ke06"
+    depends on HAS_MCUX_SDK_driver_port_ke06
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_power
+    bool "driver_power"
+    depends on HAS_MCUX_SDK_driver_power
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_power_no_lib
+    bool "driver_power_no_lib"
+    depends on HAS_MCUX_SDK_driver_power_no_lib
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_powerquad
+    bool "driver_powerquad"
+    depends on HAS_MCUX_SDK_driver_powerquad
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_prg
+    bool "driver_prg"
+    depends on HAS_MCUX_SDK_driver_prg
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_prince
+    bool "driver_prince"
+    depends on HAS_MCUX_SDK_driver_prince
+    default n
+    select MCUX_SDK_driver_puf if HAS_MCUX_SDK_driver_puf
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_driver_iap1 if HAS_MCUX_SDK_driver_iap1
+
+config MCUX_SDK_driver_puf
+    bool "driver_puf"
+    depends on HAS_MCUX_SDK_driver_puf
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_pwm
+    bool "driver_pwm"
+    depends on HAS_MCUX_SDK_driver_pwm
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_pwt
+    bool "driver_pwt"
+    depends on HAS_MCUX_SDK_driver_pwt
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_pwt_1
+    bool "driver_pwt_1"
+    depends on HAS_MCUX_SDK_driver_pwt_1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_pxp
+    bool "driver_pxp"
+    depends on HAS_MCUX_SDK_driver_pxp
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_qspi
+    bool "driver_qspi"
+    depends on HAS_MCUX_SDK_driver_qspi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_qspi_edma
+    bool "driver_qspi_edma"
+    depends on HAS_MCUX_SDK_driver_qspi_edma
+    default n
+    select MCUX_SDK_driver_qspi if HAS_MCUX_SDK_driver_qspi
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+
+config MCUX_SDK_driver_qtmr_1
+    bool "driver_qtmr_1"
+    depends on HAS_MCUX_SDK_driver_qtmr_1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_qtmr_2
+    bool "driver_qtmr_2"
+    depends on HAS_MCUX_SDK_driver_qtmr_2
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_rcm
+    bool "driver_rcm"
+    depends on HAS_MCUX_SDK_driver_rcm
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_rdc
+    bool "driver_rdc"
+    depends on HAS_MCUX_SDK_driver_rdc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_rdc_sema42
+    bool "driver_rdc_sema42"
+    depends on HAS_MCUX_SDK_driver_rdc_sema42
+    default n
+
+config MCUX_SDK_driver_reset
+    bool "driver_reset"
+    depends on HAS_MCUX_SDK_driver_reset
+    default n
+
+config MCUX_SDK_driver_rgpio
+    bool "driver_rgpio"
+    depends on HAS_MCUX_SDK_driver_rgpio
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_rit
+    bool "driver_rit"
+    depends on HAS_MCUX_SDK_driver_rit
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_rng
+    bool "driver_rng"
+    depends on HAS_MCUX_SDK_driver_rng
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_rng_1
+    bool "driver_rng_1"
+    depends on HAS_MCUX_SDK_driver_rng_1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_rnga
+    bool "driver_rnga"
+    depends on HAS_MCUX_SDK_driver_rnga
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_rom_api
+    bool "driver_rom_api"
+    depends on HAS_MCUX_SDK_driver_rom_api
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_romapi
+    bool "driver_romapi"
+    depends on HAS_MCUX_SDK_driver_romapi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_rtc
+    bool "driver_rtc"
+    depends on HAS_MCUX_SDK_driver_rtc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_rtc_1
+    bool "driver_rtc_1"
+    depends on HAS_MCUX_SDK_driver_rtc_1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_rtwatchdog
+    bool "driver_rtwatchdog"
+    depends on HAS_MCUX_SDK_driver_rtwatchdog
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_sai
+    bool "driver_sai"
+    depends on HAS_MCUX_SDK_driver_sai
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_sai_edma
+    bool "driver_sai_edma"
+    depends on HAS_MCUX_SDK_driver_sai_edma
+    default n
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+    select MCUX_SDK_driver_dma3 if HAS_MCUX_SDK_driver_dma3
+    select MCUX_SDK_driver_sai if HAS_MCUX_SDK_driver_sai
+
+config MCUX_SDK_driver_sai_sdma
+    bool "driver_sai_sdma"
+    depends on HAS_MCUX_SDK_driver_sai_sdma
+    default n
+    select MCUX_SDK_driver_sai if HAS_MCUX_SDK_driver_sai
+    select MCUX_SDK_driver_sdma if HAS_MCUX_SDK_driver_sdma
+
+config MCUX_SDK_driver_sc_event
+    bool "driver_sc_event"
+    depends on HAS_MCUX_SDK_driver_sc_event
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_driver_scfw_api if HAS_MCUX_SDK_driver_scfw_api
+    select MCUX_SDK_driver_mu if HAS_MCUX_SDK_driver_mu
+
+config MCUX_SDK_driver_scfw_api
+    bool "driver_scfw_api"
+    depends on HAS_MCUX_SDK_driver_scfw_api
+    default n
+
+config MCUX_SDK_driver_sctimer
+    bool "driver_sctimer"
+    depends on HAS_MCUX_SDK_driver_sctimer
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_sdhc
+    bool "driver_sdhc"
+    depends on HAS_MCUX_SDK_driver_sdhc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_sdif
+    bool "driver_sdif"
+    depends on HAS_MCUX_SDK_driver_sdif
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_sdma
+    bool "driver_sdma"
+    depends on HAS_MCUX_SDK_driver_sdma
+    default n
+    select MCUX_SDK_driver_memory if HAS_MCUX_SDK_driver_memory
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_sdramc
+    bool "driver_sdramc"
+    depends on HAS_MCUX_SDK_driver_sdramc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_sema4
+    bool "driver_sema4"
+    depends on HAS_MCUX_SDK_driver_sema4
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_sema42
+    bool "driver_sema42"
+    depends on HAS_MCUX_SDK_driver_sema42
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_semc
+    bool "driver_semc"
+    depends on HAS_MCUX_SDK_driver_semc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_sha
+    bool "driver_sha"
+    depends on HAS_MCUX_SDK_driver_sha
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_sim
+    bool "driver_sim"
+    depends on HAS_MCUX_SDK_driver_sim
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_slcd
+    bool "driver_slcd"
+    depends on HAS_MCUX_SDK_driver_slcd
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_slcd_engine
+    bool "driver_slcd_engine"
+    depends on HAS_MCUX_SDK_driver_slcd_engine
+    default n
+    select MCUX_SDK_driver_slcd_lcd_s401m16kr if HAS_MCUX_SDK_driver_slcd_lcd_s401m16kr
+    select MCUX_SDK_driver_slcd_gdh_1247wp if HAS_MCUX_SDK_driver_slcd_gdh_1247wp
+
+config MCUX_SDK_driver_slcd_gdh_1247wp
+    bool "driver_slcd_gdh_1247wp"
+    depends on HAS_MCUX_SDK_driver_slcd_gdh_1247wp
+    default n
+
+config MCUX_SDK_driver_slcd_lcd_s401m16kr
+    bool "driver_slcd_lcd_s401m16kr"
+    depends on HAS_MCUX_SDK_driver_slcd_lcd_s401m16kr
+    default n
+
+config MCUX_SDK_driver_smc
+    bool "driver_smc"
+    depends on HAS_MCUX_SDK_driver_smc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_snvs_hp
+    bool "driver_snvs_hp"
+    depends on HAS_MCUX_SDK_driver_snvs_hp
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_snvs_lp
+    bool "driver_snvs_lp"
+    depends on HAS_MCUX_SDK_driver_snvs_lp
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_soc_flexram_allocate
+    bool "driver_soc_flexram_allocate"
+    depends on HAS_MCUX_SDK_driver_soc_flexram_allocate
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_spi
+    bool "driver_spi"
+    depends on HAS_MCUX_SDK_driver_spi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_spi_dma
+    bool "driver_spi_dma"
+    depends on HAS_MCUX_SDK_driver_spi_dma
+    default n
+    select MCUX_SDK_driver_spi if HAS_MCUX_SDK_driver_spi
+    select MCUX_SDK_driver_dma if HAS_MCUX_SDK_driver_dma
+
+config MCUX_SDK_driver_spifi
+    bool "driver_spifi"
+    depends on HAS_MCUX_SDK_driver_spifi
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_spifi_dma
+    bool "driver_spifi_dma"
+    depends on HAS_MCUX_SDK_driver_spifi_dma
+    default n
+    select MCUX_SDK_driver_lpc_dma if HAS_MCUX_SDK_driver_lpc_dma
+    select MCUX_SDK_driver_spifi if HAS_MCUX_SDK_driver_spifi
+
+config MCUX_SDK_driver_spm
+    bool "driver_spm"
+    depends on HAS_MCUX_SDK_driver_spm
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_src
+    bool "driver_src"
+    depends on HAS_MCUX_SDK_driver_src
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_srtm
+    bool "driver_srtm"
+    depends on HAS_MCUX_SDK_driver_srtm
+    default n
+
+config MCUX_SDK_driver_srtm_freertos
+    bool "driver_srtm_freertos"
+    depends on HAS_MCUX_SDK_driver_srtm_freertos
+    default n
+    select MCUX_SDK_driver_srtm if HAS_MCUX_SDK_driver_srtm
+
+config MCUX_SDK_driver_ssd1963
+    bool "driver_ssd1963"
+    depends on HAS_MCUX_SDK_driver_ssd1963
+    default n
+    select MCUX_SDK_driver_dbi if HAS_MCUX_SDK_driver_dbi
+
+config MCUX_SDK_driver_swm
+    bool "driver_swm"
+    depends on HAS_MCUX_SDK_driver_swm
+    default n
+    select MCUX_SDK_driver_swm_connections if HAS_MCUX_SDK_driver_swm_connections
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_swm_connections
+    bool "driver_swm_connections"
+    depends on HAS_MCUX_SDK_driver_swm_connections
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_syscon
+    bool "driver_syscon"
+    depends on HAS_MCUX_SDK_driver_syscon
+    default n
+    select MCUX_SDK_driver_syscon_connections if HAS_MCUX_SDK_driver_syscon_connections
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_syscon_connections
+    bool "driver_syscon_connections"
+    depends on HAS_MCUX_SDK_driver_syscon_connections
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_sysctl
+    bool "driver_sysctl"
+    depends on HAS_MCUX_SDK_driver_sysctl
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_sysmpu
+    bool "driver_sysmpu"
+    depends on HAS_MCUX_SDK_driver_sysmpu
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_tempmon
+    bool "driver_tempmon"
+    depends on HAS_MCUX_SDK_driver_tempmon
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_tfa9xxx
+    bool "driver_tfa9xxx"
+    depends on HAS_MCUX_SDK_driver_tfa9xxx
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33 if HAS_MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33
+
+config MCUX_SDK_driver_tmu
+    bool "driver_tmu"
+    depends on HAS_MCUX_SDK_driver_tmu
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_tmu_1
+    bool "driver_tmu_1"
+    depends on HAS_MCUX_SDK_driver_tmu_1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_tpm
+    bool "driver_tpm"
+    depends on HAS_MCUX_SDK_driver_tpm
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_trgmux
+    bool "driver_trgmux"
+    depends on HAS_MCUX_SDK_driver_trgmux
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_trng
+    bool "driver_trng"
+    depends on HAS_MCUX_SDK_driver_trng
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_tsi_v4
+    bool "driver_tsi_v4"
+    depends on HAS_MCUX_SDK_driver_tsi_v4
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_tsi_v5
+    bool "driver_tsi_v5"
+    depends on HAS_MCUX_SDK_driver_tsi_v5
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_tstmr
+    bool "driver_tstmr"
+    depends on HAS_MCUX_SDK_driver_tstmr
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_uart
+    bool "driver_uart"
+    depends on HAS_MCUX_SDK_driver_uart
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_uart_dma
+    bool "driver_uart_dma"
+    depends on HAS_MCUX_SDK_driver_uart_dma
+    default n
+    select MCUX_SDK_driver_dma if HAS_MCUX_SDK_driver_dma
+    select MCUX_SDK_driver_uart if HAS_MCUX_SDK_driver_uart
+
+config MCUX_SDK_driver_uart_edma
+    bool "driver_uart_edma"
+    depends on HAS_MCUX_SDK_driver_uart_edma
+    default n
+    select MCUX_SDK_driver_uart if HAS_MCUX_SDK_driver_uart
+    select MCUX_SDK_driver_edma if HAS_MCUX_SDK_driver_edma
+
+config MCUX_SDK_driver_usdhc
+    bool "driver_usdhc"
+    depends on HAS_MCUX_SDK_driver_usdhc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_utick_LPC51U68
+    bool "driver_utick_LPC51U68"
+    depends on HAS_MCUX_SDK_driver_utick_LPC51U68
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_utick_LPC54114_cm4
+    bool "driver_utick_LPC54114_cm4"
+    depends on HAS_MCUX_SDK_driver_utick_LPC54114_cm4
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_utick_LPC54628
+    bool "driver_utick_LPC54628"
+    depends on HAS_MCUX_SDK_driver_utick_LPC54628
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_utick_LPC54S018
+    bool "driver_utick_LPC54S018"
+    depends on HAS_MCUX_SDK_driver_utick_LPC54S018
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_utick_LPC54S018M
+    bool "driver_utick_LPC54S018M"
+    depends on HAS_MCUX_SDK_driver_utick_LPC54S018M
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_utick_LPC55S16
+    bool "driver_utick_LPC55S16"
+    depends on HAS_MCUX_SDK_driver_utick_LPC55S16
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_utick_LPC55S28
+    bool "driver_utick_LPC55S28"
+    depends on HAS_MCUX_SDK_driver_utick_LPC55S28
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_utick_LPC55S69_cm33_core0
+    bool "driver_utick_LPC55S69_cm33_core0"
+    depends on HAS_MCUX_SDK_driver_utick_LPC55S69_cm33_core0
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_utick_MIMXRT685S_cm33
+    bool "driver_utick_MIMXRT685S_cm33"
+    depends on HAS_MCUX_SDK_driver_utick_MIMXRT685S_cm33
+    default n
+    select MCUX_SDK_driver_power if HAS_MCUX_SDK_driver_power
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_video-common
+    bool "driver_video-common"
+    depends on HAS_MCUX_SDK_driver_video-common
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_video-i2c
+    bool "driver_video-i2c"
+    depends on HAS_MCUX_SDK_driver_video-i2c
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_vref
+    bool "driver_vref"
+    depends on HAS_MCUX_SDK_driver_vref
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_wdog
+    bool "driver_wdog"
+    depends on HAS_MCUX_SDK_driver_wdog
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_wdog01
+    bool "driver_wdog01"
+    depends on HAS_MCUX_SDK_driver_wdog01
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_wdog32
+    bool "driver_wdog32"
+    depends on HAS_MCUX_SDK_driver_wdog32
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_wdog8
+    bool "driver_wdog8"
+    depends on HAS_MCUX_SDK_driver_wdog8
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_wkt
+    bool "driver_wkt"
+    depends on HAS_MCUX_SDK_driver_wkt
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_wm8524
+    bool "driver_wm8524"
+    depends on HAS_MCUX_SDK_driver_wm8524
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_wm8904
+    bool "driver_wm8904"
+    depends on HAS_MCUX_SDK_driver_wm8904
+    default n
+    select MCUX_SDK_component_codec_i2c_LPC54114_cm4 if HAS_MCUX_SDK_component_codec_i2c_LPC54114_cm4
+    select MCUX_SDK_component_codec_i2c_LPC54628 if HAS_MCUX_SDK_component_codec_i2c_LPC54628
+    select MCUX_SDK_component_codec_i2c_LPC55S16 if HAS_MCUX_SDK_component_codec_i2c_LPC55S16
+    select MCUX_SDK_component_codec_i2c_LPC54S018 if HAS_MCUX_SDK_component_codec_i2c_LPC54S018
+    select MCUX_SDK_component_codec_i2c_LPC54S018M if HAS_MCUX_SDK_component_codec_i2c_LPC54S018M
+    select MCUX_SDK_component_codec_i2c_LPC51U68 if HAS_MCUX_SDK_component_codec_i2c_LPC51U68
+    select MCUX_SDK_component_codec_i2c_LPC55S69_cm33_core0 if HAS_MCUX_SDK_component_codec_i2c_LPC55S69_cm33_core0
+    select MCUX_SDK_component_codec_i2c_LPC55S28 if HAS_MCUX_SDK_component_codec_i2c_LPC55S28
+    select MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33 if HAS_MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_wm8960
+    bool "driver_wm8960"
+    depends on HAS_MCUX_SDK_driver_wm8960
+    default n
+    select MCUX_SDK_component_codec_i2c_MIMXRT1052 if HAS_MCUX_SDK_component_codec_i2c_MIMXRT1052
+    select MCUX_SDK_component_codec_i2c_MIMXRT1064 if HAS_MCUX_SDK_component_codec_i2c_MIMXRT1064
+    select MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core0 if HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core0
+    select MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core1 if HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core1
+    select MCUX_SDK_component_codec_i2c_MIMX8QX6 if HAS_MCUX_SDK_component_codec_i2c_MIMX8QX6
+    select MCUX_SDK_component_codec_i2c_MIMXRT1021 if HAS_MCUX_SDK_component_codec_i2c_MIMXRT1021
+    select MCUX_SDK_component_codec_i2c_MIMXRT1062 if HAS_MCUX_SDK_component_codec_i2c_MIMXRT1062
+    select MCUX_SDK_component_codec_i2c_MCIMX7U5 if HAS_MCUX_SDK_component_codec_i2c_MCIMX7U5
+    select MCUX_SDK_component_codec_i2c_MIMXRT1024 if HAS_MCUX_SDK_component_codec_i2c_MIMXRT1024
+    select MCUX_SDK_component_codec_i2c_MIMXRT1011 if HAS_MCUX_SDK_component_codec_i2c_MIMXRT1011
+    select MCUX_SDK_component_codec_i2c_MIMXRT1015 if HAS_MCUX_SDK_component_codec_i2c_MIMXRT1015
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_wwdt
+    bool "driver_wwdt"
+    depends on HAS_MCUX_SDK_driver_wwdt
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_xbar
+    bool "driver_xbar"
+    depends on HAS_MCUX_SDK_driver_xbar
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_xbara
+    bool "driver_xbara"
+    depends on HAS_MCUX_SDK_driver_xbara
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_xbarb
+    bool "driver_xbarb"
+    depends on HAS_MCUX_SDK_driver_xbarb
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_xip_board
+    bool "driver_xip_board"
+    depends on HAS_MCUX_SDK_driver_xip_board
+    default n
+
+config MCUX_SDK_driver_xip_device
+    bool "driver_xip_device"
+    depends on HAS_MCUX_SDK_driver_xip_device
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_driver_xrdc
+    bool "driver_xrdc"
+    depends on HAS_MCUX_SDK_driver_xrdc
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+
+config HAS_MCUX_SDK_driver_IS42SM16800H
+    bool
+
+config HAS_MCUX_SDK_driver_acmp
+    bool
+
+config HAS_MCUX_SDK_driver_acmp_1
+    bool
+
+config HAS_MCUX_SDK_driver_adc12
+    bool
+
+config HAS_MCUX_SDK_driver_adc16
+    bool
+
+config HAS_MCUX_SDK_driver_adc_12b1msps_sar
+    bool
+
+config HAS_MCUX_SDK_driver_adc_5v12b_ll18_015
+    bool
+
+config HAS_MCUX_SDK_driver_adc_etc
+    bool
+
+config HAS_MCUX_SDK_driver_aes
+    bool
+
+config HAS_MCUX_SDK_driver_afe
+    bool
+
+config HAS_MCUX_SDK_driver_ak4497
+    bool
+
+config HAS_MCUX_SDK_driver_anactrl
+    bool
+
+config HAS_MCUX_SDK_driver_aoi
+    bool
+
+config HAS_MCUX_SDK_driver_asmc
+    bool
+
+config HAS_MCUX_SDK_driver_bee
+    bool
+
+config HAS_MCUX_SDK_driver_cache_armv7_m7
+    bool
+
+config HAS_MCUX_SDK_driver_cache_cache64
+    bool
+
+config HAS_MCUX_SDK_driver_cache_lmem
+    bool
+
+config HAS_MCUX_SDK_driver_cache_lpcac
+    bool
+
+config HAS_MCUX_SDK_driver_cache_lplmem
+    bool
+
+config HAS_MCUX_SDK_driver_camera-common
+    bool
+
+config HAS_MCUX_SDK_driver_camera-device-common
+    bool
+
+config HAS_MCUX_SDK_driver_camera-device-max9286
+    bool
+
+config HAS_MCUX_SDK_driver_camera-device-mt9m114
+    bool
+
+config HAS_MCUX_SDK_driver_camera-device-ov5640
+    bool
+
+config HAS_MCUX_SDK_driver_camera-device-ov7725
+    bool
+
+config HAS_MCUX_SDK_driver_camera-device-sccb
+    bool
+
+config HAS_MCUX_SDK_driver_camera-receiver-common
+    bool
+
+config HAS_MCUX_SDK_driver_camera-receiver-csi
+    bool
+
+config HAS_MCUX_SDK_driver_camera-receiver-isi
+    bool
+
+config HAS_MCUX_SDK_driver_capt
+    bool
+
+config HAS_MCUX_SDK_driver_casper
+    bool
+
+config HAS_MCUX_SDK_driver_cau3
+    bool
+
+config HAS_MCUX_SDK_driver_ci_pi
+    bool
+
+config HAS_MCUX_SDK_driver_clock
+    bool
+
+config HAS_MCUX_SDK_driver_cmp
+    bool
+
+config HAS_MCUX_SDK_driver_cmp_1
+    bool
+
+config HAS_MCUX_SDK_driver_cmt
+    bool
+
+config HAS_MCUX_SDK_driver_codec_LPC51U68
+    bool
+
+config HAS_MCUX_SDK_driver_codec_LPC54114_cm4
+    bool
+
+config HAS_MCUX_SDK_driver_codec_LPC54628
+    bool
+
+config HAS_MCUX_SDK_driver_codec_LPC54S018
+    bool
+
+config HAS_MCUX_SDK_driver_codec_LPC54S018M
+    bool
+
+config HAS_MCUX_SDK_driver_codec_LPC55S16
+    bool
+
+config HAS_MCUX_SDK_driver_codec_LPC55S28
+    bool
+
+config HAS_MCUX_SDK_driver_codec_LPC55S69_cm33_core0
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MCIMX7U5
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MIMX8MM6
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MIMX8MN6
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MIMX8MQ6
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MIMX8QM6_cm4_core0
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MIMX8QM6_cm4_core1
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MIMX8QX6
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MIMXRT1011
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MIMXRT1015
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MIMXRT1021
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MIMXRT1024
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MIMXRT1052
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MIMXRT1062
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MIMXRT1064
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MIMXRT685S_cm33
+    bool
+
+config HAS_MCUX_SDK_driver_codec_MK66F18
+    bool
+
+config HAS_MCUX_SDK_driver_common
+    bool
+
+config HAS_MCUX_SDK_driver_cop
+    bool
+
+config HAS_MCUX_SDK_driver_crc
+    bool
+
+config HAS_MCUX_SDK_driver_cs42888
+    bool
+
+config HAS_MCUX_SDK_driver_csi
+    bool
+
+config HAS_MCUX_SDK_driver_ctimer
+    bool
+
+config HAS_MCUX_SDK_driver_cwt
+    bool
+
+config HAS_MCUX_SDK_driver_dac
+    bool
+
+config HAS_MCUX_SDK_driver_dac12
+    bool
+
+config HAS_MCUX_SDK_driver_dac_1
+    bool
+
+config HAS_MCUX_SDK_driver_dbi
+    bool
+
+config HAS_MCUX_SDK_driver_dbi_flexio_edma
+    bool
+
+config HAS_MCUX_SDK_driver_dc-fb-common
+    bool
+
+config HAS_MCUX_SDK_driver_dc-fb-elcdif
+    bool
+
+config HAS_MCUX_SDK_driver_dcdc_1
+    bool
+
+config HAS_MCUX_SDK_driver_dcp
+    bool
+
+config HAS_MCUX_SDK_driver_dialog7212
+    bool
+
+config HAS_MCUX_SDK_driver_display-adv7535
+    bool
+
+config HAS_MCUX_SDK_driver_display-common
+    bool
+
+config HAS_MCUX_SDK_driver_display-it6263
+    bool
+
+config HAS_MCUX_SDK_driver_display-mipi-dsi-cmd
+    bool
+
+config HAS_MCUX_SDK_driver_display-rm67191
+    bool
+
+config HAS_MCUX_SDK_driver_dma
+    bool
+
+config HAS_MCUX_SDK_driver_dma3
+    bool
+
+config HAS_MCUX_SDK_driver_dmamux
+    bool
+
+config HAS_MCUX_SDK_driver_dmic
+    bool
+
+config HAS_MCUX_SDK_driver_dmic_dma
+    bool
+
+config HAS_MCUX_SDK_driver_dmic_hwvad
+    bool
+
+config HAS_MCUX_SDK_driver_dpr
+    bool
+
+config HAS_MCUX_SDK_driver_dpu
+    bool
+
+config HAS_MCUX_SDK_driver_dpu_irqsteer
+    bool
+
+config HAS_MCUX_SDK_driver_dspi
+    bool
+
+config HAS_MCUX_SDK_driver_dspi_edma
+    bool
+
+config HAS_MCUX_SDK_driver_easrc
+    bool
+
+config HAS_MCUX_SDK_driver_easrc_sdma
+    bool
+
+config HAS_MCUX_SDK_driver_ecspi
+    bool
+
+config HAS_MCUX_SDK_driver_edma
+    bool
+
+config HAS_MCUX_SDK_driver_eeprom
+    bool
+
+config HAS_MCUX_SDK_driver_elcdif
+    bool
+
+config HAS_MCUX_SDK_driver_emc
+    bool
+
+config HAS_MCUX_SDK_driver_enc
+    bool
+
+config HAS_MCUX_SDK_driver_enet_MIMX8QM6_cm4_core0
+    bool
+
+config HAS_MCUX_SDK_driver_enet_MIMX8QM6_cm4_core1
+    bool
+
+config HAS_MCUX_SDK_driver_enet_MIMX8QX6
+    bool
+
+config HAS_MCUX_SDK_driver_enet_MIMXRT1021
+    bool
+
+config HAS_MCUX_SDK_driver_enet_MIMXRT1024
+    bool
+
+config HAS_MCUX_SDK_driver_enet_MIMXRT1052
+    bool
+
+config HAS_MCUX_SDK_driver_enet_MIMXRT1062
+    bool
+
+config HAS_MCUX_SDK_driver_enet_MIMXRT1064
+    bool
+
+config HAS_MCUX_SDK_driver_enet_MK64F12
+    bool
+
+config HAS_MCUX_SDK_driver_enet_MK66F18
+    bool
+
+config HAS_MCUX_SDK_driver_esai
+    bool
+
+config HAS_MCUX_SDK_driver_esai_edma
+    bool
+
+config HAS_MCUX_SDK_driver_ewm
+    bool
+
+config HAS_MCUX_SDK_driver_flash
+    bool
+
+config HAS_MCUX_SDK_driver_flash_config
+    bool
+
+config HAS_MCUX_SDK_driver_flash_ftmr
+    bool
+
+config HAS_MCUX_SDK_driver_flashiap
+    bool
+
+config HAS_MCUX_SDK_driver_flexcan
+    bool
+
+config HAS_MCUX_SDK_driver_flexcan_edma
+    bool
+
+config HAS_MCUX_SDK_driver_flexcomm
+    bool
+
+config HAS_MCUX_SDK_driver_flexcomm_i2c
+    bool
+
+config HAS_MCUX_SDK_driver_flexcomm_i2c_dma
+    bool
+
+config HAS_MCUX_SDK_driver_flexcomm_i2s
+    bool
+
+config HAS_MCUX_SDK_driver_flexcomm_i2s_dma
+    bool
+
+config HAS_MCUX_SDK_driver_flexcomm_spi
+    bool
+
+config HAS_MCUX_SDK_driver_flexcomm_spi_dma
+    bool
+
+config HAS_MCUX_SDK_driver_flexcomm_usart
+    bool
+
+config HAS_MCUX_SDK_driver_flexcomm_usart_dma
+    bool
+
+config HAS_MCUX_SDK_driver_flexio
+    bool
+
+config HAS_MCUX_SDK_driver_flexio_i2c_master
+    bool
+
+config HAS_MCUX_SDK_driver_flexio_i2s
+    bool
+
+config HAS_MCUX_SDK_driver_flexio_i2s_edma
+    bool
+
+config HAS_MCUX_SDK_driver_flexio_mculcd
+    bool
+
+config HAS_MCUX_SDK_driver_flexio_mculcd_edma
+    bool
+
+config HAS_MCUX_SDK_driver_flexio_spi
+    bool
+
+config HAS_MCUX_SDK_driver_flexio_spi_dma
+    bool
+
+config HAS_MCUX_SDK_driver_flexio_spi_edma
+    bool
+
+config HAS_MCUX_SDK_driver_flexio_uart
+    bool
+
+config HAS_MCUX_SDK_driver_flexio_uart_dma
+    bool
+
+config HAS_MCUX_SDK_driver_flexio_uart_edma
+    bool
+
+config HAS_MCUX_SDK_driver_flexram
+    bool
+
+config HAS_MCUX_SDK_driver_flexspi
+    bool
+
+config HAS_MCUX_SDK_driver_flexspi_dma
+    bool
+
+config HAS_MCUX_SDK_driver_flexspi_edma
+    bool
+
+config HAS_MCUX_SDK_driver_fmc
+    bool
+
+config HAS_MCUX_SDK_driver_fmeas
+    bool
+
+config HAS_MCUX_SDK_driver_ft5406
+    bool
+
+config HAS_MCUX_SDK_driver_ftm
+    bool
+
+config HAS_MCUX_SDK_driver_fxos8700cq
+    bool
+
+config HAS_MCUX_SDK_driver_gint
+    bool
+
+config HAS_MCUX_SDK_driver_gpc_1
+    bool
+
+config HAS_MCUX_SDK_driver_gpc_2
+    bool
+
+config HAS_MCUX_SDK_driver_gpio
+    bool
+
+config HAS_MCUX_SDK_driver_gpio_1
+    bool
+
+config HAS_MCUX_SDK_driver_gpt
+    bool
+
+config HAS_MCUX_SDK_driver_hashcrypt
+    bool
+
+config HAS_MCUX_SDK_driver_i2c
+    bool
+
+config HAS_MCUX_SDK_driver_i2c_dma
+    bool
+
+config HAS_MCUX_SDK_driver_i2c_edma
+    bool
+
+config HAS_MCUX_SDK_driver_i3c
+    bool
+
+config HAS_MCUX_SDK_driver_iap
+    bool
+
+config HAS_MCUX_SDK_driver_iap1
+    bool
+
+config HAS_MCUX_SDK_driver_igpio
+    bool
+
+config HAS_MCUX_SDK_driver_ii2c
+    bool
+
+config HAS_MCUX_SDK_driver_inputmux
+    bool
+
+config HAS_MCUX_SDK_driver_inputmux_connections
+    bool
+
+config HAS_MCUX_SDK_driver_intmux
+    bool
+
+config HAS_MCUX_SDK_driver_iomuxc
+    bool
+
+config HAS_MCUX_SDK_driver_ipwm
+    bool
+
+config HAS_MCUX_SDK_driver_irq
+    bool
+
+config HAS_MCUX_SDK_driver_irqsteer
+    bool
+
+config HAS_MCUX_SDK_driver_irtc
+    bool
+
+config HAS_MCUX_SDK_driver_isi
+    bool
+
+config HAS_MCUX_SDK_driver_iuart
+    bool
+
+config HAS_MCUX_SDK_driver_iuart_sdma
+    bool
+
+config HAS_MCUX_SDK_driver_kbi
+    bool
+
+config HAS_MCUX_SDK_driver_kpp
+    bool
+
+config HAS_MCUX_SDK_driver_ldb
+    bool
+
+config HAS_MCUX_SDK_driver_ldb_combo_phy
+    bool
+
+config HAS_MCUX_SDK_driver_llwu
+    bool
+
+config HAS_MCUX_SDK_driver_lpadc
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_acomp
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_adc
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_crc
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_dac
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_dma
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_enet
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_gpio
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_i2c
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_iocon
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_iocon_lite
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_iopctl
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_lcdc
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_minispi
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_miniusart
+    bool
+
+config HAS_MCUX_SDK_driver_lpc_rtc
+    bool
+
+config HAS_MCUX_SDK_driver_lpcmp
+    bool
+
+config HAS_MCUX_SDK_driver_lpi2c
+    bool
+
+config HAS_MCUX_SDK_driver_lpi2c_edma
+    bool
+
+config HAS_MCUX_SDK_driver_lpit
+    bool
+
+config HAS_MCUX_SDK_driver_lpspi
+    bool
+
+config HAS_MCUX_SDK_driver_lpspi_edma
+    bool
+
+config HAS_MCUX_SDK_driver_lptmr
+    bool
+
+config HAS_MCUX_SDK_driver_lpuart
+    bool
+
+config HAS_MCUX_SDK_driver_lpuart_dma
+    bool
+
+config HAS_MCUX_SDK_driver_lpuart_edma
+    bool
+
+config HAS_MCUX_SDK_driver_ltc
+    bool
+
+config HAS_MCUX_SDK_driver_ltc_edma
+    bool
+
+config HAS_MCUX_SDK_driver_mailbox
+    bool
+
+config HAS_MCUX_SDK_driver_mcan
+    bool
+
+config HAS_MCUX_SDK_driver_mdio-common
+    bool
+
+config HAS_MCUX_SDK_driver_mdio-enet
+    bool
+
+config HAS_MCUX_SDK_driver_mdio-lpc-enet
+    bool
+
+config HAS_MCUX_SDK_driver_memory
+    bool
+
+config HAS_MCUX_SDK_driver_mipi_csi2rx
+    bool
+
+config HAS_MCUX_SDK_driver_mipi_dsi
+    bool
+
+config HAS_MCUX_SDK_driver_mma8451q
+    bool
+
+config HAS_MCUX_SDK_driver_mmau
+    bool
+
+config HAS_MCUX_SDK_driver_mmdvsq
+    bool
+
+config HAS_MCUX_SDK_driver_mrt
+    bool
+
+config HAS_MCUX_SDK_driver_mscan
+    bool
+
+config HAS_MCUX_SDK_driver_msmc
+    bool
+
+config HAS_MCUX_SDK_driver_mu
+    bool
+
+config HAS_MCUX_SDK_driver_mx25r_flash
+    bool
+
+config HAS_MCUX_SDK_driver_ocotp
+    bool
+
+config HAS_MCUX_SDK_driver_ostimer
+    bool
+
+config HAS_MCUX_SDK_driver_otfad
+    bool
+
+config HAS_MCUX_SDK_driver_otp
+    bool
+
+config HAS_MCUX_SDK_driver_pca9420
+    bool
+
+config HAS_MCUX_SDK_driver_pdb
+    bool
+
+config HAS_MCUX_SDK_driver_pdm
+    bool
+
+config HAS_MCUX_SDK_driver_pdm_sdma
+    bool
+
+config HAS_MCUX_SDK_driver_pf1550
+    bool
+
+config HAS_MCUX_SDK_driver_phy-common
+    bool
+
+config HAS_MCUX_SDK_driver_phy-device-ar8031
+    bool
+
+config HAS_MCUX_SDK_driver_phy-device-ksz8081
+    bool
+
+config HAS_MCUX_SDK_driver_phy-device-lan8720a
+    bool
+
+config HAS_MCUX_SDK_driver_pint
+    bool
+
+config HAS_MCUX_SDK_driver_pit
+    bool
+
+config HAS_MCUX_SDK_driver_plu
+    bool
+
+config HAS_MCUX_SDK_driver_pmc
+    bool
+
+config HAS_MCUX_SDK_driver_pmc0
+    bool
+
+config HAS_MCUX_SDK_driver_port
+    bool
+
+config HAS_MCUX_SDK_driver_port_ke02
+    bool
+
+config HAS_MCUX_SDK_driver_port_ke04
+    bool
+
+config HAS_MCUX_SDK_driver_port_ke06
+    bool
+
+config HAS_MCUX_SDK_driver_power
+    bool
+
+config HAS_MCUX_SDK_driver_power_no_lib
+    bool
+
+config HAS_MCUX_SDK_driver_powerquad
+    bool
+
+config HAS_MCUX_SDK_driver_prg
+    bool
+
+config HAS_MCUX_SDK_driver_prince
+    bool
+
+config HAS_MCUX_SDK_driver_puf
+    bool
+
+config HAS_MCUX_SDK_driver_pwm
+    bool
+
+config HAS_MCUX_SDK_driver_pwt
+    bool
+
+config HAS_MCUX_SDK_driver_pwt_1
+    bool
+
+config HAS_MCUX_SDK_driver_pxp
+    bool
+
+config HAS_MCUX_SDK_driver_qspi
+    bool
+
+config HAS_MCUX_SDK_driver_qspi_edma
+    bool
+
+config HAS_MCUX_SDK_driver_qtmr_1
+    bool
+
+config HAS_MCUX_SDK_driver_qtmr_2
+    bool
+
+config HAS_MCUX_SDK_driver_rcm
+    bool
+
+config HAS_MCUX_SDK_driver_rdc
+    bool
+
+config HAS_MCUX_SDK_driver_rdc_sema42
+    bool
+
+config HAS_MCUX_SDK_driver_reset
+    bool
+
+config HAS_MCUX_SDK_driver_rgpio
+    bool
+
+config HAS_MCUX_SDK_driver_rit
+    bool
+
+config HAS_MCUX_SDK_driver_rng
+    bool
+
+config HAS_MCUX_SDK_driver_rng_1
+    bool
+
+config HAS_MCUX_SDK_driver_rnga
+    bool
+
+config HAS_MCUX_SDK_driver_rom_api
+    bool
+
+config HAS_MCUX_SDK_driver_romapi
+    bool
+
+config HAS_MCUX_SDK_driver_rtc
+    bool
+
+config HAS_MCUX_SDK_driver_rtc_1
+    bool
+
+config HAS_MCUX_SDK_driver_rtwatchdog
+    bool
+
+config HAS_MCUX_SDK_driver_sai
+    bool
+
+config HAS_MCUX_SDK_driver_sai_edma
+    bool
+
+config HAS_MCUX_SDK_driver_sai_sdma
+    bool
+
+config HAS_MCUX_SDK_driver_sc_event
+    bool
+
+config HAS_MCUX_SDK_driver_scfw_api
+    bool
+
+config HAS_MCUX_SDK_driver_sctimer
+    bool
+
+config HAS_MCUX_SDK_driver_sdhc
+    bool
+
+config HAS_MCUX_SDK_driver_sdif
+    bool
+
+config HAS_MCUX_SDK_driver_sdma
+    bool
+
+config HAS_MCUX_SDK_driver_sdramc
+    bool
+
+config HAS_MCUX_SDK_driver_sema4
+    bool
+
+config HAS_MCUX_SDK_driver_sema42
+    bool
+
+config HAS_MCUX_SDK_driver_semc
+    bool
+
+config HAS_MCUX_SDK_driver_sha
+    bool
+
+config HAS_MCUX_SDK_driver_sim
+    bool
+
+config HAS_MCUX_SDK_driver_slcd
+    bool
+
+config HAS_MCUX_SDK_driver_slcd_engine
+    bool
+
+config HAS_MCUX_SDK_driver_slcd_gdh_1247wp
+    bool
+
+config HAS_MCUX_SDK_driver_slcd_lcd_s401m16kr
+    bool
+
+config HAS_MCUX_SDK_driver_smc
+    bool
+
+config HAS_MCUX_SDK_driver_snvs_hp
+    bool
+
+config HAS_MCUX_SDK_driver_snvs_lp
+    bool
+
+config HAS_MCUX_SDK_driver_soc_flexram_allocate
+    bool
+
+config HAS_MCUX_SDK_driver_spi
+    bool
+
+config HAS_MCUX_SDK_driver_spi_dma
+    bool
+
+config HAS_MCUX_SDK_driver_spifi
+    bool
+
+config HAS_MCUX_SDK_driver_spifi_dma
+    bool
+
+config HAS_MCUX_SDK_driver_spm
+    bool
+
+config HAS_MCUX_SDK_driver_src
+    bool
+
+config HAS_MCUX_SDK_driver_srtm
+    bool
+
+config HAS_MCUX_SDK_driver_srtm_freertos
+    bool
+
+config HAS_MCUX_SDK_driver_ssd1963
+    bool
+
+config HAS_MCUX_SDK_driver_swm
+    bool
+
+config HAS_MCUX_SDK_driver_swm_connections
+    bool
+
+config HAS_MCUX_SDK_driver_syscon
+    bool
+
+config HAS_MCUX_SDK_driver_syscon_connections
+    bool
+
+config HAS_MCUX_SDK_driver_sysctl
+    bool
+
+config HAS_MCUX_SDK_driver_sysmpu
+    bool
+
+config HAS_MCUX_SDK_driver_tempmon
+    bool
+
+config HAS_MCUX_SDK_driver_tfa9xxx
+    bool
+
+config HAS_MCUX_SDK_driver_tmu
+    bool
+
+config HAS_MCUX_SDK_driver_tmu_1
+    bool
+
+config HAS_MCUX_SDK_driver_tpm
+    bool
+
+config HAS_MCUX_SDK_driver_trgmux
+    bool
+
+config HAS_MCUX_SDK_driver_trng
+    bool
+
+config HAS_MCUX_SDK_driver_tsi_v4
+    bool
+
+config HAS_MCUX_SDK_driver_tsi_v5
+    bool
+
+config HAS_MCUX_SDK_driver_tstmr
+    bool
+
+config HAS_MCUX_SDK_driver_uart
+    bool
+
+config HAS_MCUX_SDK_driver_uart_dma
+    bool
+
+config HAS_MCUX_SDK_driver_uart_edma
+    bool
+
+config HAS_MCUX_SDK_driver_usdhc
+    bool
+
+config HAS_MCUX_SDK_driver_utick_LPC51U68
+    bool
+
+config HAS_MCUX_SDK_driver_utick_LPC54114_cm4
+    bool
+
+config HAS_MCUX_SDK_driver_utick_LPC54628
+    bool
+
+config HAS_MCUX_SDK_driver_utick_LPC54S018
+    bool
+
+config HAS_MCUX_SDK_driver_utick_LPC54S018M
+    bool
+
+config HAS_MCUX_SDK_driver_utick_LPC55S16
+    bool
+
+config HAS_MCUX_SDK_driver_utick_LPC55S28
+    bool
+
+config HAS_MCUX_SDK_driver_utick_LPC55S69_cm33_core0
+    bool
+
+config HAS_MCUX_SDK_driver_utick_MIMXRT685S_cm33
+    bool
+
+config HAS_MCUX_SDK_driver_video-common
+    bool
+
+config HAS_MCUX_SDK_driver_video-i2c
+    bool
+
+config HAS_MCUX_SDK_driver_vref
+    bool
+
+config HAS_MCUX_SDK_driver_wdog
+    bool
+
+config HAS_MCUX_SDK_driver_wdog01
+    bool
+
+config HAS_MCUX_SDK_driver_wdog32
+    bool
+
+config HAS_MCUX_SDK_driver_wdog8
+    bool
+
+config HAS_MCUX_SDK_driver_wkt
+    bool
+
+config HAS_MCUX_SDK_driver_wm8524
+    bool
+
+config HAS_MCUX_SDK_driver_wm8904
+    bool
+
+config HAS_MCUX_SDK_driver_wm8960
+    bool
+
+config HAS_MCUX_SDK_driver_wwdt
+    bool
+
+config HAS_MCUX_SDK_driver_xbar
+    bool
+
+config HAS_MCUX_SDK_driver_xbara
+    bool
+
+config HAS_MCUX_SDK_driver_xbarb
+    bool
+
+config HAS_MCUX_SDK_driver_xip_board
+    bool
+
+config HAS_MCUX_SDK_driver_xip_device
+    bool
+
+config HAS_MCUX_SDK_driver_xrdc
+    bool
+
+endmenu

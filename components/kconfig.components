@@ -1,0 +1,1483 @@
+# Copyright 2021 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "components"
+
+menu "components"
+
+    depends on HAS_MCUX_SDK_component_codec_ak4497_adapter || HAS_MCUX_SDK_component_codec_i2c_LPC51U68 || HAS_MCUX_SDK_component_codec_i2c_LPC54114_cm4 || HAS_MCUX_SDK_component_codec_i2c_LPC54628 || HAS_MCUX_SDK_component_codec_i2c_LPC54S018 || HAS_MCUX_SDK_component_codec_i2c_LPC54S018M || HAS_MCUX_SDK_component_codec_i2c_LPC55S16 || HAS_MCUX_SDK_component_codec_i2c_LPC55S28 || HAS_MCUX_SDK_component_codec_i2c_LPC55S69_cm33_core0 || HAS_MCUX_SDK_component_codec_i2c_MCIMX7U5 || HAS_MCUX_SDK_component_codec_i2c_MIMX8MM6 || HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core0 || HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core1 || HAS_MCUX_SDK_component_codec_i2c_MIMX8QX6 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1011 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1015 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1021 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1024 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1052 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1062 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1064 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33 || HAS_MCUX_SDK_component_codec_i2c_MK66F18 || HAS_MCUX_SDK_component_codec_wm8524_adapter || HAS_MCUX_SDK_component_cs42888_adapter || HAS_MCUX_SDK_component_ctimer_adapter || HAS_MCUX_SDK_component_da7212_adapter || HAS_MCUX_SDK_component_flexcomm_i2c_adapter || HAS_MCUX_SDK_component_i2c_adapter || HAS_MCUX_SDK_component_i3c_adapter || HAS_MCUX_SDK_component_ii2c_adapter || HAS_MCUX_SDK_component_iuart_adapter || HAS_MCUX_SDK_component_lists || HAS_MCUX_SDK_component_lpi2c_adapter || HAS_MCUX_SDK_component_lpuart_adapter || HAS_MCUX_SDK_component_miniusart_adapter || HAS_MCUX_SDK_component_osa || HAS_MCUX_SDK_component_osa_bm || HAS_MCUX_SDK_component_serial_manager_K32L2A41A || HAS_MCUX_SDK_component_serial_manager_K32L2B31A || HAS_MCUX_SDK_component_serial_manager_K32L3A60_cm0plus || HAS_MCUX_SDK_component_serial_manager_K32L3A60_cm4 || HAS_MCUX_SDK_component_serial_manager_LPC51U68 || HAS_MCUX_SDK_component_serial_manager_LPC54114_cm4 || HAS_MCUX_SDK_component_serial_manager_LPC54628 || HAS_MCUX_SDK_component_serial_manager_LPC54S018 || HAS_MCUX_SDK_component_serial_manager_LPC54S018M || HAS_MCUX_SDK_component_serial_manager_LPC55S16 || HAS_MCUX_SDK_component_serial_manager_LPC55S28 || HAS_MCUX_SDK_component_serial_manager_LPC55S69_cm33_core0 || HAS_MCUX_SDK_component_serial_manager_MCIMX7U5 || HAS_MCUX_SDK_component_serial_manager_MIMX8MM6 || HAS_MCUX_SDK_component_serial_manager_MIMX8MN6 || HAS_MCUX_SDK_component_serial_manager_MIMX8QM6_cm4_core0 || HAS_MCUX_SDK_component_serial_manager_MIMX8QM6_cm4_core1 || HAS_MCUX_SDK_component_serial_manager_MIMX8QX6 || HAS_MCUX_SDK_component_serial_manager_MIMXRT1011 || HAS_MCUX_SDK_component_serial_manager_MIMXRT1015 || HAS_MCUX_SDK_component_serial_manager_MIMXRT1021 || HAS_MCUX_SDK_component_serial_manager_MIMXRT1024 || HAS_MCUX_SDK_component_serial_manager_MIMXRT1052 || HAS_MCUX_SDK_component_serial_manager_MIMXRT1062 || HAS_MCUX_SDK_component_serial_manager_MIMXRT1064 || HAS_MCUX_SDK_component_serial_manager_MIMXRT685S_cm33 || HAS_MCUX_SDK_component_serial_manager_MK22F51212 || HAS_MCUX_SDK_component_serial_manager_MK28FA15 || HAS_MCUX_SDK_component_serial_manager_MK64F12 || HAS_MCUX_SDK_component_serial_manager_MK66F18 || HAS_MCUX_SDK_component_serial_manager_MKE02Z4 || HAS_MCUX_SDK_component_serial_manager_MKE06Z4 || HAS_MCUX_SDK_component_serial_manager_MKE15Z7 || HAS_MCUX_SDK_component_serial_manager_MKE16Z4 || HAS_MCUX_SDK_component_serial_manager_MKL27Z644 || HAS_MCUX_SDK_component_serial_manager_MKM35Z7 || HAS_MCUX_SDK_component_serial_manager_MKV11Z7 || HAS_MCUX_SDK_component_serial_manager_MKV31F51212 || HAS_MCUX_SDK_component_serial_manager_swo || HAS_MCUX_SDK_component_serial_manager_uart_K32L2A41A || HAS_MCUX_SDK_component_serial_manager_uart_K32L2B31A || HAS_MCUX_SDK_component_serial_manager_uart_K32L3A60_cm0plus || HAS_MCUX_SDK_component_serial_manager_uart_K32L3A60_cm4 || HAS_MCUX_SDK_component_serial_manager_uart_LPC51U68 || HAS_MCUX_SDK_component_serial_manager_uart_LPC54114_cm4 || HAS_MCUX_SDK_component_serial_manager_uart_LPC54628 || HAS_MCUX_SDK_component_serial_manager_uart_LPC54S018 || HAS_MCUX_SDK_component_serial_manager_uart_LPC54S018M || HAS_MCUX_SDK_component_serial_manager_uart_LPC55S16 || HAS_MCUX_SDK_component_serial_manager_uart_LPC55S28 || HAS_MCUX_SDK_component_serial_manager_uart_LPC55S69_cm33_core0 || HAS_MCUX_SDK_component_serial_manager_uart_MCIMX7U5 || HAS_MCUX_SDK_component_serial_manager_uart_MIMX8MM6 || HAS_MCUX_SDK_component_serial_manager_uart_MIMX8MN6 || HAS_MCUX_SDK_component_serial_manager_uart_MIMX8QM6_cm4_core0 || HAS_MCUX_SDK_component_serial_manager_uart_MIMX8QM6_cm4_core1 || HAS_MCUX_SDK_component_serial_manager_uart_MIMX8QX6 || HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1011 || HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1015 || HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1021 || HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1024 || HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1052 || HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1062 || HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1064 || HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT685S_cm33 || HAS_MCUX_SDK_component_serial_manager_uart_MK22F51212 || HAS_MCUX_SDK_component_serial_manager_uart_MK28FA15 || HAS_MCUX_SDK_component_serial_manager_uart_MK64F12 || HAS_MCUX_SDK_component_serial_manager_uart_MK66F18 || HAS_MCUX_SDK_component_serial_manager_uart_MKE02Z4 || HAS_MCUX_SDK_component_serial_manager_uart_MKE06Z4 || HAS_MCUX_SDK_component_serial_manager_uart_MKE15Z7 || HAS_MCUX_SDK_component_serial_manager_uart_MKE16Z4 || HAS_MCUX_SDK_component_serial_manager_uart_MKL27Z644 || HAS_MCUX_SDK_component_serial_manager_uart_MKM35Z7 || HAS_MCUX_SDK_component_serial_manager_uart_MKV11Z7 || HAS_MCUX_SDK_component_serial_manager_uart_MKV31F51212 || HAS_MCUX_SDK_component_tfa9xxx_adapter || HAS_MCUX_SDK_component_uart_adapter || HAS_MCUX_SDK_component_usart_adapter || HAS_MCUX_SDK_component_wm8524_adapter || HAS_MCUX_SDK_component_wm8904_adapter || HAS_MCUX_SDK_component_wm8960_adapter
+
+config MCUX_SDK_component_codec_ak4497_adapter
+    bool "component_codec_ak4497_adapter"
+    depends on HAS_MCUX_SDK_component_codec_ak4497_adapter
+    default n
+    select MCUX_SDK_driver_ak4497 if HAS_MCUX_SDK_driver_ak4497
+
+config MCUX_SDK_component_codec_i2c_LPC51U68
+    bool "component_codec_i2c_LPC51U68"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC51U68
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config MCUX_SDK_component_codec_i2c_LPC54114_cm4
+    bool "component_codec_i2c_LPC54114_cm4"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC54114_cm4
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config MCUX_SDK_component_codec_i2c_LPC54628
+    bool "component_codec_i2c_LPC54628"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC54628
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config MCUX_SDK_component_codec_i2c_LPC54S018
+    bool "component_codec_i2c_LPC54S018"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC54S018
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config MCUX_SDK_component_codec_i2c_LPC54S018M
+    bool "component_codec_i2c_LPC54S018M"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC54S018M
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config MCUX_SDK_component_codec_i2c_LPC55S16
+    bool "component_codec_i2c_LPC55S16"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC55S16
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config MCUX_SDK_component_codec_i2c_LPC55S28
+    bool "component_codec_i2c_LPC55S28"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC55S28
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config MCUX_SDK_component_codec_i2c_LPC55S69_cm33_core0
+    bool "component_codec_i2c_LPC55S69_cm33_core0"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC55S69_cm33_core0
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config MCUX_SDK_component_codec_i2c_MCIMX7U5
+    bool "component_codec_i2c_MCIMX7U5"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MCIMX7U5
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config MCUX_SDK_component_codec_i2c_MIMX8MM6
+    bool "component_codec_i2c_MIMX8MM6"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMX8MM6
+    default n
+    select MCUX_SDK_component_ii2c_adapter if HAS_MCUX_SDK_component_ii2c_adapter
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core0
+    bool "component_codec_i2c_MIMX8QM6_cm4_core0"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core0
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core1
+    bool "component_codec_i2c_MIMX8QM6_cm4_core1"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config MCUX_SDK_component_codec_i2c_MIMX8QX6
+    bool "component_codec_i2c_MIMX8QX6"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMX8QX6
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config MCUX_SDK_component_codec_i2c_MIMXRT1011
+    bool "component_codec_i2c_MIMXRT1011"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1011
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config MCUX_SDK_component_codec_i2c_MIMXRT1015
+    bool "component_codec_i2c_MIMXRT1015"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1015
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config MCUX_SDK_component_codec_i2c_MIMXRT1021
+    bool "component_codec_i2c_MIMXRT1021"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1021
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config MCUX_SDK_component_codec_i2c_MIMXRT1024
+    bool "component_codec_i2c_MIMXRT1024"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1024
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config MCUX_SDK_component_codec_i2c_MIMXRT1052
+    bool "component_codec_i2c_MIMXRT1052"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1052
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config MCUX_SDK_component_codec_i2c_MIMXRT1062
+    bool "component_codec_i2c_MIMXRT1062"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1062
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config MCUX_SDK_component_codec_i2c_MIMXRT1064
+    bool "component_codec_i2c_MIMXRT1064"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1064
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33
+    bool "component_codec_i2c_MIMXRT685S_cm33"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    if MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33
+        config MCUX_SDK_component_flexcomm_i2c_adapter
+            bool "component_flexcomm_i2c_adapter"
+            default n
+    endif
+    if MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33
+        config MCUX_SDK_component_i3c_adapter
+            bool "component_i3c_adapter"
+            default n
+    endif
+
+config MCUX_SDK_component_codec_i2c_MK66F18
+    bool "component_codec_i2c_MK66F18"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MK66F18
+    default n
+    select MCUX_SDK_component_i2c_adapter if HAS_MCUX_SDK_component_i2c_adapter
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_component_codec_wm8524_adapter
+    bool "component_codec_wm8524_adapter"
+    depends on HAS_MCUX_SDK_component_codec_wm8524_adapter
+    default n
+    select MCUX_SDK_driver_wm8524 if HAS_MCUX_SDK_driver_wm8524
+
+config MCUX_SDK_component_cs42888_adapter
+    bool "component_cs42888_adapter"
+    depends on HAS_MCUX_SDK_component_cs42888_adapter
+    default n
+    select MCUX_SDK_driver_cs42888 if HAS_MCUX_SDK_driver_cs42888
+
+config MCUX_SDK_component_ctimer_adapter
+    bool "component_ctimer_adapter"
+    depends on HAS_MCUX_SDK_component_ctimer_adapter
+    default n
+    select MCUX_SDK_driver_ctimer if HAS_MCUX_SDK_driver_ctimer
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_component_da7212_adapter
+    bool "component_da7212_adapter"
+    depends on HAS_MCUX_SDK_component_da7212_adapter
+    default n
+    select MCUX_SDK_driver_dialog7212 if HAS_MCUX_SDK_driver_dialog7212
+
+config MCUX_SDK_component_flexcomm_i2c_adapter
+    bool "component_flexcomm_i2c_adapter"
+    depends on HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+    default n
+    select MCUX_SDK_driver_flexcomm_i2c if HAS_MCUX_SDK_driver_flexcomm_i2c
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_component_i2c_adapter
+    bool "component_i2c_adapter"
+    depends on HAS_MCUX_SDK_component_i2c_adapter
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_driver_i2c if HAS_MCUX_SDK_driver_i2c
+
+config MCUX_SDK_component_i3c_adapter
+    bool "component_i3c_adapter"
+    depends on HAS_MCUX_SDK_component_i3c_adapter
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_driver_i3c if HAS_MCUX_SDK_driver_i3c
+
+config MCUX_SDK_component_ii2c_adapter
+    bool "component_ii2c_adapter"
+    depends on HAS_MCUX_SDK_component_ii2c_adapter
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_driver_ii2c if HAS_MCUX_SDK_driver_ii2c
+
+config MCUX_SDK_component_iuart_adapter
+    bool "component_iuart_adapter"
+    depends on HAS_MCUX_SDK_component_iuart_adapter
+    default n
+    select MCUX_SDK_driver_iuart if HAS_MCUX_SDK_driver_iuart
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_component_lists
+    bool "component_lists"
+    depends on HAS_MCUX_SDK_component_lists
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_component_lpi2c_adapter
+    bool "component_lpi2c_adapter"
+    depends on HAS_MCUX_SDK_component_lpi2c_adapter
+    default n
+    select MCUX_SDK_driver_lpi2c if HAS_MCUX_SDK_driver_lpi2c
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_component_lpuart_adapter
+    bool "component_lpuart_adapter"
+    depends on HAS_MCUX_SDK_component_lpuart_adapter
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_component_miniusart_adapter
+    bool "component_miniusart_adapter"
+    depends on HAS_MCUX_SDK_component_miniusart_adapter
+    default n
+    select MCUX_SDK_driver_lpc_miniusart if HAS_MCUX_SDK_driver_lpc_miniusart
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_component_osa
+    bool "component_osa"
+    depends on HAS_MCUX_SDK_component_osa
+    default n
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_component_osa_bm
+    bool "component_osa_bm"
+    depends on HAS_MCUX_SDK_component_osa_bm
+    default n
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_component_serial_manager_K32L2A41A
+    bool "component_serial_manager_K32L2A41A"
+    depends on HAS_MCUX_SDK_component_serial_manager_K32L2A41A
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_K32L2A41A
+        config MCUX_SDK_component_serial_manager_uart_K32L2A41A
+            bool "component_serial_manager_uart_K32L2A41A"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_K32L2B31A
+    bool "component_serial_manager_K32L2B31A"
+    depends on HAS_MCUX_SDK_component_serial_manager_K32L2B31A
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_K32L2B31A
+        config MCUX_SDK_component_serial_manager_uart_K32L2B31A
+            bool "component_serial_manager_uart_K32L2B31A"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_K32L3A60_cm0plus
+    bool "component_serial_manager_K32L3A60_cm0plus"
+    depends on HAS_MCUX_SDK_component_serial_manager_K32L3A60_cm0plus
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_K32L3A60_cm0plus
+        config MCUX_SDK_component_serial_manager_uart_K32L3A60_cm0plus
+            bool "component_serial_manager_uart_K32L3A60_cm0plus"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_K32L3A60_cm4
+    bool "component_serial_manager_K32L3A60_cm4"
+    depends on HAS_MCUX_SDK_component_serial_manager_K32L3A60_cm4
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_K32L3A60_cm4
+        config MCUX_SDK_component_serial_manager_uart_K32L3A60_cm4
+            bool "component_serial_manager_uart_K32L3A60_cm4"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_LPC51U68
+    bool "component_serial_manager_LPC51U68"
+    depends on HAS_MCUX_SDK_component_serial_manager_LPC51U68
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_LPC51U68
+        config MCUX_SDK_component_serial_manager_uart_LPC51U68
+            bool "component_serial_manager_uart_LPC51U68"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_LPC54114_cm4
+    bool "component_serial_manager_LPC54114_cm4"
+    depends on HAS_MCUX_SDK_component_serial_manager_LPC54114_cm4
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_LPC54114_cm4
+        config MCUX_SDK_component_serial_manager_uart_LPC54114_cm4
+            bool "component_serial_manager_uart_LPC54114_cm4"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_LPC54628
+    bool "component_serial_manager_LPC54628"
+    depends on HAS_MCUX_SDK_component_serial_manager_LPC54628
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_LPC54628
+        config MCUX_SDK_component_serial_manager_uart_LPC54628
+            bool "component_serial_manager_uart_LPC54628"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_LPC54S018
+    bool "component_serial_manager_LPC54S018"
+    depends on HAS_MCUX_SDK_component_serial_manager_LPC54S018
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_LPC54S018
+        config MCUX_SDK_component_serial_manager_uart_LPC54S018
+            bool "component_serial_manager_uart_LPC54S018"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_LPC54S018M
+    bool "component_serial_manager_LPC54S018M"
+    depends on HAS_MCUX_SDK_component_serial_manager_LPC54S018M
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_LPC54S018M
+        config MCUX_SDK_component_serial_manager_uart_LPC54S018M
+            bool "component_serial_manager_uart_LPC54S018M"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_LPC55S16
+    bool "component_serial_manager_LPC55S16"
+    depends on HAS_MCUX_SDK_component_serial_manager_LPC55S16
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_LPC55S16
+        config MCUX_SDK_component_serial_manager_uart_LPC55S16
+            bool "component_serial_manager_uart_LPC55S16"
+            default n
+    endif
+    if MCUX_SDK_component_serial_manager_LPC55S16
+        config MCUX_SDK_component_serial_manager_swo
+            bool "component_serial_manager_swo"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_LPC55S28
+    bool "component_serial_manager_LPC55S28"
+    depends on HAS_MCUX_SDK_component_serial_manager_LPC55S28
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_LPC55S28
+        config MCUX_SDK_component_serial_manager_uart_LPC55S28
+            bool "component_serial_manager_uart_LPC55S28"
+            default n
+    endif
+    if MCUX_SDK_component_serial_manager_LPC55S28
+        config MCUX_SDK_component_serial_manager_swo
+            bool "component_serial_manager_swo"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_LPC55S69_cm33_core0
+    bool "component_serial_manager_LPC55S69_cm33_core0"
+    depends on HAS_MCUX_SDK_component_serial_manager_LPC55S69_cm33_core0
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_LPC55S69_cm33_core0
+        config MCUX_SDK_component_serial_manager_uart_LPC55S69_cm33_core0
+            bool "component_serial_manager_uart_LPC55S69_cm33_core0"
+            default n
+    endif
+    if MCUX_SDK_component_serial_manager_LPC55S69_cm33_core0
+        config MCUX_SDK_component_serial_manager_swo
+            bool "component_serial_manager_swo"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MCIMX7U5
+    bool "component_serial_manager_MCIMX7U5"
+    depends on HAS_MCUX_SDK_component_serial_manager_MCIMX7U5
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MCIMX7U5
+        config MCUX_SDK_component_serial_manager_uart_MCIMX7U5
+            bool "component_serial_manager_uart_MCIMX7U5"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MIMX8MM6
+    bool "component_serial_manager_MIMX8MM6"
+    depends on HAS_MCUX_SDK_component_serial_manager_MIMX8MM6
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MIMX8MM6
+        config MCUX_SDK_component_serial_manager_uart_MIMX8MM6
+            bool "component_serial_manager_uart_MIMX8MM6"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MIMX8MN6
+    bool "component_serial_manager_MIMX8MN6"
+    depends on HAS_MCUX_SDK_component_serial_manager_MIMX8MN6
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MIMX8MN6
+        config MCUX_SDK_component_serial_manager_uart_MIMX8MN6
+            bool "component_serial_manager_uart_MIMX8MN6"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MIMX8QM6_cm4_core0
+    bool "component_serial_manager_MIMX8QM6_cm4_core0"
+    depends on HAS_MCUX_SDK_component_serial_manager_MIMX8QM6_cm4_core0
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MIMX8QM6_cm4_core0
+        config MCUX_SDK_component_serial_manager_uart_MIMX8QM6_cm4_core0
+            bool "component_serial_manager_uart_MIMX8QM6_cm4_core0"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MIMX8QM6_cm4_core1
+    bool "component_serial_manager_MIMX8QM6_cm4_core1"
+    depends on HAS_MCUX_SDK_component_serial_manager_MIMX8QM6_cm4_core1
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MIMX8QM6_cm4_core1
+        config MCUX_SDK_component_serial_manager_uart_MIMX8QM6_cm4_core1
+            bool "component_serial_manager_uart_MIMX8QM6_cm4_core1"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MIMX8QX6
+    bool "component_serial_manager_MIMX8QX6"
+    depends on HAS_MCUX_SDK_component_serial_manager_MIMX8QX6
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MIMX8QX6
+        config MCUX_SDK_component_serial_manager_uart_MIMX8QX6
+            bool "component_serial_manager_uart_MIMX8QX6"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MIMXRT1011
+    bool "component_serial_manager_MIMXRT1011"
+    depends on HAS_MCUX_SDK_component_serial_manager_MIMXRT1011
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MIMXRT1011
+        config MCUX_SDK_component_serial_manager_uart_MIMXRT1011
+            bool "component_serial_manager_uart_MIMXRT1011"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MIMXRT1015
+    bool "component_serial_manager_MIMXRT1015"
+    depends on HAS_MCUX_SDK_component_serial_manager_MIMXRT1015
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MIMXRT1015
+        config MCUX_SDK_component_serial_manager_uart_MIMXRT1015
+            bool "component_serial_manager_uart_MIMXRT1015"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MIMXRT1021
+    bool "component_serial_manager_MIMXRT1021"
+    depends on HAS_MCUX_SDK_component_serial_manager_MIMXRT1021
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MIMXRT1021
+        config MCUX_SDK_component_serial_manager_uart_MIMXRT1021
+            bool "component_serial_manager_uart_MIMXRT1021"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MIMXRT1024
+    bool "component_serial_manager_MIMXRT1024"
+    depends on HAS_MCUX_SDK_component_serial_manager_MIMXRT1024
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MIMXRT1024
+        config MCUX_SDK_component_serial_manager_uart_MIMXRT1024
+            bool "component_serial_manager_uart_MIMXRT1024"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MIMXRT1052
+    bool "component_serial_manager_MIMXRT1052"
+    depends on HAS_MCUX_SDK_component_serial_manager_MIMXRT1052
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MIMXRT1052
+        config MCUX_SDK_component_serial_manager_uart_MIMXRT1052
+            bool "component_serial_manager_uart_MIMXRT1052"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MIMXRT1062
+    bool "component_serial_manager_MIMXRT1062"
+    depends on HAS_MCUX_SDK_component_serial_manager_MIMXRT1062
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MIMXRT1062
+        config MCUX_SDK_component_serial_manager_uart_MIMXRT1062
+            bool "component_serial_manager_uart_MIMXRT1062"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MIMXRT1064
+    bool "component_serial_manager_MIMXRT1064"
+    depends on HAS_MCUX_SDK_component_serial_manager_MIMXRT1064
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MIMXRT1064
+        config MCUX_SDK_component_serial_manager_uart_MIMXRT1064
+            bool "component_serial_manager_uart_MIMXRT1064"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MIMXRT685S_cm33
+    bool "component_serial_manager_MIMXRT685S_cm33"
+    depends on HAS_MCUX_SDK_component_serial_manager_MIMXRT685S_cm33
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MIMXRT685S_cm33
+        config MCUX_SDK_component_serial_manager_uart_MIMXRT685S_cm33
+            bool "component_serial_manager_uart_MIMXRT685S_cm33"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MK22F51212
+    bool "component_serial_manager_MK22F51212"
+    depends on HAS_MCUX_SDK_component_serial_manager_MK22F51212
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MK22F51212
+        config MCUX_SDK_component_serial_manager_uart_MK22F51212
+            bool "component_serial_manager_uart_MK22F51212"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MK28FA15
+    bool "component_serial_manager_MK28FA15"
+    depends on HAS_MCUX_SDK_component_serial_manager_MK28FA15
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MK28FA15
+        config MCUX_SDK_component_serial_manager_uart_MK28FA15
+            bool "component_serial_manager_uart_MK28FA15"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MK64F12
+    bool "component_serial_manager_MK64F12"
+    depends on HAS_MCUX_SDK_component_serial_manager_MK64F12
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MK64F12
+        config MCUX_SDK_component_serial_manager_uart_MK64F12
+            bool "component_serial_manager_uart_MK64F12"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MK66F18
+    bool "component_serial_manager_MK66F18"
+    depends on HAS_MCUX_SDK_component_serial_manager_MK66F18
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MK66F18
+        config MCUX_SDK_component_serial_manager_uart_MK66F18
+            bool "component_serial_manager_uart_MK66F18"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MKE02Z4
+    bool "component_serial_manager_MKE02Z4"
+    depends on HAS_MCUX_SDK_component_serial_manager_MKE02Z4
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MKE02Z4
+        config MCUX_SDK_component_serial_manager_uart_MKE02Z4
+            bool "component_serial_manager_uart_MKE02Z4"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MKE06Z4
+    bool "component_serial_manager_MKE06Z4"
+    depends on HAS_MCUX_SDK_component_serial_manager_MKE06Z4
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MKE06Z4
+        config MCUX_SDK_component_serial_manager_uart_MKE06Z4
+            bool "component_serial_manager_uart_MKE06Z4"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MKE15Z7
+    bool "component_serial_manager_MKE15Z7"
+    depends on HAS_MCUX_SDK_component_serial_manager_MKE15Z7
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MKE15Z7
+        config MCUX_SDK_component_serial_manager_uart_MKE15Z7
+            bool "component_serial_manager_uart_MKE15Z7"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MKE16Z4
+    bool "component_serial_manager_MKE16Z4"
+    depends on HAS_MCUX_SDK_component_serial_manager_MKE16Z4
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MKE16Z4
+        config MCUX_SDK_component_serial_manager_uart_MKE16Z4
+            bool "component_serial_manager_uart_MKE16Z4"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MKL27Z644
+    bool "component_serial_manager_MKL27Z644"
+    depends on HAS_MCUX_SDK_component_serial_manager_MKL27Z644
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MKL27Z644
+        config MCUX_SDK_component_serial_manager_uart_MKL27Z644
+            bool "component_serial_manager_uart_MKL27Z644"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MKM35Z7
+    bool "component_serial_manager_MKM35Z7"
+    depends on HAS_MCUX_SDK_component_serial_manager_MKM35Z7
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MKM35Z7
+        config MCUX_SDK_component_serial_manager_uart_MKM35Z7
+            bool "component_serial_manager_uart_MKM35Z7"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MKV11Z7
+    bool "component_serial_manager_MKV11Z7"
+    depends on HAS_MCUX_SDK_component_serial_manager_MKV11Z7
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MKV11Z7
+        config MCUX_SDK_component_serial_manager_uart_MKV11Z7
+            bool "component_serial_manager_uart_MKV11Z7"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_MKV31F51212
+    bool "component_serial_manager_MKV31F51212"
+    depends on HAS_MCUX_SDK_component_serial_manager_MKV31F51212
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_component_lists if HAS_MCUX_SDK_component_lists
+    if MCUX_SDK_component_serial_manager_MKV31F51212
+        config MCUX_SDK_component_serial_manager_uart_MKV31F51212
+            bool "component_serial_manager_uart_MKV31F51212"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_swo
+    bool "component_serial_manager_swo"
+    depends on HAS_MCUX_SDK_component_serial_manager_swo
+    default n
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_component_serial_manager_uart_K32L2A41A
+    bool "component_serial_manager_uart_K32L2A41A"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_K32L2A41A
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_K32L2B31A
+    bool "component_serial_manager_uart_K32L2B31A"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_K32L2B31A
+    default n
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+    if MCUX_SDK_component_serial_manager_uart_K32L2B31A
+        config MCUX_SDK_driver_lpuart
+            bool "driver_lpuart"
+            default n
+    endif
+    if MCUX_SDK_component_serial_manager_uart_K32L2B31A
+        config MCUX_SDK_driver_uart
+            bool "driver_uart"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_uart_K32L3A60_cm0plus
+    bool "component_serial_manager_uart_K32L3A60_cm0plus"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_K32L3A60_cm0plus
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_K32L3A60_cm4
+    bool "component_serial_manager_uart_K32L3A60_cm4"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_K32L3A60_cm4
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_LPC51U68
+    bool "component_serial_manager_uart_LPC51U68"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_LPC51U68
+    default n
+    select MCUX_SDK_driver_flexcomm_usart if HAS_MCUX_SDK_driver_flexcomm_usart
+    select MCUX_SDK_component_usart_adapter if HAS_MCUX_SDK_component_usart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_LPC54114_cm4
+    bool "component_serial_manager_uart_LPC54114_cm4"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_LPC54114_cm4
+    default n
+    select MCUX_SDK_driver_flexcomm_usart if HAS_MCUX_SDK_driver_flexcomm_usart
+    select MCUX_SDK_component_usart_adapter if HAS_MCUX_SDK_component_usart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_LPC54628
+    bool "component_serial_manager_uart_LPC54628"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_LPC54628
+    default n
+    select MCUX_SDK_driver_flexcomm_usart if HAS_MCUX_SDK_driver_flexcomm_usart
+    select MCUX_SDK_component_usart_adapter if HAS_MCUX_SDK_component_usart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_LPC54S018
+    bool "component_serial_manager_uart_LPC54S018"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_LPC54S018
+    default n
+    select MCUX_SDK_driver_flexcomm_usart if HAS_MCUX_SDK_driver_flexcomm_usart
+    select MCUX_SDK_component_usart_adapter if HAS_MCUX_SDK_component_usart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_LPC54S018M
+    bool "component_serial_manager_uart_LPC54S018M"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_LPC54S018M
+    default n
+    select MCUX_SDK_driver_flexcomm_usart if HAS_MCUX_SDK_driver_flexcomm_usart
+    select MCUX_SDK_component_usart_adapter if HAS_MCUX_SDK_component_usart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_LPC55S16
+    bool "component_serial_manager_uart_LPC55S16"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_LPC55S16
+    default n
+    select MCUX_SDK_driver_flexcomm_usart if HAS_MCUX_SDK_driver_flexcomm_usart
+    select MCUX_SDK_component_usart_adapter if HAS_MCUX_SDK_component_usart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_LPC55S28
+    bool "component_serial_manager_uart_LPC55S28"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_LPC55S28
+    default n
+    select MCUX_SDK_component_usart_adapter if HAS_MCUX_SDK_component_usart_adapter
+    select MCUX_SDK_driver_flexcomm_usart if HAS_MCUX_SDK_driver_flexcomm_usart
+
+config MCUX_SDK_component_serial_manager_uart_LPC55S69_cm33_core0
+    bool "component_serial_manager_uart_LPC55S69_cm33_core0"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_LPC55S69_cm33_core0
+    default n
+    select MCUX_SDK_driver_flexcomm_usart if HAS_MCUX_SDK_driver_flexcomm_usart
+    select MCUX_SDK_component_usart_adapter if HAS_MCUX_SDK_component_usart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MCIMX7U5
+    bool "component_serial_manager_uart_MCIMX7U5"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MCIMX7U5
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MIMX8MM6
+    bool "component_serial_manager_uart_MIMX8MM6"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MIMX8MM6
+    default n
+    select MCUX_SDK_component_iuart_adapter if HAS_MCUX_SDK_component_iuart_adapter
+    select MCUX_SDK_driver_iuart if HAS_MCUX_SDK_driver_iuart
+
+config MCUX_SDK_component_serial_manager_uart_MIMX8MN6
+    bool "component_serial_manager_uart_MIMX8MN6"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MIMX8MN6
+    default n
+    select MCUX_SDK_component_iuart_adapter if HAS_MCUX_SDK_component_iuart_adapter
+    select MCUX_SDK_driver_iuart if HAS_MCUX_SDK_driver_iuart
+
+config MCUX_SDK_component_serial_manager_uart_MIMX8QM6_cm4_core0
+    bool "component_serial_manager_uart_MIMX8QM6_cm4_core0"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MIMX8QM6_cm4_core0
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MIMX8QM6_cm4_core1
+    bool "component_serial_manager_uart_MIMX8QM6_cm4_core1"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MIMX8QM6_cm4_core1
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MIMX8QX6
+    bool "component_serial_manager_uart_MIMX8QX6"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MIMX8QX6
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MIMXRT1011
+    bool "component_serial_manager_uart_MIMXRT1011"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1011
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MIMXRT1015
+    bool "component_serial_manager_uart_MIMXRT1015"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1015
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MIMXRT1021
+    bool "component_serial_manager_uart_MIMXRT1021"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1021
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MIMXRT1024
+    bool "component_serial_manager_uart_MIMXRT1024"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1024
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MIMXRT1052
+    bool "component_serial_manager_uart_MIMXRT1052"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1052
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MIMXRT1062
+    bool "component_serial_manager_uart_MIMXRT1062"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1062
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MIMXRT1064
+    bool "component_serial_manager_uart_MIMXRT1064"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1064
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MIMXRT685S_cm33
+    bool "component_serial_manager_uart_MIMXRT685S_cm33"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT685S_cm33
+    default n
+    select MCUX_SDK_driver_flexcomm_usart if HAS_MCUX_SDK_driver_flexcomm_usart
+    select MCUX_SDK_component_usart_adapter if HAS_MCUX_SDK_component_usart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MK22F51212
+    bool "component_serial_manager_uart_MK22F51212"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MK22F51212
+    default n
+    select MCUX_SDK_component_uart_adapter if HAS_MCUX_SDK_component_uart_adapter
+    if MCUX_SDK_component_serial_manager_uart_MK22F51212
+        config MCUX_SDK_driver_lpuart
+            bool "driver_lpuart"
+            default n
+    endif
+    if MCUX_SDK_component_serial_manager_uart_MK22F51212
+        config MCUX_SDK_driver_uart
+            bool "driver_uart"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_uart_MK28FA15
+    bool "component_serial_manager_uart_MK28FA15"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MK28FA15
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MK64F12
+    bool "component_serial_manager_uart_MK64F12"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MK64F12
+    default n
+    select MCUX_SDK_driver_uart if HAS_MCUX_SDK_driver_uart
+    select MCUX_SDK_component_uart_adapter if HAS_MCUX_SDK_component_uart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MK66F18
+    bool "component_serial_manager_uart_MK66F18"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MK66F18
+    default n
+    select MCUX_SDK_component_uart_adapter if HAS_MCUX_SDK_component_uart_adapter
+    if MCUX_SDK_component_serial_manager_uart_MK66F18
+        config MCUX_SDK_driver_lpuart
+            bool "driver_lpuart"
+            default n
+    endif
+    if MCUX_SDK_component_serial_manager_uart_MK66F18
+        config MCUX_SDK_driver_uart
+            bool "driver_uart"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_uart_MKE02Z4
+    bool "component_serial_manager_uart_MKE02Z4"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MKE02Z4
+    default n
+    select MCUX_SDK_driver_uart if HAS_MCUX_SDK_driver_uart
+    select MCUX_SDK_component_uart_adapter if HAS_MCUX_SDK_component_uart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MKE06Z4
+    bool "component_serial_manager_uart_MKE06Z4"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MKE06Z4
+    default n
+    select MCUX_SDK_driver_uart if HAS_MCUX_SDK_driver_uart
+    select MCUX_SDK_component_uart_adapter if HAS_MCUX_SDK_component_uart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MKE15Z7
+    bool "component_serial_manager_uart_MKE15Z7"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MKE15Z7
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MKE16Z4
+    bool "component_serial_manager_uart_MKE16Z4"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MKE16Z4
+    default n
+    select MCUX_SDK_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MKL27Z644
+    bool "component_serial_manager_uart_MKL27Z644"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MKL27Z644
+    default n
+    select MCUX_SDK_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+    if MCUX_SDK_component_serial_manager_uart_MKL27Z644
+        config MCUX_SDK_driver_lpuart
+            bool "driver_lpuart"
+            default n
+    endif
+    if MCUX_SDK_component_serial_manager_uart_MKL27Z644
+        config MCUX_SDK_driver_uart
+            bool "driver_uart"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_uart_MKM35Z7
+    bool "component_serial_manager_uart_MKM35Z7"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MKM35Z7
+    default n
+    select MCUX_SDK_component_uart_adapter if HAS_MCUX_SDK_component_uart_adapter
+    if MCUX_SDK_component_serial_manager_uart_MKM35Z7
+        config MCUX_SDK_driver_lpuart
+            bool "driver_lpuart"
+            default n
+    endif
+    if MCUX_SDK_component_serial_manager_uart_MKM35Z7
+        config MCUX_SDK_driver_uart
+            bool "driver_uart"
+            default n
+    endif
+
+config MCUX_SDK_component_serial_manager_uart_MKV11Z7
+    bool "component_serial_manager_uart_MKV11Z7"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MKV11Z7
+    default n
+    select MCUX_SDK_driver_uart if HAS_MCUX_SDK_driver_uart
+    select MCUX_SDK_component_uart_adapter if HAS_MCUX_SDK_component_uart_adapter
+
+config MCUX_SDK_component_serial_manager_uart_MKV31F51212
+    bool "component_serial_manager_uart_MKV31F51212"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart_MKV31F51212
+    default n
+    select MCUX_SDK_component_uart_adapter if HAS_MCUX_SDK_component_uart_adapter
+    if MCUX_SDK_component_serial_manager_uart_MKV31F51212
+        config MCUX_SDK_driver_lpuart
+            bool "driver_lpuart"
+            default n
+    endif
+    if MCUX_SDK_component_serial_manager_uart_MKV31F51212
+        config MCUX_SDK_driver_uart
+            bool "driver_uart"
+            default n
+    endif
+
+config MCUX_SDK_component_tfa9xxx_adapter
+    bool "component_tfa9xxx_adapter"
+    depends on HAS_MCUX_SDK_component_tfa9xxx_adapter
+    default n
+    select MCUX_SDK_driver_tfa9xxx if HAS_MCUX_SDK_driver_tfa9xxx
+
+config MCUX_SDK_component_uart_adapter
+    bool "component_uart_adapter"
+    depends on HAS_MCUX_SDK_component_uart_adapter
+    default n
+    select MCUX_SDK_driver_uart if HAS_MCUX_SDK_driver_uart
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+
+config MCUX_SDK_component_usart_adapter
+    bool "component_usart_adapter"
+    depends on HAS_MCUX_SDK_component_usart_adapter
+    default n
+    select MCUX_SDK_driver_flexcomm_usart if HAS_MCUX_SDK_driver_flexcomm_usart
+    select MCUX_SDK_driver_common if HAS_MCUX_SDK_driver_common
+    select MCUX_SDK_driver_flexcomm if HAS_MCUX_SDK_driver_flexcomm
+
+config MCUX_SDK_component_wm8524_adapter
+    bool "component_wm8524_adapter"
+    depends on HAS_MCUX_SDK_component_wm8524_adapter
+    default n
+    select MCUX_SDK_driver_wm8524 if HAS_MCUX_SDK_driver_wm8524
+
+config MCUX_SDK_component_wm8904_adapter
+    bool "component_wm8904_adapter"
+    depends on HAS_MCUX_SDK_component_wm8904_adapter
+    default n
+    select MCUX_SDK_driver_wm8904 if HAS_MCUX_SDK_driver_wm8904
+
+config MCUX_SDK_component_wm8960_adapter
+    bool "component_wm8960_adapter"
+    depends on HAS_MCUX_SDK_component_wm8960_adapter
+    default n
+    select MCUX_SDK_driver_wm8960 if HAS_MCUX_SDK_driver_wm8960
+
+
+endmenu
+
+
+config HAS_MCUX_SDK_component_codec_ak4497_adapter
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC51U68
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC54114_cm4
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC54628
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC54S018
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC54S018M
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC55S16
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC55S28
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC55S69_cm33_core0
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_MCIMX7U5
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMX8MM6
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core0
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core1
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMX8QX6
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1011
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1015
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1021
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1024
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1052
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1062
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1064
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33
+    bool
+
+config HAS_MCUX_SDK_component_codec_i2c_MK66F18
+    bool
+
+config HAS_MCUX_SDK_component_codec_wm8524_adapter
+    bool
+
+config HAS_MCUX_SDK_component_cs42888_adapter
+    bool
+
+config HAS_MCUX_SDK_component_ctimer_adapter
+    bool
+
+config HAS_MCUX_SDK_component_da7212_adapter
+    bool
+
+config HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+    bool
+
+config HAS_MCUX_SDK_component_i2c_adapter
+    bool
+
+config HAS_MCUX_SDK_component_i3c_adapter
+    bool
+
+config HAS_MCUX_SDK_component_ii2c_adapter
+    bool
+
+config HAS_MCUX_SDK_component_iuart_adapter
+    bool
+
+config HAS_MCUX_SDK_component_lists
+    bool
+
+config HAS_MCUX_SDK_component_lpi2c_adapter
+    bool
+
+config HAS_MCUX_SDK_component_lpuart_adapter
+    bool
+
+config HAS_MCUX_SDK_component_miniusart_adapter
+    bool
+
+config HAS_MCUX_SDK_component_osa
+    bool
+
+config HAS_MCUX_SDK_component_osa_bm
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_K32L2A41A
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_K32L2B31A
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_K32L3A60_cm0plus
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_K32L3A60_cm4
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_LPC51U68
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_LPC54114_cm4
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_LPC54628
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_LPC54S018
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_LPC54S018M
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_LPC55S16
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_LPC55S28
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_LPC55S69_cm33_core0
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MCIMX7U5
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MIMX8MM6
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MIMX8MN6
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MIMX8QM6_cm4_core0
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MIMX8QM6_cm4_core1
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MIMX8QX6
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MIMXRT1011
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MIMXRT1015
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MIMXRT1021
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MIMXRT1024
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MIMXRT1052
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MIMXRT1062
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MIMXRT1064
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MIMXRT685S_cm33
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MK22F51212
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MK28FA15
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MK64F12
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MK66F18
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MKE02Z4
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MKE06Z4
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MKE15Z7
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MKE16Z4
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MKL27Z644
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MKM35Z7
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MKV11Z7
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_MKV31F51212
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_swo
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_K32L2A41A
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_K32L2B31A
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_K32L3A60_cm0plus
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_K32L3A60_cm4
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_LPC51U68
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_LPC54114_cm4
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_LPC54628
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_LPC54S018
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_LPC54S018M
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_LPC55S16
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_LPC55S28
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_LPC55S69_cm33_core0
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MCIMX7U5
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MIMX8MM6
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MIMX8MN6
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MIMX8QM6_cm4_core0
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MIMX8QM6_cm4_core1
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MIMX8QX6
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1011
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1015
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1021
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1024
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1052
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1062
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1064
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT685S_cm33
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MK22F51212
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MK28FA15
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MK64F12
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MK66F18
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MKE02Z4
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MKE06Z4
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MKE15Z7
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MKE16Z4
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MKL27Z644
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MKM35Z7
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MKV11Z7
+    bool
+
+config HAS_MCUX_SDK_component_serial_manager_uart_MKV31F51212
+    bool
+
+config HAS_MCUX_SDK_component_tfa9xxx_adapter
+    bool
+
+config HAS_MCUX_SDK_component_uart_adapter
+    bool
+
+config HAS_MCUX_SDK_component_usart_adapter
+    bool
+
+config HAS_MCUX_SDK_component_wm8524_adapter
+    bool
+
+config HAS_MCUX_SDK_component_wm8904_adapter
+    bool
+
+config HAS_MCUX_SDK_component_wm8960_adapter
+    bool
+
+endmenu
