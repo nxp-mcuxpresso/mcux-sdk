@@ -12,8 +12,6 @@ if(NOT DRIVER_CAMERA-DEVICE-OV5640_INCLUDED)
 
 
     include(driver_camera-device-sccb)
-    include(driver_camera-common)
-    include(driver_video-common)
     include(driver_camera-device-common)
 
 endif()

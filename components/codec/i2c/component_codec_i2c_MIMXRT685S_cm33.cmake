@@ -11,13 +11,12 @@ if(NOT COMPONENT_CODEC_I2C_MIMXRT685S_CM33_INCLUDED)
     )
 
     #OR Logic component
-    if(CONFIG_USE_component_flexcomm_i2c_adapter) 
-        include(component_flexcomm_i2c_adapter)
-    endif()
     if(CONFIG_USE_component_i3c_adapter) 
         include(component_i3c_adapter)
     endif()
+    if(CONFIG_USE_component_flexcomm_i2c_adapter) 
+        include(component_flexcomm_i2c_adapter)
+    endif()
 
-    include(driver_common)
 
 endif()

@@ -40,15 +40,12 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
-#    include(component_serial_manager_MKV11Z7)
 #    include(driver_llwu)
-#    include(utility_assert_lite_MKV11Z7)
 #    include(driver_dspi)
 #    include(driver_uart_edma)
 #    include(CMSIS_Include_dsp)
 #    include(driver_flexcan)
 #    include(driver_i2c)
-#    include(component_serial_manager_uart_MKV11Z7)
 #    include(driver_port)
 #    include(driver_dmamux)
 #    include(driver_lptmr)
@@ -83,7 +80,10 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_common)
 #    include(driver_smc)
 #    include(driver_crc)
+#    include(utility_assert_lite)
+#    include(component_serial_manager)
 #    include(driver_fxos8700cq)
+#    include(component_serial_manager_uart)
 #    include(driver_pmc)
 #    include(driver_rcm)
 #    include(driver_dspi_edma)

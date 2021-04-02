@@ -11,6 +11,5 @@ if(NOT DRIVER_CAMERA-RECEIVER-COMMON_INCLUDED)
 
 
     include(driver_camera-common)
-    include(driver_video-common)
 
 endif()

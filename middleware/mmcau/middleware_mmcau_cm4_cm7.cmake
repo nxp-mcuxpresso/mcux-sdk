@@ -10,8 +10,6 @@ if(NOT MIDDLEWARE_MMCAU_CM4_CM7_INCLUDED)
     )
 
 
-    include(driver_clock)
-    include(driver_common)
     include(middleware_mmcau_common_files)
 
 endif()

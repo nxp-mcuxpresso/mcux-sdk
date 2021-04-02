@@ -11,7 +11,6 @@ if(NOT COMPONENT_I2C_ADAPTER_INCLUDED)
     )
 
 
-    include(driver_common)
     include(driver_i2c)
 
 endif()

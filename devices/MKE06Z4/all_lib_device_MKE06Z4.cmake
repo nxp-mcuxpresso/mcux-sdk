@@ -30,8 +30,6 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
-#    include(component_serial_manager_MKE06Z4)
-#    include(utility_assert_lite_MKE06Z4)
 #    include(driver_mscan)
 #    include(CMSIS_Include_dsp)
 #    include(driver_i2c)
@@ -54,13 +52,15 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_assert)
 #    include(utility_debug_console)
 #    include(device_CMSIS)
-#    include(component_serial_manager_uart_MKE06Z4)
 #    include(driver_uart)
 #    include(utilities_misc_utilities)
 #    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_irq)
+#    include(utility_assert_lite)
+#    include(component_serial_manager)
 #    include(driver_rtc_1)
 #    include(driver_pit)
+#    include(component_serial_manager_uart)
 #    include(driver_adc_5v12b_ll18_015)
 #    include(driver_flash_ftmr)

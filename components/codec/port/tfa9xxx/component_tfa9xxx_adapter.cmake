@@ -11,7 +11,7 @@ if(NOT COMPONENT_TFA9XXX_ADAPTER_INCLUDED)
     )
 
 
+    include(driver_codec)
     include(driver_tfa9xxx)
-    include(driver_codec_MIMXRT685S_cm33)
 
 endif()

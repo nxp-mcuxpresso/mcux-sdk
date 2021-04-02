@@ -12,6 +12,5 @@ if(NOT COMPONENT_CODEC_I2C_MIMX8MM6_INCLUDED)
 
 
     include(component_ii2c_adapter)
-    include(driver_common)
 
 endif()

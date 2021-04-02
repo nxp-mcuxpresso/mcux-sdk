@@ -18,7 +18,6 @@ if(NOT DRIVER_TFA9XXX_INCLUDED)
     )
 
 
-    include(driver_common)
     include(component_codec_i2c_MIMXRT685S_cm33)
 
 endif()

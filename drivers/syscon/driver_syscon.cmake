@@ -10,23 +10,7 @@ if(NOT DRIVER_SYSCON_INCLUDED)
         ${CMAKE_CURRENT_LIST_DIR}/.
     )
 
-    #OR Logic component
-    if(${MCUX_DEVICE} STREQUAL "LPC845")
-        include(driver_syscon_connections)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "LPC812")
-        include(driver_syscon_connections)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "LPC802")
-        include(driver_syscon_connections)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "LPC824")
-        include(driver_syscon_connections)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "LPC804")
-        include(driver_syscon_connections)
-    endif()
 
-    include(driver_common)
+    include(driver_syscon_connections)
 
 endif()

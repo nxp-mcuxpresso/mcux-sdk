@@ -26,7 +26,6 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
-#    include(utility_assert_lite_MKE04Z4)
 #    include(CMSIS_Include_dsp)
 #    include(driver_i2c)
 #    include(driver_pwt_1)
@@ -51,6 +50,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_irq)
+#    include(utility_assert_lite)
 #    include(driver_pit)
 #    include(driver_adc_5v12b_ll18_015)
 #    include(driver_flash_ftmr)

@@ -45,6 +45,5 @@ if(NOT DRIVER_WM8960_INCLUDED)
         include(component_codec_i2c_MIMXRT1015)
     endif()
 
-    include(driver_common)
 
 endif()

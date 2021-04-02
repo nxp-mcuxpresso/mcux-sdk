@@ -1,6 +1,6 @@
-if(NOT COMPONENT_SERIAL_MANAGER_LPC55S69_CM33_CORE0_INCLUDED)
+if(NOT COMPONENT_SERIAL_MANAGER_INCLUDED)
 
-    set(COMPONENT_SERIAL_MANAGER_LPC55S69_CM33_CORE0_INCLUDED true CACHE BOOL "component_serial_manager component is included.")
+    set(COMPONENT_SERIAL_MANAGER_INCLUDED true CACHE BOOL "component_serial_manager component is included.")
 
     target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/fsl_component_serial_manager.c
@@ -11,14 +11,13 @@ if(NOT COMPONENT_SERIAL_MANAGER_LPC55S69_CM33_CORE0_INCLUDED)
     )
 
     #OR Logic component
-    if(CONFIG_USE_component_serial_manager_uart_LPC55S69_cm33_core0) 
-        include(component_serial_manager_uart_LPC55S69_cm33_core0)
+    if(CONFIG_USE_component_serial_manager_uart) 
+        include(component_serial_manager_uart)
     endif()
     if(CONFIG_USE_component_serial_manager_swo) 
         include(component_serial_manager_swo)
     endif()
 
-    include(driver_common)
     include(component_lists)
 
 endif()

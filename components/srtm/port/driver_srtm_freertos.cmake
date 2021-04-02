@@ -11,22 +11,7 @@ if(NOT DRIVER_SRTM_FREERTOS_INCLUDED)
     target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
     )
 
-    #OR Logic component
-    if(${MCUX_DEVICE} STREQUAL "MIMX8MM6")
-        include(driver_srtm)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMX8QM6_cm4_core1")
-        include(driver_srtm)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMX8QX6")
-        include(driver_srtm)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMX8MN6")
-        include(driver_srtm)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "MCIMX7U5")
-        include(driver_srtm)
-    endif()
 
+    include(driver_srtm)
 
 endif()

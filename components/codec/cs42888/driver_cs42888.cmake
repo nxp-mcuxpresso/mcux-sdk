@@ -27,6 +27,5 @@ if(NOT DRIVER_CS42888_INCLUDED)
         include(component_codec_i2c_MIMXRT685S_cm33)
     endif()
 
-    include(driver_common)
 
 endif()

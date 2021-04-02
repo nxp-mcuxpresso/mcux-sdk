@@ -11,7 +11,6 @@ if(NOT DRIVER_SC_EVENT_INCLUDED)
     )
 
 
-    include(driver_common)
     include(driver_scfw_api)
     include(driver_mu)
 

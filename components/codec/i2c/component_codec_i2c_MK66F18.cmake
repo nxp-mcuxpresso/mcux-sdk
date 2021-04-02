@@ -12,6 +12,5 @@ if(NOT COMPONENT_CODEC_I2C_MK66F18_INCLUDED)
 
 
     include(component_i2c_adapter)
-    include(driver_common)
 
 endif()

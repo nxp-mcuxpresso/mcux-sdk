@@ -11,6 +11,6 @@ if(NOT DEVICE_SYSTEM_LPC54114_CM0PLUS_INCLUDED)
     )
 
 
-    include(device_CMSIS_LPC54114_cm0plus)
+    include(device_CMSIS)
 
 endif()

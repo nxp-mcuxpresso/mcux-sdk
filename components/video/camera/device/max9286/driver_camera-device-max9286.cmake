@@ -11,8 +11,6 @@ if(NOT DRIVER_CAMERA-DEVICE-MAX9286_INCLUDED)
     )
 
 
-    include(driver_camera-common)
-    include(driver_video-common)
     include(driver_camera-device-common)
     include(driver_video-i2c)
 

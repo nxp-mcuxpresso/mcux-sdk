@@ -10,7 +10,6 @@ if(NOT MIDDLEWARE_USB_DEVICE_COMMON_HEADER_INCLUDED)
     )
 
 
-    include(component_osa)
     include(middleware_usb_common_header)
 
 endif()

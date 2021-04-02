@@ -11,7 +11,6 @@ if(NOT DRIVER_DMIC_HWVAD_INCLUDED)
     )
 
 
-    include(driver_common)
     include(driver_dmic)
 
 endif()

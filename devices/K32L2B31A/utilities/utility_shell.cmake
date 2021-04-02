@@ -12,7 +12,6 @@ if(NOT UTILITY_SHELL_INCLUDED)
 
 
     include(utility_debug_console)
-    include(driver_common)
     include(component_lists)
 
 endif()

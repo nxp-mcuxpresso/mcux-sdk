@@ -10,19 +10,8 @@ if(NOT DRIVER_CAMERA-RECEIVER-CSI_INCLUDED)
         ${CMAKE_CURRENT_LIST_DIR}/.
     )
 
-    #OR Logic component
-    if(${MCUX_DEVICE} STREQUAL "MIMXRT1052")
-        include(driver_camera-receiver-common)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMXRT1064")
-        include(driver_camera-receiver-common)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMXRT1062")
-        include(driver_camera-receiver-common)
-    endif()
 
-    include(driver_camera-common)
-    include(driver_video-common)
     include(driver_csi)
+    include(driver_camera-receiver-common)
 
 endif()

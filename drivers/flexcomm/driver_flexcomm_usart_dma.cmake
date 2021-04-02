@@ -13,6 +13,5 @@ if(NOT DRIVER_FLEXCOMM_USART_DMA_INCLUDED)
 
     include(driver_lpc_dma)
     include(driver_flexcomm_usart)
-    include(driver_flexcomm)
 
 endif()

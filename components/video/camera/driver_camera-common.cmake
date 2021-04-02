@@ -9,22 +9,7 @@ if(NOT DRIVER_CAMERA-COMMON_INCLUDED)
         ${CMAKE_CURRENT_LIST_DIR}/.
     )
 
-    #OR Logic component
-    if(${MCUX_DEVICE} STREQUAL "MIMXRT1052")
-        include(driver_video-common)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMXRT1064")
-        include(driver_video-common)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMX8QM6_cm4_core1")
-        include(driver_video-common)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMX8QX6")
-        include(driver_video-common)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMXRT1062")
-        include(driver_video-common)
-    endif()
 
+    include(driver_video-common)
 
 endif()

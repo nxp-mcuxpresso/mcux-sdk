@@ -12,6 +12,5 @@ if(NOT DRIVER_DIALOG7212_INCLUDED)
 
 
     include(component_codec_i2c_MK66F18)
-    include(driver_common)
 
 endif()

@@ -11,7 +11,6 @@ if(NOT DRIVER_DBI_FLEXIO_EDMA_INCLUDED)
     )
 
 
-    include(driver_flexio_mculcd)
     include(driver_flexio_mculcd_edma)
     include(driver_dbi)
 
