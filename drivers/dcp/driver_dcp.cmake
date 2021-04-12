@@ -1,16 +1,13 @@
-if(NOT DRIVER_DCP_INCLUDED)
+include_guard(GLOBAL)
+message("driver_dcp component is included.")
 
-    set(DRIVER_DCP_INCLUDED true CACHE BOOL "driver_dcp component is included.")
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/fsl_dcp.c
+)
 
-    target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/fsl_dcp.c
-    )
-
-    target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/.
-    )
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/.
+)
 
 
-    include(driver_cache_armv7_m7)
-
-endif()
+include(driver_cache_armv7_m7)

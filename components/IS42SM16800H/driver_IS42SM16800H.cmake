@@ -1,16 +1,13 @@
-if(NOT DRIVER_IS42SM16800H_INCLUDED)
+include_guard(GLOBAL)
+message("driver_IS42SM16800H component is included.")
 
-    set(DRIVER_IS42SM16800H_INCLUDED true CACHE BOOL "driver_IS42SM16800H component is included.")
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/fsl_sdram.c
+)
 
-    target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/fsl_sdram.c
-    )
-
-    target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/.
-    )
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/.
+)
 
 
-    include(driver_sdramc)
-
-endif()
+include(driver_sdramc)

@@ -1,18 +1,15 @@
-if(NOT UTILITY_DEBUG_CONSOLE_INCLUDED)
+include_guard(GLOBAL)
+message("utility_debug_console component is included.")
 
-    set(UTILITY_DEBUG_CONSOLE_INCLUDED true CACHE BOOL "utility_debug_console component is included.")
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/str/fsl_str.c
+    ${CMAKE_CURRENT_LIST_DIR}/debug_console/fsl_debug_console.c
+)
 
-    target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/str/fsl_str.c
-        ${CMAKE_CURRENT_LIST_DIR}/debug_console/fsl_debug_console.c
-    )
-
-    target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/debug_console
-        ${CMAKE_CURRENT_LIST_DIR}/str
-    )
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/debug_console
+    ${CMAKE_CURRENT_LIST_DIR}/str
+)
 
 
-    include(component_serial_manager)
-
-endif()
+include(component_serial_manager)
