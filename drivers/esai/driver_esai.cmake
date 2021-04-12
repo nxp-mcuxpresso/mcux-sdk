@@ -1,15 +1,12 @@
-if(NOT DRIVER_ESAI_INCLUDED)
+include_guard(GLOBAL)
+message("driver_esai component is included.")
 
-    set(DRIVER_ESAI_INCLUDED true CACHE BOOL "driver_esai component is included.")
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/fsl_esai.c
+)
 
-    target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/fsl_esai.c
-    )
-
-    target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/.
-    )
-
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/.
+)
 
 
-endif()

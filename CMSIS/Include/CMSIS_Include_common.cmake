@@ -1,14 +1,11 @@
-if(NOT CMSIS_INCLUDE_COMMON_INCLUDED)
+include_guard(GLOBAL)
+message("CMSIS_Include_common component is included.")
 
-    set(CMSIS_INCLUDE_COMMON_INCLUDED true CACHE BOOL "CMSIS_Include_common component is included.")
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+)
 
-    target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-    )
-
-    target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/.
-    )
-
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/.
+)
 
 
-endif()

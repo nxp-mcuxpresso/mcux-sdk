@@ -1,15 +1,12 @@
-if(NOT UTILITY_ASSERT_LITE_INCLUDED)
+include_guard(GLOBAL)
+message("utility_assert_lite component is included.")
 
-    set(UTILITY_ASSERT_LITE_INCLUDED true CACHE BOOL "utility_assert_lite component is included.")
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/fsl_assert.c
+)
 
-    target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/fsl_assert.c
-    )
-
-    target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
-    )
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
+)
 
 
-    include(utility_debug_console_lite)
-
-endif()
+include(utility_debug_console_lite)

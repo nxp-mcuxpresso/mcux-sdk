@@ -1,17 +1,14 @@
-if(NOT DRIVER_PRINCE_INCLUDED)
+include_guard(GLOBAL)
+message("driver_prince component is included.")
 
-    set(DRIVER_PRINCE_INCLUDED true CACHE BOOL "driver_prince component is included.")
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/fsl_prince.c
+)
 
-    target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/fsl_prince.c
-    )
-
-    target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/.
-    )
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/.
+)
 
 
-    include(driver_puf)
-    include(driver_iap1)
-
-endif()
+include(driver_puf)
+include(driver_iap1)
