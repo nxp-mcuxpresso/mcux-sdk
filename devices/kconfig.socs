@@ -795,7 +795,7 @@ config MCUX_SDK_DEVICE_K32L2A41A
     select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_driver_cmp
     select HAS_MCUX_SDK_device_startup
-    select HAS_MCUX_SDK_component_serial_manager_K32L2A41A
+    select HAS_MCUX_SDK_driver_adc16
     select HAS_MCUX_SDK_driver_clock
     select HAS_MCUX_SDK_utility_notifier
     select HAS_MCUX_SDK_utility_debug_console_lite
@@ -816,7 +816,6 @@ config MCUX_SDK_DEVICE_K32L2A41A
     select HAS_MCUX_SDK_driver_flexio_i2c_master
     select HAS_MCUX_SDK_driver_sim
     select HAS_MCUX_SDK_middleware_baremetal
-    select HAS_MCUX_SDK_driver_adc16
     select HAS_MCUX_SDK_middleware_usb_device_common_header
     select HAS_MCUX_SDK_driver_flash
     select HAS_MCUX_SDK_utility_assert
@@ -826,7 +825,6 @@ config MCUX_SDK_DEVICE_K32L2A41A
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_flexio_uart_edma
     select HAS_MCUX_SDK_driver_tstmr
-    select HAS_MCUX_SDK_utility_assert_lite_K32L2A41A
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_driver_lpi2c
     select HAS_MCUX_SDK_CMSIS_Include_common
@@ -835,9 +833,11 @@ config MCUX_SDK_DEVICE_K32L2A41A
     select HAS_MCUX_SDK_driver_smc
     select HAS_MCUX_SDK_driver_crc
     select HAS_MCUX_SDK_driver_wdog32
-    select HAS_MCUX_SDK_component_serial_manager_uart_K32L2A41A
+    select HAS_MCUX_SDK_utility_assert_lite
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_fxos8700cq
     select HAS_MCUX_SDK_driver_lptmr
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_pmc
     select HAS_MCUX_SDK_driver_intmux
     select HAS_MCUX_SDK_middleware_usb_common_header
@@ -866,7 +866,6 @@ config MCUX_SDK_DEVICE_K32L2B31A
     select HAS_MCUX_SDK_device_startup
     select HAS_MCUX_SDK_driver_adc16
     select HAS_MCUX_SDK_driver_clock
-    select HAS_MCUX_SDK_component_serial_manager_K32L2B31A
     select HAS_MCUX_SDK_utility_debug_console_lite
     select HAS_MCUX_SDK_driver_flexio_uart
     select HAS_MCUX_SDK_component_osa
@@ -889,8 +888,8 @@ config MCUX_SDK_DEVICE_K32L2B31A
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_uart
     select HAS_MCUX_SDK_driver_flexio_uart_dma
-    select HAS_MCUX_SDK_utility_assert_lite_K32L2B31A
     select HAS_MCUX_SDK_utilities_misc_utilities
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_rtc
@@ -899,15 +898,16 @@ config MCUX_SDK_DEVICE_K32L2B31A
     select HAS_MCUX_SDK_driver_spi_dma
     select HAS_MCUX_SDK_driver_dma
     select HAS_MCUX_SDK_driver_i2c_dma
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_slcd
     select HAS_MCUX_SDK_driver_lpuart_dma
     select HAS_MCUX_SDK_driver_pit
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_flexio_spi_dma
     select HAS_MCUX_SDK_driver_rcm
     select HAS_MCUX_SDK_driver_slcd_engine
     select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_middleware_usb_common_header
-    select HAS_MCUX_SDK_component_serial_manager_uart_K32L2B31A
     select HAS_MCUX_SDK_driver_slcd_lcd_s401m16kr
     select HAS_MIDDLEWARE
     select MCU_SDK_DEVICE if MCUX_SDK_DEVICE_K32L2B31A
@@ -918,12 +918,10 @@ config MCUX_SDK_DEVICE_K32L2B31A
 
 config MCUX_SDK_DEVICE_K32L3A60
     bool
-    select HAS_MCUX_SDK_device_CMSIS_K32L3A60_cm0plus
     select HAS_MCUX_SDK_driver_flexio_spi_edma
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_lpuart_adapter
-    select HAS_MCUX_SDK_driver_flexio_uart
-    select HAS_MCUX_SDK_component_serial_manager_uart_K32L3A60_cm0plus
+    select HAS_MCUX_SDK_driver_port
     select HAS_MCUX_SDK_driver_dmamux
     select HAS_MCUX_SDK_driver_lpspi
     select HAS_MCUX_SDK_driver_lpi2c_edma
@@ -933,10 +931,9 @@ config MCUX_SDK_DEVICE_K32L3A60
     select HAS_MCUX_SDK_driver_lpit
     select HAS_MCUX_SDK_driver_cau3
     select HAS_MCUX_SDK_driver_lpadc
-    select HAS_MCUX_SDK_driver_port
     select HAS_MCUX_SDK_driver_clock
     select HAS_MCUX_SDK_utility_debug_console_lite
-    select HAS_MCUX_SDK_component_serial_manager_K32L3A60_cm0plus
+    select HAS_MCUX_SDK_driver_flexio_uart
     select HAS_MCUX_SDK_driver_edma
     select HAS_MCUX_SDK_driver_ewm
     select HAS_MCUX_SDK_driver_trng
@@ -952,9 +949,10 @@ config MCUX_SDK_DEVICE_K32L3A60
     select HAS_MCUX_SDK_driver_flash
     select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_driver_mmdvsq
-    select HAS_MCUX_SDK_driver_sema42
-    select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_driver_lpspi_edma
+    select HAS_MCUX_SDK_utility_debug_console
+    select HAS_MCUX_SDK_device_CMSIS
+    select HAS_MCUX_SDK_driver_sema42
     select HAS_MCUX_SDK_driver_lpcmp
     select HAS_MCUX_SDK_driver_cache_lplmem
     select HAS_MCUX_SDK_driver_tstmr
@@ -963,11 +961,13 @@ config MCUX_SDK_DEVICE_K32L3A60
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_rtc
-    select HAS_MCUX_SDK_utility_assert_lite_K32L3A60_cm0plus
     select HAS_MCUX_SDK_driver_crc
     select HAS_MCUX_SDK_device_system_K32L3A60_cm0plus
+    select HAS_MCUX_SDK_utility_assert_lite
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_fxos8700cq
     select HAS_MCUX_SDK_driver_lptmr
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_device_startup_K32L3A60_cm0plus
     select HAS_MCUX_SDK_driver_mu
     select HAS_MCUX_SDK_driver_intmux
@@ -995,8 +995,7 @@ config MCUX_SDK_DEVICE_K32L3A60
     select HAS_MCUX_SDK_driver_tpm
     select HAS_MCUX_SDK_driver_lpit
     select HAS_MCUX_SDK_driver_cau3
-    select HAS_MCUX_SDK_driver_xrdc
-    select HAS_MCUX_SDK_component_serial_manager_K32L3A60_cm4
+    select HAS_MCUX_SDK_driver_lpadc
     select HAS_MCUX_SDK_driver_clock
     select HAS_MCUX_SDK_utility_debug_console_lite
     select HAS_MCUX_SDK_driver_flexio_uart
@@ -1007,20 +1006,21 @@ config MCUX_SDK_DEVICE_K32L3A60
     select HAS_MCUX_SDK_driver_lpuart
     select HAS_MCUX_SDK_driver_cache_lpcac
     select HAS_MCUX_SDK_driver_flexio_spi
-    select HAS_MCUX_SDK_driver_lpadc
-    select HAS_MCUX_SDK_device_CMSIS_K32L3A60_cm4
+    select HAS_MCUX_SDK_driver_xrdc
     select HAS_MCUX_SDK_driver_flexio
     select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_driver_msmc
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_flexio_i2c_master
     select HAS_MCUX_SDK_driver_sim
     select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_driver_flash
     select HAS_MCUX_SDK_driver_lpi2c
     select HAS_MCUX_SDK_driver_spm
-    select HAS_MCUX_SDK_driver_sema42
-    select HAS_MCUX_SDK_driver_lpuart_edma
     select HAS_MCUX_SDK_driver_lpspi_edma
+    select HAS_MCUX_SDK_driver_lpuart_edma
+    select HAS_MCUX_SDK_device_CMSIS
+    select HAS_MCUX_SDK_driver_sema42
     select HAS_MCUX_SDK_driver_lpcmp
     select HAS_MCUX_SDK_driver_flexio_uart_edma
     select HAS_MCUX_SDK_driver_tstmr
@@ -1031,10 +1031,10 @@ config MCUX_SDK_DEVICE_K32L3A60
     select HAS_MCUX_SDK_driver_rtc
     select HAS_MCUX_SDK_driver_crc
     select HAS_MCUX_SDK_driver_wdog32
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_fxos8700cq
-    select HAS_MCUX_SDK_component_serial_manager_uart_K32L3A60_cm4
     select HAS_MCUX_SDK_driver_lptmr
-    select HAS_MCUX_SDK_utility_assert_lite_K32L3A60_cm4
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_mu
     select HAS_MCUX_SDK_driver_dac_1
     select HAS_MCUX_SDK_device_system_K32L3A60_cm4
@@ -1046,15 +1046,12 @@ config MCUX_SDK_DEVICE_K32L3A60
 
 config MCUX_SDK_DEVICE_LPC51U68
     bool
-    select HAS_MCUX_SDK_component_serial_manager_uart_LPC51U68
-    select HAS_MCUX_SDK_component_serial_manager_LPC51U68
+    select HAS_MCUX_SDK_driver_lpc_rtc
     select HAS_MCUX_SDK_driver_pint
     select HAS_MCUX_SDK_driver_ctimer
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_usart_adapter
-    select HAS_MCUX_SDK_driver_lpc_rtc
     select HAS_MCUX_SDK_driver_wwdt
-    select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_component_lists
     select HAS_MCUX_SDK_driver_lpc_gpio
     select HAS_MCUX_SDK_driver_mrt
@@ -1069,32 +1066,35 @@ config MCUX_SDK_DEVICE_LPC51U68
     select HAS_MCUX_SDK_driver_inputmux_connections
     select HAS_MCUX_SDK_driver_fmeas
     select HAS_MCUX_SDK_driver_lpc_crc
-    select HAS_MCUX_SDK_utility_assert_lite_LPC51U68
     select HAS_MCUX_SDK_driver_wm8904
     select HAS_MCUX_SDK_driver_flexcomm_i2c_dma
     select HAS_MCUX_SDK_component_flexcomm_i2c_adapter
     select HAS_MCUX_SDK_CMSIS_Include_core_cm0plus
     select HAS_MCUX_SDK_driver_flexcomm_usart_dma
     select HAS_MCUX_SDK_driver_flexcomm_spi
+    select HAS_MCUX_SDK_driver_utick
     select HAS_MCUX_SDK_utility_debug_console
-    select HAS_MCUX_SDK_driver_codec_LPC51U68
+    select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_driver_sctimer
     select HAS_MCUX_SDK_driver_flexcomm_usart
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_component_ctimer_adapter
     select HAS_MCUX_SDK_driver_lpc_iocon
-    select HAS_MCUX_SDK_driver_utick_LPC51U68
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_gint
     select HAS_MCUX_SDK_component_codec_i2c_LPC51U68
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_inputmux
     select HAS_MCUX_SDK_driver_flexcomm_i2c
     select HAS_MCUX_SDK_driver_iap
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_power
     select HAS_MCUX_SDK_driver_lpc_dma
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_component_wm8904_adapter
     select HAS_MCUX_SDK_driver_flexcomm_i2s
     select HAS_MCUX_SDK_driver_reset
@@ -1112,20 +1112,20 @@ config MCUX_SDK_DEVICE_LPC54114
     select HAS_MCUX_SDK_component_lists
     select HAS_MCUX_SDK_driver_lpc_gpio
     select HAS_MCUX_SDK_driver_flexcomm
-    select HAS_MCUX_SDK_utility_assert_lite_LPC54114_cm0plus
     select HAS_MCUX_SDK_driver_clock
     select HAS_MCUX_SDK_utility_debug_console_lite
     select HAS_MCUX_SDK_driver_inputmux_connections
     select HAS_MCUX_SDK_driver_mailbox
-    select HAS_MCUX_SDK_CMSIS_Include_core_cm0plus
-    select HAS_MCUX_SDK_device_CMSIS_LPC54114_cm0plus
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_flexcomm_usart
+    select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_device_system_LPC54114_cm0plus
     select HAS_MCUX_SDK_driver_lpc_iocon
     select HAS_MCUX_SDK_device_startup_LPC54114_cm0plus
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
+    select HAS_MCUX_SDK_CMSIS_Include_core_cm0plus
     select HAS_MCUX_SDK_driver_inputmux
     select HAS_MCUX_SDK_driver_power
     select HAS_MCUX_SDK_driver_reset
@@ -1138,12 +1138,12 @@ config MCUX_SDK_DEVICE_LPC54114
 config MCUX_SDK_DEVICE_LPC54114
     bool
     select HAS_MCUX_SDK_middleware_baremetal
-    select HAS_MCUX_SDK_driver_codec_LPC54114_cm4
+    select HAS_MCUX_SDK_driver_lpc_rtc
     select HAS_MCUX_SDK_driver_pint
     select HAS_MCUX_SDK_driver_ctimer
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_usart_adapter
-    select HAS_MCUX_SDK_driver_lpc_dma
+    select HAS_MCUX_SDK_utility_incbin
     select HAS_MCUX_SDK_driver_wwdt
     select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_middleware_usb_device_common_header
@@ -1153,7 +1153,6 @@ config MCUX_SDK_DEVICE_LPC54114
     select HAS_MCUX_SDK_driver_lpc_adc
     select HAS_MCUX_SDK_driver_flashiap
     select HAS_MCUX_SDK_driver_flexcomm
-    select HAS_MCUX_SDK_utility_assert_lite_LPC54114_cm4
     select HAS_MCUX_SDK_driver_clock
     select HAS_MCUX_SDK_utility_debug_console_lite
     select HAS_MCUX_SDK_driver_flexcomm_i2s_dma
@@ -1161,38 +1160,39 @@ config MCUX_SDK_DEVICE_LPC54114
     select HAS_MCUX_SDK_driver_fmeas
     select HAS_MCUX_SDK_driver_mx25r_flash
     select HAS_MCUX_SDK_driver_lpc_crc
-    select HAS_MCUX_SDK_utility_assert
-    select HAS_MCUX_SDK_driver_utick_LPC54114_cm4
     select HAS_MCUX_SDK_component_codec_i2c_LPC54114_cm4
     select HAS_MCUX_SDK_driver_flexcomm_i2c_dma
     select HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_device_system_LPC54114_cm4
-    select HAS_MCUX_SDK_component_serial_manager_LPC54114_cm4
     select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_driver_flexcomm_spi
+    select HAS_MCUX_SDK_driver_utick
     select HAS_MCUX_SDK_driver_dmic
     select HAS_MCUX_SDK_utility_shell
-    select HAS_MCUX_SDK_driver_lpc_rtc
+    select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_driver_sctimer
     select HAS_MCUX_SDK_driver_flexcomm_usart
+    select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_component_ctimer_adapter
     select HAS_MCUX_SDK_driver_lpc_iocon
     select HAS_MCUX_SDK_driver_dmic_hwvad
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_core_cm4
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_gint
-    select HAS_MCUX_SDK_utility_incbin
     select HAS_MCUX_SDK_device_startup_LPC54114_cm4
     select HAS_MCUX_SDK_driver_inputmux
     select HAS_MCUX_SDK_driver_inputmux_connections
     select HAS_MCUX_SDK_driver_flexcomm_i2c
-    select HAS_MCUX_SDK_component_serial_manager_uart_LPC54114_cm4
-    select HAS_MCUX_SDK_driver_flexcomm_usart_dma
     select HAS_MCUX_SDK_driver_iap
+    select HAS_MCUX_SDK_component_serial_manager
+    select HAS_MCUX_SDK_driver_flexcomm_usart_dma
     select HAS_MCUX_SDK_driver_power
-    select HAS_MCUX_SDK_device_CMSIS_LPC54114_cm4
+    select HAS_MCUX_SDK_driver_lpc_dma
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_component_wm8904_adapter
     select HAS_MCUX_SDK_driver_flexcomm_i2s
     select HAS_MCUX_SDK_driver_mailbox
@@ -1214,6 +1214,7 @@ config MCUX_SDK_DEVICE_LPC54628
     select HAS_MCUX_SDK_driver_sha
     select HAS_MCUX_SDK_driver_pint
     select HAS_MCUX_SDK_driver_ctimer
+    select HAS_MCUX_SDK_driver_utick
     select HAS_MCUX_SDK_driver_lpc_enet
     select HAS_MCUX_SDK_driver_dmic
     select HAS_MCUX_SDK_component_usart_adapter
@@ -1227,12 +1228,11 @@ config MCUX_SDK_DEVICE_LPC54628
     select HAS_MCUX_SDK_driver_lpc_adc
     select HAS_MCUX_SDK_component_codec_i2c_LPC54628
     select HAS_MCUX_SDK_driver_flexcomm
-    select HAS_MCUX_SDK_driver_codec_LPC54628
+    select HAS_MCUX_SDK_driver_flashiap
     select HAS_MCUX_SDK_device_startup
     select HAS_MCUX_SDK_driver_clock
     select HAS_MCUX_SDK_driver_sctimer
     select HAS_MCUX_SDK_utility_debug_console_lite
-    select HAS_MCUX_SDK_driver_flashiap
     select HAS_MCUX_SDK_driver_flexcomm_i2s_dma
     select HAS_MCUX_SDK_component_osa
     select HAS_MCUX_SDK_driver_fmeas
@@ -1246,6 +1246,7 @@ config MCUX_SDK_DEVICE_LPC54628
     select HAS_MCUX_SDK_driver_mdio-common
     select HAS_MCUX_SDK_driver_flexcomm_i2c_dma
     select HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_flexcomm_usart_dma
     select HAS_MCUX_SDK_driver_spifi_dma
     select HAS_MCUX_SDK_driver_flexcomm_spi
@@ -1254,15 +1255,15 @@ config MCUX_SDK_DEVICE_LPC54628
     select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_driver_lpc_lcdc
-    select HAS_MCUX_SDK_component_serial_manager_uart_LPC54628
     select HAS_MCUX_SDK_driver_flexcomm_usart
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_component_ctimer_adapter
     select HAS_MCUX_SDK_driver_rit
     select HAS_MCUX_SDK_driver_lpc_iocon
-    select HAS_MCUX_SDK_component_serial_manager_LPC54628
+    select HAS_MCUX_SDK_driver_spifi
     select HAS_MCUX_SDK_driver_ft5406
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_core_cm4
     select HAS_MCUX_SDK_driver_eeprom
@@ -1274,14 +1275,13 @@ config MCUX_SDK_DEVICE_LPC54628
     select HAS_MCUX_SDK_driver_inputmux_connections
     select HAS_MCUX_SDK_driver_flexcomm_i2c
     select HAS_MCUX_SDK_driver_iap
-    select HAS_MCUX_SDK_utility_assert_lite_LPC54628
-    select HAS_MCUX_SDK_driver_spifi
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_power
     select HAS_MCUX_SDK_driver_lpc_dma
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_emc
     select HAS_MCUX_SDK_component_wm8904_adapter
     select HAS_MCUX_SDK_driver_flexcomm_i2s
-    select HAS_MCUX_SDK_driver_utick_LPC54628
     select HAS_MCUX_SDK_driver_reset
     select HAS_MCUX_SDK_driver_flexcomm_spi_dma
     select HAS_MCUX_SDK_driver_dmic_dma
@@ -1299,10 +1299,11 @@ config MCUX_SDK_DEVICE_LPC54S018
     select HAS_MCUX_SDK_driver_sha
     select HAS_MCUX_SDK_driver_pint
     select HAS_MCUX_SDK_driver_ctimer
+    select HAS_MCUX_SDK_driver_utick
     select HAS_MCUX_SDK_driver_lpc_enet
     select HAS_MCUX_SDK_driver_dmic
     select HAS_MCUX_SDK_component_usart_adapter
-    select HAS_MCUX_SDK_driver_codec_LPC54S018
+    select HAS_MCUX_SDK_driver_wwdt
     select HAS_MCUX_SDK_driver_phy-common
     select HAS_MCUX_SDK_middleware_usb_device_common_header
     select HAS_MCUX_SDK_component_lists
@@ -1315,7 +1316,6 @@ config MCUX_SDK_DEVICE_LPC54S018
     select HAS_MCUX_SDK_driver_flexcomm
     select HAS_MCUX_SDK_driver_phy-device-lan8720a
     select HAS_MCUX_SDK_device_startup
-    select HAS_MCUX_SDK_component_serial_manager_uart_LPC54S018
     select HAS_MCUX_SDK_driver_clock
     select HAS_MCUX_SDK_driver_sctimer
     select HAS_MCUX_SDK_utility_debug_console_lite
@@ -1331,38 +1331,38 @@ config MCUX_SDK_DEVICE_LPC54S018
     select HAS_MCUX_SDK_driver_mdio-common
     select HAS_MCUX_SDK_driver_flexcomm_i2c_dma
     select HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_flexcomm_usart_dma
-    select HAS_MCUX_SDK_driver_utick_LPC54S018
     select HAS_MCUX_SDK_driver_spifi_dma
     select HAS_MCUX_SDK_driver_flexcomm_spi
     select HAS_MCUX_SDK_driver_mdio-lpc-enet
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_utility_shell
-    select HAS_MCUX_SDK_middleware_usb_common_header
+    select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_driver_lpc_lcdc
+    select HAS_MCUX_SDK_driver_puf
     select HAS_MCUX_SDK_driver_flexcomm_usart
     select HAS_MCUX_SDK_device_CMSIS
-    select HAS_MCUX_SDK_component_serial_manager_LPC54S018
+    select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_component_ctimer_adapter
     select HAS_MCUX_SDK_driver_rit
     select HAS_MCUX_SDK_driver_lpc_iocon
     select HAS_MCUX_SDK_driver_spifi
     select HAS_MCUX_SDK_driver_ft5406
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_core_cm4
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_gint
-    select HAS_MCUX_SDK_utility_assert
-    select HAS_MCUX_SDK_driver_wwdt
     select HAS_MCUX_SDK_driver_inputmux
     select HAS_MCUX_SDK_driver_inputmux_connections
     select HAS_MCUX_SDK_driver_flexcomm_i2c
     select HAS_MCUX_SDK_driver_iap
-    select HAS_MCUX_SDK_driver_puf
-    select HAS_MCUX_SDK_utility_assert_lite_LPC54S018
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_power
     select HAS_MCUX_SDK_driver_lpc_dma
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_emc
     select HAS_MCUX_SDK_component_wm8904_adapter
     select HAS_MCUX_SDK_driver_flexcomm_i2s
@@ -1383,8 +1383,9 @@ config MCUX_SDK_DEVICE_LPC54S018M
     select HAS_MCUX_SDK_driver_sha
     select HAS_MCUX_SDK_driver_pint
     select HAS_MCUX_SDK_driver_ctimer
+    select HAS_MCUX_SDK_driver_utick
     select HAS_MCUX_SDK_driver_lpc_enet
-    select HAS_MCUX_SDK_CMSIS_Include_dsp
+    select HAS_MCUX_SDK_driver_dmic
     select HAS_MCUX_SDK_component_usart_adapter
     select HAS_MCUX_SDK_driver_wwdt
     select HAS_MCUX_SDK_driver_phy-common
@@ -1413,43 +1414,42 @@ config MCUX_SDK_DEVICE_LPC54S018M
     select HAS_MCUX_SDK_driver_mdio-common
     select HAS_MCUX_SDK_driver_flexcomm_i2c_dma
     select HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_flexcomm_usart_dma
     select HAS_MCUX_SDK_driver_spifi_dma
     select HAS_MCUX_SDK_driver_flexcomm_spi
     select HAS_MCUX_SDK_driver_mdio-lpc-enet
-    select HAS_MCUX_SDK_driver_dmic
-    select HAS_MCUX_SDK_utility_assert_lite_LPC54S018M
+    select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_utility_shell
-    select HAS_MCUX_SDK_middleware_usb_common_header
-    select HAS_MCUX_SDK_driver_codec_LPC54S018M
+    select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_driver_lpc_lcdc
+    select HAS_MCUX_SDK_driver_puf
     select HAS_MCUX_SDK_driver_flexcomm_usart
     select HAS_MCUX_SDK_device_CMSIS
-    select HAS_MCUX_SDK_component_serial_manager_uart_LPC54S018M
+    select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_component_ctimer_adapter
     select HAS_MCUX_SDK_driver_rit
     select HAS_MCUX_SDK_driver_lpc_iocon
     select HAS_MCUX_SDK_driver_spifi
     select HAS_MCUX_SDK_driver_ft5406
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_core_cm4
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_gint
-    select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_component_codec_i2c_LPC54S018M
-    select HAS_MCUX_SDK_component_serial_manager_LPC54S018M
     select HAS_MCUX_SDK_driver_inputmux
     select HAS_MCUX_SDK_driver_inputmux_connections
     select HAS_MCUX_SDK_driver_flexcomm_i2c
     select HAS_MCUX_SDK_driver_iap
-    select HAS_MCUX_SDK_driver_puf
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_power
     select HAS_MCUX_SDK_driver_lpc_dma
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_emc
     select HAS_MCUX_SDK_component_wm8904_adapter
     select HAS_MCUX_SDK_driver_flexcomm_i2s
-    select HAS_MCUX_SDK_driver_utick_LPC54S018M
     select HAS_MCUX_SDK_driver_reset
     select HAS_MCUX_SDK_driver_flexcomm_spi_dma
     select HAS_MCUX_SDK_driver_dmic_dma
@@ -1468,11 +1468,11 @@ config MCUX_SDK_DEVICE_LPC55S16
     select HAS_MCUX_SDK_driver_hashcrypt
     select HAS_MCUX_SDK_driver_pint
     select HAS_MCUX_SDK_driver_ctimer
+    select HAS_MCUX_SDK_driver_utick
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_usart_adapter
     select HAS_MCUX_SDK_driver_wwdt
-    select HAS_MCUX_SDK_component_serial_manager_uart_LPC55S16
-    select HAS_MCUX_SDK_component_serial_manager_LPC55S16
+    select HAS_MCUX_SDK_middleware_usb_device_common_header
     select HAS_MCUX_SDK_component_lists
     select HAS_MCUX_SDK_driver_lpc_gpio
     select HAS_MCUX_SDK_driver_mrt
@@ -1493,35 +1493,35 @@ config MCUX_SDK_DEVICE_LPC55S16
     select HAS_MCUX_SDK_component_serial_manager_swo
     select HAS_MCUX_SDK_driver_flexcomm_i2c_dma
     select HAS_MCUX_SDK_component_flexcomm_i2c_adapter
-    select HAS_MCUX_SDK_driver_utick_LPC55S16
-    select HAS_MCUX_SDK_middleware_usb_device_common_header
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_flexcomm_usart_dma
     select HAS_MCUX_SDK_driver_iap1
     select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_driver_flexcomm_spi
+    select HAS_MCUX_SDK_driver_puf
     select HAS_MCUX_SDK_driver_prince
     select HAS_MCUX_SDK_driver_flexcomm_i2s
-    select HAS_MCUX_SDK_utility_assert_lite_LPC55S16
     select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_middleware_baremetal
     select HAS_MCUX_SDK_driver_sctimer
     select HAS_MCUX_SDK_driver_flexcomm_usart
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_lpc_iocon
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_driver_ostimer
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_gint
-    select HAS_MCUX_SDK_driver_codec_LPC55S16
     select HAS_MCUX_SDK_driver_flexcomm_spi_dma
     select HAS_MCUX_SDK_driver_inputmux
     select HAS_MCUX_SDK_driver_inputmux_connections
     select HAS_MCUX_SDK_driver_flexcomm_i2c
-    select HAS_MCUX_SDK_driver_puf
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_sysctl
     select HAS_MCUX_SDK_driver_casper
     select HAS_MCUX_SDK_driver_lpc_dma
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_component_wm8904_adapter
     select HAS_MCUX_SDK_CMSIS_Include_core_cm33
     select HAS_MCUX_SDK_utility_shell
@@ -1543,10 +1543,10 @@ config MCUX_SDK_DEVICE_LPC55S28
     select HAS_MCUX_SDK_driver_hashcrypt
     select HAS_MCUX_SDK_driver_pint
     select HAS_MCUX_SDK_driver_ctimer
+    select HAS_MCUX_SDK_driver_utick
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_usart_adapter
     select HAS_MCUX_SDK_driver_wwdt
-    select HAS_MCUX_SDK_utility_assert_lite_LPC55S28
     select HAS_MCUX_SDK_middleware_usb_device_common_header
     select HAS_MCUX_SDK_component_lists
     select HAS_MCUX_SDK_driver_lpc_gpio
@@ -1556,14 +1556,12 @@ config MCUX_SDK_DEVICE_LPC55S28
     select HAS_MCUX_SDK_driver_flexcomm
     select HAS_MCUX_SDK_driver_lpadc
     select HAS_MCUX_SDK_device_startup
-    select HAS_MCUX_SDK_driver_utick_LPC55S28
     select HAS_MCUX_SDK_driver_clock
     select HAS_MCUX_SDK_utility_debug_console_lite
     select HAS_MCUX_SDK_driver_flexcomm_i2s_dma
     select HAS_MCUX_SDK_component_osa
     select HAS_MCUX_SDK_component_codec_i2c_LPC55S28
     select HAS_MCUX_SDK_driver_lpc_crc
-    select HAS_MCUX_SDK_driver_codec_LPC55S28
     select HAS_MCUX_SDK_driver_rng_1
     select HAS_MCUX_SDK_driver_wm8904
     select HAS_MCUX_SDK_driver_sdif
@@ -1571,10 +1569,12 @@ config MCUX_SDK_DEVICE_LPC55S28
     select HAS_MCUX_SDK_component_serial_manager_swo
     select HAS_MCUX_SDK_driver_flexcomm_i2c_dma
     select HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_flexcomm_usart_dma
     select HAS_MCUX_SDK_driver_iap1
     select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_driver_flexcomm_spi
+    select HAS_MCUX_SDK_driver_puf
     select HAS_MCUX_SDK_driver_prince
     select HAS_MCUX_SDK_driver_flexcomm_i2s
     select HAS_MCUX_SDK_utility_assert
@@ -1583,20 +1583,20 @@ config MCUX_SDK_DEVICE_LPC55S28
     select HAS_MCUX_SDK_driver_flexcomm_usart
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_lpc_iocon
-    select HAS_MCUX_SDK_driver_inputmux_connections
-    select HAS_MCUX_SDK_component_serial_manager_LPC55S28
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_driver_ostimer
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_gint
     select HAS_MCUX_SDK_driver_inputmux
-    select HAS_MCUX_SDK_component_serial_manager_uart_LPC55S28
+    select HAS_MCUX_SDK_driver_inputmux_connections
     select HAS_MCUX_SDK_driver_flexcomm_i2c
-    select HAS_MCUX_SDK_driver_puf
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_sysctl
     select HAS_MCUX_SDK_driver_casper
     select HAS_MCUX_SDK_driver_lpc_dma
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_component_wm8904_adapter
     select HAS_MCUX_SDK_CMSIS_Include_core_cm33
     select HAS_MCUX_SDK_utility_shell
@@ -1617,26 +1617,25 @@ config MCUX_SDK_DEVICE_LPC55S69
     select HAS_MCUX_SDK_driver_hashcrypt
     select HAS_MCUX_SDK_driver_pint
     select HAS_MCUX_SDK_driver_ctimer
+    select HAS_MCUX_SDK_driver_utick
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_usart_adapter
     select HAS_MCUX_SDK_utility_incbin
     select HAS_MCUX_SDK_component_codec_i2c_LPC55S69_cm33_core0
     select HAS_MCUX_SDK_driver_wwdt
-    select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_middleware_usb_device_common_header
     select HAS_MCUX_SDK_component_lists
     select HAS_MCUX_SDK_driver_lpc_gpio
     select HAS_MCUX_SDK_driver_mrt
-    select HAS_MCUX_SDK_driver_utick_LPC55S69_cm33_core0
+    select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_driver_flexcomm
     select HAS_MCUX_SDK_driver_lpadc
     select HAS_MCUX_SDK_driver_plu
     select HAS_MCUX_SDK_driver_clock
     select HAS_MCUX_SDK_utility_debug_console_lite
-    select HAS_MCUX_SDK_driver_codec_LPC55S69_cm33_core0
+    select HAS_MCUX_SDK_driver_flexcomm_i2s_dma
     select HAS_MCUX_SDK_component_osa
     select HAS_MCUX_SDK_driver_lpc_crc
-    select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_driver_rng_1
     select HAS_MCUX_SDK_driver_wm8904
     select HAS_MCUX_SDK_driver_sdif
@@ -1644,42 +1643,43 @@ config MCUX_SDK_DEVICE_LPC55S69
     select HAS_MCUX_SDK_component_serial_manager_swo
     select HAS_MCUX_SDK_driver_flexcomm_i2c_dma
     select HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_flexcomm_usart_dma
     select HAS_MCUX_SDK_driver_iap1
     select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_driver_flexcomm_spi
+    select HAS_MCUX_SDK_driver_puf
     select HAS_MCUX_SDK_driver_prince
     select HAS_MCUX_SDK_driver_flexcomm_i2s
-    select HAS_MCUX_SDK_component_serial_manager_LPC55S69_cm33_core0
+    select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_middleware_baremetal
     select HAS_MCUX_SDK_driver_sctimer
     select HAS_MCUX_SDK_driver_flexcomm_usart
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_lpc_iocon
-    select HAS_MCUX_SDK_utility_assert_lite_LPC55S69_cm33_core0
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_driver_ostimer
     select HAS_MCUX_SDK_driver_powerquad
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_gint
-    select HAS_MCUX_SDK_driver_flexcomm_i2s_dma
     select HAS_MCUX_SDK_driver_inputmux
     select HAS_MCUX_SDK_driver_inputmux_connections
     select HAS_MCUX_SDK_driver_flexcomm_i2c
-    select HAS_MCUX_SDK_driver_puf
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_device_startup_LPC55S69_cm33_core0
     select HAS_MCUX_SDK_device_system_LPC55S69_cm33_core0
     select HAS_MCUX_SDK_driver_sysctl
     select HAS_MCUX_SDK_driver_casper
     select HAS_MCUX_SDK_driver_lpc_dma
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_component_wm8904_adapter
     select HAS_MCUX_SDK_CMSIS_Include_core_cm33
     select HAS_MCUX_SDK_driver_mailbox
     select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_driver_reset
     select HAS_MCUX_SDK_driver_flexcomm_spi_dma
-    select HAS_MCUX_SDK_component_serial_manager_uart_LPC55S69_cm33_core0
     select HAS_MIDDLEWARE
     select MCU_SDK_DEVICE if MCUX_SDK_DEVICE_LPC55S69
     if MCUX_SDK_DEVICE_LPC55S69
@@ -1698,10 +1698,10 @@ config MCUX_SDK_DEVICE_LPC55S69
     select HAS_MCUX_SDK_utility_debug_console_lite
     select HAS_MCUX_SDK_driver_inputmux_connections
     select HAS_MCUX_SDK_driver_mailbox
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_flexcomm_usart
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_lpc_iocon
-    select HAS_MCUX_SDK_utility_assert_lite_LPC55S69_cm33_core1
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
@@ -1737,7 +1737,6 @@ config MCUX_SDK_DEVICE_LPC802
     select HAS_MCUX_SDK_CMSIS_Include_core_cm0plus
     select HAS_MCUX_SDK_component_miniusart_adapter
     select HAS_MCUX_SDK_driver_lpc_acomp
-    select HAS_MCUX_SDK_utility_assert_lite_LPC802
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_rom_api
     select HAS_MCUX_SDK_utility_debug_console_lite
@@ -1745,6 +1744,7 @@ config MCUX_SDK_DEVICE_LPC802
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_syscon_connections
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_iap
     select HAS_MCUX_SDK_driver_pint
     select HAS_MCUX_SDK_driver_syscon
@@ -1779,7 +1779,6 @@ config MCUX_SDK_DEVICE_LPC804
     select HAS_MCUX_SDK_driver_capt
     select HAS_MCUX_SDK_driver_lpc_crc
     select HAS_MCUX_SDK_CMSIS_Include_core_cm0plus
-    select HAS_MCUX_SDK_utility_assert_lite_LPC804
     select HAS_MCUX_SDK_component_miniusart_adapter
     select HAS_MCUX_SDK_driver_lpc_acomp
     select HAS_MCUX_SDK_device_CMSIS
@@ -1790,6 +1789,7 @@ config MCUX_SDK_DEVICE_LPC804
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_syscon_connections
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_iap
     select HAS_MCUX_SDK_driver_syscon
     select HAS_MCUX_SDK_driver_reset
@@ -1812,7 +1812,6 @@ config MCUX_SDK_DEVICE_LPC812
     select HAS_MCUX_SDK_driver_lpc_gpio
     select HAS_MCUX_SDK_driver_mrt
     select HAS_MCUX_SDK_device_system
-    select HAS_MCUX_SDK_utility_assert_lite_LPC812
     select HAS_MCUX_SDK_device_startup
     select HAS_MCUX_SDK_driver_power_no_lib
     select HAS_MCUX_SDK_driver_clock
@@ -1828,6 +1827,7 @@ config MCUX_SDK_DEVICE_LPC812
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_syscon_connections
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_iap
     select HAS_MCUX_SDK_driver_pint
     select HAS_MCUX_SDK_driver_syscon
@@ -1861,7 +1861,6 @@ config MCUX_SDK_DEVICE_LPC824
     select HAS_MCUX_SDK_CMSIS_Include_core_cm0plus
     select HAS_MCUX_SDK_component_miniusart_adapter
     select HAS_MCUX_SDK_driver_lpc_acomp
-    select HAS_MCUX_SDK_utility_assert_lite_LPC824
     select HAS_MCUX_SDK_driver_swm_connections
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_power_no_lib
@@ -1870,6 +1869,7 @@ config MCUX_SDK_DEVICE_LPC824
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_syscon_connections
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_inputmux
     select HAS_MCUX_SDK_driver_iap
     select HAS_MCUX_SDK_driver_lpc_dma
@@ -1910,11 +1910,11 @@ config MCUX_SDK_DEVICE_LPC845
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_power_no_lib
     select HAS_MCUX_SDK_utility_debug_console_lite
-    select HAS_MCUX_SDK_utility_assert_lite_LPC845
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_syscon_connections
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_inputmux
     select HAS_MCUX_SDK_driver_inputmux_connections
     select HAS_MCUX_SDK_driver_iap
@@ -1946,7 +1946,6 @@ config MCUX_SDK_DEVICE_MCIMX7U5
     select HAS_MCUX_SDK_driver_lpi2c_edma
     select HAS_MCUX_SDK_driver_gpio
     select HAS_MCUX_SDK_component_lists
-    select HAS_MCUX_SDK_component_serial_manager_MCIMX7U5
     select HAS_MCUX_SDK_driver_snvs_hp
     select HAS_MCUX_SDK_driver_snvs_lp
     select HAS_MCUX_SDK_driver_lpit
@@ -1965,28 +1964,27 @@ config MCUX_SDK_DEVICE_MCIMX7U5
     select HAS_MCUX_SDK_driver_lpuart
     select HAS_MCUX_SDK_driver_flexio_spi
     select HAS_MCUX_SDK_driver_lpadc
-    select HAS_MCUX_SDK_middleware_mmcau_common_files
     select HAS_MCUX_SDK_driver_flexio
     select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_driver_trgmux
     select HAS_MCUX_SDK_CMSIS_Driver_Include_I2C
     select HAS_MCUX_SDK_driver_wm8960
     select HAS_MCUX_SDK_driver_dac12
-    select HAS_MCUX_SDK_component_serial_manager_uart_MCIMX7U5
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_cache_lmem
-    select HAS_MCUX_SDK_utility_assert_lite_MCIMX7U5
     select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_middleware_mmcau_cm4_cm7
     select HAS_MCUX_SDK_driver_lpi2c
     select HAS_MCUX_SDK_driver_wdog32
     select HAS_MCUX_SDK_driver_xrdc
     select HAS_MCUX_SDK_driver_lpspi_edma
-    select HAS_MCUX_SDK_driver_codec_MCIMX7U5
+    select HAS_MCUX_SDK_middleware_issdk_sensor_allregdefs
     select HAS_MCUX_SDK_driver_lpuart_edma
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_sema42
     select HAS_MCUX_SDK_CMSIS_Driver_Include_Common
     select HAS_MCUX_SDK_driver_tstmr
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_driver_qspi_edma
     select HAS_MCUX_SDK_CMSIS_Include_core_cm4
     select HAS_MCUX_SDK_CMSIS_Include_common
@@ -1997,12 +1995,14 @@ config MCUX_SDK_DEVICE_MCIMX7U5
     select HAS_MCUX_SDK_driver_srtm
     select HAS_MCUX_SDK_middleware_issdk_algorithms_pedometer_lib_cm4
     select HAS_MCUX_SDK_component_wm8960_adapter
-    select HAS_MCUX_SDK_middleware_issdk_sensor_allregdefs
+    select HAS_MCUX_SDK_component_serial_manager
+    select HAS_MCUX_SDK_middleware_mmcau_common_files
     select HAS_MCUX_SDK_driver_tpm
     select HAS_MCUX_SDK_driver_fxos8700cq
     select HAS_MCUX_SDK_driver_lptmr
     select HAS_MCUX_SDK_component_lpi2c_adapter
     select HAS_MCUX_SDK_driver_sai
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_sai_edma
     select HAS_MCUX_SDK_driver_flexio_i2c_master
     select HAS_MCUX_SDK_driver_mu
@@ -2019,7 +2019,6 @@ config MCUX_SDK_DEVICE_MCIMX7U5
 config MCUX_SDK_DEVICE_MIMX8MM6
     bool
     select HAS_MCUX_SDK_component_codec_wm8524_adapter
-    select HAS_MCUX_SDK_utility_assert_lite_MIMX8MM6
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_driver_rdc
     select HAS_MCUX_SDK_driver_ii2c
@@ -2036,8 +2035,8 @@ config MCUX_SDK_DEVICE_MIMX8MM6
     select HAS_MCUX_SDK_driver_ipwm
     select HAS_MCUX_SDK_driver_ecspi
     select HAS_MCUX_SDK_component_codec_ak4497_adapter
-    select HAS_MCUX_SDK_driver_codec_MIMX8MM6
     select HAS_MCUX_SDK_driver_sdma
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_cache_lmem
     select HAS_MCUX_SDK_driver_tmu_1
     select HAS_MCUX_SDK_driver_iuart_sdma
@@ -2050,22 +2049,23 @@ config MCUX_SDK_DEVICE_MIMX8MM6
     select HAS_MCUX_SDK_driver_sai_sdma
     select HAS_MCUX_SDK_component_iuart_adapter
     select HAS_MCUX_SDK_component_wm8524_adapter
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_core_cm4
-    select HAS_MCUX_SDK_component_serial_manager_uart_MIMX8MM6
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_sema4
     select HAS_MCUX_SDK_component_ii2c_adapter
     select HAS_MCUX_SDK_driver_srtm
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_igpio
     select HAS_MCUX_SDK_driver_pdm_sdma
     select HAS_MCUX_SDK_component_codec_i2c_MIMX8MM6
     select HAS_MCUX_SDK_driver_sai
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_wm8524
     select HAS_MCUX_SDK_driver_pdm
     select HAS_MCUX_SDK_driver_mu
-    select HAS_MCUX_SDK_component_serial_manager_MIMX8MM6
     select MCU_SDK_DEVICE if MCUX_SDK_DEVICE_MIMX8MM6
     if MCUX_SDK_DEVICE_MIMX8MM6
         config MCUX_DEVICE
@@ -2075,7 +2075,6 @@ config MCUX_SDK_DEVICE_MIMX8MM6
 config MCUX_SDK_DEVICE_MIMX8MN6
     bool
     select HAS_MCUX_SDK_component_codec_wm8524_adapter
-    select HAS_MCUX_SDK_utility_debug_console_lite
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_driver_rdc
     select HAS_MCUX_SDK_driver_ii2c
@@ -2084,7 +2083,7 @@ config MCUX_SDK_DEVICE_MIMX8MN6
     select HAS_MCUX_SDK_device_system
     select HAS_MCUX_SDK_device_startup
     select HAS_MCUX_SDK_driver_clock
-    select HAS_MCUX_SDK_utility_assert_lite_MIMX8MN6
+    select HAS_MCUX_SDK_utility_debug_console_lite
     select HAS_MCUX_SDK_driver_memory
     select HAS_MCUX_SDK_driver_gpt
     select HAS_MCUX_SDK_driver_easrc
@@ -2092,7 +2091,7 @@ config MCUX_SDK_DEVICE_MIMX8MN6
     select HAS_MCUX_SDK_driver_ipwm
     select HAS_MCUX_SDK_driver_ecspi
     select HAS_MCUX_SDK_driver_sdma
-    select HAS_MCUX_SDK_component_serial_manager_MIMX8MN6
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_tmu_1
     select HAS_MCUX_SDK_driver_iuart_sdma
     select HAS_MCUX_SDK_driver_rdc_sema42
@@ -2105,20 +2104,21 @@ config MCUX_SDK_DEVICE_MIMX8MN6
     select HAS_MCUX_SDK_component_iuart_adapter
     select HAS_MCUX_SDK_component_wm8524_adapter
     select HAS_MCUX_SDK_CMSIS_Include_core_cm7
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_easrc_sdma
     select HAS_MCUX_SDK_driver_sema4
-    select HAS_MCUX_SDK_component_serial_manager_uart_MIMX8MN6
+    select HAS_MCUX_SDK_driver_pdm
     select HAS_MCUX_SDK_driver_srtm
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_igpio
     select HAS_MCUX_SDK_driver_pdm_sdma
     select HAS_MCUX_SDK_driver_sai
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_wm8524
-    select HAS_MCUX_SDK_driver_pdm
     select HAS_MCUX_SDK_driver_mu
-    select HAS_MCUX_SDK_driver_codec_MIMX8MN6
     select MCU_SDK_DEVICE if MCUX_SDK_DEVICE_MIMX8MN6
     if MCUX_SDK_DEVICE_MIMX8MN6
         config MCUX_DEVICE
@@ -2132,7 +2132,6 @@ config MCUX_SDK_DEVICE_MIMX8MQ6
     select HAS_MCUX_SDK_driver_ii2c
     select HAS_MCUX_SDK_component_lists
     select HAS_MCUX_SDK_device_system
-    select HAS_MCUX_SDK_driver_codec_MIMX8MQ6
     select HAS_MCUX_SDK_device_startup
     select HAS_MCUX_SDK_driver_clock
     select HAS_MCUX_SDK_utility_debug_console_lite
@@ -2140,13 +2139,14 @@ config MCUX_SDK_DEVICE_MIMX8MQ6
     select HAS_MCUX_SDK_driver_iuart
     select HAS_MCUX_SDK_driver_ipwm
     select HAS_MCUX_SDK_driver_ecspi
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_cache_lmem
     select HAS_MCUX_SDK_driver_rdc_sema42
-    select HAS_MCUX_SDK_utility_assert_lite_MIMX8MQ6
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_wdog01
     select HAS_MCUX_SDK_component_iuart_adapter
     select HAS_MCUX_SDK_component_wm8524_adapter
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_core_cm4
     select HAS_MCUX_SDK_CMSIS_Include_common
@@ -2165,10 +2165,10 @@ config MCUX_SDK_DEVICE_MIMX8MQ6
 
 config MCUX_SDK_DEVICE_MIMX8QM6
     bool
-    select HAS_MCUX_SDK_utility_assert_lite_MIMX8QM6_cm4_core0
     select HAS_MCUX_SDK_driver_esai
-    select HAS_MCUX_SDK_driver_codec_MIMX8QM6_cm4_core0
+    select HAS_MCUX_SDK_driver_mdio-enet
     select HAS_MCUX_SDK_driver_flexspi
+    select HAS_MCUX_SDK_driver_lpuart
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_lpuart_adapter
     select HAS_MCUX_SDK_driver_wdog32
@@ -2177,7 +2177,7 @@ config MCUX_SDK_DEVICE_MIMX8QM6
     select HAS_MCUX_SDK_driver_sai_edma
     select HAS_MCUX_SDK_component_lists
     select HAS_MCUX_SDK_driver_tpm
-    select HAS_MCUX_SDK_driver_enet_MIMX8QM6_cm4_core0
+    select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_middleware_mmcau_common_files
     select HAS_MCUX_SDK_driver_lpadc
     select HAS_MCUX_SDK_driver_clock
@@ -2189,43 +2189,43 @@ config MCUX_SDK_DEVICE_MIMX8QM6
     select HAS_MCUX_SDK_component_cs42888_adapter
     select HAS_MCUX_SDK_driver_gpt
     select HAS_MCUX_SDK_utility_assert
-    select HAS_MCUX_SDK_driver_lpuart
+    select HAS_MCUX_SDK_driver_enet
     select HAS_MCUX_SDK_middleware_mmcau_cm4_cm7
     select HAS_MCUX_SDK_driver_phy-device-ar8031
     select HAS_MCUX_SDK_driver_phy-common
     select HAS_MCUX_SDK_driver_ftm
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_cache_lmem
     select HAS_MCUX_SDK_driver_dma3
-    select HAS_MCUX_SDK_driver_mu
     select HAS_MCUX_SDK_driver_lpi2c
     select HAS_MCUX_SDK_driver_flexcan_edma
-    select HAS_MCUX_SDK_driver_memory
     select HAS_MCUX_SDK_driver_flexcan
     select HAS_MCUX_SDK_driver_lpuart_edma
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_sema42
     select HAS_MCUX_SDK_driver_lpspi_edma
-    select HAS_MCUX_SDK_driver_tstmr
     select HAS_MCUX_SDK_driver_sc_event
+    select HAS_MCUX_SDK_driver_tstmr
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_core_cm4
     select HAS_MCUX_SDK_driver_scfw_api
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_asmc
-    select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_component_wm8960_adapter
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_igpio
     select HAS_MCUX_SDK_component_lpi2c_adapter
     select HAS_MCUX_SDK_driver_sai
     select HAS_MCUX_SDK_driver_cs42888
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_irqsteer
-    select HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core0
-    select HAS_MCUX_SDK_driver_mdio-enet
+    select HAS_MCUX_SDK_driver_mu
     select HAS_MCUX_SDK_driver_intmux
     select HAS_MCUX_SDK_device_startup_MIMX8QM6_cm4_core0
-    select HAS_MCUX_SDK_component_serial_manager_uart_MIMX8QM6_cm4_core0
-    select HAS_MCUX_SDK_component_serial_manager_MIMX8QM6_cm4_core0
+    select HAS_MCUX_SDK_driver_memory
+    select HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core0
     select HAS_MCUX_SDK_driver_esai_edma
     select HAS_MIDDLEWARE
     select MCU_SDK_DEVICE if MCUX_SDK_DEVICE_MIMX8QM6
@@ -2249,9 +2249,13 @@ config MCUX_SDK_DEVICE_MIMX8QM6
     select HAS_MCUX_SDK_driver_display-common
     select HAS_MCUX_SDK_driver_lpuart_edma
     select HAS_MCUX_SDK_driver_lpspi_edma
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_core_cm4
+    select HAS_MCUX_SDK_component_serial_manager
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_esai_edma
+    select HAS_MCUX_SDK_driver_enet
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_lpuart_adapter
     select HAS_MCUX_SDK_driver_lpi2c_edma
@@ -2281,13 +2285,12 @@ config MCUX_SDK_DEVICE_MIMX8QM6
     select HAS_MCUX_SDK_driver_mipi_dsi
     select HAS_MCUX_SDK_driver_isi
     select HAS_MCUX_SDK_driver_lpspi
-    select HAS_MCUX_SDK_driver_esai
-    select HAS_MCUX_SDK_driver_enet_MIMX8QM6_cm4_core1
     select HAS_MCUX_SDK_driver_clock
     select HAS_MCUX_SDK_utility_debug_console_lite
     select HAS_MCUX_SDK_driver_rgpio
     select HAS_MCUX_SDK_driver_mdio-common
     select HAS_MCUX_SDK_driver_camera-device-max9286
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_flexcan
     select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_driver_ldb
@@ -2295,8 +2298,7 @@ config MCUX_SDK_DEVICE_MIMX8QM6
     select HAS_MCUX_SDK_component_wm8960_adapter
     select HAS_MCUX_SDK_driver_cs42888
     select HAS_MCUX_SDK_driver_irqsteer
-    select HAS_MCUX_SDK_component_serial_manager_MIMX8QM6_cm4_core1
-    select HAS_MCUX_SDK_driver_codec_MIMX8QM6_cm4_core1
+    select HAS_MCUX_SDK_driver_esai
     select HAS_MCUX_SDK_driver_display-rm67191
     select HAS_MCUX_SDK_driver_flexspi
     select HAS_MCUX_SDK_driver_display-it6263
@@ -2313,14 +2315,12 @@ config MCUX_SDK_DEVICE_MIMX8QM6
     select HAS_MCUX_SDK_driver_lpi2c
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_asmc
-    select HAS_MCUX_SDK_utility_assert_lite_MIMX8QM6_cm4_core1
     select HAS_MCUX_SDK_driver_igpio
     select HAS_MCUX_SDK_driver_mipi_csi2rx
     select HAS_MCUX_SDK_driver_sai
     select HAS_MCUX_SDK_driver_display-adv7535
     select HAS_MCUX_SDK_driver_mu
     select HAS_MCUX_SDK_driver_intmux
-    select HAS_MCUX_SDK_component_serial_manager_uart_MIMX8QM6_cm4_core1
     select HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core1
     select HAS_MIDDLEWARE
     select MCU_SDK_DEVICE if MCUX_SDK_DEVICE_MIMX8QM6
@@ -2362,15 +2362,14 @@ config MCUX_SDK_DEVICE_MIMX8QX6
     select HAS_MCUX_SDK_component_cs42888_adapter
     select HAS_MCUX_SDK_driver_gpt
     select HAS_MCUX_SDK_utility_assert
-    select HAS_MCUX_SDK_driver_lpuart
-    select HAS_MCUX_SDK_driver_sema42
+    select HAS_MCUX_SDK_driver_enet
     select HAS_MCUX_SDK_driver_lpadc
     select HAS_MCUX_SDK_driver_phy-device-ar8031
-    select HAS_MCUX_SDK_component_serial_manager_MIMX8QX6
+    select HAS_MCUX_SDK_driver_phy-common
     select HAS_MCUX_SDK_driver_ftm
     select HAS_MCUX_SDK_driver_display-it6263
-    select HAS_MCUX_SDK_driver_enet_MIMX8QX6
     select HAS_MCUX_SDK_driver_ldb_combo_phy
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_intmux
     select HAS_MCUX_SDK_driver_camera-receiver-common
     select HAS_MCUX_SDK_driver_cache_lmem
@@ -2384,21 +2383,22 @@ config MCUX_SDK_DEVICE_MIMX8QX6
     select HAS_MCUX_SDK_driver_display-mipi-dsi-cmd
     select HAS_MCUX_SDK_driver_dpr
     select HAS_MCUX_SDK_device_CMSIS
-    select HAS_MCUX_SDK_component_serial_manager_uart_MIMX8QX6
+    select HAS_MCUX_SDK_driver_sema42
     select HAS_MCUX_SDK_driver_srtm_freertos
-    select HAS_MCUX_SDK_utility_assert_lite_MIMX8QX6
     select HAS_MCUX_SDK_driver_lpuart_edma
     select HAS_MCUX_SDK_driver_display-adv7535
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_core_cm4
     select HAS_MCUX_SDK_driver_camera-device-sccb
-    select HAS_MCUX_SDK_driver_phy-common
+    select HAS_MCUX_SDK_driver_lpuart
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_asmc
     select HAS_MCUX_SDK_driver_scfw_api
     select HAS_MCUX_SDK_driver_wdog32
     select HAS_MCUX_SDK_component_wm8960_adapter
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_mipi_dsi
     select HAS_MCUX_SDK_driver_camera-common
     select HAS_MCUX_SDK_driver_igpio
@@ -2408,11 +2408,11 @@ config MCUX_SDK_DEVICE_MIMX8QX6
     select HAS_MCUX_SDK_component_lpi2c_adapter
     select HAS_MCUX_SDK_component_codec_i2c_MIMX8QX6
     select HAS_MCUX_SDK_driver_cs42888
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_irqsteer
     select HAS_MCUX_SDK_driver_sai
     select HAS_MCUX_SDK_driver_mdio-enet
     select HAS_MCUX_SDK_driver_camera-device-max9286
-    select HAS_MCUX_SDK_driver_codec_MIMX8QX6
     select HAS_MCUX_SDK_driver_memory
     select HAS_MCUX_SDK_middleware_mmcau_cm4_cm7
     select HAS_MCUX_SDK_driver_esai_edma
@@ -2425,7 +2425,6 @@ config MCUX_SDK_DEVICE_MIMX8QX6
 
 config MCUX_SDK_DEVICE_MIMXRT1011
     bool
-    select HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1011
     select HAS_MCUX_SDK_driver_igpio
     select HAS_MCUX_SDK_driver_rtwatchdog
     select HAS_MCUX_SDK_driver_flexspi
@@ -2441,7 +2440,6 @@ config MCUX_SDK_DEVICE_MIMXRT1011
     select HAS_MCUX_SDK_driver_snvs_hp
     select HAS_MCUX_SDK_device_system
     select HAS_MCUX_SDK_driver_snvs_lp
-    select HAS_MCUX_SDK_driver_codec_MIMXRT1011
     select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_device_startup
@@ -2455,13 +2453,12 @@ config MCUX_SDK_DEVICE_MIMXRT1011
     select HAS_MCUX_SDK_driver_gpt
     select HAS_MCUX_SDK_driver_lpuart
     select HAS_MCUX_SDK_driver_flexio_spi
-    select HAS_MCUX_SDK_utility_assert_lite_MIMXRT1011
     select HAS_MCUX_SDK_driver_iomuxc
-    select HAS_MCUX_SDK_driver_xbara
     select HAS_MCUX_SDK_driver_flexio
     select HAS_MCUX_SDK_middleware_usb_device_common_header
     select HAS_MCUX_SDK_driver_wm8960
     select HAS_MCUX_SDK_driver_flexram
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_flexio_i2c_master
     select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_middleware_baremetal
@@ -2478,6 +2475,7 @@ config MCUX_SDK_DEVICE_MIMXRT1011
     select HAS_MCUX_SDK_driver_dcdc_1
     select HAS_MCUX_SDK_driver_ocotp
     select HAS_MCUX_SDK_CMSIS_Include_core_cm7
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_driver_lpi2c
     select HAS_MCUX_SDK_driver_adc_12b1msps_sar
@@ -2488,6 +2486,7 @@ config MCUX_SDK_DEVICE_MIMXRT1011
     select HAS_MCUX_SDK_component_codec_i2c_MIMXRT1011
     select HAS_MCUX_SDK_driver_xip_device
     select HAS_MCUX_SDK_component_wm8960_adapter
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_xip_board
     select HAS_MCUX_SDK_driver_fxos8700cq
     select HAS_MCUX_SDK_driver_adc_etc
@@ -2495,10 +2494,11 @@ config MCUX_SDK_DEVICE_MIMXRT1011
     select HAS_MCUX_SDK_driver_pit
     select HAS_MCUX_SDK_component_lpi2c_adapter
     select HAS_MCUX_SDK_driver_sai
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_gpc_1
     select HAS_MCUX_SDK_driver_cache_armv7_m7
     select HAS_MCUX_SDK_driver_dcp
-    select HAS_MCUX_SDK_component_serial_manager_MIMXRT1011
+    select HAS_MCUX_SDK_driver_xbara
     select HAS_MCUX_SDK_driver_flexio_i2s_edma
     select HAS_MIDDLEWARE
     select MCU_SDK_DEVICE if MCUX_SDK_DEVICE_MIMXRT1011
@@ -2510,7 +2510,6 @@ config MCUX_SDK_DEVICE_MIMXRT1011
 config MCUX_SDK_DEVICE_MIMXRT1015
     bool
     select HAS_MCUX_SDK_driver_igpio
-    select HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1015
     select HAS_MCUX_SDK_driver_rtwatchdog
     select HAS_MCUX_SDK_driver_flexspi
     select HAS_MCUX_SDK_driver_flexio_spi_edma
@@ -2527,7 +2526,7 @@ config MCUX_SDK_DEVICE_MIMXRT1015
     select HAS_MCUX_SDK_device_system
     select HAS_MCUX_SDK_driver_snvs_lp
     select HAS_MCUX_SDK_utility_debug_console
-    select HAS_MCUX_SDK_driver_codec_MIMXRT1015
+    select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_device_startup
     select HAS_MCUX_SDK_driver_tempmon
     select HAS_MCUX_SDK_driver_clock
@@ -2537,14 +2536,15 @@ config MCUX_SDK_DEVICE_MIMXRT1015
     select HAS_MCUX_SDK_driver_edma
     select HAS_MCUX_SDK_driver_ewm
     select HAS_MCUX_SDK_driver_gpt
-    select HAS_MCUX_SDK_utility_assert_lite_MIMXRT1015
     select HAS_MCUX_SDK_driver_lpuart
+    select HAS_MCUX_SDK_driver_wdog01
     select HAS_MCUX_SDK_driver_flexio_spi
     select HAS_MCUX_SDK_driver_iomuxc
     select HAS_MCUX_SDK_driver_flexio
     select HAS_MCUX_SDK_middleware_usb_device_common_header
     select HAS_MCUX_SDK_driver_wm8960
     select HAS_MCUX_SDK_driver_flexram
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_bee
     select HAS_MCUX_SDK_driver_flexio_i2c_master
     select HAS_MCUX_SDK_middleware_usb_common_header
@@ -2562,7 +2562,7 @@ config MCUX_SDK_DEVICE_MIMXRT1015
     select HAS_MCUX_SDK_driver_dcp
     select HAS_MCUX_SDK_driver_ocotp
     select HAS_MCUX_SDK_CMSIS_Include_core_cm7
-    select HAS_MCUX_SDK_driver_wdog01
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_driver_lpi2c
     select HAS_MCUX_SDK_driver_adc_12b1msps_sar
@@ -2573,6 +2573,7 @@ config MCUX_SDK_DEVICE_MIMXRT1015
     select HAS_MCUX_SDK_driver_kpp
     select HAS_MCUX_SDK_component_codec_i2c_MIMXRT1015
     select HAS_MCUX_SDK_component_wm8960_adapter
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_xip_board
     select HAS_MCUX_SDK_driver_fxos8700cq
     select HAS_MCUX_SDK_driver_adc_etc
@@ -2580,12 +2581,11 @@ config MCUX_SDK_DEVICE_MIMXRT1015
     select HAS_MCUX_SDK_driver_pit
     select HAS_MCUX_SDK_component_lpi2c_adapter
     select HAS_MCUX_SDK_driver_sai
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_gpc_1
     select HAS_MCUX_SDK_driver_cache_armv7_m7
     select HAS_MCUX_SDK_driver_dcdc_1
-    select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_driver_xbara
-    select HAS_MCUX_SDK_component_serial_manager_MIMXRT1015
     select HAS_MCUX_SDK_driver_flexio_i2s_edma
     select HAS_MIDDLEWARE
     select MCU_SDK_DEVICE if MCUX_SDK_DEVICE_MIMXRT1015
@@ -2601,7 +2601,6 @@ config MCUX_SDK_DEVICE_MIMXRT1021
     select HAS_MCUX_SDK_device_system
     select HAS_MCUX_SDK_driver_snvs_lp
     select HAS_MCUX_SDK_driver_mdio-enet
-    select HAS_MCUX_SDK_driver_codec_MIMXRT1021
     select HAS_MCUX_SDK_driver_flexio_uart
     select HAS_MCUX_SDK_driver_wm8960
     select HAS_MCUX_SDK_driver_ewm
@@ -2617,10 +2616,12 @@ config MCUX_SDK_DEVICE_MIMXRT1021
     select HAS_MCUX_SDK_driver_flexio_uart_edma
     select HAS_MCUX_SDK_driver_ocotp
     select HAS_MCUX_SDK_CMSIS_Include_core_cm7
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_driver_xip_device
-    select HAS_MCUX_SDK_utility_assert_lite_MIMXRT1021
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_pit
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_tempmon
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_lpuart_adapter
@@ -2629,14 +2630,13 @@ config MCUX_SDK_DEVICE_MIMXRT1021
     select HAS_MCUX_SDK_driver_phy-device-ksz8081
     select HAS_MCUX_SDK_driver_usdhc
     select HAS_MCUX_SDK_driver_gpt
+    select HAS_MCUX_SDK_driver_enet
     select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_middleware_usb_device_common_header
     select HAS_MCUX_SDK_driver_soc_flexram_allocate
     select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_romapi
-    select HAS_MCUX_SDK_driver_flexcan
-    select HAS_MCUX_SDK_utility_debug_console_lite
     select HAS_MCUX_SDK_component_osa_bm
     select HAS_MCUX_SDK_driver_adc_12b1msps_sar
     select HAS_MCUX_SDK_driver_common
@@ -2648,15 +2648,16 @@ config MCUX_SDK_DEVICE_MIMXRT1021
     select HAS_MCUX_SDK_driver_lpspi
     select HAS_MCUX_SDK_driver_flexspi_edma
     select HAS_MCUX_SDK_driver_clock
-    select HAS_MCUX_SDK_component_serial_manager_MIMXRT1021
+    select HAS_MCUX_SDK_utility_debug_console_lite
     select HAS_MCUX_SDK_driver_mdio-common
     select HAS_MCUX_SDK_driver_iomuxc
     select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_driver_flexram
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_semc
     select HAS_MCUX_SDK_driver_xbarb
     select HAS_MCUX_SDK_driver_xbara
-    select HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1021
+    select HAS_MCUX_SDK_driver_flexcan
     select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_component_wm8960_adapter
     select HAS_MCUX_SDK_driver_enc
@@ -2666,7 +2667,7 @@ config MCUX_SDK_DEVICE_MIMXRT1021
     select HAS_MCUX_SDK_driver_flexspi
     select HAS_MCUX_SDK_driver_flexio_spi_edma
     select HAS_MCUX_SDK_driver_qtmr_1
-    select HAS_MCUX_SDK_driver_trng
+    select HAS_MCUX_SDK_driver_pwm
     select HAS_MCUX_SDK_driver_sai_edma
     select HAS_MCUX_SDK_component_lists
     select HAS_MCUX_SDK_driver_cmp
@@ -2674,7 +2675,6 @@ config MCUX_SDK_DEVICE_MIMXRT1021
     select HAS_MCUX_SDK_driver_rtwatchdog
     select HAS_MCUX_SDK_driver_lpuart
     select HAS_MCUX_SDK_driver_flexio_spi
-    select HAS_MCUX_SDK_driver_enet_MIMXRT1021
     select HAS_MCUX_SDK_driver_src
     select HAS_MCUX_SDK_driver_lpi2c
     select HAS_MCUX_SDK_CMSIS_Include_common
@@ -2682,7 +2682,7 @@ config MCUX_SDK_DEVICE_MIMXRT1021
     select HAS_MCUX_SDK_driver_fxos8700cq
     select HAS_MCUX_SDK_driver_xip_board
     select HAS_MCUX_SDK_driver_igpio
-    select HAS_MCUX_SDK_driver_pwm
+    select HAS_MCUX_SDK_driver_trng
     select HAS_MCUX_SDK_driver_sai
     select HAS_MCUX_SDK_driver_cache_armv7_m7
     select HAS_MCUX_SDK_driver_flexio_i2s_edma
@@ -2715,19 +2715,21 @@ config MCUX_SDK_DEVICE_MIMXRT1024
     select HAS_MCUX_SDK_driver_flexio_uart_edma
     select HAS_MCUX_SDK_driver_ocotp
     select HAS_MCUX_SDK_CMSIS_Include_core_cm7
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_driver_xip_device
-    select HAS_MCUX_SDK_utility_assert_lite_MIMXRT1024
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_pit
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_tempmon
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_lpuart_adapter
     select HAS_MCUX_SDK_driver_lpi2c_edma
-    select HAS_MCUX_SDK_driver_codec_MIMXRT1024
     select HAS_MCUX_SDK_device_startup
     select HAS_MCUX_SDK_driver_phy-device-ksz8081
     select HAS_MCUX_SDK_driver_usdhc
     select HAS_MCUX_SDK_driver_gpt
+    select HAS_MCUX_SDK_driver_enet
     select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_middleware_usb_device_common_header
     select HAS_MCUX_SDK_driver_soc_flexram_allocate
@@ -2738,7 +2740,6 @@ config MCUX_SDK_DEVICE_MIMXRT1024
     select HAS_MCUX_SDK_driver_adc_12b1msps_sar
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_kpp
-    select HAS_MCUX_SDK_driver_mdio-common
     select HAS_MCUX_SDK_driver_adc_etc
     select HAS_MCUX_SDK_component_lpi2c_adapter
     select HAS_MCUX_SDK_driver_dcdc_1
@@ -2747,16 +2748,16 @@ config MCUX_SDK_DEVICE_MIMXRT1024
     select HAS_MCUX_SDK_driver_flexspi_edma
     select HAS_MCUX_SDK_driver_clock
     select HAS_MCUX_SDK_utility_debug_console_lite
-    select HAS_MCUX_SDK_component_serial_manager_MIMXRT1024
+    select HAS_MCUX_SDK_driver_mdio-common
     select HAS_MCUX_SDK_driver_iomuxc
     select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_driver_flexram
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_semc
     select HAS_MCUX_SDK_driver_xbarb
     select HAS_MCUX_SDK_driver_xbara
     select HAS_MCUX_SDK_driver_flexcan
     select HAS_MCUX_SDK_utility_debug_console
-    select HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1024
     select HAS_MCUX_SDK_component_wm8960_adapter
     select HAS_MCUX_SDK_driver_enc
     select HAS_MCUX_SDK_driver_gpc_1
@@ -2765,13 +2766,12 @@ config MCUX_SDK_DEVICE_MIMXRT1024
     select HAS_MCUX_SDK_driver_flexspi
     select HAS_MCUX_SDK_driver_flexio_spi_edma
     select HAS_MCUX_SDK_driver_qtmr_1
-    select HAS_MCUX_SDK_driver_trng
+    select HAS_MCUX_SDK_driver_pwm
     select HAS_MCUX_SDK_driver_sai_edma
     select HAS_MCUX_SDK_component_lists
     select HAS_MCUX_SDK_driver_cmp
     select HAS_MCUX_SDK_component_osa
     select HAS_MCUX_SDK_driver_rtwatchdog
-    select HAS_MCUX_SDK_driver_enet_MIMXRT1024
     select HAS_MCUX_SDK_driver_lpuart
     select HAS_MCUX_SDK_driver_flexio_spi
     select HAS_MCUX_SDK_driver_src
@@ -2781,7 +2781,7 @@ config MCUX_SDK_DEVICE_MIMXRT1024
     select HAS_MCUX_SDK_driver_fxos8700cq
     select HAS_MCUX_SDK_driver_xip_board
     select HAS_MCUX_SDK_driver_igpio
-    select HAS_MCUX_SDK_driver_pwm
+    select HAS_MCUX_SDK_driver_trng
     select HAS_MCUX_SDK_driver_sai
     select HAS_MCUX_SDK_driver_cache_armv7_m7
     select HAS_MCUX_SDK_driver_flexio_i2s_edma
@@ -2816,23 +2816,24 @@ config MCUX_SDK_DEVICE_MIMXRT1052
     select HAS_MCUX_SDK_driver_flexio_uart_edma
     select HAS_MCUX_SDK_driver_ocotp
     select HAS_MCUX_SDK_CMSIS_Include_core_cm7
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_driver_pxp
     select HAS_MCUX_SDK_driver_xip_device
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_camera-device-ov7725
     select HAS_MCUX_SDK_driver_pit
-    select HAS_MCUX_SDK_driver_pwm
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_tempmon
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_lpuart_adapter
     select HAS_MCUX_SDK_driver_lpi2c_edma
-    select HAS_MCUX_SDK_driver_codec_MIMXRT1052
     select HAS_MCUX_SDK_device_startup
-    select HAS_MCUX_SDK_utility_assert_lite_MIMXRT1052
     select HAS_MCUX_SDK_driver_phy-device-ksz8081
     select HAS_MCUX_SDK_driver_usdhc
     select HAS_MCUX_SDK_component_cs42888_adapter
     select HAS_MCUX_SDK_driver_gpt
+    select HAS_MCUX_SDK_driver_enet
     select HAS_MCUX_SDK_driver_camera-receiver-common
     select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_middleware_usb_device_common_header
@@ -2860,26 +2861,24 @@ config MCUX_SDK_DEVICE_MIMXRT1052
     select HAS_MCUX_SDK_driver_iomuxc
     select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_driver_flexram
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_semc
-    select HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1052
     select HAS_MCUX_SDK_driver_xbarb
     select HAS_MCUX_SDK_driver_xbara
     select HAS_MCUX_SDK_driver_flexcan
     select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_driver_camera-receiver-csi
-    select HAS_MCUX_SDK_component_serial_manager_MIMXRT1052
     select HAS_MCUX_SDK_component_wm8960_adapter
     select HAS_MCUX_SDK_driver_enc
     select HAS_MCUX_SDK_driver_cs42888
     select HAS_MCUX_SDK_driver_sai_edma
     select HAS_MCUX_SDK_driver_dc-fb-elcdif
     select HAS_MCUX_SDK_driver_dcp
-    select HAS_MCUX_SDK_driver_enet_MIMXRT1052
     select HAS_MCUX_SDK_driver_edma
     select HAS_MCUX_SDK_driver_flexspi
     select HAS_MCUX_SDK_driver_flexio_spi_edma
     select HAS_MCUX_SDK_driver_qtmr_1
-    select HAS_MCUX_SDK_driver_pwm
+    select HAS_MCUX_SDK_component_codec_i2c_MIMXRT1052
     select HAS_MCUX_SDK_driver_gpc_1
     select HAS_MCUX_SDK_component_lists
     select HAS_MCUX_SDK_driver_video-i2c
@@ -2896,7 +2895,7 @@ config MCUX_SDK_DEVICE_MIMXRT1052
     select HAS_MCUX_SDK_driver_elcdif
     select HAS_MCUX_SDK_driver_xip_board
     select HAS_MCUX_SDK_driver_igpio
-    select HAS_MCUX_SDK_component_codec_i2c_MIMXRT1052
+    select HAS_MCUX_SDK_driver_pwm
     select HAS_MCUX_SDK_driver_sai
     select HAS_MCUX_SDK_driver_cache_armv7_m7
     select HAS_MCUX_SDK_driver_flexio_i2s_edma
@@ -2919,24 +2918,26 @@ config MCUX_SDK_DEVICE_MIMXRT1062
     select HAS_MCUX_SDK_driver_flexio_uart
     select HAS_MCUX_SDK_driver_wm8960
     select HAS_MCUX_SDK_driver_ewm
-    select HAS_MCUX_SDK_component_serial_manager_MIMXRT1062
     select HAS_MCUX_SDK_driver_flexio
     select HAS_MCUX_SDK_driver_aoi
     select HAS_MCUX_SDK_driver_bee
     select HAS_MCUX_SDK_driver_flexio_i2c_master
     select HAS_MCUX_SDK_middleware_baremetal
-    select HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1062
+    select HAS_MCUX_SDK_driver_camera-device-common
     select HAS_MCUX_SDK_driver_lpuart_edma
     select HAS_MCUX_SDK_driver_lpspi_edma
     select HAS_MCUX_SDK_driver_wdog01
     select HAS_MCUX_SDK_driver_flexio_uart_edma
     select HAS_MCUX_SDK_driver_ocotp
     select HAS_MCUX_SDK_CMSIS_Include_core_cm7
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_driver_pxp
     select HAS_MCUX_SDK_driver_xip_device
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_camera-device-ov7725
     select HAS_MCUX_SDK_driver_pit
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_tempmon
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_lpuart_adapter
@@ -2946,7 +2947,7 @@ config MCUX_SDK_DEVICE_MIMXRT1062
     select HAS_MCUX_SDK_driver_usdhc
     select HAS_MCUX_SDK_driver_gpt
     select HAS_MCUX_SDK_utility_assert
-    select HAS_MCUX_SDK_driver_enet_MIMXRT1062
+    select HAS_MCUX_SDK_driver_enet
     select HAS_MCUX_SDK_driver_camera-receiver-common
     select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_middleware_usb_device_common_header
@@ -2954,7 +2955,6 @@ config MCUX_SDK_DEVICE_MIMXRT1062
     select HAS_MCUX_SDK_driver_flexcan_edma
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_romapi
-    select HAS_MCUX_SDK_driver_codec_MIMXRT1062
     select HAS_MCUX_SDK_component_codec_i2c_MIMXRT1062
     select HAS_MCUX_SDK_component_osa_bm
     select HAS_MCUX_SDK_driver_camera-device-sccb
@@ -2962,7 +2962,7 @@ config MCUX_SDK_DEVICE_MIMXRT1062
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_kpp
     select HAS_MCUX_SDK_driver_camera-common
-    select HAS_MCUX_SDK_driver_camera-device-common
+    select HAS_MCUX_SDK_driver_adc_etc
     select HAS_MCUX_SDK_component_lpi2c_adapter
     select HAS_MCUX_SDK_driver_video-common
     select HAS_MCUX_SDK_driver_dcdc_1
@@ -2972,11 +2972,11 @@ config MCUX_SDK_DEVICE_MIMXRT1062
     select HAS_MCUX_SDK_driver_csi
     select HAS_MCUX_SDK_driver_clock
     select HAS_MCUX_SDK_utility_debug_console_lite
-    select HAS_MCUX_SDK_driver_adc_etc
     select HAS_MCUX_SDK_driver_mdio-common
     select HAS_MCUX_SDK_driver_iomuxc
     select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_driver_flexram
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_semc
     select HAS_MCUX_SDK_driver_xbarb
     select HAS_MCUX_SDK_driver_xbara
@@ -2988,7 +2988,6 @@ config MCUX_SDK_DEVICE_MIMXRT1062
     select HAS_MCUX_SDK_driver_gpc_1
     select HAS_MCUX_SDK_driver_dc-fb-elcdif
     select HAS_MCUX_SDK_driver_dcp
-    select HAS_MCUX_SDK_utility_assert_lite_MIMXRT1062
     select HAS_MCUX_SDK_driver_edma
     select HAS_MCUX_SDK_driver_flexspi
     select HAS_MCUX_SDK_driver_flexio_spi_edma
@@ -3033,12 +3032,11 @@ config MCUX_SDK_DEVICE_MIMXRT1064
     select HAS_MCUX_SDK_driver_flexio_uart
     select HAS_MCUX_SDK_driver_wm8960
     select HAS_MCUX_SDK_driver_ewm
-    select HAS_MCUX_SDK_component_serial_manager_MIMXRT1064
     select HAS_MCUX_SDK_driver_flexio
     select HAS_MCUX_SDK_driver_aoi
     select HAS_MCUX_SDK_driver_bee
     select HAS_MCUX_SDK_driver_flexio_i2c_master
-    select HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT1064
+    select HAS_MCUX_SDK_middleware_baremetal
     select HAS_MCUX_SDK_driver_camera-device-common
     select HAS_MCUX_SDK_driver_lpuart_edma
     select HAS_MCUX_SDK_driver_lpspi_edma
@@ -3046,11 +3044,14 @@ config MCUX_SDK_DEVICE_MIMXRT1064
     select HAS_MCUX_SDK_driver_flexio_uart_edma
     select HAS_MCUX_SDK_driver_ocotp
     select HAS_MCUX_SDK_CMSIS_Include_core_cm7
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_driver_pxp
     select HAS_MCUX_SDK_driver_xip_device
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_camera-device-ov7725
     select HAS_MCUX_SDK_driver_pit
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_tempmon
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_lpuart_adapter
@@ -3060,7 +3061,7 @@ config MCUX_SDK_DEVICE_MIMXRT1064
     select HAS_MCUX_SDK_driver_usdhc
     select HAS_MCUX_SDK_driver_gpt
     select HAS_MCUX_SDK_utility_assert
-    select HAS_MCUX_SDK_driver_enet_MIMXRT1064
+    select HAS_MCUX_SDK_driver_enet
     select HAS_MCUX_SDK_driver_camera-receiver-common
     select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_middleware_usb_device_common_header
@@ -3079,7 +3080,6 @@ config MCUX_SDK_DEVICE_MIMXRT1064
     select HAS_MCUX_SDK_component_lpi2c_adapter
     select HAS_MCUX_SDK_driver_video-common
     select HAS_MCUX_SDK_driver_dcdc_1
-    select HAS_MCUX_SDK_driver_codec_MIMXRT1064
     select HAS_MCUX_SDK_driver_snvs_hp
     select HAS_MCUX_SDK_driver_lpspi
     select HAS_MCUX_SDK_driver_flexspi_edma
@@ -3090,6 +3090,7 @@ config MCUX_SDK_DEVICE_MIMXRT1064
     select HAS_MCUX_SDK_driver_iomuxc
     select HAS_MCUX_SDK_utility_shell
     select HAS_MCUX_SDK_driver_flexram
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_semc
     select HAS_MCUX_SDK_driver_xbarb
     select HAS_MCUX_SDK_driver_xbara
@@ -3101,8 +3102,6 @@ config MCUX_SDK_DEVICE_MIMXRT1064
     select HAS_MCUX_SDK_driver_gpc_1
     select HAS_MCUX_SDK_driver_dc-fb-elcdif
     select HAS_MCUX_SDK_driver_dcp
-    select HAS_MCUX_SDK_utility_assert_lite_MIMXRT1064
-    select HAS_MCUX_SDK_middleware_baremetal
     select HAS_MCUX_SDK_driver_edma
     select HAS_MCUX_SDK_driver_flexspi
     select HAS_MCUX_SDK_driver_flexio_spi_edma
@@ -3142,6 +3141,7 @@ config MCUX_SDK_DEVICE_MIMXRT685S
     select HAS_MCUX_SDK_driver_hashcrypt
     select HAS_MCUX_SDK_driver_pint
     select HAS_MCUX_SDK_driver_ctimer
+    select HAS_MCUX_SDK_driver_utick
     select HAS_MCUX_SDK_driver_flexspi
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_usart_adapter
@@ -3163,14 +3163,14 @@ config MCUX_SDK_DEVICE_MIMXRT685S
     select HAS_MCUX_SDK_driver_fmeas
     select HAS_MCUX_SDK_driver_power
     select HAS_MCUX_SDK_component_cs42888_adapter
-    select HAS_MCUX_SDK_utility_assert_lite_MIMXRT685S_cm33
     select HAS_MCUX_SDK_driver_lpadc
     select HAS_MCUX_SDK_driver_wm8904
     select HAS_MCUX_SDK_driver_flexcomm_i2c_dma
     select HAS_MCUX_SDK_component_i3c_adapter
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_flexcomm_usart_dma
     select HAS_MCUX_SDK_driver_flexcomm_i2s
-    select HAS_MCUX_SDK_component_serial_manager_MIMXRT685S_cm33
+    select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_driver_flexcomm_spi
     select HAS_MCUX_SDK_component_tfa9xxx_adapter
     select HAS_MCUX_SDK_driver_dmic
@@ -3178,12 +3178,11 @@ config MCUX_SDK_DEVICE_MIMXRT685S
     select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_middleware_baremetal
     select HAS_MCUX_SDK_driver_sctimer
+    select HAS_MCUX_SDK_driver_puf
     select HAS_MCUX_SDK_driver_flexcomm_usart
     select HAS_MCUX_SDK_device_CMSIS
-    select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_driver_i3c
-    select HAS_MCUX_SDK_driver_utick_MIMXRT685S_cm33
-    select HAS_MCUX_SDK_component_serial_manager_uart_MIMXRT685S_cm33
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33
     select HAS_MCUX_SDK_driver_ostimer
@@ -3197,11 +3196,12 @@ config MCUX_SDK_DEVICE_MIMXRT685S
     select HAS_MCUX_SDK_driver_inputmux_connections
     select HAS_MCUX_SDK_driver_flexcomm_i2c
     select HAS_MCUX_SDK_driver_lpc_dma
-    select HAS_MCUX_SDK_driver_puf
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_lpc_iopctl
     select HAS_MCUX_SDK_driver_tfa9xxx
     select HAS_MCUX_SDK_driver_casper
     select HAS_MCUX_SDK_driver_cs42888
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_component_wm8904_adapter
     select HAS_MCUX_SDK_CMSIS_Include_core_cm33
     select HAS_MCUX_SDK_driver_lpc_crc
@@ -3209,7 +3209,6 @@ config MCUX_SDK_DEVICE_MIMXRT685S
     select HAS_MCUX_SDK_driver_reset
     select HAS_MCUX_SDK_driver_flexcomm_spi_dma
     select HAS_MCUX_SDK_driver_dmic_dma
-    select HAS_MCUX_SDK_driver_codec_MIMXRT685S_cm33
     select HAS_MIDDLEWARE
     select MCU_SDK_DEVICE if MCUX_SDK_DEVICE_MIMXRT685S
     if MCUX_SDK_DEVICE_MIMXRT685S
@@ -3222,8 +3221,7 @@ config MCUX_SDK_DEVICE_MK22F51212
     select HAS_MCUX_SDK_middleware_usb_device_common_header
     select HAS_MCUX_SDK_driver_llwu
     select HAS_MCUX_SDK_driver_dspi
-    select HAS_MCUX_SDK_component_serial_manager_uart_MK22F51212
-    select HAS_MCUX_SDK_component_serial_manager_MK22F51212
+    select HAS_MCUX_SDK_driver_uart_edma
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_driver_i2c
     select HAS_MCUX_SDK_driver_port
@@ -3240,7 +3238,6 @@ config MCUX_SDK_DEVICE_MK22F51212
     select HAS_MCUX_SDK_driver_pdb
     select HAS_MCUX_SDK_driver_adc16
     select HAS_MCUX_SDK_driver_clock
-    select HAS_MCUX_SDK_utility_assert_lite_MK22F51212
     select HAS_MCUX_SDK_utility_debug_console_lite
     select HAS_MCUX_SDK_component_osa
     select HAS_MCUX_SDK_driver_edma
@@ -3250,6 +3247,7 @@ config MCUX_SDK_DEVICE_MK22F51212
     select HAS_MCUX_SDK_driver_ftm
     select HAS_MCUX_SDK_utility_notifier
     select HAS_MCUX_SDK_driver_wdog
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_middleware_baremetal
     select HAS_MCUX_SDK_driver_vref
@@ -3262,14 +3260,15 @@ config MCUX_SDK_DEVICE_MK22F51212
     select HAS_MCUX_SDK_driver_uart
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_core_cm4
-    select HAS_MCUX_SDK_driver_uart_edma
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_rtc
     select HAS_MCUX_SDK_driver_smc
     select HAS_MCUX_SDK_driver_crc
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_fxos8700cq
     select HAS_MCUX_SDK_driver_pit
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_pmc
     select HAS_MCUX_SDK_driver_rcm
     select HAS_MCUX_SDK_utility_shell
@@ -3315,12 +3314,12 @@ config MCUX_SDK_DEVICE_MK28FA15
     select HAS_MCUX_SDK_driver_sdramc
     select HAS_MCUX_SDK_driver_lpuart
     select HAS_MCUX_SDK_driver_flexio_spi
-    select HAS_MCUX_SDK_driver_qspi
+    select HAS_MCUX_SDK_middleware_mmcau_cm4_cm7
     select HAS_MCUX_SDK_driver_flexio
     select HAS_MCUX_SDK_driver_ftm
     select HAS_MCUX_SDK_utility_notifier
     select HAS_MCUX_SDK_driver_wdog
-    select HAS_MCUX_SDK_driver_crc
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_cache_lmem
     select HAS_MCUX_SDK_driver_pmc
     select HAS_MCUX_SDK_driver_vref
@@ -3339,20 +3338,20 @@ config MCUX_SDK_DEVICE_MK28FA15
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_rtc
     select HAS_MCUX_SDK_driver_smc
+    select HAS_MCUX_SDK_driver_crc
     select HAS_MCUX_SDK_driver_IS42SM16800H
-    select HAS_MCUX_SDK_utility_assert_lite_MK28FA15
-    select HAS_MCUX_SDK_component_serial_manager_MK28FA15
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_fxos8700cq
     select HAS_MCUX_SDK_driver_trng
     select HAS_MCUX_SDK_driver_pit
     select HAS_MCUX_SDK_driver_ssd1963
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_flexio_mculcd_edma
     select HAS_MCUX_SDK_driver_flexio_i2c_master
     select HAS_MCUX_SDK_driver_rcm
     select HAS_MCUX_SDK_driver_flexio_mculcd
+    select HAS_MCUX_SDK_driver_qspi
     select HAS_MCUX_SDK_driver_dspi_edma
-    select HAS_MCUX_SDK_middleware_mmcau_cm4_cm7
-    select HAS_MCUX_SDK_component_serial_manager_uart_MK28FA15
     select HAS_MIDDLEWARE
     select MCU_SDK_DEVICE if MCUX_SDK_DEVICE_MK28FA15
     if MCUX_SDK_DEVICE_MK28FA15
@@ -3380,24 +3379,23 @@ config MCUX_SDK_DEVICE_MK64F12
     select HAS_MCUX_SDK_driver_i2c_edma
     select HAS_MCUX_SDK_driver_cmt
     select HAS_MCUX_SDK_middleware_mmcau_common_files
-    select HAS_MCUX_SDK_driver_enet_MK64F12
     select HAS_MCUX_SDK_driver_cmp
     select HAS_MCUX_SDK_device_startup
     select HAS_MCUX_SDK_driver_pdb
     select HAS_MCUX_SDK_driver_adc16
     select HAS_MCUX_SDK_driver_clock
-    select HAS_MCUX_SDK_component_serial_manager_uart_MK64F12
     select HAS_MCUX_SDK_utility_debug_console_lite
     select HAS_MCUX_SDK_component_osa
     select HAS_MCUX_SDK_driver_edma
     select HAS_MCUX_SDK_driver_ewm
     select HAS_MCUX_SDK_utility_assert
+    select HAS_MCUX_SDK_driver_enet
     select HAS_MCUX_SDK_driver_phy-device-ksz8081
     select HAS_MCUX_SDK_driver_rnga
     select HAS_MCUX_SDK_driver_ftm
     select HAS_MCUX_SDK_utility_notifier
     select HAS_MCUX_SDK_driver_wdog
-    select HAS_MCUX_SDK_utility_assert_lite_MK64F12
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_sysmpu
     select HAS_MCUX_SDK_middleware_baremetal
     select HAS_MCUX_SDK_driver_vref
@@ -3411,15 +3409,16 @@ config MCUX_SDK_DEVICE_MK64F12
     select HAS_MCUX_SDK_driver_uart
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_core_cm4
-    select HAS_MCUX_SDK_component_serial_manager_MK64F12
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_rtc
     select HAS_MCUX_SDK_driver_smc
     select HAS_MCUX_SDK_driver_crc
     select HAS_MCUX_SDK_driver_mdio-common
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_fxos8700cq
     select HAS_MCUX_SDK_driver_pit
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_pmc
     select HAS_MCUX_SDK_driver_rcm
     select HAS_MCUX_SDK_utility_shell
@@ -3455,7 +3454,6 @@ config MCUX_SDK_DEVICE_MK66F18
     select HAS_MCUX_SDK_driver_cmt
     select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_middleware_mmcau_common_files
-    select HAS_MCUX_SDK_utility_assert_lite_MK66F18
     select HAS_MCUX_SDK_driver_cmp
     select HAS_MCUX_SDK_device_startup
     select HAS_MCUX_SDK_driver_pdb
@@ -3466,15 +3464,15 @@ config MCUX_SDK_DEVICE_MK66F18
     select HAS_MCUX_SDK_component_osa
     select HAS_MCUX_SDK_driver_edma
     select HAS_MCUX_SDK_driver_ewm
-    select HAS_MCUX_SDK_driver_codec_MK66F18
     select HAS_MCUX_SDK_utility_assert
-    select HAS_MCUX_SDK_driver_lpuart
+    select HAS_MCUX_SDK_driver_enet
     select HAS_MCUX_SDK_driver_phy-device-ksz8081
     select HAS_MCUX_SDK_driver_rnga
     select HAS_MCUX_SDK_driver_smc
     select HAS_MCUX_SDK_driver_ftm
     select HAS_MCUX_SDK_driver_rcm
     select HAS_MCUX_SDK_driver_wdog
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_cache_lmem
     select HAS_MCUX_SDK_driver_sysmpu
     select HAS_MCUX_SDK_middleware_baremetal
@@ -3486,30 +3484,31 @@ config MCUX_SDK_DEVICE_MK66F18
     select HAS_MCUX_SDK_driver_sim
     select HAS_MCUX_SDK_driver_lpuart_edma
     select HAS_MCUX_SDK_device_CMSIS
+    select HAS_MCUX_SDK_middleware_usb_common_header
     select HAS_MCUX_SDK_driver_uart
-    select HAS_MCUX_SDK_component_serial_manager_uart_MK66F18
     select HAS_MCUX_SDK_component_osa_bm
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_core_cm4
+    select HAS_MCUX_SDK_driver_lpuart
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_rtc
     select HAS_MCUX_SDK_driver_dialog7212
     select HAS_MCUX_SDK_driver_crc
     select HAS_MCUX_SDK_driver_mdio-common
-    select HAS_MCUX_SDK_driver_enet_MK66F18
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_fxos8700cq
     select HAS_MCUX_SDK_driver_pit
     select HAS_MCUX_SDK_component_codec_i2c_MK66F18
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_sai_edma
     select HAS_MCUX_SDK_driver_sdhc
     select HAS_MCUX_SDK_driver_pmc
     select HAS_MCUX_SDK_component_da7212_adapter
     select HAS_MCUX_SDK_driver_tpm
     select HAS_MCUX_SDK_utility_shell
-    select HAS_MCUX_SDK_middleware_usb_common_header
-    select HAS_MCUX_SDK_component_serial_manager_MK66F18
     select HAS_MCUX_SDK_driver_dspi_edma
+    select HAS_MCUX_SDK_driver_codec
     select HAS_MIDDLEWARE
     select MCU_SDK_DEVICE if MCUX_SDK_DEVICE_MK66F18
     if MCUX_SDK_DEVICE_MK66F18
@@ -3525,7 +3524,6 @@ config MCUX_SDK_DEVICE_MKE02Z4
     select HAS_MCUX_SDK_device_system
     select HAS_MCUX_SDK_driver_tpm
     select HAS_MCUX_SDK_device_startup
-    select HAS_MCUX_SDK_utility_assert_lite_MKE02Z4
     select HAS_MCUX_SDK_driver_clock
     select HAS_MCUX_SDK_driver_wdog8
     select HAS_MCUX_SDK_utility_debug_console_lite
@@ -3537,7 +3535,6 @@ config MCUX_SDK_DEVICE_MKE02Z4
     select HAS_MCUX_SDK_driver_spi
     select HAS_MCUX_SDK_component_uart_adapter
     select HAS_MCUX_SDK_utility_assert
-    select HAS_MCUX_SDK_component_serial_manager_MKE02Z4
     select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_uart
@@ -3545,10 +3542,12 @@ config MCUX_SDK_DEVICE_MKE02Z4
     select HAS_MCUX_SDK_driver_port_ke02
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
-    select HAS_MCUX_SDK_component_serial_manager_uart_MKE02Z4
     select HAS_MCUX_SDK_driver_irq
+    select HAS_MCUX_SDK_utility_assert_lite
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_rtc_1
     select HAS_MCUX_SDK_driver_pit
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_adc_5v12b_ll18_015
     select HAS_MCUX_SDK_driver_flash_ftmr
     select MCU_SDK_DEVICE if MCUX_SDK_DEVICE_MKE02Z4
@@ -3559,7 +3558,6 @@ config MCUX_SDK_DEVICE_MKE02Z4
 
 config MCUX_SDK_DEVICE_MKE04Z4
     bool
-    select HAS_MCUX_SDK_utility_assert_lite_MKE04Z4
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_driver_i2c
     select HAS_MCUX_SDK_driver_pwt_1
@@ -3584,6 +3582,7 @@ config MCUX_SDK_DEVICE_MKE04Z4
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_irq
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_driver_pit
     select HAS_MCUX_SDK_driver_adc_5v12b_ll18_015
     select HAS_MCUX_SDK_driver_flash_ftmr
@@ -3595,8 +3594,6 @@ config MCUX_SDK_DEVICE_MKE04Z4
 
 config MCUX_SDK_DEVICE_MKE06Z4
     bool
-    select HAS_MCUX_SDK_component_serial_manager_MKE06Z4
-    select HAS_MCUX_SDK_utility_assert_lite_MKE06Z4
     select HAS_MCUX_SDK_driver_mscan
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_driver_i2c
@@ -3619,14 +3616,16 @@ config MCUX_SDK_DEVICE_MKE06Z4
     select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_device_CMSIS
-    select HAS_MCUX_SDK_component_serial_manager_uart_MKE06Z4
     select HAS_MCUX_SDK_driver_uart
     select HAS_MCUX_SDK_utilities_misc_utilities
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_irq
+    select HAS_MCUX_SDK_utility_assert_lite
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_rtc_1
     select HAS_MCUX_SDK_driver_pit
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_adc_5v12b_ll18_015
     select HAS_MCUX_SDK_driver_flash_ftmr
     select MCU_SDK_DEVICE if MCUX_SDK_DEVICE_MKE06Z4
@@ -3640,7 +3639,6 @@ config MCUX_SDK_DEVICE_MKE15Z7
     select HAS_MCUX_SDK_driver_flexio_spi_edma
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_component_lpuart_adapter
-    select HAS_MCUX_SDK_component_serial_manager_uart_MKE15Z7
     select HAS_MCUX_SDK_driver_port
     select HAS_MCUX_SDK_driver_dmamux
     select HAS_MCUX_SDK_driver_lpspi
@@ -3649,7 +3647,6 @@ config MCUX_SDK_DEVICE_MKE15Z7
     select HAS_MCUX_SDK_component_lists
     select HAS_MCUX_SDK_device_system
     select HAS_MCUX_SDK_driver_lpit
-    select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_driver_acmp
     select HAS_MCUX_SDK_device_startup
     select HAS_MCUX_SDK_driver_pdb
@@ -3669,8 +3666,7 @@ config MCUX_SDK_DEVICE_MKE15Z7
     select HAS_MCUX_SDK_driver_tsi_v5
     select HAS_MCUX_SDK_driver_flexio_i2c_master
     select HAS_MCUX_SDK_driver_sim
-    select HAS_MCUX_SDK_utility_assert_lite_MKE15Z7
-    select HAS_MCUX_SDK_component_serial_manager_MKE15Z7
+    select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_driver_flash
     select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_driver_mmdvsq
@@ -3686,8 +3682,11 @@ config MCUX_SDK_DEVICE_MKE15Z7
     select HAS_MCUX_SDK_driver_smc
     select HAS_MCUX_SDK_driver_crc
     select HAS_MCUX_SDK_driver_wdog32
+    select HAS_MCUX_SDK_utility_assert_lite
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_fxos8700cq
     select HAS_MCUX_SDK_driver_lptmr
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_pwt
     select HAS_MCUX_SDK_driver_pmc
     select HAS_MCUX_SDK_driver_rcm
@@ -3721,10 +3720,8 @@ config MCUX_SDK_DEVICE_MKE16Z4
     select HAS_MCUX_SDK_driver_fxos8700cq
     select HAS_MCUX_SDK_driver_ewm
     select HAS_MCUX_SDK_driver_lpuart
-    select HAS_MCUX_SDK_utility_assert_lite_MKE16Z4
     select HAS_MCUX_SDK_driver_ftm
     select HAS_MCUX_SDK_driver_trgmux
-    select HAS_MCUX_SDK_component_serial_manager_MKE16Z4
     select HAS_MCUX_SDK_CMSIS_Include_core_cm0plus
     select HAS_MCUX_SDK_driver_tsi_v5
     select HAS_MCUX_SDK_utility_shell
@@ -3741,7 +3738,9 @@ config MCUX_SDK_DEVICE_MKE16Z4
     select HAS_MCUX_SDK_driver_rtc
     select HAS_MCUX_SDK_driver_smc
     select HAS_MCUX_SDK_driver_crc
-    select HAS_MCUX_SDK_component_serial_manager_uart_MKE16Z4
+    select HAS_MCUX_SDK_utility_assert_lite
+    select HAS_MCUX_SDK_component_serial_manager
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_pwt
     select HAS_MCUX_SDK_driver_pmc
     select HAS_MCUX_SDK_driver_rcm
@@ -3775,13 +3774,10 @@ config MCUX_SDK_DEVICE_MKL27Z644
     select HAS_MCUX_SDK_driver_lpuart_dma
     select HAS_MCUX_SDK_driver_lpuart
     select HAS_MCUX_SDK_driver_flexio_spi
-    select HAS_MCUX_SDK_utility_assert_lite_MKL27Z644
-    select HAS_MCUX_SDK_component_serial_manager_uart_MKL27Z644
     select HAS_MCUX_SDK_driver_flexio
     select HAS_MCUX_SDK_middleware_usb_device_common_header
     select HAS_MCUX_SDK_utility_notifier
     select HAS_MCUX_SDK_device_system
-    select HAS_MCUX_SDK_component_serial_manager_MKL27Z644
     select HAS_MCUX_SDK_CMSIS_Include_core_cm0plus
     select HAS_MCUX_SDK_driver_flexio_i2c_master
     select HAS_MCUX_SDK_driver_pmc
@@ -3794,6 +3790,7 @@ config MCUX_SDK_DEVICE_MKL27Z644
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_uart
     select HAS_MCUX_SDK_utilities_misc_utilities
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_rtc
@@ -3804,7 +3801,9 @@ config MCUX_SDK_DEVICE_MKL27Z644
     select HAS_MCUX_SDK_driver_dma
     select HAS_MCUX_SDK_driver_i2c_dma
     select HAS_MCUX_SDK_driver_sim
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_pit
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_flexio_spi_dma
     select HAS_MCUX_SDK_driver_rcm
     select HAS_MCUX_SDK_utility_shell
@@ -3844,23 +3843,21 @@ config MCUX_SDK_DEVICE_MKM35Z7
     select HAS_MCUX_SDK_utility_notifier
     select HAS_MCUX_SDK_driver_wdog
     select HAS_MCUX_SDK_CMSIS_Include_core_cm0plus
-    select HAS_MCUX_SDK_driver_sim
+    select HAS_MCUX_SDK_driver_sysmpu
     select HAS_MCUX_SDK_driver_vref
     select HAS_MCUX_SDK_driver_mmau
     select HAS_MCUX_SDK_driver_spi
-    select HAS_MCUX_SDK_driver_sysmpu
     select HAS_MCUX_SDK_driver_flash
     select HAS_MCUX_SDK_component_uart_adapter
     select HAS_MCUX_SDK_utility_assert
     select HAS_MCUX_SDK_middleware_mmcau_cm0p
-    select HAS_MCUX_SDK_component_serial_manager_MKM35Z7
-    select HAS_MCUX_SDK_utility_assert_lite_MKM35Z7
+    select HAS_MCUX_SDK_driver_sim
     select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_device_CMSIS
     select HAS_MCUX_SDK_driver_uart
     select HAS_MCUX_SDK_driver_qtmr_2
-    select HAS_MCUX_SDK_component_serial_manager_uart_MKM35Z7
     select HAS_MCUX_SDK_utilities_misc_utilities
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_CMSIS_Include_common
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_uart_dma
@@ -3868,9 +3865,11 @@ config MCUX_SDK_DEVICE_MKM35Z7
     select HAS_MCUX_SDK_driver_crc
     select HAS_MCUX_SDK_driver_spi_dma
     select HAS_MCUX_SDK_driver_dma
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_slcd
     select HAS_MCUX_SDK_driver_pit
     select HAS_MCUX_SDK_driver_afe
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_slcd_gdh_1247wp
     select HAS_MCUX_SDK_driver_pmc
     select HAS_MCUX_SDK_driver_rcm
@@ -3885,15 +3884,12 @@ config MCUX_SDK_DEVICE_MKM35Z7
 
 config MCUX_SDK_DEVICE_MKV11Z7
     bool
-    select HAS_MCUX_SDK_component_serial_manager_MKV11Z7
     select HAS_MCUX_SDK_driver_llwu
-    select HAS_MCUX_SDK_utility_assert_lite_MKV11Z7
     select HAS_MCUX_SDK_driver_dspi
     select HAS_MCUX_SDK_driver_uart_edma
     select HAS_MCUX_SDK_CMSIS_Include_dsp
     select HAS_MCUX_SDK_driver_flexcan
     select HAS_MCUX_SDK_driver_i2c
-    select HAS_MCUX_SDK_component_serial_manager_uart_MKV11Z7
     select HAS_MCUX_SDK_driver_port
     select HAS_MCUX_SDK_driver_dmamux
     select HAS_MCUX_SDK_driver_lptmr
@@ -3928,7 +3924,10 @@ config MCUX_SDK_DEVICE_MKV11Z7
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_smc
     select HAS_MCUX_SDK_driver_crc
+    select HAS_MCUX_SDK_utility_assert_lite
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_fxos8700cq
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_pmc
     select HAS_MCUX_SDK_driver_rcm
     select HAS_MCUX_SDK_driver_dspi_edma
@@ -3953,7 +3952,6 @@ config MCUX_SDK_DEVICE_MKV31F51212
     select HAS_MCUX_SDK_driver_dac
     select HAS_MCUX_SDK_device_system
     select HAS_MCUX_SDK_driver_i2c_edma
-    select HAS_MCUX_SDK_component_serial_manager_uart_MKV31F51212
     select HAS_MCUX_SDK_driver_cmp
     select HAS_MCUX_SDK_device_startup
     select HAS_MCUX_SDK_driver_pdb
@@ -3962,12 +3960,12 @@ config MCUX_SDK_DEVICE_MKV31F51212
     select HAS_MCUX_SDK_utility_debug_console_lite
     select HAS_MCUX_SDK_driver_edma
     select HAS_MCUX_SDK_driver_ewm
-    select HAS_MCUX_SDK_utility_assert_lite_MKV31F51212
     select HAS_MCUX_SDK_driver_lpuart
     select HAS_MCUX_SDK_driver_rnga
     select HAS_MCUX_SDK_driver_ftm
     select HAS_MCUX_SDK_utility_notifier
     select HAS_MCUX_SDK_driver_wdog
+    select HAS_MCUX_SDK_utility_assert_lite
     select HAS_MCUX_SDK_utility_debug_console
     select HAS_MCUX_SDK_driver_flash
     select HAS_MCUX_SDK_component_uart_adapter
@@ -3982,9 +3980,10 @@ config MCUX_SDK_DEVICE_MKV31F51212
     select HAS_MCUX_SDK_driver_common
     select HAS_MCUX_SDK_driver_smc
     select HAS_MCUX_SDK_driver_crc
-    select HAS_MCUX_SDK_component_serial_manager_MKV31F51212
+    select HAS_MCUX_SDK_component_serial_manager
     select HAS_MCUX_SDK_driver_fxos8700cq
     select HAS_MCUX_SDK_driver_pit
+    select HAS_MCUX_SDK_component_serial_manager_uart
     select HAS_MCUX_SDK_driver_pmc
     select HAS_MCUX_SDK_driver_rcm
     select HAS_MCUX_SDK_utility_shell

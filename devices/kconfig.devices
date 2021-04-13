@@ -3,160 +3,108 @@
 
 menu "devices"
 
-config MCUX_SDK_device_CMSIS
+config USE_device_CMSIS
     bool "device_CMSIS"
     depends on HAS_MCUX_SDK_device_CMSIS
     default n
-    select MCUX_SDK_CMSIS_Include_core_cm0plus if HAS_MCUX_SDK_CMSIS_Include_core_cm0plus
+    select USE_CMSIS_Include_core_cm0plus if HAS_MCUX_SDK_CMSIS_Include_core_cm0plus
 
-config MCUX_SDK_device_CMSIS_K32L3A60_cm0plus
-    bool "device_CMSIS_K32L3A60_cm0plus"
-    depends on HAS_MCUX_SDK_device_CMSIS_K32L3A60_cm0plus
-    default n
-    if MCUX_SDK_device_CMSIS_K32L3A60_cm0plus
-        config MCUX_SDK_CMSIS_Include_core_cm0plus
-            bool "CMSIS_Include_core_cm0plus"
-            default n
-    endif
-
-config MCUX_SDK_device_CMSIS_K32L3A60_cm4
-    bool "device_CMSIS_K32L3A60_cm4"
-    depends on HAS_MCUX_SDK_device_CMSIS_K32L3A60_cm4
-    default n
-    if MCUX_SDK_device_CMSIS_K32L3A60_cm4
-        config MCUX_SDK_CMSIS_Include_core_cm4
-            bool "CMSIS_Include_core_cm4"
-            default n
-    endif
-
-config MCUX_SDK_device_CMSIS_LPC54114_cm0plus
-    bool "device_CMSIS_LPC54114_cm0plus"
-    depends on HAS_MCUX_SDK_device_CMSIS_LPC54114_cm0plus
-    default n
-    if MCUX_SDK_device_CMSIS_LPC54114_cm0plus
-        config MCUX_SDK_CMSIS_Include_core_cm0plus
-            bool "CMSIS_Include_core_cm0plus"
-            default n
-    endif
-
-config MCUX_SDK_device_CMSIS_LPC54114_cm4
-    bool "device_CMSIS_LPC54114_cm4"
-    depends on HAS_MCUX_SDK_device_CMSIS_LPC54114_cm4
-    default n
-    if MCUX_SDK_device_CMSIS_LPC54114_cm4
-        config MCUX_SDK_CMSIS_Include_core_cm4
-            bool "CMSIS_Include_core_cm4"
-            default n
-    endif
-
-config MCUX_SDK_device_startup
+config USE_device_startup
     bool "device_startup"
     depends on HAS_MCUX_SDK_device_startup
     default n
-    select MCUX_SDK_device_system if HAS_MCUX_SDK_device_system
+    select USE_device_system if HAS_MCUX_SDK_device_system
 
-config MCUX_SDK_device_startup_K32L3A60_cm0plus
+config USE_device_startup_K32L3A60_cm0plus
     bool "device_startup_K32L3A60_cm0plus"
     depends on HAS_MCUX_SDK_device_startup_K32L3A60_cm0plus
     default n
-    select MCUX_SDK_device_system_K32L3A60_cm0plus if HAS_MCUX_SDK_device_system_K32L3A60_cm0plus
+    select USE_device_system_K32L3A60_cm0plus if HAS_MCUX_SDK_device_system_K32L3A60_cm0plus
 
-config MCUX_SDK_device_startup_K32L3A60_cm4
+config USE_device_startup_K32L3A60_cm4
     bool "device_startup_K32L3A60_cm4"
     depends on HAS_MCUX_SDK_device_startup_K32L3A60_cm4
     default n
-    select MCUX_SDK_device_system_K32L3A60_cm4 if HAS_MCUX_SDK_device_system_K32L3A60_cm4
+    select USE_device_system_K32L3A60_cm4 if HAS_MCUX_SDK_device_system_K32L3A60_cm4
 
-config MCUX_SDK_device_startup_LPC54114_cm0plus
+config USE_device_startup_LPC54114_cm0plus
     bool "device_startup_LPC54114_cm0plus"
     depends on HAS_MCUX_SDK_device_startup_LPC54114_cm0plus
     default n
-    select MCUX_SDK_device_system_LPC54114_cm0plus if HAS_MCUX_SDK_device_system_LPC54114_cm0plus
+    select USE_device_system_LPC54114_cm0plus if HAS_MCUX_SDK_device_system_LPC54114_cm0plus
 
-config MCUX_SDK_device_startup_LPC54114_cm4
+config USE_device_startup_LPC54114_cm4
     bool "device_startup_LPC54114_cm4"
     depends on HAS_MCUX_SDK_device_startup_LPC54114_cm4
     default n
-    select MCUX_SDK_device_system_LPC54114_cm4 if HAS_MCUX_SDK_device_system_LPC54114_cm4
+    select USE_device_system_LPC54114_cm4 if HAS_MCUX_SDK_device_system_LPC54114_cm4
 
-config MCUX_SDK_device_startup_LPC55S69_cm33_core0
+config USE_device_startup_LPC55S69_cm33_core0
     bool "device_startup_LPC55S69_cm33_core0"
     depends on HAS_MCUX_SDK_device_startup_LPC55S69_cm33_core0
     default n
-    select MCUX_SDK_device_system_LPC55S69_cm33_core0 if HAS_MCUX_SDK_device_system_LPC55S69_cm33_core0
+    select USE_device_system_LPC55S69_cm33_core0 if HAS_MCUX_SDK_device_system_LPC55S69_cm33_core0
 
-config MCUX_SDK_device_startup_LPC55S69_cm33_core1
+config USE_device_startup_LPC55S69_cm33_core1
     bool "device_startup_LPC55S69_cm33_core1"
     depends on HAS_MCUX_SDK_device_startup_LPC55S69_cm33_core1
     default n
-    select MCUX_SDK_device_system_LPC55S69_cm33_core1 if HAS_MCUX_SDK_device_system_LPC55S69_cm33_core1
+    select USE_device_system_LPC55S69_cm33_core1 if HAS_MCUX_SDK_device_system_LPC55S69_cm33_core1
 
-config MCUX_SDK_device_startup_MIMX8QM6_cm4_core0
+config USE_device_startup_MIMX8QM6_cm4_core0
     bool "device_startup_MIMX8QM6_cm4_core0"
     depends on HAS_MCUX_SDK_device_startup_MIMX8QM6_cm4_core0
     default n
 
-config MCUX_SDK_device_startup_MIMX8QM6_cm4_core1
+config USE_device_startup_MIMX8QM6_cm4_core1
     bool "device_startup_MIMX8QM6_cm4_core1"
     depends on HAS_MCUX_SDK_device_startup_MIMX8QM6_cm4_core1
     default n
 
-config MCUX_SDK_device_system
+config USE_device_system
     bool "device_system"
     depends on HAS_MCUX_SDK_device_system
     default n
-    select MCUX_SDK_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
+    select USE_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
 
-config MCUX_SDK_device_system_K32L3A60_cm0plus
+config USE_device_system_K32L3A60_cm0plus
     bool "device_system_K32L3A60_cm0plus"
     depends on HAS_MCUX_SDK_device_system_K32L3A60_cm0plus
     default n
-    select MCUX_SDK_device_CMSIS_K32L3A60_cm0plus if HAS_MCUX_SDK_device_CMSIS_K32L3A60_cm0plus
+    select USE_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
 
-config MCUX_SDK_device_system_K32L3A60_cm4
+config USE_device_system_K32L3A60_cm4
     bool "device_system_K32L3A60_cm4"
     depends on HAS_MCUX_SDK_device_system_K32L3A60_cm4
     default n
-    select MCUX_SDK_device_CMSIS_K32L3A60_cm4 if HAS_MCUX_SDK_device_CMSIS_K32L3A60_cm4
+    select USE_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
 
-config MCUX_SDK_device_system_LPC54114_cm0plus
+config USE_device_system_LPC54114_cm0plus
     bool "device_system_LPC54114_cm0plus"
     depends on HAS_MCUX_SDK_device_system_LPC54114_cm0plus
     default n
-    select MCUX_SDK_device_CMSIS_LPC54114_cm0plus if HAS_MCUX_SDK_device_CMSIS_LPC54114_cm0plus
+    select USE_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
 
-config MCUX_SDK_device_system_LPC54114_cm4
+config USE_device_system_LPC54114_cm4
     bool "device_system_LPC54114_cm4"
     depends on HAS_MCUX_SDK_device_system_LPC54114_cm4
     default n
-    select MCUX_SDK_device_CMSIS_LPC54114_cm4 if HAS_MCUX_SDK_device_CMSIS_LPC54114_cm4
+    select USE_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
 
-config MCUX_SDK_device_system_LPC55S69_cm33_core0
+config USE_device_system_LPC55S69_cm33_core0
     bool "device_system_LPC55S69_cm33_core0"
     depends on HAS_MCUX_SDK_device_system_LPC55S69_cm33_core0
     default n
-    select MCUX_SDK_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
+    select USE_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
 
-config MCUX_SDK_device_system_LPC55S69_cm33_core1
+config USE_device_system_LPC55S69_cm33_core1
     bool "device_system_LPC55S69_cm33_core1"
     depends on HAS_MCUX_SDK_device_system_LPC55S69_cm33_core1
     default n
-    select MCUX_SDK_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
+    select USE_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
 
 
 config HAS_MCUX_SDK_device_CMSIS
-    bool
-
-config HAS_MCUX_SDK_device_CMSIS_K32L3A60_cm0plus
-    bool
-
-config HAS_MCUX_SDK_device_CMSIS_K32L3A60_cm4
-    bool
-
-config HAS_MCUX_SDK_device_CMSIS_LPC54114_cm0plus
-    bool
-
-config HAS_MCUX_SDK_device_CMSIS_LPC54114_cm4
     bool
 
 config HAS_MCUX_SDK_device_startup

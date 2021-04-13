@@ -1,4 +1,5 @@
-function(mcux_import_kconfig prefix kconfig_fragment)
+function(mcux_import_kconfig kconfig_fragment)
+  set(prefix "CONFIG_")
   if(NOT EXISTS ${kconfig_fragment})
     return()
   endif()
@@ -32,11 +33,10 @@ function(mcux_import_kconfig prefix kconfig_fragment)
 endfunction()
 
 function(mcux_include_from_kconfig cmake_module)
-  if(${CONFIG_MCUX_SDK_${cmake_module}})
+  if(${CONFIG_USE_${cmake_module}})
    include(${cmake_module})
+   message("    ${cmake_module}")
   endif()
 endfunction()
-
-mcux_import_kconfig(CONFIG_ ${CMAKE_CURRENT_LIST_DIR}/../../.config)
 
 
