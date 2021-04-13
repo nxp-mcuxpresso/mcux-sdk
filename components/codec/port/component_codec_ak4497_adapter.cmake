@@ -13,6 +13,6 @@ if(NOT COMPONENT_CODEC_AK4497_ADAPTER_INCLUDED)
 
 
     include(driver_ak4497)
-    include(driver_codec_MIMX8MM6)
+    include(driver_codec)
 
 endif()

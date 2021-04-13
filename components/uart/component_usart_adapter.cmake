@@ -12,7 +12,5 @@ if(NOT COMPONENT_USART_ADAPTER_INCLUDED)
 
 
     include(driver_flexcomm_usart)
-    include(driver_common)
-    include(driver_flexcomm)
 
 endif()

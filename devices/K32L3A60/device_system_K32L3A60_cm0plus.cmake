@@ -11,6 +11,6 @@ if(NOT DEVICE_SYSTEM_K32L3A60_CM0PLUS_INCLUDED)
     )
 
 
-    include(device_CMSIS_K32L3A60_cm0plus)
+    include(device_CMSIS)
 
 endif()

@@ -11,7 +11,6 @@ if(NOT DRIVER_AK4497_INCLUDED)
     )
 
 
-    include(driver_common)
     include(component_codec_i2c_MIMX8MM6)
 
 endif()

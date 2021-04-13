@@ -10,16 +10,7 @@ if(NOT DRIVER_PHY-DEVICE-LAN8720A_INCLUDED)
         ${CMAKE_CURRENT_LIST_DIR}/.
     )
 
-    #OR Logic component
-    if(${MCUX_DEVICE} STREQUAL "LPC54628")
-        include(driver_phy-common)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "LPC54S018")
-        include(driver_phy-common)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "LPC54S018M")
-        include(driver_phy-common)
-    endif()
 
+    include(driver_phy-common)
 
 endif()

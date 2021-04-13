@@ -11,7 +11,6 @@ if(NOT COMPONENT_CODEC_I2C_LPC51U68_INCLUDED)
     )
 
 
-    include(driver_common)
     include(component_flexcomm_i2c_adapter)
 
 endif()

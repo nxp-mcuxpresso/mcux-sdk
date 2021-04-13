@@ -11,8 +11,7 @@ if(NOT DRIVER_EASRC_SDMA_INCLUDED)
     )
 
 
-    include(driver_easrc)
-    include(driver_common)
     include(driver_sdma)
+    include(driver_easrc)
 
 endif()

@@ -10,17 +10,8 @@ if(NOT COMPONENT_IUART_ADAPTER_INCLUDED)
         ${CMAKE_CURRENT_LIST_DIR}/.
     )
 
-    #OR Logic component
-    if(${MCUX_DEVICE} STREQUAL "MIMX8MQ6")
-        include(driver_iuart)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMX8MM6")
-        include(driver_iuart)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMX8MN6")
-        include(driver_iuart)
-    endif()
 
     include(driver_common)
+    include(driver_iuart)
 
 endif()

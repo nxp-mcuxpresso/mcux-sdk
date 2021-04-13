@@ -11,7 +11,6 @@ if(NOT COMPONENT_CODEC_I2C_MIMXRT1015_INCLUDED)
     )
 
 
-    include(driver_common)
     include(component_lpi2c_adapter)
 
 endif()

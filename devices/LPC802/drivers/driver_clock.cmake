@@ -12,7 +12,6 @@ if(NOT DRIVER_CLOCK_INCLUDED)
 
 
     include(driver_rom_api)
-    include(driver_common)
     include(driver_power_no_lib)
 
 endif()

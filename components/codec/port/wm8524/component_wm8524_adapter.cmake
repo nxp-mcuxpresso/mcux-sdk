@@ -10,17 +10,8 @@ if(NOT COMPONENT_WM8524_ADAPTER_INCLUDED)
         ${CMAKE_CURRENT_LIST_DIR}/.
     )
 
-    #OR Logic component
-    if(${MCUX_DEVICE} STREQUAL "MIMX8MQ6")
-        include(driver_codec_MIMX8MQ6)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMX8MM6")
-        include(driver_codec_MIMX8MM6)
-    endif()
-    if(${MCUX_DEVICE} STREQUAL "MIMX8MN6")
-        include(driver_codec_MIMX8MN6)
-    endif()
 
     include(driver_wm8524)
+    include(driver_codec)
 
 endif()

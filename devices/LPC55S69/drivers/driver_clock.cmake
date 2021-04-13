@@ -15,6 +15,5 @@ if(NOT DRIVER_CLOCK_INCLUDED)
         include(driver_power)
     endif()
 
-    include(driver_common)
 
 endif()

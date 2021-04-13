@@ -11,7 +11,6 @@ if(NOT DRIVER_DISPLAY-IT6263_INCLUDED)
     )
 
 
-    include(driver_video-common)
     include(driver_display-common)
     include(driver_video-i2c)
 

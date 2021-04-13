@@ -12,8 +12,6 @@ if(NOT DRIVER_FLEXCOMM_I2C_DMA_INCLUDED)
 
 
     include(driver_lpc_dma)
-    include(driver_common)
-    include(driver_flexcomm)
     include(driver_flexcomm_i2c)
 
 endif()

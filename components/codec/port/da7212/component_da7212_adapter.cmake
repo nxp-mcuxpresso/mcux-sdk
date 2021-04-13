@@ -11,7 +11,6 @@ if(NOT COMPONENT_DA7212_ADAPTER_INCLUDED)
     )
 
 
-    include(driver_codec_MK66F18)
     include(driver_dialog7212)
 
 endif()

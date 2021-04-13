@@ -12,7 +12,6 @@ if(NOT DRIVER_PRINCE_INCLUDED)
 
 
     include(driver_puf)
-    include(driver_common)
     include(driver_iap1)
 
 endif()
