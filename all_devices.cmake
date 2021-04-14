@@ -1,5 +1,3 @@
-include(${CMAKE_CURRENT_LIST_DIR}/tools/cmake_toolchain_files/utils.cmake)
-
 # OR Logic component
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1052")
     list(APPEND CMAKE_MODULE_PATH
