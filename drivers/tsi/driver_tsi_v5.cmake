@@ -1,3 +1,4 @@
+#Description: TSI Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_tsi_v5 component is included.")
 

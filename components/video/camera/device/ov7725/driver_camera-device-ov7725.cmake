@@ -1,3 +1,4 @@
+#Description: Driver camera-device-ov7725; user_visible: True
 include_guard(GLOBAL)
 message("driver_camera-device-ov7725 component is included.")
 

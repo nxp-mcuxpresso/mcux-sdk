@@ -1,3 +1,4 @@
+#Description: FLEXSPI DMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexspi_dma component is included.")
 

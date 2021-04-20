@@ -1,3 +1,4 @@
+#Description: Driver camera-device-max9286; user_visible: True
 include_guard(GLOBAL)
 message("driver_camera-device-max9286 component is included.")
 

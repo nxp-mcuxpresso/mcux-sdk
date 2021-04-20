@@ -1,3 +1,4 @@
+#Description: middleware_baremetal; user_visible: True
 include_guard(GLOBAL)
 message("middleware_baremetal component is included.")
 

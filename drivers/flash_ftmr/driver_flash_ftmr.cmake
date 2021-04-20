@@ -1,3 +1,4 @@
+#Description: Flash Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flash_ftmr component is included.")
 

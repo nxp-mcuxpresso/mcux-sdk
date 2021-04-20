@@ -1,3 +1,4 @@
+#Description: CAU3 Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_cau3 component is included.")
 

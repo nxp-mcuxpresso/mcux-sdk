@@ -1,3 +1,4 @@
+#Description: ASMC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_asmc component is included.")
 

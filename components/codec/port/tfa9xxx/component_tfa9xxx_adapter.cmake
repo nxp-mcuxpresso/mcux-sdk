@@ -1,3 +1,4 @@
+#Description: Component tfa9xxx adapter for single codec; user_visible: True
 include_guard(GLOBAL)
 message("component_tfa9xxx_adapter component is included.")
 
@@ -10,5 +11,4 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
 )
 
 
-include(driver_codec)
 include(driver_tfa9xxx)

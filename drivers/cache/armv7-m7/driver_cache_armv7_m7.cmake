@@ -1,3 +1,4 @@
+#Description: CACHE Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_cache_armv7_m7 component is included.")
 

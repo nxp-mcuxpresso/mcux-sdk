@@ -1,3 +1,4 @@
+#Description: Swm_connections Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_swm_connections component is included.")
 

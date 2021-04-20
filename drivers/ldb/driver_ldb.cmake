@@ -1,3 +1,4 @@
+#Description: LDB Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_ldb component is included.")
 

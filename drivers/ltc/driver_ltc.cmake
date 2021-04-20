@@ -1,3 +1,4 @@
+#Description: LTC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_ltc component is included.")
 

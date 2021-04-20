@@ -1,3 +1,4 @@
+#Description: FLEXIO MCULCD EDMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexio_mculcd_edma component is included.")
 

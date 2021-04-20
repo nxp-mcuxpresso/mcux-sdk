@@ -1,3 +1,4 @@
+#Description: ADC16 Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_adc16 component is included.")
 

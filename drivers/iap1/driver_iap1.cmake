@@ -1,3 +1,4 @@
+#Description: FLASHIAP Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_iap1 component is included.")
 

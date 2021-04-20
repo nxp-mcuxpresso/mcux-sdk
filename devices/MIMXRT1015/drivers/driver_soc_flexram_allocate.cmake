@@ -1,3 +1,4 @@
+#Description: SOC FLEXRAM ALLOCATE Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_soc_flexram_allocate component is included.")
 

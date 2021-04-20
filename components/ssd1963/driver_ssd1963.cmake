@@ -1,3 +1,4 @@
+#Description: Driver ssd1963; user_visible: True
 include_guard(GLOBAL)
 message("driver_ssd1963 component is included.")
 

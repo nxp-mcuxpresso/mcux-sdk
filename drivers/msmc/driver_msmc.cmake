@@ -1,3 +1,4 @@
+#Description: MSMC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_msmc component is included.")
 

@@ -1,3 +1,4 @@
+#Description: LPC_ACOMP Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_lpc_acomp component is included.")
 

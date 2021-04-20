@@ -1,3 +1,4 @@
+#Description: Driver pf1550; user_visible: True
 include_guard(GLOBAL)
 message("driver_pf1550 component is included.")
 

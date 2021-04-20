@@ -1,3 +1,4 @@
+#Description: SRC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_src component is included.")
 

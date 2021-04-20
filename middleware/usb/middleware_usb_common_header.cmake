@@ -1,3 +1,4 @@
+#Description: Middleware usb common_header; user_visible: True
 include_guard(GLOBAL)
 message("middleware_usb_common_header component is included.")
 

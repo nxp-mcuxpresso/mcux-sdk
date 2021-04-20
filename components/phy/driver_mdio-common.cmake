@@ -1,3 +1,4 @@
+#Description: Driver mdio-common; user_visible: True
 include_guard(GLOBAL)
 message("driver_mdio-common component is included.")
 

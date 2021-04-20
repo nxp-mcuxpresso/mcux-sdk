@@ -1,3 +1,4 @@
+#Description: SDRAMC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_sdramc component is included.")
 

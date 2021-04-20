@@ -1,3 +1,4 @@
+#Description: Driver camera-common; user_visible: True
 include_guard(GLOBAL)
 message("driver_camera-common component is included.")
 

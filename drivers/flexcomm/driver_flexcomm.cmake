@@ -1,3 +1,4 @@
+#Description: FLEXCOMM Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexcomm component is included.")
 

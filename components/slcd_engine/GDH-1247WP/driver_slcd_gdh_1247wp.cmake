@@ -1,3 +1,4 @@
+#Description: Driver slcd_gdh_1247wp; user_visible: True
 include_guard(GLOBAL)
 message("driver_slcd_gdh_1247wp component is included.")
 

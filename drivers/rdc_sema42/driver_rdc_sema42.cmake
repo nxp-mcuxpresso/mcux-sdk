@@ -1,3 +1,4 @@
+#Description: RDC SEMA42 Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_rdc_sema42 component is included.")
 

@@ -1,3 +1,4 @@
+#Description: Driver fxos8700cq; user_visible: True
 include_guard(GLOBAL)
 message("driver_fxos8700cq component is included.")
 

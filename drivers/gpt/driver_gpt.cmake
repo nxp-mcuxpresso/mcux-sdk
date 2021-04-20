@@ -1,3 +1,4 @@
+#Description: GPT Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_gpt component is included.")
 

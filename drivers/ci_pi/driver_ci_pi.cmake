@@ -1,3 +1,4 @@
+#Description: CI_PI Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_ci_pi component is included.")
 

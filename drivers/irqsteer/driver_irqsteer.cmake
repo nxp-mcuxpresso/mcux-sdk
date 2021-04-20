@@ -1,3 +1,4 @@
+#Description: IRQSTEER Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_irqsteer component is included.")
 

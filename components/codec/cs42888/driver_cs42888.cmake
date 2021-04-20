@@ -1,3 +1,4 @@
+#Description: Driver cs42888; user_visible: True
 include_guard(GLOBAL)
 message("driver_cs42888 component is included.")
 

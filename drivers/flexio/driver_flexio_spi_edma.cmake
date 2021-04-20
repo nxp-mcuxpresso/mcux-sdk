@@ -1,3 +1,4 @@
+#Description: FLEXIO SPI EDMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexio_spi_edma component is included.")
 

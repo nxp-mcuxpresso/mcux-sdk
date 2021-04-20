@@ -1,3 +1,4 @@
+#Description: MSCAN Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_mscan component is included.")
 

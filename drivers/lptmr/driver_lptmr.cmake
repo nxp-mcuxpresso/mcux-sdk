@@ -1,3 +1,4 @@
+#Description: LPTMR Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_lptmr component is included.")
 

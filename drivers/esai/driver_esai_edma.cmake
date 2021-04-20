@@ -1,3 +1,4 @@
+#Description: ESAI Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_esai_edma component is included.")
 

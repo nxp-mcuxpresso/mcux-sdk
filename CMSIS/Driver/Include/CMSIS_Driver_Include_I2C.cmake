@@ -1,3 +1,4 @@
+#Description: Cmsis_driver_include i2c; user_visible: False
 include_guard(GLOBAL)
 message("CMSIS_Driver_Include_I2C component is included.")
 

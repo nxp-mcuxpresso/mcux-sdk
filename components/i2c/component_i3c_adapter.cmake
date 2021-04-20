@@ -1,3 +1,4 @@
+#Description: Component i3c_adapter; user_visible: True
 include_guard(GLOBAL)
 message("component_i3c_adapter component is included.")
 

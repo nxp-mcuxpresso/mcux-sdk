@@ -1,3 +1,4 @@
+#Description: Driver dialog7212; user_visible: True
 include_guard(GLOBAL)
 message("driver_dialog7212 component is included.")
 

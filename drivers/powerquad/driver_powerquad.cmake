@@ -1,3 +1,4 @@
+#Description: POWERQUAD Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_powerquad component is included.")
 

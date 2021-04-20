@@ -1,3 +1,4 @@
+#Description: Rom_api Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_rom_api component is included.")
 

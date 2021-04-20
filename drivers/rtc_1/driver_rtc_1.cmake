@@ -1,3 +1,4 @@
+#Description: RTC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_rtc_1 component is included.")
 

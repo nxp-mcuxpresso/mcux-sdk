@@ -1,3 +1,4 @@
+#Description: Cmsis_driver_include spi; user_visible: False
 include_guard(GLOBAL)
 message("CMSIS_Driver_Include_SPI component is included.")
 

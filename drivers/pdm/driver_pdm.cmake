@@ -1,3 +1,4 @@
+#Description: PDM Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_pdm component is included.")
 

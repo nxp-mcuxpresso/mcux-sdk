@@ -1,3 +1,4 @@
+#Description: CRC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_crc component is included.")
 

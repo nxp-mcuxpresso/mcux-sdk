@@ -1,3 +1,4 @@
+#Description: Driver slcd_lcd_s401m16kr; user_visible: True
 include_guard(GLOBAL)
 message("driver_slcd_lcd_s401m16kr component is included.")
 

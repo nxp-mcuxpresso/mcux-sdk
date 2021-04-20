@@ -1,3 +1,4 @@
+#Description: Driver mdio-enet; user_visible: True
 include_guard(GLOBAL)
 message("driver_mdio-enet component is included.")
 

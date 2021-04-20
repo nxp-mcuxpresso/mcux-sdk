@@ -1,3 +1,4 @@
+#Description: MMCAU library for ARM Cortex M4/M7 core; user_visible: True
 include_guard(GLOBAL)
 message("middleware_mmcau_cm4_cm7 component is included.")
 

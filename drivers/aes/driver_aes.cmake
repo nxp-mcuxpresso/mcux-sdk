@@ -1,3 +1,4 @@
+#Description: AES Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_aes component is included.")
 

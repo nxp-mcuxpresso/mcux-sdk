@@ -1,3 +1,4 @@
+#Description: CACHE Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_cache_cache64 component is included.")
 

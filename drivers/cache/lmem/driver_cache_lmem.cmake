@@ -1,3 +1,4 @@
+#Description: CACHE LMEM Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_cache_lmem component is included.")
 

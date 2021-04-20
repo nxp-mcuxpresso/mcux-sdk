@@ -1,3 +1,4 @@
+#Description: Reset Driver; user_visible: False
 include_guard(GLOBAL)
 message("driver_reset component is included.")
 

@@ -1,3 +1,4 @@
+#Description: Driver phy-device-lan8720a; user_visible: True
 include_guard(GLOBAL)
 message("driver_phy-device-lan8720a component is included.")
 

@@ -1,3 +1,4 @@
+#Description: PRG Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_prg component is included.")
 

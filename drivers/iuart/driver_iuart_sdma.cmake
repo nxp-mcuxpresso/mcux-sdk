@@ -1,3 +1,4 @@
+#Description: IUART SDMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_iuart_sdma component is included.")
 

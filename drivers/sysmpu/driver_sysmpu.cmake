@@ -1,3 +1,4 @@
+#Description: SYSMPU Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_sysmpu component is included.")
 

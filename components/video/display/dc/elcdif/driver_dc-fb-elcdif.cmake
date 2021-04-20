@@ -1,3 +1,4 @@
+#Description: Driver dc-fb-elcdif; user_visible: True
 include_guard(GLOBAL)
 message("driver_dc-fb-elcdif component is included.")
 

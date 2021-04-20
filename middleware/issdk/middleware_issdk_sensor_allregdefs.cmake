@@ -1,3 +1,4 @@
+#Description: ISSDK Sensors RegDefs; user_visible: True
 include_guard(GLOBAL)
 message("middleware_issdk_sensor_allregdefs component is included.")
 

@@ -1,3 +1,4 @@
+#Description: Component lpuart_adapter; user_visible: True
 include_guard(GLOBAL)
 message("component_lpuart_adapter component is included.")
 

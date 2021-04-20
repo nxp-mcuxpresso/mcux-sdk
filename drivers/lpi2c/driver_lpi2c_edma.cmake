@@ -1,3 +1,4 @@
+#Description: LPI2C Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_lpi2c_edma component is included.")
 

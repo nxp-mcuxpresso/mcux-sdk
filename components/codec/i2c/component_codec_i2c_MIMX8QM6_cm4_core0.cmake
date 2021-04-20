@@ -1,3 +1,4 @@
+#Description: Component codec_i2c; user_visible: True
 include_guard(GLOBAL)
 message("component_codec_i2c component is included.")
 

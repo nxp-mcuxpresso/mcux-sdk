@@ -1,3 +1,4 @@
+#Description: IRTC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_irtc component is included.")
 

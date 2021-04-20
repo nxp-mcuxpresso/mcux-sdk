@@ -1,3 +1,4 @@
+#Description: Driver is42sm16800h; user_visible: True
 include_guard(GLOBAL)
 message("driver_IS42SM16800H component is included.")
 

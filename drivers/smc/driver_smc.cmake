@@ -1,3 +1,4 @@
+#Description: SMC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_smc component is included.")
 

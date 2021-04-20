@@ -1,3 +1,4 @@
+#Description: Driver wm8960; user_visible: True
 include_guard(GLOBAL)
 message("driver_wm8960 component is included.")
 

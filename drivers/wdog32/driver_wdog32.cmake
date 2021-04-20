@@ -1,3 +1,4 @@
+#Description: WDOG32 Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_wdog32 component is included.")
 

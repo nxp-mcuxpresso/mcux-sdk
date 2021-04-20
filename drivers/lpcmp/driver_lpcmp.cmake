@@ -1,3 +1,4 @@
+#Description: LPCMP Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_lpcmp component is included.")
 

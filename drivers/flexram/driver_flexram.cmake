@@ -1,3 +1,4 @@
+#Description: FLEXRAM Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexram component is included.")
 

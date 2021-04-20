@@ -1,3 +1,4 @@
+#Description: Component wm8960 adapter for single codecs; user_visible: True
 include_guard(GLOBAL)
 message("component_wm8960_adapter component is included.")
 

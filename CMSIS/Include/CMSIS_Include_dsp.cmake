@@ -1,3 +1,4 @@
+#Description: Cmsis_include_dsp; user_visible: True
 include_guard(GLOBAL)
 message("CMSIS_Include_dsp component is included.")
 

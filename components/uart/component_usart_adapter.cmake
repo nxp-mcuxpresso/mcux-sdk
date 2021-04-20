@@ -1,3 +1,4 @@
+#Description: Component usart_adapter; user_visible: True
 include_guard(GLOBAL)
 message("component_usart_adapter component is included.")
 

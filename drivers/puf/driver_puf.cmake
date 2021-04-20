@@ -1,3 +1,4 @@
+#Description: PUF Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_puf component is included.")
 

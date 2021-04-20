@@ -1,3 +1,4 @@
+#Description: fmc Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_fmc component is included.")
 

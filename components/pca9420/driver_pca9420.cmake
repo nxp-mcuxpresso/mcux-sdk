@@ -1,3 +1,4 @@
+#Description: Driver pca9420; user_visible: True
 include_guard(GLOBAL)
 message("driver_pca9420 component is included.")
 

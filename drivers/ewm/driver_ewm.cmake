@@ -1,3 +1,4 @@
+#Description: EWM Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_ewm component is included.")
 

@@ -1,3 +1,4 @@
+#Description: ROMAPI Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_romapi component is included.")
 

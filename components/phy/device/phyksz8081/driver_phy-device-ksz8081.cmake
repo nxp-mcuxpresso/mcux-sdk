@@ -1,3 +1,4 @@
+#Description: Driver phy-device-ksz8081; user_visible: True
 include_guard(GLOBAL)
 message("driver_phy-device-ksz8081 component is included.")
 

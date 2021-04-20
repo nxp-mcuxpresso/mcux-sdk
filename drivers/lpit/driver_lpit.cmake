@@ -1,3 +1,4 @@
+#Description: LPIT Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_lpit component is included.")
 

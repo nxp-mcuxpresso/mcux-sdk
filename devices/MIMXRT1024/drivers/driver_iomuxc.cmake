@@ -1,3 +1,4 @@
+#Description: IOMUXC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_iomuxc component is included.")
 

@@ -1,3 +1,4 @@
+#Description: Driver clock; user_visible: True
 include_guard(GLOBAL)
 message("driver_clock component is included.")
 

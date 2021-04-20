@@ -1,3 +1,4 @@
+#Description: CTimer Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_ctimer component is included.")
 

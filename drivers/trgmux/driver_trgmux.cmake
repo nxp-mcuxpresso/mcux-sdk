@@ -1,3 +1,4 @@
+#Description: TRGMUX Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_trgmux component is included.")
 

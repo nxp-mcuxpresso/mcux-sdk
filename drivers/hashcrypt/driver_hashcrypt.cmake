@@ -1,3 +1,4 @@
+#Description: Hashcrypt Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_hashcrypt component is included.")
 

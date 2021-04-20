@@ -1,3 +1,4 @@
+#Description: XIP Device Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_xip_device component is included.")
 

@@ -1,3 +1,4 @@
+#Description: Utility assert_lite; user_visible: True
 include_guard(GLOBAL)
 message("utility_assert_lite component is included.")
 

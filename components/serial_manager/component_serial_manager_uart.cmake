@@ -1,3 +1,4 @@
+#Description: Component serial_manager_uart; user_visible: True
 include_guard(GLOBAL)
 message("component_serial_manager_uart component is included.")
 

@@ -1,3 +1,4 @@
+#Description: Driver display-adv7535; user_visible: True
 include_guard(GLOBAL)
 message("driver_display-adv7535 component is included.")
 

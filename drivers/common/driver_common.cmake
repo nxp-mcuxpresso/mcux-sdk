@@ -1,3 +1,4 @@
+#Description: Common Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_common component is included.")
 
@@ -10,6 +11,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
 )
 
 
-include(driver_clock)
 include(driver_reset)
 include(device_CMSIS)

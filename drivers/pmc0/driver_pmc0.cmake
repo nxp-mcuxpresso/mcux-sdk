@@ -1,3 +1,4 @@
+#Description: PMC0 Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_pmc0 component is included.")
 

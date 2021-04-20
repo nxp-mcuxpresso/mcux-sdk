@@ -1,3 +1,4 @@
+#Description: USDHC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_usdhc component is included.")
 

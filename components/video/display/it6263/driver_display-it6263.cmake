@@ -1,3 +1,4 @@
+#Description: Driver display-it6263; user_visible: True
 include_guard(GLOBAL)
 message("driver_display-it6263 component is included.")
 

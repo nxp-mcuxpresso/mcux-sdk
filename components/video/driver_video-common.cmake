@@ -1,3 +1,4 @@
+#Description: Driver video-common; user_visible: True
 include_guard(GLOBAL)
 message("driver_video-common component is included.")
 

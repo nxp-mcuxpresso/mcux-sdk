@@ -1,3 +1,4 @@
+#Description: enet Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_lpc_enet component is included.")
 

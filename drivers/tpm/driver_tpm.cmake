@@ -1,3 +1,4 @@
+#Description: TPM Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_tpm component is included.")
 

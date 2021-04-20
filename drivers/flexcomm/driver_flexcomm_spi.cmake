@@ -1,3 +1,4 @@
+#Description: SPI Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexcomm_spi component is included.")
 

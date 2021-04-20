@@ -1,3 +1,4 @@
+#Description: device_CMSIS; user_visible: False
 include_guard(GLOBAL)
 message("device_CMSIS component is included.")
 

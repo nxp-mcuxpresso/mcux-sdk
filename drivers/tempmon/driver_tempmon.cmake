@@ -1,3 +1,4 @@
+#Description: TEMPMON Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_tempmon component is included.")
 

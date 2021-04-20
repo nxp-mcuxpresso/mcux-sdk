@@ -1,3 +1,4 @@
+#Description: TMU Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_tmu component is included.")
 

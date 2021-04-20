@@ -1,3 +1,4 @@
+#Description: Component cs42888 adapter for single codec; user_visible: True
 include_guard(GLOBAL)
 message("component_cs42888_adapter component is included.")
 

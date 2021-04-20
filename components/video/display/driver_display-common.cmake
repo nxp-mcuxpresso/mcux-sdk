@@ -1,3 +1,4 @@
+#Description: Driver display-common; user_visible: True
 include_guard(GLOBAL)
 message("driver_display-common component is included.")
 

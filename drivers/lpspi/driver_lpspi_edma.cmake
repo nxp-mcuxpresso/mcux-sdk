@@ -1,3 +1,4 @@
+#Description: LPSPI Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_lpspi_edma component is included.")
 

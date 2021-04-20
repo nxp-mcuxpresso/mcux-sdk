@@ -1,3 +1,4 @@
+#Description: Syscon_connections Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_syscon_connections component is included.")
 

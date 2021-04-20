@@ -1,3 +1,4 @@
+#Description: device_startup; user_visible: False
 include_guard(GLOBAL)
 message("device_startup component is included.")
 

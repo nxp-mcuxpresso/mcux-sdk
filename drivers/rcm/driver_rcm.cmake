@@ -1,3 +1,4 @@
+#Description: RCM Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_rcm component is included.")
 

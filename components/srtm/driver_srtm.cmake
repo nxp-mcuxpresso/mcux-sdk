@@ -1,3 +1,4 @@
+#Description: Driver srtm; user_visible: True
 include_guard(GLOBAL)
 message("driver_srtm component is included.")
 

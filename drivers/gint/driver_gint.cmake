@@ -1,3 +1,4 @@
+#Description: GINT Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_gint component is included.")
 

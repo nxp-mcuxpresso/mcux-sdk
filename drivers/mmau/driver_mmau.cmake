@@ -1,3 +1,4 @@
+#Description: MMAU Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_mmau component is included.")
 

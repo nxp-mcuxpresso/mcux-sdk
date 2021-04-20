@@ -1,3 +1,4 @@
+#Description: FLEXSPI Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexspi component is included.")
 

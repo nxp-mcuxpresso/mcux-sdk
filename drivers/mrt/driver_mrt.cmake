@@ -1,3 +1,4 @@
+#Description: MRT Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_mrt component is included.")
 

@@ -1,3 +1,4 @@
+#Description: I2S Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexcomm_i2s component is included.")
 

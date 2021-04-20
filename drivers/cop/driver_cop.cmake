@@ -1,3 +1,4 @@
+#Description: COP Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_cop component is included.")
 

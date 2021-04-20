@@ -1,3 +1,4 @@
+#Description: Component ctimer_adapter; user_visible: True
 include_guard(GLOBAL)
 message("component_ctimer_adapter component is included.")
 

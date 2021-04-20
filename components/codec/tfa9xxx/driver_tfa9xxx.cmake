@@ -1,3 +1,4 @@
+#Description: Driver tfa9xxx; user_visible: True
 include_guard(GLOBAL)
 message("driver_tfa9xxx component is included.")
 

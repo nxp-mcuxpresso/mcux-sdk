@@ -1,3 +1,4 @@
+#Description: LPADC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_lpadc component is included.")
 

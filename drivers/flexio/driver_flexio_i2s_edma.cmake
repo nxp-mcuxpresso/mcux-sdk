@@ -1,3 +1,4 @@
+#Description: FLEXIO I2S EDMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexio_i2s_edma component is included.")
 

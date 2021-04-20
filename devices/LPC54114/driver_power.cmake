@@ -1,3 +1,4 @@
+#Description: Power driver with Power Lib Hard ABI; user_visible: True
 include_guard(GLOBAL)
 message("driver_power component is included.")
 

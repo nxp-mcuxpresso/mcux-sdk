@@ -1,3 +1,4 @@
+#Description: CMT Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_cmt component is included.")
 

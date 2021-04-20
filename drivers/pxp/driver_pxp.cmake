@@ -1,3 +1,4 @@
+#Description: PXP Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_pxp component is included.")
 

@@ -1,3 +1,4 @@
+#Description: I2C Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_i2c component is included.")
 

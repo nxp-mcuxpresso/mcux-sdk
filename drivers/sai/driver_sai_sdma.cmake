@@ -1,3 +1,4 @@
+#Description: SAI SDMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_sai_sdma component is included.")
 

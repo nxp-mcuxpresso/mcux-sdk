@@ -1,3 +1,4 @@
+#Description: Cmsis_include_common; user_visible: True
 include_guard(GLOBAL)
 message("CMSIS_Include_common component is included.")
 

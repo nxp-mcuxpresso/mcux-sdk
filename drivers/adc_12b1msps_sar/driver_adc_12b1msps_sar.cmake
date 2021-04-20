@@ -1,3 +1,4 @@
+#Description: ADC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_adc_12b1msps_sar component is included.")
 

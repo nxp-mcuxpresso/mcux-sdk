@@ -1,3 +1,4 @@
+#Description: KPP Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_kpp component is included.")
 

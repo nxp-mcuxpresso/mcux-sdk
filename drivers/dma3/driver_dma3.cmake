@@ -1,3 +1,4 @@
+#Description: EDMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_dma3 component is included.")
 

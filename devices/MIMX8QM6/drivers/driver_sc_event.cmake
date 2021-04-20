@@ -1,3 +1,4 @@
+#Description: SC Event Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_sc_event component is included.")
 

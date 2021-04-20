@@ -1,3 +1,4 @@
+#Description: SCT Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_sctimer component is included.")
 

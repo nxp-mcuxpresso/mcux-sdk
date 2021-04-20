@@ -1,3 +1,4 @@
+#Description: Driver mx25r_flash; user_visible: True
 include_guard(GLOBAL)
 message("driver_mx25r_flash component is included.")
 

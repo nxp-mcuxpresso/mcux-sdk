@@ -1,3 +1,4 @@
+#Description: SCFW API Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_scfw_api component is included.")
 

@@ -1,3 +1,4 @@
+#Description: SPIFI Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_spifi_dma component is included.")
 

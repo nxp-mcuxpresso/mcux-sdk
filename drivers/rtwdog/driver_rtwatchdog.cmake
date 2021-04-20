@@ -1,3 +1,4 @@
+#Description: RTWDOG Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_rtwatchdog component is included.")
 

@@ -1,3 +1,4 @@
+#Description: Driver display-mipi-dsi-cmd; user_visible: True
 include_guard(GLOBAL)
 message("driver_display-mipi-dsi-cmd component is included.")
 

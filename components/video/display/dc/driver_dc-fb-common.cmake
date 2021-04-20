@@ -1,3 +1,4 @@
+#Description: Driver dc-fb-common; user_visible: True
 include_guard(GLOBAL)
 message("driver_dc-fb-common component is included.")
 

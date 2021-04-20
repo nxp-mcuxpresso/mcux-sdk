@@ -1,3 +1,4 @@
+#Description: Driver mma8451q; user_visible: True
 include_guard(GLOBAL)
 message("driver_mma8451q component is included.")
 

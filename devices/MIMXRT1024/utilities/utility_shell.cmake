@@ -1,3 +1,4 @@
+#Description: Utility shell; user_visible: True
 include_guard(GLOBAL)
 message("utility_shell component is included.")
 

@@ -1,3 +1,4 @@
+#Description: FMEAS Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_fmeas component is included.")
 

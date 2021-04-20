@@ -1,3 +1,4 @@
+#Description: ISI Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_isi component is included.")
 

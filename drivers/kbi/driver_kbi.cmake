@@ -1,3 +1,4 @@
+#Description: KBI Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_kbi component is included.")
 

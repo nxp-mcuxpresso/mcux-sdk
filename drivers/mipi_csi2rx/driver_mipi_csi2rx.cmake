@@ -1,3 +1,4 @@
+#Description: MIPI CSI2RX Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_mipi_csi2rx component is included.")
 

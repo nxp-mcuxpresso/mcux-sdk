@@ -1,3 +1,4 @@
+#Description: ACMP Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_acmp_1 component is included.")
 

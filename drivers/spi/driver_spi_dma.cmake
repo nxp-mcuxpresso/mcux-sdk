@@ -1,3 +1,4 @@
+#Description: SPI Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_spi_dma component is included.")
 

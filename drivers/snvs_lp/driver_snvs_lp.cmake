@@ -1,3 +1,4 @@
+#Description: SNVS LP Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_snvs_lp component is included.")
 

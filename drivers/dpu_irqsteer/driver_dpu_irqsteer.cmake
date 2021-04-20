@@ -1,3 +1,4 @@
+#Description: DPU IRQSTEER Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_dpu_irqsteer component is included.")
 

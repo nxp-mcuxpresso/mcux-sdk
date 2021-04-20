@@ -1,3 +1,4 @@
+#Description: Driver display-rm67191; user_visible: True
 include_guard(GLOBAL)
 message("driver_display-rm67191 component is included.")
 

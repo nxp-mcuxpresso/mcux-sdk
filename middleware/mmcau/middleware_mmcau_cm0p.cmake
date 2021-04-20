@@ -1,3 +1,4 @@
+#Description: MMCAU library for ARM Cortex M0+ core; user_visible: True
 include_guard(GLOBAL)
 message("middleware_mmcau_cm0p component is included.")
 

@@ -1,3 +1,4 @@
+#Description: PIT Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_pit component is included.")
 

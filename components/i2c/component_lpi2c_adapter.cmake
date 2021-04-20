@@ -1,3 +1,4 @@
+#Description: Component lpi2c_adapter; user_visible: True
 include_guard(GLOBAL)
 message("component_lpi2c_adapter component is included.")
 

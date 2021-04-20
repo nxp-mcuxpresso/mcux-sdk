@@ -1,3 +1,4 @@
+#Description: Driver ft5406; user_visible: False
 include_guard(GLOBAL)
 message("driver_ft5406 component is included.")
 

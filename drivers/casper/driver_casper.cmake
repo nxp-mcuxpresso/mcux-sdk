@@ -1,3 +1,4 @@
+#Description: CASPER Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_casper component is included.")
 

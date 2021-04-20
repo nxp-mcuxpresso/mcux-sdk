@@ -1,3 +1,4 @@
+#Description: Cmsis_include_core_cm33; user_visible: True
 include_guard(GLOBAL)
 message("CMSIS_Include_core_cm33 component is included.")
 

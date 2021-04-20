@@ -1,3 +1,4 @@
+#Description: DAC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_dac component is included.")
 

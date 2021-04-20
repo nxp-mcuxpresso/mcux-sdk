@@ -1,3 +1,4 @@
+#Description: Driver slcd_engine; user_visible: True
 include_guard(GLOBAL)
 message("driver_slcd_engine component is included.")
 

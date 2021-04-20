@@ -1,3 +1,4 @@
+#Description: DCDC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_dcdc_1 component is included.")
 

@@ -1,3 +1,4 @@
+#Description: Driver video-i2c; user_visible: True
 include_guard(GLOBAL)
 message("driver_video-i2c component is included.")
 

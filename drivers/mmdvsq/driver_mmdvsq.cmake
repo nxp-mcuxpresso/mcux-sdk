@@ -1,3 +1,4 @@
+#Description: MMDVSQ Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_mmdvsq component is included.")
 

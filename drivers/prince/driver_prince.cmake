@@ -1,3 +1,4 @@
+#Description: PRINCE Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_prince component is included.")
 

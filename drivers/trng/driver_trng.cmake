@@ -1,3 +1,4 @@
+#Description: TRNG Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_trng component is included.")
 

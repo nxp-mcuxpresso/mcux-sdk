@@ -1,3 +1,4 @@
+#Description: VREF Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_vref component is included.")
 

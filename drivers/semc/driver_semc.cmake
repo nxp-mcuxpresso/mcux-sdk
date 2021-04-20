@@ -1,3 +1,4 @@
+#Description: SEMC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_semc component is included.")
 

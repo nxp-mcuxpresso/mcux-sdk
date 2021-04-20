@@ -1,3 +1,4 @@
+#Description: Driver ak4497; user_visible: True
 include_guard(GLOBAL)
 message("driver_ak4497 component is included.")
 

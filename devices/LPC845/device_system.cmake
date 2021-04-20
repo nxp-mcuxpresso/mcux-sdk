@@ -1,3 +1,4 @@
+#Description: device_system; user_visible: False
 include_guard(GLOBAL)
 message("device_system component is included.")
 

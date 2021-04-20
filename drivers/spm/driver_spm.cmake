@@ -1,3 +1,4 @@
+#Description: SPM Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_spm component is included.")
 

@@ -1,3 +1,4 @@
+#Description: XRDC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_xrdc component is included.")
 

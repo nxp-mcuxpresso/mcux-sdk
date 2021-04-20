@@ -1,3 +1,4 @@
+#Description: Driver camera-receiver-isi; user_visible: True
 include_guard(GLOBAL)
 message("driver_camera-receiver-isi component is included.")
 

@@ -1,3 +1,4 @@
+#Description: FLEXIO I2S Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexio_i2s component is included.")
 

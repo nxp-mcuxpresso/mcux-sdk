@@ -1,3 +1,4 @@
+#Description: CWT Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_cwt component is included.")
 

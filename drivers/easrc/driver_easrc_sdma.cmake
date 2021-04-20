@@ -1,3 +1,4 @@
+#Description: asrc_sdma Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_easrc_sdma component is included.")
 

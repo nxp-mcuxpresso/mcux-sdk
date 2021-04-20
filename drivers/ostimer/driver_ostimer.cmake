@@ -1,3 +1,4 @@
+#Description: OSTimer Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_ostimer component is included.")
 

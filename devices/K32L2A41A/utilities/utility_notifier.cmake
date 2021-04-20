@@ -1,3 +1,4 @@
+#Description: Utility notifier; user_visible: True
 include_guard(GLOBAL)
 message("utility_notifier component is included.")
 

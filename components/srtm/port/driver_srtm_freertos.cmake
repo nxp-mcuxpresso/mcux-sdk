@@ -1,3 +1,4 @@
+#Description: Driver srtm freertos; user_visible: True
 include_guard(GLOBAL)
 message("driver_srtm_freertos component is included.")
 

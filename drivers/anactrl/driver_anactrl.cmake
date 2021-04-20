@@ -1,3 +1,4 @@
+#Description: anactrl Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_anactrl component is included.")
 

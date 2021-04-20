@@ -1,3 +1,4 @@
+#Description: Component lists; user_visible: True
 include_guard(GLOBAL)
 message("component_lists component is included.")
 

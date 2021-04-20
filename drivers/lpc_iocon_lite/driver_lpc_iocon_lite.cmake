@@ -1,3 +1,4 @@
+#Description: IOCON Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_lpc_iocon_lite component is included.")
 

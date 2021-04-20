@@ -1,3 +1,4 @@
+#Description: Component da7212 adapter for single codec; user_visible: True
 include_guard(GLOBAL)
 message("component_da7212_adapter component is included.")
 

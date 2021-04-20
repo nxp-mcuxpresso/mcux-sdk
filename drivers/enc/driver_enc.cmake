@@ -1,3 +1,4 @@
+#Description: ENC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_enc component is included.")
 

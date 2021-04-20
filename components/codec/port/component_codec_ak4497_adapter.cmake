@@ -1,3 +1,4 @@
+#Description: Component ak4497 adapter for multi codecs; user_visible: True
 include_guard(GLOBAL)
 message("component_codec_ak4497_adapter component is included.")
 
@@ -12,4 +13,3 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
 
 
 include(driver_ak4497)
-include(driver_codec)

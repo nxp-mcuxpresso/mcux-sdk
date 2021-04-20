@@ -1,3 +1,4 @@
+#Description: ADC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_lpc_adc component is included.")
 

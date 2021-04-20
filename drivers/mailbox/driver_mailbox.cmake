@@ -1,3 +1,4 @@
+#Description: MAILBOX Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_mailbox component is included.")
 

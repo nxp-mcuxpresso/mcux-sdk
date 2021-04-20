@@ -1,3 +1,4 @@
+#Description: SNVS HP Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_snvs_hp component is included.")
 

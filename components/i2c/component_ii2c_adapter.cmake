@@ -1,3 +1,4 @@
+#Description: Component ii2c_adapter; user_visible: True
 include_guard(GLOBAL)
 message("component_ii2c_adapter component is included.")
 

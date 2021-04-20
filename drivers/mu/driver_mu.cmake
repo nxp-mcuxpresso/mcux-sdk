@@ -1,3 +1,4 @@
+#Description: MU Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_mu component is included.")
 

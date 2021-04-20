@@ -1,3 +1,4 @@
+#Description: BEE Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_bee component is included.")
 

@@ -1,3 +1,4 @@
+#Description: FLEXIO SPI Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexio_spi component is included.")
 

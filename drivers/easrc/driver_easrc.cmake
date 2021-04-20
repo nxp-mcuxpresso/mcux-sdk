@@ -1,3 +1,4 @@
+#Description: asrc Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_easrc component is included.")
 

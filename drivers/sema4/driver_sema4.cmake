@@ -1,3 +1,4 @@
+#Description: SEMA4 Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_sema4 component is included.")
 

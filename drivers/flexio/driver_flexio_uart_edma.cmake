@@ -1,3 +1,4 @@
+#Description: FLEXIO UART EDMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexio_uart_edma component is included.")
 

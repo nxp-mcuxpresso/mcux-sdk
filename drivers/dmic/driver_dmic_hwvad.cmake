@@ -1,3 +1,4 @@
+#Description: DMIC HWVAD Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_dmic_hwvad component is included.")
 

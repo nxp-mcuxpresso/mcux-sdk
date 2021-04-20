@@ -1,3 +1,4 @@
+#Description: Component osa_bm; user_visible: False
 include_guard(GLOBAL)
 message("component_osa_bm component is included.")
 

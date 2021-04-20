@@ -1,3 +1,4 @@
+#Description: DMIC Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_dmic component is included.")
 

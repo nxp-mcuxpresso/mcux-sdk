@@ -1,3 +1,4 @@
+#Description: PWT Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_pwt component is included.")
 

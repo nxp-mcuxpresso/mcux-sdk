@@ -1,3 +1,4 @@
+#Description: FLEXIO UART Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexio_uart component is included.")
 

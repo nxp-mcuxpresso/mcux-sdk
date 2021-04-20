@@ -1,3 +1,4 @@
+#Description: FLEXCAN Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexcan component is included.")
 

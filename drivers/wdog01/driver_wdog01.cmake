@@ -1,3 +1,4 @@
+#Description: wdog01 Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_wdog01 component is included.")
 

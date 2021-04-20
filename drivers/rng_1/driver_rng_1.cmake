@@ -1,3 +1,4 @@
+#Description: RNG Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_rng_1 component is included.")
 

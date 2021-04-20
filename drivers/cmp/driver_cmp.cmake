@@ -1,3 +1,4 @@
+#Description: CMP Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_cmp component is included.")
 

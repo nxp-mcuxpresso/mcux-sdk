@@ -1,3 +1,4 @@
+#Description: Utility debug_console; user_visible: True
 include_guard(GLOBAL)
 message("utility_debug_console component is included.")
 

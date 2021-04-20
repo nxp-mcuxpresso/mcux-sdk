@@ -1,3 +1,4 @@
+#Description: I3C Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_i3c component is included.")
 

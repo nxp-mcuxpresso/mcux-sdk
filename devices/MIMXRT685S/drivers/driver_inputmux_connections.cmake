@@ -1,3 +1,4 @@
+#Description: Inputmux_connections Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_inputmux_connections component is included.")
 

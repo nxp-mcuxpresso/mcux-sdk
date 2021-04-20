@@ -1,3 +1,4 @@
+#Description: Driver camera-device-sccb; user_visible: True
 include_guard(GLOBAL)
 message("driver_camera-device-sccb component is included.")
 

@@ -1,3 +1,4 @@
+#Description: CAPT Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_capt component is included.")
 

@@ -1,3 +1,4 @@
+#Description: OCOTP Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_ocotp component is included.")
 
