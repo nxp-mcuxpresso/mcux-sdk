@@ -1,4 +1,4 @@
-#Description: ISSDK Pedometer Algorithm Common; user_visible: False
+#Description: Middleware issdk algorithms pedometer common; user_visible: False
 include_guard(GLOBAL)
 message("middleware_issdk_algorithms_pedometer_common component is included.")
 

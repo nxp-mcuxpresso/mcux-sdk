@@ -1,4 +1,4 @@
-#Description: Component wm8524 adapter for multi codecs; user_visible: True
+#Description: Component codec_wm8524_adapter; user_visible: True
 include_guard(GLOBAL)
 message("component_codec_wm8524_adapter component is included.")
 

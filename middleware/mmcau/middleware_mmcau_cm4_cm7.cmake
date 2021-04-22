@@ -1,4 +1,4 @@
-#Description: MMCAU library for ARM Cortex M4/M7 core; user_visible: True
+#Description: Kinetis MMCAU security function library for Arm Cortex-M4 and Cortex-M7; user_visible: True
 include_guard(GLOBAL)
 message("middleware_mmcau_cm4_cm7 component is included.")
 

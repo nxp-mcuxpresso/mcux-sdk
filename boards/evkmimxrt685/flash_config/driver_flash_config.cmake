@@ -1,4 +1,4 @@
-#Description: flash config block; user_visible: True
+#Description: Flash config; user_visible: True
 include_guard(GLOBAL)
 message("driver_flash_config component is included.")
 

@@ -1,4 +1,4 @@
-#Description: Component miniusart_adapter; user_visible: True
+#Description: miniusart_adapter; user_visible: True
 include_guard(GLOBAL)
 message("component_miniusart_adapter component is included.")
 

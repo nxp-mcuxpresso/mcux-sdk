@@ -1,4 +1,4 @@
-#Description: FLEXSPI Driver; user_visible: True
+#Description: FLEXSPI EDMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexspi_edma component is included.")
 

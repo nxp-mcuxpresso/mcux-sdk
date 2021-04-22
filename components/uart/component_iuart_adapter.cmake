@@ -1,4 +1,4 @@
-#Description: Component iuart_adapter; user_visible: True
+#Description: iuart_adapter; user_visible: True
 include_guard(GLOBAL)
 message("component_iuart_adapter component is included.")
 

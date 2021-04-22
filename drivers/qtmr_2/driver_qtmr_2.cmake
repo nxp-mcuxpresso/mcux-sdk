@@ -1,4 +1,4 @@
-#Description: QTMR Driver; user_visible: True
+#Description: QTMR_2 Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_qtmr_2 component is included.")
 

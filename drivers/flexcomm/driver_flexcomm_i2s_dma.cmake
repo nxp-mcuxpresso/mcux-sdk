@@ -1,4 +1,4 @@
-#Description: I2S Driver; user_visible: True
+#Description: FLEXCOMM I2S DMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexcomm_i2s_dma component is included.")
 

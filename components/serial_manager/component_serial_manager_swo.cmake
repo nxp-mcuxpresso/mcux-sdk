@@ -1,4 +1,4 @@
-#Description: Component serial_manager_swo; user_visible: True
+#Description: Serial Manager Swo; user_visible: True
 include_guard(GLOBAL)
 message("component_serial_manager_swo component is included.")
 

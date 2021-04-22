@@ -1,4 +1,4 @@
-#Description: Component uart_adapter; user_visible: True
+#Description: uart_adapter; user_visible: True
 include_guard(GLOBAL)
 message("component_uart_adapter component is included.")
 

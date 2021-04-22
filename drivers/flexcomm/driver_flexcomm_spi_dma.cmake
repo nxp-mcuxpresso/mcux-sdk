@@ -1,4 +1,4 @@
-#Description: SPI Driver; user_visible: True
+#Description: FLEXCOMM SPI DMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexcomm_spi_dma component is included.")
 

@@ -1,4 +1,4 @@
-#Description: LTC Driver; user_visible: True
+#Description: LTC EDMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_ltc_edma component is included.")
 

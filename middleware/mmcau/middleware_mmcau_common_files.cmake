@@ -1,4 +1,4 @@
-#Description: MMCAU common library source files; user_visible: True
+#Description: Kinetis MMCAU common source files; user_visible: True
 include_guard(GLOBAL)
 message("middleware_mmcau_common_files component is included.")
 

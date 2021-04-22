@@ -1,4 +1,4 @@
-#Description: PORT Driver; user_visible: True
+#Description: port Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_port_ke04 component is included.")
 

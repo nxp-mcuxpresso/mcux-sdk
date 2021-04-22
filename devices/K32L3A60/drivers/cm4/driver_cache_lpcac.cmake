@@ -1,4 +1,4 @@
-#Description: CACHE Driver; user_visible: True
+#Description: CACHE Lpcac Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_cache_lpcac component is included.")
 

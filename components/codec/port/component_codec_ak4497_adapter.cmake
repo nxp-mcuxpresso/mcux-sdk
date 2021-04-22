@@ -1,4 +1,4 @@
-#Description: Component ak4497 adapter for multi codecs; user_visible: True
+#Description: Component codec_ak4497_adapter; user_visible: True
 include_guard(GLOBAL)
 message("component_codec_ak4497_adapter component is included.")
 

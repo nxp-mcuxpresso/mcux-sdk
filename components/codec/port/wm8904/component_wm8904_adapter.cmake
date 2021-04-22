@@ -1,4 +1,4 @@
-#Description: Component wm8904 adapter for single codec; user_visible: True
+#Description: Component wm8904_adapter; user_visible: True
 include_guard(GLOBAL)
 message("component_wm8904_adapter component is included.")
 

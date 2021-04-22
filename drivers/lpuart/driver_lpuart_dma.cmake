@@ -1,4 +1,4 @@
-#Description: LPUART Driver; user_visible: True
+#Description: LPUART DMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_lpuart_dma component is included.")
 

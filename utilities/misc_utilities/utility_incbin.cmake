@@ -1,4 +1,4 @@
-#Description: Used to include slave core binary into master core binary.; user_visible: True
+#Description: utility incbin; user_visible: True
 include_guard(GLOBAL)
 message("utility_incbin component is included.")
 

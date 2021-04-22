@@ -1,4 +1,4 @@
-#Description: CACHE Driver; user_visible: True
+#Description: CACHE Lplmem Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_cache_lplmem component is included.")
 

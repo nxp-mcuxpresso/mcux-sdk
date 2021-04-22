@@ -1,4 +1,4 @@
-#Description: Power Driver; user_visible: True
+#Description: power_no_lib; user_visible: True
 include_guard(GLOBAL)
 message("driver_power_no_lib component is included.")
 

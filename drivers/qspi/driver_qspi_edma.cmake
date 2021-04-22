@@ -1,4 +1,4 @@
-#Description: QSPI Driver; user_visible: True
+#Description: QSPI EDMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_qspi_edma component is included.")
 

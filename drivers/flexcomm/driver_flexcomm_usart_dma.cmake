@@ -1,4 +1,4 @@
-#Description: USART Driver; user_visible: True
+#Description: FLEXCOMM USART DMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexcomm_usart_dma component is included.")
 

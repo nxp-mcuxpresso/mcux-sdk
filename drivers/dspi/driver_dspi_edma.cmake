@@ -1,4 +1,4 @@
-#Description: DSPI Driver; user_visible: True
+#Description: DSPI_EDMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_dspi_edma component is included.")
 

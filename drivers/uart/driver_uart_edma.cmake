@@ -1,4 +1,4 @@
-#Description: UART Driver; user_visible: True
+#Description: UART EDMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_uart_edma component is included.")
 

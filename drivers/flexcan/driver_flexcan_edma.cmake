@@ -1,4 +1,4 @@
-#Description: FLEXCAN Driver; user_visible: True
+#Description: FLEXCAN EDMA Driver; user_visible: True
 include_guard(GLOBAL)
 message("driver_flexcan_edma component is included.")
 
