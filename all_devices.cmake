@@ -1,4 +1,14 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.10.0)
+
+include(${CMAKE_CURRENT_LIST_DIR}/tools/cmake_toolchain_files/utils.cmake)
+
+mcux_import_kconfig(${CMAKE_CURRENT_LIST_DIR}/.config)
+
+if(NOT DEFINED MCUX_DEVICE)
+  message(FATAL_ERROR "MCUX_DEVICE is not defined")
+else()
+  message("Load components for ${MCUX_DEVICE}:")
+endif()
 # OR Logic component
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1052")
     list(APPEND CMAKE_MODULE_PATH

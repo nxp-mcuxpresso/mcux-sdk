@@ -1,0 +1,156 @@
+# Copyright 2021 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+
+config USE_device_CMSIS
+    bool
+    depends on HAS_MCUX_SDK_device_CMSIS
+    default n
+    select USE_CMSIS_Include_core_cm0plus if HAS_MCUX_SDK_CMSIS_Include_core_cm0plus
+
+config USE_device_startup
+    bool
+    depends on HAS_MCUX_SDK_device_startup
+    default n
+    select USE_device_system if HAS_MCUX_SDK_device_system
+
+config USE_device_startup_K32L3A60_cm0plus
+    bool
+    depends on HAS_MCUX_SDK_device_startup_K32L3A60_cm0plus
+    default n
+    select USE_device_system_K32L3A60_cm0plus if HAS_MCUX_SDK_device_system_K32L3A60_cm0plus
+
+config USE_device_startup_K32L3A60_cm4
+    bool
+    depends on HAS_MCUX_SDK_device_startup_K32L3A60_cm4
+    default n
+    select USE_device_system_K32L3A60_cm4 if HAS_MCUX_SDK_device_system_K32L3A60_cm4
+
+config USE_device_startup_LPC54114_cm0plus
+    bool
+    depends on HAS_MCUX_SDK_device_startup_LPC54114_cm0plus
+    default n
+    select USE_device_system_LPC54114_cm0plus if HAS_MCUX_SDK_device_system_LPC54114_cm0plus
+
+config USE_device_startup_LPC54114_cm4
+    bool
+    depends on HAS_MCUX_SDK_device_startup_LPC54114_cm4
+    default n
+    select USE_device_system_LPC54114_cm4 if HAS_MCUX_SDK_device_system_LPC54114_cm4
+
+config USE_device_startup_LPC55S69_cm33_core0
+    bool
+    depends on HAS_MCUX_SDK_device_startup_LPC55S69_cm33_core0
+    default n
+    select USE_device_system_LPC55S69_cm33_core0 if HAS_MCUX_SDK_device_system_LPC55S69_cm33_core0
+
+config USE_device_startup_LPC55S69_cm33_core1
+    bool
+    depends on HAS_MCUX_SDK_device_startup_LPC55S69_cm33_core1
+    default n
+    select USE_device_system_LPC55S69_cm33_core1 if HAS_MCUX_SDK_device_system_LPC55S69_cm33_core1
+
+config USE_device_startup_MIMX8QM6_cm4_core0
+    bool
+    depends on HAS_MCUX_SDK_device_startup_MIMX8QM6_cm4_core0
+    default n
+
+config USE_device_startup_MIMX8QM6_cm4_core1
+    bool
+    depends on HAS_MCUX_SDK_device_startup_MIMX8QM6_cm4_core1
+    default n
+
+config USE_device_system
+    bool
+    depends on HAS_MCUX_SDK_device_system
+    default n
+    select USE_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
+
+config USE_device_system_K32L3A60_cm0plus
+    bool
+    depends on HAS_MCUX_SDK_device_system_K32L3A60_cm0plus
+    default n
+    select USE_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
+
+config USE_device_system_K32L3A60_cm4
+    bool
+    depends on HAS_MCUX_SDK_device_system_K32L3A60_cm4
+    default n
+    select USE_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
+
+config USE_device_system_LPC54114_cm0plus
+    bool
+    depends on HAS_MCUX_SDK_device_system_LPC54114_cm0plus
+    default n
+    select USE_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
+
+config USE_device_system_LPC54114_cm4
+    bool
+    depends on HAS_MCUX_SDK_device_system_LPC54114_cm4
+    default n
+    select USE_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
+
+config USE_device_system_LPC55S69_cm33_core0
+    bool
+    depends on HAS_MCUX_SDK_device_system_LPC55S69_cm33_core0
+    default n
+    select USE_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
+
+config USE_device_system_LPC55S69_cm33_core1
+    bool
+    depends on HAS_MCUX_SDK_device_system_LPC55S69_cm33_core1
+    default n
+    select USE_device_CMSIS if HAS_MCUX_SDK_device_CMSIS
+
+
+config HAS_MCUX_SDK_device_CMSIS
+    bool
+
+config HAS_MCUX_SDK_device_startup
+    bool
+
+config HAS_MCUX_SDK_device_startup_K32L3A60_cm0plus
+    bool
+
+config HAS_MCUX_SDK_device_startup_K32L3A60_cm4
+    bool
+
+config HAS_MCUX_SDK_device_startup_LPC54114_cm0plus
+    bool
+
+config HAS_MCUX_SDK_device_startup_LPC54114_cm4
+    bool
+
+config HAS_MCUX_SDK_device_startup_LPC55S69_cm33_core0
+    bool
+
+config HAS_MCUX_SDK_device_startup_LPC55S69_cm33_core1
+    bool
+
+config HAS_MCUX_SDK_device_startup_MIMX8QM6_cm4_core0
+    bool
+
+config HAS_MCUX_SDK_device_startup_MIMX8QM6_cm4_core1
+    bool
+
+config HAS_MCUX_SDK_device_system
+    bool
+
+config HAS_MCUX_SDK_device_system_K32L3A60_cm0plus
+    bool
+
+config HAS_MCUX_SDK_device_system_K32L3A60_cm4
+    bool
+
+config HAS_MCUX_SDK_device_system_LPC54114_cm0plus
+    bool
+
+config HAS_MCUX_SDK_device_system_LPC54114_cm4
+    bool
+
+config HAS_MCUX_SDK_device_system_LPC55S69_cm33_core0
+    bool
+
+config HAS_MCUX_SDK_device_system_LPC55S69_cm33_core1
+    bool
+
