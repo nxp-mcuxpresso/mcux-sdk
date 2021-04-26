@@ -31,6 +31,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sema4
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tmu_1
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog01
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -41,20 +42,24 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(component_codec_wm8524_adapter)
+#    include(utility_debug_console_lite)
 #    include(CMSIS_Include_dsp)
 #    include(driver_rdc)
 #    include(driver_ii2c)
+#    include(driver_ecspi_freertos)
 #    include(driver_gpc_2)
+#    include(driver_iuart_freertos)
 #    include(component_lists)
 #    include(device_system)
 #    include(device_startup)
 #    include(driver_ak4497)
 #    include(driver_clock)
-#    include(utility_debug_console_lite)
+#    include(driver_ii2c_freertos)
 #    include(driver_memory)
 #    include(driver_gpt)
 #    include(driver_iuart)
 #    include(driver_ipwm)
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_ecspi)
 #    include(component_codec_ak4497_adapter)
 #    include(driver_sdma)
@@ -63,6 +68,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_tmu_1)
 #    include(driver_iuart_sdma)
 #    include(driver_rdc_sema42)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(utility_assert)
 #    include(driver_srtm_freertos)
 #    include(utility_debug_console)
@@ -88,3 +94,4 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_wm8524)
 #    include(driver_pdm)
 #    include(driver_mu)
+#    include(middleware_freertos-kernel_MIMX8MM6)

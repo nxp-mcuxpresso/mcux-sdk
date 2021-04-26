@@ -34,8 +34,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/vref
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -48,11 +49,13 @@ list(APPEND CMAKE_MODULE_PATH
 # Copy the cmake components into projects
 #    include(middleware_usb_device_common_header)
 #    include(driver_llwu)
+#    include(driver_port)
 #    include(driver_dspi)
 #    include(driver_uart_edma)
+#    include(driver_uart_freertos)
 #    include(CMSIS_Include_dsp)
 #    include(driver_i2c)
-#    include(driver_port)
+#    include(driver_i2c_freertos)
 #    include(driver_dmamux)
 #    include(driver_lptmr)
 #    include(driver_gpio)
@@ -60,6 +63,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_dac)
 #    include(device_system)
 #    include(driver_i2c_edma)
+#    include(driver_lpuart_freertos)
 #    include(utility_debug_console)
 #    include(driver_cmp)
 #    include(device_startup)
@@ -72,12 +76,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_ewm)
 #    include(driver_lpuart)
 #    include(driver_rnga)
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_ftm)
 #    include(utility_notifier)
 #    include(driver_wdog)
 #    include(utility_assert_lite)
 #    include(middleware_usb_common_header)
 #    include(middleware_baremetal)
+#    include(driver_dspi_freertos)
 #    include(driver_vref)
 #    include(driver_flash)
 #    include(component_uart_adapter)
@@ -95,9 +101,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_crc)
 #    include(component_serial_manager)
 #    include(driver_fxos8700cq)
+#    include(middleware_freertos-kernel_MK22F51212)
 #    include(driver_pit)
 #    include(component_serial_manager_uart)
 #    include(driver_pmc)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)
 #    include(utility_shell)
 #    include(driver_dspi_edma)

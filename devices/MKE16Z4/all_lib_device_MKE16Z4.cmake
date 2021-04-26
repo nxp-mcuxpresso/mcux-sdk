@@ -31,6 +31,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/trgmux
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tsi
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -41,9 +42,12 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(middleware_freertos-kernel_MKE16Z4)
+#    include(driver_lpuart_freertos)
 #    include(driver_mscan)
 #    include(CMSIS_Include_dsp)
 #    include(component_lpuart_adapter)
+#    include(driver_lpi2c_freertos)
 #    include(driver_port)
 #    include(driver_wdog32)
 #    include(driver_lpspi)
@@ -62,6 +66,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_fxos8700cq)
 #    include(driver_ewm)
 #    include(driver_lpuart)
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_ftm)
 #    include(driver_trgmux)
 #    include(CMSIS_Include_core_cm0plus)
@@ -82,7 +87,10 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_crc)
 #    include(utility_assert_lite)
 #    include(component_serial_manager)
+#    include(middleware_freertos-kernel_heap_3)
 #    include(component_serial_manager_uart)
+#    include(driver_lpspi_freertos)
 #    include(driver_pwt)
 #    include(driver_pmc)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)

@@ -29,6 +29,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sctimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/utick
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -45,6 +46,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_dsp)
 #    include(component_usart_adapter)
 #    include(driver_wwdt)
+#    include(utility_shell)
 #    include(component_lists)
 #    include(driver_lpc_gpio)
 #    include(driver_mrt)
@@ -60,6 +62,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_fmeas)
 #    include(driver_lpc_crc)
 #    include(driver_wm8904)
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_flexcomm_i2c_dma)
 #    include(component_flexcomm_i2c_adapter)
 #    include(CMSIS_Include_core_cm0plus)
@@ -67,19 +70,21 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_spi)
 #    include(driver_utick)
 #    include(utility_debug_console)
-#    include(utility_shell)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(utility_assert)
 #    include(driver_sctimer)
 #    include(driver_flexcomm_usart)
 #    include(device_CMSIS)
 #    include(component_ctimer_adapter)
 #    include(driver_lpc_iocon)
+#    include(driver_flexcomm_i2c_freertos)
 #    include(driver_codec)
 #    include(utilities_misc_utilities)
 #    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_gint)
 #    include(component_codec_i2c_LPC51U68)
+#    include(driver_flexcomm_usart_freertos)
 #    include(utility_assert_lite)
 #    include(driver_inputmux)
 #    include(driver_flexcomm_i2c)
@@ -90,5 +95,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager_uart)
 #    include(component_wm8904_adapter)
 #    include(driver_flexcomm_i2s)
+#    include(middleware_freertos-kernel_LPC51U68)
 #    include(driver_reset)
 #    include(driver_flexcomm_spi_dma)
+#    include(driver_flexcomm_spi_freertos)

@@ -3,6 +3,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cau3
@@ -32,8 +33,11 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tpm
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/trng
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tstmr
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/usdhc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xrdc
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -47,37 +51,49 @@ list(APPEND CMAKE_MODULE_PATH
 # Copy the cmake components into projects
 #    include(utility_incbin)
 #    include(device_startup_K32L3A60_cm4)
+#    include(driver_lpuart_freertos)
+#    include(utility_debug_console)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_flexio_spi_edma)
 #    include(CMSIS_Include_dsp)
 #    include(component_lpuart_adapter)
+#    include(driver_lpi2c_freertos)
 #    include(driver_port)
 #    include(driver_dmamux)
 #    include(driver_lpspi)
 #    include(driver_lpi2c_edma)
 #    include(driver_gpio)
 #    include(component_lists)
+#    include(middleware_sdmmc_common)
 #    include(driver_tpm)
 #    include(driver_lpit)
 #    include(driver_cau3)
+#    include(middleware_sdmmc_host_usdhc_interrupt)
 #    include(driver_lpadc)
+#    include(middleware_freertos-kernel_K32L3A60_cm4)
 #    include(driver_clock)
 #    include(utility_debug_console_lite)
 #    include(driver_flexio_uart)
 #    include(driver_edma)
 #    include(driver_ewm)
 #    include(driver_trng)
+#    include(middleware_sdmmc_host_usdhc)
 #    include(utility_assert)
 #    include(driver_lpuart)
 #    include(driver_cache_lpcac)
 #    include(driver_flexio_spi)
 #    include(driver_xrdc)
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_flexio)
 #    include(utility_shell)
+#    include(middleware_sdmmc_host_usdhc_freertos)
+#    include(driver_usdhc)
 #    include(driver_msmc)
 #    include(utility_assert_lite)
 #    include(driver_flexio_i2c_master)
 #    include(driver_sim)
-#    include(utility_debug_console)
+#    include(middleware_sdmmc_host_usdhc_polling)
+#    include(middleware_sdmmc_osa_freertos)
 #    include(driver_flash)
 #    include(driver_lpi2c)
 #    include(driver_spm)
@@ -88,17 +104,22 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpcmp)
 #    include(driver_flexio_uart_edma)
 #    include(driver_tstmr)
+#    include(component_osa_bm)
 #    include(utilities_misc_utilities)
 #    include(CMSIS_Include_core_cm4)
 #    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_rtc)
+#    include(middleware_sdmmc_osa_bm)
 #    include(driver_crc)
 #    include(driver_wdog32)
-#    include(component_serial_manager)
+#    include(component_osa_free_rtos)
 #    include(driver_fxos8700cq)
+#    include(middleware_sdmmc_sd)
 #    include(driver_lptmr)
+#    include(component_serial_manager)
 #    include(component_serial_manager_uart)
+#    include(driver_lpspi_freertos)
 #    include(driver_mu)
 #    include(driver_dac_1)
 #    include(device_system_K32L3A60_cm4)

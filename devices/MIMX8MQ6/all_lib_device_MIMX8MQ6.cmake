@@ -5,6 +5,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8524
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8524
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cache/lmem
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
@@ -21,7 +22,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sema4
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tmu
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog01
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
@@ -29,21 +32,27 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(utility_debug_console_lite)
 #    include(CMSIS_Include_dsp)
 #    include(driver_rdc)
 #    include(driver_ii2c)
+#    include(driver_ecspi_freertos)
+#    include(driver_iuart_freertos)
 #    include(component_lists)
 #    include(device_system)
 #    include(device_startup)
 #    include(driver_clock)
-#    include(utility_debug_console_lite)
+#    include(driver_ii2c_freertos)
 #    include(driver_gpt)
 #    include(driver_iuart)
 #    include(driver_ipwm)
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_ecspi)
 #    include(utility_assert_lite)
 #    include(driver_cache_lmem)
 #    include(driver_rdc_sema42)
+#    include(utility_assert)
+#    include(utility_debug_console)
 #    include(device_CMSIS)
 #    include(driver_wdog01)
 #    include(component_iuart_adapter)
@@ -55,7 +64,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_common)
 #    include(driver_sema4)
 #    include(driver_tmu)
+#    include(component_serial_manager)
 #    include(driver_igpio)
 #    include(driver_sai)
+#    include(component_serial_manager_uart)
 #    include(driver_wm8524)
+#    include(middleware_freertos-kernel_MIMX8MQ6)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_qspi)

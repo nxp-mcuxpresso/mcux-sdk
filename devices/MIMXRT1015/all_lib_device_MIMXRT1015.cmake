@@ -46,8 +46,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/trng
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog01
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbara
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -59,7 +60,9 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_igpio)
+#    include(driver_lpuart_freertos)
 #    include(driver_rtwatchdog)
 #    include(driver_flexspi)
 #    include(driver_flexio_spi_edma)
@@ -86,10 +89,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_edma)
 #    include(driver_ewm)
 #    include(driver_gpt)
+#    include(middleware_freertos-kernel_MIMXRT1015)
 #    include(driver_lpuart)
 #    include(driver_wdog01)
 #    include(driver_flexio_spi)
 #    include(driver_iomuxc)
+#    include(driver_lpspi_freertos)
 #    include(driver_flexio)
 #    include(middleware_usb_device_common_header)
 #    include(driver_wm8960)
@@ -133,6 +138,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_sai)
 #    include(component_serial_manager_uart)
 #    include(driver_gpc_1)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_cache_armv7_m7)
 #    include(driver_dcdc_1)
 #    include(driver_xbara)

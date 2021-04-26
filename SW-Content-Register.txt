@@ -69,6 +69,34 @@ SDK_Components             Name: SDK components and board peripheral drivers
                            Location: components/                             
                            Origin: NXP (BSD-3-Clause)                        
 
+freertos                   Name: FreeRTOS                                    
+                           Version: 202007.00.0                              
+                           Outgoing License: MIT                             
+                           License File:                                     
+                           rtos/freertos_kernel/License/license.txt          
+                           Format: source code                               
+                           Description: IoT operating system for             
+                           microcontrollers                                  
+                           Location: rtos/freertos                           
+                           Origin: Amazon (MIT)                              
+                           Url: https://aws.amazon.com/freertos/             
+
+FreeRTOS_heap_newlib       Name: FreeRTOS Newlib helper                      
+                           Version: 23.9.2019                                
+                           Outgoing License: Dave Nadler License             
+                           License File:                                     
+                           rtos/freertos/freertos_kernel/portable/MemMang/hea
+                           p_useNewlib.c                                     
+                           Format: source code                               
+                           Description: Newlib allocator for FreeRTOS        
+                           Location:                                         
+                           rtos/freertos/freertos_kernel/portable/MemMang    
+                           Origin: Dave Nadler, Nadler & Associates          
+                           Consulting (Dave Nadler License)                  
+                           Url:                                              
+                           http://www.nadler.com/embedded/newlibAndFreeRTOS.h
+                           tml                                               
+
 mmcau                      Name: mmCAU S/W Library                           
                            Version: 2.0.1                                    
                            Outgoing License: BSD-3-Clause                    
@@ -91,6 +119,39 @@ cmsis_drivers              Name: SDK CMSIS Peripheral Drivers
                            supported microcontroller devices.                
                            Location: devices/<device>/cmsis_drivers          
                            Origin: NXP (Apache License 2.0)                  
+
+sdmmc                      Name: SD MMC SDIO Card middleware                 
+                           Version: 2.2.7                                    
+                           Outgoing License: BSC-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code                               
+                           Description: A software component support SD card,
+                           eMMC card, SDIO card.                             
+                           Location: middleware/sdmmc                        
+                           Origin: NXP (BSD-3-Clause)                        
+
+sdmmc_sdspi                Name: SD Card middleware                          
+                           Version: 2.1.4                                    
+                           Outgoing License: BSC-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code                               
+                           Description: A software component support access  
+                           SD card through spi.                              
+                           Location: middleware/sdmmc/sdspi                  
+                           Origin: NXP (BSD-3-Clause)                        
+
+segger_systemview          Name: Segger SystemView Demo                      
+                           Version: 2.40a                                    
+                           Outgoing License: BSD-3-Clause                    
+                           License File:                                     
+                           boards/<board>/rtos_examples/visualization/freerto
+                           s_segger_sysview/LICENSE                          
+                           Format: source code                               
+                           Description: Segger systemview demo               
+                           Location:                                         
+                           boards/<board>/rtos_examples/visualization/freerto
+                           s_segger_sysview                                  
+                           Origin: Segger (BSD-3-Clause)                     
 
 Pedometer_Library          Name: Pedometer Library                           
                            Version: 1.0                                      

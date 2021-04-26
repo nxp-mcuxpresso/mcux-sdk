@@ -47,8 +47,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tstmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xrdc
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/issdk
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -60,9 +61,11 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(driver_llwu)
+#    include(driver_lpuart_freertos)
 #    include(middleware_issdk_algorithms_pedometer_common)
 #    include(driver_pmc0)
 #    include(driver_ltc)
+#    include(middleware_freertos-kernel_MCIMX7U5)
 #    include(driver_flexio_spi_edma)
 #    include(CMSIS_Include_dsp)
 #    include(component_lpuart_adapter)
@@ -76,6 +79,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_snvs_hp)
 #    include(driver_snvs_lp)
 #    include(driver_lpit)
+#    include(utility_debug_console)
 #    include(driver_pf1550)
 #    include(utilities_misc_utilities)
 #    include(driver_acmp)
@@ -91,6 +95,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpuart)
 #    include(driver_flexio_spi)
 #    include(driver_lpadc)
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_flexio)
 #    include(utility_shell)
 #    include(driver_trgmux)
@@ -99,8 +104,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_dac12)
 #    include(utility_assert_lite)
 #    include(driver_cache_lmem)
-#    include(utility_debug_console)
+#    include(driver_sai_edma)
 #    include(middleware_mmcau_cm4_cm7)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_lpi2c)
 #    include(driver_wdog32)
 #    include(driver_xrdc)
@@ -109,6 +115,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpuart_edma)
 #    include(device_CMSIS)
 #    include(driver_sema42)
+#    include(driver_lpi2c_freertos)
 #    include(CMSIS_Driver_Include_Common)
 #    include(driver_tstmr)
 #    include(driver_codec)
@@ -130,7 +137,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_lpi2c_adapter)
 #    include(driver_sai)
 #    include(component_serial_manager_uart)
-#    include(driver_sai_edma)
+#    include(driver_lpspi_freertos)
 #    include(driver_flexio_i2c_master)
 #    include(driver_mu)
 #    include(driver_srtm_freertos)

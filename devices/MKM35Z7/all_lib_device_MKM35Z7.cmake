@@ -39,6 +39,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbar
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -50,9 +51,12 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(driver_llwu)
+#    include(driver_port)
+#    include(driver_lpuart_freertos)
+#    include(driver_uart_freertos)
 #    include(CMSIS_Include_dsp)
 #    include(driver_i2c)
-#    include(driver_port)
+#    include(driver_i2c_freertos)
 #    include(driver_dmamux)
 #    include(driver_lptmr)
 #    include(driver_gpio)
@@ -71,6 +75,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpuart)
 #    include(middleware_mmcau_common_files)
 #    include(driver_rnga)
+#    include(middleware_freertos-kernel_extension)
 #    include(utility_shell)
 #    include(utility_notifier)
 #    include(driver_wdog)
@@ -104,6 +109,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager_uart)
 #    include(driver_slcd_gdh_1247wp)
 #    include(driver_pmc)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)
 #    include(driver_slcd_engine)
+#    include(driver_spi_freertos)
+#    include(middleware_freertos-kernel_MKM35Z7)
 #    include(driver_xbar)

@@ -22,8 +22,14 @@ manifest:
 
   projects:
     - name: mcux-sdk-examples
-      revision: 946044848f909236a7d325c687a8adb71fc3de85
+      revision: 5a5037ebef679f8d1584a8a0b53a0c6eecf5a5d9
       path: examples
+    - name: FreeRTOS-Kernel
+      revision: MCUX_2.9.0
+      path: rtos/freertos/freertos_kernel
+    - name: mcux-sdk-middleware-sdmmc
+      revision: MCUX_2.9.0
+      path: middleware/sdmmc
 
   self:
     path: core

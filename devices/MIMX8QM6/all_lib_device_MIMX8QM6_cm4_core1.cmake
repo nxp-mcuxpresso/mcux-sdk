@@ -64,6 +64,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tstmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -74,6 +75,8 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(middleware_freertos-kernel_MIMX8QM6_cm4_core1)
+#    include(driver_lpuart_freertos)
 #    include(driver_camera-device-ov5640)
 #    include(driver_sema42)
 #    include(driver_wdog32)
@@ -83,6 +86,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_mdio-enet)
 #    include(driver_wm8960)
 #    include(middleware_mmcau_common_files)
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_cache_lmem)
 #    include(driver_display-common)
 #    include(driver_lpuart_edma)
@@ -92,6 +96,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_core_cm4)
 #    include(component_serial_manager)
 #    include(component_serial_manager_uart)
+#    include(driver_lpspi_freertos)
 #    include(driver_esai_edma)
 #    include(driver_enet)
 #    include(CMSIS_Include_dsp)
@@ -100,13 +105,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_startup_MIMX8QM6_cm4_core1)
 #    include(component_cs42888_adapter)
 #    include(driver_gpt)
-#    include(driver_flexcan_edma)
+#    include(utility_assert)
 #    include(driver_prg)
 #    include(middleware_mmcau_cm4_cm7)
 #    include(driver_phy-device-ar8031)
 #    include(driver_ftm)
 #    include(driver_camera-receiver-common)
-#    include(utility_assert)
+#    include(driver_flexcan_edma)
 #    include(driver_display-mipi-dsi-cmd)
 #    include(device_CMSIS)
 #    include(driver_tstmr)
@@ -119,6 +124,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_lpi2c_adapter)
 #    include(driver_dpu)
 #    include(driver_video-common)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_dpr)
 #    include(driver_mipi_dsi)
 #    include(driver_isi)
@@ -140,6 +146,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_display-rm67191)
 #    include(driver_flexspi)
 #    include(driver_display-it6263)
+#    include(driver_lpi2c_freertos)
 #    include(driver_srtm)
 #    include(driver_sai_edma)
 #    include(component_lists)

@@ -38,8 +38,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sysctl
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/utick
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -54,6 +55,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_power)
 #    include(driver_lpc_rtc)
 #    include(driver_hashcrypt)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_pint)
 #    include(driver_ctimer)
 #    include(driver_utick)
@@ -70,7 +72,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpadc)
 #    include(device_startup)
 #    include(driver_clock)
-#    include(utility_debug_console_lite)
+#    include(middleware_freertos-kernel_cm33_nonsecure_port)
 #    include(driver_flexcomm_i2s_dma)
 #    include(component_osa)
 #    include(driver_lpc_crc)
@@ -81,6 +83,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager_swo)
 #    include(driver_flexcomm_i2c_dma)
 #    include(component_flexcomm_i2c_adapter)
+#    include(middleware_freertos-kernel_extension)
 #    include(utility_assert_lite)
 #    include(driver_flexcomm_usart_dma)
 #    include(driver_iap1)
@@ -95,17 +98,21 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_usart)
 #    include(device_CMSIS)
 #    include(driver_lpc_iocon)
+#    include(driver_flexcomm_i2c_freertos)
+#    include(utility_debug_console_lite)
 #    include(driver_codec)
 #    include(utilities_misc_utilities)
 #    include(driver_ostimer)
 #    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_gint)
+#    include(driver_flexcomm_usart_freertos)
 #    include(driver_flexcomm_spi_dma)
 #    include(driver_inputmux)
 #    include(driver_inputmux_connections)
 #    include(driver_flexcomm_i2c)
 #    include(component_serial_manager)
+#    include(middleware_freertos-kernel_LPC55S16)
 #    include(driver_sysctl)
 #    include(driver_casper)
 #    include(driver_lpc_dma)
@@ -115,4 +122,5 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_shell)
 #    include(driver_reset)
 #    include(driver_cwt)
+#    include(driver_flexcomm_spi_freertos)
 #    include(component_codec_i2c_LPC55S16)

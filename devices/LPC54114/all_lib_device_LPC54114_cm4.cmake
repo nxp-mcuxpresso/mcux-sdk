@@ -33,8 +33,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sctimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/utick
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -45,6 +46,7 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(middleware_freertos-kernel_LPC54114_cm4)
 #    include(middleware_baremetal)
 #    include(driver_lpc_rtc)
 #    include(driver_pint)
@@ -61,6 +63,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpc_adc)
 #    include(driver_flashiap)
 #    include(driver_flexcomm)
+#    include(driver_flexcomm_usart_dma)
 #    include(driver_clock)
 #    include(utility_debug_console_lite)
 #    include(driver_flexcomm_i2s_dma)
@@ -69,6 +72,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_mx25r_flash)
 #    include(driver_lpc_crc)
 #    include(component_codec_i2c_LPC54114_cm4)
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_flexcomm_i2c_dma)
 #    include(component_flexcomm_i2c_adapter)
 #    include(utility_assert_lite)
@@ -77,6 +81,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_spi)
 #    include(driver_utick)
 #    include(driver_dmic)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(utility_shell)
 #    include(utility_assert)
 #    include(driver_sctimer)
@@ -84,6 +89,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_CMSIS)
 #    include(component_ctimer_adapter)
 #    include(driver_lpc_iocon)
+#    include(driver_flexcomm_i2c_freertos)
 #    include(driver_dmic_hwvad)
 #    include(driver_codec)
 #    include(utilities_misc_utilities)
@@ -91,13 +97,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_gint)
+#    include(driver_flexcomm_usart_freertos)
 #    include(device_startup_LPC54114_cm4)
 #    include(driver_inputmux)
 #    include(driver_inputmux_connections)
 #    include(driver_flexcomm_i2c)
 #    include(driver_iap)
 #    include(component_serial_manager)
-#    include(driver_flexcomm_usart_dma)
+#    include(driver_flexcomm_spi_freertos)
 #    include(driver_power)
 #    include(driver_lpc_dma)
 #    include(component_serial_manager_uart)

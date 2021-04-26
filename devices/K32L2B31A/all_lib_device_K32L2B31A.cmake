@@ -33,8 +33,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/spi
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tpm
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/uart
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -46,10 +47,13 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(driver_llwu)
+#    include(driver_port)
+#    include(driver_lpuart_freertos)
+#    include(driver_uart_freertos)
 #    include(CMSIS_Include_dsp)
 #    include(component_lpuart_adapter)
 #    include(driver_i2c)
-#    include(driver_port)
+#    include(driver_i2c_freertos)
 #    include(driver_dmamux)
 #    include(driver_lptmr)
 #    include(driver_gpio)
@@ -67,6 +71,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_fxos8700cq)
 #    include(driver_lpuart)
 #    include(driver_flexio_spi)
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_flexio)
 #    include(middleware_usb_device_common_header)
 #    include(utility_notifier)
@@ -77,6 +82,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_baremetal)
 #    include(driver_spi)
 #    include(driver_flash)
+#    include(utility_shell)
 #    include(utility_assert)
 #    include(driver_sim)
 #    include(utility_debug_console)
@@ -94,13 +100,15 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_dma)
 #    include(driver_i2c_dma)
 #    include(component_serial_manager)
+#    include(middleware_freertos-kernel_K32L2B31A)
 #    include(driver_slcd)
 #    include(driver_lpuart_dma)
 #    include(driver_pit)
 #    include(component_serial_manager_uart)
 #    include(driver_flexio_spi_dma)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)
 #    include(driver_slcd_engine)
-#    include(utility_shell)
+#    include(driver_spi_freertos)
 #    include(middleware_usb_common_header)
 #    include(driver_slcd_lcd_s401m16kr)

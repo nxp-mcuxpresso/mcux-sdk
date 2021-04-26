@@ -36,9 +36,10 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tsi
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tstmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -50,9 +51,11 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(driver_llwu)
+#    include(driver_lpuart_freertos)
 #    include(driver_flexio_spi_edma)
 #    include(CMSIS_Include_dsp)
 #    include(component_lpuart_adapter)
+#    include(driver_lpi2c_freertos)
 #    include(driver_port)
 #    include(driver_dmamux)
 #    include(driver_lpspi)
@@ -78,6 +81,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_spi)
 #    include(middleware_mmcau_common_files)
 #    include(middleware_mmcau_cm0p)
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_flexio)
 #    include(utility_shell)
 #    include(driver_rcm)
@@ -98,17 +102,20 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_tstmr)
 #    include(utilities_misc_utilities)
 #    include(driver_lpi2c)
+#    include(utility_assert_lite)
 #    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_rtc)
 #    include(driver_smc)
 #    include(driver_crc)
 #    include(driver_wdog32)
-#    include(utility_assert_lite)
+#    include(middleware_freertos-kernel_K32L2A41A)
 #    include(component_serial_manager)
 #    include(driver_fxos8700cq)
 #    include(driver_lptmr)
 #    include(component_serial_manager_uart)
+#    include(driver_lpspi_freertos)
 #    include(driver_pmc)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_intmux)
 #    include(middleware_usb_common_header)

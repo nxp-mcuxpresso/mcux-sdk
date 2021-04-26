@@ -40,6 +40,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tstmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -50,18 +51,22 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(driver_phy-device-ar8031)
+#    include(middleware_freertos-kernel_MIMX8QM6_cm4_core0)
 #    include(driver_esai)
 #    include(driver_mdio-enet)
 #    include(driver_flexspi)
 #    include(driver_lpuart)
 #    include(CMSIS_Include_dsp)
 #    include(component_lpuart_adapter)
+#    include(driver_lpi2c_freertos)
 #    include(driver_wdog32)
 #    include(driver_lpspi)
 #    include(driver_lpi2c_edma)
 #    include(driver_sai_edma)
 #    include(component_lists)
 #    include(driver_tpm)
+#    include(driver_lpuart_freertos)
 #    include(utility_debug_console)
 #    include(middleware_mmcau_common_files)
 #    include(driver_lpadc)
@@ -76,12 +81,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_assert)
 #    include(driver_enet)
 #    include(middleware_mmcau_cm4_cm7)
-#    include(driver_phy-device-ar8031)
+#    include(driver_lpspi_freertos)
 #    include(driver_phy-common)
 #    include(driver_ftm)
 #    include(utility_assert_lite)
 #    include(driver_cache_lmem)
 #    include(driver_dma3)
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_lpi2c)
 #    include(driver_flexcan_edma)
 #    include(driver_flexcan)
@@ -98,6 +104,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_asmc)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(component_wm8960_adapter)
 #    include(component_serial_manager)
 #    include(driver_igpio)

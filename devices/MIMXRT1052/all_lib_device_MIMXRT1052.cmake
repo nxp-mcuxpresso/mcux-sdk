@@ -72,8 +72,10 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog01
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbara
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbarb
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -85,9 +87,13 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(driver_lpuart_freertos)
 #    include(driver_trng)
+#    include(middleware_sdmmc_osa_bm)
+#    include(middleware_sdmmc_mmc)
 #    include(driver_dmamux)
 #    include(driver_phy-common)
+#    include(middleware_sdmmc_sd)
 #    include(device_system)
 #    include(driver_snvs_lp)
 #    include(driver_dc-fb-common)
@@ -96,7 +102,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart)
 #    include(driver_wm8960)
 #    include(driver_ewm)
+#    include(middleware_sdmmc_host_usdhc_interrupt)
 #    include(driver_flexio)
+#    include(middleware_sdmmc_host_usdhc_freertos)
 #    include(driver_aoi)
 #    include(driver_bee)
 #    include(driver_flexio_i2c_master)
@@ -115,21 +123,25 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_camera-device-ov7725)
 #    include(driver_pit)
 #    include(component_serial_manager_uart)
+#    include(driver_lpspi_freertos)
 #    include(driver_tempmon)
 #    include(CMSIS_Include_dsp)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_edma)
+#    include(middleware_usb_device_common_header)
 #    include(device_startup)
 #    include(driver_phy-device-ksz8081)
 #    include(driver_usdhc)
 #    include(component_cs42888_adapter)
 #    include(driver_gpt)
 #    include(driver_enet)
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_camera-receiver-common)
 #    include(middleware_usb_common_header)
-#    include(middleware_usb_device_common_header)
+#    include(middleware_sdmmc_osa_freertos)
 #    include(driver_soc_flexram_allocate)
 #    include(utility_assert)
+#    include(middleware_sdmmc_host_usdhc_polling)
 #    include(device_CMSIS)
 #    include(driver_romapi)
 #    include(component_osa_bm)
@@ -137,11 +149,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_adc_12b1msps_sar)
 #    include(driver_common)
 #    include(driver_kpp)
+#    include(component_osa_free_rtos)
 #    include(driver_camera-common)
 #    include(driver_camera-device-common)
 #    include(component_lpi2c_adapter)
 #    include(driver_video-common)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_dcdc_1)
+#    include(middleware_sdmmc_sdio)
 #    include(driver_snvs_hp)
 #    include(driver_lpspi)
 #    include(driver_csi)
@@ -158,6 +173,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_xbara)
 #    include(driver_flexcan)
 #    include(utility_debug_console)
+#    include(middleware_freertos-kernel_MIMXRT1052)
+#    include(middleware_sdmmc_host_usdhc)
 #    include(driver_camera-receiver-csi)
 #    include(component_wm8960_adapter)
 #    include(driver_enc)
@@ -168,11 +185,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_edma)
 #    include(driver_flexspi)
 #    include(driver_flexio_spi_edma)
+#    include(driver_lpi2c_freertos)
 #    include(driver_qtmr_1)
 #    include(component_codec_i2c_MIMXRT1052)
 #    include(driver_gpc_1)
 #    include(component_lists)
 #    include(driver_video-i2c)
+#    include(middleware_sdmmc_common)
 #    include(driver_cmp)
 #    include(component_osa)
 #    include(driver_rtwatchdog)
