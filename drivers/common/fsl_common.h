@@ -247,6 +247,19 @@ typedef int32_t status_t;
 #endif
 /* @} */
 
+/*! @name UINTPTR_SIZE value */
+/* @{ */
+#if !defined(UINTPTR_SIZE)
+#if UINTPTR_MAX > UINT32_MAX
+  #define UINTPTR_SIZE 8 /* 64-bit processor */
+#elif UINTPTR_MAX > UINT16_MAX
+  #define UINTPTR_SIZE 4 /* 32-bit processor */
+#else
+  #error "UINTPTR_SIZE is unknown!"
+#endif
+#endif
+/* @} */
+
 /*! @name Suppress fallthrough warning macro */
 /* For switch case code block, if case section ends without "break;" statement, there wil be
  fallthrough warning with compiler flag -Wextra or -Wimplicit-fallthrough=n when using armgcc.
