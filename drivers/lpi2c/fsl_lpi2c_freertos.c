@@ -50,13 +50,25 @@ status_t LPI2C_RTOS_Init(lpi2c_rtos_handle_t *handle,
 
     (void)memset(handle, 0, sizeof(lpi2c_rtos_handle_t));
 
+#if configSUPPORT_STATIC_ALLOCATION
+    handle->mutex = xSemaphoreCreateMutexStatic(&handle->mutexStaticQueue);
+#elif configSUPPORT_DYNAMIC_ALLOCATION
     handle->mutex = xSemaphoreCreateMutex();
+#else
+#error "Allocation method didn't match"
+#endif
     if (handle->mutex == NULL)
     {
         return kStatus_Fail;
     }
 
+#if configSUPPORT_STATIC_ALLOCATION
+    handle->semaphore = xSemaphoreCreateBinaryStatic(&handle->semaphoreStaticQueue);
+#elif configSUPPORT_DYNAMIC_ALLOCATION
     handle->semaphore = xSemaphoreCreateBinary();
+#else
+#error "Allocation method didn't match"
+#endif
     if (handle->semaphore == NULL)
     {
         vSemaphoreDelete(handle->mutex);
