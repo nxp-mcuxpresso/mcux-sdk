@@ -23,7 +23,9 @@ This project provides the fundamental support for all NXP hot parts:
 
 **The project can work solely**, if you only want to get the fundamental support for SoC(s) or board(s), you just use the original Git way to clone and checkout the project.
 
-**The project is also the main repository to achieve the whole SDK delivery**, it contains the [west.yml](https://github.com/NXPmicro/mcux-sdk/blob/main/west.yml) which keeps description and revision for other projects in the overall MCUXpresso delivery. You need to have both Git and West installed, then execute below commands to achieve the whole SDK delivery at revision ```${revision}``` and place it in a folder named ```mcuxsdk```.
+**The project is also the main repository to achieve the whole SDK delivery**, it contains the [west.yml](https://github.com/NXPmicro/mcux-sdk/blob/main/west.yml) which keeps description and revision for other projects in the overall MCUXpresso delivery. Currently available middleware sets are shown in below figure, user could click the middleware to navigate the middleware project repo.
+[![MCUXSDK Graph](docs/sdk_graph.svg)](https://github.com/NXPmicro/mcux-sdk/blob/main/docs/sdk_graph.html)
+You need to have both Git and West installed, then execute below commands to achieve the whole SDK delivery at revision ```${revision}``` and place it in a folder named ```mcuxsdk```. 
 ```
 west init -m https://github.com/NXPmicro/mcux-sdk --mr ${revision} mcuxsdk
 cd mcuxsdk
