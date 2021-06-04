@@ -2,7 +2,7 @@
 
 We greatly welcome and highly appreciate for your contribution. You could freely choose to either raise a GitHub issue or contributing your code change directly to our project. Please read through below guidelines before building your contribution.  
 
-##### Table of Contents 
+## Table of Contents 
   * [Code of Conduct](#code-of-conduct)
   * [Licensing](#licensing)
   * [Developer Certification of Origin (DCO)](#developer-certification-of-origin-(DCO))
