@@ -2,7 +2,7 @@
 
 The **tfa9xxx** driver supported the following TFA amplifiers: TFA9894N1, TFA9894N2 and TFA9892N1.
 
-### Typical use cases:
+# Typical use cases:
 
 1. Initialize TFA:
 
