@@ -105,6 +105,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_freertos-kernel_LPC55S69_cm33_core0)
 #    include(component_osa_free_rtos)
 #    include(middleware_sdmmc_sd)
+#    include(middleware_freertos-kernel_heap_3)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(middleware_freertos-kernel_cm33_secure_port)
 #    include(driver_hashcrypt)

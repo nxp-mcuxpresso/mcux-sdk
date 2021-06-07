@@ -36,6 +36,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tstmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/usdhc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xrdc
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
@@ -51,6 +52,7 @@ list(APPEND CMAKE_MODULE_PATH
 # Copy the cmake components into projects
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_lpuart_freertos)
+#    include(utility_debug_console)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_flexio_spi_edma)
 #    include(CMSIS_Include_dsp)
@@ -88,12 +90,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_core_cm0plus)
 #    include(driver_flexio_i2c_master)
 #    include(driver_sim)
+#    include(middleware_baremetal)
 #    include(middleware_sdmmc_osa_freertos)
 #    include(driver_flash)
 #    include(middleware_sdmmc_host_usdhc)
 #    include(driver_mmdvsq)
 #    include(driver_lpspi_edma)
-#    include(utility_debug_console)
+#    include(middleware_freertos-kernel_heap_3)
 #    include(device_CMSIS)
 #    include(driver_sema42)
 #    include(driver_lpcmp)

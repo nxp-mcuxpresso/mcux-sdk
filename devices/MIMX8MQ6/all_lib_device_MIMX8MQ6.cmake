@@ -15,6 +15,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ii2c
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ipwm
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iuart
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/mu
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/qspi
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rdc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rdc_sema42
@@ -51,6 +52,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_assert_lite)
 #    include(driver_cache_lmem)
 #    include(driver_rdc_sema42)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(utility_assert)
 #    include(utility_debug_console)
 #    include(device_CMSIS)
@@ -70,5 +72,5 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager_uart)
 #    include(driver_wm8524)
 #    include(middleware_freertos-kernel_MIMX8MQ6)
-#    include(middleware_freertos-kernel_heap_4)
+#    include(driver_mu)
 #    include(driver_qspi)

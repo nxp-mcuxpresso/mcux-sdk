@@ -60,6 +60,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_lists)
 #    include(driver_lpc_gpio)
 #    include(driver_mrt)
+#    include(middleware_freertos-kernel_heap_3)
 #    include(driver_lpc_adc)
 #    include(driver_flashiap)
 #    include(driver_flexcomm)

@@ -11,6 +11,9 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
 )
 
 #OR Logic component
+if(${MCUX_DEVICE} STREQUAL "LPC54114_cm0plus")
+    include(driver_common)
+endif()
 if(${MCUX_DEVICE} STREQUAL "LPC54114_cm4")
     include(driver_common)
 endif()
