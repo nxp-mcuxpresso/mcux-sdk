@@ -16,6 +16,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flash
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexio
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpio
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/llwu
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpadc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpcmp
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpi2c
@@ -36,6 +37,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/usdhc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xrdc
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
@@ -49,7 +51,7 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
-#    include(utility_incbin)
+#    include(driver_llwu)
 #    include(device_startup_K32L3A60_cm4)
 #    include(driver_lpuart_freertos)
 #    include(utility_debug_console)
@@ -92,6 +94,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_assert_lite)
 #    include(driver_flexio_i2c_master)
 #    include(driver_sim)
+#    include(middleware_baremetal)
 #    include(middleware_sdmmc_host_usdhc_polling)
 #    include(middleware_sdmmc_osa_freertos)
 #    include(driver_flash)
@@ -113,7 +116,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_sdmmc_osa_bm)
 #    include(driver_crc)
 #    include(driver_wdog32)
+#    include(utility_incbin)
 #    include(component_osa_free_rtos)
+#    include(middleware_freertos-kernel_heap_3)
 #    include(driver_fxos8700cq)
 #    include(middleware_sdmmc_sd)
 #    include(driver_lptmr)
