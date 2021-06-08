@@ -1,42 +1,34 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2021 NXP
  *
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <soc.h>
-#include <arch/arm/aarch64/arm_mmu.h>
+#include "fsl_common.h"
+//#include <soc.h>
+
+#include "arm_mmu.h"
 
 static const struct arm_mmu_region mmu_regions[] = {
 
-	MMU_REGION_FLAT_ENTRY("GIC",
-			      DT_REG_ADDR_BY_IDX(DT_INST(0, arm_gic), 0),
-			      DT_REG_SIZE_BY_IDX(DT_INST(0, arm_gic), 0),
-			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
-
-	MMU_REGION_FLAT_ENTRY("GIC",
-			      DT_REG_ADDR_BY_IDX(DT_INST(0, arm_gic), 1),
-			      DT_REG_SIZE_BY_IDX(DT_INST(0, arm_gic), 1),
-			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
-
-	MMU_REGION_FLAT_ENTRY("UART",
-			      DT_REG_ADDR(DT_INST(0, nxp_imx_iuart)),
-			      DT_REG_SIZE(DT_INST(0, nxp_imx_iuart)),
+	MMU_REGION_FLAT_ENTRY("ANA_PLL",
+			      0x30360000, KB(64),
 			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
 
 	MMU_REGION_FLAT_ENTRY("CCM",
-			      DT_REG_ADDR(DT_INST(0, nxp_imx_ccm)),
-			      DT_REG_SIZE(DT_INST(0, nxp_imx_ccm)),
+			      0x30380000, KB(64),
 			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
 
-	MMU_REGION_FLAT_ENTRY("ANA_PLL",
-			      DT_REG_ADDR(DT_INST(0, nxp_imx_ana)),
-			      DT_REG_SIZE(DT_INST(0, nxp_imx_ana)),
+	MMU_REGION_FLAT_ENTRY("UART2",
+			      0x30890000, KB(4),
 			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
 
-	MMU_REGION_FLAT_ENTRY("UART",
-			      DT_REG_ADDR(DT_INST(1, nxp_imx_iuart)),
-			      DT_REG_SIZE(DT_INST(1, nxp_imx_iuart)),
+	MMU_REGION_FLAT_ENTRY("UART4",
+			      0x30a60000, KB(4),
+			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
+
+	MMU_REGION_FLAT_ENTRY("GIC",
+			      0x38800000, MB(1),
 			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
 
 };

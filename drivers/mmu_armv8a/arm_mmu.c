@@ -3,26 +3,180 @@
  * The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
  *
  * Copyright (c) 2021 BayLibre, SAS
+ * Copyright (c) 2021 NXP
  *
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <device.h>
-#include <init.h>
-#include <kernel.h>
-#include <kernel_arch_interface.h>
-#include <kernel_internal.h>
-#include <logging/log.h>
-#include <arch/arm/aarch64/cpu.h>
-#include <arch/arm/aarch64/lib_helpers.h>
-#include <arch/arm/aarch64/arm_mmu.h>
-#include <linker/linker-defs.h>
-#include <spinlock.h>
-#include <sys/util.h>
+#include "fsl_common.h"
+#include "fsl_debug_console.h"
 
+#include "lib_helpers.h"
 #include "arm_mmu.h"
 
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
+/*******************************************************************************
+ * FreeRTOS port
+ ******************************************************************************/
+#ifdef FSL_RTOS_FREE_RTOS
+
+#define isb()                  __ISB()
+#define dsb()                  __DSB()
+#define dmb()                  __DMB()
+
+#define CONFIG_MMU_PAGE_SIZE   4096
+#define CONFIG_MAX_XLAT_TABLES 16
+#define CONFIG_ARM64_PA_BITS   48
+#define CONFIG_ARM64_VA_BITS   48
+
+#define LOG_ERR(fmt, ...)      PRINTF(fmt, ##__VA_ARGS__);
+#define ARG_UNUSED(x)          (void)(x)
+
+#define BITS_PER_LONG          (__CHAR_BIT__ * __SIZEOF_LONG__)
+#define GENMASK(h, l) \
+  (((~0UL) - (1UL << (l)) + 1) & (~0UL >> (BITS_PER_LONG - 1 - (h))))
+
+#define        ENOMEM          12      /* Out of memory */
+#define        EBUSY           16      /* Device or resource busy */
+#define        ENOTSUP         35
+
+/* TODO: Figure out spinlock, if needed */
+struct k_spinlock {
+	char dummy;
+};
+#define k_spinlock_key_t       void *
+#define k_spin_lock(p)         (p)
+#define k_spin_unlock(p, key)  (void)key
+
+#define k_panic()              assert(false)
+
+/*******************************************************************************
+ * from zephyr:/include/sys/mem_manage.h
+ ******************************************************************************/
+
+/*
+ * Caching mode definitions. These are mutually exclusive.
+ */
+
+/** No caching. Most drivers want this. */
+#define K_MEM_CACHE_NONE	2
+
+/** Write-through caching. Used by certain drivers. */
+#define K_MEM_CACHE_WT		1
+
+/** Full write-back caching. Any RAM mapped wants this. */
+#define K_MEM_CACHE_WB		0
+
+/** Reserved bits for cache modes in k_map() flags argument */
+#define K_MEM_CACHE_MASK	(BIT(3) - 1)
+
+/*
+ * Region permission attributes. Default is read-only, no user, no exec
+ */
+
+/** Region will have read/write access (and not read-only) */
+#define K_MEM_PERM_RW		BIT(3)
+
+/** Region will be executable (normally forbidden) */
+#define K_MEM_PERM_EXEC		BIT(4)
+
+/** Region will be accessible to user mode (normally supervisor-only) */
+#define K_MEM_PERM_USER		BIT(5)
+
+/*******************************************************************************
+ * from zephyr:/arch/arm/core/aarch64/mmu/arm_mmu.h:
+ ******************************************************************************/
+
+/* Set below flag to get debug prints */
+#define MMU_DEBUG_PRINTS	0
+
+#if MMU_DEBUG_PRINTS
+/* To dump page table entries while filling them, set DUMP_PTE macro */
+#define DUMP_PTE		0
+#define MMU_DEBUG(fmt, ...)	PRINTF(fmt, ##__VA_ARGS__)
+#else
+#define MMU_DEBUG(...)
+#endif
+
+/*
+ * 48-bit address with 4KB granule size:
+ *
+ * +------------+------------+------------+------------+-----------+
+ * | VA [47:39] | VA [38:30] | VA [29:21] | VA [20:12] | VA [11:0] |
+ * +---------------------------------------------------------------+
+ * |     L0     |     L1     |     L2     |     L3     | block off |
+ * +------------+------------+------------+------------+-----------+
+ */
+
+/* Only 4K granule is supported */
+#define PAGE_SIZE_SHIFT		12U
+
+/* 48-bit VA address */
+#define VA_SIZE_SHIFT_MAX	48U
+
+/* Maximum 4 XLAT table levels (L0 - L3) */
+#define XLAT_LAST_LEVEL		3U
+
+/* The VA shift of L3 depends on the granule size */
+#define L3_XLAT_VA_SIZE_SHIFT	PAGE_SIZE_SHIFT
+
+/* Number of VA bits to assign to each table (9 bits) */
+#define Ln_XLAT_VA_SIZE_SHIFT	(PAGE_SIZE_SHIFT - 3)
+
+/* Starting bit in the VA address for each level */
+#define L2_XLAT_VA_SIZE_SHIFT	(L3_XLAT_VA_SIZE_SHIFT + Ln_XLAT_VA_SIZE_SHIFT)
+#define L1_XLAT_VA_SIZE_SHIFT	(L2_XLAT_VA_SIZE_SHIFT + Ln_XLAT_VA_SIZE_SHIFT)
+#define L0_XLAT_VA_SIZE_SHIFT	(L1_XLAT_VA_SIZE_SHIFT + Ln_XLAT_VA_SIZE_SHIFT)
+
+#define LEVEL_TO_VA_SIZE_SHIFT(level)			\
+	(PAGE_SIZE_SHIFT + (Ln_XLAT_VA_SIZE_SHIFT *	\
+	(XLAT_LAST_LEVEL - (level))))
+
+/* Number of entries for each table (512) */
+#define Ln_XLAT_NUM_ENTRIES	((1U << PAGE_SIZE_SHIFT) / 8U)
+
+/* Virtual Address Index within a given translation table level */
+#define XLAT_TABLE_VA_IDX(va_addr, level) \
+	((va_addr >> LEVEL_TO_VA_SIZE_SHIFT(level)) & (Ln_XLAT_NUM_ENTRIES - 1))
+
+/*
+ * Calculate the initial translation table level from CONFIG_ARM64_VA_BITS
+ * For a 4 KB page size:
+ *
+ * (va_bits <= 20)	 - base level 3
+ * (21 <= va_bits <= 29) - base level 2
+ * (30 <= va_bits <= 38) - base level 1
+ * (39 <= va_bits <= 47) - base level 0
+ */
+#define GET_BASE_XLAT_LEVEL(va_bits)				\
+	 ((va_bits > L0_XLAT_VA_SIZE_SHIFT) ? 0U		\
+	: (va_bits > L1_XLAT_VA_SIZE_SHIFT) ? 1U		\
+	: (va_bits > L2_XLAT_VA_SIZE_SHIFT) ? 2U : 3U)
+
+/* Level for the base XLAT */
+#define BASE_XLAT_LEVEL	GET_BASE_XLAT_LEVEL(CONFIG_ARM64_VA_BITS)
+
+#if (CONFIG_ARM64_PA_BITS == 48)
+#define TCR_PS_BITS TCR_PS_BITS_256TB
+#elif (CONFIG_ARM64_PA_BITS == 44)
+#define TCR_PS_BITS TCR_PS_BITS_16TB
+#elif (CONFIG_ARM64_PA_BITS == 42)
+#define TCR_PS_BITS TCR_PS_BITS_4TB
+#elif (CONFIG_ARM64_PA_BITS == 40)
+#define TCR_PS_BITS TCR_PS_BITS_1TB
+#elif (CONFIG_ARM64_PA_BITS == 36)
+#define TCR_PS_BITS TCR_PS_BITS_64GB
+#else
+#define TCR_PS_BITS TCR_PS_BITS_4GB
+#endif
+
+/* Upper and lower attributes mask for page/block descriptor */
+#define DESC_ATTRS_UPPER_MASK	GENMASK(63, 51)
+#define DESC_ATTRS_LOWER_MASK	GENMASK(11, 2)
+
+#define DESC_ATTRS_MASK		(DESC_ATTRS_UPPER_MASK | DESC_ATTRS_LOWER_MASK)
+
+#endif /* #ifdef FSL_RTOS_FREE_RTOS */
+/******************************************************************************/
 
 static uint64_t xlat_tables[CONFIG_MAX_XLAT_TABLES * Ln_XLAT_NUM_ENTRIES]
 		__aligned(Ln_XLAT_NUM_ENTRIES * sizeof(uint64_t));
@@ -59,7 +213,7 @@ static void free_table(uint64_t *table)
 {
 	unsigned int i = table_index(table);
 
-	MMU_DEBUG("freeing table [%d]%p\n", i, table);
+	MMU_DEBUG("freeing table [%d]%p\r\n", i, table);
 	__ASSERT(xlat_use_count[i] == 1, "table still in use");
 	xlat_use_count[i] = 0;
 }
@@ -117,14 +271,14 @@ static void debug_show_pte(uint64_t *pte, unsigned int level)
 	MMU_DEBUG("[%d]%p: ", table_index(pte), pte);
 
 	if (is_free_desc(*pte)) {
-		MMU_DEBUG("---\n");
+		MMU_DEBUG("---\r\n");
 		return;
 	}
 
 	if (is_table_desc(*pte, level)) {
 		uint64_t *table = pte_desc_table(*pte);
 
-		MMU_DEBUG("[Table] [%d]%p\n", table_index(table), table);
+		MMU_DEBUG("[Table] [%d]%p\r\n", table_index(table), table);
 		return;
 	}
 
@@ -143,7 +297,7 @@ static void debug_show_pte(uint64_t *pte, unsigned int level)
 	MMU_DEBUG((*pte & PTE_BLOCK_DESC_AP_ELx) ? "-ELx" : "-ELh");
 	MMU_DEBUG((*pte & PTE_BLOCK_DESC_PXN) ? "-PXN" : "-PX");
 	MMU_DEBUG((*pte & PTE_BLOCK_DESC_UXN) ? "-UXN" : "-UX");
-	MMU_DEBUG("\n");
+	MMU_DEBUG("\r\n");
 }
 #else
 static inline void debug_show_pte(uint64_t *pte, unsigned int level) { }
@@ -184,7 +338,7 @@ static uint64_t *expand_to_table(uint64_t *pte, unsigned int level)
 		uint64_t desc = *pte;
 		unsigned int i, stride_shift;
 
-		MMU_DEBUG("expanding PTE 0x%016llx into table [%d]%p\n",
+		MMU_DEBUG("expanding PTE 0x%016llx into table [%d]%p\r\n",
 			  desc, table_index(table), table);
 		__ASSERT(is_block_desc(desc), "");
 
@@ -227,7 +381,7 @@ static int set_mapping(struct arm_mmu_ptables *ptables,
 
 	while (size) {
 		__ASSERT(level <= XLAT_LAST_LEVEL,
-			 "max translation table level exceeded\n");
+			 "max translation table level exceeded\r\n");
 
 		/* Locate PTE for given virtual address and page table level */
 		pte = &table[XLAT_TABLE_VA_IDX(virt, level)];
@@ -316,7 +470,7 @@ static uint64_t *dup_table(uint64_t *src_table, unsigned int level)
 		return NULL;
 	}
 
-	MMU_DEBUG("dup (level %d) [%d]%p to [%d]%p\n", level,
+	MMU_DEBUG("dup (level %d) [%d]%p to [%d]%p\r\n", level,
 		  table_index(src_table), src_table,
 		  table_index(dst_table), dst_table);
 
@@ -393,7 +547,7 @@ static int privatize_page_range(struct arm_mmu_ptables *dst_pt,
 	k_spinlock_key_t key;
 	int ret;
 
-	MMU_DEBUG("privatize [%s]: virt %lx size %lx\n",
+	MMU_DEBUG("privatize [%s]: virt %lx size %lx\r\n",
 		  name, virt_start, size);
 
 	key = k_spin_lock(&xlat_lock);
@@ -497,7 +651,7 @@ static int globalize_page_range(struct arm_mmu_ptables *dst_pt,
 	k_spinlock_key_t key;
 	int ret;
 
-	MMU_DEBUG("globalize [%s]: virt %lx size %lx\n",
+	MMU_DEBUG("globalize [%s]: virt %lx size %lx\r\n",
 		  name, virt_start, size);
 
 	key = k_spin_lock(&xlat_lock);
@@ -583,10 +737,10 @@ static int add_map(struct arm_mmu_ptables *ptables, const char *name,
 	uint64_t desc = get_region_desc(attrs);
 	bool may_overwrite = !(attrs & MT_NO_OVERWRITE);
 
-	MMU_DEBUG("mmap [%s]: virt %lx phys %lx size %lx attr %llx\n",
+	MMU_DEBUG("mmap [%s]: virt %lx phys %lx size %lx attr %llx\r\n",
 		  name, virt, phys, size, desc);
 	__ASSERT(((virt | phys | size) & (CONFIG_MMU_PAGE_SIZE - 1)) == 0,
-		 "address/size are not page aligned\n");
+		 "address/size are not page aligned\r\n");
 	desc |= phys;
 	return set_mapping(ptables, virt, size, desc, may_overwrite);
 }
@@ -594,9 +748,9 @@ static int add_map(struct arm_mmu_ptables *ptables, const char *name,
 static int remove_map(struct arm_mmu_ptables *ptables, const char *name,
 		      uintptr_t virt, size_t size)
 {
-	MMU_DEBUG("unmmap [%s]: virt %lx size %lx\n", name, virt, size);
+	MMU_DEBUG("unmmap [%s]: virt %lx size %lx\r\n", name, virt, size);
 	__ASSERT(((virt | size) & (CONFIG_MMU_PAGE_SIZE - 1)) == 0,
-		 "address/size are not page aligned\n");
+		 "address/size are not page aligned\r\n");
 	return set_mapping(ptables, virt, size, 0, true);
 }
 
@@ -607,7 +761,7 @@ static void invalidate_tlb_all(void)
 	: : : "memory");
 }
 
-/* zephyr execution regions with appropriate attributes */
+/* OS execution regions with appropriate attributes */
 
 struct arm_mmu_flat_range {
 	char *name;
@@ -616,28 +770,39 @@ struct arm_mmu_flat_range {
 	uint32_t attrs;
 };
 
-static const struct arm_mmu_flat_range mmu_zephyr_ranges[] = {
+/* symbols defined in linker script: */
+extern uintptr_t __text[];
+extern uintptr_t __etext[];
+extern uintptr_t __data_start__[];
+extern uintptr_t __data_end__[];
+extern uintptr_t __noncachedata_start__[];
+extern uintptr_t __noncachedata_end__[];
 
-	/* Mark the zephyr execution regions (data, bss, noinit, etc.)
+static const struct arm_mmu_flat_range mmu_os_ranges[] = {
+
+	/* Mark text/rodata segments cacheable, read only and executable */
+	{ .name  = "code",
+	  .start = __text,
+	  .end   = __etext,
+	  .attrs = MT_NORMAL | MT_P_RX_U_NA | MT_DEFAULT_SECURE_STATE },
+
+	/* Mark the execution regions (data, bss, noinit, etc.)
 	 * cacheable, read-write
 	 * Note: read-write region is marked execute-never internally
 	 */
-	{ .name  = "zephyr_data",
-	  .start = _image_ram_start,
-	  .end   = _image_ram_end,
+	{ .name  = "data",
+	  .start = __data_start__,
+	  .end   = __data_end__,
 	  .attrs = MT_NORMAL | MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
 
-	/* Mark text segment cacheable,read only and executable */
-	{ .name  = "zephyr_code",
-	  .start = _image_text_start,
-	  .end   = _image_text_end,
-	  .attrs = MT_NORMAL | MT_P_RX_U_NA | MT_DEFAULT_SECURE_STATE },
-
-	/* Mark rodata segment cacheable, read only and execute-never */
-	{ .name  = "zephyr_rodata",
-	  .start = _image_rodata_start,
-	  .end   = _image_rodata_end,
-	  .attrs = MT_NORMAL | MT_P_RO_U_NA | MT_DEFAULT_SECURE_STATE },
+	/* Mark the shared regions (non-cacheable data)
+	 * noncacheable, read-write
+	 * Note: read-write region is marked execute-never internally
+	 */
+	{ .name  = "data_nc",
+	  .start = __noncachedata_start__,
+	  .end   = __noncachedata_end__,
+	  .attrs = MT_NORMAL_NC	| MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
 };
 
 static inline void add_arm_mmu_flat_range(struct arm_mmu_ptables *ptables,
@@ -670,9 +835,9 @@ static void setup_page_tables(struct arm_mmu_ptables *ptables)
 	const struct arm_mmu_region *region;
 	uintptr_t max_va = 0, max_pa = 0;
 
-	MMU_DEBUG("xlat tables:\n");
+	MMU_DEBUG("xlat tables:\r\n");
 	for (index = 0; index < CONFIG_MAX_XLAT_TABLES; index++)
-		MMU_DEBUG("%d: %p\n", index, xlat_tables + index * Ln_XLAT_NUM_ENTRIES);
+		MMU_DEBUG("%d: %p\r\n", index, xlat_tables + index * Ln_XLAT_NUM_ENTRIES);
 
 	for (index = 0; index < mmu_config.num_regions; index++) {
 		region = &mmu_config.mmu_regions[index];
@@ -681,13 +846,13 @@ static void setup_page_tables(struct arm_mmu_ptables *ptables)
 	}
 
 	__ASSERT(max_va <= (1ULL << CONFIG_ARM64_VA_BITS),
-		 "Maximum VA not supported\n");
+		 "Maximum VA not supported\r\n");
 	__ASSERT(max_pa <= (1ULL << CONFIG_ARM64_PA_BITS),
-		 "Maximum PA not supported\n");
+		 "Maximum PA not supported\r\n");
 
-	/* setup translation table for zephyr execution regions */
-	for (index = 0; index < ARRAY_SIZE(mmu_zephyr_ranges); index++) {
-		range = &mmu_zephyr_ranges[index];
+	/* setup translation table for OS execution regions */
+	for (index = 0; index < ARRAY_SIZE(mmu_os_ranges); index++) {
+		range = &mmu_os_ranges[index];
 		add_arm_mmu_flat_range(ptables, range, 0);
 	}
 
@@ -745,14 +910,14 @@ static void enable_mmu_el1(struct arm_mmu_ptables *ptables, unsigned int flags)
 	/* Ensure these changes are seen before MMU is enabled */
 	isb();
 
-	/* Enable the MMU and data cache */
+	/* Enable the MMU and caches */
 	val = read_sctlr_el1();
 	write_sctlr_el1(val | SCTLR_M_BIT | SCTLR_C_BIT);
 
 	/* Ensure the MMU enable takes effect immediately */
 	isb();
 
-	MMU_DEBUG("MMU enabled with dcache\n");
+	MMU_DEBUG("MMU enabled with caches\r\n");
 }
 
 /* ARM MMU Driver Initial Setup */
@@ -773,13 +938,13 @@ void z_arm64_mmu_init(void)
 	unsigned int flags = 0;
 
 	__ASSERT(CONFIG_MMU_PAGE_SIZE == KB(4),
-		 "Only 4K page size is supported\n");
+		 "Only 4K page size is supported\r\n");
 
 	__ASSERT(GET_EL(read_currentel()) == MODE_EL1,
-		 "Exception level not EL1, MMU not enabled!\n");
+		 "Exception level not EL1, MMU not enabled!\r\n");
 
 	/* Ensure that MMU is already not enabled */
-	__ASSERT((read_sctlr_el1() & SCTLR_M_BIT) == 0, "MMU is already enabled\n");
+	__ASSERT((read_sctlr_el1() & SCTLR_M_BIT) == 0, "MMU is already enabled\r\n");
 
 	/*
 	 * Only booting core setup up the page tables.
@@ -904,7 +1069,7 @@ int arch_mem_domain_init(struct k_mem_domain *domain)
 	struct arm_mmu_ptables *domain_ptables = &domain->arch.ptables;
 	k_spinlock_key_t key;
 
-	MMU_DEBUG("%s\n", __func__);
+	MMU_DEBUG("%s\r\n", __func__);
 
 	key = k_spin_lock(&xlat_lock);
 	domain_ptables->base_xlat_table =
@@ -922,7 +1087,7 @@ void arch_mem_domain_destroy(struct k_mem_domain *domain)
 	struct arm_mmu_ptables *domain_ptables = &domain->arch.ptables;
 	k_spinlock_key_t key;
 
-	MMU_DEBUG("%s\n", __func__);
+	MMU_DEBUG("%s\r\n", __func__);
 
 	sys_slist_remove(&domain_list, NULL, &domain->arch.node);
 	key = k_spin_lock(&xlat_lock);

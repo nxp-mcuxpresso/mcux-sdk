@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2019 Carlo Caione <ccaione@baylibre.com>
+ * Copyright 2021 NXP
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -7,7 +8,10 @@
 #ifndef ZEPHYR_INCLUDE_ARCH_ARM_AARCH64_CPU_H_
 #define ZEPHYR_INCLUDE_ARCH_ARM_AARCH64_CPU_H_
 
-#include <sys/util.h>
+//#include <sys/util.h>
+#ifndef BIT
+#define BIT(n) (1 << (n))
+#endif
 
 #define DAIFSET_FIQ_BIT		BIT(0)
 #define DAIFSET_IRQ_BIT		BIT(1)
@@ -76,7 +80,11 @@
 		(((mpidr) >> MPIDR_AFF##aff_level##_SHIFT) & MPIDR_AFFLVL_MASK)
 
 #define GET_MPIDR()		read_sysreg(mpidr_el1)
+#if (defined(FSL_RTOS_FREE_RTOS) && defined(GUEST))
+#define MPIDR_TO_CORE(mpidr)	MPIDR_AFFLVL(mpidr, 3)
+#else
 #define MPIDR_TO_CORE(mpidr)	MPIDR_AFFLVL(mpidr, 0)
+#endif
 #define IS_PRIMARY_CORE()	(!MPIDR_TO_CORE(GET_MPIDR()))
 
 #define MODE_EL_SHIFT		(0x2)

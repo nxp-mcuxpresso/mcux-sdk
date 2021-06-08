@@ -2,10 +2,24 @@
  * Copyright 2019 Broadcom
  * The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
  *
+ * Copyright 2021 NXP
+ *
  * SPDX-License-Identifier: Apache-2.0
  */
 #ifndef ZEPHYR_INCLUDE_ARCH_ARM64_MMU_ARM_MMU_H_
 #define ZEPHYR_INCLUDE_ARCH_ARM64_MMU_ARM_MMU_H_
+
+/*******************************************************************************
+ * FreeRTOS port
+ ******************************************************************************/
+#ifdef FSL_RTOS_FREE_RTOS
+
+#define KB(x)                  ((x) << 10)
+#define MB(x)                  (KB(x) << 10)
+#define GB(x)                  (MB(x) << 10)
+
+#endif
+/******************************************************************************/
 
 /* Following Memory types supported through MAIR encodings can be passed
  * by user through "attrs"(attributes) field of specified memory region.

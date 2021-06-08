@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2021 Carlo Caione <ccaione@baylibre.com>
+ * Copyright 2021 NXP
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -9,8 +10,22 @@
 
 #ifndef _ASMLANGUAGE
 
-#include <arch/arm/aarch64/cpu.h>
+#include "cpu.h"
 #include <stdint.h>
+
+#ifdef FSL_RTOS_FREE_RTOS
+#include "FreeRTOS.h"
+
+#define ALWAYS_INLINE inline
+#define STRINGIFY(x) #x
+#define __ASSERT(op, fmt, ...) \
+    do { \
+        if (!(op)) \
+            PRINTF(fmt, ##__VA_ARGS__); \
+        configASSERT(op); \
+    } while (0);
+
+#endif /* #ifdef FSL_RTOS_FREE_RTOS */
 
 /* All the macros need a memory clobber */
 
@@ -175,11 +190,13 @@ static inline bool is_el2_sec_supported(void)
 		ID_AA64PFR0_SEL2_MASK) != 0U);
 }
 
+#ifndef FSL_RTOS_FREE_RTOS
 static inline bool is_in_secure_state(void)
 {
 	/* We cannot read SCR_EL3 from EL2 or EL1 */
 	return !IS_ENABLED(CONFIG_ARMV8_A_NS);
 }
+#endif
 
 #endif /* !_ASMLANGUAGE */
 
