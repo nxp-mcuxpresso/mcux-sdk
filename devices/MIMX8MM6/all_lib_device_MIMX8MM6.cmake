@@ -31,6 +31,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sema4
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tmu_1
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog01
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -43,6 +44,7 @@ list(APPEND CMAKE_MODULE_PATH
 # Copy the cmake components into projects
 #    include(component_codec_wm8524_adapter)
 #    include(utility_debug_console_lite)
+#    include(middleware_multicore_rpmsg_lite_imx8mm_m4_freertos)
 #    include(CMSIS_Include_dsp)
 #    include(driver_rdc)
 #    include(driver_ii2c)
@@ -86,6 +88,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_ii2c_adapter)
 #    include(driver_srtm)
 #    include(component_serial_manager)
+#    include(middleware_multicore_rpmsg_lite)
 #    include(driver_igpio)
 #    include(driver_pdm_sdma)
 #    include(component_codec_i2c_MIMX8MM6)
