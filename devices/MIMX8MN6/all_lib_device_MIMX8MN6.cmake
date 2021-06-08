@@ -28,6 +28,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sema4
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tmu_1
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog01
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -80,9 +81,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_common)
 #    include(driver_easrc_sdma)
 #    include(driver_sema4)
+#    include(middleware_multicore_rpmsg_lite_imx8mn_m7_freertos)
 #    include(driver_pdm)
 #    include(driver_srtm)
 #    include(component_serial_manager)
+#    include(middleware_multicore_rpmsg_lite)
 #    include(driver_igpio)
 #    include(driver_pdm_sdma)
 #    include(driver_sai)
