@@ -664,7 +664,7 @@ static void enable_mmu_el1(struct arm_mmu_ptables *ptables, unsigned int flags)
 
 	/* Enable the MMU and caches */
 	val = read_sctlr_el1();
-	write_sctlr_el1(val | SCTLR_M_BIT | SCTLR_C_BIT);
+	write_sctlr_el1(val | SCTLR_M_BIT | SCTLR_C_BIT | SCTLR_I_BIT);
 
 	/* Ensure the MMU enable takes effect immediately */
 	isb();
