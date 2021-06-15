@@ -37,6 +37,7 @@ struct sai_edma_handle
     edma_handle_t *dmaHandle;     /*!< DMA handler for SAI send */
     uint8_t nbytes;               /*!< eDMA minor byte transfer count initially configured. */
     uint8_t bytesPerFrame;        /*!< Bytes in a frame */
+    uint8_t channelMask;          /*!< Enabled channel mask value, reference _sai_channel_mask */
     uint8_t channel;              /*!< Which data channel */
     uint8_t count;                /*!< The transfer data count in a DMA request */
     uint32_t state;               /*!< Internal state for SAI eDMA transfer */
@@ -148,6 +149,18 @@ void SAI_TransferRxSetFormatEDMA(I2S_Type *base,
 /*!
  * @brief Configures the SAI Tx.
  *
+ * @note SAI eDMA supports data transfer in a multiple SAI channels if the FIFO Combine feature is supported.
+ * To activate the multi-channel transfer enable SAI channels by filling the channelMask 
+ * of sai_transceiver_t with the corresponding values of _sai_channel_mask enum, enable the FIFO Combine 
+ * mode by assigning kSAI_FifoCombineModeEnabledOnWrite to the fifoCombine member of sai_fifo_combine_t 
+ * which is a member of sai_transceiver_t.
+ * This is an example of multi-channel data transfer configuration step.
+   @code
+    sai_transceiver_t config;
+    SAI_GetClassicI2SConfig(&config, kSAI_WordWidth16bits, kSAI_Stereo, kSAI_Channel0Mask|kSAI_Channel1Mask);
+    config.fifo.fifoCombine = kSAI_FifoCombineModeEnabledOnWrite;
+    SAI_TransferTxSetConfigEDMA(I2S0, &edmaHandle, &config);
+   @endcode
  *
  * @param base SAI base pointer.
  * @param handle SAI eDMA handle pointer.
@@ -158,6 +171,18 @@ void SAI_TransferTxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
 /*!
  * @brief Configures the SAI Rx.
  *
+ * @note SAI eDMA supports data transfer in a multiple SAI channels if the FIFO Combine feature is supported.
+ * To activate the multi-channel transfer enable SAI channels by filling the channelMask 
+ * of sai_transceiver_t with the corresponding values of _sai_channel_mask enum, enable the FIFO Combine 
+ * mode by assigning kSAI_FifoCombineModeEnabledOnRead to the fifoCombine member of sai_fifo_combine_t 
+ * which is a member of sai_transceiver_t.
+ * This is an example of multi-channel data transfer configuration step.
+   @code
+    sai_transceiver_t config;
+    SAI_GetClassicI2SConfig(&config, kSAI_WordWidth16bits, kSAI_Stereo, kSAI_Channel0Mask|kSAI_Channel1Mask);
+    config.fifo.fifoCombine = kSAI_FifoCombineModeEnabledOnRead;
+    SAI_TransferRxSetConfigEDMA(I2S0, &edmaHandle, &config);
+   @endcode
  *
  * @param base SAI base pointer.
  * @param handle SAI eDMA handle pointer.

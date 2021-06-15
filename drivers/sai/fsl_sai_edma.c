@@ -255,6 +255,7 @@ void SAI_TransferTxSetFormatEDMA(I2S_Type *base,
     }
 
     /* Update the data channel SAI used */
+    handle->channelMask = format->channelMask;
     handle->channel = format->channel;
 
     /* Clear the channel enable bits until do a send/receive */
@@ -269,6 +270,18 @@ void SAI_TransferTxSetFormatEDMA(I2S_Type *base,
 /*!
  * @brief Configures the SAI Tx.
  *
+ * @note SAI eDMA supports data transfer in a multiple SAI channels if the FIFO Combine feature is supported.
+ * To activate the multi-channel transfer enable SAI channels by filling the channelMask 
+ * of sai_transceiver_t with the corresponding values of _sai_channel_mask enum, enable the FIFO Combine 
+ * mode by assigning kSAI_FifoCombineModeEnabledOnWrite to the fifoCombine member of sai_fifo_combine_t 
+ * which is a member of sai_transceiver_t.
+ * This is an example of multi-channel data transfer configuration step.
+   @code
+    sai_transceiver_t config;
+    SAI_GetClassicI2SConfig(&config, kSAI_WordWidth16bits, kSAI_Stereo, kSAI_Channel0Mask|kSAI_Channel1Mask);
+    config.fifo.fifoCombine = kSAI_FifoCombineModeEnabledOnWrite;
+    SAI_TransferTxSetConfigEDMA(I2S0, &edmaHandle, &config);
+   @endcode
  *
  * @param base SAI base pointer.
  * @param handle SAI eDMA handle pointer.
@@ -281,6 +294,13 @@ void SAI_TransferTxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     /* Configure the audio format to SAI registers */
     SAI_TxSetConfig(base, saiConfig);
 
+#if defined(FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) && FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE
+    /* Allow multi-channel transfer only if FIFO Combine mode is enabled */
+    assert((saiConfig->channelNums <= 1) || ((saiConfig->channelNums > 1) &&
+            ((saiConfig->fifo.fifoCombine == kSAI_FifoCombineModeEnabledOnWrite) || 
+             (saiConfig->fifo.fifoCombine == kSAI_FifoCombineModeEnabledOnReadWrite))));
+#endif
+
     /* Get the transfer size from format, this should be used in EDMA configuration */
     if (saiConfig->serialData.dataWordLength == 24U)
     {
@@ -290,7 +310,9 @@ void SAI_TransferTxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     {
         handle->bytesPerFrame = saiConfig->serialData.dataWordLength / 8U;
     }
+
     /* Update the data channel SAI used */
+    handle->channelMask = saiConfig->channelMask;
     handle->channel = saiConfig->startChannel;
 
     /* Clear the channel enable bits until do a send/receive */
@@ -341,6 +363,7 @@ void SAI_TransferRxSetFormatEDMA(I2S_Type *base,
     }
 
     /* Update the data channel SAI used */
+    handle->channelMask = format->channelMask;
     handle->channel = format->channel;
 
     /* Clear the channel enable bits until do a send/receive */
@@ -355,6 +378,18 @@ void SAI_TransferRxSetFormatEDMA(I2S_Type *base,
 /*!
  * @brief Configures the SAI Rx.
  *
+ * @note SAI eDMA supports data transfer in a multiple SAI channels if the FIFO Combine feature is supported.
+ * To activate the multi-channel transfer enable SAI channels by filling the channelMask 
+ * of sai_transceiver_t with the corresponding values of _sai_channel_mask enum, enable the FIFO Combine 
+ * mode by assigning kSAI_FifoCombineModeEnabledOnRead to the fifoCombine member of sai_fifo_combine_t 
+ * which is a member of sai_transceiver_t.
+ * This is an example of multi-channel data transfer configuration step.
+   @code
+    sai_transceiver_t config;
+    SAI_GetClassicI2SConfig(&config, kSAI_WordWidth16bits, kSAI_Stereo, kSAI_Channel0Mask|kSAI_Channel1Mask);
+    config.fifo.fifoCombine = kSAI_FifoCombineModeEnabledOnRead;
+    SAI_TransferRxSetConfigEDMA(I2S0, &edmaHandle, &config);
+   @endcode
  *
  * @param base SAI base pointer.
  * @param handle SAI eDMA handle pointer.
@@ -367,6 +402,13 @@ void SAI_TransferRxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     /* Configure the audio format to SAI registers */
     SAI_RxSetConfig(base, saiConfig);
 
+#if defined(FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) && FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE
+    /* Allow multi-channel transfer only if FIFO Combine mode is enabled */
+    assert((saiConfig->channelNums <= 1) || ((saiConfig->channelNums > 1) &&
+            ((saiConfig->fifo.fifoCombine == kSAI_FifoCombineModeEnabledOnRead) || 
+             (saiConfig->fifo.fifoCombine == kSAI_FifoCombineModeEnabledOnReadWrite))));
+#endif
+
     /* Get the transfer size from format, this should be used in EDMA configuration */
     if (saiConfig->serialData.dataWordLength == 24U)
     {
@@ -378,6 +420,7 @@ void SAI_TransferRxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     }
 
     /* Update the data channel SAI used */
+    handle->channelMask = saiConfig->channelMask;
     handle->channel = saiConfig->startChannel;
 
     /* Clear the channel enable bits until do a send/receive */
@@ -451,7 +494,7 @@ status_t SAI_TransferSendEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_tra
     SAI_TxEnable(base, true);
 
     /* Enable the channel FIFO */
-    base->TCR3 |= I2S_TCR3_TCE(1UL << handle->channel);
+    base->TCR3 |= I2S_TCR3_TCE(handle->channelMask);
 
     return kStatus_Success;
 }
@@ -515,7 +558,7 @@ status_t SAI_TransferReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     SAI_RxEnableDMA(base, kSAI_FIFORequestDMAEnable, true);
 
     /* Enable the channel FIFO */
-    base->RCR3 |= I2S_RCR3_RCE(1UL << handle->channel);
+    base->RCR3 |= I2S_RCR3_RCE(handle->channelMask);
 
     /* Enable SAI Rx clock */
     SAI_RxEnable(base, true);
