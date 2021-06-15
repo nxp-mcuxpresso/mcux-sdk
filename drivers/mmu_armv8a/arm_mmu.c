@@ -531,6 +531,14 @@ extern uintptr_t __stacks_limit__[];
 extern uintptr_t __stacks_top__[];
 extern uintptr_t __noncachedata_start__[];
 extern uintptr_t __noncachedata_end__[];
+extern uintptr_t __ocramtext_start__[];
+extern uintptr_t __ocramtext_end__[];
+extern uintptr_t __ocramdata_start__[];
+extern uintptr_t __ocramdata_end__[];
+extern uintptr_t __itcm_start__[];
+extern uintptr_t __itcm_end__[];
+extern uintptr_t __dtcm_start__[];
+extern uintptr_t __dtcm_end__[];
 
 static const struct arm_mmu_flat_range mmu_os_ranges[] = {
 
@@ -566,6 +574,34 @@ static const struct arm_mmu_flat_range mmu_os_ranges[] = {
 	  .start = __noncachedata_start__,
 	  .end   = __noncachedata_end__,
 	  .attrs = MT_NORMAL_NC	| MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
+
+	/* Mark text/rodata segments cacheable, read only and executable */
+	{ .name  = "ocram_code",
+	  .start = __ocramtext_start__,
+	  .end   = __ocramtext_end__,
+	  .attrs = MT_NORMAL | MT_P_RX_U_NA | MT_DEFAULT_SECURE_STATE },
+
+	/* Mark the data regions cacheable, read-write
+	 * Note: read-write region is marked execute-never internally
+	 */
+	{ .name  = "ocram_data",
+	  .start = __ocramdata_start__,
+	  .end   = __ocramdata_end__,
+	  .attrs = MT_NORMAL | MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
+
+	/* Mark text/rodata segments cacheable, read only and executable */
+	{ .name  = "itcm",
+	  .start = __itcm_start__,
+	  .end   = __itcm_end__,
+	  .attrs = MT_NORMAL | MT_P_RX_U_NA | MT_DEFAULT_SECURE_STATE },
+
+	/* Mark the data regions cacheable, read-write
+	 * Note: read-write region is marked execute-never internally
+	 */
+	{ .name  = "dtcm",
+	  .start = __dtcm_start__,
+	  .end   = __dtcm_end__,
+	  .attrs = MT_NORMAL | MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
 };
 
 static inline void add_arm_mmu_flat_range(struct arm_mmu_ptables *ptables,
