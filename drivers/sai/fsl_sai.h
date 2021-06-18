@@ -241,7 +241,7 @@ typedef enum _sai_data_pin_state
 } sai_data_pin_state_t;
 #endif
 
-#if defined(FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_COMBINE) && FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_COMBINE
+#if defined(FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) && FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE
 /*! @brief sai fifo combine mode definition */
 typedef enum _sai_fifo_combine
 {
@@ -318,7 +318,7 @@ typedef struct _sai_master_clock
 
 /*! @brief sai fifo feature*/
 #if (defined(FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_AFTER_ERROR) && FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_AFTER_ERROR) || \
-    (defined(FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_COMBINE) && FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_COMBINE) ||         \
+    (defined(FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) && FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) ||         \
     (defined(FSL_FEATURE_SAI_HAS_FIFO_PACKING) && FSL_FEATURE_SAI_HAS_FIFO_PACKING) ||                           \
     (defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1))
 #define FSL_SAI_HAS_FIFO_EXTEND_FEATURE 1
@@ -334,7 +334,7 @@ typedef struct _sai_fifo
     bool fifoContinueOneError; /*!< fifo continues when error occur */
 #endif
 
-#if defined(FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_COMBINE) && FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_COMBINE
+#if defined(FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) && FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE
     sai_fifo_combine_t fifoCombine; /*!< fifo combine mode */
 #endif
 
