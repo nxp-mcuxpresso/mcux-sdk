@@ -995,23 +995,32 @@ DEBUG_CONSOLE_FUNCTION_PREFIX status_t DbgConsole_Flush(void)
 
 #if SDK_DEBUGCONSOLE
 /* See fsl_debug_console.h for documentation of this function. */
-int DbgConsole_Printf(const char *fmt_s, ...)
+int DbgConsole_Printf(const char *formatString, ...)
 {
     va_list ap;
-    int logLength = 0, dbgResult = 0;
+    int result;
+
+    va_start(ap, formatString);
+    result = DbgConsole_Vprintf(formatString, ap);
+    va_end(ap);
+
+    return result;
+}
+
+/* See fsl_debug_console.h for documentation of this function. */
+int DbgConsole_Vprintf(const char *formatString, va_list formatStringArg)
+{
+    int logLength = 0, result = 0;
     char printBuf[DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN] = {'\0'};
 
     if (NULL != g_serialHandle)
     {
-        va_start(ap, fmt_s);
         /* format print log first */
-        logLength = StrFormatPrintf(fmt_s, ap, printBuf, DbgConsole_PrintCallback);
+        logLength = StrFormatPrintf(formatString, formatStringArg, printBuf, DbgConsole_PrintCallback);
         /* print log */
-        dbgResult = DbgConsole_SendDataReliable((uint8_t *)printBuf, (size_t)logLength);
-
-        va_end(ap);
+        result = DbgConsole_SendDataReliable((uint8_t *)printBuf, (size_t)logLength);
     }
-    return dbgResult;
+    return result;
 }
 
 /* See fsl_debug_console.h for documentation of this function. */
@@ -1039,12 +1048,25 @@ int DbgConsole_Scanf(char *formatString, ...)
 
     return formatResult;
 }
+
 /* See fsl_debug_console.h for documentation of this function. */
 int DbgConsole_BlockingPrintf(const char *formatString, ...)
 {
     va_list ap;
+    int result;
+
+    va_start(ap, formatString);
+    result = DbgConsole_BlockingVprintf(formatString, ap);
+    va_end(ap);
+
+    return result;
+}
+
+/* See fsl_debug_console.h for documentation of this function. */
+int DbgConsole_BlockingVprintf(const char *formatString, va_list formatStringArg)
+{
     status_t status;
-    int logLength = 0, dbgResult = 0;
+    int logLength, result;
     char printBuf[DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN] = {'\0'};
 
     if (NULL == g_serialHandle)
@@ -1052,9 +1074,8 @@ int DbgConsole_BlockingPrintf(const char *formatString, ...)
         return 0;
     }
 
-    va_start(ap, formatString);
     /* format print log first */
-    logLength = StrFormatPrintf(formatString, ap, printBuf, DbgConsole_PrintCallback);
+    logLength = StrFormatPrintf(formatString, formatStringArg, printBuf, DbgConsole_PrintCallback);
 
 #if defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING)
     (void)SerialManager_CancelWriting(((serial_write_handle_t)&s_debugConsoleState.serialWriteHandleBuffer[0]));
@@ -1063,10 +1084,9 @@ int DbgConsole_BlockingPrintf(const char *formatString, ...)
     status =
         (status_t)SerialManager_WriteBlocking(((serial_write_handle_t)&s_debugConsoleState.serialWriteHandleBuffer[0]),
                                               (uint8_t *)printBuf, (size_t)logLength);
-    dbgResult = (((status_t)kStatus_Success == status) ? (int)logLength : -1);
-    va_end(ap);
+    result = (((status_t)kStatus_Success == status) ? (int)logLength : -1);
 
-    return dbgResult;
+    return result;
 }
 
 #ifdef DEBUG_CONSOLE_TRANSFER_NON_BLOCKING
