@@ -162,20 +162,30 @@ status_t DbgConsole_Deinit(void)
 
 #if SDK_DEBUGCONSOLE
 /* See fsl_debug_console.h for documentation of this function. */
-int DbgConsole_Printf(const char *fmt_s, ...)
+int DbgConsole_Printf(const char *formatString, ...)
 {
     va_list ap;
     int result;
 
+    va_start(ap, formatString);
+    result = DbgConsole_Vprintf(formatString, ap);
+    va_end(ap);
+
+    return result;
+}
+
+/* See fsl_debug_console.h for documentation of this function. */
+int DbgConsole_Vprintf(const char *formatString, va_list formatStringArg)
+{
+    int result;
+    
     /* Do nothing if the debug UART is not initialized. */
     if (kSerialPort_None == s_debugConsole.type)
     {
         return -1;
     }
-    va_start(ap, fmt_s);
-    result = DbgConsole_PrintfFormattedData(DbgConsole_Putchar, fmt_s, ap);
-    va_end(ap);
-
+    result = DbgConsole_PrintfFormattedData(DbgConsole_Putchar, formatString, formatStringArg);
+    
     return result;
 }
 
@@ -193,7 +203,7 @@ int DbgConsole_Putchar(int ch)
 }
 
 /* See fsl_debug_console.h for documentation of this function. */
-int DbgConsole_Scanf(char *fmt_ptr, ...)
+int DbgConsole_Scanf(char *formatString, ...)
 {
     /* Plus one to store end of string char */
     char temp_buf[IO_MAXLINE + 1];
@@ -206,7 +216,7 @@ int DbgConsole_Scanf(char *fmt_ptr, ...)
     {
         return -1;
     }
-    va_start(ap, fmt_ptr);
+    va_start(ap, formatString);
     temp_buf[0] = '\0';
 
     i = 0;
@@ -245,7 +255,7 @@ int DbgConsole_Scanf(char *fmt_ptr, ...)
     {
         temp_buf[i + 1] = '\0';
     }
-    result = (char)DbgConsole_ScanfFormattedData(temp_buf, fmt_ptr, ap);
+    result = (char)DbgConsole_ScanfFormattedData(temp_buf, formatString, ap);
     va_end(ap);
 
     return (int)result;
@@ -544,8 +554,8 @@ static int32_t DbgConsole_ConvertFloatRadixNumToString(char *numstr,
  * (*func_ptr)(c);
  *
  * @param[in] func_ptr  Function to put character out.
- * @param[in] fmt_ptr   Format string for printf.
- * @param[in] args_ptr  Arguments to printf.
+ * @param[in] fmt       Format string for printf.
+ * @param[in] ap        Arguments to printf.
  *
  * @return Number of characters
  */

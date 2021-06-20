@@ -50,6 +50,8 @@ extern serial_handle_t g_serialHandle; /*!< serial manager handle */
 
 #if defined(SDK_DEBUGCONSOLE) && !(SDK_DEBUGCONSOLE)
 #include <stdio.h>
+#else
+#include <stdarg.h>
 #endif
 
 /*! @brief Definition to select redirect toolchain printf, scanf to uart or not.
@@ -200,10 +202,21 @@ static inline status_t DbgConsole_ExitLowpower(void)
  *
  * Call this function to write a formatted output to the standard output stream.
  *
- * @param   fmt_s Format control string.
+ * @param   formatString Format control string.
  * @return  Returns the number of characters printed or a negative value if an error occurs.
  */
-int DbgConsole_Printf(const char *fmt_s, ...);
+int DbgConsole_Printf(const char *formatString, ...);
+
+/*!
+ * @brief Writes formatted output to the standard output stream.
+ *
+ * Call this function to write a formatted output to the standard output stream.
+ *
+ * @param   formatString Format control string.
+ * @param   formatStringArg Format arguments.
+ * @return  Returns the number of characters printed or a negative value if an error occurs.
+ */
+int DbgConsole_Vprintf(const char *formatString, va_list formatStringArg);
 
 /*!
  * @brief Writes a character to stdout.
@@ -258,6 +271,20 @@ int DbgConsole_Getchar(void);
  * @return  Returns the number of characters printed or a negative value if an error occurs.
  */
 int DbgConsole_BlockingPrintf(const char *formatString, ...);
+
+/*!
+ * @brief Writes formatted output to the standard output stream with the blocking mode.
+ *
+ * Call this function to write a formatted output to the standard output stream with the blocking mode.
+ * The function will send data with blocking mode no matter the DEBUG_CONSOLE_TRANSFER_NON_BLOCKING set
+ * or not.
+ * The function could be used in system ISR mode with DEBUG_CONSOLE_TRANSFER_NON_BLOCKING set.
+ *
+ * @param   formatString Format control string.
+ * @param   formatStringArg Format arguments.
+ * @return  Returns the number of characters printed or a negative value if an error occurs.
+ */
+int DbgConsole_BlockingVprintf(const char *formatString, va_list formatStringArg);
 
 /*!
  * @brief Debug console flush.
