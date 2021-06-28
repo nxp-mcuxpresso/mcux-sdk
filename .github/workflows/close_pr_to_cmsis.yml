@@ -5,6 +5,7 @@ on:
     types: [opened]
     paths:
     - 'CMSIS/**'
+    - '!CMSIS/**.cmake'
 
 jobs:
   run:
