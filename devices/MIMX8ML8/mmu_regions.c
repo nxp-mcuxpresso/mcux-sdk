@@ -93,6 +93,14 @@ static const struct arm_mmu_flat_range mmu_os_ranges[] = {
 
 static const struct arm_mmu_region mmu_regions[] = {
 
+	MMU_REGION_FLAT_ENTRY("GPT1",
+			      0x302d0000, KB(64),
+			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
+
+	MMU_REGION_FLAT_ENTRY("GPT2",
+			      0x302e0000, KB(64),
+			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
+
 	MMU_REGION_FLAT_ENTRY("ANA_PLL",
 			      0x30360000, KB(64),
 			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
