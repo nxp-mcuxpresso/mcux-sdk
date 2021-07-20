@@ -1,5 +1,5 @@
 #Description: Driver ft5406; user_visible: False
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 message("driver_ft5406 component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE

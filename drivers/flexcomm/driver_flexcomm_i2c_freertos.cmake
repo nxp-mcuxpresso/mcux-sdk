@@ -1,5 +1,5 @@
 #Description: FLEXCOMM I2C FREERTOS Driver; user_visible: True
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 message("driver_flexcomm_i2c_freertos component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE

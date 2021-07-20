@@ -1,5 +1,5 @@
 #Description: power_s; user_visible: True
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 message("driver_power_s component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE

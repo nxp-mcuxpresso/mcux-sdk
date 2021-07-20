@@ -1,5 +1,5 @@
 #Description: Component lpi2c_adapter; user_visible: True
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 message("component_lpi2c_adapter component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE

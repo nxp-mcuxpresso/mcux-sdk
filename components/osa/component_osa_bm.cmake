@@ -1,5 +1,5 @@
 #Description: Component osa_bm; user_visible: False
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 message("component_osa_bm component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE

@@ -1,5 +1,5 @@
 #Description: FLEXCOMM I2S Driver; user_visible: True
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 message("driver_flexcomm_i2s component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE

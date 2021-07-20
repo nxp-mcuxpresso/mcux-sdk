@@ -1,5 +1,5 @@
 #Description: cmp_1 Driver; user_visible: True
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 message("driver_cmp_1 component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE

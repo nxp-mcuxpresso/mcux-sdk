@@ -1,5 +1,5 @@
 #Description: FLEXIO UART EDMA Driver; user_visible: True
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 message("driver_flexio_uart_edma component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE

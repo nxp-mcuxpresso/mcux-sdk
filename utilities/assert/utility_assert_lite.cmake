@@ -1,5 +1,5 @@
 #Description: Utility assert_lite; user_visible: True
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 message("utility_assert_lite component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE

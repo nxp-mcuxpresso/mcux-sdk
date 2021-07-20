@@ -1,5 +1,5 @@
 #Description: Middleware issdk algorithms pedometer lib_cm4; user_visible: False
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 message("middleware_issdk_algorithms_pedometer_lib_cm4 component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE

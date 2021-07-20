@@ -1,5 +1,5 @@
 #Description: Cmsis_driver_include common; user_visible: False
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 message("CMSIS_Driver_Include_Common component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE

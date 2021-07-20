@@ -1,5 +1,5 @@
 #Description: Cmsis_include_core_cm33; user_visible: True
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 message("CMSIS_Include_core_cm33 component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE

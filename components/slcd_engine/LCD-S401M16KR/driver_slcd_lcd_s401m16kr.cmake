@@ -1,5 +1,5 @@
 #Description: Driver slcd_lcd_s401m16kr; user_visible: True
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 message("driver_slcd_lcd_s401m16kr component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE

@@ -1,5 +1,5 @@
 #Description: Utility shell; user_visible: True
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 message("utility_shell component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
