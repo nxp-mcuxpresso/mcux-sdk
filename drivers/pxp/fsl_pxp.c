@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  *
@@ -7,6 +7,10 @@
  */
 
 #include "fsl_pxp.h"
+
+#if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#include "fsl_memory.h"
+#endif
 
 /*******************************************************************************
  * Definitions
@@ -32,6 +36,17 @@
 #endif
 
 #define PXP_MAX_HEIGHT ((PXP_OUT_LRC_Y_MASK >> PXP_OUT_LRC_Y_SHIFT) + 1U)
+
+/* Compatibility macro remap. */
+#if (!defined(PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK) && defined(PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK))
+#define PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK
+#endif
+
+#if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#define PXP_ADDR_CPU_2_IP(addr) (MEMORY_ConvertMemoryMapAddress((uint32_t)(addr), kMEMORY_Local2DMA))
+#else
+#define PXP_ADDR_CPU_2_IP(addr) (addr)
+#endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
 
 typedef union _u32_f32
 {
@@ -312,7 +327,7 @@ void PXP_SetAlphaSurfaceBufferConfig(PXP_Type *base, const pxp_as_buffer_config_
 
     base->AS_CTRL = (base->AS_CTRL & ~PXP_AS_CTRL_FORMAT_MASK) | PXP_AS_CTRL_FORMAT(config->pixelFormat);
 
-    base->AS_BUF   = config->bufferAddr;
+    base->AS_BUF   = PXP_ADDR_CPU_2_IP(config->bufferAddr);
     base->AS_PITCH = config->pitchBytes;
 }
 
@@ -390,9 +405,9 @@ void PXP_SetProcessSurfaceBufferConfig(PXP_Type *base, const pxp_ps_buffer_confi
     base->PS_CTRL = ((base->PS_CTRL & ~(PXP_PS_CTRL_FORMAT_MASK | PXP_PS_CTRL_WB_SWAP_MASK)) |
                      PXP_PS_CTRL_FORMAT(config->pixelFormat) | PXP_PS_CTRL_WB_SWAP(config->swapByte));
 
-    base->PS_BUF   = config->bufferAddr;
-    base->PS_UBUF  = config->bufferAddrU;
-    base->PS_VBUF  = config->bufferAddrV;
+    base->PS_BUF   = PXP_ADDR_CPU_2_IP(config->bufferAddr);
+    base->PS_UBUF  = PXP_ADDR_CPU_2_IP(config->bufferAddrU);
+    base->PS_VBUF  = PXP_ADDR_CPU_2_IP(config->bufferAddrV);
     base->PS_PITCH = config->pitchBytes;
 }
 
@@ -467,8 +482,8 @@ void PXP_SetOutputBufferConfig(PXP_Type *base, const pxp_output_buffer_config_t 
     base->OUT_CTRL = (base->OUT_CTRL & ~(PXP_OUT_CTRL_FORMAT_MASK | PXP_OUT_CTRL_INTERLACED_OUTPUT_MASK)) |
                      PXP_OUT_CTRL_FORMAT(config->pixelFormat) | PXP_OUT_CTRL_INTERLACED_OUTPUT(config->interlacedMode);
 
-    base->OUT_BUF  = config->buffer0Addr;
-    base->OUT_BUF2 = config->buffer1Addr;
+    base->OUT_BUF  = PXP_ADDR_CPU_2_IP(config->buffer0Addr);
+    base->OUT_BUF2 = PXP_ADDR_CPU_2_IP(config->buffer1Addr);
 
     base->OUT_PITCH = config->pitchBytes;
     base->OUT_LRC   = PXP_OUT_LRC_Y((uint32_t)config->height - 1U) | PXP_OUT_LRC_X((uint32_t)config->width - 1U);
@@ -512,7 +527,7 @@ void PXP_SetNextCommand(PXP_Type *base, void *commandAddr)
 
     addr.pvoid = commandAddr;
 
-    base->NEXT = addr.u32 & PXP_NEXT_POINTER_MASK;
+    base->NEXT = PXP_ADDR_CPU_2_IP(addr.u32) & PXP_NEXT_POINTER_MASK;
 }
 
 #if !(defined(FSL_FEATURE_PXP_HAS_NO_CSC2) && FSL_FEATURE_PXP_HAS_NO_CSC2)
@@ -653,6 +668,8 @@ void PXP_SetLutConfig(PXP_Type *base, const pxp_lut_config_t *config)
 status_t PXP_LoadLutTable(
     PXP_Type *base, pxp_lut_lookup_mode_t lookupMode, uint32_t bytesNum, uint32_t memAddr, uint16_t lutStartAddr)
 {
+    memAddr = PXP_ADDR_CPU_2_IP(memAddr);
+
     if (kPXP_LutCacheRGB565 == lookupMode)
     {
         /* Make sure the previous memory write is finished, especially the LUT data memory. */
@@ -806,60 +823,62 @@ status_t PXP_GetPorterDuffConfig(pxp_porter_duff_blend_mode_t mode, pxp_porter_d
 
     static const uint32_t pdCtrl[] = {
         /* kPXP_PorterDuffSrc */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK | PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorOne) |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
+            PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorOne) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorZero),
 
         /* kPXP_PorterDuffAtop */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorStraight) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorInversed),
 
         /* kPXP_PorterDuffOver */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK | PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorOne) |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
+            PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorOne) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorInversed),
 
         /* kPXP_PorterDuffIn */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorStraight) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorZero),
 
         /* kPXP_PorterDuffOut */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorInversed) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorZero),
 
         /* kPXP_PorterDuffDst */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorZero) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorOne),
 
         /* kPXP_PorterDuffDstAtop */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorInversed) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorStraight),
 
         /* kPXP_PorterDuffDstOver */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorInversed) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorOne),
 
         /* kPXP_PorterDuffDstIn */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorZero) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorStraight),
 
         /* kPXP_PorterDuffDstOut */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorZero) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorInversed),
 
         /* kPXP_PorterDuffXor */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorInversed) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorInversed),
 
         /* kPXP_PorterDuffClear */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorZero) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorZero),
     };

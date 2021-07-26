@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2017, NXP
+ * Copyright 2017,2021, NXP
  * All rights reserved.
  *
  *
@@ -33,7 +33,7 @@ static void mmcau_memcpy(void *dst, const void *src, size_t size)
 {
     register uint8_t *to         = dst;
     register const uint8_t *from = src;
-    while (size)
+    while (size != 0U)
     {
         *to = *from;
         size--;
@@ -45,9 +45,10 @@ static void mmcau_memcpy(void *dst, const void *src, size_t size)
 /* check if in pointer is aligned. if not, copy in to inAlign. return pointer to aligned data. */
 static const void *mmcau_align_const(const void *in, void *inAlign, size_t size)
 {
-    const void *inWork = in;
+    const void *inWork  = in;
+    const uint32_t *src = (const uint32_t *)in;
     /* if one or two least significant bits in the address are set, the address is unaligned */
-    if ((uint32_t)in & 3u)
+    if (0U != ((uint32_t)src & 0x3u))
     {
         mmcau_memcpy(inAlign, in, size);
         inWork = inAlign;
@@ -60,8 +61,9 @@ static const void *mmcau_align_const(const void *in, void *inAlign, size_t size)
 static void *mmcau_align(void *out, void *outAlign, bool *copyOut)
 {
     void *outWork;
+    uint32_t *dst = (uint32_t *)out;
     /* if one or two least significant bits in the address are set, the address is unaligned */
-    if ((uint32_t)out & 3u)
+    if (0U != ((uint32_t)dst & 0x3u))
     {
         outWork  = outAlign;
         *copyOut = true;
@@ -119,11 +121,11 @@ static status_t mmcau_AesCrypt(const uint8_t *in, const uint8_t *keySch, uint32_
         /* call actual CAU API */
         if (encrypt)
         {
-            cau_aes_encrypt(inWork, keySchWork, aesRounds, outWork);
+            cau_aes_encrypt(inWork, keySchWork, (int)aesRounds, outWork);
         }
         else
         {
-            cau_aes_decrypt(inWork, keySchWork, aesRounds, outWork);
+            cau_aes_decrypt(inWork, keySchWork, (int)aesRounds, outWork);
         }
         /* copy to unaligned out pointer */
         if (copyOut)
@@ -141,7 +143,7 @@ static status_t mmcau_DesCrypt(const uint8_t *in, const uint8_t *key, uint8_t *o
 {
     status_t status;
 
-    if (in && key && out)
+    if ((in != NULL) && (key != NULL) && (out != NULL))
     {
         uint8_t keyAlign[MMCAU_DES_BLOCK_SIZE]; /* 8 bytes key size aligned */
         uint8_t inAlign[MMCAU_DES_BLOCK_SIZE];  /* 8 bytes input block aligned */
@@ -185,7 +187,7 @@ static status_t mmcau_hash_API(
 {
     status_t status;
 
-    if (msgData && hashState && numBlocks)
+    if ((msgData != NULL) && (hashState != NULL) && (numBlocks != 0U))
     {
         const uint8_t *msgDataWork;
         void *hashStateWork;
@@ -221,7 +223,7 @@ static status_t mmcau_hash_MD5API(
 {
     status_t status;
 
-    if (msgData && hashState && numBlocks)
+    if ((msgData != NULL) && (hashState != NULL) && (numBlocks != 0U))
     {
         const uint8_t *msgDataWork;
         void *hashStateWork;
@@ -274,7 +276,7 @@ status_t MMCAU_AES_SetKey(const uint8_t *key, const size_t keySize, uint8_t *key
         keySchWork = mmcau_align(keySch, keySchAlign, &copyOut);
 
         /* call CAU lib API with all addresses aligned */
-        cau_aes_set_key(keyWork, keySize * 8, keySchWork);
+        cau_aes_set_key(keyWork, ((int)keySize * 8), keySchWork);
 
         /* in case we have aligned output to local, copy the result out */
         if (copyOut)
@@ -315,7 +317,7 @@ status_t MMCAU_DES_ChkParity(const uint8_t *key)
 {
     status_t status;
 
-    if (key)
+    if (key != NULL)
     {
         uint8_t keyAlign[8]; /* 8 bytes key size aligned */
         const uint8_t *keyWork;
@@ -356,7 +358,7 @@ status_t MMCAU_MD5_InitializeOutput(uint32_t *md5State)
 {
     status_t status;
 
-    if (md5State)
+    if (md5State != NULL)
     {
         uint8_t hashStateAlign[MMCAU_HASH_STATE_SIZE];
         void *hashStateWork;
@@ -400,7 +402,7 @@ status_t MMCAU_SHA1_InitializeOutput(uint32_t *sha1State)
 {
     status_t status;
 
-    if (sha1State)
+    if (sha1State != NULL)
     {
         uint8_t hashStateAlign[MMCAU_HASH_STATE_SIZE];
         void *hashStateWork;
@@ -445,7 +447,7 @@ status_t MMCAU_SHA256_InitializeOutput(uint32_t *sha256State)
     status_t status;
     int ret;
 
-    if (sha256State)
+    if (sha256State != NULL)
     {
         uint8_t hashStateAlign[MMCAU_HASH_STATE_SIZE];
         void *hashStateWork;

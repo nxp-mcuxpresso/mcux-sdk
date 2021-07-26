@@ -122,9 +122,9 @@ status_t ROM_FLEXSPI_NorFlash_ProgramPage(uint32_t instance,
  * @param lengthInBytes The length, given in bytes to be read.
  */
 status_t ROM_FLEXSPI_NorFlash_Read(
-    uint32_t instance, flexspi_nor_config_t *config, uint32_t *dst, uint32_t addr, uint32_t lengthInBytes)
+    uint32_t instance, flexspi_nor_config_t *config, uint32_t *dst, uint32_t start, uint32_t lengthInBytes)
 {
-    return g_bootloaderTree->flexSpiNorDriver->read(instance, config, dst, addr, lengthInBytes);
+    return g_bootloaderTree->flexSpiNorDriver->read(instance, config, dst, start, lengthInBytes);
 }
 #endif /* FSL_ROM_FLEXSPINOR_API_HAS_FEATURE_READ */
 
@@ -183,9 +183,9 @@ status_t ROM_FLEXSPI_NorFlash_GetConfig(uint32_t instance,
     status_t status = g_bootloaderTree->flexSpiNorDriver->get_config(instance, config, option);
     if (status == kStatus_Success)
     {
-        if (config->memConfig.readSampleClkSrc == kFLEXSPIReadSampleClk_LoopbackInternally)
+        if (config->memConfig.readSampleClkSrc == (uint8_t)kFLEXSPIReadSampleClk_LoopbackInternally)
         {
-            config->memConfig.readSampleClkSrc = kFLEXSPIReadSampleClk_LoopbackFromDqsPad;
+            config->memConfig.readSampleClkSrc = (uint8_t)kFLEXSPIReadSampleClk_LoopbackFromDqsPad;
         }
     }
 

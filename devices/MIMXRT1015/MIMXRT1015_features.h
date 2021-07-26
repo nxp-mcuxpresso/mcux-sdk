@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2019-02-20
-**     Build:               b201019
+**     Build:               b210326
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -137,6 +137,10 @@
 #define FSL_FEATURE_ADC_ETC_HAS_CTRL_DMA_MODE_SEL (1)
 /* @brief Has TRIGm_CHAIN_a_b IEn_EN. */
 #define FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN (0)
+/* @brief Has no TSC0 trigger related bitfields (bit field CTRL[EXT0_TRIG_ENABLE], CTRL[EXT0_TRIG_PRIORITY]). */
+#define FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG (0)
+/* @brief Has no TSC1 trigger related bitfields (bit field CTRL[EXT1_TRIG_ENABLE], CTRL[EXT1_TRIG_PRIORITY]). */
+#define FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG (0)
 
 /* AOI module features */
 
@@ -241,6 +245,8 @@
 #define FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS (4)
 /* @brief Has FLEXRAM_MAGIC_ADDR. */
 #define FSL_FEATURE_FLEXRAM_HAS_MAGIC_ADDR (0)
+/* @brief If FLEXRAM has ECC function. */
+#define FSL_FEATURE_FLEXRAM_HAS_ECC (0)
 
 /* FLEXSPI module features */
 
@@ -373,8 +379,6 @@
 #define FSL_FEATURE_OCOTP_HAS_TIMING_CTRL (1)
 /* @brief Support lock eFuse word write lock, (CTRL[WORDLOCK]). */
 #define FSL_FEATURE_OCOTP_HAS_WORDLOCK (0)
-/* @brief Has status register. (Register HW_OCOTP_OUT_STATUS0). */
-#define FSL_FEATURE_OCOTP_HAS_STATUS (0)
 
 /* PIT module features */
 
@@ -455,6 +459,12 @@
 
 /* @brief Has Secure Real Time Counter Enabled and Valid (bit field LPCR[SRTC_ENV]). */
 #define FSL_FEATURE_SNVS_HAS_SRTC (1)
+/* @brief Has Passive Tamper Filter (regitser LPTGFCR). */
+#define FSL_FEATURE_SNVS_PASSIVE_TAMPER_FILTER (0)
+/* @brief Has Active Tampers (regitser LPATCTLR, LPATCLKR, LPATRCnR). */
+#define FSL_FEATURE_SNVS_HAS_ACTIVE_TAMPERS (0)
+/* @brief Number of TAMPER. */
+#define FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER (1)
 
 /* SRC module features */
 

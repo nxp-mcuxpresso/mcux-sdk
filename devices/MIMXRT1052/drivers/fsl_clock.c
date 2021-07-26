@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2020 NXP
+ * Copyright 2017 - 2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -443,13 +443,13 @@ uint32_t CLOCK_GetFreq(clock_name_t name)
  */
 uint32_t CLOCK_GetClockRootFreq(clock_root_t clockRoot)
 {
-    const clock_name_t clockRootSourceArray[][6]  = CLOCK_ROOT_SOUCE;
-    const clock_mux_t clockRootMuxTupleArray[]    = CLOCK_ROOT_MUX_TUPLE;
-    const clock_div_t clockRootDivTupleArray[][2] = CLOCK_ROOT_DIV_TUPLE;
-    uint32_t freq                                 = 0UL;
-    clock_mux_t clockRootMuxTuple                 = clockRootMuxTupleArray[(uint8_t)clockRoot];
-    clock_div_t clockRootPreDivTuple              = clockRootDivTupleArray[(uint8_t)clockRoot][0];
-    clock_div_t clockRootPostDivTuple             = clockRootDivTupleArray[(uint8_t)clockRoot][1];
+    static const clock_name_t clockRootSourceArray[][6]  = CLOCK_ROOT_SOUCE;
+    static const clock_mux_t clockRootMuxTupleArray[]    = CLOCK_ROOT_MUX_TUPLE;
+    static const clock_div_t clockRootDivTupleArray[][2] = CLOCK_ROOT_DIV_TUPLE;
+    uint32_t freq                                        = 0UL;
+    clock_mux_t clockRootMuxTuple                        = clockRootMuxTupleArray[(uint8_t)clockRoot];
+    clock_div_t clockRootPreDivTuple                     = clockRootDivTupleArray[(uint8_t)clockRoot][0];
+    clock_div_t clockRootPostDivTuple                    = clockRootDivTupleArray[(uint8_t)clockRoot][1];
     uint32_t clockRootMuxValue = (CCM_TUPLE_REG(CCM, clockRootMuxTuple) & CCM_TUPLE_MASK(clockRootMuxTuple)) >>
                                  CCM_TUPLE_SHIFT(clockRootMuxTuple);
     clock_name_t clockSourceName;
@@ -539,7 +539,7 @@ bool CLOCK_EnableUsbhs1Clock(clock_usb_src_t src, uint32_t freq)
  */
 bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
 {
-    const clock_usb_pll_config_t g_ccmConfigUsbPll = {.loopDivider = 0U};
+    static const clock_usb_pll_config_t g_ccmConfigUsbPll = {.loopDivider = 0U};
     if ((CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_ENABLE_MASK) != 0U)
     {
         CCM_ANALOG->PLL_USB1 |= CCM_ANALOG_PLL_USB1_EN_USB_CLKS_MASK;
@@ -942,7 +942,7 @@ uint32_t CLOCK_GetPllFreq(clock_pll_t pll)
     uint32_t divSelect;
     clock_64b_t freqTmp;
 
-    const uint32_t enetRefClkFreq[] = {
+    static const uint32_t enetRefClkFreq[] = {
         25000000U,  /* 25M */
         50000000U,  /* 50M */
         100000000U, /* 100M */
@@ -1183,6 +1183,19 @@ void CLOCK_DeinitSysPfd(clock_pfd_t pfd)
 }
 
 /*!
+ * brief Check if Sys PFD is enabled
+ *
+ * param pfd PFD control name
+ * return PFD bypass status.
+ *         - true: power on.
+ *         - false: power off.
+ */
+bool CLOCK_IsSysPfdEnabled(clock_pfd_t pfd)
+{
+    return ((CCM_ANALOG->PFD_528 & (uint32_t)CCM_ANALOG_PFD_528_PFD0_CLKGATE_MASK << (8UL * (uint8_t)pfd)) == 0U);
+}
+
+/*!
  * brief Initialize the USB1 PLL PFD.
  *
  * This function initializes the USB1 PLL PFD. During new value setting,
@@ -1218,6 +1231,19 @@ void CLOCK_InitUsb1Pfd(clock_pfd_t pfd, uint8_t pfdFrac)
 void CLOCK_DeinitUsb1Pfd(clock_pfd_t pfd)
 {
     CCM_ANALOG->PFD_480 |= (uint32_t)CCM_ANALOG_PFD_480_PFD0_CLKGATE_MASK << (8UL * (uint8_t)pfd);
+}
+
+/*!
+ * brief Check if Usb1 PFD is enabled
+ *
+ * param pfd PFD control name.
+ * return PFD bypass status.
+ *         - true: power on.
+ *         - false: power off.
+ */
+bool CLOCK_IsUsb1PfdEnabled(clock_pfd_t pfd)
+{
+    return ((CCM_ANALOG->PFD_480 & (uint32_t)CCM_ANALOG_PFD_480_PFD0_CLKGATE_MASK << (8UL * (uint8_t)pfd)) == 0U);
 }
 
 /*!
@@ -1309,7 +1335,7 @@ uint32_t CLOCK_GetUsb1PfdFreq(clock_pfd_t pfd)
  */
 bool CLOCK_EnableUsbhs1PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
 {
-    const clock_usb_pll_config_t g_ccmConfigUsbPll = {.loopDivider = 0U};
+    static const clock_usb_pll_config_t g_ccmConfigUsbPll = {.loopDivider = 0U};
     CLOCK_InitUsb2Pll(&g_ccmConfigUsbPll);
     USBPHY2->CTRL &= ~USBPHY_CTRL_SFTRST_MASK; /* release PHY from reset */
     USBPHY2->CTRL &= ~USBPHY_CTRL_CLKGATE_MASK;

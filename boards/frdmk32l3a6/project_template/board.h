@@ -88,7 +88,6 @@
 #ifndef BOARD_LED3_GPIO_PIN
 #define BOARD_LED3_GPIO_PIN 22U
 #endif
-
 #ifndef BOARD_LED4_GPIO
 #define BOARD_LED4_GPIO GPIOE
 #endif
@@ -116,14 +115,6 @@
 #define LED3_ON()           GPIO_PortSet(BOARD_LED3_GPIO, 1U << BOARD_LED3_GPIO_PIN)    /*!< Turn on target LED3 */
 #define LED3_OFF()          GPIO_PortClear(BOARD_LED3_GPIO, 1U << BOARD_LED3_GPIO_PIN)  /*!< Turn off target LED3 */
 #define LED3_TOGGLE()       GPIO_PortToggle(BOARD_LED3_GPIO, 1U << BOARD_LED3_GPIO_PIN) /*!< Toggle on target LED3 */
-
-#define LED4_INIT(output)                                        \
-    GPIO_PinWrite(BOARD_LED4_GPIO, BOARD_LED4_GPIO_PIN, output); \
-    BOARD_LED4_GPIO->PDDR |= (1U << BOARD_LED4_GPIO_PIN)
-#define LED4_ON()           GPIO_PortSet(BOARD_LED4_GPIO, 1U << BOARD_LED4_GPIO_PIN)    /*!< Turn on target LED */
-#define LED4_OFF()          GPIO_PortClear(BOARD_LED4_GPIO, 1U << BOARD_LED4_GPIO_PIN)  /*!< Turn off target LED */
-#define LED4_TOGGLE()       GPIO_PortToggle(BOARD_LED4_GPIO, 1U << BOARD_LED4_GPIO_PIN) /*!< Toggle on target LED */
-
 #define LLWU_SW_GPIO        BOARD_SW2_GPIO
 #define LLWU_SW_PORT        BOARD_SW2_PORT
 #define LLWU_SW_GPIO_PIN    BOARD_SW2_GPIO_PIN

@@ -42,6 +42,10 @@ typedef enum _hal_rng_status
 * Public prototypes
 *************************************************************************************
 ************************************************************************************/
+#if defined(__cplusplus)
+extern "C" {
+#endif /* _cplusplus */
+
 /*!
  * @brief Initializes the random adapter module for a random data generator basic operation.
  *
@@ -91,5 +95,8 @@ hal_rng_status_t HAL_RngGetData(void *pRandomNo, uint32_t dataSize);
  * @retval KStatus_HAL_RngNotSupport Rand set rand seed not support
  */
 hal_rng_status_t HAL_RngSetSeed(uint32_t seed);
+#if defined(__cplusplus)
+}
+#endif
 /*! @}*/
 #endif /* _HAL_RNG_H_ */

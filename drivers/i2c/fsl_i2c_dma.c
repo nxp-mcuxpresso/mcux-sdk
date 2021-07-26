@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019,2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -184,8 +184,8 @@ static status_t I2C_InitTransferStateMachineDMA(I2C_Type *base,
                                                 i2c_master_dma_handle_t *handle,
                                                 i2c_master_transfer_t *xfer)
 {
-    assert(handle);
-    assert(xfer);
+    assert(handle != NULL);
+    assert(xfer != NULL);
 
     /* Set up transfer first. */
     i2c_direction_t direction = xfer->direction;
@@ -398,8 +398,8 @@ void I2C_MasterTransferCreateHandleDMA(I2C_Type *base,
                                        void *userData,
                                        dma_handle_t *dmaHandle)
 {
-    assert(handle);
-    assert(dmaHandle);
+    assert(handle != NULL);
+    assert(dmaHandle != NULL);
 
     uint32_t instance = I2C_GetInstance(base);
 
@@ -433,16 +433,12 @@ void I2C_MasterTransferCreateHandleDMA(I2C_Type *base,
  */
 status_t I2C_MasterTransferDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, i2c_master_transfer_t *xfer)
 {
-    assert(handle);
-    assert(xfer);
+    assert(handle != NULL);
+    assert(xfer != NULL);
 
     status_t result;
     uint8_t tmpReg;
-    volatile uint8_t dummy = 0;
     uint8_t tmpdata;
-
-    /* Add this to avoid build warning. */
-    dummy++;
 
     /* Disable dma transfer. */
     I2C_EnableDMA(base, false);
@@ -480,7 +476,7 @@ status_t I2C_MasterTransferDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, 
             base->C1 &= ~((uint8_t)I2C_C1_TX_MASK | (uint8_t)I2C_C1_TXAK_MASK);
 
             /* Read dummy to release the bus. */
-            dummy = base->D;
+            (void)base->D;
 
             /* Enabe dma transfer. */
             I2C_EnableDMA(base, true);
@@ -509,7 +505,7 @@ status_t I2C_MasterTransferDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, 
             base->C1 = tmpReg;
 
             /* Read dummy to release the bus. */
-            dummy = base->D;
+            (void)base->D;
         }
         else
         {
@@ -575,7 +571,7 @@ status_t I2C_MasterTransferDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, 
  */
 status_t I2C_MasterTransferGetCountDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (NULL == count)
     {

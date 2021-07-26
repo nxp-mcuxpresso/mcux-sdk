@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_GPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_GPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*!
@@ -183,17 +183,17 @@ static inline void GPT_SoftwareReset(GPT_Type *base)
  * @brief Set clock source of GPT.
  *
  * @param base GPT peripheral base address.
- * @param source Clock source (see @ref gpt_clock_source_t typedef enumeration).
+ * @param gptClkSource Clock source (see @ref gpt_clock_source_t typedef enumeration).
  */
-static inline void GPT_SetClockSource(GPT_Type *base, gpt_clock_source_t source)
+static inline void GPT_SetClockSource(GPT_Type *base, gpt_clock_source_t gptClkSource)
 {
-    if (source == kGPT_ClockSource_Osc)
+    if (gptClkSource == kGPT_ClockSource_Osc)
     {
-        base->CR = (base->CR & ~GPT_CR_CLKSRC_MASK) | GPT_CR_EN_24M_MASK | GPT_CR_CLKSRC(source);
+        base->CR = (base->CR & ~GPT_CR_CLKSRC_MASK) | GPT_CR_EN_24M_MASK | GPT_CR_CLKSRC(gptClkSource);
     }
     else
     {
-        base->CR = (base->CR & ~(GPT_CR_CLKSRC_MASK | GPT_CR_EN_24M_MASK)) | GPT_CR_CLKSRC(source);
+        base->CR = (base->CR & ~(GPT_CR_CLKSRC_MASK | GPT_CR_EN_24M_MASK)) | GPT_CR_CLKSRC(gptClkSource);
     }
 }
 

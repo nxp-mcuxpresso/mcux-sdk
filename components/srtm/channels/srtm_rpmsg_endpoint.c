@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, NXP
+ * Copyright 2017-2021, NXP
  * All rights reserved.
  *
  *
@@ -74,8 +74,8 @@ static int32_t SRTM_RPMsgEndpoint_RxHandler(void *payload, uint32_t payload_len,
             return handle->rxCallback(&handle->channel, payload, payload_len, src, handle->rxCallbackParam);
         }
 
-        assert(handle->channel.core);
-        assert(handle->channel.core->dispatcher);
+        assert(handle->channel.core != NULL);
+        assert(handle->channel.core->dispatcher != NULL);
 
         (void)SRTM_Dispatcher_PostRecvData(handle->channel.core->dispatcher, &handle->channel, payload, payload_len);
     }
@@ -165,16 +165,16 @@ srtm_channel_t SRTM_RPMsgEndpoint_Create(srtm_rpmsg_endpoint_config_t *config)
     SRTM_DEBUG_MESSAGE(SRTM_DEBUG_VERBOSE_INFO, "%s\r\n", __func__);
 
     handle = (srtm_rpmsg_endpoint_t)SRTM_Heap_Malloc(sizeof(struct _srtm_rpmsg_endpoint));
-    assert(handle);
+    assert(handle != NULL);
 
     handle->started         = false;
     handle->rxCallback      = NULL;
     handle->rxCallbackParam = NULL;
     handle->rpmsgEndpoint =
         rpmsg_lite_create_ept(config->rpmsgHandle, config->localAddr, SRTM_RPMsgEndpoint_RxHandler, handle);
-    assert(handle->rpmsgEndpoint);
+    assert(handle->rpmsgEndpoint != NULL);
 
-    memcpy(&handle->config, config, sizeof(struct _srtm_rpmsg_endpoint_config));
+    (void)memcpy(&handle->config, config, sizeof(struct _srtm_rpmsg_endpoint_config));
     if (config->localAddr == RL_ADDR_ANY)
     {
         handle->config.localAddr = handle->rpmsgEndpoint->addr;
@@ -192,7 +192,7 @@ srtm_channel_t SRTM_RPMsgEndpoint_Create(srtm_rpmsg_endpoint_config_t *config)
         if (rpmsg_ns_announce(config->rpmsgHandle, handle->rpmsgEndpoint, config->epName, (uint32_t)RL_NS_CREATE) !=
             RL_SUCCESS)
         {
-            assert(false);
+            assert((bool)false);
         }
     }
 
@@ -209,7 +209,7 @@ void SRTM_RPMsgEndpoint_Destroy(srtm_channel_t channel)
 
     SRTM_DEBUG_MESSAGE(SRTM_DEBUG_VERBOSE_INFO, "%s\r\n", __func__);
 
-    rpmsg_lite_destroy_ept(handle->config.rpmsgHandle, handle->rpmsgEndpoint);
+    (void)rpmsg_lite_destroy_ept(handle->config.rpmsgHandle, handle->rpmsgEndpoint);
 
     SRTM_Heap_Free(handle);
 }

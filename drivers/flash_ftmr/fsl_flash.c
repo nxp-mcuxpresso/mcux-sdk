@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2020 NXP
+ * Copyright 2017 - 2021 NXP
  * All rights reserved.
  *
  *
@@ -1019,10 +1019,6 @@ status_t FLASH_EepromWrite(flash_config_t *config, uint32_t start, uint8_t *src,
     {
         return kStatus_FLASH_InvalidArgument;
     }
-    if ((lengthInBytes > 4UL) || (0UL == lengthInBytes))
-    {
-        return kStatus_FLASH_InvalidArgument;
-    }
 
     /* Check the supplied address range. */
     /* Validates the range of the given address */
@@ -1036,63 +1032,65 @@ status_t FLASH_EepromWrite(flash_config_t *config, uint32_t start, uint8_t *src,
 
     flash_cache_clear_process(config, kFLASH_CacheClearProcessPre);
 
-    while (lengthInBytes > 3UL)
+    while (lengthInBytes > 0UL)
     {
         /* pass paramters to FTMRx */
         FTMRx->FSTAT = FTMRx_FSTAT_ACCERR_MASK | FTMRx_FSTAT_FPVIOL_MASK;
 
-        /* Write index to specify the command code to be loaded */
-        flash_set_command(0UL, start >> 16UL, FTMRx_PROGRAM_EEPROM);
-        flash_set_command(1UL, start, start >> 8UL);
-
-        /* Write index to specify the byte (MSB word) to be programmed */
-        for (i = 0UL; i < lengthInBytes; i++)
+        if (lengthInBytes >= 4UL)
         {
-            flash_set_command(0x02UL + i, *src++, 0UL);
+            /* Write index to specify the command code to be loaded */
+            flash_set_command(0UL, start >> 16UL, FTMRx_PROGRAM_EEPROM);
+            flash_set_command(1UL, (start & 0x000000FFUL), start >> 8UL);
+
+            for (i = 0UL; i < 4UL; i++)
+            {
+                flash_set_command(0x02UL + i, *src++, 0UL);
+            }
+
+            /* calling flash command sequence function to execute the command */
+            returnCode = flash_command_sequence(config);
+
+            /* calling flash callback function if it is available */
+            if (config->PFlashCallback != NULL)
+            {
+                config->PFlashCallback();
+            }
+
+            /* checking for the success of command execution */
+            if (returnCode != kStatus_FLASH_Success)
+            {
+                break;
+            }
+            else
+            {
+                /* update start address for next iteration */
+                start += 4UL;
+                /* update lengthInBytes for next iteration */
+                lengthInBytes -= 4UL;
+            }
         }
-
-        /* calling flash command sequence function to execute the command */
-        returnCode = flash_command_sequence(config);
-
-        /* calling flash callback function if it is available */
-        if (config->PFlashCallback != NULL)
+        else if (lengthInBytes > 0UL)
         {
-            config->PFlashCallback();
-        }
+            /* Write index to specify the command code to be loaded */
+            flash_set_command(0UL, start >> 16UL, FTMRx_PROGRAM_EEPROM);
+            flash_set_command(1UL, (start & 0x000000FFUL), start >> 8UL);
 
-        /* checking for the success of command execution */
-        if (returnCode != kStatus_FLASH_Success)
-        {
-            break;
+            /* Write index to specify the byte (MSB word) to be programmed */
+            for (i = 0UL; i < lengthInBytes; i++)
+            {
+                flash_set_command(0x02UL + i, *src++, 0UL);
+            }
+            /* calling flash command sequence function to execute the command */
+            returnCode    = flash_command_sequence(config);
+            lengthInBytes = 0UL;
         }
         else
         {
-            /* update start address for next iteration */
-            start += 4U;
-            src += 4U;
-            /* update lengthInBytes for next iteration */
-            lengthInBytes -= 4UL;
+            /*"There's nothing to do here."*/
         }
-    }
-    if ((lengthInBytes > 0UL) && (kStatus_FLASH_Success == returnCode))
-    {
-        /* pass paramters to FTMRx */
-        FTMRx->FSTAT = FTMRx_FSTAT_ACCERR_MASK | FTMRx_FSTAT_FPVIOL_MASK;
-
-        /* Write index to specify the command code to be loaded */
-        flash_set_command(0UL, start >> 16UL, FTMRx_PROGRAM_EEPROM);
-        flash_set_command(1UL, start, start >> 8UL);
-
-        /* Write index to specify the byte (MSB word) to be programmed */
-        for (i = 0UL; i < lengthInBytes; i++)
-        {
-            flash_set_command(0x02UL + i, *src++, 0UL);
-        }
-        /* calling flash command sequence function to execute the command */
-        returnCode = flash_command_sequence(config);
     }
     flash_cache_clear(config);
-
     return (returnCode);
 }
 #endif /* FLASH_SSD_IS_EEPROM_ENABLED */

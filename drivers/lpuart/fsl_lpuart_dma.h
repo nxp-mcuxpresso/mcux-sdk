@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPUART DMA driver version 2.4.0. */
-#define FSL_LPUART_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief LPUART DMA driver version. */
+#define FSL_LPUART_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*@}*/
 
 /* Forward declaration of the handle typedef. */
@@ -159,6 +159,16 @@ status_t LPUART_TransferGetSendCountDMA(LPUART_Type *base, lpuart_dma_handle_t *
  * @retval kStatus_Success Get successfully through the parameter \p count;
  */
 status_t LPUART_TransferGetReceiveCountDMA(LPUART_Type *base, lpuart_dma_handle_t *handle, uint32_t *count);
+
+/*!
+ * @brief LPUART DMA IRQ handle function.
+ *
+ * This function handles the LPUART tx complete IRQ request and invoke user callback.
+ *
+ * @param base LPUART peripheral base address.
+ * @param lpuartDmaHandle LPUART handle pointer.
+ */
+void LPUART_TransferDMAHandleIRQ(LPUART_Type *base, void *lpuartDmaHandle);
 
 /*@}*/
 

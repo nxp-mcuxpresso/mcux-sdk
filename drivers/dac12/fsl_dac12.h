@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief DAC12 driver version 2.0.1. */
-#define FSL_DAC12_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief DAC12 driver version 2.1.0. */
+#define FSL_DAC12_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*! @brief Define "write 1 to clear" flags. */
@@ -160,7 +160,9 @@ typedef struct
     dac12_reference_current_source_t referenceCurrentSource; /*!< Select the reference current source. */
     dac12_speed_mode_t speedMode;                            /*!< Select the speed mode for conversion. */
     bool enableAnalogBuffer;                                 /*!< Enable analog buffer for high drive. */
+#if !(defined(FSL_FEATURE_DAC12_HAS_NO_ITRM_REGISTER) && FSL_FEATURE_DAC12_HAS_NO_ITRM_REGISTER)
     uint32_t currentReferenceInternalTrimValue; /*!< Internal reference current trim value. 3-bit value is available.*/
+#endif                                          /* FSL_FEATURE_DAC12_HAS_NO_ITRM_REGISTER */
 } dac12_config_t;
 
 /*******************************************************************************

@@ -28,9 +28,9 @@ status_t BOARD_InitDebugConsole(void)
 #if ((SDK_DEBUGCONSOLE == DEBUGCONSOLE_REDIRECT_TO_SDK) || defined(SDK_DEBUGCONSOLE_UART))
     status_t result;
     /* attach 12 MHz clock to FLEXCOMM0 (debug console) */
-    CLOCK_AttachClk(kFRO12M_to_FLEXCOMM0);
+    CLOCK_AttachClk(BOARD_DEBUG_UART_CLK_ATTACH);
     RESET_PeripheralReset(BOARD_DEBUG_UART_RST);
-    result = DbgConsole_Init(BOARD_DEBUG_UART_BASEADDR, BOARD_DEBUG_UART_BAUDRATE, DEBUG_CONSOLE_DEVICE_TYPE_FLEXCOMM,
+    result = DbgConsole_Init(BOARD_DEBUG_UART_INSTANCE, BOARD_DEBUG_UART_BAUDRATE, BOARD_DEBUG_UART_TYPE,
                              BOARD_DEBUG_UART_CLK_FREQ);
     assert(kStatus_Success == result);
     return result;

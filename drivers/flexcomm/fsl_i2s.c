@@ -51,7 +51,7 @@ static status_t I2S_ValidateBuffer(i2s_handle_t *handle, i2s_transfer_t *transfe
  ******************************************************************************/
 
 /*! @brief Array to map i2c instance number to base address. */
-static const uint32_t s_i2sBaseAddrs[FSL_FEATURE_SOC_I2S_COUNT] = I2S_BASE_ADDRS;
+static const uint32_t s_i2sBaseAddrs[] = I2S_BASE_ADDRS;
 
 /*! @brief IRQ name array */
 static const IRQn_Type s_i2sIRQ[] = I2S_IRQS;
@@ -71,7 +71,7 @@ static const IRQn_Type s_i2sIRQ[] = I2S_IRQS;
 static uint32_t I2S_GetInstance(I2S_Type *base)
 {
     uint32_t i;
-    for (i = 0; i < (uint32_t)FSL_FEATURE_SOC_I2S_COUNT; i++)
+    for (i = 0; i < (uint32_t)ARRAY_SIZE(s_i2sBaseAddrs); i++)
     {
         if ((uint32_t)base == s_i2sBaseAddrs[i])
         {

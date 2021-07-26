@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016, NXP
+ * Copyright 2016, 2021 NXP
  * All rights reserved.
  *
  *
@@ -22,47 +22,47 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.0.0. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief power driver version 2.1.0. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 #define MAKE_PD_BITS(reg, slot) (((reg) << 8) | (slot))
-#define PDRCFG0 0x0U
-#define PDRCFG1 0x1U
+#define PDRCFG0                 0x0U
+#define PDRCFG1                 0x1U
 
 typedef enum pd_bits
 {
-    kPDRUNCFG_LP_REG = MAKE_PD_BITS(PDRCFG0, 2U),
-    kPDRUNCFG_PD_FRO_EN = MAKE_PD_BITS(PDRCFG0, 4U),
-    kPDRUNCFG_PD_TS = MAKE_PD_BITS(PDRCFG0, 6U),
+    kPDRUNCFG_LP_REG       = MAKE_PD_BITS(PDRCFG0, 2U),
+    kPDRUNCFG_PD_FRO_EN    = MAKE_PD_BITS(PDRCFG0, 4U),
+    kPDRUNCFG_PD_TS        = MAKE_PD_BITS(PDRCFG0, 6U),
     kPDRUNCFG_PD_BOD_RESET = MAKE_PD_BITS(PDRCFG0, 7U),
-    kPDRUNCFG_PD_BOD_INTR = MAKE_PD_BITS(PDRCFG0, 8U),
-    kPDRUNCFG_PD_VD2_ANA = MAKE_PD_BITS(PDRCFG0, 9U),
-    kPDRUNCFG_PD_ADC0 = MAKE_PD_BITS(PDRCFG0, 10U),
-    kPDRUNCFG_PD_RAM0 = MAKE_PD_BITS(PDRCFG0, 13U),
-    kPDRUNCFG_PD_RAM1 = MAKE_PD_BITS(PDRCFG0, 14U),
-    kPDRUNCFG_PD_RAM2 = MAKE_PD_BITS(PDRCFG0, 15U),
-    kPDRUNCFG_PD_RAM3 = MAKE_PD_BITS(PDRCFG0, 16U),
-    kPDRUNCFG_PD_ROM = MAKE_PD_BITS(PDRCFG0, 17U),
-    kPDRUNCFG_PD_VDDA = MAKE_PD_BITS(PDRCFG0, 19U),
-    kPDRUNCFG_PD_WDT_OSC = MAKE_PD_BITS(PDRCFG0, 20U),
-    kPDRUNCFG_PD_USB0_PHY = MAKE_PD_BITS(PDRCFG0, 21U),
-    kPDRUNCFG_PD_SYS_PLL0 = MAKE_PD_BITS(PDRCFG0, 22U),
-    kPDRUNCFG_PD_VREFP = MAKE_PD_BITS(PDRCFG0, 23U),
-    kPDRUNCFG_PD_FLASH_BG = MAKE_PD_BITS(PDRCFG0, 25U),
-    kPDRUNCFG_PD_VD3 = MAKE_PD_BITS(PDRCFG0, 26U),
-    kPDRUNCFG_PD_VD4 = MAKE_PD_BITS(PDRCFG0, 27U),
-    kPDRUNCFG_PD_VD5 = MAKE_PD_BITS(PDRCFG0, 28U),
-    kPDRUNCFG_PD_VD6 = MAKE_PD_BITS(PDRCFG0, 29U),
-    kPDRUNCFG_REQ_DELAY = MAKE_PD_BITS(PDRCFG0, 30U),
-    kPDRUNCFG_FORCE_RBB = MAKE_PD_BITS(PDRCFG0, 31U),
+    kPDRUNCFG_PD_BOD_INTR  = MAKE_PD_BITS(PDRCFG0, 8U),
+    kPDRUNCFG_PD_VD2_ANA   = MAKE_PD_BITS(PDRCFG0, 9U),
+    kPDRUNCFG_PD_ADC0      = MAKE_PD_BITS(PDRCFG0, 10U),
+    kPDRUNCFG_PD_RAM0      = MAKE_PD_BITS(PDRCFG0, 13U),
+    kPDRUNCFG_PD_RAM1      = MAKE_PD_BITS(PDRCFG0, 14U),
+    kPDRUNCFG_PD_RAM2      = MAKE_PD_BITS(PDRCFG0, 15U),
+    kPDRUNCFG_PD_RAM3      = MAKE_PD_BITS(PDRCFG0, 16U),
+    kPDRUNCFG_PD_ROM       = MAKE_PD_BITS(PDRCFG0, 17U),
+    kPDRUNCFG_PD_VDDA      = MAKE_PD_BITS(PDRCFG0, 19U),
+    kPDRUNCFG_PD_WDT_OSC   = MAKE_PD_BITS(PDRCFG0, 20U),
+    kPDRUNCFG_PD_USB0_PHY  = MAKE_PD_BITS(PDRCFG0, 21U),
+    kPDRUNCFG_PD_SYS_PLL0  = MAKE_PD_BITS(PDRCFG0, 22U),
+    kPDRUNCFG_PD_VREFP     = MAKE_PD_BITS(PDRCFG0, 23U),
+    kPDRUNCFG_PD_FLASH_BG  = MAKE_PD_BITS(PDRCFG0, 25U),
+    kPDRUNCFG_PD_VD3       = MAKE_PD_BITS(PDRCFG0, 26U),
+    kPDRUNCFG_PD_VD4       = MAKE_PD_BITS(PDRCFG0, 27U),
+    kPDRUNCFG_PD_VD5       = MAKE_PD_BITS(PDRCFG0, 28U),
+    kPDRUNCFG_PD_VD6       = MAKE_PD_BITS(PDRCFG0, 29U),
+    kPDRUNCFG_REQ_DELAY    = MAKE_PD_BITS(PDRCFG0, 30U),
+    kPDRUNCFG_FORCE_RBB    = MAKE_PD_BITS(PDRCFG0, 31U),
 
-    kPDRUNCFG_PD_USB1_PHY = MAKE_PD_BITS(PDRCFG1, 0U),
-    kPDRUNCFG_PD_USB_PLL = MAKE_PD_BITS(PDRCFG1, 1U),
+    kPDRUNCFG_PD_USB1_PHY  = MAKE_PD_BITS(PDRCFG1, 0U),
+    kPDRUNCFG_PD_USB_PLL   = MAKE_PD_BITS(PDRCFG1, 1U),
     kPDRUNCFG_PD_AUDIO_PLL = MAKE_PD_BITS(PDRCFG1, 2U),
-    kPDRUNCFG_PD_SYS_OSC = MAKE_PD_BITS(PDRCFG1, 3U),
-    kPDRUNCFG_PD_EEPROM = MAKE_PD_BITS(PDRCFG1, 5U),
-    kPDRUNCFG_PD_rng = MAKE_PD_BITS(PDRCFG1, 6U),
+    kPDRUNCFG_PD_SYS_OSC   = MAKE_PD_BITS(PDRCFG1, 3U),
+    kPDRUNCFG_PD_EEPROM    = MAKE_PD_BITS(PDRCFG1, 5U),
+    kPDRUNCFG_PD_rng       = MAKE_PD_BITS(PDRCFG1, 6U),
 
     /*
     This enum member has no practical meaning,it is used to avoid MISRA issue,
@@ -74,10 +74,44 @@ typedef enum pd_bits
 /* Power mode configuration API parameter */
 typedef enum _power_mode_config
 {
-    kPmu_Sleep = 0U,
-    kPmu_Deep_Sleep = 1U,
+    kPmu_Sleep          = 0U,
+    kPmu_Deep_Sleep     = 1U,
     kPmu_Deep_PowerDown = 2U,
 } power_mode_cfg_t;
+
+/*!
+ * @brief The enumeration of BOD reset level.
+ */
+typedef enum _power_bod_reset_level
+{
+    kBod_ResetLevel0 = 0U, /*!< Reset Level0: 1.5V. */
+    kBod_ResetLevel1,      /*!< Reset Level0: 1.85V. */
+    kBod_ResetLevel2,      /*!< Reset Level0: 2.0V. */
+    kBod_ResetLevel3,      /*!< Reset Level0: 2.3V. */
+} power_bod_reset_level_t;
+
+/*!
+ * @brief The enumeration of BOD interrupt level.
+ */
+typedef enum _power_bod_interrupt_level
+{
+    kBod_InterruptLevel0 = 0U, /*!< Interrupt level: 2.05V. */
+    kBod_InterruptLevel1,      /*!< Interrupt level: 2.45V. */
+    kBod_InterruptLevel2,      /*!< Interrupt level: 2.75V. */
+    kBod_InterruptLevel3,      /*!< Interrupt level: 3s.05V. */
+} power_bod_interrupt_level_t;
+
+/*!
+ * @brief The configuration of power bod, including reset level, interrupt level, and so on.
+ */
+typedef struct _power_bod_config
+{
+    bool enableReset;                   /*!< Enable/disable BOD reset function. */
+    power_bod_reset_level_t resetLevel; /*!< BOD reset level, please refer to @ref power_bod_reset_level_t. */
+    bool enableInterrupt;               /*!< Enable/disable BOD interrupt function. */
+    power_bod_interrupt_level_t
+        interruptLevel; /*!< BOD interrupt level, please refer to @ref power_bod_interrupt_level_t. */
+} power_bod_config_t;
 
 /*******************************************************************************
  * API
@@ -88,9 +122,9 @@ extern "C" {
 #endif
 
 /*!
-* @name Power Configuration
-* @{
-*/
+ * @name Power Configuration
+ * @{
+ */
 
 /*!
  * @brief API to enable PDRUNCFG bit in the Syscon. Note that enabling the bit powers down the peripheral
@@ -213,6 +247,15 @@ void POWER_SetVoltageForFreq(uint32_t freq);
  * @return version number of the power library
  */
 uint32_t POWER_GetLibVersion(void);
+
+void POWER_InitBod(const power_bod_config_t *bodConfig);
+
+void POWER_GetDefaultBodConfig(power_bod_config_t *bodConfig);
+
+static inline void POWER_DeinitBod(void)
+{
+    SYSCON->BODCTRL &= ~(SYSCON_BODCTRL_BODRSTENA_MASK | SYSCON_BODCTRL_BODINTENA_MASK);
+}
 
 /*@}*/
 

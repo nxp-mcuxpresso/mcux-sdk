@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -611,7 +611,7 @@ status_t FLEXIO_UART_TransferSendNonBlocking(FLEXIO_UART_Type *base,
     status_t status;
 
     /* Return error if xfer invalid. */
-    if ((0U == xfer->dataSize) || (NULL == xfer->data))
+    if ((0U == xfer->dataSize) || (NULL == xfer->txData))
     {
         return kStatus_InvalidArgument;
     }
@@ -623,7 +623,7 @@ status_t FLEXIO_UART_TransferSendNonBlocking(FLEXIO_UART_Type *base,
     }
     else
     {
-        handle->txData        = xfer->data;
+        handle->txData        = xfer->txData;
         handle->txDataSize    = xfer->dataSize;
         handle->txDataSizeAll = xfer->dataSize;
         handle->txState       = (uint8_t)kFLEXIO_UART_TxBusy;
@@ -721,7 +721,7 @@ status_t FLEXIO_UART_TransferReceiveNonBlocking(FLEXIO_UART_Type *base,
     size_t bytesCurrentReceived;
 
     /* Return error if xfer invalid. */
-    if ((0U == xfer->dataSize) || (NULL == xfer->data))
+    if ((0U == xfer->dataSize) || (NULL == xfer->rxData))
     {
         return kStatus_InvalidArgument;
     }
@@ -763,7 +763,7 @@ status_t FLEXIO_UART_TransferReceiveNonBlocking(FLEXIO_UART_Type *base,
                 /* Copy data from ring buffer to user memory. */
                 for (i = 0U; i < bytesToCopy; i++)
                 {
-                    xfer->data[bytesCurrentReceived++] = handle->rxRingBuffer[handle->rxRingBufferTail];
+                    xfer->rxData[bytesCurrentReceived++] = handle->rxRingBuffer[handle->rxRingBufferTail];
 
                     /* Wrap to 0. Not use modulo (%) because it might be large and slow. */
                     if ((uint32_t)handle->rxRingBufferTail + 1U == handle->rxRingBufferSize)
@@ -781,9 +781,9 @@ status_t FLEXIO_UART_TransferReceiveNonBlocking(FLEXIO_UART_Type *base,
             if (bytesToReceive != 0U)
             {
                 /* No data in ring buffer, save the request to UART handle. */
-                handle->rxData        = xfer->data + bytesCurrentReceived;
+                handle->rxData        = xfer->rxData + bytesCurrentReceived;
                 handle->rxDataSize    = bytesToReceive;
-                handle->rxDataSizeAll = bytesToReceive;
+                handle->rxDataSizeAll = xfer->dataSize;
                 handle->rxState       = (uint8_t)kFLEXIO_UART_RxBusy;
             }
 
@@ -802,7 +802,7 @@ status_t FLEXIO_UART_TransferReceiveNonBlocking(FLEXIO_UART_Type *base,
         /* Ring buffer not used. */
         else
         {
-            handle->rxData        = xfer->data + bytesCurrentReceived;
+            handle->rxData        = xfer->rxData + bytesCurrentReceived;
             handle->rxDataSize    = bytesToReceive;
             handle->rxDataSizeAll = bytesToReceive;
             handle->rxState       = (uint8_t)kFLEXIO_UART_RxBusy;

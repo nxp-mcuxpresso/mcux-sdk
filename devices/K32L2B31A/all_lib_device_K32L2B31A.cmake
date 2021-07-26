@@ -1,6 +1,6 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
@@ -34,7 +34,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tpm
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -50,7 +49,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_port)
 #    include(driver_lpuart_freertos)
 #    include(driver_uart_freertos)
-#    include(CMSIS_Include_dsp)
+#    include(device_system)
 #    include(component_lpuart_adapter)
 #    include(driver_i2c)
 #    include(driver_i2c_freertos)
@@ -70,19 +69,18 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_osa)
 #    include(driver_fxos8700cq)
 #    include(driver_lpuart)
+#    include(CMSIS_Include_core_cm)
 #    include(driver_flexio_spi)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_flexio)
-#    include(middleware_usb_device_common_header)
+#    include(utility_shell)
 #    include(utility_notifier)
-#    include(device_system)
-#    include(CMSIS_Include_core_cm0plus)
+#    include(utility_assert_lite)
 #    include(driver_flexio_i2c_master)
 #    include(driver_pmc)
 #    include(middleware_baremetal)
 #    include(driver_spi)
 #    include(driver_flash)
-#    include(utility_shell)
 #    include(utility_assert)
 #    include(driver_sim)
 #    include(utility_debug_console)
@@ -90,8 +88,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_uart)
 #    include(driver_flexio_uart_dma)
 #    include(utilities_misc_utilities)
-#    include(utility_assert_lite)
-#    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_rtc)
 #    include(driver_uart_dma)
@@ -110,5 +106,4 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_rcm)
 #    include(driver_slcd_engine)
 #    include(driver_spi_freertos)
-#    include(middleware_usb_common_header)
 #    include(driver_slcd_lcd_s401m16kr)

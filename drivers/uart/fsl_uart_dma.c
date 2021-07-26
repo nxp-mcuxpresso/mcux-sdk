@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -99,8 +99,8 @@ static void UART_TransferReceiveDMACallback(dma_handle_t *handle, void *param);
 
 static void UART_TransferSendDMACallback(dma_handle_t *handle, void *param)
 {
-    assert(handle);
-    assert(param);
+    assert(handle != NULL);
+    assert(param != NULL);
 
     uart_dma_private_handle_t *uartPrivateHandle = (uart_dma_private_handle_t *)param;
 
@@ -110,24 +110,14 @@ static void UART_TransferSendDMACallback(dma_handle_t *handle, void *param)
     /* Disable interrupt. */
     DMA_DisableInterrupts(handle->base, handle->channel);
 
-    uartPrivateHandle->handle->txState = (uint8_t)kUART_TxIdle;
-
-    /* Ensure all the data in the transmit buffer are sent out to bus. */
-    while (0U == (uartPrivateHandle->base->S1 & UART_S1_TC_MASK))
-    {
-    }
-
-    if (uartPrivateHandle->handle->callback != NULL)
-    {
-        uartPrivateHandle->handle->callback(uartPrivateHandle->base, uartPrivateHandle->handle, kStatus_UART_TxIdle,
-                                            uartPrivateHandle->handle->userData);
-    }
+    /* Enable tx complete interrupt */
+    UART_EnableInterrupts(uartPrivateHandle->base, (uint32_t)kUART_TransmissionCompleteInterruptEnable);
 }
 
 static void UART_TransferReceiveDMACallback(dma_handle_t *handle, void *param)
 {
-    assert(handle);
-    assert(param);
+    assert(handle != NULL);
+    assert(param != NULL);
 
     uart_dma_private_handle_t *uartPrivateHandle = (uart_dma_private_handle_t *)param;
 
@@ -163,7 +153,7 @@ void UART_TransferCreateHandleDMA(UART_Type *base,
                                   dma_handle_t *txDmaHandle,
                                   dma_handle_t *rxDmaHandle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     uint32_t instance = UART_GetInstance(base);
 
@@ -196,6 +186,14 @@ void UART_TransferCreateHandleDMA(UART_Type *base,
     handle->rxDmaHandle = rxDmaHandle;
     handle->txDmaHandle = txDmaHandle;
 
+    /* Save the handle in global variables to support the double weak mechanism. */
+    s_uartHandle[instance] = handle;
+    /* Save IRQ handler into static ISR function pointer. */
+    s_uartIsr = UART_TransferDMAHandleIRQ;
+    /* Disable internal IRQs and enable global IRQ. */
+    UART_DisableInterrupts(base, (uint32_t)kUART_AllInterruptsEnable);
+    (void)EnableIRQ(s_uartIRQ[instance]);
+
     /* Configure TX. */
     if (txDmaHandle != NULL)
     {
@@ -224,11 +222,11 @@ void UART_TransferCreateHandleDMA(UART_Type *base,
  */
 status_t UART_TransferSendDMA(UART_Type *base, uart_dma_handle_t *handle, uart_transfer_t *xfer)
 {
-    assert(handle);
-    assert(handle->txDmaHandle);
-    assert(xfer);
-    assert(xfer->data);
-    assert(xfer->dataSize);
+    assert(handle != NULL);
+    assert(handle->txDmaHandle != NULL);
+    assert(xfer != NULL);
+    assert(xfer->data != NULL);
+    assert(xfer->dataSize != 0U);
 
     dma_transfer_config_t xferConfig;
     status_t status;
@@ -275,11 +273,11 @@ status_t UART_TransferSendDMA(UART_Type *base, uart_dma_handle_t *handle, uart_t
  */
 status_t UART_TransferReceiveDMA(UART_Type *base, uart_dma_handle_t *handle, uart_transfer_t *xfer)
 {
-    assert(handle);
-    assert(handle->rxDmaHandle);
-    assert(xfer);
-    assert(xfer->data);
-    assert(xfer->dataSize);
+    assert(handle != NULL);
+    assert(handle->rxDmaHandle != NULL);
+    assert(xfer != NULL);
+    assert(xfer->data != NULL);
+    assert(xfer->dataSize != 0U);
 
     dma_transfer_config_t xferConfig;
     status_t status;
@@ -321,8 +319,8 @@ status_t UART_TransferReceiveDMA(UART_Type *base, uart_dma_handle_t *handle, uar
  */
 void UART_TransferAbortSendDMA(UART_Type *base, uart_dma_handle_t *handle)
 {
-    assert(handle);
-    assert(handle->txDmaHandle);
+    assert(handle != NULL);
+    assert(handle->txDmaHandle != NULL);
 
     /* Disable UART TX DMA. */
     UART_EnableTxDMA(base, false);
@@ -347,8 +345,8 @@ void UART_TransferAbortSendDMA(UART_Type *base, uart_dma_handle_t *handle)
  */
 void UART_TransferAbortReceiveDMA(UART_Type *base, uart_dma_handle_t *handle)
 {
-    assert(handle);
-    assert(handle->rxDmaHandle);
+    assert(handle != NULL);
+    assert(handle->rxDmaHandle != NULL);
 
     /* Disable UART RX DMA. */
     UART_EnableRxDMA(base, false);
@@ -378,9 +376,9 @@ void UART_TransferAbortReceiveDMA(UART_Type *base, uart_dma_handle_t *handle)
  */
 status_t UART_TransferGetSendCountDMA(UART_Type *base, uart_dma_handle_t *handle, uint32_t *count)
 {
-    assert(handle);
-    assert(handle->txDmaHandle);
-    assert(count);
+    assert(handle != NULL);
+    assert(handle->txDmaHandle != NULL);
+    assert(count != NULL);
 
     if ((uint8_t)kUART_TxIdle == handle->txState)
     {
@@ -406,9 +404,9 @@ status_t UART_TransferGetSendCountDMA(UART_Type *base, uart_dma_handle_t *handle
  */
 status_t UART_TransferGetReceiveCountDMA(UART_Type *base, uart_dma_handle_t *handle, uint32_t *count)
 {
-    assert(handle);
-    assert(handle->rxDmaHandle);
-    assert(count);
+    assert(handle != NULL);
+    assert(handle->rxDmaHandle != NULL);
+    assert(count != NULL);
 
     if ((uint8_t)kUART_RxIdle == handle->rxState)
     {
@@ -418,4 +416,21 @@ status_t UART_TransferGetReceiveCountDMA(UART_Type *base, uart_dma_handle_t *han
     *count = handle->rxDataSizeAll - DMA_GetRemainingBytes(handle->rxDmaHandle->base, handle->rxDmaHandle->channel);
 
     return kStatus_Success;
+}
+
+void UART_TransferDMAHandleIRQ(UART_Type *base, void *uartDmaHandle)
+{
+    assert(uartDmaHandle != NULL);
+
+    uart_dma_handle_t *handle = (uart_dma_handle_t *)uartDmaHandle;
+
+    handle->txState = (uint8_t)kUART_TxIdle;
+
+    /* Disable tx complete interrupt */
+    UART_DisableInterrupts(base, (uint32_t)kUART_TransmissionCompleteInterruptEnable);
+
+    if (handle->callback != NULL)
+    {
+        handle->callback(base, handle, kStatus_UART_TxIdle, handle->userData);
+    }
 }

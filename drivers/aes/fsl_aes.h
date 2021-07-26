@@ -23,9 +23,11 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Defines LPC AES driver version 2.0.2.
+/*! @brief Defines LPC AES driver version 2.0.3.
  *
  * Change log:
+ * - Version 2.0.3
+ *   - Edit aes_one_block() function to be interrupt safe.
  * - Version 2.0.2
  *   - Fix MISRA-2012 issues
  * - Version 2.0.1
@@ -33,7 +35,7 @@
  * - Version 2.0.0
  *   - initial version
  */
-#define FSL_AES_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_AES_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*******************************************************************************

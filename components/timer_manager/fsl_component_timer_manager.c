@@ -388,15 +388,6 @@ static void TimerManagerTask(void *param)
             }
             s_timermanager.timerHardwareIsRunning = (uint8_t) true;
         }
-        else
-        {
-            if (0U != s_timermanager.timerHardwareIsRunning)
-            {
-                HAL_TimerDisable((hal_timer_handle_t)s_timermanager.halTimerHandle);
-                s_timermanager.timerHardwareIsRunning = (uint8_t) false;
-                s_timermanager.mUsInTimerInterval     = 0;
-            }
-        }
         EnableGlobalIRQ(regPrimask);
 #if defined(OSA_USED)
 #if (defined(TM_COMMON_TASK_ENABLE) && (TM_COMMON_TASK_ENABLE > 0U))

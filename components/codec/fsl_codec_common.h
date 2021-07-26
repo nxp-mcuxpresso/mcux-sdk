@@ -21,12 +21,12 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.1. */
-#define FSL_CODEC_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief CLOCK driver version 2.2.2. */
+#define FSL_CODEC_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 /*! @brief codec maximum volume range */
-#define CODEC_VOLUME_MAX_VALUE (0x80U)
+#define CODEC_VOLUME_MAX_VALUE (100U)
 
 /*! @brief CODEC status
  * @anchor _codec_status
@@ -97,7 +97,7 @@ typedef enum _codec_module
     kCODEC_ModuleMic       = 9U,  /*!< codec module MIC */
     kCODEC_ModuleI2SIn     = 10U, /*!< codec module I2S in */
     kCODEC_ModuleI2SOut    = 11U, /*!< codec module I2S out */
-    kCODEC_ModuleMxier     = 12U, /*!< codec module mixer */
+    kCODEC_ModuleMixer     = 12U, /*!< codec module mixer */
 } codec_module_t;
 
 /*! @brief audio codec module control cmd */

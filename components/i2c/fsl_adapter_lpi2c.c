@@ -96,7 +96,7 @@ static hal_i2c_status_t HAL_I2cGetStatus(status_t status)
 static void HAL_I2cMasterCallback(LPI2C_Type *base, lpi2c_master_handle_t *handle, status_t status, void *callbackParam)
 {
     hal_i2c_master_t *i2cMasterHandle;
-    assert(callbackParam);
+    assert(NULL != callbackParam);
 
     i2cMasterHandle = (hal_i2c_master_t *)callbackParam;
 
@@ -109,7 +109,7 @@ static void HAL_I2cMasterCallback(LPI2C_Type *base, lpi2c_master_handle_t *handl
 static void HAL_I2cSlaveCallback(LPI2C_Type *base, lpi2c_slave_transfer_t *xfer, void *callbackParam)
 {
     hal_i2c_slave_t *i2cSlaveHandle;
-    assert(callbackParam);
+    assert(NULL != callbackParam);
 
     i2cSlaveHandle = (hal_i2c_slave_t *)callbackParam;
 
@@ -131,8 +131,8 @@ hal_i2c_status_t HAL_I2cMasterInit(hal_i2c_master_handle_t handle, const hal_i2c
     hal_i2c_master_t *i2cMasterHandle;
     lpi2c_master_config_t i2cConfig;
 
-    assert(handle);
-    assert(config);
+    assert(NULL != handle);
+    assert(NULL != config);
     assert(HAL_I2C_MASTER_HANDLE_SIZE >= sizeof(hal_i2c_master_t));
 
     i2cMasterHandle = (hal_i2c_master_t *)handle;
@@ -152,8 +152,8 @@ hal_i2c_status_t HAL_I2cSlaveInit(hal_i2c_slave_handle_t handle, const hal_i2c_s
     hal_i2c_slave_t *i2cSlaveHandle;
     lpi2c_slave_config_t i2cConfig;
 
-    assert(handle);
-    assert(config);
+    assert(NULL != handle);
+    assert(NULL != config);
     assert(HAL_I2C_SLAVE_HANDLE_SIZE >= sizeof(hal_i2c_slave_t));
 
     i2cSlaveHandle = (hal_i2c_slave_t *)handle;
@@ -172,7 +172,7 @@ hal_i2c_status_t HAL_I2cMasterDeinit(hal_i2c_master_handle_t handle)
 {
     hal_i2c_master_t *i2cMasterHandle;
 
-    assert(handle);
+    assert(NULL != handle);
 
     i2cMasterHandle = (hal_i2c_master_t *)handle;
 
@@ -185,7 +185,7 @@ hal_i2c_status_t HAL_I2cSlaveDeinit(hal_i2c_slave_handle_t handle)
 {
     hal_i2c_slave_t *i2cSlaveHandle;
 
-    assert(handle);
+    assert(NULL != handle);
 
     i2cSlaveHandle = (hal_i2c_slave_t *)handle;
 
@@ -225,8 +225,8 @@ hal_i2c_status_t HAL_I2cMasterTransferBlocking(hal_i2c_master_handle_t handle, h
     hal_i2c_master_t *i2cMasterHandle;
     lpi2c_master_transfer_t transfer;
 
-    assert(handle);
-    assert(xfer);
+    assert(NULL != handle);
+    assert(NULL != xfer);
 
     i2cMasterHandle = (hal_i2c_master_t *)handle;
 
@@ -247,7 +247,7 @@ hal_i2c_status_t HAL_I2cMasterTransferInstallCallback(hal_i2c_master_handle_t ha
 {
     hal_i2c_master_t *i2cMasterHandle;
 
-    assert(handle);
+    assert(NULL != handle);
 
     i2cMasterHandle = (hal_i2c_master_t *)handle;
 
@@ -264,8 +264,8 @@ hal_i2c_status_t HAL_I2cMasterTransferNonBlocking(hal_i2c_master_handle_t handle
     hal_i2c_master_t *i2cMasterHandle;
     lpi2c_master_transfer_t transfer;
 
-    assert(handle);
-    assert(xfer);
+    assert(NULL != handle);
+    assert(NULL != xfer);
 
     i2cMasterHandle = (hal_i2c_master_t *)handle;
 
@@ -284,8 +284,8 @@ hal_i2c_status_t HAL_I2cMasterTransferGetCount(hal_i2c_master_handle_t handle, s
 {
     hal_i2c_master_t *i2cMasterHandle;
 
-    assert(handle);
-    assert(count);
+    assert(NULL != handle);
+    assert(NULL != count);
 
     i2cMasterHandle = (hal_i2c_master_t *)handle;
     return HAL_I2cGetStatus(
@@ -296,7 +296,7 @@ hal_i2c_status_t HAL_I2cMasterTransferAbort(hal_i2c_master_handle_t handle)
 {
     hal_i2c_master_t *i2cMasterHandle;
 
-    assert(handle);
+    assert(NULL != handle);
 
     i2cMasterHandle = (hal_i2c_master_t *)handle;
     LPI2C_MasterTransferAbort(s_i2cBases[i2cMasterHandle->instance], &i2cMasterHandle->hardwareHandle);
@@ -310,7 +310,7 @@ hal_i2c_status_t HAL_I2cSlaveTransferInstallCallback(hal_i2c_slave_handle_t hand
 {
     hal_i2c_slave_t *i2cSlaveHandle;
 
-    assert(handle);
+    assert(NULL != handle);
 
     i2cSlaveHandle = (hal_i2c_slave_t *)handle;
 
@@ -326,7 +326,7 @@ hal_i2c_status_t HAL_I2cSlaveTransferNonBlocking(hal_i2c_slave_handle_t handle, 
 {
     hal_i2c_slave_t *i2cSlaveHandle;
 
-    assert(handle);
+    assert(NULL != handle);
 
     i2cSlaveHandle = (hal_i2c_slave_t *)handle;
 
@@ -338,7 +338,7 @@ hal_i2c_status_t HAL_I2cSlaveTransferAbort(hal_i2c_slave_handle_t handle)
 {
     hal_i2c_slave_t *i2cSlaveHandle;
 
-    assert(handle);
+    assert(NULL != handle);
 
     i2cSlaveHandle = (hal_i2c_slave_t *)handle;
 
@@ -351,8 +351,8 @@ hal_i2c_status_t HAL_I2cSlaveTransferGetCount(hal_i2c_slave_handle_t handle, siz
 {
     hal_i2c_slave_t *i2cSlaveHandle;
 
-    assert(handle);
-    assert(count);
+    assert(NULL != handle);
+    assert(NULL != count);
 
     i2cSlaveHandle = (hal_i2c_slave_t *)handle;
 

@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief UART FreeRTOS driver version 2.4.0. */
-#define FSL_UART_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief UART FreeRTOS driver version. */
+#define FSL_UART_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*@}*/
 
 /*! @brief UART configuration structure */

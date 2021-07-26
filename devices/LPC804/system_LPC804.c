@@ -50,8 +50,8 @@
 #include <stdint.h>
 #include "fsl_device_registers.h"
 
-extern uint32_t g_Fro_Osc_Freq;
-extern uint32_t g_LP_Osc_Freq;
+extern volatile uint32_t g_Fro_Osc_Freq;
+extern volatile uint32_t g_LP_Osc_Freq;
 
 
 

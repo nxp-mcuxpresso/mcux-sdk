@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -13,6 +13,7 @@
 #include "fsl_codec_i2c.h"
 /*!
  * @addtogroup wm8904
+ * @ingroup codec
  * @{
  */
 
@@ -21,8 +22,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief WM8904 driver version 2.4.3. */
-#define FSL_WM8904_DRIVER_VERSION (MAKE_VERSION(2, 4, 3))
+/*! @brief WM8904 driver version 2.4.4. */
+#define FSL_WM8904_DRIVER_VERSION (MAKE_VERSION(2, 4, 4))
 /*@}*/
 
 /*! @brief wm8904 handle size */
@@ -169,12 +170,15 @@ typedef enum _wm8904_fs_ratio
 /*! @brief Sample rate. */
 typedef enum _wm8904_sample_rate
 {
-    kWM8904_SampleRate8kHz  = 0x0, /*!< 8 kHz */
-    kWM8904_SampleRate12kHz = 0x1, /*!< 11.025kHz, 12kHz */
-    kWM8904_SampleRate16kHz = 0x2, /*!< 16kHz */
-    kWM8904_SampleRate24kHz = 0x3, /*!< 22.05kHz, 24kHz */
-    kWM8904_SampleRate32kHz = 0x4, /*!< 32kHz */
-    kWM8904_SampleRate48kHz = 0x5  /*!< 44.1kHz, 48kHz */
+    kWM8904_SampleRate8kHz    = 0x0, /*!< 8 kHz */
+    kWM8904_SampleRate12kHz   = 0x1, /*!< 12kHz */
+    kWM8904_SampleRate16kHz   = 0x2, /*!< 16kHz */
+    kWM8904_SampleRate24kHz   = 0x3, /*!< 24kHz */
+    kWM8904_SampleRate32kHz   = 0x4, /*!< 32kHz */
+    kWM8904_SampleRate48kHz   = 0x5, /*!< 48kHz */
+    kWM8904_SampleRate11025Hz = 0x6, /*!< 11.025kHz */
+    kWM8904_SampleRate22050Hz = 0x7, /*!< 22.05kHz */
+    kWM8904_SampleRate44100Hz = 0x8  /*!< 44.1kHz */
 } wm8904_sample_rate_t;
 
 /*! @brief Bit width. */

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -121,18 +121,14 @@ static void LPUART_SendEDMACallback(edma_handle_t *handle, void *param, bool tra
 
     if (transferDone)
     {
-        LPUART_TransferAbortSendEDMA(lpuartPrivateHandle->base, lpuartPrivateHandle->handle);
+        /* Disable LPUART TX EDMA. */
+        LPUART_EnableTxDMA(lpuartPrivateHandle->base, false);
 
-        /* Ensure all the data in the transmit buffer are sent out to bus. */
-        while (0U == (lpuartPrivateHandle->base->STAT & LPUART_STAT_TC_MASK))
-        {
-        }
+        /* Stop transfer. */
+        EDMA_AbortTransfer(handle);
 
-        if (NULL != lpuartPrivateHandle->handle->callback)
-        {
-            lpuartPrivateHandle->handle->callback(lpuartPrivateHandle->base, lpuartPrivateHandle->handle,
-                                                  kStatus_LPUART_TxIdle, lpuartPrivateHandle->handle->userData);
-        }
+        /* Enable tx complete interrupt */
+        LPUART_EnableInterrupts(lpuartPrivateHandle->base, (uint32_t)kLPUART_TransmissionCompleteInterruptEnable);
     }
 }
 
@@ -206,6 +202,19 @@ void LPUART_TransferCreateHandleEDMA(LPUART_Type *base,
     {
         base->WATER &= (~LPUART_WATER_RXWATER_MASK);
     }
+#endif
+
+    /* Save the handle in global variables to support the double weak mechanism. */
+    s_lpuartHandle[instance] = handle;
+    /* Set LPUART_TransferEdmaHandleIRQ as DMA IRQ handler */
+    s_lpuartIsr = LPUART_TransferEdmaHandleIRQ;
+    /* Disable all LPUART internal interrupts */
+    LPUART_DisableInterrupts(base, (uint32_t)kLPUART_AllInterruptEnable);
+    /* Enable interrupt in NVIC. */
+#if defined(FSL_FEATURE_LPUART_HAS_SEPARATE_RX_TX_IRQ) && FSL_FEATURE_LPUART_HAS_SEPARATE_RX_TX_IRQ
+    (void)EnableIRQ(s_lpuartTxIRQ[instance]);
+#else
+    (void)EnableIRQ(s_lpuartIRQ[instance]);
 #endif
 
     /* Configure TX. */
@@ -441,4 +450,30 @@ status_t LPUART_TransferGetSendCountEDMA(LPUART_Type *base, lpuart_edma_handle_t
               EDMA_GetRemainingMajorLoopCount(handle->txEdmaHandle->base, handle->txEdmaHandle->channel));
 
     return kStatus_Success;
+}
+
+/*!
+ * brief LPUART eDMA IRQ handle function.
+ *
+ * This function handles the LPUART tx complete IRQ request and invoke user callback.
+ * It is not set to static so that it can be used in user application.
+ *
+ * param base LPUART peripheral base address.
+ * param lpuartEdmaHandle LPUART handle pointer.
+ */
+void LPUART_TransferEdmaHandleIRQ(LPUART_Type *base, void *lpuartEdmaHandle)
+{
+    assert(lpuartEdmaHandle != NULL);
+
+    lpuart_edma_handle_t *handle = (lpuart_edma_handle_t *)lpuartEdmaHandle;
+
+    /* Disable tx complete interrupt */
+    LPUART_DisableInterrupts(base, (uint32_t)kLPUART_TransmissionCompleteInterruptEnable);
+
+    handle->txState = (uint8_t)kLPUART_TxIdle;
+
+    if (handle->callback != NULL)
+    {
+        handle->callback(base, handle, kStatus_LPUART_TxIdle, handle->userData);
+    }
 }

@@ -88,6 +88,12 @@
 #ifndef BOARD_LED3_GPIO_PIN
 #define BOARD_LED3_GPIO_PIN 22U
 #endif
+#ifndef BOARD_LED4_GPIO
+#define BOARD_LED4_GPIO GPIOE
+#endif
+#ifndef BOARD_LED4_GPIO_PIN
+#define BOARD_LED4_GPIO_PIN 0U
+#endif
 
 #define LED1_INIT(output)                                        \
     GPIO_PinWrite(BOARD_LED1_GPIO, BOARD_LED1_GPIO_PIN, output); \

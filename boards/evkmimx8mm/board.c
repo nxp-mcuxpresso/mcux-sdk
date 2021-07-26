@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -148,17 +148,27 @@ void BOARD_InitMemory(void)
     /* Configure the force_incr programmable bit in GPV_5 of PL301_display, which fixes partial write issue.
      * The AXI2AHB bridge is used for masters that access the TCM through system bus.
      * Please refer to errata for more information */
-    *(uint32_t *)(GPV5_BASE_ADDR + FORCE_INCR_OFFSET) =
-        *(uint32_t *)(GPV5_BASE_ADDR + FORCE_INCR_OFFSET) | FORCE_INCR_BIT_MASK;
+    /* Only configure the GPV5 if the M core access type is secure. */
+    if ((*(uint32_t *)(CSU_SA_ADDR)&CSU_SA_NSN_M_BIT_MASK) == 0U)
+    {
+        *(uint32_t *)(GPV5_BASE_ADDR + FORCE_INCR_OFFSET) =
+            *(uint32_t *)(GPV5_BASE_ADDR + FORCE_INCR_OFFSET) | FORCE_INCR_BIT_MASK;
+    }
 }
 
 void BOARD_RdcInit(void)
 {
     /* Move M4 core to specific RDC domain 1 */
     rdc_domain_assignment_t assignment = {0};
+    uint8_t domainId                   = 0U;
 
-    assignment.domainId = BOARD_DOMAIN_ID;
-    RDC_SetMasterDomainAssignment(RDC, kRDC_Master_M4, &assignment);
+    domainId = RDC_GetCurrentMasterDomainId(RDC);
+    /* Only configure the RDC if RDC peripheral write access allowed. */
+    if ((0x1U & RDC_GetPeriphAccessPolicy(RDC, kRDC_Periph_RDC, domainId)) != 0U)
+    {
+        assignment.domainId = BOARD_DOMAIN_ID;
+        RDC_SetMasterDomainAssignment(RDC, kRDC_Master_M4, &assignment);
+    }
 
     /*
      * The M4 core is running at domain 1, now enable the clock gate of the following IP/BUS/PLL in domain 1 in the CCM.

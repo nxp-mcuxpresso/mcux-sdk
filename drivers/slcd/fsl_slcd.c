@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -88,6 +88,9 @@ void SLCD_Init(LCD_Type *base, slcd_config_t *configure)
     uint32_t regNum   = 0;
     uint32_t instance = SLCD_GetInstance(base);
 
+    /* Bit mask of the LCD_GCR to modify in this function. */
+    uint32_t gcrMsk = 0;
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Un-gate the SLCD clock. */
     CLOCK_EnableClock(s_slcdClock[instance]);
@@ -103,28 +106,38 @@ void SLCD_Init(LCD_Type *base, slcd_config_t *configure)
               LCD_GCR_LCLK(configure->clkConfig->clkPrescaler) | LCD_GCR_ALTDIV(configure->clkConfig->altClkDivider);
     /* Configure the duty and set the work for low power wait and stop mode. */
     gcrReg |= LCD_GCR_DUTY(configure->dutyCycle) | LCD_GCR_LCDSTP((uint32_t)configure->lowPowerBehavior & 0x1U);
+
+    gcrMsk = LCD_GCR_RVEN_MASK | LCD_GCR_CPSEL_MASK | LCD_GCR_VSUPPLY_MASK | LCD_GCR_LADJ_MASK | LCD_GCR_SOURCE_MASK |
+             LCD_GCR_LCLK_MASK | LCD_GCR_ALTDIV_MASK | LCD_GCR_DUTY_MASK | LCD_GCR_LCDSTP_MASK;
+
 #if FSL_FEATURE_SLCD_HAS_LCD_WAIT
     gcrReg |= LCD_GCR_LCDWAIT(((uint32_t)configure->lowPowerBehavior >> 1U) & 0x1U);
+    gcrMsk |= LCD_GCR_LCDWAIT_MASK;
 #endif
 #if FSL_FEATURE_SLCD_HAS_LCD_DOZE_ENABLE
     gcrReg |= LCD_GCR_LCDDOZE(((uint32_t)configure->lowPowerBehavior >> 1U) & 0x1U);
+    gcrMsk |= LCD_GCR_LCDDOZE_MASK;
 #endif
 #if FSL_FEATURE_SLCD_HAS_FRAME_FREQUENCY_INTERRUPT
     /* Configure for frame frequency interrupt. */
     gcrReg |= LCD_GCR_LCDIEN(configure->frameFreqIntEnable);
+    gcrMsk |= LCD_GCR_LCDIEN_MASK;
 #endif /* FSL_FEATURE_SLCD_HAS_FRAME_FREQUENCY_INTERRUPT */
 #if FSL_FEATURE_SLCD_HAS_MULTI_ALTERNATE_CLOCK_SOURCE
     /* Select the alternate clock for alternate clock source. */
     gcrReg |= LCD_GCR_ALTSOURCE((((uint32_t)configure->clkConfig->clkSource) >> 1U) & 0x1U);
+    gcrMsk |= LCD_GCR_ALTSOURCE_MASK;
 #endif /* FSL_FEATURE_SLCD_HAS_MULTI_ALTERNATE_CLOCK_SOURCE */
 #if FSL_FEATURE_SLCD_HAS_FAST_FRAME_RATE
     /* Configure the for fast frame rate. */
     gcrReg |= LCD_GCR_FFR(configure->clkConfig->fastFrameRateEnable ? 1U : 0U);
+    gcrMsk |= LCD_GCR_FFR_MASK;
 #endif /* FSL_FEATURE_SLCD_HAS_FAST_FRAME_RATE */
 
     gcrReg |= LCD_GCR_RVTRIM(configure->voltageTrim);
+    gcrMsk |= LCD_GCR_RVTRIM_MASK;
 
-    base->GCR = gcrReg;
+    base->GCR = (base->GCR & ~gcrMsk) | gcrReg;
 
     /* Set display mode. */
     base->AR = LCD_AR_ALT((uint32_t)configure->displayMode & 0x1U) |

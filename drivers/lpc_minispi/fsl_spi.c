@@ -937,7 +937,7 @@ static void SPI_CommonIRQHandler(SPI_Type *base, void *param)
 void SPI0_DriverIRQHandler(void);
 void SPI0_DriverIRQHandler(void)
 {
-    assert(s_spiHandle[0]);
+    assert(s_spiHandle[0] != NULL);
     SPI_CommonIRQHandler(SPI0, s_spiHandle[0]);
 }
 #endif
@@ -946,7 +946,7 @@ void SPI0_DriverIRQHandler(void)
 void SPI1_DriverIRQHandler(void);
 void SPI1_DriverIRQHandler(void)
 {
-    assert(s_spiHandle[1]);
+    assert(s_spiHandle[1] != NULL);
     SPI_CommonIRQHandler(SPI1, s_spiHandle[1]);
 }
 #endif

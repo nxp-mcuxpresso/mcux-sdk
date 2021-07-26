@@ -77,18 +77,14 @@ static void UART_SendSDMACallback(sdma_handle_t *handle, void *param, bool trans
 
     if (transferDone)
     {
-        UART_TransferAbortSendSDMA(uartPrivateHandle->base, uartPrivateHandle->handle);
+        /* Disable UART TX SDMA. */
+        UART_EnableTxDMA(uartPrivateHandle->base, false);
 
-        /* Wait for transmission complete */
-        while (0U == (uartPrivateHandle->base->USR2 & UART_USR2_TXDC_MASK))
-        {
-        }
+        /* Stop transfer. */
+        SDMA_AbortTransfer(handle);
 
-        if (uartPrivateHandle->handle->callback != NULL)
-        {
-            uartPrivateHandle->handle->callback(uartPrivateHandle->base, uartPrivateHandle->handle, kStatus_UART_TxIdle,
-                                                uartPrivateHandle->handle->userData);
-        }
+        /* Enable tx empty interrupt */
+        UART_EnableInterrupts(uartPrivateHandle->base, (uint32_t)kUART_TxEmptyEnable);
     }
 }
 
@@ -158,6 +154,14 @@ void UART_TransferCreateHandleSDMA(UART_Type *base,
 
     s_sdmaPrivateHandle[instance].base   = base;
     s_sdmaPrivateHandle[instance].handle = handle;
+
+    /* Save the handle in global variables to support the double weak mechanism. */
+    s_uartHandle[instance] = handle;
+
+    s_uartIsr = UART_TransferSdmaHandleIRQ;
+
+    /* Enable interrupt in NVIC. */
+    (void)EnableIRQ(s_uartIRQ[instance]);
 
     /* Configure TX. */
     if (txSdmaHandle != NULL)
@@ -339,4 +343,28 @@ void UART_TransferAbortReceiveSDMA(UART_Type *base, uart_sdma_handle_t *handle)
     SDMA_AbortTransfer(handle->rxSdmaHandle);
 
     handle->rxState = (uint8_t)kUART_RxIdle;
+}
+
+/*!
+ * brief UART IRQ handle function.
+ *
+ * This function handles the UART transmit complete IRQ request and invoke user callback.
+ *
+ * param base UART peripheral base address.
+ * param uartSdmaHandle UART handle pointer.
+ */
+void UART_TransferSdmaHandleIRQ(UART_Type *base, void *uartSdmaHandle)
+{
+    assert(uartSdmaHandle != NULL);
+
+    uart_sdma_handle_t *handle = (uart_sdma_handle_t *)uartSdmaHandle;
+    handle->txState            = (uint8_t)kUART_TxIdle;
+
+    /* Disable tx empty interrupt */
+    UART_DisableInterrupts(base, (uint32_t)kUART_TxEmptyEnable);
+
+    if (handle->callback != NULL)
+    {
+        handle->callback(base, handle, kStatus_UART_TxIdle, handle->userData);
+    }
 }

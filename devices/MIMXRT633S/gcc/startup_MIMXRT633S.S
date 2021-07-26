@@ -7,7 +7,7 @@
 /* --------------------------------------------------------------------------*/
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2020 NXP                                                   */
+/* Copyright 2016-2021 NXP                                                   */
 /* All rights reserved.                                                      */
 /*                                                                           */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
@@ -78,7 +78,7 @@ __isr_vector:
     .long   Reserved46_IRQHandler  /* Reserved interrupt */
     .long   RNG_IRQHandler  /* Random number Generator */
     .long   RTC_IRQHandler  /* RTC alarm and wake-up */
-    .long   DSPWAKE_IRQHandler  /* Wake-up from DSP */
+    .long   Reserved49_IRQHandler  /* Reserved interrupt */
     .long   MU_A_IRQHandler  /* Messaging Unit port A for CM33 */
     .long   PIN_INT4_IRQHandler  /* Pin interrupt 4 or pattern match engine slice 4 int */
     .long   PIN_INT5_IRQHandler  /* Pin interrupt 5 or pattern match engine slice 5 int */
@@ -570,12 +570,12 @@ RTC_IRQHandler:
 
     .align 1
     .thumb_func
-    .weak DSPWAKE_IRQHandler
-    .type DSPWAKE_IRQHandler, %function
-DSPWAKE_IRQHandler:
-    ldr   r0,=DSPWAKE_DriverIRQHandler
+    .weak Reserved49_IRQHandler
+    .type Reserved49_IRQHandler, %function
+Reserved49_IRQHandler:
+    ldr   r0,=Reserved49_DriverIRQHandler
     bx    r0
-    .size DSPWAKE_IRQHandler, . - DSPWAKE_IRQHandler
+    .size Reserved49_IRQHandler, . - Reserved49_IRQHandler
 
     .align 1
     .thumb_func
@@ -857,7 +857,7 @@ HASHCRYPT_IRQHandler:
                 def_irq_handler     Reserved46_DriverIRQHandler
                 def_irq_handler     RNG_DriverIRQHandler
                 def_irq_handler     RTC_DriverIRQHandler
-                def_irq_handler     DSPWAKE_DriverIRQHandler
+                def_irq_handler     Reserved49_DriverIRQHandler
                 def_irq_handler     MU_A_DriverIRQHandler
                 def_irq_handler     PIN_INT4_DriverIRQHandler
                 def_irq_handler     PIN_INT5_DriverIRQHandler

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,9 +20,25 @@
  * Definitions
  ******************************************************************************/
 /*! @brief ADC_ETC driver version */
-#define FSL_ADC_ETC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.0. */
+#define FSL_ADC_ETC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0)) /*!< Version 2.2.0. */
 /*! @brief The mask of status flags cleared by writing 1. */
 #define ADC_ETC_DMA_CTRL_TRGn_REQ_MASK 0xFF0000U
+
+#if defined(FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN) && FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN
+#if defined(ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE2_MASK)
+#define ADC_ETC_DONE2_ERR_IRQ_TRIG0_DONE2_MASK ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE2_MASK
+#define DONE2_ERR_IRQ                          DONE2_3_ERR_IRQ
+#endif /* ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE2_MASK */
+
+#if defined(ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE3_MASK)
+#define ADC_ETC_DONE2_ERR_IRQ_TRIG0_DONE3_MASK ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE3_MASK
+#endif /* ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE3_MASK */
+
+#if defined(ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_ERR_MASK)
+#define ADC_ETC_DONE2_ERR_IRQ_TRIG0_ERR_MASK ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_ERR_MASK
+#endif /* ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_ERR_MASK */
+
+#endif /* FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN */
 
 /*!
  * @brief ADC_ETC customized status flags mask.
@@ -94,21 +110,37 @@ typedef enum _adc_etc_dma_mode_selection
  */
 typedef struct _adc_etc_config
 {
-    bool enableTSCBypass;   /* If bypass TSC, TSC would trigger ADC directly.
-                               Otherwise TSC would trigger ADC through ADC_ETC. */
+#if ((!(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG)) || \
+     (!(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG)))
+    bool enableTSCBypass; /* If bypass TSC, TSC would trigger ADC directly.
+                             Otherwise TSC would trigger ADC through ADC_ETC. */
+#endif
+
+#if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG)
     bool enableTSC0Trigger; /* Enable external TSC0 trigger. It is valid when enableTSCBypass = false. */
+#endif                      /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG */
+
+#if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG)
     bool enableTSC1Trigger; /* Enable external TSC1 trigger. It is valid when enableTSCBypass = false.*/
+#endif                      /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG */
+
 #if defined(FSL_FEATURE_ADC_ETC_HAS_CTRL_DMA_MODE_SEL) && FSL_FEATURE_ADC_ETC_HAS_CTRL_DMA_MODE_SEL
     adc_etc_dma_mode_selection_t dmaMode; /* Select the ADC_ETC DMA mode. */
 #endif                                    /*FSL_FEATURE_ADC_ETC_HAS_CTRL_DMA_MODE_SEL*/
-    uint32_t TSC0triggerPriority;         /* External TSC0 trigger priority, 7 is highest, 0 is lowest. */
-    uint32_t TSC1triggerPriority;         /* External TSC1 trigger priority, 7 is highest, 0 is lowest. */
-    uint32_t clockPreDivider;             /* Pre-divider for trig delay and interval. Available range is 0-255.
-                                            Clock would be divided by (clockPreDivider+1). */
-    uint32_t XBARtriggerMask; /* Enable the corresponding trigger source. Available range is trigger0:0x01 to
-                                 trigger7:0x80
-                                 For example, XBARtriggerMask = 0x7U, which means trigger0, trigger1 and trigger2 is
-                                 enabled. */
+
+#if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG)
+    uint32_t TSC0triggerPriority; /* External TSC0 trigger priority, 7 is highest, 0 is lowest. */
+#endif                            /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG */
+
+#if !(defined(FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG) && FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG)
+    uint32_t TSC1triggerPriority; /* External TSC1 trigger priority, 7 is highest, 0 is lowest. */
+#endif                            /* FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG */
+    uint32_t clockPreDivider;     /* Pre-divider for trig delay and interval. Available range is 0-255.
+                                    Clock would be divided by (clockPreDivider+1). */
+    uint32_t XBARtriggerMask;     /* Enable the corresponding trigger source. Available range is trigger0:0x01 to
+                                     trigger7:0x80
+                                     For example, XBARtriggerMask = 0x7U, which means trigger0, trigger1 and trigger2 is
+                                     enabled. */
 } adc_etc_config_t;
 
 /*!

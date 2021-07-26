@@ -154,6 +154,7 @@ void PDM_SetChannelConfigSDMA(PDM_Type *base,
 status_t PDM_TransferReceiveSDMA(PDM_Type *base, pdm_sdma_handle_t *handle, pdm_transfer_t *xfer)
 {
     assert((handle != NULL) && (xfer != NULL));
+    assert((xfer->dataSize % (handle->fifoWidth)) == 0U);
 
     sdma_transfer_config_t config = {0};
     uint32_t startAddr =
@@ -161,7 +162,7 @@ status_t PDM_TransferReceiveSDMA(PDM_Type *base, pdm_sdma_handle_t *handle, pdm_
     sdma_peripheral_t perType = kSDMA_PeripheralMultiFifoPDM;
 
     /* Check if input parameter invalid */
-    if ((xfer->data == NULL) || (xfer->dataSize == 0U))
+    if ((xfer->data == NULL) || (xfer->dataSize == 0U) || ((xfer->dataSize % (handle->fifoWidth)) != 0U))
     {
         return kStatus_InvalidArgument;
     }

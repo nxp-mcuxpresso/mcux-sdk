@@ -45,10 +45,15 @@
 #define FLASH_BUSY_STATUS_POL    1
 #define FLASH_BUSY_STATUS_OFFSET 0
 
-#define FLASH_SIZE      0x2000 /* 64Mb/KByte */
-#define FLASH_PAGE_SIZE 256
-#define SECTOR_SIZE     0x1000 /* 4K */
-#ifdef FlexSPI1_AMBA_BASE
+#ifndef FLASH_ADAPTER_SIZE
+#define FLASH_ADAPTER_SIZE 0x2000 /* 64Mb/KByte */
+#endif
+
+#define FLASH_PAGE_SIZE 256U
+#define SECTOR_SIZE     0x1000U /* 4K */
+#ifdef APP_FLEXSPI_AMBA_BASE
+#define FLEXSPI_AMBA_BASE APP_FLEXSPI_AMBA_BASE
+#elif defined(FlexSPI1_AMBA_BASE)
 #define FLEXSPI_AMBA_BASE FlexSPI1_AMBA_BASE
 #elif defined(FlexSPI_AMBA_BASE)
 #define FLEXSPI_AMBA_BASE FlexSPI_AMBA_BASE
@@ -75,16 +80,16 @@
 ********************************************************************************** */
 static FLEXSPI_Type *s_flexspiBase[] = FLEXSPI_BASE_PTRS;
 
-static flexspi_device_config_t deviceconfig = {
+static flexspi_device_config_t s_deviceconfig = {
     .flexspiRootClk       = 100000000,
-    .flashSize            = FLASH_SIZE,
+    .flashSize            = FLASH_ADAPTER_SIZE,
     .CSIntervalUnit       = kFLEXSPI_CsIntervalUnit1SckCycle,
     .CSInterval           = 2,
     .CSHoldTime           = 3,
     .CSSetupTime          = 3,
     .dataValidTime        = 0,
     .columnspace          = 0,
-    .enableWordAddress    = 0,
+    .enableWordAddress    = (bool)0,
     .AWRSeqIndex          = 0,
     .AWRSeqNumber         = 0,
     .ARDSeqIndex          = NOR_CMD_LUT_SEQ_IDX_READ_FAST_QUAD,
@@ -191,6 +196,7 @@ static status_t flexspi_nor_wait_bus_busy(FLEXSPI_Type *base)
     uint32_t readValue;
     status_t status;
     flexspi_transfer_t flashXfer;
+    bool busyStaus = (bool)FLASH_BUSY_STATUS_POL;
 
     flashXfer.deviceAddress = 0;
     flashXfer.port          = kFLEXSPI_PortA1;
@@ -208,9 +214,9 @@ static status_t flexspi_nor_wait_bus_busy(FLEXSPI_Type *base)
         {
             return status;
         }
-        if (FLASH_BUSY_STATUS_POL)
+        if (busyStaus)
         {
-            if (readValue & (1U << FLASH_BUSY_STATUS_OFFSET))
+            if ((readValue & (1U << FLASH_BUSY_STATUS_OFFSET)) > 0U)
             {
                 isBusy = true;
             }
@@ -221,7 +227,7 @@ static status_t flexspi_nor_wait_bus_busy(FLEXSPI_Type *base)
         }
         else
         {
-            if (readValue & (1U << FLASH_BUSY_STATUS_OFFSET))
+            if ((readValue & (1U << FLASH_BUSY_STATUS_OFFSET)) > 0U)
             {
                 isBusy = false;
             }
@@ -308,9 +314,20 @@ hal_flash_status_t HAL_FlashInit(void)
     }
 #endif /* __DCACHE_PRESENT */
 
-    key = DisableGlobalIRQ();
-
-    base = s_flexspiBase[0];
+    key  = DisableGlobalIRQ();
+    base = NULL;
+    for (uint8_t i = 0; i < (sizeof(s_flexspiBase) / sizeof(FLEXSPI_Type *)); i++)
+    {
+        if (NULL != s_flexspiBase[i])
+        {
+            base = s_flexspiBase[i];
+            break;
+        }
+    }
+    if (NULL == base)
+    {
+        return kStatus_HAL_Flash_Fail;
+    }
 
     /*Get FLEXSPI default settings and configure the flexspi. */
     FLEXSPI_GetDefaultConfig(&config);
@@ -324,7 +341,7 @@ hal_flash_status_t HAL_FlashInit(void)
     FLEXSPI_Init(base, &config);
 
     /* Configure flash settings according to serial flash feature. */
-    FLEXSPI_SetFlashConfig(base, &deviceconfig, kFLEXSPI_PortA1);
+    FLEXSPI_SetFlashConfig(base, &s_deviceconfig, kFLEXSPI_PortA1);
 
     /* Update LUT table. */
     FLEXSPI_UpdateLUT(base, 0, customLUT, CUSTOM_LUT_LENGTH);
@@ -420,9 +437,10 @@ hal_flash_status_t HAL_FlashProgram(uint32_t dest, uint32_t size, uint8_t *pData
     FLEXSPI_Type *base;
     uint32_t address;
     uint32_t writeLength;
-    status_t status;
+    status_t status = (status_t)kStatus_HAL_Flash_Error;
     flexspi_transfer_t flashXfer;
     uint32_t key;
+
 #if defined(__ICACHE_PRESENT) && (__ICACHE_PRESENT == 1U)
     bool ICacheEnableFlag = false;
     /* Disable I cache. */
@@ -450,14 +468,26 @@ hal_flash_status_t HAL_FlashProgram(uint32_t dest, uint32_t size, uint8_t *pData
 
     dest = dest - FLEXSPI_AMBA_BASE;
 
-    base = s_flexspiBase[0];
+    base = NULL;
+    for (uint8_t i = 0; i < (sizeof(s_flexspiBase) / sizeof(FLEXSPI_Type *)); i++)
+    {
+        if (NULL != s_flexspiBase[i])
+        {
+            base = s_flexspiBase[i];
+            break;
+        }
+    }
+    if (NULL == base)
+    {
+        return kStatus_HAL_Flash_Fail;
+    }
 
     address = dest;
     while (address < (dest + size))
     {
-        if (0 != (address & ((FLASH_PAGE_SIZE - 1))))
+        if (0U != (address & ((FLASH_PAGE_SIZE - 1U))))
         {
-            writeLength = address - (address & (~(FLASH_PAGE_SIZE - 1)));
+            writeLength = address - (address & (~(FLASH_PAGE_SIZE - 1U)));
             writeLength = FLASH_PAGE_SIZE - writeLength;
 
             if ((dest + size - address) < writeLength)
@@ -489,7 +519,7 @@ hal_flash_status_t HAL_FlashProgram(uint32_t dest, uint32_t size, uint8_t *pData
         flashXfer.cmdType       = kFLEXSPI_Write;
         flashXfer.SeqNumber     = 1;
         flashXfer.seqIndex      = NOR_CMD_LUT_SEQ_IDX_PAGEPROGRAM_QUAD;
-        flashXfer.data          = (uint32_t *)&pData[address - dest];
+        flashXfer.data          = (uint32_t *)((void *)(&pData[address - dest]));
         flashXfer.dataSize      = writeLength;
 
         status = FLEXSPI_TransferBlocking(base, &flashXfer);
@@ -559,7 +589,7 @@ hal_flash_status_t HAL_FlashEraseSector(uint32_t dest, uint32_t size)
 {
     FLEXSPI_Type *base;
     uint32_t address;
-    status_t status = kStatus_HAL_Flash_Error;
+    status_t status = (status_t)kStatus_HAL_Flash_Error;
     flexspi_transfer_t flashXfer;
     uint32_t key;
 
@@ -577,7 +607,19 @@ hal_flash_status_t HAL_FlashEraseSector(uint32_t dest, uint32_t size)
     }
 #endif /* __ICACHE_PRESENT */
     dest = dest - FLEXSPI_AMBA_BASE;
-    base = s_flexspiBase[0];
+    base = NULL;
+    for (uint8_t i = 0; i < (sizeof(s_flexspiBase) / sizeof(FLEXSPI_Type *)); i++)
+    {
+        if (NULL != s_flexspiBase[i])
+        {
+            base = s_flexspiBase[i];
+            break;
+        }
+    }
+    if (NULL == base)
+    {
+        return kStatus_HAL_Flash_Fail;
+    }
 
     address = dest;
     while (address < (dest + size))
@@ -655,7 +697,7 @@ hal_flash_status_t HAL_FlashRead(uint32_t src, uint32_t size, uint8_t *pData)
         DCacheEnableFlag = true;
     }
 #endif /* __DCACHE_PRESENT */
-    memcpy(pData, (uint8_t *)src, size);
+    (void)memcpy(pData, (uint8_t *)src, size);
 #if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
     if (DCacheEnableFlag)
     {

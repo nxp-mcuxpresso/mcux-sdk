@@ -37,4 +37,8 @@
 #define FSL_OSA_MAIN_FUNC_ENABLE 1U
 #endif
 
+#ifndef FSL_OSA_BM_TIMEOUT_ENABLE
+#define FSL_OSA_BM_TIMEOUT_ENABLE 0U
+#endif
+
 #endif /* _FSL_OS_ABSTRACTION_CONFIG_H_ */

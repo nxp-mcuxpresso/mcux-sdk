@@ -106,6 +106,83 @@
 #define LOG_ENABLE_FILE_WITH_PATH 0
 #endif
 
+/*! @brief Set the max message length, the default value is 128.
+ * @details The feature is used to set the max message length, the default value is 128.@n
+ * The feature should be defined in project setting.@n Below shows how to configure in your project if you
+ * want to enable the feature.@n For IAR, right click project and select "Options", define it in "C/C++
+ * Compiler->Preprocessor->Defined symbols".@n For KEIL, click "Options for Target...", define it in
+ * "C/C++->Preprocessor Symbols->Define".@n For ARMGCC, open CmakeLists.txt and add the following lines,@n
+ * "SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DLOG_MAX_MEESSAGE_LENGTH=128")" for debug target.@n
+ * "SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DLOG_MAX_MEESSAGE_LENGTH=128")" for release target.@n
+ * For MCUxpresso, right click project and select "Properties", define it in "C/C++ Build->Settings->MCU C
+ * Complier->Preprocessor".@n
+ */
+#ifndef LOG_MAX_MEESSAGE_LENGTH
+#define LOG_MAX_MEESSAGE_LENGTH 128
+#endif
+
+/*! @brief Whether enable asynchronous log mode feature, 1 - enable, 0 - disable.
+ * @details The feature is used to enable asynchronous log mode feature.@n
+ * The feature should be defined in project setting.@n Below shows how to configure in your project if you
+ * want to enable the feature.@n For IAR, right click project and select "Options", define it in "C/C++
+ * Compiler->Preprocessor->Defined symbols".@n For KEIL, click "Options for Target...", define it in
+ * "C/C++->Preprocessor Symbols->Define".@n For ARMGCC, open CmakeLists.txt and add the following lines,@n
+ * "SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DLOG_ENABLE_ASYNC_MODE=1")" for debug target.@n
+ * "SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DLOG_ENABLE_ASYNC_MODE=1")" for release target.@n
+ * For MCUxpresso, right click project and select "Properties", define it in "C/C++ Build->Settings->MCU C
+ * Complier->Preprocessor".@n
+ */
+#ifndef LOG_ENABLE_ASYNC_MODE
+#define LOG_ENABLE_ASYNC_MODE 0
+#endif
+
+#if (LOG_ENABLE_ASYNC_MODE > 0)
+/*! @brief Set the max argument count, the default value is 4.
+ * @details The feature is used to set the max argument count.@n
+ * The feature should be defined in project setting.@n Below shows how to configure in your project if you
+ * want to change the default value.@n For IAR, right click project and select "Options", define it in "C/C++
+ * Compiler->Preprocessor->Defined symbols".@n For KEIL, click "Options for Target...", define it in
+ * "C/C++->Preprocessor Symbols->Define".@n For ARMGCC, open CmakeLists.txt and add the following lines,@n
+ * "SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DLOG_MAX_ARGUMENT_COUNT=4")" for debug target.@n
+ * "SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DLOG_MAX_ARGUMENT_COUNT=4")" for release target.@n
+ * For MCUxpresso, right click project and select "Properties", define it in "C/C++ Build->Settings->MCU C
+ * Complier->Preprocessor".@n
+ */
+#ifndef LOG_MAX_ARGUMENT_COUNT
+#define LOG_MAX_ARGUMENT_COUNT 4
+#endif
+
+/*! @brief Set the max bufferred log count, the default value is 16.
+ * @details The feature is used to set the max bufferred log count.@n
+ * The feature should be defined in project setting.@n Below shows how to configure in your project if you
+ * want to change the default value.@n For IAR, right click project and select "Options", define it in "C/C++
+ * Compiler->Preprocessor->Defined symbols".@n For KEIL, click "Options for Target...", define it in
+ * "C/C++->Preprocessor Symbols->Define".@n For ARMGCC, open CmakeLists.txt and add the following lines,@n
+ * "SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DLOG_MAX_ARGUMENT_COUNT=4")" for debug target.@n
+ * "SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DLOG_MAX_ARGUMENT_COUNT=4")" for release target.@n
+ * For MCUxpresso, right click project and select "Properties", define it in "C/C++ Build->Settings->MCU C
+ * Complier->Preprocessor".@n
+ */
+#ifndef LOG_MAX_BUFF_LOG_COUNT
+#define LOG_MAX_BUFF_LOG_COUNT 16
+#endif
+
+/*! @brief Whether enable overwrite log feature in asynchronous mode, 1 - enable, 0 - disable.
+ * @details The feature is used to enable overwrite log feature in asynchronous mode.@n
+ * The feature should be defined in project setting.@n Below shows how to configure in your project if you
+ * want to enable the feature.@n For IAR, right click project and select "Options", define it in "C/C++
+ * Compiler->Preprocessor->Defined symbols".@n For KEIL, click "Options for Target...", define it in
+ * "C/C++->Preprocessor Symbols->Define".@n For ARMGCC, open CmakeLists.txt and add the following lines,@n
+ * "SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DLOG_ENABLE_ASYNC_MODE=1")" for debug target.@n
+ * "SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DLOG_ENABLE_ASYNC_MODE=1")" for release target.@n
+ * For MCUxpresso, right click project and select "Properties", define it in "C/C++ Build->Settings->MCU C
+ * Complier->Preprocessor".@n
+ */
+#ifndef LOG_ENABLE_OVERWRITE
+#define LOG_ENABLE_OVERWRITE 1
+#endif
+#endif
+
 /*! @} */
 
 #endif /* __FSL_COMPONENT_LOG_CONFIG_H__ */

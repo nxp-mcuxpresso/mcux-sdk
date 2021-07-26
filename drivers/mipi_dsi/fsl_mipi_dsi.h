@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019-2020 NXP
+ * Copyright 2017, 2019-2021 NXP
  * All rights reserved.
  *
  *
@@ -10,6 +10,7 @@
 #define _FSL_MIPI_DSI_H_
 
 #include "fsl_common.h"
+#include "fsl_soc_mipi_dsi.h"
 
 /*!
  * @addtogroup mipi_dsi
@@ -22,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /* The max APB transfer size. */
@@ -44,12 +45,14 @@ typedef struct _dsi_config
     uint8_t numLanes;              /*!< Number of lanes. */
     bool enableNonContinuousHsClk; /*!< In enabled, the high speed clock will enter
                                        low power mode between transmissions. */
-    bool enableTxUlps;             /*!< Enable the TX ULPS. */
-    bool autoInsertEoTp;           /*!< Insert an EoTp short package when switching from HS to LP. */
-    uint8_t numExtraEoTp;          /*!< How many extra EoTp to send after the end of a packet. */
-    uint32_t htxTo_ByteClk;        /*!< HS TX timeout count (HTX_TO) in byte clock. */
-    uint32_t lrxHostTo_ByteClk;    /*!< LP RX host timeout count (LRX-H_TO) in byte clock. */
-    uint32_t btaTo_ByteClk;        /*!< Bus turn around timeout count (TA_TO) in byte clock. */
+#if (defined(FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS_CTRL) && FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS_CTRL)
+    bool enableTxUlps;          /*!< Enable the TX ULPS. */
+#endif                          /* FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS_CTRL */
+    bool autoInsertEoTp;        /*!< Insert an EoTp short package when switching from HS to LP. */
+    uint8_t numExtraEoTp;       /*!< How many extra EoTp to send after the end of a packet. */
+    uint32_t htxTo_ByteClk;     /*!< HS TX timeout count (HTX_TO) in byte clock. */
+    uint32_t lrxHostTo_ByteClk; /*!< LP RX host timeout count (LRX-H_TO) in byte clock. */
+    uint32_t btaTo_ByteClk;     /*!< Bus turn around timeout count (TA_TO) in byte clock. */
 } dsi_config_t;
 
 /*! @brief MIPI DPI interface color coding. */
@@ -125,17 +128,22 @@ typedef struct _dsi_dphy_config
 {
     uint32_t txHsBitClk_Hz; /*!< The generated HS TX bit clock in Hz. */
 
-    uint8_t tClkPre_ByteClk;        /*!< TCLK-PRE in byte clock. Set how long the controller
-                                         will wait after enabling clock lane for HS before
-                                         enabling data lanes for HS. */
-    uint8_t tClkPost_ByteClk;       /*!< TCLK-POST in byte clock. Set how long the controller
-                                        will wait before putting clock lane into LP mode after
-                                        data lanes detected in stop state. */
-    uint8_t tHsExit_ByteClk;        /*!< THS-EXIT in byte clock. Set how long the controller
-                                          will wait after the clock lane has been put into LP
-                                          mode before enabling clock lane for HS again. */
-    uint32_t tWakeup_EscClk;        /*!< Number of clk_esc clock periods to keep a clock
-                                         or data lane in Mark-1 state after exiting ULPS. */
+    uint8_t tClkPre_ByteClk;  /*!< TLPX + TCLK-PREPARE + TCLK-ZERO + TCLK-PRE in byte clock.
+                                   Set how long the controller
+                                   will wait after enabling clock lane for HS before
+                                   enabling data lanes for HS. */
+    uint8_t tClkPost_ByteClk; /*!< TCLK-POST + T_CLK-TRAIL in byte clock. Set how long the controller
+                                  will wait before putting clock lane into LP mode after
+                                  data lanes detected in stop state. */
+    uint8_t tHsExit_ByteClk;  /*!< THS-EXIT in byte clock. Set how long the controller
+                                    will wait after the clock lane has been put into LP
+                                    mode before enabling clock lane for HS again. */
+
+#if (defined(FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS) && FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS)
+    uint32_t tWakeup_EscClk; /*!< Number of clk_esc clock periods to keep a clock
+                                  or data lane in Mark-1 state after exiting ULPS. */
+#endif
+
     uint8_t tHsPrepare_HalfEscClk;  /*!< THS-PREPARE in clk_esc/2. Set how long
                                       to drive the LP-00 state before HS transmissions,
                                       available values are 2, 3, 4, 5. */
@@ -148,11 +156,11 @@ typedef struct _dsi_dphy_config
     uint8_t tClkZero_ByteClk;       /*!< TCLK-ZERO in clk_byte. Set how long that controller
                                       drives clock lane HS-0 state before transmit
                                       the Sync sequence. Available values are 3, 4, ..., 66. */
-    uint8_t tHsTrail_ByteClk;       /*!< THS-TRAIL in clk_byte. Set the time
+    uint8_t tHsTrail_ByteClk;       /*!< THS-TRAIL + 4*UI in clk_byte. Set the time
                                        of the flipped differential state after last payload
                                        data bit of HS transmission burst. Available values
                                        are 0, 1, ..., 15. */
-    uint8_t tClkTrail_ByteClk;      /*!< TCLK-TRAIL in clk_byte. Set the time
+    uint8_t tClkTrail_ByteClk;      /*!< TCLK-TRAIL + 4*UI in clk_byte. Set the time
                                        of the flipped differential state after last payload
                                        data bit of HS transmission burst. Available values
                                        are 0, 1, ..., 15. */

@@ -1,13 +1,10 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt685/flash_config
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/cs42888
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/cs42888
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/tfa9xxx
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8904
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/tfa9xxx
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8904
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
@@ -38,7 +35,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ostimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/otfad
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pint
-    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/powerquad
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/puf
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sctimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/trng
@@ -47,7 +43,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -66,8 +61,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpadc)
 #    include(middleware_freertos-kernel_cm33_nonsecure_port)
 #    include(driver_lpc_crc)
-#    include(middleware_sdmmc_host_usdhc_interrupt)
-#    include(middleware_sdmmc_host_usdhc_freertos)
 #    include(middleware_baremetal)
 #    include(driver_flexcomm_usart)
 #    include(driver_i3c)
@@ -76,6 +69,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_ostimer)
 #    include(driver_inputmux)
 #    include(driver_flexcomm_i2c)
+#    include(driver_iap)
 #    include(component_serial_manager)
 #    include(driver_lpc_dma)
 #    include(component_serial_manager_uart)
@@ -84,9 +78,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_spi_freertos)
 #    include(middleware_freertos-kernel_cm33_secure_port)
 #    include(driver_pint)
-#    include(CMSIS_Include_dsp)
 #    include(driver_sctimer)
-#    include(middleware_usb_device_common_header)
 #    include(driver_flexcomm)
 #    include(device_startup)
 #    include(driver_casper)
@@ -94,13 +86,10 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_cs42888_adapter)
 #    include(driver_wm8904)
 #    include(middleware_freertos-kernel_extension)
-#    include(middleware_usb_common_header)
 #    include(driver_flexcomm_spi)
 #    include(driver_utick)
 #    include(middleware_sdmmc_osa_freertos)
-#    include(CMSIS_Include_core_cm33)
 #    include(utility_assert)
-#    include(middleware_sdmmc_host_usdhc_polling)
 #    include(device_CMSIS)
 #    include(component_osa_bm)
 #    include(component_codec_i2c_MIMXRT685S_cm33)
@@ -109,6 +98,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexspi_dma)
 #    include(component_osa_free_rtos)
 #    include(middleware_sdmmc_sd)
+#    include(CMSIS_Include_core_cm)
+#    include(middleware_sdmmc_host_usdhc_interrupt_MIMXRT685S_cm33)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_hashcrypt)
 #    include(middleware_sdmmc_sdio)
@@ -125,6 +116,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_shell)
 #    include(driver_flexcomm_usart_freertos)
 #    include(utility_debug_console)
+#    include(middleware_sdmmc_host_usdhc_polling_MIMXRT685S_cm33)
 #    include(middleware_sdmmc_host_usdhc)
 #    include(driver_puf)
 #    include(driver_tfa9xxx)
@@ -141,14 +133,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_acmp)
 #    include(component_osa)
 #    include(driver_fmeas)
+#    include(middleware_sdmmc_host_usdhc_freertos_MIMXRT685S_cm33)
 #    include(middleware_freertos-kernel_secure_context)
 #    include(component_i3c_adapter)
 #    include(driver_flexcomm_usart_dma)
 #    include(driver_pca9420)
 #    include(component_tfa9xxx_adapter)
 #    include(driver_flexcomm_i2c_freertos)
-#    include(driver_powerquad)
-#    include(CMSIS_Include_common)
 #    include(driver_otfad)
 #    include(driver_lpc_iopctl)
 #    include(driver_trng)

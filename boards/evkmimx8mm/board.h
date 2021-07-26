@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,9 +27,11 @@
 #define BOARD_UART_IRQ         UART4_IRQn
 #define BOARD_UART_IRQ_HANDLER UART4_IRQHandler
 
-#define GPV5_BASE_ADDR      (0x32500000)
-#define FORCE_INCR_OFFSET   (0x4044)
-#define FORCE_INCR_BIT_MASK (0x2)
+#define GPV5_BASE_ADDR        (0x32500000)
+#define FORCE_INCR_OFFSET     (0x4044)
+#define FORCE_INCR_BIT_MASK   (0x2)
+#define CSU_SA_ADDR           (0x303E0218) /* Secure access register base address. */
+#define CSU_SA_NSN_M_BIT_MASK (0x4U)       /* Non-secure access policy indicator bit. */
 
 #define BOARD_GPC_BASEADDR GPC
 #define BOARD_MU_IRQ_NUM   MU_M4_IRQn

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FLEXSPI driver version 2.3.2. */
-#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+/*! @brief FLEXSPI driver version 2.3.5. */
+#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 5))
 /*@}*/
 
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(0)
@@ -227,21 +227,23 @@ typedef struct _flexspi_config
 {
     flexspi_read_sample_clock_t rxSampleClock; /*!< Sample Clock source selection for Flash Reading. */
     bool enableSckFreeRunning;                 /*!< Enable/disable SCK output free-running. */
-    bool enableCombination;                    /*!< Enable/disable combining PORT A and B Data Pins
-                                               (SIOA[3:0] and SIOB[3:0]) to support Flash Octal mode. */
-    bool enableDoze;                           /*!< Enable/disable doze mode support. */
-    bool enableHalfSpeedAccess;                /*!< Enable/disable divide by 2 of the clock for half
-                                                speed commands. */
-    bool enableSckBDiffOpt;                    /*!< Enable/disable SCKB pad use as SCKA differential clock
-                                                output, when enable, Port B flash access is not available. */
-    bool enableSameConfigForAll;               /*!< Enable/disable same configuration for all connected devices
-                                                when enabled, same configuration in FLASHA1CRx is applied to all. */
-    uint16_t seqTimeoutCycle;                  /*!< Timeout wait cycle for command sequence execution,
-                                               timeout after ahbGrantTimeoutCyle*1024 serial root clock cycles. */
-    uint8_t ipGrantTimeoutCycle;               /*!< Timeout wait cycle for IP command grant, timeout after
-                                                ipGrantTimeoutCycle*1024 AHB clock cycles. */
-    uint8_t txWatermark;                       /*!< FLEXSPI IP transmit watermark value. */
-    uint8_t rxWatermark;                       /*!< FLEXSPI receive watermark value. */
+#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN)
+    bool enableCombination; /*!< Enable/disable combining PORT A and B Data Pins
+                            (SIOA[3:0] and SIOB[3:0]) to support Flash Octal mode. */
+#endif
+    bool enableDoze;             /*!< Enable/disable doze mode support. */
+    bool enableHalfSpeedAccess;  /*!< Enable/disable divide by 2 of the clock for half
+                                  speed commands. */
+    bool enableSckBDiffOpt;      /*!< Enable/disable SCKB pad use as SCKA differential clock
+                                  output, when enable, Port B flash access is not available. */
+    bool enableSameConfigForAll; /*!< Enable/disable same configuration for all connected devices
+                                  when enabled, same configuration in FLASHA1CRx is applied to all. */
+    uint16_t seqTimeoutCycle;    /*!< Timeout wait cycle for command sequence execution,
+                                 timeout after ahbGrantTimeoutCyle*1024 serial root clock cycles. */
+    uint8_t ipGrantTimeoutCycle; /*!< Timeout wait cycle for IP command grant, timeout after
+                                  ipGrantTimeoutCycle*1024 AHB clock cycles. */
+    uint8_t txWatermark;         /*!< FLEXSPI IP transmit watermark value. */
+    uint8_t rxWatermark;         /*!< FLEXSPI receive watermark value. */
     struct
     {
 #if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ATDFEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ATDFEN)

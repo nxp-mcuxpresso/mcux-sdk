@@ -1,5 +1,5 @@
 /*
- * Copyright  2017- 2019 NXP
+ * Copyright  2017- 2021 NXP
  * All rights reserved.
  *
  *
@@ -10,8 +10,14 @@
 #define _FSL_CODEC_ADAPTER_H_
 #include "fsl_common.h"
 
+/*!
+ * @addtogroup codec_adapter CODEC Adapter
+ * @ingroup codec_common
+ * @{
+ */
+
 #ifdef CODEC_WM8904_ENABLE
-#include "fsl_wm8904_adapter.h"
+#include "fsl_codec_wm8904_adapter.h"
 
 #if ((defined HAL_CODEC_HANDLER_SIZE) && (HAL_CODEC_HANDLER_SIZE < HAL_CODEC_WM8904_HANDLER_SIZE))
 #undef HAL_CODEC_HANDLER_SIZE
@@ -24,7 +30,7 @@
 #endif /* CODEC_WM8904_ENABLE */
 
 #ifdef CODEC_WM8960_ENABLE
-#include "fsl_wm8960_adapter.h"
+#include "fsl_codec_wm8960_adapter.h"
 
 #if ((defined HAL_CODEC_HANDLER_SIZE) && (HAL_CODEC_HANDLER_SIZE < HAL_CODEC_WM8960_HANDLER_SIZE))
 #undef HAL_CODEC_HANDLER_SIZE
@@ -38,7 +44,7 @@
 #endif /* CODEC_WM8960_ENABLE */
 
 #ifdef CODEC_WM8524_ENABLE
-#include "fsl_wm8524_adapter.h"
+#include "fsl_codec_wm8524_adapter.h"
 
 #if ((defined HAL_CODEC_HANDLER_SIZE) && (HAL_CODEC_HANDLER_SIZE < HAL_CODEC_WM8524_HANDLER_SIZE))
 #undef HAL_CODEC_HANDLER_SIZE
@@ -52,7 +58,7 @@
 #endif /* CODEC_WM8524_ENABLE */
 
 #ifdef CODEC_SGTL5000_ENABLE
-#include "fsl_sgtl_adapter.h"
+#include "fsl_codec_sgtl_adapter.h"
 
 #if ((defined HAL_CODEC_HANDLER_SIZE) && (HAL_CODEC_HANDLER_SIZE < HAL_CODEC_SGTL_HANDLER_SIZE))
 #undef HAL_CODEC_HANDLER_SIZE
@@ -66,7 +72,7 @@
 #endif /* CODEC_SGTL5000_ENABLE */
 
 #ifdef CODEC_DA7212_ENABLE
-#include "fsl_da7212_adapter.h"
+#include "fsl_codec_da7212_adapter.h"
 
 #if ((defined HAL_CODEC_HANDLER_SIZE) && (HAL_CODEC_HANDLER_SIZE < HAL_CODEC_DA7212_HANDLER_SIZE))
 #undef HAL_CODEC_HANDLER_SIZE
@@ -80,7 +86,7 @@
 #endif /* CODEC_DA7212_ENABLE */
 
 #ifdef CODEC_CS42888_ENABLE
-#include "fsl_cs42888_adapter.h"
+#include "fsl_codec_cs42888_adapter.h"
 
 #if ((defined HAL_CODEC_HANDLER_SIZE) && (HAL_CODEC_HANDLER_SIZE < HAL_CODEC_CS42888_HANDLER_SIZE))
 #undef HAL_CODEC_HANDLER_SIZE
@@ -93,8 +99,22 @@
 
 #endif /* CODEC_CS42888_ENABLE */
 
+#ifdef CODEC_CS42448_ENABLE
+#include "fsl_codec_cs42448_adapter.h"
+
+#if ((defined HAL_CODEC_HANDLER_SIZE) && (HAL_CODEC_HANDLER_SIZE < HAL_CODEC_CS42448_HANDLER_SIZE))
+#undef HAL_CODEC_HANDLER_SIZE
+#define HAL_CODEC_HANDLER_SIZE HAL_CODEC_CS42448_HANDLER_SIZE
+#endif
+
+#if (!(defined HAL_CODEC_HANDLER_SIZE))
+#define HAL_CODEC_HANDLER_SIZE HAL_CODEC_CS42448_HANDLER_SIZE
+#endif
+
+#endif /* CODEC_CS42448_ENABLE */
+
 #ifdef CODEC_AK4497_ENABLE
-#include "fsl_ak4497_adapter.h"
+#include "fsl_codec_ak4497_adapter.h"
 
 #if ((defined HAL_CODEC_HANDLER_SIZE) && (HAL_CODEC_HANDLER_SIZE < HAL_CODEC_AK4497_HANDLER_SIZE))
 #undef HAL_CODEC_HANDLER_SIZE
@@ -108,7 +128,7 @@
 #endif /* CODEC_AK4497_ENABLE */
 
 #ifdef CODEC_AK4458_ENABLE
-#include "fsl_ak4458_adapter.h"
+#include "fsl_codec_ak4458_adapter.h"
 
 #if ((defined HAL_CODEC_HANDLER_SIZE) && (HAL_CODEC_HANDLER_SIZE < HAL_CODEC_AK4458_HANDLER_SIZE))
 #undef HAL_CODEC_HANDLER_SIZE
@@ -122,7 +142,7 @@
 #endif /* CODEC_AK4458_ENABLE */
 
 #ifdef CODEC_TFA9XXX_ENABLE
-#include "fsl_tfa9xxx_adapter.h"
+#include "fsl_codec_tfa9xxx_adapter.h"
 
 #if ((defined HAL_CODEC_HANDLER_SIZE) && (HAL_CODEC_HANDLER_SIZE < HAL_CODEC_TFA98XX_HANDLER_SIZE))
 #undef HAL_CODEC_HANDLER_SIZE
@@ -136,7 +156,7 @@
 #endif /* CODEC_TFA9XXX_ENABLE */
 
 #ifdef CODEC_TFA9896_ENABLE
-#include "fsl_tfa9896_adapter.h"
+#include "fsl_codec_tfa9896_adapter.h"
 
 #if ((defined HAL_CODEC_HANDLER_SIZE) && (HAL_CODEC_HANDLER_SIZE < HAL_CODEC_TFA9896_HANDLER_SIZE))
 #undef HAL_CODEC_HANDLER_SIZE
@@ -166,6 +186,7 @@ enum
     kCODEC_SGTL5000, /*!< sgtl5000 */
     kCODEC_DA7212,   /*!< da7212 */
     kCODEC_CS42888,  /*!< CS42888 */
+    kCODEC_CS42448,  /*!< CS42448 */
     kCODEC_AK4497,   /*!< AK4497 */
     kCODEC_AK4458,   /*!< ak4458 */
     kCODEC_TFA9XXX,  /*!< tfa9xxx */
@@ -178,6 +199,7 @@ enum
 #if defined(__cplusplus)
 extern "C" {
 #endif
+#if (defined CODEC_MULTI_ADAPTERS && CODEC_MULTI_ADAPTERS)
 /*!
  * @brief Codec initilization.
  *
@@ -283,9 +305,11 @@ status_t HAL_CODEC_SetPlay(void *handle, uint32_t playSource);
  * @return kStatus_Success is success, else configure failed.
  */
 status_t HAL_CODEC_ModuleControl(void *handle, uint32_t cmd, uint32_t data);
-
+#endif
 #if defined(__cplusplus)
 }
 #endif
+
+/*! @} */
 
 #endif /* _FSL_CODEC_ADAPTER_H_ */

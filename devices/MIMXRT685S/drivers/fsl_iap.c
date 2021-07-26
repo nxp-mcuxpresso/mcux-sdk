@@ -98,7 +98,7 @@ void IAP_RunBootLoader(iap_boot_option_t *option)
 /*******************************************************************************
  * FlexSPI NOR driver
  ******************************************************************************/
-status_t IAP_FlexspiNorInit(uint32_t instance, flexspi_nor_config_t *config)
+AT_QUICKACCESS_SECTION_CODE(status_t IAP_FlexspiNorInit(uint32_t instance, flexspi_nor_config_t *config))
 {
     return FLEXSPI_API_TREE->init(instance, config);
 }

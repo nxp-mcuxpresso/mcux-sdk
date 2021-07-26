@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,7 +18,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPI2C EDMA driver version. */
-#define FSL_LPI2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_LPI2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 /*!
@@ -54,7 +54,8 @@ struct _lpi2c_master_edma_handle
     LPI2C_Type *base;                 /*!< LPI2C base pointer. */
     bool isBusy;                      /*!< Transfer state machine current state. */
     uint8_t nbytes;                   /*!< eDMA minor byte transfer count initially configured. */
-    uint16_t commandBuffer[7];        /*!< LPI2C command sequence. */
+    uint16_t commandBuffer[10];       /*!< LPI2C command sequence. When all 10 command words are used:
+         Start&addr&write[1 word] + subaddr[4 words] + restart&addr&read[1 word] + receive&Size[4 words] */
     lpi2c_master_transfer_t transfer; /*!< Copy of the current transfer info. */
     lpi2c_master_edma_transfer_callback_t completionCallback; /*!< Callback function pointer. */
     void *userData;                                           /*!< Application data passed to callback. */

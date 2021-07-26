@@ -7,6 +7,8 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
   else
     IMGUTIL=../bin/imgutil64
   fi
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  IMGUTIL=../bin/mac/imgutil
 else
   IMGUTIL=../bin/imgutil.exe
 fi

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -128,7 +128,7 @@ status_t FLEXIO_MCULCD_SetBaudRate(FLEXIO_MCULCD_Type *base, uint32_t baudRate_B
     uint32_t timerCompare;
     status_t status;
 
-    baudRatePerDataLine = baudRate_Bps / FLEXIO_MCULCD_DATA_BUS_WIDTH;
+    baudRatePerDataLine = baudRate_Bps / (uint32_t)FLEXIO_MCULCD_DATA_BUS_WIDTH;
 
     baudRateDiv = (srcClock_Hz + baudRatePerDataLine) / (baudRatePerDataLine * 2U);
 
@@ -320,7 +320,7 @@ void FLEXIO_MCULCD_SetSingleBeatWriteConfig(FLEXIO_MCULCD_Type *base)
 
     /* Enable the TX Shifter output. */
     base->flexioBase->SHIFTCFG[base->txShifterStartIndex] =
-        FLEXIO_SHIFTCFG_PWIDTH(FLEXIO_MCULCD_DATA_BUS_WIDTH - 1U) |
+        FLEXIO_SHIFTCFG_PWIDTH((uint32_t)FLEXIO_MCULCD_DATA_BUS_WIDTH - 1U) |
         FLEXIO_SHIFTCFG_INSRC(kFLEXIO_ShifterInputFromNextShifterOutput);
 
     base->flexioBase->SHIFTCTL[base->txShifterStartIndex] =
@@ -411,7 +411,8 @@ void FLEXIO_MCULCD_SetSingleBeatReadConfig(FLEXIO_MCULCD_Type *base)
     }
 
     /* Enable the RX Shifter input. */
-    base->flexioBase->SHIFTCFG[base->rxShifterEndIndex] = FLEXIO_SHIFTCFG_PWIDTH(FLEXIO_MCULCD_DATA_BUS_WIDTH - 1U);
+    base->flexioBase->SHIFTCFG[base->rxShifterEndIndex] =
+        FLEXIO_SHIFTCFG_PWIDTH((uint32_t)FLEXIO_MCULCD_DATA_BUS_WIDTH - 1U);
 
     base->flexioBase->SHIFTCTL[base->rxShifterEndIndex] =
         FLEXIO_SHIFTCTL_TIMSEL(base->timerIndex) | FLEXIO_SHIFTCTL_TIMPOL(kFLEXIO_ShifterTimerPolarityOnNegitive) |
@@ -491,7 +492,7 @@ void FLEXIO_MCULCD_SetMultiBeatsWriteConfig(FLEXIO_MCULCD_Type *base)
 
     /* Enable the TX Shifter output. */
     base->flexioBase->SHIFTCFG[base->txShifterStartIndex] =
-        FLEXIO_SHIFTCFG_PWIDTH(FLEXIO_MCULCD_DATA_BUS_WIDTH - 1U) |
+        FLEXIO_SHIFTCFG_PWIDTH((uint32_t)FLEXIO_MCULCD_DATA_BUS_WIDTH - 1U) |
         FLEXIO_SHIFTCFG_INSRC(kFLEXIO_ShifterInputFromNextShifterOutput);
 
     base->flexioBase->SHIFTCTL[base->txShifterStartIndex] =
@@ -501,7 +502,7 @@ void FLEXIO_MCULCD_SetMultiBeatsWriteConfig(FLEXIO_MCULCD_Type *base)
 
     for (i = base->txShifterStartIndex + 1U; i <= base->txShifterEndIndex; i++)
     {
-        base->flexioBase->SHIFTCFG[i] = FLEXIO_SHIFTCFG_PWIDTH(FLEXIO_MCULCD_DATA_BUS_WIDTH - 1U) |
+        base->flexioBase->SHIFTCFG[i] = FLEXIO_SHIFTCFG_PWIDTH((uint32_t)FLEXIO_MCULCD_DATA_BUS_WIDTH - 1U) |
                                         FLEXIO_SHIFTCFG_INSRC(kFLEXIO_ShifterInputFromNextShifterOutput);
 
         base->flexioBase->SHIFTCTL[i] =
@@ -610,7 +611,7 @@ void FLEXIO_MCULCD_SetMultiBeatsReadConfig(FLEXIO_MCULCD_Type *base)
     /* Enable the RX Shifter input. */
     for (i = base->rxShifterStartIndex; i < base->rxShifterEndIndex; i++)
     {
-        base->flexioBase->SHIFTCFG[i] = FLEXIO_SHIFTCFG_PWIDTH(FLEXIO_MCULCD_DATA_BUS_WIDTH - 1U) |
+        base->flexioBase->SHIFTCFG[i] = FLEXIO_SHIFTCFG_PWIDTH((uint32_t)FLEXIO_MCULCD_DATA_BUS_WIDTH - 1U) |
                                         FLEXIO_SHIFTCFG_INSRC(kFLEXIO_ShifterInputFromNextShifterOutput);
 
         base->flexioBase->SHIFTCTL[i] =
@@ -619,7 +620,8 @@ void FLEXIO_MCULCD_SetMultiBeatsReadConfig(FLEXIO_MCULCD_Type *base)
             FLEXIO_SHIFTCTL_PINPOL(kFLEXIO_PinActiveHigh) | FLEXIO_SHIFTCTL_SMOD(kFLEXIO_ShifterModeReceive);
     }
 
-    base->flexioBase->SHIFTCFG[base->rxShifterEndIndex] = FLEXIO_SHIFTCFG_PWIDTH(FLEXIO_MCULCD_DATA_BUS_WIDTH - 1U);
+    base->flexioBase->SHIFTCFG[base->rxShifterEndIndex] =
+        FLEXIO_SHIFTCFG_PWIDTH((uint32_t)FLEXIO_MCULCD_DATA_BUS_WIDTH - 1U);
     base->flexioBase->SHIFTCTL[base->rxShifterEndIndex] =
         FLEXIO_SHIFTCTL_TIMSEL(base->timerIndex) | FLEXIO_SHIFTCTL_TIMPOL(kFLEXIO_ShifterTimerPolarityOnNegitive) |
         FLEXIO_SHIFTCTL_PINCFG(kFLEXIO_PinConfigOutputDisabled) | FLEXIO_SHIFTCTL_PINSEL(base->dataPinStartIndex) |

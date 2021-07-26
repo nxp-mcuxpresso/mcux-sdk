@@ -28,9 +28,6 @@ enum _uart_tansfer_states
     kUART_RxParityError   /* Rx parity error */
 };
 
-/* Typedef for interrupt handler. */
-typedef void (*uart_isr_t)(UART_Type *base, uart_handle_t *handle);
-
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -78,7 +75,7 @@ static void UART_WriteNonBlocking(UART_Type *base, const uint8_t *data, size_t l
 static UART_Type *const s_uartBases[] = UART_BASE_PTRS;
 
 /* Array of UART IRQ number. */
-static const IRQn_Type s_uartIRQ[] = UART_IRQS;
+const IRQn_Type s_uartIRQ[] = UART_IRQS;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /* Array of UART clock name. */
@@ -87,12 +84,12 @@ static const clock_ip_name_t s_uartClock[] = UART_CLOCKS;
 
 /* UART ISR for transactional APIs. */
 #if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
-static uart_isr_t s_uartIsr = (uart_isr_t)DefaultISR;
+uart_isr_t s_uartIsr = (uart_isr_t)DefaultISR;
 #else
-static uart_isr_t s_uartIsr;
+uart_isr_t s_uartIsr;
 #endif
 
-static uart_handle_t *s_uartHandle[ARRAY_SIZE(s_uartBases)];
+void *s_uartHandle[ARRAY_SIZE(s_uartBases)];
 
 /*******************************************************************************
  * Code
@@ -960,7 +957,7 @@ status_t UART_TransferSendNonBlocking(UART_Type *base, uart_handle_t *handle, ua
     assert(handle != NULL);
     assert(xfer != NULL);
     assert(xfer->dataSize != 0U);
-    assert(xfer->data != NULL);
+    assert(xfer->txData != NULL);
 
     status_t status;
 
@@ -971,7 +968,7 @@ status_t UART_TransferSendNonBlocking(UART_Type *base, uart_handle_t *handle, ua
     }
     else
     {
-        handle->txData        = xfer->data;
+        handle->txData        = xfer->txData;
         handle->txDataSize    = xfer->dataSize;
         handle->txDataSizeAll = xfer->dataSize;
         handle->txState       = (uint8_t)kUART_TxBusy;
@@ -1064,7 +1061,7 @@ status_t UART_TransferReceiveNonBlocking(UART_Type *base,
 {
     assert(handle != NULL);
     assert(xfer != NULL);
-    assert(xfer->data != NULL);
+    assert(xfer->rxData != NULL);
     assert(xfer->dataSize != 0U);
 
     uint32_t i;
@@ -1113,7 +1110,7 @@ status_t UART_TransferReceiveNonBlocking(UART_Type *base,
                 /* Copy data from ring buffer to user memory. */
                 for (i = 0U; i < bytesToCopy; i++)
                 {
-                    xfer->data[bytesCurrentReceived++] = handle->rxRingBuffer[handle->rxRingBufferTail];
+                    xfer->rxData[bytesCurrentReceived++] = handle->rxRingBuffer[handle->rxRingBufferTail];
 
                     /* Wrap to 0. Not use modulo (%) because it might be large and slow. */
                     if (handle->rxRingBufferTail + 1U == (uint16_t)handle->rxRingBufferSize)
@@ -1131,9 +1128,9 @@ status_t UART_TransferReceiveNonBlocking(UART_Type *base,
             if (bytesToReceive != 0U)
             {
                 /* No data in ring buffer, save the request to UART handle. */
-                handle->rxData        = xfer->data + bytesCurrentReceived;
+                handle->rxData        = xfer->rxData + bytesCurrentReceived;
                 handle->rxDataSize    = bytesToReceive;
-                handle->rxDataSizeAll = bytesToReceive;
+                handle->rxDataSizeAll = xfer->dataSize;
                 handle->rxState       = (uint8_t)kUART_RxBusy;
             }
 
@@ -1152,7 +1149,7 @@ status_t UART_TransferReceiveNonBlocking(UART_Type *base,
         /* Ring buffer not used. */
         else
         {
-            handle->rxData        = xfer->data + bytesCurrentReceived;
+            handle->rxData        = xfer->rxData + bytesCurrentReceived;
             handle->rxDataSize    = bytesToReceive;
             handle->rxDataSizeAll = bytesToReceive;
             handle->rxState       = (uint8_t)kUART_RxBusy;
@@ -1239,14 +1236,15 @@ status_t UART_TransferGetReceiveCount(UART_Type *base, uart_handle_t *handle, ui
  * This function handles the UART transmit and receive IRQ request.
  *
  * param base UART peripheral base address.
- * param handle UART handle pointer.
+ * param irqHandle UART handle pointer.
  */
-void UART_TransferHandleIRQ(UART_Type *base, uart_handle_t *handle)
+void UART_TransferHandleIRQ(UART_Type *base, void *irqHandle)
 {
-    assert(handle != NULL);
+    assert(irqHandle != NULL);
 
     uint8_t count;
     uint8_t tempCount;
+    uart_handle_t *handle = (uart_handle_t *)irqHandle;
 
     /* If RX framing error */
     if ((UART_USR1_FRAMERR_MASK & base->USR1) != 0U)

@@ -545,6 +545,7 @@ mem_status_t MEM_BufferFree(void *buffer /* IN: Block of memory to free*/
 )
 {
     block_list_header_t *pBlock;
+    mem_pool_structure_t *pPool = s_memmanager.pHeadPool;
     MEM_ENTER_CRITICAL();
 
     do
@@ -562,7 +563,22 @@ mem_status_t MEM_BufferFree(void *buffer /* IN: Block of memory to free*/
         {
             (void)memset(pBlock, 0x0, (sizeof(block_list_header_t) + (uint32_t)pBlock->blockSize));
             MEM_EXIT_CRITICAL();
-            return kStatus_MemSuccess;
+            while (true)
+            {
+                if (((uint32_t)pPool->pHeap <= (uint32_t)pBlock) &&
+                    ((uint32_t)pBlock <
+                     (uint32_t)pPool->pHeap +
+                         pPool->numBlocks * ((uint32_t)pPool->blockSize + (uint32_t)sizeof(block_list_header_t))))
+                {
+                    pPool->allocatedBlocks--;
+                    return kStatus_MemSuccess;
+                }
+                pPool = pPool->nextPool;
+                if (NULL == pPool)
+                {
+                    return kStatus_MemFreeError;
+                }
+            }
         }
 
 #if (defined(MEM_MANAGER_ENABLE_TRACE) && (MEM_MANAGER_ENABLE_TRACE > 0U))
@@ -619,6 +635,7 @@ mem_status_t MEM_BufferFreeAllWithId(uint8_t poolId)
             pPool->poolFragmentWastePeak  = 0;
             pPool->poolFragmentMinWaste   = 0xffff;
 #endif /*MEM_MANAGER_ENABLE_TRACE*/
+            pPool->allocatedBlocks = 0;
         }
         pPool = pPool->nextPool;
     }

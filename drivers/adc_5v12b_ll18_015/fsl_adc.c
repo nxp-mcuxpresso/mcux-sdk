@@ -195,6 +195,25 @@ void ADC_SetFifoConfig(ADC_Type *base, const adc_fifo_config_t *config)
 }
 
 /*!
+ * brief Gets an available pre-defined settings for the FIFO's configuration.
+ *
+ * param config Pointer to the FIFO configuration structure, please refer to adc_fifo_config_t for details.
+ */
+void ADC_GetDefaultFIFOConfig(adc_fifo_config_t *config)
+{
+    assert(config != NULL);
+
+    (void)memset(config, 0, sizeof(*config));
+
+    config->enableFifoScanMode   = false;
+    config->enableCompareAndMode = false;
+    config->FifoDepth            = 0UL;
+#if defined(FSL_FEATURE_ADC_HAS_SC4_HTRGME) && FSL_FEATURE_ADC_HAS_SC4_HTRGME
+    config->enableHWTriggerMultConv = false;
+#endif
+}
+
+/*!
  * brief Configures the conversion channel.
  *
  * This operation triggers the conversion when in software trigger mode. When in hardware trigger mode, this API

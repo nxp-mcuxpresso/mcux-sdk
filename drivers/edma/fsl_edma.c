@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -94,11 +94,11 @@ void EDMA_InstallTCD(DMA_Type *base, uint32_t channel, edma_tcd_t *tcd)
     base->TCD[channel].SOFF          = tcd->SOFF;
     base->TCD[channel].ATTR          = tcd->ATTR;
     base->TCD[channel].NBYTES_MLNO   = tcd->NBYTES;
-    base->TCD[channel].SLAST         = tcd->SLAST;
+    base->TCD[channel].SLAST         = (int32_t)tcd->SLAST;
     base->TCD[channel].DADDR         = tcd->DADDR;
     base->TCD[channel].DOFF          = tcd->DOFF;
     base->TCD[channel].CITER_ELINKNO = tcd->CITER;
-    base->TCD[channel].DLAST_SGA     = tcd->DLAST_SGA;
+    base->TCD[channel].DLAST_SGA     = (int32_t)tcd->DLAST_SGA;
     /* Clear DONE bit first, otherwise ESG cannot be set */
     base->TCD[channel].CSR           = 0;
     base->TCD[channel].CSR           = tcd->CSR;
@@ -271,8 +271,8 @@ void EDMA_SetMajorOffsetConfig(DMA_Type *base, uint32_t channel, int32_t sourceO
 {
     assert(channel < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL);
 
-    base->TCD[channel].SLAST     = (uint32_t)sourceOffset;
-    base->TCD[channel].DLAST_SGA = (uint32_t)destOffset;
+    base->TCD[channel].SLAST     = sourceOffset;
+    base->TCD[channel].DLAST_SGA = destOffset;
 }
 
 /*!
@@ -837,6 +837,7 @@ void EDMA_CreateHandle(edma_handle_t *handle, DMA_Type *base, uint32_t channel)
 
     handle->base    = base;
     handle->channel = (uint8_t)channel;
+
     /* Get the DMA instance number */
     edmaInstance = EDMA_GetInstance(base);
     channelIndex = (EDMA_GetInstanceOffset(edmaInstance) * (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL) + channel;
@@ -882,8 +883,16 @@ void EDMA_InstallTCDMemory(edma_handle_t *handle, edma_tcd_t *tcdPool, uint32_t 
     assert(((uint32_t)tcdPool & 0x1FU) == 0U);
 
     /* Initialize tcd queue attribute. */
-    handle->header  = 0;
-    handle->tail    = 0;
+    /* header should initial as 1, since that it is used to point to the next TCD to be loaded into TCD memory,
+     * In EDMA driver IRQ handler, header will be used to calculate how many tcd has done, for example,
+     * If application submit 4 transfer request, A->B->C->D,
+     * when A finshed, the header is 0, C is the next TCD to be load, since B is already loaded,
+     * according to EDMA driver IRQ handler, tcdDone = C - A - header = 2 - header = 2, but actually only 1 TCD done,
+     * so the issue will be the wrong TCD done count will pass to application in first TCD interrupt.
+     * During first submit, the header should be assigned to 1, since 0 is current one and 1 is next TCD to be loaded,
+     * but software cannot know which submission is the first one, so assign 1 to header here.
+     */
+    handle->header  = 1;
     handle->tcdUsed = 0;
     handle->tcdSize = (int8_t)tcdSize;
     handle->flags   = 0;
@@ -1316,7 +1325,7 @@ void EDMA_AbortTransfer(edma_handle_t *handle)
     /* Handle the tcd */
     if (handle->tcdPool != NULL)
     {
-        handle->header  = 0;
+        handle->header  = 1;
         handle->tail    = 0;
         handle->tcdUsed = 0;
     }
@@ -1370,7 +1379,7 @@ void EDMA_HandleIRQ(edma_handle_t *handle)
     }
     else /* Use the TCD queue. Please refer to the API descriptions in the eDMA header file for detailed information. */
     {
-        uint32_t sga = handle->base->TCD[handle->channel].DLAST_SGA;
+        uint32_t sga = (uint32_t)handle->base->TCD[handle->channel].DLAST_SGA;
         uint32_t sga_index;
         int32_t tcds_done;
         uint8_t new_header;

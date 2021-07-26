@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -49,10 +49,32 @@ typedef void (*lpi2c_isr_t)(LPI2C_Type *base, void *handle);
  * Prototypes
  ******************************************************************************/
 
+/*!
+ * @brief Prepares the command buffer with the sequence of commands needed to send the requested transaction.
+ * @param handle Master DMA driver handle.
+ * @return Number of command words.
+ */
 static uint32_t LPI2C_GenerateCommands(lpi2c_master_edma_handle_t *handle);
 
+/*!
+ * @brief DMA completion callback.
+ * @param dmaHandle DMA channel handle for the channel that completed.
+ * @param userData User data associated with the channel handle. For this callback, the user data is the
+ *      LPI2C DMA driver handle.
+ * @param isTransferDone Whether the DMA transfer has completed.
+ * @param tcds Number of TCDs that completed.
+ */
 static void LPI2C_MasterEDMACallback(edma_handle_t *dmaHandle, void *userData, bool isTransferDone, uint32_t tcds);
 
+/*!
+ * @brief LPI2C master edma transfer IRQ handle routine.
+ *
+ * This API handles the LPI2C bus error status and invoke callback if needed.
+ *
+ * @param base The LPI2C peripheral base address.
+ * @param lpi2cMasterEdmaHandle Pointer to the LPI2C master edma handle.
+ */
+static void LPI2C_MasterTransferEdmaHandleIRQ(LPI2C_Type *base, void *lpi2cMasterEdmaHandle);
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -87,9 +109,12 @@ void LPI2C_MasterCreateEDMAHandle(LPI2C_Type *base,
                                   lpi2c_master_edma_transfer_callback_t callback,
                                   void *userData)
 {
-    assert(handle);
-    assert(rxDmaHandle);
-    assert(txDmaHandle);
+    assert(handle != NULL);
+    assert(rxDmaHandle != NULL);
+    assert(txDmaHandle != NULL);
+
+    /* Look up instance number */
+    uint32_t instance = LPI2C_GetInstance(base);
 
     /* Clear out the handle. */
     (void)memset(handle, 0, sizeof(*handle));
@@ -102,6 +127,15 @@ void LPI2C_MasterCreateEDMAHandle(LPI2C_Type *base,
     handle->rx                 = rxDmaHandle;
     handle->tx                 = (FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base) > 0) ? txDmaHandle : rxDmaHandle;
 
+    /* Save the handle in global variables to support the double weak mechanism. */
+    s_lpi2cMasterHandle[instance] = handle;
+
+    /* Set LPI2C_MasterTransferEdmaHandleIRQ as LPI2C DMA IRQ handler */
+    s_lpi2cMasterIsr = LPI2C_MasterTransferEdmaHandleIRQ;
+
+    /* Enable interrupt in NVIC. */
+    (void)EnableIRQ(kLpi2cIrqs[instance]);
+
     /* Set DMA channel completion callbacks. */
     EDMA_SetCallback(handle->rx, LPI2C_MasterEDMACallback, handle);
     if (FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base) != 0)
@@ -110,11 +144,6 @@ void LPI2C_MasterCreateEDMAHandle(LPI2C_Type *base,
     }
 }
 
-/*!
- * @brief Prepares the command buffer with the sequence of commands needed to send the requested transaction.
- * @param handle Master DMA driver handle.
- * @return Number of command words.
- */
 static uint32_t LPI2C_GenerateCommands(lpi2c_master_edma_handle_t *handle)
 {
     lpi2c_master_transfer_t *xfer = &handle->transfer;
@@ -163,8 +192,22 @@ static uint32_t LPI2C_GenerateCommands(lpi2c_master_edma_handle_t *handle)
                                   (uint16_t)((uint16_t)((uint16_t)xfer->slaveAddress << 1U) | (uint16_t)kLPI2C_Read);
             }
 
-            /* Read command. */
-            cmd[cmdCount++] = (uint16_t)kRxDataCmd | (uint16_t)LPI2C_MTDR_DATA(xfer->dataSize - 1U);
+            /* Read command. A single write to MTDR can issue read operation of 0xFFU + 1 byte of data at most, so when
+              the dataSize is larger than 0x100U, push multiple read commands to MTDR until dataSize is reached. */
+            size_t tmpRxSize = xfer->dataSize;
+            while (tmpRxSize != 0U)
+            {
+                if (tmpRxSize > 256U)
+                {
+                    cmd[cmdCount++] = (uint16_t)kRxDataCmd | (uint16_t)LPI2C_MTDR_DATA(0xFFU);
+                    tmpRxSize -= 256U;
+                }
+                else
+                {
+                    cmd[cmdCount++] = (uint16_t)kRxDataCmd | (uint16_t)LPI2C_MTDR_DATA(tmpRxSize - 1U);
+                    tmpRxSize       = 0U;
+                }
+            }
         }
     }
 
@@ -190,9 +233,19 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
 {
     status_t result;
 
-    assert(handle);
-    assert(transfer);
+    assert(handle != NULL);
+    assert(transfer != NULL);
     assert(transfer->subaddressSize <= sizeof(transfer->subaddress));
+
+    /* Check transfer data size in read operation. */
+    /* A single write to MTDR can issue read operation of 0xFFU + 1 byte of data at most, so when the dataSize is larger
+       than 0x100U, push multiple read commands to MTDR until dataSize is reached. LPI2C edma transfer uses linked
+       descriptor to transfer command and data, the command buffer is stored in handle. Allocate 4 command words to
+       carry read command which can cover nearly all use cases. */
+    if ((transfer->direction == kLPI2C_Read) && (transfer->dataSize > (256U * 4U)))
+    {
+        return kStatus_InvalidArgument;
+    }
 
     /* Return busy if another transaction is in progress. */
     if (handle->isBusy)
@@ -362,6 +415,11 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
     /* Enable DMA in both directions. This actually kicks of the transfer. */
     LPI2C_MasterEnableDMA(base, true, true);
 
+    /* Enable all LPI2C master interrupts */
+    LPI2C_MasterEnableInterrupts(base,
+                                 (uint32_t)kLPI2C_MasterArbitrationLostFlag | (uint32_t)kLPI2C_MasterNackDetectFlag |
+                                     (uint32_t)kLPI2C_MasterPinLowTimeoutFlag | (uint32_t)kLPI2C_MasterFifoErrFlag);
+
     return result;
 }
 
@@ -376,7 +434,7 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
  */
 status_t LPI2C_MasterTransferGetCountEDMA(LPI2C_Type *base, lpi2c_master_edma_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (NULL == count)
     {
@@ -442,8 +500,16 @@ status_t LPI2C_MasterTransferAbortEDMA(LPI2C_Type *base, lpi2c_master_edma_handl
     /* Reset fifos. */
     base->MCR |= LPI2C_MCR_RRF_MASK | LPI2C_MCR_RTF_MASK;
 
-    /* Send a stop command to finalize the transfer. */
-    base->MTDR = (uint32_t)kStopCmd;
+    /* Disable LPI2C interrupts. */
+    LPI2C_MasterDisableInterrupts(base, (uint32_t)kLPI2C_MasterIrqFlags);
+
+    /* If master is still busy and has not send out stop signal yet. */
+    if ((LPI2C_MasterGetStatusFlags(base) &
+         ((uint32_t)kLPI2C_MasterStopDetectFlag | (uint32_t)kLPI2C_MasterBusyFlag)) == (uint32_t)kLPI2C_MasterBusyFlag)
+    {
+        /* Send a stop command to finalize the transfer. */
+        base->MTDR = (uint32_t)kStopCmd;
+    }
 
     /* Reset handle. */
     handle->isBusy = false;
@@ -451,14 +517,6 @@ status_t LPI2C_MasterTransferAbortEDMA(LPI2C_Type *base, lpi2c_master_edma_handl
     return kStatus_Success;
 }
 
-/*!
- * @brief DMA completion callback.
- * @param dmaHandle DMA channel handle for the channel that completed.
- * @param userData User data associated with the channel handle. For this callback, the user data is the
- *      LPI2C DMA driver handle.
- * @param isTransferDone Whether the DMA transfer has completed.
- * @param tcds Number of TCDs that completed.
- */
 static void LPI2C_MasterEDMACallback(edma_handle_t *dmaHandle, void *userData, bool isTransferDone, uint32_t tcds)
 {
     lpi2c_master_edma_handle_t *handle = (lpi2c_master_edma_handle_t *)userData;
@@ -484,5 +542,71 @@ static void LPI2C_MasterEDMACallback(edma_handle_t *dmaHandle, void *userData, b
     if (handle->completionCallback != NULL)
     {
         handle->completionCallback(handle->base, handle, result, handle->userData);
+    }
+}
+
+static void LPI2C_MasterTransferEdmaHandleIRQ(LPI2C_Type *base, void *lpi2cMasterEdmaHandle)
+{
+    assert(lpi2cMasterEdmaHandle != NULL);
+
+    lpi2c_master_edma_handle_t *handle = (lpi2c_master_edma_handle_t *)lpi2cMasterEdmaHandle;
+    uint32_t status                    = LPI2C_MasterGetStatusFlags(base);
+    status_t result                    = kStatus_Success;
+
+    /* Terminate DMA transfers. */
+    EDMA_AbortTransfer(handle->rx);
+    if (FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base) != 0)
+    {
+        EDMA_AbortTransfer(handle->tx);
+    }
+
+    /* Done with this transaction. */
+    handle->isBusy = false;
+
+    /* Disable LPI2C interrupts. */
+    LPI2C_MasterDisableInterrupts(base, (uint32_t)kLPI2C_MasterIrqFlags);
+
+    /* Check error status */
+    if (0U != (status & (uint32_t)kLPI2C_MasterPinLowTimeoutFlag))
+    {
+        result = kStatus_LPI2C_PinLowTimeout;
+    }
+    else if (0U != (status & (uint32_t)kLPI2C_MasterArbitrationLostFlag))
+    {
+        result = kStatus_LPI2C_ArbitrationLost;
+    }
+    else if (0U != (status & (uint32_t)kLPI2C_MasterNackDetectFlag))
+    {
+        result = kStatus_LPI2C_Nak;
+    }
+    else if (0U != (status & (uint32_t)kLPI2C_MasterFifoErrFlag))
+    {
+        result = kStatus_LPI2C_FifoError;
+    }
+    else
+    {
+        ; /* Intentional empty */
+    }
+
+    /* Clear error status. */
+    (void)LPI2C_MasterCheckAndClearError(base, status);
+
+    /* Send stop flag if needed */
+    if (0U == (handle->transfer.flags & (uint32_t)kLPI2C_TransferNoStopFlag))
+    {
+        status = LPI2C_MasterGetStatusFlags(base);
+        /* If bus is still busy and the master has not generate stop flag */
+        if ((status & ((uint32_t)kLPI2C_MasterBusBusyFlag | (uint32_t)kLPI2C_MasterStopDetectFlag)) ==
+            (uint32_t)kLPI2C_MasterBusBusyFlag)
+        {
+            /* Send a stop command to finalize the transfer. */
+            handle->base->MTDR = (uint32_t)kStopCmd;
+        }
+    }
+
+    /* Invoke callback. */
+    if (handle->completionCallback != NULL)
+    {
+        handle->completionCallback(base, handle, result, handle->userData);
     }
 }

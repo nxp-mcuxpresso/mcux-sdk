@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  *
@@ -72,7 +72,8 @@ AT_QUICKACCESS_SECTION_CODE(void OTFAD_Init(OTFAD_Type *base, const otfad_config
     /* No independent clock and it is bind with flexspi clock,
        so it need to enable clock for flexspi firstly with initialization. */
 
-    uint32_t temp = 0U;
+    uint32_t temp   = 0U;
+    uint32_t status = 0U;
 
     /* Set OTFAD operate mode, IRQ eable, key blob and restricted register access */
     temp = OTFAD_CR_FLDM(config->forceLDM) |
@@ -94,9 +95,10 @@ AT_QUICKACCESS_SECTION_CODE(void OTFAD_Init(OTFAD_Type *base, const otfad_config
     temp |= OTFAD_CR_GE(config->enableOTFAD);
 
     /* Wait for AHB bus idle, otherwise the keyblob process will fail */
-    while (
-        !((((FLEXSPI_Type *)config->flexspiBaseAddr)->STS0 & FLEXSPI_STS0_ARBIDLE_MASK) > FLEXSPI_STS0_ARBIDLE_SHIFT))
+    status = ((FLEXSPI_Type *)config->flexspiBaseAddr)->STS0;
+    while (!((status & FLEXSPI_STS0_ARBIDLE_MASK) && (status & FLEXSPI_STS0_SEQIDLE_MASK)))
     {
+        status = ((FLEXSPI_Type *)config->flexspiBaseAddr)->STS0;
     }
 
 #if defined(FSL_FEATURE_OTFAD_HAS_KEYBLOB_PROCESSING) && (FSL_FEATURE_OTFAD_HAS_KEYBLOB_PROCESSING > 0)

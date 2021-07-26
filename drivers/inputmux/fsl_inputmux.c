@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -91,8 +91,8 @@ void INPUTMUX_EnableSignal(INPUTMUX_Type *base, inputmux_signal_t signal, bool e
     /* Only enable need to update channel mux */
     if (enable && ((((uint32_t)signal) & (1UL << CHMUX_AVL_SHIFT)) != 0U))
     {
-        chmux_offset = (((uint32_t)signal) >> CHMUX_OFF_SHIFT) & ((1U << (CHMUX_AVL_SHIFT - CHMUX_OFF_SHIFT)) - 1);
-        chmux_value  = (((uint32_t)signal) >> CHMUX_VAL_SHIFT) & ((1U << (CHMUX_OFF_SHIFT - CHMUX_VAL_SHIFT)) - 1);
+        chmux_offset = (((uint32_t)signal) >> CHMUX_OFF_SHIFT) & ((1UL << (CHMUX_AVL_SHIFT - CHMUX_OFF_SHIFT)) - 1UL);
+        chmux_value  = (((uint32_t)signal) >> CHMUX_VAL_SHIFT) & ((1UL << (CHMUX_OFF_SHIFT - CHMUX_VAL_SHIFT)) - 1UL);
         *(volatile uint32_t *)(((uint32_t)base) + chmux_offset) = chmux_value;
     }
     ena_id_mask = (1UL << (CHMUX_VAL_SHIFT - ENA_SHIFT)) - 1U;

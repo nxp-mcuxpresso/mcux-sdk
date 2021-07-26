@@ -15,7 +15,7 @@
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
 product: Pins v6.0
-processor: LPC55S26
+processor: LPC5526
 mcu_data: ksdk2_0
 processor_version: 0.1.11
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -210,6 +210,8 @@ static status_t hashcrypt_get_key_from_unaligned_src(uint8_t *dest, const uint8_
  */
 __STATIC_FORCEINLINE void hashcrypt_sha_ldm_stm_16_words(HASHCRYPT_Type *base, const uint32_t *src)
 {
+    /* Data Synchronization Barrier */
+    __DSB();
     /*
     typedef struct _one_block
     {
@@ -221,8 +223,16 @@ __STATIC_FORCEINLINE void hashcrypt_sha_ldm_stm_16_words(HASHCRYPT_Type *base, c
     *ldst = lsrc[0];
     *ldst = lsrc[1];
     */
+
+    /* Data Synchronization Barrier prevent compiler from reordering memory write when -O2 or higher is used. */
+    /* The address is passed to the crypto engine for hashing below, therefore out   */
+    /* of order memory write due to compiler optimization must be prevented. */
+    __DSB();
+
     base->MEMADDR = HASHCRYPT_MEMADDR_BASE(src);
     base->MEMCTRL = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(1);
+
+    __DSB();
 }
 
 /*!
@@ -1273,6 +1283,241 @@ status_t HASHCRYPT_AES_CryptCtr(HASHCRYPT_Type *base,
     }
 
     return kStatus_Success;
+}
+
+status_t HASHCRYPT_AES_CryptOfb(HASHCRYPT_Type *base,
+                                hashcrypt_handle_t *handle,
+                                const uint8_t *input,
+                                uint8_t *output,
+                                size_t size,
+                                const uint8_t iv[HASHCRYPT_AES_BLOCK_SIZE])
+{
+    status_t status                               = kStatus_Fail;
+    uint8_t zeroes[HASHCRYPT_AES_BLOCK_SIZE]      = {0};
+    uint8_t blockOutput[HASHCRYPT_AES_BLOCK_SIZE] = {0};
+
+    if (handle->keySize == kHASHCRYPT_InvalidKey)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0U : 1u;
+
+    base->CRYPTCFG = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCbc) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
+                     HASHCRYPT_CRYPTCFG_AESSECRET(keyType) | HASHCRYPT_CRYPTCFG_AESKEYSZ(handle->keySize) |
+                     HASHCRYPT_CRYPTCFG_MSW1ST_OUT(1) | HASHCRYPT_CRYPTCFG_SWAPKEY(1) | HASHCRYPT_CRYPTCFG_SWAPDAT(1) |
+                     HASHCRYPT_CRYPTCFG_MSW1ST(1);
+
+    hashcrypt_engine_init(base, kHASHCRYPT_Aes);
+
+    /* in case of HW AES key, check if it is available */
+    if (hashcrypt_check_need_key(base, handle) != kStatus_Success)
+    {
+        return kStatus_Fail;
+    }
+
+    /* load key if kHASHCRYPT_UserKey is selected */
+    if (handle->keyType == kHASHCRYPT_UserKey)
+    {
+        hashcrypt_aes_load_userKey(base, handle);
+    }
+
+    /* load iv */
+    hashcrypt_load_data(base, (uint32_t *)(uintptr_t)iv, HASHCRYPT_AES_BLOCK_SIZE);
+
+    /*Use AES CBC mode and feed input with zeroes as input*/
+    /*Output block is then XORed with input*/
+
+    while (size >= 16u)
+    {
+        status = hashcrypt_aes_one_block(base, zeroes, blockOutput, HASHCRYPT_AES_BLOCK_SIZE);
+        if (status != kStatus_Success)
+        {
+            return status;
+        }
+        /* XOR input with output block to get output*/
+        for (uint32_t i = 0; i < HASHCRYPT_AES_BLOCK_SIZE; i++)
+        {
+            output[i] = input[i] ^ blockOutput[i];
+        }
+        size -= 16u;
+        output += 16;
+        input += 16;
+    }
+
+    /* OFB can have non-block multiple size.*/
+    if (size != 0U)
+    {
+        status = hashcrypt_aes_one_block(base, zeroes, blockOutput, HASHCRYPT_AES_BLOCK_SIZE);
+        if (status != kStatus_Success)
+        {
+            return status;
+        }
+
+        /* XOR input with output block to get output*/
+        for (uint32_t i = 0; i < size; i++)
+        {
+            output[i] = input[i] ^ blockOutput[i];
+        }
+    }
+
+    return status;
+}
+
+status_t HASHCRYPT_AES_EncryptCfb(HASHCRYPT_Type *base,
+                                  hashcrypt_handle_t *handle,
+                                  const uint8_t *plaintext,
+                                  uint8_t *ciphertext,
+                                  size_t size,
+                                  const uint8_t iv[HASHCRYPT_AES_BLOCK_SIZE])
+{
+    status_t status                               = kStatus_Fail;
+    uint8_t zeroes[HASHCRYPT_AES_BLOCK_SIZE]      = {0};
+    uint8_t blockOutput[HASHCRYPT_AES_BLOCK_SIZE] = {0};
+
+    /* For CFB mode size must be 16-byte multiple */
+    if ((0U != (size % 16u)) || (handle->keySize == kHASHCRYPT_InvalidKey))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0U : 1u;
+
+    base->CRYPTCFG = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCbc) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
+                     HASHCRYPT_CRYPTCFG_AESSECRET(keyType) | HASHCRYPT_CRYPTCFG_AESKEYSZ(handle->keySize) |
+                     HASHCRYPT_CRYPTCFG_MSW1ST_OUT(1) | HASHCRYPT_CRYPTCFG_SWAPKEY(1) | HASHCRYPT_CRYPTCFG_SWAPDAT(1) |
+                     HASHCRYPT_CRYPTCFG_MSW1ST(1);
+
+    hashcrypt_engine_init(base, kHASHCRYPT_Aes);
+
+    /* in case of HW AES key, check if it is available */
+    if (hashcrypt_check_need_key(base, handle) != kStatus_Success)
+    {
+        return kStatus_Fail;
+    }
+
+    /* load key if kHASHCRYPT_UserKey is selected */
+    if (handle->keyType == kHASHCRYPT_UserKey)
+    {
+        hashcrypt_aes_load_userKey(base, handle);
+    }
+
+    /* load iv */
+    hashcrypt_load_data(base, (uint32_t *)(uintptr_t)iv, HASHCRYPT_AES_BLOCK_SIZE);
+
+    /*Use AES CBC mode and feed input with zeroes for first block */
+    /*Output block is then XORed with plaintext to get ciphertext*/
+
+    status = hashcrypt_aes_one_block(base, zeroes, blockOutput, HASHCRYPT_AES_BLOCK_SIZE);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+    /* XOR plaintext with output block to get ciphertext*/
+    for (uint32_t i = 0; i < HASHCRYPT_AES_BLOCK_SIZE; i++)
+    {
+        ciphertext[i] = plaintext[i] ^ blockOutput[i];
+    }
+    size -= 16u;
+
+    /*Remaining blocks use previous plaintext as input for aes block function */
+    while (size >= 16u)
+    {
+        status = hashcrypt_aes_one_block(base, plaintext, blockOutput, HASHCRYPT_AES_BLOCK_SIZE);
+        ciphertext += 16;
+        plaintext += 16;
+
+        if (status != kStatus_Success)
+        {
+            return status;
+        }
+        /* XOR plaintext with output block to get ciphertext*/
+        for (uint32_t i = 0; i < HASHCRYPT_AES_BLOCK_SIZE; i++)
+        {
+            ciphertext[i] = plaintext[i] ^ blockOutput[i];
+        }
+        size -= 16u;
+    }
+
+    return status;
+}
+
+status_t HASHCRYPT_AES_DecryptCfb(HASHCRYPT_Type *base,
+                                  hashcrypt_handle_t *handle,
+                                  const uint8_t *ciphertext,
+                                  uint8_t *plaintext,
+                                  size_t size,
+                                  const uint8_t iv[HASHCRYPT_AES_BLOCK_SIZE])
+{
+    status_t status                               = kStatus_Fail;
+    uint8_t zeroes[HASHCRYPT_AES_BLOCK_SIZE]      = {0};
+    uint8_t blockOutput[HASHCRYPT_AES_BLOCK_SIZE] = {0};
+
+    /* For CFB mode size must be 16-byte multiple */
+    if ((0U != (size % 16u)) || (handle->keySize == kHASHCRYPT_InvalidKey))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0U : 1u;
+
+    base->CRYPTCFG = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCbc) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
+                     HASHCRYPT_CRYPTCFG_AESSECRET(keyType) | HASHCRYPT_CRYPTCFG_AESKEYSZ(handle->keySize) |
+                     HASHCRYPT_CRYPTCFG_MSW1ST_OUT(1) | HASHCRYPT_CRYPTCFG_SWAPKEY(1) | HASHCRYPT_CRYPTCFG_SWAPDAT(1) |
+                     HASHCRYPT_CRYPTCFG_MSW1ST(1);
+
+    hashcrypt_engine_init(base, kHASHCRYPT_Aes);
+
+    /* in case of HW AES key, check if it is available */
+    if (hashcrypt_check_need_key(base, handle) != kStatus_Success)
+    {
+        return kStatus_Fail;
+    }
+
+    /* load key if kHASHCRYPT_UserKey is selected */
+    if (handle->keyType == kHASHCRYPT_UserKey)
+    {
+        hashcrypt_aes_load_userKey(base, handle);
+    }
+
+    /* load iv */
+    hashcrypt_load_data(base, (uint32_t *)(uintptr_t)iv, HASHCRYPT_AES_BLOCK_SIZE);
+
+    /*Use AES CBC mode and feed input with zeroes for first block */
+    /*Output block is then XORed with ciphertext to get plaintext*/
+
+    status = hashcrypt_aes_one_block(base, zeroes, blockOutput, HASHCRYPT_AES_BLOCK_SIZE);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+    /* XOR ciphertext with output block to get plaintext*/
+    for (uint32_t i = 0; i < HASHCRYPT_AES_BLOCK_SIZE; i++)
+    {
+        plaintext[i] = ciphertext[i] ^ blockOutput[i];
+    }
+    size -= 16u;
+
+    /*Remaining blocks use previous plaintext as input for aes block function */
+    while (size >= 16u)
+    {
+        status = hashcrypt_aes_one_block(base, plaintext, blockOutput, HASHCRYPT_AES_BLOCK_SIZE);
+        ciphertext += 16;
+        plaintext += 16;
+
+        if (status != kStatus_Success)
+        {
+            return status;
+        }
+        /* XOR plaintext with ciphertext block to get plaintext*/
+        for (uint32_t i = 0; i < HASHCRYPT_AES_BLOCK_SIZE; i++)
+        {
+            plaintext[i] = ciphertext[i] ^ blockOutput[i];
+        }
+        size -= 16u;
+    }
+
+    return status;
 }
 
 void HASHCRYPT_DriverIRQHandler(void);

@@ -1,5 +1,32 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.10.0)
 # OR Logic component
+if(${MCUX_DEVICE} STREQUAL "MIMXRT1166_cm7")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMXRT1166
+    )
+
+    include(all_lib_device_MIMXRT1166_cm7)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "MIMXRT1166_cm4")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMXRT1166
+    )
+
+    include(all_lib_device_MIMXRT1166_cm4)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "LPC5506CPXXXX")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/LPC5506CPXXXX
+    )
+
+    include(all_lib_device_LPC5506CPXXXX)
+
+endif()
+
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1052")
     list(APPEND CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/devices/MIMXRT1052
@@ -27,48 +54,12 @@ if(${MCUX_DEVICE} STREQUAL "LPC845")
 
 endif()
 
-if(${MCUX_DEVICE} STREQUAL "LPC812")
-    list(APPEND CMAKE_MODULE_PATH
-        ${CMAKE_CURRENT_LIST_DIR}/devices/LPC812
-    )
-
-    include(all_lib_device_LPC812)
-
-endif()
-
-if(${MCUX_DEVICE} STREQUAL "MK28FA15")
-    list(APPEND CMAKE_MODULE_PATH
-        ${CMAKE_CURRENT_LIST_DIR}/devices/MK28FA15
-    )
-
-    include(all_lib_device_MK28FA15)
-
-endif()
-
 if(${MCUX_DEVICE} STREQUAL "LPC802")
     list(APPEND CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/devices/LPC802
     )
 
     include(all_lib_device_LPC802)
-
-endif()
-
-if(${MCUX_DEVICE} STREQUAL "LPC54114_cm0plus")
-    list(APPEND CMAKE_MODULE_PATH
-        ${CMAKE_CURRENT_LIST_DIR}/devices/LPC54114
-    )
-
-    include(all_lib_device_LPC54114_cm0plus)
-
-endif()
-
-if(${MCUX_DEVICE} STREQUAL "LPC54114_cm4")
-    list(APPEND CMAKE_MODULE_PATH
-        ${CMAKE_CURRENT_LIST_DIR}/devices/LPC54114
-    )
-
-    include(all_lib_device_LPC54114_cm4)
 
 endif()
 
@@ -135,21 +126,12 @@ if(${MCUX_DEVICE} STREQUAL "MKE16Z4")
 
 endif()
 
-if(${MCUX_DEVICE} STREQUAL "MIMX8QM6_cm4_core0")
+if(${MCUX_DEVICE} STREQUAL "LPC55S06")
     list(APPEND CMAKE_MODULE_PATH
-        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMX8QM6
+        ${CMAKE_CURRENT_LIST_DIR}/devices/LPC55S06
     )
 
-    include(all_lib_device_MIMX8QM6_cm4_core0)
-
-endif()
-
-if(${MCUX_DEVICE} STREQUAL "MIMX8QM6_cm4_core1")
-    list(APPEND CMAKE_MODULE_PATH
-        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMX8QM6
-    )
-
-    include(all_lib_device_MIMX8QM6_cm4_core1)
+    include(all_lib_device_LPC55S06)
 
 endif()
 
@@ -198,12 +180,12 @@ if(${MCUX_DEVICE} STREQUAL "MKE06Z4")
 
 endif()
 
-if(${MCUX_DEVICE} STREQUAL "MIMX8QX6")
+if(${MCUX_DEVICE} STREQUAL "MKM34ZA5")
     list(APPEND CMAKE_MODULE_PATH
-        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMX8QX6
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MKM34ZA5
     )
 
-    include(all_lib_device_MIMX8QX6)
+    include(all_lib_device_MKM34ZA5)
 
 endif()
 
@@ -306,6 +288,24 @@ if(${MCUX_DEVICE} STREQUAL "K32L3A60_cm0plus")
 
 endif()
 
+if(${MCUX_DEVICE} STREQUAL "MIMXRT1176_cm4")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMXRT1176
+    )
+
+    include(all_lib_device_MIMXRT1176_cm4)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "MIMXRT1176_cm7")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMXRT1176
+    )
+
+    include(all_lib_device_MIMXRT1176_cm7)
+
+endif()
+
 if(${MCUX_DEVICE} STREQUAL "LPC54S018M")
     list(APPEND CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/devices/LPC54S018M
@@ -333,12 +333,12 @@ if(${MCUX_DEVICE} STREQUAL "LPC51U68")
 
 endif()
 
-if(${MCUX_DEVICE} STREQUAL "MKL27Z644")
+if(${MCUX_DEVICE} STREQUAL "MKM34Z7")
     list(APPEND CMAKE_MODULE_PATH
-        ${CMAKE_CURRENT_LIST_DIR}/devices/MKL27Z644
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MKM34Z7
     )
 
-    include(all_lib_device_MKL27Z644)
+    include(all_lib_device_MKM34Z7)
 
 endif()
 
@@ -396,6 +396,15 @@ if(${MCUX_DEVICE} STREQUAL "LPC55S28")
 
 endif()
 
+if(${MCUX_DEVICE} STREQUAL "MIMX8ML8")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMX8ML8
+    )
+
+    include(all_lib_device_MIMX8ML8)
+
+endif()
+
 if(${MCUX_DEVICE} STREQUAL "K32L2A41A")
     list(APPEND CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/devices/K32L2A41A
@@ -414,12 +423,93 @@ if(${MCUX_DEVICE} STREQUAL "MIMXRT685S_cm33")
 
 endif()
 
+if(${MCUX_DEVICE} STREQUAL "MIMXRT595S_cm33")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMXRT595S
+    )
+
+    include(all_lib_device_MIMXRT595S_cm33)
+
+endif()
+
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1015")
     list(APPEND CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/devices/MIMXRT1015
     )
 
     include(all_lib_device_MIMXRT1015)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "LPC54114_cm0plus")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/LPC54114
+    )
+
+    include(all_lib_device_LPC54114_cm0plus)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "LPC54114_cm4")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/LPC54114
+    )
+
+    include(all_lib_device_LPC54114_cm4)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "LPC812")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/LPC812
+    )
+
+    include(all_lib_device_LPC812)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "MIMX8QM6_cm4_core0")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMX8QM6
+    )
+
+    include(all_lib_device_MIMX8QM6_cm4_core0)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "MIMX8QM6_cm4_core1")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMX8QM6
+    )
+
+    include(all_lib_device_MIMX8QM6_cm4_core1)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "MIMX8QX6")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMX8QX6
+    )
+
+    include(all_lib_device_MIMX8QX6)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "MK28FA15")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MK28FA15
+    )
+
+    include(all_lib_device_MK28FA15)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "MKL27Z644")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MKL27Z644
+    )
+
+    include(all_lib_device_MKL27Z644)
 
 endif()
 

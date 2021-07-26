@@ -1,5 +1,6 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2021 NXP
+ * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -17,9 +18,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define BOARD_SYSOSC_SETTLING_US 260U   /*!< Board System oscillator settling time in us */
-#define BOARD_XTAL32K_CLK_HZ 32768U     /*!< Board xtal32K frequency in Hz */
-#define BOARD_XTAL_SYS_CLK_HZ 24000000U /*!< Board xtal frequency in Hz */
+#define BOARD_XTAL32K_CLK_HZ                          32768U  /*!< Board xtal32K frequency in Hz */
 
 /*******************************************************************************
  ************************ BOARD_InitBootClocks function ************************
@@ -45,7 +44,8 @@ void BOARD_InitBootClocks(void);
 /*******************************************************************************
  * Definitions for BOARD_BootClockRUN configuration
  ******************************************************************************/
-#define BOARD_BOOTCLOCKRUN_CORE_CLOCK 250105263U /*!< Core clock frequency: 250105263Hz */
+#define BOARD_BOOTCLOCKRUN_CORE_CLOCK              12000000U  /*!< Core clock frequency: 12000000Hz */
+
 
 /*******************************************************************************
  * API for BOARD_BootClockRUN configuration
@@ -65,3 +65,4 @@ void BOARD_BootClockRUN(void);
 #endif /* __cplusplus*/
 
 #endif /* _CLOCK_CONFIG_H_ */
+

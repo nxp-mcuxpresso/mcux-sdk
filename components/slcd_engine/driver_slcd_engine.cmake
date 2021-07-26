@@ -14,7 +14,13 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 if(${MCUX_DEVICE} STREQUAL "K32L2B31A")
     include(driver_slcd_lcd_s401m16kr)
 endif()
+if(${MCUX_DEVICE} STREQUAL "MKM34ZA5")
+    include(driver_slcd_gdh_1247wp)
+endif()
 if(${MCUX_DEVICE} STREQUAL "MKM35Z7")
+    include(driver_slcd_gdh_1247wp)
+endif()
+if(${MCUX_DEVICE} STREQUAL "MKM34Z7")
     include(driver_slcd_gdh_1247wp)
 endif()
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2020 NXP
+ * Copyright 2017 - 2021 NXP
  * All rights reserved.
  *
  *
@@ -12,7 +12,8 @@
 #include "fsl_sdma.h"
 
 /*!
- * @addtogroup sai_sdma
+ * @addtogroup sai_sdma SAI SDMA Driver
+ * @ingroup sai
  * @{
  */
 
@@ -22,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SAI_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 1)) /*!< Version 2.3.1 */
+#define FSL_SAI_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0)) /*!< Version 2.4.0 */
 /*@}*/
 
 typedef struct _sai_sdma_handle sai_sdma_handle_t;
@@ -39,7 +40,7 @@ struct _sai_sdma_handle
     uint8_t channelNums;          /*!< total transfer channel numbers, used for multififo */
     uint8_t channelMask;          /*!< enabled channel mask value, refernece _sai_channel_mask */
     uint8_t fifoOffset;           /*!< fifo address offset between multifo*/
-    uint8_t count;                /*!< The transfer data count in a DMA request */
+    uint32_t count;               /*!< The transfer data count in a DMA request */
     uint32_t state;               /*!< Internal state for SAI SDMA transfer */
     uint32_t eventSource;         /*!< SAI event source number */
     sai_sdma_callback_t callback; /*!< Callback for users while transfer finish or error occurs */

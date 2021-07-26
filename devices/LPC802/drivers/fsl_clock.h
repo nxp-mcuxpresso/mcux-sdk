@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.3.2. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+/*! @brief CLOCK driver version 2.3.3. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -186,25 +186,42 @@ extern volatile uint32_t g_Ext_Clk_Freq;
 /*! @brief Clock gate name used for CLOCK_EnableClock/CLOCK_DisableClock. */
 typedef enum _clock_ip_name
 {
-    kCLOCK_IpInvalid = 0U,
-    kCLOCK_Rom       = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 1U),
-    kCLOCK_Ram0      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 2U),
-    kCLOCK_Flash     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 4U),
-    kCLOCK_I2c0      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 5U),
-    kCLOCK_Gpio0     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 6U),
-    kCLOCK_Swm       = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 7U),
-    kCLOCK_Wkt       = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 9U),
-    kCLOCK_Mrt       = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 10U),
-    kCLOCK_Spi0      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 11U),
-    kCLOCK_Crc       = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 13U),
-    kCLOCK_Uart0     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 14U),
-    kCLOCK_Uart1     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 15U),
-    kCLOCK_Wwdt      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 17U),
-    kCLOCK_Iocon     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 18U),
-    kCLOCK_Acmp      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 19U),
-    kCLOCK_Adc       = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 24U),
-    kCLOCK_Ctimer0   = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 25U),
-    kCLOCK_GpioInt   = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 28U),
+    kCLOCK_IpInvalid = 0U,                                     /*!< Invalid Ip Name. */
+    kCLOCK_Rom       = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 1U), /*!< Clock gate name: Rom. */
+
+    kCLOCK_Ram0 = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 2U), /*!< Clock gate name: Ram0. */
+
+    kCLOCK_Flash = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 4U), /*!< Clock gate name: Flash. */
+
+    kCLOCK_I2c0 = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 5U), /*!< Clock gate name: I2c0. */
+
+    kCLOCK_Gpio0 = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 6U), /*!< Clock gate name: Gpio0. */
+
+    kCLOCK_Swm = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 7U), /*!< Clock gate name: Swm. */
+
+    kCLOCK_Wkt = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 9U), /*!< Clock gate name: Wkt. */
+
+    kCLOCK_Mrt = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 10U), /*!< Clock gate name: Mrt. */
+
+    kCLOCK_Spi0 = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 11U), /*!< Clock gate name: Spi0. */
+
+    kCLOCK_Crc = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 13U), /*!< Clock gate name: Crc. */
+
+    kCLOCK_Uart0 = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 14U), /*!< Clock gate name: Uart0. */
+
+    kCLOCK_Uart1 = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 15U), /*!< Clock gate name: Uart1. */
+
+    kCLOCK_Wwdt = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 17U), /*!< Clock gate name: Wwdt. */
+
+    kCLOCK_Iocon = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 18U), /*!< Clock gate name: Iocon. */
+
+    kCLOCK_Acmp = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 19U), /*!< Clock gate name: Acmp. */
+
+    kCLOCK_Adc = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 24U), /*!< Clock gate name: Adc. */
+
+    kCLOCK_Ctimer0 = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 25U), /*!< Clock gate name: Ctimer0. */
+
+    kCLOCK_GpioInt = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL0, 28U), /*!< Clock gate name: GpioInt. */
 
 } clock_ip_name_t;
 
@@ -230,44 +247,62 @@ typedef enum _clock_name
 typedef enum _clock_select
 {
 
-    kADC_Clk_From_Fro   = CLK_MUX_DEFINE(ADCCLKSEL, 0U),
-    kADC_Clk_From_ClkIn = CLK_MUX_DEFINE(ADCCLKSEL, 1U),
+    kADC_Clk_From_Fro = CLK_MUX_DEFINE(ADCCLKSEL, 0U), /*!< Mux ADC_Clk from Fro. */
 
-    kUART0_Clk_From_Fro     = CLK_MUX_DEFINE(UART0CLKSEL, 0U),
-    kUART0_Clk_From_MainClk = CLK_MUX_DEFINE(UART0CLKSEL, 1U),
-    kUART0_Clk_From_Frg0Clk = CLK_MUX_DEFINE(UART0CLKSEL, 2U),
-    kUART0_Clk_From_Fro_Div = CLK_MUX_DEFINE(UART0CLKSEL, 4U),
+    kADC_Clk_From_ClkIn = CLK_MUX_DEFINE(ADCCLKSEL, 1U), /*!< Mux ADC_Clk from ClkIn. */
 
-    kUART1_Clk_From_Fro     = CLK_MUX_DEFINE(UART1CLKSEL, 0U),
-    kUART1_Clk_From_MainClk = CLK_MUX_DEFINE(UART1CLKSEL, 1U),
-    kUART1_Clk_From_Frg0Clk = CLK_MUX_DEFINE(UART1CLKSEL, 2U),
-    kUART1_Clk_From_Fro_Div = CLK_MUX_DEFINE(UART1CLKSEL, 4U),
+    kUART0_Clk_From_Fro = CLK_MUX_DEFINE(UART0CLKSEL, 0U), /*!< Mux UART0_Clk from Fro. */
 
-    kI2C_Clk_From_Fro     = CLK_MUX_DEFINE(I2C0CLKSEL, 0U),
-    kI2C_Clk_From_MainClk = CLK_MUX_DEFINE(I2C0CLKSEL, 1U),
-    kI2C_Clk_From_Frg0Clk = CLK_MUX_DEFINE(I2C0CLKSEL, 2U),
-    kI2C_Clk_From_Fro_Div = CLK_MUX_DEFINE(I2C0CLKSEL, 4U),
+    kUART0_Clk_From_MainClk = CLK_MUX_DEFINE(UART0CLKSEL, 1U), /*!< Mux UART0_Clk from MainClk. */
 
-    kSPI_Clk_From_Fro     = CLK_MUX_DEFINE(SPI0CLKSEL, 0U),
-    kSPI_Clk_From_MainClk = CLK_MUX_DEFINE(SPI0CLKSEL, 1U),
-    kSPI_Clk_From_Frg0Clk = CLK_MUX_DEFINE(SPI0CLKSEL, 2U),
-    kSPI_Clk_From_Fro_Div = CLK_MUX_DEFINE(SPI0CLKSEL, 4U),
+    kUART0_Clk_From_Frg0Clk = CLK_MUX_DEFINE(UART0CLKSEL, 2U), /*!< Mux UART0_Clk from Frg0Clk. */
 
-    kFRG0_Clk_From_Fro     = CLK_MUX_DEFINE(FRG[0].FRGCLKSEL, 0U),
-    kFRG0_Clk_From_MainClk = CLK_MUX_DEFINE(FRG[0].FRGCLKSEL, 1U),
+    kUART0_Clk_From_Fro_Div = CLK_MUX_DEFINE(UART0CLKSEL, 4U), /*!< Mux UART0_Clk from Fro_Div. */
 
-    kCLKOUT_From_Fro     = CLK_MUX_DEFINE(CLKOUTSEL, 0U),
-    kCLKOUT_From_MainClk = CLK_MUX_DEFINE(CLKOUTSEL, 1U),
-    kCLKOUT_From_ExtClk  = CLK_MUX_DEFINE(CLKOUTSEL, 3U),
-    kCLKOUT_From_WdtOsc  = CLK_MUX_DEFINE(CLKOUTSEL, 4U)
+    kUART1_Clk_From_Fro = CLK_MUX_DEFINE(UART1CLKSEL, 0U), /*!< Mux UART1_Clk from Fro. */
+
+    kUART1_Clk_From_MainClk = CLK_MUX_DEFINE(UART1CLKSEL, 1U), /*!< Mux UART1_Clk from MainClk. */
+
+    kUART1_Clk_From_Frg0Clk = CLK_MUX_DEFINE(UART1CLKSEL, 2U), /*!< Mux UART1_Clk from Frg0Clk. */
+
+    kUART1_Clk_From_Fro_Div = CLK_MUX_DEFINE(UART1CLKSEL, 4U), /*!< Mux UART1_Clk from Fro_Div. */
+
+    kI2C_Clk_From_Fro = CLK_MUX_DEFINE(I2C0CLKSEL, 0U), /*!< Mux I2C_Clk from Fro. */
+
+    kI2C_Clk_From_MainClk = CLK_MUX_DEFINE(I2C0CLKSEL, 1U), /*!< Mux I2C_Clk from MainClk. */
+
+    kI2C_Clk_From_Frg0Clk = CLK_MUX_DEFINE(I2C0CLKSEL, 2U), /*!< Mux I2C_Clk from Frg0Clk. */
+
+    kI2C_Clk_From_Fro_Div = CLK_MUX_DEFINE(I2C0CLKSEL, 4U), /*!< Mux I2C_Clk from Fro_Div. */
+
+    kSPI_Clk_From_Fro = CLK_MUX_DEFINE(SPI0CLKSEL, 0U), /*!< Mux SPI_Clk from Fro. */
+
+    kSPI_Clk_From_MainClk = CLK_MUX_DEFINE(SPI0CLKSEL, 1U), /*!< Mux SPI_Clk from MainClk. */
+
+    kSPI_Clk_From_Frg0Clk = CLK_MUX_DEFINE(SPI0CLKSEL, 2U), /*!< Mux SPI_Clk from Frg0Clk. */
+
+    kSPI_Clk_From_Fro_Div = CLK_MUX_DEFINE(SPI0CLKSEL, 4U), /*!< Mux SPI_Clk from Fro_Div. */
+
+    kFRG0_Clk_From_Fro = CLK_MUX_DEFINE(FRG[0].FRGCLKSEL, 0U), /*!< Mux FRG0_Clk from Fro. */
+
+    kFRG0_Clk_From_MainClk = CLK_MUX_DEFINE(FRG[0].FRGCLKSEL, 1U), /*!< Mux FRG0_Clk from MainClk. */
+
+    kCLKOUT_From_Fro = CLK_MUX_DEFINE(CLKOUTSEL, 0U), /*!< Mux CLKOUT from Fro. */
+
+    kCLKOUT_From_MainClk = CLK_MUX_DEFINE(CLKOUTSEL, 1U), /*!< Mux CLKOUT from MainClk. */
+
+    kCLKOUT_From_ExtClk = CLK_MUX_DEFINE(CLKOUTSEL, 3U), /*!< Mux CLKOUT from ExtClk. */
+
+    kCLKOUT_From_WdtOsc = CLK_MUX_DEFINE(CLKOUTSEL, 4U) /*!< Mux clock out from WdtOsc. */
 } clock_select_t;
 
 /*! @brief Clock divider
  */
 typedef enum _clock_divider
 {
-    kCLOCK_DivAdcClk = CLK_DIV_DEFINE(ADCCLKDIV),
-    kCLOCK_DivClkOut = CLK_DIV_DEFINE(CLKOUTDIV)
+    kCLOCK_DivAdcClk = CLK_DIV_DEFINE(ADCCLKDIV), /*!< Adc Clock Divider. */
+
+    kCLOCK_DivClkOut = CLK_DIV_DEFINE(CLKOUTDIV) /*!< Clock out divider. */
 } clock_divider_t;
 
 /*! @brief fro output frequency source definition */

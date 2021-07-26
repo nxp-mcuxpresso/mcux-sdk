@@ -49,7 +49,6 @@ static inline void mflash_drv_check_if_finish(void)
     } while (val & 0x1);
 }
 
-/* return offset from sector */
 static void mflash_drv_read_mode(void)
 {
     /* Switch back to read mode */
@@ -76,7 +75,9 @@ static int32_t mflash_drv_init_internal(void)
 
 #ifndef XIP_IMAGE
     uint32_t sourceClockFreq;
+#if 0 /* Pinmuxing shall be initialized during board startup */
     BOARD_InitSPIFI();
+#endif
     /* Reset peripheral */
     RESET_PeripheralReset(kSPIFI_RST_SHIFT_RSTn);
     /* Set SPIFI clock source */
@@ -114,7 +115,7 @@ static int32_t mflash_drv_init_internal(void)
         __asm("cpsie i");
     }
 
-    return 0;
+    return kStatus_Success;
 }
 
 /* API - initialize 'mflash' - calling wrapper */
@@ -152,7 +153,7 @@ static int32_t mflash_drv_sector_erase_internal(uint32_t sector_addr)
     /* Flush pipeline to allow pending interrupts take place */
     __ISB();
 
-    return 0;
+    return kStatus_Success;
 }
 
 /* API - Erase single sector - calling wrapper */
@@ -192,7 +193,7 @@ static int32_t mflash_drv_page_program_internal(uint32_t page_addr, const uint32
     /* Flush pipeline to allow pending interrupts take place */
     __ISB();
 
-    return 0;
+    return kStatus_Success;
 }
 
 /* API - Page program - calling wrapper */
@@ -204,20 +205,44 @@ int32_t mflash_drv_page_program(uint32_t page_addr, uint32_t *data)
 /* API - Read data */
 int32_t mflash_drv_read(uint32_t addr, uint32_t *buffer, uint32_t len)
 {
-    memcpy(buffer, (void *)addr, len);
+    void *ptr = mflash_drv_phys2log(addr, len);
+
+    if (ptr == NULL)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    memcpy(buffer, ptr, len);
     return kStatus_Success;
 }
 
 /* API - Get pointer to FLASH region */
 void *mflash_drv_phys2log(uint32_t addr, uint32_t len)
 {
-    /* FLASH is directly mapped in the address space */
-    return (void *)(addr);
+    uint32_t last_addr = addr + (len != 0 ? len - 1 : 0);
+
+    if (last_addr > (FSL_FEATURE_SPIFI_END_ADDR - FSL_FEATURE_SPIFI_START_ADDR))
+    {
+        return NULL;
+    }
+
+    return (void *)(addr + FSL_FEATURE_SPIFI_START_ADDR);
 }
 
 /* API - Get pointer to FLASH region */
 uint32_t mflash_drv_log2phys(void *ptr, uint32_t len)
 {
-    /* FLASH is directly mapped in the address space */
-    return ((uint32_t)ptr);
+    uint32_t log_addr = (uint32_t)ptr;
+
+    if (log_addr < FSL_FEATURE_SPIFI_START_ADDR || log_addr > FSL_FEATURE_SPIFI_END_ADDR)
+    {
+        return MFLASH_INVALID_ADDRESS;
+    }
+
+    if (log_addr + len > FSL_FEATURE_SPIFI_END_ADDR + 1)
+    {
+        return MFLASH_INVALID_ADDRESS;
+    }
+
+    return (log_addr - FSL_FEATURE_SPIFI_START_ADDR);
 }

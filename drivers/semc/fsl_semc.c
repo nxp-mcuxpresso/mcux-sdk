@@ -737,7 +737,7 @@ status_t SEMC_ConfigureNOR(SEMC_Type *base, semc_nor_config_t *config, uint32_t 
 }
 
 /*!
- * brief Configures SRAM controller in SEMC.
+ * brief Configures SRAM controller in SEMC, which can be used only for specific chip selection CS0.
  *
  * param base SEMC peripheral base address.
  * param config The sram configuration.
@@ -749,7 +749,7 @@ status_t SEMC_ConfigureSRAM(SEMC_Type *base, semc_sram_config_t *config, uint32_
 }
 
 /*!
- * brief Configures SRAM controller in SEMC.
+ * brief Configures SRAM controller in SEMC, which can be used up to four chip selections CS0/CS1/CS2/CS3..
  *
  * param base SEMC peripheral base address.
  * param cs The chip selection.
@@ -1068,10 +1068,20 @@ status_t SEMC_ConfigureDBI(SEMC_Type *base, semc_dbi_config_t *config, uint32_t 
     timing |= SEMC_DBICR1_WEH(SEMC_ConvertTiming(config->tWexHigh_Ns, clkSrc_Hz));
     timing |= SEMC_DBICR1_REL(SEMC_ConvertTiming(config->tRdxLow_Ns, clkSrc_Hz));
     timing |= SEMC_DBICR1_REH(SEMC_ConvertTiming(config->tRdxHigh_Ns, clkSrc_Hz));
+#if defined(SEMC_DBICR1_CEITV_MASK)
     timing |= SEMC_DBICR1_CEITV(SEMC_ConvertTiming(config->tCsxInterval_Ns, clkSrc_Hz));
+#endif /* SEMC_DBICR1_CEITV_MASK */
 
     /* DBICR1 timing setting. */
     base->DBICR1 = timing;
+
+#if defined(SEMC_DBICR2_CEITV_MASK)
+    timing = SEMC_DBICR2_CEITV(SEMC_ConvertTiming(config->tCsxInterval_Ns, clkSrc_Hz));
+
+    /* DBICR2 timing setting. */
+    base->DBICR2 = timing;
+#endif /* SEMC_DBICR2_CEITV_MASK */
+
     return SEMC_ConfigureIPCommand(base, ((uint8_t)config->portSize + 1U));
 }
 

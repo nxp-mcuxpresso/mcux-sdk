@@ -1,4 +1,4 @@
-#Description: Cmsis_driver_include common; user_visible: False
+#Description: CMSIS Driver Common; user_visible: False
 include_guard(GLOBAL)
 message("CMSIS_Driver_Include_Common component is included.")
 

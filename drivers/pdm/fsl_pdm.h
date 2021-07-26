@@ -12,7 +12,7 @@
 #include "fsl_common.h"
 
 /*!
- * @addtogroup pdm_driver
+ * @addtogroup pdm_driver PDM Driver
  * @{
  */
 

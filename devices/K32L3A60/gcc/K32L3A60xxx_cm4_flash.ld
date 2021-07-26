@@ -4,13 +4,13 @@
 **     Compiler:            GNU C Compiler
 **     Reference manual:    K32L3ARM, Rev. 0 , 05/2019
 **     Version:             rev. 1.0, 2019-04-22
-**     Build:               b200723
+**     Build:               b210519
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -36,11 +36,21 @@ MEMORY
   m_data                (RW)  : ORIGIN = 0x20000000, LENGTH = 0x00030000 - RPMSG_SHMEM_SIZE
   rpmsg_sh_mem          (RW)  : ORIGIN = 0x2002E800, LENGTH = RPMSG_SHMEM_SIZE
   m_usb_sram            (RW)  : ORIGIN = 0x48010000, LENGTH = 0x00000800
+  m_core1_image         (RX)  : ORIGIN = 0x01000000, LENGTH = 0x00040000
 }
 
 /* Define output sections */
 SECTIONS
 {
+   /* section for storing the secondary core image */
+   .core1_code :
+   {
+      . = ALIGN(4) ;
+     KEEP (*(.core1_code))
+     *(.core1_code*)
+     . = ALIGN(4) ;
+   } > m_core1_image
+
   /* NOINIT section for rpmsg_sh_mem */
   .noinit_rpmsg_sh_mem (NOLOAD) : ALIGN(4)
   {

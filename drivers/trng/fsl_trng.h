@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018, 2020 NXP
+ * Copyright 2016-2018, 2020-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,12 +23,15 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief TRNG driver version 2.0.12.
+/*! @brief TRNG driver version 2.0.13.
  *
- * Current version: 2.0.12
+ * Current version: 2.0.13
  *
 
  * Change log:
+ * - version 2.0.13
+ *   - After deepsleep it might return error, added clearing bits in TRNG_GetRandomData() and generating new entropy.
+ *   - Modified reloading entropy in TRNG_GetRandomData(), for some data length it doesn't reloading entropy correctly.
  * - version 2.0.12
  *   - For KW34A4_SERIES, KW35A4_SERIES, KW36A4_SERIES set TRNG_USER_CONFIG_DEFAULT_OSC_DIV to kTRNG_RingOscDiv8.
  * - version 2.0.11
@@ -56,7 +59,7 @@
  *   - add support for KL8x and KL28Z
  *   - update default OSCDIV for K81 to divide by 2
  */
-#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 12))
+#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 13))
 /*@}*/
 
 /*! @brief TRNG sample mode. Used by trng_config_t. */

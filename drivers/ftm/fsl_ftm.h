@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FTM driver version 2.3.0. */
-#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief FTM driver version 2.4.1. */
+#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*@}*/
 
 /*!
@@ -647,7 +647,8 @@ void FTM_ClearStatusFlags(FTM_Type *base, uint32_t mask);
  */
 static inline void FTM_SetTimerPeriod(FTM_Type *base, uint32_t ticks)
 {
-    base->MOD = ticks;
+    base->CNTIN = 0x0U;
+    base->MOD   = ticks;
 }
 
 /*!
@@ -665,6 +666,23 @@ static inline void FTM_SetTimerPeriod(FTM_Type *base, uint32_t ticks)
 static inline uint32_t FTM_GetCurrentTimerCount(FTM_Type *base)
 {
     return (uint32_t)((base->CNT & FTM_CNT_COUNT_MASK) >> FTM_CNT_COUNT_SHIFT);
+}
+
+/*!
+ * @brief Reads the captured value.
+ *
+ * This function returns the captured value of a FTM channel configured in input capture or dual edge capture mode.
+ *
+ * @note Call the utility macros provided in the fsl_common.h to convert ticks to usec or msec.
+ *
+ * @param base FTM peripheral base address
+ * @param chnlNumber Channel to be read
+ *
+ * @return The captured FTM counter value of the input modes.
+ */
+static inline uint32_t FTM_GetInputCaptureValue(FTM_Type *base, ftm_chnl_t chnlNumber)
+{
+    return (base->CONTROLS[chnlNumber].CnV & FTM_CnV_VAL_MASK);
 }
 
 /*! @}*/
@@ -822,6 +840,10 @@ static inline void FTM_SetPwmOutputEnable(FTM_Type *base, ftm_chnl_t chnlNumber,
  */
 static inline void FTM_SetFaultControlEnable(FTM_Type *base, ftm_chnl_t chnlPairNumber, bool value)
 {
+    /* Fault input is not supported if the instance has only basic feature.*/
+#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+    assert(0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base));
+#endif
     if (value)
     {
         base->COMBINE |=

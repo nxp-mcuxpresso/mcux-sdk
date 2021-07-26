@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2018-01-09
-**     Build:               b190816
+**     Build:               b210408
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2019 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -27,6 +27,8 @@
 
 /* SOC module features */
 
+/* @brief ACOMP availability on the SoC. */
+#define FSL_FEATURE_SOC_ACOMP_COUNT (1)
 /* @brief ADC availability on the SoC. */
 #define FSL_FEATURE_SOC_ADC_COUNT (1)
 /* @brief CRC availability on the SoC. */
@@ -64,7 +66,7 @@
 /* ADC module features */
 
 /* @brief Do not has input select (register INSEL). */
-#define FSL_FEATURE_ADC_HAS_NO_INSEL  (1)
+#define FSL_FEATURE_ADC_HAS_NO_INSEL (1)
 /* @brief Has ASYNMODE bitfile in CTRL reigster. */
 #define FSL_FEATURE_ADC_HAS_CTRL_ASYNMODE (1)
 /* @brief Has ASYNMODE bitfile in CTRL reigster. */
@@ -79,7 +81,7 @@
 #define FSL_FEATURE_ADC_HAS_CTRL_CALMODE (0)
 /* @brief Has startup register. */
 #define FSL_FEATURE_ADC_HAS_STARTUP_REG (0)
-/* @brief Has ADTrim register */
+/* @brief Has ADC Trim register */
 #define FSL_FEATURE_ADC_HAS_TRIM_REG (0)
 /* @brief Has Calibration register. */
 #define FSL_FEATURE_ADC_HAS_CALIB_REG (0)
@@ -102,14 +104,14 @@
 
 /* MRT module features */
 
-/* @brief Writing a zero asserts the MRT reset. */
-#define FSL_FEATURE_MRT_WRITE_ZERO_ASSERT_RESET (1)
+/* @brief number of channels. */
+#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (2)
 /* @brief Has no MULTITASK bitfile in MODCFG reigster. */
 #define FSL_FEATURE_MRT_HAS_NO_MODCFG_MULTITASK (1)
 /* @brief Has no INUSE bitfile in STAT reigster. */
 #define FSL_FEATURE_MRT_HAS_NO_CHANNEL_STAT_INUSE (1)
-/* @brief number of channels. */
-#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS  (2)
+/* @brief Writing a zero asserts the MRT reset. */
+#define FSL_FEATURE_MRT_WRITE_ZERO_ASSERT_RESET (1)
 
 /* NVIC module features */
 
@@ -123,13 +125,13 @@
 
 /* SPI module features */
 
-/* @brief Has slave select 0(CFG[SPOL0] and TXDATCTL[TXSSEL0_N]). */
+/* @brief Has SPOL0 bitfile in CFG reigster. */
 #define FSL_FEATURE_SPI_HAS_SSEL0 (1)
-/* @brief Has slave select 1(CFG[SPOL1] and TXDATCTL[TXSSEL1_N]). */
+/* @brief Has SPOL1 bitfile in CFG reigster. */
 #define FSL_FEATURE_SPI_HAS_SSEL1 (1)
-/* @brief Has slave select 2(CFG[SPOL2] and TXDATCTL[TXSSEL2_N]). */
+/* @brief Has SPOL2 bitfile in CFG reigster. */
 #define FSL_FEATURE_SPI_HAS_SSEL2 (0)
-/* @brief Has slave select 3(CFG[SPOL3] and TXDATCTL[TXSSEL3_N]). */
+/* @brief Has SPOL3 bitfile in CFG reigster. */
 #define FSL_FEATURE_SPI_HAS_SSEL3 (0)
 
 /* SWM module features */
@@ -176,10 +178,9 @@
 
 /* WWDT module features */
 
-/* @brief Has no RESET register. */
-#define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
 /* @brief Has LPOSC as clock source. */
 #define FSL_FEATURE_WWDT_HAS_LPOSC_CLOCK_SOURCE (1)
+/* @brief Has no RESET register. */
+#define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
 
 #endif /* _LPC802_FEATURES_H_ */
-

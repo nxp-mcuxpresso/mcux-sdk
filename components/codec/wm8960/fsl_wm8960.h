@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -14,6 +14,7 @@
 
 /*!
  * @addtogroup wm8960
+ * @ingroup codec
  * @{
  */
 
@@ -22,8 +23,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.1.3 */
-#define FSL_WM8960_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+/*! @brief CLOCK driver version 2.2.0 */
+#define FSL_WM8960_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 /*! @brief wm8960 handle size */
@@ -87,6 +88,9 @@
 
 /*! @brief Cache register number */
 #define WM8960_CACHEREGNUM 56U
+
+/*! @brief WM8960 CLOCK2 bits */
+#define WM8960_CLOCK2_BCLK_DIV_MASK 0xFU
 
 /*! @brief WM8960_IFACE1 FORMAT bits */
 #define WM8960_IFACE1_FORMAT_MASK  0x03U
@@ -306,6 +310,13 @@ enum
     kWM8960_AudioBitWidth32bit = 32U, /*!< audio bit width 32 */
 };
 
+/*! @brief wm8960 sysclk source */
+typedef enum _wm8960_sysclk_source
+{
+    kWM8960_SysClkSourceMclk        = 0U, /*!< sysclk source from external MCLK */
+    kWM8960_SysClkSourceInternalPLL = 1U, /*!< sysclk source from internal PLL */
+} wm8960_sysclk_source_t;
+
 /*! @brief wm8960 audio format */
 typedef struct _wm8960_audio_format
 {
@@ -314,19 +325,27 @@ typedef struct _wm8960_audio_format
     uint32_t bitWidth;   /*!< bit width */
 } wm8960_audio_format_t;
 
+/*! @brief wm8960 master system clock configuration */
+typedef struct _wm8960_master_sysclk_config
+{
+    wm8960_sysclk_source_t sysclkSource; /*!< sysclk source */
+    uint32_t sysclkFreq;                 /*!< PLL output frequency value */
+} wm8960_master_sysclk_config_t;
+
 /*! @brief Initialize structure of WM8960 */
 typedef struct wm8960_config
 {
-    wm8960_route_t route;            /*!< Audio data route.*/
-    wm8960_protocol_t bus;           /*!< Audio transfer protocol */
-    wm8960_audio_format_t format;    /*!< Audio format */
-    bool master_slave;               /*!< Master or slave. */
-    bool enableSpeaker;              /*!< True means enable class D speaker as output, false means no */
-    wm8960_input_t leftInputSource;  /*!< Left input source for WM8960 */
-    wm8960_input_t rightInputSource; /*!< Right input source for wm8960 */
-    wm8960_play_source_t playSource; /*!< play source */
-    uint8_t slaveAddress;            /*!< wm8960 device address */
-    codec_i2c_config_t i2cConfig;    /*!< i2c configuration */
+    wm8960_route_t route;                      /*!< Audio data route.*/
+    wm8960_protocol_t bus;                     /*!< Audio transfer protocol */
+    wm8960_audio_format_t format;              /*!< Audio format */
+    bool master_slave;                         /*!< Master or slave. */
+    wm8960_master_sysclk_config_t masterClock; /*!< master clock configurations */
+    bool enableSpeaker;                        /*!< True means enable class D speaker as output, false means no */
+    wm8960_input_t leftInputSource;            /*!< Left input source for WM8960 */
+    wm8960_input_t rightInputSource;           /*!< Right input source for wm8960 */
+    wm8960_play_source_t playSource;           /*!< play source */
+    uint8_t slaveAddress;                      /*!< wm8960 device address */
+    codec_i2c_config_t i2cConfig;              /*!< i2c configuration */
 } wm8960_config_t;
 
 /*! @brief wm8960 codec handler

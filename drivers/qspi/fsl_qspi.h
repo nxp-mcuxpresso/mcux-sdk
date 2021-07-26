@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief QSPI driver version 2.2.2. */
-#define FSL_QSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+/*! @brief QSPI driver version 2.2.3. */
+#define FSL_QSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
 /*@}*/
 
 /*! @brief Macro functions for LUT table */

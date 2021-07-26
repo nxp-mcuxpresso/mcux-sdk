@@ -10,6 +10,7 @@
 
 /*!
  * @addtogroup serial_port_virtual
+ * @ingroup serialmanager
  * @{
  */
 

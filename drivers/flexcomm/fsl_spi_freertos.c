@@ -67,7 +67,7 @@ status_t SPI_RTOS_Init(spi_rtos_handle_t *handle,
 
     handle->base = base;
 
-    SPI_MasterInit(handle->base, masterConfig, srcClock_Hz);
+    (void)SPI_MasterInit(handle->base, masterConfig, srcClock_Hz);
     status = SPI_MasterTransferCreateHandle(handle->base, &handle->drv_handle, SPI_RTOS_Callback, (void *)handle);
 
     return status;

@@ -1,6 +1,6 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
@@ -28,8 +28,8 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
-#    include(CMSIS_Include_dsp)
 #    include(driver_i2c)
+#    include(driver_kbi)
 #    include(component_lists)
 #    include(device_system)
 #    include(driver_tpm)
@@ -38,10 +38,10 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_wdog8)
 #    include(utility_debug_console_lite)
 #    include(driver_acmp_1)
-#    include(driver_kbi)
+#    include(CMSIS_Include_core_cm)
 #    include(driver_ftm)
-#    include(driver_gpio_1)
-#    include(CMSIS_Include_core_cm0plus)
+#    include(driver_port_ke02)
+#    include(utility_assert_lite)
 #    include(driver_spi)
 #    include(component_uart_adapter)
 #    include(utility_assert)
@@ -49,11 +49,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_CMSIS)
 #    include(driver_uart)
 #    include(utilities_misc_utilities)
-#    include(driver_port_ke02)
-#    include(CMSIS_Include_common)
+#    include(driver_gpio_1)
 #    include(driver_common)
 #    include(driver_irq)
-#    include(utility_assert_lite)
 #    include(component_serial_manager)
 #    include(driver_rtc_1)
 #    include(driver_pit)

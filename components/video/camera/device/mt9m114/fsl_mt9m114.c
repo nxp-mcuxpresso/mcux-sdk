@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 NXP
+ * Copyright 2017-2018, 2021 NXP
  * All rights reserved.
  *
  *
@@ -272,7 +272,8 @@ status_t MT9M114_Init(camera_device_handle_t *handle, const camera_config_t *con
     }
 
     /* Only support RGB565 and YUV422 */
-    if ((kVIDEO_PixelFormatRGB565 != config->pixelFormat) && (kVIDEO_PixelFormatYUYV != config->pixelFormat))
+    if ((kVIDEO_PixelFormatRGB565 != config->pixelFormat) && (kVIDEO_PixelFormatYUYV != config->pixelFormat) &&
+        (kVIDEO_PixelFormatRAW8 != config->pixelFormat))
     {
         return kStatus_InvalidArgument;
     }
@@ -323,6 +324,14 @@ status_t MT9M114_Init(camera_device_handle_t *handle, const camera_config_t *con
     if (kVIDEO_PixelFormatRGB565 == config->pixelFormat)
     {
         outputFormat |= ((1U << 8U) | (1U << 1U));
+    }
+    else if (kVIDEO_PixelFormatRAW8 == config->pixelFormat)
+    {
+        outputFormat |= ((2U << 8U) | (3U << 10U));
+    }
+    else
+    {
+        /* Empty. */
     }
 
     if (kCAMERA_InterfaceCCIR656 == config->interface)

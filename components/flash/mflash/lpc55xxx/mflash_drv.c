@@ -112,8 +112,10 @@ int32_t mflash_drv_read(uint32_t addr, uint32_t *buffer, uint32_t len)
 /* API - Get pointer to FLASH region */
 void *mflash_drv_phys2log(uint32_t addr, uint32_t len)
 {
+#if 0
     if (mflash_drv_is_readable(addr) != 0)
         return NULL;
+#endif
 
     /* FLASH is directly mapped in the address space */
     return (void *)(addr);

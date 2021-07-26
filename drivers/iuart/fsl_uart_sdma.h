@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief UART SDMA driver version 2.1.1. */
-#define FSL_UART_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief UART SDMA driver version. */
+#define FSL_UART_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 /* Forward declaration of the handle typedef. */
@@ -131,6 +131,15 @@ void UART_TransferAbortSendSDMA(UART_Type *base, uart_sdma_handle_t *handle);
  */
 void UART_TransferAbortReceiveSDMA(UART_Type *base, uart_sdma_handle_t *handle);
 
+/*!
+ * @brief UART IRQ handle function.
+ *
+ * This function handles the UART transmit complete IRQ request and invoke user callback.
+ *
+ * @param base UART peripheral base address.
+ * @param uartSdmaHandle UART handle pointer.
+ */
+void UART_TransferSdmaHandleIRQ(UART_Type *base, void *uartSdmaHandle);
 /*@}*/
 
 #if defined(__cplusplus)

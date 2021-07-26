@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP.
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -53,119 +53,146 @@ void BOARD_InitPins(void); /* Function assigned for the Cortex-M0P */
 #define IOCON_PIO_CLKDIV0 0x00u      /*!<@brief IOCONCLKDIV0 */
 #define IOCON_PIO_HYS_DI 0x00u       /*!<@brief Disable hysteresis */
 #define IOCON_PIO_INV_DI 0x00u       /*!<@brief Input not invert */
-#define IOCON_PIO_MODE_PULLUP 0x10u  /*!<@brief Selects pull-up function */
+#define IOCON_PIO_MODE_INACT 0x00u   /*!<@brief No addition pin function */
 #define IOCON_PIO_OD_DI 0x00u        /*!<@brief Disables Open-drain function */
 #define IOCON_PIO_SMODE_BYPASS 0x00u /*!<@brief Bypass input filter */
 
 /*! @name PIO0_27 (number 11), D1[3]/P3[42]/J1[9]/P0_27-BLUE
   @{ */
+/* Routed pin properties */
 /*!
- * @brief Device name: GPIO */
+ * @brief Peripheral name */
 #define BOARD_INITLEDSPINS_LED_BLUE_PERIPHERAL GPIO
 /*!
- * @brief GPIO signal: PIO0 */
+ * @brief Signal name */
 #define BOARD_INITLEDSPINS_LED_BLUE_SIGNAL PIO0
 /*!
- * @brief GPIO device name: GPIO */
-#define BOARD_INITLEDSPINS_LED_BLUE_GPIO GPIO
-/*!
- * @brief PIO0 pin index: 27 */
-#define BOARD_INITLEDSPINS_LED_BLUE_GPIO_PIN 27U
-/*!
- * @brief PORT device name: 0U */
-#define BOARD_INITLEDSPINS_LED_BLUE_PORT 0U
-/*!
- * @brief 0U pin index: 27 */
-#define BOARD_INITLEDSPINS_LED_BLUE_PIN 27U
-/*!
- * @brief GPIO PIO0 channel: 27 */
+ * @brief Signal channel */
 #define BOARD_INITLEDSPINS_LED_BLUE_CHANNEL 27
 /*!
- * @brief Pin name */
+ * @brief Routed pin name */
 #define BOARD_INITLEDSPINS_LED_BLUE_PIN_NAME PIO0_27
 /*!
  * @brief Label */
 #define BOARD_INITLEDSPINS_LED_BLUE_LABEL "D1[3]/P3[42]/J1[9]/P0_27-BLUE"
 /*!
- * @brief Identifier name */
+ * @brief Identifier */
 #define BOARD_INITLEDSPINS_LED_BLUE_NAME "LED_BLUE"
 /*!
  * @brief Direction */
 #define BOARD_INITLEDSPINS_LED_BLUE_DIRECTION kPIN_MUX_DirectionOutput
+
+/* Symbols to be used with GPIO driver */
+/*!
+ * @brief GPIO peripheral base pointer */
+#define BOARD_INITLEDSPINS_LED_BLUE_GPIO GPIO
+/*!
+ * @brief GPIO pin number */
+#define BOARD_INITLEDSPINS_LED_BLUE_GPIO_PIN 27U
+/*!
+ * @brief GPIO pin mask */
+#define BOARD_INITLEDSPINS_LED_BLUE_GPIO_PIN_MASK (1U << 27U)
+/*!
+ * @brief PORT device index: 0 */
+#define BOARD_INITLEDSPINS_LED_BLUE_PORT 0U
+/*!
+ * @brief PORT pin number */
+#define BOARD_INITLEDSPINS_LED_BLUE_PIN 27U
+/*!
+ * @brief PORT pin mask */
+#define BOARD_INITLEDSPINS_LED_BLUE_PIN_MASK (1U << 27U)
 /* @} */
 
 /*! @name PIO0_16 (number 10), D1[4]/P3[43]/J2[2]/P0_16-GREEN
   @{ */
+/* Routed pin properties */
 /*!
- * @brief Device name: GPIO */
+ * @brief Peripheral name */
 #define BOARD_INITLEDSPINS_LED_GREEN_PERIPHERAL GPIO
 /*!
- * @brief GPIO signal: PIO0 */
+ * @brief Signal name */
 #define BOARD_INITLEDSPINS_LED_GREEN_SIGNAL PIO0
 /*!
- * @brief GPIO device name: GPIO */
-#define BOARD_INITLEDSPINS_LED_GREEN_GPIO GPIO
-/*!
- * @brief PIO0 pin index: 16 */
-#define BOARD_INITLEDSPINS_LED_GREEN_GPIO_PIN 16U
-/*!
- * @brief PORT device name: 0U */
-#define BOARD_INITLEDSPINS_LED_GREEN_PORT 0U
-/*!
- * @brief 0U pin index: 16 */
-#define BOARD_INITLEDSPINS_LED_GREEN_PIN 16U
-/*!
- * @brief GPIO PIO0 channel: 16 */
+ * @brief Signal channel */
 #define BOARD_INITLEDSPINS_LED_GREEN_CHANNEL 16
 /*!
- * @brief Pin name */
+ * @brief Routed pin name */
 #define BOARD_INITLEDSPINS_LED_GREEN_PIN_NAME PIO0_16
 /*!
  * @brief Label */
 #define BOARD_INITLEDSPINS_LED_GREEN_LABEL "D1[4]/P3[43]/J2[2]/P0_16-GREEN"
 /*!
- * @brief Identifier name */
+ * @brief Identifier */
 #define BOARD_INITLEDSPINS_LED_GREEN_NAME "LED_GREEN"
 /*!
  * @brief Direction */
 #define BOARD_INITLEDSPINS_LED_GREEN_DIRECTION kPIN_MUX_DirectionOutput
+
+/* Symbols to be used with GPIO driver */
+/*!
+ * @brief GPIO peripheral base pointer */
+#define BOARD_INITLEDSPINS_LED_GREEN_GPIO GPIO
+/*!
+ * @brief GPIO pin number */
+#define BOARD_INITLEDSPINS_LED_GREEN_GPIO_PIN 16U
+/*!
+ * @brief GPIO pin mask */
+#define BOARD_INITLEDSPINS_LED_GREEN_GPIO_PIN_MASK (1U << 16U)
+/*!
+ * @brief PORT device index: 0 */
+#define BOARD_INITLEDSPINS_LED_GREEN_PORT 0U
+/*!
+ * @brief PORT pin number */
+#define BOARD_INITLEDSPINS_LED_GREEN_PIN 16U
+/*!
+ * @brief PORT pin mask */
+#define BOARD_INITLEDSPINS_LED_GREEN_PIN_MASK (1U << 16U)
 /* @} */
 
 /*! @name PIO0_12 (number 2), SW2/D1[1]/P3[45]/J2[5]/P0_12-RED-ISP
   @{ */
+/* Routed pin properties */
 /*!
- * @brief Device name: GPIO */
+ * @brief Peripheral name */
 #define BOARD_INITLEDSPINS_LED_RED_PERIPHERAL GPIO
 /*!
- * @brief GPIO signal: PIO0 */
+ * @brief Signal name */
 #define BOARD_INITLEDSPINS_LED_RED_SIGNAL PIO0
 /*!
- * @brief GPIO device name: GPIO */
-#define BOARD_INITLEDSPINS_LED_RED_GPIO GPIO
-/*!
- * @brief PIO0 pin index: 12 */
-#define BOARD_INITLEDSPINS_LED_RED_GPIO_PIN 12U
-/*!
- * @brief PORT device name: 0U */
-#define BOARD_INITLEDSPINS_LED_RED_PORT 0U
-/*!
- * @brief 0U pin index: 12 */
-#define BOARD_INITLEDSPINS_LED_RED_PIN 12U
-/*!
- * @brief GPIO PIO0 channel: 12 */
+ * @brief Signal channel */
 #define BOARD_INITLEDSPINS_LED_RED_CHANNEL 12
 /*!
- * @brief Pin name */
+ * @brief Routed pin name */
 #define BOARD_INITLEDSPINS_LED_RED_PIN_NAME PIO0_12
 /*!
  * @brief Label */
 #define BOARD_INITLEDSPINS_LED_RED_LABEL "SW2/D1[1]/P3[45]/J2[5]/P0_12-RED-ISP"
 /*!
- * @brief Identifier name */
+ * @brief Identifier */
 #define BOARD_INITLEDSPINS_LED_RED_NAME "LED_RED"
 /*!
  * @brief Direction */
 #define BOARD_INITLEDSPINS_LED_RED_DIRECTION kPIN_MUX_DirectionOutput
+
+/* Symbols to be used with GPIO driver */
+/*!
+ * @brief GPIO peripheral base pointer */
+#define BOARD_INITLEDSPINS_LED_RED_GPIO GPIO
+/*!
+ * @brief GPIO pin number */
+#define BOARD_INITLEDSPINS_LED_RED_GPIO_PIN 12U
+/*!
+ * @brief GPIO pin mask */
+#define BOARD_INITLEDSPINS_LED_RED_GPIO_PIN_MASK (1U << 12U)
+/*!
+ * @brief PORT device index: 0 */
+#define BOARD_INITLEDSPINS_LED_RED_PORT 0U
+/*!
+ * @brief PORT pin number */
+#define BOARD_INITLEDSPINS_LED_RED_PIN 12U
+/*!
+ * @brief PORT pin mask */
+#define BOARD_INITLEDSPINS_LED_RED_PIN_MASK (1U << 12U)
 /* @} */
 
 /*!
@@ -183,52 +210,60 @@ void BOARD_InitLEDsPins(void); /* Function assigned for the Cortex-M0P */
 
 /*! @name PIO0_7 (number 22), P3[14]/U2[31]/TARGET_TX-P0_7
   @{ */
+/* Routed pin properties */
 /*!
- * @brief Device name: USART0 */
+ * @brief Peripheral name */
 #define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PERIPHERAL USART0
 /*!
- * @brief USART0 signal: TXD */
+ * @brief Signal name */
 #define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_SIGNAL TXD
 /*!
- * @brief PORT device name: 0U */
-#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PORT 0U
-/*!
- * @brief 0U pin index: 7 */
-#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PIN 7U
-/*!
- * @brief Pin name */
+ * @brief Routed pin name */
 #define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PIN_NAME PIO0_7
 /*!
  * @brief Label */
 #define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_LABEL "P3[14]/U2[31]/TARGET_TX-P0_7"
 /*!
- * @brief Identifier name */
+ * @brief Identifier */
 #define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_NAME "DEBUG_UART_TX"
+/*!
+ * @brief PORT device index: 0 */
+#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PORT 0U
+/*!
+ * @brief PORT pin number */
+#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PIN 7U
+/*!
+ * @brief PORT pin mask */
+#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PIN_MASK (1U << 7U)
 /* @} */
 
 /*! @name PIO0_18 (number 31), P3[21]/J2[4]/U2[32]/TARGET_RX-P0_18
   @{ */
+/* Routed pin properties */
 /*!
- * @brief Device name: USART0 */
+ * @brief Peripheral name */
 #define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_PERIPHERAL USART0
 /*!
- * @brief USART0 signal: RXD */
+ * @brief Signal name */
 #define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_SIGNAL RXD
 /*!
- * @brief PORT device name: 0U */
-#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_PORT 0U
-/*!
- * @brief 0U pin index: 18 */
-#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_PIN 18U
-/*!
- * @brief Pin name */
+ * @brief Routed pin name */
 #define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_PIN_NAME PIO0_18
 /*!
  * @brief Label */
 #define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_LABEL "P3[21]/J2[4]/U2[32]/TARGET_RX-P0_18"
 /*!
- * @brief Identifier name */
+ * @brief Identifier */
 #define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_NAME "DEBUG_UART_RX"
+/*!
+ * @brief PORT device index: 0 */
+#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_PORT 0U
+/*!
+ * @brief PORT pin number */
+#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_PIN 18U
+/*!
+ * @brief PORT pin mask */
+#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_PIN_MASK (1U << 18U)
 /* @} */
 
 /*!
@@ -246,59 +281,89 @@ void BOARD_InitDEBUG_UARTPins(void); /* Function assigned for the Cortex-M0P */
 
 /*! @name SWCLK (number 6), P5[4]/U2[16]/TARGET_SWCLK
   @{ */
+/* Routed pin properties */
 /*!
- * @brief Device name: SWD */
+ * @brief Peripheral name */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDCLK_PERIPHERAL SWD
 /*!
- * @brief SWD signal: SWCLK */
+ * @brief Signal name */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDCLK_SIGNAL SWCLK
 /*!
- * @brief Pin name */
+ * @brief Routed pin name */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDCLK_PIN_NAME SWCLK
 /*!
  * @brief Label */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDCLK_LABEL "P5[4]/U2[16]/TARGET_SWCLK"
 /*!
- * @brief Identifier name */
+ * @brief Identifier */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDCLK_NAME "DEBUG_SWD_SWDCLK"
+/*!
+ * @brief PORT device index: 0 */
+#define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDCLK_PORT 0U
+/*!
+ * @brief PORT pin number */
+#define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDCLK_PIN 3U
+/*!
+ * @brief PORT pin mask */
+#define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDCLK_PIN_MASK (1U << 3U)
 /* @} */
 
 /*! @name SWDIO (number 7), P5[2]/U2[17]/TARGET_SWDIO
   @{ */
+/* Routed pin properties */
 /*!
- * @brief Device name: SWD */
+ * @brief Peripheral name */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDIO_PERIPHERAL SWD
 /*!
- * @brief SWD signal: SWDIO */
+ * @brief Signal name */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDIO_SIGNAL SWDIO
 /*!
- * @brief Pin name */
+ * @brief Routed pin name */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDIO_PIN_NAME SWDIO
 /*!
  * @brief Label */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDIO_LABEL "P5[2]/U2[17]/TARGET_SWDIO"
 /*!
- * @brief Identifier name */
+ * @brief Identifier */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDIO_NAME "DEBUG_SWD_SWDIO"
+/*!
+ * @brief PORT device index: 0 */
+#define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDIO_PORT 0U
+/*!
+ * @brief PORT pin number */
+#define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDIO_PIN 2U
+/*!
+ * @brief PORT pin mask */
+#define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDIO_PIN_MASK (1U << 2U)
 /* @} */
 
 /*! @name RESETN (number 3), J4[3]/P3[4]/U2[3]/P5[10]/SW3[1]/TARGET_nRESET-P0_5
   @{ */
+/* Routed pin properties */
 /*!
- * @brief Device name: SYSCON */
+ * @brief Peripheral name */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_RESETN_PERIPHERAL SYSCON
 /*!
- * @brief SYSCON signal: RESETN */
+ * @brief Signal name */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_RESETN_SIGNAL RESETN
 /*!
- * @brief Pin name */
+ * @brief Routed pin name */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_RESETN_PIN_NAME RESETN
 /*!
  * @brief Label */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_RESETN_LABEL "J4[3]/P3[4]/U2[3]/P5[10]/SW3[1]/TARGET_nRESET-P0_5"
 /*!
- * @brief Identifier name */
+ * @brief Identifier */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_RESETN_NAME "DEBUG_SWD_RESETN"
+/*!
+ * @brief PORT device index: 0 */
+#define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_RESETN_PORT 0U
+/*!
+ * @brief PORT pin number */
+#define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_RESETN_PIN 5U
+/*!
+ * @brief PORT pin mask */
+#define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_RESETN_PIN_MASK (1U << 5U)
 /* @} */
 
 /*!
@@ -316,76 +381,94 @@ void BOARD_InitSWD_DEBUGPins(void); /* Function assigned for the Cortex-M0P */
 
 /*! @name PIO0_4 (number 4), SW1/P3[9]/J2[7]/P0_4-ISP_U_TXD-WAKEUP
   @{ */
+/* Routed pin properties */
 /*!
- * @brief Device name: GPIO */
+ * @brief Peripheral name */
 #define BOARD_INITBUTTONSPINS_SW1_PERIPHERAL GPIO
 /*!
- * @brief GPIO signal: PIO0 */
+ * @brief Signal name */
 #define BOARD_INITBUTTONSPINS_SW1_SIGNAL PIO0
 /*!
- * @brief GPIO device name: GPIO */
-#define BOARD_INITBUTTONSPINS_SW1_GPIO GPIO
-/*!
- * @brief PIO0 pin index: 4 */
-#define BOARD_INITBUTTONSPINS_SW1_GPIO_PIN 4U
-/*!
- * @brief PORT device name: 0U */
-#define BOARD_INITBUTTONSPINS_SW1_PORT 0U
-/*!
- * @brief 0U pin index: 4 */
-#define BOARD_INITBUTTONSPINS_SW1_PIN 4U
-/*!
- * @brief GPIO PIO0 channel: 4 */
+ * @brief Signal channel */
 #define BOARD_INITBUTTONSPINS_SW1_CHANNEL 4
 /*!
- * @brief Pin name */
+ * @brief Routed pin name */
 #define BOARD_INITBUTTONSPINS_SW1_PIN_NAME PIO0_4
 /*!
  * @brief Label */
 #define BOARD_INITBUTTONSPINS_SW1_LABEL "SW1/P3[9]/J2[7]/P0_4-ISP_U_TXD-WAKEUP"
 /*!
- * @brief Identifier name */
+ * @brief Identifier */
 #define BOARD_INITBUTTONSPINS_SW1_NAME "SW1"
 /*!
  * @brief Direction */
 #define BOARD_INITBUTTONSPINS_SW1_DIRECTION kPIN_MUX_DirectionInput
+
+/* Symbols to be used with GPIO driver */
+/*!
+ * @brief GPIO peripheral base pointer */
+#define BOARD_INITBUTTONSPINS_SW1_GPIO GPIO
+/*!
+ * @brief GPIO pin number */
+#define BOARD_INITBUTTONSPINS_SW1_GPIO_PIN 4U
+/*!
+ * @brief GPIO pin mask */
+#define BOARD_INITBUTTONSPINS_SW1_GPIO_PIN_MASK (1U << 4U)
+/*!
+ * @brief PORT device index: 0 */
+#define BOARD_INITBUTTONSPINS_SW1_PORT 0U
+/*!
+ * @brief PORT pin number */
+#define BOARD_INITBUTTONSPINS_SW1_PIN 4U
+/*!
+ * @brief PORT pin mask */
+#define BOARD_INITBUTTONSPINS_SW1_PIN_MASK (1U << 4U)
 /* @} */
 
 /*! @name PIO0_12 (number 2), SW2/D1[1]/P3[45]/J2[5]/P0_12-RED-ISP
   @{ */
+/* Routed pin properties */
 /*!
- * @brief Device name: GPIO */
+ * @brief Peripheral name */
 #define BOARD_INITBUTTONSPINS_SW2_PERIPHERAL GPIO
 /*!
- * @brief GPIO signal: PIO0 */
+ * @brief Signal name */
 #define BOARD_INITBUTTONSPINS_SW2_SIGNAL PIO0
 /*!
- * @brief GPIO device name: GPIO */
-#define BOARD_INITBUTTONSPINS_SW2_GPIO GPIO
-/*!
- * @brief PIO0 pin index: 12 */
-#define BOARD_INITBUTTONSPINS_SW2_GPIO_PIN 12U
-/*!
- * @brief PORT device name: 0U */
-#define BOARD_INITBUTTONSPINS_SW2_PORT 0U
-/*!
- * @brief 0U pin index: 12 */
-#define BOARD_INITBUTTONSPINS_SW2_PIN 12U
-/*!
- * @brief GPIO PIO0 channel: 12 */
+ * @brief Signal channel */
 #define BOARD_INITBUTTONSPINS_SW2_CHANNEL 12
 /*!
- * @brief Pin name */
+ * @brief Routed pin name */
 #define BOARD_INITBUTTONSPINS_SW2_PIN_NAME PIO0_12
 /*!
  * @brief Label */
 #define BOARD_INITBUTTONSPINS_SW2_LABEL "SW2/D1[1]/P3[45]/J2[5]/P0_12-RED-ISP"
 /*!
- * @brief Identifier name */
+ * @brief Identifier */
 #define BOARD_INITBUTTONSPINS_SW2_NAME "SW2"
 /*!
  * @brief Direction */
 #define BOARD_INITBUTTONSPINS_SW2_DIRECTION kPIN_MUX_DirectionInput
+
+/* Symbols to be used with GPIO driver */
+/*!
+ * @brief GPIO peripheral base pointer */
+#define BOARD_INITBUTTONSPINS_SW2_GPIO GPIO
+/*!
+ * @brief GPIO pin number */
+#define BOARD_INITBUTTONSPINS_SW2_GPIO_PIN 12U
+/*!
+ * @brief GPIO pin mask */
+#define BOARD_INITBUTTONSPINS_SW2_GPIO_PIN_MASK (1U << 12U)
+/*!
+ * @brief PORT device index: 0 */
+#define BOARD_INITBUTTONSPINS_SW2_PORT 0U
+/*!
+ * @brief PORT pin number */
+#define BOARD_INITBUTTONSPINS_SW2_PIN 12U
+/*!
+ * @brief PORT pin mask */
+#define BOARD_INITBUTTONSPINS_SW2_PIN_MASK (1U << 12U)
 /* @} */
 
 /*!

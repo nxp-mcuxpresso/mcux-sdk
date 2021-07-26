@@ -1416,6 +1416,17 @@ status_t SDHC_TransferBlocking(SDHC_Type *base, uint32_t *admaTable, uint32_t ad
         }
     }
 
+    if (data != NULL)
+    {
+        SDHC_ClearInterruptStatusFlags(
+            base,
+            (uint32_t)(dmaMode == kSDHC_DmaModeNo ? kSDHC_DataFlag : kSDHC_DataDMAFlag) | (uint32_t)kSDHC_CommandFlag);
+    }
+    else
+    {
+        SDHC_ClearInterruptStatusFlags(base, kSDHC_CommandFlag);
+    }
+
     /* Send command and receive data. */
     SDHC_StartTransfer(base, command, data, (sdhc_dma_mode_t)dmaMode);
 

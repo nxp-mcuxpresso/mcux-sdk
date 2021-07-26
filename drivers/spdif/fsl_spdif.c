@@ -117,6 +117,10 @@ void SPDIF_Init(SPDIF_Type *base, const spdif_config_t *config)
     val = base->STC & ~SPDIF_STC_TXCLK_SOURCE_MASK;
     val |= SPDIF_STC_TXCLK_SOURCE(config->txClkSource);
     base->STC = val;
+
+    /* clear and diable all the interrupt */
+    base->SIC = (uint32_t)kSPDIF_AllInterrupt;
+    base->SIE &= ~(uint32_t)kSPDIF_AllInterrupt;
 }
 
 /*!
@@ -489,6 +493,8 @@ status_t SPDIF_TransferReceiveNonBlocking(SPDIF_Type *base, spdif_handle_t *hand
 {
     assert(handle != NULL);
 
+    uint32_t enableInterrupts = (uint32_t)kSPDIF_RxFIFOFull | (uint32_t)kSPDIF_RxControlChannelChange;
+
     /* Check if the queue is full */
     if (handle->spdifQueue[handle->queueUser].data != NULL)
     {
@@ -506,10 +512,18 @@ status_t SPDIF_TransferReceiveNonBlocking(SPDIF_Type *base, spdif_handle_t *hand
     /* Set state to busy */
     handle->state = kSPDIF_Busy;
 
+    if (xfer->qdata != NULL)
+    {
+        enableInterrupts |= (uint32_t)kSPDIF_QChannelReceiveRegisterFull;
+    }
+
+    if (xfer->udata != NULL)
+    {
+        enableInterrupts |= (uint32_t)kSPDIF_UChannelReceiveRegisterFull;
+    }
+
     /* Enable interrupt */
-    SPDIF_EnableInterrupts(base, (uint32_t)kSPDIF_UChannelReceiveRegisterFull |
-                                     (uint32_t)kSPDIF_QChannelReceiveRegisterFull | (uint32_t)kSPDIF_RxFIFOFull |
-                                     (uint32_t)kSPDIF_RxControlChannelChange);
+    SPDIF_EnableInterrupts(base, enableInterrupts);
 
     /* Enable Rx transfer */
     SPDIF_RxEnable(base, true);

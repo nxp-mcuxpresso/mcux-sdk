@@ -49,6 +49,14 @@
 /*! @brief The ENET PHY address. */
 #define BOARD_ENET0_PHY_ADDRESS (0x00U) /* Phy address of enet port 0. */
 
+/*! @brief Memory ranges not usable by the ENET DMA. */
+#ifndef BOARD_ENET_NON_DMA_MEMORY_ARRAY
+#define BOARD_ENET_NON_DMA_MEMORY_ARRAY                                                     \
+    {                                                                                       \
+        {0x10000000U, 0x17FFFFFFU}, {0x80000000U, 0xDFFFFFFFU}, {0x00000000U, 0x00000000U}, \
+    }
+#endif /* BOARD_ENET_NON_DMA_MEMORY_ARRAY */
+
 #ifndef BOARD_LED1_GPIO
 #define BOARD_LED1_GPIO GPIO
 #endif
@@ -182,7 +190,7 @@
 #define BOARD_SERIAL_MWM_PORT_IRQn     FLEXCOMM4_IRQn
 #define BOARD_SERIAL_MWM_RST_GPIO      GPIO
 #define BOARD_SERIAL_MWM_RST_PORT      1
-#define BOARD_SERIAL_MWM_RST_PIN       0
+#define BOARD_SERIAL_MWM_RST_PIN       22
 #define BOARD_SERIAL_MWM_RST_WRITE(output) \
     GPIO_PinWrite(BOARD_SERIAL_MWM_RST_GPIO, BOARD_SERIAL_MWM_RST_PORT, BOARD_SERIAL_MWM_RST_PIN, output)
 

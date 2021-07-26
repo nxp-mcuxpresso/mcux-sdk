@@ -547,7 +547,7 @@ void SPI_SlaveGetDefaultConfig(spi_slave_config_t *config)
  */
 void SPI_SlaveInit(SPI_Type *base, const spi_slave_config_t *config)
 {
-    (void)assert(config);
+    assert(config != NULL);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Open clock gate for SPI and open interrupt */
@@ -1495,7 +1495,7 @@ void SPI0_SPI1_DriverIRQHandler(void)
 void SPI0_DriverIRQHandler(void);
 void SPI0_DriverIRQHandler(void)
 {
-    assert(s_spiHandle[0]);
+    assert(s_spiHandle[0] != NULL);
     SPI_CommonIRQHandler(SPI0, 0);
 }
 #endif
@@ -1504,7 +1504,7 @@ void SPI0_DriverIRQHandler(void)
 void SPI1_DriverIRQHandler(void);
 void SPI1_DriverIRQHandler(void)
 {
-    assert(s_spiHandle[1]);
+    assert(s_spiHandle[1] != NULL);
     SPI_CommonIRQHandler(SPI1, 1);
 }
 #endif
@@ -1513,7 +1513,7 @@ void SPI1_DriverIRQHandler(void)
 void SPI2_DriverIRQHandler(void);
 void SPI2_DriverIRQHandler(void)
 {
-    assert(s_spiHandle[2]);
+    assert(s_spiHandle[2] != NULL);
     SPI_CommonIRQHandler(SPI2, 2);
 }
 #endif

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FlexCAN EDMA driver version. */
-#define FSL_FLEXCAN_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
+#define FSL_FLEXCAN_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 7, 1))
 /*@}*/
 
 /* Forward declaration of the handle typedef. */
@@ -42,8 +42,12 @@ struct _flexcan_edma_handle
 {
     flexcan_edma_transfer_callback_t callback; /*!< Callback function. */
     void *userData;                            /*!< FlexCAN callback function parameter.*/
-    edma_handle_t *rxFifoEdmaHandle;           /*!< The EDMA Rx FIFO channel used. */
+    edma_handle_t *rxFifoEdmaHandle;           /*!< The EDMA handler for Rx FIFO. */
     volatile uint8_t rxFifoState;              /*!< Rx FIFO transfer state. */
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
+    size_t frameNum;             /*!< The number of messages that need to be received. */
+    flexcan_fd_frame_t *framefd; /*!< Point to the buffer of CAN Message to be received from Enhanced Rx FIFO. */
+#endif
 };
 
 /*******************************************************************************
@@ -104,7 +108,7 @@ status_t FLEXCAN_StartTransferDatafromRxFIFO(CAN_Type *base,
                                              edma_transfer_config_t *pEdmaConfig);
 
 /*!
- * @brief Receives the CAN Message from the Rx FIFO using eDMA.
+ * @brief Receives the CAN Message from the Legacy Rx FIFO using eDMA.
  *
  * This function receives the CAN Message using eDMA. This is a non-blocking function, which returns
  * right away. After the CAN Message is received, the receive callback function is called.
@@ -118,16 +122,44 @@ status_t FLEXCAN_StartTransferDatafromRxFIFO(CAN_Type *base,
 status_t FLEXCAN_TransferReceiveFifoEDMA(CAN_Type *base,
                                          flexcan_edma_handle_t *handle,
                                          flexcan_fifo_transfer_t *pFifoXfer);
-
 /*!
- * @brief Aborts the receive process which used eDMA.
+ * @brief Aborts the receive Legacy/Enhanced Rx FIFO process which used eDMA.
  *
- * This function aborts the receive process which used eDMA.
+ * This function aborts the receive Legacy/Enhanced Rx FIFO process which used eDMA.
  *
  * @param base FlexCAN peripheral base address.
  * @param handle Pointer to flexcan_edma_handle_t structure.
  */
 void FLEXCAN_TransferAbortReceiveFifoEDMA(CAN_Type *base, flexcan_edma_handle_t *handle);
+
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
+/*!
+ * @brief Receives the CAN FD Message from the Enhanced Rx FIFO using eDMA.
+ *
+ * This function receives the CAN FD Message using eDMA. This is a non-blocking function, which returns
+ * right away. After the CAN Message is received, the receive callback function is called.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param handle Pointer to flexcan_edma_handle_t structure.
+ * @param pFifoXfer FlexCAN Rx FIFO EDMA transfer structure, see #flexcan_fifo_transfer_t.
+ * @retval kStatus_Success if succeed, others failed.
+ * @retval kStatus_FLEXCAN_RxFifoBusy Previous transfer ongoing.
+ */
+status_t FLEXCAN_TransferReceiveEnhancedFifoEDMA(CAN_Type *base,
+                                                 flexcan_edma_handle_t *handle,
+                                                 flexcan_fifo_transfer_t *pFifoXfer);
+/*!
+ * @brief Gets the Enhanced Rx Fifo transfer status during a interrupt non-blocking receive.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param handle FlexCAN handle pointer.
+ * @param count Number of CAN messages receive so far by the non-blocking transaction.
+ * @retval kStatus_InvalidArgument count is Invalid.
+ * @retval kStatus_Success Successfully return the count.
+ */
+
+status_t FLEXCAN_TransferGetReceiveEnhancedFifoCountEMDA(CAN_Type *base, flexcan_edma_handle_t *handle, size_t *count);
+#endif
 
 /*@}*/
 

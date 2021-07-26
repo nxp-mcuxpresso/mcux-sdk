@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -10,7 +10,9 @@
 #if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
 #include "fsl_cache.h"
 #endif /* FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL */
-
+#if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#include "fsl_memory.h"
+#endif
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -45,6 +47,12 @@ enum _usdhc_transfer_flags
     kUSDHC_BootData           = 32U, /*!< transfer boot data */
     kUSDHC_BootDataContinuous = 64U, /*!< transfer boot data continuous */
 };
+
+#if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#define USDHC_ADDR_CPU_2_DMA(addr) (MEMORY_ConvertMemoryMapAddress((addr), kMEMORY_Local2DMA))
+#else
+#define USDHC_ADDR_CPU_2_DMA(addr) (addr)
+#endif
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -471,8 +479,7 @@ static status_t USDHC_ReadByDataPortBlocking(USDHC_Type *base, usdhc_data_t *dat
         if ((data->dataType == (uint32_t)kUSDHC_TransferDataTuning) &&
             (IS_USDHC_FLAG_SET(interruptStatus, kUSDHC_BufferReadReadyFlag)))
         {
-            USDHC_ClearInterruptStatusFlags(base,
-                                            (uint32_t)kUSDHC_BufferReadReadyFlag | (uint32_t)kUSDHC_TuningPassFlag);
+            USDHC_ClearInterruptStatusFlags(base, kUSDHC_BufferReadReadyFlag);
 
             return kStatus_Success;
         }
@@ -776,8 +783,7 @@ static status_t USDHC_TransferDataBlocking(USDHC_Type *base, usdhc_data_t *data,
             *(data->rxData) = s_usdhcBootDummy;
         }
 
-        USDHC_ClearInterruptStatusFlags(
-            base, ((uint32_t)kUSDHC_DataDMAFlag | (uint32_t)kUSDHC_TuningPassFlag | (uint32_t)kUSDHC_TuningErrorFlag));
+        USDHC_ClearInterruptStatusFlags(base, ((uint32_t)kUSDHC_DataDMAFlag | (uint32_t)kUSDHC_TuningErrorFlag));
     }
     else
     {
@@ -1430,18 +1436,18 @@ status_t USDHC_SetInternalDmaConfig(USDHC_Type *base,
              and block count should load to DS_ADDR*/
         if (enAutoCmd23)
         {
-            base->ADMA_SYS_ADDR = (uint32_t)dataAddr;
+            base->ADMA_SYS_ADDR = USDHC_ADDR_CPU_2_DMA((uint32_t)dataAddr);
         }
         else
         {
-            base->DS_ADDR = (uint32_t)dataAddr;
+            base->DS_ADDR = USDHC_ADDR_CPU_2_DMA((uint32_t)dataAddr);
         }
     }
     else
     {
         /* When use ADMA, disable simple DMA */
         base->DS_ADDR       = 0UL;
-        base->ADMA_SYS_ADDR = (uint32_t)(dmaConfig->admaTable);
+        base->ADMA_SYS_ADDR = USDHC_ADDR_CPU_2_DMA((uint32_t)(dmaConfig->admaTable));
     }
 
 #if (defined(FSL_FEATURE_USDHC_HAS_NO_RW_BURST_LEN) && FSL_FEATURE_USDHC_HAS_NO_RW_BURST_LEN)
@@ -1483,10 +1489,9 @@ status_t USDHC_SetAdmaTableConfig(USDHC_Type *base,
     status_t error = kStatus_Fail;
     uint32_t bootDummyOffset =
         dataConfig->dataType == (uint32_t)kUSDHC_TransferDataBootcontinous ? sizeof(uint32_t) : 0UL;
-    const uint32_t *data =
-        (const uint32_t *)((uint32_t)((dataConfig->rxData == NULL) ? dataConfig->txData : dataConfig->rxData) +
-                           bootDummyOffset);
-    uint32_t blockSize = dataConfig->blockSize * dataConfig->blockCount - bootDummyOffset;
+    const uint32_t *data = (const uint32_t *)USDHC_ADDR_CPU_2_DMA((uint32_t)(
+        (uint32_t)((dataConfig->rxData == NULL) ? dataConfig->txData : dataConfig->rxData) + bootDummyOffset));
+    uint32_t blockSize   = dataConfig->blockSize * dataConfig->blockCount - bootDummyOffset;
 
 #if FSL_FEATURE_USDHC_HAS_EXT_DMA
     if (dmaConfig->dmaMode == kUSDHC_ExternalDMA)
@@ -1940,9 +1945,15 @@ status_t USDHC_TransferNonBlocking(USDHC_Type *base,
     if (handle->data != NULL)
     {
         USDHC_ClearInterruptStatusFlags(
-            base, (uint32_t)(enDMA == false ? kUSDHC_DataFlag : kUSDHC_DataDMAFlag) | (uint32_t)kUSDHC_CommandFlag);
-        USDHC_EnableInterruptSignal(
-            base, (uint32_t)(enDMA == false ? kUSDHC_DataFlag : kUSDHC_DataDMAFlag) | (uint32_t)kUSDHC_CommandFlag);
+            base, (uint32_t)(enDMA == false ? kUSDHC_DataFlag : kUSDHC_DataDMAFlag) | (uint32_t)kUSDHC_CommandFlag |
+                      (uint32_t)(data->dataType == (uint8_t)kUSDHC_TransferDataBootcontinous ?
+                                     (uint32_t)kUSDHC_DmaCompleteFlag :
+                                     0U));
+        USDHC_EnableInterruptSignal(base, (uint32_t)(enDMA == false ? kUSDHC_DataFlag : kUSDHC_DataDMAFlag) |
+                                              (uint32_t)kUSDHC_CommandFlag |
+                                              (uint32_t)(data->dataType == (uint8_t)kUSDHC_TransferDataBootcontinous ?
+                                                             (uint32_t)kUSDHC_DmaCompleteFlag :
+                                                             0U));
     }
     else
     {
@@ -1975,8 +1986,7 @@ void USDHC_EnableManualTuning(USDHC_Type *base, bool enable)
         /* disable auto tuning here */
         base->MIX_CTRL &= ~USDHC_MIX_CTRL_AUTO_TUNE_EN_MASK;
         /* execute tuning for SDR104 mode */
-        base->MIX_CTRL |=
-            USDHC_MIX_CTRL_EXE_TUNE_MASK | USDHC_MIX_CTRL_SMP_CLK_SEL_MASK | USDHC_MIX_CTRL_FBCLK_SEL_MASK;
+        base->MIX_CTRL |= USDHC_MIX_CTRL_EXE_TUNE_MASK | USDHC_MIX_CTRL_SMP_CLK_SEL_MASK;
     }
     else
     { /* abort the tuning */
@@ -2001,6 +2011,49 @@ status_t USDHC_AdjustDelayForManualTuning(USDHC_Type *base, uint32_t delay)
     clkTuneCtrl &= ~USDHC_CLK_TUNE_CTRL_STATUS_DLY_CELL_SET_PRE_MASK;
 
     clkTuneCtrl |= USDHC_CLK_TUNE_CTRL_STATUS_DLY_CELL_SET_PRE(delay);
+
+    /* load the delay setting */
+    base->CLK_TUNE_CTRL_STATUS = clkTuneCtrl;
+    /* check delat setting error */
+    if (IS_USDHC_FLAG_SET(base->CLK_TUNE_CTRL_STATUS,
+                          USDHC_CLK_TUNE_CTRL_STATUS_PRE_ERR_MASK | USDHC_CLK_TUNE_CTRL_STATUS_NXT_ERR_MASK))
+    {
+        return kStatus_Fail;
+    }
+
+    return kStatus_Success;
+}
+
+/*!
+ * brief The tuning delay cell setting.
+ *
+ * param base USDHC peripheral base address.
+ * param preDelay Set the number of delay cells on the feedback clock between the feedback clock and CLK_PRE.
+ * param outDelay Set the number of delay cells on the feedback clock between CLK_PRE and CLK_OUT.
+ * param postDelay Set the number of delay cells on the feedback clock between CLK_OUT and CLK_POST.
+ * retval kStatus_Fail config the delay setting fail
+ * retval kStatus_Success config the delay setting success
+ */
+status_t USDHC_SetTuningDelay(USDHC_Type *base, uint32_t preDelay, uint32_t outDelay, uint32_t postDelay)
+{
+    assert(preDelay <=
+           (USDHC_CLK_TUNE_CTRL_STATUS_DLY_CELL_SET_PRE_MASK >> USDHC_CLK_TUNE_CTRL_STATUS_DLY_CELL_SET_PRE_SHIFT));
+    assert(outDelay <=
+           (USDHC_CLK_TUNE_CTRL_STATUS_DLY_CELL_SET_OUT_MASK >> USDHC_CLK_TUNE_CTRL_STATUS_DLY_CELL_SET_OUT_SHIFT));
+    assert(postDelay <=
+           (USDHC_CLK_TUNE_CTRL_STATUS_DLY_CELL_SET_POST_MASK >> USDHC_CLK_TUNE_CTRL_STATUS_DLY_CELL_SET_POST_SHIFT));
+
+    uint32_t clkTuneCtrl = 0UL;
+
+    clkTuneCtrl = base->CLK_TUNE_CTRL_STATUS;
+
+    clkTuneCtrl &=
+        ~(USDHC_CLK_TUNE_CTRL_STATUS_DLY_CELL_SET_PRE_MASK | USDHC_CLK_TUNE_CTRL_STATUS_DLY_CELL_SET_OUT_MASK |
+          USDHC_CLK_TUNE_CTRL_STATUS_DLY_CELL_SET_POST_MASK);
+
+    clkTuneCtrl |= USDHC_CLK_TUNE_CTRL_STATUS_DLY_CELL_SET_PRE(preDelay) |
+                   USDHC_CLK_TUNE_CTRL_STATUS_DLY_CELL_SET_OUT(outDelay) |
+                   USDHC_CLK_TUNE_CTRL_STATUS_DLY_CELL_SET_POST(postDelay);
 
     /* load the delay setting */
     base->CLK_TUNE_CTRL_STATUS = clkTuneCtrl;

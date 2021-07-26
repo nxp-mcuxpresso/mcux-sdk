@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,9 +26,9 @@ enum _hashcrypt_status
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief HASHCRYPT driver version. Version 2.1.4.
+/*! @brief HASHCRYPT driver version. Version 2.2.2.
  *
- * Current version: 2.1.4
+ * Current version: 2.2.2
  *
  * Change log:
  * - Version 2.0.0
@@ -51,8 +51,19 @@ enum _hashcrypt_status
  *   - Fix MISRA C-2012.
  * - Version 2.1.4
  *   - Fix context switch cannot work when switching from AES.
+ * - Version 2.1.5
+ *   - Add data synchronization barriere inside hashcrypt_sha_ldm_stm_16_words()
+ *     to prevent possible optimization issue.
+ * - Version 2.2.0
+ *   - Add AES-OFB and AES-CFB mixed IP/SW modes.
+ * - Version 2.2.1
+ *   - Add data synchronization barrier inside hashcrypt_sha_ldm_stm_16_words()
+ *     prevent compiler from reordering memory write when -O2 or higher is used.
+ * - Version 2.2.2
+ *   - Add data synchronization barrier inside hashcrypt_sha_ldm_stm_16_words() 
+ *     to fix optimization issue
  */
-#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
+#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 /*! @brief Algorithm definitions correspond with the values for Mode field in Control register !*/
@@ -308,6 +319,68 @@ status_t HASHCRYPT_AES_CryptCtr(HASHCRYPT_Type *base,
                                 uint8_t counterlast[HASHCRYPT_AES_BLOCK_SIZE],
                                 size_t *szLeft);
 
+/*!
+ * @brief Encrypts or decrypts AES using OFB block mode.
+ *
+ * Encrypts or decrypts AES using OFB block mode.
+ * AES OFB mode uses only forward AES cipher and same algorithm for encryption and decryption.
+ * The only difference between encryption and decryption is that, for encryption, the input argument
+ * is plain text and the output argument is cipher text. For decryption, the input argument is cipher text
+ * and the output argument is plain text.
+ *
+ * @param base HASHCRYPT peripheral base address
+ * @param handle Handle used for this request.
+ * @param input Input data for OFB block mode
+ * @param[out] output Output data for OFB block mode
+ * @param size Size of input and output data in bytes
+ * @param iv Input initial vector to combine with the first input block.
+ * @return Status from encrypt operation
+ */
+
+status_t HASHCRYPT_AES_CryptOfb(HASHCRYPT_Type *base,
+                                hashcrypt_handle_t *handle,
+                                const uint8_t *input,
+                                uint8_t *output,
+                                size_t size,
+                                const uint8_t iv[HASHCRYPT_AES_BLOCK_SIZE]);
+
+/*!
+ * @brief Encrypts AES using CFB block mode.
+ *
+ * @param base HASHCRYPT peripheral base address
+ * @param handle Handle used for this request.
+ * @param plaintext Input plain text to encrypt
+ * @param[out] ciphertext Output cipher text
+ * @param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * @param iv Input initial vector to combine with the first input block.
+ * @return Status from encrypt operation
+ */
+
+status_t HASHCRYPT_AES_EncryptCfb(HASHCRYPT_Type *base,
+                                  hashcrypt_handle_t *handle,
+                                  const uint8_t *plaintext,
+                                  uint8_t *ciphertext,
+                                  size_t size,
+                                  const uint8_t iv[16]);
+
+/*!
+ * @brief Decrypts AES using CFB block mode.
+ *
+ * @param base HASHCRYPT peripheral base address
+ * @param handle Handle used for this request.
+ * @param ciphertext Input cipher text to decrypt
+ * @param[out] plaintext Output plaintext text
+ * @param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * @param iv Input initial vector to combine with the first input block.
+ * @return Status from encrypt operation
+ */
+
+status_t HASHCRYPT_AES_DecryptCfb(HASHCRYPT_Type *base,
+                                  hashcrypt_handle_t *handle,
+                                  const uint8_t *ciphertext,
+                                  uint8_t *plaintext,
+                                  size_t size,
+                                  const uint8_t iv[16]);
 /*!
  *@}
  */ /* end of hashcrypt_driver_aes */

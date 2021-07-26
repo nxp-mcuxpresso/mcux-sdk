@@ -110,7 +110,11 @@ set_key_256:
 #    (lr) r14  |  link register
 
 # load some of the regs in preperation of the AES-256 set key calculations
-    ldmia   r3, {r3-r7}
+#   ldmia   r3, {r3-r7}
+    mov     r1, r3                          @ store r3 in scratch r1 to be interruptible
+    adds    r3, #1<<2                       @ move r3 by 4 bytes
+    ldmia   r3!, {r4-r7}                    @ ldmia without r3
+    ldr     r3, [r1]                        @ load to r3 from scratch address
     mov     r8, r3                          @ r8 = *rcon
     mov     r9, r4                          @ r9 = mmcau_1_cmd(AESS+CAA)
     mov     sl, r5                          @ sl = *mmcau_direct_cmd()
@@ -127,7 +131,11 @@ set_key_256:
     stmia   r2!, {r3-r7}                    @ store key_sch[0-4], key_sch++
 
 # calculate key_sch[5-7]
-    ldmia   r0, {r0-r1,r7}                  @ load key[5-7]
+#   ldmia   r0, {r0-r1,r7}                  @ load key[5-7]
+    adds    r0, #1<<2                       @ move by 4 byte, make ldmia interruptible in MMCAU
+    ldmia   r0!, {r1,r7}                    @ load key[6-7] and move r0 by 8 bytes
+    subs    r0, #3<<2                       @ move r0 back by 12 bytes
+    ldr     r0, [r0]                        @ load key[5]
     rev     r0, r0                          @ byterev(key[5]) = key_sch[5]
     rev     r1, r1                          @ byterev(key[6]) = key_sch[6]
     rev     r7, r7                          @ byterev(key[7]) = key_sch[7]
@@ -411,14 +419,26 @@ set_key_192:
 #    (lr) r14  |  temporary storage for key_sch[5+6i]
 
 # load some of the regs in preperation of the AES-192 set key calculations
-    ldmia   r3, {r3-r6}    
+#   ldmia   r3, {r3-r6}    
+    mov     r7, r3                          @ make ldmia interuptible in MMCAU by storing r3 addr into scratch r7
+    adds    r3, #1<<2                       @ move r3 addr by 1 word
+    ldmia   r3!, {r4-r6}                    @ load from r3 (r7 + 1 word) to r4-r6 with writeback
+    ldr     r3, [r7]                        @ load to r3 from addres in scratch (r7)
+
     mov     r8, r3                          @ r8 = *rcon
     mov     r9, r4                          @ r9 = mmcau_1_cmd(AESS+CAA)
     mov     sl, r5                          @ sl = *mmcau_direct_cmd()
     mov     fp, r6                          @ fp = mmcau_indirect_cmd(LDR+CAA)
 
 # calculate key_sch[0-5]
-    ldmia   r0, {r0-r1, r3-r6}              @ load key[0-5]
+#   ldmia   r0, {r0-r1, r3-r6}              @ load key[0-5]
+                                            @ make ldmia interuptible in MMCAU
+    adds    r0, #1<<2                       @ move by 4 byte
+    ldmia   r0!, {r1, r3-r6}                @ load key[1-5] + move by 20 byte
+    subs    r0, #6<<2                       @ move back by 24byte
+    ldr     r0, [r0]                        @ load key[0]
+
+
     rev     r0, r0                          @ byterev(key[0]) = key_sch[0]
     rev     r1, r1                          @ byterev(key[1]) = key_sch[1]
     rev     r3, r3                          @ byterev(key[2]) = key_sch[2]
@@ -653,7 +673,12 @@ set_key_128:
 #    (lr) r14  |  link register
 
 # load some of the regs in preperation of the AES-128 set key calculations
-    ldmia   r3, {r3-r7}    
+#   ldmia   r3, {r3-r7}    
+    mov     r1, r3                          @ store r3 in r1 scratch to make ldmia interruptible
+    adds    r3, #1<<2                       @ move r3 by 4 bytes
+    ldmia   r3!, {r4-r7}                    @ ldmia without r3
+    ldr     r3, [r1]                        @ load to r3 from r1 scratch address
+
     mov     r8, r3                          @ r8 = *rcon
     mov     r9, r4                          @ r9 = mmcau_1_cmd(AESS+CAA)
     mov     sl, r5                          @ sl = *mmcau_direct_cmd()
@@ -947,7 +972,12 @@ mmcau_aes_encrypt:
 # XOR the first 4 keys into the 4 words of plaintext
     ldmia   r1!, {r4-r7}                    @ load first 4 keys, *key_sch++
     mov     lr, r1                          @ temporarily store *key_sch[4]
-    ldmia   r0, {r0-r3}                     @ load plaintext
+#   ldmia   r0, {r0-r3}                     @ load plaintext
+    adds    r0, #1<<2                       @ move by 4 byte to make ldmia interuptible
+    ldmia   r0!, {r1-r3}                    @ load plaintext and move r0 by 12 byte
+    subs    r0, #1<<4                       @ move r0 back by 16 bytes
+    ldr     r0, [r0]                        @ load the rest of plaintext
+
     rev     r0, r0
     rev     r1, r1
     rev     r2, r2
@@ -961,7 +991,12 @@ mmcau_aes_encrypt:
 
 # load some of the regs in preperation of the encryption
     ldr     r0, =encrypt_reg_data
-    ldmia   r0, {r0-r3}
+#   ldmia   r0, {r0-r3}
+    adds    r0, #1<<2                       @ move by 4 byte to make ldmia interuptible
+    ldmia   r0!, {r1-r3}                    @ load plaintext and move r0 by 12 byte
+    subs    r0, #1<<4                       @ move r0 back by 16 bytes
+    ldr     r0, [r0]                        @ load the rest of plaintext
+
     mov     r8, r1                          @ r8 = mmcau_indirect_cmd(AESC+CA0)
     mov     r1, lr                          @ restore r1 = *key_sch[4]
     mov     lr, r3                          @ lr = mmcau_2_cmds(AESS+CA3,AESR)
@@ -971,63 +1006,108 @@ mmcau_aes_encrypt:
     str     r3, [r2]                        @ SubBytes, ShiftRows
     ldmia   r1!, {r4-r7}                    @ load next 4 keys, *key_sch++
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     str     r0, [r2]                        @ SubBytes
     mov     r3, lr
     str     r3, [r2]                        @ SubBytes, ShiftRows
     ldmia   r1!, {r4-r7}                    @ load next 4 keys, *key_sch++
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     str     r0, [r2]                        @ SubBytes
     mov     r3, lr
     str     r3, [r2]                        @ SubBytes, ShiftRows
     ldmia   r1!, {r4-r7}                    @ load next 4 keys, *key_sch++
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     str     r0, [r2]                        @ SubBytes
     mov     r3, lr
     str     r3, [r2]                        @ SubBytes, ShiftRows
     ldmia   r1!, {r4-r7}                    @ load next 4 keys, *key_sch++
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     str     r0, [r2]                        @ SubBytes
     mov     r3, lr
     str     r3, [r2]                        @ SubBytes, ShiftRows
     ldmia   r1!, {r4-r7}                    @ load next 4 keys, *key_sch++
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     str     r0, [r2]                        @ SubBytes
     mov     r3, lr
     str     r3, [r2]                        @ SubBytes, ShiftRows
     ldmia   r1!, {r4-r7}                    @ load next 4 keys, *key_sch++
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     str     r0, [r2]                        @ SubBytes
     mov     r3, lr
     str     r3, [r2]                        @ SubBytes, ShiftRows
     ldmia   r1!, {r4-r7}                    @ load next 4 keys, *key_sch++
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     str     r0, [r2]                        @ SubBytes
     mov     r3, lr
     str     r3, [r2]                        @ SubBytes, ShiftRows
     ldmia   r1!, {r4-r7}                    @ load next 4 keys, *key_sch++
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     str     r0, [r2]                        @ SubBytes
     mov     r3, lr
     str     r3, [r2]                        @ SubBytes, ShiftRows
     ldmia   r1!, {r4-r7}                    @ load next 4 keys, *key_sch++
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
 
     ldr     r3, [sp, #1<<2]                 @ load nr
@@ -1040,14 +1120,24 @@ mmcau_aes_encrypt:
     str     r3, [r2]                        @ SubBytes, ShiftRows
     ldmia   r1!, {r4-r7}                    @ load next 4 keys, *key_sch++
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     str     r0, [r2]                        @ SubBytes
     mov     r3, lr
     str     r3, [r2]                        @ SubBytes, ShiftRows
     ldmia   r1!, {r4-r7}                    @ load next 4 keys, *key_sch++
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+ #  stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
 
     ldr     r3, [sp, #1<<2]                 @ load nr
@@ -1060,14 +1150,24 @@ mmcau_aes_encrypt:
     str     r3, [r2]                        @ SubBytes, ShiftRows
     ldmia   r1!, {r4-r7}                    @ load next 4 keys, *key_sch++
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     str     r0, [r2]                        @ SubBytes
     mov     r3, lr
     str     r3, [r2]                        @ SubBytes, ShiftRows
     ldmia   r1!, {r4-r7}                    @ load next 4 keys, *key_sch++
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
 
 encrypt_end:
@@ -1079,7 +1179,11 @@ encrypt_end:
 # XOR the last 4 keys with the 4 words of ciphertext
     ldr     r0, =MMCAU_PPB_INDIRECT+(STR+CA0)<<2
     ldmia   r1!, {r4-r7}                    @ load last 4 keys
-    ldmia   r0, {r0-r3}                     @ load ciphertext
+#   ldmia   r0, {r0-r3}                     @ load ciphertext
+    adds    r0, #1<<2                       @ move by 4 byte to make ldmia interuptible
+    ldmia   r0!, {r1-r3}                    @ load ciphertext and move r0 by 12 byte
+    subs    r0, #1<<4                       @ move r0 back by 16 bytes
+    ldr     r0, [r0]                        @ load the rest of ciphertext
     eors    r4, r0
     eors    r5, r1
     eors    r6, r2
@@ -1171,7 +1275,11 @@ mmcau_aes_decrypt:
 
 # XOR the last 4 keys into the 4 words of ciphertext
     ldmia   r1!, {r4-r7}                    @ load last 4 keys
-    ldmia   r0, {r0-r3}                     @ load ciphertext
+#   ldmia   r0, {r0-r3}                     @ load ciphertext
+    adds    r0, #1<<2                       @ move by 4 byte to make ldmia interuptible
+    ldmia   r0!, {r1-r3}                    @ load ciphertext and move r0 by 12 byte
+    subs    r0, #1<<4                       @ move r0 back by 16 bytes
+    ldr     r0, [r0]                        @ load the rest of ciphertext
     rev     r0, r0
     rev     r1, r1
     rev     r2, r2
@@ -1185,7 +1293,12 @@ mmcau_aes_decrypt:
 
 # load some of the regs in preperation of the decryption
     ldr     r0, =decrypt_reg_data
-    ldmia   r0, {r0-r3}
+#   ldmia   r0, {r0-r3}
+    adds    r0, #1<<2                       @ move by 4 byte to make ldmia interuptible
+    ldmia   r0!, {r1-r3}                    @ load and move r0 by 12 byte
+    subs    r0, #1<<4                       @ move r0 back by 16 bytes
+    ldr     r0, [r0]                        @ load the rest
+
     mov     r8, r1                          @ r8 = mmcau_indirect_cmd(AESC+CA0)
     mov     r1, lr                          @ restore end of key_sch
     subs    r1, #4<<2                       @ *key_sch--
@@ -1197,7 +1310,12 @@ mmcau_aes_decrypt:
     subs    r1, #8<<2                       @ *key_sch--
     str     r3, [r2]                        @ InvSubBytes
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     ldmia   r1!, {r4-r7}                    @ load previous 4 keys
     str     r0, [r2]                        @ InvShiftRows, InvSubBytes
@@ -1205,7 +1323,12 @@ mmcau_aes_decrypt:
     subs    r1, #8<<2                       @ *key_sch--
     str     r3, [r2]                        @ InvSubBytes
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     ldmia   r1!, {r4-r7}                    @ load previous 4 keys
     str     r0, [r2]                        @ InvShiftRows, InvSubBytes
@@ -1213,7 +1336,12 @@ mmcau_aes_decrypt:
     subs    r1, #8<<2                       @ *key_sch--
     str     r3, [r2]                        @ InvSubBytes
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     ldmia   r1!, {r4-r7}                    @ load previous 4 keys
     str     r0, [r2]                        @ InvShiftRows, InvSubBytes
@@ -1221,7 +1349,12 @@ mmcau_aes_decrypt:
     subs    r1, #8<<2                       @ *key_sch--
     str     r3, [r2]                        @ InvSubBytes
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     ldmia   r1!, {r4-r7}                    @ load previous 4 keys
     str     r0, [r2]                        @ InvShiftRows, InvSubBytes
@@ -1229,7 +1362,12 @@ mmcau_aes_decrypt:
     subs    r1, #8<<2                       @ *key_sch--
     str     r3, [r2]                        @ InvSubBytes
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     ldmia   r1!, {r4-r7}                    @ load previous 4 keys
     str     r0, [r2]                        @ InvShiftRows, InvSubBytes
@@ -1237,7 +1375,12 @@ mmcau_aes_decrypt:
     subs    r1, #8<<2                       @ *key_sch--
     str     r3, [r2]                        @ InvSubBytes
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     ldmia   r1!, {r4-r7}                    @ load previous 4 keys
     str     r0, [r2]                        @ InvShiftRows, InvSubBytes
@@ -1245,7 +1388,12 @@ mmcau_aes_decrypt:
     subs    r1, #8<<2                       @ *key_sch--
     str     r3, [r2]                        @ InvSubBytes
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     ldmia   r1!, {r4-r7}                    @ load previous 4 keys
     str     r0, [r2]                        @ InvShiftRows, InvSubBytes
@@ -1253,7 +1401,12 @@ mmcau_aes_decrypt:
     subs    r1, #8<<2                       @ *key_sch--
     str     r3, [r2]                        @ InvSubBytes
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     ldmia   r1!, {r4-r7}                    @ load previous 4 keys
     str     r0, [r2]                        @ InvShiftRows, InvSubBytes
@@ -1261,7 +1414,12 @@ mmcau_aes_decrypt:
     subs    r1, #8<<2                       @ *key_sch--
     str     r3, [r2]                        @ InvSubBytes
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
 
     ldr     r3, [sp, #1<<2]                 @ restore nr
@@ -1275,7 +1433,12 @@ mmcau_aes_decrypt:
     subs    r1, #8<<2                       @ *key_sch--
     str     r3, [r2]                        @ InvSubBytes
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     ldmia   r1!, {r4-r7}                    @ load previous 4 keys
     str     r0, [r2]                        @ InvShiftRows, InvSubBytes
@@ -1283,7 +1446,12 @@ mmcau_aes_decrypt:
     subs    r1, #8<<2                       @ *key_sch--
     str     r3, [r2]                        @ InvSubBytes
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
 
     ldr     r3, [sp, #1<<2]                 @ restore nr
@@ -1297,7 +1465,12 @@ mmcau_aes_decrypt:
     subs    r1, #8<<2                       @ *key_sch--
     str     r3, [r2]                        @ InvSubBytes
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
     ldmia   r1!, {r4-r7}                    @ load previous 4 keys
     str     r0, [r2]                        @ InvShiftRows, InvSubBytes
@@ -1305,7 +1478,12 @@ mmcau_aes_decrypt:
     subs    r1, #8<<2                       @ *key_sch--
     str     r3, [r2]                        @ InvSubBytes
     mov     r3, r8
-    stmia   r3!, {r4-r7}                    @ MixColumns
+#   stmia   r3!, {r4-r7}                    @ MixColumns
+    str     r4, [r3, #0<<2]                 @ MixColumns without stmia
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #4<<2
 
 
 decrypt_end:
@@ -1317,7 +1495,11 @@ decrypt_end:
 # XOR the first 4 keys with the 4 words of plaintext
     ldr     r0, =MMCAU_PPB_INDIRECT+(STR+CA0)<<2
     ldmia   r1!, {r4-r7}                    @ load first 4 keys
-    ldmia   r0, {r0-r3}                     @ load plaintext
+#   ldmia   r0, {r0-r3}                     @ load plaintext
+    adds    r0, #1<<2                       @ move by 4 byte to make ldmia interuptible
+    ldmia   r0!, {r1-r3}                    @ load plaintext and move r0 by 12 byte
+    subs    r0, #1<<4                       @ move r0 back by 16 bytes
+    ldr     r0, [r0]                        @ load the rest of plaintext
     eors    r4, r0
     eors    r5, r1
     eors    r6, r2

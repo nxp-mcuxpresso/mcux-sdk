@@ -121,11 +121,6 @@ void SystemInit (void) {
         SCB_EnableICache();
     }
 #endif
-#if defined(__DCACHE_PRESENT) && __DCACHE_PRESENT
-    if (SCB_CCR_DC_Msk != (SCB_CCR_DC_Msk & SCB->CCR)) {
-        SCB_EnableDCache();
-    }
-#endif
 
   SystemInitHook();
 }

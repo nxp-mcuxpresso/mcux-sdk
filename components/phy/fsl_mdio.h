@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -47,19 +47,19 @@ struct _mdio_operations
     status_t (*mdioWrite)(mdio_handle_t *handle,
                           uint32_t phyAddr,
                           uint32_t devAddr,
-                          uint32_t data); /*!< MDIO write data. */
+                          uint32_t data); /*!< IEEE 802.3 Clause 22 MDIO write data. */
     status_t (*mdioRead)(mdio_handle_t *handle,
                          uint32_t phyAddr,
                          uint32_t devAddr,
-                         uint32_t *dataPtr); /*!< MDIO read data. */
+                         uint32_t *dataPtr); /*!< IEEE 802.3 Clause 22 MDIO read data. */
     status_t (*mdioWriteExt)(mdio_handle_t *handle,
                              uint32_t phyAddr,
                              uint32_t devAddr,
-                             uint32_t data); /*!< MDIO write data. */
+                             uint32_t data); /*!< IEEE 802.3 Clause 45 MDIO write data. */
     status_t (*mdioReadExt)(mdio_handle_t *handle,
                             uint32_t phyAddr,
                             uint32_t devAddr,
-                            uint32_t *dataPtr); /*!< MDIO read data. */
+                            uint32_t *dataPtr); /*!< IEEE 802.3 Clause 45 MDIO read data. */
 };
 
 /*******************************************************************************

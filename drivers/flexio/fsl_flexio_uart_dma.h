@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FlexIO UART DMA driver version 2.3.0. */
-#define FSL_FLEXIO_UART_DMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief FlexIO UART DMA driver version. */
+#define FSL_FLEXIO_UART_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*@}*/
 
 /* Forward declaration of the handle typedef. */

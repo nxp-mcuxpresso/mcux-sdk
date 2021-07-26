@@ -13,6 +13,7 @@
 
 /*!
  * @addtogroup serial_port_uart
+ * @ingroup serialmanager
  * @{
  */
 
@@ -35,8 +36,8 @@
 typedef enum _serial_port_uart_parity_mode
 {
     kSerialManager_UartParityDisabled = 0x0U, /*!< Parity disabled */
-    kSerialManager_UartParityEven     = 0x1U, /*!< Parity even enabled */
-    kSerialManager_UartParityOdd      = 0x2U, /*!< Parity odd enabled */
+    kSerialManager_UartParityEven     = 0x2U, /*!< Parity even enabled */
+    kSerialManager_UartParityOdd      = 0x3U, /*!< Parity odd enabled */
 } serial_port_uart_parity_mode_t;
 
 /*! @brief serial port uart stop bit count*/

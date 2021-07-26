@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  *
@@ -461,7 +461,7 @@ void FLEXRAM_GetDtcmSingleErroInfo(FLEXRAM_Type *base, flexram_dtcm_ecc_single_e
 /*!
  * @brief FLEXRAM get d0tcm ecc multiple error information.
  * @param base  FLEXRAM base address.
- * @param bank ecc error information.
+ * @param info ecc error information.
  * @param bank DTCM bank, 0 is D0TCM, 1 is D1TCM.
  */
 void FLEXRAM_GetDtcmMultiErroInfo(FLEXRAM_Type *base, flexram_dtcm_ecc_multi_error_info_t *info, uint8_t bank);

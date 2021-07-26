@@ -17,13 +17,9 @@
 #define FSL_COMPONENT_ID "platform.drivers.flexcomm_usart_dma"
 #endif
 
-/*<! Structure definition for uart_dma_handle_t. The structure is private. */
-typedef struct _usart_dma_private_handle
-{
-    USART_Type *base;
-    usart_dma_handle_t *handle;
-} usart_dma_private_handle_t;
-
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
 enum
 {
     kUSART_TxIdle, /* TX idle. */
@@ -32,11 +28,50 @@ enum
     kUSART_RxBusy  /* RX busy. */
 };
 
+/*! @brief Typedef for usart DMA interrupt handler. */
+typedef void (*flexcomm_usart_dma_irq_handler_t)(USART_Type *base, usart_dma_handle_t *handle);
+
+/*<! Structure definition for uart_dma_handle_t. The structure is private. */
+typedef struct _usart_dma_private_handle
+{
+    USART_Type *base;
+    usart_dma_handle_t *handle;
+} usart_dma_private_handle_t;
+
+/*!
+ * @brief Used for conversion from `flexcomm_usart_irq_handler_t` to `flexcomm_irq_handler_t`
+ */
+typedef union usart_dma_to_flexcomm
+{
+    flexcomm_usart_dma_irq_handler_t usart_dma_handler;
+    flexcomm_irq_handler_t flexcomm_handler;
+} usart_dma_to_flexcomm_t;
+
+/*******************************************************************************
+ * Variables
+ ******************************************************************************/
+/*! @brief IRQ name array */
+static const IRQn_Type s_usartIRQ[] = USART_IRQS;
+/*! @brief Array to map USART instance number to base address. */
+static const uint32_t s_usartBaseAddrs[] = USART_BASE_ADDRS;
 /*<! Private handle only used for internally. */
-static usart_dma_private_handle_t s_dmaPrivateHandle[FSL_FEATURE_SOC_USART_COUNT];
+static usart_dma_private_handle_t s_dmaPrivateHandle[ARRAY_SIZE(s_usartBaseAddrs)];
 
 /*******************************************************************************
  * Prototypes
+ ******************************************************************************/
+/*!
+ * @brief USART DMA IRQ handle function.
+ *
+ * This function handles the USART transmit idle interrupt and invoke call back.
+ *
+ * @param base USART peripheral base address.
+ * @param handle USART handle pointer.
+ */
+void USART_TransferDMAHandleIRQ(USART_Type *base, usart_dma_handle_t *handle);
+
+/*******************************************************************************
+ * Code
  ******************************************************************************/
 
 static void USART_TransferSendDMACallback(dma_handle_t *handle, void *param, bool transferDone, uint32_t intmode)
@@ -49,18 +84,8 @@ static void USART_TransferSendDMACallback(dma_handle_t *handle, void *param, boo
     /* Disable UART TX DMA. */
     USART_EnableTxDMA(usartPrivateHandle->base, false);
 
-    usartPrivateHandle->handle->txState = (uint8_t)kUSART_TxIdle;
-
-    /* Wait to finish transfer */
-    while (0U == (usartPrivateHandle->base->STAT & USART_STAT_TXIDLE_MASK))
-    {
-    }
-
-    if (usartPrivateHandle->handle->callback != NULL)
-    {
-        usartPrivateHandle->handle->callback(usartPrivateHandle->base, usartPrivateHandle->handle, kStatus_USART_TxIdle,
-                                             usartPrivateHandle->handle->userData);
-    }
+    /* Enable tx idle interrupt */
+    usartPrivateHandle->base->INTENSET = USART_INTENSET_TXIDLEEN_MASK;
 }
 
 static void USART_TransferReceiveDMACallback(dma_handle_t *handle, void *param, bool transferDone, uint32_t intmode)
@@ -129,6 +154,13 @@ status_t USART_TransferCreateHandleDMA(USART_Type *base,
 
     handle->rxDmaHandle = rxDmaHandle;
     handle->txDmaHandle = txDmaHandle;
+
+    /* Set USART_TransferDMAHandleIRQ as DMA IRQ handler */
+    usart_dma_to_flexcomm_t handler;
+    handler.usart_dma_handler = USART_TransferDMAHandleIRQ;
+    FLEXCOMM_SetIRQHandler(base, handler.flexcomm_handler, handle);
+    /* Enable NVIC IRQ. */
+    (void)EnableIRQ(s_usartIRQ[instance]);
 
     /* Configure TX. */
     if (txDmaHandle != NULL)
@@ -311,4 +343,50 @@ status_t USART_TransferGetReceiveCountDMA(USART_Type *base, usart_dma_handle_t *
     *count = handle->rxDataSizeAll - DMA_GetRemainingBytes(handle->rxDmaHandle->base, handle->rxDmaHandle->channel);
 
     return kStatus_Success;
+}
+
+/*!
+ * brief Get the number of bytes that have been sent.
+ *
+ * This function gets the number of bytes that have been sent.
+ *
+ * param base USART peripheral base address.
+ * param handle USART handle pointer.
+ * param count Sent bytes count.
+ * retval kStatus_NoTransferInProgress No receive in progress.
+ * retval kStatus_InvalidArgument Parameter is invalid.
+ * retval kStatus_Success Get successfully through the parameter \p count;
+ */
+status_t USART_TransferGetSendCountDMA(USART_Type *base, usart_dma_handle_t *handle, uint32_t *count)
+{
+    assert(NULL != handle);
+    assert(NULL != handle->txDmaHandle);
+    assert(NULL != count);
+
+    if ((uint8_t)kUSART_TxIdle == handle->txState)
+    {
+        return kStatus_NoTransferInProgress;
+    }
+
+    *count = handle->txDataSizeAll - DMA_GetRemainingBytes(handle->txDmaHandle->base, handle->txDmaHandle->channel);
+
+    return kStatus_Success;
+}
+
+void USART_TransferDMAHandleIRQ(USART_Type *base, usart_dma_handle_t *handle)
+{
+    /* Check arguments */
+    assert((NULL != base) && (NULL != handle));
+
+    /* Tx idle interrupt happens means that all the tx data have been sent out to bus, set the tx state to idle */
+    handle->txState = (uint8_t)kUSART_TxIdle;
+
+    /* Disable tx idle interrupt */
+    base->INTENCLR = USART_INTENCLR_TXIDLECLR_MASK;
+
+    /* Invoke callback */
+    if (handle->callback != NULL)
+    {
+        handle->callback(base, handle, kStatus_USART_TxIdle, handle->userData);
+    }
 }

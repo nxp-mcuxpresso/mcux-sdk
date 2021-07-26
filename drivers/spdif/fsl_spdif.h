@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 5)) /*!< Version 2.0.5 */
+#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 6)) /*!< Version 2.0.6 */
 /*@}*/
 
 /*! @brief SPDIF return status*/
@@ -120,7 +120,14 @@ enum
     kSPDIF_RxFIFOResync                   = SPDIF_SIE_RXFIFORESYN_MASK, /*!< SPDIF Rx left and right FIFO resync */
     kSPDIF_LockLoss                       = SPDIF_SIE_LOCKLOSS_MASK,    /*!< SPDIF receiver loss of lock */
     kSPDIF_TxFIFOEmpty                    = SPDIF_SIE_TXEM_MASK,        /*!< SPDIF Tx FIFO empty */
-    kSPDIF_RxFIFOFull                     = SPDIF_SIE_RXFIFOFUL_MASK    /*!< SPDIF Rx FIFO full */
+    kSPDIF_RxFIFOFull                     = SPDIF_SIE_RXFIFOFUL_MASK,   /*!< SPDIF Rx FIFO full */
+    kSPDIF_AllInterrupt                   = kSPDIF_RxDPLLLocked | kSPDIF_TxFIFOError | kSPDIF_TxFIFOResync |
+                          kSPDIF_RxControlChannelChange | kSPDIF_ValidityFlagNoGood | kSPDIF_RxIllegalSymbol |
+                          kSPDIF_RxParityBitError | kSPDIF_UChannelReceiveRegisterFull |
+                          kSPDIF_UChannelReceiveRegisterOverrun | kSPDIF_QChannelReceiveRegisterFull |
+                          kSPDIF_QChannelReceiveRegisterOverrun | kSPDIF_UQChannelSync | kSPDIF_UQChannelFrameError |
+                          kSPDIF_RxFIFOError | kSPDIF_RxFIFOResync | kSPDIF_LockLoss | kSPDIF_TxFIFOEmpty |
+                          kSPDIF_RxFIFOFull, /*!< all interrupt */
 };
 
 /*! @brief The DMA request sources */

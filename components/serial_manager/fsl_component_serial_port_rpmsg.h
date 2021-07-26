@@ -13,6 +13,7 @@
 
 /*!
  * @addtogroup serial_port_rpmsg
+ * @ingroup serialmanager
  * @{
  */
 

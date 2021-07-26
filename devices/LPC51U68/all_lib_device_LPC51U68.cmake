@@ -1,9 +1,8 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8904
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8904
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
@@ -43,7 +42,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpc_rtc)
 #    include(driver_pint)
 #    include(driver_ctimer)
-#    include(CMSIS_Include_dsp)
 #    include(component_usart_adapter)
 #    include(driver_wwdt)
 #    include(utility_shell)
@@ -61,11 +59,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_inputmux_connections)
 #    include(driver_fmeas)
 #    include(driver_lpc_crc)
+#    include(CMSIS_Include_core_cm)
 #    include(driver_wm8904)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_flexcomm_i2c_dma)
 #    include(component_flexcomm_i2c_adapter)
-#    include(CMSIS_Include_core_cm0plus)
+#    include(utility_assert_lite)
 #    include(driver_flexcomm_usart_dma)
 #    include(driver_flexcomm_spi)
 #    include(driver_utick)
@@ -80,12 +79,10 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_i2c_freertos)
 #    include(driver_codec)
 #    include(utilities_misc_utilities)
-#    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_gint)
 #    include(component_codec_i2c_LPC51U68)
 #    include(driver_flexcomm_usart_freertos)
-#    include(utility_assert_lite)
 #    include(driver_inputmux)
 #    include(driver_flexcomm_i2c)
 #    include(driver_iap)

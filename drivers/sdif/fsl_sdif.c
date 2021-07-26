@@ -359,16 +359,18 @@ static status_t SDIF_ReadCommandResponse(SDIF_Type *base, sdif_command_t *comman
 
 static status_t SDIF_WaitCommandDone(SDIF_Type *base, sdif_command_t *command)
 {
-    uint32_t status = 0U;
+    uint32_t status      = 0U;
+    uint32_t errorStatus = (uint32_t)kSDIF_ResponseError | (uint32_t)kSDIF_ResponseTimeout |
+                           (uint32_t)kSDIF_DataStartBitError | (uint32_t)kSDIF_HardwareLockError |
+                           (uint32_t)kSDIF_ResponseCRCError;
 
     do
     {
         status = SDIF_GetInterruptStatus(base);
-    } while ((status & (uint32_t)kSDIF_CommandDone) != (uint32_t)kSDIF_CommandDone);
+    } while ((status & (errorStatus | (uint32_t)kSDIF_CommandDone)) == 0UL);
     /* clear interrupt status flag first */
     SDIF_ClearInterruptStatus(base, status & (uint32_t)kSDIF_CommandTransferStatus);
-    if ((status & ((uint32_t)kSDIF_ResponseError | (uint32_t)kSDIF_ResponseCRCError | (uint32_t)kSDIF_ResponseTimeout |
-                   (uint32_t)kSDIF_HardwareLockError)) != 0UL)
+    if ((status & errorStatus) != 0UL)
     {
         return kStatus_SDIF_SendCmdFail;
     }
@@ -423,8 +425,8 @@ status_t SDIF_ReleaseDMADescriptor(SDIF_Type *base, sdif_dma_config_t *dmaConfig
     /* chain descriptor mode */
     if (dmaConfig->mode == kSDIF_ChainDMAMode)
     {
-        while (((dmaDesAddr->dmaDesAttribute & SDIF_DMA_DESCRIPTOR_DATA_BUFFER_END_FLAG) !=
-                SDIF_DMA_DESCRIPTOR_DATA_BUFFER_END_FLAG) &&
+        while (((dmaDesAddr->dmaDesAttribute & SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG) !=
+                SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG) &&
                (dmaDesBufferSize < dmaConfig->dmaDesBufferLen * sizeof(uint32_t)))
         {
             /* set the OWN bit */
@@ -442,8 +444,8 @@ status_t SDIF_ReleaseDMADescriptor(SDIF_Type *base, sdif_dma_config_t *dmaConfig
     /* dual descriptor mode */
     else
     {
-        while (((dmaDesAddr->dmaDesAttribute & SDIF_DMA_DESCRIPTOR_DESCRIPTOR_END_FLAG) !=
-                SDIF_DMA_DESCRIPTOR_DESCRIPTOR_END_FLAG) &&
+        while (((dmaDesAddr->dmaDesAttribute & SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG) !=
+                SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG) &&
                (dmaDesBufferSize < dmaConfig->dmaDesBufferLen * sizeof(uint32_t)))
         {
             dmaDesAddr = (sdif_dma_descriptor_t *)(uint32_t)tempDMADesBuffer;
@@ -1545,7 +1547,7 @@ static void SDIF_TransferHandleData(SDIF_Type *base, sdif_handle_t *handle, uint
     {
         while ((handle->data->rxData != NULL) && ((base->STATUS & SDIF_STATUS_FIFO_COUNT_MASK) != 0UL))
         {
-            handle->transferredWords = SDIF_ReadDataPort(base, handle->data, transferredWords);
+            handle->transferredWords = SDIF_ReadDataPort(base, handle->data, handle->transferredWords);
         }
         transferStatus = kStatus_SDIF_DataTransferSuccess;
     }

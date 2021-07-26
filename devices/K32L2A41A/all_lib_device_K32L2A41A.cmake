@@ -1,6 +1,6 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
@@ -38,7 +38,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -53,7 +52,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_llwu)
 #    include(driver_lpuart_freertos)
 #    include(driver_flexio_spi_edma)
-#    include(CMSIS_Include_dsp)
+#    include(driver_trng)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_freertos)
 #    include(driver_port)
@@ -66,7 +65,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_system)
 #    include(driver_tpm)
 #    include(driver_lpit)
-#    include(utility_debug_console)
 #    include(driver_cmp)
 #    include(device_startup)
 #    include(driver_adc16)
@@ -76,8 +74,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart)
 #    include(component_osa)
 #    include(driver_edma)
-#    include(driver_trng)
 #    include(driver_lpuart)
+#    include(CMSIS_Include_core_cm)
 #    include(driver_flexio_spi)
 #    include(middleware_mmcau_common_files)
 #    include(middleware_mmcau_cm0p)
@@ -85,13 +83,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio)
 #    include(utility_shell)
 #    include(driver_rcm)
-#    include(CMSIS_Include_core_cm0plus)
+#    include(middleware_freertos-kernel_K32L2A41A)
 #    include(driver_trgmux)
 #    include(driver_tsi_v4)
 #    include(driver_flexio_i2c_master)
 #    include(driver_sim)
 #    include(middleware_baremetal)
-#    include(middleware_usb_device_common_header)
+#    include(utility_debug_console)
 #    include(driver_flash)
 #    include(utility_assert)
 #    include(driver_mmdvsq)
@@ -102,14 +100,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_tstmr)
 #    include(utilities_misc_utilities)
 #    include(driver_lpi2c)
-#    include(utility_assert_lite)
-#    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_rtc)
 #    include(driver_smc)
 #    include(driver_crc)
 #    include(driver_wdog32)
-#    include(middleware_freertos-kernel_K32L2A41A)
+#    include(utility_assert_lite)
 #    include(component_serial_manager)
 #    include(driver_fxos8700cq)
 #    include(driver_lptmr)
@@ -118,4 +114,3 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_pmc)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_intmux)
-#    include(middleware_usb_common_header)

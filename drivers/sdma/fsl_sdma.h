@@ -1,5 +1,5 @@
 /*
- * Copyright  2016-2019 NXP
+ * Copyright  2016-2021 NXP
  * All rights reserved.
  *
  *
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SDMA driver version */
-#define FSL_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 2)) /*!< Version 2.3.2. */
+#define FSL_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 4)) /*!< Version 2.3.4. */
 /*@}*/
 
 /*! @brief SDMA transfer configuration */
@@ -683,8 +683,8 @@ void SDMA_SetCallback(sdma_handle_t *handle, sdma_callback callback, void *userD
  * shoule be called before submit transfer.
  *
  * @param config transfer configurations.
- * @param fifoNums fifo numbers that multi fifo operation perform.
- * @param fifoOffset offset between multififo address.
+ * @param fifoNums fifo numbers that multi fifo operation perform, support up to 15 fifo numbers.
+ * @param fifoOffset fifoOffset = fifo address offset / sizeof(uint32_t) - 1.
  */
 void SDMA_SetMultiFifoConfig(sdma_transfer_config_t *config, uint32_t fifoNums, uint32_t fifoOffset);
 

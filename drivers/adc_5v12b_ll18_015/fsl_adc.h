@@ -19,7 +19,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief ADC driver version */
-#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2. */
+#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0. */
 
 /*!
  * @brief Reference voltage source.
@@ -239,6 +239,13 @@ void ADC_SetHardwareCompare(ADC_Type *base, const adc_hardware_compare_config_t 
  * @param config Pointer to "adc_fifo_config_t" structure.
  */
 void ADC_SetFifoConfig(ADC_Type *base, const adc_fifo_config_t *config);
+
+/*!
+ * @brief Gets an available pre-defined settings for the FIFO's configuration.
+ *
+ * @param config Pointer to the FIFO configuration structure, please refer to @ref adc_fifo_config_t for details.
+ */
+void ADC_GetDefaultFIFOConfig(adc_fifo_config_t *config);
 
 /*!
  * @brief Configures the conversion channel.

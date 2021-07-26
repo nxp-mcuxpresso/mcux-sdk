@@ -1,10 +1,9 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8960
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8960
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
@@ -80,7 +79,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart_edma)
 #    include(driver_codec)
 #    include(utilities_misc_utilities)
-#    include(CMSIS_Include_core_cm4)
 #    include(driver_wdog32)
 #    include(component_serial_manager)
 #    include(middleware_multicore_rpmsg_lite)
@@ -88,7 +86,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpspi_freertos)
 #    include(driver_llwu)
 #    include(middleware_freertos-kernel_MCIMX7U5)
-#    include(CMSIS_Include_dsp)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_edma)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_tty_rtos_transport)
@@ -104,6 +101,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_erpc_common)
 #    include(driver_common)
 #    include(component_lpi2c_adapter)
+#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_qspi)
 #    include(driver_ltc)
@@ -130,7 +128,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_erpc_eRPC_port_freertos)
 #    include(driver_flexio_spi_edma)
 #    include(component_codec_i2c_MCIMX7U5)
-#    include(driver_srtm)
 #    include(driver_sai_edma)
 #    include(component_lists)
 #    include(middleware_issdk_algorithms_pedometer_common)
@@ -141,12 +138,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpuart)
 #    include(driver_flexio_spi)
 #    include(driver_xrdc)
+#    include(driver_srtm_MCIMX7U5)
 #    include(driver_dac12)
 #    include(driver_lpspi_edma)
 #    include(driver_srtm_freertos)
 #    include(driver_qspi_edma)
 #    include(driver_lpi2c)
-#    include(CMSIS_Include_common)
 #    include(driver_fxos8700cq)
 #    include(driver_trng)
 #    include(driver_sai)

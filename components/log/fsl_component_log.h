@@ -40,6 +40,10 @@
  * @{
  */
 
+#if defined(__cplusplus)
+extern "C" {
+#endif /* _cplusplus */
+
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -49,6 +53,18 @@
 #else
 #define LOG_TIMESTAMP_GET 0
 #endif
+
+/*! @brief log error code*/
+typedef enum _log_status
+{
+    kStatus_LOG_Success         = kStatus_Success,                  /*!< Success */
+    kStatus_LOG_Error           = MAKE_STATUS(kStatusGroup_LOG, 1), /*!< Failed */
+    kStatus_LOG_Initialized     = MAKE_STATUS(kStatusGroup_LOG, 2), /*!< Initialized */
+    kStatus_LOG_Uninitialized   = MAKE_STATUS(kStatusGroup_LOG, 3), /*!< Uninitialized */
+    kStatus_LOG_LackResource    = MAKE_STATUS(kStatusGroup_LOG, 4), /*!< Lack resource */
+    kStatus_LOG_BackendExist    = MAKE_STATUS(kStatusGroup_LOG, 5), /*!< Backend exists */
+    kStatus_LOG_BackendNotFound = MAKE_STATUS(kStatusGroup_LOG, 6), /*!< Backend not found */
+} log_status_t;
 
 #if LOG_ENABLE_FILE_WITH_PATH > 0
 /*!
@@ -83,6 +99,47 @@
 #define LOG_FILE_NAME LOG_FILE_NAME_SET(LOG_FILE_NAME_RECURSIVE, LOG_FILE_NAME_INTERCEPT, __FILE__, 3) : __FILE__
 #endif
 
+#if (LOG_ENABLE_ASYNC_MODE > 0)
+
+/* Define the log argument type */
+#ifndef LOG_ARGUMENT_TYPE
+#define LOG_ARGUMENT_TYPE unsigned long
+#endif
+
+/* Get the log argument count MACRO set. The max argument count is 16 for application. */
+#define _LOG_COUNT_ARGUMENT(N0, N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, N11, N12, N13, N14, N15, N16, N17, COUNT, \
+                            ...)                                                                                   \
+    COUNT
+#define LOG_COUNT_ARGUMENT(...) \
+    _LOG_COUNT_ARGUMENT(__VA_ARGS__, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+
+#define LOG_FORMAT_ARG(x) ((LOG_ARGUMENT_TYPE)(x))
+
+#define LOG_LIST_ARGUMENT_1(arg, ...)  LOG_FORMAT_ARG(arg)
+#define LOG_LIST_ARGUMENT_2(arg, ...)  LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_1(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_3(arg, ...)  LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_2(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_4(arg, ...)  LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_3(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_5(arg, ...)  LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_4(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_6(arg, ...)  LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_5(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_7(arg, ...)  LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_6(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_8(arg, ...)  LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_7(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_9(arg, ...)  LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_8(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_10(arg, ...) LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_9(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_11(arg, ...) LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_10(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_12(arg, ...) LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_11(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_13(arg, ...) LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_12(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_14(arg, ...) LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_13(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_15(arg, ...) LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_14(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_16(arg, ...) LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_15(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_17(arg, ...) LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_16(__VA_ARGS__)
+#define LOG_LIST_ARGUMENT_18(arg, ...) LOG_FORMAT_ARG(arg), LOG_LIST_ARGUMENT_17(__VA_ARGS__)
+
+#define _LOG_LIST_ARGUMENT_CAT(macro, sub) macro##sub
+#define LOG_LIST_ARGUMENT_CAT(macro, sub)  _LOG_LIST_ARGUMENT_CAT(macro, sub)
+#define LOG_LIST_ARGUMENT(...)             LOG_LIST_ARGUMENT_CAT(LOG_LIST_ARGUMENT_, LOG_COUNT_ARGUMENT(__VA_ARGS__))(__VA_ARGS__)
+
+#endif
+
 /*!
  * @brief log level definition
  *
@@ -111,14 +168,19 @@ typedef enum log_level
  */
 typedef struct log_module
 {
-    char *logModuleName; /*!< Log module name */
-    log_level_t level;   /*!< Log level of the module */
+    const char *logModuleName; /*!< Log module name */
+    log_level_t level;         /*!< Log level of the module */
 } log_module_t;
 
 /*!
  * @brief Puts function type for log backend.
  */
 typedef void (*log_backend_puts_t)(uint8_t *buffer, size_t length);
+
+/*!
+ * @brief Gets dump buffer from log backend.
+ */
+typedef log_status_t (*log_backend_get_dump_buffer_t)(uint8_t **buffer, size_t *length);
 
 /*!
  * @brief Backend of log
@@ -135,7 +197,7 @@ typedef struct log_backend
  *
  * @details This macro is used to define the log backend. The static global variable with
  * parameter name is defined by the macro. And calling the function
- * LOG_BackendRegister to register the backend with defined static global
+ * log_backend_register to register the backend with defined static global
  * variable.
  * For example, if there is a backend named test, the reference code is following,
  * @code
@@ -153,6 +215,25 @@ typedef struct log_backend
 
 #if (LOG_ENABLE > 0)
 
+#if (LOG_ENABLE_ASYNC_MODE > 0)
+/*!
+ * @brief Filter the log
+ *
+ * @details This macro is used to filter the log. The macro is used by the
+ * macro LOG_FATAL/LOG_ERR/LOG_WRN/LOG_INF/LOG_DBG/LOG_TRACE.
+ * Only when the following two conditions are met at the same time,
+ * 1. The priority of the log message level is valid.
+ * 2. The priority of the log message level is higher than the module log
+ * level.@n
+ * The macro should not be used by application directly.
+ */
+#define _LOG_PRINTF(logger, logLevel, format, ...)                                                            \
+    if (((logLevel > kLOG_LevelNone) && ((logger)->level >= logLevel)))                                       \
+    {                                                                                                         \
+        LOG_ARGUMENT_TYPE argValueList[] = {LOG_LIST_ARGUMENT(__VA_ARGS__)};                                  \
+        LOG_AsyncPrintf(logger, logLevel, LOG_TIMESTAMP_GET, format, ARRAY_SIZE(argValueList), argValueList); \
+    }
+#else
 /*!
  * @brief Filter the log
  *
@@ -169,6 +250,7 @@ typedef struct log_backend
     {                                                                         \
         LOG_Printf(logger, logLevel, LOG_TIMESTAMP_GET, format, __VA_ARGS__); \
     }
+#endif
 
 /*!
  * @brief Defines the log module
@@ -255,6 +337,7 @@ typedef struct log_backend
  */
 #define LOG_WRN(format, ...) \
     _LOG_PRINTF(&s_LogModuleLogger, kLOG_LevelWarning, "%s:%d:" format "\r\n", LOG_FILE_NAME, __LINE__, ##__VA_ARGS__);
+
 /*!
  * @brief Writes the info level log formatted output to the backend.
  *
@@ -276,6 +359,7 @@ typedef struct log_backend
  */
 #define LOG_INF(format, ...) \
     _LOG_PRINTF(&s_LogModuleLogger, kLOG_LevelInfo, "%s:%d:" format "\r\n", LOG_FILE_NAME, __LINE__, ##__VA_ARGS__);
+
 /*!
  * @brief Writes the debug level log formatted output to the backend.
  *
@@ -336,25 +420,9 @@ typedef struct log_backend
 typedef unsigned int (*log_get_timestamp_callback_t)(void);
 #endif
 
-/*! @brief log error code*/
-typedef enum _log_status
-{
-    kStatus_LOG_Success         = kStatus_Success,                  /*!< Success */
-    kStatus_LOG_Error           = MAKE_STATUS(kStatusGroup_LOG, 1), /*!< Failed */
-    kStatus_LOG_Initialized     = MAKE_STATUS(kStatusGroup_LOG, 2), /*!< Initialized */
-    kStatus_LOG_Uninitialized   = MAKE_STATUS(kStatusGroup_LOG, 3), /*!< Uninitialized */
-    kStatus_LOG_LackResource    = MAKE_STATUS(kStatusGroup_LOG, 4), /*!< Lack resource */
-    kStatus_LOG_BackendExist    = MAKE_STATUS(kStatusGroup_LOG, 5), /*!< Backend exists */
-    kStatus_LOG_BackendNotFound = MAKE_STATUS(kStatusGroup_LOG, 6), /*!< Backend not found */
-} log_status_t;
-
 /*******************************************************************************
  * API
  ******************************************************************************/
-
-#if defined(__cplusplus)
-extern "C" {
-#endif /* _cplusplus */
 
 /*!
  * @brief Initializes the log component with the user configuration structure.
@@ -394,6 +462,43 @@ log_status_t LOG_Deinit(void);
  * @param format formated log string.
  */
 void LOG_Printf(log_module_t const *module, log_level_t level, unsigned int timeStamp, char const *format, ...);
+
+#if (LOG_ENABLE_ASYNC_MODE > 0)
+/*!
+ * @brief Prints the format log string in asynchronous mode.
+ *
+ * @details This function prints the format log string in asynchronous mode. The timestamp and color are added to prefix
+ * by function. The log string color feature is set by the macro LOG_ENABLE_COLOR. The log string time stamp feature is
+ * set by the macro LOG_ENABLE_TIMESTAMP.
+ *
+ * @param module the log module.
+ * @param level log level.
+ * @param timeStamp current timestamp.
+ * @param format formated log string.
+ * @param argc argument count.
+ * @param argv argument value array.
+ */
+void LOG_AsyncPrintf(log_module_t const *module,
+                     log_level_t level,
+                     unsigned int timeStamp,
+                     char const *format,
+                     uint32_t argc,
+                     LOG_ARGUMENT_TYPE argv[]);
+
+/*!
+ * @brief Dump the log bufferred in log component.
+ *
+ * @details This function dumps one log bufferred in log component.
+ * Only the buffer and length are valid, the outLength will be filled with valid value.
+ * The message will be discarded when the message is more than LOG_MAX_MEESSAGE_LENGTH or buffer length
+ * passed by the function.
+ *
+ * @param buffer The buffer to dump the message.
+ * @param length The buffer length of the passed buffer.
+ * @param outLength return the message length.
+ */
+void LOG_Dump(uint8_t *buffer, size_t length, size_t *outLength);
+#endif
 
 /*!
  * @brief Registers backend.

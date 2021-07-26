@@ -174,8 +174,8 @@ void DSPI_MasterTransferCreateHandleEDMA(SPI_Type *base,
  * is transferred, the callback function is called.
  *
  * @note The max transfer size of each transfer depends on whether the instance's Tx/Rx shares the same DMA request. If
- * <b>FSL_FEATURE_DSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x)</b> is true, then the max transfer size is 32767 datawidth of data,
- * otherwise is 511.
+ * <b>FSL_FEATURE_DSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x)</b> is true, then the max transfer size is 32767 datawidth of
+ * data, otherwise is 511.
  *
  * @param base DSPI peripheral base address.
  * @param handle A pointer to the @ref _dspi_master_edma_handle structure which stores the transfer state.
@@ -256,8 +256,8 @@ void DSPI_SlaveTransferCreateHandleEDMA(SPI_Type *base,
  * than eight.
  *
  * @note The max transfer size of each transfer depends on whether the instance's Tx/Rx shares the same DMA request. If
- * <b>FSL_FEATURE_DSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x)</b> is true, then the max transfer size is 32767 datawidth of data,
- * otherwise is 511.
+ * <b>FSL_FEATURE_DSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x)</b> is true, then the max transfer size is 32767 datawidth of
+ * data, otherwise is 511.
  *
  * @param base DSPI peripheral base address.
  * @param handle A pointer to the @ref _dspi_slave_edma_handle structure which stores the transfer state.

@@ -233,7 +233,7 @@ _Pragma("diag_suppress=Pm120")
      * @retval kStatus_SHELL_Success Successfully send data.
      * @retval kStatus_SHELL_Error An error occurred.
      */
-    shell_status_t SHELL_Write(shell_handle_t shellHandle, char *buffer, uint32_t length);
+    shell_status_t SHELL_Write(shell_handle_t shellHandle, const char *buffer, uint32_t length);
 
     /*!
      * @brief Writes formatted output to the shell output stream.

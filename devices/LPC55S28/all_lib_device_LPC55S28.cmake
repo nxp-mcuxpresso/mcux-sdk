@@ -1,9 +1,8 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8904
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8904
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
@@ -39,7 +38,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -59,7 +57,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_pint)
 #    include(driver_ctimer)
 #    include(driver_utick)
-#    include(CMSIS_Include_dsp)
 #    include(component_usart_adapter)
 #    include(driver_wwdt)
 #    include(middleware_sdmmc_osa_freertos)
@@ -80,6 +77,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_codec_i2c_LPC55S28)
 #    include(driver_lpc_crc)
 #    include(utility_assert)
+#    include(CMSIS_Include_core_cm)
 #    include(middleware_sdmmc_common)
 #    include(driver_rng_1)
 #    include(driver_wm8904)
@@ -88,19 +86,16 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager_swo)
 #    include(driver_flexcomm_i2c_dma)
 #    include(component_flexcomm_i2c_adapter)
-#    include(middleware_freertos-kernel_extension)
 #    include(middleware_sdmmc_host_sdif_interrupt)
 #    include(driver_flexcomm_usart_dma)
 #    include(driver_iap1)
-#    include(middleware_usb_common_header)
 #    include(driver_flexcomm_spi)
 #    include(driver_puf)
 #    include(driver_prince)
-#    include(driver_flexcomm_i2s)
+#    include(middleware_freertos-kernel_extension)
 #    include(middleware_sdmmc_host_sdif)
 #    include(middleware_baremetal)
 #    include(driver_sctimer)
-#    include(middleware_usb_device_common_header)
 #    include(driver_flexcomm_usart)
 #    include(device_CMSIS)
 #    include(middleware_sdmmc_host_sdif_freertos)
@@ -111,7 +106,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utilities_misc_utilities)
 #    include(driver_ostimer)
 #    include(middleware_freertos-kernel_LPC55S28)
-#    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_gint)
 #    include(middleware_sdmmc_osa_bm)
@@ -127,7 +121,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_osa_free_rtos)
 #    include(component_serial_manager_uart)
 #    include(component_wm8904_adapter)
-#    include(CMSIS_Include_core_cm33)
+#    include(driver_flexcomm_i2s)
 #    include(utility_shell)
 #    include(driver_reset)
 #    include(driver_flexcomm_spi_dma)

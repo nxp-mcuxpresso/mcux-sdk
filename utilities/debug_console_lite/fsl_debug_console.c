@@ -82,9 +82,9 @@ enum _debugconsole_scanf_flag
     kSCANF_LengthLongInt     = 0x400U, /*!< Length LongInt Flag. */
     kSCANF_LengthLongLongInt = 0x800U, /*!< Length LongLongInt Flag. */
 #endif                                 /* SCANF_ADVANCED_ENABLE */
-#if PRINTF_FLOAT_ENABLE
+#if SCANF_FLOAT_ENABLE
     kSCANF_LengthLongLongDouble = 0x1000U, /*!< Length LongLongDuoble Flag. */
-#endif                                     /*PRINTF_FLOAT_ENABLE */
+#endif                                     /*SCANF_FLOAT_ENABLE */
     kSCANF_TypeSinged = 0x2000U,           /*!< TypeSinged Flag. */
 };
 
@@ -237,7 +237,7 @@ int DbgConsole_Scanf(char *fmt_ptr, ...)
         i++;
     }
 
-    if ((i == (int32_t)IO_MAXLINE))
+    if (i == (int32_t)IO_MAXLINE)
     {
         temp_buf[i] = '\0';
     }
@@ -349,6 +349,10 @@ static int32_t DbgConsole_ConvertRadixNumToString(char *numstr, void *nump, int3
     nlen     = 0;
     nstrp    = numstr;
     *nstrp++ = '\0';
+
+#if !(PRINTF_ADVANCED_ENABLE > 0)
+    neg = 0;
+#endif
 
     if (0 != neg)
     {
@@ -874,7 +878,7 @@ static int DbgConsole_PrintfFormattedData(PUTCHAR_FUNC func_ptr, const char *fmt
                         if (0U == (flags_used & (uint32_t)kPRINTF_Minus))
                         {
                             DbgConsole_PrintfPaddingCharacter(' ', vlen, (int32_t)field_width, &count, func_ptr);
-                            if (schar)
+                            if ('\0' != schar)
                             {
                                 (void)func_ptr(schar);
                                 count++;
@@ -882,7 +886,7 @@ static int DbgConsole_PrintfFormattedData(PUTCHAR_FUNC func_ptr, const char *fmt
                             dschar = true;
                         }
                     }
-                    if ((!dschar) && schar)
+                    if ((!dschar) && ('\0' != schar))
                     {
                         (void)func_ptr(schar);
                         count++;
@@ -1762,6 +1766,58 @@ void _ttywrch(int ch)
 char *_sys_command_string(char *cmd, int len)
 {
     return (cmd);
+}
+#endif /* SDK_DEBUGCONSOLE_UART */
+
+/* These function __write_r and __read_r are used to support Xtensa Clang toolchain to printf and scanf */
+#elif defined(__XTENSA__) && defined(__XT_CLANG__)
+#if defined(SDK_DEBUGCONSOLE_UART)
+
+int __attribute__((weak)) _write_r(void *ptr, int handle, char *buffer, int size);
+int __attribute__((weak)) _write_r(void *ptr, int handle, char *buffer, int size)
+{
+    if (NULL == buffer)
+    {
+        /* return -1 if error. */
+        return -1;
+    }
+
+    /* This function only writes to "standard out" and "standard err" for all other file handles it returns failure. */
+    if ((handle != 1) && (handle != 2))
+    {
+        return -1;
+    }
+
+    /* Do nothing if the debug UART is not initialized. */
+    if (kSerialPort_None == s_debugConsole.type)
+    {
+        return -1;
+    }
+
+    /* Send data. */
+    (void)s_debugConsole.putChar((hal_uart_handle_t)&s_debugConsole.uartHandleBuffer[0], (uint8_t *)buffer, size);
+
+    return size;
+}
+
+int __attribute__((weak)) _read_r(void *ptr, int handle, char *buffer, int size);
+int __attribute__((weak)) _read_r(void *ptr, int handle, char *buffer, int size)
+{
+    /* This function only reads from "standard in", for all other file handles it returns failure. */
+    if (handle != 0)
+    {
+        return -1;
+    }
+
+    /* Do nothing if the debug UART is not initialized. */
+    if (kSerialPort_None == s_debugConsole.type)
+    {
+        return -1;
+    }
+
+    /* Receive data. */
+    (void)s_debugConsole.getChar((hal_uart_handle_t)&s_debugConsole.uartHandleBuffer[0], (uint8_t *)buffer, size);
+    return size;
 }
 #endif /* SDK_DEBUGCONSOLE_UART */
 

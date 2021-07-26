@@ -1,5 +1,5 @@
 /*
- * Copyright  2017-2018, 2020 NXP
+ * Copyright 2017-2018, 2020-2021 NXP
  * All rights reserved.
  *
  *
@@ -15,6 +15,9 @@
 
 /*
  * Change log:
+ *
+ *   1.0.2
+ *     - Add RAW8 support.
  *
  *   1.0.1
  *     - Fixed MISRA-C 2012 issues.

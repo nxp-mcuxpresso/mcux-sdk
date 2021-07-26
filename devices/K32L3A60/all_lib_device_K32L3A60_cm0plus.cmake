@@ -1,6 +1,6 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
@@ -60,11 +60,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart)
 #    include(middleware_multicore_rpmsg_lite_k32l3a6_freertos)
 #    include(driver_ewm)
-#    include(middleware_sdmmc_host_usdhc_interrupt)
+#    include(middleware_sdmmc_host_usdhc_freertos_K32L3A60_cm0plus)
 #    include(driver_flexio)
-#    include(middleware_sdmmc_host_usdhc_freertos)
 #    include(driver_msmc)
-#    include(CMSIS_Include_core_cm0plus)
 #    include(driver_flexio_i2c_master)
 #    include(middleware_baremetal)
 #    include(middleware_sdmmc_osa_bm)
@@ -77,7 +75,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_rpmsg_lite)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
-#    include(CMSIS_Include_dsp)
+#    include(middleware_sdmmc_host_usdhc_interrupt_K32L3A60_cm0plus)
 #    include(component_lpuart_adapter)
 #    include(device_system_K32L3A60_cm0plus)
 #    include(driver_lpi2c_edma)
@@ -85,7 +83,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_freertos-kernel_extension)
 #    include(middleware_sdmmc_osa_freertos)
 #    include(utility_assert)
-#    include(middleware_sdmmc_host_usdhc_polling)
 #    include(device_CMSIS)
 #    include(middleware_multicore_erpc_doc)
 #    include(driver_tstmr)
@@ -95,7 +92,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_common)
 #    include(component_osa_free_rtos)
 #    include(middleware_sdmmc_sd)
-#    include(middleware_freertos-kernel_heap_3)
+#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_port)
 #    include(driver_lpspi)
@@ -114,6 +111,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_crc)
 #    include(middleware_sdmmc_host_usdhc)
 #    include(middleware_multicore_erpc_eRPC_port_stdlib)
+#    include(middleware_sdmmc_host_usdhc_polling_K32L3A60_cm0plus)
 #    include(middleware_multicore_erpc_eRPC_arbitrator)
 #    include(device_startup_K32L3A60_cm0plus)
 #    include(middleware_multicore_erpc_eRPC_port_freertos)
@@ -135,7 +133,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_sim)
 #    include(driver_cache_lplmem)
 #    include(driver_lpi2c)
-#    include(CMSIS_Include_common)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_transport)
 #    include(driver_fxos8700cq)
 #    include(driver_trng)

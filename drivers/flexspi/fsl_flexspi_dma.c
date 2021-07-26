@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -178,7 +178,7 @@ static status_t FLEXSPI_WriteDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *h
     if (dataSize < handle->count)
     {
         handle->nsize  = kFLEXPSI_DMAnSize1Bytes;
-        handle->nbytes = dataSize;
+        handle->nbytes = (uint8_t)dataSize;
     }
     else
     {
@@ -194,19 +194,19 @@ static status_t FLEXSPI_WriteDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *h
     /* Configure linked descriptors to start FLEXSPI Tx DMA transfer to provide software workaround for
     ERRATA FLEXSPI.1: Using FLEXSPI register interface, TX buffer fill / RX buffer drain by DMA with a
     single DMA descriptor cannot be performed. */
-    desCount    = dataSize / handle->nbytes;
+    desCount    = (uint8_t)(dataSize / (uint32_t)handle->nbytes);
     bytesPerDes = handle->nbytes;
-    remains     = dataSize - desCount * handle->nbytes;
+    remains     = (uint8_t)(dataSize - (uint32_t)desCount * (uint32_t)handle->nbytes);
     if (remains > 0U)
     {
-        DMA_SetupDescriptor(
-            &s_flexspiDes[desCount - 1U],
-            DMA_CHANNEL_XFER(false, true, true, false, kFLEXPSI_DMAnSize1Bytes, srcInc, dstInc, remains),
-            (void *)(uint64_t *)((uint32_t)data + desCount * bytesPerDes), txFifoBase, NULL);
+        uint32_t width = (uint32_t)kFLEXPSI_DMAnSize1Bytes;
+        DMA_SetupDescriptor(&s_flexspiDes[desCount - 1U],
+                            DMA_CHANNEL_XFER(false, true, true, false, width, srcInc, dstInc, remains),
+                            (void *)(uint64_t *)((uint32_t)data + desCount * bytesPerDes), txFifoBase, NULL);
         nextDesc = &s_flexspiDes[desCount - 1U];
     }
 
-    remains = bytesPerDes;
+    remains = (uint8_t)bytesPerDes;
 #else
     uint32_t dmaTriggerBurst;
     dmaTxTriggerConfig.type = kDMA_RisingEdgeTrigger;
@@ -331,7 +331,7 @@ static status_t FLEXSPI_ReadDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *ha
     if (dataSize < handle->count)
     {
         handle->nsize  = kFLEXPSI_DMAnSize1Bytes;
-        handle->nbytes = dataSize;
+        handle->nbytes = (uint8_t)dataSize;
     }
     else
     {
@@ -348,17 +348,17 @@ static status_t FLEXSPI_ReadDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *ha
     single DMA descriptor cannot be performed. */
     desCount    = (uint8_t)(dataSize / (uint32_t)handle->nbytes);
     bytesPerDes = handle->nbytes;
-    remains     = dataSize - desCount * handle->nbytes;
+    remains     = (uint8_t)(dataSize - (uint32_t)desCount * (uint32_t)handle->nbytes);
 
     if (remains > 0U)
     {
-        DMA_SetupDescriptor(
-            &s_flexspiDes[desCount - 1U],
-            DMA_CHANNEL_XFER(false, true, true, false, kFLEXPSI_DMAnSize1Bytes, srcInc, dstInc, remains), rxFifoBase,
-            (void *)(uint64_t *)((uint32_t)data + desCount * bytesPerDes), NULL);
+        uint32_t width = (uint32_t)kFLEXPSI_DMAnSize1Bytes;
+        DMA_SetupDescriptor(&s_flexspiDes[desCount - 1U],
+                            DMA_CHANNEL_XFER(false, true, true, false, width, srcInc, dstInc, remains), rxFifoBase,
+                            (void *)(uint64_t *)((uint32_t)data + desCount * bytesPerDes), NULL);
         nextDesc = &s_flexspiDes[desCount - 1U];
     }
-    remains = bytesPerDes;
+    remains = (uint8_t)bytesPerDes;
 
 #else
     uint32_t dmaTriggerBurst;

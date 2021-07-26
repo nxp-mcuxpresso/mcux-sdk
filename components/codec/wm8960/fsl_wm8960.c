@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -10,15 +10,19 @@
 /*******************************************************************************
  * Definitations
  ******************************************************************************/
-#define WM8960_CHECK_RET(x, status)      \
-    do                                   \
-    {                                    \
-        (status) = (x);                  \
-        if (kStatus_Success != (status)) \
-        {                                \
-            return (status);             \
-        }                                \
-    } while (false)
+#define WM8960_CHECK_RET(x, status)  \
+    (status) = (x);                  \
+    if ((status) != kStatus_Success) \
+    {                                \
+        return (status);             \
+    }
+
+/*! @brief WM8960 f2 better performance range */
+#define WM8960_PLL_F2_MIN_FREQ 90000000U
+#define WM8960_PLL_F2_MAX_FREQ 100000000U
+/*! @brief WM8960 PLLN range */
+#define WM8960_PLL_N_MIN_VALUE 6U
+#define WM8960_PLL_N_MAX_VALUE 12U
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -39,15 +43,127 @@ static const uint16_t wm8960_reg[WM8960_CACHEREGNUM] = {
 };
 
 static uint16_t reg_cache[WM8960_CACHEREGNUM];
-
 /*******************************************************************************
  * Code
  ******************************************************************************/
+static status_t WM8960_SetInternalPllConfig(
+    wm8960_handle_t *handle, uint32_t inputMclk, uint32_t outputClk, uint32_t sampleRate, uint32_t bitWidth)
+{
+    status_t ret   = kStatus_Success;
+    uint32_t pllF2 = outputClk * 4U, pllPrescale = 0U, sysclkDiv = 1U, pllR = 0, pllN = 0, pllK = 0U, fracMode = 0U;
+
+    /* disable PLL power */
+    WM8960_CHECK_RET(WM8960_ModifyReg(handle, WM8960_POWER2, 1U, 0U), ret);
+    WM8960_CHECK_RET(WM8960_ModifyReg(handle, WM8960_CLOCK1, 7U, 0U), ret);
+
+    pllN = pllF2 / inputMclk;
+    if (pllN < WM8960_PLL_N_MIN_VALUE)
+    {
+        inputMclk >>= 1U;
+        pllPrescale = 1;
+        pllN        = pllF2 / inputMclk;
+        if (pllN < WM8960_PLL_N_MIN_VALUE)
+        {
+            sysclkDiv = 2U;
+            pllN      = pllF2 / inputMclk * sysclkDiv;
+        }
+    }
+
+    if ((pllN < WM8960_PLL_N_MIN_VALUE) || (pllN > WM8960_PLL_N_MAX_VALUE))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    pllR = pllF2 / (inputMclk / 1000U) * sysclkDiv;
+    pllK = ((1UL << 24U) * (pllR - pllN * 1000U)) / 1000U;
+    if (pllK != 0U)
+    {
+        fracMode = 1U;
+    }
+    WM8960_CHECK_RET(
+        WM8960_WriteReg(handle, WM8960_PLL1,
+                        ((uint16_t)fracMode << 5U) | ((uint16_t)pllPrescale << 4U) | ((uint16_t)pllN & 0xFU)),
+        ret);
+    WM8960_CHECK_RET(WM8960_WriteReg(handle, WM8960_PLL2, (uint16_t)(pllK >> 16U) & 0xFFU), ret);
+    WM8960_CHECK_RET(WM8960_WriteReg(handle, WM8960_PLL3, (uint16_t)(pllK >> 8U) & 0xFFU), ret);
+    WM8960_CHECK_RET(WM8960_WriteReg(handle, WM8960_PLL4, (uint16_t)pllK & 0xFFU), ret);
+    /* enable PLL power */
+    WM8960_CHECK_RET(WM8960_ModifyReg(handle, WM8960_POWER2, 1U, 1U), ret);
+
+    WM8960_CHECK_RET(WM8960_ModifyReg(handle, WM8960_CLOCK1, 7U, ((sysclkDiv == 1U ? 0U : sysclkDiv) << 1U) | 1U), ret);
+
+    return ret;
+}
+
+static status_t WM8960_SetMasterClock(wm8960_handle_t *handle, uint32_t sysclk, uint32_t sampleRate, uint32_t bitWidth)
+{
+    uint32_t bitClockDivider = 0U, regDivider = 0U;
+    status_t ret = kStatus_Success;
+
+    bitClockDivider = (sysclk * 2U) / (sampleRate * bitWidth * 2U);
+
+    switch (bitClockDivider)
+    {
+        case 2:
+            regDivider = 0U;
+            break;
+        case 3:
+            regDivider = 1U;
+            break;
+        case 4:
+            regDivider = 2U;
+            break;
+        case 6:
+            regDivider = 3U;
+            break;
+        case 8:
+            regDivider = 4U;
+            break;
+        case 11:
+            regDivider = 5U;
+            break;
+        case 12:
+            regDivider = 6U;
+            break;
+        case 16:
+            regDivider = 7U;
+            break;
+        case 22:
+            regDivider = 8U;
+            break;
+        case 24:
+            regDivider = 9U;
+            break;
+        case 32:
+            regDivider = 10U;
+            break;
+        case 44:
+            regDivider = 11U;
+            break;
+        case 48:
+            regDivider = 12U;
+            break;
+
+        default:
+            ret = kStatus_InvalidArgument;
+            break;
+    }
+    if (ret == kStatus_Success)
+    {
+        /* configure the master bit clock divider will be better */
+        WM8960_CHECK_RET(WM8960_ModifyReg(handle, WM8960_CLOCK2, WM8960_CLOCK2_BCLK_DIV_MASK, (uint16_t)regDivider),
+                         ret);
+    }
+
+    return ret;
+}
+
 status_t WM8960_Init(wm8960_handle_t *handle, const wm8960_config_t *config)
 {
     status_t ret = kStatus_Success;
 
-    handle->config = config;
+    handle->config  = config;
+    uint32_t sysclk = config->format.mclk_HZ;
 
     /* i2c bus initialization */
     if (CODEC_I2C_Init(handle->i2cHandle, config->i2cConfig.codecI2CInstance, WM8960_I2C_BAUDRATE,
@@ -79,7 +195,20 @@ status_t WM8960_Init(wm8960_handle_t *handle, const wm8960_config_t *config)
     WM8960_CHECK_RET(WM8960_SetDataRoute(handle, config->route), ret);
     /* set data protocol */
     WM8960_CHECK_RET(WM8960_SetProtocol(handle, config->bus), ret);
+
+    if ((config->masterClock.sysclkSource == kWM8960_SysClkSourceInternalPLL))
+    {
+        WM8960_CHECK_RET(WM8960_SetInternalPllConfig(handle, sysclk, config->masterClock.sysclkFreq,
+                                                     config->format.sampleRate, config->format.bitWidth),
+                         ret);
+        sysclk = config->masterClock.sysclkFreq;
+    }
     /* set master or slave */
+    if (config->master_slave)
+    {
+        WM8960_CHECK_RET(WM8960_SetMasterClock(handle, sysclk, config->format.sampleRate, config->format.bitWidth),
+                         ret);
+    }
     WM8960_SetMasterSlave(handle, config->master_slave);
     /* select left input */
     WM8960_CHECK_RET(WM8960_SetLeftInput(handle, config->leftInputSource), ret);
@@ -125,9 +254,7 @@ status_t WM8960_Init(wm8960_handle_t *handle, const wm8960_config_t *config)
     WM8960_CHECK_RET(WM8960_WriteReg(handle, WM8960_LINVOL, 0x117), ret);
     WM8960_CHECK_RET(WM8960_WriteReg(handle, WM8960_RINVOL, 0x117), ret);
 
-    WM8960_CHECK_RET(
-        WM8960_ConfigDataFormat(handle, config->format.mclk_HZ, config->format.sampleRate, config->format.bitWidth),
-        ret);
+    WM8960_CHECK_RET(WM8960_ConfigDataFormat(handle, sysclk, config->format.sampleRate, config->format.bitWidth), ret);
 
     return ret;
 }
@@ -313,7 +440,7 @@ status_t WM8960_SetLeftInput(wm8960_handle_t *handle, wm8960_input_t input)
     {
         case kWM8960_InputClosed:
             WM8960_CHECK_RET(WM8960_ReadReg(WM8960_POWER1, &val), ret);
-            val &= ~(WM8960_POWER1_AINL_MASK | WM8960_POWER1_ADCL_MASK);
+            val &= (uint16_t) ~(WM8960_POWER1_AINL_MASK | WM8960_POWER1_ADCL_MASK);
             WM8960_CHECK_RET(WM8960_WriteReg(handle, WM8960_POWER1, val), ret);
             break;
         case kWM8960_InputSingleEndedMic:
@@ -371,7 +498,7 @@ status_t WM8960_SetRightInput(wm8960_handle_t *handle, wm8960_input_t input)
     {
         case kWM8960_InputClosed:
             WM8960_CHECK_RET(WM8960_ReadReg(WM8960_POWER1, &val), ret);
-            val &= ~(WM8960_POWER1_AINR_MASK | WM8960_POWER1_ADCR_MASK);
+            val &= (uint16_t) ~(WM8960_POWER1_AINR_MASK | WM8960_POWER1_ADCR_MASK);
             WM8960_CHECK_RET(WM8960_WriteReg(handle, WM8960_POWER1, val), ret);
             break;
         case kWM8960_InputSingleEndedMic:
@@ -638,7 +765,11 @@ status_t WM8960_ConfigDataFormat(wm8960_handle_t *handle, uint32_t sysclk, uint3
         return kStatus_InvalidArgument;
     }
 
-    retval = WM8960_WriteReg(handle, WM8960_CLOCK1, val);
+    retval = WM8960_ModifyReg(handle, WM8960_CLOCK1, 0x1F8U, val);
+    if (retval != kStatus_Success)
+    {
+        return retval;
+    }
 
     /*
      * Slave mode (MS = 0), LRP = 0, 32bit WL, left justified (FORMAT[1:0]=0b01)

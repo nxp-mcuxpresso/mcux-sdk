@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Driver version 2.7.0. */
-#define FSL_USDHC_DRIVER_VERSION (MAKE_VERSION(2U, 7U, 0U))
+/*! @brief Driver version 2.8.0. */
+#define FSL_USDHC_DRIVER_VERSION (MAKE_VERSION(2U, 8U, 0U))
 /*@}*/
 
 /*! @brief Maximum block count can be set one time */
@@ -221,8 +221,9 @@ enum
     kUSDHC_CardDetectFlag   = (kUSDHC_CardInsertionFlag | kUSDHC_CardRemovalFlag),    /*!< Card detection interrupts */
     kUSDHC_SDR104TuningFlag = (kUSDHC_TuningErrorFlag | kUSDHC_TuningPassFlag | kUSDHC_ReTuningEventFlag),
     /*!< SDR104 tuning flag. */
-    kUSDHC_AllInterruptFlags = (kUSDHC_BlockGapEventFlag | kUSDHC_CardInterruptFlag | kUSDHC_CommandFlag |
-                                kUSDHC_DataFlag | kUSDHC_ErrorFlag | kUSDHC_SDR104TuningFlag), /*!< All flags mask */
+    kUSDHC_AllInterruptFlags =
+        (kUSDHC_BlockGapEventFlag | kUSDHC_CardInterruptFlag | kUSDHC_CommandFlag | kUSDHC_DataFlag | kUSDHC_ErrorFlag |
+         kUSDHC_SDR104TuningFlag | kUSDHC_DmaCompleteFlag), /*!< All flags mask */
 };
 
 /*! @brief Enum _usdhc_auto_command12_error_status_flag. Auto CMD12 error status flag mask.
@@ -1393,7 +1394,31 @@ void USDHC_EnableAutoTuningForCmdAndData(USDHC_Type *base);
 void USDHC_EnableManualTuning(USDHC_Type *base, bool enable);
 
 /*!
+ * @brief Get the tuning delay cell setting.
+ *
+ * @param base USDHC peripheral base address.
+ * @retval CLK Tuning Control and Status register value.
+ */
+static inline uint32_t USDHC_GetTuningDelayStatus(USDHC_Type *base)
+{
+    return base->CLK_TUNE_CTRL_STATUS >> 16U;
+}
+
+/*!
+ * @brief The tuning delay cell setting.
+ *
+ * @param base USDHC peripheral base address.
+ * @param preDelay Set the number of delay cells on the feedback clock between the feedback clock and CLK_PRE.
+ * @param outDelay Set the number of delay cells on the feedback clock between CLK_PRE and CLK_OUT.
+ * @param postDelay Set the number of delay cells on the feedback clock between CLK_OUT and CLK_POST.
+ * @retval kStatus_Fail config the delay setting fail
+ * @retval kStatus_Success config the delay setting success
+ */
+status_t USDHC_SetTuningDelay(USDHC_Type *base, uint32_t preDelay, uint32_t outDelay, uint32_t postDelay);
+
+/*!
  * @brief Adjusts delay for mannual tuning.
+ * @deprecated Do not use this function.  It has been superceded by USDHC_SetTuingDelay
  * @param base USDHC peripheral base address.
  * @param delay setting configuration
  * @retval #kStatus_Fail config the delay setting fail

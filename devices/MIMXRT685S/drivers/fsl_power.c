@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020, NXP
+ * Copyright 2018-2021, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -142,7 +142,10 @@ static const uint32_t powerLdoVoltLevel[5] = {
 /* Turn on all partitions in parallel.
  * Be cautious to change the PMC_MEM_SEQ_NUM. To save code size, countPartitionSwitches() counted with 0x3F.
  */
-#define PMC_MEM_SEQ_NUM (0x3FU)
+#define PMC_MEM_SEQ_NUM                 (0x3FU)
+#define SYSCTL0_PDRUNCFG1_MEM_BITS_MASK (0x1F000FFFU)
+#define SYSCTL0_PDRUNCFG2_BITS_MASK     (0x3FFFFFFFU)
+#define SYSCTL0_PDRUNCFG3_BITS_MASK     (0x3FFFFFFFU)
 
 /*******************************************************************************
  * Codes
@@ -630,8 +633,22 @@ AT_QUICKACCESS_SECTION_CODE(static uint32_t countPartitionSwitches(uint32_t numP
 {
     (void)numPerSwitch;
 
-    /* All partitions are turned on in parallel */
-    return 1U;
+    /* Find if there's memory is powered on in PDRUNCFGn but powered down in PDSLEEPCFGn */
+    if ((((SYSCTL0->PDRUNCFG1 ^ SYSCTL0_PDRUNCFG1_MEM_BITS_MASK) &
+          (SYSCTL0->PDSLEEPCFG1 & SYSCTL0_PDRUNCFG1_MEM_BITS_MASK)) != 0U) ||
+        (((SYSCTL0->PDRUNCFG2 ^ SYSCTL0_PDRUNCFG2_BITS_MASK) & (SYSCTL0->PDSLEEPCFG2 & SYSCTL0_PDRUNCFG2_BITS_MASK)) !=
+         0U) ||
+        (((SYSCTL0->PDRUNCFG3 ^ SYSCTL0_PDRUNCFG3_BITS_MASK) & (SYSCTL0->PDSLEEPCFG3 & SYSCTL0_PDRUNCFG3_BITS_MASK)) !=
+         0U))
+    {
+        /* All partitions are turned on in parallel */
+        return 1U;
+    }
+    else
+    {
+        /* No partition power change */
+        return 0U;
+    };
 }
 
 AT_QUICKACCESS_SECTION_CODE(static uint32_t POWER_CalculateSafetyCount(void))

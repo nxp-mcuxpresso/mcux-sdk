@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020,2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPSPI driver version. */
-#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 #ifndef LPSPI_DUMMY_DATA
@@ -355,7 +355,9 @@ struct _lpspi_master_handle
     volatile bool isPcsContinuous; /*!< Is PCS continuous in transfer. */
     volatile bool writeTcrInIsr;   /*!< A flag that whether should write TCR in ISR. */
 
-    volatile bool isByteSwap; /*!< A flag that whether should byte swap. */
+    volatile bool isByteSwap;        /*!< A flag that whether should byte swap. */
+    volatile bool isTxMask;          /*!< A flag that whether TCR[TXMSK] is set. */
+    volatile uint16_t bytesPerFrame; /*!< Number of bytes in each frame */
 
     volatile uint8_t fifoSize; /*!< FIFO dataSize. */
 
@@ -714,12 +716,12 @@ static inline uint32_t LPSPI_GetRxRegisterAddress(LPSPI_Type *base)
 /*!
  * @brief Check the argument for transfer .
  *
+ * @param base LPSPI peripheral address.
  * @param transfer the transfer struct to be used.
- * @param bitsPerFrame The bit size of one frame.
- * @param bytesPerFrame The byte size of one frame.
+ * @param isEdma True to check for EDMA transfer, false to check interrupt non-blocking transfer
  * @return Return true for right and false for wrong.
  */
-bool LPSPI_CheckTransferArgument(lpspi_transfer_t *transfer, uint32_t bitsPerFrame, uint32_t bytesPerFrame);
+bool LPSPI_CheckTransferArgument(LPSPI_Type *base, lpspi_transfer_t *transfer, bool isEdma);
 
 /*!
  * @brief Configures the LPSPI for either master or slave.
@@ -1027,8 +1029,7 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
  * @brief LPSPI master transfer data using an interrupt method.
  *
  * This function transfers data using an interrupt method. This is a non-blocking function, which returns right away.
- * When all data
- * is transferred, the callback function is called.
+ * When all data is transferred, the callback function is called.
  *
  * Note:
  * The transfer data size should be integer multiples of bytesPerFrame if bytesPerFrame is less than or equal to 4.
@@ -1095,8 +1096,7 @@ void LPSPI_SlaveTransferCreateHandle(LPSPI_Type *base,
  * @brief LPSPI slave transfer data using an interrupt method.
  *
  * This function transfer data using an interrupt method. This is a non-blocking function, which returns right away.
- * When all data
- * is transferred, the callback function is called.
+ * When all data is transferred, the callback function is called.
  *
  * Note:
  * The transfer data size should be integer multiples of bytesPerFrame if bytesPerFrame is less than or equal to 4.

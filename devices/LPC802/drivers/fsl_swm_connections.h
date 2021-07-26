@@ -49,7 +49,7 @@ typedef enum _swm_port_pin_type_t
     kSWM_PortPin_P0_14 = 14U, /*!< port_pin number P0_14. */
     kSWM_PortPin_P0_15 = 15U, /*!< port_pin number P0_15. */
     kSWM_PortPin_P0_16 = 16U, /*!< port_pin number P0_16. */
-    kSWM_PortPin_P0_17 = 16U, /*!< port_pin number P0_17. */
+    kSWM_PortPin_P0_17 = 17U, /*!< port_pin number P0_17. */
     kSWM_PortPin_Reset = 0xffU /*!< port_pin reset number. */
 } swm_port_pin_type_t;
 

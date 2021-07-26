@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.4.2. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 4, 2))
+/*! @brief CLOCK driver version 2.4.3. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 4, 3))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -161,32 +161,32 @@ extern volatile uint32_t g_Ext_Clk_Freq;
 /*! @brief Clock gate name used for CLOCK_EnableClock/CLOCK_DisableClock. */
 typedef enum _clock_ip_name
 {
-    kCLOCK_Sys      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 0U),
-    kCLOCK_Rom      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 1U),
-    kCLOCK_Ram0_1   = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 2U),
-    kCLOCK_Flashreg = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 3U),
-    kCLOCK_Flash    = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 4U),
-    kCLOCK_I2c0     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 5U),
-    kCLOCK_Gpio0    = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 6U),
-    kCLOCK_Swm      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 7U),
-    kCLOCK_Sct      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 8U),
-    kCLOCK_Wkt      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 9U),
-    kCLOCK_Mrt      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 10U),
-    kCLOCK_Spi0     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 11U),
-    kCLOCK_Spi1     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 12U),
-    kCLOCK_Crc      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 13U),
-    kCLOCK_Uart0    = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 14U),
-    kCLOCK_Uart1    = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 15U),
-    kCLOCK_Uart2    = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 16U),
-    kCLOCK_Wwdt     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 17U),
-    kCLOCK_Iocon    = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 18U),
-    kCLOCK_Acmp     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 19U),
-    kCLOCK_I2c1     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 21U),
-    kCLOCK_I2c2     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 22U),
-    kCLOCK_I2c3     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 23U),
-    kCLOCK_Adc      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 24U),
-    kCLOCK_Mtb      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 26U),
-    kCLOCK_Dma      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 29U),
+    kCLOCK_Sys      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 0U),  /*!< Clock gate name: Sys. */
+    kCLOCK_Rom      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 1U),  /*!< Clock gate name: Rom. */
+    kCLOCK_Ram0_1   = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 2U),  /*!< Clock gate name: Ram0_1. */
+    kCLOCK_Flashreg = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 3U),  /*!< Clock gate name: Flashreg. */
+    kCLOCK_Flash    = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 4U),  /*!< Clock gate name: Flash. */
+    kCLOCK_I2c0     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 5U),  /*!< Clock gate name: I2c0. */
+    kCLOCK_Gpio0    = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 6U),  /*!< Clock gate name: Gpio0. */
+    kCLOCK_Swm      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 7U),  /*!< Clock gate name: Swm. */
+    kCLOCK_Sct      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 8U),  /*!< Clock gate name: Sct. */
+    kCLOCK_Wkt      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 9U),  /*!< Clock gate name: Wkt. */
+    kCLOCK_Mrt      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 10U), /*!< Clock gate name: Mrt. */
+    kCLOCK_Spi0     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 11U), /*!< Clock gate name: Spi0. */
+    kCLOCK_Spi1     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 12U), /*!< Clock gate name: Spi1. */
+    kCLOCK_Crc      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 13U), /*!< Clock gate name: Crc. */
+    kCLOCK_Uart0    = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 14U), /*!< Clock gate name: Uart0. */
+    kCLOCK_Uart1    = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 15U), /*!< Clock gate name: Uart1. */
+    kCLOCK_Uart2    = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 16U), /*!< Clock gate name: Uart2. */
+    kCLOCK_Wwdt     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 17U), /*!< Clock gate name: Wwdt. */
+    kCLOCK_Iocon    = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 18U), /*!< Clock gate name: Iocon. */
+    kCLOCK_Acmp     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 19U), /*!< Clock gate name: Acmp. */
+    kCLOCK_I2c1     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 21U), /*!< Clock gate name: I2c1. */
+    kCLOCK_I2c2     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 22U), /*!< Clock gate name: I2c2. */
+    kCLOCK_I2c3     = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 23U), /*!< Clock gate name: I2c3. */
+    kCLOCK_Adc      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 24U), /*!< Clock gate name: Adc. */
+    kCLOCK_Mtb      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 26U), /*!< Clock gate name: Mtb. */
+    kCLOCK_Dma      = CLK_GATE_DEFINE(SYS_AHB_CLK_CTRL, 29U), /*!< Clock gate name: Dma. */
 } clock_ip_name_t;
 
 /*! @brief Clock name used to get clock frequency. */
@@ -211,19 +211,27 @@ typedef enum _clock_name
 typedef enum _clock_select
 {
 
-    kSYSPLL_From_Irc    = CLK_MUX_DEFINE(SYSPLLCLKSEL, 0U),
-    kSYSPLL_From_SysOsc = CLK_MUX_DEFINE(SYSPLLCLKSEL, 1U),
-    kSYSPLL_From_ExtClk = CLK_MUX_DEFINE(SYSPLLCLKSEL, 3U),
+    kSYSPLL_From_Irc = CLK_MUX_DEFINE(SYSPLLCLKSEL, 0U), /*!< Mux SYSPLL from Irc. */
 
-    kMAINCLK_From_Irc      = CLK_MUX_DEFINE(MAINCLKSEL, 0U),
-    kMAINCLK_From_SysPllIn = CLK_MUX_DEFINE(MAINCLKSEL, 1U),
-    kMAINCLK_From_WdtOsc   = CLK_MUX_DEFINE(MAINCLKSEL, 2U),
-    kMAINCLK_From_SysPll   = CLK_MUX_DEFINE(MAINCLKSEL, 3U),
+    kSYSPLL_From_SysOsc = CLK_MUX_DEFINE(SYSPLLCLKSEL, 1U), /*!< Mux SYSPLL from SysOsc. */
 
-    kCLKOUT_From_Irc     = CLK_MUX_DEFINE(CLKOUTSEL, 0U),
-    kCLKOUT_From_SysOsc  = CLK_MUX_DEFINE(CLKOUTSEL, 1U),
-    kCLKOUT_From_WdtOsc  = CLK_MUX_DEFINE(CLKOUTSEL, 2U),
-    kCLKOUT_From_MainClk = CLK_MUX_DEFINE(CLKOUTSEL, 3U)
+    kSYSPLL_From_ExtClk = CLK_MUX_DEFINE(SYSPLLCLKSEL, 3U), /*!< Mux SYSPLL from ExtClk. */
+
+    kMAINCLK_From_Irc = CLK_MUX_DEFINE(MAINCLKSEL, 0U), /*!< Mux MAINCLK from Irc. */
+
+    kMAINCLK_From_SysPllIn = CLK_MUX_DEFINE(MAINCLKSEL, 1U), /*!< Mux MAINCLK from SysPllIn. */
+
+    kMAINCLK_From_WdtOsc = CLK_MUX_DEFINE(MAINCLKSEL, 2U), /*!< Mux MAINCLK from WdtOsc. */
+
+    kMAINCLK_From_SysPll = CLK_MUX_DEFINE(MAINCLKSEL, 3U), /*!< Mux MAINCLK from SysPll. */
+
+    kCLKOUT_From_Irc = CLK_MUX_DEFINE(CLKOUTSEL, 0U), /*!< Mux CLKOUT from Irc. */
+
+    kCLKOUT_From_SysOsc = CLK_MUX_DEFINE(CLKOUTSEL, 1U), /*!< Mux CLKOUT from SysOsc. */
+
+    kCLKOUT_From_WdtOsc = CLK_MUX_DEFINE(CLKOUTSEL, 2U), /*!< Mux CLKOUT from WdtOsc. */
+
+    kCLKOUT_From_MainClk = CLK_MUX_DEFINE(CLKOUTSEL, 3U) /*!< Mux clock out from Main clock. */
 } clock_select_t;
 
 /*! @brief Clock divider
@@ -231,39 +239,63 @@ typedef enum _clock_select
 typedef enum _clock_divider
 {
 
-    kCLOCK_DivUsartClk = CLK_DIV_DEFINE(UARTCLKDIV),
-    kCLOCK_DivClkOut   = CLK_DIV_DEFINE(CLKOUTDIV),
-    kCLOCK_DivUartFrg  = CLK_DIV_DEFINE(UARTFRGDIV),
+    kCLOCK_DivUsartClk = CLK_DIV_DEFINE(UARTCLKDIV), /*!< Usart Clock Divider. */
 
-    kCLOCK_IOCONCLKDiv6 = CLK_DIV_DEFINE(IOCONCLKDIV6),
-    kCLOCK_IOCONCLKDiv5 = CLK_DIV_DEFINE(IOCONCLKDIV5),
-    kCLOCK_IOCONCLKDiv4 = CLK_DIV_DEFINE(IOCONCLKDIV4),
-    kCLOCK_IOCONCLKDiv3 = CLK_DIV_DEFINE(IOCONCLKDIV3),
-    kCLOCK_IOCONCLKDiv2 = CLK_DIV_DEFINE(IOCONCLKDIV2),
-    kCLOCK_IOCONCLKDiv1 = CLK_DIV_DEFINE(IOCONCLKDIV1),
-    kCLOCK_IOCONCLKDiv0 = CLK_DIV_DEFINE(IOCONCLKDIV0),
+    kCLOCK_DivClkOut = CLK_DIV_DEFINE(CLKOUTDIV), /*!< Clk Out Divider. */
+
+    kCLOCK_DivUartFrg = CLK_DIV_DEFINE(UARTFRGDIV), /*!< Uart Frg Divider. */
+
+    kCLOCK_IOCONCLKDiv6 = CLK_DIV_DEFINE(IOCONCLKDIV6), /*!< IOCON Clock Div6 Divider. */
+
+    kCLOCK_IOCONCLKDiv5 = CLK_DIV_DEFINE(IOCONCLKDIV5), /*!< IOCON Clock Div5 Divider. */
+
+    kCLOCK_IOCONCLKDiv4 = CLK_DIV_DEFINE(IOCONCLKDIV4), /*!< IOCON Clock Div4 Divider. */
+
+    kCLOCK_IOCONCLKDiv3 = CLK_DIV_DEFINE(IOCONCLKDIV3), /*!< IOCON Clock Div3 Divider. */
+
+    kCLOCK_IOCONCLKDiv2 = CLK_DIV_DEFINE(IOCONCLKDIV2), /*!< IOCON Clock Div2 Divider. */
+
+    kCLOCK_IOCONCLKDiv1 = CLK_DIV_DEFINE(IOCONCLKDIV1), /*!< IOCON Clock Div1 Divider. */
+
+    kCLOCK_IOCONCLKDiv0 = CLK_DIV_DEFINE(IOCONCLKDIV0), /*!< IOCON Clock Div0 Divider. */
 
 } clock_divider_t;
 
 /*! @brief watch dog analog output frequency */
 typedef enum _clock_wdt_analog_freq
 {
-    kCLOCK_WdtAnaFreq0HZ     = CLK_WDT_OSC_DEFINE(0U, 0U),
-    kCLOCK_WdtAnaFreq600KHZ  = CLK_WDT_OSC_DEFINE(600000U, 1U),
-    kCLOCK_WdtAnaFreq1050KHZ = CLK_WDT_OSC_DEFINE(1050000U, 2u),
-    kCLOCK_WdtAnaFreq1400KHZ = CLK_WDT_OSC_DEFINE(1400000U, 3U),
-    kCLOCK_WdtAnaFreq1750KHZ = CLK_WDT_OSC_DEFINE(1750000U, 4U),
-    kCLOCK_WdtAnaFreq2100KHZ = CLK_WDT_OSC_DEFINE(2100000U, 5U),
-    kCLOCK_WdtAnaFreq2400KHZ = CLK_WDT_OSC_DEFINE(2400000U, 6U),
-    kCLOCK_WdtAnaFreq2700KHZ = CLK_WDT_OSC_DEFINE(2700000U, 7U),
-    kCLOCK_WdtAnaFreq3000KHZ = CLK_WDT_OSC_DEFINE(3000000U, 8U),
-    kCLOCK_WdtAnaFreq3250KHZ = CLK_WDT_OSC_DEFINE(3250000U, 9U),
-    kCLOCK_WdtAnaFreq3500KHZ = CLK_WDT_OSC_DEFINE(3500000U, 10U),
-    kCLOCK_WdtAnaFreq3750KHZ = CLK_WDT_OSC_DEFINE(3750000U, 11U),
-    kCLOCK_WdtAnaFreq4000KHZ = CLK_WDT_OSC_DEFINE(4000000U, 12U),
-    kCLOCK_WdtAnaFreq4200KHZ = CLK_WDT_OSC_DEFINE(4200000U, 13U),
-    kCLOCK_WdtAnaFreq4400KHZ = CLK_WDT_OSC_DEFINE(4400000U, 14U),
-    kCLOCK_WdtAnaFreq4600KHZ = CLK_WDT_OSC_DEFINE(4600000U, 15U),
+    kCLOCK_WdtAnaFreq0HZ = CLK_WDT_OSC_DEFINE(0U, 0U), /*!< Watch dog analog output frequency is 0HZ. */
+
+    kCLOCK_WdtAnaFreq600KHZ = CLK_WDT_OSC_DEFINE(600000U, 1U), /*!< Watch dog analog output frequency is 600KHZ. */
+
+    kCLOCK_WdtAnaFreq1050KHZ = CLK_WDT_OSC_DEFINE(1050000U, 2u), /*!< Watch dog analog output frequency is 1050KHZ. */
+
+    kCLOCK_WdtAnaFreq1400KHZ = CLK_WDT_OSC_DEFINE(1400000U, 3U), /*!< Watch dog analog output frequency is 1400KHZ. */
+
+    kCLOCK_WdtAnaFreq1750KHZ = CLK_WDT_OSC_DEFINE(1750000U, 4U), /*!< Watch dog analog output frequency is 1750KHZ. */
+
+    kCLOCK_WdtAnaFreq2100KHZ = CLK_WDT_OSC_DEFINE(2100000U, 5U), /*!< Watch dog analog output frequency is 2100KHZ. */
+
+    kCLOCK_WdtAnaFreq2400KHZ = CLK_WDT_OSC_DEFINE(2400000U, 6U), /*!< Watch dog analog output frequency is 2400KHZ. */
+
+    kCLOCK_WdtAnaFreq2700KHZ = CLK_WDT_OSC_DEFINE(2700000U, 7U), /*!< Watch dog analog output frequency is 2700KHZ. */
+
+    kCLOCK_WdtAnaFreq3000KHZ = CLK_WDT_OSC_DEFINE(3000000U, 8U), /*!< Watch dog analog output frequency is 3000KHZ. */
+
+    kCLOCK_WdtAnaFreq3250KHZ = CLK_WDT_OSC_DEFINE(3250000U, 9U), /*!< Watch dog analog output frequency is 3250KHZ. */
+
+    kCLOCK_WdtAnaFreq3500KHZ = CLK_WDT_OSC_DEFINE(3500000U, 10U), /*!< Watch dog analog output frequency is 3500KHZ. */
+
+    kCLOCK_WdtAnaFreq3750KHZ = CLK_WDT_OSC_DEFINE(3750000U, 11U), /*!< Watch dog analog output frequency is 3750KHZ. */
+
+    kCLOCK_WdtAnaFreq4000KHZ = CLK_WDT_OSC_DEFINE(4000000U, 12U), /*!< Watch dog analog output frequency is 4000KHZ. */
+
+    kCLOCK_WdtAnaFreq4200KHZ = CLK_WDT_OSC_DEFINE(4200000U, 13U), /*!< Watch dog analog output frequency is 4200KHZ. */
+
+    kCLOCK_WdtAnaFreq4400KHZ = CLK_WDT_OSC_DEFINE(4400000U, 14U), /*!< Watch dog analog output frequency is 4400KHZ. */
+
+    kCLOCK_WdtAnaFreq4600KHZ = CLK_WDT_OSC_DEFINE(4600000U, 15U), /*!< Watch dog analog output frequency is 4600KHZ. */
+
 } clock_wdt_analog_freq_t;
 
 /*! @brief PLL clock definition.*/

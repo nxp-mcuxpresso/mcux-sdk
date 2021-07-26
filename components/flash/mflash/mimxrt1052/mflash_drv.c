@@ -22,6 +22,7 @@
 
 #define FLASH_SIZE 0x10000
 
+#ifndef XIP_EXTERNAL_FLASH
 flexspi_device_config_t deviceconfig = {
     .flexspiRootClk       = 42000000, /* 42MHZ SPI serial clock */
     .isSck2Enabled        = false,
@@ -40,6 +41,7 @@ flexspi_device_config_t deviceconfig = {
     .AHBWriteWaitUnit     = kFLEXSPI_AhbWriteWaitUnit2AhbCycle,
     .AHBWriteWaitInterval = 20,
 };
+#endif
 
 static uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
     /* Read Data */
@@ -268,8 +270,12 @@ static int32_t mflash_drv_init_internal(void)
      *       It is necessary to place at least "mflash_drv.o", "fsl_flexspi.o" to SRAM */
     /* disable interrupts when running from XIP */
     uint32_t primask = __get_PRIMASK();
-
     __asm("cpsid i");
+
+    /* Wait for bus to be idle before changing flash configuration. */
+    while (false == FLEXSPI_GetBusIdleStatus(MFLASH_FLEXSPI))
+    {
+    }
 
 #ifndef XIP_EXTERNAL_FLASH
     flexspi_config_t config;
@@ -283,7 +289,9 @@ static int32_t mflash_drv_init_internal(void)
     /* enable diff clock and DQS */
     config.enableSckBDiffOpt = true;
     config.rxSampleClock     = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad;
+#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN)
     config.enableCombination = true;
+#endif
     FLEXSPI_Init(MFLASH_FLEXSPI, &config);
 
     /* AHB Read Address option bit. This option bit is intend to remove AHB burst start address alignment limitation */
@@ -359,8 +367,12 @@ int32_t mflash_drv_sector_erase(uint32_t sector_addr)
 static int32_t mflash_drv_page_program_internal(uint32_t page_addr, uint32_t *data)
 {
     uint32_t primask = __get_PRIMASK();
-
     __asm("cpsid i");
+
+    /* Wait for bus to be idle before changing flash configuration. */
+    while (false == FLEXSPI_GetBusIdleStatus(MFLASH_FLEXSPI))
+    {
+    }
 
     FLEXSPI_Enable(MFLASH_FLEXSPI, false);
     CLOCK_DisableClock(kCLOCK_FlexSpi);
