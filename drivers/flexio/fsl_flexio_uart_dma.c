@@ -130,7 +130,7 @@ status_t FLEXIO_UART_TransferCreateHandleDMA(FLEXIO_UART_Type *base,
                                              dma_handle_t *txDmaHandle,
                                              dma_handle_t *rxDmaHandle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     dma_transfer_config_t dmaXferConfig;
     uint8_t index = 0;
@@ -213,7 +213,7 @@ status_t FLEXIO_UART_TransferSendDMA(FLEXIO_UART_Type *base,
                                      flexio_uart_dma_handle_t *handle,
                                      flexio_uart_transfer_t *xfer)
 {
-    assert(handle->txDmaHandle);
+    assert(handle->txDmaHandle != NULL);
 
     status_t status;
 
@@ -266,7 +266,7 @@ status_t FLEXIO_UART_TransferReceiveDMA(FLEXIO_UART_Type *base,
                                         flexio_uart_dma_handle_t *handle,
                                         flexio_uart_transfer_t *xfer)
 {
-    assert(handle->rxDmaHandle);
+    assert(handle->rxDmaHandle != NULL);
 
     status_t status;
 
@@ -313,7 +313,7 @@ status_t FLEXIO_UART_TransferReceiveDMA(FLEXIO_UART_Type *base,
  */
 void FLEXIO_UART_TransferAbortSendDMA(FLEXIO_UART_Type *base, flexio_uart_dma_handle_t *handle)
 {
-    assert(handle->txDmaHandle);
+    assert(handle->txDmaHandle != NULL);
 
     /* Disable FLEXIO UART TX DMA. */
     FLEXIO_UART_EnableTxDMA(base, false);
@@ -338,7 +338,7 @@ void FLEXIO_UART_TransferAbortSendDMA(FLEXIO_UART_Type *base, flexio_uart_dma_ha
  */
 void FLEXIO_UART_TransferAbortReceiveDMA(FLEXIO_UART_Type *base, flexio_uart_dma_handle_t *handle)
 {
-    assert(handle->rxDmaHandle);
+    assert(handle->rxDmaHandle != NULL);
 
     /* Disable FLEXIO UART RX DMA. */
     FLEXIO_UART_EnableRxDMA(base, false);
@@ -366,9 +366,9 @@ void FLEXIO_UART_TransferAbortReceiveDMA(FLEXIO_UART_Type *base, flexio_uart_dma
  */
 status_t FLEXIO_UART_TransferGetSendCountDMA(FLEXIO_UART_Type *base, flexio_uart_dma_handle_t *handle, size_t *count)
 {
-    assert(handle);
-    assert(handle->txDmaHandle);
-    assert(count);
+    assert(handle != NULL);
+    assert(handle->txDmaHandle != NULL);
+    assert(count != NULL);
 
     if ((uint8_t)kFLEXIO_UART_TxIdle == handle->txState)
     {
@@ -393,9 +393,9 @@ status_t FLEXIO_UART_TransferGetSendCountDMA(FLEXIO_UART_Type *base, flexio_uart
  */
 status_t FLEXIO_UART_TransferGetReceiveCountDMA(FLEXIO_UART_Type *base, flexio_uart_dma_handle_t *handle, size_t *count)
 {
-    assert(handle);
-    assert(handle->rxDmaHandle);
-    assert(count);
+    assert(handle != NULL);
+    assert(handle->rxDmaHandle != NULL);
+    assert(count != NULL);
 
     if ((uint8_t)kFLEXIO_UART_RxIdle == handle->rxState)
     {

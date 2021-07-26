@@ -136,7 +136,12 @@ mmcau_des_encrypt:
     ldmia   r0!, {r5-r6}                    @ load plaintext
     rev     r5, r5
     rev     r6, r6
-    stmia   r7!, {r3-r6}                    @ store in CA[0-3]
+#   stmia   r7!, {r3-r6}                    @ store in CA[0-3]
+    str     r3, [r7, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r4, [r7, #1<<2]
+    str     r5, [r7, #2<<2]
+    str     r6, [r7, #3<<2]
+    adds    r7, #1<<4
 
 # send a series of 17 direct cau commands to perform the DES round operations
 #   *(MMCAU_PPB_DIRECT) = mmcau_3_cmds(DESK,DESR+IP+KSL1,DESR+KSL2)      1- 3
@@ -146,7 +151,12 @@ mmcau_des_encrypt:
 #   *(MMCAU_PPB_DIRECT) = mmcau_3_cmds(DESR+KSL2,DESR+KSL2,DESR+KSL2)   13-15
 #   *(MMCAU_PPB_DIRECT) = mmcau_2_cmds(DESR+KSL1,DESR+FP)               16-17
     ldr     r0, =encrypt_reg_data
-    ldmia   r0, {r0-r1, r3-r6}              @ load commands
+#   ldmia   r0, {r0-r1, r3-r6}              @ load commands
+                                            @ make ldmia interuptible in MMCAU
+    adds    r0, #1<<2                       @ move by 4 byte
+    ldmia   r0!, {r1, r3-r6}                @ load commands + move by 20 byte
+    subs    r0, #3<<3                       @ move back by 24byte
+    ldr     r0, [r0]                        @ load rest/first of commands
     str     r3, [r0]                        @ send commands  1- 3
     str     r4, [r0]                        @    " "         4- 6
     str     r5, [r0]                        @    " "         7- 9
@@ -155,10 +165,15 @@ mmcau_des_encrypt:
     str     r6, [r0]                        @    " "        16-17
 
 # store the 64-bit ciphertext output block into memory
-    ldmia   r1, {r0-r1}                     @ load ciphertext
+#   ldmia   r1, {r0-r1}                     @ load ciphertext
+    ldr     r0, [r1, #0<<2]                 @ expand ldmia into ldr to be interruptible
+    ldr     r1, [r1, #1<<2]
     rev     r0, r0
     rev     r1, r1
-    stmia   r2!, {r0-r1}                    @ store in out[0-1]
+#   stmia   r2!, {r0-r1}                    @ store in out[0-1]
+    str     r0, [r2, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r1, [r2, #1<<2]
+    adds    r2, #2<<2
 
     pop     {r4-r7}                         @ restore regs
     bx      lr                              @ exit routine
@@ -214,7 +229,12 @@ mmcau_des_decrypt:
     ldmia   r0!, {r5-r6}                    @ load ciphertext
     rev     r5, r5
     rev     r6, r6
-    stmia   r7!, {r3-r6}                    @ store in CA[0-3]
+#   stmia   r7!, {r3-r6}                    @ store in CA[0-3]
+    str     r3, [r7, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r4, [r7, #1<<2]
+    str     r5, [r7, #2<<2]
+    str     r6, [r7, #3<<2]
+    adds    r7, #1<<4
 
 # send a series of 17 direct cau commands to perform the DES round operations
 #   *(MMCAU_PPB_DIRECT) = mmcau_3_cmds(DESK+DC,DESR+IP+KSR1,DESR+KSR2)   1- 3
@@ -224,7 +244,12 @@ mmcau_des_decrypt:
 #   *(MMCAU_PPB_DIRECT) = mmcau_3_cmds(DESR+KSR2,DESR+KSR2,DESR+KSR2)   13-15
 #   *(MMCAU_PPB_DIRECT) = mmcau_2_cmds(DESR+KSR1,DESR+FP)               16-17
     ldr     r0, =decrypt_reg_data
-    ldmia   r0, {r0-r1, r3-r6}              @ load commands
+#   ldmia   r0, {r0-r1, r3-r6}              @ load commands
+                                            @ make ldmia interuptible in MMCAU
+    adds    r0, #1<<2                       @ move by 4 byte
+    ldmia   r0!, {r1, r3-r6}                @ load commands + move by 20 byte
+    subs    r0, #3<<3                       @ move back by 24byte
+    ldr     r0, [r0]                        @ load rest/first of commands
     str     r3, [r0]                        @ send commands  1- 3
     str     r4, [r0]                        @    " "         4- 6
     str     r5, [r0]                        @    " "         7- 9
@@ -233,10 +258,15 @@ mmcau_des_decrypt:
     str     r6, [r0]                        @    " "        16-17
 
 # store the 64-bit plaintext output block into memory
-    ldmia   r1, {r0-r1}                     @ load plaintext
+#   ldmia   r1, {r0-r1}                     @ load plaintext
+    ldr     r0, [r1, #0<<2]                 @ expand ldmia into ldr to be interruptible
+    ldr     r1, [r1, #1<<2]
     rev     r0, r0
     rev     r1, r1
-    stmia   r2!, {r0-r1}                    @ store in out[0-1]
+#   stmia   r2!, {r0-r1}                    @ store in out[0-1]
+    str     r0, [r2, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r1, [r2, #1<<2]
+    adds    r2, #2<<2
 
     pop     {r4-r7}                         @ restore regs
     bx      lr                              @ exit routine

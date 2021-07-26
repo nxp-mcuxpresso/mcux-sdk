@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPADC driver version 2.3.0. */
-#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief LPADC driver version 2.4.0. */
+#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*@}*/
 
 /*!
@@ -94,6 +94,64 @@ enum _lpadc_interrupt_enable
                                                                        requests when RDY flag is asserted. */
 };
 #endif /* FSL_FEATURE_LPADC_FIFO_COUNT */
+
+#if (defined(FSL_FEATURE_LPADC_HAS_TSTAT) && FSL_FEATURE_LPADC_HAS_TSTAT)
+/*!
+ * @brief The enumerator of lpadc trigger status flags, including interrupted flags and completed flags.
+ */
+enum _lpadc_trigger_status_flags
+{
+    kLPADC_Trigger0InterruptedFlag  = 1UL << 0UL,  /*!< Trigger 0 is interrupted by a high priority exception. */
+    kLPADC_Trigger1InterruptedFlag  = 1UL << 1UL,  /*!< Trigger 1 is interrupted by a high priority exception. */
+    kLPADC_Trigger2InterruptedFlag  = 1UL << 2UL,  /*!< Trigger 2 is interrupted by a high priority exception. */
+    kLPADC_Trigger3InterruptedFlag  = 1UL << 3UL,  /*!< Trigger 3 is interrupted by a high priority exception. */
+    kLPADC_Trigger4InterruptedFlag  = 1UL << 4UL,  /*!< Trigger 4 is interrupted by a high priority exception. */
+    kLPADC_Trigger5InterruptedFlag  = 1UL << 5UL,  /*!< Trigger 5 is interrupted by a high priority exception. */
+    kLPADC_Trigger6InterruptedFlag  = 1UL << 6UL,  /*!< Trigger 6 is interrupted by a high priority exception. */
+    kLPADC_Trigger7InterruptedFlag  = 1UL << 7UL,  /*!< Trigger 7 is interrupted by a high priority exception. */
+    kLPADC_Trigger8InterruptedFlag  = 1UL << 8UL,  /*!< Trigger 8 is interrupted by a high priority exception. */
+    kLPADC_Trigger9InterruptedFlag  = 1UL << 9UL,  /*!< Trigger 9 is interrupted by a high priority exception. */
+    kLPADC_Trigger10InterruptedFlag = 1UL << 10UL, /*!< Trigger 10 is interrupted by a high priority exception. */
+    kLPADC_Trigger11InterruptedFlag = 1UL << 11UL, /*!< Trigger 11 is interrupted by a high priority exception. */
+    kLPADC_Trigger12InterruptedFlag = 1UL << 12UL, /*!< Trigger 12 is interrupted by a high priority exception. */
+    kLPADC_Trigger13InterruptedFlag = 1UL << 13UL, /*!< Trigger 13 is interrupted by a high priority exception. */
+    kLPADC_Trigger14InterruptedFlag = 1UL << 14UL, /*!< Trigger 14 is interrupted by a high priority exception. */
+    kLPADC_Trigger15InterruptedFlag = 1UL << 15UL, /*!< Trigger 15 is interrupted by a high priority exception. */
+
+    kLPADC_Trigger0CompletedFlag = 1UL << 16UL,  /*!< Trigger 0 is completed and
+                                                     trigger 0 has enabled completion interrupts. */
+    kLPADC_Trigger1CompletedFlag = 1UL << 17UL,  /*!< Trigger 1 is completed and
+                                                     trigger 1 has enabled completion interrupts. */
+    kLPADC_Trigger2CompletedFlag = 1UL << 18UL,  /*!< Trigger 2 is completed and
+                                                     trigger 2 has enabled completion interrupts. */
+    kLPADC_Trigger3CompletedFlag = 1UL << 19UL,  /*!< Trigger 3 is completed and
+                                                     trigger 3 has enabled completion interrupts. */
+    kLPADC_Trigger4CompletedFlag = 1UL << 20UL,  /*!< Trigger 4 is completed and
+                                                     trigger 4 has enabled completion interrupts. */
+    kLPADC_Trigger5CompletedFlag = 1UL << 21UL,  /*!< Trigger 5 is completed and
+                                                     trigger 5 has enabled completion interrupts. */
+    kLPADC_Trigger6CompletedFlag = 1UL << 22UL,  /*!< Trigger 6 is completed and
+                                                     trigger 6 has enabled completion interrupts. */
+    kLPADC_Trigger7CompletedFlag = 1UL << 23UL,  /*!< Trigger 7 is completed and
+                                                     trigger 7 has enabled completion interrupts. */
+    kLPADC_Trigger8CompletedFlag = 1UL << 24UL,  /*!< Trigger 8 is completed and
+                                                     trigger 8 has enabled completion interrupts. */
+    kLPADC_Trigger9CompletedFlag = 1UL << 25UL,  /*!< Trigger 9 is completed and
+                                                     trigger 9 has enabled completion interrupts. */
+    kLPADC_Trigger10CompletedFlag = 1UL << 26UL, /*!< Trigger 10 is completed and
+                                                    trigger 10 has enabled completion interrupts. */
+    kLPADC_Trigger11CompletedFlag = 1UL << 27UL, /*!< Trigger 11 is completed and
+                                                    trigger 11 has enabled completion interrupts. */
+    kLPADC_Trigger12CompletedFlag = 1UL << 28UL, /*!< Trigger 12 is completed and
+                                                    trigger 12 has enabled completion interrupts. */
+    kLPADC_Trigger13CompletedFlag = 1UL << 29UL, /*!< Trigger 13 is completed and
+                                                    trigger 13 has enabled completion interrupts. */
+    kLPADC_Trigger14CompletedFlag = 1UL << 30UL, /*!< Trigger 14 is completed and
+                                                    trigger 14 has enabled completion interrupts. */
+    kLPADC_Trigger15CompletedFlag = 1UL << 31UL, /*!< Trigger 15 is completed and
+                                                    trigger 15 has enabled completion interrupts. */
+}
+#endif /* FSL_FEATURE_LPADC_HAS_TSTAT */
 
 /*!
  * @brief Define enumeration of sample scale mode.
@@ -524,6 +582,32 @@ static inline void LPADC_ClearStatusFlags(ADC_Type *base, uint32_t mask)
 {
     base->STAT = mask;
 }
+
+#if (defined(FSL_FEATURE_LPADC_HAS_TSTAT) && FSL_FEATURE_LPADC_HAS_TSTAT)
+/*!
+ * @brief Get trigger status flags to indicate which trigger sequences have been completed or interrupted by a high
+ * priority trigger exception.
+ *
+ * @param base LPADC peripheral base address.
+ * @return The OR'ed value of @ref _lpadc_trigger_status_flags.
+ */
+static inline uint32_t LPADC_GetTriggerStatusFlags(ADC_Type *base)
+{
+    return base->TSTAT;
+}
+
+/*!
+ * @brief Clear trigger status flags.
+ *
+ * @param base LPADC peripheral base address.
+ * @param mask The mask of trigger status flags to be cleared, should be the
+ *              OR'ed value of @ref _lpadc_trigger_status_flags.
+ */
+static inline void LPADC_ClearTriggerStatusFlags(ADC_Type *base, uint32_t mask)
+{
+    base->TSTAT = mask;
+}
+#endif /* FSL_FEATURE_LPADC_HAS_TSTAT */
 
 /* @} */
 

@@ -12,7 +12,8 @@
 #include "fsl_sai.h"
 
 /*!
- * @addtogroup sai_edma
+ * @addtogroup sai_edma SAI EDMA Driver
+ * @ingroup sai
  * @{
  */
 
@@ -22,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SAI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 1)) /*!< Version 2.3.1 */
+#define FSL_SAI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0)) /*!< Version 2.4.0 */
 /*@}*/
 
 typedef struct sai_edma_handle sai_edma_handle_t;
@@ -36,7 +37,6 @@ struct sai_edma_handle
     edma_handle_t *dmaHandle;     /*!< DMA handler for SAI send */
     uint8_t nbytes;               /*!< eDMA minor byte transfer count initially configured. */
     uint8_t bytesPerFrame;        /*!< Bytes in a frame */
-    uint8_t channelMask;          /*!< Enabled channel mask value, reference _sai_channel_mask */
     uint8_t channel;              /*!< Which data channel */
     uint8_t count;                /*!< The transfer data count in a DMA request */
     uint32_t state;               /*!< Internal state for SAI eDMA transfer */
@@ -102,6 +102,8 @@ void SAI_TransferRxCreateHandleEDMA(I2S_Type *base,
 /*!
  * @brief Configures the SAI Tx audio format.
  *
+ * @deprecated Do not use this function.  It has been superceded by @ref SAI_TransferTxSetConfigEDMA
+ *
  * The audio format can be changed at run-time. This function configures the sample rate and audio data
  * format to be transferred. This function also sets the eDMA parameter according to formatting requirements.
  *
@@ -122,6 +124,8 @@ void SAI_TransferTxSetFormatEDMA(I2S_Type *base,
 
 /*!
  * @brief Configures the SAI Rx audio format.
+ *
+ * @deprecated Do not use this function.  It has been superceded by @ref SAI_TransferRxSetConfigEDMA
  *
  * The audio format can be changed at run-time. This function configures the sample rate and audio data
  * format to be transferred. This function also sets the eDMA parameter according to formatting requirements.
@@ -144,18 +148,6 @@ void SAI_TransferRxSetFormatEDMA(I2S_Type *base,
 /*!
  * @brief Configures the SAI Tx.
  *
- * @note SAI eDMA supports data transfer in a multiple SAI channels if the FIFO Combine feature is supported.
- * To activate the multi-channel transfer enable SAI channels by filling the channelMask 
- * of sai_transceiver_t with the corresponding values of _sai_channel_mask enum, enable the FIFO Combine 
- * mode by assigning kSAI_FifoCombineModeEnabledOnWrite to the fifoCombine member of sai_fifo_combine_t 
- * which is a member of sai_transceiver_t.
- * This is an example of multi-channel data transfer configuration step.
-   @code
-    sai_transceiver_t config;
-    SAI_GetClassicI2SConfig(&config, kSAI_WordWidth16bits, kSAI_Stereo, kSAI_Channel0Mask|kSAI_Channel1Mask);
-    config.fifo.fifoCombine = kSAI_FifoCombineModeEnabledOnWrite;
-    SAI_TransferTxSetConfigEDMA(I2S0, &edmaHandle, &config);
-   @endcode
  *
  * @param base SAI base pointer.
  * @param handle SAI eDMA handle pointer.
@@ -166,18 +158,6 @@ void SAI_TransferTxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
 /*!
  * @brief Configures the SAI Rx.
  *
- * @note SAI eDMA supports data transfer in a multiple SAI channels if the FIFO Combine feature is supported.
- * To activate the multi-channel transfer enable SAI channels by filling the channelMask 
- * of sai_transceiver_t with the corresponding values of _sai_channel_mask enum, enable the FIFO Combine 
- * mode by assigning kSAI_FifoCombineModeEnabledOnRead to the fifoCombine member of sai_fifo_combine_t 
- * which is a member of sai_transceiver_t.
- * This is an example of multi-channel data transfer configuration step.
-   @code
-    sai_transceiver_t config;
-    SAI_GetClassicI2SConfig(&config, kSAI_WordWidth16bits, kSAI_Stereo, kSAI_Channel0Mask|kSAI_Channel1Mask);
-    config.fifo.fifoCombine = kSAI_FifoCombineModeEnabledOnRead;
-    SAI_TransferRxSetConfigEDMA(I2S0, &edmaHandle, &config);
-   @endcode
  *
  * @param base SAI base pointer.
  * @param handle SAI eDMA handle pointer.
@@ -280,6 +260,19 @@ status_t SAI_TransferGetSendCountEDMA(I2S_Type *base, sai_edma_handle_t *handle,
  * @retval kStatus_NoTransferInProgress There is no non-blocking transaction in progress.
  */
 status_t SAI_TransferGetReceiveCountEDMA(I2S_Type *base, sai_edma_handle_t *handle, size_t *count);
+
+/*!
+ * @brief Gets valid transfer slot.
+ *
+ * This function can be used to query the valid transfer request slot that the application can submit.
+ * It should be called in the critical section, that means the application could call it in the corresponding callback
+ * function or disable IRQ before calling it in the application, otherwise, the returned value may not correct.
+ *
+ * @param base SAI base pointer
+ * @param handle SAI eDMA handle pointer.
+ * @retval valid slot count that application submit.
+ */
+uint32_t SAI_TransferGetValidTransferSlotsEDMA(I2S_Type *base, sai_edma_handle_t *handle);
 
 /*! @} */
 

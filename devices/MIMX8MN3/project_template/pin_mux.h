@@ -1,33 +1,56 @@
 /*
- * Copyright 2017, NXP
+ * Copyright 2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
+ *
  */
 
-/**
- * @file    pin_mux.h
- * @brief   Board pins header file.
- */
- 
-/* This is an empty template for board specific configuration.*/
 
 #ifndef _PIN_MUX_H_
 #define _PIN_MUX_H_
 
+#include "board.h"
+
+/***********************************************************************************************************************
+ * Definitions
+ **********************************************************************************************************************/
+
+/*!
+ * @addtogroup pin_mux
+ * @{
+ */
+
+/***********************************************************************************************************************
+ * API
+ **********************************************************************************************************************/
+
 #if defined(__cplusplus)
 extern "C" {
-#endif /* __cplusplus */
+#endif
 
-/**
- * @brief 	Initialize board pins.
+
+/*!
+ * @brief Calls initialization functions.
+ *
  */
 void BOARD_InitBootPins(void);
 
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void BOARD_InitPins(void);                                 /*!< Function assigned for the core: Cortex-M7F[m7] */
+
 #if defined(__cplusplus)
 }
-#endif /* __cplusplus */
+#endif
 
+/*!
+ * @}
+ */
 #endif /* _PIN_MUX_H_ */
 
-
+/***********************************************************************************************************************
+ * EOF
+ **********************************************************************************************************************/

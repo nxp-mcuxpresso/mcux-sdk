@@ -310,7 +310,8 @@ status_t PRINCE_SetEncryptForAddressRange(
     }
 
     /* Check the address range, region borders crossing. */
-#if (defined(FSL_PRINCE_DRIVER_LPC55S1x)) || (defined(FSL_PRINCE_DRIVER_LPC55S2x))
+#if (defined(FSL_PRINCE_DRIVER_LPC55S0x)) || (defined(FSL_PRINCE_DRIVER_LPC55S1x)) || \
+    (defined(FSL_PRINCE_DRIVER_LPC55S2x))
     if ((start_address > FSL_PRINCE_DRIVER_MAX_FLASH_ADDR) ||
         ((start_address < FSL_PRINCE_DRIVER_MAX_FLASH_ADDR) && (end_address > FSL_PRINCE_DRIVER_MAX_FLASH_ADDR)))
     {
@@ -574,7 +575,8 @@ status_t PRINCE_SetRegionBaseAddress(PRINCE_Type *base, prince_region_t region, 
     status_t status = kStatus_Success;
 
     /* Check input parameters. */
-#if (defined(FSL_PRINCE_DRIVER_LPC55S1x)) || (defined(FSL_PRINCE_DRIVER_LPC55S2x))
+#if (defined(FSL_PRINCE_DRIVER_LPC55S0x)) || (defined(FSL_PRINCE_DRIVER_LPC55S1x)) || \
+    (defined(FSL_PRINCE_DRIVER_LPC55S2x))
     if (region_base_addr > 0U)
     {
         return kStatus_InvalidArgument;

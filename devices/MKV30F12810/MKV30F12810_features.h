@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 0.9, 2015-06-08
-**     Build:               b200921
+**     Build:               b201028
 **
 **     Abstract:
 **         Chip specific module features.
@@ -1833,6 +1833,10 @@
 #define FSL_FEATURE_SIM_HAS_COP_STOP (0)
 /* @brief Has LLWU clock gate bit (e.g SIM_SCGC4). */
 #define FSL_FEATURE_SIM_HAS_SCGC_LLWU (0)
+/* @brief Has UIDH registers. */
+#define FSL_FEATURE_SIM_HAS_UIDH (1)
+/* @brief Has UIDM registers. */
+#define FSL_FEATURE_SIM_HAS_UIDM (0)
 
 /* SMC module features */
 

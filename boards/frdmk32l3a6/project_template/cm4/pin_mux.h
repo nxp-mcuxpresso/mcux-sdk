@@ -163,18 +163,6 @@ void BOARD_InitButtonsPins(void); /* Function assigned for the Cortex-M4F */
 #define BOARD_INITLEDSPINS_RGB_RED_NAME "RGB_RED"                     /*!<@brief Identifier name */
 #define BOARD_INITLEDSPINS_RGB_RED_DIRECTION kPIN_MUX_DirectionOutput /*!<@brief Direction */
                                                                       /* @} */
-//note can be FGPIE on cortex M0+    
-#define BOARD_INITLEDSPINS_LED_RED_PERIPHERAL GPIOE                   /*!<@brief Device name: GPIOE */
-#define BOARD_INITLEDSPINS_LED_RED_SIGNAL GPIO                        /*!<@brief GPIOA signal: GPIO */
-#define BOARD_INITLEDSPINS_LED_RED_GPIO GPIOE                         /*!<@brief GPIO device name: GPIOE */
-#define BOARD_INITLEDSPINS_LED_RED_GPIO_PIN 0U                       /*!<@brief PORTE pin index: 0 */
-#define BOARD_INITLEDSPINS_LED_RED_PORT PORTE                         /*!<@brief PORT device name: PORTE */
-#define BOARD_INITLEDSPINS_LED_RED_PIN 0U                            /*!<@brief PORTE pin index: 0 */
-#define BOARD_INITLEDSPINS_LED_RED_CHANNEL 0                         /*!<@brief GPIOA GPIO channel: 0 */
-#define BOARD_INITLEDSPINS_LED_RED_PIN_NAME PTE0                     /*!<@brief Pin name */
-#define BOARD_INITLEDSPINS_LED_RED_LABEL "LED_RED"              /*!<@brief Label */
-#define BOARD_INITLEDSPINS_LED_RED_NAME "RED"                     /*!<@brief Identifier name */
-#define BOARD_INITLEDSPINS_LED_RED_DIRECTION kPIN_MUX_DirectionOutput /*!<@brief Direction */    
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.

@@ -1,5 +1,5 @@
 /*
- * Copyright  2017 NXP
+ * Copyright  2017-2021 NXP
  * All rights reserved.
  *
  *
@@ -29,8 +29,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief IOCON driver version 2.0.0. */
-#define LPC_IOCON_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief IOCON driver version 2.0.1. */
+#define LPC_IOCON_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /**

@@ -12,6 +12,7 @@
 
 /*!
  * @addtogroup wm8524
+ * @ingroup codec
  * @{
  */
 

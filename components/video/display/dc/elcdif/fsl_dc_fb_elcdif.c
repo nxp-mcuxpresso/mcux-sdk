@@ -215,7 +215,7 @@ status_t DC_FB_ELCDIF_SetFrameBuffer(const dc_fb_t *dc, uint8_t layer, void *fra
      */
     if (!dcHandle->layers[layer].enabled)
     {
-        dcHandle->elcdif->CUR_BUF            = (uint32_t)(uint8_t *)frameBuffer;
+        dcHandle->elcdif->CUR_BUF            = ELCDIF_ADDR_CPU_2_IP((uint32_t)(uint8_t *)frameBuffer);
         dcHandle->layers[layer].activeBuffer = frameBuffer;
     }
     else

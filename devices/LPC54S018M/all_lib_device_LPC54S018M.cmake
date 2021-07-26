@@ -1,9 +1,8 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8904
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8904
     ${CMAKE_CURRENT_LIST_DIR}/../../components/ft5406
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
@@ -48,7 +47,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -74,7 +72,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpc_lcdc)
 #    include(driver_codec)
 #    include(utilities_misc_utilities)
-#    include(CMSIS_Include_core_cm4)
 #    include(driver_gint)
 #    include(driver_inputmux)
 #    include(driver_flexcomm_i2c)
@@ -88,9 +85,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_sdmmc_host_sdif_polling)
 #    include(driver_pint)
 #    include(driver_lpc_enet)
-#    include(CMSIS_Include_dsp)
 #    include(driver_sctimer)
-#    include(middleware_usb_device_common_header)
 #    include(driver_lpc_adc)
 #    include(driver_flexcomm)
 #    include(driver_phy-device-lan8720a)
@@ -99,7 +94,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_wm8904)
 #    include(middleware_freertos-kernel_extension)
 #    include(middleware_freertos-kernel_LPC54S018M)
-#    include(middleware_usb_common_header)
 #    include(driver_flexcomm_spi)
 #    include(driver_utick)
 #    include(middleware_sdmmc_osa_freertos)
@@ -114,6 +108,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_inputmux_connections)
 #    include(component_osa_free_rtos)
 #    include(middleware_sdmmc_sd)
+#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_sha)
 #    include(middleware_sdmmc_sdio)
@@ -149,7 +144,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_sdmmc_host_sdif_interrupt)
 #    include(driver_flexcomm_usart_dma)
 #    include(driver_flexcomm_i2c_freertos)
-#    include(CMSIS_Include_common)
 #    include(middleware_sdmmc_host_sdif_freertos)
 #    include(driver_flexcomm_usart_freertos)
 #    include(component_wm8904_adapter)

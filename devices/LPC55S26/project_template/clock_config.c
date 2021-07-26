@@ -26,7 +26,6 @@
 !!GlobalInfo
 product: Clocks v6.0
 processor: LPC55S26
-package_id: LPC55S26JBD100
 mcu_data: ksdk2_0
 processor_version: 0.2.11
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/

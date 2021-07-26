@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -10,6 +10,9 @@
 #include <stdbool.h>
 #include "fsl_nand_flash.h"
 #include "fsl_semc_nand_flash.h"
+#if defined(CACHE_MAINTAIN) && CACHE_MAINTAIN
+#include "fsl_cache.h"
+#endif
 
 /*******************************************************************************
  * Definitions
@@ -692,8 +695,8 @@ static status_t semc_nand_issue_read_parameter(nand_handle_t *handle, nand_onfi_
 
 status_t semc_nand_issue_read_status(nand_handle_t *handle, uint8_t *stat)
 {
-    status_t status = kStatus_Success;
-    uint32_t readoutData;
+    status_t status      = kStatus_Success;
+    uint32_t readoutData = 0x00U;
     uint16_t commandCode;
     uint32_t slaveAddress;
     semc_mem_nand_handle_t *semcHandle = (semc_mem_nand_handle_t *)handle->deviceSpecific;
@@ -848,6 +851,20 @@ status_t Nand_Flash_Read_Page_Partial(
         }
     }
 
+#if defined(CACHE_MAINTAIN) && CACHE_MAINTAIN
+#if __CORTEX_M == 7
+    if (SCB_CCR_DC_Msk == (SCB_CCR_DC_Msk & SCB->CCR))
+    {
+        DCACHE_InvalidateByRange(((semc_mem_nand_handle_t *)handle->deviceSpecific)->ctlAccessMemAddr2, pageSize);
+    }
+#elif __CORTEX_M == 4
+    if (LMEM_PCCCR_ENCACHE_MASK == (LMEM_PCCCR_ENCACHE_MASK & LMEM->PCCCR))
+    {
+        DCACHE_InvalidateByRange(((semc_mem_nand_handle_t *)handle->deviceSpecific)->ctlAccessMemAddr2, pageSize);
+    }
+#endif
+#endif
+
     /* Read data from device through AXI */
     (void)memcpy(buffer,
                  (uint8_t *)(((semc_mem_nand_handle_t *)handle->deviceSpecific)->ctlAccessMemAddr2 + offset_bytes),
@@ -997,6 +1014,20 @@ status_t Nand_Flash_Read_Page(nand_handle_t *handle, uint32_t pageIndex, uint8_t
             return kStatus_Fail;
         }
     }
+
+#if defined(CACHE_MAINTAIN) && CACHE_MAINTAIN
+#if __CORTEX_M == 7
+    if (SCB_CCR_DC_Msk == (SCB_CCR_DC_Msk & SCB->CCR))
+    {
+        DCACHE_InvalidateByRange(((semc_mem_nand_handle_t *)handle->deviceSpecific)->ctlAccessMemAddr2, pageSize);
+    }
+#elif __CORTEX_M == 4
+    if (LMEM_PCCCR_ENCACHE_MASK == (LMEM_PCCCR_ENCACHE_MASK & LMEM->PCCCR))
+    {
+        DCACHE_InvalidateByRange(((semc_mem_nand_handle_t *)handle->deviceSpecific)->ctlAccessMemAddr2, pageSize);
+    }
+#endif
+#endif
 
     /* Read Page data from device through AXI */
     (void)memcpy(buffer, (uint8_t *)semcHandle->ctlAccessMemAddr2, length);

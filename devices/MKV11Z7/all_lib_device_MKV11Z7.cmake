@@ -1,6 +1,6 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
@@ -46,7 +46,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_dspi)
 #    include(driver_uart_edma)
 #    include(driver_uart_freertos)
-#    include(CMSIS_Include_dsp)
 #    include(driver_flexcan)
 #    include(driver_i2c)
 #    include(driver_i2c_freertos)
@@ -65,11 +64,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_edma)
 #    include(driver_ewm)
 #    include(utility_assert)
+#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_ftm)
 #    include(utility_notifier)
 #    include(driver_wdog)
-#    include(CMSIS_Include_core_cm0plus)
+#    include(utility_assert_lite)
 #    include(utility_shell)
 #    include(driver_flash)
 #    include(component_uart_adapter)
@@ -80,11 +80,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_CMSIS)
 #    include(driver_uart)
 #    include(utilities_misc_utilities)
-#    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_smc)
 #    include(driver_crc)
-#    include(utility_assert_lite)
 #    include(component_serial_manager)
 #    include(driver_fxos8700cq)
 #    include(component_serial_manager_uart)

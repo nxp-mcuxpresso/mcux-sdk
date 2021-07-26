@@ -9,7 +9,7 @@
 #ifndef __HAL_RPMSG_ADAPTER_H__
 #define __HAL_RPMSG_ADAPTER_H__
 
-#if defined(FSL_RTOS_FREE_RTOS)
+#if defined(SDK_OS_FREE_RTOS)
 #include "FreeRTOS.h"
 #endif
 

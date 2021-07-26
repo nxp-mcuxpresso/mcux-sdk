@@ -15,8 +15,8 @@
  * @{
  */
 
-/*! @brief ROM API version 1.0.1. */
-#define FSL_ROM_ROMAPI_VERSION (MAKE_VERSION(1U, 0U, 1U))
+/*! @brief ROM API version 1.0.2. */
+#define FSL_ROM_ROMAPI_VERSION (MAKE_VERSION(1U, 0U, 2U))
 /*! @brief ROM FLEXSPI NOR driver version 1.5.0. */
 #define FSL_ROM_FLEXSPINOR_DRIVER_VERSION (MAKE_VERSION(1U, 5U, 0U))
 
@@ -362,7 +362,6 @@ typedef enum _flexspi_operation
     kFLEXSPIOperation_Config,  /*!< FLEXSPI operation: Configure device mode, the TX FIFO size is fixed in LUT. */
     kFLEXSPIOperation_Write,   /*!< FLEXSPI operation: Write, only TX buffer is effective */
     kFLEXSPIOperation_Read,    /*!< FLEXSPI operation: Read, only Rx Buffer is effective. */
-    kFLEXSPIOperation_End = kFLEXSPIOperation_Read,
 } flexspi_operation_t;
 
 /*! @brief FLEXSPI Transfer Context */

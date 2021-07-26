@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019 ,2021 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -43,7 +43,7 @@ product: Clocks v7.0
 processor: MKM35Z512xxx7
 package_id: MKM35Z512VLQ7
 mcu_data: ksdk2_0
-processor_version: 0.0.1
+processor_version: 9.0.0
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
 

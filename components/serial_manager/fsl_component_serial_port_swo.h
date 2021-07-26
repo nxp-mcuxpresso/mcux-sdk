@@ -10,6 +10,7 @@
 
 /*!
  * @addtogroup serial_port_swo
+ * @ingroup serialmanager
  * @{
  */
 

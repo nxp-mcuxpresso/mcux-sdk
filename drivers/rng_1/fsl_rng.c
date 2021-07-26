@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019 NXP
+ * Copyright 2017, 2019, 2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -31,12 +31,23 @@ void RNG_Init(RNG_Type *base)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     CLOCK_EnableClock(kCLOCK_Rng);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
+    /* Reset the module. */
+    RESET_PeripheralReset(kRNG_RST_SHIFT_RSTn);
+#endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
 }
 
 void RNG_Deinit(RNG_Type *base)
 {
     /* Set ring oscilator disable bit*/
     PMC->PDRUNCFGSET0 = PMC_PDRUNCFG0_PDEN_RNG_MASK;
+
+#if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
+    /* Reset the module. */
+    RESET_PeripheralReset(kRNG_RST_SHIFT_RSTn);
+#endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     CLOCK_DisableClock(kCLOCK_Rng);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */

@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief EWM driver version 2.0.2. */
-#define FSL_EWM_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief EWM driver version 2.0.3. */
+#define FSL_EWM_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*! @brief Describes EWM clock source. */

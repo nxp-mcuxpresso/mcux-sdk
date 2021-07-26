@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief UART DMA driver version 2.4.0. */
-#define FSL_UART_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief UART DMA driver version. */
+#define FSL_UART_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*@}*/
 
 /* Forward declaration of the handle typedef. */
@@ -163,6 +163,15 @@ status_t UART_TransferGetSendCountDMA(UART_Type *base, uart_dma_handle_t *handle
  */
 status_t UART_TransferGetReceiveCountDMA(UART_Type *base, uart_dma_handle_t *handle, uint32_t *count);
 
+/*!
+ * @brief UART DMA IRQ handle function.
+ *
+ * This function handles the UART transmit complete IRQ request and invoke user callback.
+ *
+ * @param base UART peripheral base address.
+ * @param uartDmaHandle UART handle pointer.
+ */
+void UART_TransferDMAHandleIRQ(UART_Type *base, void *uartDmaHandle);
 /*@}*/
 
 #if defined(__cplusplus)

@@ -1,5 +1,5 @@
 /*
- * Copyright  2018-2019 NXP
+ * Copyright  2018-2021 NXP
  * All rights reserved.
  *
  *
@@ -155,6 +155,9 @@ void TEMPMON_SetTempAlarm(TEMPMON_Type *base, uint32_t tempVal, tempmon_alarm_mo
 {
     /* Check arguments */
     assert(NULL != base);
+    /* Different SOC has different qualified temperature level based on AEC-Q100 standard by default, such as Consumer(0
+       to +95 degrees celsius)/Industrial(-40 to +105 degrees celsius)/Automotive(-40 to +125 degrees celsius). */
+    assert(s_hotTemp >= tempVal);
 
     uint32_t tempCodeVal;
     uint32_t tempRegVal;

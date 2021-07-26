@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -14,13 +14,21 @@
  * @addtogroup tsi_v5_driver
  * @{
  */
-
+/*******************************************************************************
+ * Variables
+ ******************************************************************************/
+/* Array of TSI clock name. */
+extern const clock_ip_name_t s_tsiClock[];
+/* Array of TSI IRQ name. */
+extern const IRQn_Type s_TsiIRQ[];
+/* Array of TSI peripheral base address. */
+extern TSI_Type *const s_tsiBases[];
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
 
 /*! @brief TSI driver version */
-#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 
 /*! @brief TSI status flags macro collection */
 #define ALL_FLAGS_MASK (TSI_GENCS_EOSF_MASK | TSI_GENCS_OUTRGF_MASK)
@@ -78,6 +86,25 @@ typedef enum _tsi_sensitivity_xdn_option
     kTSI_SensitivityXdnOption_6 = 6U, /*!< Adjust sensitivity in self-cap mode, 4/1  */
     kTSI_SensitivityXdnOption_7 = 7U, /*!< Adjust sensitivity in self-cap mode, 8/1  */
 } tsi_sensitivity_xdn_option_t;
+
+/*!
+ * @brief TSI Shield setting (S_W_SHIELD option).
+ *
+ * These constants define the shield pin used for HW shielding functionality. One or more shield pin can be selected.
+ * The involved bitfield is not fix can change from device to device (KE16Z7 and KE17Z7 support 3 shield pins, other KE
+ * serials only support 1 shield pin).
+ */
+typedef enum _tsi_shield
+{
+    kTSI_shieldAllOff  = 0U, /*!< No pin used */
+    kTSI_shield0On     = 1U, /*!< Shield 0   pin used */
+    kTSI_shield1On     = 2U, /*!< Shield 1   pin used */
+    kTSI_shield1and0On = 3U, /*!< Shield 0,1 pins used */
+    kTSI_shield2On     = 4U, /*!< Shield 2   pin used */
+    kTSI_shield2and0On = 5U, /*!< Shield 2,0 pins used */
+    kTSI_shield2and1On = 6U, /*!< Shield 2,1 pins used */
+    kTSI_shieldAllOn   = 7U, /*!< Shield 2,1,0 pins used */
+} tsi_shield_t;
 
 /*!
  * @brief TSI sensitivity ajustment (CTRIM option).
@@ -542,7 +569,7 @@ typedef struct _tsi_selfCap_config
 {
     tsi_common_config_t commonConfig;            /*!< Common settings.          */
     bool enableSensitivity;                      /*!< Enable sensitivity boost of self-cap or not. */
-    bool enableShield;                           /*!< Enable shield of self-cap mode or not. */
+    tsi_shield_t enableShield;                   /*!< Enable shield of self-cap mode or not. */
     tsi_sensitivity_xdn_option_t xdn;            /*!< Sensitivity XDN option.   */
     tsi_sensitivity_ctrim_option_t ctrim;        /*!< Sensitivity CTRIM option. */
     tsi_current_multiple_input_t inputCurrent;   /*!< Input current multiple.   */
@@ -576,6 +603,14 @@ typedef struct _tsi_mutualCap_config
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*!
+ * @brief Get the TSI instance from peripheral base address.
+ *
+ * @param base TSI peripheral base address.
+ * @return TSI instance.
+ */
+uint32_t TSI_GetInstance(TSI_Type *base);
 
 /*!
  * @brief Initialize hardware to Self-cap mode.

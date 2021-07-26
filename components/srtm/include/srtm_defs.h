@@ -25,7 +25,7 @@
 /*! @brief Defines SRTM major version */
 #define SRTM_VERSION_MAJOR (0x01UL)
 /*! @brief Defines SRTM minor version */
-#define SRTM_VERSION_MINOR (0x00UL)
+#define SRTM_VERSION_MINOR (0x01UL)
 /*! @brief Defines SRTM bugfix version */
 #define SRTM_VERSION_BUGFIX (0x00UL)
 

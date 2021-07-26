@@ -1,6 +1,6 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
@@ -35,7 +35,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/vref
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -47,13 +46,12 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
-#    include(middleware_usb_device_common_header)
 #    include(driver_llwu)
 #    include(driver_port)
 #    include(driver_dspi)
 #    include(driver_uart_edma)
 #    include(driver_uart_freertos)
-#    include(CMSIS_Include_dsp)
+#    include(driver_vref)
 #    include(driver_i2c)
 #    include(driver_i2c_freertos)
 #    include(driver_dmamux)
@@ -64,7 +62,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_system)
 #    include(driver_i2c_edma)
 #    include(driver_lpuart_freertos)
-#    include(utility_debug_console)
 #    include(driver_cmp)
 #    include(device_startup)
 #    include(driver_pdb)
@@ -75,16 +72,15 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_edma)
 #    include(driver_ewm)
 #    include(driver_lpuart)
-#    include(driver_rnga)
+#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_ftm)
 #    include(utility_notifier)
 #    include(driver_wdog)
 #    include(utility_assert_lite)
-#    include(middleware_usb_common_header)
 #    include(middleware_baremetal)
 #    include(driver_dspi_freertos)
-#    include(driver_vref)
+#    include(utility_debug_console)
 #    include(driver_flash)
 #    include(component_uart_adapter)
 #    include(utility_assert)
@@ -93,8 +89,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_CMSIS)
 #    include(driver_uart)
 #    include(utilities_misc_utilities)
-#    include(CMSIS_Include_core_cm4)
-#    include(CMSIS_Include_common)
+#    include(driver_rnga)
 #    include(driver_common)
 #    include(driver_rtc)
 #    include(driver_smc)

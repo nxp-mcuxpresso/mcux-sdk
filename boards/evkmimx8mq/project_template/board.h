@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 NXP
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -13,7 +13,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief The board name */
-#define BOARD_NAME        "MIMX8MQ6-EVK"
+#define BOARD_NAME        "MIMX8MQ-EVK"
 #define MANUFACTURER_NAME "NXP"
 #define BOARD_DOMAIN_ID   (1)
 /* The UART to use for debug messages. */
@@ -26,6 +26,10 @@
         (CLOCK_GetRootPostDivider(kCLOCK_RootUart2)) / 10
 #define BOARD_UART_IRQ         UART2_IRQn
 #define BOARD_UART_IRQ_HANDLER UART2_IRQHandler
+
+/* Shared memory base for RPMsg communication. */
+#define VDEV0_VRING_BASE      (0xB8000000U)
+#define RESOURCE_TABLE_OFFSET (0xFF000)
 
 #if defined(__cplusplus)
 extern "C" {

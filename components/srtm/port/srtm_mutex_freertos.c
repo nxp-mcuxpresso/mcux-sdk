@@ -40,14 +40,14 @@ srtm_mutex_t SRTM_Mutex_Create(void)
 
 void SRTM_Mutex_Destroy(srtm_mutex_t mutex)
 {
-    assert(mutex);
+    assert(mutex != NULL);
 
     vSemaphoreDelete(mutex);
 }
 
 srtm_status_t SRTM_Mutex_Lock(srtm_mutex_t mutex)
 {
-    assert(mutex);
+    assert(mutex != NULL);
 
     if (xSemaphoreTake(mutex, portMAX_DELAY) == pdFALSE)
     {
@@ -59,7 +59,7 @@ srtm_status_t SRTM_Mutex_Lock(srtm_mutex_t mutex)
 
 srtm_status_t SRTM_Mutex_Unlock(srtm_mutex_t mutex)
 {
-    assert(mutex);
+    assert(mutex != NULL);
 
     if (xSemaphoreGive(mutex) == pdFALSE)
     {

@@ -968,7 +968,7 @@ static void ECSPI_CommonIRQHandler(ECSPI_Type *base, ecspi_master_handle_t *hand
 void ECSPI1_DriverIRQHandler(void);
 void ECSPI1_DriverIRQHandler(void)
 {
-    assert(s_ecspiHandle[1]);
+    assert(s_ecspiHandle[1] != NULL);
     ECSPI_CommonIRQHandler(ECSPI1, s_ecspiHandle[1]);
 }
 #endif /* ECSPI1 */
@@ -977,7 +977,7 @@ void ECSPI1_DriverIRQHandler(void)
 void ECSPI2_DriverIRQHandler(void);
 void ECSPI2_DriverIRQHandler(void)
 {
-    assert(s_ecspiHandle[2]);
+    assert(s_ecspiHandle[2] != NULL);
     ECSPI_CommonIRQHandler(ECSPI2, s_ecspiHandle[2]);
 }
 #endif /* ECSPI2 */
@@ -986,7 +986,7 @@ void ECSPI2_DriverIRQHandler(void)
 void ECSPI3_DriverIRQHandler(void);
 void ECSPI3_DriverIRQHandler(void)
 {
-    assert(s_ecspiHandle[3]);
+    assert(s_ecspiHandle[3] != NULL);
     ECSPI_CommonIRQHandler(ECSPI3, s_ecspiHandle[3]);
 }
 #endif /* ECSPI3 */
@@ -995,7 +995,7 @@ void ECSPI3_DriverIRQHandler(void)
 void ECSPI4_DriverIRQHandler(void);
 void ECSPI4_DriverIRQHandler(void)
 {
-    assert(s_ecspiHandle[4]);
+    assert(s_ecspiHandle[4] != NULL);
     ECSPI_CommonIRQHandler(ECSPI4, s_ecspiHandle[4]);
 }
 #endif /* ECSPI4 */

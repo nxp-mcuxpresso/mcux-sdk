@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1152,6 +1152,7 @@ void SAI_TxSetBitclockConfig(I2S_Type *base, sai_master_slave_t masterSlave, sai
     else
     {
         tcr2 &= ~(I2S_TCR2_BCD_MASK);
+        tcr2 |= I2S_TCR2_BCP(config->bclkPolarity);
     }
 
     base->TCR2 = tcr2;
@@ -1179,6 +1180,7 @@ void SAI_RxSetBitclockConfig(I2S_Type *base, sai_master_slave_t masterSlave, sai
     else
     {
         rcr2 &= ~(I2S_RCR2_BCD_MASK);
+        rcr2 |= I2S_RCR2_BCP(config->bclkPolarity);
     }
 
     base->RCR2 = rcr2;
@@ -1236,7 +1238,7 @@ void SAI_TxSetFifoConfig(I2S_Type *base, sai_fifo_t *config)
 
     uint32_t tcr4 = base->TCR4;
 
-#if defined(FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) && FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE
+#if defined(FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_COMBINE) && FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_COMBINE
     tcr4 &= ~I2S_TCR4_FCOMB_MASK;
     tcr4 |= I2S_TCR4_FCOMB(config->fifoCombine);
 #endif
@@ -1277,7 +1279,7 @@ void SAI_RxSetFifoConfig(I2S_Type *base, sai_fifo_t *config)
 #endif
     uint32_t rcr4 = base->RCR4;
 
-#if defined(FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) && FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE
+#if defined(FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_COMBINE) && FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_COMBINE
     rcr4 &= ~I2S_RCR4_FCOMB_MASK;
     rcr4 |= I2S_RCR4_FCOMB(config->fifoCombine);
 #endif
@@ -2131,7 +2133,7 @@ void SAI_WriteBlocking(I2S_Type *base, uint32_t channel, uint32_t bitWidth, uint
         }
 
         SAI_WriteNonBlocking(base, channel, 1UL << channel, channel, (uint8_t)bitWidth, buffer, bytesPerWord);
-        buffer += bytesPerWord;
+        buffer = (uint8_t *)((uint32_t)buffer + bytesPerWord);
         i += bytesPerWord;
     }
 
@@ -2184,9 +2186,10 @@ void SAI_WriteMultiChannelBlocking(
         {
         }
 
-        SAI_WriteNonBlocking(base, channel, channelMask, endChannel, (uint8_t)bitWidth, buffer, bytesPerWord);
-        buffer += bytesPerWord;
-        j += bytesPerWord;
+        SAI_WriteNonBlocking(base, channel, channelMask, endChannel, (uint8_t)bitWidth, buffer,
+                             bytesPerWord * channelNums);
+        buffer = (uint8_t *)((uint32_t)buffer + bytesPerWord * channelNums);
+        j += bytesPerWord * channelNums;
     }
 
     /* Wait until the last data is sent */
@@ -2236,9 +2239,10 @@ void SAI_ReadMultiChannelBlocking(
         {
         }
 
-        SAI_ReadNonBlocking(base, channel, channelMask, endChannel, (uint8_t)bitWidth, buffer, bytesPerWord);
-        buffer += bytesPerWord;
-        j += bytesPerWord;
+        SAI_ReadNonBlocking(base, channel, channelMask, endChannel, (uint8_t)bitWidth, buffer,
+                            bytesPerWord * channelNums);
+        buffer = (uint8_t *)((uint32_t)buffer + bytesPerWord * channelNums);
+        j += bytesPerWord * channelNums;
     }
 }
 
@@ -2269,7 +2273,7 @@ void SAI_ReadBlocking(I2S_Type *base, uint32_t channel, uint32_t bitWidth, uint8
         }
 
         SAI_ReadNonBlocking(base, channel, 1UL << channel, channel, (uint8_t)bitWidth, buffer, bytesPerWord);
-        buffer += bytesPerWord;
+        buffer = (uint8_t *)((uint32_t)buffer + bytesPerWord);
         i += bytesPerWord;
     }
 }
@@ -2466,7 +2470,7 @@ status_t SAI_TransferSendNonBlocking(I2S_Type *base, sai_handle_t *handle, sai_t
     handle->transferSize[handle->queueUser]      = xfer->dataSize;
     handle->saiQueue[handle->queueUser].data     = xfer->data;
     handle->saiQueue[handle->queueUser].dataSize = xfer->dataSize;
-    handle->queueUser                            = (handle->queueUser + 1U) % SAI_XFER_QUEUE_SIZE;
+    handle->queueUser                            = (handle->queueUser + 1U) % (uint8_t)SAI_XFER_QUEUE_SIZE;
 
     /* Set the state to busy */
     handle->state = (uint32_t)kSAI_Busy;
@@ -2515,7 +2519,7 @@ status_t SAI_TransferReceiveNonBlocking(I2S_Type *base, sai_handle_t *handle, sa
     handle->transferSize[handle->queueUser]      = xfer->dataSize;
     handle->saiQueue[handle->queueUser].data     = xfer->data;
     handle->saiQueue[handle->queueUser].dataSize = xfer->dataSize;
-    handle->queueUser                            = (handle->queueUser + 1U) % SAI_XFER_QUEUE_SIZE;
+    handle->queueUser                            = (handle->queueUser + 1U) % (uint8_t)SAI_XFER_QUEUE_SIZE;
 
     /* Set state to busy */
     handle->state = (uint32_t)kSAI_Busy;
@@ -2615,7 +2619,7 @@ void SAI_TransferAbortSend(I2S_Type *base, sai_handle_t *handle)
     handle->state = (uint32_t)kSAI_Idle;
 
     /* Clear the queue */
-    (void)memset(handle->saiQueue, 0, sizeof(sai_transfer_t) * SAI_XFER_QUEUE_SIZE);
+    (void)memset(handle->saiQueue, 0, sizeof(sai_transfer_t) * (uint8_t)SAI_XFER_QUEUE_SIZE);
     handle->queueDriver = 0;
     handle->queueUser   = 0;
 }
@@ -2645,7 +2649,7 @@ void SAI_TransferAbortReceive(I2S_Type *base, sai_handle_t *handle)
     handle->state = (uint32_t)kSAI_Idle;
 
     /* Clear the queue */
-    (void)memset(handle->saiQueue, 0, sizeof(sai_transfer_t) * SAI_XFER_QUEUE_SIZE);
+    (void)memset(handle->saiQueue, 0, sizeof(sai_transfer_t) * (uint8_t)SAI_XFER_QUEUE_SIZE);
     handle->queueDriver = 0;
     handle->queueUser   = 0;
 }
@@ -2761,7 +2765,7 @@ void SAI_TransferTxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
     if (handle->saiQueue[handle->queueDriver].dataSize == 0U)
     {
         (void)memset(&handle->saiQueue[handle->queueDriver], 0, sizeof(sai_transfer_t));
-        handle->queueDriver = (handle->queueDriver + 1U) % SAI_XFER_QUEUE_SIZE;
+        handle->queueDriver = (handle->queueDriver + 1U) % (uint8_t)SAI_XFER_QUEUE_SIZE;
         if (handle->callback != NULL)
         {
             (handle->callback)(base, handle, kStatus_SAI_TxIdle, handle->userData);
@@ -2837,7 +2841,7 @@ void SAI_TransferRxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
     if (handle->saiQueue[handle->queueDriver].dataSize == 0U)
     {
         (void)memset(&handle->saiQueue[handle->queueDriver], 0, sizeof(sai_transfer_t));
-        handle->queueDriver = (handle->queueDriver + 1U) % SAI_XFER_QUEUE_SIZE;
+        handle->queueDriver = (handle->queueDriver + 1U) % (uint8_t)SAI_XFER_QUEUE_SIZE;
         if (handle->callback != NULL)
         {
             (handle->callback)(base, handle, kStatus_SAI_RxIdle, handle->userData);

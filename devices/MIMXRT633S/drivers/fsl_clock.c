@@ -84,7 +84,7 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
 /**
  * brief   Setup peripheral clock dividers.
  * param   div_name    : Clock divider name
- * param   divider     : Value to be divided.
+ * param   divider     : Value to be divided. Divided clock frequency = Undivided clock frequency / divider.
  * return  Nothing
  */
 void CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divider)

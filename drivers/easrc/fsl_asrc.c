@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -14,7 +14,7 @@
 #endif
 
 /*******************************************************************************
- * Definitations
+ * Definitions
  ******************************************************************************/
 /*! @brief asrc sample rate ratio format */
 typedef enum _asrc_samplerate_ratio_format
@@ -63,17 +63,17 @@ typedef enum _asrc_samplerate_ratio_format
 static uint32_t ASRC_GetSampleRateGCD(uint32_t inputSampleRate, uint32_t outputSampleRate);
 
 /*!
- * @brief ASRC get avalible context slot channel.
+ * @brief ASRC get available context slot channel.
  *
  * @param base ASRC base address.
  * @param contextProcessor context processor number.
  * @param slot0UsedChannel slot0 used channel number.
  * @param slot1UsedChannel slot1 used channel number.
  */
-static void ASRC_GetAvalibleContextSlot(ASRC_Type *base,
-                                        uint32_t contextProcessor,
-                                        uint32_t *slot0UsedChannel,
-                                        uint32_t *slot1UsedChannel);
+static void ASRC_GetAvailableContextSlot(ASRC_Type *base,
+                                         uint32_t contextProcessor,
+                                         uint32_t *slot0UsedChannel,
+                                         uint32_t *slot1UsedChannel);
 
 /*!
  * @brief ASRC enable context slot.
@@ -82,15 +82,15 @@ static void ASRC_GetAvalibleContextSlot(ASRC_Type *base,
  * @param contextProcessor context processor number.
  * @param slot slot number.
  * @param channelNums channel number
- * @param startChannel start channel number runing on this slot.
- * @param context context number runing on this slot.
+ * @param startChannel start channel number running on this slot.
+ * @param context context number running on this slot.
  */
 static void ASRC_EnableContextSlot(ASRC_Type *base,
                                    uint32_t contextProcessor,
                                    uint32_t slot,
                                    uint32_t channelNums,
                                    uint32_t startChannel,
-                                   asrc_context_t runingContext);
+                                   asrc_context_t runningContext);
 
 /*!
  * @brief ASRC config the sample rate ratio.
@@ -111,14 +111,14 @@ static status_t ASRC_SetSampleRateRatioConfig(ASRC_Type *base,
 /*!
  * @brief ASRC load prefilter configuration.
  *
- * @param config prefliter pointer.
+ * @param config prefilter pointer.
  * @param inputSampleRate input sample rate.
  * @param outputSampleRate output sample rate.
  * @retval kStatus_Success, else configure failed.
  */
-static status_t ASRC_GetPrefiterConfig(asrc_context_prefilter_config_t *config,
-                                       uint32_t inputSampleRate,
-                                       uint32_t outputSampleRate);
+static status_t ASRC_GetPrefilterConfig(asrc_context_prefilter_config_t *config,
+                                        uint32_t inputSampleRate,
+                                        uint32_t outputSampleRate);
 
 /*!
  * @brief ASRC load resample configuration.
@@ -144,7 +144,7 @@ static void ASRC_SetPrefilterCoeffMemReset(ASRC_Type *base, asrc_context_t conte
  * @param base ASRC base address.
  * @param context context number.
  * @param config prefilter configuration.
- * @param filter fliter configuration load from firmware.
+ * @param filter filter configuration load from firmware.
  * @retval kStatus_Success, else configure failed.
  */
 static status_t ASRC_SetPrefilterConfig(ASRC_Type *base,
@@ -157,7 +157,7 @@ static status_t ASRC_SetPrefilterConfig(ASRC_Type *base,
  * @param base ASRC base address.
  * @param context context number.
  * @param config resampler configuration.
- * @param filter fliter configuration load from firmware.
+ * @param filter filter configuration load from firmware.
  * @retval kStatus_Success, else configure failed.
  */
 static status_t ASRC_SetResamplerConfig(ASRC_Type *base,
@@ -170,7 +170,7 @@ static status_t ASRC_SetResamplerConfig(ASRC_Type *base,
  * @param base ASRC base address.
  * @param context context number.
  * @param requestChannel request channel number need to run on this slot.
- * @param filter fliter configuration load from firmware.
+ * @param filter filter configuration load from firmware.
  * @retval kStatus_Success, else configure failed.
  */
 static status_t ASRC_SetSlotConfig(ASRC_Type *base,
@@ -235,14 +235,14 @@ static uint32_t ASRC_GetSampleRateGCD(uint32_t inputSampleRate, uint32_t outputS
     return gcd;
 }
 
-static void ASRC_GetAvalibleContextSlot(ASRC_Type *base,
-                                        uint32_t contextProcessor,
-                                        uint32_t *slot0UsedChannel,
-                                        uint32_t *slot1UsedChannel)
+static void ASRC_GetAvailableContextSlot(ASRC_Type *base,
+                                         uint32_t contextProcessor,
+                                         uint32_t *slot0UsedChannel,
+                                         uint32_t *slot1UsedChannel)
 {
     uint32_t contextIndex = 0U;
 
-    /* looking for avalible context processor */
+    /* looking for available context processor */
     if (ASRC_IS_SLOT0_ENABLED(contextProcessor))
     {
         contextIndex = ASRC_GET_SLOT0_CONTEXT_INDEX(contextProcessor);
@@ -267,14 +267,14 @@ static void ASRC_EnableContextSlot(ASRC_Type *base,
                                    uint32_t slot,
                                    uint32_t channelNums,
                                    uint32_t startChannel,
-                                   asrc_context_t runingContext)
+                                   asrc_context_t runningContext)
 {
-    assert(channelNums <= ASRC_SUPPORT_MAXIMUM_CHANNEL_NUMBER);
+    assert(channelNums <= ASRC_SUPPORT_MAXIMUM_CONTEXT_PROCESSOR_NUMBER);
 
     if (slot == 0U)
     {
         base->PROC_CTRL_SLOT0_R0[contextProcessor] =
-            ASRC_PROC_CTRL_SLOT0_R0_SLOT0_EN_MASK | ASRC_PROC_CTRL_SLOT0_R0_SLOT0_CTX_NUM(runingContext) |
+            ASRC_PROC_CTRL_SLOT0_R0_SLOT0_EN_MASK | ASRC_PROC_CTRL_SLOT0_R0_SLOT0_CTX_NUM(runningContext) |
             ASRC_PROC_CTRL_SLOT0_R0_SLOT0_NUM_CH(channelNums - 1U) |
             ASRC_PROC_CTRL_SLOT0_R0_SLOT0_MIN_CH(startChannel) |
             ASRC_PROC_CTRL_SLOT0_R0_SLOT0_MAX_CH(startChannel + channelNums - 1U);
@@ -282,7 +282,7 @@ static void ASRC_EnableContextSlot(ASRC_Type *base,
     else
     {
         base->PROC_CTRL_SLOT1_R0[contextProcessor] =
-            ASRC_PROC_CTRL_SLOT1_R0_SLOT1_EN_MASK | ASRC_PROC_CTRL_SLOT1_R0_SLOT1_CTX_NUM(runingContext) |
+            ASRC_PROC_CTRL_SLOT1_R0_SLOT1_EN_MASK | ASRC_PROC_CTRL_SLOT1_R0_SLOT1_CTX_NUM(runningContext) |
             ASRC_PROC_CTRL_SLOT1_R0_SLOT1_NUM_CH(channelNums - 1U) |
             ASRC_PROC_CTRL_SLOT1_R0_SLOT1_MIN_CH(startChannel) |
             ASRC_PROC_CTRL_SLOT1_R0_SLOT1_MAX_CH(startChannel + channelNums - 1U);
@@ -323,9 +323,9 @@ static status_t ASRC_SetSampleRateRatioConfig(ASRC_Type *base,
     return kStatus_Success;
 }
 
-static status_t ASRC_GetPrefiterConfig(asrc_context_prefilter_config_t *config,
-                                       uint32_t inputSampleRate,
-                                       uint32_t outputSampleRate)
+static status_t ASRC_GetPrefilterConfig(asrc_context_prefilter_config_t *config,
+                                        uint32_t inputSampleRate,
+                                        uint32_t outputSampleRate)
 {
     assert(config != NULL);
 
@@ -445,6 +445,8 @@ static status_t ASRC_SetPrefilterConfig(ASRC_Type *base,
     /* reset prefilter coefficient memory */
     ASRC_SetPrefilterCoeffMemReset(base, context);
     /* load stage1 */
+    base->CTX_CTRL_EXT1[context] &= ~ASRC_CTX_CTRL_EXT1_PF_COEFF_STAGE_WR_MASK;
+
     for (i = 0; i < ((config->filterSt1Taps + 1U) / 2U) * 2U; i++)
     {
         base->PRE_COEFF_FIFO[context] = coeffPointer[i];
@@ -518,7 +520,7 @@ static status_t ASRC_SetSlotConfig(ASRC_Type *base,
                                    uint32_t requestChannel,
                                    asrc_context_prefilter_config_t *config)
 {
-    uint32_t avalibleSlot = 0U, avalibleContext = 0U, avalibleChannel = 0U, startChannel = 0U;
+    uint32_t availableSlot = 0U, availableContext = 0U, availableChannel = 0U, startChannel = 0U;
     uint32_t i                = 0U;
     uint32_t slot0UsedChannel = 0U, slot1UsedChannel = 0U;
     uint32_t stage1MemSize = 0U, stage1MemAddr = 0U, stage2MemSize = 0U, stage2MemAddr = 0U, stage1Exp = 0U;
@@ -527,9 +529,9 @@ static status_t ASRC_SetSlotConfig(ASRC_Type *base,
     for (i = 0U; i < ASRC_SUPPORT_MAXIMUM_CONTEXT_PROCESSOR_NUMBER; i++)
     {
         /* record start channel */
-        startChannel += avalibleChannel;
+        startChannel += availableChannel;
 
-        ASRC_GetAvalibleContextSlot(base, i, &slot0UsedChannel, &slot1UsedChannel);
+        ASRC_GetAvailableContextSlot(base, i, &slot0UsedChannel, &slot1UsedChannel);
 
         /* context is busy */
         if ((slot0UsedChannel != 0U) && ((slot1UsedChannel != 0U)))
@@ -539,73 +541,75 @@ static status_t ASRC_SetSlotConfig(ASRC_Type *base,
         /* context is idle */
         if ((slot0UsedChannel == 0U) && (slot1UsedChannel == 0U))
         {
-            avalibleSlot    = 0U;
-            avalibleChannel = ASRC_SUPPORT_MAXIMUM_CHANNEL_NUMBER;
-            avalibleContext = i;
+            availableSlot    = 0U;
+            availableChannel = ASRC_SUPPORT_MAXIMUM_CONTEXT_PROCESSOR_NUMBER;
+            availableContext = i;
         }
         /* context slot 0 is busy, slot 1 is idle */
         else if (slot0UsedChannel != 0U)
         {
-            avalibleSlot    = 1U;
-            avalibleChannel = ASRC_SUPPORT_MAXIMUM_CHANNEL_NUMBER - slot0UsedChannel;
-            avalibleContext = i;
+            availableSlot    = 1U;
+            availableChannel = ASRC_SUPPORT_MAXIMUM_CONTEXT_PROCESSOR_NUMBER - slot0UsedChannel;
+            availableContext = i;
         }
         /* context slot0 is idle, slot 1 is busy, ((slot0UsedChannel == 0U) && (slot1UsedChannel != 0U))*/
         else
         {
-            avalibleSlot    = 0U;
-            avalibleChannel = ASRC_SUPPORT_MAXIMUM_CHANNEL_NUMBER - slot1UsedChannel;
-            avalibleContext = i;
+            availableSlot    = 0U;
+            availableChannel = ASRC_SUPPORT_MAXIMUM_CONTEXT_PROCESSOR_NUMBER - slot1UsedChannel;
+            availableContext = i;
         }
 
-        avalibleChannel = avalibleChannel > leftChannel ? leftChannel : avalibleChannel;
-        leftChannel -= avalibleChannel;
-        /* enable the avalible slot */
-        ASRC_EnableContextSlot(base, avalibleContext, avalibleSlot, avalibleChannel, startChannel, context);
+        availableChannel = availableChannel > leftChannel ? leftChannel : availableChannel;
+        leftChannel -= availableChannel;
+        /* enable the available slot */
+        ASRC_EnableContextSlot(base, availableContext, availableSlot, availableChannel, startChannel, context);
 
-        if (avalibleSlot == 0U)
+        if (availableSlot == 0U)
         {
             if (config->filterSt2Taps != 0U)
             {
-                stage1Exp     = (config->filterSt1Exp - 1U) * avalibleChannel;
-                stage1MemSize = (config->filterSt1Taps - 1U) * config->filterSt1Exp * avalibleChannel + avalibleChannel;
+                stage1Exp = (config->filterSt1Exp - 1U) * availableChannel;
+                stage1MemSize =
+                    (config->filterSt1Taps - 1U) * config->filterSt1Exp * availableChannel + availableChannel;
                 stage1MemAddr = 0U;
-                stage2MemSize = avalibleChannel * config->filterSt2Taps;
+                stage2MemSize = availableChannel * config->filterSt2Taps;
                 stage2MemAddr = stage1MemSize;
             }
             else
             {
-                stage1MemSize = avalibleChannel * config->filterSt1Taps;
+                stage1MemSize = availableChannel * config->filterSt1Taps;
                 stage1MemAddr = 0U;
             }
 
-            base->PROC_CTRL_SLOT0_R1[avalibleContext] = stage1Exp;
-            base->PROC_CTRL_SLOT0_R2[avalibleContext] = ASRC_PROC_CTRL_SLOT0_R2_SLOT0_ST1_ST_ADDR(stage1MemAddr) |
-                                                        ASRC_PROC_CTRL_SLOT0_R2_SLOT0_ST1_MEM_ALLOC(stage1MemSize);
-            base->PROC_CTRL_SLOT0_R3[avalibleContext] = ASRC_PROC_CTRL_SLOT0_R3_SLOT0_ST2_ST_ADDR(stage2MemAddr) |
-                                                        ASRC_PROC_CTRL_SLOT0_R3_SLOT0_ST2_MEM_ALLOC(stage2MemSize);
+            base->PROC_CTRL_SLOT0_R1[availableContext] = stage1Exp;
+            base->PROC_CTRL_SLOT0_R2[availableContext] = ASRC_PROC_CTRL_SLOT0_R2_SLOT0_ST1_ST_ADDR(stage1MemAddr) |
+                                                         ASRC_PROC_CTRL_SLOT0_R2_SLOT0_ST1_MEM_ALLOC(stage1MemSize);
+            base->PROC_CTRL_SLOT0_R3[availableContext] = ASRC_PROC_CTRL_SLOT0_R3_SLOT0_ST2_ST_ADDR(stage2MemAddr) |
+                                                         ASRC_PROC_CTRL_SLOT0_R3_SLOT0_ST2_MEM_ALLOC(stage2MemSize);
         }
         else
         {
             if (config->filterSt2Taps != 0U)
             {
-                stage1Exp     = (config->filterSt1Exp - 1U) * avalibleChannel;
-                stage1MemSize = (config->filterSt1Taps - 1U) * config->filterSt1Exp * avalibleChannel + avalibleChannel;
+                stage1Exp = (config->filterSt1Exp - 1U) * availableChannel;
+                stage1MemSize =
+                    (config->filterSt1Taps - 1U) * config->filterSt1Exp * availableChannel + availableChannel;
                 stage1MemAddr = 0x1800U - stage1MemSize;
-                stage2MemSize = avalibleChannel * config->filterSt2Taps;
+                stage2MemSize = availableChannel * config->filterSt2Taps;
                 stage2MemAddr = 0x1800U - stage1MemSize - stage2MemSize;
             }
             else
             {
-                stage1MemSize = avalibleChannel * config->filterSt1Taps;
+                stage1MemSize = availableChannel * config->filterSt1Taps;
                 stage1MemAddr = 0x1800U - stage1MemSize;
             }
 
-            base->PROC_CTRL_SLOT1_R1[avalibleContext] = stage1Exp;
-            base->PROC_CTRL_SLOT1_R2[avalibleContext] = ASRC_PROC_CTRL_SLOT1_R2_SLOT1_ST1_ST_ADDR(stage1MemAddr) |
-                                                        ASRC_PROC_CTRL_SLOT1_R2_SLOT1_ST1_MEM_ALLOC(stage1MemSize);
-            base->PROC_CTRL_SLOT1_R3[avalibleContext] = ASRC_PROC_CTRL_SLOT1_R3_SLOT1_ST2_ST_ADDR(stage2MemAddr) |
-                                                        ASRC_PROC_CTRL_SLOT1_R3_SLOT1_ST2_MEM_ALLOC(stage2MemSize);
+            base->PROC_CTRL_SLOT1_R1[availableContext] = stage1Exp;
+            base->PROC_CTRL_SLOT1_R2[availableContext] = ASRC_PROC_CTRL_SLOT1_R2_SLOT1_ST1_ST_ADDR(stage1MemAddr) |
+                                                         ASRC_PROC_CTRL_SLOT1_R2_SLOT1_ST1_MEM_ALLOC(stage1MemSize);
+            base->PROC_CTRL_SLOT1_R3[availableContext] = ASRC_PROC_CTRL_SLOT1_R3_SLOT1_ST2_ST_ADDR(stage2MemAddr) |
+                                                         ASRC_PROC_CTRL_SLOT1_R3_SLOT1_ST2_MEM_ALLOC(stage2MemSize);
         }
 
         /* one context processor can satisfy the channel requirement*/
@@ -664,8 +668,8 @@ static status_t ASRC_SetContextProcessorConfig(ASRC_Type *base, asrc_context_t c
         /* load default configuration if not assigned by application */
         if (config->contextPrefilter.filterCoeffAddress == NULL)
         {
-            if (ASRC_GetPrefiterConfig(&config->contextPrefilter, config->contextInput.sampleRate,
-                                       config->contextOutput.sampleRate) == kStatus_InvalidArgument)
+            if (ASRC_GetPrefilterConfig(&config->contextPrefilter, config->contextInput.sampleRate,
+                                        config->contextOutput.sampleRate) == kStatus_InvalidArgument)
             {
                 return kStatus_InvalidArgument;
             }
@@ -696,16 +700,14 @@ void ASRC_Init(ASRC_Type *base)
     CLOCK_EnableClock(s_asrcClock[ASRC_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
-    /* disable ASRC module */
-    base->CTX_CTRL[0U] = 0U;
-    base->CTX_CTRL[1U] = 0U;
-    base->CTX_CTRL[2U] = 0U;
-    base->CTX_CTRL[3U] = 0U;
-
-    base->CTX_OUT_CTRL[0U] = 0U;
-    base->CTX_OUT_CTRL[1U] = 0U;
-    base->CTX_OUT_CTRL[2U] = 0U;
-    base->CTX_OUT_CTRL[3U] = 0U;
+    for (uint32_t i = 0U; i < ASRC_SUPPORT_MAXIMUM_CONTEXT_PROCESSOR_NUMBER; i++)
+    {
+        /* disable ASRC module and reset ASRC slot configurations*/
+        base->CTX_CTRL[i]           = 0U;
+        base->CTX_OUT_CTRL[i]       = 0U;
+        base->PROC_CTRL_SLOT0_R0[i] = 0U;
+        base->PROC_CTRL_SLOT1_R0[i] = 0U;
+    }
 
     /* disable all the interrupt */
     base->IRQ_CTRL  = 0U;
@@ -786,11 +788,11 @@ status_t ASRC_SetContextOutputConfig(ASRC_Type *base, asrc_context_t context, as
         {
             samplePosition = 12U;
         }
-        else if (config->dataFormat.dataWidth == kASRC_DataWidth24Bit)
+        else if (config->dataFormat.dataWidth == kASRC_DataWidth20Bit)
         {
             samplePosition = 8U;
         }
-        else if (config->dataFormat.dataWidth == kASRC_DataWidth32Bit)
+        else if (config->dataFormat.dataWidth == kASRC_DataWidth24Bit)
         {
             samplePosition = 4U;
         }
@@ -842,8 +844,8 @@ void ASRC_GetContextDefaultConfig(asrc_context_config_t *config,
     config->contextInput.sampleRate                  = inSampleRate;
     config->contextInput.watermark                   = FSL_ASRC_INPUT_FIFO_DEPTH / 2U;
     config->contextInput.accessCtrl.accessIterations = 1;
-    config->contextInput.accessCtrl.accessGroupLen   = 2;
-    config->contextInput.accessCtrl.accessLen        = 2;
+    config->contextInput.accessCtrl.accessGroupLen   = (uint8_t)channels;
+    config->contextInput.accessCtrl.accessLen        = (uint8_t)channels;
     config->contextInput.dataFormat.dataPosition     = 0U;
     config->contextInput.dataFormat.dataEndianness   = kASRC_DataEndianLittle;
     config->contextInput.dataFormat.dataWidth        = kASRC_DataWidth16Bit;
@@ -853,8 +855,8 @@ void ASRC_GetContextDefaultConfig(asrc_context_config_t *config,
     config->contextOutput.sampleRate                  = outSampleRate;
     config->contextOutput.watermark                   = FSL_ASRC_OUTPUT_FIFO_DEPTH / 8U;
     config->contextOutput.accessCtrl.accessIterations = 1;
-    config->contextOutput.accessCtrl.accessGroupLen   = 2;
-    config->contextOutput.accessCtrl.accessLen        = 2;
+    config->contextOutput.accessCtrl.accessGroupLen   = (uint8_t)channels;
+    config->contextOutput.accessCtrl.accessLen        = (uint8_t)channels;
     config->contextOutput.dataFormat.dataPosition     = 0;
     config->contextOutput.dataFormat.dataEndianness   = kASRC_DataEndianLittle;
     config->contextOutput.dataFormat.dataWidth        = kASRC_DataWidth16Bit;
@@ -865,11 +867,11 @@ void ASRC_GetContextDefaultConfig(asrc_context_config_t *config,
     /* prefilter configuration */
     config->contextPrefilter.initMode     = kASRC_SampleBufferFillZeroOnInit;
     config->contextPrefilter.stopMode     = kASRC_SampleBufferFillLastSampleOnStop;
-    config->contextPrefilter.stage1Result = kASRC_PrefilterStage1ResultInt;
+    config->contextPrefilter.stage1Result = kASRC_PrefilterStage1ResultFloat;
     /* resampler configuration */
     config->contextResampler.initMode = kASRC_SampleBufferFillZeroOnInit;
     config->contextResampler.stopMode = kASRC_SampleBufferFillLastSampleOnStop;
-    config->contextResampler.tap      = kASRC_ResamplerTaps_32;
+    config->contextResampler.tap      = kASRC_ResamplerTaps_128;
 }
 
 /*!
@@ -886,7 +888,7 @@ status_t ASRC_SetContextConfig(ASRC_Type *base, asrc_context_t context, asrc_con
 {
     assert(config != NULL);
 
-    if (config->contextChannelNums > ASRC_SUPPORT_MAXIMUM_CHANNEL_NUMBER)
+    if ((config->contextChannelNums == 0U) || (config->contextChannelNums > ASRC_SUPPORT_MAXIMUM_CHANNEL_NUMBER))
     {
         return kStatus_InvalidArgument;
     }
@@ -1070,6 +1072,14 @@ status_t ASRC_TransferBlocking(ASRC_Type *base, asrc_context_t context, asrc_tra
         if (outSamples <= outWatermarkSamples)
         {
             readSamples = ASRC_ReadFIFORemainedSample(base, context, readPointer, outWidth, outSamples);
+            /* for the case that all the output samples have write to the output fifo and all the fifo samples has been
+             * read */
+            if (((ASRC_GetInterruptStatus(base) & ((uint32_t)kASRC_Context0RunStopDone << (uint32_t)context)) != 0U) &&
+                (readSamples == 0U))
+            {
+                ASRC_ClearInterruptStatus(base, ((uint32_t)kASRC_Context0RunStopDone << (uint32_t)context));
+                break;
+            }
             outSamples -= readSamples;
             continue;
         }

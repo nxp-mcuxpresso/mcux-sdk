@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, NXP
+ * Copyright 2018-2021, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.3.0. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2UL, 3UL, 0UL))
+/*! @brief power driver version 2.3.1. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2UL, 3UL, 1UL))
 /*@}*/
 
 #define MAKE_PD_BITS(reg, slot)  (((reg) << 8) | (slot))

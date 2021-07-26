@@ -49,6 +49,14 @@
 /*! @brief The ENET PHY address. */
 #define BOARD_ENET0_PHY_ADDRESS (0x00U) /* Phy address of enet port 0. */
 
+/*! @brief Memory ranges not usable by the ENET DMA. */
+#ifndef BOARD_ENET_NON_DMA_MEMORY_ARRAY
+#define BOARD_ENET_NON_DMA_MEMORY_ARRAY                                                     \
+    {                                                                                       \
+        {0x10000000U, 0x17FFFFFFU}, {0x80000000U, 0xDFFFFFFFU}, {0x00000000U, 0x00000000U}, \
+    }
+#endif /* BOARD_ENET_NON_DMA_MEMORY_ARRAY */
+
 #ifndef BOARD_LED1_GPIO
 #define BOARD_LED1_GPIO GPIO
 #endif
@@ -170,23 +178,6 @@
 #define LED3_TOGGLE() \
     GPIO_PortToggle(BOARD_LED3_GPIO, BOARD_LED3_GPIO_PORT, 1U << BOARD_LED3_GPIO_PIN) /*!< Toggle on target LED3 */
 
-/*! @brief The WIFI-QCA shield pin. */
-#define BOARD_INITGT202SHIELD_PWRON_GPIO      GPIO                /*!< GPIO device name: GPIO */
-#define BOARD_INITGT202SHIELD_PWRON_PORT      4U                  /*!< PORT device index: 4 */
-#define BOARD_INITGT202SHIELD_PWRON_GPIO_PIN  7U                  /*!< PIO4 pin index: 7 */
-#define BOARD_INITGT202SHIELD_PWRON_PIN_NAME  PIO4_7              /*!< Pin name */
-#define BOARD_INITGT202SHIELD_PWRON_LABEL     "PWRON"             /*!< Label */
-#define BOARD_INITGT202SHIELD_PWRON_NAME      "PWRON"             /*!< Identifier name */
-#define BOARD_INITGT202SHIELD_PWRON_DIRECTION kGPIO_DigitalOutput /*!< Direction */
-
-#define BOARD_INITGT202SHIELD_IRQ_GPIO      GPIO               /*!< GPIO device name: GPIO */
-#define BOARD_INITGT202SHIELD_IRQ_PORT      1U                 /*!< PORT device index: 1 */
-#define BOARD_INITGT202SHIELD_IRQ_GPIO_PIN  22U                /*!< PIO1 pin index: 22 */
-#define BOARD_INITGT202SHIELD_IRQ_PIN_NAME  PIO1_22            /*!< Pin name */
-#define BOARD_INITGT202SHIELD_IRQ_LABEL     "IRQ"              /*!< Label */
-#define BOARD_INITGT202SHIELD_IRQ_NAME      "IRQ"              /*!< Identifier name */
-#define BOARD_INITGT202SHIELD_IRQ_DIRECTION kGPIO_DigitalInput /*!< Direction */
-
 /* LCD panel. */
 #define BOARD_LCD_BL_GPIO          3
 #define BOARD_LCD_BL_PIN           31
@@ -199,7 +190,7 @@
 #define BOARD_SERIAL_MWM_PORT_IRQn     FLEXCOMM4_IRQn
 #define BOARD_SERIAL_MWM_RST_GPIO      GPIO
 #define BOARD_SERIAL_MWM_RST_PORT      1
-#define BOARD_SERIAL_MWM_RST_PIN       0
+#define BOARD_SERIAL_MWM_RST_PIN       22
 #define BOARD_SERIAL_MWM_RST_WRITE(output) \
     GPIO_PinWrite(BOARD_SERIAL_MWM_RST_GPIO, BOARD_SERIAL_MWM_RST_PORT, BOARD_SERIAL_MWM_RST_PIN, output)
 

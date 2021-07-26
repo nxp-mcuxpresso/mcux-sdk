@@ -13,6 +13,7 @@
 
 /*!
  * @addtogroup cs42888
+ * @ingroup codec
  * @{
  */
 

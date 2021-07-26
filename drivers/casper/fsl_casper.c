@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  *
@@ -51,6 +51,12 @@ enum _casper_ecc_N_wordlen
   (-fno-strict-aliasing is required for this driver). */
 #pragma GCC push_options
 #pragma GCC optimize("-O1")
+#endif
+
+#if (defined(__CC_ARM) || defined(__ARMCC_VERSION))
+/* Enforce optimization off for clang, specifically to remove strict-aliasing option.
+(-fno-strict-aliasing is required for this driver). */
+#pragma clang optimize off
 #endif
 
 /* CASPER driver allows usage of 256, 384 and 521 ECC */
@@ -122,14 +128,14 @@ enum _casper_ecc_N_wordlen
         }                                                                     \
     }
 #else
-#define GET_WORD(addr)         (*((uint32_t *)(addr)))
+#define GET_WORD(addr)         (*((uint32_t *)(uint32_t)(addr)))
 #define GET_DWORD(addr)        (*((uint64_t *)(addr)))
-#define SET_WORD(addr, value)  *((uint32_t *)(addr)) = ((uint32_t)(value))
+#define SET_WORD(addr, value)  *((uint32_t *)(uint32_t)(addr)) = ((uint32_t)(value))
 #define SET_DWORD(addr, value) *((uint64_t *)(addr)) = ((uint64_t)(value))
 
-#define CASPER_MEMCPY_I2I(dst, src, siz) memcpy(dst, src, siz)
-#define CASPER_MEMCPY_I2N(dst, src, siz) memcpy(dst, src, siz)
-#define CASPER_MEMCPY_N2I(dst, src, siz) memcpy(dst, src, siz)
+#define CASPER_MEMCPY_I2I(dst, src, siz) (void)memcpy(dst, src, siz)
+#define CASPER_MEMCPY_I2N(dst, src, siz) (void)memcpy(dst, src, siz)
+#define CASPER_MEMCPY_N2I(dst, src, siz) (void)memcpy(dst, src, siz)
 #endif
 
 #define WORK_BUFF_MUL4 (N_wordlen_max * 4 + 2) /* ! working buffer is 4xN_wordlen to allow in place math */
@@ -1055,6 +1061,10 @@ void CASPER_Init(CASPER_Type *base)
     CLOCK_EnableClock(kCLOCK_Casper);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
     RESET_PeripheralReset(kCASPER_RST_SHIFT_RSTn);
+#if defined(FSL_FEATURE_CASPER_RAM_HW_INTERLEAVE) && (FSL_FEATURE_CASPER_RAM_HW_INTERLEAVE > 0)
+    /* Enable hardware interleaving to RAMX0 and RAMX1 for CASPER */
+    SYSCON->CASPER_CTRL = SYSCON_CASPER_CTRL_INTERLEAVE(1);
+#endif /* FSL_FEATURE_CASPER_RAM_HW_INTERLEAVE */
     /* If Casper init is called with secure address, use secure addres also for accessing Casper RAM. */
     s_casperRamBase = (unsigned)CASPER_RAM_BASE_NS | ((uint32_t)base & 0x10000000u);
     msg_ret         = (uint32_t *)s_casperRamBase;
@@ -2417,7 +2427,8 @@ void Jac_scalar_multiplication(
 
 static void precompute_double_scalar_LUT16(uint32_t *Px, uint32_t *Py, uint32_t *Qx, uint32_t *Qy)
 {
-    uint32_t *Q2x, *Q2y, *Q2z, *P2x, *P2y, *P2z, *Z, *mem, *ONE;
+    uint32_t *Q2x, *Q2y, *Q2z, *P2x, *P2y, *P2z, *Z, *mem;
+    uint32_t *ONE  = NULL;
     uint32_t index = 0;
 
     if (N_wordlen == 8U)
@@ -3404,6 +3415,11 @@ static void MultprecCiosMul521_ct(
 }
 
 #if defined(__GNUC__)
-/* End of enforcing O1 optimize level */
+/* End of enforcing O1 optimize level for gcc*/
 #pragma GCC pop_options
+#endif
+
+#if (defined(__CC_ARM) || defined(__ARMCC_VERSION))
+// End of enforcing optimize off for clang
+#pragma clang optimize on
 #endif

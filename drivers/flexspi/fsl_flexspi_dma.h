@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FLEXSPI DMA driver version 2.2.0. */
-#define FSL_FLEXSPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief FLEXSPI DMA driver version 2.2.1. */
+#define FSL_FLEXSPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 typedef struct _flexspi_dma_handle flexspi_dma_handle_t;

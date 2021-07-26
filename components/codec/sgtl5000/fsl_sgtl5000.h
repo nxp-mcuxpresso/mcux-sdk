@@ -13,6 +13,7 @@
 
 /*!
  * @addtogroup sgtl5000
+ * @ingroup codec
  * @{
  */
 

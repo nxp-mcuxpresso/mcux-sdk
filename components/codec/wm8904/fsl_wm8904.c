@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -629,12 +629,12 @@ status_t WM8904_SetFLLConfig(wm8904_handle_t *handle, wm8904_fll_config_t *confi
         inputDivider = 3;
     }
 
-    if (referenceClock / ((uint32_t)1U << inputDivider) > 13500000U)
+    if (referenceClock / (1UL << inputDivider) > 13500000U)
     {
         return kStatus_InvalidArgument;
     }
 
-    referenceClock = referenceClock / ((uint32_t)1U << inputDivider);
+    referenceClock = referenceClock / (1UL << inputDivider);
 
     for (outputDiv = 4U; outputDiv <= 64U; outputDiv++)
     {
@@ -801,17 +801,26 @@ status_t WM8904_CheckAudioFormat(wm8904_handle_t *handle, wm8904_audio_format_t 
         case kWM8904_SampleRate8kHz:
             sampleRate = 8000;
             break;
+        case kWM8904_SampleRate11025Hz:
+            sampleRate = 11025;
+            break;
         case kWM8904_SampleRate12kHz:
             sampleRate = 12000;
             break;
         case kWM8904_SampleRate16kHz:
             sampleRate = 16000;
             break;
+        case kWM8904_SampleRate22050Hz:
+            sampleRate = 22050;
+            break;
         case kWM8904_SampleRate24kHz:
             sampleRate = 24000;
             break;
         case kWM8904_SampleRate32kHz:
             sampleRate = 32000;
+            break;
+        case kWM8904_SampleRate44100Hz:
+            sampleRate = 44100;
             break;
         case kWM8904_SampleRate48kHz:
             sampleRate = 48000;
@@ -876,7 +885,8 @@ status_t WM8904_CheckAudioFormat(wm8904_handle_t *handle, wm8904_audio_format_t 
  */
 status_t WM8904_SetAudioFormat(wm8904_handle_t *handle, uint32_t sysclk, uint32_t sampleRate, uint32_t bitWidth)
 {
-    wm8904_audio_format_t format;
+    wm8904_audio_format_t format = {
+        .fsRatio = kWM8904_FsRatio1536X, .sampleRate = kWM8904_SampleRate48kHz, .bitWidth = kWM8904_BitWidth32};
     uint32_t ratio = 0;
     status_t error = kStatus_WM8904_Success;
 
@@ -886,7 +896,7 @@ status_t WM8904_SetAudioFormat(wm8904_handle_t *handle, uint32_t sysclk, uint32_
             format.sampleRate = kWM8904_SampleRate8kHz;
             break;
         case 11025:
-            /* Avoid MISRA 16.4 violation */
+            format.sampleRate = kWM8904_SampleRate12kHz;
             break;
         case 12000:
             format.sampleRate = kWM8904_SampleRate12kHz;
@@ -895,7 +905,7 @@ status_t WM8904_SetAudioFormat(wm8904_handle_t *handle, uint32_t sysclk, uint32_
             format.sampleRate = kWM8904_SampleRate16kHz;
             break;
         case 22050:
-            /* Avoid MISRA 16.4 violation */
+            format.sampleRate = kWM8904_SampleRate24kHz;
             break;
         case 24000:
             format.sampleRate = kWM8904_SampleRate24kHz;
@@ -904,7 +914,7 @@ status_t WM8904_SetAudioFormat(wm8904_handle_t *handle, uint32_t sysclk, uint32_
             format.sampleRate = kWM8904_SampleRate32kHz;
             break;
         case 44100:
-            /* Avoid MISRA 16.4 violation */
+            format.sampleRate = kWM8904_SampleRate48kHz;
             break;
         case 48000:
             format.sampleRate = kWM8904_SampleRate48kHz;

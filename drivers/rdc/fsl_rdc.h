@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,7 +18,7 @@
 /******************************************************************************
  * Definitions
  *****************************************************************************/
-#define FSL_RDC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_RDC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 
 #define RDC_ACCESS_POLICY(domainID, policy) (uint16_t)((uint16_t)(policy) << ((domainID)*2U))
 
@@ -297,6 +297,21 @@ static inline void RDC_LockPeriphAccessConfig(RDC_Type *base, rdc_periph_t perip
 }
 
 /*!
+ * @brief Get the peripheral access policy for specific domain.
+ *
+ * @param base RDC peripheral base address.
+ * @param periph Which peripheral to get.
+ * @param domainId Get policy for which domain.
+ * @return Access policy, see @ref _rdc_access_policy.
+ */
+static inline uint8_t RDC_GetPeriphAccessPolicy(RDC_Type *base, rdc_periph_t periph, uint8_t domainId)
+{
+    assert((uint32_t)periph < RDC_PDAP_COUNT);
+
+    return (uint8_t)((base->PDAP[periph] >> (domainId * 2U)) & 0x03U);
+}
+
+/*!
  * @brief Set memory region access policy.
  *
  * Note that when setting the baseAddress and endAddress in @p config,
@@ -391,6 +406,21 @@ static inline void RDC_ClearMemViolationFlag(RDC_Type *base, rdc_mem_t mem)
     assert((uint32_t)mem < RDC_MRC_COUNT);
 
     base->MR[mem].MRVS = RDC_MRVS_AD_MASK;
+}
+
+/*!
+ * @brief Get the memory region access policy for specific domain.
+ *
+ * @param base RDC peripheral base address.
+ * @param mem Which memory region to get.
+ * @param domainId Get policy for which domain.
+ * @return Access policy, see @ref _rdc_access_policy.
+ */
+static inline uint8_t RDC_GetMemAccessPolicy(RDC_Type *base, rdc_mem_t mem, uint8_t domainId)
+{
+    assert((uint32_t)mem < RDC_MRC_COUNT);
+
+    return (uint8_t)((base->MR[mem].MRC >> (domainId * 2U)) & 0x03U);
 }
 
 /*!

@@ -245,7 +245,7 @@ extern volatile uint32_t g_xtal32Freq;
 /*! @brief Clock ip name array for FGPIO. */
 #define FGPIO_CLOCKS                                                                          \
     {                                                                                         \
-        kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_Rgpio1 \
+        kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_GpioE \
     }
 
 /*! @brief Clock name used to get clock frequency.
@@ -354,7 +354,7 @@ typedef enum _clock_ip_name
     kCLOCK_Trace    = MAKE_PCC_REGADDR(PCC0_BASE, 0x200),
     /* PCC1. */
     kCLOCK_Edma1     = MAKE_PCC_REGADDR(PCC1_BASE, 0x20),
-    kCLOCK_Rgpio1    = MAKE_PCC_REGADDR(PCC1_BASE, 0x3C),
+    kCLOCK_GpioE    = MAKE_PCC_REGADDR(PCC1_BASE, 0x3C),
     kCLOCK_Xrdc0PacB = MAKE_PCC_REGADDR(PCC1_BASE, 0x58),
     kCLOCK_Xrdc0MrcB = MAKE_PCC_REGADDR(PCC1_BASE, 0x5C),
     kCLOCK_Sema421   = MAKE_PCC_REGADDR(PCC1_BASE, 0x6C),

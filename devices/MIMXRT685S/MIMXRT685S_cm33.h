@@ -11,13 +11,13 @@
 **
 **     Reference manual:    MIMXRT685 User manual Rev. 0.95 11 November 2019
 **     Version:             rev. 2.0, 2019-11-12
-**     Build:               b201019
+**     Build:               b210203
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT685S_cm33
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -12049,13 +12049,6 @@ typedef struct {
  *  0b1..Doze mode support enabled. AHB clock and serial clock will be gated off when there is doze mode request from system.
  */
 #define FLEXSPI_MCR0_DOZEEN(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXSPI_MCR0_DOZEEN_SHIFT)) & FLEXSPI_MCR0_DOZEEN_MASK)
-#define FLEXSPI_MCR0_COMBINATIONEN_MASK          (0x2000U)
-#define FLEXSPI_MCR0_COMBINATIONEN_SHIFT         (13U)
-/*! COMBINATIONEN - This bit is to support Flash Octal mode access by combining Port A and B Data pins (A_DATA[3:0] and B_DATA[3:0]).
- *  0b0..Disable.
- *  0b1..Enable.
- */
-#define FLEXSPI_MCR0_COMBINATIONEN(x)            (((uint32_t)(((uint32_t)(x)) << FLEXSPI_MCR0_COMBINATIONEN_SHIFT)) & FLEXSPI_MCR0_COMBINATIONEN_MASK)
 #define FLEXSPI_MCR0_SCKFREERUNEN_MASK           (0x4000U)
 #define FLEXSPI_MCR0_SCKFREERUNEN_SHIFT          (14U)
 /*! SCKFREERUNEN - This bit is used to force SCLK output free-running. For FPGA applications,

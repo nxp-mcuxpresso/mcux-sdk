@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -350,7 +350,8 @@ void QSPI_SoftwareReset(QuadSPI_Type *base)
 
     /* Reset AHB domain and buffer domian */
     base->MCR |= (QuadSPI_MCR_SWRSTHD_MASK | QuadSPI_MCR_SWRSTSD_MASK);
-    base->BFGENCR = 0;
+    /* Clear buffer generic configuration. */
+    base->BFGENCR = 0x00U;
 
     /* Wait several time for the reset to finish, this method came from IC team */
     for (i = 0; i < 100U; i++)

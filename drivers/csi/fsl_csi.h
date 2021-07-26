@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  *
@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
 /*@}*/
 
 #if (defined(FSL_FEATURE_CSI_NO_REG_PREFIX) && FSL_FEATURE_CSI_NO_REG_PREFIX)

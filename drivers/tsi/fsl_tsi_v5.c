@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -11,6 +11,46 @@
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.tsi_v5"
 #endif
+
+/*******************************************************************************
+ * Prototypes
+ ******************************************************************************/
+
+/*******************************************************************************
+ * Variables
+ ******************************************************************************/
+/* Array of TSI clock name. */
+const clock_ip_name_t s_tsiClock[] = TSI_CLOCKS;
+/* Array of TSI IRQ name. */
+const IRQn_Type s_TsiIRQ[] = TSI_IRQS;
+/* Array of TSI peripheral base address. */
+TSI_Type *const s_tsiBases[] = TSI_BASE_PTRS;
+/*******************************************************************************
+ * Code
+ ******************************************************************************/
+/*!
+ * brief Get the TSI instance from peripheral base address.
+ *
+ * param base TSI peripheral base address.
+ * return TSI instance.
+ */
+uint32_t TSI_GetInstance(TSI_Type *base)
+{
+    uint32_t instance;
+
+    /* Find the instance index from base address mappings. */
+    for (instance = 0U; instance < ARRAY_SIZE(s_tsiBases); instance++)
+    {
+        if (s_tsiBases[instance] == base)
+        {
+            break;
+        }
+    }
+
+    assert(instance < ARRAY_SIZE(s_tsiBases));
+
+    return instance;
+}
 
 /*!
  * brief Initialize hardware to Self-cap mode.
@@ -30,7 +70,10 @@ void TSI_InitSelfCapMode(TSI_Type *base, const tsi_selfCap_config_t *config)
     bool is_int_enabled    = false;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    CLOCK_EnableClock(kCLOCK_Tsi0);
+    uint32_t instance = TSI_GetInstance(base);
+
+    /* Enable tsi clock */
+    (void)CLOCK_EnableClock(s_tsiClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
     if ((bool)(base->GENCS & TSI_GENCS_TSIEN_MASK))
     {
@@ -96,7 +139,10 @@ void TSI_InitMutualCapMode(TSI_Type *base, const tsi_mutualCap_config_t *config)
     bool is_int_enabled    = false;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    CLOCK_EnableClock(kCLOCK_Tsi0);
+    uint32_t instance = TSI_GetInstance(base);
+
+    /* Enable tsi clock */
+    (void)CLOCK_EnableClock(s_tsiClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
     if ((bool)(base->GENCS & TSI_GENCS_TSIEN_MASK))
     {
@@ -162,8 +208,12 @@ void TSI_Deinit(TSI_Type *base)
     base->GENCS = 0U;
     base->DATA  = 0U;
     base->TSHD  = 0U;
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    CLOCK_DisableClock(kCLOCK_Tsi0);
+    uint32_t instance = TSI_GetInstance(base);
+
+    /* Disable tsi clock */
+    (void)CLOCK_DisableClock(s_tsiClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
@@ -211,7 +261,7 @@ void TSI_GetSelfCapModeDefaultConfig(tsi_selfCap_config_t *userConfig)
     userConfig->commonConfig.ssc_mode      = kTSI_ssc_prbs_method;
     userConfig->commonConfig.ssc_prescaler = kTSI_ssc_div_by_1;
     userConfig->enableSensitivity          = true;
-    userConfig->enableShield               = false;
+    userConfig->enableShield               = kTSI_shieldAllOff;
     userConfig->xdn                        = kTSI_SensitivityXdnOption_1;
     userConfig->ctrim                      = kTSI_SensitivityCtrimOption_7;
     userConfig->inputCurrent               = kTSI_CurrentMultipleInputValue_0;

@@ -240,8 +240,21 @@ status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
     (void)CLOCK_EnableClock(s_ftmClocks[FTM_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+    if (0 != FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))
+    {
+        /* Enable FTM mode and disable write protection */
+        base->MODE = FTM_MODE_FTMEN_MASK | FTM_MODE_WPDIS_MASK;
+    }
+    else
+    {
+        /* Configure the fault mode, enable FTM mode and disable write protection */
+        base->MODE = FTM_MODE_FAULTM(config->faultMode) | FTM_MODE_FTMEN_MASK | FTM_MODE_WPDIS_MASK;
+    }
+#else
     /* Configure the fault mode, enable FTM mode and disable write protection */
     base->MODE = FTM_MODE_FAULTM(config->faultMode) | FTM_MODE_FTMEN_MASK | FTM_MODE_WPDIS_MASK;
+#endif
 
     /* Configure the update mechanism for buffered registers */
     FTM_SetPwmSync(base, config->pwmSyncMode);
@@ -282,11 +295,22 @@ status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
 #endif /* FSL_FEATURE_FTM_HAS_EXTENDED_DEADTIME_VALUE */
                       FTM_DEADTIME_DTPS(config->deadTimePrescale) | FTM_DEADTIME_DTVAL(config->deadTimeValue));
 
+#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+    if (0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))
+    {
+        /* FTM fault filter value */
+        reg = base->FLTCTRL;
+        reg &= ~FTM_FLTCTRL_FFVAL_MASK;
+        reg |= FTM_FLTCTRL_FFVAL(config->faultFilterValue);
+        base->FLTCTRL = reg;
+    }
+#else
     /* FTM fault filter value */
     reg = base->FLTCTRL;
     reg &= ~FTM_FLTCTRL_FFVAL_MASK;
     reg |= FTM_FLTCTRL_FFVAL(config->faultFilterValue);
     base->FLTCTRL = reg;
+#endif
 
     return kStatus_Success;
 }
@@ -992,6 +1016,10 @@ void FTM_SetupQuadDecode(FTM_Type *base,
 void FTM_SetupFaultInput(FTM_Type *base, ftm_fault_input_t faultNumber, const ftm_fault_param_t *faultParams)
 {
     assert(faultParams != NULL);
+    /* Fault input is not supported if the instance has only basic feature.*/
+#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+    assert(0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base));
+#endif
 
     if (faultParams->useFaultFilter)
     {
@@ -1045,11 +1073,23 @@ void FTM_EnableInterrupts(FTM_Type *base, uint32_t mask)
         base->SC |= FTM_SC_TOIE_MASK;
     }
 
+    /* Fault input is not supported if the instance has only basic feature.*/
+#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+    if (0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))
+    {
+        /* Enable the fault interrupt */
+        if ((mask & (uint32_t)kFTM_FaultInterruptEnable) != 0U)
+        {
+            base->MODE |= FTM_MODE_FAULTIE_MASK;
+        }
+    }
+#else
     /* Enable the fault interrupt */
     if ((mask & (uint32_t)kFTM_FaultInterruptEnable) != 0U)
     {
         base->MODE |= FTM_MODE_FAULTIE_MASK;
     }
+#endif
 
 #if defined(FSL_FEATURE_FTM_HAS_RELOAD_INTERRUPT) && (FSL_FEATURE_FTM_HAS_RELOAD_INTERRUPT)
     /* Enable the reload interrupt available only on certain SoC's */
@@ -1088,11 +1128,23 @@ void FTM_DisableInterrupts(FTM_Type *base, uint32_t mask)
     {
         base->SC &= ~FTM_SC_TOIE_MASK;
     }
+    /* Fault input is not supported if the instance has only basic feature.*/
+#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+    if (0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))
+    {
+        /* Disable the fault interrupt */
+        if ((mask & (uint32_t)kFTM_FaultInterruptEnable) != 0U)
+        {
+            base->MODE &= ~FTM_MODE_FAULTIE_MASK;
+        }
+    }
+#else
     /* Disable the fault interrupt */
     if ((mask & (uint32_t)kFTM_FaultInterruptEnable) != 0U)
     {
         base->MODE &= ~FTM_MODE_FAULTIE_MASK;
     }
+#endif
 
 #if defined(FSL_FEATURE_FTM_HAS_RELOAD_INTERRUPT) && (FSL_FEATURE_FTM_HAS_RELOAD_INTERRUPT)
     /* Disable the reload interrupt available only on certain SoC's */
@@ -1135,11 +1187,23 @@ uint32_t FTM_GetEnabledInterrupts(FTM_Type *base)
     {
         enabledInterrupts |= (uint32_t)kFTM_TimeOverflowInterruptEnable;
     }
+    /* Fault input is not supported if the instance has only basic feature.*/
+#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+    if (0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))
+    {
+        /* Check if fault interrupt is enabled */
+        if ((base->MODE & FTM_MODE_FAULTIE_MASK) != 0U)
+        {
+            enabledInterrupts |= (uint32_t)kFTM_FaultInterruptEnable;
+        }
+    }
+#else
     /* Check if fault interrupt is enabled */
     if ((base->MODE & FTM_MODE_FAULTIE_MASK) != 0U)
     {
         enabledInterrupts |= (uint32_t)kFTM_FaultInterruptEnable;
     }
+#endif
 
 #if defined(FSL_FEATURE_FTM_HAS_RELOAD_INTERRUPT) && (FSL_FEATURE_FTM_HAS_RELOAD_INTERRUPT)
     /* Check if the reload interrupt is enabled */
@@ -1179,11 +1243,23 @@ uint32_t FTM_GetStatusFlags(FTM_Type *base)
     {
         statusFlags |= (uint32_t)kFTM_TimeOverflowFlag;
     }
+    /* Fault input is not supported if the instance has only basic feature.*/
+#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+    if (0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))
+    {
+        /* Check fault flag */
+        if ((base->FMS & FTM_FMS_FAULTF_MASK) != 0U)
+        {
+            statusFlags |= (uint32_t)kFTM_FaultFlag;
+        }
+    }
+#else
     /* Check fault flag */
     if ((base->FMS & FTM_FMS_FAULTF_MASK) != 0U)
     {
         statusFlags |= (uint32_t)kFTM_FaultFlag;
     }
+#endif
     /* Check channel trigger flag */
     if ((base->EXTTRIG & FTM_EXTTRIG_TRIGF_MASK) != 0U)
     {
@@ -1217,11 +1293,23 @@ void FTM_ClearStatusFlags(FTM_Type *base, uint32_t mask)
     {
         base->SC &= ~FTM_SC_TOF_MASK;
     }
+    /* Fault input is not supported if the instance has only basic feature.*/
+#if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
+    if (0 == FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))
+    {
+        /* Clear fault flag by writing a 0 to the bit while it is set */
+        if ((mask & (uint32_t)kFTM_FaultFlag) != 0U)
+        {
+            base->FMS &= ~FTM_FMS_FAULTF_MASK;
+        }
+    }
+#else
     /* Clear fault flag by writing a 0 to the bit while it is set */
     if ((mask & (uint32_t)kFTM_FaultFlag) != 0U)
     {
         base->FMS &= ~FTM_FMS_FAULTF_MASK;
     }
+#endif
     /* Clear channel trigger flag */
     if ((mask & (uint32_t)kFTM_ChnlTriggerFlag) != 0U)
     {

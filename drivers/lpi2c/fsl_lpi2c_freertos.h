@@ -26,7 +26,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPI2C FreeRTOS driver version. */
-#define FSL_LPI2C_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_LPI2C_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 /*!

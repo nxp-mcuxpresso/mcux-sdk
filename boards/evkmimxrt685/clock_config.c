@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2021 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -25,7 +25,7 @@ product: Clocks v7.0
 processor: MIMXRT685S
 package_id: MIMXRT685SFVKB
 mcu_data: ksdk2_0
-processor_version: 0.0.3
+processor_version: 0.9.6
 board: MIMXRT685-EVK
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
@@ -93,7 +93,7 @@ void BOARD_InitBootClocks(void)
 name: BOARD_BootClockRUN
 called_from_default_init: true
 outputs:
-- {id: FLEXSPI_clock.outFreq, value: 1900.8/19 MHz}
+- {id: FLEXSPI_clock.outFreq, value: 1056/19 MHz}
 - {id: LPOSC1M_clock.outFreq, value: 1 MHz}
 - {id: OSTIMER_clock.outFreq, value: 1 MHz}
 - {id: System_clock.outFreq, value: 4752/19 MHz}
@@ -108,7 +108,7 @@ settings:
 - {id: SYSCON.AUDIOPLL0_PFD0_DIV.scale, value: '26', locked: true}
 - {id: SYSCON.AUDIOPLLCLKDIV.scale, value: '15', locked: true}
 - {id: SYSCON.AUDIO_PLL0_PFD0_MUL.scale, value: '18', locked: true}
-- {id: SYSCON.FLEXSPIFCLKDIV.scale, value: '5', locked: true}
+- {id: SYSCON.FLEXSPIFCLKDIV.scale, value: '9', locked: true}
 - {id: SYSCON.FLEXSPIFCLKSEL.sel, value: SYSCON.MAINPLLCLKDIV}
 - {id: SYSCON.FRGPLLCLKDIV.scale, value: '12', locked: true}
 - {id: SYSCON.MAINCLKSELB.sel, value: SYSCON.MAINPLLCLKDIV}
@@ -146,8 +146,8 @@ const clock_sys_pll_config_t g_sysPllConfig_BOARD_BootClockRUN = {
 };
 const clock_audio_pll_config_t g_audioPllConfig_BOARD_BootClockRUN = {
     .audio_pll_src  = kCLOCK_AudioPllXtalIn, /* OSC clock */
-    .numerator      = 5040,                  /* Numerator of the SYSPLL0 fractional loop divider isnull */
-    .denominator    = 27000,                 /* Denominator of the SYSPLL0 fractional loop divider isnull */
+    .numerator      = 5040,                  /* Numerator of the Audio PLL fractional loop divider is null */
+    .denominator    = 27000,                 /* Denominator of the Audio PLL fractional loop divider is null */
     .audio_pll_mult = kCLOCK_AudioPllMult22  /* Divide by 22 */
 };
 /*******************************************************************************
@@ -197,8 +197,8 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetClkDiv(kCLOCK_DivPllFrgClk, 12U);   /* Set FRGPLLCLKDIV divider to value 12 */
 
     /* Call weak function BOARD_SetFlexspiClock() to set user configured clock source/divider for FLEXSPI. */
-    BOARD_SetFlexspiClock(1U, 5U);
+    BOARD_SetFlexspiClock(1U, 9U);
 
-    /*< Set SystemCoreClock variable. */
+    /*!< Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKRUN_CORE_CLOCK;
 }

@@ -62,9 +62,20 @@ mmcau_sha256_initialize_output:
 
     ldr     r3, =sha256_initial_h
     ldmia   r3!, {r4-r7}                    @ load sha256_initial_h[0-3]
-    stmia   r0!, {r4-r7}                    @ store in output[0-3]
+#   stmia   r0!, {r4-r7}                    @ store in output[0-3]
+    str     r4, [r0, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r5, [r0, #1<<2]
+    str     r6, [r0, #2<<2]
+    str     r7, [r0, #3<<2]
+    adds    r0, #1<<4
+
     ldmia   r3!, {r4-r7}                    @ load sha256_initial_h[4-7]
-    stmia   r0!, {r4-r7}                    @ store in output[4-7]
+#   stmia   r0!, {r4-r7}                    @ store in output[4-7]
+    str     r4, [r0, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r5, [r0, #1<<2]
+    str     r6, [r0, #2<<2]
+    str     r7, [r0, #3<<2]
+    adds    r0, #1<<4
 
     movs    r0, #0                          @ clear the return value
     pop     {r4-r7}                         @ restore regs
@@ -135,13 +146,29 @@ mmcau_sha256_hash_n:
 # initialize the CAU data regs with the current contents of output[0-7]
     ldr     r1, =MMCAU_PPB_INDIRECT+((LDR+CA0)<<2)
     ldmia   r2!, {r4-r7}                    @ load output[0-3]
-    stmia   r1!, {r4-r7}                    @ store in CA[0-3]
+#   stmia   r1!, {r4-r7}                    @ store in CA[0-3]
+    str     r4, [r1, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r5, [r1, #1<<2]
+    str     r6, [r1, #2<<2]
+    str     r7, [r1, #3<<2]
+    adds    r1, #4<<2
+
     ldmia   r2!, {r4-r7}                    @ load output[4-7]
-    stmia   r1!, {r4-r7}                    @ store in CA[4-7]
+#   stmia   r1!, {r4-r7}                    @ store in CA[4-7]
+    str     r4, [r1, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r5, [r1, #1<<2]
+    str     r6, [r1, #2<<2]
+    str     r7, [r1, #3<<2]
+    adds    r1, #4<<2
 
 # prepare for next_blk
     ldr     r1, =sha256_reg_data+3<<2       @ get *sha256_reg_data[3]
-    ldmia   r1, {r1-r7}                     @ load sha256_reg_data[3-9]
+#   ldmia   r1, {r1-r7}                     @ load sha256_reg_data[3-9]
+    adds    r1, #1<<2                       @ move r1 by 4 bytes
+    ldmia   r1!, {r2-r7}                    @ load sha256_reg_data[4-9] and move r1 by 24 bytes
+    subs    r1, #7<<2                       @ move r1 back by 28 bytes
+    ldr     r1, [r1]                        @ load sha256_reg_data[3]
+
     mov     r9, r5                          @ store mmcau_indirect_cmd(LDR+CAA)
     mov     sl, r6                          @ store mmcau_indirect_cmd(ADR+CAA)
     mov     fp, r7                          @ store mmcau_indirect_cmd(STR+CAA)
@@ -383,7 +410,11 @@ next_blk:
     mov     lr, r2                          @ store HF2M
     str     r3, [sp, #256]                  @ store HF2C
     ldr     r0, =sha256_reg_data            @ get *sha256_reg_data
-    ldmia   r0, {r0-r2}                     @ load sha256_reg_data[0-2]
+#   ldmia   r0, {r0-r2}                     @ load sha256_reg_data[0-2]
+    adds    r0, #1<<2                       @ move r0 by 4 bytes
+    ldmia   r0!, {r1-r2}                    @ load sha256_reg_data[1-2] and move r0 by 8 bytes
+    subs    r0, #3<<2                       @ move r0 back by 12 bytes
+    ldr     r0, [r0]                        @ load sha256_reg_data[0]
     add     r3, sp, #0                      @ get *w[0]
     movs    r6, #48                         @ set number of loops = 48
 
@@ -461,16 +492,37 @@ loop:
     ldr     r2, =MMCAU_PPB_INDIRECT+((ADR+CA0)<<2)
     ldr     r3, [sp, #268]                  @ restore *output
     ldmia   r3!, {r4-r7}                    @ load output[0-3]
-    stmia   r2!, {r4-r7}                    @ add to CA[0-3]
+#   stmia   r2!, {r4-r7}                    @ add to CA[0-3]
+    str     r4, [r2, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r5, [r2, #1<<2]
+    str     r6, [r2, #2<<2]
+    str     r7, [r2, #3<<2]
+    adds    r2, #1<<4
+
     ldmia   r3!, {r4-r7}                    @ load output[4-7]
-    stmia   r2!, {r4-r7}                    @ add to CA[4-7]
+#   stmia   r2!, {r4-r7}                    @ add to CA[4-7]
+    str     r4, [r2, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r5, [r2, #1<<2]
+    str     r6, [r2, #2<<2]
+    str     r7, [r2, #3<<2]
+    adds    r2, #1<<4
     subs    r2, #96                         @ mmcau_indirect_cmd(STR+CA0)
     subs    r3, #8<<2                       @ reset *output
     ldmia   r2!, {r4-r7}                    @ load new CA[0-3]
-    stmia   r3!, {r4-r7}                    @ store in output[0-3]
-    ldmia   r2!, {r4-r7}                    @ load new CA[4-7]
-    stmia   r3!, {r4-r7}                    @ store in output[4-7]
+#   stmia   r3!, {r4-r7}                    @ store in output[0-3]
+    str     r4, [r3, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #1<<4
 
+    ldmia   r2!, {r4-r7}                    @ load new CA[4-7]
+#   stmia   r3!, {r4-r7}                    @ store in output[4-7]
+    str     r4, [r3, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r5, [r3, #1<<2]
+    str     r6, [r3, #2<<2]
+    str     r7, [r3, #3<<2]
+    adds    r3, #1<<4
 
 # find out if next_blk should be repeated
     ldr     r1, [sp, #264]                  @ restore num_blks
@@ -492,7 +544,11 @@ repeat_next_blk:
     str     r1, [sp, #264]                  @ store num_blks
     ldr     r0, [sp, #260]                  @ restore *input
     ldr     r1, =sha256_reg_data+3<<2       @ get *sha256_reg_data[3]
-    ldmia   r1, {r1-r4}                     @ load sha256_reg_data[3-6]
+#   ldmia   r1, {r1-r4}                     @ load sha256_reg_data[3-6]
+    adds    r1, #1<<2                       @ move r0 by 4 bytes
+    ldmia   r1!, {r2-r4}                    @ load sha256_reg_data[4-6] and move r0 by 12 bytes
+    subs    r1, #1<<4                       @ move r0 back by 16 bytes
+    ldr     r1, [r0]                        @ load sha256_reg_data[3]
     ldr     r5, =MMCAU_PPB_DIRECT
     b       next_blk                        @ repeat next_blk
 
@@ -537,9 +593,19 @@ mmcau_sha256_update:
 
     ldr     r3, =sha256_initial_h
     ldmia   r3!, {r4-r7}                    @ load sha256_initial_h[0-3]
-    stmia   r2!, {r4-r7}                    @ store in output[0-3]
+#   stmia   r2!, {r4-r7}                    @ store in output[0-3]
+    str     r4, [r2, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r5, [r2, #1<<2]
+    str     r6, [r2, #2<<2]
+    str     r7, [r2, #3<<2]
+    adds    r2, #1<<4
     ldmia   r3!, {r4-r7}                    @ load sha256_initial_h[4-7]
-    stmia   r2!, {r4-r7}                    @ store in output[4-7]
+#   stmia   r2!, {r4-r7}                    @ store in output[4-7]
+    str     r4, [r2, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r5, [r2, #1<<2]
+    str     r6, [r2, #2<<2]
+    str     r7, [r2, #3<<2]
+    adds    r2, #1<<4
     subs    r2, #32                         @ reset *output
 
     bl      mmcau_sha256_hash_n             @ do mmcau_sha256_hash_n

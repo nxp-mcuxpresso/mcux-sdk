@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -11,7 +11,7 @@
 #include "fsl_common.h"
 
 /*!
- * @addtogroup cache
+ * @addtogroup cache64
  * @{
  */
 
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief cache driver version 2.0.3. */
-#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief cache driver version 2.0.4. */
+#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
 
 /*! @brief cache line size. */

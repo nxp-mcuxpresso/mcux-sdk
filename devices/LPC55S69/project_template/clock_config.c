@@ -25,7 +25,6 @@
 !!GlobalInfo
 product: Clocks v7.0
 processor: LPC55S69
-package_id: LPC55S69JBD100
 mcu_data: ksdk2_0
 processor_version: 0.7.2
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/

@@ -1,6 +1,6 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ctimer
@@ -29,7 +29,6 @@ list(APPEND CMAKE_MODULE_PATH
 # Copy the cmake components into projects
 #    include(driver_lpc_miniusart)
 #    include(driver_ctimer)
-#    include(CMSIS_Include_dsp)
 #    include(driver_swm_connections)
 #    include(driver_wwdt)
 #    include(driver_swm)
@@ -42,19 +41,18 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_clock)
 #    include(driver_wkt)
 #    include(driver_lpc_crc)
-#    include(CMSIS_Include_core_cm0plus)
+#    include(utility_assert_lite)
 #    include(component_miniusart_adapter)
 #    include(driver_lpc_acomp)
 #    include(device_CMSIS)
 #    include(driver_rom_api)
 #    include(utility_debug_console_lite)
 #    include(utilities_misc_utilities)
-#    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_syscon_connections)
-#    include(utility_assert_lite)
 #    include(driver_iap)
 #    include(driver_pint)
+#    include(CMSIS_Include_core_cm)
 #    include(driver_syscon)
 #    include(driver_reset)
 #    include(driver_lpc_i2c)

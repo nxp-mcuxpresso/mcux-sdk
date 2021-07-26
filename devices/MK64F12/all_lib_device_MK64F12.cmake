@@ -1,6 +1,6 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
@@ -44,7 +44,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -56,14 +55,13 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
-#    include(middleware_usb_device_common_header)
 #    include(driver_llwu)
 #    include(driver_port)
 #    include(driver_dspi)
 #    include(driver_uart_edma)
 #    include(middleware_sdmmc_host_sdhc_polling)
 #    include(driver_uart_freertos)
-#    include(CMSIS_Include_dsp)
+#    include(driver_vref)
 #    include(driver_flexcan)
 #    include(driver_i2c)
 #    include(driver_i2c_freertos)
@@ -89,19 +87,18 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_ewm)
 #    include(utility_assert)
 #    include(driver_enet)
+#    include(CMSIS_Include_core_cm)
 #    include(driver_phy-device-ksz8081)
-#    include(driver_rnga)
+#    include(middleware_sdmmc_host_sdhc_interrupt)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_ftm)
 #    include(utility_notifier)
 #    include(driver_wdog)
 #    include(utility_assert_lite)
-#    include(middleware_sdmmc_host_sdhc_freertos)
 #    include(driver_sysmpu)
 #    include(middleware_baremetal)
 #    include(driver_dspi_freertos)
-#    include(middleware_sdmmc_host_sdhc_interrupt)
-#    include(driver_vref)
+#    include(middleware_sdmmc_osa_freertos)
 #    include(middleware_mmcau_cm4_cm7)
 #    include(driver_flash)
 #    include(component_uart_adapter)
@@ -113,15 +110,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_debug_console_lite)
 #    include(component_osa_bm)
 #    include(utilities_misc_utilities)
-#    include(CMSIS_Include_core_cm4)
+#    include(middleware_sdmmc_host_sdhc_freertos)
 #    include(middleware_sdmmc_osa_bm)
-#    include(CMSIS_Include_common)
+#    include(driver_rnga)
 #    include(driver_common)
 #    include(driver_rtc)
 #    include(driver_smc)
 #    include(driver_crc)
 #    include(driver_mdio-common)
-#    include(middleware_sdmmc_osa_freertos)
 #    include(component_osa_free_rtos)
 #    include(middleware_mmcau_common_files)
 #    include(driver_fxos8700cq)
@@ -134,5 +130,4 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)
 #    include(utility_shell)
-#    include(middleware_usb_common_header)
 #    include(driver_dspi_edma)

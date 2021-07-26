@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2020,2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,7 +26,7 @@ product: Clocks v7.0
 processor: MIMXRT1064xxxxA
 package_id: MIMXRT1064DVL6A
 mcu_data: ksdk2_0
-processor_version: 0.7.9
+processor_version: 0.9.4
 board: MIMXRT1064-EVK
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
@@ -72,7 +72,7 @@ outputs:
 - {id: ENET_25M_REF_CLK.outFreq, value: 1.2 MHz}
 - {id: FLEXIO1_CLK_ROOT.outFreq, value: 30 MHz}
 - {id: FLEXIO2_CLK_ROOT.outFreq, value: 30 MHz}
-- {id: FLEXSPI2_CLK_ROOT.outFreq, value: 1440/11 MHz}
+- {id: FLEXSPI2_CLK_ROOT.outFreq, value: 264 MHz}
 - {id: FLEXSPI_CLK_ROOT.outFreq, value: 1440/11 MHz}
 - {id: GPT1_ipg_clk_highfreq.outFreq, value: 75 MHz}
 - {id: GPT2_ipg_clk_highfreq.outFreq, value: 75 MHz}
@@ -104,7 +104,6 @@ settings:
 - {id: CCM.AHB_PODF.scale, value: '1', locked: true}
 - {id: CCM.ARM_PODF.scale, value: '2', locked: true}
 - {id: CCM.FLEXSPI2_PODF.scale, value: '2', locked: true}
-- {id: CCM.FLEXSPI2_SEL.sel, value: CCM_ANALOG.PLL3_PFD0_CLK}
 - {id: CCM.FLEXSPI_PODF.scale, value: '2', locked: true}
 - {id: CCM.FLEXSPI_SEL.sel, value: CCM_ANALOG.PLL3_PFD0_CLK}
 - {id: CCM.LPSPI_PODF.scale, value: '5', locked: true}
@@ -264,7 +263,7 @@ void BOARD_BootClockRUN(void)
     /* Set FLEXSPI2_PODF. */
     CLOCK_SetDiv(kCLOCK_Flexspi2Div, 1);
     /* Set Flexspi2 clock source. */
-    CLOCK_SetMux(kCLOCK_Flexspi2Mux, 3);
+    CLOCK_SetMux(kCLOCK_Flexspi2Mux, 1);
 #endif
     /* Disable CSI clock gate. */
     CLOCK_DisableClock(kCLOCK_Csi);
@@ -513,4 +512,3 @@ void BOARD_BootClockRUN(void)
     /* Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKRUN_CORE_CLOCK;
 }
-

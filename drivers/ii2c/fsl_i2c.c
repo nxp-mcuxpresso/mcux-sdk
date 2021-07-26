@@ -531,7 +531,7 @@ void I2C_MasterDeinit(I2C_Type *base)
  */
 void I2C_MasterGetDefaultConfig(i2c_master_config_t *masterConfig)
 {
-    assert(masterConfig);
+    assert(masterConfig != NULL);
 
     /* Initializes the configure structure to zero. */
     (void)memset(masterConfig, 0, sizeof(*masterConfig));
@@ -884,7 +884,7 @@ status_t I2C_MasterReadBlocking(I2C_Type *base, uint8_t *rxBuff, size_t rxSize, 
  */
 status_t I2C_MasterTransferBlocking(I2C_Type *base, i2c_master_transfer_t *xfer)
 {
-    assert(xfer);
+    assert(xfer != NULL);
 
     i2c_direction_t direction = xfer->direction;
     status_t result           = kStatus_Success;
@@ -1058,7 +1058,7 @@ void I2C_MasterTransferCreateHandle(I2C_Type *base,
                                     i2c_master_transfer_callback_t callback,
                                     void *userData)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     uint32_t instance = I2C_GetInstance(base);
 
@@ -1096,8 +1096,8 @@ void I2C_MasterTransferCreateHandle(I2C_Type *base,
  */
 status_t I2C_MasterTransferNonBlocking(I2C_Type *base, i2c_master_handle_t *handle, i2c_master_transfer_t *xfer)
 {
-    assert(handle);
-    assert(xfer);
+    assert(handle != NULL);
+    assert(xfer != NULL);
 
     status_t result = kStatus_Success;
 
@@ -1134,7 +1134,7 @@ status_t I2C_MasterTransferNonBlocking(I2C_Type *base, i2c_master_handle_t *hand
  */
 status_t I2C_MasterTransferAbort(I2C_Type *base, i2c_master_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     volatile uint8_t dummy = 0;
 
@@ -1184,7 +1184,7 @@ status_t I2C_MasterTransferAbort(I2C_Type *base, i2c_master_handle_t *handle)
  */
 status_t I2C_MasterTransferGetCount(I2C_Type *base, i2c_master_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (NULL == count)
     {
@@ -1204,7 +1204,7 @@ status_t I2C_MasterTransferGetCount(I2C_Type *base, i2c_master_handle_t *handle,
  */
 void I2C_MasterTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
 {
-    assert(i2cHandle);
+    assert(i2cHandle != NULL);
 
     i2c_master_handle_t *handle = (i2c_master_handle_t *)i2cHandle;
     status_t result             = kStatus_Success;
@@ -1316,7 +1316,7 @@ void I2C_SlaveDeinit(I2C_Type *base)
  */
 void I2C_SlaveGetDefaultConfig(i2c_slave_config_t *slaveConfig)
 {
-    assert(slaveConfig);
+    assert(slaveConfig != NULL);
 
     /* Initializes the configure structure to zero. */
     (void)memset(slaveConfig, 0, sizeof(*slaveConfig));
@@ -1418,7 +1418,7 @@ void I2C_SlaveTransferCreateHandle(I2C_Type *base,
                                    i2c_slave_transfer_callback_t callback,
                                    void *userData)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     uint32_t instance = I2C_GetInstance(base);
 
@@ -1506,7 +1506,7 @@ status_t I2C_SlaveTransferNonBlocking(I2C_Type *base, i2c_slave_handle_t *handle
  */
 void I2C_SlaveTransferAbort(I2C_Type *base, i2c_slave_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (handle->state != (uint8_t)kIdleState)
     {
@@ -1532,7 +1532,7 @@ void I2C_SlaveTransferAbort(I2C_Type *base, i2c_slave_handle_t *handle)
  */
 status_t I2C_SlaveTransferGetCount(I2C_Type *base, i2c_slave_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (NULL == count)
     {
@@ -1560,7 +1560,7 @@ status_t I2C_SlaveTransferGetCount(I2C_Type *base, i2c_slave_handle_t *handle, s
  */
 void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
 {
-    assert(i2cHandle);
+    assert(i2cHandle != NULL);
 
     uint32_t status;
     bool doTransmit            = false;

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -103,6 +103,15 @@
 #define LED_BLUE_TOGGLE()                                          \
     GPIO_PortToggle(BOARD_LED_BLUE_GPIO, BOARD_LED_BLUE_GPIO_PORT, \
                     1U << BOARD_LED_BLUE_GPIO_PIN) /*!< Toggle on target LED_BLUE */
+
+/*! @brief Memory ranges not usable by the ENET DMA. */
+#ifndef BOARD_ENET_NON_DMA_MEMORY_ARRAY
+#define BOARD_ENET_NON_DMA_MEMORY_ARRAY                                                     \
+    {                                                                                       \
+        {0x00000000U, 0x0007FFFFU}, {0x10000000U, 0x17FFFFFFU}, {0x80000000U, 0xDFFFFFFFU}, \
+            {0x00000000U, 0x00000000U},                                                     \
+    }
+#endif /* BOARD_ENET_NON_DMA_MEMORY_ARRAY */
 
 #if defined(__cplusplus)
 extern "C" {

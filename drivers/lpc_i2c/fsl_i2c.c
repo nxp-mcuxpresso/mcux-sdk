@@ -546,7 +546,7 @@ status_t I2C_MasterTransferBlocking(I2C_Type *base, i2c_master_transfer_t *xfer)
     uint8_t subaddrBuf[4];
     int i;
 
-    assert(xfer);
+    assert(xfer != NULL);
 
     /* If repeated start is requested, send repeated start. */
     if ((xfer->flags & (uint32_t)kI2C_TransferNoStartFlag) == 0U)
@@ -627,7 +627,7 @@ void I2C_MasterTransferCreateHandle(I2C_Type *base,
 {
     uint32_t instance;
 
-    assert(handle);
+    assert(handle != NULL);
 
     /* Clear out the handle. */
     (void)memset(handle, 0, sizeof(*handle));
@@ -664,8 +664,8 @@ status_t I2C_MasterTransferNonBlocking(I2C_Type *base, i2c_master_handle_t *hand
 {
     status_t result;
 
-    assert(handle);
-    assert(xfer);
+    assert(handle != NULL);
+    assert(xfer != NULL);
     assert(xfer->subaddressSize <= sizeof(xfer->subaddress));
 
     /* Return busy if another transaction is in progress. */
@@ -699,7 +699,7 @@ status_t I2C_MasterTransferNonBlocking(I2C_Type *base, i2c_master_handle_t *hand
  */
 status_t I2C_MasterTransferGetCount(I2C_Type *base, i2c_master_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (count == NULL)
     {
@@ -1027,7 +1027,7 @@ static status_t I2C_RunTransferStateMachine(I2C_Type *base, i2c_master_handle_t 
  */
 void I2C_MasterTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
 {
-    assert(i2cHandle);
+    assert(i2cHandle != NULL);
 
     i2c_master_handle_t *handle = (i2c_master_handle_t *)i2cHandle;
     bool isDone;
@@ -1286,7 +1286,7 @@ static status_t I2C_SlaveTransferNonBlockingInternal(I2C_Type *base,
 {
     status_t status;
 
-    assert(handle);
+    assert(handle != NULL);
 
     status = kStatus_Success;
 
@@ -1423,7 +1423,7 @@ void I2C_SlaveSetAddress(I2C_Type *base,
  */
 void I2C_SlaveGetDefaultConfig(i2c_slave_config_t *slaveConfig)
 {
-    assert(slaveConfig);
+    assert(slaveConfig != NULL);
 
     /* Initializes the configure structure to zero. */
     (void)memset(slaveConfig, 0, sizeof(*slaveConfig));
@@ -1707,7 +1707,7 @@ void I2C_SlaveTransferCreateHandle(I2C_Type *base,
 {
     uint32_t instance;
 
-    assert(handle);
+    assert(handle != NULL);
 
     /* Clear out the handle. */
     (void)memset(handle, 0, sizeof(*handle));
@@ -1779,7 +1779,7 @@ status_t I2C_SlaveTransferNonBlocking(I2C_Type *base, i2c_slave_handle_t *handle
  */
 status_t I2C_SlaveTransferGetCount(I2C_Type *base, i2c_slave_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (count == NULL)
     {
@@ -1829,7 +1829,7 @@ void I2C_SlaveTransferAbort(I2C_Type *base, i2c_slave_handle_t *handle)
  */
 void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
 {
-    assert(i2cHandle);
+    assert(i2cHandle != NULL);
 
     i2c_slave_handle_t *handle = (i2c_slave_handle_t *)i2cHandle;
     uint32_t i2cStatus         = base->STAT;

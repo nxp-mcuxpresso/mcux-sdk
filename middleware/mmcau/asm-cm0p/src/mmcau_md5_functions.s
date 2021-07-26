@@ -59,8 +59,17 @@ mmcau_md5_initialize_output:
     push    {r4}                            @ store reg
 
     ldr     r1, =md5_initial_h
-    ldmia   r1, {r1-r4}                     @ load md5_initial_h[0-3]
-    stmia   r0!, {r1-r4}                    @ store in md5_state[0-3]
+#   ldmia   r1, {r1-r4}                     @ load md5_initial_h[0-3]
+    adds    r1, #1<<2                       @ move by 4 byte to make ldmia interuptible
+    ldmia   r1!, {r2-r4}                    @ load md5_initial_h[1-3] and move r4 by 12 byte    
+    subs    r1, #1<<4                       @ move back by 16 byte
+    ldr     r1, [r1]                        @ load md5_initial_h[0]
+#   stmia   r0!, {r1-r4}                    @ store in md5_state[0-3]
+    str     r1, [r0, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r2, [r0, #1<<2]
+    str     r3, [r0, #2<<2]
+    str     r4, [r0, #3<<2]
+    adds    r0, #4<<2
 
     pop     {r4}                            @ restore reg
     bx      lr                              @ exit routine
@@ -107,6 +116,10 @@ mmcau_md5_hash_n:
 
 # initialize CAU data regs with current contents of md5_state[0-3]
     ldmia   r2, {r1-r4}                     @ load md5_state[0-3]
+#   ldr     r1,[r2, #0<<2]                  @ expand ldmia to ldr to be interruptible
+#   ldr     r3,[r2, #2<<2]
+#   ldr     r4,[r2, #3<<2]
+#   ldr     r2,[r2, #1<<2]
 
     ldr     r7, =md5_t                      @ set *md5_t
     b       next_blk
@@ -977,7 +990,12 @@ next_blk:
     add     r3, r5                          @ c += md5_state[2]
     ldr     r5, [r6, #3<<2]                 @ load md5_state[3]
     add     r4, r5                          @ d += md5_state[3]
-    stmia   r6!, {r1-r4}                    @ store updated md5_state[0-3]
+#   stmia   r6!, {r1-r4}                    @ store updated md5_state[0-3]
+    str     r1, [r6, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r2, [r6, #1<<2]
+    str     r3, [r6, #2<<2]
+    str     r4, [r6, #3<<2]   
+    adds    r6, #4<<2
 
 # check if we need to repeat num_blks
     ldr     r5, [sp, #0]                    @ restore num_blks
@@ -1036,9 +1054,19 @@ mmcau_md5_update:
     push    {r4-r7, lr}                     @ store regs
 
     ldr     r4, =md5_initial_h
-    ldmia   r4, {r4-r7}                     @ load md5_initial_h[0-3]
-    stmia   r2!, {r4-r7}                    @ store in md5_state[0-3]
-    subs    r2, #4<<2                       @ reset *md5_state
+#   ldmia   r4, {r4-r7}                     @ load md5_initial_h[0-3]
+    adds    r4, #1<<2                       @ move by 4 byte to make ldmia interuptible
+    ldmia   r4!, {r5-r7}                    @ load md5_initial_h[1-3] and move r4 by 12 byte    
+    subs    r4, #1<<4                       @ move back by 16 byte
+    ldr     r4, [r4]                        @ load md5_initial_h[0]
+#   stmia   r2!, {r4-r7}                    @ store in md5_state[0-3]
+    str     r4, [r2, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r5, [r2, #1<<2]
+    str     r6, [r2, #2<<2]
+    str     r7, [r2, #3<<2]   
+#   adds    r2, #4<<2                       @ no need to simulate stmia writeback, 
+                                            @ since we comment out reseting below
+#   subs    r2, #4<<2                       @ reset *md5_state
 
     bl      mmcau_md5_hash_n                @ do mmcau_md5_hash_n
 

@@ -1,5 +1,5 @@
 /*
- * Copyright  2016-2019 NXP
+ * Copyright  2016-2021 NXP
  * All rights reserved.
  *
  *
@@ -606,6 +606,8 @@ void SDMA_SetCallback(sdma_handle_t *handle, sdma_callback callback, void *userD
 void SDMA_SetMultiFifoConfig(sdma_transfer_config_t *config, uint32_t fifoNums, uint32_t fifoOffset)
 {
     assert(config != NULL);
+    assert(fifoNums <= 15UL);
+    assert(fifoOffset <= 15UL);
 
     config->multiFifo.fifoNums   = (uint8_t)fifoNums;
     config->multiFifo.fifoOffset = (uint8_t)fifoOffset;
@@ -683,6 +685,7 @@ void SDMA_PrepareTransfer(sdma_transfer_config_t *config,
     assert(config != NULL);
     assert((srcWidth == 1U) || (srcWidth == 2U) || (srcWidth == 3U) || (srcWidth == 4U));
     assert((destWidth == 1U) || (destWidth == 2U) || (destWidth == 3U) || (destWidth == 4U));
+    assert((bytesEachRequest != 0u) && (bytesEachRequest <= (uint32_t)kSDMA_MultiFifoWatermarkLevelMask));
 
 #if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET)
     config->srcAddr  = MEMORY_ConvertMemoryMapAddress(srcAddr, kMEMORY_Local2DMA);
@@ -770,6 +773,7 @@ void SDMA_PrepareP2PTransfer(sdma_transfer_config_t *config,
     assert((config != NULL) && (p2p != NULL));
     assert((srcWidth == 1U) || (srcWidth == 2U) || (srcWidth == 4U));
     assert((destWidth == 1U) || (destWidth == 2U) || (destWidth == 4U));
+    assert((bytesEachRequest != 0U) && (bytesEachRequest <= (uint32_t)kSDMA_MultiFifoWatermarkLevelMask));
 
 #if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET)
     config->srcAddr  = MEMORY_ConvertMemoryMapAddress(srcAddr, kMEMORY_Local2DMA);

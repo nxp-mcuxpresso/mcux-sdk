@@ -1,10 +1,9 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt1064/xip
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8960
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8960
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
@@ -72,7 +71,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbarb
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -99,9 +97,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart)
 #    include(driver_wm8960)
 #    include(driver_ewm)
-#    include(middleware_sdmmc_host_usdhc_interrupt)
 #    include(driver_flexio)
-#    include(middleware_sdmmc_host_usdhc_freertos)
 #    include(driver_aoi)
 #    include(driver_bee)
 #    include(driver_flexio_i2c_master)
@@ -111,7 +107,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_wdog01)
 #    include(driver_flexio_uart_edma)
 #    include(driver_ocotp)
-#    include(CMSIS_Include_core_cm7)
 #    include(driver_codec)
 #    include(utilities_misc_utilities)
 #    include(driver_pxp)
@@ -122,23 +117,20 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
 #    include(driver_tempmon)
-#    include(CMSIS_Include_dsp)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_edma)
-#    include(middleware_usb_device_common_header)
 #    include(device_startup)
 #    include(driver_phy-device-ksz8081)
 #    include(driver_usdhc)
 #    include(driver_gpt)
 #    include(utility_assert)
 #    include(driver_enet)
+#    include(driver_rtwdog)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_camera-receiver-common)
-#    include(middleware_usb_common_header)
 #    include(middleware_sdmmc_osa_freertos)
 #    include(driver_soc_flexram_allocate)
 #    include(driver_flexcan_edma)
-#    include(middleware_sdmmc_host_usdhc_polling)
 #    include(device_CMSIS)
 #    include(driver_romapi)
 #    include(component_codec_i2c_MIMXRT1064)
@@ -151,13 +143,16 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_camera-common)
 #    include(driver_camera-device-common)
 #    include(component_lpi2c_adapter)
+#    include(CMSIS_Include_core_cm)
 #    include(driver_video-common)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_dcdc_1)
+#    include(middleware_sdmmc_host_usdhc_interrupt_MIMXRT1064)
 #    include(driver_snvs_hp)
 #    include(driver_lpspi)
 #    include(driver_flexspi_edma)
 #    include(driver_csi)
+#    include(middleware_sdmmc_host_usdhc_freertos_MIMXRT1064)
 #    include(driver_clock)
 #    include(utility_debug_console_lite)
 #    include(driver_adc_etc)
@@ -178,7 +173,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_gpc_1)
 #    include(driver_dc-fb-elcdif)
 #    include(driver_dcp)
-#    include(driver_edma)
 #    include(driver_flexspi)
 #    include(driver_flexio_spi_edma)
 #    include(driver_lpi2c_freertos)
@@ -191,18 +185,18 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_freertos-kernel_MIMXRT1064)
 #    include(driver_cmp)
 #    include(component_osa)
-#    include(driver_rtwatchdog)
+#    include(driver_edma)
 #    include(driver_lpuart)
 #    include(driver_flexio_spi)
 #    include(driver_src)
+#    include(driver_xip_board_evkmimxrt1064)
 #    include(driver_lpi2c)
-#    include(CMSIS_Include_common)
 #    include(driver_flexio_i2s)
 #    include(driver_fxos8700cq)
 #    include(driver_elcdif)
-#    include(driver_xip_board)
 #    include(driver_igpio)
 #    include(driver_pwm)
 #    include(driver_sai)
+#    include(middleware_sdmmc_host_usdhc_polling_MIMXRT1064)
 #    include(driver_cache_armv7_m7)
 #    include(driver_flexio_i2s_edma)

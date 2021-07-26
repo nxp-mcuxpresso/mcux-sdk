@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 1)) /*!< Version 2.4.1. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 2)) /*!< Version 2.4.2. */
 /*@}*/
 
 /*! @brief Compute the offset unit from DCHPRI3 */
@@ -974,7 +974,7 @@ static inline uint32_t EDMA_GetUnusedTCDNumber(edma_handle_t *handle)
  */
 static inline uint32_t EDMA_GetNextTCDAddress(edma_handle_t *handle)
 {
-    return (handle->base->TCD[handle->channel].DLAST_SGA);
+    return (uint32_t)(handle->base->TCD[handle->channel].DLAST_SGA);
 }
 
 /*!

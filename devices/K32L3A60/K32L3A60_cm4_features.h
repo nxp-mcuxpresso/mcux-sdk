@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2019-04-22
-**     Build:               b200927
+**     Build:               b201028
 **
 **     Abstract:
 **         Chip specific module features.
@@ -1351,6 +1351,8 @@
 #define FSL_FEATURE_SIM_HAS_RF_MAC_ADDR (0)
 /* @brief Has SYSTICK_CLK_EN bit in SIM_MISC2 register. */
 #define FSL_FEATURE_SIM_MISC2_HAS_SYSTICK_CLK_EN (1)
+/* @brief Has UIDH registers. */
+#define FSL_FEATURE_SIM_HAS_UIDH (1)
 /* @brief Has UIDM registers. */
 #define FSL_FEATURE_SIM_HAS_UIDM (1)
 
@@ -1517,6 +1519,8 @@
 #define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_HS400_MODEn(x) (0)
 /* @brief If USDHC instance support 1v8 signal */
 #define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_1V8_SIGNALn(x) (1)
+/* @brief Has no retuning time counter (HOST_CTRL_CAP[TIME_COUNT_RETURNING]) */
+#define FSL_FEATURE_USDHC_REGISTER_HOST_CTRL_CAP_HAS_NO_RETUNING_TIME_COUNTER (1)
 
 /* VREF module features */
 

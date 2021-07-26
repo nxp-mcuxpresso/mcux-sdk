@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -121,7 +121,7 @@
 #define WHO_AM_I_REG 0x0D
 
 /* Content */
-#define kFXOS_WHO_AM_I_Device_ID 0xC7
+#define kFXOS_WHO_AM_I_Device_ID 0xC7U
 
 /* XYZ_DATA_CFG Sensor Data Configuration Register */
 #define XYZ_DATA_CFG_REG 0x0E
@@ -315,10 +315,10 @@
 #define ASLP_RATE0_MASK 0x40
 #define DR2_MASK        0x20
 #define DR1_MASK        0x10
-#define DR0_MASK        0x08
+#define DR0_MASK        0x08U
 #define LNOISE_MASK     0x04
 #define FREAD_MASK      0x02
-#define ACTIVE_MASK     0x01
+#define ACTIVE_MASK     0x01U
 #define ASLP_RATE_MASK  0xC0
 #define DR_MASK         0x38
 
@@ -505,15 +505,15 @@
 #define M_CTRL_REG1 0x5B
 
 #define M_ACAL_MASK 0x80
-#define M_RST_MASK  0x40
+#define M_RST_MASK  0x40U
 #define M_OST_MASK  0x20
 #define M_OSR2_MASK 0x10
 #define M_OSR1_MASK 0x08
 #define M_OSR0_MASK 0x04
 #define M_HMS1_MASK 0x02
 #define M_HMS0_MASK 0x01
-#define M_OSR_MASK  0x1C
-#define M_HMS_MASK  0x03
+#define M_OSR_MASK  0x1CU
+#define M_HMS_MASK  0x03U
 
 /* OSR Selections */
 #define M_OSR_1_56_HZ 0x00

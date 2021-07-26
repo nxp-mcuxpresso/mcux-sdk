@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2020, NXP
+ * Copyright 2017 - 2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,8 +39,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.4.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief CLOCK driver version 2.5.0. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -391,7 +391,7 @@ extern volatile uint32_t g_rtcXtalFreq;
 /*! @brief Clock ip name array for XBARA. */
 #define XBARA_CLOCKS \
     {                \
-        kCLOCK_Xbar1 \
+        kCLOCK_IpInvalid, kCLOCK_Xbar1 \
     }
 
 /*! @brief Clock ip name array for XBARB. */
@@ -1145,6 +1145,7 @@ static inline uint32_t CLOCK_GetMux(clock_mux_t mux)
  *
  * @param divider Which div node to set, see \ref clock_div_t.
  * @param value   Clock div value to set, different divider has different value range.
+ *                Divided clock frequency = Undivided clock frequency / (value + 1).
  */
 static inline void CLOCK_SetDiv(clock_div_t divider, uint32_t value)
 {
@@ -1190,8 +1191,8 @@ static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t va
 
     assert(index <= 6UL);
 
-    reg  = (volatile uint32_t *)(&(((volatile uint32_t *)&CCM->CCGR0)[index]));
-    *reg = ((*reg) & ~((uint32_t)(3UL << shift))) | (((uint32_t)value) << shift);
+    reg = (volatile uint32_t *)(&(((volatile uint32_t *)&CCM->CCGR0)[index]));
+    SDK_ATOMIC_LOCAL_CLEAR_AND_SET(reg, (3UL << shift), (((uint32_t)value) << shift));
 }
 
 /*!
@@ -1616,6 +1617,16 @@ void CLOCK_InitSysPfd(clock_pfd_t pfd, uint8_t pfdFrac);
 void CLOCK_DeinitSysPfd(clock_pfd_t pfd);
 
 /*!
+ * @brief Check if Sys PFD is enabled
+ *
+ * @param pfd PFD control name
+ * @return PFD bypass status.
+ *         - true: power on.
+ *         - false: power off.
+ */
+bool CLOCK_IsSysPfdEnabled(clock_pfd_t pfd);
+
+/*!
  * @brief Initialize the USB1 PLL PFD.
  *
  * This function initializes the USB1 PLL PFD. During new value setting,
@@ -1635,6 +1646,16 @@ void CLOCK_InitUsb1Pfd(clock_pfd_t pfd, uint8_t pfdFrac);
  * @param pfd Which PFD clock to disable.
  */
 void CLOCK_DeinitUsb1Pfd(clock_pfd_t pfd);
+
+/*!
+ * @brief Check if Usb1 PFD is enabled
+ *
+ * @param pfd PFD control name.
+ * @return PFD bypass status.
+ *         - true: power on.
+ *         - false: power off.
+ */
+bool CLOCK_IsUsb1PfdEnabled(clock_pfd_t pfd);
 
 /*!
  * @brief Get current System PLL PFD output frequency.

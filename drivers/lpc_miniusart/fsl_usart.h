@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief USART driver version. */
-#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*@}*/
 
 /*! @brief Macro gate for enable transaction API.  1 for enable, 0 for disable. */
@@ -204,7 +204,16 @@ typedef struct _usart_config
 /*! @brief USART transfer structure. */
 typedef struct _usart_transfer
 {
-    uint8_t *data;   /*!< The buffer of data to be transfer.*/
+    /*
+     * Use separate TX and RX data pointer, because TX data is const data.
+     * The member data is kept for backward compatibility.
+     */
+    union
+    {
+        uint8_t *data;         /*!< The buffer of data to be transfer.*/
+        uint8_t *rxData;       /*!< The buffer to receive data. */
+        const uint8_t *txData; /*!< The buffer of data to be sent. */
+    };
     size_t dataSize; /*!< The byte count to be transfer. */
 } usart_transfer_t;
 
@@ -217,12 +226,12 @@ typedef void (*usart_transfer_callback_t)(USART_Type *base, usart_handle_t *hand
 /*! @brief USART handle structure. */
 struct _usart_handle
 {
-    uint8_t *volatile txData;   /*!< Address of remaining data to send. */
-    volatile size_t txDataSize; /*!< Size of the remaining data to send. */
-    size_t txDataSizeAll;       /*!< Size of the data to send out. */
-    uint8_t *volatile rxData;   /*!< Address of remaining data to receive. */
-    volatile size_t rxDataSize; /*!< Size of the remaining data to receive. */
-    size_t rxDataSizeAll;       /*!< Size of the data to receive. */
+    const uint8_t *volatile txData; /*!< Address of remaining data to send. */
+    volatile size_t txDataSize;     /*!< Size of the remaining data to send. */
+    size_t txDataSizeAll;           /*!< Size of the data to send out. */
+    uint8_t *volatile rxData;       /*!< Address of remaining data to receive. */
+    volatile size_t rxDataSize;     /*!< Size of the remaining data to receive. */
+    size_t rxDataSizeAll;           /*!< Size of the data to receive. */
 
     uint8_t *rxRingBuffer;              /*!< Start address of the receiver ring buffer. */
     size_t rxRingBufferSize;            /*!< Size of the ring buffer. */

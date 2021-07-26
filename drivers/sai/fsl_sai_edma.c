@@ -94,9 +94,10 @@ static void SAI_TxEDMACallback(edma_handle_t *handle, void *userData, bool done,
     sai_edma_private_handle_t *privHandle = (sai_edma_private_handle_t *)userData;
     sai_edma_handle_t *saiHandle          = privHandle->handle;
 
-    /* If finished a block, call the callback function */
     (void)memset(&saiHandle->saiQueue[saiHandle->queueDriver], 0, sizeof(sai_transfer_t));
-    saiHandle->queueDriver = (saiHandle->queueDriver + 1U) % SAI_XFER_QUEUE_SIZE;
+    saiHandle->queueDriver = (saiHandle->queueDriver + 1U) % (uint8_t)SAI_XFER_QUEUE_SIZE;
+
+    /* If finished a block, call the callback function */
     if (saiHandle->callback != NULL)
     {
         (saiHandle->callback)(privHandle->base, saiHandle, kStatus_SAI_TxIdle, saiHandle->userData);
@@ -116,9 +117,9 @@ static void SAI_RxEDMACallback(edma_handle_t *handle, void *userData, bool done,
     sai_edma_private_handle_t *privHandle = (sai_edma_private_handle_t *)userData;
     sai_edma_handle_t *saiHandle          = privHandle->handle;
 
-    /* If finished a block, call the callback function */
     (void)memset(&saiHandle->saiQueue[saiHandle->queueDriver], 0, sizeof(sai_transfer_t));
-    saiHandle->queueDriver = (saiHandle->queueDriver + 1U) % SAI_XFER_QUEUE_SIZE;
+    saiHandle->queueDriver = (saiHandle->queueDriver + 1U) % (uint8_t)SAI_XFER_QUEUE_SIZE;
+    /* If finished a block, call the callback function */
     if (saiHandle->callback != NULL)
     {
         (saiHandle->callback)(privHandle->base, saiHandle, kStatus_SAI_RxIdle, saiHandle->userData);
@@ -218,6 +219,8 @@ void SAI_TransferRxCreateHandleEDMA(
 /*!
  * brief Configures the SAI Tx audio format.
  *
+ * deprecated Do not use this function.  It has been superceded by ref SAI_TransferTxSetConfigEDMA
+ *
  * The audio format can be changed at run-time. This function configures the sample rate and audio data
  * format to be transferred. This function also sets the eDMA parameter according to formatting requirements.
  *
@@ -252,7 +255,6 @@ void SAI_TransferTxSetFormatEDMA(I2S_Type *base,
     }
 
     /* Update the data channel SAI used */
-    handle->channelMask = format->channelMask;
     handle->channel = format->channel;
 
     /* Clear the channel enable bits until do a send/receive */
@@ -267,18 +269,6 @@ void SAI_TransferTxSetFormatEDMA(I2S_Type *base,
 /*!
  * @brief Configures the SAI Tx.
  *
- * @note SAI eDMA supports data transfer in a multiple SAI channels if the FIFO Combine feature is supported.
- * To activate the multi-channel transfer enable SAI channels by filling the channelMask 
- * of sai_transceiver_t with the corresponding values of _sai_channel_mask enum, enable the FIFO Combine 
- * mode by assigning kSAI_FifoCombineModeEnabledOnWrite to the fifoCombine member of sai_fifo_combine_t 
- * which is a member of sai_transceiver_t.
- * This is an example of multi-channel data transfer configuration step.
-   @code
-    sai_transceiver_t config;
-    SAI_GetClassicI2SConfig(&config, kSAI_WordWidth16bits, kSAI_Stereo, kSAI_Channel0Mask|kSAI_Channel1Mask);
-    config.fifo.fifoCombine = kSAI_FifoCombineModeEnabledOnWrite;
-    SAI_TransferTxSetConfigEDMA(I2S0, &edmaHandle, &config);
-   @endcode
  *
  * @param base SAI base pointer.
  * @param handle SAI eDMA handle pointer.
@@ -291,13 +281,6 @@ void SAI_TransferTxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     /* Configure the audio format to SAI registers */
     SAI_TxSetConfig(base, saiConfig);
 
-#if defined(FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) && FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE
-    /* Allow multi-channel transfer only if FIFO Combine mode is enabled */
-    assert((saiConfig->channelNums <= 1) || ((saiConfig->channelNums > 1) &&
-            ((saiConfig->fifo.fifoCombine == kSAI_FifoCombineModeEnabledOnWrite) || 
-             (saiConfig->fifo.fifoCombine == kSAI_FifoCombineModeEnabledOnReadWrite))));
-#endif
-
     /* Get the transfer size from format, this should be used in EDMA configuration */
     if (saiConfig->serialData.dataWordLength == 24U)
     {
@@ -307,9 +290,7 @@ void SAI_TransferTxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     {
         handle->bytesPerFrame = saiConfig->serialData.dataWordLength / 8U;
     }
-
     /* Update the data channel SAI used */
-    handle->channelMask = saiConfig->channelMask;
     handle->channel = saiConfig->startChannel;
 
     /* Clear the channel enable bits until do a send/receive */
@@ -323,6 +304,8 @@ void SAI_TransferTxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
 
 /*!
  * brief Configures the SAI Rx audio format.
+ *
+ * deprecated Do not use this function.  It has been superceded by ref SAI_TransferRxSetConfigEDMA
  *
  * The audio format can be changed at run-time. This function configures the sample rate and audio data
  * format to be transferred. This function also sets the eDMA parameter according to formatting requirements.
@@ -358,7 +341,6 @@ void SAI_TransferRxSetFormatEDMA(I2S_Type *base,
     }
 
     /* Update the data channel SAI used */
-    handle->channelMask = format->channelMask;
     handle->channel = format->channel;
 
     /* Clear the channel enable bits until do a send/receive */
@@ -373,18 +355,6 @@ void SAI_TransferRxSetFormatEDMA(I2S_Type *base,
 /*!
  * @brief Configures the SAI Rx.
  *
- * @note SAI eDMA supports data transfer in a multiple SAI channels if the FIFO Combine feature is supported.
- * To activate the multi-channel transfer enable SAI channels by filling the channelMask 
- * of sai_transceiver_t with the corresponding values of _sai_channel_mask enum, enable the FIFO Combine 
- * mode by assigning kSAI_FifoCombineModeEnabledOnRead to the fifoCombine member of sai_fifo_combine_t 
- * which is a member of sai_transceiver_t.
- * This is an example of multi-channel data transfer configuration step.
-   @code
-    sai_transceiver_t config;
-    SAI_GetClassicI2SConfig(&config, kSAI_WordWidth16bits, kSAI_Stereo, kSAI_Channel0Mask|kSAI_Channel1Mask);
-    config.fifo.fifoCombine = kSAI_FifoCombineModeEnabledOnRead;
-    SAI_TransferRxSetConfigEDMA(I2S0, &edmaHandle, &config);
-   @endcode
  *
  * @param base SAI base pointer.
  * @param handle SAI eDMA handle pointer.
@@ -397,13 +367,6 @@ void SAI_TransferRxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     /* Configure the audio format to SAI registers */
     SAI_RxSetConfig(base, saiConfig);
 
-#if defined(FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) && FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE
-    /* Allow multi-channel transfer only if FIFO Combine mode is enabled */
-    assert((saiConfig->channelNums <= 1) || ((saiConfig->channelNums > 1) &&
-            ((saiConfig->fifo.fifoCombine == kSAI_FifoCombineModeEnabledOnRead) || 
-             (saiConfig->fifo.fifoCombine == kSAI_FifoCombineModeEnabledOnReadWrite))));
-#endif
-
     /* Get the transfer size from format, this should be used in EDMA configuration */
     if (saiConfig->serialData.dataWordLength == 24U)
     {
@@ -415,7 +378,6 @@ void SAI_TransferRxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     }
 
     /* Update the data channel SAI used */
-    handle->channelMask = saiConfig->channelMask;
     handle->channel = saiConfig->startChannel;
 
     /* Clear the channel enable bits until do a send/receive */
@@ -465,7 +427,7 @@ status_t SAI_TransferSendEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_tra
     handle->transferSize[handle->queueUser]      = xfer->dataSize;
     handle->saiQueue[handle->queueUser].data     = xfer->data;
     handle->saiQueue[handle->queueUser].dataSize = xfer->dataSize;
-    handle->queueUser                            = (handle->queueUser + 1U) % SAI_XFER_QUEUE_SIZE;
+    handle->queueUser                            = (handle->queueUser + 1U) % (uint8_t)SAI_XFER_QUEUE_SIZE;
 
     /* Prepare edma configure */
     EDMA_PrepareTransfer(&config, xfer->data, handle->bytesPerFrame, (uint32_t *)destAddr, handle->bytesPerFrame,
@@ -489,7 +451,7 @@ status_t SAI_TransferSendEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_tra
     SAI_TxEnable(base, true);
 
     /* Enable the channel FIFO */
-    base->TCR3 |= I2S_TCR3_TCE(handle->channelMask);
+    base->TCR3 |= I2S_TCR3_TCE(1UL << handle->channel);
 
     return kStatus_Success;
 }
@@ -532,7 +494,7 @@ status_t SAI_TransferReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     handle->transferSize[handle->queueUser]      = xfer->dataSize;
     handle->saiQueue[handle->queueUser].data     = xfer->data;
     handle->saiQueue[handle->queueUser].dataSize = xfer->dataSize;
-    handle->queueUser                            = (handle->queueUser + 1U) % SAI_XFER_QUEUE_SIZE;
+    handle->queueUser                            = (handle->queueUser + 1U) % (uint8_t)SAI_XFER_QUEUE_SIZE;
 
     /* Prepare edma configure */
     EDMA_PrepareTransfer(&config, (uint32_t *)srcAddr, handle->bytesPerFrame, xfer->data, handle->bytesPerFrame,
@@ -553,7 +515,7 @@ status_t SAI_TransferReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     SAI_RxEnableDMA(base, kSAI_FIFORequestDMAEnable, true);
 
     /* Enable the channel FIFO */
-    base->RCR3 |= I2S_RCR3_RCE(handle->channelMask);
+    base->RCR3 |= I2S_RCR3_RCE(1UL << handle->channel);
 
     /* Enable SAI Rx clock */
     SAI_RxEnable(base, true);
@@ -595,7 +557,7 @@ void SAI_TransferAbortSendEDMA(I2S_Type *base, sai_edma_handle_t *handle)
 
     /* Handle the queue index */
     (void)memset(&handle->saiQueue[handle->queueDriver], 0, sizeof(sai_transfer_t));
-    handle->queueDriver = (handle->queueDriver + 1U) % SAI_XFER_QUEUE_SIZE;
+    handle->queueDriver = (handle->queueDriver + 1U) % (uint8_t)SAI_XFER_QUEUE_SIZE;
 
     /* Set the handle state */
     handle->state = (uint32_t)kSAI_Idle;
@@ -635,7 +597,7 @@ void SAI_TransferAbortReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle)
 
     /* Handle the queue index */
     (void)memset(&handle->saiQueue[handle->queueDriver], 0, sizeof(sai_transfer_t));
-    handle->queueDriver = (handle->queueDriver + 1U) % SAI_XFER_QUEUE_SIZE;
+    handle->queueDriver = (handle->queueDriver + 1U) % (uint8_t)SAI_XFER_QUEUE_SIZE;
 
     /* Set the handle state */
     handle->state = (uint32_t)kSAI_Idle;
@@ -747,4 +709,30 @@ status_t SAI_TransferGetReceiveCountEDMA(I2S_Type *base, sai_edma_handle_t *hand
     }
 
     return status;
+}
+
+/*!
+ * @rief Gets valid transfer slot.
+ *
+ * This function can be used to query the valid transfer request slot that the application can submit.
+ * It should be called in the critical section, that means the application could call it in the corresponding callback
+ * function or disable IRQ before calling it in the application, otherwise, the returned value may not correct.
+ *
+ * param base SAI base pointer
+ * param handle SAI eDMA handle pointer.
+ * retval valid slot count that application submit.
+ */
+uint32_t SAI_TransferGetValidTransferSlotsEDMA(I2S_Type *base, sai_edma_handle_t *handle)
+{
+    uint32_t validSlot = 0U;
+
+    for (uint32_t i = 0U; i < (uint32_t)SAI_XFER_QUEUE_SIZE; i++)
+    {
+        if (handle->saiQueue[i].data == NULL)
+        {
+            validSlot++;
+        }
+    }
+
+    return validSlot;
 }

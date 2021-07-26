@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 7.0, 2018-11-05
-**     Build:               b200927
+**     Build:               b210329
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -195,6 +195,11 @@
 /* @brief Has data register with name CRC */
 #define FSL_FEATURE_CRC_HAS_CRC_REG (0)
 
+/* DAC12 module features */
+
+/* @brief Has no ITRM register. */
+#define FSL_FEATURE_DAC12_HAS_NO_ITRM_REGISTER (0)
+
 /* EDMA module features */
 
 /* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) */
@@ -213,6 +218,8 @@
 #define FSL_FEATURE_EDMA_SUPPORT_8_BYTES_TRANSFER (1)
 /* @brief If 16 bytes transfer supported. */
 #define FSL_FEATURE_EDMA_SUPPORT_16_BYTES_TRANSFER (0)
+/* @brief If 32 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_32_BYTES_TRANSFER (1)
 
 /* DMAMUX module features */
 
@@ -224,6 +231,8 @@
 #define FSL_FEATURE_DMAMUX_HAS_TRIG (1)
 /* @brief Has DMA Channel Always ON function (register bit CHCFG0[A_ON]). */
 #define FSL_FEATURE_DMAMUX_HAS_A_ON (1)
+/* @brief Register CHCFGn width. */
+#define FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH (32)
 
 /* EWM module features */
 
@@ -254,13 +263,9 @@
 #define FSL_FEATURE_FLEXIO_VERID_RESET_VALUE (0x1010001)
 /* @brief Reset value of the FLEXIO_PARAM register */
 #define FSL_FEATURE_FLEXIO_PARAM_RESET_VALUE (0x4200808)
-/* @brief Flexio DMA request base channel */
-#define FSL_FEATURE_FLEXIO_DMA_REQUEST_BASE_CHANNEL (0)
 
 /* GPIO module features */
 
-/* @brief Has port input disable register (PIDR). */
-#define FSL_FEATURE_GPIO_HAS_INPUT_DISABLE (0)
 /* @brief Has GPIO attribute checker register  (GACR). */
 #define FSL_FEATURE_GPIO_HAS_ATTRIBUTE_CHECKER (0)
 
@@ -561,7 +566,7 @@
 /* @brief Has lifetime timer (related to existence of registers LTMR64L and LTMR64H). */
 #define FSL_FEATURE_LPIT_HAS_LIFETIME_TIMER (0)
 /* @brief Has shared interrupt handler (has not individual interrupt handler for each channel). */
-#define FSL_FEATURE_LPIT_HAS_SHARED_IRQ_HANDLER (0)
+#define FSL_FEATURE_LPIT_HAS_SHARED_IRQ_HANDLER (1)
 
 /* LPSPI module features */
 
@@ -1235,6 +1240,8 @@
 #define FSL_FEATURE_SIM_HAS_RF_MAC_ADDR (0)
 /* @brief Has SYSTICK_CLK_EN bit in SIM_MISC2 register. */
 #define FSL_FEATURE_SIM_MISC2_HAS_SYSTICK_CLK_EN (0)
+/* @brief Has UIDH registers. */
+#define FSL_FEATURE_SIM_HAS_UIDH (0)
 /* @brief Has UIDM registers. */
 #define FSL_FEATURE_SIM_HAS_UIDM (0)
 
@@ -1242,6 +1249,12 @@
 
 /* @brief Has Secure Real Time Counter Enabled and Valid (bit field LPCR[SRTC_ENV]). */
 #define FSL_FEATURE_SNVS_HAS_SRTC (1)
+/* @brief Has Passive Tamper Filter (regitser LPTGFCR). */
+#define FSL_FEATURE_SNVS_PASSIVE_TAMPER_FILTER (0)
+/* @brief Has Active Tampers (regitser LPATCTLR, LPATCLKR, LPATRCnR). */
+#define FSL_FEATURE_SNVS_HAS_ACTIVE_TAMPERS (0)
+/* @brief Number of TAMPER. */
+#define FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER (1)
 /* @brief Has Set Lock. */
 #define FSL_FEATURE_SNVS_HAS_SET_LOCK (1)
 /* @brief Has State Transition. */

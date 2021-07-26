@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, NXP
+ * Copyright 2018-2021, NXP
  * All rights reserved.
  *
  *
@@ -64,7 +64,8 @@ typedef struct _srtm_sai_sdma_runtime
     struct _srtm_sai_sdma_buf_runtime bufRtm; /* buffer provided by audio client. */
     srtm_sai_sdma_local_buf_t localBuf;
     struct _srtm_sai_sdma_local_runtime localRtm; /* buffer set by application. */
-    bool freeRun;               /* flag to indicate that no periodReady will be sent by audio client. */
+    bool freeRun; /* flag to indicate that no periodReady will be sent by audio client. */
+    bool stoppedOnSuspend;
     uint32_t finishedBufOffset; /* offset from bufAddr where the data transfer has completed. */
     bool isSuspend;             /* flag to indicate that if M4 playback in suspend status. */
 } * srtm_sai_sdma_runtime_t;
@@ -915,7 +916,7 @@ static srtm_status_t SRTM_SaiSdmaAdapter_SetParam(
 
     SRTM_SaiSdmaAdapter_ReconfigSAI(adapter, dir, format, srate);
 
-    if (format >= (uint8_t)SRTM_Audio_DSD8bits && format <= (uint8_t)SRTM_Audio_DSD32bits)
+    if (format >= (uint8_t)SRTM_Audio_DSD8bits)
     {
         /* DSD mode always two channels and get the sample frequcy to caculate the BCLK in the sai driver. */
         rtm->srate    = srate / 2U;
@@ -996,7 +997,8 @@ static srtm_status_t SRTM_SaiSdmaAdapter_Suspend(srtm_sai_adapter_t adapter, srt
 
     if (thisRtm->state == SRTM_AudioStateStarted && thisCfg->stopOnSuspend)
     {
-        status = SRTM_SaiSdmaAdapter_End(adapter, dir, index, false);
+        thisRtm->stoppedOnSuspend = true;
+        status                    = SRTM_SaiSdmaAdapter_End(adapter, dir, index, false);
     }
 
     return status;
@@ -1007,24 +1009,22 @@ static srtm_status_t SRTM_SaiSdmaAdapter_Resume(srtm_sai_adapter_t adapter, srtm
     srtm_status_t status           = SRTM_Status_Success;
     srtm_sai_sdma_adapter_t handle = (srtm_sai_sdma_adapter_t)(void *)adapter;
     srtm_sai_sdma_runtime_t thisRtm;
-    srtm_sai_sdma_config_t *thisCfg;
 
     SRTM_DEBUG_MESSAGE(SRTM_DEBUG_VERBOSE_INFO, "%s: %s%d\r\n", __func__, saiDirection[dir], index);
 
     if (dir == SRTM_AudioDirTx)
     {
         thisRtm = &handle->txRtm;
-        thisCfg = &handle->txConfig;
     }
     else
     {
         thisRtm = &handle->rxRtm;
-        thisCfg = &handle->rxConfig;
     }
     thisRtm->isSuspend = false;
-    if (thisRtm->state == SRTM_AudioStateStarted && thisCfg->stopOnSuspend)
+    if (thisRtm->stoppedOnSuspend)
     {
-        status = SRTM_SaiSdmaAdapter_Start(adapter, dir, index);
+        thisRtm->stoppedOnSuspend = false;
+        status                    = SRTM_SaiSdmaAdapter_Start(adapter, dir, index);
     }
 
     return status;
@@ -1091,7 +1091,7 @@ srtm_sai_adapter_t SRTM_SaiSdmaAdapter_Create(I2S_Type *sai,
 
     handle = (srtm_sai_sdma_adapter_t)SRTM_Heap_Malloc(sizeof(struct _srtm_sai_sdma_adapter));
     assert(handle != NULL);
-    memset(handle, 0, sizeof(struct _srtm_sai_sdma_adapter));
+    (void)memset(handle, 0, sizeof(struct _srtm_sai_sdma_adapter));
 
     handle->sai = sai;
     handle->dma = dma;

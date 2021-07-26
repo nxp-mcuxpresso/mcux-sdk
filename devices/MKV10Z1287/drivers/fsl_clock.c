@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2019, NXP
+ * Copyright 2016 - 2021, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -46,25 +46,25 @@
 /* Min trim value of fast internal reference clock. */
 #define TRIM_SIRC_MIN (31250U)
 
-#define MCG_S_IRCST_VAL (((uint32_t)MCG->S & (uint32_t)MCG_S_IRCST_MASK) >> (uint32_t)MCG_S_IRCST_SHIFT)
-#define MCG_S_CLKST_VAL (((uint32_t)MCG->S & (uint32_t)MCG_S_CLKST_MASK) >> (uint32_t)MCG_S_CLKST_SHIFT)
-#define MCG_S_IREFST_VAL (((uint32_t)MCG->S & (uint32_t)MCG_S_IREFST_MASK) >> (uint32_t)MCG_S_IREFST_SHIFT)
-#define MCG_S_PLLST_VAL (((uint32_t)MCG->S & (uint32_t)MCG_S_PLLST_MASK) >> (uint32_t)MCG_S_PLLST_SHIFT)
-#define MCG_C1_FRDIV_VAL ((MCG->C1 & MCG_C1_FRDIV_MASK) >> MCG_C1_FRDIV_SHIFT)
-#define MCG_C2_LP_VAL (((uint32_t)MCG->C2 & (uint32_t)MCG_C2_LP_MASK) >> (uint32_t)MCG_C2_LP_SHIFT)
-#define MCG_C2_RANGE_VAL ((MCG->C2 & MCG_C2_RANGE_MASK) >> MCG_C2_RANGE_SHIFT)
-#define MCG_SC_FCRDIV_VAL ((MCG->SC & MCG_SC_FCRDIV_MASK) >> MCG_SC_FCRDIV_SHIFT)
-#define MCG_S2_PLLCST_VAL (((uint32_t)MCG->S2 & (uint32_t)MCG_S2_PLLCST_MASK) >> (uint32_t)MCG_S2_PLLCST_SHIFT)
-#define MCG_C7_OSCSEL_VAL ((MCG->C7 & MCG_C7_OSCSEL_MASK) >> MCG_C7_OSCSEL_SHIFT)
-#define MCG_C4_DMX32_VAL ((MCG->C4 & MCG_C4_DMX32_MASK) >> MCG_C4_DMX32_SHIFT)
-#define MCG_C4_DRST_DRS_VAL ((MCG->C4 & MCG_C4_DRST_DRS_MASK) >> MCG_C4_DRST_DRS_SHIFT)
+#define MCG_S_IRCST_VAL         (((uint32_t)MCG->S & (uint32_t)MCG_S_IRCST_MASK) >> (uint32_t)MCG_S_IRCST_SHIFT)
+#define MCG_S_CLKST_VAL         (((uint32_t)MCG->S & (uint32_t)MCG_S_CLKST_MASK) >> (uint32_t)MCG_S_CLKST_SHIFT)
+#define MCG_S_IREFST_VAL        (((uint32_t)MCG->S & (uint32_t)MCG_S_IREFST_MASK) >> (uint32_t)MCG_S_IREFST_SHIFT)
+#define MCG_S_PLLST_VAL         (((uint32_t)MCG->S & (uint32_t)MCG_S_PLLST_MASK) >> (uint32_t)MCG_S_PLLST_SHIFT)
+#define MCG_C1_FRDIV_VAL        ((MCG->C1 & MCG_C1_FRDIV_MASK) >> MCG_C1_FRDIV_SHIFT)
+#define MCG_C2_LP_VAL           (((uint32_t)MCG->C2 & (uint32_t)MCG_C2_LP_MASK) >> (uint32_t)MCG_C2_LP_SHIFT)
+#define MCG_C2_RANGE_VAL        ((MCG->C2 & MCG_C2_RANGE_MASK) >> MCG_C2_RANGE_SHIFT)
+#define MCG_SC_FCRDIV_VAL       ((MCG->SC & MCG_SC_FCRDIV_MASK) >> MCG_SC_FCRDIV_SHIFT)
+#define MCG_S2_PLLCST_VAL       (((uint32_t)MCG->S2 & (uint32_t)MCG_S2_PLLCST_MASK) >> (uint32_t)MCG_S2_PLLCST_SHIFT)
+#define MCG_C7_OSCSEL_VAL       ((MCG->C7 & MCG_C7_OSCSEL_MASK) >> MCG_C7_OSCSEL_SHIFT)
+#define MCG_C4_DMX32_VAL        ((MCG->C4 & MCG_C4_DMX32_MASK) >> MCG_C4_DMX32_SHIFT)
+#define MCG_C4_DRST_DRS_VAL     ((MCG->C4 & MCG_C4_DRST_DRS_MASK) >> MCG_C4_DRST_DRS_SHIFT)
 #define MCG_C7_PLL32KREFSEL_VAL ((MCG->C7 & MCG_C7_PLL32KREFSEL_MASK) >> MCG_C7_PLL32KREFSEL_SHIFT)
-#define MCG_C5_PLLREFSEL0_VAL ((MCG->C5 & MCG_C5_PLLREFSEL0_MASK) >> MCG_C5_PLLREFSEL0_SHIFT)
-#define MCG_C11_PLLREFSEL1_VAL ((MCG->C11 & MCG_C11_PLLREFSEL1_MASK) >> MCG_C11_PLLREFSEL1_SHIFT)
-#define MCG_C11_PRDIV1_VAL ((MCG->C11 & MCG_C11_PRDIV1_MASK) >> MCG_C11_PRDIV1_SHIFT)
-#define MCG_C12_VDIV1_VAL ((MCG->C12 & MCG_C12_VDIV1_MASK) >> MCG_C12_VDIV1_SHIFT)
-#define MCG_C5_PRDIV0_VAL ((uint8_t)(MCG->C5 & MCG_C5_PRDIV0_MASK) >> MCG_C5_PRDIV0_SHIFT)
-#define MCG_C6_VDIV0_VAL ((uint8_t)(MCG->C6 & MCG_C6_VDIV0_MASK) >> MCG_C6_VDIV0_SHIFT)
+#define MCG_C5_PLLREFSEL0_VAL   ((MCG->C5 & MCG_C5_PLLREFSEL0_MASK) >> MCG_C5_PLLREFSEL0_SHIFT)
+#define MCG_C11_PLLREFSEL1_VAL  ((MCG->C11 & MCG_C11_PLLREFSEL1_MASK) >> MCG_C11_PLLREFSEL1_SHIFT)
+#define MCG_C11_PRDIV1_VAL      ((MCG->C11 & MCG_C11_PRDIV1_MASK) >> MCG_C11_PRDIV1_SHIFT)
+#define MCG_C12_VDIV1_VAL       ((MCG->C12 & MCG_C12_VDIV1_MASK) >> MCG_C12_VDIV1_SHIFT)
+#define MCG_C5_PRDIV0_VAL       ((uint8_t)(MCG->C5 & MCG_C5_PRDIV0_MASK) >> MCG_C5_PRDIV0_SHIFT)
+#define MCG_C6_VDIV0_VAL        ((uint8_t)(MCG->C6 & MCG_C6_VDIV0_MASK) >> MCG_C6_VDIV0_SHIFT)
 
 #define OSC_MODE_MASK (MCG_C2_EREFS0_MASK | MCG_C2_HGO0_MASK | MCG_C2_RANGE0_MASK)
 
@@ -374,7 +374,7 @@ uint32_t CLOCK_GetPlatClkFreq(void)
  */
 uint32_t CLOCK_GetFlashClkFreq(void)
 {
-    return CLOCK_GetOutClkFreq() / (SIM_CLKDIV1_OUTDIV4_VAL + 1UL);
+    return CLOCK_GetCoreSysClkFreq() / (SIM_CLKDIV1_OUTDIV4_VAL + 1UL);
 }
 
 /*!
@@ -384,7 +384,7 @@ uint32_t CLOCK_GetFlashClkFreq(void)
  */
 uint32_t CLOCK_GetBusClkFreq(void)
 {
-    return CLOCK_GetOutClkFreq() / (SIM_CLKDIV1_OUTDIV4_VAL + 1UL);
+    return CLOCK_GetCoreSysClkFreq() / (SIM_CLKDIV1_OUTDIV4_VAL + 1UL);
 }
 
 /*!
@@ -418,10 +418,10 @@ uint32_t CLOCK_GetFreq(clock_name_t clockName)
             freq = CLOCK_GetOutClkFreq() / (SIM_CLKDIV1_OUTDIV1_VAL + 1UL);
             break;
         case kCLOCK_BusClk:
-            freq = CLOCK_GetOutClkFreq() / (SIM_CLKDIV1_OUTDIV4_VAL + 1UL);
+            freq = CLOCK_GetCoreSysClkFreq() / (SIM_CLKDIV1_OUTDIV4_VAL + 1UL);
             break;
         case kCLOCK_FlashClk:
-            freq = CLOCK_GetOutClkFreq() / (SIM_CLKDIV1_OUTDIV4_VAL + 1UL);
+            freq = CLOCK_GetCoreSysClkFreq() / (SIM_CLKDIV1_OUTDIV4_VAL + 1UL);
             break;
         case kCLOCK_Er32kClk:
             freq = CLOCK_GetEr32kClkFreq();

@@ -171,7 +171,7 @@
 #define BOARD_SERIAL_MWM_PORT              LPUART0
 #define BOARD_SERIAL_MWM_PORT_IRQn         LPUART0_IRQn
 #define BOARD_SERIAL_MWM_RST_GPIO          GPIOC
-#define BOARD_SERIAL_MWM_RST_PIN           1
+#define BOARD_SERIAL_MWM_RST_PIN           13
 #define BOARD_SERIAL_MWM_RST_WRITE(output) GPIO_PinWrite(BOARD_SERIAL_MWM_RST_GPIO, BOARD_SERIAL_MWM_RST_PIN, output)
 
 #if defined(__cplusplus)

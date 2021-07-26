@@ -20,5 +20,8 @@ endif()
 if(${MCUX_DEVICE} STREQUAL "MIMX8MN6")
     include(middleware_freertos-kernel_MIMX8MN6)
 endif()
+if(${MCUX_DEVICE} STREQUAL "MIMX8ML8")
+    include(middleware_freertos-kernel_MIMX8ML8)
+endif()
 
 include(driver_ii2c)

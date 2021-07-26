@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Driver version 2.0.15. */
-#define FSL_SDIF_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 15U))
+#define FSL_SDIF_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 0U))
 /*@}*/
 
 /*! @brief  SDIOCLKCTRL setting
@@ -222,7 +222,7 @@ enum
     kSDIF_SDIOInterrupt               = SDIF_INTMASK_SDIO_INT_MASK_MASK, /*!< interrupt from the SDIO card */
 
     kSDIF_CommandTransferStatus = kSDIF_ResponseError | kSDIF_CommandDone | kSDIF_ResponseCRCError |
-                                  kSDIF_ResponseTimeout |
+                                  kSDIF_ResponseTimeout | kSDIF_DataStartBitError |
                                   kSDIF_HardwareLockError, /*!< command transfer status collection*/
     kSDIF_DataTransferStatus = kSDIF_DataTransferOver | kSDIF_WriteFIFORequest | kSDIF_ReadFIFORequest |
                                kSDIF_DataCRCError | kSDIF_DataReadTimeout | kSDIF_DataStarvationByHostTimeout |
@@ -350,8 +350,6 @@ typedef struct _sdif_config
     uint8_t responseTimeout;        /*!< command response timeout value */
     uint32_t cardDetDebounce_Clock; /*!< define the debounce clock count which will used in
                                         card detect logic,typical value is 5-25ms */
-    uint32_t endianMode;            /*!< define endian mode ,this field is not used in this
-                                    module actually, keep for compatible with middleware*/
     uint32_t dataTimeout;           /*!< data timeout value  */
 } sdif_config_t;
 

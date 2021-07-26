@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2020,2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -54,7 +54,7 @@ void BOARD_InitBootClocks(void);
 #define BOARD_BOOTCLOCKRUN_ENET_25M_REF_CLK           0UL
 #define BOARD_BOOTCLOCKRUN_ENET_500M_REF_CLK          500000000UL
 #define BOARD_BOOTCLOCKRUN_FLEXIO1_CLK_ROOT           30000000UL
-#define BOARD_BOOTCLOCKRUN_FLEXSPI_CLK_ROOT           132000000UL
+#define BOARD_BOOTCLOCKRUN_FLEXSPI_CLK_ROOT           98181818UL
 #define BOARD_BOOTCLOCKRUN_GPT1_IPG_CLK_HIGHFREQ      62500000UL
 #define BOARD_BOOTCLOCKRUN_GPT2_IPG_CLK_HIGHFREQ      62500000UL
 #define BOARD_BOOTCLOCKRUN_IPG_CLK_ROOT               125000000UL
@@ -111,4 +111,3 @@ void BOARD_BootClockRUN(void);
 #endif /* __cplusplus*/
 
 #endif /* _CLOCK_CONFIG_H_ */
-

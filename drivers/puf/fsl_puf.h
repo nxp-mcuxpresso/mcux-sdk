@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  *
@@ -24,9 +24,9 @@
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief PUF driver version. Version 2.1.3.
+/*! @brief PUF driver version. Version 2.1.5.
  *
- * Current version: 2.1.3
+ * Current version: 2.1.4
  *
  * Change log:
  * - 2.0.0
@@ -48,8 +48,13 @@
  *     (pre-shared) keys destinated to secret hardware bus (PUF key index 0).
  * - 2.1.3
  *   - Fix MISRA C-2012 issue.
+ * - 2.1.4
+ *   - Replace register uint32_t ticksCount with volatile uint32_t ticksCount in puf_wait_usec() to prevent optimization
+ * 	   out delay loop.
+ * - 2.1.5
+ *   - Use common SDK delay in puf_wait_usec()
  */
-#define FSL_PUF_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+#define FSL_PUF_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
 /*@}*/
 
 typedef enum _puf_key_index_register

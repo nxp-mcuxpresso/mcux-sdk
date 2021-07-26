@@ -12,6 +12,7 @@
 #include "fsl_codec_i2c.h"
 /*!
  * @addtogroup ak4497
+ * @ingroup codec
  * @{
  */
 

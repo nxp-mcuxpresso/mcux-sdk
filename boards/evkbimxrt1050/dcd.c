@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -31,8 +31,7 @@ product: DCDx V2.0
 processor: MIMXRT1052xxxxB
 package_id: MIMXRT1052DVL6B
 mcu_data: ksdk2_0
-processor_version: 0.0.0
-board: IMXRT1050-EVKB
+processor_version: 9.0.1
 output_format: c_array
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* COMMENTS BELOW ARE USED AS SETTINGS FOR DCD DATA */
@@ -256,8 +255,8 @@ const uint8_t dcd_data[] = {
 	0x40, 0x2F, 0x00, 0x30, 0x00, 0x00, 0x00, 0x21,
 	/* #1.103, command: write_value, address: SEMC_IOCR, value: 0x79A8, size: 4 */
 	0x40, 0x2F, 0x00, 0x04, 0x00, 0x00, 0x79, 0xA8,
-	/* #1.104, command: write_value, address: SEMC_SDRAMCR0, value: 0xF31, size: 4 */
-	0x40, 0x2F, 0x00, 0x40, 0x00, 0x00, 0x0F, 0x31,
+	/* #1.104, command: write_value, address: SEMC_SDRAMCR0, value: 0xF07, size: 4 */
+	0x40, 0x2F, 0x00, 0x40, 0x00, 0x00, 0x0F, 0x07,
 	/* #1.105, command: write_value, address: SEMC_SDRAMCR1, value: 0x652922, size: 4 */
 	0x40, 0x2F, 0x00, 0x44, 0x00, 0x65, 0x29, 0x22,
 	/* #1.106, command: write_value, address: SEMC_SDRAMCR2, value: 0x10920, size: 4 */
@@ -296,8 +295,8 @@ const uint8_t dcd_data[] = {
 	0xCF, 0x00, 0x0C, 0x1C, 0x40, 0x2F, 0x00, 0x3C, 0x00, 0x00, 0x00, 0x01,
 	/* #7.1-3, command header bytes for merged 'Write - value' command */
 	0xCC, 0x00, 0x1C, 0x04,
-	/* #7.1, command: write_value, address: SEMC_IPTXDAT, value: 0x33, size: 4 */
-	0x40, 0x2F, 0x00, 0xA0, 0x00, 0x00, 0x00, 0x33,
+	/* #7.1, command: write_value, address: SEMC_IPTXDAT, value: 0x30, size: 4 */
+	0x40, 0x2F, 0x00, 0xA0, 0x00, 0x00, 0x00, 0x30,
 	/* #7.2, command: write_value, address: SEMC_IPCR0, value: 0x80000000, size: 4 */
 	0x40, 0x2F, 0x00, 0x90, 0x80, 0x00, 0x00, 0x00,
 	/* #7.3, command: write_value, address: SEMC_IPCMD, value: 0xA55A000A, size: 4 */

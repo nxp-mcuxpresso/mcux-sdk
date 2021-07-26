@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019 ,2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -25,11 +25,11 @@
 /* clang-format off */
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Clocks v6.0
+product: Clocks v7.0
 processor: K32L2B31xxxxA
 package_id: K32L2B31VLH0A
 mcu_data: ksdk2_0
-processor_version: 0.0.0
+processor_version: 9.0.0
 board: FRDM-K32L2B
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
@@ -40,9 +40,9 @@ board: FRDM-K32L2B
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define OSC_CAP0P 0U                   /*!< Oscillator 0pF capacitor load */
-#define OSC_ER_CLK_DISABLE 0U          /*!< Disable external reference clock */
-#define SIM_OSC32KSEL_OSC32KCLK_CLK 0U /*!< OSC32KSEL select: OSC32KCLK clock */
+#define OSC_CAP0P                                         0U  /*!< Oscillator 0pF capacitor load */
+#define OSC_ER_CLK_DISABLE                                0U  /*!< Disable external reference clock */
+#define SIM_OSC32KSEL_OSC32KCLK_CLK                       0U  /*!< OSC32KSEL select: OSC32KCLK clock */
 
 /*******************************************************************************
  * Variables
@@ -99,26 +99,30 @@ sources:
 /*******************************************************************************
  * Variables for BOARD_BootClockRUN configuration
  ******************************************************************************/
-const mcglite_config_t mcgliteConfig_BOARD_BootClockRUN = {
-    .outSrc          = kMCGLITE_ClkSrcHirc,  /* MCGOUTCLK source is HIRC */
-    .irclkEnableMode = kMCGLITE_IrclkEnable, /* MCGIRCLK enabled, MCGIRCLK disabled in STOP mode */
-    .ircs            = kMCGLITE_Lirc8M,      /* Slow internal reference (LIRC) 8 MHz clock selected */
-    .fcrdiv          = kMCGLITE_LircDivBy1,  /* Low-frequency Internal Reference Clock Divider: divided by 1 */
-    .lircDiv2        = kMCGLITE_LircDivBy1,  /* Second Low-frequency Internal Reference Clock Divider: divided by 1 */
-    .hircEnableInNotHircMode = true,         /* HIRC source is enabled */
-};
-const sim_clock_config_t simConfig_BOARD_BootClockRUN = {
-    .er32kSrc = SIM_OSC32KSEL_OSC32KCLK_CLK, /* OSC32KSEL select: OSC32KCLK clock */
-    .clkdiv1  = 0x10000U,                    /* SIM_CLKDIV1 - OUTDIV1: /1, OUTDIV4: /2 */
-};
-const osc_config_t oscConfig_BOARD_BootClockRUN = {
-    .freq        = 0U,                   /* Oscillator frequency: 0Hz */
-    .capLoad     = (OSC_CAP0P),          /* Oscillator capacity load: 0pF */
-    .workMode    = kOSC_ModeOscLowPower, /* Oscillator low power */
-    .oscerConfig = {
-        .enableMode =
-            kOSC_ErClkEnable, /* Enable external reference clock, disable external reference clock in STOP mode */
-    }};
+const mcglite_config_t mcgliteConfig_BOARD_BootClockRUN =
+    {
+        .outSrc = kMCGLITE_ClkSrcHirc,            /* MCGOUTCLK source is HIRC */
+        .irclkEnableMode = kMCGLITE_IrclkEnable,  /* MCGIRCLK enabled, MCGIRCLK disabled in STOP mode */
+        .ircs = kMCGLITE_Lirc8M,                  /* Slow internal reference (LIRC) 8 MHz clock selected */
+        .fcrdiv = kMCGLITE_LircDivBy1,            /* Low-frequency Internal Reference Clock Divider: divided by 1 */
+        .lircDiv2 = kMCGLITE_LircDivBy1,          /* Second Low-frequency Internal Reference Clock Divider: divided by 1 */
+        .hircEnableInNotHircMode = true,          /* HIRC source is enabled */
+    };
+const sim_clock_config_t simConfig_BOARD_BootClockRUN =
+    {
+        .er32kSrc = SIM_OSC32KSEL_OSC32KCLK_CLK,  /* OSC32KSEL select: OSC32KCLK clock */
+        .clkdiv1 = 0x10000U,                      /* SIM_CLKDIV1 - OUTDIV1: /1, OUTDIV4: /2 */
+    };
+const osc_config_t oscConfig_BOARD_BootClockRUN =
+    {
+        .freq = 0U,                               /* Oscillator frequency: 0Hz */
+        .capLoad = (OSC_CAP0P),                   /* Oscillator capacity load: 0pF */
+        .workMode = kOSC_ModeOscLowPower,         /* Oscillator low power */
+        .oscerConfig =
+            {
+                .enableMode = kOSC_ErClkEnable,   /* Enable external reference clock, disable external reference clock in STOP mode */
+            }
+    };
 
 /*******************************************************************************
  * Code for BOARD_BootClockRUN configuration
@@ -165,25 +169,30 @@ sources:
 /*******************************************************************************
  * Variables for BOARD_BootClockVLPR configuration
  ******************************************************************************/
-const mcglite_config_t mcgliteConfig_BOARD_BootClockVLPR = {
-    .outSrc          = kMCGLITE_ClkSrcLirc,  /* MCGOUTCLK source is LIRC */
-    .irclkEnableMode = kMCGLITE_IrclkEnable, /* MCGIRCLK enabled, MCGIRCLK disabled in STOP mode */
-    .ircs            = kMCGLITE_Lirc2M,      /* Slow internal reference (LIRC) 2 MHz clock selected */
-    .fcrdiv          = kMCGLITE_LircDivBy1,  /* Low-frequency Internal Reference Clock Divider: divided by 1 */
-    .lircDiv2        = kMCGLITE_LircDivBy1,  /* Second Low-frequency Internal Reference Clock Divider: divided by 1 */
-    .hircEnableInNotHircMode = false,        /* HIRC source is not enabled */
-};
-const sim_clock_config_t simConfig_BOARD_BootClockVLPR = {
-    .er32kSrc = SIM_OSC32KSEL_OSC32KCLK_CLK, /* OSC32KSEL select: OSC32KCLK clock */
-    .clkdiv1  = 0x10000U,                    /* SIM_CLKDIV1 - OUTDIV1: /1, OUTDIV4: /2 */
-};
-const osc_config_t oscConfig_BOARD_BootClockVLPR = {
-    .freq        = 0U,                   /* Oscillator frequency: 0Hz */
-    .capLoad     = (OSC_CAP0P),          /* Oscillator capacity load: 0pF */
-    .workMode    = kOSC_ModeOscLowPower, /* Oscillator low power */
-    .oscerConfig = {
-        .enableMode = OSC_ER_CLK_DISABLE, /* Disable external reference clock */
-    }};
+const mcglite_config_t mcgliteConfig_BOARD_BootClockVLPR =
+    {
+        .outSrc = kMCGLITE_ClkSrcLirc,            /* MCGOUTCLK source is LIRC */
+        .irclkEnableMode = kMCGLITE_IrclkEnable,  /* MCGIRCLK enabled, MCGIRCLK disabled in STOP mode */
+        .ircs = kMCGLITE_Lirc2M,                  /* Slow internal reference (LIRC) 2 MHz clock selected */
+        .fcrdiv = kMCGLITE_LircDivBy1,            /* Low-frequency Internal Reference Clock Divider: divided by 1 */
+        .lircDiv2 = kMCGLITE_LircDivBy1,          /* Second Low-frequency Internal Reference Clock Divider: divided by 1 */
+        .hircEnableInNotHircMode = false,         /* HIRC source is not enabled */
+    };
+const sim_clock_config_t simConfig_BOARD_BootClockVLPR =
+    {
+        .er32kSrc = SIM_OSC32KSEL_OSC32KCLK_CLK,  /* OSC32KSEL select: OSC32KCLK clock */
+        .clkdiv1 = 0x10000U,                      /* SIM_CLKDIV1 - OUTDIV1: /1, OUTDIV4: /2 */
+    };
+const osc_config_t oscConfig_BOARD_BootClockVLPR =
+    {
+        .freq = 0U,                               /* Oscillator frequency: 0Hz */
+        .capLoad = (OSC_CAP0P),                   /* Oscillator capacity load: 0pF */
+        .workMode = kOSC_ModeOscLowPower,         /* Oscillator low power */
+        .oscerConfig =
+            {
+                .enableMode = OSC_ER_CLK_DISABLE, /* Disable external reference clock */
+            }
+    };
 
 /*******************************************************************************
  * Code for BOARD_BootClockVLPR configuration
@@ -209,3 +218,4 @@ void BOARD_BootClockVLPR(void)
     /* Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKVLPR_CORE_CLOCK;
 }
+

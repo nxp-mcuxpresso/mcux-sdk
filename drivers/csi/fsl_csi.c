@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  *
@@ -9,6 +9,10 @@
 #include "fsl_csi.h"
 #if CSI_DRIVER_FRAG_MODE
 #include "fsl_cache.h"
+#endif
+
+#if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#include "fsl_memory.h"
 #endif
 
 /*******************************************************************************
@@ -29,6 +33,14 @@
 
 /* CSI driver only support RGB565 and YUV422 in fragment mode, 2 bytes per pixel. */
 #define CSI_FRAG_INPUT_BYTES_PER_PIXEL 2U
+
+#if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#define CSI_ADDR_CPU_2_IP(addr) (MEMORY_ConvertMemoryMapAddress((uint32_t)(addr), kMEMORY_Local2DMA))
+#define CSI_ADDR_IP_2_CPU(addr) (MEMORY_ConvertMemoryMapAddress((uint32_t)(addr), kMEMORY_DMA2Local))
+#else
+#define CSI_ADDR_CPU_2_IP(addr) (addr)
+#define CSI_ADDR_IP_2_CPU(addr) (addr)
+#endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
 
 /*!
  * @brief Used for conversion between `void*` and `uint32_t`.
@@ -248,7 +260,7 @@ static uint32_t CSI_GetRxBufferAddr(CSI_Type *base, uint8_t index)
         addr = CSI_REG_DMASA_FB1(base);
     }
 
-    return addr;
+    return CSI_ADDR_IP_2_CPU(addr);
 }
 
 #endif /* CSI_DRIVER_FRAG_MODE */
@@ -465,6 +477,8 @@ void CSI_GetDefaultConfig(csi_config_t *config)
  */
 void CSI_SetRxBufferAddr(CSI_Type *base, uint8_t index, uint32_t addr)
 {
+    addr = CSI_ADDR_CPU_2_IP(addr);
+
     if (0U != index)
     {
         CSI_REG_DMASA_FB2(base) = addr;
@@ -683,8 +697,8 @@ status_t CSI_TransferStart(CSI_Type *base, csi_handle_t *handle)
                          CSI_CSICR18_BASEADDR_SWITCH_SEL_MASK | CSI_CSICR18_BASEADDR_SWITCH_EN_MASK;
 
     /* Load the frame buffer to CSI register, there are at least two empty buffers. */
-    CSI_REG_DMASA_FB1(base) = CSI_TransferGetEmptyBuffer(handle);
-    CSI_REG_DMASA_FB2(base) = CSI_TransferGetEmptyBuffer(handle);
+    CSI_REG_DMASA_FB1(base) = CSI_ADDR_CPU_2_IP(CSI_TransferGetEmptyBuffer(handle));
+    CSI_REG_DMASA_FB2(base) = CSI_ADDR_CPU_2_IP(CSI_TransferGetEmptyBuffer(handle));
 
     handle->activeBufferNum = CSI_MAX_ACTIVE_FRAME_NUM;
 
@@ -1171,8 +1185,8 @@ status_t CSI_FragModeCreateHandle(CSI_Type *base,
         CSI_REG_CR3(base) = (CSI_REG_CR3(base) & ~CSI_CSICR3_RxFF_LEVEL_MASK) | ((0U << CSI_CSICR3_RxFF_LEVEL_SHIFT));
     }
 
-    CSI_REG_DMASA_FB1(base) = config->dmaBufferAddr0;
-    CSI_REG_DMASA_FB2(base) = config->dmaBufferAddr1;
+    CSI_REG_DMASA_FB1(base) = CSI_ADDR_CPU_2_IP(config->dmaBufferAddr0);
+    CSI_REG_DMASA_FB2(base) = CSI_ADDR_CPU_2_IP(config->dmaBufferAddr1);
 
     if (handle->isDmaBufferCachable)
     {
@@ -1329,6 +1343,8 @@ void CSI_FragModeTransferHandleIRQ(CSI_Type *base, csi_frag_handle_t *handle)
         {
             dmaBufAddr = CSI_REG_DMASA_FB2(base);
         }
+
+        dmaBufAddr = CSI_ADDR_IP_2_CPU(dmaBufAddr);
 
         if (handle->isDmaBufferCachable)
         {

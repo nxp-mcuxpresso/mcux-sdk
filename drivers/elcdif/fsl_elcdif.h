@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  *
@@ -10,6 +10,10 @@
 #define _FSL_ELCDIF_H_
 
 #include "fsl_common.h"
+
+#if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#include "fsl_memory.h"
+#endif
 
 /*!
  * @addtogroup elcdif
@@ -23,7 +27,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief eLCDIF driver version */
-#define FSL_ELCDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_ELCDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
 
 /* All IRQ flags in CTRL1 register. */
@@ -53,6 +57,18 @@
 #if ((ELCDIF_CTRL1_IRQ_MASK & ELCDIF_AS_CTRL_IRQ_MASK) || (ELCDIF_AS_CTRL_IRQ_MASK & ELCDIF_AS_CTRL_IRQ_EN_MASK))
 #error Interrupt bits overlap, need to update the interrupt functions.
 #endif
+
+#if defined(LCDIF_CTRL_ENABLE_PXP_HANDSHAKE_MASK)
+#define FSL_FEATURE_LCDIF_HAS_PXP_HANDSHAKE 1
+#else
+#define FSL_FEATURE_LCDIF_HAS_PXP_HANDSHAKE 0
+#endif
+
+#if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#define ELCDIF_ADDR_CPU_2_IP(addr) (MEMORY_ConvertMemoryMapAddress((uint32_t)(addr), kMEMORY_Local2DMA))
+#else
+#define ELCDIF_ADDR_CPU_2_IP(addr) (addr)
+#endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
 
 /* LUT memory entery number. */
 #define ELCDIF_LUT_ENTRY_NUM 256U
@@ -374,7 +390,7 @@ void ELCDIF_RgbModeStop(LCDIF_Type *base);
  */
 static inline void ELCDIF_SetNextBufferAddr(LCDIF_Type *base, uint32_t bufferAddr)
 {
-    base->NEXT_BUF = bufferAddr;
+    base->NEXT_BUF = ELCDIF_ADDR_CPU_2_IP(bufferAddr);
 }
 
 /*!
@@ -404,6 +420,7 @@ static inline void ELCDIF_PullUpResetPin(LCDIF_Type *base, bool pullUp)
 }
 #endif
 
+#if defined(FSL_FEATURE_LCDIF_HAS_PXP_HANDSHAKE) && FSL_FEATURE_LCDIF_HAS_PXP_HANDSHAKE
 /*!
  * @brief Enable or disable the hand shake with PXP.
  *
@@ -421,6 +438,7 @@ static inline void ELCDIF_EnablePxpHandShake(LCDIF_Type *base, bool enable)
         base->CTRL_CLR = LCDIF_CTRL_ENABLE_PXP_HANDSHAKE_MASK;
     }
 }
+#endif
 
 /* @} */
 
@@ -605,7 +623,7 @@ void ELCDIF_SetAlphaSurfaceBlendConfig(LCDIF_Type *base, const elcdif_as_blend_c
  */
 static inline void ELCDIF_SetNextAlphaSurfaceBufferAddr(LCDIF_Type *base, uint32_t bufferAddr)
 {
-    base->AS_NEXT_BUF = bufferAddr;
+    base->AS_NEXT_BUF = ELCDIF_ADDR_CPU_2_IP(bufferAddr);
 }
 
 /*!

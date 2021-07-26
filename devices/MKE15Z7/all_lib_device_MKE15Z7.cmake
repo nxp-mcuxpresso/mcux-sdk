@@ -1,6 +1,6 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
@@ -46,7 +46,6 @@ list(APPEND CMAKE_MODULE_PATH
 # Copy the cmake components into projects
 #    include(driver_lpuart_freertos)
 #    include(driver_flexio_spi_edma)
-#    include(CMSIS_Include_dsp)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_freertos)
 #    include(driver_port)
@@ -68,12 +67,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_edma)
 #    include(driver_ewm)
 #    include(driver_lpuart)
+#    include(CMSIS_Include_core_cm)
 #    include(driver_flexio_spi)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_flexio)
 #    include(driver_ftm)
 #    include(driver_trgmux)
-#    include(CMSIS_Include_core_cm0plus)
+#    include(utility_assert_lite)
 #    include(driver_tsi_v5)
 #    include(driver_flexio_i2c_master)
 #    include(driver_sim)
@@ -88,13 +88,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart_edma)
 #    include(utilities_misc_utilities)
 #    include(driver_lpi2c)
-#    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_rtc)
 #    include(driver_smc)
 #    include(driver_crc)
 #    include(driver_wdog32)
-#    include(utility_assert_lite)
 #    include(component_serial_manager)
 #    include(driver_fxos8700cq)
 #    include(driver_lptmr)

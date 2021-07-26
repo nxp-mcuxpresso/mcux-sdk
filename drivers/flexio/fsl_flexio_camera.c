@@ -42,7 +42,7 @@ static uint32_t FLEXIO_CAMERA_GetInstance(FLEXIO_CAMERA_Type *base)
 */
 void FLEXIO_CAMERA_GetDefaultConfig(flexio_camera_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
 
     /* Initializes the configure structure to zero. */
     (void)memset(config, 0, sizeof(*config));

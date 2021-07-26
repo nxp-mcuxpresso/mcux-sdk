@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 NXP
+ * Copyright 2017 - 2021 NXP
  * All rights reserved.
  *
  *
@@ -274,7 +274,8 @@ void SAI_TransferTxSetFormatSDMA(I2S_Type *base,
     }
 
 #if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
-    handle->count = (uint8_t)((uint8_t)FSL_FEATURE_SAI_FIFO_COUNT - format->watermark) * format->channelNums;
+    handle->count =
+        ((uint32_t)FSL_FEATURE_SAI_FIFO_COUNT - (uint32_t)format->watermark) * (uint32_t)format->channelNums;
 #else
     handle->count = 1U * format->channelNums;
 #endif /* FSL_FEATURE_SAI_FIFO_COUNT */
@@ -319,8 +320,8 @@ void SAI_TransferTxSetConfigSDMA(I2S_Type *base, sai_sdma_handle_t *handle, sai_
     }
 
 #if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
-    handle->count =
-        (uint8_t)((uint8_t)FSL_FEATURE_SAI_FIFO_COUNT - saiConfig->fifo.fifoWatermark) * saiConfig->channelNums;
+    handle->count = ((uint32_t)FSL_FEATURE_SAI_FIFO_COUNT - (uint32_t)saiConfig->fifo.fifoWatermark) *
+                    (uint32_t)saiConfig->channelNums;
 #else
     handle->count = 1U * saiConfig->channelNums;
 #endif /* FSL_FEATURE_SAI_FIFO_COUNT */
@@ -387,7 +388,7 @@ void SAI_TransferRxSetFormatSDMA(I2S_Type *base,
     handle->channel = format->channel;
 
 #if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
-    handle->count = format->watermark * format->channelNums;
+    handle->count = (uint32_t)format->watermark * (uint32_t)format->channelNums;
 #else
     handle->count = 1U * format->channelNums;
 #endif /* FSL_FEATURE_SAI_FIFO_COUNT */
@@ -434,7 +435,7 @@ void SAI_TransferRxSetConfigSDMA(I2S_Type *base, sai_sdma_handle_t *handle, sai_
     handle->channel = saiConfig->startChannel;
 
 #if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
-    handle->count = saiConfig->fifo.fifoWatermark * saiConfig->channelNums;
+    handle->count = (uint32_t)saiConfig->fifo.fifoWatermark * (uint32_t)saiConfig->channelNums;
 #else
     handle->count = 1U * saiConfig->channelNums;
 #endif /* FSL_FEATURE_SAI_FIFO_COUNT */
@@ -459,6 +460,7 @@ void SAI_TransferRxSetConfigSDMA(I2S_Type *base, sai_sdma_handle_t *handle, sai_
 status_t SAI_TransferSendSDMA(I2S_Type *base, sai_sdma_handle_t *handle, sai_transfer_t *xfer)
 {
     assert((handle != NULL) && (xfer != NULL));
+    assert((xfer->dataSize % (handle->bytesPerFrame)) == 0U);
 
     sdma_transfer_config_t config = {0};
     uint32_t destAddr             = SAI_TxGetDataRegisterAddress(base, handle->channel);
@@ -468,7 +470,8 @@ status_t SAI_TransferSendSDMA(I2S_Type *base, sai_sdma_handle_t *handle, sai_tra
     /* Check if input parameter invalid */
     if ((xfer->data == NULL) || (xfer->dataSize == 0U) || ((handle->channelNums > 1U) && (handle->fifoOffset == 0U)) ||
         ((handle->channelNums > 1U) &&
-         ((uint16_t)handle->count * handle->bytesPerFrame > (uint16_t)kSDMA_MultiFifoWatermarkLevelMask)))
+         ((uint16_t)handle->count * handle->bytesPerFrame > (uint16_t)kSDMA_MultiFifoWatermarkLevelMask)) ||
+        ((xfer->dataSize % (handle->bytesPerFrame)) != 0U))
     {
         return kStatus_InvalidArgument;
     }
@@ -557,6 +560,7 @@ status_t SAI_TransferSendSDMA(I2S_Type *base, sai_sdma_handle_t *handle, sai_tra
 status_t SAI_TransferReceiveSDMA(I2S_Type *base, sai_sdma_handle_t *handle, sai_transfer_t *xfer)
 {
     assert((handle != NULL) && (xfer != NULL));
+    assert((xfer->dataSize % (handle->bytesPerFrame)) == 0U);
 
     sdma_transfer_config_t config = {0};
     sdma_handle_t *dmaHandle      = handle->dmaHandle;
@@ -566,7 +570,8 @@ status_t SAI_TransferReceiveSDMA(I2S_Type *base, sai_sdma_handle_t *handle, sai_
     /* Check if input parameter invalid */
     if ((xfer->data == NULL) || (xfer->dataSize == 0U) || ((handle->channelNums > 1U) && (handle->fifoOffset == 0U)) ||
         ((handle->channelNums > 1U) &&
-         ((uint16_t)handle->count * handle->bytesPerFrame > (uint16_t)kSDMA_MultiFifoWatermarkLevelMask)))
+         ((uint16_t)handle->count * handle->bytesPerFrame > (uint16_t)kSDMA_MultiFifoWatermarkLevelMask)) ||
+        ((xfer->dataSize % (handle->bytesPerFrame)) != 0U))
     {
         return kStatus_InvalidArgument;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP.
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -14,42 +14,18 @@
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Pins v4.1
+product: Pins v8.0
 processor: LPC804
 package_id: LPC804M101JDH24
 mcu_data: ksdk2_0
-processor_version: 4.0.1
+processor_version: 0.9.4
 board: LPCXpresso804
-pin_labels:
-- {pin_num: '10', pin_signal: PIO0_11/ADC_6/WKTCLKIN, label: 'CN6[10]/CN8[3]/D4/PIO0_11/M_PIO0_11', identifier: LED_BLUE}
-- {pin_num: '5', pin_signal: PIO0_12, label: 'S2/CN8[6]/CN6[5]/D3/M_PIO0_12/PIO0_12', identifier: LED_GREEN;S2}
-- {pin_num: '4', pin_signal: PIO0_13/ADC_10, label: 'S1/CN8[4]/CN6[4]/D2/M_PIO0_13/PIO0_13', identifier: LED_RED;S1}
-- {pin_num: '22', pin_signal: PIO0_0/ACMP_I1, label: 'CN7[3]/CN8[8]/JP2/PIO0_0', identifier: DEBUG_UART_RX}
-- {pin_num: '7', pin_signal: PIO0_4/ADC_11, label: 'CN6[7]/CN8[7]/CN5[5]/JP24/PIO0_4', identifier: DEBUG_UART_TX}
-- {pin_num: '9', pin_signal: SWDIO/PIO0_2, label: 'CN6[9]/CN1[2]/U1[17]/SWDIO_PIO0_2', identifier: DEBUG_SWD_SWDIO}
-- {pin_num: '8', pin_signal: SWCLK/PIO0_3, label: 'CN6[8]/CN1[4]/U1[16]/SWCLK_PIO0_3', identifier: DEBUG_SWD_SWDCLK}
-- {pin_num: '23', pin_signal: PIO0_14/ACMP_I3/ADC_2, label: 'CN7[2]/CN3[1]/JP4/PIO0_14', identifier: I2C_SCL}
-- {pin_num: '20', pin_signal: PIO0_7/ADC_1/ACMPVREF, label: 'CN7[5]/CN3[2]/JP23/CN5[4]/PIO0_7', identifier: I2C_SDA}
-- {pin_num: '6', pin_signal: RESETN/PIO0_5, label: 'CN6[6]/CN1[10]/S3/CN4[3]/U1[3]/U1[8]/TRST_P0_5', identifier: DEBUG_SWD_RESETN}
-- {pin_num: '1', pin_signal: PIO0_18, label: 'CN6[1]/CN3[9]/PIO0_18'}
-- {pin_num: '2', pin_signal: PIO0_16/ACMP_I4/ADC_3, label: 'CN6[2]/CN5[2]/U4[1]/PIO0_16'}
-- {pin_num: '3', pin_signal: PIO0_17/ADC_9, label: 'CN6[3]/CN5[3]/PIO0_17'}
-- {pin_num: '11', pin_signal: PIO0_10/ADC_7, label: 'CN6[11]/VR1/CN5[1]/PIO0_10'}
-- {pin_num: '12', pin_signal: PIO0_21/ACMP_I5, label: 'CN6[12]/CN8[5]/PIO0_21'}
-- {pin_num: '13', pin_signal: PIO0_20, label: 'CN7[12]/CN3[10]/PIO0_20'}
-- {pin_num: '14', pin_signal: PIO0_15/ADC_8, label: 'CN7[11]/CN3[8]/PIO0_15'}
-- {pin_num: '15', pin_signal: PIO0_1/ADC_0/ACMP_I2/CLKIN, label: 'CN7[10]/CN3[5]/CN5[6]/U4[6]/PIO0_1'}
-- {pin_num: '16', pin_signal: PIO0_9/ADC_4, label: 'CN7[9]/CN3[6]/R13/U4[2]/PIO0_9/ISP_U0_TXD_DS'}
-- {pin_num: '17', pin_signal: PIO0_8/ADC_5, label: 'CN7[8]/CN3[7]/R20/U4[5]/PIO0_8/ISP_U0_RXD_DS'}
-- {pin_num: '18', pin_signal: VDD, label: 'CN7[7]/JP5/R37/VDD'}
-- {pin_num: '19', pin_signal: VSS, label: GND}
-- {pin_num: '21', pin_signal: VREFP, label: 'CN7[4]/JP7/MCU_VREFP'}
-- {pin_num: '24', pin_signal: PIO0_19/DACOUT, label: 'CN7[1]/CN8[2]/PIO0_19'}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
 
 #include "fsl_common.h"
+#include "fsl_gpio.h"
 #include "fsl_iocon.h"
 #include "fsl_swm.h"
 #include "pin_mux.h"
@@ -93,12 +69,12 @@ void BOARD_InitPins(void)
 BOARD_InitLEDsPins:
 - options: {callFromInitBoot: 'false', coreID: core0, enableClock: 'true'}
 - pin_list:
-  - {pin_num: '10', peripheral: GPIO, signal: 'PIO0, 11', pin_signal: PIO0_11/ADC_6/WKTCLKIN, direction: OUTPUT, mode: pullUp, invert: disabled, hysteresis: enabled,
-    opendrain: disabled}
-  - {pin_num: '5', peripheral: GPIO, signal: 'PIO0, 12', pin_signal: PIO0_12, identifier: LED_GREEN, direction: OUTPUT, mode: pullUp, invert: disabled, hysteresis: enabled,
-    opendrain: disabled}
-  - {pin_num: '4', peripheral: GPIO, signal: 'PIO0, 13', pin_signal: PIO0_13/ADC_10, identifier: LED_RED, direction: OUTPUT, mode: pullUp, invert: disabled, hysteresis: enabled,
-    opendrain: disabled}
+  - {pin_num: '10', peripheral: GPIO, signal: 'PIO0, 11', pin_signal: PIO0_11/ADC_6/WKTCLKIN, direction: OUTPUT, gpio_init_state: 'true', mode: inactive, invert: disabled,
+    hysteresis: enabled, opendrain: disabled}
+  - {pin_num: '5', peripheral: GPIO, signal: 'PIO0, 12', pin_signal: PIO0_12, identifier: LED_GREEN, direction: OUTPUT, gpio_init_state: 'true', mode: inactive, invert: disabled,
+    hysteresis: enabled, opendrain: disabled}
+  - {pin_num: '4', peripheral: GPIO, signal: 'PIO0, 13', pin_signal: PIO0_13/ADC_10, identifier: LED_RED, direction: OUTPUT, gpio_init_state: 'true', mode: inactive,
+    invert: disabled, hysteresis: enabled, opendrain: disabled}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -114,39 +90,62 @@ void BOARD_InitLEDsPins(void)
 {
     /* Enables clock for IOCON.: enable */
     CLOCK_EnableClock(kCLOCK_Iocon);
+    /* Enables the clock for the GPIO0 module */
+    CLOCK_EnableClock(kCLOCK_Gpio0);
 
-    const uint32_t IOCON_INDEX_PIO0_13_config = (/* Selects pull-up function */
-                                                 IOCON_PIO_MODE_PULLUP |
-                                                 /* Enable hysteresis */
-                                                 IOCON_PIO_HYS_EN |
-                                                 /* Input not invert */
-                                                 IOCON_PIO_INV_DI |
-                                                 /* Disables Open-drain function */
-                                                 IOCON_PIO_OD_DI);
-    /* PORT1 PIN (coords: ) is configured as  */
-    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_13, IOCON_INDEX_PIO0_13_config);
+    gpio_pin_config_t LED_BLUE_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 1U,
+    };
+    /* Initialize GPIO functionality on pin PIO0_11 (pin 10)  */
+    GPIO_PinInit(BOARD_INITLEDSPINS_LED_BLUE_GPIO, BOARD_INITLEDSPINS_LED_BLUE_PORT, BOARD_INITLEDSPINS_LED_BLUE_PIN, &LED_BLUE_config);
 
-    const uint32_t IOCON_INDEX_PIO0_12_config = (/* Selects pull-up function */
-                                                 IOCON_PIO_MODE_PULLUP |
-                                                 /* Enable hysteresis */
-                                                 IOCON_PIO_HYS_EN |
-                                                 /* Input not invert */
-                                                 IOCON_PIO_INV_DI |
-                                                 /* Disables Open-drain function */
-                                                 IOCON_PIO_OD_DI);
-    /* PORT2 PIN (coords: ) is configured as  */
-    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_12, IOCON_INDEX_PIO0_12_config);
+    gpio_pin_config_t LED_GREEN_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 1U,
+    };
+    /* Initialize GPIO functionality on pin PIO0_12 (pin 5)  */
+    GPIO_PinInit(BOARD_INITLEDSPINS_LED_GREEN_GPIO, BOARD_INITLEDSPINS_LED_GREEN_PORT, BOARD_INITLEDSPINS_LED_GREEN_PIN, &LED_GREEN_config);
 
-    const uint32_t IOCON_INDEX_PIO0_11_config = (/* Selects pull-up function */
-                                                 IOCON_PIO_MODE_PULLUP |
-                                                 /* Enable hysteresis */
-                                                 IOCON_PIO_HYS_EN |
-                                                 /* Input not invert */
-                                                 IOCON_PIO_INV_DI |
-                                                 /* Disables Open-drain function */
-                                                 IOCON_PIO_OD_DI);
-    /* PORT7 PIN (coords: ) is configured as  */
-    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_11, IOCON_INDEX_PIO0_11_config);
+    gpio_pin_config_t LED_RED_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 1U,
+    };
+    /* Initialize GPIO functionality on pin PIO0_13 (pin 4)  */
+    GPIO_PinInit(BOARD_INITLEDSPINS_LED_RED_GPIO, BOARD_INITLEDSPINS_LED_RED_PORT, BOARD_INITLEDSPINS_LED_RED_PIN, &LED_RED_config);
+
+    const uint32_t LED_BLUE = (/* No addition pin function */
+                               IOCON_PIO_MODE_INACT |
+                               /* Enable hysteresis */
+                               IOCON_PIO_HYS_EN |
+                               /* Input not invert */
+                               IOCON_PIO_INV_DI |
+                               /* Disables Open-drain function */
+                               IOCON_PIO_OD_DI);
+    /* PIO0 PIN11 (coords: 10) is configured as GPIO, PIO0, 11. */
+    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_11, LED_BLUE);
+
+    const uint32_t LED_GREEN = (/* No addition pin function */
+                                IOCON_PIO_MODE_INACT |
+                                /* Enable hysteresis */
+                                IOCON_PIO_HYS_EN |
+                                /* Input not invert */
+                                IOCON_PIO_INV_DI |
+                                /* Disables Open-drain function */
+                                IOCON_PIO_OD_DI);
+    /* PIO0 PIN12 (coords: 5) is configured as GPIO, PIO0, 12. */
+    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_12, LED_GREEN);
+
+    const uint32_t LED_RED = (/* No addition pin function */
+                              IOCON_PIO_MODE_INACT |
+                              /* Enable hysteresis */
+                              IOCON_PIO_HYS_EN |
+                              /* Input not invert */
+                              IOCON_PIO_INV_DI |
+                              /* Disables Open-drain function */
+                              IOCON_PIO_OD_DI);
+    /* PIO0 PIN13 (coords: 4) is configured as GPIO, PIO0, 13. */
+    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_13, LED_RED);
 }
 
 /* clang-format off */
@@ -175,27 +174,27 @@ void BOARD_InitDEBUG_UARTPins(void)
     /* Enables clock for switch matrix.: enable */
     CLOCK_EnableClock(kCLOCK_Swm);
 
-    const uint32_t IOCON_INDEX_PIO0_0_config = (/* Selects pull-up function */
-                                                IOCON_PIO_MODE_PULLUP |
-                                                /* Enable hysteresis */
-                                                IOCON_PIO_HYS_EN |
-                                                /* Input not invert */
-                                                IOCON_PIO_INV_DI |
-                                                /* Disables Open-drain function */
-                                                IOCON_PIO_OD_DI);
-    /* PORT1 PIN7 (coords: ) is configured as  */
-    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_0, IOCON_INDEX_PIO0_0_config);
+    const uint32_t DEBUG_UART_RX = (/* Selects pull-up function */
+                                    IOCON_PIO_MODE_PULLUP |
+                                    /* Enable hysteresis */
+                                    IOCON_PIO_HYS_EN |
+                                    /* Input not invert */
+                                    IOCON_PIO_INV_DI |
+                                    /* Disables Open-drain function */
+                                    IOCON_PIO_OD_DI);
+    /* PIO0 PIN0 (coords: 22) is configured as USART0, RXD. */
+    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_0, DEBUG_UART_RX);
 
-    const uint32_t IOCON_INDEX_PIO0_4_config = (/* Selects pull-up function */
-                                                IOCON_PIO_MODE_PULLUP |
-                                                /* Enable hysteresis */
-                                                IOCON_PIO_HYS_EN |
-                                                /* Input not invert */
-                                                IOCON_PIO_INV_DI |
-                                                /* Disables Open-drain function */
-                                                IOCON_PIO_OD_DI);
-    /* PORT4 PIN (coords: ) is configured as  */
-    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_4, IOCON_INDEX_PIO0_4_config);
+    const uint32_t DEBUG_UART_TX = (/* Selects pull-up function */
+                                    IOCON_PIO_MODE_PULLUP |
+                                    /* Enable hysteresis */
+                                    IOCON_PIO_HYS_EN |
+                                    /* Input not invert */
+                                    IOCON_PIO_INV_DI |
+                                    /* Disables Open-drain function */
+                                    IOCON_PIO_OD_DI);
+    /* PIO0 PIN4 (coords: 7) is configured as USART0, TXD. */
+    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_4, DEBUG_UART_TX);
 
     /* USART0_TXD connect to P0_4 */
     SWM_SetMovablePinSelect(SWM0, kSWM_USART0_TXD, kSWM_PortPin_P0_4);
@@ -234,38 +233,38 @@ void BOARD_InitSWD_DEBUGPins(void)
     /* Enables clock for switch matrix.: enable */
     CLOCK_EnableClock(kCLOCK_Swm);
 
-    const uint32_t IOCON_INDEX_PIO0_5_config = (/* Selects pull-up function */
-                                                IOCON_PIO_MODE_PULLUP |
-                                                /* Enable hysteresis */
-                                                IOCON_PIO_HYS_EN |
-                                                /* Input not invert */
-                                                IOCON_PIO_INV_DI |
-                                                /* Disables Open-drain function */
-                                                IOCON_PIO_OD_DI);
-    /* PORT3 PIN (coords: ) is configured as  */
-    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_5, IOCON_INDEX_PIO0_5_config);
+    const uint32_t DEBUG_SWD_SWDIO = (/* Selects pull-up function */
+                                      IOCON_PIO_MODE_PULLUP |
+                                      /* Enable hysteresis */
+                                      IOCON_PIO_HYS_EN |
+                                      /* Input not invert */
+                                      IOCON_PIO_INV_DI |
+                                      /* Disables Open-drain function */
+                                      IOCON_PIO_OD_DI);
+    /* PIO0 PIN2 (coords: 9) is configured as SWD, SWDIO. */
+    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_2, DEBUG_SWD_SWDIO);
 
-    const uint32_t IOCON_INDEX_PIO0_3_config = (/* Selects pull-up function */
-                                                IOCON_PIO_MODE_PULLUP |
-                                                /* Enable hysteresis */
-                                                IOCON_PIO_HYS_EN |
-                                                /* Input not invert */
-                                                IOCON_PIO_INV_DI |
-                                                /* Disables Open-drain function */
-                                                IOCON_PIO_OD_DI);
-    /* PORT5 PIN (coords: ) is configured as  */
-    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_3, IOCON_INDEX_PIO0_3_config);
+    const uint32_t DEBUG_SWD_SWDCLK = (/* Selects pull-up function */
+                                       IOCON_PIO_MODE_PULLUP |
+                                       /* Enable hysteresis */
+                                       IOCON_PIO_HYS_EN |
+                                       /* Input not invert */
+                                       IOCON_PIO_INV_DI |
+                                       /* Disables Open-drain function */
+                                       IOCON_PIO_OD_DI);
+    /* PIO0 PIN3 (coords: 8) is configured as SWD, SWCLK. */
+    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_3, DEBUG_SWD_SWDCLK);
 
-    const uint32_t IOCON_INDEX_PIO0_2_config = (/* Selects pull-up function */
-                                                IOCON_PIO_MODE_PULLUP |
-                                                /* Enable hysteresis */
-                                                IOCON_PIO_HYS_EN |
-                                                /* Input not invert */
-                                                IOCON_PIO_INV_DI |
-                                                /* Disables Open-drain function */
-                                                IOCON_PIO_OD_DI);
-    /* PORT6 PIN (coords: ) is configured as  */
-    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_2, IOCON_INDEX_PIO0_2_config);
+    const uint32_t DEBUG_SWD_RESETN = (/* Selects pull-up function */
+                                       IOCON_PIO_MODE_PULLUP |
+                                       /* Enable hysteresis */
+                                       IOCON_PIO_HYS_EN |
+                                       /* Input not invert */
+                                       IOCON_PIO_INV_DI |
+                                       /* Disables Open-drain function */
+                                       IOCON_PIO_OD_DI);
+    /* PIO0 PIN5 (coords: 6) is configured as SYSCON, RESETN. */
+    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_5, DEBUG_SWD_RESETN);
 
     /* SWCLK connect to P0_3 */
     SWM_SetFixedPinSelect(SWM0, kSWM_SWCLK, true);
@@ -306,27 +305,27 @@ void BOARD_InitI2CPins(void)
     /* Enables clock for switch matrix.: enable */
     CLOCK_EnableClock(kCLOCK_Swm);
 
-    const uint32_t IOCON_INDEX_PIO0_7_config = (/* Selects pull-up function */
-                                                IOCON_PIO_MODE_PULLUP |
-                                                /* Enable hysteresis */
-                                                IOCON_PIO_HYS_EN |
-                                                /* Input not invert */
-                                                IOCON_PIO_INV_DI |
-                                                /* Disables Open-drain function */
-                                                IOCON_PIO_OD_DI);
-    /* PORT1 PIN5 (coords: ) is configured as  */
-    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_7, IOCON_INDEX_PIO0_7_config);
+    const uint32_t I2C_SCL = (/* Selects pull-up function */
+                              IOCON_PIO_MODE_PULLUP |
+                              /* Enable hysteresis */
+                              IOCON_PIO_HYS_EN |
+                              /* Input not invert */
+                              IOCON_PIO_INV_DI |
+                              /* Disables Open-drain function */
+                              IOCON_PIO_OD_DI);
+    /* PIO0 PIN14 (coords: 23) is configured as I2C0, SCL. */
+    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_14, I2C_SCL);
 
-    const uint32_t IOCON_INDEX_PIO0_14_config = (/* Selects pull-up function */
-                                                 IOCON_PIO_MODE_PULLUP |
-                                                 /* Enable hysteresis */
-                                                 IOCON_PIO_HYS_EN |
-                                                 /* Input not invert */
-                                                 IOCON_PIO_INV_DI |
-                                                 /* Disables Open-drain function */
-                                                 IOCON_PIO_OD_DI);
-    /* PORT1 PIN8 (coords: ) is configured as  */
-    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_14, IOCON_INDEX_PIO0_14_config);
+    const uint32_t I2C_SDA = (/* Selects pull-up function */
+                              IOCON_PIO_MODE_PULLUP |
+                              /* Enable hysteresis */
+                              IOCON_PIO_HYS_EN |
+                              /* Input not invert */
+                              IOCON_PIO_INV_DI |
+                              /* Disables Open-drain function */
+                              IOCON_PIO_OD_DI);
+    /* PIO0 PIN7 (coords: 20) is configured as I2C0, SDA. */
+    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_7, I2C_SDA);
 
     /* I2C0_SDA connect to P0_7 */
     SWM_SetMovablePinSelect(SWM0, kSWM_I2C0_SDA, kSWM_PortPin_P0_7);
@@ -363,28 +362,44 @@ void BOARD_InitBUTTONsPins(void)
 {
     /* Enables clock for IOCON.: enable */
     CLOCK_EnableClock(kCLOCK_Iocon);
+    /* Enables the clock for the GPIO0 module */
+    CLOCK_EnableClock(kCLOCK_Gpio0);
 
-    const uint32_t IOCON_INDEX_PIO0_13_config = (/* Selects pull-up function */
-                                                 IOCON_PIO_MODE_PULLUP |
-                                                 /* Enable hysteresis */
-                                                 IOCON_PIO_HYS_EN |
-                                                 /* Input not invert */
-                                                 IOCON_PIO_INV_DI |
-                                                 /* Disables Open-drain function */
-                                                 IOCON_PIO_OD_DI);
-    /* PORT1 PIN (coords: ) is configured as  */
-    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_13, IOCON_INDEX_PIO0_13_config);
+    gpio_pin_config_t S2_config = {
+        .pinDirection = kGPIO_DigitalInput,
+        .outputLogic = 0U,
+    };
+    /* Initialize GPIO functionality on pin PIO0_12 (pin 5)  */
+    GPIO_PinInit(BOARD_INITBUTTONSPINS_S2_GPIO, BOARD_INITBUTTONSPINS_S2_PORT, BOARD_INITBUTTONSPINS_S2_PIN, &S2_config);
 
-    const uint32_t IOCON_INDEX_PIO0_12_config = (/* Selects pull-up function */
-                                                 IOCON_PIO_MODE_PULLUP |
-                                                 /* Enable hysteresis */
-                                                 IOCON_PIO_HYS_EN |
-                                                 /* Input not invert */
-                                                 IOCON_PIO_INV_DI |
-                                                 /* Disables Open-drain function */
-                                                 IOCON_PIO_OD_DI);
-    /* PORT2 PIN (coords: ) is configured as  */
-    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_12, IOCON_INDEX_PIO0_12_config);
+    gpio_pin_config_t S1_config = {
+        .pinDirection = kGPIO_DigitalInput,
+        .outputLogic = 0U,
+    };
+    /* Initialize GPIO functionality on pin PIO0_13 (pin 4)  */
+    GPIO_PinInit(BOARD_INITBUTTONSPINS_S1_GPIO, BOARD_INITBUTTONSPINS_S1_PORT, BOARD_INITBUTTONSPINS_S1_PIN, &S1_config);
+
+    const uint32_t S2 = (/* Selects pull-up function */
+                         IOCON_PIO_MODE_PULLUP |
+                         /* Enable hysteresis */
+                         IOCON_PIO_HYS_EN |
+                         /* Input not invert */
+                         IOCON_PIO_INV_DI |
+                         /* Disables Open-drain function */
+                         IOCON_PIO_OD_DI);
+    /* PIO0 PIN12 (coords: 5) is configured as GPIO, PIO0, 12. */
+    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_12, S2);
+
+    const uint32_t S1 = (/* Selects pull-up function */
+                         IOCON_PIO_MODE_PULLUP |
+                         /* Enable hysteresis */
+                         IOCON_PIO_HYS_EN |
+                         /* Input not invert */
+                         IOCON_PIO_INV_DI |
+                         /* Disables Open-drain function */
+                         IOCON_PIO_OD_DI);
+    /* PIO0 PIN13 (coords: 4) is configured as GPIO, PIO0, 13. */
+    IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_13, S1);
 
     /* Disable clock for switch matrix. */
     CLOCK_DisableClock(kCLOCK_Swm);

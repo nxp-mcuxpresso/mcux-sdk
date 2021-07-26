@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 
-#define FSL_XBAR_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+#define FSL_XBAR_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 
 /* Macros for entire XBAR_SELx register. */
 #define XBAR_SELx(base, output) (((volatile uint16_t *)(&((base)->SEL0)))[(uint32_t)(output) / 2UL])
@@ -60,12 +60,18 @@ typedef enum _xbar_status_flag_t
 {
     kXBAR_EdgeDetectionOut0 =
         (XBAR_CTRL0_STS0_MASK), /*!< XBAR_OUT0 active edge interrupt flag, sets when active edge detected. */
+#if FSL_FEATURE_XBAR_INTERRUPT_COUNT > 1
     kXBAR_EdgeDetectionOut1 =
         (XBAR_CTRL0_STS1_MASK), /*!< XBAR_OUT1 active edge interrupt flag, sets when active edge detected. */
+#endif
+#if FSL_FEATURE_XBAR_INTERRUPT_COUNT > 2
     kXBAR_EdgeDetectionOut2 =
         (XBAR_CTRL1_STS2_MASK << 16U), /*!< XBAR_OUT2 active edge interrupt flag, sets when active edge detected. */
+#endif
+#if FSL_FEATURE_XBAR_INTERRUPT_COUNT > 3
     kXBAR_EdgeDetectionOut3 =
         (XBAR_CTRL1_STS3_MASK << 16U), /*!< XBAR_OUT3 active edge interrupt flag, sets when active edge detected. */
+#endif
 } xbar_status_flag_t;
 
 /*!

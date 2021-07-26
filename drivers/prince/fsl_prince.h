@@ -23,9 +23,9 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief PRINCE driver version 2.3.1.
+/*! @brief PRINCE driver version 2.3.2.
  *
- * Current version: 2.3.1
+ * Current version: 2.3.2
  *
  * Change log:
  * - Version 2.0.0
@@ -39,11 +39,19 @@
  *   - Add support for LPC55S1x and LPC55S2x series
  * - Version 2.3.0
  *   - Fix MISRA-2012 issues.
+ * - Version 2.3.1
+ *   - Add support for LPC55S0x series
+ * - Version 2.3.2
+ *   - Fix documentation of enumeration. Extend PRINCE example.
  */
-#define FSL_PRINCE_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+#define FSL_PRINCE_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
-#if (defined(LPC55S14_SERIES) || defined(LPC55S16_SERIES))
+#if (defined(LPC55S04_SERIES) || defined(LPC55S06_SERIES))
+
+#define FSL_PRINCE_DRIVER_LPC55S0x
+
+#elif (defined(LPC55S14_SERIES) || defined(LPC55S16_SERIES))
 
 #define FSL_PRINCE_DRIVER_LPC55S1x
 
@@ -69,18 +77,20 @@
 #define ALIGN_DOWN(x, a) ((x) & (uint32_t)(-((int32_t)(a))))
 #endif
 
+/*! @brief Secure status enumeration. */
 typedef enum _skboot_status
 {
-    kStatus_SKBOOT_Success               = 0x5ac3c35au,
-    kStatus_SKBOOT_Fail                  = 0xc35ac35au,
-    kStatus_SKBOOT_InvalidArgument       = 0xc35a5ac3u,
-    kStatus_SKBOOT_KeyStoreMarkerInvalid = 0xc3c35a5au,
+    kStatus_SKBOOT_Success               = 0x5ac3c35au, /*!< PRINCE Success */
+    kStatus_SKBOOT_Fail                  = 0xc35ac35au, /*!< PRINCE Fail */
+    kStatus_SKBOOT_InvalidArgument       = 0xc35a5ac3u, /*!< PRINCE Invalid argument */
+    kStatus_SKBOOT_KeyStoreMarkerInvalid = 0xc3c35a5au, /*!< PRINCE Invalid marker */
 } skboot_status_t;
 
+/*! @brief Secure boolean enumeration. */
 typedef enum _secure_bool
 {
-    kSECURE_TRUE  = 0xc33cc33cU,
-    kSECURE_FALSE = 0x5aa55aa5U,
+    kSECURE_TRUE  = 0xc33cc33cU, /*!< PRINCE true */
+    kSECURE_FALSE = 0x5aa55aa5U, /*!< PRINCE false */
 } secure_bool_t;
 
 /*! @brief Prince region. */
@@ -100,11 +110,12 @@ typedef enum _prince_lock
     kPRINCE_MaskLock    = 256U, /*!< PRINCE mask register lock */
 } prince_lock_t;
 
+/*! @brief Prince flag. */
 typedef enum _prince_flags
 {
-    kPRINCE_Flag_None       = 0U,
-    kPRINCE_Flag_EraseCheck = 1U,
-    kPRINCE_Flag_WriteCheck = 2U,
+    kPRINCE_Flag_None       = 0U, /*!< PRINCE Flag None */
+    kPRINCE_Flag_EraseCheck = 1U, /*!< PRINCE Flag Erase check */
+    kPRINCE_Flag_WriteCheck = 2U, /*!< PRINCE Flag Write check */
 } prince_flags_t;
 
 /*******************************************************************************
@@ -344,7 +355,7 @@ status_t PRINCE_FlashEraseWithChecker(flash_config_t *config, uint32_t start, ui
  */
 status_t PRINCE_FlashProgramWithChecker(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
 
-#if defined(FSL_PRINCE_DRIVER_LPC55S1x)
+#if (defined(FSL_PRINCE_DRIVER_LPC55S0x)) || defined(FSL_PRINCE_DRIVER_LPC55S1x)
 /*!
  * @brief Gets the PRINCE Error status register.
  *
@@ -366,7 +377,7 @@ static inline void PRINCE_ClearErrorStatus(PRINCE_Type *base)
 {
     base->ERR = 0U;
 }
-#endif /* defined(FSL_PRINCE_DRIVER_LPC55S1x) */
+#endif /* defined(FSL_PRINCE_DRIVER_LPC55S0x) || defined(FSL_PRINCE_DRIVER_LPC55S1x) */
 
 #if defined(__cplusplus)
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -30,7 +30,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief IOCON driver version. */
-#define FSL_IOCON_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+#define FSL_IOCON_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 /**
@@ -48,14 +48,14 @@ typedef struct _iocon_group
  * @brief IOCON function and mode selection definitions
  * @note See the User Manual for specific modes and functions supported by the various pins.
  */
-#define IOCON_FUNC0  0x0 /*!< Selects pin function 0 */
-#define IOCON_FUNC1  0x1 /*!< Selects pin function 1 */
-#define IOCON_FUNC2  0x2 /*!< Selects pin function 2 */
-#define IOCON_FUNC3  0x3 /*!< Selects pin function 3 */
-#define IOCON_FUNC4  0x4 /*!< Selects pin function 4 */
-#define IOCON_FUNC5  0x5 /*!< Selects pin function 5 */
-#define IOCON_FUNC6  0x6 /*!< Selects pin function 6 */
-#define IOCON_FUNC7  0x7 /*!< Selects pin function 7 */
+#define IOCON_FUNC0 0x0 /*!< Selects pin function 0 */
+#define IOCON_FUNC1 0x1 /*!< Selects pin function 1 */
+#define IOCON_FUNC2 0x2 /*!< Selects pin function 2 */
+#define IOCON_FUNC3 0x3 /*!< Selects pin function 3 */
+#define IOCON_FUNC4 0x4 /*!< Selects pin function 4 */
+#define IOCON_FUNC5 0x5 /*!< Selects pin function 5 */
+#define IOCON_FUNC6 0x6 /*!< Selects pin function 6 */
+#define IOCON_FUNC7 0x7 /*!< Selects pin function 7 */
 #if defined(FSL_FEATURE_IOCON_FUNC_FIELD_WIDTH) && (FSL_FEATURE_IOCON_FUNC_FIELD_WIDTH == 4)
 #define IOCON_FUNC8  0x8 /*!< Selects pin function 8 */
 #define IOCON_FUNC9  0x9 /*!< Selects pin function 9 */
@@ -65,7 +65,7 @@ typedef struct _iocon_group
 #define IOCON_FUNC13 0xD /*!< Selects pin function 13 */
 #define IOCON_FUNC14 0xE /*!< Selects pin function 14 */
 #define IOCON_FUNC15 0xF /*!< Selects pin function 15 */
-#endif /* FSL_FEATURE_IOCON_FUNC_FIELD_WIDTH */
+#endif                   /* FSL_FEATURE_IOCON_FUNC_FIELD_WIDTH */
 
 #if defined(IOCON_PIO_MODE_SHIFT)
 #define IOCON_MODE_INACT    (0x0 << IOCON_PIO_MODE_SHIFT) /*!< No addition pin function */
@@ -76,13 +76,14 @@ typedef struct _iocon_group
 
 #if defined(IOCON_PIO_I2CSLEW_SHIFT)
 #define IOCON_GPIO_MODE (0x1 << IOCON_PIO_I2CSLEW_SHIFT) /*!< GPIO Mode */
-#define IOCON_I2C_SLEW  (0x0 << IOCON_PIO_I2CSLEW_SHIFT) /*!< I2C Slew Rate Control */
+#define IOCON_I2C_MODE  (0x0 << IOCON_PIO_I2CSLEW_SHIFT) /*!< I2C Slew Rate Control */
+#define IOCON_I2C_SLEW  IOCON_I2C_MODE                   /*!< Deprecated name for #IOCON_I2C_MODE */
 #endif
 
 #if defined(IOCON_PIO_EGP_SHIFT)
 #define IOCON_GPIO_MODE (0x1 << IOCON_PIO_EGP_SHIFT) /*!< GPIO Mode */
 #define IOCON_I2C_MODE  (0x0 << IOCON_PIO_EGP_SHIFT) /*!< I2C Slew Rate Control */
-#define IOCON_I2C_SLEW  IOCON_I2C_MODE /*!< Deprecated name for #IOCON_I2C_MODE */
+#define IOCON_I2C_SLEW  IOCON_I2C_MODE               /*!< Deprecated name for #IOCON_I2C_MODE */
 #endif
 
 #if defined(IOCON_PIO_SLEW_SHIFT)

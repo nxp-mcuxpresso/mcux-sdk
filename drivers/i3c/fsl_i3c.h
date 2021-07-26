@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
 /*! @brief Timeout times for waiting flag. */
@@ -65,6 +65,7 @@ enum
     kStatus_I3C_S0S1Error      = MAKE_STATUS(kStatusGroup_I3C, 19), /*!< S0 or S1 error */
 };
 
+/*! @brief I3C HDR modes. */
 typedef enum _i3c_hdr_mode
 {
     kI3C_HDRModeNone = 0x00U, /* Do not support HDR mode. */
@@ -73,6 +74,7 @@ typedef enum _i3c_hdr_mode
     kI3C_HDRModeTSL  = 0x04U, /* HDR-TSL Mode. */
 } i3c_hdr_mode_t;
 
+/*! @brief I3C device information. */
 typedef struct _i3c_device_info
 {
     uint8_t dynamicAddr;     /*!< Device dynamic address. */
@@ -120,6 +122,8 @@ enum _i3c_master_flags
     kI3C_MasterArbitrationWonFlag = I3C_MSTATUS_IBIWON_MASK,    /*!< Header address won arbitration flag */
     kI3C_MasterErrorFlag          = I3C_MSTATUS_ERRWARN_MASK,   /*!< Error occurred flag */
     kI3C_MasterSlave2MasterFlag   = I3C_MSTATUS_NOWMASTER_MASK, /*!< Switch from slave to master flag */
+    kI3C_MasterClearFlags         = kI3C_MasterSlaveStartFlag | kI3C_MasterControlDoneFlag | kI3C_MasterCompleteFlag |
+                            kI3C_MasterArbitrationWonFlag | kI3C_MasterSlave2MasterFlag | kI3C_MasterErrorFlag,
 };
 
 /*!
@@ -140,6 +144,10 @@ enum _i3c_master_error_flags
             read/write message in wrong state */
     kI3C_MasterErrorInvalidReqFlag = I3C_MERRWARN_INVREQ_MASK,  /*!< Invalid use of request */
     kI3C_MasterErrorTimeoutFlag    = I3C_MERRWARN_TIMEOUT_MASK, /*!< The module has stalled too long in a frame */
+    kI3C_MasterAllErrorFlags = kI3C_MasterErrorNackFlag | kI3C_MasterErrorWriteAbortFlag | kI3C_MasterErrorTermFlag |
+                               kI3C_MasterErrorParityFlag | kI3C_MasterErrorCrcFlag | kI3C_MasterErrorReadFlag |
+                               kI3C_MasterErrorWriteFlag | kI3C_MasterErrorMsgFlag | kI3C_MasterErrorInvalidReqFlag |
+                               kI3C_MasterErrorTimeoutFlag, /*!< All error flags */
 };
 
 /*! @brief I3C working master state. */
@@ -200,6 +208,22 @@ typedef enum _i3c_ibi_response
     kI3C_IbiRespAckMandatory = 2U, /*!< ACK with mandatory byte. */
     kI3C_IbiRespManual       = 3U, /*!< Reserved. */
 } i3c_ibi_response_t;
+
+/*! @brief IBI type. */
+typedef enum _i3c_ibi_type
+{
+    kI3C_IbiNormal        = 0U, /*!< In-band interrupt. */
+    kI3C_IbiHotJoin       = 1U, /*!< slave hot join. */
+    kI3C_IbiMasterRequest = 2U, /*!< slave master ship request. */
+} i3c_ibi_type_t;
+
+/*! @brief IBI state. */
+typedef enum _i3c_ibi_state
+{
+    kI3C_IbiReady          = 0U, /*!< In-band interrupt ready state, ready for user to handle. */
+    kI3C_IbiDataBuffNeed   = 1U, /*!< In-band interrupt need data buffer for data receive. */
+    kI3C_IbiAckNackPending = 2U, /*!< In-band interrupt Ack/Nack pending for decision. */
+} i3c_ibi_state_t;
 
 /*! @brief Direction of master and slave transfers. */
 typedef enum _i3c_direction
@@ -264,21 +288,19 @@ typedef struct _i3c_master_config
 typedef struct _i3c_master_transfer i3c_master_transfer_t;
 typedef struct _i3c_master_handle i3c_master_handle_t;
 
-/*!
- * @brief Master completion callback function pointer type.
- *
- * This callback is used only for the non-blocking master transfer API. Specify the callback you wish to use
- * in the call to I3C_MasterTransferCreateHandle().
- *
- * @param base The I3C peripheral base address.
- * @param completionStatus Either #kStatus_Success or an error code describing how the transfer completed.
- * @param userData Arbitrary pointer-sized value passed from the application.
- */
-typedef void (*i3c_master_transfer_callback_t)(I3C_Type *base,
-                                               i3c_master_handle_t *handle,
-                                               status_t completionStatus,
-                                               void *userData);
-
+/*! @brief i3c master callback functions. */
+typedef struct _i3c_master_transfer_callback
+{
+    void (*slave2Master)(I3C_Type *base, void *userData); /*!< Transfer complete callback */
+    void (*ibiCallback)(I3C_Type *base,
+                        i3c_master_handle_t *handle,
+                        i3c_ibi_type_t ibiType,
+                        i3c_ibi_state_t ibiState); /*!< IBI event callback */
+    void (*transferComplete)(I3C_Type *base,
+                             i3c_master_handle_t *handle,
+                             status_t completionStatus,
+                             void *userData); /*!< Transfer complete callback */
+} i3c_master_transfer_callback_t;
 /*!
  * @brief Transfer option flags.
  *
@@ -319,15 +341,19 @@ struct _i3c_master_transfer
  */
 struct _i3c_master_handle
 {
-    uint8_t state;                                     /*!< Transfer state machine current state. */
-    uint32_t remainingBytes;                           /*!< Remaining byte count in current state. */
-    i3c_master_transfer_t transfer;                    /*!< Copy of the current transfer info. */
-    uint8_t ibiAddress;                                /*!< Slave address which request IBI. */
-    uint8_t ibiBuff[I3C_IBI_BUFF_SIZE];                /*!< IBI buffer to keep ibi bytes. */
-    size_t ibiPayloadSize;                             /*!< IBI payload size. */
-    i3c_master_transfer_callback_t completionCallback; /*!< Callback function pointer. */
-    void *userData;                                    /*!< Application data passed to callback. */
+    uint8_t state;                           /*!< Transfer state machine current state. */
+    uint32_t remainingBytes;                 /*!< Remaining byte count in current state. */
+    i3c_master_transfer_t transfer;          /*!< Copy of the current transfer info. */
+    uint8_t ibiAddress;                      /*!< Slave address which request IBI. */
+    uint8_t *ibiBuff;                        /*!< Pointer to IBI buffer to keep ibi bytes. */
+    size_t ibiPayloadSize;                   /*!< IBI payload size. */
+    i3c_ibi_type_t ibiType;                  /*!< IBI type. */
+    i3c_master_transfer_callback_t callback; /*!< Callback functions pointer. */
+    void *userData;                          /*!< Application data passed to callback. */
 };
+
+/*! @brief Typedef for master interrupt handler. */
+typedef void (*i3c_master_isr_t)(I3C_Type *base, i3c_master_handle_t *handle);
 
 /*! @} */
 
@@ -386,6 +412,14 @@ enum _i3c_slave_flags
     kI3C_SlaveIbiDisableFlag            = I3C_SSTATUS_IBIDIS_MASK, /*!< Slave in band interrupt is disabled. */
     kI3C_SlaveMasterRequestDisabledFlag = I3C_SSTATUS_MRDIS_MASK,  /*!< Slave master request is disabled. */
     kI3C_SlaveHotJoinDisabledFlag       = I3C_SSTATUS_HJDIS_MASK,  /*!< Slave Hot-Join is disabled. */
+    /*! All flags which are cleared by the driver upon starting a transfer. */
+    kI3C_SlaveClearFlags = kI3C_SlaveBusStartFlag | kI3C_SlaveMatchedFlag | kI3C_SlaveBusStopFlag,
+
+    kI3C_SlaveAllIrqFlags = kI3C_SlaveBusStartFlag | kI3C_SlaveMatchedFlag | kI3C_SlaveBusStopFlag |
+                            kI3C_SlaveRxReadyFlag | kI3C_SlaveTxReadyFlag | kI3C_SlaveDynamicAddrChangedFlag |
+                            kI3C_SlaveReceivedCCCFlag | kI3C_SlaveErrorFlag | kI3C_SlaveHDRCommandMatchFlag |
+                            kI3C_SlaveCCCHandledFlag | kI3C_SlaveEventSentFlag,
+
 };
 
 /*!
@@ -451,6 +485,8 @@ typedef struct _i3c_slave_config
     bool ignoreS0S1Error;  /*!< Whether to ignore S0/S1 error in SDR mode. */
     bool offline; /*!< Whether to wait 60 us of bus quiet or HDR request to ensure slave track SDR mode safely. */
     bool matchSlaveStartStop; /*!< Whether to assert start/stop status only the time slave is addressed. */
+    uint32_t maxWriteLength;  /*!< Maximum write length. */
+    uint32_t maxReadLength;   /*!< Maximum read length. */
 } i3c_slave_config_t;
 
 /*!
@@ -475,10 +511,13 @@ typedef enum _i3c_slave_transfer_event
     kI3C_SlaveStartEvent           = 0x10U,  /*!< A start/repeated start was detected. */
     kI3C_SlaveHDRCommandMatchEvent = 0x20U,  /*!< Slave Match HDR Command. */
     kI3C_SlaveCompletionEvent      = 0x40U,  /*!< A stop was detected, completing the transfer. */
+    kI3C_SlaveRequestSentEvent     = 0x80U,  /*!< Slave request event sent. */
+    kI3C_SlaveReceivedCCCEvent     = 0x100L, /*!< Slave received CCC event, need to handle by application. */
 
     /*! Bit mask of all available events. */
     kI3C_SlaveAllEvents = kI3C_SlaveAddressMatchEvent | kI3C_SlaveTransmitEvent | kI3C_SlaveReceiveEvent |
-                          kI3C_SlaveStartEvent | kI3C_SlaveHDRCommandMatchEvent | kI3C_SlaveCompletionEvent,
+                          kI3C_SlaveStartEvent | kI3C_SlaveHDRCommandMatchEvent | kI3C_SlaveCompletionEvent |
+                          kI3C_SlaveRequestSentEvent | kI3C_SlaveReceivedCCCEvent,
 } i3c_slave_transfer_event_t;
 
 /*! @brief I3C slave transfer structure */
@@ -522,9 +561,70 @@ struct _i3c_slave_handle
     uint32_t transferredCount;              /*!< Count of bytes transferred. */
     i3c_slave_transfer_callback_t callback; /*!< Callback function called at transfer event. */
     void *userData;                         /*!< Callback parameter passed to callback. */
+    uint8_t *ibiData;                       /*!< IBI data buffer */
+    size_t ibiDataSize;                     /*!< IBI data size */
 };
 
 /*! @} */
+
+/*!
+ * @addtogroup i3c_common_driver
+ * @{
+ */
+
+/*!
+ * @brief Structure with settings to initialize the I3C module, could both initialize master and slave functionality.
+ *
+ * This structure holds configuration settings for the I3C peripheral. To initialize this
+ * structure to reasonable defaults, call the I3C_GetDefaultConfig() function and
+ * pass a pointer to your configuration structure instance.
+ *
+ * The configuration structure can be made constant so it resides in flash.
+ */
+typedef struct _i3c_config
+{
+    i3c_master_enable_t enableMaster; /*!< Enable master mode. */
+    bool disableTimeout;              /*!< Whether to disable timeout to prevent the ERRWARN. */
+    i3c_master_hkeep_t hKeep;         /*!< High keeper mode setting. */
+    bool enableOpenDrainStop;         /*!< Whether to emit open-drain speed STOP. */
+    bool enableOpenDrainHigh;         /*!< Enable Open-Drain High to be 1 PPBAUD count for i3c messages, or 1 ODBAUD. */
+    i3c_baudrate_hz_t baudRate_Hz;    /*!< Desired baud rate settings. */
+    uint8_t masterDynamicAddress;     /*!< Main master dynamic address configuration. */
+    uint32_t slowClock_Hz;            /*!< Slow clock frequency for time control. */
+    uint32_t maxWriteLength;          /*!< Maximum write length. */
+    uint32_t maxReadLength;           /*!< Maximum read length. */
+    bool enableSlave;                 /*!< Whether to enable slave. */
+    uint8_t staticAddr;               /*!< Static address. */
+    uint16_t vendorID;                /*!< Device vendor ID(manufacture ID). */
+    bool enableRandomPart;            /*!< Whether to generate random part number, if using random part number,
+                                           the partNumber variable setting is meaningless. */
+    uint32_t partNumber;              /*!< Device part number info */
+    uint8_t dcr;                      /*!< Device characteristics register information. */
+    uint8_t bcr;                      /*!< Bus characteristics register information. */
+    uint8_t hdrMode;                  /*!< Support hdr mode, could be OR logic in enumeration:i3c_hdr_mode_t. */
+    bool nakAllRequest;               /*!< Whether to reply NAK to all requests except broadcast CCC. */
+    bool ignoreS0S1Error;             /*!< Whether to ignore S0/S1 error in SDR mode. */
+    bool offline; /*!< Whether to wait 60 us of bus quiet or HDR request to ensure slave track SDR mode safely. */
+    bool matchSlaveStartStop; /*!< Whether to assert start/stop status only the time slave is addressed. */
+} i3c_config_t;
+
+/*! @} */
+
+/*******************************************************************************
+ * Variables
+ ******************************************************************************/
+/*! Array to map I3C instance number to IRQ number. */
+extern IRQn_Type const kI3cIrqs[];
+
+/*! Pointer to master IRQ handler for each instance. */
+extern i3c_master_isr_t s_i3cMasterIsr;
+
+/*! Pointers to master handles for each instance. */
+extern void *s_i3cMasterHandle[];
+
+/*! Pointers to slave handles for each instance. */
+extern i3c_slave_handle_t *s_i3cSlaveHandle[];
+
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -532,6 +632,68 @@ struct _i3c_slave_handle
 #if defined(__cplusplus)
 extern "C" {
 #endif
+
+/*!
+ * @addtogroup i3c_common_driver
+ * @{
+ */
+/*!
+ * @brief Get which instance current I3C is used.
+ * @param base The I3C peripheral base address.
+ */
+uint32_t I3C_GetInstance(I3C_Type *base);
+/*!
+ * @brief Provides a default configuration for the I3C peripheral, the configuration covers both master
+ * functionality and slave functionality.
+ *
+ * This function provides the following default configuration for I3C:
+ * @code
+ *    config->enableMaster                 = kI3C_MasterCapable;
+ *    config->disableTimeout               = false;
+ *    config->hKeep                        = kI3C_MasterHighKeeperNone;
+ *    config->enableOpenDrainStop          = true;
+ *    config->enableOpenDrainHigh          = true;
+ *    config->baudRate_Hz.i2cBaud          = 400000U;
+ *    config->baudRate_Hz.i3cPushPullBaud  = 12500000U;
+ *    config->baudRate_Hz.i3cOpenDrainBaud = 2500000U;
+ *    config->masterDynamicAddress         = 0x0AU;
+ *    config->slowClock_Hz                 = 1000000U;
+ *    config->enableSlave                  = true;
+ *    config->vendorID                     = 0x11BU;
+ *    config->enableRandomPart             = false;
+ *    config->partNumber                   = 0;
+ *    config->dcr                          = 0;
+ *    config->bcr = 0;
+ *    config->hdrMode             = (uint8_t)kI3C_HDRModeDDR;
+ *    config->nakAllRequest       = false;
+ *    config->ignoreS0S1Error     = false;
+ *    config->offline             = false;
+ *    config->matchSlaveStartStop = false;
+ * @endcode
+ *
+ * After calling this function, you can override any settings in order to customize the configuration,
+ * prior to initializing the common I3C driver with I3C_Init().
+ *
+ * @param[out] config User provided configuration structure for default values. Refer to #i3c_config_t.
+ */
+void I3C_GetDefaultConfig(i3c_config_t *config);
+
+/*!
+ * @brief Initializes the I3C peripheral.
+ * This function enables the peripheral clock and initializes the I3C peripheral as described by the user
+ * provided configuration. This will initialize both the master peripheral and slave peripheral so that I3C
+ * module could work as pure master, pure slave or secondary master, etc.
+ * A software reset is performed prior to configuration.
+ *
+ * @param base The I3C peripheral base address.
+ * @param config User provided peripheral configuration. Use I3C_GetDefaultConfig() to get a set of
+ * defaults that you can override.
+ * @param sourceClock_Hz Frequency in Hertz of the I3C functional clock. Used to calculate the baud rate divisors,
+ *      filter widths, and timeout periods.
+ */
+void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_Hz);
+
+/*! @} */
 
 /*!
  * @addtogroup i3c_master_driver
@@ -586,10 +748,10 @@ void I3C_MasterInit(I3C_Type *base, const i3c_master_config_t *masterConfig, uin
  */
 void I3C_MasterDeinit(I3C_Type *base);
 
-/* Not static so it can be used from fsl_i3c_edma.c. */
+/* Not static so it can be used from fsl_i3c_dma.c. */
 status_t I3C_MasterCheckAndClearError(I3C_Type *base, uint32_t status);
 
-/* Not static so it can be used from fsl_i3c_edma.c. */
+/* Not static so it can be used from fsl_i3c_dma.c. */
 status_t I3C_CheckForBusyBus(I3C_Type *base);
 
 /*!
@@ -969,6 +1131,20 @@ status_t I3C_MasterStop(I3C_Type *base);
 void I3C_MasterEmitRequest(I3C_Type *base, i3c_bus_request_t masterReq);
 
 /*!
+ * @brief I3C master emit request.
+ *
+ * @param base The I3C peripheral base address.
+ * @param ibiResponse  I3C master emit IBI response of type #i3c_ibi_response_t
+ */
+static inline void I3C_MasterEmitIBIResponse(I3C_Type *base, i3c_ibi_response_t ibiResponse)
+{
+    uint32_t ctrlVal = base->MCTRL;
+    ctrlVal &= ~(I3C_MCTRL_IBIRESP_MASK | I3C_MCTRL_REQUEST_MASK);
+    ctrlVal |= I3C_MCTRL_IBIRESP((uint32_t)ibiResponse) | I3C_MCTRL_REQUEST(kI3C_RequestIbiAckNack);
+    base->MCTRL = ctrlVal;
+}
+
+/*!
  * @brief I3C master register IBI rule.
  *
  * @param base The I3C peripheral base address.
@@ -1037,7 +1213,7 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
  */
 void I3C_MasterTransferCreateHandle(I3C_Type *base,
                                     i3c_master_handle_t *handle,
-                                    i3c_master_transfer_callback_t callback,
+                                    const i3c_master_transfer_callback_t *callback,
                                     void *userData);
 
 /*!
@@ -1137,6 +1313,17 @@ void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32
  * @param base The I3C peripheral base address.
  */
 void I3C_SlaveDeinit(I3C_Type *base);
+
+/*!
+ * @brief Enable/Disable Slave.
+ *
+ * @param base The I3C peripheral base address.
+ * @param isEnable Enable or disable.
+ */
+static inline void I3C_SlaveEnable(I3C_Type *base, bool isEnable)
+{
+    base->SCONFIG = (base->SCONFIG & ~I3C_SCONFIG_SLVENA_MASK) | I3C_SCONFIG_SLVENA(isEnable);
+}
 
 /*@}*/
 
@@ -1398,9 +1585,8 @@ static inline void I3C_SlaveGetFifoCounts(I3C_Type *base, size_t *rxCount, size_
  *
  * @param base The I3C peripheral base address.
  * @param event I3C slave event of type #i3c_slave_event_t
- * @param data IBI data if In-band interrupt has data, only applicable for event type #kI3C_SlaveEventIBI
  */
-void I3C_SlaveRequestEvent(I3C_Type *base, i3c_slave_event_t event, uint8_t data);
+void I3C_SlaveRequestEvent(I3C_Type *base, i3c_slave_event_t event);
 
 /*!
  * @brief Performs a polling send transfer on the I3C bus.
@@ -1509,6 +1695,15 @@ void I3C_SlaveTransferAbort(I3C_Type *base, i3c_slave_handle_t *handle);
  */
 void I3C_SlaveTransferHandleIRQ(I3C_Type *base, i3c_slave_handle_t *handle);
 
+/*!
+ * @brief I3C slave request IBI event with payload.
+ *
+ * @param base The I3C peripheral base address.
+ * @param handle Pointer to struct: _i3c_slave_handle structure which stores the transfer state.
+ * @param data Pointer to IBI data to be sent in the request.
+ * @param dataSize IBI data size.
+ */
+void I3C_SlaveRequestIBIWithData(I3C_Type *base, i3c_slave_handle_t *handle, uint8_t *data, size_t dataSize);
 /*@}*/
 /*! @} */
 #if defined(__cplusplus)

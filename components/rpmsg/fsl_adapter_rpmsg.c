@@ -296,23 +296,34 @@ hal_rpmsg_status_t HAL_RpmsgDeinit(hal_rpmsg_handle_t handle)
 hal_rpmsg_status_t HAL_RpmsgSend(hal_rpmsg_handle_t handle, uint8_t *data, uint32_t length)
 {
     hal_rpmsg_state_t *rpmsgHandle;
+    hal_rpmsg_status_t status = kStatus_HAL_RpmsgSuccess;
+    uint32_t primask;
 
     assert(NULL != data);
 
     rpmsgHandle = (hal_rpmsg_state_t *)handle;
 
-    if (0 == rpmsg_lite_is_link_up(rpmsgHandle->pContext))
-    {
-        return kStatus_HAL_RpmsgError;
-    }
+    primask = DisableGlobalIRQ();
 
-    if (RL_SUCCESS != rpmsg_lite_send(rpmsgHandle->pContext, rpmsgHandle->pEndpoint, rpmsgHandle->remote_addr,
-                                      (char *)data, length, RL_BLOCK))
+    do
     {
-        return kStatus_HAL_RpmsgError;
-    }
+        if (0 == rpmsg_lite_is_link_up(rpmsgHandle->pContext))
+        {
+            status = kStatus_HAL_RpmsgError;
+            break;
+        }
 
-    return kStatus_HAL_RpmsgSuccess;
+        if (RL_SUCCESS != rpmsg_lite_send(rpmsgHandle->pContext, rpmsgHandle->pEndpoint, rpmsgHandle->remote_addr,
+                                          (char *)data, length, RL_BLOCK))
+        {
+            status = kStatus_HAL_RpmsgError;
+            break;
+        }
+    } while (false);
+
+    EnableGlobalIRQ(primask);
+
+    return status;
 }
 
 hal_rpmsg_status_t HAL_RpmsgInstallRxCallback(hal_rpmsg_handle_t handle, rpmsg_rx_callback_t callback, void *param)

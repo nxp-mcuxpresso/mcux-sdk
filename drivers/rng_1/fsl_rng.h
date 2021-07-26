@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019 NXP
+ * Copyright 2017, 2019, 2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,9 +21,9 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief RNG driver version. Version 2.0.1.
+/*! @brief RNG driver version. Version 2.0.2.
  *
- * Current version: 2.0.1
+ * Current version: 2.0.2
  *
  * Change log:
  * - Version 2.0.0
@@ -31,8 +31,11 @@
  *
  * - Version 2.0.1
  *   - Fix MISRA C-2012 issue.
+ *
+ * - Version 2.0.2
+ *   - Add RESET_PeripheralReset function inside RNG_Init and RNG_Deinit functions.
  */
-#define FSL_RNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_RNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*******************************************************************************

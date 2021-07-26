@@ -218,7 +218,9 @@ status_t BOARD_InitPsRam(void)
     config.ahbConfig.buffer[0].priority       = 0;
     /* All other masters use last buffer with 512B bytes. */
     config.ahbConfig.buffer[FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT - 1].bufferSize = 512;
-    config.enableCombination                                                     = true;
+#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN)
+    config.enableCombination = true;
+#endif
     FLEXSPI_Init(BOARD_FLEXSPI_PSRAM, &config);
 
     /* Configure flash settings according to serial flash feature. */

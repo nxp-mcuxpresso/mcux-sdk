@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018, 2020 NXP
+ * Copyright 2016-2018, 2020-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.0.4. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+/*! @brief power driver version 2.1.0. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*! @brief PMU PCON reserved mask, used to clear reserved field which should not write 1*/
@@ -95,6 +95,30 @@ typedef enum _power_mode_config
     kPmu_PowerDown      = 2U,
     kPmu_Deep_PowerDown = 3U,
 } power_mode_cfg_t;
+
+/*!
+ * @brief BOD reset level, if VDD below reset level value, the reset will be
+ * asserted.
+ */
+typedef enum _power_bod_reset_level
+{
+    kBod_ResetLevelReserved = 0U, /*!< BOD Reset Level reserved. */
+    kBod_ResetLevel1,             /*!< BOD Reset Level1: 2.05V */
+    kBod_ResetLevel2,             /*!< BOD Reset Level2: 2.35V */
+    kBod_ResetLevel3,             /*!< BOD Reset Level3: 2.63V */
+} power_bod_reset_level_t;
+
+/*!
+ * @brief BOD interrupt level, if VDD below interrupt level value, the BOD interrupt
+ * will be asserted.
+ */
+typedef enum _power_bod_interrupt_level
+{
+    kBod_InterruptLevelReserved = 0U, /*!< BOD interrupt level reserved. */
+    kBod_InterruptLevel1,             /*!< BOD interrupt level1: 2.25V. */
+    kBod_InterruptLevel2,             /*!< BOD interrupt level2: 2.55V. */
+    kBod_InterruptLevel3,             /*!< BOD interrupt level3: 2.84V. */
+} power_bod_interrupt_level_t;
 
 /*******************************************************************************
  * API
@@ -391,6 +415,20 @@ static inline void POWER_EnableResetPinForDeepPowerDown(bool enable, bool enHyst
                    PMU_DPDCTRL_RESET_DISABLE(!enable) | PMU_DPDCTRL_RESETHYS(enHysteresis);
 }
 
+/*!
+ * @brief Set Bod interrupt level and reset level.
+ *
+ * @param resetLevel BOD reset threshold level, please refer to @ref power_bod_reset_level_t.
+ * @param interruptLevel BOD interrupt threshold level, please refer to @ref power_bod_interrupt_level_t.
+ * @param enable Used to enable/disable the BOD interrupt and BOD reset.
+ */
+static inline void POWER_SetBodLevel(power_bod_reset_level_t resetLevel,
+                                     power_bod_interrupt_level_t interruptLevel,
+                                     bool enable)
+{
+    SYSCON->BODCTRL = SYSCON_BODCTRL_BODRSTLEV(resetLevel) | SYSCON_BODCTRL_BODINTVAL(interruptLevel) |
+                      SYSCON_BODCTRL_BODRSTENA(enable);
+}
 /* @} */
 
 #ifdef __cplusplus

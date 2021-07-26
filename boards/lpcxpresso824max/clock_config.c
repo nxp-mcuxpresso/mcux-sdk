@@ -1,10 +1,11 @@
 /*
- * Copyright  2018,2019 NXP
+ * Copyright  2018,2019 ,2021 NXP
  * All rights reserved.
  *
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+
 /*
  * How to set up clock using clock driver functions:
  *
@@ -21,7 +22,7 @@ product: Clocks v7.0
 processor: LPC824
 package_id: LPC824M201JHI33
 mcu_data: ksdk2_0
-processor_version: 0.7.1
+processor_version: 9.0.0
 board: LPCXpresso824
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
@@ -81,16 +82,16 @@ void BOARD_BootClockIRC12M(void)
 {
     /*!< Set up the clock sources */
     /*!< Set up IRC */
-    POWER_DisablePD(kPDRUNCFG_PD_IRC_OUT); /*!< Ensure IRC OUT is on  */
-    POWER_DisablePD(kPDRUNCFG_PD_IRC);     /*!< Ensure IRC is on  */
-    POWER_DisablePD(kPDRUNCFG_PD_SYSOSC);  /*!< Ensure SYSOSC is on */
-    CLOCK_Select(kSYSPLL_From_Irc);        /*!< set IRC to pll select */
+    POWER_DisablePD(kPDRUNCFG_PD_IRC_OUT);                   /*!< Ensure IRC OUT is on  */
+    POWER_DisablePD(kPDRUNCFG_PD_IRC);                   /*!< Ensure IRC is on  */
+    POWER_DisablePD(kPDRUNCFG_PD_SYSOSC);                  /*!< Ensure SYSOSC is on */
+    CLOCK_Select(kSYSPLL_From_Irc);                         /*!< set IRC to pll select */
     clock_sys_pll_t config;
-    config.src        = kCLOCK_SysPllSrcIrc;   /*!< set pll src  */
-    config.targetFreq = 12000000U;             /*!< set pll target freq */
-    CLOCK_InitSystemPll(&config);              /*!< set parameters */
-    CLOCK_SetMainClkSrc(kCLOCK_MainClkSrcIrc); /*!< select irc for main clock */
-    CLOCK_Select(kCLKOUT_From_Irc);            /*!< select IRC for CLKOUT */
+    config.src = kCLOCK_SysPllSrcIrc;                           /*!< set pll src  */
+    config.targetFreq = 12000000U;                     /*!< set pll target freq */
+    CLOCK_InitSystemPll(&config);                           /*!< set parameters */
+    CLOCK_SetMainClkSrc(kCLOCK_MainClkSrcIrc);            /*!< select irc for main clock */
+    CLOCK_Select(kCLKOUT_From_Irc);                         /*!< select IRC for CLKOUT */
     CLOCK_SetCoreSysClkDiv(1U);
     /*!< Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKIRC12M_CORE_CLOCK;
@@ -130,17 +131,18 @@ void BOARD_BootClockPll24M(void)
 {
     /*!< Set up the clock sources */
     /*!< Set up IRC */
-    POWER_DisablePD(kPDRUNCFG_PD_IRC_OUT); /*!< Ensure IRC OUT is on  */
-    POWER_DisablePD(kPDRUNCFG_PD_IRC);     /*!< Ensure IRC is on  */
-    POWER_DisablePD(kPDRUNCFG_PD_SYSOSC);  /*!< Ensure SYSOSC is on */
-    CLOCK_Select(kSYSPLL_From_Irc);        /*!< set IRC to pll select */
+    POWER_DisablePD(kPDRUNCFG_PD_IRC_OUT);                   /*!< Ensure IRC OUT is on  */
+    POWER_DisablePD(kPDRUNCFG_PD_IRC);                   /*!< Ensure IRC is on  */
+    POWER_DisablePD(kPDRUNCFG_PD_SYSOSC);                  /*!< Ensure SYSOSC is on */
+    CLOCK_Select(kSYSPLL_From_Irc);                         /*!< set IRC to pll select */
     clock_sys_pll_t config;
-    config.src        = kCLOCK_SysPllSrcIrc;      /*!< set pll src  */
-    config.targetFreq = 24000000U;                /*!< set pll target freq */
-    CLOCK_InitSystemPll(&config);                 /*!< set parameters */
-    CLOCK_SetMainClkSrc(kCLOCK_MainClkSrcSysPll); /*!< select syspll for main clock */
-    CLOCK_Select(kCLKOUT_From_Irc);               /*!< select IRC for CLKOUT */
+    config.src = kCLOCK_SysPllSrcIrc;                           /*!< set pll src  */
+    config.targetFreq = 24000000U;                     /*!< set pll target freq */
+    CLOCK_InitSystemPll(&config);                           /*!< set parameters */
+    CLOCK_SetMainClkSrc(kCLOCK_MainClkSrcSysPll);         /*!< select syspll for main clock */
+    CLOCK_Select(kCLKOUT_From_Irc);                         /*!< select IRC for CLKOUT */
     CLOCK_SetCoreSysClkDiv(1U);
     /*!< Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKPLL24M_CORE_CLOCK;
 }
+

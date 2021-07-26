@@ -10,7 +10,7 @@
 #define __HAL_GPIO_H__
 
 #include "fsl_common.h"
-#if defined(FSL_RTOS_FREE_RTOS)
+#if defined(SDK_OS_FREE_RTOS)
 #include "FreeRTOS.h"
 #endif
 
@@ -22,6 +22,11 @@
 /*******************************************************************************
  * Public macro
  ******************************************************************************/
+/*! @name Driver version */
+/*@{*/
+#define FSL_GPIO_ADAPTER_VERSION (MAKE_VERSION(1, 0, 1)) /*!< Version 1.0.1. */
+                                                         /*@}*/
+
 /*! @brief Definition of GPIO conflict check Enable. */
 #ifndef HAL_GPIO_CONFLICT_CHECK_ENABLE
 #define HAL_GPIO_CONFLICT_CHECK_ENABLE (1)

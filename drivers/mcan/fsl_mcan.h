@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief MCAN driver version. */
-#define FSL_MCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+#define FSL_MCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
 /*@}*/
 
 #ifndef MCAN_RETRY_TIMES
@@ -678,8 +678,8 @@ static inline uint32_t MCAN_GetStatusFlag(CAN_Type *base, uint32_t mask)
  */
 static inline void MCAN_ClearStatusFlag(CAN_Type *base, uint32_t mask)
 {
-    /* Write 1 to clear status flag. */
-    base->IR |= mask;
+    /* Write 1 to clear status flag, write 0 has no effect. */
+    base->IR = mask;
 }
 
 /*!

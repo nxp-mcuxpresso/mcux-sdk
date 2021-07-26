@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2018-06-19
-**     Build:               b200922
+**     Build:               b210203
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -312,6 +312,8 @@
 #define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ARDFEN (1)
 /* @brief FlexSPI has no MCR0 ATDFEN bit */
 #define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ATDFEN (1)
+/* @brief FlexSPI has no MCR0 COMBINATIONEN bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN (1)
 
 /* GPIO module features */
 
@@ -426,6 +428,8 @@
 #define FSL_FEATURE_USBHSD_USB_RAM (0x00004000)
 /* @brief Base address of the USB dedicated RAM */
 #define FSL_FEATURE_USBHSD_USB_RAM_BASE_ADDRESS (0x40140000)
+/* @brief USBHSD version */
+#define FSL_FEATURE_USBHSD_VERSION (300)
 /* @brief Number of the endpoint in USB HS */
 #define FSL_FEATURE_USBHSD_EP_NUM (6)
 /* @brief The controller doesn't exit HS mode automatically after vbus becomes invalid */
@@ -473,6 +477,8 @@
     (((x) == USDHC1) ? (0) : (-1)))
 /* @brief If USDHC instance support 1v8 signal */
 #define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_1V8_SIGNALn(x) (1)
+/* @brief Has no retuning time counter (HOST_CTRL_CAP[TIME_COUNT_RETURNING]) */
+#define FSL_FEATURE_USDHC_REGISTER_HOST_CTRL_CAP_HAS_NO_RETUNING_TIME_COUNTER (0)
 
 /* UTICK module features */
 

@@ -1,6 +1,6 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
@@ -22,7 +22,6 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
-#    include(CMSIS_Include_dsp)
 #    include(component_usart_adapter)
 #    include(middleware_multicore_erpc_eRPC_arbitrator)
 #    include(component_lists)
@@ -30,15 +29,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_rtos_remote_c_wrapper)
 #    include(driver_flexcomm)
 #    include(middleware_multicore_rpmsg_lite_lpcxpresso55s69_bm)
-#    include(middleware_multicore_mcmgr)
 #    include(middleware_multicore_erpc_eRPC_server)
 #    include(driver_clock)
 #    include(middleware_freertos-kernel_cm33_nonsecure_port)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_transport)
 #    include(driver_inputmux_connections)
-#    include(middleware_freertos-kernel_heap_3)
 #    include(driver_mailbox)
 #    include(middleware_multicore_mcmgr_lpc55s69)
+#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_extension)
 #    include(middleware_multicore_rpmsg_lite_lpcxpresso55s69_freertos)
 #    include(middleware_baremetal)
@@ -52,7 +50,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_erpc_common)
 #    include(utilities_misc_utilities)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_remote_c_wrapper)
-#    include(CMSIS_Include_common)
+#    include(middleware_multicore_mcmgr)
 #    include(driver_common)
 #    include(middleware_multicore_erpc_eRPC_port_freertos)
 #    include(utility_assert)
@@ -66,5 +64,5 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_power)
 #    include(device_startup_LPC55S69_cm33_core1)
 #    include(component_serial_manager_uart)
-#    include(CMSIS_Include_core_cm33)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_reset)

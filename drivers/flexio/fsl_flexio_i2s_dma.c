@@ -184,8 +184,6 @@ void FLEXIO_I2S_TransferRxCreateHandleDMA(FLEXIO_I2S_Type *base,
  * param handle FlexIO I2S DMA handle pointer
  * param format Pointer to FlexIO I2S audio data format structure.
  * param srcClock_Hz FlexIO I2S clock source frequency in Hz. It should be 0 while in slave mode.
- * retval kStatus_Success Audio format set successfully.
- * retval kStatus_InvalidArgument The input arguments is invalid.
  */
 void FLEXIO_I2S_TransferSetFormatDMA(FLEXIO_I2S_Type *base,
                                      flexio_i2s_dma_handle_t *handle,

@@ -1,6 +1,6 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/slcd_engine
@@ -54,7 +54,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_port)
 #    include(driver_lpuart_freertos)
 #    include(driver_uart_freertos)
-#    include(CMSIS_Include_dsp)
+#    include(driver_slcd_gdh_1247wp)
 #    include(driver_i2c)
 #    include(driver_i2c_freertos)
 #    include(driver_dmamux)
@@ -73,13 +73,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpuart_dma)
 #    include(driver_ewm)
 #    include(driver_lpuart)
+#    include(CMSIS_Include_core_cm)
 #    include(middleware_mmcau_common_files)
-#    include(driver_rnga)
+#    include(driver_xbar)
 #    include(middleware_freertos-kernel_extension)
 #    include(utility_shell)
 #    include(utility_notifier)
 #    include(driver_wdog)
-#    include(CMSIS_Include_core_cm0plus)
+#    include(utility_assert_lite)
 #    include(driver_sysmpu)
 #    include(driver_vref)
 #    include(driver_mmau)
@@ -94,8 +95,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_uart)
 #    include(driver_qtmr_2)
 #    include(utilities_misc_utilities)
-#    include(utility_assert_lite)
-#    include(CMSIS_Include_common)
+#    include(driver_rnga)
 #    include(driver_common)
 #    include(driver_uart_dma)
 #    include(driver_smc)
@@ -107,11 +107,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_pit)
 #    include(driver_afe)
 #    include(component_serial_manager_uart)
-#    include(driver_slcd_gdh_1247wp)
 #    include(driver_pmc)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)
 #    include(driver_slcd_engine)
 #    include(driver_spi_freertos)
 #    include(middleware_freertos-kernel_MKM35Z7)
-#    include(driver_xbar)

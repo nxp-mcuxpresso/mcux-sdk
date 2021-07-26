@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -280,10 +280,6 @@ uint32_t ADC12_GetChannelStatusFlags(ADC_Type *base, uint32_t channelGroup)
  *
  * This auto calibration helps to adjust the gain automatically according to the converter's working environment.
  * Execute the calibration before conversion. Note that the software trigger should be used during calibration.
- *
- * note The calibration function has bug in the SOC. The calibration failed flag may be set after calibration process
- * even if you configure the ADC12 as the reference manual correctly. It is a known issue now and may be fixed in the
- * future.
  *
  * param base ADC12 peripheral base address.
  * retval kStatus_Success Calibration is done successfully.

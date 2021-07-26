@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2020 ,2021 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,7 +20,7 @@ product: Clocks v7.0
 processor: LPC802
 package_id: LPC802M001JDH20
 mcu_data: ksdk2_0
-processor_version: 0.7.8
+processor_version: 9.0.0
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
 #include "fsl_power.h"
@@ -163,3 +163,4 @@ void BOARD_BootClockFRO30M(void)
     /*!< Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKFRO30M_CORE_CLOCK;
 }
+

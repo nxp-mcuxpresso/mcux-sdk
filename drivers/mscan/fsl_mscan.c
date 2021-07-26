@@ -537,9 +537,8 @@ void MSCAN_SetTimingConfig(MSCAN_Type *base, const mscan_timing_config_t *config
     MSCAN_EnterInitMode(base);
 
     /* Cleaning previous Timing Setting. */
-    base->CANBTR0 &= ~((uint8_t)MSCAN_CANBTR0_BRP_MASK | (uint8_t)MSCAN_CANBTR0_SJW_MASK);
-    base->CANBTR1 &=
-        ~((uint8_t)MSCAN_CANBTR1_TSEG1_MASK | (uint8_t)MSCAN_CANBTR1_TSEG2_MASK | (uint8_t)MSCAN_CANBTR1_SAMP_MASK);
+    base->CANBTR0 &= (uint8_t)(~(MSCAN_CANBTR0_BRP_MASK | MSCAN_CANBTR0_SJW_MASK));
+    base->CANBTR1 &= (uint8_t)(~(MSCAN_CANBTR1_TSEG1_MASK | MSCAN_CANBTR1_TSEG2_MASK | MSCAN_CANBTR1_SAMP_MASK));
 
     /* Updating Timing Setting according to configuration structure. */
     base->CANBTR0 |= (MSCAN_CANBTR0_BRP(config->priDiv) | MSCAN_CANBTR0_SJW(config->sJumpwidth));
@@ -565,8 +564,8 @@ void MSCAN_SetTimingConfig(MSCAN_Type *base, const mscan_timing_config_t *config
 status_t MSCAN_WriteTxMb(MSCAN_Type *base, mscan_frame_t *pTxFrame)
 {
     uint8_t txEmptyFlag;
-    mscan_mb_t mb = {0};
-    IDR1_3_UNION sIDR1, sIDR3;
+    mscan_mb_t mb      = {0};
+    IDR1_3_UNION sIDR1 = {0}, sIDR3 = {0};
     status_t status;
     uint8_t i;
 
@@ -654,8 +653,8 @@ status_t MSCAN_WriteTxMb(MSCAN_Type *base, mscan_frame_t *pTxFrame)
  */
 status_t MSCAN_ReadRxMb(MSCAN_Type *base, mscan_frame_t *pRxFrame)
 {
-    IDR1_3_UNION sIDR1;
-    IDR1_3_UNION sIDR3;
+    IDR1_3_UNION sIDR1 = {0};
+    IDR1_3_UNION sIDR3 = {0};
     uint8_t i;
     status_t status;
 

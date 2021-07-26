@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -73,11 +73,11 @@ enum _mu_status_flags
 #endif
 
 #if (defined(FSL_FEATURE_MU_HAS_SR_RS) && FSL_FEATURE_MU_HAS_SR_RS)
-    kMU_OtherSideInResetFlag = MU_SR_RS_MASK /*!< The other side is in reset. */
+    kMU_OtherSideInResetFlag = MU_SR_RS_MASK, /*!< The other side is in reset. */
 #endif
 
 #if (defined(FSL_FEATURE_MU_HAS_SR_MURIP) && FSL_FEATURE_MU_HAS_SR_MURIP)
-        kMU_MuResetInterruptFlag = MU_SR_MURIP_MASK, /*!< The other side initializes MU reset. */
+    kMU_MuResetInterruptFlag = MU_SR_MURIP_MASK, /*!< The other side initializes MU reset. */
 #endif
 #if (defined(FSL_FEATURE_MU_HAS_SR_HRIP) && FSL_FEATURE_MU_HAS_SR_HRIP)
     kMU_HardwareResetInterruptFlag = MU_SR_HRIP_MASK, /*!< Current side has been hardware reset by the other side. */
@@ -370,7 +370,7 @@ static inline uint32_t MU_GetStatusFlags(MU_Type *base)
  */
 static inline uint32_t MU_GetInterruptsPending(MU_Type *base)
 {
-    uint32_t irqMask = base->CR & (MU_CR_GIRn_MASK | MU_CR_TIEn_MASK | MU_CR_RIEn_MASK);
+    uint32_t irqMask = base->CR & (MU_CR_GIEn_MASK | MU_CR_TIEn_MASK | MU_CR_RIEn_MASK);
     return (base->SR & irqMask);
 }
 

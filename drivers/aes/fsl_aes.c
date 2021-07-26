@@ -230,33 +230,48 @@ static void aes_one_block(AES_Type *base, uint8_t *output, const uint8_t *input)
     int index;
     uint32_t aesStat;
 
+    /* If defined FLS_FEATURE_AES_IRQ_DISABLE, disable IRQs during computing AES block, */
+    /* please note that this can affect IRQs latency */
+#if defined(FLS_FEATURE_AES_IRQ_DISABLE) && (FLS_FEATURE_AES_IRQ_DISABLE > 0)
+    uint32_t currPriMask;
+    /* disable global interrupt */
+    currPriMask = DisableGlobalIRQ();
+#endif /* FLS_FEATURE_AES_IRQ_DISABLE */
+
     /* If the IN_READY bit in STAT register is 1, write the input text in the INTEXT [3:0]
        registers. */
-    index = 0;
-    while (index < 4)
+    aesStat = base->STAT;
+
+    /* Wait until input text can be written. */
+    while (0U == (aesStat & AES_STAT_IN_READY_MASK))
     {
         aesStat = base->STAT;
-
-        if (0U != (aesStat & AES_STAT_IN_READY_MASK))
-        {
-            base->INTEXT[index] = aes_get_word_from_unaligned(input);
-            input += sizeof(uint32_t);
-            index++;
-        }
     }
 
-    index = 0;
-    while (index < 4)
+    /* Write input data into INTEXT regs */
+    for (index = 0; index < 4; index++)
+    {
+        base->INTEXT[index] = aes_get_word_from_unaligned(input);
+        input += sizeof(uint32_t);
+    }
+
+    /* Wait until output text is ready to be read */
+    while (0U == (aesStat & AES_STAT_OUT_READY_MASK))
     {
         aesStat = base->STAT;
-
-        if (0U != (aesStat & AES_STAT_OUT_READY_MASK))
-        {
-            aes_set_unaligned_from_word(base->OUTTEXT[index], output);
-            output += sizeof(uint32_t);
-            index++;
-        }
     }
+
+    /* Read output data from OUTTEXT regs */
+    for (index = 0; index < 4; index++)
+    {
+        aes_set_unaligned_from_word(base->OUTTEXT[index], output);
+        output += sizeof(uint32_t);
+    }
+
+#if defined(FLS_FEATURE_AES_IRQ_DISABLE) && (FLS_FEATURE_AES_IRQ_DISABLE > 0)
+    /* global interrupt enable */
+    EnableGlobalIRQ(currPriMask);
+#endif /* FLS_FEATURE_AES_IRQ_DISABLE */
 }
 
 /*!

@@ -20,6 +20,8 @@
 /* Macros for entire XBAR_CTRL register.  */
 #define XBAR_CTRLx(base, index) (((volatile uint16_t *)(&((base)->CTRL0)))[(index)])
 
+#define XBAR_CTRL_STS_MASK ((uint32_t)XBAR_CTRL0_STS0_MASK | ((uint32_t)XBAR_CTRL0_STS0_MASK << 8UL))
+
 typedef union
 {
     uint8_t _u8[2];
@@ -57,9 +59,10 @@ static const clock_ip_name_t s_xbarClock[] = XBAR_CLOCKS;
 static uint32_t XBAR_GetInstance(XBAR_Type *base)
 {
     uint32_t instance;
+    uint32_t xbarInstanceCount = ARRAY_SIZE(s_xbarBases);
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_xbarBases); instance++)
+    for (instance = 0; instance < xbarInstanceCount; instance++)
     {
         if (s_xbarBases[instance] == base)
         {
@@ -67,7 +70,7 @@ static uint32_t XBAR_GetInstance(XBAR_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_xbarBases));
+    assert(instance < xbarInstanceCount);
 
     return instance;
 }
@@ -156,10 +159,11 @@ uint32_t XBAR_GetStatusFlags(XBAR_Type *base)
 {
     uint32_t status_flag;
 
-    status_flag = ((uint32_t)base->CTRL0 & (XBAR_CTRL0_STS0_MASK | XBAR_CTRL0_STS1_MASK));
+    status_flag = (uint32_t)base->CTRL0 & XBAR_CTRL_STS_MASK;
 
-    status_flag |= (((uint32_t)base->CTRL1 & (XBAR_CTRL1_STS2_MASK | XBAR_CTRL1_STS3_MASK)) << 16U);
-
+#if FSL_FEATURE_XBAR_INTERRUPT_COUNT > 2
+    status_flag |= (((uint32_t)base->CTRL1 & XBAR_CTRL_STS_MASK) << 16U);
+#endif
     return status_flag;
 }
 
@@ -176,20 +180,24 @@ void XBAR_ClearStatusFlags(XBAR_Type *base, uint32_t mask)
     /* Assign regVal to CTRL0 register's value */
     regVal = (base->CTRL0);
     /* Perform this command to avoid writing 1 into interrupt flag bits */
-    regVal &= (uint16_t)(~(XBAR_CTRL0_STS0_MASK | XBAR_CTRL0_STS1_MASK));
+    regVal &= (uint16_t)(~(XBAR_CTRL_STS_MASK));
     /* Write 1 to interrupt flag bits corresponding to mask */
-    regVal |= (uint16_t)(mask & (XBAR_CTRL0_STS0_MASK | XBAR_CTRL0_STS1_MASK));
+    regVal |= (uint16_t)(mask & XBAR_CTRL_STS_MASK);
+
     /* Write regVal value into CTRL0 register */
     base->CTRL0 = regVal;
 
     /* Assign regVal to CTRL1 register's value */
+#if FSL_FEATURE_XBAR_INTERRUPT_COUNT > 2
     regVal = (base->CTRL1);
     /* Perform this command to avoid writing 1 into interrupt flag bits */
-    regVal &= (uint16_t)(~(XBAR_CTRL1_STS2_MASK | XBAR_CTRL1_STS3_MASK));
+    regVal &= (uint16_t)(~(XBAR_CTRL_STS_MASK));
     /* Write 1 to interrupt flag bits corresponding to mask */
-    regVal |= (uint16_t)((mask >> 16U) & (XBAR_CTRL1_STS2_MASK | XBAR_CTRL1_STS3_MASK));
+    regVal |= (uint16_t)((mask >> 16U) & (XBAR_CTRL_STS_MASK));
+
     /* Write regVal value into CTRL1 register */
     base->CTRL1 = regVal;
+#endif
 }
 
 /*!
@@ -220,7 +228,7 @@ void XBAR_SetOutputSignalConfig(XBAR_Type *base,
     uint8_t byteInReg;
     xbar_u8_u16_t regVal;
 
-    assert(outputIndex < (uint32_t)FSL_FEATURE_XBAR_INTERRUPT_COUNT);
+    assert(outputIndex < (uint8_t)FSL_FEATURE_XBAR_INTERRUPT_COUNT);
 
     regIndex  = outputIndex / 2U;
     byteInReg = outputIndex % 2U;
@@ -228,8 +236,7 @@ void XBAR_SetOutputSignalConfig(XBAR_Type *base,
     regVal._u16 = XBAR_CTRLx(base, regIndex);
 
     /* Don't clear the status flags. */
-    regVal._u16 &= (uint16_t)(~(XBAR_CTRL0_STS0_MASK | XBAR_CTRL0_STS1_MASK));
-
+    regVal._u16 &= (uint16_t)(~(XBAR_CTRL_STS_MASK));
     regVal._u8[byteInReg] = (uint8_t)(XBAR_CTRL0_EDGE0(controlConfig->activeEdge) |
                                       (uint16_t)(((uint32_t)controlConfig->requestType) << XBAR_CTRL0_DEN0_SHIFT));
 

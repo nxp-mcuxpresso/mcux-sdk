@@ -12,6 +12,18 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 )
 endif()
 
+if(CONFIG_USE_middleware_freertos-kernel_MIMXRT1166_cm4)
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/fsl_os_abstraction_free_rtos.c
+)
+endif()
+
+if(CONFIG_USE_middleware_freertos-kernel_MIMXRT1166_cm7)
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/fsl_os_abstraction_free_rtos.c
+)
+endif()
+
 if(CONFIG_USE_middleware_freertos-kernel_MIMXRT1052)
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/fsl_os_abstraction_free_rtos.c
@@ -19,12 +31,6 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 endif()
 
 if(CONFIG_USE_middleware_freertos-kernel_MIMXRT1064)
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_LIST_DIR}/fsl_os_abstraction_free_rtos.c
-)
-endif()
-
-if(CONFIG_USE_middleware_freertos-kernel_LPC54114_cm4)
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/fsl_os_abstraction_free_rtos.c
 )
@@ -84,13 +90,19 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 )
 endif()
 
-if(CONFIG_USE_middleware_freertos-kernel_LPC54S018M)
+if(CONFIG_USE_middleware_freertos-kernel_MIMXRT1176_cm4)
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/fsl_os_abstraction_free_rtos.c
 )
 endif()
 
-if(CONFIG_USE_middleware_freertos-kernel_MKL27Z644)
+if(CONFIG_USE_middleware_freertos-kernel_MIMXRT1176_cm7)
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/fsl_os_abstraction_free_rtos.c
+)
+endif()
+
+if(CONFIG_USE_middleware_freertos-kernel_LPC54S018M)
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/fsl_os_abstraction_free_rtos.c
 )
@@ -132,7 +144,25 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 )
 endif()
 
+if(CONFIG_USE_middleware_freertos-kernel_MIMXRT595S_cm33)
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/fsl_os_abstraction_free_rtos.c
+)
+endif()
+
 if(CONFIG_USE_middleware_freertos-kernel_MIMXRT1015)
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/fsl_os_abstraction_free_rtos.c
+)
+endif()
+
+if(CONFIG_USE_middleware_freertos-kernel_LPC54114_cm4)
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/fsl_os_abstraction_free_rtos.c
+)
+endif()
+
+if(CONFIG_USE_middleware_freertos-kernel_MKL27Z644)
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/fsl_os_abstraction_free_rtos.c
 )

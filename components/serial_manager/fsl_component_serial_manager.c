@@ -651,8 +651,8 @@ static void SerialManager_TxCallback(void *callbackParam,
     serial_manager_handle_t *handle;
     serial_manager_write_handle_t *writeHandle;
 
-    assert(callbackParam);
-    assert(message);
+    assert(NULL != callbackParam);
+    assert(NULL != message);
 
     handle = (serial_manager_handle_t *)callbackParam;
 
@@ -710,8 +710,8 @@ void SerialManager_RxCallback(void *callbackParam,
     uint32_t ringBufferLength;
     uint32_t primask;
 
-    assert(callbackParam);
-    assert(message);
+    assert(NULL != callbackParam);
+    assert(NULL != message);
 
     handle = (serial_manager_handle_t *)callbackParam;
 
@@ -815,11 +815,21 @@ void SerialManager_RxCallback(void *callbackParam,
 
 /*
  * This function is used for perdiodic check if the transfer is complete, and will be called in blocking transfer at
- * non-blocking mode. The predic unit is ms and default value is define by SERIAL_MANAGER_TIME_DELAY_DEFAULT_VALUE. The
- * function SerialManager_TimeDelay() is a weak function, so it could be re-implemented by upper layer.
+ * non-blocking mode. The perdiodic unit is ms and default value is define by
+ * SERIAL_MANAGER_WRITE_TIME_DELAY_DEFAULT_VALUE/SERIAL_MANAGER_READ_TIME_DELAY_DEFAULT_VALUE. The function
+ * SerialManager_WriteTimeDelay()/SerialManager_ReadTimeDelay() is a weak function, so it could be re-implemented by
+ * upper layer.
  */
-__WEAK_FUNC void SerialManager_TimeDelay(uint32_t ms);
-__WEAK_FUNC void SerialManager_TimeDelay(uint32_t ms)
+__WEAK_FUNC void SerialManager_WriteTimeDelay(uint32_t ms);
+__WEAK_FUNC void SerialManager_WriteTimeDelay(uint32_t ms)
+{
+#if defined(OSA_USED)
+    OSA_TimeDelay(ms);
+#endif
+}
+
+__WEAK_FUNC void SerialManager_ReadTimeDelay(uint32_t ms);
+__WEAK_FUNC void SerialManager_ReadTimeDelay(uint32_t ms)
 {
 #if defined(OSA_USED)
     OSA_TimeDelay(ms);
@@ -847,13 +857,13 @@ static serial_manager_status_t SerialManager_Write(serial_write_handle_t writeHa
     uint32_t primask;
     uint8_t isEmpty = 0U;
 
-    assert(writeHandle);
-    assert(buffer);
-    assert(length);
+    assert(NULL != writeHandle);
+    assert(NULL != buffer);
+    assert(length > 0U);
 
     serialWriteHandle = (serial_manager_write_handle_t *)writeHandle;
     handle            = serialWriteHandle->serialManagerHandle;
-    assert(handle);
+    assert(NULL != handle);
 #if (defined(SERIAL_MANAGER_NON_BLOCKING_DUAL_MODE) && (SERIAL_MANAGER_NON_BLOCKING_DUAL_MODE > 0U))
     if ((handle->handleType == kSerialManager_Blocking) || (kSerialManager_TransmissionBlocking == mode))
     {
@@ -920,7 +930,7 @@ static serial_manager_status_t SerialManager_Write(serial_write_handle_t writeHa
             }
             else
             {
-                SerialManager_TimeDelay(SERIAL_MANAGER_TIME_DELAY_DEFAULT_VALUE);
+                SerialManager_WriteTimeDelay(SERIAL_MANAGER_WRITE_TIME_DELAY_DEFAULT_VALUE);
             }
         }
     }
@@ -938,14 +948,14 @@ static serial_manager_status_t SerialManager_Read(serial_read_handle_t readHandl
     uint32_t dataLength;
     uint32_t primask;
 
-    assert(readHandle);
-    assert(buffer);
-    assert(length);
+    assert(NULL != readHandle);
+    assert(NULL != buffer);
+    assert(length > 0U);
 
     serialReadHandle = (serial_manager_read_handle_t *)readHandle;
 
     handle = serialReadHandle->serialManagerHandle;
-    assert(handle);
+    assert(NULL != handle);
 #if (defined(SERIAL_MANAGER_NON_BLOCKING_DUAL_MODE) && (SERIAL_MANAGER_NON_BLOCKING_DUAL_MODE > 0U))
     if (handle->handleType == kSerialManager_Blocking)
     /* if ((handle->handleType == kSerialManager_Blocking) || (kSerialManager_TransmissionBlocking == mode)) */
@@ -1019,6 +1029,7 @@ static serial_manager_status_t SerialManager_Read(serial_read_handle_t readHandl
         {
             while (serialReadHandle->transfer.length > serialReadHandle->transfer.soFar)
             {
+                SerialManager_ReadTimeDelay(SERIAL_MANAGER_READ_TIME_DELAY_DEFAULT_VALUE);
             }
         }
     }
@@ -1068,9 +1079,9 @@ serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const s
     serial_manager_handle_t *handle;
     serial_manager_status_t status = kStatus_SerialManager_Error;
 
-    assert(config);
+    assert(NULL != config);
 
-    assert(serialHandle);
+    assert(NULL != serialHandle);
     assert(SERIAL_MANAGER_HANDLE_SIZE >= sizeof(serial_manager_handle_t));
 
     handle = (serial_manager_handle_t *)serialHandle;
@@ -1083,8 +1094,8 @@ serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const s
     else
 #endif /* SERIAL_MANAGER_NON_BLOCKING_DUAL_MODE */
     {
-        assert(config->ringBuffer);
-        assert(config->ringBufferSize);
+        assert(NULL != config->ringBuffer);
+        assert(config->ringBufferSize > 0U);
         (void)memset(handle, 0, SERIAL_MANAGER_HANDLE_SIZE);
     }
     handle->handleType = config->blockType;
@@ -1220,7 +1231,7 @@ serial_manager_status_t SerialManager_Deinit(serial_handle_t serialHandle)
     uint32_t primask;
     serial_manager_status_t serialManagerStatus = kStatus_SerialManager_Success;
 
-    assert(serialHandle);
+    assert(NULL != serialHandle);
 
     handle = (serial_manager_handle_t *)serialHandle;
 
@@ -1287,8 +1298,8 @@ serial_manager_status_t SerialManager_OpenWriteHandle(serial_handle_t serialHand
     serial_manager_write_handle_t *serialWriteHandle;
     uint32_t primask;
 
-    assert(serialHandle);
-    assert(writeHandle);
+    assert(NULL != serialHandle);
+    assert(NULL != writeHandle);
     assert(SERIAL_MANAGER_WRITE_HANDLE_SIZE >= sizeof(serial_manager_write_handle_t));
 
     handle            = (serial_manager_handle_t *)serialHandle;
@@ -1324,12 +1335,12 @@ serial_manager_status_t SerialManager_CloseWriteHandle(serial_write_handle_t wri
     serial_manager_write_handle_t *serialWriteHandle;
     uint32_t primask;
 
-    assert(writeHandle);
+    assert(NULL != writeHandle);
 
     serialWriteHandle = (serial_manager_write_handle_t *)writeHandle;
     handle            = (serial_manager_handle_t *)(void *)serialWriteHandle->serialManagerHandle;
 
-    assert(handle);
+    assert(NULL != handle);
 #if (defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
     assert(SERIAL_MANAGER_WRITE_TAG == serialWriteHandle->tag);
 #endif
@@ -1356,8 +1367,8 @@ serial_manager_status_t SerialManager_OpenReadHandle(serial_handle_t serialHandl
     serial_manager_status_t serialManagerStatus = kStatus_SerialManager_Success;
     uint32_t primask;
 
-    assert(serialHandle);
-    assert(readHandle);
+    assert(NULL != serialHandle);
+    assert(NULL != readHandle);
     assert(SERIAL_MANAGER_READ_HANDLE_SIZE >= sizeof(serial_manager_read_handle_t));
 
     handle           = (serial_manager_handle_t *)serialHandle;
@@ -1395,7 +1406,7 @@ serial_manager_status_t SerialManager_CloseReadHandle(serial_read_handle_t readH
     serial_manager_read_handle_t *serialReadHandle;
     uint32_t primask;
 
-    assert(readHandle);
+    assert(NULL != readHandle);
 
     serialReadHandle = (serial_manager_read_handle_t *)readHandle;
     handle           = (serial_manager_handle_t *)(void *)serialReadHandle->serialManagerHandle;
@@ -1456,11 +1467,11 @@ serial_manager_status_t SerialManager_CancelWriting(serial_write_handle_t writeH
     uint8_t isNotUsed        = 0U;
     uint8_t isNotNeed2Cancel = 0U;
 
-    assert(writeHandle);
+    assert(NULL != writeHandle);
 
     serialWriteHandle = (serial_manager_write_handle_t *)writeHandle;
 
-    assert(serialWriteHandle->serialManagerHandle);
+    assert(NULL != serialWriteHandle->serialManagerHandle);
     assert(SERIAL_MANAGER_WRITE_TAG == serialWriteHandle->tag);
 
     if ((NULL != serialWriteHandle->transfer.buffer) &&
@@ -1566,7 +1577,7 @@ serial_manager_status_t SerialManager_CancelReading(serial_read_handle_t readHan
     uint8_t *buffer;
     uint32_t primask;
 
-    assert(readHandle);
+    assert(NULL != readHandle);
 
     serialReadHandle = (serial_manager_read_handle_t *)readHandle;
 
@@ -1601,7 +1612,7 @@ serial_manager_status_t SerialManager_TryRead(serial_read_handle_t readHandle,
                                               uint32_t length,
                                               uint32_t *receivedLength)
 {
-    assert(receivedLength);
+    assert(NULL != receivedLength);
 
     return SerialManager_Read(readHandle, buffer, length, kSerialManager_TransmissionBlocking, receivedLength);
 }
@@ -1612,7 +1623,7 @@ serial_manager_status_t SerialManager_InstallTxCallback(serial_write_handle_t wr
 {
     serial_manager_write_handle_t *serialWriteHandle;
 
-    assert(writeHandle);
+    assert(NULL != writeHandle);
 
     serialWriteHandle = (serial_manager_write_handle_t *)writeHandle;
 
@@ -1630,7 +1641,7 @@ serial_manager_status_t SerialManager_InstallRxCallback(serial_read_handle_t rea
 {
     serial_manager_read_handle_t *serialReadHandle;
 
-    assert(readHandle);
+    assert(NULL != readHandle);
 
     serialReadHandle = (serial_manager_read_handle_t *)readHandle;
 
@@ -1648,7 +1659,7 @@ serial_manager_status_t SerialManager_EnterLowpower(serial_handle_t serialHandle
     serial_manager_handle_t *handle;
     serial_manager_status_t status = kStatus_SerialManager_Error;
 
-    assert(serialHandle);
+    assert(NULL != serialHandle);
 
     handle = (serial_manager_handle_t *)serialHandle;
 
@@ -1687,7 +1698,7 @@ serial_manager_status_t SerialManager_ExitLowpower(serial_handle_t serialHandle)
     serial_manager_handle_t *handle;
     serial_manager_status_t status = kStatus_SerialManager_Error;
 
-    assert(serialHandle);
+    assert(NULL != serialHandle);
 
     handle = (serial_manager_handle_t *)serialHandle;
 

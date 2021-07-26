@@ -12,6 +12,11 @@
 #include "fsl_common.h"
 #include "fsl_adapter_i2c.h"
 
+/*!
+ * @addtogroup codec_i2c
+ * @{
+ */ 
+
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -108,4 +113,5 @@ status_t CODEC_I2C_Receive(void *handle,
 }
 #endif
 
+/*! @} */
 #endif /* _FSL_CODEC_I2C_H_ */

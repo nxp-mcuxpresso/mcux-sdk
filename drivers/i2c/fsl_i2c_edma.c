@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -418,9 +418,6 @@ void I2C_MasterCreateEDMAHandle(I2C_Type *base,
     handle->completionCallback = callback;
     handle->userData           = userData;
 
-    /* Set the base for the handle. */
-    base = base;
-
     /* Set the handle for EDMA. */
     handle->dmaHandle = edmaHandle;
 
@@ -449,10 +446,6 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
 
     status_t result;
     uint8_t tmpReg;
-    volatile uint8_t dummy = 0;
-
-    /* Add this to avoid build warning. */
-    dummy++;
 
     /* Disable dma xfer. */
     I2C_EnableDMA(base, false);
@@ -490,7 +483,7 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
             base->C1 &= ~(uint8_t)(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK);
 
             /* Read dummy to release the bus. */
-            dummy = base->D;
+            (void)base->D;
 
             /* Enabe dma transfer. */
             I2C_EnableDMA(base, true);
@@ -519,7 +512,7 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
             base->C1 = tmpReg;
 
             /* Read dummy to release the bus. */
-            dummy = base->D;
+            (void)base->D;
         }
         else
         {

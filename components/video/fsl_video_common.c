@@ -7,7 +7,7 @@
  */
 
 #include "fsl_video_common.h"
-#if defined(FSL_RTOS_FREE_RTOS)
+#if defined(SDK_OS_FREE_RTOS)
 #include "FreeRTOS.h"
 #include "task.h"
 #endif
@@ -32,7 +32,7 @@ bool VIDEO_IsYUV(video_pixel_format_t format)
 
 void VIDEO_DelayMs(uint32_t ms)
 {
-#if defined(FSL_RTOS_FREE_RTOS)
+#if defined(SDK_OS_FREE_RTOS)
     TickType_t tick;
 
     tick = ms * configTICK_RATE_HZ / 1000U;

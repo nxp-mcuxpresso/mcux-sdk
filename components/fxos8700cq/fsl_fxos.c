@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -178,24 +178,24 @@ status_t FXOS_ReadSensorData(fxos_handle_t *fxos_handle, fxos_data_t *sensorData
     uint8_t tmp_buff[6] = {0};
     uint8_t i           = 0;
 
-    if ((!FXOS_ReadReg(fxos_handle, OUT_X_MSB_REG, tmp_buff, 6)) == kStatus_Success)
+    if ((FXOS_ReadReg(fxos_handle, OUT_X_MSB_REG, tmp_buff, 6)) != kStatus_Success)
     {
         status = kStatus_Fail;
     }
 
-    for (i = 0; i < 6; i++)
+    for (i = 0U; i < 6U; i++)
     {
-        ((int8_t *)sensorData)[i] = tmp_buff[i];
+        ((uint8_t *)sensorData)[i] = tmp_buff[i];
     }
 
-    if ((!FXOS_ReadReg(fxos_handle, M_OUT_X_MSB_REG, tmp_buff, 6)) == kStatus_Success)
+    if ((FXOS_ReadReg(fxos_handle, M_OUT_X_MSB_REG, tmp_buff, 6)) != kStatus_Success)
     {
         status = kStatus_Fail;
     }
 
-    for (i = 0; i < 6; i++)
+    for (i = 0U; i < 6U; i++)
     {
-        ((int8_t *)sensorData)[i + 6] = tmp_buff[i];
+        ((uint8_t *)sensorData)[i + 6U] = tmp_buff[i];
     }
 
     return status;
@@ -206,7 +206,7 @@ status_t FXOS_ReadReg(fxos_handle_t *handle, uint8_t reg, uint8_t *val, uint8_t 
     assert(handle);
     assert(val);
 
-    if (!handle->I2C_ReceiveFunc)
+    if ((handle->I2C_ReceiveFunc) == NULL)
     {
         return kStatus_Fail;
     }
@@ -218,7 +218,7 @@ status_t FXOS_WriteReg(fxos_handle_t *handle, uint8_t reg, uint8_t val)
 {
     assert(handle);
 
-    if (!handle->I2C_SendFunc)
+    if ((handle->I2C_SendFunc) == NULL)
     {
         return kStatus_Fail;
     }

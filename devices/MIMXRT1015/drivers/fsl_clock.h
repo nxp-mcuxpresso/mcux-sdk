@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,8 +39,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.4.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief CLOCK driver version 2.5.0. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 
 /* analog pll definition */
 #define CCM_ANALOG_PLL_BYPASS_SHIFT         (16U)
@@ -406,10 +406,9 @@ typedef enum _clock_ip_name
     kCLOCK_Gpio2       = (0U << 8U) | CCM_CCGR0_CG15_SHIFT, /*!< CCGR0, CG15  */
 
     /* CCM CCGR1 */
-    kCLOCK_Lpspi1 = (1U << 8U) | CCM_CCGR1_CG0_SHIFT,   /*!< CCGR1, CG0   */
-    kCLOCK_Lpspi2 = (1U << 8U) | CCM_CCGR1_CG1_SHIFT,   /*!< CCGR1, CG1   */
-    kCLOCK_Pit    = (1U << 8U) | CCM_CCGR1_CG6_SHIFT,   /*!< CCGR1, CG6   */
-                                                        /*!< CCGR1, CG7, Reserved */
+    kCLOCK_Lpspi1  = (1U << 8U) | CCM_CCGR1_CG0_SHIFT,  /*!< CCGR1, CG0   */
+    kCLOCK_Lpspi2  = (1U << 8U) | CCM_CCGR1_CG1_SHIFT,  /*!< CCGR1, CG1   */
+    kCLOCK_Pit     = (1U << 8U) | CCM_CCGR1_CG6_SHIFT,  /*!< CCGR1, CG6   */
     kCLOCK_Adc1    = (1U << 8U) | CCM_CCGR1_CG8_SHIFT,  /*!< CCGR1, CG8   */
     kCLOCK_Gpt1    = (1U << 8U) | CCM_CCGR1_CG10_SHIFT, /*!< CCGR1, CG10  */
     kCLOCK_Gpt1S   = (1U << 8U) | CCM_CCGR1_CG11_SHIFT, /*!< CCGR1, CG11  */
@@ -419,64 +418,48 @@ typedef enum _clock_ip_name
     kCLOCK_Gpio5   = (1U << 8U) | CCM_CCGR1_CG15_SHIFT, /*!< CCGR1, CG15  */
 
     /* CCM CCGR2 */
-    kCLOCK_OcramExsc = (2U << 8U) | CCM_CCGR2_CG0_SHIFT,  /*!< CCGR2, CG0   */
-                                                          /*!< CCGR2, CG1, Reserved */
-    kCLOCK_IomuxcSnvs = (2U << 8U) | CCM_CCGR2_CG2_SHIFT, /*!< CCGR2, CG2   */
-    kCLOCK_Lpi2c1     = (2U << 8U) | CCM_CCGR2_CG3_SHIFT, /*!< CCGR2, CG3   */
-    kCLOCK_Lpi2c2     = (2U << 8U) | CCM_CCGR2_CG4_SHIFT, /*!< CCGR2, CG4   */
-    kCLOCK_Ocotp      = (2U << 8U) | CCM_CCGR2_CG6_SHIFT, /*!< CCGR2, CG6   */
-                                                          /*!< CCGR2, CG7, Reserved */
-                                                          /*!< CCGR2, CG8, Reserved */
-                                                          /*!< CCGR2, CG9, Reserved */
-                                                          /*!< CCGR2, CG10, Reserved */
-    kCLOCK_Xbar1 = (2U << 8U) | CCM_CCGR2_CG11_SHIFT,     /*!< CCGR2, CG11  */
-    kCLOCK_Xbar2 = (2U << 8U) | CCM_CCGR2_CG12_SHIFT,     /*!< CCGR2, CG12  */
-    kCLOCK_Gpio3 = (2U << 8U) | CCM_CCGR2_CG13_SHIFT,     /*!< CCGR2, CG13  */
-                                                          /*!< CCGR2, CG14, Reserved */
-                                                          /*!< CCGR2, CG15, Reserved */
+    kCLOCK_OcramExsc  = (2U << 8U) | CCM_CCGR2_CG0_SHIFT,  /*!< CCGR2, CG0   */
+    kCLOCK_IomuxcSnvs = (2U << 8U) | CCM_CCGR2_CG2_SHIFT,  /*!< CCGR2, CG2   */
+    kCLOCK_Lpi2c1     = (2U << 8U) | CCM_CCGR2_CG3_SHIFT,  /*!< CCGR2, CG3   */
+    kCLOCK_Lpi2c2     = (2U << 8U) | CCM_CCGR2_CG4_SHIFT,  /*!< CCGR2, CG4   */
+    kCLOCK_Ocotp      = (2U << 8U) | CCM_CCGR2_CG6_SHIFT,  /*!< CCGR2, CG6   */
+    kCLOCK_Xbar1      = (2U << 8U) | CCM_CCGR2_CG11_SHIFT, /*!< CCGR2, CG11  */
+    kCLOCK_Xbar2      = (2U << 8U) | CCM_CCGR2_CG12_SHIFT, /*!< CCGR2, CG12  */
+    kCLOCK_Gpio3      = (2U << 8U) | CCM_CCGR2_CG13_SHIFT, /*!< CCGR2, CG13  */
 
     /* CCM CCGR3 */
-    /*!< CCGR3, CG0, Reserved */
-    kCLOCK_Aoi = (3U << 8U) | CCM_CCGR3_CG4_SHIFT,            /*!< CCGR3, CG4   */
-                                                              /*!< CCGR3, CG5, Reserved */
-                                                              /*!< CCGR3, CG6, Reserved */
-    kCLOCK_Ewm0    = (3U << 8U) | CCM_CCGR3_CG7_SHIFT,        /*!< CCGR3, CG7   */
-    kCLOCK_Wdog1   = (3U << 8U) | CCM_CCGR3_CG8_SHIFT,        /*!< CCGR3, CG8   */
-    kCLOCK_FlexRam = (3U << 8U) | CCM_CCGR3_CG9_SHIFT,        /*!< CCGR3, CG9   */
-                                                              /*!< CCGR3, CG14, Reserved */
+    kCLOCK_Aoi           = (3U << 8U) | CCM_CCGR3_CG4_SHIFT,  /*!< CCGR3, CG4   */
+    kCLOCK_Ewm0          = (3U << 8U) | CCM_CCGR3_CG7_SHIFT,  /*!< CCGR3, CG7   */
+    kCLOCK_Wdog1         = (3U << 8U) | CCM_CCGR3_CG8_SHIFT,  /*!< CCGR3, CG8   */
+    kCLOCK_FlexRam       = (3U << 8U) | CCM_CCGR3_CG9_SHIFT,  /*!< CCGR3, CG9   */
     kCLOCK_IomuxcSnvsGpr = (3U << 8U) | CCM_CCGR3_CG15_SHIFT, /*!< CCGR3, CG15  */
 
     /* CCM CCGR4 */
-    kCLOCK_Sim_m7_clk_r = (4U << 8U) | CCM_CCGR4_CG0_SHIFT, /*!< CCGR4, CG0   */
-    kCLOCK_Iomuxc       = (4U << 8U) | CCM_CCGR4_CG1_SHIFT, /*!< CCGR4, CG1   */
-    kCLOCK_IomuxcGpr    = (4U << 8U) | CCM_CCGR4_CG2_SHIFT, /*!< CCGR4, CG2   */
-    kCLOCK_Bee          = (4U << 8U) | CCM_CCGR4_CG3_SHIFT, /*!< CCGR4, CG3   */
-    kCLOCK_SimM7        = (4U << 8U) | CCM_CCGR4_CG4_SHIFT, /*!< CCGR4, CG4   */
-    kCLOCK_SimM         = (4U << 8U) | CCM_CCGR4_CG6_SHIFT, /*!< CCGR4, CG6   */
-    kCLOCK_SimEms       = (4U << 8U) | CCM_CCGR4_CG7_SHIFT, /*!< CCGR4, CG7   */
-    kCLOCK_Pwm1         = (4U << 8U) | CCM_CCGR4_CG8_SHIFT, /*!< CCGR4, CG8   */
-                                                            /*!< CCGR4, CG10, Reserved */
-                                                            /*!< CCGR4, CG11, Reserved */
-    kCLOCK_Enc1 = (4U << 8U) | CCM_CCGR4_CG12_SHIFT,        /*!< CCGR4, CG12  */
-                                                            /*!< CCGR4, CG14, Reserved */
-                                                            /*!< CCGR4, CG15, Reserved */
+    kCLOCK_Sim_m7_clk_r = (4U << 8U) | CCM_CCGR4_CG0_SHIFT,  /*!< CCGR4, CG0   */
+    kCLOCK_Iomuxc       = (4U << 8U) | CCM_CCGR4_CG1_SHIFT,  /*!< CCGR4, CG1   */
+    kCLOCK_IomuxcGpr    = (4U << 8U) | CCM_CCGR4_CG2_SHIFT,  /*!< CCGR4, CG2   */
+    kCLOCK_Bee          = (4U << 8U) | CCM_CCGR4_CG3_SHIFT,  /*!< CCGR4, CG3   */
+    kCLOCK_SimM7        = (4U << 8U) | CCM_CCGR4_CG4_SHIFT,  /*!< CCGR4, CG4   */
+    kCLOCK_SimM         = (4U << 8U) | CCM_CCGR4_CG6_SHIFT,  /*!< CCGR4, CG6   */
+    kCLOCK_SimEms       = (4U << 8U) | CCM_CCGR4_CG7_SHIFT,  /*!< CCGR4, CG7   */
+    kCLOCK_Pwm1         = (4U << 8U) | CCM_CCGR4_CG8_SHIFT,  /*!< CCGR4, CG8   */
+    kCLOCK_Enc1         = (4U << 8U) | CCM_CCGR4_CG12_SHIFT, /*!< CCGR4, CG12  */
 
     /* CCM CCGR5 */
-    kCLOCK_Rom      = (5U << 8U) | CCM_CCGR5_CG0_SHIFT, /*!< CCGR5, CG0   */
-    kCLOCK_Flexio1  = (5U << 8U) | CCM_CCGR5_CG1_SHIFT, /*!< CCGR5, CG1   */
-    kCLOCK_Wdog3    = (5U << 8U) | CCM_CCGR5_CG2_SHIFT, /*!< CCGR5, CG2   */
-    kCLOCK_Dma      = (5U << 8U) | CCM_CCGR5_CG3_SHIFT, /*!< CCGR5, CG3   */
-    kCLOCK_Kpp      = (5U << 8U) | CCM_CCGR5_CG4_SHIFT, /*!< CCGR5, CG4   */
-    kCLOCK_Wdog2    = (5U << 8U) | CCM_CCGR5_CG5_SHIFT, /*!< CCGR5, CG5   */
-    kCLOCK_Aips_tz4 = (5U << 8U) | CCM_CCGR5_CG6_SHIFT, /*!< CCGR5, CG6   */
-    kCLOCK_Spdif    = (5U << 8U) | CCM_CCGR5_CG7_SHIFT, /*!< CCGR5, CG7   */
-                                                        /*!< CCGR5, CG8, Reserved */
-    kCLOCK_Sai1    = (5U << 8U) | CCM_CCGR5_CG9_SHIFT,  /*!< CCGR5, CG9   */
-    kCLOCK_Sai2    = (5U << 8U) | CCM_CCGR5_CG10_SHIFT, /*!< CCGR5, CG10  */
-    kCLOCK_Sai3    = (5U << 8U) | CCM_CCGR5_CG11_SHIFT, /*!< CCGR5, CG11  */
-    kCLOCK_Lpuart1 = (5U << 8U) | CCM_CCGR5_CG12_SHIFT, /*!< CCGR5, CG12  */
-    kCLOCK_SnvsHp  = (5U << 8U) | CCM_CCGR5_CG14_SHIFT, /*!< CCGR5, CG14  */
-    kCLOCK_SnvsLp  = (5U << 8U) | CCM_CCGR5_CG15_SHIFT, /*!< CCGR5, CG15  */
+    kCLOCK_Rom      = (5U << 8U) | CCM_CCGR5_CG0_SHIFT,  /*!< CCGR5, CG0   */
+    kCLOCK_Flexio1  = (5U << 8U) | CCM_CCGR5_CG1_SHIFT,  /*!< CCGR5, CG1   */
+    kCLOCK_Wdog3    = (5U << 8U) | CCM_CCGR5_CG2_SHIFT,  /*!< CCGR5, CG2   */
+    kCLOCK_Dma      = (5U << 8U) | CCM_CCGR5_CG3_SHIFT,  /*!< CCGR5, CG3   */
+    kCLOCK_Kpp      = (5U << 8U) | CCM_CCGR5_CG4_SHIFT,  /*!< CCGR5, CG4   */
+    kCLOCK_Wdog2    = (5U << 8U) | CCM_CCGR5_CG5_SHIFT,  /*!< CCGR5, CG5   */
+    kCLOCK_Aips_tz4 = (5U << 8U) | CCM_CCGR5_CG6_SHIFT,  /*!< CCGR5, CG6   */
+    kCLOCK_Spdif    = (5U << 8U) | CCM_CCGR5_CG7_SHIFT,  /*!< CCGR5, CG7   */
+    kCLOCK_Sai1     = (5U << 8U) | CCM_CCGR5_CG9_SHIFT,  /*!< CCGR5, CG9   */
+    kCLOCK_Sai2     = (5U << 8U) | CCM_CCGR5_CG10_SHIFT, /*!< CCGR5, CG10  */
+    kCLOCK_Sai3     = (5U << 8U) | CCM_CCGR5_CG11_SHIFT, /*!< CCGR5, CG11  */
+    kCLOCK_Lpuart1  = (5U << 8U) | CCM_CCGR5_CG12_SHIFT, /*!< CCGR5, CG12  */
+    kCLOCK_SnvsHp   = (5U << 8U) | CCM_CCGR5_CG14_SHIFT, /*!< CCGR5, CG14  */
+    kCLOCK_SnvsLp   = (5U << 8U) | CCM_CCGR5_CG15_SHIFT, /*!< CCGR5, CG15  */
 
     /* CCM CCGR6 */
     kCLOCK_UsbOh3   = (6U << 8U) | CCM_CCGR6_CG0_SHIFT,  /*!< CCGR6, CG0   */
@@ -487,7 +470,6 @@ typedef enum _clock_ip_name
     kCLOCK_SimPer   = (6U << 8U) | CCM_CCGR6_CG10_SHIFT, /*!< CCGR6, CG10  */
     kCLOCK_Anadig   = (6U << 8U) | CCM_CCGR6_CG11_SHIFT, /*!< CCGR6, CG11  */
     kCLOCK_Timer1   = (6U << 8U) | CCM_CCGR6_CG13_SHIFT, /*!< CCGR6, CG13  */
-                                                         /*!< CCGR6, CG15, Reserved  */
 
 } clock_ip_name_t;
 
@@ -909,6 +891,7 @@ static inline uint32_t CLOCK_GetMux(clock_mux_t mux)
  *
  * @param divider Which div node to set, see \ref clock_div_t.
  * @param value   Clock div value to set, different divider has different value range.
+ *                Divided clock frequency = Undivided clock frequency / (value + 1).
  */
 static inline void CLOCK_SetDiv(clock_div_t divider, uint32_t value)
 {
@@ -954,8 +937,8 @@ static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t va
 
     assert(index <= 6UL);
 
-    reg  = (volatile uint32_t *)((uint32_t)((volatile uint32_t *)&CCM->CCGR0) + sizeof(volatile uint32_t *) * index);
-    *reg = ((*reg) & ~(3UL << shift)) | (((uint32_t)value) << shift);
+    reg = (volatile uint32_t *)((uint32_t)((volatile uint32_t *)&CCM->CCGR0) + sizeof(volatile uint32_t *) * index);
+    SDK_ATOMIC_LOCAL_CLEAR_AND_SET(reg, (3UL << shift), (((uint32_t)value) << shift));
 }
 
 /*!
@@ -1326,6 +1309,16 @@ void CLOCK_InitSysPfd(clock_pfd_t pfd, uint8_t pfdFrac);
 void CLOCK_DeinitSysPfd(clock_pfd_t pfd);
 
 /*!
+ * @brief Check if Sys PFD is enabled
+ *
+ * @param pfd PFD control name
+ * @return PFD bypass status.
+ *         - true: power on.
+ *         - false: power off.
+ */
+bool CLOCK_IsSysPfdEnabled(clock_pfd_t pfd);
+
+/*!
  * @brief Initialize the USB1 PLL PFD.
  *
  * This function initializes the USB1 PLL PFD. During new value setting,
@@ -1345,6 +1338,16 @@ void CLOCK_InitUsb1Pfd(clock_pfd_t pfd, uint8_t pfdFrac);
  * @param pfd Which PFD clock to disable.
  */
 void CLOCK_DeinitUsb1Pfd(clock_pfd_t pfd);
+
+/*!
+ * @brief Check if Usb1 PFD is enabled
+ *
+ * @param pfd PFD control name.
+ * @return PFD bypass status.
+ *         - true: power on.
+ *         - false: power off.
+ */
+bool CLOCK_IsUsb1PfdEnabled(clock_pfd_t pfd);
 
 /*!
  * @brief Get current System PLL PFD output frequency.

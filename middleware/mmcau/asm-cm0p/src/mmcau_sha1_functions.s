@@ -62,7 +62,12 @@ mmcau_sha1_initialize_output:
 
 # initialize the hash variables, a-e, both in memory and in the CAU
     ldr     r1, =sha1_initial_h
-    ldmia   r1, {r1-r5}                     @ load sha1_initial_h[0-4]
+#   ldmia   r1, {r1-r5}                     @ load sha1_initial_h[0-4]
+    adds    r1, #1<<2                       @ move by 4 byte, make ldmia interruptible in MMCAU
+    ldmia   r1!, {r2-r5}                    @ load sha1_initial_h[1-4] + move by 12 byte
+    subs    r1, #1<<4                       @ move back by 16 byte
+    ldr     r1, [r1]                        @ load key[0]
+
     stmia   r0!, {r1-r5}                    @ store in sha1_state[0-4]
 
     pop     {r4-r5}                         @ restore regs
@@ -125,7 +130,13 @@ mmcau_sha1_hash_n:
 # initialize the hash variables, a-e, in the CAU
     ldr     r1, =MMCAU_PPB_INDIRECT+((LDR+CA0)<<2)
     ldmia   r2!, {r3-r7}                    @ load sha1_state[0-4]
-    stmia   r1!, {r3-r7}                    @ store in CA[0-4]
+#   stmia   r1!, {r3-r7}                    @ store in CA[0-4]
+    str     r3, [r1, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r4, [r1, #1<<2]
+    str     r5, [r1, #2<<2]
+    str     r6, [r1, #3<<2]
+    str     r7, [r1, #4<<2]
+    adds    r1, #5<<2                       @ writeback
 
     sub     sp, #348                        @ reserve stack
 
@@ -134,7 +145,13 @@ mmcau_sha1_hash_n:
 next_blk:
 
     add     r2, sp, #0                      @ set *sha1_state (on stack)
-    stmia   r2!, {r3-r7}                    @ store sha1_state[0-4]
+#   stmia   r2!, {r3-r7}                    @ store sha1_state[0-4]
+    str     r3, [r2, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r4, [r2, #1<<2]
+    str     r5, [r2, #2<<2]
+    str     r6, [r2, #3<<2]
+    str     r7, [r2, #4<<2]
+    adds    r2, #5<<2                       @ writeback
 
     ldr     r4, =MMCAU_PPB_INDIRECT+((LDR+CAA)<<2)
     movs    r1, #27
@@ -1327,8 +1344,18 @@ next_blk_continued:
 # after going through the loops
     add     r3, sp, #0                      @ get *sha1_state (on stack)
     ldr     r1, =MMCAU_PPB_INDIRECT+((ADR+CA0)<<2)
-    ldmia   r3, {r3-r7}                     @ load sha1_state[0-4]
-    stmia   r1!, {r3-r7}                    @ add to CA[0-4]
+#   ldmia   r3, {r3-r7}                     @ load sha1_state[0-4]
+    mov     r0, r3                          @ store r3 in scratch r0 to be interruptible
+    adds    r3, #1<<2                       @ move r3 by 4 bytes
+    ldmia   r3!, {r4-r7}                    @ ldmia without r3
+    ldr     r3, [r0]                        @ load to r3 from scratch address
+#   stmia   r1!, {r3-r7}                    @ add to CA[0-4]
+    str     r3, [r1, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r4, [r1, #1<<2]
+    str     r5, [r1, #2<<2]
+    str     r6, [r1, #3<<2]
+    str     r7, [r1, #4<<2]
+    adds    r1, #5<<2                       @ writeback
     subs    r1, #84                         @ mmcau_indirect_cmd(STR+CA0)
     ldmia   r1!, {r3-r7}                    @ load sums
 
@@ -1339,7 +1366,13 @@ next_blk_continued:
 
 # if num_blks = 0,
     ldr     r2, [sp, #356]                  @ restore *sha1_state
-    stmia   r2!, {r3-r7}                    @ store CA[0-4] to sha1_state[0-4]
+#   stmia   r2!, {r3-r7}                    @ store CA[0-4] to sha1_state[0-4]
+    str     r3, [r2, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r4, [r2, #1<<2]
+    str     r5, [r2, #2<<2]
+    str     r6, [r2, #3<<2]
+    str     r7, [r2, #4<<2]
+    adds    r2, #5<<2                       @ writeback
     add     sp, #360                        @ unreserve stack
     pop     {r4-r7}                         @ restore regs
     bx      lr                              @ exit routine
@@ -1390,9 +1423,19 @@ mmcau_sha1_update:
     push    {r4-r7, lr}                     @ store regs
 
     ldr     r3, =sha1_initial_h
-    ldmia   r3, {r3-r7}                     @ load sha1_initial_h[0-4]
-    stmia   r2!, {r3-r7}                    @ store in sha1_state[0-4]
-    subs    r2, #5<<2                       @ reset *sha1_state
+#   ldmia   r3, {r3-r7}                     @ load sha1_initial_h[0-4]
+    adds    r3, #1<<2                       @ move by 4 byte to make ldmia interuptible
+    ldmia   r3!, {r4-r7}                    @ load sha1_initial_h[1-4] and move r3 by 16 byte    
+    subs    r3, #5<<2                       @ move back by 20 byte
+    ldr     r3, [r3]                        @ load sha1_initial_h[0]
+#   stmia   r2!, {r3-r7}                    @ store in sha1_state[0-4]
+    str     r3, [r2, #0<<2]                 @ expand stmia into str to be interruptible
+    str     r4, [r2, #1<<2]
+    str     r5, [r2, #2<<2]
+    str     r6, [r2, #3<<2]
+    str     r7, [r2, #4<<2]
+#   adds    r2, #5<<2                       @ writeback not needed (reset *sha1_state below)
+#   subs    r2, #5<<2                       @ reset *sha1_state
 
     bl      mmcau_sha1_hash_n               @ do mmcau_sha1_hash_n
 

@@ -1,10 +1,10 @@
 //*****************************************************************************
 // MIMXRT633S_cm33 startup code for use with MCUXpresso IDE
 //
-// Version : 160420
+// Version : 030221
 //*****************************************************************************
 //
-// Copyright 2016-2020 NXP
+// Copyright 2016-2021 NXP
 // All rights reserved.
 //
 // SPDX-License-Identifier: BSD-3-Clause
@@ -44,6 +44,7 @@ extern "C" {
 // by the linker when "Enable Code Read Protect" selected.
 // See crp.h header for more information
 //*****************************************************************************
+
 //*****************************************************************************
 // Declaration of external SystemInit function
 //*****************************************************************************
@@ -111,7 +112,7 @@ WEAK void HWVAD0_IRQHandler(void);
 WEAK void Reserved46_IRQHandler(void);
 WEAK void RNG_IRQHandler(void);
 WEAK void RTC_IRQHandler(void);
-WEAK void DSPWAKE_IRQHandler(void);
+WEAK void Reserved49_IRQHandler(void);
 WEAK void MU_A_IRQHandler(void);
 WEAK void PIN_INT4_IRQHandler(void);
 WEAK void PIN_INT5_IRQHandler(void);
@@ -178,7 +179,7 @@ void HWVAD0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved46_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void RNG_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void RTC_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void DSPWAKE_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void Reserved49_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void MU_A_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PIN_INT4_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PIN_INT5_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
@@ -303,7 +304,7 @@ void (* const g_pfnVectors[])(void) = {
     Reserved46_IRQHandler,       // 46: Reserved interrupt
     RNG_IRQHandler,              // 47: Random number Generator
     RTC_IRQHandler,              // 48: RTC alarm and wake-up
-    DSPWAKE_IRQHandler,          // 49: Wake-up from DSP
+    Reserved49_IRQHandler,       // 49: Reserved interrupt
     MU_A_IRQHandler,             // 50: Messaging Unit port A for CM33
     PIN_INT4_IRQHandler,         // 51: Pin interrupt 4 or pattern match engine slice 4 int
     PIN_INT5_IRQHandler,         // 52: Pin interrupt 5 or pattern match engine slice 5 int
@@ -380,7 +381,7 @@ extern unsigned int __bss_section_table_end;
 // Sets up a simple runtime environment and initializes the C/C++
 // library.
 //*****************************************************************************
-__attribute__ ((section(".after_vectors.reset")))
+__attribute__ ((naked, section(".after_vectors.reset")))
 void ResetISR(void) {
 
     // Disable interrupts
@@ -395,6 +396,8 @@ void ResetISR(void) {
                     :
                     : "r"(g_pfnVectors), "r"(_vStackBase)
                     : "r0", "r1");
+
+
 
 #if defined (__USE_CMSIS)
 // If __USE_CMSIS defined, then call CMSIS SystemInit code
@@ -643,8 +646,8 @@ WEAK void RTC_IRQHandler(void)
 {   RTC_DriverIRQHandler();
 }
 
-WEAK void DSPWAKE_IRQHandler(void)
-{   DSPWAKE_DriverIRQHandler();
+WEAK void Reserved49_IRQHandler(void)
+{   Reserved49_DriverIRQHandler();
 }
 
 WEAK void MU_A_IRQHandler(void)

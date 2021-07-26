@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPUART FreeRTOS driver version 2.4.0. */
-#define FSL_LPUART_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief LPUART FreeRTOS driver version. */
+#define FSL_LPUART_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*@}*/
 
 /*! @brief LPUART RTOS configuration structure. */

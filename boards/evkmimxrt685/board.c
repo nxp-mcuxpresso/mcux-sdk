@@ -52,6 +52,11 @@ void BOARD_InitDebugConsole(void)
     CLOCK_SetFRGClock(BOARD_DEBUG_UART_FRG_CLK);
     CLOCK_AttachClk(BOARD_DEBUG_UART_CLK_ATTACH);
 
+    
+    /* attach FRG0 clock to FLEXCOMM4*/
+    CLOCK_SetFRGClock(BOARD_BT_UART_FRG_CLK);
+    CLOCK_AttachClk(BOARD_BT_UART_CLK_ATTACH);
+    
     uartClkSrcFreq = BOARD_DEBUG_UART_CLK_FREQ;
 
     DbgConsole_Init(BOARD_DEBUG_UART_INSTANCE, BOARD_DEBUG_UART_BAUDRATE, BOARD_DEBUG_UART_TYPE, uartClkSrcFreq);
@@ -225,7 +230,9 @@ status_t BOARD_InitPsRam(void)
     config.ahbConfig.buffer[0].priority       = 0;
     /* All other masters use last buffer with 512B bytes. */
     config.ahbConfig.buffer[FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT - 1].bufferSize = 512;
-    config.enableCombination                                                     = true;
+#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN)
+    config.enableCombination = true;
+#endif
     FLEXSPI_Init(BOARD_FLEXSPI_PSRAM, &config);
 
     /* Configure flash settings according to serial flash feature. */
@@ -392,7 +399,7 @@ void BOARD_FlexspiClockSafeConfig(void)
     /* Move FLEXSPI clock source from main clock to FFRO to avoid instruction/data fetch issue in XIP when
      * updating PLL and main clock.
      */
-    BOARD_SetFlexspiClock(3U, 1);
+    BOARD_SetFlexspiClock(3U, 1U);
 }
 
 #if defined(SDK_I2C_BASED_COMPONENT_USED) && SDK_I2C_BASED_COMPONENT_USED

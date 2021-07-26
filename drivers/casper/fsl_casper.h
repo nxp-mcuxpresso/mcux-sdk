@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  *
@@ -23,9 +23,9 @@
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief CASPER driver version. Version 2.2.1.
+/*! @brief CASPER driver version. Version 2.2.3.
  *
- * Current version: 2.2.1
+ * Current version: 2.2.3
  *
  * Change log:
  * - Version 2.0.0
@@ -59,8 +59,12 @@
  *   - Rework driver to support multiple curves at once.
  * - Version 2.2.1
  *   - Fix MISRA-C 2012 issue.
+ * - Version 2.2.2
+ *   - Enable hardware interleaving to RAMX0 and RAMX1 for CASPER by feature macro FSL_FEATURE_CASPER_RAM_HW_INTERLEAVE
+ * - Version 2.2.3
+ *   - Fix MISRA-C 2012 issues.
  */
-#define FSL_CASPER_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+#define FSL_CASPER_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
 /*@}*/
 
 /*! @brief CASPER operation

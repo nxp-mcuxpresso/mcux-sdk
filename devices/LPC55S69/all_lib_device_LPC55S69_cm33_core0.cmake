@@ -1,9 +1,8 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8904
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8904
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
@@ -31,7 +30,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ostimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pint
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/plu
-    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/powerquad
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/prince
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/puf
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rng_1
@@ -43,7 +41,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -83,9 +80,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_spi_freertos)
 #    include(middleware_freertos-kernel_cm33_secure_port)
 #    include(driver_pint)
-#    include(CMSIS_Include_dsp)
 #    include(driver_sctimer)
-#    include(middleware_usb_device_common_header)
 #    include(driver_flexcomm)
 #    include(middleware_multicore_rpmsg_lite_lpcxpresso55s69_bm)
 #    include(middleware_freertos-kernel_secure_context)
@@ -96,11 +91,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager_swo)
 #    include(middleware_sdmmc_host_sdif_polling)
 #    include(driver_iap1)
-#    include(middleware_usb_common_header)
 #    include(driver_flexcomm_spi)
 #    include(driver_utick)
 #    include(middleware_sdmmc_osa_freertos)
-#    include(CMSIS_Include_core_cm33)
 #    include(utility_assert)
 #    include(driver_prince)
 #    include(device_CMSIS)
@@ -112,7 +105,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_freertos-kernel_LPC55S69_cm33_core0)
 #    include(component_osa_free_rtos)
 #    include(middleware_sdmmc_sd)
-#    include(middleware_freertos-kernel_heap_3)
+#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_hashcrypt)
 #    include(component_usart_adapter)
@@ -153,8 +146,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_sdmmc_host_sdif_interrupt)
 #    include(driver_flexcomm_usart_dma)
 #    include(driver_flexcomm_i2c_freertos)
-#    include(driver_powerquad)
-#    include(CMSIS_Include_common)
 #    include(middleware_sdmmc_host_sdif_freertos)
 #    include(driver_flexcomm_usart_freertos)
 #    include(device_startup_LPC55S69_cm33_core0)

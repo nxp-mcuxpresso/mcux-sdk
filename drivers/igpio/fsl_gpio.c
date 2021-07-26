@@ -124,7 +124,7 @@ void GPIO_PinWrite(GPIO_Type *base, uint32_t pin, uint8_t output)
 #if (defined(FSL_FEATURE_IGPIO_HAS_DR_SET) && FSL_FEATURE_IGPIO_HAS_DR_SET)
         base->DR_SET = (1UL << pin);
 #else
-        base->DR |= (1UL << pin); /* Set pin output to high level.*/
+        base->DR |= (1UL << pin);  /* Set pin output to high level.*/
 #endif
     }
 }

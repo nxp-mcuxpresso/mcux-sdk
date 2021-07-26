@@ -7,7 +7,7 @@
 /* --------------------------------------------------------------------------*/
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2020 NXP                                                   */
+/* Copyright 2016-2021 NXP                                                   */
 /* All rights reserved.                                                      */
 /*                                                                           */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
@@ -101,7 +101,7 @@ __Vectors:
     .long   Reserved73_IRQHandler  /* Reserved interrupt */
     .long   DMA1_IRQHandler  /* DMA1 interrupt */
     .long   FLEXCOMM8_IRQHandler  /* Flexcomm Interface 8 (SPI, , FLEXCOMM) */
-    .long   CodeWDG_IRQHandler  /* CodeWDG interrupt */
+    .long   CDOG_IRQHandler  /* CDOG interrupt */
 
     .size   __Vectors, . - __Vectors
 
@@ -115,6 +115,15 @@ __Vectors:
     .weak    Reset_Handler
     .type    Reset_Handler, %function
 Reset_Handler:
+    cpsid   i               /* Mask interrupts */
+    .equ    VTOR, 0xE000ED08
+    ldr     r0, =VTOR
+    ldr     r1, =__Vectors
+    str     r1, [r0]
+    ldr     r2, [r1]
+    msr     msp, r2
+    ldr     R0, =__StackLimit
+    msr     msplim, R0
 #ifndef __NO_SYSTEM_INIT
     ldr   r0,=SystemInit
     blx   r0
@@ -801,12 +810,12 @@ FLEXCOMM8_IRQHandler:
 
     .align 1
     .thumb_func
-    .weak CodeWDG_IRQHandler
-    .type CodeWDG_IRQHandler, %function
-CodeWDG_IRQHandler:
-    ldr   r0,=CodeWDG_DriverIRQHandler
+    .weak CDOG_IRQHandler
+    .type CDOG_IRQHandler, %function
+CDOG_IRQHandler:
+    ldr   r0,=CDOG_DriverIRQHandler
     bx    r0
-    .size CodeWDG_IRQHandler, . - CodeWDG_IRQHandler
+    .size CDOG_IRQHandler, . - CDOG_IRQHandler
 
 /*    Macro to define default handlers. Default handler
  *    will be weak symbol and just dead loops. They can be
@@ -881,6 +890,6 @@ CodeWDG_IRQHandler:
                 def_irq_handler     Reserved73_DriverIRQHandler
                 def_irq_handler     DMA1_DriverIRQHandler
                 def_irq_handler     FLEXCOMM8_DriverIRQHandler
-                def_irq_handler     CodeWDG_DriverIRQHandler
+                def_irq_handler     CDOG_DriverIRQHandler
 
     .end

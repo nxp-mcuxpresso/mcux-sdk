@@ -150,9 +150,16 @@ void BOARD_RdcInit(void)
 {
     /* Move M4 core to specific RDC domain 1 */
     rdc_domain_assignment_t assignment = {0};
+    uint8_t domainId                   = 0U;
 
-    assignment.domainId = BOARD_DOMAIN_ID;
-    RDC_SetMasterDomainAssignment(RDC, kRDC_Master_M4, &assignment);
+    domainId = RDC_GetCurrentMasterDomainId(RDC);
+    /* Only configure the RDC if RDC peripheral write access allowed. */
+    if ((0x1U & RDC_GetPeriphAccessPolicy(RDC, kRDC_Periph_RDC, domainId)) != 0U)
+    {
+        assignment.domainId = BOARD_DOMAIN_ID;
+        RDC_SetMasterDomainAssignment(RDC, kRDC_Master_M4, &assignment);
+    }
+
     /*
      * The M4 core is running at domain 1, now enable the clock gate of the following IP/BUS/PLL in domain 1 in the CCM.
      * In this way, to ensure the clock of the peripherals used by M core not be affected by A core which is running at

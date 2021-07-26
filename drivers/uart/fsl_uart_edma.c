@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -99,7 +99,7 @@ static void UART_ReceiveEDMACallback(edma_handle_t *handle, void *param, bool tr
 
 static void UART_SendEDMACallback(edma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
-    assert(param);
+    assert(param != NULL);
 
     uart_edma_private_handle_t *uartPrivateHandle = (uart_edma_private_handle_t *)param;
 
@@ -109,24 +109,19 @@ static void UART_SendEDMACallback(edma_handle_t *handle, void *param, bool trans
 
     if (transferDone)
     {
-        UART_TransferAbortSendEDMA(uartPrivateHandle->base, uartPrivateHandle->handle);
+        /* Disable UART TX EDMA. */
+        UART_EnableTxDMA(uartPrivateHandle->base, false);
+        /* Stop transfer. */
+        EDMA_AbortTransfer(handle);
 
-        /* Ensure all the data in the transmit buffer are sent out to bus. */
-        while (0U == (uartPrivateHandle->base->S1 & UART_S1_TC_MASK))
-        {
-        }
-
-        if (uartPrivateHandle->handle->callback != NULL)
-        {
-            uartPrivateHandle->handle->callback(uartPrivateHandle->base, uartPrivateHandle->handle, kStatus_UART_TxIdle,
-                                                uartPrivateHandle->handle->userData);
-        }
+        /* Enable tx complete interrupt */
+        UART_EnableInterrupts(uartPrivateHandle->base, (uint32_t)kUART_TransmissionCompleteInterruptEnable);
     }
 }
 
 static void UART_ReceiveEDMACallback(edma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
-    assert(param);
+    assert(param != NULL);
 
     uart_edma_private_handle_t *uartPrivateHandle = (uart_edma_private_handle_t *)param;
 
@@ -163,7 +158,7 @@ void UART_TransferCreateHandleEDMA(UART_Type *base,
                                    edma_handle_t *txEdmaHandle,
                                    edma_handle_t *rxEdmaHandle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     uint32_t instance = UART_GetInstance(base);
 
@@ -196,6 +191,14 @@ void UART_TransferCreateHandleEDMA(UART_Type *base,
     }
 #endif
 
+    /* Save the handle in global variables to support the double weak mechanism. */
+    s_uartHandle[instance] = handle;
+    /* Save IRQ handler into static ISR function pointer. */
+    s_uartIsr = UART_TransferEdmaHandleIRQ;
+    /* Disable internal IRQs and enable global IRQ. */
+    UART_DisableInterrupts(base, (uint32_t)kUART_AllInterruptsEnable);
+    (void)EnableIRQ(s_uartIRQ[instance]);
+
     /* Configure TX. */
     if (txEdmaHandle != NULL)
     {
@@ -224,11 +227,11 @@ void UART_TransferCreateHandleEDMA(UART_Type *base,
  */
 status_t UART_SendEDMA(UART_Type *base, uart_edma_handle_t *handle, uart_transfer_t *xfer)
 {
-    assert(handle);
-    assert(handle->txEdmaHandle);
-    assert(xfer);
-    assert(xfer->data);
-    assert(xfer->dataSize);
+    assert(handle != NULL);
+    assert(handle->txEdmaHandle != NULL);
+    assert(xfer != NULL);
+    assert(xfer->data != NULL);
+    assert(xfer->dataSize != 0U);
 
     edma_transfer_config_t xferConfig;
     status_t status;
@@ -278,11 +281,11 @@ status_t UART_SendEDMA(UART_Type *base, uart_edma_handle_t *handle, uart_transfe
  */
 status_t UART_ReceiveEDMA(UART_Type *base, uart_edma_handle_t *handle, uart_transfer_t *xfer)
 {
-    assert(handle);
-    assert(handle->rxEdmaHandle);
-    assert(xfer);
-    assert(xfer->data);
-    assert(xfer->dataSize);
+    assert(handle != NULL);
+    assert(handle->rxEdmaHandle != NULL);
+    assert(xfer != NULL);
+    assert(xfer->data != NULL);
+    assert(xfer->dataSize != 0U);
 
     edma_transfer_config_t xferConfig;
     status_t status;
@@ -327,8 +330,8 @@ status_t UART_ReceiveEDMA(UART_Type *base, uart_edma_handle_t *handle, uart_tran
  */
 void UART_TransferAbortSendEDMA(UART_Type *base, uart_edma_handle_t *handle)
 {
-    assert(handle);
-    assert(handle->txEdmaHandle);
+    assert(handle != NULL);
+    assert(handle->txEdmaHandle != NULL);
 
     /* Disable UART TX EDMA. */
     UART_EnableTxDMA(base, false);
@@ -349,8 +352,8 @@ void UART_TransferAbortSendEDMA(UART_Type *base, uart_edma_handle_t *handle)
  */
 void UART_TransferAbortReceiveEDMA(UART_Type *base, uart_edma_handle_t *handle)
 {
-    assert(handle);
-    assert(handle->rxEdmaHandle);
+    assert(handle != NULL);
+    assert(handle->rxEdmaHandle != NULL);
 
     /* Disable UART RX EDMA. */
     UART_EnableRxDMA(base, false);
@@ -375,9 +378,9 @@ void UART_TransferAbortReceiveEDMA(UART_Type *base, uart_edma_handle_t *handle)
  */
 status_t UART_TransferGetReceiveCountEDMA(UART_Type *base, uart_edma_handle_t *handle, uint32_t *count)
 {
-    assert(handle);
-    assert(handle->rxEdmaHandle);
-    assert(count);
+    assert(handle != NULL);
+    assert(handle->rxEdmaHandle != NULL);
+    assert(count != NULL);
 
     if ((uint8_t)kUART_RxIdle == handle->rxState)
     {
@@ -406,9 +409,9 @@ status_t UART_TransferGetReceiveCountEDMA(UART_Type *base, uart_edma_handle_t *h
  */
 status_t UART_TransferGetSendCountEDMA(UART_Type *base, uart_edma_handle_t *handle, uint32_t *count)
 {
-    assert(handle);
-    assert(handle->txEdmaHandle);
-    assert(count);
+    assert(handle != NULL);
+    assert(handle->txEdmaHandle != NULL);
+    assert(count != NULL);
 
     if ((uint8_t)kUART_TxIdle == handle->txState)
     {
@@ -420,4 +423,29 @@ status_t UART_TransferGetSendCountEDMA(UART_Type *base, uart_edma_handle_t *hand
                  EDMA_GetRemainingMajorLoopCount(handle->txEdmaHandle->base, handle->txEdmaHandle->channel);
 
     return kStatus_Success;
+}
+
+/*!
+ * brief UART eDMA IRQ handle function.
+ *
+ * This function handles the UART transmit complete IRQ request and invoke user callback.
+ *
+ * param base UART peripheral base address.
+ * param uartEdmaHandle UART handle pointer.
+ */
+void UART_TransferEdmaHandleIRQ(UART_Type *base, void *uartEdmaHandle)
+{
+    assert(uartEdmaHandle != NULL);
+
+    uart_edma_handle_t *handle = (uart_edma_handle_t *)uartEdmaHandle;
+
+    handle->txState = (uint8_t)kUART_TxIdle;
+
+    /* Disable tx complete interrupt */
+    UART_DisableInterrupts(base, (uint32_t)kUART_TransmissionCompleteInterruptEnable);
+
+    if (handle->callback != NULL)
+    {
+        handle->callback(base, handle, kStatus_UART_TxIdle, handle->userData);
+    }
 }

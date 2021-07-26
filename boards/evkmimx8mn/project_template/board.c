@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -118,40 +118,48 @@ void BOARD_InitMemory(void)
     /* Configure the force_incr programmable bit in GPV_5 of PL301_display, which fixes partial write issue.
      * The AXI2AHB bridge is used for masters that access the TCM through system bus.
      * Please refer to errata ERR050362 for more information */
-    *(uint32_t *)(GPV5_BASE_ADDR + FORCE_INCR_OFFSET) =
-        *(uint32_t *)(GPV5_BASE_ADDR + FORCE_INCR_OFFSET) | FORCE_INCR_BIT_MASK;
+    /* Only configure the GPV5 if the M core access type is secure. */
+    if ((*(uint32_t *)(CSU_SA_ADDR)&CSU_SA_NSN_M_BIT_MASK) == 0U)
+    {
+        *(uint32_t *)(GPV5_BASE_ADDR + FORCE_INCR_OFFSET) =
+            *(uint32_t *)(GPV5_BASE_ADDR + FORCE_INCR_OFFSET) | FORCE_INCR_BIT_MASK;
+    }
 }
 
 void BOARD_RdcInit(void)
 {
     /* Move M7 core to specific RDC domain 1 */
     rdc_domain_assignment_t assignment = {0};
+    uint8_t domainId                   = 0U;
 
-    assignment.domainId = BOARD_DOMAIN_ID;
-    RDC_SetMasterDomainAssignment(RDC, kRDC_Master_M7, &assignment);
-
-    /*
-     *  The M7 core is running at domain 1, enable clock gate for Iomux to run at domain 1.
-     */
-    CLOCK_EnableClock(kCLOCK_Iomux0);
-    CLOCK_EnableClock(kCLOCK_Iomux1);
-    CLOCK_EnableClock(kCLOCK_Iomux2);
-    CLOCK_EnableClock(kCLOCK_Iomux3);
-    CLOCK_EnableClock(kCLOCK_Iomux4);
+    domainId = RDC_GetCurrentMasterDomainId(RDC);
+    /* Only configure the RDC if RDC peripheral write access is allowed. */
+    if ((0x1U & RDC_GetPeriphAccessPolicy(RDC, kRDC_Periph_RDC, domainId)) != 0U)
+    {
+        assignment.domainId = BOARD_DOMAIN_ID;
+        RDC_SetMasterDomainAssignment(RDC, kRDC_Master_M7, &assignment);
+    }
 
     /*
-     *  The M7 core is running at domain 1, enable the QSPI clock sources to domain 1 for flash target.
+     * The M7 core is running at domain 1, now enable the clock gate of the following IP/BUS/PLL in domain 1 in the CCM.
+     * In this way, to ensure the clock of the peripherals used by M core not be affected by A core which is running at
+     * domain 0.
      */
+    CLOCK_EnableClock(kCLOCK_Iomux);
+
+    CLOCK_EnableClock(kCLOCK_Ipmux1);
+    CLOCK_EnableClock(kCLOCK_Ipmux2);
+    CLOCK_EnableClock(kCLOCK_Ipmux3);
+    CLOCK_EnableClock(kCLOCK_Ipmux4);
+
 #if defined(FLASH_TARGET)
     CLOCK_EnableClock(kCLOCK_Qspi);
 #endif
-    /*
-     *  The M7 core is running at domain 1, enable the PLL clock sources to domain 1.
-     */
-    CLOCK_ControlGate(kCLOCK_SysPll1Gate, kCLOCK_ClockNeededAll);   /* Enabel SysPLL1 to Domain 1 */
-    CLOCK_ControlGate(kCLOCK_SysPll2Gate, kCLOCK_ClockNeededAll);   /* Enable SysPLL2 to Domain 1 */
-    CLOCK_ControlGate(kCLOCK_SysPll3Gate, kCLOCK_ClockNeededAll);   /* Enable SysPLL3 to Domain 1 */
-    CLOCK_ControlGate(kCLOCK_AudioPll1Gate, kCLOCK_ClockNeededAll); /* Enable AudioPLL1 to Domain 1 */
-    CLOCK_ControlGate(kCLOCK_AudioPll2Gate, kCLOCK_ClockNeededAll); /* Enable AudioPLL2 to Domain 1 */
-    CLOCK_ControlGate(kCLOCK_VideoPll1Gate, kCLOCK_ClockNeededAll); /* Enable VideoPLL1 to Domain 1 */
+
+    CLOCK_ControlGate(kCLOCK_SysPll1Gate, kCLOCK_ClockNeededAll);   /* Enable the CCGR gate for SysPLL1 in Domain 1 */
+    CLOCK_ControlGate(kCLOCK_SysPll2Gate, kCLOCK_ClockNeededAll);   /* Enable the CCGR gate for SysPLL2 in Domain 1 */
+    CLOCK_ControlGate(kCLOCK_SysPll3Gate, kCLOCK_ClockNeededAll);   /* Enable the CCGR gate for SysPLL3 in Domain 1 */
+    CLOCK_ControlGate(kCLOCK_AudioPll1Gate, kCLOCK_ClockNeededAll); /* Enable the CCGR gate for AudioPLL1 in Domain 1 */
+    CLOCK_ControlGate(kCLOCK_AudioPll2Gate, kCLOCK_ClockNeededAll); /* Enable the CCGR gate for AudioPLL2 in Domain 1 */
+    CLOCK_ControlGate(kCLOCK_VideoPll1Gate, kCLOCK_ClockNeededAll); /* Enable the CCGR gate for VideoPLL1 in Domain 1 */
 }

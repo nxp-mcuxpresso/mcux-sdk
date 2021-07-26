@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief DMA driver version 2.1.0. */
-#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief DMA driver version 2.1.1. */
+#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /*! @brief _dma_channel_status_flags status flag for the DMA driver. */
@@ -238,7 +238,7 @@ void DMA_SetChannelLinkConfig(DMA_Type *base, uint32_t channel, const dma_channe
  */
 static inline void DMA_SetSourceAddress(DMA_Type *base, uint32_t channel, uint32_t srcAddr)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     base->DMA[channel].SAR = srcAddr;
 }
@@ -252,7 +252,7 @@ static inline void DMA_SetSourceAddress(DMA_Type *base, uint32_t channel, uint32
  */
 static inline void DMA_SetDestinationAddress(DMA_Type *base, uint32_t channel, uint32_t destAddr)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     base->DMA[channel].DAR = destAddr;
 }
@@ -266,7 +266,7 @@ static inline void DMA_SetDestinationAddress(DMA_Type *base, uint32_t channel, u
  */
 static inline void DMA_SetTransferSize(DMA_Type *base, uint32_t channel, uint32_t size)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     base->DMA[channel].DSR_BCR = DMA_DSR_BCR_BCR(size);
 }
@@ -297,7 +297,7 @@ void DMA_SetModulo(DMA_Type *base, uint32_t channel, dma_modulo_t srcModulo, dma
  */
 static inline void DMA_EnableCycleSteal(DMA_Type *base, uint32_t channel, bool enable)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     base->DMA[channel].DCR = (base->DMA[channel].DCR & (~DMA_DCR_CS_MASK)) | DMA_DCR_CS(enable);
 }
@@ -314,7 +314,7 @@ static inline void DMA_EnableCycleSteal(DMA_Type *base, uint32_t channel, bool e
  */
 static inline void DMA_EnableAutoAlign(DMA_Type *base, uint32_t channel, bool enable)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     base->DMA[channel].DCR = (base->DMA[channel].DCR & (~DMA_DCR_AA_MASK)) | DMA_DCR_AA(enable);
 }
@@ -331,7 +331,7 @@ static inline void DMA_EnableAutoAlign(DMA_Type *base, uint32_t channel, bool en
  */
 static inline void DMA_EnableAsyncRequest(DMA_Type *base, uint32_t channel, bool enable)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     base->DMA[channel].DCR = (base->DMA[channel].DCR & (~DMA_DCR_EADREQ_MASK)) | DMA_DCR_EADREQ(enable);
 }
@@ -344,7 +344,7 @@ static inline void DMA_EnableAsyncRequest(DMA_Type *base, uint32_t channel, bool
  */
 static inline void DMA_EnableInterrupts(DMA_Type *base, uint32_t channel)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     base->DMA[channel].DCR |= DMA_DCR_EINT(true);
 }
@@ -357,7 +357,7 @@ static inline void DMA_EnableInterrupts(DMA_Type *base, uint32_t channel)
  */
 static inline void DMA_DisableInterrupts(DMA_Type *base, uint32_t channel)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     base->DMA[channel].DCR &= ~DMA_DCR_EINT_MASK;
 }
@@ -376,7 +376,7 @@ static inline void DMA_DisableInterrupts(DMA_Type *base, uint32_t channel)
  */
 static inline void DMA_EnableChannelRequest(DMA_Type *base, uint32_t channel)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     base->DMA[channel].DCR |= DMA_DCR_ERQ_MASK;
 }
@@ -389,7 +389,7 @@ static inline void DMA_EnableChannelRequest(DMA_Type *base, uint32_t channel)
  */
 static inline void DMA_DisableChannelRequest(DMA_Type *base, uint32_t channel)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     base->DMA[channel].DCR &= ~DMA_DCR_ERQ_MASK;
 }
@@ -404,7 +404,7 @@ static inline void DMA_DisableChannelRequest(DMA_Type *base, uint32_t channel)
  */
 static inline void DMA_TriggerChannelStart(DMA_Type *base, uint32_t channel)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     base->DMA[channel].DCR |= DMA_DCR_START_MASK;
 }
@@ -418,7 +418,7 @@ static inline void DMA_TriggerChannelStart(DMA_Type *base, uint32_t channel)
  */
 static inline void DMA_EnableAutoStopRequest(DMA_Type *base, uint32_t channel, bool enable)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     if (enable)
     {
@@ -445,7 +445,7 @@ static inline void DMA_EnableAutoStopRequest(DMA_Type *base, uint32_t channel, b
  */
 static inline uint32_t DMA_GetRemainingBytes(DMA_Type *base, uint32_t channel)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     return (base->DMA[channel].DSR_BCR & DMA_DSR_BCR_BCR_MASK) >> DMA_DSR_BCR_BCR_SHIFT;
 }
@@ -460,7 +460,7 @@ static inline uint32_t DMA_GetRemainingBytes(DMA_Type *base, uint32_t channel)
  */
 static inline uint32_t DMA_GetChannelStatusFlags(DMA_Type *base, uint32_t channel)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     return base->DMA[channel].DSR_BCR;
 }
@@ -475,7 +475,7 @@ static inline uint32_t DMA_GetChannelStatusFlags(DMA_Type *base, uint32_t channe
  */
 static inline void DMA_ClearChannelStatusFlags(DMA_Type *base, uint32_t channel, uint32_t mask)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_DMA_MODULE_CHANNEL);
 
     if (mask != 0U)
     {
