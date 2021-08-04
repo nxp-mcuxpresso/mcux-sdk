@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/DSP
     ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt685/flash_config
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/cs42888
@@ -35,6 +36,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ostimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/otfad
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pint
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/powerquad
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/puf
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sctimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/trng
@@ -77,6 +79,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_spi_dma)
 #    include(driver_flexcomm_spi_freertos)
 #    include(middleware_freertos-kernel_cm33_secure_port)
+#    include(CMSIS_DSP_Library)
 #    include(driver_pint)
 #    include(driver_sctimer)
 #    include(driver_flexcomm)
@@ -114,7 +117,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_assert_lite)
 #    include(middleware_freertos-kernel_MIMXRT685S_cm33)
 #    include(utility_shell)
-#    include(driver_flexcomm_usart_freertos)
+#    include(driver_otfad)
 #    include(utility_debug_console)
 #    include(middleware_sdmmc_host_usdhc_polling_MIMXRT685S_cm33)
 #    include(middleware_sdmmc_host_usdhc)
@@ -140,7 +143,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_pca9420)
 #    include(component_tfa9xxx_adapter)
 #    include(driver_flexcomm_i2c_freertos)
-#    include(driver_otfad)
+#    include(driver_powerquad)
+#    include(driver_flexcomm_usart_freertos)
 #    include(driver_lpc_iopctl)
 #    include(driver_trng)
 #    include(component_wm8904_adapter)

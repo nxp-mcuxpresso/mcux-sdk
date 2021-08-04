@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/DSP
     ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt595/flash_config
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/cs42888
@@ -43,6 +44,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ostimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/otfad
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pint
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/powerquad
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/puf
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sctimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/trng
@@ -92,6 +94,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_spi_dma)
 #    include(driver_flexcomm_spi_freertos)
 #    include(middleware_freertos-kernel_cm33_secure_port)
+#    include(CMSIS_DSP_Library)
 #    include(driver_pint)
 #    include(driver_sctimer)
 #    include(middleware_sdmmc_host_usdhc_freertos_MIMXRT595S_cm33)
@@ -160,6 +163,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_usart_dma)
 #    include(driver_pca9420)
 #    include(driver_flexcomm_i2c_freertos)
+#    include(driver_powerquad)
 #    include(driver_tfa9896)
 #    include(driver_otfad)
 #    include(driver_lpc_iopctl)
