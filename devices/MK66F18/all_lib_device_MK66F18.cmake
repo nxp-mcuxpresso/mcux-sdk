@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/DSP
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/da7212
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
@@ -89,7 +90,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_pit)
 #    include(component_serial_manager_uart)
 #    include(component_da7212_adapter)
-#    include(driver_llwu)
+#    include(CMSIS_DSP_Library)
 #    include(driver_flexcan)
 #    include(driver_lptmr)
 #    include(driver_i2c_edma)
@@ -114,6 +115,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)
+#    include(driver_llwu)
 #    include(driver_port)
 #    include(driver_gpio)
 #    include(driver_pdb)

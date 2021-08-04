@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/DSP
     ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt1170/xip
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
@@ -145,6 +146,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_pit)
 #    include(component_serial_manager_uart)
 #    include(driver_soc_src)
+#    include(CMSIS_DSP_Library)
 #    include(component_lpuart_adapter)
 #    include(middleware_multicore_rpmsg_lite_imxrt1170_freertos)
 #    include(driver_display-rm68191)
