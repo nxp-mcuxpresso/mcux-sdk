@@ -19,6 +19,12 @@
 #include <stddef.h>
 #endif
 
+#if defined(__aarch64__)
+typedef uint64_t phys_addr_t;
+#else
+typedef uint32_t phys_addr_t;
+#endif
+
 #include "fsl_device_registers.h"
 
 /*!
