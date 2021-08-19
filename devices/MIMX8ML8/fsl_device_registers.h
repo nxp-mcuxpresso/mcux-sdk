@@ -17,12 +17,23 @@
  */
 #if (defined(CPU_MIMX8ML8CVNKZ) || defined(CPU_MIMX8ML8DVNLZ))
 
+#if defined(CONFIG_ARM64)
+#define __XCC__
+
+#include "MIMX8ML8_ca53.h"
+/* CPU specific feature definitions */
+#include "MIMX8ML8_ca53_features.h"
+
+#else /* CONFIG_ARM64 */
+
 #define MIMX8ML8_cm7_SERIES
 
 /* CMSIS-style register definitions */
 #include "MIMX8ML8_cm7.h"
 /* CPU specific feature definitions */
 #include "MIMX8ML8_cm7_features.h"
+
+#endif /* CONFIG_ARM64 */
 
 #else
 #error "No valid CPU defined!"
