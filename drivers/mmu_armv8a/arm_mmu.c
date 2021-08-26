@@ -527,6 +527,8 @@ extern uintptr_t __text[];
 extern uintptr_t __etext[];
 extern uintptr_t __data_start__[];
 extern uintptr_t __data_end__[];
+extern uintptr_t __stacks_limit__[];
+extern uintptr_t __stacks_top__[];
 extern uintptr_t __noncachedata_start__[];
 extern uintptr_t __noncachedata_end__[];
 
@@ -545,6 +547,15 @@ static const struct arm_mmu_flat_range mmu_os_ranges[] = {
 	{ .name  = "data",
 	  .start = __data_start__,
 	  .end   = __data_end__,
+	  .attrs = MT_NORMAL | MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
+
+	/* Mark the stack regions (_el0_stack, _el1_stack)
+	 * cacheable, read-write
+	 * Note: read-write region is marked execute-never internally
+	 */
+	{ .name  = "stacks",
+	  .start = __stacks_limit__,
+	  .end   = __stacks_top__,
 	  .attrs = MT_NORMAL | MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
 
 	/* Mark the shared regions (non-cacheable data)
