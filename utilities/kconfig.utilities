@@ -1,0 +1,90 @@
+# Copyright 2021 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "utilities"
+
+config USE_utility_notifier
+    bool "Utility notifier"
+    depends on HAS_MCUX_SDK_utility_notifier
+    default n
+    select USE_driver_common if HAS_MCUX_SDK_driver_common
+
+config USE_utility_shell
+    bool "Utility shell"
+    depends on HAS_MCUX_SDK_utility_shell
+    default n
+    select USE_utility_debug_console if HAS_MCUX_SDK_utility_debug_console
+    select USE_component_lists if HAS_MCUX_SDK_component_lists
+
+config USE_utility_assert
+    bool "Utility assert"
+    depends on HAS_MCUX_SDK_utility_assert
+    default n
+    select USE_utility_debug_console if HAS_MCUX_SDK_utility_debug_console
+
+config USE_utility_assert_lite
+    bool "Utility assert_lite"
+    depends on HAS_MCUX_SDK_utility_assert_lite
+    default n
+    select USE_utility_debug_console_lite if HAS_MCUX_SDK_utility_debug_console_lite
+
+config USE_utility_debug_console
+    bool "Utility debug_console"
+    depends on HAS_MCUX_SDK_utility_debug_console
+    default n
+    select USE_component_serial_manager if HAS_MCUX_SDK_component_serial_manager
+
+config USE_utility_debug_console_lite
+    bool "Utility debug_console_lite"
+    depends on HAS_MCUX_SDK_utility_debug_console_lite
+    default n
+    select USE_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+    select USE_component_usart_adapter if HAS_MCUX_SDK_component_usart_adapter
+    select USE_component_miniusart_adapter if HAS_MCUX_SDK_component_miniusart_adapter
+    select USE_component_iuart_adapter if HAS_MCUX_SDK_component_iuart_adapter
+    select USE_component_uart_adapter if HAS_MCUX_SDK_component_uart_adapter
+    select USE_driver_common if HAS_MCUX_SDK_driver_common
+
+config USE_utilities_misc_utilities
+    bool "utilities_misc_utilities"
+    depends on HAS_MCUX_SDK_utilities_misc_utilities
+    default n
+
+config USE_utility_incbin
+    bool "utility incbin"
+    depends on HAS_MCUX_SDK_utility_incbin
+    default n
+
+config HAS_MCUX_SDK_utility_notifier
+    bool
+
+
+config HAS_MCUX_SDK_utility_shell
+    bool
+
+
+config HAS_MCUX_SDK_utility_assert
+    bool
+
+
+config HAS_MCUX_SDK_utility_assert_lite
+    bool
+
+
+config HAS_MCUX_SDK_utility_debug_console
+    bool
+
+
+config HAS_MCUX_SDK_utility_debug_console_lite
+    bool
+
+
+config HAS_MCUX_SDK_utilities_misc_utilities
+    bool
+
+
+config HAS_MCUX_SDK_utility_incbin
+    bool
+
+
+endmenu
