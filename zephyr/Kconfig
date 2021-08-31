@@ -1,0 +1,14 @@
+# Copyright 2021 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+config ZEPHYR_HAL_NXP_MODULE
+	bool
+
+config USE_MCUX_SDK
+	bool "Use MCUX SDK"
+	help
+	  This option enables the use of NXP MCUXpresso SDK
+
+if USE_MCUX_SDK
+rsource "../Kconfig"
+endif

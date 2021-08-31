@@ -1,0 +1,41 @@
+/*
+ * Copyright (c) 2021, Linaro
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/* This file is handcoded based on what pin configurations are actually
+ * used by boards in Zephyr.  At this time that is only the Hexiwear KW40Z.
+ */
+
+/*
+ * Pin nodes are of the form:
+ *
+ *	<SIGNAL[0..n]>: <signal[0]> {
+ *		nxp,kinetis-port-pins = < PIN PCR[MUX] >;
+ *	};
+ */
+
+&portb {
+	ADC0_SE1_PTB1: CMP0_IN5_PTB1: adc0_se1_ptb1 {
+		nxp,kinetis-port-pins = < 1 0 >;
+	};
+	PTB1: GPIOB_PTB1: gpiob_ptb1 {
+		nxp,kinetis-port-pins = < 1 1 >;
+	};
+};
+
+&portc {
+	PTC6: GPIOC_PTC6: LLWU_P14_PTC6: gpioc_ptc6 {
+		nxp,kinetis-port-pins = < 6 1 >;
+	};
+	UART0_RX_PTC6: uart0_rx_ptc6 {
+		nxp,kinetis-port-pins = < 6 4 >;
+	};
+	PTC7: GPIOC_PTC7: LLWU_P15_PTC7: gpioc_ptc7 {
+		nxp,kinetis-port-pins = < 7 1 >;
+	};
+	UART0_TX_PTC7: uart0_tx_ptc7 {
+		nxp,kinetis-port-pins = < 7 4 >;
+	};
+};
