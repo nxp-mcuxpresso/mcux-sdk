@@ -5,9 +5,9 @@ menu "MCUX SDK"
 
 rsource "./devices/kconfig.socs"
 
-rsource "./drivers/kconfig.drivers"
-
 rsource "./CMSIS/kconfig.CMSIS"
+
+rsource "./drivers/kconfig.drivers"
 
 rsource "./components/kconfig.components"
 
