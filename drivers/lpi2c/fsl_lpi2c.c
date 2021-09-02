@@ -1065,21 +1065,33 @@ static status_t LPI2C_RunTransferStateMachine(LPI2C_Type *base, lpi2c_master_han
 
     /* Check for errors. */
     status = LPI2C_MasterGetStatusFlags(base);
+
+    /* Get fifo counts. */
+    LPI2C_MasterGetFifoCounts(base, &rxCount, &txCount);
+
+    /* Get pointer to private data. */
+    xfer = &handle->transfer;
+
     /* For the last byte, nack flag is expected.
        Do not check and clear kLPI2C_MasterNackDetectFlag for the last byte,
        in case FIFO is emptied when stop command has not been sent. */
     if (handle->remainingBytes == 0U)
     {
-        status &= ~(uint32_t)kLPI2C_MasterNackDetectFlag;
+        /* When data size is not zero which means it is not only one byte of address is sent, and */
+        /* when the txfifo is empty, or have one byte which is the stop command, then the nack status can be ignored. */
+        if ((xfer->dataSize != 0U) &&
+            ((txCount == 0U) || ((txCount == 1U) && (handle->state == (uint8_t)kWaitForCompletionState) &&
+                                 ((xfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U))))
+        {
+            status &= ~(uint32_t)kLPI2C_MasterNackDetectFlag;
+        }
     }
+
     result = LPI2C_MasterCheckAndClearError(base, status);
+
     if (kStatus_Success == result)
     {
-        /* Get pointer to private data. */
-        xfer = &handle->transfer;
-
-        /* Get fifo counts and compute room in tx fifo. */
-        LPI2C_MasterGetFifoCounts(base, &rxCount, &txCount);
+        /* Compute room in tx fifo */
         txCount = txFifoSize - txCount;
 
         while (!state_complete)
