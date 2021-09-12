@@ -115,7 +115,7 @@ static float findPll0MMult(void)
                        (float)(uint32_t)(1UL << PLL_SSCG_MD_INT_P));
         mMult       = (float)mMult_int + mMult_fract;
     }
-    if (mMult == 0.0F)
+    if (mMult < 1e-9)
     {
         mMult = 1.0F;
     }
