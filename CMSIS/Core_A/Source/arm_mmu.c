@@ -8,27 +8,54 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "fsl_common.h"
-#include "fsl_debug_console.h"
+#include <stdbool.h>
+#include <stdint.h>
+
+//#include "fsl_common.h"
+//#include "fsl_debug_console.h"
 
 #include "lib_helpers.h"
-#include "arm_mmu.h"
+#include "core_ca53.h"
 
 /*******************************************************************************
- * FreeRTOS port
+ * Definitions
  ******************************************************************************/
-#ifdef FSL_RTOS_FREE_RTOS
+
+#define __ASSERT(op, fmt, ...) \
+  do { \
+    if (!(op)) { \
+      while(1) \
+        /* wait here */; \
+    } \
+  } while (0)
+
+#ifndef MAX
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
+#endif
 
 #define isb()                  __ISB()
 #define dsb()                  __DSB()
 #define dmb()                  __DMB()
+
+#define MPIDR_AFFLVL(mpidr, aff_level) \
+      (((mpidr) >> MPIDR_AFF##aff_level##_SHIFT) & MPIDR_AFFLVL_MASK)
+
+#define GET_MPIDR()               read_sysreg(mpidr_el1)
+
+#if (defined(FSL_RTOS_FREE_RTOS) && defined(GUEST))
+  #define MPIDR_TO_CORE(mpidr)    MPIDR_AFFLVL(mpidr, 3)
+#else
+  #define MPIDR_TO_CORE(mpidr)    MPIDR_AFFLVL(mpidr, 0)
+#endif
+#define IS_PRIMARY_CORE()         (!MPIDR_TO_CORE(GET_MPIDR()))
 
 #define CONFIG_MMU_PAGE_SIZE   4096
 #define CONFIG_MAX_XLAT_TABLES 16
 #define CONFIG_ARM64_PA_BITS   48
 #define CONFIG_ARM64_VA_BITS   48
 
-#define LOG_ERR(fmt, ...)      PRINTF(fmt, ##__VA_ARGS__);
+//#define LOG_ERR(fmt, ...)      PRINTF(fmt, ##__VA_ARGS__);
+#define LOG_ERR(fmt, ...)      (void)(fmt)
 #define ARG_UNUSED(x)          (void)(x)
 
 #define BITS_PER_LONG          (__CHAR_BIT__ * __SIZEOF_LONG__)
@@ -54,9 +81,9 @@ struct k_spinlock {
  ******************************************************************************/
 
 /* Set below flag to get debug prints */
-#define MMU_DEBUG_PRINTS	0
+//#define MMU_DEBUG_PRINTS	0
 
-#if MMU_DEBUG_PRINTS
+#if defined (MMU_DEBUG_PRINTS) && (MMU_DEBUG_PRINTS == 1)
 /* To dump page table entries while filling them, set DUMP_PTE macro */
 #define DUMP_PTE		0
 #define MMU_DEBUG(fmt, ...)	PRINTF(fmt, ##__VA_ARGS__)
@@ -142,7 +169,6 @@ struct k_spinlock {
 
 #define DESC_ATTRS_MASK		(DESC_ATTRS_UPPER_MASK | DESC_ATTRS_LOWER_MASK)
 
-#endif /* #ifdef FSL_RTOS_FREE_RTOS */
 /******************************************************************************/
 
 static uint64_t xlat_tables[CONFIG_MAX_XLAT_TABLES * Ln_XLAT_NUM_ENTRIES]
@@ -333,7 +359,7 @@ static uint64_t *expand_to_table(uint64_t *pte, unsigned int level)
 	return table;
 }
 
-static int set_mapping(struct arm_mmu_ptables *ptables,
+static int set_mapping(struct ARM_MMU_ptables *ptables,
 		       uintptr_t virt, size_t size,
 		       uint64_t desc, bool may_overwrite)
 {
@@ -492,7 +518,7 @@ static uint64_t get_region_desc(uint32_t attrs)
 	return desc;
 }
 
-static int add_map(struct arm_mmu_ptables *ptables, const char *name,
+static int add_map(struct ARM_MMU_ptables *ptables, const char *name,
 		   uintptr_t phys, uintptr_t virt, size_t size, uint32_t attrs)
 {
 	uint64_t desc = get_region_desc(attrs);
@@ -515,8 +541,8 @@ static void invalidate_tlb_all(void)
 
 /* OS execution regions with appropriate attributes */
 
-static inline void add_arm_mmu_flat_range(struct arm_mmu_ptables *ptables,
-					  const struct arm_mmu_flat_range *range,
+static inline void add_ARM_MMU_flat_range(struct ARM_MMU_ptables *ptables,
+					  const struct ARM_MMU_flat_range *range,
 					  uint32_t extra_flags)
 {
 	uintptr_t address = (uintptr_t)range->start;
@@ -528,8 +554,8 @@ static inline void add_arm_mmu_flat_range(struct arm_mmu_ptables *ptables,
 	}
 }
 
-static inline void add_arm_mmu_region(struct arm_mmu_ptables *ptables,
-				      const struct arm_mmu_region *region,
+static inline void add_ARM_MMU_region(struct ARM_MMU_ptables *ptables,
+				      const struct ARM_MMU_region *region,
 				      uint32_t extra_flags)
 {
 	if (region->size || region->attrs) {
@@ -538,19 +564,19 @@ static inline void add_arm_mmu_region(struct arm_mmu_ptables *ptables,
 	}
 }
 
-static void setup_page_tables(struct arm_mmu_ptables *ptables)
+static void setup_page_tables(struct ARM_MMU_ptables *ptables)
 {
 	unsigned int index;
-	const struct arm_mmu_flat_range *range;
-	const struct arm_mmu_region *region;
+	const struct ARM_MMU_flat_range *range;
+	const struct ARM_MMU_region *region;
 	uintptr_t max_va = 0, max_pa = 0;
 
 	MMU_DEBUG("xlat tables:\r\n");
 	for (index = 0; index < CONFIG_MAX_XLAT_TABLES; index++)
 		MMU_DEBUG("%d: %p\r\n", index, xlat_tables + index * Ln_XLAT_NUM_ENTRIES);
 
-	for (index = 0; index < mmu_config.num_regions; index++) {
-		region = &mmu_config.mmu_regions[index];
+	for (index = 0; index < MMU_config.num_regions; index++) {
+		region = &MMU_config.mmu_regions[index];
 		max_va = MAX(max_va, region->base_va + region->size);
 		max_pa = MAX(max_pa, region->base_pa + region->size);
 	}
@@ -561,18 +587,18 @@ static void setup_page_tables(struct arm_mmu_ptables *ptables)
 		 "Maximum PA not supported\r\n");
 
 	/* setup translation table for OS execution regions */
-	for (index = 0; index < mmu_config.num_regions; index++) {
-		range = &mmu_config.mmu_os_ranges[index];
-		add_arm_mmu_flat_range(ptables, range, 0);
+	for (index = 0; index < MMU_config.num_regions; index++) {
+		range = &MMU_config.mmu_os_ranges[index];
+		add_ARM_MMU_flat_range(ptables, range, 0);
 	}
 
 	/*
 	 * Create translation tables for user provided platform regions.
 	 * Those must not conflict with our default mapping.
 	 */
-	for (index = 0; index < mmu_config.num_regions; index++) {
-		region = &mmu_config.mmu_regions[index];
-		add_arm_mmu_region(ptables, region, MT_NO_OVERWRITE);
+	for (index = 0; index < MMU_config.num_regions; index++) {
+		region = &MMU_config.mmu_regions[index];
+		add_ARM_MMU_region(ptables, region, MT_NO_OVERWRITE);
 	}
 
 	invalidate_tlb_all();
@@ -607,7 +633,7 @@ static uint64_t get_tcr(int el)
 	return tcr;
 }
 
-static void enable_mmu_el1(struct arm_mmu_ptables *ptables, unsigned int flags)
+static void enable_mmu_el1(struct ARM_MMU_ptables *ptables, unsigned int flags)
 {
 	ARG_UNUSED(flags);
 	uint64_t val;
@@ -632,7 +658,7 @@ static void enable_mmu_el1(struct arm_mmu_ptables *ptables, unsigned int flags)
 
 /* ARM MMU Driver Initial Setup */
 
-static struct arm_mmu_ptables kernel_ptables;
+static struct ARM_MMU_ptables kernel_ptables;
 #ifdef CONFIG_USERSPACE
 static sys_slist_t domain_list;
 #endif
@@ -643,7 +669,8 @@ static sys_slist_t domain_list;
  * This function provides the default configuration mechanism for the Memory
  * Management Unit (MMU).
  */
-void z_arm64_mmu_init(void)
+/* was: void z_arm64_mmu_init() */
+void ARM_MMU_Initialize(void)
 {
 	unsigned int flags = 0;
 

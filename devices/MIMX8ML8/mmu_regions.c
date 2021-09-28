@@ -27,7 +27,7 @@ extern uintptr_t __itcm_end__[];
 extern uintptr_t __dtcm_start__[];
 extern uintptr_t __dtcm_end__[];
 
-static const struct arm_mmu_flat_range mmu_os_ranges[] = {
+static const struct ARM_MMU_flat_range mmu_os_ranges[] = {
 
 	/* Mark text/rodata segments cacheable, read only and executable */
 	{ .name  = "code",
@@ -91,7 +91,7 @@ static const struct arm_mmu_flat_range mmu_os_ranges[] = {
 	  .attrs = MT_NORMAL | MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
 };
 
-static const struct arm_mmu_region mmu_regions[] = {
+static const struct ARM_MMU_region mmu_regions[] = {
 
 	MMU_REGION_FLAT_ENTRY("GPT1",
 			      0x302d0000, KB(64),
@@ -123,7 +123,7 @@ static const struct arm_mmu_region mmu_regions[] = {
 
 };
 
-const struct arm_mmu_config mmu_config = {
+const struct ARM_MMU_config MMU_config = {
 	.num_regions = ARRAY_SIZE(mmu_regions),
 	.mmu_regions = mmu_regions,
 	.num_os_ranges = ARRAY_SIZE(mmu_os_ranges),

@@ -100,6 +100,24 @@
 #define DAIF_A_BIT                BIT(8)
 #define DAIF_D_BIT                BIT(9)
 
+/* System Control Register */
+#define SCTLR_M_BIT               BIT(0)
+#define SCTLR_A_BIT               BIT(1)
+#define SCTLR_C_BIT               BIT(2)
+#define SCTLR_SA_BIT              BIT(3)
+#define SCTLR_I_BIT               BIT(12)
+
+/* Exception levels EL0-EL3 */
+#define MODE_EL_SHIFT		(0x2)
+#define MODE_EL_MASK		(0x3)
+
+#define MODE_EL3		(0x3)
+#define MODE_EL2		(0x2)
+#define MODE_EL1		(0x1)
+#define MODE_EL0		(0x0)
+
+#define GET_EL(_mode)		(((_mode) >> MODE_EL_SHIFT) & MODE_EL_MASK)
+
 /*******************************************************************************
  *                 L1 Cache Functions
  ******************************************************************************/
@@ -111,7 +129,11 @@
  *                 MMU Functions
  ******************************************************************************/
 
-/* TODO: MMU Functions are TBD */
+#if defined (__MMU_PRESENT) && (__MMU_PRESENT == 1U)
+
+  #include "arm_mmu.h"
+
+#endif
 
 
 /*******************************************************************************

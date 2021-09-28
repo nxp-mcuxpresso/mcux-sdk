@@ -9,16 +9,12 @@
 #ifndef ZEPHYR_INCLUDE_ARCH_ARM64_MMU_ARM_MMU_H_
 #define ZEPHYR_INCLUDE_ARCH_ARM64_MMU_ARM_MMU_H_
 
-/*******************************************************************************
- * FreeRTOS port
- ******************************************************************************/
-#ifdef FSL_RTOS_FREE_RTOS
+#include <stddef.h>
 
 #define KB(x)                  ((x) << 10)
 #define MB(x)                  (KB(x) << 10)
 #define GB(x)                  (MB(x) << 10)
 
-#endif
 /******************************************************************************/
 
 /* Following Memory types supported through MAIR encodings can be passed
@@ -158,7 +154,7 @@
 #ifndef _ASMLANGUAGE
 
 /* Region definition data structure */
-struct arm_mmu_region {
+struct ARM_MMU_region {
 	/* Region Base Physical Address */
 	uintptr_t base_pa;
 	/* Region Base Virtual Address */
@@ -172,25 +168,25 @@ struct arm_mmu_region {
 };
 
 /* MMU configuration data structure */
-struct arm_mmu_config {
+struct ARM_MMU_config {
 	/* Number of regions */
 	unsigned int num_regions;
 	/* Regions */
-	const struct arm_mmu_region *mmu_regions;
+	const struct ARM_MMU_region *mmu_regions;
 	/* Number of OS memory regions */
 	unsigned int num_os_ranges;
 	/* OS memory regions */
-	const struct arm_mmu_flat_range *mmu_os_ranges;
+	const struct ARM_MMU_flat_range *mmu_os_ranges;
 };
 
-struct arm_mmu_flat_range {
+struct ARM_MMU_flat_range {
 	char *name;
 	void *start;
 	void *end;
 	uint32_t attrs;
 };
 
-struct arm_mmu_ptables {
+struct ARM_MMU_ptables {
 	uint64_t *base_xlat_table;
 };
 
@@ -217,9 +213,10 @@ struct arm_mmu_ptables {
  * and holds the build-time configuration information for the fixed MMU
  * regions enabled during kernel initialization.
  */
-extern const struct arm_mmu_config mmu_config;
+extern const struct ARM_MMU_config MMU_config;
 
-void z_arm64_mmu_init(void);
+/* was: void z_arm64_mmu_init() */
+void ARM_MMU_Initialize(void);
 #endif /* _ASMLANGUAGE */
 
 #endif /* ZEPHYR_INCLUDE_ARCH_ARM64_MMU_ARM_MMU_H_ */

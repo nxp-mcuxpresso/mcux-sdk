@@ -7,7 +7,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpt
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iuart
-    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/mmu_armv8a
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
@@ -25,7 +24,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_common)
 #    include(driver_gpt)
 #    include(driver_iuart)
-#    include(driver_mmu_armv8a)
 #    include(middleware_freertos-kernel_ca53)
 #    include(middleware_freertos-kernel_extension)
 #    include(middleware_freertos-kernel_heap_4)
