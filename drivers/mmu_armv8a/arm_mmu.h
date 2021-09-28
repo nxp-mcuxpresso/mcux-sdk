@@ -177,6 +177,17 @@ struct arm_mmu_config {
 	unsigned int num_regions;
 	/* Regions */
 	const struct arm_mmu_region *mmu_regions;
+	/* Number of OS memory regions */
+	unsigned int num_os_ranges;
+	/* OS memory regions */
+	const struct arm_mmu_flat_range *mmu_os_ranges;
+};
+
+struct arm_mmu_flat_range {
+	char *name;
+	void *start;
+	void *end;
+	uint32_t attrs;
 };
 
 struct arm_mmu_ptables {

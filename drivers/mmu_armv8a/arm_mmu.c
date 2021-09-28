@@ -515,95 +515,6 @@ static void invalidate_tlb_all(void)
 
 /* OS execution regions with appropriate attributes */
 
-struct arm_mmu_flat_range {
-	char *name;
-	void *start;
-	void *end;
-	uint32_t attrs;
-};
-
-/* symbols defined in linker script: */
-extern uintptr_t __text[];
-extern uintptr_t __etext[];
-extern uintptr_t __data_start__[];
-extern uintptr_t __data_end__[];
-extern uintptr_t __stacks_limit__[];
-extern uintptr_t __stacks_top__[];
-extern uintptr_t __noncachedata_start__[];
-extern uintptr_t __noncachedata_end__[];
-extern uintptr_t __ocramtext_start__[];
-extern uintptr_t __ocramtext_end__[];
-extern uintptr_t __ocramdata_start__[];
-extern uintptr_t __ocramdata_end__[];
-extern uintptr_t __itcm_start__[];
-extern uintptr_t __itcm_end__[];
-extern uintptr_t __dtcm_start__[];
-extern uintptr_t __dtcm_end__[];
-
-static const struct arm_mmu_flat_range mmu_os_ranges[] = {
-
-	/* Mark text/rodata segments cacheable, read only and executable */
-	{ .name  = "code",
-	  .start = __text,
-	  .end   = __etext,
-	  .attrs = MT_NORMAL | MT_P_RX_U_NA | MT_DEFAULT_SECURE_STATE },
-
-	/* Mark the execution regions (data, bss, noinit, etc.)
-	 * cacheable, read-write
-	 * Note: read-write region is marked execute-never internally
-	 */
-	{ .name  = "data",
-	  .start = __data_start__,
-	  .end   = __data_end__,
-	  .attrs = MT_NORMAL | MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
-
-	/* Mark the stack regions (_el0_stack, _el1_stack)
-	 * cacheable, read-write
-	 * Note: read-write region is marked execute-never internally
-	 */
-	{ .name  = "stacks",
-	  .start = __stacks_limit__,
-	  .end   = __stacks_top__,
-	  .attrs = MT_NORMAL | MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
-
-	/* Mark the shared regions (non-cacheable data)
-	 * noncacheable, read-write
-	 * Note: read-write region is marked execute-never internally
-	 */
-	{ .name  = "data_nc",
-	  .start = __noncachedata_start__,
-	  .end   = __noncachedata_end__,
-	  .attrs = MT_NORMAL_NC	| MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
-
-	/* Mark text/rodata segments cacheable, read only and executable */
-	{ .name  = "ocram_code",
-	  .start = __ocramtext_start__,
-	  .end   = __ocramtext_end__,
-	  .attrs = MT_NORMAL | MT_P_RX_U_NA | MT_DEFAULT_SECURE_STATE },
-
-	/* Mark the data regions cacheable, read-write
-	 * Note: read-write region is marked execute-never internally
-	 */
-	{ .name  = "ocram_data",
-	  .start = __ocramdata_start__,
-	  .end   = __ocramdata_end__,
-	  .attrs = MT_NORMAL | MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
-
-	/* Mark text/rodata segments cacheable, read only and executable */
-	{ .name  = "itcm",
-	  .start = __itcm_start__,
-	  .end   = __itcm_end__,
-	  .attrs = MT_NORMAL | MT_P_RX_U_NA | MT_DEFAULT_SECURE_STATE },
-
-	/* Mark the data regions cacheable, read-write
-	 * Note: read-write region is marked execute-never internally
-	 */
-	{ .name  = "dtcm",
-	  .start = __dtcm_start__,
-	  .end   = __dtcm_end__,
-	  .attrs = MT_NORMAL | MT_P_RW_U_NA | MT_DEFAULT_SECURE_STATE },
-};
-
 static inline void add_arm_mmu_flat_range(struct arm_mmu_ptables *ptables,
 					  const struct arm_mmu_flat_range *range,
 					  uint32_t extra_flags)
@@ -650,8 +561,8 @@ static void setup_page_tables(struct arm_mmu_ptables *ptables)
 		 "Maximum PA not supported\r\n");
 
 	/* setup translation table for OS execution regions */
-	for (index = 0; index < ARRAY_SIZE(mmu_os_ranges); index++) {
-		range = &mmu_os_ranges[index];
+	for (index = 0; index < mmu_config.num_regions; index++) {
+		range = &mmu_config.mmu_os_ranges[index];
 		add_arm_mmu_flat_range(ptables, range, 0);
 	}
 
