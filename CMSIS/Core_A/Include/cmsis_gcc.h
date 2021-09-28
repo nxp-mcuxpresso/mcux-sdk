@@ -43,6 +43,33 @@
   #define __STATIC_FORCEINLINE                   __attribute__((always_inline)) static inline
 #endif
 
+#ifndef __STRINGIFY
+  #define __STRINGIFY(x)                         #x
+#endif
+
+#ifndef __MSR
+  #define __MSR(sysreg, val) \
+    __asm volatile ("msr "__STRINGIFY(sysreg)", %0\n" : : "r"((uint64_t)(val)))
+#endif
+
+#ifndef __MRS
+#define __MRS(sysreg, val) \
+  __asm volatile ("mrs  %0, "__STRINGIFY(sysreg)"\n" : "=r"((val)))
+#endif
+
+/**
+  \brief   Multiprocessor Affinity
+  \details Indicates the core number in the Cortex-Axx processor.
+ */
+__STATIC_FORCEINLINE uint32_t __get_MPIDR_EL1(void)
+{
+    uint32_t result;
+    __MRS(MPIDR_EL1, result);
+    return result;
+}
+
+#define MPIDR_GetCoreID() (__get_MPIDR_EL1() & 0xff)
+
 /**
   \brief   Instruction Synchronization Barrier
   \details Instruction Synchronization Barrier flushes the pipeline in the processor,
