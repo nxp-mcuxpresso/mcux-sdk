@@ -76,30 +76,36 @@ __STATIC_FORCEINLINE uint32_t __get_MPIDR_EL1(void)
            so that all instructions following the ISB are fetched from cache or memory,
            after the instruction has been completed.
  */
+#ifndef __ISB
 __STATIC_FORCEINLINE void __ISB(void)
 {
   __ASM volatile ("isb":::"memory");
 }
+#endif
 
 /**
   \brief   Data Synchronization Barrier
   \details Acts as a special kind of Data Memory Barrier.
            It completes when all explicit memory accesses before this instruction complete.
  */
+#ifndef __DSB
 __STATIC_FORCEINLINE void __DSB(void)
 {
   __ASM volatile ("dsb sy":::"memory");
 }
+#endif
 
 /**
   \brief   Data Memory Barrier
   \details Ensures the apparent order of the explicit memory operations before
            and after the instruction, without ensuring their completion.
  */
+#ifndef __DMB
 __STATIC_FORCEINLINE void __DMB(void)
 {
   __ASM volatile ("dmb sy":::"memory");
 }
+#endif
 
 
 /**
