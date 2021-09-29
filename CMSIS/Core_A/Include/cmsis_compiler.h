@@ -39,12 +39,6 @@
  extern "C" {
 #endif
 
-#if defined(__GNUC__)
-  #define FORCEDINLINE  __attribute__((always_inline))
-#else
-  #define FORCEDINLINE
-#endif
-
 #if   defined ( __CC_ARM )
   #define __ASM            __asm                                      /*!< asm keyword for ARM Compiler */
   #define __INLINE         __inline                                   /*!< inline keyword for ARM Compiler */
@@ -56,9 +50,7 @@
   #define __STATIC_INLINE  static __inline
 
 #elif defined ( __GNUC__ )
-  #define __ASM            __asm                                      /*!< asm keyword for GNU Compiler */
-  #define __INLINE         inline                                     /*!< inline keyword for GNU Compiler */
-  #define __STATIC_INLINE  static inline
+  #include "cmsis_gcc.h"
 
 #elif defined ( __ICCARM__ )
   #define __ASM            __asm                                      /*!< asm keyword for IAR Compiler */
@@ -83,9 +75,6 @@
 #else
   #error Unknown compiler
 #endif
-
-#define __FPU_PRESENT 1
-#define __FPU_USED    1
 
 /* IO definitions (access restrictions to peripheral registers) */
 #ifdef __cplusplus
