@@ -111,6 +111,17 @@
 #endif
 
 
+/*******************************************************************************
+ *                 Timer Functions
+ ******************************************************************************/
+
+#if defined (__TIM_PRESENT)
+#endif
+#if defined (__TIM_PRESENT) && (__TIM_PRESENT == 1U)
+  #include "timer_armv8a.h"
+#endif
+
+
 #ifdef __cplusplus
 }
 #endif
