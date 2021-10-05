@@ -108,11 +108,39 @@ typedef struct
 
 #define GICDistributor      ((GICDistributor_Type      *)     GIC_DISTRIBUTOR_BASE ) /*!< \brief GIC Distributor register set access pointer */
 
+/** \brief  Structure type to access the Generic Interrupt Controller Redistributor (GICR)
+*/
+typedef struct
+{
+  __IOM uint32_t CTLR;                 /*!< \brief  Offset: 0x000 (R/W) Redistributor Control Register */
+  __IM  uint32_t IIDR;                 /*!< \brief  Offset: 0x004 (R/ ) Implementer Identification Register */
+  __IM  uint32_t TYPER;                /*!< \brief  Offset: 0x008 (R/ ) Redistributor Type Register */
+        RESERVED(0, uint32_t)
+  __IOM uint32_t STATUSR;              /*!< \brief  Offset: 0x010 (R/W) Error Reporting Status Register, optional */
+  __IOM uint32_t WAKER;                /*!< \brief  Offset: 0x014 (R/W) Redistributor Wake Register */
+  __IM  uint32_t MPAMIDR;              /*!< \brief  Offset: 0x018 (R/ ) Report maximum PARTID and PMG Register */
+  __IOM uint32_t PARTIDR;              /*!< \brief  Offset: 0x01C (R/W) Set PARTID and PMG Register */
+        RESERVED(1[8], uint32_t)
+  __OM  uint32_t SETLPIR;              /*!< \brief  Offset: 0x040 ( /W) Set LPI Pending Register */
+        RESERVED(2, uint32_t)
+  __OM  uint32_t CLRLPIR;              /*!< \brief  Offset: 0x048 ( /W) Clear LPI Pending Register */
+        RESERVED(3[9], uint32_t)
+  __IOM uint32_t PROPBASER;            /*!< \brief  Offset: 0x070 (R/W) Redistributor Properties Base Address Register */
+        RESERVED(4, uint32_t)
+  __IOM uint32_t PENDBASER;            /*!< \brief  Offset: 0x078 (R/W) Redistributor LPI Pending Table Base Address Register */
+        RESERVED(5[9], uint32_t)
+  __OM  uint32_t INVLPIR;              /*!< \brief  Offset: 0x0A0 ( /W) Redistributor Invalidate LPI Register */
+        RESERVED(6[3], uint32_t)
+  __OM  uint32_t INVALLR;              /*!< \brief  Offset: 0x0B0 ( /W) Redistributor Invalidate All Register */
+        RESERVED(7[3], uint32_t)
+  __IM  uint32_t SYNCR;                /*!< \brief  Offset: 0x0C0 (R/ ) Redistributor Synchronize Register */
+}  GICRedistributor_Type;
+
 #define GICRedistributorArray    { \
-                                  (GICDistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 0)), \
-                                  (GICDistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 1)), \
-                                  (GICDistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 2)), \
-                                  (GICDistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 3))  \
+                                  (GICRedistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 0)), \
+                                  (GICRedistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 1)), \
+                                  (GICRedistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 2)), \
+                                  (GICRedistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 3))  \
                                  }
 
 #define GICRedistributorPPIArray { \
@@ -394,11 +422,11 @@ __STATIC_INLINE void GIC_SetRedistPriority(IRQn_Type IRQn, uint32_t priority)
 __STATIC_INLINE void GIC_RedistWakeUp(void)
 {
   uint32_t core = MPIDR_GetCoreID();
-  static GICDistributor_Type *const s_RedistBaseAddrs[] = GICRedistributorArray;
+  static GICRedistributor_Type *const s_RedistBaseAddrs[] = GICRedistributorArray;
 
-  /* wakey wakey mr redistrirbutor */
-  *(((uint32_t*)s_RedistBaseAddrs[core] ) + 5) = 0x02;
-  *(((uint32_t*)s_RedistBaseAddrs[core] ) + 5) = 0x04;
+  /* wakey wakey mr redistributor */
+  s_RedistBaseAddrs[core]->WAKER = 0x02;
+  s_RedistBaseAddrs[core]->WAKER = 0x04;
 }
 
 /** \brief Read the current interrupt priority from GIC's IPRIORITYR register.
