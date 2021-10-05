@@ -101,4 +101,15 @@ __STATIC_FORCEINLINE void __DMB(void)
   __ASM volatile ("dmb sy":::"memory");
 }
 
+
+/**
+  \brief   Breakpoint
+  \details Causes the processor to enter Debug state.
+           Debug tools can use this to investigate system state when the instruction at a particular address is reached.
+  \param [in]    value  is ignored by the processor.
+                 If required, a debugger can use it to store additional information about the breakpoint.
+ */
+#define __BKPT(value)                       __ASM volatile ("brk "#value)
+
+
 #endif /* __CMSIS_GCC_H */
