@@ -281,9 +281,10 @@ __STATIC_INLINE uint32_t GIC_GetEnableIRQ(IRQn_Type IRQn)
 __STATIC_INLINE void GIC_DisableIRQ(IRQn_Type IRQn)
 {
   static GICDistributor_Type *const s_RedistPPIBaseAddrs[] = GICRedistributorPPIArray;
-  uint32_t core = MPIDR_GetCoreID();
+  uint32_t core;
 
   if (IRQn < 32) {
+    core = MPIDR_GetCoreID();
     s_RedistPPIBaseAddrs[core]->ICENABLER[0] = 1U << IRQn;
   }
   else {
@@ -752,14 +753,11 @@ __STATIC_INLINE void GIC_CPUInterfaceInit(void)
 
 /** \brief Initialize and enable the GIC
 */
-__STATIC_INLINE void GIC_Enable(int mainCore)
+__STATIC_INLINE void GIC_Enable(int init_dist)
 {
-  uint32_t core = MPIDR_GetCoreID();
-
-  if (core == 0) {
-    /* Primary core is responsible for the GIC distributor setup */
+  /* Only one core should be responsible for the GIC distributor setup */
+  if (init_dist)
     GIC_DistInit();
-  }
 
   GIC_RedistInit();
   GIC_CPUInterfaceInit(); //per CPU
