@@ -11,11 +11,10 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-//#include "fsl_common.h"
-//#include "fsl_debug_console.h"
+#include "arm_mmu.h"
 
+/* TODO: remoe dependency on lib_helpers.h */
 #include "lib_helpers.h"
-#include "core_ca53.h"
 
 /*******************************************************************************
  * Definitions

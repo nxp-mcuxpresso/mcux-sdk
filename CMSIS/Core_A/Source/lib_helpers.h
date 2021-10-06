@@ -12,11 +12,7 @@
 
 #include <stdint.h>
 
-#ifdef FSL_RTOS_FREE_RTOS
-#include "FreeRTOS.h"
-
-#define __INLINE inline
-#endif /* #ifdef FSL_RTOS_FREE_RTOS */
+#include "core_ca53.h"
 
 /* All the macros need a memory clobber */
 
