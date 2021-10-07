@@ -94,31 +94,31 @@ static const struct ARM_MMU_flat_range mmu_os_ranges[] = {
 static const struct ARM_MMU_region mmu_regions[] = {
 
 	MMU_REGION_FLAT_ENTRY("GPT1",
-			      0x302d0000, KB(64),
+			      GPT1_BASE, KB(64),
 			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
 
 	MMU_REGION_FLAT_ENTRY("GPT2",
-			      0x302e0000, KB(64),
+			      GPT2_BASE, KB(64),
 			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
 
 	MMU_REGION_FLAT_ENTRY("ANA_PLL",
-			      0x30360000, KB(64),
+			      CCM_ANALOG_BASE, KB(64),
 			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
 
 	MMU_REGION_FLAT_ENTRY("CCM",
-			      0x30380000, KB(64),
+			      CCM_BASE, KB(64),
 			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
 
 	MMU_REGION_FLAT_ENTRY("UART2",
-			      0x30890000, KB(4),
+			      UART2_BASE, KB(4),
 			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
 
 	MMU_REGION_FLAT_ENTRY("UART4",
-			      0x30a60000, KB(4),
+			      UART4_BASE, KB(4),
 			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
 
 	MMU_REGION_FLAT_ENTRY("GIC",
-			      0x38800000, MB(1),
+			      GIC_DISTRIBUTOR_BASE, MB(1),
 			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
 
 };
