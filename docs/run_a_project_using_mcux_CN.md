@@ -5,10 +5,11 @@
 # :one:设置环境
 
 ## 1. 安装 MCUXpresso IDE
-1.从[链接](https://www.nxp.com/design/software/development-software/mcuxpresso-software-and-tools-/mcuxpresso-integrated-development-environment-ide:MCUXpresso-IDE?tab=Design_Tools_Tab)下载MCUXpresso IDE。
+1. 从[链接](https://www.nxp.com/design/software/development-software/mcuxpresso-software-and-tools-/mcuxpresso-integrated-development-environment-ide:MCUXpresso-IDE?tab=Design_Tools_Tab)下载MCUXpresso IDE。
+
 2. 打开 MCUXpresso IDE，选择工作区位置。
 
-在您首次启用MCUXpresso IDE时，系统会要求选择工作区。工作区只是一个用于存储工程项目和数据的文件系统目录，对于新安装，通常应接受推荐的默认位置。如果您勾选了 **“用此作为默认选项，并且不再询问”** 选项，那么MCUXpresso IDE启动时会始终开启所选的工作区；否则，系统会始终提示您选择一个工作区。
+    在您首次启用MCUXpresso IDE时，系统会要求选择工作区。工作区只是一个用于存储工程项目和数据的文件系统目录，对于新安装，通常应接受推荐的默认位置。如果您勾选了 **“用此作为默认选项，并且不再询问”** 选项，那么MCUXpresso IDE启动时会始终开启所选的工作区；否则，系统会始终提示您选择一个工作区。
     
     建议工作区的位置放在SDK的west工作区目录之外。
 
