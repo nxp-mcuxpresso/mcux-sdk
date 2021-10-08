@@ -1,3 +1,5 @@
+[Previous Page](Getting_Started.md)
+
 This section describes the steps to configure the command line Arm® GCC tools to build, run, and debug software examples provided in the MCUXpresso SDK. The hello_world demo located in boards/{board_name}/demos_apps/hello_world/ is used as an example.
 
 # :one:Set up environment

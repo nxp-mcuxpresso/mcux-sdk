@@ -1,4 +1,4 @@
-
+[Previous Page](CONTRIBUTING.md)
 # Contributor Covenant Code of Conduct
 
 ## Our Pledge

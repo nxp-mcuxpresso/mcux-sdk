@@ -1,4 +1,11 @@
 # MCUXpresso SDK: mcux-sdk
+
+![NXP_logo](docs/nxp_logo_small.png)[EN](./README.md)|[中文](./README_CN.md)
+[![Version](https://img.shields.io/github/v/release/NXPMicro/mcux-sdk)](https://github.com/NXPmicro/mcux-sdk/releases/latest)
+[![Contributors](https://img.shields.io/github/contributors/NXPMicro/mcux-sdk)](https://github.com/NXPmicro/mcux-sdk/graphs/contributors)
+[![Issues](https://img.shields.io/github/issues/NXPMicro/mcux-sdk)](https://github.com/NXPmicro/mcux-sdk/issues)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/NXPmicro/mcux-sdk/pulls)
+
 MCUXpresso SDK is a comprehensive software enablement package designed to simplify and accelerate application development with Arm® Cortex®-M-based devices from NXP, including its general purpose, crossover and Bluetooth™-enabled MCUs. This project provides an alternative way for user to achieve the source code of MCUXpresso SDK besides SDK builder and MCUXpresso IDE.
 
 The whole MCUXpresso SDK delivery is composed of separate project deliveries. The idea we split the whole SDK delivery to separate projects is inspired by [Zephyr](https://github.com/zephyrproject-rtos/zephyr), and the projects are planned as below:
@@ -8,8 +15,9 @@ The whole MCUXpresso SDK delivery is composed of separate project deliveries. Th
 * Examples project built on above deliveries
 
 In this way we want to benefit user from below aspects:
-1. Provide ability for user to select needed projects to build his application.
-2. Avoid huge size in a single repository.
+1. Avoid huge size in a single repository.
+2. Provide flexibility for user to select needed projects to build his application.
+3. Provide ability for user to fetch needed project version to build his application.
 
 To satisfy the expectation we leveraged [Zephyr west tool](https://docs.zephyrproject.org/latest/guides/west/index.html) which helps do multi-repository management and allow user to self create ```west.yml``` to select needed projects for downstream use. 
 
@@ -66,7 +74,7 @@ Below figure takes 2.9.0 and 2.10.0 release as an example to show the relationsh
 See [Getting Start Guide](docs/Getting_Started.md) to start explore the project.
 
 ## License
-All SDK drivers, components, device support files, board support files and driver examples in this project are under BSD-3-Clause license, license copy please check [COPYING_BSD-3](COPYING-BSD-3). The ARM CMSIS component is under Apache License 2.0, license copy check [Apache License 2.0](CMSIS/LICENSE.txt). License information for all components could be found in [SW-Content-Register.txt](SW-Content-Register.txt)
+All SDK drivers, components, device support files, board support files in this project are under BSD-3-Clause license, license copy please check [COPYING_BSD-3](COPYING-BSD-3). The ARM CMSIS component is under Apache License 2.0, license copy check [Apache License 2.0](CMSIS/LICENSE.txt). License information for all components could be found in [SW-Content-Register.txt](SW-Content-Register.txt)
 
 ## Contribution
 Contributions are greatly welcomed! For detail guideline of contribution please check [Contribution Guide](CONTRIBUTING.md).
