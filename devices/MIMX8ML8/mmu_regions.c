@@ -5,9 +5,8 @@
  */
 
 #include "fsl_common.h"
-//#include <soc.h>
 
-#include "arm_mmu.h"
+#include "mmu_armv8a.h"
 
 /* symbols defined in linker script: */
 extern uintptr_t __text[];
@@ -118,7 +117,7 @@ static const struct ARM_MMU_region mmu_regions[] = {
 			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
 
 	MMU_REGION_FLAT_ENTRY("GIC",
-			      GIC_DISTRIBUTOR_BASE, MB(1),
+			      GIC_DISTRIBUTOR_BASE, KB(1024),
 			      MT_DEVICE_nGnRnE | MT_P_RW_U_RW | MT_NS),
 
 };

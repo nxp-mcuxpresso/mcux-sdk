@@ -1,20 +1,36 @@
+/**************************************************************************//**
+ * @file     mmu_armv8a.c
+ * @brief    CMSIS Cortex-Axx MMU Source file
+ * @version  V1.0.0
+ * @date     20. october 2021
+ ******************************************************************************/
 /*
  * Copyright 2019 Broadcom
  * The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
- *
- * Copyright (c) 2021 BayLibre, SAS
- * Copyright (c) 2021 NXP
+ * Copyright (c) 2021 Arm Limited. All rights reserved.
+ * Copyright 2021 NXP
  *
  * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the License); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "arm_mmu.h"
+#include "core_ca53.h"
+#include "mmu_armv8a.h"
 
-/* TODO: remoe dependency on lib_helpers.h */
-#include "lib_helpers.h"
 
 /*******************************************************************************
  * Definitions
@@ -32,62 +48,39 @@
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #endif
 
-#define isb()                  __ISB()
-#define dsb()                  __DSB()
-#define dmb()                  __DMB()
-
-#define MPIDR_AFFLVL(mpidr, aff_level) \
-      (((mpidr) >> MPIDR_AFF##aff_level##_SHIFT) & MPIDR_AFFLVL_MASK)
-
-#define GET_MPIDR()               read_sysreg(mpidr_el1)
-
-#if (defined(FSL_RTOS_FREE_RTOS) && defined(GUEST))
-  #define MPIDR_TO_CORE(mpidr)    MPIDR_AFFLVL(mpidr, 3)
-#else
-  #define MPIDR_TO_CORE(mpidr)    MPIDR_AFFLVL(mpidr, 0)
+#ifndef CONFIG_MMU_PAGE_SIZE
+#define CONFIG_MMU_PAGE_SIZE                   4096
 #endif
-#define IS_PRIMARY_CORE()         (!MPIDR_TO_CORE(GET_MPIDR()))
+#ifndef CONFIG_MAX_XLAT_TABLES
+#define CONFIG_MAX_XLAT_TABLES                 16
+#endif
+#ifndef CONFIG_ARM64_PA_BITS
+#define CONFIG_ARM64_PA_BITS                   48
+#endif
+#ifndef CONFIG_ARM64_VA_BITS
+#define CONFIG_ARM64_VA_BITS                   48
+#endif
 
-#define CONFIG_MMU_PAGE_SIZE   4096
-#define CONFIG_MAX_XLAT_TABLES 16
-#define CONFIG_ARM64_PA_BITS   48
-#define CONFIG_ARM64_VA_BITS   48
+#define LOG_ERR(fmt, ...)                      (void)(fmt)
+#define ARG_UNUSED(x)                          (void)(x)
 
-//#define LOG_ERR(fmt, ...)      PRINTF(fmt, ##__VA_ARGS__);
-#define LOG_ERR(fmt, ...)      (void)(fmt)
-#define ARG_UNUSED(x)          (void)(x)
-
-#define BITS_PER_LONG          (__CHAR_BIT__ * __SIZEOF_LONG__)
+#define BITS_PER_LONG                          (__CHAR_BIT__ * __SIZEOF_LONG__)
 #define GENMASK(h, l) \
   (((~0UL) - (1UL << (l)) + 1) & (~0UL >> (BITS_PER_LONG - 1 - (h))))
-
-#define        ENOMEM          12      /* Out of memory */
-#define        EBUSY           16      /* Device or resource busy */
-#define        ENOTSUP         35
-
-/* TODO: Figure out spinlock, if needed */
-struct k_spinlock {
-	char dummy;
-};
-#define k_spinlock_key_t       void *
-#define k_spin_lock(p)         (p)
-#define k_spin_unlock(p, key)  (void)key
-
-#define k_panic()              assert(false)
 
 /*******************************************************************************
  * from zephyr:/arch/arm/core/aarch64/mmu/arm_mmu.h:
  ******************************************************************************/
 
 /* Set below flag to get debug prints */
-//#define MMU_DEBUG_PRINTS	0
+//#define MMU_DEBUG_PRINTS                       0
 
 #if defined (MMU_DEBUG_PRINTS) && (MMU_DEBUG_PRINTS == 1)
 /* To dump page table entries while filling them, set DUMP_PTE macro */
-#define DUMP_PTE		0
-#define MMU_DEBUG(fmt, ...)	PRINTF(fmt, ##__VA_ARGS__)
+#define DUMP_PTE                               0
+  #define MMU_DEBUG(fmt, ...)                    PRINTF(fmt, ##__VA_ARGS__)
 #else
-#define MMU_DEBUG(...)
+  #define MMU_DEBUG(...)
 #endif
 
 /*
@@ -101,31 +94,31 @@ struct k_spinlock {
  */
 
 /* Only 4K granule is supported */
-#define PAGE_SIZE_SHIFT		12U
+#define PAGE_SIZE_SHIFT                        12U
 
 /* 48-bit VA address */
-#define VA_SIZE_SHIFT_MAX	48U
+#define VA_SIZE_SHIFT_MAX                      48U
 
 /* Maximum 4 XLAT table levels (L0 - L3) */
-#define XLAT_LAST_LEVEL		3U
+#define XLAT_LAST_LEVEL                        3U
 
 /* The VA shift of L3 depends on the granule size */
-#define L3_XLAT_VA_SIZE_SHIFT	PAGE_SIZE_SHIFT
+#define L3_XLAT_VA_SIZE_SHIFT                  PAGE_SIZE_SHIFT
 
 /* Number of VA bits to assign to each table (9 bits) */
-#define Ln_XLAT_VA_SIZE_SHIFT	(PAGE_SIZE_SHIFT - 3)
+#define Ln_XLAT_VA_SIZE_SHIFT                  (PAGE_SIZE_SHIFT - 3)
 
 /* Starting bit in the VA address for each level */
-#define L2_XLAT_VA_SIZE_SHIFT	(L3_XLAT_VA_SIZE_SHIFT + Ln_XLAT_VA_SIZE_SHIFT)
-#define L1_XLAT_VA_SIZE_SHIFT	(L2_XLAT_VA_SIZE_SHIFT + Ln_XLAT_VA_SIZE_SHIFT)
-#define L0_XLAT_VA_SIZE_SHIFT	(L1_XLAT_VA_SIZE_SHIFT + Ln_XLAT_VA_SIZE_SHIFT)
+#define L2_XLAT_VA_SIZE_SHIFT                  (L3_XLAT_VA_SIZE_SHIFT + Ln_XLAT_VA_SIZE_SHIFT)
+#define L1_XLAT_VA_SIZE_SHIFT                  (L2_XLAT_VA_SIZE_SHIFT + Ln_XLAT_VA_SIZE_SHIFT)
+#define L0_XLAT_VA_SIZE_SHIFT                  (L1_XLAT_VA_SIZE_SHIFT + Ln_XLAT_VA_SIZE_SHIFT)
 
 #define LEVEL_TO_VA_SIZE_SHIFT(level)			\
 	(PAGE_SIZE_SHIFT + (Ln_XLAT_VA_SIZE_SHIFT *	\
 	(XLAT_LAST_LEVEL - (level))))
 
 /* Number of entries for each table (512) */
-#define Ln_XLAT_NUM_ENTRIES	((1U << PAGE_SIZE_SHIFT) / 8U)
+#define Ln_XLAT_NUM_ENTRIES                    ((1U << PAGE_SIZE_SHIFT) / 8U)
 
 /* Virtual Address Index within a given translation table level */
 #define XLAT_TABLE_VA_IDX(va_addr, level) \
@@ -135,7 +128,7 @@ struct k_spinlock {
  * Calculate the initial translation table level from CONFIG_ARM64_VA_BITS
  * For a 4 KB page size:
  *
- * (va_bits <= 20)	 - base level 3
+ * (va_bits <= 20)       - base level 3
  * (21 <= va_bits <= 29) - base level 2
  * (30 <= va_bits <= 38) - base level 1
  * (39 <= va_bits <= 47) - base level 0
@@ -163,8 +156,8 @@ struct k_spinlock {
 #endif
 
 /* Upper and lower attributes mask for page/block descriptor */
-#define DESC_ATTRS_UPPER_MASK	GENMASK(63, 51)
-#define DESC_ATTRS_LOWER_MASK	GENMASK(11, 2)
+#define DESC_ATTRS_UPPER_MASK                  GENMASK(63, 51)
+#define DESC_ATTRS_LOWER_MASK                  GENMASK(11, 2)
 
 #define DESC_ATTRS_MASK		(DESC_ATTRS_UPPER_MASK | DESC_ATTRS_LOWER_MASK)
 
@@ -173,7 +166,6 @@ struct k_spinlock {
 static uint64_t xlat_tables[CONFIG_MAX_XLAT_TABLES * Ln_XLAT_NUM_ENTRIES]
 		__aligned(Ln_XLAT_NUM_ENTRIES * sizeof(uint64_t));
 static uint16_t xlat_use_count[CONFIG_MAX_XLAT_TABLES];
-static struct k_spinlock xlat_lock;
 
 /* Returns a reference to a free table */
 static uint64_t *new_table(void)
@@ -366,10 +358,7 @@ static int set_mapping(struct ARM_MMU_ptables *ptables,
 	uint64_t level_size;
 	uint64_t *table = ptables->base_xlat_table;
 	unsigned int level = BASE_XLAT_LEVEL;
-	k_spinlock_key_t key;
 	int ret = 0;
-
-	key = k_spin_lock(&xlat_lock);
 
 	while (size) {
 		__ASSERT(level <= XLAT_LAST_LEVEL,
@@ -391,7 +380,7 @@ static int set_mapping(struct ARM_MMU_ptables *ptables,
 			LOG_ERR("entry already in use: "
 				"level %d pte %p *pte 0x%016llx",
 				level, pte, *pte);
-			ret = -EBUSY;
+			ret = -1;
 			break;
 		}
 
@@ -410,7 +399,7 @@ static int set_mapping(struct ARM_MMU_ptables *ptables,
 			/* Range doesn't fit, create subtable */
 			table = expand_to_table(pte, level);
 			if (!table) {
-				ret = -ENOMEM;
+				ret = -1;
 				break;
 			}
 			level++;
@@ -445,8 +434,6 @@ move_on:
 		table = ptables->base_xlat_table;
 		level = BASE_XLAT_LEVEL;
 	}
-
-	k_spin_unlock(&xlat_lock, key);
 
 	return ret;
 }
@@ -512,6 +499,9 @@ static uint64_t get_region_desc(uint32_t attrs)
 			desc |= PTE_BLOCK_DESC_INNER_SHARE;
 		else
 			desc |= PTE_BLOCK_DESC_OUTER_SHARE;
+		break;
+	default:
+		break;
 	}
 
 	return desc;
@@ -529,13 +519,6 @@ static int add_map(struct ARM_MMU_ptables *ptables, const char *name,
 		 "address/size are not page aligned\r\n");
 	desc |= phys;
 	return set_mapping(ptables, virt, size, desc, may_overwrite);
-}
-
-static void invalidate_tlb_all(void)
-{
-	__asm__ volatile (
-	"tlbi vmalle1; dsb sy; isb"
-	: : : "memory");
 }
 
 /* OS execution regions with appropriate attributes */
@@ -600,7 +583,7 @@ static void setup_page_tables(struct ARM_MMU_ptables *ptables)
 		add_ARM_MMU_region(ptables, region, MT_NO_OVERWRITE);
 	}
 
-	invalidate_tlb_all();
+	ARM_MMU_InvalidateTLB();
 }
 
 /* Translation table control register settings */
@@ -624,10 +607,9 @@ static uint64_t get_tcr(int el)
 
 	tcr |= TCR_T0SZ(va_bits);
 	/*
-	 * Translation table walk is cacheable, inner/outer WBWA and
-	 * inner shareable
+	 * Translation table walk is cacheable, inner/outer WBWA
 	 */
-	tcr |= TCR_TG0_4K | TCR_SHARED_INNER | TCR_ORGN_WBWA | TCR_IRGN_WBWA;
+	tcr |= TCR_TG0_4K | TCR_ORGN_WBWA | TCR_IRGN_WBWA;
 
 	return tcr;
 }
@@ -638,19 +620,19 @@ static void enable_mmu_el1(struct ARM_MMU_ptables *ptables, unsigned int flags)
 	uint64_t val;
 
 	/* Set MAIR, TCR and TBBR registers */
-	write_mair_el1(MEMORY_ATTRIBUTES);
-	write_tcr_el1(get_tcr(1));
-	write_ttbr0_el1((uint64_t)ptables->base_xlat_table);
+	__MSR(MAIR_EL1, MEMORY_ATTRIBUTES);
+	__MSR(TCR_EL1, get_tcr(1));
+	__MSR(TTBR0_EL1, (uint64_t)ptables->base_xlat_table);
 
 	/* Ensure these changes are seen before MMU is enabled */
-	isb();
+	__ISB();
 
 	/* Enable the MMU and caches */
-	val = read_sctlr_el1();
-	write_sctlr_el1(val | SCTLR_M_BIT | SCTLR_C_BIT | SCTLR_I_BIT);
+	__MRS(SCTLR_EL1, &val);
+	__MSR(SCTLR_EL1, val | SCTLR_M_BIT | SCTLR_C_BIT | SCTLR_I_BIT);
 
 	/* Ensure the MMU enable takes effect immediately */
-	isb();
+	__ISB();
 
 	MMU_DEBUG("MMU enabled with caches\r\n");
 }
@@ -658,9 +640,6 @@ static void enable_mmu_el1(struct ARM_MMU_ptables *ptables, unsigned int flags)
 /* ARM MMU Driver Initial Setup */
 
 static struct ARM_MMU_ptables kernel_ptables;
-#ifdef CONFIG_USERSPACE
-static sys_slist_t domain_list;
-#endif
 
 /*
  * @brief MMU default configuration
@@ -668,28 +647,43 @@ static sys_slist_t domain_list;
  * This function provides the default configuration mechanism for the Memory
  * Management Unit (MMU).
  */
-/* was: void z_arm64_mmu_init() */
-void ARM_MMU_Initialize(void)
+void ARM_MMU_Initialize(bool is_primary_core)
 {
 	unsigned int flags = 0;
+	uint64_t val;
 
 	__ASSERT(CONFIG_MMU_PAGE_SIZE == KB(4),
 		 "Only 4K page size is supported\r\n");
 
-	__ASSERT(GET_EL(read_currentel()) == MODE_EL1,
+	__MRS(CURRENTEL, &val);
+	__ASSERT(GET_EL(val) == MODE_EL1,
 		 "Exception level not EL1, MMU not enabled!\r\n");
 
 	/* Ensure that MMU is already not enabled */
-	__ASSERT((read_sctlr_el1() & SCTLR_M_BIT) == 0, "MMU is already enabled\r\n");
+	__MRS(SCTLR_EL1, &val);
+	__ASSERT((val & SCTLR_M_BIT) == 0, "MMU is already enabled\r\n");
 
 	/*
 	 * Only booting core setup up the page tables.
 	 */
-	if (IS_PRIMARY_CORE()) {
+	if (is_primary_core) {
 		kernel_ptables.base_xlat_table = new_table();
 		setup_page_tables(&kernel_ptables);
 	}
 
 	/* currently only EL1 is supported */
 	enable_mmu_el1(&kernel_ptables, flags);
+}
+
+/*
+ * @brief MMU TLB invalidation
+ *
+ * This function invalidates the entire unified TLB
+ */
+void ARM_MMU_InvalidateTLB(void)
+{
+	__DSB();
+	__ASM volatile("tlbi vmalle1");
+	__DSB();
+	__ISB();
 }
