@@ -1,8 +1,8 @@
-[Previous Page](../README.md)
+[上一页](../README_CN.md)
 
-Supported development boards and MCU devices are listed in below table.
+最新SDK支持的开发板和 MCU 设备请参考下表。
 
-| Development boards |                         MCU devices                          |
+| 开发板        |                         MCU 设备                          |
 |:----------------:|:----------------------------------------------------------:|
 | EVK-MCIMX7ULP | **MCIMX7U5DVP07** , MCIMX7U5DVP07, MCIMX7U5DVK07, MCIMX7U5CVP06, MCIMX7U3DVK07, MCIMX7U3CVP06 |
 | EVK-MIMX8MM | **MIMX8MM6DVTLZ** , MIMX8MM6DVTLZ, MIMX8MM2DVTLZ, MIMX8MM1DVTLZ, MIMX8MM6CVTKZ, MIMX8MM2CVTKZ, MIMX8MM5CVTKZ, MIMX8MM5DVTLZ, MIMX8MM1CVTKZ, MIMX8MM4CVTKZ, MIMX8MM3CVTKZ, MIMX8MM4DVTLZ, MIMX8MM3DVTLZ |
