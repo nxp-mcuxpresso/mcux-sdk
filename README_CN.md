@@ -9,16 +9,16 @@
 MCUXpresso SDK 是一个综合性软件支持包，帮助您使用恩智浦基于Arm® Cortex®-M内核的MCU(包括其通用、跨界和Bluetooth™ MCU)简化和加快应用开发。该项目为用户提供了除 SDK builder 和 MCUXpresso IDE 之外的另一种方式来获取 MCUXpresso SDK 的源代码。
 
 我们将MCUXpresso SDK软件支持包的内容拆分成多个子项目并发布到单独的代码仓库。子项目分类如下：
-* 提供处理器头文件，启动代码，板级配置模板和外设驱动代码的基石项目，即当前项目。
-* 基于基石项目，提供嵌入式实时操作系统源代码的项目。
-* 基于基石项目的上层组件，又称为中间件项目。
-* 基于上述项目的示范例程项目。
+* 提供处理器头文件，启动代码，板级配置模板和外设驱动代码的基础代码库，即当前项目。
+* 基于基础代码库，提供嵌入式实时操作系统源代码的项目。
+* 基于基础代码库的上层组件，又称为中间件项目。
+* 基于上述项目的板级应用代码库。
 
 拆分成多个子项目发布的想法主要是受到 [Zephyr](https://github.com/zephyrproject-rtos/zephyr) 的启发，用户可以从这种发布方式中得到以下好处：
 
 1. 避免单个代码仓库过大。当前项目包含了MCUXpresso SDK 2.9.0版本以上所有的MCU的软件支持，如果所有内容放在一个代码仓库里面，会造成这个代码仓库过于臃肿，后续git的管理效率也会受到影响。
-2. 用户可以灵活地根据应用的需要选择子项目。举个例子，如果用户的应用只需要SDK的驱动以及FreeRTOS，其他的内容不需要，那么用户可以只拉取基石项目和FreeRTOS子项目的代码，不用拉取其他子项目的代码。
-3. 用户可以根据需要获取不同子项目的代码版本。因为不同的项目放在自己的代码仓库里面，所以代码版本可以分开管理。如果用户只希望升级SDK驱动的代码，那么用户只需要升级基石项目代码仓库的版本就可以了。
+2. 用户可以灵活地根据应用的需要选择子项目。举个例子，如果用户的应用只需要SDK的驱动以及FreeRTOS，其他的内容不需要，那么用户可以只拉取基础代码库和FreeRTOS子项目的代码，不用拉取其他子项目的代码。
+3. 用户可以根据需要获取不同子项目的代码版本。因为不同的项目放在自己的代码仓库里面，所以代码版本可以分开管理。如果用户只希望升级SDK驱动的代码，那么用户只需要升级基础代码库的版本就可以了。
 
 为了方便管理不同子项目的版本，我们利用 [Zephyr west 工具](https://docs.zephyrproject.org/latest/guides/west/index.html) 对多个代码仓库进行管理。使用west工具，用户也可以方便地创建自己的 ```west. yml``` 选择需要的子项目供应用使用。
 
@@ -34,13 +34,13 @@ MCUXpresso SDK 是一个综合性软件支持包，帮助您使用恩智浦基�
 
 **当前项目也是获取SDK所有项目的中央存储库**，它包含的[west.yml](https://github.com/NXPmicro/mcux-sdk/blob/main/west.yml)记录了所有可用的SDK子项目以及使用的版本。当前可以拿到的子项目如下图所示，用户可以单击任意的子项目来导航到该项目的代码仓库。
 [![MCUXSDK Graph](docs/sdk_graph.svg)](https://htmlpreview.github.io/?https://github.com/NXPmicro/mcux-sdk/blob/main/docs/sdk_graph.html)
-获取所有的SDK项目，你需要同时安装 Git 和 West，然后执行下面的命令来实现整个 SDK 在软件版本 ```${revision}``` 的交付，并将其放在名为 ```mcuxsdk``` 的文件夹中。
+获取所有的SDK项目，你需要同时安装 Git 和 West。然后请执行下面的命令来获取SDK所有项目在软件版本 ```${revision}``` 的发布，并将其放在名为 ```mcuxsdk``` 的文件夹中。
 
-``
+```
 west init -m https://github.com/NXPmicro/mcux-sdk --mr ${revision} mcuxsdk
 cd mcuxsdk
 west update
-``
+```
 
 将 ```${revision}``` 替换为您希望获取的SDK软件版本。如果您想要拿到最新状态的SDK，使用 ```main```。
 

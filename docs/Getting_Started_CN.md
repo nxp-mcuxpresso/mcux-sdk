@@ -1,9 +1,9 @@
 [上一页](../README_CN.md)
 # 使用 MCUXpresso SDK
-本节帮助您了解当前基石项目内容，并指导您如何编译和运行基于当前基石项目的示例项目。
+本节帮助您了解当前基础代码库内容，并指导您如何编译和运行应用代码库中的示例应用。
 
-## 基石（中央）项目
-基石项目，又可以称为 west 工作仓库中的中央项目。用户通过west方式获取MCUXpresso SDK所有项目时，该项目的内容会被拉取到工作仓库文件夹 `core` 中。基石项目包含所有的处理器支持、板级支持、开源的处理器外设驱动程序和一些板级外设驱动的支持。
+## 基础代码库（中央项目）
+基础代码库，又可以称为 west 工作仓库中的中央项目。用户通过west方式获取MCUXpresso SDK所有项目时，该项目的内容会被拉取到工作仓库文件夹 `core` 中。基础代码库包含所有的处理器支持、板级支持、开源的处理器外设驱动程序和一些板级外设驱动的支持。
 
 |文件夹 |说明 |
 | :--------- | :-------- |
@@ -18,22 +18,22 @@
 | tools | 软件工具 |
 | utilities | 应用需要的一些文件 |
 
-## 示例项目
+## 应用代码库
 
-我们把MCUXpresso SDK软件包中板级示范例程发布到示例项目[mcux-sdk-examples](https://github.com/NXPmicro/mcux-sdk-examples)代码仓库。通过west方式获取SDK所有项目时示例项目会被拉取到west工作仓库的`examples`文件夹中。
+我们把MCUXpresso SDK软件包中的板级应用程序发布到应用代码库[mcux-sdk-examples](https://github.com/NXPmicro/mcux-sdk-examples)。通过west方式获取SDK所有项目时应用代码库会被拉取到west工作仓库的`examples`文件夹中。
 
-在文件夹 `examples` 中，可以找到支持MCUXpresso SDK 2.9.0以上版本的所有开发板的示范例程，每个开发板的示例放在对应开发板名称的文件夹下。这些示例包括（但不限于）：
+在文件夹 `examples` 中，可以找到支持MCUXpresso SDK 2.9.0以上版本的所有开发板的应用程序，每个开发板的应用放在对应开发板名称的文件夹下。这些应用包括（但不限于）：
 
-* demo_apps：快速上手把开发板驱动起来的示范程序，包括hello_world和led_blinky等示例。
+* demo_apps：快速上手把开发板驱动起来的示例应用，包括hello_world和led_blinky等示例，全功能的示例应用，展示多个外设组合使用。
 * driver_examples：展示如何使用外设驱动程序进行外设配置，实现特定外设功能或数据传输的外设示例。一般只针对单一外设，但也有使用多个外设的情况（例如，使用 DMA 的 SPI 传输。
 
-### 示例结构
+### 应用程序结构
 
-下面我们使用hello_world示例（位于demo_apps文件夹）来说明示例组织结构，其他示例也有类似的结构。
+下面我们使用hello_world作为示例应用（位于demo_apps文件夹）来说明板级应用的组织结构，其他示例应用也有类似的结构。
 
-![示范例程结构](Getting_Started/images/example_structure.png)
+![示例应用结构](Getting_Started/images/example_structure.png)
 
-### 编译并运行示例应用程序
+### 编译并运行应用程序
 
 * [MCUXpresso IDE 编译和运行示例](run_a_project_using_mcux_CN.md)
 * [ARMGCC 编译和运行示例](run_a_project_using_armgcc_CN.md)
