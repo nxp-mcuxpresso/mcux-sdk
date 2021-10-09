@@ -44,7 +44,7 @@
 
     ![选择支持浮点数的printf](Getting_Started/images/mcux_select_float_number.png)
 
-6. 选中你要示例程序evkmimxrt1020_demo_apps_hello_world，在**Quickstart Panel** 单击 **build**。
+6. 选中示例程序evkmimxrt1020_demo_apps_hello_world，在**Quickstart Panel** 单击 **build**。
 
     ![编译hello world案例](Getting_Started/images/mcux_build.png)
 

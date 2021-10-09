@@ -1,9 +1,9 @@
 [上一页](Getting_Started_CN.md)
 
-本节介绍了配置命令行 Arm® GCC 工具来编译、运行和调试 MCUXpresso SDK 中提供的示范例程的步骤。以位于 examples/{board_name}/demos_apps/hello_world/ 中的 hello_world 为例进行演示，但这些步骤适用于所有开发板、演示或示例应用。
+本节介绍了配置命令行 Arm® GCC 工具来编译、运行和调试 MCUXpresso SDK 中提供的应用程序的步骤。以位于 examples/{board_name}/demos_apps/hello_world/ 中的 hello_world 为例进行演示，但这些步骤适用于所有开发板、演示或示例应用。
 
 # :one:设置工具链
-本章节包含利用MCUXpresso SDK支持的ARM GCC工具链编译和运行示范例程时安装所需必要组件的步骤。可以通过多种方式使用ARM GCC工具，本示例重点介绍Windows操作系统环境。尽管未在此处讨论，但ARM GCC工具也可在Linux OS和Mac OSX中使用。
+本章节包含利用MCUXpresso SDK支持的ARM GCC工具链编译和运行示例应用程序时安装所需必要组件的步骤。可以通过多种方式使用ARM GCC工具，本示例重点介绍Windows操作系统环境。尽管未在此处讨论，但ARM GCC工具也可在Linux OS和Mac OSX中使用。
 
 ## 1. 安装 GCC ARM Embedded 工具链
 从launchpad.net/gcc-arm-embedded 处下载和运行安装程序。这是实际的工具箱（即编译器、链接器等）。GCC工具链应与SDK支持的最新版本对应，版本请参考[工具版本](./../README_CN.md#支持的开发工具和硬件)。
