@@ -1,6 +1,3 @@
-README
-=======
-
 **Prerequisites**
 - [ ] I have checked latest main branch and the issue still exists.
 - [ ] I did not see it is stated as known-issue in release notes.

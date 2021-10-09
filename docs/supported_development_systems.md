@@ -1,6 +1,3 @@
-README
-======
-
 Supported development boards and MCU devices are listed in below table.
 
 | Development boards |                         MCU devices                          |

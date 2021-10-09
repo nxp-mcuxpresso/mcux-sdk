@@ -17,7 +17,7 @@ All contributors are expected to follow our [Code of Conduct](CODE_OF_CONDUCT.md
 
 ## Licensing
 
-All SDK drivers, components, device support files, board support files and driver examples in this project are under BSD-3-Clause license, license copy please check `COPYING_BSD-3 <./COPYING-BSD-3>`_. For sources using BSD-3-Clause license, you may see similar copyright as below in the head of source file.
+All SDK drivers, components, device support files, board support files and driver examples in this project are under BSD-3-Clause license, license copy please check [COPYING_BSD-3](COPYING-BSD-3). For sources using BSD-3-Clause license, you may see similar copyright as below in the head of source file.
 ```
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
@@ -27,7 +27,7 @@ All SDK drivers, components, device support files, board support files and drive
  * SPDX-License-Identifier: BSD-3-Clause
  */
 ```
-There are also components using different license, eg. the ARM CMSIS component is under `Apache License 2.0 <./CMSIS/LICENSE.txt>`_. Overall license information for this project could be found in `SW-Content-Register.txt <./SW-Content-Register.txt>`_.
+There are also components using different license, eg. the ARM CMSIS component is under [Apache License 2.0](CMSIS/LICENSE.txt). Overall license information for this project could be found in [SW-Content-Register.txt](SW-Content-Register.txt).
 
 ## Developer Certification of Origin (DCO)
 Inspired by [zephyr](https://docs.zephyrproject.org/latest/contribute/index.html), we would like to adopt DCO process to encourage user contribution and avoid legally ambiguous situation. The DCO is a statement that you are the author of your contribution, and you allow our project to use your contribution under the open source license. The full statement is shown as below:
@@ -178,4 +178,5 @@ If you want to contribute your code back to our project, need to follow the pull
 
 
 ## Contributing New Components
-If you want to contribute new components, please send an email to `project maintainer <susan.su@nxp.com>`_ to communicate your idea first. If the new component has a different license other than BSD-3-Clause, you need to prepare a description for the license information in the email description for us to decide whether the contribution will pollute the project. Description for the new license need to follow the component entry in `<SW-Content-Register.txt ./SW-Content-Register.txt >`_.
+If you want to contribute new components, please send an email to [project maintainer](susan.su@nxp.com) to communicate your idea first. If the new component has a different license other than BSD-3-Clause, you need to prepare a description for the license information in the email description for us to decide whether the contribution will pollute the project. Description for the new license need to follow the component entry in [SW-Content-Register.txt](SW-Content-Register.txt).
+

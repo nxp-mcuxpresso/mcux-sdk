@@ -66,7 +66,7 @@ Below figure takes 2.9.0 and 2.10.0 release as an example to show the relationsh
 See [Getting Start Guide](docs/Getting_Started.md) to start explore the project.
 
 ## License
-All SDK drivers, components, device support files, board support files and driver examples in this project are under BSD-3-Clause license, license copy please check `COPYING_BSD-3 <./COPYING-BSD-3>`_. The ARM CMSIS component is under Apache License 2.0, license copy check `Apache License 2.0 <./CMSIS/LICENSE.txt>`_. License information for all components could be found in `SW-Content-Register.txt <./SW-Content-Register.txt>`_.
+All SDK drivers, components, device support files, board support files and driver examples in this project are under BSD-3-Clause license, license copy please check [COPYING_BSD-3](COPYING-BSD-3). The ARM CMSIS component is under Apache License 2.0, license copy check [Apache License 2.0](CMSIS/LICENSE.txt). License information for all components could be found in [SW-Content-Register.txt](SW-Content-Register.txt)
 
 ## Contribution
 Contributions are greatly welcomed! For detail guideline of contribution please check [Contribution Guide](CONTRIBUTING.md).

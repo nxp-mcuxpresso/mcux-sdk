@@ -1,15 +1,11 @@
-README
-=======
-
-Enhancement
------------
+---
 name: Enhancement
 about: Suggest enhancements to existing features
 title: ''
 labels: Enhancement
 assignees: ''
 
------------
+---
 
 **Is your enhancement proposal related to a problem? Please describe.**
 A clear and concise description of what the problem is.
