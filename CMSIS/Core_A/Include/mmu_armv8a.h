@@ -241,15 +241,7 @@ struct ARM_MMU_ptables {
 #define MMU_REGION_FLAT_ENTRY(name, adr, sz, attrs) \
         MMU_REGION_ENTRY(name, adr, adr, sz, attrs)
 
-/* Reference to the MMU configuration.
- *
- * This struct is defined and populated for each SoC (in the SoC definition),
- * and holds the build-time configuration information for the fixed MMU
- * regions enabled during kernel initialization.
- */
-extern const struct ARM_MMU_config MMU_config;
-
-void ARM_MMU_Initialize(bool is_primary_core);
+void ARM_MMU_Initialize(const struct ARM_MMU_config *MMU_config, bool is_primary_core);
 void ARM_MMU_InvalidateTLB(void);
 
 #ifdef __cplusplus

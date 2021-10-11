@@ -546,7 +546,8 @@ static inline void add_ARM_MMU_region(struct ARM_MMU_ptables *ptables,
 	}
 }
 
-static void setup_page_tables(struct ARM_MMU_ptables *ptables)
+static void setup_page_tables(const struct ARM_MMU_config *MMU_config,
+		struct ARM_MMU_ptables *ptables)
 {
 	unsigned int index;
 	const struct ARM_MMU_flat_range *range;
@@ -557,8 +558,8 @@ static void setup_page_tables(struct ARM_MMU_ptables *ptables)
 	for (index = 0; index < CONFIG_MAX_XLAT_TABLES; index++)
 		MMU_DEBUG("%d: %p\r\n", index, xlat_tables + index * Ln_XLAT_NUM_ENTRIES);
 
-	for (index = 0; index < MMU_config.num_regions; index++) {
-		region = &MMU_config.mmu_regions[index];
+	for (index = 0; index < MMU_config->num_regions; index++) {
+		region = &MMU_config->mmu_regions[index];
 		max_va = MAX(max_va, region->base_va + region->size);
 		max_pa = MAX(max_pa, region->base_pa + region->size);
 	}
@@ -569,8 +570,8 @@ static void setup_page_tables(struct ARM_MMU_ptables *ptables)
 		 "Maximum PA not supported\r\n");
 
 	/* setup translation table for OS execution regions */
-	for (index = 0; index < MMU_config.num_regions; index++) {
-		range = &MMU_config.mmu_os_ranges[index];
+	for (index = 0; index < MMU_config->num_regions; index++) {
+		range = &MMU_config->mmu_os_ranges[index];
 		add_ARM_MMU_flat_range(ptables, range, 0);
 	}
 
@@ -578,8 +579,8 @@ static void setup_page_tables(struct ARM_MMU_ptables *ptables)
 	 * Create translation tables for user provided platform regions.
 	 * Those must not conflict with our default mapping.
 	 */
-	for (index = 0; index < MMU_config.num_regions; index++) {
-		region = &MMU_config.mmu_regions[index];
+	for (index = 0; index < MMU_config->num_regions; index++) {
+		region = &MMU_config->mmu_regions[index];
 		add_ARM_MMU_region(ptables, region, MT_NO_OVERWRITE);
 	}
 
@@ -647,7 +648,8 @@ static struct ARM_MMU_ptables kernel_ptables;
  * This function provides the default configuration mechanism for the Memory
  * Management Unit (MMU).
  */
-void ARM_MMU_Initialize(bool is_primary_core)
+void ARM_MMU_Initialize(const struct ARM_MMU_config *MMU_config,
+			bool is_primary_core)
 {
 	unsigned int flags = 0;
 	uint64_t val;
@@ -668,7 +670,7 @@ void ARM_MMU_Initialize(bool is_primary_core)
 	 */
 	if (is_primary_core) {
 		kernel_ptables.base_xlat_table = new_table();
-		setup_page_tables(&kernel_ptables);
+		setup_page_tables(MMU_config, &kernel_ptables);
 	}
 
 	/* currently only EL1 is supported */
