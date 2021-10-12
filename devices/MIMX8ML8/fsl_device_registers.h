@@ -18,7 +18,6 @@
 #if (defined(CPU_MIMX8ML8CVNKZ) || defined(CPU_MIMX8ML8DVNLZ))
 
 #if defined(CONFIG_ARM64)
-#define __XCC__
 
 #include "MIMX8ML8_ca53.h"
 /* CPU specific feature definitions */
