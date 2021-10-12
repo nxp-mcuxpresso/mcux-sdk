@@ -39,6 +39,17 @@
  extern "C" {
 #endif
 
+/* Define compiler macros for CPU architecture, if not yet defined by the
+ * compiler default macros
+ */
+#if __ARM_ARCH_8A__
+/* Macro already defined */
+#else
+  #if defined(__ARM_ARCH_8A) && __ARM_ARCH_8A == 1
+    #define __ARM_ARCH_8A__ 1
+  #endif /* __ARM_ARCH_8A == 1 */
+#endif
+
 #if   defined ( __CC_ARM )
   #define __ASM            __asm                                      /*!< asm keyword for ARM Compiler */
   #define __INLINE         __inline                                   /*!< inline keyword for ARM Compiler */
