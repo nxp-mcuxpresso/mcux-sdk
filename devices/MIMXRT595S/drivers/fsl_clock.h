@@ -36,6 +36,10 @@
 #define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (198000000UL)
 #endif
 
+/* Definition for compatiblity with other platforms. */
+#define CLOCK_GetFlexCommClkFreq CLOCK_GetFlexcommClkFreq
+#define CLOCK_GetCTimerClkFreq   CLOCK_GetCtimerClkFreq
+
 /*! @brief External XTAL (SYSOSC) clock frequency.
  *
  * The XTAL (YSOSC) clock frequency in Hz, when the clock is setup, use the

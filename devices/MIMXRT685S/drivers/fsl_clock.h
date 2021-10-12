@@ -40,6 +40,9 @@
 #endif
 #endif
 
+/* Definition for compatiblity with other platforms. */
+#define CLOCK_GetCTimerClkFreq CLOCK_GetCtimerClkFreq
+
 /*! @brief External XTAL (SYSOSC) clock frequency.
  *
  * The XTAL (SYSOSC) clock frequency in Hz, when the clock is setup, use the
