@@ -578,19 +578,18 @@ static inline status_t DisableIRQ(IRQn_Type interrupt)
  */
 static inline uint32_t DisableGlobalIRQ(void)
 {
+    uint32_t mask;
+
 #if defined(CPSR_I_Msk)
-    uint32_t cpsr = __get_CPSR() & CPSR_I_Msk;
-
-    __disable_irq();
-
-    return cpsr;
+    mask = __get_CPSR() & CPSR_I_Msk;
+#elif defined(DAIF_I_BIT)
+    mask = __get_DAIF() & DAIF_I_BIT;
 #else
-    uint32_t regPrimask = __get_PRIMASK();
-
+    mask = __get_PRIMASK();
+#endif
     __disable_irq();
 
-    return regPrimask;
-#endif
+    return mask;
 }
 
 /*!
@@ -607,6 +606,9 @@ static inline void EnableGlobalIRQ(uint32_t primask)
 {
 #if defined(CPSR_I_Msk)
     __set_CPSR((__get_CPSR() & ~CPSR_I_Msk) | primask);
+#elif defined(DAIF_I_BIT)
+    if (!primask)
+        __enable_irq();
 #else
     __set_PRIMASK(primask);
 #endif
