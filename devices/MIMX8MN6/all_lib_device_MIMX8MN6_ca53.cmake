@@ -6,6 +6,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpt
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ii2c
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iuart
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -23,6 +24,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_system)
 #    include(driver_common)
 #    include(driver_gpt)
+#    include(driver_ii2c)
 #    include(driver_iuart)
 #    include(middleware_freertos-kernel_ca53)
 #    include(middleware_freertos-kernel_extension)
