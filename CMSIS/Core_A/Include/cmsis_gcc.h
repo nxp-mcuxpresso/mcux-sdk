@@ -57,6 +57,57 @@
   __asm volatile ("mrs  %0, "__STRINGIFY(sysreg)"\n" : "=r"((val)))
 #endif
 
+
+/* ###########################  Core Function Access  ########################### */
+/** \ingroup  CMSIS_Core_FunctionInterface
+    \defgroup CMSIS_Core_RegAccFunctions CMSIS Core Register Access Functions
+  @{
+ */
+
+
+/**
+  \brief   Get Interrupt Mask Bits
+  \details Returns the current state of the interrupt mask bits from the DAIF register.
+  \return  Interrupt Mask value
+ */
+__STATIC_FORCEINLINE uint64_t __get_DAIF(void)
+{
+    uint64_t result;
+    __MRS(DAIF, result);
+    return result;
+}
+
+
+/**
+  \brief   Enable IRQ Interrupts
+  \details Enables IRQ interrupts by clearing the I-bit in the DAIF.
+ */
+__STATIC_FORCEINLINE void __enable_irq(void)
+{
+  __ASM volatile ("msr daifclr, #2" : : : "memory");
+}
+
+
+/**
+  \brief   Disable IRQ Interrupts
+  \details Disables IRQ interrupts by setting the I-bit in the DAIF.
+ */
+__STATIC_FORCEINLINE void __disable_irq(void)
+{
+  __ASM volatile ("msr daifset, #2" : : : "memory");
+}
+
+
+/*@} end of CMSIS_Core_RegAccFunctions */
+
+
+/* ##########################  Core Instruction Access  ######################### */
+/** \defgroup CMSIS_Core_InstructionInterface CMSIS Core Instruction Interface
+  Access to dedicated instructions
+  @{
+*/
+
+
 /**
   \brief   Multiprocessor Affinity
   \details Indicates the core number in the Cortex-Axx processor.
@@ -116,6 +167,9 @@ __STATIC_FORCEINLINE void __DMB(void)
                  If required, a debugger can use it to store additional information about the breakpoint.
  */
 #define __BKPT(value)                       __ASM volatile ("brk "#value)
+
+
+/*@}*/ /* end of group CMSIS_Core_InstructionInterface */
 
 
 #endif /* __CMSIS_GCC_H */
