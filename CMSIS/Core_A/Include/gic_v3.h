@@ -681,7 +681,7 @@ __STATIC_INLINE void GIC_DisableInterface(void)
 __STATIC_INLINE IRQn_Type GIC_AcknowledgePending(void)
 {
   uint32_t result;
-  __MRS(ICC_IAR1_EL1, result);
+  __MRS(ICC_IAR1_EL1, &result);
   return (IRQn_Type)(result);
 }
 
@@ -707,7 +707,7 @@ __STATIC_INLINE void GIC_SetInterfacePriorityMask(uint32_t priority)
 __STATIC_INLINE uint32_t GIC_GetInterfacePriorityMask(void)
 {
   uint32_t result;
-  __MRS(ICC_PMR_EL1, result);
+  __MRS(ICC_PMR_EL1, &result);
   return result;
 }
 
@@ -725,7 +725,7 @@ __STATIC_INLINE void GIC_SetBinaryPoint(uint32_t binary_point)
 __STATIC_INLINE uint32_t GIC_GetBinaryPoint(void)
 {
   uint32_t result;
-  __MRS(ICC_BPR1_EL1, result);
+  __MRS(ICC_BPR1_EL1, &result);
   return result;
 }
 
@@ -735,7 +735,7 @@ __STATIC_INLINE uint32_t GIC_GetBinaryPoint(void)
 __STATIC_INLINE uint32_t GIC_GetHighPendingIRQ(void)
 {
   uint32_t result;
-  __MRS(ICC_HPPIR1_EL1, result);
+  __MRS(ICC_HPPIR1_EL1, &result);
   return result;
 }
 

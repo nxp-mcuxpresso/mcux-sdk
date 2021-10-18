@@ -53,8 +53,8 @@
 #endif
 
 #ifndef __MRS
-#define __MRS(sysreg, val) \
-  __asm volatile ("mrs  %0, "__STRINGIFY(sysreg)"\n" : "=r"((val)))
+#define __MRS(sysreg, pVal) \
+  __asm volatile ("mrs  %0, "__STRINGIFY(sysreg)"\n" : "=r"((*pVal)))
 #endif
 
 
@@ -73,7 +73,7 @@
 __STATIC_FORCEINLINE uint64_t __get_DAIF(void)
 {
     uint64_t result;
-    __MRS(DAIF, result);
+    __MRS(DAIF, &result);
     return result;
 }
 
@@ -115,7 +115,7 @@ __STATIC_FORCEINLINE void __disable_irq(void)
 __STATIC_FORCEINLINE uint32_t __get_MPIDR_EL1(void)
 {
     uint32_t result;
-    __MRS(MPIDR_EL1, result);
+    __MRS(MPIDR_EL1, &result);
     return result;
 }
 

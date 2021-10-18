@@ -53,7 +53,7 @@ __STATIC_INLINE void ARM_TIMER_Initialize(ARM_TIMER_type_t timer)
 
 __STATIC_INLINE void ARM_TIMER_GetFreq(ARM_TIMER_type_t timer, uint32_t *pVal)
 {
-    __MRS(CNTFRQ_EL0, *pVal);
+    __MRS(CNTFRQ_EL0, pVal);
 }
 
 __STATIC_INLINE void ARM_TIMER_EnableIRQ(ARM_TIMER_type_t timer)
