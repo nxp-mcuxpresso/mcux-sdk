@@ -111,7 +111,7 @@ include_driver_ifdef(CONFIG_MEMC_MCUX_FLEXSPI		flexspi	driver_flexspi)
 include_driver_ifdef(CONFIG_PWM_MCUX_SCTIMER		sctimer	driver_sctimer)
 include_driver_ifdef(CONFIG_HAS_MCUX_RDC	rdc	driver_rdc)
 include_driver_ifdef(CONFIG_UART_MCUX_IUART	iuart	driver_iuart)
-
+include_driver_ifdef(CONFIG_HWINFO_MCUX_SRC	src	driver_src)
 #include device specific drivers
 if (${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]")
 zephyr_include_directories(devices/${MCUX_DEVICE}/xip)
