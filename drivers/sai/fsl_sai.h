@@ -272,9 +272,7 @@ typedef struct _sai_transfer_format
     uint32_t sampleRate_Hz;   /*!< Sample rate of audio data */
     uint32_t bitWidth;        /*!< Data length of audio data, usually 8/16/24/32 bits */
     sai_mono_stereo_t stereo; /*!< Mono or stereo */
-#if defined(FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER) && (FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER)
     uint32_t masterClockHz; /*!< Master clock frequency in Hz */
-#endif                      /* FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER */
 #if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
     uint8_t watermark; /*!< Watermark value */
 #endif                 /* FSL_FEATURE_SAI_FIFO_COUNT */
