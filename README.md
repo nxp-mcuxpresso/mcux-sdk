@@ -16,8 +16,8 @@ The whole MCUXpresso SDK delivery is composed of separate project deliveries. Th
 
 In this way we want to benefit user from below aspects:
 1. Avoid huge size in a single repository.
-2. Provide flexibility for user to select needed projects to build his application.
-3. Provide ability for user to fetch needed project version to build his application.
+2. Provide flexibility for user to select needed projects to build their application.
+3. Provide ability for user to fetch needed project version to build their application.
 
 To satisfy the expectation we leveraged [Zephyr west tool](https://docs.zephyrproject.org/latest/guides/west/index.html) which helps do multi-repository management and allow user to self create ```west.yml``` to select needed projects for downstream use. 
 

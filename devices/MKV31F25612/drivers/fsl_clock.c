@@ -199,8 +199,8 @@ static void CLOCK_FllStableDelay(void)
     }
 }
 #else  /* With MCG_USER_CONFIG_FLL_STABLE_DELAY_EN defined. */
-/* Once user defines the MCG_USER_CONFIG_FLL_STABLE_DELAY_EN to use their own delay function, he has to
- * create his own CLOCK_FllStableDelay() function in application code. Since the clock functions in this
+/* Once user defines the MCG_USER_CONFIG_FLL_STABLE_DELAY_EN to use their own delay function, they have to
+ * create their own CLOCK_FllStableDelay() function in application code. Since the clock functions in this
  * file would call the CLOCK_FllStableDelay() regardless how it is defined.
  */
 extern void CLOCK_FllStableDelay(void);

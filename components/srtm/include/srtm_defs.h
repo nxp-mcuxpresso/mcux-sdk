@@ -102,7 +102,7 @@
 #error Please implement the structure packing macros for your compiler here!
 #endif
 
-/*! @brief Defines SRTM debug message function. If user want to debug SRTM, he should define
+/*! @brief Defines SRTM debug message function. If user want to debug SRTM, they should define
     SRTM_DEBUG_MESSAGE_FUNC to proper printf function, as well as define
     SRTM_DEBUG_VERBOSE_LEVEL to intended verbose level. */
 #ifdef SRTM_DEBUG_MESSAGE_FUNC
