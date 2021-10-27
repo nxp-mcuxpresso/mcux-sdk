@@ -1218,9 +1218,9 @@ static inline void SAI_RxEnableDMA(I2S_Type *base, uint32_t mask, bool enable)
  * @param channel Which data channel used.
  * @return data register address.
  */
-static inline uint32_t SAI_TxGetDataRegisterAddress(I2S_Type *base, uint32_t channel)
+static inline uintptr_t SAI_TxGetDataRegisterAddress(I2S_Type *base, uint32_t channel)
 {
-    return (uint32_t)(&(base->TDR)[channel]);
+    return (uintptr_t)(&(base->TDR)[channel]);
 }
 
 /*!
@@ -1232,9 +1232,9 @@ static inline uint32_t SAI_TxGetDataRegisterAddress(I2S_Type *base, uint32_t cha
  * @param channel Which data channel used.
  * @return data register address.
  */
-static inline uint32_t SAI_RxGetDataRegisterAddress(I2S_Type *base, uint32_t channel)
+static inline uintptr_t SAI_RxGetDataRegisterAddress(I2S_Type *base, uint32_t channel)
 {
-    return (uint32_t)(&(base->RDR)[channel]);
+    return (uintptr_t)(&(base->RDR)[channel]);
 }
 
 /*! @} */
