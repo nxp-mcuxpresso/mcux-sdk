@@ -17,13 +17,15 @@
  */
 #if (defined(CPU_MIMX8ML8CVNKZ) || defined(CPU_MIMX8ML8DVNLZ))
 
-#if defined(CONFIG_ARM64)
+#include "cmsis_compiler.h"
+
+#if defined(__ARM_ARCH_8A__)
 
 #include "MIMX8ML8_ca53.h"
 /* CPU specific feature definitions */
 #include "MIMX8ML8_ca53_features.h"
 
-#else /* CONFIG_ARM64 */
+#else /* __ARM_ARCH_8A__ */
 
 #define MIMX8ML8_cm7_SERIES
 
