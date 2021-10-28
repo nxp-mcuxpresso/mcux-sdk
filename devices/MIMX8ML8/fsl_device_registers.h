@@ -15,17 +15,14 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MIMX8ML8CVNKZ) || defined(CPU_MIMX8ML8DVNLZ))
+#if (defined(CPU_MIMX8ML8CVNKZ_ca53) || defined(CPU_MIMX8ML8DVNLZ_ca53))
 
-#include "cmsis_compiler.h"
-
-#if defined(__ARM_ARCH_8A__)
-
+/* CMSIS-style register definitions */
 #include "MIMX8ML8_ca53.h"
 /* CPU specific feature definitions */
 #include "MIMX8ML8_ca53_features.h"
 
-#else /* __ARM_ARCH_8A__ */
+#elif (defined(CPU_MIMX8ML8CVNKZ) || defined(CPU_MIMX8ML8DVNLZ))
 
 #define MIMX8ML8_cm7_SERIES
 
@@ -33,8 +30,6 @@
 #include "MIMX8ML8_cm7.h"
 /* CPU specific feature definitions */
 #include "MIMX8ML8_cm7_features.h"
-
-#endif /* CONFIG_ARM64 */
 
 #else
 #error "No valid CPU defined!"
