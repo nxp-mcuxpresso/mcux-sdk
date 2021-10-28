@@ -168,6 +168,16 @@ __STATIC_FORCEINLINE void __DMB(void)
  */
 #define __BKPT(value)                       __ASM volatile ("brk "#value)
 
+/**
+  \brief   No Operation
+  \details No Operation does nothing. This instruction can be used for code alignment purposes.
+ */
+
+__STATIC_FORCEINLINE void __NOP(void)
+{
+  __ASM volatile ("nop");
+}
+
 
 /*@}*/ /* end of group CMSIS_Core_InstructionInterface */
 
