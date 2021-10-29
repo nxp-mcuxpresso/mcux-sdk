@@ -570,7 +570,7 @@ static void setup_page_tables(const struct ARM_MMU_config *MMU_config,
 		 "Maximum PA not supported\r\n");
 
 	/* setup translation table for OS execution regions */
-	for (index = 0; index < MMU_config->num_regions; index++) {
+	for (index = 0; index < MMU_config->num_os_ranges; index++) {
 		range = &MMU_config->mmu_os_ranges[index];
 		add_ARM_MMU_flat_range(ptables, range, 0);
 	}
