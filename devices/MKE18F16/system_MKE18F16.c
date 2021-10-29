@@ -13,7 +13,7 @@
 **
 **     Reference manual:    KE1xFP100M168SF0RM, Rev. 2, Aug. 2016
 **     Version:             rev. 4.0, 2016-09-20
-**     Build:               b191113
+**     Build:               b201012
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +21,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2019 NXP
+**     Copyright 2016-2020 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -80,10 +80,10 @@ void SystemInit (void) {
   }
   else
   {
-      WDOG->CNT = WDOG_UPDATE_KEY & 0xFFFF;
-      WDOG->CNT = (WDOG_UPDATE_KEY >> 16) & 0xFFFF;
+      WDOG->CNT = WDOG_UPDATE_KEY & 0xFFFFU;
+      WDOG->CNT = (WDOG_UPDATE_KEY >> 16U) & 0xFFFFU;
   }
-  WDOG->TOVAL = 0xFFFF;
+  WDOG->TOVAL = 0xFFFFU;
   WDOG->CS = (uint32_t) ((WDOG->CS) & ~WDOG_CS_EN_MASK) | WDOG_CS_UPDATE_MASK;
 #endif /* (DISABLE_WDOG) */
 
@@ -139,7 +139,8 @@ void SystemCoreClockUpdate (void) {
       SCGOUTClock = SCGOUTClock * multi / (prediv * 2U);
       break;
     default:
-      return;
+      SCGOUTClock = 0U;
+      break;
   }
   SystemCoreClock = (SCGOUTClock / Divider);
 
