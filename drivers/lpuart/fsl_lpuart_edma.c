@@ -465,15 +465,18 @@ void LPUART_TransferEdmaHandleIRQ(LPUART_Type *base, void *lpuartEdmaHandle)
 {
     assert(lpuartEdmaHandle != NULL);
 
-    lpuart_edma_handle_t *handle = (lpuart_edma_handle_t *)lpuartEdmaHandle;
-
-    /* Disable tx complete interrupt */
-    LPUART_DisableInterrupts(base, (uint32_t)kLPUART_TransmissionCompleteInterruptEnable);
-
-    handle->txState = (uint8_t)kLPUART_TxIdle;
-
-    if (handle->callback != NULL)
+    if (kLPUART_TransmissionCompleteFlag & LPUART_GetStatusFlags(base))
     {
-        handle->callback(base, handle, kStatus_LPUART_TxIdle, handle->userData);
+        lpuart_edma_handle_t *handle = (lpuart_edma_handle_t *)lpuartEdmaHandle;
+
+        /* Disable tx complete interrupt */
+        LPUART_DisableInterrupts(base, (uint32_t)kLPUART_TransmissionCompleteInterruptEnable);
+
+        handle->txState = (uint8_t)kLPUART_TxIdle;
+
+        if (handle->callback != NULL)
+        {
+            handle->callback(base, handle, kStatus_LPUART_TxIdle, handle->userData);
+        }
     }
 }
