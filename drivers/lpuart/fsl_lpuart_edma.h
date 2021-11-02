@@ -69,6 +69,9 @@ extern "C" {
 
 /*!
  * @brief Initializes the LPUART handle which is used in transactional functions.
+ *
+ * @note This function disables all interrupts on the LPUART peripheral.
+ *
  * @param base LPUART peripheral base address.
  * @param handle Pointer to lpuart_edma_handle_t structure.
  * @param callback Callback function.
@@ -88,6 +91,10 @@ void LPUART_TransferCreateHandleEDMA(LPUART_Type *base,
  *
  * This function sends data using eDMA. This is a non-blocking function, which returns
  * right away. When all data is sent, the send callback function is called.
+ *
+ * Important: If the IRQHandler for the LPUART peripheral is overridden,
+ * then `LPUART_TransferEdmaHandleIRQ()` must be called from the interrupt handler when
+ * the `kLPUART_TransmissionCompleteFlag` status flag is set.
  *
  * @param base LPUART peripheral base address.
  * @param handle LPUART handle pointer.
@@ -166,7 +173,9 @@ status_t LPUART_TransferGetReceiveCountEDMA(LPUART_Type *base, lpuart_edma_handl
  * @brief LPUART eDMA IRQ handle function.
  *
  * This function handles the LPUART tx complete IRQ request and invoke user callback.
- * It is not set to static so that it can be used in user application.
+ * It is not set to static so that it can be used in user application (this function must
+ * be called from the IRQ handler of the LPUART peripheral if the `kLPUART_TransmissionCompleteFlag`
+ * status flag is set). This is handled by default in the weak implementation of the IRQHandler.
  *
  * @param base LPUART peripheral base address.
  * @param lpuartEdmaHandle LPUART handle pointer.
