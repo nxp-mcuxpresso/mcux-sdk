@@ -465,7 +465,7 @@ void LPUART_TransferEdmaHandleIRQ(LPUART_Type *base, void *lpuartEdmaHandle)
 {
     assert(lpuartEdmaHandle != NULL);
 
-    if (kLPUART_TransmissionCompleteFlag & LPUART_GetStatusFlags(base))
+    if (((uint32_t)kLPUART_TransmissionCompleteFlag & LPUART_GetStatusFlags(base)) != 0U)
     {
         lpuart_edma_handle_t *handle = (lpuart_edma_handle_t *)lpuartEdmaHandle;
 
