@@ -1809,8 +1809,10 @@ enum _clock_pll_clk_src
  */
 typedef enum _clock_pll_post_div
 {
-    kCLOCK_PllPostDiv8 = 0U, /*!< Divide by 8. */
+    kCLOCK_PllPostDiv2 = 0U, /*!< Divide by 2. */
     kCLOCK_PllPostDiv4 = 1U, /*!< Divide by 4. */
+    kCLOCK_PllPostDiv8 = 2U, /*!< Divide by 8. */
+    kCLOCK_PllPostDiv1 = 3U, /*!< Divide by 1. */
 } clock_pll_post_div_t;
 
 /*!
