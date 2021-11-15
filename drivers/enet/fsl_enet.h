@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -386,7 +386,7 @@ typedef struct _enet_rx_bd_struct
 {
     uint16_t length;  /*!< Buffer descriptor data length. */
     uint16_t control; /*!< Buffer descriptor control and status. */
-    uint8_t *buffer;  /*!< Data buffer pointer. */
+    uint32_t buffer;  /*!< Data buffer pointer. */
 #ifdef ENET_ENHANCEDBUFFERDESCRIPTOR_MODE
     uint16_t controlExtend0;  /*!< Extend buffer descriptor control0. */
     uint16_t controlExtend1;  /*!< Extend buffer descriptor control1. */
@@ -408,7 +408,7 @@ typedef struct _enet_tx_bd_struct
 {
     uint16_t length;  /*!< Buffer descriptor data length. */
     uint16_t control; /*!< Buffer descriptor control and status. */
-    uint8_t *buffer;  /*!< Data buffer pointer. */
+    uint32_t buffer;  /*!< Data buffer pointer. */
 #ifdef ENET_ENHANCEDBUFFERDESCRIPTOR_MODE
     uint16_t controlExtend0; /*!< Extend buffer descriptor control0. */
     uint16_t controlExtend1; /*!< Extend buffer descriptor control1. */
