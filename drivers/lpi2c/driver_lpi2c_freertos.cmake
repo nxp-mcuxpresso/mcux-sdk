@@ -11,6 +11,9 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
+if(${MCUX_DEVICE} STREQUAL "MKE18F16")
+    include(middleware_freertos-kernel_MKE18F16)
+endif()
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1166_cm4")
     include(middleware_freertos-kernel_MIMXRT1166_cm4)
 endif()
