@@ -1,5 +1,23 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.10.0)
 # OR Logic component
+if(${MCUX_DEVICE} STREQUAL "MKV58F24")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MKV58F24
+    )
+
+    include(all_lib_device_MKV58F24)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "MKE18F16")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MKE18F16
+    )
+
+    include(all_lib_device_MKE18F16)
+
+endif()
+
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1166_cm7")
     list(APPEND CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/devices/MIMXRT1166
