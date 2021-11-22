@@ -244,6 +244,7 @@ typedef enum _clock_name
     kCLOCK_AhbClk, /*!< AHB bus clock.                         */
     kCLOCK_IpgClk, /*!< IPG bus clock.                         */
     kCLOCK_PerClk, /*!< Peripheral Clock.			*/
+    kCLOCK_EnetIpgClk, /*!< ENET IPG Clock.			*/
     /* -------------------------------- Other clock --------------------------*/
 } clock_name_t;
 
@@ -1450,6 +1451,13 @@ uint32_t CLOCK_GetAxiFreq(void);
  * @return  Clock frequency; If the clock is invalid, returns 0.
  */
 uint32_t CLOCK_GetAhbFreq(void);
+
+/*!
+ * brief Get the CCM Enet AXI bus frequency.
+ *
+ * return  Clock frequency; If the clock is invalid, returns 0.
+ */
+uint32_t CLOCK_GetEnetAxiFreq(void);
 
 /* @} */
 
