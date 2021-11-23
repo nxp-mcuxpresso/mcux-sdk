@@ -41,5 +41,8 @@ endif()
 if(CONFIG_USE_component_tfa9896_adapter) 
     include(component_tfa9896_adapter)
 endif()
+if(CONFIG_USE_component_pcm512x_adapter)
+    include(component_pcm512x_adapter)
+endif()
 
 include(driver_common)

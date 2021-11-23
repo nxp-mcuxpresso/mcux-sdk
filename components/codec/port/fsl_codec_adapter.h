@@ -169,6 +169,20 @@
 
 #endif /* CODEC_TFA9896_ENABLE */
 
+#ifdef CODEC_PCM512X_ENABLE
+#include "fsl_codec_pcm512x_adapter.h"
+
+#if ((defined HAL_CODEC_HANDLER_SIZE) && (HAL_CODEC_HANDLER_SIZE < HAL_CODEC_PCM512X_HANDLER_SIZE))
+#undef HAL_CODEC_HANDLER_SIZE
+#define HAL_CODEC_HANDLER_SIZE HAL_CODEC_PCM512X_HANDLER_SIZE
+#endif
+
+#if (!(defined HAL_CODEC_HANDLER_SIZE))
+#define HAL_CODEC_HANDLER_SIZE HAL_CODEC_PCM512X_HANDLER_SIZE
+#endif
+
+#endif /* CODEC_PCM512X_ENABLE */
+
 #ifndef HAL_CODEC_HANDLER_SIZE
 #define HAL_CODEC_HANDLER_SIZE 128U
 #endif
@@ -191,6 +205,7 @@ enum
     kCODEC_AK4458,   /*!< ak4458 */
     kCODEC_TFA9XXX,  /*!< tfa9xxx */
     kCODEC_TFA9896,  /*!< tfa9896 */
+    kCODEC_PCM512X,  /*!< pcm512x */
 };
 /*******************************************************************************
  * API
