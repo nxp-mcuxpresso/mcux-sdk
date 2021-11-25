@@ -44,5 +44,8 @@ endif()
 if(CONFIG_USE_component_pcm512x_adapter)
     include(component_pcm512x_adapter)
 endif()
+if(CONFIG_USE_component_pcm186x_adapter)
+    include(component_pcm186x_adapter)
+endif()
 
 include(driver_common)
