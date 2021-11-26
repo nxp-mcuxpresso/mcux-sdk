@@ -3,6 +3,8 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core_A/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8960
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8960
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm186x
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm512x
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
@@ -40,6 +42,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_iuart)
 #    include(driver_sai)
 #    include(driver_wm8960)
+#    include(driver_pcm186x)
+#    include(driver_pcm512x)
 #    include(middleware_freertos-kernel_ca53)
 #    include(middleware_freertos-kernel_extension)
 #    include(middleware_freertos-kernel_heap_4)
