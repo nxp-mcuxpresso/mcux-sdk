@@ -1,1 +1,1 @@
-#include "../MKW41Z4/fsl_clock.c"
+#include "../../MKW41Z4/drivers/fsl_clock.c"
