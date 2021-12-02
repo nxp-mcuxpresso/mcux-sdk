@@ -99,6 +99,26 @@ __STATIC_INLINE void ARM_TIMER_SetInterval(ARM_TIMER_type_t timer, uint32_t val)
     __ISB();
 }
 
+__STATIC_INLINE void ARM_TIMER_GetCount(ARM_TIMER_type_t timer, uint32_t *val)
+{
+    switch (timer) {
+    case ARM_TIMER_PHYSICAL:
+        __MRS(CNTP_TVAL_EL0, val);
+        break;
+    case ARM_TIMER_VIRTUAL:
+        __MRS(CNTV_TVAL_EL0, val);
+        break;
+    case ARM_TIMER_HYPERVISOR_PHYSICAL:
+        __MRS(CNTHP_TVAL_EL2, val);
+        break;
+    case ARM_TIMER_PHYSICAL_SECURE:
+        __MRS(CNTPS_TVAL_EL1, val);
+        break;
+    default:
+        break;
+    }
+}
+
 __STATIC_INLINE void ARM_TIMER_Start(ARM_TIMER_type_t timer)
 {
     switch (timer) {
