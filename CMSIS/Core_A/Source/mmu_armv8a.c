@@ -678,6 +678,31 @@ void ARM_MMU_Initialize(const struct ARM_MMU_config *MMU_config,
 }
 
 /*
+ * @brief MMU mapping setup
+ *
+ * This function sets a new MMU region mapping
+ */
+int ARM_MMU_AddMap(const char *name, uintptr_t phys, uintptr_t virt, size_t size, uint32_t attrs)
+{
+	int ret = -1;
+
+	if ((virt + size) > (1ULL << CONFIG_ARM64_VA_BITS))
+		goto exit;
+
+	if ((phys + size) > (1ULL << CONFIG_ARM64_PA_BITS))
+		goto exit;
+
+	if (size) {
+		ret = add_map(&kernel_ptables, name, phys, virt, size, attrs);
+
+		ARM_MMU_InvalidateTLB();
+	}
+
+exit:
+	return ret;
+}
+
+/*
  * @brief MMU TLB invalidation
  *
  * This function invalidates the entire unified TLB

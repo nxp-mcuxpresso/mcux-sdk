@@ -242,6 +242,7 @@ struct ARM_MMU_ptables {
         MMU_REGION_ENTRY(name, adr, adr, sz, attrs)
 
 void ARM_MMU_Initialize(const struct ARM_MMU_config *MMU_config, bool is_primary_core);
+int ARM_MMU_AddMap(const char *name, uintptr_t phys, uintptr_t virt, size_t size, uint32_t attrs);
 void ARM_MMU_InvalidateTLB(void);
 
 #ifdef __cplusplus
