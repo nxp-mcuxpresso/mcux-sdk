@@ -1573,6 +1573,36 @@ void SAI_TransferTxHandleIRQ(I2S_Type *base, sai_handle_t *handle);
  */
 void SAI_TransferRxHandleIRQ(I2S_Type *base, sai_handle_t *handle);
 
+/*!
+ * @brief sends a piece of data in non-blocking way.
+ *
+ * @param base SAI base pointer
+ * @param channel start channel number.
+ * @param channelMask enabled channels mask.
+ * @param endChannel end channel numbers.
+ * @param bitWidth How many bits in a audio word, usually 8/16/24/32 bits.
+ * @param buffer Pointer to the data to be written.
+ * @param size Bytes to be written.
+ */
+void SAI_WriteNonBlocking(I2S_Type *base, uint32_t channel,
+		uint32_t channelMask, uint32_t endChannel, uint8_t bitWidth,
+		uint8_t *buffer, uint32_t size);
+
+/*!
+ * @brief Receive a piece of data in non-blocking way.
+ *
+ * @param base SAI base pointer
+ * @param channel start channel number.
+ * @param channelMask enabled channels mask.
+ * @param endChannel end channel numbers.
+ * @param bitWidth How many bits in a audio word, usually 8/16/24/32 bits.
+ * @param buffer Pointer to the data to be read.
+ * @param size Bytes to be read.
+ */
+void SAI_ReadNonBlocking(I2S_Type *base, uint32_t channel,
+		uint32_t channelMask, uint32_t endChannel, uint8_t bitWidth,
+		uint8_t *buffer, uint32_t size);
+
 /*! @} */
 
 #if defined(__cplusplus)

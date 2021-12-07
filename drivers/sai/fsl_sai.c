@@ -91,44 +91,6 @@ static void SAI_SetMasterClockDivider(I2S_Type *base, uint32_t mclk_Hz, uint32_t
 static uint32_t SAI_GetInstance(I2S_Type *base);
 
 /*!
- * @brief sends a piece of data in non-blocking way.
- *
- * @param base SAI base pointer
- * @param channel start channel number.
- * @param channelMask enabled channels mask.
- * @param endChannel end channel numbers.
- * @param bitWidth How many bits in a audio word, usually 8/16/24/32 bits.
- * @param buffer Pointer to the data to be written.
- * @param size Bytes to be written.
- */
-static void SAI_WriteNonBlocking(I2S_Type *base,
-                                 uint32_t channel,
-                                 uint32_t channelMask,
-                                 uint32_t endChannel,
-                                 uint8_t bitWidth,
-                                 uint8_t *buffer,
-                                 uint32_t size);
-
-/*!
- * @brief Receive a piece of data in non-blocking way.
- *
- * @param base SAI base pointer
- * @param channel start channel number.
- * @param channelMask enabled channels mask.
- * @param endChannel end channel numbers.
- * @param bitWidth How many bits in a audio word, usually 8/16/24/32 bits.
- * @param buffer Pointer to the data to be read.
- * @param size Bytes to be read.
- */
-static void SAI_ReadNonBlocking(I2S_Type *base,
-                                uint32_t channel,
-                                uint32_t channelMask,
-                                uint32_t endChannel,
-                                uint8_t bitWidth,
-                                uint8_t *buffer,
-                                uint32_t size);
-
-/*!
  * @brief Get classic I2S mode configurations.
  *
  * @param config transceiver configurations
@@ -274,7 +236,7 @@ static uint32_t SAI_GetInstance(I2S_Type *base)
     return instance;
 }
 
-static void SAI_WriteNonBlocking(I2S_Type *base,
+void SAI_WriteNonBlocking(I2S_Type *base,
                                  uint32_t channel,
                                  uint32_t channelMask,
                                  uint32_t endChannel,
@@ -307,7 +269,7 @@ static void SAI_WriteNonBlocking(I2S_Type *base,
     }
 }
 
-static void SAI_ReadNonBlocking(I2S_Type *base,
+void SAI_ReadNonBlocking(I2S_Type *base,
                                 uint32_t channel,
                                 uint32_t channelMask,
                                 uint32_t endChannel,
