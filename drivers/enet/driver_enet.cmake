@@ -143,4 +143,7 @@ endif()
 if(${MCUX_DEVICE} STREQUAL "MIMX8DX1")
     include(driver_memory)
 endif()
+if(${MCUX_DEVICE} STREQUAL "MIMX8ML8")
+    include(driver_memory)
+endif()
 
