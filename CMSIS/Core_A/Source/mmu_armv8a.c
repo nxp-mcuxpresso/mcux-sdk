@@ -52,7 +52,7 @@
 #define CONFIG_MMU_PAGE_SIZE                   4096
 #endif
 #ifndef CONFIG_MAX_XLAT_TABLES
-#define CONFIG_MAX_XLAT_TABLES                 16
+#define CONFIG_MAX_XLAT_TABLES                 32
 #endif
 #ifndef CONFIG_ARM64_PA_BITS
 #define CONFIG_ARM64_PA_BITS                   48
