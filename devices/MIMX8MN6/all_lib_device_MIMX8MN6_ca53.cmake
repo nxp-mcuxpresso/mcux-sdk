@@ -11,6 +11,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyar8031
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyrtl8211f
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet/
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
@@ -46,6 +47,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_iuart)
 #    include(driver_mdio-enet)
 #    include(driver_phy-device-ar8031)
+#    include(driver_phy-device-rtl8211f)
 #    include(driver_sai)
 #    include(driver_pcm186x)
 #    include(driver_pcm512x)
