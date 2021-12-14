@@ -9,9 +9,13 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm186x
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm512x
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyrtl8211f
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet/
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpt
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ii2c
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/igpio
@@ -33,10 +37,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_startup)
 #    include(device_system)
 #    include(driver_common)
+#    include(driver_enet)
 #    include(driver_gpt)
 #    include(driver_ii2c)
 #    include(driver_igpio)
 #    include(driver_iuart)
+#    include(driver_mdio-enet)
+#    include(driver_phy-device-rtl8211f)
 #    include(driver_sai)
 #    include(driver_pcm186x)
 #    include(driver_pcm512x)
