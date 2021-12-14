@@ -50,6 +50,12 @@
         kCLOCK_IpInvalid, kCLOCK_Ecspi1, kCLOCK_Ecspi2, kCLOCK_Ecspi3, \
     }
 
+/*! @brief Clock ip name array for ENET. */
+#define ENET_CLOCKS   \
+    {                 \
+        kCLOCK_Enet1, \
+    }
+
 /*! @brief Clock ip name array for GPIO. */
 #define GPIO_CLOCKS                                                                             \
     {                                                                                           \
@@ -223,6 +229,8 @@ typedef enum _clock_ip_name
     kCLOCK_Ecspi2 = CCM_TUPLE(8U, 102U), /*!< ECSPI2 Clock Gate.*/
     kCLOCK_Ecspi3 = CCM_TUPLE(9U, 131U), /*!< ECSPI3 Clock Gate.*/
 
+    kCLOCK_Enet1 = CCM_TUPLE(10U, 17U), /*!< ENET1 Clock Gate.*/
+
     kCLOCK_Gpio1 = CCM_TUPLE(11U, 33U), /*!< GPIO1 Clock Gate.*/
     kCLOCK_Gpio2 = CCM_TUPLE(12U, 33U), /*!< GPIO2 Clock Gate.*/
     kCLOCK_Gpio3 = CCM_TUPLE(13U, 33U), /*!< GPIO3 Clock Gate.*/
@@ -306,6 +314,7 @@ typedef enum _clock_root_control
 {
     kCLOCK_RootM4       = (uintptr_t)(&(CCM)->ROOT[1].TARGET_ROOT),  /*!< ARM Cortex-M4 Clock control name.*/
     kCLOCK_RootAxi      = (uintptr_t)(&(CCM)->ROOT[16].TARGET_ROOT), /*!< AXI Clock control name.*/
+    kCLOCK_RootEnetAxi  = (uintptr_t)(&(CCM)->ROOT[17].TARGET_ROOT), /*!< ENET AXI Clock control name.*/
     kCLOCK_RootNoc      = (uintptr_t)(&(CCM)->ROOT[26].TARGET_ROOT), /*!< NOC Clock control name.*/
     kCLOCK_RootAhb      = (uintptr_t)(&(CCM)->ROOT[32].TARGET_ROOT), /*!< AHB Clock control name.*/
     kCLOCK_RootIpg      = (uintptr_t)(&(CCM)->ROOT[33].TARGET_ROOT), /*!< IPG Clock control name.*/
@@ -319,6 +328,10 @@ typedef enum _clock_root_control
     kCLOCK_RootSai4 = (uintptr_t)(&(CCM)->ROOT[78].TARGET_ROOT), /*!< SAI4 Clock control name.*/
     kCLOCK_RootSai5 = (uintptr_t)(&(CCM)->ROOT[79].TARGET_ROOT), /*!< SAI5 Clock control name.*/
     kCLOCK_RootSai6 = (uintptr_t)(&(CCM)->ROOT[80].TARGET_ROOT), /*!< SAI6 Clock control name.*/
+
+    kCLOCK_RootEnetRef   = (uintptr_t)(&(CCM)->ROOT[83].TARGET_ROOT), /*!< ENET Clock control name.*/
+    kCLOCK_RootEnetTimer = (uintptr_t)(&(CCM)->ROOT[84].TARGET_ROOT), /*!< ENET TIMER Clock control name.*/
+    kCLOCK_RootEnetPhy   = (uintptr_t)(&(CCM)->ROOT[85].TARGET_ROOT), /*!< ENET PHY Clock control name.*/
 
     kCLOCK_RootQspi = (uintptr_t)(&(CCM)->ROOT[87].TARGET_ROOT), /*!< QSPI Clock control name.*/
 
@@ -430,6 +443,58 @@ typedef enum _clock_rootmux_ecspi_clk_sel
     kCLOCK_EcspiRootmuxSysPll2Div4  = 6U, /*!< ECSPI Clock from SYSTEM PLL2 divided by 4.*/
     kCLOCK_EcspiRootmuxAudioPll2    = 7U, /*!< ECSPI Clock from AUDIO PLL2.*/
 } clock_rootmux_ecspi_clk_sel_t;
+
+/*! @brief Root clock select enumeration for ENET AXI bus. */
+typedef enum _clock_rootmux_enet_axi_clk_sel
+{
+    kCLOCK_EnetAxiRootmuxOsc24M      = 0U, /*!< ENET AXI Clock from OSC 24M.*/
+    kCLOCK_EnetAxiRootmuxSysPll1Div3 = 1U, /*!< ENET AXI Clock from SYSTEM PLL1 divided by 3.*/
+    kCLOCK_EnetAxiRootmuxSysPll1     = 2U, /*!< ENET AXI Clock from SYSTEM PLL1.*/
+    kCLOCK_EnetAxiRootmuxSysPll2Div4 = 3U, /*!< ENET AXI Clock from SYSTEM PLL2 divided by 4.*/
+    kCLOCK_EnetAxiRootmuxSysPll2Div5 = 4U, /*!< ENET AXI Clock from SYSTEM PLL2 divided by 5.*/
+    kCLOCK_EnetAxiRootmuxAudioPll1   = 5U, /*!< ENET AXI Clock from AUDIO PLL1.*/
+    kCLOCK_EnetAxiRootmuxVideoPll1   = 6U, /*!< ENET AXI Clock from VIDEO PLL1.*/
+    kCLOCK_EnetAxiRootmuxSysPll3     = 7U, /*!< ENET AXI Clock from SYSTEM PLL3.*/
+} clock_rootmux_enet_axi_clk_sel_t;
+
+/*! @brief Root clock select enumeration for ENET REF Clcok. */
+typedef enum _clock_rootmux_enet_ref_clk_sel
+{
+    kCLOCK_EnetRefRootmuxOsc24M       = 0U, /*!< ENET REF Clock from OSC 24M.*/
+    kCLOCK_EnetRefRootmuxSysPll2Div8  = 1U, /*!< ENET REF Clock from SYSTEM PLL2 divided by 8.*/
+    kCLOCK_EnetRefRootmuxSysPll2Div20 = 2U, /*!< ENET REF Clock from SYSTEM PLL2 divided by 20.*/
+    kCLOCK_EnetRefRootmuxSysPll2Div10 = 3U, /*!< ENET REF Clock from SYSTEM PLL2 divided by 10.*/
+    kCLOCK_EnetRefRootmuxSysPll1Div5  = 4U, /*!< ENET REF Clock from SYSTEM PLL1 divided by 5.*/
+    kCLOCK_EnetRefRootmuxAudioPll1    = 5U, /*!< ENET REF Clock from AUDIO PLL1.*/
+    kCLOCK_EnetRefRootmuxVideoPll1    = 6U, /*!< ENET REF Clock from VIDEO PLL1.*/
+    kCLOCK_EnetRefRootmuxExtClk4      = 7U, /*!< ENET REF Clock from External Clock 4.*/
+} clock_rootmux_enet_ref_clk_sel_t;
+
+/*! @brief Root clock select enumeration for ENET TIMER Clcok. */
+typedef enum _clock_rootmux_enet_timer_clk_sel
+{
+    kCLOCK_EnetTimerRootmuxOsc24M       = 0U, /*!< ENET TIMER Clock from OSC 24M.*/
+    kCLOCK_EnetTimerRootmuxSysPll2Div10 = 1U, /*!< ENET TIMER Clock from SYSTEM PLL2 divided by 10.*/
+    kCLOCK_EnetTimerRootmuxAudioPll1    = 2U, /*!< ENET TIMER Clock from AUDIO PLL1.*/
+    kCLOCK_EnetTimerRootmuxExtClk1      = 3U, /*!< ENET TIMER Clock from External Clock 1.*/
+    kCLOCK_EnetTimerRootmuxExtClk2      = 4U, /*!< ENET TIMER Clock External Clock 2.*/
+    kCLOCK_EnetTimerRootmuxExtClk3      = 5U, /*!< ENET TIMER Clock from External Clock 3.*/
+    kCLOCK_EnetTimerRootmuxExtClk4      = 6U, /*!< ENET TIMER Clock from External Clock 4.*/
+    kCLOCK_EnetTimerRootmuxVideoPll1    = 7U, /*!< ENET TIMER Clock from VIDEO PLL1.*/
+} clock_rootmux_enet_timer_clk_sel_t;
+
+/*! @brief Root clock select enumeration for ENET PHY Clcok. */
+typedef enum _clock_rootmux_enet_phy_clk_sel
+{
+    kCLOCK_EnetPhyRootmuxOsc24M       = 0U, /*!< ENET PHY Clock from OSC 24M.*/
+    kCLOCK_EnetPhyRootmuxSysPll2Div20 = 1U, /*!< ENET PHY Clock from SYSTEM PLL2 divided by 20.*/
+    kCLOCK_EnetPhyRootmuxSysPll2Div8  = 2U, /*!< ENET PHY Clock from SYSTEM PLL2 divided by 8.*/
+    kCLOCK_EnetPhyRootmuxSysPll2Div5  = 3U, /*!< ENET PHY Clock from SYSTEM PLL2 divided by 5.*/
+    kCLOCK_EnetPhyRootmuxSysPll2Div2  = 4U, /*!< ENET PHY Clock from SYSTEM PLL2 divided by 2.*/
+    kCLOCK_EnetPhyRootmuxAudioPll1    = 5U, /*!< ENET PHY Clock from AUDIO PLL1.*/
+    kCLOCK_EnetPhyRootmuxVideoPll1    = 6U, /*!< ENET PHY Clock from VIDEO PLL1.*/
+    kCLOCK_EnetPhyRootmuxAudioPll2    = 7U, /*!< ENET PHY Clock from AUDIO PLL2.*/
+} clock_rootmux_enet_phy_clk_sel_t;
 
 /*! @brief Root clock select enumeration for I2C peripheral. */
 typedef enum _clock_rootmux_i2c_clk_sel
