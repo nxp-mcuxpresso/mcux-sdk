@@ -63,6 +63,11 @@ uint32_t CLOCK_GetFreq(clock_name_t clockName)
             freq = temp / CLOCK_GetRootPostDivider(kCLOCK_RootIpg);
             break;
         }
+        case kCLOCK_EnetIpgClk:
+        {
+            freq = CLOCK_GetEnetAxiFreq();
+            break;
+        }
         default:
             freq = 0U;
             break;
@@ -196,6 +201,51 @@ uint32_t CLOCK_GetAhbFreq(void)
             break;
         case (uint32_t)kCLOCK_AhbRootmuxVideoPll1:
             freq = CLOCK_GetPllFreq(kCLOCK_VideoPll1Ctrl);
+            break;
+        default:
+            freq = 0U;
+            break;
+    }
+
+    return freq / pre / post;
+}
+
+/*!
+ * brief Get the CCM Enet AXI bus frequency.
+ *
+ * return  Clock frequency; If the clock is invalid, returns 0.
+ */
+uint32_t CLOCK_GetEnetAxiFreq(void)
+{
+    uint32_t freq;
+    uint32_t pre  = CLOCK_GetRootPreDivider(kCLOCK_RootEnetAxi);
+    uint32_t post = CLOCK_GetRootPostDivider(kCLOCK_RootEnetAxi);
+
+    switch (CLOCK_GetRootMux(kCLOCK_RootEnetAxi))
+    {
+        case (uint32_t)kCLOCK_EnetAxiRootmuxOsc24M:
+            freq = OSC24M_CLK_FREQ;
+            break;
+        case (uint32_t)kCLOCK_EnetAxiRootmuxSysPll1Div3:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll1Ctrl) / 3U;
+            break;
+        case (uint32_t)kCLOCK_EnetAxiRootmuxSysPll1:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll1Ctrl);
+            break;
+        case (uint32_t)kCLOCK_EnetAxiRootmuxSysPll2Div4:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll2Ctrl) / 4U;
+            break;
+        case (uint32_t)kCLOCK_EnetAxiRootmuxSysPll2Div5:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll2Ctrl) / 5U;
+            break;
+        case (uint32_t)kCLOCK_EnetAxiRootmuxAudioPll1:
+            freq = CLOCK_GetPllFreq(kCLOCK_AudioPll1Ctrl);
+            break;
+        case (uint32_t)kCLOCK_EnetAxiRootmuxVideoPll1:
+            freq = CLOCK_GetPllFreq(kCLOCK_VideoPll1Ctrl);
+            break;
+        case (uint32_t)kCLOCK_EnetAxiRootmuxSysPll3:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll3Ctrl);
             break;
         default:
             freq = 0U;
