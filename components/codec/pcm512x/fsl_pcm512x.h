@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2021-2022 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -123,18 +123,20 @@
  */
 enum
 {
-    kPCM512x_AudioSampleRate8KHz    = 8000U,   /*!< Sample rate 8000 Hz */
-    kPCM512x_AudioSampleRate11025Hz = 11025U,  /*!< Sample rate 11025 Hz */
-    kPCM512x_AudioSampleRate12KHz   = 12000U,  /*!< Sample rate 12000 Hz */
-    kPCM512x_AudioSampleRate16KHz   = 16000U,  /*!< Sample rate 16000 Hz */
-    kPCM512x_AudioSampleRate22050Hz = 22050U,  /*!< Sample rate 22050 Hz */
-    kPCM512x_AudioSampleRate24KHz   = 24000U,  /*!< Sample rate 24000 Hz */
-    kPCM512x_AudioSampleRate32KHz   = 32000U,  /*!< Sample rate 32000 Hz */
-    kPCM512x_AudioSampleRate44100Hz = 44100U,  /*!< Sample rate 44100 Hz */
-    kPCM512x_AudioSampleRate48KHz   = 48000U,  /*!< Sample rate 48000 Hz */
-    kPCM512x_AudioSampleRate96KHz   = 96000U,  /*!< Sample rate 96000 Hz */
-    kPCM512x_AudioSampleRate192KHz  = 192000U, /*!< Sample rate 192000 Hz */
-    kPCM512x_AudioSampleRate384KHz  = 384000U, /*!< Sample rate 384000 Hz */
+    kPCM512x_AudioSampleRate8KHz     = 8000U,    /*!< Sample rate 8000 Hz */
+    kPCM512x_AudioSampleRate11025Hz  = 11025U,   /*!< Sample rate 11025 Hz */
+    kPCM512x_AudioSampleRate12KHz    = 12000U,   /*!< Sample rate 12000 Hz */
+    kPCM512x_AudioSampleRate16KHz    = 16000U,   /*!< Sample rate 16000 Hz */
+    kPCM512x_AudioSampleRate22050Hz  = 22050U,   /*!< Sample rate 22050 Hz */
+    kPCM512x_AudioSampleRate24KHz    = 24000U,   /*!< Sample rate 24000 Hz */
+    kPCM512x_AudioSampleRate32KHz    = 32000U,   /*!< Sample rate 32000 Hz */
+    kPCM512x_AudioSampleRate44100Hz  = 44100U,   /*!< Sample rate 44100 Hz */
+    kPCM512x_AudioSampleRate48KHz    = 48000U,   /*!< Sample rate 48000 Hz */
+    kPCM512x_AudioSampleRate88200Hz  = 88200U,   /*!< Sample rate 88200 Hz */
+    kPCM512x_AudioSampleRate96KHz    = 96000U,   /*!< Sample rate 96000 Hz */
+    kPCM512x_AudioSampleRate176400Hz = 176400U,  /*!< Sample rate 176400 Hz */
+    kPCM512x_AudioSampleRate192KHz   = 192000U,  /*!< Sample rate 192000 Hz */
+    kPCM512x_AudioSampleRate384KHz   = 384000U,  /*!< Sample rate 384000 Hz */
 };
 
 /*! @brief audio bit width

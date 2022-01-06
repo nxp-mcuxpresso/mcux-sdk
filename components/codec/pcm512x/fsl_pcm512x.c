@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2021-2022 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -107,6 +107,8 @@ static int dac_pcm512x_get_dac_rate(int sample_rate)
 
     switch (sample_rate) {
         case kPCM512x_AudioSampleRate44100Hz:
+        case kPCM512x_AudioSampleRate88200Hz:
+        case kPCM512x_AudioSampleRate176400Hz:
             dr = 5644800;
             break;
         case kPCM512x_AudioSampleRate48KHz:
@@ -129,6 +131,8 @@ static uint8_t dac_pcm512x_get_dac_div(int sample_rate)
 
     switch (sample_rate) {
         case kPCM512x_AudioSampleRate44100Hz:
+        case kPCM512x_AudioSampleRate88200Hz:
+        case kPCM512x_AudioSampleRate176400Hz:
             u = CLK_44100;
             break;
         case kPCM512x_AudioSampleRate48KHz:
@@ -155,6 +159,8 @@ static int dac_pcm512x_get_idac(int sample_rate, uint8_t dsp_div)
 
     switch (sample_rate) {
         case kPCM512x_AudioSampleRate44100Hz:
+        case kPCM512x_AudioSampleRate88200Hz:
+        case kPCM512x_AudioSampleRate176400Hz:
             u = CLK_44100;
             break;
         case kPCM512x_AudioSampleRate48KHz:
@@ -180,6 +186,8 @@ static uint8_t dac_pcm512x_get_bclk_div(int sample_rate, uint8_t lrclk_div)
 
     switch (sample_rate) {
         case kPCM512x_AudioSampleRate44100Hz:
+        case kPCM512x_AudioSampleRate88200Hz:
+        case kPCM512x_AudioSampleRate176400Hz:
             u = CLK_44100;
             break;
         case kPCM512x_AudioSampleRate48KHz:
@@ -207,9 +215,11 @@ static uint8_t dac_pcm512x_get_fssp(int sample_rate)
         case kPCM512x_AudioSampleRate48KHz:
             fssp = PCM512x_FSSP_48KHZ;
             break;
+        case kPCM512x_AudioSampleRate88200Hz:
         case kPCM512x_AudioSampleRate96KHz:
             fssp = PCM512x_FSSP_96KHZ;
             break;
+        case kPCM512x_AudioSampleRate176400Hz:
         case kPCM512x_AudioSampleRate192KHz:
             fssp = PCM512x_FSSP_192KHZ;
             break;
@@ -229,6 +239,8 @@ status_t PCM512x_SetFormat(pcm512x_handle_t *handle, uint32_t mclk, uint32_t sam
     int dac_rate, idac;
 
     if ((sampleRate != kPCM512x_AudioSampleRate44100Hz) &&
+        (sampleRate != kPCM512x_AudioSampleRate88200Hz) &&
+        (sampleRate != kPCM512x_AudioSampleRate176400Hz) &&
         (sampleRate != kPCM512x_AudioSampleRate48KHz) &&
         (sampleRate != kPCM512x_AudioSampleRate96KHz) &&
         (sampleRate != kPCM512x_AudioSampleRate192KHz)) {
