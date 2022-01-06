@@ -928,7 +928,7 @@ void CLOCK_EnableClock(clock_ip_name_t ccmGate)
         uint32_t gate   = AUDIOMIX_TUPLE_GATE(ccmGate);
         rootClk         = AUDIOMIX_TUPLE_ROOT(ccmGate);
 
-        *(volatile uint32_t *)((uint32_t)AUDIOMIX + offset) |= (uint32_t)1U << gate;
+        *(volatile uint32_t *)((uintptr_t)AUDIOMIX + offset) |= (uint32_t)1U << gate;
     }
     else
     {
@@ -964,7 +964,7 @@ void CLOCK_DisableClock(clock_ip_name_t ccmGate)
         uint32_t gate   = AUDIOMIX_TUPLE_GATE(ccmGate);
         rootClk         = AUDIOMIX_TUPLE_ROOT(ccmGate);
 
-        *(volatile uint32_t *)((uint32_t)AUDIOMIX + offset) &= ~((uint32_t)1U << gate);
+        *(volatile uint32_t *)((uintptr_t)AUDIOMIX + offset) &= ~((uint32_t)1U << gate);
     }
     else
     {
