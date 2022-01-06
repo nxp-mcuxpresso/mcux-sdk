@@ -75,9 +75,9 @@ extern "C" {
  * @param direction convert direction.
  * @return the converted address
  */
-static inline uint32_t MEMORY_ConvertMemoryMapAddress(uint32_t addr, mem_direction_t direction)
+static inline uintptr_t MEMORY_ConvertMemoryMapAddress(uintptr_t addr, mem_direction_t direction)
 {
-    uint32_t dest;
+    uintptr_t dest;
 
     switch (direction)
     {
