@@ -16,14 +16,6 @@
  * The CPU macro should be declared in the project or makefile.
  */
 #if (defined(CPU_MIMX8MM6CVTKZ) || defined(CPU_MIMX8MM6DVTLZ))
-#if defined(__aarch64__) || defined(CONFIG_ARM64)
-/* Hack: XCC needs to be removed */
-#define __XCC__
-#include "MIMX8MM6_ca53.h"
-/* CPU specific feature definitions */
-#include "MIMX8MM6_ca53_features.h"
-
-#else
 
 #define MIMX8MM6_cm4_SERIES
 
@@ -31,8 +23,6 @@
 #include "MIMX8MM6_cm4.h"
 /* CPU specific feature definitions */
 #include "MIMX8MM6_cm4_features.h"
-
-#endif
 
 #else
     #error "No valid CPU defined!"
