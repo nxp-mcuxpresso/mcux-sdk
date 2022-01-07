@@ -10,4 +10,10 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(CMSIS_Include_core_cm)
+if(${MCUX_DEVICE} STREQUAL "MIMX8MM6")
+    include(CMSIS_Include_core_cm)
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "MIMX8MM6_ca53")
+    include(CMSIS_Include_core_ca)
+endif()

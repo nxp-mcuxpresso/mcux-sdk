@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 - 2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -750,7 +750,7 @@ void CLOCK_EnableClock(clock_ip_name_t ccmGate)
 {
     uint32_t ccgr = CCM_TUPLE_CCGR(ccmGate);
 
-    CCM_REG_SET(ccgr) = (uint32_t)kCLOCK_ClockNeededAll;
+    CCM_REG_SET(ccgr) = (uintptr_t)kCLOCK_ClockNeededAll;
 #if !(defined(NOT_CONFIG_CLK_ROOT) && NOT_CONFIG_CLK_ROOT)
     uint32_t rootClk = CCM_TUPLE_ROOT(ccmGate);
     /* if root clock is 0xFFFFU, then skip enable root clock */
@@ -774,7 +774,7 @@ void CLOCK_DisableClock(clock_ip_name_t ccmGate)
 {
     uint32_t ccgr = CCM_TUPLE_CCGR(ccmGate);
 
-    CCM_REG(ccgr) = (uint32_t)kCLOCK_ClockNotNeeded;
+    CCM_REG(ccgr) = (uintptr_t)kCLOCK_ClockNotNeeded;
 #if !(defined(NOT_CONFIG_CLK_ROOT) && NOT_CONFIG_CLK_ROOT)
     uint32_t rootClk = CCM_TUPLE_ROOT(ccmGate);
     /* if root clock is 0xFFFFU, then skip disable root clock */

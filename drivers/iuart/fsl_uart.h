@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief UART driver version. */
-#define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+#define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */

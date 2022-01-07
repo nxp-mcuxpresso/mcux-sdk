@@ -191,7 +191,7 @@
 /*!
  * @brief CCM reg macros to map corresponding registers.
  */
-#define CCM_REG_OFF(root, off) (*((volatile uint32_t *)((uint32_t)(root) + (off))))
+#define CCM_REG_OFF(root, off) (*((volatile uint32_t *)((uintptr_t)(root) + (off))))
 #define CCM_REG(root)          CCM_REG_OFF(root, 0U)
 #define CCM_REG_SET(root)      CCM_REG_OFF(root, 4U)
 #define CCM_REG_CLR(root)      CCM_REG_OFF(root, 8U)
@@ -216,7 +216,7 @@
 #define CCM_ANALOG_TUPLE(reg, shift)  ((((reg)&0xFFFFU) << 16U) | ((shift)))
 #define CCM_ANALOG_TUPLE_SHIFT(tuple) (((uint32_t)(tuple)) & 0x1FU)
 #define CCM_ANALOG_TUPLE_REG_OFF(base, tuple, off) \
-    (*((volatile uint32_t *)((uint32_t)(base) + (((uint32_t)(tuple) >> 16U) & 0xFFFFU) + (off))))
+    (*((volatile uint32_t *)((uintptr_t)(base) + (((uint32_t)(tuple) >> 16U) & 0xFFFFU) + (off))))
 #define CCM_ANALOG_TUPLE_REG(base, tuple) CCM_ANALOG_TUPLE_REG_OFF(base, tuple, 0U)
 
 /*!
@@ -226,8 +226,8 @@
 #define CLOCK_GATE_IN_CCM      (0U)
 #define CLOCK_GATE_TYPE(tuple) ((uint32_t)(tuple) >> 28U)
 #define CCM_TUPLE(ccgr, root)  ((((ccgr)&0xFFFFU) << 16U) | (root))
-#define CCM_TUPLE_CCGR(tuple)  ((uint32_t)(&(CCM)->CCGR[(uint32_t)(tuple) >> 16U].CCGR))
-#define CCM_TUPLE_ROOT(tuple)  ((uint32_t)(&(CCM)->ROOT[(uint32_t)(tuple)&0xFFFFU].TARGET_ROOT))
+#define CCM_TUPLE_CCGR(tuple)  ((uintptr_t)(&(CCM)->CCGR[(uint32_t)(tuple) >> 16U].CCGR))
+#define CCM_TUPLE_ROOT(tuple)  ((uintptr_t)(&(CCM)->ROOT[(uint32_t)(tuple)&0xFFFFU].TARGET_ROOT))
 /*!@brief audio mix CCGR */
 #define AUDIOMIX_TUPLE(offset, gate, root) \
     (((CLOCK_GATE_IN_AUDIOMIX) << 28U) | (((offset)&0xFU) << 24U) | (((gate)&0xFFU) << 16U) | ((root)&0xFFFFU))
@@ -243,7 +243,7 @@ typedef enum _clock_name
     kCLOCK_AxiClk, /*!< Main AXI bus clock.                         */
     kCLOCK_AhbClk, /*!< AHB bus clock.                         */
     kCLOCK_IpgClk, /*!< IPG bus clock.                         */
-
+    kCLOCK_PerClk, /*!< Peripheral Clock.			*/
     /* -------------------------------- Other clock --------------------------*/
 } clock_name_t;
 
@@ -402,75 +402,75 @@ typedef enum _clock_ip_name
 /*! @brief ccm root name used to get clock frequency. */
 typedef enum _clock_root_control
 {
-    kCLOCK_RootM7           = (uint32_t)(&(CCM)->ROOT[1].TARGET_ROOT),  /*!< ARM Cortex-M7 Clock control name.*/
-    kCLOCK_RootHsioAxi      = (uint32_t)(&(CCM)->ROOT[7].TARGET_ROOT),  /*!< HSIO AXI Clock control name.*/
-    kCLOCK_RootMainAxi      = (uint32_t)(&(CCM)->ROOT[16].TARGET_ROOT), /*!< MAIN AXI Clock control name.*/
-    kCLOCK_RootEnetAxi      = (uint32_t)(&(CCM)->ROOT[17].TARGET_ROOT), /*!< ENET AXI Clock control name.*/
-    kCLOCK_RootNandUsdhcBus = (uint32_t)(&(CCM)->ROOT[18].TARGET_ROOT), /*!< NAND USDHC BUS Clock control name.*/
-    kCLOCK_RootVpuBus       = (uint32_t)(&(CCM)->ROOT[19].TARGET_ROOT), /*!< VPU BUS Clock control name.*/
-    kCLOCK_RootMediaAxi     = (uint32_t)(&(CCM)->ROOT[20].TARGET_ROOT), /*!< MEDIA AXI Clock control name.*/
-    kCLOCK_RootMediaApb     = (uint32_t)(&(CCM)->ROOT[21].TARGET_ROOT), /*!< MEDIA APB Clock control name.*/
-    kCLOCK_RootHdmiApb      = (uint32_t)(&(CCM)->ROOT[22].TARGET_ROOT), /*!< HDMI APB Clock control name.*/
-    kCLOCK_RootNoc          = (uint32_t)(&(CCM)->ROOT[26].TARGET_ROOT), /*!< NOC Clock control name.*/
-    kCLOCK_RootAhb          = (uint32_t)(&(CCM)->ROOT[32].TARGET_ROOT), /*!< AHB Clock control name.*/
-    kCLOCK_RootIpg          = (uint32_t)(&(CCM)->ROOT[33].TARGET_ROOT), /*!< IPG Clock control name.*/
-    kCLOCK_RootAudioAhb     = (uint32_t)(&(CCM)->ROOT[34].TARGET_ROOT), /*!< Audio AHB Clock control name.*/
-    kCLOCK_RootAudioIpg     = (uint32_t)(&(CCM)->ROOT[35].TARGET_ROOT), /*!< Audio IPG Clock control name.*/
-    kCLOCK_RootDramAlt      = (uint32_t)(&(CCM)->ROOT[64].TARGET_ROOT), /*!< DRAM ALT Clock control name.*/
-    kCLOCK_RootFlexCan1     = (uint32_t)(&(CCM)->ROOT[68].TARGET_ROOT), /*!< FLEXCAN1 Clock control name.*/
-    kCLOCK_RootFlexCan2     = (uint32_t)(&(CCM)->ROOT[69].TARGET_ROOT), /*!< FLEXCAN2 Clock control name.*/
+    kCLOCK_RootM7           = (uintptr_t)(&(CCM)->ROOT[1].TARGET_ROOT),  /*!< ARM Cortex-M7 Clock control name.*/
+    kCLOCK_RootHsioAxi      = (uintptr_t)(&(CCM)->ROOT[7].TARGET_ROOT),  /*!< HSIO AXI Clock control name.*/
+    kCLOCK_RootMainAxi      = (uintptr_t)(&(CCM)->ROOT[16].TARGET_ROOT), /*!< MAIN AXI Clock control name.*/
+    kCLOCK_RootEnetAxi      = (uintptr_t)(&(CCM)->ROOT[17].TARGET_ROOT), /*!< ENET AXI Clock control name.*/
+    kCLOCK_RootNandUsdhcBus = (uintptr_t)(&(CCM)->ROOT[18].TARGET_ROOT), /*!< NAND USDHC BUS Clock control name.*/
+    kCLOCK_RootVpuBus       = (uintptr_t)(&(CCM)->ROOT[19].TARGET_ROOT), /*!< VPU BUS Clock control name.*/
+    kCLOCK_RootMediaAxi     = (uintptr_t)(&(CCM)->ROOT[20].TARGET_ROOT), /*!< MEDIA AXI Clock control name.*/
+    kCLOCK_RootMediaApb     = (uintptr_t)(&(CCM)->ROOT[21].TARGET_ROOT), /*!< MEDIA APB Clock control name.*/
+    kCLOCK_RootHdmiApb      = (uintptr_t)(&(CCM)->ROOT[22].TARGET_ROOT), /*!< HDMI APB Clock control name.*/
+    kCLOCK_RootNoc          = (uintptr_t)(&(CCM)->ROOT[26].TARGET_ROOT), /*!< NOC Clock control name.*/
+    kCLOCK_RootAhb          = (uintptr_t)(&(CCM)->ROOT[32].TARGET_ROOT), /*!< AHB Clock control name.*/
+    kCLOCK_RootIpg          = (uintptr_t)(&(CCM)->ROOT[33].TARGET_ROOT), /*!< IPG Clock control name.*/
+    kCLOCK_RootAudioAhb     = (uintptr_t)(&(CCM)->ROOT[34].TARGET_ROOT), /*!< Audio AHB Clock control name.*/
+    kCLOCK_RootAudioIpg     = (uintptr_t)(&(CCM)->ROOT[35].TARGET_ROOT), /*!< Audio IPG Clock control name.*/
+    kCLOCK_RootDramAlt      = (uintptr_t)(&(CCM)->ROOT[64].TARGET_ROOT), /*!< DRAM ALT Clock control name.*/
+    kCLOCK_RootFlexCan1     = (uintptr_t)(&(CCM)->ROOT[68].TARGET_ROOT), /*!< FLEXCAN1 Clock control name.*/
+    kCLOCK_RootFlexCan2     = (uintptr_t)(&(CCM)->ROOT[69].TARGET_ROOT), /*!< FLEXCAN2 Clock control name.*/
 
-    kCLOCK_RootSai1 = (uint32_t)(&(CCM)->ROOT[75].TARGET_ROOT),  /*!< SAI1 Clock control name.*/
-    kCLOCK_RootSai2 = (uint32_t)(&(CCM)->ROOT[76].TARGET_ROOT),  /*!< SAI2 Clock control name.*/
-    kCLOCK_RootSai3 = (uint32_t)(&(CCM)->ROOT[77].TARGET_ROOT),  /*!< SAI3 Clock control name.*/
-    kCLOCK_RootSai5 = (uint32_t)(&(CCM)->ROOT[79].TARGET_ROOT),  /*!< SAI5 Clock control name.*/
-    kCLOCK_RootSai6 = (uint32_t)(&(CCM)->ROOT[80].TARGET_ROOT),  /*!< SAI6 Clock control name.*/
-    kCLOCK_RootSai7 = (uint32_t)(&(CCM)->ROOT[134].TARGET_ROOT), /*!< SAI7 Clock control name.*/
+    kCLOCK_RootSai1 = (uintptr_t)(&(CCM)->ROOT[75].TARGET_ROOT),  /*!< SAI1 Clock control name.*/
+    kCLOCK_RootSai2 = (uintptr_t)(&(CCM)->ROOT[76].TARGET_ROOT),  /*!< SAI2 Clock control name.*/
+    kCLOCK_RootSai3 = (uintptr_t)(&(CCM)->ROOT[77].TARGET_ROOT),  /*!< SAI3 Clock control name.*/
+    kCLOCK_RootSai5 = (uintptr_t)(&(CCM)->ROOT[79].TARGET_ROOT),  /*!< SAI5 Clock control name.*/
+    kCLOCK_RootSai6 = (uintptr_t)(&(CCM)->ROOT[80].TARGET_ROOT),  /*!< SAI6 Clock control name.*/
+    kCLOCK_RootSai7 = (uintptr_t)(&(CCM)->ROOT[134].TARGET_ROOT), /*!< SAI7 Clock control name.*/
 
-    kCLOCK_RootEnetQos      = (uint32_t)(&(CCM)->ROOT[81].TARGET_ROOT), /*!< ENET QOS Clock control name.*/
-    kCLOCK_RootEnetQosTimer = (uint32_t)(&(CCM)->ROOT[82].TARGET_ROOT), /*!< ENET QOS TIMER Clock control name.*/
-    kCLOCK_RootEnetRef      = (uint32_t)(&(CCM)->ROOT[83].TARGET_ROOT), /*!< ENET Clock control name.*/
-    kCLOCK_RootEnetTimer    = (uint32_t)(&(CCM)->ROOT[84].TARGET_ROOT), /*!< ENET TIMER Clock control name.*/
-    kCLOCK_RootEnetPhy      = (uint32_t)(&(CCM)->ROOT[85].TARGET_ROOT), /*!< ENET PHY Clock control name.*/
+    kCLOCK_RootEnetQos      = (uintptr_t)(&(CCM)->ROOT[81].TARGET_ROOT), /*!< ENET QOS Clock control name.*/
+    kCLOCK_RootEnetQosTimer = (uintptr_t)(&(CCM)->ROOT[82].TARGET_ROOT), /*!< ENET QOS TIMER Clock control name.*/
+    kCLOCK_RootEnetRef      = (uintptr_t)(&(CCM)->ROOT[83].TARGET_ROOT), /*!< ENET Clock control name.*/
+    kCLOCK_RootEnetTimer    = (uintptr_t)(&(CCM)->ROOT[84].TARGET_ROOT), /*!< ENET TIMER Clock control name.*/
+    kCLOCK_RootEnetPhy      = (uintptr_t)(&(CCM)->ROOT[85].TARGET_ROOT), /*!< ENET PHY Clock control name.*/
 
-    kCLOCK_RootNand   = (uint32_t)(&(CCM)->ROOT[86].TARGET_ROOT),  /*!< NAND Clock control name.*/
-    kCLOCK_RootQspi   = (uint32_t)(&(CCM)->ROOT[87].TARGET_ROOT),  /*!< QSPI Clock control name.*/
-    kCLOCK_RootUsdhc1 = (uint32_t)(&(CCM)->ROOT[88].TARGET_ROOT),  /*!< USDHC1 Clock control name.*/
-    kCLOCK_RootUsdhc2 = (uint32_t)(&(CCM)->ROOT[89].TARGET_ROOT),  /*!< USDHC2 Clock control name.*/
-    kCLOCK_RootUsdhc3 = (uint32_t)(&(CCM)->ROOT[121].TARGET_ROOT), /*!< USDHC3 Clock control name.*/
+    kCLOCK_RootNand   = (uintptr_t)(&(CCM)->ROOT[86].TARGET_ROOT),  /*!< NAND Clock control name.*/
+    kCLOCK_RootQspi   = (uintptr_t)(&(CCM)->ROOT[87].TARGET_ROOT),  /*!< QSPI Clock control name.*/
+    kCLOCK_RootUsdhc1 = (uintptr_t)(&(CCM)->ROOT[88].TARGET_ROOT),  /*!< USDHC1 Clock control name.*/
+    kCLOCK_RootUsdhc2 = (uintptr_t)(&(CCM)->ROOT[89].TARGET_ROOT),  /*!< USDHC2 Clock control name.*/
+    kCLOCK_RootUsdhc3 = (uintptr_t)(&(CCM)->ROOT[121].TARGET_ROOT), /*!< USDHC3 Clock control name.*/
 
-    kCLOCK_RootI2c1 = (uint32_t)(&(CCM)->ROOT[90].TARGET_ROOT), /*!< I2C1 Clock control name.*/
-    kCLOCK_RootI2c2 = (uint32_t)(&(CCM)->ROOT[91].TARGET_ROOT), /*!< I2C2 Clock control name.*/
-    kCLOCK_RootI2c3 = (uint32_t)(&(CCM)->ROOT[92].TARGET_ROOT), /*!< I2C3 Clock control name.*/
-    kCLOCK_RootI2c4 = (uint32_t)(&(CCM)->ROOT[93].TARGET_ROOT), /*!< I2C4 Clock control name.*/
-    kCLOCK_RootI2c5 = (uint32_t)(&(CCM)->ROOT[73].TARGET_ROOT), /*!< I2C5 Clock control name.*/
-    kCLOCK_RootI2c6 = (uint32_t)(&(CCM)->ROOT[74].TARGET_ROOT), /*!< I2C6 Clock control name.*/
+    kCLOCK_RootI2c1 = (uintptr_t)(&(CCM)->ROOT[90].TARGET_ROOT), /*!< I2C1 Clock control name.*/
+    kCLOCK_RootI2c2 = (uintptr_t)(&(CCM)->ROOT[91].TARGET_ROOT), /*!< I2C2 Clock control name.*/
+    kCLOCK_RootI2c3 = (uintptr_t)(&(CCM)->ROOT[92].TARGET_ROOT), /*!< I2C3 Clock control name.*/
+    kCLOCK_RootI2c4 = (uintptr_t)(&(CCM)->ROOT[93].TARGET_ROOT), /*!< I2C4 Clock control name.*/
+    kCLOCK_RootI2c5 = (uintptr_t)(&(CCM)->ROOT[73].TARGET_ROOT), /*!< I2C5 Clock control name.*/
+    kCLOCK_RootI2c6 = (uintptr_t)(&(CCM)->ROOT[74].TARGET_ROOT), /*!< I2C6 Clock control name.*/
 
-    kCLOCK_RootUart1 = (uint32_t)(&(CCM)->ROOT[94].TARGET_ROOT), /*!< UART1 Clock control name.*/
-    kCLOCK_RootUart2 = (uint32_t)(&(CCM)->ROOT[95].TARGET_ROOT), /*!< UART2 Clock control name.*/
-    kCLOCK_RootUart3 = (uint32_t)(&(CCM)->ROOT[96].TARGET_ROOT), /*!< UART3 Clock control name.*/
-    kCLOCK_RootUart4 = (uint32_t)(&(CCM)->ROOT[97].TARGET_ROOT), /*!< UART4 Clock control name.*/
+    kCLOCK_RootUart1 = (uintptr_t)(&(CCM)->ROOT[94].TARGET_ROOT), /*!< UART1 Clock control name.*/
+    kCLOCK_RootUart2 = (uintptr_t)(&(CCM)->ROOT[95].TARGET_ROOT), /*!< UART2 Clock control name.*/
+    kCLOCK_RootUart3 = (uintptr_t)(&(CCM)->ROOT[96].TARGET_ROOT), /*!< UART3 Clock control name.*/
+    kCLOCK_RootUart4 = (uintptr_t)(&(CCM)->ROOT[97].TARGET_ROOT), /*!< UART4 Clock control name.*/
 
-    kCLOCK_RootGic    = (uint32_t)(&(CCM)->ROOT[100].TARGET_ROOT), /*!< GIC Clock control name.*/
-    kCLOCK_RootEcspi1 = (uint32_t)(&(CCM)->ROOT[101].TARGET_ROOT), /*!< ECSPI1 Clock control name.*/
-    kCLOCK_RootEcspi2 = (uint32_t)(&(CCM)->ROOT[102].TARGET_ROOT), /*!< ECSPI2 Clock control name.*/
-    kCLOCK_RootEcspi3 = (uint32_t)(&(CCM)->ROOT[131].TARGET_ROOT), /*!< ECSPI3 Clock control name.*/
+    kCLOCK_RootGic    = (uintptr_t)(&(CCM)->ROOT[100].TARGET_ROOT), /*!< GIC Clock control name.*/
+    kCLOCK_RootEcspi1 = (uintptr_t)(&(CCM)->ROOT[101].TARGET_ROOT), /*!< ECSPI1 Clock control name.*/
+    kCLOCK_RootEcspi2 = (uintptr_t)(&(CCM)->ROOT[102].TARGET_ROOT), /*!< ECSPI2 Clock control name.*/
+    kCLOCK_RootEcspi3 = (uintptr_t)(&(CCM)->ROOT[131].TARGET_ROOT), /*!< ECSPI3 Clock control name.*/
 
-    kCLOCK_RootPwm1 = (uint32_t)(&(CCM)->ROOT[103].TARGET_ROOT), /*!< PWM1 Clock control name.*/
-    kCLOCK_RootPwm2 = (uint32_t)(&(CCM)->ROOT[104].TARGET_ROOT), /*!< PWM2 Clock control name.*/
-    kCLOCK_RootPwm3 = (uint32_t)(&(CCM)->ROOT[105].TARGET_ROOT), /*!< PWM3 Clock control name.*/
-    kCLOCK_RootPwm4 = (uint32_t)(&(CCM)->ROOT[106].TARGET_ROOT), /*!< PWM4 Clock control name.*/
+    kCLOCK_RootPwm1 = (uintptr_t)(&(CCM)->ROOT[103].TARGET_ROOT), /*!< PWM1 Clock control name.*/
+    kCLOCK_RootPwm2 = (uintptr_t)(&(CCM)->ROOT[104].TARGET_ROOT), /*!< PWM2 Clock control name.*/
+    kCLOCK_RootPwm3 = (uintptr_t)(&(CCM)->ROOT[105].TARGET_ROOT), /*!< PWM3 Clock control name.*/
+    kCLOCK_RootPwm4 = (uintptr_t)(&(CCM)->ROOT[106].TARGET_ROOT), /*!< PWM4 Clock control name.*/
 
-    kCLOCK_RootGpt1 = (uint32_t)(&(CCM)->ROOT[107].TARGET_ROOT), /*!< GPT1 Clock control name.*/
-    kCLOCK_RootGpt2 = (uint32_t)(&(CCM)->ROOT[108].TARGET_ROOT), /*!< GPT2 Clock control name.*/
-    kCLOCK_RootGpt3 = (uint32_t)(&(CCM)->ROOT[109].TARGET_ROOT), /*!< GPT3 Clock control name.*/
-    kCLOCK_RootGpt4 = (uint32_t)(&(CCM)->ROOT[110].TARGET_ROOT), /*!< GPT4 Clock control name.*/
-    kCLOCK_RootGpt5 = (uint32_t)(&(CCM)->ROOT[111].TARGET_ROOT), /*!< GPT5 Clock control name.*/
-    kCLOCK_RootGpt6 = (uint32_t)(&(CCM)->ROOT[112].TARGET_ROOT), /*!< GPT6 Clock control name.*/
+    kCLOCK_RootGpt1 = (uintptr_t)(&(CCM)->ROOT[107].TARGET_ROOT), /*!< GPT1 Clock control name.*/
+    kCLOCK_RootGpt2 = (uintptr_t)(&(CCM)->ROOT[108].TARGET_ROOT), /*!< GPT2 Clock control name.*/
+    kCLOCK_RootGpt3 = (uintptr_t)(&(CCM)->ROOT[109].TARGET_ROOT), /*!< GPT3 Clock control name.*/
+    kCLOCK_RootGpt4 = (uintptr_t)(&(CCM)->ROOT[110].TARGET_ROOT), /*!< GPT4 Clock control name.*/
+    kCLOCK_RootGpt5 = (uintptr_t)(&(CCM)->ROOT[111].TARGET_ROOT), /*!< GPT5 Clock control name.*/
+    kCLOCK_RootGpt6 = (uintptr_t)(&(CCM)->ROOT[112].TARGET_ROOT), /*!< GPT6 Clock control name.*/
 
-    kCLOCK_RootWdog = (uint32_t)(&(CCM)->ROOT[114].TARGET_ROOT), /*!< WDOG Clock control name.*/
+    kCLOCK_RootWdog = (uintptr_t)(&(CCM)->ROOT[114].TARGET_ROOT), /*!< WDOG Clock control name.*/
 
-    kCLOCK_RootPdm = (uint32_t)(&(CCM)->ROOT[132].TARGET_ROOT), /*!< PDM Clock control name.*/
+    kCLOCK_RootPdm = (uintptr_t)(&(CCM)->ROOT[132].TARGET_ROOT), /*!< PDM Clock control name.*/
 
 } clock_root_control_t;
 
@@ -750,38 +750,38 @@ typedef enum _clock_rootmux_noc_clk_sel
 /*! @brief CCM PLL gate control. */
 typedef enum _clock_pll_gate
 {
-    kCLOCK_ArmPllGate = (uint32_t)(&(CCM)->PLL_CTRL[12].PLL_CTRL), /*!< ARM PLL Gate.*/
+    kCLOCK_ArmPllGate = (uintptr_t)(&(CCM)->PLL_CTRL[12].PLL_CTRL), /*!< ARM PLL Gate.*/
 
-    kCLOCK_GpuPllGate  = (uint32_t)(&(CCM)->PLL_CTRL[13].PLL_CTRL), /*!< GPU PLL Gate.*/
-    kCLOCK_VpuPllGate  = (uint32_t)(&(CCM)->PLL_CTRL[14].PLL_CTRL), /*!< VPU PLL Gate.*/
-    kCLOCK_DramPllGate = (uint32_t)(&(CCM)->PLL_CTRL[15].PLL_CTRL), /*!< DRAM PLL1 Gate.*/
+    kCLOCK_GpuPllGate  = (uintptr_t)(&(CCM)->PLL_CTRL[13].PLL_CTRL), /*!< GPU PLL Gate.*/
+    kCLOCK_VpuPllGate  = (uintptr_t)(&(CCM)->PLL_CTRL[14].PLL_CTRL), /*!< VPU PLL Gate.*/
+    kCLOCK_DramPllGate = (uintptr_t)(&(CCM)->PLL_CTRL[15].PLL_CTRL), /*!< DRAM PLL1 Gate.*/
 
-    kCLOCK_SysPll1Gate      = (uint32_t)(&(CCM)->PLL_CTRL[16].PLL_CTRL), /*!< SYSTEM PLL1 Gate.*/
-    kCLOCK_SysPll1Div2Gate  = (uint32_t)(&(CCM)->PLL_CTRL[17].PLL_CTRL), /*!< SYSTEM PLL1 Div2 Gate.*/
-    kCLOCK_SysPll1Div3Gate  = (uint32_t)(&(CCM)->PLL_CTRL[18].PLL_CTRL), /*!< SYSTEM PLL1 Div3 Gate.*/
-    kCLOCK_SysPll1Div4Gate  = (uint32_t)(&(CCM)->PLL_CTRL[19].PLL_CTRL), /*!< SYSTEM PLL1 Div4 Gate.*/
-    kCLOCK_SysPll1Div5Gate  = (uint32_t)(&(CCM)->PLL_CTRL[20].PLL_CTRL), /*!< SYSTEM PLL1 Div5 Gate.*/
-    kCLOCK_SysPll1Div6Gate  = (uint32_t)(&(CCM)->PLL_CTRL[21].PLL_CTRL), /*!< SYSTEM PLL1 Div6 Gate.*/
-    kCLOCK_SysPll1Div8Gate  = (uint32_t)(&(CCM)->PLL_CTRL[22].PLL_CTRL), /*!< SYSTEM PLL1 Div8 Gate.*/
-    kCLOCK_SysPll1Div10Gate = (uint32_t)(&(CCM)->PLL_CTRL[23].PLL_CTRL), /*!< SYSTEM PLL1 Div10 Gate.*/
-    kCLOCK_SysPll1Div20Gate = (uint32_t)(&(CCM)->PLL_CTRL[24].PLL_CTRL), /*!< SYSTEM PLL1 Div20 Gate.*/
+    kCLOCK_SysPll1Gate      = (uintptr_t)(&(CCM)->PLL_CTRL[16].PLL_CTRL), /*!< SYSTEM PLL1 Gate.*/
+    kCLOCK_SysPll1Div2Gate  = (uintptr_t)(&(CCM)->PLL_CTRL[17].PLL_CTRL), /*!< SYSTEM PLL1 Div2 Gate.*/
+    kCLOCK_SysPll1Div3Gate  = (uintptr_t)(&(CCM)->PLL_CTRL[18].PLL_CTRL), /*!< SYSTEM PLL1 Div3 Gate.*/
+    kCLOCK_SysPll1Div4Gate  = (uintptr_t)(&(CCM)->PLL_CTRL[19].PLL_CTRL), /*!< SYSTEM PLL1 Div4 Gate.*/
+    kCLOCK_SysPll1Div5Gate  = (uintptr_t)(&(CCM)->PLL_CTRL[20].PLL_CTRL), /*!< SYSTEM PLL1 Div5 Gate.*/
+    kCLOCK_SysPll1Div6Gate  = (uintptr_t)(&(CCM)->PLL_CTRL[21].PLL_CTRL), /*!< SYSTEM PLL1 Div6 Gate.*/
+    kCLOCK_SysPll1Div8Gate  = (uintptr_t)(&(CCM)->PLL_CTRL[22].PLL_CTRL), /*!< SYSTEM PLL1 Div8 Gate.*/
+    kCLOCK_SysPll1Div10Gate = (uintptr_t)(&(CCM)->PLL_CTRL[23].PLL_CTRL), /*!< SYSTEM PLL1 Div10 Gate.*/
+    kCLOCK_SysPll1Div20Gate = (uintptr_t)(&(CCM)->PLL_CTRL[24].PLL_CTRL), /*!< SYSTEM PLL1 Div20 Gate.*/
 
-    kCLOCK_SysPll2Gate      = (uint32_t)(&(CCM)->PLL_CTRL[25].PLL_CTRL), /*!< SYSTEM PLL2 Gate.*/
-    kCLOCK_SysPll2Div2Gate  = (uint32_t)(&(CCM)->PLL_CTRL[26].PLL_CTRL), /*!< SYSTEM PLL2 Div2 Gate.*/
-    kCLOCK_SysPll2Div3Gate  = (uint32_t)(&(CCM)->PLL_CTRL[27].PLL_CTRL), /*!< SYSTEM PLL2 Div3 Gate.*/
-    kCLOCK_SysPll2Div4Gate  = (uint32_t)(&(CCM)->PLL_CTRL[28].PLL_CTRL), /*!< SYSTEM PLL2 Div4 Gate.*/
-    kCLOCK_SysPll2Div5Gate  = (uint32_t)(&(CCM)->PLL_CTRL[29].PLL_CTRL), /*!< SYSTEM PLL2 Div5 Gate.*/
-    kCLOCK_SysPll2Div6Gate  = (uint32_t)(&(CCM)->PLL_CTRL[30].PLL_CTRL), /*!< SYSTEM PLL2 Div6 Gate.*/
-    kCLOCK_SysPll2Div8Gate  = (uint32_t)(&(CCM)->PLL_CTRL[31].PLL_CTRL), /*!< SYSTEM PLL2 Div8 Gate.*/
-    kCLOCK_SysPll2Div10Gate = (uint32_t)(&(CCM)->PLL_CTRL[32].PLL_CTRL), /*!< SYSTEM PLL2 Div10 Gate.*/
-    kCLOCK_SysPll2Div20Gate = (uint32_t)(&(CCM)->PLL_CTRL[33].PLL_CTRL), /*!< SYSTEM PLL2 Div20 Gate.*/
+    kCLOCK_SysPll2Gate      = (uintptr_t)(&(CCM)->PLL_CTRL[25].PLL_CTRL), /*!< SYSTEM PLL2 Gate.*/
+    kCLOCK_SysPll2Div2Gate  = (uintptr_t)(&(CCM)->PLL_CTRL[26].PLL_CTRL), /*!< SYSTEM PLL2 Div2 Gate.*/
+    kCLOCK_SysPll2Div3Gate  = (uintptr_t)(&(CCM)->PLL_CTRL[27].PLL_CTRL), /*!< SYSTEM PLL2 Div3 Gate.*/
+    kCLOCK_SysPll2Div4Gate  = (uintptr_t)(&(CCM)->PLL_CTRL[28].PLL_CTRL), /*!< SYSTEM PLL2 Div4 Gate.*/
+    kCLOCK_SysPll2Div5Gate  = (uintptr_t)(&(CCM)->PLL_CTRL[29].PLL_CTRL), /*!< SYSTEM PLL2 Div5 Gate.*/
+    kCLOCK_SysPll2Div6Gate  = (uintptr_t)(&(CCM)->PLL_CTRL[30].PLL_CTRL), /*!< SYSTEM PLL2 Div6 Gate.*/
+    kCLOCK_SysPll2Div8Gate  = (uintptr_t)(&(CCM)->PLL_CTRL[31].PLL_CTRL), /*!< SYSTEM PLL2 Div8 Gate.*/
+    kCLOCK_SysPll2Div10Gate = (uintptr_t)(&(CCM)->PLL_CTRL[32].PLL_CTRL), /*!< SYSTEM PLL2 Div10 Gate.*/
+    kCLOCK_SysPll2Div20Gate = (uintptr_t)(&(CCM)->PLL_CTRL[33].PLL_CTRL), /*!< SYSTEM PLL2 Div20 Gate.*/
 
-    kCLOCK_SysPll3Gate = (uint32_t)(&(CCM)->PLL_CTRL[34].PLL_CTRL), /*!< SYSTEM PLL3 Gate.*/
+    kCLOCK_SysPll3Gate = (uintptr_t)(&(CCM)->PLL_CTRL[34].PLL_CTRL), /*!< SYSTEM PLL3 Gate.*/
 
-    kCLOCK_AudioPll1Gate = (uint32_t)(&(CCM)->PLL_CTRL[35].PLL_CTRL), /*!< AUDIO PLL1 Gate.*/
-    kCLOCK_AudioPll2Gate = (uint32_t)(&(CCM)->PLL_CTRL[36].PLL_CTRL), /*!< AUDIO PLL2 Gate.*/
-    kCLOCK_VideoPll1Gate = (uint32_t)(&(CCM)->PLL_CTRL[37].PLL_CTRL), /*!< VIDEO PLL1 Gate.*/
-    kCLOCK_VideoPll2Gate = (uint32_t)(&(CCM)->PLL_CTRL[38].PLL_CTRL), /*!< VIDEO PLL2 Gate.*/
+    kCLOCK_AudioPll1Gate = (uintptr_t)(&(CCM)->PLL_CTRL[35].PLL_CTRL), /*!< AUDIO PLL1 Gate.*/
+    kCLOCK_AudioPll2Gate = (uintptr_t)(&(CCM)->PLL_CTRL[36].PLL_CTRL), /*!< AUDIO PLL2 Gate.*/
+    kCLOCK_VideoPll1Gate = (uintptr_t)(&(CCM)->PLL_CTRL[37].PLL_CTRL), /*!< VIDEO PLL1 Gate.*/
+    kCLOCK_VideoPll2Gate = (uintptr_t)(&(CCM)->PLL_CTRL[38].PLL_CTRL), /*!< VIDEO PLL2 Gate.*/
 } clock_pll_gate_t;
 
 /*! @brief CCM gate control value. */
@@ -1083,7 +1083,7 @@ static inline uint32_t CLOCK_GetRootPostDivider(clock_root_control_t rootClk)
  * @param ccmGate Gate control (see @ref clock_pll_gate_t and @ref clock_ip_name_t enumeration)
  * @param control Gate control value (see @ref clock_gate_value_t)
  */
-static inline void CLOCK_ControlGate(uint32_t ccmGate, clock_gate_value_t control)
+static inline void CLOCK_ControlGate(uintptr_t ccmGate, clock_gate_value_t control)
 {
     CCM_REG(ccmGate) = (uint32_t)control;
 }
