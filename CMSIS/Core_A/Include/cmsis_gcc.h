@@ -42,6 +42,9 @@
 #ifndef   __STATIC_FORCEINLINE
   #define __STATIC_FORCEINLINE                   __attribute__((always_inline)) static inline
 #endif
+#ifndef   __WEAK
+  #define __WEAK                                 __attribute__((weak))
+#endif
 
 #ifndef __STRINGIFY
   #define __STRINGIFY(x)                         #x
