@@ -6,6 +6,8 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8524
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8524
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm186x
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm512x
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
@@ -36,6 +38,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_igpio)
 #    include(driver_iuart)
 #    include(driver_sai)
+#    include(driver_pcm186x)
+#    include(driver_pcm512x)
 #    include(driver_wm8524)
 #    include(middleware_freertos-kernel_ca53)
 #    include(middleware_freertos-kernel_extension)
