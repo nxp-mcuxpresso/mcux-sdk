@@ -1,6 +1,9 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core_A/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
@@ -16,6 +19,7 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(component_codec_i2c_MIMX8MN6)
 #    include(component_iuart_adapter)
 #    include(component_lists)
 #    include(component_serial_manager)
