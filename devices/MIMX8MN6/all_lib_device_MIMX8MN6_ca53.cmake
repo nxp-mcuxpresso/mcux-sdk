@@ -12,6 +12,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpt
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ii2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/igpio
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iuart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sai
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
@@ -32,6 +33,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_common)
 #    include(driver_gpt)
 #    include(driver_ii2c)
+#    include(driver_igpio)
 #    include(driver_iuart)
 #    include(driver_sai)
 #    include(driver_wm8524)
