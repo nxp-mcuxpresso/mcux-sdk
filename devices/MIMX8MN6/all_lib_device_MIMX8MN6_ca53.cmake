@@ -7,6 +7,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8524
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm186x
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm512x
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8524
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyar8031
