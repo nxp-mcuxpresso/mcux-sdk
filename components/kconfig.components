@@ -1,0 +1,688 @@
+# Copyright 2021 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "components"
+
+menu "codec"
+
+    depends on HAS_MCUX_SDK_component_ak4497_adapter || HAS_MCUX_SDK_component_codec_adapters || HAS_MCUX_SDK_component_cs42448_adapter || HAS_MCUX_SDK_component_cs42888_adapter || HAS_MCUX_SDK_component_da7212_adapter || HAS_MCUX_SDK_component_tfa9896_adapter || HAS_MCUX_SDK_component_tfa9xxx_adapter || HAS_MCUX_SDK_component_wm8524_adapter || HAS_MCUX_SDK_component_wm8904_adapter || HAS_MCUX_SDK_component_wm8960_adapter || HAS_MCUX_SDK_component_codec_i2c_LPC51U68 || HAS_MCUX_SDK_component_codec_i2c_LPC54114_cm4 || HAS_MCUX_SDK_component_codec_i2c_LPC54628 || HAS_MCUX_SDK_component_codec_i2c_LPC54S018 || HAS_MCUX_SDK_component_codec_i2c_LPC54S018M || HAS_MCUX_SDK_component_codec_i2c_LPC55S16 || HAS_MCUX_SDK_component_codec_i2c_LPC55S28 || HAS_MCUX_SDK_component_codec_i2c_LPC55S69_cm33_core0 || HAS_MCUX_SDK_component_codec_i2c_MCIMX7U5 || HAS_MCUX_SDK_component_codec_i2c_MIMX8ML8 || HAS_MCUX_SDK_component_codec_i2c_MIMX8MM6 || HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core0 || HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core1 || HAS_MCUX_SDK_component_codec_i2c_MIMX8QX6 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1011 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1015 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1021 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1024 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1052 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1062 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1064 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1166_cm4 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1166_cm7 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1176_cm4 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT1176_cm7 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT595S_cm33 || HAS_MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33 || HAS_MCUX_SDK_component_codec_i2c_MK66F18 || HAS_MCUX_SDK_component_codec_ak4497_adapter || HAS_MCUX_SDK_component_codec_wm8524_adapter
+
+config USE_component_ak4497_adapter
+    bool "Component ak4497_adapter"
+    depends on HAS_MCUX_SDK_component_ak4497_adapter
+    default n
+    select USE_driver_ak4497 if HAS_MCUX_SDK_driver_ak4497
+
+config USE_component_codec_adapters
+    bool "Component codec_adapters"
+    depends on HAS_MCUX_SDK_component_codec_adapters
+    default n
+    if USE_component_codec_adapters
+        config USE_component_ak4497_adapter
+            bool "component_ak4497_adapter"
+            default n
+    endif
+
+config USE_component_cs42448_adapter
+    bool "Component cs42448_adapter"
+    depends on HAS_MCUX_SDK_component_cs42448_adapter
+    default n
+    select USE_driver_cs42448 if HAS_MCUX_SDK_driver_cs42448
+
+config USE_component_cs42888_adapter
+    bool "Component cs42888_adapter"
+    depends on HAS_MCUX_SDK_component_cs42888_adapter
+    default n
+    select USE_driver_cs42888 if HAS_MCUX_SDK_driver_cs42888
+
+config USE_component_da7212_adapter
+    bool "Component da7212_adapter"
+    depends on HAS_MCUX_SDK_component_da7212_adapter
+    default n
+    select USE_driver_dialog7212 if HAS_MCUX_SDK_driver_dialog7212
+
+config USE_component_tfa9896_adapter
+    bool "Component tfa9896_adapter"
+    depends on HAS_MCUX_SDK_component_tfa9896_adapter
+    default n
+    select USE_driver_tfa9896 if HAS_MCUX_SDK_driver_tfa9896
+
+config USE_component_tfa9xxx_adapter
+    bool "Component tfa9xxx_adapter"
+    depends on HAS_MCUX_SDK_component_tfa9xxx_adapter
+    default n
+    select USE_driver_tfa9xxx if HAS_MCUX_SDK_driver_tfa9xxx
+
+config USE_component_wm8524_adapter
+    bool "Component wm8524_adapter"
+    depends on HAS_MCUX_SDK_component_wm8524_adapter
+    default n
+    select USE_driver_wm8524 if HAS_MCUX_SDK_driver_wm8524
+
+config USE_component_wm8904_adapter
+    bool "Component wm8904_adapter"
+    depends on HAS_MCUX_SDK_component_wm8904_adapter
+    default n
+    select USE_driver_wm8904 if HAS_MCUX_SDK_driver_wm8904
+
+config USE_component_wm8960_adapter
+    bool "Component wm8960_adapter"
+    depends on HAS_MCUX_SDK_component_wm8960_adapter
+    default n
+    select USE_driver_wm8960 if HAS_MCUX_SDK_driver_wm8960
+
+config USE_component_codec_i2c_LPC51U68
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC51U68
+    default n
+    select USE_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config USE_component_codec_i2c_LPC54114_cm4
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC54114_cm4
+    default n
+    select USE_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config USE_component_codec_i2c_LPC54628
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC54628
+    default n
+    select USE_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config USE_component_codec_i2c_LPC54S018
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC54S018
+    default n
+    select USE_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config USE_component_codec_i2c_LPC54S018M
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC54S018M
+    default n
+    select USE_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config USE_component_codec_i2c_LPC55S16
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC55S16
+    default n
+    select USE_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config USE_component_codec_i2c_LPC55S28
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC55S28
+    default n
+    select USE_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config USE_component_codec_i2c_LPC55S69_cm33_core0
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_LPC55S69_cm33_core0
+    default n
+    select USE_component_flexcomm_i2c_adapter if HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+
+config USE_component_codec_i2c_MCIMX7U5
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MCIMX7U5
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMX8ML8
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMX8ML8
+    default n
+    select USE_component_ii2c_adapter if HAS_MCUX_SDK_component_ii2c_adapter
+
+config USE_component_codec_i2c_MIMX8MM6
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMX8MM6
+    default n
+    select USE_component_ii2c_adapter if HAS_MCUX_SDK_component_ii2c_adapter
+
+config USE_component_codec_i2c_MIMX8QM6_cm4_core0
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core0
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMX8QM6_cm4_core1
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core1
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMX8QX6
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMX8QX6
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMXRT1011
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1011
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMXRT1015
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1015
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMXRT1021
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1021
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMXRT1024
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1024
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMXRT1052
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1052
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMXRT1062
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1062
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMXRT1064
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1064
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMXRT1166_cm4
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1166_cm4
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMXRT1166_cm7
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1166_cm7
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMXRT1176_cm4
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1176_cm4
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMXRT1176_cm7
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT1176_cm7
+    default n
+    select USE_component_lpi2c_adapter if HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_codec_i2c_MIMXRT595S_cm33
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT595S_cm33
+    default n
+    if USE_component_codec_i2c_MIMXRT595S_cm33
+        config USE_component_i3c_adapter
+            bool "component_i3c_adapter"
+            default n
+    endif
+    if USE_component_codec_i2c_MIMXRT595S_cm33
+        config USE_component_flexcomm_i2c_adapter
+            bool "component_flexcomm_i2c_adapter"
+            default n
+    endif
+
+config USE_component_codec_i2c_MIMXRT685S_cm33
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33
+    default n
+    if USE_component_codec_i2c_MIMXRT685S_cm33
+        config USE_component_i3c_adapter
+            bool "component_i3c_adapter"
+            default n
+    endif
+    if USE_component_codec_i2c_MIMXRT685S_cm33
+        config USE_component_flexcomm_i2c_adapter
+            bool "component_flexcomm_i2c_adapter"
+            default n
+    endif
+
+config USE_component_codec_i2c_MK66F18
+    bool "Component codec_i2c"
+    depends on HAS_MCUX_SDK_component_codec_i2c_MK66F18
+    default n
+    select USE_component_i2c_adapter if HAS_MCUX_SDK_component_i2c_adapter
+
+config USE_component_codec_ak4497_adapter
+    bool "Component codec_ak4497_adapter"
+    depends on HAS_MCUX_SDK_component_codec_ak4497_adapter
+    default n
+    select USE_driver_ak4497 if HAS_MCUX_SDK_driver_ak4497
+
+config USE_component_codec_wm8524_adapter
+    bool "Component codec_wm8524_adapter"
+    depends on HAS_MCUX_SDK_component_codec_wm8524_adapter
+    default n
+    select USE_driver_wm8524 if HAS_MCUX_SDK_driver_wm8524
+
+endmenu
+
+config HAS_MCUX_SDK_component_ak4497_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_adapters
+    bool
+
+
+config HAS_MCUX_SDK_component_cs42448_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_cs42888_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_da7212_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_tfa9896_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_tfa9xxx_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_wm8524_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_wm8904_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_wm8960_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC51U68
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC54114_cm4
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC54628
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC54S018
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC54S018M
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC55S16
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC55S28
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_LPC55S69_cm33_core0
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MCIMX7U5
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMX8ML8
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMX8MM6
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core0
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMX8QM6_cm4_core1
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMX8QX6
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1011
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1015
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1021
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1024
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1052
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1062
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1064
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1166_cm4
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1166_cm7
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1176_cm4
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT1176_cm7
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT595S_cm33
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MIMXRT685S_cm33
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_i2c_MK66F18
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_ak4497_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_codec_wm8524_adapter
+    bool
+
+
+menu "i2c"
+
+    depends on HAS_MCUX_SDK_component_flexcomm_i2c_adapter || HAS_MCUX_SDK_component_i2c_adapter || HAS_MCUX_SDK_component_i3c_adapter || HAS_MCUX_SDK_component_ii2c_adapter || HAS_MCUX_SDK_component_lpi2c_adapter
+
+config USE_component_flexcomm_i2c_adapter
+    bool "Component flexcomm_i2c_adapter"
+    depends on HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+    default n
+    select USE_driver_flexcomm_i2c if HAS_MCUX_SDK_driver_flexcomm_i2c
+
+config USE_component_i2c_adapter
+    bool "Component i2c_adapter"
+    depends on HAS_MCUX_SDK_component_i2c_adapter
+    default n
+    select USE_driver_i2c if HAS_MCUX_SDK_driver_i2c
+
+config USE_component_i3c_adapter
+    bool "Component i3c_adapter"
+    depends on HAS_MCUX_SDK_component_i3c_adapter
+    default n
+    select USE_driver_i3c if HAS_MCUX_SDK_driver_i3c
+
+config USE_component_ii2c_adapter
+    bool "Component ii2c_adapter"
+    depends on HAS_MCUX_SDK_component_ii2c_adapter
+    default n
+    select USE_driver_common if HAS_MCUX_SDK_driver_common
+    select USE_driver_ii2c if HAS_MCUX_SDK_driver_ii2c
+
+config USE_component_lpi2c_adapter
+    bool "Component lpi2c_adapter"
+    depends on HAS_MCUX_SDK_component_lpi2c_adapter
+    default n
+    select USE_driver_lpi2c if HAS_MCUX_SDK_driver_lpi2c
+
+endmenu
+
+config HAS_MCUX_SDK_component_flexcomm_i2c_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_i2c_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_i3c_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_ii2c_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_lpi2c_adapter
+    bool
+
+
+menu "lists"
+
+    depends on HAS_MCUX_SDK_component_lists
+
+config USE_component_lists
+    bool "Component lists"
+    depends on HAS_MCUX_SDK_component_lists
+    default n
+    select USE_driver_common if HAS_MCUX_SDK_driver_common
+
+endmenu
+
+config HAS_MCUX_SDK_component_lists
+    bool
+
+
+menu "osa"
+
+    depends on HAS_MCUX_SDK_component_osa || HAS_MCUX_SDK_component_osa_bm || HAS_MCUX_SDK_component_osa_free_rtos
+
+config USE_component_osa
+    bool "Component osa"
+    depends on HAS_MCUX_SDK_component_osa
+    default n
+    select USE_component_lists if HAS_MCUX_SDK_component_lists
+
+config USE_component_osa_bm
+    bool 
+    depends on HAS_MCUX_SDK_component_osa_bm
+    default n
+    select USE_component_lists if HAS_MCUX_SDK_component_lists
+
+config USE_component_osa_free_rtos
+    bool 
+    depends on HAS_MCUX_SDK_component_osa_free_rtos
+    default n
+    select USE_middleware_freertos-kernel_MIMXRT1166_cm4 if HAS_MCUX_SDK_middleware_freertos-kernel_MIMXRT1166_cm4
+    select USE_middleware_freertos-kernel_MIMXRT1166_cm7 if HAS_MCUX_SDK_middleware_freertos-kernel_MIMXRT1166_cm7
+    select USE_middleware_freertos-kernel_MIMXRT1052 if HAS_MCUX_SDK_middleware_freertos-kernel_MIMXRT1052
+    select USE_middleware_freertos-kernel_MIMXRT1064 if HAS_MCUX_SDK_middleware_freertos-kernel_MIMXRT1064
+    select USE_middleware_freertos-kernel_MK64F12 if HAS_MCUX_SDK_middleware_freertos-kernel_MK64F12
+    select USE_middleware_freertos-kernel_MK66F18 if HAS_MCUX_SDK_middleware_freertos-kernel_MK66F18
+    select USE_middleware_freertos-kernel_LPC54628 if HAS_MCUX_SDK_middleware_freertos-kernel_LPC54628
+    select USE_middleware_freertos-kernel_MIMXRT1021 if HAS_MCUX_SDK_middleware_freertos-kernel_MIMXRT1021
+    select USE_middleware_freertos-kernel_LPC55S16 if HAS_MCUX_SDK_middleware_freertos-kernel_LPC55S16
+    select USE_middleware_freertos-kernel_MIMXRT1062 if HAS_MCUX_SDK_middleware_freertos-kernel_MIMXRT1062
+    select USE_middleware_freertos-kernel_LPC54S018 if HAS_MCUX_SDK_middleware_freertos-kernel_LPC54S018
+    select USE_middleware_freertos-kernel_K32L3A60_cm0plus if HAS_MCUX_SDK_middleware_freertos-kernel_K32L3A60_cm0plus
+    select USE_middleware_freertos-kernel_K32L3A60_cm4 if HAS_MCUX_SDK_middleware_freertos-kernel_K32L3A60_cm4
+    select USE_middleware_freertos-kernel_MIMXRT1176_cm4 if HAS_MCUX_SDK_middleware_freertos-kernel_MIMXRT1176_cm4
+    select USE_middleware_freertos-kernel_MIMXRT1176_cm7 if HAS_MCUX_SDK_middleware_freertos-kernel_MIMXRT1176_cm7
+    select USE_middleware_freertos-kernel_LPC54S018M if HAS_MCUX_SDK_middleware_freertos-kernel_LPC54S018M
+    select USE_middleware_freertos-kernel_LPC55S69_cm33_core0 if HAS_MCUX_SDK_middleware_freertos-kernel_LPC55S69_cm33_core0
+    select USE_middleware_freertos-kernel_MIMXRT1024 if HAS_MCUX_SDK_middleware_freertos-kernel_MIMXRT1024
+    select USE_middleware_freertos-kernel_LPC55S28 if HAS_MCUX_SDK_middleware_freertos-kernel_LPC55S28
+    select USE_middleware_freertos-kernel_MIMXRT685S_cm33 if HAS_MCUX_SDK_middleware_freertos-kernel_MIMXRT685S_cm33
+    select USE_middleware_freertos-kernel_MIMXRT595S_cm33 if HAS_MCUX_SDK_middleware_freertos-kernel_MIMXRT595S_cm33
+    select USE_middleware_freertos-kernel_MK28FA15 if HAS_MCUX_SDK_middleware_freertos-kernel_MK28FA15
+    select USE_component_lists if HAS_MCUX_SDK_component_lists
+
+endmenu
+
+config HAS_MCUX_SDK_component_osa
+    bool
+
+
+config HAS_MCUX_SDK_component_osa_bm
+    bool
+
+
+config HAS_MCUX_SDK_component_osa_free_rtos
+    bool
+
+
+menu "serial_manager"
+
+    depends on HAS_MCUX_SDK_component_serial_manager || HAS_MCUX_SDK_component_serial_manager_swo || HAS_MCUX_SDK_component_serial_manager_uart
+
+config USE_component_serial_manager
+    bool "Serial Manager"
+    depends on HAS_MCUX_SDK_component_serial_manager
+    default n
+    select USE_component_lists if HAS_MCUX_SDK_component_lists
+    if USE_component_serial_manager
+        config USE_component_serial_manager_uart
+            bool "component_serial_manager_uart"
+            default n
+    endif
+    if USE_component_serial_manager
+        config USE_component_serial_manager_swo
+            bool "component_serial_manager_swo"
+            default n
+    endif
+
+config USE_component_serial_manager_swo
+    bool "Serial Manager Swo"
+    depends on HAS_MCUX_SDK_component_serial_manager_swo
+    default n
+    select USE_driver_common if HAS_MCUX_SDK_driver_common
+
+config USE_component_serial_manager_uart
+    bool "Serial Manager uart"
+    depends on HAS_MCUX_SDK_component_serial_manager_uart
+    default n
+    select USE_component_lpuart_adapter if HAS_MCUX_SDK_component_lpuart_adapter
+    select USE_component_usart_adapter if HAS_MCUX_SDK_component_usart_adapter
+    select USE_component_iuart_adapter if HAS_MCUX_SDK_component_iuart_adapter
+    select USE_component_uart_adapter if HAS_MCUX_SDK_component_uart_adapter
+    select USE_driver_iuart if HAS_MCUX_SDK_driver_iuart
+
+endmenu
+
+config HAS_MCUX_SDK_component_serial_manager
+    bool
+
+
+config HAS_MCUX_SDK_component_serial_manager_swo
+    bool
+
+
+config HAS_MCUX_SDK_component_serial_manager_uart
+    bool
+
+
+menu "timer"
+
+    depends on HAS_MCUX_SDK_component_ctimer_adapter
+
+config USE_component_ctimer_adapter
+    bool "Component ctimer_adapter"
+    depends on HAS_MCUX_SDK_component_ctimer_adapter
+    default n
+    select USE_driver_ctimer if HAS_MCUX_SDK_driver_ctimer
+
+endmenu
+
+config HAS_MCUX_SDK_component_ctimer_adapter
+    bool
+
+
+menu "uart"
+
+    depends on HAS_MCUX_SDK_component_iuart_adapter || HAS_MCUX_SDK_component_lpuart_adapter || HAS_MCUX_SDK_component_miniusart_adapter || HAS_MCUX_SDK_component_uart_adapter || HAS_MCUX_SDK_component_usart_adapter
+
+config USE_component_iuart_adapter
+    bool "iuart_adapter"
+    depends on HAS_MCUX_SDK_component_iuart_adapter
+    default n
+    select USE_driver_common if HAS_MCUX_SDK_driver_common
+    select USE_driver_iuart if HAS_MCUX_SDK_driver_iuart
+
+config USE_component_lpuart_adapter
+    bool "lpuart_adapter"
+    depends on HAS_MCUX_SDK_component_lpuart_adapter
+    default n
+    select USE_driver_lpuart if HAS_MCUX_SDK_driver_lpuart
+
+config USE_component_miniusart_adapter
+    bool "miniusart_adapter"
+    depends on HAS_MCUX_SDK_component_miniusart_adapter
+    default n
+    select USE_driver_lpc_miniusart if HAS_MCUX_SDK_driver_lpc_miniusart
+
+config USE_component_uart_adapter
+    bool "uart_adapter"
+    depends on HAS_MCUX_SDK_component_uart_adapter
+    default n
+    select USE_driver_uart if HAS_MCUX_SDK_driver_uart
+
+config USE_component_usart_adapter
+    bool "usart_adapter"
+    depends on HAS_MCUX_SDK_component_usart_adapter
+    default n
+    select USE_driver_flexcomm_usart if HAS_MCUX_SDK_driver_flexcomm_usart
+
+endmenu
+
+config HAS_MCUX_SDK_component_iuart_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_lpuart_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_miniusart_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_uart_adapter
+    bool
+
+
+config HAS_MCUX_SDK_component_usart_adapter
+    bool
+
+
+endmenu

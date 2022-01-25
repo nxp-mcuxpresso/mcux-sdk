@@ -1,0 +1,107 @@
+# Copyright 2021 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "middleware"
+
+    depends on HAS_MIDDLEWARE
+menu "issdk"
+
+    depends on HAS_MCUX_SDK_middleware_issdk_algorithms_pedometer_common || HAS_MCUX_SDK_middleware_issdk_algorithms_pedometer_lib_cm4 || HAS_MCUX_SDK_middleware_issdk_sensor_allregdefs
+
+config USE_middleware_issdk_algorithms_pedometer_common
+    bool 
+    depends on HAS_MCUX_SDK_middleware_issdk_algorithms_pedometer_common
+    default n
+    select USE_CMSIS_Driver_Include_I2C if HAS_MCUX_SDK_CMSIS_Driver_Include_I2C
+    select USE_CMSIS_Driver_Include_SPI if HAS_MCUX_SDK_CMSIS_Driver_Include_SPI
+
+config USE_middleware_issdk_algorithms_pedometer_lib_cm4
+    bool 
+    depends on HAS_MCUX_SDK_middleware_issdk_algorithms_pedometer_lib_cm4
+    default n
+
+config USE_middleware_issdk_sensor_allregdefs
+    bool "Middleware issdk sensor allregdefs"
+    depends on HAS_MCUX_SDK_middleware_issdk_sensor_allregdefs
+    default n
+    select USE_CMSIS_Driver_Include_I2C if HAS_MCUX_SDK_CMSIS_Driver_Include_I2C
+    select USE_CMSIS_Driver_Include_SPI if HAS_MCUX_SDK_CMSIS_Driver_Include_SPI
+
+endmenu
+
+config HAS_MCUX_SDK_middleware_issdk_algorithms_pedometer_common
+    bool
+
+
+config HAS_MCUX_SDK_middleware_issdk_algorithms_pedometer_lib_cm4
+    bool
+
+
+config HAS_MCUX_SDK_middleware_issdk_sensor_allregdefs
+    bool
+
+
+menu "mmcau"
+
+    depends on HAS_MCUX_SDK_middleware_mmcau_cm0p || HAS_MCUX_SDK_middleware_mmcau_cm4_cm7 || HAS_MCUX_SDK_middleware_mmcau_common_files
+
+config USE_middleware_mmcau_cm0p
+    bool "Kinetis MMCAU security function library for Arm Cortex-M0+"
+    depends on HAS_MCUX_SDK_middleware_mmcau_cm0p
+    default n
+    select USE_middleware_mmcau_common_files if HAS_MCUX_SDK_middleware_mmcau_common_files
+
+config USE_middleware_mmcau_cm4_cm7
+    bool "Kinetis MMCAU security function library for Arm Cortex-M4 and Cortex-M7"
+    depends on HAS_MCUX_SDK_middleware_mmcau_cm4_cm7
+    default n
+    select USE_driver_clock if HAS_MCUX_SDK_driver_clock
+    select USE_middleware_mmcau_common_files if HAS_MCUX_SDK_middleware_mmcau_common_files
+
+config USE_middleware_mmcau_common_files
+    bool "Kinetis MMCAU common source files"
+    depends on HAS_MCUX_SDK_middleware_mmcau_common_files
+    default n
+    select USE_driver_common if HAS_MCUX_SDK_driver_common
+
+endmenu
+
+config HAS_MCUX_SDK_middleware_mmcau_cm0p
+    bool
+
+
+config HAS_MCUX_SDK_middleware_mmcau_cm4_cm7
+    bool
+
+
+config HAS_MCUX_SDK_middleware_mmcau_common_files
+    bool
+
+
+menu "usb"
+
+    depends on HAS_MCUX_SDK_middleware_usb_common_header || HAS_MCUX_SDK_middleware_usb_device_common_header
+
+config USE_middleware_usb_common_header
+    bool "USB Common Header"
+    depends on HAS_MCUX_SDK_middleware_usb_common_header
+    default n
+    select USE_component_osa if HAS_MCUX_SDK_component_osa
+
+config USE_middleware_usb_device_common_header
+    bool "USB Device Common Header"
+    depends on HAS_MCUX_SDK_middleware_usb_device_common_header
+    default n
+    select USE_middleware_usb_common_header if HAS_MCUX_SDK_middleware_usb_common_header
+
+endmenu
+
+config HAS_MCUX_SDK_middleware_usb_common_header
+    bool
+
+
+config HAS_MCUX_SDK_middleware_usb_device_common_header
+    bool
+
+
+endmenu
