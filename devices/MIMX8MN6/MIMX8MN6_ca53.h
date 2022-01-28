@@ -257,6 +257,7 @@ typedef enum IRQn {
 #define __GIC_PRESENT                  1         /**< Defines if a GIC is present or not */
 #define __MMU_PRESENT                  1         /**< MMU present or not */
 #define __TIM_PRESENT                  1         /**< Defines if a Timer is present or not */
+#define __CACHE_PRESENT                1         /**< CACHE present or not */
 
 #include "core_ca53.h"                 /* Core Peripheral Access Layer */
 #include "system_MIMX8MN6_ca53.h"      /* Device specific configuration file */
