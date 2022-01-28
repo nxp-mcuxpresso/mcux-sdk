@@ -19,6 +19,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/enet_qos
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcan
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpt
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ii2c
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/igpio
@@ -44,6 +45,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_enet)
 #    include(driver_ii2c_freertos)
 #    include(component_codec_i2c_MIMX8ML8)
+#    include(driver_flexcan)
 #    include(driver_gpt)
 #    include(driver_igpio)
 #    include(driver_ii2c)
