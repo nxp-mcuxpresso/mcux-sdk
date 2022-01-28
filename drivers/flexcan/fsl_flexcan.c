@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -364,6 +364,21 @@ static flexcan_isr_t s_flexcanIsr = (flexcan_isr_t)DefaultISR;
 #else
 static flexcan_isr_t s_flexcanIsr;
 #endif
+
+/*******************************************************************************
+ * Implementation of 32-bit memset
+ ******************************************************************************/
+
+static void flexcan_memset(void *s, uint32_t c, size_t n)
+{
+    size_t m;
+    uint32_t *ptr = s;
+
+    m = n / sizeof(*ptr);
+
+    while (m--)
+       *ptr++ = c;
+}
 
 /*******************************************************************************
  * Code
@@ -733,8 +748,8 @@ static void FLEXCAN_Reset(CAN_Type *base)
     /* Do memory initialization for all FlexCAN RAM in order to have the parity bits in memory properly
        updated. */
     *(volatile uint32_t *)CAN_INIT_RXFIR = 0x0U;
-    (void)memset((void *)CAN_INIT_MEMORY_BASE_1, 0, CAN_INIT_MEMORY_SIZE_1);
-    (void)memset((void *)CAN_INIT_MEMORY_BASE_2, 0, CAN_INIT_MEMORY_SIZE_2);
+    flexcan_memset(CAN_INIT_MEMORY_BASE_1, 0, CAN_INIT_MEMORY_SIZE_1);
+    flexcan_memset(CAN_INIT_MEMORY_BASE_2, 0, CAN_INIT_MEMORY_SIZE_2);
     /* Disable unrestricted write access to FlexCAN memory. */
     base->CTRL2 &= ~CAN_CTRL2_WRMFRZ_MASK;
 
@@ -742,7 +757,7 @@ static void FLEXCAN_Reset(CAN_Type *base)
     FLEXCAN_ClearStatusFlags(base, (uint64_t)kFLEXCAN_AllMemoryErrorFlag);
 #else
     /* Only need clean all Message Buffer memory. */
-    (void)memset((void *)&base->MB[0], 0, sizeof(base->MB));
+    flexcan_memset((void *)&base->MB[0], 0, sizeof(base->MB));
 #endif
 
     /* Clean all individual Rx Mask of Message Buffers. */
