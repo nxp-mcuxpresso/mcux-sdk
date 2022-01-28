@@ -52,6 +52,11 @@
     #warning "__CA53_REV not defined in device header file; using default!"
   #endif
 
+  #ifndef __CACHE_PRESENT
+    #define __CACHE_PRESENT           1U
+    #warning "__CACHE_PRESENT not defined in device header file; using default!"
+  #endif
+
   #ifndef __FPU_PRESENT
     #define __FPU_PRESENT             1U
     #define __FPU_USED                1U
@@ -119,10 +124,17 @@
 #define GET_EL(_mode)		(((_mode) >> MODE_EL_SHIFT) & MODE_EL_MASK)
 
 /*******************************************************************************
- *                 L1 Cache Functions
+ *                 Cache Functions
  ******************************************************************************/
 
-/* TODO: L1 Cache Functions are TBD */
+#define ICACHE_LINE_SIZE	(64)
+#define DCACHE_LINE_SIZE	(64)
+
+#if defined (__CACHE_PRESENT) && (__CACHE_PRESENT == 1U)
+
+  #include "cache_armv8a.h"
+
+#endif
 
 
 /*******************************************************************************
