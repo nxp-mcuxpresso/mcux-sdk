@@ -208,6 +208,29 @@ __STATIC_FORCEINLINE void __NOP(void)
   __ASM volatile ("nop");
 }
 
+/**
+  \brief   Count leading zeros
+  \details Counts the number of leading zeros of a data value.
+  \param [in]  value  Value to count the leading zeros
+  \return             number of leading zeros in value
+ */
+__STATIC_FORCEINLINE uint8_t __CLZ(uint32_t value)
+{
+  /* Even though __builtin_clz produces a CLZ instruction on ARM, formally
+     __builtin_clz(0) is undefined behaviour, so handle this case specially.
+     This guarantees ARM-compatible results if happening to compile on a non-ARM
+     target, and ensures the compiler doesn't decide to activate any
+     optimisations using the logic "value was passed to __builtin_clz, so it
+     is non-zero".
+     ARM GCC 7.3 and possibly earlier will optimise this test away, leaving a
+     single CLZ instruction.
+   */
+  if (value == 0U)
+  {
+    return 32U;
+  }
+  return __builtin_clz(value);
+}
 
 /*@}*/ /* end of group CMSIS_Core_InstructionInterface */
 
