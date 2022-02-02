@@ -1728,9 +1728,9 @@ void FLEXCAN_EnableRxFifoDMA(CAN_Type *base, bool enable);
  * @param base FlexCAN peripheral base address.
  * @return FlexCAN Rx FIFO Head address.
  */
-static inline uint32_t FLEXCAN_GetRxFifoHeadAddr(CAN_Type *base)
+static inline uintptr_t FLEXCAN_GetRxFifoHeadAddr(CAN_Type *base)
 {
-    return (uint32_t) & (base->MB[0].CS);
+    return (uintptr_t) & (base->MB[0].CS);
 }
 
 /* @} */
