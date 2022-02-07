@@ -102,6 +102,19 @@ mmcau                      Name: mmCAU S/W Library
                            Location: middleware/mmcau                        
                            Origin: NXP (BSD-3-Clause)                        
 
+fatfs                      Name: FatFs                                       
+                           Version: 0.14a                                    
+                           Outgoing License: FatFs License                   
+                           License File: middleware/fatfs/LICENSE.txt        
+                           Format: source code                               
+                           Description: Generic FAT file system for small    
+                           embedded devices.                                 
+                           Location: middleware/fatfs                        
+                           Origin: Electronic Lives Mfg. by ChaN of Ageo     
+                           city, Japan (FatFs License)                       
+                           Approved open source license: Yes                 
+                           Url: http://elm-chan.org/fsw/ff/00index_e.html    
+
 cmsis_drivers              Name: SDK CMSIS Peripheral Drivers                
                            Version: 2.x.x                                    
                            Outgoing License: Apache License 2.0              
@@ -197,6 +210,226 @@ cpp_option_parser          Name: C++ option-parser
                            Url:                                              
                            http://www.bradapp.com/ftp/src/libs/C++/Options.ht
                            ml                                                
+
+freemaster                 Name: FreeMASTER                                  
+                           Version: 3.0.4                                    
+                           Outgoing License: LA_OPT_NXP_Software_License.txt 
+                           - Additional distribution license granted -       
+                           License in Section 2.3 applies                    
+                           License File:                                     
+                           middleware/freemaster/LA_OPT_NXP_Software_License.
+                           txt                                               
+                           Format: source code & header files                
+                           Description: FreeMASTER communication driver      
+                           Location: middleware/freemaster/src               
+                           Origin: NXP                                       
+
+freemaster-examples        Name: FreeMASTER                                  
+                           Version: 3.0.4                                    
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code & header files                
+                           Description: FreeMASTER example applications      
+                           Location: boards/<board>/freemaster_examples      
+                           Origin: NXP                                       
+
+gradle                     Name: Gradle                                      
+                           Version: 4.1                                      
+                           Outgoing License: Apache-2.0                      
+                           License File:                                     
+                           https://github.com/gradle/gradle/blob/master/LICEN
+                           SE                                                
+                           Format: binary library                            
+                           Description: Gradle build tool                    
+                           Location:                                         
+                           boards/<board>/aws_examples/remote_control_android
+                           /gradle,                                          
+                           boards/<board>/aws_examples/led_wifi_android/gradl
+                           e,                                                
+                           boards/<board>/aws_examples/device_configuration_a
+                           ndroid/gradle                                     
+                           Origin: Gradle Inc (Apache-2.0)                   
+                           Url: https://github.com/gradle/gradle             
+
+AwsRemoteControl           Name: AWS Remote Control                          
+                           Version: 1.0                                      
+                           Outgoing License: Apache-2.0 & BSD                
+                           License File:                                     
+                           http://www.apache.org/licenses/LICENSE-2.0,       
+                           COPYING-BSD-3                                     
+                           Format: binary                                    
+                           Description: AWS Remote Control example Android   
+                           application                                       
+                           Location:                                         
+                           boards/<board>/aws_examples/remote_control_android
+                           /AwsRemoteControl.apk                             
+                           Origin: Android Open Source Project               
+                           (https://source.android.com/) & NXP (Apache-2.0 & 
+                           BSD)                                              
+
+TensorFlow Lite            Name: TensorFlow Lite for Microcontrollers        
+                           Version: 2.4.1                                    
+                           Outgoing License: Apache-2.0                      
+                           License File:                                     
+                           middleware/eiq/tensorflow-lite/LICENSE            
+                           Format: source code                               
+                           Description: Software library for running machine 
+                           learning models on mobile and embedded devices    
+                           Location: middleware/eiq/tensorflow-lite          
+                           Origin: See middleware/eiq/tensorflow-lite/AUTHORS
+                           Url: https://github.com/tensorflow/tensorflow     
+
+FFT2D                      Name: FFT2D                                       
+                           Version: NA                                       
+                           Outgoing License: Public Domain                   
+                           License File:                                     
+                           middleware/eiq/tensorflow-lite/third_party/fft2d/L
+                           ICENSE                                            
+                           Format: source code                               
+                           Description: FFT package in C                     
+                           Location:                                         
+                           middleware/eiq/tensorflow-lite/third_party/fft2d  
+                           Origin: Takuya Ooura                              
+                           Url:                                              
+                           http://www.kurims.kyoto-u.ac.jp/~ooura/fft.html   
+
+FlatBuffers                Name: FlatBuffers                                 
+                           Version: 1.12.0 (commit dca1252)                  
+                           Outgoing License: Apache-2.0                      
+                           License File:                                     
+                           middleware/eiq/tensorflow-lite/third_party/flatbuf
+                           fers/LICENSE.txt                                  
+                           Format: source code                               
+                           Description: Cross platform serialization library 
+                           Location:                                         
+                           middleware/eiq/tensorflow-lite/third_party/flatbuf
+                           fers                                              
+                           Origin: https://google.github.io/flatbuffers      
+                           Url: https://github.com/google/flatbuffers        
+
+gemmlowp                   Name: gemmlowp                                    
+                           Version: NA (commit 719139c)                      
+                           Outgoing License: Apache-2.0                      
+                           License File:                                     
+                           middleware/eiq/tensorflow-lite/third_party/gemmlow
+                           p/LICENSE                                         
+                           Format: source code                               
+                           Description: A small self-contained low-precision 
+                           GEMM library                                      
+                           Location:                                         
+                           middleware/eiq/tensorflow-lite/third_party/gemmlow
+                           p                                                 
+                           Origin: See                                       
+                           middleware/eiq/tensorflow-lite/third_party/gemmlow
+                           p/AUTHORS                                         
+                           Url: https://github.com/google/gemmlowp           
+
+ruy                        Name: ruy                                         
+                           Version: NA (commit 5bb02fb)                      
+                           Outgoing License: Apache-2.0                      
+                           License File:                                     
+                           middleware/eiq/tensorflow-lite/third_party/ruy/LIC
+                           ENSE                                              
+                           Format: source code                               
+                           Description: The ruy matrix multiplication library
+                           Location:                                         
+                           middleware/eiq/tensorflow-lite/third_party/ruy    
+                           Origin: Google, Inc.                              
+                           Url: https://github.com/google/ruy                
+
+tensorflow_lite_micro_cmsisName: CMSIS-NN library                            
+_nn                        Version: 1.3.0 (commit 01f5b32, CMSIS version     
+                           5.7.0)                                            
+                           Outgoing License: Apache-2.0                      
+                           License File:                                     
+                           middleware/eiq/tensorflow-lite/third_party/cmsis/L
+                           ICENSE.txt                                        
+                           Format: source code                               
+                           Description: A neural network kernels library for 
+                           Cortex-M cores from ARM                           
+                           Location:                                         
+                           middleware/eiq/tensorflow-lite/third_party/cmsis  
+                           Origin: ARM                                       
+                           Url: https://github.com/ARM-software/CMSIS_5      
+
+tensorflow_lite_micro_xtensName: Cadence HiFi4 Neural Network (NN) Library   
+a_nn                       Version: 2.2.0                                    
+                           Outgoing License: LA_OPT_NXP_Software_License -   
+                           Additional distribution license granted - License 
+                           in Section 2.3 applies                            
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: source code                               
+                           Description: A neural network kernels library for 
+                           Xtensa cores from Cadence                         
+                           Location:                                         
+                           middleware/eiq/tensorflow-lite/third_party/xa_nnli
+                           b_hifi4,                                          
+                           middleware/eiq/tensorflow-lite/tensorflow/lite/mic
+                           ro/kernels/xtensa_hifi                            
+                           Origin: Cadence Design Systems, Inc. (proprietary)
+                           Url: https://github.com/foss-xtensa/nnlib-hifi4   
+
+Glow Utils                 Name: Glow Utils                                  
+                           Version: 1.0.0                                    
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code, header files, python scripts 
+                           Description: Utilities and project examples for   
+                           Glow NN Compiler.                                 
+                           Location: middleware/eiq/glow                     
+                           Origin: NXP (BSD-3-Clause)                        
+
+DeepviewRT Library         Name: DeepviewRT Library                          
+                           Version: 2.4.20                                   
+                           Outgoing License: LA_OPT_NXP_Software_License - No
+                           distribution permitted, license in Section 2.2    
+                           applies.                                          
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: machine learning library and header file  
+                           Description: Au-Zone DeepViewRT and ModelRunner   
+                           License.                                          
+                           Location: middleware/eiq/deepviewrt/lib           
+                           Origin: Au-Zone (proprietary)                     
+                           Url: https://embeddedml.com                       
+
+DeepviewRT Sample          Name: DeepviewRT Sample                           
+                           Version: 1.0.0                                    
+                           Outgoing License: LA_OPT_NXP_Software_License -   
+                           Additional distribution license granted, license  
+                           in Section 2.3 applies.                           
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: source code                               
+                           Description: Utilities and project examples for   
+                           deepviewRT.                                       
+                           Location: middleware/eiq/deepviewrt               
+                           Origin: NXP (Proprietary)/Au-Zone (proprietary)   
+                           Url: https://embeddedml.com                       
+
+rtcesl                     Name: rtcesl                                      
+                           Version: 4.6.2 (CM0,CM4,CM7,CM33) + 4.5 (DSC)     
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: object code & header files                
+                           Description: NXP Real Time Control Embedded       
+                           Software Library.                                 
+                           Location: middleware/rtcesl                       
+                           Origin: NXP (BSD-3-Clause)                        
+
+AwsDeviceConfiguration     Name: AWS Device Configuration                    
+                           Version: 1.0                                      
+                           Outgoing License: Apache-2.0 & BSD                
+                           License File:                                     
+                           http://www.apache.org/licenses/LICENSE-2.0,       
+                           COPYING-BSD-3                                     
+                           Format: binary                                    
+                           Description: AWS Device Configuration example     
+                           Android application                               
+                           Location:                                         
+                           boards/<board>/aws_examples/device_configuration_a
+                           ndroid/AwsDeviceConfiguration.apk                 
+                           Origin: Android Open Source Project               
+                           (https://source.android.com/) & NXP (Apache-2.0 & 
+                           BSD)                                              
 
 sdmmc_sdspi                Name: SD Card middleware                          
                            Version: 2.1.4                                    

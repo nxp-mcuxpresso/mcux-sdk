@@ -1,6 +1,8 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/acmp_1
@@ -32,7 +34,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_system)
 #    include(driver_tpm)
 #    include(device_startup)
-#    include(driver_clock)
+#    include(CMSIS_Driver_Include_USART)
 #    include(driver_wdog8)
 #    include(utility_debug_console_lite)
 #    include(driver_acmp_1)
@@ -43,12 +45,15 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_port_ke04)
 #    include(driver_spi)
 #    include(component_uart_adapter)
+#    include(driver_clock)
 #    include(device_CMSIS)
 #    include(driver_uart)
+#    include(CMSIS_Driver_Include_Common)
 #    include(utilities_misc_utilities)
 #    include(driver_common)
+#    include(driver_flash_ftmr)
 #    include(driver_irq)
 #    include(driver_pit)
 #    include(CMSIS_Include_core_cm)
 #    include(driver_adc_5v12b_ll18_015)
-#    include(driver_flash_ftmr)
+#    include(driver_cmsis_uart)

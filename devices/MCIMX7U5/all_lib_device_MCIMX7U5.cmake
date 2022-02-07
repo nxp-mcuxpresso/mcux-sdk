@@ -2,6 +2,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpi2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpspi
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpuart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8960
@@ -64,6 +67,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_pmc0)
 #    include(driver_sema42)
 #    include(driver_dmamux)
+#    include(driver_cmsis_lpuart)
 #    include(driver_snvs_lp)
 #    include(driver_lpadc)
 #    include(driver_flexio_uart)
@@ -72,7 +76,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_mmcau_common_files)
 #    include(driver_flexio)
 #    include(driver_msmc)
-#    include(driver_crc)
+#    include(middleware_multicore_rpmsg_lite_imx7ulp_m4_freertos)
 #    include(driver_cache_lmem)
 #    include(driver_lpuart_edma)
 #    include(middleware_mmcau_cm4_cm7)
@@ -90,10 +94,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpi2c_edma)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_tty_rtos_transport)
 #    include(device_startup)
+#    include(utility_assert)
 #    include(driver_pf1550)
 #    include(middleware_freertos-kernel_extension)
 #    include(CMSIS_Driver_Include_I2C)
-#    include(utility_assert)
+#    include(driver_cmsis_lpi2c)
+#    include(driver_clock)
 #    include(device_CMSIS)
 #    include(CMSIS_Driver_Include_Common)
 #    include(middleware_multicore_erpc_doc)
@@ -113,7 +119,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_issdk_sensor_allregdefs)
 #    include(driver_flexio_i2c_master)
 #    include(middleware_multicore_erpc_eRPC_server)
-#    include(driver_clock)
+#    include(CMSIS_Driver_Include_USART)
 #    include(CMSIS_Driver_Include_SPI)
 #    include(utility_debug_console_lite)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_tty_rtos_remote_c_wrapper)
@@ -121,7 +127,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_assert_lite)
 #    include(utility_debug_console)
 #    include(driver_lpi2c_freertos)
-#    include(middleware_multicore_rpmsg_lite_imx7ulp_m4_freertos)
+#    include(driver_cmsis_lpspi)
+#    include(driver_crc)
 #    include(component_wm8960_adapter)
 #    include(driver_lptmr)
 #    include(middleware_issdk_algorithms_pedometer_lib_cm4)

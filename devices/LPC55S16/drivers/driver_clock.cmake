@@ -14,4 +14,7 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 if(CONFIG_USE_driver_power) 
     include(driver_power)
 endif()
+if(CONFIG_USE_driver_power_s) 
+    include(driver_power_s)
+endif()
 
