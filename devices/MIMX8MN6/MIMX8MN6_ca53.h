@@ -254,6 +254,7 @@ typedef enum IRQn {
 #define __GIC_PRIO_BITS                5         /**< Number of Bits used for Priority Levels */
 #define __Vendor_SysTickConfig         0         /**< Vendor specific implementation of SysTickConfig is defined */
 #define __FPU_PRESENT                  1         /**< FPU present or not */
+#define __FPU_USED                     1         /**< Indicates whether an FPU is used or not */
 #define __GIC_PRESENT                  1         /**< Defines if a GIC is present or not */
 #define __MMU_PRESENT                  1         /**< MMU present or not */
 #define __TIM_PRESENT                  1         /**< Defines if a Timer is present or not */
