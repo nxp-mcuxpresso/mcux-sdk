@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -532,9 +532,9 @@ static status_t ENET_QOS_TxDescriptorsInit(ENET_QOS_Type *base,
     }
     /* Set the tx descriptor start/tail pointer, shall be word aligned. */
     base->DMA_CH[channel].DMA_CHX_TXDESC_LIST_ADDR =
-        (uint32_t)buffCfg->txDescStartAddrAlign & ENET_QOS_DMA_CHX_TXDESC_LIST_ADDR_TDESLA_MASK;
+        (uint32_t)(uintptr_t)buffCfg->txDescStartAddrAlign & ENET_QOS_DMA_CHX_TXDESC_LIST_ADDR_TDESLA_MASK;
     base->DMA_CH[channel].DMA_CHX_TXDESC_TAIL_PTR =
-        (uint32_t)buffCfg->txDescTailAddrAlign & ENET_QOS_DMA_CHX_TXDESC_TAIL_PTR_TDTP_MASK;
+        (uint32_t)(uintptr_t)buffCfg->txDescTailAddrAlign & ENET_QOS_DMA_CHX_TXDESC_TAIL_PTR_TDTP_MASK;
     /* Set the tx ring length. */
     base->DMA_CH[channel].DMA_CHX_TXDESC_RING_LENGTH =
         ((uint32_t)buffCfg->txRingLen - 1U) & ENET_QOS_DMA_CHX_TXDESC_RING_LENGTH_TDRL_MASK;
@@ -596,9 +596,9 @@ static status_t ENET_QOS_RxDescriptorsInit(ENET_QOS_Type *base,
 
     /* Set the rx descriptor start/tail pointer, shall be word aligned. */
     base->DMA_CH[channel].DMA_CHX_RXDESC_LIST_ADDR =
-        (uint32_t)buffCfg->rxDescStartAddrAlign & ENET_QOS_DMA_CHX_RXDESC_LIST_ADDR_RDESLA_MASK;
+        (uint32_t)(uintptr_t)buffCfg->rxDescStartAddrAlign & ENET_QOS_DMA_CHX_RXDESC_LIST_ADDR_RDESLA_MASK;
     base->DMA_CH[channel].DMA_CHX_RXDESC_TAIL_PTR =
-        (uint32_t)buffCfg->rxDescTailAddrAlign & ENET_QOS_DMA_CHX_RXDESC_TAIL_PTR_RDTP_MASK;
+        (uint32_t)(uintptr_t)buffCfg->rxDescTailAddrAlign & ENET_QOS_DMA_CHX_RXDESC_TAIL_PTR_RDTP_MASK;
     base->DMA_CH[channel].DMA_CHX_RXDESC_RING_LENGTH =
         ((uint32_t)buffCfg->rxRingLen - 1U) & ENET_QOS_DMA_CHX_RXDESC_RING_LENGTH_RDRL_MASK;
     reg = base->DMA_CH[channel].DMA_CHX_RX_CTRL & ~ENET_QOS_DMA_CHX_RX_CTRL_RBSZ_13_y_MASK;
@@ -622,7 +622,7 @@ static status_t ENET_QOS_RxDescriptorsInit(ENET_QOS_Type *base,
 
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
             buffCfg->rxBufferStartAddr[index] =
-                MEMORY_ConvertMemoryMapAddress((uint32_t)buffCfg->rxBufferStartAddr[index], kMEMORY_Local2DMA);
+                (uintptr_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)buffCfg->rxBufferStartAddr[index], kMEMORY_Local2DMA);
 #endif
             rxbdPtr->buff1Addr = buffCfg->rxBufferStartAddr[index];
 
@@ -631,7 +631,7 @@ static status_t ENET_QOS_RxDescriptorsInit(ENET_QOS_Type *base,
             {
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
                 buffCfg->rxBufferStartAddr[index + 1U] =
-                    MEMORY_ConvertMemoryMapAddress((uint32_t)buffCfg->rxBufferStartAddr[index + 1U], kMEMORY_Local2DMA);
+                    (uintptr_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)buffCfg->rxBufferStartAddr[index + 1U], kMEMORY_Local2DMA);
 #endif
                 rxbdPtr->buff2Addr = buffCfg->rxBufferStartAddr[index + 1U];
             }
@@ -848,8 +848,9 @@ status_t ENET_QOS_Init(
     assert(config != NULL);
 
     status_t result   = kStatus_Success;
-    uint32_t instance = ENET_QOS_GetInstance(base);
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+    uint32_t instance = ENET_QOS_GetInstance(base);
+
     /* Ungate ENET clock. */
     (void)CLOCK_EnableClock(s_enetqosClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
@@ -923,7 +924,7 @@ void ENET_QOS_Down(ENET_QOS_Type *base)
 
         /* Reset hardware ring buffer */
         base->DMA_CH[index].DMA_CHX_TXDESC_LIST_ADDR =
-            (uint32_t)handle->txBdRing[index].txBdBase & ENET_QOS_DMA_CHX_TXDESC_LIST_ADDR_TDESLA_MASK;
+            (uintptr_t)handle->txBdRing[index].txBdBase & ENET_QOS_DMA_CHX_TXDESC_LIST_ADDR_TDESLA_MASK;
 
         /* Reset software ring buffer */
         handle->txBdRing[index].txGenIdx    = 0;
@@ -1077,7 +1078,7 @@ status_t ENET_QOS_RxBufferAllocAll(ENET_QOS_Type *base, enet_qos_handle_t *handl
                 index = j;
             }
 
-            buffAddr = (uint32_t)(uint32_t *)handle->rxBuffAlloc(base, handle->userData, channel);
+            buffAddr = (uint32_t)(uintptr_t)handle->rxBuffAlloc(base, handle->userData, channel);
             if (buffAddr == 0U)
             {
                 result = kStatus_ENET_QOS_InitMemoryFail;
@@ -1085,7 +1086,7 @@ status_t ENET_QOS_RxBufferAllocAll(ENET_QOS_Type *base, enet_qos_handle_t *handl
             }
 
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-            buffAddr = MEMORY_ConvertMemoryMapAddress(buffAddr, kMEMORY_Local2DMA);
+            buffAddr = (uintptr_t)MEMORY_ConvertMemoryMapAddress(buffAddr, kMEMORY_Local2DMA);
 #endif
             rxbdPtr->buff1Addr                        = buffAddr;
             handle->rxBufferStartAddr[channel][index] = buffAddr;
@@ -1093,7 +1094,7 @@ status_t ENET_QOS_RxBufferAllocAll(ENET_QOS_Type *base, enet_qos_handle_t *handl
             /* The second buffer is set with 0 because it is not required for normal case. */
             if (handle->doubleBuffEnable)
             {
-                buffAddr = (uint32_t)(uint32_t *)handle->rxBuffAlloc(base, handle->userData, channel);
+                buffAddr = (uint32_t)(uintptr_t)handle->rxBuffAlloc(base, handle->userData, channel);
                 if (buffAddr == 0U)
                 {
                     result = kStatus_ENET_QOS_InitMemoryFail;
@@ -1101,7 +1102,7 @@ status_t ENET_QOS_RxBufferAllocAll(ENET_QOS_Type *base, enet_qos_handle_t *handl
                 }
 
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-                buffAddr = MEMORY_ConvertMemoryMapAddress(buffAddr, kMEMORY_Local2DMA);
+                buffAddr = (uintptr_t)MEMORY_ConvertMemoryMapAddress(buffAddr, kMEMORY_Local2DMA);
 #endif
                 rxbdPtr->buff2Addr                             = buffAddr;
                 handle->rxBufferStartAddr[channel][index + 1U] = buffAddr;
@@ -1156,28 +1157,28 @@ void ENET_QOS_RxBufferFreeAll(ENET_QOS_Type *base, enet_qos_handle_t *handle)
                 }
 
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-                buffAddr = MEMORY_ConvertMemoryMapAddress((uint32_t)handle->rxBufferStartAddr[channel][index],
+                buffAddr = (uintptr_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)handle->rxBufferStartAddr[channel][index],
                                                           kMEMORY_DMA2Local);
 #else
                 buffAddr = (uint32_t)handle->rxBufferStartAddr[channel][index];
 #endif
                 if (buffAddr != 0U)
                 {
-                    handle->rxBuffFree(base, (void *)(uint32_t *)buffAddr, handle->userData, channel);
+                    handle->rxBuffFree(base, (void *)(uintptr_t)buffAddr, handle->userData, channel);
                 }
 
                 /* The second buffer is set with 0 because it is not required for normal case. */
                 if (handle->doubleBuffEnable)
                 {
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-                    buffAddr = MEMORY_ConvertMemoryMapAddress((uint32_t)handle->rxBufferStartAddr[channel][index + 1],
+                    buffAddr = (uintptr_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)handle->rxBufferStartAddr[channel][index + 1],
                                                               kMEMORY_DMA2Local);
 #else
                     buffAddr = (uint32_t)handle->rxBufferStartAddr[channel][index + 1U];
 #endif
                     if (buffAddr != 0U)
                     {
-                        handle->rxBuffFree(base, (void *)(uint32_t *)buffAddr, handle->userData, channel);
+                        handle->rxBuffFree(base, (void *)(uintptr_t)buffAddr, handle->userData, channel);
                     }
                 }
             }
@@ -1885,8 +1886,8 @@ static void ENET_QOS_DropFrame(ENET_QOS_Type *base, enet_qos_handle_t *handle, u
     enet_qos_rx_bd_struct_t *rxDesc;
     uint16_t index     = rxBdRing->rxGenIdx;
     bool tsAvailable   = false;
-    uint32_t buff1Addr = 0;
-    uint32_t buff2Addr = 0;
+    uintptr_t buff1Addr = 0;
+    uintptr_t buff2Addr = 0;
 
     /* Not check DMA ownership here, assume there's at least one valid frame left in BD ring */
     do
@@ -1897,14 +1898,14 @@ static void ENET_QOS_DropFrame(ENET_QOS_Type *base, enet_qos_handle_t *handle, u
         if (!handle->doubleBuffEnable)
         {
             buff1Addr = handle->rxBufferStartAddr[channel][rxBdRing->rxGenIdx];
-            ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, NULL, handle->rxintEnable,
+            ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)buff1Addr, NULL, handle->rxintEnable,
                                         handle->doubleBuffEnable);
         }
         else
         {
             buff1Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx];
             buff2Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx + 1U];
-            ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, (void *)(uint8_t *)buff2Addr,
+            ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)buff1Addr, (void *)buff2Addr,
                                         handle->rxintEnable, handle->doubleBuffEnable);
         }
 
@@ -1929,14 +1930,14 @@ static void ENET_QOS_DropFrame(ENET_QOS_Type *base, enet_qos_handle_t *handle, u
                 if (!handle->doubleBuffEnable)
                 {
                     buff1Addr = handle->rxBufferStartAddr[channel][rxBdRing->rxGenIdx];
-                    ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, NULL, handle->rxintEnable,
+                    ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)buff1Addr, NULL, handle->rxintEnable,
                                                 handle->doubleBuffEnable);
                 }
                 else
                 {
                     buff1Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx];
                     buff2Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx + 1U];
-                    ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, (void *)(uint8_t *)buff2Addr,
+                    ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)buff1Addr, (void *)buff2Addr,
                                                 handle->rxintEnable, handle->doubleBuffEnable);
                 }
                 rxBdRing->rxGenIdx = ENET_QOS_IncreaseIndex(rxBdRing->rxGenIdx, rxBdRing->rxRingLen);
@@ -1946,7 +1947,7 @@ static void ENET_QOS_DropFrame(ENET_QOS_Type *base, enet_qos_handle_t *handle, u
     } while (rxBdRing->rxGenIdx != index);
 
     /* Always try to start receive, in case it had stopped */
-    base->DMA_CH[channel].DMA_CHX_RXDESC_TAIL_PTR = (uint32_t)(uint8_t *)&rxBdRing->rxBdBase[rxBdRing->rxRingLen];
+    base->DMA_CH[channel].DMA_CHX_RXDESC_TAIL_PTR = (uint32_t)(uintptr_t)&rxBdRing->rxBdBase[rxBdRing->rxRingLen];
 }
 
 /*!
@@ -2000,8 +2001,8 @@ status_t ENET_QOS_ReadFrame(ENET_QOS_Type *base,
     enet_qos_rx_bd_ring_t *rxBdRing = (enet_qos_rx_bd_ring_t *)&handle->rxBdRing[channel];
     enet_qos_rx_bd_struct_t *rxDesc;
     status_t result    = kStatus_Fail;
-    uint32_t buff1Addr = 0; /*!< Buffer 1 address */
-    uint32_t buff2Addr = 0; /*!< Buffer 2 or next descriptor address */
+    uintptr_t buff1Addr = 0; /*!< Buffer 1 address */
+    uintptr_t buff2Addr = 0; /*!< Buffer 2 or next descriptor address */
 
     bool tsAvailable = false;
 
@@ -2026,7 +2027,7 @@ status_t ENET_QOS_ReadFrame(ENET_QOS_Type *base,
                 {
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
                     /* Add the cache invalidate maintain. */
-                    DCACHE_InvalidateByRange(MEMORY_ConvertMemoryMapAddress(buff1Addr, kMEMORY_DMA2Local),
+                    DCACHE_InvalidateByRange((uintptr_t)MEMORY_ConvertMemoryMapAddress(buff1Addr, kMEMORY_DMA2Local),
                                              rxBdRing->rxBuffSizeAlign);
 #else
                     /* Add the cache invalidate maintain. */
@@ -2042,10 +2043,10 @@ status_t ENET_QOS_ReadFrame(ENET_QOS_Type *base,
                 {
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
                     /* Add the cache invalidate maintain. */
-                    DCACHE_InvalidateByRange(MEMORY_ConvertMemoryMapAddress(buff1Addr, kMEMORY_DMA2Local),
+                    DCACHE_InvalidateByRange((uintptr_t)MEMORY_ConvertMemoryMapAddress(buff1Addr, kMEMORY_DMA2Local),
                                              rxBdRing->rxBuffSizeAlign);
                     /* Add the cache invalidate maintain. */
-                    DCACHE_InvalidateByRange(MEMORY_ConvertMemoryMapAddress(buff2Addr, kMEMORY_DMA2Local),
+                    DCACHE_InvalidateByRange((uintptr_t)MEMORY_ConvertMemoryMapAddress(buff2Addr, kMEMORY_DMA2Local),
                                              rxBdRing->rxBuffSizeAlign);
 #else
                     /* Add the cache invalidate maintain. */
@@ -2075,18 +2076,18 @@ status_t ENET_QOS_ReadFrame(ENET_QOS_Type *base,
                     {
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
                         (void)memcpy((void *)&data[offset],
-                                     (void *)(uint8_t *)MEMORY_ConvertMemoryMapAddress(buff1Addr, kMEMORY_DMA2Local),
+                                     (void *)(uintptr_t)MEMORY_ConvertMemoryMapAddress(buff1Addr, kMEMORY_DMA2Local),
                                      rxBdRing->rxBuffSizeAlign);
 #else
-                        (void)memcpy((void *)&data[offset], (void *)(uint8_t *)buff1Addr, rxBdRing->rxBuffSizeAlign);
+                        (void)memcpy((void *)&data[offset], (void *)buff1Addr, rxBdRing->rxBuffSizeAlign);
 #endif
                         offset += rxBdRing->rxBuffSizeAlign;
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
                         (void)memcpy((void *)&data[offset],
-                                     (void *)(uint8_t *)MEMORY_ConvertMemoryMapAddress(buff2Addr, kMEMORY_DMA2Local),
+                                     (void *)(uintptr_t)MEMORY_ConvertMemoryMapAddress(buff2Addr, kMEMORY_DMA2Local),
                                      len - rxBdRing->rxBuffSizeAlign);
 #else
-                        (void)memcpy((void *)&data[offset], (void *)(uint8_t *)buff2Addr,
+                        (void)memcpy((void *)&data[offset], (void *)buff2Addr,
                                      len - rxBdRing->rxBuffSizeAlign);
 #endif
                     }
@@ -2094,10 +2095,10 @@ status_t ENET_QOS_ReadFrame(ENET_QOS_Type *base,
                     {
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
                         (void)memcpy((void *)&data[offset],
-                                     (void *)(uint8_t *)MEMORY_ConvertMemoryMapAddress(buff1Addr, kMEMORY_DMA2Local),
+                                     (void *)(uintptr_t)MEMORY_ConvertMemoryMapAddress(buff1Addr, kMEMORY_DMA2Local),
                                      len);
 #else
-                        (void)memcpy((void *)&data[offset], (void *)(uint8_t *)buff1Addr, len);
+                        (void)memcpy((void *)&data[offset], (void *)buff1Addr, len);
 #endif
                     }
 
@@ -2109,7 +2110,7 @@ status_t ENET_QOS_ReadFrame(ENET_QOS_Type *base,
                     tsAvailable = true;
                 }
                 /* Updates the receive buffer descriptors. */
-                ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, (void *)(uint8_t *)buff2Addr,
+                ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)buff1Addr, (void *)buff2Addr,
                                             handle->rxintEnable, handle->doubleBuffEnable);
                 /* Store the rx timestamp which is in the next buffer descriptor of the last
                  * descriptor of a frame. */
@@ -2146,14 +2147,14 @@ status_t ENET_QOS_ReadFrame(ENET_QOS_Type *base,
                     if (!handle->doubleBuffEnable)
                     {
                         buff1Addr = handle->rxBufferStartAddr[channel][rxBdRing->rxGenIdx];
-                        ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, NULL, handle->rxintEnable,
+                        ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)buff1Addr, NULL, handle->rxintEnable,
                                                     handle->doubleBuffEnable);
                     }
                     else
                     {
                         buff1Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx];
                         buff2Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx + 1U];
-                        ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, (void *)(uint8_t *)buff2Addr,
+                        ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)buff1Addr, (void *)buff2Addr,
                                                     handle->rxintEnable, handle->doubleBuffEnable);
                     }
                     rxBdRing->rxGenIdx = ENET_QOS_IncreaseIndex(rxBdRing->rxGenIdx, rxBdRing->rxRingLen);
@@ -2167,17 +2168,17 @@ status_t ENET_QOS_ReadFrame(ENET_QOS_Type *base,
                 if (offset >= length)
                 {
                     /* Updates the receive buffer descriptors. */
-                    ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, (void *)(uint8_t *)buff2Addr,
+                    ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)buff1Addr, (void *)buff2Addr,
                                                 handle->rxintEnable, handle->doubleBuffEnable);
                     break;
                 }
 
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
                 (void)memcpy((void *)&data[offset],
-                             (void *)(uint8_t *)MEMORY_ConvertMemoryMapAddress(buff1Addr, kMEMORY_DMA2Local),
+                             (void *)(uintptr_t)MEMORY_ConvertMemoryMapAddress(buff1Addr, kMEMORY_DMA2Local),
                              rxBdRing->rxBuffSizeAlign);
 #else
-                (void)memcpy((void *)&data[offset], (void *)(uint8_t *)buff1Addr, rxBdRing->rxBuffSizeAlign);
+                (void)memcpy((void *)&data[offset], (void *)buff1Addr, rxBdRing->rxBuffSizeAlign);
 #endif
 
                 offset += rxBdRing->rxBuffSizeAlign;
@@ -2185,21 +2186,21 @@ status_t ENET_QOS_ReadFrame(ENET_QOS_Type *base,
                 {
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
                     (void)memcpy((void *)&data[offset],
-                                 (void *)(uint8_t *)MEMORY_ConvertMemoryMapAddress(buff2Addr, kMEMORY_DMA2Local),
+                                 (void *)(uintptr_t)MEMORY_ConvertMemoryMapAddress(buff2Addr, kMEMORY_DMA2Local),
                                  rxBdRing->rxBuffSizeAlign);
 #else
-                    (void)memcpy((void *)&data[offset], (void *)(uint8_t *)buff2Addr, rxBdRing->rxBuffSizeAlign);
+                    (void)memcpy((void *)&data[offset], (void *)buff2Addr, rxBdRing->rxBuffSizeAlign);
 #endif
                     offset += rxBdRing->rxBuffSizeAlign;
                 }
 
-                ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, (void *)(uint8_t *)buff2Addr,
+                ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)buff1Addr, (void *)buff2Addr,
                                             handle->rxintEnable, handle->doubleBuffEnable);
             }
         }
 
         /* Always try to start receive, in case it had stopped */
-        base->DMA_CH[channel].DMA_CHX_RXDESC_TAIL_PTR = (uint32_t)(uint8_t *)&rxBdRing->rxBdBase[rxBdRing->rxRingLen];
+        base->DMA_CH[channel].DMA_CHX_RXDESC_TAIL_PTR = (uint32_t)(uintptr_t)&rxBdRing->rxBdBase[rxBdRing->rxRingLen];
     }
 
     return result;
@@ -2238,11 +2239,11 @@ void ENET_QOS_UpdateRxDescriptor(
     /* Update the buffer if needed. */
     if (buffer1 != NULL)
     {
-        rxDesc->buff1Addr = (uint32_t)(uint8_t *)buffer1;
+        rxDesc->buff1Addr = (uint32_t)(uintptr_t)buffer1;
     }
     if (buffer2 != NULL)
     {
-        rxDesc->buff2Addr = (uint32_t)(uint8_t *)buffer2;
+        rxDesc->buff2Addr = (uint32_t)(uintptr_t)buffer2;
     }
     else
     {
@@ -2312,13 +2313,13 @@ void ENET_QOS_SetupTxDescriptor(enet_qos_tx_bd_struct_t *txDesc,
     }
 
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-    buffer1 = (void *)(uint32_t *)MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)buffer1, kMEMORY_Local2DMA);
-    buffer2 = (void *)(uint32_t *)MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)buffer2, kMEMORY_Local2DMA);
+    buffer1 = (void *)(uintptr_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)buffer1, kMEMORY_Local2DMA);
+    buffer2 = (void *)(uintptr_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)buffer2, kMEMORY_Local2DMA);
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
 
     /* Preare the descriptor for transmit. */
-    txDesc->buff1Addr = (uint32_t)(uint8_t *)buffer1;
-    txDesc->buff2Addr = (uint32_t)(uint8_t *)buffer2;
+    txDesc->buff1Addr = (uint32_t)(uintptr_t)buffer1;
+    txDesc->buff2Addr = (uint32_t)(uintptr_t)buffer2;
     txDesc->buffLen   = control;
 
     /* Make sure all fields of descriptor are written before setting ownership */
@@ -2486,7 +2487,7 @@ status_t ENET_QOS_SendFrame(ENET_QOS_Type *base,
     {
         txDesc = &txBdRing->txBdBase[txBdRing->txRingLen];
     }
-    base->DMA_CH[channel].DMA_CHX_TXDESC_TAIL_PTR = (uint32_t)txDesc & ~ENET_QOS_ADDR_ALIGNMENT;
+    base->DMA_CH[channel].DMA_CHX_TXDESC_TAIL_PTR = (uint32_t)(uintptr_t)txDesc & ~ENET_QOS_ADDR_ALIGNMENT;
 
     return kStatus_Success;
 }
@@ -2589,8 +2590,8 @@ status_t ENET_QOS_GetRxFrame(ENET_QOS_Type *base,
     enet_qos_rx_bd_struct_t *rxDesc = &rxBdRing->rxBdBase[rxBdRing->rxGenIdx];
     uint16_t index                  = rxBdRing->rxGenIdx;
     status_t result                 = kStatus_Success;
-    uint32_t buff1Addr              = 0;
-    uint32_t buff2Addr              = 0;
+    uintptr_t buff1Addr              = 0;
+    uintptr_t buff2Addr              = 0;
     uint16_t buff1Len               = 0;
     uint16_t buff2Len               = 0;
     uint16_t offset                 = 0;
@@ -2749,13 +2750,13 @@ status_t ENET_QOS_GetRxFrame(ENET_QOS_Type *base,
             {
                 buff1Addr = handle->rxBufferStartAddr[channel][rxBdRing->rxGenIdx];
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-                buff1Addr = MEMORY_ConvertMemoryMapAddress(buff1Addr, kMEMORY_DMA2Local);
+                buff1Addr = (uintptr_t)MEMORY_ConvertMemoryMapAddress(buff1Addr, kMEMORY_DMA2Local);
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
                 if (handle->rxMaintainEnable[channel])
                 {
                     DCACHE_InvalidateByRange(buff1Addr, rxBdRing->rxBuffSizeAlign);
                 }
-                rxFrame->rxBuffArray[index].buffer = (void *)(uint32_t *)buff1Addr;
+                rxFrame->rxBuffArray[index].buffer = (void *)buff1Addr;
                 rxFrame->rxBuffArray[index].length = buff1Len;
                 index++;
             }
@@ -2769,7 +2770,7 @@ status_t ENET_QOS_GetRxFrame(ENET_QOS_Type *base,
                 {
                     DCACHE_InvalidateByRange(buff1Addr, rxBdRing->rxBuffSizeAlign);
                 }
-                rxFrame->rxBuffArray[index].buffer = (void *)(uint32_t *)buff1Addr;
+                rxFrame->rxBuffArray[index].buffer = (void *)buff1Addr;
                 rxFrame->rxBuffArray[index].length = buff1Len;
                 index++;
 
@@ -2778,13 +2779,13 @@ status_t ENET_QOS_GetRxFrame(ENET_QOS_Type *base,
                 {
                     buff2Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx + 1U];
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-                    buff2Addr = MEMORY_ConvertMemoryMapAddress(buff2Addr, kMEMORY_DMA2Local);
+                    buff2Addr = (uintptr_t)MEMORY_ConvertMemoryMapAddress(buff2Addr, kMEMORY_DMA2Local);
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
                     if (handle->rxMaintainEnable[channel])
                     {
                         DCACHE_InvalidateByRange(buff2Addr, rxBdRing->rxBuffSizeAlign);
                     }
-                    rxFrame->rxBuffArray[index].buffer = (void *)(uint32_t *)buff2Addr;
+                    rxFrame->rxBuffArray[index].buffer = (void *)buff2Addr;
                     rxFrame->rxBuffArray[index].length = buff2Len;
                     index++;
                 }
@@ -2795,27 +2796,27 @@ status_t ENET_QOS_GetRxFrame(ENET_QOS_Type *base,
             {
                 if (handle->rxMaintainEnable[channel])
                 {
-                    DCACHE_InvalidateByRange((uint32_t)(uint32_t *)newBuff1, rxBdRing->rxBuffSizeAlign);
+                    DCACHE_InvalidateByRange((uintptr_t)newBuff1, rxBdRing->rxBuffSizeAlign);
                 }
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-                buff1Addr = MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)newBuff1, kMEMORY_Local2DMA);
+                buff1Addr = (uintptr_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)newBuff1, kMEMORY_Local2DMA);
 #else
-                buff1Addr = (uint32_t)(uint32_t *)newBuff1;
+                buff1Addr = (uint32_t)(uintptr_t)newBuff1;
 #endif
                 handle->rxBufferStartAddr[channel][rxBdRing->rxGenIdx] = buff1Addr;
-                ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)(uint32_t *)buff1Addr, NULL, handle->rxintEnable,
+                ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)buff1Addr, NULL, handle->rxintEnable,
                                             handle->doubleBuffEnable);
             }
             else
             {
                 if (handle->rxMaintainEnable[channel])
                 {
-                    DCACHE_InvalidateByRange((uint32_t)(uint32_t *)newBuff1, rxBdRing->rxBuffSizeAlign);
+                    DCACHE_InvalidateByRange((uintptr_t)newBuff1, rxBdRing->rxBuffSizeAlign);
                 }
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-                buff1Addr = MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)newBuff1, kMEMORY_Local2DMA);
+                buff1Addr = (uintptr_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)newBuff1, kMEMORY_Local2DMA);
 #else
-                buff1Addr = (uint32_t)(uint32_t *)newBuff1;
+                buff1Addr = (uint32_t)(uintptr_t)newBuff1;
 #endif
                 handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx] = buff1Addr;
 
@@ -2823,12 +2824,12 @@ status_t ENET_QOS_GetRxFrame(ENET_QOS_Type *base,
                 {
                     if (handle->rxMaintainEnable[channel])
                     {
-                        DCACHE_InvalidateByRange((uint32_t)(uint32_t *)newBuff2, rxBdRing->rxBuffSizeAlign);
+                        DCACHE_InvalidateByRange((uintptr_t)newBuff2, rxBdRing->rxBuffSizeAlign);
                     }
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-                    buff2Addr = MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)newBuff2, kMEMORY_Local2DMA);
+                    buff2Addr = (uintptr_t)MEMORY_ConvertMemoryMapAddress((uintptr_t)newBuff2, kMEMORY_Local2DMA);
 #else
-                    buff2Addr = (uint32_t)(uint32_t *)newBuff2;
+                    buff2Addr = (uint32_t)(uintptr_t)newBuff2;
 #endif
                     handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx + 1U] = buff2Addr;
                 }
@@ -2838,7 +2839,7 @@ status_t ENET_QOS_GetRxFrame(ENET_QOS_Type *base,
                     buff2Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx + 1U];
                 }
 
-                ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)(uint32_t *)buff1Addr, (void *)(uint32_t *)buff2Addr,
+                ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)buff1Addr, (void *)buff2Addr,
                                             handle->rxintEnable, handle->doubleBuffEnable);
             }
             rxBdRing->rxGenIdx = ENET_QOS_IncreaseIndex(rxBdRing->rxGenIdx, rxBdRing->rxRingLen);
@@ -2855,14 +2856,14 @@ status_t ENET_QOS_GetRxFrame(ENET_QOS_Type *base,
                     if (!handle->doubleBuffEnable)
                     {
                         buff1Addr = handle->rxBufferStartAddr[channel][rxBdRing->rxGenIdx];
-                        ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, NULL, handle->rxintEnable,
+                        ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)buff1Addr, NULL, handle->rxintEnable,
                                                     handle->doubleBuffEnable);
                     }
                     else
                     {
                         buff1Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx];
                         buff2Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx + 1U];
-                        ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, (void *)(uint8_t *)buff2Addr,
+                        ENET_QOS_UpdateRxDescriptor(rxDesc, (void *)buff1Addr, (void *)buff2Addr,
                                                     handle->rxintEnable, handle->doubleBuffEnable);
                     }
                     rxBdRing->rxGenIdx = ENET_QOS_IncreaseIndex(rxBdRing->rxGenIdx, rxBdRing->rxRingLen);
@@ -2870,7 +2871,7 @@ status_t ENET_QOS_GetRxFrame(ENET_QOS_Type *base,
             }
             /* Always try to start receive, in case it had stopped */
             base->DMA_CH[channel].DMA_CHX_RXDESC_TAIL_PTR =
-                (uint32_t)(uint8_t *)&rxBdRing->rxBdBase[rxBdRing->rxRingLen];
+                (uint32_t)(uintptr_t)&rxBdRing->rxBdBase[rxBdRing->rxRingLen];
         }
         else
         {
@@ -3059,8 +3060,8 @@ status_t ENET_QOS_Ptp1588PpsSetTrgtTime(ENET_QOS_Type *base,
     uint32_t *mac_pps_trgt_ns;
     uint32_t *mac_pps_trgt_s;
 
-    mac_pps_trgt_ns = (uint32_t *)((uint32_t)&base->MAC_PPS0_TARGET_TIME_NANOSECONDS + 0x10U * (uint32_t)instance);
-    mac_pps_trgt_s  = (uint32_t *)((uint32_t)&base->MAC_PPS0_TARGET_TIME_SECONDS + 0x10U * (uint32_t)instance);
+    mac_pps_trgt_ns = (uint32_t *)((uintptr_t)&base->MAC_PPS0_TARGET_TIME_NANOSECONDS + 0x10U * (uint32_t)instance);
+    mac_pps_trgt_s  = (uint32_t *)((uintptr_t)&base->MAC_PPS0_TARGET_TIME_SECONDS + 0x10U * (uint32_t)instance);
 
     if ((*mac_pps_trgt_ns & ENET_QOS_MAC_PPS0_TARGET_TIME_NANOSECONDS_TRGTBUSY0_MASK) != 0U)
     {

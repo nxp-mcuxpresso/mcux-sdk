@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 NXP
+ * Copyright 2020-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1686,7 +1686,7 @@ static inline void ENET_QOS_Ptp1588PpsSetWidth(ENET_QOS_Type *base,
 {
     uint32_t *mac_pps_width;
 
-    mac_pps_width = (uint32_t *)((uint32_t)&base->MAC_PPS0_WIDTH + 0x10U * (uint32_t)instance);
+    mac_pps_width = (uint32_t *)((uintptr_t)&base->MAC_PPS0_WIDTH + 0x10U * (uint32_t)instance);
 
     *mac_pps_width = ENET_QOS_MAC_PPS0_WIDTH_PPSWIDTH0(width);
 }
@@ -1705,7 +1705,7 @@ static inline void ENET_QOS_Ptp1588PpsSetInterval(ENET_QOS_Type *base,
 {
     uint32_t *mac_pps_interval;
 
-    mac_pps_interval = (uint32_t *)((uint32_t)&base->MAC_PPS0_INTERVAL + 0x10U * (uint32_t)instance);
+    mac_pps_interval = (uint32_t *)((uintptr_t)&base->MAC_PPS0_INTERVAL + 0x10U * (uint32_t)instance);
 
     *mac_pps_interval = ENET_QOS_MAC_PPS0_INTERVAL_PPSINT0(interval);
 }
