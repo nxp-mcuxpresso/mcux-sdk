@@ -9,13 +9,16 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyrtl8211f
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet/
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet_qos
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/enet
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/enet_qos
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpt
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ii2c
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/igpio
