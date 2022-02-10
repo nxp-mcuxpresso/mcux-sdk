@@ -58,6 +58,8 @@ extern "C" {
 
 #include <stdint.h>
 
+/* Define clock source values */
+#define DEFAULT_SYSTEM_CLOCK   8000000U /* Default System clock value */
 
 /**
  * @brief System clock frequency (core clock)
