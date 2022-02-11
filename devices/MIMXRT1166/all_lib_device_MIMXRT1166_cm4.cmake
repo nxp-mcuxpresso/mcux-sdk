@@ -2,11 +2,20 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/DSP
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt1160/xip
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/enet
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpi2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpspi
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpuart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8960
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mimxrt1160
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/ft5406_rt
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/gt911
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
@@ -15,6 +24,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyrtl8211f
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/camera
@@ -27,6 +37,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dc
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dc/elcdif
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dc/lcdifv2
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/fbdev
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/mipi_dsi_cmd
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/rm68191
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/rm68200
@@ -85,6 +96,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xecc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xrdc2
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
@@ -106,8 +118,10 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_codec_i2c_MIMXRT1166_cm4)
 #    include(driver_rdc)
 #    include(middleware_multicore_rpmsg_lite_imxrt1160_bm)
+#    include(driver_xip_board_evkmimxrt1160)
 #    include(driver_dmamux)
 #    include(driver_phy-common)
+#    include(CMSIS_Driver_Include_Ethernet_MAC)
 #    include(middleware_sdmmc_sd)
 #    include(driver_snvs_lp)
 #    include(middleware_sdmmc_host_usdhc_polling_MIMXRT1166_cm4)
@@ -118,12 +132,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart)
 #    include(driver_wm8960)
 #    include(driver_ewm)
-#    include(middleware_mmcau_common_files)
+#    include(driver_sema4)
 #    include(driver_display-rm68200)
 #    include(driver_camera-device-ov5640)
 #    include(driver_aoi)
 #    include(driver_enc)
-#    include(driver_cache_lmem)
+#    include(driver_flexio_i2c_master)
 #    include(middleware_baremetal)
 #    include(driver_display-common)
 #    include(middleware_sdmmc_osa_bm)
@@ -141,10 +155,16 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lcdifv2)
 #    include(driver_pit)
 #    include(component_serial_manager_uart)
-#    include(middleware_multicore_mcmgr_imxrt1160)
+#    include(utility_debug_console_lite)
+#    include(driver_cmsis_lpuart)
 #    include(driver_soc_src)
 #    include(CMSIS_DSP_Library)
 #    include(component_lpuart_adapter)
+#    include(driver_lpi2c_edma)
+#    include(middleware_sdmmc_osa_freertos)
+#    include(driver_rdc_sema42)
+#    include(driver_cmsis_enet)
+#    include(middleware_multicore_erpc_eRPC_mu_c_wrapper)
 #    include(driver_display-rm68191)
 #    include(middleware_sdmmc_host_usdhc_freertos_MIMXRT1166_cm4)
 #    include(driver_phy-device-ksz8081)
@@ -155,30 +175,36 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_mmcau_cm4_cm7)
 #    include(device_system_MIMXRT1166_cm4)
 #    include(middleware_freertos-kernel_extension)
+#    include(CMSIS_Driver_Include_I2C)
 #    include(driver_camera-receiver-common)
 #    include(middleware_freertos-kernel_MIMXRT1166_cm4)
-#    include(middleware_sdmmc_osa_freertos)
-#    include(driver_rdc_sema42)
-#    include(middleware_multicore_erpc_eRPC_rpmsg_lite_rtos_transport)
+#    include(driver_cmsis_lpi2c)
+#    include(CMSIS_Driver_Include_Ethernet)
+#    include(driver_clock)
 #    include(driver_display-mipi-dsi-cmd)
 #    include(driver_anatop_ai)
 #    include(device_CMSIS)
 #    include(driver_romapi)
+#    include(CMSIS_Driver_Include_Common)
 #    include(middleware_multicore_erpc_doc)
+#    include(driver_ft5406_rt)
 #    include(middleware_multicore_erpc_common)
 #    include(component_osa_bm)
+#    include(middleware_multicore_mcmgr_imxrt1160)
 #    include(driver_camera-device-sccb)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_rtos_remote_c_wrapper)
-#    include(driver_common)
+#    include(driver_gt911)
 #    include(driver_kpp)
 #    include(component_osa_free_rtos)
 #    include(driver_camera-common)
 #    include(driver_camera-device-common)
 #    include(component_lpi2c_adapter)
 #    include(driver_key_manager)
+#    include(middleware_freertos-kernel_heap_3)
 #    include(CMSIS_Include_core_cm)
 #    include(driver_video-common)
 #    include(middleware_freertos-kernel_heap_4)
+#    include(middleware_sdmmc_sdio)
 #    include(middleware_sdmmc_host_usdhc_interrupt_MIMXRT1166_cm4)
 #    include(driver_snvs_hp)
 #    include(driver_pdm)
@@ -186,16 +212,18 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexspi_edma)
 #    include(middleware_multicore_rpmsg_lite_imxrt1160_freertos)
 #    include(driver_csi)
-#    include(middleware_multicore_erpc_eRPC_mu_c_wrapper)
+#    include(middleware_mmcau_common_files)
 #    include(middleware_multicore_erpc_eRPC_server)
-#    include(driver_clock)
-#    include(utility_debug_console_lite)
+#    include(CMSIS_Driver_Include_USART)
+#    include(CMSIS_Driver_Include_SPI)
+#    include(driver_common)
 #    include(driver_adc_etc)
 #    include(driver_mdio-common)
 #    include(driver_pgmc)
 #    include(driver_iomuxc)
 #    include(utility_shell)
 #    include(utility_assert_lite)
+#    include(middleware_fatfs)
 #    include(driver_semc)
 #    include(driver_flexio)
 #    include(driver_xbarb)
@@ -203,11 +231,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_spdif)
 #    include(driver_flexcan)
 #    include(utility_debug_console)
+#    include(component_mflash_file)
 #    include(driver_pmu_1)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_remote_c_wrapper)
 #    include(middleware_multicore_mcmgr)
 #    include(driver_smartcard_emvsim)
-#    include(driver_sema4)
+#    include(component_mflash_common)
+#    include(driver_cmsis_lpspi)
 #    include(driver_spdif_edma)
 #    include(middleware_sdmmc_host_usdhc)
 #    include(middleware_multicore_erpc_eRPC_port_stdlib)
@@ -218,11 +248,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_erpc_eRPC_arbitrator)
 #    include(driver_dcdc_soc)
 #    include(driver_dc-fb-elcdif)
-#    include(driver_flexio_i2c_master)
+#    include(driver_cache_lmem)
 #    include(middleware_multicore_erpc_eRPC_port_freertos)
 #    include(driver_xecc)
 #    include(driver_iee)
 #    include(driver_phy-device-rtl8211f)
+#    include(middleware_fatfs_sd)
 #    include(middleware_multicore_erpc_eRPC_mu_transport)
 #    include(driver_flexspi)
 #    include(driver_flexio_spi_edma)
@@ -242,12 +273,17 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_memory)
 #    include(driver_lpuart)
 #    include(driver_flexio_spi)
+#    include(component_pit_adapter)
 #    include(middleware_multicore_erpc_eRPC_mu_rtos_transport)
 #    include(driver_dac12)
+#    include(driver_fbdev)
 #    include(driver_xrdc2)
+#    include(middleware_multicore_erpc_eRPC_rpmsg_lite_rtos_transport)
 #    include(driver_lpi2c)
+#    include(CMSIS_Driver_Include_Ethernet_PHY)
 #    include(driver_ssarc)
 #    include(driver_flexio_i2s)
+#    include(component_mflash_rt1160)
 #    include(driver_fxos8700cq)
 #    include(driver_elcdif)
 #    include(driver_xip_board)

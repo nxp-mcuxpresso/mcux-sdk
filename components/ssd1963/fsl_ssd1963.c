@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2017, 2020-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -34,7 +34,7 @@
 #error Only support 8-bit or 16-bit data bus
 #endif
 
-#define SSD1963_DATA_WITDH_BYTE (SSD1963_DATA_WITDH / 8U)
+#define SSD1963_DATA_WITDH_BYTE (((uint8_t)SSD1963_DATA_WITDH) / 8U)
 
 #define SSD1963_RET(x)                 \
     do                                 \
@@ -315,7 +315,7 @@ status_t SSD1963_SetFlipMode(ssd1963_handle_t *handle, ssd1963_flip_mode_t mode)
 #endif
 
     SSD1963_RET(handle->xferOps->writeCommand(handle->xferOpsData, SSD1963_SET_ADDRESS_MODE));
-    SSD1963_RET(handle->xferOps->writeData(handle->xferOpsData, &newAddrMode, 1 * SSD1963_DATA_WITDH_BYTE));
+    SSD1963_RET(handle->xferOps->writeData(handle->xferOpsData, &newAddrMode, 1U * SSD1963_DATA_WITDH_BYTE));
 
     handle->addrMode = (uint8_t)newAddrMode;
 
@@ -336,7 +336,7 @@ status_t SSD1963_SetOrientationMode(ssd1963_handle_t *handle, ssd1963_orientatio
 #endif
 
     SSD1963_RET(handle->xferOps->writeCommand(handle->xferOpsData, SSD1963_SET_ADDRESS_MODE));
-    SSD1963_RET(handle->xferOps->writeData(handle->xferOpsData, &newAddrMode, 1 * SSD1963_DATA_WITDH_BYTE));
+    SSD1963_RET(handle->xferOps->writeData(handle->xferOpsData, &newAddrMode, 1U * SSD1963_DATA_WITDH_BYTE));
 
     handle->addrMode = (uint8_t)newAddrMode;
 

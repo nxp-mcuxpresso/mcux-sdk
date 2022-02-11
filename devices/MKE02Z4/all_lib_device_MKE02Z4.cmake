@@ -1,6 +1,10 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/i2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/spi
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
@@ -33,24 +37,31 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_lists)
 #    include(device_system)
 #    include(driver_tpm)
+#    include(driver_cmsis_spi)
+#    include(driver_cmsis_i2c)
 #    include(device_startup)
-#    include(driver_clock)
-#    include(driver_wdog8)
+#    include(CMSIS_Driver_Include_USART)
+#    include(CMSIS_Driver_Include_SPI)
 #    include(utility_debug_console_lite)
 #    include(driver_acmp_1)
 #    include(CMSIS_Include_core_cm)
 #    include(driver_ftm)
-#    include(driver_port_ke02)
+#    include(CMSIS_Driver_Include_I2C)
+#    include(driver_gpio_1)
 #    include(utility_assert_lite)
 #    include(driver_spi)
 #    include(component_uart_adapter)
-#    include(utility_assert)
+#    include(driver_clock)
 #    include(utility_debug_console)
 #    include(device_CMSIS)
+#    include(driver_wdog8)
 #    include(driver_uart)
+#    include(CMSIS_Driver_Include_Common)
 #    include(utilities_misc_utilities)
-#    include(driver_gpio_1)
+#    include(driver_port_ke02)
 #    include(driver_common)
+#    include(driver_cmsis_uart)
+#    include(utility_assert)
 #    include(driver_irq)
 #    include(component_serial_manager)
 #    include(driver_rtc_1)
