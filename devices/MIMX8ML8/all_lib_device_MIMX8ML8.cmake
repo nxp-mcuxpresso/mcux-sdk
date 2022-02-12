@@ -15,6 +15,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/srtm
     ${CMAKE_CURRENT_LIST_DIR}/../../components/srtm/port
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cache/armv7-m7
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/easrc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ecspi
