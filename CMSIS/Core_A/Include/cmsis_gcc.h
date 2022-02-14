@@ -166,6 +166,28 @@ __STATIC_FORCEINLINE void __DMB(void)
 }
 #endif
 
+/**
+  \brief   Reverse byte order (32 bit)
+  \details Reverses the byte order in unsigned integer value. For example, 0x12345678 becomes 0x78563412.
+  \param [in]    value  Value to reverse
+  \return               Reversed value
+ */
+__STATIC_FORCEINLINE uint32_t __REV(uint32_t value)
+{
+  return __builtin_bswap32(value);
+}
+
+
+/**
+  \brief   Reverse byte order (16 bit)
+  \details Reverses the byte order within each halfword of a word. For example, 0x12345678 becomes 0x34127856.
+  \param [in]    value  Value to reverse
+  \return               Reversed value
+ */
+__STATIC_FORCEINLINE uint32_t __REV16(uint32_t value)
+{
+  return __builtin_bswap16(value);
+}
 
 /**
   \brief   Breakpoint
