@@ -820,8 +820,10 @@ static inline bool SerialManager_needPollingIsr(void)
 {
 #if (defined(__DSC__) && defined(__CW__))
     return !(isIRQAllowed());
-#elif defined(__GIC_PRIO_BITS)
+#elif defined(CPSR_M_Msk)
     return (0x13 == (__get_CPSR() & CPSR_M_Msk));
+#elif defined(DAIF_I_BIT)
+    return (__get_DAIF() & DAIF_I_BIT);
 #else
     return (0U != __get_IPSR());
 #endif
