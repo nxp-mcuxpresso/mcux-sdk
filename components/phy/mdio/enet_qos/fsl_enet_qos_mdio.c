@@ -39,9 +39,9 @@ static void ENET_QOS_MDIO_Init(mdio_handle_t *handle)
 {
     mdio_resource_t *resource = (mdio_resource_t *)&handle->resource;
     ENET_QOS_Type *base       = (ENET_QOS_Type *)resource->base;
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     uint32_t instance         = ENET_QOS_GetInstance(base);
 
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Set SMI first. */
     CLOCK_EnableClock(s_enetqosClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
