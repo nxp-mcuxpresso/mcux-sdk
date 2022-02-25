@@ -6,7 +6,7 @@
  ******************************************************************************/
 /*
  * Copyright (c) 2021 Arm Limited. All rights reserved.
- * Copyright 2021 NXP
+ * Copyright 2021-2022 NXP
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -122,6 +122,20 @@ __STATIC_INLINE void ARM_TIMER_Start(ARM_TIMER_type_t timer, bool irq_enable)
     default:
         break;
     }
+}
+
+__STATIC_FORCEINLINE void ARM_TIMER_GetCounterCount(ARM_TIMER_type_t timer, uint64_t *val)
+{
+	switch (timer) {
+	case ARM_TIMER_PHYSICAL:
+		__MRS(cntpct_el0, val);
+		break;
+	case  ARM_TIMER_VIRTUAL:
+		__MRS(cntvct_el0, val);
+		break;
+	default:
+		break;
+	}
 }
 
 #ifdef __cplusplus
