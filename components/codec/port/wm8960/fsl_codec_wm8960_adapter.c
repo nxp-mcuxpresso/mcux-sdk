@@ -88,7 +88,7 @@ status_t HAL_CODEC_WM8960_Init(void *handle, void *config)
     codec_config_t *codecConfig = (codec_config_t *)config;
 
     wm8960_config_t *devConfig = (wm8960_config_t *)(codecConfig->codecDevConfig);
-    wm8960_handle_t *devHandle = (wm8960_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle));
+    wm8960_handle_t *devHandle = (wm8960_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle));
 
     ((codec_handle_t *)handle)->codecCapability = &s_wm8960_capability;
 
@@ -106,7 +106,7 @@ status_t HAL_CODEC_WM8960_Deinit(void *handle)
 {
     assert(handle != NULL);
 
-    return WM8960_Deinit((wm8960_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)));
+    return WM8960_Deinit((wm8960_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)));
 }
 
 /*!
@@ -122,7 +122,7 @@ status_t HAL_CODEC_WM8960_SetFormat(void *handle, uint32_t mclk, uint32_t sample
 {
     assert(handle != NULL);
 
-    return WM8960_ConfigDataFormat((wm8960_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)), mclk,
+    return WM8960_ConfigDataFormat((wm8960_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)), mclk,
                                    sampleRate, bitWidth);
 }
 
@@ -154,13 +154,13 @@ status_t HAL_CODEC_WM8960_SetVolume(void *handle, uint32_t playChannel, uint32_t
     if (((playChannel & (uint32_t)kWM8960_HeadphoneLeft) != 0U) ||
         ((playChannel & (uint32_t)kWM8960_HeadphoneRight) != 0U))
     {
-        retVal = WM8960_SetVolume((wm8960_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
+        retVal = WM8960_SetVolume((wm8960_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)),
                                   kWM8960_ModuleHP, mappedVolume);
     }
 
     if (((playChannel & (uint32_t)kWM8960_SpeakerLeft) != 0U) || ((playChannel & (uint32_t)kWM8960_SpeakerRight) != 0U))
     {
-        retVal = WM8960_SetVolume((wm8960_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
+        retVal = WM8960_SetVolume((wm8960_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)),
                                   kWM8960_ModuleSpeaker, mappedVolume);
     }
 
@@ -184,13 +184,13 @@ status_t HAL_CODEC_WM8960_SetMute(void *handle, uint32_t playChannel, bool isMut
     if (((playChannel & (uint32_t)kWM8960_HeadphoneLeft) != 0U) ||
         ((playChannel & (uint32_t)kWM8960_HeadphoneRight) != 0U))
     {
-        retVal = WM8960_SetMute((wm8960_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
+        retVal = WM8960_SetMute((wm8960_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)),
                                 kWM8960_ModuleHP, isMute);
     }
 
     if (((playChannel & (uint32_t)kWM8960_SpeakerLeft) != 0U) || ((playChannel & (uint32_t)kWM8960_SpeakerRight) != 0U))
     {
-        retVal = WM8960_SetMute((wm8960_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
+        retVal = WM8960_SetMute((wm8960_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)),
                                 kWM8960_ModuleSpeaker, isMute);
     }
 
@@ -209,7 +209,7 @@ status_t HAL_CODEC_WM8960_SetPower(void *handle, uint32_t module, bool powerOn)
 {
     assert(handle != NULL);
 
-    return WM8960_SetModule((wm8960_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
+    return WM8960_SetModule((wm8960_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)),
                             HAL_WM8960_MAP_MODULE(module), powerOn);
 }
 
@@ -254,7 +254,7 @@ status_t HAL_CODEC_WM8960_SetPlay(void *handle, uint32_t playSource)
 {
     assert(handle != NULL);
 
-    return WM8960_SetPlay((wm8960_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)), playSource);
+    return WM8960_SetPlay((wm8960_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)), playSource);
 }
 
 /*!

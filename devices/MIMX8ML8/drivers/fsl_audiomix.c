@@ -37,7 +37,7 @@ void AUDIOMIX_AttachClk(AUDIOMIX_Type *base, audiomix_attch_clk_t id)
     uint32_t offset             = GET_AUDIOMIX_ATTACH_ID_OFFSET(id);
     uint32_t mask               = GET_AUDIOMIX_ATTACH_ID_MASK(id);
     uint32_t value              = GET_AUDIOMIX_ATTACH_ID_value(id);
-    volatile uint32_t *baseAddr = (volatile uint32_t *)((uint32_t)base + offset);
+    volatile uint32_t *baseAddr = (volatile uint32_t *)((uintptr_t)base + offset);
     /* load to register */
     *baseAddr = (*baseAddr & ~mask) | value;
 }
