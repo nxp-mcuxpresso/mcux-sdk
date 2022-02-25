@@ -6,7 +6,7 @@
  ******************************************************************************/
 /*
  * Copyright (c) 2021 Arm Limited. All rights reserved.
- * Copyright 2021 NXP
+ * Copyright 2021-2022 NXP
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -58,6 +58,11 @@
 #ifndef __MRS
 #define __MRS(sysreg, pVal) \
   __asm volatile ("mrs  %0, "__STRINGIFY(sysreg)"\n" : "=r"((*pVal)))
+#endif
+
+#ifndef __WFI
+#define __WFI() \
+  __asm volatile ("wfi")
 #endif
 
 
