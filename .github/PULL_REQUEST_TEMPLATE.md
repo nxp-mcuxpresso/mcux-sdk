@@ -1,4 +1,5 @@
 **Prerequisites**
+
 - [ ] I have checked latest main branch and the issue still exists.
 - [ ] I did not see it is stated as known-issue in release notes.
 - [ ] No similar GitHub issue is related to this change.
@@ -9,7 +10,7 @@
 
 **Describe the pull request**
 
-A clear and concise description for the change in this Pull Request and which issue is fixed. 
+A clear and concise description for the change in this Pull Request and which issue is fixed.
 
 Fixes # (issue)
 
@@ -22,13 +23,12 @@ Fixes # (issue)
 
 **Tests**
 
-* Test configuration (please complete the following information):
-   - Hardware setting:
-   - Toolchain:
-   - Test Tool preparation:
-   - Any other dependencies:
-* Test executed
-  Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. 
-    - [ ] Build Test
-    - [ ] Run Test
-
+- Test configuration (please complete the following information):
+  - Hardware setting:
+  - Toolchain:
+  - Test Tool preparation:
+  - Any other dependencies:
+- Test executed
+  Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce.
+  - [ ] Build Test
+  - [ ] Run Test
