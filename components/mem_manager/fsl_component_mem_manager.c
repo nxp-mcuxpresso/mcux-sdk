@@ -237,9 +237,9 @@ static void MEM_Reports_memStatis(void)
     MEM_DBG_LOG("Small buffers:             %d\r\n", s_memStatis.nb_small_buffer);
     MEM_DBG_LOG("Medium buffers:            %d\r\n", s_memStatis.nb_medium_buffer);
     MEM_DBG_LOG("Large buffers:             %d\r\n", s_memStatis.nb_large_buffer);
-    MEM_DBG_LOG("Peak small:                %d\r\n ", s_memStatis.peak_small_buffer);
-    MEM_DBG_LOG("Peak medium:               %d\r\n ", s_memStatis.peak_medium_buffer);
-    MEM_DBG_LOG("Peak large:                %d\r\n ", s_memStatis.peak_large_buffer);
+    MEM_DBG_LOG("Peak small:                %d\r\n", s_memStatis.peak_small_buffer);
+    MEM_DBG_LOG("Peak medium:               %d\r\n", s_memStatis.peak_medium_buffer);
+    MEM_DBG_LOG("Peak large:                %d\r\n", s_memStatis.peak_large_buffer);
     MEM_DBG_LOG("Current RAM allocated:     %d bytes\r\n", s_memStatis.ram_allocated);
     MEM_DBG_LOG("Peak RAM allocated:        %d bytes\r\n", s_memStatis.peak_ram_allocated);
     MEM_DBG_LOG("Current RAM lost:          %d bytes\r\n", s_memStatis.ram_lost);
@@ -726,7 +726,7 @@ void MEM_Trace(void)
 {
     mem_pool_structure_t *pPool = s_memmanager.pHeadPool;
     block_list_header_t *pBlock;
-    (void)PRINTF("MEM_Trace debug information, Pools Number:%d   allocationFailures: %d  freeFailures:%d \r\n",
+    (void)PRINTF("MEM_Trace debug information, Pools Number:%d   allocationFailures: %d  freeFailures:%d\r\n",
                  s_memmanager.poolNum, s_memmanager.allocationFailures, s_memmanager.allocationFailures,
                  s_memmanager.freeFailures);
     while (NULL != pPool)
@@ -737,16 +737,16 @@ void MEM_Trace(void)
             "poolFragmentMinWaste poolTotalFragmentWaste\r\n");
         (void)PRINTF(
             "    %d          %d                %d                %d                  %d                       %d       "
-            "              %d           \r\n",
+            "              %d\r\n",
             pPool->numBlocks, pPool->allocatedBlocks, pPool->allocatedBlocksPeak, pPool->poolFragmentWaste,
             pPool->poolFragmentWastePeak, pPool->poolFragmentMinWaste, pPool->poolTotalFragmentWaste);
-        (void)PRINTF("Currently pool meory block allocate status: \r\n");
+        (void)PRINTF("Currently pool meory block allocate status:\r\n");
         for (uint32_t i = 0; i < pPool->numBlocks; i++)
         {
             pBlock = (block_list_header_t *)(void *)(pPool->pHeap +
                                                      i * ((uint32_t)pPool->blockSize + sizeof(block_list_header_t)));
 
-            (void)PRINTF("Block %d caller : 0x%x Allocated %d bytes: %d  \r\n", i, pBlock->caller, pBlock->allocated,
+            (void)PRINTF("Block %d caller : 0x%x Allocated %d bytes: %d\r\n", i, pBlock->caller, pBlock->allocated,
                          pBlock->allocatedBytes);
         }
         /* Try next pool*/
