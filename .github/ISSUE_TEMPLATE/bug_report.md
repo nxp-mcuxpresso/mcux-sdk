@@ -8,7 +8,9 @@ assignees: ''
 ---
 
 **Describe the bug**
+<!--
 A clear and concise description of what the bug is.
+-->
 
 **To Reproduce**
 
@@ -25,10 +27,16 @@ A clear and concise description of what the bug is.
   4. Connect frdmk64f board to PC and do set up follow the description in frdmk64f\driver_examples\adc16\interrupt\readme.txt. Refer to the guide running a ARMGCC demo to download and run the example, see error in console output.
 
 **Expected behavior**
+<!--
 A clear and concise description of what you expected to happen.
+-->
 
 **Screenshots and console output**
+<!--
 If applicable, add screenshots and paste your console output to help explain your problem. If the error information is captured by other tools such as Oscilloscope, logic analyzer or wireshark, please share us the screenshot of these information which could help the progress.
+-->
 
 **Additional context**
+<!--
 Add any other context about the problem here.
+-->
