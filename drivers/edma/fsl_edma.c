@@ -1468,6 +1468,15 @@ void EDMA_HandleIRQ(edma_handle_t *handle)
             {
                 tcds_done += handle->tcdSize;
             }
+            /*
+             * While code run to here, it means a TCD transfer Done and a new TCD has loaded to the hardware
+             * so clear DONE here to allow submit scatter gather transfer request in the callback to avoid TCD
+             * overwritten.
+             */
+            if (transfer_done)
+            {
+                handle->base->CDNE = handle->channel;
+            }
         }
         /* Advance header which points to the TCD to be loaded into the eDMA engine from memory. */
         handle->header = (int8_t)new_header;
