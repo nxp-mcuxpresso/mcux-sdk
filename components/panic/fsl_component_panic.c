@@ -70,12 +70,12 @@ void panic(panic_id_t id, uint32_t location, uint32_t extra1, uint32_t extra2)
     panic_data.linkRegister  = (uint32_t)((uint32_t *)__get_LR());
     panic_data.cpsr_contents = 0;
 
-    (void)PRINTF("System Panic happen: \r\n");
-    (void)PRINTF("Panic id: 0x%x \r\n", id);
-    (void)PRINTF("Panic location: 0x%x \r\n", location);
-    (void)PRINTF("Panic extra1: 0x%x \r\n", extra1);
-    (void)PRINTF("Panic extra2: 0x%x \r\n", extra2);
-    (void)PRINTF("Panic linkRegister: 0x%x \r\n", panic_data.linkRegister);
+    (void)PRINTF("System Panic happen:\r\n");
+    (void)PRINTF("Panic id: 0x%x\r\n", id);
+    (void)PRINTF("Panic location: 0x%x\r\n", location);
+    (void)PRINTF("Panic extra1: 0x%x\r\n", extra1);
+    (void)PRINTF("Panic extra2: 0x%x\r\n", extra2);
+    (void)PRINTF("Panic linkRegister: 0x%x\r\n", panic_data.linkRegister);
 #endif
 
     (void)DisableGlobalIRQ(); /* disable interrupts */

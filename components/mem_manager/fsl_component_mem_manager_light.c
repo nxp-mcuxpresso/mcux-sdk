@@ -354,9 +354,9 @@ static void MEM_Reports_memStatis(void)
     MEM_DBG_LOG("Small buffers:             %d\r\n", s_memStatis.nb_small_buffer);
     MEM_DBG_LOG("Medium buffers:            %d\r\n", s_memStatis.nb_medium_buffer);
     MEM_DBG_LOG("Large buffers:             %d\r\n", s_memStatis.nb_large_buffer);
-    MEM_DBG_LOG("Peak small:                %d\r\n ", s_memStatis.peak_small_buffer);
-    MEM_DBG_LOG("Peak medium:               %d\r\n ", s_memStatis.peak_medium_buffer);
-    MEM_DBG_LOG("Peak large:                %d\r\n ", s_memStatis.peak_large_buffer);
+    MEM_DBG_LOG("Peak small:                %d\r\n", s_memStatis.peak_small_buffer);
+    MEM_DBG_LOG("Peak medium:               %d\r\n", s_memStatis.peak_medium_buffer);
+    MEM_DBG_LOG("Peak large:                %d\r\n", s_memStatis.peak_large_buffer);
     MEM_DBG_LOG("Current RAM allocated:     %d bytes\r\n", s_memStatis.ram_allocated);
     MEM_DBG_LOG("Peak RAM allocated:        %d bytes\r\n", s_memStatis.peak_ram_allocated);
     MEM_DBG_LOG("Current RAM lost:          %d bytes\r\n", s_memStatis.ram_lost);
