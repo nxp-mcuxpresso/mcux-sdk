@@ -65,7 +65,7 @@ static status_t WM8960_SetInternalPllConfig(
         if (pllN < WM8960_PLL_N_MIN_VALUE)
         {
             sysclkDiv = 2U;
-            pllN      = pllF2 / inputMclk * sysclkDiv;
+            pllN      = (pllF2 * sysclkDiv) / inputMclk;
         }
     }
 
@@ -74,8 +74,8 @@ static status_t WM8960_SetInternalPllConfig(
         return kStatus_InvalidArgument;
     }
 
-    pllR = pllF2 / (inputMclk / 1000U) * sysclkDiv;
-    pllK = ((1UL << 24U) * (pllR - pllN * 1000U)) / 1000U;
+    pllR = (uint32_t)(((uint64_t)pllF2 * sysclkDiv * 1000U) / (inputMclk / 1000U));
+    pllK = (uint32_t)(((uint64_t)(1UL << 24U) * (pllR - pllN * 1000U * 1000U)) / 1000U / 1000U);
     if (pllK != 0U)
     {
         fracMode = 1U;
