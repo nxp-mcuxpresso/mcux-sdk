@@ -22,7 +22,7 @@ manifest:
 
   projects:
     - name: mcux-sdk-examples
-      revision: a32cda929f3e77b4aa55d104b000c2e74da7f49a
+      revision: eeae217c66847c7380a5f02145cdf8844760574d
       path: examples
     - name: FreeRTOS-Kernel
       revision: MCUX_2.10.0
@@ -42,7 +42,7 @@ manifest:
       url:  https://github.com/EmbeddedRPC/erpc
       revision: 1.8.1
     - name: mcux-soc-svd
-      revision: 4043d9ec3b173a0c45212e5536e0e8352a8634b5
+      revision: 10bfbd06fff4e3387d366dcc11f8ab1c4fc4e303
       path: svd
     - name: fatfs
       path: middleware/fatfs
