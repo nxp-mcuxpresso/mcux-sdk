@@ -33,14 +33,14 @@
 #endif
 
 /*! IRBAR and ORBAR job ring registers are 64-bit. these macros access least significant address 32-bit word. */
-#define IRBAR0 *(((volatile uint32_t *)&(base->JOBRING[0].IRBAR_JR)) + 1)
-#define ORBAR0 *(((volatile uint32_t *)&(base->JOBRING[0].ORBAR_JR)) + 1)
-#define IRBAR1 *(((volatile uint32_t *)&(base->JOBRING[1].IRBAR_JR)) + 1)
-#define ORBAR1 *(((volatile uint32_t *)&(base->JOBRING[1].ORBAR_JR)) + 1)
-#define IRBAR2 *(((volatile uint32_t *)&(base->JOBRING[2].IRBAR_JR)) + 1)
-#define ORBAR2 *(((volatile uint32_t *)&(base->JOBRING[2].ORBAR_JR)) + 1)
-#define IRBAR3 *(((volatile uint32_t *)&(base->JOBRING[3].IRBAR_JR)) + 1)
-#define ORBAR3 *(((volatile uint32_t *)&(base->JOBRING[3].ORBAR_JR)) + 1)
+#define IRBAR0 *(((volatile uint32_t *)(uint32_t) & (base->JOBRING[0].IRBAR_JR)) + 1)
+#define ORBAR0 *(((volatile uint32_t *)(uint32_t) & (base->JOBRING[0].ORBAR_JR)) + 1)
+#define IRBAR1 *(((volatile uint32_t *)(uint32_t) & (base->JOBRING[1].IRBAR_JR)) + 1)
+#define ORBAR1 *(((volatile uint32_t *)(uint32_t) & (base->JOBRING[1].ORBAR_JR)) + 1)
+#define IRBAR2 *(((volatile uint32_t *)(uint32_t) & (base->JOBRING[2].IRBAR_JR)) + 1)
+#define ORBAR2 *(((volatile uint32_t *)(uint32_t) & (base->JOBRING[2].ORBAR_JR)) + 1)
+#define IRBAR3 *(((volatile uint32_t *)(uint32_t) & (base->JOBRING[3].IRBAR_JR)) + 1)
+#define ORBAR3 *(((volatile uint32_t *)(uint32_t) & (base->JOBRING[3].ORBAR_JR)) + 1)
 
 /*! Job Descriptor defines */
 #define DESC_SIZE_MASK         0x0000003Fu
@@ -140,7 +140,7 @@ typedef struct _caam_hash_ctx_internal
 /*! Definitions of indexes into hash job descriptor */
 enum _caam_hash_sgt_index
 {
-    kCAAM_HashDescriptorSgtIdx = 13u, /*!< Index of the hash job descriptor[] where the two entry SGT starts. */
+    kCAAM_HashDescriptorSgtIdx = 14u, /*!< Index of the hash job descriptor[] where the two entry SGT starts. */
 };
 
 /*! One entry in the SGT */
@@ -297,9 +297,9 @@ static void caam_job_ring_set_base_address_and_size(CAAM_Type *base,
 {
     if (kCAAM_JobRing0 == jr)
     {
-        IRBAR0                   = (uintptr_t)ADD_OFFSET((uint32_t)inputRingBase);
+        IRBAR0                   = ADD_OFFSET((uint32_t)inputRingBase);
         base->JOBRING[0].IRSR_JR = inputRingSize;
-        ORBAR0                   = (uintptr_t)ADD_OFFSET((uint32_t)outputRingBase);
+        ORBAR0                   = ADD_OFFSET((uint32_t)outputRingBase);
         base->JOBRING[0].ORSR_JR = outputRingSize;
     }
 
@@ -419,8 +419,13 @@ bool caam_check_key_size(const uint32_t keySize)
     return ((keySize == 16u) || ((keySize == 24u)) || ((keySize == 32u)));
 }
 
-static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, void *descaddr)
+static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, uint32_t *descaddr)
 {
+    /* adding new job to the s_inJobRing[] must be atomic
+     * as this is global variable
+     */
+    uint32_t currPriMask = DisableGlobalIRQ();
+
 #if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
     bool DCacheEnableFlag = false;
     /* Disable D cache. */
@@ -436,13 +441,9 @@ static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, v
 #endif /* FSL_FEATURE_LMEM_HAS_SYSTEMBUS_CACHE */
 #endif /* FSL_FEATURE_HAS_L1CACHE */
 
-    /* adding new job to the s_inJobRing[] must be atomic
-     * as this is global variable
-     */
-    uint32_t currPriMask = DisableGlobalIRQ();
     if (kCAAM_JobRing0 == jobRing)
     {
-        s_jr0->inputJobRing[s_jrIndex0] = ADD_OFFSET((uintptr_t)descaddr);
+        s_jr0->inputJobRing[s_jrIndex0] = (ADD_OFFSET((uint32_t)descaddr));
         s_jrIndex0++;
         if (s_jrIndex0 >= ARRAY_SIZE(s_jr0->inputJobRing))
         {
@@ -451,7 +452,7 @@ static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, v
     }
     else if (kCAAM_JobRing1 == jobRing)
     {
-        s_jr1->inputJobRing[s_jrIndex1] = ADD_OFFSET((uintptr_t)descaddr);
+        s_jr1->inputJobRing[s_jrIndex1] = ADD_OFFSET((uint32_t)descaddr);
         s_jrIndex1++;
         if (s_jrIndex1 >= ARRAY_SIZE(s_jr1->inputJobRing))
         {
@@ -460,7 +461,7 @@ static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, v
     }
     else if (kCAAM_JobRing2 == jobRing)
     {
-        s_jr2->inputJobRing[s_jrIndex2] = ADD_OFFSET((uintptr_t)descaddr);
+        s_jr2->inputJobRing[s_jrIndex2] = ADD_OFFSET((uint32_t)descaddr);
         s_jrIndex2++;
         if (s_jrIndex2 >= ARRAY_SIZE(s_jr2->inputJobRing))
         {
@@ -469,7 +470,7 @@ static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, v
     }
     else if (kCAAM_JobRing3 == jobRing)
     {
-        s_jr3->inputJobRing[s_jrIndex3] = ADD_OFFSET((uintptr_t)descaddr);
+        s_jr3->inputJobRing[s_jrIndex3] = ADD_OFFSET((uint32_t)descaddr);
         s_jrIndex3++;
         if (s_jrIndex3 >= ARRAY_SIZE(s_jr3->inputJobRing))
         {
@@ -483,7 +484,6 @@ static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, v
     }
 
     caam_input_ring_set_jobs_added(base, jobRing, 1);
-    EnableGlobalIRQ(currPriMask);
 
 #if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
     if (DCacheEnableFlag)
@@ -497,6 +497,9 @@ static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, v
     L1CACHE_EnableSystemCache();
 #endif /* FSL_FEATURE_LMEM_HAS_SYSTEMBUS_CACHE */
 #endif /* FSL_FEATURE_HAS_L1CACHE */
+
+    /* Enable IRQ */
+    EnableGlobalIRQ(currPriMask);
 
     return kStatus_Success;
 }
@@ -536,7 +539,7 @@ static status_t caam_out_job_ring_remove(CAAM_Type *base, caam_job_ring_t jobRin
 }
 
 static status_t caam_out_job_ring_test_and_remove(
-    CAAM_Type *base, caam_job_ring_t jobRing, void *descriptor, bool *wait, bool *found)
+    CAAM_Type *base, caam_job_ring_t jobRing, uint32_t *descriptor, bool *wait, bool *found)
 {
     uint32_t currPriMask = DisableGlobalIRQ();
     uint32_t i;
@@ -706,25 +709,27 @@ static const uint32_t templateAesGcm[] = {
     /* 08 */ 0x22310000u, /* FIFO LOAD AAD (flush) */
     /* 09 */ 0x00000000u, /* place: AAD address */
 
-    /* 10 */ 0x22130000u, /* FIFO LOAD message */
+    /* 10 */ 0x22530000u, /* FIFO LOAD message */
     /* 11 */ 0x00000000u, /* place: message address */
+    /* 12 */ 0x00000000u, /* place: message size */
 
-    /* 12 */ 0x60300000u, /* FIFO STORE Message */
-    /* 13 */ 0x00000000u, /* place: destination address */
+    /* 13 */ 0x60700000u, /* FIFO STORE Message */
+    /* 14 */ 0x00000000u, /* place: destination address */
+    /* 15 */ 0x00000000u, /* place: destination size */
 
-    /* 14 */ 0xA3001201u, /* JMP always to next command. Load/store checkpoint. Class 1 done checkpoint. */
+    /* 16 */ 0xA3001201u, /* JMP always to next command. Load/store checkpoint. Class 1 done checkpoint. */
 
     /* For encryption, write the computed and encrypted MAC to user buffer */
     /* For decryption, compare the computed tag with the received tag, CICV-only job. */
-    /* 15 */ 0x10880004u, /* LOAD Immediate to Clear Written Register. */
-    /* 16 */ 0x08000004u, /* value for Clear Written Register: C1D and C1DS bits are set */
-    /* 17 */ 0x12820004u, /* LOAD Immediate to C1DS Register. */
-    /* 18 */ 0x00000000u, /* zero data size */
-    /* 19 */ 0x12830004u, /* LOAD Class 1 ICV Size Register by IMM data */
-    /* 20 */ 0x00000000u, /* place: received ICV size */
-    /* 21 */ 0x82100902u, /* OPERATION: AES GCM Decrypt Update ICV_TEST */
-    /* 22 */ 0x223B0000u, /* FIFO LOAD ICV */
-    /* 23 */ 0x00000000u, /* place: received ICV address */
+    /* 17 */ 0x10880004u, /* LOAD Immediate to Clear Written Register. */
+    /* 18 */ 0x08000004u, /* value for Clear Written Register: C1D and C1DS bits are set */
+    /* 19 */ 0x12820004u, /* LOAD Immediate to C1DS Register. */
+    /* 20 */ 0x00000000u, /* zero data size */
+    /* 21 */ 0x12830004u, /* LOAD Class 1 ICV Size Register by IMM data */
+    /* 22 */ 0x00000000u, /* place: received ICV size */
+    /* 23 */ 0x82100902u, /* OPERATION: AES GCM Decrypt Update ICV_TEST */
+    /* 24 */ 0x223B0000u, /* FIFO LOAD ICV */
+    /* 25 */ 0x00000000u, /* place: received ICV address */
 };
 
 status_t caam_aes_gcm_non_blocking(CAAM_Type *base,
@@ -808,34 +813,34 @@ status_t caam_aes_gcm_non_blocking(CAAM_Type *base,
     }
 
     /* Message source address and size */
-    descriptor[10] |= (size & DESC_PAYLOAD_SIZE_MASK);
     descriptor[11] = ADD_OFFSET((uint32_t)input);
+    descriptor[12] = size;
 
     /* Message destination address and size */
-    descriptor[12] |= (size & DESC_PAYLOAD_SIZE_MASK);
-    descriptor[13] = ADD_OFFSET((uint32_t)output);
+    descriptor[14] = ADD_OFFSET((uint32_t)output);
+    descriptor[15] = size;
 
     if (tag != 0U)
     {
         if (encrypt == 0)
         {
-            descriptor[20] = tagSize;
-            descriptor[22] |= (tagSize & DESC_TAG_SIZE_MASK);
-            descriptor[23] = ADD_OFFSET((uint32_t)tag);
+            descriptor[22] = tagSize;
+            descriptor[24] |= (tagSize & DESC_TAG_SIZE_MASK);
+            descriptor[25] = ADD_OFFSET((uint32_t)tag);
         }
         else
         {
             /* For encryption change the command to FIFO STORE, as tag data needs to be put into tag output */
-            descriptor[14] = 0x52200000u | (tagSize & DESC_TAG_SIZE_MASK); /* STORE from Class 1 context to tag */
-            descriptor[15] = ADD_OFFSET((uint32_t)tag);                    /* place: tag address */
+            descriptor[16] = 0x52200000u | (tagSize & DESC_TAG_SIZE_MASK); /* STORE from Class 1 context to tag */
+            descriptor[17] = ADD_OFFSET((uint32_t)tag);                    /* place: tag address */
             ;
-            descriptor[16] = DESC_HALT; /* always halt with status 0x0 (normal) */
+            descriptor[18] = DESC_HALT; /* always halt with status 0x0 (normal) */
         }
     }
     else
     {
         /* tag is NULL, skip tag processing */
-        descriptor[14] = DESC_HALT; /* always halt with status 0x0 (normal) */
+        descriptor[16] = DESC_HALT; /* always halt with status 0x0 (normal) */
     }
 
     /* add operation specified by descriptor to CAAM Job Ring */
@@ -948,15 +953,17 @@ static const uint32_t templateAesCcm[] = {
     /* 16 */ 0x22310000u, /* FIFO LOAD additional authentication data. Flush as this is last data of AAD type. */
     /* 17 */ 0x00000000u, /* place: AAD address */
 
-    /* 18 */ 0x22130000u, /* FIFO LOAD message */
+    /* 18 */ 0x22530000u, /* FIFO LOAD message */
     /* 19 */ 0x00000000u, /* place: message address */
+    /* 20 */ 0x00000000u, /* place: message size */
 
-    /* 20 */ 0x60300000u, /* FIFO STORE Message */
-    /* 21 */ 0x00000000u, /* place: destination address */
+    /* 21 */ 0x60700000u, /* FIFO STORE Message */
+    /* 22 */ 0x00000000u, /* place: destination address */
+    /* 23 */ 0x00000000u, /* place: destination size */
 
     /* For encryption, write the computed and encrypted MAC to user buffer */
-    /* 22 */ 0x52202000u, /* STORE from Class 1 context to tag */
-    /* 23 */ 0x00000000u, /* place: tag address */
+    /* 24 */ 0x52202000u, /* STORE from Class 1 context to tag */
+    /* 25 */ 0x00000000u, /* place: tag address */
 
     /* For decryption, compare the computed tag with the received tag */
 
@@ -1037,7 +1044,8 @@ status_t caam_aes_ccm_non_blocking(CAAM_Type *base,
     {
         uint32_t swapped = swap_bytes(aadSize);
         uint32_t sz;
-        (void)caam_memcpy(&descriptor[15], ((uint8_t *)&swapped) + sizeof(uint16_t), sizeof(uint16_t));
+        (void)caam_memcpy(&descriptor[15], (uint32_t *)(uintptr_t)(((uint8_t *)&swapped) + sizeof(uint16_t)),
+                          sizeof(uint16_t));
         sz = aadSize > 2u ? 2u : aadSize;                             /* limit aad to the end of 16 bytes blk */
         (void)caam_memcpy(((uint8_t *)&descriptor[15]) + 2, aad, sz); /* fill B1 with aad */
         /* track consumed AAD. sz bytes have been moved to fifo. */
@@ -1063,12 +1071,12 @@ status_t caam_aes_ccm_non_blocking(CAAM_Type *base,
     }
 
     /* Message source address and size */
-    descriptor[18] |= (size & DESC_PAYLOAD_SIZE_MASK);
     descriptor[19] = ADD_OFFSET((uint32_t)input);
+    descriptor[20] = size;
 
     /* Message destination address and size */
-    descriptor[20] |= (size & DESC_PAYLOAD_SIZE_MASK);
-    descriptor[21] = ADD_OFFSET((uint32_t)output);
+    descriptor[22] = ADD_OFFSET((uint32_t)output);
+    descriptor[23] = size;
 
     if (tag != 0U)
     {
@@ -1076,15 +1084,15 @@ status_t caam_aes_ccm_non_blocking(CAAM_Type *base,
         if (encrypt == 0)
         {
             /* FIFO LOAD ICV */
-            descriptor[22] = 0x223B0000u;
+            descriptor[24] = 0x223B0000u;
         }
-        descriptor[22] |= (tagSize & DESC_TAG_SIZE_MASK);
-        descriptor[23] = ADD_OFFSET((uint32_t)tag);
+        descriptor[24] |= (tagSize & DESC_TAG_SIZE_MASK);
+        descriptor[25] = ADD_OFFSET((uint32_t)tag);
     }
     else
     {
         /* tag is NULL, skip tag processing */
-        descriptor[22] = DESC_HALT; /* always halt with status 0x0 (normal) */
+        descriptor[24] = DESC_HALT; /* always halt with status 0x0 (normal) */
     }
 
     /* add operation specified by descriptor to CAAM Job Ring */
@@ -1181,26 +1189,28 @@ static const uint32_t templateAesCtr[] = {
     /* 04 */ 0x00000000u, /* place: CTR0 address */
 
     /* 05 */ 0x82100000u, /* OPERATION: AES CTR (de)crypt in Update mode */
-    /* 06 */ 0x22130000u, /* FIFO LOAD Message */
+    /* 06 */ 0x22530000u, /* FIFO LOAD Message */
     /* 07 */ 0x00000000u, /* place: source address */
-    /* 08 */ 0x60300000u, /* FIFO STORE Message */
-    /* 09 */ 0x00000000u, /* place: destination address */
+    /* 08 */ 0x00000000u, /* place: source size */
+    /* 09 */ 0x60700000u, /* FIFO STORE Message */
+    /* 10 */ 0x00000000u, /* place: destination address */
+    /* 11 */ 0x00000000u, /* place: destination size */
 
-    /* 10 */ 0xA2000001u, /* JMP always to next command. Done checkpoint (wait for Class 1 Done) */
-    /* 11 */ 0x10880004u, /* LOAD Immediate to Clear Written Register. */
-    /* 12 */ 0x08000004u, /* value for Clear Written Register: C1D and C1DS bits are set */
-    /* 13 */ 0x22930010u, /* FIFO LOAD Message Immediate 16 bytes */
-    /* 14 */ 0x00000000u, /* all zeroes 0-3 */
+    /* 12 */ 0xA2000001u, /* JMP always to next command. Done checkpoint (wait for Class 1 Done) */
+    /* 13 */ 0x10880004u, /* LOAD Immediate to Clear Written Register. */
+    /* 14 */ 0x08000004u, /* value for Clear Written Register: C1D and C1DS bits are set */
+    /* 15 */ 0x22930010u, /* FIFO LOAD Message Immediate 16 bytes */
+    /* 16 */ 0x00000000u, /* all zeroes 0-3 */
 
-    /* 15 */ 0x00000000u, /* all zeroes 4-7 */
-    /* 16 */ 0x00000000u, /* all zeroes 8-11 */
-    /* 17 */ 0x00000000u, /* all zeroes 12-15 */
-    /* 18 */ 0x60300010u, /* FIFO STORE Message 16 bytes */
-    /* 19 */ 0x00000000u, /* place: counterlast[] block address */
+    /* 17 */ 0x00000000u, /* all zeroes 4-7 */
+    /* 18 */ 0x00000000u, /* all zeroes 8-11 */
+    /* 19 */ 0x00000000u, /* all zeroes 12-15 */
+    /* 20 */ 0x60300010u, /* FIFO STORE Message 16 bytes */
+    /* 21 */ 0x00000000u, /* place: counterlast[] block address */
 
-    /* 20 */ 0x82100000u, /* OPERATION: AES CTR (de)crypt in Update mode */
-    /* 21 */ 0x52201010u, /* STORE 16 bytes of CTRi from Class 1 Context Register offset 16 bytes. */
-    /* 22 */ 0x00000000u, /* place: CTRi address */
+    /* 22 */ 0x82100000u, /* OPERATION: AES CTR (de)crypt in Update mode */
+    /* 23 */ 0x52201010u, /* STORE 16 bytes of CTRi from Class 1 Context Register offset 16 bytes. */
+    /* 24 */ 0x00000000u, /* place: CTRi address */
 };
 
 /*!
@@ -1264,12 +1274,12 @@ status_t CAAM_AES_CryptCtrNonBlocking(CAAM_Type *base,
     descriptor[4] = ADD_OFFSET((uint32_t)counter);
 
     /* source address and size */
-    descriptor[6] |= (size & DESC_PAYLOAD_SIZE_MASK);
     descriptor[7] = ADD_OFFSET((uint32_t)input);
+    descriptor[8] = size;
 
     /* destination address and size */
-    descriptor[8] |= (size & DESC_PAYLOAD_SIZE_MASK);
-    descriptor[9] = ADD_OFFSET((uint32_t)output);
+    descriptor[10] = ADD_OFFSET((uint32_t)output);
+    descriptor[11] = size;
 
     /* AES CTR Crypt OPERATION in descriptor[5]
      * Algorithm State (AS) in template is Update (0h)
@@ -1283,21 +1293,21 @@ status_t CAAM_AES_CryptCtrNonBlocking(CAAM_Type *base,
     /* if counterlast or szLeft is NULL, the caller is not interested in AES of last counter
      * Thus, we can skip the counterlast processing
      * and only read the last CTRi from context.
-     * So, we replace descriptor[10] with a jump command to STORE
+     * So, we replace descriptor[11] with a jump command to STORE
      */
     if ((counterlast == NULL) || (szLeft == NULL))
     {
         /*  To create an unconditional jump, use TEST TYPE = 00 (all specified conditions true) and
             clear all TEST CONDITION bits because the tested condition is considered to be true if
             no test condition bits are set. */
-        descriptor[10] = 0xA000000Bu; /* jump to current index + 11 (=21) */
+        descriptor[12] = 0xA000000Bu; /* jump to current index + 11 (=23) */
     }
     else
     {
         uint32_t lastSize;
 
         descriptor[5] |= 0x08u; /* finalize */
-        descriptor[19] = ADD_OFFSET((uint32_t)counterlast);
+        descriptor[21] = ADD_OFFSET((uint32_t)counterlast);
 
         lastSize = size % 16u;
         if (lastSize != 0U)
@@ -1307,12 +1317,12 @@ status_t CAAM_AES_CryptCtrNonBlocking(CAAM_Type *base,
         else
         {
             *szLeft = 0;
-            /* descriptor[10] = 0xA000000Bu; */ /* jump to current index + 11 (=21) */
+            /* descriptor[12] = 0xA000000Bu; */ /* jump to current index + 11 (=23) */
         }
     }
 
     /* read last CTRi from AES back to caller */
-    descriptor[22] = ADD_OFFSET((uint32_t)counter);
+    descriptor[24] = ADD_OFFSET((uint32_t)counter);
 
     /* add operation specified by descriptor to CAAM Job Ring */
     return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
@@ -1322,11 +1332,13 @@ static const uint32_t templateAesEcb[] = {
     /* 00 */ 0xB0800000u, /* HEADER */
     /* 01 */ 0x02000000u, /* KEY */
     /* 02 */ 0x00000000u, /* place: key address */
-    /* 03 */ 0x22130000u, /* FIFO LOAD Message */
+    /* 03 */ 0x22530000u, /* FIFO LOAD Message with EXT size */
     /* 04 */ 0x00000000u, /* place: source address */
-    /* 05 */ 0x60300000u, /* FIFO STORE Message */
-    /* 06 */ 0x00000000u, /* place: destination address */
-    /* 07 */ 0x82100200u, /* OPERATION: AES ECB Decrypt */
+    /* 05 */ 0x00000000u, /* place: source size */
+    /* 06 */ 0x60700000u, /* FIFO STORE Message with EXT size */
+    /* 07 */ 0x00000000u, /* place: destination address */
+    /* 08 */ 0x00000000u, /* place: destination size */
+    /* 09 */ 0x82100200u, /* OPERATION: AES ECB Decrypt */
 };
 
 /*!
@@ -1370,11 +1382,13 @@ status_t CAAM_AES_EncryptEcbNonBlocking(CAAM_Type *base,
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= (keySize & DESC_KEY_SIZE_MASK);
     descriptor[2] = (uint32_t)ADD_OFFSET((uint32_t)key);
-    descriptor[3] |= (size & DESC_PAYLOAD_SIZE_MASK);
+    /* descriptor[3] FIFO LOAD copied from template */
     descriptor[4] = (uint32_t)ADD_OFFSET((uint32_t)plaintext);
-    descriptor[5] |= (size & DESC_PAYLOAD_SIZE_MASK);
-    descriptor[6] = (uint32_t)ADD_OFFSET((uint32_t)ciphertext);
-    descriptor[7] |= 1u; /* add ENC bit to specify Encrypt OPERATION */
+    descriptor[5] = size; /* FIFO LOAD EXT size */
+                          /* descriptor[6] FIFO STORE copied from template */
+    descriptor[7] = (uint32_t)ADD_OFFSET((uint32_t)ciphertext);
+    descriptor[8] = size; /* FIFO STORE EXT size */
+    descriptor[9] |= 1u;  /* add ENC bit to specify Encrypt OPERATION */
 
     return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
 }
@@ -1420,10 +1434,12 @@ status_t CAAM_AES_DecryptEcbNonBlocking(CAAM_Type *base,
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= (keySize & DESC_KEY_SIZE_MASK);
     descriptor[2] = (uint32_t)ADD_OFFSET((uint32_t)key);
-    descriptor[3] |= (size & DESC_PAYLOAD_SIZE_MASK);
+    /* descriptor[3] FIFO LOAD copied from template */
     descriptor[4] = (uint32_t)ADD_OFFSET((uint32_t)ciphertext);
-    descriptor[5] |= (size & DESC_PAYLOAD_SIZE_MASK);
-    descriptor[6] = (uint32_t)ADD_OFFSET((uint32_t)plaintext);
+    descriptor[5] = size;
+    /* descriptor[6] FIFO STORE copied from template */
+    descriptor[7] = (uint32_t)ADD_OFFSET((uint32_t)plaintext);
+    descriptor[8] = size; /* FIFO STORE EXT size */
 
     return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
 }
@@ -1434,11 +1450,13 @@ static const uint32_t templateAesCbc[] = {
     /* 02 */ 0x00000000u, /* place: key address */
     /* 03 */ 0x12200010u, /* LOAD 16 bytes of iv to Class 1 Context Register */
     /* 04 */ 0x00000000u, /* place: iv address */
-    /* 05 */ 0x22130000u, /* FIFO LOAD Message */
+    /* 05 */ 0x22530000u, /* FIFO LOAD Message */
     /* 06 */ 0x00000000u, /* place: source address */
-    /* 07 */ 0x60300000u, /* FIFO STORE Message */
-    /* 08 */ 0x00000000u, /* place: destination address */
-    /* 09 */ 0x82100100u, /* OPERATION: AES CBC Decrypt */
+    /* 07 */ 0x00000000u, /* place: source size */
+    /* 08 */ 0x60700000u, /* FIFO STORE Message */
+    /* 09 */ 0x00000000u, /* place: destination address */
+    /* 10 */ 0x00000000u, /* place: destination size */
+    /* 11 */ 0x82100100u, /* OPERATION: AES CBC Decrypt */
 };
 
 /*!
@@ -1496,15 +1514,15 @@ status_t CAAM_AES_EncryptCbcNonBlocking(CAAM_Type *base,
     descriptor[4] = (uint32_t)ADD_OFFSET((uint32_t)iv);
 
     /* source address and size */
-    descriptor[5] |= (size & DESC_PAYLOAD_SIZE_MASK);
     descriptor[6] = (uint32_t)ADD_OFFSET((uint32_t)plaintext);
+    descriptor[7] = size;
 
     /* destination address and size */
-    descriptor[7] |= (size & DESC_PAYLOAD_SIZE_MASK);
-    descriptor[8] = (uint32_t)ADD_OFFSET((uint32_t)ciphertext);
+    descriptor[9]  = (uint32_t)ADD_OFFSET((uint32_t)ciphertext);
+    descriptor[10] = size;
 
     /* AES CBC */
-    descriptor[9] |= 1u; /* add ENC bit to specify Encrypt OPERATION */
+    descriptor[11] |= 1u; /* add ENC bit to specify Encrypt OPERATION */
 
     /* add operation specified by descriptor to CAAM Job Ring */
     return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
@@ -1564,14 +1582,14 @@ status_t CAAM_AES_DecryptCbcNonBlocking(CAAM_Type *base,
     descriptor[4] = ADD_OFFSET((uint32_t)iv);
 
     /* source address and size */
-    descriptor[5] |= (size & DESC_PAYLOAD_SIZE_MASK);
     descriptor[6] = ADD_OFFSET((uint32_t)ciphertext);
+    descriptor[7] = size;
 
     /* destination address and size */
-    descriptor[7] |= (size & DESC_PAYLOAD_SIZE_MASK);
-    descriptor[8] = ADD_OFFSET((uint32_t)plaintext);
+    descriptor[9]  = ADD_OFFSET((uint32_t)plaintext);
+    descriptor[10] = size;
 
-    /* AES CBC Decrypt OPERATION in descriptor[9] */
+    /* AES CBC Decrypt OPERATION in descriptor[11] */
 
     /* add operation specified by descriptor to CAAM Job Ring */
     return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
@@ -1769,17 +1787,35 @@ status_t CAAM_Init(CAAM_Type *base, const caam_config_t *config)
 
     caam_handle_t handle;
     handle.jobRing = kCAAM_JobRing0;
-    status         = CAAM_RNG_Init(base, &handle, kCAAM_RngStateHandle0, &rngConfig);
-    if (status != kStatus_Success)
+
+    /* Check if Instantiated State Handle 0 or 1 has been instantiated */
+    if ((base->RDSTA & (CAAM_RDSTA_IF0_MASK | CAAM_RDSTA_IF1_MASK)) == 0U)
     {
-        return status;
+        status = CAAM_RNG_Init(base, &handle, kCAAM_RngStateHandle0, &rngConfig);
+        if (status != kStatus_Success)
+        {
+            return status;
+        }
+    }
+    else
+    {
+        status = kStatus_Success;
     }
 
-    /* Note: Secure key is cleared only during POR reset */
-    status = CAAM_RNG_GenerateSecureKey(base, &handle, NULL);
-    if (status != kStatus_Success)
+    /* Check if JDKEK, TDKEK and TDSK are already generated, generate if not */
+    /* Note: second secure keys generate per one PoR will generate Secure Key error */
+    if ((base->JDKEKR[0U] == 0U) && (base->TDKEKR[0U] == 0U) && (base->TDSKR[0U] == 0U))
     {
-        return status;
+        /* Note: Secure key is cleared only during POR reset */
+        status = CAAM_RNG_GenerateSecureKey(base, &handle, NULL);
+        if (status != kStatus_Success)
+        {
+            return status;
+        }
+    }
+    else
+    {
+        status = kStatus_Success;
     }
 
     /* set RANDDPAR bit for the AESA to reseed its DPA mask using data from kCAAM_RngStateHandle0 */
@@ -1826,7 +1862,7 @@ status_t CAAM_Init(CAAM_Type *base, const caam_config_t *config)
  * return kStatus_Fail the CAAM job has completed with non-zero job termination status word
  * return kStatus_Again In non-blocking mode, the job is not ready in the CAAM Output Ring
  */
-status_t CAAM_Wait(CAAM_Type *base, caam_handle_t *handle, void *descriptor, caam_wait_mode_t mode)
+status_t CAAM_Wait(CAAM_Type *base, caam_handle_t *handle, uint32_t *descriptor, caam_wait_mode_t mode)
 {
     /* poll output ring for the specified job descriptor */
     status_t status;
@@ -1842,8 +1878,8 @@ status_t CAAM_Wait(CAAM_Type *base, caam_handle_t *handle, void *descriptor, caa
         /* any result available on this job ring? */
         if ((caam_output_ring_get_slots_full(base, handle->jobRing)) != 0U)
         {
-            status = caam_out_job_ring_test_and_remove(base, handle->jobRing, (void *)ADD_OFFSET((uint32_t)descriptor),
-                                                       &wait, &found);
+            status = caam_out_job_ring_test_and_remove(base, handle->jobRing,
+                                                       (uint32_t *)ADD_OFFSET((uint32_t)descriptor), &wait, &found);
         }
 
         /* non-blocking mode polls output ring once */
@@ -2536,24 +2572,25 @@ static const uint32_t templateHash[] = {
     /* 04 */ 0x00000000u, /* place: context address */
 
     /* 05 */ 0x80000000u, /* OPERATION (place either AES MAC or MDHA SHA) */
-    /* 06 */ 0x21170000u, /* FIFO LOAD Class Message via SGT */
+    /* 06 */ 0x21570000u, /* FIFO LOAD Class Message via SGT and EXT length */
     /* 07 */ 0x00000000u, /* place: SGT address */
-    /* 08 */ 0x50200000u, /* STORE bytes from Class Context Register offset 0 bytes. */
-    /* 09 */ 0x00000000u, /* place: context address */
+    /* 08 */ 0x00000000u, /* place: FIFO LOAD EXT Length size */
+    /* 09 */ 0x50200000u, /* STORE bytes from Class Context Register offset 0 bytes. */
+    /* 10 */ 0x00000000u, /* place: context address */
 
-    /* 10 */ 0x60240000u, /* FIFO STORE from KEY to memory. */
-    /* 11 */ 0x00000000u, /* place: derived key address ECB encrypted */
-    /* 12 */ 0xA0C00000u, /* halt always with status 0 */
+    /* 11 */ 0x60240000u, /* FIFO STORE from KEY to memory. */
+    /* 12 */ 0x00000000u, /* place: derived key address ECB encrypted */
+    /* 13 */ 0xA0C00000u, /* halt always with status 0 */
 
-    /* 13 */ 0x00000000u, /* SGT entry 0 word 0 */
-    /* 14 */ 0x00000000u, /* SGT entry 0 word 1 */
-    /* 15 */ 0x00000000u, /* SGT entry 0 word 2 */
-    /* 16 */ 0x00000000u, /* SGT entry 0 word 3 */
+    /* 14 */ 0x00000000u, /* SGT entry 0 word 0 */
+    /* 15 */ 0x00000000u, /* SGT entry 0 word 1 */
+    /* 16 */ 0x00000000u, /* SGT entry 0 word 2 */
+    /* 17 */ 0x00000000u, /* SGT entry 0 word 3 */
 
-    /* 17 */ 0x00000000u, /* SGT entry 1 word 0 */
-    /* 18 */ 0x00000000u, /* SGT entry 1 word 1 */
-    /* 19 */ 0x00000000u, /* SGT entry 1 word 2 */
-    /* 20 */ 0x00000000u, /* SGT entry 1 word 3 */
+    /* 18 */ 0x00000000u, /* SGT entry 1 word 0 */
+    /* 19 */ 0x00000000u, /* SGT entry 1 word 1 */
+    /* 20 */ 0x00000000u, /* SGT entry 1 word 2 */
+    /* 21 */ 0x00000000u, /* SGT entry 1 word 3 */
 };
 
 /*!
@@ -2677,8 +2714,8 @@ static status_t caam_hash_schedule_input_data(CAAM_Type *base,
     descriptor[3] |= hashClass;
     descriptor[5] |= hashClass;
     descriptor[6] |= hashClass;
-    descriptor[8] |= hashClass;
-    descriptor[10] |= hashClass;
+    descriptor[9] |= hashClass;
+    descriptor[11] |= hashClass;
 
     /* add descriptor size */
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
@@ -2738,7 +2775,7 @@ static status_t caam_hash_schedule_input_data(CAAM_Type *base,
     descriptor[5] |= caam_hash_algo2mode(algo, (uint32_t)algState << 2, &algOutSize);
 
     /* configure SGT */
-    descriptor[6] |= (0xFFFFu & dataSize);
+    descriptor[8] = dataSize;
     if (kCAAM_HashSgtInternal == sgtType)
     {
         descriptor[7] = ADD_OFFSET(
@@ -2772,27 +2809,27 @@ static status_t caam_hash_schedule_input_data(CAAM_Type *base,
         uint32_t how = (algState == kCAAM_AlgStateInit) ? 0U : 1U; /* context switch needs full, then running */
         caamCtxSz    = caam_hash_algo2ctx_size(algo, how);
     }
-    descriptor[8] |= caamCtxSz;
+    descriptor[9] |= caamCtxSz;
     if ((kCAAM_AlgStateFinal == algState) || (kCAAM_AlgStateInitFinal == algState))
     {
         /* final result write to output */
-        descriptor[9] = ADD_OFFSET((uint32_t)(uint32_t *)output);
+        descriptor[10] = ADD_OFFSET((uint32_t)(uint32_t *)output);
     }
     else
     {
         /* context switch write to ctxInternal */
-        descriptor[9] = ADD_OFFSET((uint32_t)(uint32_t *)context);
+        descriptor[10] = ADD_OFFSET((uint32_t)(uint32_t *)context);
     }
 
     /* save the derived key K1 in XCBC-MAC. only if context switch. */
     if ((kCAAM_AlgStateInit == algState) && (kCAAM_XcbcMac == algo))
     {
-        descriptor[10] |= (keySize & DESC_KEY_SIZE_MASK);
-        descriptor[11] = ADD_OFFSET((uint32_t)&keyAddr);
+        descriptor[11] |= (keySize & DESC_KEY_SIZE_MASK);
+        descriptor[12] = ADD_OFFSET((uint32_t)&keyAddr);
     }
     else
     {
-        descriptor[10] = ADD_OFFSET(descriptor[12]); /* always halt with status 0x0 (normal) */
+        descriptor[11] = ADD_OFFSET(descriptor[13]); /* always halt with status 0x0 (normal) */
     }
 
     return caam_in_job_ring_add(base, handle->jobRing, &descriptor[0]);
@@ -2987,7 +3024,7 @@ status_t CAAM_HASH_Update(caam_hash_ctx_t *ctx, const uint8_t *input, size_t inp
     }
 
     /* after job is complete, copy numRemain bytes at the end of the input[] to the context */
-    caam_memcpy((&ctxInternal->blk.b[0]), input + inputSize - numRemain, numRemain);
+    (void)caam_memcpy((&ctxInternal->blk.b[0]), input + inputSize - numRemain, numRemain);
     ctxInternal->blksz = numRemain;
 
     return status;
@@ -3040,7 +3077,7 @@ status_t CAAM_HASH_UpdateNonBlocking(caam_hash_ctx_t *ctx, const uint8_t *input,
         return kStatus_InvalidArgument;
     }
 
-    caam_sgt_entry_t *sgt = &((caam_sgt_entry_t *)ctxInternal)[currSgtEntry];
+    caam_sgt_entry_t *sgt = &((caam_sgt_entry_t *)(uint32_t)ctxInternal)[currSgtEntry];
     (void)caam_hash_sgt_insert(NULL, input, inputSize, NULL, kCAAM_AlgStateInitFinal, sgt,
                                kCAAM_HashSgtEntryNotLast /* not last. we don't know if this is the last chunk */);
     if (inputSize != 0U)
@@ -3144,7 +3181,7 @@ status_t CAAM_HASH_FinishNonBlocking(caam_hash_ctx_t *ctx,
         return kStatus_InvalidArgument;
     }
 
-    caam_sgt_entry_t *sgt = &((caam_sgt_entry_t *)ctxInternal)[0];
+    caam_sgt_entry_t *sgt = &((caam_sgt_entry_t *)(uint32_t)ctxInternal)[0];
 
     /* mark currSgtEntry with Final Bit */
     uint32_t i;
@@ -3547,8 +3584,9 @@ static const uint32_t templateRng[] = {
     /* 03 */ 0x12820004u, /* LOAD Class 1 Data Size Register by IMM data */
     /* 04 */ 0x00000000u, /* place: data size to generate */
     /* 05 */ 0x82500002u, /* RNG generate */
-    /* 06 */ 0x60300000u, /* FIFO STORE message */
+    /* 06 */ 0x60700000u, /* FIFO STORE message */
     /* 07 */ 0x00000000u, /* place: destination address */
+    /* 08 */ 0x00000000u, /* place: destination size */
 };
 
 /*!
@@ -3588,16 +3626,16 @@ status_t CAAM_RNG_GetRandomDataNonBlocking(CAAM_Type *base,
     if (additionalEntropy != NULL)
     {
         descriptor[2] = ADD_OFFSET((uint32_t)additionalEntropy);
-        descriptor[5] |= 1u << 11; /* set AI bit in ALG OPERATION */
+        descriptor[5] |= (uint32_t)1U << 11; /* set AI bit in ALG OPERATION */
     }
     else
     {
         descriptor[0] |= (uint32_t)3u << 16; /* start at index 3 */
     }
 
-    descriptor[4] = dataSize;
-    descriptor[6] |= (dataSize & DESC_PAYLOAD_SIZE_MASK);
+    descriptor[4] = dataSize; /* Generate OPERATION */
     descriptor[7] = ADD_OFFSET((uint32_t)(uint32_t *)data);
+    descriptor[8] = dataSize; /* FIFO STORE */
 
     /* select state handle */
     if (kCAAM_RngStateHandle1 == stateHandle)
@@ -3697,6 +3735,15 @@ status_t CAAM_DES_EncryptEcbNonBlocking(CAAM_Type *base,
     BUILD_ASSURE(sizeof(caam_desc_cipher_des_t) >= sizeof(templateCipherDes), caam_desc_cipher_des_t_size);
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
 
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
+
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= CAAM_DES_KEY_SIZE;
@@ -3765,6 +3812,15 @@ status_t CAAM_DES_DecryptEcbNonBlocking(CAAM_Type *base,
                                         const uint8_t key[CAAM_DES_KEY_SIZE])
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
 
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
@@ -3840,6 +3896,15 @@ status_t CAAM_DES_EncryptCbcNonBlocking(CAAM_Type *base,
                                         const uint8_t key[CAAM_DES_KEY_SIZE])
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
 
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
@@ -3917,6 +3982,15 @@ status_t CAAM_DES_DecryptCbcNonBlocking(CAAM_Type *base,
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
 
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
+
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= CAAM_DES_KEY_SIZE;
@@ -3991,6 +4065,15 @@ status_t CAAM_DES_EncryptCfbNonBlocking(CAAM_Type *base,
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
 
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
+
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= CAAM_DES_KEY_SIZE;
@@ -4064,6 +4147,15 @@ status_t CAAM_DES_DecryptCfbNonBlocking(CAAM_Type *base,
                                         const uint8_t key[CAAM_DES_KEY_SIZE])
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
 
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
@@ -4141,6 +4233,15 @@ status_t CAAM_DES_EncryptOfbNonBlocking(CAAM_Type *base,
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
 
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
+
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= CAAM_DES_KEY_SIZE;
@@ -4217,6 +4318,15 @@ status_t CAAM_DES_DecryptOfbNonBlocking(CAAM_Type *base,
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
 
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
+
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= CAAM_DES_KEY_SIZE;
@@ -4290,6 +4400,15 @@ status_t CAAM_DES2_EncryptEcbNonBlocking(CAAM_Type *base,
                                          const uint8_t key2[CAAM_DES_KEY_SIZE])
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
 
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
@@ -4365,6 +4484,15 @@ status_t CAAM_DES2_DecryptEcbNonBlocking(CAAM_Type *base,
                                          const uint8_t key2[CAAM_DES_KEY_SIZE])
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
 
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
@@ -4446,6 +4574,15 @@ status_t CAAM_DES2_EncryptCbcNonBlocking(CAAM_Type *base,
                                          const uint8_t key2[CAAM_DES_KEY_SIZE])
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
 
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
@@ -4529,6 +4666,15 @@ status_t CAAM_DES2_DecryptCbcNonBlocking(CAAM_Type *base,
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
 
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
+
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= 2U * CAAM_DES_KEY_SIZE;
@@ -4607,6 +4753,15 @@ status_t CAAM_DES2_EncryptCfbNonBlocking(CAAM_Type *base,
                                          const uint8_t key2[CAAM_DES_KEY_SIZE])
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
 
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
@@ -4688,6 +4843,15 @@ status_t CAAM_DES2_DecryptCfbNonBlocking(CAAM_Type *base,
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
 
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
+
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= 2U * CAAM_DES_KEY_SIZE;
@@ -4768,6 +4932,15 @@ status_t CAAM_DES2_EncryptOfbNonBlocking(CAAM_Type *base,
                                          const uint8_t key2[CAAM_DES_KEY_SIZE])
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
 
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
@@ -4851,6 +5024,15 @@ status_t CAAM_DES2_DecryptOfbNonBlocking(CAAM_Type *base,
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
 
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
+
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= 2U * CAAM_DES_KEY_SIZE;
@@ -4929,6 +5111,15 @@ status_t CAAM_DES3_EncryptEcbNonBlocking(CAAM_Type *base,
                                          const uint8_t key3[CAAM_DES_KEY_SIZE])
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
 
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
@@ -5009,6 +5200,15 @@ status_t CAAM_DES3_DecryptEcbNonBlocking(CAAM_Type *base,
                                          const uint8_t key3[CAAM_DES_KEY_SIZE])
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
 
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
@@ -5097,6 +5297,15 @@ status_t CAAM_DES3_EncryptCbcNonBlocking(CAAM_Type *base,
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
 
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
+
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= 3U * CAAM_DES_KEY_SIZE;
@@ -5184,6 +5393,15 @@ status_t CAAM_DES3_DecryptCbcNonBlocking(CAAM_Type *base,
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
 
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
+
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= 3U * CAAM_DES_KEY_SIZE;
@@ -5266,6 +5484,15 @@ status_t CAAM_DES3_EncryptCfbNonBlocking(CAAM_Type *base,
                                          const uint8_t key3[CAAM_DES_KEY_SIZE])
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
 
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
@@ -5352,6 +5579,15 @@ status_t CAAM_DES3_DecryptCfbNonBlocking(CAAM_Type *base,
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
 
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
+
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= 3U * CAAM_DES_KEY_SIZE;
@@ -5436,6 +5672,15 @@ status_t CAAM_DES3_EncryptOfbNonBlocking(CAAM_Type *base,
                                          const uint8_t key3[CAAM_DES_KEY_SIZE])
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
 
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
@@ -5523,6 +5768,15 @@ status_t CAAM_DES3_DecryptOfbNonBlocking(CAAM_Type *base,
                                          const uint8_t key3[CAAM_DES_KEY_SIZE])
 {
     uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+
+    /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
+     * Data lenght limit is 2^16 bytes = 65 536 bytes.
+     * Note: You can still call several times instead
+     */
+    if (size > 0xFFFFUL)
+    {
+        return kStatus_CAAM_DataOverflow;
+    }
 
     (void)caam_memcpy(descriptor, templateCipherDes, sizeof(templateCipherDes));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);

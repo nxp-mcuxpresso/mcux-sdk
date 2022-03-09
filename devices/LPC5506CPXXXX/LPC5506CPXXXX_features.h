@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2020-04-09
-**     Build:               b210318
+**     Build:               b211015
 **
 **     Abstract:
 **         Chip specific module features.
@@ -118,6 +118,8 @@
 #define FSL_FEATURE_LPADC_HAS_CFG_CALOFS (0)
 /* @brief Has offset trim (register OFSTRIM). */
 #define FSL_FEATURE_LPADC_HAS_OFSTRIM (1)
+/* @brief Has Trigger status register. */
+#define FSL_FEATURE_LPADC_HAS_TSTAT (1)
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Temperature sensor parameter A (slope). */
@@ -141,6 +143,8 @@
 #define FSL_FEATURE_ANACTRL_HAS_NO_ENABLE_PLL_USB_OUT_BIT_FIELD (1)
 /* @brief Has XO32M_ADC_CLK_MODE bitfile in DUMMY_CTRL reigster. */
 #define FSL_FEATURE_ANACTRL_HAS_XO32M_ADC_CLK_MODE_BIF_FIELD (1)
+/* @brief Has auxiliary bias(register AUX_BIAS). */
+#define FSL_FEATURE_ANACTRL_HAS_AUX_BIAS_REG (1)
 
 /* CAN module features */
 
@@ -285,7 +289,7 @@
 /* @brief Flash sector size in bytes */
 #define FSL_FEATURE_SYSCON_FLASH_SECTOR_SIZE_BYTES (32768)
 /* @brief Flash size in bytes */
-#define FSL_FEATURE_SYSCON_FLASH_SIZE_BYTES (229376)
+#define FSL_FEATURE_SYSCON_FLASH_SIZE_BYTES (251904)
 /* @brief Has Power Down mode */
 #define FSL_FEATURE_SYSCON_HAS_POWERDOWN_MODE (1)
 /* @brief CCM_ANALOG availability on the SoC.  */

@@ -408,16 +408,16 @@ status_t FTM_SetupPwm(FTM_Type *base,
                       uint32_t srcClock_Hz)
 {
     assert(NULL != chnlParams);
-    assert(0U != srcClock_Hz);
-    assert(0U != pwmFreq_Hz);
-    assert(0U != numOfChnls);
-    /* The CHANNEL_COUNT macro returns -1 if it cannot match the FTM instance */
-    assert(-1 != FSL_FEATURE_FTM_CHANNEL_COUNTn(base));
 
     uint32_t mod, reg;
     uint32_t ftmClock = (srcClock_Hz / (1UL << (base->SC & FTM_SC_PS_MASK)));
     uint32_t cnv, cnvFirstEdge;
     uint8_t i;
+
+    if ((0U == pwmFreq_Hz) || (0U == srcClock_Hz) || (0U == numOfChnls))
+    {
+        return kStatus_InvalidArgument;
+    }
 
     if (mode == kFTM_CenterAlignedPwm)
     {
@@ -434,7 +434,7 @@ status_t FTM_SetupPwm(FTM_Type *base,
      * clock source to get the desired frequency */
     if (mod > 65535U)
     {
-        return kStatus_Fail;
+        return kStatus_OutOfRange;
     }
     /* Set the PWM period */
     base->CNTIN = 0U;
@@ -443,25 +443,26 @@ status_t FTM_SetupPwm(FTM_Type *base,
     /* Setup each FTM channel */
     for (i = 0; i < numOfChnls; i++)
     {
+        /* Return error if requested chnlNumber is greater than the max allowed */
+        if (((uint8_t)chnlParams->chnlNumber >= (uint8_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base)) ||
+            (-1 == (int8_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base)))
+        {
+            return kStatus_InvalidArgument;
+        }
         /* Return error if requested dutycycle is greater than the max allowed */
         if (chnlParams->dutyCyclePercent > 100U)
         {
-            return kStatus_Fail;
+            return kStatus_OutOfRange;
         }
 
-        if (chnlParams->dutyCyclePercent == 0U)
+        if (chnlParams->dutyCyclePercent == 100U)
         {
-            /* Signal stays low */
-            cnv = 0;
+            /* For 100% duty cycle */
+            cnv = mod + 1U;
         }
         else
         {
             cnv = (mod * chnlParams->dutyCyclePercent) / 100U;
-            /* For 100% duty cycle */
-            if (cnv >= mod)
-            {
-                cnv = mod + 1U;
-            }
         }
 
         if ((mode == kFTM_EdgeAlignedPwm) || (mode == kFTM_CenterAlignedPwm))
@@ -490,7 +491,7 @@ status_t FTM_SetupPwm(FTM_Type *base,
             /* This check is added for combined mode as the channel number should be the pair number */
             if (((uint32_t)chnlParams->chnlNumber) >= ((uint32_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base) / 2U))
             {
-                return kStatus_Fail;
+                return kStatus_InvalidArgument;
             }
 
             if (mode == kFTM_EdgeAlignedCombinedPwm)
@@ -499,32 +500,17 @@ status_t FTM_SetupPwm(FTM_Type *base,
             }
             else if (mode == kFTM_CenterAlignedCombinedPwm)
             {
-                cnvFirstEdge = (mod - cnv) / 2U;
+                cnvFirstEdge = (mod > cnv) ? ((mod - cnv) / 2U) : 0U;
             }
             else
             {
                 /* Return error if requested value is greater than the max allowed */
-                if (chnlParams->firstEdgeDelayPercent > 100U)
+                if ((chnlParams->firstEdgeDelayPercent + chnlParams->dutyCyclePercent) > 100U)
                 {
-                    return kStatus_Fail;
+                    return kStatus_OutOfRange;
                 }
                 /* Configure delay of the first edge */
-                if (chnlParams->firstEdgeDelayPercent == 0U)
-                {
-                    /* No delay for the first edge */
-                    cnvFirstEdge = 0;
-                }
-                else
-                {
-                    cnvFirstEdge = (mod * chnlParams->firstEdgeDelayPercent) / 100U;
-                }
-            }
-
-            /* Re-configure first edge when 0% duty cycle */
-            if (chnlParams->dutyCyclePercent == 0U)
-            {
-                /* Signal stays low */
-                cnvFirstEdge = 0;
+                cnvFirstEdge = (mod * chnlParams->firstEdgeDelayPercent) / 100U;
             }
 
             /* Clear the current mode and edge level bits for channel n */
@@ -582,31 +568,37 @@ status_t FTM_SetupPwm(FTM_Type *base,
  * param dutyCyclePercent  New PWM pulse width; The value should be between 0 to 100
  *                          0=inactive signal(0% duty cycle)...
  *                          100=active signal (100% duty cycle)
+ * return kStatus_Success if the PWM update was successful
+ *         kStatus_Error on failure
  */
-void FTM_UpdatePwmDutycycle(FTM_Type *base,
-                            ftm_chnl_t chnlNumber,
-                            ftm_pwm_mode_t currentPwmMode,
-                            uint8_t dutyCyclePercent)
+status_t FTM_UpdatePwmDutycycle(FTM_Type *base,
+                                ftm_chnl_t chnlNumber,
+                                ftm_pwm_mode_t currentPwmMode,
+                                uint8_t dutyCyclePercent)
 {
     uint32_t cnv, cnvFirstEdge = 0, mod;
 
-    /* The CHANNEL_COUNT macro returns -1 if it cannot match the FTM instance */
-    assert(-1 != FSL_FEATURE_FTM_CHANNEL_COUNTn(base));
+    /* Return error if requested chnlNumber is greater than the max allowed */
+    if (((uint8_t)chnlNumber >= (uint8_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base)) ||
+        (-1 == (int8_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base)))
+    {
+        return kStatus_InvalidArgument;
+    }
 
     mod = base->MOD;
-    if (dutyCyclePercent == 0U)
+
+    if (dutyCyclePercent > 100U)
     {
-        /* Signal stays low */
-        cnv = 0;
+        return kStatus_OutOfRange;
+    }
+    if (dutyCyclePercent == 100U)
+    {
+        /* For 100% duty cycle */
+        cnv = mod + 1U;
     }
     else
     {
         cnv = (mod * dutyCyclePercent) / 100U;
-        /* For 100% duty cycle */
-        if (cnv >= mod)
-        {
-            cnv = mod + 1U;
-        }
     }
 
     if ((currentPwmMode == kFTM_EdgeAlignedPwm) || (currentPwmMode == kFTM_CenterAlignedPwm))
@@ -618,20 +610,26 @@ void FTM_UpdatePwmDutycycle(FTM_Type *base,
         /* This check is added for combined mode as the channel number should be the pair number */
         if ((uint32_t)chnlNumber >= ((uint32_t)FSL_FEATURE_FTM_CHANNEL_COUNTn(base) / 2U))
         {
-            return;
+            return kStatus_InvalidArgument;
         }
 
         if (currentPwmMode == kFTM_CenterAlignedCombinedPwm)
         {
-            cnvFirstEdge = (mod - cnv) / 2U;
+            cnvFirstEdge = (mod > cnv) ? ((mod - cnv) / 2U) : 0U;
         }
         else
         {
             cnvFirstEdge = base->CONTROLS[((uint32_t)chnlNumber) * 2U].CnV;
+            if (((cnvFirstEdge != 0U) && (cnv == (mod + 1U))) || (((cnvFirstEdge + cnv) > mod) && (cnv < mod)))
+            {
+                /* Return error if firstEdgeDelayPercent + dutyCyclePercent > 100 */
+                return kStatus_OutOfRange;
+            }
         }
         base->CONTROLS[((uint32_t)chnlNumber * 2U)].CnV      = cnvFirstEdge;
         base->CONTROLS[((uint32_t)chnlNumber * 2U) + 1U].CnV = cnvFirstEdge + cnv;
     }
+    return kStatus_Success;
 }
 
 /*!

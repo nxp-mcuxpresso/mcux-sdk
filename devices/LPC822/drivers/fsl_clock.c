@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2019, 2021  NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -158,7 +158,7 @@ uint32_t CLOCK_GetUartClkFreq(void)
     uint32_t uartDiv = SYSCON->UARTCLKDIV & 0xffU;
 
     return uartDiv == 0U ? 0U :
-                           (uint32_t)((uint64_t)(freq << 8U) /
+                           (uint32_t)((uint64_t)((uint64_t)freq << 8U) /
                                       (uartDiv * (256U + ((SYSCON->UARTFRGMULT) & SYSCON_UARTFRGMULT_MULT_MASK))));
 }
 

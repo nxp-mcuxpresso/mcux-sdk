@@ -34,7 +34,7 @@
 #define SDRAM_RRD_NS           (12u)
 #define SDRAM_MRD_NCLK         (2u)
 #define SDRAM_RAS_NCLK         (2u)
-#define SDRAM_MODEREG_VALUE    (0x23u)
+#define SDRAM_MODEREG_VALUE    (0x33u)
 #define SDRAM_DEV_MEMORYMAP    (0x09u) /* 128Mbits (8M*16, 4banks, 12 rows, 9 columns)*/
 
 /*******************************************************************************

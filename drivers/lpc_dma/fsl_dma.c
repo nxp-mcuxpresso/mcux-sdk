@@ -58,22 +58,34 @@ static const IRQn_Type s_dmaIRQNumber[] = DMA_IRQS;
 
 /*! @brief Pointers to transfer handle for each DMA channel. */
 static dma_handle_t *s_DMAHandle[FSL_FEATURE_DMA_ALL_CHANNELS];
+
 /*! @brief DMA driver internal descriptor table */
+#ifdef FSL_FEATURE_DMA0_DESCRIPTOR_ALIGN_SIZE
+SDK_ALIGN(static dma_descriptor_t s_dma_descriptor_table0[FSL_FEATURE_DMA_MAX_CHANNELS],
+          FSL_FEATURE_DMA0_DESCRIPTOR_ALIGN_SIZE);
+#else
 #if (defined(CPU_MIMXRT685SEVKA_dsp) || defined(CPU_MIMXRT685SFVKB_dsp))
 AT_NONCACHEABLE_SECTION_ALIGN(static dma_descriptor_t s_dma_descriptor_table0[FSL_FEATURE_DMA_MAX_CHANNELS],
                               FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE);
 #else
 SDK_ALIGN(static dma_descriptor_t s_dma_descriptor_table0[FSL_FEATURE_DMA_MAX_CHANNELS],
           FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE);
-#endif
+#endif /* (defined(CPU_MIMXRT685SEVKA_dsp) || defined(CPU_MIMXRT685SFVKB_dsp)) */
+#endif /* FSL_FEATURE_DMA0_DESCRIPTOR_ALIGN_SIZE */
+
 #if defined(DMA1)
+#ifdef FSL_FEATURE_DMA1_DESCRIPTOR_ALIGN_SIZE
+SDK_ALIGN(static dma_descriptor_t s_dma_descriptor_table1[FSL_FEATURE_DMA_MAX_CHANNELS],
+          FSL_FEATURE_DMA1_DESCRIPTOR_ALIGN_SIZE);
+#else
 #if (defined(CPU_MIMXRT685SEVKA_dsp) || defined(CPU_MIMXRT685SFVKB_dsp))
 AT_NONCACHEABLE_SECTION_ALIGN(static dma_descriptor_t s_dma_descriptor_table1[FSL_FEATURE_DMA_MAX_CHANNELS],
                               FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE);
 #else
 SDK_ALIGN(static dma_descriptor_t s_dma_descriptor_table1[FSL_FEATURE_DMA_MAX_CHANNELS],
           FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE);
-#endif
+#endif /* (defined(CPU_MIMXRT685SEVKA_dsp) || defined(CPU_MIMXRT685SFVKB_dsp)) */
+#endif /* FSL_FEATURE_DMA1_DESCRIPTOR_ALIGN_SIZE */
 static dma_descriptor_t *s_dma_descriptor_table[] = {s_dma_descriptor_table0, s_dma_descriptor_table1};
 #else
 static dma_descriptor_t *s_dma_descriptor_table[] = {s_dma_descriptor_table0};
@@ -732,8 +744,12 @@ void DMA_LoadChannelDescriptor(DMA_Type *base, uint32_t channel, dma_descriptor_
 void DMA_InstallDescriptorMemory(DMA_Type *base, void *addr)
 {
     assert(addr != NULL);
-    assert((((uint32_t)(uint32_t *)addr) & ((uint32_t)FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE - 1UL)) == 0U);
 
+#if defined FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZEn
+    assert((((uint32_t)(uint32_t *)addr) & ((uint32_t)FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZEn(base) - 1UL)) == 0U);
+#else
+    assert((((uint32_t)(uint32_t *)addr) & ((uint32_t)FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE - 1UL)) == 0U);
+#endif
     /* reconfigure the DMA descriptor base address */
     base->SRAMBASE = (uint32_t)(uint32_t *)addr;
 }

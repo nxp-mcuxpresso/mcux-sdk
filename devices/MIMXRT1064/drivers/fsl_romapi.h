@@ -411,7 +411,7 @@ void ROM_RunBootloader(void *arg);
  *
  * This function checks and initializes the FLEXSPI module for the other FLEXSPI APIs.
  *
- * @param instance storge the instance of FLEXSPI.
+ * @param instance storage the instance of FLEXSPI.
  * @param config A pointer to the storage for the driver runtime state.
  *
  * @retval kStatus_Success Api was executed succesfuly.
@@ -435,7 +435,7 @@ status_t ROM_FLEXSPI_NorFlash_Init(uint32_t instance, flexspi_nor_config_t *conf
  * This function programs the NOR flash memory with the dest address for a given
  * flash area as determined by the dst address and the length.
  *
- * @param instance storge the instance of FLEXSPI.
+ * @param instance storage the instance of FLEXSPI.
  * @param config  A pointer to the storage for the driver runtime state.
  * @param dstAddr A pointer to the desired flash memory to be programmed.
  *                NOTE:
@@ -470,7 +470,7 @@ status_t ROM_FLEXSPI_NorFlash_ProgramPage(uint32_t instance,
  * This function read the NOR flash memory with the start address for a given
  * flash area as determined by the dst address and the length.
  *
- * @param instance storge the instance of FLEXSPI.
+ * @param instance storage the instance of FLEXSPI.
  * @param config  A pointer to the storage for the driver runtime state.
  * @param dst     A pointer to the dest buffer of data that is to be read from the NOR flash.
  *                NOTE:
@@ -503,7 +503,7 @@ status_t ROM_FLEXSPI_NorFlash_Read(
  * This function erases the appropriate number of flash sectors based on the
  * desired start address and length.
  *
- * @param instance storge the index of FLEXSPI.
+ * @param instance storage the index of FLEXSPI.
  * @param config A pointer to the storage for the driver runtime state.
  * @param start The start address of the desired NOR flash memory to be erased.
  *              NOTE:
@@ -527,7 +527,7 @@ status_t ROM_FLEXSPI_NorFlash_Erase(uint32_t instance, flexspi_nor_config_t *con
 /*!
  * @brief Erase all the Serial NOR devices connected on FLEXSPI.
  *
- * @param instance storge the instance of FLEXSPI.
+ * @param instance storage the instance of FLEXSPI.
  * @param config A pointer to the storage for the driver runtime state.
  *
  * @retval kStatus_Success Api was executed succesfuly.
@@ -551,7 +551,7 @@ status_t ROM_FLEXSPI_NorFlash_EraseAll(uint32_t instance, flexspi_nor_config_t *
  *
  * This function is used to perform the command write sequence to the NOR device.
  *
- * @param instance storge the index of FLEXSPI.
+ * @param instance storage the index of FLEXSPI.
  * @param xfer A pointer to the storage FLEXSPI Transfer Context.
  *
  * @retval kStatus_Success Api was executed succesfuly.
@@ -571,10 +571,10 @@ status_t ROM_FLEXSPI_NorFlash_CommandXfer(uint32_t instance, flexspi_xfer_t *xfe
 /*!
  * @brief Configure FLEXSPI Lookup table
  *
- * @param instance storge the index of FLEXSPI.
- * @param seqIndex storge the sequence Id.
+ * @param instance storage the index of FLEXSPI.
+ * @param seqIndex storage the sequence Id.
  * @param lutBase A pointer to the look-up-table for command sequences.
- * @param seqNumber storge sequence number.
+ * @param seqNumber storage sequence number.
  *
  * @retval kStatus_Success Api was executed succesfuly.
  * @retval kStatus_InvalidArgument A invalid argument is provided.
@@ -600,7 +600,7 @@ status_t ROM_FLEXSPI_NorFlash_UpdateLut(uint32_t instance,
  * This function sets the software reset flags for both AHB and buffer domain and
  * resets both AHB buffer and also IP FIFOs.
  *
- * @param instance storge the index of FLEXSPI.
+ * @param instance storage the index of FLEXSPI.
  */
 void ROM_FLEXSPI_NorFlash_ClearCache(uint32_t instance);
 
@@ -614,7 +614,7 @@ void ROM_FLEXSPI_NorFlash_ClearCache(uint32_t instance);
 /*!
  * @brief Get FLEXSPI NOR Configuration Block based on specified option.
  *
- * @param instance storge the instance of FLEXSPI.
+ * @param instance storage the instance of FLEXSPI.
  * @param config A pointer to the storage for the driver runtime state.
  * @param option A pointer to the storage Serial NOR Configuration Option Context.
  *

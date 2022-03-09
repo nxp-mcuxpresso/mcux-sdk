@@ -4,7 +4,7 @@
 **     Compiler:            GNU C Compiler
 **     Reference manual:    K32L3ARM, Rev. 0 , 05/2019
 **     Version:             rev. 1.0, 2019-04-22
-**     Build:               b210519
+**     Build:               b210812
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
@@ -154,6 +154,10 @@ SECTIONS
     __data_start__ = .;      /* create a global symbol at data start */
     *(.data)                 /* .data sections */
     *(.data*)                /* .data* sections */
+    *(NonCacheable.init)     /* NonCacheable init section */;
+    *(NonCacheable)          /* NonCacheable section */;
+    *(CodeQuickAccess)       /* quick access code section */;
+    *(DataQuickAccess)       /* quick access data section */;
     KEEP(*(.jcr*))
     . = ALIGN(4);
     __data_end__ = .;        /* define a global symbol at data end */

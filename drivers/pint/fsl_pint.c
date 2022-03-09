@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -891,6 +891,7 @@ void PIN_INT4_DriverIRQHandler(void)
 
 #if (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 5U)
 #if defined(FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER) && FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER
+void PIN_INT5_DAC1_IRQHandler(void);
 void PIN_INT5_DAC1_IRQHandler(void)
 #else
 void PIN_INT5_DriverIRQHandler(void);
@@ -917,6 +918,7 @@ void PIN_INT5_DriverIRQHandler(void)
 
 #if (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 6U)
 #if defined(FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER) && FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER
+void PIN_INT6_USART3_IRQHandler(void);
 void PIN_INT6_USART3_IRQHandler(void)
 #else
 void PIN_INT6_DriverIRQHandler(void);
@@ -943,6 +945,7 @@ void PIN_INT6_DriverIRQHandler(void)
 
 #if (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 7U)
 #if defined(FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER) && FSL_FEATURE_NVIC_HAS_SHARED_INTERTTUPT_NUMBER
+void PIN_INT7_USART4_IRQHandler(void);
 void PIN_INT7_USART4_IRQHandler(void)
 #else
 void PIN_INT7_DriverIRQHandler(void);

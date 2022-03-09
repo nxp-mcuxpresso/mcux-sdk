@@ -26,7 +26,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief USART dma driver version. */
-#define FSL_USART_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+#define FSL_USART_DMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
 /*@}*/
 
 /* Forward declaration of the handle typedef. */

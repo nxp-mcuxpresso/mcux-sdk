@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2019-04-22
-**     Build:               b201028
+**     Build:               b210913
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -697,6 +697,8 @@
 
 /* LPADC module features */
 
+/* @brief FIFO availability on the SoC. */
+#define FSL_FEATURE_LPADC_FIFO_COUNT (1)
 /* @brief Has subsequent trigger priority (bitfield CFG[TPRICTRL]). */
 #define FSL_FEATURE_LPADC_HAS_CFG_SUBSEQUENT_PRIORITY (1)
 /* @brief Has differential mode (bitfield CMDLn[DIFF]). */
@@ -743,7 +745,7 @@
 /* @brief Has lifetime timer (related to existence of registers LTMR64L and LTMR64H). */
 #define FSL_FEATURE_LPIT_HAS_LIFETIME_TIMER (0)
 /* @brief Has shared interrupt handler (has not individual interrupt handler for each channel). */
-#define FSL_FEATURE_LPIT_HAS_SHARED_IRQ_HANDLER (0)
+#define FSL_FEATURE_LPIT_HAS_SHARED_IRQ_HANDLER (1)
 
 /* LPSPI module features */
 
@@ -751,6 +753,8 @@
 #define FSL_FEATURE_LPSPI_FIFO_SIZEn(x) (4)
 /* @brief Has separate DMA RX and TX requests. */
 #define FSL_FEATURE_LPSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
+/* @brief Has CCR1 (related to existence of registers CCR1). */
+#define FSL_FEATURE_LPSPI_HAS_CCR1 (0)
 
 /* LPTMR module features */
 
@@ -868,7 +872,7 @@
 #define FSL_FEATURE_MU_NO_HR (0)
 /* @brief MU supports mask the hardware reset. CR[HRM] or CCR[HRM]. */
 #define FSL_FEATURE_MU_HAS_HRM (1)
-/* @brief MU does not support check the other core power mode. SR[PM]. */
+/* @brief MU does not support check the other core power mode. SR[PM] or BSR[APM]. */
 #define FSL_FEATURE_MU_NO_PM (0)
 /* @brief MU supports reset assert interrupt. CR[RAIE] or BCR[RAIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (1)
@@ -1438,6 +1442,12 @@
 #define FSL_FEATURE_TPM_HAS_GLOBAL (1)
 /* @brief Has TPM_TRIG. */
 #define FSL_FEATURE_TPM_HAS_TRIG (1)
+/* @brief Whether TRIG register has effect. */
+#define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) \
+    (((x) == TPM0) ? (1) : \
+    (((x) == TPM1) ? (0) : \
+    (((x) == TPM2) ? (1) : \
+    (((x) == TPM3) ? (0) : (-1)))))
 /* @brief Has counter pause on trigger. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER (1)
 /* @brief Has external trigger selection. */
@@ -1448,6 +1458,12 @@
 #define FSL_FEATURE_TPM_COMBINE_HAS_EFFECTn(x) (1)
 /* @brief Has TPM_POL. */
 #define FSL_FEATURE_TPM_HAS_POL (1)
+/* @brief Whether POL register has effect. */
+#define FSL_FEATURE_TPM_POL_HAS_EFFECTn(x) \
+    (((x) == TPM0) ? (1) : \
+    (((x) == TPM1) ? (0) : \
+    (((x) == TPM2) ? (1) : \
+    (((x) == TPM3) ? (0) : (-1)))))
 /* @brief Has TPM_FILTER register. */
 #define FSL_FEATURE_TPM_HAS_FILTER (1)
 /* @brief Whether FILTER register has effect. */
@@ -1456,6 +1472,10 @@
 #define FSL_FEATURE_TPM_HAS_QDCTRL (1)
 /* @brief Whether QDCTRL register has effect. */
 #define FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(x) (1)
+/* @brief Has pause level select. */
+#define FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT (1)
+/* @brief Whether 32 bits counter has effect. */
+#define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) (0)
 
 /* TRGMUX module features */
 

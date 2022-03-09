@@ -16,7 +16,10 @@
     kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelRight0 | kCODEC_SupportPlayChannelLeft1 |      \
         kCODEC_SupportPlayChannelRight1 | kCODEC_SupportPlayChannelLeft2 | kCODEC_SupportPlayChannelRight2 | \
         kCODEC_SupportPlayChannelLeft3 | kCODEC_SupportPlayChannelRight3
-
+#define HAL_CS42448_VOLUME_CAPABILITY                                                                        \
+    kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelRight0 | kCODEC_SupportPlayChannelLeft1 |      \
+        kCODEC_SupportPlayChannelRight1 | kCODEC_SupportPlayChannelLeft2 | kCODEC_SupportPlayChannelRight2 | \
+        kCODEC_SupportPlayChannelLeft3 | kCODEC_SupportPlayChannelRight3
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -25,7 +28,8 @@
  * Variables
  ******************************************************************************/
 static const codec_capability_t s_cs42448_capability = {
-    .codecPlayCapability = HAL_CS42448_PLAY_CAPABILITY,
+    .codecPlayCapability   = HAL_CS42448_PLAY_CAPABILITY,
+    .codecVolumeCapability = HAL_CS42448_VOLUME_CAPABILITY,
 };
 /*******************************************************************************
  * Code

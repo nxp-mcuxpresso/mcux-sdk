@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,12 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 0, 8)) /*!< Version 2.0.8 */
-                                                       /*@}*/
+/*! @brief TPM driver version 2.2.0. */
+#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*@}*/
+
+/*! @brief Help macro to get the max counter value */
+#define TPM_MAX_COUNTER_VALUE(x) ((1U != (uint8_t)FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x)) ? 0xFFFFU : 0xFFFFFFFFU)
 
 /*!
  * @brief List of TPM channels.
@@ -46,24 +50,56 @@ typedef enum _tpm_pwm_mode
     kTPM_EdgeAlignedPwm = 0U, /*!< Edge aligned PWM */
     kTPM_CenterAlignedPwm,    /*!< Center aligned PWM */
 #if defined(FSL_FEATURE_TPM_HAS_COMBINE) && FSL_FEATURE_TPM_HAS_COMBINE
-    kTPM_CombinedPwm /*!< Combined PWM */
+    kTPM_CombinedPwm /*!< Combined PWM (Edge-aligned, center-aligned, or asymmetrical PWMs can be obtained in combined
+                        mode using different software configurations) */
 #endif
 } tpm_pwm_mode_t;
 
-/*! @brief TPM PWM output pulse mode: high-true, low-true or no output */
+/*!
+ * @brief TPM PWM output pulse mode: high-true, low-true or no output
+ *
+ * @note When the TPM has PWM pause level select feature, the PWM output cannot be turned off by selecting the output
+ *       level. In this case, the channel must be closed to close the PWM output.
+ */
 typedef enum _tpm_pwm_level_select
 {
+#if !(defined(FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT) && FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT)
     kTPM_NoPwmSignal = 0U, /*!< No PWM output on pin */
     kTPM_LowTrue,          /*!< Low true pulses */
     kTPM_HighTrue          /*!< High true pulses */
+#else
+    kTPM_HighTrue = 0U, /*!< High true pulses */
+    kTPM_LowTrue        /*!< Low true pulses */
+#endif
 } tpm_pwm_level_select_t;
+
+#if (defined(FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT) && FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT)
+/*! @brief TPM PWM output when first enabled or paused: set or clear */
+typedef enum _tpm_pwm_pause_level_select
+{
+    kTPM_ClearOnPause = 0U, /*!< Clear Output when counter first enabled or paused. */
+    kTPM_SetOnPause         /*!< Set Output when counter first enabled or paused. */
+} tpm_pwm_pause_level_select_t;
+#endif
+
+/*! @brief List of TPM channel modes and level control bit mask */
+typedef enum _tpm_chnl_control_bit_mask
+{
+    kTPM_ChnlELSnAMask = TPM_CnSC_ELSA_MASK, /*!< Channel ELSA bit mask.*/
+    kTPM_ChnlELSnBMask = TPM_CnSC_ELSB_MASK, /*!< Channel ELSB bit mask.*/
+    kTPM_ChnlMSAMask   = TPM_CnSC_MSA_MASK,  /*!< Channel MSA bit mask.*/
+    kTPM_ChnlMSBMask   = TPM_CnSC_MSB_MASK,  /*!< Channel MSB bit mask.*/
+} tpm_chnl_control_bit_mask_t;
 
 /*! @brief Options to configure a TPM channel's PWM signal */
 typedef struct _tpm_chnl_pwm_signal_param
 {
-    tpm_chnl_t chnlNumber;        /*!< TPM channel to configure.
-                                       In combined mode (available in some SoC's, this represents the
-                                       channel pair number */
+    tpm_chnl_t chnlNumber; /*!< TPM channel to configure.
+                                In combined mode (available in some SoC's), this represents the
+                                channel pair number */
+#if (defined(FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT) && FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT)
+    tpm_pwm_pause_level_select_t pauseLevel; /*!< PWM output level when counter first enabled or paused */
+#endif
     tpm_pwm_level_select_t level; /*!< PWM output active level select */
     uint8_t dutyCyclePercent;     /*!< PWM pulse width, value should be between 0 to 100
                                        0=inactive signal(0% duty cycle)...
@@ -71,18 +107,30 @@ typedef struct _tpm_chnl_pwm_signal_param
 #if defined(FSL_FEATURE_TPM_HAS_COMBINE) && FSL_FEATURE_TPM_HAS_COMBINE
     uint8_t firstEdgeDelayPercent; /*!< Used only in combined PWM mode to generate asymmetrical PWM.
                                         Specifies the delay to the first edge in a PWM period.
-                                        If unsure, leave as 0; Should be specified as
-                                        percentage of the PWM period */
+                                        If unsure, leave as 0. Should be specified as percentage
+                                        of the PWM period, (dutyCyclePercent + firstEdgeDelayPercent) value
+                                        should be not greate than 100. */
+    bool enableComplementary;      /*!< Used only in combined PWM mode.
+                                        true: The combined channels output complementary signals;
+                                        false: The combined channels output same signals; */
+#if (defined(FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT) && FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT)
+    tpm_pwm_pause_level_select_t secPauseLevel; /*!< Used only in combined PWM mode. Define the second channel output
+                                                   level when counter first enabled or paused */
+#endif
+    uint8_t deadTimeValue[2]; /*!< The dead time value for channel n and n+1 in combined complementary PWM mode.
+                               Deadtime insertion is disabled when this value is zero, otherwise deadtime insertion for
+                               channel n/n+1 is configured as (deadTimeValue * 4) clock cycles. deadTimeValue's
+                               available range is 0 ~ 15. */
 #endif
 } tpm_chnl_pwm_signal_param_t;
 
 #if !(defined(FSL_FEATURE_TPM_HAS_NO_CONF) && FSL_FEATURE_TPM_HAS_NO_CONF)
 /*!
- * @brief Trigger options available.
+ * @brief Trigger sources available.
  *
- * This is used for both internal & external trigger sources (external option available in certain SoC's)
+ * This is used for both internal & external trigger sources (external trigger sources available in certain SoC's)
  *
- * @note The actual trigger options available is SoC-specific.
+ * @note The actual trigger sources available is SoC-specific.
  */
 typedef enum _tpm_trigger_select
 {
@@ -114,8 +162,19 @@ typedef enum _tpm_trigger_select
 typedef enum _tpm_trigger_source
 {
     kTPM_TriggerSource_External = 0U, /*!< Use external trigger input */
-    kTPM_TriggerSource_Internal       /*!< Use internal trigger */
+    kTPM_TriggerSource_Internal       /*!< Use internal trigger (channel pin input capture) */
 } tpm_trigger_source_t;
+
+/*!
+ * @brief External trigger source polarity
+ *
+ * @note Selects the polarity of the external trigger source.
+ */
+typedef enum _tpm_ext_trigger_polarity
+{
+    kTPM_ExtTrigger_Active_High = 0U, /*!< External trigger input is active high */
+    kTPM_ExtTrigger_Active_Low        /*!< External trigger input is active low */
+} tpm_ext_trigger_polarity_t;
 #endif
 #endif
 
@@ -187,7 +246,10 @@ typedef enum _tpm_clock_source
 #if defined(FSL_FEATURE_TPM_HAS_SC_CLKS) && FSL_FEATURE_TPM_HAS_SC_CLKS
     kTPM_FixedClock, /*!< Fixed frequency clock */
 #endif
-    kTPM_ExternalClock /*!< External clock */
+    kTPM_ExternalClock, /*!< External TPM_EXTCLK pin clock */
+#if defined(FSL_FEATURE_TPM_HAS_EXTERNAL_TRIGGER_SELECTION) && FSL_FEATURE_TPM_HAS_EXTERNAL_TRIGGER_SELECTION
+    kTPM_ExternalInputTriggerClock /*!< Selected external input trigger clock */
+#endif
 } tpm_clock_source_t;
 
 /*! @brief TPM prescale value selection for the clock source*/
@@ -216,11 +278,16 @@ typedef struct _tpm_config
 {
     tpm_clock_prescale_t prescale; /*!< Select TPM clock prescale value */
 #if !(defined(FSL_FEATURE_TPM_HAS_NO_CONF) && FSL_FEATURE_TPM_HAS_NO_CONF)
-    bool useGlobalTimeBase;             /*!< true: Use of an external global time base is enabled;
-                                             false: disabled */
+    bool useGlobalTimeBase;  /*!< true: The TPM channels use an external global time base (the local counter still use
+                                for generate overflow interrupt and DMA request);
+                                false: All TPM channels use the local counter as their timebase */
+    bool syncGlobalTimeBase; /*!< true: The TPM counter is synchronized to the global time base;
+                                 false: disabled */
     tpm_trigger_select_t triggerSelect; /*!< Input trigger to use for controlling the counter operation */
 #if defined(FSL_FEATURE_TPM_HAS_EXTERNAL_TRIGGER_SELECTION) && FSL_FEATURE_TPM_HAS_EXTERNAL_TRIGGER_SELECTION
     tpm_trigger_source_t triggerSource; /*!< Decides if we use external or internal trigger. */
+    tpm_ext_trigger_polarity_t
+        extTriggerPolarity; /*!< when using external trigger source, need selects the polarity of it. */
 #endif
     bool enableDoze;            /*!< true: TPM counter is paused in doze mode;
                                      false: TPM counter continues in doze mode */
@@ -235,6 +302,9 @@ typedef struct _tpm_config
 #if defined(FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER) && FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER
     bool enablePauseOnTrigger; /*!< true: TPM counter will pause while trigger remains asserted;
                                     false: TPM counter continues running */
+#endif
+#if defined(FSL_FEATURE_TPM_HAS_POL) && FSL_FEATURE_TPM_HAS_POL
+    uint8_t chnlPolarity; /*!< Defines the input/output polarity of the channels in POL register */
 #endif
 #endif
 } tpm_config_t;
@@ -304,6 +374,7 @@ void TPM_Deinit(TPM_Type *base);
  * @code
  *     config->prescale = kTPM_Prescale_Divide_1;
  *     config->useGlobalTimeBase = false;
+ *     config->syncGlobalTimeBase = false;
  *     config->dozeEnable = false;
  *     config->dbgMode = false;
  *     config->enableReloadOnTrigger = false;
@@ -315,11 +386,29 @@ void TPM_Deinit(TPM_Type *base);
  *     config->triggerSelect = kTPM_Trigger_Select_0;
  *#if FSL_FEATURE_TPM_HAS_EXTERNAL_TRIGGER_SELECTION
  *     config->triggerSource = kTPM_TriggerSource_External;
+ *     config->extTriggerPolarity = kTPM_ExtTrigger_Active_High;
+ *#endif
+ *#if defined(FSL_FEATURE_TPM_HAS_POL) && FSL_FEATURE_TPM_HAS_POL
+ *     config->chnlPolarity = 0U;
  *#endif
  * @endcode
  * @param config Pointer to user's TPM config structure.
  */
 void TPM_GetDefaultConfig(tpm_config_t *config);
+
+/*!
+ * @brief Calculates the counter clock prescaler.
+ *
+ * This function calculates the values for SC[PS].
+ *
+ * @param base              TPM peripheral base address
+ * @param counterPeriod_Hz  The desired frequency in Hz which corresponding to the time when the counter reaches the mod
+ *                          value
+ * @param srcClock_Hz       TPM counter clock in Hz
+ *
+ * return Calculated clock prescaler value.
+ */
+tpm_clock_prescale_t TPM_CalculateCounterClkDiv(TPM_Type *base, uint32_t counterPeriod_Hz, uint32_t srcClock_Hz);
 
 /*! @}*/
 
@@ -361,14 +450,20 @@ status_t TPM_SetupPwm(TPM_Type *base,
  * @param dutyCyclePercent  New PWM pulse width, value should be between 0 to 100
  *                          0=inactive signal(0% duty cycle)...
  *                          100=active signal (100% duty cycle)
+ * @return kStatus_Success if the PWM setup was successful,
+ *         kStatus_Error on failure
  */
-void TPM_UpdatePwmDutycycle(TPM_Type *base,
-                            tpm_chnl_t chnlNumber,
-                            tpm_pwm_mode_t currentPwmMode,
-                            uint8_t dutyCyclePercent);
+status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
+                                tpm_chnl_t chnlNumber,
+                                tpm_pwm_mode_t currentPwmMode,
+                                uint8_t dutyCyclePercent);
 
 /*!
  * @brief Update the edge level selection for a channel
+ *
+ * @note When the TPM has PWM pause level select feature (FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT = 1), the PWM output
+ *      cannot be turned off by selecting the output level. In this case, must use TPM_DisableChannel API to close the
+ *      PWM output.
  *
  * @param base       TPM peripheral base address
  * @param chnlNumber The channel number
@@ -376,6 +471,71 @@ void TPM_UpdatePwmDutycycle(TPM_Type *base,
  *                   See the appropriate SoC reference manual for details about this field.
  */
 void TPM_UpdateChnlEdgeLevelSelect(TPM_Type *base, tpm_chnl_t chnlNumber, uint8_t level);
+
+/*!
+ * @brief Get the channel control bits value (mode, edge and level bit fileds).
+ *
+ * This function disable the channel by clear all mode and level control bits.
+ *
+ * @param base       TPM peripheral base address
+ * @param chnlNumber The channel number
+ * @return The contorl bits value. This is the logical OR of members of the
+ *         enumeration @ref tpm_chnl_control_bit_mask_t.
+ */
+static inline uint8_t TPM_GetChannelContorlBits(TPM_Type *base, tpm_chnl_t chnlNumber)
+{
+    return (uint8_t)(base->CONTROLS[chnlNumber].CnSC &
+                     (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK));
+}
+
+/*!
+ * @brief Dsiable the channel.
+ *
+ * This function disable the channel by clear all mode and level control bits.
+ *
+ * @param base       TPM peripheral base address
+ * @param chnlNumber The channel number
+ */
+static inline void TPM_DisableChannel(TPM_Type *base, tpm_chnl_t chnlNumber)
+{
+    do
+    {
+        /* Clear channel MSnB:MSnA and ELSnB:ELSnA to disable its output. */
+        base->CONTROLS[chnlNumber].CnSC &=
+            ~(TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK);
+        /* Wait till mode change to disable channel is acknowledged */
+    } while (0U != (base->CONTROLS[chnlNumber].CnSC &
+                    (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)));
+}
+
+/*!
+ * @brief Enable the channel according to mode and level configs.
+ *
+ * This function enable the channel output according to input mode/level config parameters.
+ *
+ * @param base       TPM peripheral base address
+ * @param chnlNumber The channel number
+ * @param control     The contorl bits value. This is the logical OR of members of the
+ *                    enumeration @ref tpm_chnl_control_bit_mask_t.
+ */
+static inline void TPM_EnableChannel(TPM_Type *base, tpm_chnl_t chnlNumber, uint8_t control)
+{
+#if defined(FSL_FEATURE_TPM_CnSC_CHF_WRITE_0_CLEAR) && FSL_FEATURE_TPM_CnSC_CHF_WRITE_0_CLEAR
+    control |= TPM_CnSC_CHF_MASK;
+#endif
+
+    do
+    {
+        /* Set channel MSB:MSA and ELSB:ELSA bits. */
+        base->CONTROLS[chnlNumber].CnSC =
+            (base->CONTROLS[chnlNumber].CnSC &
+             ~(TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)) |
+            (control & (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK));
+        /* Wait till mode change is acknowledged */
+    } while ((control & (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)) !=
+             (uint8_t)(base->CONTROLS[chnlNumber].CnSC &
+                       (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)));
+}
 
 /*!
  * @brief Enables capturing an input signal on the channel using the function parameters.
@@ -438,6 +598,58 @@ void TPM_SetupQuadDecode(TPM_Type *base,
                          tpm_quad_decode_mode_t quadMode);
 #endif
 
+#if defined(FSL_FEATURE_TPM_HAS_POL) && FSL_FEATURE_TPM_HAS_POL
+/*!
+ * @brief Set the input and output polarity of each of the channels.
+ *
+ * @param base       TPM peripheral base address
+ * @param chnlNumber The channel number
+ * @param enable     true: Set the channel polarity to active high;
+ *                   false: Set the channel polarity to active low;
+ */
+static inline void TPM_SetChannelPolarity(TPM_Type *base, tpm_chnl_t chnlNumber, bool enable)
+{
+    assert(1U == (uint8_t)FSL_FEATURE_TPM_POL_HAS_EFFECTn(base));
+    if (enable)
+    {
+        base->POL &= ~((uint32_t)TPM_POL_POL0_MASK << (uint8_t)chnlNumber);
+    }
+    else
+    {
+        base->POL |= (uint32_t)TPM_POL_POL0_MASK << (uint8_t)chnlNumber;
+    }
+}
+#endif
+#if defined(FSL_FEATURE_TPM_HAS_TRIG) && FSL_FEATURE_TPM_HAS_TRIG
+/*!
+ * @brief Enable external trigger input to be used by channel.
+ *
+ * In input capture mode, configures the trigger input that is used by the channel to capture the
+ * counter value. In output compare or PWM mode, configures the trigger input used to modulate
+ * the channel output. When modulating the output, the output is forced to the channel initial
+ * value whenever the trigger is not asserted.
+ *
+ * @note No matter how many external trigger sources there are, only input trigger 0 and 1 are used. The even numbered
+ *      channels share the input trigger 0 and the odd numbered channels share the second input trigger 1.
+ *
+ * @param base       TPM peripheral base address
+ * @param chnlNumber The channel number
+ * @param enable     true: Configures trigger input 0 or 1 to be used by channel;
+ *                   false: Trigger input has no effect on the channel
+ */
+static inline void TPM_EnableChannelExtTrigger(TPM_Type *base, tpm_chnl_t chnlNumber, bool enable)
+{
+    assert(1U == (uint8_t)FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(base));
+    if (enable)
+    {
+        base->TRIG |= (uint32_t)TPM_TRIG_TRIG0_MASK << (uint8_t)chnlNumber;
+    }
+    else
+    {
+        base->TRIG &= ~((uint32_t)TPM_TRIG_TRIG0_MASK << (uint8_t)chnlNumber);
+    }
+}
+#endif
 /*! @}*/
 
 /*!
@@ -479,6 +691,20 @@ uint32_t TPM_GetEnabledInterrupts(TPM_Type *base);
  * @name Status Interface
  * @{
  */
+/*!
+ * @brief Gets the TPM channel value
+ *
+ * @note  The TPM channel value contain the captured TPM counter value for the input modes or the match value for the
+ *        output modes.
+ *
+ * @param base       TPM peripheral base address
+ * @param chnlNumber The channel number
+ * @return The channle CnV regisyer value.
+ */
+static inline uint32_t TPM_GetChannelValue(TPM_Type *base, tpm_chnl_t chnlNumber)
+{
+    return base->CONTROLS[chnlNumber].CnV;
+}
 
 /*!
  * @brief Gets the TPM status flags
@@ -573,6 +799,10 @@ static inline void TPM_ClearStatusFlags(TPM_Type *base, uint32_t mask)
  */
 static inline void TPM_SetTimerPeriod(TPM_Type *base, uint32_t ticks)
 {
+    if (1U != (uint8_t)FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(base))
+    {
+        assert(ticks <= 0xFFFFU);
+    }
     base->MOD = ticks;
 }
 

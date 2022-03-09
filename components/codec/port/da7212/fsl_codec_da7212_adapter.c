@@ -29,7 +29,9 @@
          kDA7212_BusLeftJustified :                                         \
          protocol == kCODEC_BusRightJustified ? kDA7212_BusRightJustified : \
                                                 protocol == kCODEC_BusPCMA ? kDA7212_BusDSPMode : kDA7212_BusI2S)
-
+#define HAL_DA7212_VOLUME_CAPABILITY                                                                    \
+    kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelRight0 | kCODEC_SupportPlayChannelLeft1 | \
+        kCODEC_SupportPlayChannelRight1
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -41,6 +43,7 @@ static const codec_capability_t s_da7212_capability = {
     .codecPlayCapability   = HAL_DA7212_PLAY_CAPABILITY,
     .codecModuleCapability = HAL_DA7212_MODULE_CAPABILITY,
     .codecRecordCapability = HAL_DA7212_RECORD_CAPABILITY,
+    .codecVolumeCapability = HAL_DA7212_VOLUME_CAPABILITY,
 };
 /*******************************************************************************
  * Code

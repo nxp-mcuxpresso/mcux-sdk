@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief OSTIMER driver version. */
-#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 /*!
@@ -67,19 +67,22 @@ void OSTIMER_Init(OSTIMER_Type *base);
 void OSTIMER_Deinit(OSTIMER_Type *base);
 
 /*!
- * @brief OSTIMER software reset.
+ * @brief Translate the value from gray-code to decimal.
  *
- * This function will use software to trigger an OSTIMER reset.
- * Please note that, the OS timer reset bit was in PMC->OSTIMERr register.
- *
- * @param base OSTIMER peripheral base address.
+ * @param gray The gray value input.
+ * @return The decimal value.
  */
-static inline void OSTIMER_SoftwareReset(OSTIMER_Type *base)
+uint64_t OSTIMER_GrayToDecimal(uint64_t gray);
+
+/*!
+ * @brief Translate the value from decimal to gray-code.
+ *
+ * @param dec The decimal value.
+ * @return The gray code of the input value.
+ */
+static inline uint64_t OSTIMER_DecimalToGray(uint64_t dec)
 {
-#if !(defined(FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG) && FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG)
-    PMC->OSTIMERr |= PMC_OSTIMER_SOFTRESET_MASK;
-    PMC->OSTIMERr &= ~PMC_OSTIMER_SOFTRESET_MASK;
-#endif
+    return (dec ^ (dec >> 1U));
 }
 
 /*!
@@ -136,6 +139,56 @@ status_t OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_ca
  * @retval kStatus_Fail    - Set match value fail.
  */
 status_t OSTIMER_SetMatchValue(OSTIMER_Type *base, uint64_t count, ostimer_callback_t cb);
+
+/*!
+ * @brief Set value to OSTIMER MATCH register directly.
+ *
+ * This function writes the input value to OSTIMER MATCH register directly,
+ * it does not touch any other registers. Note that, the data format is
+ * gray-code. The function @ref OSTIMER_DecimalToGray could convert decimal
+ * value to gray code.
+ *
+ * @param base   OSTIMER peripheral base address.
+ * @param count  OSTIMER timer match value (Value is gray-code format).
+ */
+static inline void OSTIMER_SetMatchRegister(OSTIMER_Type *base, uint64_t value)
+{
+#ifdef OSTIMER_OSEVENT_CTRL_MATCH_WR_RDY_MASK
+    /* Wait for MATCH register ready for write. */
+    while (0U != (base->OSEVENT_CTRL & OSTIMER_OSEVENT_CTRL_MATCH_WR_RDY_MASK))
+    {
+    }
+#endif
+
+    base->MATCH_L = (uint32_t)value;
+    base->MATCH_H = (uint32_t)(value >> 32U);
+}
+
+/*!
+ * @brief Enable the OSTIMER counter match interrupt.
+ *
+ * Enable the timer counter match interrupt. The interrupt happens when OSTIMER
+ * counter matches the value in MATCH registers.
+ *
+ * @param base OSTIMER peripheral base address.
+ */
+static inline void OSTIMER_EnableMatchInterrupt(OSTIMER_Type *base)
+{
+    base->OSEVENT_CTRL |= OSTIMER_OSEVENT_CTRL_OSTIMER_INTENA_MASK;
+}
+
+/*!
+ * @brief Disable the OSTIMER counter match interrupt.
+ *
+ * Disable the timer counter match interrupt. The interrupt happens when OSTIMER
+ * counter matches the value in MATCH registers.
+ *
+ * @param base OSTIMER peripheral base address.
+ */
+static inline void OSTIMER_DisableMatchInterrupt(OSTIMER_Type *base)
+{
+    base->OSEVENT_CTRL &= ~OSTIMER_OSEVENT_CTRL_OSTIMER_INTENA_MASK;
+}
 
 /*!
  * @brief Get current timer raw count value from OSTIMER.

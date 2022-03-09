@@ -40,7 +40,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CLOCK driver version. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -101,12 +101,12 @@
 /*!
  * @brief SYS_PLL_FREQ frequency in Hz.
  */
-#define SYS_PLL1_FREQ (1000000000U)
-#define SYS_PLL2_MFI  (22)
+#define SYS_PLL1_FREQ (1000000000UL)
+#define SYS_PLL2_MFI  (22UL)
 #define SYS_PLL2_FREQ (XTAL_FREQ * SYS_PLL2_MFI)
-#define SYS_PLL3_MFI  (20)
+#define SYS_PLL3_MFI  (20UL)
 #define SYS_PLL3_FREQ (XTAL_FREQ * SYS_PLL3_MFI)
-#define XTAL_FREQ     (24000000U)
+#define XTAL_FREQ     (24000000UL)
 
 /*! @brief Clock gate name array for ADC. */
 #define LPADC_CLOCKS                                   \
@@ -2147,9 +2147,10 @@ static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t va
         CCM->LPCG[name].DIRECT = ((uint32_t)value & CCM_LPCG_DIRECT_ON_MASK);
         __DSB();
         __ISB();
-#if __CORTEX_M == 4
-        (void)CCM->LPCG[name].DIRECT;
-#endif
+
+        while ((CCM->LPCG[name].STATUS0 & CCM_LPCG_STATUS0_ON_MASK) != ((uint32_t)value & CCM_LPCG_STATUS0_ON_MASK))
+        {
+        }
     }
 }
 
@@ -2696,6 +2697,17 @@ void CLOCK_InitSysPll2(const clock_sys_pll2_config_t *config);
 void CLOCK_DeinitSysPll2(void);
 
 /*!
+ * @brief Check if Sys PLL2 PFD is enabled
+ *
+ * @param pfd PFD control name
+ * @return PFD bypass status.
+ *         - true: power on.
+ *         - false: power off.
+ * @note Only useful in software control mode.
+ */
+bool CLOCK_IsSysPll2PfdEnabled(clock_pfd_t pfd);
+
+/*!
  * @brief Initialize the System PLL3.
  *
  * This function initializes the System PLL3 with specific settings
@@ -2707,6 +2719,17 @@ void CLOCK_InitSysPll3(void);
  * @brief De-initialize the System PLL3.
  */
 void CLOCK_DeinitSysPll3(void);
+
+/*!
+ * @brief Check if Sys PLL3 PFD is enabled
+ *
+ * @param pfd PFD control name
+ * @return PFD bypass status.
+ *         - true: power on.
+ *         - false: power off.
+ * @note Only useful in software control mode.
+ */
+bool CLOCK_IsSysPll3PfdEnabled(clock_pfd_t pfd);
 
 /*!
  * @name PLL/PFD operations
@@ -2820,6 +2843,14 @@ uint32_t CLOCK_GetPllFreq(clock_pll_t pll);
  * @note It is recommended that PFD settings are kept between 12-35.
  */
 void CLOCK_InitPfd(clock_pll_t pll, clock_pfd_t pfd, uint8_t frac);
+
+/*!
+ * @brief De-initialize selected PLL PFD.
+ *
+ * @param pll Which PLL of targeting PFD to be operated.
+ * @param pfd Which PFD clock to enable.
+ */
+void CLOCK_DeinitPfd(clock_pll_t pll, clock_pfd_t pfd);
 
 /*!
  * @brief Get current PFD output frequency.

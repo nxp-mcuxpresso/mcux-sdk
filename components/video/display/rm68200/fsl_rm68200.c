@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  *
@@ -17,28 +17,13 @@
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-static const uint8_t lcmInitSetting[][2] = {
-    {0xFE, 0x01},
-    {0x24, 0xC0},
-    {0x25, 0x53},
-    {0x26, 0x00},
-    {0x2B, 0xE5},
-    {0x27, 0x0A},
-    {0x29, 0x0A},
-    {0x16, 0x52},
-    {0x2F, 0x53},
-    {0x34, 0x5A},
-    {0x1B, 0x00},
-    {0x12, 0x0A},
-    {0x1A, 0x06},
-    {0x46, 0x56},
-    {0x52, 0xA0},
-    {0x53, 0x00},
-    {0x54, 0xA0},
-    {0x55, 0x00},
-    /* 2 data lanes */
-    {0x5F, 0x11},
+static const uint8_t lcmInitPage0Setting[][2] = {
+    {0xFE, 0x01}, {0x24, 0xC0}, {0x25, 0x53}, {0x26, 0x00}, {0x2B, 0xE5}, {0x27, 0x0A},
+    {0x29, 0x0A}, {0x16, 0x52}, {0x2F, 0x53}, {0x34, 0x5A}, {0x1B, 0x00}, {0x12, 0x0A},
+    {0x1A, 0x06}, {0x46, 0x56}, {0x52, 0xA0}, {0x53, 0x00}, {0x54, 0xA0}, {0x55, 0x00},
+};
 
+static const uint8_t lcmInitSetting[][2] = {
     {0xFE, 0x03},
     {0x00, 0x05},
     {0x02, 0x0B},
@@ -327,6 +312,26 @@ status_t RM68200_Init(display_handle_t *handle, const display_config_t *config)
     RM68200_DelayMs(1);
     resource->pullResetPin(true);
     RM68200_DelayMs(5);
+
+    /* Set the LCM page0 init settings. */
+    for (i = 0; i < ARRAY_SIZE(lcmInitPage0Setting); i++)
+    {
+        status = MIPI_DSI_GenericWrite(dsiDevice, lcmInitPage0Setting[i], 2);
+
+        if (kStatus_Success != status)
+        {
+            return status;
+        }
+    }
+
+    /* Data lane number selection. */
+    param[0] = 0x5FU;
+    param[1] = 0x10U | (config->dsiLanes - 1U);
+    status   = MIPI_DSI_GenericWrite(dsiDevice, param, 2);
+    if (kStatus_Success != status)
+    {
+        return status;
+    }
 
     /* Set the LCM init settings. */
     for (i = 0; i < ARRAY_SIZE(lcmInitSetting); i++)

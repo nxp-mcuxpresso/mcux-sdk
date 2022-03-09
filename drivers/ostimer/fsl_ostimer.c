@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -40,14 +40,6 @@ static uint32_t OSTIMER_GetInstance(OSTIMER_Type *base);
  */
 static uint64_t OSTIMER_GrayToDecimalbyCodeGray(uint64_t gray);
 #endif /* FSL_FEATURE_SYSCTRL_HAS_CODE_GRAY. */
-
-/* @brief Translate the value from gray-code to decimal. */
-/*
- * @param gray The gray value input.
- *
- * @return the decimal value.
- */
-static uint64_t OSTIMER_GrayToDecimal(uint64_t gray);
 
 /*******************************************************************************
  * Variables
@@ -120,7 +112,7 @@ static uint64_t OSTIMER_GrayToDecimalbyCodeGray(uint64_t gray)
  *
  * @return the decimal value.
  */
-static uint64_t OSTIMER_GrayToDecimal(uint64_t gray)
+uint64_t OSTIMER_GrayToDecimal(uint64_t gray)
 {
 #if (defined(FSL_FEATURE_SYSCTRL_HAS_CODE_GRAY) && FSL_FEATURE_SYSCTRL_HAS_CODE_GRAY)
     return OSTIMER_GrayToDecimalbyCodeGray(gray);
@@ -134,12 +126,6 @@ static uint64_t OSTIMER_GrayToDecimal(uint64_t gray)
 
     return gray;
 #endif /* FSL_FEATURE_SYSCTRL_HAS_CODE_GRAY. */
-}
-
-/* @brief Translate the value from decimal to gray-code. */
-static uint64_t OSTIMER_DecimalToGray(uint64_t dec)
-{
-    return (dec ^ (dec >> 1U));
 }
 
 /* @brief Enable the OSTIMER interrupt.
@@ -161,18 +147,12 @@ static void OSTIMER_EnableInterrupt(OSTIMER_Type *base, bool enable)
         /* Enable the IRQ and module interrupt enablement. */
         (void)EnableIRQ(s_ostimerIRQ[OSTIMER_GetInstance(base)]);
         base->OSEVENT_CTRL |= OSTIMER_OSEVENT_CTRL_OSTIMER_INTENA_MASK;
-#if !(defined(FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG) && FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG)
-        PMC->OSTIMERr |= PMC_OSTIMER_DPDWAKEUPENABLE_MASK;
-#endif
     }
     else
     {
         /* Clear interrupt flag, disable the IRQ and module interrupt enablement. */
         (void)DisableIRQ(s_ostimerIRQ[OSTIMER_GetInstance(base)]);
         base->OSEVENT_CTRL &= ~OSTIMER_OSEVENT_CTRL_OSTIMER_INTENA_MASK; /* Clear interrupt flag by writing 1. */
-#if !(defined(FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG) && FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG)
-        PMC->OSTIMERr &= ~PMC_OSTIMER_DPDWAKEUPENABLE_MASK;
-#endif
     }
 }
 
@@ -189,8 +169,7 @@ void OSTIMER_Init(OSTIMER_Type *base)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 #if !(defined(FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG) && FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG)
     /* Enable the OSTIMER 32k clock in PMC module. */
-    PMC->OSTIMERr |= PMC_OSTIMER_CLOCKENABLE_MASK;
-    PMC->OSTIMERr &= ~PMC_OSTIMER_OSC32KPD_MASK;
+    CLOCK_EnableOstimer32kClock();
 #endif
     /* Enable clock for OSTIMER. */
     CLOCK_EnableClock(s_ostimerClock[instance]);

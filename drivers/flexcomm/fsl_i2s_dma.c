@@ -50,9 +50,10 @@ typedef struct _i2s_dma_private_handle
 /*! @brief I2S DMA transfer private state. */
 enum _i2s_dma_state
 {
-    kI2S_DmaStateIdle = 0x0U, /*!< I2S is in idle state */
-    kI2S_DmaStateTx,          /*!< I2S is busy transmitting data */
-    kI2S_DmaStateRx,          /*!< I2S is busy receiving data */
+    kI2S_DmaStateIdle = 0x0U,      /*!< I2S is in idle state */
+    kI2S_DmaStateTx,               /*!< I2S is busy transmitting data */
+    kI2S_DmaStateRx,               /*!< I2S is busy receiving data */
+    kI2S_DmaStateBusyLoopTransfer, /*!< I2S is busy loop transfer */
 };
 
 /*******************************************************************************
@@ -287,23 +288,12 @@ void I2S_TransferAbortDMA(I2S_Type *base, i2s_dma_handle_t *handle)
 
     if (handle->state == (uint32_t)kI2S_DmaStateTx)
     {
-        /* Wait until all transmitted data get out of FIFO */
-        while ((base->FIFOSTAT & I2S_FIFOSTAT_TXEMPTY_MASK) == 0U)
-        {
-        }
-        /* The last piece of valid data can be still being transmitted from I2S at this moment */
-
-        /* Write additional data to FIFO */
-        base->FIFOWR = 0U;
-        while ((base->FIFOSTAT & I2S_FIFOSTAT_TXEMPTY_MASK) == 0U)
-        {
-        }
-        /* At this moment the additional data are out of FIFO, starting being transmitted.
-         * This means the preceding valid data has been just transmitted and we can stop I2S. */
+        /* Disable TX */
         I2S_TxEnableDMA(base, false);
     }
     else
     {
+        /* Disable RX */
         I2S_RxEnableDMA(base, false);
     }
 
@@ -439,6 +429,209 @@ static uint16_t I2S_GetTransferBytes(volatile i2s_transfer_t *transfer)
     }
 
     return transferBytes;
+}
+
+/*!
+ * brief Install DMA descriptor memory for loop transfer only.
+ *
+ * This function used to register DMA descriptor memory for the i2s loop dma transfer.
+ *
+ * It must be callbed before I2S_TransferSendLoopDMA/I2S_TransferReceiveLoopDMA and after
+ * I2S_RxTransferCreateHandleDMA/I2S_TxTransferCreateHandleDMA.
+ *
+ * User should be take care about the address of DMA descriptor pool which required align with 16BYTE at least.
+ *
+ * param handle Pointer to i2s DMA transfer handle.
+ * param dmaDescriptorAddr DMA descriptor start address.
+ * param dmaDescriptorNum DMA descriptor number.
+ */
+void I2S_TransferInstallLoopDMADescriptorMemory(i2s_dma_handle_t *handle,
+                                                void *dmaDescriptorAddr,
+                                                size_t dmaDescriptorNum)
+{
+    assert(handle != NULL);
+    assert((((uint32_t)(uint32_t *)dmaDescriptorAddr) & ((uint32_t)FSL_FEATURE_DMA_LINK_DESCRIPTOR_ALIGN_SIZE - 1UL)) ==
+           0UL);
+
+    handle->i2sLoopDMADescriptor    = (dma_descriptor_t *)dmaDescriptorAddr;
+    handle->i2sLoopDMADescriptorNum = dmaDescriptorNum;
+}
+
+static status_t I2S_TransferLoopDMA(I2S_Type *base,
+                                    i2s_dma_handle_t *handle,
+                                    i2s_transfer_t *xfer,
+                                    uint32_t loopTransferCount)
+{
+    assert(handle != NULL);
+    assert(handle->dmaHandle != NULL);
+    assert(xfer != NULL);
+
+    uint32_t *srcAddr = NULL, *destAddr = NULL, srcInc = 4UL, destInc = 4UL;
+    i2s_transfer_t *currentTransfer = xfer;
+    bool intA                       = true;
+
+    if (handle->i2sLoopDMADescriptor == NULL)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    if (handle->state == (uint32_t)kI2S_DmaStateBusyLoopTransfer)
+    {
+        return kStatus_I2S_Busy;
+    }
+
+    for (uint32_t i = 0U; i < loopTransferCount; i++)
+    {
+        currentTransfer = &xfer[i];
+
+        if ((currentTransfer->data == NULL) || (currentTransfer->dataSize == 0U) ||
+            (i >= handle->i2sLoopDMADescriptorNum) ||
+            (currentTransfer->dataSize / handle->bytesPerFrame > DMA_MAX_TRANSFER_COUNT))
+        {
+            return kStatus_InvalidArgument;
+        }
+
+        if (handle->state == (uint32_t)kI2S_DmaStateTx)
+        {
+            srcAddr  = (uint32_t *)(uint32_t)currentTransfer->data;
+            destAddr = (uint32_t *)(uint32_t)(&(base->FIFOWR));
+            srcInc   = 1U;
+            destInc  = 0UL;
+        }
+        else
+        {
+            srcAddr  = (uint32_t *)(uint32_t)(&(base->FIFORD));
+            destAddr = (uint32_t *)(uint32_t)currentTransfer->data;
+            srcInc   = 0U;
+            destInc  = 1UL;
+        }
+
+        intA = intA == true ? false : true;
+
+        if (i == (loopTransferCount - 1U))
+        {
+            /* set up linked descriptor */
+            DMA_SetupDescriptor(&handle->i2sLoopDMADescriptor[i],
+                                DMA_CHANNEL_XFER(1UL, 0UL, intA, !intA, handle->bytesPerFrame, srcInc, destInc,
+                                                 currentTransfer->dataSize),
+                                srcAddr, destAddr, &handle->i2sLoopDMADescriptor[0U]);
+        }
+        else
+        {
+            /* set up linked descriptor */
+            DMA_SetupDescriptor(&handle->i2sLoopDMADescriptor[i],
+                                DMA_CHANNEL_XFER(1UL, 0UL, intA, !intA, handle->bytesPerFrame, srcInc, destInc,
+                                                 currentTransfer->dataSize),
+                                srcAddr, destAddr, &handle->i2sLoopDMADescriptor[i + 1U]);
+        }
+    }
+
+    /* transferSize make sense to non link transfer only */
+    if (handle->state == (uint32_t)kI2S_DmaStateTx)
+    {
+        srcAddr  = (uint32_t *)(uint32_t)xfer->data;
+        destAddr = (uint32_t *)(uint32_t)(&(base->FIFOWR));
+        srcInc   = 1U;
+        destInc  = 0UL;
+    }
+    else
+    {
+        srcAddr  = (uint32_t *)(uint32_t)(&(base->FIFORD));
+        destAddr = (uint32_t *)(uint32_t)xfer->data;
+        srcInc   = 0U;
+        destInc  = 1UL;
+    }
+
+    DMA_SubmitChannelTransferParameter(
+        handle->dmaHandle,
+        DMA_CHANNEL_XFER(1UL, 0UL, 0UL, 1UL, handle->bytesPerFrame, srcInc, destInc, (uint32_t)xfer->dataSize), srcAddr,
+        destAddr, (void *)&handle->i2sLoopDMADescriptor[1U]);
+
+    /* Submit and start initial DMA transfer */
+    if (handle->state == (uint32_t)kI2S_DmaStateTx)
+    {
+        I2S_TxEnableDMA(base, true);
+    }
+    else
+    {
+        I2S_RxEnableDMA(base, true);
+    }
+    DMA_EnableChannelPeriphRq(handle->dmaHandle->base, handle->dmaHandle->channel);
+    /* start transfer */
+    DMA_StartTransfer(handle->dmaHandle);
+    I2S_Enable(base);
+
+    handle->state = (uint32_t)kI2S_DmaStateBusyLoopTransfer;
+
+    return kStatus_Success;
+}
+
+/*!
+ * brief Send loop transfer data using DMA.
+ *
+ * This function receives data using DMA. This is a non-blocking function, which returns
+ * right away. When all data is received, the receive callback function is called.
+ *
+ * This function support loop transfer, such as A->B->...->A, the loop transfer chain
+ * will be converted into a chain of descriptor and submit to dma.
+ * Application must be aware of that the more counts of the loop transfer, then more DMA descriptor memory required,
+ * user can use function I2S_InstallDMADescriptorMemory to register the dma descriptor memory.
+ *
+ * As the DMA support maximum 1024 transfer count, so application must be aware of that this transfer function support
+ * maximum 1024 samples in each transfer, otherwise assert error or error status will be returned. Once the loop
+ * transfer start, application can use function I2S_TransferAbortDMA to stop the loop transfer.
+ *
+ * param base I2S peripheral base address.
+ * param handle Pointer to usart_dma_handle_t structure.
+ * param xfer I2S DMA transfer structure. See #i2s_transfer_t.
+ * param i2s_channel I2S start channel number
+ * retval kStatus_Success
+ */
+status_t I2S_TransferSendLoopDMA(I2S_Type *base,
+                                 i2s_dma_handle_t *handle,
+                                 i2s_transfer_t *xfer,
+                                 uint32_t loopTransferCount)
+{
+    assert(handle != NULL);
+    assert(handle->i2sLoopDMADescriptor != NULL);
+
+    handle->state = (uint32_t)kI2S_DmaStateTx;
+
+    return I2S_TransferLoopDMA(base, handle, xfer, loopTransferCount);
+}
+
+/*!
+ * brief Receive loop transfer data using DMA.
+ *
+ * This function receives data using DMA. This is a non-blocking function, which returns
+ * right away. When all data is received, the receive callback function is called.
+ *
+ * This function support loop transfer, such as A->B->...->A, the loop transfer chain
+ * will be converted into a chain of descriptor and submit to dma.
+ * Application must be aware of that the more counts of the loop transfer, then more DMA descriptor memory required,
+ * user can use function I2S_InstallDMADescriptorMemory to register the dma descriptor memory.
+ *
+ * As the DMA support maximum 1024 transfer count, so application must be aware of that this transfer function support
+ * maximum 1024 samples in each transfer, otherwise assert error or error status will be returned. Once the loop
+ * transfer start, application can use function I2S_TransferAbortDMA to stop the loop transfer.
+ *
+ * param base I2S peripheral base address.
+ * param handle Pointer to usart_dma_handle_t structure.
+ * param xfer I2S DMA transfer structure. See #i2s_transfer_t.
+ * param i2s_channel I2S start channel number
+ * retval kStatus_Success
+ */
+status_t I2S_TransferReceiveLoopDMA(I2S_Type *base,
+                                    i2s_dma_handle_t *handle,
+                                    i2s_transfer_t *xfer,
+                                    uint32_t loopTransferCount)
+{
+    assert(handle != NULL);
+    assert(handle->i2sLoopDMADescriptor != NULL);
+
+    handle->state = (uint32_t)kI2S_DmaStateRx;
+
+    return I2S_TransferLoopDMA(base, handle, xfer, loopTransferCount);
 }
 
 static status_t I2S_StartTransferDMA(I2S_Type *base, i2s_dma_handle_t *handle)
@@ -633,15 +826,23 @@ void I2S_DMACallback(dma_handle_t *handle, void *userData, bool transferDone, ui
             (i2sHandle->completionCallback)(base, i2sHandle, kStatus_I2S_BufferComplete, i2sHandle->userData);
         }
     }
-    /* check next buffer queue is avaliable or not */
-    if (i2sHandle->i2sQueue[i2sHandle->queueDriver].dataSize == 0U)
+
+    if (i2sHandle->state != (uint32_t)kI2S_DmaStateBusyLoopTransfer)
     {
-        /* All user buffers processed */
-        I2S_TransferAbortDMA(base, i2sHandle);
-    }
-    else
-    {
-        /* Enqueue another user buffer to DMA if it could not be done when in I2S_Rx/TxTransferSendDMA */
-        I2S_AddTransferDMA(base, i2sHandle);
+        /* check next buffer queue is avaliable or not */
+        if (i2sHandle->i2sQueue[i2sHandle->queueDriver].dataSize == 0U)
+        {
+            if (i2sHandle->state == (uint32_t)kI2S_DmaStateTx)
+            {
+                (void)I2S_EmptyTxFifo(base);
+            }
+            /* All user buffers processed */
+            I2S_TransferAbortDMA(base, i2sHandle);
+        }
+        else
+        {
+            /* Enqueue another user buffer to DMA if it could not be done when in I2S_Rx/TxTransferSendDMA */
+            I2S_AddTransferDMA(base, i2sHandle);
+        }
     }
 }

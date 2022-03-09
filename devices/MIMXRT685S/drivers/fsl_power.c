@@ -1100,5 +1100,5 @@ void DisableDeepSleepIRQ(IRQn_Type interrupt)
 /* Get power lib version */
 uint32_t POWER_GetLibVersion(void)
 {
-    return FSL_POWER_DRIVER_VERSION;
+    return (uint32_t)FSL_POWER_DRIVER_VERSION;
 }

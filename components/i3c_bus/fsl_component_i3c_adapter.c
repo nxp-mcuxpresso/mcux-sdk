@@ -33,6 +33,7 @@ static status_t I3C_SlaveAdapterInit(i3c_device_t *dev);
 static status_t I3C_MasterAdapterHandOffMasterShip(i3c_device_t *master, uint8_t slaveAddr);
 static void I3C_MasterAdapterTakeOverMasterShip(i3c_device_t *master);
 static void I3C_SlaveAdapterRequestIBI(i3c_device_t *dev, void *data, size_t dataSize);
+static void I3C_MasterAdapterRegisterIBI(i3c_device_t *master, uint8_t ibiAddress);
 static void i3c_master_ibi_callback(I3C_Type *base,
                                     i3c_master_handle_t *handle,
                                     i3c_ibi_type_t ibiType,
@@ -57,6 +58,7 @@ const i3c_device_hw_ops_t master_ops = {.Init              = I3C_MasterAdapterIn
                                         .DoI2CTransfer     = I3C_MasterAdapterDoI2CTransfer,
                                         .HotJoin           = I3C_SlaveAdapterRequestHotJoin,
                                         .RequestMastership = I3C_SlaveAdapterRequestMastership,
+                                        .RegisterIBI       = I3C_MasterAdapterRegisterIBI,
                                         .RequestIBI        = I3C_SlaveAdapterRequestIBI};
 
 const i3c_device_hw_ops_t slave_ops                        = {.Init              = I3C_SlaveAdapterInit,
@@ -66,6 +68,7 @@ const i3c_device_hw_ops_t slave_ops                        = {.Init             
                                        .TransmitCCC       = NULL,
                                        .DoI3CTransfer     = NULL,
                                        .DoI2CTransfer     = NULL,
+                                       .RegisterIBI       = NULL,
                                        .HotJoin           = I3C_SlaveAdapterRequestHotJoin,
                                        .RequestMastership = I3C_SlaveAdapterRequestMastership,
                                        .RequestIBI        = I3C_SlaveAdapterRequestIBI};
@@ -110,6 +113,7 @@ static void i3c_secondarymaster_callback(I3C_Type *base, i3c_slave_transfer_t *x
 
         case (uint32_t)kI3C_SlaveTransmitEvent:
         case (uint32_t)kI3C_SlaveReceiveEvent:
+        case (uint32_t)kI3C_SlaveRequestSentEvent:
             break;
 
         default:
@@ -378,14 +382,22 @@ static status_t I3CMasterAdapterTransfer(I3C_Type *base,
             }
 
             /* Wait for transfer completed. */
-            while ((!g_ibiWonFlag) && (!g_masterCompletionFlag))
+            while (!g_masterCompletionFlag)
             {
                 timeout++;
-                if ((g_completionStatus != kStatus_Success) || (timeout > I3C_TIME_OUT_INDEX))
+                __NOP();
+                if (g_ibiWonFlag)
                 {
                     break;
                 }
-                __NOP();
+                else if ((g_completionStatus != kStatus_Success) || (timeout > I3C_TIME_OUT_INDEX))
+                {
+                    break;
+                }
+                else
+                {
+                    /* Add this to fix MISRA C2012 rule15.7 issue: Empty else without comment. */
+                }
             }
 
             result = g_completionStatus;
@@ -624,6 +636,31 @@ static status_t I3C_MasterAdapterHandOffMasterShip(i3c_device_t *master, uint8_t
     I3C_SlaveDisableInterrupts(base, (uint32_t)kI3C_SlaveTxReadyFlag);
 
     return result;
+}
+
+static void I3C_MasterAdapterRegisterIBI(i3c_device_t *master, uint8_t ibiAddress)
+{
+    i3c_device_control_info_t *masterControlInfo  = master->devControlInfo;
+    i3c_master_adapter_resource_t *masterResource = (i3c_master_adapter_resource_t *)masterControlInfo->resource;
+    I3C_Type *base                                = masterResource->base;
+
+    i3c_register_ibi_addr_t ibiRule;
+    I3C_MasterGetIBIRules(base, &ibiRule);
+    if (ibiRule.ibiHasPayload)
+    {
+        ibiRule.ibiHasPayload = true;
+    }
+
+    for (uint32_t count = 0; count < ARRAY_SIZE(ibiRule.address); count++)
+    {
+        if (0U == ibiRule.address[count])
+        {
+            ibiRule.address[count] = ibiAddress;
+            break;
+        }
+    }
+
+    I3C_MasterRegisterIBI(base, &ibiRule);
 }
 
 static status_t I3C_SlaveAdapterInit(i3c_device_t *dev)

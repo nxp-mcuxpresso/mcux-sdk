@@ -1,7 +1,12 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/i2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/spi
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/log
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/slcd_engine
     ${CMAKE_CURRENT_LIST_DIR}/../../components/slcd_engine/GDH-1247WP
@@ -58,19 +63,24 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_lists)
 #    include(device_system)
 #    include(driver_irtc)
-#    include(driver_cmp)
+#    include(driver_cmsis_spi)
+#    include(driver_cmsis_i2c)
 #    include(device_startup)
 #    include(driver_adc16)
-#    include(driver_clock)
-#    include(utility_debug_console_lite)
+#    include(CMSIS_Driver_Include_USART)
+#    include(CMSIS_Driver_Include_SPI)
+#    include(component_log)
 #    include(driver_i2c_dma)
 #    include(utility_shell)
 #    include(driver_ewm)
+#    include(utility_assert)
 #    include(CMSIS_Include_core_cm)
+#    include(driver_cmp)
 #    include(driver_xbar)
 #    include(middleware_freertos-kernel_extension)
 #    include(middleware_freertos-kernel_MKM34ZA5)
 #    include(utility_notifier)
+#    include(CMSIS_Driver_Include_I2C)
 #    include(driver_wdog)
 #    include(utility_assert_lite)
 #    include(driver_sysmpu)
@@ -78,12 +88,16 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_spi)
 #    include(driver_flash)
 #    include(component_uart_adapter)
-#    include(utility_assert)
+#    include(driver_clock)
 #    include(driver_sim)
+#    include(component_log_backend_ringbuffer)
 #    include(utility_debug_console)
 #    include(device_CMSIS)
 #    include(driver_uart)
 #    include(driver_qtmr_2)
+#    include(CMSIS_Driver_Include_Common)
+#    include(driver_slcd_engine)
+#    include(utility_debug_console_lite)
 #    include(utilities_misc_utilities)
 #    include(driver_rnga)
 #    include(driver_common)
@@ -100,5 +114,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_pmc)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)
-#    include(driver_slcd_engine)
+#    include(component_log_backend_debugconsole)
 #    include(driver_spi_freertos)
+#    include(driver_cmsis_uart)

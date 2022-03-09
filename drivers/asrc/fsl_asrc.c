@@ -376,7 +376,7 @@ void ASRC_Init(ASRC_Type *base, uint32_t asrcPeripheralClock_Hz)
     /* disable all the interrupt */
     base->ASRIER = 0U;
 
-#if (defined FSL_FEATURE_ASRC_PARAMETER_REGISTER_NAME_ASPRM) && FSL_FEATURE_ASRC_PARAMETER_REGISTER_NAME_ASPRM
+#if (defined FSL_FEATURE_ASRC_PARAMETER_REGISTER_NAME_ASRPM) && FSL_FEATURE_ASRC_PARAMETER_REGISTER_NAME_ASRPM
     /* set paramter register to default configurations per recommand value in reference manual */
     base->ASRPM[0] = 0x7fffffU;
     base->ASRPM[1] = 0x255555U;
@@ -390,7 +390,7 @@ void ASRC_Init(ASRC_Type *base, uint32_t asrcPeripheralClock_Hz)
     base->ASRPMn[2] = 0xff7280U;
     base->ASRPMn[3] = 0xff7280U;
     base->ASRPMn[4] = 0xff7280U;
-#endif /*FSL_FEATURE_ASRC_PARAMETER_REGISTER_NAME_ASPRM*/
+#endif /*FSL_FEATURE_ASRC_PARAMETER_REGISTER_NAME_ASRPM*/
     /* set task queue fifo */
     base->ASRTFR1 = ASRC_ASRTFR1_TF_BASE(0x7C);
     /* 76K/56K divider */
@@ -491,16 +491,27 @@ status_t ASRC_SetChannelPairConfig(ASRC_Type *base,
     base->ASRCSR = asrcsr;
 
     /* clock divider configuration */
-    uint32_t asrcda1 =
+    uint32_t asrcdr =
         base->ASRCDR1 &
         (~(ASRC_ASRCDR_INPUT_PRESCALER_MASK(channelPair) | ASRC_ASRCDR_INPUT_DIVIDER_MASK(channelPair) |
            ASRC_ASRCDR_OUTPUT_PRESCALER_MASK(channelPair) | ASRC_ASRCDR_OUTPUT_DIVIDER_MASK(channelPair)));
-    asrcda1 |= ASRC_CalculateClockDivider(outputSampleRate, config->outSourceClock_Hz) << ASRC_ASRCDR1_AOCPA_SHIFT;
+
+    asrcdr |= ASCR_ASRCDR_OUTPUT_CLOCK_DIVIDER_PRESCALER(
+        ASRC_CalculateClockDivider(outputSampleRate, config->outSourceClock_Hz), channelPair);
     if (config->inClockSource != kASRC_ClockSourceNotAvalible)
     {
-        asrcda1 |= ASRC_CalculateClockDivider(inputSampleRate, config->inSourceClock_Hz);
+        asrcdr |= ASCR_ASRCDR_INPUT_CLOCK_DIVIDER_PRESCALER(
+            ASRC_CalculateClockDivider(inputSampleRate, config->inSourceClock_Hz), channelPair);
     }
-    base->ASRCDR1 = asrcda1;
+
+    if (channelPair == kASRC_ChannelPairC)
+    {
+        base->ASRCDR2 = asrcdr;
+    }
+    else
+    {
+        base->ASRCDR1 = asrcdr;
+    }
 
     /* data width/sign extension/data align configuration */
     ASRC_ASRMCR1(base, channelPair) = ASRC_ASRMCR1_OW16(config->outDataWidth) | ASRC_ASRMCR1_IWD(config->inDataWidth) |

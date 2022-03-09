@@ -22,8 +22,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief WM8904 driver version 2.4.4. */
-#define FSL_WM8904_DRIVER_VERSION (MAKE_VERSION(2, 4, 4))
+/*! @brief WM8904 driver version 2.5.0. */
+#define FSL_WM8904_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*@}*/
 
 /*! @brief wm8904 handle size */
@@ -93,9 +93,9 @@
 /*! @brief WM8904 I2C bit rate. */
 #define WM8904_I2C_BITRATE (400000U)
 
-/*!@brief WM8904 maximum headphone/lineout volume */
+/*!@brief WM8904 maximum volume */
 #define WM8904_MAP_HEADPHONE_LINEOUT_MAX_VOLUME 0x3FU
-
+#define WM8904_DAC_MAX_VOLUME                   0xC0U
 /*! @brief WM8904 status return codes.
  * @anchor _wm8904_status
  */
@@ -359,7 +359,7 @@ void WM8904_GetDefaultConfig(wm8904_config_t *config);
 
 /*!
  * @brief Sets WM8904 as master or slave.
- * @deprecated DO NOT USE THIS API ANYMORE. IT HAS BEEN SUPERCEDED BY @ref WM8904_SeMasterClock
+ * @deprecated DO NOT USE THIS API ANYMORE. IT HAS BEEN SUPERCEDED BY @ref WM8904_SetMasterClock
  * @param handle WM8904 handle structure.
  * @param master true for master, false for slave.
  *
@@ -370,14 +370,17 @@ status_t WM8904_SetMasterSlave(wm8904_handle_t *handle, bool master);
 /*!
  * @brief Sets WM8904 master clock configuration.
  *
+ * User should pay attention to the sysclk parameter ,When using external MCLK as system clock source, the value should
+ * be frequency of MCLK, when using FLL as system clock source, the value should be frequency of the output of FLL.
+ *
  * @param handle WM8904 handle structure.
- * @param sysclk system clock rate.
+ * @param sysclk system clock source frequency.
  * @param sampleRate sample rate
  * @param bitWidth bit width
  *
  * @return kStatus_WM8904_Success if successful, different code otherwise.
  */
-status_t WM8904_SeMasterClock(wm8904_handle_t *handle, uint32_t sysclk, uint32_t sampleRate, uint32_t bitWidth);
+status_t WM8904_SetMasterClock(wm8904_handle_t *handle, uint32_t sysclk, uint32_t sampleRate, uint32_t bitWidth);
 
 /*!
  * @brief WM8904 set PLL configuration
@@ -403,9 +406,11 @@ status_t WM8904_SetProtocol(wm8904_handle_t *handle, wm8904_protocol_t protocol)
 /*!
  * @brief Sets the audio data format.
  *
+ * User should pay attention to the sysclk parameter ,When using external MCLK as system clock source, the value should
+ * be frequency of MCLK, when using FLL as system clock source, the value should be frequency of the output of FLL.
+ *
  * @param handle WM8904 handle structure.
- * @param sysclk System clock frequency for codec, user should pay attention to this parater, sysclk is caculate as
- * SYSCLK = MCLK / MCLKDIV, MCLKDIV is bit0 of WM8904_CLK_RATES_0.
+ * @param sysclk system clock source frequency.
  * @param sampleRate Sample rate frequency in Hz.
  * @param bitWidth Audio data bit width.
  *
@@ -493,15 +498,25 @@ status_t WM8904_PrintRegisters(wm8904_handle_t *handle);
 #endif
 
 /*!
- * brief SET the module output power.
+ * @brief SET the module output power.
  *
- * param handle WM8904 handle structure.
- * param module wm8904 module.
- * param isEnabled, true is power on, false is power down.
+ * @param handle WM8904 handle structure.
+ * @param module wm8904 module.
+ * @param isEnabled, true is power on, false is power down.
  *
- * return kStatus_WM8904_Success if successful, different code otherwise..
+ * @return kStatus_WM8904_Success if successful, different code otherwise..
  */
 status_t WM8904_SetModulePower(wm8904_handle_t *handle, wm8904_module_t module, bool isEnabled);
+
+/*!
+ * @brief SET the DAC module volume.
+ *
+ * @param handle WM8904 handle structure.
+ * @param volume volume to be configured.
+ *
+ * @return kStatus_WM8904_Success if successful, different code otherwise..
+ */
+status_t WM8904_SetDACVolume(wm8904_handle_t *handle, uint8_t volume);
 
 /*!
  * @brief Sets the channel output volume.

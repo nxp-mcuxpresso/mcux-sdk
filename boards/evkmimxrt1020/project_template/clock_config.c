@@ -1,10 +1,9 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2020,2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-
 /*
  * How to setup clock using clock driver functions:
  *
@@ -22,11 +21,11 @@
 
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Clocks v5.0
+product: Clocks v8.0
 processor: MIMXRT1021xxxxx
 package_id: MIMXRT1021DAG5A
 mcu_data: ksdk2_0
-processor_version: 0.0.0
+processor_version: 10.0.0
 board: MIMXRT1020-EVK
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
@@ -86,7 +85,7 @@ outputs:
 - {id: SAI3_MCLK3.outFreq, value: 30 MHz}
 - {id: SEMC_CLK_ROOT.outFreq, value: 62.5 MHz}
 - {id: SPDIF0_CLK_ROOT.outFreq, value: 30 MHz}
-- {id: TRACE_CLK_ROOT.outFreq, value: 352/3 MHz}
+- {id: TRACE_CLK_ROOT.outFreq, value: 132 MHz}
 - {id: UART_CLK_ROOT.outFreq, value: 80 MHz}
 - {id: USDHC1_CLK_ROOT.outFreq, value: 176 MHz}
 - {id: USDHC2_CLK_ROOT.outFreq, value: 176 MHz}
@@ -100,7 +99,8 @@ settings:
 - {id: CCM.PERCLK_PODF.scale, value: '2', locked: true}
 - {id: CCM.PRE_PERIPH_CLK_SEL.sel, value: CCM.ARM_PODF}
 - {id: CCM.SEMC_PODF.scale, value: '8'}
-- {id: CCM.TRACE_PODF.scale, value: '3', locked: true}
+- {id: CCM.TRACE_CLK_SEL.sel, value: CCM_ANALOG.PLL2_MAIN_CLK}
+- {id: CCM.TRACE_PODF.scale, value: '4', locked: true}
 - {id: CCM.USDHC1_PODF.scale, value: '3', locked: true}
 - {id: CCM.USDHC2_PODF.scale, value: '3', locked: true}
 - {id: CCM_ANALOG.PLL2.denom, value: '1', locked: true}
@@ -130,30 +130,32 @@ settings:
 - {id: CCM_ANALOG_PLL_ENET_ENET_25M_REF_EN_CFG, value: Disabled}
 - {id: CCM_ANALOG_PLL_USB1_POWER_CFG, value: 'Yes'}
 sources:
-- {id: XTALOSC24M.OSC.outFreq, value: 24 MHz, enabled: true}
 - {id: XTALOSC24M.RTC_OSC.outFreq, value: 32.768 kHz, enabled: true}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
 /*******************************************************************************
  * Variables for BOARD_BootClockRUN configuration
  ******************************************************************************/
-const clock_sys_pll_config_t sysPllConfig_BOARD_BootClockRUN = {
-    .loopDivider = 1, /* PLL loop divider, Fout = Fin * ( 20 + loopDivider*2 + numerator / denominator ) */
-    .numerator   = 0, /* 30 bit numerator of fractional loop divider */
-    .denominator = 1, /* 30 bit denominator of fractional loop divider */
-    .src         = 0, /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
-};
-const clock_usb_pll_config_t usb1PllConfig_BOARD_BootClockRUN = {
-    .loopDivider = 0, /* PLL loop divider, Fout = Fin * 20 */
-    .src         = 0, /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
-};
-const clock_enet_pll_config_t enetPllConfig_BOARD_BootClockRUN = {
-    .enableClkOutput     = false, /* Disable the PLL providing the ENET 125MHz reference clock */
-    .enableClkOutput500M = true,  /* Enable the PLL providing the ENET 500MHz reference clock */
-    .enableClkOutput25M  = false, /* Disable the PLL providing the ENET 25MHz reference clock */
-    .loopDivider         = 1,     /* Set frequency of ethernet reference clock to 50 MHz */
-    .src                 = 0,     /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
-};
+const clock_sys_pll_config_t sysPllConfig_BOARD_BootClockRUN =
+    {
+        .loopDivider = 1,                         /* PLL loop divider, Fout = Fin * ( 20 + loopDivider*2 + numerator / denominator ) */
+        .numerator = 0,                           /* 30 bit numerator of fractional loop divider */
+        .denominator = 1,                         /* 30 bit denominator of fractional loop divider */
+        .src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
+    };
+const clock_usb_pll_config_t usb1PllConfig_BOARD_BootClockRUN =
+    {
+        .loopDivider = 0,                         /* PLL loop divider, Fout = Fin * 20 */
+        .src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
+    };
+const clock_enet_pll_config_t enetPllConfig_BOARD_BootClockRUN =
+    {
+        .enableClkOutput = false,                 /* Disable the PLL providing the ENET 125MHz reference clock */
+        .enableClkOutput500M = true,              /* Enable the PLL providing the ENET 500MHz reference clock */
+        .enableClkOutput25M = false,              /* Disable the PLL providing the ENET 25MHz reference clock */
+        .loopDivider = 1,                         /* Set frequency of ethernet reference clock to 50 MHz */
+        .src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
+    };
 /*******************************************************************************
  * Code for BOARD_BootClockRUN configuration
  ******************************************************************************/
@@ -218,9 +220,8 @@ void BOARD_BootClockRUN(void)
     /* Set Usdhc2 clock source. */
     CLOCK_SetMux(kCLOCK_Usdhc2Mux, 0);
     /* In SDK projects, SDRAM (configured by SEMC) will be initialized in either debug script or dcd.
-     * With this macro SKIP_SYSCLK_INIT, system pll (selected to be SEMC source clock in SDK projects) will be left
-     * unchanged. Note: If another clock source is selected for SEMC, user may want to avoid changing that clock as
-     * well.*/
+     * With this macro SKIP_SYSCLK_INIT, system pll (selected to be SEMC source clock in SDK projects) will be left unchanged.
+     * Note: If another clock source is selected for SEMC, user may want to avoid changing that clock as well.*/
 #ifndef SKIP_SYSCLK_INIT
     /* Disable Semc clock gate. */
     CLOCK_DisableClock(kCLOCK_Semc);
@@ -232,9 +233,8 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetMux(kCLOCK_SemcMux, 0);
 #endif
     /* In SDK projects, external flash (configured by FLEXSPI) will be initialized by dcd.
-     * With this macro XIP_EXTERNAL_FLASH, usb1 pll (selected to be FLEXSPI clock source in SDK projects) will be left
-     * unchanged. Note: If another clock source is selected for FLEXSPI, user may want to avoid changing that clock as
-     * well.*/
+     * With this macro XIP_EXTERNAL_FLASH, usb1 pll (selected to be FLEXSPI clock source in SDK projects) will be left unchanged.
+     * Note: If another clock source is selected for FLEXSPI, user may want to avoid changing that clock as well.*/
 #if !(defined(XIP_EXTERNAL_FLASH) && (XIP_EXTERNAL_FLASH == 1))
     /* Disable Flexspi clock gate. */
     CLOCK_DisableClock(kCLOCK_FlexSpi);
@@ -255,9 +255,9 @@ void BOARD_BootClockRUN(void)
     /* Disable TRACE clock gate. */
     CLOCK_DisableClock(kCLOCK_Trace);
     /* Set TRACE_PODF. */
-    CLOCK_SetDiv(kCLOCK_TraceDiv, 2);
+    CLOCK_SetDiv(kCLOCK_TraceDiv, 3);
     /* Set Trace clock source. */
-    CLOCK_SetMux(kCLOCK_TraceMux, 2);
+    CLOCK_SetMux(kCLOCK_TraceMux, 0);
     /* Disable SAI1 clock gate. */
     CLOCK_DisableClock(kCLOCK_Sai1);
     /* Set SAI1_CLK_PRED. */
@@ -331,10 +331,12 @@ void BOARD_BootClockRUN(void)
     /* Set Pll3 sw clock source. */
     CLOCK_SetMux(kCLOCK_Pll3SwMux, 0);
     /* In SDK projects, SDRAM (configured by SEMC) will be initialized in either debug script or dcd.
-     * With this macro SKIP_SYSCLK_INIT, system pll (selected to be SEMC source clock in SDK projects) will be left
-     * unchanged. Note: If another clock source is selected for SEMC, user may want to avoid changing that clock as
-     * well.*/
+     * With this macro SKIP_SYSCLK_INIT, system pll (selected to be SEMC source clock in SDK projects) will be left unchanged.
+     * Note: If another clock source is selected for SEMC, user may want to avoid changing that clock as well.*/
 #ifndef SKIP_SYSCLK_INIT
+#if defined(XIP_BOOT_HEADER_DCD_ENABLE) && (XIP_BOOT_HEADER_DCD_ENABLE == 1)
+    #warning "SKIP_SYSCLK_INIT should be defined to keep system pll (selected to be SEMC source clock in SDK projects) unchanged."
+#endif
     /* Init System PLL. */
     CLOCK_InitSysPll(&sysPllConfig_BOARD_BootClockRUN);
     /* Init System pfd0. */
@@ -347,9 +349,8 @@ void BOARD_BootClockRUN(void)
     CLOCK_InitSysPfd(kCLOCK_Pfd3, 18);
 #endif
     /* In SDK projects, external flash (configured by FLEXSPI) will be initialized by dcd.
-     * With this macro XIP_EXTERNAL_FLASH, usb1 pll (selected to be FLEXSPI clock source in SDK projects) will be left
-     * unchanged. Note: If another clock source is selected for FLEXSPI, user may want to avoid changing that clock as
-     * well.*/
+     * With this macro XIP_EXTERNAL_FLASH, usb1 pll (selected to be FLEXSPI clock source in SDK projects) will be left unchanged.
+     * Note: If another clock source is selected for FLEXSPI, user may want to avoid changing that clock as well.*/
 #if !(defined(XIP_EXTERNAL_FLASH) && (XIP_EXTERNAL_FLASH == 1))
     /* Init Usb1 PLL. */
     CLOCK_InitUsb1Pll(&usb1PllConfig_BOARD_BootClockRUN);
@@ -408,9 +409,16 @@ void BOARD_BootClockRUN(void)
     /* Set SAI3 MCLK3 clock source. */
     IOMUXC_SetSaiMClkClockSource(IOMUXC_GPR, kIOMUXC_GPR_SAI3MClk3Sel, 0);
     /* Set MQS configuration. */
-    IOMUXC_MQSConfig(IOMUXC_GPR, kIOMUXC_MqsPwmOverSampleRate32, 0);
-    /* Set ENET Tx clock source. */
-    IOMUXC_EnableMode(IOMUXC_GPR, kIOMUXC_GPR_ENET1RefClkMode, false);
+    IOMUXC_MQSConfig(IOMUXC_GPR,kIOMUXC_MqsPwmOverSampleRate32, 0);
+    /* Set ENET Ref clock source. */
+#if defined(IOMUXC_GPR_GPR1_ENET_REF_CLK_DIR_MASK)
+    IOMUXC_GPR->GPR1 &= ~IOMUXC_GPR_GPR1_ENET_REF_CLK_DIR_MASK;
+#elif defined(IOMUXC_GPR_GPR1_ENET1_TX_CLK_DIR_MASK)
+    /* Backward compatibility for original bitfield name */
+    IOMUXC_GPR->GPR1 &= ~IOMUXC_GPR_GPR1_ENET1_TX_CLK_DIR_MASK;
+#else
+#error "Neither IOMUXC_GPR_GPR1_ENET_REF_CLK_DIR_MASK nor IOMUXC_GPR_GPR1_ENET1_TX_CLK_DIR_MASK is defined."
+#endif /* defined(IOMUXC_GPR_GPR1_ENET_REF_CLK_DIR_MASK) */
     /* Set GPT1 High frequency reference clock source. */
     IOMUXC_GPR->GPR5 &= ~IOMUXC_GPR_GPR5_VREF_1M_CLK_GPT1_MASK;
     /* Set GPT2 High frequency reference clock source. */

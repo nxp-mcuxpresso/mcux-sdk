@@ -4,11 +4,11 @@
 /*            MIMX8MN6_cm7                                                   */
 /*  @version: 2.0                                                            */
 /*  @date:    2019-9-23                                                      */
-/*  @build:   b190830                                                        */
+/*  @build:   b211101                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2019 NXP                                                   */
+/* Copyright 2016-2021 NXP                                                   */
 /* All rights reserved.                                                      */
 /*                                                                           */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
@@ -161,7 +161,7 @@ __isr_vector:
     .long   ENET_MAC0_Rx_Tx_Done1_IRQHandler                /* MAC 0 Receive / Trasmit Frame / Buffer Done*/
     .long   ENET_MAC0_Rx_Tx_Done2_IRQHandler                /* MAC 0 Receive / Trasmit Frame / Buffer Done*/
     .long   ENET_IRQHandler                                 /* MAC 0 IRQ*/
-    .long   ENET_1588_IRQHandler                            /* MAC 0 1588 Timer Interrupt - synchronous*/
+    .long   ENET_1588_IRQHandler                            /* MAC 0 1588 Timer Interrupt-synchronous*/
     .long   ASRC_IRQHandler                                 /* ASRC Interrupt*/
     .long   Reserved139_IRQHandler                          /* Reserved Interrupt*/
     .long   Reserved140_IRQHandler                          /* Reserved Interrupt*/

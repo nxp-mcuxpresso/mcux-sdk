@@ -12,13 +12,13 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 
 #OR Logic component
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1064")
-    include(driver_edma)
+    include(driver_edma_MIMXRT1064)
 endif()
 if(${MCUX_DEVICE} STREQUAL "MKV11Z7")
-    include(driver_edma)
+    include(driver_edma_MKV11Z7)
 endif()
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1062")
-    include(driver_edma)
+    include(driver_edma_MIMXRT1062)
 endif()
 if(${MCUX_DEVICE} STREQUAL "MIMX8QM6_cm4_core0")
     include(driver_dma3)

@@ -24,9 +24,9 @@
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief PUF driver version. Version 2.1.5.
+/*! @brief PUF driver version. Version 2.1.6.
  *
- * Current version: 2.1.4
+ * Current version: 2.1.6
  *
  * Change log:
  * - 2.0.0
@@ -50,11 +50,14 @@
  *   - Fix MISRA C-2012 issue.
  * - 2.1.4
  *   - Replace register uint32_t ticksCount with volatile uint32_t ticksCount in puf_wait_usec() to prevent optimization
- * 	   out delay loop.
+ * out delay loop.
  * - 2.1.5
  *   - Use common SDK delay in puf_wait_usec()
+ * - 2.1.6
+ *   - Changed wait time in PUF_Init(), when initialization fails it will try PUF_Powercycle() with shorter time. If
+ * this shorter time will also fail, initialization will be tried with worst case time as before.
  */
-#define FSL_PUF_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
+#define FSL_PUF_DRIVER_VERSION (MAKE_VERSION(2, 1, 6))
 /*@}*/
 
 typedef enum _puf_key_index_register
@@ -106,10 +109,11 @@ typedef struct
 #endif /* FSL_FEATURE_PUF_HAS_SRAM_CTRL */
 } puf_config_t;
 /*! @brief Get Key Code size in bytes from key size in bytes at compile time. */
-#define PUF_GET_KEY_CODE_SIZE_FOR_KEY_SIZE(x) ((160u + (((((x) << 3) + 255u) >> 8) << 8)) >> 3)
-#define PUF_MIN_KEY_CODE_SIZE                 PUF_GET_KEY_CODE_SIZE_FOR_KEY_SIZE(8UL)
-#define PUF_ACTIVATION_CODE_SIZE              1192U
-#define KEYSTORE_PUF_DISCHARGE_TIME_MAX_MS    400
+#define PUF_GET_KEY_CODE_SIZE_FOR_KEY_SIZE(x)    ((160u + (((((x) << 3) + 255u) >> 8) << 8)) >> 3)
+#define PUF_MIN_KEY_CODE_SIZE                    PUF_GET_KEY_CODE_SIZE_FOR_KEY_SIZE(8UL)
+#define PUF_ACTIVATION_CODE_SIZE                 1192U
+#define KEYSTORE_PUF_DISCHARGE_TIME_FIRST_TRY_MS 50
+#define KEYSTORE_PUF_DISCHARGE_TIME_MAX_MS       400
 
 /*! PUF status return codes. */
 enum

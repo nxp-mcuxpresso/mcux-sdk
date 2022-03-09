@@ -48,7 +48,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PXP_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+#define FSL_PXP_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 /* This macto indicates whether the rotate sub module is shared by process surface and output buffer. */

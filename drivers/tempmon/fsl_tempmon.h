@@ -23,16 +23,17 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_TEMPMON_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3 */
+/*! @brief TEMPMON driver version. */
+#define FSL_TEMPMON_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /*! @brief TEMPMON temperature structure. */
 typedef struct _tempmon_config
 {
-    uint16_t frequency;      /*!< The temperature measure frequency.*/
-    uint32_t highAlarmTemp;  /*!< The high alarm temperature.*/
-    uint32_t panicAlarmTemp; /*!< The panic alarm temperature.*/
-    uint32_t lowAlarmTemp;   /*!< The low alarm temperature.*/
+    uint16_t frequency;    /*!< The temperature measure frequency.*/
+    int8_t highAlarmTemp;  /*!< The high alarm temperature.*/
+    int8_t panicAlarmTemp; /*!< The panic alarm temperature.*/
+    int8_t lowAlarmTemp;   /*!< The low alarm temperature.*/
 } tempmon_config_t;
 
 /*! @brief TEMPMON alarm mode. */
@@ -115,7 +116,7 @@ float TEMPMON_GetCurrentTemperature(TEMPMON_Type *base);
  * @param tempVal The alarm temperature with degrees Celsius
  * @param alarmMode The alarm mode.
  */
-void TEMPMON_SetTempAlarm(TEMPMON_Type *base, uint32_t tempVal, tempmon_alarm_mode alarmMode);
+void TEMPMON_SetTempAlarm(TEMPMON_Type *base, int8_t tempVal, tempmon_alarm_mode alarmMode);
 
 #if defined(__cplusplus)
 }

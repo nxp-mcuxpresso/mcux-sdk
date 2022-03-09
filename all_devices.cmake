@@ -342,6 +342,15 @@ if(${MCUX_DEVICE} STREQUAL "MKM34Z7")
 
 endif()
 
+if(${MCUX_DEVICE} STREQUAL "MKE17Z7")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MKE17Z7
+    )
+
+    include(all_lib_device_MKE17Z7)
+
+endif()
+
 if(${MCUX_DEVICE} STREQUAL "LPC55S69_cm33_core1")
     list(APPEND CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/devices/LPC55S69

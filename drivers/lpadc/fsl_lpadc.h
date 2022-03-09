@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPADC driver version 2.4.0. */
-#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief LPADC driver version 2.5.1. */
+#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
 /*@}*/
 
 /*!
@@ -70,6 +70,42 @@ enum _lpadc_interrupt_enable
                                                                          requests when FOF1 flag is asserted. */
     kLPADC_FIFO1WatermarkInterruptEnable = ADC_IE_FWMIE1_MASK,      /*!< Configures ADC to generate watermark interrupt
                                                                          requests when RDY1 flag is asserted. */
+#if (defined(FSL_FEATURE_LPADC_HAS_TSTAT) && FSL_FEATURE_LPADC_HAS_TSTAT)
+    kLPADC_TriggerExceptionInterruptEnable = ADC_IE_TEXC_IE_MASK, /*!< Configures ADC to generate trigger exception
+                                                                      interrupt. */
+    kLPADC_Trigger0CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 0UL),   /*!< Configures ADC to generate interrupt
+                                                                                when trigger 0 completion. */
+    kLPADC_Trigger1CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 1UL),   /*!< Configures ADC to generate interrupt
+                                                                                when trigger 1 completion. */
+    kLPADC_Trigger2CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 2UL),   /*!< Configures ADC to generate interrupt
+                                                                                when trigger 2 completion. */
+    kLPADC_Trigger3CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 3UL),   /*!< Configures ADC to generate interrupt
+                                                                                when trigger 3 completion. */
+    kLPADC_Trigger4CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 4UL),   /*!< Configures ADC to generate interrupt
+                                                                                when trigger 4 completion. */
+    kLPADC_Trigger5CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 5UL),   /*!< Configures ADC to generate interrupt
+                                                                                when trigger 5 completion. */
+    kLPADC_Trigger6CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 6UL),   /*!< Configures ADC to generate interrupt
+                                                                                when trigger 6 completion. */
+    kLPADC_Trigger7CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 7UL),   /*!< Configures ADC to generate interrupt
+                                                                                when trigger 7 completion. */
+    kLPADC_Trigger8CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 8UL),   /*!< Configures ADC to generate interrupt
+                                                                                when trigger 8 completion. */
+    kLPADC_Trigger9CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 9UL),   /*!< Configures ADC to generate interrupt
+                                                                                when trigger 9 completion. */
+    kLPADC_Trigger10CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 10UL), /*!< Configures ADC to generate interrupt
+                                                                              when trigger 10 completion. */
+    kLPADC_Trigger11CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 11UL), /*!< Configures ADC to generate interrupt
+                                                                              when trigger 11 completion. */
+    kLPADC_Trigger12CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 12UL), /*!< Configures ADC to generate interrupt
+                                                                              when trigger 12 completion. */
+    kLPADC_Trigger13CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 13UL), /*!< Configures ADC to generate interrupt
+                                                                              when trigger 13 completion. */
+    kLPADC_Trigger14CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 14UL), /*!< Configures ADC to generate interrupt
+                                                                              when trigger 14 completion. */
+    kLPADC_Trigger15CompletionInterruptEnable = ADC_IE_TCOMP_IE(1UL << 15UL), /*!< Configures ADC to generate interrupt
+                                                                              when trigger 15 completion. */
+#endif                                                                        /* FSL_FEATURE_LPADC_HAS_TSTAT */
 };
 #else
 /*!
@@ -150,7 +186,7 @@ enum _lpadc_trigger_status_flags
                                                     trigger 14 has enabled completion interrupts. */
     kLPADC_Trigger15CompletedFlag = 1UL << 31UL, /*!< Trigger 15 is completed and
                                                     trigger 15 has enabled completion interrupts. */
-}
+};
 #endif /* FSL_FEATURE_LPADC_HAS_TSTAT */
 
 /*!
@@ -177,8 +213,8 @@ typedef enum _lpadc_sample_channel_mode
     kLPADC_SampleChannelSingleEndSideA = 0U, /*!< Single end mode, using side A. */
     kLPADC_SampleChannelSingleEndSideB = 1U, /*!< Single end mode, using side B. */
 #if defined(FSL_FEATURE_LPADC_HAS_CMDL_DIFF) && FSL_FEATURE_LPADC_HAS_CMDL_DIFF
-    kLPADC_SampleChannelDiffBothSideAB = 2U, /*!< Differential mode, using A as plus side and B as minue side. */
-    kLPADC_SampleChannelDiffBothSideBA = 3U, /*!< Differential mode, using B as plus side and A as minue side. */
+    kLPADC_SampleChannelDiffBothSideAB = 2U, /*!< Differential mode, using A as plus side and B as minus side. */
+    kLPADC_SampleChannelDiffBothSideBA = 3U, /*!< Differential mode, using B as plus side and A as minus side. */
 #elif defined(FSL_FEATURE_LPADC_HAS_CMDL_CTYPE) && FSL_FEATURE_LPADC_HAS_CMDL_CTYPE
     kLPADC_SampleChannelDiffBothSide = 2U, /*!< Differential mode, using A and B. */
     kLPADC_SampleChannelDualSingleEndBothSide =
@@ -352,7 +388,7 @@ typedef struct
                                                                   conversions.*/
     lpadc_power_level_mode_t powerLevelMode;                 /*!< Power Configuration Selection. */
     lpadc_trigger_priority_policy_t triggerPriorityPolicy; /*!< Control how higher priority triggers are handled, see to
-                                                                lpadc_trigger_priority_policy_mode_t. */
+                                                                lpadc_trigger_priority_policy_t. */
     bool enableConvPause; /*!< Enables the ADC pausing function. When enabled, a programmable delay is inserted during
                                command execution sequencing between LOOP iterations, between commands in a sequence, and
                                between conversions when command is executing in "Compare Until True" configuration. */

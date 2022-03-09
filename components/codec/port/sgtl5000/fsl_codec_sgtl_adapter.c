@@ -20,7 +20,9 @@
         kCODEC_SupportPlayChannelRight1 | kCODEC_SupportPlaySourceInput | kCODEC_SupportPlaySourceDAC | \
         kCODEC_SupportPlayChannelLeft2 | kCODEC_SupportPlayChannelRight2
 #define HAL_SGTL_RECORD_CAPABILITY kCODEC_SupportRecordSourceLineInput | kCODEC_SupportRecordSourceSingleEndMic
-
+#define HAL_SGTL_VOLUME_CAPABILITY                                                                      \
+    kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelRight0 | kCODEC_SupportPlayChannelLeft1 | \
+        kCODEC_SupportPlayChannelRight1 | kCODEC_SupportPlayChannelLeft2 | kCODEC_SupportPlayChannelRight2
 /*! @brief sgtl map module */
 #define HAL_SGTL_MAP_MODULE(module)                     \
     ((module) == (uint32_t)kCODEC_ModuleADC ?           \
@@ -46,6 +48,7 @@
  ******************************************************************************/
 static const codec_capability_t s_sgtl5000_capability = {
     .codecPlayCapability   = HAL_SGTL_PLAY_CAPABILITY,
+    .codecVolumeCapability = HAL_SGTL_VOLUME_CAPABILITY,
     .codecModuleCapability = HAL_SGTL_MODULE_CAPABILITY,
     .codecRecordCapability = HAL_SGTL_RECORD_CAPABILITY,
 };

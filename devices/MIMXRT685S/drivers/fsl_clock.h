@@ -40,6 +40,9 @@
 #endif
 #endif
 
+/* Definition for compatiblity with other platforms. */
+#define CLOCK_GetCTimerClkFreq CLOCK_GetCtimerClkFreq
+
 /*! @brief External XTAL (SYSOSC) clock frequency.
  *
  * The XTAL (SYSOSC) clock frequency in Hz, when the clock is setup, use the
@@ -213,6 +216,11 @@ extern volatile uint32_t g_mclkFreq;
 #define OSTIMER_CLOCKS      \
     {                       \
         kCLOCK_OsEventTimer \
+    }
+/*! @brief Clock ip name array for Powerquad */
+#define POWERQUAD_CLOCKS \
+    {                    \
+        kCLOCK_PowerQuad \
     }
 
 /*! @brief Clock gate name used for CLOCK_EnableClock/CLOCK_DisableClock. */

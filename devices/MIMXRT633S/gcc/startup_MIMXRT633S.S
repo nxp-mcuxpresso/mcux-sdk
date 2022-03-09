@@ -31,7 +31,7 @@ __isr_vector:
     .long   BusFault_Handler                                /* Bus Fault Handler*/
     .long   UsageFault_Handler                              /* Usage Fault Handler*/
     .long   SecureFault_Handler                             /* Secure Fault Handler*/
-#if (__ARM_FEATURE_CMSE & 0x2)
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
     .long   0x180000                                        /* Image length*/
 #else
     .long   _image_size                                     /* Image length*/
@@ -125,8 +125,8 @@ Reset_Handler:
     str     r1, [r0]
     ldr     r2, [r1]
     msr     msp, r2
-    ldr     R0, =__StackLimit
-    msr     msplim, R0
+    ldr     r0, =__StackLimit
+    msr     msplim, r0
 #ifndef __NO_SYSTEM_INIT
     ldr   r0,=SystemInit
     blx   r0

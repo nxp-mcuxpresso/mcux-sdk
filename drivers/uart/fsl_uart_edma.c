@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -251,7 +251,7 @@ status_t UART_SendEDMA(UART_Type *base, uart_edma_handle_t *handle, uart_transfe
                              sizeof(uint8_t), sizeof(uint8_t), xfer->dataSize, kEDMA_MemoryToPeripheral);
 
         /* Store the initially configured eDMA minor byte transfer count into the UART handle */
-        handle->nbytes = sizeof(uint8_t);
+        handle->nbytes = 1U;
 
         /* Submit transfer. */
         (void)EDMA_SubmitTransfer(handle->txEdmaHandle, &xferConfig);
@@ -305,7 +305,7 @@ status_t UART_ReceiveEDMA(UART_Type *base, uart_edma_handle_t *handle, uart_tran
                              sizeof(uint8_t), sizeof(uint8_t), xfer->dataSize, kEDMA_PeripheralToMemory);
 
         /* Store the initially configured eDMA minor byte transfer count into the UART handle */
-        handle->nbytes = sizeof(uint8_t);
+        handle->nbytes = 1U;
 
         /* Submit transfer. */
         (void)EDMA_SubmitTransfer(handle->rxEdmaHandle, &xferConfig);

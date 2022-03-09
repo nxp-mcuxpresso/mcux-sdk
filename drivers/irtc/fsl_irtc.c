@@ -56,7 +56,7 @@ static bool IRTC_CheckDatetimeFormat(const irtc_datetime_t *datetime)
     else
     {
         /* Adjust the days in February for a leap year */
-        if (((0U == (datetime->year & 3U)) && (0U == (datetime->year % 100U))) || (0U == (datetime->year % 400U)))
+        if (((0U == (datetime->year & 3U)) && (0U != (datetime->year % 100U))) || (0U == (datetime->year % 400U)))
         {
             daysPerMonth[2] = 29U;
         }
@@ -93,6 +93,10 @@ status_t IRTC_Init(RTC_Type *base, const irtc_config_t *config)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     CLOCK_EnableClock(kCLOCK_Rtc0);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(FSL_FEATURE_RTC_HAS_RESET) && FSL_FEATURE_RTC_HAS_RESET
+    RESET_PeripheralReset(kRTC_RST_SHIFT_RSTn);
+#endif
 
     /* Unlock to allow register write operation */
     if (kStatus_Success == IRTC_SetWriteProtection(base, false))
@@ -320,14 +324,13 @@ void IRTC_GetAlarm(RTC_Type *base, irtc_datetime_t *datetime)
 status_t IRTC_SetWriteProtection(RTC_Type *base, bool lock)
 {
     /* Retry before giving up */
-    uint8_t repeatProtectSequence = 100U;
+    uint8_t repeatProtectSequence = 0xFFU;
     status_t status               = kStatus_Success;
 
     if (!lock)
     {
         /* Unlock IRTC registers */
-        while ((0U != ((base->STATUS & (uint16_t)RTC_STATUS_WRITE_PROT_EN_MASK) >> RTC_STATUS_WRITE_PROT_EN_SHIFT)) &&
-               (0U != repeatProtectSequence))
+        while ((0U != (base->STATUS & (uint16_t)RTC_STATUS_WRITE_PROT_EN_MASK)) && (0U != repeatProtectSequence))
         {
             /* Access in 8-bit mode while storing the value */
             *(__IO uint8_t *)(&base->STATUS) = 0U;
@@ -348,7 +351,7 @@ status_t IRTC_SetWriteProtection(RTC_Type *base, bool lock)
         }
     }
 
-    /* Lock/unlock was not successful even after trying 10 times */
+    /* Lock/unlock was not successful even after trying 256 times */
     if (0U == repeatProtectSequence)
     {
         status = kStatus_Fail;
@@ -457,7 +460,7 @@ void IRTC_SetFineCompensation(RTC_Type *base, uint8_t integralValue, uint8_t fra
     /* Set the compensation fractional and integral parts */
     base->COMPEN = ((uint16_t)fractionValue & 0x7FU) | (((uint16_t)integralValue & 0xFU) << 12U);
     /* Enable fine compensation */
-    base->CTRL |= ((1U << RTC_CTRL_COMP_EN_SHIFT) | (1U << RTC_CTRL_FINEEN_SHIFT));
+    base->CTRL |= (RTC_CTRL_COMP_EN_MASK | RTC_CTRL_FINEEN_MASK);
 }
 
 /*!
@@ -592,3 +595,35 @@ uint8_t IRTC_ReadTamperQueue(RTC_Type *base, irtc_datetime_t *tamperTimestamp)
 }
 
 #endif /* FSL_FEATURE_RTC_HAS_TAMPER_QUEUE */
+
+/*!
+ * brief Select which clock to output from RTC.
+ *
+ * Select which clock to output from RTC for other modules to use inside SoC, for example,
+ * RTC subsystem needs RTC to output 1HZ clock for sub-second counter.
+ *
+ * param base IRTC peripheral base address
+ * param cloOut select clock to use for output
+ */
+void IRTC_ConfigClockOut(RTC_Type *base, irtc_clockout_sel_t clkOut)
+{
+    uint16_t ctrlVal = base->CTRL;
+
+    ctrlVal &= (uint16_t)(~RTC_CTRL_CLKOUT_MASK);
+
+    ctrlVal |= RTC_CTRL_CLKOUT((uint16_t)clkOut);
+    if (clkOut == kIRTC_ClkoutCoarse1Hz)
+    {
+        ctrlVal |= RTC_CTRL_COMP_EN_MASK;
+    }
+    else if (clkOut == kIRTC_ClkoutFine1Hz)
+    {
+        ctrlVal |= RTC_CTRL_FINEEN_MASK;
+    }
+    else
+    {
+        /* empty else */
+    }
+
+    base->CTRL = ctrlVal;
+}

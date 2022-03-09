@@ -103,6 +103,14 @@
 /*! @brief board has sdcard */
 #define BOARD_HAS_SDCARD (1U)
 
+/* Serial MWM WIFI */
+#define BOARD_SERIAL_MWM_PORT_CLK_FREQ     BOARD_DebugConsoleSrcFreq()
+#define BOARD_SERIAL_MWM_PORT              LPUART2
+#define BOARD_SERIAL_MWM_PORT_IRQn         LPUART2_IRQn
+#define BOARD_SERIAL_MWM_RST_GPIO          GPIO1
+#define BOARD_SERIAL_MWM_RST_PIN           22
+#define BOARD_SERIAL_MWM_RST_WRITE(output) GPIO_PinWrite(BOARD_SERIAL_MWM_RST_GPIO, BOARD_SERIAL_MWM_RST_PIN, output)
+
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */

@@ -9,9 +9,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1024RM Rev.0, 09/2020 | IMXRT102xSRM Rev.0
-**     Version:             rev. 0.1, 2020-01-15
-**     Build:               b201016
+**     Reference manual:    IMXRT1024RM Rev.1, 02/2021 | IMXRT102XSRM Rev.0
+**     Version:             rev. 1.0, 2021-08-10
+**     Build:               b210811
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -19,7 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -30,14 +30,16 @@
 **     Revisions:
 **     - rev. 0.1 (2020-01-15)
 **         Initial version.
+**     - rev. 1.0 (2021-08-10)
+**         Update header files to align with IMXRT1024RM Rev.1.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1024
- * @version 0.1
- * @date 2020-01-15
+ * @version 1.0
+ * @date 110821
  * @brief Device specific configuration file for MIMXRT1024 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -138,11 +140,6 @@ void SystemInit (void) {
 #if defined(__ICACHE_PRESENT) && __ICACHE_PRESENT
     if (SCB_CCR_IC_Msk != (SCB_CCR_IC_Msk & SCB->CCR)) {
         SCB_EnableICache();
-    }
-#endif
-#if defined(__DCACHE_PRESENT) && __DCACHE_PRESENT
-    if (SCB_CCR_DC_Msk != (SCB_CCR_DC_Msk & SCB->CCR)) {
-        SCB_EnableDCache();
     }
 #endif
 

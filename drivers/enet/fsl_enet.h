@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 5, 3))
 /*@}*/
 
 /*! @name ENET DESCRIPTOR QUEUE */
@@ -252,7 +252,7 @@ typedef enum _enet_special_control_flag
 } enet_special_control_flag_t;
 
 /*! @brief List of interrupts supported by the peripheral. This
- * enumeration uses one-bot encoding to allow a logical OR of multiple
+ * enumeration uses one-bit encoding to allow a logical OR of multiple
  * members. Members usually map to interrupt enable bits in one or more
  * peripheral registers.
  */

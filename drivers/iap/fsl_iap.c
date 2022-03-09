@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -17,6 +17,12 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+#define IAP_ISP_TYPE_I2C  1U
+#define IAP_ISP_TYPE_SPI  4U
+#define IAP_ISP_TYPE_SPI1 5U
+#define IAP_ISP_TYPE_USB0 8U
+#define IAP_ISP_TYPE_USB1 9U
+
 /*! @brief IAP_ENTRY API function type */
 typedef void (*IAP_ENTRY_T)(uint32_t cmd[], uint32_t stat[]);
 
@@ -120,7 +126,7 @@ status_t IAP_ReadBootCodeVersion(uint32_t *bootCodeVersion)
  * This function is used to invoke the boot loader in ISP mode. It maps boot vectors and configures the peripherals for
  * ISP.
  *
- * @param ispTyoe ISP type selection.
+ * @param ispType ISP type selection.
  * @param status store the possible status.
  *
  * @retval kStatus_IAP_ReinvokeISPConfig reinvoke configuration error.
@@ -130,18 +136,40 @@ status_t IAP_ReadBootCodeVersion(uint32_t *bootCodeVersion)
  */
 void IAP_ReinvokeISP(uint8_t ispType, uint32_t *status)
 {
+#if (defined(FSL_FEATURE_SYSCON_IAP_REINVOKE_ISP_PARAM_POINTER) && FSL_FEATURE_SYSCON_IAP_REINVOKE_ISP_PARAM_POINTER)
     uint32_t command[5] = {0x00U};
     uint32_t result[5]  = {0x00U};
     uint8_t ispParameterArray[8];
 
     command[0] = (uint32_t)kIapCmd_IAP_ReinvokeISP;
     (void)memset(ispParameterArray, 0, sizeof(uint8_t) * 8U);
+    if ((IAP_ISP_TYPE_I2C == ispType) || (IAP_ISP_TYPE_SPI == ispType) || (IAP_ISP_TYPE_SPI1 == ispType))
+    {
+        ispParameterArray[0] = 0x55U;
+    }
+    else if ((IAP_ISP_TYPE_USB0 == ispType) || (IAP_ISP_TYPE_USB1 == ispType))
+    {
+        ispParameterArray[0] = 0xAAU;
+    }
+    else
+    {
+        ispParameterArray[0] = 0x00U;
+    }
     ispParameterArray[1] = ispType;
     ispParameterArray[7] = ispParameterArray[0] ^ ispParameterArray[1] ^ ispParameterArray[2] ^ ispParameterArray[3] ^
                            ispParameterArray[4] ^ ispParameterArray[5] ^ ispParameterArray[6];
     command[1] = (uint32_t)ispParameterArray;
     iap_entry(command, result);
     *status = (uint32_t)translate_iap_status(result[0]);
+#else
+    uint32_t command[5] = {0x00U};
+    uint32_t result[5]  = {0x00U};
+
+    command[0] = (uint32_t)kIapCmd_IAP_ReinvokeISP;
+    command[1] = (uint32_t)ispType;
+    iap_entry(command, result);
+    *status             = (uint32_t)translate_iap_status(result[0]);
+#endif
 }
 
 /*!

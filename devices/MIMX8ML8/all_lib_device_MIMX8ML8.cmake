@@ -1,6 +1,10 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/ecspi
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/ii2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/iuart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8960
@@ -40,6 +44,8 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(driver_cmsis_ii2c)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_iuart_sdma)
 #    include(driver_flexcan)
 #    include(driver_ii2c)
@@ -47,9 +53,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_gpc_2)
 #    include(driver_iuart_freertos)
 #    include(component_lists)
+#    include(driver_cmsis_ecspi)
 #    include(device_system)
+#    include(middleware_multicore_rpmsg_lite_MIMX8ML8)
 #    include(device_startup)
-#    include(driver_clock)
+#    include(CMSIS_Driver_Include_USART)
+#    include(CMSIS_Driver_Include_SPI)
 #    include(driver_ii2c_freertos)
 #    include(component_codec_i2c_MIMX8ML8)
 #    include(driver_wm8960)
@@ -59,22 +68,25 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_core_cm)
 #    include(driver_iuart)
 #    include(driver_ipwm)
+#    include(driver_ecspi_sdma)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_ecspi)
 #    include(driver_tmu_2)
 #    include(middleware_freertos-kernel_MIMX8ML8)
+#    include(CMSIS_Driver_Include_I2C)
 #    include(driver_sdma)
 #    include(utility_assert_lite)
+#    include(middleware_multicore_rpmsg_lite_freertos)
 #    include(middleware_multicore_rpmsg_lite_imx8mp_m7_freertos)
 #    include(driver_rdc_sema42)
-#    include(middleware_freertos-kernel_heap_4)
-#    include(utility_assert)
+#    include(driver_mu)
+#    include(driver_clock)
 #    include(driver_rdc)
 #    include(utility_debug_console)
 #    include(device_CMSIS)
 #    include(driver_wdog01)
 #    include(driver_sai_sdma)
-#    include(driver_srtm_freertos)
+#    include(CMSIS_Driver_Include_Common)
 #    include(component_iuart_adapter)
 #    include(utility_debug_console_lite)
 #    include(driver_codec)
@@ -82,16 +94,17 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_common)
 #    include(driver_easrc_sdma)
 #    include(driver_sema4)
+#    include(utility_assert)
 #    include(component_ii2c_adapter)
 #    include(component_wm8960_adapter)
 #    include(component_serial_manager)
-#    include(middleware_multicore_rpmsg_lite)
 #    include(driver_igpio)
 #    include(driver_pdm_sdma)
 #    include(driver_sai)
 #    include(component_serial_manager_uart)
 #    include(driver_pdm)
-#    include(driver_mu)
+#    include(driver_cmsis_iuart)
 #    include(driver_cache_armv7_m7)
+#    include(driver_srtm_freertos)
 #    include(driver_gpt)
 #    include(driver_srtm_MIMX8ML8)
