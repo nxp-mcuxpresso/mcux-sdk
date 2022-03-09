@@ -12,7 +12,7 @@
 **
 **     Reference manual:    IMXRT1160RM, Rev 0, 03/2021
 **     Version:             rev. 0.1, 2020-12-29
-**     Build:               b210422
+**     Build:               b210615
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -38,7 +38,7 @@
 /*!
  * @file MIMXRT1166_cm7
  * @version 1.0
- * @date 2021-04-22
+ * @date 2021-06-15
  * @brief Device specific configuration file for MIMXRT1166_cm7 (implementation
  *        file)
  *
@@ -117,11 +117,6 @@ void SystemInit (void) {
 #if defined(__ICACHE_PRESENT) && __ICACHE_PRESENT
     if (SCB_CCR_IC_Msk != (SCB_CCR_IC_Msk & SCB->CCR)) {
         SCB_EnableICache();
-    }
-#endif
-#if defined(__DCACHE_PRESENT) && __DCACHE_PRESENT
-    if (SCB_CCR_DC_Msk != (SCB_CCR_DC_Msk & SCB->CCR)) {
-        SCB_EnableDCache();
     }
 #endif
 

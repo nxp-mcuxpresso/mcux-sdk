@@ -19,7 +19,9 @@
 /*! @brief CAAM status return codes. */
 enum
 {
-    kStatus_CAAM_Again = MAKE_STATUS(kStatusGroup_CAAM, 0), /*!< Non-blocking function shall be called again. */
+    kStatus_CAAM_Again        = MAKE_STATUS(kStatusGroup_CAAM, 0), /*!< Non-blocking function shall be called again. */
+    kStatus_CAAM_DataOverflow = MAKE_STATUS(kStatusGroup_CAAM, 1), /*!< Input data too big. */
+
 };
 
 /*******************************************************************************
@@ -28,9 +30,9 @@ enum
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CAAM driver version. Version 2.1.3.
+/*! @brief CAAM driver version. Version 2.1.5.
  *
- * Current version: 2.1.3
+ * Current version: 2.1.4
  *
  * Change log:
  * - Version 2.0.0
@@ -51,8 +53,13 @@ enum
  *   - Add data offset feature to provide support for mirrored (high-speed) memory.
  * - Version 2.1.3
  *   - Fix MISRA-2012 issues.
+ * - Version 2.1.4
+ *   - Fix MISRA-2012 issues.
+ * - Version 2.1.5
+ *   - Support EXTENDED data size for all AES, HASH and RNG operations.
+ *   - Support multiple De-Initialization/Initialization of CAAM driver within one POR event.
  */
-#define FSL_CAAM_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
+#define FSL_CAAM_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
 /*@}*/
 
 /*! @brief CAAM callback function. */
@@ -395,7 +402,7 @@ void CAAM_GetDefaultConfig(caam_config_t *config);
  * @return kStatus_Fail the CAAM job has completed with non-zero job termination status word
  * @return kStatus_Again In non-blocking mode, the job is not ready in the CAAM Output Ring
  */
-status_t CAAM_Wait(CAAM_Type *base, caam_handle_t *handle, void *descriptor, caam_wait_mode_t mode);
+status_t CAAM_Wait(CAAM_Type *base, caam_handle_t *handle, uint32_t *descriptor, caam_wait_mode_t mode);
 
 /*!
  * @brief External Key Transfer.

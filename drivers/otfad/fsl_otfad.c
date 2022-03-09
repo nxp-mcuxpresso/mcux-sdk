@@ -96,7 +96,7 @@ AT_QUICKACCESS_SECTION_CODE(void OTFAD_Init(OTFAD_Type *base, const otfad_config
 
     /* Wait for AHB bus idle, otherwise the keyblob process will fail */
     status = ((FLEXSPI_Type *)config->flexspiBaseAddr)->STS0;
-    while (!((status & FLEXSPI_STS0_ARBIDLE_MASK) && (status & FLEXSPI_STS0_SEQIDLE_MASK)))
+    while (!(((status & FLEXSPI_STS0_ARBIDLE_MASK) != 0UL) && ((status & FLEXSPI_STS0_SEQIDLE_MASK) != 0UL)))
     {
         status = ((FLEXSPI_Type *)config->flexspiBaseAddr)->STS0;
     }

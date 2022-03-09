@@ -85,7 +85,7 @@ extern uint32_t __VECTOR_TABLE[];
 #define DCD_ADDRESS 0
 #endif
 
-#define BOOT_DATA_ADDRESS &boot_data
+#define BOOT_DATA_ADDRESS &g_boot_data
 #define CSF_ADDRESS       0
 #define IVT_RSVD          (uint32_t)(0x00000000)
 
@@ -109,7 +109,7 @@ typedef struct _boot_data_
 #define PLUGIN_FLAG (uint32_t)0
 
 /* External Variables */
-const BOOT_DATA_T boot_data;
+extern const BOOT_DATA_T g_boot_data;
 #if defined(XIP_BOOT_HEADER_DCD_ENABLE) && (1 == XIP_BOOT_HEADER_DCD_ENABLE)
 extern const uint8_t dcd_data[];
 #endif

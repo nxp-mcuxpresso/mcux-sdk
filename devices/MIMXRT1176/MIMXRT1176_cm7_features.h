@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2020-12-29
-**     Build:               b210427
+**     Build:               b210910
 **
 **     Abstract:
 **         Chip specific module features.
@@ -43,8 +43,8 @@
 #define FSL_FEATURE_SOC_CSI_COUNT (1)
 /* @brief CDOG availability on the SoC. */
 #define FSL_FEATURE_SOC_CDOG_COUNT (1)
-/* @brief DAC availability on the SoC. */
-#define FSL_FEATURE_SOC_DAC_COUNT (1)
+/* @brief DAC12 availability on the SoC. */
+#define FSL_FEATURE_SOC_DAC12_COUNT (1)
 /* @brief DCDC availability on the SoC. */
 #define FSL_FEATURE_SOC_DCDC_COUNT (1)
 /* @brief DMAMUX availability on the SoC. */
@@ -166,12 +166,8 @@
 
 /* ASRC module features */
 
-/* @brief Register name is ASPRM or ASPRMn */
-#define FSL_FEATURE_ASRC_PARAMETER_REGISTER_NAME_ASPRM (1)
-
-/* AUDIO_PLL module features */
-
-/* No feature definitions */
+/* @brief Register name is ASRPM or ASRPMn */
+#define FSL_FEATURE_ASRC_PARAMETER_REGISTER_NAME_ASRPM (1)
 
 /* FLEXCAN module features */
 
@@ -207,8 +203,6 @@
 #define FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE (1)
 /* @brief CAN instance support Flexible Data rate (CAN FD) protocol. */
 #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_FLEXIBLE_DATA_RATEn(x) (1)
-/* @brief Has extra MB interrupt or common one. */
-#define FSL_FEATURE_FLEXCAN_HAS_EXTRA_MB_INT (1)
 /* @brief Has memory error control (register MECR). */
 #define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL (1)
 /* @brief Init memory base 1 */
@@ -219,6 +213,10 @@
 #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_2 (0xF28)
 /* @brief Init memory size 2 */
 #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_2 (0xD8)
+/* @brief Has enhanced bit timing register (register EPRS, ENCBT, EDCBT and ETDC). */
+#define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_BIT_TIMING_REG (0)
+/* @brief Has Pretended Networking mode support. */
+#define FSL_FEATURE_FLEXCAN_HAS_PN_MODE (0)
 
 /* CCM module features */
 
@@ -324,6 +322,17 @@
 /* @brief Has separate submodules */
 #define FSL_FEATURE_MIPI_DSI_HAS_SEPARATE_SUBMODULE (1)
 
+/* ENC module features */
+
+/* @brief Has no simultaneous PHASEA and PHASEB change interrupt (register bit field CTRL2[SABIE] and CTRL2[SABIRQ]). */
+#define FSL_FEATURE_ENC_HAS_NO_CTRL2_SAB_INT (0)
+/* @brief Has register CTRL3. */
+#define FSL_FEATURE_ENC_HAS_CTRL3 (1)
+/* @brief Has register LASTEDGE or LASTEDGEH. */
+#define FSL_FEATURE_ENC_HAS_LASTEDGE (1)
+/* @brief Has register POSDPERBFR, POSDPERH, or POSDPER. */
+#define FSL_FEATURE_ENC_HAS_POSDPER (1)
+
 /* ENET module features */
 
 /* @brief Support Interrupt Coalesce */
@@ -339,7 +348,7 @@
 /* @brief Has Additional 1588 Timer Channel Interrupt. */
 #define FSL_FEATURE_ENET_HAS_ADD_1588_TIMER_CHN_INT (1)
 /* @brief Support Interrupt Coalesce for each instance */
-#define FSL_FEATURE_ENET_INSTANCE_HAS_INTERRUPT_COALESCEn(x) (0)
+#define FSL_FEATURE_ENET_INSTANCE_HAS_INTERRUPT_COALESCEn(x) (1)
 /* @brief Queue Size for each instance. */
 #define FSL_FEATURE_ENET_INSTANCE_QUEUEn(x) \
     (((x) == ENET) ? (1) : \
@@ -366,10 +375,6 @@
 #define FSL_FEATURE_ENET_TIMESTAMP_CAPTURE_BIT_INVALID (0)
 
 /* ENET_QOS module features */
-
-/* No feature definitions */
-
-/* ENET_PLL module features */
 
 /* No feature definitions */
 
@@ -419,7 +424,7 @@
 /* FLEXSPI module features */
 
 /* @brief FlexSPI AHB buffer count */
-#define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(x) (4)
+#define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(x) (8)
 /* @brief FlexSPI has no data learn. */
 #define FSL_FEATURE_FLEXSPI_HAS_NO_DATA_LEARN (1)
 /* @brief There is AHBBUSERROREN bit in INTEN register. */
@@ -428,14 +433,6 @@
 #define FSL_FEATURE_FLEXSPI_HAS_AHBCR_CLRAHBTX_RXBUF (0)
 
 /* GPC_CPU_CTRL module features */
-
-/* No feature definitions */
-
-/* GPC_SP_CTRL module features */
-
-/* No feature definitions */
-
-/* GPC_STBY_CTRL module features */
 
 /* No feature definitions */
 
@@ -476,6 +473,8 @@
 
 /* LPADC module features */
 
+/* @brief FIFO availability on the SoC. */
+#define FSL_FEATURE_LPADC_FIFO_COUNT (1)
 /* @brief Has subsequent trigger priority (bitfield CFG[TPRICTRL]). */
 #define FSL_FEATURE_LPADC_HAS_CFG_SUBSEQUENT_PRIORITY (1)
 /* @brief Has differential mode (bitfield CMDLn[DIFF]). */
@@ -516,6 +515,8 @@
 #define FSL_FEATURE_LPSPI_FIFO_SIZEn(x) (16)
 /* @brief Has separate DMA RX and TX requests. */
 #define FSL_FEATURE_LPSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
+/* @brief Has CCR1 (related to existence of registers CCR1). */
+#define FSL_FEATURE_LPSPI_HAS_CCR1 (0)
 
 /* LPUART module features */
 
@@ -615,7 +616,7 @@
 #define FSL_FEATURE_MU_NO_HR (1)
 /* @brief MU supports mask the hardware reset. CR[HRM] or CCR[HRM]. */
 #define FSL_FEATURE_MU_HAS_HRM (0)
-/* @brief MU does not support check the other core power mode. SR[PM]. */
+/* @brief MU does not support check the other core power mode. SR[PM] or BSR[APM]. */
 #define FSL_FEATURE_MU_NO_PM (1)
 /* @brief MU supports reset assert interrupt. CR[RAIE] or BCR[RAIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (0)
@@ -636,10 +637,6 @@
 /* @brief Support lock eFuse word write lock, (CTRL[WORDLOCK]). */
 #define FSL_FEATURE_OCOTP_HAS_WORDLOCK (1)
 
-/* OSC_RC_400M module features */
-
-/* No feature definitions */
-
 /* PDM module features */
 
 /* @brief PDM FIFO offset */
@@ -652,26 +649,8 @@
 #define FSL_FEATURE_PDM_FIFO_DEPTH (8)
 /* @brief PDM has RANGE_CTRL register */
 #define FSL_FEATURE_PDM_HAS_RANGE_CTRL (1)
-
-/* PGMC_BPC module features */
-
-/* No feature definitions */
-
-/* PGMC_CPC module features */
-
-/* No feature definitions */
-
-/* PGMC_MIF module features */
-
-/* No feature definitions */
-
-/* PGMC_PPC module features */
-
-/* No feature definitions */
-
-/* PHY_LDO module features */
-
-/* No feature definitions */
+/* @brief PDM Has Low Frequency */
+#define FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ (1)
 
 /* PIT module features */
 
@@ -766,6 +745,18 @@
 #define FSL_FEATURE_SEMC_HAS_NOR_WDH_TIME (0)
 /* @brief Has WDS time in NOR controller (register bit field NORCR2[WDS]). */
 #define FSL_FEATURE_SEMC_HAS_NOR_WDS_TIME (0)
+/* @brief Has LC time in NOR controller (register bit field NORCR2[LC]). */
+#define FSL_FEATURE_SEMC_HAS_NOR_LC_TIME (1)
+/* @brief Has RD time in NOR controller (register bit field NORCR2[RD]). */
+#define FSL_FEATURE_SEMC_HAS_NOR_RD_TIME (1)
+/* @brief Has WDH time in SRAM controller (register bit field SRAMCR2[WDH]). */
+#define FSL_FEATURE_SEMC_HAS_SRAM_WDH_TIME (1)
+/* @brief Has WDS time in SRAM controller (register bit field SRAMCR2[WDS]). */
+#define FSL_FEATURE_SEMC_HAS_SRAM_WDS_TIME (1)
+/* @brief Has LC time in SRAM controller (register bit field SRAMCR2[LC]). */
+#define FSL_FEATURE_SEMC_HAS_SRAM_LC_TIME (1)
+/* @brief Has RD time in SRAM controller (register bit field SRAMCR2[RD]). */
+#define FSL_FEATURE_SEMC_HAS_SRAM_RD_TIME (1)
 /* @brief SRAM count SEMC can support (register BRx). */
 #define FSL_FEATURE_SEMC_SUPPORT_SRAM_COUNT (4)
 /* @brief If SEMC support delay chain control (register DCCR). */
@@ -847,14 +838,6 @@
 #define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_1V8_SIGNALn(x) (1)
 /* @brief Has no retuning time counter (HOST_CTRL_CAP[TIME_COUNT_RETURNING]) */
 #define FSL_FEATURE_USDHC_REGISTER_HOST_CTRL_CAP_HAS_NO_RETUNING_TIME_COUNTER (1)
-
-/* VIDEO_PLL module features */
-
-/* No feature definitions */
-
-/* VMBANDGAP module features */
-
-/* No feature definitions */
 
 /* XBARA module features */
 

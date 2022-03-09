@@ -12,7 +12,8 @@
  * Definitions
  ******************************************************************************/
 
-#define HAL_TFA9XXX_PLAY_CAPABILITY (kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelRight0)
+#define HAL_TFA9XXX_PLAY_CAPABILITY   (kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelRight0)
+#define HAL_TFA9XXX_VOLUME_CAPABILITY (kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelRight0)
 
 /*******************************************************************************
  * Prototypes
@@ -22,7 +23,8 @@
  * Variables
  ******************************************************************************/
 static const codec_capability_t s_tfa9xxx_capability = {
-    .codecPlayCapability = HAL_TFA9XXX_PLAY_CAPABILITY,
+    .codecPlayCapability   = HAL_TFA9XXX_PLAY_CAPABILITY,
+    .codecVolumeCapability = HAL_TFA9XXX_VOLUME_CAPABILITY,
 };
 /*******************************************************************************
  * Code
@@ -132,9 +134,13 @@ status_t HAL_CODEC_TFA9XXX_SetPower(void *handle, uint32_t module, bool powerOn)
     status_t retVal = kStatus_Success;
 
     if (powerOn)
+    {
         retVal = TFA9XXX_Start((tfa9xxx_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)));
+    }
     else
+    {
         retVal = TFA9XXX_Stop((tfa9xxx_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)));
+    }
 
     return retVal;
 }

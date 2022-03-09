@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013-2016 ARM Limited. All rights reserved.
  * Copyright (c) 2016, Freescale Semiconductor, Inc. Not a Contribution.
- * Copyright 2016-2020 NXP. Not a Contribution.
+ * Copyright 2016-2021 NXP. Not a Contribution.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -52,13 +52,13 @@ typedef const struct _cmsis_ecspi_sdma_resource
     SDMAARM_Type *txSdmaBase;
     uint32_t txSdmaChannel;
     uint32_t txSdmaRequest;
-    uint32_t txSdmaPriority;
+    uint8_t txSdmaPriority;
     sdma_context_data_t *txSdmaContext;
 
     SDMAARM_Type *rxSdmaBase;
     uint32_t rxSdmaChannel;
     uint32_t rxSdmaRequest;
-    uint32_t rxSdmaPriority;
+    uint8_t rxSdmaPriority;
     sdma_context_data_t *rxSdmaContext;
 } cmsis_ecspi_sdma_resource_t;
 
@@ -321,6 +321,8 @@ static int32_t ECSPI_SDMAUninitialize(cmsis_ecspi_sdma_driver_state_t *ecspi)
 
 static int32_t ECSPI_SDMAPowerControl(ARM_POWER_STATE state, cmsis_ecspi_sdma_driver_state_t *ecspi)
 {
+    int32_t result = ARM_DRIVER_OK;
+
     switch (state)
     {
         case ARM_POWER_OFF:
@@ -331,12 +333,14 @@ static int32_t ECSPI_SDMAPowerControl(ARM_POWER_STATE state, cmsis_ecspi_sdma_dr
             }
             break;
         case ARM_POWER_LOW:
-            return ARM_DRIVER_ERROR_UNSUPPORTED;
+            result = ARM_DRIVER_ERROR_UNSUPPORTED;
+            break;
 
         case ARM_POWER_FULL:
             if (ecspi->flags == (uint8_t)SPI_FLAG_UNINIT)
             {
-                return ARM_DRIVER_ERROR;
+                result = ARM_DRIVER_ERROR;
+                break;
             }
             if ((ecspi->flags & (uint8_t)SPI_FLAG_POWER) != 0U)
             {
@@ -346,9 +350,10 @@ static int32_t ECSPI_SDMAPowerControl(ARM_POWER_STATE state, cmsis_ecspi_sdma_dr
             ecspi->flags |= (uint8_t)SPI_FLAG_POWER;
             break;
         default:
-            return ARM_DRIVER_ERROR_UNSUPPORTED;
+            result = ARM_DRIVER_ERROR_UNSUPPORTED;
+            break;
     }
-    return ARM_DRIVER_OK;
+    return result;
 }
 
 static int32_t ECSPI_SDMASend(const void *data, uint32_t num, cmsis_ecspi_sdma_driver_state_t *ecspi)
@@ -553,6 +558,9 @@ static uint32_t ECSPI_SDMAGetCount(cmsis_ecspi_sdma_driver_state_t *ecspi)
 
 static int32_t ECSPI_SDMAControl(uint32_t control, uint32_t arg, cmsis_ecspi_sdma_driver_state_t *ecspi)
 {
+    int32_t result = ARM_DRIVER_OK;
+    bool isDone    = false;
+
     if (0U == (ecspi->flags & (uint8_t)SPI_FLAG_POWER))
     {
         return ARM_DRIVER_ERROR;
@@ -562,7 +570,8 @@ static int32_t ECSPI_SDMAControl(uint32_t control, uint32_t arg, cmsis_ecspi_sdm
     {
         case ARM_SPI_MODE_INACTIVE:
             ECSPI_Enable(ecspi->resource->base, false);
-            return ARM_DRIVER_OK;
+            isDone = true;
+            break;
 
         case ARM_SPI_MODE_MASTER:
             ecspi->baudRate_Bps = arg;
@@ -576,21 +585,27 @@ static int32_t ECSPI_SDMAControl(uint32_t control, uint32_t arg, cmsis_ecspi_sdm
         case ARM_SPI_SET_BUS_SPEED:
             if (0U == (ecspi->flags & (uint8_t)SPI_FLAG_MASTER))
             {
-                return ARM_DRIVER_ERROR_UNSUPPORTED;
+                result = ARM_DRIVER_ERROR_UNSUPPORTED;
+                break;
             }
             ECSPI_SetBaudRate(ecspi->resource->base, arg, ecspi->resource->GetFreq());
             ecspi->baudRate_Bps = arg;
-            return ARM_DRIVER_OK;
+            isDone              = true;
+            break;
 
         case ARM_SPI_GET_BUS_SPEED: /* Set Bus Speed in bps; arg = value */
             if (0U == (ecspi->flags & (uint8_t)SPI_FLAG_MASTER))
             {
-                return ARM_DRIVER_ERROR_UNSUPPORTED;
+                result = ARM_DRIVER_ERROR_UNSUPPORTED;
+                break;
             }
-            return ecspi->baudRate_Bps;
+            result = (int32_t)ecspi->baudRate_Bps;
+            isDone = true;
+            break;
 
         case ARM_SPI_CONTROL_SS:
-            return ARM_DRIVER_ERROR_UNSUPPORTED;
+            result = ARM_DRIVER_ERROR_UNSUPPORTED;
+            break;
 
         case ARM_SPI_ABORT_TRANSFER:
             if ((ecspi->flags & (uint8_t)SPI_FLAG_MASTER) != 0U)
@@ -601,23 +616,32 @@ static int32_t ECSPI_SDMAControl(uint32_t control, uint32_t arg, cmsis_ecspi_sdm
             {
                 ECSPI_SlaveTransferAbortSDMA(ecspi->resource->base, ecspi->handle);
             }
-            return ARM_DRIVER_OK;
+            isDone = true;
+            break;
 
         case ARM_SPI_SET_DEFAULT_TX_VALUE: /* Set default Transmit value; arg = value */
             /* Unsupported by current driver. */
-            return ARM_DRIVER_OK;
+            result = ARM_DRIVER_ERROR_UNSUPPORTED;
+            break;
 
         case ARM_SPI_MODE_MASTER_SIMPLEX: /* SPI Master (Output/Input on MOSI); arg = Bus Speed in bps */
             /* Mode is not supported by current driver. */
-            return ARM_DRIVER_ERROR_UNSUPPORTED;
+            result = ARM_DRIVER_ERROR_UNSUPPORTED;
+            break;
 
         case ARM_SPI_MODE_SLAVE_SIMPLEX: /* SPI Slave  (Output/Input on MISO) */
             /* Mode is not supported by current driver. */
-            return ARM_DRIVER_ERROR_UNSUPPORTED;
+            result = ARM_DRIVER_ERROR_UNSUPPORTED;
+            break;
 
         default:
             /* Avoid MISRA 16.4 violation */
             break;
+    }
+
+    if ((result != ARM_DRIVER_OK) || isDone)
+    {
+        return result;
     }
 
     if ((ecspi->flags & (uint8_t)SPI_FLAG_MASTER) != 0U)
@@ -1145,12 +1169,12 @@ static cmsis_ecspi_resource_t ECSPI1_Resource = {ECSPI1, 1, ECSPI1_GetFreq};
 
 #if defined(RTE_SPI1_DMA_EN) && RTE_SPI1_DMA_EN
 
-AT_NONCACHEABLE_SECTION_ALIGN(ecspi_sdma_handle_t ECSPI1_SdmaHandle, 4);
-AT_NONCACHEABLE_SECTION_ALIGN(sdma_handle_t ECSPI1_TxSdmaHandle, 4);
-AT_NONCACHEABLE_SECTION_ALIGN(sdma_handle_t ECSPI1_RxSdmaHandle, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static ecspi_sdma_handle_t ECSPI1_SdmaHandle, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static sdma_handle_t ECSPI1_TxSdmaHandle, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static sdma_handle_t ECSPI1_RxSdmaHandle, 4);
 
-AT_NONCACHEABLE_SECTION_ALIGN(sdma_context_data_t ECSPI1_TxSdmaContext, 4);
-AT_NONCACHEABLE_SECTION_ALIGN(sdma_context_data_t ECSPI1_RxSdmaContext, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static sdma_context_data_t ECSPI1_TxSdmaContext, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static sdma_context_data_t ECSPI1_RxSdmaContext, 4);
 
 static cmsis_ecspi_sdma_resource_t ECSPI1_SDMAResource = {
     RTE_SPI1_DMA_TX_DMA_BASE,    RTE_SPI1_DMA_TX_CH,       RTE_SPI1_DMA_TX_CH_REQUEST, RTE_SPI1_DMA_TX_CH_PRIORITY,
@@ -1308,12 +1332,12 @@ static cmsis_ecspi_resource_t ECSPI2_Resource = {ECSPI2, 2, ECSPI2_GetFreq};
 
 #if defined(RTE_SPI2_DMA_EN) && RTE_SPI2_DMA_EN
 
-AT_NONCACHEABLE_SECTION_ALIGN(ecspi_sdma_handle_t ECSPI2_SdmaHandle, 4);
-AT_NONCACHEABLE_SECTION_ALIGN(sdma_handle_t ECSPI2_TxSdmaHandle, 4);
-AT_NONCACHEABLE_SECTION_ALIGN(sdma_handle_t ECSPI2_RxSdmaHandle, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static ecspi_sdma_handle_t ECSPI2_SdmaHandle, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static sdma_handle_t ECSPI2_TxSdmaHandle, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static sdma_handle_t ECSPI2_RxSdmaHandle, 4);
 
-AT_NONCACHEABLE_SECTION_ALIGN(sdma_context_data_t ECSPI2_TxSdmaContext, 4);
-AT_NONCACHEABLE_SECTION_ALIGN(sdma_context_data_t ECSPI2_RxSdmaContext, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static sdma_context_data_t ECSPI2_TxSdmaContext, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static sdma_context_data_t ECSPI2_RxSdmaContext, 4);
 
 static cmsis_ecspi_sdma_resource_t ECSPI2_SDMAResource = {
     RTE_SPI2_DMA_TX_DMA_BASE,    RTE_SPI2_DMA_TX_CH,       RTE_SPI2_DMA_TX_CH_REQUEST, RTE_SPI2_DMA_TX_CH_PRIORITY,
@@ -1473,12 +1497,12 @@ static cmsis_ecspi_resource_t ECSPI3_Resource = {ECSPI3, 3, ECSPI3_GetFreq};
 
 #if defined(RTE_SPI3_DMA_EN) && RTE_SPI3_DMA_EN)
 
-AT_NONCACHEABLE_SECTION_ALIGN(ecspi_sdma_handle_t ECSPI3_SdmaHandle, 4);
-AT_NONCACHEABLE_SECTION_ALIGN(sdma_handle_t ECSPI3_TxSdmaHandle, 4);
-AT_NONCACHEABLE_SECTION_ALIGN(sdma_handle_t ECSPI3_RxSdmaHandle, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static ecspi_sdma_handle_t ECSPI3_SdmaHandle, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static sdma_handle_t ECSPI3_TxSdmaHandle, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static sdma_handle_t ECSPI3_RxSdmaHandle, 4);
 
-AT_NONCACHEABLE_SECTION_ALIGN(sdma_context_data_t ECSPI3_TxSdmaContext, 4);
-AT_NONCACHEABLE_SECTION_ALIGN(sdma_context_data_t ECSPI3_RxSdmaContext, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static sdma_context_data_t ECSPI3_TxSdmaContext, 4);
+AT_NONCACHEABLE_SECTION_ALIGN(static sdma_context_data_t ECSPI3_RxSdmaContext, 4);
 
 static cmsis_ecspi_sdma_resource_t ECSPI3_SDMAResource = {
     RTE_SPI3_DMA_TX_DMA_BASE,    RTE_SPI3_DMA_TX_CH,       RTE_SPI3_DMA_TX_CH_REQUEST, RTE_SPI3_DMA_TX_CH_PRIORITY,

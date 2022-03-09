@@ -283,6 +283,21 @@ void CLOCK_DeinitSysPll2(void)
     ANADIG_PLL->SYS_PLL2_SS &= ~ANADIG_PLL_SYS_PLL2_SS_ENABLE_MASK;
 }
 
+/*!
+ * brief Check if Sys PLL2 PFD is enabled
+ *
+ * param pfd PFD control name
+ * return PFD bypass status.
+ *         - true: power on.
+ *         - false: power off.
+ * note Only useful in software control mode.
+ */
+bool CLOCK_IsSysPll2PfdEnabled(clock_pfd_t pfd)
+{
+    return ((ANADIG_PLL->SYS_PLL2_PFD & (uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK
+                                            << (8UL * (uint8_t)pfd)) == 0U);
+}
+
 #define PFD_FRAC_MIN 12U
 #define PFD_FRAC_MAX 35U
 void CLOCK_InitPfd(clock_pll_t pll, clock_pfd_t pfd, uint8_t frac)
@@ -333,6 +348,40 @@ void CLOCK_InitPfd(clock_pll_t pll, clock_pfd_t pfd, uint8_t frac)
     while (stable == (*pfdCtrl & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_STABLE_MASK << (8UL * (uint32_t)pfd))))
     {
     }
+}
+
+/*!
+ * brief De-initialize selected PLL PFD.
+ *
+ * param pll Which PLL of targeting PFD to be operated.
+ * param pfd Which PFD clock to enable.
+ */
+void CLOCK_DeinitPfd(clock_pll_t pll, clock_pfd_t pfd)
+{
+    volatile uint32_t *pfdCtrl = NULL;
+
+    switch (pll)
+    {
+        case kCLOCK_PllSys2:
+        {
+            pfdCtrl = &ANADIG_PLL->SYS_PLL2_PFD;
+            break;
+        }
+        case kCLOCK_PllSys3:
+        {
+            pfdCtrl = &ANADIG_PLL->SYS_PLL3_PFD;
+            break;
+        }
+        default:
+        {
+            /* Wrong input parameter pll. */
+            assert(false);
+            break;
+        }
+    }
+
+    /* Clock gate the selected pfd. */
+    *pfdCtrl |= ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << (8UL * (uint32_t)pfd));
 }
 
 #ifndef GET_FREQ_FROM_OBS
@@ -455,6 +504,21 @@ void CLOCK_DeinitSysPll3(void)
     ANADIG_PLL->SYS_PLL3_CTRL |= ANADIG_PLL_SYS_PLL3_CTRL_SYS_PLL3_GATE_MASK;
     ANADIG_PLL->SYS_PLL3_CTRL &= ~(ANADIG_PLL_SYS_PLL3_CTRL_ENABLE_CLK_MASK | ANADIG_PLL_SYS_PLL3_CTRL_POWERUP_MASK |
                                    ANADIG_PLL_SYS_PLL3_CTRL_PLL_REG_EN_MASK);
+}
+
+/*!
+ * brief Check if Sys PLL3 PFD is enabled
+ *
+ * param pfd PFD control name
+ * return PFD bypass status.
+ *         - true: power on.
+ *         - false: power off.
+ * note Only useful in software control mode.
+ */
+bool CLOCK_IsSysPll3PfdEnabled(clock_pfd_t pfd)
+{
+    return ((ANADIG_PLL->SYS_PLL3_PFD & (uint32_t)ANADIG_PLL_SYS_PLL3_PFD_PFD0_DIV1_CLKGATE_MASK
+                                            << (8UL * (uint8_t)pfd)) == 0U);
 }
 
 void CLOCK_SetPllBypass(clock_pll_t pll, bool bypass)

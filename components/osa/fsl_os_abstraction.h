@@ -361,7 +361,7 @@ extern const uint8_t gUseRtos_c;
 /*
  * alloc the temporary memory to store the status
  */
-#define OSA_SR_ALLOC() uint32_t osaCurrentSr;
+#define OSA_SR_ALLOC() uint32_t osaCurrentSr = 0U;
 /*
  * Enter critical mode
  */

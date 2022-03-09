@@ -17,5 +17,8 @@ endif()
 if(CONFIG_USE_component_serial_manager_swo) 
     include(component_serial_manager_swo)
 endif()
+if(CONFIG_USE_component_serial_manager_usb_cdc) 
+    include(component_serial_manager_usb_cdc)
+endif()
 
 include(component_lists)

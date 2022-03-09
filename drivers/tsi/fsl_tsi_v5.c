@@ -226,7 +226,7 @@ void TSI_Deinit(TSI_Type *base)
     userConfig->commonConfig.mainClock     = kTSI_MainClockSlection_0;
     userConfig->commonConfig.mode          = kTSI_SensingModeSlection_Self;
     userConfig->commonConfig.dvolt         = kTSI_DvoltOption_2;
-    userConfig->commonConfig.cutoff        = kTSI_SincCutoffDiv_0;
+    userConfig->commonConfig.cutoff        = kTSI_SincCutoffDiv_1;
     userConfig->commonConfig.order         = kTSI_SincFilterOrder_1;
     userConfig->commonConfig.decimation    = kTSI_SincDecimationValue_8;
     userConfig->commonConfig.chargeNum     = kTSI_SscChargeNumValue_3;
@@ -252,7 +252,7 @@ void TSI_GetSelfCapModeDefaultConfig(tsi_selfCap_config_t *userConfig)
     userConfig->commonConfig.mainClock     = kTSI_MainClockSlection_0;
     userConfig->commonConfig.mode          = kTSI_SensingModeSlection_Self;
     userConfig->commonConfig.dvolt         = kTSI_DvoltOption_2;
-    userConfig->commonConfig.cutoff        = kTSI_SincCutoffDiv_0;
+    userConfig->commonConfig.cutoff        = kTSI_SincCutoffDiv_1;
     userConfig->commonConfig.order         = kTSI_SincFilterOrder_1;
     userConfig->commonConfig.decimation    = kTSI_SincDecimationValue_8;
     userConfig->commonConfig.chargeNum     = kTSI_SscChargeNumValue_3;
@@ -277,7 +277,7 @@ void TSI_GetSelfCapModeDefaultConfig(tsi_selfCap_config_t *userConfig)
     userConfig->commonConfig.mainClock     = kTSI_MainClockSlection_1;
     userConfig->commonConfig.mode          = kTSI_SensingModeSlection_Mutual;
     userConfig->commonConfig.dvolt         = kTSI_DvoltOption_0;
-    userConfig->commonConfig.cutoff        = kTSI_SincCutoffDiv_0;
+    userConfig->commonConfig.cutoff        = kTSI_SincCutoffDiv_1;
     userConfig->commonConfig.order         = kTSI_SincFilterOrder_1;
     userConfig->commonConfig.decimation    = kTSI_SincDecimationValue_8;
     userConfig->commonConfig.chargeNum     = kTSI_SscChargeNumValue_4;
@@ -306,7 +306,7 @@ void TSI_GetMutualCapModeDefaultConfig(tsi_mutualCap_config_t *userConfig)
     userConfig->commonConfig.mainClock     = kTSI_MainClockSlection_1;
     userConfig->commonConfig.mode          = kTSI_SensingModeSlection_Mutual;
     userConfig->commonConfig.dvolt         = kTSI_DvoltOption_0;
-    userConfig->commonConfig.cutoff        = kTSI_SincCutoffDiv_0;
+    userConfig->commonConfig.cutoff        = kTSI_SincCutoffDiv_1;
     userConfig->commonConfig.order         = kTSI_SincFilterOrder_1;
     userConfig->commonConfig.decimation    = kTSI_SincDecimationValue_8;
     userConfig->commonConfig.chargeNum     = kTSI_SscChargeNumValue_4;
@@ -333,7 +333,7 @@ void TSI_GetMutualCapModeDefaultConfig(tsi_mutualCap_config_t *userConfig)
  *          This API is mostly used at initial application setup, it shall be called
  *          after the \ref TSI_Init API, then user can use the calibrated
  *          counter values to setup applications(such as to determine
- *          under which counter value we can confirm a touch event occurrs).
+ *          under which counter value we can confirm a touch event occurs).
  *
  * param   base    TSI peripheral base address.
  * param   calBuff Data buffer that store the calibrated counter value.

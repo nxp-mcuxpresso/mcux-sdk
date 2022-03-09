@@ -273,13 +273,14 @@ osa_status_t OSA_TaskCreate(osa_task_handle_t taskHandle, const osa_task_def_t *
     TaskHandle_t pxCreatedTask;
     osa_freertos_task_t *ptask = (osa_freertos_task_t *)taskHandle;
 
-    if (xTaskCreate((TaskFunction_t)thread_def->pthread, /* pointer to the task */
-                    (char const *)thread_def->tname,     /* task name for kernel awareness debugging */
-                    (configSTACK_DEPTH_TYPE)thread_def->stacksize / sizeof(portSTACK_TYPE), /* task stack size */
-                    (task_param_t)task_param,                    /* optional task startup argument */
-                    PRIORITY_OSA_TO_RTOS(thread_def->tpriority), /* initial priority */
-                    &pxCreatedTask                               /* optional task handle to create */
-                    ) == pdPASS)
+    if (xTaskCreate(
+            (TaskFunction_t)thread_def->pthread, /* pointer to the task */
+            (char const *)thread_def->tname,     /* task name for kernel awareness debugging */
+            (configSTACK_DEPTH_TYPE)((uint16_t)thread_def->stacksize / sizeof(portSTACK_TYPE)), /* task stack size */
+            (task_param_t)task_param,                    /* optional task startup argument */
+            PRIORITY_OSA_TO_RTOS(thread_def->tpriority), /* initial priority */
+            &pxCreatedTask                               /* optional task handle to create */
+            ) == pdPASS)
     {
         ptask->taskHandle = pxCreatedTask;
         OSA_InterruptDisable();

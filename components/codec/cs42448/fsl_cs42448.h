@@ -134,6 +134,7 @@ typedef enum _cs42448_module
     kCS42448_ModuleDACPair4 = 0x10, /*!< DAC pair4 (AOUT7 and AOUT8) module in CS42448 */
     kCS42448_ModuleADCPair1 = 0x20, /*!< ADC pair1 (AIN1 and AIN2) module in CS42448 */
     kCS42448_ModuleADCPair2 = 0x40, /*!< ADC pair2 (AIN3 and AIN4) module in CS42448 */
+    kCS42448_ModuleADCPair3 = 0x80, /*!< ADC pair3 (AIN5 and AIN6) module in CS42448 */
 } cs42448_module_t;
 
 /*! @brief CS42448 supported audio bus type. */

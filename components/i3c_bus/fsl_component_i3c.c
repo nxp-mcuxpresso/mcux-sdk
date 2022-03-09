@@ -22,7 +22,7 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
-static void I3C_BusSetAddrSlot(i3c_bus_t *bus, uint8_t addr, i3c_addr_slot_status_t status)
+void I3C_BusSetAddrSlot(i3c_bus_t *bus, uint8_t addr, i3c_addr_slot_status_t status)
 {
     uint16_t bitPos = (uint16_t)addr * I3C_BUS_ADDR_SLOTWIDTH;
     uint32_t *slotPtr;
@@ -164,6 +164,9 @@ static status_t I3C_BusMasterGetPID(i3c_device_t *master, i3c_device_information
 
     result = I3C_BusMasterSendCCC(master, &getPidCmd);
 
+    info->vendorID   = (((uint16_t)pid[0] << 8U | (uint16_t)pid[1]) & 0xFFFEU) >> 1U;
+    info->partNumber = ((uint32_t)pid[2] << 24U | (uint32_t)pid[3] << 16U | (uint32_t)pid[4] << 8U | (uint32_t)pid[5]);
+
     return result;
 }
 
@@ -205,6 +208,80 @@ static status_t I3C_BusMasterGetDCR(i3c_device_t *master, i3c_device_information
     return result;
 }
 
+static status_t I3C_BusMasterAssignDevDynamicAddr(i3c_device_t *masterDev)
+{
+    i3c_bus_t *i3cBus = masterDev->bus;
+    status_t result   = kStatus_Success;
+
+    list_handle_t i3cDevList = &(i3cBus->i3cDevList);
+
+    for (list_element_handle_t listItem = i3cDevList->head; listItem != NULL; listItem = listItem->next)
+    {
+        i3c_device_t *tmpDev = (i3c_device_t *)(void *)listItem;
+        if (tmpDev == masterDev)
+        {
+            continue;
+        }
+        else if ((tmpDev->initDynamicAddr != 0U) && (tmpDev->info.staticAddr != 0U) && (tmpDev->info.dynamicAddr == 0U))
+        {
+            result =
+                I3C_BusMasterSetDynamicAddrFromStaticAddr(masterDev, tmpDev->info.staticAddr, tmpDev->initDynamicAddr);
+
+            if (result != kStatus_Success)
+            {
+                return result;
+            }
+
+            tmpDev->info.dynamicAddr = tmpDev->initDynamicAddr;
+            I3C_BusSetAddrSlot(i3cBus, tmpDev->info.dynamicAddr, kI3C_Bus_AddrSlot_I3CDev);
+
+            /* Retrieve device information. */
+            result = I3C_BusMasterGetDeviceInfo(masterDev, tmpDev->info.dynamicAddr, &tmpDev->info);
+            if (result != kStatus_Success)
+            {
+                return result;
+            }
+        }
+        else
+        {
+            /*Empty else to eliminate MISRA 15.7*/
+        }
+    }
+
+    return result;
+}
+
+static status_t I3C_BusMasterAddExistingI3CDevs(i3c_device_t *masterDev)
+{
+    i3c_bus_t *i3cBus = masterDev->bus;
+    status_t result   = kStatus_Success;
+
+    list_handle_t i3cDevList = &(i3cBus->i3cDevList);
+
+    for (list_element_handle_t listItem = i3cDevList->head; listItem != NULL; listItem = listItem->next)
+    {
+        i3c_device_t *tmpDev = (i3c_device_t *)(void *)listItem;
+        if (tmpDev == masterDev)
+        {
+            continue;
+        }
+        else if (tmpDev->ibiInfo != NULL)
+        {
+            result = I3C_BusMasterRegisterDevIBI(masterDev, tmpDev, tmpDev->ibiInfo);
+            if (result != kStatus_Success)
+            {
+                return result;
+            }
+        }
+        else
+        {
+            /*Fix MISRA violation 15.7*/
+        }
+    }
+
+    return result;
+}
+
 /*!
  * brief Add exist I3C device in bus to the bus device list.
  *
@@ -218,10 +295,20 @@ void I3C_BusAddI3CDev(i3c_bus_t *bus, i3c_device_t *dev)
     /* Chain device into i3c_device_list */
     list_handle_t i3cDevList = &bus->i3cDevList;
     (void)LIST_AddTail(i3cDevList, &dev->listNode);
-    /* Set slot status I3C device */
-    I3C_BusSetAddrSlot(bus, dev->info.dynamicAddr, kI3C_Bus_AddrSlot_I3CDev);
-    /* Set slot status I2C device */
-    I3C_BusSetAddrSlot(bus, dev->info.staticAddr, kI3C_Bus_AddrSlot_I3CDev);
+
+    if (dev->info.dynamicAddr != 0U)
+    {
+        /* Set slot status I3C device */
+        I3C_BusSetAddrSlot(bus, dev->info.dynamicAddr, kI3C_Bus_AddrSlot_I3CDev);
+    }
+
+    if (dev->info.staticAddr != 0U)
+    {
+        /* Set slot status I2C device */
+        I3C_BusSetAddrSlot(bus, dev->info.staticAddr, kI3C_Bus_AddrSlot_I2CDev);
+    }
+
+    dev->bus = bus;
 }
 
 /*!
@@ -240,6 +327,7 @@ void I3C_BusAddI2CDev(i3c_bus_t *bus, i2c_device_t *dev)
     (void)LIST_AddTail(i2cDevList, &dev->listNode);
     /* Set slot status I2C device */
     I3C_BusSetAddrSlot(bus, dev->staticAddr, kI3C_Bus_AddrSlot_I2CDev);
+    dev->bus = bus;
 }
 
 /*!
@@ -364,8 +452,37 @@ status_t I3C_BusMasterCreate(i3c_device_t *masterDev,
             return result;
         }
 
+        /* Master assign slave with init dynamic address. */
+        result = I3C_BusMasterAssignDevDynamicAddr(masterDev);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+
+        result = I3C_BusMasterAddExistingI3CDevs(masterDev);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+
+        /* Disable all events before start doing DAA. */
+        result = I3C_BusMasterDisableEvents(masterDev, I3C_BUS_BROADCAST_ADDR,
+                                            ((uint8_t)kI3C_EventMR | (uint8_t)kI3C_EventHJ | (uint8_t)kI3C_EventIBI));
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+
         /* Start to do DAA */
         result = I3C_BusMasterDoDAA(masterDev);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+
+        /* Enable all events before start doing DAA. */
+        result = I3C_BusMasterEnableEvents(masterDev, I3C_BUS_BROADCAST_ADDR,
+                                           ((uint8_t)kI3C_EventMR | (uint8_t)kI3C_EventHJ | (uint8_t)kI3C_EventIBI));
         if (result != kStatus_Success)
         {
             return result;
@@ -497,6 +614,32 @@ status_t I3C_BusMasterDoDAA(i3c_device_t *masterDev)
 }
 
 /*!
+ * brief Bus master set device dynamic address from static address.
+ *
+ * Bus master call this function to execute SETDASA CCC command to set device dynamic address from static address.
+ *
+ * param masterDev Pointer to I3C master device.
+ * param staticAddr Device static address.
+ * param initDynamicAddr Device initialized dynamic address.
+ */
+status_t I3C_BusMasterSetDynamicAddrFromStaticAddr(i3c_device_t *master, uint8_t staticAddr, uint8_t initDynamicAddr)
+{
+    i3c_ccc_cmd_t setdasaCCC = {0};
+    status_t result          = kStatus_Success;
+    uint8_t dynamicAddr      = initDynamicAddr << 1;
+
+    setdasaCCC.cmdId    = I3C_BUS_CCC_SETDASA;
+    setdasaCCC.destAddr = staticAddr;
+    setdasaCCC.data     = &dynamicAddr;
+    setdasaCCC.dataSize = 1U;
+    setdasaCCC.isRead   = false;
+
+    result = I3C_BusMasterSendCCC(master, &setdasaCCC);
+
+    return result;
+}
+
+/*!
  * brief Bus master send slave list on bus.
  *
  * Bus master call this function to send slave list on bus to notify the secondary master.
@@ -520,7 +663,7 @@ status_t I3C_BusMasterSendSlavesList(i3c_device_t *masterDev)
     defSlavesCmd.isRead        = false;
     defSlavesCmd.destAddr      = I3C_BUS_BROADCAST_ADDR;
     defSlavesCmd.cmdId         = I3C_BUS_CCC_DEFSLVS;
-    uint8_t devCount           = 0;
+    uint8_t devCount           = 1;
     status_t result            = kStatus_Success;
 
     for (listItem = i2cDevList->head; listItem != NULL; listItem = listItem->next)
@@ -530,10 +673,18 @@ status_t I3C_BusMasterSendSlavesList(i3c_device_t *masterDev)
 
     for (listItem = i3cDevList->head; listItem != NULL; listItem = listItem->next)
     {
-        devCount++;
+        i3c_device_t *i3cDev = (i3c_device_t *)(void *)listItem;
+        if (i3cDev == masterDev)
+        {
+            continue;
+        }
+        else
+        {
+            devCount++;
+        }
     }
 
-    defSlavesCmd.dataSize = sizeof(i3c_ccc_dev_t) * (uint16_t)devCount + 1U;
+    defSlavesCmd.dataSize = (uint16_t)sizeof(i3c_ccc_dev_t) * (uint16_t)devCount + 1U;
     defSlavesCmd.data     = malloc(defSlavesCmd.dataSize);
 
     uint8_t *pData = defSlavesCmd.data;
@@ -638,7 +789,6 @@ status_t I3C_BusMasterGetDeviceInfo(i3c_device_t *masterDev, uint8_t slaveAddr, 
 {
     status_t result = kStatus_Success;
 
-    (void)memset(devInfo, 0, sizeof(*devInfo));
     devInfo->dynamicAddr = slaveAddr;
 
     result = I3C_BusMasterGetPID(masterDev, devInfo);
@@ -682,6 +832,29 @@ status_t I3C_BusMasterGetDeviceInfo(i3c_device_t *masterDev, uint8_t slaveAddr, 
     return result;
 }
 
+status_t I3C_BusMasterRegisterDevIBI(i3c_device_t *masterDev, i3c_device_t *i3cDev, i3c_device_ibi_info_t *devIbiInfo)
+{
+    i3c_bus_t *i3cBus = masterDev->bus;
+
+    if (masterDev != i3cBus->currentMaster)
+    {
+        return kStatus_I3CBus_NotCurrentMaster;
+    }
+
+    i3c_device_control_info_t *masterControlInfo = masterDev->devControlInfo;
+    i3cDev->ibiInfo                              = devIbiInfo;
+
+    if (I3C_BusGetAddrSlotStatus(i3cBus, i3cDev->info.dynamicAddr) == (uint8_t)kI3C_Bus_AddrSlot_I3CDev)
+    {
+        masterControlInfo->funcs->RegisterIBI(masterDev, i3cDev->info.dynamicAddr);
+    }
+    else
+    {
+        return kStatus_I3CBus_InvalidOps;
+    }
+
+    return kStatus_Success;
+}
 /*!
  * brief Bus master handle in-band-interrupt event.
  *
@@ -722,7 +895,7 @@ status_t I3C_BusMasterHandleIBI(i3c_device_t *masterDev, uint8_t ibiAddress, voi
     if (i3cDev != NULL)
     {
         assert(i3cDev->ibiInfo != NULL);
-        assert(i3cDev->ibiInfo->maxPayloadLength < payloadSize);
+        assert(i3cDev->ibiInfo->maxPayloadLength >= payloadSize);
         assert(i3cDev->ibiInfo->ibiHandler != NULL);
 
         i3cDev->ibiInfo->ibiHandler(i3cDev, ibiData, payloadSize);

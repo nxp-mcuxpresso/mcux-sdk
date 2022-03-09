@@ -302,7 +302,8 @@ status_t FLEXCAN_TransferReceiveEnhancedFifoEDMA(CAN_Type *base,
                          sizeof(uint32_t), sizeof(uint32_t) * perReadWords,  /* minor loop bytes : 4* perReadWords */
                          sizeof(uint32_t) * perReadWords * handle->frameNum, /* major loop counts : handle->frameNum */
                          kEDMA_MemoryToMemory);
-    EDMA_SubmitTransfer(handle->rxFifoEdmaHandle, &dmaXferConfig);
+    /* Submit configuration. */
+    (void)EDMA_SubmitTransfer(handle->rxFifoEdmaHandle, &dmaXferConfig);
     handle->rxFifoEdmaHandle->base->CH[handle->rxFifoEdmaHandle->channel].TCD_NBYTES_MLOFFYES &=
         ~DMA_TCD_NBYTES_MLOFFYES_MLOFF_MASK;
     handle->rxFifoEdmaHandle->base->CH[handle->rxFifoEdmaHandle->channel].TCD_NBYTES_MLOFFYES |=

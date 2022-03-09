@@ -91,6 +91,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_common_header)
 #    include(driver_flexcomm_spi)
 #    include(driver_utick)
+#    include(middleware_multicore_rpmsg_lite_LPC54114_cm4)
 #    include(driver_dmic)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(utility_shell)
@@ -131,4 +132,3 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_reset)
 #    include(driver_flexcomm_spi_dma)
 #    include(driver_dmic_dma)
-#    include(middleware_multicore_rpmsg_lite)

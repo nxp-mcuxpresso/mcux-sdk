@@ -22,7 +22,13 @@
          12000U :                         \
          (x) == kWM8904_SampleRate16kHz ? \
          16000U :                         \
-         (x) == kWM8904_SampleRate24kHz ? 24000U : (x) == kWM8904_SampleRate32kHz ? 32000U : 48000U)
+         (x) == kWM8904_SampleRate24kHz ? \
+         24000U :                         \
+         (x) == kWM8904_SampleRate32kHz ? \
+         32000U :                         \
+         (x) == kWM8904_SampleRate48kHz ? \
+         48000U :                         \
+         (x) == kWM8904_SampleRate11025Hz ? 11025U : (x) == kWM8904_SampleRate22050Hz ? 22050U : 44100U)
 #define WM8904_MAP_BITWIDTH(x) \
     ((x) == kWM8904_BitWidth16 ? 16 : (x) == kWM8904_BitWidth20 ? 20 : (x) == kWM8904_BitWidth24 ? 24 : 32)
 /*******************************************************************************
@@ -32,10 +38,15 @@
  * @brief WM8904 update format.
  *
  * @param handle WM8904 handle structure.
- * @param format format configurations.
+ * @param fsRatio fs ratio.
+ * @param sampleRate sample rate.
+ * @param bitWidth bit width.
  * @return kStatus_Success, else failed.
  */
-static status_t WM8904_UpdateFormat(wm8904_handle_t *handle, wm8904_audio_format_t *format);
+static status_t WM8904_UpdateFormat(wm8904_handle_t *handle,
+                                    wm8904_fs_ratio_t fsRatio,
+                                    wm8904_sample_rate_t sampleRate,
+                                    wm8904_bit_width_t bitWidth);
 
 /*!
  * @brief WM8904 wait on write sequencer.
@@ -60,7 +71,10 @@ static const uint8_t allRegisters[] = {
 /*******************************************************************************
  * Code
  ******************************************************************************/
-static status_t WM8904_UpdateFormat(wm8904_handle_t *handle, wm8904_audio_format_t *format)
+static status_t WM8904_UpdateFormat(wm8904_handle_t *handle,
+                                    wm8904_fs_ratio_t fsRatio,
+                                    wm8904_sample_rate_t sampleRate,
+                                    wm8904_bit_width_t bitWidth)
 {
     status_t result = kStatus_Success;
 
@@ -73,22 +87,14 @@ static status_t WM8904_UpdateFormat(wm8904_handle_t *handle, wm8904_audio_format
 
     /* Set Clock ratio and sample rate */
     result = WM8904_WriteRegister(handle, WM8904_CLK_RATES_1,
-                                  (uint16_t)(((uint16_t)(format->fsRatio) << 10U) | (uint16_t)(format->sampleRate)));
+                                  (uint16_t)(((uint16_t)(fsRatio) << 10U) | (uint16_t)(sampleRate)));
     if (result != kStatus_WM8904_Success)
     {
         return result;
     }
 
-    /* Set bit resolution and bclk direction */
-    result =
-        WM8904_ModifyRegister(handle, WM8904_AUDIO_IF_1, (0x000CU | (1U << 6U)), ((uint16_t)(format->bitWidth) << 2U));
-    if (result != kStatus_WM8904_Success)
-    {
-        return result;
-    }
-
-    /* Set LRCLK is input */
-    result = WM8904_ModifyRegister(handle, WM8904_AUDIO_IF_3, 1U << 11U, 0);
+    /* Set bit resolution */
+    result = WM8904_ModifyRegister(handle, WM8904_AUDIO_IF_1, (0x000CU), ((uint16_t)(bitWidth) << 2U));
     if (result != kStatus_WM8904_Success)
     {
         return result;
@@ -313,15 +319,15 @@ status_t WM8904_Init(wm8904_handle_t *handle, wm8904_config_t *wm8904Config)
         return result;
     }
 
-    /* HPOUTL_MUTE=0, HPOUT_VU=0, HPOUTLZC=0, HPOUTL_VOL=11_1001 */
-    result = WM8904_WriteRegister(handle, WM8904_ANALOG_OUT1_LEFT, 0x0039);
+    /* HPOUTL_MUTE=0, HPOUT_VU=0, HPOUTLZC=0, HPOUTL_VOL=10_1101 */
+    result = WM8904_WriteRegister(handle, WM8904_ANALOG_OUT1_LEFT, 0x00AD);
     if (result != kStatus_WM8904_Success)
     {
         return result;
     }
 
-    /* HPOUTR_MUTE=0, HPOUT_VU=0, HPOUTRZC=0, HPOUTR_VOL=11_1001 */
-    result = WM8904_WriteRegister(handle, WM8904_ANALOG_OUT1_RIGHT, 0x0039);
+    /* HPOUTR_MUTE=0, HPOUT_VU=0, HPOUTRZC=0, HPOUTR_VOL=10_1101 */
+    result = WM8904_WriteRegister(handle, WM8904_ANALOG_OUT1_RIGHT, 0x00AD);
     if (result != kStatus_WM8904_Success)
     {
         return result;
@@ -363,7 +369,8 @@ status_t WM8904_Init(wm8904_handle_t *handle, wm8904_config_t *wm8904Config)
         return result;
     }
 
-    result = WM8904_ModifyRegister(handle, WM8904_CLK_RATES_2, (1U << 14U), (uint16_t)(config->sysClkSource));
+    result =
+        WM8904_ModifyRegister(handle, WM8904_CLK_RATES_2, (uint16_t)(1UL << 14U), (uint16_t)(config->sysClkSource));
     if (kStatus_WM8904_Success != result)
     {
         return result;
@@ -391,9 +398,24 @@ status_t WM8904_Init(wm8904_handle_t *handle, wm8904_config_t *wm8904Config)
 
     if (config->master)
     {
-        result = WM8904_SeMasterClock(handle, sysclk / 2U, (uint32_t)(WM8904_MAP_SAMPLERATE(config->format.sampleRate)),
-                                      (uint32_t)(WM8904_MAP_BITWIDTH(config->format.bitWidth)));
+        result = WM8904_SetMasterClock(handle, sysclk, (uint32_t)(WM8904_MAP_SAMPLERATE(config->format.sampleRate)),
+                                       (uint32_t)(WM8904_MAP_BITWIDTH(config->format.bitWidth)));
         if (result != kStatus_WM8904_Success)
+        {
+            return result;
+        }
+    }
+    else
+    {
+        /* BCLK/LRCLK default direction input */
+        result = WM8904_ModifyRegister(handle, WM8904_AUDIO_IF_1, 1U << 6U, 0U);
+        if (kStatus_WM8904_Success != result)
+        {
+            return result;
+        }
+
+        result = WM8904_ModifyRegister(handle, WM8904_AUDIO_IF_3, (uint16_t)(1UL << 11U), 0U);
+        if (kStatus_WM8904_Success != result)
         {
             return result;
         }
@@ -465,7 +487,7 @@ void WM8904_GetDefaultConfig(wm8904_config_t *config)
 
 /*!
  * brief Sets WM8904 as master or slave.
- * deprecated DO NOT USE THIS API ANYMORE. IT HAS BEEN SUPERCEDED BY @ref WM8904_SeMasterClock
+ * deprecated DO NOT USE THIS API ANYMORE. IT HAS BEEN SUPERCEDED BY @ref WM8904_SetMasterClock
  * param handle WM8904 handle structure.
  * param master true for master, false for slave.
  *
@@ -482,12 +504,26 @@ status_t WM8904_SetMasterSlave(wm8904_handle_t *handle, bool master)
     return kStatus_WM8904_Success;
 }
 
-status_t WM8904_SeMasterClock(wm8904_handle_t *handle, uint32_t sysclk, uint32_t sampleRate, uint32_t bitWidth)
+/*!
+ * brief Sets WM8904 master clock configuration.
+ *
+ * param handle WM8904 handle structure.
+ * param sysclk system clock rate.
+ * param sampleRate sample rate
+ * param bitWidth bit width
+ *
+ * return kStatus_WM8904_Success if successful, different code otherwise.
+ */
+status_t WM8904_SetMasterClock(wm8904_handle_t *handle, uint32_t sysclk, uint32_t sampleRate, uint32_t bitWidth)
 {
     uint32_t bclk           = sampleRate * bitWidth * 2U;
     uint32_t bclkDiv        = 0U;
     uint16_t audioInterface = 0U;
     status_t result         = kStatus_WM8904_Success;
+    uint16_t sysclkDiv      = 0U;
+
+    result = WM8904_ReadRegister(handle, WM8904_CLK_RATES_0, &sysclkDiv);
+    sysclk = sysclk >> (sysclkDiv & 0x1U);
 
     if ((sysclk / bclk > 48U) || (bclk / sampleRate > 2047U) || (bclk / sampleRate < 8U))
     {
@@ -569,9 +605,15 @@ status_t WM8904_SeMasterClock(wm8904_handle_t *handle, uint32_t sysclk, uint32_t
             audioInterface |= 20U;
             break;
         default:
-            /* Avoid MISRA 16.4 violation */
+            result = kStatus_InvalidArgument;
             break;
     }
+
+    if (kStatus_WM8904_Success != result)
+    {
+        return result;
+    }
+
     /* bclk divider */
     result = WM8904_WriteRegister(handle, WM8904_AUDIO_IF_2, audioInterface);
     if (kStatus_WM8904_Success != result)
@@ -591,7 +633,7 @@ status_t WM8904_SeMasterClock(wm8904_handle_t *handle, uint32_t sysclk, uint32_t
         return result;
     }
     /* LRCLK direction and divider */
-    audioInterface = (uint16_t)((1U << 11U) | (bclk / sampleRate));
+    audioInterface = (uint16_t)((1UL << 11U) | (bclk / sampleRate));
     result         = WM8904_ModifyRegister(handle, WM8904_AUDIO_IF_3, 0xFFFU, audioInterface);
     if (kStatus_WM8904_Success != result)
     {
@@ -601,6 +643,15 @@ status_t WM8904_SeMasterClock(wm8904_handle_t *handle, uint32_t sysclk, uint32_t
     return kStatus_WM8904_Success;
 }
 
+/*!
+ * brief WM8904 set PLL configuration
+ * This function will enable the GPIO1 FLL clock output function, so user can see
+ * the generated fll output clock frequency from WM8904 GPIO1.
+ *
+ * param handle wm8904 handler pointer.
+ * param config FLL configuration pointer.
+ *
+ */
 status_t WM8904_SetFLLConfig(wm8904_handle_t *handle, wm8904_fll_config_t *config)
 {
     assert(config != NULL);
@@ -785,10 +836,12 @@ status_t WM8904_CheckAudioFormat(wm8904_handle_t *handle, wm8904_audio_format_t 
 {
     assert((handle != NULL) && (format != NULL));
 
-    status_t result     = kStatus_Success;
-    uint16_t mclkDiv    = 0U;
-    uint32_t sampleRate = 0U;
-    uint32_t fsRatio    = 0U;
+    status_t result                    = kStatus_Success;
+    uint16_t mclkDiv                   = 0U;
+    uint32_t sampleRate                = 0U;
+    uint32_t fsRatio                   = 0U;
+    wm8904_sample_rate_t regSamplerate = format->sampleRate;
+    status_t error                     = kStatus_WM8904_Success;
 
     result = WM8904_ReadRegister(handle, WM8904_CLK_RATES_0, &mclkDiv);
     if (kStatus_WM8904_Success != result)
@@ -802,7 +855,8 @@ status_t WM8904_CheckAudioFormat(wm8904_handle_t *handle, wm8904_audio_format_t 
             sampleRate = 8000;
             break;
         case kWM8904_SampleRate11025Hz:
-            sampleRate = 11025;
+            sampleRate    = 11025;
+            regSamplerate = kWM8904_SampleRate12kHz;
             break;
         case kWM8904_SampleRate12kHz:
             sampleRate = 12000;
@@ -811,7 +865,8 @@ status_t WM8904_CheckAudioFormat(wm8904_handle_t *handle, wm8904_audio_format_t 
             sampleRate = 16000;
             break;
         case kWM8904_SampleRate22050Hz:
-            sampleRate = 22050;
+            sampleRate    = 22050;
+            regSamplerate = kWM8904_SampleRate24kHz;
             break;
         case kWM8904_SampleRate24kHz:
             sampleRate = 24000;
@@ -820,14 +875,20 @@ status_t WM8904_CheckAudioFormat(wm8904_handle_t *handle, wm8904_audio_format_t 
             sampleRate = 32000;
             break;
         case kWM8904_SampleRate44100Hz:
-            sampleRate = 44100;
+            sampleRate    = 44100;
+            regSamplerate = kWM8904_SampleRate48kHz;
             break;
         case kWM8904_SampleRate48kHz:
             sampleRate = 48000;
             break;
         default:
-            /* Avoid MISRA 16.4 violation */
+            error = kStatus_WM8904_Fail;
             break;
+    }
+
+    if (error != kStatus_WM8904_Success)
+    {
+        return error;
     }
 
     fsRatio = (mclkFreq >> (mclkDiv & 0x1U)) / sampleRate;
@@ -865,19 +926,23 @@ status_t WM8904_CheckAudioFormat(wm8904_handle_t *handle, wm8904_audio_format_t 
             format->fsRatio = kWM8904_FsRatio1536X;
             break;
         default:
-            /* Avoid MISRA 16.4 violation */
+            error = kStatus_WM8904_Fail;
             break;
     }
 
-    return WM8904_UpdateFormat(handle, format);
+    if (error != kStatus_WM8904_Success)
+    {
+        return error;
+    }
+
+    return WM8904_UpdateFormat(handle, format->fsRatio, regSamplerate, format->bitWidth);
 }
 
 /*!
  * brief Sets the audio data format.
  *
  * param handle WM8904 handle structure.
- * param sysclk System clock frequency for codec, user should pay attention to this parater, sysclk is caculate as
- * SYSCLK = MCLK / MCLKDIV, MCLKDIV is bit0 of WM8904_CLK_RATES_0.
+ * param sysclk external input clock frequency used as WM8904 system clock.
  * param sampleRate Sample rate frequency in Hz.
  * param bitWidth Audio data bit width.
  *
@@ -885,39 +950,47 @@ status_t WM8904_CheckAudioFormat(wm8904_handle_t *handle, wm8904_audio_format_t 
  */
 status_t WM8904_SetAudioFormat(wm8904_handle_t *handle, uint32_t sysclk, uint32_t sampleRate, uint32_t bitWidth)
 {
-    wm8904_audio_format_t format = {
-        .fsRatio = kWM8904_FsRatio1536X, .sampleRate = kWM8904_SampleRate48kHz, .bitWidth = kWM8904_BitWidth32};
-    uint32_t ratio = 0;
-    status_t error = kStatus_WM8904_Success;
+    uint32_t ratio                     = 0;
+    status_t error                     = kStatus_WM8904_Success;
+    wm8904_bit_width_t regBitWidth     = kWM8904_BitWidth32;
+    wm8904_sample_rate_t regSamplerate = kWM8904_SampleRate48kHz;
+    wm8904_fs_ratio_t regFsRatio       = kWM8904_FsRatio1536X;
+    uint16_t tempReg                   = 0U;
+
+    error = WM8904_ReadRegister(handle, WM8904_CLK_RATES_0, &tempReg);
+    if (error != kStatus_WM8904_Success)
+    {
+        return error;
+    }
 
     switch (sampleRate)
     {
         case 8000:
-            format.sampleRate = kWM8904_SampleRate8kHz;
+            regSamplerate = kWM8904_SampleRate8kHz;
             break;
         case 11025:
-            format.sampleRate = kWM8904_SampleRate12kHz;
+            regSamplerate = kWM8904_SampleRate12kHz;
             break;
         case 12000:
-            format.sampleRate = kWM8904_SampleRate12kHz;
+            regSamplerate = kWM8904_SampleRate12kHz;
             break;
         case 16000:
-            format.sampleRate = kWM8904_SampleRate16kHz;
+            regSamplerate = kWM8904_SampleRate16kHz;
             break;
         case 22050:
-            format.sampleRate = kWM8904_SampleRate24kHz;
+            regSamplerate = kWM8904_SampleRate24kHz;
             break;
         case 24000:
-            format.sampleRate = kWM8904_SampleRate24kHz;
+            regSamplerate = kWM8904_SampleRate24kHz;
             break;
         case 32000:
-            format.sampleRate = kWM8904_SampleRate32kHz;
+            regSamplerate = kWM8904_SampleRate32kHz;
             break;
         case 44100:
-            format.sampleRate = kWM8904_SampleRate48kHz;
+            regSamplerate = kWM8904_SampleRate48kHz;
             break;
         case 48000:
-            format.sampleRate = kWM8904_SampleRate48kHz;
+            regSamplerate = kWM8904_SampleRate48kHz;
             break;
         default:
             error = kStatus_WM8904_Fail;
@@ -932,16 +1005,16 @@ status_t WM8904_SetAudioFormat(wm8904_handle_t *handle, uint32_t sysclk, uint32_
     switch (bitWidth)
     {
         case 16:
-            format.bitWidth = kWM8904_BitWidth16;
+            regBitWidth = kWM8904_BitWidth16;
             break;
         case 20:
-            format.bitWidth = kWM8904_BitWidth20;
+            regBitWidth = kWM8904_BitWidth20;
             break;
         case 24:
-            format.bitWidth = kWM8904_BitWidth24;
+            regBitWidth = kWM8904_BitWidth24;
             break;
         case 32:
-            format.bitWidth = kWM8904_BitWidth32;
+            regBitWidth = kWM8904_BitWidth32;
             break;
         default:
             error = kStatus_WM8904_Fail;
@@ -953,38 +1026,39 @@ status_t WM8904_SetAudioFormat(wm8904_handle_t *handle, uint32_t sysclk, uint32_
         return error;
     }
 
-    ratio = sysclk / sampleRate;
+    ratio = (sysclk >> (tempReg & 0x1U)) / sampleRate;
+
     switch (ratio)
     {
         case 64:
-            format.fsRatio = kWM8904_FsRatio64X;
+            regFsRatio = kWM8904_FsRatio64X;
             break;
         case 128:
-            format.fsRatio = kWM8904_FsRatio128X;
+            regFsRatio = kWM8904_FsRatio128X;
             break;
         case 192:
-            format.fsRatio = kWM8904_FsRatio192X;
+            regFsRatio = kWM8904_FsRatio192X;
             break;
         case 256:
-            format.fsRatio = kWM8904_FsRatio256X;
+            regFsRatio = kWM8904_FsRatio256X;
             break;
         case 384:
-            format.fsRatio = kWM8904_FsRatio384X;
+            regFsRatio = kWM8904_FsRatio384X;
             break;
         case 512:
-            format.fsRatio = kWM8904_FsRatio512X;
+            regFsRatio = kWM8904_FsRatio512X;
             break;
         case 768:
-            format.fsRatio = kWM8904_FsRatio768X;
+            regFsRatio = kWM8904_FsRatio768X;
             break;
         case 1024:
-            format.fsRatio = kWM8904_FsRatio1024X;
+            regFsRatio = kWM8904_FsRatio1024X;
             break;
         case 1408:
-            format.fsRatio = kWM8904_FsRatio1408X;
+            regFsRatio = kWM8904_FsRatio1408X;
             break;
         case 1536:
-            format.fsRatio = kWM8904_FsRatio1536X;
+            regFsRatio = kWM8904_FsRatio1536X;
             break;
         default:
             error = kStatus_WM8904_Fail;
@@ -993,7 +1067,18 @@ status_t WM8904_SetAudioFormat(wm8904_handle_t *handle, uint32_t sysclk, uint32_
 
     if (error == kStatus_WM8904_Success)
     {
-        error = WM8904_UpdateFormat(handle, &format);
+        if (kStatus_WM8904_Success == WM8904_UpdateFormat(handle, regFsRatio, regSamplerate, regBitWidth))
+        {
+            /* check codec in master or not */
+            error = WM8904_ReadRegister(handle, WM8904_AUDIO_IF_1, &tempReg);
+            if (kStatus_WM8904_Success == error)
+            {
+                if ((tempReg & (1UL << 6U)) != 0U)
+                {
+                    error = WM8904_SetMasterClock(handle, sysclk, sampleRate, bitWidth);
+                }
+            }
+        }
     }
 
     return error;
@@ -1183,6 +1268,27 @@ status_t WM8904_SetChannelMute(wm8904_handle_t *handle, uint32_t channel, bool i
     }
 
     return ret;
+}
+
+/*!
+ * brief SET the DAC module volume.
+ *
+ * param handle WM8904 handle structure.
+ * param volume volume to be configured.
+ *
+ * return kStatus_WM8904_Success if successful, different code otherwise..
+ */
+status_t WM8904_SetDACVolume(wm8904_handle_t *handle, uint8_t volume)
+{
+    status_t error = kStatus_WM8904_Success;
+
+    error = WM8904_WriteRegister(handle, WM8904_DAC_DIGITAL_VOLUME_LEFT, (uint16_t)(volume | 0x100UL));
+    if (error == kStatus_WM8904_Success)
+    {
+        error = WM8904_WriteRegister(handle, WM8904_DAC_DIGITAL_VOLUME_RIGHT, (uint16_t)(volume | 0x100UL));
+    }
+
+    return error;
 }
 
 /*!

@@ -22,7 +22,6 @@
 
 #define FLASH_SIZE 0x10000
 
-#ifndef XIP_EXTERNAL_FLASH
 flexspi_device_config_t deviceconfig = {
     .flexspiRootClk       = 42000000, /* 42MHZ SPI serial clock */
     .isSck2Enabled        = false,
@@ -41,7 +40,6 @@ flexspi_device_config_t deviceconfig = {
     .AHBWriteWaitUnit     = kFLEXSPI_AhbWriteWaitUnit2AhbCycle,
     .AHBWriteWaitInterval = 20,
 };
-#endif
 
 static uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
     /* Read Data */
@@ -366,57 +364,76 @@ int32_t mflash_drv_sector_erase(uint32_t sector_addr)
 /* Internal - write single page */
 static int32_t mflash_drv_page_program_internal(uint32_t page_addr, uint32_t *data)
 {
+    status_t status;
+
+    uint32_t freq_orig;
+    uint32_t div_orig;
+    uint32_t div_restore = 0;
+
     uint32_t primask = __get_PRIMASK();
     __asm("cpsid i");
 
-    /* Wait for bus to be idle before changing flash configuration. */
-    while (false == FLEXSPI_GetBusIdleStatus(MFLASH_FLEXSPI))
+    /* CLOCK_GetClockRootFreq may be executed from FLASH, called here, avoid calling it later on */
+    freq_orig = CLOCK_GetClockRootFreq(kCLOCK_FlexspiClkRoot);
+    if (freq_orig > 100000000)
     {
+        /* It is necessary to slow down the clock below 50 MHz DDR for programming operation */
+        uint32_t div_prog;
+        uint32_t freq_prog;
+        uint32_t freq_in;
+
+        div_orig    = CLOCK_GetDiv(kCLOCK_FlexspiDiv); /* Backup currect div setting */
+        freq_in     = freq_orig * (div_orig + 1);      /* Calculate input clock */
+        div_prog    = (freq_in - 1) / 100000000;       /* Calculate divider to get below 50 MHz DDR */
+        freq_prog   = freq_in / (div_prog + 1);        /* Calculate frequency used during programming */
+        div_restore = 1;                               /* Set this to restore to original clock settings afterwards */
+
+        /* Wait for bus to be idle before changing flash configuration. */
+        while (!FLEXSPI_GetBusIdleStatus(MFLASH_FLEXSPI))
+        {
+        }
+        FLEXSPI_Enable(MFLASH_FLEXSPI, false);
+        CLOCK_DisableClock(kCLOCK_FlexSpi);
+        CLOCK_SetDiv(kCLOCK_FlexspiDiv, div_prog);
+        CLOCK_EnableClock(kCLOCK_FlexSpi);
+        FLEXSPI_Enable(MFLASH_FLEXSPI, true);
+
+        /* Do software reset. */
+        FLEXSPI_SoftwareReset(MFLASH_FLEXSPI);
+
+        /* Set frequency in device config */
+        deviceconfig.flexspiRootClk = freq_prog;
+
+        /* Update DLL value depending on flexspi root clock. */
+        FLEXSPI_UpdateDllValue(MFLASH_FLEXSPI, &deviceconfig, kFLEXSPI_PortA1);
+
+        /* Do software reset. */
+        FLEXSPI_SoftwareReset(MFLASH_FLEXSPI);
     }
 
-    FLEXSPI_Enable(MFLASH_FLEXSPI, false);
-    CLOCK_DisableClock(kCLOCK_FlexSpi);
-
-    /* The clock should be max 50MHz during programming */
-    /* Backup of CCM_ANALOG_PFD_480 register */
-    uint32_t pfd480;
-    pfd480 = CCM_ANALOG->PFD_480;
-    /* Disable the clock output first */
-    CCM_ANALOG->PFD_480 |= CCM_ANALOG_PFD_480_PFD0_CLKGATE_MASK;
-    /* Set value of PFD0_FRAC to 26 - clock 332MHz */
-    CCM_ANALOG->PFD_480 &= ~CCM_ANALOG_PFD_480_PFD0_FRAC_MASK;
-    CCM_ANALOG->PFD_480 |= CCM_ANALOG_PFD_480_PFD0_FRAC(26);
-    /* Enable output */
-    CCM_ANALOG->PFD_480 &= ~CCM_ANALOG_PFD_480_PFD0_CLKGATE_MASK;
-
-    /* Backup of CCM_CSCMR1 register */
-    uint32_t cscmr1;
-    cscmr1 = CCM->CSCMR1;
-    /* Set value of FLEXSPI_CLK_SEL to 3 - derive clock from PLL3 PFD0 */
-    CCM->CSCMR1 |= CCM_CSCMR1_FLEXSPI_CLK_SEL(3);
-    /* Set value of FLEXSPI_PODF to 3 - divide by 4, flexspi clock 83MHz, in DDR mode is half clock frequency on SCK -
-     * 42MHz */
-    CCM->CSCMR1 &= ~CCM_CSCMR1_FLEXSPI_PODF_MASK;
-    CCM->CSCMR1 |= CCM_CSCMR1_FLEXSPI_PODF(3);
-
-    CLOCK_EnableClock(kCLOCK_FlexSpi);
-    FLEXSPI_Enable(MFLASH_FLEXSPI, true);
-
-    /* Do software reset. */
-    FLEXSPI_SoftwareReset(MFLASH_FLEXSPI);
-
-    status_t status;
     status = flexspi_nor_flash_page_program(MFLASH_FLEXSPI, page_addr, data);
 
-    FLEXSPI_Enable(MFLASH_FLEXSPI, false);
-    CLOCK_DisableClock(kCLOCK_FlexSpi);
+    if (div_restore != 0)
+    {
+        /* Wait for bus to be idle before changing flash configuration. */
+        while (!FLEXSPI_GetBusIdleStatus(MFLASH_FLEXSPI))
+        {
+        }
+        FLEXSPI_Enable(MFLASH_FLEXSPI, false);
+        CLOCK_DisableClock(kCLOCK_FlexSpi);
+        CLOCK_SetDiv(kCLOCK_FlexspiDiv, div_orig);
+        CLOCK_EnableClock(kCLOCK_FlexSpi);
+        FLEXSPI_Enable(MFLASH_FLEXSPI, true);
 
-    /* Return back the changes in clocks */
-    CCM_ANALOG->PFD_480 = pfd480;
-    CCM->CSCMR1         = cscmr1;
+        /* Do software reset. */
+        FLEXSPI_SoftwareReset(MFLASH_FLEXSPI);
 
-    CLOCK_EnableClock(kCLOCK_FlexSpi);
-    FLEXSPI_Enable(MFLASH_FLEXSPI, true);
+        /* Restore frequency in deviceconfig to original value */
+        deviceconfig.flexspiRootClk = freq_orig;
+
+        /* Update DLL value depending on flexspi root clock. */
+        FLEXSPI_UpdateDllValue(MFLASH_FLEXSPI, &deviceconfig, kFLEXSPI_PortA1);
+    }
 
     /* Do software reset. */
     FLEXSPI_SoftwareReset(MFLASH_FLEXSPI);

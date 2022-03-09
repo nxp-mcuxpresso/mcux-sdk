@@ -178,7 +178,15 @@ void GPIO6_7_8_9_IRQHandler(void)
     SDK_ISR_EXIT_BARRIER;
 }
 #endif
+#if defined(GPIO13) && (FSL_FEATURE_SOC_IGPIO_COUNT > 13U)
+void GPIO13_Combined_0_31_IRQHandler(void);
+void GPIO13_Combined_0_31_IRQHandler(void)
+{
+    HAL_GpioInterruptHandle(13);
 
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
 static hal_gpio_status_t HAL_GpioConflictSearch(hal_gpio_state_t *head, uint8_t port, uint8_t pin)
 {
     while (NULL != head)

@@ -21,8 +21,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.2. */
-#define FSL_CODEC_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+/*! @brief CLOCK driver version 2.3.0. */
+#define FSL_CODEC_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 /*! @brief codec maximum volume range */
@@ -182,6 +182,30 @@ enum
     kCODEC_PlayChannelRight3 = 128U, /*!< play channel right3 */
 };
 
+/*! @brief codec volume setting
+ * @anchor _codec_volume_capability
+ */
+enum
+{
+    kCODEC_VolumeHeadphoneLeft  = 1U,  /*!< headphone left volume */
+    kCODEC_VolumeHeadphoneRight = 2U,  /*!< headphone right volume */
+    kCODEC_VolumeSpeakerLeft    = 4U,  /*!< speaker left volume */
+    kCODEC_VolumeSpeakerRight   = 8U,  /*!< speaker right volume */
+    kCODEC_VolumeLineOutLeft    = 16U, /*!< lineout left volume */
+    kCODEC_VolumeLineOutRight   = 32U, /*!< lineout right volume */
+
+    kCODEC_VolumeLeft0  = 1UL << 0U, /*!< left0 volume */
+    kCODEC_VolumeRight0 = 1UL << 1U, /*!< right0 volume */
+    kCODEC_VolumeLeft1  = 1UL << 2U, /*!< left1 volume */
+    kCODEC_VolumeRight1 = 1UL << 3U, /*!< right1 volume */
+    kCODEC_VolumeLeft2  = 1UL << 4U, /*!< left2 volume */
+    kCODEC_VolumeRight2 = 1UL << 5U, /*!< right2 volume */
+    kCODEC_VolumeLeft3  = 1UL << 6U, /*!< left3 volume */
+    kCODEC_VolumeRight3 = 1UL << 7U, /*!< right3 volume */
+
+    kCODEC_VolumeDAC = 1UL << 8U, /*!< dac volume */
+};
+
 /*! @brief audio codec capability
  * @anchor _codec_capability_flag
  */
@@ -248,6 +272,7 @@ typedef struct _codec_capability
     uint32_t codecModuleCapability; /*!< codec module capability */
     uint32_t codecPlayCapability;   /*!< codec play capability */
     uint32_t codecRecordCapability; /*!< codec record capability */
+    uint32_t codecVolumeCapability; /*!< codec volume capability */
 } codec_capability_t;
 
 /*! @brief Codec handle definition.
@@ -316,7 +341,8 @@ status_t CODEC_ModuleControl(codec_handle_t *handle, codec_module_ctrl_cmd_t cmd
  * @brief set audio codec pl volume.
  *
  * @param handle codec handle.
- * @param channel audio codec play channel, can be a value or combine value of _codec_play_channel.
+ * @param channel audio codec volume channel, can be a value or combine value of _codec_volume_capability or
+ * _codec_play_channel.
  * @param volume volume value, support 0 ~ 100, 0 is mute, 100 is the maximum volume value.
  * @return kStatus_Success is success, else configure failed.
  */
@@ -326,7 +352,8 @@ status_t CODEC_SetVolume(codec_handle_t *handle, uint32_t channel, uint32_t volu
  * @brief set audio codec module mute.
  *
  * @param handle codec handle.
- * @param channel audio codec play channel, can be a value or combine value of _codec_play_channel.
+ * @param channel audio codec volume channel, can be a value or combine value of _codec_volume_capability or
+ * _codec_play_channel.
  * @param mute true is mute, false is unmute.
  * @return kStatus_Success is success, else configure failed.
  */

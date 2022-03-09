@@ -36,10 +36,10 @@
  * Variables
  ******************************************************************************/
 
-static uint32_t s_hotTemp;    /*!< The value of TEMPMON_TEMPSENSE0[TEMP_VALUE] at room temperature .*/
-static uint32_t s_hotCount;   /*!< The value of TEMPMON_TEMPSENSE0[TEMP_VALUE] at the hot temperature.*/
-static float s_hotT_ROOM;     /*!< The value of s_hotTemp minus room temperature(25��).*/
-static uint32_t s_roomC_hotC; /*!< The value of s_roomCount minus s_hotCount.*/
+static int32_t s_hotTemp;    /*!< The value of TEMPMON_TEMPSENSE0[TEMP_VALUE] at room temperature .*/
+static int32_t s_hotCount;   /*!< The value of TEMPMON_TEMPSENSE0[TEMP_VALUE] at the hot temperature.*/
+static float s_hotT_ROOM;    /*!< The value of s_hotTemp minus room temperature(25 degrees celsius).*/
+static int32_t s_roomC_hotC; /*!< The value of s_roomCount minus s_hotCount.*/
 
 /*******************************************************************************
  * Code
@@ -55,7 +55,8 @@ void TEMPMON_Init(TEMPMON_Type *base, const tempmon_config_t *config)
     assert(NULL != config);
 
     uint32_t calibrationData;
-    uint32_t roomCount;
+    uint32_t tmpU32;
+    int32_t roomCount;
 
     /* Power on the temperature sensor*/
     base->TEMPSENSE0 &= ~TEMPMON_TEMPSENSE0_POWER_DOWN_MASK;
@@ -65,9 +66,14 @@ void TEMPMON_Init(TEMPMON_Type *base, const tempmon_config_t *config)
 
     /* ready to read calibration data */
     calibrationData = OCOTP->ANA1;
-    s_hotTemp       = (uint32_t)(calibrationData & TEMPMON_HOTTEMPMASK) >> TEMPMON_HOTTEMPSHIFT;
-    s_hotCount      = (uint32_t)(calibrationData & TEMPMON_HOTCOUNTMASK) >> TEMPMON_HOTCOUNTSHIFT;
-    roomCount       = (uint32_t)(calibrationData & TEMPMON_ROOMCOUNTMASK) >> TEMPMON_ROOMCOUNTSHIFT;
+    tmpU32          = (calibrationData & TEMPMON_HOTTEMPMASK) >> TEMPMON_HOTTEMPSHIFT;
+    s_hotTemp       = (int32_t)tmpU32;
+
+    tmpU32     = (calibrationData & TEMPMON_HOTCOUNTMASK) >> TEMPMON_HOTCOUNTSHIFT;
+    s_hotCount = (int32_t)tmpU32;
+
+    tmpU32    = (calibrationData & TEMPMON_ROOMCOUNTMASK) >> TEMPMON_ROOMCOUNTSHIFT;
+    roomCount = (int32_t)tmpU32;
 
     s_hotT_ROOM  = (float)s_hotTemp - TEMPMON_ROOMTEMP;
     s_roomC_hotC = roomCount - s_hotCount;
@@ -110,11 +116,11 @@ void TEMPMON_GetDefaultConfig(tempmon_config_t *config)
     /* Default measure frequency */
     config->frequency = 0x03U;
     /* Default high alarm temperature */
-    config->highAlarmTemp = 40U;
+    config->highAlarmTemp = 40;
     /* Default panic alarm temperature */
-    config->panicAlarmTemp = 90U;
+    config->panicAlarmTemp = 90;
     /* Default low alarm temperature */
-    config->lowAlarmTemp = 20U;
+    config->lowAlarmTemp = 20;
 }
 
 /*!
@@ -139,7 +145,7 @@ float TEMPMON_GetCurrentTemperature(TEMPMON_Type *base)
     nmeas = (base->TEMPSENSE0 & TEMPMON_TEMPSENSE0_TEMP_CNT_MASK) >> TEMPMON_TEMPSENSE0_TEMP_CNT_SHIFT;
 
     /* Calculate temperature */
-    tmeas = (float)s_hotTemp - (((float)nmeas - (float)s_hotCount) * s_hotT_ROOM / (float)s_roomC_hotC);
+    tmeas = (float)s_hotTemp - (((float)nmeas - (float)s_hotCount) * (s_hotT_ROOM / (float)s_roomC_hotC));
 
     return tmeas;
 }
@@ -151,7 +157,7 @@ float TEMPMON_GetCurrentTemperature(TEMPMON_Type *base)
  * param tempVal The alarm temperature with degrees Celsius
  * param alarmMode The alarm mode.
  */
-void TEMPMON_SetTempAlarm(TEMPMON_Type *base, uint32_t tempVal, tempmon_alarm_mode alarmMode)
+void TEMPMON_SetTempAlarm(TEMPMON_Type *base, int8_t tempVal, tempmon_alarm_mode alarmMode)
 {
     /* Check arguments */
     assert(NULL != base);
@@ -159,11 +165,11 @@ void TEMPMON_SetTempAlarm(TEMPMON_Type *base, uint32_t tempVal, tempmon_alarm_mo
        to +95 degrees celsius)/Industrial(-40 to +105 degrees celsius)/Automotive(-40 to +125 degrees celsius). */
     assert(s_hotTemp >= tempVal);
 
-    uint32_t tempCodeVal;
+    int32_t tempCodeVal;
     uint32_t tempRegVal;
 
     /* Calculate alarm temperature code value */
-    tempCodeVal = (uint32_t)(s_hotCount + (s_hotTemp - tempVal) * s_roomC_hotC / (uint32_t)s_hotT_ROOM);
+    tempCodeVal = s_hotCount + (s_hotTemp - (int32_t)tempVal) * s_roomC_hotC / (int32_t)s_hotT_ROOM;
 
     switch (alarmMode)
     {

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 4.0, 2019-02-18
-**     Build:               b210601
+**     Build:               b210825
 **
 **     Abstract:
 **         Chip specific module features.
@@ -137,7 +137,7 @@
 /* @brief Has Additional 1588 Timer Channel Interrupt. */
 #define FSL_FEATURE_ENET_HAS_ADD_1588_TIMER_CHN_INT (1)
 /* @brief Support Interrupt Coalesce for each instance */
-#define FSL_FEATURE_ENET_INSTANCE_HAS_INTERRUPT_COALESCEn(x) (0)
+#define FSL_FEATURE_ENET_INSTANCE_HAS_INTERRUPT_COALESCEn(x) (1)
 /* @brief Queue Size for each instance. */
 #define FSL_FEATURE_ENET_INSTANCE_QUEUEn(x) (3)
 /* @brief Has AVB Support for each instance. */
@@ -276,6 +276,10 @@
 #define FSL_FEATURE_PDM_FIFO_WIDTH (2)
 /* @brief PDM FIFO DEPTH Size */
 #define FSL_FEATURE_PDM_FIFO_DEPTH (8)
+/* @brief PDM has RANGE_CTRL register */
+#define FSL_FEATURE_PDM_HAS_RANGE_CTRL (0)
+/* @brief PDM Has Low Frequency */
+#define FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ (1)
 
 /* SDMA module features */
 

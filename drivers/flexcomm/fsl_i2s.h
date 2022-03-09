@@ -479,6 +479,14 @@ static inline uint32_t I2S_GetEnabledInterrupts(I2S_Type *base)
 }
 
 /*!
+ * @brief Flush the valid data in TX fifo.
+ *
+ * @param base I2S base pointer.
+ * @return kStatus_Fail empty TX fifo failed, kStatus_Success empty tx fifo success.
+ */
+status_t I2S_EmptyTxFifo(I2S_Type *base);
+
+/*!
  * @brief Invoked from interrupt handler when transmit FIFO level decreases.
  *
  * @param base I2S base pointer.

@@ -1,10 +1,10 @@
 //*****************************************************************************
 // MIMXRT1064 startup code for use with MCUXpresso IDE
 //
-// Version : 160420
+// Version : 070721
 //*****************************************************************************
 //
-// Copyright 2016-2020 NXP
+// Copyright 2016-2021 NXP
 // All rights reserved.
 //
 // SPDX-License-Identifier: BSD-3-Clause
@@ -148,7 +148,7 @@ WEAK void ADC1_IRQHandler(void);
 WEAK void ADC2_IRQHandler(void);
 WEAK void DCDC_IRQHandler(void);
 WEAK void Reserved86_IRQHandler(void);
-WEAK void Reserved87_IRQHandler(void);
+WEAK void GPIO10_IRQHandler(void);
 WEAK void GPIO1_INT0_IRQHandler(void);
 WEAK void GPIO1_INT1_IRQHandler(void);
 WEAK void GPIO1_INT2_IRQHandler(void);
@@ -313,7 +313,7 @@ void ADC1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void ADC2_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void DCDC_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved86_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void Reserved87_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void GPIO10_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void GPIO1_INT0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void GPIO1_INT1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void GPIO1_INT2_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
@@ -424,8 +424,6 @@ extern void _vStackTop(void);
 // This relies on the linker script to place at correct location in memory.
 //*****************************************************************************
 
-
-
 extern void (* const g_pfnVectors[])(void);
 extern void * __Vectors __attribute__ ((alias ("g_pfnVectors")));
 
@@ -521,7 +519,7 @@ void (* const g_pfnVectors[])(void) = {
     ADC2_IRQHandler,                  // 84 : ADC2 interrupt
     DCDC_IRQHandler,                  // 85 : DCDC interrupt
     Reserved86_IRQHandler,            // 86 : Reserved interrupt
-    Reserved87_IRQHandler,            // 87 : Reserved interrupt
+    GPIO10_IRQHandler,                // 87 : GPIO10 interrupt
     GPIO1_INT0_IRQHandler,            // 88 : Active HIGH Interrupt from INT0 from GPIO
     GPIO1_INT1_IRQHandler,            // 89 : Active HIGH Interrupt from INT1 from GPIO
     GPIO1_INT2_IRQHandler,            // 90 : Active HIGH Interrupt from INT2 from GPIO
@@ -608,8 +606,6 @@ void (* const g_pfnVectors[])(void) = {
     Reserved171_IRQHandler,           // 171: Reserved interrupt
     FLEXIO3_IRQHandler,               // 172: FLEXIO3 interrupt
     GPIO6_7_8_9_IRQHandler,           // 173: GPIO6, GPIO7, GPIO8, GPIO9 interrupt
-
-
 }; /* End of g_pfnVectors */
 
 //*****************************************************************************
@@ -654,10 +650,9 @@ extern unsigned int __bss_section_table_end;
 //*****************************************************************************
 __attribute__ ((naked, section(".after_vectors.reset")))
 void ResetISR(void) {
-
     // Disable interrupts
     __asm volatile ("cpsid i");
-
+    __asm volatile ("MSR MSP, %0" : : "r" (&_vStackTop) : );
 
 #if defined (__USE_CMSIS)
 // If __USE_CMSIS defined, then call CMSIS SystemInit code
@@ -702,7 +697,6 @@ void ResetISR(void) {
         SectionLen = *SectionTableAddr++;
         bss_init(ExeAddr, SectionLen);
     }
-
 
 #if !defined (__USE_CMSIS)
 // Assume that if __USE_CMSIS defined, then CMSIS SystemInit code
@@ -1080,8 +1074,8 @@ WEAK void Reserved86_IRQHandler(void)
 {   Reserved86_DriverIRQHandler();
 }
 
-WEAK void Reserved87_IRQHandler(void)
-{   Reserved87_DriverIRQHandler();
+WEAK void GPIO10_IRQHandler(void)
+{   GPIO10_DriverIRQHandler();
 }
 
 WEAK void GPIO1_INT0_IRQHandler(void)

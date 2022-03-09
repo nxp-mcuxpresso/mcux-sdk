@@ -13,7 +13,8 @@
 #define FSL_COMPONENT_ID "platform.drivers.lpc_gpio_cmsis"
 #endif
 
-#if (RTE_GPIO_PORT0 && defined(GPIO)) || (RTE_GPIO_PORT1 && defined(GPIO))
+#if (defined(RTE_GPIO_PORT0) && RTE_GPIO_PORT0 && defined(GPIO)) || \
+    (defined(RTE_GPIO_PORT1) && RTE_GPIO_PORT1 && defined(GPIO))
 
 /*!
  * @brief Status of the GPIO inteface
@@ -86,7 +87,7 @@ typedef struct _gpio_cmsis_handle
 #define ARM_CMSIS_GPIO_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1U, 0U) /* driver version */
 
 /* Driver Version */
-static const ARM_DRIVER_VERSION s_gpioDriverVersion = {ARM_GPIO_API_VERSION, ARM_CMSIS_GPIO_DRV_VERSION};
+static const ARM_DRIVER_VERSION s_gpioDriverVersion = {(ARM_GPIO_API_VERSION), (ARM_CMSIS_GPIO_DRV_VERSION)};
 
 /* Driver Capabilities */
 static const ARM_GPIO_CAPABILITIES s_gpioDriverCapabilities = {

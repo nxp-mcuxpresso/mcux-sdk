@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2018, NXP
+ * Copyright 2016 - 2018, 2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.1.1. */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief reset driver version 2.1.2. */
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 /*!
@@ -42,7 +42,7 @@
 /*!
  * @brief Enumeration for peripheral reset control bits
  *
- * Defines the enumeration for peripheral reset control bits in RSTCLTx registers
+ * Defines the enumeration for peripheral reset control bits in RSTCTLx registers
  */
 typedef enum _RSTCTL_RSTn
 {
@@ -180,6 +180,10 @@ typedef enum _RSTCTL_RSTn
     {                                 \
         kOSEVENT_TIMER_RST_SHIFT_RSTn \
     } /* Reset bits for OSTIMER peripheral */
+#define POWERQUAD_RSTS            \
+    {                             \
+        kPOWERQUAD_RST_SHIFT_RSTn \
+    } /* Reset bits for Powerquad peripheral */
 
 /*!
  * @brief IP reset handle

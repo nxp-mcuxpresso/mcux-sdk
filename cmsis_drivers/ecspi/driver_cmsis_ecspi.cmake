@@ -10,18 +10,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/.
 )
 
-#OR Logic component
-if(${MCUX_DEVICE} STREQUAL "MIMX8MQ6")
-    include(driver_ecspi)
-endif()
-if(${MCUX_DEVICE} STREQUAL "MIMX8MM6")
-    include(driver_ecspi_sdma)
-endif()
-if(${MCUX_DEVICE} STREQUAL "MIMX8MN6")
-    include(driver_ecspi_sdma)
-endif()
-if(${MCUX_DEVICE} STREQUAL "MIMX8ML8")
-    include(driver_ecspi_sdma)
-endif()
-
 include(CMSIS_Driver_Include_SPI)
+include(driver_ecspi)

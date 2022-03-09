@@ -37,10 +37,10 @@ static const clock_ip_name_t s_mrtClocks[] = MRT_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
-#if defined(FSL_FEATURE_MRT_WRITE_ZERO_ASSERT_RESET) && FSL_FEATURE_MRT_WRITE_ZERO_ASSERT_RESET
+#if defined(MRT_RSTS_N)
 /*! @brief Pointers to MRT resets for each instance, writing a zero asserts the reset */
 static const reset_ip_name_t s_mrtResets[] = MRT_RSTS_N;
-#else
+#elif defined(MRT_RSTS)
 /*! @brief Pointers to MRT resets for each instance, writing a one asserts the reset */
 static const reset_ip_name_t s_mrtResets[] = MRT_RSTS;
 #endif
@@ -87,8 +87,10 @@ void MRT_Init(MRT_Type *base, const mrt_config_t *config)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
+#if defined(MRT_RSTS_N) || defined(MRT_RSTS)
     /* Reset the module. */
     RESET_PeripheralReset(s_mrtResets[MRT_GetInstance(base)]);
+#endif
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
 
 #if !(defined(FSL_FEATURE_MRT_HAS_NO_MODCFG_MULTITASK) && FSL_FEATURE_MRT_HAS_NO_MODCFG_MULTITASK)

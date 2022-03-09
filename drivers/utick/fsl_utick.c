@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -217,6 +217,14 @@ void UTICK2_DriverIRQHandler(void);
 void UTICK2_DriverIRQHandler(void)
 {
     s_utickIsr(UTICK2, s_utickHandle[2]);
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
+#if defined(UTICK)
+void UTICK_DriverIRQHandler(void);
+void UTICK_DriverIRQHandler(void)
+{
+    s_utickIsr(UTICK, s_utickHandle[0]);
     SDK_ISR_EXIT_BARRIER;
 }
 #endif

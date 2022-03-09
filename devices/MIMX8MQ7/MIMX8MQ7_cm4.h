@@ -9,7 +9,7 @@
 **
 **     Reference manual:    IMX8MDQLQRM, Rev. 0, Jan. 2018
 **     Version:             rev. 4.0, 2018-01-26
-**     Build:               b210305
+**     Build:               b210824
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX8MQ7_cm4

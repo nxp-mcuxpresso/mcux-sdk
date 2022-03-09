@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 0.1, 2020-12-29
-**     Build:               b210427
+**     Build:               b210817
 **
 **     Abstract:
 **         Chip specific module features.
@@ -162,8 +162,8 @@
 
 /* ASRC module features */
 
-/* @brief Register name is ASPRM or ASPRMn */
-#define FSL_FEATURE_ASRC_PARAMETER_REGISTER_NAME_ASPRM (1)
+/* @brief Register name is ASRPM or ASRPMn */
+#define FSL_FEATURE_ASRC_PARAMETER_REGISTER_NAME_ASRPM (1)
 
 /* AUDIO_PLL module features */
 
@@ -215,6 +215,8 @@
 #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_2 (0xF28)
 /* @brief Init memory size 2 */
 #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_2 (0xD8)
+/* @brief Has Pretended Networking mode support. */
+#define FSL_FEATURE_FLEXCAN_HAS_PN_MODE (0)
 
 /* CCM module features */
 
@@ -320,6 +322,11 @@
 /* @brief Has separate submodules */
 #define FSL_FEATURE_MIPI_DSI_HAS_SEPARATE_SUBMODULE (1)
 
+/* ENC module features */
+
+/* @brief Has no simultaneous PHASEA and PHASEB change interrupt (register bit field CTRL2[SABIE] and CTRL2[SABIRQ]). */
+#define FSL_FEATURE_ENC_HAS_NO_CTRL2_SAB_INT (0)
+
 /* ENET module features */
 
 /* @brief Support Interrupt Coalesce */
@@ -335,7 +342,7 @@
 /* @brief Has Additional 1588 Timer Channel Interrupt. */
 #define FSL_FEATURE_ENET_HAS_ADD_1588_TIMER_CHN_INT (1)
 /* @brief Support Interrupt Coalesce for each instance */
-#define FSL_FEATURE_ENET_INSTANCE_HAS_INTERRUPT_COALESCEn(x) (0)
+#define FSL_FEATURE_ENET_INSTANCE_HAS_INTERRUPT_COALESCEn(x) (1)
 /* @brief Queue Size for each instance. */
 #define FSL_FEATURE_ENET_INSTANCE_QUEUEn(x) \
     (((x) == ENET) ? (1) : \
@@ -508,6 +515,8 @@
 #define FSL_FEATURE_LPSPI_FIFO_SIZEn(x) (16)
 /* @brief Has separate DMA RX and TX requests. */
 #define FSL_FEATURE_LPSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
+/* @brief Has CCR1 (related to existence of registers CCR1). */
+#define FSL_FEATURE_LPSPI_HAS_CCR1 (0)
 
 /* LPUART module features */
 
@@ -607,7 +616,7 @@
 #define FSL_FEATURE_MU_NO_HR (1)
 /* @brief MU supports mask the hardware reset. CR[HRM] or CCR[HRM]. */
 #define FSL_FEATURE_MU_HAS_HRM (0)
-/* @brief MU does not support check the other core power mode. SR[PM]. */
+/* @brief MU does not support check the other core power mode. SR[PM] or BSR[APM]. */
 #define FSL_FEATURE_MU_NO_PM (1)
 /* @brief MU supports reset assert interrupt. CR[RAIE] or BCR[RAIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (0)
@@ -644,6 +653,8 @@
 #define FSL_FEATURE_PDM_FIFO_DEPTH (8)
 /* @brief PDM has RANGE_CTRL register */
 #define FSL_FEATURE_PDM_HAS_RANGE_CTRL (1)
+/* @brief PDM Has Low Frequency */
+#define FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ (1)
 
 /* PGMC_BPC module features */
 
@@ -758,6 +769,18 @@
 #define FSL_FEATURE_SEMC_HAS_NOR_WDH_TIME (0)
 /* @brief Has WDS time in NOR controller (register bit field NORCR2[WDS]). */
 #define FSL_FEATURE_SEMC_HAS_NOR_WDS_TIME (0)
+/* @brief Has LC time in NOR controller (register bit field NORCR2[LC]). */
+#define FSL_FEATURE_SEMC_HAS_NOR_LC_TIME (1)
+/* @brief Has RD time in NOR controller (register bit field NORCR2[RD]). */
+#define FSL_FEATURE_SEMC_HAS_NOR_RD_TIME (1)
+/* @brief Has WDH time in SRAM controller (register bit field SRAMCR2[WDH]). */
+#define FSL_FEATURE_SEMC_HAS_SRAM_WDH_TIME (1)
+/* @brief Has WDS time in SRAM controller (register bit field SRAMCR2[WDS]). */
+#define FSL_FEATURE_SEMC_HAS_SRAM_WDS_TIME (1)
+/* @brief Has LC time in SRAM controller (register bit field SRAMCR2[LC]). */
+#define FSL_FEATURE_SEMC_HAS_SRAM_LC_TIME (1)
+/* @brief Has RD time in SRAM controller (register bit field SRAMCR2[RD]). */
+#define FSL_FEATURE_SEMC_HAS_SRAM_RD_TIME (1)
 /* @brief SRAM count SEMC can support (register BRx). */
 #define FSL_FEATURE_SEMC_SUPPORT_SRAM_COUNT (4)
 /* @brief If SEMC support delay chain control (register DCCR). */

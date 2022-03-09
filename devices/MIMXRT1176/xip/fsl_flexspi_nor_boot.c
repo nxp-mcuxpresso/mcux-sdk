@@ -22,14 +22,14 @@ __attribute__((section(".boot_hdr.ivt"), used))
  *  IVT Data
  *************************************/
 const ivt image_vector_table = {
-    IVT_HEADER,                    /* IVT Header */
-    IMAGE_ENTRY_ADDRESS,           /* Image Entry Function */
-    IVT_RSVD,                      /* Reserved = 0 */
-    (uint32_t)DCD_ADDRESS,         /* Address where DCD information is stored */
-    (uint32_t)BOOT_DATA_ADDRESS,   /* Address where BOOT Data Structure is stored */
-    (uint32_t)IVT_ADDRESS,         /* Pointer to IVT Self (absolute address) */
-    (uint32_t)CSF_ADDRESS,         /* Address where CSF file is stored */
-    IVT_RSVD                       /* Reserved = 0 */
+    IVT_HEADER,                  /* IVT Header */
+    IMAGE_ENTRY_ADDRESS,         /* Image Entry Function */
+    IVT_RSVD,                    /* Reserved = 0 */
+    (uint32_t)DCD_ADDRESS,       /* Address where DCD information is stored */
+    (uint32_t)BOOT_DATA_ADDRESS, /* Address where BOOT Data Structure is stored */
+    (uint32_t)IVT_ADDRESS,       /* Pointer to IVT Self (absolute address) */
+    (uint32_t)CSF_ADDRESS,       /* Address where CSF file is stored */
+    IVT_RSVD                     /* Reserved = 0 */
 };
 
 #if defined(__CC_ARM) || defined(__ARMCC_VERSION) || defined(__GNUC__)
@@ -40,10 +40,10 @@ __attribute__((section(".boot_hdr.boot_data"), used))
 /*************************************
  *  Boot Data
  *************************************/
-const BOOT_DATA_T boot_data = {
-    BOOT_IMAGE_BASE,  /* boot start location */
-    BOOT_IMAGE_SIZE,  /* size */
-    PLUGIN_FLAG, /* Plugin flag*/
-    0xFFFFFFFFU  /* empty - extra data word */
+const BOOT_DATA_T g_boot_data = {
+    BOOT_IMAGE_BASE, /* boot start location */
+    BOOT_IMAGE_SIZE, /* size */
+    PLUGIN_FLAG,     /* Plugin flag*/
+    0xFFFFFFFFU      /* empty - extra data word */
 };
 #endif

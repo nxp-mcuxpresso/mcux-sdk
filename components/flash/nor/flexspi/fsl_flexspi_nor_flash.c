@@ -1910,8 +1910,8 @@ static status_t FLEXSPI_NOR_PrepareQuadModeEnableSequence(nor_handle_t *handle,
     /* See JESD216A/B/C/D/D-01 6.4.18(JEDEC Basic Flash Parameter Table: 15th DWORD) for more details. */
     do
     {
-        bool isQuadMode = false;
-        run_context_t runContext;
+        bool isQuadMode                 = false;
+        run_context_t runContext        = {0x00U, 0x00U};
         uint32_t enter_quad_mode_option = (uint32_t)kSerialNorQuadMode_NotConfig;
         uint32_t lut_seq[4];
         FLEXSPI_NOR_Memset(lut_seq, 0, sizeof(lut_seq));
@@ -3450,7 +3450,10 @@ static status_t FLEXSPI_NOR_GenerateConfigBlockUsingSFDP(nor_handle_t *handle, f
             }
         }
 
-        /* Read manufacturer ID */
+        /* Read manufacturer ID based on JEP106V spec, max continuation code table is 9, max manufacturer ID starts from
+         * 9 + 1. */
+        uint8_t id[10] = {0x00U};
+
         FLEXSPI_UpdateLUT((FLEXSPI_Type *)handle->driverBaseAddr, NOR_CMD_LUT_SEQ_IDX_READID * 4UL,
                           (const uint32_t *)(const void *)&manufacturerIdLut, 4);
 
@@ -3459,14 +3462,22 @@ static status_t FLEXSPI_NOR_GenerateConfigBlockUsingSFDP(nor_handle_t *handle, f
         flashXfer.cmdType       = kFLEXSPI_Read;
         flashXfer.SeqNumber     = 1U;
         flashXfer.seqIndex      = NOR_CMD_LUT_SEQ_IDX_READID;
-        flashXfer.data          = &jedec_info_tbl.manufacturerId;
-        flashXfer.dataSize      = 1U;
+        flashXfer.data          = (uint32_t *)(void *)id;
+        flashXfer.dataSize      = 10U;
         status                  = FLEXSPI_TransferBlocking((FLEXSPI_Type *)handle->driverBaseAddr, &flashXfer);
         if (status != kStatus_Success)
         {
             break;
         }
 
+        for (uint8_t i = 0x00U; i < 10U; i++)
+        {
+            if (0x7FU != id[i])
+            {
+                jedec_info_tbl.manufacturerId = (uint32_t)id[i];
+                break;
+            }
+        }
         /* Read SFDP information, probe whether the Flash device is present or not. */
         FLEXSPI_UpdateLUT((FLEXSPI_Type *)handle->driverBaseAddr, NOR_CMD_LUT_SEQ_IDX_READ_SFDP * 4U,
                           (const uint32_t *)(const void *)&k_sdfp_lut[config->queryPads], 4);

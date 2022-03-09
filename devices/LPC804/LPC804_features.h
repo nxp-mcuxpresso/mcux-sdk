@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2018-01-09
-**     Build:               b210408
+**     Build:               b210823
 **
 **     Abstract:
 **         Chip specific module features.
@@ -203,6 +203,8 @@
 
 /* @brief Pointer to ROM IAP entry functions */
 #define FSL_FEATURE_SYSCON_IAP_ENTRY_LOCATION (0x0F001FF1)
+/* @brief IAP Reinvoke ISP command parameter is pointer */
+#define FSL_FEATURE_SYSCON_IAP_REINVOKE_ISP_PARAM_POINTER (0)
 /* @brief Flash page size in bytes */
 #define FSL_FEATURE_SYSCON_FLASH_PAGE_SIZE_BYTES (64)
 /* @brief Flash sector size in bytes */

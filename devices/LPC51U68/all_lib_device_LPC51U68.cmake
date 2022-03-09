@@ -37,6 +37,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/utick
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -53,9 +54,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_ili9341)
 #    include(driver_pint)
 #    include(driver_ctimer)
+#    include(middleware_usb_device_ip3511fs)
 #    include(component_usart_adapter)
 #    include(driver_lpc_dma)
 #    include(driver_cmsis_flexcomm_spi)
+#    include(utility_debug_console)
 #    include(utility_shell)
 #    include(component_lists)
 #    include(driver_lpc_gpio)
@@ -85,7 +88,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_i2c_dma)
 #    include(driver_flexcomm_spi)
 #    include(driver_utick)
-#    include(utility_debug_console)
+#    include(middleware_usb_device_common_header)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(component_panic)
 #    include(driver_clock)
@@ -93,6 +96,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_log_backend_ringbuffer)
 #    include(driver_flexcomm_usart)
 #    include(device_CMSIS)
+#    include(middleware_usb_common_header)
 #    include(component_ctimer_adapter)
 #    include(CMSIS_Driver_Include_Common)
 #    include(driver_lpc_iocon)
@@ -100,6 +104,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_debug_console_lite)
 #    include(component_osa_bm)
 #    include(utilities_misc_utilities)
+#    include(middleware_usb_device_controller_driver_LPC51U68)
 #    include(driver_common)
 #    include(driver_gint)
 #    include(component_codec_i2c_LPC51U68)

@@ -10,17 +10,28 @@ This section describes the steps required to configure MCUXpresso IDE to build, 
 
     Every time MCUXpresso IDE launches, it prompts the user to select a workspace location. MCUXpresso IDE is built on top of Eclipse which uses workspace to store information about its current configuration, and in some use cases, source files for the projects are in the workspace. The location of the workspace can be anywhere, but it is recommended that the workspace be located outside of the MCUXpresso SDK tree.
 
-## 2. Copy the board manifest file to root folder
-Copy the board manifest file from the `examples/manifests` folder to the root folder of west workspace(mcuxsdk) to explore MCUXpresso IDE build and debug for example application of specified board. 
-
-*Take EVK-MIMXRT1020 as an example, copy EVK-MIMXRT1020_manifest_v3_8.xml file in `manifests` folder to the repository root directory.*
-
 # :two:Build an example application
-To build an example application, follow these steps.
+To build an example application, follow these steps. 
+
+If you are using MCUXpresso IDE version 11.5.0, please follow below first step:
+
+1. Right-click the empty space in the **Installed SDKs** view to show the menus, select **Import local SDK Git repository** and input the root folder of west workspace(mcuxsdk), then IDE will be able to recognize all boards support in local GitHub SDK repository.
+    ![Import local directory](Getting_Started/images/mcux_import_local_repository.png)
+    ![Local github repositories](Getting_Started/images/mcux_github_repository.png)
+
+**When you are using IDE version older than 11.5.0, you need to copy the board manifest file from the `examples/manifests` folder to the root folder of west workspace(mcuxsdk) to explore MCUXpresso IDE build and debug for example application of specified board.** 
+
+    *Take EVK-MIMXRT1020 as an example, copy EVK-MIMXRT1020_manifest_v3_8.xml file in `manifests` folder to the repository root directory.*
+
+Then you could follow below first step to import:
+
 1. Drag and drop the repository into the **Installed SDKs** view to install the MCUXpresso SDK. In the window that
 appears, click the **OK** button and wait until the import has finished.
 
     ![Install SDK](Getting_Started/images/mcux_install_a_sdk.png)
+
+The below steps for import, build and run an example are same for different IDE versions.
+
 2. On the **Quickstart Panel**, click **Import SDK example(s)….**
 
     ![Import an SDK example](Getting_Started/images/mcux_import_project.png)

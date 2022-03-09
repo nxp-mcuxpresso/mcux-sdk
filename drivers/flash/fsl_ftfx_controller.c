@@ -651,9 +651,9 @@ status_t FTFx_CMD_ProgramSection(ftfx_config_t *config, uint32_t start, const ui
             uint32_t programSizeOfCurrentPass;
             uint32_t numberOfPhases;
 
-            if (lengthTobeProgrammedOfCurrentSector > config->flexramTotalSize)
+            if (lengthTobeProgrammedOfCurrentSector > (uint32_t)kFLASH_AccelerationRamSize)
             {
-                programSizeOfCurrentPass = config->flexramTotalSize;
+                programSizeOfCurrentPass = (uint32_t)kFLASH_AccelerationRamSize;
             }
             else
             {

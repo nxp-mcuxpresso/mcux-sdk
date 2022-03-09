@@ -93,10 +93,10 @@ typedef enum _power_bod_status
  */
 typedef enum _power_bod_reset_level
 {
-    kBod_ResetLevel0 = 0U, /*!< Reset Level0: 1.5V. */
-    kBod_ResetLevel1,      /*!< Reset Level0: 1.85V. */
-    kBod_ResetLevel2,      /*!< Reset Level0: 2.0V. */
-    kBod_ResetLevel3,      /*!< Reset Level0: 2.3V. */
+    kBod_ResetLevel0 = 0U, /*!< Reset Level0: 1.62V. */
+    kBod_ResetLevel1,      /*!< Reset Level0: 1.68V. */
+    kBod_ResetLevel2,      /*!< Reset Level0: 2.21V. */
+    kBod_ResetLevel3,      /*!< Reset Level0: 2.85V. */
 } power_bod_reset_level_t;
 
 /*!
@@ -104,10 +104,10 @@ typedef enum _power_bod_reset_level
  */
 typedef enum _power_bod_interrupt_level
 {
-    kBod_InterruptLevel0 = 0U, /*!< Interrupt level: 2.05V. */
-    kBod_InterruptLevel1,      /*!< Interrupt level: 2.45V. */
-    kBod_InterruptLevel2,      /*!< Interrupt level: 2.75V. */
-    kBod_InterruptLevel3,      /*!< Interrupt level: 3.05V. */
+    kBod_InterruptLevel0 = 0U, /*!< Interrupt level: 1.63V. */
+    kBod_InterruptLevel1,      /*!< Interrupt level: 1.68V. */
+    kBod_InterruptLevel2,      /*!< Interrupt level: 1.95V. */
+    kBod_InterruptLevel3,      /*!< Interrupt level: 2.86V. */
 } power_bod_interrupt_level_t;
 
 /*!

@@ -22,31 +22,18 @@
 #define SRTM_SAI_SDMA_MAX_LOCAL_BUF_PERIODS           (4U)
 #define SRTM_SAI_SDMA_MAX_LOCAL_PERIOD_ALIGNMENT      (4U)
 #define SRTM_SAI_SDMA_MAX_LOCAL_PERIOD_ALIGNMENT_MASK (SRTM_SAI_SDMA_MAX_LOCAL_PERIOD_ALIGNMENT - 1U)
-/*!< @brief select the mclk based of sai  */
-typedef enum _sai_mclk_type
-{
-    SRTM_CLK22M = 0U, /*!< configure the mclk to 22.5792Mhz or its multiple */
-    SRTM_CLK24M = 1U, /*!< configure the mclk to 24.5760Mhz or its multiple */
-} mclk_type_t;
-/*!< reconfig sai for DSD mode */
-typedef void (*dsd_saiSetting)(void);
-/*!< reconfig sai for PCM mode */
-typedef void (*pcm_saiSetting)(void);
-/*!< reconfig the sai clock  */
-typedef uint32_t (*sai_clkSetting)(mclk_type_t type);
-/*!< clock gate operation  */
-typedef void (*clockEnable)(bool isEnable);
-/*!< init audio devices  */
-typedef void (*initDev)(bool enable);
+
+/*!< init audio device */
+typedef void (*aud_init_dev)(bool enable);
+/*!< config audio device based on format and sample rate, return mclk HZ */
+typedef uint32_t (*aud_conf_dev)(srtm_audio_format_type_t format, uint32_t srate);
 
 typedef struct _audio_misc_set
 {
-    dsd_saiSetting dsdSaiSetting;
-    pcm_saiSetting pcmSaiSetting;
-    sai_clkSetting clkSetting; /* Set the MCLK of SAI per the requirement of different sample rate music stream. */
-    clockEnable clkGate;
-    initDev audioDevInit;
+    aud_init_dev audioDevInit;
+    aud_conf_dev audioDevConf;
 } audio_misc_set_t;
+
 typedef struct _srtm_sai_sdma_config
 {
     sai_transceiver_t config;
@@ -58,9 +45,9 @@ typedef struct _srtm_sai_sdma_config
     uint8_t ChannelPriority;
     bool stopOnSuspend;
     uint32_t eventSource;
-    uint32_t guardTime; /* guardTime (unit:ms): M core needs to make sure there is enough time for A core wake up from
-                           suspend and fill the DDR buffer again. The time should not less than the guardTime */
-    uint32_t threshold; /* threshold: under which will trigger periodDone notification. */
+    uint32_t guardTime; /* TX ONLY guardTime (ms): M core needs to make sure there is enough time for A core wake up
+                           from suspend and fill the DDR buffer again. The time should not less than the guardTime */
+    uint32_t threshold; /* TX ONLY threshold: under which will trigger periodDone notification. */
     sdma_context_data_t txcontext;
     sdma_context_data_t rxcontext;
     audio_misc_set_t extendConfig;
@@ -74,6 +61,8 @@ typedef struct _srtm_sai_sdma_local_buf
     uint32_t threshold; /* Threshold period number: under which will trigger copy from share buf to local buf
                            in playback case. */
 } srtm_sai_sdma_local_buf_t;
+
+typedef void (*srtm_sai_sdma_data_callback_t)(srtm_sai_adapter_t adapter, void *data, uint32_t bytes, void *params);
 
 /*******************************************************************************
  * API
@@ -113,15 +102,39 @@ void SRTM_SaiSdmaAdapter_Destroy(srtm_sai_adapter_t adapter);
  * @param localBuf Local buffer information to be set to the adapter TX path.
  */
 void SRTM_SaiSdmaAdapter_SetTxLocalBuf(srtm_sai_adapter_t adapter, srtm_sai_sdma_local_buf_t *localBuf);
+
 /*!
  * @brief Get the audio service status.
- * @param sai adapter value.
- * @param Transfer status pointer.
- * @param Receiver status pointer.
+ *
+ * @param adapter SAI SDMA adapter instance.
+ * @param pTxState Transfer status pointer.
+ * @param pRxState Receiver status pointer.
  */
 void SRTM_SaiSdmaAdapter_GetAudioServiceState(srtm_sai_adapter_t adapter,
                                               srtm_audio_state_t *pTxState,
                                               srtm_audio_state_t *pRxState);
+
+/*!
+ * @brief When the host driver suspends, voice data can be passed to application via callback.
+ *        The callback is called in SRTM dispatcher task context and should not cost much time.
+ *
+ * @param adapter SAI SDMA adapter instance.
+ * @param cb Callback function pointer.
+ * @param param Callback function argument to be passed back to applicaiton.
+ */
+void SRTM_SaiSdmaAdapter_SetDataHandlerOnHostSuspend(srtm_sai_adapter_t adapter,
+                                                     srtm_sai_sdma_data_callback_t cb,
+                                                     void *param);
+
+/*!
+ * @brief When key word detected, voice data will be sent to host again.
+ *
+ * @param adapter SAI SDMA adapter instance.
+ * @param cb Callback function pointer.
+ * @param params Callback function argument to be passed back to applicaiton.
+ */
+void SRTM_SaiSdmaAdapter_ResumeHost(srtm_sai_adapter_t adapter);
+
 /*******************************************************************************
  * Definitions from other files
  ******************************************************************************/

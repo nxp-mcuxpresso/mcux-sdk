@@ -27,7 +27,7 @@
 #endif
 
 #define TFA9896_PATCH_EXTRA        6
-#define FSL_TFA9896_DRIVER_VERSION (MAKE_VERSION(6, 0, 1))
+#define FSL_TFA9896_DRIVER_VERSION (MAKE_VERSION(6, 0, 2))
 
 /*!@brief TFA I2S bit clock */
 #define TFA_I2C_BITRATE (400000U)
@@ -133,8 +133,10 @@
 #define OPTIMIZED_RPC
 #define PLL_READ_TRIAL 50
 
-/*! @brief status flag */
-enum _tfa9896_error
+/*! @brief status flag
+ *  @anchor _tfa9896_error
+ */
+enum
 {
     kStatus_TFA9896_Ok              = MAKE_STATUS(kStatusGroup_Generic, 0), /*!< kStatus_TFA9896_Ok = 0,*/
     kStatus_TFA9896_DSP_not_running = MAKE_STATUS(kStatusGroup_Generic, 1),

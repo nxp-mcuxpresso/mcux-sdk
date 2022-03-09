@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,7 +27,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief PMC 0 driver version */
-#define FSL_PMC0_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_PMC0_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*!
@@ -874,6 +874,36 @@ static inline void PMC0_ConfigureSramBankPowerDownStandbyMode(uint32_t bankMask)
 {
     PMC0->SRAMCTRL_2 = PMC0_SRAMCTRL_2_SRAM_STDY(bankMask);
 }
+
+/*!
+ * @brief Enable/disable internal temperature sensor.
+ *
+ * @param enable Used to enable/disable internal temperature sensor.
+ *          - \b true Enable internal temperature sensor.
+ *          - \b false Disable internal temperature sensor.
+ */
+static inline void PMC0_EnableTemperatureSensor(bool enable)
+{
+    if (enable)
+    {
+        PMC0->ACTRL |= PMC0_ACTRL_TSENSEN_MASK;
+    }
+    else
+    {
+        PMC0->ACTRL &= ~PMC0_ACTRL_TSENSEN_MASK;
+    }
+}
+
+/*!
+ * @brief Set temperature sensor mode.
+ *
+ * @param mode The temperature sensor mode to set.
+ */
+static inline void PMC0_SetTemperatureSensorMode(uint8_t mode)
+{
+    PMC0->ACTRL = (PMC0->ACTRL & ~PMC0_ACTRL_TSENSM_MASK) | PMC0_ACTRL_TSENSM(mode);
+}
+
 /*@}*/
 
 #if defined(__cplusplus)

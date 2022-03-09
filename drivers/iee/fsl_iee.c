@@ -137,5 +137,5 @@ status_t IEE_SetRegionKey(
  */
 void IEE_LockRegionConfig(IEE_Type *base, iee_region_t region)
 {
-    base->GCFG |= 0x1U << (uint32_t)region;
+    base->GCFG |= (uint32_t)(0x1UL << (uint32_t)region);
 }

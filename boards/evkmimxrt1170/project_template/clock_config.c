@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,11 +18,11 @@
 
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Clocks v7.0
+product: Clocks v8.0
 processor: MIMXRT1176xxxxx
 package_id: MIMXRT1176DVMAA
 mcu_data: ksdk2_0
-processor_version: 0.8.1
+processor_version: 0.0.0
 board: MIMXRT1170-EVK
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
@@ -39,8 +39,6 @@ board: MIMXRT1170-EVK
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-/* System clock frequency. */
-extern uint32_t SystemCoreClock;
 
 /*******************************************************************************
  ************************ BOARD_InitBootClocks function ************************
@@ -112,7 +110,6 @@ outputs:
 - {id: ENET_TIMER1_CLK_ROOT.outFreq, value: 24 MHz}
 - {id: ENET_TIMER2_CLK_ROOT.outFreq, value: 24 MHz}
 - {id: ENET_TIMER3_CLK_ROOT.outFreq, value: 24 MHz}
-- {id: ENET_TX_CLK.outFreq, value: 24 MHz}
 - {id: FLEXIO1_CLK_ROOT.outFreq, value: 24 MHz}
 - {id: FLEXIO2_CLK_ROOT.outFreq, value: 24 MHz}
 - {id: FLEXSPI1_CLK_ROOT.outFreq, value: 24 MHz}
@@ -234,7 +231,7 @@ settings:
 - {id: CCM.CLOCK_ROOT3.MUX.sel, value: ANADIG_PLL.SYS_PLL3_CLK}
 - {id: CCM.CLOCK_ROOT4.DIV.scale, value: '3'}
 - {id: CCM.CLOCK_ROOT4.MUX.sel, value: ANADIG_PLL.SYS_PLL2_PFD1_CLK}
-- {id: CCM.CLOCK_ROOT6.DIV.scale, value: '4', locked: true}
+- {id: CCM.CLOCK_ROOT6.DIV.scale, value: '4'}
 - {id: CCM.CLOCK_ROOT6.MUX.sel, value: ANADIG_PLL.SYS_PLL2_CLK}
 - {id: CCM.CLOCK_ROOT68.DIV.scale, value: '2'}
 - {id: CCM.CLOCK_ROOT68.MUX.sel, value: ANADIG_PLL.PLL_VIDEO_CLK}
@@ -285,6 +282,9 @@ void BOARD_BootClockRUN(void)
 {
     clock_root_config_t rootCfg = {0};
 
+    /* Set DCDC to DCM mode to improve the efficiency for light loading in run mode and transient performance with a big loading step. */
+    DCDC_BootIntoDCM(DCDC);
+
 #if !defined(SKIP_DCDC_ADJUSTMENT) || (!SKIP_DCDC_ADJUSTMENT)
     if((OCOTP->FUSEN[16].FUSE == 0x57AC5969U) && ((OCOTP->FUSEN[17].FUSE & 0xFFU) == 0x0BU))
     {
@@ -332,8 +332,6 @@ void BOARD_BootClockRUN(void)
     }
 #endif
 
-    /* PLL LDO shall be enabled first before enable PLLs */
-
     /* Config CLK_1M */
     CLOCK_OSC_Set1MHzOutputBehavior(kCLOCK_1MHzOutEnableFreeRunning1Mhz);
 
@@ -357,14 +355,23 @@ void BOARD_BootClockRUN(void)
     }
 
     /* Swicth both core, M7 Systick and Bus_Lpsr to OscRC48MDiv2 first */
+#if __CORTEX_M == 7
     rootCfg.mux = kCLOCK_M7_ClockRoot_MuxOscRc48MDiv2;
     rootCfg.div = 1;
-#if __CORTEX_M == 7
     CLOCK_SetRootClock(kCLOCK_Root_M7, &rootCfg);
+
+    rootCfg.mux = kCLOCK_M7_SYSTICK_ClockRoot_MuxOscRc48MDiv2;
+    rootCfg.div = 1;
     CLOCK_SetRootClock(kCLOCK_Root_M7_Systick, &rootCfg);
 #endif
+
 #if __CORTEX_M == 4
+    rootCfg.mux = kCLOCK_M4_ClockRoot_MuxOscRc48MDiv2;
+    rootCfg.div = 1;
     CLOCK_SetRootClock(kCLOCK_Root_M4, &rootCfg);
+
+    rootCfg.mux = kCLOCK_BUS_LPSR_ClockRoot_MuxOscRc48MDiv2;
+    rootCfg.div = 1;
     CLOCK_SetRootClock(kCLOCK_Root_Bus_Lpsr, &rootCfg);
 #endif
 
@@ -435,18 +442,14 @@ void BOARD_BootClockRUN(void)
 #endif
 
     /* Configure BUS using SYS_PLL3_CLK */
-#if __CORTEX_M == 7
     rootCfg.mux = kCLOCK_BUS_ClockRoot_MuxSysPll3Out;
     rootCfg.div = 2;
     CLOCK_SetRootClock(kCLOCK_Root_Bus, &rootCfg);
-#endif
 
     /* Configure BUS_LPSR using SYS_PLL3_CLK */
-#if __CORTEX_M == 4
     rootCfg.mux = kCLOCK_BUS_LPSR_ClockRoot_MuxSysPll3Out;
     rootCfg.div = 3;
     CLOCK_SetRootClock(kCLOCK_Root_Bus_Lpsr, &rootCfg);
-#endif
 
     /* Configure SEMC using SYS_PLL2_PFD1_CLK */
 #ifndef SKIP_SEMC_INIT
@@ -541,7 +544,7 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetRootClock(kCLOCK_Root_Gpt6, &rootCfg);
 
     /* Configure FLEXSPI1 using OSC_RC_48M_DIV2 */
-#if !(defined(XIP_EXTERNAL_FLASH) && (XIP_EXTERNAL_FLASH == 1))
+#if !(defined(XIP_EXTERNAL_FLASH) && (XIP_EXTERNAL_FLASH == 1) || defined(FLEXSPI_IN_USE))
     rootCfg.mux = kCLOCK_FLEXSPI1_ClockRoot_MuxOscRc48MDiv2;
     rootCfg.div = 1;
     CLOCK_SetRootClock(kCLOCK_Root_Flexspi1, &rootCfg);
@@ -850,10 +853,16 @@ void BOARD_BootClockRUN(void)
 
     /* Set MQS configuration. */
     IOMUXC_MQSConfig(IOMUXC_GPR,kIOMUXC_MqsPwmOverSampleRate32, 0);
-    /* Set ENET Tx clock source. */
-    IOMUXC_GPR->GPR4 &= ~IOMUXC_GPR_GPR4_ENET_TX_CLK_SEL_MASK;
+    /* Set ENET Ref clock source. */
+    IOMUXC_GPR->GPR4 &= ~IOMUXC_GPR_GPR4_ENET_REF_CLK_DIR_MASK;
     /* Set ENET_1G Tx clock source. */
-    IOMUXC_GPR->GPR5 &= ~IOMUXC_GPR_GPR5_ENET1G_TX_CLK_SEL_MASK;
+    IOMUXC_GPR->GPR5 = ((IOMUXC_GPR->GPR5 & ~IOMUXC_GPR_GPR5_ENET1G_TX_CLK_SEL_MASK) | IOMUXC_GPR_GPR5_ENET1G_RGMII_EN_MASK);
+    /* Set ENET_1G Ref clock source. */
+    IOMUXC_GPR->GPR5 &= ~IOMUXC_GPR_GPR5_ENET1G_REF_CLK_DIR_MASK;
+    /* Set ENET_QOS Tx clock source. */
+    IOMUXC_GPR->GPR6 &= ~IOMUXC_GPR_GPR6_ENET_QOS_RGMII_EN_MASK;
+    /* Set ENET_QOS Ref clock source. */
+    IOMUXC_GPR->GPR6 &= ~IOMUXC_GPR_GPR6_ENET_QOS_REF_CLK_DIR_MASK;
     /* Set GPT1 High frequency reference clock source. */
     IOMUXC_GPR->GPR22 &= ~IOMUXC_GPR_GPR22_REF_1M_CLK_GPT1_MASK;
     /* Set GPT2 High frequency reference clock source. */

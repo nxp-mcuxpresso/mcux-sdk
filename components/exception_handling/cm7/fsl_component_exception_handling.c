@@ -321,7 +321,7 @@ static void EXCEPTION_HardFaultRegisterPrint(void)
 static void EXCEPTION_StackFramePrint(void)
 {
 #if (defined(EXCEPTION_HANDLING_LOG_ENABLE) && (EXCEPTION_HANDLING_LOG_ENABLE == 1U))
-    (void)EXCEPTION_PRINTF("\n\r--- Stack frame -------------------------------------------------------\r\n");
+    (void)EXCEPTION_PRINTF("\r\n--- Stack frame -------------------------------------------------------\r\n");
     (void)EXCEPTION_PRINTF(" IPSR= 0x%08X >>>>> ", g_exceptionStackStruct->IPSR);
     switch (g_exceptionStackStruct->IPSR & 0xFFU)
     {

@@ -6,7 +6,7 @@
 **     Compiler:            GNU C Compiler
 **     Reference manual:    IMXRT1024RM Rev.0, 09/2020 | IMXRT102xSRM Rev.0
 **     Version:             rev. 0.1, 2020-01-15
-**     Build:               b210226
+**     Build:               b210709
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
@@ -196,6 +196,13 @@ SECTIONS
   text_end = ORIGIN(m_text) + LENGTH(m_text);
   ASSERT(__DATA_END <= text_end, "region m_text overflowed with text and data")
 
+  .qadata :
+  {
+    . = ALIGN(4);
+    *(DataQuickAccess)       /* quick access data section */
+    . = ALIGN(4);
+  } > m_data2
+
   /* Uninitialized data section */
   .bss :
   {
@@ -236,4 +243,3 @@ SECTIONS
 
   .ARM.attributes 0 : { *(.ARM.attributes) }
 }
-

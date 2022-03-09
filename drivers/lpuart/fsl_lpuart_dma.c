@@ -151,6 +151,9 @@ static void LPUART_TransferReceiveDMACallback(dma_handle_t *handle, void *param)
 
 /*!
  * brief Initializes the LPUART handle which is used in transactional functions.
+ *
+ * note This function disables all LPUART interrupts.
+ *
  * param base LPUART peripheral base address.
  * param handle Pointer to lpuart_dma_handle_t structure.
  * param callback Callback function.
@@ -441,6 +444,8 @@ status_t LPUART_TransferGetReceiveCountDMA(LPUART_Type *base, lpuart_dma_handle_
  * brief LPUART DMA IRQ handle function.
  *
  * This function handles the LPUART tx complete IRQ request and invoke user callback.
+ * note This function is used as default IRQ handler by double weak mechanism.
+ * If user's specific IRQ handler is implemented, make sure this function is invoked in the handler.
  *
  * param base LPUART peripheral base address.
  * param lpuartDmaHandle LPUART handle pointer.
@@ -449,15 +454,18 @@ void LPUART_TransferDMAHandleIRQ(LPUART_Type *base, void *lpuartDmaHandle)
 {
     assert(lpuartDmaHandle != NULL);
 
-    lpuart_dma_handle_t *handle = (lpuart_dma_handle_t *)lpuartDmaHandle;
-
-    /* Disable tx complete interrupt */
-    LPUART_DisableInterrupts(base, (uint32_t)kLPUART_TransmissionCompleteInterruptEnable);
-
-    handle->txState = (uint8_t)kLPUART_TxIdle;
-
-    if (handle->callback != NULL)
+    if (((uint32_t)kLPUART_TransmissionCompleteFlag & LPUART_GetStatusFlags(base)) != 0U)
     {
-        handle->callback(base, handle, kStatus_LPUART_TxIdle, handle->userData);
+        lpuart_dma_handle_t *handle = (lpuart_dma_handle_t *)lpuartDmaHandle;
+
+        /* Disable tx complete interrupt */
+        LPUART_DisableInterrupts(base, (uint32_t)kLPUART_TransmissionCompleteInterruptEnable);
+
+        handle->txState = (uint8_t)kLPUART_TxIdle;
+
+        if (handle->callback != NULL)
+        {
+            handle->callback(base, handle, kStatus_LPUART_TxIdle, handle->userData);
+        }
     }
 }

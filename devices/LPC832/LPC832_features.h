@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.2, 2017-06-08
-**     Build:               b210408
+**     Build:               b210823
 **
 **     Abstract:
 **         Chip specific module features.
@@ -72,7 +72,7 @@
 /* ADC module features */
 
 /* @brief Do not has input select (register INSEL). */
-#define FSL_FEATURE_ADC_HAS_NO_INSEL  (1)
+#define FSL_FEATURE_ADC_HAS_NO_INSEL (1)
 /* @brief Has ASYNMODE bitfile in CTRL reigster. */
 #define FSL_FEATURE_ADC_HAS_CTRL_ASYNMODE (0)
 /* @brief Has ASYNMODE bitfile in CTRL reigster. */
@@ -118,7 +118,7 @@
 /* MRT module features */
 
 /* @brief number of channels. */
-#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS  (4)
+#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (4)
 /* @brief Has no MULTITASK bitfile in MODCFG reigster. */
 #define FSL_FEATURE_MRT_HAS_NO_MODCFG_MULTITASK (1)
 /* @brief Has no INUSE bitfile in STAT reigster. */
@@ -173,6 +173,8 @@
 
 /* @brief Pointer to ROM IAP entry functions */
 #define FSL_FEATURE_SYSCON_IAP_ENTRY_LOCATION (0x1fff1ff1)
+/* @brief IAP Reinvoke ISP command parameter is pointer */
+#define FSL_FEATURE_SYSCON_IAP_REINVOKE_ISP_PARAM_POINTER (0)
 /* @brief Flash page size in bytes */
 #define FSL_FEATURE_SYSCON_FLASH_PAGE_SIZE_BYTES (64)
 /* @brief Flash sector size in bytes */
@@ -206,4 +208,3 @@
 #define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
 
 #endif /* _LPC832_FEATURES_H_ */
-

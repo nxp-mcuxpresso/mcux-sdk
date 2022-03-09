@@ -39,25 +39,31 @@ typedef enum _power_mode_config
  */
 typedef enum pd_bits
 {
-    kPDRUNCFG_PD_BODCORE    = (1UL << 2),
-    kPDRUNCFG_PD_BODVBAT    = (1UL << 3),
-    kPDRUNCFG_PD_FRO1M      = (1UL << 4),
-    kPDRUNCFG_PD_FRO192M    = (1UL << 5),
-    kPDRUNCFG_PD_FRO32K     = (1UL << 6),
-    kPDRUNCFG_PD_XTAL32K    = (1UL << 7),
-    kPDRUNCFG_PD_XTAL32M    = (1UL << 8),
-    kPDRUNCFG_PD_PLL0       = (1UL << 9),
-    kPDRUNCFG_PD_PLL1       = (1UL << 10),
-    kPDRUNCFG_PD_USB0_PHY   = (1UL << 11),
-    kPDRUNCFG_PD_USB1_PHY   = (1UL << 12),
-    kPDRUNCFG_PD_COMP       = (1UL << 13),
-    kPDRUNCFG_PD_GPADC      = (1UL << 15),
-    kPDRUNCFG_PD_LDOUSBHS   = (1UL << 18),
-    kPDRUNCFG_PD_LDOGPADC   = (1UL << 19),
-    kPDRUNCFG_PD_LDOXO32M   = (1UL << 20),
-    kPDRUNCFG_PD_LDOFLASHNV = (1UL << 21),
-    kPDRUNCFG_PD_RNG        = (1UL << 22),
-    kPDRUNCFG_PD_PLL0_SSCG  = (1UL << 23),
+    kPDRUNCFG_PD_DCDC         = (1UL << 0),
+    kPDRUNCFG_PD_BIAS         = (1UL << 1),
+    kPDRUNCFG_PD_BODCORE      = (1UL << 2),
+    kPDRUNCFG_PD_BODVBAT      = (1UL << 3),
+    kPDRUNCFG_PD_FRO1M        = (1UL << 4),
+    kPDRUNCFG_PD_FRO192M      = (1UL << 5),
+    kPDRUNCFG_PD_FRO32K       = (1UL << 6),
+    kPDRUNCFG_PD_XTAL32K      = (1UL << 7),
+    kPDRUNCFG_PD_XTAL32M      = (1UL << 8),
+    kPDRUNCFG_PD_PLL0         = (1UL << 9),
+    kPDRUNCFG_PD_PLL1         = (1UL << 10),
+    kPDRUNCFG_PD_USB0_PHY     = (1UL << 11),
+    kPDRUNCFG_PD_USB1_PHY     = (1UL << 12),
+    kPDRUNCFG_PD_COMP         = (1UL << 13),
+    kPDRUNCFG_PD_TEMPSENS     = (1UL << 14),
+    kPDRUNCFG_PD_GPADC        = (1UL << 15),
+    kPDRUNCFG_PD_LDOMEM       = (1UL << 16),
+    kPDRUNCFG_PD_LDODEEPSLEEP = (1UL << 17),
+    kPDRUNCFG_PD_LDOUSBHS     = (1UL << 18),
+    kPDRUNCFG_PD_LDOGPADC     = (1UL << 19),
+    kPDRUNCFG_PD_LDOXO32M     = (1UL << 20),
+    kPDRUNCFG_PD_LDOFLASHNV   = (1UL << 21),
+    kPDRUNCFG_PD_RNG          = (1UL << 22),
+    kPDRUNCFG_PD_PLL0_SSCG    = (1UL << 23),
+    kPDRUNCFG_PD_ROM          = (1UL << 24),
     /*
        This enum member has no practical meaning,it is used to avoid MISRA issue,
        user should not trying to use it.
@@ -257,6 +263,7 @@ typedef enum _power_device_boot_mode
 /**
  * @brief Sleep Postpone
  */
+#define LOWPOWER_HWWAKE_FORCED (1UL << 0) /*!< Force peripheral clocking to stay on during deep-sleep mode. */
 #define LOWPOWER_HWWAKE_PERIPHERALS                                                                                \
     (1UL << 1) /*!< Wake for Flexcomms. Any Flexcomm FIFO reaching the level specified by its own TXLVL will cause \
                   peripheral clocking to wake up temporarily while the related status is asserted */
@@ -266,6 +273,9 @@ typedef enum _power_device_boot_mode
 #define LOWPOWER_HWWAKE_SDMA1                                                                                 \
     (1UL << 5) /*!< Wake for DMA1. DMA0 being busy will cause peripheral clocking to remain running until DMA \
                   completes. Used in conjonction with LOWPOWER_HWWAKE_PERIPHERALS */
+#define LOWPOWER_HWWAKE_ENABLE_FRO192M                                                                  \
+    (1UL << 31) /*!< Need to be set if FRO192M is disable - via PDCTRL0 - in Deep Sleep mode and any of \
+                   LOWPOWER_HWWAKE_PERIPHERALS, LOWPOWER_HWWAKE_SDMA0 or LOWPOWER_HWWAKE_SDMA1 is set */
 
 #define LOWPOWER_CPURETCTRL_ENA_DISABLE 0 /*!< In POWER DOWN mode, CPU Retention is disabled */
 #define LOWPOWER_CPURETCTRL_ENA_ENABLE  1 /*!< In POWER DOWN mode, CPU Retention is enabled  */
@@ -518,13 +528,6 @@ void POWER_EnterSleep(void);
  */
 void POWER_SetVoltageForFreq(uint32_t system_freq_hz);
 
-/*!
- * @brief Power Library API to return the library version.
- *
- * @return version number of the power library
- */
-uint32_t POWER_GetLibVersion(void);
-
 /**
  * @brief   Sets board-specific trim values for 16MHz XTAL
  * @param   pi32_16MfXtalIecLoadpF_x100 Load capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF becomes 120
@@ -563,14 +566,6 @@ extern void POWER_Xtal32khzCapabankTrim(int32_t pi32_32kfXtalIecLoadpF_x100,
  * @return  none
  */
 extern void POWER_SetXtal16mhzLdo(void);
-
-/**
- * @brief   Set up 16-MHz XTAL Trimmings
- * @param       amp Amplitude
- * @param       gm  Transconductance
- * @return  none
- */
-extern void POWER_SetXtal16mhzTrim(uint32_t amp, uint32_t gm);
 
 /**
  * @brief   Return some key information related to the device reset causes / wake-up sources, for all power modes.

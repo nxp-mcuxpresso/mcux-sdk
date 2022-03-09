@@ -5,8 +5,8 @@
 **
 **     Compiler:            GNU C Compiler
 **     Reference manual:    iMXRT500RM Rev.0, 01/2021
-**     Version:             rev. 4.0, 2020-05-12
-**     Build:               b210303
+**     Version:             rev. 5.0, 2021-07-28
+**     Build:               b210810
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
@@ -36,11 +36,13 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? 0x00000180 : 0;
 /* The SRAM region [0x10000-0x1BFFF] is reserved for ROM code. */
 /* The SRAM region [0x0-0xFFFF], [0x1C000-0x1FFFF] are reserved for app-specific use cases. */
 /* The SRAM region [0x20000-0x7FFFF] is reserved for Non-cached shared memory between M33 and DSP. */
+/* The SRAM region [0x80000-0x27FFFF] is reserved for DSP code and data. */
 MEMORY
 {
   m_interrupts          (RX)  : ORIGIN = 0x08100000, LENGTH = 0x00000180
   m_text                (RX)  : ORIGIN = 0x08100180, LENGTH = 0x000FFE80
-  m_data                (RW)  : ORIGIN = 0x20180000, LENGTH = 0x00080000
+  /* Use the same SRAM partition with ram_ns linker to share the same SAU configuration. */
+  m_data                (RW)  : ORIGIN = 0x20380000, LENGTH = 0x00080000
   m_usb_sram            (RW)  : ORIGIN = 0x40140000, LENGTH = 0x00004000
 }
 

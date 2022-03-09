@@ -881,8 +881,9 @@ static int32_t SPI_DMAControl(uint32_t control, uint32_t arg, cmsis_spi_dma_driv
         DMA_CreateHandle(spi->dmaTxDataHandle, spi->dmaResource->txdmaBase, spi->dmaResource->txdmaChannel);
         DMA_CreateHandle(spi->dmaRxDataHandle, spi->dmaResource->rxdmaBase, spi->dmaResource->rxdmaChannel);
 
-        (void)SPI_SlaveTransferCreateHandleDMA(spi->resource->base, &(spi->handle->slaveHandle), KSDK_SPI_SlaveDMACallback,
-                                         (void *)spi->cb_event, spi->dmaTxDataHandle, spi->dmaRxDataHandle);
+        (void)SPI_SlaveTransferCreateHandleDMA(spi->resource->base, &(spi->handle->slaveHandle),
+                                               KSDK_SPI_SlaveDMACallback, (void *)spi->cb_event, spi->dmaTxDataHandle,
+                                               spi->dmaRxDataHandle);
 
         spi->flags |= (uint8_t)SPI_FLAG_CONFIGURED;
     }
@@ -1304,7 +1305,7 @@ static int32_t SPI_InterruptControl(uint32_t control, uint32_t arg, cmsis_spi_in
         }
         (void)SPI_MasterInit(spi->resource->base, &masterConfig, spi->resource->GetFreq());
         (void)SPI_MasterTransferCreateHandle(spi->resource->base, &spi->handle->masterHandle,
-                                       KSDK_SPI_MasterInterruptCallback, (void *)spi->cb_event);
+                                             KSDK_SPI_MasterInterruptCallback, (void *)spi->cb_event);
         spi->flags |= (uint8_t)SPI_FLAG_CONFIGURED;
     }
     else
@@ -1331,8 +1332,8 @@ static int32_t SPI_InterruptControl(uint32_t control, uint32_t arg, cmsis_spi_in
             SPI_Deinit(spi->resource->base);
         }
         (void)SPI_SlaveInit(spi->resource->base, &slaveConfig);
-        (void)SPI_SlaveTransferCreateHandle(spi->resource->base, &spi->handle->slaveHandle, KSDK_SPI_SlaveInterruptCallback,
-                                      (void *)spi->cb_event);
+        (void)SPI_SlaveTransferCreateHandle(spi->resource->base, &spi->handle->slaveHandle,
+                                            KSDK_SPI_SlaveInterruptCallback, (void *)spi->cb_event);
         spi->flags |= (uint8_t)SPI_FLAG_CONFIGURED;
     }
 

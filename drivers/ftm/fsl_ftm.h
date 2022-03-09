@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FTM driver version 2.4.1. */
-#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
+/*! @brief FTM driver version 2.5.0. */
+#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*@}*/
 
 /*!
@@ -422,6 +422,35 @@ void FTM_Deinit(FTM_Type *base);
  */
 void FTM_GetDefaultConfig(ftm_config_t *config);
 
+/*!
+ * brief Calculates the counter clock prescaler.
+ *
+ * This function calculates the values for SC[PS] bit.
+ *
+ * param base                FTM peripheral base address
+ * param counterPeriod_Hz    The desired frequency in Hz which corresponding to the time when the counter reaches the
+ *                           mod value
+ * param srcClock_Hz         FTM counter clock in Hz
+ *
+ * return Calculated clock prescaler value, see @ref ftm_clock_prescale_t.
+ */
+static inline ftm_clock_prescale_t FTM_CalculateCounterClkDiv(FTM_Type *base,
+                                                              uint32_t counterPeriod_Hz,
+                                                              uint32_t srcClock_Hz)
+{
+    uint8_t i;
+    assert((srcClock_Hz / 2U) > counterPeriod_Hz);
+    assert((srcClock_Hz / 128U / 0xFFFFU) <= counterPeriod_Hz);
+    for (i = 0U; i < (uint32_t)kFTM_Prescale_Divide_128; i++)
+    {
+        if ((srcClock_Hz / (1UL << i) / 0xFFFFU) < counterPeriod_Hz)
+        {
+            break;
+        }
+    }
+    return (ftm_clock_prescale_t)i;
+}
+
 /*! @}*/
 
 /*!
@@ -462,11 +491,13 @@ status_t FTM_SetupPwm(FTM_Type *base,
  * @param dutyCyclePercent  New PWM pulse width; The value should be between 0 to 100
  *                          0=inactive signal(0% duty cycle)...
  *                          100=active signal (100% duty cycle)
+ * @return kStatus_Success if the PWM update was successful
+ *         kStatus_Error on failure
  */
-void FTM_UpdatePwmDutycycle(FTM_Type *base,
-                            ftm_chnl_t chnlNumber,
-                            ftm_pwm_mode_t currentPwmMode,
-                            uint8_t dutyCyclePercent);
+status_t FTM_UpdatePwmDutycycle(FTM_Type *base,
+                                ftm_chnl_t chnlNumber,
+                                ftm_pwm_mode_t currentPwmMode,
+                                uint8_t dutyCyclePercent);
 
 /*!
  * @brief Updates the edge level selection for a channel.

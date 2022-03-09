@@ -217,6 +217,11 @@ extern volatile uint32_t g_mclkFreq;
     {                       \
         kCLOCK_OsEventTimer \
     }
+/*! @brief Clock ip name array for Powerquad */
+#define POWERQUAD_CLOCKS \
+    {                    \
+        kCLOCK_PowerQuad \
+    }
 
 /*! @brief Clock gate name used for CLOCK_EnableClock/CLOCK_DisableClock. */
 /*------------------------------------------------------------------------------

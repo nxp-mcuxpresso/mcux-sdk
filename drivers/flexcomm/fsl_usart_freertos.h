@@ -27,7 +27,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief USART FreeRTOS driver version. */
-#define FSL_USART_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+#define FSL_USART_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
 /*@}*/
 
 /*! @brief FLEX USART configuration structure */

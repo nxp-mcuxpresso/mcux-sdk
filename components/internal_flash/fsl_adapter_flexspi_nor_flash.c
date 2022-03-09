@@ -304,6 +304,7 @@ hal_flash_status_t HAL_FlashInit(void)
     flexspi_config_t config;
     uint32_t key;
 
+    (void)memset(&config, 0x0, sizeof(flexspi_config_t));
 #if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
     bool DCacheEnableFlag = false;
     /* Disable D cache. */

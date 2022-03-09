@@ -67,7 +67,7 @@ typedef struct _serial_rpmsg_state
  * Code
  ******************************************************************************/
 
-static void Serial_RpmsgRxCallback(void *param, uint8_t *data, uint32_t len)
+static hal_rpmsg_return_status_t Serial_RpmsgRxCallback(void *param, uint8_t *data, uint32_t len)
 {
     serial_rpmsg_state_t *serialRpmsgHandle;
 #if (defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
@@ -78,7 +78,7 @@ static void Serial_RpmsgRxCallback(void *param, uint8_t *data, uint32_t len)
 
     if (NULL == param)
     {
-        return;
+        return kStatus_HAL_RL_RELEASE;
     }
 
     serialRpmsgHandle = (serial_rpmsg_state_t *)param;
@@ -108,6 +108,7 @@ static void Serial_RpmsgRxCallback(void *param, uint8_t *data, uint32_t len)
         }
     }
 #endif /* SERIAL_MANAGER_NON_BLOCKING_MODE */
+    return kStatus_HAL_RL_RELEASE;
 }
 
 serial_manager_status_t Serial_RpmsgInit(serial_handle_t serialHandle, void *serialConfig)

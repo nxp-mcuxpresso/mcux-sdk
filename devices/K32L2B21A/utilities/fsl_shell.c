@@ -61,7 +61,6 @@
  *
  */
 #if defined(OSA_USED)
-
 #if (defined(SHELL_USE_COMMON_TASK) && (SHELL_USE_COMMON_TASK > 0U))
 #include "fsl_component_common_task.h"
 #else
@@ -73,6 +72,40 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+#if defined(OSA_USED)
+#define SHELL_WRITEX SHELL_WriteSynchronization
+#else
+#define SHELL_WRITEX SHELL_Write
+#endif
+
+#if defined(OSA_USED)
+#if (defined(USE_RTOS) && (USE_RTOS > 0U))
+static OSA_MUTEX_HANDLE_DEFINE(s_shellMutex);
+#define SHELL_MUTEX_CREATE()   (void)OSA_MutexCreate(s_shellMutex)
+#define SHELL_ENTER_CRITICAL() (void)OSA_MutexLock(s_shellMutex, osaWaitForever_c)
+#define SHELL_EXIT_CRITICAL()  (void)OSA_MutexUnlock(s_shellMutex)
+#else
+#define SHELL_MUTEX_CREATE()
+#define SHELL_ENTER_CRITICAL()
+#define SHELL_EXIT_CRITICAL()
+#endif
+#else
+#ifdef SDK_OS_FREE_RTOS
+#include "FreeRTOS.h"
+#include "queue.h"
+#include "semphr.h"
+static QueueHandle_t s_shellMutex;
+
+#define SHELL_MUTEX_CREATE()   s_shellMutex = xSemaphoreCreateMutex()
+#define SHELL_ENTER_CRITICAL() (void)xSemaphoreTakeRecursive(s_shellMutex, portMAX_DELAY)
+#define SHELL_EXIT_CRITICAL()  (void)xSemaphoreGiveRecursive(s_shellMutex)
+#else /* BM case*/
+#define SHELL_MUTEX_CREATE()
+#define SHELL_ENTER_CRITICAL()
+#define SHELL_EXIT_CRITICAL()
+#endif
+#endif
+
 #define KEY_ESC (0x1BU)
 #define KET_DEL (0x7FU)
 
@@ -126,7 +159,8 @@ typedef struct _shell_context_handle
     uint8_t c_pos;                                         /*!< Current line position */
     volatile uint8_t notificationPost;                     /*!< The serial manager notification is post */
     uint8_t exit;                                          /*!< Exit Flag*/
-    uint8_t printBusy;                                     /*!< Print is busy */
+    uint8_t printBusy : 1;                                 /*!< Print is busy */
+    uint8_t taskBusy : 1;                                  /*!< Task is busy */
 } shell_context_handle_t;
 
 #if 0
@@ -278,6 +312,17 @@ void SHELL_Task(shell_handle_t shellHandle)
 
     if (NULL != shellContextHandle)
     {
+        uint32_t osaCurrentSr = 0U;
+
+        osaCurrentSr                         = DisableGlobalIRQ();
+        shellContextHandle->notificationPost = 0U;
+        if (shellContextHandle->taskBusy > 0U)
+        {
+            EnableGlobalIRQ(osaCurrentSr);
+            return;
+        }
+        shellContextHandle->taskBusy = 1U;
+        EnableGlobalIRQ(osaCurrentSr);
 #if (defined(SHELL_NON_BLOCKING_MODE) && (SHELL_NON_BLOCKING_MODE > 0U))
 
 #if defined(OSA_USED)
@@ -298,7 +343,7 @@ void SHELL_Task(shell_handle_t shellHandle)
 
 #endif
         {
-            shellContextHandle->notificationPost = 0;
+            shellContextHandle->notificationPost = 0U;
             do
             {
                 if ((bool)shellContextHandle->exit)
@@ -361,15 +406,15 @@ void SHELL_Task(shell_handle_t shellHandle)
                         case 'D': /* Left key */
                             if ((bool)shellContextHandle->c_pos)
                             {
-                                (void)SHELL_Write(shellContextHandle, "\b", 1);
+                                (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
                                 shellContextHandle->c_pos--;
                             }
                             break;
                         case 'C': /* Right key */
                             if (shellContextHandle->c_pos < shellContextHandle->l_pos)
                             {
-                                (void)SHELL_Write(shellContextHandle,
-                                                  &shellContextHandle->line[shellContextHandle->c_pos], 1);
+                                (void)SHELL_WRITEX(shellContextHandle,
+                                                   &shellContextHandle->line[shellContextHandle->c_pos], 1);
                                 shellContextHandle->c_pos++;
                             }
                             break;
@@ -387,7 +432,7 @@ void SHELL_Task(shell_handle_t shellHandle)
                     uint32_t i;
                     for (i = 0; i < (uint32_t)shellContextHandle->c_pos; i++)
                     {
-                        (void)SHELL_Write(shellContextHandle, "\b", 1);
+                        (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
                     }
                     /* Do auto complete */
                     SHELL_AutoComplete(shellContextHandle);
@@ -415,21 +460,21 @@ void SHELL_Task(shell_handle_t shellHandle)
                                       &shellContextHandle->line[shellContextHandle->c_pos + 1U],
                                       (uint32_t)shellContextHandle->l_pos - (uint32_t)shellContextHandle->c_pos);
                         shellContextHandle->line[shellContextHandle->l_pos] = '\0';
-                        (void)SHELL_Write(shellContextHandle, "\b", 1);
-                        (void)SHELL_Write(shellContextHandle, &shellContextHandle->line[shellContextHandle->c_pos],
-                                          strlen(&shellContextHandle->line[shellContextHandle->c_pos]));
-                        (void)SHELL_Write(shellContextHandle, "  \b", 3);
+                        (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
+                        (void)SHELL_WRITEX(shellContextHandle, &shellContextHandle->line[shellContextHandle->c_pos],
+                                           strlen(&shellContextHandle->line[shellContextHandle->c_pos]));
+                        (void)SHELL_WRITEX(shellContextHandle, "  \b", 3);
 
                         /* Reset position */
                         uint32_t i;
                         for (i = (uint32_t)shellContextHandle->c_pos; i <= (uint32_t)shellContextHandle->l_pos; i++)
                         {
-                            (void)SHELL_Write(shellContextHandle, "\b", 1);
+                            (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
                         }
                     }
                     else /* Normal backspace operation */
                     {
-                        (void)SHELL_Write(shellContextHandle, "\b \b", 3);
+                        (void)SHELL_WRITEX(shellContextHandle, "\b \b", 3);
                         shellContextHandle->line[shellContextHandle->l_pos] = '\0';
                     }
                     continue;
@@ -458,15 +503,15 @@ void SHELL_Task(shell_handle_t shellHandle)
                     {
                         endoflinechar = (char)ch;
                         /* Print new line. */
-                        (void)SHELL_Write(shellContextHandle, "\r\n", 2U);
+                        (void)SHELL_WRITEX(shellContextHandle, "\r\n", 2U);
                         /* If command line is not NULL, will start process it. */
                         if (0U != strlen(shellContextHandle->line))
                         {
                             SHELL_ProcessCommand(shellContextHandle, shellContextHandle->line);
                         }
                         /* Print prompt. */
-                        (void)SHELL_Write(shellContextHandle, shellContextHandle->prompt,
-                                          strlen(shellContextHandle->prompt));
+                        (void)SHELL_WRITEX(shellContextHandle, shellContextHandle->prompt,
+                                           strlen(shellContextHandle->prompt));
                         /* Reset all params */
                         shellContextHandle->c_pos = shellContextHandle->l_pos = 0;
                         shellContextHandle->hist_current                      = 0;
@@ -482,19 +527,19 @@ void SHELL_Task(shell_handle_t shellHandle)
                                   &shellContextHandle->line[shellContextHandle->c_pos],
                                   (uint32_t)shellContextHandle->l_pos - (uint32_t)shellContextHandle->c_pos);
                     shellContextHandle->line[shellContextHandle->c_pos] = (char)ch;
-                    (void)SHELL_Write(shellContextHandle, &shellContextHandle->line[shellContextHandle->c_pos],
-                                      strlen(&shellContextHandle->line[shellContextHandle->c_pos]));
+                    (void)SHELL_WRITEX(shellContextHandle, &shellContextHandle->line[shellContextHandle->c_pos],
+                                       strlen(&shellContextHandle->line[shellContextHandle->c_pos]));
                     /* Move the cursor to new position */
                     uint32_t i;
                     for (i = (uint32_t)shellContextHandle->c_pos; i < (uint32_t)shellContextHandle->l_pos; i++)
                     {
-                        (void)SHELL_Write(shellContextHandle, "\b", 1);
+                        (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
                     }
                 }
                 else
                 {
                     shellContextHandle->line[shellContextHandle->l_pos] = (char)ch;
-                    (void)SHELL_Write(shellContextHandle, &shellContextHandle->line[shellContextHandle->l_pos], 1);
+                    (void)SHELL_WRITEX(shellContextHandle, &shellContextHandle->line[shellContextHandle->l_pos], 1);
                 }
 
                 ch = 0;
@@ -515,6 +560,9 @@ void SHELL_Task(shell_handle_t shellHandle)
 #endif
 
 #endif
+        osaCurrentSr                 = DisableGlobalIRQ();
+        shellContextHandle->taskBusy = 0U;
+        EnableGlobalIRQ(osaCurrentSr);
     }
 }
 
@@ -529,8 +577,8 @@ static shell_status_t SHELL_HelpCommand(shell_handle_t shellHandle, int32_t argc
         shellCommandContextHandle = SHEEL_COMMAND_POINTER(p);
         if ((shellCommandContextHandle->pcHelpString != NULL) && (bool)strlen(shellCommandContextHandle->pcHelpString))
         {
-            (void)SHELL_Write(shellContextHandle, shellCommandContextHandle->pcHelpString,
-                              strlen(shellCommandContextHandle->pcHelpString));
+            (void)SHELL_WRITEX(shellContextHandle, shellCommandContextHandle->pcHelpString,
+                               strlen(shellCommandContextHandle->pcHelpString));
         }
 
         p = LIST_GetNext(p);
@@ -542,7 +590,7 @@ static shell_status_t SHELL_ExitCommand(shell_handle_t shellHandle, int32_t argc
 {
     shell_context_handle_t *shellContextHandle = (shell_context_handle_t *)shellHandle;
     /* Skip warning */
-    (void)SHELL_Write(shellContextHandle, "\r\nSHELL exited\r\n", strlen("\r\nSHELL exited\r\n"));
+    (void)SHELL_WRITEX(shellContextHandle, "\r\nSHELL exited\r\n", strlen("\r\nSHELL exited\r\n"));
     shellContextHandle->exit = (uint8_t) true;
     return kStatus_SHELL_Success;
 }
@@ -671,15 +719,15 @@ static void SHELL_GetHistoryCommand(shell_context_handle_t *shellContextHandle, 
         (void)memset(shellContextHandle->line, (int)'\0', tmp);
         for (i = 0U; i < tmp; i++)
         {
-            (void)SHELL_Write(shellContextHandle, "\b \b", 3);
+            (void)SHELL_WRITEX(shellContextHandle, "\b \b", 3);
         }
     }
 
     shellContextHandle->l_pos = (uint8_t)strlen(shellContextHandle->hist_buf[hist_pos]);
     shellContextHandle->c_pos = shellContextHandle->l_pos;
     (void)memcpy(shellContextHandle->line, shellContextHandle->hist_buf[hist_pos], shellContextHandle->l_pos);
-    (void)SHELL_Write(shellContextHandle, shellContextHandle->hist_buf[hist_pos],
-                      strlen(shellContextHandle->hist_buf[hist_pos]));
+    (void)SHELL_WRITEX(shellContextHandle, shellContextHandle->hist_buf[hist_pos],
+                       strlen(shellContextHandle->hist_buf[hist_pos]));
 }
 
 static void SHELL_AutoComplete(shell_context_handle_t *shellContextHandle)
@@ -700,7 +748,7 @@ static void SHELL_AutoComplete(shell_context_handle_t *shellContextHandle)
         return;
     }
 
-    (void)SHELL_Write(shellContextHandle, "\r\n", 2);
+    (void)SHELL_WRITEX(shellContextHandle, "\r\n", 2);
 
     /* Do auto complete */
     p = LIST_GetHead(&shellContextHandle->commandContextListHead);
@@ -726,7 +774,7 @@ static void SHELL_AutoComplete(shell_context_handle_t *shellContextHandle)
         (void)memcpy(shellContextHandle->line, namePtr, (uint32_t)minLen);
     }
     SHELL_PrintPrompt(shellContextHandle);
-    (void)SHELL_Write(shellContextHandle, shellContextHandle->line, strlen(shellContextHandle->line));
+    (void)SHELL_WRITEX(shellContextHandle, shellContextHandle->line, strlen(shellContextHandle->line));
     return;
 }
 
@@ -923,7 +971,7 @@ shell_status_t SHELL_Init(shell_handle_t shellHandle, serial_handle_t serialHand
 
     (void)SHELL_RegisterCommand(shellContextHandle, SHELL_COMMAND(help));
     (void)SHELL_RegisterCommand(shellContextHandle, SHELL_COMMAND(exit));
-
+    SHELL_MUTEX_CREATE();
     (void)SHELL_Write(shellContextHandle, "\r\nCopyright  2020  NXP\r\n", strlen("\r\nCopyright  2020  NXP\r\n"));
     SHELL_PrintPrompt(shellContextHandle);
 
@@ -1046,6 +1094,41 @@ int SHELL_Printf(shell_handle_t shellHandle, const char *formatString, ...)
     return (int32_t)shellContextHandle->printLength;
 }
 
+shell_status_t SHELL_WriteSynchronization(shell_handle_t shellHandle, const char *buffer, uint32_t length)
+{
+    shell_status_t status;
+
+    assert(SHELL_checkRunningInIsr() == false);
+
+    SHELL_ENTER_CRITICAL();
+    status = SHELL_Write(shellHandle, buffer, length);
+
+    SHELL_EXIT_CRITICAL();
+
+    return status;
+}
+
+int SHELL_PrintfSynchronization(shell_handle_t shellHandle, const char *formatString, ...)
+{
+    shell_status_t status;
+    shell_context_handle_t *shellContextHandle;
+    va_list ap;
+    uint32_t length;
+
+    assert(SHELL_checkRunningInIsr() == false);
+
+    shellContextHandle = (shell_context_handle_t *)shellHandle;
+
+    SHELL_ENTER_CRITICAL();
+    va_start(ap, formatString);
+    length = (uint32_t)SHELL_Sprintf(shellHandle, formatString, ap);
+
+    status = SHELL_Write(shellHandle, (const char *)shellContextHandle->printBuffer, length);
+    va_end(ap);
+    SHELL_EXIT_CRITICAL();
+
+    return (status == kStatus_SHELL_Success) ? (int)length : 0;
+}
 void SHELL_ChangePrompt(shell_handle_t shellHandle, char *prompt)
 {
     shell_context_handle_t *shellContextHandle;

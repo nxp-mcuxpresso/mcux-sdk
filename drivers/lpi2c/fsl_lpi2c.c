@@ -56,10 +56,8 @@ typedef void (*lpi2c_slave_isr_t)(LPI2C_Type *base, lpi2c_slave_handle_t *handle
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-static uint32_t LPI2C_GetCyclesForWidth(uint32_t sourceClock_Hz,
-                                        uint32_t width_ns,
-                                        uint32_t maxCycles,
-                                        uint32_t prescaler);
+static uint32_t LPI2C_GetCyclesForWidth(
+    uint32_t sourceClock_Hz, uint32_t width_ns, uint32_t minCycles, uint32_t maxCycles, uint32_t prescaler);
 
 static status_t LPI2C_MasterWaitForTxReady(LPI2C_Type *base);
 
@@ -139,13 +137,12 @@ uint32_t LPI2C_GetInstance(LPI2C_Type *base)
  * @brief Computes a cycle count for a given time in nanoseconds.
  * @param sourceClock_Hz LPI2C functional clock frequency in Hertz.
  * @param width_ns Desired with in nanoseconds.
- * @param maxCycles Maximum cycle count, determined by the number of bits wide the cycle count field is.
- * @param prescaler LPI2C prescaler setting.
+ * @param minCycles Minimum cycle count.
+ * @param maxCycles Maximum cycle count.
+ * @param prescaler LPI2C prescaler setting. If the cycle period is not affected by the prescaler value, set it to 0.
  */
-static uint32_t LPI2C_GetCyclesForWidth(uint32_t sourceClock_Hz,
-                                        uint32_t width_ns,
-                                        uint32_t maxCycles,
-                                        uint32_t prescaler)
+static uint32_t LPI2C_GetCyclesForWidth(
+    uint32_t sourceClock_Hz, uint32_t width_ns, uint32_t minCycles, uint32_t maxCycles, uint32_t prescaler)
 {
     assert(sourceClock_Hz > 0U);
 
@@ -158,19 +155,18 @@ static uint32_t LPI2C_GetCyclesForWidth(uint32_t sourceClock_Hz,
     }
 
     uint32_t busCycle_ns = 1000000U / (sourceClock_Hz / divider / 1000U);
-    uint32_t cycles      = 0U;
+    /* Calculate the cycle count, round up the calculated value. */
+    uint32_t cycles = (width_ns * 10U / busCycle_ns + 5U) / 10U;
 
-    /* Search for the cycle count just below the desired glitch width. */
-    while ((((cycles + 1U) * busCycle_ns) < width_ns) && (cycles + 1U < maxCycles))
+    /* If the calculated value is smaller than the minimum value, use the minimum value */
+    if (cycles < minCycles)
     {
-        ++cycles;
+        cycles = minCycles;
     }
-
-    /* If we end up with zero cycles, then set the filter to a single cycle unless the */
-    /* bus clock is greater than 10x the desired glitch width. */
-    if ((cycles == 0U) && (busCycle_ns <= (width_ns * 10U)))
+    /* If the calculated value is larger than the maximum value, use the maxmum value */
+    if (cycles > maxCycles)
     {
-        cycles = 1U;
+        cycles = maxCycles;
     }
 
     return cycles;
@@ -337,10 +333,10 @@ void LPI2C_MasterGetDefaultConfig(lpi2c_master_config_t *masterConfig)
     masterConfig->ignoreAck               = false;
     masterConfig->pinConfig               = kLPI2C_2PinOpenDrain;
     masterConfig->baudRate_Hz             = 100000U;
-    masterConfig->busIdleTimeout_ns       = 0U;
-    masterConfig->pinLowTimeout_ns        = 0U;
-    masterConfig->sdaGlitchFilterWidth_ns = 0U;
-    masterConfig->sclGlitchFilterWidth_ns = 0U;
+    masterConfig->busIdleTimeout_ns       = 0U; /* Set to 0 to disable the function */
+    masterConfig->pinLowTimeout_ns        = 0U; /* Set to 0 to disable the function */
+    masterConfig->sdaGlitchFilterWidth_ns = 0U; /* Set to 0 to disable the function */
+    masterConfig->sclGlitchFilterWidth_ns = 0U; /* Set to 0 to disable the function */
     masterConfig->hostRequest.enable      = false;
     masterConfig->hostRequest.source      = kLPI2C_HostRequestExternalPin;
     masterConfig->hostRequest.polarity    = kLPI2C_HostRequestPinActiveHigh;
@@ -406,15 +402,19 @@ void LPI2C_MasterInit(LPI2C_Type *base, const lpi2c_master_config_t *masterConfi
     cfgr2 = base->MCFGR2;
     if (0U != (masterConfig->sdaGlitchFilterWidth_ns))
     {
-        cycles = LPI2C_GetCyclesForWidth(sourceClock_Hz, masterConfig->sdaGlitchFilterWidth_ns,
-                                         (LPI2C_MCFGR2_FILTSDA_MASK >> LPI2C_MCFGR2_FILTSDA_SHIFT), 1U);
+        /* Calculate SDA filter width. The width is equal to FILTSDA cycles of functional clock.
+           And set FILTSDA to 0 disables the fileter, so the min value is 1. */
+        cycles = LPI2C_GetCyclesForWidth(sourceClock_Hz, masterConfig->sdaGlitchFilterWidth_ns, 1U,
+                                         (LPI2C_MCFGR2_FILTSDA_MASK >> LPI2C_MCFGR2_FILTSDA_SHIFT), 0U);
         cfgr2 &= ~LPI2C_MCFGR2_FILTSDA_MASK;
         cfgr2 |= LPI2C_MCFGR2_FILTSDA(cycles);
     }
     if (0U != masterConfig->sclGlitchFilterWidth_ns)
     {
-        cycles = LPI2C_GetCyclesForWidth(sourceClock_Hz, masterConfig->sclGlitchFilterWidth_ns,
-                                         (LPI2C_MCFGR2_FILTSCL_MASK >> LPI2C_MCFGR2_FILTSCL_SHIFT), 1U);
+        /* Calculate SDL filter width. The width is equal to FILTSCL cycles of functional clock.
+           And set FILTSCL to 0 disables the fileter, so the min value is 1. */
+        cycles = LPI2C_GetCyclesForWidth(sourceClock_Hz, masterConfig->sclGlitchFilterWidth_ns, 1U,
+                                         (LPI2C_MCFGR2_FILTSCL_MASK >> LPI2C_MCFGR2_FILTSCL_SHIFT), 0U);
         cfgr2 &= ~LPI2C_MCFGR2_FILTSCL_MASK;
         cfgr2 |= LPI2C_MCFGR2_FILTSCL(cycles);
     }
@@ -430,7 +430,9 @@ void LPI2C_MasterInit(LPI2C_Type *base, const lpi2c_master_config_t *masterConfi
 
     if (0U != (masterConfig->busIdleTimeout_ns))
     {
-        cycles = LPI2C_GetCyclesForWidth(sourceClock_Hz, masterConfig->busIdleTimeout_ns,
+        /* Calculate bus idle timeout value. The value is equal to BUSIDLE cycles of functional clock divided by
+           prescaler. And set BUSIDLE to 0 disables the fileter, so the min value is 1. */
+        cycles = LPI2C_GetCyclesForWidth(sourceClock_Hz, masterConfig->busIdleTimeout_ns, 1U,
                                          (LPI2C_MCFGR2_BUSIDLE_MASK >> LPI2C_MCFGR2_BUSIDLE_SHIFT), prescaler);
         cfgr2 &= ~LPI2C_MCFGR2_BUSIDLE_MASK;
         cfgr2 |= LPI2C_MCFGR2_BUSIDLE(cycles);
@@ -438,7 +440,9 @@ void LPI2C_MasterInit(LPI2C_Type *base, const lpi2c_master_config_t *masterConfi
     base->MCFGR2 = cfgr2;
     if (0U != masterConfig->pinLowTimeout_ns)
     {
-        cycles       = LPI2C_GetCyclesForWidth(sourceClock_Hz, masterConfig->pinLowTimeout_ns / 256U,
+        /* Calculate bus pin low timeout value. The value is equal to PINLOW cycles of functional clock divided by
+           prescaler. And set PINLOW to 0 disables the fileter, so the min value is 1. */
+        cycles       = LPI2C_GetCyclesForWidth(sourceClock_Hz, masterConfig->pinLowTimeout_ns / 256U, 1U,
                                          (LPI2C_MCFGR2_BUSIDLE_MASK >> LPI2C_MCFGR2_BUSIDLE_SHIFT), prescaler);
         base->MCFGR3 = (base->MCFGR3 & ~LPI2C_MCFGR3_PINLOW_MASK) | LPI2C_MCFGR3_PINLOW(cycles);
     }
@@ -759,7 +763,7 @@ status_t LPI2C_MasterReceive(LPI2C_Type *base, void *rxBuff, size_t rxSize)
 #endif
 
     /* Check transfer data size. */
-    if (rxSize > (256U * FSL_FEATURE_LPI2C_FIFO_SIZEn(base)))
+    if (rxSize > (256UL * (uint32_t)FSL_FEATURE_LPI2C_FIFO_SIZEn(base)))
     {
         return kStatus_InvalidArgument;
     }
@@ -898,7 +902,8 @@ status_t LPI2C_MasterTransferBlocking(LPI2C_Type *base, lpi2c_master_transfer_t 
     uint32_t cmdCount = 0U;
 
     /* Check transfer data size in read operation. */
-    if ((transfer->direction == kLPI2C_Read) && (transfer->dataSize > (256U * FSL_FEATURE_LPI2C_FIFO_SIZEn(base))))
+    if ((transfer->direction == kLPI2C_Read) &&
+        (transfer->dataSize > (256UL * (uint32_t)FSL_FEATURE_LPI2C_FIFO_SIZEn(base))))
     {
         return kStatus_InvalidArgument;
     }
@@ -1133,6 +1138,12 @@ static status_t LPI2C_RunTransferStateMachine(LPI2C_Type *base, lpi2c_master_han
                                 size_t tmpRxSize = xfer->dataSize;
                                 while (tmpRxSize != 0U)
                                 {
+                                    LPI2C_MasterGetFifoCounts(base, NULL, &txCount);
+                                    while (txFifoSize == txCount)
+                                    {
+                                        LPI2C_MasterGetFifoCounts(base, NULL, &txCount);
+                                    }
+
                                     if (tmpRxSize > 256U)
                                     {
                                         base->MTDR = (uint32_t)(kRxDataCmd) | (uint32_t)LPI2C_MTDR_DATA(0xFFU);
@@ -1591,10 +1602,13 @@ void LPI2C_SlaveGetDefaultConfig(lpi2c_slave_config_t *slaveConfig)
     slaveConfig->sclStall.enableAddress    = false;
     slaveConfig->ignoreAck                 = false;
     slaveConfig->enableReceivedAddressRead = false;
-    slaveConfig->sdaGlitchFilterWidth_ns   = 0U; /* TODO determine default width values */
-    slaveConfig->sclGlitchFilterWidth_ns   = 0U;
+    slaveConfig->sdaGlitchFilterWidth_ns   = 0U; /* Set to 0 to disable the function */
+    slaveConfig->sclGlitchFilterWidth_ns   = 0U; /* Set to 0 to disable the function */
     slaveConfig->dataValidDelay_ns         = 0U;
-    slaveConfig->clockHoldTime_ns          = 0U;
+    /* When enabling the slave tx SCL stall, set the default clock hold time to 250ns according
+       to I2C spec for standard mode baudrate(100k). User can manually change it to 100ns or 50ns
+       for fast-mode(400k) or fast-mode+(1m). */
+    slaveConfig->clockHoldTime_ns = 250U;
 }
 
 /*!
@@ -1611,6 +1625,7 @@ void LPI2C_SlaveGetDefaultConfig(lpi2c_slave_config_t *slaveConfig)
  */
 void LPI2C_SlaveInit(LPI2C_Type *base, const lpi2c_slave_config_t *slaveConfig, uint32_t sourceClock_Hz)
 {
+    uint32_t tmpReg;
     uint32_t tmpCycle;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -1639,21 +1654,36 @@ void LPI2C_SlaveInit(LPI2C_Type *base, const lpi2c_slave_config_t *slaveConfig, 
         LPI2C_SCFGR1_RXSTALL(slaveConfig->sclStall.enableRx) |
         LPI2C_SCFGR1_ADRSTALL(slaveConfig->sclStall.enableAddress);
 
-    tmpCycle =
-        LPI2C_SCFGR2_FILTSDA(LPI2C_GetCyclesForWidth(sourceClock_Hz, slaveConfig->sdaGlitchFilterWidth_ns,
-                                                     (LPI2C_SCFGR2_FILTSDA_MASK >> LPI2C_SCFGR2_FILTSDA_SHIFT), 1U));
-    tmpCycle |=
-        LPI2C_SCFGR2_FILTSCL(LPI2C_GetCyclesForWidth(sourceClock_Hz, slaveConfig->sclGlitchFilterWidth_ns,
-                                                     (LPI2C_SCFGR2_FILTSCL_MASK >> LPI2C_SCFGR2_FILTSCL_SHIFT), 1U));
-    tmpCycle |= LPI2C_SCFGR2_DATAVD(LPI2C_GetCyclesForWidth(
-        sourceClock_Hz, slaveConfig->dataValidDelay_ns, (LPI2C_SCFGR2_DATAVD_MASK >> LPI2C_SCFGR2_DATAVD_SHIFT), 1U));
+    /* Calculate SDA filter width. The width is equal to FILTSDA+3 cycles of functional clock.
+       And set FILTSDA to 0 disables the fileter, so the min value is 4. */
+    tmpReg = LPI2C_SCFGR2_FILTSDA(
+        LPI2C_GetCyclesForWidth(sourceClock_Hz, slaveConfig->sdaGlitchFilterWidth_ns, 4U,
+                                (LPI2C_SCFGR2_FILTSDA_MASK >> LPI2C_SCFGR2_FILTSDA_SHIFT) + 3U, 0U) -
+        3U);
 
-    base->SCFGR2 = tmpCycle | LPI2C_SCFGR2_CLKHOLD(LPI2C_GetCyclesForWidth(
-                                  sourceClock_Hz, slaveConfig->clockHoldTime_ns,
-                                  (LPI2C_SCFGR2_CLKHOLD_MASK >> LPI2C_SCFGR2_CLKHOLD_SHIFT), 1U));
+    /* Calculate SDL filter width. The width is equal to FILTSCL+3 cycles of functional clock.
+       And set FILTSCL to 0 disables the fileter, so the min value is 4. */
+    tmpCycle = LPI2C_GetCyclesForWidth(sourceClock_Hz, slaveConfig->sclGlitchFilterWidth_ns, 4U,
+                                       (LPI2C_SCFGR2_FILTSCL_MASK >> LPI2C_SCFGR2_FILTSCL_SHIFT) + 3U, 0U);
+    tmpReg |= LPI2C_SCFGR2_FILTSCL(tmpCycle - 3U);
+
+    /* Calculate data valid time. The time is equal to FILTSCL+DATAVD+3 cycles of functional clock.
+       So the min value is FILTSCL+3. */
+    tmpReg |= LPI2C_SCFGR2_DATAVD(
+        LPI2C_GetCyclesForWidth(sourceClock_Hz, slaveConfig->dataValidDelay_ns, tmpCycle,
+                                tmpCycle + (LPI2C_SCFGR2_DATAVD_MASK >> LPI2C_SCFGR2_DATAVD_SHIFT), 0U) -
+        tmpCycle);
+
+    /* Calculate clock hold time. The time is equal to CLKHOLD+3 cycles of functional clock.
+       So the min value is 3. */
+    base->SCFGR2 =
+        tmpReg | LPI2C_SCFGR2_CLKHOLD(
+                     LPI2C_GetCyclesForWidth(sourceClock_Hz, slaveConfig->clockHoldTime_ns, 3U,
+                                             (LPI2C_SCFGR2_CLKHOLD_MASK >> LPI2C_SCFGR2_CLKHOLD_SHIFT) + 3U, 0U) -
+                     3U);
 
     /* Save SCR to last so we don't enable slave until it is configured */
-    base->SCR = LPI2C_SCR_FILTDZ(slaveConfig->filterDozeEnable) | LPI2C_SCR_FILTEN(slaveConfig->filterEnable) |
+    base->SCR = LPI2C_SCR_FILTDZ(!slaveConfig->filterDozeEnable) | LPI2C_SCR_FILTEN(slaveConfig->filterEnable) |
                 LPI2C_SCR_SEN(slaveConfig->enableSlave);
 }
 
@@ -2151,8 +2181,11 @@ void LPI2C_SlaveTransferHandleIRQ(LPI2C_Type *base, lpi2c_slave_handle_t *handle
                     handle->callback(base, xfer, handle->userData);
                 }
 
-                /* Clean up transfer info on completion, after the callback has been invoked. */
-                (void)memset(&handle->transfer, 0, sizeof(handle->transfer));
+                if (0U != (flags & (uint32_t)kLPI2C_SlaveStopDetectFlag))
+                {
+                    /* Clean up transfer info on completion, after the callback has been invoked. */
+                    (void)memset(&handle->transfer, 0, sizeof(handle->transfer));
+                }
             }
             if (0U != (flags & (uint32_t)kLPI2C_SlaveAddressValidFlag))
             {

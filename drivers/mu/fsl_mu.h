@@ -39,7 +39,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief MU driver version. */
-#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
+#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*!
@@ -135,6 +135,17 @@ enum _mu_interrupt_trigger
     kMU_GenInt3InterruptTrigger = (1U << (MU_CR_GIRn_SHIFT + 0U))  /*!< General purpose interrupt 3. */
 };
 
+/*!
+ * @brief MU message register.
+ */
+typedef enum _mu_msg_reg_index
+{
+    kMU_MsgReg0 = 0,
+    kMU_MsgReg1,
+    kMU_MsgReg2,
+    kMU_MsgReg3,
+} mu_msg_reg_index_t;
+
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -182,11 +193,11 @@ void MU_Deinit(MU_Type *base);
  *
  * @code
  * while (!(kMU_Tx0EmptyFlag & MU_GetStatusFlags(base))) { }  Wait for TX0 register empty.
- * MU_SendMsgNonBlocking(base, 0U, MSG_VAL);  Write message to the TX0 register.
+ * MU_SendMsgNonBlocking(base, kMU_MsgReg0, MSG_VAL);  Write message to the TX0 register.
  * @endcode
  *
  * @param base MU peripheral base address.
- * @param regIndex  TX register index.
+ * @param regIndex  TX register index, see @ref mu_msg_reg_index_t.
  * @param msg      Message to send.
  */
 static inline void MU_SendMsgNonBlocking(MU_Type *base, uint32_t regIndex, uint32_t msg)
@@ -202,7 +213,7 @@ static inline void MU_SendMsgNonBlocking(MU_Type *base, uint32_t regIndex, uint3
  * This function waits until the TX register is empty and sends the message.
  *
  * @param base MU peripheral base address.
- * @param regIndex  TX register index.
+ * @param regIndex MU message register, see @ref mu_msg_reg_index_t
  * @param msg      Message to send.
  */
 void MU_SendMsg(MU_Type *base, uint32_t regIndex, uint32_t msg);
@@ -221,11 +232,11 @@ void MU_SendMsg(MU_Type *base, uint32_t regIndex, uint32_t msg);
  * {
  * }  Wait for the RX0 register full.
  *
- * msg = MU_ReceiveMsgNonBlocking(base, 0U);  Read message from RX0 register.
+ * msg = MU_ReceiveMsgNonBlocking(base, kMU_MsgReg0);  Read message from RX0 register.
  * @endcode
  *
  * @param base MU peripheral base address.
- * @param regIndex  TX register index.
+ * @param RX register index, see @ref mu_msg_reg_index_t.
  * @return The received message.
  */
 static inline uint32_t MU_ReceiveMsgNonBlocking(MU_Type *base, uint32_t regIndex)
@@ -241,7 +252,7 @@ static inline uint32_t MU_ReceiveMsgNonBlocking(MU_Type *base, uint32_t regIndex
  * This function waits until the RX register is full and receives the message.
  *
  * @param base MU peripheral base address.
- * @param regIndex  RX register index.
+ * @param regIndex  MU message register, see @ref mu_msg_reg_index_t
  * @return The received message.
  */
 uint32_t MU_ReceiveMsg(MU_Type *base, uint32_t regIndex);
@@ -327,12 +338,12 @@ static inline uint32_t MU_GetFlags(MU_Type *base)
  * if (kMU_Tx0EmptyFlag & flags)
  * {
  *     The TX0 register is empty. Message can be sent.
- *     MU_SendMsgNonBlocking(base, 0U, MSG0_VAL);
+ *     MU_SendMsgNonBlocking(base, kMU_MsgReg0, MSG0_VAL);
  * }
  * if (kMU_Tx1EmptyFlag & flags)
  * {
  *     The TX1 register is empty. Message can be sent.
- *     MU_SendMsgNonBlocking(base, 1U, MSG1_VAL);
+ *     MU_SendMsgNonBlocking(base, kMU_MsgReg1, MSG1_VAL);
  * }
  * @endcode
  *

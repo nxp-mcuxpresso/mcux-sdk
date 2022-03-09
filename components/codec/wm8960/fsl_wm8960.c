@@ -232,13 +232,13 @@ status_t WM8960_Init(wm8960_handle_t *handle, const wm8960_config_t *config)
     WM8960_CHECK_RET(WM8960_WriteReg(handle, WM8960_RADC, 0x1C3), ret);
 
     /*
-     * Digital DAC volume, 0dB
+     * Digital DAC volume, -15.5dB
      */
     WM8960_CHECK_RET(WM8960_WriteReg(handle, WM8960_LDAC, 0x1E0), ret);
     WM8960_CHECK_RET(WM8960_WriteReg(handle, WM8960_RDAC, 0x1E0), ret);
 
     /*
-     * Headphone volume, LOUT1 and ROUT1, 0dB
+     * Headphone volume, LOUT1 and ROUT1, -10dB
      */
     WM8960_CHECK_RET(WM8960_WriteReg(handle, WM8960_LOUT1, 0x16F), ret);
     WM8960_CHECK_RET(WM8960_WriteReg(handle, WM8960_ROUT1, 0x16F), ret);

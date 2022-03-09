@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 7.0, 2018-11-05
-**     Build:               b210329
+**     Build:               b210913
 **
 **     Abstract:
 **         Chip specific module features.
@@ -45,8 +45,8 @@
 #define FSL_FEATURE_SOC_AXBS_COUNT (2)
 /* @brief CRC availability on the SoC. */
 #define FSL_FEATURE_SOC_CRC_COUNT (1)
-/* @brief DAC availability on the SoC. */
-#define FSL_FEATURE_SOC_DAC_COUNT (2)
+/* @brief DAC12 availability on the SoC. */
+#define FSL_FEATURE_SOC_DAC12_COUNT (2)
 /* @brief DMAMUX availability on the SoC. */
 #define FSL_FEATURE_SOC_DMAMUX_COUNT (2)
 /* @brief EDMA availability on the SoC. */
@@ -144,6 +144,8 @@
 
 /* LPADC module features */
 
+/* @brief FIFO availability on the SoC. */
+#define FSL_FEATURE_LPADC_FIFO_COUNT (1)
 /* @brief Has subsequent trigger priority (bitfield CFG[TPRICTRL]). */
 #define FSL_FEATURE_LPADC_HAS_CFG_SUBSEQUENT_PRIORITY (1)
 /* @brief Has differential mode (bitfield CMDLn[DIFF]). */
@@ -578,6 +580,8 @@
     (((x) == LPSPI3) ? (16) : (-1)))))
 /* @brief Has separate DMA RX and TX requests. */
 #define FSL_FEATURE_LPSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
+/* @brief Has CCR1 (related to existence of registers CCR1). */
+#define FSL_FEATURE_LPSPI_HAS_CCR1 (0)
 
 /* LPTMR module features */
 
@@ -765,7 +769,7 @@
 #define FSL_FEATURE_MU_NO_HR (0)
 /* @brief MU supports mask the hardware reset. CR[HRM] or CCR[HRM]. */
 #define FSL_FEATURE_MU_HAS_HRM (0)
-/* @brief MU does not support check the other core power mode. SR[PM]. */
+/* @brief MU does not support check the other core power mode. SR[PM] or BSR[APM]. */
 #define FSL_FEATURE_MU_NO_PM (0)
 /* @brief MU supports reset assert interrupt. CR[RAIE] or BCR[RAIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (1)
@@ -1254,7 +1258,7 @@
 /* @brief Has Active Tampers (regitser LPATCTLR, LPATCLKR, LPATRCnR). */
 #define FSL_FEATURE_SNVS_HAS_ACTIVE_TAMPERS (0)
 /* @brief Number of TAMPER. */
-#define FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER (1)
+#define FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER (0)
 /* @brief Has Set Lock. */
 #define FSL_FEATURE_SNVS_HAS_SET_LOCK (1)
 /* @brief Has State Transition. */
@@ -1289,6 +1293,16 @@
 #define FSL_FEATURE_TPM_HAS_GLOBAL (1)
 /* @brief Has TPM_TRIG. */
 #define FSL_FEATURE_TPM_HAS_TRIG (1)
+/* @brief Whether TRIG register has effect. */
+#define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) \
+    (((x) == TPM0) ? (1) : \
+    (((x) == TPM1) ? (0) : \
+    (((x) == TPM2) ? (0) : \
+    (((x) == TPM3) ? (1) : \
+    (((x) == TPM4) ? (1) : \
+    (((x) == TPM5) ? (0) : \
+    (((x) == TPM6) ? (0) : \
+    (((x) == TPM7) ? (1) : (-1)))))))))
 /* @brief Has counter pause on trigger. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER (1)
 /* @brief Has external trigger selection. */
@@ -1299,6 +1313,16 @@
 #define FSL_FEATURE_TPM_COMBINE_HAS_EFFECTn(x) (1)
 /* @brief Has TPM_POL. */
 #define FSL_FEATURE_TPM_HAS_POL (1)
+/* @brief Whether POL register has effect. */
+#define FSL_FEATURE_TPM_POL_HAS_EFFECTn(x) \
+    (((x) == TPM0) ? (1) : \
+    (((x) == TPM1) ? (0) : \
+    (((x) == TPM2) ? (0) : \
+    (((x) == TPM3) ? (1) : \
+    (((x) == TPM4) ? (1) : \
+    (((x) == TPM5) ? (0) : \
+    (((x) == TPM6) ? (0) : \
+    (((x) == TPM7) ? (1) : (-1)))))))))
 /* @brief Has TPM_FILTER register. */
 #define FSL_FEATURE_TPM_HAS_FILTER (1)
 /* @brief Whether FILTER register has effect. */
@@ -1307,6 +1331,18 @@
 #define FSL_FEATURE_TPM_HAS_QDCTRL (1)
 /* @brief Whether QDCTRL register has effect. */
 #define FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(x) (1)
+/* @brief Has pause level select. */
+#define FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT (0)
+/* @brief Whether 32 bits counter has effect. */
+#define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) \
+    (((x) == TPM0) ? (0) : \
+    (((x) == TPM1) ? (1) : \
+    (((x) == TPM2) ? (1) : \
+    (((x) == TPM3) ? (0) : \
+    (((x) == TPM4) ? (0) : \
+    (((x) == TPM5) ? (1) : \
+    (((x) == TPM6) ? (1) : \
+    (((x) == TPM7) ? (0) : (-1)))))))))
 
 /* TRNG module features */
 

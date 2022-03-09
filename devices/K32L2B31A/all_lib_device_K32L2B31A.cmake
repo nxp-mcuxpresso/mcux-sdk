@@ -47,6 +47,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -79,6 +80,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager)
 #    include(driver_slcd)
 #    include(driver_pit)
+#    include(middleware_usb_device_cdc_external)
 #    include(component_serial_manager_uart)
 #    include(component_log_backend_debugconsole)
 #    include(driver_llwu)
@@ -87,11 +89,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_spi_dma)
 #    include(driver_lptmr)
 #    include(device_startup)
+#    include(component_serial_manager_usb_cdc)
 #    include(utility_assert)
 #    include(middleware_freertos-kernel_extension)
 #    include(CMSIS_Driver_Include_I2C)
 #    include(component_led)
+#    include(middleware_usb_common_header)
 #    include(middleware_multicore_erpc_eRPC_server)
+#    include(middleware_usb_device_common_header)
 #    include(component_panic)
 #    include(driver_clock)
 #    include(driver_sim)
@@ -125,6 +130,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_spi)
 #    include(driver_flash)
 #    include(utility_debug_console)
+#    include(middleware_usb_device_controller_driver_K32L2B31A)
 #    include(middleware_multicore_erpc_eRPC_port_stdlib)
 #    include(middleware_multicore_erpc_eRPC_arbitrator)
 #    include(driver_pmc)
@@ -142,6 +148,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpuart)
 #    include(driver_flexio_spi)
 #    include(driver_cmsis_i2c)
+#    include(middleware_usb_device_khci)
 #    include(component_pit_adapter)
 #    include(middleware_multicore_erpc_eRPC_spi_slave_c_wrapper)
 #    include(utility_notifier)
@@ -152,3 +159,4 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_spi_dma)
 #    include(driver_slcd_engine)
 #    include(driver_spi_freertos)
+#    include(middleware_usb_device_stack_external)

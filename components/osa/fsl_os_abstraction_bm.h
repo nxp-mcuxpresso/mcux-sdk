@@ -54,6 +54,21 @@ typedef uint32_t event_flags_t;
 extern void DefaultISR(void);
 
 /*!
+ * @brief Process OSA tasks
+ *
+ * This function is used to process registered tasks.
+ *
+ * Example below shows how to use this API in baremetal.
+ *
+ * @code
+ *   while(1) {
+ *     OSA_ProcessTasks();
+ *   }
+ * @endcode
+ */
+void OSA_ProcessTasks(void);
+
+/*!
  * @name Thread management
  * @{
  */

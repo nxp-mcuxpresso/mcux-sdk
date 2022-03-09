@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SNVS_LP_DRIVER_VERSION (MAKE_VERSION(2, 4, 1)) /*!< Version 2.4.1 */
+#define FSL_SNVS_LP_DRIVER_VERSION (MAKE_VERSION(2, 4, 3)) /*!< Version 2.4.3 */
 /*@}*/
 
 /*! @brief Define of SNVS_LP Zeroizable Master Key registers */
@@ -40,6 +40,8 @@ typedef enum _snvs_lp_srtc_status_flags
     kSNVS_SRTC_AlarmInterruptFlag = SNVS_LPSR_LPTA_MASK, /*!< SRTC time alarm flag */
 } snvs_lp_srtc_status_flags_t;
 
+#if defined(FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER) && (FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER > 0)
+
 /*! @brief List of SNVS_LP external tampers */
 typedef enum _snvs_lp_external_tamper
 {
@@ -54,8 +56,10 @@ typedef enum _snvs_lp_external_tamper
     kSNVS_ExternalTamper8  = 8U,
     kSNVS_ExternalTamper9  = 9U,
     kSNVS_ExternalTamper10 = 10U
-#endif
+#endif /* defined(FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER) && (FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER > 1) */
 } snvs_lp_external_tamper_t;
+
+#endif /* defined(FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER) && (FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER > 0) */
 
 #if defined(FSL_FEATURE_SNVS_HAS_ACTIVE_TAMPERS) && (FSL_FEATURE_SNVS_HAS_ACTIVE_TAMPERS > 0)
 /*! @brief List of SNVS_LP active tampers */
@@ -396,6 +400,8 @@ static inline void SNVS_LP_SRTC_StopTimer(SNVS_Type *base)
  * @{
  */
 
+#if defined(FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER) && (FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER > 0)
+
 /*!
  * @brief Enables the specified SNVS external tamper.
  *
@@ -404,6 +410,8 @@ static inline void SNVS_LP_SRTC_StopTimer(SNVS_Type *base)
  * @param config Configuration structure of external passive tamper
  */
 void SNVS_LP_EnablePassiveTamper(SNVS_Type *base, snvs_lp_external_tamper_t pin, snvs_lp_passive_tamper_t config);
+
+#endif /* defined(FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER) && (FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER > 0) */
 
 #if defined(FSL_FEATURE_SNVS_HAS_ACTIVE_TAMPERS) && (FSL_FEATURE_SNVS_HAS_ACTIVE_TAMPERS > 0)
 /*!
@@ -511,6 +519,8 @@ void SNVS_LP_TamperPinRx_GetDefaultConfig(tamper_active_rx_config_t *config);
  */
 void SNVS_LP_PassiveTamperPin_GetDefaultConfig(snvs_lp_passive_tamper_t *config);
 
+#if defined(FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER) && (FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER > 0)
+
 /*!
  * @brief Disables the specified SNVS external tamper.
  *
@@ -550,6 +560,8 @@ void SNVS_LP_ClearExternalTamperStatus(SNVS_Type *base, snvs_lp_external_tamper_
  * @param base SNVS peripheral base address
  */
 void SNVS_LP_ClearAllExternalTamperStatus(SNVS_Type *base);
+
+#endif /* defined(FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER) && (FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER > 0) */
 
 /*! @}*/
 

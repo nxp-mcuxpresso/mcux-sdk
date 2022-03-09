@@ -1118,9 +1118,9 @@ void CASPER_ecc_init(casper_algo_t curve)
 
 void CASPER_ECC_equal(int *res, uint32_t *op1, uint32_t *op2)
 {
-    uint32_t a[CASPER_MAX_ECC_SIZE_WORDLEN];
-    uint32_t b[CASPER_MAX_ECC_SIZE_WORDLEN];
-    uint32_t c = 0;
+    uint32_t a[CASPER_MAX_ECC_SIZE_WORDLEN] = {0};
+    uint32_t b[CASPER_MAX_ECC_SIZE_WORDLEN] = {0};
+    uint32_t c                              = 0;
     CASPER_MEMCPY(a, op1, N_wordlen * sizeof(uint32_t));
     CASPER_MEMCPY(b, op2, N_wordlen * sizeof(uint32_t));
 
@@ -1139,8 +1139,8 @@ void CASPER_ECC_equal(int *res, uint32_t *op1, uint32_t *op2)
 
 void CASPER_ECC_equal_to_zero(int *res, uint32_t *op1)
 {
-    uint32_t a[CASPER_MAX_ECC_SIZE_WORDLEN];
-    uint32_t c = 0;
+    uint32_t a[CASPER_MAX_ECC_SIZE_WORDLEN] = {0};
+    uint32_t c                              = 0;
     CASPER_MEMCPY(a, op1, N_wordlen * sizeof(uint32_t));
 
     do

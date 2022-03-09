@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 5)) /*!< Version 2.0.5 */
+#define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 6)) /*!< Version 2.0.6 */
 /*@}*/
 
 /*! @brief ASRC fifo depth */

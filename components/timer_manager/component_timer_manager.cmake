@@ -29,5 +29,8 @@ endif()
 if(CONFIG_USE_component_tpm_adapter) 
     include(component_tpm_adapter)
 endif()
+if(CONFIG_USE_component_gpt_adapter) 
+    include(component_gpt_adapter)
+endif()
 
 include(component_lists)

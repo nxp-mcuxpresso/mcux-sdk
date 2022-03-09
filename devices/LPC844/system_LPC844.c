@@ -12,7 +12,7 @@
 **
 **     Reference manual:    LPC84x User manual Rev.1.6  8 Dec 2017
 **     Version:             rev. 1.2, 2017-06-08
-**     Build:               b201015
+**     Build:               b210815
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -20,7 +20,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -79,6 +79,7 @@ void SystemInit (void) {
     extern void *__Vectors;
     SCB->VTOR = (uint32_t) &__Vectors;
 #endif
+    FLASH_CTRL->FLASHCFG &= ~FLASH_CTRL_FLASHCFG_FLASHTIM_MASK; /* set 1 system clock flash access time. */
     SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
   SystemInitHook();
 }

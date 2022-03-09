@@ -182,7 +182,7 @@ static void log_output_low_level(uint8_t *buffer, size_t length)
 
 static void log_print_to_buffer(char *buf, int32_t *indicator, char val, int len)
 {
-    log_print_buffer_t *buffer = (log_print_buffer_t *)((void *)((size_t)buf));
+    log_print_buffer_t *buffer = (log_print_buffer_t *)((void *)(buf));
     int i                      = 0;
 
     for (i = 0; i < len; i++)
@@ -485,7 +485,12 @@ void LOG_AsyncPrintf(log_module_t const *module,
             EnableGlobalIRQ(primask);
 #endif
         }
-    } while (NULL == node);
+    }
+#if (LOG_ENABLE_OVERWRITE > 0)
+    while (false);
+#else
+    while (NULL == node);
+#endif
 
 #if (LOG_ENABLE_OVERWRITE > 0)
     if (NULL != node)

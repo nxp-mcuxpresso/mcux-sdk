@@ -76,7 +76,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Driver_Include_SPI)
 #    include(middleware_freertos-kernel_MKV31F51212)
 #    include(component_panic)
-#    include(driver_edma)
+#    include(driver_edma_MKV31F51212)
 #    include(driver_ewm)
 #    include(utility_assert)
 #    include(driver_lpuart)

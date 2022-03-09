@@ -4,6 +4,7 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+
 #ifndef DRIVER_GPIO_H_
 #define DRIVER_GPIO_H_
 
@@ -24,9 +25,9 @@ extern "C"
 #define ARM_GPIO_INTERRUPT_NONE                   0x00U   /* Disable Interrupt */
 #define ARM_GPIO_INTERRUPT_RISING_EDGE            0x01U   /* Interrupt on Rising Edge */
 #define ARM_GPIO_INTERRUPT_FALLING_EDGE           0x02U   /* Interrupt on Falling Edge */
-#define ARM_GPIO_INTERRUPT_RISING_FALLING_EDGE    0x03U   /* Interrupt on rising or falling edge */
-#define ARM_GPIO_INTERRUPT_LOGIC_ONE              0x04U   /* Interrupt on Logic Level zero */
-#define ARM_GPIO_INTERRUPT_LOGIC_ZERO             0x05U   /* Interrupt on Logic Level One */
+#define ARM_GPIO_INTERRUPT_RISING_FALLING_EDGE    0x03U   /* Interrupt on Rising or Falling edge */
+#define ARM_GPIO_INTERRUPT_LOGIC_ONE              0x04U   /* Interrupt on Logic Level One */
+#define ARM_GPIO_INTERRUPT_LOGIC_ZERO             0x05U   /* Interrupt on Logic Level Zero */
 #define ARM_GPIO_INTERRUPT_MAX_CONFIG_PARA        0x06U   /* Internal use and not used by user */
 
 /*----- GPIO Control Codes: Interrupt -----*/

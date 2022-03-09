@@ -377,7 +377,7 @@ static int32_t USART_DmaSend(const void *data, uint32_t num, cmsis_usart_dma_dri
     status_t status;
     usart_transfer_t xfer;
 
-    xfer.data     = (uint8_t *)data;
+    xfer.txData   = (const uint8_t *)data;
     xfer.dataSize = num;
 
     status = USART_TransferSendDMA(usart->resource->base, usart->handle, &xfer);
@@ -407,7 +407,7 @@ static int32_t USART_DmaReceive(void *data, uint32_t num, cmsis_usart_dma_driver
     status_t status;
     usart_transfer_t xfer;
 
-    xfer.data     = (uint8_t *)data;
+    xfer.rxData   = (uint8_t *)data;
     xfer.dataSize = num;
 
     status = USART_TransferReceiveDMA(usart->resource->base, usart->handle, &xfer);
@@ -641,7 +641,7 @@ static int32_t USART_NonBlockingSend(const void *data, uint32_t num, cmsis_usart
     status_t status;
     usart_transfer_t xfer;
 
-    xfer.data     = (uint8_t *)data;
+    xfer.txData   = (const uint8_t *)data;
     xfer.dataSize = num;
 
     status = USART_TransferSendNonBlocking(usart->resource->base, usart->handle, &xfer);
@@ -671,7 +671,7 @@ static int32_t USART_NonBlockingReceive(void *data, uint32_t num, cmsis_usart_no
     status_t status;
     usart_transfer_t xfer;
 
-    xfer.data     = (uint8_t *)data;
+    xfer.rxData   = (uint8_t *)data;
     xfer.dataSize = num;
 
     status = USART_TransferReceiveNonBlocking(usart->resource->base, usart->handle, &xfer, NULL);

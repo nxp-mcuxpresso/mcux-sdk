@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1 */
+#define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 1, 2)) /*!< Version 2.1.2 */
 /*@}*/
 
 #ifndef ASRC_XFER_QUEUE_SIZE
@@ -61,6 +61,7 @@
 #define ASRC_ASRCSR_OUTPUT_CLOCK_SOURCE(source, index)                                    \
     ((uint32_t)((uint32_t)(source) << (ASRC_ASRCSR_AOCSA_SHIFT + (uint32_t)(index)*4U)) & \
      ASRC_ASRCSR_OUTPUT_CLOCK_SOURCE_MASK(index))
+
 #define ASRC_ASRCDR_INPUT_PRESCALER_MASK(index) \
     ((uint32_t)(index) < 2U ? ((uint32_t)7U << (ASRC_ASRCDR1_AICPA_SHIFT + (uint32_t)(index)*6U)) : 7U)
 #define ASRC_ASRCDR_INPUT_PRESCALER(prescaler, index)                                                              \
@@ -85,6 +86,13 @@
     (((uint32_t)(index) < 2U ? ((uint32_t)(divider) << (ASRC_ASRCDR1_AOCDA_SHIFT + (uint32_t)(index)*6U)) : \
                                ((uint32_t)(divider) << 9U)) &                                               \
      ASRC_ASRCDR_OUTPUT_DIVIDER_MASK(index))
+
+#define ASCR_ASRCDR_OUTPUT_CLOCK_DIVIDER_PRESCALER(value, index)                                          \
+    (((uint32_t)(index) < 2U ? ((uint32_t)(value) << (ASRC_ASRCDR1_AOCPA_SHIFT + (uint32_t)(index)*6U)) : \
+                               ((uint32_t)(value) << 6U)))
+#define ASCR_ASRCDR_INPUT_CLOCK_DIVIDER_PRESCALER(value, index) \
+    (((uint32_t)(index) < 2U ? ((uint32_t)(value) << ((uint32_t)(index)*6U)) : ((uint32_t)(value))))
+
 #define ASRC_IDEAL_RATIO_HIGH(base, index)    *(volatile uint32_t *)((uint32_t)(&(base)->ASRIDRHA) + (uint32_t)(index)*8U)
 #define ASRC_IDEAL_RATIO_LOW(base, index)     *(volatile uint32_t *)((uint32_t)(&(base)->ASRIDRLA) + (uint32_t)(index)*8U)
 #define ASRC_ASRMCR(base, index)              *(volatile uint32_t *)((uint32_t)(&(base)->ASRMCRA) + (uint32_t)(index)*8U)
@@ -224,28 +232,6 @@ typedef enum _asrc_ratio
         3U, /*!< ideal ratio use manual configure ratio, can be used for the non-real time streaming audio */
 } asrc_ratio_t;
 
-/*! @brief The ASRC clock source */
-typedef enum _asrc_clock_source
-{
-    kASRC_ClockSourceNotAvalible = -1U, /*!< clock source not avalible */
-
-    kASRC_ClockSourceBitClock0 = 0U,  /*!< clock source from bit clock 0 */
-    kASRC_ClockSourceBitClock1 = 1U,  /*!< clock source from bit clock 1 */
-    kASRC_ClockSourceBitClock2 = 2U,  /*!< clock source from bit clock 2 */
-    kASRC_ClockSourceBitClock3 = 3U,  /*!< clock source from bit clock 3 */
-    kASRC_ClockSourceBitClock4 = 4U,  /*!< clock source from bit clock 4 */
-    kASRC_ClockSourceBitClock5 = 5U,  /*!< clock source from bit clock 5 */
-    kASRC_ClockSourceBitClock6 = 6U,  /*!< clock source from bit clock 6 */
-    kASRC_ClockSourceBitClock7 = 7U,  /*!< clock source from bit clock 7 */
-    kASRC_ClockSourceBitClock8 = 8U,  /*!< clock source from bit clock 8 */
-    kASRC_ClockSourceBitClock9 = 9U,  /*!< clock source from bit clock 9 */
-    kASRC_ClockSourceBitClocka = 10U, /*!< clock source from bit clock a */
-    kASRC_ClockSourceBitClockb = 11U, /*!< clock source from bit clock b */
-    kASRC_ClockSourceBitClockc = 12U, /*!< clock source from bit clock c */
-    kASRC_ClockSourceBitClockd = 13U, /*!< clock source from bit clock d */
-    kASRC_ClockSourceBitClocke = 14U, /*!< clock source from bit clock e */
-} asrc_clock_source_t;
-
 /*! @brief Number of channels in audio data */
 typedef enum _asrc_audio_channel
 {
@@ -287,11 +273,13 @@ typedef enum _asrc_sign_extension
 typedef struct _asrc_channel_pair_config
 {
     asrc_audio_channel_t audioDataChannels; /*!< audio data channel numbers */
-    asrc_clock_source_t inClockSource;      /*!< input clock source */
-    uint32_t inSourceClock_Hz;              /*!< input source clock frequency */
+    asrc_clock_source_t
+        inClockSource;         /*!< input clock source, reference the clock source definition in SOC header file */
+    uint32_t inSourceClock_Hz; /*!< input source clock frequency */
 
-    asrc_clock_source_t outClockSource; /*!< output clock source */
-    uint32_t outSourceClock_Hz;         /*!< output source clock frequency */
+    asrc_clock_source_t
+        outClockSource;         /*!< output clock source, reference the clock source definition in SOC header file */
+    uint32_t outSourceClock_Hz; /*!< output source clock frequency */
 
     asrc_ratio_t sampleRateRatio; /*!< sample rate ratio type */
 
@@ -503,11 +491,11 @@ static inline void ASRC_ChannelPairEnable(ASRC_Type *base, asrc_channel_pair_t c
 {
     if (enable)
     {
-        base->ASRCTR |= ((uint32_t)channelPair + 1U) << ASRC_ASRCTR_ASREA_SHIFT;
+        base->ASRCTR |= 1UL << ((uint32_t)channelPair + 1U);
     }
     else
     {
-        base->ASRCTR &= ~(((uint32_t)channelPair + 1U) << ASRC_ASRCTR_ASREA_SHIFT);
+        base->ASRCTR &= ~(1UL << ((uint32_t)channelPair + 1U));
     }
 }
 /*! @} */

@@ -73,7 +73,7 @@ enum
     kSerialFlash_8Pads = 8,
 };
 
-/* !@brief FLEXSPI clock configuration - In High speed boot mode mode */
+/* !@brief FLEXSPI clock configuration - In High speed boot mode */
 enum
 {
     kFlexSpiSerialClk_30MHz  = 1,

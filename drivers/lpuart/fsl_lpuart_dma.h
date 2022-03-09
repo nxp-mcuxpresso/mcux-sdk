@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPUART DMA driver version. */
-#define FSL_LPUART_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+#define FSL_LPUART_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 2))
 /*@}*/
 
 /* Forward declaration of the handle typedef. */
@@ -67,6 +67,9 @@ extern "C" {
 
 /*!
  * @brief Initializes the LPUART handle which is used in transactional functions.
+ *
+ * @note This function disables all LPUART interrupts.
+ *
  * @param base LPUART peripheral base address.
  * @param handle Pointer to lpuart_dma_handle_t structure.
  * @param callback Callback function.
@@ -164,6 +167,8 @@ status_t LPUART_TransferGetReceiveCountDMA(LPUART_Type *base, lpuart_dma_handle_
  * @brief LPUART DMA IRQ handle function.
  *
  * This function handles the LPUART tx complete IRQ request and invoke user callback.
+ * @note This function is used as default IRQ handler by double weak mechanism.
+ * If user's specific IRQ handler is implemented, make sure this function is invoked in the handler.
  *
  * @param base LPUART peripheral base address.
  * @param lpuartDmaHandle LPUART handle pointer.

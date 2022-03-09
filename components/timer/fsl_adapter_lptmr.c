@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  *
@@ -113,9 +113,7 @@ hal_timer_status_t HAL_TimerInit(hal_timer_handle_t halTimerHandle, hal_timer_co
     irqId                   = mLptmrIrqId[halTimerState->instance];
 
     LPTMR_GetDefaultConfig(&lptmrConfig);
-#if (defined(TM_ENABLE_TIMER_CLOCK_SELECT) && (TM_ENABLE_TIMER_CLOCK_SELECT > 0U))
     lptmrConfig.prescalerClockSource = (lptmr_prescaler_clock_select_t)halTimerConfig->clockSrcSelect;
-#endif
 
 #if (defined(LPTMR_USE_FREE_RUNNING) && (LPTMR_USE_FREE_RUNNING > 0))
     lptmrConfig.enableFreeRunning = true;

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,7 +18,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define FSL_ENC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_ENC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 
 /*!
  * @brief Interrupt enable/disable mask.
@@ -29,8 +29,10 @@ enum _enc_interrupt_enable
     kENC_INDEXPulseInterruptEnable      = (1U << 1U), /*!< INDEX pulse interrupt enable. */
     kENC_WatchdogTimeoutInterruptEnable = (1U << 2U), /*!< Watchdog timeout interrupt enable. */
     kENC_PositionCompareInerruptEnable  = (1U << 3U), /*!< Position compare interrupt enable. */
+#if !(defined(FSL_FEATURE_ENC_HAS_NO_CTRL2_SAB_INT) && FSL_FEATURE_ENC_HAS_NO_CTRL2_SAB_INT)
     kENC_SimultBothPhaseChangeInterruptEnable =
-        (1U << 4U),                                     /*!< Simultaneous PHASEA and PHASEB change interrupt enable. */
+        (1U << 4U), /*!< Simultaneous PHASEA and PHASEB change interrupt enable. */
+#endif
     kENC_PositionRollOverInterruptEnable  = (1U << 5U), /*!< Roll-over interrupt enable. */
     kENC_PositionRollUnderInterruptEnable = (1U << 6U), /*!< Roll-under interrupt enable. */
 };
@@ -42,14 +44,16 @@ enum _enc_interrupt_enable
  */
 enum _enc_status_flags
 {
-    kENC_HOMETransitionFlag        = (1U << 0U), /*!< HOME signal transition interrupt request. */
-    kENC_INDEXPulseFlag            = (1U << 1U), /*!< INDEX Pulse Interrupt Request. */
-    kENC_WatchdogTimeoutFlag       = (1U << 2U), /*!< Watchdog timeout interrupt request. */
-    kENC_PositionCompareFlag       = (1U << 3U), /*!< Position compare interrupt request. */
+    kENC_HOMETransitionFlag  = (1U << 0U), /*!< HOME signal transition interrupt request. */
+    kENC_INDEXPulseFlag      = (1U << 1U), /*!< INDEX Pulse Interrupt Request. */
+    kENC_WatchdogTimeoutFlag = (1U << 2U), /*!< Watchdog timeout interrupt request. */
+    kENC_PositionCompareFlag = (1U << 3U), /*!< Position compare interrupt request. */
+#if !(defined(FSL_FEATURE_ENC_HAS_NO_CTRL2_SAB_INT) && FSL_FEATURE_ENC_HAS_NO_CTRL2_SAB_INT)
     kENC_SimultBothPhaseChangeFlag = (1U << 4U), /*!< Simultaneous PHASEA and PHASEB change interrupt request. */
-    kENC_PositionRollOverFlag      = (1U << 5U), /*!< Roll-over interrupt request. */
-    kENC_PositionRollUnderFlag     = (1U << 6U), /*!< Roll-under interrupt request. */
-    kENC_LastCountDirectionFlag    = (1U << 7U), /*!< Last count was in the up direction, or the down direction. */
+#endif
+    kENC_PositionRollOverFlag   = (1U << 5U), /*!< Roll-over interrupt request. */
+    kENC_PositionRollUnderFlag  = (1U << 6U), /*!< Roll-under interrupt request. */
+    kENC_LastCountDirectionFlag = (1U << 7U), /*!< Last count was in the up direction, or the down direction. */
 };
 
 /*!
@@ -137,6 +141,34 @@ typedef enum _enc_self_test_direction
     kENC_SelfTestDirectionNegative,      /*!< Self test generates the signal in negative direction. */
 } enc_self_test_direction_t;
 
+#if (defined(FSL_FEATURE_ENC_HAS_CTRL3) && FSL_FEATURE_ENC_HAS_CTRL3)
+/*!
+ * @brief Define prescaler value for clock in CTRL3.
+ *
+ * The clock is prescaled by a value of 2^PRSC which means that the prescaler logic
+ * can divide the clock by a minimum of 1 and a maximum of 32,768.
+ */
+typedef enum _enc_prescaler
+{
+    kENC_ClockDiv1     = 0,
+    kENC_ClockDiv2     = 1,
+    kENC_ClockDiv4     = 2,
+    kENC_ClockDiv8     = 3,
+    kENC_ClockDiv16    = 4,
+    kENC_ClockDiv32    = 5,
+    kENC_ClockDiv64    = 6,
+    kENC_ClockDiv128   = 7,
+    kENC_ClockDiv256   = 8,
+    kENC_ClockDiv512   = 9,
+    kENC_ClockDiv1024  = 10,
+    kENC_ClockDiv2048  = 11,
+    kENC_ClockDiv4096  = 12,
+    kENC_ClockDiv8192  = 13,
+    kENC_ClockDiv16384 = 14,
+    kENC_ClockDiv32768 = 15,
+} enc_prescaler_t;
+#endif
+
 /*!
  * @brief Define user configuration structure for ENC module.
  */
@@ -180,6 +212,12 @@ typedef struct _enc_config
     uint32_t positionModulusValue; /*!< Position modulus value. This value would be available only when
                                         "enableModuloCountMode" = true. The available value is a 32-bit number. */
     uint32_t positionInitialValue; /*!< Position initial value. The available value is a 32-bit number. */
+
+#if (defined(FSL_FEATURE_ENC_HAS_CTRL3) && FSL_FEATURE_ENC_HAS_CTRL3)
+    /* Prescaler. */
+    bool enablePeriodMeasurementFunction; /*!< Enable period measurement function. */
+    enc_prescaler_t prescalerValue;       /*!< The value of prescaler. */
+#endif
 } enc_config_t;
 
 /*!
@@ -254,6 +292,8 @@ void ENC_Deinit(ENC_Type *base);
  *   config->enableModuloCountMode                 = false;
  *   config->positionModulusValue                  = 0U;
  *   config->positionInitialValue                  = 0U;
+ *   config->prescalerValue                        = kENC_ClockDiv1;
+ *   config->enablePeriodMeasurementFunction       = true;
  * @endcode
  * @param config Pointer to a variable of configuration structure. See to "enc_config_t".
  */
@@ -431,6 +471,7 @@ static inline uint16_t ENC_GetRevolutionValue(ENC_Type *base)
 {
     return base->REV;
 }
+
 /*!
  * @brief  Get the hold position revolution counter's value.
  *
@@ -447,6 +488,69 @@ static inline uint16_t ENC_GetHoldRevolutionValue(ENC_Type *base)
     return base->REVH;
 }
 
+#if (defined(FSL_FEATURE_ENC_HAS_LASTEDGE) && FSL_FEATURE_ENC_HAS_LASTEDGE)
+/*!
+ * @brief  Get the last edge time value.
+ *
+ * @param  base ENC peripheral base address.
+ *
+ * @return     The last edge time hold value.
+ */
+static inline uint16_t ENC_GetLastEdgeTimeValue(ENC_Type *base)
+{
+    return base->LASTEDGE;
+}
+
+/*!
+ * @brief  Get the last edge time hold value.
+ *
+ * @param  base ENC peripheral base address.
+ *
+ * @return     The last edge time hold value.
+ */
+static inline uint16_t ENC_GetHoldLastEdgeTimeValue(ENC_Type *base)
+{
+    return base->LASTEDGEH;
+}
+#endif
+
+#if (defined(FSL_FEATURE_ENC_HAS_POSDPER) && FSL_FEATURE_ENC_HAS_POSDPER)
+/*!
+ * @brief  Get the position difference period value.
+ *
+ * @param  base ENC peripheral base address.
+ *
+ * @return     The position difference period hold value.
+ */
+static inline uint16_t ENC_GetPositionDifferencePeriodValue(ENC_Type *base)
+{
+    return base->POSDPER;
+}
+
+/*!
+ * @brief  Get the position difference period buffer value.
+ *
+ * @param  base ENC peripheral base address.
+ *
+ * @return     The position difference period hold value.
+ */
+static inline uint16_t ENC_GetPositionDifferencePeriodBufferValue(ENC_Type *base)
+{
+    return base->POSDPERBFR;
+}
+
+/*!
+ * @brief  Get the position difference period hold value.
+ *
+ * @param  base ENC peripheral base address.
+ *
+ * @return     The position difference period hold value.
+ */
+static inline uint16_t ENC_GetHoldPositionDifferencePeriodValue(ENC_Type *base)
+{
+    return base->POSDPERH;
+}
+#endif
 /* @} */
 
 #if defined(__cplusplus)
