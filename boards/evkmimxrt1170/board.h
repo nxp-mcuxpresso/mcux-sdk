@@ -176,6 +176,13 @@
 #define BOARD_BT_UART_IRQ         LPUART7_IRQn
 #define BOARD_BT_UART_IRQ_HANDLER LPUART7_IRQHandler
 
+/*! @brief The Ethernet port used by network examples, default use 1G port. */
+/* Below comment is for test script to easily define which port to be used, please don't delete. */
+/* @TEST_ANCHOR */
+#ifndef BOARD_NETWORK_USE_100M_ENET_PORT
+#define BOARD_NETWORK_USE_100M_ENET_PORT (0U)
+#endif
+
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */

@@ -27,6 +27,8 @@
 
 /*! @brief cache line size. */
 #define CACHE64_LINESIZE_BYTE (FSL_FEATURE_CACHE64_CTRL_LINESIZE_BYTE)
+
+#if (defined(FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT) && (FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT > 0))
 /*! @brief cache region number. */
 #define CACHE64_REGION_NUM (3U)
 /*! @brief cache region alignment. */
@@ -51,6 +53,7 @@ typedef struct _cache64_config
     /*!< Cacheable policy for each region. */
     cache64_policy_t policy[CACHE64_REGION_NUM];
 } cache64_config_t;
+#endif
 
 /*******************************************************************************
  * API
@@ -65,6 +68,7 @@ extern "C" {
  *@{
  */
 
+#if (defined(FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT) && (FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT > 0))
 /*!
  * @brief Returns an instance number given periphearl base address.
  *
@@ -72,6 +76,7 @@ extern "C" {
  * @return CACHE64_POLSEL instance number starting from 0.
  */
 uint32_t CACHE64_GetInstance(CACHE64_POLSEL_Type *base);
+#endif
 
 /*!
  * brief Returns an instance number given physical memory address.
@@ -81,6 +86,7 @@ uint32_t CACHE64_GetInstance(CACHE64_POLSEL_Type *base);
  */
 uint32_t CACHE64_GetInstanceByAddr(uint32_t address);
 
+#if (defined(FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT) && (FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT > 0))
 /*!
  * @brief Initializes an CACHE64 instance with the user configuration structure.
  *
@@ -102,6 +108,7 @@ status_t CACHE64_Init(CACHE64_POLSEL_Type *base, const cache64_config_t *config)
  * @param config Pointer to a configuration structure.
  */
 void CACHE64_GetDefaultConfig(cache64_config_t *config);
+#endif
 
 /*!
  * @brief Enables the cache.

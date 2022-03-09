@@ -22,6 +22,10 @@
      kCODEC_SupportPlayChannelRight1 | kCODEC_SupportPlaySourcePGA | kCODEC_SupportPlaySourceDAC |       \
      kCODEC_SupportPlaySourceInput)
 
+#define HAL_WM8960_VOLUME_CAPABILITY                                                                     \
+    (kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelRight0 | kCODEC_SupportPlayChannelLeft1 | \
+     kCODEC_SupportPlayChannelRight1 | kCODEC_VolumeDAC)
+
 #define HAL_WM8960_RECORD_CAPABILITY                                                                    \
     (kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelLeft1 | kCODEC_SupportPlayChannelLeft2 | \
      kCODEC_SupportPlayChannelRight0 | kCODEC_SupportPlayChannelRight1 | kCODEC_SupportPlayChannelRight2)
@@ -68,6 +72,7 @@
  ******************************************************************************/
 static const codec_capability_t s_wm8960_capability = {
     .codecPlayCapability   = HAL_WM8960_PLAY_CAPABILITY,
+    .codecVolumeCapability = HAL_WM8960_VOLUME_CAPABILITY,
     .codecModuleCapability = HAL_WM8960_MODULE_CAPABILITY,
     .codecRecordCapability = HAL_WM8960_RECORD_CAPABILITY,
 };
@@ -141,27 +146,41 @@ status_t HAL_CODEC_WM8960_SetVolume(void *handle, uint32_t playChannel, uint32_t
     status_t retVal       = kStatus_Success;
     uint32_t mappedVolume = 0U;
 
-    /*
-     * 0 is mute
-     * 1 - 100 is mapped to 0x30 - 0x7F
-     */
-    if (volume != 0U)
-    {
-        mappedVolume = (volume * (WM8960_HEADPHONE_MAX_VOLUME_vALUE - WM8960_HEADPHONE_MIN_VOLUME_vALUE)) / 100U +
-                       WM8960_HEADPHONE_MIN_VOLUME_vALUE;
-    }
-
     if (((playChannel & (uint32_t)kWM8960_HeadphoneLeft) != 0U) ||
         ((playChannel & (uint32_t)kWM8960_HeadphoneRight) != 0U))
     {
+        /*
+         * 0 is mute
+         * 1 - 100 is mapped to 0x30 - 0x7F
+         */
+        mappedVolume = (volume * (WM8960_HEADPHONE_MAX_VOLUME_vALUE - WM8960_HEADPHONE_MIN_VOLUME_vALUE)) / 100U +
+                       WM8960_HEADPHONE_MIN_VOLUME_vALUE;
         retVal = WM8960_SetVolume((wm8960_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
                                   kWM8960_ModuleHP, mappedVolume);
     }
 
     if (((playChannel & (uint32_t)kWM8960_SpeakerLeft) != 0U) || ((playChannel & (uint32_t)kWM8960_SpeakerRight) != 0U))
     {
+        /*
+         * 0 is mute
+         * 1 - 100 is mapped to 0x30 - 0x7F
+         */
+        mappedVolume = (volume * (WM8960_HEADPHONE_MAX_VOLUME_vALUE - WM8960_HEADPHONE_MIN_VOLUME_vALUE)) / 100U +
+                       WM8960_HEADPHONE_MIN_VOLUME_vALUE;
         retVal = WM8960_SetVolume((wm8960_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
                                   kWM8960_ModuleSpeaker, mappedVolume);
+    }
+
+    if ((playChannel & (uint32_t)kCODEC_VolumeDAC) != 0U)
+    {
+        /*
+         * 0 is mute
+         * 0 - 100 is mapped to 0x00 - 0xFF
+         */
+        mappedVolume = (volume * (WM8960_DAC_MAX_VOLUME_vALUE - 0U)) / 100U;
+
+        retVal = WM8960_SetVolume((wm8960_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
+                                  kWM8960_ModuleDAC, mappedVolume);
     }
 
     return retVal;

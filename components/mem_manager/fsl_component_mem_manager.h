@@ -95,7 +95,7 @@
 #define MEM_BLOCK_BUFFER_NONAME_DEFINE(blockSize, numberOfBlocks, id)                   \
     MEM_BLOCK_DATA_BUFFER_NONAME_DEFINE(blockSize, numberOfBlocks, id)                  \
     const static mem_config_t g_poolHeadBuffer##blockSize##_##numberOfBlocks##_##id = { \
-        (blockSize), (numberOfBlocks), (id), (0), (uint8_t *)&g_poolBuffer####blockSize##_##numberOfBlocks##_##id[0]}
+        (blockSize), (numberOfBlocks), (id), (0), (uint8_t *)&g_poolBuffer##blockSize##_##numberOfBlocks##_##id[0]}
 #define MEM_BLOCK_NONAME_BUFFER(blockSize, numberOfBlocks, id) \
     (uint8_t *)&g_poolHeadBuffer##blockSize##_##numberOfBlocks##_##id
 #endif /* MEM_MANAGER_PRE_CONFIGURE */
@@ -281,6 +281,14 @@ void *MEM_BufferRealloc(void *buffer, uint32_t new_size);
  * @retval 0           Return 0 in case of the legacy MemManager.
  */
 uint32_t MEM_GetHeapUpperLimit(void);
+
+/*!
+ * @brief Get the free space in the heap.
+ *
+ * @retval FreeHeapSize  Return the free space in the heap if MemManagerLight is used.
+ * @retval 0             Return 0 in case of the legacy MemManager.
+ */
+uint32_t MEM_GetFreeHeapSize(void);
 
 #if !defined(gMemManagerLight) || (gMemManagerLight == 0)
 #if (defined(MEM_MANAGER_ENABLE_TRACE) && (MEM_MANAGER_ENABLE_TRACE > 0U))

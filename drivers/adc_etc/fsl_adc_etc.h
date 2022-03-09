@@ -20,25 +20,9 @@
  * Definitions
  ******************************************************************************/
 /*! @brief ADC_ETC driver version */
-#define FSL_ADC_ETC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0)) /*!< Version 2.2.0. */
+#define FSL_ADC_ETC_DRIVER_VERSION (MAKE_VERSION(2, 2, 1)) /*!< Version 2.2.1. */
 /*! @brief The mask of status flags cleared by writing 1. */
 #define ADC_ETC_DMA_CTRL_TRGn_REQ_MASK 0xFF0000U
-
-#if defined(FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN) && FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN
-#if defined(ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE2_MASK)
-#define ADC_ETC_DONE2_ERR_IRQ_TRIG0_DONE2_MASK ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE2_MASK
-#define DONE2_ERR_IRQ                          DONE2_3_ERR_IRQ
-#endif /* ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE2_MASK */
-
-#if defined(ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE3_MASK)
-#define ADC_ETC_DONE2_ERR_IRQ_TRIG0_DONE3_MASK ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE3_MASK
-#endif /* ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE3_MASK */
-
-#if defined(ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_ERR_MASK)
-#define ADC_ETC_DONE2_ERR_IRQ_TRIG0_ERR_MASK ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_ERR_MASK
-#endif /* ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_ERR_MASK */
-
-#endif /* FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN */
 
 /*!
  * @brief ADC_ETC customized status flags mask.

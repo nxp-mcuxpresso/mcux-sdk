@@ -232,7 +232,7 @@ status_t FLEXIO_UART_TransferSendEDMA(FLEXIO_UART_Type *base,
                              xfer->dataSize, kEDMA_MemoryToPeripheral);
 
         /* Store the initially configured eDMA minor byte transfer count into the FLEXIO UART handle */
-        handle->nbytes = sizeof(uint8_t);
+        handle->nbytes = 1U;
 
         /* Submit transfer. */
         (void)EDMA_SubmitTransfer(handle->txEdmaHandle, &xferConfig);
@@ -289,7 +289,7 @@ status_t FLEXIO_UART_TransferReceiveEDMA(FLEXIO_UART_Type *base,
                              xfer->data, sizeof(uint8_t), sizeof(uint8_t), xfer->dataSize, kEDMA_PeripheralToMemory);
 
         /* Store the initially configured eDMA minor byte transfer count into the FLEXIO UART handle */
-        handle->nbytes = sizeof(uint8_t);
+        handle->nbytes = (uint8_t)sizeof(uint8_t);
 
         /* Submit transfer. */
         (void)EDMA_SubmitTransfer(handle->rxEdmaHandle, &xferConfig);

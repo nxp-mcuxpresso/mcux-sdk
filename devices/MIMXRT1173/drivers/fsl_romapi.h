@@ -363,8 +363,9 @@ typedef enum _flexspi_operation
     kFLEXSPIOperation_Config,   /*!< FLEXSPI operation: Configure device mode, the TX FIFO size is fixed in LUT. */
     kFLEXSPIOperation_Write,    /*!< FLEXSPI operation: Write, only TX buffer is effective */
     kFLEXSPIOperation_Read,     /*!< FLEXSPI operation: Read, only Rx Buffer is effective. */
-    kFLEXSPIOperation_End = 3U, /*!< FLEXSPI operation: End. */
 } flexspi_operation_t;
+
+#define kFLEXSPIOperation_End   kFLEXSPIOperation_Read
 
 /*! @brief FLEXSPI Transfer Context */
 typedef struct _flexspi_xfer

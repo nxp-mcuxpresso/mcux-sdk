@@ -246,7 +246,32 @@ _Pragma("diag_suppress=Pm120")
      * @return  Returns the number of characters printed or a negative value if an error occurs.
      */
     int SHELL_Printf(shell_handle_t shellHandle, const char *formatString, ...);
+    /*!
+     * @brief Sends data to the shell output stream with OS synchronization.
+     *
+     * This function is used to send data to the shell output stream with OS synchronization, note the function could
+     * not be called in ISR.
+     *
+     * @param shellHandle The shell module handle pointer.
+     * @param buffer Start address of the data to write.
+     * @param length Length of the data to write.
+     * @retval kStatus_SHELL_Success Successfully send data.
+     * @retval kStatus_SHELL_Error An error occurred.
+     */
+    shell_status_t SHELL_WriteSynchronization(shell_handle_t shellHandle, const char *buffer, uint32_t length);
 
+    /*!
+     * @brief Writes formatted output to the shell output stream with OS synchronization.
+     *
+     * Call this function to write a formatted output to the shell output stream with OS synchronization, note the
+     * function could not be called in ISR.
+     *
+     * @param shellHandle The shell module handle pointer.
+     *
+     * @param   formatString Format string.
+     * @return  Returns the number of characters printed or a negative value if an error occurs.
+     */
+    int SHELL_PrintfSynchronization(shell_handle_t shellHandle, const char *formatString, ...);
     /*!
      * @brief Change shell prompt.
      *
@@ -280,6 +305,26 @@ _Pragma("diag_suppress=Pm120")
 #if !(defined(SHELL_NON_BLOCKING_MODE) && (SHELL_NON_BLOCKING_MODE > 0U))
     void SHELL_Task(shell_handle_t shellHandle);
 #endif
+
+    /*!
+     * @brief Check if code is running in ISR.
+     *
+     * This function is used to check if code running in ISR.
+     *
+     * @retval TRUE if code runing in ISR.
+     */
+    static inline bool SHELL_checkRunningInIsr(void)
+    {
+#if (defined(__DSC__) && defined(__CW__))
+        return !(isIRQAllowed());
+#elif defined(__GIC_PRIO_BITS)
+    return (0x13 == (__get_CPSR() & CPSR_M_Msk));
+#elif defined(__get_IPSR)
+    return (0U != __get_IPSR());
+#else
+    return false;
+#endif
+    }
 
     /* @} */
 

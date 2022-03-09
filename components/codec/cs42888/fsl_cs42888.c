@@ -163,14 +163,15 @@ void CS42888_SetFuncMode(cs42888_handle_t *handle, cs42888_func_mode mode)
 
 static void CS42888_Reset(cs42888_handle_t *handle, cs42888_reset codecReset)
 {
-    assert(codecReset != NULL);
-
-    /* hold reset 0 */
-    codecReset(false);
-    /* delay 400ms */
-    CS42888_DelayMs(400U);
-    /* hold reset 0 */
-    codecReset(true);
+    if (codecReset != NULL)
+    {
+        /* hold reset 0 */
+        codecReset(false);
+        /* delay 400ms */
+        CS42888_DelayMs(400U);
+        /* hold reset 0 */
+        codecReset(true);
+    }
 }
 
 status_t CS42888_Deinit(cs42888_handle_t *handle)

@@ -74,7 +74,7 @@
 
 #if defined(MIPI_DSI_HOST_DPHY_PD_TX_dphy_pd_tx_MASK)
 #define DPHY_PD_REG DPHY_PD_TX
-#elif defined(MIPI_DSI_HOST_DPHY_PD_DPHY_dphy_pd_dphy_MASK)
+#elif (defined(MIPI_DSI_HOST_DPHY_PD_DPHY_dphy_pd_dphy_MASK) || defined(MIPI_DSI_HOST_DPHY_PD_DPHY_PD_DPHY_MASK))
 #define DPHY_PD_REG DPHY_PD_DPHY
 #endif
 
@@ -834,7 +834,8 @@ void DSI_WriteApbTxPayloadExt(
     /* Write the payload to the FIFO. */
     for (i = 0; i < payloadSize / 4U; i++)
     {
-        base->DSI_HOST_TX_PAYLOAD = *(const uint32_t *)(const void *)payload;
+        base->DSI_HOST_TX_PAYLOAD =
+            ((uint32_t)payload[3] << 24U) | ((uint32_t)payload[2] << 16U) | ((uint32_t)payload[1] << 8U) | payload[0];
         payload += 4U;
     }
 
@@ -1316,5 +1317,13 @@ void MIPI_DSI1_INT_OUT_DriverIRQHandler(void);
 void MIPI_DSI1_INT_OUT_DriverIRQHandler(void)
 {
     s_dsiIsr(MIPI_DSI_HOST1, s_dsiHandle[1]);
+}
+#endif
+
+#if defined(MIPI_DSI)
+void DSI_DriverIRQHandler(void);
+void DSI_DriverIRQHandler(void)
+{
+    s_dsiIsr(MIPI_DSI, s_dsiHandle[0]);
 }
 #endif

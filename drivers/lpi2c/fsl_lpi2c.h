@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPI2C driver version. */
-#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
@@ -350,8 +350,10 @@ typedef struct _lpi2c_slave_config
     } sclStall;
     bool ignoreAck;                   /*!< Continue transfers after a NACK is detected. */
     bool enableReceivedAddressRead;   /*!< Enable reading the address received address as the first byte of data. */
-    uint32_t sdaGlitchFilterWidth_ns; /*!< Width in nanoseconds of the digital filter on the SDA signal. */
-    uint32_t sclGlitchFilterWidth_ns; /*!< Width in nanoseconds of the digital filter on the SCL signal. */
+    uint32_t sdaGlitchFilterWidth_ns; /*!< Width in nanoseconds of the digital filter on the SDA signal. Set to 0 to
+                                         disable. */
+    uint32_t sclGlitchFilterWidth_ns; /*!< Width in nanoseconds of the digital filter on the SCL signal. Set to 0 to
+                                         disable. */
     uint32_t dataValidDelay_ns;       /*!< Width in nanoseconds of the data valid delay. */
     uint32_t clockHoldTime_ns;        /*!< Width in nanoseconds of the clock hold time. */
 } lpi2c_slave_config_t;

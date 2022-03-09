@@ -10,6 +10,12 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/.
 )
 
+#OR Logic component
+if(${MCUX_DEVICE} STREQUAL "MIMXRT1166_cm7")
+    include(driver_edma_MIMXRT1166_cm7)
+endif()
+if(${MCUX_DEVICE} STREQUAL "MIMXRT1176_cm7")
+    include(driver_edma_MIMXRT1176_cm7)
+endif()
 
-include(driver_edma)
 include(driver_asrc)

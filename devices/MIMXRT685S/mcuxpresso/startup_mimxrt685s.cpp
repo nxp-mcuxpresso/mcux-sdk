@@ -1,10 +1,10 @@
 //*****************************************************************************
 // MIMXRT685S_cm33 startup code for use with MCUXpresso IDE
 //
-// Version : 160420
+// Version : 101121
 //*****************************************************************************
 //
-// Copyright 2016-2020 NXP
+// Copyright 2016-2021 NXP
 // All rights reserved.
 //
 // SPDX-License-Identifier: BSD-3-Clause
@@ -240,8 +240,6 @@ WEAK extern void __imghdr_imagetype();
 // This relies on the linker script to place at correct location in memory.
 //*****************************************************************************
 
-
-
 extern void (* const g_pfnVectors[])(void);
 extern void * __Vectors __attribute__ ((alias ("g_pfnVectors")));
 
@@ -256,7 +254,7 @@ void (* const g_pfnVectors[])(void) = {
     BusFault_Handler,                  // The bus fault handler
     UsageFault_Handler,                // The usage fault handler
     SecureFault_Handler,               // The secure fault handler
-#if (__ARM_FEATURE_CMSE & 0x2)
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
     (void (*)())0x180000,                // Image length
 #else
     (void (*)())((unsigned)_image_size), // Image length
@@ -330,8 +328,6 @@ void (* const g_pfnVectors[])(void) = {
     CASPER_IRQHandler,           // 73: Casper cryptographic coprocessor
     PMC_PMIC_IRQHandler,         // 74: Power management IC
     HASHCRYPT_IRQHandler,        // 75: Hash-AES unit
-
-
 }; /* End of g_pfnVectors */
 
 #if defined(ENABLE_RAM_VECTOR_TABLE)
@@ -382,10 +378,8 @@ extern unsigned int __bss_section_table_end;
 //*****************************************************************************
 __attribute__ ((naked, section(".after_vectors.reset")))
 void ResetISR(void) {
-
     // Disable interrupts
     __asm volatile ("cpsid i");
-
     // Config VTOR & MSPLIM register
     __asm volatile ("LDR R0, =0xE000ED08  \n"
                     "STR %0, [R0]         \n"
@@ -426,7 +420,6 @@ void ResetISR(void) {
         SectionLen = *SectionTableAddr++;
         bss_init(ExeAddr, SectionLen);
     }
-
 
 #if defined (__cplusplus)
     //

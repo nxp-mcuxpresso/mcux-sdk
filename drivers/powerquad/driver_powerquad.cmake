@@ -17,4 +17,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
+include(CMSIS_DSP_Library)
 include(driver_common)

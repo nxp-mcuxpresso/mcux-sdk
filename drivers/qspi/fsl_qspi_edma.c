@@ -223,7 +223,7 @@ status_t QSPI_TransferSendEDMA(QuadSPI_Type *base, qspi_edma_handle_t *handle, q
                              (sizeof(uint32_t) * (uint32_t)handle->count), xfer->dataSize, kEDMA_MemoryToPeripheral);
 
         /* Store the initially configured eDMA minor byte transfer count into the QSPI handle */
-        handle->nbytes = (sizeof(uint32_t) * handle->count);
+        handle->nbytes = (uint8_t)(sizeof(uint32_t) * handle->count);
 
         /* Submit transfer. */
         do
@@ -276,7 +276,7 @@ status_t QSPI_TransferReceiveEDMA(QuadSPI_Type *base, qspi_edma_handle_t *handle
                              (sizeof(uint32_t) * (uint32_t)handle->count), xfer->dataSize, kEDMA_MemoryToMemory);
 
         /* Store the initially configured eDMA minor byte transfer count into the QSPI handle */
-        handle->nbytes = (sizeof(uint32_t) * handle->count);
+        handle->nbytes = (uint8_t)(sizeof(uint32_t) * handle->count);
         /* Submit transfer. */
         do
         {

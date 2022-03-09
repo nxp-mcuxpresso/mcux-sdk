@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020, NXP
+ * Copyright 2017-2021, NXP
  * All rights reserved.
  *
  *
@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief DCDC driver version. */
-#define FSL_DCDC_DRIVER_VERSION (MAKE_VERSION(2, 2, 1)) /*!< Version 2.2.1. */
+#define FSL_DCDC_DRIVER_VERSION (MAKE_VERSION(2, 3, 0)) /*!< Version 2.3.0. */
 
 /*!
  * @brief DCDC status flags.
@@ -218,11 +218,6 @@ typedef struct _dcdc_loop_control_config
                                            0x0, the loop filter of the DC-DC converter is stepped once by a value
                                            proportional to the change. This can be used to force a certain control loop
                                            behavior, such as improving response under known heavy load transients. */
-    uint32_t controlParameterMagnitude; /*!< Available range is 0~15. Magnitude of proportional control parameter in the
-                                           switching DC-DC converter control loop. */
-    uint32_t integralProportionalRatio; /*!< Available range is 0~3.Ratio of integral control parameter to proportional
-                                           control parameter in the switching DC-DC converter, and can be used to
-                                           optimize efficiency and loop response. */
 } dcdc_loop_control_config_t;
 /*!
  * @brief Configuration for DCDC low power.
@@ -487,8 +482,6 @@ static inline void DCDC_SetBandgapVoltageTrimValue(DCDC_Type *base, uint32_t tri
  *   config->enableRCThresholdDetection = false;
  *   config->enableRCScaleCircuit = 0U;
  *   config->complementFeedForwardStep = 0U;
- *   config->controlParameterMagnitude = 2U;
- *   config->integralProportionalRatio = 2U;
  * @endcode
  *
  * @param config Pointer to configuration structure. See to "dcdc_loop_control_config_t"
@@ -650,24 +643,6 @@ void DCDC_AdjustLowPowerTargetVoltage(DCDC_Type *base, uint32_t VDDStandby);
  * @param config Pointer to configuration structure. See to "dcdc_internal_regulator_config_t".
  */
 void DCDC_SetInternalRegulatorConfig(DCDC_Type *base, const dcdc_internal_regulator_config_t *config);
-
-/*!
- * @brief Ajust delay to reduce ground noise.
- *
- * @param base DCDC peripheral base address.
- * @param enable Enable the feature or not.
- */
-static inline void DCDC_EnableAdjustDelay(DCDC_Type *base, bool enable)
-{
-    if (enable)
-    {
-        base->REG3 |= DCDC_REG3_MISC_DELAY_TIMING_MASK;
-    }
-    else
-    {
-        base->REG3 &= ~DCDC_REG3_MISC_DELAY_TIMING_MASK;
-    }
-}
 
 /*!
  * @brief Enable/Disable to improve the transition from heavy load to light load. It is valid while zero

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020 -2021 NXP
  * All rights reserved.
  *
  *
@@ -14,9 +14,8 @@ typedef struct _hal_time_stamp_handle_struct_t
 {
     uint32_t timeStampClock_Hz;
     uint8_t timeStampInstance;
-#if (defined(TM_ENABLE_TIME_STAMP_CLOCK_SELECT) && (TM_ENABLE_TIME_STAMP_CLOCK_SELECT > 0U))
     uint8_t timeStampClockSrcSelect;
-#endif
+
 } hal_time_stamp_handle_struct_t;
 
 /*******************************************************************************
@@ -47,9 +46,8 @@ static void HAL_HWTimeStampInit(hal_time_stamp_handle_t halTimeStampHandle)
     assert(halTimeStampHandle);
 
     LPTMR_GetDefaultConfig(&lptmrConfig);
-#if (defined(TM_ENABLE_TIME_STAMP_CLOCK_SELECT) && (TM_ENABLE_TIME_STAMP_CLOCK_SELECT > 0U))
     lptmrConfig.prescalerClockSource = (lptmr_prescaler_clock_select_t)halTimeStampState->timeStampClockSrcSelect;
-#endif
+
     /* Initialize the LPTMR */
     LPTMR_Init(s_LptmrBase[halTimeStampState->timeStampInstance], &lptmrConfig);
 #if (defined(FSL_FEATURE_LPTMR_CNR_WIDTH_IS_32B) && (FSL_FEATURE_LPTMR_CNR_WIDTH_IS_32B > 0))
@@ -76,11 +74,9 @@ void HAL_TimeStampInit(hal_time_stamp_handle_t halTimeStampHandle, hal_time_stam
     hal_time_stamp_handle_struct_t *halTimeStampState = halTimeStampHandle;
     assert(halTimeStampHandle);
 
-    halTimeStampState->timeStampInstance = halTimeStampConfig->instance;
-    halTimeStampState->timeStampClock_Hz = halTimeStampConfig->srcClock_Hz;
-#if (defined(TM_ENABLE_TIME_STAMP_CLOCK_SELECT) && (TM_ENABLE_TIME_STAMP_CLOCK_SELECT > 0U))
+    halTimeStampState->timeStampInstance       = halTimeStampConfig->instance;
+    halTimeStampState->timeStampClock_Hz       = halTimeStampConfig->srcClock_Hz;
     halTimeStampState->timeStampClockSrcSelect = halTimeStampConfig->clockSrcSelect;
-#endif
 
     HAL_HWTimeStampInit(halTimeStampHandle);
 }

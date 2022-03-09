@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020, NXP
+ * Copyright 2017-2021, NXP
  * All rights reserved.
  *
  *
@@ -445,8 +445,6 @@ void DCDC_ResetCurrentAlertSignal(DCDC_Type *base, bool enable)
  *   config->enableRCThresholdDetection = false;
  *   config->enableRCScaleCircuit = 0U;
  *   config->complementFeedForwardStep = 0U;
- *   config->controlParameterMagnitude = 2U;
- *   config->integralProportionalRatio = 2U;
  * endcode
  *
  * param config Pointer to configuration structure. See to "dcdc_loop_control_config_t"
@@ -464,8 +462,6 @@ void DCDC_GetDefaultLoopControlConfig(dcdc_loop_control_config_t *config)
     config->enableRCThresholdDetection     = false;
     config->enableRCScaleCircuit           = 0U;
     config->complementFeedForwardStep      = 0U;
-    config->controlParameterMagnitude      = 2U;
-    config->integralProportionalRatio      = 2U;
 }
 
 /*!
@@ -516,11 +512,8 @@ void DCDC_SetLoopControlConfig(DCDC_Type *base, const dcdc_loop_control_config_t
 
     /* configure the DCDC_REG2 register. */
     tmp32 = base->REG2 & ~(DCDC_REG2_LOOPCTRL_HYST_SIGN_MASK | DCDC_REG2_LOOPCTRL_RCSCALE_THRSH_MASK |
-                           DCDC_REG2_LOOPCTRL_EN_RCSCALE_MASK | DCDC_REG2_LOOPCTRL_DC_FF_MASK |
-                           DCDC_REG2_LOOPCTRL_DC_R_MASK | DCDC_REG2_LOOPCTRL_DC_C_MASK);
+                           DCDC_REG2_LOOPCTRL_EN_RCSCALE_MASK | DCDC_REG2_LOOPCTRL_DC_FF_MASK);
     tmp32 |= DCDC_REG2_LOOPCTRL_DC_FF(config->complementFeedForwardStep) |
-             DCDC_REG2_LOOPCTRL_DC_R(config->controlParameterMagnitude) |
-             DCDC_REG2_LOOPCTRL_DC_C(config->integralProportionalRatio) |
              DCDC_REG2_LOOPCTRL_EN_RCSCALE(config->enableRCScaleCircuit);
     if (config->enableInvertHysteresisSign)
     {

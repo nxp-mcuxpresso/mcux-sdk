@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -343,19 +343,19 @@ uint32_t ADC_ETC_GetInterruptStatusFlags(ADC_ETC_Type *base, adc_etc_external_tr
         tmp32 |= (uint32_t)kADC_ETC_Done1StatusFlagMask; /* Customized DONE1 status flags mask, which is defined in
                                                   fsl_adc_etc.h file. */
     }
-    if (((base->DONE2_ERR_IRQ) & ((uint32_t)ADC_ETC_DONE2_ERR_IRQ_TRIG0_DONE2_MASK << (uint32_t)sourceIndex)) != 0U)
+    if (((base->DONE2_3_ERR_IRQ) & ((uint32_t)ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE2_MASK << (uint32_t)sourceIndex)) != 0U)
     {
         tmp32 |= (uint32_t)kADC_ETC_Done2StatusFlagMask; /* Customized DONE2 status flags mask, which is defined in
                                                   fsl_adc_etc.h file. */
     }
 #if defined(FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN) && FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN
-    if (((base->DONE2_ERR_IRQ) & ((uint32_t)ADC_ETC_DONE2_ERR_IRQ_TRIG0_DONE3_MASK << (uint32_t)sourceIndex)) != 0U)
+    if (((base->DONE2_3_ERR_IRQ) & ((uint32_t)ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE3_MASK << (uint32_t)sourceIndex)) != 0U)
     {
         tmp32 |= (uint32_t)kADC_ETC_Done3StatusFlagMask; /* Customized DONE3 status flags mask, which is defined in
                                                   fsl_adc_etc.h file. */
     }
 #endif /* FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN */
-    if (((base->DONE2_ERR_IRQ) & ((uint32_t)ADC_ETC_DONE2_ERR_IRQ_TRIG0_ERR_MASK << (uint32_t)sourceIndex)) != 0U)
+    if (((base->DONE2_3_ERR_IRQ) & ((uint32_t)ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_ERR_MASK << (uint32_t)sourceIndex)) != 0U)
     {
         tmp32 |= (uint32_t)kADC_ETC_ErrorStatusFlagMask; /* Customized ERROR status flags mask, which is defined in
                                                   fsl_adc_etc.h file. */
@@ -382,17 +382,17 @@ void ADC_ETC_ClearInterruptStatusFlags(ADC_ETC_Type *base, adc_etc_external_trig
     }
     if (0U != (mask & (uint32_t)kADC_ETC_Done2StatusFlagMask)) /* Write 1 to clear DONE2 status flags. */
     {
-        base->DONE2_ERR_IRQ = ((uint32_t)ADC_ETC_DONE2_ERR_IRQ_TRIG0_DONE2_MASK << (uint32_t)sourceIndex);
+        base->DONE2_3_ERR_IRQ = ((uint32_t)ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE2_MASK << (uint32_t)sourceIndex);
     }
 #if defined(FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN) && FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN
     if (0U != (mask & (uint32_t)kADC_ETC_Done3StatusFlagMask)) /* Write 1 to clear DONE3 status flags. */
     {
-        base->DONE2_ERR_IRQ = ((uint32_t)ADC_ETC_DONE2_ERR_IRQ_TRIG0_DONE3_MASK << (uint32_t)sourceIndex);
+        base->DONE2_3_ERR_IRQ = ((uint32_t)ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_DONE3_MASK << (uint32_t)sourceIndex);
     }
 #endif                                                         /* FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN */
     if (0U != (mask & (uint32_t)kADC_ETC_ErrorStatusFlagMask)) /* Write 1 to clear ERROR status flags. */
     {
-        base->DONE2_ERR_IRQ = ((uint32_t)ADC_ETC_DONE2_ERR_IRQ_TRIG0_ERR_MASK << (uint32_t)sourceIndex);
+        base->DONE2_3_ERR_IRQ = ((uint32_t)ADC_ETC_DONE2_3_ERR_IRQ_TRIG0_ERR_MASK << (uint32_t)sourceIndex);
     }
 }
 

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 0.1, 2020-01-15
-**     Build:               b210427
+**     Build:               b211108
 **
 **     Abstract:
 **         Chip specific module features.
@@ -142,9 +142,9 @@
 /* @brief Has TRIGm_CHAIN_a_b IEn_EN. */
 #define FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN (0)
 /* @brief Has no TSC0 trigger related bitfields (bit field CTRL[EXT0_TRIG_ENABLE], CTRL[EXT0_TRIG_PRIORITY]). */
-#define FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG (0)
+#define FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG (1)
 /* @brief Has no TSC1 trigger related bitfields (bit field CTRL[EXT1_TRIG_ENABLE], CTRL[EXT1_TRIG_PRIORITY]). */
-#define FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG (0)
+#define FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG (1)
 
 /* AOI module features */
 
@@ -187,10 +187,12 @@
 #define FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE (0)
 /* @brief CAN instance support Flexible Data rate (CAN FD) protocol. */
 #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_FLEXIBLE_DATA_RATEn(x) (0)
-/* @brief Has extra MB interrupt or common one. */
-#define FSL_FEATURE_FLEXCAN_HAS_EXTRA_MB_INT (1)
 /* @brief Has memory error control (register MECR). */
 #define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL (0)
+/* @brief Has enhanced bit timing register (register EPRS, ENCBT, EDCBT and ETDC). */
+#define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_BIT_TIMING_REG (0)
+/* @brief Has Pretended Networking mode support. */
+#define FSL_FEATURE_FLEXCAN_HAS_PN_MODE (0)
 
 /* CCM module features */
 
@@ -266,6 +268,17 @@
 #define FSL_FEATURE_DMAMUX_HAS_A_ON (1)
 /* @brief Register CHCFGn width. */
 #define FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH (32)
+
+/* ENC module features */
+
+/* @brief Has no simultaneous PHASEA and PHASEB change interrupt (register bit field CTRL2[SABIE] and CTRL2[SABIRQ]). */
+#define FSL_FEATURE_ENC_HAS_NO_CTRL2_SAB_INT (1)
+/* @brief Has register CTRL3. */
+#define FSL_FEATURE_ENC_HAS_CTRL3 (0)
+/* @brief Has register LASTEDGE or LASTEDGEH. */
+#define FSL_FEATURE_ENC_HAS_LASTEDGE (0)
+/* @brief Has register POSDPERBFR, POSDPERH, or POSDPER. */
+#define FSL_FEATURE_ENC_HAS_POSDPER (0)
 
 /* ENET module features */
 
@@ -354,7 +367,7 @@
 /* @brief There is AHBBUSERROREN bit in INTEN register. */
 #define FSL_FEATURE_FLEXSPI_HAS_INTEN_AHBBUSERROREN (0)
 /* @brief There is CLRAHBTX_RXBUF bit in AHBCR register. */
-#define FSL_FEATURE_FLEXSPI_HAS_AHBCR_CLRAHBTX_RXBUF (0)
+#define FSL_FEATURE_FLEXSPI_HAS_AHBCR_CLRAHBTX_RXBUF (1)
 
 /* GPC module features */
 
@@ -395,6 +408,8 @@
 #define FSL_FEATURE_LPSPI_FIFO_SIZEn(x) (16)
 /* @brief Has separate DMA RX and TX requests. */
 #define FSL_FEATURE_LPSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
+/* @brief Has CCR1 (related to existence of registers CCR1). */
+#define FSL_FEATURE_LPSPI_HAS_CCR1 (0)
 
 /* LPUART module features */
 
@@ -558,6 +573,18 @@
 #define FSL_FEATURE_SEMC_HAS_NOR_WDH_TIME (0)
 /* @brief Has WDS time in NOR controller (register bit field NORCR2[WDS]). */
 #define FSL_FEATURE_SEMC_HAS_NOR_WDS_TIME (0)
+/* @brief Has LC time in NOR controller (register bit field NORCR2[LC]). */
+#define FSL_FEATURE_SEMC_HAS_NOR_LC_TIME (0)
+/* @brief Has RD time in NOR controller (register bit field NORCR2[RD]). */
+#define FSL_FEATURE_SEMC_HAS_NOR_RD_TIME (0)
+/* @brief Has WDH time in SRAM controller (register bit field SRAMCR2[WDH]). */
+#define FSL_FEATURE_SEMC_HAS_SRAM_WDH_TIME (0)
+/* @brief Has WDS time in SRAM controller (register bit field SRAMCR2[WDS]). */
+#define FSL_FEATURE_SEMC_HAS_SRAM_WDS_TIME (0)
+/* @brief Has LC time in SRAM controller (register bit field SRAMCR2[LC]). */
+#define FSL_FEATURE_SEMC_HAS_SRAM_LC_TIME (0)
+/* @brief Has RD time in SRAM controller (register bit field SRAMCR2[RD]). */
+#define FSL_FEATURE_SEMC_HAS_SRAM_RD_TIME (0)
 /* @brief SRAM count SEMC can support (register BRx). */
 #define FSL_FEATURE_SEMC_SUPPORT_SRAM_COUNT (1)
 /* @brief If SEMC support delay chain control (register DCCR). */
@@ -582,7 +609,7 @@
 /* @brief Has Active Tampers (regitser LPATCTLR, LPATCLKR, LPATRCnR). */
 #define FSL_FEATURE_SNVS_HAS_ACTIVE_TAMPERS (0)
 /* @brief Number of TAMPER. */
-#define FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER (1)
+#define FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER (0)
 
 /* SRC module features */
 
@@ -651,7 +678,7 @@
 /* TRNG module features */
 
 /* @brief TRNG has no TRNG_ACC bitfield. */
-#define FSL_FEATURE_TRNG_HAS_NO_TRNG_ACC (0)
+#define FSL_FEATURE_TRNG_HAS_NO_TRNG_ACC (1)
 
 /* USBHS module features */
 
@@ -694,7 +721,7 @@
     (((x) == USDHC1) ? (1) : \
     (((x) == USDHC2) ? (0) : (-1)))
 /* @brief Has no retuning time counter (HOST_CTRL_CAP[TIME_COUNT_RETURNING]) */
-#define FSL_FEATURE_USDHC_REGISTER_HOST_CTRL_CAP_HAS_NO_RETUNING_TIME_COUNTER (0)
+#define FSL_FEATURE_USDHC_REGISTER_HOST_CTRL_CAP_HAS_NO_RETUNING_TIME_COUNTER (1)
 
 /* XBARA module features */
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  *
@@ -84,20 +84,6 @@
 #define TM_ENABLE_TIME_STAMP (0)
 #endif
 
-/*
- * @brief   Enable/Disable clock select
- * This macro just for lptmr timer clock select, if the lptmr does not to use the default clock source.
- */
-#ifndef TM_ENABLE_TIMER_CLOCK_SELECT
-#define TM_ENABLE_TIMER_CLOCK_SELECT (0)
-#endif
-/*
- * @brief   Enable/Disable clock select
- * This macro just for lptmr time stamp clock select, if the lptmr does not to use the default clock source.
- */
-#ifndef TM_ENABLE_TIME_STAMP_CLOCK_SELECT
-#define TM_ENABLE_TIME_STAMP_CLOCK_SELECT (0)
-#endif
 /*! @brief Definition of timer manager handle size. */
 #define TIMER_HANDLE_SIZE (32U)
 
@@ -151,17 +137,17 @@ typedef struct _timer_config
                                is configured to 0, if you want use FTM2 hardware timer, then configure the instance
                                to 2, detail information please refer to the SOC corresponding RM. Invalid instance
                                value will cause initialization failure. */
-#if (defined(TM_ENABLE_TIMER_CLOCK_SELECT) && (TM_ENABLE_TIMER_CLOCK_SELECT > 0U))
-    uint8_t clockSrcSelect; /*!< Select clock source. It is just for lptmr timer clock select, if the lptmr does not
+
+    uint8_t clockSrcSelect; /*!< Select clock source. It is timer clock select, if the lptmr does not
                                  to use the default clock source*/
-#endif
+
 #if (defined(TM_ENABLE_TIME_STAMP) && (TM_ENABLE_TIME_STAMP > 0U))
     uint32_t timeStampSrcClock_Hz; /**< The timer stamp source clock frequency. */
     uint8_t timeStampInstance;     /**< Hardware timer module instance. This instance for time stamp */
-#if (defined(TM_ENABLE_TIME_STAMP_CLOCK_SELECT) && (TM_ENABLE_TIME_STAMP_CLOCK_SELECT > 0U))
-    uint8_t timeStampClockSrcSelect; /*!< Select clock source. It is just for lptmr timer clock select, if the lptmr
+
+    uint8_t timeStampClockSrcSelect; /*!< Select clock source. It is timer clock select, if the lptmr
                                         does not to use the default clock source*/
-#endif
+
 #endif
 } timer_config_t;
 

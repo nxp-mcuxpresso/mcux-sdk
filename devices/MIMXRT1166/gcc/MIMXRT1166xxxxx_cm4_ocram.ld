@@ -7,7 +7,7 @@
 **     Compiler:            GNU C Compiler
 **     Reference manual:    IMXRT1160RM, Rev 0, 03/2021
 **     Version:             rev. 0.1, 2020-12-29
-**     Build:               b210422
+**     Build:               b210709
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
@@ -37,6 +37,7 @@ MEMORY
 {
   m_interrupts          (RX)  : ORIGIN = 0x20200000, LENGTH = 0x00000400
   m_text                (RX)  : ORIGIN = 0x20200400, LENGTH = 0x0001FC00
+  m_qacode              (RX)  : ORIGIN = 0x1FFE0000, LENGTH = 0x00020000
   m_data                (RW)  : ORIGIN = 0x20000000, LENGTH = DEFINED(__heap_noncacheable__) ? 0x00020000 : 0x00020000 - HEAP_SIZE
   m_ncache              (RW)  : ORIGIN = 0x20248000, LENGTH = DEFINED(__heap_noncacheable__) ? 0x00008000 - HEAP_SIZE : 0x00008000
   m_data2               (RW)  : ORIGIN = 0x20240000, LENGTH = 0x00008000
@@ -159,11 +160,24 @@ SECTIONS
     *(m_usb_dma_init_data)
     *(.data)                 /* .data sections */
     *(.data*)                /* .data* sections */
+    *(DataQuickAccess)       /* quick access data section */
     KEEP(*(.jcr*))
     . = ALIGN(4);
     __data_end__ = .;        /* define a global symbol at data end */
   } > m_data
-  __NDATA_ROM = __DATA_ROM + (__data_end__ - __data_start__);
+
+  __ram_function_flash_start = __DATA_ROM + (__data_end__ - __data_start__); /* Symbol is used by startup for TCM data initialization */
+
+  .ram_function : AT(__ram_function_flash_start)
+  {
+    . = ALIGN(32);
+    __ram_function_start__ = .;
+    *(CodeQuickAccess)
+    . = ALIGN(128);
+    __ram_function_end__ = .;
+  } > m_qacode
+
+  __NDATA_ROM = __ram_function_flash_start + (__ram_function_end__ - __ram_function_start__);
   .ncache.init : AT(__NDATA_ROM)
   {
     __noncachedata_start__ = .;   /* create a global symbol at ncache data start */
@@ -226,4 +240,3 @@ SECTIONS
 
   ASSERT(__StackLimit >= __StackEnd, "region m_data overflowed with stack and heap")
 }
-

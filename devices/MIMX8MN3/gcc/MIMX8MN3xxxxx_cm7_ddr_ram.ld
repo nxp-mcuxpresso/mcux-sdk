@@ -1,18 +1,20 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX8MN3CVTIZ
+**     Processors:          MIMX8MN3CVPIZ
+**                          MIMX8MN3CVTIZ
+**                          MIMX8MN3DVPIZ
 **                          MIMX8MN3DVTJZ
 **
 **     Compiler:            GNU C Compiler
 **     Reference manual:    MX8MNRM, Rev.B, 07/2019
 **     Version:             rev. 2.0, 2019-09-23
-**     Build:               b200331
+**     Build:               b211101
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -58,7 +60,7 @@ SECTIONS
     . = ALIGN(8);
   } > m_text
 
-    /* The program code and other data goes into internal RAM */
+  /* The program code and other data goes into internal RAM */
   .text :
   {
     . = ALIGN(4);

@@ -21,8 +21,11 @@
  ******************************************************************************/
 /* Array of CACHE64_CTRL peripheral base address. */
 static CACHE64_CTRL_Type *const s_cache64ctrlBases[] = CACHE64_CTRL_BASE_PTRS;
+
+#if (defined(FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT) && (FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT > 0))
 /* Array of CACHE64_POLSEL peripheral base address. */
 static CACHE64_POLSEL_Type *const s_cache64polselBases[] = CACHE64_POLSEL_BASE_PTRS;
+#endif
 
 /* Array of CACHE64 physical memory base address. */
 static uint32_t const s_cache64PhymemBases[] = CACHE64_CTRL_PHYMEM_BASES;
@@ -30,13 +33,16 @@ static uint32_t const s_cache64PhymemBases[] = CACHE64_CTRL_PHYMEM_BASES;
 static uint32_t const s_cache64PhymemSizes[] = CACHE64_CTRL_PHYMEM_SIZES;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#ifdef CACHE64_CLOCKS
 /* Array of CACHE64_CTRL clock name. */
 static const clock_ip_name_t s_cache64Clocks[] = CACHE64_CLOCKS;
+#endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*******************************************************************************
  * Code
  ******************************************************************************/
+#if (defined(FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT) && (FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT > 0))
 /*!
  * brief Returns an instance number given periphearl base address.
  *
@@ -59,6 +65,8 @@ uint32_t CACHE64_GetInstance(CACHE64_POLSEL_Type *base)
 
     return i;
 }
+#endif
+
 /*!
  * brief Returns an instance number given physical memory address.
  *
@@ -80,6 +88,7 @@ uint32_t CACHE64_GetInstanceByAddr(uint32_t address)
     return i;
 }
 
+#if (defined(FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT) && (FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT > 0))
 /*!
  * @brief Initializes an CACHE64 instance with the user configuration structure.
  *
@@ -97,10 +106,12 @@ status_t CACHE64_Init(CACHE64_POLSEL_Type *base, const cache64_config_t *config)
     uint32_t polsel = 0;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#ifdef CACHE64_CLOCKS
     uint32_t instance = CACHE64_GetInstance(base);
 
     /* Enable CACHE64 clock */
     CLOCK_EnableClock(s_cache64Clocks[instance]);
+#endif
 #endif
 
     for (i = 0; i < CACHE64_REGION_NUM - 1U; i++)
@@ -135,6 +146,7 @@ void CACHE64_GetDefaultConfig(cache64_config_t *config)
     config->boundaryAddr[0] = s_cache64PhymemSizes[0];
     config->policy[0]       = kCACHE64_PolicyWriteBack;
 }
+#endif
 
 /*!
  * brief Enables the cache.

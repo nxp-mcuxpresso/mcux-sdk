@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2019-08-01
-**     Build:               b210329
+**     Build:               b211108
 **
 **     Abstract:
 **         Chip specific module features.
@@ -87,8 +87,6 @@
 #define FSL_FEATURE_SOC_PMU_COUNT (1)
 /* @brief PWM availability on the SoC. */
 #define FSL_FEATURE_SOC_PWM_COUNT (1)
-/* @brief ROMC availability on the SoC. */
-#define FSL_FEATURE_SOC_ROMC_COUNT (1)
 /* @brief SNVS availability on the SoC. */
 #define FSL_FEATURE_SOC_SNVS_COUNT (1)
 /* @brief SPDIF availability on the SoC. */
@@ -130,9 +128,9 @@
 /* @brief Has TRIGm_CHAIN_a_b IEn_EN. */
 #define FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN (1)
 /* @brief Has no TSC0 trigger related bitfields (bit field CTRL[EXT0_TRIG_ENABLE], CTRL[EXT0_TRIG_PRIORITY]). */
-#define FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG (0)
+#define FSL_FEATURE_ADC_ETC_HAS_NO_TSC0_TRIG (1)
 /* @brief Has no TSC1 trigger related bitfields (bit field CTRL[EXT1_TRIG_ENABLE], CTRL[EXT1_TRIG_PRIORITY]). */
-#define FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG (0)
+#define FSL_FEATURE_ADC_ETC_HAS_NO_TSC1_TRIG (1)
 
 /* AOI module features */
 
@@ -290,6 +288,8 @@
 #define FSL_FEATURE_LPSPI_FIFO_SIZEn(x) (16)
 /* @brief Has separate DMA RX and TX requests. */
 #define FSL_FEATURE_LPSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
+/* @brief Has CCR1 (related to existence of registers CCR1). */
+#define FSL_FEATURE_LPSPI_HAS_CCR1 (0)
 
 /* LPUART module features */
 
@@ -379,7 +379,7 @@
 /* @brief OTFAD has Key Blob Processing */
 #define FSL_FEATURE_OTFAD_HAS_KEYBLOB_PROCESSING (1)
 /* @brief OTFAD has interrupt request enable */
-#define FSL_FEATURE_OTFAD_HAS_HAS_IRQ_ENABLE (1)
+#define FSL_FEATURE_OTFAD_HAS_HAS_IRQ_ENABLE (0)
 /* @brief OTFAD has Force Error */
 #define FSL_FEATURE_OTFAD_HAS_FORCE_ERR (1)
 
@@ -462,11 +462,11 @@
 /* @brief Has Secure Real Time Counter Enabled and Valid (bit field LPCR[SRTC_ENV]). */
 #define FSL_FEATURE_SNVS_HAS_SRTC (1)
 /* @brief Has Passive Tamper Filter (regitser LPTGFCR). */
-#define FSL_FEATURE_SNVS_PASSIVE_TAMPER_FILTER (0)
+#define FSL_FEATURE_SNVS_PASSIVE_TAMPER_FILTER (1)
 /* @brief Has Active Tampers (regitser LPATCTLR, LPATCLKR, LPATRCnR). */
 #define FSL_FEATURE_SNVS_HAS_ACTIVE_TAMPERS (0)
 /* @brief Number of TAMPER. */
-#define FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER (1)
+#define FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER (0)
 
 /* SRC module features */
 

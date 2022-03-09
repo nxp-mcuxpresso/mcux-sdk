@@ -1,6 +1,10 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/ecspi
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/ii2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/iuart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8524
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
@@ -33,44 +37,52 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(driver_cmsis_ii2c)
 #    include(utility_debug_console_lite)
 #    include(driver_rdc)
 #    include(driver_ii2c)
 #    include(driver_ecspi_freertos)
-#    include(component_lists)
-#    include(device_system)
 #    include(driver_iuart_freertos)
-#    include(driver_clock)
+#    include(component_lists)
+#    include(driver_cmsis_ecspi)
+#    include(device_system)
+#    include(device_startup)
+#    include(CMSIS_Driver_Include_USART)
+#    include(CMSIS_Driver_Include_SPI)
 #    include(driver_ii2c_freertos)
 #    include(driver_gpt)
+#    include(utility_assert)
 #    include(CMSIS_Include_core_cm)
 #    include(driver_iuart)
 #    include(driver_ipwm)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_ecspi)
+#    include(CMSIS_Driver_Include_I2C)
 #    include(utility_assert_lite)
 #    include(driver_cache_lmem)
 #    include(driver_rdc_sema42)
-#    include(middleware_freertos-kernel_heap_4)
+#    include(driver_mu)
 #    include(middleware_multicore_rpmsg_lite_imx8mq_m4_freertos)
-#    include(utility_assert)
+#    include(driver_clock)
 #    include(utility_debug_console)
 #    include(device_CMSIS)
 #    include(driver_wdog01)
+#    include(middleware_multicore_rpmsg_lite_freertos)
+#    include(CMSIS_Driver_Include_Common)
 #    include(component_iuart_adapter)
 #    include(component_wm8524_adapter)
 #    include(driver_codec)
 #    include(utilities_misc_utilities)
 #    include(driver_common)
-#    include(device_startup)
 #    include(driver_sema4)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_tmu)
 #    include(component_serial_manager)
-#    include(middleware_multicore_rpmsg_lite)
 #    include(driver_igpio)
 #    include(driver_sai)
 #    include(component_serial_manager_uart)
 #    include(driver_wm8524)
+#    include(middleware_multicore_rpmsg_lite_MIMX8MQ6)
 #    include(middleware_freertos-kernel_MIMX8MQ6)
-#    include(driver_mu)
+#    include(driver_cmsis_iuart)
 #    include(driver_qspi)

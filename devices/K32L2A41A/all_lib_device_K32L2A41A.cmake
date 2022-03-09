@@ -1,10 +1,22 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpi2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpspi
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpuart
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/button
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/gpio
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/led
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/log
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/panic
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/timer_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/adc16
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cmp
@@ -37,7 +49,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tstmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -49,68 +63,105 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
-#    include(driver_llwu)
 #    include(driver_lpuart_freertos)
-#    include(driver_flexio_spi_edma)
-#    include(driver_trng)
-#    include(component_lpuart_adapter)
-#    include(driver_lpi2c_freertos)
-#    include(driver_port)
+#    include(component_lpit_adapter)
 #    include(driver_dmamux)
-#    include(driver_lpspi)
-#    include(driver_lpi2c_edma)
-#    include(driver_gpio)
-#    include(component_lists)
+#    include(utility_shell)
+#    include(driver_cmsis_lpuart)
 #    include(driver_dac)
 #    include(device_system)
-#    include(driver_tpm)
-#    include(driver_lpit)
-#    include(driver_cmp)
-#    include(device_startup)
-#    include(driver_adc16)
-#    include(driver_clock)
-#    include(utility_notifier)
-#    include(utility_debug_console_lite)
 #    include(driver_flexio_uart)
-#    include(component_osa)
-#    include(driver_edma)
-#    include(driver_lpuart)
-#    include(CMSIS_Include_core_cm)
-#    include(driver_flexio_spi)
 #    include(middleware_mmcau_common_files)
-#    include(middleware_mmcau_cm0p)
-#    include(middleware_freertos-kernel_extension)
 #    include(driver_flexio)
-#    include(utility_shell)
-#    include(driver_rcm)
 #    include(middleware_freertos-kernel_K32L2A41A)
-#    include(driver_trgmux)
-#    include(driver_tsi_v4)
 #    include(driver_flexio_i2c_master)
-#    include(driver_sim)
 #    include(middleware_baremetal)
-#    include(utility_debug_console)
-#    include(driver_flash)
-#    include(utility_assert)
-#    include(driver_mmdvsq)
-#    include(driver_lpspi_edma)
+#    include(component_log_backend_ringbuffer)
 #    include(driver_lpuart_edma)
-#    include(device_CMSIS)
+#    include(driver_lpspi_edma)
 #    include(driver_flexio_uart_edma)
-#    include(driver_tstmr)
 #    include(utilities_misc_utilities)
-#    include(driver_lpi2c)
-#    include(driver_common)
 #    include(driver_rtc)
-#    include(driver_smc)
-#    include(driver_crc)
 #    include(driver_wdog32)
-#    include(utility_assert_lite)
+#    include(component_gpio_adapter)
 #    include(component_serial_manager)
-#    include(driver_fxos8700cq)
-#    include(driver_lptmr)
+#    include(middleware_usb_device_cdc_external)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
-#    include(driver_pmc)
+#    include(component_log_backend_debugconsole)
+#    include(driver_llwu)
+#    include(component_lpuart_adapter)
+#    include(driver_lpi2c_edma)
+#    include(driver_cmsis_lpi2c)
+#    include(device_startup)
+#    include(component_panic)
+#    include(utility_assert)
+#    include(driver_mmdvsq)
+#    include(middleware_freertos-kernel_extension)
+#    include(CMSIS_Driver_Include_I2C)
+#    include(component_led)
+#    include(middleware_usb_common_header)
+#    include(middleware_usb_device_common_header)
+#    include(component_serial_manager_usb_cdc)
+#    include(driver_clock)
+#    include(component_button)
+#    include(device_CMSIS)
+#    include(CMSIS_Driver_Include_Common)
+#    include(driver_tstmr)
+#    include(component_osa_bm)
+#    include(middleware_usb_host_common_header)
+#    include(middleware_usb_host_cdc)
+#    include(driver_common)
+#    include(driver_smc)
+#    include(component_osa_free_rtos)
+#    include(component_lpi2c_adapter)
+#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
+#    include(driver_rcm)
+#    include(driver_trgmux)
+#    include(middleware_usb_host_msd)
+#    include(driver_port)
+#    include(driver_lpspi)
+#    include(driver_gpio)
+#    include(component_log)
+#    include(driver_adc16)
+#    include(CMSIS_Driver_Include_USART)
+#    include(CMSIS_Driver_Include_SPI)
+#    include(utility_debug_console_lite)
+#    include(middleware_usb_host_printer)
+#    include(middleware_usb_host_audio)
+#    include(utility_assert_lite)
+#    include(driver_tsi_v4)
+#    include(driver_flash)
+#    include(utility_debug_console)
+#    include(middleware_usb_host_hid)
+#    include(driver_cmsis_lpspi)
+#    include(driver_crc)
+#    include(driver_lptmr)
+#    include(middleware_fatfs)
+#    include(driver_pmc)
+#    include(middleware_usb_host_stack_K32L2A41A)
+#    include(middleware_fatfs_usb)
+#    include(driver_flexio_spi_edma)
+#    include(middleware_usb_host_khci)
+#    include(component_timer_manager)
+#    include(driver_lpi2c_freertos)
+#    include(component_lists)
+#    include(driver_tpm)
+#    include(driver_cmp)
+#    include(driver_lpit)
+#    include(component_osa)
+#    include(driver_fxos8700cq)
+#    include(driver_lpuart)
+#    include(driver_flexio_spi)
+#    include(middleware_usb_device_khci)
+#    include(driver_edma_K32L2A41A)
+#    include(middleware_mmcau_cm0p)
+#    include(utility_notifier)
+#    include(driver_sim)
+#    include(middleware_usb_device_controller_driver_K32L2A41A)
+#    include(driver_lpi2c)
+#    include(middleware_usb_host_phdc)
+#    include(driver_trng)
 #    include(driver_intmux)
+#    include(middleware_usb_device_stack_external)

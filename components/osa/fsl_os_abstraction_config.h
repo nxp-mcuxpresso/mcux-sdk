@@ -34,7 +34,7 @@
 #endif /* OSA_USED */
 
 #ifndef FSL_OSA_MAIN_FUNC_ENABLE
-#define FSL_OSA_MAIN_FUNC_ENABLE 1U
+#define FSL_OSA_MAIN_FUNC_ENABLE 0U
 #endif
 
 #ifndef FSL_OSA_BM_TIMEOUT_ENABLE

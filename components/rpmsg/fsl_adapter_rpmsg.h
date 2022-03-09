@@ -69,8 +69,15 @@ typedef enum _hal_rpmsg_status
     kStatus_HAL_RpmsgRxIdle,
 } hal_rpmsg_status_t;
 
+/*! @brief RPMSG return status */
+typedef enum _hal_rpmsg_return_status
+{
+    kStatus_HAL_RL_RELEASE = 0U,
+    kStatus_HAL_RL_HOLD,
+} hal_rpmsg_return_status_t;
+
 /*! @brief The callback function of RPMSG adapter. */
-typedef void (*rpmsg_rx_callback_t)(void *param, uint8_t *data, uint32_t len);
+typedef hal_rpmsg_return_status_t (*rpmsg_rx_callback_t)(void *param, uint8_t *data, uint32_t len);
 
 /*! @brief The configure structure of RPMSG adapter. */
 typedef struct _hal_rpmsg_config
@@ -126,6 +133,59 @@ hal_rpmsg_status_t HAL_RpmsgDeinit(hal_rpmsg_handle_t handle);
  * @retval kStatus_HAL_RpmsgSuccess RPMSG send data succeed.
  */
 hal_rpmsg_status_t HAL_RpmsgSend(hal_rpmsg_handle_t handle, uint8_t *data, uint32_t length);
+
+/*!
+ * @brief Allocates the tx buffer for message payload.
+ *
+ * This API can only be called at process context to get the tx buffer in vring. By this way, the
+ * application can directly put its message into the vring tx buffer without copy from an application buffer.
+ * It is the application responsibility to correctly fill the allocated tx buffer by data and passing correct
+ * parameters to the rpmsg_lite_send_nocopy() function to perform data no-copy-send mechanism.
+ *
+ *
+ * @param handle           RPMSG handle pointer.
+ * @param size           The send data length.
+ * @retval The tx buffer address on success and RL_NULL on failure.
+ */
+void *HAL_RpmsgAllocTxBuffer(hal_rpmsg_handle_t handle, uint32_t size);
+
+/*!
+ * @brief Send data with NoCopy to another RPMSG module.
+ *
+ * This function will send a specified length of data to another core by RPMSG.
+ * This function sends txbuf of length len to the remote dst address,
+ * and uses ept->addr as the source address.
+ * The application has to take the responsibility for:
+ *  1. tx buffer allocation (HAL_RpmsgAllocTxBuffer())
+ *  2. filling the data to be sent into the pre-allocated tx buffer
+ *  3. not exceeding the buffer size when filling the data
+ *  4. data cache coherency
+ *
+ * After the HAL_RpmsgNoCopySend() function is issued the tx buffer is no more owned
+ * by the sending task and must not be touched anymore unless the HAL_RpmsgNoCopySend()
+ * function fails and returns an error.
+ *
+ * @note This API should be called to send data.
+ *
+ * @param handle           RPMSG handle pointer.
+ * @param data             Pointer to where the send data from.
+ * @param length           The send data length.
+ * @retval kStatus_HAL_RpmsgSuccess RPMSG send data succeed.
+ */
+hal_rpmsg_status_t HAL_RpmsgNoCopySend(hal_rpmsg_handle_t handle, uint8_t *data, uint32_t length);
+
+/*!
+ * @brief Releases the rx buffer for future reuse in vring.
+ * This API can be called at process context when the
+ * message in rx buffer is processed.
+ *
+ * @param handle           RPMSG handle pointer.
+ * @param data             Pointer to where the received data from perr.
+
+ *
+ * @return Status of function execution, RL_SUCCESS on success.
+ */
+hal_rpmsg_status_t HAL_RpmsgFreeRxBuffer(hal_rpmsg_handle_t handle, uint8_t *data);
 
 /*!
  * @brief Install RPMSG rx callback.

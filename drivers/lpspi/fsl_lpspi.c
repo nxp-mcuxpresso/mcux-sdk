@@ -498,7 +498,15 @@ uint32_t LPSPI_MasterSetBaudRate(LPSPI_Type *base,
      * disabled and in master mode. Also, there is a limit on the maximum divider so we will not
      * exceed this.
      */
+#if defined(FSL_FEATURE_LPSPI_HAS_CCR1) && FSL_FEATURE_LPSPI_HAS_CCR1
+    /* When CCR1 is present, the CCR[DBT] and CCR[SCKDIV] is write only, all read will return 0
+       The real DBT and SCKDIV can be obtained in CCR1, CCR[DBT]=CCR1[SCKSCK] and CCR[SCKDIV]=CCR1[SCKHLD]+CCR1[SCKSET]
+       So when changing either CCR[DBT] or CCR[SCKDIV] make sure the other value is not overwritten by 0 */
+    base->CCR = base->CCR | LPSPI_CCR_DBT((base->CCR1 & LPSPI_CCR1_SCKSCK_MASK) >> LPSPI_CCR1_SCKSCK_SHIFT) |
+                LPSPI_CCR_SCKDIV(bestScaler);
+#else
     base->CCR = (base->CCR & ~LPSPI_CCR_SCKDIV_MASK) | LPSPI_CCR_SCKDIV(bestScaler);
+#endif /* FSL_FEATURE_LPSPI_HAS_CCR1 */
 
     /* return the best prescaler value for user to use later */
     *tcrPrescaleValue = bestPrescaler;
@@ -532,6 +540,28 @@ uint32_t LPSPI_MasterSetBaudRate(LPSPI_Type *base,
 void LPSPI_MasterSetDelayScaler(LPSPI_Type *base, uint32_t scaler, lpspi_delay_type_t whichDelay)
 {
     /*These settings are only relevant in master mode */
+#if defined(FSL_FEATURE_LPSPI_HAS_CCR1) && FSL_FEATURE_LPSPI_HAS_CCR1
+    /* When CCR1 is present, the CCR[DBT] and CCR[SCKDIV] is write only, all read will return 0
+       The real DBT and SCKDIV can be obtained in CCR1, CCR[DBT]=CCR1[SCKSCK] and CCR[SCKDIV]=CCR1[SCKHLD]+CCR1[SCKSET]
+       So when changing either CCR[DBT] or CCR[SCKDIV] make sure the other value is not overwritten by 0 */
+    uint32_t dbt    = (base->CCR1 & LPSPI_CCR1_SCKSCK_MASK) >> LPSPI_CCR1_SCKSCK_SHIFT;
+    uint32_t sckdiv = (base->CCR1 & LPSPI_CCR1_SCKHLD_MASK) >> LPSPI_CCR1_SCKHLD_SHIFT;
+    sckdiv += (base->CCR1 & LPSPI_CCR1_SCKSET_MASK) >> LPSPI_CCR1_SCKSET_SHIFT;
+    switch (whichDelay)
+    {
+        case kLPSPI_PcsToSck:
+            base->CCR = (base->CCR & (~LPSPI_CCR_PCSSCK_MASK)) | LPSPI_CCR_PCSSCK(scaler) | LPSPI_CCR_DBT(dbt) |
+                        LPSPI_CCR_SCKDIV(sckdiv);
+
+            break;
+        case kLPSPI_LastSckToPcs:
+            base->CCR = (base->CCR & (~LPSPI_CCR_SCKPCS_MASK)) | LPSPI_CCR_SCKPCS(scaler) | LPSPI_CCR_DBT(dbt) |
+                        LPSPI_CCR_SCKDIV(sckdiv);
+
+            break;
+        case kLPSPI_BetweenTransfer:
+            base->CCR = base->CCR | LPSPI_CCR_DBT(scaler) | LPSPI_CCR_SCKDIV(sckdiv);
+#else
     switch (whichDelay)
     {
         case kLPSPI_PcsToSck:
@@ -544,7 +574,7 @@ void LPSPI_MasterSetDelayScaler(LPSPI_Type *base, uint32_t scaler, lpspi_delay_t
             break;
         case kLPSPI_BetweenTransfer:
             base->CCR = (base->CCR & (~LPSPI_CCR_DBT_MASK)) | LPSPI_CCR_DBT(scaler);
-
+#endif /* FSL_FEATURE_LPSPI_HAS_CCR1 */
             break;
         default:
             assert(false);

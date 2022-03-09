@@ -9,7 +9,7 @@
 **
 **     Reference manual:    MX8MNRM, Rev.B, 07/2019
 **     Version:             rev. 2.0, 2019-09-23
-**     Build:               b210304
+**     Build:               b211101
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX8MN2_cm7
@@ -95,7 +95,7 @@ typedef enum IRQn {
   Reserved29_IRQn              = 13,               /**< Reserved */
   BCH_IRQn                     = 14,               /**< BCH operation complete interrupt */
   GPMI_IRQn                    = 15,               /**< GPMI operation TIMEOUT ERROR interrupt */
-  ISI_IRQn                     = 16,               /**< ISI Interrupt */
+  ISI_CH0_IRQn                 = 16,               /**< ISI Camera Channel 0 Interrupt */
   MIPI_CSI1_IRQn               = 17,               /**< MIPI CSI Interrupt */
   MIPI_DSI_IRQn                = 18,               /**< MIPI DSI Interrupt */
   SNVS_Consolidated_IRQn       = 19,               /**< SRTC Consolidated Interrupt. Non TZ. */

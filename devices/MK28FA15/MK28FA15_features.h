@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.3, 2018-01-09
-**     Build:               b200921
+**     Build:               b210913
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -1419,6 +1419,10 @@
 #define FSL_FEATURE_SIM_HAS_COP_STOP (0)
 /* @brief Has LLWU clock gate bit (e.g SIM_SCGC4). */
 #define FSL_FEATURE_SIM_HAS_SCGC_LLWU (0)
+/* @brief Has UIDH registers. */
+#define FSL_FEATURE_SIM_HAS_UIDH (1)
+/* @brief Has UIDM registers. */
+#define FSL_FEATURE_SIM_HAS_UIDM (0)
 
 /* SMC module features */
 
@@ -1520,6 +1524,8 @@
 #define FSL_FEATURE_TPM_HAS_GLOBAL (0)
 /* @brief Has TPM_TRIG. */
 #define FSL_FEATURE_TPM_HAS_TRIG (0)
+/* @brief Whether TRIG register has effect. */
+#define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) (0)
 /* @brief Has counter pause on trigger. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER (1)
 /* @brief Has external trigger selection. */
@@ -1530,6 +1536,8 @@
 #define FSL_FEATURE_TPM_COMBINE_HAS_EFFECTn(x) (1)
 /* @brief Has TPM_POL. */
 #define FSL_FEATURE_TPM_HAS_POL (1)
+/* @brief Whether POL register has effect. */
+#define FSL_FEATURE_TPM_POL_HAS_EFFECTn(x) (1)
 /* @brief Has TPM_FILTER register. */
 #define FSL_FEATURE_TPM_HAS_FILTER (1)
 /* @brief Whether FILTER register has effect. */
@@ -1540,6 +1548,8 @@
 #define FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(x) (1)
 /* @brief Is affected by errata with ID 050050 (Incorrect duty output when EPWM mode is set to PS=0 during write 1 to CnV register). */
 #define FSL_FEATURE_TPM_HAS_ERRATA_050050 (0)
+/* @brief Whether 32 bits counter has effect. */
+#define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) (0)
 
 /* USB module features */
 

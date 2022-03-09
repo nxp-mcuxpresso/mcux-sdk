@@ -327,7 +327,7 @@ status_t MT9M114_Init(camera_device_handle_t *handle, const camera_config_t *con
     }
     else if (kVIDEO_PixelFormatRAW8 == config->pixelFormat)
     {
-        outputFormat |= ((2U << 8U) | (3U << 10U));
+        outputFormat |= (((uint16_t)2U << 8U) | ((uint16_t)3U << 10U));
     }
     else
     {

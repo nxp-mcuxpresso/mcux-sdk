@@ -704,7 +704,17 @@ void *MEM_BufferRealloc(void *buffer, uint32_t new_size)
  */
 uint32_t MEM_GetHeapUpperLimit(void)
 {
-    return 0;
+    return 0U;
+}
+
+/*!
+ * @brief Get the free space in the heap.
+ *
+ * @retval 0      Return 0 in case of the legacy MemManager.
+ */
+uint32_t MEM_GetFreeHeapSize(void)
+{
+    return 0U;
 }
 
 /*!

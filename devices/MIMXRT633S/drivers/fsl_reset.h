@@ -180,6 +180,10 @@ typedef enum _RSTCTL_RSTn
     {                                 \
         kOSEVENT_TIMER_RST_SHIFT_RSTn \
     } /* Reset bits for OSTIMER peripheral */
+#define POWERQUAD_RSTS            \
+    {                             \
+        kPOWERQUAD_RST_SHIFT_RSTn \
+    } /* Reset bits for Powerquad peripheral */
 
 /*!
  * @brief IP reset handle

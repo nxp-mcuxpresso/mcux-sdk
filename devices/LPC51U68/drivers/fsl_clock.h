@@ -83,9 +83,9 @@
         kCLOCK_Dma \
     }
 /*! @brief Clock ip name array for CT32B. */
-#define CTIMER_CLOCKS                                  \
-    {                                                  \
-        kCLOCK_Ctimer0, kCLOCK_Ctimer1, kCLOCK_Ctimer3 \
+#define CTIMER_CLOCKS                                                    \
+    {                                                                    \
+        kCLOCK_Ctimer0, kCLOCK_Ctimer1, kCLOCK_IpInvalid, kCLOCK_Ctimer3 \
     }
 
 /*! @brief Clock ip name array for GPIO. */

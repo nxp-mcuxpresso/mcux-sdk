@@ -858,7 +858,8 @@ void DSI_WriteApbTxPayloadExt(
     /* Write the payload to the FIFO. */
     for (i = 0; i < payloadSize / 4U; i++)
     {
-        apb->TX_PAYLOAD = *(const uint32_t *)(const void *)payload;
+        apb->TX_PAYLOAD =
+            ((uint32_t)payload[3] << 24U) | ((uint32_t)payload[2] << 16U) | ((uint32_t)payload[1] << 8U) | payload[0];
         payload += 4U;
     }
 

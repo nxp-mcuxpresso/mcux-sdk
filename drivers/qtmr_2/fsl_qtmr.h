@@ -58,7 +58,7 @@ typedef enum _qtmr_input_source
 typedef enum _qtmr_counting_mode
 {
     kQTMR_NoOperation = 0,          /*!< No operation */
-    kQTMR_PriSrcRiseEdge,           /*!< Count rising edges or primary source */
+    kQTMR_PriSrcRiseEdge,           /*!< Count rising edges of primary source */
     kQTMR_PriSrcRiseAndFallEdge,    /*!< Count rising and falling edges of primary source */
     kQTMR_PriSrcRiseEdgeSecInpHigh, /*!< Count rise edges of pri SRC while sec inp high active */
     kQTMR_QuadCountMode,            /*!< Quadrature count mode, uses pri and sec sources */

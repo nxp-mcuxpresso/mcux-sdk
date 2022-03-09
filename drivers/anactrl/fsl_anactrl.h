@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief ANACTRL driver version. */
-#define FSL_ANACTRL_DRIVER_VERSION (MAKE_VERSION(2, 2, 0)) /*!< Version 2.2.0. */`
+#define FSL_ANACTRL_DRIVER_VERSION (MAKE_VERSION(2, 3, 0)) /*!< Version 2.3.0. */`
 
 /*!
  * @brief ANACTRL interrupt flags
@@ -323,6 +323,33 @@ static inline uint32_t ANACTRL_GetInterruptStatusFlags(ANACTRL_Type *base)
     return base->BOD_DCDC_INT_STATUS & 0x1FFU;
 }
 /* @} */
+
+#if (defined(FSL_FEATURE_ANACTRL_HAS_AUX_BIAS_REG) && (FSL_FEATURE_ANACTRL_HAS_AUX_BIAS_REG == 1U))
+/*!
+ * @brief Aux_Bias Control Interfaces
+ * @{
+ */
+
+/*!
+ * @brief Enables/disabless 1V reference voltage buffer.
+ *
+ * @param base ANACTRL peripheral base address.
+ * @param enable Used to enable or disable 1V reference voltage buffer.
+ */
+static inline void ANACTRL_EnableVref1V(ANACTRL_Type *base, bool enable)
+{
+    if (enable)
+    {
+        base->AUX_BIAS |= ANACTRL_AUX_BIAS_VREF1VENABLE_MASK;
+    }
+    else
+    {
+        base->AUX_BIAS &= ~ANACTRL_AUX_BIAS_VREF1VENABLE_MASK;
+    }
+}
+
+/* @} */
+#endif /* defined(FSL_FEATURE_ANACTRL_HAS_AUX_BIAS_REG) */
 
 #if defined(__cplusplus)
 }

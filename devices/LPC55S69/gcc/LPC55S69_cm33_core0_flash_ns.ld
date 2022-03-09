@@ -38,7 +38,7 @@ MEMORY
 {
   m_interrupts          (RX)  : ORIGIN = 0x00010000, LENGTH = 0x00000200
   m_text                (RX)  : ORIGIN = 0x00010200, LENGTH = 0x00061E00
-  m_core1_image         (RX)  : ORIGIN = 0x00072000, LENGTH = 0x00026000
+  m_core1_image         (RX)  : ORIGIN = 0x00072000, LENGTH = 0x0002B800
   m_data                (RW)  : ORIGIN = 0x20008000, LENGTH = 0x0002A800 - RPMSG_SHMEM_SIZE
   rpmsg_sh_mem          (RW)  : ORIGIN = 0x20033000 - RPMSG_SHMEM_SIZE, LENGTH = RPMSG_SHMEM_SIZE
   m_usb_sram            (RW)  : ORIGIN = 0x40100000, LENGTH = 0x00004000

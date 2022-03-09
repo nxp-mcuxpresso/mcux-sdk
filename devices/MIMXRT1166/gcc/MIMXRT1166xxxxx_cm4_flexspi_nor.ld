@@ -7,7 +7,7 @@
 **     Compiler:            GNU C Compiler
 **     Reference manual:    IMXRT1160RM, Rev 0, 03/2021
 **     Version:             rev. 0.1, 2020-12-29
-**     Build:               b210422
+**     Build:               b210709
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
@@ -42,8 +42,8 @@ MEMORY
   m_text                (RX)  : ORIGIN = 0x08002400, LENGTH = 0x00FFDC00
   m_qacode              (RX)  : ORIGIN = 0x1FFE0000, LENGTH = 0x00020000
   m_data                (RW)  : ORIGIN = 0x20000000, LENGTH = DEFINED(__heap_noncacheable__) ? 0x00020000 : 0x00020000 - HEAP_SIZE
-  m_ncache              (RW)  : ORIGIN = 0x20248000, LENGTH = DEFINED(__heap_noncacheable__) ? 0x00008000 - HEAP_SIZE : 0x00008000
   m_data2               (RW)  : ORIGIN = 0x20240000, LENGTH = 0x00008000
+  m_ncache              (RW)  : ORIGIN = 0x20248000, LENGTH = DEFINED(__heap_noncacheable__) ? 0x00008000 - HEAP_SIZE : 0x00008000
   m_heap                (RW)  : ORIGIN = NCACHE_HEAP_START, LENGTH = HEAP_SIZE
 }
 
@@ -61,7 +61,7 @@ SECTIONS
     . = ALIGN(4);
   } > m_flash_config
 
-  ivt_begin= ORIGIN(m_flash_config) + LENGTH(m_flash_config);
+  ivt_begin = ORIGIN(m_flash_config) + LENGTH(m_flash_config);
 
   .ivt : AT(ivt_begin)
   {
@@ -193,6 +193,7 @@ SECTIONS
     *(m_usb_dma_init_data)
     *(.data)                 /* .data sections */
     *(.data*)                /* .data* sections */
+    *(DataQuickAccess)       /* quick access data section */
     KEEP(*(.jcr*))
     . = ALIGN(4);
     __data_end__ = .;        /* define a global symbol at data end */
@@ -272,4 +273,3 @@ SECTIONS
 
   ASSERT(__StackLimit >= __StackEnd, "region m_data overflowed with stack and heap")
 }
-

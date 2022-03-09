@@ -21,9 +21,9 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief RNG driver version. Version 2.0.2.
+/*! @brief RNG driver version. Version 2.0.3.
  *
- * Current version: 2.0.2
+ * Current version: 2.0.3
  *
  * Change log:
  * - Version 2.0.0
@@ -34,8 +34,12 @@
  *
  * - Version 2.0.2
  *   - Add RESET_PeripheralReset function inside RNG_Init and RNG_Deinit functions.
+ *
+ * - Version 2.0.3
+ *   - Modified RNG_Init and RNG_GetRandomData functions, added rng_accumulateEntropy and rng_readEntropy functions.
+ *   - These changes are reflecting recommended usage of RNG according to device UM.
  */
-#define FSL_RNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_RNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*******************************************************************************

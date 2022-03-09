@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPSPI driver version. */
-#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 #ifndef LPSPI_DUMMY_DATA
@@ -766,7 +766,7 @@ static inline void LPSPI_SetPCSContinous(LPSPI_Type *base, bool IsContinous)
     }
     else
     {
-        base->TCR &= LPSPI_TCR_CONT_MASK;
+        base->TCR &= ~LPSPI_TCR_CONT_MASK;
     }
 }
 

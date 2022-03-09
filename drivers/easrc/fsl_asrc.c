@@ -269,7 +269,7 @@ static void ASRC_EnableContextSlot(ASRC_Type *base,
                                    uint32_t startChannel,
                                    asrc_context_t runningContext)
 {
-    assert(channelNums <= ASRC_SUPPORT_MAXIMUM_CONTEXT_PROCESSOR_NUMBER);
+    assert(channelNums <= ASRC_SUPPORT_CONTEXT_PROCESSOR_MAXIMUM_CHANNEL_NUMBER);
 
     if (slot == 0U)
     {
@@ -542,21 +542,21 @@ static status_t ASRC_SetSlotConfig(ASRC_Type *base,
         if ((slot0UsedChannel == 0U) && (slot1UsedChannel == 0U))
         {
             availableSlot    = 0U;
-            availableChannel = ASRC_SUPPORT_MAXIMUM_CONTEXT_PROCESSOR_NUMBER;
+            availableChannel = ASRC_SUPPORT_CONTEXT_PROCESSOR_MAXIMUM_CHANNEL_NUMBER;
             availableContext = i;
         }
         /* context slot 0 is busy, slot 1 is idle */
         else if (slot0UsedChannel != 0U)
         {
             availableSlot    = 1U;
-            availableChannel = ASRC_SUPPORT_MAXIMUM_CONTEXT_PROCESSOR_NUMBER - slot0UsedChannel;
+            availableChannel = ASRC_SUPPORT_CONTEXT_PROCESSOR_MAXIMUM_CHANNEL_NUMBER - slot0UsedChannel;
             availableContext = i;
         }
         /* context slot0 is idle, slot 1 is busy, ((slot0UsedChannel == 0U) && (slot1UsedChannel != 0U))*/
         else
         {
             availableSlot    = 0U;
-            availableChannel = ASRC_SUPPORT_MAXIMUM_CONTEXT_PROCESSOR_NUMBER - slot1UsedChannel;
+            availableChannel = ASRC_SUPPORT_CONTEXT_PROCESSOR_MAXIMUM_CHANNEL_NUMBER - slot1UsedChannel;
             availableContext = i;
         }
 

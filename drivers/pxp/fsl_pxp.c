@@ -285,6 +285,9 @@ void PXP_Init(PXP_Type *base)
 #endif
 
     PXP_ResetToInit(base);
+
+    /* Disable the alpha surface. */
+    PXP_SetAlphaSurfacePosition(base, 0xFFFFU, 0xFFFFU, 0U, 0U);
 }
 
 /*!

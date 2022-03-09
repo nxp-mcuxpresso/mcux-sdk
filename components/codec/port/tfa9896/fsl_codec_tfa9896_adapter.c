@@ -14,7 +14,7 @@
 /*! @brief TFA9896 play capability*/
 #define HAL_TFA9896_PLAY_CAPABILITY \
     kCODEC_SupportModuleSpeaker | kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelRight0
-
+#define HAL_TFA9896_VOLUME_CAPABILITY kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelRight0
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -23,7 +23,8 @@
  * Variables
  ******************************************************************************/
 static const codec_capability_t s_tfa9896_capability = {
-    .codecPlayCapability = (uint32_t)HAL_TFA9896_PLAY_CAPABILITY,
+    .codecPlayCapability   = (uint32_t)HAL_TFA9896_PLAY_CAPABILITY,
+    .codecVolumeCapability = (uint32_t)HAL_TFA9896_VOLUME_CAPABILITY,
 };
 
 /*******************************************************************************
@@ -41,11 +42,19 @@ status_t HAL_CODEC_TFA9896_Init(void *handle, void *config)
     assert((config != NULL) && (handle != NULL));
 
     codec_config_t *codecConfig = (codec_config_t *)config;
+    status_t ret                = kStatus_Success;
+
     tfa9896_config_t *devConfig = (tfa9896_config_t *)(codecConfig->codecDevConfig);
     tfa9896_handle_t *devHandle = (tfa9896_handle_t *)((uint32_t) & (((codec_handle_t *)handle)->codecDevHandle));
     ((codec_handle_t *)handle)->codecCapability = &s_tfa9896_capability;
     /* codec device initialization */
-    return TFA9896_Init(devHandle, devConfig);
+    ret = TFA9896_Init(devHandle, devConfig);
+    if (ret != kStatus_TFA9896_Ok)
+    {
+        ret = kStatus_Fail;
+    }
+
+    return ret;
 }
 
 /*!
@@ -89,6 +98,7 @@ status_t HAL_CODEC_TFA9896_SetVolume(void *handle, uint32_t playChannel, uint32_
 {
     assert(handle != NULL);
     status_t ret                    = kStatus_Success;
+    uint8_t mappedVolume            = 0U;
     tfa9896_handle_t *tfa9896Handle = (tfa9896_handle_t *)((uint32_t) & (((codec_handle_t *)handle)->codecDevHandle));
     /* Set Volume 0(min) to 100 (max) */
 
@@ -97,43 +107,51 @@ status_t HAL_CODEC_TFA9896_SetVolume(void *handle, uint32_t playChannel, uint32_
      * Vol_lvl  0    10   20   30   40   50   60   70   80   90   100(Maximum volume)
      * Volume   255  40   30   24   16   10   6    4    2    1    0  (zero attenuation )*/
 
-    switch (volume / 10)
+    switch (volume / 10U)
     {
-        case 0:
-            volume = 255;
+        case 0U:
+            mappedVolume = 255U;
             break;
-        case 1:
-            volume = 40;
+        case 1U:
+            mappedVolume = 40U;
             break;
-        case 2:
-            volume = 30;
+        case 2U:
+            mappedVolume = 30U;
             break;
-        case 3:
-            volume = 24;
+        case 3U:
+            mappedVolume = 24U;
             break;
-        case 4:
-            volume = 16;
+        case 4U:
+            mappedVolume = 16U;
             break;
-        case 5:
-            volume = 10;
+        case 5U:
+            mappedVolume = 10U;
             break;
-        case 6:
-            volume = 6;
+        case 6U:
+            mappedVolume = 6U;
             break;
-        case 7:
-            volume = 4;
+        case 7U:
+            mappedVolume = 4U;
             break;
-        case 8:
-            volume = 2;
+        case 8U:
+            mappedVolume = 2U;
             break;
-        case 9:
-            volume = 1;
+        case 9U:
+            mappedVolume = 1U;
             break;
-        case 10:
-            volume = 0;
+        case 10U:
+            mappedVolume = 0U;
+            break;
+        default:
+            ret = kStatus_InvalidArgument;
             break;
     }
-    ret = TFA9896_SetVolume(tfa9896Handle, volume);
+
+    if (ret == kStatus_Success)
+    {
+        ret = TFA9896_SetVolume(tfa9896Handle, mappedVolume);
+    }
+
     return ret;
 }
 
@@ -149,7 +167,14 @@ status_t HAL_CODEC_TFA9896_SetMute(void *handle, uint32_t playChannel, bool isMu
 {
     assert(handle != NULL);
     status_t ret = kStatus_Success;
-    ret          = TFA9896_SetMute((tfa9896_handle_t *)((codec_handle_t *)handle), Mute_Digital);
+
+    ret =
+        TFA9896_SetMute((tfa9896_handle_t *)((uint32_t) & (((codec_handle_t *)handle)->codecDevHandle)), Mute_Digital);
+    if (ret != kStatus_TFA9896_Ok)
+    {
+        ret = kStatus_Fail;
+    }
+
     return ret;
 }
 

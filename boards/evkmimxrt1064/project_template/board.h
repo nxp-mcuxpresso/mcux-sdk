@@ -105,7 +105,7 @@
 #define BOARD_CAMERA_I2C_SDA_GPIO GPIO1
 #define BOARD_CAMERA_I2C_SDA_PIN  17
 #define BOARD_CAMERA_PWDN_GPIO    GPIO1
-#define BOARD_CAMERA_PWDN_PIN     4
+#define BOARD_CAMERA_PWDN_PIN     18
 
 /* @Brief Board Bluetooth HCI UART configuration */
 #define BOARD_BT_UART_BASEADDR    LPUART3

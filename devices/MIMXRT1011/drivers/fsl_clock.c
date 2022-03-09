@@ -1076,20 +1076,16 @@ uint32_t CLOCK_GetUsb1PfdFreq(clock_pfd_t pfd)
  */
 void CLOCK_SetClockOutput1(clock_output1_selection_t selection, clock_output_divider_t divider)
 {
-    uint32_t tmp32;
-
-    tmp32 = CCM->CCOSR;
     if (selection == kCLOCK_DisableClockOutput1)
     {
-        tmp32 &= ~CCM_CCOSR_CLKO1_EN_MASK;
+        CCM->CCOSR &= ~(CCM_CCOSR_CLKO1_EN_MASK | CCM_CCOSR_CLKO1_SEL_MASK | CCM_CCOSR_CLKO1_DIV_MASK);
     }
     else
     {
-        tmp32 |= CCM_CCOSR_CLKO1_EN_MASK;
-        tmp32 &= ~(CCM_CCOSR_CLKO1_SEL_MASK | CCM_CCOSR_CLKO1_DIV_MASK);
-        tmp32 |= CCM_CCOSR_CLKO1_SEL(selection) | CCM_CCOSR_CLKO1_DIV(divider);
+        CCM->CCOSR &= ~(CCM_CCOSR_CLKO1_EN_MASK | CCM_CCOSR_CLKO1_SEL_MASK | CCM_CCOSR_CLKO1_DIV_MASK);
+        CCM->CCOSR |= CCM_CCOSR_CLKO1_SEL(selection) | CCM_CCOSR_CLKO1_DIV(divider);
+        CCM->CCOSR |= CCM_CCOSR_CLKO1_EN_MASK;
     }
-    CCM->CCOSR = tmp32;
 }
 
 /*!

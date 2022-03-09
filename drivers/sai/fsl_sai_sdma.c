@@ -33,7 +33,7 @@ enum
 static I2S_Type *const s_saiBases[] = I2S_BASE_PTRS;
 
 /*<! Private handle only used for internally. */
-static sai_sdma_private_handle_t s_sdmaPrivateHandle[FSL_FEATURE_SOC_I2S_COUNT][2];
+static sai_sdma_private_handle_t s_sdmaPrivateHandle[ARRAY_SIZE(s_saiBases)][2];
 
 /*******************************************************************************
  * Prototypes

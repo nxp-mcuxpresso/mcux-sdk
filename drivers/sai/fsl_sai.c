@@ -1238,7 +1238,7 @@ void SAI_TxSetFifoConfig(I2S_Type *base, sai_fifo_t *config)
 
     uint32_t tcr4 = base->TCR4;
 
-#if defined(FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_COMBINE) && FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_COMBINE
+#if defined(FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) && FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE
     tcr4 &= ~I2S_TCR4_FCOMB_MASK;
     tcr4 |= I2S_TCR4_FCOMB(config->fifoCombine);
 #endif
@@ -1279,7 +1279,7 @@ void SAI_RxSetFifoConfig(I2S_Type *base, sai_fifo_t *config)
 #endif
     uint32_t rcr4 = base->RCR4;
 
-#if defined(FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_COMBINE) && FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_COMBINE
+#if defined(FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) && FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE
     rcr4 &= ~I2S_RCR4_FCOMB_MASK;
     rcr4 |= I2S_RCR4_FCOMB(config->fifoCombine);
 #endif

@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SMARTDMA driver version */
-#define FSL_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 2))
+#define FSL_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 3))
 /*@}*/
 
 /*! @brief The firmware used for display. */

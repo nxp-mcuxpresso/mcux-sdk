@@ -31,6 +31,8 @@
 #define __WEAK_FUNC __weak
 #elif defined(__CC_ARM) || defined(__ARMCC_VERSION)
 #define __WEAK_FUNC __attribute__((weak))
+#elif defined(__DSC__) || defined(__CW__)
+#define __WEAK_FUNC __attribute__((weak))
 #endif
 
 #ifdef DEBUG_ASSERT
@@ -133,6 +135,7 @@ typedef struct _osa_state
     task_handler_t curTaskHandler;
 #endif
     volatile uint32_t interruptDisableCount;
+    volatile uint32_t interruptRegPrimask;
     volatile uint32_t tickCounter;
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
 #if (defined(FSL_OSA_MAIN_FUNC_ENABLE) && (FSL_OSA_MAIN_FUNC_ENABLE > 0U))
@@ -225,7 +228,7 @@ void OSA_EnableIRQGlobal(void)
 
         if (0U == s_osaState.interruptDisableCount)
         {
-            __enable_irq();
+            EnableGlobalIRQ(s_osaState.interruptRegPrimask);
         }
         /* call core API to enable the global interrupt*/
     }
@@ -240,8 +243,11 @@ void OSA_EnableIRQGlobal(void)
  *END**************************************************************************/
 void OSA_DisableIRQGlobal(void)
 {
-    /* call core API to disable the global interrupt*/
-    __disable_irq();
+    /* call API to disable the global interrupt*/
+    if (0U == s_osaState.interruptDisableCount)
+    {
+        s_osaState.interruptRegPrimask = DisableGlobalIRQ();
+    }
 
     /* update counter*/
     s_osaState.interruptDisableCount++;
@@ -878,17 +884,17 @@ osa_status_t OSA_EventClear(osa_event_handle_t eventHandle, osa_event_flags_t fl
 osa_status_t OSA_EventGet(osa_event_handle_t eventHandle, osa_event_flags_t flagsMask, osa_event_flags_t *pFlagsOfEvent)
 {
     event_t *pEventStruct;
+    uint32_t regPrimask;
     pEventStruct = (event_t *)eventHandle;
-    OSA_SR_ALLOC();
 
     if (NULL == pFlagsOfEvent)
     {
         return KOSA_StatusError;
     }
 
-    OSA_ENTER_CRITICAL();
+    OSA_EnterCritical(&regPrimask);
     *pFlagsOfEvent = pEventStruct->flags & flagsMask;
-    OSA_EXIT_CRITICAL();
+    OSA_ExitCritical(regPrimask);
 
     return KOSA_StatusSuccess;
 }
@@ -1307,6 +1313,41 @@ void OSA_Start(void)
 #endif
 
     while (true)
+    {
+        list_element = LIST_GetHead(&s_osaState.taskList);
+        while (NULL != list_element)
+        {
+            tcb                       = (task_control_block_t *)(void *)list_element;
+            s_osaState.curTaskHandler = (osa_task_handle_t)tcb;
+            if (0U != tcb->haveToRun)
+            {
+                if (NULL != tcb->p_func)
+                {
+                    tcb->p_func(tcb->param);
+                }
+                list_element = LIST_GetHead(&s_osaState.taskList);
+            }
+            else
+            {
+                list_element = LIST_GetNext(list_element);
+            }
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : OSA_ProcessTasks
+ * Description   : This function is used to process registered tasks.
+ *
+ *END**************************************************************************/
+void OSA_ProcessTasks(void)
+{
+    list_element_handle_t list_element;
+    task_control_block_t *tcb;
+
+    list_element = LIST_GetHead(&s_osaState.taskList);
+    while (list_element != NULL)
     {
         list_element = LIST_GetHead(&s_osaState.taskList);
         while (NULL != list_element)

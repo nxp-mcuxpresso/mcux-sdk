@@ -40,7 +40,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CLOCK driver version. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -2182,9 +2182,10 @@ static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t va
         CCM->LPCG[name].DIRECT = ((uint32_t)value & CCM_LPCG_DIRECT_ON_MASK);
         __DSB();
         __ISB();
-#if __CORTEX_M == 4
-        (void)CCM->LPCG[name].DIRECT;
-#endif
+
+        while ((CCM->LPCG[name].STATUS0 & CCM_LPCG_STATUS0_ON_MASK) != ((uint32_t)value & CCM_LPCG_STATUS0_ON_MASK))
+        {
+        }
     }
 }
 
@@ -2737,6 +2738,7 @@ void CLOCK_DeinitSysPll2(void);
  * @return PFD bypass status.
  *         - true: power on.
  *         - false: power off.
+ * @note Only useful in software control mode.
  */
 bool CLOCK_IsSysPll2PfdEnabled(clock_pfd_t pfd);
 
@@ -2760,6 +2762,7 @@ void CLOCK_DeinitSysPll3(void);
  * @return PFD bypass status.
  *         - true: power on.
  *         - false: power off.
+ * @note Only useful in software control mode.
  */
 bool CLOCK_IsSysPll3PfdEnabled(clock_pfd_t pfd);
 
@@ -2875,6 +2878,14 @@ uint32_t CLOCK_GetPllFreq(clock_pll_t pll);
  * @note It is recommended that PFD settings are kept between 12-35.
  */
 void CLOCK_InitPfd(clock_pll_t pll, clock_pfd_t pfd, uint8_t frac);
+
+/*!
+ * @brief De-initialize selected PLL PFD.
+ *
+ * @param pll Which PLL of targeting PFD to be operated.
+ * @param pfd Which PFD clock to enable.
+ */
+void CLOCK_DeinitPfd(clock_pll_t pll, clock_pfd_t pfd);
 
 /*!
  * @brief Get current PFD output frequency.
