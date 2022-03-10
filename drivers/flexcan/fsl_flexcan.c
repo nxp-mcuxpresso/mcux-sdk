@@ -376,7 +376,7 @@ static void flexcan_memset(void *s, uint32_t c, size_t n)
 
     m = n / sizeof(*ptr);
 
-    while (m--)
+    while ((m--) != (size_t)0)
        *ptr++ = c;
 }
 
