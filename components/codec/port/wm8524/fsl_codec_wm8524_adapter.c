@@ -1,5 +1,5 @@
 /*
- * Copyright  2021 NXP
+ * Copyright  2021-2022 NXP
  * All rights reserved.
  *
  *
@@ -38,7 +38,7 @@ status_t HAL_CODEC_WM8524_Init(void *handle, void *config)
     codec_config_t *codecConfig = (codec_config_t *)config;
 
     wm8524_config_t *devConfig = (wm8524_config_t *)(codecConfig->codecDevConfig);
-    wm8524_handle_t *devHandle = (wm8524_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle));
+    wm8524_handle_t *devHandle = (wm8524_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle));
 
     ((codec_handle_t *)handle)->codecCapability = &s_wm8524_capability;
 
@@ -102,7 +102,7 @@ status_t HAL_CODEC_WM8524_SetMute(void *handle, uint32_t playChannel, bool isMut
 {
     assert(handle != NULL);
 
-    WM8524_SetMute((wm8524_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)), isMute);
+    WM8524_SetMute((wm8524_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)), isMute);
 
     return kStatus_Success;
 }
