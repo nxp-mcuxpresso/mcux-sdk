@@ -209,6 +209,7 @@ typedef enum _clock_name
     kCLOCK_AxiClk, /*!< Main AXI bus clock.                         */
     kCLOCK_AhbClk, /*!< AHB bus clock.                         */
     kCLOCK_IpgClk, /*!< IPG bus clock.                         */
+    kCLOCK_PerClk, /*!< Peripheral Clock.			*/
     kCLOCK_EnetIpgClk, /*!< ENET IPG Clock.			*/
 
     /* -------------------------------- Other clock --------------------------*/
