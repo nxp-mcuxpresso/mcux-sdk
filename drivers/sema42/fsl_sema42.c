@@ -148,20 +148,7 @@ status_t SEMA42_TryLock(SEMA42_Type *base, uint8_t gateNum, uint8_t procNum)
  */
 void SEMA42_Lock(SEMA42_Type *base, uint8_t gateNum, uint8_t procNum)
 {
-    assert(gateNum < (uint8_t)FSL_FEATURE_SEMA42_GATE_COUNT);
-
-    ++procNum;
-
-    while (procNum != SEMA42_GATEn(base, gateNum))
-    {
-        /* Wait for unlocked status. */
-        while (0U != SEMA42_GATEn(base, gateNum))
-        {
-        }
-
-        /* Lock the gate. */
-        SEMA42_GATEn(base, gateNum) = procNum;
-    }
+    while (kStatus_SEMA42_Busy == SEMA42_TryLock(base, gateNum, procNum)){};
 }
 
 /*!
