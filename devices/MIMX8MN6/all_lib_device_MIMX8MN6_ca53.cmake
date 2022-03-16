@@ -4,7 +4,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8524
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8524
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm186x
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm512x
