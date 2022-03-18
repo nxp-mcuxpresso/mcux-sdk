@@ -115,6 +115,15 @@ __STATIC_FORCEINLINE void __disable_irq(void)
   @{
 */
 
+/**
+  \brief   Hypervisor call with 2 arguments
+  \details Makes an hypervisor call with two arguments stored in x0 and x1.
+ */
+#define HVC_2(imm, x0, x1) __asm volatile (                     \
+				"mov x0, %0               \n\t" \
+				"mov x1, %1               \n\t" \
+				"hvc #" __STRINGIFY(imm) "\n\t" \
+				 : : "r" (x0), "r" (x1) : "x0", "x1", "memory")
 
 /**
   \brief   Multiprocessor Affinity
