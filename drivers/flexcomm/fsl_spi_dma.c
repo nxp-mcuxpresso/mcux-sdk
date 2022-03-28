@@ -376,8 +376,9 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
             }
         }
 
-        handle->txInProgress = true;
-        uint32_t tmpData     = 0U;
+        handle->txInProgress  = true;
+        uint32_t tmpData      = 0U;
+        uint32_t writeAddress = (uint32_t) & (base->FIFOWR) + 2UL;
         XferToFifoWR(xfer, &tmpData);
         SpiConfigToFifoWR(spi_config_p, &tmpData);
 
@@ -389,13 +390,13 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
         if (((xfer->configFlags & (uint32_t)kSPI_FrameAssert) != 0U) &&
             ((spi_config_p->dataWidth > kSPI_Data8Bits) ? (xfer->dataSize == 2U) : (xfer->dataSize == 1U)))
         {
-            *((uint16_t *)((uint32_t)&base->FIFOWR) + 1) = (uint16_t)(tmpData >> 16U);
+            *(uint16_t *)writeAddress = (uint16_t)(tmpData >> 16U);
         }
         else
         {
             /* Clear the SPI_FIFOWR_EOT_MASK bit when data is not the last. */
             tmpData &= (~(uint32_t)kSPI_FrameAssert);
-            *((uint16_t *)((uint32_t)&base->FIFOWR) + 1) = (uint16_t)(tmpData >> 16U);
+            *(uint16_t *)writeAddress = (uint16_t)(tmpData >> 16U);
         }
 
         DMA_StartTransfer(handle->txHandle);

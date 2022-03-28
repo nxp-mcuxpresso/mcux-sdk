@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2020 , NXP
+ * Copyright 2017 - 2021 , NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -388,7 +388,7 @@ void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t iFreq)
 /* Set EXT OSC Clk */
 /**
  * brief   Initialize the external osc clock to given frequency.
- * Crystal oscillator with an operating frequency of 12 MHz to 32 MHz. 
+ * Crystal oscillator with an operating frequency of 12 MHz to 32 MHz.
  * Option for external clock input (bypass mode) for clock frequencies of up to 25 MHz.
  * param   iFreq   : Desired frequency (must be equal to exact rate in Hz)
  * return  returns success or fail status.
@@ -1159,7 +1159,7 @@ static float findPll0MMult(void)
                        (float)(uint32_t)(1UL << PLL0_SSCG_MD_INT_P));
         mMult       = (float)mMult_int + mMult_fract;
     }
-    if (mMult == 0.0F)
+    if(0ULL == ((uint64_t)mMult))
     {
         mMult = 1.0F;
     }
@@ -1882,7 +1882,8 @@ bool CLOCK_EnableUsbfs0DeviceClock(clock_usbfs_src_t src, uint32_t freq)
         /* Turn ON FRO HF */
         POWER_DisablePD(kPDRUNCFG_PD_FRO192M);
         /* Enable FRO 96MHz output */
-        ANACTRL->FRO192M_CTRL = ANACTRL->FRO192M_CTRL | ANACTRL_FRO192M_CTRL_ENA_96MHZCLK_MASK | ANACTRL_FRO192M_CTRL_USBCLKADJ_MASK;
+        ANACTRL->FRO192M_CTRL =
+            ANACTRL->FRO192M_CTRL | ANACTRL_FRO192M_CTRL_ENA_96MHZCLK_MASK | ANACTRL_FRO192M_CTRL_USBCLKADJ_MASK;
         /* Select FRO 96 or 48 MHz */
         CLOCK_AttachClk(kFRO_HF_to_USB0_CLK);
     }
@@ -2092,4 +2093,12 @@ bool CLOCK_EnableUsbhs0HostClock(clock_usbhs_src_t src, uint32_t freq)
     ANACTRL->XO32M_CTRL |= ANACTRL_XO32M_CTRL_ENABLE_PLL_USB_OUT(1);
 
     return true;
+}
+
+/*! @brief Enable the OSTIMER 32k clock.
+ *  @return  Nothing
+ */
+void CLOCK_EnableOstimer32kClock(void)
+{
+    PMC->OSTIMERr |= PMC_OSTIMER_CLOCKENABLE_MASK;
 }

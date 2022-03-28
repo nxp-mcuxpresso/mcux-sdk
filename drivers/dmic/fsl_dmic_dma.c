@@ -62,7 +62,6 @@ static void DMIC_TransferReceiveDMACallback(dma_handle_t *handle, void *param, b
  * User should be take care about the address of DMA descriptor pool which required align with 512BYTE.
  *
  * param handle Pointer to DMA channel transfer handle.
- * param headAddr DMA head descriptor address.
  * param linkAddr DMA link descriptor address.
  * param num DMA link descriptor number.
  */

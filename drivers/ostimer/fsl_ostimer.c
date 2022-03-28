@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -161,18 +161,12 @@ static void OSTIMER_EnableInterrupt(OSTIMER_Type *base, bool enable)
         /* Enable the IRQ and module interrupt enablement. */
         (void)EnableIRQ(s_ostimerIRQ[OSTIMER_GetInstance(base)]);
         base->OSEVENT_CTRL |= OSTIMER_OSEVENT_CTRL_OSTIMER_INTENA_MASK;
-#if !(defined(FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG) && FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG)
-        PMC->OSTIMERr |= PMC_OSTIMER_DPDWAKEUPENABLE_MASK;
-#endif
     }
     else
     {
         /* Clear interrupt flag, disable the IRQ and module interrupt enablement. */
         (void)DisableIRQ(s_ostimerIRQ[OSTIMER_GetInstance(base)]);
         base->OSEVENT_CTRL &= ~OSTIMER_OSEVENT_CTRL_OSTIMER_INTENA_MASK; /* Clear interrupt flag by writing 1. */
-#if !(defined(FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG) && FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG)
-        PMC->OSTIMERr &= ~PMC_OSTIMER_DPDWAKEUPENABLE_MASK;
-#endif
     }
 }
 
@@ -189,8 +183,7 @@ void OSTIMER_Init(OSTIMER_Type *base)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 #if !(defined(FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG) && FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG)
     /* Enable the OSTIMER 32k clock in PMC module. */
-    PMC->OSTIMERr |= PMC_OSTIMER_CLOCKENABLE_MASK;
-    PMC->OSTIMERr &= ~PMC_OSTIMER_OSC32KPD_MASK;
+    CLOCK_EnableOstimer32kClock();
 #endif
     /* Enable clock for OSTIMER. */
     CLOCK_EnableClock(s_ostimerClock[instance]);

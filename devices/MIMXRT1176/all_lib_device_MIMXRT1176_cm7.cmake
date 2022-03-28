@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/DSP
     ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt1170/xip
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
@@ -155,6 +156,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_sdmmc_host_usdhc_polling_MIMXRT1176_cm7)
 #    include(component_serial_manager_uart)
 #    include(driver_soc_src)
+#    include(CMSIS_DSP_Library)
 #    include(component_lpuart_adapter)
 #    include(middleware_sdmmc_host_usdhc_freertos_MIMXRT1176_cm7)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_rtos_master_c_wrapper)

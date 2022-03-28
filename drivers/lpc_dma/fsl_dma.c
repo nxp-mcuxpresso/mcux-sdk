@@ -58,22 +58,34 @@ static const IRQn_Type s_dmaIRQNumber[] = DMA_IRQS;
 
 /*! @brief Pointers to transfer handle for each DMA channel. */
 static dma_handle_t *s_DMAHandle[FSL_FEATURE_DMA_ALL_CHANNELS];
+
 /*! @brief DMA driver internal descriptor table */
+#ifdef FSL_FEATURE_DMA0_DESCRIPTOR_ALIGN_SIZE
+SDK_ALIGN(static dma_descriptor_t s_dma_descriptor_table0[FSL_FEATURE_DMA_MAX_CHANNELS],
+          FSL_FEATURE_DMA0_DESCRIPTOR_ALIGN_SIZE);
+#else
 #if (defined(CPU_MIMXRT685SEVKA_dsp) || defined(CPU_MIMXRT685SFVKB_dsp))
 AT_NONCACHEABLE_SECTION_ALIGN(static dma_descriptor_t s_dma_descriptor_table0[FSL_FEATURE_DMA_MAX_CHANNELS],
                               FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE);
 #else
 SDK_ALIGN(static dma_descriptor_t s_dma_descriptor_table0[FSL_FEATURE_DMA_MAX_CHANNELS],
           FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE);
-#endif
+#endif /* (defined(CPU_MIMXRT685SEVKA_dsp) || defined(CPU_MIMXRT685SFVKB_dsp)) */
+#endif /* FSL_FEATURE_DMA0_DESCRIPTOR_ALIGN_SIZE */
+
 #if defined(DMA1)
+#ifdef FSL_FEATURE_DMA1_DESCRIPTOR_ALIGN_SIZE
+SDK_ALIGN(static dma_descriptor_t s_dma_descriptor_table1[FSL_FEATURE_DMA_MAX_CHANNELS],
+          FSL_FEATURE_DMA1_DESCRIPTOR_ALIGN_SIZE);
+#else
 #if (defined(CPU_MIMXRT685SEVKA_dsp) || defined(CPU_MIMXRT685SFVKB_dsp))
 AT_NONCACHEABLE_SECTION_ALIGN(static dma_descriptor_t s_dma_descriptor_table1[FSL_FEATURE_DMA_MAX_CHANNELS],
                               FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE);
 #else
 SDK_ALIGN(static dma_descriptor_t s_dma_descriptor_table1[FSL_FEATURE_DMA_MAX_CHANNELS],
           FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE);
-#endif
+#endif /* (defined(CPU_MIMXRT685SEVKA_dsp) || defined(CPU_MIMXRT685SFVKB_dsp)) */
+#endif /* FSL_FEATURE_DMA1_DESCRIPTOR_ALIGN_SIZE */
 static dma_descriptor_t *s_dma_descriptor_table[] = {s_dma_descriptor_table0, s_dma_descriptor_table1};
 #else
 static dma_descriptor_t *s_dma_descriptor_table[] = {s_dma_descriptor_table0};
@@ -171,6 +183,7 @@ void DMA_Deinit(DMA_Type *base)
  */
 void DMA_ConfigureChannelTrigger(DMA_Type *base, uint32_t channel, dma_channel_trigger_t *trigger)
 {
+    assert(FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base) != -1);
     assert((channel < (uint32_t)FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base)) && (NULL != trigger));
 
     uint32_t tmpReg = (DMA_CHANNEL_CFG_HWTRIGEN_MASK | DMA_CHANNEL_CFG_TRIGPOL_MASK | DMA_CHANNEL_CFG_TRIGTYPE_MASK |
@@ -190,6 +203,7 @@ void DMA_ConfigureChannelTrigger(DMA_Type *base, uint32_t channel, dma_channel_t
  */
 uint32_t DMA_GetRemainingBytes(DMA_Type *base, uint32_t channel)
 {
+    assert(FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base) != -1);
     assert(channel < (uint32_t)FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base));
 
     /* NOTE: when descriptors are chained, ACTIVE bit is set for whole chain. It makes
@@ -464,10 +478,10 @@ void DMA_AbortTransfer(dma_handle_t *handle)
 
     DMA_DisableChannel(handle->base, handle->channel);
     while ((DMA_COMMON_CONST_REG_GET(handle->base, handle->channel, BUSY) &
-            (1UL << DMA_CHANNEL_INDEX(handle->channel))) != 0UL)
+            (1UL << DMA_CHANNEL_INDEX(handle->base, handle->channel))) != 0UL)
     {
     }
-    DMA_COMMON_REG_GET(handle->base, handle->channel, ABORT) |= 1UL << DMA_CHANNEL_INDEX(handle->channel);
+    DMA_COMMON_REG_GET(handle->base, handle->channel, ABORT) |= 1UL << DMA_CHANNEL_INDEX(handle->base, handle->channel);
     DMA_EnableChannel(handle->base, handle->channel);
 }
 
@@ -484,6 +498,7 @@ void DMA_AbortTransfer(dma_handle_t *handle)
  */
 void DMA_CreateHandle(dma_handle_t *handle, DMA_Type *base, uint32_t channel)
 {
+    assert(FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base) != -1);
     assert((NULL != handle) && (channel < (uint32_t)FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base)));
 
     uint32_t dmaInstance;
@@ -703,6 +718,7 @@ void DMA_PrepareChannelTransfer(dma_channel_config_t *config,
 void DMA_LoadChannelDescriptor(DMA_Type *base, uint32_t channel, dma_descriptor_t *descriptor)
 {
     assert(NULL != descriptor);
+    assert(FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base) != -1);
     assert(channel < (uint32_t)FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base));
 
     uint32_t instance                   = DMA_GetInstance(base);
@@ -732,8 +748,12 @@ void DMA_LoadChannelDescriptor(DMA_Type *base, uint32_t channel, dma_descriptor_
 void DMA_InstallDescriptorMemory(DMA_Type *base, void *addr)
 {
     assert(addr != NULL);
-    assert((((uint32_t)(uint32_t *)addr) & ((uint32_t)FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE - 1UL)) == 0U);
 
+#if defined FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZEn
+    assert((((uint32_t)(uint32_t *)addr) & ((uint32_t)FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZEn(base) - 1UL)) == 0U);
+#else
+    assert((((uint32_t)(uint32_t *)addr) & ((uint32_t)FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE - 1UL)) == 0U);
+#endif
     /* reconfigure the DMA descriptor base address */
     base->SRAMBASE = (uint32_t)(uint32_t *)addr;
 }
@@ -783,6 +803,7 @@ void DMA_SubmitChannelTransferParameter(
     dma_handle_t *handle, uint32_t xferCfg, void *srcStartAddr, void *dstStartAddr, void *nextDesc)
 {
     assert((NULL != srcStartAddr) && (NULL != dstStartAddr));
+    assert(FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(handle->base) != -1);
     assert(handle->channel < (uint8_t)FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(handle->base));
 
     uint32_t instance            = DMA_GetInstance(handle->base);
@@ -887,6 +908,7 @@ void DMA_SubmitChannelDescriptor(dma_handle_t *handle, dma_descriptor_t *descrip
 status_t DMA_SubmitChannelTransfer(dma_handle_t *handle, dma_channel_config_t *config)
 {
     assert((NULL != handle) && (NULL != config));
+    assert(FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(handle->base) != -1);
     assert(handle->channel < (uint8_t)FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(handle->base));
     uint32_t instance            = DMA_GetInstance(handle->base);
     dma_descriptor_t *descriptor = (dma_descriptor_t *)(&s_dma_descriptor_table[instance][handle->channel]);
@@ -930,6 +952,7 @@ status_t DMA_SubmitChannelTransfer(dma_handle_t *handle, dma_channel_config_t *c
 status_t DMA_SubmitTransfer(dma_handle_t *handle, dma_transfer_config_t *config)
 {
     assert((NULL != handle) && (NULL != config));
+    assert(FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(handle->base) != -1);
     assert(handle->channel < (uint32_t)FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(handle->base));
 
     uint32_t instance            = DMA_GetInstance(handle->base);
@@ -969,6 +992,7 @@ status_t DMA_SubmitTransfer(dma_handle_t *handle, dma_transfer_config_t *config)
 void DMA_StartTransfer(dma_handle_t *handle)
 {
     assert(NULL != handle);
+    assert(FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(handle->base) != -1);
 
     uint32_t channel = handle->channel;
     assert(channel < (uint32_t)FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(handle->base));
@@ -999,7 +1023,7 @@ void DMA_IRQHandle(DMA_Type *base)
         {
             continue;
         }
-        channel_index = DMA_CHANNEL_INDEX(handle->channel);
+        channel_index = DMA_CHANNEL_INDEX(base, handle->channel);
         /* Channel uses INTA flag */
         if ((DMA_COMMON_REG_GET(handle->base, handle->channel, INTA) & (1UL << channel_index)) != 0UL)
         {

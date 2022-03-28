@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2020 , NXP
+ * Copyright 2017 - 2021 , NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -319,11 +319,19 @@ typedef struct
     uint32_t freqMax;
 } WaitStateInterval_t;
 
+/* clang-format off */
 /* Wait state if frequency is inferior to the one specified */
 static const WaitStateInterval_t IntervalList[] = {
-    {0, 11000000}, {1, 22000000}, {2, 33000000}, {3, 44000000},
-    {4, 55000000}, {5, 66000000}, {6, 84000000}, {7, 96000000} /* Maximum allowed frequency (96 MHz) */
+    {0, 11000000},
+    {1, 22000000},
+    {2, 33000000},
+    {3, 44000000},
+    {4, 55000000},
+    {5, 66000000},
+    {6, 84000000},
+    {7, 96000000} /* Maximum allowed frequency (96 MHz) */
 };
+/* clang-format on */
 
 void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz)
 {
@@ -359,7 +367,7 @@ void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz)
 /* Set EXT OSC Clk */
 /**
  * brief   Initialize the external osc clock to given frequency.
- * Crystal oscillator with an operating frequency of 12 MHz to 32 MHz. 
+ * Crystal oscillator with an operating frequency of 12 MHz to 32 MHz.
  * Option for external clock input (bypass mode) for clock frequencies of up to 25 MHz.
  * param   iFreq   : Desired frequency (must be equal to exact rate in Hz)
  * return  returns success or fail status.
@@ -1111,7 +1119,7 @@ static float findPll0MMult(void)
                        (float)(uint32_t)(1UL << PLL0_SSCG_MD_INT_P));
         mMult       = (float)mMult_int + mMult_fract;
     }
-    if (mMult == 0.0F)
+    if (0ULL == ((uint64_t)mMult))
     {
         mMult = 1.0F;
     }
@@ -1882,4 +1890,12 @@ void CLOCK_SetupPLL0Mult(uint32_t multiply_by, uint32_t input_freq)
     SYSCON->PLL0NDEC = ndec | (1UL << SYSCON_PLL0NDEC_NREQ_SHIFT); /* set Pdec value and assert preq */
     SYSCON->PLL0SSCG1 =
         mdec | (1UL << SYSCON_PLL0SSCG1_MREQ_SHIFT); /* select non sscg MDEC value, assert mreq and select mdec value */
+}
+
+/*! @brief Enable the OSTIMER 32k clock.
+ *  @return  Nothing
+ */
+void CLOCK_EnableOstimer32kClock(void)
+{
+    PMC->OSTIMERr |= PMC_OSTIMER_CLOCKENABLE_MASK;
 }

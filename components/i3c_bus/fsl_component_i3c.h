@@ -211,6 +211,7 @@ typedef struct i3c_device_hw_ops
     void (*HotJoin)(i3c_device_t *master);            /*!< HotJoin function.*/
     void (*RequestMastership)(
         i3c_device_t *master); /*!< RequestMastership function, only require for I3C master device.*/
+    void (*RegisterIBI)(i3c_device_t *master, uint8_t ibiAddress); /*!< Register IBI address with mandatory byte.*/
     void (*RequestIBI)(i3c_device_t *device, void *data, size_t dataSize); /*!< RequestIBI function.*/
 } i3c_device_hw_ops_t;
 
@@ -352,6 +353,17 @@ void I3C_BusCreate(i3c_bus_t *bus, const i3c_bus_config_t *busConfig);
 uint8_t I3C_BusGetValidAddrSlot(i3c_bus_t *bus, uint8_t startAddr);
 
 /*!
+ * @brief Set address slot status.
+ *
+ * This function will set an specified address to address slot and set the status.
+ *
+ * @param bus Pointer to bus structure.
+ * @param addr address to be used.
+ * @return status the address status of @ref i3c_addr_slot_status_t.
+ */
+void I3C_BusSetAddrSlot(i3c_bus_t *bus, uint8_t addr, i3c_addr_slot_status_t status);
+
+/*!
  * @brief Add exist I3C device in bus to the bus device list.
  *
  * This function will simply add the device to the bus device list and set the related address slot.
@@ -395,6 +407,18 @@ status_t I3C_BusMasterCreate(i3c_device_t *masterDev,
                              i3c_device_control_info_t *masterControlInfo);
 
 /*!
+ * @brief Register slave IBI information to bus master.
+ *
+ * This function will register the slave IBI information to bus master so that bus master know how
+ * to handle slave IBI event.
+ *
+ * @param masterDev Pointer to device structure creating as master.
+ * @param i3cDev Pointer to the I3C device master want to register.
+ * @param devIbiInfo Pointer to device IBI information structure.
+ */
+status_t I3C_BusMasterRegisterDevIBI(i3c_device_t *masterDev, i3c_device_t *i3cDev, i3c_device_ibi_info_t *devIbiInfo);
+
+/*!
  * @brief Bus master transfer CCC frame.
  *
  * Bus master call this function to transfer CCC frame, CCC frame command and data is prepared in @ref i3c_ccc_cmd_t
@@ -425,6 +449,17 @@ status_t I3C_BusMasterResetDAA(i3c_device_t *masterDev, uint8_t slaveAddr);
  * @param masterDev Pointer to I3C master device.
  */
 status_t I3C_BusMasterDoDAA(i3c_device_t *masterDev);
+
+/*!
+ * @brief Bus master set device dynamic address from static address.
+ *
+ * Bus master call this function to execute SETDASA CCC command to set device dynamic address from static address.
+ *
+ * @param masterDev Pointer to I3C master device.
+ * @param staticAddr Device static address.
+ * @param initDynamicAddr Device initialized dynamic address.
+ */
+status_t I3C_BusMasterSetDynamicAddrFromStaticAddr(i3c_device_t *master, uint8_t staticAddr, uint8_t initDynamicAddr);
 
 /*!
  * @brief Bus master send slave list on bus.

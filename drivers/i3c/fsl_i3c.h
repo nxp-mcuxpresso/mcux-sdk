@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 5, 2))
 /*@}*/
 
 /*! @brief Timeout times for waiting flag. */
@@ -133,18 +133,23 @@ enum _i3c_master_flags
  */
 enum _i3c_master_error_flags
 {
-    kI3C_MasterErrorNackFlag       = I3C_MERRWARN_NACK_MASK,    /*!< Slave NACKed the last address */
-    kI3C_MasterErrorWriteAbortFlag = I3C_MERRWARN_WRABT_MASK,   /*!< Slave NACKed the write data */
-    kI3C_MasterErrorTermFlag       = I3C_MERRWARN_TERM_MASK,    /*!< Master terminates slave read */
-    kI3C_MasterErrorParityFlag     = I3C_MERRWARN_HPAR_MASK,    /*!< Parity error from DDR read */
-    kI3C_MasterErrorCrcFlag        = I3C_MERRWARN_HCRC_MASK,    /*!< CRC error from DDR read */
-    kI3C_MasterErrorReadFlag       = I3C_MERRWARN_OREAD_MASK,   /*!< Read from MRDATAB register when FIFO empty */
-    kI3C_MasterErrorWriteFlag      = I3C_MERRWARN_OWRITE_MASK,  /*!< Write to MWDATAB register when FIFO full */
-    kI3C_MasterErrorMsgFlag        = I3C_MERRWARN_MSGERR_MASK,  /*!< Message SDR/DDR mismatch or
+    kI3C_MasterErrorNackFlag       = I3C_MERRWARN_NACK_MASK,  /*!< Slave NACKed the last address */
+    kI3C_MasterErrorWriteAbortFlag = I3C_MERRWARN_WRABT_MASK, /*!< Slave NACKed the write data */
+#if !defined(FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM) || (!FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM)
+    kI3C_MasterErrorTermFlag = I3C_MERRWARN_TERM_MASK, /*!< Master terminates slave read */
+#endif
+    kI3C_MasterErrorParityFlag = I3C_MERRWARN_HPAR_MASK,        /*!< Parity error from DDR read */
+    kI3C_MasterErrorCrcFlag    = I3C_MERRWARN_HCRC_MASK,        /*!< CRC error from DDR read */
+    kI3C_MasterErrorReadFlag   = I3C_MERRWARN_OREAD_MASK,       /*!< Read from MRDATAB register when FIFO empty */
+    kI3C_MasterErrorWriteFlag  = I3C_MERRWARN_OWRITE_MASK,      /*!< Write to MWDATAB register when FIFO full */
+    kI3C_MasterErrorMsgFlag    = I3C_MERRWARN_MSGERR_MASK,      /*!< Message SDR/DDR mismatch or
             read/write message in wrong state */
     kI3C_MasterErrorInvalidReqFlag = I3C_MERRWARN_INVREQ_MASK,  /*!< Invalid use of request */
     kI3C_MasterErrorTimeoutFlag    = I3C_MERRWARN_TIMEOUT_MASK, /*!< The module has stalled too long in a frame */
-    kI3C_MasterAllErrorFlags = kI3C_MasterErrorNackFlag | kI3C_MasterErrorWriteAbortFlag | kI3C_MasterErrorTermFlag |
+    kI3C_MasterAllErrorFlags       = kI3C_MasterErrorNackFlag | kI3C_MasterErrorWriteAbortFlag |
+#if !defined(FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM) || (!FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM)
+                               kI3C_MasterErrorTermFlag |
+#endif
                                kI3C_MasterErrorParityFlag | kI3C_MasterErrorCrcFlag | kI3C_MasterErrorReadFlag |
                                kI3C_MasterErrorWriteFlag | kI3C_MasterErrorMsgFlag | kI3C_MasterErrorInvalidReqFlag |
                                kI3C_MasterErrorTimeoutFlag, /*!< All error flags */
@@ -343,6 +348,7 @@ struct _i3c_master_handle
 {
     uint8_t state;                           /*!< Transfer state machine current state. */
     uint32_t remainingBytes;                 /*!< Remaining byte count in current state. */
+    bool isReadTerm;                         /*!< Is readterm configured. */
     i3c_master_transfer_t transfer;          /*!< Copy of the current transfer info. */
     uint8_t ibiAddress;                      /*!< Slave address which request IBI. */
     uint8_t *ibiBuff;                        /*!< Pointer to IBI buffer to keep ibi bytes. */
@@ -473,6 +479,7 @@ typedef enum _i3c_slave_activity_state
 typedef struct _i3c_slave_config
 {
     bool enableSlave;      /*!< Whether to enable slave. */
+    bool isHotJoin;        /*!< Whether to enable slave hotjoin before enable slave. */
     uint8_t staticAddr;    /*!< Static address. */
     uint16_t vendorID;     /*!< Device vendor ID(manufacture ID). */
     bool enableRandomPart; /*!< Whether to generate random part number, if using random part number,
@@ -1069,6 +1076,30 @@ status_t I3C_MasterStart(I3C_Type *base, i3c_bus_type_t type, uint8_t address, i
 status_t I3C_MasterRepeatedStart(I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir);
 
 /*!
+ * @brief Sends a repeated START signal and slave address on the I2C/I3C bus, receive size is also specified
+ * in the call.
+ *
+ * This function is used to send a Repeated START signal when a transfer is already in progress. Like
+ * I3C_MasterStart(), it also sends the specified 7-bit address. Call this API also configures the read
+ * terminate size for the following read transfer. For example, set the rxSize = 2, the following read transfer
+ * will be terminated after two bytes of data received. Write transfer will not be affected by the rxSize
+ * configuration.
+ *
+ * @note This function exists primarily to maintain compatible APIs between I3C and I2C drivers,
+ *      as well as to better document the intent of code that uses these APIs.
+ *
+ * @param base The I3C peripheral base address.
+ * @param type The bus type to use in this transaction.
+ * @param address 7-bit slave device address, in bits [6:0].
+ * @param dir Master transfer direction, either #kI3C_Read or #kI3C_Write. This parameter is used to set
+ *      the R/w bit (bit 0) in the transmitted slave address.
+ * @param rxSize Read terminate size for the followed read transfer, limit to 255 bytes.
+ * @retval #kStatus_Success Repeated START signal and address were successfully enqueued in the transmit FIFO.
+ */
+status_t I3C_MasterRepeatedStartWithRxSize(
+    I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir, uint8_t rxSize);
+
+/*!
  * @brief Performs a polling send transfer on the I2C/I3C bus.
  *
  * Sends up to @a txSize number of bytes to the previously addressed slave device. The slave may
@@ -1151,6 +1182,14 @@ static inline void I3C_MasterEmitIBIResponse(I3C_Type *base, i3c_ibi_response_t 
  * @param ibiRule Pointer to ibi rule description of type #i3c_register_ibi_addr_t
  */
 void I3C_MasterRegisterIBI(I3C_Type *base, i3c_register_ibi_addr_t *ibiRule);
+
+/*!
+ * @brief I3C master get IBI rule.
+ *
+ * @param base The I3C peripheral base address.
+ * @param ibiRule Pointer to store the read out ibi rule description.
+ */
+void I3C_MasterGetIBIRules(I3C_Type *base, i3c_register_ibi_addr_t *ibiRule);
 
 /*!
  * @brief Performs a DAA in the i3c bus

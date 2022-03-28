@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/DSP
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8904
@@ -30,6 +31,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ostimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pint
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/plu
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/powerquad
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/prince
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/puf
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rng_1
@@ -79,6 +81,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_spi_dma)
 #    include(driver_flexcomm_spi_freertos)
 #    include(middleware_freertos-kernel_cm33_secure_port)
+#    include(CMSIS_DSP_Library)
 #    include(driver_pint)
 #    include(driver_sctimer)
 #    include(driver_flexcomm)
@@ -146,6 +149,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_sdmmc_host_sdif_interrupt)
 #    include(driver_flexcomm_usart_dma)
 #    include(driver_flexcomm_i2c_freertos)
+#    include(driver_powerquad)
 #    include(middleware_sdmmc_host_sdif_freertos)
 #    include(driver_flexcomm_usart_freertos)
 #    include(device_startup_LPC55S69_cm33_core0)

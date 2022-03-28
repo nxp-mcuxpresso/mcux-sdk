@@ -11,6 +11,9 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
+if(${MCUX_DEVICE} STREQUAL "LPC55S36")
+    include(component_usart_adapter)
+endif()
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1166_cm4")
     include(component_lpuart_adapter)
 endif()

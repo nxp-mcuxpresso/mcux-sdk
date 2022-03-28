@@ -52,6 +52,12 @@ The link array consumes 16 bytes consumption.*/
 #define FLEXSPI_DMA_DES_COUNT 1U
 #endif
 
+#if defined(FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZEn)
+#define FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE                                            \
+    ((FSL_FEATURE_DMA0_DESCRIPTOR_ALIGN_SIZE > FSL_FEATURE_DMA1_DESCRIPTOR_ALIGN_SIZE) ? \
+         FSL_FEATURE_DMA0_DESCRIPTOR_ALIGN_SIZE :                                        \
+         FSL_FEATURE_DMA1_DESCRIPTOR_ALIGN_SIZE)
+#endif
 #if defined(__ICCARM__)
 #pragma data_alignment = FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE
 static dma_descriptor_t s_flexspiDes[FLEXSPI_DMA_DES_COUNT];

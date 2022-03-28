@@ -176,6 +176,8 @@ enum _status_groups
     kStatusGroup_I3CBUS = 155,                /*!< Group number for I3CBUS status codes. */
     kStatusGroup_QSCI = 156,                  /*!< Group number for QSCI status codes. */
     kStatusGroup_SNT = 157,                   /*!< Group number for SNT status codes. */
+    kStatusGroup_IPED = 158,                  /*!< Group number for IPED status codes. */
+    kStatusGroup_CSS_PKC = 159,               /*!< Group number for CSS PKC status codes. */
 };
 
 /*! \public

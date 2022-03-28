@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief OSTIMER driver version. */
-#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 /*!
@@ -65,22 +65,6 @@ void OSTIMER_Init(OSTIMER_Type *base);
  * @param base OSTIMER peripheral base address.
  */
 void OSTIMER_Deinit(OSTIMER_Type *base);
-
-/*!
- * @brief OSTIMER software reset.
- *
- * This function will use software to trigger an OSTIMER reset.
- * Please note that, the OS timer reset bit was in PMC->OSTIMERr register.
- *
- * @param base OSTIMER peripheral base address.
- */
-static inline void OSTIMER_SoftwareReset(OSTIMER_Type *base)
-{
-#if !(defined(FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG) && FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG)
-    PMC->OSTIMERr |= PMC_OSTIMER_SOFTRESET_MASK;
-    PMC->OSTIMERr &= ~PMC_OSTIMER_SOFTRESET_MASK;
-#endif
-}
 
 /*!
  * @brief Get OSTIMER status Flags.

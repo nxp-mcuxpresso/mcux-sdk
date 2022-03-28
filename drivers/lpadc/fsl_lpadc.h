@@ -150,7 +150,7 @@ enum _lpadc_trigger_status_flags
                                                     trigger 14 has enabled completion interrupts. */
     kLPADC_Trigger15CompletedFlag = 1UL << 31UL, /*!< Trigger 15 is completed and
                                                     trigger 15 has enabled completion interrupts. */
-}
+};
 #endif /* FSL_FEATURE_LPADC_HAS_TSTAT */
 
 /*!
