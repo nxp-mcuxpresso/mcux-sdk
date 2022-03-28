@@ -104,6 +104,7 @@ status_t IRTC_Init(RTC_Type *base, const irtc_config_t *config)
         /* Issue a software reset */
         IRTC_Reset(base);
 
+#if !defined(FSL_FEATURE_RTC_HAS_NO_CTRL2_WAKEUP_MODE) || (!FSL_FEATURE_RTC_HAS_NO_CTRL2_WAKEUP_MODE)
         /* Setup the wakeup pin select */
         if (config->wakeupSelect)
         {
@@ -113,7 +114,7 @@ status_t IRTC_Init(RTC_Type *base, const irtc_config_t *config)
         {
             base->CTRL2 &= ~(uint16_t)RTC_CTRL2_WAKEUP_MODE_MASK;
         }
-
+#endif
         /* Setup alarm match operation and sampling clock operation in standby mode */
         reg = base->CTRL;
         reg &= ~((uint16_t)RTC_CTRL_TIMER_STB_MASK_MASK | (uint16_t)RTC_CTRL_ALM_MATCH_MASK);
@@ -146,8 +147,10 @@ void IRTC_GetDefaultConfig(irtc_config_t *config)
     /* Initializes the configure structure to zero. */
     (void)memset(config, 0, sizeof(*config));
 
+#if !defined(FSL_FEATURE_RTC_HAS_NO_CTRL2_WAKEUP_MODE) || (!FSL_FEATURE_RTC_HAS_NO_CTRL2_WAKEUP_MODE)
     /* Tamper pin 0 is used as a wakeup/hibernation pin */
     config->wakeupSelect = true;
+#endif
 
     /* Sampling clock are not gated when in standby mode */
     config->timerStdMask = false;
@@ -514,7 +517,9 @@ void IRTC_SetTamperParams(RTC_Type *base, irtc_tamper_pins_t tamperNumber, const
     {
         case kIRTC_Tamper_0:
             /* Set the pin for Tamper 0 */
+#if !defined(FSL_FEATURE_RTC_HAS_NO_CTRL2_WAKEUP_MODE) || (!FSL_FEATURE_RTC_HAS_NO_CTRL2_WAKEUP_MODE)
             base->CTRL2 &= ~(uint16_t)RTC_CTRL2_WAKEUP_MODE_MASK;
+#endif
             reg = base->FILTER01_CFG;
             reg &= ~((uint16_t)RTC_FILTER01_CFG_POL0_MASK | (uint16_t)RTC_FILTER01_CFG_FIL_DUR0_MASK |
                      (uint16_t)RTC_FILTER01_CFG_CLK_SEL0_MASK);
@@ -532,6 +537,26 @@ void IRTC_SetTamperParams(RTC_Type *base, irtc_tamper_pins_t tamperNumber, const
                     RTC_FILTER01_CFG_CLK_SEL1(tamperConfig->filterClk));
             base->FILTER01_CFG = reg;
             break;
+#if defined(FSL_FEATURE_RTC_HAS_FILTER23_CFG) && FSL_FEATURE_RTC_HAS_FILTER23_CFG
+        case kIRTC_Tamper_2:
+            reg = base->FILTER23_CFG;
+            reg &= ~((uint16_t)RTC_FILTER23_CFG_POL2_MASK | (uint16_t)RTC_FILTER23_CFG_FIL_DUR2_MASK |
+                     (uint16_t)RTC_FILTER23_CFG_CLK_SEL2_MASK);
+            reg |= (RTC_FILTER23_CFG_POL2(tamperConfig->pinPolarity) |
+                    RTC_FILTER23_CFG_FIL_DUR2(tamperConfig->filterDuration) |
+                    RTC_FILTER23_CFG_CLK_SEL2(tamperConfig->filterClk));
+            base->FILTER23_CFG = reg;
+            break;
+        case kIRTC_Tamper_3:
+            reg = base->FILTER23_CFG;
+            reg &= ~((uint16_t)RTC_FILTER23_CFG_POL3_MASK | (uint16_t)RTC_FILTER23_CFG_FIL_DUR3_MASK |
+                     (uint16_t)RTC_FILTER23_CFG_CLK_SEL3_MASK);
+            reg |= (RTC_FILTER23_CFG_POL3(tamperConfig->pinPolarity) |
+                    RTC_FILTER23_CFG_FIL_DUR3(tamperConfig->filterDuration) |
+                    RTC_FILTER23_CFG_CLK_SEL3(tamperConfig->filterClk));
+            base->FILTER23_CFG = reg;
+            break;
+#else
         case kIRTC_Tamper_2:
             reg = base->FILTER2_CFG;
             reg &= ~((uint16_t)RTC_FILTER2_CFG_POL2_MASK | (uint16_t)RTC_FILTER2_CFG_FIL_DUR2_MASK |
@@ -541,6 +566,7 @@ void IRTC_SetTamperParams(RTC_Type *base, irtc_tamper_pins_t tamperNumber, const
                     RTC_FILTER2_CFG_CLK_SEL2(tamperConfig->filterClk));
             base->FILTER2_CFG = reg;
             break;
+#endif
 
         default:
             /* Internal tamper, does not have filter configuration. */
@@ -609,7 +635,7 @@ void IRTC_ConfigClockOut(RTC_Type *base, irtc_clockout_sel_t clkOut)
 {
     uint16_t ctrlVal = base->CTRL;
 
-    ctrlVal &= (uint16_t)(~RTC_CTRL_CLKOUT_MASK);
+    ctrlVal &= ~RTC_CTRL_CLKOUT_MASK;
 
     ctrlVal |= RTC_CTRL_CLKOUT((uint16_t)clkOut);
     if (clkOut == kIRTC_ClkoutCoarse1Hz)

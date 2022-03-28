@@ -38,7 +38,6 @@ void CDOG_GetDefaultConfig(cdog_config_t *conf)
     conf->timeout    = (uint8_t)kCDOG_FaultCtrl_NoAction; /* Timeout control */
     conf->miscompare = (uint8_t)kCDOG_FaultCtrl_NoAction; /* Miscompare control */
     conf->sequence   = (uint8_t)kCDOG_FaultCtrl_NoAction; /* Sequence control */
-    conf->control    = (uint8_t)kCDOG_FaultCtrl_NoAction; /* Control */
     conf->state      = (uint8_t)kCDOG_FaultCtrl_NoAction; /* State control */
     conf->address    = (uint8_t)kCDOG_FaultCtrl_NoAction; /* Address control */
     conf->irq_pause  = (uint8_t)kCDOG_IrqPauseCtrl_Run;   /* IRQ pause control */
@@ -278,7 +277,6 @@ status_t CDOG_Init(CDOG_Type *base, cdog_config_t *conf)
         CDOG_CONTROL_TIMEOUT_CTRL(conf->timeout) |       /* Action if the timeout event is triggered  */
         CDOG_CONTROL_MISCOMPARE_CTRL(conf->miscompare) | /* Action if the miscompare error event is triggered  */
         CDOG_CONTROL_SEQUENCE_CTRL(conf->sequence) |     /* Action if the sequence error event is triggered  */
-        CDOG_CONTROL_CONTROL_CTRL(conf->control) |       /* Action if the control error event is triggered  */
         CDOG_CONTROL_STATE_CTRL(conf->state) |           /* Action if the state error event is triggered  */
         CDOG_CONTROL_ADDRESS_CTRL(conf->address) |       /* Action if the address error event is triggered */
         CDOG_CONTROL_IRQ_PAUSE(conf->irq_pause) |        /* Pause running during interrupts setup */

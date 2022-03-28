@@ -12,6 +12,12 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 )
 endif()
 
+if(CONFIG_USE_middleware_freertos-kernel_LPC55S36)
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/fsl_os_abstraction_free_rtos.c
+)
+endif()
+
 if(CONFIG_USE_middleware_freertos-kernel_MIMXRT1166_cm4)
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/fsl_os_abstraction_free_rtos.c

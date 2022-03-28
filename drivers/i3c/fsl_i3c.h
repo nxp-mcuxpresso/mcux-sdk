@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 5, 2))
 /*@}*/
 
 /*! @brief Timeout times for waiting flag. */
@@ -133,18 +133,23 @@ enum _i3c_master_flags
  */
 enum _i3c_master_error_flags
 {
-    kI3C_MasterErrorNackFlag       = I3C_MERRWARN_NACK_MASK,    /*!< Slave NACKed the last address */
-    kI3C_MasterErrorWriteAbortFlag = I3C_MERRWARN_WRABT_MASK,   /*!< Slave NACKed the write data */
-    kI3C_MasterErrorTermFlag       = I3C_MERRWARN_TERM_MASK,    /*!< Master terminates slave read */
-    kI3C_MasterErrorParityFlag     = I3C_MERRWARN_HPAR_MASK,    /*!< Parity error from DDR read */
-    kI3C_MasterErrorCrcFlag        = I3C_MERRWARN_HCRC_MASK,    /*!< CRC error from DDR read */
-    kI3C_MasterErrorReadFlag       = I3C_MERRWARN_OREAD_MASK,   /*!< Read from MRDATAB register when FIFO empty */
-    kI3C_MasterErrorWriteFlag      = I3C_MERRWARN_OWRITE_MASK,  /*!< Write to MWDATAB register when FIFO full */
-    kI3C_MasterErrorMsgFlag        = I3C_MERRWARN_MSGERR_MASK,  /*!< Message SDR/DDR mismatch or
+    kI3C_MasterErrorNackFlag       = I3C_MERRWARN_NACK_MASK,  /*!< Slave NACKed the last address */
+    kI3C_MasterErrorWriteAbortFlag = I3C_MERRWARN_WRABT_MASK, /*!< Slave NACKed the write data */
+#if !defined(FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM) || (!FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM)
+    kI3C_MasterErrorTermFlag = I3C_MERRWARN_TERM_MASK, /*!< Master terminates slave read */
+#endif
+    kI3C_MasterErrorParityFlag = I3C_MERRWARN_HPAR_MASK,        /*!< Parity error from DDR read */
+    kI3C_MasterErrorCrcFlag    = I3C_MERRWARN_HCRC_MASK,        /*!< CRC error from DDR read */
+    kI3C_MasterErrorReadFlag   = I3C_MERRWARN_OREAD_MASK,       /*!< Read from MRDATAB register when FIFO empty */
+    kI3C_MasterErrorWriteFlag  = I3C_MERRWARN_OWRITE_MASK,      /*!< Write to MWDATAB register when FIFO full */
+    kI3C_MasterErrorMsgFlag    = I3C_MERRWARN_MSGERR_MASK,      /*!< Message SDR/DDR mismatch or
             read/write message in wrong state */
     kI3C_MasterErrorInvalidReqFlag = I3C_MERRWARN_INVREQ_MASK,  /*!< Invalid use of request */
     kI3C_MasterErrorTimeoutFlag    = I3C_MERRWARN_TIMEOUT_MASK, /*!< The module has stalled too long in a frame */
-    kI3C_MasterAllErrorFlags = kI3C_MasterErrorNackFlag | kI3C_MasterErrorWriteAbortFlag | kI3C_MasterErrorTermFlag |
+    kI3C_MasterAllErrorFlags       = kI3C_MasterErrorNackFlag | kI3C_MasterErrorWriteAbortFlag |
+#if !defined(FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM) || (!FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM)
+                               kI3C_MasterErrorTermFlag |
+#endif
                                kI3C_MasterErrorParityFlag | kI3C_MasterErrorCrcFlag | kI3C_MasterErrorReadFlag |
                                kI3C_MasterErrorWriteFlag | kI3C_MasterErrorMsgFlag | kI3C_MasterErrorInvalidReqFlag |
                                kI3C_MasterErrorTimeoutFlag, /*!< All error flags */

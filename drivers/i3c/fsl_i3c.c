@@ -39,7 +39,10 @@ enum _i3c_flag_constants
                       kI3C_MasterErrorFlag | kI3C_MasterSlave2MasterFlag,
 
     /*! Errors to check for. */
-    kMasterErrorFlags = kI3C_MasterErrorNackFlag | kI3C_MasterErrorWriteAbortFlag | kI3C_MasterErrorTermFlag |
+    kMasterErrorFlags = kI3C_MasterErrorNackFlag | kI3C_MasterErrorWriteAbortFlag |
+#if !defined(FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM) || (!FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM)
+                        kI3C_MasterErrorTermFlag |
+#endif
                         kI3C_MasterErrorParityFlag | kI3C_MasterErrorCrcFlag | kI3C_MasterErrorReadFlag |
                         kI3C_MasterErrorWriteFlag | kI3C_MasterErrorMsgFlag | kI3C_MasterErrorInvalidReqFlag |
                         kI3C_MasterErrorTimeoutFlag,
@@ -192,10 +195,12 @@ status_t I3C_MasterCheckAndClearError(I3C_Type *base, uint32_t status)
         {
             result = kStatus_I3C_WriteAbort;
         }
+#if !defined(FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM) || (!FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM)
         else if (0UL != (status & (uint32_t)kI3C_MasterErrorTermFlag))
         {
             result = kStatus_I3C_Term;
         }
+#endif
         else if (0UL != (status & (uint32_t)kI3C_MasterErrorParityFlag))
         {
             result = kStatus_I3C_HdrParityError;

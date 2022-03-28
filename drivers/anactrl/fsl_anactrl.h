@@ -27,14 +27,24 @@
  */
 enum _anactrl_interrupt_flags
 {
+#if (defined(FSL_FEATURE_ANACTRL_CONTROL_VDD_MAIN) && FSL_FEATURE_ANACTRL_CONTROL_VDD_MAIN)
+    kANACTRL_BodVDDMainFlag = ANACTRL_BOD_DCDC_INT_STATUS_BODVDDMAIN_STATUS_MASK, /*!< BOD VDDMAIN Interrupt status
+                                                                               before Interrupt Enable. */
+    kANACTRL_BodVDDMainInterruptFlag =
+        ANACTRL_BOD_DCDC_INT_STATUS_BODVDDMAIN_INT_STATUS_MASK,                     /*!< BOD VDDMAIN Interrupt status
+                                                                                 after Interrupt Enable. */
+    kANACTRL_BodVDDMainPowerFlag = ANACTRL_BOD_DCDC_INT_STATUS_BODVDDMAIN_VAL_MASK, /*!< Current value of BOD VDDMAIN
+                                                                                   power status output. */
+#else
     kANACTRL_BodVbatFlag = ANACTRL_BOD_DCDC_INT_STATUS_BODVBAT_STATUS_MASK, /*!< BOD VBAT Interrupt status before
                                                                                 Interrupt Enable. */
     kANACTRL_BodVbatInterruptFlag = ANACTRL_BOD_DCDC_INT_STATUS_BODVBAT_INT_STATUS_MASK, /*!< BOD VBAT Interrupt status
                                                                                             after Interrupt Enable. */
     kANACTRL_BodVbatPowerFlag = ANACTRL_BOD_DCDC_INT_STATUS_BODVBAT_VAL_MASK, /*!< Current value of BOD VBAT power
                                                                                     status output. */
-    kANACTRL_BodCoreFlag = ANACTRL_BOD_DCDC_INT_STATUS_BODCORE_STATUS_MASK,   /*!< BOD CORE Interrupt status before
-                                                                                  Interrupt Enable. */
+#endif /* defined(FSL_FEATURE_ANACTRL_CONTROL_VDD_MAIN) && FSL_FEATURE_ANACTRL_CONTROL_VDD_MAIN */
+    kANACTRL_BodCoreFlag = ANACTRL_BOD_DCDC_INT_STATUS_BODCORE_STATUS_MASK, /*!< BOD CORE Interrupt status before
+                                                                                Interrupt Enable. */
     kANACTRL_BodCoreInterruptFlag = ANACTRL_BOD_DCDC_INT_STATUS_BODCORE_INT_STATUS_MASK, /*!< BOD CORE Interrupt status
                                                                                             after Interrupt Enable. */
     kANACTRL_BodCorePowerFlag = ANACTRL_BOD_DCDC_INT_STATUS_BODCORE_VAL_MASK,      /*!< Current value of BOD CORE power
@@ -52,8 +62,13 @@ enum _anactrl_interrupt_flags
  */
 enum _anactrl_interrupt
 {
+#if (defined(FSL_FEATURE_ANACTRL_CONTROL_VDD_MAIN) && FSL_FEATURE_ANACTRL_CONTROL_VDD_MAIN)
+    kANACTRL_BodVDDMainInterruptEnable = ANACTRL_BOD_DCDC_INT_CTRL_BODVDDMAIN_INT_ENABLE_MASK, /*!< BOD VDDMAIN
+                                                                                            interrupt control. */
+#else
     kANACTRL_BodVbatInterruptEnable = ANACTRL_BOD_DCDC_INT_CTRL_BODVBAT_INT_ENABLE_MASK, /*!< BOD VBAT interrupt
                                                                                             control. */
+#endif /* defined(FSL_FEATURE_ANACTRL_CONTROL_VDD_MAIN) && FSL_FEATURE_ANACTRL_CONTROL_VDD_MAIN */
     kANACTRL_BodCoreInterruptEnable = ANACTRL_BOD_DCDC_INT_CTRL_BODCORE_INT_ENABLE_MASK, /*!< BOD CORE interrupt
                                                                                             control. */
     kANACTRL_DcdcInterruptEnable = ANACTRL_BOD_DCDC_INT_CTRL_DCDC_INT_ENABLE_MASK,       /*!< DCDC interrupt control. */
@@ -190,6 +205,7 @@ void ANACTRL_GetDefaultXo32MConfig(anactrl_xo32M_config_t *config);
 
 /* @} */
 
+#if !(defined(FSL_FEATURE_ANACTRL_HAS_NO_FREQ_ME_CTRL) && FSL_FEATURE_ANACTRL_HAS_NO_FREQ_ME_CTRL)
 /*!
  * @name Measure Frequency
  * @{
@@ -212,6 +228,7 @@ void ANACTRL_GetDefaultXo32MConfig(anactrl_xo32M_config_t *config);
  */
 uint32_t ANACTRL_MeasureFrequency(ANACTRL_Type *base, uint8_t scale, uint32_t refClkFreq);
 /* @} */
+#endif /* FSL_FEATURE_ANACTRL_HAS_NO_FREQ_ME_CTRL */
 
 /*!
  * @name Interrupt Interface

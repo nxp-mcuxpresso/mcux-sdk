@@ -18,6 +18,15 @@ if(${MCUX_DEVICE} STREQUAL "MKE18F16")
 
 endif()
 
+if(${MCUX_DEVICE} STREQUAL "LPC55S36")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/LPC55S36
+    )
+
+    include(all_lib_device_LPC55S36)
+
+endif()
+
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1166_cm7")
     list(APPEND CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/devices/MIMXRT1166
