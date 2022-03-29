@@ -602,7 +602,7 @@ status_t TFA9896_ProcessPatchFile(tfa9896_handle_t *handle, int length, const un
         if (err != kStatus_Success)
         {
 #ifdef TFA9896_PRINT_DEBUG
-            TFA9896_Printf("I2C write error at\r\n", size);
+            TFA9896_Printf("I2C write error at %d\r\n", size);
 #endif
             err = kStatus_TFA9896_I2C_Fatal;
             break;
