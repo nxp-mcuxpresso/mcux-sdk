@@ -1,4 +1,4 @@
-/* This linker script generated from xt-genldscripts.tpp for LSP C:/usr/xtensa/Xplorer-8.0.10-workspaces/XtensaInfo/Models/nxp_rt600_sram_memmap/sim */
+/* This linker script generated from xt-genldscripts.tpp for LSP c:\_ddm\audio\devices\MIMXRT685S\xtensa\sim */
 /* Linker Script for ld -r or ld -i */
 
 
@@ -56,6 +56,10 @@ SECTIONS
   .debug.xt.callgraph 0 :
   {
     KEEP (*(.debug.xt.callgraph .debug.xt.callgraph.* .gnu.linkonce.xt.callgraph.*))
+  }
+  .note.gnu.build-id 0 :
+  {
+    KEEP(*(.note.gnu.build-id))
   }
 }
 

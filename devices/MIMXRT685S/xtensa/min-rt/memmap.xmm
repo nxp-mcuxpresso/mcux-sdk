@@ -49,10 +49,15 @@
 //
 // Please refer to the Xtensa LSP Reference Manual for more details.
 //
-BEGIN sram
-0x4: sysram : sram : 0x23fffffc : executable, writable ;
- sram0 : C : 0x4 - 0x23ffffff :  STACK :  HEAP : .sram.rodata .clib.rodata .rtos.rodata .rodata .sram.literal .literal .rtos.literal .clib.literal .sram.text .text .clib.text .rtos.text .clib.data .clib.percpu.data .rtos.percpu.data .rtos.data .sram.data .data __llvm_prf_names .clib.bss .clib.percpu.bss .rtos.percpu.bss .rtos.bss .sram.bss .bss;
-END sram
+BEGIN dsp_core
+0x00200000: sysram : dsp_core : 0x280000 : executable, writable ;
+ dsp_core : C : 0x00200000 - 0x0047ffff :  STACK :  HEAP : .rodata .literal .text .data __llvm_prf_names .bss;
+END dsp_core
+
+BEGIN dsp_uncached
+0x20000000: sysram : dsp_uncached : 0x480000 : uncached, executable, writable ;
+ dsp_uncached : C : 0x20060000 - 0x2006ffff : NonCacheable.init NonCacheable ;
+END dsp_uncached
 
 BEGIN dram0
 0x24000000: dataRam : dram0 : 0x10000 : writable ;

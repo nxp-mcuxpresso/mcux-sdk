@@ -49,11 +49,15 @@
 //
 // Please refer to the Xtensa LSP Reference Manual for more details.
 //
+BEGIN dsp_core
+0x00200000: sysram : dsp_core : 0x280000 : executable, writable ;
+ dsp_core : C : 0x00200000 - 0x0047ffff :  STACK :  HEAP : .rodata .literal .text .data __llvm_prf_names .bss;
+END dsp_core
 
-BEGIN sram
-0x0: sysram : sram : 0x480000 : executable, writable ;
- dsp_core : C : 0x200000 - 0x47ffff :  STACK :  HEAP : .sram.rodata .clib.rodata .rtos.rodata .rodata .sram.literal .literal .rtos.literal .clib.literal .sram.text .text .clib.text .rtos.text .clib.data .clib.percpu.data .rtos.percpu.data .rtos.data .sram.data .data __llvm_prf_names .clib.bss .clib.percpu.bss .rtos.percpu.bss .rtos.bss .sram.bss .bss;
-END sram
+BEGIN dsp_uncached
+0x20000000: sysram : dsp_uncached : 0x480000 : uncached, executable, writable ;
+ dsp_uncached : C : 0x20060000 - 0x2006ffff : NonCacheable.init NonCacheable ;
+END dsp_uncached
 
 BEGIN dram0
 0x24000000: dataRam : dram0 : 0x10000 : writable ;
@@ -72,7 +76,3 @@ BEGIN iram0
  iram0_7 : F : 0x2402061c - 0x2402063b : .UserExceptionVector.text;
  iram0_8 : F : 0x2402063c - 0x2402ffff : .DoubleExceptionVector.text .iram0.text;
 END iram0
-BEGIN sram_uncached
-0x20000000: sysram : sram_uncached : 0x480000 : writable ;
- dsp_uncached : C : 0x20060000 - 0x2006ffff : NonCacheable.init NonCacheable;
-END sram_uncached

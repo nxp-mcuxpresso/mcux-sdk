@@ -7,7 +7,7 @@
 **     Compiler:            XCC Compiler
 **     Reference manual:    MIMXRT685 User manual Rev. 0.95 11 November 2019
 **     Version:             rev. 2.0, 2019-11-12
-**     Build:               b210330
+**     Build:               b211110
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT685S_dsp

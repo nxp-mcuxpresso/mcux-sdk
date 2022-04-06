@@ -1,4 +1,4 @@
-/* This linker script generated from xt-genldscripts.tpp for LSP C:/usr/xtensa/Xplorer-8.0.10-workspaces/XtensaInfo/Models/nxp_rt600_sram_memmap/min-rt */
+/* This linker script generated from xt-genldscripts.tpp for LSP c:\_ddm\audio\devices\MIMXRT685S\xtensa\min-rt */
 /* Linker Script for ld -n */
 MEMORY
 {
@@ -40,14 +40,14 @@ ENTRY(_ResetVector)
 
 
 /*  Memory boundary addresses:  */
-_memmap_mem_sram_start = 0x0;
-_memmap_mem_sram_end   = 0x480000;
+_memmap_mem_dsp_core_start = 0x200000;
+_memmap_mem_dsp_core_end   = 0x480000;
+_memmap_mem_dsp_uncached_start = 0x20000000;
+_memmap_mem_dsp_uncached_end   = 0x20480000;
 _memmap_mem_dram0_start = 0x24000000;
 _memmap_mem_dram0_end   = 0x24010000;
 _memmap_mem_iram0_start = 0x24020000;
 _memmap_mem_iram0_end   = 0x24030000;
-_memmap_mem_sram_uncached_start = 0x20000000;
-_memmap_mem_sram_uncached_end   = 0x20480000;
 
 /*  Memory segment boundary addresses:  */
 _memmap_seg_dsp_core_start = 0x200000;
@@ -79,20 +79,20 @@ _rom_store_table = 0;
 PROVIDE(_memmap_reset_vector = 0x24020000);
 PROVIDE(_memmap_vecbase_reset = 0x24020400);
 /* Various memory-map dependent cache attribute settings: */
-_memmap_cacheattr_wb_base = 0x00000044;
-_memmap_cacheattr_wt_base = 0x00000011;
+_memmap_cacheattr_wb_base = 0x00000024;
+_memmap_cacheattr_wt_base = 0x00000021;
 _memmap_cacheattr_bp_base = 0x00000022;
 _memmap_cacheattr_unused_mask = 0xFFFFFF00;
-_memmap_cacheattr_wb_trapnull = 0x22222244;
-_memmap_cacheattr_wba_trapnull = 0x22222244;
-_memmap_cacheattr_wbna_trapnull = 0x22222255;
-_memmap_cacheattr_wt_trapnull = 0x22222211;
+_memmap_cacheattr_wb_trapnull = 0x22222224;
+_memmap_cacheattr_wba_trapnull = 0x22222224;
+_memmap_cacheattr_wbna_trapnull = 0x22222225;
+_memmap_cacheattr_wt_trapnull = 0x22222221;
 _memmap_cacheattr_bp_trapnull = 0x22222222;
-_memmap_cacheattr_wb_strict = 0xFFFFFF44;
-_memmap_cacheattr_wt_strict = 0xFFFFFF11;
+_memmap_cacheattr_wb_strict = 0xFFFFFF24;
+_memmap_cacheattr_wt_strict = 0xFFFFFF21;
 _memmap_cacheattr_bp_strict = 0xFFFFFF22;
-_memmap_cacheattr_wb_allvalid = 0x22222244;
-_memmap_cacheattr_wt_allvalid = 0x22222211;
+_memmap_cacheattr_wb_allvalid = 0x22222224;
+_memmap_cacheattr_wt_allvalid = 0x22222221;
 _memmap_cacheattr_bp_allvalid = 0x22222222;
 _memmap_region_map = 0x00000003;
 PROVIDE(_memmap_cacheattr_reset = _memmap_cacheattr_wb_trapnull);
@@ -117,6 +117,7 @@ SECTIONS
     _memmap_seg_dsp_uncached_end = ALIGN(0x8);
   } >dsp_uncached_seg :dsp_uncached_phdr
 
+  _memmap_mem_dsp_uncached_max = ABSOLUTE(.);
 
   .dram0.rodata : ALIGN(4)
   {
@@ -220,6 +221,7 @@ SECTIONS
     _memmap_seg_dram0_0_end = ALIGN(0x8);
   } >dram0_0_seg :dram0_0_bss_phdr
 
+  _memmap_mem_dram0_max = ABSOLUTE(.);
 
   .ResetVector.text : ALIGN(4)
   {
@@ -327,14 +329,7 @@ SECTIONS
     _memmap_seg_iram0_8_end = ALIGN(0x8);
   } >iram0_8_seg :iram0_8_phdr
 
-
-  .sram.rodata : ALIGN(4)
-  {
-    _sram_rodata_start = ABSOLUTE(.);
-    *(.sram.rodata)
-    . = ALIGN (4);
-    _sram_rodata_end = ABSOLUTE(.);
-  } >dsp_core_seg :dsp_core_phdr
+  _memmap_mem_iram0_max = ABSOLUTE(.);
 
   .clib.rodata : ALIGN(4)
   {
@@ -393,14 +388,6 @@ SECTIONS
     _bss_table_end = ABSOLUTE(.);
     . = ALIGN (4);
     _rodata_end = ABSOLUTE(.);
-  } >dsp_core_seg :dsp_core_phdr
-
-  .sram.text : ALIGN(4)
-  {
-    _sram_text_start = ABSOLUTE(.);
-    *(.sram.literal .sram.text)
-    . = ALIGN (4);
-    _sram_text_end = ABSOLUTE(.);
   } >dsp_core_seg :dsp_core_phdr
 
   .text : ALIGN(4)
@@ -469,14 +456,6 @@ SECTIONS
     _rtos_data_end = ABSOLUTE(.);
   } >dsp_core_seg :dsp_core_phdr
 
-  .sram.data : ALIGN(4)
-  {
-    _sram_data_start = ABSOLUTE(.);
-    *(.sram.data)
-    . = ALIGN (4);
-    _sram_data_end = ABSOLUTE(.);
-  } >dsp_core_seg :dsp_core_phdr
-
   .data : ALIGN(4)
   {
     _data_start = ABSOLUTE(.);
@@ -532,7 +511,6 @@ SECTIONS
     *(.clib.percpu.bss)
     *(.rtos.percpu.bss)
     *(.rtos.bss)
-    *(.sram.bss)
     . = ALIGN (8);
     _bss_end = ABSOLUTE(.);
     _end = ALIGN(0x8);
@@ -543,6 +521,9 @@ SECTIONS
 
   PROVIDE(__stack = 0x480000);
   _heap_sentry = 0x480000;
+
+  _memmap_mem_dsp_core_max = ABSOLUTE(.);
+
   .debug  0 :  { *(.debug) }
   .line  0 :  { *(.line) }
   .debug_srcinfo  0 :  { *(.debug_srcinfo) }
@@ -580,6 +561,10 @@ SECTIONS
   .debug.xt.callgraph 0 :
   {
     KEEP (*(.debug.xt.callgraph .debug.xt.callgraph.* .gnu.linkonce.xt.callgraph.*))
+  }
+  .note.gnu.build-id 0 :
+  {
+    KEEP(*(.note.gnu.build-id))
   }
 }
 

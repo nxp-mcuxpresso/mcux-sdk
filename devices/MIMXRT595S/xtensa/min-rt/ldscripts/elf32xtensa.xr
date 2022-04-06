@@ -1,5 +1,5 @@
-/* This linker script generated from xt-genldscripts.tpp for LSP c:\_ddm\audio\devices\MIMXRT685S\xtensa\min-rt */
-/* Linker Script for ld -Ur */
+/* This linker script generated from xt-genldscripts.tpp for LSP c:\_ddm\dev\devices\MIMXRT595S\xtensa\min-rt */
+/* Linker Script for ld -r or ld -i */
 
 
 SECTIONS

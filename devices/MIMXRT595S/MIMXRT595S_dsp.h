@@ -6,7 +6,7 @@
 **     Compiler:            XCC Compiler
 **     Reference manual:    iMXRT500RM Rev.0, 01/2021
 **     Version:             rev. 5.0, 2020-08-27
-**     Build:               b210330
+**     Build:               b211110
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT595S_dsp
@@ -37228,6 +37228,7 @@ typedef struct {
  *  0b1..LP mode
  */
 #define SYSCTL0_PDSLEEPCFG0_PORCORE_LP(x)        (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDSLEEPCFG0_PORCORE_LP_SHIFT)) & SYSCTL0_PDSLEEPCFG0_PORCORE_LP_MASK)
+
 #define SYSCTL0_PDSLEEPCFG0_LVDCORE_LP_MASK      (0x200U)
 #define SYSCTL0_PDSLEEPCFG0_LVDCORE_LP_SHIFT     (9U)
 /*! LVDCORE_LP - LVD
@@ -38219,6 +38220,7 @@ typedef struct {
  *  0b1..LP mode
  */
 #define SYSCTL0_PDRUNCFG0_PORCORE_LP(x)          (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_PORCORE_LP_SHIFT)) & SYSCTL0_PDRUNCFG0_PORCORE_LP_MASK)
+
 #define SYSCTL0_PDRUNCFG0_LVDCORE_LP_MASK        (0x200U)
 #define SYSCTL0_PDRUNCFG0_LVDCORE_LP_SHIFT       (9U)
 /*! LVDCORE_LP - LVD
@@ -39210,6 +39212,7 @@ typedef struct {
  *  0b1..Sets the PDRUNCFG0 Bit
  */
 #define SYSCTL0_PDRUNCFG0_SET_PORCORE_LP(x)      (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_SET_PORCORE_LP_SHIFT)) & SYSCTL0_PDRUNCFG0_SET_PORCORE_LP_MASK)
+
 #define SYSCTL0_PDRUNCFG0_SET_LVDCORE_LP_MASK    (0x200U)
 #define SYSCTL0_PDRUNCFG0_SET_LVDCORE_LP_SHIFT   (9U)
 /*! LVDCORE_LP - LVD
@@ -40209,6 +40212,7 @@ typedef struct {
  *  0b1..Clears the PDRUNCFG0 Bit
  */
 #define SYSCTL0_PDRUNCFG0_CLR_PORCORE_LP(x)      (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_CLR_PORCORE_LP_SHIFT)) & SYSCTL0_PDRUNCFG0_CLR_PORCORE_LP_MASK)
+
 #define SYSCTL0_PDRUNCFG0_CLR_LVDCORE_LP_MASK    (0x200U)
 #define SYSCTL0_PDRUNCFG0_CLR_LVDCORE_LP_SHIFT   (9U)
 /*! LVDCORE_LP - LVD

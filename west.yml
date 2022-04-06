@@ -24,7 +24,7 @@ manifest:
 
   projects:
     - name: mcux-sdk-examples
-      revision: 07dfa7fda416cf01e525df1ebbfccc60f956f260
+      revision: 6938ad99b2f8b1574bb385f279576351dba2c60a 
       path: examples
     - name: FreeRTOS-Kernel
       revision: MCUX_2.11.0
@@ -50,7 +50,7 @@ manifest:
       path: middleware/fatfs
       revision: MCUX_2.11.0
     - name: mcux-sdk-middleware-eiq
-      revision: MCUX_2.11.0
+      revision: 2a19cbbed43538f3f426e1576da7742de347f442
       path: middleware/eiq
     - name: mcux-sdk-middleware-deepviewrt
       revision: MCUX_2.11.0

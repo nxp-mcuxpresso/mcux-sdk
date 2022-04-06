@@ -1,8 +1,4 @@
-//  Memory map file to generate linker scripts for programs to run on
-//  most targets (that have the OCD option); allows I/O through the host
-//  debugger when being debugged using GDB (via the Xtensa OCD daemon).
-
-// Customer ID=13270; Build=0x802a5; Copyright (c) 2006-2015 Cadence Design Systems, Inc.
+// Customer ID=13270; Build=0x815fe; Copyright (c) 2004-2015 Cadence Design Systems, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -51,31 +47,42 @@
 //
 // Please refer to the Xtensa LSP Reference Manual for more details.
 //
-BEGIN dsp_core
-0x00200000: sysram : dsp_core : 0x280000 : executable, writable ;
- dsp_core : C : 0x00200000 - 0x0047ffff :  STACK :  HEAP : .rodata .literal .text .data __llvm_prf_names .bss;
-END dsp_core
 
-BEGIN dsp_uncached
-0x20000000: sysram : dsp_uncached : 0x480000 : uncached, executable, writable ;
- dsp_uncached : C : 0x20060000 - 0x2006ffff : NonCacheable.init NonCacheable ;
-END dsp_uncached
+// Additions for -mvecbase option:
+VECBASE = 0x180400
 
-BEGIN dram0
-0x24000000: dataRam : dram0 : 0x10000 : writable ;
- dram0_0 : C : 0x24000000 - 0x2400ffff : .dram0.rodata .ResetVector.literal .Level2InterruptVector.literal .Level3InterruptVector.literal .DebugExceptionVector.literal .NMIExceptionVector.literal .KernelExceptionVector.literal .UserExceptionVector.literal .DoubleExceptionVector.literal .iram0.literal .dram0.data .dram0.bss;
-END dram0
+// Additions for -mvecreset option:
+VECRESET = 0x000000
+
+// Additions for -mvecselect option:
+VECSELECT = 0
 
 BEGIN iram0
-0x24020000: instRam : iram0 : 0x10000 : executable, writable ;
- iram0_0 : F : 0x24020000 - 0x240203ff : .ResetVector.text .ResetHandler.literal .ResetHandler.text;
- iram0_1 : F : 0x24020400 - 0x2402057b : .WindowVectors.text;
- iram0_2 : F : 0x2402057c - 0x2402059b : .Level2InterruptVector.text;
- iram0_3 : F : 0x2402059c - 0x240205bb : .Level3InterruptVector.text;
- iram0_4 : F : 0x240205bc - 0x240205db : .DebugExceptionVector.text;
- iram0_5 : F : 0x240205dc - 0x240205fb : .NMIExceptionVector.text;
- iram0_6 : F : 0x240205fc - 0x2402061b : .KernelExceptionVector.text;
- iram0_7 : F : 0x2402061c - 0x2402063b : .UserExceptionVector.text;
- iram0_8 : F : 0x2402063c - 0x2402ffff : .DoubleExceptionVector.text .iram0.text;
+0x00000000: instRam : iram0 : 0x400 : executable, writable ;
+ iram0_0 : F : 0x000000 - 0x0003ff : .ResetVector.text .ResetHandler.literal .ResetHandler.text;
 END iram0
+
+BEGIN iram1
+0x180400: instRam : iram1 : 0xFFC00 : executable, writable ;
+ iram1_0 : F : 0x180400 - 0x18057b : .WindowVectors.text .Level2InterruptVector.literal;
+ iram1_1 : F : 0x18057c - 0x18059b : .Level2InterruptVector.text .Level3InterruptVector.literal;
+ iram1_2 : F : 0x18059c - 0x1805bb : .Level3InterruptVector.text .DebugExceptionVector.literal;
+ iram1_3 : F : 0x1805bc - 0x1805db : .DebugExceptionVector.text .NMIExceptionVector.literal;
+ iram1_4 : F : 0x1805dc - 0x1805fb : .NMIExceptionVector.text .KernelExceptionVector.literal;
+ iram1_5 : F : 0x1805fc - 0x18061b : .KernelExceptionVector.text .UserExceptionVector.literal;
+ iram1_6 : F : 0x18061c - 0x18063b : .UserExceptionVector.text .DoubleExceptionVector.literal;
+ iram1_7 : F : 0x18063c - 0x180a3b : .DoubleExceptionVector.text;
+ iram1_8 : F : 0x180a3c - 0x27ffff : __llvm_prf_names .text .literal;
+END iram1
+
+BEGIN dram0
+0x820000: dataRam : dram0 : 0x60000 : writable ;
+ dram0_0 : C : 0x820000 - 0x87ffff : .shmem;
+END dram0
+
+BEGIN dram1
+0x880000: dataRam : dram1 : 0x100000 : writable ;
+ dram1_0 : C : 0x880000 - 0x97ffff : STACK : HEAP : .rodata .data .bss;
+END dram1
+
 
