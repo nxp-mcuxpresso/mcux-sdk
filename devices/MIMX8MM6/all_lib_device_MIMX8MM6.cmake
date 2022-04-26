@@ -15,6 +15,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyar8031
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet/
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/silicon_id
