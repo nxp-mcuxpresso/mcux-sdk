@@ -263,6 +263,11 @@ status_t WM8960_Deinit(wm8960_handle_t *handle)
 {
     status_t ret = kStatus_Success;
 
+    /* Reinit I2C in case it has been stopped by concurrent codec driver */
+    if (CODEC_I2C_Init(handle->i2cHandle, handle->config->i2cConfig.codecI2CInstance, WM8960_I2C_BAUDRATE,
+                handle->config->i2cConfig.codecI2CSourceClock) != (status_t)kStatus_HAL_I2cSuccess)
+        return kStatus_Fail;
+
     WM8960_CHECK_RET(WM8960_SetModule(handle, kWM8960_ModuleADC, false), ret);
     WM8960_CHECK_RET(WM8960_SetModule(handle, kWM8960_ModuleDAC, false), ret);
     WM8960_CHECK_RET(WM8960_SetModule(handle, kWM8960_ModuleVREF, false), ret);
