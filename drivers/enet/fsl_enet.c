@@ -957,7 +957,9 @@ static status_t ENET_RxBufferAllocAll(ENET_Type *base, enet_handle_t *handle)
     uint16_t index;
     uintptr_t buffer;
     uint16_t ringId;
+#if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
     uint16_t rxBuffSizeAlign;
+#endif /* FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL */
 
     /* Allocate memory for all empty buffers in buffer descriptor */
     for (ringId = 0; ringId < handle->ringNum; ringId++)
@@ -967,7 +969,9 @@ static status_t ENET_RxBufferAllocAll(ENET_Type *base, enet_handle_t *handle)
         rxBdRing       = &handle->rxBdRing[ringId];
         curBuffDescrip = rxBdRing->rxBdBase;
         index          = 0;
+#if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
         rxBuffSizeAlign = handle->rxBuffSizeAlign[ringId];
+#endif /* FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL */
 
         do
         {
@@ -977,9 +981,10 @@ static status_t ENET_RxBufferAllocAll(ENET_Type *base, enet_handle_t *handle)
                 ENET_RxBufferFreeAll(base, handle);
                 return kStatus_ENET_InitMemoryFail;
             }
-            assert(buffer + rxBuffSizeAlign - 1 <= UINT_MAX);
 
 #if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
+            assert(buffer + rxBuffSizeAlign - 1 <= UINT_MAX);
+
             if (handle->rxMaintainEnable[ringId])
             {
                 /* Invalidate cache in case any unfinished cache operation occurs. */
@@ -2394,7 +2399,9 @@ status_t ENET_GetRxFrame(ENET_Type *base, enet_handle_t *handle, enet_rx_frame_s
 
     status_t result                              = kStatus_Success;
     enet_rx_bd_ring_t *rxBdRing                  = &handle->rxBdRing[ringId];
+#if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
     uint16_t rxBuffSizeAlign                     = handle->rxBuffSizeAlign[ringId];
+#endif /* FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL */
     volatile enet_rx_bd_struct_t *curBuffDescrip = rxBdRing->rxBdBase + rxBdRing->rxGenIdx;
     uintptr_t newBuff                            = 0;
     bool isLastBuff                              = false;
@@ -2476,7 +2483,9 @@ status_t ENET_GetRxFrame(ENET_Type *base, enet_handle_t *handle, enet_rx_frame_s
         newBuff = (uintptr_t)handle->rxBuffAlloc(base, handle->userData, ringId);
         if (newBuff)
         {
+#if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
             assert(newBuff + rxBuffSizeAlign - 1 <= UINT_MAX);
+#endif /* FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL */
             rxBuffer = &rxFrame->rxBuffArray[index];
 
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
