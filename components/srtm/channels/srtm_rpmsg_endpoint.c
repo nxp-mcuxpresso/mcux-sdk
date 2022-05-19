@@ -26,16 +26,6 @@
 #define SRTM_DEBUG_COMMUNICATION (0)
 #endif
 
-typedef struct _srtm_rpmsg_endpoint
-{
-    struct _srtm_channel channel;
-    srtm_rpmsg_endpoint_config_t config;
-    struct rpmsg_lite_endpoint *rpmsgEndpoint;
-    srtm_rpmsg_endpoint_rx_cb_t rxCallback;
-    void *rxCallbackParam;
-    bool started;
-} * srtm_rpmsg_endpoint_t;
-
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
