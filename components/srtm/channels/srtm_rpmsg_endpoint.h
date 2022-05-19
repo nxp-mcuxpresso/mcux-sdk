@@ -10,6 +10,7 @@
 #define __SRTM_RPMSG_ENDPOINT_H__
 
 #include "srtm_channel.h"
+#include "srtm_channel_struct.h"
 #include "rpmsg_lite.h"
 
 /*!
@@ -36,6 +37,16 @@ typedef struct _srtm_rpmsg_endpoint_config
  */
 typedef int (*srtm_rpmsg_endpoint_rx_cb_t)(
     srtm_channel_t channel, void *payload, int payloadLen, unsigned long src, void *param);
+
+typedef struct _srtm_rpmsg_endpoint
+{
+    struct _srtm_channel channel;
+    srtm_rpmsg_endpoint_config_t config;
+    struct rpmsg_lite_endpoint *rpmsgEndpoint;
+    srtm_rpmsg_endpoint_rx_cb_t rxCallback;
+    void *rxCallbackParam;
+    bool started;
+} * srtm_rpmsg_endpoint_t;
 
 /*******************************************************************************
  * API
