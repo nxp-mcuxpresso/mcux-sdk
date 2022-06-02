@@ -241,6 +241,26 @@ __STATIC_FORCEINLINE uint8_t __CLZ(uint32_t value)
   return __builtin_clz(value);
 }
 
+/**
+  \brief   likely/unlikely() branch prediction
+  \details Gives hints to the compiler to favor either side of a jump instruction
+  \param [in]  expr   Boolean expression under evaluation
+  \return             The same boolean value
+ */
+#ifndef unlikely
+__STATIC_FORCEINLINE long unlikely(long expr)
+{
+  return __builtin_expect(expr, 0L);
+}
+#endif
+
+#ifndef likely
+__STATIC_FORCEINLINE long likely(long expr)
+{
+  return __builtin_expect(expr, 1L);
+}
+#endif
+
 /*@}*/ /* end of group CMSIS_Core_InstructionInterface */
 
 
