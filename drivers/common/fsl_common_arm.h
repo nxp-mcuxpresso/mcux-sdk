@@ -574,6 +574,10 @@ static inline status_t DisableIRQ(IRQn_Type interrupt)
     return status;
 }
 
+#if defined(__GIC_PRIO_BITS)
+#define NVIC_SetPriority(irq, prio) do {} while(0)
+#endif
+
 /*!
  * @brief Disable the global IRQ
  *
