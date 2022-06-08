@@ -1688,7 +1688,7 @@ serial_manager_status_t SerialManager_CancelWriting(serial_write_handle_t writeH
 
     primask = DisableGlobalIRQ();
     if (serialWriteHandle !=
-        (serial_manager_write_handle_t *)((uint32_t)LIST_GetHead(
+        (serial_manager_write_handle_t *)((void *)LIST_GetHead(
                                               &serialWriteHandle->serialManagerHandle->runningWriteHandleHead) -
                                           4U))
     {
