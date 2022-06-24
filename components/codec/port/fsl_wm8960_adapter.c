@@ -54,7 +54,7 @@
                                         kWM8960_ModuleLineIn :             \
                                         (module) == kCODEC_ModuleSpeaker ? \
                                         kWM8960_ModuleSpeaker :            \
-                                        (module) == kCODEC_ModuleMixer ?   \
+                                        (module) == kCODEC_ModuleMxier ?   \
                                         kWM8960_ModuleOMIX :               \
                                         (module) == kCODEC_ModuleLineout ? kWM8960_ModuleLineOut : kWM8960_ModuleADC)
 

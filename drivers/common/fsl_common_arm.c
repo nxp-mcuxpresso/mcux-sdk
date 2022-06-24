@@ -152,20 +152,6 @@ loop
     BNE  loop
     BX   LR
 }
-#elif defined(__ARM_ARCH_8A__) /* This macro is ARMv8-A specific */
-static void DelayLoop(uint32_t count)
-{
-    __ASM volatile("    MOV    X0, %0" : : "r"(count));
-    __ASM volatile(
-        "loop:                          \n"
-        "    SUB    X0, X0, #1          \n"
-        "    CMP    X0, #0              \n"
-
-        "    BNE    loop                \n"
-        :
-        :
-        : "r0");
-}
 /* clang-format on */
 #elif defined(__ARMCC_VERSION) || defined(__ICCARM__) || defined(__GNUC__)
 /* Cortex-M0 has a smaller instruction set, SUBS isn't supported in thumb-16 mode reported from __GNUC__ compiler,

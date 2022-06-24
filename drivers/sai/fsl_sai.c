@@ -91,6 +91,44 @@ static void SAI_SetMasterClockDivider(I2S_Type *base, uint32_t mclk_Hz, uint32_t
 static uint32_t SAI_GetInstance(I2S_Type *base);
 
 /*!
+ * @brief sends a piece of data in non-blocking way.
+ *
+ * @param base SAI base pointer
+ * @param channel start channel number.
+ * @param channelMask enabled channels mask.
+ * @param endChannel end channel numbers.
+ * @param bitWidth How many bits in a audio word, usually 8/16/24/32 bits.
+ * @param buffer Pointer to the data to be written.
+ * @param size Bytes to be written.
+ */
+static void SAI_WriteNonBlocking(I2S_Type *base,
+                                 uint32_t channel,
+                                 uint32_t channelMask,
+                                 uint32_t endChannel,
+                                 uint8_t bitWidth,
+                                 uint8_t *buffer,
+                                 uint32_t size);
+
+/*!
+ * @brief Receive a piece of data in non-blocking way.
+ *
+ * @param base SAI base pointer
+ * @param channel start channel number.
+ * @param channelMask enabled channels mask.
+ * @param endChannel end channel numbers.
+ * @param bitWidth How many bits in a audio word, usually 8/16/24/32 bits.
+ * @param buffer Pointer to the data to be read.
+ * @param size Bytes to be read.
+ */
+static void SAI_ReadNonBlocking(I2S_Type *base,
+                                uint32_t channel,
+                                uint32_t channelMask,
+                                uint32_t endChannel,
+                                uint8_t bitWidth,
+                                uint8_t *buffer,
+                                uint32_t size);
+
+/*!
  * @brief Get classic I2S mode configurations.
  *
  * @param config transceiver configurations
@@ -236,7 +274,7 @@ static uint32_t SAI_GetInstance(I2S_Type *base)
     return instance;
 }
 
-void SAI_WriteNonBlocking(I2S_Type *base,
+static void SAI_WriteNonBlocking(I2S_Type *base,
                                  uint32_t channel,
                                  uint32_t channelMask,
                                  uint32_t endChannel,
@@ -269,7 +307,7 @@ void SAI_WriteNonBlocking(I2S_Type *base,
     }
 }
 
-void SAI_ReadNonBlocking(I2S_Type *base,
+static void SAI_ReadNonBlocking(I2S_Type *base,
                                 uint32_t channel,
                                 uint32_t channelMask,
                                 uint32_t endChannel,
@@ -2095,7 +2133,7 @@ void SAI_WriteBlocking(I2S_Type *base, uint32_t channel, uint32_t bitWidth, uint
         }
 
         SAI_WriteNonBlocking(base, channel, 1UL << channel, channel, (uint8_t)bitWidth, buffer, bytesPerWord);
-        buffer = (uint8_t *)((uintptr_t)buffer + bytesPerWord);
+        buffer = (uint8_t *)((uint32_t)buffer + bytesPerWord);
         i += bytesPerWord;
     }
 
@@ -2150,7 +2188,7 @@ void SAI_WriteMultiChannelBlocking(
 
         SAI_WriteNonBlocking(base, channel, channelMask, endChannel, (uint8_t)bitWidth, buffer,
                              bytesPerWord * channelNums);
-        buffer = (uint8_t *)((uintptr_t)buffer + bytesPerWord * channelNums);
+        buffer = (uint8_t *)((uint32_t)buffer + bytesPerWord * channelNums);
         j += bytesPerWord * channelNums;
     }
 
@@ -2203,7 +2241,7 @@ void SAI_ReadMultiChannelBlocking(
 
         SAI_ReadNonBlocking(base, channel, channelMask, endChannel, (uint8_t)bitWidth, buffer,
                             bytesPerWord * channelNums);
-        buffer = (uint8_t *)((uintptr_t)buffer + bytesPerWord * channelNums);
+        buffer = (uint8_t *)((uint32_t)buffer + bytesPerWord * channelNums);
         j += bytesPerWord * channelNums;
     }
 }
@@ -2235,7 +2273,7 @@ void SAI_ReadBlocking(I2S_Type *base, uint32_t channel, uint32_t bitWidth, uint8
         }
 
         SAI_ReadNonBlocking(base, channel, 1UL << channel, channel, (uint8_t)bitWidth, buffer, bytesPerWord);
-        buffer = (uint8_t *)((uintptr_t)buffer + bytesPerWord);
+        buffer = (uint8_t *)((uint32_t)buffer + bytesPerWord);
         i += bytesPerWord;
     }
 }
@@ -2707,7 +2745,7 @@ void SAI_TransferTxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
 
         /* Update the internal counter */
         handle->saiQueue[handle->queueDriver].dataSize -= size;
-        handle->saiQueue[handle->queueDriver].data = (uint8_t *)((uintptr_t)buffer + size);
+        handle->saiQueue[handle->queueDriver].data = (uint8_t *)((uint32_t)buffer + size);
     }
 #else
     if (IS_SAI_FLAG_SET(base->TCSR, I2S_TCSR_FWF_MASK))
@@ -2719,7 +2757,7 @@ void SAI_TransferTxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
 
         /* Update internal counter */
         handle->saiQueue[handle->queueDriver].dataSize -= size;
-        handle->saiQueue[handle->queueDriver].data = (uint8_t *)((uintptr_t)buffer + size);
+        handle->saiQueue[handle->queueDriver].data = (uint8_t *)((uint32_t)buffer + size);
     }
 #endif /* FSL_FEATURE_SAI_FIFO_COUNT */
 
@@ -2783,7 +2821,7 @@ void SAI_TransferRxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
 
         /* Update the internal counter */
         handle->saiQueue[handle->queueDriver].dataSize -= size;
-        handle->saiQueue[handle->queueDriver].data = (uint8_t *)((uintptr_t)buffer + size);
+        handle->saiQueue[handle->queueDriver].data = (uint8_t *)((uint32_t)buffer + size);
     }
 #else
     if (IS_SAI_FLAG_SET(base->RCSR, I2S_RCSR_FWF_MASK))
@@ -2795,7 +2833,7 @@ void SAI_TransferRxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
 
         /* Update internal state */
         handle->saiQueue[handle->queueDriver].dataSize -= size;
-        handle->saiQueue[handle->queueDriver].data = (uint8_t *)((uintptr_t)buffer + size);
+        handle->saiQueue[handle->queueDriver].data = (uint8_t *)((uint32_t)buffer + size);
     }
 #endif /* FSL_FEATURE_SAI_FIFO_COUNT */
 

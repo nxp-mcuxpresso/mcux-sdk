@@ -35,7 +35,7 @@ caddr_t _sbrk(int incr)
 
     prev_heap_end = heap_end;
 
-    if ((uintptr_t)heap_end + (uintptr_t)incr > (uintptr_t)(&heap_limit))
+    if ((unsigned int)heap_end + (unsigned int)incr > (unsigned int)(&heap_limit))
     {
         errno = ENOMEM;
 
@@ -43,7 +43,7 @@ caddr_t _sbrk(int incr)
     }
     else
     {
-        heap_end = (char *)((uintptr_t)heap_end + (uintptr_t)incr);
+        heap_end = (char *)((unsigned int)heap_end + (unsigned int)incr);
 
         ret = (caddr_t)prev_heap_end;
     }

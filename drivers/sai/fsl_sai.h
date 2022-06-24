@@ -272,7 +272,9 @@ typedef struct _sai_transfer_format
     uint32_t sampleRate_Hz;   /*!< Sample rate of audio data */
     uint32_t bitWidth;        /*!< Data length of audio data, usually 8/16/24/32 bits */
     sai_mono_stereo_t stereo; /*!< Mono or stereo */
+#if defined(FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER) && (FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER)
     uint32_t masterClockHz; /*!< Master clock frequency in Hz */
+#endif                      /* FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER */
 #if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
     uint8_t watermark; /*!< Watermark value */
 #endif                 /* FSL_FEATURE_SAI_FIFO_COUNT */
@@ -1216,9 +1218,9 @@ static inline void SAI_RxEnableDMA(I2S_Type *base, uint32_t mask, bool enable)
  * @param channel Which data channel used.
  * @return data register address.
  */
-static inline uintptr_t SAI_TxGetDataRegisterAddress(I2S_Type *base, uint32_t channel)
+static inline uint32_t SAI_TxGetDataRegisterAddress(I2S_Type *base, uint32_t channel)
 {
-    return (uintptr_t)(&(base->TDR)[channel]);
+    return (uint32_t)(&(base->TDR)[channel]);
 }
 
 /*!
@@ -1230,9 +1232,9 @@ static inline uintptr_t SAI_TxGetDataRegisterAddress(I2S_Type *base, uint32_t ch
  * @param channel Which data channel used.
  * @return data register address.
  */
-static inline uintptr_t SAI_RxGetDataRegisterAddress(I2S_Type *base, uint32_t channel)
+static inline uint32_t SAI_RxGetDataRegisterAddress(I2S_Type *base, uint32_t channel)
 {
-    return (uintptr_t)(&(base->RDR)[channel]);
+    return (uint32_t)(&(base->RDR)[channel]);
 }
 
 /*! @} */
@@ -1572,36 +1574,6 @@ void SAI_TransferTxHandleIRQ(I2S_Type *base, sai_handle_t *handle);
  * @param handle Pointer to the sai_handle_t structure.
  */
 void SAI_TransferRxHandleIRQ(I2S_Type *base, sai_handle_t *handle);
-
-/*!
- * @brief sends a piece of data in non-blocking way.
- *
- * @param base SAI base pointer
- * @param channel start channel number.
- * @param channelMask enabled channels mask.
- * @param endChannel end channel numbers.
- * @param bitWidth How many bits in a audio word, usually 8/16/24/32 bits.
- * @param buffer Pointer to the data to be written.
- * @param size Bytes to be written.
- */
-void SAI_WriteNonBlocking(I2S_Type *base, uint32_t channel,
-		uint32_t channelMask, uint32_t endChannel, uint8_t bitWidth,
-		uint8_t *buffer, uint32_t size);
-
-/*!
- * @brief Receive a piece of data in non-blocking way.
- *
- * @param base SAI base pointer
- * @param channel start channel number.
- * @param channelMask enabled channels mask.
- * @param endChannel end channel numbers.
- * @param bitWidth How many bits in a audio word, usually 8/16/24/32 bits.
- * @param buffer Pointer to the data to be read.
- * @param size Bytes to be read.
- */
-void SAI_ReadNonBlocking(I2S_Type *base, uint32_t channel,
-		uint32_t channelMask, uint32_t endChannel, uint8_t bitWidth,
-		uint8_t *buffer, uint32_t size);
 
 /*! @} */
 
