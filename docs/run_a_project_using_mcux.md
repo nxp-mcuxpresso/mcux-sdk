@@ -1,3 +1,5 @@
+[Previous Page](Getting_Started.md)
+
 This section describes the steps required to configure MCUXpresso IDE to build, run, and debug example applications.
 
 # :one:Set up Environment

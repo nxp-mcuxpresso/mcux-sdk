@@ -18,10 +18,10 @@
  * Definitions
  ******************************************************************************/
 /*! @brief HAL I2C master handle size. */
-#define HAL_I2C_MASTER_HANDLE_SIZE (80U)
+#define HAL_I2C_MASTER_HANDLE_SIZE (104U)
 
 /*! @brief HAL I2C slave handle size. */
-#define HAL_I2C_SLAVE_HANDLE_SIZE (88U)
+#define HAL_I2C_SLAVE_HANDLE_SIZE (144U)
 
 /*! @brief HAL I2C status. */
 typedef enum _hal_i2c_status
@@ -131,7 +131,7 @@ typedef void *hal_i2c_slave_handle_t;
 /*!
  * @brief Defines the I2C master handle
  *
- * This macro is used to define a 4 byte aligned I2C master handle.
+ * This macro is used to define a 4 byte or 8 byte (aarch64) aligned I2C master handle.
  * Then use "(hal_i2c_master_handle_t)name" to get the I2C master handle.
  *
  * The macro should be global and could be optional. You could also define I2C master handle by yourself.
@@ -144,12 +144,12 @@ typedef void *hal_i2c_slave_handle_t;
  * @param name The name string of the I2C master handle.
  */
 #define HAL_I2C_MASTER_HANDLE_DEFINE(name) \
-    uint32_t name[(HAL_I2C_MASTER_HANDLE_SIZE + sizeof(uint32_t) - 1U) / sizeof(uint32_t)]
+    uintptr_t name[(HAL_I2C_MASTER_HANDLE_SIZE + sizeof(uintptr_t) - 1U) / sizeof(uintptr_t)]
 
 /*!
  * @brief Defines the I2C slave handle
  *
- * This macro is used to define a 4 byte aligned I2C slave handle.
+ * This macro is used to define a 4 byte or 8 byte (aarch64) aligned I2C slave handle.
  * Then use "(hal_i2c_slave_handle_t)name" to get the I2C slave handle.
  *
  * The macro should be global and could be optional. You could also define I2C slave handle by yourself.
@@ -162,7 +162,7 @@ typedef void *hal_i2c_slave_handle_t;
  * @param name The name string of the I2C slave handle.
  */
 #define HAL_I2C_SLAVE_HANDLE_DEFINE(name) \
-    uint32_t name[(HAL_I2C_SLAVE_HANDLE_SIZE + sizeof(uint32_t) - 1U) / sizeof(uint32_t)]
+    uintptr_t name[(HAL_I2C_SLAVE_HANDLE_SIZE + sizeof(uintptr_t) - 1U) / sizeof(uintptr_t)]
 
 /*!
  * @brief Master completion callback function pointer type.

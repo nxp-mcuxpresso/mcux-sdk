@@ -1,5 +1,23 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.10.0)
 # OR Logic component
+if(${MCUX_DEVICE} STREQUAL "MKV58F24")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MKV58F24
+    )
+
+    include(all_lib_device_MKV58F24)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "MKE18F16")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MKE18F16
+    )
+
+    include(all_lib_device_MKE18F16)
+
+endif()
+
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1166_cm7")
     list(APPEND CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/devices/MIMXRT1166
@@ -78,6 +96,15 @@ if(${MCUX_DEVICE} STREQUAL "MIMX8MM6")
     )
 
     include(all_lib_device_MIMX8MM6)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "MIMX8MM6_ca53")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMX8MM6
+    )
+
+    include(all_lib_device_MIMX8MM6_ca53)
 
 endif()
 
@@ -240,6 +267,15 @@ if(${MCUX_DEVICE} STREQUAL "MIMX8MN6")
     )
 
     include(all_lib_device_MIMX8MN6)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "MIMX8MN6_ca53")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMX8MN6
+    )
+
+    include(all_lib_device_MIMX8MN6_ca53)
 
 endif()
 
@@ -411,6 +447,15 @@ if(${MCUX_DEVICE} STREQUAL "MIMX8ML8")
     )
 
     include(all_lib_device_MIMX8ML8)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "MIMX8ML8_ca53")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMX8ML8
+    )
+
+    include(all_lib_device_MIMX8ML8_ca53)
 
 endif()
 

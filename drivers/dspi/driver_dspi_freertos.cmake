@@ -11,6 +11,9 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
+if(${MCUX_DEVICE} STREQUAL "MKV58F24")
+    include(middleware_freertos-kernel_MKV58F24)
+endif()
 if(${MCUX_DEVICE} STREQUAL "MK64F12")
     include(middleware_freertos-kernel_MK64F12)
 endif()
