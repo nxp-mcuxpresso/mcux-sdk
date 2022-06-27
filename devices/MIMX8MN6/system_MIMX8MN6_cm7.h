@@ -7,9 +7,9 @@
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **
-**     Reference manual:    MX8MNRM, Rev.A, 04/2019
+**     Reference manual:    MX8MNRM, Rev.B, 07/2019
 **     Version:             rev. 2.0, 2019-09-23
-**     Build:               b190830
+**     Build:               b211101
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -17,7 +17,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2019 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -36,17 +36,16 @@
 
 /*!
  * @file MIMX8MN6_cm7
- * @version 2.0
- * @date 2019-09-23
+ * @version 1.0
+ * @date 011121
  * @brief Device specific configuration file for MIMX8MN6_cm7 (header file)
  *
  * Provides a system configuration function and a global variable that contains
  * the system frequency. It configures the device and initializes the oscillator
  * (PLL) that is part of the microcontroller device.
  */
-
 #ifndef _SYSTEM_MIMX8MN6_cm7_H_
-#define _SYSTEM_MIMX8MN6_cm7_H_ /**< Symbol preventing repeated inclusion */
+#define _SYSTEM_MIMX8MN6_cm7_H_                    /**< Symbol preventing repeated inclusion */
 
 #ifdef __cplusplus
 extern "C" {

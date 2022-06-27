@@ -12,6 +12,7 @@
  ******************************************************************************/
 /*! @brief codec play and record capability */
 #define GET_PLAY_CHANNEL_CAPABILITY(capability)   ((capability)&0xFFU)
+#define GET_VOLUME_CAPABILITY(capability)         ((capability)&0x1FFU)
 #define GET_PLAY_SOURCE_CAPABILITY(capability)    ((capability) >> 8U)
 #define GET_RECORD_SOURCE_CAPABILITY(capability)  ((capability)&0x3FU)
 #define GET_RECORD_CHANNEL_CAPABILITY(capability) ((capability) >> 6U)
@@ -105,8 +106,8 @@ status_t CODEC_ModuleControl(codec_handle_t *handle, codec_module_ctrl_cmd_t cmd
  * brief set audio codec module volume.
  *
  * param handle codec handle.
- * param channel audio codec play channel, can be a value or combine value of _codec_play_channel.
- * param volume volume value, support 0 ~ 100, 0 is mute, 100 is the maximum volume value.
+ * param channel audio codec volume channel, can be a value or combine value of _codec_play_channel or
+ * _codec_volume_capability. param volume volume value, support 0 ~ 100, 0 is mute, 100 is the maximum volume value.
  * return kStatus_Success is success, else configure failed.
  */
 status_t CODEC_SetVolume(codec_handle_t *handle, uint32_t channel, uint32_t volume)
@@ -116,7 +117,7 @@ status_t CODEC_SetVolume(codec_handle_t *handle, uint32_t channel, uint32_t volu
     assert(handle->codecCapability != NULL);
 
     /* check capability of set volume */
-    if ((GET_PLAY_CHANNEL_CAPABILITY(handle->codecCapability->codecPlayCapability) & channel) == 0U)
+    if ((GET_VOLUME_CAPABILITY(handle->codecCapability->codecVolumeCapability) & channel) == 0U)
     {
         return kStatus_CODEC_NotSupport;
     }
@@ -128,9 +129,9 @@ status_t CODEC_SetVolume(codec_handle_t *handle, uint32_t channel, uint32_t volu
  * brief set audio codec module mute.
  *
  * param handle codec handle.
- * param channel audio codec play channel, can be a value or combine value of _codec_play_channel.
- * param mute true is mute, false is unmute.
- * return kStatus_Success is success, else configure failed.
+ * param channel audio codec volume channel, can be a value or combine value of _codec_play_channel or
+ * _codec_volume_capability. param mute true is mute, false is unmute. return kStatus_Success is success, else configure
+ * failed.
  */
 status_t CODEC_SetMute(codec_handle_t *handle, uint32_t channel, bool mute)
 {
@@ -138,7 +139,7 @@ status_t CODEC_SetMute(codec_handle_t *handle, uint32_t channel, bool mute)
     assert(handle->codecCapability != NULL);
 
     /* check capability of mute */
-    if ((GET_PLAY_CHANNEL_CAPABILITY(handle->codecCapability->codecPlayCapability) & channel) == 0U)
+    if ((GET_VOLUME_CAPABILITY(handle->codecCapability->codecVolumeCapability) & channel) == 0U)
     {
         return kStatus_CODEC_NotSupport;
     }

@@ -93,9 +93,7 @@ static int32_t rpmsg_ept_read_cb(void *payload, uint32_t payload_len, uint32_t s
 
     rpmsgHandle = (hal_rpmsg_state_t *)priv;
 
-    rpmsgHandle->rx.callback(rpmsgHandle->rx.param, payload, payload_len);
-
-    return RL_RELEASE;
+    return rpmsgHandle->rx.callback(rpmsgHandle->rx.param, payload, payload_len);
 }
 
 #if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
@@ -326,6 +324,64 @@ hal_rpmsg_status_t HAL_RpmsgSend(hal_rpmsg_handle_t handle, uint8_t *data, uint3
     return status;
 }
 
+void *HAL_RpmsgAllocTxBuffer(hal_rpmsg_handle_t handle, uint32_t size)
+{
+    hal_rpmsg_state_t *rpmsgHandle;
+    rpmsgHandle = (hal_rpmsg_state_t *)handle;
+    void *buf   = NULL;
+    uint32_t primask;
+    primask = DisableGlobalIRQ();
+    buf     = rpmsg_lite_alloc_tx_buffer(rpmsgHandle->pContext, &size, RL_BLOCK);
+    EnableGlobalIRQ(primask);
+    return buf;
+}
+
+hal_rpmsg_status_t HAL_RpmsgFreeRxBuffer(hal_rpmsg_handle_t handle, uint8_t *data)
+{
+    hal_rpmsg_state_t *rpmsgHandle;
+    rpmsgHandle               = (hal_rpmsg_state_t *)handle;
+    hal_rpmsg_status_t status = kStatus_HAL_RpmsgSuccess;
+    uint32_t primask;
+    primask = DisableGlobalIRQ();
+    if (RL_SUCCESS != rpmsg_lite_release_rx_buffer(rpmsgHandle->pContext, data))
+    {
+        status = kStatus_HAL_RpmsgError;
+    }
+    EnableGlobalIRQ(primask);
+    return status;
+}
+
+hal_rpmsg_status_t HAL_RpmsgNoCopySend(hal_rpmsg_handle_t handle, uint8_t *data, uint32_t length)
+{
+    hal_rpmsg_state_t *rpmsgHandle;
+    hal_rpmsg_status_t status = kStatus_HAL_RpmsgSuccess;
+    uint32_t primask;
+
+    primask = DisableGlobalIRQ();
+    assert(NULL != data);
+
+    rpmsgHandle = (hal_rpmsg_state_t *)handle;
+
+    do
+    {
+        if (0 == rpmsg_lite_is_link_up(rpmsgHandle->pContext))
+        {
+            status = kStatus_HAL_RpmsgError;
+            break;
+        }
+
+        if (RL_SUCCESS != rpmsg_lite_send_nocopy(rpmsgHandle->pContext, rpmsgHandle->pEndpoint,
+                                                 rpmsgHandle->remote_addr, (char *)data, length))
+        {
+            status = kStatus_HAL_RpmsgError;
+            break;
+        }
+    } while (false);
+
+    EnableGlobalIRQ(primask);
+
+    return status;
+}
 hal_rpmsg_status_t HAL_RpmsgInstallRxCallback(hal_rpmsg_handle_t handle, rpmsg_rx_callback_t callback, void *param)
 {
     hal_rpmsg_state_t *rpmsgHandle;

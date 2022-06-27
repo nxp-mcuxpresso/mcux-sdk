@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2020 NXP
+ * Copyright 2017, 2020-2021 NXP
  * All rights reserved.
  *
  *
@@ -109,7 +109,11 @@ status_t VIDEO_RINGBUF_Get(video_ringbuf_t *ringbuf, void **item)
 {
     uint32_t front_next;
 
-    if (ringbuf->rear != ringbuf->front)
+    /* To fix IAR Pa082 warning. */
+    uint32_t rear  = ringbuf->rear;
+    uint32_t front = ringbuf->front;
+
+    if (rear != front)
     {
         *item = ringbuf->buf[ringbuf->front];
 
@@ -158,7 +162,11 @@ uint32_t VIDEO_RINGBUF_GetLength(video_ringbuf_t *ringbuf)
 {
     uint32_t ret;
 
-    ret = (ringbuf->rear + ringbuf->size) - ringbuf->front;
+    /* To fix IAR Pa082 warning. */
+    uint32_t rear  = ringbuf->rear;
+    uint32_t front = ringbuf->front;
+
+    ret = (rear + ringbuf->size) - front;
 
     if (ret >= ringbuf->size)
     {
@@ -170,7 +178,11 @@ uint32_t VIDEO_RINGBUF_GetLength(video_ringbuf_t *ringbuf)
 
 bool VIDEO_RINGBUF_IsEmpty(video_ringbuf_t *ringbuf)
 {
-    if (ringbuf->rear == ringbuf->front)
+    /* To fix IAR Pa082 warning. */
+    uint32_t rear  = ringbuf->rear;
+    uint32_t front = ringbuf->front;
+
+    if (rear == front)
     {
         return true;
     }

@@ -388,7 +388,7 @@ void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t iFreq)
 /* Set EXT OSC Clk */
 /**
  * brief   Initialize the external osc clock to given frequency.
- * Crystal oscillator with an operating frequency of 12 MHz to 32 MHz. 
+ * Crystal oscillator with an operating frequency of 12 MHz to 32 MHz.
  * Option for external clock input (bypass mode) for clock frequencies of up to 25 MHz.
  * param   iFreq   : Desired frequency (must be equal to exact rate in Hz)
  * return  returns success or fail status.
@@ -2086,4 +2086,12 @@ bool CLOCK_EnableUsbhs0HostClock(clock_usbhs_src_t src, uint32_t freq)
     ANACTRL->XO32M_CTRL |= ANACTRL_XO32M_CTRL_ENABLE_PLL_USB_OUT(1);
 
     return true;
+}
+
+/*! @brief Enable the OSTIMER 32k clock.
+ *  @return  Nothing
+ */
+void CLOCK_EnableOstimer32kClock(void)
+{
+    PMC->OSTIMERr |= PMC_OSTIMER_CLOCKENABLE_MASK;
 }

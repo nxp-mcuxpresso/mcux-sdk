@@ -1369,6 +1369,11 @@ pll_error_t CLOCK_SetPLL1Freq(const pll_setup_t *pSetup);
  */
 void CLOCK_SetupPLL0Mult(uint32_t multiply_by, uint32_t input_freq);
 
+/*! @brief Enable the OSTIMER 32k clock.
+ *  @return  Nothing
+ */
+void CLOCK_EnableOstimer32kClock(void);
+
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */

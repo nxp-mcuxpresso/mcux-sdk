@@ -4,11 +4,11 @@
 /*            MIMXRT1064                                                     */
 /*  @version: 1.2                                                            */
 /*  @date:    2019-4-29                                                      */
-/*  @build:   b190919                                                        */
+/*  @build:   b210707                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2019 NXP                                                   */
+/* Copyright 2016-2021 NXP                                                   */
 /* All rights reserved.                                                      */
 /*                                                                           */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
@@ -111,7 +111,7 @@ __isr_vector:
     .long   ADC2_IRQHandler                                 /* ADC2 interrupt*/
     .long   DCDC_IRQHandler                                 /* DCDC interrupt*/
     .long   Reserved86_IRQHandler                           /* Reserved interrupt*/
-    .long   Reserved87_IRQHandler                           /* Reserved interrupt*/
+    .long   GPIO10_IRQHandler                               /* GPIO10 interrupt*/
     .long   GPIO1_INT0_IRQHandler                           /* Active HIGH Interrupt from INT0 from GPIO*/
     .long   GPIO1_INT1_IRQHandler                           /* Active HIGH Interrupt from INT1 from GPIO*/
     .long   GPIO1_INT2_IRQHandler                           /* Active HIGH Interrupt from INT2 from GPIO*/
@@ -1037,7 +1037,7 @@ FLEXIO3_IRQHandler:
     def_irq_handler    ADC2_IRQHandler
     def_irq_handler    DCDC_IRQHandler
     def_irq_handler    Reserved86_IRQHandler
-    def_irq_handler    Reserved87_IRQHandler
+    def_irq_handler    GPIO10_IRQHandler
     def_irq_handler    GPIO1_INT0_IRQHandler
     def_irq_handler    GPIO1_INT1_IRQHandler
     def_irq_handler    GPIO1_INT2_IRQHandler

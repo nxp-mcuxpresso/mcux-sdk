@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SDMA driver version */
-#define FSL_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 4)) /*!< Version 2.3.4. */
+#define FSL_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 6)) /*!< Version 2.3.6. */
 /*@}*/
 
 /*! @brief SDMA transfer configuration */

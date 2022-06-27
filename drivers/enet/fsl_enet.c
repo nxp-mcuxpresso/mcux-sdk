@@ -730,12 +730,13 @@ static void ENET_SetMacController(ENET_Type *base,
 
 /* Enables Ethernet interrupt, enables the interrupt coalsecing if it is required. */
 #if defined(FSL_FEATURE_ENET_HAS_INTERRUPT_COALESCE) && FSL_FEATURE_ENET_HAS_INTERRUPT_COALESCE
+    uint8_t queue = 0;
+
     if (NULL != config->intCoalesceCfg)
     {
         uint32_t intMask = (ENET_EIMR_TXB_MASK | ENET_EIMR_RXB_MASK);
 
 #if FSL_FEATURE_ENET_QUEUE > 1
-        uint8_t queue = 0;
         if (FSL_FEATURE_ENET_INSTANCE_QUEUEn(base) > 1)
         {
             intMask |= ENET_EIMR_TXB2_MASK | ENET_EIMR_RXB2_MASK | ENET_EIMR_TXB1_MASK | ENET_EIMR_RXB1_MASK;
@@ -745,8 +746,7 @@ static void ENET_SetMacController(ENET_Type *base,
         /* Clear all buffer interrupts. */
         base->EIMR &= ~intMask;
 
-/* Set the interrupt coalescence. */
-#if FSL_FEATURE_ENET_QUEUE > 1
+        /* Set the interrupt coalescence. */
         for (queue = 0; queue < (uint8_t)FSL_FEATURE_ENET_INSTANCE_QUEUEn(base); queue++)
         {
             base->TXIC[queue] = ENET_TXIC_ICFT(config->intCoalesceCfg->txCoalesceFrameCount[queue]) |
@@ -756,12 +756,6 @@ static void ENET_SetMacController(ENET_Type *base,
                                 config->intCoalesceCfg->rxCoalesceTimeCount[queue] | ENET_RXIC_ICCS_MASK |
                                 ENET_RXIC_ICEN_MASK;
         }
-#else
-        base->TXIC = ENET_TXIC_ICFT(config->intCoalesceCfg->txCoalesceFrameCount[0]) |
-                     config->intCoalesceCfg->txCoalesceTimeCount[0] | ENET_TXIC_ICCS_MASK | ENET_TXIC_ICEN_MASK;
-        base->RXIC = ENET_RXIC_ICFT(config->intCoalesceCfg->rxCoalesceFrameCount[0]) |
-                     config->intCoalesceCfg->rxCoalesceTimeCount[0] | ENET_RXIC_ICCS_MASK | ENET_RXIC_ICEN_MASK;
-#endif /* FSL_FEATURE_ENET_QUEUE > 1 */
     }
 #endif /* FSL_FEATURE_ENET_HAS_INTERRUPT_COALESCE */
     ENET_EnableInterrupts(base, config->interrupt);
@@ -2514,7 +2508,7 @@ status_t ENET_GetRxFrame(ENET_Type *base, enet_handle_t *handle, enet_rx_frame_s
 #if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
             if (handle->rxMaintainEnable[ringId])
             {
-                DCACHE_InvalidateByRange((uint32_t)buffer, handle->rxBuffSizeAlign[ringId]);
+                DCACHE_InvalidateByRange((uint32_t)(uint32_t *)buffer, handle->rxBuffSizeAlign[ringId]);
             }
 #endif /* FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL */
 
@@ -2694,7 +2688,7 @@ status_t ENET_StartTxFrame(ENET_Type *base, enet_handle_t *handle, enet_tx_frame
 #if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
             if (handle->txMaintainEnable[ringId])
             {
-                DCACHE_CleanByRange((uint32_t)txBuff->buffer, txBuff->length);
+                DCACHE_CleanByRange((uint32_t)(uint32_t *)txBuff->buffer, txBuff->length);
             }
 #endif /* FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL */
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET

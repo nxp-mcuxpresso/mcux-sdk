@@ -291,19 +291,22 @@ void SNVS_LP_SRTC_Init(SNVS_Type *base, const snvs_lp_srtc_config_t *config)
     CLOCK_EnableClock(s_snvsLpClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
-    int pin;
-
     if (config->srtcCalEnable)
     {
-        base->LPCR = SNVS_LPCR_LPCALB_VAL_MASK & (config->srtcCalValue << SNVS_LPCR_LPCALB_VAL_SHIFT);
+        base->LPCR = (base->LPCR & ~SNVS_LPCR_LPCALB_VAL_MASK) | SNVS_LPCR_LPCALB_VAL(config->srtcCalValue);
         base->LPCR |= SNVS_LPCR_LPCALB_EN_MASK;
     }
+
+#if defined(FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER) && (FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER > 0)
+
+    int pin;
 
     for (pin = (int32_t)kSNVS_ExternalTamper1; pin <= (int32_t)SNVS_LP_MAX_TAMPER; pin++)
     {
         SNVS_LP_DisableExternalTamper(SNVS, (snvs_lp_external_tamper_t)pin);
         SNVS_LP_ClearExternalTamperStatus(SNVS, (snvs_lp_external_tamper_t)pin);
     }
+#endif /* defined(FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER) && (FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER > 0) */
 }
 
 /*!
@@ -598,6 +601,8 @@ void SNVS_LP_TamperPinRx_GetDefaultConfig(tamper_active_rx_config_t *config)
     config->activeTamper = kSNVS_ActiveTamper1;
 }
 #endif /* FSL_FEATURE_SNVS_HAS_ACTIVE_TAMPERS */
+
+#if defined(FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER) && (FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER > 0)
 
 /*!
  * brief Enables the specified SNVS external tamper.
@@ -958,6 +963,8 @@ void SNVS_LP_ClearAllExternalTamperStatus(SNVS_Type *base)
         SNVS_LP_ClearExternalTamperStatus(SNVS, (snvs_lp_external_tamper_t)pin);
     }
 }
+
+#endif /* (!(defined(FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER) && (FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER > 0)) */
 
 #if defined(FSL_FEATURE_SNVS_HAS_ACTIVE_TAMPERS) && (FSL_FEATURE_SNVS_HAS_ACTIVE_TAMPERS > 0)
 /*!

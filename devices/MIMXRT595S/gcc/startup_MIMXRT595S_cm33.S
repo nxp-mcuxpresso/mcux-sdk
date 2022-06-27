@@ -2,12 +2,12 @@
 /* @file:    startup_MIMXRT595S_cm33.s                                                */
 /* @purpose: CMSIS Cortex-M33 Core Device Startup File                       */
 /*           MIMXRT595S_cm33                                                          */
-/* @version: 4.0                                                      */
-/* @date:    2020-5-18                                                         */
+/* @version: 5.0                                                      */
+/* @date:    2020-8-27                                                         */
 /* --------------------------------------------------------------------------*/
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2020 NXP                                                   */
+/* Copyright 2016-2021 NXP                                                   */
 /* All rights reserved.                                                      */
 /*                                                                           */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
@@ -31,7 +31,7 @@ __isr_vector:
     .long   BusFault_Handler                                /* Bus Fault Handler*/
     .long   UsageFault_Handler                              /* Usage Fault Handler*/
     .long   SecureFault_Handler                             /* Secure Fault Handler*/
-#if (__ARM_FEATURE_CMSE & 0x2)
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
     .long   0x280000                                        /* Image length*/
 #else
     .long   _image_size                                     /* Image length*/
@@ -139,8 +139,8 @@ Reset_Handler:
     str     r1, [r0]
     ldr     r2, [r1]
     msr     msp, r2
-    ldr     R0, =__StackLimit
-    msr     msplim, R0
+    ldr     r0, =__StackLimit
+    msr     msplim, r0
 #ifndef __NO_SYSTEM_INIT
     ldr   r0,=SystemInit
     blx   r0

@@ -87,7 +87,7 @@ static void ANATOP_PllSetPower(anatop_ai_itf_t itf, bool enable);
 static void ANATOP_PllBypass(anatop_ai_itf_t itf, bool bypass);
 static void ANATOP_PllEnablePllReg(anatop_ai_itf_t itf, bool enable);
 static void ANATOP_PllHoldRingOff(anatop_ai_itf_t itf, bool off);
-static void ANATOP_PllToggleHoldRingOff(anatop_ai_itf_t itf, uint32_t delay_us);
+static void ANATOP_PllToggleHoldRingOff(anatop_ai_itf_t itf, uint32_t delayUsValue);
 static void ANATOP_PllEnableClk(anatop_ai_itf_t itf, bool enable);
 static void ANATOP_PllConfigure(anatop_ai_itf_t itf,
                                 uint8_t div,
@@ -290,6 +290,7 @@ void CLOCK_DeinitSysPll2(void)
  * return PFD bypass status.
  *         - true: power on.
  *         - false: power off.
+ * note Only useful in software control mode.
  */
 bool CLOCK_IsSysPll2PfdEnabled(clock_pfd_t pfd)
 {
@@ -346,6 +347,40 @@ void CLOCK_InitPfd(clock_pll_t pll, clock_pfd_t pfd, uint8_t frac)
     while (stable == (*pfdCtrl & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_STABLE_MASK << (8UL * (uint32_t)pfd))))
     {
     }
+}
+
+/*!
+ * brief De-initialize selected PLL PFD.
+ *
+ * param pll Which PLL of targeting PFD to be operated.
+ * param pfd Which PFD clock to enable.
+ */
+void CLOCK_DeinitPfd(clock_pll_t pll, clock_pfd_t pfd)
+{
+    volatile uint32_t *pfdCtrl = NULL;
+
+    switch (pll)
+    {
+        case kCLOCK_PllSys2:
+        {
+            pfdCtrl = &ANADIG_PLL->SYS_PLL2_PFD;
+            break;
+        }
+        case kCLOCK_PllSys3:
+        {
+            pfdCtrl = &ANADIG_PLL->SYS_PLL3_PFD;
+            break;
+        }
+        default:
+        {
+            /* Wrong input parameter pll. */
+            assert(false);
+            break;
+        }
+    }
+
+    /* Clock gate the selected pfd. */
+    *pfdCtrl |= ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << (8UL * (uint32_t)pfd));
 }
 
 #ifndef GET_FREQ_FROM_OBS
@@ -477,6 +512,7 @@ void CLOCK_DeinitSysPll3(void)
  * return PFD bypass status.
  *         - true: power on.
  *         - false: power off.
+ * note Only useful in software control mode.
  */
 bool CLOCK_IsSysPll3PfdEnabled(clock_pfd_t pfd)
 {
@@ -536,10 +572,10 @@ static void ANATOP_PllHoldRingOff(anatop_ai_itf_t itf, bool off)
     ANATOP_AI_Write(itf, off ? PLL_AI_CTRL0_SET_REG : PLL_AI_CTRL0_CLR_REG, PLL_AI_CTRL0_HOLD_RING_OFF_MASK);
 }
 
-static void ANATOP_PllToggleHoldRingOff(anatop_ai_itf_t itf, uint32_t delay_us)
+static void ANATOP_PllToggleHoldRingOff(anatop_ai_itf_t itf, uint32_t delayUsValue)
 {
     ANATOP_PllHoldRingOff(itf, true);
-    SDK_DelayAtLeastUs(delay_us, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+    SDK_DelayAtLeastUs(delayUsValue, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
     ANATOP_PllHoldRingOff(itf, false);
 }
 

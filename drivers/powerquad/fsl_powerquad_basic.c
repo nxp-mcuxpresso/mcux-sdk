@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2019, 2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -51,10 +51,14 @@ void PQ_SetConfig(POWERQUAD_Type *base, const pq_config_t *config)
 void PQ_Init(POWERQUAD_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if defined(POWERQUAD_CLOCKS)
     CLOCK_EnableClock(kCLOCK_PowerQuad);
 #endif
+#endif
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
+#if defined(POWERQUAD_RSTS)
     RESET_PeripheralReset(kPOWERQUAD_RST_SHIFT_RSTn);
+#endif
 #endif
 
     /* Enable event used for WFE. */
@@ -66,7 +70,9 @@ void PQ_Init(POWERQUAD_Type *base)
 void PQ_Deinit(POWERQUAD_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if defined(POWERQUAD_CLOCKS)
     CLOCK_DisableClock(kCLOCK_PowerQuad);
+#endif
 #endif
 }
 

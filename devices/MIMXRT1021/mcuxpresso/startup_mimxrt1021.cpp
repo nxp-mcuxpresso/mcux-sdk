@@ -1,10 +1,10 @@
 //*****************************************************************************
 // MIMXRT1021 startup code for use with MCUXpresso IDE
 //
-// Version : 231120
+// Version : 150621
 //*****************************************************************************
 //
-// Copyright 2016-2020 NXP
+// Copyright 2016-2021 NXP
 // All rights reserved.
 //
 // SPDX-License-Identifier: BSD-3-Clause
@@ -44,7 +44,6 @@ extern "C" {
 // by the linker when "Enable Code Read Protect" selected.
 // See crp.h header for more information
 //*****************************************************************************
-
 //*****************************************************************************
 // Declaration of external SystemInit function
 //*****************************************************************************
@@ -393,8 +392,6 @@ extern void _vStackTop(void);
 // This relies on the linker script to place at correct location in memory.
 //*****************************************************************************
 
-
-
 extern void (* const g_pfnVectors[])(void);
 extern void * __Vectors __attribute__ ((alias ("g_pfnVectors")));
 
@@ -561,8 +558,6 @@ void (* const g_pfnVectors[])(void) = {
     PWM2_2_IRQHandler,                // 155: PWM2 capture 2, compare 2, or reload 0 interrupt
     PWM2_3_IRQHandler,                // 156: PWM2 capture 3, compare 3, or reload 0 interrupt
     PWM2_FAULT_IRQHandler,            // 157: PWM2 fault or reload error interrupt
-
-
 }; /* End of g_pfnVectors */
 
 //*****************************************************************************
@@ -607,13 +602,9 @@ extern unsigned int __bss_section_table_end;
 //*****************************************************************************
 __attribute__ ((naked, section(".after_vectors.reset")))
 void ResetISR(void) {
-
     // Disable interrupts
     __asm volatile ("cpsid i");
-
     __asm volatile ("MSR MSP, %0" : : "r" (&_vStackTop) : );
-
-
 
 #if defined (__USE_CMSIS)
 // If __USE_CMSIS defined, then call CMSIS SystemInit code
@@ -658,7 +649,6 @@ void ResetISR(void) {
         SectionLen = *SectionTableAddr++;
         bss_init(ExeAddr, SectionLen);
     }
-
 
 #if !defined (__USE_CMSIS)
 // Assume that if __USE_CMSIS defined, then CMSIS SystemInit code

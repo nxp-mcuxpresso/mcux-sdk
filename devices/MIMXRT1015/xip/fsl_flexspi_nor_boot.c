@@ -40,7 +40,7 @@ __attribute__((section(".boot_hdr.boot_data"), used))
 /*************************************
  *  Boot Data
  *************************************/
-const BOOT_DATA_T boot_data = {
+const BOOT_DATA_T g_boot_data = {
     FLASH_BASE,  /* boot start location */
     FLASH_SIZE,  /* size */
     PLUGIN_FLAG, /* Plugin flag*/

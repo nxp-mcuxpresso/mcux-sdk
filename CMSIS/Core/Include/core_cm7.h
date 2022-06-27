@@ -2317,14 +2317,6 @@ __STATIC_FORCEINLINE void SCB_InvalidateICache_by_Addr (void *addr, int32_t isiz
   #endif
 }
 
-/*
- * Optimize the Data Cache functions, for the endless loop issue.
- * More details, see https://github.com/ARM-software/CMSIS_5/issues/620
- */
-#if (defined(__GNUC__) && !defined(__OPTIMIZE__))
-#pragma GCC push_options
-#pragma GCC optimize ("Og")
-#endif
 
 /**
   \brief   Enable D-Cache
@@ -2385,6 +2377,25 @@ __STATIC_FORCEINLINE void SCB_DisableDCache (void)
 
     ccsidr = SCB->CCSIDR;
 
+  #if (defined(__GNUC__) && !defined(__OPTIMIZE__))
+    /*
+     * For the endless loop issue with GCC O0.
+     * More details, see https://github.com/ARM-software/CMSIS_5/issues/620
+     *
+     * The issue only happens when local variables are in stack (GCC O0). If
+     * local variables are saved in general purpose register, then the function
+     * is OK.
+     *
+     * When local variables are in stack, after disabling the cache, flush the
+     * local variables cache line for data consistency.
+     */
+    /* Clean and invalidate the local variable cache. */
+    SCB->DCCIMVAC = (uint32_t)(&sets);
+    SCB->DCCIMVAC = (uint32_t)(&ways);
+    SCB->DCCIMVAC = (uint32_t)(&ccsidr);
+    __DSB();
+    __ISB();
+  #endif
                                             /* clean & invalidate D-Cache */
     sets = (uint32_t)(CCSIDR_SETS(ccsidr));
     do {
@@ -2508,9 +2519,6 @@ __STATIC_FORCEINLINE void SCB_CleanInvalidateDCache (void)
   #endif
 }
 
-#if (defined(__GNUC__) && !defined(__OPTIMIZE__))
-#pragma GCC pop_options
-#endif
 
 /**
   \brief   D-Cache Invalidate by address

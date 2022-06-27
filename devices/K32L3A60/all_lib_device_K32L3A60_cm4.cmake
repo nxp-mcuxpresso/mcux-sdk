@@ -1,10 +1,17 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpi2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpspi
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpuart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/log
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/panic
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cau3
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
@@ -38,8 +45,10 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xrdc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -54,8 +63,12 @@ list(APPEND CMAKE_MODULE_PATH
 # Copy the cmake components into projects
 #    include(utility_incbin)
 #    include(driver_lpuart_freertos)
+#    include(component_lpit_adapter)
+#    include(middleware_usb_device_controller_driver_K32L3A60_cm4)
 #    include(driver_sema42)
 #    include(driver_dmamux)
+#    include(utility_shell)
+#    include(driver_cmsis_lpuart)
 #    include(middleware_sdmmc_host_usdhc_freertos_K32L3A60_cm4)
 #    include(driver_lpadc)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_rtos_transport)
@@ -63,6 +76,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_rpmsg_lite_k32l3a6_freertos)
 #    include(driver_ewm)
 #    include(driver_cache_lpcac)
+#    include(middleware_multicore_rpmsg_lite_bm)
 #    include(driver_flexio)
 #    include(driver_msmc)
 #    include(middleware_multicore_erpc_eRPC_client)
@@ -70,6 +84,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_baremetal)
 #    include(middleware_sdmmc_host_usdhc_interrupt_K32L3A60_cm4)
 #    include(middleware_sdmmc_osa_bm)
+#    include(component_log_backend_ringbuffer)
 #    include(driver_lpuart_edma)
 #    include(driver_lpspi_edma)
 #    include(driver_lpcmp)
@@ -78,25 +93,35 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_rtc)
 #    include(driver_wdog32)
 #    include(component_serial_manager)
-#    include(middleware_multicore_rpmsg_lite)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
+#    include(component_log_backend_debugconsole)
 #    include(device_system_K32L3A60_cm4)
 #    include(driver_llwu)
 #    include(device_startup_K32L3A60_cm4)
+#    include(middleware_multicore_rpmsg_lite_K32L3A60_cm4)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_edma)
-#    include(middleware_multicore_erpc_eRPC_rpmsg_lite_rtos_master_c_wrapper)
-#    include(driver_usdhc)
-#    include(middleware_freertos-kernel_extension)
 #    include(middleware_sdmmc_osa_freertos)
+#    include(middleware_multicore_erpc_eRPC_rpmsg_lite_rtos_master_c_wrapper)
+#    include(middleware_multicore_erpc_eRPC_mu_c_wrapper)
+#    include(driver_usdhc)
 #    include(utility_assert)
+#    include(middleware_freertos-kernel_extension)
+#    include(CMSIS_Driver_Include_I2C)
+#    include(middleware_usb_common_header)
+#    include(driver_cmsis_lpi2c)
+#    include(component_panic)
+#    include(driver_clock)
 #    include(device_CMSIS)
+#    include(middleware_multicore_rpmsg_lite_freertos)
+#    include(CMSIS_Driver_Include_Common)
 #    include(middleware_multicore_erpc_doc)
 #    include(driver_tstmr)
 #    include(middleware_multicore_erpc_common)
 #    include(component_osa_bm)
 #    include(driver_common)
+#    include(middleware_sdmmc_host_usdhc_polling_K32L3A60_cm4)
 #    include(component_osa_free_rtos)
 #    include(middleware_sdmmc_sd)
 #    include(CMSIS_Include_core_cm)
@@ -104,19 +129,21 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_port)
 #    include(driver_lpspi)
 #    include(driver_gpio)
-#    include(middleware_multicore_erpc_eRPC_mu_c_wrapper)
-#    include(driver_clock)
+#    include(component_log)
+#    include(CMSIS_Driver_Include_USART)
+#    include(CMSIS_Driver_Include_SPI)
 #    include(utility_debug_console_lite)
-#    include(middleware_sdmmc_host_usdhc_polling_K32L3A60_cm4)
-#    include(utility_shell)
+#    include(driver_lptmr)
+#    include(middleware_usb_device_common_header)
 #    include(utility_assert_lite)
+#    include(middleware_fatfs)
 #    include(driver_flash)
 #    include(driver_spm)
 #    include(utility_debug_console)
-#    include(driver_lptmr)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_master_c_wrapper)
 #    include(middleware_multicore_mcmgr)
 #    include(middleware_freertos-kernel_K32L3A60_cm4)
+#    include(driver_cmsis_lpspi)
 #    include(driver_crc)
 #    include(middleware_sdmmc_host_usdhc)
 #    include(middleware_multicore_erpc_eRPC_port_stdlib)
@@ -124,6 +151,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_erpc_eRPC_port_freertos)
 #    include(driver_dac_1)
 #    include(middleware_multicore_mcmgr_k32l3a6)
+#    include(middleware_fatfs_sd)
 #    include(middleware_multicore_erpc_eRPC_mu_transport)
 #    include(driver_flexio_spi_edma)
 #    include(driver_lpi2c_freertos)
@@ -133,14 +161,16 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_rpmsg_lite_k32l3a6_bm)
 #    include(driver_cau3)
 #    include(driver_lpit)
-#    include(driver_edma)
+#    include(component_osa)
+#    include(driver_fxos8700cq)
 #    include(driver_lpuart)
 #    include(driver_flexio_spi)
 #    include(driver_xrdc)
+#    include(middleware_usb_device_khci)
+#    include(driver_edma_K32L3A60_cm4)
 #    include(driver_sim)
 #    include(driver_lpi2c)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_transport)
-#    include(driver_fxos8700cq)
 #    include(driver_trng)
 #    include(middleware_multicore_erpc_eRPC_mu_rtos_transport)
 #    include(driver_mu)

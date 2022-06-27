@@ -22,11 +22,11 @@
 
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Clocks v7.0
+product: Clocks v8.0
 processor: MIMXRT1011xxxxx
 package_id: MIMXRT1011DAE5A
 mcu_data: ksdk2_0
-processor_version: 9.0.1
+processor_version: 10.0.0
 board: MIMXRT1010-EVK
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
@@ -89,13 +89,12 @@ settings:
 - {id: CCM.AHB_PODF.scale, value: '1', locked: true}
 - {id: CCM.FLEXSPI_PODF.scale, value: '4', locked: true}
 - {id: CCM.IPG_PODF.scale, value: '4'}
-- {id: CCM.LPSPI_PODF.scale, value: '5', locked: true}
+- {id: CCM.LPSPI_PODF.scale, value: '5'}
 - {id: CCM.PERCLK_PODF.scale, value: '2', locked: true}
 - {id: CCM.PRE_PERIPH_CLK_SEL.sel, value: CCM_ANALOG.ENET_500M_REF_CLK}
 - {id: CCM.SAI1_CLK_SEL.sel, value: CCM_ANALOG.PLL3_PFD2_CLK}
 - {id: CCM.SAI3_CLK_SEL.sel, value: CCM_ANALOG.PLL3_PFD2_CLK}
 - {id: CCM.TRACE_CLK_SEL.sel, value: CCM_ANALOG.PLL2_MAIN_CLK}
-- {id: CCM.TRACE_PODF.scale, value: '4', locked: true}
 - {id: CCM_ANALOG.PLL2.denom, value: '1'}
 - {id: CCM_ANALOG.PLL2.num, value: '0'}
 - {id: CCM_ANALOG.PLL2_BYPASS.sel, value: CCM_ANALOG.PLL2_OUT_CLK}

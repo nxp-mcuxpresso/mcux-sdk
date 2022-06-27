@@ -97,6 +97,11 @@
 #define BOARD_FLASH_RESET_GPIO_PIN 5U
 #endif
 
+/* Board microphone defines */
+#ifndef BOARD_DMIC_NUM
+#define BOARD_DMIC_NUM 2
+#endif
+
 #define LED_RED_INIT(output)                                                          \
     GPIO_PinInit(BOARD_LED_RED_GPIO, BOARD_LED_RED_GPIO_PORT, BOARD_LED_RED_GPIO_PIN, \
                  &(gpio_pin_config_t){kGPIO_DigitalOutput, (output)}) /*!< Enable target LED_RED */
@@ -196,6 +201,16 @@
 #define BOARD_MIPI_PANEL_TOUCH_INT_PORT       3
 #define BOARD_MIPI_PANEL_TOUCH_INT_PIN        19
 
+#define BOARD_BT_UART_INSTANCE 0
+#define BOARD_BT_UART_BAUDRATE 3000000
+#define BOARD_BT_UART_CLK_FREQ CLOCK_GetFlexcommClkFreq(0U)
+#define BOARD_BT_UART_FRG_CLK \
+    (&(const clock_frg_clk_config_t){0, kCLOCK_FrgMainClk, 255, 0}) /*!< Select FRG0 mux as frg_pll */
+#define BOARD_BT_UART_CLK_ATTACH  kFRG_to_FLEXCOMM0
+#define BOARD_BT_UART_RST         kFC0_RST_SHIFT_RSTn
+#define BOARD_BT_UART_IRQ         FLEXCOMM0_IRQn
+#define BOARD_BT_UART_IRQ_HANDLER FLEXCOMM0_IRQHandler
+#define BOARD_BT_UART_CLKSRC      kCLOCK_Flexcomm0
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
@@ -210,6 +225,11 @@ void BOARD_FlexspiClockSafeConfig(void);
 AT_QUICKACCESS_SECTION_CODE(void BOARD_SetFlexspiClock(FLEXSPI_Type *base, uint32_t src, uint32_t divider));
 AT_QUICKACCESS_SECTION_CODE(void BOARD_DeinitFlash(FLEXSPI_Type *base));
 AT_QUICKACCESS_SECTION_CODE(void BOARD_InitFlash(FLEXSPI_Type *base));
+AT_QUICKACCESS_SECTION_CODE(void BOARD_SetDeepSleepPinConfig(void));
+AT_QUICKACCESS_SECTION_CODE(void BOARD_RestoreDeepSleepPinConfig(void));
+AT_QUICKACCESS_SECTION_CODE(void BOARD_EnterDeepSleep(const uint32_t exclude_from_pd[4]));
+AT_QUICKACCESS_SECTION_CODE(void BOARD_EnterDeepPowerDown(const uint32_t exclude_from_pd[4]));
+
 #if defined(SDK_I2C_BASED_COMPONENT_USED) && SDK_I2C_BASED_COMPONENT_USED
 void BOARD_I2C_Init(I2C_Type *base, uint32_t clkSrc_Hz);
 status_t BOARD_I2C_Send(I2C_Type *base,

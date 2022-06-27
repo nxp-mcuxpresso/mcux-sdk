@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPUART EDMA driver version. */
-#define FSL_LPUART_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+#define FSL_LPUART_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 2))
 /*@}*/
 
 /* Forward declaration of the handle typedef. */
@@ -69,6 +69,9 @@ extern "C" {
 
 /*!
  * @brief Initializes the LPUART handle which is used in transactional functions.
+ *
+ * @note This function disables all LPUART interrupts.
+ *
  * @param base LPUART peripheral base address.
  * @param handle Pointer to lpuart_edma_handle_t structure.
  * @param callback Callback function.
@@ -167,6 +170,8 @@ status_t LPUART_TransferGetReceiveCountEDMA(LPUART_Type *base, lpuart_edma_handl
  *
  * This function handles the LPUART tx complete IRQ request and invoke user callback.
  * It is not set to static so that it can be used in user application.
+ * @note This function is used as default IRQ handler by double weak mechanism.
+ * If user's specific IRQ handler is implemented, make sure this function is invoked in the handler.
  *
  * @param base LPUART peripheral base address.
  * @param lpuartEdmaHandle LPUART handle pointer.

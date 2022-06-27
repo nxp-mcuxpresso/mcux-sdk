@@ -45,7 +45,6 @@ typedef enum
     SRTM_AudioStateClosed  = 0U,
     SRTM_AudioStateOpened  = 1U,
     SRTM_AudioStateStarted = 2U,
-    SRTM_AudioStatePaused  = 3U,
 } srtm_audio_state_t;
 
 /*!@brief Define the format info which aligned with Linux side in the SRTM Audio service. */
@@ -193,18 +192,21 @@ void SRTM_AudioService_Destroy(srtm_service_t service);
 void SRTM_AudioService_Reset(srtm_service_t service, srtm_peercore_t core);
 
 /*!
- * @brief Register sai/codec adapters to audio interface identified by parameter index. Existing interface with same
- *        index will be overwritten. To avoid contention, this API should be called before service starts running.
+ * @brief Bind SRTM channel to audio adapter. The messages from the channel will be delivered to the adapter.
  * @param service SRTM service to set audio interface.
- * @param index audio interface index to set.
  * @param sai digital audio driver adapter.
- * @param codec analog audio codec adapter.
+ * @param channel SRTM channel to be bound to the adapters.
  * @return SRTM_Status_Success on success and others on failure.
  */
-srtm_status_t SRTM_AudioService_SetAudioInterface(srtm_service_t service,
-                                                  uint8_t index,
-                                                  srtm_sai_adapter_t sai,
-                                                  srtm_codec_adapter_t codec);
+srtm_status_t SRTM_AudioService_BindChannel(srtm_service_t service, srtm_sai_adapter_t sai, srtm_channel_t channel);
+
+/*!
+ * @brief Add audio adapters to audio service.
+ * @param service SRTM service to set audio interface.
+ * @param sai digital audio driver adapter.
+ * @return SRTM_Status_Success on success and others on failure.
+ */
+srtm_status_t SRTM_AudioService_AddAudioInterface(srtm_service_t service, srtm_sai_adapter_t sai);
 
 #ifdef __cplusplus
 }

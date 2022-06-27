@@ -206,7 +206,7 @@ static void USDHC_TransferHandleReTuning(USDHC_Type *base, usdhc_handle_t *handl
 static USDHC_Type *const s_usdhcBase[] = USDHC_BASE_PTRS;
 
 /*! @brief USDHC internal handle pointer array */
-static usdhc_handle_t *s_usdhcHandle[ARRAY_SIZE(s_usdhcBase)] = {NULL};
+static usdhc_handle_t *s_usdhcHandle[ARRAY_SIZE(s_usdhcBase)] = {0};
 
 /*! @brief USDHC IRQ name array */
 static const IRQn_Type s_usdhcIRQ[] = USDHC_IRQS;

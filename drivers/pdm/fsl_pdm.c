@@ -386,7 +386,7 @@ void PDM_SetChannelConfig(PDM_Type *base, uint32_t channel, const pdm_channel_co
     assert(config != NULL);
     assert(channel <= (uint32_t)FSL_FEATURE_PDM_CHANNEL_NUM);
 
-    uint32_t dcCtrl = base->DC_CTRL;
+    uint32_t dcCtrl = 0U;
 
 #if defined(FSL_FEATURE_PDM_HAS_RANGE_CTRL) && FSL_FEATURE_PDM_HAS_RANGE_CTRL
     uint32_t outCtrl = base->RANGE_CTRL;
@@ -394,9 +394,21 @@ void PDM_SetChannelConfig(PDM_Type *base, uint32_t channel, const pdm_channel_co
     uint32_t outCtrl = base->OUT_CTRL;
 #endif
 
+#if (defined(FSL_FEATURE_PDM_HAS_DC_OUT_CTRL) && (FSL_FEATURE_PDM_HAS_DC_OUT_CTRL))
+    dcCtrl = base->DC_OUT_CTRL;
+    /* configure gain and cut off freq */
+    dcCtrl &= ~((uint32_t)PDM_DC_OUT_CTRL_DCCONFIG0_MASK << (channel << 1U));
+    dcCtrl |= (uint32_t)config->outputCutOffFreq << (channel << 1U);
+    base->DC_OUT_CTRL = dcCtrl;
+#endif
+
+#if !(defined(FSL_FEATURE_PDM_DC_CTRL_VALUE_FIXED) && (FSL_FEATURE_PDM_DC_CTRL_VALUE_FIXED))
+    dcCtrl = base->DC_CTRL;
     /* configure gain and cut off freq */
     dcCtrl &= ~((uint32_t)PDM_DC_CTRL_DCCONFIG0_MASK << (channel << 1U));
     dcCtrl |= (uint32_t)config->cutOffFreq << (channel << 1U);
+    base->DC_CTRL = dcCtrl;
+#endif
 
 #if defined(FSL_FEATURE_PDM_HAS_RANGE_CTRL) && FSL_FEATURE_PDM_HAS_RANGE_CTRL
     outCtrl &= ~((uint32_t)PDM_RANGE_CTRL_RANGEADJ0_MASK << (channel << 2U));
@@ -405,8 +417,6 @@ void PDM_SetChannelConfig(PDM_Type *base, uint32_t channel, const pdm_channel_co
 #endif
 
     outCtrl |= (uint32_t)config->gain << (channel << 2U);
-
-    base->DC_CTRL = dcCtrl;
 
 #if defined(FSL_FEATURE_PDM_HAS_RANGE_CTRL) && FSL_FEATURE_PDM_HAS_RANGE_CTRL
     base->RANGE_CTRL = outCtrl;
@@ -561,6 +571,8 @@ void PDM_TransferHandleIRQ(PDM_Type *base, pdm_handle_t *handle)
 
 #if (defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
     uint32_t status = 0U;
+
+#if (defined(FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ) && (FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ == 1U))
     if (PDM_GetStatus(base) & PDM_STAT_LOWFREQF_MASK)
     {
         PDM_ClearStatus(base, PDM_STAT_LOWFREQF_MASK);
@@ -569,7 +581,7 @@ void PDM_TransferHandleIRQ(PDM_Type *base, pdm_handle_t *handle)
             (handle->callback)(base, handle, kStatus_PDM_CLK_LOW, handle->userData);
         }
     }
-
+#endif
     status = PDM_GetFifoStatus(base);
     if (status != 0U)
     {
@@ -580,6 +592,7 @@ void PDM_TransferHandleIRQ(PDM_Type *base, pdm_handle_t *handle)
         }
     }
 
+#if !(defined(FSL_FEATURE_PDM_HAS_RANGE_CTRL) && FSL_FEATURE_PDM_HAS_RANGE_CTRL)
     status = PDM_GetOutputStatus(base);
     if (status != 0U)
     {
@@ -589,7 +602,7 @@ void PDM_TransferHandleIRQ(PDM_Type *base, pdm_handle_t *handle)
             (handle->callback)(base, handle, kStatus_PDM_Output_ERROR, handle->userData);
         }
     }
-
+#endif
 #endif
 
     /* Handle transfer */

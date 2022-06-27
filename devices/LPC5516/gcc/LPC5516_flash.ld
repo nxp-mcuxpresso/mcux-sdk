@@ -7,13 +7,13 @@
 **     Compiler:            GNU C Compiler
 **     Reference manual:    LPC55S1x/LPC551x User manual Rev.0.6  15 November 2019
 **     Version:             rev. 1.1, 2019-12-03
-**     Build:               b200221
+**     Build:               b210927
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -36,7 +36,7 @@ STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x0800;
 MEMORY
 {
   m_interrupts          (RX)  : ORIGIN = 0x00000000, LENGTH = 0x00000200
-  m_text                (RX)  : ORIGIN = 0x00000200, LENGTH = 0x00037E00
+  m_text                (RX)  : ORIGIN = 0x00000200, LENGTH = 0x0003D600
   m_data                (RW)  : ORIGIN = 0x20000000, LENGTH = 0x00010000
   m_sramx               (RW)  : ORIGIN = 0x04000000, LENGTH = 0x00004000
   m_usb_sram            (RW)  : ORIGIN = 0x20010000, LENGTH = 0x00004000

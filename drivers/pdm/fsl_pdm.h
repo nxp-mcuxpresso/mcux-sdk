@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PDM_DRIVER_VERSION (MAKE_VERSION(2, 5, 0)) /*!< Version 2.5.0 */
+#define FSL_PDM_DRIVER_VERSION (MAKE_VERSION(2, 6, 0)) /*!< Version 2.6.0 */
 /*@}*/
 
 /*! @brief PDM XFER QUEUE SIZE */
@@ -31,8 +31,10 @@
 /*! @brief PDM return status*/
 enum
 {
-    kStatus_PDM_Busy                 = MAKE_STATUS(kStatusGroup_PDM, 0), /*!< PDM is busy. */
-    kStatus_PDM_CLK_LOW              = MAKE_STATUS(kStatusGroup_PDM, 1), /*!< PDM clock frequency low */
+    kStatus_PDM_Busy = MAKE_STATUS(kStatusGroup_PDM, 0), /*!< PDM is busy. */
+#if (defined(FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ) && (FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ == 1U))
+    kStatus_PDM_CLK_LOW = MAKE_STATUS(kStatusGroup_PDM, 1), /*!< PDM clock frequency low */
+#endif
     kStatus_PDM_FIFO_ERROR           = MAKE_STATUS(kStatusGroup_PDM, 2), /*!< PDM FIFO underrun or overflow */
     kStatus_PDM_QueueFull            = MAKE_STATUS(kStatusGroup_PDM, 3), /*!< PDM FIFO underrun or overflow */
     kStatus_PDM_Idle                 = MAKE_STATUS(kStatusGroup_PDM, 4), /*!< PDM is idle */
@@ -52,8 +54,9 @@ enum _pdm_internal_status
 {
     kPDM_StatusDfBusyFlag     = (int)PDM_STAT_BSY_FIL_MASK, /*!< Decimation filter is busy processing data */
     kPDM_StatusFIRFilterReady = PDM_STAT_FIR_RDY_MASK,      /*!< FIR filter data is ready */
-    kPDM_StatusFrequencyLow   = PDM_STAT_LOWFREQF_MASK,     /*!< Mic app clock frequency not high enough */
-
+#if (defined(FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ) && (FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ == 1U))
+    kPDM_StatusFrequencyLow = PDM_STAT_LOWFREQF_MASK, /*!< Mic app clock frequency not high enough */
+#endif
     kPDM_StatusCh0FifoDataAvaliable = PDM_STAT_CH0F_MASK, /*!< channel 0 fifo data reached watermark level */
     kPDM_StatusCh1FifoDataAvaliable = PDM_STAT_CH1F_MASK, /*!< channel 1 fifo data reached watermark level */
     kPDM_StatusCh2FifoDataAvaliable = PDM_STAT_CH2F_MASK, /*!< channel 2 fifo data reached watermark level */
@@ -164,14 +167,25 @@ enum _pdm_output_status
 };
 #endif
 
+#if (defined(FSL_FEATURE_PDM_HAS_DC_OUT_CTRL) && (FSL_FEATURE_PDM_HAS_DC_OUT_CTRL))
 /*! @brief PDM DC remover configurations */
 typedef enum _pdm_dc_remover
 {
-    kPDM_DcRemoverCutOff21Hz  = 0U, /*!< DC remover cut off 21HZ */
-    kPDM_DcRemoverCutOff83Hz  = 1U, /*!< DC remover cut off 83HZ */
-    kPDM_DcRemoverCutOff152Hz = 2U, /*!< DC remover cut off 152HZ */
-    kPDM_DcRemoverBypass      = 3U, /*!< DC remover bypass */
+    kPDM_DcRemoverCutOff20Hz = 0U, /*!< DC remover cut off 20HZ */
+    kPDM_DcRemoverCutOff13Hz = 1U, /*!< DC remover cut off 13.3HZ */
+    kPDM_DcRemoverCutOff40Hz = 2U, /*!< DC remover cut off 40HZ */
+    kPDM_DcRemoverBypass     = 3U, /*!< DC remover bypass */
 } pdm_dc_remover_t;
+#else
+/*! @brief PDM DC remover configurations */
+typedef enum _pdm_dc_remover
+{
+    kPDM_DcRemoverCutOff21Hz = 0U,  /*!< DC remover cut off 21HZ */
+    kPDM_DcRemoverCutOff83Hz = 1U,  /*!< DC remover cut off 83HZ */
+    kPDM_DcRemoverCutOff152Hz = 2U, /*!< DC remover cut off 152HZ */
+    kPDM_DcRemoverBypass = 3U,      /*!< DC remover bypass */
+} pdm_dc_remover_t;
+#endif
 
 /*! @brief PDM decimation filter quality mode */
 typedef enum _pdm_df_quality_mode
@@ -228,8 +242,15 @@ enum _pdm_data_width
 /*! @brief PDM channel configurations */
 typedef struct _pdm_channel_config
 {
+#if (defined(FSL_FEATURE_PDM_HAS_DC_OUT_CTRL) && (FSL_FEATURE_PDM_HAS_DC_OUT_CTRL))
+    pdm_dc_remover_t outputCutOffFreq; /*!< PDM output DC remover cut off frequency */
+#endif
+
+#if !(defined(FSL_FEATURE_PDM_DC_CTRL_VALUE_FIXED) && (FSL_FEATURE_PDM_DC_CTRL_VALUE_FIXED))
     pdm_dc_remover_t cutOffFreq; /*!< DC remover cut off frequency */
-    pdm_df_output_gain_t gain;   /*!< Decimation Filter Output Gain */
+#endif
+
+    pdm_df_output_gain_t gain; /*!< Decimation Filter Output Gain */
 } pdm_channel_config_t;
 
 /*! @brief PDM user configuration structure */

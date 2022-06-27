@@ -162,7 +162,9 @@ void *MSG_Alloc(uint32_t length)
 
 void MSG_Free(void *buffer)
 {
-    assert(buffer);
-    (void)MSG_QueueRemove(buffer);
-    (void)MEM_BufferFree((list_element_t *)buffer - 1);
+    if (buffer != NULL)
+    {
+        (void)MSG_QueueRemove(buffer);
+        (void)MEM_BufferFree((list_element_t *)buffer - 1);
+    }
 }

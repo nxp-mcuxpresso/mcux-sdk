@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  *
@@ -73,10 +73,9 @@ typedef struct _hal_timer_config
     uint8_t  instance;                    /*!< Hardware timer module instance, for example: if you want use FTM0,then the instance is configured to 0, if
                                                you want use FTM2 hardware timer, then configure the instance to 2, detail information please refer to the
                                                SOC corresponding RM.Invalid instance value will cause initialization failure. */
-#if (defined(TM_ENABLE_TIMER_CLOCK_SELECT) && (TM_ENABLE_TIMER_CLOCK_SELECT > 0U))
-    uint8_t  clockSrcSelect;              /*!< Select clock source. It is just for lptmr timer clock select, if the lptmr does not
+
+    uint8_t  clockSrcSelect;              /*!< Select clock source. It is for timer clock select, if the lptmr does not
                                                want to use the default clock source*/
-#endif
 } hal_timer_config_t;
 
 /*! @brief Definition of timer adapter handle size. */

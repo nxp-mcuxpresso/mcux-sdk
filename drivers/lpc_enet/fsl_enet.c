@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -17,61 +17,6 @@
 #define FSL_COMPONENT_ID "platform.drivers.lpc_enet"
 #endif
 
-/*! @brief IPv4 PTP message IP version offset. */
-#define ENET_PTP1588_IPVERSION_OFFSET 0x0EU
-/*! @brief IPv4 PTP message UDP protocol offset. */
-#define ENET_PTP1588_IPV4_UDP_PROTOCOL_OFFSET 0x17U
-/*! @brief IPv4 PTP message UDP port offset. */
-#define ENET_PTP1588_IPV4_UDP_PORT_OFFSET 0x24U
-/*! @brief IPv4 PTP message UDP message type offset. */
-#define ENET_PTP1588_IPV4_UDP_MSGTYPE_OFFSET 0x2AU
-/*! @brief IPv4 PTP message UDP version offset. */
-#define ENET_PTP1588_IPV4_UDP_VERSION_OFFSET 0x2BU
-/*! @brief IPv4 PTP message UDP clock id offset. */
-#define ENET_PTP1588_IPV4_UDP_CLKID_OFFSET 0x3EU
-/*! @brief IPv4 PTP message UDP sequence id offset. */
-#define ENET_PTP1588_IPV4_UDP_SEQUENCEID_OFFSET 0x48U
-/*! @brief IPv4 PTP message UDP control offset. */
-#define ENET_PTP1588_IPV4_UDP_CTL_OFFSET 0x4AU
-/*! @brief IPv6 PTP message UDP protocol offset. */
-#define ENET_PTP1588_IPV6_UDP_PROTOCOL_OFFSET 0x14U
-/*! @brief IPv6 PTP message UDP port offset. */
-#define ENET_PTP1588_IPV6_UDP_PORT_OFFSET 0x38U
-/*! @brief IPv6 PTP message UDP message type offset. */
-#define ENET_PTP1588_IPV6_UDP_MSGTYPE_OFFSET 0x3EU
-/*! @brief IPv6 PTP message UDP version offset. */
-#define ENET_PTP1588_IPV6_UDP_VERSION_OFFSET 0x3FU
-/*! @brief IPv6 PTP message UDP clock id offset. */
-#define ENET_PTP1588_IPV6_UDP_CLKID_OFFSET 0x52U
-/*! @brief IPv6 PTP message UDP sequence id offset. */
-#define ENET_PTP1588_IPV6_UDP_SEQUENCEID_OFFSET 0x5CU
-/*! @brief IPv6 PTP message UDP control offset. */
-#define ENET_PTP1588_IPV6_UDP_CTL_OFFSET 0x5EU
-/*! @brief PTPv2 message Ethernet packet type offset. */
-#define ENET_PTP1588_ETHL2_PACKETTYPE_OFFSET 0x0CU
-/*! @brief PTPv2 message Ethernet message type offset. */
-#define ENET_PTP1588_ETHL2_MSGTYPE_OFFSET 0x0EU
-/*! @brief PTPv2 message Ethernet version type offset. */
-#define ENET_PTP1588_ETHL2_VERSION_OFFSET 0X0FU
-/*! @brief PTPv2 message Ethernet clock id offset. */
-#define ENET_PTP1588_ETHL2_CLOCKID_OFFSET 0x22U
-/*! @brief PTPv2 message Ethernet sequence id offset. */
-#define ENET_PTP1588_ETHL2_SEQUENCEID_OFFSET 0x2CU
-/*! @brief Packet type Ethernet IEEE802.3 for PTPv2. */
-#define ENET_ETHERNETL2 0x88F7U
-/*! @brief Packet type IPv4. */
-#define ENET_IPV4 0x0800U
-/*! @brief Packet type IPv6. */
-#define ENET_IPV6 0x86ddU
-/*! @brief Packet type VLAN. */
-#define ENET_8021QVLAN 0x8100U
-/*! @brief UDP protocol type. */
-#define ENET_UDPVERSION 0x0011U
-/*! @brief Packet IP version IPv4. */
-#define ENET_IPV4VERSION 0x0004U
-/*! @brief Packet IP version IPv6. */
-#define ENET_IPV6VERSION 0x0006U
-
 /*! @brief Defines 10^9 nanosecond. */
 #define ENET_NANOSECS_ONESECOND (1000000000U)
 /*! @brief Defines 10^6 microsecond.*/
@@ -83,11 +28,11 @@
 #define ENET_FIFOSIZE_UNIT (256U)
 /*! @brief ENET half-dulpex default IPG. */
 #define ENET_HALFDUPLEX_DEFAULTIPG (4U)
-/*! @breif ENET miminum ring length. */
+/*! @brief ENET miminum ring length. */
 #define ENET_MIN_RINGLEN (4U)
-/*! @breif ENET wakeup filter numbers. */
+/*! @brief ENET wakeup filter numbers. */
 #define ENET_WAKEUPFILTER_NUM (8U)
-/*! @breif Requried systime timer frequency. */
+/*! @brief Requried systime timer frequency. */
 #define ENET_SYSTIME_REQUIRED_CLK_MHZ (50U)
 /*! @brief Ethernet VLAN tag length. */
 #define ENET_FRAME_VLAN_TAGLEN 4U
@@ -97,14 +42,8 @@
 #define ENET_HEAD_TYPE_OFFSET    (12)
 #define ENET_HEAD_AVBTYPE_OFFSET (16)
 
-/*! @brief Defines the macro for converting constants from host byte order to network byte order. */
-#define ENET_HTONS(n) __REV16(n)
-#define ENET_HTONL(n) __REV(n)
-#define ENET_NTOHS(n) __REV16(n)
-#define ENET_NTOHL(n) __REV(n)
-
-/* Typedef for interrupt handler. */
-typedef void (*enet_isr_t)(ENET_Type *base, enet_handle_t *handle);
+/*! @brief Binary rollover mode count convert */
+#define ENET_BINARY_ROLLOVER_SCALE(x) (uint32_t)((uint64_t)(x)*46566U / 100000U)
 
 /*******************************************************************************
  * Prototypes
@@ -157,36 +96,31 @@ static void ENET_SetMTL(ENET_Type *base, const enet_config_t *config);
  *
  * @param base ENET peripheral base address.
  * @param bufferConfig ENET buffer configuration.
- * @param intTxEnable tx interrupt enable.
  * @param channel The channel number, 0 , 1.
  */
-static status_t ENET_TxDescriptorsInit(ENET_Type *base,
-                                       const enet_buffer_config_t *bufferConfig,
-                                       bool intTxEnable,
-                                       uint8_t channel);
+static status_t ENET_TxDescriptorsInit(ENET_Type *base, const enet_buffer_config_t *bufferConfig, uint8_t channel);
 
 /*!
  * @brief Set ENET DMA receive buffer descriptors for one channel.
  *
  * @param base ENET peripheral base address.
+ * @param config The ENET configuration.
  * @param bufferConfig ENET buffer configuration.
- * @param intRxEnable tx interrupt enable.
  * @param channel The channel number, 0 , 1.
- * @param doubleBuffEnable Two buffers are enabled.
  */
 static status_t ENET_RxDescriptorsInit(ENET_Type *base,
+                                       enet_config_t *config,
                                        const enet_buffer_config_t *bufferConfig,
-                                       bool intRxEnable,
-                                       uint8_t channel,
-                                       bool doubleBuffEnable);
+                                       uint8_t channel);
 
 /*!
- * @brief Set ENET get transmit ring descriptors.
+ * @brief Drop one frame in specified BD channel.
  *
- * @param data The ENET data to be transfered.
+ * @param base ENET peripheral base address.
  * @param handle ENET handler.
+ * @param channel The channel number, 0 , 1.
  */
-static uint8_t ENET_GetTxRingId(uint8_t *data, enet_handle_t *handle);
+static void ENET_DropFrame(ENET_Type *base, enet_handle_t *handle, uint8_t channel);
 
 #ifdef ENET_PTP1588FEATURE_REQUIRED
 /*!
@@ -200,48 +134,6 @@ static uint8_t ENET_GetTxRingId(uint8_t *data, enet_handle_t *handle);
  * @param refClk_Hz The reference clock for ptp 1588.
  */
 static void ENET_SetPtp1588(ENET_Type *base, const enet_config_t *config, uint32_t refClk_Hz);
-
-/*!
- * @brief Parses the ENET frame for time-stamp process of PTP 1588 frame.
- *
- * @param data  The ENET read data for frame parse.
- * @param ptpTsData The ENET PTP message and time-stamp data pointer.
- * @param isFastEnabled The fast parse flag.
- *        - true , Fast processing, only check if this is a PTP message.
- *        - false, Store the PTP message data after check the PTP message.
- */
-static bool ENET_Ptp1588ParseFrame(uint8_t *data, enet_ptp_time_data_t *ptpTsData, bool isFastEnabled);
-
-/*!
- * @brief Updates the new PTP 1588 time-stamp to the time-stamp buffer ring.
- *
- * @param ptpTsDataRing The PTP message and time-stamp data ring pointer.
- * @param ptpTimeData   The new PTP 1588 time-stamp data pointer.
- */
-static status_t ENET_Ptp1588UpdateTimeRing(enet_ptp_time_data_ring_t *ptpTsDataRing, enet_ptp_time_data_t *ptpTimeData);
-
-/*!
- * @brief Search up the right PTP 1588 time-stamp from the time-stamp buffer ring.
- *
- * @param ptpTsDataRing The PTP message and time-stamp data ring pointer.
- * @param ptpTimeData   The find out right PTP 1588 time-stamp data pointer with the specific PTP message.
- */
-static status_t ENET_Ptp1588SearchTimeRing(enet_ptp_time_data_ring_t *ptpTsDataRing, enet_ptp_time_data_t *ptpTimedata);
-
-/*!
- * @brief Store the receive time-stamp for event PTP frame in the time-stamp buffer ring.
- *
- * @param base   ENET peripheral base address.
- * @param handle ENET handler.
- * @param rxDesc The ENET receive descriptor pointer.
- * @param channel The rx channel.
- * @param ptpTimeData The PTP 1588 time-stamp data pointer.
- */
-static status_t ENET_StoreRxFrameTime(ENET_Type *base,
-                                      enet_handle_t *handle,
-                                      enet_rx_bd_struct_t *rxDesc,
-                                      uint8_t channel,
-                                      enet_ptp_time_data_t *ptpTimeData);
 #endif /* ENET_PTP1588FEATURE_REQUIRED */
 
 /*******************************************************************************
@@ -352,13 +244,13 @@ static void ENET_SetMTL(ENET_Type *base, const enet_config_t *config)
     if (multiqCfg != NULL)
     {
         base->MTL_OP_MODE = ENET_MTL_OP_MODE_SCHALG(multiqCfg->mtltxSche) | ENET_MTL_OP_MODE_RAA(multiqCfg->mtlrxSche);
-        /* Set the rx queue mapping to dma channel. */
+        /* Set the Rx queue mapping to dma channel. */
         base->MTL_RXQ_DMA_MAP = (uint32_t)multiqCfg->mtlrxQuemap;
-        /* Set the tx/rx queue operation mode for multi-queue. */
+        /* Set the Tx/Rx queue operation mode for multi-queue. */
         base->MTL_QUEUE[1].MTL_TXQX_OP_MODE |= ENET_MTL_QUEUE_MTL_TXQX_OP_MODE_TXQEN(2);
         base->MTL_QUEUE[1].MTL_RXQX_OP_MODE = rxqOpReg;
 
-        /* Set the tx/rx queue weight. */
+        /* Set the Tx/Rx queue weight. */
         for (index = 0; index < ENET_RING_NUM_MAX; index++)
         {
             base->MTL_QUEUE[index].MTL_TXQX_QNTM_WGHT = multiqCfg->txqueweight[index];
@@ -374,7 +266,7 @@ static void ENET_SetMacControl(ENET_Type *base, const enet_config_t *config, uin
     uint32_t reg = 0;
 
     /* Set Macaddr */
-    /* The dma channel 0 is set as to which the rx packet
+    /* The dma channel 0 is set as to which the Rx packet
      * whose DA matches the MAC address content is routed. */
     if (macAddr != NULL)
     {
@@ -412,14 +304,10 @@ static void ENET_SetMacControl(ENET_Type *base, const enet_config_t *config, uin
     base->MAC_RXQ_CTRL[0] = ENET_MAC_RXQ_CTRL_RXQ0EN(1) | ENET_MAC_RXQ_CTRL_RXQ1EN(1);
 }
 
-static status_t ENET_TxDescriptorsInit(ENET_Type *base,
-                                       const enet_buffer_config_t *bufferConfig,
-                                       bool intTxEnable,
-                                       uint8_t channel)
+static status_t ENET_TxDescriptorsInit(ENET_Type *base, const enet_buffer_config_t *bufferConfig, uint8_t channel)
 {
     uint16_t j;
     enet_tx_bd_struct_t *txbdPtr;
-    uint32_t control                    = intTxEnable ? ENET_TXDESCRIP_RD_IOC_MASK : 0U;
     const enet_buffer_config_t *buffCfg = bufferConfig;
 
     if (buffCfg == NULL)
@@ -432,12 +320,12 @@ static status_t ENET_TxDescriptorsInit(ENET_Type *base,
     {
         return kStatus_InvalidArgument;
     }
-    /* Set the tx descriptor start/tail pointer, shall be word aligned. */
+    /* Set the Tx descriptor start/tail pointer, shall be word aligned. */
     base->DMA_CH[channel].DMA_CHX_TXDESC_LIST_ADDR =
         (uint32_t)buffCfg->txDescStartAddrAlign & ENET_DMA_CH_DMA_CHX_TXDESC_LIST_ADDR_STL_MASK;
     base->DMA_CH[channel].DMA_CHX_TXDESC_TAIL_PTR =
         (uint32_t)buffCfg->txDescTailAddrAlign & ENET_DMA_CH_DMA_CHX_TXDESC_LIST_ADDR_STL_MASK;
-    /* Set the tx ring length. */
+    /* Set the Tx ring length. */
     base->DMA_CH[channel].DMA_CHX_TXDESC_RING_LENGTH =
         ((uint32_t)buffCfg->txRingLen - 1U) & ENET_DMA_CH_DMA_CHX_TXDESC_RING_LENGTH_TDRL_MASK;
 
@@ -445,32 +333,35 @@ static status_t ENET_TxDescriptorsInit(ENET_Type *base,
     txbdPtr = (enet_tx_bd_struct_t *)(buffCfg->txDescStartAddrAlign);
     for (j = 0; j < buffCfg->txRingLen; j++)
     {
-        txbdPtr->buff1Addr   = 0;
-        txbdPtr->buff2Addr   = 0;
-        txbdPtr->buffLen     = control;
-        txbdPtr->controlStat = 0;
+        txbdPtr->tdes0 = 0;
+        txbdPtr->tdes1 = 0;
+        txbdPtr->tdes2 = 0;
+        txbdPtr->tdes3 = 0;
         txbdPtr++;
     }
 
     return kStatus_Success;
 }
 
-static status_t ENET_RxDescriptorsInit(
-    ENET_Type *base, const enet_buffer_config_t *bufferConfig, bool intRxEnable, uint8_t channel, bool doubleBuffEnable)
+static status_t ENET_RxDescriptorsInit(ENET_Type *base,
+                                       enet_config_t *config,
+                                       const enet_buffer_config_t *bufferConfig,
+                                       uint8_t channel)
 {
     uint16_t j;
     uint32_t reg;
     enet_rx_bd_struct_t *rxbdPtr;
     uint16_t index;
+    bool doubleBuffEnable = ((config->specialControl & (uint16_t)kENET_DescDoubleBuffer) != 0U) ? true : false;
     const enet_buffer_config_t *buffCfg = bufferConfig;
-    uint32_t control                    = ENET_RXDESCRIP_WR_OWN_MASK | ENET_RXDESCRIP_RD_BUFF1VALID_MASK;
+    uint32_t control                    = ENET_RXDESCRIP_RD_BUFF1VALID_MASK;
 
     if (buffCfg == NULL)
     {
         return kStatus_InvalidArgument;
     }
 
-    if (intRxEnable)
+    if (0U != (config->interrupt & (uint32_t)kENET_DmaRx))
     {
         control |= ENET_RXDESCRIP_RD_IOC_MASK;
     }
@@ -480,13 +371,19 @@ static status_t ENET_RxDescriptorsInit(
         control |= ENET_RXDESCRIP_RD_BUFF2VALID_MASK;
     }
 
+    /* Not give ownership to DMA before Rx buffer is ready */
+    if ((config->rxBuffAlloc == NULL) || (config->rxBuffFree == NULL))
+    {
+        control |= ENET_RXDESCRIP_WR_OWN_MASK;
+    }
+
     /* Check the ring length. */
     if (buffCfg->rxRingLen < ENET_MIN_RINGLEN)
     {
         return kStatus_InvalidArgument;
     }
 
-    /* Set the rx descriptor start/tail pointer, shall be word aligned. */
+    /* Set the Rx descriptor start/tail pointer, shall be word aligned. */
     base->DMA_CH[channel].DMA_CHX_RXDESC_LIST_ADDR =
         (uint32_t)buffCfg->rxDescStartAddrAlign & ENET_DMA_CH_DMA_CHX_RXDESC_LIST_ADDR_SRL_MASK;
     base->DMA_CH[channel].DMA_CHX_RXDESC_TAIL_PTR =
@@ -502,53 +399,34 @@ static status_t ENET_RxDescriptorsInit(
 
     for (j = 0; j < buffCfg->rxRingLen; j++)
     {
-        if (doubleBuffEnable)
+        if ((config->rxBuffAlloc == NULL) || (config->rxBuffFree == NULL))
         {
-            index = 2U * j;
-        }
-        else
-        {
-            index = j;
-        }
-        rxbdPtr->buff1Addr = *(buffCfg->rxBufferStartAddr + index);
-        /* The second buffer is set with 0 because it is not required for normal case. */
-        if (doubleBuffEnable)
-        {
-            rxbdPtr->buff2Addr = *(buffCfg->rxBufferStartAddr + index + 1);
-        }
-        else
-        {
-            rxbdPtr->buff2Addr = 0;
+            if (doubleBuffEnable)
+            {
+                index = 2U * j;
+            }
+            else
+            {
+                index = j;
+            }
+            rxbdPtr->rdes0 = buffCfg->rxBufferStartAddr[index];
+            /* The second buffer is set with 0 because it is not required for normal case. */
+            if (doubleBuffEnable)
+            {
+                rxbdPtr->rdes2 = buffCfg->rxBufferStartAddr[index + 1U];
+            }
+            else
+            {
+                rxbdPtr->rdes2 = 0;
+            }
         }
 
         /* Set the valid and DMA own flag.*/
-        rxbdPtr->control = control;
+        rxbdPtr->rdes3 = control;
         rxbdPtr++;
     }
 
     return kStatus_Success;
-}
-
-static uint8_t ENET_GetTxRingId(uint8_t *data, enet_handle_t *handle)
-{
-    /* Defuault use the queue/ring 0. */
-    uint8_t ringId = 0;
-
-    if (handle->multiQueEnable)
-    {
-        /* Parse the frame and choose the queue id for different avb frames
-         *  AVB Class frame in queue 1.
-         *  non-AVB frame in queue 0.
-         */
-        if ((*(uint16_t *)(uint32_t)(data + ENET_HEAD_TYPE_OFFSET) == ENET_HTONS(ENET_8021QVLAN)) &&
-            ((*(uint16_t *)(uint32_t)(data + ENET_HEAD_AVBTYPE_OFFSET)) == ENET_HTONS(ENET_AVBTYPE)))
-        {
-            /* AVBTP stream data frame. */
-            ringId = 1;
-        }
-    }
-
-    return ringId;
 }
 
 #ifdef ENET_PTP1588FEATURE_REQUIRED
@@ -606,226 +484,6 @@ static void ENET_SetPtp1588(ENET_Type *base, const enet_config_t *config, uint32
 
     /* Initialize the system timer. */
     base->MAC_TIMESTAMP_CTRL = control | ENET_MAC_TIMESTAMP_CTRL_TSINIT_MASK;
-}
-
-static bool ENET_Ptp1588ParseFrame(uint8_t *data, enet_ptp_time_data_t *ptpTsData, bool isFastEnabled)
-{
-    assert(data);
-    if (!isFastEnabled)
-    {
-        assert(ptpTsData);
-    }
-
-    bool isPtpMsg   = false;
-    uint8_t *buffer = data;
-    uint16_t ptpType;
-
-    /* Check for VLAN frame. */
-    if (*(uint16_t *)(uint32_t)(buffer + ENET_PTP1588_ETHL2_PACKETTYPE_OFFSET) == ENET_HTONS(ENET_8021QVLAN))
-    {
-        buffer += ENET_FRAME_VLAN_TAGLEN;
-    }
-
-    ptpType = *(uint16_t *)(uint32_t)(buffer + ENET_PTP1588_ETHL2_PACKETTYPE_OFFSET);
-    switch (ENET_HTONS(ptpType))
-    { /* Ethernet layer 2. */
-        case ENET_ETHERNETL2:
-            if (*(uint8_t *)(uint32_t)(buffer + ENET_PTP1588_ETHL2_MSGTYPE_OFFSET) <= (uint8_t)kENET_PtpEventMsgType)
-            {
-                isPtpMsg = true;
-                if (!isFastEnabled)
-                {
-                    /* It's a ptpv2 message and store the ptp header information. */
-                    ptpTsData->version = (*(uint8_t *)(uint32_t)(buffer + ENET_PTP1588_ETHL2_VERSION_OFFSET)) & 0x0FU;
-                    ptpTsData->messageType =
-                        (*(uint8_t *)(uint32_t)(buffer + ENET_PTP1588_ETHL2_MSGTYPE_OFFSET)) & 0x0FU;
-                    ptpTsData->sequenceId =
-                        (uint16_t)ENET_HTONS(*(uint16_t *)(uint32_t)(buffer + ENET_PTP1588_ETHL2_SEQUENCEID_OFFSET));
-                    (void)memcpy((void *)(uint32_t *)(uint32_t)&ptpTsData->sourcePortId[0],
-                                 (void *)(uint32_t *)(uint32_t)(buffer + ENET_PTP1588_ETHL2_CLOCKID_OFFSET),
-                                 (uint32_t)kENET_PtpSrcPortIdLen);
-                }
-            }
-            break;
-        /* IPV4. */
-        case ENET_IPV4:
-            if ((*(uint8_t *)(uint32_t)(buffer + ENET_PTP1588_IPVERSION_OFFSET) >> 4) == ENET_IPV4VERSION)
-            {
-                if (((*(uint16_t *)(uint32_t)(buffer + ENET_PTP1588_IPV4_UDP_PORT_OFFSET)) ==
-                     ENET_HTONS((uint16_t)kENET_PtpEventPort)) &&
-                    (*(uint8_t *)(uint32_t)(buffer + ENET_PTP1588_IPV4_UDP_PROTOCOL_OFFSET) == ENET_UDPVERSION))
-                {
-                    /* Set the PTP message flag. */
-                    isPtpMsg = true;
-                    if (!isFastEnabled)
-                    {
-                        /* It's a IPV4 ptp message and store the ptp header information. */
-                        ptpTsData->version =
-                            (*(uint8_t *)(uint32_t)(buffer + ENET_PTP1588_IPV4_UDP_VERSION_OFFSET)) & 0x0FU;
-                        ptpTsData->messageType =
-                            (*(uint8_t *)(uint32_t)(buffer + ENET_PTP1588_IPV4_UDP_MSGTYPE_OFFSET)) & 0x0FU;
-                        ptpTsData->sequenceId = (uint16_t)ENET_HTONS(
-                            *(uint16_t *)(uint32_t)(buffer + ENET_PTP1588_IPV4_UDP_SEQUENCEID_OFFSET));
-                        (void)memcpy((void *)(uint32_t *)(uint32_t)&ptpTsData->sourcePortId[0],
-                                     (void *)(uint32_t *)(uint32_t)(buffer + ENET_PTP1588_IPV4_UDP_CLKID_OFFSET),
-                                     (uint32_t)kENET_PtpSrcPortIdLen);
-                    }
-                }
-            }
-            break;
-        /* IPV6. */
-        case ENET_IPV6:
-            if ((*(uint8_t *)(uint32_t)(buffer + ENET_PTP1588_IPVERSION_OFFSET) >> 4) == ENET_IPV6VERSION)
-            {
-                if (((*(uint16_t *)(uint32_t)(buffer + ENET_PTP1588_IPV6_UDP_PORT_OFFSET)) ==
-                     ENET_HTONS((uint16_t)kENET_PtpEventPort)) &&
-                    (*(uint8_t *)(uint32_t)(buffer + ENET_PTP1588_IPV6_UDP_PROTOCOL_OFFSET) == ENET_UDPVERSION))
-                {
-                    /* Set the PTP message flag. */
-                    isPtpMsg = true;
-                    if (!isFastEnabled)
-                    {
-                        /* It's a IPV6 ptp message and store the ptp header information. */
-                        ptpTsData->version =
-                            (*(uint8_t *)(uint32_t)(buffer + ENET_PTP1588_IPV6_UDP_VERSION_OFFSET)) & 0x0FU;
-                        ptpTsData->messageType =
-                            (*(uint8_t *)(uint32_t)(buffer + ENET_PTP1588_IPV6_UDP_MSGTYPE_OFFSET)) & 0x0FU;
-                        ptpTsData->sequenceId = (uint16_t)ENET_HTONS(
-                            *(uint16_t *)(uint32_t)(buffer + ENET_PTP1588_IPV6_UDP_SEQUENCEID_OFFSET));
-                        (void)memcpy((void *)(uint32_t *)(uint32_t)&ptpTsData->sourcePortId[0],
-                                     (void *)(uint32_t *)(uint32_t)(buffer + ENET_PTP1588_IPV6_UDP_CLKID_OFFSET),
-                                     (uint32_t)kENET_PtpSrcPortIdLen);
-                    }
-                }
-            }
-            break;
-        default:
-            assert(true);
-            break;
-    }
-    return isPtpMsg;
-}
-
-static status_t ENET_Ptp1588UpdateTimeRing(enet_ptp_time_data_ring_t *ptpTsDataRing, enet_ptp_time_data_t *ptpTimeData)
-{
-    assert(ptpTsDataRing);
-    assert(ptpTsDataRing->ptpTsData);
-    assert(ptpTimeData);
-
-    uint32_t usedBuffer = 0;
-
-    /* Check if the buffers ring is full. */
-    if (ptpTsDataRing->endIndex >= ptpTsDataRing->frontIndex)
-    {
-        usedBuffer = ptpTsDataRing->endIndex - ptpTsDataRing->frontIndex;
-    }
-    else
-    {
-        usedBuffer = ptpTsDataRing->size - (ptpTsDataRing->frontIndex - ptpTsDataRing->endIndex);
-    }
-
-    if (usedBuffer == ptpTsDataRing->size)
-    {
-        return kStatus_ENET_PtpTsRingFull;
-    }
-
-    /* Copy the new data into the buffer. */
-    (void)memcpy((ptpTsDataRing->ptpTsData + ptpTsDataRing->endIndex), ptpTimeData, sizeof(enet_ptp_time_data_t));
-
-    /* Increase the buffer pointer to the next empty one. */
-    ptpTsDataRing->endIndex = (ptpTsDataRing->endIndex + 1U) % ptpTsDataRing->size;
-
-    return kStatus_Success;
-}
-
-static status_t ENET_StoreRxFrameTime(ENET_Type *base,
-                                      enet_handle_t *handle,
-                                      enet_rx_bd_struct_t *rxDesc,
-                                      uint8_t channel,
-                                      enet_ptp_time_data_t *ptpTimeData)
-{
-    assert(ptpTimeData);
-
-    uint32_t nanosecond;
-    uint32_t nanoOverSize = ENET_NANOSECS_ONESECOND; /* Default use the digital rollover. */
-
-    /* Get transmit time stamp second. */
-    nanosecond = rxDesc->reserved | rxDesc->buff1Addr;
-    if ((base->MAC_TIMESTAMP_CTRL & ENET_MAC_TIMESTAMP_CTRL_TSCTRLSSR_MASK) == 0U)
-    {
-        /* Binary rollover. */
-        nanoOverSize = ENET_MAC_SYS_TIME_NSCND_TSSS_MASK;
-    }
-    ptpTimeData->timeStamp.second     = (uint64_t)nanosecond / nanoOverSize;
-    ptpTimeData->timeStamp.nanosecond = nanosecond % nanoOverSize;
-
-    /* Store the timestamp to the receive time stamp ring. */
-    /* Check if the buffers ring is full. */
-    return ENET_Ptp1588UpdateTimeRing(&handle->rxBdRing[channel].rxPtpTsDataRing, ptpTimeData);
-}
-
-static status_t ENET_Ptp1588SearchTimeRing(enet_ptp_time_data_ring_t *ptpTsDataRing, enet_ptp_time_data_t *ptpTimedata)
-{
-    assert(ptpTsDataRing);
-    assert(ptpTsDataRing->ptpTsData);
-    assert(ptpTimedata);
-
-    uint32_t index;
-    uint32_t size;
-    uint32_t usedBuffer = 0;
-
-    /* Check the PTP 1588 timestamp ring. */
-    if (ptpTsDataRing->frontIndex == ptpTsDataRing->endIndex)
-    {
-        return kStatus_ENET_PtpTsRingEmpty;
-    }
-
-    /* Search the element in the ring buffer */
-    index = ptpTsDataRing->frontIndex;
-    size  = ptpTsDataRing->size;
-    while (index != ptpTsDataRing->endIndex)
-    {
-        if (((ptpTsDataRing->ptpTsData + index)->sequenceId == ptpTimedata->sequenceId) &&
-            (0 == memcmp(((void *)(uint32_t *)(uint32_t) & (ptpTsDataRing->ptpTsData + index)->sourcePortId[0]),
-                         (void *)(uint32_t *)(uint32_t)&ptpTimedata->sourcePortId[0],
-                         (uint32_t)kENET_PtpSrcPortIdLen)) &&
-            ((ptpTsDataRing->ptpTsData + index)->version == ptpTimedata->version) &&
-            ((ptpTsDataRing->ptpTsData + index)->messageType == ptpTimedata->messageType))
-        {
-            break;
-        }
-
-        /* Increase the ptp ring index. */
-        index = (index + 1U) % size;
-    }
-
-    if (index == ptpTsDataRing->endIndex)
-    {
-        /* Check if buffers is full. */
-        if (ptpTsDataRing->endIndex >= ptpTsDataRing->frontIndex)
-        {
-            usedBuffer = ptpTsDataRing->endIndex - ptpTsDataRing->frontIndex;
-        }
-        else
-        {
-            usedBuffer = ptpTsDataRing->size - (ptpTsDataRing->frontIndex - ptpTsDataRing->endIndex);
-        }
-
-        if (usedBuffer == ptpTsDataRing->size)
-        { /* Drop one in the front. */
-            ptpTsDataRing->frontIndex = (ptpTsDataRing->frontIndex + 1U) % size;
-        }
-        return kStatus_ENET_PtpTsRingFull;
-    }
-
-    /* Get the right timestamp of the required ptp messag. */
-    ptpTimedata->timeStamp.second     = (ptpTsDataRing->ptpTsData + index)->timeStamp.second;
-    ptpTimedata->timeStamp.nanosecond = (ptpTsDataRing->ptpTsData + index)->timeStamp.nanosecond;
-
-    /* Increase the index. */
-    ptpTsDataRing->frontIndex = (ptpTsDataRing->frontIndex + 1U) % size;
-
-    return kStatus_Success;
 }
 #endif /* ENET_PTP1588FEATURE_REQUIRED */
 
@@ -889,6 +547,12 @@ void ENET_GetDefaultConfig(enet_config_t *config)
  *
  * This function ungates the module clock and initializes it with the ENET basic
  * configuration.
+ * note As our transactional transmit API use the zero-copy transmit buffer.
+ * So there are two thing we emphasize here:
+ *  1. Tx buffer free/requeue for application should be done in the Tx
+ *  interrupt handler. Please set callback: kENET_TxIntEvent with Tx buffer free/requeue
+ *  process APIs.
+ *  2. The Tx interrupt is forced to open.
  *
  * param base    ENET peripheral base address.
  * param config  ENET mac configuration structure pointer.
@@ -922,6 +586,9 @@ void ENET_Init(ENET_Type *base, const enet_config_t *config, uint8_t *macAddr, u
 #ifdef ENET_PTP1588FEATURE_REQUIRED
     ENET_SetPtp1588(base, config, refclkSrc_Hz);
 #endif /* ENET_PTP1588FEATURE_REQUIRED */
+
+    /* Force to enable Tx interrupt for use transactional API to do Tx buffer free/requeue. */
+    ENET_EnableInterrupts(base, (config->interrupt | (uint32_t)kENET_DmaTx));
 }
 
 /*!
@@ -949,11 +616,8 @@ void ENET_Deinit(ENET_Type *base)
 /*!
  * brief Initialize for all ENET descriptors.
  *
- * note This function is do all tx/rx descriptors initialization. Because this API
- *  read all interrupt registers first and then set the interrupt flag for all descriptos,
- * if the interrupt register is set. so the descriptor initialization should be called
- * after ENET_Init(), ENET_EnableInterrupts() and ENET_CreateHandle()(if transactional APIs
- * are used).
+ * note This function finishes all Tx/Rx descriptors initialization. The descriptor initialization
+ * should be called after ENET_Init().
  *
  * param base  ENET peripheral base address.
  * param config The configuration for ENET.
@@ -964,25 +628,17 @@ status_t ENET_DescriptorInit(ENET_Type *base, enet_config_t *config, enet_buffer
     assert(config);
     assert(bufferConfig);
 
-    bool intTxEnable      = false;
-    bool intRxEnable      = false;
-    bool doubleBuffEnable = ((config->specialControl & (uint16_t)kENET_DescDoubleBuffer) != 0U) ? true : false;
-    uint8_t ringNum       = config->multiqueueCfg == NULL ? 1U : 2U;
+    uint8_t ringNum = config->multiqueueCfg == NULL ? 1U : 2U;
     uint8_t channel;
 
     for (channel = 0; channel < ringNum; channel++)
     {
-        intRxEnable =
-            ((base->DMA_CH[channel].DMA_CHX_INT_EN & ENET_DMA_CH_DMA_CHX_INT_EN_RIE_MASK) != 0U) ? true : false;
-        intTxEnable =
-            ((base->DMA_CH[channel].DMA_CHX_INT_EN & ENET_DMA_CH_DMA_CHX_INT_EN_TIE_MASK) != 0U) ? true : false;
-
-        if (ENET_TxDescriptorsInit(base, bufferConfig, intTxEnable, channel) != kStatus_Success)
+        if (ENET_TxDescriptorsInit(base, bufferConfig, channel) != kStatus_Success)
         {
             return kStatus_Fail;
         }
 
-        if (ENET_RxDescriptorsInit(base, bufferConfig, intRxEnable, channel, doubleBuffEnable) != kStatus_Success)
+        if (ENET_RxDescriptorsInit(base, config, bufferConfig, channel) != kStatus_Success)
         {
             return kStatus_Fail;
         }
@@ -993,16 +649,16 @@ status_t ENET_DescriptorInit(ENET_Type *base, enet_config_t *config, enet_buffer
 }
 
 /*!
- * brief Starts the ENET rx/tx.
- *  This function enable the tx/rx and starts the rx/tx DMA.
+ * brief Starts the ENET Tx/Rx.
+ *  This function enable the Tx/Rx and starts the Tx/Rx DMA.
  * This shall be set after ENET initialization and before
  * starting to receive the data.
  *
  * param base  ENET peripheral base address.
- * param rxRingNum  The number of the used rx rings. It shall not be
+ * param rxRingNum  The number of the used Rx rings. It shall not be
  * larger than the ENET_RING_NUM_MAX(2). If the ringNum is set with
  * 1, the ring 0 will be used.
- * param txRingNum  The number of the used tx rings. It shall not be
+ * param txRingNum  The number of the used Tx rings. It shall not be
  * larger than the ENET_RING_NUM_MAX(2). If the ringNum is set with
  * 1, the ring 0 will be used.
  *
@@ -1036,6 +692,18 @@ void ENET_StartRxTx(ENET_Type *base, uint8_t txRingNum, uint8_t rxRingNum)
 
     /* Enable the RX and TX at same time. */
     base->MAC_CONFIG |= (ENET_MAC_CONFIG_TE_MASK | ENET_MAC_CONFIG_RE_MASK);
+}
+
+/*!
+ * brief Set the second level IRQ handler
+ *
+ * param base ENET peripheral base address.
+ * param ISRHandler The handler to install.
+ */
+void ENET_SetISRHandler(ENET_Type *base, enet_isr_t ISRHandler)
+{
+    s_enetIsr = ISRHandler;
+    (void)EnableIRQ(s_enetIrqId[ENET_GetInstance(base)]);
 }
 
 /*!
@@ -1166,16 +834,8 @@ void ENET_DisableInterrupts(ENET_Type *base, uint32_t mask)
  *
  * This is a transactional API and it's provided to store all datas which are needed
  * during the whole transactional process. This API should not be used when you use
- * functional APIs to do data tx/rx. This is funtion will store many data/flag for
- * transactional use, so all configure API such as ENET_Init(), ENET_DescriptorInit(),
- * ENET_EnableInterrupts() etc.
- *
- * note as our transactional transmit API use the zero-copy transmit buffer.
- * so there are two thing we emphasize here:
- *  1. tx buffer free/requeue for application should be done in the tx
- *  interrupt handler. Please set callback: kENET_TxIntEvent with tx buffer free/requeue
- *  process APIs.
- *  2. the tx interrupt is forced to open.
+ * functional APIs to do data Tx/Rx. This is funtion will store many data/flag for
+ * transactional use.
  *
  * param base  ENET peripheral base address.
  * param handle ENET handler.
@@ -1200,12 +860,6 @@ void ENET_CreateHandler(ENET_Type *base,
     uint8_t rxIntEnable              = 0;
     enet_buffer_config_t *buffConfig = bufferConfig;
 
-    if (config->multiqueueCfg != NULL)
-    {
-        ringNum                = 2;
-        handle->multiQueEnable = true;
-    }
-
     /* Store transfer parameters in handle pointer. */
     (void)memset(handle, 0, sizeof(enet_handle_t));
     if ((config->specialControl & (uint32_t)kENET_DescDoubleBuffer) != 0U)
@@ -1214,6 +868,7 @@ void ENET_CreateHandler(ENET_Type *base,
     }
     if (config->multiqueueCfg != NULL)
     {
+        ringNum                = 2;
         handle->multiQueEnable = true;
     }
     for (count = 0; count < ringNum; count++)
@@ -1228,30 +883,15 @@ void ENET_CreateHandler(ENET_Type *base,
         handle->txBdRing[count].txGenIdx    = 0;
         handle->txBdRing[count].txConsumIdx = 0;
         handle->txBdRing[count].txDescUsed  = 0;
-#ifdef ENET_PTP1588FEATURE_REQUIRED
-        assert(bufferConfig->rxPtpTsData);
-        assert(bufferConfig->txPtpTsData);
-        assert(buffConfig->rxRingLen <= (uint8_t)ENET_RXBUFFSTORE_NUM);
 
-        uint32_t index;
+        handle->txDirtyRing[count].txDirtyBase = buffConfig->txDirtyStartAddr;
+        handle->txDirtyRing[count].txRingLen   = buffConfig->txRingLen;
+        handle->txDirtyRing[count].txGenIdx    = 0;
+        handle->txDirtyRing[count].txConsumIdx = 0;
 
-        handle->rxBdRing[count].rxPtpTsDataRing.ptpTsData  = buffConfig->rxPtpTsData;
-        handle->rxBdRing[count].rxPtpTsDataRing.frontIndex = 0;
-        handle->rxBdRing[count].rxPtpTsDataRing.endIndex   = 0;
-        handle->rxBdRing[count].rxPtpTsDataRing.size       = buffConfig->ptpTsRxBuffNum;
-        handle->txBdRing[count].txPtpTsDataRing.ptpTsData  = buffConfig->txPtpTsData;
-        handle->txBdRing[count].txPtpTsDataRing.frontIndex = 0;
-        handle->txBdRing[count].txPtpTsDataRing.endIndex   = 0;
-        handle->txBdRing[count].txPtpTsDataRing.size       = buffConfig->ptpTsTxBuffNum;
+        handle->rxBufferStartAddr[count] = buffConfig->rxBufferStartAddr;
 
-        for (index = 0; index < buffConfig->rxRingLen; index++)
-        {
-            handle->rxbuffers[index] = *(buffConfig->rxBufferStartAddr + index);
-        }
-#endif /* ENET_PTP1588FEATURE_REQUIRED */
-        /* Enable tx interrupt for use transactional API to do tx buffer free/requeue. */
-        base->DMA_CH[count].DMA_CHX_INT_EN |= ENET_DMA_CH_DMA_CHX_INT_EN_TIE_MASK | ENET_DMA_CH_DMA_CHX_INT_EN_NIE_MASK;
-        /* Check if the rx interrrupt is enabled. */
+        /* Check if the Rx interrrupt is enabled. */
         rxIntEnable |= (uint8_t)(uint32_t)(base->DMA_CH[count].DMA_CHX_INT_EN & ENET_DMA_CH_DMA_CHX_INT_EN_RIE_MASK);
         buffConfig++;
     }
@@ -1261,13 +901,16 @@ void ENET_CreateHandler(ENET_Type *base,
     /* Save the handle pointer in the global variables. */
     s_ENETHandle[ENET_GetInstance(base)] = handle;
 
+    /* Set Rx alloc/free callback. */
+    handle->rxBuffAlloc = config->rxBuffAlloc;
+    handle->rxBuffFree  = config->rxBuffFree;
+
     /* Set callback and userData. */
     handle->callback = callback;
     handle->userData = userData;
 
-    /* Enable the NVIC for tx. */
-    s_enetIsr = ENET_IRQHandler;
-    (void)EnableIRQ(s_enetIrqId[ENET_GetInstance(base)]);
+    /* Set up interrupt and its handler. */
+    ENET_SetISRHandler(base, ENET_IRQHandler);
 }
 
 /*!
@@ -1389,11 +1032,11 @@ void ENET_EnterPowerDown(ENET_Type *base, uint32_t *wakeFilter)
     uint8_t index;
     uint32_t *reg = wakeFilter;
 
-    /* Disable the tx dma. */
+    /* Disable the Tx dma. */
     base->DMA_CH[0].DMA_CHX_TX_CTRL &= ~ENET_DMA_CH_DMA_CHX_TX_CTRL_ST_MASK;
     base->DMA_CH[1].DMA_CHX_TX_CTRL &= ~ENET_DMA_CH_DMA_CHX_TX_CTRL_ST_MASK;
 
-    /* Disable the mac tx/rx. */
+    /* Disable the mac Tx/Rx. */
     base->MAC_CONFIG &= ~(ENET_MAC_CONFIG_RE_MASK | ENET_MAC_CONFIG_TE_MASK);
     /* Enable the remote wakeup packet and enable the power down mode. */
     if (wakeFilter != NULL)
@@ -1407,7 +1050,7 @@ void ENET_EnterPowerDown(ENET_Type *base, uint32_t *wakeFilter)
     base->MAC_PMT_CRTL_STAT = ENET_MAC_PMT_CRTL_STAT_MGKPKTEN_MASK | ENET_MAC_PMT_CRTL_STAT_RWKPKTEN_MASK |
                               ENET_MAC_PMT_CRTL_STAT_PWRDWN_MASK;
 
-    /* Enable the MAC rx. */
+    /* Enable the MAC Rx. */
     base->MAC_CONFIG |= ENET_MAC_CONFIG_RE_MASK;
 }
 
@@ -1420,7 +1063,7 @@ void ENET_EnterPowerDown(ENET_Type *base, uint32_t *wakeFilter)
  *
  * param handle The ENET handler structure. This is the same handler pointer used in the ENET_Init.
  * param length The length of the valid frame received.
- * param channel The DMAC channel for the rx.
+ * param channel The DMAC channel for the Rx.
  * retval kStatus_ENET_RxFrameEmpty No frame received. Should not call ENET_ReadFrame to read frame.
  * retval kStatus_ENET_RxFrameError Data error happens. ENET_ReadFrame should be called with NULL data
  *         and NULL length to update the receive buffers.
@@ -1439,7 +1082,7 @@ status_t ENET_GetRxFrameSize(ENET_Type *base, enet_handle_t *handle, uint32_t *l
     /* Reset the length to zero. */
     *length = 0;
 
-    if ((rxDesc->control & ENET_RXDESCRIP_WR_OWN_MASK) != 0U)
+    if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_OWN_MASK) != 0U)
     {
         return kStatus_ENET_RxFrameEmpty;
     }
@@ -1448,13 +1091,13 @@ status_t ENET_GetRxFrameSize(ENET_Type *base, enet_handle_t *handle, uint32_t *l
         do
         {
             /* Application owns the buffer descriptor, get the length. */
-            if ((rxDesc->control & ENET_RXDESCRIP_WR_LD_MASK) != 0U)
+            if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_LD_MASK) != 0U)
             {
-                if ((rxDesc->control & ENET_RXDESCRIP_WR_ERRSUM_MASK) != 0U)
+                if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_ERRSUM_MASK) != 0U)
                 {
                     return kStatus_ENET_RxFrameError;
                 }
-                *length = rxDesc->control & ENET_RXDESCRIP_WR_PACKETLEN_MASK;
+                *length = (rxDesc->rdes3 & ENET_RXDESCRIP_WR_PACKETLEN_MASK) - ENET_FCS_LEN;
                 return kStatus_Success;
             }
 
@@ -1470,7 +1113,7 @@ status_t ENET_GetRxFrameSize(ENET_Type *base, enet_handle_t *handle, uint32_t *l
  * brief Reads a frame from the ENET device.
  * This function reads a frame from the ENET DMA descriptors.
  * The ENET_GetRxFrameSize should be used to get the size of the prepared data buffer.
- * For example use rx dma channel 0:
+ * For example use Rx dma channel 0:
  * code
  *       uint32_t length;
  *       enet_handle_t g_handle;
@@ -1499,28 +1142,28 @@ status_t ENET_GetRxFrameSize(ENET_Type *base, enet_handle_t *handle, uint32_t *l
  * param handle The ENET handler structure. This is the same handler pointer used in the ENET_Init.
  * param data The data buffer provided by user to store the frame which memory size should be at least "length".
  * param length The size of the data buffer which is still the length of the received frame.
- * param channel The rx DMA channel. shall not be larger than 2.
+ * param channel The Rx DMA channel. shall not be larger than 2.
+ * param timestamp The timestamp address to store received timestamp.
  * return The execute status, successful or failure.
  */
-status_t ENET_ReadFrame(ENET_Type *base, enet_handle_t *handle, uint8_t *data, uint32_t length, uint8_t channel)
+status_t ENET_ReadFrame(
+    ENET_Type *base, enet_handle_t *handle, uint8_t *data, uint32_t length, uint8_t channel, enet_ptp_time_t *timestamp)
 {
     assert(handle);
 
-    uint32_t len    = 0;
-    uint32_t offset = 0;
-    uint32_t control;
-    bool isLastBuff             = false;
     enet_rx_bd_ring_t *rxBdRing = (enet_rx_bd_ring_t *)&handle->rxBdRing[channel];
+    uint32_t len                = 0;
+    uint32_t offset             = 0;
+    bool isLastBuff             = false;
+    status_t result             = kStatus_Fail;
+    bool suspend                = false;
     enet_rx_bd_struct_t *rxDesc;
-    status_t result = kStatus_Fail;
-    uint16_t index  = rxBdRing->rxGenIdx;
-    bool suspend    = false;
 #ifdef ENET_PTP1588FEATURE_REQUIRED
     uint32_t buffer;
     uint32_t bufferAdd;
-#endif /* ENET_PTP1588FEATURE_REQUIRED  */
+#endif /* ENET_PTP1588FEATURE_REQUIRED */
 
-    /* Suspend and command for rx. */
+    /* Suspend and command for Rx. */
     if ((base->DMA_CH[channel].DMA_CHX_STAT & ENET_DMA_CH_DMA_CHX_STAT_RBU_MASK) != 0U)
     {
         suspend = true;
@@ -1529,83 +1172,37 @@ status_t ENET_ReadFrame(ENET_Type *base, enet_handle_t *handle, uint8_t *data, u
     /* For data-NULL input, only update the buffer descriptor. */
     if (data == NULL)
     {
-        do
-        {
-            /* Get the control flag. */
-            rxDesc             = rxBdRing->rxBdBase + rxBdRing->rxGenIdx;
-            rxBdRing->rxGenIdx = ENET_IncreaseIndex(rxBdRing->rxGenIdx, rxBdRing->rxRingLen);
-            control            = rxDesc->control;
-            /* Updates the receive buffer descriptors. */
-            ENET_UpdateRxDescriptor(rxDesc, NULL, NULL, handle->rxintEnable, handle->doubleBuffEnable);
-
-            /* Find the last buffer descriptor for the frame. */
-            if ((control & ENET_RXDESCRIP_WR_LD_MASK) != 0U)
-            {
-#ifdef ENET_PTP1588FEATURE_REQUIRED
-                /* Reinit for the context descritor which has been updated by DMA. */
-                rxDesc = rxBdRing->rxBdBase + rxBdRing->rxGenIdx;
-                if ((rxDesc->control & ENET_RXDESCRIP_WR_CTXT_MASK) != 0U)
-                {
-                    if (!handle->doubleBuffEnable)
-                    {
-                        buffer = handle->rxbuffers[rxBdRing->rxGenIdx];
-                        ENET_UpdateRxDescriptor(rxDesc, (void *)(uint32_t *)buffer, NULL, handle->rxintEnable,
-                                                handle->doubleBuffEnable);
-                    }
-                    else
-                    {
-                        buffer    = handle->rxbuffers[2U * rxBdRing->rxGenIdx];
-                        bufferAdd = handle->rxbuffers[2U * rxBdRing->rxGenIdx + 1U];
-                        ENET_UpdateRxDescriptor(rxDesc, (void *)(uint32_t *)buffer, (void *)(uint32_t *)bufferAdd,
-                                                handle->rxintEnable, handle->doubleBuffEnable);
-                    }
-                    rxBdRing->rxGenIdx = ENET_IncreaseIndex(rxBdRing->rxGenIdx, rxBdRing->rxRingLen);
-                }
-#endif /*  ENET_PTP1588FEATURE_REQUIRED */
-                break;
-            }
-        } while (rxBdRing->rxGenIdx != index);
-
+        ENET_DropFrame(base, handle, channel);
         result = kStatus_Success;
     }
     else
     {
-#ifdef ENET_PTP1588FEATURE_REQUIRED
-        enet_ptp_time_data_t ptpTsData;
-        bool ptp1588 = false;
-#endif /* ENET_PTP1588FEATURE_REQUIRED */
-
-        while ((!isLastBuff))
+        while (!isLastBuff)
         {
             /* The last buffer descriptor of a frame. */
             rxDesc             = rxBdRing->rxBdBase + rxBdRing->rxGenIdx;
             rxBdRing->rxGenIdx = ENET_IncreaseIndex(rxBdRing->rxGenIdx, rxBdRing->rxRingLen);
-#ifdef ENET_PTP1588FEATURE_REQUIRED
-            if ((rxDesc->control & ENET_RXDESCRIP_WR_FD_MASK) != 0U)
-            {
-                ptp1588 = ENET_Ptp1588ParseFrame((uint8_t *)rxDesc->buff1Addr, &ptpTsData, false);
-            }
-#endif
-            if ((rxDesc->control & ENET_RXDESCRIP_WR_LD_MASK) != 0U)
+
+            if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_LD_MASK) != 0U)
             {
                 /* This is a valid frame. */
                 isLastBuff = true;
-                if (length == (rxDesc->control & ENET_RXDESCRIP_WR_PACKETLEN_MASK))
+                if (length == ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_PACKETLEN_MASK) - ENET_FCS_LEN))
                 {
                     /* Copy the frame to user's buffer. */
-                    len = (rxDesc->control & ENET_RXDESCRIP_WR_PACKETLEN_MASK) - offset;
+                    len = length - offset;
                     if (len > rxBdRing->rxBuffSizeAlign)
                     {
-                        (void)memcpy((void *)(uint32_t *)(uint32_t)(data + offset),
-                                     (void *)(uint32_t *)rxDesc->buff1Addr, rxBdRing->rxBuffSizeAlign);
+                        (void)memcpy((void *)(uint32_t *)(uint32_t)(data + offset), (void *)(uint32_t *)rxDesc->rdes0,
+                                     rxBdRing->rxBuffSizeAlign);
                         offset += rxBdRing->rxBuffSizeAlign;
-                        (void)memcpy((void *)(uint32_t *)(uint32_t)(data + offset),
-                                     (void *)(uint32_t *)rxDesc->buff2Addr, len - rxBdRing->rxBuffSizeAlign);
+                        (void)memcpy((void *)(uint32_t *)(uint32_t)(data + offset), (void *)(uint32_t *)rxDesc->rdes2,
+                                     len - rxBdRing->rxBuffSizeAlign);
                     }
                     else
                     {
-                        (void)memcpy((void *)(uint32_t *)(uint32_t)(data + offset),
-                                     (void *)(uint32_t *)rxDesc->buff1Addr, len);
+                        (void)memcpy((void *)(uint32_t *)(uint32_t)(data + offset), (void *)(uint32_t *)rxDesc->rdes0,
+                                     len);
                     }
 
                     result = kStatus_Success;
@@ -1614,28 +1211,41 @@ status_t ENET_ReadFrame(ENET_Type *base, enet_handle_t *handle, uint8_t *data, u
                 /* Updates the receive buffer descriptors. */
                 ENET_UpdateRxDescriptor(rxDesc, NULL, NULL, handle->rxintEnable, handle->doubleBuffEnable);
 #ifdef ENET_PTP1588FEATURE_REQUIRED
-                /* Store the rx timestamp which is in the next buffer descriptor of the last
+                /* Store the Rx timestamp which is in the next buffer descriptor of the last
                  * descriptor of a frame. */
                 rxDesc = rxBdRing->rxBdBase + rxBdRing->rxGenIdx;
 
                 /* Reinit for the context descritor which has been updated by DMA. */
-                if ((rxDesc->control & ENET_RXDESCRIP_WR_CTXT_MASK) != 0U)
+                if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_CTXT_MASK) != 0U)
                 {
-                    if (ptp1588)
+                    if (timestamp != NULL)
                     {
-                        (void)ENET_StoreRxFrameTime(base, handle, rxDesc, channel, &ptpTsData);
+                        uint32_t timerCount;
+
+                        /* Get receive frame timestamp. */
+                        timestamp->second = rxDesc->rdes1;
+                        timerCount        = rxDesc->rdes0;
+                        if ((base->MAC_TIMESTAMP_CTRL & ENET_MAC_TIMESTAMP_CTRL_TSCTRLSSR_MASK) == 0U)
+                        {
+                            /* Binary rollover. */
+                            timestamp->nanosecond = ENET_BINARY_ROLLOVER_SCALE(timerCount);
+                        }
+                        else
+                        {
+                            timestamp->nanosecond = timerCount;
+                        }
                     }
 
                     if (!handle->doubleBuffEnable)
                     {
-                        buffer = handle->rxbuffers[rxBdRing->rxGenIdx];
+                        buffer = handle->rxBufferStartAddr[channel][rxBdRing->rxGenIdx];
                         ENET_UpdateRxDescriptor(rxDesc, (void *)(uint32_t *)buffer, NULL, handle->rxintEnable,
                                                 handle->doubleBuffEnable);
                     }
                     else
                     {
-                        buffer    = handle->rxbuffers[2U * rxBdRing->rxGenIdx];
-                        bufferAdd = handle->rxbuffers[2U * rxBdRing->rxGenIdx + 1U];
+                        buffer    = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx];
+                        bufferAdd = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx + 1U];
                         ENET_UpdateRxDescriptor(rxDesc, (void *)(uint32_t *)buffer, (void *)(uint32_t *)bufferAdd,
                                                 handle->rxintEnable, handle->doubleBuffEnable);
                     }
@@ -1656,12 +1266,12 @@ status_t ENET_ReadFrame(ENET_Type *base, enet_handle_t *handle, uint8_t *data, u
                     break;
                 }
 
-                (void)memcpy((void *)(uint32_t *)(uint32_t)(data + offset), (void *)(uint32_t *)rxDesc->buff1Addr,
+                (void)memcpy((void *)(uint32_t *)(uint32_t)(data + offset), (void *)(uint32_t *)rxDesc->rdes0,
                              rxBdRing->rxBuffSizeAlign);
                 offset += rxBdRing->rxBuffSizeAlign;
-                if (((rxDesc->buff2Addr) != 0U) && (handle->doubleBuffEnable))
+                if (((rxDesc->rdes2) != 0U) && (handle->doubleBuffEnable))
                 {
-                    (void)memcpy((void *)(uint32_t *)(uint32_t)(data + offset), (void *)(uint32_t *)rxDesc->buff2Addr,
+                    (void)memcpy((void *)(uint32_t *)(uint32_t)(data + offset), (void *)(uint32_t *)rxDesc->rdes2,
                                  rxBdRing->rxBuffSizeAlign);
                     offset += rxBdRing->rxBuffSizeAlign;
                 }
@@ -1672,7 +1282,7 @@ status_t ENET_ReadFrame(ENET_Type *base, enet_handle_t *handle, uint8_t *data, u
         }
     }
 
-    /* Set command for rx when it is suspend. */
+    /* Set command for Rx when it is suspend. */
     if (suspend)
     {
         base->DMA_CH[channel].DMA_CHX_RXDESC_TAIL_PTR = base->DMA_CH[channel].DMA_CHX_RXDESC_TAIL_PTR;
@@ -1682,11 +1292,11 @@ status_t ENET_ReadFrame(ENET_Type *base, enet_handle_t *handle, uint8_t *data, u
 }
 
 /*!
- * brief Updates the buffers and the own status for a given rx descriptor.
+ * brief Updates the buffers and the own status for a given Rx descriptor.
  *  This function is a low level functional API to Updates the
- *  buffers and the own status for a given rx descriptor.
+ *  buffers and the own status for a given Rx descriptor.
  *
- * param rxDesc  The given rx descriptor.
+ * param rxDesc  The given Rx descriptor.
  * param buffer1  The first buffer address in the descriptor.
  * param buffer2  The second buffer address in the descriptor.
  * param intEnable Interrupt enable flag.
@@ -1714,36 +1324,526 @@ void ENET_UpdateRxDescriptor(
     /* Update the buffer if needed. */
     if (buffer1 != NULL)
     {
-        rxDesc->buff1Addr = (uint32_t)(uint32_t *)buffer1;
+        rxDesc->rdes0 = (uint32_t)(uint32_t *)buffer1;
     }
     if (buffer2 != NULL)
     {
-        rxDesc->buff2Addr = (uint32_t)(uint32_t *)buffer2;
+        rxDesc->rdes2 = (uint32_t)(uint32_t *)buffer2;
     }
     else
     {
-        rxDesc->buff2Addr = 0;
+        rxDesc->rdes2 = 0;
     }
 
-    rxDesc->reserved = 0;
-    rxDesc->control  = control;
+    rxDesc->rdes1 = 0;
+    rxDesc->rdes3 = control;
 }
 
 /*!
- * brief Setup a given tx descriptor.
- *  This function is a low level functional API to setup or prepare
- *  a given tx descriptor.
+ * brief Allocates Rx buffers for all BDs.
+ * It's used for zero copy Rx. In zero copy Rx case, Rx buffers are dynamic. This function
+ * will populate initial buffers in all BDs for receiving. Then ENET_GetRxFrame() is used
+ * to get Rx frame with zero copy, it will allocate new buffer to replace the buffer in BD taken
+ * by application, application should free those buffers after they're used.
  *
- * param txDesc  The given tx descriptor.
+ * note This function should be called after ENET_CreateHandler() and buffer allocating callback
+ * function should be ready.
+ *
+ * param base  ENET peripheral base address.
+ * param handle The ENET handler structure. This is the same handler pointer used in the ENET_Init.
+ */
+status_t ENET_RxBufferAllocAll(ENET_Type *base, enet_handle_t *handle)
+{
+    status_t result = kStatus_Success;
+    enet_rx_bd_struct_t *rxbdPtr;
+    uint32_t buffAddr;
+    uint8_t channel;
+    uint16_t index;
+    uint16_t j;
+    uint8_t ringNum = (handle->multiQueEnable) ? 2U : 1U;
+
+    if ((handle->rxBuffAlloc == NULL) || (handle->rxBuffFree == NULL))
+    {
+        return kStatus_ENET_InitMemoryFail;
+    }
+
+    for (channel = 0; channel < ringNum; channel++)
+    {
+        /* Init the rxbdPtr to the receive descriptor start address. */
+        rxbdPtr = handle->rxBdRing[channel].rxBdBase;
+        for (j = 0U; j < handle->rxBdRing[channel].rxRingLen; j++)
+        {
+            if (handle->doubleBuffEnable)
+            {
+                index = 2U * j;
+            }
+            else
+            {
+                index = j;
+            }
+
+            buffAddr = (uint32_t)(uint32_t *)handle->rxBuffAlloc(base, handle->userData, channel);
+            if (buffAddr == 0U)
+            {
+                result = kStatus_ENET_InitMemoryFail;
+                break;
+            }
+
+            rxbdPtr->rdes0                            = buffAddr;
+            handle->rxBufferStartAddr[channel][index] = buffAddr;
+
+            /* The second buffer is set with 0 because it is not required for normal case. */
+            if (handle->doubleBuffEnable)
+            {
+                buffAddr = (uint32_t)(uint32_t *)handle->rxBuffAlloc(base, handle->userData, channel);
+                if (buffAddr == 0U)
+                {
+                    result = kStatus_ENET_InitMemoryFail;
+                    break;
+                }
+
+                rxbdPtr->rdes2                                 = buffAddr;
+                handle->rxBufferStartAddr[channel][index + 1U] = buffAddr;
+            }
+            else
+            {
+                rxbdPtr->rdes2 = 0;
+            }
+
+            /* Set the valid and DMA own flag.*/
+            rxbdPtr->rdes3 |= ENET_RXDESCRIP_WR_OWN_MASK;
+            rxbdPtr++;
+        }
+    }
+
+    if (result == kStatus_ENET_InitMemoryFail)
+    {
+        ENET_RxBufferFreeAll(base, handle);
+    }
+
+    return result;
+}
+
+/*!
+ * brief Frees Rx buffers in all BDs.
+ * It's used for zero copy Rx. In zero copy Rx case, Rx buffers are dynamic. This function
+ * frees left buffers in all BDs.
+ *
+ * param base  ENET peripheral base address.
+ * param handle The ENET handler structure. This is the same handler pointer used in the ENET_Init.
+ */
+void ENET_RxBufferFreeAll(ENET_Type *base, enet_handle_t *handle)
+{
+    uint8_t ringNum = (handle->multiQueEnable) ? 2U : 1U;
+    uint8_t channel;
+    uint32_t buffAddr;
+    uint16_t index;
+    uint16_t j;
+
+    if (handle->rxBuffFree != NULL)
+    {
+        for (channel = 0; channel < ringNum; channel++)
+        {
+            for (j = 0U; j < handle->rxBdRing[channel].rxRingLen; j++)
+            {
+                index = (handle->doubleBuffEnable) ? (2U * j) : j;
+
+                buffAddr = (uint32_t)handle->rxBufferStartAddr[channel][index];
+                if (buffAddr != 0U)
+                {
+                    handle->rxBuffFree(base, (void *)(uint32_t *)buffAddr, handle->userData, channel);
+                }
+
+                /* The second buffer is set with 0 because it is not required for normal case. */
+                if (handle->doubleBuffEnable)
+                {
+                    buffAddr = (uint32_t)handle->rxBufferStartAddr[channel][index + 1U];
+                    if (buffAddr != 0U)
+                    {
+                        handle->rxBuffFree(base, (void *)(uint32_t *)buffAddr, handle->userData, channel);
+                    }
+                }
+            }
+        }
+    }
+}
+
+static inline void ENET_GetRxFrameErr(enet_rx_bd_struct_t *rxDesc, enet_rx_frame_error_t *rxFrameError)
+{
+    uint32_t rdes3 = rxDesc->rdes3;
+    union _frame_error
+    {
+        uint32_t data;
+        enet_rx_frame_error_t frameError;
+    };
+    union _frame_error error;
+
+    (void)memset((void *)&error.frameError, 0, sizeof(enet_rx_frame_error_t));
+
+    error.data = ENET_FRAME_RX_ERROR_BITS(rdes3);
+}
+
+static void ENET_DropFrame(ENET_Type *base, enet_handle_t *handle, uint8_t channel)
+{
+    enet_rx_bd_ring_t *rxBdRing = (enet_rx_bd_ring_t *)&handle->rxBdRing[channel];
+    enet_rx_bd_struct_t *rxDesc;
+    uint16_t index = rxBdRing->rxGenIdx;
+#ifdef ENET_PTP1588FEATURE_REQUIRED
+    bool tsAvailable   = false;
+    uint32_t buff1Addr = 0;
+    uint32_t buff2Addr = 0;
+#endif /* ENET_PTP1588FEATURE_REQUIRED */
+
+    /* Not check DMA ownership here, assume there's at least one valid frame left in BD ring */
+    do
+    {
+        /* Update the BD to idle status. */
+        rxDesc = &rxBdRing->rxBdBase[rxBdRing->rxGenIdx];
+        ENET_UpdateRxDescriptor(rxDesc, NULL, NULL, handle->rxintEnable, handle->doubleBuffEnable);
+        rxBdRing->rxGenIdx = ENET_IncreaseIndex(rxBdRing->rxGenIdx, rxBdRing->rxRingLen);
+
+        /* Find the last buffer descriptor for the frame. */
+        if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_LD_MASK) != 0U)
+        {
+#ifdef ENET_PTP1588FEATURE_REQUIRED
+            if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_RS1V_MASK) != 0U)
+            {
+                if ((rxDesc->rdes1 & ENET_RXDESCRIP_WR_PTPTSA_MASK) != 0U)
+                {
+                    tsAvailable = true;
+                }
+            }
+
+            /* Reinit for the context descriptor which has been updated by DMA. */
+            rxDesc = &rxBdRing->rxBdBase[rxBdRing->rxGenIdx];
+
+            if (tsAvailable && ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_CTXT_MASK) != 0U))
+            {
+                if (!handle->doubleBuffEnable)
+                {
+                    buff1Addr = handle->rxBufferStartAddr[channel][rxBdRing->rxGenIdx];
+                    ENET_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, NULL, handle->rxintEnable,
+                                            handle->doubleBuffEnable);
+                }
+                else
+                {
+                    buff1Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx];
+                    buff2Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx + 1U];
+                    ENET_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, (void *)(uint8_t *)buff2Addr,
+                                            handle->rxintEnable, handle->doubleBuffEnable);
+                }
+                rxBdRing->rxGenIdx = ENET_IncreaseIndex(rxBdRing->rxGenIdx, rxBdRing->rxRingLen);
+            }
+#endif /*  ENET_PTP1588FEATURE_REQUIRED */
+            break;
+        }
+    } while (rxBdRing->rxGenIdx != index);
+
+    /* Always try to start receive, in case it had stopped */
+    base->DMA_CH[channel].DMA_CHX_RXDESC_TAIL_PTR = (uint32_t)(uint8_t *)&rxBdRing->rxBdBase[rxBdRing->rxRingLen];
+}
+
+/*!
+ * brief Receives one frame in specified BD ring with zero copy.
+ *
+ * This function will use the user-defined allocate and free callback. Every time application gets one frame through
+ * this function, driver will allocate new buffers for the BDs whose buffers have been taken by application.
+ * note This function will drop current frame and update related BDs as available for DMA if new buffers allocating
+ * fails. Application must provide a memory pool including at least BD number + 1 buffers(+2 if enable double buffer)
+ * to make this function work normally. If user calls this function in Rx interrupt handler, be careful that this
+ * function makes Rx BD ready with allocating new buffer(normal) or updating current BD(out of memory). If there's
+ * always new Rx frame input, Rx interrupt will be triggered forever. Application need to disable Rx interrupt according
+ * to specific design in this case.
+ *
+ * param base   ENET peripheral base address.
+ * param handle The ENET handler pointer. This is the same handler pointer used in the ENET_Init.
+ * param rxFrame The received frame information structure provided by user.
+ * param channel The Rx DMA channel. Shall not be larger than 2.
+ * retval kStatus_Success  Succeed to get one frame and allocate new memory for Rx buffer.
+ * retval kStatus_ENET_RxFrameEmpty  There's no Rx frame in the BD.
+ * retval kStatus_ENET_RxFrameError  There's issue in this receiving. In this function, issue frame will be dropped.
+ * retval kStatus_ENET_RxFrameDrop  There's no new buffer memory for BD, dropped this frame.
+ */
+status_t ENET_GetRxFrame(ENET_Type *base, enet_handle_t *handle, enet_rx_frame_struct_t *rxFrame, uint8_t channel)
+{
+    assert(handle != NULL);
+    assert(channel < ENET_RING_NUM_MAX);
+
+    enet_rx_bd_ring_t *rxBdRing = (enet_rx_bd_ring_t *)&handle->rxBdRing[channel];
+    enet_rx_bd_struct_t *rxDesc = &rxBdRing->rxBdBase[rxBdRing->rxGenIdx];
+    uint16_t index              = rxBdRing->rxGenIdx;
+    status_t result             = kStatus_Success;
+    uint32_t buff1Addr          = 0;
+    uint32_t buff2Addr          = 0;
+    uint16_t buff1Len           = 0;
+    uint16_t buff2Len           = 0;
+    uint16_t offset             = 0;
+    void *newBuff1              = NULL;
+    void *newBuff2              = NULL;
+    bool isDrop                 = false;
+    bool isLastBuff             = false;
+#ifdef ENET_PTP1588FEATURE_REQUIRED
+    bool tsAvailable = false;
+#endif /* ENET_PTP1588FEATURE_REQUIRED */
+
+    /* Check the frame status. */
+    do
+    {
+        if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_OWN_MASK) != 0U)
+        {
+            result = kStatus_ENET_RxFrameEmpty;
+            break;
+        }
+
+        /* Check timestamp and error. */
+        if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_LD_MASK) != 0U)
+        {
+#ifdef ENET_PTP1588FEATURE_REQUIRED
+            if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_RS1V_MASK) != 0U)
+            {
+                if ((rxDesc->rdes1 & ENET_RXDESCRIP_WR_PTPTSA_MASK) != 0U)
+                {
+                    tsAvailable = true;
+                }
+            }
+#endif /* ENET_PTP1588FEATURE_REQUIRED */
+
+            /* Get the frame error if there is. */
+            if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_ERRSUM_MASK) != 0U)
+            {
+                ENET_GetRxFrameErr(rxDesc, &rxFrame->rxFrameError);
+                result = kStatus_ENET_RxFrameError;
+            }
+            else if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_PACKETLEN_MASK) == 0U)
+            {
+                result = kStatus_ENET_RxFrameEmpty;
+            }
+            else
+            {
+                /* Intentional empty */
+            }
+            break;
+        }
+
+        index = ENET_IncreaseIndex(index, rxBdRing->rxRingLen);
+        if (index == rxBdRing->rxGenIdx)
+        {
+            result = kStatus_ENET_RxFrameEmpty;
+            break;
+        }
+        rxDesc = &rxBdRing->rxBdBase[index];
+    } while (index != rxBdRing->rxGenIdx);
+
+    /* Drop the error frame and return error. */
+    if (result != kStatus_Success)
+    {
+        if (result == kStatus_ENET_RxFrameError)
+        {
+            ENET_DropFrame(base, handle, channel);
+        }
+        return result;
+    }
+
+    /* Get the valid frame */
+    index = 0;
+    do
+    {
+        rxDesc = &rxBdRing->rxBdBase[rxBdRing->rxGenIdx];
+
+        /* Calculate the buffer and frame length. */
+        if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_LD_MASK) != 0U)
+        {
+            isLastBuff      = true;
+            rxFrame->totLen = (uint16_t)(rxDesc->rdes3 & ENET_RXDESCRIP_WR_PACKETLEN_MASK);
+
+            if (rxFrame->totLen - offset > (uint16_t)rxBdRing->rxBuffSizeAlign)
+            {
+                buff1Len = (uint16_t)rxBdRing->rxBuffSizeAlign;
+                if (handle->doubleBuffEnable)
+                {
+                    buff2Len = rxFrame->totLen - offset - (uint16_t)rxBdRing->rxBuffSizeAlign - ENET_FCS_LEN;
+                }
+            }
+            else
+            {
+                buff1Len = rxFrame->totLen - offset - ENET_FCS_LEN;
+            }
+            rxFrame->totLen -= ENET_FCS_LEN;
+        }
+        else
+        {
+            if (!handle->doubleBuffEnable)
+            {
+                buff1Len = (uint16_t)rxBdRing->rxBuffSizeAlign;
+                offset += buff1Len;
+            }
+            else
+            {
+                buff1Len = (uint16_t)rxBdRing->rxBuffSizeAlign;
+                buff2Len = (uint16_t)rxBdRing->rxBuffSizeAlign;
+                offset += buff1Len + buff2Len;
+            }
+        }
+
+        /* Allocate new buffer to replace the buffer taken by application */
+        newBuff1 = handle->rxBuffAlloc(base, handle->userData, channel);
+        if (newBuff1 == NULL)
+        {
+            isDrop = true;
+        }
+        else if (handle->doubleBuffEnable && (buff2Len != 0U))
+        {
+            newBuff2 = handle->rxBuffAlloc(base, handle->userData, channel);
+            if (newBuff2 == NULL)
+            {
+                handle->rxBuffFree(base, newBuff1, handle->userData, channel);
+                isDrop = true;
+            }
+        }
+        else
+        {
+            /* Intentional empty */
+        }
+
+        if (!isDrop)
+        {
+            /* Get the frame data information into Rx frame structure. */
+            if (!handle->doubleBuffEnable)
+            {
+                buff1Addr                          = handle->rxBufferStartAddr[channel][rxBdRing->rxGenIdx];
+                rxFrame->rxBuffArray[index].buffer = (void *)(uint32_t *)buff1Addr;
+                rxFrame->rxBuffArray[index].length = buff1Len;
+                index++;
+            }
+            else
+            {
+                buff1Addr                          = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx];
+                rxFrame->rxBuffArray[index].buffer = (void *)(uint32_t *)buff1Addr;
+                rxFrame->rxBuffArray[index].length = buff1Len;
+                index++;
+
+                /* If there's no data in buffer2, not add it into rxFrame */
+                if (buff2Len != 0U)
+                {
+                    buff2Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx + 1U];
+                    rxFrame->rxBuffArray[index].buffer = (void *)(uint32_t *)buff2Addr;
+                    rxFrame->rxBuffArray[index].length = buff2Len;
+                    index++;
+                }
+            }
+
+            /* Give new buffer from application to BD */
+            if (!handle->doubleBuffEnable)
+            {
+                buff1Addr                                              = (uint32_t)(uint32_t *)newBuff1;
+                handle->rxBufferStartAddr[channel][rxBdRing->rxGenIdx] = buff1Addr;
+                ENET_UpdateRxDescriptor(rxDesc, (void *)(uint32_t *)buff1Addr, NULL, handle->rxintEnable,
+                                        handle->doubleBuffEnable);
+            }
+            else
+            {
+                buff1Addr                                                   = (uint32_t)(uint32_t *)newBuff1;
+                handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx] = buff1Addr;
+
+                if (buff2Len != 0U)
+                {
+                    buff2Addr                                                        = (uint32_t)(uint32_t *)newBuff2;
+                    handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx + 1U] = buff2Addr;
+                }
+                else
+                {
+                    /* If there's no data in buffer2, keep it */
+                    buff2Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx + 1U];
+                }
+
+                ENET_UpdateRxDescriptor(rxDesc, (void *)(uint32_t *)buff1Addr, (void *)(uint32_t *)buff2Addr,
+                                        handle->rxintEnable, handle->doubleBuffEnable);
+            }
+            rxBdRing->rxGenIdx = ENET_IncreaseIndex(rxBdRing->rxGenIdx, rxBdRing->rxRingLen);
+
+#ifdef ENET_PTP1588FEATURE_REQUIRED
+            /* Update context BD if there is */
+            if (isLastBuff && tsAvailable)
+            {
+                rxDesc = &rxBdRing->rxBdBase[rxBdRing->rxGenIdx];
+                if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_CTXT_MASK) != 0U)
+                {
+                    uint32_t timerCount;
+
+                    /* Get receive frame timestamp. */
+                    rxFrame->rxAttribute.timestamp.second = rxDesc->rdes1;
+                    timerCount                            = rxDesc->rdes0;
+                    if ((base->MAC_TIMESTAMP_CTRL & ENET_MAC_TIMESTAMP_CTRL_TSCTRLSSR_MASK) == 0U)
+                    {
+                        /* Binary rollover. */
+                        rxFrame->rxAttribute.timestamp.nanosecond = ENET_BINARY_ROLLOVER_SCALE(timerCount);
+                    }
+                    else
+                    {
+                        rxFrame->rxAttribute.timestamp.nanosecond = timerCount;
+                    }
+                    rxFrame->rxAttribute.isTsAvail = true;
+
+                    if (!handle->doubleBuffEnable)
+                    {
+                        buff1Addr = handle->rxBufferStartAddr[channel][rxBdRing->rxGenIdx];
+                        ENET_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, NULL, handle->rxintEnable,
+                                                handle->doubleBuffEnable);
+                    }
+                    else
+                    {
+                        buff1Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx];
+                        buff2Addr = handle->rxBufferStartAddr[channel][2U * rxBdRing->rxGenIdx + 1U];
+                        ENET_UpdateRxDescriptor(rxDesc, (void *)(uint8_t *)buff1Addr, (void *)(uint8_t *)buff2Addr,
+                                                handle->rxintEnable, handle->doubleBuffEnable);
+                    }
+                    rxBdRing->rxGenIdx = ENET_IncreaseIndex(rxBdRing->rxGenIdx, rxBdRing->rxRingLen);
+                }
+            }
+#else
+            rxFrame->rxAttribute.isTsAvail = false;
+#endif /* ENET_PTP1588FEATURE_REQUIRED */
+
+            /* Always try to start receive, in case it had stopped */
+            base->DMA_CH[channel].DMA_CHX_RXDESC_TAIL_PTR =
+                (uint32_t)(uint8_t *)&rxBdRing->rxBdBase[rxBdRing->rxRingLen];
+        }
+        else
+        {
+            /* Drop frame if there's no new buffer memory */
+
+            /* Free the incomplete frame buffers. */
+            while (index-- != 0U)
+            {
+                handle->rxBuffFree(base, &rxFrame->rxBuffArray[index].buffer, handle->userData, channel);
+            }
+
+            /* Update all left BDs of this frame from current index. */
+            ENET_DropFrame(base, handle, channel);
+
+            result = kStatus_ENET_RxFrameDrop;
+            break;
+        }
+    } while (!isLastBuff);
+
+    return result;
+}
+
+/*!
+ * brief Setup a given Tx descriptor.
+ *  This function is a low level functional API to setup or prepare
+ *  a given Tx descriptor.
+ *
+ * param txDesc  The given Tx descriptor.
  * param buffer1  The first buffer address in the descriptor.
  * param bytes1  The bytes in the fist buffer.
  * param buffer2  The second buffer address in the descriptor.
- * param bytes1  The bytes in the second buffer.
+ * param bytes2  The bytes in the second buffer.
  * param framelen  The length of the frame to be transmitted.
  * param intEnable Interrupt enable flag.
  * param tsEnable The timestamp enable.
- * param flag The flag of this tx desciriptor, see "enet_desc_flag" .
- * param slotNum The slot num used for AV  only.
+ * param flag The flag of this Tx desciriptor, see "enet_desc_flag_t" .
+ * param slotNum The slot num used for AV mode only.
  *
  * note This must be called after all the ENET initilization.
  * And should be called when the ENET receive/transmit is required.
@@ -1759,18 +1859,21 @@ void ENET_SetupTxDescriptor(enet_tx_bd_struct_t *txDesc,
                             uint32_t framelen,
                             bool intEnable,
                             bool tsEnable,
-                            enet_desc_flag flag,
+                            enet_desc_flag_t flag,
                             uint8_t slotNum)
 {
     uint32_t control = ENET_TXDESCRIP_RD_BL1(bytes1) | ENET_TXDESCRIP_RD_BL2(bytes2);
 
-    if (tsEnable)
+    if ((flag == kENET_FirstFlagOnly) || (flag == kENET_FirstLastFlag))
     {
-        control |= ENET_TXDESCRIP_RD_TTSE_MASK;
-    }
-    else
-    {
-        control &= ~ENET_TXDESCRIP_RD_TTSE_MASK;
+        if (tsEnable)
+        {
+            control |= ENET_TXDESCRIP_RD_TTSE_MASK;
+        }
+        else
+        {
+            control &= ~ENET_TXDESCRIP_RD_TTSE_MASK;
+        }
     }
 
     if (intEnable)
@@ -1783,67 +1886,73 @@ void ENET_SetupTxDescriptor(enet_tx_bd_struct_t *txDesc,
     }
 
     /* Preare the descriptor for transmit. */
-    txDesc->buff1Addr = (uint32_t)(uint32_t *)buffer1;
-    txDesc->buff2Addr = (uint32_t)(uint32_t *)buffer2;
-    txDesc->buffLen   = control;
+    txDesc->tdes0 = (uint32_t)(uint32_t *)buffer1;
+    txDesc->tdes1 = (uint32_t)(uint32_t *)buffer2;
+    txDesc->tdes2 = control;
 
-    control = ENET_TXDESCRIP_RD_FL(framelen) | ENET_TXDESCRIP_RD_LDFD(flag) | ENET_TXDESCRIP_RD_OWN_MASK;
+    control = ENET_TXDESCRIP_RD_SLOT(slotNum) | ENET_TXDESCRIP_RD_FL(framelen) | ENET_TXDESCRIP_RD_LDFD(flag) |
+              ENET_TXDESCRIP_RD_OWN_MASK;
 
-    txDesc->controlStat = control;
+    txDesc->tdes3 = control;
 }
 
 /*!
- * brief Reclaim tx descriptors.
- *  This function is used to update the tx descriptor status and
- *  store the tx timestamp when the 1588 feature is enabled.
+ * brief Reclaim Tx descriptors.
+ *  This function is used to update the Tx descriptor status and
+ *  store the Tx timestamp when the 1588 feature is enabled.
  *  This is called by the transmit interupt IRQ handler after the
  *  complete of a frame transmission.
  *
  * param base    ENET peripheral base address.
  * param handle The ENET handler pointer. This is the same handler pointer used in the ENET_Init.
- * param channel  The tx DMA channnel.
+ * param channel  The Tx DMA channnel.
  *
  */
 void ENET_ReclaimTxDescriptor(ENET_Type *base, enet_handle_t *handle, uint8_t channel)
 {
-    enet_tx_bd_ring_t *txBdRing = &handle->txBdRing[channel];
-    enet_tx_bd_struct_t *txDesc = txBdRing->txBdBase + txBdRing->txConsumIdx;
+    enet_tx_bd_ring_t *txBdRing       = &handle->txBdRing[channel];
+    enet_tx_bd_struct_t *txDesc       = txBdRing->txBdBase + txBdRing->txConsumIdx;
+    enet_tx_dirty_ring_t *txDirtyRing = (enet_tx_dirty_ring_t *)&handle->txDirtyRing[channel];
+    enet_tx_reclaim_info_t *txDirty   = NULL;
 
     /* Need to update the first index for transmit buffer free. */
-    while ((txBdRing->txDescUsed > 0U) && ((txDesc->controlStat & ENET_TXDESCRIP_RD_OWN_MASK) == 0U))
+    while ((txBdRing->txDescUsed > 0U) && ((txDesc->tdes3 & ENET_TXDESCRIP_RD_OWN_MASK) == 0U))
     {
-#ifdef ENET_PTP1588FEATURE_REQUIRED
-        uint32_t nanosecond;
-        uint32_t nanoOverSize = ENET_NANOSECS_ONESECOND; /* Default use the digital rollover. */
-
-        if ((txDesc->controlStat & ENET_TXDESCRIP_RD_LD_MASK) != 0U)
+        if ((txDesc->tdes3 & ENET_TXDESCRIP_RD_LD_MASK) != 0U)
         {
-            enet_ptp_time_data_t *ptpTsData = txBdRing->txPtpTsDataRing.ptpTsData + txBdRing->txPtpTsDataRing.endIndex;
-            if ((txDesc->controlStat & ENET_TXDESCRIP_WB_TTSS_MASK) != 0U)
+            txDirty                  = &txDirtyRing->txDirtyBase[txDirtyRing->txConsumIdx];
+            txDirtyRing->txConsumIdx = ENET_IncreaseIndex(txDirtyRing->txConsumIdx, txDirtyRing->txRingLen);
+            txDirty->isTsAvail       = false;
+
+#ifdef ENET_PTP1588FEATURE_REQUIRED
+            uint32_t nanosecond = 0;
+
+            if ((txDesc->tdes3 & ENET_TXDESCRIP_WB_TTSS_MASK) != 0U)
             {
                 /* Get transmit time stamp second. */
-                nanosecond = txDesc->buff2Addr | txDesc->buff1Addr;
+                nanosecond = txDesc->tdes0;
                 if ((base->MAC_TIMESTAMP_CTRL & ENET_MAC_TIMESTAMP_CTRL_TSCTRLSSR_MASK) == 0U)
                 {
                     /* Binary rollover. */
-                    nanoOverSize = ENET_MAC_SYS_TIME_NSCND_TSSS_MASK;
+                    txDirty->timeStamp.nanosecond = ENET_BINARY_ROLLOVER_SCALE(nanosecond);
                 }
-                ptpTsData->timeStamp.second     = (uint64_t)nanosecond / nanoOverSize;
-                ptpTsData->timeStamp.nanosecond = nanosecond % nanoOverSize;
-
-                /* Store the timestamp to the transmit timestamp ring. */
-                (void)ENET_Ptp1588UpdateTimeRing(&txBdRing->txPtpTsDataRing, ptpTsData);
+                else
+                {
+                    txDirty->timeStamp.nanosecond = nanosecond;
+                }
+                txDirty->timeStamp.second = txDesc->tdes1;
+                txDirty->isTsAvail        = true;
+            }
+#endif /* ENET_PTP1588FEATURE_REQUIRED */
+            /* For Tx buffer free or requeue for each descriptor.
+             * The Tx interrupt callback should free/requeue the Tx buffer. */
+            if (handle->callback != NULL)
+            {
+                handle->callback(base, handle, kENET_TxIntEvent, channel, txDirty, handle->userData);
             }
         }
-#endif /* ENET_PTP1588FEATURE_REQUIRED */
 
-        /* For tx buffer free or requeue for each descriptor.
-         * The tx interrupt callback should free/requeue the tx buffer. */
-        if (handle->callback != NULL)
-        {
-            handle->callback(base, handle, kENET_TxIntEvent, channel, handle->userData);
-        }
-
+        /* Update the used Tx descriptor count. */
         txBdRing->txDescUsed--;
 
         /* Update the txConsumIdx/txDesc. */
@@ -1855,74 +1964,106 @@ void ENET_ReclaimTxDescriptor(ENET_Type *base, enet_handle_t *handle, uint8_t ch
 /*!
  * brief Transmits an ENET frame.
  * note The CRC is automatically appended to the data. Input the data
- * to send without the CRC.
+ * to send without the CRC. This API uses input buffer for Tx, application
+ * should reclaim the buffer after Tx is over.
  *
  * param base  ENET peripheral base address.
  * param handle The ENET handler pointer. This is the same handler pointer used in the ENET_Init.
- * param data The data buffer provided by user to be send.
- * param length The length of the data to be send.
+ * param txFrame The Tx frame structure.
+ * param channel Channel to send the frame, same with queue index.
  * retval kStatus_Success  Send frame succeed.
  * retval kStatus_ENET_TxFrameBusy  Transmit buffer descriptor is busy under transmission.
- *         The transmit busy happens when the data send rate is over the MAC capacity.
- *         The waiting mechanism is recommended to be added after each call return with
- *         kStatus_ENET_TxFrameBusy.
+ *        The transmit busy happens when the data send rate is over the MAC capacity.
+ *        The waiting mechanism is recommended to be added after each call return with kStatus_ENET_TxFrameBusy.
+ *        Also need to pay attention to reclaim Tx frame after Tx is over.
+ * retval kStatus_ENET_TxFrameOverLen  Transmit frme length exceeds the 0x3FFF limit defined by the driver.
  */
-status_t ENET_SendFrame(ENET_Type *base, enet_handle_t *handle, uint8_t *data, uint32_t length)
+status_t ENET_SendFrame(ENET_Type *base, enet_handle_t *handle, enet_tx_frame_struct_t *txFrame, uint8_t channel)
 {
     assert(handle);
-    assert(data);
+    assert(handle->txDirtyRing[channel].txDirtyBase != NULL);
+    assert(txFrame);
+    assert(txFrame->txBuffNum != 0U);
+    assert(txFrame->txBuffArray != NULL);
 
-    enet_tx_bd_ring_t *txBdRing;
+    enet_tx_bd_ring_t *txBdRing       = (enet_tx_bd_ring_t *)&handle->txBdRing[channel];
+    enet_tx_dirty_ring_t *txDirtyRing = (enet_tx_dirty_ring_t *)&handle->txDirtyRing[channel];
+    enet_tx_reclaim_info_t *txDirty   = &txDirtyRing->txDirtyBase[txDirtyRing->txGenIdx];
+    enet_buffer_struct_t *txBuff      = txFrame->txBuffArray;
+    uint32_t frameLen                 = 0;
+    uint32_t index                    = 0;
     enet_tx_bd_struct_t *txDesc;
-    uint8_t channel = 0;
-    bool ptp1588    = false;
+    enet_desc_flag_t descFlag;
+    uint32_t leftBuffNum;
 
-    if (length > 2U * ENET_TXDESCRIP_RD_BL1_MASK)
+    /* Calculate total frame length and the Tx buffer number if it's scattered. */
+    for (index = 0; index < txFrame->txBuffNum; index++)
+    {
+        frameLen += txBuff[index].length;
+    }
+
+    /* Here use maximum length of single buffer in hardware as transmit length limitation, cause it's long enough.
+     * And it simplifies the check of buffer length. There's no need to check each buffer length. */
+    if (frameLen > ENET_FRAME_TX_LEN_LIMITATION)
     {
         return kStatus_ENET_TxFrameOverLen;
     }
 
-    /* Choose the transit queue. */
-    channel = ENET_GetTxRingId(data, handle);
-
-    /* Check if the DMA owns the descriptor. */
-    txBdRing = (enet_tx_bd_ring_t *)&handle->txBdRing[channel];
-    txDesc   = txBdRing->txBdBase + txBdRing->txGenIdx;
-    if (txBdRing->txRingLen == txBdRing->txDescUsed)
+    /* Check whether the available BD number is enough for Tx data buffer. */
+    if (txFrame->txBuffNum > (((uint32_t)txBdRing->txRingLen - (uint32_t)txBdRing->txDescUsed) * 2U))
     {
         return kStatus_ENET_TxFrameBusy;
     }
 
-#ifdef ENET_PTP1588FEATURE_REQUIRED
-    enet_ptp_time_data_t ptpTsData;
+    /* Update the context in Tx dirty ring for reclaim */
+    txDirty->context      = txFrame->context;
+    txDirtyRing->txGenIdx = ENET_IncreaseIndex(txDirtyRing->txGenIdx, txDirtyRing->txRingLen);
 
-    ptp1588 = ENET_Ptp1588ParseFrame(data, &ptpTsData, true);
-#endif /* ENET_PTP1588FEATURE_REQUIRED */
-
-    /* Fill the descriptor. */
-    if (length <= ENET_TXDESCRIP_RD_BL1_MASK)
+    index       = 0;
+    leftBuffNum = txFrame->txBuffNum;
+    do
     {
-        ENET_SetupTxDescriptor(txDesc, data, length, NULL, 0, length, true, ptp1588, kENET_FirstLastFlag, 0);
-    }
-    else
-    {
-        ENET_SetupTxDescriptor(txDesc, data, ENET_TXDESCRIP_RD_BL1_MASK, data + ENET_TXDESCRIP_RD_BL1_MASK,
-                               (length - ENET_TXDESCRIP_RD_BL1_MASK), length, true, ptp1588, kENET_FirstLastFlag, 0);
-    }
+        txDesc = &txBdRing->txBdBase[txBdRing->txGenIdx];
 
-    /* Increase the index. */
-    txBdRing->txGenIdx = ENET_IncreaseIndex(txBdRing->txGenIdx, txBdRing->txRingLen);
-    /* Disable interrupt first and then enable interrupt to avoid the race condition. */
-    (void)DisableIRQ(s_enetIrqId[ENET_GetInstance(base)]);
-    txBdRing->txDescUsed++;
-    (void)EnableIRQ(s_enetIrqId[ENET_GetInstance(base)]);
+        /* Get the right flag for current BD */
+        if (leftBuffNum == txFrame->txBuffNum)
+        {
+            descFlag = (leftBuffNum > 2U) ? kENET_FirstFlagOnly : kENET_FirstLastFlag;
+        }
+        else
+        {
+            descFlag = (leftBuffNum > 2U) ? kENET_MiddleFlag : kENET_LastFlagOnly;
+        }
+
+        /* Fill the descriptor. */
+        if (leftBuffNum < 2U)
+        {
+            ENET_SetupTxDescriptor(txDesc, txBuff[index].buffer, txBuff[index].length, NULL, 0, frameLen,
+                                   (bool)txFrame->txConfig.intEnable, (bool)txFrame->txConfig.tsEnable, descFlag,
+                                   txFrame->txConfig.slotNum);
+            leftBuffNum--;
+        }
+        else
+        {
+            ENET_SetupTxDescriptor(txDesc, txBuff[index].buffer, txBuff[index].length, txBuff[index + 1U].buffer,
+                                   txBuff[index + 1U].length, frameLen, (bool)txFrame->txConfig.intEnable,
+                                   (bool)txFrame->txConfig.tsEnable, descFlag, txFrame->txConfig.slotNum);
+            index += 2U;
+            leftBuffNum -= 2U;
+        }
+
+        /* Increase the index. */
+        txBdRing->txGenIdx = ENET_IncreaseIndex(txBdRing->txGenIdx, txBdRing->txRingLen);
+
+        /* Disable interrupt first and then enable interrupt to avoid the race condition. */
+        (void)DisableIRQ(s_enetIrqId[ENET_GetInstance(base)]);
+        txBdRing->txDescUsed++;
+        (void)EnableIRQ(s_enetIrqId[ENET_GetInstance(base)]);
+    } while (leftBuffNum != 0U);
 
     /* Update the transmit tail address. */
-    txDesc = txBdRing->txBdBase + txBdRing->txGenIdx;
-    if (txBdRing->txGenIdx == 0U)
-    {
-        txDesc = txBdRing->txBdBase + txBdRing->txRingLen;
-    }
+    txDesc = (txBdRing->txGenIdx == 0U) ? (&txBdRing->txBdBase[txBdRing->txRingLen]) :
+                                          (&txBdRing->txBdBase[txBdRing->txGenIdx]);
     base->DMA_CH[channel].DMA_CHX_TXDESC_TAIL_PTR = (uint32_t)txDesc & ~ENET_ADDR_ALIGNMENT;
 
     return kStatus_Success;
@@ -1931,11 +2072,35 @@ status_t ENET_SendFrame(ENET_Type *base, enet_handle_t *handle, uint8_t *data, u
 #ifdef ENET_PTP1588FEATURE_REQUIRED
 /*!
  * brief Gets the current ENET time from the PTP 1588 timer.
+ *       Interrupts are not disabled.
  *
  * param base  ENET peripheral base address.
  * param second The PTP 1588 system timer second.
  * param nanosecond The PTP 1588 system timer nanosecond.
- * For the unit of the nanosecond is 1ns. so the nanosecond is the real nanosecond.
+ */
+void ENET_Ptp1588GetTimerNoIrqDisable(ENET_Type *base, uint64_t *second, uint32_t *nanosecond)
+{
+    assert(second);
+    assert(nanosecond);
+
+    /* Get the current PTP time. */
+    *second = (((uint64_t)base->MAC_SYS_TIME_HWORD_SCND & ENET_MAC_SYS_TIME_HWORD_SCND_TSHWR_MASK) << 32U) |
+              base->MAC_SYS_TIME_SCND;
+    *nanosecond = base->MAC_SYS_TIME_NSCND & ENET_MAC_SYS_TIME_NSCND_TSSS_MASK;
+    if (!((base->MAC_TIMESTAMP_CTRL & ENET_MAC_TIMESTAMP_CTRL_TSCTRLSSR_MASK) != 0U))
+    {
+        /* Binary rollover, the unit of the increment is ~ 0.466 ns. */
+        *nanosecond = ENET_BINARY_ROLLOVER_SCALE(*nanosecond);
+    }
+}
+
+/*!
+ * brief Gets the current ENET time from the PTP 1588 timer.
+ *
+ * param base  ENET peripheral base address.
+ * param second The PTP 1588 system timer second.
+ * param nanosecond The PTP 1588 system timer nanosecond.
+ * For the unit of the nanosecond is 1ns. So the nanosecond is the real nanosecond.
  */
 void ENET_Ptp1588GetTimer(ENET_Type *base, uint64_t *second, uint32_t *nanosecond)
 {
@@ -1947,29 +2112,24 @@ void ENET_Ptp1588GetTimer(ENET_Type *base, uint64_t *second, uint32_t *nanosecon
     /* Disables the interrupt. */
     primask = DisableGlobalIRQ();
 
-    /* Get the current PTP time. */
-    *second = (((uint64_t)base->MAC_SYS_TIME_HWORD_SCND & ENET_MAC_SYS_TIME_HWORD_SCND_TSHWR_MASK) << 32U) |
-              base->MAC_SYS_TIME_SCND;
-    *nanosecond = base->MAC_SYS_TIME_NSCND & ENET_MAC_SYS_TIME_NSCND_TSSS_MASK;
-    if (!((base->MAC_TIMESTAMP_CTRL & ENET_MAC_TIMESTAMP_CTRL_TSCTRLSSR_MASK) != 0U))
-    {
-        /* Binary rollover, the unit of the increment is ~ 0.466 ns. */
-        *nanosecond = *nanosecond / 1000U * 466U;
-    }
+    ENET_Ptp1588GetTimerNoIrqDisable(base, second, nanosecond);
 
     /* Enables the interrupt. */
     EnableGlobalIRQ(primask);
 }
 
 /*!
- * brief Coreect the ENET PTP 1588 timer in coarse method.
+ * brief Correct the ENET PTP 1588 timer in coarse method.
  *
  * param base  ENET peripheral base address.
- * param operation The system time operation, refer to "enet_systime_op"
+ * param operation The system time operation, refer to "enet_systime_op_t"
  * param second The correction second.
  * param nanosecond The correction nanosecond.
  */
-void ENET_Ptp1588CorrectTimerInCoarse(ENET_Type *base, enet_systime_op operation, uint32_t second, uint32_t nanosecond)
+void ENET_Ptp1588CorrectTimerInCoarse(ENET_Type *base,
+                                      enet_systime_op_t operation,
+                                      uint32_t second,
+                                      uint32_t nanosecond)
 {
     uint32_t corrSecond = second;
     uint32_t corrNanosecond;
@@ -2014,73 +2174,6 @@ void ENET_Ptp1588CorrectTimerInCoarse(ENET_Type *base, enet_systime_op operation
     {
     }
 }
-
-/*!
- * brief Gets the time stamp of the transmit frame.
- *
- * This function is used for PTP stack to get the timestamp captured by the ENET driver.
- *
- * param handle The ENET handler pointer.This is the same state pointer used in
- *        ENET_Init.
- * param ptpTimeData The special PTP timestamp data for search the receive timestamp.
- * retval kStatus_Success Get 1588 timestamp success.
- * retval kStatus_ENET_PtpTsRingEmpty 1588 timestamp ring empty.
- * retval kStatus_ENET_PtpTsRingFull 1588 timestamp ring full.
- */
-status_t ENET_GetTxFrameTime(enet_handle_t *handle, enet_ptp_time_data_t *ptpTimeData)
-{
-    assert(handle);
-    assert(ptpTimeData);
-
-    status_t result = kStatus_Success;
-    uint8_t count;
-    uint8_t index = handle->multiQueEnable ? 2U : 1U;
-
-    for (count = 0; count < index; count++)
-    {
-        result = ENET_Ptp1588SearchTimeRing(&handle->txBdRing[count].txPtpTsDataRing, ptpTimeData);
-        if (result == kStatus_Success)
-        {
-            break;
-        }
-    }
-
-    return result;
-}
-
-/*!
- * brief Gets the time stamp of the received frame.
- *
- * This function is used for PTP stack to get the timestamp captured by the ENET driver.
- *
- * param handle The ENET handler pointer.This is the same state pointer used in
- *        ENET_Init.
- * param ptpTimeData The special PTP timestamp data for search the receive timestamp.
- * retval kStatus_Success Get 1588 timestamp success.
- * retval kStatus_ENET_PtpTsRingEmpty 1588 timestamp ring empty.
- * retval kStatus_ENET_PtpTsRingFull 1588 timestamp ring full.
- */
-status_t ENET_GetRxFrameTime(enet_handle_t *handle, enet_ptp_time_data_t *ptpTimeData)
-{
-    assert(handle);
-    assert(ptpTimeData);
-
-    status_t result = kStatus_Success;
-    uint8_t count;
-    uint8_t index = handle->multiQueEnable ? 2U : 1U;
-
-    for (count = 0; count < index; count++)
-    {
-        result = ENET_Ptp1588SearchTimeRing(&handle->rxBdRing[count].rxPtpTsDataRing, ptpTimeData);
-        if (result == kStatus_Success)
-        {
-            break;
-        }
-    }
-
-    return result;
-}
-
 #endif /* ENET_PTP1588FEATURE_REQUIRED */
 
 /*!
@@ -2101,7 +2194,7 @@ void ENET_IRQHandler(ENET_Type *base, enet_handle_t *handle)
             base->DMA_CH[0].DMA_CHX_STAT = ENET_DMA_CH_DMA_CHX_STAT_RI_MASK | ENET_DMA_CH_DMA_CHX_STAT_NIS_MASK;
             if (handle->callback != NULL)
             {
-                handle->callback(base, handle, kENET_RxIntEvent, 0, handle->userData);
+                handle->callback(base, handle, kENET_RxIntEvent, 0, NULL, handle->userData);
             }
         }
         if ((flag & ENET_DMA_CH_DMA_CHX_STAT_TI_MASK) != 0U)
@@ -2120,7 +2213,7 @@ void ENET_IRQHandler(ENET_Type *base, enet_handle_t *handle)
             base->DMA_CH[1].DMA_CHX_STAT = ENET_DMA_CH_DMA_CHX_STAT_RI_MASK | ENET_DMA_CH_DMA_CHX_STAT_NIS_MASK;
             if (handle->callback != NULL)
             {
-                handle->callback(base, handle, kENET_RxIntEvent, 1, handle->userData);
+                handle->callback(base, handle, kENET_RxIntEvent, 1, NULL, handle->userData);
             }
         }
         if ((flag & ENET_DMA_CH_DMA_CHX_STAT_TI_MASK) != 0U)
@@ -2138,7 +2231,7 @@ void ENET_IRQHandler(ENET_Type *base, enet_handle_t *handle)
         {
             if (handle->callback != NULL)
             {
-                handle->callback(base, handle, kENET_TimeStampIntEvent, 0, handle->userData);
+                handle->callback(base, handle, kENET_TimeStampIntEvent, 0, NULL, handle->userData);
             }
         }
     }

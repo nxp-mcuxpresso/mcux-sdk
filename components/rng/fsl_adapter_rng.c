@@ -40,7 +40,7 @@ hal_rng_status_t HAL_RngGetData(void *pRandomNo, uint32_t dataSize)
     do
     {
         /* Read Entropy.*/
-        random_32 = RNG_GetRandomData();
+        random_32 = RNG_GetRandomDataWord();
 
         random_p = (uint8_t *)&random_32;
 
@@ -62,7 +62,7 @@ hal_rng_status_t HAL_RngGetData(void *pRandomNo, uint32_t dataSize)
         /* Skip next 32 random numbers for better entropy */
         for (skip = 0; skip < 32U; skip++)
         {
-            (void)RNG_GetRandomData();
+            (void)RNG_GetRandomDataWord();
         }
     } while (dataSize > 0U);
     return status;
@@ -75,6 +75,6 @@ hal_rng_status_t HAL_RngHwGetData(void *pRandomNo, uint32_t dataSize)
 
 hal_rng_status_t HAL_RngSetSeed(uint32_t seed)
 {
-    (void)RNG_GetRandomData();
+    (void)RNG_GetRandomDataWord();
     return kStatus_HAL_RngSuccess;
 }

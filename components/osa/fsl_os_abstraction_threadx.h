@@ -30,12 +30,10 @@
 /*! @brief OSA mutex handle size. */
 #define OSA_MUTEX_HANDLE_SIZE sizeof(TX_MUTEX)
 
-#define configMAX_PRIORITIES 32U
-
 /*!
  * @brief To provide unified task priority for upper layer, OSA layer makes conversion.
  */
-#define PRIORITY_OSA_TO_THREAD(osa_prio)    ((UINT)configMAX_PRIORITIES - (osa_prio)-2U)
-#define PRIORITY_THREAD_TO_OSA(thread_prio) ((UINT)configMAX_PRIORITIES - (thread_prio)-2U)
+#define PRIORITY_OSA_TO_THREAD(osa_prio)    ((UINT)TX_MAX_PRIORITIES - (osa_prio)-2U)
+#define PRIORITY_THREAD_TO_OSA(thread_prio) ((UINT)TX_MAX_PRIORITIES - (thread_prio)-2U)
 
 #endif /* __FSL_OS_ABSTRACTION_THREADX_H__ */

@@ -406,8 +406,8 @@ void FLEXIO_SPI_MasterTransferAbortEDMA(FLEXIO_SPI_Type *base, flexio_spi_master
     assert(handle != NULL);
 
     /* Disable dma. */
-    EDMA_StopTransfer(handle->txHandle);
-    EDMA_StopTransfer(handle->rxHandle);
+    EDMA_AbortTransfer(handle->txHandle);
+    EDMA_AbortTransfer(handle->rxHandle);
 
     /* Disable DMA enable bit. */
     FLEXIO_SPI_EnableDMA(base, (uint32_t)kFLEXIO_SPI_DmaAllEnable, false);

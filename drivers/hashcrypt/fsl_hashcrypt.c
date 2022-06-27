@@ -400,63 +400,30 @@ static void hashcrypt_aes_load_userKey(HASHCRYPT_Type *base, hashcrypt_handle_t 
  * @param output output data
  * @param size size of data block to process in bytes (must be 16bytes multiple).
  */
-static status_t hashcrypt_aes_one_block(HASHCRYPT_Type *base, const uint8_t *input, uint8_t *output, size_t size)
+static status_t hashcrypt_aes_one_block_aligned(HASHCRYPT_Type *base,
+                                                const uint8_t *input,
+                                                uint8_t *output,
+                                                size_t size)
 {
     status_t status = kStatus_Fail;
     uint32_t idx    = 0;
 
-    /* we use AHB master mode as much as possible */
-    /* however, it can work only with aligned input data */
-    /* so, if unaligned, we do memcpy to temp buffer on stack, which is aligned, and use AHB mode to read data in */
-    /* then we read data back to it and do memcpy to the output buffer */
-    if ((0U != ((uint32_t)input & 0x3u)) || (0U != ((uint32_t)output & 0x3u)))
+    base->MEMADDR = HASHCRYPT_MEMADDR_BASE(input);
+    base->MEMCTRL = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(size / 16U);
+    while (size >= HASHCRYPT_AES_BLOCK_SIZE)
     {
-        uint32_t temp[256 / sizeof(uint32_t)];
-        int cnt = 0;
-        while (size != 0U)
+        /* Get result */
+        while (0U == (base->STATUS & HASHCRYPT_STATUS_DIGEST_MASK))
         {
-            size_t actSz     = size >= 256u ? 256u : size;
-            size_t actSzOrig = actSz;
-            (void)memcpy(temp, (const uint32_t *)(uintptr_t)(input + 256 * cnt), actSz);
-            size -= actSz;
-            base->MEMADDR   = HASHCRYPT_MEMADDR_BASE(temp);
-            base->MEMCTRL   = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(actSz / 16U);
-            uint32_t outidx = 0;
-            while (actSz != 0U)
-            {
-                while (0U == (base->STATUS & HASHCRYPT_STATUS_DIGEST_MASK))
-                {
-                }
-                for (int i = 0; i < 4; i++)
-                {
-                    (temp + outidx)[i] = swap_bytes(base->DIGEST0[i]);
-                }
-                outidx += HASHCRYPT_AES_BLOCK_SIZE / 4U;
-                actSz -= HASHCRYPT_AES_BLOCK_SIZE;
-            }
-            (void)memcpy(output + 256 * cnt, (const uint8_t *)(uintptr_t)temp, actSzOrig);
-            cnt++;
         }
-    }
-    else
-    {
-        base->MEMADDR = HASHCRYPT_MEMADDR_BASE(input);
-        base->MEMCTRL = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(size / 16U);
-        while (size >= HASHCRYPT_AES_BLOCK_SIZE)
+
+        for (int i = 0; i < 4; i++)
         {
-            /* Get result */
-            while (0U == (base->STATUS & HASHCRYPT_STATUS_DIGEST_MASK))
-            {
-            }
-
-            for (int i = 0; i < 4; i++)
-            {
-                ((uint32_t *)(uintptr_t)output + idx)[i] = swap_bytes(base->DIGEST0[i]);
-            }
-
-            idx += HASHCRYPT_AES_BLOCK_SIZE / 4U;
-            size -= HASHCRYPT_AES_BLOCK_SIZE;
+            ((uint32_t *)(uintptr_t)output + idx)[i] = swap_bytes(base->DIGEST0[i]);
         }
+
+        idx += HASHCRYPT_AES_BLOCK_SIZE / 4U;
+        size -= HASHCRYPT_AES_BLOCK_SIZE;
     }
 
     if (0U == (base->STATUS & HASHCRYPT_STATUS_ERROR_MASK))
@@ -464,6 +431,127 @@ static status_t hashcrypt_aes_one_block(HASHCRYPT_Type *base, const uint8_t *inp
         status = kStatus_Success;
     }
 
+    return status;
+}
+
+/*!
+ * @brief Performs AES encryption/decryption of one data block.
+ *
+ * This function encrypts/decrypts one block of data with specified size.
+ *
+ * @param base Hashcrypt peripheral base address.
+ * @param input input data
+ * @param output output data
+ * @param size size of data block to process in bytes (must be 16bytes multiple).
+ */
+static status_t hashcrypt_aes_one_block_unaligned(HASHCRYPT_Type *base,
+                                                  const uint8_t *input,
+                                                  uint8_t *output,
+                                                  size_t size)
+{
+    status_t status = kStatus_Fail;
+
+    /* we use AHB master mode as much as possible */
+    /* however, it can work only with aligned input data */
+    /* so, if unaligned, we do memcpy to temp buffer on stack, which is aligned, and use AHB mode to read data in */
+    /* then we read data back to it and do memcpy to the output buffer */
+    uint32_t temp[256 / sizeof(uint32_t)];
+    int cnt = 0;
+    while (size != 0U)
+    {
+        size_t actSz     = size >= 256u ? 256u : size;
+        size_t actSzOrig = actSz;
+        (void)memcpy(temp, (const uint32_t *)(uintptr_t)(input + 256 * cnt), actSz);
+        size -= actSz;
+        base->MEMADDR   = HASHCRYPT_MEMADDR_BASE(temp);
+        base->MEMCTRL   = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(actSz / 16U);
+        uint32_t outidx = 0;
+        while (actSz != 0U)
+        {
+            while (0U == (base->STATUS & HASHCRYPT_STATUS_DIGEST_MASK))
+            {
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                (temp + outidx)[i] = swap_bytes(base->DIGEST0[i]);
+            }
+            outidx += HASHCRYPT_AES_BLOCK_SIZE / 4U;
+            actSz -= HASHCRYPT_AES_BLOCK_SIZE;
+        }
+        (void)memcpy(output + 256 * cnt, (const uint8_t *)(uintptr_t)temp, actSzOrig);
+        cnt++;
+    }
+
+    if (0U == (base->STATUS & HASHCRYPT_STATUS_ERROR_MASK))
+    {
+        status = kStatus_Success;
+    }
+
+    return status;
+}
+
+/*!
+ * @brief Performs AES encryption/decryption of one data block.
+ *
+ * This function encrypts/decrypts one block of data with specified size.
+ *
+ * @param base Hashcrypt peripheral base address.
+ * @param input input data
+ * @param output output data
+ * @param size size of data block to process in bytes (must be 16bytes multiple).
+ */
+static status_t hashcrypt_aes_one_block(HASHCRYPT_Type *base, const uint8_t *input, uint8_t *output, size_t size)
+{
+    status_t status = kStatus_Fail;
+
+    /*MEMCTRL bitfield for COUNT is 11 bits, and this limits the number of blocks to process in one Master run to 2047
+    (2^11 -1)  blocks . Each block is 16bytes long, so biggest data size  which can we do in one Master run is (2047
+    blocks *16 bytes) = 32752 So, when size is overflowing HASHCRYPT_MEMCTRL_COUNT field of MEMCTRL register, we split
+    our data into more smaller chunks */
+
+    if (size > 32752U)
+
+    {
+        size_t numBlock      = size / 32752U;              /* number of blocks, each block is processed in one run*/
+        size_t remainingSize = size - (numBlock * 32752U); /* size of last  block */
+
+        if ((0U != ((uint32_t)input & 0x3u)) || (0U != ((uint32_t)output & 0x3u))) /* If data is unaligned*/
+        {
+            for (uint32_t i = 0; i < numBlock; i++)
+            {
+                status = hashcrypt_aes_one_block_unaligned(base, input, output, 32752U);
+                input += 32752U;
+                output += 32752U;
+            }
+            status = hashcrypt_aes_one_block_unaligned(base, input, output, remainingSize);
+        }
+        else /* If data is aligned*/
+        {
+            for (uint32_t i = 0; i < numBlock; i++)
+            {
+                status = hashcrypt_aes_one_block_aligned(base, input, output, 32752U);
+                input += 32752U;
+                output += 32752U;
+            }
+            status = hashcrypt_aes_one_block_aligned(base, input, output, remainingSize);
+        }
+    }
+
+    else /* size is less than COUNT field of MEMCTRL register  so we can process all data at once */
+    {
+        /* we use AHB master mode as much as possible */
+        /* however, it can work only with aligned input data */
+        /* so, if unaligned, we do memcpy to temp buffer on stack, which is aligned, and use AHB mode to read data in */
+        /* then we read data back to it and do memcpy to the output buffer */
+        if ((0U != ((uint32_t)input & 0x3u)) || (0U != ((uint32_t)output & 0x3u)))
+        {
+            status = hashcrypt_aes_one_block_unaligned(base, input, output, size);
+        }
+        else
+        {
+            status = hashcrypt_aes_one_block_aligned(base, input, output, size);
+        }
+    }
     return status;
 }
 

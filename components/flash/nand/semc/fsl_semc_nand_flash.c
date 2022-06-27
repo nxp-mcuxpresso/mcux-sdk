@@ -32,7 +32,8 @@
 
 /*! @brief Constructs the four character code for tag */
 #if !defined(FOUR_CHAR_CODE)
-#define FOUR_CHAR_CODE(a, b, c, d) (((d) << 24) | ((c) << 16) | ((b) << 8) | ((a)))
+#define FOUR_CHAR_CODE(a, b, c, d) \
+    (((uint32_t)(d) << 24) | ((uint32_t)(c) << 16) | ((uint32_t)(b) << 8) | ((uint32_t)(a)))
 #endif
 
 /*! @brief State information for the CRC16 algorithm. */
@@ -83,7 +84,7 @@ static status_t semc_nand_is_device_ecc_check_passed(nand_handle_t *handle, bool
  * Variables
  ******************************************************************************/
 /*! @brief Define the onfi timing mode. */
-const nand_ac_timing_parameter_t s_nandAcTimingParameterTable[] = {
+static const nand_ac_timing_parameter_t s_nandAcTimingParameterTable[] = {
     /* ONFI 1.0, mode 0, 10MHz, 100ns */
     {.min_tCS_ns    = 70,
      .min_tCH_ns    = 20,
@@ -114,16 +115,16 @@ const nand_ac_timing_parameter_t s_nandAcTimingParameterTable[] = {
     /* Auto-Detection */
     {0}};
 
-const char s_nandDeviceManufacturerList[][12] = {{'M', 'I', 'C', 'R', 'O', 'N', ' ', ' ', ' ', ' ', ' ', ' '},
-                                                 {'S', 'P', 'A', 'N', 'S', 'I', 'O', 'N', ' ', ' ', ' ', ' '},
-                                                 {'S', 'A', 'M', 'S', 'U', 'N', 'G', ' ', ' ', ' ', ' ', ' '},
-                                                 {'W', 'I', 'N', 'B', 'O', 'N', 'D', ' ', ' ', ' ', ' ', ' '},
-                                                 {'H', 'Y', 'N', 'I', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-                                                 {'T', 'O', 'S', 'H', 'I', 'B', 'A', ' ', ' ', ' ', ' ', ' '},
-                                                 {'M', 'A', 'C', 'R', 'O', 'N', 'I', 'X', ' ', ' ', ' ', ' '},
-                                                 {0}};
+static const char s_nandDeviceManufacturerList[][12] = {{'M', 'I', 'C', 'R', 'O', 'N', ' ', ' ', ' ', ' ', ' ', ' '},
+                                                        {'S', 'P', 'A', 'N', 'S', 'I', 'O', 'N', ' ', ' ', ' ', ' '},
+                                                        {'S', 'A', 'M', 'S', 'U', 'N', 'G', ' ', ' ', ' ', ' ', ' '},
+                                                        {'W', 'I', 'N', 'B', 'O', 'N', 'D', ' ', ' ', ' ', ' ', ' '},
+                                                        {'H', 'Y', 'N', 'I', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                                                        {'T', 'O', 'S', 'H', 'I', 'B', 'A', ' ', ' ', ' ', ' ', ' '},
+                                                        {'M', 'A', 'C', 'R', 'O', 'N', 'I', 'X', ' ', ' ', ' ', ' '},
+                                                        {0}};
 
-semc_mem_nand_handle_t semc_handle;
+static semc_mem_nand_handle_t semc_handle;
 
 /*******************************************************************************
  * API
@@ -131,7 +132,7 @@ semc_mem_nand_handle_t semc_handle;
 /* ONFI parameters CRC related functions. */
 static void semc_nand_crc16_onfi_init(crc16_data_t *crc16Info)
 {
-    assert(crc16Info);
+    assert(crc16Info != NULL);
 
     /* initialize running crc and byte count. */
     crc16Info->currentCrc = 0x4F4EU;
@@ -139,19 +140,19 @@ static void semc_nand_crc16_onfi_init(crc16_data_t *crc16Info)
 
 static void semc_nand_crc16_onfi_update(crc16_data_t *crc16Info, const uint8_t *src, uint32_t lengthInBytes)
 {
-    assert(crc16Info);
-    assert(src);
+    assert(crc16Info != NULL);
+    assert(src != NULL);
 
     uint32_t crc = crc16Info->currentCrc;
 
-    for (uint32_t i = 0; i < lengthInBytes; ++i)
+    for (uint32_t i = 0U; i < lengthInBytes; ++i)
     {
         uint32_t byte = src[i];
-        crc ^= byte << 8;
-        for (uint32_t j = 0; j < 8; ++j)
+        crc ^= byte << 8U;
+        for (uint32_t j = 0U; j < 8U; ++j)
         {
-            uint32_t temp = crc << 1;
-            if (crc & 0x8000)
+            uint32_t temp = crc << 1U;
+            if ((crc & 0x8000U) != 0x00U)
             {
                 temp ^= 0x8005U;
             }
@@ -159,20 +160,20 @@ static void semc_nand_crc16_onfi_update(crc16_data_t *crc16Info, const uint8_t *
         }
     }
 
-    crc16Info->currentCrc = crc;
+    crc16Info->currentCrc = (uint16_t)crc;
 }
 
 static void semc_nand_crc16_onfi_finalize(crc16_data_t *crc16Info, uint16_t *hash)
 {
-    assert(crc16Info);
-    assert(hash);
+    assert(crc16Info != NULL);
+    assert(hash != NULL);
 
     *hash = crc16Info->currentCrc;
 }
 
 static void semc_get_default_timing_configure(semc_nand_timing_config_t *semcNandTimingConfig)
 {
-    assert(semcNandTimingConfig);
+    assert(semcNandTimingConfig != NULL);
 
     /* Configure Timing mode 0 for timing parameter.*/
     const nand_ac_timing_parameter_t *nandTiming =
@@ -194,8 +195,8 @@ static void semc_get_default_timing_configure(semc_nand_timing_config_t *semcNan
 
 static status_t semc_nand_get_onfi_timing_configure(nand_handle_t *handle, nand_config_t *config)
 {
-    assert(config->memControlConfig);
-    assert(handle->deviceSpecific);
+    assert(config->memControlConfig != NULL);
+    assert(handle->deviceSpecific != NULL);
 
     status_t status = kStatus_Success;
     uint32_t ch;
@@ -693,7 +694,7 @@ static status_t semc_nand_issue_read_parameter(nand_handle_t *handle, nand_onfi_
     return status;
 }
 
-status_t semc_nand_issue_read_status(nand_handle_t *handle, uint8_t *stat)
+static status_t semc_nand_issue_read_status(nand_handle_t *handle, uint8_t *stat)
 {
     status_t status      = kStatus_Success;
     uint32_t readoutData = 0x00U;
@@ -809,7 +810,7 @@ static status_t semc_nand_is_device_ecc_check_passed(nand_handle_t *handle, bool
         *isEccPassed = false;
     }
 
-    /* READ MODE command should be issued in case read cycle is folowing. */
+    /* READ MODE command should be issued in case read cycle is following. */
     status = semc_nand_issue_read_mode(handle);
     if (status != kStatus_Success)
     {
@@ -879,8 +880,8 @@ status_t Nand_Flash_Read_Page_Partial(
 /* Initialize Parallel NAND Flash device */
 status_t Nand_Flash_Init(nand_config_t *config, nand_handle_t *handle)
 {
-    assert(config);
-    assert(handle);
+    assert(config != NULL);
+    assert(handle != NULL);
 
     semc_nand_timing_config_t semcNandTimingConfig;
     semc_mem_nand_config_t *semcConfig = (semc_mem_nand_config_t *)config->memControlConfig;
@@ -1079,7 +1080,7 @@ status_t Nand_Flash_Page_Program(nand_handle_t *handle, uint32_t pageIndex, cons
     /* Write Page data to device
        Note: the memory address(row, column address) is always assigned by ipg commmand,
        the given address for axi command is just byte offset of available page array. */
-    (void)memcpy((uint8_t *)semcHandle->ctlAccessMemAddr2, (uint8_t *)src, length);
+    (void)memcpy((uint8_t *)semcHandle->ctlAccessMemAddr2, src, length);
     while (!SEMC_IsInIdle((SEMC_Type *)handle->driverBaseAddr))
     {
     }

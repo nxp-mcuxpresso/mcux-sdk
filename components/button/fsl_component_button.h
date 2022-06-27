@@ -88,10 +88,14 @@ typedef void *button_handle_t;
 #define BUTTON_TIMER_INTERVAL (25U)
 
 /*! @brief Definition of button short press threshold,unit is ms. */
+#ifndef BUTTON_SHORT_PRESS_THRESHOLD
 #define BUTTON_SHORT_PRESS_THRESHOLD (200U)
+#endif
 
 /*! @brief Definition of button long press threshold,unit is ms. */
+#ifndef BUTTON_LONG_PRESS_THRESHOLD
 #define BUTTON_LONG_PRESS_THRESHOLD (500U)
+#endif
 
 /*! @brief Definition of button double click threshold,unit is ms. */
 #define BUTTON_DOUBLE_CLICK_THRESHOLD (200U)

@@ -26,9 +26,9 @@ enum _hashcrypt_status
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief HASHCRYPT driver version. Version 2.2.2.
+/*! @brief HASHCRYPT driver version. Version 2.2.3.
  *
- * Current version: 2.2.2
+ * Current version: 2.2.3
  *
  * Change log:
  * - Version 2.0.0
@@ -60,10 +60,13 @@ enum _hashcrypt_status
  *   - Add data synchronization barrier inside hashcrypt_sha_ldm_stm_16_words()
  *     prevent compiler from reordering memory write when -O2 or higher is used.
  * - Version 2.2.2
- *   - Add data synchronization barrier inside hashcrypt_sha_ldm_stm_16_words() 
+ *   - Add data synchronization barrier inside hashcrypt_sha_ldm_stm_16_words()
  *     to fix optimization issue
+ * - Version 2.2.3
+ *   - Added check for size in hashcrypt_aes_one_block to prevent overflowing COUNT field in MEMCTRL register, if its
+ * bigger than COUNT field do a multiple runs.
  */
-#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
 /*@}*/
 
 /*! @brief Algorithm definitions correspond with the values for Mode field in Control register !*/

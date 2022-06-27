@@ -69,8 +69,7 @@ void DSP_Deinit(void)
 void DSP_CopyImage(dsp_copy_image_t *dspCopyImage)
 {
     assert(dspCopyImage != NULL);
-    assert(dspCopyImage->srcAddr != NULL);
-    assert(dspCopyImage->destAddr != NULL);
+    assert(dspCopyImage->srcAddr != dspCopyImage->destAddr);
 
     uint32_t *srcAddr  = dspCopyImage->srcAddr;
     uint32_t *destAddr = dspCopyImage->destAddr;

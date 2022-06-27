@@ -1,8 +1,16 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/dspi
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/i2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpuart
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/log
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/panic
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/adc16
@@ -31,6 +39,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/smc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/motor_control
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -44,8 +53,9 @@ list(APPEND CMAKE_MODULE_PATH
 # Copy the cmake components into projects
 #    include(driver_llwu)
 #    include(driver_port)
-#    include(driver_dspi)
+#    include(driver_cmsis_dspi)
 #    include(driver_uart_edma)
+#    include(utility_shell)
 #    include(driver_uart_freertos)
 #    include(driver_i2c)
 #    include(driver_i2c_freertos)
@@ -56,43 +66,57 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_dac)
 #    include(device_system)
 #    include(driver_i2c_edma)
-#    include(driver_lpuart_freertos)
-#    include(middleware_freertos-kernel_MKV31F51212)
+#    include(driver_dspi)
+#    include(component_log)
 #    include(driver_cmp)
 #    include(device_startup)
 #    include(driver_pdb)
 #    include(driver_adc16)
-#    include(driver_clock)
-#    include(utility_debug_console_lite)
-#    include(driver_edma)
+#    include(CMSIS_Driver_Include_USART)
+#    include(CMSIS_Driver_Include_SPI)
+#    include(middleware_freertos-kernel_MKV31F51212)
+#    include(component_panic)
+#    include(driver_edma_MKV31F51212)
 #    include(driver_ewm)
+#    include(utility_assert)
 #    include(driver_lpuart)
 #    include(CMSIS_Include_core_cm)
+#    include(driver_cmsis_i2c)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_ftm)
 #    include(utility_notifier)
+#    include(CMSIS_Driver_Include_I2C)
 #    include(driver_wdog)
 #    include(utility_assert_lite)
+#    include(driver_lpuart_freertos)
 #    include(driver_dspi_freertos)
 #    include(utility_debug_console)
 #    include(driver_flash)
 #    include(component_uart_adapter)
-#    include(utility_assert)
+#    include(driver_clock)
 #    include(driver_sim)
+#    include(component_log_backend_ringbuffer)
 #    include(driver_lpuart_edma)
 #    include(device_CMSIS)
 #    include(driver_uart)
+#    include(CMSIS_Driver_Include_Common)
+#    include(utility_debug_console_lite)
+#    include(component_osa_bm)
 #    include(utilities_misc_utilities)
 #    include(driver_rnga)
 #    include(driver_common)
 #    include(driver_smc)
 #    include(driver_crc)
-#    include(component_serial_manager)
+#    include(middleware_motor_control_mc_drivers_adc16_ftm_float)
+#    include(component_osa_free_rtos)
 #    include(driver_fxos8700cq)
 #    include(driver_pit)
+#    include(component_serial_manager)
 #    include(component_serial_manager_uart)
 #    include(driver_pmc)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)
-#    include(utility_shell)
+#    include(component_log_backend_debugconsole)
+#    include(driver_cmsis_lpuart)
+#    include(driver_cmsis_uart)
 #    include(driver_dspi_edma)

@@ -18,6 +18,9 @@
 #define HAL_WM8904_PLAY_CAPABILITY                                                                      \
     kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelRight0 | kCODEC_SupportPlayChannelLeft1 | \
         kCODEC_SupportPlayChannelRight1 | kCODEC_SupportPlaySourcePGA | kCODEC_SupportPlaySourceDAC
+#define HAL_WM8904_VOLUME_CAPABILITY                                                                    \
+    kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelRight0 | kCODEC_SupportPlayChannelLeft1 | \
+        kCODEC_SupportPlayChannelRight1 | kCODEC_VolumeDAC
 #define HAL_WM8904_RECORD_CAPABILITY                                                                             \
     kCODEC_SupportRecordSourceDifferentialLine | kCODEC_SupportRecordSourceDifferentialMic |                     \
         kCODEC_SupportRecordSourceLineInput | kCODEC_SupportRecordSourceDigitalMic |                             \
@@ -67,6 +70,7 @@
  ******************************************************************************/
 static const codec_capability_t s_wm8904_capability = {
     .codecPlayCapability   = HAL_WM8904_PLAY_CAPABILITY,
+    .codecVolumeCapability = HAL_WM8904_VOLUME_CAPABILITY,
     .codecModuleCapability = HAL_WM8904_MODULE_CAPABILITY,
     .codecRecordCapability = HAL_WM8904_RECORD_CAPABILITY,
 };
@@ -148,23 +152,38 @@ status_t HAL_CODEC_WM8904_SetVolume(void *handle, uint32_t playChannel, uint32_t
     uint32_t mappedVolume = 0;
     status_t ret          = kStatus_Success;
 
-    /* 0 will mute the output */
-    if (volume == 0U)
+    if ((playChannel & ((uint32_t)kCODEC_VolumeDAC)) != 0U)
     {
-        ret = WM8904_SetChannelMute((wm8904_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
-                                    playChannel, true);
+        mappedVolume = (volume * (WM8904_DAC_MAX_VOLUME - 0U)) / 100U;
+        ret          = WM8904_SetDACVolume((wm8904_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
+                                  (uint8_t)mappedVolume);
+        if (ret != kStatus_Success)
+        {
+            return ret;
+        }
     }
-    else
-    {
-        /* 1-100 mapped to 0-63 */
-        mappedVolume = ((volume - 1U) * (WM8904_MAP_HEADPHONE_LINEOUT_MAX_VOLUME + 1U)) / 100U;
 
-        ret = WM8904_SetChannelVolume((wm8904_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
-                                      playChannel, mappedVolume);
-        if (ret == kStatus_Success)
+    if ((playChannel & ((uint32_t)kCODEC_PlayChannelLeft0 | (uint32_t)kCODEC_PlayChannelRight0 |
+                        (uint32_t)kCODEC_PlayChannelLeft1 | (uint32_t)kCODEC_PlayChannelRight1)) != 0U)
+    {
+        /* 0 will mute the output */
+        if (volume == 0U)
         {
             ret = WM8904_SetChannelMute((wm8904_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
-                                        playChannel, false);
+                                        playChannel, true);
+        }
+        else
+        {
+            /* 1-100 mapped to 0-63 */
+            mappedVolume = ((volume - 1U) * (WM8904_MAP_HEADPHONE_LINEOUT_MAX_VOLUME + 1U)) / 100U;
+
+            ret = WM8904_SetChannelVolume((wm8904_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
+                                          playChannel, mappedVolume);
+            if (ret == kStatus_Success)
+            {
+                ret = WM8904_SetChannelMute((wm8904_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
+                                            playChannel, false);
+            }
         }
     }
 

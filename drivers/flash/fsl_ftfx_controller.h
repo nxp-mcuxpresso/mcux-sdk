@@ -150,6 +150,14 @@ typedef enum _ftfx_flexram_function_option
     kFTFx_FlexramFuncOptAvailableForEeprom = 0x00U  /*!< An option used to make FlexRAM available for EEPROM */
 } ftfx_flexram_func_opt_t;
 
+/*!
+ * @brief Enumeration for acceleration ram property.
+ */
+enum _flash_acceleration_ram_property
+{
+    kFLASH_AccelerationRamSize = 0x400U
+};
+
 #if defined(FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD) && FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD
 /*!
  * @brief Enumeration for the possible options of Swap control commands

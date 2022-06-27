@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2017-05-19
-**     Build:               b201014
+**     Build:               b210915
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -129,88 +129,96 @@
 /* @brief Has no STATUS. */
 #define FSL_FEATURE_TPM_HAS_NO_STATUS (1)
 /* @brief Number of channels. */
-#define FSL_FEATURE_TPM_CHANNEL_COUNTn(x) ((x) == TPM0 ? (2) : (-1))
+#define FSL_FEATURE_TPM_CHANNEL_COUNTn(x) \
+    (((x) == FTM0) ? (2) : \
+    (((x) == FTM2) ? (-1) : (-1)))
+/* @brief Whether TRIG register has effect. */
+#define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) (0)
+/* @brief Whether POL register has effect. */
+#define FSL_FEATURE_TPM_POL_HAS_EFFECTn(x) (0)
+/* @brief Whether 32 bits counter has effect. */
+#define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) (0)
 
 /* FTMRE module features */
 
 /* @brief Is of type FTMRE. */
-#define FSL_FEATURE_FLASH_IS_FTMRE (1U)
+#define FSL_FEATURE_FLASH_IS_FTMRE (1)
 /* @brief Is of type FTMRH. */
-#define FSL_FEATURE_FLASH_IS_FTMRH (0U)
+#define FSL_FEATURE_FLASH_IS_FTMRH (0)
 /* @brief Has EEPROM region protection (register FEPROT). */
-#define FSL_FEATURE_FLASH_HAS_EEROM_REGION_PROTECTION (0U)
+#define FSL_FEATURE_FLASH_HAS_EEROM_REGION_PROTECTION (0)
 /* @brief Has flash cache control in FMC module. */
-#define FSL_FEATURE_FLASH_HAS_FMC_FLASH_CACHE_CONTROLS (0U)
+#define FSL_FEATURE_FLASH_HAS_FMC_FLASH_CACHE_CONTROLS (0)
 /* @brief Has flash cache control in MCM module. */
-#define FSL_FEATURE_FLASH_HAS_MCM_FLASH_CACHE_CONTROLS (1U)
+#define FSL_FEATURE_FLASH_HAS_MCM_FLASH_CACHE_CONTROLS (1)
 /* @brief P-Flash higher region start address. */
-#define FSL_FEATURE_FLASH_PFLASH_HIGH_START_ADDRESS (0x00007FFFUL)
+#define FSL_FEATURE_FLASH_PFLASH_HIGH_START_ADDRESS (0x00007FFF)
 /* @brief P-Flash start address. */
-#define FSL_FEATURE_FLASH_PFLASH_START_ADDRESS (0x00000000UL)
+#define FSL_FEATURE_FLASH_PFLASH_START_ADDRESS (0x00000000)
 /* @brief P-Flash block count. */
-#define FSL_FEATURE_FLASH_PFLASH_BLOCK_COUNT (1UL)
+#define FSL_FEATURE_FLASH_PFLASH_BLOCK_COUNT (1)
 /* @brief P-Flash block size. */
-#define FSL_FEATURE_FLASH_PFLASH_BLOCK_SIZE (8192UL)
+#define FSL_FEATURE_FLASH_PFLASH_BLOCK_SIZE (8192)
 /* @brief P-Flash sector size. */
-#define FSL_FEATURE_FLASH_PFLASH_BLOCK_SECTOR_SIZE (512UL)
+#define FSL_FEATURE_FLASH_PFLASH_BLOCK_SECTOR_SIZE (512)
 /* @brief P-Flash write unit size. */
-#define FSL_FEATURE_FLASH_PFLASH_BLOCK_WRITE_UNIT_SIZE (8UL)
+#define FSL_FEATURE_FLASH_PFLASH_BLOCK_WRITE_UNIT_SIZE (8)
 /* @brief P-Flash data path width. */
-#define FSL_FEATURE_FLASH_PFLASH_BLOCK_DATA_PATH_WIDTH (16U)
+#define FSL_FEATURE_FLASH_PFLASH_BLOCK_DATA_PATH_WIDTH (16)
 /* @brief Has EEPROM memory. */
-#define FSL_FEATURE_FLASH_HAS_EEPROM (0U)
+#define FSL_FEATURE_FLASH_HAS_EEPROM (0)
 /* @brief EEPROM start address. */
-#define FSL_FEATURE_FLASH_EEPROM_START_ADDRESS (0x10000000UL)
+#define FSL_FEATURE_FLASH_EEPROM_START_ADDRESS (0x10000000)
 /* @brief EEPROM block count. */
-#define FSL_FEATURE_FLASH_EEPROM_BLOCK_COUNT (0UL)
+#define FSL_FEATURE_FLASH_EEPROM_BLOCK_COUNT (0)
 /* @brief EEPROM block size . */
-#define FSL_FEATURE_FLASH_EEPROM_BLOCK_SIZE (0UL)
+#define FSL_FEATURE_FLASH_EEPROM_BLOCK_SIZE (0)
 /* @brief EEPROM sector size. */
-#define FSL_FEATURE_FLASH_EEPROM_BLOCK_SECTOR_SIZE (0U)
+#define FSL_FEATURE_FLASH_EEPROM_BLOCK_SECTOR_SIZE (0)
 /* @brief EEPROM write unit size. */
-#define FSL_FEATURE_FLASH_EEPROM_BLOCK_WRITE_UNIT_SIZE (0U)
+#define FSL_FEATURE_FLASH_EEPROM_BLOCK_WRITE_UNIT_SIZE (0)
 /* @brief EEPROM data path width. */
-#define FSL_FEATURE_FLASH_EEPROM_BLOCK_DATA_PATH_WIDTH (0U)
+#define FSL_FEATURE_FLASH_EEPROM_BLOCK_DATA_PATH_WIDTH (0)
 /* @brief Has 0x01 Erase Verify All Blocks command. */
-#define FSL_FEATURE_FLASH_HAS_ERASE_VERIFY_ALL_BLOCKS_CMD (1U)
+#define FSL_FEATURE_FLASH_HAS_ERASE_VERIFY_ALL_BLOCKS_CMD (1)
 /* @brief Has 0x02 Erase Verify Block command. */
-#define FSL_FEATURE_FLASH_HAS_ERASE_VERIFY_BLOCK_CMD (1U)
+#define FSL_FEATURE_FLASH_HAS_ERASE_VERIFY_BLOCK_CMD (1)
 /* @brief Has 0x03 Erase Verify Flash Section command. */
-#define FSL_FEATURE_FLASH_HAS_ERASE_VERIFY_FLASH_SECTION_CMD (1U)
+#define FSL_FEATURE_FLASH_HAS_ERASE_VERIFY_FLASH_SECTION_CMD (1)
 /* @brief Has 0x04 Read Once command. */
-#define FSL_FEATURE_FLASH_HAS_READ_ONCE_CMD (1U)
+#define FSL_FEATURE_FLASH_HAS_READ_ONCE_CMD (1)
 /* @brief Has 0x06 Program Flash command. */
-#define FSL_FEATURE_FLASH_HAS_PROGRAM_FLASH_CMD (1U)
+#define FSL_FEATURE_FLASH_HAS_PROGRAM_FLASH_CMD (1)
 /* @brief Has 0x07 Program Once command. */
-#define FSL_FEATURE_FLASH_HAS_PROGRAM_ONCE_CMD (1U)
+#define FSL_FEATURE_FLASH_HAS_PROGRAM_ONCE_CMD (1)
 /* @brief Has 0x08 Erase All Blocks command. */
-#define FSL_FEATURE_FLASH_HAS_ERASE_ALL_BLOCKS_CMD (1U)
+#define FSL_FEATURE_FLASH_HAS_ERASE_ALL_BLOCKS_CMD (1)
 /* @brief Has 0x09 Erase Flash Block command. */
-#define FSL_FEATURE_FLASH_HAS_ERASE_FLASH_BLOCK_CMD (1U)
+#define FSL_FEATURE_FLASH_HAS_ERASE_FLASH_BLOCK_CMD (1)
 /* @brief Has 0x0A Erase Flash Sector command. */
-#define FSL_FEATURE_FLASH_HAS_ERASE_FLASH_SECTOR_CMD (1U)
+#define FSL_FEATURE_FLASH_HAS_ERASE_FLASH_SECTOR_CMD (1)
 /* @brief Has 0x0B Unsecure Flash command. */
-#define FSL_FEATURE_FLASH_HAS_UNSECURE_FLASH_CMD (1U)
+#define FSL_FEATURE_FLASH_HAS_UNSECURE_FLASH_CMD (1)
 /* @brief Has 0x0C Verify Backdoor Access Key command. */
-#define FSL_FEATURE_FLASH_HAS_VERIFY_BACKDOOR_ACCESS_KEY_CMD (1U)
+#define FSL_FEATURE_FLASH_HAS_VERIFY_BACKDOOR_ACCESS_KEY_CMD (1)
 /* @brief Has 0x0D Set User Margin Level command. */
-#define FSL_FEATURE_FLASH_HAS_SET_USER_MARGIN_LEVEL_CMD (1U)
+#define FSL_FEATURE_FLASH_HAS_SET_USER_MARGIN_LEVEL_CMD (1)
 /* @brief Has 0x0E Set Factory Margin Level command. */
-#define FSL_FEATURE_FLASH_HAS_SET_FACTORY_MARGIN_LEVEL_CMD (1U)
+#define FSL_FEATURE_FLASH_HAS_SET_FACTORY_MARGIN_LEVEL_CMD (1)
 /* @brief Has 0x0F Configure NVM command. */
-#define FSL_FEATURE_FLASH_HAS_CONFIGURE_NVM_CMD (0U)
+#define FSL_FEATURE_FLASH_HAS_CONFIGURE_NVM_CMD (0)
 /* @brief Has 0x10 Erase Verify EEPROM Section command. */
-#define FSL_FEATURE_FLASH_HAS_ERASE_VERIFY_EEPROM_SECTION_CMD (0U)
+#define FSL_FEATURE_FLASH_HAS_ERASE_VERIFY_EEPROM_SECTION_CMD (0)
 /* @brief Has 0x11 Program EEPROM command. */
-#define FSL_FEATURE_FLASH_HAS_PROGRAM_EEPROM_CMD (0U)
+#define FSL_FEATURE_FLASH_HAS_PROGRAM_EEPROM_CMD (0)
 /* @brief Has 0x12 Erase EEPROM Sector command. */
-#define FSL_FEATURE_FLASH_HAS_ERASE_EEPROM_SECTOR_CMD (0U)
+#define FSL_FEATURE_FLASH_HAS_ERASE_EEPROM_SECTOR_CMD (0)
 /* @brief P-Flash Erase sector command address alignment. */
-#define FSL_FEATURE_FLASH_PFLASH_SECTOR_CMD_ADDRESS_ALIGMENT (4UL)
+#define FSL_FEATURE_FLASH_PFLASH_SECTOR_CMD_ADDRESS_ALIGMENT (4)
 /* @brief P-Flash Rrogram/Verify section command address alignment. */
-#define FSL_FEATURE_FLASH_PFLASH_SECTION_CMD_ADDRESS_ALIGMENT (4UL)
+#define FSL_FEATURE_FLASH_PFLASH_SECTION_CMD_ADDRESS_ALIGMENT (4)
 /* @brief P-Flash Program flash command address alignment. */
-#define FSL_FEATURE_FLASH_PFLASH_PROGRAM_CMD_ADDRESS_ALIGMENT (4UL)
+#define FSL_FEATURE_FLASH_PFLASH_PROGRAM_CMD_ADDRESS_ALIGMENT (4)
 
 /* GPIO module features */
 

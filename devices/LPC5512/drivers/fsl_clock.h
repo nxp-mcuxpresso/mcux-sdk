@@ -1496,6 +1496,11 @@ bool CLOCK_EnableUsbfs0DeviceClock(clock_usbfs_src_t src, uint32_t freq);
  */
 bool CLOCK_EnableUsbfs0HostClock(clock_usbfs_src_t src, uint32_t freq);
 
+/*! @brief Enable the OSTIMER 32k clock.
+ *  @return  Nothing
+ */
+void CLOCK_EnableOstimer32kClock(void);
+
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */

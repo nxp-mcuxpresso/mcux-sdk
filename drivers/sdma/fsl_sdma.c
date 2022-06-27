@@ -388,7 +388,7 @@ void SDMA_Init(SDMAARM_Type *base, const sdma_config_t *config)
 
     /* Configure SDMA peripheral according to the configuration structure. */
     tmpreg = base->CONFIG;
-    tmpreg &= ~(SDMAARM_CONFIG_ACR_MASK | SDMAARM_CONFIG_RTDOBS_MASK);
+    tmpreg &= ~(SDMAARM_CONFIG_ACR_MASK | SDMAARM_CONFIG_RTDOBS_MASK | SDMAARM_CONFIG_CSM_MASK);
     /* Channel 0 shall use static context switch method */
     tmpreg |= (SDMAARM_CONFIG_ACR(config->ratio) | SDMAARM_CONFIG_RTDOBS(config->enableRealTimeDebugPin) |
                SDMAARM_CONFIG_CSM(0U));
@@ -468,8 +468,9 @@ void SDMA_ConfigBufferDescriptor(sdma_buffer_descriptor_t *bd,
                                  bool isWrap,
                                  sdma_transfer_type_t type)
 {
-    uint8_t status = 0U;
+    assert(bufferSize <= 0xFFFFU);
 
+    uint8_t status = 0U;
     /* Set the descriptor to 0 */
     (void)memset(bd, 0, sizeof(sdma_buffer_descriptor_t));
     if (type == kSDMA_PeripheralToMemory)
@@ -686,6 +687,7 @@ void SDMA_PrepareTransfer(sdma_transfer_config_t *config,
     assert((srcWidth == 1U) || (srcWidth == 2U) || (srcWidth == 3U) || (srcWidth == 4U));
     assert((destWidth == 1U) || (destWidth == 2U) || (destWidth == 3U) || (destWidth == 4U));
     assert((bytesEachRequest != 0u) && (bytesEachRequest <= (uint32_t)kSDMA_MultiFifoWatermarkLevelMask));
+    assert(transferSize <= 0xFFFFU);
 
 #if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET)
     config->srcAddr  = MEMORY_ConvertMemoryMapAddress(srcAddr, kMEMORY_Local2DMA);
@@ -774,6 +776,7 @@ void SDMA_PrepareP2PTransfer(sdma_transfer_config_t *config,
     assert((srcWidth == 1U) || (srcWidth == 2U) || (srcWidth == 4U));
     assert((destWidth == 1U) || (destWidth == 2U) || (destWidth == 4U));
     assert((bytesEachRequest != 0U) && (bytesEachRequest <= (uint32_t)kSDMA_MultiFifoWatermarkLevelMask));
+    assert(transferSize <= 0xFFFFU);
 
 #if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET)
     config->srcAddr  = MEMORY_ConvertMemoryMapAddress(srcAddr, kMEMORY_Local2DMA);
@@ -863,6 +866,7 @@ void SDMA_SubmitTransfer(sdma_handle_t *handle, const sdma_transfer_config_t *co
 {
     assert(handle != NULL);
     assert(config != NULL);
+    assert(config->transferSzie <= 0xFFFFU);
 
     uint32_t val      = 0U;
     uint32_t instance = SDMA_GetInstance(handle->base);

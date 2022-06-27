@@ -45,6 +45,8 @@
 
 #if defined(SDK_DEBUGCONSOLE) && !(SDK_DEBUGCONSOLE)
 #include <stdio.h>
+#else
+#include <stdarg.h>
 #endif
 
 /*! @brief Definition to printf the float number. */
@@ -183,6 +185,17 @@ static inline status_t DbgConsole_Deinit(void)
 int DbgConsole_Printf(const char *fmt_s, ...);
 
 /*!
+ * @brief Writes formatted output to the standard output stream.
+ *
+ * Call this function to write a formatted output to the standard output stream.
+ *
+ * @param   fmt_s Format control string.
+ * @param   formatStringArg Format arguments.
+ * @return  Returns the number of characters printed or a negative value if an error occurs.
+ */
+int DbgConsole_Vprintf(const char *fmt_s, va_list formatStringArg);
+
+/*!
  * @brief Writes a character to stdout.
  *
  * Call this function to write a character to stdout.
@@ -197,10 +210,10 @@ int DbgConsole_Putchar(int ch);
  *
  * Call this function to read formatted data from the standard input stream.
  *
- * @param   fmt_ptr Format control string.
+ * @param   fmt_s Format control string.
  * @return  Returns the number of fields successfully converted and assigned.
  */
-int DbgConsole_Scanf(char *fmt_ptr, ...);
+int DbgConsole_Scanf(char *fmt_s, ...);
 
 /*!
  * @brief Reads a character from standard input.

@@ -39,8 +39,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.5.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+/*! @brief CLOCK driver version 2.5.1. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -925,6 +925,275 @@ typedef enum _clock_div
     kCLOCK_NonePreDiv = CLOCK_ROOT_NONE_PRE_DIV, /*!< None Pre div. */
 } clock_div_t;
 
+/*!
+ * @brief Clock divider value.
+ */
+typedef enum
+{
+    kCLOCK_ArmDivBy1 = 0, /*!< ARM clock divider set to divided by 1. */
+    kCLOCK_ArmDivBy2 = 1, /*!< ARM clock divider set to divided by 2. */
+    kCLOCK_ArmDivBy3 = 2, /*!< ARM clock divider set to divided by 3. */
+    kCLOCK_ArmDivBy4 = 3, /*!< ARM clock divider set to divided by 4. */
+    kCLOCK_ArmDivBy5 = 4, /*!< ARM clock divider set to divided by 5. */
+    kCLOCK_ArmDivBy6 = 5, /*!< ARM clock divider set to divided by 6. */
+    kCLOCK_ArmDivBy7 = 6, /*!< ARM clock divider set to divided by 7. */
+    kCLOCK_ArmDivBy8 = 7, /*!< ARM clock divider set to divided by 8. */
+
+    kCLOCK_PeriphClk2DivBy1 = 0, /*!< PeriphClk2 divider set to divided by 1. */
+    kCLOCK_PeriphClk2DivBy2 = 1, /*!< PeriphClk2 divider set to divided by 2. */
+    kCLOCK_PeriphClk2DivBy3 = 2, /*!< PeriphClk2 divider set to divided by 3. */
+    kCLOCK_PeriphClk2DivBy4 = 3, /*!< PeriphClk2 divider set to divided by 4. */
+    kCLOCK_PeriphClk2DivBy5 = 4, /*!< PeriphClk2 divider set to divided by 5. */
+    kCLOCK_PeriphClk2DivBy6 = 5, /*!< PeriphClk2 divider set to divided by 6. */
+    kCLOCK_PeriphClk2DivBy7 = 6, /*!< PeriphClk2 divider set to divided by 7. */
+    kCLOCK_PeriphClk2DivBy8 = 7, /*!< PeriphClk2 divider set to divided by 8. */
+
+    kCLOCK_SemcDivBy1 = 0, /*!< SEMC clock divider set to divided by 1. */
+    kCLOCK_SemcDivBy2 = 1, /*!< SEMC clock divider set to divided by 2. */
+    kCLOCK_SemcDivBy3 = 2, /*!< SEMC clock divider set to divided by 3. */
+    kCLOCK_SemcDivBy4 = 3, /*!< SEMC clock divider set to divided by 4. */
+    kCLOCK_SemcDivBy5 = 4, /*!< SEMC clock divider set to divided by 5. */
+    kCLOCK_SemcDivBy6 = 5, /*!< SEMC clock divider set to divided by 6. */
+    kCLOCK_SemcDivBy7 = 6, /*!< SEMC clock divider set to divided by 7. */
+    kCLOCK_SemcDivBy8 = 7, /*!< SEMC clock divider set to divided by 8. */
+
+    kCLOCK_AhbDivBy1 = 0, /*!< AHB clock divider set to divided by 1. */
+    kCLOCK_AhbDivBy2 = 1, /*!< AHB clock divider set to divided by 2. */
+    kCLOCK_AhbDivBy3 = 2, /*!< AHB clock divider set to divided by 3. */
+    kCLOCK_AhbDivBy4 = 3, /*!< AHB clock divider set to divided by 4. */
+    kCLOCK_AhbDivBy5 = 4, /*!< AHB clock divider set to divided by 5. */
+    kCLOCK_AhbDivBy6 = 5, /*!< AHB clock divider set to divided by 6. */
+    kCLOCK_AhbDivBy7 = 6, /*!< AHB clock divider set to divided by 7. */
+    kCLOCK_AhbDivBy8 = 7, /*!< AHB clock divider set to divided by 8. */
+
+    kCLOCK_IpgDivBy1 = 0, /*!< IPG clock divider set to divided by 1. */
+    kCLOCK_IpgDivBy2 = 1, /*!< IPG clock divider set to divided by 2. */
+    kCLOCK_IpgDivBy3 = 2, /*!< IPG clock divider set to divided by 3. */
+    kCLOCK_IpgDivBy4 = 3, /*!< IPG clock divider set to divided by 4. */
+
+    kCLOCK_Flexspi2DivBy1 = 0, /*!< Flexspi2 divider set to divided by 1. */
+    kCLOCK_Flexspi2DivBy2 = 1, /*!< Flexspi2 divider set to divided by 2. */
+    kCLOCK_Flexspi2DivBy3 = 2, /*!< Flexspi2 divider set to divided by 3. */
+    kCLOCK_Flexspi2DivBy4 = 3, /*!< Flexspi2 divider set to divided by 4. */
+    kCLOCK_Flexspi2DivBy5 = 4, /*!< Flexspi2 divider set to divided by 5. */
+    kCLOCK_Flexspi2DivBy6 = 5, /*!< Flexspi2 divider set to divided by 6. */
+    kCLOCK_Flexspi2DivBy7 = 6, /*!< Flexspi2 divider set to divided by 7. */
+    kCLOCK_Flexspi2DivBy8 = 7, /*!< Flexspi2 divider set to divided by 8. */
+
+    kCLOCK_LpspiDivBy1 = 0, /*!< Lpspi divider set to divided by 1. */
+    kCLOCK_LpspiDivBy2 = 1, /*!< Lpspi divider set to divided by 2. */
+    kCLOCK_LpspiDivBy3 = 2, /*!< Lpspi divider set to divided by 3. */
+    kCLOCK_LpspiDivBy4 = 3, /*!< Lpspi divider set to divided by 4. */
+    kCLOCK_LpspiDivBy5 = 4, /*!< Lpspi divider set to divided by 5. */
+    kCLOCK_LpspiDivBy6 = 5, /*!< Lpspi divider set to divided by 6. */
+    kCLOCK_LpspiDivBy7 = 6, /*!< Lpspi divider set to divided by 7. */
+    kCLOCK_LpspiDivBy8 = 7, /*!< Lpspi divider set to divided by 8. */
+
+    kCLOCK_LcdifDivBy1 = 0, /*!< Lcdif divider set to divided by 1. */
+    kCLOCK_LcdifDivBy2 = 1, /*!< Lcdif divider set to divided by 2. */
+    kCLOCK_LcdifDivBy3 = 2, /*!< Lcdif divider set to divided by 3. */
+    kCLOCK_LcdifDivBy4 = 3, /*!< Lcdif divider set to divided by 4. */
+    kCLOCK_LcdifDivBy5 = 4, /*!< Lcdif divider set to divided by 5. */
+    kCLOCK_LcdifDivBy6 = 5, /*!< Lcdif divider set to divided by 6. */
+    kCLOCK_LcdifDivBy7 = 6, /*!< Lcdif divider set to divided by 7. */
+    kCLOCK_LcdifDivBy8 = 7, /*!< Lcdif divider set to divided by 8. */
+
+    kCLOCK_FlexspiDivBy1 = 0, /*!< Flexspi divider set to divided by 1. */
+    kCLOCK_FlexspiDivBy2 = 1, /*!< Flexspi divider set to divided by 2. */
+    kCLOCK_FlexspiDivBy3 = 2, /*!< Flexspi divider set to divided by 3. */
+    kCLOCK_FlexspiDivBy4 = 3, /*!< Flexspi divider set to divided by 4. */
+    kCLOCK_FlexspiDivBy5 = 4, /*!< Flexspi divider set to divided by 5. */
+    kCLOCK_FlexspiDivBy6 = 5, /*!< Flexspi divider set to divided by 6. */
+    kCLOCK_FlexspiDivBy7 = 6, /*!< Flexspi divider set to divided by 7. */
+    kCLOCK_FlexspiDivBy8 = 7, /*!< Flexspi divider set to divided by 8. */
+
+    kCLOCK_TraceDivBy1 = 0, /*!< Trace divider set to divided by 1. */
+    kCLOCK_TraceDivBy2 = 1, /*!< Trace divider set to divided by 2. */
+    kCLOCK_TraceDivBy3 = 2, /*!< Trace divider set to divided by 3. */
+    kCLOCK_TraceDivBy4 = 3, /*!< Trace divider set to divided by 4. */
+
+    kCLOCK_Usdhc2DivBy1 = 0, /*!< Usdhc2 divider set to divided by 1. */
+    kCLOCK_Usdhc2DivBy2 = 1, /*!< Usdhc2 divider set to divided by 2. */
+    kCLOCK_Usdhc2DivBy3 = 2, /*!< Usdhc2 divider set to divided by 3. */
+    kCLOCK_Usdhc2DivBy4 = 3, /*!< Usdhc2 divider set to divided by 4. */
+    kCLOCK_Usdhc2DivBy5 = 4, /*!< Usdhc2 divider set to divided by 5. */
+    kCLOCK_Usdhc2DivBy6 = 5, /*!< Usdhc2 divider set to divided by 6. */
+    kCLOCK_Usdhc2DivBy7 = 6, /*!< Usdhc2 divider set to divided by 7. */
+    kCLOCK_Usdhc2DivBy8 = 7, /*!< Usdhc2 divider set to divided by 8. */
+
+    kCLOCK_Usdhc1DivBy1 = 0, /*!< Usdhc1 divider set to divided by 1. */
+    kCLOCK_Usdhc1DivBy2 = 1, /*!< Usdhc1 divider set to divided by 2. */
+    kCLOCK_Usdhc1DivBy3 = 2, /*!< Usdhc1 divider set to divided by 3. */
+    kCLOCK_Usdhc1DivBy4 = 3, /*!< Usdhc1 divider set to divided by 4. */
+    kCLOCK_Usdhc1DivBy5 = 4, /*!< Usdhc1 divider set to divided by 5. */
+    kCLOCK_Usdhc1DivBy6 = 5, /*!< Usdhc1 divider set to divided by 6. */
+    kCLOCK_Usdhc1DivBy7 = 6, /*!< Usdhc1 divider set to divided by 7. */
+    kCLOCK_Usdhc1DivBy8 = 7, /*!< Usdhc1 divider set to divided by 8. */
+
+    kCLOCK_Flexio2DivBy1 = 0, /*!< Flexio2 divider set to divided by 1. */
+    kCLOCK_Flexio2DivBy2 = 1, /*!< Flexio2 divider set to divided by 2. */
+    kCLOCK_Flexio2DivBy3 = 2, /*!< Flexio2 divider set to divided by 3. */
+    kCLOCK_Flexio2DivBy4 = 3, /*!< Flexio2 divider set to divided by 4. */
+    kCLOCK_Flexio2DivBy5 = 4, /*!< Flexio2 divider set to divided by 5. */
+    kCLOCK_Flexio2DivBy6 = 5, /*!< Flexio2 divider set to divided by 6. */
+    kCLOCK_Flexio2DivBy7 = 6, /*!< Flexio2 divider set to divided by 7. */
+    kCLOCK_Flexio2DivBy8 = 7, /*!< Flexio2 divider set to divided by 8. */
+
+    kCLOCK_Sai3PreDivBy1 = 0, /*!< Sai3Pre divider set to divided by 1. */
+    kCLOCK_Sai3PreDivBy2 = 1, /*!< Sai3Pre divider set to divided by 2. */
+    kCLOCK_Sai3PreDivBy3 = 2, /*!< Sai3Pre divider set to divided by 3. */
+    kCLOCK_Sai3PreDivBy4 = 3, /*!< Sai3Pre divider set to divided by 4. */
+    kCLOCK_Sai3PreDivBy5 = 4, /*!< Sai3Pre divider set to divided by 5. */
+    kCLOCK_Sai3PreDivBy6 = 5, /*!< Sai3Pre divider set to divided by 6. */
+    kCLOCK_Sai3PreDivBy7 = 6, /*!< Sai3Pre divider set to divided by 7. */
+    kCLOCK_Sai3PreDivBy8 = 7, /*!< Sai3Pre divider set to divided by 8. */
+
+    kCLOCK_Flexio2PreDivBy1 = 0, /*!< Flexio2Pre divider set to divided by 1. */
+    kCLOCK_Flexio2PreDivBy2 = 1, /*!< Flexio2Pre divider set to divided by 2. */
+    kCLOCK_Flexio2PreDivBy3 = 2, /*!< Flexio2Pre divider set to divided by 3. */
+    kCLOCK_Flexio2PreDivBy4 = 3, /*!< Flexio2Pre divider set to divided by 4. */
+    kCLOCK_Flexio2PreDivBy5 = 4, /*!< Flexio2Pre divider set to divided by 5. */
+    kCLOCK_Flexio2PreDivBy6 = 5, /*!< Flexio2Pre divider set to divided by 6. */
+    kCLOCK_Flexio2PreDivBy7 = 6, /*!< Flexio2Pre divider set to divided by 7. */
+    kCLOCK_Flexio2PreDivBy8 = 7, /*!< Flexio2Pre divider set to divided by 8. */
+
+    kCLOCK_Sai1PreDivBy1 = 0, /*!< Sai1Pre divider set to divided by 1. */
+    kCLOCK_Sai1PreDivBy2 = 1, /*!< Sai1Pre divider set to divided by 2. */
+    kCLOCK_Sai1PreDivBy3 = 2, /*!< Sai1Pre divider set to divided by 3. */
+    kCLOCK_Sai1PreDivBy4 = 3, /*!< Sai1Pre divider set to divided by 4. */
+    kCLOCK_Sai1PreDivBy5 = 4, /*!< Sai1Pre divider set to divided by 5. */
+    kCLOCK_Sai1PreDivBy6 = 5, /*!< Sai1Pre divider set to divided by 6. */
+    kCLOCK_Sai1PreDivBy7 = 6, /*!< Sai1Pre divider set to divided by 7. */
+    kCLOCK_Sai1PreDivBy8 = 7, /*!< Sai1Pre divider set to divided by 8. */
+
+    kCLOCK_Sai2PreDivBy1 = 0, /*!< Sai2Pre divider set to divided by 1. */
+    kCLOCK_Sai2PreDivBy2 = 1, /*!< Sai2Pre divider set to divided by 2. */
+    kCLOCK_Sai2PreDivBy3 = 2, /*!< Sai2Pre divider set to divided by 3. */
+    kCLOCK_Sai2PreDivBy4 = 3, /*!< Sai2Pre divider set to divided by 4. */
+    kCLOCK_Sai2PreDivBy5 = 4, /*!< Sai2Pre divider set to divided by 5. */
+    kCLOCK_Sai2PreDivBy6 = 5, /*!< Sai2Pre divider set to divided by 6. */
+    kCLOCK_Sai2PreDivBy7 = 6, /*!< Sai2Pre divider set to divided by 7. */
+    kCLOCK_Sai2PreDivBy8 = 7, /*!< Sai2Pre divider set to divided by 8. */
+
+    kCLOCK_Spdif0PreDivBy1 = 0, /*!< Spdif0Pre divider set to divided by 1. */
+    kCLOCK_Spdif0PreDivBy2 = 1, /*!< Spdif0Pre divider set to divided by 2. */
+    kCLOCK_Spdif0PreDivBy3 = 2, /*!< Spdif0Pre divider set to divided by 3. */
+    kCLOCK_Spdif0PreDivBy4 = 3, /*!< Spdif0Pre divider set to divided by 4. */
+    kCLOCK_Spdif0PreDivBy5 = 4, /*!< Spdif0Pre divider set to divided by 5. */
+    kCLOCK_Spdif0PreDivBy6 = 5, /*!< Spdif0Pre divider set to divided by 6. */
+    kCLOCK_Spdif0PreDivBy7 = 6, /*!< Spdif0Pre divider set to divided by 7. */
+    kCLOCK_Spdif0PreDivBy8 = 7, /*!< Spdif0Pre divider set to divided by 8. */
+
+    kCLOCK_Spdif0DivBy1 = 0, /*!< Spdif0 divider set to divided by 1. */
+    kCLOCK_Spdif0DivBy2 = 1, /*!< Spdif0 divider set to divided by 2. */
+    kCLOCK_Spdif0DivBy3 = 2, /*!< Spdif0 divider set to divided by 3. */
+    kCLOCK_Spdif0DivBy4 = 3, /*!< Spdif0 divider set to divided by 4. */
+    kCLOCK_Spdif0DivBy5 = 4, /*!< Spdif0 divider set to divided by 5. */
+    kCLOCK_Spdif0DivBy6 = 5, /*!< Spdif0 divider set to divided by 6. */
+    kCLOCK_Spdif0DivBy7 = 6, /*!< Spdif0 divider set to divided by 7. */
+    kCLOCK_Spdif0DivBy8 = 7, /*!< Spdif0 divider set to divided by 8. */
+
+    kCLOCK_Flexio1PreDivBy1 = 0, /*!< Flexio1Pre divider set to divided by 1. */
+    kCLOCK_Flexio1PreDivBy2 = 1, /*!< Flexio1Pre divider set to divided by 2. */
+    kCLOCK_Flexio1PreDivBy3 = 2, /*!< Flexio1Pre divider set to divided by 3. */
+    kCLOCK_Flexio1PreDivBy8 = 7, /*!< Flexio1Pre divider set to divided by 8. */
+
+    kCLOCK_Flexio1DivBy1 = 0, /*!< Flexio1 divider set to divided by 1. */
+    kCLOCK_Flexio1DivBy2 = 1, /*!< Flexio1 divider set to divided by 2. */
+    kCLOCK_Flexio1DivBy3 = 2, /*!< Flexio1 divider set to divided by 3. */
+    kCLOCK_Flexio1DivBy4 = 3, /*!< Flexio1 divider set to divided by 4. */
+    kCLOCK_Flexio1DivBy5 = 4, /*!< Flexio1 divider set to divided by 5. */
+    kCLOCK_Flexio1DivBy6 = 5, /*!< Flexio1 divider set to divided by 6. */
+    kCLOCK_Flexio1DivBy7 = 6, /*!< Flexio1 divider set to divided by 7. */
+    kCLOCK_Flexio1DivBy8 = 7, /*!< Flexio1 divider set to divided by 8. */
+
+    kCLOCK_LcdifPreDivBy1 = 0, /*!< LcdifPre divider set to divided by 1. */
+    kCLOCK_LcdifPreDivBy2 = 1, /*!< LcdifPre divider set to divided by 2. */
+    kCLOCK_LcdifPreDivBy3 = 2, /*!< LcdifPre divider set to divided by 3. */
+    kCLOCK_LcdifPreDivBy4 = 3, /*!< LcdifPre divider set to divided by 4. */
+    kCLOCK_LcdifPreDivBy5 = 4, /*!< LcdifPre divider set to divided by 5. */
+    kCLOCK_LcdifPreDivBy6 = 5, /*!< LcdifPre divider set to divided by 6. */
+    kCLOCK_LcdifPreDivBy7 = 6, /*!< LcdifPre divider set to divided by 7. */
+    kCLOCK_LcdifPreDivBy8 = 7, /*!< LcdifPre divider set to divided by 8. */
+
+    kCLOCK_CsiDivBy1 = 0, /*!< Csi divider set to divided by 1. */
+    kCLOCK_CsiDivBy2 = 1, /*!< Csi divider set to divided by 2. */
+    kCLOCK_CsiDivBy3 = 2, /*!< Csi divider set to divided by 3. */
+    kCLOCK_CsiDivBy4 = 3, /*!< Csi divider set to divided by 4. */
+    kCLOCK_CsiDivBy5 = 4, /*!< Csi divider set to divided by 5. */
+    kCLOCK_CsiDivBy6 = 5, /*!< Csi divider set to divided by 6. */
+    kCLOCK_CsiDivBy7 = 6, /*!< Csi divider set to divided by 7. */
+    kCLOCK_CsiDivBy8 = 7, /*!< Csi divider set to divided by 8. */
+
+    /* Only kCLOCK_PerClk, kCLOCK_Lpi2cDiv, kCLOCK_CanDiv, kCLOCK_UartDiv, kCLOCK_Sai1Div,
+     * kCLOCK_Sai2Div, kCLOCK_Sai3Div can use these.
+     */
+    kCLOCK_MiscDivBy1  = 0 , /*!< Misc divider like LPI2C set to divided by 1 . */
+    kCLOCK_MiscDivBy2  = 1 , /*!< Misc divider like LPI2C set to divided by 2 . */
+    kCLOCK_MiscDivBy3  = 2 , /*!< Misc divider like LPI2C set to divided by 3 . */
+    kCLOCK_MiscDivBy4  = 3 , /*!< Misc divider like LPI2C set to divided by 4 . */
+    kCLOCK_MiscDivBy5  = 4 , /*!< Misc divider like LPI2C set to divided by 5 . */
+    kCLOCK_MiscDivBy6  = 5 , /*!< Misc divider like LPI2C set to divided by 6 . */
+    kCLOCK_MiscDivBy7  = 6 , /*!< Misc divider like LPI2C set to divided by 7 . */
+    kCLOCK_MiscDivBy8  = 7 , /*!< Misc divider like LPI2C set to divided by 8 . */
+    kCLOCK_MiscDivBy9  = 8 , /*!< Misc divider like LPI2C set to divided by 9 . */
+    kCLOCK_MiscDivBy10 = 9 , /*!< Misc divider like LPI2C set to divided by 10. */
+    kCLOCK_MiscDivBy11 = 10, /*!< Misc divider like LPI2C set to divided by 11. */
+    kCLOCK_MiscDivBy12 = 11, /*!< Misc divider like LPI2C set to divided by 12. */
+    kCLOCK_MiscDivBy13 = 12, /*!< Misc divider like LPI2C set to divided by 13. */
+    kCLOCK_MiscDivBy14 = 13, /*!< Misc divider like LPI2C set to divided by 14. */
+    kCLOCK_MiscDivBy15 = 14, /*!< Misc divider like LPI2C set to divided by 15. */
+    kCLOCK_MiscDivBy16 = 15, /*!< Misc divider like LPI2C set to divided by 16. */
+    kCLOCK_MiscDivBy17 = 16, /*!< Misc divider like LPI2C set to divided by 17. */
+    kCLOCK_MiscDivBy18 = 17, /*!< Misc divider like LPI2C set to divided by 18. */
+    kCLOCK_MiscDivBy19 = 18, /*!< Misc divider like LPI2C set to divided by 19. */
+    kCLOCK_MiscDivBy20 = 19, /*!< Misc divider like LPI2C set to divided by 20. */
+    kCLOCK_MiscDivBy21 = 20, /*!< Misc divider like LPI2C set to divided by 21. */
+    kCLOCK_MiscDivBy22 = 21, /*!< Misc divider like LPI2C set to divided by 22. */
+    kCLOCK_MiscDivBy23 = 22, /*!< Misc divider like LPI2C set to divided by 23. */
+    kCLOCK_MiscDivBy24 = 23, /*!< Misc divider like LPI2C set to divided by 24. */
+    kCLOCK_MiscDivBy25 = 24, /*!< Misc divider like LPI2C set to divided by 25. */
+    kCLOCK_MiscDivBy26 = 25, /*!< Misc divider like LPI2C set to divided by 26. */
+    kCLOCK_MiscDivBy27 = 26, /*!< Misc divider like LPI2C set to divided by 27. */
+    kCLOCK_MiscDivBy28 = 27, /*!< Misc divider like LPI2C set to divided by 28. */
+    kCLOCK_MiscDivBy29 = 28, /*!< Misc divider like LPI2C set to divided by 29. */
+    kCLOCK_MiscDivBy30 = 29, /*!< Misc divider like LPI2C set to divided by 30. */
+    kCLOCK_MiscDivBy31 = 30, /*!< Misc divider like LPI2C set to divided by 31. */
+    kCLOCK_MiscDivBy32 = 31, /*!< Misc divider like LPI2C set to divided by 32. */
+    kCLOCK_MiscDivBy33 = 32, /*!< Misc divider like LPI2C set to divided by 33. */
+    kCLOCK_MiscDivBy34 = 33, /*!< Misc divider like LPI2C set to divided by 34. */
+    kCLOCK_MiscDivBy35 = 34, /*!< Misc divider like LPI2C set to divided by 35. */
+    kCLOCK_MiscDivBy36 = 35, /*!< Misc divider like LPI2C set to divided by 36. */
+    kCLOCK_MiscDivBy37 = 36, /*!< Misc divider like LPI2C set to divided by 37. */
+    kCLOCK_MiscDivBy38 = 37, /*!< Misc divider like LPI2C set to divided by 38. */
+    kCLOCK_MiscDivBy39 = 38, /*!< Misc divider like LPI2C set to divided by 39. */
+    kCLOCK_MiscDivBy40 = 39, /*!< Misc divider like LPI2C set to divided by 40. */
+    kCLOCK_MiscDivBy41 = 40, /*!< Misc divider like LPI2C set to divided by 41. */
+    kCLOCK_MiscDivBy42 = 41, /*!< Misc divider like LPI2C set to divided by 42. */
+    kCLOCK_MiscDivBy43 = 42, /*!< Misc divider like LPI2C set to divided by 43. */
+    kCLOCK_MiscDivBy44 = 43, /*!< Misc divider like LPI2C set to divided by 44. */
+    kCLOCK_MiscDivBy45 = 44, /*!< Misc divider like LPI2C set to divided by 45. */
+    kCLOCK_MiscDivBy46 = 45, /*!< Misc divider like LPI2C set to divided by 46. */
+    kCLOCK_MiscDivBy47 = 46, /*!< Misc divider like LPI2C set to divided by 47. */
+    kCLOCK_MiscDivBy48 = 47, /*!< Misc divider like LPI2C set to divided by 48. */
+    kCLOCK_MiscDivBy49 = 48, /*!< Misc divider like LPI2C set to divided by 49. */
+    kCLOCK_MiscDivBy50 = 49, /*!< Misc divider like LPI2C set to divided by 50. */
+    kCLOCK_MiscDivBy51 = 50, /*!< Misc divider like LPI2C set to divided by 51. */
+    kCLOCK_MiscDivBy52 = 51, /*!< Misc divider like LPI2C set to divided by 52. */
+    kCLOCK_MiscDivBy53 = 52, /*!< Misc divider like LPI2C set to divided by 53. */
+    kCLOCK_MiscDivBy54 = 53, /*!< Misc divider like LPI2C set to divided by 54. */
+    kCLOCK_MiscDivBy55 = 54, /*!< Misc divider like LPI2C set to divided by 55. */
+    kCLOCK_MiscDivBy56 = 55, /*!< Misc divider like LPI2C set to divided by 56. */
+    kCLOCK_MiscDivBy57 = 56, /*!< Misc divider like LPI2C set to divided by 57. */
+    kCLOCK_MiscDivBy58 = 57, /*!< Misc divider like LPI2C set to divided by 58. */
+    kCLOCK_MiscDivBy59 = 58, /*!< Misc divider like LPI2C set to divided by 59. */
+    kCLOCK_MiscDivBy60 = 59, /*!< Misc divider like LPI2C set to divided by 60. */
+    kCLOCK_MiscDivBy61 = 60, /*!< Misc divider like LPI2C set to divided by 61. */
+    kCLOCK_MiscDivBy62 = 61, /*!< Misc divider like LPI2C set to divided by 62. */
+    kCLOCK_MiscDivBy63 = 62, /*!< Misc divider like LPI2C set to divided by 63. */
+    kCLOCK_MiscDivBy64 = 63, /*!< Misc divider like LPI2C set to divided by 64. */
+} clock_div_value_t;
+
 /*! @brief USB clock source definition. */
 typedef enum _clock_usb_src
 {
@@ -1167,11 +1436,25 @@ static inline uint32_t CLOCK_GetMux(clock_mux_t mux)
 }
 
 /*!
- * @brief Set CCM DIV node to certain value.
+ * @brief Set clock divider value.
  *
- * @param divider Which div node to set, see \ref clock_div_t.
- * @param value   Clock div value to set, different divider has different value range.
- *                Divided clock frequency = Undivided clock frequency / (value + 1).
+ * Example, set the ARM clock divider to divide by 2:
+ * @code
+   CLOCK_SetDiv(kCLOCK_ArmDiv, kCLOCK_ArmDivBy2);
+   @endcode
+ *
+ * Example, set the LPI2C clock divider to divide by 5.
+ * @code
+   CLOCK_SetDiv(kCLOCK_Lpi2cDiv, kCLOCK_MiscDivBy5);
+   @endcode
+ *
+ * Only @ref kCLOCK_PerClk, @ref kCLOCK_Lpi2cDiv, @ref kCLOCK_CanDiv, @ref kCLOCK_UartDiv, @ref kCLOCK_Sai1Div,
+ * @ref kCLOCK_Sai2Div, @ref kCLOCK_Sai3Div can use the divider kCLOCK_MiscDivByxxx.
+ *
+ * @param divider Which divider node to set.
+ * @param value   Clock div value to set, different divider has different value range. See @ref clock_div_value_t
+ *                for details.
+ *                Divided clock frequency = Undivided clock frequency / (value + 1)
  */
 static inline void CLOCK_SetDiv(clock_div_t divider, uint32_t value)
 {
