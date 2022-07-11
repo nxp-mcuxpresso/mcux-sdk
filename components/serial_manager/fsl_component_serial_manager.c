@@ -73,7 +73,7 @@
 #define SERIAL_MANAGER_READ_TAG  0xBBAA5244U
 
 #ifndef RINGBUFFER_WATERMARK_THRESHOLD
-#define RINGBUFFER_WATERMARK_THRESHOLD 95U/100U
+#define RINGBUFFER_WATERMARK_THRESHOLD 95U / 100U
 #endif
 #if (defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
 typedef enum _serial_manager_transmission_mode
@@ -1261,12 +1261,6 @@ serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const s
         case kSerialPort_UartDma:
             status = Serial_UartDmaInit(((serial_handle_t)&handle->lowLevelhandleBuffer[0]), config->portConfig);
 #if (defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
-#if (defined(SERIAL_MANAGER_NON_BLOCKING_DUAL_MODE) && (SERIAL_MANAGER_NON_BLOCKING_DUAL_MODE > 0U))
-            if (config->blockType == kSerialManager_Blocking)
-            {
-                return status;
-            }
-#endif /* SERIAL_MANAGER_NON_BLOCKING_DUAL_MODE */
             if ((serial_manager_status_t)kStatus_SerialManager_Success == status)
             {
                 (void)Serial_UartDmaInstallTxCallback(((serial_handle_t)&handle->lowLevelhandleBuffer[0]),
@@ -1278,27 +1272,7 @@ serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const s
 #endif
             break;
 #endif
-#if (defined(SERIAL_PORT_TYPE_UART_DMA) && (SERIAL_PORT_TYPE_UART_DMA > 0U))
-        case kSerialPort_UartDma:
-            status = Serial_UartDmaInit(((serial_handle_t)&handle->lowLevelhandleBuffer[0]), config->portConfig);
-#if (defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
-#if (defined(SERIAL_MANAGER_NON_BLOCKING_DUAL_MODE) && (SERIAL_MANAGER_NON_BLOCKING_DUAL_MODE > 0U))
-            if (config->blockType == kSerialManager_Blocking)
-            {
-                return status;
-            }
-#endif /* SERIAL_MANAGER_NON_BLOCKING_DUAL_MODE */
-            if ((serial_manager_status_t)kStatus_SerialManager_Success == status)
-            {
-                (void)Serial_UartDmaInstallTxCallback(((serial_handle_t)&handle->lowLevelhandleBuffer[0]),
-                                                      SerialManager_TxCallback, handle);
 
-                (void)Serial_UartDmaInstallRxCallback(((serial_handle_t)&handle->lowLevelhandleBuffer[0]),
-                                                      SerialManager_RxCallback, handle);
-            }
-#endif
-            break;
-#endif
 #if (defined(SERIAL_PORT_TYPE_USBCDC) && (SERIAL_PORT_TYPE_USBCDC > 0U))
         case kSerialPort_UsbCdc:
             status = Serial_UsbCdcInit(((serial_handle_t)&handle->lowLevelhandleBuffer[0]), config->portConfig);
@@ -1797,9 +1771,9 @@ serial_manager_status_t SerialManager_CancelWriting(serial_write_handle_t writeH
         /* Need to support common_task. */
 #else /* SERIAL_MANAGER_USE_COMMON_TASK */
         primask = DisableGlobalIRQ();
-        handle->serialManagerState[SERIAL_EVENT_DATA_START_SEND]++;
+        serialWriteHandle->serialManagerHandle->serialManagerState[SERIAL_EVENT_DATA_START_SEND]++;
         EnableGlobalIRQ(primask);
-        (void)OSA_SemaphorePost((osa_semaphore_handle_t)handle->serSemaphore);
+        (void)OSA_SemaphorePost((osa_semaphore_handle_t)serialWriteHandle->serialManagerHandle->serSemaphore);
 
 #endif /* SERIAL_MANAGER_USE_COMMON_TASK */
 #else  /* OSA_USED && SERIAL_MANAGER_TASK_HANDLE_TX */
