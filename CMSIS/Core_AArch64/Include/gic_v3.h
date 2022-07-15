@@ -218,11 +218,50 @@ typedef struct
 #define GICInterface        ((GICInterface_Type        *)     GIC_INTERFACE_BASE )   /*!< \brief GIC Interface register set access pointer */
 #endif /* GIC_INTERFACE_BASE */
 
+#define GICD_CTLR_RWP		31
+#define GICR_CTLR_RWP		3
+
+enum gic_rwp {
+  GICD_RWP,
+  GICR_RWP,
+};
+
 /*******************************************************************************
  *                 GIC Functions
  ******************************************************************************/
 
 /* ##########################  GIC functions  ###################################### */
+
+/** \brief Get the Redistributor base.
+*/
+__STATIC_INLINE GICRedistributor_Type *GIC_GetRdist(void)
+{
+  uint32_t core = MPIDR_GetCoreID();
+  static GICRedistributor_Type *const s_RedistBaseAddrs[] = GICRedistributorArray;
+
+  return s_RedistBaseAddrs[core];
+}
+
+/** \brief Wait for register write pending.
+*/
+__STATIC_INLINE void GIC_WaitRWP(enum gic_rwp rwp)
+{
+  uint32_t rwp_mask;
+  uint32_t __IM *base;
+
+  if (rwp == GICR_RWP) {
+    base = &GIC_GetRdist()->CTLR;
+    rwp_mask = BIT(GICR_CTLR_RWP);
+  } else if (rwp == GICD_RWP) {
+    base = &GICDistributor->CTLR;
+    rwp_mask = BIT(GICD_CTLR_RWP);
+  } else {
+    return;
+  }
+
+  while (*base & rwp_mask)
+    ;
+}
 
 /** \brief Get the Affinity Routing status.
 */
@@ -243,11 +282,13 @@ __STATIC_INLINE void GIC_EnableDistributor(void)
 __STATIC_INLINE void GIC_DisableDistributor(void)
 {
   GICDistributor->CTLR &=~1U;
+  GIC_WaitRWP(GICD_RWP);
 }
 
 __STATIC_INLINE void GIC_DisableSecurity(void)
 {
   GICDistributor->CTLR |= 0x40U;
+  GIC_WaitRWP(GICD_RWP);
 }
 
 /** \brief Read the GIC's TYPER register.
@@ -356,9 +397,11 @@ __STATIC_INLINE void GIC_DisableIRQ(IRQn_Type IRQn)
   if (IRQn < 32) {
     core = MPIDR_GetCoreID();
     s_RedistPPIBaseAddrs[core]->ICENABLER[0] = 1U << IRQn;
+    GIC_WaitRWP(GICR_RWP);
   }
   else {
     GICDistributor->ICENABLER[IRQn / 32U] = 1U << (IRQn % 32U);
+    GIC_WaitRWP(GICD_RWP);
   }
 
 }
