@@ -3,13 +3,13 @@
  * Title:        arm_rfft_q15.c
  * Description:  RFFT & RIFFT Q15 process function
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/transform_functions.h"
 
 /* ----------------------------------------------------------------------
  * Internal functions prototypes
@@ -56,7 +56,7 @@ void arm_split_rifft_q15(
 /**
   @brief         Processing function for the Q15 RFFT/RIFFT.
   @param[in]     S     points to an instance of the Q15 RFFT/RIFFT structure
-  @param[in]     pSrc  points to input buffer
+  @param[in]     pSrc  points to input buffer (Source buffer is modified by this function.)
   @param[out]    pDst  points to output buffer
   @return        none
 
@@ -68,6 +68,15 @@ void arm_split_rifft_q15(
                    \image html RFFTQ15.gif "Input and Output Formats for Q15 RFFT"
   @par
                    \image html RIFFTQ15.gif "Input and Output Formats for Q15 RIFFT"
+  @par
+                   If the input buffer is of length N, the output buffer must have length 2*N.
+                   The input buffer is modified by this function.
+  @par
+                   For the RIFFT, the source buffer must at least have length 
+                   fftLenReal + 2.
+                   The last two elements must be equal to what would be generated
+                   by the RFFT:
+                     (pSrc[0] - pSrc[1]) >> 1 and 0
  */
 
 void arm_rfft_q15(
@@ -75,9 +84,12 @@ void arm_rfft_q15(
         q15_t * pSrc,
         q15_t * pDst)
 {
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
+  const arm_cfft_instance_q15 *S_CFFT = &(S->cfftInst);
+#else
   const arm_cfft_instance_q15 *S_CFFT = S->pCfft;
+#endif
         uint32_t L2 = S->fftLenReal >> 1U;
-        uint32_t i;
 
   /* Calculation of RIFFT of input */
   if (S->ifftFlagR == 1U)
@@ -88,10 +100,7 @@ void arm_rfft_q15(
      /* Complex IFFT process */
      arm_cfft_q15 (S_CFFT, pDst, S->ifftFlagR, S->bitReverseFlagR);
 
-     for(i = 0; i < S->fftLenReal; i++)
-     {
-        pDst[i] = pDst[i] << 1U;
-     }
+     arm_shift_q15(pDst, 1, pDst, S->fftLenReal);
   }
   else
   {
@@ -124,6 +133,80 @@ void arm_rfft_q15(
                    The function implements a Real FFT
  */
 
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
+
+#include "arm_helium_utils.h"
+#include "arm_vec_fft.h"
+
+#if defined(__CMSIS_GCC_H)
+#define MVE_CMPLX_MULT_FX_AxB_S16(A,B)          vqdmladhxq_s16(vqdmlsdhq_s16((__typeof(A))vuninitializedq_s16(), A, B), A, B)
+#define MVE_CMPLX_MULT_FX_AxConjB_S16(A,B)      vqdmladhq_s16(vqdmlsdhxq_s16((__typeof(A))vuninitializedq_s16(), A, B), A, B)
+
+#endif 
+
+void arm_split_rfft_q15(
+        q15_t * pSrc,
+        uint32_t fftLen,
+  const q15_t * pATable,
+  const q15_t * pBTable,
+        q15_t * pDst,
+        uint32_t modifier)
+{
+   uint32_t        i;          /* Loop Counter */
+    const q15_t    *pCoefA, *pCoefB;    /* Temporary pointers for twiddle factors */
+    q15_t          *pOut1 = &pDst[2];
+    q15_t          *pIn1 = &pSrc[2];
+    uint16x8_t      offsetIn = { 6, 7, 4, 5, 2, 3, 0, 1 };
+    uint16x8_t      offsetCoef;
+    const uint16_t  offsetCoefArr[16] = {
+        0, 0, 2, 2, 4, 4, 6, 6,
+        0, 1, 0, 1, 0, 1, 0, 1
+    };
+
+    offsetCoef = vmulq_n_u16(vld1q_u16(offsetCoefArr), modifier) + vld1q_u16(offsetCoefArr + 8);
+    offsetIn = vaddq_n_u16(offsetIn, (2 * fftLen - 8));
+
+    /* Init coefficient pointers */
+    pCoefA = &pATable[modifier * 2];
+    pCoefB = &pBTable[modifier * 2];
+
+    const q15_t    *pCoefAb, *pCoefBb;
+    pCoefAb = pCoefA;
+    pCoefBb = pCoefB;
+
+    pIn1 = &pSrc[2];
+
+    i = fftLen - 1U;
+    i = i / 4 + 1;
+    while (i > 0U) {
+        q15x8_t         in1 = vld1q_s16(pIn1);
+        q15x8_t         in2 = vldrhq_gather_shifted_offset_s16(pSrc, offsetIn);
+        q15x8_t         coefA = vldrhq_gather_shifted_offset_s16(pCoefAb, offsetCoef);
+        q15x8_t         coefB = vldrhq_gather_shifted_offset_s16(pCoefBb, offsetCoef);
+
+#if defined(__CMSIS_GCC_H)
+        q15x8_t         out = vhaddq_s16(MVE_CMPLX_MULT_FX_AxB_S16(in1, coefA),
+                                     MVE_CMPLX_MULT_FX_AxConjB_S16(coefB, in2));
+#else
+        q15x8_t         out = vhaddq_s16(MVE_CMPLX_MULT_FX_AxB(in1, coefA),
+                                     MVE_CMPLX_MULT_FX_AxConjB(coefB, in2));
+#endif
+        vst1q_s16(pOut1, out);
+        pOut1 += 8;
+
+        offsetCoef = vaddq_n_u16(offsetCoef, modifier * 8);
+        offsetIn -= 8;
+        pIn1 += 8;
+        i -= 1;
+    }
+
+    pDst[2 * fftLen] = (pSrc[0] - pSrc[1]) >> 1U;
+    pDst[2 * fftLen + 1] = 0;
+
+    pDst[0] = (pSrc[0] + pSrc[1]) >> 1U;
+    pDst[1] = 0;
+}
+#else
 void arm_split_rfft_q15(
         q15_t * pSrc,
         uint32_t fftLen,
@@ -266,7 +349,7 @@ void arm_split_rfft_q15(
 
 #endif /* #if defined (ARM_MATH_DSP) */
 }
-
+#endif /* defined(ARM_MATH_MVEI) */
 
 /**
   @brief         Core Real IFFT process
@@ -282,6 +365,68 @@ void arm_split_rfft_q15(
                    The function implements a Real IFFT
  */
 
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
+
+#include "arm_helium_utils.h"
+#include "arm_vec_fft.h"
+
+void arm_split_rifft_q15(
+        q15_t * pSrc,
+        uint32_t fftLen,
+  const q15_t * pATable,
+  const q15_t * pBTable,
+        q15_t * pDst,
+        uint32_t modifier)
+{
+   uint32_t        i;                  /* Loop Counter */
+    const q15_t    *pCoefA, *pCoefB;    /* Temporary pointers for twiddle factors */
+    q15_t          *pIn1;
+    uint16x8_t      offset = { 6, 7, 4, 5, 2, 3, 0, 1 };
+    uint16x8_t      offsetCoef;
+    int16x8_t       conj = { 1, -1, 1, -1, 1, -1, 1, -1 }; /* conjugate */
+    const uint16_t  offsetCoefArr[16] = {
+        0, 0, 2, 2, 4, 4, 6, 6,
+        0, 1, 0, 1, 0, 1, 0, 1
+    };
+
+    offsetCoef = vmulq_n_u16(vld1q_u16(offsetCoefArr), modifier) + vld1q_u16(offsetCoefArr + 8);
+
+    offset = vaddq_n_u16(offset, (2 * fftLen - 6));
+
+    /* Init coefficient pointers */
+    pCoefA = &pATable[0];
+    pCoefB = &pBTable[0];
+
+    const q15_t    *pCoefAb, *pCoefBb;
+    pCoefAb = pCoefA;
+    pCoefBb = pCoefB;
+
+    pIn1 = &pSrc[0];
+
+    i = fftLen;
+    i = i / 4;
+
+    while (i > 0U) {
+        q15x8_t         in1 = vld1q_s16(pIn1);
+        q15x8_t         in2 = vldrhq_gather_shifted_offset_s16(pSrc, offset);
+        q15x8_t         coefA = vldrhq_gather_shifted_offset_s16(pCoefAb, offsetCoef);
+        q15x8_t         coefB = vldrhq_gather_shifted_offset_s16(pCoefBb, offsetCoef);
+
+        /* can we avoid the conjugate here ? */
+        q15x8_t         out = vhaddq_s16(MVE_CMPLX_MULT_FX_AxConjB(in1, coefA),
+                                     vmulq(conj, MVE_CMPLX_MULT_FX_AxB(in2, coefB)));
+
+        vst1q_s16(pDst, out);
+        pDst += 8;
+
+        offsetCoef = vaddq_n_u16(offsetCoef, modifier * 8);
+        offset -= 8;
+
+        pIn1 += 8;
+        i -= 1;
+    }
+}
+#else
 void arm_split_rifft_q15(
         q15_t * pSrc,
         uint32_t fftLen,
@@ -378,3 +523,4 @@ void arm_split_rifft_q15(
   }
 
 }
+#endif /* defined(ARM_MATH_MVEI) */

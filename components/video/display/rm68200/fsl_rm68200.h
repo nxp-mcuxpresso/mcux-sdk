@@ -50,6 +50,8 @@ extern const display_operations_t rm68200_ops;
 extern "C" {
 #endif
 
+extern uint8_t RM68200_DDB_START[5];
+
 status_t RM68200_Init(display_handle_t *handle, const display_config_t *config);
 
 status_t RM68200_Deinit(display_handle_t *handle);

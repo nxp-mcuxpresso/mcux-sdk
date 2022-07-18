@@ -243,8 +243,5 @@ static void FBDEV_BufferSwitchOffCallback(void *param, void *switchOffBuffer)
 
     (void)xSemaphoreGiveFromISR(fbdev->semaFramePending, &framePendingWake);
 
-    if ((fbManagerWake == pdTRUE) || (framePendingWake == pdTRUE))
-    {
-        portYIELD_FROM_ISR(pdTRUE);
-    }
+    portYIELD_FROM_ISR((fbManagerWake == pdTRUE) || (framePendingWake == pdTRUE));
 }

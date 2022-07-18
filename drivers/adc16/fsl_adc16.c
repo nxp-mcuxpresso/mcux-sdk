@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -142,7 +142,7 @@ void ADC16_Deinit(ADC_Type *base)
  * code
  *   config->referenceVoltageSource     = kADC16_ReferenceVoltageSourceVref;
  *   config->clockSource                = kADC16_ClockSourceAsynchronousClock;
- *   config->enableAsynchronousClock    = true;
+ *   config->enableAsynchronousClock    = false;
  *   config->clockDivider               = kADC16_ClockDivider8;
  *   config->resolution                 = kADC16_ResolutionSE12Bit;
  *   config->longSampleMode             = kADC16_LongSampleDisabled;
@@ -161,7 +161,7 @@ void ADC16_GetDefaultConfig(adc16_config_t *config)
 
     config->referenceVoltageSource     = kADC16_ReferenceVoltageSourceVref;
     config->clockSource                = kADC16_ClockSourceAsynchronousClock;
-    config->enableAsynchronousClock    = true;
+    config->enableAsynchronousClock    = false;
     config->clockDivider               = kADC16_ClockDivider8;
     config->resolution                 = kADC16_ResolutionSE12Bit;
     config->longSampleMode             = kADC16_LongSampleDisabled;

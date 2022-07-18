@@ -10,6 +10,9 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
+if(${MCUX_DEVICE} STREQUAL "MIMXRT1052")
+    include(component_flexspi_hyper_flash_adapter)
+endif()
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1062")
     include(component_flexspi_nor_flash_adapter_rt1060evk)
 endif()

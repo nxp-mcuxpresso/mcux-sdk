@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 5, 2))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 5, 4))
 /*@}*/
 
 /*! @brief Timeout times for waiting flag. */
@@ -478,18 +478,20 @@ typedef enum _i3c_slave_activity_state
  */
 typedef struct _i3c_slave_config
 {
-    bool enableSlave;      /*!< Whether to enable slave. */
-    bool isHotJoin;        /*!< Whether to enable slave hotjoin before enable slave. */
-    uint8_t staticAddr;    /*!< Static address. */
-    uint16_t vendorID;     /*!< Device vendor ID(manufacture ID). */
+    bool enableSlave;   /*!< Whether to enable slave. */
+    bool isHotJoin;     /*!< Whether to enable slave hotjoin before enable slave. */
+    uint8_t staticAddr; /*!< Static address. */
+    uint16_t vendorID;  /*!< Device vendor ID(manufacture ID). */
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND)
     bool enableRandomPart; /*!< Whether to generate random part number, if using random part number,
                                 the partNumber variable setting is meaningless. */
-    uint32_t partNumber;   /*!< Device part number info */
-    uint8_t dcr;           /*!< Device characteristics register information. */
-    uint8_t bcr;           /*!< Bus characteristics register information. */
-    uint8_t hdrMode;       /*!< Support hdr mode, could be OR logic in enumeration:i3c_hdr_mode_t. */
-    bool nakAllRequest;    /*!< Whether to reply NAK to all requests except broadcast CCC. */
-    bool ignoreS0S1Error;  /*!< Whether to ignore S0/S1 error in SDR mode. */
+#endif
+    uint32_t partNumber;  /*!< Device part number info */
+    uint8_t dcr;          /*!< Device characteristics register information. */
+    uint8_t bcr;          /*!< Bus characteristics register information. */
+    uint8_t hdrMode;      /*!< Support hdr mode, could be OR logic in enumeration:i3c_hdr_mode_t. */
+    bool nakAllRequest;   /*!< Whether to reply NAK to all requests except broadcast CCC. */
+    bool ignoreS0S1Error; /*!< Whether to ignore S0/S1 error in SDR mode. */
     bool offline; /*!< Whether to wait 60 us of bus quiet or HDR request to ensure slave track SDR mode safely. */
     bool matchSlaveStartStop; /*!< Whether to assert start/stop status only the time slave is addressed. */
     uint32_t maxWriteLength;  /*!< Maximum write length. */

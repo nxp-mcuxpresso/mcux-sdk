@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    LPC55S1x/LPC551x User manual Rev.0.6  15 November 2019
+**     Reference manual:    LPC55S0x/LPC550x User manual Rev.0.3  14 August 2020
 **     Version:             rev. 1.0, 2020-04-09
-**     Build:               b200817
+**     Build:               b220117
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,7 +18,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -260,6 +260,7 @@ __attribute__ ((weak)) void SystemInit (void) {
 /* Optionally enable RAM banks that may be off by default at reset */
 #if !defined(DONT_ENABLE_DISABLED_RAMBANKS)
     SYSCON->AHBCLKCTRLSET[0] = SYSCON_AHBCLKCTRL0_SRAM_CTRL1_MASK | SYSCON_AHBCLKCTRL0_SRAM_CTRL2_MASK;
+    SYSCON->AHBCLKCTRLSET[2] = SYSCON_AHBCLKCTRL2_SRAM_CTRL3_MASK;
 #endif
     /* Following code is to reset PUF to remove over consumption */
     /* Enable PUF register clock to access register */

@@ -47,11 +47,15 @@ static void ENET_MDIO_Init(mdio_handle_t *handle)
 {
     mdio_resource_t *resource = (mdio_resource_t *)&handle->resource;
     ENET_Type *base           = (ENET_Type *)resource->base;
-    uint32_t instance         = ENET_GetInstance(base);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+    uint32_t instance         = ENET_GetInstance(base);
+
     /* Set SMI first. */
     (void)CLOCK_EnableClock(s_enetClock[instance]);
+#if defined(FSL_FEATURE_ENET_HAS_EXTRA_CLOCK_GATE) && FSL_FEATURE_ENET_HAS_EXTRA_CLOCK_GATE
+    (void)CLOCK_EnableClock(s_enetExtraClock[instance]);
+#endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
     ENET_SetSMI(base, resource->csrClock_Hz, false);
 }

@@ -22,8 +22,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief WM8904 driver version 2.5.0. */
-#define FSL_WM8904_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+/*! @brief WM8904 driver version 2.5.1. */
+#define FSL_WM8904_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
 /*@}*/
 
 /*! @brief wm8904 handle size */

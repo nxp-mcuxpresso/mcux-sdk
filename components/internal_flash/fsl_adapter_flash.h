@@ -87,7 +87,6 @@ typedef enum _hal_flash_margin_value
     kHAL_Flash_MarginValueFactory,    /*!< Apply the 'Factory' margin to the normal read-1 level.*/
     kHAL_Flash_MarginValueInvalid     /*!< Not real margin level, Used to determine the range of valid margin level. */
 } hal_flash_margin_value_t;
-
 /*! *********************************************************************************
 *************************************************************************************
 * Public memory declarations

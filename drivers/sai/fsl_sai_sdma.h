@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SAI_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 1)) /*!< Version 2.4.1 */
+#define FSL_SAI_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 0)) /*!< Version 2.5.0 */
 /*@}*/
 
 typedef struct _sai_sdma_handle sai_sdma_handle_t;
@@ -192,6 +192,22 @@ void SAI_TransferAbortSendSDMA(I2S_Type *base, sai_sdma_handle_t *handle);
  * @param handle SAI SDMA handle pointer.
  */
 void SAI_TransferAbortReceiveSDMA(I2S_Type *base, sai_sdma_handle_t *handle);
+
+/*!
+ * @brief Terminate all the SAI sdma receive transfer.
+ *
+ * @param base SAI base pointer.
+ * @param handle SAI SDMA handle pointer.
+ */
+void SAI_TransferTerminateReceiveSDMA(I2S_Type *base, sai_sdma_handle_t *handle);
+
+/*!
+ * @brief Terminate all the SAI sdma send transfer.
+ *
+ * @param base SAI base pointer.
+ * @param handle SAI SDMA handle pointer.
+ */
+void SAI_TransferTerminateSendSDMA(I2S_Type *base, sai_sdma_handle_t *handle);
 
 /*!
  * brief Configures the SAI RX.

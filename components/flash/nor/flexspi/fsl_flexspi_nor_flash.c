@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2022 NXP
  * All rights reserved.
  *
  *
@@ -1488,7 +1488,7 @@ static status_t FLEXSPI_NOR_ParseSFDP(nor_handle_t *handle, flexspi_mem_config_t
             break;
         }
 
-        if ((flexspiMemHandle.configuredFlashSize > MAX_24BIT_ADDRESSING_SIZE) && (tbl->has_4b_addressing_inst_table))
+        if ((handle->bytesInMemorySize > MAX_24BIT_ADDRESSING_SIZE) && (tbl->has_4b_addressing_inst_table))
         {
             address_bits = 32;
         }
@@ -3770,6 +3770,53 @@ status_t Nor_Flash_Init(nor_config_t *config, nor_handle_t *handle)
         SCB_CleanInvalidateDCache();
     }
 #endif /* __DCACHE_PRESENT */
+
+    return status;
+}
+
+status_t Nor_Flash_DeInit(nor_handle_t *handle)
+{
+    status_t status = kStatus_Success;
+
+    /* Reset peripheral. */
+    FLEXSPI_SoftwareReset((FLEXSPI_Type *)handle->driverBaseAddr);
+
+    return status;
+}
+
+status_t Nor_Flash_Is_Busy(nor_handle_t *handle, bool *isBusy)
+{
+    bool busy = true;
+    uint32_t readValue;
+    status_t status                     = kStatus_InvalidArgument;
+    flexspi_mem_nor_handle_t *memHandle = (flexspi_mem_nor_handle_t *)handle->deviceSpecific;
+    flexspi_transfer_t flashXfer;
+
+    flashXfer.deviceAddress = 0x00U;
+    flashXfer.port          = memHandle->port;
+    flashXfer.cmdType       = kFLEXSPI_Read;
+    flashXfer.SeqNumber     = 1;
+    flashXfer.seqIndex      = NOR_CMD_LUT_SEQ_IDX_READSTATUS;
+    flashXfer.data          = &readValue;
+    flashXfer.dataSize      = 1;
+
+    status = FLEXSPI_TransferBlocking((FLEXSPI_Type *)handle->driverBaseAddr, &flashXfer);
+
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+
+    if (memHandle->busyBitPolarity == 0x01U)
+    {
+        busy = (((~readValue) & (0x01UL << memHandle->busyOffset)) == (0x01UL << memHandle->busyOffset)) ? true : false;
+    }
+    else
+    {
+        busy = ((readValue & (0x01UL << memHandle->busyOffset)) == (0x01UL << memHandle->busyOffset)) ? true : false;
+    }
+
+    *isBusy = busy;
 
     return status;
 }

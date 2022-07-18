@@ -1,7 +1,9 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1024CAG4A
+**                          MIMXRT1024CAG4B
 **                          MIMXRT1024DAG5A
+**                          MIMXRT1024DAG5B
 **
 **     Compilers:           Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler

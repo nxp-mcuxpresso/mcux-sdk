@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #include "flash_config.h"
-#include "board.h"
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
@@ -36,7 +35,7 @@ const flexspi_nor_config_t flexspi_config = {
             .serialClkFreq        = kFlexSpiSerialClk_SDR_24MHz,
             .sflashA1Size         = 0,
             .sflashA2Size         = 0,
-            .sflashB1Size         = BOARD_FLASH_SIZE,
+            .sflashB1Size         = 0x4000000U,
             .sflashB2Size         = 0,
             .lookupTable =
                 {

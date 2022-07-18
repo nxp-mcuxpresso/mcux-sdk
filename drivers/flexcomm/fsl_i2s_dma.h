@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief I2S DMA driver version 2.3.0. */
-#define FSL_I2S_DMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief I2S DMA driver version 2.3.1. */
+#define FSL_I2S_DMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*@}*/
 
 /*! @brief Members not to be accessed / modified outside of the driver. */

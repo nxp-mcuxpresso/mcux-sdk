@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/DSP
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/ecspi
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/ii2c
@@ -47,7 +48,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_cmsis_ii2c)
 #    include(component_codec_adapters)
 #    include(middleware_freertos-kernel_heap_4)
-#    include(utility_debug_console_lite)
+#    include(CMSIS_DSP_Source)
 #    include(middleware_multicore_rpmsg_lite_imx8mm_m4_freertos)
 #    include(driver_iuart_sdma)
 #    include(driver_rdc)
@@ -91,8 +92,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_iuart_adapter)
 #    include(component_wm8524_adapter)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(driver_common)
+#    include(utilities_misc_utilities_MIMX8MM6)
 #    include(driver_sema4)
 #    include(middleware_multicore_rpmsg_lite_freertos)
 #    include(component_ii2c_adapter)
@@ -105,5 +106,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_core_cm)
 #    include(driver_wm8524)
 #    include(driver_pdm)
+#    include(utility_debug_console_lite)
 #    include(driver_cmsis_iuart)
 #    include(middleware_freertos-kernel_MIMX8MM6)

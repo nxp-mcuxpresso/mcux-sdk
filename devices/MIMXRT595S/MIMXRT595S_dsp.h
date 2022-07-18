@@ -6,13 +6,13 @@
 **     Compiler:            XCC Compiler
 **     Reference manual:    iMXRT500RM Rev.0, 01/2021
 **     Version:             rev. 5.0, 2020-08-27
-**     Build:               b211110
+**     Build:               b220401
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT595S_dsp
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -92,61 +92,88 @@
  */
 
 /** Interrupt Number Definitions */
-#define NUMBER_OF_INT_VECTORS 46                 /**< Number of interrupts in the Vector table */
+#define NUMBER_OF_INT_VECTORS 73                 /**< Number of interrupts in the Vector table */
 
 typedef enum IRQn {
   /* Auxiliary constants */
   NotAvail_IRQn                = -128,             /**< Not available device specific interrupt */
 
   /* Core interrupts */
-  NonMaskableInt_IRQn          = -5,               /**< SysIRQ, Non Maskable Interrupt */
-  Software_IRQn                = -4,               /**< Software triggered Interrupt */
-  RtosTimer0_IRQn              = -3,               /**< Internal RTOS Timer0 Interrupt */
-  RtosTimer1_IRQn              = -2,               /**< Internal RTOS Timer1 Interrupt */
-  Profiling_IRQn               = -1,               /**< Profiling Interrupt */
+  NonMaskableInt_IRQn          = 0,                /**< SysIRQ, Non Maskable Interrupt */
+  Software_IRQn                = 1,                /**< Software triggered Interrupt */
+  RtosTimer0_IRQn              = 2,                /**< Internal RTOS Timer0 Interrupt */
+  RtosTimer1_IRQn              = 3,                /**< Internal RTOS Timer1 Interrupt */
+  Profiling_IRQn               = 4,                /**< Profiling Interrupt */
 
   /* Device specific interrupts */
-  FLEXCOMM0_IRQn               = 0,                /**< Flexcomm Interface 0 (USART, SPI, I2C, I2S) */
-  FLEXCOMM1_IRQn               = 1,                /**< Flexcomm Interface 1 (USART, SPI, I2C, I2S) */
-  FLEXCOMM2_IRQn               = 2,                /**< Flexcomm Interface 2 (USART, SPI, I2C, I2S) */
-  FLEXCOMM3_IRQn               = 3,                /**< Flexcomm Interface 3 (USART, SPI, I2C, I2S) */
-  FLEXCOMM4_IRQn               = 4,                /**< Flexcomm Interface 4 (USART, SPI, I2C, I2S) */
-  FLEXCOMM5_IRQn               = 5,                /**< Flexcomm Interface 5 (USART, SPI, I2C, I2S) */
-  FLEXCOMM6_IRQn               = 6,                /**< Flexcomm Interface 6 (USART, SPI, I2C, I3S) */
-  FLEXCOMM7_IRQn               = 7,                /**< Flexcomm Interface 7 (USART, SPI, I2C, I4S) */
-  FLEXCOMM14_IRQn              = 8,                /**< Flexcomm Interface 14 (USART, SPI, I2C, I5S) */
-  FLEXCOMM16_IRQn              = 9,                /**< Flexcomm Interface 16 (USART, SPI, I2C, I6S) */
-  PIN_INT0_IRQn                = 10,               /**< Pin interrupt 0 or pattern match engine slice 0 int */
-  PIN_INT1_IRQn                = 11,               /**< Pin interrupt 1 or pattern match engine slice 1 int */
-  PIN_INT2_IRQn                = 12,               /**< Pin interrupt 2 or pattern match engine slice 2 int */
-  PIN_INT3_IRQn                = 13,               /**< Pin interrupt 3 or pattern match engine slice 3 int */
-  PIN_INT4_IRQn                = 14,               /**< Pin interrupt 4 or pattern match engine slice 4 int */
-  PIN_INT5_IRQn                = 15,               /**< Pin interrupt 5 or pattern match engine slice 5 int */
-  PIN_INT6_IRQn                = 16,               /**< Pin interrupt 6 or pattern match engine slice 6 int */
-  PIN_INT7_IRQn                = 17,               /**< Pin interrupt 7 or pattern match engine slice 7 int */
-  GPIO_INTA_IRQn               = 18,               /**< GPIO interrupt A */
-  GPIO_INTB_IRQn               = 19,               /**< GPIO interrupt B */
-  WDT1_IRQn                    = 20,               /**< Windowed watchdog timer 1 */
-  DMA0_IRQn                    = 21,               /**< DMA controller 0 (secure or CM33 DMA) */
-  DMA1_IRQn                    = 22,               /**< DMA controller 1 (non-secure or DSP DMA) */
-  MU_B_IRQn                    = 23,               /**< Messaging Unit interrupt */
-  UTICK0_IRQn                  = 24,               /**< Micro-tick Timer */
-  MRT0_IRQn                    = 25,               /**< Multi-Rate Timer */
-  OS_EVENT_IRQn                = 26,               /**< OS event timer */
-  CTIMER0_IRQn                 = 27,               /**< Standard counter/timer CTIMER0 */
-  CTIMER1_IRQn                 = 28,               /**< Standard counter/timer CTIMER1 */
-  CTIMER2_IRQn                 = 29,               /**< Standard counter/timer CTIMER2 */
-  CTIMER3_IRQn                 = 30,               /**< Standard counter/timer CTIMER3 */
-  CTIMER4_IRQn                 = 31,               /**< Standard counter/timer CTIMER4 */
-  RTC_IRQn                     = 32,               /**< RTC alarm and wake-up */
-  I3C0_IRQn                    = 33,               /**< I3C interface 0 */
-  I3C1_IRQn                    = 34,               /**< I3C interface 1 */
-  DMIC0_IRQn                   = 35,               /**< Digital microphone and DMIC subsystem */
-  HWVAD_IRQn                   = 36,               /**< Hardware Voice Activity Detector */
-  LCDIF_IRQn                   = 37,               /**< Liquid Crystal Display Interface interrupt */
-  GPU_IRQn                     = 38,               /**< Graphics Processor Unit interrupt */
-  SMARTDMA_IRQn                = 39,               /**< Smart DMA Controller interrupt */
-  FLEXIO_IRQn                  = 40                /**< Flexible IO interrupt */
+  DSP_INT0_SEL0_IRQn           = 5,                /**< Interrupt selected by DSP_INT0_SEL0 */
+  DSP_INT0_SEL1_IRQn           = 6,                /**< Interrupt selected by DSP_INT0_SEL1 */
+  DSP_INT0_SEL2_IRQn           = 7,                /**< Interrupt selected by DSP_INT0_SEL2 */
+  DSP_INT0_SEL3_IRQn           = 8,                /**< Interrupt selected by DSP_INT0_SEL3 */
+  DSP_INT0_SEL4_IRQn           = 9,                /**< Interrupt selected by DSP_INT0_SEL4 */
+  DSP_INT0_SEL5_IRQn           = 10,               /**< Interrupt selected by DSP_INT0_SEL5 */
+  DSP_INT0_SEL6_IRQn           = 11,               /**< Interrupt selected by DSP_INT0_SEL6 */
+  DSP_INT0_SEL7_IRQn           = 12,               /**< Interrupt selected by DSP_INT0_SEL7 */
+  DSP_INT0_SEL8_IRQn           = 13,               /**< Interrupt selected by DSP_INT0_SEL8 */
+  DSP_INT0_SEL9_IRQn           = 14,               /**< Interrupt selected by DSP_INT0_SEL9 */
+  DSP_INT0_SEL10_IRQn          = 15,               /**< Interrupt selected by DSP_INT0_SEL10 */
+  DSP_INT0_SEL11_IRQn          = 16,               /**< Interrupt selected by DSP_INT0_SEL11 */
+  DSP_INT0_SEL12_IRQn          = 17,               /**< Interrupt selected by DSP_INT0_SEL12 */
+  DSP_INT0_SEL13_IRQn          = 18,               /**< Interrupt selected by DSP_INT0_SEL13 */
+  DSP_INT0_SEL14_IRQn          = 19,               /**< Interrupt selected by DSP_INT0_SEL14 */
+  DSP_INT0_SEL15_IRQn          = 20,               /**< Interrupt selected by DSP_INT0_SEL15 */
+  DSP_INT0_SEL16_IRQn          = 21,               /**< Interrupt selected by DSP_INT0_SEL16 */
+  DSP_INT0_SEL17_IRQn          = 22,               /**< Interrupt selected by DSP_INT0_SEL17 */
+  DSP_INT0_SEL18_IRQn          = 23,               /**< Interrupt selected by DSP_INT0_SEL18 */
+  DSP_INT0_SEL19_IRQn          = 24,               /**< Interrupt selected by DSP_INT0_SEL19 */
+  DSP_INT0_SEL20_IRQn          = 25,               /**< Interrupt selected by DSP_INT0_SEL20 */
+  DSP_INT0_SEL21_IRQn          = 26,               /**< Interrupt selected by DSP_INT0_SEL21 */
+  DSP_INT0_SEL22_IRQn          = 27,               /**< Interrupt selected by DSP_INT0_SEL22 */
+  DSP_INT0_SEL23_IRQn          = 28,               /**< Interrupt selected by DSP_INT0_SEL23 */
+  DSP_INT0_SEL24_IRQn          = 29,               /**< Interrupt selected by DSP_INT0_SEL24 */
+  DSP_INT0_SEL25_IRQn          = 30,               /**< Interrupt selected by DSP_INT0_SEL25 */
+  DSP_INT0_SEL26_IRQn          = 31,               /**< Interrupt selected by DSP_INT0_SEL26 */
+  FLEXCOMM0_IRQn               = 32,               /**< Flexcomm Interface 0 (USART, SPI, I2C, I2S)(DSP_INT_SELn source IRQ0) */
+  FLEXCOMM1_IRQn               = 33,               /**< Flexcomm Interface 1 (USART, SPI, I2C, I2S)(DSP_INT_SELn source IRQ1) */
+  FLEXCOMM2_IRQn               = 34,               /**< Flexcomm Interface 2 (USART, SPI, I2C, I2S)(DSP_INT_SELn source IRQ2) */
+  FLEXCOMM3_IRQn               = 35,               /**< Flexcomm Interface 3 (USART, SPI, I2C, I2S)(DSP_INT_SELn source IRQ3) */
+  FLEXCOMM4_IRQn               = 36,               /**< Flexcomm Interface 4 (USART, SPI, I2C, I2S)(DSP_INT_SELn source IRQ4) */
+  FLEXCOMM5_IRQn               = 37,               /**< Flexcomm Interface 5 (USART, SPI, I2C, I2S)(DSP_INT_SELn source IRQ5) */
+  FLEXCOMM6_IRQn               = 38,               /**< Flexcomm Interface 6 (USART, SPI, I2C, I3S)(DSP_INT_SELn source IRQ6) */
+  FLEXCOMM7_IRQn               = 39,               /**< Flexcomm Interface 7 (USART, SPI, I2C, I4S)(DSP_INT_SELn source IRQ7) */
+  FLEXCOMM14_IRQn              = 40,               /**< Flexcomm Interface 14 (USART, SPI, I2C, I5S)(DSP_INT_SELn source IRQ8) */
+  FLEXCOMM16_IRQn              = 41,               /**< Flexcomm Interface 16 (USART, SPI, I2C, I6S)(DSP_INT_SELn source IRQ9) */
+  PIN_INT0_IRQn                = 42,               /**< Pin interrupt 0 or pattern match engine slice 0 int(DSP_INT_SELn source IRQ10) */
+  PIN_INT1_IRQn                = 43,               /**< Pin interrupt 1 or pattern match engine slice 1 int(DSP_INT_SELn source IRQ11) */
+  PIN_INT2_IRQn                = 44,               /**< Pin interrupt 2 or pattern match engine slice 2 int(DSP_INT_SELn source IRQ12) */
+  PIN_INT3_IRQn                = 45,               /**< Pin interrupt 3 or pattern match engine slice 3 int(DSP_INT_SELn source IRQ13) */
+  PIN_INT4_IRQn                = 46,               /**< Pin interrupt 4 or pattern match engine slice 4 int(DSP_INT_SELn source IRQ14) */
+  PIN_INT5_IRQn                = 47,               /**< Pin interrupt 5 or pattern match engine slice 5 int(DSP_INT_SELn source IRQ15) */
+  PIN_INT6_IRQn                = 48,               /**< Pin interrupt 6 or pattern match engine slice 6 int(DSP_INT_SELn source IRQ16) */
+  PIN_INT7_IRQn                = 49,               /**< Pin interrupt 7 or pattern match engine slice 7 int(DSP_INT_SELn source IRQ17) */
+  GPIO_INTA_IRQn               = 50,               /**< GPIO interrupt A(DSP_INT_SELn source IRQ18) */
+  GPIO_INTB_IRQn               = 51,               /**< GPIO interrupt B(DSP_INT_SELn source IRQ19) */
+  WDT1_IRQn                    = 52,               /**< Windowed watchdog timer 1(DSP_INT_SELn source IRQ20) */
+  DMA0_IRQn                    = 53,               /**< DMA controller 0 (secure or CM33 DMA)(DSP_INT_SELn source IRQ21) */
+  DMA1_IRQn                    = 54,               /**< DMA controller 1 (non-secure or DSP DMA)(DSP_INT_SELn source IRQ22) */
+  MU_B_IRQn                    = 55,               /**< Messaging Unit interrupt(DSP_INT_SELn source IRQ23) */
+  UTICK0_IRQn                  = 56,               /**< Micro-tick Timer(DSP_INT_SELn source IRQ24) */
+  MRT0_IRQn                    = 57,               /**< Multi-Rate Timer(DSP_INT_SELn source IRQ25) */
+  OS_EVENT_IRQn                = 58,               /**< OS event timer(DSP_INT_SELn source IRQ26) */
+  CTIMER0_IRQn                 = 59,               /**< Standard counter/timer CTIMER0(DSP_INT_SELn source IRQ27) */
+  CTIMER1_IRQn                 = 60,               /**< Standard counter/timer CTIMER1(DSP_INT_SELn source IRQ28) */
+  CTIMER2_IRQn                 = 61,               /**< Standard counter/timer CTIMER2(DSP_INT_SELn source IRQ29) */
+  CTIMER3_IRQn                 = 62,               /**< Standard counter/timer CTIMER3(DSP_INT_SELn source IRQ30) */
+  CTIMER4_IRQn                 = 63,               /**< Standard counter/timer CTIMER4(DSP_INT_SELn source IRQ31) */
+  RTC_IRQn                     = 64,               /**< RTC alarm and wake-up(DSP_INT_SELn source IRQ32) */
+  I3C0_IRQn                    = 65,               /**< I3C interface 0(DSP_INT_SELn source IRQ33) */
+  I3C1_IRQn                    = 66,               /**< I3C interface 1(DSP_INT_SELn source IRQ34) */
+  DMIC0_IRQn                   = 67,               /**< Digital microphone and DMIC subsystem(DSP_INT_SELn source IRQ35) */
+  HWVAD0_IRQn                  = 68,               /**< Hardware Voice Activity Detector(DSP_INT_SELn source IRQ36) */
+  LCDIF_IRQn                   = 69,               /**< Liquid Crystal Display Interface interrupt(DSP_INT_SELn source IRQ37) */
+  GPU_IRQn                     = 70,               /**< Graphics Processor Unit interrupt(DSP_INT_SELn source IRQ38) */
+  SDMA_IRQn                    = 71,               /**< Smart DMA Controller interrupt(DSP_INT_SELn source IRQ39) */
+  FLEXIO_IRQn                  = 72                /**< Flexible IO interrupt(DSP_INT_SELn source IRQ40) */
 } IRQn_Type;
 
 /*!
@@ -12124,7 +12151,7 @@ typedef struct {
 #define DMIC_BASE_PTRS                           { DMIC0 }
 /** Interrupt vectors for the DMIC peripheral type */
 #define DMIC_IRQS                                { DMIC0_IRQn }
-#define DMIC_HWVAD_IRQS                          { HWVAD_IRQn }
+#define DMIC_HWVAD_IRQS                          { HWVAD0_IRQn }
 
 /*!
  * @}
@@ -22195,8 +22222,8 @@ typedef struct {
 #define INPUTMUX_DMAC0_CHMUX_SEL_DMAC0_CHMUX_SEL_MASK (0x1U)
 #define INPUTMUX_DMAC0_CHMUX_SEL_DMAC0_CHMUX_SEL_SHIFT (0U)
 /*! DMAC0_CHMUX_SEL - DMAC0 Channel mux select 1
- *  0b0..DMIC_CH0_DMA
- *  0b1..FLEXCOM8_RX_DMA
+ *  0b0..FLEXIO_SHFT0_DMA
+ *  0b1..FLEXCOM11_RX_DMA
  */
 #define INPUTMUX_DMAC0_CHMUX_SEL_DMAC0_CHMUX_SEL(x) (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC0_CHMUX_SEL_DMAC0_CHMUX_SEL_SHIFT)) & INPUTMUX_DMAC0_CHMUX_SEL_DMAC0_CHMUX_SEL_MASK)
 /*! @} */
@@ -22304,8 +22331,8 @@ typedef struct {
 #define INPUTMUX_DMAC1_CHMUX_SEL_DMAC1_CHMUX_SEL_MASK (0x1U)
 #define INPUTMUX_DMAC1_CHMUX_SEL_DMAC1_CHMUX_SEL_SHIFT (0U)
 /*! DMAC1_CHMUX_SEL - DMAC1 Channel mux select
- *  0b0..DMIC_CH0_DMA
- *  0b1..FLEXCOM8_RX_DMA
+ *  0b0..DMIC_CH4_DMA
+ *  0b1..FLEXCOM10_RX_DMA
  */
 #define INPUTMUX_DMAC1_CHMUX_SEL_DMAC1_CHMUX_SEL(x) (((uint32_t)(((uint32_t)(x)) << INPUTMUX_DMAC1_CHMUX_SEL_DMAC1_CHMUX_SEL_SHIFT)) & INPUTMUX_DMAC1_CHMUX_SEL_DMAC1_CHMUX_SEL_MASK)
 /*! @} */

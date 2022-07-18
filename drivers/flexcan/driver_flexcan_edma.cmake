@@ -11,12 +11,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
-if(${MCUX_DEVICE} STREQUAL "MKV58F24")
-    include(driver_edma)
-endif()
-if(${MCUX_DEVICE} STREQUAL "MKE18F16")
-    include(driver_edma)
-endif()
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1064")
     include(driver_edma_MIMXRT1064)
 endif()

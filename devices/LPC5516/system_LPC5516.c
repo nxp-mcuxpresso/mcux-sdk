@@ -11,7 +11,7 @@
 **
 **     Reference manual:    LPC55S1x/LPC551x User manual Rev.0.6  15 November 2019
 **     Version:             rev. 1.1, 2019-12-03
-**     Build:               b201015
+**     Build:               b220117
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -19,7 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -52,9 +52,9 @@
 
 /* PLL0 SSCG control1 */
 #define PLL_SSCG_MD_FRACT_P 0U
-#define PLL_SSCG_MD_INT_P   25U
+#define PLL_SSCG_MD_INT_P 25U
 #define PLL_SSCG_MD_FRACT_M (0x1FFFFFFUL << PLL_SSCG_MD_FRACT_P)
-#define PLL_SSCG_MD_INT_M   ((uint64_t)0xFFUL << PLL_SSCG_MD_INT_P)
+#define PLL_SSCG_MD_INT_M ((uint64_t)0xFFUL << PLL_SSCG_MD_INT_P)
 
 /* Get predivider (N) from PLL0 NDEC setting */
 static uint32_t findPll0PreDiv(void)
@@ -105,8 +105,7 @@ static float findPll0MMult(void)
 
     if ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_SEL_EXT_MASK) != 0UL)
     {
-        mMult =
-            (float)(uint32_t)((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_MDIV_EXT_MASK) >> SYSCON_PLL0SSCG1_MDIV_EXT_SHIFT);
+        mMult = (float)(uint32_t)((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_MDIV_EXT_MASK) >> SYSCON_PLL0SSCG1_MDIV_EXT_SHIFT);
     }
     else
     {
@@ -219,14 +218,14 @@ static uint32_t GetFroHfFreq(void)
  */
 static uint32_t GetOsc32KFreq(void)
 {
-    return ((0UL == (PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_FRO32K_MASK)) &&
-            (0UL == (PMC->RTCOSC32K & PMC_RTCOSC32K_SEL_MASK))) ?
+    return ((0UL == (PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_FRO32K_MASK)) && (0UL == (PMC->RTCOSC32K & PMC_RTCOSC32K_SEL_MASK))) ?
                CLK_RTC_32K_CLK :
-               ((0UL == (PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_XTAL32K_MASK)) &&
-                ((PMC->RTCOSC32K & PMC_RTCOSC32K_SEL_MASK) != 0UL)) ?
+               ((0UL == (PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_XTAL32K_MASK)) && ((PMC->RTCOSC32K & PMC_RTCOSC32K_SEL_MASK) != 0UL)) ?
                CLK_RTC_32K_CLK :
                0U;
 }
+
+
 
 /* ----------------------------------------------------------------------------
    -- Core clock
@@ -238,43 +237,41 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
    -- SystemInit()
    ---------------------------------------------------------------------------- */
 
-__attribute__((weak)) void SystemInit(void)
-{
+__attribute__ ((weak)) void SystemInit (void) {
 #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-    SCB->CPACR |= ((3UL << 10 * 2) | (3UL << 11 * 2)); /* set CP10, CP11 Full Access in Secure mode */
-#if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
-    SCB_NS->CPACR |= ((3UL << 10 * 2) | (3UL << 11 * 2)); /* set CP10, CP11 Full Access in Non-secure mode */
-#endif                                                    /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
-#endif                                                    /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
+  SCB->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access in Secure mode */
+  #if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
+  SCB_NS->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access in Non-secure mode */
+  #endif /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
+#endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
 
-    SCB->CPACR |= ((3UL << 0 * 2) | (3UL << 1 * 2)); /* set CP0, CP1 Full Access in Secure mode (enable PowerQuad) */
-#if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
-    SCB_NS->CPACR |= ((3UL << 0 * 2) | (3UL << 1 * 2)); /* set CP0, CP1 Full Access in Normal mode (enable PowerQuad) */
-#endif                                                  /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
+  SCB->CPACR |= ((3UL << 0*2) | (3UL << 1*2));    /* set CP0, CP1 Full Access in Secure mode (enable PowerQuad) */
+#if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
+  SCB_NS->CPACR |= ((3UL << 0*2) | (3UL << 1*2));    /* set CP0, CP1 Full Access in Normal mode (enable PowerQuad) */
+#endif /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
 
-    SCB->NSACR |= ((3UL << 0) | (3UL << 10)); /* enable CP0, CP1, CP10, CP11 Non-secure Access */
+  SCB->NSACR |= ((3UL << 0) | (3UL << 10));   /* enable CP0, CP1, CP10, CP11 Non-secure Access */
 
 #if defined(__MCUXPRESSO)
-    extern void (*const g_pfnVectors[])(void);
-    SCB->VTOR = (uint32_t)&g_pfnVectors;
+    extern void(*const g_pfnVectors[]) (void);
+    SCB->VTOR = (uint32_t) &g_pfnVectors;
 #else
     extern void *__Vectors;
-    SCB->VTOR = (uint32_t)&__Vectors;
+    SCB->VTOR = (uint32_t) &__Vectors;
 #endif
     SYSCON->TRACECLKDIV = 0;
 /* Optionally enable RAM banks that may be off by default at reset */
 #if !defined(DONT_ENABLE_DISABLED_RAMBANKS)
     SYSCON->AHBCLKCTRLSET[0] = SYSCON_AHBCLKCTRL0_SRAM_CTRL1_MASK | SYSCON_AHBCLKCTRL0_SRAM_CTRL2_MASK;
 #endif
-    SystemInitHook();
+  SystemInitHook();
 }
 
 /* ----------------------------------------------------------------------------
    -- SystemCoreClockUpdate()
    ---------------------------------------------------------------------------- */
 
-void SystemCoreClockUpdate(void)
-{
+void SystemCoreClockUpdate (void) {
     uint32_t clkRate = 0;
     uint32_t prediv, postdiv;
     uint64_t workRate;
@@ -318,18 +315,15 @@ void SystemCoreClockUpdate(void)
                     clkRate = 0UL;
                     break;
             }
-            if (((SYSCON->PLL0CTRL & SYSCON_PLL0CTRL_BYPASSPLL_MASK) == 0UL) &&
-                ((SYSCON->PLL0CTRL & SYSCON_PLL0CTRL_CLKEN_MASK) != 0UL) &&
-                ((PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_PLL0_MASK) == 0UL) &&
-                ((PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_PLL0_SSCG_MASK) == 0UL))
+            if (((SYSCON->PLL0CTRL & SYSCON_PLL0CTRL_BYPASSPLL_MASK) == 0UL) && ((SYSCON->PLL0CTRL & SYSCON_PLL0CTRL_CLKEN_MASK) != 0UL) && ((PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_PLL0_MASK) == 0UL) && ((PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_PLL0_SSCG_MASK) == 0UL))
             {
-                prediv  = findPll0PreDiv();
+                prediv = findPll0PreDiv();
                 postdiv = findPll0PostDiv();
                 /* Adjust input clock */
                 clkRate = clkRate / prediv;
                 /* MDEC used for rate */
                 workRate = (uint64_t)clkRate * (uint64_t)findPll0MMult();
-                clkRate  = (uint32_t)(workRate / ((uint64_t)postdiv));
+                clkRate = (uint32_t)(workRate / ((uint64_t)postdiv));
             }
             break;
         case 0x02: /* PLL1 clock (pll1_clk)*/
@@ -351,19 +345,17 @@ void SystemCoreClockUpdate(void)
                     clkRate = 0UL;
                     break;
             }
-            if (((SYSCON->PLL1CTRL & SYSCON_PLL1CTRL_BYPASSPLL_MASK) == 0UL) &&
-                ((SYSCON->PLL1CTRL & SYSCON_PLL1CTRL_CLKEN_MASK) != 0UL) &&
-                ((PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_PLL1_MASK) == 0UL))
+            if (((SYSCON->PLL1CTRL & SYSCON_PLL1CTRL_BYPASSPLL_MASK) == 0UL) && ((SYSCON->PLL1CTRL & SYSCON_PLL1CTRL_CLKEN_MASK) != 0UL) && ((PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_PLL1_MASK) == 0UL))
             {
                 /* PLL is not in bypass mode, get pre-divider, post-divider, and M divider */
-                prediv  = findPll1PreDiv();
+                prediv = findPll1PreDiv();
                 postdiv = findPll1PostDiv();
                 /* Adjust input clock */
                 clkRate = clkRate / prediv;
 
                 /* MDEC used for rate */
                 workRate1 = (uint64_t)clkRate * (uint64_t)findPll1MMult();
-                clkRate   = (uint32_t)(workRate1 / ((uint64_t)postdiv));
+                clkRate = (uint32_t)(workRate1 / ((uint64_t)postdiv));
             }
             break;
         case 0x03: /* RTC oscillator 32 kHz output (32k_clk) */
@@ -380,7 +372,6 @@ void SystemCoreClockUpdate(void)
    -- SystemInitHook()
    ---------------------------------------------------------------------------- */
 
-__attribute__((weak)) void SystemInitHook(void)
-{
-    /* Void implementation of the weak function. */
+__attribute__ ((weak)) void SystemInitHook (void) {
+  /* Void implementation of the weak function. */
 }

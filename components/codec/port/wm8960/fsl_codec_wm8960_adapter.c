@@ -179,7 +179,7 @@ status_t HAL_CODEC_WM8960_SetVolume(void *handle, uint32_t playChannel, uint32_t
          */
         mappedVolume = (volume * (WM8960_DAC_MAX_VOLUME_vALUE - 0U)) / 100U;
 
-        retVal = WM8960_SetVolume((wm8960_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
+        retVal = WM8960_SetVolume((wm8960_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)),
                                   kWM8960_ModuleDAC, mappedVolume);
     }
 

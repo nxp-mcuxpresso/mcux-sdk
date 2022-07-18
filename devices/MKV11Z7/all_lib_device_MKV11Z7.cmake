@@ -37,7 +37,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/smc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/motor_control
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -73,7 +72,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Driver_Include_USART)
 #    include(CMSIS_Driver_Include_SPI)
 #    include(utility_debug_console_lite)
-#    include(middleware_motor_control_mc_drivers_adc16_ftm_frac)
 #    include(component_panic)
 #    include(driver_fxos8700cq)
 #    include(driver_ewm)
@@ -85,6 +83,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_notifier)
 #    include(CMSIS_Driver_Include_I2C)
 #    include(driver_wdog)
+#    include(utilities_misc_utilities_MKV11Z7)
 #    include(utility_assert)
 #    include(utility_shell)
 #    include(driver_flash)
@@ -98,7 +97,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_uart)
 #    include(CMSIS_Driver_Include_Common)
 #    include(component_osa_bm)
-#    include(utilities_misc_utilities)
 #    include(driver_common)
 #    include(driver_smc)
 #    include(driver_crc)

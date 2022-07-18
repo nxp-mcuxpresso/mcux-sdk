@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 - 2020 NXP
+ * Copyright 2018 - 2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -9,8 +9,8 @@
 #define _FSL_PRINCE_H_
 
 #include "fsl_common.h"
-#include "fsl_iap_ffr.h"
-#include "fsl_puf.h"
+
+#include FFR_INCLUDE
 
 /*!
  * @addtogroup prince
@@ -23,9 +23,9 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief PRINCE driver version 2.3.2.
+/*! @brief PRINCE driver version 2.5.0.
  *
- * Current version: 2.3.2
+ * Current version: 2.5.0
  *
  * Change log:
  * - Version 2.0.0
@@ -43,30 +43,45 @@
  *   - Add support for LPC55S0x series
  * - Version 2.3.2
  *   - Fix documentation of enumeration. Extend PRINCE example.
+ * - Version 2.4.0
+ *   - Add support for LPC55S3x series
+ * - Version 2.5.0
+ *   - Add PRINCE_Config() and PRINCE_Reconfig() features.
  */
-#define FSL_PRINCE_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+#define FSL_PRINCE_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*@}*/
 
 #if (defined(LPC55S04_SERIES) || defined(LPC55S06_SERIES))
-
+/* LPC55S0x series*/
 #define FSL_PRINCE_DRIVER_LPC55S0x
+#include "fsl_puf.h"
 
 #elif (defined(LPC55S14_SERIES) || defined(LPC55S16_SERIES))
-
+/* LPC55S1x series*/
 #define FSL_PRINCE_DRIVER_LPC55S1x
+#include "fsl_puf.h"
 
 #elif (defined(LPC55S26_SERIES) || defined(LPC55S28_SERIES))
-
+/* LPC55S2x series*/
 #define FSL_PRINCE_DRIVER_LPC55S2x
+#include "fsl_puf.h"
 
 #elif (defined(LPC55S69_cm33_core0_SERIES) || defined(LPC55S69_cm33_core1_SERIES) || \
        defined(LPC55S66_cm33_core0_SERIES) || defined(LPC55S66_cm33_core1_SERIES))
-
+/* LPC55S6x series*/
 #define FSL_PRINCE_DRIVER_LPC55S6x
+#include "fsl_puf.h"
 
+#elif (defined(LPC55S36_SERIES))
+/* LPC55S3x series*/
+#define FSL_PRINCE_DRIVER_LPC55S3x
+#define PRINCE PRINCE0
+#include "fsl_mem_interface.h"
+#include "fsl_css.h"                // Power Down Wake-up Init
+#include <mcuxClCss.h>              // Interface to the entire nxpClCss component
+#include <mcuxCsslFlowProtection.h> // Code flow protection
 #else
 #error "No valid CPU defined!"
-
 #endif
 
 #define FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB (8U)
@@ -118,6 +133,49 @@ typedef enum _prince_flags
     kPRINCE_Flag_WriteCheck = 2U, /*!< PRINCE Flag Write check */
 } prince_flags_t;
 
+#if defined(FSL_PRINCE_DRIVER_LPC55S3x)
+typedef struct
+{
+    uint32_t target_prince_region : 2; // 0/1/2
+    uint32_t reserved : 22;
+    uint32_t tag : 8; // Fixed to 0x50 ('P')
+} prince_prot_region_option_t;
+typedef struct
+{
+    prince_prot_region_option_t option;
+    uint32_t start;
+    uint32_t length;
+} prince_prot_region_arg_t;
+
+/*! @brief Prince fixed tag in prince_prot_region_option_t structure */
+#define PRINCE_TAG       0x50u
+#define PRINCE_TAG_SHIFT 24u
+/*! @brief Prince region count */
+#define PRINCE_REGION_COUNT 3u
+/*! @brief Define for CSS key store indexes */
+#define NXP_DIE_MEM_ENC_SK    2u
+#define NXP_DIE_MEM_IV_ENC_SK 4u
+/*! @brief KDF mask and key properties for NXP_DIE_MEM_IV_ENC_SK (see SYSCON documentation)*/
+#define SYSCON_CSS_KDF_MASK 0x07000FCF
+/*! @brief CFPA version and IV indexes (see Protected Flash Region table) */
+#define CFPA_VER_OFFSET       0x04
+#define CFPA_PRINCE_IV_OFFSET 0x14u
+/*! @brief CMPA SR and lock indexes (see Protected Flash Region table) */
+#define CMPA_PRINCE_SR_OFFSET   0x24u
+#define CMPA_PRINCE_LOCK_OFFSET 0x20u
+/*! @brief CFPA scrach version and IV addresses (see Protected Flash Region table) */
+#define CFPA_SCRATCH_VER 0x3dc04
+#define CFPA_SCRATCH_IV  0x3dc14
+/*! @brief CMPA lock bit-field defines (see Protected Flash Region table) */
+#define PRINCE_BASE_ADDR_LOCK_REG0_SHIFT (16u)
+#define PRINCE_BASE_ADDR_LOCK_REG0_MASK  (0x3u << PRINCE_BASE_ADDR_LOCK_REG0_SHIFT)
+#define PRINCE_BASE_ADDR_LOCK_REG1_SHIFT (18u)
+#define PRINCE_BASE_ADDR_LOCK_REG1_MASK  (0x3u << PRINCE_BASE_ADDR_LOCK_REG1_SHIFT)
+#define PRINCE_BASE_ADDR_LOCK_REG2_SHIFT (20u)
+#define PRINCE_BASE_ADDR_LOCK_REG2_MASK  (0x3u << PRINCE_BASE_ADDR_LOCK_REG2_SHIFT)
+
+#endif /* defined(FSL_PRINCE_DRIVER_LPC55S3x) */
+
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -134,7 +192,7 @@ extern "C" {
  */
 static inline void PRINCE_EncryptEnable(PRINCE_Type *base)
 {
-    base->ENC_ENABLE = 1;
+    base->ENC_ENABLE = 1u;
 }
 
 /*!
@@ -146,7 +204,20 @@ static inline void PRINCE_EncryptEnable(PRINCE_Type *base)
  */
 static inline void PRINCE_EncryptDisable(PRINCE_Type *base)
 {
-    base->ENC_ENABLE = 0;
+    base->ENC_ENABLE = 0u;
+}
+
+/*!
+ * @brief Is Enable data encryption.
+ *
+ * This function test if PRINCE on-the-fly data encryption is enabled.
+ *
+ * @param base PRINCE peripheral address.
+ * @return true if enabled, false if not
+ */
+static inline bool PRINCE_IsEncryptEnable(PRINCE_Type *base)
+{
+    return (base->ENC_ENABLE == 1u) ? true : false;
 }
 
 /*!
@@ -177,6 +248,7 @@ static inline void PRINCE_SetLock(PRINCE_Type *base, uint32_t lock)
     base->LOCK = lock & 0x1ffu;
 }
 
+#if !defined(FSL_PRINCE_DRIVER_LPC55S3x)
 /*!
  * @brief Generate new IV code.
  *
@@ -193,7 +265,9 @@ static inline void PRINCE_SetLock(PRINCE_Type *base, uint32_t lock)
  *                         PRINCE region is not present in the keystore (though new IV code has been provided)
  */
 status_t PRINCE_GenNewIV(prince_region_t region, uint8_t *iv_code, bool store, flash_config_t *flash_context);
+#endif /* !defined(FSL_PRINCE_DRIVER_LPC55S3x) */
 
+#if !defined(FSL_PRINCE_DRIVER_LPC55S3x)
 /*!
  * @brief Load IV code.
  *
@@ -206,7 +280,9 @@ status_t PRINCE_GenNewIV(prince_region_t region, uint8_t *iv_code, bool store, f
  * @return kStatus_Fail    otherwise
  */
 status_t PRINCE_LoadIV(prince_region_t region, uint8_t *iv_code);
+#endif /* !defined(FSL_PRINCE_DRIVER_LPC55S3x) */
 
+#if !defined(FSL_PRINCE_DRIVER_LPC55S3x)
 /*!
  * @brief Allow encryption/decryption for specified address range.
  *
@@ -233,6 +309,7 @@ status_t PRINCE_LoadIV(prince_region_t region, uint8_t *iv_code);
  */
 status_t PRINCE_SetEncryptForAddressRange(
     prince_region_t region, uint32_t start_address, uint32_t length, flash_config_t *flash_context, bool regenerate_iv);
+#endif /* !defined(FSL_PRINCE_DRIVER_LPC55S3x) */
 
 /*!
  * @brief Gets the PRINCE Sub-Region Enable register.
@@ -295,6 +372,7 @@ status_t PRINCE_SetRegionBaseAddress(PRINCE_Type *base, prince_region_t region, 
  */
 status_t PRINCE_SetRegionSREnable(PRINCE_Type *base, prince_region_t region, uint32_t sr_enable);
 
+#if !defined(FSL_PRINCE_DRIVER_LPC55S3x)
 /*!
  * @brief Erases the flash sectors encompassed by parameters passed into function.
  *
@@ -323,7 +401,9 @@ status_t PRINCE_SetRegionSREnable(PRINCE_Type *base, prince_region_t region, uin
  * @return #kStatus_FLASH_EncryptedRegionsEraseNotDoneAtOnce Encrypted flash subregions are not erased at once.
  */
 status_t PRINCE_FlashEraseWithChecker(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key);
+#endif /* !defined(FSL_PRINCE_DRIVER_LPC55S3x) */
 
+#if !defined(FSL_PRINCE_DRIVER_LPC55S3x)
 /*!
  * @brief Programs flash with data at locations passed in through parameters.
  *
@@ -354,8 +434,59 @@ status_t PRINCE_FlashEraseWithChecker(flash_config_t *config, uint32_t start, ui
  * @return #kStatus_FLASH_SizeError Encrypted flash subregions are not programmed at once.
  */
 status_t PRINCE_FlashProgramWithChecker(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
+#endif /* !defined(FSL_PRINCE_DRIVER_LPC55S3x) */
 
-#if (defined(FSL_PRINCE_DRIVER_LPC55S0x)) || defined(FSL_PRINCE_DRIVER_LPC55S1x)
+#if defined(FSL_PRINCE_DRIVER_LPC55S3x)
+/*!
+ * @brief Configures PRINCE setting.
+ *
+ * This function does the initial PRINCE configuration via ROM IAP API call.
+ * PRINCE_SR_x configuration for each region configuration is stored into FFR (CMPA).
+ * PRINCE IV erase counters (MCTR_INT_IV_CTRx) in CFPA are updated accordingly.
+ *
+ * Note: This function is expected to be called once in the device lifetime,
+ * typically during the initial device provisioning, since it is programming the CMPA pages in PFR flash.
+ *
+ * @param coreCtx The pointer to the ROM API driver context structure.
+ * @param config The pointer to the PRINCE driver configuration structure.
+ *
+ * @retval #kStatus_Success
+ * @retval #kStatus_CommandUnsupported
+ * @retval #kStatus_InvalidArgument
+ * @retval #kStatus_FLASH_ModifyProtectedAreaDisallowed
+ * @retval #kStatusMemoryRangeInvalid
+ * @retval #kStatus_Fail
+ * @retval #kStatus_OutOfRange
+ * @retval #kStatus_SPI_BaudrateNotSupport
+ */
+status_t PRINCE_Configure(api_core_context_t *coreCtx, prince_prot_region_arg_t *config);
+#endif /* defined(FSL_PRINCE_DRIVER_LPC55S3x) */
+
+#if defined(FSL_PRINCE_DRIVER_LPC55S3x)
+/*!
+ * @brief Reconfigures PRINCE setting.
+ *
+ * This function is used to re-configure PRINCE IP based on configuration stored in FFR.
+ * This function also needs to be called after wake up from power-down mode to regenerate IV
+ * encryption key in CSS key store whose presence is necessary for correct PRINCE operation
+ * during erase and write operations to encrypted regions of internal flash memory
+ * (dependency for correct operation of MEM_Erase() and MEM_Write() after wake up from power-down mode).
+ *
+ * @param coreCtx The pointer to the ROM API driver context structure.
+ *
+ * @retval #kStatus_Success
+ * @retval #kStatus_CommandUnsupported
+ * @retval #kStatus_InvalidArgument
+ * @retval #kStatus_FLASH_ModifyProtectedAreaDisallowed
+ * @retval #kStatusMemoryRangeInvalid
+ * @retval #kStatus_Fail
+ * @retval #kStatus_OutOfRange
+ * @retval #kStatus_SPI_BaudrateNotSupport
+ */
+status_t PRINCE_Reconfigure(api_core_context_t *coreCtx);
+#endif /* defined(FSL_PRINCE_DRIVER_LPC55S3x) */
+
+#if (defined(FSL_PRINCE_DRIVER_LPC55S0x)) || defined(FSL_PRINCE_DRIVER_LPC55S1x) || defined(FSL_PRINCE_DRIVER_LPC55S3x)
 /*!
  * @brief Gets the PRINCE Error status register.
  *
@@ -377,7 +508,8 @@ static inline void PRINCE_ClearErrorStatus(PRINCE_Type *base)
 {
     base->ERR = 0U;
 }
-#endif /* defined(FSL_PRINCE_DRIVER_LPC55S0x) || defined(FSL_PRINCE_DRIVER_LPC55S1x) */
+#endif /* defined(FSL_PRINCE_DRIVER_LPC55S0x) || defined(FSL_PRINCE_DRIVER_LPC55S1x) || \
+          defined(FSL_PRINCE_DRIVER_LPC55S3x) */
 
 #if defined(__cplusplus)
 }

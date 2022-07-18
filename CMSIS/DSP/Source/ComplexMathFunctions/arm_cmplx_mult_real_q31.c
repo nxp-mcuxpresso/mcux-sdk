@@ -3,13 +3,13 @@
  * Title:        arm_cmplx_mult_real_q31.c
  * Description:  Q31 complex by real multiplication
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/complex_math_functions.h"
 
 /**
   @ingroup groupCmplxMath
@@ -50,6 +50,61 @@
                    Results outside of the allowable Q31 range[0x80000000 0x7FFFFFFF] are saturated.
  */
 
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
+void arm_cmplx_mult_real_q31(
+  const q31_t * pSrcCmplx,
+  const q31_t * pSrcReal,
+        q31_t * pCmplxDst,
+        uint32_t numSamples)
+{
+
+    static const uint32_t stride_cmplx_x_real_32[4] = {
+        0, 0, 1, 1
+    };
+    q31x4_t rVec;
+    q31x4_t cmplxVec;
+    q31x4_t dstVec;
+    uint32x4_t strideVec;
+    uint32_t blockSizeC = numSamples * CMPLX_DIM;   /* loop counters */
+    uint32_t blkCnt;
+    q31_t in;
+
+    /*
+     * stride vector for pairs of real generation
+     */
+    strideVec = vld1q(stride_cmplx_x_real_32);
+
+    /* Compute 4 complex outputs at a time */
+    blkCnt = blockSizeC >> 2;
+    while (blkCnt > 0U) 
+    {
+        cmplxVec = vld1q(pSrcCmplx);
+        rVec = vldrwq_gather_shifted_offset_s32(pSrcReal, strideVec);
+        dstVec = vqdmulhq(cmplxVec, rVec);
+        vst1q(pCmplxDst, dstVec);
+
+        pSrcReal += 2;
+        pSrcCmplx += 4;
+        pCmplxDst += 4;
+        blkCnt --;
+    }
+
+    blkCnt = (blockSizeC & 3) >> 1; 
+    while (blkCnt > 0U)
+    {
+      /* C[2 * i    ] = A[2 * i    ] * B[i]. */
+      /* C[2 * i + 1] = A[2 * i + 1] * B[i]. */
+  
+      in = *pSrcReal++;
+      /* store saturated result in 1.31 format to destination buffer */
+      *pCmplxDst++ = (__SSAT((q31_t) (((q63_t) *pSrcCmplx++ * in) >> 32), 31) << 1);
+      *pCmplxDst++ = (__SSAT((q31_t) (((q63_t) *pSrcCmplx++ * in) >> 32), 31) << 1);
+  
+      /* Decrement loop counter */
+      blkCnt--;
+    }
+}
+#else
 void arm_cmplx_mult_real_q31(
   const q31_t * pSrcCmplx,
   const q31_t * pSrcReal,
@@ -142,6 +197,7 @@ void arm_cmplx_mult_real_q31(
   }
 
 }
+#endif /* defined(ARM_MATH_MVEI) */
 
 /**
   @} end of CmplxByRealMult group

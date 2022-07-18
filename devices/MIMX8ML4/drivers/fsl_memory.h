@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief IMEMORY driver version 2.0.0. */
-#define FSL_MEMORY_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief MEMORY driver version 2.0.1. */
+#define FSL_MEMORY_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /* The CM7 subsystem local ITCM start address, refer to Reference Manual for detailed information */
@@ -75,9 +75,9 @@ extern "C" {
  * @param direction convert direction.
  * @return the converted address
  */
-static inline uint32_t MEMORY_ConvertMemoryMapAddress(uint32_t addr, mem_direction_t direction)
+static inline uintptr_t MEMORY_ConvertMemoryMapAddress(uintptr_t addr, mem_direction_t direction)
 {
-    uint32_t dest;
+    uintptr_t dest;
 
     switch (direction)
     {

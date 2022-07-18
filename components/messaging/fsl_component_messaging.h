@@ -10,7 +10,13 @@
 #ifndef __MESSAGING_H__
 #define __MESSAGING_H__
 
+#ifndef SDK_COMPONENT_DEPENDENCY_FSL_COMMON
+#define SDK_COMPONENT_DEPENDENCY_FSL_COMMON (1U)
+#endif
+#if (defined(SDK_COMPONENT_DEPENDENCY_FSL_COMMON) && (SDK_COMPONENT_DEPENDENCY_FSL_COMMON > 0U))
 #include "fsl_common.h"
+#else
+#endif
 #include "fsl_component_generic_list.h"
 
 /*! @brief Definition to determine whether use message macro define. */
@@ -36,11 +42,20 @@
  ******************************************************************************/
 
 /*! @brief The msg status */
+#if (defined(SDK_COMPONENT_DEPENDENCY_FSL_COMMON) && (SDK_COMPONENT_DEPENDENCY_FSL_COMMON > 0U))
 typedef enum _messaging_status
 {
     kMSG_Success = kStatus_Success,                  /*!< Success */
     kMSG_Error   = MAKE_STATUS(kStatusGroup_MSG, 1), /*!< Error */
 } messaging_status_t;
+#else
+typedef enum _messaging_status
+{
+    kMSG_Success = 0, /*!< Success */
+    kMSG_Error   = 1, /*!< Error */
+} messaging_status_t;
+
+#endif
 
 typedef list_label_t messaging_t;
 

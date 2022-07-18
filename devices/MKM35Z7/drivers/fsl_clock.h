@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2020, NXP
+ * Copyright 2016 - 2020,2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -58,8 +58,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.1. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief CLOCK driver version 2.2.2. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 /*! @brief External XTAL0 (OSC0) clock frequency.
@@ -248,11 +248,11 @@ extern volatile uint32_t g_xtal32Freq;
 #define SYS_CLK kCLOCK_CoreSysClk
 #define BUS_CLK kCLOCK_BusClk
 
-#define I2C0_CLK_SRC BUS_CLK
-#define I2C1_CLK_SRC BUS_CLK
-#define SPI0_CLK_SRC SYS_CLK
-#define SPI1_CLK_SRC SYS_CLK
-#define SPI2_CLK_SRC SYS_CLK
+#define I2C0_CLK_SRC  BUS_CLK
+#define I2C1_CLK_SRC  BUS_CLK
+#define SPI0_CLK_SRC  SYS_CLK
+#define SPI1_CLK_SRC  SYS_CLK
+#define SPI2_CLK_SRC  SYS_CLK
 #define UART0_CLK_SRC BUS_CLK
 #define UART1_CLK_SRC SYS_CLK
 #define UART2_CLK_SRC BUS_CLK
@@ -303,9 +303,9 @@ typedef enum _clock_name
 ------------------------------------------------------------------------------*/
 
 #define CLK_GATE_REG_OFFSET_SHIFT 16U
-#define CLK_GATE_REG_OFFSET_MASK 0xFFFF0000U
-#define CLK_GATE_BIT_SHIFT_SHIFT 0U
-#define CLK_GATE_BIT_SHIFT_MASK 0x0000FFFFU
+#define CLK_GATE_REG_OFFSET_MASK  0xFFFF0000U
+#define CLK_GATE_BIT_SHIFT_SHIFT  0U
+#define CLK_GATE_BIT_SHIFT_MASK   0x0000FFFFU
 
 #define CLK_GATE_DEFINE(reg_offset, bit_shift)                                  \
     ((((reg_offset) << CLK_GATE_REG_OFFSET_SHIFT) & CLK_GATE_REG_OFFSET_MASK) | \

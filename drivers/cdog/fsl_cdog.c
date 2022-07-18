@@ -242,7 +242,9 @@ status_t CDOG_Init(CDOG_Type *base, cdog_config_t *conf)
 {
     /* Ungate clock to CDOG engine and reset it */
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#ifdef CDOG_CLOCKS
     CLOCK_EnableClock(kCLOCK_Cdog);
+#endif /* CDOG_CLOCKS */
 #endif /* !FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if !(defined(FSL_FEATURE_CDOG_HAS_NO_RESET) && FSL_FEATURE_CDOG_HAS_NO_RESET)
@@ -305,6 +307,8 @@ void CDOG_Deinit(CDOG_Type *base)
 #endif /* !FSL_FEATURE_CDOG_HAS_NO_RESET */
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#ifdef CDOG_CLOCKS
     CLOCK_DisableClock(kCLOCK_Cdog);
+#endif /* CDOG_CLOCKS */
 #endif /* !FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }

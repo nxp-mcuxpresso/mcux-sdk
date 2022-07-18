@@ -2,18 +2,19 @@
 ** ###################################################################
 **     Processors:          LPC55S16JBD100
 **                          LPC55S16JBD64
+**                          LPC55S16JEV59
 **                          LPC55S16JEV98
 **
 **     Compiler:            GNU C Compiler
 **     Reference manual:    LPC55S1x/LPC551x User manual Rev.0.6  15 November 2019
 **     Version:             rev. 1.1, 2019-12-03
-**     Build:               b200221
+**     Build:               b220622
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause

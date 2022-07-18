@@ -30,7 +30,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_POWERQUAD_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version. */
+#define FSL_POWERQUAD_DRIVER_VERSION (MAKE_VERSION(2, 0, 5)) /*!< Version. */
 /*@}*/
 
 #define PQ_FLOAT32 0U

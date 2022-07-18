@@ -50,6 +50,7 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(middleware_freertos-kernel_MKE16Z4)
+#    include(utilities_misc_utilities_MKE16Z4)
 #    include(driver_lpuart_freertos)
 #    include(utility_shell)
 #    include(driver_mscan)
@@ -93,7 +94,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_CMSIS)
 #    include(CMSIS_Driver_Include_Common)
 #    include(component_osa_bm)
-#    include(utilities_misc_utilities)
 #    include(driver_lpi2c)
 #    include(driver_common)
 #    include(driver_rtc)

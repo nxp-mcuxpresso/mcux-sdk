@@ -3,13 +3,13 @@
  * Title:        arm_q31_to_q7.c
  * Description:  Converts the elements of the Q31 vector to Q7 vector
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/support_functions.h"
 
 /**
   @ingroup groupSupport
@@ -50,7 +50,65 @@
       pDst[n] = (q7_t) pSrc[n] >> 24;   0 <= n < blockSize.
   </pre>
  */
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
+void arm_q31_to_q7(
+  const q31_t * pSrc,
+        q7_t * pDst,
+        uint32_t blockSize)
+{
+    uint32_t  blkCnt;           /* loop counters */
+    q31x4x4_t tmp;
+    q15x8_t evVec, oddVec;
+    q7x16_t  vecDst;
+    q31_t const *pSrcVec;
 
+    pSrcVec = (q31_t const *) pSrc;
+    blkCnt = blockSize >> 4;
+    while (blkCnt > 0U)
+    {
+        tmp = vld4q(pSrcVec);  
+        pSrcVec += 16;
+        /* C = (q7_t) A >> 24 */
+        /* convert from q31 to q7 and then store the results in the destination buffer */
+        /*
+         * narrow and pack evens
+         */
+        evVec = vshrnbq_n_s32(evVec, tmp.val[0], 16);
+        evVec = vshrntq_n_s32(evVec, tmp.val[2], 16);
+        /*
+         * narrow and pack odds
+         */
+        oddVec = vshrnbq_n_s32(oddVec, tmp.val[1], 16);
+        oddVec = vshrntq_n_s32(oddVec, tmp.val[3], 16);
+        /*
+         * narrow & merge
+         */
+        vecDst = vshrnbq_n_s16(vecDst, evVec, 8);
+        vecDst = vshrntq_n_s16(vecDst, oddVec, 8);
+
+        vst1q(pDst, vecDst);    
+        pDst += 16;
+        /*
+         * Decrement the blockSize loop counter
+         */
+        blkCnt--;
+    }
+    /*
+     * tail
+     */
+    blkCnt = blockSize & 0xF;
+    while (blkCnt > 0U)
+    {
+      /* C = (q7_t) (A >> 24) */
+  
+      /* Convert from q31 to q7 and store result in destination buffer */
+      *pDst++ = (q7_t) (*pSrcVec++ >> 24);
+  
+      /* Decrement loop counter */
+      blkCnt--;
+    }
+}
+#else
 void arm_q31_to_q7(
   const q31_t * pSrc,
         q7_t * pDst,
@@ -104,6 +162,7 @@ void arm_q31_to_q7(
   }
 
 }
+#endif /* defined(ARM_MATH_MVEI) */
 
 /**
   @} end of q31_to_x group

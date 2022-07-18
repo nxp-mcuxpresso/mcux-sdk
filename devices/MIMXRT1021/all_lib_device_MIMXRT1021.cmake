@@ -30,6 +30,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyksz8081
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/silicon_id
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/adc_12b1msps_sar
@@ -123,7 +124,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart_edma)
 #    include(driver_ocotp)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
+#    include(utilities_misc_utilities_MIMXRT1021)
 #    include(driver_xip_device)
 #    include(component_serial_manager)
 #    include(middleware_freertos-kernel_MIMXRT1021)
@@ -135,12 +136,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpspi_freertos)
 #    include(component_log_backend_debugconsole)
 #    include(CMSIS_Driver_Include_Ethernet_MAC)
-#    include(CMSIS_DSP_Library)
 #    include(driver_ili9341)
 #    include(driver_tempmon)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_edma)
 #    include(middleware_sdmmc_osa_freertos)
+#    include(component_silicon_id)
 #    include(driver_cmsis_enet)
 #    include(utility_shell)
 #    include(device_startup)
@@ -182,6 +183,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_dcdc_1)
 #    include(middleware_sdmmc_host_usdhc_polling_MIMXRT1021)
 #    include(middleware_sdmmc_sdio)
+#    include(CMSIS_DSP_Source)
 #    include(driver_snvs_hp)
 #    include(middleware_usb_host_msd)
 #    include(driver_lpspi)
@@ -229,7 +231,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpi2c_freertos)
 #    include(driver_qtmr_1)
 #    include(driver_trng)
-#    include(middleware_usb_host_video)
 #    include(driver_gpc_1)
 #    include(component_lists)
 #    include(middleware_sdmmc_common)

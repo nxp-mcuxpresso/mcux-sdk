@@ -217,6 +217,71 @@ status_t MIPI_DSI_GenericWrite(mipi_dsi_device_t *device, const uint8_t *txData,
     return device->xferFunc(&dsiXfer);
 }
 
+status_t MIPI_DSI_DCS_SetMaxReturnPktSize(mipi_dsi_device_t *device, uint16_t sizeBytes)
+{
+    dsi_transfer_t dsiXfer = {0};
+
+    dsiXfer.virtualChannel = device->virtualChannel;
+    dsiXfer.txDataType     = kDSI_TxDataSetMaxReturnPktSize;
+    dsiXfer.txDataSize     = 2;
+    dsiXfer.txData         = (uint8_t *)&sizeBytes;
+
+    return device->xferFunc(&dsiXfer);
+}
+
+status_t MIPI_DSI_GenericRead(
+    mipi_dsi_device_t *device, const uint8_t *txData, int32_t txDataSize, uint8_t *rxData, int32_t *rxDataSize)
+{
+    status_t status;
+    dsi_transfer_t dsiXfer = {0};
+
+    dsiXfer.virtualChannel = device->virtualChannel;
+    dsiXfer.txDataSize     = (uint16_t)txDataSize;
+    dsiXfer.txData         = txData;
+    dsiXfer.rxDataSize     = (uint16_t)*rxDataSize;
+    dsiXfer.rxData         = rxData;
+
+    *rxDataSize = 0;
+
+    if (0 == txDataSize)
+    {
+        dsiXfer.txDataType = kDSI_TxDataGenShortRdNoParam;
+    }
+    else if (1 == txDataSize)
+    {
+        dsiXfer.txDataType = kDSI_TxDataGenShortRdOneParam;
+    }
+    else if (2 == txDataSize)
+    {
+        dsiXfer.txDataType = kDSI_TxDataGenShortRdTwoParam;
+    }
+    else
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    status = device->xferFunc(&dsiXfer);
+
+    /* Return actual received size. */
+    *rxDataSize = (int32_t)dsiXfer.rxDataSize;
+
+    return status;
+}
+
+status_t MIPI_DSI_ReadCMD(mipi_dsi_device_t *device, enum _mipi_dcs dcsCmd, uint8_t *rxData, int32_t *rxDataSize)
+{
+    uint8_t txData[2];
+    status_t status = kStatus_Fail;
+
+    txData[0] = (uint8_t)dcsCmd;
+    if (kStatus_Success == MIPI_DSI_DCS_SetMaxReturnPktSize(device, (uint16_t)*rxDataSize))
+    {
+        status = MIPI_DSI_GenericRead(device, txData, 1, rxData, rxDataSize);
+    }
+
+    return status;
+}
+
 status_t MIPI_DSI_SelectArea(mipi_dsi_device_t *device, uint16_t startX, uint16_t startY, uint16_t endX, uint16_t endY)
 {
     status_t status;

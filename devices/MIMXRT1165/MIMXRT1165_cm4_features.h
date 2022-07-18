@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 0.1, 2020-12-29
-**     Build:               b210817
+**     Build:               b220407
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -41,8 +41,8 @@
 #define FSL_FEATURE_SOC_CCM_COUNT (1)
 /* @brief CDOG availability on the SoC. */
 #define FSL_FEATURE_SOC_CDOG_COUNT (1)
-/* @brief DAC availability on the SoC. */
-#define FSL_FEATURE_SOC_DAC_COUNT (1)
+/* @brief DAC12 availability on the SoC. */
+#define FSL_FEATURE_SOC_DAC12_COUNT (1)
 /* @brief DCDC availability on the SoC. */
 #define FSL_FEATURE_SOC_DCDC_COUNT (1)
 /* @brief DMAMUX availability on the SoC. */
@@ -91,6 +91,8 @@
 #define FSL_FEATURE_SOC_LPUART_COUNT (12)
 /* @brief MCM availability on the SoC. */
 #define FSL_FEATURE_SOC_MCM_COUNT (1)
+/* @brief MPU availability on the SoC. */
+#define FSL_FEATURE_SOC_MPU_COUNT (1)
 /* @brief MU availability on the SoC. */
 #define FSL_FEATURE_SOC_MU_COUNT (1)
 /* @brief OCOTP availability on the SoC. */
@@ -163,10 +165,6 @@
 /* @brief Register name is ASRPM or ASRPMn */
 #define FSL_FEATURE_ASRC_PARAMETER_REGISTER_NAME_ASRPM (1)
 
-/* AUDIO_PLL module features */
-
-/* No feature definitions */
-
 /* FLEXCAN module features */
 
 /* @brief Message buffer size */
@@ -201,8 +199,6 @@
 #define FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE (1)
 /* @brief CAN instance support Flexible Data rate (CAN FD) protocol. */
 #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_FLEXIBLE_DATA_RATEn(x) (1)
-/* @brief Has extra MB interrupt or common one. */
-#define FSL_FEATURE_FLEXCAN_HAS_EXTRA_MB_INT (1)
 /* @brief Has memory error control (register MECR). */
 #define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL (1)
 /* @brief Init memory base 1 */
@@ -213,6 +209,8 @@
 #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_2 (0xF28)
 /* @brief Init memory size 2 */
 #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_2 (0xD8)
+/* @brief Has enhanced bit timing register (register EPRS, ENCBT, EDCBT and ETDC). */
+#define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_BIT_TIMING_REG (0)
 /* @brief Has Pretended Networking mode support. */
 #define FSL_FEATURE_FLEXCAN_HAS_PN_MODE (0)
 
@@ -258,6 +256,8 @@
 
 /* @brief Has no ITRM register. */
 #define FSL_FEATURE_DAC12_HAS_NO_ITRM_REGISTER (1)
+/* @brief Has hardware trigger. */
+#define FSL_FEATURE_DAC12_HAS_HW_TRIGGER (0)
 
 /* DCDC module features */
 
@@ -319,6 +319,12 @@
 
 /* @brief Has no simultaneous PHASEA and PHASEB change interrupt (register bit field CTRL2[SABIE] and CTRL2[SABIRQ]). */
 #define FSL_FEATURE_ENC_HAS_NO_CTRL2_SAB_INT (0)
+/* @brief Has register CTRL3. */
+#define FSL_FEATURE_ENC_HAS_CTRL3 (1)
+/* @brief Has register LASTEDGE or LASTEDGEH. */
+#define FSL_FEATURE_ENC_HAS_LASTEDGE (1)
+/* @brief Has register POSDPERBFR, POSDPERH, or POSDPER. */
+#define FSL_FEATURE_ENC_HAS_POSDPER (1)
 
 /* ENET module features */
 
@@ -360,10 +366,8 @@
 #define FSL_FEATURE_ENET_HAS_RGMII_RXC_DELAY (0)
 /* @brief PTP Timestamp CAPTURE bit always returns 0 when the capture is not over. */
 #define FSL_FEATURE_ENET_TIMESTAMP_CAPTURE_BIT_INVALID (0)
-
-/* ENET_PLL module features */
-
-/* No feature definitions */
+/* @brief ENET Has Extra Clock Gate.(RW610). */
+#define FSL_FEATURE_ENET_HAS_EXTRA_CLOCK_GATE (0)
 
 /* EWM module features */
 
@@ -406,28 +410,26 @@
 /* @brief Has FLEXRAM_MAGIC_ADDR. */
 #define FSL_FEATURE_FLEXRAM_HAS_MAGIC_ADDR (1)
 /* @brief If FLEXRAM has ECC function. */
-#define FSL_FEATURE_FLEXRAM_HAS_ECC (1)
+#define FSL_FEATURE_FLEXRAM_HAS_ECC (0)
 
 /* FLEXSPI module features */
 
 /* @brief FlexSPI AHB buffer count */
-#define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(x) (4)
+#define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(x) (8)
 /* @brief FlexSPI has no data learn. */
 #define FSL_FEATURE_FLEXSPI_HAS_NO_DATA_LEARN (1)
 /* @brief There is AHBBUSERROREN bit in INTEN register. */
 #define FSL_FEATURE_FLEXSPI_HAS_INTEN_AHBBUSERROREN (1)
 /* @brief There is CLRAHBTX_RXBUF bit in AHBCR register. */
 #define FSL_FEATURE_FLEXSPI_HAS_AHBCR_CLRAHBTX_RXBUF (0)
+/* @brief FLEXSPI has no IP parallel mode. */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_IP_PARALLEL_MODE (0)
+/* @brief FLEXSPI has no AHB parallel mode. */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_AHB_PARALLEL_MODE (0)
+/* @brief FLEXSPI support address shift. */
+#define FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT (0)
 
 /* GPC_CPU_CTRL module features */
-
-/* No feature definitions */
-
-/* GPC_SP_CTRL module features */
-
-/* No feature definitions */
-
-/* GPC_STBY_CTRL module features */
 
 /* No feature definitions */
 
@@ -470,6 +472,8 @@
 
 /* LPADC module features */
 
+/* @brief FIFO availability on the SoC. */
+#define FSL_FEATURE_LPADC_FIFO_COUNT (1)
 /* @brief Has subsequent trigger priority (bitfield CFG[TPRICTRL]). */
 #define FSL_FEATURE_LPADC_HAS_CFG_SUBSEQUENT_PRIORITY (1)
 /* @brief Has differential mode (bitfield CMDLn[DIFF]). */
@@ -496,6 +500,18 @@
 #define FSL_FEATURE_LPADC_HAS_CFG_CALOFS (0)
 /* @brief Has offset trim (register OFSTRIM). */
 #define FSL_FEATURE_LPADC_HAS_OFSTRIM (0)
+/* @brief Has power select (bitfield CFG[PWRSEL]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_PWRSEL (1)
+/* @brief Has alternate channel B scale (bitfield CMDLn[ALTB_CSCALE]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE (0)
+/* @brief Has alternate channel B select enable (bitfield CMDLn[ALTBEN]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_ALTBEN (0)
+/* @brief Has alternate channel input (bitfield CMDLn[ALTB_ADCH]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_ALTB_ADCH (0)
+/* @brief Has offset calibration mode (bitfield CTRL[CALOFSMODE]). */
+#define FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE (0)
+/* @brief Conversion averaged bitfiled width. */
+#define FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH (3)
 
 /* LPI2C module features */
 
@@ -637,10 +653,6 @@
 /* @brief Support lock eFuse word write lock, (CTRL[WORDLOCK]). */
 #define FSL_FEATURE_OCOTP_HAS_WORDLOCK (1)
 
-/* OSC_RC_400M module features */
-
-/* No feature definitions */
-
 /* PDM module features */
 
 /* @brief PDM FIFO offset */
@@ -655,26 +667,10 @@
 #define FSL_FEATURE_PDM_HAS_RANGE_CTRL (1)
 /* @brief PDM Has Low Frequency */
 #define FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ (1)
-
-/* PGMC_BPC module features */
-
-/* No feature definitions */
-
-/* PGMC_CPC module features */
-
-/* No feature definitions */
-
-/* PGMC_MIF module features */
-
-/* No feature definitions */
-
-/* PGMC_PPC module features */
-
-/* No feature definitions */
-
-/* PHY_LDO module features */
-
-/* No feature definitions */
+/* @brief CLKDIV factor in Medium, High and Low Quality modes */
+#define FSL_FEATURE_PDM_HIGH_QUALITY_CLKDIV_FACTOR (93)
+/* @brief CLKDIV factor in Very Low Quality modes */
+#define FSL_FEATURE_PDM_VERY_LOW_QUALITY_CLKDIV_FACTOR (43)
 
 /* PIT module features */
 
@@ -790,11 +786,11 @@
 /* @brief Has Secure Real Time Counter Enabled and Valid (bit field LPCR[SRTC_ENV]). */
 #define FSL_FEATURE_SNVS_HAS_SRTC (1)
 /* @brief Has Passive Tamper Filter (regitser LPTGFCR). */
-#define FSL_FEATURE_SNVS_PASSIVE_TAMPER_FILTER (1)
+#define FSL_FEATURE_SNVS_PASSIVE_TAMPER_FILTER (0)
 /* @brief Has Active Tampers (regitser LPATCTLR, LPATCLKR, LPATRCnR). */
-#define FSL_FEATURE_SNVS_HAS_ACTIVE_TAMPERS (1)
+#define FSL_FEATURE_SNVS_HAS_ACTIVE_TAMPERS (0)
 /* @brief Number of TAMPER. */
-#define FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER (10)
+#define FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER (0)
 
 /* SSARC_HP module features */
 
@@ -844,14 +840,6 @@
 #define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_1V8_SIGNALn(x) (1)
 /* @brief Has no retuning time counter (HOST_CTRL_CAP[TIME_COUNT_RETURNING]) */
 #define FSL_FEATURE_USDHC_REGISTER_HOST_CTRL_CAP_HAS_NO_RETUNING_TIME_COUNTER (1)
-
-/* VIDEO_PLL module features */
-
-/* No feature definitions */
-
-/* VMBANDGAP module features */
-
-/* No feature definitions */
 
 /* XBARA module features */
 

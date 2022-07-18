@@ -27,8 +27,6 @@ typedef struct _hal_rpmsg_state
 {
     uint32_t local_addr;
     uint32_t remote_addr;
-    struct rpmsg_lite_instance context;
-    struct rpmsg_lite_instance *pContext;
     struct rpmsg_lite_ept_static_context endpoint;
     struct rpmsg_lite_endpoint *pEndpoint;
     hal_rpmsg_rx_state_t rx;
@@ -59,7 +57,8 @@ extern uint32_t rpmsg_sh_mem_end[];
 
 static int32_t s_rpmsgEptCount                        = -1;
 static struct rpmsg_lite_instance *s_rpmsgContext     = NULL;
-volatile static uint16_t s_rpmsgEptData[MAX_EP_COUNT] = {0};
+static struct rpmsg_lite_instance s_context           = {0};
+static volatile uint16_t s_rpmsgEptData[MAX_EP_COUNT] = {0};
 static uint8_t s_rpmsg_init_golbal                    = 0U;
 
 /*******************************************************************************
@@ -92,6 +91,7 @@ static int32_t rpmsg_ept_read_cb(void *payload, uint32_t payload_len, uint32_t s
     hal_rpmsg_state_t *rpmsgHandle;
 
     rpmsgHandle = (hal_rpmsg_state_t *)priv;
+    assert(NULL != rpmsgHandle->rx.callback);
 
     return rpmsgHandle->rx.callback(rpmsgHandle->rx.param, payload, payload_len);
 }
@@ -108,13 +108,9 @@ static void RPMsgPeerReadyEventHandler(uint16_t eventData, void *context)
 
     *data = eventData;
 }
-
-static hal_rpmsg_status_t HAL_RpmsgMasterInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *config)
+static hal_rpmsg_status_t HAL_RpmsgMcmgrMasterInit(void)
 {
-    hal_rpmsg_state_t *rpmsgHandle;
-    volatile static uint16_t RPMsgRemoteReadyEventData = 0;
-
-    rpmsgHandle = (hal_rpmsg_state_t *)handle;
+    static volatile uint16_t RPMsgRemoteReadyEventData = 0;
 
     if (0 > s_rpmsgEptCount)
     {
@@ -133,21 +129,23 @@ static hal_rpmsg_status_t HAL_RpmsgMasterInit(hal_rpmsg_handle_t handle, hal_rpm
         RPMsgRemoteReadyEventData = 0;
 
         /* Master init */
-        rpmsgHandle->pContext = rpmsg_lite_master_init((void *)rpmsg_lite_base, SH_MEM_TOTAL_SIZE, RPMSG_LITE_LINK_ID,
-                                                       RL_NO_FLAGS, &rpmsgHandle->context);
+        s_rpmsgContext = rpmsg_lite_master_init((void *)rpmsg_lite_base, SH_MEM_TOTAL_SIZE, RPMSG_LITE_LINK_ID,
+                                                RL_NO_FLAGS, &s_context);
 
-        if (RL_NULL == rpmsgHandle->pContext)
+        if (RL_NULL == s_rpmsgContext)
         {
             return kStatus_HAL_RpmsgError;
         }
 
-        s_rpmsgContext  = rpmsgHandle->pContext;
         s_rpmsgEptCount = 0;
     }
-    else
-    {
-        rpmsgHandle->pContext = s_rpmsgContext;
-    }
+
+    return kStatus_HAL_RpmsgSuccess;
+}
+static hal_rpmsg_status_t HAL_RpmsgMasterInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *config)
+{
+    hal_rpmsg_state_t *rpmsgHandle;
+    rpmsgHandle = (hal_rpmsg_state_t *)handle;
 
     rpmsgHandle->local_addr  = config->local_addr;
     rpmsgHandle->remote_addr = config->remote_addr;
@@ -155,7 +153,7 @@ static hal_rpmsg_status_t HAL_RpmsgMasterInit(hal_rpmsg_handle_t handle, hal_rpm
     rpmsgHandle->rx.callback = NULL;
     rpmsgHandle->rx.param    = NULL;
 
-    rpmsgHandle->pEndpoint = rpmsg_lite_create_ept(rpmsgHandle->pContext, rpmsgHandle->local_addr, rpmsg_ept_read_cb,
+    rpmsgHandle->pEndpoint = rpmsg_lite_create_ept(s_rpmsgContext, rpmsgHandle->local_addr, rpmsg_ept_read_cb,
                                                    rpmsgHandle, &rpmsgHandle->endpoint);
 
     if (RL_NULL == rpmsgHandle->pEndpoint)
@@ -163,29 +161,16 @@ static hal_rpmsg_status_t HAL_RpmsgMasterInit(hal_rpmsg_handle_t handle, hal_rpm
         return kStatus_HAL_RpmsgError;
     }
 
-    /* Delay to wait remote side endpoint initialize complete. */
-    while ((APP_RPMSG_EP_READY_EVENT_DATA) != s_rpmsgEptData[s_rpmsgEptCount])
-    {
-    };
-    s_rpmsgEptData[s_rpmsgEptCount] = 0U;
-
-    /* Create end point success! */
-    s_rpmsgEptCount++;
-
     return kStatus_HAL_RpmsgSuccess;
 }
 #endif /* HAL_RPMSG_SELECT_ROLE */
 
 #if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 1U))
-
-static hal_rpmsg_status_t HAL_RpmsgRemoteInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *config)
+static hal_rpmsg_status_t HAL_RpmsgMcmgrRemoteInit()
 {
-    hal_rpmsg_state_t *rpmsgHandle;
     uint32_t startupData;
     mcmgr_status_t status;
     volatile static uint16_t RPMsgRemoteReadyEventData = 0;
-
-    rpmsgHandle = (hal_rpmsg_state_t *)handle;
 
     if (0 > s_rpmsgEptCount)
     {
@@ -199,10 +184,10 @@ static hal_rpmsg_status_t HAL_RpmsgRemoteInit(hal_rpmsg_handle_t handle, hal_rpm
             } while (status != kStatus_MCMGR_Success);
         }
 
-        rpmsgHandle->pContext = rpmsg_lite_remote_init((void *)(char *)rpmsg_sh_mem_start, RPMSG_LITE_LINK_ID,
-                                                       RL_NO_FLAGS, &rpmsgHandle->context);
+        s_rpmsgContext =
+            rpmsg_lite_remote_init((void *)(char *)rpmsg_sh_mem_start, RPMSG_LITE_LINK_ID, RL_NO_FLAGS, &s_context);
 
-        if (RL_NULL == rpmsgHandle->pContext)
+        if (RL_NULL == s_rpmsgContext)
         {
             return kStatus_HAL_RpmsgError;
         }
@@ -211,16 +196,18 @@ static hal_rpmsg_status_t HAL_RpmsgRemoteInit(hal_rpmsg_handle_t handle, hal_rpm
         (void)MCMGR_TriggerEvent(kMCMGR_RemoteApplicationEvent, APP_RPMSG_READY_EVENT_DATA);
         do
         {
-        } while (0 == rpmsg_lite_is_link_up(rpmsgHandle->pContext));
+        } while (RL_TRUE != rpmsg_lite_is_link_up(s_rpmsgContext));
 
         /* rpmsg initialized */
-        s_rpmsgContext  = rpmsgHandle->pContext;
         s_rpmsgEptCount = 0;
     }
-    else
-    {
-        rpmsgHandle->pContext = s_rpmsgContext;
-    }
+    return kStatus_HAL_RpmsgSuccess;
+}
+static hal_rpmsg_status_t HAL_RpmsgRemoteInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *config)
+{
+    hal_rpmsg_state_t *rpmsgHandle;
+
+    rpmsgHandle = (hal_rpmsg_state_t *)handle;
 
     /* Set local/remote addr */
     rpmsgHandle->local_addr  = config->local_addr;
@@ -229,7 +216,7 @@ static hal_rpmsg_status_t HAL_RpmsgRemoteInit(hal_rpmsg_handle_t handle, hal_rpm
     rpmsgHandle->rx.callback = NULL;
     rpmsgHandle->rx.param    = NULL;
 
-    rpmsgHandle->pEndpoint = rpmsg_lite_create_ept(rpmsgHandle->pContext, rpmsgHandle->local_addr, rpmsg_ept_read_cb,
+    rpmsgHandle->pEndpoint = rpmsg_lite_create_ept(s_rpmsgContext, rpmsgHandle->local_addr, rpmsg_ept_read_cb,
                                                    rpmsgHandle, &rpmsgHandle->endpoint);
 
     if (RL_NULL == rpmsgHandle->pEndpoint)
@@ -237,32 +224,42 @@ static hal_rpmsg_status_t HAL_RpmsgRemoteInit(hal_rpmsg_handle_t handle, hal_rpm
         return kStatus_HAL_RpmsgError;
     }
 
-    (void)MCMGR_TriggerEvent(kMCMGR_RemoteApplicationEvent, APP_RPMSG_EP_READY_EVENT_DATA << 0x8U | s_rpmsgEptCount);
-
-    /* Create end point success! */
-    s_rpmsgEptCount++;
-
     return kStatus_HAL_RpmsgSuccess;
 }
 #endif /* HAL_RPMSG_SELECT_ROLE */
 
-hal_rpmsg_status_t HAL_RpmsgInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *config)
+hal_rpmsg_status_t HAL_RpmsgMcmgrInit(void)
 {
     hal_rpmsg_status_t state;
-
-    assert(HAL_RPMSG_HANDLE_SIZE >= sizeof(hal_rpmsg_state_t));
-    assert(NULL != handle);
     if (0U == s_rpmsg_init_golbal)
     {
         (void)MCMGR_EarlyInit();
     }
 
 #if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
+    state = HAL_RpmsgMcmgrMasterInit();
+#elif (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 1U))
+    state = HAL_RpmsgMcmgrRemoteInit();
+#endif /* HAL_RPMSG_SELECT_ROLE */
+
+    return state;
+}
+hal_rpmsg_status_t HAL_RpmsgInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *config)
+{
+    hal_rpmsg_status_t state;
+    hal_rpmsg_state_t *rpmsgHandle;
+
+    assert(HAL_RPMSG_HANDLE_SIZE >= sizeof(hal_rpmsg_state_t));
+    assert(NULL != handle);
+    rpmsgHandle = (hal_rpmsg_state_t *)handle;
+
+#if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
     state = HAL_RpmsgMasterInit(handle, config);
 #elif (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 1U))
     state = HAL_RpmsgRemoteInit(handle, config);
 #endif /* HAL_RPMSG_SELECT_ROLE */
-
+    rpmsgHandle->rx.callback = config->callback;
+    rpmsgHandle->rx.param    = config->param;
     return state;
 }
 
@@ -274,14 +271,14 @@ hal_rpmsg_status_t HAL_RpmsgDeinit(hal_rpmsg_handle_t handle)
 
     if (s_rpmsgEptCount > 0)
     {
-        (void)rpmsg_lite_destroy_ept(rpmsgHandle->pContext, rpmsgHandle->pEndpoint);
+        (void)rpmsg_lite_destroy_ept(s_rpmsgContext, rpmsgHandle->pEndpoint);
         s_rpmsgEptCount--;
     }
 
     if (0 == s_rpmsgEptCount)
     {
         s_rpmsgEptCount = -1;
-        (void)rpmsg_lite_deinit(rpmsgHandle->pContext);
+        (void)rpmsg_lite_deinit(s_rpmsgContext);
         for (int i = 0; i < MAX_EP_COUNT; i++)
         {
             s_rpmsgEptData[i] = 0U;
@@ -305,13 +302,13 @@ hal_rpmsg_status_t HAL_RpmsgSend(hal_rpmsg_handle_t handle, uint8_t *data, uint3
 
     do
     {
-        if (0 == rpmsg_lite_is_link_up(rpmsgHandle->pContext))
+        if (RL_TRUE != rpmsg_lite_is_link_up(s_rpmsgContext))
         {
             status = kStatus_HAL_RpmsgError;
             break;
         }
 
-        if (RL_SUCCESS != rpmsg_lite_send(rpmsgHandle->pContext, rpmsgHandle->pEndpoint, rpmsgHandle->remote_addr,
+        if (RL_SUCCESS != rpmsg_lite_send(s_rpmsgContext, rpmsgHandle->pEndpoint, rpmsgHandle->remote_addr,
                                           (char *)data, length, RL_BLOCK))
         {
             status = kStatus_HAL_RpmsgError;
@@ -326,24 +323,20 @@ hal_rpmsg_status_t HAL_RpmsgSend(hal_rpmsg_handle_t handle, uint8_t *data, uint3
 
 void *HAL_RpmsgAllocTxBuffer(hal_rpmsg_handle_t handle, uint32_t size)
 {
-    hal_rpmsg_state_t *rpmsgHandle;
-    rpmsgHandle = (hal_rpmsg_state_t *)handle;
-    void *buf   = NULL;
+    void *buf = NULL;
     uint32_t primask;
     primask = DisableGlobalIRQ();
-    buf     = rpmsg_lite_alloc_tx_buffer(rpmsgHandle->pContext, &size, RL_BLOCK);
+    buf     = rpmsg_lite_alloc_tx_buffer(s_rpmsgContext, &size, RL_BLOCK);
     EnableGlobalIRQ(primask);
     return buf;
 }
 
 hal_rpmsg_status_t HAL_RpmsgFreeRxBuffer(hal_rpmsg_handle_t handle, uint8_t *data)
 {
-    hal_rpmsg_state_t *rpmsgHandle;
-    rpmsgHandle               = (hal_rpmsg_state_t *)handle;
     hal_rpmsg_status_t status = kStatus_HAL_RpmsgSuccess;
     uint32_t primask;
     primask = DisableGlobalIRQ();
-    if (RL_SUCCESS != rpmsg_lite_release_rx_buffer(rpmsgHandle->pContext, data))
+    if (RL_SUCCESS != rpmsg_lite_release_rx_buffer(s_rpmsgContext, data))
     {
         status = kStatus_HAL_RpmsgError;
     }
@@ -364,14 +357,14 @@ hal_rpmsg_status_t HAL_RpmsgNoCopySend(hal_rpmsg_handle_t handle, uint8_t *data,
 
     do
     {
-        if (0 == rpmsg_lite_is_link_up(rpmsgHandle->pContext))
+        if (RL_TRUE != rpmsg_lite_is_link_up(s_rpmsgContext))
         {
             status = kStatus_HAL_RpmsgError;
             break;
         }
 
-        if (RL_SUCCESS != rpmsg_lite_send_nocopy(rpmsgHandle->pContext, rpmsgHandle->pEndpoint,
-                                                 rpmsgHandle->remote_addr, (char *)data, length))
+        if (RL_SUCCESS != rpmsg_lite_send_nocopy(s_rpmsgContext, rpmsgHandle->pEndpoint, rpmsgHandle->remote_addr,
+                                                 (char *)data, length))
         {
             status = kStatus_HAL_RpmsgError;
             break;
@@ -390,7 +383,21 @@ hal_rpmsg_status_t HAL_RpmsgInstallRxCallback(hal_rpmsg_handle_t handle, rpmsg_r
 
     rpmsgHandle->rx.callback = callback;
     rpmsgHandle->rx.param    = param;
+#if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
+    /* Wait for remote side endpoint initialize completed and install the RX call back. */
+    while ((APP_RPMSG_EP_READY_EVENT_DATA) != s_rpmsgEptData[s_rpmsgEptCount])
+    {
+    };
+    s_rpmsgEptData[s_rpmsgEptCount] = 0U;
 
+    /* Create end point success! */
+    s_rpmsgEptCount++;
+#elif (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 1U))
+    (void)MCMGR_TriggerEvent(kMCMGR_RemoteApplicationEvent, APP_RPMSG_EP_READY_EVENT_DATA << 0x8U | s_rpmsgEptCount);
+
+    /* Create end point success! */
+    s_rpmsgEptCount++;
+#endif /* HAL_RPMSG_SELECT_ROLE */
     return kStatus_HAL_RpmsgSuccess;
 }
 

@@ -3,13 +3,13 @@
  * Title:        arm_dot_prod_q31.c
  * Description:  Q31 dot product
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/basic_math_functions.h"
 
 /**
   @ingroup groupMath
@@ -54,6 +54,64 @@
                    The return result is in 16.48 format.
  */
 
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
+
+#include "arm_helium_utils.h"
+
+void arm_dot_prod_q31(
+    const q31_t * pSrcA,
+    const q31_t * pSrcB,
+    uint32_t blockSize,
+    q63_t * result)
+{
+    uint32_t  blkCnt;           /* loop counters */
+    q31x4_t vecA;
+    q31x4_t vecB;
+    q63_t     sum = 0LL;
+
+    /* Compute 4 outputs at a time */
+    blkCnt = blockSize >> 2;
+    while (blkCnt > 0U)
+    {
+        /*
+         * C = A[0]* B[0] + A[1]* B[1] + A[2]* B[2] + .....+ A[blockSize-1]* B[blockSize-1]
+         * Calculate dot product and then store the result in a temporary buffer.
+         */
+        vecA = vld1q(pSrcA);
+        vecB = vld1q(pSrcB);
+        sum = vrmlaldavhaq(sum, vecA, vecB);
+        /*
+         * Decrement the blockSize loop counter
+         */
+        blkCnt--;
+        /*
+         * advance vector source and destination pointers
+         */
+        pSrcA += 4;
+        pSrcB += 4;
+    }
+    /*
+     * tail
+     */
+    blkCnt = blockSize & 3;
+    if (blkCnt > 0U)
+    {
+        mve_pred16_t p0 = vctp32q(blkCnt);
+        vecA = vld1q(pSrcA);
+        vecB = vld1q(pSrcB);
+        sum = vrmlaldavhaq_p(sum, vecA, vecB, p0);
+    }
+
+    /*
+     * vrmlaldavhaq provides extra intermediate accumulator headroom.
+     * limiting the need of intermediate scaling
+     * Scalar variant uses 2.48 accu format by right shifting accumulators by 14.
+     * 16.48 output conversion is performed outside the loop by scaling accu. by 6
+     */
+    *result = asrl(sum, (14 - 8));
+}
+
+#else
 void arm_dot_prod_q31(
   const q31_t * pSrcA,
   const q31_t * pSrcB,
@@ -109,6 +167,7 @@ void arm_dot_prod_q31(
   /* Store result in destination buffer in 16.48 format */
   *result = sum;
 }
+#endif /* defined(ARM_MATH_MVEI) */
 
 /**
   @} end of BasicDotProd group

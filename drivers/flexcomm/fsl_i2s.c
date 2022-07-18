@@ -606,7 +606,6 @@ status_t I2S_TxTransferNonBlocking(I2S_Type *base, i2s_handle_t *handle, i2s_tra
         return kStatus_I2S_Busy;
     }
 
-    handle->state                                = (uint32_t)kI2S_StateTx;
     handle->i2sQueue[handle->queueUser].data     = transfer.data;
     handle->i2sQueue[handle->queueUser].dataSize = transfer.dataSize;
     handle->queueUser                            = (handle->queueUser + 1U) % I2S_NUM_BUFFERS;
@@ -712,7 +711,6 @@ status_t I2S_RxTransferNonBlocking(I2S_Type *base, i2s_handle_t *handle, i2s_tra
         return kStatus_I2S_Busy;
     }
 
-    handle->state                                = (uint32_t)kI2S_StateRx;
     handle->i2sQueue[handle->queueUser].data     = transfer.data;
     handle->i2sQueue[handle->queueUser].dataSize = transfer.dataSize;
     handle->queueUser                            = (handle->queueUser + 1U) % I2S_NUM_BUFFERS;
@@ -839,6 +837,11 @@ void I2S_TxHandleIRQ(I2S_Type *base, i2s_handle_t *handle)
 
     if ((intstat & I2S_FIFOINTSTAT_TXLVL_MASK) != 0UL)
     {
+        if ((handle->state != (uint32_t)kI2S_StateTx) && (dataSize != 0U) && (dataAddr != 0U))
+        {
+            handle->state = (uint32_t)kI2S_StateTx;
+        }
+
         if (handle->state == (uint32_t)kI2S_StateTx)
         {
             /* Send data */

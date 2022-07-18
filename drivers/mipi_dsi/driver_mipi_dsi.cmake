@@ -10,5 +10,14 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/.
 )
 
-include(driver_soc_mipi_dsi)
+#OR Logic component
+if(${MCUX_DEVICE} STREQUAL "MIMXRT595S_cm33")
+    include(driver_soc_mipi_dsi)
+endif()
+if(${MCUX_DEVICE} STREQUAL "MIMX8QM6_cm4_core1")
+    include(driver_common)
+endif()
+if(${MCUX_DEVICE} STREQUAL "MIMX8QX6")
+    include(driver_common)
+endif()
 

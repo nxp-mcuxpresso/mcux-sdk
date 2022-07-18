@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef __HAL_RPMSG_ADAPTER_H__
-#define __HAL_RPMSG_ADAPTER_H__
+#ifndef __FSL_RPMSG_ADAPTER_H__
+#define __FSL_RPMSG_ADAPTER_H__
 
 #if defined(SDK_OS_FREE_RTOS)
 #include "FreeRTOS.h"
@@ -28,7 +28,7 @@
 #endif
 
 /*! @brief RPMSG handle size definition */
-#define HAL_RPMSG_HANDLE_SIZE (300U)
+#define HAL_RPMSG_HANDLE_SIZE (52U)
 
 #ifndef REMOTE_CORE_BOOT_ADDRESS
 #define REMOTE_CORE_BOOT_ADDRESS (0x01000000U)
@@ -76,14 +76,21 @@ typedef enum _hal_rpmsg_return_status
     kStatus_HAL_RL_HOLD,
 } hal_rpmsg_return_status_t;
 
-/*! @brief The callback function of RPMSG adapter. */
+/*! @brief The callback function of RPMSG adapter.
+ *
+ * @note If Rpmsg RX callback function return kStatus_HAL_RL_RELEASE mode, no need to call HAL_RpmsgFreeRxBuffer.
+ * @note If Rpmsg RX callback function return kStatus_HAL_RL_HOLD mode,then need to call HAL_RpmsgFreeRxBuffer.
+ *
+ */
 typedef hal_rpmsg_return_status_t (*rpmsg_rx_callback_t)(void *param, uint8_t *data, uint32_t len);
 
 /*! @brief The configure structure of RPMSG adapter. */
 typedef struct _hal_rpmsg_config
 {
-    uint32_t local_addr;  /* Local address for rx */
-    uint32_t remote_addr; /* Remote address for tx */
+    uint32_t local_addr;          /* Local address for rx */
+    uint32_t remote_addr;         /* Remote address for tx */
+    rpmsg_rx_callback_t callback; /* RPMGS Rx callback  */
+    void *param;                  /* RPMGS Rx callback parameter */
 } hal_rpmsg_config_t;
 
 /*******************************************************************************
@@ -98,6 +105,16 @@ extern "C" {
  * @brief Initializes the RPMSG adapter module for dual core communication.
  *
  * @note This API should be called at the beginning of the application using the RPMSG adapter driver.
+ *
+ * @retval kStatus_HAL_RpmsgSuccess RPMSG module initialize succeed.
+ */
+hal_rpmsg_status_t HAL_RpmsgMcmgrInit(void);
+
+/*!
+ * @brief Initializes the RPMSG adapter for RPMSG channel configure.
+ *
+ * @note This API should be called to software RPMSG communication configure, and it be
+ * called whenever application need it.
  *
  * @param handle Pointer to point to a memory space of size #HAL_RPMSG_HANDLE_SIZE allocated by the caller.
  * The handle should be 4 byte aligned, because unaligned access doesn't be supported on some devices.
@@ -179,6 +196,8 @@ hal_rpmsg_status_t HAL_RpmsgNoCopySend(hal_rpmsg_handle_t handle, uint8_t *data,
  * This API can be called at process context when the
  * message in rx buffer is processed.
  *
+ * @note The HAL_RpmsgFreeRxBuffer need be called only if Rpmsg RX callback function return kStatus_HAL_RL_HOLD mode.
+ *
  * @param handle           RPMSG handle pointer.
  * @param data             Pointer to where the received data from perr.
 
@@ -190,9 +209,12 @@ hal_rpmsg_status_t HAL_RpmsgFreeRxBuffer(hal_rpmsg_handle_t handle, uint8_t *dat
 /*!
  * @brief Install RPMSG rx callback.
  *
- * @note The rx callback function will be called when the rx process complete.
+ * @note The function must be called because rpmsg adapter just support asynchronous receive mode
+ *        should make sure the callback function is installed before the data received from peer soc,
+ *        and the rx callback function will be called when the rx process complete.
  *
- * @param handle           RPMSG handle pointer.
+ *
+ * @param handle    RPMSG handle pointer.
  * @retval kStatus_HAL_RpmsgSuccess RPMSG install rx callback succeed.
  */
 hal_rpmsg_status_t HAL_RpmsgInstallRxCallback(hal_rpmsg_handle_t handle, rpmsg_rx_callback_t callback, void *param);
@@ -225,4 +247,4 @@ hal_rpmsg_status_t HAL_RpmsgExitLowpower(hal_rpmsg_handle_t handle);
 }
 #endif
 /*! @}*/
-#endif /* __HAL_RPMSG_ADAPTER_H__ */
+#endif /* __FSL_RPMSG_ADAPTER_H__ */

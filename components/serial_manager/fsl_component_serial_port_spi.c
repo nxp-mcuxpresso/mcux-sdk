@@ -145,7 +145,7 @@ void Serial_SpiSlaveTxCallback(hal_spi_slave_handle_t handle, hal_spi_status_t s
         serial_manager_status_t serialManagerStatus = kStatus_SerialManager_Success;
         msg.buffer                                  = serialSpiSlaveHandle->tx.buffer;
         msg.length                                  = serialSpiSlaveHandle->tx.length;
-        if (NULL != serialSpiSlaveHandle->rx.callback)
+        if (NULL != serialSpiSlaveHandle->tx.callback)
         {
             serialSpiSlaveHandle->tx.callback(serialSpiSlaveHandle->tx.callbackParam, &msg, serialManagerStatus);
         }

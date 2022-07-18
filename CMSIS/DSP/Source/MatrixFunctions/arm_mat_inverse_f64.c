@@ -3,13 +3,13 @@
  * Title:        arm_mat_inverse_f64.c
  * Description:  Floating-point matrix inverse
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/matrix_functions.h"
 
 /**
   @ingroup groupMatrix
@@ -40,7 +40,7 @@
 
 /**
   @brief         Floating-point (64 bit) matrix inverse.
-  @param[in]     pSrc      points to input matrix structure
+  @param[in]     pSrc      points to input matrix structure. The source matrix is modified by the function.
   @param[out]    pDst      points to output matrix structure
   @return        execution status
                    - \ref ARM_MATH_SUCCESS       : Operation successful
@@ -61,10 +61,9 @@ arm_status arm_mat_inverse_f64(
   uint32_t numCols = pSrc->numCols;              /* Number of Cols in the matrix  */
 
 #if defined (ARM_MATH_DSP)
-  float64_t maxC;                                /* maximum value in the column */
 
   float64_t Xchg, in = 0.0, in1;                /* Temporary input values  */
-  uint32_t i, rowCnt, flag = 0U, j, loopCnt, k, l;      /* loop counters */
+  uint32_t i, rowCnt, flag = 0U, j, loopCnt, k,l;      /* loop counters */
   arm_status status;                             /* status of matrix inverse */
 
 #ifdef ARM_MATH_MATRIX_CHECK
@@ -99,13 +98,12 @@ arm_status arm_mat_inverse_f64(
      *
      *      3. Begin with the first row. Let i = 1.
      *
-     *      4. Check to see if the pivot for column i is the greatest of the column.
+     *      4. Check to see if the pivot for row i is zero.
      *         The pivot is the element of the main diagonal that is on the current row.
      *         For instance, if working with row i, then the pivot element is aii.
-     *         If the pivot is not the most significant of the columns, exchange that row with a row
-     *         below it that does contain the most significant value in column i. If the most
-     *         significant value of the column is zero, then an inverse to that matrix does not exist.
-     *         The most significant value of the column is the absolute maximum.
+     *         If the pivot is zero, exchange that row with a row below it that does not
+     *         contain a zero in column i. If this is not possible, then an inverse
+     *         to that matrix does not exist.
      *
      *      5. Divide every element of row i by the pivot.
      *
@@ -176,41 +174,22 @@ arm_status arm_mat_inverse_f64(
       /* Temporary variable to hold the pivot value */
       in = *pInT1;
 
-      /* Grab the most significant value from column l */
-      maxC = 0;
-      for (i = l; i < numRows; i++)
-      {
-        maxC = *pInT1 > 0 ? (*pInT1 > maxC ? *pInT1 : maxC) : (-*pInT1 > maxC ? -*pInT1 : maxC);
-        pInT1 += numCols;
-      }
+    
 
-      /* Update the status if the matrix is singular */
-      if (maxC == 0.0)
-      {
-        return ARM_MATH_SINGULAR;
-      }
-
-      /* Restore pInT1  */
-      pInT1 = pIn;
-
-      /* Destination pointer modifier */
-      k = 1U;
-
-      /* Check if the pivot element is the most significant of the column */
-      if ( (in > 0.0 ? in : -in) != maxC)
+      /* Check if the pivot element is zero */
+      if (*pInT1 == 0.0)
       {
         /* Loop over the number rows present below */
-        i = numRows - (l + 1U);
 
-        while (i > 0U)
+        for (i = 1U; i < numRows - l; i++)
         {
           /* Update the input and destination pointers */
-          pInT2 = pInT1 + (numCols * l);
-          pOutT2 = pOutT1 + (numCols * k);
+          pInT2 = pInT1 + (numCols * i);
+          pOutT2 = pOutT1 + (numCols * i);
 
-          /* Look for the most significant element to
+          /* Check if there is a non zero pivot element to
            * replace in the rows below */
-          if ((*pInT2 > 0.0 ? *pInT2: -*pInT2) == maxC)
+          if (*pInT2 != 0.0)
           {
             /* Loop over number of columns
              * to the right of the pilot element */
@@ -248,11 +227,8 @@ arm_status arm_mat_inverse_f64(
             break;
           }
 
-          /* Update the destination pointer modifier */
-          k++;
 
           /* Decrement loop counter */
-          i--;
         }
       }
 
@@ -392,7 +368,7 @@ arm_status arm_mat_inverse_f64(
 #else
 
   float64_t Xchg, in = 0.0;                     /* Temporary input values  */
-  uint32_t i, rowCnt, flag = 0U, j, loopCnt, k, l;      /* loop counters */
+  uint32_t i, rowCnt, flag = 0U, j, loopCnt, l;      /* loop counters */
   arm_status status;                             /* status of matrix inverse */
 
 #ifdef ARM_MATH_MATRIX_CHECK
@@ -503,18 +479,15 @@ arm_status arm_mat_inverse_f64(
       /* Temporary variable to hold the pivot value */
       in = *pInT1;
 
-      /* Destination pointer modifier */
-      k = 1U;
-
       /* Check if the pivot element is zero */
       if (*pInT1 == 0.0)
       {
         /* Loop over the number rows present below */
-        for (i = (l + 1U); i < numRows; i++)
+        for (i = 1U; i < numRows-l; i++)
         {
           /* Update the input and destination pointers */
-          pInT2 = pInT1 + (numCols * l);
-          pOutT2 = pOutT1 + (numCols * k);
+          pInT2 = pInT1 + (numCols * i);
+          pOutT2 = pOutT1 + (numCols * i);
 
           /* Check if there is a non zero pivot element to
            * replace in the rows below */
@@ -543,11 +516,9 @@ arm_status arm_mat_inverse_f64(
             /* Break after exchange is done */
             break;
           }
-
-          /* Update the destination pointer modifier */
-          k++;
         }
       }
+
 
       /* Update the status if the matrix is singular */
       if ((flag != 1U) && (in == 0.0))

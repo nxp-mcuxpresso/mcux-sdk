@@ -3,13 +3,13 @@
  * Title:        arm_q15_to_q7.c
  * Description:  Converts the elements of the Q15 vector to Q7 vector
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/support_functions.h"
 
 /**
   @ingroup groupSupport
@@ -50,7 +50,50 @@
       pDst[n] = (q7_t) pSrc[n] >> 8;   0 <= n < blockSize.
   </pre>
  */
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
+void arm_q15_to_q7(
+  const q15_t * pSrc,
+        q7_t * pDst,
+        uint32_t blockSize)
+{
 
+    uint32_t  blkCnt;           /* loop counters */
+    q15x8x2_t tmp;
+    q15_t const *pSrcVec;
+    q7x16_t vecDst;
+
+
+    pSrcVec = (q15_t const *) pSrc;
+    blkCnt = blockSize >> 4;
+    while (blkCnt > 0U)
+    {
+        /* C = (q7_t) A >> 8 */
+        /* convert from q15 to q7 and then store the results in the destination buffer */
+        tmp = vld2q(pSrcVec);   
+        pSrcVec += 16;
+        vecDst = vqshrnbq_n_s16(vecDst, tmp.val[0], 8);
+        vecDst = vqshrntq_n_s16(vecDst, tmp.val[1], 8);
+        vst1q(pDst, vecDst);    
+        pDst += 16;
+        /*
+         * Decrement the blockSize loop counter
+         */
+        blkCnt--;
+    }
+
+  blkCnt = blockSize & 0xF;
+  while (blkCnt > 0U)
+  {
+    /* C = (q7_t) A >> 8 */
+
+    /* Convert from q15 to q7 and store result in destination buffer */
+    *pDst++ = (q7_t) (*pSrcVec++ >> 8);
+
+    /* Decrement loop counter */
+    blkCnt--;
+  }
+}
+#else
 void arm_q15_to_q7(
   const q15_t * pSrc,
         q7_t * pDst,
@@ -140,6 +183,7 @@ void arm_q15_to_q7(
   }
 
 }
+#endif /* defined(ARM_MATH_MVEI) */
 
 /**
   @} end of q15_to_x group

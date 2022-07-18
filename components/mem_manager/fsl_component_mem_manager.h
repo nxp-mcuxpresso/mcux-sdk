@@ -9,7 +9,14 @@
 #ifndef __MEM_MANAGER_H__
 #define __MEM_MANAGER_H__
 
+#ifndef SDK_COMPONENT_DEPENDENCY_FSL_COMMON
+#define SDK_COMPONENT_DEPENDENCY_FSL_COMMON (1U)
+#endif
+#if (defined(SDK_COMPONENT_DEPENDENCY_FSL_COMMON) && (SDK_COMPONENT_DEPENDENCY_FSL_COMMON > 0U))
 #include "fsl_common.h"
+#else
+#endif
+
 /*!
  * @addtogroup MemManager
  * @{
@@ -20,14 +27,27 @@
 * Public macros
 ******************************************************************************
 *****************************************************************************/
-/*
+
+/*!
+ * @brief Provide Minimal heap size for application to execute correctly.
+ *
+ * The application can define a minimal heap size for proper code exection at run time,
+ * This will issue a link error if the minimal heap size requirement is not fullfilled (not enough space in RAM)
+ * By Default, Minimal heap size is set to 4 bytes (unlikely enough to have application work correctly)
+ */
+#if !defined(MinimalHeapSize_c)
+#define MinimalHeapSize_c        (uint32_t)4
+#endif
+
+
+/*!
  * @brief Configures the memory manager light enable.
  */
 #ifndef gMemManagerLight
 #define gMemManagerLight (1)
 #endif
 
-/*
+/*!
  * @brief Configures the memory manager trace debug enable.
  */
 #ifndef MEM_MANAGER_ENABLE_TRACE
@@ -41,7 +61,7 @@
 #define MEM_MANAGER_BUFFER_REMOVE (0)
 #endif
 
-/*
+/*!
  * @brief Configures the memory manager pre configure.
  */
 #ifndef MEM_MANAGER_PRE_CONFIGURE
@@ -144,6 +164,7 @@
 *****************************************************************************/
 
 /**@brief Memory status. */
+#if (defined(SDK_COMPONENT_DEPENDENCY_FSL_COMMON) && (SDK_COMPONENT_DEPENDENCY_FSL_COMMON > 0U))
 typedef enum _mem_status
 {
     kStatus_MemSuccess      = kStatus_Success,                          /* No error occurred */
@@ -152,6 +173,17 @@ typedef enum _mem_status
     kStatus_MemFreeError    = MAKE_STATUS(kStatusGroup_MEM_MANAGER, 3), /* Memory free error */
     kStatus_MemUnknownError = MAKE_STATUS(kStatusGroup_MEM_MANAGER, 4), /* something bad has happened... */
 } mem_status_t;
+#else
+typedef enum _mem_status
+{
+    kStatus_MemSuccess      = 0, /* No error occurred */
+    kStatus_MemInitError    = 1, /* Memory initialization error */
+    kStatus_MemAllocError   = 2, /* Memory allocation error */
+    kStatus_MemFreeError    = 3, /* Memory free error */
+    kStatus_MemUnknownError = 4, /* something bad has happened... */
+} mem_status_t;
+
+#endif
 
 /**@brief Memory user config. */
 typedef struct _mem_config
@@ -162,6 +194,15 @@ typedef struct _mem_config
     uint16_t reserved;       /*< reserved. */
     uint8_t *pbuffer;        /*< buffer. */
 } mem_config_t;
+
+#if defined(gFSCI_MemAllocTest_Enabled_d) && (gFSCI_MemAllocTest_Enabled_d)
+/**@brief Memory status. */
+typedef enum mem_alloc_test_status
+{
+    kStatus_AllocSuccess = kStatus_Success, /* Allow buffer to be allocated */
+    kStatus_AllocBlock   = kStatus_Busy,    /* Block buffer to be allocated */
+} mem_alloc_test_status_t;
+#endif
 
 /*****************************************************************************
 ******************************************************************************

@@ -19,6 +19,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/ft5406_rt
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/gpio
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/gt911
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/log
@@ -28,6 +29,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyksz8081
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/silicon_id
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video
@@ -137,7 +139,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart_edma)
 #    include(driver_ocotp)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(driver_pxp)
 #    include(component_mflash_rt1064)
 #    include(driver_xip_device)
@@ -149,13 +150,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_azure_rtos_ux)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
+#    include(utility_debug_console_lite)
 #    include(component_log_backend_debugconsole)
 #    include(CMSIS_Driver_Include_Ethernet_MAC)
-#    include(CMSIS_DSP_Library)
 #    include(driver_tempmon)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_edma)
 #    include(middleware_sdmmc_osa_freertos)
+#    include(component_silicon_id)
 #    include(middleware_usb_device_cdc_external)
 #    include(driver_cmsis_enet)
 #    include(utility_shell)
@@ -208,6 +210,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_azure_rtos_ux_template_MIMXRT1064)
 #    include(middleware_azure_rtos_nxd_template_MIMXRT1064)
 #    include(middleware_sdmmc_sdio)
+#    include(CMSIS_DSP_Source)
 #    include(middleware_eiq_deepviewrt_deps_json)
 #    include(driver_snvs_hp)
 #    include(middleware_usb_host_msd)
@@ -221,7 +224,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_eiq_worker)
 #    include(CMSIS_Driver_Include_USART)
 #    include(CMSIS_Driver_Include_SPI)
-#    include(utility_debug_console_lite)
+#    include(driver_gt911)
 #    include(component_audio_sai_edma_adapter)
 #    include(driver_adc_etc)
 #    include(driver_mdio-common)
@@ -241,6 +244,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_hid)
 #    include(component_osa_thread)
 #    include(driver_lpi2c_freertos)
+#    include(utilities_misc_utilities_MIMXRT1064)
 #    include(component_mflash_common)
 #    include(driver_cmsis_lpspi)
 #    include(middleware_usb_device_ehci)

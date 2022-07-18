@@ -38,6 +38,7 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(driver_cmsis_ii2c)
+#    include(utilities_misc_utilities_MIMX8MQ6)
 #    include(utility_debug_console_lite)
 #    include(driver_rdc)
 #    include(driver_ii2c)
@@ -72,7 +73,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_iuart_adapter)
 #    include(component_wm8524_adapter)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(driver_common)
 #    include(driver_sema4)
 #    include(middleware_freertos-kernel_heap_4)

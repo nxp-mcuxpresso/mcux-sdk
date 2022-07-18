@@ -534,7 +534,7 @@ void LOG_Printf(log_module_t const *module, log_level_t level, unsigned int time
     }
 
 #ifdef SDK_OS_FREE_RTOS
-    if (pdFALSE == xSemaphoreTakeRecursive(s_logContext.mutex, portMAX_DELAY))
+    if (((BaseType_t)0) == (BaseType_t)xSemaphoreTakeRecursive(s_logContext.mutex, portMAX_DELAY))
     {
         return;
     }
@@ -571,7 +571,7 @@ void LOG_Printf(log_module_t const *module, log_level_t level, unsigned int time
     log_output_low_level(buffer.buffer, buffer.sofar);
 
 #ifdef SDK_OS_FREE_RTOS
-    if (pdFALSE == xSemaphoreGiveRecursive(s_logContext.mutex))
+    if (((BaseType_t)0) == (BaseType_t)xSemaphoreGiveRecursive(s_logContext.mutex))
     {
         return;
     }

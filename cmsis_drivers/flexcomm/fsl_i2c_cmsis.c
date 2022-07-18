@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013-2016 ARM Limited. All rights reserved.
  * Copyright (c) 2016, Freescale Semiconductor, Inc. Not a Contribution.
- * Copyright 2016-2020 NXP. Not a Contribution.
+ * Copyright 2016-2020,2022 NXP. Not a Contribution.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -31,7 +31,7 @@
      (defined(RTE_I2C9) && RTE_I2C9) || (defined(RTE_I2C10) && RTE_I2C10) || (defined(RTE_I2C11) && RTE_I2C11) || \
      (defined(RTE_I2C12) && RTE_I2C12) || (defined(RTE_I2C13) && RTE_I2C13))
 
-#define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (2))
+#define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (3))
 
 /*
  * ARMCC does not support split the data section automatically, so the driver
@@ -413,8 +413,14 @@ static void KSDK_I2C_MASTER_InterruptCallback(I2C_Type *base,
         case kStatus_I2C_ArbitrationLost: /*Occurs in master mode when arbitration is lost.*/
             event = ARM_I2C_EVENT_ARBITRATION_LOST;
             break;
-        default:
+        case kStatus_I2C_Nak: /* Slave nacks master before all data are transmitted */
             event = ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
+            break;
+        case kStatus_I2C_Addr_Nak: /* Failed during slave probing */
+            event = ARM_I2C_EVENT_ADDRESS_NACK;
+            break;
+        default:
+            event = ARM_I2C_EVENT_BUS_ERROR;
             break;
     }
 

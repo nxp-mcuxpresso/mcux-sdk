@@ -11,7 +11,14 @@
 #ifndef __PANIC_H__
 #define __PANIC_H__
 
+#ifndef SDK_COMPONENT_DEPENDENCY_FSL_COMMON
+#define SDK_COMPONENT_DEPENDENCY_FSL_COMMON (1U)
+#endif
+#if (defined(SDK_COMPONENT_DEPENDENCY_FSL_COMMON) && (SDK_COMPONENT_DEPENDENCY_FSL_COMMON > 0U))
 #include "fsl_common.h"
+#else
+#endif
+
 /*!
  * @addtogroup Panic
  * @{

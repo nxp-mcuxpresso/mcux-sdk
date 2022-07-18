@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,11 +26,11 @@ static void LPUART_RTOS_Callback(LPUART_Type *base, lpuart_handle_t *state, stat
 
     if (status == kStatus_LPUART_RxIdle)
     {
-        xResult = xEventGroupSetBitsFromISR(handle->rxEvent, RTOS_LPUART_COMPLETE, &xHigherPriorityTaskWoken);
+        xResult = xEventGroupSetBitsFromISR(handle->rxEvent, RTOS_LPUART_RX_COMPLETE, &xHigherPriorityTaskWoken);
     }
     else if (status == kStatus_LPUART_TxIdle)
     {
-        xResult = xEventGroupSetBitsFromISR(handle->txEvent, RTOS_LPUART_COMPLETE, &xHigherPriorityTaskWoken);
+        xResult = xEventGroupSetBitsFromISR(handle->txEvent, RTOS_LPUART_TX_COMPLETE, &xHigherPriorityTaskWoken);
     }
     else if (status == kStatus_LPUART_RxRingBufferOverrun)
     {
@@ -99,8 +99,13 @@ int LPUART_RTOS_Init(lpuart_rtos_handle_t *handle, lpuart_handle_t *t_handle, co
         return kStatus_InvalidArgument;
     }
 
-    handle->base    = cfg->base;
-    handle->t_state = t_handle;
+    handle->base                     = cfg->base;
+    handle->t_state                  = t_handle;
+    handle->rx_timeout_constant_ms   = cfg->rx_timeout_constant_ms;
+    handle->rx_timeout_multiplier_ms = cfg->rx_timeout_multiplier_ms;
+    handle->tx_timeout_constant_ms   = cfg->tx_timeout_constant_ms;
+    handle->tx_timeout_multiplier_ms = cfg->tx_timeout_multiplier_ms;
+
 #if (configSUPPORT_STATIC_ALLOCATION == 1)
     handle->txSemaphore = xSemaphoreCreateMutexStatic(&handle->txSemaphoreBuffer);
 #else
@@ -143,6 +148,7 @@ int LPUART_RTOS_Init(lpuart_rtos_handle_t *handle, lpuart_handle_t *t_handle, co
         vSemaphoreDelete(handle->txSemaphore);
         return kStatus_Fail;
     }
+
     LPUART_GetDefaultConfig(&defcfg);
 
     defcfg.baudRate_Bps = cfg->baudrate;
@@ -210,7 +216,7 @@ int LPUART_RTOS_Deinit(lpuart_rtos_handle_t *handle)
 /*FUNCTION**********************************************************************
  *
  * Function Name : UART_RTOS_Send
- * Description   : Initializes the UART instance for application
+ * Description   : Send chars over LPUART
  *
  *END**************************************************************************/
 /*!
@@ -226,8 +232,10 @@ int LPUART_RTOS_Deinit(lpuart_rtos_handle_t *handle)
 int LPUART_RTOS_Send(lpuart_rtos_handle_t *handle, uint8_t *buffer, uint32_t length)
 {
     EventBits_t ev;
-    int retval = kStatus_Success;
+    int retval = kStatus_Fail;
     status_t status;
+    const TickType_t txTickTimeout =
+        (length * handle->tx_timeout_multiplier_ms + handle->tx_timeout_constant_ms) / portTICK_PERIOD_MS;
 
     if (NULL == handle->base)
     {
@@ -243,7 +251,7 @@ int LPUART_RTOS_Send(lpuart_rtos_handle_t *handle, uint8_t *buffer, uint32_t len
         return kStatus_InvalidArgument;
     }
 
-    if (pdFALSE == xSemaphoreTake(handle->txSemaphore, 0))
+    if (pdFALSE == xSemaphoreTake(handle->txSemaphore, 0u))
     {
         /* We could not take the semaphore, exit with 0 data received */
         return kStatus_Fail;
@@ -260,10 +268,24 @@ int LPUART_RTOS_Send(lpuart_rtos_handle_t *handle, uint8_t *buffer, uint32_t len
         return kStatus_Fail;
     }
 
-    ev = xEventGroupWaitBits(handle->txEvent, RTOS_LPUART_COMPLETE, pdTRUE, pdFALSE, portMAX_DELAY);
-    if ((ev & RTOS_LPUART_COMPLETE) == 0U)
+    ev = xEventGroupWaitBits(handle->txEvent, RTOS_LPUART_TX_COMPLETE, pdTRUE, pdFALSE,
+                             (txTickTimeout > 0u) ? txTickTimeout : portMAX_DELAY);
+    if ((ev & RTOS_LPUART_TX_COMPLETE) != 0u)
     {
-        retval = kStatus_Fail;
+        retval = kStatus_Success;
+    }
+    else /* timeout expired or unknown error*/
+    {
+        if (txTickTimeout > 0u)
+        {
+            LPUART_TransferAbortSend(handle->base, handle->t_state);
+            (void)xEventGroupClearBits(handle->txEvent, RTOS_LPUART_TX_COMPLETE);
+            retval = kStatus_Timeout;
+        }
+        else
+        {
+            retval = kStatus_Fail;
+        }
     }
 
     if (pdFALSE == xSemaphoreGive(handle->txSemaphore))
@@ -277,8 +299,8 @@ int LPUART_RTOS_Send(lpuart_rtos_handle_t *handle, uint8_t *buffer, uint32_t len
 
 /*FUNCTION**********************************************************************
  *
- * Function Name : LPUART_RTOS_Recv
- * Description   : Receives chars for the application
+ * Function Name : LPUART_RTOS_Receive
+ * Description   : Receives chars from LPUART
  *
  *END**************************************************************************/
 /*!
@@ -295,10 +317,12 @@ int LPUART_RTOS_Send(lpuart_rtos_handle_t *handle, uint8_t *buffer, uint32_t len
 int LPUART_RTOS_Receive(lpuart_rtos_handle_t *handle, uint8_t *buffer, uint32_t length, size_t *received)
 {
     EventBits_t ev;
-    size_t n              = 0;
-    int retval            = kStatus_Fail;
-    size_t local_received = 0;
+    size_t n                = 0u;
+    int retval              = kStatus_Fail;
+    uint32_t local_received = 0u;
     status_t status;
+    const TickType_t rxTickTimeout =
+        (length * handle->rx_timeout_multiplier_ms + handle->rx_timeout_constant_ms) / portTICK_PERIOD_MS;
 
     if (NULL == handle->base)
     {
@@ -337,43 +361,54 @@ int LPUART_RTOS_Receive(lpuart_rtos_handle_t *handle, uint8_t *buffer, uint32_t 
     }
 
     ev = xEventGroupWaitBits(
-        handle->rxEvent, RTOS_LPUART_COMPLETE | RTOS_LPUART_RING_BUFFER_OVERRUN | RTOS_LPUART_HARDWARE_BUFFER_OVERRUN,
-        pdTRUE, pdFALSE, portMAX_DELAY);
-    if ((ev & RTOS_LPUART_HARDWARE_BUFFER_OVERRUN) != 0U)
+        handle->rxEvent,
+        RTOS_LPUART_RX_COMPLETE | RTOS_LPUART_RING_BUFFER_OVERRUN | RTOS_LPUART_HARDWARE_BUFFER_OVERRUN, pdTRUE,
+        pdFALSE, (rxTickTimeout > 0u) ? rxTickTimeout : portMAX_DELAY);
+    if ((ev & RTOS_LPUART_HARDWARE_BUFFER_OVERRUN) != 0u)
     {
         /* Stop data transfer to application buffer, ring buffer is still active */
         LPUART_TransferAbortReceive(handle->base, handle->t_state);
         /* Prevent false indication of successful transfer in next call of LPUART_RTOS_Receive.
            RTOS_LPUART_COMPLETE flag could be set meanwhile overrun is handled */
-        (void)xEventGroupClearBits(handle->rxEvent, RTOS_LPUART_COMPLETE);
+        (void)xEventGroupClearBits(handle->rxEvent, RTOS_LPUART_RX_COMPLETE);
         retval         = kStatus_LPUART_RxHardwareOverrun;
-        local_received = 0;
+        local_received = 0u;
     }
-    else if ((ev & RTOS_LPUART_RING_BUFFER_OVERRUN) != 0U)
+    else if ((ev & RTOS_LPUART_RING_BUFFER_OVERRUN) != 0u)
     {
         /* Stop data transfer to application buffer, ring buffer is still active */
         LPUART_TransferAbortReceive(handle->base, handle->t_state);
         /* Prevent false indication of successful transfer in next call of LPUART_RTOS_Receive.
            RTOS_LPUART_COMPLETE flag could be set meanwhile overrun is handled */
-        (void)xEventGroupClearBits(handle->rxEvent, RTOS_LPUART_COMPLETE);
+        (void)xEventGroupClearBits(handle->rxEvent, RTOS_LPUART_RX_COMPLETE);
         retval         = kStatus_LPUART_RxRingBufferOverrun;
-        local_received = 0;
+        local_received = 0u;
     }
-    else if ((ev & RTOS_LPUART_COMPLETE) != 0U)
+    else if ((ev & RTOS_LPUART_RX_COMPLETE) != 0u)
     {
         retval         = kStatus_Success;
         local_received = length;
     }
-    else
+    else /* timeout expired or unknown error*/
     {
-        retval         = kStatus_LPUART_Error;
-        local_received = 0;
+        if (rxTickTimeout > 0u)
+        {
+            (void)LPUART_TransferGetReceiveCount(handle->base, handle->t_state, &local_received);
+            LPUART_TransferAbortReceive(handle->base, handle->t_state);
+            (void)xEventGroupClearBits(handle->rxEvent, RTOS_LPUART_RX_COMPLETE);
+            retval = kStatus_Timeout;
+        }
+        else
+        {
+            retval         = kStatus_LPUART_Error;
+            local_received = 0u;
+        }
     }
 
     /* Prevent repetitive NULL check */
     if (received != NULL)
     {
-        *received = local_received;
+        *received = (size_t)local_received;
     }
 
     /* Enable next transfer. Current one is finished */
@@ -383,4 +418,60 @@ int LPUART_RTOS_Receive(lpuart_rtos_handle_t *handle, uint8_t *buffer, uint32_t 
         retval = kStatus_Fail;
     }
     return retval;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : LPUART_RTOS_SetRxTimeout
+ * Description   : Modify receive timeout value in alreaty initialized LPUART RTOS handle.
+ *
+ *END**************************************************************************/
+/*!
+ * brief Set RX timeout in runtime
+ *
+ * This function can modify RX timeout between initialization and receive.
+ *
+ * param handle The RTOS LPUART handle.
+ * param rx_timeout_constant_ms RX timeout applied per receive.
+ * param rx_timeout_multiplier_ms RX timeout added for each byte of the receive.
+ */
+int LPUART_RTOS_SetRxTimeout(lpuart_rtos_handle_t *handle,
+                             uint32_t rx_timeout_constant_ms,
+                             uint32_t rx_timeout_multiplier_ms)
+{
+    if (NULL == handle)
+    {
+        return kStatus_InvalidArgument;
+    }
+    handle->rx_timeout_constant_ms   = rx_timeout_constant_ms;
+    handle->rx_timeout_multiplier_ms = rx_timeout_multiplier_ms;
+    return kStatus_Success;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : LPUART_RTOS_SetTxTimeout
+ * Description   : Modify send timeout value in alreaty initialized LPUART RTOS handle.
+ *
+ *END**************************************************************************/
+/*!
+ * brief Set TX timeout in runtime
+ *
+ * This function can modify TX timeout between initialization and send.
+ *
+ * param handle The RTOS LPUART handle.
+ * param tx_timeout_constant_ms TX timeout applied per transmition.
+ * param tx_timeout_multiplier_ms TX timeout added for each byte of the transmition.
+ */
+int LPUART_RTOS_SetTxTimeout(lpuart_rtos_handle_t *handle,
+                             uint32_t tx_timeout_constant_ms,
+                             uint32_t tx_timeout_multiplier_ms)
+{
+    if (NULL == handle)
+    {
+        return kStatus_InvalidArgument;
+    }
+    handle->tx_timeout_constant_ms   = tx_timeout_constant_ms;
+    handle->tx_timeout_multiplier_ms = tx_timeout_multiplier_ms;
+    return kStatus_Success;
 }

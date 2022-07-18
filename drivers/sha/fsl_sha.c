@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,7 +18,7 @@
 
 /*!< SHA-1 and SHA-256 block size  */
 #define SHA_BLOCK_SIZE 64U
-#define MAX_HASH_CHUNK (SHA_MEMCTRL_COUNT_MASK >> 16)
+#define MAX_HASH_CHUNK (2048U - 1U)
 
 /*!< Use standard C library memcpy  */
 #define sha_memcpy memcpy
@@ -43,13 +43,15 @@ typedef union _sha_hash_block
 /*! internal sha context structure */
 typedef struct _sha_ctx_internal
 {
-    sha_block_t blk;        /*!< memory buffer. only full 64-byte blocks are written to SHA during hash updates */
-    size_t blksz;           /*!< number of valid bytes in memory buffer */
-    sha_algo_t algo;        /*!< selected algorithm from the set of supported algorithms */
-    sha_algo_state_t state; /*!< finite machine state of the hash software process */
-    size_t fullMessageSize; /*!< track message size during SHA_Update(). The value is used for padding. */
-    uint8_t *pMessage;      /*!< current message address */
-    SHA_Type *base;         /*!< SHA base address */
+    sha_block_t blk;             /*!< memory buffer. only full 64-byte blocks are written to SHA during hash updates */
+    size_t blksz;                /*!< number of valid bytes in memory buffer */
+    sha_algo_t algo;             /*!< selected algorithm from the set of supported algorithms */
+    sha_algo_state_t state;      /*!< finite machine state of the hash software process */
+    size_t fullMessageSize;      /*!< track message size during SHA_Update(). The value is used for padding. */
+    uint32_t remainingBlcks;     /*!< number of remaining blocks to process in AHB master mode */
+    sha_callback_t hashCallback; /*!< pointer to HASH callback function */
+    void
+        *userData; /*!< user data to be passed as an argument to callback function, once callback is invoked from isr */
 } sha_ctx_internal_t;
 
 /*!< SHA-1 and SHA-256 digest length in bytes  */
@@ -60,7 +62,7 @@ enum _sha_digest_len
 };
 
 /*! pointer to hash context structure used by isr */
-static sha_ctx_internal_t *s_shaCtx = NULL;
+static sha_ctx_t *s_shaCtx = NULL;
 
 /*!< macro for checking build time condition. It is used to assure the sha_ctx_internal_t can fit into sha_ctx_t */
 #define BUILD_ASSERT(condition, msg) extern int msg[1 - 2 * (!(condition))] __attribute__((unused))
@@ -303,13 +305,16 @@ static status_t sha_process_message_data(SHA_Type *base,
                                          size_t messageSize)
 {
     /* first fill the internal buffer to full block */
-    size_t toCopy = SHA_BLOCK_SIZE - ctxInternal->blksz;
-    (void)sha_memcpy(&ctxInternal->blk.b[ctxInternal->blksz], message, toCopy);
-    message += toCopy;
-    messageSize -= toCopy;
+    if (ctxInternal->blksz != 0U)
+    {
+        size_t toCopy = SHA_BLOCK_SIZE - ctxInternal->blksz;
+        (void)sha_memcpy(&ctxInternal->blk.b[ctxInternal->blksz], message, toCopy);
+        message += toCopy;
+        messageSize -= toCopy;
 
-    /* process full internal block */
-    sha_one_block(base, &ctxInternal->blk.b[0]);
+        /* process full internal block */
+        sha_one_block(base, &ctxInternal->blk.b[0]);
+    }
 
     /* process all full blocks in message[] */
     while (messageSize >= SHA_BLOCK_SIZE)
@@ -325,6 +330,76 @@ static status_t sha_process_message_data(SHA_Type *base,
     ctxInternal->state = kSHA_HashDone;
     return kStatus_Success;
 }
+
+#if defined(FSL_FEATURE_SHA_HAS_MEMADDR_DMA) && (FSL_FEATURE_SHA_HAS_MEMADDR_DMA > 0)
+/*!
+ * @brief Adds message to current hash.
+ *
+ * This function merges the message to fill the internal buffer, empties the internal buffer if
+ * it becomes full, then process all remaining message data using AHB master mode.
+ *
+ *
+ * @param base SHA peripheral base address.
+ * @param ctxInternal Internal context.
+ * @param message Input message.
+ * @param messageSize Size of input message in bytes.
+ * @return kStatus_Success.
+ */
+static status_t sha_process_message_data_master(SHA_Type *base,
+                                                sha_ctx_internal_t *ctxInternal,
+                                                const uint8_t *message,
+                                                size_t messageSize)
+{
+    /* first fill the internal buffer to full block */
+    if (ctxInternal->blksz != 0U)
+    {
+        size_t toCopy = SHA_BLOCK_SIZE - ctxInternal->blksz;
+        (void)sha_memcpy(&ctxInternal->blk.b[ctxInternal->blksz], message, toCopy);
+        message += toCopy;
+        messageSize -= toCopy;
+
+        /* process full internal block */
+        sha_one_block(base, &ctxInternal->blk.b[0]);
+    }
+
+    /* process all full blocks in message[] */
+    if (messageSize >= SHA_BLOCK_SIZE)
+    {
+        /* poll waiting. */
+        while (0U == (base->STATUS & SHA_STATUS_WAITING_MASK))
+        {
+        }
+        /* transfer one 512-bit block manually first to workaround the silicon bug */
+        /* Disabling interrupts to ensure that MEMADDR is written within 64 cycles of writing last word to INDATA as is
+         * mentioned in errata */
+        /* disable global interrupt */
+        uint32_t currPriMask = DisableGlobalIRQ();
+        sha_one_block(base, message);
+        message += SHA_BLOCK_SIZE;
+        messageSize -= SHA_BLOCK_SIZE;
+
+        uint32_t blkNum   = (messageSize >> 6); /* div by 64 bytes */
+        uint32_t blkBytes = blkNum * 64u;       /* number of bytes in 64 bytes blocks */
+        base->MEMADDR     = SHA_MEMADDR_BASEADDR(message);
+        base->MEMCTRL     = SHA_MEMCTRL_MASTER(1) | SHA_MEMCTRL_COUNT(blkNum);
+
+        /* global interrupt enable */
+        EnableGlobalIRQ(currPriMask);
+
+        message += blkBytes;
+        messageSize -= blkBytes;
+        while (0U == (base->STATUS & SHA_STATUS_DIGEST_MASK))
+        {
+        }
+    }
+
+    /* copy last incomplete message bytes into internal block */
+    (void)sha_memcpy(&ctxInternal->blk.b[0], message, messageSize);
+    ctxInternal->blksz = messageSize;
+    ctxInternal->state = kSHA_HashDone;
+    return kStatus_Success;
+}
+#endif /* defined(FSL_FEATURE_SHA_HAS_MEMADDR_DMA) && (FSL_FEATURE_SHA_HAS_MEMADDR_DMA > 0) */
 
 /*!
  * @brief Finalize the running hash to make digest.
@@ -439,7 +514,6 @@ status_t SHA_Init(SHA_Type *base, sha_ctx_t *ctx, sha_algo_t algo)
     }
     ctxInternal->state           = kSHA_HashInit;
     ctxInternal->fullMessageSize = 0;
-    ctxInternal->base            = base;
     return status;
 }
 
@@ -453,12 +527,11 @@ status_t SHA_Init(SHA_Type *base, sha_ctx_t *ctx, sha_algo_t algo)
  * param[in,out] ctx HASH context
  * param message Input message
  * param messageSize Size of input message in bytes
- * param manual 0 use nonblocking MEMADDR, MEMCRL (pseudo-DMA), 1 - manual load
  * return Status of the hash update operation
  */
-status_t SHA_Update(SHA_Type *base, sha_ctx_t *ctx, const uint8_t *message, size_t messageSize, bool manual)
+status_t SHA_Update(SHA_Type *base, sha_ctx_t *ctx, const uint8_t *message, size_t messageSize)
 {
-    bool isUpdateState;
+    bool isInitState;
     status_t status;
     sha_ctx_internal_t *ctxInternal;
     size_t blockSize;
@@ -487,8 +560,8 @@ status_t SHA_Update(SHA_Type *base, sha_ctx_t *ctx, const uint8_t *message, size
     }
     else
     {
-        isUpdateState = ctxInternal->state == kSHA_HashUpdate;
-        if (!isUpdateState)
+        isInitState = ctxInternal->state == kSHA_HashInit;
+        if (isInitState)
         {
             /* start NEW hash */
             sha_engine_init(base, ctxInternal);
@@ -498,7 +571,7 @@ status_t SHA_Update(SHA_Type *base, sha_ctx_t *ctx, const uint8_t *message, size
 
 #if defined(FSL_FEATURE_SHA_HAS_MEMADDR_DMA) && (FSL_FEATURE_SHA_HAS_MEMADDR_DMA > 0)
     /* Check if address is outisde of SRAMX or SRAM0, thus data must be loaded manually */
-    if (kStatus_Success != sha_check_memory_boundry(message, messageSize) || manual)
+    if (kStatus_Success != sha_check_memory_boundry(message, messageSize))
     {
         /* process message data */
         status = sha_process_message_data(base, ctxInternal, message, messageSize);
@@ -507,32 +580,7 @@ status_t SHA_Update(SHA_Type *base, sha_ctx_t *ctx, const uint8_t *message, size
     load blocks of memory for hashing. */
     else
     {
-        uint32_t num512BitBlocks = ctxInternal->fullMessageSize >> 6;
-
-        /* If requested to hash 0 blocks this is an error */
-        if (0U == num512BitBlocks)
-        {
-            ctxInternal->state = kSHA_HashError;
-            return kStatus_Fail;
-        }
-
-        if (num512BitBlocks > MAX_HASH_CHUNK)
-        {
-            num512BitBlocks = MAX_HASH_CHUNK;
-        }
-        ctxInternal->blksz    = ctxInternal->fullMessageSize - (num512BitBlocks << 6);
-        ctxInternal->pMessage = (uint8_t *)(uintptr_t)message + (num512BitBlocks << 6);
-
-        /* Write address  and number of 512bit blocks */
-        ctxInternal->base->MEMADDR = (uint32_t)message;
-
-        /* Start the hash by setting the count */
-        ctxInternal->base->MEMCTRL = 1U | ((num512BitBlocks & MAX_HASH_CHUNK) << 16);
-
-        /* Enable IRQ on waiting and digest ready */
-        ctxInternal->base->INTENSET = (SHA_STATUS_DIGEST_MASK | SHA_STATUS_ERROR_MASK);
-        s_shaCtx                    = ctxInternal;
-        NVIC_EnableIRQ(SHA_IRQn);
+        status = sha_process_message_data_master(base, ctxInternal, message, messageSize);
     }
 #else  /* SHA engine does not have MEMADDR DMA, so data are processed manually */
     status = sha_process_message_data(base, ctxInternal, message, messageSize);
@@ -631,16 +679,97 @@ status_t SHA_Finish(SHA_Type *base, sha_ctx_t *ctx, uint8_t *output, size_t *out
     return status;
 }
 
+#if defined(FSL_FEATURE_SHA_HAS_MEMADDR_DMA) && (FSL_FEATURE_SHA_HAS_MEMADDR_DMA > 0)
+void SHA_SetCallback(SHA_Type *base, sha_ctx_t *ctx, sha_callback_t callback, void *userData)
+{
+    sha_ctx_internal_t *ctxInternal;
+
+    s_shaCtx                  = ctx;
+    ctxInternal               = (sha_ctx_internal_t *)(uint32_t)ctx;
+    ctxInternal->hashCallback = callback;
+    ctxInternal->userData     = userData;
+
+    (void)EnableIRQ(SHA_IRQn);
+}
+
+status_t SHA_UpdateNonBlocking(SHA_Type *base, sha_ctx_t *ctx, const uint8_t *input, size_t inputSize)
+{
+    sha_ctx_internal_t *ctxInternal;
+    uint32_t numBlocks;
+    status_t status;
+
+    if (inputSize == 0U)
+    {
+        return kStatus_Success;
+    }
+
+    if (0U != ((uintptr_t)input & 0x3U))
+    {
+        return kStatus_Fail;
+    }
+
+    ctxInternal = (sha_ctx_internal_t *)(uint32_t)ctx;
+    status      = sha_check_context(ctxInternal, input);
+    if (kStatus_Success != status)
+    {
+        return status;
+    }
+
+    ctxInternal->fullMessageSize = inputSize;
+    ctxInternal->remainingBlcks  = inputSize / SHA_BLOCK_SIZE;
+    ctxInternal->blksz           = inputSize % SHA_BLOCK_SIZE;
+
+    /* copy last incomplete block to context */
+    if ((ctxInternal->blksz > 0U) && (ctxInternal->blksz <= SHA_BLOCK_SIZE))
+    {
+        (void)sha_memcpy((&ctxInternal->blk.b[0]), input + SHA_BLOCK_SIZE * ctxInternal->remainingBlcks,
+                         ctxInternal->blksz);
+    }
+
+    if (ctxInternal->remainingBlcks >= MAX_HASH_CHUNK)
+    {
+        numBlocks = MAX_HASH_CHUNK - 1U;
+    }
+    else
+    {
+        numBlocks = ctxInternal->remainingBlcks;
+    }
+    /* update remainingBlks so that ISR can run another hash if necessary */
+    ctxInternal->remainingBlcks -= numBlocks;
+
+    /* compute hash using AHB Master mode for full blocks */
+    if (numBlocks > 0U)
+    {
+        ctxInternal->state = kSHA_HashUpdate;
+        sha_engine_init(base, ctxInternal);
+
+        /* Enable digest and error interrupts and start hash */
+        base->INTENSET = SHA_STATUS_DIGEST_MASK | SHA_STATUS_ERROR_MASK;
+        base->MEMADDR  = SHA_MEMADDR_BASEADDR(input);
+        base->MEMCTRL  = SHA_MEMCTRL_MASTER(1) | SHA_MEMCTRL_COUNT(numBlocks);
+    }
+    /* no full blocks, invoke callback directly */
+    else
+    {
+        ctxInternal->hashCallback(base, ctx, status, ctxInternal->userData);
+    }
+
+    return status;
+}
+#endif /* defined(FSL_FEATURE_SHA_HAS_MEMADDR_DMA) && (FSL_FEATURE_SHA_HAS_MEMADDR_DMA > 0) */
+
 void SHA_ClkInit(SHA_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* ungate clock */
     CLOCK_EnableClock(kCLOCK_Sha0);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+    RESET_PeripheralReset(kSHA_RST_SHIFT_RSTn);
 }
 
 void SHA_ClkDeinit(SHA_Type *base)
 {
+    RESET_PeripheralReset(kSHA_RST_SHIFT_RSTn);
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* gate clock */
     CLOCK_DisableClock(kCLOCK_Sha0);
@@ -650,70 +779,45 @@ void SHA_ClkDeinit(SHA_Type *base)
 void SHA_DriverIRQHandler(void);
 void SHA_DriverIRQHandler(void)
 {
-    sha_ctx_internal_t *ctxInternal = s_shaCtx;
+    sha_ctx_internal_t *ctxInternal;
+    SHA_Type *base = SHA0;
+    uint32_t numBlocks;
+    status_t status;
 
-    /* Record status */
-    uint32_t status = ctxInternal->base->STATUS & (SHA_STATUS_DIGEST_MASK | SHA_STATUS_ERROR_MASK);
+    ctxInternal = (sha_ctx_internal_t *)(uint32_t)s_shaCtx;
 
-    /* If we need to setup for the next chunk */
-    if ((0U != (ctxInternal->blksz >> 6)) && ((status & SHA_STATUS_ERROR_MASK) == 0U))
+    if (0U == (base->STATUS & SHA_STATUS_ERROR_MASK))
     {
-        uint32_t num512BitBlocks = ctxInternal->blksz >> 6;
-
-        /* send more blocks using AHB master */
-        num512BitBlocks--;
-        if (num512BitBlocks > MAX_HASH_CHUNK)
+        if (ctxInternal->remainingBlcks > 0U)
         {
-            num512BitBlocks = MAX_HASH_CHUNK;
-        }
-
-        /* account for the number of blocks we are about to check */
-        ctxInternal->blksz    = ((ctxInternal->blksz >> 6) - (num512BitBlocks + 1U)) << 6;
-        ctxInternal->pMessage = (uint8_t *)ctxInternal->base->MEMADDR + ((num512BitBlocks + 1U) << 6);
-
-        /* transfer one 512-bit block manually first to workaround the silicon bug - artf251591 */
-        struct tmp
-        {
-            uint32_t data[8];
-        } *src = (struct tmp *)ctxInternal->base->MEMADDR, *dst = (struct tmp *)(uintptr_t)&ctxInternal->base->INDATA;
-        *dst = *src;
-        src++;
-        while (0U == (ctxInternal->base->STATUS & SHA_INTENSET_WAITING_MASK))
-        {
-        }
-        *dst = *src;
-        src++;
-
-        /* if no more data, return, else post an AHB master transfer */
-        if (num512BitBlocks == 0U)
-        {
+            if (ctxInternal->remainingBlcks >= MAX_HASH_CHUNK)
+            {
+                numBlocks = MAX_HASH_CHUNK - 1U;
+            }
+            else
+            {
+                numBlocks = ctxInternal->remainingBlcks;
+            }
+            /* some blocks still remaining, update remainingBlcks for next ISR and start another hash */
+            ctxInternal->remainingBlcks -= numBlocks;
+            base->MEMCTRL = SHA_MEMCTRL_MASTER(1) | SHA_MEMCTRL_COUNT(numBlocks);
             return;
         }
-
-        /* AHB master transfer */
-        ctxInternal->base->MEMADDR = (uint32_t)src;
-
-        /* set the next block size */
-        ctxInternal->base->MEMCTRL = 1U | ((num512BitBlocks & MAX_HASH_CHUNK) << SHA_MEMCTRL_COUNT_SHIFT);
-
-        /* Done setting up for the next block so exit */
-        return;
-    }
-
-    /* copy last incomplete message bytes into internal block */
-    (void)sha_memcpy(&ctxInternal->blk.b[0], ctxInternal->pMessage, ctxInternal->blksz);
-
-    /* Disable SHA IRQ's and restore IRQ mask */
-    if ((status & SHA_STATUS_ERROR_MASK) == 0U)
-    {
-        ctxInternal->state = kSHA_HashDone;
+        /* no full blocks left, disable interrupts and AHB master mode */
+        base->INTENCLR = SHA_INTENCLR_DIGEST_MASK | SHA_INTENCLR_ERROR_MASK;
+        base->MEMCTRL  = SHA_MEMCTRL_MASTER(0);
+        status         = kStatus_Success;
     }
     else
     {
-        ctxInternal->state = kSHA_HashError;
+        status = kStatus_Fail;
     }
 
-    ctxInternal->base->INTENCLR = (SHA_STATUS_DIGEST_MASK | SHA_STATUS_ERROR_MASK);
-    NVIC_DisableIRQ(SHA_IRQn);
+    /* Invoke callback if there is one */
+    if (NULL != ctxInternal->hashCallback)
+    {
+        ctxInternal->hashCallback(SHA0, s_shaCtx, status, ctxInternal->userData);
+    }
+
     SDK_ISR_EXIT_BARRIER;
 }

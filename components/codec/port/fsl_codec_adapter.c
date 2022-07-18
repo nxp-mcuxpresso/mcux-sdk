@@ -105,21 +105,9 @@ status_t HAL_CODEC_Init(void *handle, void *config)
             retVal = HAL_CODEC_TFA9896_Init(handle, config);
             break;
 #endif
-
-#ifdef CODEC_PCM512X_ENABLE
-        case kCODEC_PCM512X:
-            retVal = HAL_CODEC_PCM512x_Init(handle, config);
-            break;
-#endif
-
-#ifdef CODEC_PCM186X_ENABLE
-        case kCODEC_PCM186X:
-            retVal = HAL_CODEC_PCM186x_Init(handle, config);
-            break;
-#endif
-
         default:
             retVal = kStatus_InvalidArgument;
+            break;
     }
 
     return retVal;
@@ -197,21 +185,9 @@ status_t HAL_CODEC_Deinit(void *handle)
             retVal = HAL_CODEC_TFA9XXX_Deinit(handle);
             break;
 #endif
-
-#ifdef CODEC_PCM512X_ENABLE
-        case kCODEC_PCM512X:
-            retVal = HAL_CODEC_PCM512x_Deinit(handle);
-            break;
-#endif
-
-#ifdef CODEC_PCM186X_ENABLE
-        case kCODEC_PCM186X:
-            retVal = HAL_CODEC_PCM186x_Deinit(handle);
-            break;
-#endif
-
         default:
             retVal = kStatus_InvalidArgument;
+            break;
     }
 
     return retVal;
@@ -292,21 +268,9 @@ status_t HAL_CODEC_SetFormat(void *handle, uint32_t mclk, uint32_t sampleRate, u
             retVal = HAL_CODEC_TFA9XXX_SetFormat(handle, mclk, sampleRate, bitWidth);
             break;
 #endif
-
-#ifdef CODEC_PCM512X_ENABLE
-        case kCODEC_PCM512X:
-            retVal = HAL_CODEC_PCM512x_SetFormat(handle, mclk, sampleRate, bitWidth);
-            break;
-#endif
-
-#ifdef CODEC_PCM186X_ENABLE
-        case kCODEC_PCM186X:
-            retVal = HAL_CODEC_PCM186x_SetFormat(handle, mclk, sampleRate, bitWidth);
-            break;
-#endif
-
         default:
             retVal = kStatus_InvalidArgument;
+            break;
     }
 
     return retVal;
@@ -386,9 +350,9 @@ status_t HAL_CODEC_SetVolume(void *handle, uint32_t playChannel, uint32_t volume
             retVal = HAL_CODEC_TFA9XXX_SetVolume(handle, playChannel, volume);
             break;
 #endif
-
         default:
             retVal = kStatus_InvalidArgument;
+            break;
     }
 
     return retVal;
@@ -468,15 +432,9 @@ status_t HAL_CODEC_SetMute(void *handle, uint32_t playChannel, bool isMute)
             retVal = HAL_CODEC_TFA9XXX_SetMute(handle, playChannel, isMute);
             break;
 #endif
-
-#ifdef CODEC_PCM512X_ENABLE
-        case kCODEC_PCM512X:
-            retVal = HAL_CODEC_PCM512x_SetMute(handle, playChannel, isMute);
-            break;
-#endif
-
         default:
             retVal = kStatus_InvalidArgument;
+            break;
     }
 
     return retVal;
@@ -556,9 +514,9 @@ status_t HAL_CODEC_SetPower(void *handle, uint32_t module, bool powerOn)
             retVal = HAL_CODEC_TFA9XXX_SetPower(handle, module, powerOn);
             break;
 #endif
-
         default:
             retVal = kStatus_InvalidArgument;
+            break;
     }
 
     return retVal;
@@ -638,9 +596,9 @@ status_t HAL_CODEC_SetRecord(void *handle, uint32_t recordSource)
             retVal = HAL_CODEC_TFA9XXX_SetRecord(handle, recordSource);
             break;
 #endif
-
         default:
             retVal = kStatus_InvalidArgument;
+            break;
     }
 
     return retVal;
@@ -723,9 +681,9 @@ status_t HAL_CODEC_SetRecordChannel(void *handle, uint32_t leftRecordChannel, ui
             retVal = HAL_CODEC_TFA9XXX_SetRecordChannel(handle, leftRecordChannel, rightRecordChannel);
             break;
 #endif
-
         default:
             retVal = kStatus_InvalidArgument;
+            break;
     }
 
     return retVal;
@@ -805,9 +763,9 @@ status_t HAL_CODEC_SetPlay(void *handle, uint32_t playSource)
             retVal = HAL_CODEC_TFA9XXX_SetPlay(handle, playSource);
             break;
 #endif
-
         default:
             retVal = kStatus_InvalidArgument;
+            break;
     }
 
     return retVal;
@@ -889,6 +847,7 @@ status_t HAL_CODEC_ModuleControl(void *handle, uint32_t cmd, uint32_t data)
 
         default:
             retVal = kStatus_InvalidArgument;
+            break;
     }
 
     return retVal;

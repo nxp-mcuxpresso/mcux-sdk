@@ -11,6 +11,8 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8960
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/nor
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/nor/flexspi
     ${CMAKE_CURRENT_LIST_DIR}/../../components/ft6x06
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/gpio
@@ -77,7 +79,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_azure_rtos_ux_template_MIMXRT1015)
 #    include(middleware_usb_device_controller_driver_MIMXRT1015)
 #    include(driver_dmamux)
-#    include(utility_shell)
+#    include(driver_nor_flash-controller-flexspi)
 #    include(driver_cmsis_lpuart)
 #    include(middleware_azure_rtos_nxd)
 #    include(device_system)
@@ -98,7 +100,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart_edma)
 #    include(driver_ocotp)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(driver_xip_device)
 #    include(component_serial_manager)
 #    include(driver_pit)
@@ -108,12 +109,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpspi_freertos)
 #    include(middleware_azure_rtos_ux_sp)
 #    include(component_log_backend_debugconsole)
-#    include(CMSIS_DSP_Library)
 #    include(driver_ili9341)
 #    include(driver_tempmon)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_edma)
 #    include(middleware_usb_device_common_header)
+#    include(utility_shell)
 #    include(device_startup)
 #    include(component_panic)
 #    include(driver_gpt)
@@ -121,6 +122,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_rtwdog)
 #    include(middleware_freertos-kernel_extension)
 #    include(CMSIS_Driver_Include_I2C)
+#    include(driver_nor_flash-common)
 #    include(middleware_usb_common_header)
 #    include(driver_cmsis_lpi2c)
 #    include(driver_soc_flexram_allocate)
@@ -144,12 +146,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_dcdc_1)
 #    include(middleware_azure_rtos_fx_sp)
+#    include(CMSIS_DSP_Source)
 #    include(driver_snvs_hp)
 #    include(middleware_usb_host_msd)
 #    include(driver_lpspi)
 #    include(driver_flexspi_edma)
 #    include(component_gpt_adapter)
 #    include(middleware_usb_host_common_header)
+#    include(utilities_misc_utilities_MIMXRT1015)
 #    include(component_log)
 #    include(CMSIS_Driver_Include_USART)
 #    include(CMSIS_Driver_Include_SPI)
@@ -165,6 +169,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_azure_rtos_tx_sp)
 #    include(utility_debug_console)
 #    include(middleware_usb_host_hid)
+#    include(component_osa_thread)
 #    include(driver_xip_board_evkmimxrt1015)
 #    include(driver_cmsis_lpspi)
 #    include(middleware_usb_device_ehci)
@@ -177,7 +182,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexspi)
 #    include(driver_flexio_spi_edma)
 #    include(driver_qtmr_1)
-#    include(driver_pwm)
+#    include(driver_trng)
 #    include(driver_sai_edma)
 #    include(component_lists)
 #    include(middleware_azure_rtos_tx_template_MIMXRT1015)
@@ -196,7 +201,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_i2s)
 #    include(middleware_azure_rtos_tx)
 #    include(driver_igpio)
-#    include(driver_trng)
+#    include(driver_pwm)
 #    include(driver_edma_MIMXRT1015)
 #    include(driver_sai)
 #    include(driver_cache_armv7_m7)

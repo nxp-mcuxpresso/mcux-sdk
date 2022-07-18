@@ -78,6 +78,7 @@ list(APPEND CMAKE_MODULE_PATH
 # Copy the cmake components into projects
 #    include(middleware_freertos-kernel_MIMX8QM6_cm4_core1)
 #    include(driver_lpuart_freertos)
+#    include(utilities_misc_utilities_MIMX8QM6_cm4_core1)
 #    include(driver_camera-device-ov5640)
 #    include(driver_sema42)
 #    include(driver_wdog32)
@@ -93,7 +94,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpuart_edma)
 #    include(driver_lpspi_edma)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(CMSIS_Include_core_cm4)
 #    include(component_serial_manager)
 #    include(component_serial_manager_uart)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 NXP
+ * Copyright 2018-2020 NXP
  * All rights reserved.
  *
  *
@@ -78,18 +78,18 @@
 
 /*! @brief Definition of uart adapter handle size. */
 #if (defined(UART_ADAPTER_NON_BLOCKING_MODE) && (UART_ADAPTER_NON_BLOCKING_MODE > 0U))
-#define HAL_UART_HANDLE_SIZE       (UINTPTR_SIZE * 23U + HAL_UART_ADAPTER_LOWPOWER * UINTPTR_SIZE * 4U + HAL_UART_DMA_ENABLE * UINTPTR_SIZE)
-#define HAL_UART_BLOCK_HANDLE_SIZE (UINTPTR_SIZE * 2U + HAL_UART_ADAPTER_LOWPOWER * UINTPTR_SIZE * 4U + HAL_UART_DMA_ENABLE * UINTPTR_SIZE)
+#define HAL_UART_HANDLE_SIZE       (92U + HAL_UART_ADAPTER_LOWPOWER * 16U + HAL_UART_DMA_ENABLE * 4U)
+#define HAL_UART_BLOCK_HANDLE_SIZE (8U + HAL_UART_ADAPTER_LOWPOWER * 16U + HAL_UART_DMA_ENABLE * 4U)
 #else
-#define HAL_UART_HANDLE_SIZE (UINTPTR_SIZE * 2U + HAL_UART_ADAPTER_LOWPOWER * UINTPTR_SIZE * 4U + HAL_UART_DMA_ENABLE * UINTPTR_SIZE)
+#define HAL_UART_HANDLE_SIZE (8U + HAL_UART_ADAPTER_LOWPOWER * 16U + HAL_UART_DMA_ENABLE * 4U)
 #endif
 
 /*! @brief Definition of uart dma adapter handle size. */
 #if (defined(HAL_UART_DMA_ENABLE) && (HAL_UART_DMA_ENABLE > 0U))
 #if (defined(FSL_FEATURE_SOC_DMA_COUNT) && (FSL_FEATURE_SOC_DMA_COUNT > 0U))
-#define HAL_UART_DMA_HANDLE_SIZE (UINTPTR_SIZE * 31U)
+#define HAL_UART_DMA_HANDLE_SIZE (124U)
 #elif (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U))
-#define HAL_UART_DMA_HANDLE_SIZE (UINTPTR_SIZE * 35U)
+#define HAL_UART_DMA_HANDLE_SIZE (140U)
 #else
 #error This SOC does not have DMA or EDMA available!
 #endif
@@ -153,15 +153,6 @@ typedef enum _hal_uart_parity_mode
     kHAL_UartParityOdd      = 0x3U, /*!< Parity odd enabled */
 } hal_uart_parity_mode_t;
 
-#if (defined(UART_ADAPTER_NON_BLOCKING_MODE) && (UART_ADAPTER_NON_BLOCKING_MODE > 0U))
-/*! @brief UART Block Mode. */
-typedef enum _hal_uart_block_mode
-{
-    kHAL_UartNonBlockMode = 0x0U, /*!< Uart NonBlock Mode */
-    kHAL_UartBlockMode    = 0x1U, /*!< Uart Block Mode */
-} hal_uart_block_mode_t;
-#endif /* UART_ADAPTER_NON_BLOCKING_MODE */
-
 /*! @brief UART stop bit count. */
 typedef enum _hal_uart_stop_bit_count
 {
@@ -183,9 +174,6 @@ typedef struct _hal_uart_config
     uint8_t instance; /*!< Instance (0 - UART0, 1 - UART1, ...), detail information please refer to the
                            SOC corresponding RM.
                            Invalid instance value will cause initialization failure. */
-#if (defined(UART_ADAPTER_NON_BLOCKING_MODE) && (UART_ADAPTER_NON_BLOCKING_MODE > 0U))
-    hal_uart_block_mode_t mode; /*!< Uart  block mode */
-#endif                          /* UART_ADAPTER_NON_BLOCKING_MODE */
 #if (defined(HAL_UART_ADAPTER_FIFO) && (HAL_UART_ADAPTER_FIFO > 0u))
     uint8_t txFifoWatermark;
     uint8_t rxFifoWatermark;

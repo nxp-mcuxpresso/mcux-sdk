@@ -52,7 +52,6 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(driver_lpuart_freertos)
-#    include(utilities_misc_utilities)
 #    include(utility_shell)
 #    include(driver_flexio_spi_edma)
 #    include(component_lpuart_adapter)
@@ -104,6 +103,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_osa_bm)
 #    include(driver_wdog32)
 #    include(driver_lpi2c)
+#    include(utilities_misc_utilities_MKE15Z7)
 #    include(driver_common)
 #    include(driver_rtc)
 #    include(driver_cmsis_lpspi)

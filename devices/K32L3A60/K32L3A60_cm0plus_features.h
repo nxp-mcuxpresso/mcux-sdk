@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2019-04-22
-**     Build:               b210913
+**     Build:               b220216
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -748,6 +748,18 @@
 #define FSL_FEATURE_LPADC_HAS_CFG_CALOFS (1)
 /* @brief Has offset trim (register OFSTRIM). */
 #define FSL_FEATURE_LPADC_HAS_OFSTRIM (1)
+/* @brief Has power select (bitfield CFG[PWRSEL]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_PWRSEL (1)
+/* @brief Has alternate channel B scale (bitfield CMDLn[ALTB_CSCALE]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE (0)
+/* @brief Has alternate channel B select enable (bitfield CMDLn[ALTBEN]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_ALTBEN (0)
+/* @brief Has alternate channel input (bitfield CMDLn[ALTB_ADCH]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_ALTB_ADCH (0)
+/* @brief Has offset calibration mode (bitfield CTRL[CALOFSMODE]). */
+#define FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE (0)
+/* @brief Conversion averaged bitfiled width. */
+#define FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH (3)
 
 /* LPDAC module features */
 

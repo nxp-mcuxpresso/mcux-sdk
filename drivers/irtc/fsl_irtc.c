@@ -635,7 +635,7 @@ void IRTC_ConfigClockOut(RTC_Type *base, irtc_clockout_sel_t clkOut)
 {
     uint16_t ctrlVal = base->CTRL;
 
-    ctrlVal &= ~RTC_CTRL_CLKOUT_MASK;
+    ctrlVal &= (uint16_t)(~RTC_CTRL_CLKOUT_MASK);
 
     ctrlVal |= RTC_CTRL_CLKOUT((uint16_t)clkOut);
     if (clkOut == kIRTC_ClkoutCoarse1Hz)

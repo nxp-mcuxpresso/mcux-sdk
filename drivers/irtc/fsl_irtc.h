@@ -470,13 +470,14 @@ static inline void IRTC_Reset(RTC_Type *base)
  */
 static inline void IRTC_Enable32kClkDuringRegisterWrite(RTC_Type *base, bool enable)
 {
+    uint16_t mask = RTC_GP_DATA_REG_CFG0_MASK;
     if (enable)
     {
-        base->GP_DATA_REG &= ~RTC_GP_DATA_REG_CFG0_MASK;
+        base->GP_DATA_REG &= ~mask;
     }
     else
     {
-        base->GP_DATA_REG |= RTC_GP_DATA_REG_CFG0_MASK;
+        base->GP_DATA_REG |= mask;
     }
 }
 
@@ -500,7 +501,7 @@ void IRTC_ConfigClockOut(RTC_Type *base, irtc_clockout_sel_t clkOut);
  */
 static inline uint8_t IRTC_GetTamperStatusFlag(RTC_Type *base)
 {
-    return (base->TAMPER_SCR & RTC_TAMPER_SCR_TMPR_STS_MASK) >> RTC_TAMPER_SCR_TMPR_STS_SHIFT;
+    return (uint8_t)((base->TAMPER_SCR & RTC_TAMPER_SCR_TMPR_STS_MASK) >> RTC_TAMPER_SCR_TMPR_STS_SHIFT);
 }
 
 /*!

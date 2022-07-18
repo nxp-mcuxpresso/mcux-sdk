@@ -3,13 +3,13 @@
  * Title:        arm_rms_q31.c
  * Description:  Root Mean Square of the elements of a Q31 vector
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/statistics_functions.h"
 
 /**
   @ingroup groupStats
@@ -56,7 +56,23 @@
                    log2(blockSize) bits, as a total of blockSize additions are performed internally.
                    Finally, the 2.62 accumulator is right shifted by 31 bits to yield a 1.31 format value.
  */
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
 
+void arm_rms_q31(
+  const q31_t * pSrc,
+        uint32_t blockSize,
+        q31_t * pResult)
+{
+    q63_t pow = 0.0f;
+    q31_t normalizedPower;
+    arm_power_q31(pSrc, blockSize, &pow);
+
+    normalizedPower=clip_q63_to_q31((pow / (q63_t) blockSize) >> 17);
+    arm_sqrt_q31(normalizedPower, pResult);
+
+}
+
+#else
 void arm_rms_q31(
   const q31_t * pSrc,
         uint32_t blockSize,
@@ -118,6 +134,7 @@ void arm_rms_q31(
   /* Compute Rms and store result in destination vector */
   arm_sqrt_q31(clip_q63_to_q31((sum / (q63_t) blockSize) >> 31), pResult);
 }
+#endif /* defined(ARM_MATH_MVEI) */
 
 /**
   @} end of RMS group

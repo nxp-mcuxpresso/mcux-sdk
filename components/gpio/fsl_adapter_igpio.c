@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 - 2020 NXP
+ * Copyright 2018 - 2022 NXP
  * All rights reserved.
  *
  *
@@ -308,13 +308,14 @@ hal_gpio_status_t HAL_GpioInit(hal_gpio_handle_t gpioHandle, hal_gpio_pin_config
 
     if (kHAL_GpioDirectionOut == (hal_gpio_direction_t)pinConfig->direction)
     {
-        gpioPinconfig.direction = kGPIO_DigitalOutput;
+        gpioPinconfig.direction   = kGPIO_DigitalOutput;
+        gpioPinconfig.outputLogic = pinConfig->level;
     }
     else
     {
         gpioPinconfig.direction = kGPIO_DigitalInput;
     }
-    gpioPinconfig.outputLogic = pinConfig->level;
+
     GPIO_PinInit(gpioList[gpioState->pin.port], gpioState->pin.pin, &gpioPinconfig);
     return kStatus_HAL_GpioSuccess;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 - 2020 NXP
+ * Copyright 2018 - 2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,6 +23,7 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
+#if !defined(FSL_PRINCE_DRIVER_LPC55S3x)
 static secure_bool_t PRINCE_CheckerAlgorithm(uint32_t address,
                                              uint32_t length,
                                              prince_flags_t flag,
@@ -158,7 +159,9 @@ static secure_bool_t PRINCE_CheckerAlgorithm(uint32_t address,
     }
     return kSECURE_TRUE;
 }
+#endif /* !defined(FSL_PRINCE_DRIVER_LPC55S3x) */
 
+#if !defined(FSL_PRINCE_DRIVER_LPC55S3x)
 /*!
  * @brief Generate new IV code.
  *
@@ -228,9 +231,12 @@ status_t PRINCE_GenNewIV(prince_region_t region, uint8_t *iv_code, bool store, f
         /* Pass the new IV code */
         (void)memcpy(iv_code, &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
     }
+
     return status;
 }
+#endif /* !defined(FSL_PRINCE_DRIVER_LPC55S3x) */
 
+#if !defined(FSL_PRINCE_DRIVER_LPC55S3x)
 /*!
  * @brief Load IV code.
  *
@@ -265,9 +271,12 @@ status_t PRINCE_LoadIV(prince_region_t region, uint8_t *iv_code)
             status = kStatus_Success;
         }
     }
+
     return status;
 }
+#endif /* !defined(FSL_PRINCE_DRIVER_LPC55S3x) */
 
+#if !defined(FSL_PRINCE_DRIVER_LPC55S3x)
 /*!
  * @brief Allow encryption/decryption for specified address range.
  *
@@ -298,10 +307,10 @@ status_t PRINCE_SetEncryptForAddressRange(
     status_t status           = kStatus_Fail;
     uint32_t srEnableRegister = 0;
     uint32_t alignedStartAddress;
+    uint32_t prince_base_addr_ffr_word          = 0;
     uint32_t end_address                        = start_address + length;
     uint32_t prince_region_base_address         = 0;
     uint8_t tempBuffer[FLASH_FFR_MAX_PAGE_SIZE] = {0};
-    uint32_t prince_base_addr_ffr_word          = 0;
 
     /* Check input parameters. */
     if (NULL == flash_context)
@@ -311,7 +320,7 @@ status_t PRINCE_SetEncryptForAddressRange(
 
     /* Check the address range, region borders crossing. */
 #if (defined(FSL_PRINCE_DRIVER_LPC55S0x)) || (defined(FSL_PRINCE_DRIVER_LPC55S1x)) || \
-    (defined(FSL_PRINCE_DRIVER_LPC55S2x))
+    (defined(FSL_PRINCE_DRIVER_LPC55S2x)) || (defined(FSL_PRINCE_DRIVER_LPC55S3x))
     if ((start_address > FSL_PRINCE_DRIVER_MAX_FLASH_ADDR) ||
         ((start_address < FSL_PRINCE_DRIVER_MAX_FLASH_ADDR) && (end_address > FSL_PRINCE_DRIVER_MAX_FLASH_ADDR)))
     {
@@ -410,7 +419,6 @@ status_t PRINCE_SetEncryptForAddressRange(
         (void)memcpy((uint32_t *)(uintptr_t)&tempBuffer[offsetof(cmpa_cfg_info_t, princeSr) +
                                                         ((uint32_t)region * sizeof(uint32_t))],
                      &srEnableRegister, sizeof(uint32_t));
-
         /* Set the ADDRX_PRG in the page */
         (void)memcpy(&prince_base_addr_ffr_word,
                      (const uint32_t *)(uintptr_t)&tempBuffer[offsetof(cmpa_cfg_info_t, princeBaseAddr)],
@@ -431,6 +439,7 @@ status_t PRINCE_SetEncryptForAddressRange(
 
     return status;
 }
+#endif /* !defined(FSL_PRINCE_DRIVER_LPC55S3x) */
 
 /*!
  * @brief Gets the PRINCE Sub-Region Enable register.
@@ -576,7 +585,7 @@ status_t PRINCE_SetRegionBaseAddress(PRINCE_Type *base, prince_region_t region, 
 
     /* Check input parameters. */
 #if (defined(FSL_PRINCE_DRIVER_LPC55S0x)) || (defined(FSL_PRINCE_DRIVER_LPC55S1x)) || \
-    (defined(FSL_PRINCE_DRIVER_LPC55S2x))
+    (defined(FSL_PRINCE_DRIVER_LPC55S2x)) || (defined(FSL_PRINCE_DRIVER_LPC55S3x))
     if (region_base_addr > 0U)
     {
         return kStatus_InvalidArgument;
@@ -649,6 +658,7 @@ status_t PRINCE_SetRegionSREnable(PRINCE_Type *base, prince_region_t region, uin
     return status;
 }
 
+#if !defined(FSL_PRINCE_DRIVER_LPC55S3x)
 /*!
  * @brief Erases the flash sectors encompassed by parameters passed into function.
  *
@@ -734,3 +744,353 @@ status_t PRINCE_FlashProgramWithChecker(flash_config_t *config, uint32_t start, 
     }
     return FLASH_Program(config, start, src, lengthInBytes);
 }
+#endif /* !defined(FSL_PRINCE_DRIVER_LPC55S3x) */
+
+#if defined(FSL_PRINCE_DRIVER_LPC55S3x)
+static status_t PRINCE_CSS_generate_random(uint8_t *output, size_t outputByteLen);
+static status_t PRINCE_CSS_check_key(uint8_t keyIdx, mcuxClCss_KeyProp_t *pKeyProp);
+static status_t PRINCE_CSS_gen_iv_key(void);
+static status_t PRINCE_CSS_enable(void);
+static status_t PRINCE_CSS_calculate_iv(uint32_t *IvReg);
+
+/*!
+ * @brief Configures PRINCE setting.
+ *
+ * This function does the initial PRINCE configuration via ROM IAP API call.
+ * PRINCE_SR_x configuration for each region configuration is stored into FFR (CMPA).
+ * PRINCE IV erase counters (MCTR_INT_IV_CTRx) in CFPA are updated accordingly.
+ *
+ * Note: This function is expected to be called once in the device lifetime,
+ * typically during the initial device provisioning, since it is programming the CMPA pages in PFR flash.
+ *
+ * @param coreCtx The pointer to the ROM API driver context structure.
+ * @param config The pointer to the PRINCE driver configuration structure.
+ *
+ * @retval #kStatus_Success
+ * @retval #kStatus_CommandUnsupported
+ * @retval #kStatus_InvalidArgument
+ * @retval #kStatus_FLASH_ModifyProtectedAreaDisallowed
+ * @retval #kStatusMemoryRangeInvalid
+ * @retval #kStatus_Fail
+ * @retval #kStatus_OutOfRange
+ * @retval #kStatus_SPI_BaudrateNotSupport
+ */
+status_t PRINCE_Configure(api_core_context_t *coreCtx, prince_prot_region_arg_t *config)
+{
+    /* Enable CSS and check keys */
+    if (kStatus_Success != PRINCE_CSS_enable())
+    {
+        return kStatus_Fail;
+    }
+
+    return MEM_Config(coreCtx, (uint32_t *)config, kMemoryInternal);
+}
+
+/*!
+ * @brief Configures PRINCE setting.
+ *
+ * This function is used to re-configure PRINCE IP based on configuration stored in FFR.
+ * This function also needs to be called after wake up from power-down mode to regenerate IV
+ * encryption key in CSS key store whose presence is necessary for correct PRINCE operation
+ * during erase and write operations to encrypted regions of internal flash memory
+ * (dependency for correct operation of MEM_Erase() and MEM_Write() after wake up from power-down mode).
+ *
+ * @param coreCtx The pointer to the ROM API driver context structure.
+ *
+ * @retval #kStatus_Success
+ * @retval #kStatus_Fail
+ */
+status_t PRINCE_Reconfigure(api_core_context_t *coreCtx)
+{
+    status_t status = kStatus_Fail;
+    uint64_t princeMask;
+    uint32_t IvReg[4] = {0};
+    uint32_t ivEraseCounter[3];
+    uint32_t srEnable[3];
+    uint32_t uuid[4];
+    flash_config_t flash_config;
+    uint32_t lockWord;
+    uint8_t lock[3];
+
+    /* Enable CSS and check keys */
+    status = PRINCE_CSS_enable();
+    if (kStatus_Success != status)
+    {
+        return kStatus_Fail;
+    }
+
+    /* Set PRINCE mask value. */
+    status = PRINCE_CSS_generate_random((uint8_t *)&princeMask, sizeof(princeMask));
+    if (kStatus_Success != status)
+    {
+        return kStatus_Fail;
+    }
+    PRINCE_SetMask(PRINCE, princeMask);
+
+    /* Clean up Flash driver structure and Init*/
+    memset(&flash_config, 0, sizeof(flash_config_t));
+    if (FLASH_Init(&flash_config) != kStatus_Success)
+    {
+        return kStatus_Fail;
+    }
+
+    /* FFR Init */
+    if (FFR_Init(&flash_config) != kStatus_Success)
+    {
+        return kStatus_Fail;
+    }
+
+    /* Get UUID from FFR */
+    status = FFR_GetUUID(&flash_config, (uint8_t *)uuid);
+    if (kStatus_Success != status)
+    {
+        return kStatus_Fail;
+    }
+
+    /* Check version of CFPA scratch first */
+    uint32_t cfpaScratchVer = 0u;
+    memcpy(&cfpaScratchVer, (void *)(CFPA_SCRATCH_VER), sizeof(uint32_t));
+
+    /* Get CFPA version using FFR ROM API */
+    uint32_t cfpaVer = 0u;
+    if (kStatus_Success !=
+        FFR_GetCustomerInfieldData(&flash_config, (uint8_t *)&cfpaVer, CFPA_VER_OFFSET, sizeof(uint32_t)))
+    {
+        status = kStatus_Fail;
+        return status;
+    }
+
+    /* Compare the version of CFPA scratch and version of CFPA returned by ROM API */
+    if (cfpaScratchVer > cfpaVer)
+    {
+        /* Get PRINCE_IV_CTRs from CFPA scratch */
+        memcpy(&ivEraseCounter, (void *)CFPA_SCRATCH_IV, sizeof(uint32_t) * PRINCE_REGION_COUNT);
+    }
+    else
+    {
+        /* Get PRINCE_IV_CTRs IVs from CFPA ping/pong page */
+        status = FFR_GetCustomerInfieldData(&flash_config, (uint8_t *)ivEraseCounter, CFPA_PRINCE_IV_OFFSET,
+                                            sizeof(uint32_t) * PRINCE_REGION_COUNT);
+        if (kStatus_Success != status)
+        {
+            return kStatus_Fail;
+        }
+    }
+
+    /* Get PRINCE sub-region enable word from FFR */
+    status = FFR_GetCustomerData(&flash_config, (uint8_t *)srEnable, CMPA_PRINCE_SR_OFFSET,
+                                 sizeof(uint32_t) * PRINCE_REGION_COUNT);
+    if (kStatus_Success != status)
+    {
+        return kStatus_Fail;
+    }
+
+    /* Get PRINCE lock setting from FFR */
+    status = FFR_GetCustomerData(&flash_config, (uint8_t *)&lockWord, CMPA_PRINCE_LOCK_OFFSET, sizeof(uint32_t));
+    if (kStatus_Success != status)
+    {
+        return kStatus_Fail;
+    }
+
+    lock[0] = (lockWord & PRINCE_BASE_ADDR_LOCK_REG0_MASK) >> PRINCE_BASE_ADDR_LOCK_REG0_SHIFT;
+    lock[1] = (lockWord & PRINCE_BASE_ADDR_LOCK_REG1_MASK) >> PRINCE_BASE_ADDR_LOCK_REG1_SHIFT;
+    lock[2] = (lockWord & PRINCE_BASE_ADDR_LOCK_REG2_MASK) >> PRINCE_BASE_ADDR_LOCK_REG2_SHIFT;
+
+    /* Iterate for all internal PRINCE regions */
+    for (prince_region_t region = kPRINCE_Region0; region <= kPRINCE_Region2; region++)
+    {
+        /* Set region base address. Should be always 0x0 on LPC55S36 */
+        status = PRINCE_SetRegionBaseAddress(PRINCE, (prince_region_t)region, 0x0u);
+        if (kStatus_Success != status)
+        {
+            return kStatus_Fail;
+        }
+
+        status = PRINCE_SetRegionSREnable(PRINCE, region, srEnable[region]);
+        if (kStatus_Success != status)
+        {
+            return kStatus_Fail;
+        }
+
+        /* Prepare ivSeed for current region */
+        IvReg[0] = uuid[0];
+        IvReg[1] = uuid[1];
+        IvReg[2] = uuid[2] ^ region;
+        IvReg[3] = ivEraseCounter[region];
+
+        /* Calculate IV as IvReg = AES_ECB_ENC(DUK_derived_key, {ctx_erase_counter, ctx_id}) */
+        status = PRINCE_CSS_calculate_iv(IvReg);
+        if (status != kStatus_Success)
+        {
+            return kStatus_Fail;
+        }
+
+        /* Load IV into PRINCE registers */
+        status = PRINCE_SetRegionIV(PRINCE, (prince_region_t)region, (uint8_t *)IvReg);
+        if (status != kStatus_Success)
+        {
+            return kStatus_Fail;
+        }
+
+        /* Lock region if required */
+        if ((lock[region] == 0x1u) || (lock[region] == 0x2u) || (lock[region] == 0x3u))
+        {
+            PRINCE_SetLock(PRINCE, (kPRINCE_Region0Lock << region));
+        }
+    }
+
+    /* Break the main loop in case that error occured during PRINCE configuration */
+    if (status != kStatus_Success)
+    {
+        return kStatus_Fail;
+    }
+
+    /* When ENC_ENABLE is set, reading from PRINCE-encrypted regions is disabled. */
+    /* For LPC55S36, the ENC_ENABLE is self-cleared after programming memory. */
+    PRINCE_EncryptDisable(PRINCE);
+    return status;
+}
+
+static status_t PRINCE_CSS_generate_random(uint8_t *output, size_t outputByteLen)
+{
+    status_t status = kStatus_Fail;
+
+    // PRNG needs to be initialized; this can be done by calling mcuxClCss_KeyDelete_Async
+    // (delete any key slot, can be empty)
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClCss_KeyDelete_Async(18));
+    // mcuxClCss_KeyDelete_Async is a flow-protected function: Check the protection token and the return value
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_KeyDelete_Async) != token) || (MCUXCLCSS_STATUS_OK_WAIT != result))
+        return kStatus_Fail; // Expect that no error occurred, meaning that the mcuxClCss_KeyDelete_Async operation was
+                             // started.
+    MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+    // Wait for operation to finish
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClCss_WaitForOperation(MCUXCLCSS_ERROR_FLAGS_CLEAR));
+    // mcuxClCss_WaitForOperation is a flow-protected function: Check the protection token and the return value
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_WaitForOperation) != token) || (MCUXCLCSS_STATUS_OK != result))
+        return kStatus_Fail; // Expect that no error occurred, meaning that the mcuxClCss_WaitForOperation operation was
+                             // started.
+    MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClCss_Prng_GetRandom(output, outputByteLen));
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_Prng_GetRandom) != token) || (MCUXCLCSS_STATUS_OK != result))
+        return kStatus_Fail;
+    MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+    status = kStatus_Success;
+    return status;
+}
+
+static status_t PRINCE_CSS_check_key(uint8_t keyIdx, mcuxClCss_KeyProp_t *pKeyProp)
+{
+    /* Check if CSS required keys are available in CSS keystore */
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token,
+                                     mcuxClCss_GetKeyProperties(keyIdx, pKeyProp)); // Get key propertis from the CSS.
+    // mcuxClCss_GetKeyProperties is a flow-protected function: Check the protection token and the return value
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_GetKeyProperties) != token) || (MCUXCLCSS_STATUS_OK != result))
+        return kStatus_Fail;
+    MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+    return kStatus_Success;
+}
+
+static status_t PRINCE_CSS_gen_iv_key(void)
+{
+    /* The NXP_DIE_MEM_IV_ENC_SK is not loaded and needs to be regenerated (power-down wakeup) */
+    /* Set KDF mask and key properties for NXP_DIE_MEM_IV_ENC_SK */
+    SYSCON->CSS_KDF_MASK            = SYSCON_CSS_KDF_MASK;
+    static const uint32_t ddata2[3] = {0x62032504, 0x72f04280, 0x87a2bbae};
+    mcuxClCss_KeyProp_t keyProp;
+    /* Set key properties in structure */
+    keyProp.word.value = CSS_CSS_KS2_ks2_uaes_MASK | CSS_CSS_KS2_ks2_fgp_MASK | CSS_CSS_KS2_ks2_kact_MASK;
+    status_t status    = kStatus_Fail;
+
+    /* Generate the key using CKDF */
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(
+        result, token,
+        mcuxClCss_Ckdf_Sp800108_Async((mcuxClCss_KeyIndex_t)0, (mcuxClCss_KeyIndex_t)NXP_DIE_MEM_IV_ENC_SK, keyProp,
+                                      (uint8_t const *)ddata2));
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_Ckdf_Sp800108_Async) != token) && (MCUXCLCSS_STATUS_OK != result))
+    {
+        return kStatus_Fail;
+    }
+    MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+    /* Wait for CKDF to finish */
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClCss_WaitForOperation(MCUXCLCSS_ERROR_FLAGS_CLEAR));
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_WaitForOperation) == token) && (MCUXCLCSS_STATUS_OK == result))
+    {
+        status = kStatus_Success;
+    }
+    MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+    return status;
+}
+
+static status_t PRINCE_CSS_enable(void)
+{
+    mcuxClCss_KeyProp_t key_properties;
+    status_t status = kStatus_Fail;
+
+    /* Enable CSS and related clocks */
+    status = CSS_PowerDownWakeupInit(CSS);
+    if (status != kStatus_Success)
+    {
+        return kStatus_Fail;
+    }
+
+    /* Check if MEM_ENC_SK key is available in CSS keystore */
+    status = PRINCE_CSS_check_key(NXP_DIE_MEM_ENC_SK, &key_properties);
+    if (status != kStatus_Success || key_properties.bits.kactv != 1u)
+    {
+        return kStatus_Fail;
+    }
+
+    /* Check if MEM_IV_ENC_SK key is available in CSS keystore */
+    status = PRINCE_CSS_check_key(NXP_DIE_MEM_IV_ENC_SK, &key_properties);
+    if (status != kStatus_Success || key_properties.bits.kactv != 1u)
+    {
+        return PRINCE_CSS_gen_iv_key();
+    }
+
+    return kStatus_Success;
+}
+
+static status_t PRINCE_CSS_calculate_iv(uint32_t *IvReg)
+{
+    mcuxClCss_CipherOption_t cipherOptions = {0};
+    status_t status                        = kStatus_Fail;
+
+    /* Configure CSS for AES ECB-128, using NXP_DIE_MEM_IV_ENC_SK key */
+    cipherOptions.bits.cphmde = MCUXCLCSS_CIPHERPARAM_ALGORITHM_AES_ECB;
+    cipherOptions.bits.dcrpt  = MCUXCLCSS_CIPHER_ENCRYPT;
+    cipherOptions.bits.extkey = MCUXCLCSS_CIPHER_INTERNAL_KEY;
+
+    do
+    {
+        /* Calculate IV as IvReg = AES_ECB_ENC(NXP_DIE_MEM_IV_ENC_SK, ivSeed[127:0]) */
+        /* ivSeed[127:0] = {UUID[96:0] ^ regionNumber[1:0], ivEraseCounter[31:0]} */
+        MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(
+            result, token,
+            mcuxClCss_Cipher_Async(cipherOptions, (mcuxClCss_KeyIndex_t)NXP_DIE_MEM_IV_ENC_SK, NULL,
+                                   MCUXCLCSS_CIPHER_KEY_SIZE_AES_128, (uint8_t *)IvReg, MCUXCLCSS_CIPHER_BLOCK_SIZE_AES,
+                                   NULL, (uint8_t *)IvReg));
+        if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_Cipher_Async) != token) || (MCUXCLCSS_STATUS_OK_WAIT != result))
+            break;
+        MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+        MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(
+            result, token,
+            mcuxClCss_WaitForOperation(
+                MCUXCLCSS_ERROR_FLAGS_CLEAR)); // Wait for the mcuxClCss_Enable_Async operation to complete.
+        // mcuxClCss_WaitForOperation is a flow-protected function: Check the protection token and the return value
+        if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_WaitForOperation) == token) && (MCUXCLCSS_STATUS_OK == result))
+        {
+            status = kStatus_Success;
+        }
+        MCUX_CSSL_FP_FUNCTION_CALL_END();
+    } while (0);
+
+    return status;
+}
+#endif /* defined(FSL_PRINCE_DRIVER_LPC55S3x) */

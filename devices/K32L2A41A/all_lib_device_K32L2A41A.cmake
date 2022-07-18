@@ -8,7 +8,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/button
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/gpio
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/led
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/log
@@ -80,7 +79,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpuart_edma)
 #    include(driver_lpspi_edma)
 #    include(driver_flexio_uart_edma)
-#    include(utilities_misc_utilities)
 #    include(driver_rtc)
 #    include(driver_wdog32)
 #    include(component_gpio_adapter)
@@ -93,8 +91,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_edma)
 #    include(driver_cmsis_lpi2c)
+#    include(utilities_misc_utilities_K32L2A41A)
 #    include(device_startup)
-#    include(component_panic)
+#    include(component_serial_manager_usb_cdc)
 #    include(utility_assert)
 #    include(driver_mmdvsq)
 #    include(middleware_freertos-kernel_extension)
@@ -102,9 +101,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_led)
 #    include(middleware_usb_common_header)
 #    include(middleware_usb_device_common_header)
-#    include(component_serial_manager_usb_cdc)
+#    include(component_panic)
 #    include(driver_clock)
-#    include(component_button)
 #    include(device_CMSIS)
 #    include(CMSIS_Driver_Include_Common)
 #    include(driver_tstmr)
@@ -114,7 +112,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_common)
 #    include(driver_smc)
 #    include(component_osa_free_rtos)
-#    include(component_lpi2c_adapter)
 #    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)
@@ -148,6 +145,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpi2c_freertos)
 #    include(component_lists)
 #    include(driver_tpm)
+#    include(component_button_K32L2A41A)
 #    include(driver_cmp)
 #    include(driver_lpit)
 #    include(component_osa)

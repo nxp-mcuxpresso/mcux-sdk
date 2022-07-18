@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2021-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,18 +20,23 @@
 #define BOARD_NAME "MIMXRT1060-EVKB"
 
 /* The UART to use for debug messages. */
-#define BOARD_DEBUG_UART_TYPE     kSerialPort_Uart
-#define BOARD_DEBUG_UART_BASEADDR (uint32_t) LPUART1
-#define BOARD_DEBUG_UART_INSTANCE 1U
-
 #define BOARD_DEBUG_UART_CLK_FREQ BOARD_DebugConsoleSrcFreq()
-
-#define BOARD_UART_IRQ         LPUART1_IRQn
+#define BOARD_DEBUG_UART_TYPE     kSerialPort_Uart
+#ifndef BOARD_DEBUG_UART_BASEADDR
+#define BOARD_DEBUG_UART_BASEADDR (uint32_t) LPUART1
+#endif
+#ifndef BOARD_DEBUG_UART_INSTANCE
+#define BOARD_DEBUG_UART_INSTANCE 1U
+#endif
+#ifndef BOARD_UART_IRQ
+#define BOARD_UART_IRQ LPUART1_IRQn
+#endif
+#ifndef BOARD_UART_IRQ_HANDLER
 #define BOARD_UART_IRQ_HANDLER LPUART1_IRQHandler
-
+#endif
 #ifndef BOARD_DEBUG_UART_BAUDRATE
 #define BOARD_DEBUG_UART_BAUDRATE (115200U)
-#endif /* BOARD_DEBUG_UART_BAUDRATE */
+#endif
 
 /*! @brief The USER_LED used for board */
 #define LOGIC_LED_ON  (0U)
@@ -107,6 +112,13 @@
 #define BOARD_CAMERA_PWDN_GPIO    GPIO1
 #define BOARD_CAMERA_PWDN_PIN     18
 
+/* @Brief Board touch panel configuration */
+#define BOARD_TOUCH_I2C_BASEADDR LPI2C1
+#define BOARD_TOUCH_RST_GPIO     GPIO1
+#define BOARD_TOUCH_RST_PIN      2
+#define BOARD_TOUCH_INT_GPIO     GPIO1
+#define BOARD_TOUCH_INT_PIN      11
+
 /* @Brief Board Bluetooth HCI UART configuration */
 #define BOARD_BT_UART_BASEADDR    LPUART3
 #define BOARD_BT_UART_INSTANCE    3
@@ -174,6 +186,10 @@ status_t BOARD_Camera_I2C_Receive(
 status_t BOARD_Camera_I2C_SendSCCB(
     uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, const uint8_t *txBuff, uint8_t txBuffSize);
 status_t BOARD_Camera_I2C_ReceiveSCCB(
+    uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, uint8_t *rxBuff, uint8_t rxBuffSize);
+status_t BOARD_Touch_I2C_Send(
+    uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, const uint8_t *txBuff, uint8_t txBuffSize);
+status_t BOARD_Touch_I2C_Receive(
     uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, uint8_t *rxBuff, uint8_t rxBuffSize);
 #endif /* SDK_I2C_BASED_COMPONENT_USED */
 

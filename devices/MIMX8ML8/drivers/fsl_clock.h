@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.1.1. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief CLOCK driver version 2.2.0. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -461,6 +461,7 @@ typedef enum _clock_name
     kCLOCK_AhbClk,          /*!< AHB bus clock.                         */
     kCLOCK_IpgClk,          /*!< IPG bus clock.                         */
     kCLOCK_PerClk,          /*!< Peripheral Clock.                      */
+    kCLOCK_EnetIpgClk,      /*!< ENET IPG Clock.                        */
     kCLOCK_Osc24MClk,       /*!< OSC 24M clock.                         */
     kCLOCK_ArmPllClk,       /*!< Arm PLL clock.                         */
     kCLOCK_DramPllClk,      /*!< Dram PLL clock.                         */
@@ -1821,6 +1822,13 @@ uint32_t CLOCK_GetAxiFreq(void);
  * @return  Clock frequency; If the clock is invalid, returns 0.
  */
 uint32_t CLOCK_GetAhbFreq(void);
+
+/*!
+ * brief Get the CCM Enet AXI bus frequency.
+ *
+ * return  Clock frequency; If the clock is invalid, returns 0.
+ */
+uint32_t CLOCK_GetEnetAxiFreq(void);
 
 /* @} */
 

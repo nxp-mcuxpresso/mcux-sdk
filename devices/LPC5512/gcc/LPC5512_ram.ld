@@ -6,13 +6,13 @@
 **     Compiler:            GNU C Compiler
 **     Reference manual:    LPC55S1x/LPC551x User manual Rev.0.6  15 November 2019
 **     Version:             rev. 1.1, 2019-12-03
-**     Build:               b200221
+**     Build:               b220301
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -188,16 +188,6 @@ SECTIONS
     . += STACK_SIZE;
   } > m_data
 
-  m_usb_bdt (NOLOAD) :
-  {
-    . = ALIGN(512);
-    *(m_usb_bdt)
-  } > m_usb_sram
-
-  m_usb_global (NOLOAD) :
-  {
-    *(m_usb_global)
-  } > m_usb_sram
 
   /* Initializes stack on the end of block */
   __StackTop   = ORIGIN(m_data) + LENGTH(m_data);

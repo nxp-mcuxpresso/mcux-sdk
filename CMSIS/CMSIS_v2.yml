@@ -31,6 +31,8 @@ CMSIS_Include_core_cm:
         cores: cm4 cm4f
       - source: core_cm7.h
         cores: cm7 cm7f
+      - source: cachel1_armv7.h
+        cores: cm7 cm7f
       - source: mpu_armv7.h
         cores: cm0 cm0p cm3 cm4 cm4f cm7 cm7f
       - source: mpu_armv8.h
@@ -39,7 +41,7 @@ CMSIS_Include_core_cm:
         cores: cm23 cm33 cm33f
   component_info:
     common:
-      version: 5.3.0
+      version: 5.5.0
       type: CMSIS_Include
       full_name: CMSIS Include For Cortex-M, ARMv8-M, ARMv8.1-M
       description: CMSIS-CORE for Cortex-M, ARMv8-M, ARMv8.1-M
@@ -51,7 +53,7 @@ CMSIS_Include_core_cm:
       sub: ''
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Include_core_ca7:
   section-type: component
@@ -74,7 +76,7 @@ CMSIS_Include_core_ca7:
     - cmsis.core_ca7.support
   component_info:
     common:
-      version: 1.1.4
+      version: 1.2.1
       type: CMSIS_Include
       full_name: CMSIS Include For Cortex-A
       description: CMSIS-CORE for Cortex-A
@@ -86,7 +88,7 @@ CMSIS_Include_core_ca7:
       pack_name: CMSIS
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 cmsis.core_cm.support:
   section-type: component_support
@@ -101,267 +103,159 @@ cmsis.core_cm.support:
     - core.cm33f
     - core.cm7
     - core.cm7f
+    - core.cm55
 
 cmsis.core_ca7.support:
   section-type: component_support
   __requires__:
     - core.ca7
 
-## CMSIS DSP Library
-CMSIS_DSP_Library:
+CMSIS_DSP_Include:
   section-type: component
   contents:
     repo_base_path: CMSIS/DSP
     project_base_path: CMSIS/DSP
     cc-include:
       - repo_relative_path: Include
+      - repo_relative_path: PrivateInclude
     files:
+      - source: README.md
+        hidden: true
+        exclude: true
       - source: Include/arm_common_tables.h
       - source: Include/arm_const_structs.h
       - source: Include/arm_math.h
-
-      - source: Lib/ARM/arm_cortexM0l_math.lib
-        toolchains: mdk
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm0p
-      - source: Lib/GCC/libarm_cortexM0l_math.a
-        toolchains: armgcc mcux
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm0p
-      - source: Lib/IAR/iar_cortexM0l_math.a
-        cores: cm0p
-        toolchains: iar
-        attribute: extra-libraries
-        project_relative_path: "./"
-
-      - source: Lib/ARM/arm_cortexM3l_math.lib
-        toolchains: mdk
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm3
-      - source: Lib/GCC/libarm_cortexM3l_math.a
-        toolchains: armgcc mcux
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm3
-      - source: Lib/IAR/iar_cortexM3l_math.a
-        cores: cm3
-        toolchains: iar
-        attribute: extra-libraries
-        project_relative_path: "./"
-
-      - source: Lib/ARM/arm_cortexM4l_math.lib
-        toolchains: mdk
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm4
-        fpu: NO_FPU
-      - source: Lib/GCC/libarm_cortexM4l_math.a
-        toolchains: armgcc mcux
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm4
-        fpu: NO_FPU
-      - source: Lib/IAR/iar_cortexM4l_math.a
-        cores: cm4
-        toolchains: iar
-        attribute: extra-libraries
-        project_relative_path: "./"
-        fpu: NO_FPU
-      - source: Lib/ARM/arm_cortexM4lf_math.lib
-        toolchains: mdk
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm4f
-        fpu: SP_FPU DP_FPU
-      - source: Lib/GCC/libarm_cortexM4lf_math.a
-        toolchains: armgcc mcux
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm4f
-        fpu: SP_FPU DP_FPU
-      - source: Lib/IAR/iar_cortexM4lf_math.a
-        cores: cm4f
-        fpu: SP_FPU DP_FPU
-        toolchains: iar
-        attribute: extra-libraries
-        project_relative_path: "./"
-
-      - source: Lib/ARM/arm_cortexM7l_math.lib
-        toolchains: mdk
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm7
-        fpu: NO_FPU
-      - source: Lib/GCC/libarm_cortexM7l_math.a
-        toolchains: armgcc mcux
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm7
-        fpu: NO_FPU
-      - source: Lib/IAR/iar_cortexM7l_math.a
-        cores: cm7
-        toolchains: iar
-        attribute: extra-libraries
-        project_relative_path: "./"
-        fpu: NO_FPU
-
-      - source: Lib/ARM/arm_cortexM7lfsp_math.lib
-        toolchains: mdk
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm7f
-        fpu: SP_FPU
-      - source: Lib/GCC/libarm_cortexM7lfsp_math.a
-        toolchains: armgcc mcux
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm7f
-        fpu: SP_FPU
-      - source: Lib/IAR/iar_cortexM7ls_math.a
-        cores: cm7f
-        toolchains: iar
-        attribute: extra-libraries
-        project_relative_path: "./"
-        fpu: SP_FPU
-      - source: Lib/ARM/arm_cortexM7lfdp_math.lib
-        toolchains: mdk
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm7f
-        fpu: DP_FPU
-      - source: Lib/GCC/libarm_cortexM7lfdp_math.a
-        toolchains: armgcc mcux
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm7f
-        fpu: DP_FPU
-      - source: Lib/IAR/iar_cortexM7lf_math.a
-        cores: cm7f
-        toolchains: iar
-        attribute: extra-libraries
-        project_relative_path: "./"
-        fpu: DP_FPU
-
-      - source: Lib/ARM/arm_ARMv8MMLl_math.lib
-        toolchains: mdk
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm23 cm33
-        fpu: NO_FPU
-        dsp: NO_DSP
-      - source: Lib/GCC/libarm_ARMv8MMLl_math.a
-        toolchains: armgcc mcux
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm23 cm33
-        fpu: NO_FPU
-        dsp: NO_DSP
-      - source: Lib/IAR/iar_ARMv8MMLl_math.a
-        cores: cm23 cm33
-        toolchains: iar
-        attribute: extra-libraries
-        project_relative_path: "./"
-        fpu: NO_FPU
-        dsp: NO_DSP
-
-      - source: Lib/ARM/arm_ARMv8MMLld_math.lib
-        toolchains: mdk
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm33 cm33f
-        fpu: NO_FPU
-        dsp: DSP
-      - source: Lib/GCC/libarm_ARMv8MMLld_math.a
-        toolchains: armgcc mcux
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm33 cm33f
-        fpu: NO_FPU
-        dsp: DSP
-      - source: Lib/IAR/iar_ARMv8MMLld_math.a
-        cores: cm33 cm33f
-        toolchains: iar
-        attribute: extra-libraries
-        project_relative_path: "./"
-        fpu: NO_FPU
-        dsp: DSP
-
-      - source: Lib/ARM/arm_ARMv8MMLlfsp_math.lib
-        toolchains: mdk
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm33 cm33f
-        fpu: SP_FPU
-        dsp: NO_DSP
-      - source: Lib/GCC/libarm_ARMv8MMLlfsp_math.a
-        toolchains: armgcc mcux
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm33 cm33f
-        fpu: SP_FPU
-        dsp: NO_DSP
-      - source: Lib/IAR/iar_ARMv8MMLlfsp_math.a
-        cores: cm33 cm33f
-        toolchains: iar
-        attribute: extra-libraries
-        project_relative_path: "./"
-        fpu: SP_FPU
-        dsp: NO_DSP
-
-      - source: Lib/ARM/arm_ARMv8MMLldfsp_math.lib
-        toolchains: mdk
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm33 cm33f
-        fpu: SP_FPU
-        dsp: DSP
-      - source: Lib/GCC/libarm_ARMv8MMLldfsp_math.a
-        toolchains: armgcc mcux
-        attribute: extra-libraries
-        project_relative_path: "./"
-        cores: cm33 cm33f
-        fpu: SP_FPU
-        dsp: DSP
-      - source: Lib/IAR/iar_ARMv8MMLldfsp_math.a
-        cores: cm33 cm33f
-        toolchains: iar
-        attribute: extra-libraries
-        project_relative_path: "./"
-        fpu: SP_FPU
-        dsp: DSP
+      - source: Include/arm_common_tables_f16.h
+      - source: Include/arm_const_structs_f16.h
+      - source: Include/arm_helium_utils.h
+      - source: Include/arm_math_f16.h
+      - source: Include/arm_math_memory.h
+      - source: Include/arm_math_types.h
+      - source: Include/arm_math_types_f16.h
+      - source: Include/arm_mve_tables.h
+      - source: Include/arm_mve_tables_f16.h
+      - source: Include/arm_vec_math.h
+      - source: Include/arm_vec_math_f16.h
+      - source: Include/dsp/basic_math_functions.h
+      - source: Include/dsp/basic_math_functions_f16.h
+      - source: Include/dsp/bayes_functions.h
+      - source: Include/dsp/bayes_functions_f16.h
+      - source: Include/dsp/complex_math_functions.h
+      - source: Include/dsp/complex_math_functions_f16.h
+      - source: Include/dsp/controller_functions.h
+      - source: Include/dsp/controller_functions_f16.h
+      - source: Include/dsp/distance_functions.h
+      - source: Include/dsp/distance_functions_f16.h
+      - source: Include/dsp/fast_math_functions.h
+      - source: Include/dsp/fast_math_functions_f16.h
+      - source: Include/dsp/filtering_functions.h
+      - source: Include/dsp/filtering_functions_f16.h
+      - source: Include/dsp/interpolation_functions.h
+      - source: Include/dsp/interpolation_functions_f16.h
+      - source: Include/dsp/matrix_functions.h
+      - source: Include/dsp/matrix_functions_f16.h
+      - source: Include/dsp/none.h
+      - source: Include/dsp/quaternion_math_functions.h
+      - source: Include/dsp/statistics_functions.h
+      - source: Include/dsp/statistics_functions_f16.h
+      - source: Include/dsp/support_functions.h
+      - source: Include/dsp/support_functions_f16.h
+      - source: Include/dsp/svm_defines.h
+      - source: Include/dsp/svm_functions.h
+      - source: Include/dsp/svm_functions_f16.h
+      - source: Include/dsp/transform_functions.h
+      - source: Include/dsp/transform_functions_f16.h
+      - source: Include/dsp/utils.h
+      - source: PrivateInclude/arm_sorting.h
+      - source: PrivateInclude/arm_vec_fft.h
+      - source: PrivateInclude/arm_vec_filtering.h
   __requires__:
   - CMSIS_DSP_Lib.ui_control
   component_info:
     common:
-      version: 1.7.0
+      version: 1.9.0
       type: CMSIS_driver
-      full_name: CMSIS DSP Library
-      description: CMSIS-DSP Library for Cortex-M, SC000, and SC300
-      manifest_name: CMSIS_DSP_Library
+      full_name: CMSIS DSP Library Header
+      description: CMSIS-DSP Library Header
+      manifest_name: CMSIS_DSP_Library_Header
     cmsis_pack:
       class: CMSIS
       group: DSP
-      variant: Library
       sub: ''
       pack_name: CMSIS
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_DSP_Source:
   section-type: component
+  configuration:
+    tools:
+      __common__:
+        config:
+          __common__:
+            cc-define:
+              DISABLEFLOAT16:
   contents:
     repo_base_path: CMSIS/DSP
     project_base_path: CMSIS/DSP
     cc-include:
       - repo_relative_path: Include
+      - repo_relative_path: PrivateInclude
+      - repo_relative_path: Source/DistanceFunctions
     files:
+      - source: README.md
+        hidden: true
+        exclude: true
+
       - source: Include/arm_common_tables.h
       - source: Include/arm_const_structs.h
       - source: Include/arm_math.h
+      - source: Include/arm_common_tables_f16.h
+      - source: Include/arm_const_structs_f16.h
+      - source: Include/arm_helium_utils.h
+      - source: Include/arm_math_f16.h
+      - source: Include/arm_math_memory.h
+      - source: Include/arm_math_types.h
+      - source: Include/arm_math_types_f16.h
+      - source: Include/arm_mve_tables.h
+      - source: Include/arm_mve_tables_f16.h
+      - source: Include/arm_vec_math.h
+      - source: Include/arm_vec_math_f16.h
+      - source: Include/dsp/basic_math_functions.h
+      - source: Include/dsp/basic_math_functions_f16.h
+      - source: Include/dsp/bayes_functions.h
+      - source: Include/dsp/bayes_functions_f16.h
+      - source: Include/dsp/complex_math_functions.h
+      - source: Include/dsp/complex_math_functions_f16.h
+      - source: Include/dsp/controller_functions.h
+      - source: Include/dsp/controller_functions_f16.h
+      - source: Include/dsp/distance_functions.h
+      - source: Include/dsp/distance_functions_f16.h
+      - source: Include/dsp/fast_math_functions.h
+      - source: Include/dsp/fast_math_functions_f16.h
+      - source: Include/dsp/filtering_functions.h
+      - source: Include/dsp/filtering_functions_f16.h
+      - source: Include/dsp/interpolation_functions.h
+      - source: Include/dsp/interpolation_functions_f16.h
+      - source: Include/dsp/matrix_functions.h
+      - source: Include/dsp/matrix_functions_f16.h
+      - source: Include/dsp/none.h
+      - source: Include/dsp/quaternion_math_functions.h
+      - source: Include/dsp/statistics_functions.h
+      - source: Include/dsp/statistics_functions_f16.h
+      - source: Include/dsp/support_functions.h
+      - source: Include/dsp/support_functions_f16.h
+      - source: Include/dsp/svm_defines.h
+      - source: Include/dsp/svm_functions.h
+      - source: Include/dsp/svm_functions_f16.h
+      - source: Include/dsp/transform_functions.h
+      - source: Include/dsp/transform_functions_f16.h
+      - source: Include/dsp/utils.h
+      - source: PrivateInclude/arm_sorting.h
+      - source: PrivateInclude/arm_vec_fft.h
+      - source: PrivateInclude/arm_vec_filtering.h
+
       - source: Source/BasicMathFunctions/BasicMathFunctions.c
       - source: Source/BasicMathFunctions/arm_abs_f32.c
         hidden: true
@@ -385,6 +279,27 @@ CMSIS_DSP_Source:
         hidden: true
         exclude: true
       - source: Source/BasicMathFunctions/arm_add_q7.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_and_u16.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_and_u32.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_and_u8.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_clip_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_clip_q15.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_clip_q31.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_clip_q7.c
         hidden: true
         exclude: true
       - source: Source/BasicMathFunctions/arm_dot_prod_f32.c
@@ -423,6 +338,15 @@ CMSIS_DSP_Source:
       - source: Source/BasicMathFunctions/arm_negate_q7.c
         hidden: true
         exclude: true
+      - source: Source/BasicMathFunctions/arm_not_u16.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_not_u32.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_not_u8.c
+        hidden: true
+        exclude: true
       - source: Source/BasicMathFunctions/arm_offset_f32.c
         hidden: true
         exclude: true
@@ -433,6 +357,15 @@ CMSIS_DSP_Source:
         hidden: true
         exclude: true
       - source: Source/BasicMathFunctions/arm_offset_q7.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_or_u16.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_or_u32.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_or_u8.c
         hidden: true
         exclude: true
       - source: Source/BasicMathFunctions/arm_scale_f32.c
@@ -468,12 +401,74 @@ CMSIS_DSP_Source:
       - source: Source/BasicMathFunctions/arm_sub_q7.c
         hidden: true
         exclude: true
+      - source: Source/BasicMathFunctions/arm_xor_u16.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_xor_u32.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_xor_u8.c
+        hidden: true
+        exclude: true
+
+      - source: Source/BasicMathFunctions/BasicMathFunctionsF16.c
+      - source: Source/BasicMathFunctions/arm_abs_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_add_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_clip_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_dot_prod_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_mult_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_negate_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_offset_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_scale_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/BasicMathFunctions/arm_sub_f16.c
+        hidden: true
+        exclude: true
+
+      - source: Source/BayesFunctions/BayesFunctions.c
+      - source: Source/BayesFunctions/arm_gaussian_naive_bayes_predict_f32.c
+        hidden: true
+        exclude: true
+
+      - source: Source/BayesFunctions/BayesFunctionsF16.c
+      - source: Source/BayesFunctions/arm_gaussian_naive_bayes_predict_f16.c
+        hidden: true
+        exclude: true
 
       - source: Source/CommonTables/CommonTables.c
       - source: Source/CommonTables/arm_common_tables.c
         hidden: true
         exclude: true
       - source: Source/CommonTables/arm_const_structs.c
+        hidden: true
+        exclude: true
+      - source: Source/CommonTables/arm_mve_tables.c
+        hidden: true
+        exclude: true
+
+      - source: Source/CommonTables/CommonTablesF16.c
+      - source: Source/CommonTables/arm_common_tables_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/CommonTables/arm_const_structs_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/CommonTables/arm_mve_tables_f16.c
         hidden: true
         exclude: true
 
@@ -533,6 +528,26 @@ CMSIS_DSP_Source:
         hidden: true
         exclude: true
 
+      - source: Source/ComplexMathFunctions/ComplexMathFunctionsF16.c
+      - source: Source/ComplexMathFunctions/arm_cmplx_conj_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/ComplexMathFunctions/arm_cmplx_dot_prod_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/ComplexMathFunctions/arm_cmplx_mag_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/ComplexMathFunctions/arm_cmplx_mag_squared_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/ComplexMathFunctions/arm_cmplx_mult_cmplx_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/ComplexMathFunctions/arm_cmplx_mult_real_f16.c
+        hidden: true
+        exclude: true
+
       - source: Source/ControllerFunctions/ControllerFunctions.c
       - source: Source/ControllerFunctions/arm_pid_init_f32.c
         hidden: true
@@ -559,6 +574,95 @@ CMSIS_DSP_Source:
         hidden: true
         exclude: true
 
+      - source: Source/DistanceFunctions/DistanceFunctions.c
+      - source: Source/DistanceFunctions/arm_boolean_distance_template.h
+      - source: Source/DistanceFunctions/arm_boolean_distance.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_braycurtis_distance_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_canberra_distance_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_chebyshev_distance_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_cityblock_distance_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_correlation_distance_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_cosine_distance_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_dice_distance.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_euclidean_distance_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_hamming_distance.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_jaccard_distance.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_jensenshannon_distance_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_kulsinski_distance.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_minkowski_distance_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_rogerstanimoto_distance.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_russellrao_distance.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_sokalmichener_distance.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_sokalsneath_distance.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_yule_distance.c
+        hidden: true
+        exclude: true
+
+      - source: Source/DistanceFunctions/DistanceFunctionsF16.c
+      - source: Source/DistanceFunctions/arm_braycurtis_distance_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_canberra_distance_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_chebyshev_distance_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_cityblock_distance_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_correlation_distance_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_cosine_distance_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_euclidean_distance_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_jensenshannon_distance_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/DistanceFunctions/arm_minkowski_distance_f16.c
+        hidden: true
+        exclude: true
+
       - source: Source/FastMathFunctions/FastMathFunctions.c
       - source: Source/FastMathFunctions/arm_cos_f32.c
         hidden: true
@@ -567,6 +671,9 @@ CMSIS_DSP_Source:
         hidden: true
         exclude: true
       - source: Source/FastMathFunctions/arm_cos_q31.c
+        hidden: true
+        exclude: true
+      - source: Source/FastMathFunctions/arm_divide_q15.c
         hidden: true
         exclude: true
       - source: Source/FastMathFunctions/arm_sin_f32.c
@@ -582,6 +689,23 @@ CMSIS_DSP_Source:
         hidden: true
         exclude: true
       - source: Source/FastMathFunctions/arm_sqrt_q31.c
+        hidden: true
+        exclude: true
+      - source: Source/FastMathFunctions/arm_vexp_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/FastMathFunctions/arm_vlog_f32.c
+        hidden: true
+        exclude: true
+
+      - source: Source/FastMathFunctions/FastMathFunctionsF16.c
+      - source: Source/FastMathFunctions/arm_vexp_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/FastMathFunctions/arm_vinverse_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/FastMathFunctions/arm_vlog_f16.c
         hidden: true
         exclude: true
 
@@ -847,6 +971,12 @@ CMSIS_DSP_Source:
       - source: Source/FilteringFunctions/arm_iir_lattice_q31.c
         hidden: true
         exclude: true
+      - source: Source/FilteringFunctions/arm_levinson_durbin_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/FilteringFunctions/arm_levinson_durbin_q31.c
+        hidden: true
+        exclude: true
       - source: Source/FilteringFunctions/arm_lms_f32.c
         hidden: true
         exclude: true
@@ -884,6 +1014,78 @@ CMSIS_DSP_Source:
         hidden: true
         exclude: true
 
+      - source: Source/FilteringFunctions/FilteringFunctionsF16.c
+      - source: Source/FilteringFunctions/arm_biquad_cascade_df1_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/FilteringFunctions/arm_biquad_cascade_df1_init_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/FilteringFunctions/arm_biquad_cascade_df2T_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/FilteringFunctions/arm_biquad_cascade_df2T_init_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/FilteringFunctions/arm_biquad_cascade_stereo_df2T_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/FilteringFunctions/arm_biquad_cascade_stereo_df2T_init_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/FilteringFunctions/arm_correlate_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/FilteringFunctions/arm_fir_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/FilteringFunctions/arm_fir_init_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/FilteringFunctions/arm_levinson_durbin_f16.c
+        hidden: true
+        exclude: true
+
+      - source: Source/InterpolationFunctions/InterpolationFunctions.c
+      - source: Source/InterpolationFunctions/arm_bilinear_interp_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/InterpolationFunctions/arm_bilinear_interp_q15.c
+        hidden: true
+        exclude: true
+      - source: Source/InterpolationFunctions/arm_bilinear_interp_q31.c
+        hidden: true
+        exclude: true
+      - source: Source/InterpolationFunctions/arm_bilinear_interp_q7.c
+        hidden: true
+        exclude: true
+      - source: Source/InterpolationFunctions/arm_linear_interp_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/InterpolationFunctions/arm_linear_interp_q15.c
+        hidden: true
+        exclude: true
+      - source: Source/InterpolationFunctions/arm_linear_interp_q31.c
+        hidden: true
+        exclude: true
+      - source: Source/InterpolationFunctions/arm_linear_interp_q7.c
+        hidden: true
+        exclude: true
+      - source: Source/InterpolationFunctions/arm_spline_interp_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/InterpolationFunctions/arm_spline_interp_init_f32.c
+        hidden: true
+        exclude: true
+
+      - source: Source/InterpolationFunctions/InterpolationFunctionsF16.c
+      - source: Source/InterpolationFunctions/arm_bilinear_interp_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/InterpolationFunctions/arm_linear_interp_f16.c
+        hidden: true
+        exclude: true
+
       - source: Source/MatrixFunctions/MatrixFunctions.c
       - source: Source/MatrixFunctions/arm_mat_add_f32.c
         hidden: true
@@ -894,6 +1096,12 @@ CMSIS_DSP_Source:
       - source: Source/MatrixFunctions/arm_mat_add_q31.c
         hidden: true
         exclude: true
+      - source: Source/MatrixFunctions/arm_mat_cholesky_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_cholesky_f64.c
+        hidden: true
+        exclude: true
       - source: Source/MatrixFunctions/arm_mat_cmplx_mult_f32.c
         hidden: true
         exclude: true
@@ -901,6 +1109,15 @@ CMSIS_DSP_Source:
         hidden: true
         exclude: true
       - source: Source/MatrixFunctions/arm_mat_cmplx_mult_q31.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_cmplx_trans_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_cmplx_trans_q15.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_cmplx_trans_q31.c
         hidden: true
         exclude: true
       - source: Source/MatrixFunctions/arm_mat_init_f32.c
@@ -918,7 +1135,16 @@ CMSIS_DSP_Source:
       - source: Source/MatrixFunctions/arm_mat_inverse_f64.c
         hidden: true
         exclude: true
+      - source: Source/MatrixFunctions/arm_mat_ldlt_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_ldlt_f64.c
+        hidden: true
+        exclude: true
       - source: Source/MatrixFunctions/arm_mat_mult_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_mult_f64.c
         hidden: true
         exclude: true
       - source: Source/MatrixFunctions/arm_mat_mult_fast_q15.c
@@ -933,6 +1159,9 @@ CMSIS_DSP_Source:
       - source: Source/MatrixFunctions/arm_mat_mult_q31.c
         hidden: true
         exclude: true
+      - source: Source/MatrixFunctions/arm_mat_mult_q7.c
+        hidden: true
+        exclude: true
       - source: Source/MatrixFunctions/arm_mat_scale_f32.c
         hidden: true
         exclude: true
@@ -942,7 +1171,22 @@ CMSIS_DSP_Source:
       - source: Source/MatrixFunctions/arm_mat_scale_q31.c
         hidden: true
         exclude: true
+      - source: Source/MatrixFunctions/arm_mat_solve_lower_triangular_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_solve_lower_triangular_f64.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_solve_upper_triangular_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_solve_upper_triangular_f64.c
+        hidden: true
+        exclude: true
       - source: Source/MatrixFunctions/arm_mat_sub_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_sub_f64.c
         hidden: true
         exclude: true
       - source: Source/MatrixFunctions/arm_mat_sub_q15.c
@@ -954,15 +1198,197 @@ CMSIS_DSP_Source:
       - source: Source/MatrixFunctions/arm_mat_trans_f32.c
         hidden: true
         exclude: true
+      - source: Source/MatrixFunctions/arm_mat_trans_f64.c
+        hidden: true
+        exclude: true
       - source: Source/MatrixFunctions/arm_mat_trans_q15.c
         hidden: true
         exclude: true
       - source: Source/MatrixFunctions/arm_mat_trans_q31.c
         hidden: true
         exclude: true
+      - source: Source/MatrixFunctions/arm_mat_trans_q7.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_vec_mult_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_vec_mult_q15.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_vec_mult_q31.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_vec_mult_q7.c
+        hidden: true
+        exclude: true
+
+      - source: Source/MatrixFunctions/MatrixFunctionsF16.c
+      - source: Source/MatrixFunctions/arm_mat_add_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_cholesky_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_cmplx_mult_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_cmplx_trans_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_init_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_inverse_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_mult_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_scale_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_solve_lower_triangular_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_solve_upper_triangular_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_sub_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_trans_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/MatrixFunctions/arm_mat_vec_mult_f16.c
+        hidden: true
+        exclude: true
+
+      - source: Source/QuaternionMathFunctions/QuaternionMathFunctions.c
+      - source: Source/QuaternionMathFunctions/arm_quaternion2rotation_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/QuaternionMathFunctions/arm_quaternion_conjugate_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/QuaternionMathFunctions/arm_quaternion_inverse_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/QuaternionMathFunctions/arm_quaternion_norm_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/QuaternionMathFunctions/arm_quaternion_normalize_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/QuaternionMathFunctions/arm_quaternion_product_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/QuaternionMathFunctions/arm_quaternion_product_single_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/QuaternionMathFunctions/arm_rotation2quaternion_f32.c
+        hidden: true
+        exclude: true
+
+      - source: Source/SVMFunctions/SVMFunctions.c
+      - source: Source/SVMFunctions/arm_svm_linear_init_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SVMFunctions/arm_svm_linear_predict_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SVMFunctions/arm_svm_polynomial_init_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SVMFunctions/arm_svm_polynomial_predict_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SVMFunctions/arm_svm_rbf_init_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SVMFunctions/arm_svm_rbf_predict_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SVMFunctions/arm_svm_sigmoid_init_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SVMFunctions/arm_svm_sigmoid_predict_f32.c
+        hidden: true
+        exclude: true
+
+      - source: Source/SVMFunctions/SVMFunctionsF16.c
+      - source: Source/SVMFunctions/arm_svm_linear_init_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/SVMFunctions/arm_svm_linear_predict_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/SVMFunctions/arm_svm_polynomial_init_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/SVMFunctions/arm_svm_polynomial_predict_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/SVMFunctions/arm_svm_rbf_init_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/SVMFunctions/arm_svm_rbf_predict_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/SVMFunctions/arm_svm_sigmoid_init_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/SVMFunctions/arm_svm_sigmoid_predict_f16.c
+        hidden: true
+        exclude: true
 
       - source: Source/StatisticsFunctions/StatisticsFunctions.c
+      - source: Source/StatisticsFunctions/arm_absmax_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_absmax_q15.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_absmax_q31.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_absmax_q7.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_absmin_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_absmin_q15.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_absmin_q31.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_absmin_q7.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_entropy_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_entropy_f64.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_kullback_leibler_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_kullback_leibler_f64.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_logsumexp_dot_prod_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_logsumexp_f32.c
+        hidden: true
+        exclude: true
       - source: Source/StatisticsFunctions/arm_max_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_max_no_idx_f32.c
         hidden: true
         exclude: true
       - source: Source/StatisticsFunctions/arm_max_q15.c
@@ -1038,7 +1464,60 @@ CMSIS_DSP_Source:
         hidden: true
         exclude: true
 
+      - source: Source/StatisticsFunctions/StatisticsFunctionsF16.c
+      - source: Source/StatisticsFunctions/arm_absmax_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_absmin_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_entropy_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_kullback_leibler_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_logsumexp_dot_prod_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_logsumexp_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_max_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_max_no_idx_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_mean_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_min_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_power_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_rms_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_std_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/StatisticsFunctions/arm_var_f16.c
+        hidden: true
+        exclude: true
+
       - source: Source/SupportFunctions/SupportFunctions.c
+      - source: Source/SupportFunctions/arm_barycenter_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_bitonic_sort_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_bubble_sort_f32.c
+        hidden: true
+        exclude: true
       - source: Source/SupportFunctions/arm_copy_f32.c
         hidden: true
         exclude: true
@@ -1072,6 +1551,18 @@ CMSIS_DSP_Source:
       - source: Source/SupportFunctions/arm_float_to_q7.c
         hidden: true
         exclude: true
+      - source: Source/SupportFunctions/arm_heap_sort_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_insertion_sort_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_merge_sort_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_merge_sort_init_f32.c
+        hidden: true
+        exclude: true
       - source: Source/SupportFunctions/arm_q15_to_float.c
         hidden: true
         exclude: true
@@ -1099,6 +1590,47 @@ CMSIS_DSP_Source:
       - source: Source/SupportFunctions/arm_q7_to_q31.c
         hidden: true
         exclude: true
+      - source: Source/SupportFunctions/arm_quick_sort_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_selection_sort_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_sort_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_sort_init_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_weighted_sum_f32.c
+        hidden: true
+        exclude: true
+
+      - source: Source/SupportFunctions/SupportFunctionsF16.c
+      - source: Source/SupportFunctions/arm_barycenter_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_copy_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_f16_to_float.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_f16_to_q15.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_fill_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_float_to_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_q15_to_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/SupportFunctions/arm_weighted_sum_f16.c
+        hidden: true
+        exclude: true
 
       - source: Source/TransformFunctions/TransformFunctions.c
       - source: Source/TransformFunctions/arm_bitreversal.c
@@ -1107,7 +1639,25 @@ CMSIS_DSP_Source:
       - source: Source/TransformFunctions/arm_bitreversal2.c
         hidden: true
         exclude: true
+      - source: Source/TransformFunctions/arm_bitreversal2.S
+        hidden: true
+        exclude: true
       - source: Source/TransformFunctions/arm_cfft_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_cfft_f64.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_cfft_init_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_cfft_init_f64.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_cfft_init_q15.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_cfft_init_q31.c
         hidden: true
         exclude: true
       - source: Source/TransformFunctions/arm_cfft_q15.c
@@ -1179,7 +1729,13 @@ CMSIS_DSP_Source:
       - source: Source/TransformFunctions/arm_rfft_fast_f32.c
         hidden: true
         exclude: true
+      - source: Source/TransformFunctions/arm_rfft_fast_f64.c
+        hidden: true
+        exclude: true
       - source: Source/TransformFunctions/arm_rfft_fast_init_f32.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_rfft_fast_init_f64.c
         hidden: true
         exclude: true
       - source: Source/TransformFunctions/arm_rfft_init_f32.c
@@ -1198,14 +1754,46 @@ CMSIS_DSP_Source:
         hidden: true
         exclude: true
 
+      - source: Source/TransformFunctions/TransformFunctionsF16.c
+      - source: Source/TransformFunctions/arm_bitreversal_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_cfft_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_cfft_init_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_cfft_radix2_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_cfft_radix2_init_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_cfft_radix4_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_cfft_radix4_init_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_cfft_radix8_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_rfft_fast_f16.c
+        hidden: true
+        exclude: true
+      - source: Source/TransformFunctions/arm_rfft_fast_init_f16.c
+        hidden: true
+        exclude: true
+
   __requires__:
   - CMSIS_DSP_Lib.ui_control
   component_info:
     common:
-      version: 1.7.0
+      version: 1.9.0
       type: CMSIS_driver
       full_name: CMSIS DSP Library Source
-      description: CMSIS-DSP Library for Cortex-M, SC000, and SC300
+      description: CMSIS-DSP Library
       manifest_name: CMSIS_DSP_Library_Source
     cmsis_pack:
       class: CMSIS
@@ -1215,7 +1803,111 @@ CMSIS_DSP_Source:
       pack_name: CMSIS
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
+
+CMSIS_NN_Source:
+  __requires__:
+    - CMSIS_DSP_Include
+  section-type: component
+  contents:
+    repo_base_path: CMSIS/NN
+    project_base_path: CMSIS/NN
+    cc-include:
+      - repo_relative_path: Include
+    files:
+      - source: README.md
+        hidden: true
+        exclude: true
+      - source: Include/arm_nn_tables.h
+      - source: Include/arm_nn_types.h
+      - source: Include/arm_nnfunctions.h
+      - source: Include/arm_nnsupportfunctions.h
+      - source: Source/ActivationFunctions/arm_nn_activations_q15.c
+      - source: Source/ActivationFunctions/arm_nn_activations_q7.c
+      - source: Source/ActivationFunctions/arm_relu6_s8.c
+      - source: Source/ActivationFunctions/arm_relu_q15.c
+      - source: Source/ActivationFunctions/arm_relu_q7.c
+      - source: Source/BasicMathFunctions/arm_elementwise_add_s8.c
+      - source: Source/BasicMathFunctions/arm_elementwise_mul_s8.c
+      - source: Source/ConcatenationFunctions/arm_concatenation_s8_w.c
+      - source: Source/ConcatenationFunctions/arm_concatenation_s8_x.c
+      - source: Source/ConcatenationFunctions/arm_concatenation_s8_y.c
+      - source: Source/ConcatenationFunctions/arm_concatenation_s8_z.c
+      - source: Source/ConvolutionFunctions/arm_convolve_1x1_HWC_q7_fast_nonsquare.c
+      - source: Source/ConvolutionFunctions/arm_convolve_1x1_s8_fast.c
+      - source: Source/ConvolutionFunctions/arm_convolve_1_x_n_s8.c
+      - source: Source/ConvolutionFunctions/arm_convolve_HWC_q15_basic.c
+      - source: Source/ConvolutionFunctions/arm_convolve_HWC_q15_fast.c
+      - source: Source/ConvolutionFunctions/arm_convolve_HWC_q15_fast_nonsquare.c
+      - source: Source/ConvolutionFunctions/arm_convolve_HWC_q7_basic.c
+      - source: Source/ConvolutionFunctions/arm_convolve_HWC_q7_basic_nonsquare.c
+      - source: Source/ConvolutionFunctions/arm_convolve_HWC_q7_fast.c
+      - source: Source/ConvolutionFunctions/arm_convolve_HWC_q7_fast_nonsquare.c
+      - source: Source/ConvolutionFunctions/arm_convolve_HWC_q7_RGB.c
+      - source: Source/ConvolutionFunctions/arm_convolve_s8.c
+      - source: Source/ConvolutionFunctions/arm_convolve_wrapper_s8.c
+      - source: Source/ConvolutionFunctions/arm_depthwise_conv_3x3_s8.c
+      - source: Source/ConvolutionFunctions/arm_depthwise_conv_s8.c
+      - source: Source/ConvolutionFunctions/arm_depthwise_conv_s8_opt.c
+      - source: Source/ConvolutionFunctions/arm_depthwise_conv_u8_basic_ver1.c
+      - source: Source/ConvolutionFunctions/arm_depthwise_conv_wrapper_s8.c
+      - source: Source/ConvolutionFunctions/arm_depthwise_separable_conv_HWC_q7.c
+      - source: Source/ConvolutionFunctions/arm_depthwise_separable_conv_HWC_q7_nonsquare.c
+      - source: Source/ConvolutionFunctions/arm_nn_depthwise_conv_s8_core.c
+      - source: Source/ConvolutionFunctions/arm_nn_mat_mult_kernel_q7_q15.c
+      - source: Source/ConvolutionFunctions/arm_nn_mat_mult_kernel_q7_q15_reordered.c
+      - source: Source/ConvolutionFunctions/arm_nn_mat_mult_kernel_s8_s16.c
+      - source: Source/ConvolutionFunctions/arm_nn_mat_mult_kernel_s8_s16_reordered.c
+      - source: Source/ConvolutionFunctions/arm_nn_mat_mult_s8.c
+      - source: Source/FullyConnectedFunctions/arm_fully_connected_mat_q7_vec_q15.c
+      - source: Source/FullyConnectedFunctions/arm_fully_connected_mat_q7_vec_q15_opt.c
+      - source: Source/FullyConnectedFunctions/arm_fully_connected_q15.c
+      - source: Source/FullyConnectedFunctions/arm_fully_connected_q15_opt.c
+      - source: Source/FullyConnectedFunctions/arm_fully_connected_q7.c
+      - source: Source/FullyConnectedFunctions/arm_fully_connected_q7_opt.c
+      - source: Source/FullyConnectedFunctions/arm_fully_connected_s8.c
+      - source: Source/NNSupportFunctions/arm_nntables.c
+      - source: Source/NNSupportFunctions/arm_nn_accumulate_q7_to_q15.c
+      - source: Source/NNSupportFunctions/arm_nn_add_q7.c
+      - source: Source/NNSupportFunctions/arm_nn_depthwise_conv_nt_t_padded_s8.c
+      - source: Source/NNSupportFunctions/arm_nn_depthwise_conv_nt_t_s8.c
+      - source: Source/NNSupportFunctions/arm_nn_mat_mult_nt_t_s8.c
+      - source: Source/NNSupportFunctions/arm_nn_mat_mul_core_1x_s8.c
+      - source: Source/NNSupportFunctions/arm_nn_mat_mul_core_4x_s8.c
+      - source: Source/NNSupportFunctions/arm_nn_mult_q15.c
+      - source: Source/NNSupportFunctions/arm_nn_mult_q7.c
+      - source: Source/NNSupportFunctions/arm_nn_vec_mat_mult_t_s8.c
+      - source: Source/NNSupportFunctions/arm_nn_vec_mat_mult_t_svdf_s8.c
+      - source: Source/NNSupportFunctions/arm_q7_to_q15_no_shift.c
+      - source: Source/NNSupportFunctions/arm_q7_to_q15_reordered_no_shift.c
+      - source: Source/NNSupportFunctions/arm_q7_to_q15_reordered_with_offset.c
+      - source: Source/NNSupportFunctions/arm_q7_to_q15_with_offset.c
+      - source: Source/PoolingFunctions/arm_avgpool_s8.c
+      - source: Source/PoolingFunctions/arm_max_pool_s8.c
+      - source: Source/PoolingFunctions/arm_pool_q7_HWC.c
+      - source: Source/ReshapeFunctions/arm_reshape_s8.c
+      - source: Source/SoftmaxFunctions/arm_softmax_q15.c
+      - source: Source/SoftmaxFunctions/arm_softmax_q7.c
+      - source: Source/SoftmaxFunctions/arm_softmax_s8.c
+      - source: Source/SoftmaxFunctions/arm_softmax_u8.c
+      - source: Source/SoftmaxFunctions/arm_softmax_with_batch_q7.c
+      - source: Source/SVDFunctions/arm_svdf_s8.c
+  component_info:
+    common:
+      version: 3.0.0
+      type: CMSIS_driver
+      full_name: CMSIS NN Library Source
+      description: CMSIS-NN Library
+      manifest_name: CMSIS_NN_Library_Source
+    cmsis_pack:
+      class: CMSIS
+      group: NN
+      variant: Source
+      sub: ''
+      pack_name: CMSIS
+      pack_url: http://www.keil.com/pack/
+      pack_vendor: ARM
+      pack_version: 5.8.0
 
 ## CMSIS Driver Custom components
 # All CMSIS Driver components in ARM.CMSIS.pdsc have template file. In SDK yml data record, we don't use
@@ -1250,7 +1942,7 @@ CMSIS_Driver_Include.Common:
       sub: Custom
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Driver_Include.USART:
   __requires__:
@@ -1265,7 +1957,7 @@ CMSIS_Driver_Include.USART:
       - source: Driver_USART.h
   component_info:
     common:
-      version: 2.3.0
+      version: 2.4.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver USART
@@ -1278,7 +1970,7 @@ CMSIS_Driver_Include.USART:
       sub: Custom
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Driver_Include.CAN:
   __requires__:
@@ -1293,7 +1985,7 @@ CMSIS_Driver_Include.CAN:
       - source: Driver_CAN.h
   component_info:
     common:
-      version: 1.2.0
+      version: 1.3.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver CAN
@@ -1306,7 +1998,7 @@ CMSIS_Driver_Include.CAN:
       sub: Custom
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 # Mismatch
 # In ARM.CMSIS.pdsc, the Ethernet component actually contains both Driver_ETH_MAC.h and Driver_ETH_PHY.h which is not a practical
@@ -1325,7 +2017,7 @@ CMSIS_Driver_Include.Ethernet:
       - source: Driver_ETH.h
   component_info:
     common:
-      version: 2.1.0
+      version: 2.2.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver Ethernet Common
@@ -1338,7 +2030,7 @@ CMSIS_Driver_Include.Ethernet:
       pack_name: CMSIS
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Driver_Include.Ethernet_MAC:
   __requires__:
@@ -1353,7 +2045,7 @@ CMSIS_Driver_Include.Ethernet_MAC:
       - source: Driver_ETH_MAC.h
   component_info:
     common:
-      version: 2.1.0
+      version: 2.2.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver Ethernet MAC
@@ -1366,7 +2058,7 @@ CMSIS_Driver_Include.Ethernet_MAC:
       sub: Custom
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Driver_Include.Ethernet_PHY:
   __requires__:
@@ -1381,7 +2073,7 @@ CMSIS_Driver_Include.Ethernet_PHY:
       - source: Driver_ETH_PHY.h
   component_info:
     common:
-      version: 2.1.0
+      version: 2.2.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver Ethernet PHY
@@ -1394,7 +2086,7 @@ CMSIS_Driver_Include.Ethernet_PHY:
       pack_name: CMSIS
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Driver_Include.Flash:
   __requires__:
@@ -1409,7 +2101,7 @@ CMSIS_Driver_Include.Flash:
       - source: Driver_Flash.h
   component_info:
     common:
-      version: 2.2.0
+      version: 2.3.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver Flash
@@ -1422,7 +2114,7 @@ CMSIS_Driver_Include.Flash:
       sub: Custom
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Driver_Include.I2C:
   __requires__:
@@ -1437,7 +2129,7 @@ CMSIS_Driver_Include.I2C:
       - source: Driver_I2C.h
   component_info:
     common:
-      version: 2.3.0
+      version: 2.4.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver I2C
@@ -1450,7 +2142,7 @@ CMSIS_Driver_Include.I2C:
       sub: Custom
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Driver_Include.MCI:
   __requires__:
@@ -1465,7 +2157,7 @@ CMSIS_Driver_Include.MCI:
       - source: Driver_MCI.h
   component_info:
     common:
-      version: 2.3.0
+      version: 2.4.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver MCI
@@ -1478,7 +2170,7 @@ CMSIS_Driver_Include.MCI:
       pack_name: CMSIS
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Driver_Include.NAND:
   __requires__:
@@ -1493,7 +2185,7 @@ CMSIS_Driver_Include.NAND:
       - source: Driver_NAND.h
   component_info:
     common:
-      version: 2.3.0
+      version: 2.4.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver NAND
@@ -1506,7 +2198,7 @@ CMSIS_Driver_Include.NAND:
       sub: Custom
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Driver_Include.SAI:
   __requires__:
@@ -1521,7 +2213,7 @@ CMSIS_Driver_Include.SAI:
       - source: Driver_SAI.h
   component_info:
     common:
-      version: 1.1.0
+      version: 1.2.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver SAI
@@ -1534,7 +2226,7 @@ CMSIS_Driver_Include.SAI:
       sub: Custom
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Driver_Include.SPI:
   __requires__:
@@ -1549,7 +2241,7 @@ CMSIS_Driver_Include.SPI:
       - source: Driver_SPI.h
   component_info:
     common:
-      version: 2.2.0
+      version: 2.3.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver SPI
@@ -1562,7 +2254,7 @@ CMSIS_Driver_Include.SPI:
       sub: Custom
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 # Mismatch. There is no CMSIS_Driver_Include USB in ARM.CMSIS.pdsc. Such Driver_USB.h is the common head file
 # included in Driver_USBD.h and Driver_USBH.h.
@@ -1579,7 +2271,7 @@ CMSIS_Driver_Include.USB:
       - source: Driver_USB.h
   component_info:
     common:
-      version: 2.2.0
+      version: 2.3.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver USB Common
@@ -1592,7 +2284,7 @@ CMSIS_Driver_Include.USB:
       sub: Custom
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Driver_Include.USB_Device:
   __requires__:
@@ -1607,7 +2299,7 @@ CMSIS_Driver_Include.USB_Device:
       - source: Driver_USBD.h
   component_info:
     common:
-      version: 2.2.0
+      version: 2.3.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver USB Device
@@ -1620,7 +2312,7 @@ CMSIS_Driver_Include.USB_Device:
       pack_name: CMSIS
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Driver_Include.USB_Host:
   __requires__:
@@ -1635,7 +2327,7 @@ CMSIS_Driver_Include.USB_Host:
       - source: Driver_USBH.h
   component_info:
     common:
-      version: 2.2.0
+      version: 2.3.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver USB Host
@@ -1648,7 +2340,7 @@ CMSIS_Driver_Include.USB_Host:
       sub: Custom
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Driver_Include.WiFi:
   section-type: component
@@ -1663,7 +2355,7 @@ CMSIS_Driver_Include.WiFi:
       - source: Driver_WiFi.h
   component_info:
     common:
-      version: 1.0.0
+      version: 1.1.0
       type: CMSIS_driver
       user_visible: false
       full_name: CMSIS Driver WiFi
@@ -1676,30 +2368,7 @@ CMSIS_Driver_Include.WiFi:
       sub: Custom
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
-
-# Mismatch, there is no such CMSIS Driver GPIO from ARM.
-# This is our proposal to ARM as official CMSIS GPIO Driver. The JIRA: MCUX-32150
-# This component is marked as manifest specific.
-CMSIS_Driver_Include.GPIO:
-  __requires__:
-    - CMSIS_Driver_Include.Common
-  section-type: component
-  contents:
-    repo_base_path: CMSIS/Driver/Include
-    project_base_path: CMSIS_driver
-    cc-include:
-      - repo_relative_path: "./"
-    files:
-      - source: Driver_GPIO.h
-  component_info:
-    manifest:
-      version: 2.0.0
-      type: CMSIS_driver
-      user_visible: false
-      full_name: NXP CMSIS Driver GPIO
-      description: NXP Standardized GPIO Driver aligned with CMSIS style.
-      manifest_name: NXP_CMSIS_Driver_GPIO
+      pack_version: 5.8.0
 
 ## CMSIS Device API
 # Mismatch. In ARM.CMSIS.pdsc, an API is a special form of a software component that only defines a C/C++ Application Programming Interface (API), such OS Tick and RTOS2 are API.
@@ -1716,7 +2385,7 @@ CMSIS_Device_API_OSTick:
   component_info:
     common:
       # There is no version for api in ARM CMSIS, using apiversion instead
-      version: 1.0.1
+      version: 1.0.2
       user_visible: false
       type: CMSIS_driver
       full_name: CMSIS Device API OSTick
@@ -1725,12 +2394,12 @@ CMSIS_Device_API_OSTick:
     cmsis_pack:
       class: Device
       group: OS Tick
-      apiversion: 1.0.1
+      apiversion: 1.0.2
       sub: ''
       pack_name: CMSIS
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_Device_API_RTOS2:
   section-type: component
@@ -1758,7 +2427,7 @@ CMSIS_Device_API_RTOS2:
       pack_name: CMSIS
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 ## CMSIS-RTOS2 Keil RTX5 component
 # Mismatch. There is no CMSIS_RTOS2_Common in ARM.CMSIS.pdsc.
@@ -1781,6 +2450,7 @@ CMSIS_RTOS2_Common:
     - source: RTX/Source/rtx_lib.c
     - source: RTX/Include/rtx_evr.h
     - source: RTX/Include/rtx_os.h
+    - source: RTX/Include/rtx_def.h
     - source: RTX/Config/RTX_Config.c
     - source: RTX/Config/RTX_Config.h
 
@@ -1832,7 +2502,7 @@ CMSIS_RTOS2_Common:
   component_info:
     common:
       type: CMSIS_driver
-      version: 5.5.1
+      version: 2.1.3
       user_visible: false
       full_name: CMSIS RTOS2 Keil RTX5 Common
       description: CMSIS-RTOS2 RTX5 Common part for Cortex-M, SC000, C300 and Armv8-M (Library)
@@ -1846,7 +2516,7 @@ CMSIS_RTOS2_Common:
       variant: Library
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_RTOS2_Secure:
   section-type: component
@@ -1892,7 +2562,7 @@ CMSIS_RTOS2_Secure:
   component_info:
     common:
       type: CMSIS_driver
-      version: 5.5.1
+      version: 2.1.3
       user_visible: false
       full_name: CMSIS RTOS2 Keil RTX5
       description: CMSIS-RTOS2 RTX5 for Cortex-M, SC000, C300 and Armv8-M (Library)
@@ -1906,7 +2576,7 @@ CMSIS_RTOS2_Secure:
       variant: Library
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 CMSIS_RTOS2_NonSecure:
   section-type: component
@@ -1952,7 +2622,7 @@ CMSIS_RTOS2_NonSecure:
   component_info:
     common:
       type: CMSIS_driver
-      version: 5.5.1
+      version: 2.1.3
       user_visible: false
       full_name: CMSIS RTOS2 Keil RTX5 Non Secure
       description: CMSIS-RTOS2 RTX5 for Armv8-M Non-Secure Domain (Library)
@@ -1966,7 +2636,7 @@ CMSIS_RTOS2_NonSecure:
       variant: Library_NS
       pack_url: http://www.keil.com/pack/
       pack_vendor: ARM
-      pack_version: 5.6.0
+      pack_version: 5.8.0
 
 # CMSIS file container
 # This component is only used to wrap all CMSIS pack files.
@@ -1991,7 +2661,7 @@ CMSIS_files:
       - source: DSP/Source/**
   component_info:
     common:
-      version: 5.6.0
+      version: 5.8.0
       user_visible: false
       type: container
       full_name: CMSIS
@@ -2008,4 +2678,4 @@ CMSIS_DSP_Lib.ui_control:
       ui_control: true
       ui_control_default: true
       ui_release_specific: true
-      version: 1.7.0
+      version: 1.9.0

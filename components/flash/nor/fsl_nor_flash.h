@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -143,6 +143,23 @@ status_t Nor_Flash_Erase(nor_handle_t *handle, uint32_t address, uint32_t size_B
  * @retval execution status
  */
 status_t Nor_Flash_Erase_Chip(nor_handle_t *handle);
+
+/*!
+ * @brief  Get the busy status of the NOR Flash.
+ *
+ * @param handle    The NOR Flash handler.
+ * @param isBusy    Pointer of the variable which has the busy status of the NOR flash.
+ * @retval execution status
+ */
+status_t Nor_Flash_Is_Busy(nor_handle_t *handle, bool *isBusy);
+
+/*!
+ * @brief Deinitialize NOR FLASH devices.
+ *
+ * @param handle    The NOR Flash handler.
+ * @retval execution status
+ */
+status_t Nor_Flash_DeInit(nor_handle_t *handle);
 
 /*! @} */
 

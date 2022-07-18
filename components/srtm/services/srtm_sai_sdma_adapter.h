@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, NXP
+ * Copyright 2018-2022 NXP
  * All rights reserved.
  *
  *
@@ -19,7 +19,17 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define SRTM_SAI_SDMA_MAX_LOCAL_BUF_PERIODS           (4U)
+#ifndef SRTM_SAI_CONFIG_Rx_Enabled
+#define SRTM_SAI_CONFIG_Rx_Enabled 1
+#endif
+
+#ifndef SRTM_SAI_CONFIG_SupportLocalBuf
+#define SRTM_SAI_CONFIG_SupportLocalBuf 1
+#endif
+
+#ifndef SRTM_SAI_SDMA_MAX_LOCAL_BUF_PERIODS
+#define SRTM_SAI_SDMA_MAX_LOCAL_BUF_PERIODS (4U)
+#endif
 #define SRTM_SAI_SDMA_MAX_LOCAL_PERIOD_ALIGNMENT      (4U)
 #define SRTM_SAI_SDMA_MAX_LOCAL_PERIOD_ALIGNMENT_MASK (SRTM_SAI_SDMA_MAX_LOCAL_PERIOD_ALIGNMENT - 1U)
 
@@ -49,10 +59,13 @@ typedef struct _srtm_sai_sdma_config
                            from suspend and fill the DDR buffer again. The time should not less than the guardTime */
     uint32_t threshold; /* TX ONLY threshold: under which will trigger periodDone notification. */
     sdma_context_data_t txcontext;
+#if SRTM_SAI_CONFIG_Rx_Enabled
     sdma_context_data_t rxcontext;
+#endif
     audio_misc_set_t extendConfig;
 } srtm_sai_sdma_config_t;
 
+#if SRTM_SAI_CONFIG_SupportLocalBuf
 typedef struct _srtm_sai_sdma_local_buf
 {
     uint8_t *buf;
@@ -61,8 +74,14 @@ typedef struct _srtm_sai_sdma_local_buf
     uint32_t threshold; /* Threshold period number: under which will trigger copy from share buf to local buf
                            in playback case. */
 } srtm_sai_sdma_local_buf_t;
+#endif
 
+#if SRTM_SAI_CONFIG_Rx_Enabled
+/*! @brief The callback function pointer.  Voice data can be passed to application via callback when the host side is
+ * suspend. The callback is also a notification to the application for the host side resumes from suspend when the data
+ * and bytes are 0(NULL). */
 typedef void (*srtm_sai_sdma_data_callback_t)(srtm_sai_adapter_t adapter, void *data, uint32_t bytes, void *params);
+#endif
 
 /*******************************************************************************
  * API
@@ -92,6 +111,7 @@ srtm_sai_adapter_t SRTM_SaiSdmaAdapter_Create(I2S_Type *sai,
  */
 void SRTM_SaiSdmaAdapter_Destroy(srtm_sai_adapter_t adapter);
 
+#if SRTM_SAI_CONFIG_SupportLocalBuf
 /*!
  * @brief Set local buffer to use in DMA transfer. If local buffer is set, the audio data will be copied
  * from shared buffer to local buffer and then transfered to I2S interface. Otherwise the data will be
@@ -103,6 +123,19 @@ void SRTM_SaiSdmaAdapter_Destroy(srtm_sai_adapter_t adapter);
  */
 void SRTM_SaiSdmaAdapter_SetTxLocalBuf(srtm_sai_adapter_t adapter, srtm_sai_sdma_local_buf_t *localBuf);
 
+#if SRTM_SAI_CONFIG_Rx_Enabled
+/*!
+ * @brief Set local buffer to use in DMA transfer. If local buffer is set, the audio data will be transfered
+ * from the I2S interface to local buffer and then copied from local buffer to shared buffer. Otherwise the data will be
+ * transfered from I2S interface to shared buffer directly.
+ * NOTE: it must be called before service start.
+ *
+ * @param adapter SAI SDMA adapter to set.
+ * @param localBuf Local buffer information to be set to the adapter RX path.
+ */
+void SRTM_SaiSdmaAdapter_SetRxLocalBuf(srtm_sai_adapter_t adapter, srtm_sai_sdma_local_buf_t *localBuf);
+#endif /* SRTM_SAI_CONFIG_Rx_Enabled */
+#endif /* SRTM_SAI_CONFIG_SupportLocalBuf */
 /*!
  * @brief Get the audio service status.
  *
@@ -114,8 +147,10 @@ void SRTM_SaiSdmaAdapter_GetAudioServiceState(srtm_sai_adapter_t adapter,
                                               srtm_audio_state_t *pTxState,
                                               srtm_audio_state_t *pRxState);
 
+#if SRTM_SAI_CONFIG_Rx_Enabled
 /*!
  * @brief When the host driver suspends, voice data can be passed to application via callback.
+          When the host driver is waking up, the notfication is sent via callback.
  *        The callback is called in SRTM dispatcher task context and should not cost much time.
  *
  * @param adapter SAI SDMA adapter instance.
@@ -134,6 +169,7 @@ void SRTM_SaiSdmaAdapter_SetDataHandlerOnHostSuspend(srtm_sai_adapter_t adapter,
  * @param params Callback function argument to be passed back to applicaiton.
  */
 void SRTM_SaiSdmaAdapter_ResumeHost(srtm_sai_adapter_t adapter);
+#endif
 
 /*******************************************************************************
  * Definitions from other files

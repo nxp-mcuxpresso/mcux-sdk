@@ -9,10 +9,12 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpspi
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpuart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/audio
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/button
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/cs42448
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8960
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/common_task
     ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash
     ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mimxrt1052
     ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/nor
@@ -20,7 +22,11 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/ft5406_rt
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/gpio
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/gt911
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/internal_flash
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/internal_flash/hyper_flash
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/internal_flash/hyper_flash/RT1050
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/log
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
@@ -29,7 +35,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyksz8081
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/silicon_id
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/timer_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/camera
@@ -119,6 +127,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_azure_rtos_nxd)
 #    include(device_system)
 #    include(driver_snvs_lp)
+#    include(component_button_MIMXRT1052)
 #    include(driver_dc-fb-common)
 #    include(driver_camera-device-mt9m114)
 #    include(driver_mdio-enet)
@@ -140,9 +149,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart_edma)
 #    include(driver_ocotp)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(driver_pxp)
-#    include(driver_xip_device)
+#    include(component_flexspi_hyper_flash_adapter)
 #    include(middleware_eiq_deepviewrt_deps_stb)
 #    include(middleware_sdmmc_osa_freertos)
 #    include(component_serial_manager)
@@ -152,13 +160,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_azure_rtos_ux)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
+#    include(utility_debug_console_lite)
 #    include(component_log_backend_debugconsole)
 #    include(CMSIS_Driver_Include_Ethernet_MAC)
-#    include(CMSIS_DSP_Library)
 #    include(driver_tempmon)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_edma)
 #    include(middleware_azure_rtos_tx_template_MIMXRT1052)
+#    include(component_silicon_id)
 #    include(middleware_usb_device_cdc_external)
 #    include(driver_cmsis_enet)
 #    include(utility_shell)
@@ -200,6 +209,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_kpp)
 #    include(driver_edma_MIMXRT1052)
 #    include(component_osa_free_rtos)
+#    include(driver_xip_device)
 #    include(driver_camera-common)
 #    include(driver_camera-device-common)
 #    include(component_lpi2c_adapter)
@@ -212,6 +222,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_azure_rtos_tx)
 #    include(middleware_azure_rtos_fx_template_MIMXRT1052)
 #    include(middleware_sdmmc_sdio)
+#    include(CMSIS_DSP_Source)
 #    include(middleware_eiq_deepviewrt_deps_json)
 #    include(driver_snvs_hp)
 #    include(middleware_usb_host_msd)
@@ -219,21 +230,22 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_device_controller_driver_MIMXRT1052)
 #    include(component_gpt_adapter)
 #    include(middleware_usb_host_common_header)
+#    include(component_flexspi_nor_flash_adapter)
 #    include(driver_csi)
 #    include(component_log)
 #    include(middleware_usb_host_cdc)
 #    include(middleware_eiq_worker)
 #    include(driver_clock)
 #    include(CMSIS_Driver_Include_SPI)
-#    include(utility_debug_console_lite)
+#    include(driver_gt911)
 #    include(component_audio_sai_edma_adapter)
-#    include(driver_adc_etc)
 #    include(driver_mdio-common)
 #    include(middleware_usb_host_phdc)
 #    include(middleware_usb_host_printer)
 #    include(driver_iomuxc)
 #    include(middleware_azure_rtos_ux_template_MIMXRT1052)
 #    include(middleware_usb_device_common_header)
+#    include(driver_flexio_spi_edma)
 #    include(driver_flexram)
 #    include(middleware_azure_rtos_gx)
 #    include(middleware_fatfs)
@@ -264,15 +276,18 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_fatfs_sd)
 #    include(middleware_sdmmc_osa_azurertos)
 #    include(driver_flexspi)
-#    include(driver_flexio_spi_edma)
+#    include(driver_adc_etc)
+#    include(component_timer_manager)
 #    include(driver_lpi2c_freertos)
 #    include(driver_qtmr_1)
 #    include(driver_pwm)
+#    include(component_common_task)
 #    include(middleware_usb_host_video)
 #    include(driver_gpc_1)
 #    include(component_lists)
 #    include(driver_video-i2c)
 #    include(middleware_sdmmc_common)
+#    include(utilities_misc_utilities_MIMXRT1052)
 #    include(driver_cmp)
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_ruy)
 #    include(component_igpio_adapter)
@@ -290,6 +305,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_cs42448)
 #    include(middleware_sdmmc_sd)
 #    include(driver_src)
+#    include(component_flexspi_hyper_flash_adapter_config_rt1050)
 #    include(middleware_sdmmc_host_usdhc_freertos_MIMXRT1052)
 #    include(driver_lpi2c)
 #    include(CMSIS_Driver_Include_Ethernet_PHY)

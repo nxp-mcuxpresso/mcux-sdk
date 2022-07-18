@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! Version 2.1.1. */
-#define FSL_PORT_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief PORT driver version. */
+#define FSL_PORT_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 #if defined(FSL_FEATURE_PORT_HAS_PULL_ENABLE) && FSL_FEATURE_PORT_HAS_PULL_ENABLE
@@ -235,6 +235,25 @@ typedef struct _port_pin_config
 } port_pin_config_t;
 #endif /* FSL_FEATURE_PORT_PCR_MUX_WIDTH */
 
+#if defined(FSL_FEATURE_PORT_HAS_VERSION_INFO_REGISTER) && FSL_FEATURE_PORT_HAS_VERSION_INFO_REGISTER
+/*! @brief PORT version information. */
+typedef struct _port_version_info
+{
+    uint16_t feature; /*!< Feature Specification Number. */
+    uint8_t minor;    /*!< Minor Version Number. */
+    uint8_t major;    /*!< Major Version Number. */
+} port_version_info_t;
+#endif /* FSL_FEATURE_PORT_HAS_VERSION_INFO_REGISTER */
+
+#if defined(FSL_FEATURE_PORT_SUPPORT_DIFFERENT_VOLTAGE_RANGE) && FSL_FEATURE_PORT_SUPPORT_DIFFERENT_VOLTAGE_RANGE
+/*! @brief PORT voltage range. */
+typedef enum _port_voltage_range
+{
+    kPORT_VoltageRange1Dot71V_3Dot6V = 0x0U, /*!< Port voltage range is 1.71 V - 3.6 V. */
+    kPORT_VoltageRange2Dot70V_3Dot6V = 0x1U, /*!< Port voltage range is 2.70 V - 3.6 V. */
+} port_voltage_range_t;
+#endif /* FSL_FEATURE_PORT_SUPPORT_DIFFERENT_VOLTAGE_RANGE */
+
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -246,6 +265,38 @@ extern "C" {
 #if defined(FSL_FEATURE_PORT_PCR_MUX_WIDTH) && FSL_FEATURE_PORT_PCR_MUX_WIDTH
 /*! @name Configuration */
 /*@{*/
+
+#if defined(FSL_FEATURE_PORT_HAS_VERSION_INFO_REGISTER) && FSL_FEATURE_PORT_HAS_VERSION_INFO_REGISTER
+/*!
+ * @brief Get PORT version information.
+ *
+ * @param base PORT peripheral base pointer
+ * @param info PORT version information
+ */
+static inline void PORT_GetVersionInfo(PORT_Type *base, port_version_info_t *info)
+{
+    uint32_t verid = base->VERID;
+    info->feature  = (uint16_t)verid;
+    info->minor    = (uint8_t)(verid >> PORT_VERID_MINOR_SHIFT);
+    info->major    = (uint8_t)(verid >> PORT_VERID_MAJOR_SHIFT);
+}
+#endif /* FSL_FEATURE_PORT_HAS_VERSION_INFO_REGISTER */
+
+#if defined(FSL_FEATURE_PORT_SUPPORT_DIFFERENT_VOLTAGE_RANGE) && FSL_FEATURE_PORT_SUPPORT_DIFFERENT_VOLTAGE_RANGE
+/*!
+ * @brief Get PORT version information.
+ *
+ * @note : PORTA_CONFIG[RANGE] controls the voltage ranges of Port A, B, and C. Read or write PORTB_CONFIG[RANGE] and
+ *         PORTC_CONFIG[RANGE] does not take effect.
+ *
+ * @param base PORT peripheral base pointer
+ * @param range port voltage range
+ */
+static inline void PORT_SecletPortVoltageRange(PORT_Type *base, port_voltage_range_t range)
+{
+    base->CONFIG = (uint32_t)range;
+}
+#endif /* FSL_FEATURE_PORT_SUPPORT_DIFFERENT_VOLTAGE_RANGE */
 
 /*!
  * @brief Sets the port PCR register.
@@ -522,6 +573,67 @@ static inline void PORT_ClearPinsInterruptFlags(PORT_Type *base, uint32_t mask)
     base->ISFR = mask;
 }
 #endif
+
+#if defined(FSL_FEATURE_PORT_SUPPORT_EFT) && FSL_FEATURE_PORT_SUPPORT_EFT
+/*!
+ * @brief Get EFT detect flags.
+ *
+ * @param base PORT peripheral base pointer
+ * @return EFT detect flags
+ */
+static inline uint32_t PORT_GetEFTDetectFlags(PORT_Type *base)
+{
+    return base->EDFR;
+}
+
+/*!
+ * @brief Enable EFT detect interrupts.
+ *
+ * @param base PORT peripheral base pointer
+ * @param interrupt EFT detect interrupt
+ */
+static inline void PORT_EnableEFTDetectInterrupts(PORT_Type *base, uint32_t interrupt)
+{
+    base->EDIER |= interrupt;
+}
+
+/*!
+ * @brief Disable EFT detect interrupts.
+ *
+ * @param base PORT peripheral base pointer
+ * @param interrupt EFT detect interrupt
+ */
+static inline void PORT_DisableEFTDetectInterrupts(PORT_Type *base, uint32_t interrupt)
+{
+    base->EDIER &= ~interrupt;
+}
+
+/*!
+ * @brief Clear all low EFT detector.
+ *
+ * @note : Port B and Port C pins share the same EFT detector clear control from PORTC_EDCR register. Any write to the
+ * PORTB_EDCR does not take effect.
+ * @param base PORT peripheral base pointer
+ * @param interrupt EFT detect interrupt
+ */
+static inline void PORT_ClearAllLowEFTDetectors(PORT_Type *base)
+{
+    base->EDCR |= PORT_EDCR_EDLC_MASK;
+    base->EDCR &= ~PORT_EDCR_EDLC_MASK;
+}
+
+/*!
+ * @brief Clear all high EFT detector.
+ *
+ * @param base PORT peripheral base pointer
+ * @param interrupt EFT detect interrupt
+ */
+static inline void PORT_ClearAllHighEFTDetectors(PORT_Type *base)
+{
+    base->EDCR |= PORT_EDCR_EDHC_MASK;
+    base->EDCR &= ~PORT_EDCR_EDHC_MASK;
+}
+#endif /* FSL_FEATURE_PORT_SUPPORT_EFT */
 
 /*@}*/
 

@@ -59,7 +59,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief common driver version. */
-#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
 /* Debug console type definition. */
@@ -190,6 +190,11 @@ enum _status_groups
     kStatusGroup_SNT            = 157, /*!< Group number for SNT status codes. */
     kStatusGroup_QUEUEDSPI      = 158, /*!< Group number for QSPI status codes. */
     kStatusGroup_POWER_MANAGER  = 159, /*!< Group number for POWER_MANAGER status codes. */
+    kStatusGroup_IPED = 160,                  /*!< Group number for IPED status codes. */
+    kStatusGroup_CSS_PKC = 161,               /*!< Group number for CSS PKC status codes. */
+    kStatusGroup_HOSTIF      = 162, /*!< Group number for HOSTIF status codes. */
+    kStatusGroup_CLIF           = 163, /*!< Group number for CLIF status codes. */
+    kStatusGroup_BMA            = 164, /*!< Group number for BMA status codes. */
 };
 
 /*! \public
@@ -242,19 +247,6 @@ typedef int32_t status_t;
 #endif
 /* @} */
 
-/*! @name UINTPTR_SIZE value */
-/* @{ */
-#if !defined(UINTPTR_SIZE)
-#if UINTPTR_MAX > UINT32_MAX
-  #define UINTPTR_SIZE 8 /* 64-bit processor */
-#elif UINTPTR_MAX > UINT16_MAX
-  #define UINTPTR_SIZE 4 /* 32-bit processor */
-#else
-  #error "UINTPTR_SIZE is unknown!"
-#endif
-#endif
-/* @} */
-
 /*! @name Suppress fallthrough warning macro */
 /* For switch case code block, if case section ends without "break;" statement, there wil be
  fallthrough warning with compiler flag -Wextra or -Wimplicit-fallthrough=n when using armgcc.
@@ -277,6 +269,7 @@ typedef int32_t status_t;
 extern "C" {
 #endif
 
+#if !((defined(__DSC__) && defined(__CW__)))
 /*!
  * @brief Allocate memory with given alignment and aligned size.
  *
@@ -294,6 +287,7 @@ void *SDK_Malloc(size_t size, size_t alignbytes);
  * @param ptr The memory to be release.
  */
 void SDK_Free(void *ptr);
+#endif
 
 /*!
  * @brief Delay at least for some time.

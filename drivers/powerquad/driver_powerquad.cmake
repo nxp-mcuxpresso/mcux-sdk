@@ -9,7 +9,6 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/fsl_powerquad_matrix.c
     ${CMAKE_CURRENT_LIST_DIR}/fsl_powerquad_filter.c
     ${CMAKE_CURRENT_LIST_DIR}/fsl_powerquad_transform.c
-    ${CMAKE_CURRENT_LIST_DIR}/fsl_powerquad_cmsis.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
@@ -17,5 +16,4 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(CMSIS_DSP_Library)
 include(driver_common)

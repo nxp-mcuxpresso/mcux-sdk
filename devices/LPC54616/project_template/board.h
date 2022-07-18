@@ -23,7 +23,7 @@
 
 /*! @brief The UART to use for debug messages. */
 /* TODO: rename UART to USART */
-#define BOARD_DEBUG_UART_TYPE DEBUG_CONSOLE_DEVICE_TYPE_FLEXCOMM
+#define BOARD_DEBUG_UART_TYPE kSerialPort_Uart
 #define BOARD_DEBUG_UART_BASEADDR (uint32_t) USART0
 #define BOARD_DEBUG_UART_INSTANCE 0U
 #define BOARD_DEBUG_UART_CLK_FREQ CLOCK_GetFlexCommClkFreq(0)

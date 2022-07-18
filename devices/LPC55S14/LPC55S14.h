@@ -2,6 +2,7 @@
 ** ###################################################################
 **     Processors:          LPC55S14JBD100
 **                          LPC55S14JBD64
+**                          LPC55S14JEV59
 **
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
@@ -10,13 +11,13 @@
 **
 **     Reference manual:    LPC55S1x/LPC551x User manual Rev.0.6  15 November 2019
 **     Version:             rev. 1.1, 2019-12-03
-**     Build:               b211009
+**     Build:               b220301
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC55S14
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause

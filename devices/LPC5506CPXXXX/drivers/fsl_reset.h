@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.3.2. */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+/*! @brief reset driver version 2.3.3. */
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
 /*@}*/
 
 /*!
@@ -67,7 +67,6 @@ typedef enum _SYSCON_RSTn
     kFC4_RST_SHIFT_RSTn      = 65536 | 15U, /**< Flexcomm Interface 4 reset control */
     kFC5_RST_SHIFT_RSTn      = 65536 | 16U, /**< Flexcomm Interface 5 reset control */
     kFC6_RST_SHIFT_RSTn      = 65536 | 17U, /**< Flexcomm Interface 6 reset control */
-    kFC7_RST_SHIFT_RSTn      = 65536 | 18U, /**< Flexcomm Interface 7 reset control */
     kCTIMER2_RST_SHIFT_RSTn  = 65536 | 22U, /**< CTimer 2 reset control */
     kCTIMER0_RST_SHIFT_RSTn  = 65536 | 26U, /**< CTimer 0 reset control */
     kCTIMER1_RST_SHIFT_RSTn  = 65536 | 27U, /**< CTimer 1 reset control */
@@ -119,7 +118,7 @@ typedef enum _SYSCON_RSTn
 #define FLEXCOMM_RSTS                                                                                            \
     {                                                                                                            \
         kFC0_RST_SHIFT_RSTn, kFC1_RST_SHIFT_RSTn, kFC2_RST_SHIFT_RSTn, kFC3_RST_SHIFT_RSTn, kFC4_RST_SHIFT_RSTn, \
-            kFC5_RST_SHIFT_RSTn, kFC6_RST_SHIFT_RSTn, kFC7_RST_SHIFT_RSTn, kHSLSPI_RST_SHIFT_RSTn                \
+            kFC5_RST_SHIFT_RSTn, kFC6_RST_SHIFT_RSTn, kHSLSPI_RST_SHIFT_RSTn                                     \
     } /* Reset bits for FLEXCOMM peripheral */
 #define GINT_RSTS                                  \
     {                                              \
@@ -177,6 +176,18 @@ typedef enum _SYSCON_RSTn
     {                            \
         kOSTIMER0_RST_SHIFT_RSTn \
     } /* Reset bits for OSTIMER peripheral */
+#define CASPER_RSTS            \
+    {                          \
+        kCASPER_RST_SHIFT_RSTn \
+    } /* Reset bits for Casper peripheral */
+#define HASHCRYPT_RSTS            \
+    {                             \
+        kHASHCRYPT_RST_SHIFT_RSTn \
+    } /* Reset bits for Hashcrypt peripheral */
+#define PUF_RSTS            \
+    {                       \
+        kPUF_RST_SHIFT_RSTn \
+    } /* Reset bits for PUF peripheral */
 typedef SYSCON_RSTn_t reset_ip_name_t;
 
 /*******************************************************************************

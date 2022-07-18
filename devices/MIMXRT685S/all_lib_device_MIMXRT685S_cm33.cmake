@@ -31,13 +31,10 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/internal_flash/octal_flash
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/log
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/mem_manager
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/messaging
     ${CMAKE_CURRENT_LIST_DIR}/../../components/mpi_loader
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
     ${CMAKE_CURRENT_LIST_DIR}/../../components/panic
     ${CMAKE_CURRENT_LIST_DIR}/../../components/pca9420
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/rng
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/sx1502
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
@@ -83,8 +80,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/ethermind
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/ethermind/port/pal/mcux/bluetooth/controller/wifi
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -101,10 +96,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_flexspi_nor_flash_adapter_rt685evk)
 #    include(middleware_usb_host_stack_MIMXRT685S_cm33)
 #    include(driver_lpc_gpio)
-#    include(driver_lpadc)
+#    include(component_rt_gpio_adapter)
 #    include(middleware_freertos-kernel_cm33_nonsecure_port)
 #    include(middleware_usb_device_ip3511hs_MIMXRT685S_cm33)
 #    include(component_mflash_common)
+#    include(middleware_multicore_rpmsg_lite_bm)
 #    include(middleware_baremetal)
 #    include(component_cs42448_adapter)
 #    include(component_audio_flexcomm_i2s_dma_adapter)
@@ -116,7 +112,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_i3c)
 #    include(driver_sx1502)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(driver_ostimer)
 #    include(driver_cmsis_flexcomm_i2c)
 #    include(component_mflash_rt685)
@@ -134,7 +129,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_spi_freertos)
 #    include(middleware_freertos-kernel_cm33_secure_port)
 #    include(middleware_eiq_tensorflow_lite_micro_cmsis_nn)
-#    include(CMSIS_DSP_Library)
 #    include(driver_ili9341)
 #    include(driver_pint)
 #    include(driver_sctimer)
@@ -147,11 +141,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpc_dma)
 #    include(driver_dsp)
 #    include(utility_assert)
+#    include(driver_lpadc)
 #    include(driver_wm8904)
 #    include(middleware_freertos-kernel_extension)
 #    include(component_serial_manager_swo)
 #    include(CMSIS_Driver_Include_I2C)
-#    include(middleware_eiq_audio)
+#    include(middleware_eiq_audio_evkmimxrt685)
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_cmsis_nn)
 #    include(middleware_usb_common_header)
 #    include(driver_flexcomm_spi)
@@ -184,6 +179,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpc_crc)
 #    include(driver_hashcrypt)
 #    include(middleware_sdmmc_sdio)
+#    include(CMSIS_DSP_Source)
 #    include(component_usart_adapter)
 #    include(driver_mpi_loader)
 #    include(middleware_usb_host_msd)
@@ -199,6 +195,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_i2s_dma)
 #    include(component_mrt_adapter)
 #    include(middleware_usb_host_printer)
+#    include(middleware_eiq_audio_mimxrt685audevk)
 #    include(middleware_multicore_erpc_eRPC_uart_cmsis_transport)
 #    include(driver_flexcomm_i2c_dma)
 #    include(component_flexcomm_i2c_adapter)
@@ -212,7 +209,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_sdmmc_host_usdhc_polling_MIMXRT685S_cm33)
 #    include(driver_flash_config_mimxrt685audevk)
 #    include(component_lpc_gpio_adapter)
-#    include(component_software_rng_adapter)
 #    include(driver_cmsis_flexcomm_spi)
 #    include(middleware_multicore_erpc_eRPC_port_stdlib)
 #    include(driver_icm42688p)
@@ -221,12 +217,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_tfa9xxx)
 #    include(driver_casper)
 #    include(middleware_usb_phy)
-#    include(middleware_wireless_ethermind_wifi_fwdnld)
+#    include(CMSIS_DSP_Include)
 #    include(CMSIS_Device_API_RTOS2)
 #    include(middleware_fatfs_usb)
 #    include(driver_dmic_dma)
 #    include(middleware_freertos-kernel_mpu_wrappers)
 #    include(driver_lpc_rtc)
+#    include(middleware_multicore_rpmsg_lite_mimxrt685audevk_bm)
 #    include(middleware_sdmmc_common)
 #    include(middleware_fatfs_sd)
 #    include(driver_flexspi)
@@ -244,18 +241,19 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_fmeas)
 #    include(middleware_sdmmc_host_usdhc_freertos_MIMXRT685S_cm33)
 #    include(middleware_usb_host_ip3516hs_MIMXRT685S_cm33)
-#    include(component_messaging)
 #    include(middleware_freertos-kernel_secure_context)
 #    include(component_i3c_adapter)
-#    include(middleware_edgefast_bluetooth_k32w061_controller)
 #    include(driver_flexcomm_usart_dma)
+#    include(utilities_misc_utilities_MIMXRT685S_cm33)
 #    include(driver_pca9420)
 #    include(component_tfa9xxx_adapter)
+#    include(component_button_MIMXRT685S_cm33)
+#    include(middleware_multicore_rpmsg_lite_evkmimxrt685_bm)
 #    include(middleware_eiq_tensorflow_lite_micro)
 #    include(driver_cs42448)
-#    include(component_button)
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_ruy)
 #    include(driver_flexcomm_i2c_freertos)
+#    include(driver_powerquad_cmsis)
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_gemmlowp)
 #    include(driver_powerquad)
 #    include(middleware_usb_host_phdc)
@@ -265,7 +263,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Device_API_OSTick)
 #    include(driver_fxos8700cq)
 #    include(driver_trng)
-#    include(component_mem_manager)
 #    include(driver_usdhc)
 #    include(component_wm8904_adapter)
 #    include(driver_mu)

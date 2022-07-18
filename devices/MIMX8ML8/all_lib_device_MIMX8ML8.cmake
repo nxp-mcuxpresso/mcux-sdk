@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/DSP
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/ecspi
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/ii2c
@@ -45,7 +46,9 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(driver_cmsis_ii2c)
+#    include(component_codec_adapters)
 #    include(middleware_freertos-kernel_heap_4)
+#    include(CMSIS_DSP_Source)
 #    include(driver_iuart_sdma)
 #    include(driver_flexcan)
 #    include(driver_ii2c)
@@ -87,10 +90,10 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_wdog01)
 #    include(driver_sai_sdma)
 #    include(CMSIS_Driver_Include_Common)
+#    include(utilities_misc_utilities_MIMX8ML8)
 #    include(component_iuart_adapter)
 #    include(utility_debug_console_lite)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(driver_common)
 #    include(driver_easrc_sdma)
 #    include(driver_sema4)

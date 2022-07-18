@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 4, 0)) /*!< Version */
+#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 4, 4)) /*!< Version */
 /*@}*/
 
 #ifndef SCT_EV_STATE_STATEMSKn

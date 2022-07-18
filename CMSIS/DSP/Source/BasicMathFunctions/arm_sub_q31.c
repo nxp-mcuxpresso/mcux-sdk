@@ -3,13 +3,13 @@
  * Title:        arm_sub_q31.c
  * Description:  Q31 vector subtraction
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/basic_math_functions.h"
 
 /**
   @ingroup groupMath
@@ -50,6 +50,56 @@
                    Results outside of the allowable Q31 range [0x80000000 0x7FFFFFFF] are saturated.
  */
 
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
+
+#include "arm_helium_utils.h"
+
+void arm_sub_q31(
+  const q31_t * pSrcA,
+  const q31_t * pSrcB,
+        q31_t * pDst,
+        uint32_t blockSize)
+{
+    uint32_t blkCnt;   
+    q31x4_t vecA;
+    q31x4_t vecB;
+
+    /* Compute 4 outputs at a time */
+    blkCnt = blockSize >> 2;
+    while (blkCnt > 0U)
+    {
+        /*
+         * C = A + B
+         * Add and then store the results in the destination buffer.
+         */
+        vecA = vld1q(pSrcA);
+        vecB = vld1q(pSrcB);
+        vst1q(pDst, vqsubq(vecA, vecB));
+        /*
+         * Decrement the blockSize loop counter
+         */
+        blkCnt--;
+        /*
+         * advance vector source and destination pointers
+         */
+        pSrcA  += 4;
+        pSrcB  += 4;
+        pDst   += 4;
+    }
+    /*
+     * tail
+     */
+    blkCnt = blockSize & 3;
+    if (blkCnt > 0U)
+    {
+        mve_pred16_t p0 = vctp32q(blkCnt);
+        vecA = vld1q(pSrcA);
+        vecB = vld1q(pSrcB);
+        vstrwq_p(pDst, vqsubq(vecA, vecB), p0);
+    }
+}
+
+#else
 void arm_sub_q31(
   const q31_t * pSrcA,
   const q31_t * pSrcB,
@@ -102,6 +152,7 @@ void arm_sub_q31(
   }
 
 }
+#endif /* defined(ARM_MATH_MVEI) */
 
 /**
   @} end of BasicSub group

@@ -3,13 +3,13 @@
  * Title:        arm_biquad_cascade_df2T_f64.c
  * Description:  Processing function for floating-point transposed direct form II Biquad cascade filter
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/filtering_functions.h"
 
 /**
   @ingroup groupFilters
@@ -136,15 +136,15 @@
 LOW_OPTIMIZATION_ENTER
 void arm_biquad_cascade_df2T_f64(
   const arm_biquad_cascade_df2T_instance_f64 * S,
-        float64_t * pSrc,
+  const float64_t * pSrc,
         float64_t * pDst,
         uint32_t blockSize)
 {
 
-        float64_t *pIn = pSrc;                         /* Source pointer */
+        const float64_t *pIn = pSrc;                   /* Source pointer */
         float64_t *pOut = pDst;                        /* Destination pointer */
         float64_t *pState = S->pState;                 /* State pointer */
-        float64_t *pCoeffs = S->pCoeffs;               /* Coefficient pointer */
+        const float64_t *pCoeffs = S->pCoeffs;               /* Coefficient pointer */
         float64_t acc1;                                /* Accumulator */
         float64_t b0, b1, b2, a1, a2;                  /* Filter coefficients */
         float64_t Xn1;                                 /* Temporary input */
@@ -424,7 +424,7 @@ void arm_biquad_cascade_df2T_f64(
 
       pState += 2U;
 
-      /* The current stage input is given as the output to the next stage */
+      /* The current stage output is given as the input to the next stage */
       pIn = pDst;
 
       /* Reset the output working pointer */
