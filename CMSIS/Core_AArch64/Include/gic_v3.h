@@ -1,12 +1,12 @@
 /**************************************************************************//**
  * @file     gic_v3.h
  * @brief    CMSIS Cortex-A53 Generic Interrupt Controller API header file
- * @version  V1.0.0
+ * @version  V1.0.1
  * @date     05. october 2021
  ******************************************************************************/
 /*
  * Copyright (c) 2021 Arm Limited. All rights reserved.
- * Copyright 2021 NXP
+ * Copyright 2021-2022 NXP
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -64,6 +64,41 @@
   #define ICC_SRE_EL2            S3_4_C12_C9_5
   #define ICC_SRE_EL3            S3_6_C12_C12_5
 #endif /* __GNUC__ */
+
+/* ICC_SGIR */
+#define ICC_SGIR_TARGETLIST_SHIFT	(0)
+#define ICC_SGIR_TARGETLIST_MASK	(0xffff)
+#define ICC_SGIR_AFF_MASK		(0xff)
+#define ICC_SGIR_AFF1_SHIFT		(16)
+#define ICC_SGIR_INTID_SHIFT		(24)
+#define ICC_SGIR_INTID_MASK		(0xf)
+#define ICC_SGIR_AFF2_SHIFT		(32)
+#define ICC_SGIR_IRM_SHIFT		(40)
+#define ICC_SGIR_IRM_MASK		(0x1)
+#define ICC_SGIR_RS_SHIFT		(44)
+#define ICC_SGIR_RS_MASK		(0xf)
+#define ICC_SGIR_AFF3_SHIFT		(48)
+
+/* MPIDR */
+#define MPIDR_AFFLVL_MASK		(0xff)
+#define MPIDR_AFF0_SHIFT		(0)
+#define MPIDR_AFF1_SHIFT		(8)
+#define MPIDR_AFF2_SHIFT		(16)
+#define MPIDR_AFF3_SHIFT		(32)
+
+#define MPIDR_TO_AFF_LEVEL(mpidr, aff_level) \
+	(((mpidr) >> MPIDR_AFF##aff_level##_SHIFT) & MPIDR_AFFLVL_MASK)
+
+#define MPIDR_TO_RS(mpidr)		(MPIDR_TO_AFF_LEVEL(mpidr, 0) >> 4)
+
+#define COMPOSE_ICC_SGIR_VALUE(aff3, aff2, aff1, intid, irm, rs, tlist)	\
+	((((uint64_t)(aff3) & ICC_SGIR_AFF_MASK) << ICC_SGIR_AFF3_SHIFT) |	\
+	 (((uint64_t)(rs) & ICC_SGIR_RS_MASK) << ICC_SGIR_RS_SHIFT) |		\
+	 (((uint64_t)(irm) & ICC_SGIR_IRM_MASK) << ICC_SGIR_IRM_SHIFT) |	\
+	 (((uint64_t)(aff2) & ICC_SGIR_AFF_MASK) << ICC_SGIR_AFF2_SHIFT) |	\
+	 (((intid) & ICC_SGIR_INTID_MASK) << ICC_SGIR_INTID_SHIFT) |		\
+	 (((aff1) & ICC_SGIR_AFF_MASK) << ICC_SGIR_AFF1_SHIFT) |		\
+	 (((tlist) & ICC_SGIR_TARGETLIST_MASK) << ICC_SGIR_TARGETLIST_SHIFT))
 
 /** \brief  Structure type to access the Generic Interrupt Controller Distributor (GICD)
 */
@@ -472,14 +507,46 @@ __STATIC_INLINE uint32_t GIC_GetIRQStatus(IRQn_Type IRQn)
   return ((active<<1U) | pending);
 }
 
-/** \brief Generate a software interrupt using GIC's SGIR register.
+/** \brief Generate a software interrupt (Affinity Routing version).
 * \param [in] IRQn Software interrupt to be generated.
-* \param [in] target_list List of CPUs the software interrupt should be forwarded to.
-* \param [in] filter_list Filter to be applied to determine interrupt receivers.
+* \param [in] target_aff Target affinity in MPIDR form.
+* \param [in] tlist List of CPUs the software interrupt should be forwarded to.
 */
-__STATIC_INLINE void GIC_SendSGI(IRQn_Type IRQn, uint32_t target_list, uint32_t filter_list)
+__STATIC_INLINE void GIC_SendSGI_ARE(IRQn_Type IRQn, uint64_t target_aff, uint16_t tlist)
 {
-  GICDistributor->SGIR = ((filter_list & 3U) << 24U) | ((target_list & 0xFFUL) << 16U) | (IRQn & 0x0FUL);
+  uint32_t aff3, aff2, aff1, rs;
+  uint64_t val;
+
+  if (IRQn >= 16)
+    return;
+
+  aff1 = MPIDR_TO_AFF_LEVEL(target_aff, 1);
+  aff2 = MPIDR_TO_AFF_LEVEL(target_aff, 2);
+  aff3 = MPIDR_TO_AFF_LEVEL(target_aff, 3);
+  rs = MPIDR_TO_RS(target_aff);
+  val = COMPOSE_ICC_SGIR_VALUE(aff3, aff2, aff1, IRQn, 0, rs, tlist);
+
+  __DSB();
+  __MSR(ICC_SGI1R_EL1, val);
+  __ISB();
+}
+
+/** \brief Generate a software interrupt.
+* \param [in] IRQn Software interrupt to be generated.
+* \param [in] target_aff Target affinity in MPIDR form.
+* \param [in] target_list List of CPUs the software interrupt should be forwarded to.
+*/
+__STATIC_INLINE void GIC_SendSGI(IRQn_Type IRQn, uint64_t target_aff, uint16_t target_list)
+{
+  if (IRQn >= 16)
+    return;
+
+  if (GIC_GetARE()) {
+    /* affinity routing */
+    GIC_SendSGI_ARE(IRQn, target_aff, target_list);
+  } else {
+    GICDistributor->SGIR = ((target_list & 0xFFUL) << 16U) | (IRQn & 0x0FUL);
+  }
 }
 
 /** \brief Set the interrupt group from the GIC's IGROUPR register.
