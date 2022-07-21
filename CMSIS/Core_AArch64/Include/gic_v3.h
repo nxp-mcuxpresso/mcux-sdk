@@ -406,16 +406,6 @@ __STATIC_INLINE uint32_t GIC_GetConfiguration(IRQn_Type IRQn)
   return (GICDistributor->ICFGR[IRQn / 16U] >> ((IRQn % 16U) >> 1U));
 }
 
-/** \brief Set the priority for the given interrupt in the GIC's IPRIORITYR register.
-* \param [in] IRQn The interrupt to be configured.
-* \param [in] priority The priority for the interrupt, lower values denote higher priorities.
-*/
-__STATIC_INLINE void GIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
-{
-  uint32_t mask = GICDistributor->IPRIORITYR[IRQn / 4U] & ~(0xFFUL << ((IRQn % 4U) * 8U));
-  GICDistributor->IPRIORITYR[IRQn / 4U] = mask | ((priority & 0xFFUL) << ((IRQn % 4U) * 8U));
-}
-
 __STATIC_INLINE void GIC_SetRedistPriority(IRQn_Type IRQn, uint32_t priority)
 {
   uint32_t core = MPIDR_GetCoreID();
@@ -424,6 +414,22 @@ __STATIC_INLINE void GIC_SetRedistPriority(IRQn_Type IRQn, uint32_t priority)
   uint32_t mask = s_RedistPPIBaseAddrs[core]->IPRIORITYR[IRQn / 4U] & ~(0xFFUL << ((IRQn % 4U) * 8U));
 
   s_RedistPPIBaseAddrs[core]->IPRIORITYR[IRQn / 4U] = mask | ((priority & 0xFFUL) << ((IRQn % 4U) * 8U));
+}
+
+/** \brief Set the priority for the given interrupt.
+* \param [in] IRQn The interrupt to be configured.
+* \param [in] priority The priority for the interrupt, lower values denote higher priorities.
+*/
+__STATIC_INLINE void GIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+{
+  uint32_t mask;
+
+  if ((IRQn < 32) && (GIC_GetARE())) {
+    GIC_SetRedistPriority(IRQn, priority);
+  } else {
+    mask = GICDistributor->IPRIORITYR[IRQn / 4U] & ~(0xFFUL << ((IRQn % 4U) * 8U));
+    GICDistributor->IPRIORITYR[IRQn / 4U] = mask | ((priority & 0xFFUL) << ((IRQn % 4U) * 8U));
+  }
 }
 
 __STATIC_INLINE void GIC_RedistWakeUp(void)
