@@ -8,7 +8,7 @@
  * Copyright 2019 Broadcom
  * The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
  * Copyright (c) 2021 Arm Limited. All rights reserved.
- * Copyright 2021 NXP
+ * Copyright 2021-2022 NXP
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -43,6 +43,14 @@
 
 #ifndef KB
 #define KB(x)                  ((x) << 10)
+#endif
+
+#ifndef MB
+#define MB(x)                  ((KB(x)) << 10)
+#endif
+
+#ifndef GB
+#define GB(x)                  ((MB(x)) << 10)
 #endif
 
 /******************************************************************************/
