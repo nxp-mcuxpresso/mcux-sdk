@@ -1598,7 +1598,7 @@ int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
                     }
                     p = tempEnd;
                 }
-                n_decode += (uintptr_t)p - (uintptr_t)s;
+                n_decode += (uint32_t)p - (uint32_t)s;
 
                 val *= neg;
 

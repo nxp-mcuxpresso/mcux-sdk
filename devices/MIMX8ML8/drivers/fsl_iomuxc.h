@@ -864,11 +864,11 @@ extern "C" {
  * @param configRegister The config register_
  * @param inputOnfield       The pad->module input inversion_
  */
-static inline void IOMUXC_SetPinMux(uintptr_t muxRegister,
+static inline void IOMUXC_SetPinMux(uint32_t muxRegister,
                                     uint32_t muxMode,
-                                    uintptr_t inputRegister,
+                                    uint32_t inputRegister,
                                     uint32_t inputDaisy,
-                                    uintptr_t configRegister,
+                                    uint32_t configRegister,
                                     uint32_t inputOnfield)
 {
     *((volatile uint32_t *)muxRegister) =
@@ -895,11 +895,11 @@ static inline void IOMUXC_SetPinMux(uintptr_t muxRegister,
  * @param configRegister The config register_
  * @param configValue    The pin config value_
  */
-static inline void IOMUXC_SetPinConfig(uintptr_t muxRegister,
+static inline void IOMUXC_SetPinConfig(uint32_t muxRegister,
                                        uint32_t muxMode,
-                                       uintptr_t inputRegister,
+                                       uint32_t inputRegister,
                                        uint32_t inputDaisy,
-                                       uintptr_t configRegister,
+                                       uint32_t configRegister,
                                        uint32_t configValue)
 {
     if (configRegister)
