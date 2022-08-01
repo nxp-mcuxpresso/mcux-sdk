@@ -69,6 +69,14 @@ extern void DefaultISR(void);
 void OSA_ProcessTasks(void);
 
 /*!
+ * @brief Check OSA Task Should Yield
+ *
+ * This function is used to check task should yield, When this function returns 1, an OSA task has to run.
+ * This function is typically used with Interrupt disabled before executing WFI instruction.
+ *
+ */
+uint8_t OSA_TaskShouldYield(void);
+/*!
  * @name Thread management
  * @{
  */

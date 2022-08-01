@@ -159,30 +159,30 @@
 #define FLEXCOMM_CLOCKS                                                                                             \
     {                                                                                                               \
         kCLOCK_FlexComm0, kCLOCK_FlexComm1, kCLOCK_FlexComm2, kCLOCK_FlexComm3, kCLOCK_FlexComm4, kCLOCK_FlexComm5, \
-            kCLOCK_FlexComm6, kCLOCK_FlexComm7, kCLOCK_Hs_Lspi                                                      \
+            kCLOCK_FlexComm6, kCLOCK_Hs_Lspi                                                                        \
     }
 /*! @brief Clock ip name array for LPUART. */
 #define LPUART_CLOCKS                                                                                         \
     {                                                                                                         \
         kCLOCK_MinUart0, kCLOCK_MinUart1, kCLOCK_MinUart2, kCLOCK_MinUart3, kCLOCK_MinUart4, kCLOCK_MinUart5, \
-            kCLOCK_MinUart6, kCLOCK_MinUart7                                                                  \
+            kCLOCK_MinUart6                                                                                   \
     }
 
 /*! @brief Clock ip name array for BI2C. */
-#define BI2C_CLOCKS                                                                                                    \
-    {                                                                                                                  \
-        kCLOCK_BI2c0, kCLOCK_BI2c1, kCLOCK_BI2c2, kCLOCK_BI2c3, kCLOCK_BI2c4, kCLOCK_BI2c5, kCLOCK_BI2c6, kCLOCK_BI2c7 \
+#define BI2C_CLOCKS                                                                                      \
+    {                                                                                                    \
+        kCLOCK_BI2c0, kCLOCK_BI2c1, kCLOCK_BI2c2, kCLOCK_BI2c3, kCLOCK_BI2c4, kCLOCK_BI2c5, kCLOCK_BI2c6 \
     }
 /*! @brief Clock ip name array for LSPI. */
-#define LPSPI_CLOCKS                                                                                                   \
-    {                                                                                                                  \
-        kCLOCK_LSpi0, kCLOCK_LSpi1, kCLOCK_LSpi2, kCLOCK_LSpi3, kCLOCK_LSpi4, kCLOCK_LSpi5, kCLOCK_LSpi6, kCLOCK_LSpi7 \
+#define LPSPI_CLOCKS                                                                                     \
+    {                                                                                                    \
+        kCLOCK_LSpi0, kCLOCK_LSpi1, kCLOCK_LSpi2, kCLOCK_LSpi3, kCLOCK_LSpi4, kCLOCK_LSpi5, kCLOCK_LSpi6 \
     }
 /*! @brief Clock ip name array for FLEXI2S. */
 #define FLEXI2S_CLOCKS                                                                                        \
     {                                                                                                         \
         kCLOCK_FlexI2s0, kCLOCK_FlexI2s1, kCLOCK_FlexI2s2, kCLOCK_FlexI2s3, kCLOCK_FlexI2s4, kCLOCK_FlexI2s5, \
-            kCLOCK_FlexI2s6, kCLOCK_FlexI2s7                                                                  \
+            kCLOCK_FlexI2s6                                                                                   \
     }
 /*! @brief Clock ip name array for CTIMER. */
 #define CTIMER_CLOCKS                                                             \
@@ -340,8 +340,6 @@ typedef enum _clock_ip_name
 
     kCLOCK_FlexComm6 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17), /*!< Clock gate name: FlexComm6. */
 
-    kCLOCK_FlexComm7 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18), /*!< Clock gate name: FlexComm7. */
-
     kCLOCK_MinUart0 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 11), /*!< Clock gate name: MinUart0. */
 
     kCLOCK_MinUart1 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 12), /*!< Clock gate name: MinUart1. */
@@ -355,8 +353,6 @@ typedef enum _clock_ip_name
     kCLOCK_MinUart5 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 16), /*!< Clock gate name: MinUart5. */
 
     kCLOCK_MinUart6 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17), /*!< Clock gate name: MinUart6. */
-
-    kCLOCK_MinUart7 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18), /*!< Clock gate name: MinUart7. */
 
     kCLOCK_LSpi0 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 11), /*!< Clock gate name: LSpi0. */
 
@@ -372,8 +368,6 @@ typedef enum _clock_ip_name
 
     kCLOCK_LSpi6 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17), /*!< Clock gate name: LSpi6. */
 
-    kCLOCK_LSpi7 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18), /*!< Clock gate name: LSpi7. */
-
     kCLOCK_BI2c0 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 11), /*!< Clock gate name: BI2c0. */
 
     kCLOCK_BI2c1 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 12), /*!< Clock gate name: BI2c1. */
@@ -388,8 +382,6 @@ typedef enum _clock_ip_name
 
     kCLOCK_BI2c6 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17), /*!< Clock gate name: BI2c6. */
 
-    kCLOCK_BI2c7 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18), /*!< Clock gate name: BI2c7. */
-
     kCLOCK_FlexI2s0 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 11), /*!< Clock gate name: FlexI2s0. */
 
     kCLOCK_FlexI2s1 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 12), /*!< Clock gate name: FlexI2s1. */
@@ -403,8 +395,6 @@ typedef enum _clock_ip_name
     kCLOCK_FlexI2s5 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 16), /*!< Clock gate name: FlexI2s5. */
 
     kCLOCK_FlexI2s6 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17), /*!< Clock gate name: FlexI2s6. */
-
-    kCLOCK_FlexI2s7 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18), /*!< Clock gate name: FlexI2s7. */
 
     kCLOCK_Timer2 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 22), /*!< Clock gate name: Timer2. */
 
@@ -510,7 +500,6 @@ typedef enum _clock_name
 #define CM_FXCOMCLKSEL4   24
 #define CM_FXCOMCLKSEL5   25
 #define CM_FXCOMCLKSEL6   26
-#define CM_FXCOMCLKSEL7   27
 #define CM_HSLSPICLKSEL   28
 #define CM_MCLKCLKSEL     32
 #define CM_SCTCLKSEL      36
@@ -699,22 +688,6 @@ typedef enum _clock_attach_id
     kOSC32K_to_FLEXCOMM6 = MUX_A(CM_FXCOMCLKSEL6, 6), /*!< Attach OSC32K to FLEXCOMM6. */
 
     kNONE_to_FLEXCOMM6 = MUX_A(CM_FXCOMCLKSEL6, 7), /*!< Attach NONE to FLEXCOMM6. */
-
-    kMAIN_CLK_to_FLEXCOMM7 = MUX_A(CM_FXCOMCLKSEL7, 0), /*!< Attach MAIN_CLK to FLEXCOMM7. */
-
-    kPLL0_DIV_to_FLEXCOMM7 = MUX_A(CM_FXCOMCLKSEL7, 1), /*!< Attach PLL0_DIV to FLEXCOMM7. */
-
-    kFRO12M_to_FLEXCOMM7 = MUX_A(CM_FXCOMCLKSEL7, 2), /*!< Attach FRO12M to FLEXCOMM7. */
-
-    kFRO_HF_DIV_to_FLEXCOMM7 = MUX_A(CM_FXCOMCLKSEL7, 3), /*!< Attach FRO_HF_DIV to FLEXCOMM7. */
-
-    kFRO1M_to_FLEXCOMM7 = MUX_A(CM_FXCOMCLKSEL7, 4), /*!< Attach FRO1M to FLEXCOMM7. */
-
-    kMCLK_to_FLEXCOMM7 = MUX_A(CM_FXCOMCLKSEL7, 5), /*!< Attach MCLK to FLEXCOMM7. */
-
-    kOSC32K_to_FLEXCOMM7 = MUX_A(CM_FXCOMCLKSEL7, 6), /*!< Attach OSC32K to FLEXCOMM7. */
-
-    kNONE_to_FLEXCOMM7 = MUX_A(CM_FXCOMCLKSEL7, 7), /*!< Attach NONE to FLEXCOMM7. */
 
     kMAIN_CLK_to_HSLSPI = MUX_A(CM_HSLSPICLKSEL, 0), /*!< Attach MAIN_CLK to HSLSPI. */
 

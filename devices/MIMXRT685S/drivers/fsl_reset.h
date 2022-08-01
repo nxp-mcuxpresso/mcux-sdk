@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2018, 2021 NXP
+ * Copyright 2016 - 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.1.2. */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+/*! @brief reset driver version 2.1.3. */
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*@}*/
 
 /*!
@@ -113,6 +113,10 @@ typedef enum _RSTCTL_RSTn
     {                        \
         kADC0_RST_SHIFT_RSTn \
     } /* Reset bits for ADC peripheral */
+#define CASPER_RSTS            \
+    {                          \
+        kCASPER_RST_SHIFT_RSTn \
+    } /* Reset bits for Casper peripheral */
 #define CRC_RSTS            \
     {                       \
         kCRC_RST_SHIFT_RSTn \
@@ -135,6 +139,10 @@ typedef enum _RSTCTL_RSTn
         kHSGPIO0_RST_SHIFT_RSTn, kHSGPIO1_RST_SHIFT_RSTn, kHSGPIO2_RST_SHIFT_RSTn, kHSGPIO3_RST_SHIFT_RSTn,    \
             kHSGPIO4_RST_SHIFT_RSTn, kHSGPIO5_RST_SHIFT_RSTn, kHSGPIO6_RST_SHIFT_RSTn, kHSGPIO7_RST_SHIFT_RSTn \
     } /* Reset bits for GPIO peripheral */
+#define HASHCRYPT_RSTS            \
+    {                             \
+        kHASHCRYPT_RST_SHIFT_RSTn \
+    } /* Reset bits for Hashcrypt peripheral */
 #define I3C_RSTS             \
     {                        \
         kI3C0_RST_SHIFT_RSTn \
@@ -184,6 +192,14 @@ typedef enum _RSTCTL_RSTn
     {                             \
         kPOWERQUAD_RST_SHIFT_RSTn \
     } /* Reset bits for Powerquad peripheral */
+#define PUF_RSTS            \
+    {                       \
+        kPUF_RST_SHIFT_RSTn \
+    } /* Reset bits for PUF peripheral */
+#define TRNG_RSTS           \
+    {                       \
+        kRNG_RST_SHIFT_RSTn \
+    } /* Reset bits for TRNG peripheral */
 
 /*!
  * @brief IP reset handle

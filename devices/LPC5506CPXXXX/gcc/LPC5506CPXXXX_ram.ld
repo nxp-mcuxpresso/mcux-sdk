@@ -2,15 +2,15 @@
 ** ###################################################################
 **     Processor:           LPC5506JHI48CPXXXX
 **     Compiler:            GNU C Compiler
-**     Reference manual:    LPC55S1x/LPC551x User manual Rev.0.6  15 November 2019
+**     Reference manual:    LPC55S0x/LPC550x User manual Rev.0.3  14 August 2020
 **     Version:             rev. 1.0, 2020-04-09
-**     Build:               b200831
+**     Build:               b220622
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause

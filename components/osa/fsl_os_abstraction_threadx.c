@@ -358,6 +358,19 @@ osa_status_t OSA_SemaphoreCreate(osa_semaphore_handle_t semaphoreHandle, uint32_
 
 /*FUNCTION**********************************************************************
  *
+ * Function Name : OSA_SemaphoreCreateBinary
+ * Description   : This function is used to create a binary semaphore.
+ * Return        : Semaphore handle of the new binary semaphore, or NULL if failed.
+ *
+ *END**************************************************************************/
+osa_status_t OSA_SemaphoreCreateBinary(osa_semaphore_handle_t semaphoreHandle)
+{
+    /* TODO */
+    return KOSA_StatusError;
+}
+
+/*FUNCTION**********************************************************************
+ *
  * Function Name : OSA_SemaphoreDestroy
  * Description   : This function is used to destroy a semaphore.
  * Return        : KOSA_StatusSuccess if the semaphore is destroyed successfully, otherwise return KOSA_StatusError.

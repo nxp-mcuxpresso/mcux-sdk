@@ -11,45 +11,45 @@
 #include "fsl_common.h"
 
 /* Locate in bank 0. */
-#define DEVICE_CONFIG      0x11
-#define INT_CONFIG         0x14
-#define TEMP_DATA1         0x1D
-#define TEMP_DATA0         0x1E
-#define PWR_MGMT0          0x4E
-#define GYRO_CONFIG0       0x4F
-#define ACCEL_CONFIG0      0x50
-#define GYRO_CONFIG1       0x51
-#define GYRO_ACCEL_CONFIG0 0x52
-#define ACCEL_CONFIG1      0x53
-#define WHO_AM_I           0x75
-#define WHO_AM_I_VALUE     0x47
-#define BANK_SEL           0x76
+#define DEVICE_CONFIG      0x11U
+#define INT_CONFIG         0x14U
+#define TEMP_DATA1         0x1DU
+#define TEMP_DATA0         0x1EU
+#define PWR_MGMT0          0x4EU
+#define GYRO_CONFIG0       0x4FU
+#define ACCEL_CONFIG0      0x50U
+#define GYRO_CONFIG1       0x51U
+#define GYRO_ACCEL_CONFIG0 0x52U
+#define ACCEL_CONFIG1      0x53U
+#define WHO_AM_I           0x75U
+#define WHO_AM_I_VALUE     0x47U
+#define BANK_SEL           0x76U
 
-#define ACCEL_DATA_X1 0x1F
-#define ACCEL_DATA_X0 0x20
+#define ACCEL_DATA_X1 0x1FU
+#define ACCEL_DATA_X0 0x20U
 
-#define ACCEL_DATA_Y1 0x21
-#define ACCEL_DATA_Y0 0x22
+#define ACCEL_DATA_Y1 0x21U
+#define ACCEL_DATA_Y0 0x22U
 
-#define ACCEL_DATA_Z1 0x23
-#define ACCEL_DATA_Z0 0x24
+#define ACCEL_DATA_Z1 0x23U
+#define ACCEL_DATA_Z0 0x24U
 
-#define GYRO_DATA_X1 0x25
-#define GYRO_DATA_X0 0x26
+#define GYRO_DATA_X1 0x25U
+#define GYRO_DATA_X0 0x26U
 
-#define GYRO_DATA_Y1 0x27
-#define GYRO_DATA_Y0 0x28
+#define GYRO_DATA_Y1 0x27U
+#define GYRO_DATA_Y0 0x28U
 
-#define GYRO_DATA_Z1 0x29
-#define GYRO_DATA_Z0 0x2A
+#define GYRO_DATA_Z1 0x29U
+#define GYRO_DATA_Z0 0x2AU
 
-#define FIFO_CONFIG  0x16
-#define FIFO_CONFIG1 0x5F
-#define FIFO_DATA    0x30
-#define APEX_CONFIG0 0x56
+#define FIFO_CONFIG  0x16U
+#define FIFO_CONFIG1 0x5FU
+#define FIFO_DATA    0x30U
+#define APEX_CONFIG0 0x56U
 
 /* Locate in bank 4. */
-#define INT_SOURCE10 0x51
+#define INT_SOURCE10 0x51U
 
 /*! @brief Define sensor access function. */
 typedef status_t (*sensor_write_transfer_func_t)(uint8_t deviceAddress,

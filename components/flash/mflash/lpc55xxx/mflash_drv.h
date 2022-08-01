@@ -23,6 +23,10 @@
 #define MFLASH_PAGE_SIZE (512)
 #endif
 
+#ifndef MFLASH_BASE_ADDRESS
+#define MFLASH_BASE_ADDRESS (0)
+#endif
+
 #define MFLASH_PAGE_INTEGRITY_CHECKS (1)
 
 int32_t mflash_drv_is_readable(uint32_t addr);

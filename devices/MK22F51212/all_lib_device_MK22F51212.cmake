@@ -10,7 +10,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/ft6x06
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/gpio
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/ili9341
     ${CMAKE_CURRENT_LIST_DIR}/../../components/led
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
@@ -65,8 +64,8 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(component_button_MK22F51212)
 #    include(driver_dspi)
-#    include(component_i2c_adapter)
 #    include(driver_uart_freertos)
 #    include(driver_vref)
 #    include(driver_dmamux)
@@ -80,9 +79,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_baremetal)
 #    include(component_log_backend_ringbuffer)
 #    include(driver_lpuart_edma)
-#    include(middleware_multicore_erpc_eRPC_port_freertos)
 #    include(driver_uart)
-#    include(utilities_misc_utilities)
+#    include(utilities_misc_utilities_MK22F51212)
 #    include(driver_rtc)
 #    include(component_gpio_adapter)
 #    include(component_serial_manager)
@@ -110,7 +108,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_device_common_header)
 #    include(component_uart_adapter)
 #    include(driver_clock)
-#    include(component_button)
 #    include(device_CMSIS)
 #    include(CMSIS_Driver_Include_Common)
 #    include(middleware_multicore_erpc_doc)
@@ -119,13 +116,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_common_header)
 #    include(driver_rnga)
 #    include(driver_common)
-#    include(driver_cmsis_uart)
+#    include(middleware_fatfs_usb)
 #    include(driver_smc)
 #    include(component_osa_free_rtos)
 #    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_1)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)
+#    include(driver_cmsis_uart)
 #    include(middleware_usb_host_msd)
 #    include(driver_port)
 #    include(middleware_multicore_erpc_eRPC_dspi_master_c_wrapper)
@@ -152,7 +150,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_pmc)
 #    include(middleware_usb_device_controller_driver_MK22F51212)
 #    include(component_pwm_ftm_adapter)
-#    include(middleware_fatfs_usb)
+#    include(middleware_multicore_erpc_eRPC_port_freertos)
 #    include(component_serial_manager_usb_cdc)
 #    include(driver_cmsis_dspi)
 #    include(driver_uart_edma)

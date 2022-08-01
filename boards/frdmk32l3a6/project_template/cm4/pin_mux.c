@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -14,12 +14,14 @@
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Pins v7.0
+product: Pins v11.0
 processor: K32L3A60xxx
 package_id: K32L3A60VPJ1A
 mcu_data: ksdk2_0
-processor_version: 0.0.1
+processor_version: 0.11.6
 board: FRDM-K32L3A6
+pin_labels:
+- {pin_num: R14, pin_signal: LPCMP1_IN4/PTE0/EWM_IN, label: 'G2[5]/RED_LED_STS', identifier: RED_LED_STS}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -90,10 +92,11 @@ BOARD_InitButtonsPins:
 void BOARD_InitButtonsPins(void)
 {
     /* Clock Gate Control: Clock enabled. The current clock selection and divider options are locked. */
+    CLOCK_EnableClock(kCLOCK_GpioE);
+    /* Clock Gate Control: Clock enabled. The current clock selection and divider options are locked. */
     CLOCK_EnableClock(kCLOCK_PortA);
     /* Clock Gate Control: Clock enabled. The current clock selection and divider options are locked. */
     CLOCK_EnableClock(kCLOCK_PortE);
-    CLOCK_EnableClock(kCLOCK_Rgpio1);//allow access to GPIOE_BASE address 
 
     gpio_pin_config_t SW2_config = {
         .pinDirection = kGPIO_DigitalInput,
@@ -204,6 +207,8 @@ BOARD_InitLEDsPins:
     open_drain: disable, pull_select: down, pull_enable: disable}
   - {pin_num: D6, peripheral: GPIOA, signal: 'GPIO, 24', pin_signal: PTA24/LPSPI2_PCS0/LPSPI1_SCK/LPI2C2_SCL/FB_OE_b/TPM2_CH0, direction: OUTPUT, slew_rate: fast,
     open_drain: disable, pull_select: down, pull_enable: disable}
+  - {pin_num: R14, peripheral: GPIOE, signal: 'GPIO, 0', pin_signal: LPCMP1_IN4/PTE0/EWM_IN, direction: OUTPUT, slew_rate: fast, open_drain: disable, pull_select: down,
+    pull_enable: disable}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -218,7 +223,11 @@ BOARD_InitLEDsPins:
 void BOARD_InitLEDsPins(void)
 {
     /* Clock Gate Control: Clock enabled. The current clock selection and divider options are locked. */
+    CLOCK_EnableClock(kCLOCK_GpioE);
+    /* Clock Gate Control: Clock enabled. The current clock selection and divider options are locked. */
     CLOCK_EnableClock(kCLOCK_PortA);
+    /* Clock Gate Control: Clock enabled. The current clock selection and divider options are locked. */
+    CLOCK_EnableClock(kCLOCK_PortE);
 
     gpio_pin_config_t RGB_BLUE_config = {
         .pinDirection = kGPIO_DigitalOutput,
@@ -240,6 +249,13 @@ void BOARD_InitLEDsPins(void)
     };
     /* Initialize GPIO functionality on pin PTA24 (pin D6)  */
     GPIO_PinInit(BOARD_INITLEDSPINS_RGB_RED_GPIO, BOARD_INITLEDSPINS_RGB_RED_PIN, &RGB_RED_config);
+
+    gpio_pin_config_t RED_LED_STS_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PTE0 (pin R14)  */
+    GPIO_PinInit(BOARD_INITLEDSPINS_RED_LED_STS_GPIO, BOARD_INITLEDSPINS_RED_LED_STS_PIN, &RED_LED_STS_config);
 
     const port_pin_config_t RGB_BLUE = {/* Internal pull-up/down resistor is disabled */
                                         kPORT_PullDisable,
@@ -291,39 +307,23 @@ void BOARD_InitLEDsPins(void)
                                        kPORT_UnlockRegister};
     /* PORTA24 (pin D6) is configured as PTA24 */
     PORT_SetPinConfig(BOARD_INITLEDSPINS_RGB_RED_PORT, BOARD_INITLEDSPINS_RGB_RED_PIN, &RGB_RED);
-    
-        /* Clock Gate Control: Clock enabled. The current clock selection and divider options are locked. */
-	CLOCK_EnableClock(kCLOCK_Rgpio1);
-	CLOCK_EnableClock(kCLOCK_PortE);
 
-
-    gpio_pin_config_t LED_RED_config = {
-         .pinDirection = kGPIO_DigitalOutput,
-         .outputLogic = 0U
-     };
-    /*  Initialize GPIO functionality on pin PTE0  */
-     GPIO_PinInit(BOARD_INITLEDSPINS_LED_RED_GPIO, BOARD_INITLEDSPINS_LED_RED_PIN, &LED_RED_config);
-
-
-    const port_pin_config_t LED_RED = {/* Internal pull-up/down resistor is disabled */
-                                       kPORT_PullDisable,
-                                       /* Fast slew rate is configured */
-                                       kPORT_FastSlewRate,
-                                       /* Passive filter is disabled */
-                                       kPORT_PassiveFilterDisable,
-                                       /* Open drain is disabled */
-                                       kPORT_OpenDrainDisable,
-                                       /* Low drive strength is configured */
-                                       kPORT_LowDriveStrength,
-                                       /* Pin is configured as PTE0 */
-                                       kPORT_MuxAsGpio,
-                                       /* Pin Control Register fields [15:0] are not locked */
-                                       kPORT_UnlockRegister};
-    /* PORTE0 is configured as PTE0 */
-    PORT_SetPinConfig(BOARD_INITLEDSPINS_LED_RED_PORT, BOARD_INITLEDSPINS_LED_RED_PIN, &LED_RED);
-    
-    
-    
+    const port_pin_config_t RED_LED_STS = {/* Internal pull-up/down resistor is disabled */
+                                           kPORT_PullDisable,
+                                           /* Fast slew rate is configured */
+                                           kPORT_FastSlewRate,
+                                           /* Passive filter is disabled */
+                                           kPORT_PassiveFilterDisable,
+                                           /* Open drain is disabled */
+                                           kPORT_OpenDrainDisable,
+                                           /* Low drive strength is configured */
+                                           kPORT_LowDriveStrength,
+                                           /* Pin is configured as PTE0 */
+                                           kPORT_MuxAsGpio,
+                                           /* Pin Control Register fields [15:0] are not locked */
+                                           kPORT_UnlockRegister};
+    /* PORTE0 (pin R14) is configured as PTE0 */
+    PORT_SetPinConfig(BOARD_INITLEDSPINS_RED_LED_STS_PORT, BOARD_INITLEDSPINS_RED_LED_STS_PIN, &RED_LED_STS);
 }
 
 /* clang-format off */
@@ -449,8 +449,9 @@ BOARD_InitACCELPins:
 void BOARD_InitACCELPins(void)
 {
     /* Clock Gate Control: Clock enabled. The current clock selection and divider options are locked. */
+    CLOCK_EnableClock(kCLOCK_GpioE);
+    /* Clock Gate Control: Clock enabled. The current clock selection and divider options are locked. */
     CLOCK_EnableClock(kCLOCK_PortE);
-    CLOCK_EnableClock(kCLOCK_Rgpio1);//allow access to GPIOE_BASE address 
 
     gpio_pin_config_t ACCEL_INT1_config = {
         .pinDirection = kGPIO_DigitalInput,

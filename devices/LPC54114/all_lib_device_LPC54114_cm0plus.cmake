@@ -23,6 +23,7 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(utilities_misc_utilities_LPC54114_cm0plus)
 #    include(CMSIS_Include_dsp)
 #    include(component_usart_adapter)
 #    include(component_lists)
@@ -52,7 +53,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_erpc_doc)
 #    include(device_startup_LPC54114_cm0plus)
 #    include(middleware_multicore_erpc_common)
-#    include(utilities_misc_utilities)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_remote_c_wrapper)
 #    include(CMSIS_Include_common)
 #    include(driver_common)

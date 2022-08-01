@@ -3,13 +3,13 @@
  * Title:        arm_power_q31.c
  * Description:  Sum of the squares of the elements of a Q31 vector
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/statistics_functions.h"
 
 /**
   @ingroup groupStats
@@ -54,7 +54,50 @@
                    full precision of the intermediate multiplication is preserved.
                    Finally, the return result is in 16.48 format.
  */
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
+void arm_power_q31(
+  const q31_t * pSrc,
+        uint32_t blockSize,
+        q63_t * pResult)
+{
+    uint32_t     blkCnt;           /* loop counters */
+    q31x4_t     vecSrc;
+    q63_t       sum = 0LL;
+    q31_t       in;
 
+    /* Compute 4 outputs at a time */
+    blkCnt = blockSize >> 2U;
+    while (blkCnt > 0U)
+    {
+        vecSrc = vldrwq_s32(pSrc);
+        /*
+         * sum lanes
+         */
+        sum = vrmlaldavhaq(sum, vecSrc, vecSrc);
+
+        blkCnt --;
+        pSrc += 4;
+    }
+
+    /*
+     * tail
+     */
+    blkCnt = blockSize & 0x3;
+    while (blkCnt > 0U)
+    {
+       /* C = A[0] * A[0] + A[1] * A[1] + ... + A[blockSize-1] * A[blockSize-1] */
+
+       /* Compute Power and store result in a temporary variable, sum. */
+       in = *pSrc++;
+       sum += ((q63_t) in * in) >> 8;
+
+       /* Decrement loop counter */
+       blkCnt--;
+    }
+
+    *pResult = asrl(sum, 6);
+}
+#else
 void arm_power_q31(
   const q31_t * pSrc,
         uint32_t blockSize,
@@ -115,6 +158,7 @@ void arm_power_q31(
   /* Store results in 16.48 format */
   *pResult = sum;
 }
+#endif /* defined(ARM_MATH_MVEI) */
 
 /**
   @} end of power group

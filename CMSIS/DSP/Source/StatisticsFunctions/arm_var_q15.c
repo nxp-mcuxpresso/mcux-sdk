@@ -3,13 +3,13 @@
  * Title:        arm_var_q15.c
  * Description:  Variance of an array of Q15 type
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/statistics_functions.h"
 
 /**
   @ingroup groupStats
@@ -54,7 +54,72 @@
                    Finally, the 34.30 result is truncated to 34.15 format by discarding the lower
                    15 bits, and then saturated to yield a result in 1.15 format.
  */
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
+void arm_var_q15(
+  const q15_t * pSrc,
+        uint32_t blockSize,
+        q15_t * pResult)
+{
+    uint32_t  blkCnt;     /* loop counters */
+    q15x8_t         vecSrc;
+    q63_t           sumOfSquares = 0LL;
+    q63_t           meanOfSquares, squareOfMean;        /* square of mean and mean of square */
+    q63_t           sum = 0LL;
+    q15_t in; 
 
+    if (blockSize <= 1U) {
+        *pResult = 0;
+        return;
+    }
+
+
+    blkCnt = blockSize >> 3;
+    while (blkCnt > 0U)
+    {
+        vecSrc = vldrhq_s16(pSrc);
+        /* C = (A[0] * A[0] + A[1] * A[1] + ... + A[blockSize-1] * A[blockSize-1]) */
+        /* Compute Sum of squares of the input samples
+         * and then store the result in a temporary variable, sumOfSquares. */
+
+        sumOfSquares = vmlaldavaq_s16(sumOfSquares, vecSrc, vecSrc);
+        sum = vaddvaq_s16(sum, vecSrc);
+
+        blkCnt --;
+        pSrc += 8;
+    }
+
+    /* Tail */
+    blkCnt = blockSize & 7;
+    while (blkCnt > 0U)
+    {
+      /* C = A[0] * A[0] + A[1] * A[1] + ... + A[blockSize-1] * A[blockSize-1] */
+      /* C = A[0] + A[1] + ... + A[blockSize-1] */
+
+      in = *pSrc++;
+      /* Compute sum of squares and store result in a temporary variable, sumOfSquares. */
+#if defined (ARM_MATH_DSP)
+      sumOfSquares = __SMLALD(in, in, sumOfSquares);
+#else
+      sumOfSquares += (in * in);
+#endif /* #if defined (ARM_MATH_DSP) */
+      /* Compute sum and store result in a temporary variable, sum. */
+      sum += in;
+  
+      /* Decrement loop counter */
+      blkCnt--;
+    }
+
+    /* Compute Mean of squares of the input samples
+     * and then store the result in a temporary variable, meanOfSquares. */
+    meanOfSquares = arm_div_q63_to_q31(sumOfSquares, (blockSize - 1U));
+
+    /* Compute square of mean */
+    squareOfMean = arm_div_q63_to_q31((q63_t)sum * sum, (q31_t)(blockSize * (blockSize - 1U)));
+
+    /* mean of the squares minus the square of the mean. */
+    *pResult = (meanOfSquares - squareOfMean) >> 15;
+}
+#else
 void arm_var_q15(
   const q15_t * pSrc,
         uint32_t blockSize,
@@ -158,6 +223,7 @@ void arm_var_q15(
   /* mean of squares minus the square of mean. */
   *pResult = (meanOfSquares - squareOfMean) >> 15U;
 }
+#endif /* defined(ARM_MATH_MVEI) */
 
 /**
   @} end of variance group

@@ -110,6 +110,15 @@ void GPIO_PinInit(GPIO_Type *base, uint32_t pin, const gpio_pin_config_t *config
     }
 }
 
+#if defined(FSL_FEATURE_GPIO_HAS_VERSION_INFO_REGISTER) && FSL_FEATURE_GPIO_HAS_VERSION_INFO_REGISTER
+void GPIO_GetVersionInfo(GPIO_Type *base, gpio_version_info_t *info)
+{
+    info->feature = (uint16_t)base->VERID;
+    info->minor   = (uint8_t)(base->VERID >> GPIO_VERID_MINOR_SHIFT);
+    info->major   = (uint8_t)(base->VERID >> GPIO_VERID_MAJOR_SHIFT);
+}
+#endif /* FSL_FEATURE_GPIO_HAS_VERSION_INFO_REGISTER */
+
 #if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
 /*!
  * brief Reads the GPIO port interrupt status flag.

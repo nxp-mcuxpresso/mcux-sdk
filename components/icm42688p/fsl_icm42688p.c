@@ -49,15 +49,15 @@ status_t ICM42688P_Init(icm42688p_handle_t *handle, icm42688p_config_t *config)
 
     if (config->isReset)
     {
-        uint8_t resetVal = 0x01;
+        uint8_t resetVal = 0x01U;
         uint8_t bankSel  = 0;
 
-        result = ICM42688P_WriteReg(handle, BANK_SEL, &bankSel, 1);
+        result = ICM42688P_WriteReg(handle, BANK_SEL, &bankSel, 1U);
         if (result != kStatus_Success)
         {
             return result;
         }
-        result = ICM42688P_WriteReg(handle, DEVICE_CONFIG, &resetVal, 1);
+        result = ICM42688P_WriteReg(handle, DEVICE_CONFIG, &resetVal, 1U);
         if (result != kStatus_Success)
         {
             return result;
@@ -70,42 +70,42 @@ status_t ICM42688P_Init(icm42688p_handle_t *handle, icm42688p_config_t *config)
 
 status_t ICM42688P_EnableSensors(icm42688p_handle_t *handle)
 {
-    uint8_t sensorConfig = 0x1F;
-    uint8_t fifoConfData = 0x03;
-    uint8_t fifoInitVal  = 0x40;
+    uint8_t sensorConfig = 0x1FU;
+    uint8_t fifoConfData = 0x03U;
+    uint8_t fifoInitVal  = 0x40U;
     uint8_t whoamiVal    = 0;
     uint8_t readVal      = 0;
     status_t result      = kStatus_Success;
 
-    result = ICM42688P_ReadReg(handle, WHO_AM_I, &whoamiVal, 1);
+    result = ICM42688P_ReadReg(handle, WHO_AM_I, &whoamiVal, 1U);
     if (result != kStatus_Success)
     {
         return result;
     }
     assert(whoamiVal == WHO_AM_I_VALUE);
 
-    result = ICM42688P_WriteReg(handle, PWR_MGMT0, &sensorConfig, 1);
+    result = ICM42688P_WriteReg(handle, PWR_MGMT0, &sensorConfig, 1U);
     if (result != kStatus_Success)
     {
         return result;
     }
     SDK_DelayAtLeastUs(1000, SystemCoreClock);
-    result = ICM42688P_ReadReg(handle, PWR_MGMT0, &readVal, 1);
+    result = ICM42688P_ReadReg(handle, PWR_MGMT0, &readVal, 1U);
     assert(readVal == sensorConfig);
 
-    result = ICM42688P_WriteReg(handle, FIFO_CONFIG, &fifoInitVal, 1);
+    result = ICM42688P_WriteReg(handle, FIFO_CONFIG, &fifoInitVal, 1U);
     if (result != kStatus_Success)
     {
         return result;
     }
     SDK_DelayAtLeastUs(1000, SystemCoreClock);
-    result = ICM42688P_ReadReg(handle, FIFO_CONFIG, &readVal, 1);
+    result = ICM42688P_ReadReg(handle, FIFO_CONFIG, &readVal, 1U);
     assert(readVal == fifoInitVal);
 
-    result = ICM42688P_WriteReg(handle, FIFO_CONFIG1, &fifoConfData, 1);
+    result = ICM42688P_WriteReg(handle, FIFO_CONFIG1, &fifoConfData, 1U);
 
     SDK_DelayAtLeastUs(1000, SystemCoreClock);
-    result = ICM42688P_ReadReg(handle, FIFO_CONFIG1, &readVal, 1);
+    result = ICM42688P_ReadReg(handle, FIFO_CONFIG1, &readVal, 1U);
     assert(readVal == fifoConfData);
 
     return result;
@@ -118,19 +118,19 @@ status_t ICM42688P_ConfigureTapDetectIBI(icm42688p_handle_t *handle)
     uint8_t enTapIbi = 0x1U;
     status_t result  = kStatus_Success;
 
-    result = ICM42688P_WriteReg(handle, APEX_CONFIG0, &confData, 1);
+    result = ICM42688P_WriteReg(handle, APEX_CONFIG0, &confData, 1U);
     if (result != kStatus_Success)
     {
         return result;
     }
 
-    result = ICM42688P_WriteReg(handle, BANK_SEL, &bankSel, 1);
+    result = ICM42688P_WriteReg(handle, BANK_SEL, &bankSel, 1U);
     if (result != kStatus_Success)
     {
         return result;
     }
 
-    result = ICM42688P_WriteReg(handle, INT_SOURCE10, &enTapIbi, 1);
+    result = ICM42688P_WriteReg(handle, INT_SOURCE10, &enTapIbi, 1U);
 
     return result;
 }
@@ -140,15 +140,15 @@ status_t ICM42688P_ReadSensorData(icm42688p_handle_t *handle, icm42688p_sensor_d
     uint8_t fifoData[16];
     status_t result = kStatus_Success;
 
-    result = ICM42688P_ReadReg(handle, FIFO_DATA, fifoData, 16);
+    result = ICM42688P_ReadReg(handle, FIFO_DATA, fifoData, 16U);
     if (result == kStatus_Success)
     {
-        sensorData->accelDataX = (fifoData[1] << 8) | fifoData[2];
-        sensorData->accelDataY = (fifoData[3] << 8) | fifoData[4];
-        sensorData->accelDataZ = (fifoData[5] << 8) | fifoData[6];
-        sensorData->gyroDataX  = (fifoData[7] << 8) | fifoData[8];
-        sensorData->gyroDataY  = (fifoData[9] << 8) | fifoData[10];
-        sensorData->gyroDataZ  = (fifoData[11] << 8) | fifoData[12];
+        sensorData->accelDataX = ((uint16_t)fifoData[1] << 8U) | (uint16_t)fifoData[2];
+        sensorData->accelDataY = ((uint16_t)fifoData[3] << 8U) | (uint16_t)fifoData[4];
+        sensorData->accelDataZ = ((uint16_t)fifoData[5] << 8U) | (uint16_t)fifoData[6];
+        sensorData->gyroDataX  = ((uint16_t)fifoData[7] << 8U) | (uint16_t)fifoData[8];
+        sensorData->gyroDataY  = ((uint16_t)fifoData[9] << 8U) | (uint16_t)fifoData[10];
+        sensorData->gyroDataZ  = ((uint16_t)fifoData[11] << 8U) | (uint16_t)fifoData[12];
     }
 
     return result;

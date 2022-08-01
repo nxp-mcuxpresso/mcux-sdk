@@ -3,13 +3,13 @@
  * Title:        arm_add_q15.c
  * Description:  Q15 vector addition
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/basic_math_functions.h"
 
 /**
   @ingroup groupMath
@@ -50,6 +50,56 @@
                    Results outside of the allowable Q15 range [0x8000 0x7FFF] are saturated.
  */
 
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
+
+#include "arm_helium_utils.h"
+
+void arm_add_q15(
+    const q15_t * pSrcA,
+    const q15_t * pSrcB,
+    q15_t * pDst,
+    uint32_t blockSize)
+{
+    uint32_t  blkCnt;           /* loop counters */
+    q15x8_t vecA;
+    q15x8_t vecB;
+
+    /* Compute 8 outputs at a time */
+    blkCnt = blockSize >> 3;
+    while (blkCnt > 0U)
+    {
+        /*
+         * C = A + B
+         * Add and then store the results in the destination buffer.
+         */
+        vecA = vld1q(pSrcA);
+        vecB = vld1q(pSrcB);
+        vst1q(pDst, vqaddq(vecA, vecB));
+        /*
+         * Decrement the blockSize loop counter
+         */
+        blkCnt--;
+        /*
+         * advance vector source and destination pointers
+         */
+        pSrcA  += 8;
+        pSrcB  += 8;
+        pDst   += 8;
+    }
+    /*
+     * tail
+     */
+    blkCnt = blockSize & 7;
+    if (blkCnt > 0U)
+    {
+        mve_pred16_t p0 = vctp16q(blkCnt);
+        vecA = vld1q(pSrcA);
+        vecB = vld1q(pSrcB);
+        vstrhq_p(pDst, vqaddq(vecA, vecB), p0);
+    }
+}
+
+#else
 void arm_add_q15(
   const q15_t * pSrcA,
   const q15_t * pSrcB,
@@ -120,7 +170,7 @@ void arm_add_q15(
   }
 
 }
-
+#endif /* defined(ARM_MATH_MVEI) */
 /**
   @} end of BasicAdd group
  */

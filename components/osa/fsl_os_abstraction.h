@@ -9,7 +9,14 @@
 #ifndef _FSL_OS_ABSTRACTION_H_
 #define _FSL_OS_ABSTRACTION_H_
 
+#ifndef SDK_COMPONENT_DEPENDENCY_FSL_COMMON
+#define SDK_COMPONENT_DEPENDENCY_FSL_COMMON (1U)
+#endif
+#if (defined(SDK_COMPONENT_DEPENDENCY_FSL_COMMON) && (SDK_COMPONENT_DEPENDENCY_FSL_COMMON > 0U))
 #include "fsl_common.h"
+#else
+#endif
+
 #include "fsl_os_abstraction_config.h"
 #include "fsl_component_generic_list.h"
 
@@ -86,6 +93,7 @@ typedef enum _osa_timer
 } osa_timer_t;
 
 /*! @brief Defines the return status of OSA's functions */
+#if (defined(SDK_COMPONENT_DEPENDENCY_FSL_COMMON) && (SDK_COMPONENT_DEPENDENCY_FSL_COMMON > 0U))
 typedef enum _osa_status
 {
     KOSA_StatusSuccess = kStatus_Success,                  /*!< Success */
@@ -94,6 +102,17 @@ typedef enum _osa_status
     KOSA_StatusIdle    = MAKE_STATUS(kStatusGroup_OSA, 3), /*!< Used for bare metal only, the wait object is not ready
                                                                  and timeout still not occur */
 } osa_status_t;
+#else
+typedef enum _osa_status
+{
+    KOSA_StatusSuccess = 0, /*!< Success */
+    KOSA_StatusError   = 1, /*!< Failed */
+    KOSA_StatusTimeout = 2, /*!< Timeout occurs while waiting */
+    KOSA_StatusIdle    = 3, /*!< Used for bare metal only, the wait object is not ready
+                                                and timeout still not occur */
+} osa_status_t;
+
+#endif
 
 #ifdef USE_RTOS
 #undef USE_RTOS
@@ -132,10 +151,10 @@ typedef enum _osa_status
 #define OSA_EVENT_HANDLE_SIZE (16U)
 #endif /* FSL_OSA_TASK_ENABLE */
 #if (defined(FSL_OSA_BM_TIMEOUT_ENABLE) && (FSL_OSA_BM_TIMEOUT_ENABLE > 0U))
-#define OSA_SEM_HANDLE_SIZE   (12U)
+#define OSA_SEM_HANDLE_SIZE   (16U)
 #define OSA_MUTEX_HANDLE_SIZE (12U)
 #else
-#define OSA_SEM_HANDLE_SIZE   (4U)
+#define OSA_SEM_HANDLE_SIZE   (8U)
 #define OSA_MUTEX_HANDLE_SIZE (4U)
 #endif
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
@@ -555,6 +574,29 @@ osa_status_t OSA_TaskDestroy(osa_task_handle_t taskHandle);
  * @retval KOSA_StatusError   if the semaphore can not be created.
  */
 osa_status_t OSA_SemaphoreCreate(osa_semaphore_handle_t semaphoreHandle, uint32_t initValue);
+
+/*!
+ * @brief Creates a binary semaphore.
+ *
+ * This function creates a binary semaphore
+ *
+ * Example below shows how to use this API to create the semaphore handle.
+ * @code
+ *   OSA_SEMAPHORE_HANDLE_DEFINE(semaphoreHandle);
+ *   OSA_SemaphoreCreateBinary((osa_semaphore_handle_t)semaphoreHandle);
+ * @endcode
+ *
+ * @param semaphoreHandle Pointer to a memory space of size OSA_SEM_HANDLE_SIZE allocated by the caller.
+ * The handle should be 4 byte aligned, because unaligned access doesn't be supported on some devices.
+ * You can define the handle in the following two ways:
+ * #OSA_SEMAPHORE_HANDLE_DEFINE(semaphoreHandle);
+ * or
+ * uint32_t semaphoreHandle[((OSA_SEM_HANDLE_SIZE + sizeof(uint32_t) - 1U) / sizeof(uint32_t))];
+ *
+ * @retval KOSA_StatusSuccess  the new binary semaphore if the binary semaphore is created successfully.
+ * @retval KOSA_StatusError   if the binary semaphore can not be created.
+ */
+osa_status_t OSA_SemaphoreCreateBinary(osa_semaphore_handle_t semaphoreHandle);
 
 /*!
  * @brief Destroys a previously created semaphore.

@@ -4,7 +4,7 @@
 /*            MIMXRT1176_cm4                                                 */
 /*  @version: 1.0                                                            */
 /*  @date:    2020-12-29                                                     */
-/*  @build:   b210402                                                        */
+/*  @build:   b211122                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
@@ -240,8 +240,8 @@ __isr_vector:
     .long   Reserved213_IRQHandler                          /* Reserved interrupt*/
     .long   Reserved214_IRQHandler                          /* Reserved interrupt*/
     .long   Reserved215_IRQHandler                          /* Reserved interrupt*/
-    .long   HWVAD_EVENT_IRQHandler                          /* HWVAD event interrupt*/
-    .long   HWVAD_ERROR_IRQHandler                          /* HWVAD error interrupt*/
+    .long   PDM_HWVAD_EVENT_IRQHandler                      /* HWVAD event interrupt*/
+    .long   PDM_HWVAD_ERROR_IRQHandler                      /* HWVAD error interrupt*/
     .long   PDM_EVENT_IRQHandler                            /* PDM event interrupt*/
     .long   PDM_ERROR_IRQHandler                            /* PDM error interrupt*/
     .long   EMVSIM1_IRQHandler                              /* EMVSIM1 interrupt*/
@@ -1098,21 +1098,21 @@ ENET_1G_1588_Timer_IRQHandler:
 
     .align 1
     .thumb_func
-    .weak HWVAD_EVENT_IRQHandler
-    .type HWVAD_EVENT_IRQHandler, %function
-HWVAD_EVENT_IRQHandler:
-    ldr   r0,=HWVAD_EVENT_DriverIRQHandler
+    .weak PDM_HWVAD_EVENT_IRQHandler
+    .type PDM_HWVAD_EVENT_IRQHandler, %function
+PDM_HWVAD_EVENT_IRQHandler:
+    ldr   r0,=PDM_HWVAD_EVENT_DriverIRQHandler
     bx    r0
-    .size HWVAD_EVENT_IRQHandler, . - HWVAD_EVENT_IRQHandler
+    .size PDM_HWVAD_EVENT_IRQHandler, . - PDM_HWVAD_EVENT_IRQHandler
 
     .align 1
     .thumb_func
-    .weak HWVAD_ERROR_IRQHandler
-    .type HWVAD_ERROR_IRQHandler, %function
-HWVAD_ERROR_IRQHandler:
-    ldr   r0,=HWVAD_ERROR_DriverIRQHandler
+    .weak PDM_HWVAD_ERROR_IRQHandler
+    .type PDM_HWVAD_ERROR_IRQHandler, %function
+PDM_HWVAD_ERROR_IRQHandler:
+    ldr   r0,=PDM_HWVAD_ERROR_DriverIRQHandler
     bx    r0
-    .size HWVAD_ERROR_IRQHandler, . - HWVAD_ERROR_IRQHandler
+    .size PDM_HWVAD_ERROR_IRQHandler, . - PDM_HWVAD_ERROR_IRQHandler
 
     .align 1
     .thumb_func
@@ -1400,8 +1400,8 @@ ENET_QOS_PMT_IRQHandler:
     def_irq_handler    Reserved213_IRQHandler
     def_irq_handler    Reserved214_IRQHandler
     def_irq_handler    Reserved215_IRQHandler
-    def_irq_handler    HWVAD_EVENT_DriverIRQHandler
-    def_irq_handler    HWVAD_ERROR_DriverIRQHandler
+    def_irq_handler    PDM_HWVAD_EVENT_DriverIRQHandler
+    def_irq_handler    PDM_HWVAD_ERROR_DriverIRQHandler
     def_irq_handler    PDM_EVENT_DriverIRQHandler
     def_irq_handler    PDM_ERROR_DriverIRQHandler
     def_irq_handler    EMVSIM1_IRQHandler

@@ -581,6 +581,9 @@ hal_gpio_status_t HAL_GpioExitLowpower(hal_gpio_handle_t gpioHandle)
     }
 
     GPIO_PinInit(s_GpioPort[gpioState->port], gpioState->pin, &gpioPinconfig);
-    (void)HAL_GpioSetTriggerMode(gpioHandle, (hal_gpio_interrupt_trigger_t)gpioState->trigger);
+    if (kHAL_GpioDirectionIn == gpioState->direction)
+    {
+        (void)HAL_GpioSetTriggerMode(gpioHandle, (hal_gpio_interrupt_trigger_t)gpioState->trigger);
+    }
     return kStatus_HAL_GpioSuccess;
 }

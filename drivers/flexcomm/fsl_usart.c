@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1033,6 +1033,56 @@ void USART_TransferHandleIRQ(USART_Type *base, usart_handle_t *handle)
         if (handle->callback != NULL)
         {
             handle->callback(base, handle, kStatus_USART_RxError, handle->userData);
+        }
+    }
+    /* TX under run, happens when slave is in synchronous mode and the data is not written in tx register in time. */
+    if ((base->FIFOSTAT & USART_FIFOSTAT_TXERR_MASK) != 0U)
+    {
+        /* Clear tx error state. */
+        base->FIFOSTAT |= USART_FIFOSTAT_TXERR_MASK;
+        /* Trigger callback. */
+        if (handle->callback != NULL)
+        {
+            handle->callback(base, handle, kStatus_USART_TxError, handle->userData);
+        }
+    }
+    /* If noise error. */
+    if ((base->STAT & USART_STAT_RXNOISEINT_MASK) != 0U)
+    {
+        /* Clear rx error state. */
+        base->STAT |= USART_STAT_RXNOISEINT_MASK;
+        /* clear rxFIFO */
+        base->FIFOCFG |= USART_FIFOCFG_EMPTYRX_MASK;
+        /* Trigger callback. */
+        if (handle->callback != NULL)
+        {
+            handle->callback(base, handle, kStatus_USART_NoiseError, handle->userData);
+        }
+    }
+    /* If framing error. */
+    if ((base->STAT & USART_STAT_FRAMERRINT_MASK) != 0U)
+    {
+        /* Clear rx error state. */
+        base->STAT |= USART_STAT_FRAMERRINT_MASK;
+        /* clear rxFIFO */
+        base->FIFOCFG |= USART_FIFOCFG_EMPTYRX_MASK;
+        /* Trigger callback. */
+        if (handle->callback != NULL)
+        {
+            handle->callback(base, handle, kStatus_USART_FramingError, handle->userData);
+        }
+    }
+    /* If parity error. */
+    if ((base->STAT & USART_STAT_PARITYERRINT_MASK) != 0U)
+    {
+        /* Clear rx error state. */
+        base->STAT |= USART_STAT_PARITYERRINT_MASK;
+        /* clear rxFIFO */
+        base->FIFOCFG |= USART_FIFOCFG_EMPTYRX_MASK;
+        /* Trigger callback. */
+        if (handle->callback != NULL)
+        {
+            handle->callback(base, handle, kStatus_USART_ParityError, handle->userData);
         }
     }
     while ((receiveEnabled && ((base->FIFOSTAT & USART_FIFOSTAT_RXNOTEMPTY_MASK) != 0U)) ||

@@ -3,7 +3,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/flexcomm
-    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpc_gpio
     ${CMAKE_CURRENT_LIST_DIR}/../../components/audio
     ${CMAKE_CURRENT_LIST_DIR}/../../components/button
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
@@ -13,6 +12,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/lpc54xxx
     ${CMAKE_CURRENT_LIST_DIR}/../../components/ft5406
     ${CMAKE_CURRENT_LIST_DIR}/../../components/gpio
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/gt911
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/led
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
@@ -24,9 +24,11 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phylan8720a
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/lpc_enet
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/silicon_id
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/video
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ctimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/dmic
@@ -83,11 +85,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpc_gpio)
 #    include(device_system)
 #    include(component_codec_i2c_LPC54628)
-#    include(driver_cmsis_lpc_gpio)
 #    include(driver_lpc_crc)
 #    include(driver_otp)
 #    include(middleware_usb_host_stack_LPC54628)
 #    include(driver_fmc)
+#    include(middleware_freertos-kernel_extension)
 #    include(driver_spifi_dma)
 #    include(middleware_baremetal)
 #    include(component_audio_flexcomm_i2s_dma_adapter)
@@ -95,7 +97,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_usart)
 #    include(driver_lpc_lcdc)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(driver_eeprom)
 #    include(driver_gint)
 #    include(driver_cmsis_flexcomm_i2c)
@@ -111,12 +112,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_spi_dma)
 #    include(driver_flexcomm_spi_freertos)
 #    include(middleware_sdmmc_host_sdif_polling)
-#    include(component_mrt_adapter)
 #    include(middleware_usb_host_ip3516hs_LPC54628)
 #    include(driver_pint)
 #    include(driver_lpc_enet)
 #    include(driver_sctimer)
 #    include(middleware_usb_device_common_header)
+#    include(component_silicon_id)
 #    include(driver_lpc_adc)
 #    include(driver_flashiap)
 #    include(driver_flexcomm)
@@ -125,7 +126,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_panic)
 #    include(utility_assert)
 #    include(driver_wm8904)
-#    include(middleware_freertos-kernel_extension)
+#    include(driver_mdio-common)
 #    include(CMSIS_Driver_Include_I2C)
 #    include(component_led)
 #    include(middleware_usb_common_header)
@@ -143,15 +144,15 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_ohci)
 #    include(middleware_usb_host_common_header)
 #    include(middleware_usb_host_cdc)
-#    include(driver_common)
+#    include(driver_gt911)
 #    include(driver_mma8652fc)
-#    include(driver_mdio-common)
+#    include(component_mrt_adapter)
 #    include(component_osa_free_rtos)
-#    include(CMSIS_Driver_Include_GPIO)
 #    include(middleware_sdmmc_sd)
 #    include(middleware_freertos-kernel_heap_3)
 #    include(CMSIS_Include_core_cm)
-#    include(middleware_freertos-kernel_heap_4)
+#    include(driver_video-common)
+#    include(driver_common)
 #    include(middleware_usb_device_ip3511fs)
 #    include(driver_sha)
 #    include(middleware_sdmmc_sdio)
@@ -186,6 +187,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_sdmmc_host_sdif)
 #    include(driver_power)
 #    include(driver_emc)
+#    include(utilities_misc_utilities_LPC54628)
 #    include(middleware_fatfs_usb)
 #    include(driver_dmic_dma)
 #    include(middleware_freertos-kernel_LPC54628)
@@ -205,11 +207,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_sdif)
 #    include(middleware_sdmmc_host_sdif_interrupt)
 #    include(driver_flexcomm_usart_dma)
-#    include(component_button)
+#    include(middleware_freertos-kernel_heap_4)
 #    include(driver_flexcomm_i2c_freertos)
 #    include(middleware_sdmmc_host_sdif_freertos)
 #    include(middleware_usb_host_phdc)
 #    include(driver_flexcomm_usart_freertos)
+#    include(component_button_LPC54628)
 #    include(component_wm8904_adapter)
 #    include(driver_reset)
 #    include(middleware_usb_device_stack_external)

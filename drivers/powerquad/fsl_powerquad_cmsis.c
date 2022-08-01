@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -852,6 +852,16 @@ arm_status arm_fir_init_q15(
     return ARM_MATH_SUCCESS;
 }
 
+/**
+ * brief Processing function for the floating-point FIR filter.
+ * param[in]  S          points to an instance of the floating-point FIR structure.
+ * param[in]  pSrc       points to the block of input data.
+ * param[out] pDst       points to the block of output data.
+ * param[in]  blockSize  number of samples to process.
+ *
+ * Note: Powerquad has a hardware limitation, when using it for FIR increment calculation, the address of pSrc needs to
+ * be a continuous address.
+ */
 void arm_fir_f32(const arm_fir_instance_f32 *S, const float32_t *pSrc, float32_t *pDst, uint32_t blockSize)
 {
     assert(NULL != S);

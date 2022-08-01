@@ -29,7 +29,7 @@
  * Definitions
  ******************************************************************************/
 
-enum _mipi_dsc
+enum _mipi_dcs
 {
     kMIPI_DCS_Nop                  = 0x00,
     kMIPI_DCS_SoftReset            = 0x01,
@@ -207,6 +207,41 @@ status_t MIPI_DSI_DCS_Write(mipi_dsi_device_t *device, const uint8_t *txData, in
  * @return Returns @ref kStatus_Success if success, otherwise returns error code.
  */
 status_t MIPI_DSI_GenericWrite(mipi_dsi_device_t *device, const uint8_t *txData, int32_t txDataSize);
+
+/*!
+ * @brief Set the maximum return data length.
+ *
+ * @param device The MIPI DSI device.
+ * @param sizeBytes Maximum return data length.
+ * @return Returns @ref kStatus_Success if success, otherwise returns error code.
+ */
+status_t MIPI_DSI_DCS_SetMaxReturnPktSize(mipi_dsi_device_t *device, uint16_t sizeBytes);
+
+/*!
+ * @brief Generic read.
+ *
+ * @param device The MIPI DSI device.
+ * @param txData The data to send before read.
+ * @param txDataSize Size of the data to send (in bytes).
+ * @param rxData The data to read.
+ * @param rxDataSize Size of the data to read (in bytes), after this function returns,
+ * it is the actual read length.
+ * @return Returns @ref kStatus_Success if success, otherwise returns error code.
+ */
+status_t MIPI_DSI_GenericRead(
+    mipi_dsi_device_t *device, const uint8_t *txData, int32_t txDataSize, uint8_t *rxData, int32_t *rxDataSize);
+
+/*!
+ * @brief Read DCS command(read type command, such as: Get Display ID).
+ *
+ * @param device The MIPI DSI device.
+ * @param dcsCmd The command to send before read.
+ * @param rxData The data to read.
+ * @param rxDataSize Size of the data to read (in bytes), after this function returns,
+ * it is the actual read length.
+ * @return Returns @ref kStatus_Success if success, otherwise returns error code.
+ */
+status_t MIPI_DSI_ReadCMD(mipi_dsi_device_t *device, enum _mipi_dcs dcsCmd, uint8_t *rxData, int32_t *rxDataSize);
 
 /*!
  * @brief Set the panel pixel format.

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -148,7 +148,9 @@ status_t SEMA42_TryLock(SEMA42_Type *base, uint8_t gateNum, uint8_t procNum)
  */
 void SEMA42_Lock(SEMA42_Type *base, uint8_t gateNum, uint8_t procNum)
 {
-    while (kStatus_SEMA42_Busy == SEMA42_TryLock(base, gateNum, procNum)){};
+    while (kStatus_Success != SEMA42_TryLock(base, gateNum, procNum))
+    {
+    }
 }
 
 /*!

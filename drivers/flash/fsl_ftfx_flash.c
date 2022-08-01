@@ -86,11 +86,11 @@ static status_t flash_validate_swap_indicator_address(ftfx_config_t *config, uin
 
 static volatile uint32_t *const kFPROTL = (volatile uint32_t *)(uint32_t)&FTFx_FPROT_LOW_REG;
 #if defined(FTFx_FLASH0_HAS_HIGH_PROT_REG) && FTFx_FLASH0_HAS_HIGH_PROT_REG
-static volatile uint32_t *const kFPROTH = (volatile uint32_t *)&FTFx_FPROT_HIGH_REG;
+static volatile uint32_t *const kFPROTH = (volatile uint32_t *)(uint32_t)&FTFx_FPROT_HIGH_REG;
 #endif /* FTFx_FLASH0_HAS_HIGH_PROT_REG */
 #if defined(FTFx_FLASH1_HAS_INT_PROT_REG) && FTFx_FLASH1_HAS_INT_PROT_REG
-volatile uint8_t *const kFPROTSL = (volatile uint8_t *)&FTFx_FPROTSL_REG;
-volatile uint8_t *const kFPROTSH = (volatile uint8_t *)&FTFx_FPROTSH_REG;
+volatile uint8_t *const kFPROTSL = (volatile uint8_t *)(uint32_t)&FTFx_FPROTSL_REG;
+volatile uint8_t *const kFPROTSH = (volatile uint8_t *)(uint32_t)&FTFx_FPROTSH_REG;
 #endif /* FTFx_FLASH1_HAS_INT_PROT_REG */
 
 /*!

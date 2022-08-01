@@ -4,6 +4,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/DSP
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt1170/xip
+    ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt1170/xmcd
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpi2c
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpspi
@@ -17,6 +18,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/nand/semc
     ${CMAKE_CURRENT_LIST_DIR}/../../components/ft5406_rt
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/gpio
     ${CMAKE_CURRENT_LIST_DIR}/../../components/gt911
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
@@ -27,6 +29,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet_qos
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/silicon_id
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video
@@ -146,7 +149,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_display-rm68200)
 #    include(driver_aoi)
 #    include(driver_enc)
-#    include(driver_cache_lmem)
+#    include(driver_flexio_i2c_master)
 #    include(driver_nand_flash-common)
 #    include(middleware_baremetal)
 #    include(driver_display-common)
@@ -156,7 +159,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart_edma)
 #    include(driver_ocotp)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(driver_pxp)
 #    include(driver_xip_device)
 #    include(driver_mipi_dsi_split)
@@ -167,13 +169,15 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_cmsis_nn)
 #    include(component_serial_manager_uart)
 #    include(driver_display-hx8394)
+#    include(utility_debug_console_lite)
 #    include(middleware_usb_host_stack_MIMXRT1176_cm4)
 #    include(driver_cmsis_lpuart)
 #    include(driver_soc_src)
-#    include(CMSIS_DSP_Library)
+#    include(driver_xmcd_evkmimxrt1170)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_edma)
 #    include(middleware_sdmmc_osa_freertos)
+#    include(component_silicon_id)
 #    include(driver_rdc_sema42)
 #    include(middleware_usb_device_cdc_external)
 #    include(driver_cmsis_enet)
@@ -187,6 +191,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_enet)
 #    include(middleware_mmcau_cm4_cm7)
 #    include(middleware_freertos-kernel_extension)
+#    include(utilities_misc_utilities_MIMXRT1176_cm4)
 #    include(CMSIS_Driver_Include_I2C)
 #    include(driver_enet_qos)
 #    include(driver_camera-receiver-common)
@@ -215,13 +220,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_camera-common)
 #    include(driver_camera-device-common)
 #    include(component_lpi2c_adapter)
-#    include(driver_key_manager)
+#    include(driver_dc-fb-lcdifv2)
 #    include(middleware_freertos-kernel_heap_3)
 #    include(CMSIS_Include_core_cm)
 #    include(driver_video-common)
 #    include(middleware_freertos-kernel_heap_4)
-#    include(middleware_sdmmc_sdio)
-#    include(utility_debug_console_lite)
+#    include(CMSIS_DSP_Source)
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_gemmlowp)
 #    include(driver_snvs_hp)
 #    include(driver_pdm)
@@ -273,7 +277,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_phy)
 #    include(driver_dcdc_soc)
 #    include(driver_dc-fb-elcdif)
-#    include(driver_flexio_i2c_master)
+#    include(driver_cache_lmem)
 #    include(middleware_multicore_erpc_eRPC_port_freertos)
 #    include(middleware_usb_device_controller_driver_MIMXRT1176_cm4)
 #    include(driver_xecc)
@@ -293,8 +297,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_smartcard_phy_emvsim)
 #    include(driver_acmp)
 #    include(driver_edma_MIMXRT1176_cm4)
-#    include(driver_dc-fb-lcdifv2)
+#    include(driver_key_manager)
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_ruy)
+#    include(component_igpio_adapter)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_transport)
 #    include(component_osa)
 #    include(driver_fxos8700cq)

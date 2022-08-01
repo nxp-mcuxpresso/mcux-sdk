@@ -1,11 +1,14 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_i3c.h"
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_RESET) && FSL_FEATURE_I3C_HAS_NO_RESET)
+#include "fsl_reset.h"
+#endif
 #include <stdlib.h>
 #include <string.h>
 
@@ -595,7 +598,7 @@ void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_H
 {
     uint32_t instance = I3C_GetInstance(base);
     uint32_t configValue;
-    uint8_t matchCount;
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate the clock. */
     CLOCK_EnableClock(kI3cClocks[instance]);
@@ -620,16 +623,33 @@ void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_H
 
     I3C_MasterSetBaudRate(base, &config->baudRate_Hz, sourceClock_Hz);
 
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
+    uint8_t matchCount;
     /* Caculate bus available condition match value for current slow clock, count value provides 1us.*/
     matchCount = (uint8_t)(config->slowClock_Hz / 1000000UL);
+#endif
 
     configValue = base->SCONFIG;
 
-    configValue &= ~(I3C_SCONFIG_SADDR_MASK | I3C_SCONFIG_BAMATCH_MASK | I3C_SCONFIG_OFFLINE_MASK |
-                     I3C_SCONFIG_IDRAND_MASK | I3C_SCONFIG_DDROK_MASK | I3C_SCONFIG_S0IGNORE_MASK |
-                     I3C_SCONFIG_MATCHSS_MASK | I3C_SCONFIG_NACK_MASK | I3C_SCONFIG_SLVENA_MASK);
-    configValue |= I3C_SCONFIG_SADDR(config->staticAddr) | I3C_SCONFIG_BAMATCH(matchCount) |
-                   I3C_SCONFIG_OFFLINE(config->offline) | I3C_SCONFIG_IDRAND(config->enableRandomPart) |
+    configValue &= ~(I3C_SCONFIG_SADDR_MASK |
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
+                     I3C_SCONFIG_BAMATCH_MASK |
+#endif
+                     I3C_SCONFIG_OFFLINE_MASK |
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND)
+                     I3C_SCONFIG_IDRAND_MASK |
+#endif
+                     I3C_SCONFIG_DDROK_MASK | I3C_SCONFIG_S0IGNORE_MASK | I3C_SCONFIG_MATCHSS_MASK |
+                     I3C_SCONFIG_NACK_MASK | I3C_SCONFIG_SLVENA_MASK);
+
+    configValue |= I3C_SCONFIG_SADDR(config->staticAddr) |
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
+                   I3C_SCONFIG_BAMATCH(matchCount) |
+#endif
+                   I3C_SCONFIG_OFFLINE(config->offline) |
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND)
+                   I3C_SCONFIG_IDRAND(config->enableRandomPart) |
+#endif
                    I3C_SCONFIG_DDROK((0U != (config->hdrMode & (uint8_t)kI3C_HDRModeDDR)) ? 1U : 0U) |
                    I3C_SCONFIG_S0IGNORE(config->ignoreS0S1Error) | I3C_SCONFIG_MATCHSS(config->matchSlaveStartStop) |
                    I3C_SCONFIG_NACK(config->nakAllRequest) | I3C_SCONFIG_SLVENA(config->enableSlave);
@@ -1498,6 +1518,11 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
         }
     }
 
+    if (result == kStatus_I3C_Nak)
+    {
+        (void)I3C_MasterEmitStop(base, true);
+    }
+
     /* Clear all flags. */
     I3C_MasterClearStatusFlags(base, (uint32_t)kMasterClearFlags);
     /* Enable I3C IRQ sources. */
@@ -1696,18 +1721,22 @@ static status_t I3C_RunTransferStateMachine(I3C_Type *base, i3c_master_handle_t 
                     if ((xfer->direction == kI3C_Read) || (0UL == xfer->dataSize))
                     {
                         base->MWDATABE = (uint8_t)((xfer->subaddress) >> (8U * xfer->subaddressSize));
-                        handle->state  = (uint8_t)kWaitForCompletionState;
+
+                        if (0UL == xfer->dataSize)
+                        {
+                            handle->state = (uint8_t)kWaitForCompletionState;
+                        }
+                        else
+                        {
+                            /* xfer->dataSize != 0U, xfer->direction = kI3C_Read */
+                            handle->state = (uint8_t)kWaitRepeatedStartCompleteState;
+                        }
                     }
                     else
                     {
-                        /* Next state, receive data begin. */
+                        /* Next state, transfer data. */
                         handle->state = (uint8_t)kTransferDataState;
                         base->MWDATAB = (uint8_t)((xfer->subaddress) >> (8U * xfer->subaddressSize));
-                    }
-
-                    if ((xfer->busType != kI3C_TypeI3CDdr) && (xfer->direction == kI3C_Read))
-                    {
-                        handle->state = (uint8_t)kWaitRepeatedStartCompleteState;
                     }
                 }
                 else
@@ -2133,12 +2162,14 @@ void I3C_SlaveGetDefaultConfig(i3c_slave_config_t *slaveConfig)
 
     (void)memset(slaveConfig, 0, sizeof(*slaveConfig));
 
-    slaveConfig->enableSlave      = true;
-    slaveConfig->isHotJoin        = false;
-    slaveConfig->vendorID         = 0x11BU;
+    slaveConfig->enableSlave = true;
+    slaveConfig->isHotJoin   = false;
+    slaveConfig->vendorID    = 0x11BU;
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND)
     slaveConfig->enableRandomPart = false;
-    slaveConfig->partNumber       = 0;
-    slaveConfig->dcr              = 0; /* Generic device. */
+#endif
+    slaveConfig->partNumber = 0;
+    slaveConfig->dcr        = 0; /* Generic device. */
     slaveConfig->bcr =
         0; /* BCR[7:6]: device role, I3C slave(2b'00), BCR[5]: SDR Only / SDR and HDR Capable,  SDR and HDR
               Capable(1b'1), BCR[4]: Bridge Identifier, Not a bridge device(1b'0), BCR[3]: Offline Capable, device is
@@ -2169,8 +2200,7 @@ void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32
     assert(NULL != slaveConfig);
     assert(0UL != slowClock_Hz);
 
-    uint32_t configValue = base->SCONFIG;
-    uint8_t matchCount;
+    uint32_t configValue;
     uint32_t instance = I3C_GetInstance(base);
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate the clock. */
@@ -2182,14 +2212,31 @@ void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32
     RESET_PeripheralReset(kI3cResets[instance]);
 #endif
 
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
+    uint8_t matchCount;
     /* Caculate bus available condition match value for current slow clock, count value provides 1us.*/
     matchCount = (uint8_t)(slowClock_Hz / 1000000UL);
+#endif
 
-    configValue &= ~(I3C_SCONFIG_SADDR_MASK | I3C_SCONFIG_BAMATCH_MASK | I3C_SCONFIG_OFFLINE_MASK |
-                     I3C_SCONFIG_IDRAND_MASK | I3C_SCONFIG_DDROK_MASK | I3C_SCONFIG_S0IGNORE_MASK |
-                     I3C_SCONFIG_MATCHSS_MASK | I3C_SCONFIG_NACK_MASK | I3C_SCONFIG_SLVENA_MASK);
-    configValue |= I3C_SCONFIG_SADDR(slaveConfig->staticAddr) | I3C_SCONFIG_BAMATCH(matchCount) |
-                   I3C_SCONFIG_OFFLINE(slaveConfig->offline) | I3C_SCONFIG_IDRAND(slaveConfig->enableRandomPart) |
+    configValue = base->SCONFIG;
+    configValue &= ~(I3C_SCONFIG_SADDR_MASK |
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
+                     I3C_SCONFIG_BAMATCH_MASK |
+#endif
+                     I3C_SCONFIG_OFFLINE_MASK |
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND)
+                     I3C_SCONFIG_IDRAND_MASK |
+#endif
+                     I3C_SCONFIG_DDROK_MASK | I3C_SCONFIG_S0IGNORE_MASK | I3C_SCONFIG_MATCHSS_MASK |
+                     I3C_SCONFIG_NACK_MASK | I3C_SCONFIG_SLVENA_MASK);
+    configValue |= I3C_SCONFIG_SADDR(slaveConfig->staticAddr) |
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
+                   I3C_SCONFIG_BAMATCH(matchCount) |
+#endif
+                   I3C_SCONFIG_OFFLINE(slaveConfig->offline) |
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND)
+                   I3C_SCONFIG_IDRAND(slaveConfig->enableRandomPart) |
+#endif
                    I3C_SCONFIG_DDROK((0U != (slaveConfig->hdrMode & (uint8_t)kI3C_HDRModeDDR)) ? 1U : 0U) |
                    I3C_SCONFIG_S0IGNORE(slaveConfig->ignoreS0S1Error) |
                    I3C_SCONFIG_MATCHSS(slaveConfig->matchSlaveStartStop) |
@@ -2198,10 +2245,14 @@ void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32
     base->SVENDORID &= ~I3C_SVENDORID_VID_MASK;
     base->SVENDORID |= I3C_SVENDORID_VID(slaveConfig->vendorID);
 
+#if defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND
+    base->SIDPARTNO = slaveConfig->partNumber;
+#else
     if (!slaveConfig->enableRandomPart)
     {
         base->SIDPARTNO = slaveConfig->partNumber;
     }
+#endif
 
     base->SIDEXT &= ~(I3C_SIDEXT_BCR_MASK | I3C_SIDEXT_DCR_MASK);
     base->SIDEXT |= I3C_SIDEXT_BCR(slaveConfig->bcr) | I3C_SIDEXT_DCR(slaveConfig->dcr);

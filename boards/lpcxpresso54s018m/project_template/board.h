@@ -184,6 +184,15 @@
 #define BOARD_TOUCH_PANEL_RST_GPIO 2
 #define BOARD_TOUCH_PANEL_RST_PIN  27
 
+/* @Brief Board touch panel configuration */
+#define BOARD_TOUCH_I2C_BASEADDR I2C2
+#define BOARD_TOUCH_RST_GPIO     GPIO
+#define BOARD_TOUCH_RST_PORT     2
+#define BOARD_TOUCH_RST_PIN      27
+#define BOARD_TOUCH_INT_GPIO     GPIO
+#define BOARD_TOUCH_INT_PORT     4
+#define BOARD_TOUCH_INT_PIN      0
+
 /* Serial MWM WIFI */
 #define BOARD_SERIAL_MWM_PORT_CLK_FREQ CLOCK_GetFlexCommClkFreq(4)
 #define BOARD_SERIAL_MWM_PORT          USART4
@@ -226,6 +235,10 @@ void BOARD_Codec_I2C_Init(void);
 status_t BOARD_Codec_I2C_Send(
     uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, const uint8_t *txBuff, uint8_t txBuffSize);
 status_t BOARD_Codec_I2C_Receive(
+    uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, uint8_t *rxBuff, uint8_t rxBuffSize);
+status_t BOARD_Touch_I2C_Send(
+    uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, const uint8_t *txBuff, uint8_t txBuffSize);
+status_t BOARD_Touch_I2C_Receive(
     uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, uint8_t *rxBuff, uint8_t rxBuffSize);
 #endif /* SDK_I2C_BASED_COMPONENT_USED */
 

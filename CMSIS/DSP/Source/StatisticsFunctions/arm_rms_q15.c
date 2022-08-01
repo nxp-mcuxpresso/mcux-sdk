@@ -3,13 +3,13 @@
  * Title:        arm_rms_q15.c
  * Description:  Root Mean Square of the elements of a Q15 vector
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/statistics_functions.h"
 
 /**
   @ingroup groupStats
@@ -54,7 +54,21 @@
                    Finally, the 34.30 result is truncated to 34.15 format by discarding the lower
                    15 bits, and then saturated to yield a result in 1.15 format.
  */
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
+void arm_rms_q15(
+  const q15_t * pSrc,
+        uint32_t blockSize,
+        q15_t * pResult)
+{
+    q63_t pow = 0.0f;
+    q15_t normalizedPower;
 
+    arm_power_q15(pSrc, blockSize, &pow);
+
+    normalizedPower=__SSAT((pow / (q63_t) blockSize) >> 15,16);
+    arm_sqrt_q15(normalizedPower, pResult);
+}
+#else
 void arm_rms_q15(
   const q15_t * pSrc,
         uint32_t blockSize,
@@ -128,6 +142,7 @@ void arm_rms_q15(
   /* Store result in destination */
   arm_sqrt_q15(__SSAT((sum / (q63_t)blockSize) >> 15, 16), pResult);
 }
+#endif /* defined(ARM_MATH_MVEI) */
 
 /**
   @} end of RMS group

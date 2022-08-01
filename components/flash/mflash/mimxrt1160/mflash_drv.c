@@ -52,7 +52,7 @@ flexspi_device_config_t deviceconfig = {
 };
 #endif
 
-const uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
+static uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
     /* Normal read mode -SDR */
     [4 * NOR_CMD_LUT_SEQ_IDX_READ_NORMAL] =
         FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, 0x03, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 0x18),

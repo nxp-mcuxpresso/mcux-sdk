@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.2, 2017-06-08
-**     Build:               b210823
+**     Build:               b220303
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -81,7 +81,7 @@
 /* ADC module features */
 
 /* @brief Do not has input select (register INSEL). */
-#define FSL_FEATURE_ADC_HAS_NO_INSEL (1)
+#define FSL_FEATURE_ADC_HAS_NO_INSEL  (1)
 /* @brief Has ASYNMODE bitfile in CTRL reigster. */
 #define FSL_FEATURE_ADC_HAS_CTRL_ASYNMODE (1)
 /* @brief Has ASYNMODE bitfile in CTRL reigster. */
@@ -108,6 +108,16 @@
 
 /* CTIMER module features */
 
+/* @brief CTIMER has no capture channel. */
+#define FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE (0)
+/* @brief CTIMER has no capture 2 interrupt. */
+#define FSL_FEATURE_CTIMER_HAS_NO_IR_CR2INT (0)
+/* @brief CTIMER capture 3 interrupt. */
+#define FSL_FEATURE_CTIMER_HAS_IR_CR3INT (1)
+/* @brief Has CTIMER CCR_CAP2 (register bits CCR[CAP2RE][CAP2FE][CAP2I]. */
+#define FSL_FEATURE_CTIMER_HAS_NO_CCR_CAP2 (0)
+/* @brief Has CTIMER CCR_CAP3 (register bits CCR[CAP3RE][CAP3FE][CAP3I]). */
+#define FSL_FEATURE_CTIMER_HAS_CCR_CAP3 (1)
 /* @brief Writing a zero asserts the CTIMER reset. */
 #define FSL_FEATURE_CTIMER_WRITE_ZERO_ASSERT_RESET (1)
 
@@ -139,7 +149,7 @@
 /* MRT module features */
 
 /* @brief number of channels. */
-#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (4)
+#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS  (4)
 /* @brief Has no MULTITASK bitfile in MODCFG reigster. */
 #define FSL_FEATURE_MRT_HAS_NO_MODCFG_MULTITASK (1)
 /* @brief Has no INUSE bitfile in STAT reigster. */
@@ -237,3 +247,4 @@
 #define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
 
 #endif /* _LPC844_FEATURES_H_ */
+

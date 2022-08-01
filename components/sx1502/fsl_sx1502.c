@@ -1,5 +1,5 @@
 /*
- * Copyright  2021 NXP
+ * Copyright  2021-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -248,7 +248,12 @@ status_t SX1502_IO_Set(sx1502_handle_t *handle, uint8_t ioMask)
     }
 
     dataValue |= (ioMask);
-    SX1502_WriteRegister(handle, SX1502_REGDATA, dataValue);
+
+    result = SX1502_WriteRegister(handle, SX1502_REGDATA, dataValue);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
 
     return SX1502_IO_SetDirection(handle, ioMask, kSX1502_IO_Output);
 }
@@ -273,7 +278,12 @@ status_t SX1502_IO_Clear(sx1502_handle_t *handle, uint8_t ioMask)
     }
 
     dataValue &= ~(ioMask);
-    SX1502_WriteRegister(handle, SX1502_REGDATA, dataValue);
+
+    result = SX1502_WriteRegister(handle, SX1502_REGDATA, dataValue);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
 
     return SX1502_IO_SetDirection(handle, ioMask, kSX1502_IO_Output);
 }
@@ -309,6 +319,7 @@ status_t SX1502_IO_SetDirection(sx1502_handle_t *handle, uint8_t ioMask, sx1502_
             dirValue |= (ioMask);
             break;
         default:
+            /* Avoid MISRA 16.4 violation */
             break;
     }
 
@@ -339,7 +350,12 @@ status_t SX1502_IO_OutputControl(sx1502_handle_t *handle, uint8_t ioMask, uint8_
     }
 
     dataValue = (dataValue & ~ioMask) | ioPattern;
-    SX1502_WriteRegister(handle, SX1502_REGDATA, dataValue);
+
+    result = SX1502_WriteRegister(handle, SX1502_REGDATA, dataValue);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
 
     return SX1502_IO_SetDirection(handle, ioMask, kSX1502_IO_Output);
 }

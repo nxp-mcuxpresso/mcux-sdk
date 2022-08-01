@@ -240,3 +240,25 @@ void PDM_TransferAbortReceiveSDMA(PDM_Type *base, pdm_sdma_handle_t *handle)
     /* Set the handle state */
     handle->state = kStatus_PDM_Idle;
 }
+
+/*!
+ * brief Terminate all the PDM sdma receive transfer.
+ *
+ * param base PDM base pointer.
+ * param handle PDM SDMA handle pointer.
+ */
+void PDM_TransferTerminateReceiveSDMA(PDM_Type *base, pdm_sdma_handle_t *handle)
+{
+    assert(handle != NULL);
+
+    /* abort current transfer */
+    PDM_TransferAbortReceiveSDMA(base, handle);
+
+    /* Clear all the internal information */
+    (void)memset(handle->bdPool, 0, sizeof(handle->bdPool));
+    (void)memset(handle->pdmQueue, 0, sizeof(handle->pdmQueue));
+    (void)memset(handle->transferSize, 0, sizeof(handle->transferSize));
+
+    handle->queueUser   = 0U;
+    handle->queueDriver = 0U;
+}

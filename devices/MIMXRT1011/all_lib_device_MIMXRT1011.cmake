@@ -11,6 +11,8 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8960
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/nor
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/nor/flexspi
     ${CMAKE_CURRENT_LIST_DIR}/../../components/ft6x06
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
@@ -74,7 +76,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpuart_freertos)
 #    include(middleware_usb_device_controller_driver_MIMXRT1011)
 #    include(driver_dmamux)
-#    include(utility_shell)
+#    include(driver_nor_flash-controller-flexspi)
 #    include(driver_cmsis_lpuart)
 #    include(device_system)
 #    include(driver_snvs_lp)
@@ -93,7 +95,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart_edma)
 #    include(driver_ocotp)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(driver_xip_device)
 #    include(component_serial_manager)
 #    include(driver_pit)
@@ -101,23 +102,25 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager_uart)
 #    include(middleware_azure_rtos_ux_sp)
 #    include(component_log_backend_debugconsole)
-#    include(CMSIS_DSP_Library)
+#    include(utilities_misc_utilities_MIMXRT1011)
 #    include(driver_ili9341)
 #    include(driver_tempmon)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_edma)
 #    include(middleware_usb_device_common_header)
+#    include(utility_shell)
 #    include(device_startup)
-#    include(component_serial_manager_usb_cdc)
+#    include(component_panic)
 #    include(driver_gpt)
 #    include(utility_assert)
 #    include(driver_rtwdog)
 #    include(middleware_freertos-kernel_extension)
 #    include(CMSIS_Driver_Include_I2C)
+#    include(driver_nor_flash-common)
 #    include(middleware_usb_common_header)
 #    include(driver_cmsis_lpi2c)
 #    include(driver_soc_flexram_allocate)
-#    include(component_panic)
+#    include(component_serial_manager_usb_cdc)
 #    include(driver_clock)
 #    include(device_CMSIS)
 #    include(CMSIS_Driver_Include_Common)
@@ -135,6 +138,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_dcdc_1)
 #    include(middleware_azure_rtos_fx_sp)
+#    include(CMSIS_DSP_Source)
 #    include(middleware_azure_rtos_nxd_template_MIMXRT1011)
 #    include(driver_snvs_hp)
 #    include(middleware_usb_host_msd)
@@ -156,6 +160,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_azure_rtos_tx_sp)
 #    include(utility_debug_console)
 #    include(component_codec_i2c_MIMXRT1011)
+#    include(component_osa_thread)
 #    include(driver_cmsis_lpspi)
 #    include(middleware_usb_device_ehci)
 #    include(component_wm8960_adapter)

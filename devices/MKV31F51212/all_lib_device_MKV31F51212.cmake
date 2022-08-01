@@ -39,7 +39,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/smc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/motor_control
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -102,12 +101,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Driver_Include_Common)
 #    include(utility_debug_console_lite)
 #    include(component_osa_bm)
-#    include(utilities_misc_utilities)
 #    include(driver_rnga)
 #    include(driver_common)
 #    include(driver_smc)
 #    include(driver_crc)
-#    include(middleware_motor_control_mc_drivers_adc16_ftm_float)
+#    include(utilities_misc_utilities_MKV31F51212)
 #    include(component_osa_free_rtos)
 #    include(driver_fxos8700cq)
 #    include(driver_pit)

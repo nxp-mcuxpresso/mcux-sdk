@@ -52,6 +52,7 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(utilities_misc_utilities_MIMX8QM6_cm4_core0)
 #    include(driver_phy-device-ar8031)
 #    include(middleware_freertos-kernel_MIMX8QM6_cm4_core0)
 #    include(driver_esai)
@@ -100,7 +101,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_sc_event)
 #    include(driver_tstmr)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(CMSIS_Include_core_cm4)
 #    include(driver_scfw_api)
 #    include(CMSIS_Include_common)

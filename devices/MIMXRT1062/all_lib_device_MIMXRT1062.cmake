@@ -23,19 +23,18 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/ft5406_rt
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
     ${CMAKE_CURRENT_LIST_DIR}/../../components/gpio
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/gt911
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/internal_flash
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/log
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/mem_manager
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/messaging
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
     ${CMAKE_CURRENT_LIST_DIR}/../../components/panic
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyksz8081
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/rng
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/silicon_id
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
@@ -103,8 +102,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/ethermind
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/ethermind/port/pal/mcux/bluetooth/controller/wifi
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
@@ -139,7 +136,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_ewm)
 #    include(driver_flexio)
 #    include(driver_aoi)
-#    include(component_flexspi_nor_flash_adapter_rt1060evk)
 #    include(driver_enc)
 #    include(driver_flexio_i2c_master)
 #    include(middleware_baremetal)
@@ -153,26 +149,25 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart_edma)
 #    include(driver_ocotp)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(driver_pxp)
 #    include(driver_xip_device)
 #    include(component_mflash_rt1060)
 #    include(middleware_eiq_deepviewrt_deps_stb)
 #    include(component_serial_manager)
-#    include(middleware_wireless_ethermind_wifi_fwdnld)
 #    include(driver_camera-device-ov7725)
 #    include(driver_pit)
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_cmsis_nn)
 #    include(middleware_azure_rtos_ux)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
+#    include(utility_debug_console_lite)
 #    include(component_log_backend_debugconsole)
 #    include(CMSIS_Driver_Include_Ethernet_MAC)
-#    include(CMSIS_DSP_Library)
 #    include(driver_tempmon)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_edma)
 #    include(middleware_sdmmc_osa_freertos)
+#    include(component_silicon_id)
 #    include(middleware_usb_device_cdc_external)
 #    include(driver_cmsis_enet)
 #    include(utility_shell)
@@ -209,6 +204,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_mflash_dummy)
 #    include(driver_common)
 #    include(middleware_eiq_gui_printf)
+#    include(component_button_MIMXRT1062)
 #    include(driver_kpp)
 #    include(middleware_multicore_erpc_common)
 #    include(middleware_usb_host_ehci)
@@ -224,9 +220,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_dcdc_1)
 #    include(middleware_azure_rtos_ux_template_MIMXRT1062)
 #    include(middleware_azure_rtos_tx)
-#    include(middleware_sdmmc_host_usdhc_polling_MIMXRT1062)
 #    include(middleware_azure_rtos_nxd_template_MIMXRT1062)
 #    include(middleware_sdmmc_sdio)
+#    include(CMSIS_DSP_Source)
 #    include(middleware_eiq_deepviewrt_deps_json)
 #    include(driver_snvs_hp)
 #    include(middleware_sdmmc_host_usdhc_interrupt_MIMXRT1062)
@@ -245,7 +241,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_erpc_eRPC_server)
 #    include(CMSIS_Driver_Include_USART)
 #    include(CMSIS_Driver_Include_SPI)
-#    include(utility_debug_console_lite)
+#    include(driver_gt911)
 #    include(component_audio_sai_edma_adapter)
 #    include(driver_mdio-common)
 #    include(middleware_usb_host_phdc)
@@ -266,10 +262,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_hid)
 #    include(component_osa_thread)
 #    include(driver_lpi2c_freertos)
+#    include(utilities_misc_utilities_MIMXRT1062)
 #    include(component_mflash_common)
 #    include(driver_cmsis_lpspi)
 #    include(middleware_usb_device_ehci)
-#    include(component_software_rng_adapter)
+#    include(component_flexspi_nor_flash_adapter_rt1060evk)
 #    include(middleware_azure_rtos_azure_iot)
 #    include(middleware_multicore_erpc_eRPC_port_stdlib)
 #    include(utility_assert_lite)
@@ -307,14 +304,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_spi)
 #    include(middleware_freertos-kernel_MIMXRT1062)
 #    include(component_pit_adapter)
-#    include(component_messaging)
+#    include(middleware_sdmmc_host_usdhc_polling_MIMXRT1062)
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_gemmlowp)
-#    include(middleware_edgefast_bluetooth_k32w061_controller)
 #    include(driver_fbdev)
 #    include(middleware_eiq_tensorflow_lite_micro_cmsis_nn)
 #    include(middleware_eiq_tensorflow_lite_micro)
 #    include(driver_cs42448)
-#    include(component_button)
 #    include(middleware_sdmmc_sd)
 #    include(driver_src)
 #    include(driver_xip_board_evkmimxrt1060)
@@ -327,7 +322,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_elcdif)
 #    include(driver_igpio)
 #    include(driver_pwm)
-#    include(component_mem_manager)
 #    include(middleware_sdmmc_host_usdhc_azurertos)
 #    include(driver_sai)
 #    include(middleware_eiq_glow)

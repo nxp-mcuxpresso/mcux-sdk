@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 - 2020 NXP
+ * Copyright 2018 - 2022 NXP
  * All rights reserved.
  *
  *
@@ -217,12 +217,12 @@ hal_gpio_status_t HAL_GpioInit(hal_gpio_handle_t gpioHandle, hal_gpio_pin_config
     if (kHAL_GpioDirectionOut == pinConfig->direction)
     {
         gpioPinConfig.pinDirection = kGPIO_DigitalOutput;
+        gpioPinConfig.outputLogic  = pinConfig->level;
     }
     else
     {
         gpioPinConfig.pinDirection = kGPIO_DigitalInput;
     }
-    gpioPinConfig.outputLogic = pinConfig->level;
 
     /* Critical protection */
     regPrimask = DisableGlobalIRQ();
@@ -235,7 +235,20 @@ hal_gpio_status_t HAL_GpioInit(hal_gpio_handle_t gpioHandle, hal_gpio_pin_config
 
     if (1U == portNeedInit)
     {
-        GPIO_PortInit(GPIO, gpioState->pin.port);
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+        /*! @brief Array to map FGPIO instance number to clock name. */
+        const clock_ip_name_t gpioClockName[] = GPIO_CLOCKS;
+
+        assert(gpioState->pin.port < ARRAY_SIZE(gpioClockName));
+        CLOCK_EnableClock(gpioClockName[gpioState->pin.port]);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if !(defined(FSL_FEATURE_GPIO_HAS_NO_RESET) && FSL_FEATURE_GPIO_HAS_NO_RESET)
+        /*! @brief Pointers to GPIO resets for each instance. */
+        const reset_ip_name_t gpioResets[] = GPIO_RSTS_N;
+
+        RESET_ClearPeripheralReset(gpioResets[gpioState->pin.port]);
+#endif /* FSL_FEATURE_GPIO_HAS_NO_RESET */
     }
 
     GPIO_PinInit(GPIO, gpioState->pin.port, gpioState->pin.pin, &gpioPinConfig);

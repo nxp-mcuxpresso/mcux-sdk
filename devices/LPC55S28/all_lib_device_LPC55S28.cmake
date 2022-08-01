@@ -3,7 +3,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/flexcomm
-    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpc_gpio
     ${CMAKE_CURRENT_LIST_DIR}/../../components/audio
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
@@ -74,18 +73,18 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_system)
 #    include(middleware_sdmmc_host_sdif_azurertos)
 #    include(driver_lpadc)
-#    include(driver_cmsis_lpc_gpio)
+#    include(middleware_azure_rtos_nxd_template_LPC55S28)
 #    include(middleware_freertos-kernel_cm33_nonsecure_port)
 #    include(component_codec_i2c_LPC55S28)
-#    include(driver_lpc_crc)
+#    include(middleware_azure_rtos_fx_template_LPC55S28)
 #    include(middleware_azure_rtos_nxd_sp)
+#    include(utilities_misc_utilities_LPC55S28)
 #    include(middleware_baremetal)
 #    include(component_audio_flexcomm_i2s_dma_adapter)
 #    include(middleware_sdmmc_host_sdif)
 #    include(component_log_backend_ringbuffer)
 #    include(driver_flexcomm_usart)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(driver_ostimer)
 #    include(driver_gint)
 #    include(driver_cmsis_flexcomm_i2c)
@@ -137,13 +136,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_mflash_file_LPC55S28)
 #    include(driver_inputmux_connections)
 #    include(component_osa_free_rtos)
-#    include(CMSIS_Driver_Include_GPIO)
 #    include(middleware_sdmmc_sd)
 #    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
+#    include(driver_lpc_crc)
 #    include(middleware_azure_rtos_fx_sp)
 #    include(driver_hashcrypt)
-#    include(middleware_azure_rtos_fx_template_LPC55S28)
 #    include(component_usart_adapter)
 #    include(middleware_usb_host_msd)
 #    include(driver_wwdt)
@@ -181,7 +179,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_cmsis_flexcomm_spi)
 #    include(middleware_usb_host_video)
 #    include(component_lists)
-#    include(middleware_azure_rtos_nxd_template_LPC55S28)
 #    include(driver_mrt)
 #    include(middleware_azure_rtos_ux_template_LPC55S28)
 #    include(component_osa)

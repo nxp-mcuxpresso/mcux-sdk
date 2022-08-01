@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.3.2. */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+/*! @brief reset driver version 2.3.3. */
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
 /*@}*/
 
 /*!
@@ -76,6 +76,7 @@ typedef enum _SYSCON_RSTn
 
     kDMA1_RST_SHIFT_RSTn       = 131072 | 1U,  /**< DMA1 reset control */
     kCMP_RST_SHIFT_RSTn        = 131072 | 2U,  /**< CMP reset control */
+    kSRAM3_RST_SHIFT_RSTn      = 131072 | 6U,  /**< SRAM3 reset control */
     kFREQME_RST_SHIFT_RSTn     = 131072 | 8U,  /**< FREQME reset control */
     kCDOG_RST_SHIFT_RSTn       = 131072 | 11U, /**< Code Watchdog reset control */
     kRNG_RST_SHIFT_RSTn        = 131072 | 13U, /**< RNG  reset control */
@@ -176,6 +177,18 @@ typedef enum _SYSCON_RSTn
     {                            \
         kOSTIMER0_RST_SHIFT_RSTn \
     } /* Reset bits for OSTIMER peripheral */
+#define CASPER_RSTS            \
+    {                          \
+        kCASPER_RST_SHIFT_RSTn \
+    } /* Reset bits for Casper peripheral */
+#define HASHCRYPT_RSTS            \
+    {                             \
+        kHASHCRYPT_RST_SHIFT_RSTn \
+    } /* Reset bits for Hashcrypt peripheral */
+#define PUF_RSTS            \
+    {                       \
+        kPUF_RST_SHIFT_RSTn \
+    } /* Reset bits for PUF peripheral */
 typedef SYSCON_RSTn_t reset_ip_name_t;
 
 /*******************************************************************************

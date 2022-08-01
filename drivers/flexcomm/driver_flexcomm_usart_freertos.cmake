@@ -11,9 +11,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
-if(${MCUX_DEVICE} STREQUAL "LPC55S36")
-    include(middleware_freertos-kernel_LPC55S36)
-endif()
 if(${MCUX_DEVICE} STREQUAL "LPC5506CPXXXX")
     include(middleware_freertos-kernel_LPC5506CPXXXX)
 endif()

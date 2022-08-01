@@ -2,6 +2,7 @@
 ** ###################################################################
 **     Processors:          LPC5516JBD100
 **                          LPC5516JBD64
+**                          LPC5516JEV59
 **                          LPC5516JEV98
 **
 **     Compilers:           GNU C Compiler
@@ -11,13 +12,13 @@
 **
 **     Reference manual:    LPC55S1x/LPC551x User manual Rev.0.6  15 November 2019
 **     Version:             rev. 1.1, 2019-12-03
-**     Build:               b211009
+**     Build:               b220301
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC5516
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause

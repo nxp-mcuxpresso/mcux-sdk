@@ -202,12 +202,13 @@ hal_timer_status_t HAL_TimerUpdateTimeout(hal_timer_handle_t halTimerHandle, uin
 #endif
     assert(halTimerHandle);
     hal_timer_handle_struct_t *halTimerState = halTimerHandle;
-    halTimerState->timeout                   = timeout;
+    halTimerState->timeout                   = timeout + 1U;
     tickCount = (uint32_t)USEC_TO_COUNT(halTimerState->timeout, halTimerState->timerClock_Hz);
     if ((tickCount < 1U) || (tickCount > 0xfffffff0U))
     {
         return kStatus_HAL_TimerOutOfRanger;
     }
+    tickCount += 1U;
 #if (defined(LPTMR_USE_FREE_RUNNING) && (LPTMR_USE_FREE_RUNNING > 0))
     totalCount = (uint64_t)tickCount + (uint64_t)LPTMR_GetCurrentTimerCount(s_LptmrBase[halTimerState->instance]);
     if (totalCount > 0xffffffff)

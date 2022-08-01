@@ -511,6 +511,24 @@ I2C4_IRQHandler:
 
     .align 1
     .thumb_func
+    .weak PDM_HWVAD_EVENT_IRQHandler
+    .type PDM_HWVAD_EVENT_IRQHandler, %function
+PDM_HWVAD_EVENT_IRQHandler:
+    ldr   r0,=PDM_HWVAD_EVENT_DriverIRQHandler
+    bx    r0
+    .size PDM_HWVAD_EVENT_IRQHandler, . - PDM_HWVAD_EVENT_IRQHandler
+
+    .align 1
+    .thumb_func
+    .weak PDM_HWVAD_ERROR_IRQHandler
+    .type PDM_HWVAD_ERROR_IRQHandler, %function
+PDM_HWVAD_ERROR_IRQHandler:
+    ldr   r0,=PDM_HWVAD_ERROR_DriverIRQHandler
+    bx    r0
+    .size PDM_HWVAD_ERROR_IRQHandler, . - PDM_HWVAD_ERROR_IRQHandler
+
+    .align 1
+    .thumb_func
     .weak I2S3_IRQHandler
     .type I2S3_IRQHandler, %function
 I2S3_IRQHandler:
@@ -666,8 +684,8 @@ ENET_1588_IRQHandler:
     def_irq_handler    Reserved57_IRQHandler
     def_irq_handler    ISI_CH1_IRQHandler
     def_irq_handler    ISI_CH2_IRQHandler
-    def_irq_handler    PDM_HWVAD_EVENT_IRQHandler
-    def_irq_handler    PDM_HWVAD_ERROR_IRQHandler
+    def_irq_handler    PDM_HWVAD_EVENT_DriverIRQHandler
+    def_irq_handler    PDM_HWVAD_ERROR_DriverIRQHandler
     def_irq_handler    GPT6_IRQHandler
     def_irq_handler    SCTR_IRQ0_IRQHandler
     def_irq_handler    SCTR_IRQ1_IRQHandler

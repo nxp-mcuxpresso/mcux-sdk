@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2020 , NXP
+ * Copyright 2017 - 2021 , NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -782,11 +782,14 @@ uint32_t CLOCK_GetFlexCommInputClock(uint32_t id)
 /* Get FLEXCOMM Clk */
 uint32_t CLOCK_GetFlexCommClkFreq(uint32_t id)
 {
-    uint32_t freq = 0U;
+    uint32_t freq   = 0U;
+    uint32_t frgMul = 0U;
+    uint32_t frgDiv = 0U;
 
-    freq = CLOCK_GetFlexCommInputClock(id);
-    return freq / (1UL + (SYSCON->FLEXFRGXCTRL[id] & SYSCON_FLEXFRG0CTRL_MULT_MASK) /
-                             ((SYSCON->FLEXFRGXCTRL[id] & SYSCON_FLEXFRG0CTRL_DIV_MASK) + 1UL));
+    freq   = CLOCK_GetFlexCommInputClock(id);
+    frgMul = (SYSCON->FLEXFRGXCTRL[id] & SYSCON_FLEXFRG0CTRL_MULT_MASK) >> 8U;
+    frgDiv = SYSCON->FLEXFRGXCTRL[id] & SYSCON_FLEXFRG0CTRL_DIV_MASK;
+    return (uint32_t)(((uint64_t)freq * ((uint64_t)frgDiv + 1ULL)) / (frgMul + frgDiv + 1UL));
 }
 
 /* Get HS_LPSI Clk */
@@ -1119,7 +1122,7 @@ static float findPll0MMult(void)
                        (float)(uint32_t)(1UL << PLL0_SSCG_MD_INT_P));
         mMult       = (float)mMult_int + mMult_fract;
     }
-    if (0ULL == ((uint64_t)mMult))
+    if(0ULL == ((uint64_t)mMult))
     {
         mMult = 1.0F;
     }

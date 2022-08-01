@@ -72,7 +72,7 @@
 /* ADC module features */
 
 /* @brief Do not has input select (register INSEL). */
-#define FSL_FEATURE_ADC_HAS_NO_INSEL (1)
+#define FSL_FEATURE_ADC_HAS_NO_INSEL  (1)
 /* @brief Has ASYNMODE bitfile in CTRL reigster. */
 #define FSL_FEATURE_ADC_HAS_CTRL_ASYNMODE (0)
 /* @brief Has ASYNMODE bitfile in CTRL reigster. */
@@ -118,7 +118,7 @@
 /* MRT module features */
 
 /* @brief number of channels. */
-#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (4)
+#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS  (4)
 /* @brief Has no MULTITASK bitfile in MODCFG reigster. */
 #define FSL_FEATURE_MRT_HAS_NO_MODCFG_MULTITASK (1)
 /* @brief Has no INUSE bitfile in STAT reigster. */
@@ -208,3 +208,4 @@
 #define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
 
 #endif /* _LPC832_FEATURES_H_ */
+

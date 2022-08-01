@@ -191,27 +191,16 @@ static inline status_t DbgConsole_ExitLowpower(void)
 
 #endif /* ((SDK_DEBUGCONSOLE == DEBUGCONSOLE_REDIRECT_TO_SDK) || defined(SDK_DEBUGCONSOLE_UART)) */
 
-#if SDK_DEBUGCONSOLE
+#if (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE == DEBUGCONSOLE_REDIRECT_TO_SDK))
 /*!
  * @brief Writes formatted output to the standard output stream.
  *
  * Call this function to write a formatted output to the standard output stream.
  *
- * @param   formatString Format control string.
+ * @param   fmt_s Format control string.
  * @return  Returns the number of characters printed or a negative value if an error occurs.
  */
-int DbgConsole_Printf(const char *formatString, ...);
-
-/*!
- * @brief Writes formatted output to the standard output stream.
- *
- * Call this function to write a formatted output to the standard output stream.
- *
- * @param   formatString Format control string.
- * @param   formatStringArg Format arguments.
- * @return  Returns the number of characters printed or a negative value if an error occurs.
- */
-int DbgConsole_Vprintf(const char *formatString, va_list formatStringArg);
+int DbgConsole_Printf(const char *fmt_s, ...);
 
 /*!
  * @brief Writes formatted output to the standard output stream.
@@ -291,20 +280,6 @@ int DbgConsole_BlockingPrintf(const char *fmt_s, ...);
  * @return  Returns the number of characters printed or a negative value if an error occurs.
  */
 int DbgConsole_BlockingVprintf(const char *fmt_s, va_list formatStringArg);
-
-/*!
- * @brief Writes formatted output to the standard output stream with the blocking mode.
- *
- * Call this function to write a formatted output to the standard output stream with the blocking mode.
- * The function will send data with blocking mode no matter the DEBUG_CONSOLE_TRANSFER_NON_BLOCKING set
- * or not.
- * The function could be used in system ISR mode with DEBUG_CONSOLE_TRANSFER_NON_BLOCKING set.
- *
- * @param   formatString Format control string.
- * @param   formatStringArg Format arguments.
- * @return  Returns the number of characters printed or a negative value if an error occurs.
- */
-int DbgConsole_BlockingVprintf(const char *formatString, va_list formatStringArg);
 
 /*!
  * @brief Debug console flush.

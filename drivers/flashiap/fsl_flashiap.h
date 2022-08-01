@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_FLASHIAP_DRIVER_VERSION (MAKE_VERSION(2, 0, 5)) /*!< Version 2.0.5. */
-                                                            /*@}*/
+#define FSL_FLASHIAP_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
+/*@}*/
 
 /*!
  * @brief Flashiap status codes.
@@ -84,7 +84,7 @@ enum _flashiap_commands
 };
 
 /*! @brief IAP_ENTRY API function type */
-typedef void (*IAP_ENTRY_T)(uint32_t cmd[5], uint32_t stat[4]);
+typedef void (*FLASHIAP_ENTRY_T)(uint32_t cmd[5], uint32_t stat[4]);
 
 /*******************************************************************************
  * API
@@ -106,7 +106,7 @@ extern "C" {
  */
 static inline void iap_entry(uint32_t *cmd_param, uint32_t *status_result)
 {
-    ((IAP_ENTRY_T)FSL_FEATURE_SYSCON_IAP_ENTRY_LOCATION)(cmd_param, status_result);
+    ((FLASHIAP_ENTRY_T)FSL_FEATURE_SYSCON_IAP_ENTRY_LOCATION)(cmd_param, status_result);
 }
 
 /*!

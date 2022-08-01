@@ -14,7 +14,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief wm8904 volume mapping */
-#define WM8904_SWAP_UINT16_BYTE_SEQUENCE(x) (__REV16(x))
+#define WM8904_SWAP_UINT16_BYTE_SEQUENCE(x) ((((x) & 0x00ffU) << 8U) | (((x) & 0xff00U) >> 8U))
 #define WM8904_MAP_SAMPLERATE(x)          \
     ((x) == kWM8904_SampleRate8kHz ?      \
          8000U :                          \
@@ -369,13 +369,6 @@ status_t WM8904_Init(wm8904_handle_t *handle, wm8904_config_t *wm8904Config)
         return result;
     }
 
-    result =
-        WM8904_ModifyRegister(handle, WM8904_CLK_RATES_2, (uint16_t)(1UL << 14U), (uint16_t)(config->sysClkSource));
-    if (kStatus_WM8904_Success != result)
-    {
-        return result;
-    }
-
     if (config->sysClkSource == kWM8904_SysClkSourceFLL)
     {
         result = WM8904_SetFLLConfig(handle, config->fll);
@@ -392,6 +385,13 @@ status_t WM8904_Init(wm8904_handle_t *handle, wm8904_config_t *wm8904Config)
 
     result = WM8904_CheckAudioFormat(handle, &config->format, sysclk);
     if (result != kStatus_WM8904_Success)
+    {
+        return result;
+    }
+
+    result =
+        WM8904_ModifyRegister(handle, WM8904_CLK_RATES_2, (uint16_t)(1UL << 14U), (uint16_t)(config->sysClkSource));
+    if (kStatus_WM8904_Success != result)
     {
         return result;
     }
@@ -548,16 +548,16 @@ status_t WM8904_SetMasterClock(wm8904_handle_t *handle, uint32_t sysclk, uint32_
             audioInterface |= 1U;
             break;
         case 20:
-            /* Avoid MISRA 16.4 violation */
+            audioInterface |= 2U;
             break;
         case 30:
-            /* Avoid MISRA 16.4 violation */
+            audioInterface |= 3U;
             break;
         case 40:
-            /* Avoid MISRA 16.4 violation */
+            audioInterface |= 4U;
             break;
         case 50:
-            audioInterface |= (uint16_t)bclkDiv / 10U;
+            audioInterface |= 5U;
             break;
         case 55:
             audioInterface |= 6U;
@@ -569,13 +569,13 @@ status_t WM8904_SetMasterClock(wm8904_handle_t *handle, uint32_t sysclk, uint32_
             audioInterface |= 8U;
             break;
         case 100:
-            /* Avoid MISRA 16.4 violation */
+            audioInterface |= 9U;
             break;
         case 110:
-            /* Avoid MISRA 16.4 violation */
+            audioInterface |= 10U;
             break;
         case 120:
-            audioInterface |= (uint16_t)bclkDiv / 10U - 1U;
+            audioInterface |= 11U;
             break;
         case 160:
             audioInterface |= 12U;

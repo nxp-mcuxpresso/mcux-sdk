@@ -62,7 +62,7 @@
  * - Version 2.2.2
  *   - Enable hardware interleaving to RAMX0 and RAMX1 for CASPER by feature macro FSL_FEATURE_CASPER_RAM_HW_INTERLEAVE
  * - Version 2.2.3
- *   - Fix MISRA-C 2012 issues.
+ *   - Added macro into CASPER_Init and CASPER_Deinit to support devices without clock and reset control.
  */
 #define FSL_CASPER_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
 /*@}*/

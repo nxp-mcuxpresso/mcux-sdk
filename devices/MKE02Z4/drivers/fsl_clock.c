@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2019 , NXP
+ * Copyright 2016 - 2019 , 2022 NXP
  * All rights reserved.
  *
  *
@@ -17,14 +17,14 @@
 #define FSL_COMPONENT_ID "platform.drivers.clock"
 #endif
 
-#define ICS_C2_BDIV_VAL ((ICS->C2 & ICS_C2_BDIV_MASK) >> ICS_C2_BDIV_SHIFT)
-#define ICS_S_CLKST_VAL ((ICS->S & ICS_S_CLKST_MASK) >> ICS_S_CLKST_SHIFT)
+#define ICS_C2_BDIV_VAL  ((ICS->C2 & ICS_C2_BDIV_MASK) >> ICS_C2_BDIV_SHIFT)
+#define ICS_S_CLKST_VAL  ((ICS->S & ICS_S_CLKST_MASK) >> ICS_S_CLKST_SHIFT)
 #define ICS_S_IREFST_VAL ((ICS->S & ICS_S_IREFST_MASK) >> ICS_S_IREFST_SHIFT)
-#define ICS_C1_RDIV_VAL ((ICS->C1 & ICS_C1_RDIV_MASK) >> ICS_C1_RDIV_SHIFT)
+#define ICS_C1_RDIV_VAL  ((ICS->C1 & ICS_C1_RDIV_MASK) >> ICS_C1_RDIV_SHIFT)
 #define OSC_CR_RANGE_VAL ((OSC0->CR & OSC_CR_RANGE_MASK) >> OSC_CR_RANGE_SHIFT)
 #define OSC_MODE_MASK \
     (OSC_CR_OSCOS_MASK | OSC_CR_HGO_MASK | OSC_CR_RANGE_MASK | OSC_CR_OSCEN_MASK | OSC_CR_OSCSTEN_MASK)
-#define ICS_C2_LP_VAL ((ICS->C2 & ICS_C2_LP_MASK) >> ICS_C2_LP_SHIFT)
+#define ICS_C2_LP_VAL  ((ICS->C2 & ICS_C2_LP_MASK) >> ICS_C2_LP_SHIFT)
 #define SIM_BUSDIV_VAL ((SIM->BUSDIV & SIM_BUSDIV_BUSDIV_MASK) >> SIM_BUSDIV_BUSDIV_SHIFT)
 
 /* ICS_S_CLKST definition. */
@@ -931,6 +931,8 @@ static const ics_mode_t ICSModeMatrix[6][6] = {
  */
 status_t CLOCK_SetIcsConfig(const ics_config_t *config)
 {
+    assert(config->icsMode != kICS_ModeError);
+
     ics_mode_t next_mode;
     status_t status = kStatus_Success;
 
@@ -938,6 +940,11 @@ status_t CLOCK_SetIcsConfig(const ics_config_t *config)
     CLOCK_SetInternalRefClkConfig(config->irClkEnableMode);
 
     next_mode = CLOCK_GetMode();
+
+    if (next_mode == kICS_ModeError)
+    {
+        return kStatus_ICS_ModeUnreachable;
+    }
 
     do
     {

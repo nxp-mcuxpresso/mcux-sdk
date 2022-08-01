@@ -3,13 +3,13 @@
  * Title:        FastMathFunctions.c
  * Description:  Combination of all fast math function source files.
  *
- * $Date:        18. March 2019
- * $Revision:    V1.0.0
+ * $Date:        16. March 2020
+ * $Revision:    V1.1.0
  *
  * Target Processor: Cortex-M cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2019-2020 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,12 +26,37 @@
  * limitations under the License.
  */
 
+#if !defined(ARM_DSP_CONFIG_TABLES) || defined(ARM_FAST_ALLOW_TABLES)
+
+#if !defined(ARM_DSP_CONFIG_TABLES) || defined(ARM_ALL_FAST_TABLES) || defined(ARM_TABLE_SIN_F32)
 #include "arm_cos_f32.c"
+#endif
+
+#if !defined(ARM_DSP_CONFIG_TABLES) || defined(ARM_ALL_FAST_TABLES) || defined(ARM_TABLE_SIN_Q15)
 #include "arm_cos_q15.c"
+#endif 
+
+#if !defined(ARM_DSP_CONFIG_TABLES) || defined(ARM_ALL_FAST_TABLES) || defined(ARM_TABLE_SIN_Q31)
 #include "arm_cos_q31.c"
+#endif 
+
+#if !defined(ARM_DSP_CONFIG_TABLES) || defined(ARM_ALL_FAST_TABLES) || defined(ARM_TABLE_SIN_F32)
 #include "arm_sin_f32.c"
+#endif 
+
+#if !defined(ARM_DSP_CONFIG_TABLES) || defined(ARM_ALL_FAST_TABLES) || defined(ARM_TABLE_SIN_Q15)
 #include "arm_sin_q15.c"
+#endif 
+
+#if !defined(ARM_DSP_CONFIG_TABLES) || defined(ARM_ALL_FAST_TABLES) || defined(ARM_TABLE_SIN_Q31)
 #include "arm_sin_q31.c"
+#endif 
+
+#endif
+
 #include "arm_sqrt_q15.c"
 #include "arm_sqrt_q31.c"
+#include "arm_vexp_f32.c"
+#include "arm_vlog_f32.c"
+#include "arm_divide_q15.c"
 

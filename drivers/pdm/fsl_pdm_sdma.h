@@ -24,7 +24,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PDM_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 0)) /*!< Version 2.6.0 */
+#define FSL_PDM_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 7, 0)) /*!< Version 2.7.0 */
 /*@}*/
 
 typedef struct _pdm_sdma_handle pdm_sdma_handle_t;
@@ -119,6 +119,14 @@ void PDM_SetChannelConfigSDMA(PDM_Type *base,
                               pdm_sdma_handle_t *handle,
                               uint32_t channel,
                               const pdm_channel_config_t *config);
+
+/*!
+ * @brief Terminate all the PDM sdma receive transfer.
+ *
+ * @param base PDM base pointer.
+ * @param handle PDM SDMA handle pointer.
+ */
+void PDM_TransferTerminateReceiveSDMA(PDM_Type *base, pdm_sdma_handle_t *handle);
 
 /*! @} */
 

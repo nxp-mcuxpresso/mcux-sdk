@@ -37,7 +37,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/trgmux
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tsi
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/motor_control
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -50,7 +49,6 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(driver_lpuart_freertos)
-#    include(utilities_misc_utilities)
 #    include(middleware_freertos-kernel_MKE17Z7)
 #    include(utility_shell)
 #    include(driver_flexio_spi_edma)
@@ -80,11 +78,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_core_cm)
 #    include(driver_flexio_spi)
 #    include(middleware_freertos-kernel_extension)
+#    include(utilities_misc_utilities_MKE17Z7)
 #    include(driver_flexio)
 #    include(driver_ftm)
 #    include(driver_trgmux)
 #    include(CMSIS_Driver_Include_I2C)
-#    include(middleware_motor_control_mc_drivers_adc16sngl_ftm_frac)
 #    include(utility_assert_lite)
 #    include(driver_tsi_v5)
 #    include(driver_flexio_i2c_master)

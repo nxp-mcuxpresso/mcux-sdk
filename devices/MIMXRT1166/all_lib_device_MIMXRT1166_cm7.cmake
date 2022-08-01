@@ -28,6 +28,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyrtl8211f
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/silicon_id
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video
@@ -150,6 +151,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_dc-fb-common)
 #    include(driver_lpadc)
 #    include(driver_soc_mipi_csi2rx)
+#    include(utilities_misc_utilities_MIMXRT1166_cm7)
 #    include(middleware_usb_host_video)
 #    include(driver_mdio-enet)
 #    include(driver_flexio_uart)
@@ -175,7 +177,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart_edma)
 #    include(driver_ocotp)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(middleware_usb_host_stack_MIMXRT1166_cm7)
 #    include(driver_pxp)
 #    include(driver_edma_MIMXRT1166_cm7)
@@ -190,14 +191,15 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_azure_rtos_ux)
 #    include(component_serial_manager_uart)
 #    include(driver_flexspi_edma)
+#    include(utility_debug_console_lite)
 #    include(component_log_backend_debugconsole)
 #    include(CMSIS_Driver_Include_Ethernet_MAC)
 #    include(driver_soc_src)
-#    include(CMSIS_DSP_Library)
 #    include(middleware_multicore_rpmsg_lite_imxrt1160_freertos)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_edma)
 #    include(middleware_sdmmc_osa_freertos)
+#    include(component_silicon_id)
 #    include(driver_rdc_sema42)
 #    include(middleware_usb_device_cdc_external)
 #    include(driver_cmsis_enet)
@@ -253,7 +255,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_video-common)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(middleware_sdmmc_sdio)
-#    include(utility_debug_console_lite)
+#    include(CMSIS_DSP_Source)
 #    include(middleware_sdmmc_host_usdhc_interrupt_MIMXRT1166_cm7)
 #    include(middleware_eiq_deepviewrt_deps_json)
 #    include(driver_snvs_hp)
@@ -366,7 +368,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_flatbuffers)
 #    include(middleware_sdmmc_host_usdhc_freertos_MIMXRT1166_cm7)
 #    include(driver_elcdif)
-#    include(driver_xip_board)
 #    include(driver_igpio)
 #    include(driver_pwm)
 #    include(driver_mipi_csi2rx)

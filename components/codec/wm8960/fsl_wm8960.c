@@ -75,7 +75,7 @@ static status_t WM8960_SetInternalPllConfig(
     }
 
     pllR = (uint32_t)(((uint64_t)pllF2 * sysclkDiv * 1000U) / (inputMclk / 1000U));
-    pllK = (uint32_t)(((uint64_t)(1UL << 24U) * (pllR - pllN * 1000U * 1000U)) / 1000U / 1000U);
+    pllK = (uint32_t)(((1UL << 24U) * ((uint64_t)pllR - (uint64_t)pllN * 1000U * 1000U)) / 1000U / 1000U);
     if (pllK != 0U)
     {
         fracMode = 1U;

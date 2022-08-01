@@ -970,8 +970,8 @@ uint32_t CLOCK_GetUsbClkFreq(void)
         case CLKCTL0_USBHSFCLKSEL_SEL(1):
             freq = CLOCK_GetMainClkFreq();
             break;
-        case CLKCTL0_USBHSFCLKSEL_SEL(2):
-            freq = CLK_FRO_DIV8_CLK;
+        case CLKCTL0_USBHSFCLKSEL_SEL(3):
+            freq = CLOCK_GetAux0PllClkFreq();
             break;
         default:
             freq = 0U;

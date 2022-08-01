@@ -782,11 +782,14 @@ uint32_t CLOCK_GetFlexCommInputClock(uint32_t id)
 /* Get FLEXCOMM Clk */
 uint32_t CLOCK_GetFlexCommClkFreq(uint32_t id)
 {
-    uint32_t freq = 0U;
+    uint32_t freq   = 0U;
+    uint32_t frgMul = 0U;
+    uint32_t frgDiv = 0U;
 
-    freq = CLOCK_GetFlexCommInputClock(id);
-    return freq / (1UL + (SYSCON->FLEXFRGXCTRL[id] & SYSCON_FLEXFRG0CTRL_MULT_MASK) /
-                             ((SYSCON->FLEXFRGXCTRL[id] & SYSCON_FLEXFRG0CTRL_DIV_MASK) + 1UL));
+    freq   = CLOCK_GetFlexCommInputClock(id);
+    frgMul = (SYSCON->FLEXFRGXCTRL[id] & SYSCON_FLEXFRG0CTRL_MULT_MASK) >> 8U;
+    frgDiv = SYSCON->FLEXFRGXCTRL[id] & SYSCON_FLEXFRG0CTRL_DIV_MASK;
+    return (uint32_t)(((uint64_t)freq * ((uint64_t)frgDiv + 1ULL)) / (frgMul + frgDiv + 1UL));
 }
 
 /* Get HS_LPSI Clk */

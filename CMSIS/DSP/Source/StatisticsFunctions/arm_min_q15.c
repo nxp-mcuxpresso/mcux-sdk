@@ -3,13 +3,13 @@
  * Title:        arm_min_q15.c
  * Description:  Minimum value of a Q15 vector
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/statistics_functions.h"
 
 /**
   @ingroup groupStats
@@ -46,7 +46,60 @@
   @param[out]    pIndex     index of minimum value returned here
   @return        none
  */
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
 
+#include "arm_helium_utils.h"
+
+void arm_min_q15(
+  const q15_t * pSrc,
+        uint32_t blockSize,
+        q15_t * pResult,
+        uint32_t * pIndex)
+{
+
+    int32_t         blkCnt;     /* loop counters */
+    q15x8_t         extremValVec = vdupq_n_s16(Q15_MAX);
+    q15_t           minValue = Q15_MAX;
+    uint16x8_t      indexVec;
+    uint16x8_t      extremIdxVec;
+    mve_pred16_t    p0;
+    uint16_t        extremIdxArr[8];
+
+    indexVec = vidupq_u16(0U, 1);
+
+    blkCnt = blockSize;
+    do {
+        mve_pred16_t    p = vctp16q(blkCnt);
+        q15x8_t         extremIdxVal = vld1q_z_s16(pSrc, p);
+        /*
+         * Get current min per lane and current index per lane
+         * when a min is selected
+         */
+        p0 = vcmpleq_m(extremIdxVal, extremValVec, p);
+
+        extremValVec = vorrq_m(extremValVec, extremIdxVal, extremIdxVal, p0);
+        /* store per-lane extrema indexes */
+        vst1q_p_u16(extremIdxArr, indexVec, p0);
+
+        indexVec += 8;
+        pSrc += 8;
+        blkCnt -= 8;
+    }
+    while (blkCnt > 0);
+
+    /* Get min value across the vector   */
+    minValue = vminvq(minValue, extremValVec);
+
+    /* set index for lower values to min possible index   */
+    p0 = vcmpleq(extremValVec, minValue);
+    extremIdxVec = vld1q_u16(extremIdxArr);
+
+    indexVec = vpselq(extremIdxVec, vdupq_n_u16(blockSize - 1), p0);
+    *pIndex = vminvq(blockSize - 1, indexVec);
+    *pResult = minValue;
+ 
+}
+#else
 void arm_min_q15(
   const q15_t * pSrc,
         uint32_t blockSize,
@@ -143,6 +196,7 @@ void arm_min_q15(
   *pResult = out;
   *pIndex = outIndex;
 }
+#endif /* defined(ARM_MATH_MVEI) */
 
 /**
   @} end of Min group

@@ -1,7 +1,7 @@
 //*****************************************************************************
 // MIMXRT1165_cm4 startup code for use with MCUXpresso IDE
 //
-// Version : 020421
+// Version : 221121
 //*****************************************************************************
 //
 // Copyright 2016-2021 NXP
@@ -46,7 +46,6 @@ extern "C" {
 //*****************************************************************************
 #include <NXP/crp.h>
 __CRP const unsigned int CRP_WORD = CRP_NO_CRP ;
-
 
 //*****************************************************************************
 // Declaration of external SystemInit function
@@ -280,8 +279,8 @@ WEAK void Reserved212_IRQHandler(void);
 WEAK void Reserved213_IRQHandler(void);
 WEAK void Reserved214_IRQHandler(void);
 WEAK void Reserved215_IRQHandler(void);
-WEAK void HWVAD_EVENT_IRQHandler(void);
-WEAK void HWVAD_ERROR_IRQHandler(void);
+WEAK void PDM_HWVAD_EVENT_IRQHandler(void);
+WEAK void PDM_HWVAD_ERROR_IRQHandler(void);
 WEAK void PDM_EVENT_IRQHandler(void);
 WEAK void PDM_ERROR_IRQHandler(void);
 WEAK void EMVSIM1_IRQHandler(void);
@@ -503,8 +502,8 @@ void Reserved212_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved213_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved214_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved215_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void HWVAD_EVENT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void HWVAD_ERROR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void PDM_HWVAD_EVENT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void PDM_HWVAD_ERROR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PDM_EVENT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PDM_ERROR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void EMVSIM1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
@@ -542,8 +541,6 @@ extern void _vStackTop(void);
 // The vector table.
 // This relies on the linker script to place at correct location in memory.
 //*****************************************************************************
-
-
 
 extern void (* const g_pfnVectors[])(void);
 extern void * __Vectors __attribute__ ((alias ("g_pfnVectors")));
@@ -769,8 +766,8 @@ void (* const g_pfnVectors[])(void) = {
     Reserved213_IRQHandler,              // 213: Reserved interrupt
     Reserved214_IRQHandler,              // 214: Reserved interrupt
     Reserved215_IRQHandler,              // 215: Reserved interrupt
-    HWVAD_EVENT_IRQHandler,              // 216: HWVAD event interrupt
-    HWVAD_ERROR_IRQHandler,              // 217: HWVAD error interrupt
+    PDM_HWVAD_EVENT_IRQHandler,          // 216: HWVAD event interrupt
+    PDM_HWVAD_ERROR_IRQHandler,          // 217: HWVAD error interrupt
     PDM_EVENT_IRQHandler,                // 218: PDM event interrupt
     PDM_ERROR_IRQHandler,                // 219: PDM error interrupt
     EMVSIM1_IRQHandler,                  // 220: EMVSIM1 interrupt
@@ -785,8 +782,6 @@ void (* const g_pfnVectors[])(void) = {
     XECC_FLEXSPI2_FATAL_INT_IRQHandler,  // 229: XECC fatal int
     XECC_SEMC_INT_IRQHandler,            // 230: XECC int
     XECC_SEMC_FATAL_INT_IRQHandler,      // 231: XECC fatal int
-
-
 }; /* End of g_pfnVectors */
 
 //*****************************************************************************
@@ -831,14 +826,9 @@ extern unsigned int __bss_section_table_end;
 //*****************************************************************************
 __attribute__ ((naked, section(".after_vectors.reset")))
 void ResetISR(void) {
-
-
     // Disable interrupts
     __asm volatile ("cpsid i");
-
     __asm volatile ("MSR MSP, %0" : : "r" (&_vStackTop) : );
-
-
 
 #if defined (__USE_CMSIS)
 // If __USE_CMSIS defined, then call CMSIS SystemInit code
@@ -902,7 +892,6 @@ void ResetISR(void) {
                   "STR R1, [R0]");
 #endif // (__VFP_FP__) && !(__SOFTFP__)
 #endif // (__USE_CMSIS)
-
 
 #if !defined (__USE_CMSIS)
 // Assume that if __USE_CMSIS defined, then CMSIS SystemInit code
@@ -1792,12 +1781,12 @@ WEAK void Reserved215_IRQHandler(void)
 {   Reserved215_DriverIRQHandler();
 }
 
-WEAK void HWVAD_EVENT_IRQHandler(void)
-{   HWVAD_EVENT_DriverIRQHandler();
+WEAK void PDM_HWVAD_EVENT_IRQHandler(void)
+{   PDM_HWVAD_EVENT_DriverIRQHandler();
 }
 
-WEAK void HWVAD_ERROR_IRQHandler(void)
-{   HWVAD_ERROR_DriverIRQHandler();
+WEAK void PDM_HWVAD_ERROR_IRQHandler(void)
+{   PDM_HWVAD_ERROR_DriverIRQHandler();
 }
 
 WEAK void PDM_EVENT_IRQHandler(void)

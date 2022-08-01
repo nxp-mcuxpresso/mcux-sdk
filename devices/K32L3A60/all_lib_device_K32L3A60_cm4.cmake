@@ -6,6 +6,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpspi
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpuart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/gpio
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/log
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
@@ -89,9 +90,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpspi_edma)
 #    include(driver_lpcmp)
 #    include(driver_flexio_uart_edma)
-#    include(utilities_misc_utilities)
 #    include(driver_rtc)
 #    include(driver_wdog32)
+#    include(component_gpio_adapter)
 #    include(component_serial_manager)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
@@ -147,6 +148,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_crc)
 #    include(middleware_sdmmc_host_usdhc)
 #    include(middleware_multicore_erpc_eRPC_port_stdlib)
+#    include(utilities_misc_utilities_K32L3A60_cm4)
 #    include(middleware_multicore_erpc_eRPC_arbitrator)
 #    include(middleware_multicore_erpc_eRPC_port_freertos)
 #    include(driver_dac_1)

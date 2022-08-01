@@ -29,13 +29,17 @@
  *
  * @return The TPM instance
  */
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 static uint32_t TPM_GetInstance(TPM_Type *base);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*******************************************************************************
  * Variables
  ******************************************************************************/
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to TPM bases for each instance. */
 static TPM_Type *const s_tpmBases[] = TPM_BASE_PTRS;
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to TPM clocks for each instance. */
@@ -45,6 +49,7 @@ static const clock_ip_name_t s_tpmClocks[] = TPM_CLOCKS;
 /*******************************************************************************
  * Code
  ******************************************************************************/
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 static uint32_t TPM_GetInstance(TPM_Type *base)
 {
     uint32_t instance;
@@ -63,6 +68,7 @@ static uint32_t TPM_GetInstance(TPM_Type *base)
 
     return instance;
 }
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*!
  * brief Ungates the TPM clock and configures the peripheral for basic operation.

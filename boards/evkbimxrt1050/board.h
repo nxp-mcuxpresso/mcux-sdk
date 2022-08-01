@@ -109,8 +109,17 @@
 #define BOARD_CAMERA_PWDN_GPIO    GPIO1
 #define BOARD_CAMERA_PWDN_PIN     4
 
+/* @Brief Board touch panel configuration */
+#define BOARD_TOUCH_I2C_BASEADDR LPI2C1
+#define BOARD_TOUCH_RST_GPIO     GPIO1
+#define BOARD_TOUCH_RST_PIN      2
+#define BOARD_TOUCH_INT_GPIO     GPIO1
+#define BOARD_TOUCH_INT_PIN      11
+
 /* @Brief Board Bluetooth HCI UART configuration */
 #define BOARD_BT_UART_BASEADDR    LPUART3
+#define BOARD_BT_UART_INSTANCE    3
+#define BOARD_BT_UART_BAUDRATE    3000000
 #define BOARD_BT_UART_CLK_FREQ    BOARD_DebugConsoleSrcFreq()
 #define BOARD_BT_UART_IRQ         LPUART3_IRQn
 #define BOARD_BT_UART_IRQ_HANDLER LPUART3_IRQHandler
@@ -171,6 +180,10 @@ status_t BOARD_Camera_I2C_Receive(
 status_t BOARD_Camera_I2C_SendSCCB(
     uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, const uint8_t *txBuff, uint8_t txBuffSize);
 status_t BOARD_Camera_I2C_ReceiveSCCB(
+    uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, uint8_t *rxBuff, uint8_t rxBuffSize);
+status_t BOARD_Touch_I2C_Send(
+    uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, const uint8_t *txBuff, uint8_t txBuffSize);
+status_t BOARD_Touch_I2C_Receive(
     uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, uint8_t *rxBuff, uint8_t rxBuffSize);
 #endif /* SDK_I2C_BASED_COMPONENT_USED */
 

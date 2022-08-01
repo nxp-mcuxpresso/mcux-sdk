@@ -4,11 +4,11 @@
 /*            MIMX8MM6_cm4                                                   */
 /*  @version: 4.0                                                            */
 /*  @date:    2019-2-18                                                      */
-/*  @build:   b190228                                                        */
+/*  @build:   b211013                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2019 NXP                                                   */
+/* Copyright 2016-2021 NXP                                                   */
 /* All rights reserved.                                                      */
 /*                                                                           */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
@@ -508,6 +508,24 @@ I2C4_IRQHandler:
 
     .align 1
     .thumb_func
+    .weak PDM_HWVAD_EVENT_IRQHandler
+    .type PDM_HWVAD_EVENT_IRQHandler, %function
+PDM_HWVAD_EVENT_IRQHandler:
+    ldr   r0,=PDM_HWVAD_EVENT_DriverIRQHandler
+    bx    r0
+    .size PDM_HWVAD_EVENT_IRQHandler, . - PDM_HWVAD_EVENT_IRQHandler
+
+    .align 1
+    .thumb_func
+    .weak PDM_HWVAD_ERROR_IRQHandler
+    .type PDM_HWVAD_ERROR_IRQHandler, %function
+PDM_HWVAD_ERROR_IRQHandler:
+    ldr   r0,=PDM_HWVAD_ERROR_DriverIRQHandler
+    bx    r0
+    .size PDM_HWVAD_ERROR_IRQHandler, . - PDM_HWVAD_ERROR_IRQHandler
+
+    .align 1
+    .thumb_func
     .weak I2S3_IRQHandler
     .type I2S3_IRQHandler, %function
 I2S3_IRQHandler:
@@ -663,8 +681,8 @@ ENET_1588_IRQHandler:
     def_irq_handler    USB2_IRQHandler
     def_irq_handler    Reserved58_IRQHandler
     def_irq_handler    Reserved59_IRQHandler
-    def_irq_handler    PDM_HWVAD_EVENT_IRQHandler
-    def_irq_handler    PDM_HWVAD_ERROR_IRQHandler
+    def_irq_handler    PDM_HWVAD_EVENT_DriverIRQHandler
+    def_irq_handler    PDM_HWVAD_ERROR_DriverIRQHandler
     def_irq_handler    GPT6_IRQHandler
     def_irq_handler    SCTR_IRQ0_IRQHandler
     def_irq_handler    SCTR_IRQ1_IRQHandler

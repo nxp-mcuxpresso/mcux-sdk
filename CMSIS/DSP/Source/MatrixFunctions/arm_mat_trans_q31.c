@@ -3,13 +3,13 @@
  * Title:        arm_mat_trans_q31.c
  * Description:  Q31 matrix transpose
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/matrix_functions.h"
 
 /**
   @ingroup groupMatrix
@@ -45,7 +45,51 @@
                    - \ref ARM_MATH_SUCCESS       : Operation successful
                    - \ref ARM_MATH_SIZE_MISMATCH : Matrix size check failed
  */
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
 
+#include "arm_helium_utils.h"
+
+arm_status arm_mat_trans_q31(
+  const arm_matrix_instance_q31 * pSrc,
+        arm_matrix_instance_q31 * pDst)
+{
+  arm_status status;                             /* status of matrix transpose */
+  #ifdef ARM_MATH_MATRIX_CHECK
+
+  /* Check for matrix mismatch condition */
+  if ((pSrc->numRows != pDst->numCols) ||
+      (pSrc->numCols != pDst->numRows)   )
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
+
+#endif /* #ifdef ARM_MATH_MATRIX_CHECK */
+
+  {
+    if (pDst->numRows == pDst->numCols)
+    {
+        if (pDst->numCols == 2)
+            return arm_mat_trans_32bit_2x2_mve((uint32_t *)pSrc->pData, (uint32_t *)pDst->pData);
+        if (pDst->numCols == 3)
+            return arm_mat_trans_32bit_3x3_mve((uint32_t *)pSrc->pData, (uint32_t *)pDst->pData);
+        if (pDst->numCols == 4)
+            return arm_mat_trans_32bit_4x4_mve((uint32_t *)pSrc->pData, (uint32_t *)pDst->pData);
+    }
+
+    arm_mat_trans_32bit_generic_mve(pSrc->numRows, pSrc->numCols, (uint32_t *)pSrc->pData, (uint32_t *)pDst->pData);
+    /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+
+    /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
+
+  /* Return to application */
+  return (status);
+}
+#else
 arm_status arm_mat_trans_q31(
   const arm_matrix_instance_q31 * pSrc,
         arm_matrix_instance_q31 * pDst)
@@ -140,6 +184,7 @@ arm_status arm_mat_trans_q31(
   /* Return to application */
   return (status);
 }
+#endif /* defined(ARM_MATH_MVEI) */
 
 /**
   @} end of MatrixTrans group

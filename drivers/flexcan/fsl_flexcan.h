@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FlexCAN driver version. */
-#define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 8, 2))
+#define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 8, 6))
 /*@}*/
 
 #if !(defined(FLEXCAN_WAIT_TIMEOUT) && FLEXCAN_WAIT_TIMEOUT)
@@ -1728,9 +1728,9 @@ void FLEXCAN_EnableRxFifoDMA(CAN_Type *base, bool enable);
  * @param base FlexCAN peripheral base address.
  * @return FlexCAN Rx FIFO Head address.
  */
-static inline uint32_t FLEXCAN_GetRxFifoHeadAddr(CAN_Type *base)
+static inline uintptr_t FLEXCAN_GetRxFifoHeadAddr(CAN_Type *base)
 {
-    return (uint32_t) & (base->MB[0].CS);
+    return (uintptr_t) & (base->MB[0].CS);
 }
 
 /* @} */

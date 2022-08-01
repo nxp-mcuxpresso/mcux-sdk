@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 NXP
+ * Copyright 2017-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,9 +26,9 @@ enum _hashcrypt_status
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief HASHCRYPT driver version. Version 2.2.3.
+/*! @brief HASHCRYPT driver version. Version 2.2.6.
  *
- * Current version: 2.2.3
+ * Current version: 2.2.6
  *
  * Change log:
  * - Version 2.0.0
@@ -52,7 +52,7 @@ enum _hashcrypt_status
  * - Version 2.1.4
  *   - Fix context switch cannot work when switching from AES.
  * - Version 2.1.5
- *   - Add data synchronization barriere inside hashcrypt_sha_ldm_stm_16_words()
+ *   - Add data synchronization barrier inside hashcrypt_sha_ldm_stm_16_words()
  *     to prevent possible optimization issue.
  * - Version 2.2.0
  *   - Add AES-OFB and AES-CFB mixed IP/SW modes.
@@ -65,8 +65,17 @@ enum _hashcrypt_status
  * - Version 2.2.3
  *   - Added check for size in hashcrypt_aes_one_block to prevent overflowing COUNT field in MEMCTRL register, if its
  * bigger than COUNT field do a multiple runs.
+ * - Version 2.2.4
+ *   - In all HASHCRYPT_AES_xx functions have been added setting CTRL_MODE bitfield to 0 after processing data, which
+ * decreases power consumption.
+ * - Version 2.2.5
+ *   - Add data synchronization barrier and instruction  synchronization barrier inside
+ * hashcrypt_sha_process_message_data() to fix optimization issue
+ * - Version 2.2.6
+ *   - Add data synchronization barrier inside HASHCRYPT_SHA_Update() and hashcrypt_get_data() function to fix
+ * optimization issue on MDK and ARMGCC release targets
  */
-#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
+#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 2, 6))
 /*@}*/
 
 /*! @brief Algorithm definitions correspond with the values for Mode field in Control register !*/

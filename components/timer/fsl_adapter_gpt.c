@@ -146,11 +146,16 @@ uint32_t HAL_TimerGetMaxTimeout(hal_timer_handle_t halTimerHandle)
     assert(halTimerHandle);
     hal_timer_handle_struct_t *halTimerState = halTimerHandle;
     reserveCount                             = (uint32_t)MSEC_TO_COUNT((4), (halTimerState->timerClock_Hz));
-    if (reserveCount < MSEC_TO_COUNT((1), (halTimerState->timerClock_Hz)))
+    if ((reserveCount < MSEC_TO_COUNT((1), (halTimerState->timerClock_Hz))) ||
+        (reserveCount > (GPT_CNT_COUNT_MASK - 0xfU)))
     {
+        /* make sure 1ms timeout doesn't overflow */
+        assert(USEC_TO_COUNT(1000, (halTimerState->timerClock_Hz)) < GPT_CNT_COUNT_MASK);
         return 1000;
     }
-    return (uint32_t)COUNT_TO_USEC(((uint64_t)0xFFFFUL - (uint64_t)reserveCount), halTimerState->timerClock_Hz);
+
+    return (uint32_t)COUNT_TO_USEC(((uint64_t)GPT_CNT_COUNT_MASK - (uint64_t)reserveCount),
+                                   halTimerState->timerClock_Hz);
 }
 /* return micro us */
 uint32_t HAL_TimerGetCurrentTimerCount(hal_timer_handle_t halTimerHandle)
@@ -168,7 +173,8 @@ hal_timer_status_t HAL_TimerUpdateTimeout(hal_timer_handle_t halTimerHandle, uin
     hal_timer_handle_struct_t *halTimerState = halTimerHandle;
     halTimerState->timeout                   = timeout;
     tickCount = (uint32_t)USEC_TO_COUNT(halTimerState->timeout, halTimerState->timerClock_Hz);
-    if ((tickCount < 1U) || (tickCount > 0xfff0U))
+
+    if ((tickCount < 1U) || (tickCount > (GPT_CNT_COUNT_MASK - 0xfU)))
     {
         return kStatus_HAL_TimerOutOfRanger;
     }

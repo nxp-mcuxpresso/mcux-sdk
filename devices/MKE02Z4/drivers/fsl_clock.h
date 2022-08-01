@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2020, NXP
+ * Copyright 2016 - 2020, 2022 NXP
  * All rights reserved.
  *
  *
@@ -59,8 +59,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.1. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief CLOCK driver version 2.2.2. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -200,9 +200,9 @@ typedef enum _clock_name
 ------------------------------------------------------------------------------*/
 
 #define CLK_GATE_REG_OFFSET_SHIFT 16U
-#define CLK_GATE_REG_OFFSET_MASK 0xFFFF0000U
-#define CLK_GATE_BIT_SHIFT_SHIFT 0U
-#define CLK_GATE_BIT_SHIFT_MASK 0x0000FFFFU
+#define CLK_GATE_REG_OFFSET_MASK  0xFFFF0000U
+#define CLK_GATE_BIT_SHIFT_SHIFT  0U
+#define CLK_GATE_BIT_SHIFT_MASK   0x0000FFFFU
 
 #define CLK_GATE_DEFINE(reg_offset, bit_shift)                                  \
     ((((reg_offset) << CLK_GATE_REG_OFFSET_SHIFT) & CLK_GATE_REG_OFFSET_MASK) | \
@@ -299,8 +299,10 @@ typedef enum _ics_clkout_src
     kICS_ClkOutSrcExternal, /*!< External reference clock is selected, FLL is bypassed */
 } ics_clkout_src_t;
 
-/*! @brief ICS status. */
-enum _ics_status
+/*! @brief ICS status.
+    @anchor _ics_status.
+ */
+enum
 {
     kStatus_ICS_ModeUnreachable = MAKE_STATUS(kStatusGroup_ICS, 0), /*!< Can't switch to target mode. */
     kStatus_ICS_SourceUsed      = MAKE_STATUS(kStatusGroup_ICS, 1)  /*!< Can't change the clock source because

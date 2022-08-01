@@ -15,16 +15,7 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MIMX8MN6CUCIZ_ca53) || defined(CPU_MIMX8MN6CVTIZ_ca53) || defined(CPU_MIMX8MN6DUCJZ_ca53) || \
-    defined(CPU_MIMX8MN6DVTJZ_ca53))
-
-/* CMSIS-style register definitions */
-#include "MIMX8MN6_ca53.h"
-/* CPU specific feature definitions */
-#include "MIMX8MN6_ca53_features.h"
-
-#elif (defined(CPU_MIMX8MN6CUCIZ) || defined(CPU_MIMX8MN6CVTIZ) || defined(CPU_MIMX8MN6DUCJZ) || \
-    defined(CPU_MIMX8MN6DVTJZ))
+#if (defined(CPU_MIMX8MN6CVTIZ) || defined(CPU_MIMX8MN6DVTJZ))
 
 #define MIMX8MN6_cm7_SERIES
 

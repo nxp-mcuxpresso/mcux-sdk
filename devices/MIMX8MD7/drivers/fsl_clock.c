@@ -54,11 +54,132 @@ uint32_t CLOCK_GetFreq(clock_name_t clockName)
         case kCLOCK_IpgClk:
             freq = CLOCK_GetAhbFreq();
             break;
+        case kCLOCK_Osc25MClk:
+            freq = OSC25M_CLK_FREQ;
+            break;
+        case kCLOCK_Osc27MClk:
+            freq = OSC27M_CLK_FREQ;
+            break;
+        case kCLOCK_ArmPllClk:
+            freq = CLOCK_GetPllFreq(kCLOCK_ArmPllCtrl);
+            break;
+        case kCLOCK_VpuPllClk:
+            freq = CLOCK_GetPllFreq(kCLOCK_VpuPllCtrl);
+            break;
+        case kCLOCK_DramPllClk:
+            freq = CLOCK_GetPllFreq(kCLOCK_DramPllCtrl);
+            break;
+        case kCLOCK_SysPll1Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll1Ctrl);
+            break;
+        case kCLOCK_SysPll1Div2Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll1Ctrl) / 2U;
+            break;
+        case kCLOCK_SysPll1Div3Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll1Ctrl) / 3U;
+            break;
+        case kCLOCK_SysPll1Div4Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll1Ctrl) / 4U;
+            break;
+        case kCLOCK_SysPll1Div5Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll1Ctrl) / 5U;
+            break;
+        case kCLOCK_SysPll1Div6Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll1Ctrl) / 6U;
+            break;
+        case kCLOCK_SysPll1Div8Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll1Ctrl) / 8U;
+            break;
+        case kCLOCK_SysPll1Div10Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll1Ctrl) / 10U;
+            break;
+        case kCLOCK_SysPll1Div20Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll1Ctrl) / 20U;
+            break;
+        case kCLOCK_SysPll2Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll2Ctrl);
+            break;
+        case kCLOCK_SysPll2Div2Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll2Ctrl) / 2U;
+            break;
+        case kCLOCK_SysPll2Div3Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll2Ctrl) / 3U;
+            break;
+        case kCLOCK_SysPll2Div4Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll2Ctrl) / 4U;
+            break;
+        case kCLOCK_SysPll2Div5Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll2Ctrl) / 5U;
+            break;
+        case kCLOCK_SysPll2Div6Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll2Ctrl) / 6U;
+            break;
+        case kCLOCK_SysPll2Div8Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll2Ctrl) / 8U;
+            break;
+        case kCLOCK_SysPll2Div10Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll2Ctrl) / 10U;
+            break;
+        case kCLOCK_SysPll2Div20Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll2Ctrl) / 20U;
+            break;
+        case kCLOCK_SysPll3Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_SystemPll3Ctrl);
+            break;
+        case kCLOCK_AudioPll1Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_AudioPll1Ctrl);
+            break;
+        case kCLOCK_AudioPll2Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_AudioPll2Ctrl);
+            break;
+        case kCLOCK_VideoPll1Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_VideoPll1Ctrl);
+            break;
+        case kCLOCK_ExtClk1:
+        case kCLOCK_ExtClk2:
+        case kCLOCK_ExtClk3:
+        case kCLOCK_ExtClk4:
+            freq = CLKPN_FREQ;
+            break;
         default:
             freq = 0U;
             break;
     }
     return freq;
+}
+
+/*!
+ * brief Gets the frequency of selected clock root.
+ *
+ * param clockRoot The clock root used to get the frequency, please refer to @ref clock_root_t.
+ * return The frequency of selected clock root.
+ */
+uint32_t CLOCK_GetClockRootFreq(clock_root_t clockRoot)
+{
+    static const clock_name_t clockRootSourceArray[][8]          = CLOCK_ROOT_SOURCE;
+    static const clock_root_control_t clockRootControlArray[]    = CLOCK_ROOT_CONTROL_TUPLE;
+
+    clock_root_control_t clockRootControl                        = clockRootControlArray[(uint8_t)clockRoot];
+
+    uint32_t freq = 0U;
+    uint32_t pre  = CLOCK_GetRootPreDivider(clockRootControl);
+    uint32_t post = CLOCK_GetRootPostDivider(clockRootControl);
+    uint32_t mux = CLOCK_GetRootMux(clockRootControl);
+
+    clock_name_t clockSourceName;
+
+    clockSourceName = clockRootSourceArray[(uint8_t)clockRoot][mux];
+
+    assert(clockSourceName != kCLOCK_NoneName);
+
+    freq = CLOCK_GetFreq(clockSourceName);
+
+    if (clockRoot == kCLOCK_IpgClkRoot)
+    {
+        freq /= CLOCK_GetRootPostDivider(kCLOCK_RootIpg);
+    }
+
+    return freq / pre / post;
 }
 
 /*!

@@ -6,7 +6,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/RTOS2/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/RTOS2/RTX/Library
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/flexcomm
-    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpc_gpio
     ${CMAKE_CURRENT_LIST_DIR}/../../components/audio
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
@@ -72,9 +71,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_device_ip3511fs)
 #    include(utility_shell)
 #    include(driver_lpc_gpio)
-#    include(device_system)
+#    include(middleware_azure_rtos_fx_template_LPC55S16)
 #    include(driver_lpadc)
-#    include(driver_cmsis_lpc_gpio)
 #    include(middleware_freertos-kernel_cm33_nonsecure_port)
 #    include(driver_lpc_crc)
 #    include(middleware_azure_rtos_nxd_sp)
@@ -83,7 +81,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_log_backend_ringbuffer)
 #    include(driver_flexcomm_usart)
 #    include(driver_codec)
-#    include(utilities_misc_utilities)
 #    include(driver_ostimer)
 #    include(driver_gint)
 #    include(driver_cmsis_flexcomm_i2c)
@@ -100,9 +97,10 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_spi_freertos)
 #    include(driver_ili9341)
 #    include(driver_pint)
-#    include(middleware_azure_rtos_fx_template_LPC55S16)
+#    include(device_system)
 #    include(driver_sctimer)
 #    include(driver_flexcomm)
+#    include(utilities_misc_utilities_LPC55S16)
 #    include(device_startup)
 #    include(driver_casper)
 #    include(component_panic)
@@ -135,7 +133,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_common)
 #    include(driver_inputmux_connections)
 #    include(component_osa_free_rtos)
-#    include(CMSIS_Driver_Include_GPIO)
 #    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(component_codec_i2c_LPC55S16)
@@ -163,6 +160,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_audio)
 #    include(utility_debug_console)
 #    include(middleware_usb_host_hid)
+#    include(component_osa_thread)
 #    include(component_lpc_gpio_adapter)
 #    include(CMSIS_RTOS2_Common)
 #    include(driver_puf)

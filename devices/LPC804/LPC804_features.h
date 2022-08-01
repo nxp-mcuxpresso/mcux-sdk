@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2018-01-09
-**     Build:               b210823
+**     Build:               b220303
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -28,73 +28,73 @@
 /* SOC module features */
 
 #if defined(CPU_LPC804M101JDH20) || defined(CPU_LPC804UK)
-/* @brief ACOMP availability on the SoC. */
-#define FSL_FEATURE_SOC_ACOMP_COUNT (1)
-/* @brief ADC availability on the SoC. */
-#define FSL_FEATURE_SOC_ADC_COUNT (1)
-/* @brief CAPT availability on the SoC. */
-#define FSL_FEATURE_SOC_CAPT_COUNT (1)
-/* @brief CRC availability on the SoC. */
-#define FSL_FEATURE_SOC_CRC_COUNT (1)
-/* @brief CTIMER availability on the SoC. */
-#define FSL_FEATURE_SOC_CTIMER_COUNT (1)
-/* @brief GPIO availability on the SoC. */
-#define FSL_FEATURE_SOC_GPIO_COUNT (1)
-/* @brief I2C availability on the SoC. */
-#define FSL_FEATURE_SOC_I2C_COUNT (2)
-/* @brief IOCON availability on the SoC. */
-#define FSL_FEATURE_SOC_IOCON_COUNT (1)
-/* @brief MRT availability on the SoC. */
-#define FSL_FEATURE_SOC_MRT_COUNT (1)
-/* @brief PINT availability on the SoC. */
-#define FSL_FEATURE_SOC_PINT_COUNT (1)
-/* @brief PMU availability on the SoC. */
-#define FSL_FEATURE_SOC_PMU_COUNT (1)
-/* @brief SPI availability on the SoC. */
-#define FSL_FEATURE_SOC_SPI_COUNT (1)
-/* @brief SWM availability on the SoC. */
-#define FSL_FEATURE_SOC_SWM_COUNT (1)
-/* @brief SYSCON availability on the SoC. */
-#define FSL_FEATURE_SOC_SYSCON_COUNT (1)
-/* @brief USART availability on the SoC. */
-#define FSL_FEATURE_SOC_USART_COUNT (2)
-/* @brief WWDT availability on the SoC. */
-#define FSL_FEATURE_SOC_WWDT_COUNT (1)
+    /* @brief ACOMP availability on the SoC. */
+    #define FSL_FEATURE_SOC_ACOMP_COUNT (1)
+    /* @brief ADC availability on the SoC. */
+    #define FSL_FEATURE_SOC_ADC_COUNT (1)
+    /* @brief CAPT availability on the SoC. */
+    #define FSL_FEATURE_SOC_CAPT_COUNT (1)
+    /* @brief CRC availability on the SoC. */
+    #define FSL_FEATURE_SOC_CRC_COUNT (1)
+    /* @brief CTIMER availability on the SoC. */
+    #define FSL_FEATURE_SOC_CTIMER_COUNT (1)
+    /* @brief GPIO availability on the SoC. */
+    #define FSL_FEATURE_SOC_GPIO_COUNT (1)
+    /* @brief I2C availability on the SoC. */
+    #define FSL_FEATURE_SOC_I2C_COUNT (2)
+    /* @brief IOCON availability on the SoC. */
+    #define FSL_FEATURE_SOC_IOCON_COUNT (1)
+    /* @brief MRT availability on the SoC. */
+    #define FSL_FEATURE_SOC_MRT_COUNT (1)
+    /* @brief PINT availability on the SoC. */
+    #define FSL_FEATURE_SOC_PINT_COUNT (1)
+    /* @brief PMU availability on the SoC. */
+    #define FSL_FEATURE_SOC_PMU_COUNT (1)
+    /* @brief SPI availability on the SoC. */
+    #define FSL_FEATURE_SOC_SPI_COUNT (1)
+    /* @brief SWM availability on the SoC. */
+    #define FSL_FEATURE_SOC_SWM_COUNT (1)
+    /* @brief SYSCON availability on the SoC. */
+    #define FSL_FEATURE_SOC_SYSCON_COUNT (1)
+    /* @brief USART availability on the SoC. */
+    #define FSL_FEATURE_SOC_USART_COUNT (2)
+    /* @brief WWDT availability on the SoC. */
+    #define FSL_FEATURE_SOC_WWDT_COUNT (1)
 #elif defined(CPU_LPC804M101JDH24) || defined(CPU_LPC804M101JHI33) || defined(CPU_LPC804M111JDH24)
-/* @brief ACOMP availability on the SoC. */
-#define FSL_FEATURE_SOC_ACOMP_COUNT  (1)
-/* @brief ADC availability on the SoC. */
-#define FSL_FEATURE_SOC_ADC_COUNT    (1)
-/* @brief CAPT availability on the SoC. */
-#define FSL_FEATURE_SOC_CAPT_COUNT   (1)
-/* @brief CRC availability on the SoC. */
-#define FSL_FEATURE_SOC_CRC_COUNT    (1)
-/* @brief CTIMER availability on the SoC. */
-#define FSL_FEATURE_SOC_CTIMER_COUNT (1)
-/* @brief DAC availability on the SoC. */
-#define FSL_FEATURE_SOC_DAC_COUNT    (1)
-/* @brief GPIO availability on the SoC. */
-#define FSL_FEATURE_SOC_GPIO_COUNT   (1)
-/* @brief I2C availability on the SoC. */
-#define FSL_FEATURE_SOC_I2C_COUNT    (2)
-/* @brief IOCON availability on the SoC. */
-#define FSL_FEATURE_SOC_IOCON_COUNT  (1)
-/* @brief MRT availability on the SoC. */
-#define FSL_FEATURE_SOC_MRT_COUNT    (1)
-/* @brief PINT availability on the SoC. */
-#define FSL_FEATURE_SOC_PINT_COUNT   (1)
-/* @brief PMU availability on the SoC. */
-#define FSL_FEATURE_SOC_PMU_COUNT    (1)
-/* @brief SPI availability on the SoC. */
-#define FSL_FEATURE_SOC_SPI_COUNT    (1)
-/* @brief SWM availability on the SoC. */
-#define FSL_FEATURE_SOC_SWM_COUNT    (1)
-/* @brief SYSCON availability on the SoC. */
-#define FSL_FEATURE_SOC_SYSCON_COUNT (1)
-/* @brief USART availability on the SoC. */
-#define FSL_FEATURE_SOC_USART_COUNT  (2)
-/* @brief WWDT availability on the SoC. */
-#define FSL_FEATURE_SOC_WWDT_COUNT   (1)
+    /* @brief ACOMP availability on the SoC. */
+    #define FSL_FEATURE_SOC_ACOMP_COUNT (1)
+    /* @brief ADC availability on the SoC. */
+    #define FSL_FEATURE_SOC_ADC_COUNT (1)
+    /* @brief CAPT availability on the SoC. */
+    #define FSL_FEATURE_SOC_CAPT_COUNT (1)
+    /* @brief CRC availability on the SoC. */
+    #define FSL_FEATURE_SOC_CRC_COUNT (1)
+    /* @brief CTIMER availability on the SoC. */
+    #define FSL_FEATURE_SOC_CTIMER_COUNT (1)
+    /* @brief DAC availability on the SoC. */
+    #define FSL_FEATURE_SOC_DAC_COUNT (1)
+    /* @brief GPIO availability on the SoC. */
+    #define FSL_FEATURE_SOC_GPIO_COUNT (1)
+    /* @brief I2C availability on the SoC. */
+    #define FSL_FEATURE_SOC_I2C_COUNT (2)
+    /* @brief IOCON availability on the SoC. */
+    #define FSL_FEATURE_SOC_IOCON_COUNT (1)
+    /* @brief MRT availability on the SoC. */
+    #define FSL_FEATURE_SOC_MRT_COUNT (1)
+    /* @brief PINT availability on the SoC. */
+    #define FSL_FEATURE_SOC_PINT_COUNT (1)
+    /* @brief PMU availability on the SoC. */
+    #define FSL_FEATURE_SOC_PMU_COUNT (1)
+    /* @brief SPI availability on the SoC. */
+    #define FSL_FEATURE_SOC_SPI_COUNT (1)
+    /* @brief SWM availability on the SoC. */
+    #define FSL_FEATURE_SOC_SWM_COUNT (1)
+    /* @brief SYSCON availability on the SoC. */
+    #define FSL_FEATURE_SOC_SYSCON_COUNT (1)
+    /* @brief USART availability on the SoC. */
+    #define FSL_FEATURE_SOC_USART_COUNT (2)
+    /* @brief WWDT availability on the SoC. */
+    #define FSL_FEATURE_SOC_WWDT_COUNT (1)
 #endif
 
 /* ACOMP module features */
@@ -105,7 +105,7 @@
 /* ADC module features */
 
 /* @brief Do not has input select (register INSEL). */
-#define FSL_FEATURE_ADC_HAS_NO_INSEL (1)
+#define FSL_FEATURE_ADC_HAS_NO_INSEL  (1)
 /* @brief Has ASYNMODE bitfile in CTRL reigster. */
 #define FSL_FEATURE_ADC_HAS_CTRL_ASYNMODE (0)
 /* @brief Has ASYNMODE bitfile in CTRL reigster. */
@@ -139,6 +139,16 @@
 
 /* CTIMER module features */
 
+/* @brief CTIMER has no capture channel. */
+#define FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE (0)
+/* @brief CTIMER has no capture 2 interrupt. */
+#define FSL_FEATURE_CTIMER_HAS_NO_IR_CR2INT (0)
+/* @brief CTIMER capture 3 interrupt. */
+#define FSL_FEATURE_CTIMER_HAS_IR_CR3INT (0)
+/* @brief Has CTIMER CCR_CAP2 (register bits CCR[CAP2RE][CAP2FE][CAP2I]. */
+#define FSL_FEATURE_CTIMER_HAS_NO_CCR_CAP2 (0)
+/* @brief Has CTIMER CCR_CAP3 (register bits CCR[CAP3RE][CAP3FE][CAP3I]). */
+#define FSL_FEATURE_CTIMER_HAS_CCR_CAP3 (0)
 /* @brief Writing a zero asserts the CTIMER reset. */
 #define FSL_FEATURE_CTIMER_WRITE_ZERO_ASSERT_RESET (1)
 
@@ -155,7 +165,7 @@
 /* MRT module features */
 
 /* @brief number of channels. */
-#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS (4)
+#define FSL_FEATURE_MRT_NUMBER_OF_CHANNELS  (4)
 /* @brief Has no MULTITASK bitfile in MODCFG reigster. */
 #define FSL_FEATURE_MRT_HAS_NO_MODCFG_MULTITASK (1)
 /* @brief Has no INUSE bitfile in STAT reigster. */
@@ -197,7 +207,7 @@
 /* @brief Has SWM PINENABLE0 ACMP I5. */
 #define FSL_FEATURE_SWM_HAS_PINENABLE0_ACMP_I5 (1)
 /* @brief Has PINASSIGNFIXED0 register. */
-#define FSL_FEATURE_SWM_HAS_PINASSIGNFIXED0_REGISTER (1)
+#define FSL_FEATURE_SWM_HAS_PINASSIGNFIXED0_REGISTER  (1)
 
 /* SYSCON module features */
 
@@ -242,3 +252,4 @@
 #define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
 
 #endif /* _LPC804_FEATURES_H_ */
+

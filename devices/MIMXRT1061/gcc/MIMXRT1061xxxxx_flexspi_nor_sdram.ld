@@ -4,17 +4,18 @@
 **                          MIMXRT1061CVL5A
 **                          MIMXRT1061DVJ6A
 **                          MIMXRT1061DVL6A
+**                          MIMXRT1061XVN5B
 **
 **     Compiler:            GNU C Compiler
-**     Reference manual:    IMXRT1060RM Rev.1, 12/2018 | IMXRT1060SRM Rev.3
-**     Version:             rev. 0.1, 2017-01-10
-**     Build:               b210709
+**     Reference manual:    IMXRT1060RM Rev.3, 07/2021 | IMXRT106XSRM Rev.0
+**     Version:             rev. 0.2, 2022-03-25
+**     Build:               b220401
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause

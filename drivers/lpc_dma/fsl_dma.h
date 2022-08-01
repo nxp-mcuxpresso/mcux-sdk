@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief DMA driver version */
-#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 3)) /*!< Version 2.4.3. */
+#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 4)) /*!< Version 2.4.4. */
 /*@}*/
 
 /*! @brief DMA max transfer size */
@@ -76,9 +76,9 @@
 /*! @brief DMA transfer buffer address need to align with the transfer width */
 #define DMA_ALLOCATE_DATA_TRANSFER_BUFFER(name, width) SDK_ALIGN(name, width)
 /* Channel group consists of 32 channels. channel_group = 0 */
-#define DMA_CHANNEL_GROUP(channel) (0U)
+#define DMA_CHANNEL_GROUP(channel) (((uint8_t)(channel)) >> 5U)
 /* Channel index in channel group. channel_index = (channel % (channel number per instance)) */
-#define DMA_CHANNEL_INDEX(base, channel) (((uint8_t)(channel)) % FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base))
+#define DMA_CHANNEL_INDEX(base, channel) (((uint8_t)(channel)) & 0x1FU)
 /*! @brief DMA linked descriptor address algin size */
 #define DMA_COMMON_REG_GET(base, channel, reg) \
     (((volatile uint32_t *)(&((base)->COMMON[0].reg)))[DMA_CHANNEL_GROUP(channel)])

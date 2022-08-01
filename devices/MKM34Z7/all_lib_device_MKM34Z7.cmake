@@ -107,7 +107,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Driver_Include_Common)
 #    include(driver_slcd_engine)
 #    include(utility_debug_console_lite)
-#    include(utilities_misc_utilities)
+#    include(utilities_misc_utilities_MKM34Z7)
 #    include(driver_rnga)
 #    include(driver_common)
 #    include(driver_uart_dma)

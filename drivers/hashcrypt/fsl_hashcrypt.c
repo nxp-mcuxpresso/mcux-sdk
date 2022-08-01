@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 NXP
+ * Copyright 2017-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -329,6 +329,9 @@ static void hashcrypt_get_data(HASHCRYPT_Type *base, uint32_t *output, size_t ou
     {
     }
 
+    /* Data Synchronization Barrier */
+    __DSB();
+
     for (int i = 0; i < 8; i++)
     {
         digest[i] = swap_bytes(base->DIGEST0[i]);
@@ -354,6 +357,19 @@ static void hashcrypt_engine_init(HASHCRYPT_Type *base, hashcrypt_algo_t algo)
     /* NEW bit must be set before we switch from previous mode otherwise new mode will not work correctly */
     base->CTRL = HASHCRYPT_CTRL_NEW_HASH(1);
     base->CTRL = HASHCRYPT_CTRL_MODE(algo) | HASHCRYPT_CTRL_NEW_HASH(1);
+}
+
+/*!
+ * @brief Deinitialization of the Hashcrypt engine.
+ *
+ * This function sets MODE field in Hashcrypt Control register to zero - disabled.
+ * This reduces power consumption of HASHCRYPT.
+ *
+ * @param base Hashcrypt peripheral base address.
+ */
+static inline void hashcrypt_engine_deinit(HASHCRYPT_Type *base)
+{
+    base->CTRL &= ~(HASHCRYPT_CTRL_MODE_MASK);
 }
 
 /*!
@@ -699,8 +715,10 @@ static status_t hashcrypt_sha_process_message_data(HASHCRYPT_Type *base,
             }
             uint32_t blkNum   = (messageSize >> 6); /* div by 64 bytes */
             uint32_t blkBytes = blkNum * 64u;       /* number of bytes in 64 bytes blocks */
-            base->MEMADDR     = HASHCRYPT_MEMADDR_BASE(message);
-            base->MEMCTRL     = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(blkNum);
+            __DSB();
+            __ISB();
+            base->MEMADDR = HASHCRYPT_MEMADDR_BASE(message);
+            base->MEMCTRL = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(blkNum);
             message += blkBytes;
             messageSize -= blkBytes;
             while (0U == (base->STATUS & HASHCRYPT_STATUS_DIGEST_MASK))
@@ -909,6 +927,8 @@ status_t HASHCRYPT_SHA_Update(HASHCRYPT_Type *base, hashcrypt_hash_ctx_t *ctx, c
     }
 
     /* process message data */
+    /* Data Synchronization Barrier */
+    __DSB();
     status = hashcrypt_sha_process_message_data(base, ctxInternal, input, inputSize);
     hashcrypt_save_running_hash(base, ctxInternal);
     return status;
@@ -1137,6 +1157,7 @@ status_t HASHCRYPT_AES_EncryptEcb(
     /* in case of HW AES key, check if it is available */
     if (hashcrypt_check_need_key(base, handle) != kStatus_Success)
     {
+        hashcrypt_engine_deinit(base);
         return kStatus_Fail;
     }
 
@@ -1148,6 +1169,8 @@ status_t HASHCRYPT_AES_EncryptEcb(
 
     /* load message and get result */
     status = hashcrypt_aes_one_block(base, plaintext, ciphertext, size);
+    /* After processing all data, hashcrypt engine is set to disabled to lower power consumption */
+    hashcrypt_engine_deinit(base);
 
     return status;
 }
@@ -1173,6 +1196,7 @@ status_t HASHCRYPT_AES_DecryptEcb(
     /* in case of HW AES key, check if it is available */
     if (hashcrypt_check_need_key(base, handle) != kStatus_Success)
     {
+        hashcrypt_engine_deinit(base);
         return kStatus_Fail;
     }
 
@@ -1185,6 +1209,8 @@ status_t HASHCRYPT_AES_DecryptEcb(
     /* load message and get result */
     status = hashcrypt_aes_one_block(base, ciphertext, plaintext, size);
 
+    /* After processing all data, hashcrypt engine is set to disabled to lower power consumption */
+    hashcrypt_engine_deinit(base);
     return status;
 }
 
@@ -1213,6 +1239,7 @@ status_t HASHCRYPT_AES_EncryptCbc(HASHCRYPT_Type *base,
     /* in case of HW AES key, check if it is available */
     if (hashcrypt_check_need_key(base, handle) != kStatus_Success)
     {
+        hashcrypt_engine_deinit(base);
         return kStatus_Fail;
     }
 
@@ -1228,6 +1255,8 @@ status_t HASHCRYPT_AES_EncryptCbc(HASHCRYPT_Type *base,
     /* load message and get result */
     status = hashcrypt_aes_one_block(base, plaintext, ciphertext, size);
 
+    /* After processing all data, hashcrypt engine is set to disabled to lower power consumption */
+    hashcrypt_engine_deinit(base);
     return status;
 }
 
@@ -1256,6 +1285,7 @@ status_t HASHCRYPT_AES_DecryptCbc(HASHCRYPT_Type *base,
     /* in case of HW AES key, check if it is available */
     if (hashcrypt_check_need_key(base, handle) != kStatus_Success)
     {
+        hashcrypt_engine_deinit(base);
         return kStatus_Fail;
     }
 
@@ -1271,6 +1301,8 @@ status_t HASHCRYPT_AES_DecryptCbc(HASHCRYPT_Type *base,
     /* load message and get result */
     status = hashcrypt_aes_one_block(base, ciphertext, plaintext, size);
 
+    /* After processing all data, hashcrypt engine is set to disabled to lower power consumption */
+    hashcrypt_engine_deinit(base);
     return status;
 }
 
@@ -1304,6 +1336,7 @@ status_t HASHCRYPT_AES_CryptCtr(HASHCRYPT_Type *base,
     /* in case of HW AES key, check if it is available */
     if (hashcrypt_check_need_key(base, handle) != kStatus_Success)
     {
+        hashcrypt_engine_deinit(base);
         return kStatus_Fail;
     }
 
@@ -1320,7 +1353,12 @@ status_t HASHCRYPT_AES_CryptCtr(HASHCRYPT_Type *base,
     size -= lastSize;
 
     /* encrypt full 16byte blocks */
-    (void)hashcrypt_aes_one_block(base, input, output, size);
+    status = hashcrypt_aes_one_block(base, input, output, size);
+    if (status != kStatus_Success)
+    {
+        hashcrypt_engine_deinit(base);
+        return status;
+    }
 
     while (size != 0U)
     {
@@ -1345,6 +1383,7 @@ status_t HASHCRYPT_AES_CryptCtr(HASHCRYPT_Type *base,
         status = hashcrypt_aes_one_block(base, lastBlock, lastEncryptedCounter, HASHCRYPT_AES_BLOCK_SIZE);
         if (status != kStatus_Success)
         {
+            hashcrypt_engine_deinit(base);
             return status;
         }
         /* remain output = input XOR counterlast */
@@ -1370,6 +1409,8 @@ status_t HASHCRYPT_AES_CryptCtr(HASHCRYPT_Type *base,
         *szLeft = HASHCRYPT_AES_BLOCK_SIZE - lastSize;
     }
 
+    /* After processing all data, hashcrypt engine is set to disabled to lower power consumption */
+    hashcrypt_engine_deinit(base);
     return kStatus_Success;
 }
 
@@ -1401,6 +1442,7 @@ status_t HASHCRYPT_AES_CryptOfb(HASHCRYPT_Type *base,
     /* in case of HW AES key, check if it is available */
     if (hashcrypt_check_need_key(base, handle) != kStatus_Success)
     {
+        hashcrypt_engine_deinit(base);
         return kStatus_Fail;
     }
 
@@ -1421,6 +1463,7 @@ status_t HASHCRYPT_AES_CryptOfb(HASHCRYPT_Type *base,
         status = hashcrypt_aes_one_block(base, zeroes, blockOutput, HASHCRYPT_AES_BLOCK_SIZE);
         if (status != kStatus_Success)
         {
+            hashcrypt_engine_deinit(base);
             return status;
         }
         /* XOR input with output block to get output*/
@@ -1439,6 +1482,7 @@ status_t HASHCRYPT_AES_CryptOfb(HASHCRYPT_Type *base,
         status = hashcrypt_aes_one_block(base, zeroes, blockOutput, HASHCRYPT_AES_BLOCK_SIZE);
         if (status != kStatus_Success)
         {
+            hashcrypt_engine_deinit(base);
             return status;
         }
 
@@ -1449,6 +1493,8 @@ status_t HASHCRYPT_AES_CryptOfb(HASHCRYPT_Type *base,
         }
     }
 
+    /* After processing all data, hashcrypt engine is set to disabled to lower power consumption */
+    hashcrypt_engine_deinit(base);
     return status;
 }
 
@@ -1481,6 +1527,7 @@ status_t HASHCRYPT_AES_EncryptCfb(HASHCRYPT_Type *base,
     /* in case of HW AES key, check if it is available */
     if (hashcrypt_check_need_key(base, handle) != kStatus_Success)
     {
+        hashcrypt_engine_deinit(base);
         return kStatus_Fail;
     }
 
@@ -1499,6 +1546,7 @@ status_t HASHCRYPT_AES_EncryptCfb(HASHCRYPT_Type *base,
     status = hashcrypt_aes_one_block(base, zeroes, blockOutput, HASHCRYPT_AES_BLOCK_SIZE);
     if (status != kStatus_Success)
     {
+        hashcrypt_engine_deinit(base);
         return status;
     }
     /* XOR plaintext with output block to get ciphertext*/
@@ -1517,6 +1565,7 @@ status_t HASHCRYPT_AES_EncryptCfb(HASHCRYPT_Type *base,
 
         if (status != kStatus_Success)
         {
+            hashcrypt_engine_deinit(base);
             return status;
         }
         /* XOR plaintext with output block to get ciphertext*/
@@ -1527,6 +1576,8 @@ status_t HASHCRYPT_AES_EncryptCfb(HASHCRYPT_Type *base,
         size -= 16u;
     }
 
+    /* After processing all data, hashcrypt engine is set to disabled to lower power consumption */
+    hashcrypt_engine_deinit(base);
     return status;
 }
 
@@ -1559,6 +1610,7 @@ status_t HASHCRYPT_AES_DecryptCfb(HASHCRYPT_Type *base,
     /* in case of HW AES key, check if it is available */
     if (hashcrypt_check_need_key(base, handle) != kStatus_Success)
     {
+        hashcrypt_engine_deinit(base);
         return kStatus_Fail;
     }
 
@@ -1577,6 +1629,7 @@ status_t HASHCRYPT_AES_DecryptCfb(HASHCRYPT_Type *base,
     status = hashcrypt_aes_one_block(base, zeroes, blockOutput, HASHCRYPT_AES_BLOCK_SIZE);
     if (status != kStatus_Success)
     {
+        hashcrypt_engine_deinit(base);
         return status;
     }
     /* XOR ciphertext with output block to get plaintext*/
@@ -1595,6 +1648,7 @@ status_t HASHCRYPT_AES_DecryptCfb(HASHCRYPT_Type *base,
 
         if (status != kStatus_Success)
         {
+            hashcrypt_engine_deinit(base);
             return status;
         }
         /* XOR plaintext with ciphertext block to get plaintext*/
@@ -1605,6 +1659,8 @@ status_t HASHCRYPT_AES_DecryptCfb(HASHCRYPT_Type *base,
         size -= 16u;
     }
 
+    /* After processing all data, hashcrypt engine is set to disabled to lower power consumption */
+    hashcrypt_engine_deinit(base);
     return status;
 }
 

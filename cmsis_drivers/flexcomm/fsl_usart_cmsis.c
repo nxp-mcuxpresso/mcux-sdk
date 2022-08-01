@@ -33,7 +33,7 @@
      (defined(RTE_USART10) && RTE_USART10) || (defined(RTE_USART11) && RTE_USART11) || \
      (defined(RTE_USART12) && RTE_USART12) || (defined(RTE_USART13) && RTE_USART13))
 
-#define ARM_USART_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (2))
+#define ARM_USART_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (3))
 
 /*
  * ARMCC does not support split the data section automatically, so the driver
@@ -552,13 +552,29 @@ static void KSDK_USART_NonBlockingCallback(USART_Type *base, usart_handle_t *han
 {
     uint32_t event = 0U;
 
-    if (kStatus_USART_TxIdle == status)
+    switch (status)
     {
-        event = ARM_USART_EVENT_SEND_COMPLETE;
-    }
-    if (kStatus_USART_RxIdle == status)
-    {
-        event = ARM_USART_EVENT_RECEIVE_COMPLETE;
+        case kStatus_USART_TxIdle:
+            event = ARM_USART_EVENT_SEND_COMPLETE;
+            break;
+        case kStatus_USART_RxIdle:
+            event = ARM_USART_EVENT_RECEIVE_COMPLETE;
+            break;
+        case kStatus_USART_RxError:
+            event = ARM_USART_EVENT_RX_OVERFLOW;
+            break;
+        case kStatus_USART_TxError:
+            event = ARM_USART_EVENT_TX_UNDERFLOW;
+            break;
+        case kStatus_USART_FramingError:
+            event = ARM_USART_EVENT_RX_FRAMING_ERROR;
+            break;
+        case kStatus_USART_ParityError:
+            event = ARM_USART_EVENT_RX_PARITY_ERROR;
+            break;
+        default:
+            /* Avoid MISRA 16.4. */
+            break;
     }
 
     /* User data is actually CMSIS driver callback. */

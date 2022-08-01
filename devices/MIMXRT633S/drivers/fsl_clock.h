@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2021 , NXP
+ * Copyright 2016 - 2022 , NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,8 +27,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.7.1. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 7, 1))
+/*! @brief CLOCK driver version 2.7.2. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 7, 2))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -206,6 +206,21 @@ extern volatile uint32_t g_mclkFreq;
 #define TRNG_CLOCKS \
     {               \
         kCLOCK_Rng  \
+    }
+/*! @brief Clock ip name array for PUF */
+#define PUF_CLOCKS \
+    {              \
+        kCLOCK_Puf \
+    }
+/*! @brief Clock ip name array for HashCrypt */
+#define HASHCRYPT_CLOCKS \
+    {                    \
+        kCLOCK_Hashcrypt \
+    }
+/*! @brief Clock ip name array for Casper */
+#define CASPER_CLOCKS \
+    {                 \
+        kCLOCK_Casper \
     }
 /*! @brief Clock ip name array for uSDHC */
 #define USDHC_CLOCKS               \

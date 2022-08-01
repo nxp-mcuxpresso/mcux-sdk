@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief MCAN driver version. */
-#define FSL_MCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
+#define FSL_MCAN_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 #ifndef MCAN_RETRY_TIMES
@@ -389,7 +389,6 @@ struct _mcan_handle
     void *userData;                                      /*!< MCAN callback function parameter.*/
     mcan_tx_buffer_frame_t *volatile bufferFrameBuf[64]; /*!< The buffer for received data from Buffers. */
     mcan_rx_buffer_frame_t *volatile rxFifoFrameBuf;     /*!< The buffer for received data from Rx FIFO. */
-    volatile uint8_t txbufferIdx;                        /*!< Message Buffer transfer state. */
     volatile uint8_t bufferState[64];                    /*!< Message Buffer transfer state. */
     volatile uint8_t rxFifoState;                        /*!< Rx FIFO transfer state. */
 };
@@ -527,6 +526,18 @@ bool MCAN_CalculateImprovedTimingValues(uint32_t baudRate, uint32_t sourceClock_
  */
 void MCAN_SetArbitrationTimingConfig(CAN_Type *base, const mcan_timing_config_t *config);
 
+/*!
+ * @brief Set Baud Rate of MCAN classic mode.
+ *
+ * This function set the baud rate of MCAN base on MCAN_CalculateImprovedTimingValues() API calculated timing values.
+ *
+ * @param base MCAN peripheral base address.
+ * @param sourceClock_Hz Source Clock in Hz.
+ * @param baudRate_Bps Baud Rate in Bps.
+ * @return kStatus_Success - Set CAN baud rate (only has Nominal phase) successfully.
+ */
+status_t MCAN_SetBaudRate(CAN_Type *base, uint32_t sourceClock_Hz, uint32_t baudRate_Bps);
+
 #if (defined(FSL_FEATURE_CAN_SUPPORT_CANFD) && FSL_FEATURE_CAN_SUPPORT_CANFD)
 /*!
  * @brief Calculates the improved timing values by specific baudrates for CANFD
@@ -542,6 +553,19 @@ bool MCAN_FDCalculateImprovedTimingValues(uint32_t baudRate,
                                           uint32_t baudRateFD,
                                           uint32_t sourceClock_Hz,
                                           mcan_timing_config_t *pconfig);
+
+/*!
+ * @brief Set Baud Rate of MCAN FD mode.
+ *
+ * This function set the baud rate of MCAN FD base on MCAN_FDCalculateImprovedTimingValues API calculated timing values.
+ *
+ * @param base MCAN peripheral base address.
+ * @param sourceClock_Hz Source Clock in Hz.
+ * @param baudRateN_Bps Nominal Baud Rate in Bps.
+ * @param baudRateD_Bps Data Baud Rate in Bps.
+ * @return kStatus_Success - Set CAN FD baud rate (include Nominal and Data phase) successfully.
+ */
+status_t MCAN_SetBaudRateFD(CAN_Type *base, uint32_t sourceClock_Hz, uint32_t baudRateN_Bps, uint32_t baudRateD_Bps);
 /*!
  * @brief Sets the MCAN protocol data phase timing characteristic.
  *
@@ -723,11 +747,11 @@ static inline void MCAN_ClearRxBufferStatusFlag(CAN_Type *base, uint8_t idx)
 
     if (idx <= 31U)
     {
-        base->NDAT1 &= ~((uint32_t)1U << idx);
+        base->NDAT1 = ((uint32_t)1U << idx);
     }
     else
     {
-        base->NDAT2 &= ~((uint32_t)1U << (idx - 32U));
+        base->NDAT2 = ((uint32_t)1U << (idx - 32U));
     }
 }
 
@@ -883,7 +907,7 @@ status_t MCAN_ReadRxFifo(CAN_Type *base, uint8_t fifoBlock, mcan_rx_buffer_frame
  */
 static inline void MCAN_TransmitAddRequest(CAN_Type *base, uint8_t idx)
 {
-    base->TXBAR |= ((uint32_t)1U << idx);
+    base->TXBAR = ((uint32_t)1U << idx);
 }
 
 /*!
@@ -896,7 +920,7 @@ static inline void MCAN_TransmitAddRequest(CAN_Type *base, uint8_t idx)
  */
 static inline void MCAN_TransmitCancelRequest(CAN_Type *base, uint8_t idx)
 {
-    base->TXBCR |= ((uint32_t)1U << idx);
+    base->TXBCR = ((uint32_t)1U << idx);
 }
 
 /*!

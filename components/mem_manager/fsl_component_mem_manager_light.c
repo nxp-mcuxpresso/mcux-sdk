@@ -28,6 +28,10 @@
 
 #if defined(gMemManagerLight) && (gMemManagerLight == 1)
 
+/*  Selects the allocation scheme that will be used by the MemManagerLight
+    0: Allocates the first free block available in the heap, no matter its size
+    1: Allocates the first free block whose size is at most the double of the requested size
+    2: Allocates the first free block whose size is at most the 4/3 of the requested size     */
 #ifndef cMemManagerLightReuseFreeBlocks
 #define cMemManagerLightReuseFreeBlocks 1
 #endif
@@ -49,16 +53,6 @@
 * Private macros
 *************************************************************************************
 ********************************************************************************** */
-
-#define MEM_BLOCK_HEAP_SIZE(blockSize, numberOfBlocks, id) ((numberOfBlocks) * ((blockSize) + 16))
-
-#undef _block_set_
-#undef _eol_
-
-#define _eol_       +
-#define _block_set_ MEM_BLOCK_HEAP_SIZE
-
-#define heapSize_c (PoolsDetails_c 0)
 
 #define MEMMANAGER_BLOCK_INVALID (uint16_t)0x0    /* Used to remove a block in the heap - debug only */
 #define MEMMANAGER_BLOCK_FREE    (uint16_t)0xBA00 /* Mark a previous allocated block as free         */
@@ -142,16 +136,16 @@ typedef union void_ptr_tag
 ********************************************************************************** */
 
 /* Allocate memHeap array in the .heap section to ensure the size of the .heap section is large enough
-   for the application (from app_preinclude.h)
+   for the application
    However, the real heap used at run time will cover all the .heap section so this area can be bigger
-   than the requested heapSize_c - see memHeapEnd */
+   than the requested MinimalHeapSize_c - see memHeapEnd */
 #if defined(__IAR_SYSTEMS_ICC__)
 #pragma location = ".heap"
-static uint32_t memHeap[heapSize_c / sizeof(uint32_t)];
+static uint32_t memHeap[MinimalHeapSize_c / sizeof(uint32_t)];
 #elif defined(__GNUC__)
-static uint32_t memHeap[heapSize_c / sizeof(uint32_t)] __attribute__((section(".heap")));
+static uint32_t memHeap[MinimalHeapSize_c / sizeof(uint32_t)] __attribute__((section(".heap")));
 #elif defined(__CC_ARM)
-static uint32_t memHeap[heapSize_c / sizeof(uint32_t)] __attribute__((section(".heap")));
+static uint32_t memHeap[MinimalHeapSize_c / sizeof(uint32_t)] __attribute__((section(".heap")));
 #else
 #error "Compiler unknown!"
 #endif
@@ -164,6 +158,10 @@ static freeBlockHeaderList_t FreeBlockHdrList;
 #ifdef MEM_STATISTICS_INTERNAL
 static mem_statis_t s_memStatis;
 #endif /* MEM_STATISTICS_INTERNAL */
+
+#if defined(gFSCI_MemAllocTest_Enabled_d) && (gFSCI_MemAllocTest_Enabled_d)
+extern mem_alloc_test_status_t FSCI_MemAllocTestCanAllocate(void *pCaller);
+#endif
 
 /*! *********************************************************************************
 *************************************************************************************
@@ -315,27 +313,31 @@ static void MEM_BufferFreeBlocksCleanUp(blockHeader_t *BlockHdr)
 #if defined(gMemManagerLightGuardsCheckEnable) && (gMemManagerLightGuardsCheckEnable == 1)
 static void MEM_BlockHeaderCheck(blockHeader_t *BlockHdr)
 {
-    bool_t ret;
+    int ret;
+    uint8_t guardPrePattern[BLOCK_HDR_PREGUARD_SIZE];
+    uint8_t guardPostPattern[BLOCK_HDR_POSTGUARD_SIZE];
 
-    ret = FLib_MemCmpToVal((const void *)&BlockHdr->preguard, BLOCK_HDR_PREGUARD_PATTERN, BLOCK_HDR_PREGUARD_SIZE);
-    if (ret == 0)
+    (void)memset((void *)guardPrePattern, BLOCK_HDR_PREGUARD_PATTERN, BLOCK_HDR_PREGUARD_SIZE);
+    ret = memcmp((const void *)&BlockHdr->preguard, (const void *)guardPrePattern, BLOCK_HDR_PREGUARD_SIZE);
+    if (ret != 0)
     {
         MEM_DBG_LOG("Preguard Block Header Corrupted %x", BlockHdr);
     }
-    assert(ret);
+    assert(ret == 0);
 
-    ret = FLib_MemCmpToVal((const void *)&BlockHdr->postguard, BLOCK_HDR_POSTGUARD_PATTERN, BLOCK_HDR_POSTGUARD_SIZE);
-    if (ret == 0)
+    (void)memset((void *)guardPostPattern, BLOCK_HDR_POSTGUARD_PATTERN, BLOCK_HDR_POSTGUARD_SIZE);
+    ret = memcmp((const void *)&BlockHdr->postguard, (const void *)guardPostPattern, BLOCK_HDR_POSTGUARD_SIZE);
+    if (ret != 0)
     {
         MEM_DBG_LOG("Postguard Block Header Corrupted %x", BlockHdr);
     }
-    assert(ret);
+    assert(ret == 0);
 }
 
 static void MEM_BlockHeaderSetGuards(blockHeader_t *BlockHdr)
 {
-    FLib_MemSet((void *)&BlockHdr->preguard, BLOCK_HDR_PREGUARD_PATTERN, BLOCK_HDR_PREGUARD_SIZE);
-    FLib_MemSet((void *)&BlockHdr->postguard, BLOCK_HDR_POSTGUARD_PATTERN, BLOCK_HDR_POSTGUARD_SIZE);
+    (void)memset((void *)&BlockHdr->preguard, BLOCK_HDR_PREGUARD_PATTERN, BLOCK_HDR_PREGUARD_SIZE);
+    (void)memset((void *)&BlockHdr->postguard, BLOCK_HDR_POSTGUARD_PATTERN, BLOCK_HDR_POSTGUARD_SIZE);
 }
 
 #endif
@@ -635,6 +637,16 @@ void *MEM_BufferAllocWithId(uint32_t numBytes, uint8_t poolId)
     void_ptr_t BlockHdr_ptr;
 #endif
     void_ptr_t buffer_ptr;
+
+#if defined(gFSCI_MemAllocTest_Enabled_d) && (gFSCI_MemAllocTest_Enabled_d)
+    void *pCaller = (void *)((uint32_t *)__mem_get_LR());
+    /* Verify if the caller is part of any FSCI memory allocation test. If so, return NULL. */
+    if (FSCI_MemAllocTestCanAllocate(pCaller) == kStatus_AllocBlock)
+    {
+        buffer_ptr.void_ptr = NULL;
+        return buffer_ptr.void_ptr;
+    }
+#endif
 
     /* Alloc a buffer */
     buffer_ptr.void_ptr = MEM_BufferAllocate(numBytes, poolId);

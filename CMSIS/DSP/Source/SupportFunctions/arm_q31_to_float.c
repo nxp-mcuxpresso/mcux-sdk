@@ -3,13 +3,13 @@
  * Title:        arm_q31_to_float.c
  * Description:  Converts the elements of the Q31 vector to floating-point vector
  *
- * $Date:        18. March 2019
- * $Revision:    V1.6.0
+ * $Date:        23 April 2021
+ * $Revision:    V1.9.0
  *
- * Target Processor: Cortex-M cores
+ * Target Processor: Cortex-M and Cortex-A cores
  * -------------------------------------------------------------------- */
 /*
- * Copyright (C) 2010-2019 ARM Limited or its affiliates. All rights reserved.
+ * Copyright (C) 2010-2021 ARM Limited or its affiliates. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,7 +26,7 @@
  * limitations under the License.
  */
 
-#include "arm_math.h"
+#include "dsp/support_functions.h"
 
 /**
   @ingroup groupSupport
@@ -54,7 +54,49 @@
       pDst[n] = (float32_t) pSrc[n] / 2147483648;   0 <= n < blockSize.
   </pre>
  */
+#if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE)
+void arm_q31_to_float(
+  const q31_t * pSrc,
+        float32_t * pDst,
+        uint32_t blockSize)
+{
+    uint32_t  blkCnt;           /* loop counters */
+    q31x4_t vecDst;
+    q31_t const *pSrcVec;
 
+    pSrcVec = (q31_t const *) pSrc;
+    blkCnt = blockSize >> 2;
+    while (blkCnt > 0U)
+    {
+        /* C = (float32_t) A / 2147483648 */
+        /* convert from q31 to float and then store the results in the destination buffer */
+        vecDst = vld1q(pSrcVec);   
+        pSrcVec += 4;
+        vstrwq(pDst, vcvtq_n_f32_s32(vecDst, 31));  
+        pDst += 4;
+        /*
+         * Decrement the blockSize loop counter
+         */
+        blkCnt--;
+    }
+    /*
+     * tail
+     * (will be merged thru tail predication)
+     */
+    blkCnt = blockSize & 3;
+    while (blkCnt > 0U)
+    {
+      /* C = (float32_t) A / 2147483648 */
+  
+      /* Convert from q31 to float and store result in destination buffer */
+      *pDst++ = ((float32_t) *pSrcVec++ / 2147483648.0f);
+  
+      /* Decrement loop counter */
+      blkCnt--;
+    }
+}
+
+#else
 #if defined(ARM_MATH_NEON_EXPERIMENTAL)
 void arm_q31_to_float(
   const q31_t * pSrc,
@@ -153,6 +195,7 @@ void arm_q31_to_float(
 
 }
 #endif /* #if defined(ARM_MATH_NEON) */
+#endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */
 
 /**
   @} end of q31_to_x group
