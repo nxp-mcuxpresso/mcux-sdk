@@ -34,8 +34,6 @@
 /*! @brief USB stack version definition */
 #define USB_MAKE_VERSION(major, minor, bugfix) (((major) << 16) | ((minor) << 8) | (bugfix))
 
-#define MAKE_VERSION(major, minor, bugfix) (((major) << 16) | ((minor) << 8) | (bugfix))
-
 /*! @brief USB stack component version definition, changed with component in yaml together */
 #define USB_STACK_COMPONENT_VERSION \
     MAKE_VERSION(USB_STACK_VERSION_MAJOR, USB_STACK_VERSION_MINOR, USB_STACK_VERSION_BUGFIX)
