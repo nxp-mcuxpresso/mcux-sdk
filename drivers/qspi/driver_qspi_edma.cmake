@@ -14,7 +14,13 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 if(${MCUX_DEVICE} STREQUAL "MCIMX7U5")
     include(driver_edma_MCIMX7U5)
 endif()
+if(${MCUX_DEVICE} STREQUAL "MCIMX7U3")
+    include(driver_edma_MCIMX7U5)
+endif()
 if(${MCUX_DEVICE} STREQUAL "MK28FA15")
+    include(driver_edma_MK28FA15)
+endif()
+if(${MCUX_DEVICE} STREQUAL "MK27FA15")
     include(driver_edma_MK28FA15)
 endif()
 

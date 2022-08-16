@@ -41,4 +41,7 @@ endif()
 if(${MCUX_DEVICE} STREQUAL "LPC54114_cm4")
     include(component_codec_i2c_LPC54114_cm4)
 endif()
+if(${MCUX_DEVICE} STREQUAL "LPC54113_cm4")
+    include(component_codec_i2c_LPC54114_cm4)
+endif()
 
