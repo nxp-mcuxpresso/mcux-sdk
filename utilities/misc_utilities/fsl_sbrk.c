@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -8,6 +8,8 @@
 #if defined(__GNUC__)
 #include <stdio.h>
 #include <errno.h>
+#include <stdint.h>
+#include <sys/types.h>
 #endif
 
 #if defined(__GNUC__)
