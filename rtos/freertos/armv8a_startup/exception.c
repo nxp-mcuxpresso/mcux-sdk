@@ -5,11 +5,25 @@
  */
 
 #include "cmsis_compiler.h"
+#include "fsl_debug_console.h"
 
-__WEAK void putc(int c) {};
-__WEAK void puts(const char *s) {};
-__WEAK void put_hex(uint64_t v) {};
-__WEAK void put_dec(uint64_t v) {};
+__WEAK void putc(int c)
+{
+	PRINTF("%c", c);
+}
+
+__WEAK void puts(const char *s)
+{
+	PRINTF("%s", s);
+}
+__WEAK void put_hex(uint64_t v)
+{
+	PRINTF("0x%llx", v);
+}
+__WEAK void put_dec(uint64_t v)
+{
+	PRINTF("%lld", v);
+}
 
 struct exception_class_handler {
 	const char *name;
@@ -31,7 +45,7 @@ static void serror_handler(uint32_t iss)
 		uint8_t serror = ((iss >> 22) & 0x3) | (iss & 0x3);
 		puts(": ");
 		puts(serror_str[serror]);
-		puts("\n");
+		puts("\r\n");
 	}
 }
 
@@ -83,7 +97,7 @@ static void dump_registers(uint64_t *regs)
 {
 	int i;
 
-	puts("registers:\n");
+	puts("registers:\r\n");
 	for (i = 0; i < 31; i++) {
 		puts("x");
 		put_dec(i);
@@ -96,7 +110,7 @@ static void dump_registers(uint64_t *regs)
 		put_hex(regs[i]);
 
 		if (i & 0x1)
-			puts("\n");
+			puts("\r\n");
 		else
 			puts(" ");
 	}
@@ -118,27 +132,27 @@ void exception_handler(uint64_t from, uint64_t type, uint64_t *sp)
 	ec = (esr_el1 >> 26) & 0x3f;
 	iss = esr_el1 & 0x1ffffff;
 
-	puts("\nException: ");
+	puts("\r\nException: ");
 	puts(exception_type[type]);
-	puts("\nFrom: ");
+	puts("\r\nFrom: ");
 	puts(exception_from[from]);
-	puts("\nClass: ");
+	puts("\r\nClass: ");
 	if (ec_handler[ec].name)
 		puts(ec_handler[ec].name);
 
-	puts("\nelr: ");
+	puts("\r\nelr: ");
 	put_hex(elr_el1);
 
-	puts("\nfar: ");
+	puts("\r\nfar: ");
 	put_hex(far_el1);
 
-	puts("\nesr: ");
+	puts("\r\nesr: ");
 	put_hex(esr_el1);
 
-	puts("\nsctlr: ");
+	puts("\r\nsctlr: ");
 	put_hex(sctlr_el1);
 
-	puts("\n");
+	puts("\r\n");
 
 	if (ec_handler[ec].handler)
 		ec_handler[ec].handler(iss);
