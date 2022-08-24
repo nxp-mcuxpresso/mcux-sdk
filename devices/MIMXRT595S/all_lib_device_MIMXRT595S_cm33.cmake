@@ -54,6 +54,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/rm67162
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/rm68191
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/rm68200
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/wifi_bt_module
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/acmp
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cache/cache64
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/casper
@@ -90,14 +91,19 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/utick
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/edgefast_wifi
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/common/audio
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/tensorflow-lite
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/tensorflow-lite/third_party/cmsis
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/littlefs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/lwip
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wifi_nxp
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
@@ -114,9 +120,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utilities_misc_utilities_MIMXRT595S_cm33)
 #    include(driver_sema42)
 #    include(middleware_sdmmc_mmc)
+#    include(middleware_lwip_apps_lwiperf)
 #    include(driver_nor_flash-controller-flexspi)
 #    include(driver_lpc_gpio)
 #    include(component_flexspi_nor_flash_adapter_rt595evk)
+#    include(middleware_wifi)
 #    include(driver_dc-fb-common)
 #    include(component_rt_gpio_adapter)
 #    include(middleware_freertos-kernel_cm33_nonsecure_port)
@@ -134,19 +142,24 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_sdmmc_osa_bm)
 #    include(component_log_backend_ringbuffer)
 #    include(driver_flexcomm_usart)
+#    include(middleware_mbedtls_MIMXRT595S_cm33)
 #    include(driver_i3c)
 #    include(driver_display-rm67162)
+#    include(middleware_lwip)
 #    include(driver_codec)
 #    include(driver_gt911)
 #    include(driver_ostimer)
 #    include(driver_cmsis_flexcomm_i2c)
+#    include(middleware_mbedtls_rt1)
 #    include(driver_inputmux)
 #    include(driver_flexcomm_i2c)
 #    include(driver_iap)
 #    include(component_serial_manager)
+#    include(middleware_edgefast_wifi_nxp)
 #    include(middleware_usb_device_cdc_external)
 #    include(component_i3c_bus_adapter)
 #    include(component_serial_manager_uart)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(driver_nor_flash-common)
 #    include(driver_flexcomm_i2s)
 #    include(component_log_backend_debugconsole)
@@ -156,10 +169,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_freertos-kernel_cm33_secure_port)
 #    include(middleware_eiq_tensorflow_lite_micro_cmsis_nn)
 #    include(driver_pint)
+#    include(middleware_lwip_contrib_ping)
+#    include(middleware_wifi_fwdnld)
 #    include(driver_sctimer)
 #    include(middleware_usb_device_common_header)
 #    include(middleware_sdmmc_host_usdhc_freertos_MIMXRT595S_cm33)
 #    include(middleware_multicore_rpmsg_lite_evkmimxrt595_freertos)
+#    include(middleware_edgefast_wifi)
+#    include(middleware_lwip_apps_httpsrv)
 #    include(component_codec_i2c_MIMXRT595S_cm33)
 #    include(utility_shell)
 #    include(device_startup)
@@ -173,6 +190,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_mculcd_smartdma)
 #    include(driver_usdhc)
 #    include(driver_lpadc)
+#    include(middleware_wifi_wifidriver)
 #    include(driver_wm8904)
 #    include(middleware_freertos-kernel_extension)
 #    include(component_serial_manager_swo)
@@ -238,10 +256,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_fatfs)
 #    include(driver_flexio)
 #    include(driver_lcdif)
-#    include(middleware_usb_host_audio)
+#    include(component_wifi_bt_module_tx_pwr_limits)
 #    include(driver_otfad)
 #    include(utility_debug_console)
 #    include(middleware_usb_host_hid)
+#    include(middleware_wifi_cli)
+#    include(middleware_wifi_sdio-2)
 #    include(component_mflash_common)
 #    include(driver_cmsis_flexcomm_spi)
 #    include(CMSIS_RTOS2_Common)
@@ -274,8 +294,10 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm)
 #    include(component_osa)
 #    include(driver_fmeas)
+#    include(middleware_littlefs)
 #    include(driver_flexio_spi)
 #    include(middleware_usb_device_ip3511hs_MIMXRT595S_cm33)
+#    include(middleware_wifi_sdio)
 #    include(middleware_freertos-kernel_secure_context)
 #    include(component_i3c_adapter)
 #    include(driver_flexcomm_usart_dma)
@@ -295,6 +317,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_assert)
 #    include(driver_tfa9896)
 #    include(driver_flexcomm_usart_freertos)
+#    include(middleware_usb_host_audio)
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_flatbuffers)
 #    include(driver_lpc_iopctl)
 #    include(CMSIS_Device_API_OSTick)

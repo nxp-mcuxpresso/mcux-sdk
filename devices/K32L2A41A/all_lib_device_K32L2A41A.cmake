@@ -49,6 +49,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
@@ -86,6 +87,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_device_cdc_external)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(component_log_backend_debugconsole)
 #    include(driver_llwu)
 #    include(component_lpuart_adapter)
@@ -120,6 +122,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_port)
 #    include(driver_lpspi)
 #    include(driver_gpio)
+#    include(middleware_mbedtls_kinetis2)
 #    include(component_log)
 #    include(driver_adc16)
 #    include(CMSIS_Driver_Include_USART)
@@ -162,4 +165,5 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_phdc)
 #    include(driver_trng)
 #    include(driver_intmux)
+#    include(middleware_mbedtls_K32L2A41A)
 #    include(middleware_usb_device_stack_external)

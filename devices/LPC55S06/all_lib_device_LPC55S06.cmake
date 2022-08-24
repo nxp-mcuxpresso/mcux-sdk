@@ -39,6 +39,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sctimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/utick
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
@@ -62,6 +63,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_debug_console_lite)
 #    include(component_usart_adapter)
 #    include(driver_cmsis_flexcomm_spi)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(component_lists)
 #    include(driver_lpc_gpio)
 #    include(driver_mrt)
@@ -87,6 +89,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_shell)
 #    include(middleware_azure_rtos_fx_sp)
 #    include(CMSIS_Driver_Include_I2C)
+#    include(middleware_mbedtls_lpc1)
 #    include(utility_assert)
 #    include(driver_flexcomm_usart_dma)
 #    include(driver_iap1)
@@ -106,6 +109,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_i2c_freertos)
 #    include(middleware_freertos-kernel_cm33_nonsecure_port)
 #    include(middleware_azure_rtos_fx_template_LPC55S06)
+#    include(middleware_mbedtls_LPC55S06)
 #    include(driver_ostimer)
 #    include(utilities_misc_utilities_LPC55S06)
 #    include(driver_common)

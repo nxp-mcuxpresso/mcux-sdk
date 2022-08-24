@@ -58,6 +58,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbara
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
@@ -100,6 +101,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_pit)
 #    include(middleware_usb_device_cdc_external)
 #    include(component_serial_manager_uart)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(middleware_azure_rtos_ux_sp)
 #    include(component_log_backend_debugconsole)
 #    include(utilities_misc_utilities_MIMXRT1011)
@@ -134,6 +136,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_xip_board_evkmimxrt1010)
 #    include(driver_adc_etc)
 #    include(component_lpi2c_adapter)
+#    include(middleware_mbedtls_MIMXRT1011)
 #    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_dcdc_1)
@@ -182,6 +185,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_stack_MIMXRT1011)
 #    include(driver_flexio_spi)
 #    include(component_pit_adapter)
+#    include(middleware_mbedtls_rt)
 #    include(middleware_azure_rtos_fx_template_MIMXRT1011)
 #    include(driver_src)
 #    include(driver_lpi2c)

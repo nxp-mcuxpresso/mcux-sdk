@@ -44,6 +44,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/vref
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbar
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
@@ -88,7 +89,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_xbar)
 #    include(middleware_freertos-kernel_extension)
 #    include(utility_shell)
-#    include(utility_notifier)
+#    include(middleware_mbedtls_MKM35Z7)
 #    include(CMSIS_Driver_Include_I2C)
 #    include(driver_wdog)
 #    include(utility_assert_lite)
@@ -117,7 +118,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_smc)
 #    include(driver_crc)
 #    include(driver_spi_dma)
+#    include(utility_notifier)
 #    include(driver_dma)
+#    include(middleware_mbedtls_kinetis6)
 #    include(component_osa_free_rtos)
 #    include(middleware_mmcau_common_files)
 #    include(driver_slcd)
@@ -125,6 +128,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_afe)
 #    include(component_serial_manager)
 #    include(component_serial_manager_uart)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(driver_pmc)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)

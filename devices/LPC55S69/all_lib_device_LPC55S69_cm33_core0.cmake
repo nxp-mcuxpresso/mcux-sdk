@@ -57,6 +57,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
@@ -104,6 +105,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_device_cdc_external)
 #    include(driver_lpc_dma)
 #    include(component_serial_manager_uart)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(driver_flexcomm_i2s)
 #    include(component_log_backend_debugconsole)
 #    include(driver_flexcomm_spi_dma)
@@ -219,6 +221,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_osa)
 #    include(middleware_azure_rtos_tx_sp)
 #    include(driver_sdif)
+#    include(middleware_mbedtls_lpc1)
 #    include(middleware_sdmmc_host_sdif_interrupt)
 #    include(driver_flexcomm_usart_dma)
 #    include(middleware_usb_host_ip3516hs_LPC55S69_cm33_core0)
@@ -233,6 +236,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_azure_rtos_lx)
 #    include(device_startup_LPC55S69_cm33_core0)
 #    include(CMSIS_Device_API_OSTick)
+#    include(middleware_mbedtls_LPC55S69_cm33_core0)
 #    include(middleware_usb_host_stack_LPC55S69_cm33_core0)
 #    include(component_wm8904_adapter)
 #    include(driver_reset)

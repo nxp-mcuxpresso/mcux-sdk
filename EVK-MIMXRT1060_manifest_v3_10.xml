@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_EVK-MIMXRT1060_manifest_v3_10" name="SDKVersion 2.12.0 SuperSet" brief="This is SDK version 2.12.0 manifest file." format_version="3.10" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.10.xsd">
-  <!--Timestamp (UTC): 2022-07-15 08:18:38.328160-->
-  <!--This manifest is generated based on sdk repo commit: 45d71c921a1dd3e0403549aa377535344ed9bc97-->
+  <!--Timestamp (UTC): 2022-08-11 15:00:48.706822-->
+  <!--This manifest is generated based on sdk repo commit: 7fb442914f92023b395b260777eb2355254fd71d-->
   <defines>
     <define name="CPU_$|package|" value=""/>
     <define name="CPU_$|package|_$|core|" value=""/>
@@ -11,8 +11,10 @@
     <definition extID="evkbmimxrt1060"/>
     <definition extID="middleware.freertos-kernel.MIMXRT1062"/>
     <definition extID="middleware.usb.device.cdc.external.MIMXRT1062"/>
+    <definition extID="middleware.littlefs.MIMXRT1062"/>
     <definition extID="middleware.multicore.erpc.MIMXRT1062"/>
     <definition extID="middleware.multicore.MIMXRT1062"/>
+    <definition extID="middleware.wifi.MIMXRT1062"/>
   </externalDefinitions>
   <ksdk id="MCUXpressoSDK2120" name="MCUXpressoSDK2120" version="2.12.0"/>
   <manifest_includes>
@@ -23,9 +25,13 @@
     <manifest_include path="../rtos/azure-rtos/middleware_microsoft_azure_rtos_nxd_MIMXRT1062_manifest_v3_10.xml"/>
     <manifest_include path="../rtos/azure-rtos/middleware_microsoft_azure_rtos_tx_MIMXRT1062_manifest_v3_10.xml"/>
     <manifest_include path="../rtos/azure-rtos/middleware_microsoft_azure_rtos_ux_MIMXRT1062_manifest_v3_10.xml"/>
+    <manifest_include path="../middleware/wifi_nxp/middleware_nxp_wifi_MIMXRT1062_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/eiq/middleware_nxp_eiq_machine_learning_MIMXRT1062_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/fatfs/middleware_elm_chan_fatfs_MIMXRT1062_manifest_v3_10.xml"/>
     <manifest_include path="../rtos/freertos/freertos_kernel/middleware_amazon_freertos_kernel_MIMXRT1062_manifest_v3_10.xml"/>
+    <manifest_include path="../middleware/littlefs/middleware_christopher_haster_littlefs_MIMXRT1062_manifest_v3_10.xml"/>
+    <manifest_include path="../middleware/lwip/middleware_adam_dunkels_lwip_MIMXRT1062_manifest_v3_10.xml"/>
+    <manifest_include path="../middleware/mbedtls/middleware_arm_mbedtls_MIMXRT1062_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/multicore/middleware_nxp_multicore_MIMXRT1062_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/sdmmc/middleware_nxp_sd_mmc_sdio_card_MIMXRT1062_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/usb/middleware_nxp_usb_MIMXRT1062_manifest_v3_10.xml"/>
@@ -3019,6 +3025,35 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
+    <component id="component.wifi_bt_module.tx_pwr_limits.MIMXRT1062" name="wifi_bt_module_tx_pwr_limits" brief="Wi-Fi module Tx power limits" version="1.0.0" full_name="Wi-Fi module Tx power limits" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="software_component" package_base_path="components/wifi_bt_module" project_base_path="component/wifi_bt_module">
+      <source relative_path="AzureWave/tx_pwr_limits" type="c_include">
+        <files mask="wlan_txpwrlimit_cfg_WW.h"/>
+      </source>
+      <source relative_path="Murata/tx_pwr_limits" type="c_include">
+        <files mask="wlan_txpwrlimit_cfg_murata_1XK_CA.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1XK_EU.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1XK_JP.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1XK_US.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1XK_WW.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1ZM_CA.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1ZM_EU.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1ZM_JP.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1ZM_US.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1ZM_WW.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_2DS_CA.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_2DS_EU.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_2DS_JP.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_2DS_US.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_2DS_WW.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="component_wifi_bt_module_tx_pwr_limits_MIMXRT1062.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="AzureWave/tx_pwr_limits" type="c_include"/>
+        <include_path relative_path="Murata/tx_pwr_limits" type="c_include"/>
+      </include_paths>
+    </component>
     <component id="component.wm8904_adapter.MIMXRT1062" name="codec_wm8904_adapter" brief="Component wm8904 adapter for single codec" version="2.2.0" full_name="Component wm8904_adapter" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" device_cores="core0_MIMXRT1062xxxxA core0_MIMXRT1062xxxxB" user_visible="true" type="abstraction_layer" package_base_path="components/codec/" project_base_path="codec">
       <dependencies>
         <all>
@@ -3169,6 +3204,14 @@ ${load}</script>
         <files mask="eIQ_Media_Processing_Pipeline_User_Guide.pdf"/>
       </source>
     </component>
+    <component id="docs.littlefs.MIMXRT1062" name="doc_littlefs" brief="Littlefs documentation" version="1.0.0" full_name="Littlefs documentation" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="documentation" package_base_path="docs/littlefs" project_base_path="littlefs">
+      <dependencies>
+        <component_dependency value="middleware.littlefs.MIMXRT1062"/>
+      </dependencies>
+      <source relative_path="./" type="doc">
+        <files mask="littlefs.txt"/>
+      </source>
+    </component>
     <component id="docs.multicore.MIMXRT1062" name="docs_multicore" brief="Collection of Multicore SDK documentation" version="2.12.0" full_name="Multicore SDK documentation" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="documentation" package_base_path="docs/MULTICORE" project_base_path="MULTICORE">
       <dependencies>
         <any_of>
@@ -3187,6 +3230,28 @@ ${load}</script>
       </dependencies>
       <source relative_path="./" type="doc">
         <files mask="eRPC Getting Started User's Guide.pdf"/>
+      </source>
+    </component>
+    <component id="docs.wifi.MIMXRT1062" name="doc_wifi" brief="Wi-Fi documentation" version="1.0.0" full_name="Wi-Fi documentation" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" device_cores="core0_MIMXRT1062xxxxA core0_MIMXRT1062xxxxB" user_visible="true" type="documentation" package_base_path="docs/wireless/Wi-Fi" project_base_path="wireless/Wi-Fi">
+      <dependencies>
+        <component_dependency value="middleware.wifi.MIMXRT1062"/>
+      </dependencies>
+      <source relative_path="./" type="doc">
+        <files mask="AN12917-Compliance-and-certification-considerations.pdf"/>
+        <files mask="AN12918-Wi-Fi-Tx-Power-Table-and-Channel-Scan-Management-for-i.MX-RT-SDK.pdf"/>
+        <files mask="MCUXpresso_SDK_WLAN_Driver_Reference_Manual.pdf"/>
+        <files mask="TN00066-WFA-Derivative-Certification-Process.pdf"/>
+        <files mask="UM11567-WFA-Certification-Guide-for-NXP-based-Wireless-Modules-on-i.MX-RT-Platform-Running-RTOS.pdf"/>
+      </source>
+    </component>
+    <component id="docs.wifi_bt.MIMXRT1062" name="doc_wifi_bt" brief="Wi-Fi and Bluetooth documentation" version="1.0.0" full_name="Wi-Fi and Bluetooth documentation" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" device_cores="core0_MIMXRT1062xxxxA core0_MIMXRT1062xxxxB" user_visible="true" type="documentation" package_base_path="docs/wireless" project_base_path="wireless">
+      <dependencies>
+        <component_dependency value="middleware.wifi.MIMXRT1062"/>
+      </dependencies>
+      <source relative_path="./" type="doc">
+        <files mask="UM11441-Getting-Started-with-NXP-based-Wireless-Modules-and-i.MX-RT-Platform-Running-on-RTOS.pdf"/>
+        <files mask="UM11442-NXP-Wi-Fi-and-Bluetooth-Demo-Applications-for-i.MX-RT-platforms-User-Guide.pdf"/>
+        <files mask="UM11443-NXP-Wi-Fi-and-Bluetooth-Debug-Feature-Configuration-Guide-for-i.MX-RT-Platforms.pdf"/>
       </source>
     </component>
     <component id="docs_external.MIMXRT1062.MIMXRT1062" name="docs_external.MIMXRT1062" brief="External documentation for MIMXRT1062." version="1.0.0" full_name="External documentation" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="documentation" package_base_path="docs" project_base_path="docs">
