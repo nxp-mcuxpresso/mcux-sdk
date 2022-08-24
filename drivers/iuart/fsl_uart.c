@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -459,6 +459,51 @@ status_t UART_SetBaudRate(UART_Type *base, uint32_t baudRate_Bps, uint32_t srcCl
 }
 
 /*!
+ * brief Enable 9-bit RS-485 mode for UART.
+ *
+ * This function set the 9-bit RS-485 mode for UART module. The 9th bit is not used for parity thus can be modified by user.
+ *
+ * param base UART peripheral base address.
+ * param enable true to enable, flase to disable.
+ */
+void UART_Enable9bitRS485Mode(UART_Type *base, bool enable)
+{
+    assert(base != NULL);
+
+    if (enable)
+    {
+        /* Set PREN to enable trasmitting the ninth data bit and set WS for 8bits data word size*/
+        base->UCR2 |= UART_UCR2_WS_MASK | UART_UCR2_PREN_MASK;
+
+		/* set MDEN to enable 9bit RS485 mode. */
+		base->UMCR |= UART_UMCR_MDEN_MASK;
+    }
+    else
+    {
+        /* Clear MDEN. */
+        base->UMCR &= ~UART_UMCR_MDEN_MASK;
+    }
+}
+
+/*!
+ * brief Transmit an address frame in 9-bit data mode.
+ *
+ * param base UART peripheral base address.
+ * param address UART slave address.
+ */
+void UART_Send9bitRS485Address(UART_Type *base, uint8_t address)
+{
+    assert(base != NULL);
+
+    /* Set address mark. */
+    UART_Set9thTransmitBit(base);
+    /* Send address. */
+	UART_WriteBlocking(base, &address, 1);
+    /* Clear address mark for following data transfer. */
+    UART_Clear9thTransmitBit(base);
+}
+
+/*!
  * brief Enables UART interrupts according to the provided mask.
  *
  * This function enables the UART interrupts according to the provided mask. The mask
@@ -771,7 +816,8 @@ status_t UART_ReadBlocking(UART_Type *base, uint8_t *data, size_t length)
             if ((base->USR1 & UART_USR1_PARITYERR_MASK) != 0U)
             {
                 UART_ClearStatusFlag(base, (uint32_t)kUART_ParityErrorFlag);
-                status = kStatus_UART_ParityError;
+                if ((UART_UMCR_MDEN_MASK & base->UMCR) == 0U)
+                    status = kStatus_UART_ParityError;
             }
             /* Framing error check for receiving character */
             if ((base->USR1 & UART_USR1_FRAMERR_MASK) != 0U)
@@ -1266,13 +1312,14 @@ void UART_TransferHandleIRQ(UART_Type *base, void *irqHandle)
     {
         /* Write 1 to clear parity error flag. */
         base->USR1 |= UART_USR1_PARITYERR_MASK;
-
-        handle->rxState    = (uint8_t)kUART_RxParityError;
-        handle->rxDataSize = 0U;
-        /* Trigger callback. */
-        if ((handle->callback) != NULL)
-        {
-            handle->callback(base, handle, kStatus_UART_ParityError, handle->userData);
+        if (((UART_UMCR_MDEN_MASK & base->UMCR) == 0U)) {
+             handle->rxState    = (uint8_t)kUART_RxParityError;
+             handle->rxDataSize = 0U;
+             /* Trigger callback. */
+             if ((handle->callback) != NULL)
+             {
+                 handle->callback(base, handle, kStatus_UART_ParityError, handle->userData);
+             }
         }
     }
 
@@ -1293,6 +1340,19 @@ void UART_TransferHandleIRQ(UART_Type *base, void *irqHandle)
     {
         /* Get the size that stored in receive FIFO buffer for this interrupt. */
         count = (uint8_t)((base->UFCR & UART_UFCR_RXTL_MASK) >> UART_UFCR_RXTL_SHIFT);
+        /* If 9bit RS-485 Slave Address was detected*/
+       if ((UART_USR1_SAD_MASK & base->USR1) != 0U)
+       {
+            /* Write 1 to clear SAD interrupt flag */
+            base->USR1 |= UART_USR1_SAD_MASK;
+
+            if ((handle->callback) != NULL)
+            {
+                handle->callback(base, handle, kStatus_UART_RS485SlaveAddressDetected, handle->userData);
+            }
+
+        }
+        /* Get the size that stored in receive FIFO buffer for this interrupt. */
 
         /* If count and handle->rxDataSize are not 0, first save data to handle->rxData. */
         while ((count != 0U) && (handle->rxDataSize != 0U))
@@ -1376,6 +1436,18 @@ void UART_TransferHandleIRQ(UART_Type *base, void *irqHandle)
      */
     if (((UART_USR1_AGTIM_MASK & base->USR1) != 0U) && ((UART_UCR2_ATEN_MASK & base->UCR2) != 0U))
     {
+        /* If 9bit RS-485 Slave Address was detected*/
+        if ((UART_USR1_SAD_MASK & base->USR1) != 0U)
+        {
+            /* Write 1 to clear SAD interrupt flag */
+            base->USR1 |= UART_USR1_SAD_MASK;
+
+            if ((handle->callback) != NULL)
+            {
+                handle->callback(base, handle, kStatus_UART_RS485SlaveAddressDetected, handle->userData);
+            }
+
+        }
         /* If count and handle->rxDataSize are not 0, first save data to handle->rxData. */
         while (((base->USR2 & UART_USR2_RDR_MASK) != 0U) && (handle->rxDataSize != 0U))
         {
