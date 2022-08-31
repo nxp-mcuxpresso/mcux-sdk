@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1024-EVK_manifest_v3_10" name="SDKVersion 2.12.0 SuperSet" brief="This is SDK version 2.12.0 manifest file." format_version="3.10" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.10.xsd">
-  <!--Timestamp (UTC): 2022-07-20 11:57:30.775501-->
+  <!--Timestamp (UTC): 2022-08-04 15:20:14.815947-->
   <!--This manifest is generated based on sdk repo commit: 7fb442914f92023b395b260777eb2355254fd71d-->
   <defines>
     <define name="CPU_$|package|" value=""/>
@@ -22,6 +22,8 @@
     <manifest_include path="../rtos/azure-rtos/middleware_microsoft_azure_rtos_ux_MIMXRT1024_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/fatfs/middleware_elm_chan_fatfs_MIMXRT1024_manifest_v3_10.xml"/>
     <manifest_include path="../rtos/freertos/freertos_kernel/middleware_amazon_freertos_kernel_MIMXRT1024_manifest_v3_10.xml"/>
+    <manifest_include path="../middleware/lwip/middleware_adam_dunkels_lwip_MIMXRT1024_manifest_v3_10.xml"/>
+    <manifest_include path="../middleware/mbedtls/middleware_arm_mbedtls_MIMXRT1024_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/sdmmc/middleware_nxp_sd_mmc_sdio_card_MIMXRT1024_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/usb/middleware_nxp_usb_MIMXRT1024_manifest_v3_10.xml"/>
     <manifest_include path="../examples/evkmimxrt1024/evkmimxrt1024_example_manifest_v3_10.xml"/>

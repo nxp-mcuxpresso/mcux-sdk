@@ -50,6 +50,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xrdc
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
@@ -76,7 +77,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_mmcau_common_files)
 #    include(driver_flexio)
 #    include(driver_msmc)
-#    include(driver_crc)
+#    include(middleware_multicore_rpmsg_lite_imx7ulp_m4_freertos)
 #    include(driver_cache_lmem)
 #    include(driver_edma_MCIMX7U5)
 #    include(driver_lpuart_edma)
@@ -87,6 +88,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(driver_llwu)
 #    include(middleware_freertos-kernel_MCIMX7U5)
 #    include(component_lpuart_adapter)
@@ -119,6 +121,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpspi)
 #    include(driver_gpio)
 #    include(middleware_issdk_sensor_allregdefs)
+#    include(middleware_mbedtls_kinetis5)
 #    include(middleware_multicore_erpc_eRPC_server)
 #    include(CMSIS_Driver_Include_USART)
 #    include(CMSIS_Driver_Include_SPI)
@@ -129,7 +132,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_debug_console)
 #    include(driver_lpi2c_freertos)
 #    include(driver_cmsis_lpspi)
-#    include(middleware_multicore_rpmsg_lite_imx7ulp_m4_freertos)
+#    include(driver_crc)
 #    include(component_wm8960_adapter)
 #    include(driver_lptmr)
 #    include(driver_flexio_i2c_master)
@@ -155,5 +158,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpi2c)
 #    include(driver_trng)
 #    include(driver_sai)
+#    include(middleware_mbedtls_MCIMX7U5)
 #    include(driver_mu)
 #    include(driver_ltc_edma)

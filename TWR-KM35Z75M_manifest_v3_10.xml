@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_TWR-KM35Z75M_manifest_v3_10" name="SDKVersion 2.12.0 SuperSet" brief="This is SDK version 2.12.0 manifest file." format_version="3.10" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.10.xsd">
-  <!--Timestamp (UTC): 2022-07-15 08:19:40.674804-->
-  <!--This manifest is generated based on sdk repo commit: 45d71c921a1dd3e0403549aa377535344ed9bc97-->
+  <!--Timestamp (UTC): 2022-08-04 15:21:52.198012-->
+  <!--This manifest is generated based on sdk repo commit: 7fb442914f92023b395b260777eb2355254fd71d-->
   <defines>
     <define name="CPU_$|package|" value=""/>
     <define name="CPU_$|package|_$|core|" value=""/>
@@ -13,6 +13,7 @@
   <ksdk id="MCUXpressoSDK2120" name="MCUXpressoSDK2120" version="2.12.0"/>
   <manifest_includes>
     <manifest_include path="../rtos/freertos/freertos_kernel/middleware_amazon_freertos_kernel_MKM35Z7_manifest_v3_10.xml"/>
+    <manifest_include path="../middleware/mbedtls/middleware_arm_mbedtls_MKM35Z7_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/mmcau/middleware_nxp_mmcau_MKM35Z7_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/rtcesl/middleware_nxp_rtcesl_MKM35Z7_manifest_v3_10.xml"/>
     <manifest_include path="../examples/twrkm35z75m/twrkm35z75m_example_manifest_v3_10.xml"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_LPCXpresso54S018M_manifest_v3_10" name="SDKVersion 2.12.0 SuperSet" brief="This is SDK version 2.12.0 manifest file." format_version="3.10" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.10.xsd">
-  <!--Timestamp (UTC): 2022-07-15 08:19:17.622709-->
-  <!--This manifest is generated based on sdk repo commit: 45d71c921a1dd3e0403549aa377535344ed9bc97-->
+  <!--Timestamp (UTC): 2022-08-11 15:01:29.664193-->
+  <!--This manifest is generated based on sdk repo commit: 7fb442914f92023b395b260777eb2355254fd71d-->
   <defines>
     <define name="CPU_$|package|" value=""/>
     <define name="CPU_$|package|_$|core|" value=""/>
@@ -10,11 +10,15 @@
   <externalDefinitions>
     <definition extID="middleware.freertos-kernel.LPC54S018M"/>
     <definition extID="middleware.usb.device.cdc.external.LPC54S018M"/>
+    <definition extID="middleware.littlefs.LPC54S018M"/>
   </externalDefinitions>
   <ksdk id="MCUXpressoSDK2120" name="MCUXpressoSDK2120" version="2.12.0"/>
   <manifest_includes>
     <manifest_include path="../middleware/fatfs/middleware_elm_chan_fatfs_LPC54S018M_manifest_v3_10.xml"/>
     <manifest_include path="../rtos/freertos/freertos_kernel/middleware_amazon_freertos_kernel_LPC54S018M_manifest_v3_10.xml"/>
+    <manifest_include path="../middleware/littlefs/middleware_christopher_haster_littlefs_LPC54S018M_manifest_v3_10.xml"/>
+    <manifest_include path="../middleware/lwip/middleware_adam_dunkels_lwip_LPC54S018M_manifest_v3_10.xml"/>
+    <manifest_include path="../middleware/mbedtls/middleware_arm_mbedtls_LPC54S018M_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/sdmmc/middleware_nxp_sd_mmc_sdio_card_LPC54S018M_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/usb/middleware_nxp_usb_LPC54S018M_manifest_v3_10.xml"/>
     <manifest_include path="../examples/lpcxpresso54s018m/lpcxpresso54s018m_example_manifest_v3_10.xml"/>
@@ -3034,6 +3038,14 @@ ${load}</script>
         <files mask="MCUXpresso SDK USB Stack Device Reference Manual.pdf"/>
         <files mask="MCUXpresso SDK USB Stack Composite Device User's Guide.pdf"/>
         <files mask="MCUXpresso SDK USB Stack Composite Host User's Guide.pdf"/>
+      </source>
+    </component>
+    <component id="docs.littlefs.LPC54S018M" name="doc_littlefs" brief="Littlefs documentation" version="1.0.0" full_name="Littlefs documentation" devices="LPC54S018J2M LPC54S018J4M" user_visible="true" type="documentation" package_base_path="docs/littlefs" project_base_path="littlefs">
+      <dependencies>
+        <component_dependency value="middleware.littlefs.LPC54S018M"/>
+      </dependencies>
+      <source relative_path="./" type="doc">
+        <files mask="littlefs.txt"/>
       </source>
     </component>
     <component id="docs_external.LPC54S018M.LPC54S018M" name="docs_external.LPC54S018M" brief="External documentation for LPC54S018M." version="1.0.0" full_name="External documentation" devices="LPC54S018J2M LPC54S018J4M" user_visible="true" type="documentation" package_base_path="docs" project_base_path="docs">

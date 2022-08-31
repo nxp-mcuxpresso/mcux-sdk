@@ -45,6 +45,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xrdc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
@@ -86,7 +87,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(component_log_backend_debugconsole)
+#    include(middleware_mbedtls_K32L3A60_cm0plus)
 #    include(middleware_sdmmc_host_usdhc_interrupt_K32L3A60_cm0plus)
 #    include(component_lpuart_adapter)
 #    include(device_system_K32L3A60_cm0plus)
@@ -117,6 +120,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_port)
 #    include(driver_lpspi)
 #    include(driver_gpio)
+#    include(middleware_mbedtls_kinetis3)
 #    include(component_log)
 #    include(middleware_multicore_erpc_eRPC_server)
 #    include(CMSIS_Driver_Include_USART)

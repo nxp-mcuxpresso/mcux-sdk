@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT685-AUD-EVK_manifest_v3_10" name="SDKVersion 2.12.0 SuperSet" brief="This is SDK version 2.12.0 manifest file." format_version="3.10" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.10.xsd">
-  <!--Timestamp (UTC): 2022-07-20 11:58:09.601616-->
+  <!--Timestamp (UTC): 2022-08-11 15:01:08.178466-->
   <!--This manifest is generated based on sdk repo commit: 7fb442914f92023b395b260777eb2355254fd71d-->
   <defines>
     <define name="CPU_$|package|" value=""/>
@@ -11,14 +11,20 @@
     <definition extID="evkmimxrt685"/>
     <definition extID="middleware.freertos-kernel.MIMXRT685S"/>
     <definition extID="middleware.usb.device.cdc.external.MIMXRT685S"/>
+    <definition extID="middleware.littlefs.MIMXRT685S"/>
     <definition extID="middleware.multicore.erpc.MIMXRT685S"/>
     <definition extID="middleware.multicore.MIMXRT685S"/>
+    <definition extID="middleware.wifi.MIMXRT685S"/>
   </externalDefinitions>
   <ksdk id="MCUXpressoSDK2120" name="MCUXpressoSDK2120" version="2.12.0"/>
   <manifest_includes>
+    <manifest_include path="../middleware/wifi_nxp/middleware_nxp_wifi_MIMXRT685S_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/eiq/middleware_nxp_eiq_machine_learning_MIMXRT685S_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/fatfs/middleware_elm_chan_fatfs_MIMXRT685S_manifest_v3_10.xml"/>
     <manifest_include path="../rtos/freertos/freertos_kernel/middleware_amazon_freertos_kernel_MIMXRT685S_manifest_v3_10.xml"/>
+    <manifest_include path="../middleware/littlefs/middleware_christopher_haster_littlefs_MIMXRT685S_manifest_v3_10.xml"/>
+    <manifest_include path="../middleware/lwip/middleware_adam_dunkels_lwip_MIMXRT685S_manifest_v3_10.xml"/>
+    <manifest_include path="../middleware/mbedtls/middleware_arm_mbedtls_MIMXRT685S_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/multicore/middleware_nxp_multicore_MIMXRT685S_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/sdmmc/middleware_nxp_sd_mmc_sdio_card_MIMXRT685S_manifest_v3_10.xml"/>
     <manifest_include path="../middleware/usb/middleware_nxp_usb_MIMXRT685S_manifest_v3_10.xml"/>
@@ -3076,6 +3082,35 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
+    <component id="component.wifi_bt_module.tx_pwr_limits.MIMXRT685S" name="wifi_bt_module_tx_pwr_limits" brief="Wi-Fi module Tx power limits" version="1.0.0" full_name="Wi-Fi module Tx power limits" devices="MIMXRT685S" user_visible="true" type="software_component" package_base_path="components/wifi_bt_module" project_base_path="component/wifi_bt_module">
+      <source relative_path="AzureWave/tx_pwr_limits" type="c_include">
+        <files mask="wlan_txpwrlimit_cfg_WW.h"/>
+      </source>
+      <source relative_path="Murata/tx_pwr_limits" type="c_include">
+        <files mask="wlan_txpwrlimit_cfg_murata_1XK_CA.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1XK_EU.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1XK_JP.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1XK_US.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1XK_WW.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1ZM_CA.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1ZM_EU.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1ZM_JP.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1ZM_US.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_1ZM_WW.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_2DS_CA.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_2DS_EU.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_2DS_JP.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_2DS_US.h"/>
+        <files mask="wlan_txpwrlimit_cfg_murata_2DS_WW.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm33_MIMXRT685S">
+        <files mask="component_wifi_bt_module_tx_pwr_limits_MIMXRT685S_cm33.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="AzureWave/tx_pwr_limits" type="c_include"/>
+        <include_path relative_path="Murata/tx_pwr_limits" type="c_include"/>
+      </include_paths>
+    </component>
     <component id="component.wm8904_adapter.MIMXRT685S" name="codec_wm8904_adapter" brief="Component wm8904 adapter for single codec" version="2.2.0" full_name="Component wm8904_adapter" devices="MIMXRT685S" device_cores="cm33_MIMXRT685S" user_visible="true" type="abstraction_layer" package_base_path="components/codec/" project_base_path="codec">
       <dependencies>
         <all>
@@ -3189,6 +3224,14 @@ ${load}</script>
         <files mask="eIQ_Media_Processing_Pipeline_User_Guide.pdf"/>
       </source>
     </component>
+    <component id="docs.littlefs.MIMXRT685S" name="doc_littlefs" brief="Littlefs documentation" version="1.0.0" full_name="Littlefs documentation" devices="MIMXRT685S" user_visible="true" type="documentation" package_base_path="docs/littlefs" project_base_path="littlefs">
+      <dependencies>
+        <component_dependency value="middleware.littlefs.MIMXRT685S"/>
+      </dependencies>
+      <source relative_path="./" type="doc">
+        <files mask="littlefs.txt"/>
+      </source>
+    </component>
     <component id="docs.multicore.MIMXRT685S" name="docs_multicore" brief="Collection of Multicore SDK documentation" version="2.12.0" full_name="Multicore SDK documentation" devices="MIMXRT685S" user_visible="true" type="documentation" package_base_path="docs/MULTICORE" project_base_path="MULTICORE">
       <dependencies>
         <any_of>
@@ -3207,6 +3250,28 @@ ${load}</script>
       </dependencies>
       <source relative_path="./" type="doc">
         <files mask="eRPC Getting Started User's Guide.pdf"/>
+      </source>
+    </component>
+    <component id="docs.wifi.MIMXRT685S" name="doc_wifi" brief="Wi-Fi documentation" version="1.0.0" full_name="Wi-Fi documentation" devices="MIMXRT685S" device_cores="cm33_MIMXRT685S" user_visible="true" type="documentation" package_base_path="docs/wireless/Wi-Fi" project_base_path="wireless/Wi-Fi">
+      <dependencies>
+        <component_dependency value="middleware.wifi.MIMXRT685S"/>
+      </dependencies>
+      <source relative_path="./" type="doc">
+        <files mask="AN12917-Compliance-and-certification-considerations.pdf"/>
+        <files mask="AN12918-Wi-Fi-Tx-Power-Table-and-Channel-Scan-Management-for-i.MX-RT-SDK.pdf"/>
+        <files mask="MCUXpresso_SDK_WLAN_Driver_Reference_Manual.pdf"/>
+        <files mask="TN00066-WFA-Derivative-Certification-Process.pdf"/>
+        <files mask="UM11567-WFA-Certification-Guide-for-NXP-based-Wireless-Modules-on-i.MX-RT-Platform-Running-RTOS.pdf"/>
+      </source>
+    </component>
+    <component id="docs.wifi_bt.MIMXRT685S" name="doc_wifi_bt" brief="Wi-Fi and Bluetooth documentation" version="1.0.0" full_name="Wi-Fi and Bluetooth documentation" devices="MIMXRT685S" device_cores="cm33_MIMXRT685S" user_visible="true" type="documentation" package_base_path="docs/wireless" project_base_path="wireless">
+      <dependencies>
+        <component_dependency value="middleware.wifi.MIMXRT685S"/>
+      </dependencies>
+      <source relative_path="./" type="doc">
+        <files mask="UM11441-Getting-Started-with-NXP-based-Wireless-Modules-and-i.MX-RT-Platform-Running-on-RTOS.pdf"/>
+        <files mask="UM11442-NXP-Wi-Fi-and-Bluetooth-Demo-Applications-for-i.MX-RT-platforms-User-Guide.pdf"/>
+        <files mask="UM11443-NXP-Wi-Fi-and-Bluetooth-Debug-Feature-Configuration-Guide-for-i.MX-RT-Platforms.pdf"/>
       </source>
     </component>
     <component id="docs_external.MIMXRT685S.MIMXRT685S" name="docs_external.MIMXRT685S" brief="External documentation for MIMXRT685S." version="1.0.0" full_name="External documentation" devices="MIMXRT685S" user_visible="true" type="documentation" package_base_path="docs" project_base_path="docs">

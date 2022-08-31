@@ -51,6 +51,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dc/elcdif
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/fbdev
     ${CMAKE_CURRENT_LIST_DIR}/../../components/video/i2c
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/wifi_bt_module
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/adc_12b1msps_sar
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/adc_etc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/aoi
@@ -96,12 +97,18 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbara
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbarb
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/edgefast_wifi
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/tensorflow-lite
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/tensorflow-lite/third_party/cmsis
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/littlefs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/lwip
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wifi_nxp
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/ethermind
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
@@ -122,6 +129,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_sdmmc_mmc)
 #    include(driver_dmamux)
 #    include(driver_phy-common)
+#    include(middleware_lwip_apps_lwiperf)
 #    include(driver_nor_flash-controller-flexspi)
 #    include(driver_cmsis_lpuart)
 #    include(middleware_azure_rtos_nxd)
@@ -134,6 +142,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_uart)
 #    include(driver_wm8960)
 #    include(driver_ewm)
+#    include(middleware_wifi_sdio)
 #    include(middleware_sdmmc_host_usdhc_polling_MIMXRT1052)
 #    include(driver_flexio)
 #    include(driver_aoi)
@@ -153,6 +162,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_flexspi_hyper_flash_adapter)
 #    include(middleware_eiq_deepviewrt_deps_stb)
 #    include(middleware_sdmmc_osa_freertos)
+#    include(middleware_lwip_apps_httpd)
 #    include(component_serial_manager)
 #    include(driver_camera-device-ov7725)
 #    include(driver_pit)
@@ -160,14 +170,22 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_azure_rtos_ux)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(utility_debug_console_lite)
+#    include(middleware_wifi_wifidriver)
 #    include(component_log_backend_debugconsole)
 #    include(CMSIS_Driver_Include_Ethernet_MAC)
+#    include(middleware_lwip_enet_ethernetif_MIMXRT1052)
 #    include(driver_tempmon)
+#    include(middleware_lwip_contrib_ping)
+#    include(middleware_wifi_fwdnld)
 #    include(component_lpuart_adapter)
+#    include(middleware_edgefast_wifi_nxp)
 #    include(driver_lpi2c_edma)
 #    include(middleware_azure_rtos_tx_template_MIMXRT1052)
 #    include(component_silicon_id)
+#    include(middleware_edgefast_wifi)
+#    include(middleware_lwip_apps_httpsrv)
 #    include(middleware_usb_device_cdc_external)
 #    include(driver_cmsis_enet)
 #    include(utility_shell)
@@ -181,6 +199,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_gpt)
 #    include(utility_assert)
 #    include(driver_enet)
+#    include(middleware_wifi)
 #    include(component_mflash_file_MIMXRT1052)
 #    include(driver_rtwdog)
 #    include(middleware_freertos-kernel_extension)
@@ -208,6 +227,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_eiq_gui_printf)
 #    include(driver_kpp)
 #    include(driver_edma_MIMXRT1052)
+#    include(middleware_lwip_apps_httpd_support)
 #    include(component_osa_free_rtos)
 #    include(driver_xip_device)
 #    include(driver_camera-common)
@@ -219,8 +239,10 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_xip_board_evkbimxrt1050)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_dcdc_1)
+#    include(middleware_wifi_sdio-2)
 #    include(middleware_azure_rtos_tx)
 #    include(middleware_azure_rtos_fx_template_MIMXRT1052)
+#    include(middleware_lwip_apps_mdns)
 #    include(middleware_sdmmc_sdio)
 #    include(CMSIS_DSP_Source)
 #    include(middleware_eiq_deepviewrt_deps_json)
@@ -252,12 +274,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_semc)
 #    include(driver_xbarb)
 #    include(driver_xbara)
-#    include(middleware_usb_host_audio)
+#    include(component_wifi_bt_module_tx_pwr_limits)
+#    include(middleware_lwip_usb_ethernetif)
 #    include(driver_flexcan)
 #    include(utility_debug_console)
 #    include(middleware_usb_host_hid)
 #    include(component_osa_thread)
 #    include(middleware_freertos-kernel_MIMXRT1052)
+#    include(middleware_wifi_cli)
 #    include(middleware_usb_host_ehci)
 #    include(component_mflash_common)
 #    include(driver_cmsis_lpspi)
@@ -295,22 +319,30 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_fxos8700cq)
 #    include(middleware_eiq_worker_sensor)
 #    include(driver_lpuart)
+#    include(middleware_littlefs)
 #    include(driver_flexio_spi)
 #    include(component_pit_adapter)
+#    include(middleware_sdmmc_host_usdhc_interrupt_MIMXRT1052)
 #    include(middleware_eiq_worker_video_MIMXRT1052)
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_gemmlowp)
+#    include(middleware_mbedtls_rt)
+#    include(middleware_edgefast_bluetooth_k32w061_controller)
 #    include(driver_fbdev)
 #    include(middleware_eiq_tensorflow_lite_micro_cmsis_nn)
+#    include(middleware_lwip_empty_ethernetif)
+#    include(middleware_lwip_contrib_tcpecho)
 #    include(middleware_eiq_tensorflow_lite_micro)
 #    include(driver_cs42448)
 #    include(middleware_sdmmc_sd)
 #    include(driver_src)
 #    include(component_flexspi_hyper_flash_adapter_config_rt1050)
 #    include(middleware_sdmmc_host_usdhc_freertos_MIMXRT1052)
+#    include(middleware_lwip_apps_mqtt)
 #    include(driver_lpi2c)
 #    include(CMSIS_Driver_Include_Ethernet_PHY)
 #    include(driver_flexio_i2s)
-#    include(middleware_sdmmc_host_usdhc_interrupt_MIMXRT1052)
+#    include(middleware_lwip)
+#    include(middleware_usb_host_audio)
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_flatbuffers)
 #    include(driver_elcdif)
 #    include(driver_igpio)
@@ -320,5 +352,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_eiq_glow)
 #    include(middleware_eiq_deepviewrt)
 #    include(driver_cache_armv7_m7)
+#    include(middleware_mbedtls_MIMXRT1052)
 #    include(middleware_usb_device_stack_external)
+#    include(middleware_lwip_apps_httpssrv)
 #    include(driver_flexio_i2s_edma)
