@@ -868,9 +868,7 @@ void SerialManager_RxCallback(void *callbackParam,
                 handle->commontaskMsg.callbackParam           = handle;
                 COMMON_TASK_post_message(&handle->commontaskMsg);
 #else
-                primask = DisableGlobalIRQ();
                 handle->serialManagerState[SERIAL_EVENT_DATA_RECEIVED]++;
-                EnableGlobalIRQ(primask);
                 (void)OSA_SemaphorePost((osa_semaphore_handle_t)handle->serSemaphore);
 #endif
 
@@ -891,9 +889,7 @@ void SerialManager_RxCallback(void *callbackParam,
     if (0U != ringBufferLength)
     {
 #if (defined(SERIAL_MANAGER_TASK_HANDLE_RX_AVAILABLE_NOTIFY) && (SERIAL_MANAGER_TASK_HANDLE_RX_AVAILABLE_NOTIFY > 0U))
-        primask = DisableGlobalIRQ();
         handle->serialManagerState[SERIAL_EVENT_DATA_RX_NOTIFY]++;
-        EnableGlobalIRQ(primask);
         (void)OSA_SemaphorePost((osa_semaphore_handle_t)handle->serSemaphore);
 
         (void)status; /* Fix "set but never used" warning. */

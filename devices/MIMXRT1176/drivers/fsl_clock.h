@@ -485,9 +485,9 @@
     }
 
 /*! @brief Clock ip name array for XBARA. */
-#define XBARA_CLOCKS \
-    {                \
-        kCLOCK_Xbar1 \
+#define XBARA_CLOCKS                   \
+    {                                  \
+        kCLOCK_IpInvalid, kCLOCK_Xbar1 \
     }
 
 /*! @brief Clock ip name array for XBARB. */

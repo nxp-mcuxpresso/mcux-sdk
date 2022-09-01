@@ -2375,8 +2375,6 @@ __STATIC_FORCEINLINE void SCB_DisableDCache (void)
     SCB->CCR &= ~(uint32_t)SCB_CCR_DC_Msk;  /* disable D-Cache */
     __DSB();
 
-    ccsidr = SCB->CCSIDR;
-
   #if (defined(__GNUC__) && !defined(__OPTIMIZE__))
     /*
      * For the endless loop issue with GCC O0.
@@ -2396,6 +2394,8 @@ __STATIC_FORCEINLINE void SCB_DisableDCache (void)
     __DSB();
     __ISB();
   #endif
+
+    ccsidr = SCB->CCSIDR;
                                             /* clean & invalidate D-Cache */
     sets = (uint32_t)(CCSIDR_SETS(ccsidr));
     do {

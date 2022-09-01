@@ -54,6 +54,8 @@ static const clock_ip_name_t s_pdmFilterClock[] = PDM_FILTER_CLOCKS;
 
 /*! @brief Pointer to tx IRQ handler for each instance. */
 static pdm_isr_t s_pdmIsr;
+/*! @brief callback for hwvad. */
+static pdm_hwvad_notification_t s_pdm_hwvad_notification[ARRAY_SIZE(s_pdmBases)];
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -839,6 +841,47 @@ void PDM_SetHwvadZeroCrossDetectorConfig(PDM_Type *base, const pdm_hwvad_zero_cr
     base->VAD0_ZCD = zcd;
 }
 
+/*!
+ * brief   Enable/Disable  hwvad callback.
+
+ * This function enable/disable the hwvad interrupt for the selected PDM peripheral.
+ *
+ * param base Base address of the PDM peripheral.
+ * param vadCallback callback Pointer to store callback function, should be NULL when disable.
+ * param userData user data.
+ * param enable true is enable, false is disable.
+ * retval None.
+ */
+void PDM_EnableHwvadInterruptCallback(PDM_Type *base, pdm_hwvad_callback_t vadCallback, void *userData, bool enable)
+{
+    uint32_t instance = PDM_GetInstance(base);
+
+    if (enable)
+    {
+        PDM_EnableHwvadInterrupts(base, kPDM_HwvadErrorInterruptEnable | kPDM_HwvadInterruptEnable);
+        NVIC_ClearPendingIRQ(PDM_HWVAD_EVENT_IRQn);
+        (void)EnableIRQ(PDM_HWVAD_EVENT_IRQn);
+#if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+        NVIC_ClearPendingIRQ(PDM_HWVAD_ERROR_IRQn);
+        (void)EnableIRQ(PDM_HWVAD_ERROR_IRQn);
+#endif
+        s_pdm_hwvad_notification[instance].callback = vadCallback;
+        s_pdm_hwvad_notification[instance].userData = userData;
+    }
+    else
+    {
+        PDM_DisableHwvadInterrupts(base, kPDM_HwvadErrorInterruptEnable | kPDM_HwvadInterruptEnable);
+        (void)DisableIRQ(PDM_HWVAD_EVENT_IRQn);
+#if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+        (void)DisableIRQ(PDM_HWVAD_ERROR_IRQn);
+        NVIC_ClearPendingIRQ(PDM_HWVAD_ERROR_IRQn);
+#endif
+        s_pdm_hwvad_notification[instance].callback = NULL;
+        s_pdm_hwvad_notification[instance].userData = NULL;
+        NVIC_ClearPendingIRQ(PDM_HWVAD_EVENT_IRQn);
+    }
+}
+
 #if defined(PDM)
 void PDM_EVENT_DriverIRQHandler(void);
 void PDM_EVENT_DriverIRQHandler(void)
@@ -847,12 +890,41 @@ void PDM_EVENT_DriverIRQHandler(void)
     s_pdmIsr(PDM, s_pdmHandle[0]);
     SDK_ISR_EXIT_BARRIER;
 }
-#elif defined(PDM0)
-void PDM_EVENT_DriverIRQHandler(void);
-void PDM_EVENT_DriverIRQHandler(void)
+#endif
+
+#if (defined PDM)
+void PDM_HWVAD_EVENT_DriverIRQHandler(void)
 {
-    assert(s_pdmHandle[0]);
-    s_pdmIsr(PDM0, s_pdmHandle[0]);
+    if (PDM_GetHwvadInterruptStatusFlags(PDM) & kPDM_HwvadStatusVoiceDetectFlag)
+    {
+        PDM_ClearHwvadInterruptStatusFlags(PDM, kPDM_HwvadStatusVoiceDetectFlag);
+        if (s_pdm_hwvad_notification[0].callback != NULL)
+        {
+            s_pdm_hwvad_notification[0].callback(kStatus_PDM_HWVAD_VoiceDetected, s_pdm_hwvad_notification[0].userData);
+        }
+    }
+#if (defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+    else
+    {
+        PDM_ClearHwvadInterruptStatusFlags(PDM, kPDM_HwvadStatusInputSaturation);
+        if (s_pdm_hwvad_notification[0].callback != NULL)
+        {
+            s_pdm_hwvad_notification[0].callback(kStatus_PDM_HWVAD_Error, s_pdm_hwvad_notification[0].userData);
+        }
+    }
+#endif
     SDK_ISR_EXIT_BARRIER;
 }
+
+#if !(defined FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ && FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ)
+void PDM_HWVAD_ERROR_DriverIRQHandler(void)
+{
+    PDM_ClearHwvadInterruptStatusFlags(PDM, kPDM_HwvadStatusInputSaturation);
+    if (s_pdm_hwvad_notification[0].callback != NULL)
+    {
+        s_pdm_hwvad_notification[0].callback(kStatus_PDM_HWVAD_Error, s_pdm_hwvad_notification[0].userData);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
 #endif
