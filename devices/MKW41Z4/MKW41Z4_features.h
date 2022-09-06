@@ -1232,8 +1232,6 @@
 #define FSL_FEATURE_MCG_FRDIV_SUPPORT_1280 (1)
 /* @brief FRDIV supports 1536. */
 #define FSL_FEATURE_MCG_FRDIV_SUPPORT_1536 (1)
-/* @brief MCGFFCLK divider. */
-#define FSL_FEATURE_MCG_FFCLK_DIV (1)
 /* @brief Is PLL clock divided by 2 before MCG PLL/FLL clock selection in the SIM module. */
 #define FSL_FEATURE_MCG_HAS_PLL_EXTRA_DIV (0)
 /* @brief Has 32kHz RTC external reference clock (register bits C8[LOCS1], C8[CME1], C8[LOCRE1] and RTC module are present). */
