@@ -111,7 +111,7 @@ mcuxClHash_Status_Protected_t mcuxClHash_finish(
                         &(context->data),
                         &(context->buffer),
                         NULL,
-                        NULL,
+                        0,
                         hash,
                         rtf,
                         options

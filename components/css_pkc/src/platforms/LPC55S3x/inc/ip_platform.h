@@ -20,7 +20,7 @@
 #ifndef IP_PLATFORM_H
 #define IP_PLATFORM_H
 
-#include "board.h"
+#include "fsl_common.h"
 #include "cssv2.h"
 #include "fame3.h"
 
