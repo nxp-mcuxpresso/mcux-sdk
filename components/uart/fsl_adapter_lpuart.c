@@ -1470,7 +1470,7 @@ void ADMA_UART3_INT_IRQHandler(void)
 
 #if (defined(HAL_UART_DMA_ENABLE) && (HAL_UART_DMA_ENABLE > 0U))
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U))
-volatile static uint32_t ringBufferFlag = 0U;
+static volatile uint32_t ringBufferFlag = 0U;
 /* LPUART RX EDMA call back. */
 static void LPUART_RxEDMACallback(edma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
