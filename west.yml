@@ -20,7 +20,7 @@ manifest:
     remote: nxpmicro
   projects:
   - name: mcux-sdk-examples
-    revision: c31fcf90aa5412071be3ca33d8ba9e7541c600c2
+    revision: 95e0e9b2aa9d27cec8f12842ee1146792d5b8311
     path: examples
   - name: FreeRTOS-Kernel
     revision: MCUX_2.12.0
