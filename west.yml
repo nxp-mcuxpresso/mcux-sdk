@@ -1,0 +1,22 @@
+# The west manifest file (west.yml) for MCUXpresso SDK overall delivery.
+#
+# The per-workspace west configuration file, ${workspace_path}/.west/config,
+# specifies the path of the project containing this manifest file, the
+# path is relative to the workspace location ${workspace_path}.
+#
+#     [manifest]
+#     path = core
+#
+# See the west documentation for more information:
+#
+# https://docs.zephyrproject.org/latest/guides/west/index.html
+manifest:
+  remotes:
+  - name: nxpmicro
+    url-base: https://github.com/NXPmicro
+  - name: nxp
+    url-base: https://github.com/NXP
+  defaults:
+    remote: nxpmicro
+  self:
+    path: core
