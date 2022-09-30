@@ -1678,10 +1678,8 @@ serial_manager_status_t SerialManager_CancelWriting(serial_write_handle_t writeH
     }
 
     primask = DisableGlobalIRQ();
-    if (serialWriteHandle !=
-        (serial_manager_write_handle_t *)((void *)LIST_GetHead(
-                                              &serialWriteHandle->serialManagerHandle->runningWriteHandleHead) -
-                                          4U))
+    if (serialWriteHandle != (serial_manager_write_handle_t *)(void *)LIST_GetHead(
+                                 &serialWriteHandle->serialManagerHandle->runningWriteHandleHead))
     {
         if (kLIST_Ok == LIST_RemoveElement(&serialWriteHandle->link))
         {
