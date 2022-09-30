@@ -9,7 +9,8 @@
 #define __SERIAL_PORT_SWO_H__
 
 /*!
- * @addtogroup serial_port_swo
+ * @addtogroup serial_port_swo Serial Port SWO
+ * @ingroup serialmanager
  * @{
  */
 

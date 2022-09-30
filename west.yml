@@ -10,25 +10,23 @@
 # See the west documentation for more information:
 #
 # https://docs.zephyrproject.org/latest/guides/west/index.html
-
 manifest:
-  
   remotes:
     - name: nxpmicro
       url-base: https://github.com/NXPmicro
-
+    - name: nxp
+      url-base: https://github.com/NXP
   defaults:
     remote: nxpmicro
-
   projects:
     - name: mcux-sdk-examples
-      revision: 62f5041d6d7da742ffd7ea0f8f017a670af450e8
+      revision: MCUX_2.9.4_MW320
       path: examples
     - name: FreeRTOS-Kernel
-      revision: 030849f81f057eea51527f63cb5ecc28283d2275
+      revision: MCUX_2.9.4_MW320
       path: rtos/freertos/freertos_kernel
     - name: mcux-sdk-middleware-sdmmc
-      revision: MCUX_2.9.0
+      revision: 3789034d53336cf6ca73d7777aa05fd7d2d81ad3
       path: middleware/sdmmc
     - name: mcux-sdk-middleware-multicore
       path: middleware/multicore
@@ -41,6 +39,15 @@ manifest:
       path: middleware/multicore/erpc
       url:  https://github.com/EmbeddedRPC/erpc
       revision: 1.8.0
-
+    - name: lwip
+      path: middleware/lwip
+      revision: 4ef9433dee75f3597f782d817a432b0cf950750d
+    - name: mbedtls
+      path: middleware/mbedtls
+      revision: 75010b7b49c72067f4c3e57361975069075bca74
+    - name: wifi_nxp
+      path: middleware/wifi
+      revision: 8fbb64dd7a0384efdd46dd5fe8ea8172b70e7adb
+      remote: nxp
   self:
     path: core

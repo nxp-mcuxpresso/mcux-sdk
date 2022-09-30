@@ -1159,21 +1159,6 @@ osa_status_t OSA_MsgQGet(osa_msgq_handle_t msgqHandle, osa_msg_handle_t pMessage
 
 /*FUNCTION**********************************************************************
  *
- * Function Name : OSA_MsgQAvailableMsgs
- * Description   : This function is used to get the available message.
- * Return        : Available message count
- *
- *END**************************************************************************/
-int OSA_MsgQAvailableMsgs(osa_msgq_handle_t msgqHandle)
-{
-    assert(msgqHandle);
-    msg_queue_t *pQueue = (msg_queue_t *)msgqHandle;
-
-    return (int)pQueue->number;
-}
-
-/*FUNCTION**********************************************************************
- *
  * Function Name : OSA_EXT_MsgQDestroy
  * Description   : This function is used to destroy the message queue.
  * Return        : KOSA_StatusSuccess if the message queue is destroyed successfully, otherwise return KOSA_StatusError.

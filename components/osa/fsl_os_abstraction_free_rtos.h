@@ -14,7 +14,7 @@
 /**
  * Workaround to disable MISRA C message suppress warnings for IAR compiler.
  */
-/* http://supp.iar.com/Support/?note=24725 */
+// http://supp.iar.com/Support/?note=24725
 
 #define MISRAC_DISABLE \
     _Pragma(           \
@@ -129,4 +129,4 @@ extern void DefaultISR(void);
 /*! @}*/
 /*! @}*/
 
-#endif /* __FSL_OS_ABSTRACTION_FREERTOS_H__ */
+#endif // __FSL_OS_ABSTRACTION_FREERTOS_H__

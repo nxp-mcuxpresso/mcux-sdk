@@ -12,7 +12,8 @@
 #include "fsl_adapter_uart.h"
 
 /*!
- * @addtogroup serial_port_uart
+ * @addtogroup serial_port_uart Serial Port Uart
+ * @ingroup serialmanager
  * @{
  */
 
@@ -71,10 +72,6 @@ typedef struct _serial_port_uart_config
 #if (defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
     serial_port_uart_block_mode_t mode; /*!< serial port uart block mode */
 #endif                                  /* SERIAL_MANAGER_NON_BLOCKING_MODE */
-#if (defined(HAL_UART_ADAPTER_FIFO) && (HAL_UART_ADAPTER_FIFO > 0u))
-    uint8_t txFifoWatermark;
-    uint8_t rxFifoWatermark;
-#endif
 } serial_port_uart_config_t;
 /*! @} */
 #endif /* __SERIAL_PORT_UART_H__ */

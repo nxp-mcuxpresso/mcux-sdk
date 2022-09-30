@@ -96,7 +96,7 @@ void startup_task(void *argument);
 * Public memory declarations
 *************************************************************************************
 ********************************************************************************** */
-const uint8_t gUseRtos_c = USE_RTOS; /* USE_RTOS = 0 for BareMetal and 1 for OS */
+const uint8_t gUseRtos_c = USE_RTOS; // USE_RTOS = 0 for BareMetal and 1 for OS
 
 static osa_state_t s_osaState = {0};
 /*! *********************************************************************************
@@ -266,17 +266,10 @@ osa_status_t OSA_TaskSetPriority(osa_task_handle_t taskHandle, osa_task_priority
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
 osa_status_t OSA_TaskCreate(osa_task_handle_t taskHandle, const osa_task_def_t *thread_def, osa_task_param_t task_param)
 {
-    static uint8_t s_osaTaskListInitialized = 0;
     assert(sizeof(osa_freertos_task_t) == OSA_TASK_HANDLE_SIZE);
     assert(taskHandle);
     TaskHandle_t pxCreatedTask;
     osa_freertos_task_t *ptask = (osa_freertos_task_t *)taskHandle;
-
-    if (0u == s_osaTaskListInitialized)
-    {
-        s_osaTaskListInitialized = 1u;
-        LIST_Init((&s_osaState.taskList), 0);
-    }
 
     if (xTaskCreate((TaskFunction_t)thread_def->pthread, /* pointer to the task */
                     (char const *)thread_def->tname,     /* task name for kernel awareness debugging */
@@ -900,21 +893,6 @@ osa_status_t OSA_MsgQGet(osa_msgq_handle_t msgqHandle, osa_msg_handle_t pMessage
 
 /*FUNCTION**********************************************************************
  *
- * Function Name : OSA_MsgQAvailableMsgs
- * Description   : This function is used to get the available message.
- * Return        : Available message count
- *
- *END**************************************************************************/
-int OSA_MsgQAvailableMsgs(osa_msgq_handle_t msgqHandle)
-{
-    QueueHandle_t handler;
-    assert(NULL != msgqHandle);
-    handler = (QueueHandle_t)(void *)(uint32_t *)(*(uint32_t *)msgqHandle);
-    return (int)uxQueueMessagesWaiting((QueueHandle_t)handler);
-}
-
-/*FUNCTION**********************************************************************
- *
  * Function Name : OSA_MsgQDestroy
  * Description   : This function is used to destroy the message queue.
  * Return        : KOSA_StatusSuccess if the message queue is destroyed successfully, otherwise return KOSA_StatusError.
@@ -1037,13 +1015,13 @@ void OSA_InstallIntHandler(uint32_t IRQNumber, void (*handler)(void))
 *************************************************************************************
 ********************************************************************************** */
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
-#if (defined(FSL_OSA_MAIN_FUNC_ENABLE) && (FSL_OSA_MAIN_FUNC_ENABLE > 0U))
+
 static OSA_TASK_DEFINE(startup_task, gMainThreadPriority_c, 1, gMainThreadStackSize_c, 0);
 
-__WEAK_FUNC int main(void)
+int main(void)
 {
     extern void BOARD_InitHardware(void);
-
+    LIST_Init((&s_osaState.taskList), 0);
     /* Initialize MCU clock */
     BOARD_InitHardware();
 
@@ -1054,7 +1032,4 @@ __WEAK_FUNC int main(void)
     vTaskStartScheduler();
     return 0;
 }
-
-#endif
-
 #endif /* FSL_OSA_TASK_ENABLE */

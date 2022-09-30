@@ -179,7 +179,7 @@ static void MEM_BufferAllocates_memStatis(void *buffer, uint32_t time, uint32_t 
     s_memStatis.ram_lost += (uint16_t)(block_size - requestedSize);
     UPDATE_PEAK(s_memStatis.ram_lost, s_memStatis.peak_ram_lost);
 
-    /* UPDATE_PEAK(((uint32_t)FreeBlockHdrList.tail + BLOCK_HDR_SIZE), s_memStatis.peak_upper_addr); */
+    // UPDATE_PEAK(((uint32_t)FreeBlockHdrList.tail + BLOCK_HDR_SIZE), s_memStatis.peak_upper_addr);
 
 #ifdef MEM_MANAGER_BENCH
     if (time != 0U)
@@ -430,7 +430,7 @@ mem_status_t MEM_RemoveBuffer(uint8_t *buffer)
     MEM_EXIT_CRITICAL();
     return kStatus_MemUnknownError;
 }
-#endif /* MEM_MANAGER_BUFFER_REMOVE */
+#endif // MEM_MANAGER_BUFFER_REMOVE
 
 /*!
  * @brief Allocate a block from the memory pools. The function uses the

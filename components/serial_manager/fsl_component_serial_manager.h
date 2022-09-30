@@ -12,7 +12,7 @@
 #include "fsl_common.h"
 
 /*!
- * @addtogroup Serial_Manager
+ * @addtogroup serialmanager
  * @{
  */
 

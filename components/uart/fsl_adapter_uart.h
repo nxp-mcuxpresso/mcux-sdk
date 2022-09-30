@@ -58,10 +58,6 @@
 #define HAL_UART_ADAPTER_LOWPOWER (0U)
 #endif /* HAL_UART_ADAPTER_LOWPOWER */
 
-#ifndef HAL_UART_ADAPTER_FIFO
-#define HAL_UART_ADAPTER_FIFO (0U)
-#endif /* HAL_UART_ADAPTER_FIFO */
-
 /*! @brief Definition of uart adapter handle size. */
 #if (defined(UART_ADAPTER_NON_BLOCKING_MODE) && (UART_ADAPTER_NON_BLOCKING_MODE > 0U))
 #define HAL_UART_HANDLE_SIZE       (92U + HAL_UART_ADAPTER_LOWPOWER * 16U)
@@ -153,10 +149,6 @@ typedef struct _hal_uart_config
 #if (defined(UART_ADAPTER_NON_BLOCKING_MODE) && (UART_ADAPTER_NON_BLOCKING_MODE > 0U))
     hal_uart_block_mode_t mode; /*!< Uart  block mode */
 #endif                          /* UART_ADAPTER_NON_BLOCKING_MODE */
-#if (defined(HAL_UART_ADAPTER_FIFO) && (HAL_UART_ADAPTER_FIFO > 0u))
-    uint8_t txFifoWatermark;
-    uint8_t rxFifoWatermark;
-#endif
 } hal_uart_config_t;
 
 /*! @brief UART transfer callback function. */

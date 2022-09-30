@@ -33,8 +33,4 @@
 #define FSL_OSA_TASK_ENABLE 1U
 #endif /* OSA_USED */
 
-#ifndef FSL_OSA_MAIN_FUNC_ENABLE
-#define FSL_OSA_MAIN_FUNC_ENABLE 1U
-#endif
-
 #endif /* _FSL_OS_ABSTRACTION_CONFIG_H_ */

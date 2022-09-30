@@ -86,20 +86,14 @@
 #if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
 
 static SemaphoreHandle_t s_debugConsoleReadSemaphore;
-#if configSUPPORT_STATIC_ALLOCATION
-static StaticSemaphore_t s_debugConsoleReadSemaphoreStatic;
-#endif
 #if (defined(DEBUG_CONSOLE_RX_ENABLE) && (DEBUG_CONSOLE_RX_ENABLE > 0U))
 static SemaphoreHandle_t s_debugConsoleReadWaitSemaphore;
-#if configSUPPORT_STATIC_ALLOCATION
-static StaticSemaphore_t s_debugConsoleReadWaitSemaphoreStatic;
-#endif
 #endif
 
 #elif (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_BM)
 
 #if (defined(DEBUG_CONSOLE_RX_ENABLE) && (DEBUG_CONSOLE_RX_ENABLE > 0U))
-static volatile bool s_debugConsoleReadWaitSemaphore;
+static volatile uint8_t s_debugConsoleReadWaitSemaphore;
 #endif
 
 #else
@@ -118,20 +112,16 @@ static volatile bool s_debugConsoleReadWaitSemaphore;
 
 /* mutex semaphore */
 /* clang-format off */
-#if configSUPPORT_STATIC_ALLOCATION
-#define DEBUG_CONSOLE_CREATE_MUTEX_SEMAPHORE(mutex, stack) ((mutex) = xSemaphoreCreateMutexStatic(stack))
-#else
 #define DEBUG_CONSOLE_CREATE_MUTEX_SEMAPHORE(mutex) ((mutex) = xSemaphoreCreateMutex())
-#endif
 #define DEBUG_CONSOLE_DESTROY_MUTEX_SEMAPHORE(mutex)   \
         do                                             \
         {                                              \
-            if(NULL != (mutex))                        \
+            if(NULL != mutex)                          \
             {                                          \
                 vSemaphoreDelete(mutex);               \
-                (mutex) = NULL;                          \
+                mutex = NULL;                          \
             }                                          \
-        } while(false)
+        } while(0)
 
 #define DEBUG_CONSOLE_GIVE_MUTEX_SEMAPHORE(mutex) \
 {                                                 \
@@ -162,49 +152,41 @@ static volatile bool s_debugConsoleReadWaitSemaphore;
 }
 
 /* Binary semaphore */
-#if configSUPPORT_STATIC_ALLOCATION
-#define DEBUG_CONSOLE_CREATE_BINARY_SEMAPHORE(binary,stack) ((binary) = xSemaphoreCreateBinaryStatic(stack))
-#else
 #define DEBUG_CONSOLE_CREATE_BINARY_SEMAPHORE(binary) ((binary) = xSemaphoreCreateBinary())
-#endif
 #define DEBUG_CONSOLE_DESTROY_BINARY_SEMAPHORE(binary) \
         do                                             \
         {                                              \
-            if(NULL != (binary))                       \
+            if(NULL != binary)                         \
             {                                          \
-                vSemaphoreDelete((binary));              \
-                (binary) = NULL;                         \
+                vSemaphoreDelete(binary);              \
+                binary = NULL;                         \
             }                                          \
-        } while(false)
-#define DEBUG_CONSOLE_TAKE_BINARY_SEMAPHORE_BLOCKING(binary) ((void)xSemaphoreTake((binary), portMAX_DELAY))
-#define DEBUG_CONSOLE_GIVE_BINARY_SEMAPHORE_FROM_ISR(binary) ((void)xSemaphoreGiveFromISR((binary), NULL))
+        } while(0)
+#define DEBUG_CONSOLE_TAKE_BINARY_SEMAPHORE_BLOCKING(binary) ((void)xSemaphoreTake(binary, portMAX_DELAY))
+#define DEBUG_CONSOLE_GIVE_BINARY_SEMAPHORE_FROM_ISR(binary) ((void)xSemaphoreGiveFromISR(binary, NULL))
 
 #elif (DEBUG_CONSOLE_SYNCHRONIZATION_BM == DEBUG_CONSOLE_SYNCHRONIZATION_MODE)
 
-#define DEBUG_CONSOLE_CREATE_MUTEX_SEMAPHORE(mutex)         (void)(mutex)
-#define DEBUG_CONSOLE_DESTROY_MUTEX_SEMAPHORE(mutex)        (void)(mutex)
-#define DEBUG_CONSOLE_TAKE_MUTEX_SEMAPHORE_BLOCKING(mutex)  (void)(mutex)
-#define DEBUG_CONSOLE_GIVE_MUTEX_SEMAPHORE(mutex)           (void)(mutex)
+#define DEBUG_CONSOLE_CREATE_MUTEX_SEMAPHORE(mutex)
+#define DEBUG_CONSOLE_DESTROY_MUTEX_SEMAPHORE(mutex)
+#define DEBUG_CONSOLE_TAKE_MUTEX_SEMAPHORE_BLOCKING(mutex)
+#define DEBUG_CONSOLE_GIVE_MUTEX_SEMAPHORE(mutex)
 #define DEBUG_CONSOLE_TAKE_MUTEX_SEMAPHORE_NONBLOCKING(mutex, result) (result = 1U)
 
-#define DEBUG_CONSOLE_CREATE_BINARY_SEMAPHORE(binary)       (void)(binary)
-#define DEBUG_CONSOLE_DESTROY_BINARY_SEMAPHORE(binary)      (void)(binary)
+#define DEBUG_CONSOLE_CREATE_BINARY_SEMAPHORE(binary)
+#define DEBUG_CONSOLE_DESTROY_BINARY_SEMAPHORE(binary)
 #ifdef DEBUG_CONSOLE_TRANSFER_NON_BLOCKING
 #define DEBUG_CONSOLE_TAKE_BINARY_SEMAPHORE_BLOCKING(binary) \
     {                                                        \
-        while (!(binary))                                    \
+        while (!binary)                                      \
         {                                                    \
         }                                                    \
-        (binary) = false;                                      \
+        binary = false;                                      \
     }
-#define DEBUG_CONSOLE_GIVE_BINARY_SEMAPHORE_FROM_ISR(binary) \
-    do                                                       \
-    {                                                        \
-        (binary) = true;                                       \
-    } while(false)
+#define DEBUG_CONSOLE_GIVE_BINARY_SEMAPHORE_FROM_ISR(binary) (binary = true)
 #else
-#define DEBUG_CONSOLE_TAKE_BINARY_SEMAPHORE_BLOCKING(binary)  (void)(binary)
-#define DEBUG_CONSOLE_GIVE_BINARY_SEMAPHORE_FROM_ISR(binary)  (void)(binary)
+#define DEBUG_CONSOLE_TAKE_BINARY_SEMAPHORE_BLOCKING(binary)
+#define DEBUG_CONSOLE_GIVE_BINARY_SEMAPHORE_FROM_ISR(binary)
 #endif /* DEBUG_CONSOLE_TRANSFER_NON_BLOCKING */
 /* clang-format on */
 
@@ -594,9 +576,7 @@ int DbgConsole_ReadLine(uint8_t *buf, size_t size)
     }
 
     /* take mutex lock function */
-#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
     DEBUG_CONSOLE_TAKE_MUTEX_SEMAPHORE_BLOCKING(s_debugConsoleReadSemaphore);
-#endif
 
     do
     {
@@ -604,9 +584,7 @@ int DbgConsole_ReadLine(uint8_t *buf, size_t size)
         if ((status_t)kStatus_Success != DbgConsole_ReadOneCharacter(&buf[i]))
         {
             /* release mutex lock function */
-#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
             DEBUG_CONSOLE_GIVE_MUTEX_SEMAPHORE(s_debugConsoleReadSemaphore);
-#endif
             i = -1;
             break;
         }
@@ -641,9 +619,7 @@ int DbgConsole_ReadLine(uint8_t *buf, size_t size)
     }
 
     /* release mutex lock function */
-#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
     DEBUG_CONSOLE_GIVE_MUTEX_SEMAPHORE(s_debugConsoleReadSemaphore);
-#endif
 
     return i;
 }
@@ -660,9 +636,7 @@ int DbgConsole_ReadCharacter(uint8_t *ch)
     }
 
     /* take mutex lock function */
-#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
     DEBUG_CONSOLE_TAKE_MUTEX_SEMAPHORE_BLOCKING(s_debugConsoleReadSemaphore);
-#endif
     /* read one character */
     if ((status_t)kStatus_Success == DbgConsole_ReadOneCharacter(ch))
     {
@@ -677,9 +651,7 @@ int DbgConsole_ReadCharacter(uint8_t *ch)
     }
 
     /* release mutex lock function */
-#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
     DEBUG_CONSOLE_GIVE_MUTEX_SEMAPHORE(s_debugConsoleReadSemaphore);
-#endif
 
     return ret;
 }
@@ -691,7 +663,7 @@ static void DbgConsole_PrintCallback(char *buf, int32_t *indicator, char dbgVal,
 
     for (i = 0; i < len; i++)
     {
-        if (((uint32_t)*indicator + 1UL) >= (uint32_t)DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN)
+        if (((uint32_t)*indicator + 1UL) >= DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN)
         {
             (void)DbgConsole_SendDataReliable((uint8_t *)buf, (uint32_t)(*indicator));
             *indicator = 0;
@@ -708,24 +680,21 @@ static void DbgConsole_PrintCallback(char *buf, int32_t *indicator, char dbgVal,
 #if (defined(SERIAL_USE_CONFIGURE_STRUCTURE) && (SERIAL_USE_CONFIGURE_STRUCTURE > 0U))
 #include "board.h"
 #if (defined(SERIAL_PORT_TYPE_UART) && (SERIAL_PORT_TYPE_UART > 0U))
-static const serial_port_uart_config_t uartConfig = {.instance     = BOARD_DEBUG_UART_INSTANCE,
-                                                     .clockRate    = BOARD_DEBUG_UART_CLK_FREQ,
-                                                     .baudRate     = BOARD_DEBUG_UART_BAUDRATE,
-                                                     .parityMode   = kSerialManager_UartParityDisabled,
-                                                     .stopBitCount = kSerialManager_UartOneStopBit,
+static const serial_port_uart_config_t uartConfig = {
+    .instance     = BOARD_DEBUG_UART_INSTANCE,
+    .clockRate    = BOARD_DEBUG_UART_CLK_FREQ,
+    .baudRate     = BOARD_DEBUG_UART_BAUDRATE,
+    .parityMode   = kSerialManager_UartParityDisabled,
+    .stopBitCount = kSerialManager_UartOneStopBit,
 #if !defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING)
 #if (defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
-                                                     .mode = kSerialManager_UartBlockMode,
+    .mode = kSerialManager_UartBlockMode,
 #endif
 #endif
-                                                     .enableRx    = 1U,
-                                                     .enableTx    = 1U,
-                                                     .enableRxRTS = 0U,
-                                                     .enableTxCTS = 0U,
-#if (defined(HAL_UART_ADAPTER_FIFO) && (HAL_UART_ADAPTER_FIFO > 0u))
-                                                     .txFifoWatermark = 0U,
-                                                     .rxFifoWatermark = 0U
-#endif
+    .enableRx    = 1U,
+    .enableTx    = 1U,
+    .enableRxRTS = 0U,
+    .enableTxCTS = 0U,
 };
 #endif
 #endif
@@ -752,10 +721,6 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
         .enableTx    = 1,
         .enableRxRTS = 0U,
         .enableTxCTS = 0U,
-#if (defined(HAL_UART_ADAPTER_FIFO) && (HAL_UART_ADAPTER_FIFO > 0u))
-        .txFifoWatermark = 0U,
-        .rxFifoWatermark = 0U
-#endif
     };
 #endif
 #endif
@@ -843,19 +808,9 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
 
         assert(kStatus_SerialManager_Success == status);
 
-#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
-#if  configSUPPORT_STATIC_ALLOCATION
-        DEBUG_CONSOLE_CREATE_MUTEX_SEMAPHORE(s_debugConsoleReadSemaphore, &s_debugConsoleReadSemaphoreStatic);
-#else
         DEBUG_CONSOLE_CREATE_MUTEX_SEMAPHORE(s_debugConsoleReadSemaphore);
-#endif
-#endif
 #if (defined(DEBUG_CONSOLE_RX_ENABLE) && (DEBUG_CONSOLE_RX_ENABLE > 0U))
-#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS) && configSUPPORT_STATIC_ALLOCATION
-        DEBUG_CONSOLE_CREATE_BINARY_SEMAPHORE(s_debugConsoleReadWaitSemaphore, &s_debugConsoleReadWaitSemaphoreStatic);
-#else
         DEBUG_CONSOLE_CREATE_BINARY_SEMAPHORE(s_debugConsoleReadWaitSemaphore);
-#endif
 #endif
 
         {
@@ -940,9 +895,7 @@ status_t DbgConsole_Deinit(void)
 #if (defined(DEBUG_CONSOLE_RX_ENABLE) && (DEBUG_CONSOLE_RX_ENABLE > 0U))
     DEBUG_CONSOLE_DESTROY_BINARY_SEMAPHORE(s_debugConsoleReadWaitSemaphore);
 #endif
-#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
     DEBUG_CONSOLE_DESTROY_MUTEX_SEMAPHORE(s_debugConsoleReadSemaphore);
-#endif
 
     return (status_t)kStatus_Success;
 }
@@ -990,7 +943,7 @@ DEBUG_CONSOLE_FUNCTION_PREFIX status_t DbgConsole_Flush(void)
 
 #if SDK_DEBUGCONSOLE
 /* See fsl_debug_console.h for documentation of this function. */
-int DbgConsole_Printf(const char *fmt_s, ...)
+int DbgConsole_Printf(const char *formatString, ...)
 {
     va_list ap;
     int logLength = 0, dbgResult = 0;
@@ -998,9 +951,9 @@ int DbgConsole_Printf(const char *fmt_s, ...)
 
     if (NULL != g_serialHandle)
     {
-        va_start(ap, fmt_s);
+        va_start(ap, formatString);
         /* format print log first */
-        logLength = StrFormatPrintf(fmt_s, ap, printBuf, DbgConsole_PrintCallback);
+        logLength = StrFormatPrintf(formatString, ap, printBuf, DbgConsole_PrintCallback);
         /* print log */
         dbgResult = DbgConsole_SendDataReliable((uint8_t *)printBuf, (size_t)logLength);
 
@@ -1079,9 +1032,7 @@ status_t DbgConsole_TryGetchar(char *ch)
     }
 
     /* take mutex lock function */
-#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
     DEBUG_CONSOLE_TAKE_MUTEX_SEMAPHORE_BLOCKING(s_debugConsoleReadSemaphore);
-#endif
 
     if (kStatus_SerialManager_Success ==
         SerialManager_TryRead(((serial_read_handle_t)&s_debugConsoleState.serialReadHandleBuffer[0]), (uint8_t *)ch, 1,
@@ -1096,9 +1047,7 @@ status_t DbgConsole_TryGetchar(char *ch)
         }
     }
     /* release mutex lock function */
-#if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
     DEBUG_CONSOLE_GIVE_MUTEX_SEMAPHORE(s_debugConsoleReadSemaphore);
-#endif
     return status;
 #else
     return (status_t)kStatus_Fail;

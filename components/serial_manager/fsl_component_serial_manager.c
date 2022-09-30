@@ -616,7 +616,7 @@ static void SerialManager_Task(void *param)
             ringBufferLength =
                 handle->ringBuffer.ringHead + handle->ringBuffer.ringBufferSize - handle->ringBuffer.ringTail;
             ringBufferLength = ringBufferLength % handle->ringBuffer.ringBufferSize;
-            /* Notify there are data in ringbuffer */
+            // Notify there are data in ringbuffer
             if (0U != ringBufferLength)
             {
                 msg.buffer = NULL;
@@ -948,7 +948,7 @@ static serial_manager_status_t SerialManager_Read(serial_read_handle_t readHandl
     assert(handle);
 #if (defined(SERIAL_MANAGER_NON_BLOCKING_DUAL_MODE) && (SERIAL_MANAGER_NON_BLOCKING_DUAL_MODE > 0U))
     if (handle->handleType == kSerialManager_Blocking)
-    /* if ((handle->handleType == kSerialManager_Blocking) || (kSerialManager_TransmissionBlocking == mode)) */
+    //   if ((handle->handleType == kSerialManager_Blocking) || (kSerialManager_TransmissionBlocking == mode))
     {
         return SerialManager_StartReading(handle, serialReadHandle, buffer, length);
     }

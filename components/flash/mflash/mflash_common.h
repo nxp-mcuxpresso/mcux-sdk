@@ -16,8 +16,6 @@
  * Common definitions
  ******************************************************************************/
 
-#define MFLASH_INVALID_ADDRESS (UINT32_MAX)
-
 #define mflash_drv_is_page_aligned(x)   (((x) % (MFLASH_PAGE_SIZE)) == 0)
 #define mflash_drv_is_sector_aligned(x) (((x) % (MFLASH_SECTOR_SIZE)) == 0)
 

@@ -11,6 +11,9 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
+if(${MCUX_DEVICE} STREQUAL "MK22F51212")
+    include(middleware_freertos-kernel_MK22F51212)
+endif()
 if(${MCUX_DEVICE} STREQUAL "MK28FA15")
     include(middleware_freertos-kernel_MK28FA15)
 endif()
@@ -22,9 +25,6 @@ if(${MCUX_DEVICE} STREQUAL "MK66F18")
 endif()
 if(${MCUX_DEVICE} STREQUAL "MKV31F51212")
     include(middleware_freertos-kernel_MKV31F51212)
-endif()
-if(${MCUX_DEVICE} STREQUAL "MK22F51212")
-    include(middleware_freertos-kernel_MK22F51212)
 endif()
 
 include(driver_dspi)

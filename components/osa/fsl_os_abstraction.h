@@ -793,17 +793,6 @@ osa_status_t OSA_MsgQPut(osa_msgq_handle_t msgqHandle, osa_msg_handle_t pMessage
 osa_status_t OSA_MsgQGet(osa_msgq_handle_t msgqHandle, osa_msg_handle_t pMessage, uint32_t millisec);
 
 /*!
- * @brief Get the available message
- *
- * This function is used to get the available message.
- *
- * @param msgqHandle Message Queue handler.
- *
- * @return Available message count
- */
-int OSA_MsgQAvailableMsgs(osa_msgq_handle_t msgqHandle);
-
-/*!
  * @brief Destroys a previously created queue.
  *
  * @param msgqHandle Message Queue handler.

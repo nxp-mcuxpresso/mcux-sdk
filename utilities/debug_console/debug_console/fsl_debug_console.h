@@ -200,10 +200,10 @@ static inline status_t DbgConsole_ExitLowpower(void)
  *
  * Call this function to write a formatted output to the standard output stream.
  *
- * @param   fmt_s Format control string.
+ * @param   formatString Format control string.
  * @return  Returns the number of characters printed or a negative value if an error occurs.
  */
-int DbgConsole_Printf(const char *fmt_s, ...);
+int DbgConsole_Printf(const char *formatString, ...);
 
 /*!
  * @brief Writes a character to stdout.

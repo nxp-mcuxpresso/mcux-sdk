@@ -387,7 +387,7 @@ mem_status_t MEM_Init(void)
         blockHeader_t *firstBlockHdr;
         firstBlockHdr = ptr.block_hdr_ptr;
 
-        /* MEM_DBG_LOG("%x %d\r\n", memHeap, heapSize_c/sizeof(uint32_t)); */
+        // MEM_DBG_LOG("%x %d\r\n", memHeap, heapSize_c/sizeof(uint32_t));
 
         /* Init firstBlockHdr as a free block */
         firstBlockHdr->next      = NULL;
@@ -581,7 +581,7 @@ static void *MEM_BufferAllocate(uint32_t numBytes, uint8_t poolId)
         /* avoid looping */
         assert(FreeBlockHdr != FreeBlockHdr->next_free);
     } while (true);
-    /* MEM_DBG_LOG("BlockHdrFound: %x", BlockHdrFound); */
+    // MEM_DBG_LOG("BlockHdrFound: %x", BlockHdrFound);
 
 #ifdef MEM_DEBUG_OUT_OF_MEMORY
     assert(BlockHdrFound);
@@ -675,7 +675,7 @@ mem_status_t MEM_BufferFree(void *buffer /* IN: Block of memory to free*/)
         MEM_BlockHeaderCheck(BlockHdr->next);
 #endif
 
-        /* MEM_DBG_LOG("%x %d", BlockHdr, BlockHdr->buff_size); */
+        // MEM_DBG_LOG("%x %d", BlockHdr, BlockHdr->buff_size);
 
 #if defined(MEM_STATISTICS_INTERNAL)
         MEM_BufferFrees_memStatis(buffer);
