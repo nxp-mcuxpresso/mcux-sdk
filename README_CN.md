@@ -65,7 +65,7 @@ MCUXpresso SDK 是一个综合性软件支持包，帮助您使用恩智浦基�
     git checkout ${revision}
     west update
     ```
-    将 ```${revision}``` 替换为您希望更新的SDK软件版本。如果您想要拿到最新状态的SDK，使用 ```main```。
+    将 ```${revision}``` 替换为您希望更新的SDK软件版本。
 
 ## 软件发布
 当前项目设计了两种类型的发布。 MCUXpresso SDK 版本和 GitHub Main SDK 版本。下面的描述使用 **MCUX 发布** 是 MCUXpresso SDK 版本的缩写，使用 **Main 发布** 是 GitHub Main SDK 版本的缩写。

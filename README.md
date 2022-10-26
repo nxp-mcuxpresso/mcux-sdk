@@ -35,6 +35,7 @@ This project provides the fundamental support for all NXP hot parts:
 [![MCUXSDK Graph](docs/sdk_graph.svg)](https://htmlpreview.github.io/?https://github.com/NXPmicro/mcux-sdk/blob/main/docs/sdk_graph.html)
 You need to have both Git and West installed in order to get a new delivery of the whole SDK or update the existing SDK deliveries. You could follow below guide according to your scenario:
 * Clone/check-out a new delivery of whole SDK
+    
     Execute below commands to achieve the whole SDK delivery at revision ```${revision}``` and place it in a folder named ```mcuxsdk```
     ```
     west init -m https://github.com/NXPmicro/mcux-sdk --mr ${revision} mcuxsdk
