@@ -33,13 +33,36 @@ This project provides the fundamental support for all NXP hot parts:
 
 **The project is also the main repository to achieve the whole SDK delivery**, it contains the [west.yml](https://github.com/NXPmicro/mcux-sdk/blob/main/west.yml) which keeps description and revision for other projects in the overall MCUXpresso delivery. Currently available middleware sets are shown in below figure, user could click the middleware to navigate the middleware project repo.
 [![MCUXSDK Graph](docs/sdk_graph.svg)](https://htmlpreview.github.io/?https://github.com/NXPmicro/mcux-sdk/blob/main/docs/sdk_graph.html)
-You need to have both Git and West installed, then execute below commands to achieve the whole SDK delivery at revision ```${revision}``` and place it in a folder named ```mcuxsdk```. 
-```
-west init -m https://github.com/NXPmicro/mcux-sdk --mr ${revision} mcuxsdk
-cd mcuxsdk
-west update
-```
-Replace ```${revision}``` with any SDK revision you wish to achieve. This can be ```main``` if you want the latest state, or any commit SHA. 
+You need to have both Git and West installed in order to get a new delivery of the whole SDK or update the existing SDK deliveries. You could follow below guide according to your scenario:
+* Clone/check-out a new delivery of whole SDK
+    Execute below commands to achieve the whole SDK delivery at revision ```${revision}``` and place it in a folder named ```mcuxsdk```
+    ```
+    west init -m https://github.com/NXPmicro/mcux-sdk --mr ${revision} mcuxsdk
+    cd mcuxsdk
+    west update
+    ```
+    Replace ```${revision}``` with any SDK revision(branch/tag/commit SHA) you wish to achieve. This can be ```main``` if you want the latest state, or any commit SHA or tag. 
+
+* Update existing west cloned SDK whole delivery
+    
+    Assume you have followed previous commands to clone/check-out whole SDK delivery to the west workspace mcuxsdk, then the main repository of SDK is located in mcuxsdk/core. If you would like to update/check-out to another revision, you need to first update the main repository to the expected revision, then update the west workspace:
+    
+    When you would like to update SDK full delivery in the latest branch of main repository, follow below commands:
+
+     ```
+    cd mcuxsdk/core
+    git fetch
+    git rebase
+    west update
+    ```
+
+    If the ```${revision}``` is different revision from that used in main repository, such as different branch, different tag or different commit SHA, you could follow below commands:
+    ```
+    cd mcuxsdk/core
+    git fetch
+    git checkout ${revision}
+    west update
+    ```
 
 ## Releases
 

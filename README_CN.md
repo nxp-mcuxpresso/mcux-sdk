@@ -34,15 +34,38 @@ MCUXpresso SDK 是一个综合性软件支持包，帮助您使用恩智浦基�
 
 **当前项目也是获取SDK所有项目的中央存储库**，它包含的[west.yml](https://github.com/NXPmicro/mcux-sdk/blob/main/west.yml)记录了所有可用的SDK子项目以及使用的版本。当前可以拿到的子项目如下图所示，用户可以单击任意的子项目来导航到该项目的代码仓库。
 [![MCUXSDK Graph](docs/sdk_graph.svg)](https://htmlpreview.github.io/?https://github.com/NXPmicro/mcux-sdk/blob/main/docs/sdk_graph.html)
-获取所有的SDK项目，你需要同时安装 Git 和 West。然后请执行下面的命令来获取SDK所有项目在软件版本 ```${revision}``` 的发布，并将其放在名为 ```mcuxsdk``` 的文件夹中。
+获取所有的SDK项目，你需要同时安装 Git 和 West，可以参考下面的命令来获取一份新的SDK所有项目或者更新已有的SDK项目：
+* 获取一份新的SDK所有项目
+    
+    请执行下面的命令来获取SDK所有项目在软件版本 ```${revision}``` 的发布，并将其放在名为 ```mcuxsdk``` 的文件夹中。
 
-```
-west init -m https://github.com/NXPmicro/mcux-sdk --mr ${revision} mcuxsdk
-cd mcuxsdk
-west update
-```
+    ```
+    west init -m https://github.com/NXPmicro/mcux-sdk --mr ${revision} mcuxsdk
+    cd mcuxsdk
+    west update
+    ```
 
-将 ```${revision}``` 替换为您希望获取的SDK软件版本。如果您想要拿到最新状态的SDK，使用 ```main```。
+    将 ```${revision}``` 替换为您希望获取的SDK软件版本(分支名/标签名/提交的SHA号)。如果您想要拿到最新状态的SDK，使用 ```main```。
+
+* 更新已有的SDK所有项目
+    
+    假定你曾经执行上面的命令获取了一份新的SDK所有项目并放在west工作区mcuxsdk目录下, 这时中央存储库是被放到mcuxsdk/core目录。如果想要更新本地的SDK所有项目到另外一个指定的版本，需要先更新中央存储库到指定版本，然后对整个west工作区做更新:
+    
+    想要拿到中央存储库所在分支上SDK所有项目的最新更新，参考命令如下：
+     ```
+    cd mcuxsdk/core
+    git fetch
+    git rebase
+    west update
+    ```
+    想要获取与中央存储库当前所在版本不同的更新，比如说不同的分支，不同的发布标签或者不同的提交序列号，参考命令如下：    
+    ```
+    cd mcuxsdk/core
+    git fetch
+    git checkout ${revision}
+    west update
+    ```
+    将 ```${revision}``` 替换为您希望更新的SDK软件版本。如果您想要拿到最新状态的SDK，使用 ```main```。
 
 ## 软件发布
 当前项目设计了两种类型的发布。 MCUXpresso SDK 版本和 GitHub Main SDK 版本。下面的描述使用 **MCUX 发布** 是 MCUXpresso SDK 版本的缩写，使用 **Main 发布** 是 GitHub Main SDK 版本的缩写。
