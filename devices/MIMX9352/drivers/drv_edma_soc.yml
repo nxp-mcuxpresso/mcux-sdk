@@ -1,0 +1,24 @@
+---
+driver.edma_soc:
+  contents:
+    repo_base_path: devices/MIMX9352/drivers
+    package_base_path: devices/${platform_devices_soc_name}/drivers
+    project_base_path: drivers
+    cc-include:
+    - repo_relative_path: "./"
+    files:
+    - source: fsl_edma_soc.h
+    - source: fsl_edma_soc.c
+  __requires__:
+  - driver.common
+  section-type: component
+  component_info:
+    common:
+      description: EDMA SOC Driver
+      version: 2.0.0
+      type: driver
+      full_name: EDMA SOC Driver
+      change_log: devices/MIMX9352/drivers/ChangeLogKSDK.txt
+      component_bundle: bundle.drivers
+      manifest_name: edma_soc
+      sub: edma_soc
