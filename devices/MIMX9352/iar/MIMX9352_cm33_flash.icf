@@ -1,0 +1,103 @@
+/*
+** ###################################################################
+**     Processors:          MIMX9352CVUXK_cm33
+**                          MIMX9352DVUXM_cm33
+**
+**     Compiler:            IAR ANSI C/C++ Compiler for ARM
+**     Reference manual:    IMX93RM, Internal, November. 2021
+**     Version:             rev. 1.0, 2021-11-16
+**     Build:               b220830
+**
+**     Abstract:
+**         Linker file for the IAR ANSI C/C++ Compiler for ARM
+**
+**     Copyright 2016 Freescale Semiconductor, Inc.
+**     Copyright 2016-2022 NXP
+**     All rights reserved.
+**
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+** ###################################################################
+*/
+
+/* Memory region from [0x80000000-0x80001FFF] is reserved for ROM header */
+/* Memory region from [0x20040000-0x2007FFFF] is reserved for A55 ATF */
+
+define symbol __ram_vector_table_size__ =  isdefinedsymbol(__ram_vector_table__) ? 0x00000478 : 0;
+define symbol __ram_vector_table_offset__ =  isdefinedsymbol(__ram_vector_table__) ? 0x00000477 : 0;
+
+define symbol m_interrupts_start       = 0x80002000;
+define symbol m_interrupts_end         = 0x80002477;
+
+define symbol m_text_start             = 0x80002478;
+define symbol m_text_end               = 0x803FFFFF;
+
+define symbol m_m33_suspend_ram_start  = 0x20000000;
+define symbol m_m33_suspend_ram_end    = 0x20001FFF;
+
+define symbol m_a55_suspend_ram_start  = 0x20002000;
+define symbol m_a55_suspend_ram_end    = 0x20002FFF;
+
+define symbol m_interrupts_ram_start   = 0x0FFE0000;
+define symbol m_interrupts_ram_end     = 0x0FFE0000 + __ram_vector_table_offset__;
+
+define symbol m_data_start             = m_interrupts_ram_start + __ram_vector_table_size__;
+define symbol m_data_end               = 0x0FFFFFFF;
+
+define symbol m_data_2_start           = 0x20008000;
+define symbol m_data_2_end             = 0x2003FFFF;
+
+/* Sizes */
+if (isdefinedsymbol(__stack_size__)) {
+  define symbol __size_cstack__        = __stack_size__;
+} else {
+  define symbol __size_cstack__        = 0x0400;
+}
+
+if (isdefinedsymbol(__heap_size__)) {
+  define symbol __size_heap__          = __heap_size__;
+} else {
+  define symbol __size_heap__          = 0x0400;
+}
+
+define exported symbol __VECTOR_TABLE  = m_interrupts_start;
+define exported symbol __VECTOR_RAM    = isdefinedsymbol(__ram_vector_table__) ? m_interrupts_ram_start : m_interrupts_start;
+define exported symbol __RAM_VECTOR_TABLE_SIZE = __ram_vector_table_size__;
+
+define memory mem with size = 4G;
+define region TEXT_region = mem:[from m_interrupts_start to m_interrupts_end]
+                          | mem:[from m_text_start to m_text_end];
+define region DATA_region = mem:[from m_data_start to m_data_end]
+                          | mem:[from m_data_2_start to m_data_2_end-__size_cstack__];
+define region CSTACK_region = mem:[from m_data_2_end-__size_cstack__+1 to m_data_2_end];
+define region m_interrupts_ram_region = mem:[from m_interrupts_ram_start to m_interrupts_ram_end];
+define region M33_SUSPEND_region = mem:[from m_m33_suspend_ram_start to m_m33_suspend_ram_end];
+define region A55_SUSPEND_region = mem:[from m_a55_suspend_ram_start to m_a55_suspend_ram_end];
+
+define block CSTACK    with alignment = 8, size = __size_cstack__   { };
+define block HEAP      with alignment = 8, size = __size_heap__     { };
+define block RW        { readwrite };
+define block ZI        { zi };
+define block QACCESS_CODE_VAR   with alignment = 32 { section CodeQuickAccess };
+define block QACCESS_DATA_VAR   with alignment = 32 { section DataQuickAccess };
+
+initialize by copy { readwrite, section .textrw, section DataQuickAccess, section CodeQuickAccess };
+do not initialize  { section .noinit, section M33SuspendRam, section A55SuspendRam };
+
+keep{section .resource_table};
+
+place at address mem: m_interrupts_start    { readonly section .intvec };
+".resource_table": place at address mem: m_text_start {section .resource_table};
+place in TEXT_region                        { readonly };
+place in DATA_region                        { block QACCESS_CODE_VAR };
+place in DATA_region                        { block QACCESS_DATA_VAR };
+place in DATA_region                        { block RW };
+place in DATA_region                        { block ZI };
+place in DATA_region                        { last block HEAP };
+place in CSTACK_region                      { block CSTACK };
+place in m_interrupts_ram_region            { section m_interrupts_ram };
+place in M33_SUSPEND_region                 { section M33SuspendRam };
+place in A55_SUSPEND_region                 { section A55SuspendRam };
