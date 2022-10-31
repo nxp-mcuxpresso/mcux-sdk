@@ -1,0 +1,7 @@
+/*!
+@defgroup iomuxc_driver IOMUXC: IOMUX Controller
+
+@details IOMUXC driver provides APIs for pin configuration. It also supports the miscellaneous
+functions integrated in IOMUXC.
+
+*/
