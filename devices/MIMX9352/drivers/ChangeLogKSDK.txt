@@ -1,0 +1,21 @@
+/*!
+@page driver_log Driver Change Log
+
+@section clock CLOCK
+  Current CLOCK driver version is 1.0.0
+
+  - 1.0.0
+    - Initial version.
+
+@section iomuxc IOMUXC
+  The current IOMUXC driver version is 1.0.0.
+
+  - 1.0.0
+    - Initial version.
+
+@section memory MEMORY
+  The current MEMORY driver version is 1.0.0.
+
+  - 1.0.0
+    - Initial version.
+*/

@@ -1,0 +1,230 @@
+---
+#####################################################################################
+# This file is placed under devices/<device>
+#
+# The following components(manifest_content) are translated from the devices/<device>.meta
+# and devices/<device>_device.meta
+#
+# They are used contained the information for manifest generation usage. Currently, they are
+# not related to SW components actions
+#
+# The naming for this component must be consistent in all devices. Generator can get the contents
+# of them directly from the name.
+#
+#####################################################################################
+
+# automatically, from fromChipModel
+device.hardware_data:
+  section-type: "manifest_content"
+  contents:
+    generated_from_chip_model: "yes"
+    devices:
+      - id: "MIMX9352xxxxM"
+        full_name: "MIMX9352xxxxM"
+        name: "MIMX9352"
+        platform: "i.MX"
+        series: "93"
+        family: "MIMX93xx"
+        subfamily: "iMX9352"
+        core:
+          - name: "Cortex-M33"
+            type: "cm33"
+            id: "cm33"
+            description: ""
+            fpu: "SP_FPU"
+            dsp: true
+            mpu: true
+            frequency_mhz: 216
+        memory:
+          memoryBlock:
+            - id: "SRAM_UPPER"
+              name: "SRAM_UPPER"
+              addr: 0x20000000
+              size: 0x20000
+              type: "RAM"
+              access: "RW"
+              default: true
+            - id: "SRAM_LOWER"
+              name: "SRAM_LOWER"
+              addr: 0xffe0000
+              size: 0x20000
+              type: "RAM"
+              access: "RW"
+              default: true
+        total_memory:
+          ram_size_kb: 256
+          flash_size_kb: 0
+        part:
+          - name: "MIMX9352DVUXM"
+        ips:
+          - "DriverFeature_FLEXCAN_DMA"
+          - "DriverFeature_WDOG_WDOG32"
+          - "DriverType_"
+          - "DriverType_AXBS"
+          - "DriverType_BLK_CTRL_NIC_WRAPPER"
+          - "DriverType_BLK_CTRL_WAKEUPMIX"
+          - "DriverType_CM33_MCM"
+          - "DriverType_CMX_PERFMON"
+          - "DriverType_DDR"
+          - "DriverType_DMA3"
+          - "DriverType_DMA_TCD"
+          - "DriverType_D_IP_MX9DUAL_CCM"
+          - "DriverType_D_IP_ROBLK"
+          - "DriverType_EDMA4"
+          - "DriverType_ENET"
+          - "DriverType_ENET_QOS"
+          - "DriverType_FLEXCAN"
+          - "DriverType_FLEXIO"
+          - "DriverType_FLEXSPI"
+          - "DriverType_ISI"
+          - "DriverType_JTAGC"
+          - "DriverType_LCDIF"
+          - "DriverType_LPC_I3C"
+          - "DriverType_LPI2C"
+          - "DriverType_LPIT"
+          - "DriverType_LPSPI"
+          - "DriverType_LPTMR"
+          - "DriverType_LPUART"
+          - "DriverType_M33_CACHE_MCM"
+          - "DriverType_MCM"
+          - "DriverType_MECC256"
+          - "DriverType_MEMORY"
+          - "DriverType_MIPI_CSI"
+          - "DriverType_MIPI_DSI"
+          - "DriverType_MQS"
+          - "DriverType_MU"
+          - "DriverType_MUB"
+          - "DriverType_OCOTP"
+          - "DriverType_OTFAD"
+          - "DriverType_PDM"
+          - "DriverType_PXP"
+          - "DriverType_RGPIO"
+          - "DriverType_ROMC"
+          - "DriverType_SAI"
+          - "DriverType_SEMA42"
+          - "DriverType_SFA"
+          - "DriverType_SPDIF"
+          - "DriverType_SYS_CTR_COMPARE"
+          - "DriverType_SYS_CTR_CONTROL"
+          - "DriverType_SYS_CTR_READ"
+          - "DriverType_TMU"
+          - "DriverType_TPM"
+          - "DriverType_TRDC"
+          - "DriverType_TRGMUX"
+          - "DriverType_TSTMR"
+          - "DriverType_USDHC"
+          - "DriverType_WDOG"
+          - "DriverType_XCACHE"
+          - "DriverType_bbsmmix"
+          - "DriverType_blk_ctrl_ddrmix"
+          - "DriverType_blk_ctrl_mlmix"
+          - "DriverType_blk_ctrl_ns_aonmix"
+          - "DriverType_blk_ctrl_s_aonmix"
+          - "DriverType_iomuxc"
+          - "DriverType_uSDHC"
+        modules:
+      - id: "MIMX9352xxxxK"
+        full_name: "MIMX9352xxxxK"
+        name: "MIMX9352"
+        platform: "i.MX"
+        series: "93"
+        family: "MIMX93xx"
+        subfamily: "iMX9352"
+        core:
+          - name: "Cortex-M33"
+            type: "cm33"
+            id: "cm33"
+            description: ""
+            fpu: "SP_FPU"
+            dsp: true
+            mpu: true
+            frequency_mhz: 216
+        memory:
+          memoryBlock:
+            - id: "SRAM_UPPER"
+              name: "SRAM_UPPER"
+              addr: 0x20000000
+              size: 0x20000
+              type: "RAM"
+              access: "RW"
+              default: true
+            - id: "SRAM_LOWER"
+              name: "SRAM_LOWER"
+              addr: 0xffe0000
+              size: 0x20000
+              type: "RAM"
+              access: "RW"
+              default: true
+        total_memory:
+          ram_size_kb: 256
+          flash_size_kb: 0
+        part:
+          - name: "MIMX9352CVUXK"
+        ips:
+          - "DriverFeature_FLEXCAN_DMA"
+          - "DriverFeature_WDOG_WDOG32"
+          - "DriverType_"
+          - "DriverType_AXBS"
+          - "DriverType_BLK_CTRL_NIC_WRAPPER"
+          - "DriverType_BLK_CTRL_WAKEUPMIX"
+          - "DriverType_CM33_MCM"
+          - "DriverType_CMX_PERFMON"
+          - "DriverType_DDR"
+          - "DriverType_DMA3"
+          - "DriverType_DMA_TCD"
+          - "DriverType_D_IP_MX9DUAL_CCM"
+          - "DriverType_D_IP_ROBLK"
+          - "DriverType_EDMA4"
+          - "DriverType_ENET"
+          - "DriverType_ENET_QOS"
+          - "DriverType_FLEXCAN"
+          - "DriverType_FLEXIO"
+          - "DriverType_FLEXSPI"
+          - "DriverType_ISI"
+          - "DriverType_JTAGC"
+          - "DriverType_LCDIF"
+          - "DriverType_LPC_I3C"
+          - "DriverType_LPI2C"
+          - "DriverType_LPIT"
+          - "DriverType_LPSPI"
+          - "DriverType_LPTMR"
+          - "DriverType_LPUART"
+          - "DriverType_M33_CACHE_MCM"
+          - "DriverType_MCM"
+          - "DriverType_MECC256"
+          - "DriverType_MEMORY"
+          - "DriverType_MIPI_CSI"
+          - "DriverType_MIPI_DSI"
+          - "DriverType_MQS"
+          - "DriverType_MU"
+          - "DriverType_MUB"
+          - "DriverType_OCOTP"
+          - "DriverType_OTFAD"
+          - "DriverType_PDM"
+          - "DriverType_PXP"
+          - "DriverType_RGPIO"
+          - "DriverType_ROMC"
+          - "DriverType_SAI"
+          - "DriverType_SEMA42"
+          - "DriverType_SFA"
+          - "DriverType_SPDIF"
+          - "DriverType_SYS_CTR_COMPARE"
+          - "DriverType_SYS_CTR_CONTROL"
+          - "DriverType_SYS_CTR_READ"
+          - "DriverType_TMU"
+          - "DriverType_TPM"
+          - "DriverType_TRDC"
+          - "DriverType_TRGMUX"
+          - "DriverType_TSTMR"
+          - "DriverType_USDHC"
+          - "DriverType_WDOG"
+          - "DriverType_XCACHE"
+          - "DriverType_bbsmmix"
+          - "DriverType_blk_ctrl_ddrmix"
+          - "DriverType_blk_ctrl_mlmix"
+          - "DriverType_blk_ctrl_ns_aonmix"
+          - "DriverType_blk_ctrl_s_aonmix"
+          - "DriverType_iomuxc"
+          - "DriverType_uSDHC"
+        modules:
+...
