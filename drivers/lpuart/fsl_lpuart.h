@@ -650,9 +650,9 @@ uint32_t LPUART_GetEnabledInterrupts(LPUART_Type *base);
  * @param base LPUART peripheral base address.
  * @return LPUART data register addresses which are used both by the transmitter and receiver.
  */
-static inline uint32_t LPUART_GetDataRegisterAddress(LPUART_Type *base)
+static inline uintptr_t LPUART_GetDataRegisterAddress(LPUART_Type *base)
 {
-    return (uint32_t) & (base->DATA);
+    return (uintptr_t) & (base->DATA);
 }
 
 /*!
