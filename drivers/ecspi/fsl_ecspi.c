@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -277,6 +277,7 @@ void ECSPI_MasterGetDefaultConfig(ecspi_master_config_t *config)
 void ECSPI_MasterInit(ECSPI_Type *base, const ecspi_master_config_t *config, uint32_t srcClock_Hz)
 {
     assert((config != NULL) && (srcClock_Hz != 0U));
+    assert(config->burstLength <= 4096U);
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Open clock gate for SPI and open interrupt */
     CLOCK_EnableClock(s_ecspiClock[ECSPI_GetInstance(base)]);
@@ -353,7 +354,7 @@ void ECSPI_SlaveGetDefaultConfig(ecspi_slave_config_t *config)
 void ECSPI_SlaveInit(ECSPI_Type *base, const ecspi_slave_config_t *config)
 {
     assert((base != NULL) && (config != NULL));
-
+    assert(config->burstLength <= 4096U);
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Open clock gate for SPI and open interrupt */
     CLOCK_EnableClock(s_ecspiClock[ECSPI_GetInstance(base)]);

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief ECSPI driver version. */
-#define FSL_ECSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_ECSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 #ifndef ECSPI_DUMMYDATA
@@ -166,7 +166,7 @@ typedef struct _ecspi_master_config
     ecspi_channel_config_t channelConfig;                 /*!< Channel configuration */
     ecspi_sample_period_clock_source_t samplePeriodClock; /*!< Sample period clock source */
 
-    uint8_t burstLength;     /*!< Burst length */
+    uint16_t burstLength;    /*!< Burst length. The length shall be less than 4096 bits */
     uint8_t chipSelectDelay; /*!< SS delay time */
     uint16_t samplePeriod;   /*!< Sample period */
     uint8_t txFifoThreshold; /*!< TX Threshold */
@@ -179,7 +179,7 @@ typedef struct _ecspi_master_config
 typedef struct _ecspi_slave_config
 {
     ecspi_channel_source_t channel;       /*Channel number */
-    uint8_t burstLength;                  /*!< Burst length */
+    uint16_t burstLength;                 /*!< Burst length. The length shall be less than 4096 bits */
     uint8_t txFifoThreshold;              /*!< TX Threshold */
     uint8_t rxFifoThreshold;              /*!< RX Threshold */
     ecspi_channel_config_t channelConfig; /*!< Channel configuration */
