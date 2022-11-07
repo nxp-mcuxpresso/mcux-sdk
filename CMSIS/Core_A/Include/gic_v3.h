@@ -228,6 +228,13 @@ __STATIC_INLINE void GIC_WaitRWP(enum gic_rwp rwp)
     ;
 }
 
+/** \brief Get the Affinity Routing status.
+*/
+__STATIC_INLINE bool GIC_GetARE(void)
+{
+  return !!(GICDistributor->CTLR & 0x30);
+}
+
 /** \brief  Enable the interrupt distributor using the GIC's CTLR register.
 */
 __STATIC_INLINE void GIC_EnableDistributor(void)
@@ -274,7 +281,7 @@ __STATIC_INLINE void GIC_SetTarget(IRQn_Type IRQn, uint32_t cpu_target)
 {
   if(IRQn >= 32)
   {
-    if(GICDistributor->CTLR & 0x30)
+    if(GIC_GetARE())
     {
       /* affinity routing */
       GICDistributor->IROUTER[IRQn] = (uint64_t)cpu_target;
@@ -298,7 +305,7 @@ __STATIC_INLINE uint32_t GIC_GetTarget(IRQn_Type IRQn)
 
   if(IRQn >= 32)
   {
-    if(GICDistributor->CTLR & 0x30)
+    if(GIC_GetARE())
     {
       /* affinity routing */
       cpu_target = (uint32_t) (GICDistributor->IROUTER[IRQn] & 0xff);
