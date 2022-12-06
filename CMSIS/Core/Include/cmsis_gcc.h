@@ -932,6 +932,26 @@ __STATIC_FORCEINLINE uint32_t __STLEX(uint32_t value, volatile uint32_t *ptr)
 #endif /* ((defined (__ARM_ARCH_8M_MAIN__ ) && (__ARM_ARCH_8M_MAIN__ == 1)) || \
            (defined (__ARM_ARCH_8M_BASE__ ) && (__ARM_ARCH_8M_BASE__ == 1))    ) */
 
+/**
+  \brief   likely/unlikely() branch prediction
+  \details Gives hints to the compiler to favor either side of a jump instruction
+  \param [in]  expr   Boolean expression under evaluation
+  \return             The same boolean value
+ */
+#ifndef unlikely
+__STATIC_FORCEINLINE long unlikely(long expr)
+{
+  return __builtin_expect(expr, 0L);
+}
+#endif
+
+#ifndef likely
+__STATIC_FORCEINLINE long likely(long expr)
+{
+  return __builtin_expect(expr, 1L);
+}
+#endif
+
 /*@}*/ /* end of group CMSIS_Core_InstructionInterface */
 
 
