@@ -1,5 +1,5 @@
 //*****************************************************************************
-// JN518x Microcontroller Startup code for use with MCUXpresso IDE
+// K32W041AM Microcontroller Startup code for use with MCUXpresso IDE
 //
 // Version : 141204
 //*****************************************************************************

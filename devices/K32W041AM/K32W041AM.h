@@ -11,13 +11,13 @@
 **
 **     Reference manual:    K32W041AMUM_Rev.0.3 20 December 2019
 **     Version:             rev. 1.0, 2019-11-05
-**     Build:               b210126
+**     Build:               b220927
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for K32W041AM
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -155,6 +155,7 @@ typedef enum IRQn {
 #define __NVIC_PRIO_BITS               3         /**< Number of priority bits implemented in the NVIC */
 #define __Vendor_SysTickConfig         0         /**< Vendor specific implementation of SysTickConfig is defined */
 #define __FPU_PRESENT                  0         /**< Defines if an FPU is present or not */
+#define __DSP_PRESENT                  1         /**< Defines if ARMv7E-M Mainline core supports DSP instructions */
 
 #include "core_cm4.h"                  /* Core Peripheral Access Layer */
 #include "system_K32W041AM.h"          /* Device specific configuration file */

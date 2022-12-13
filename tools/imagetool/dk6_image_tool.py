@@ -16,6 +16,10 @@ from io import StringIO
 def auto_int(x):
    return int(x, 0)
 
+def delete_file(fname):
+    from os.path import exists
+    if exists(fname):
+        os.remove(fname)
 
 
 def get_symbol_value(file, symb_name):
@@ -169,58 +173,42 @@ def EvalHexArgumentToInt(arg_name, arg_str):
 
     return int_result, error
 
-def HandleExtFlashSection(elf_file_name, sections, sect_name):
-    extflash_section = get_section(sections, sect_name)
-    if extflash_section is None:
-        # print (sect_name + " section not found in ELF file: check name in linker script")
-        return 0
-    else:
-        if extflash_section.size != 0 and extflash_section.lma >= 0x10000000:
-            # the rodata section is placed in external flash
-            extflash_section_hash = get_section(sections, '.extflash_hash')
-            if extflash_section_hash is None:
-                return -2
-            if extflash_section_hash.size != 40 or extflash_section_hash.lma > 0x9de00:
-                print(".extflash_hash section headroom must have been reserved in internal flash")
-                return -3
-            # Compute hash of rodata section
-            from Crypto.Hash import SHA256
-            with open(elf_file_name, 'r+b') as elf_file:
-                elf_file.seek(extflash_section.offset)
-                extflash_contents = elf_file.read(extflash_section.size)
-                hash = SHA256.new(extflash_contents)
-                # write hash to ro_data_section_hash
-                hdr_s = struct.Struct("<LL")
-                #pdb.set_trace()
-                sect_hdr = hdr_s.pack(extflash_section.lma, extflash_section.size)
-                print("extflash_section: address 0x{:08x} size 0x{:08x}".format(extflash_section.lma, extflash_section.size))
-                elf_file.seek(extflash_section_hash.offset)
-                elf_file.write(sect_hdr)
+def HandleExtFlashSection(elf_file_name, extflash_section, sect_name):
+    EXTRA_SECTION_MARKER = 0x73676745
+    NO_EXTRA_SECTION_MARKER = 0x65706F4E
 
-                elf_file.seek(extflash_section_hash.offset + hdr_s.size)
-                elf_file.write(hash.digest())
+    from Crypto.Hash import SHA256
+    with open(elf_file_name, 'r+b') as elf_file:
+        elf_file.seek(extflash_section.offset)
+        extflash_contents = elf_file.read(extflash_section.size)
+        hash = SHA256.new(extflash_contents)
+        # write hash to ro_data_section_hash
+        hdr_s = struct.Struct("<LLL")
+        hdr_concat_s = struct.Struct("<LLL")
+        # pdb.set_trace()
+        hdr_s = hdr_s.pack(NO_EXTRA_SECTION_MARKER, extflash_section.lma, extflash_section.size)
+        hdr_concat_s = hdr_concat_s.pack(EXTRA_SECTION_MARKER, extflash_section.lma, extflash_section.size)
+        print("extflash_section: address 0x{:08x} size 0x{:08x}".format(extflash_section.lma,
+                                                                        extflash_section.size))
 
-            extflash_elf_name = elf_file_name.split(".")[0]+'_extflash.'+elf_file_name.split(".")[1]
-            extflash_bin_name = extflash_elf_name.split(".")[0]+'.bin'
-    
-            #extflash_text_file =  'extFlash_text'
+    extflash_elf_name = elf_file_name.split(".")[0] + '_extflash.' + elf_file_name.split(".")[1]
+    extflash_bin_name = extflash_elf_name.split(".")[0] + '.bin'
 
-            extract_section = subprocess.check_output(['arm-none-eabi-objcopy',
-                                             '--only-section='+sect_name,
-                                              elf_file_name,
-                                              extflash_elf_name])
+    extract_section = subprocess.check_output(['arm-none-eabi-objcopy',
+                                               '--only-section=' + sect_name,
+                                               elf_file_name,
+                                               extflash_elf_name])
 
-            extract_section = subprocess.check_output(['arm-none-eabi-objcopy', 
-                                                        '-v', '-O' , 'binary',  
-                                                        extflash_elf_name, 
-                                                        extflash_bin_name])
+    extract_section = subprocess.check_output(['arm-none-eabi-objcopy',
+                                               '-v', '-O', 'binary',
+                                               extflash_elf_name,
+                                               extflash_bin_name])
 
-            remove_section = subprocess.check_output(['arm-none-eabi-objcopy',
-                                             '--remove-section='+sect_name,
+    remove_section = subprocess.check_output(['arm-none-eabi-objcopy',
+                                              '--remove-section=' + sect_name,
                                               elf_file_name])
-            return 1
-        else:
-            return 0 
+    return hdr_concat_s, hdr_s, hash.digest(), 44
+
 #
 # Fill in the Nonce section that is used for AES image encryption and decryption
 # Populating the .ro_nonce overwrites the section not changing its size 
@@ -604,14 +592,40 @@ def PatchImageHeader(first_section, elf_file_name, args, img_header_marker, boot
         elf_file.close()
     return status
 
+def ReadImageHeader(sections, args):
+    first_section = get_first_section(sections)
+    status = 0
+    with open(args.out_file, 'r+b') as elf_file:
+        VECTSUM_OFFSET = 7
+        IMG_MARKER_OFFSET = 8
+        BBLOCK_OFFSET_OFFSET = 9
+        header_struct     = struct.Struct('<7LLLLL')
+
+        header=""
+        elf_file.seek(first_section.offset)
+        vectors = elf_file.read(header_struct.size)
+        fields = list(header_struct.unpack(vectors))
+        vectsum = fields[VECTSUM_OFFSET]
+        img_header_marker = fields[IMG_MARKER_OFFSET]
+        IMAGE_HEADER_MARKER    = 0x98447902
+        IMAGE_HEADER_APP_CORE  = 0x02794498
+        if ((img_header_marker - IMAGE_HEADER_MARKER) >= 3) and (img_header_marker != IMAGE_HEADER_APP_CORE):
+            result = 1
+        boot_block_offset = fields[BBLOCK_OFFSET_OFFSET]
+        if vectsum != 0 and boot_block_offset != 0: 
+            status = 1
+        elf_file.close()
+
+    return status
 
 # 
 #  UpdateLastSection: changes the length of the section so requires an 'update_section' operation
 #  This function is called a first time 
 #
-def UpdateLastSection(sections, args, 
+def UpdateLastSection(elf_file_name, sections, args,
                       image_addr, stated_size,
-                      cert_file_path, signing, signature):
+                      cert_file_path, signing, signature, extra_section_desc_size,
+                      ext_flash_section_descriptor, ext_flash_hash):
     status = 0
     boot_block_struct = struct.Struct('<8L')
     BOOT_BLOCK_MARKER      = 0xBB0110BB
@@ -619,6 +633,7 @@ def UpdateLastSection(sections, args,
     compatibility_offset = 0
     expected_cert_len = 0
     boot_block_offset = 0
+
     last_section = get_last_section(sections)
     # IAR toolchain uses odd section names that contain spaces
     # the regexp now may now return trailing spaces too, need to strip them
@@ -635,6 +650,13 @@ def UpdateLastSection(sections, args,
         elf_file.close()
 
     if not signing:
+        if ReadImageHeader(sections, args) != 0:
+            status = 1
+            return status, boot_block_offset, 0
+        else:
+            with open('postbuild_process_ongoing', '+w') as postbld_file:
+                postbld_file.write('1')
+
         compatibility, compatibility_len, error = BuildCompatibilityList(args, offset)
         if error != 0:
             print ("Failed to append compatibility section")
@@ -645,6 +667,9 @@ def UpdateLastSection(sections, args,
             compatibility_offset = offset
 
         boot_block_offset = offset + compatibility_len
+
+        if (extra_section_desc_size != 0):
+            boot_block_offset = boot_block_offset + extra_section_desc_size
 
         # determine amount of padding to be inserted
         # IAR toolchain uses odd section names that contain spaces
@@ -720,10 +745,16 @@ def UpdateLastSection(sections, args,
                 tmp_file.write(compatibility)
             if padding_len != 0:
                 tmp_file.write(padding_bytes)
+            if extra_section_desc_size != 0:
+                tmp_file.write(ext_flash_section_descriptor)
+                tmp_file.write(ext_flash_hash)
             tmp_file.write(boot_block)
             if certificate_len != 0:
                 tmp_file.write(certificate)
     else:
+        from os.path import exists
+        if not exists('postbuild_process_ongoing'):
+            return 1, boot_block_offset, total_img_sz
         total_img_sz = offset + len(signature)
         # appending signature
         with open('temp_last_section.bin', 'wb') as tmp_file:
@@ -742,6 +773,7 @@ def UpdateLastSection(sections, args,
 # JN518x ES2 version
 ######################
 def BuildImageElf(args, elf_bin_file, bin_file_name, verbose):
+    import shutil
     is_signature = False
     error = 0
     if args.signature_path is not None:
@@ -794,25 +826,70 @@ def BuildImageElf(args, elf_bin_file, bin_file_name, verbose):
         if error != 0:
             print ("Failed to populate LnkKey ")
             return -4
-    status = HandleExtFlashSection(elf_file_name, sections, '.ext_text')
-    if status < 0:
-        print ("Failed to place section in external flash")
-        return -12
-    elif status == 1:
-        # need to reload sections
-        sections = parse_sections(elf_file_name)
 
     error, image_header_marker, image_addr, stated_size = DetermineImageCharacteristics(elf_file_name, args)
     if error != 0:
         print("Bad argument setting stated_size or target_address")
         return -5
 
-    error, boot_block_offset, img_total_len = UpdateLastSection(sections, args,
-                                                                image_addr, stated_size, 
-                                                                cert_file_path, False, b'')
-    if error != 0:
+    # Check if ext_flash_text section is in elf file
+    concatenated_elf_file_name = ""
+    concatenated_bin_file_name = ""
+    is_ext_flash_section = False
+    extflash_section = get_section(sections, '.ext_flash_text')
+    if extflash_section is None:
+        print("No .ext_flash_text section found in ELF file")
+        error, boot_block_offset, img_total_len = UpdateLastSection(elf_file_name, sections, args,
+                                                                    image_addr,
+                                                                    stated_size, cert_file_path, False, b'',
+                                                                    0,
+                                                                    b'', b'')
+    else:
+        if extflash_section.size != 0 and extflash_section.lma >= 0x10000000:
+            save_out_file = args.out_file
+            is_ext_flash_section = True
+            concatenated_elf_file_name = elf_file_name.split(".")[0] + '_concatenated.' + \
+                                         elf_file_name.split(".")[1]
+            concatenated_bin_file_name = elf_file_name.split(".")[0] + '_concatenated.bin'
+            ext_flash_section_descriptor_concat, ext_flash_section_descriptor, ext_flash_hash, extra_section_desc_size = HandleExtFlashSection(
+                elf_file_name, extflash_section, '.ext_flash_text')
+            # need to reload sections as .ext_flash_text is removed from sections
+            sections = parse_sections(elf_file_name)
+            # Do a copy of the .elf file used later for concatenated binary
+            concatenated_elf_file_name = elf_file_name.split(".")[0] + '_concatenated.' + elf_file_name.split(".")[1]
+            shutil.copy(elf_file_name, concatenated_elf_file_name)
+            # Update last section of both files
+            error, boot_block_offset, img_total_len = UpdateLastSection(elf_file_name, sections, args, image_addr,
+                                                                        stated_size, cert_file_path, False, b'',
+                                                                        extra_section_desc_size,
+                                                                        ext_flash_section_descriptor,
+                                                                        ext_flash_hash)
+            args.out_file = concatenated_elf_file_name
+            error, boot_block_offset, img_total_len = UpdateLastSection(concatenated_elf_file_name, sections, args,
+                                                                        image_addr,
+                                                                        stated_size, cert_file_path, False, b'',
+                                                                        extra_section_desc_size,
+                                                                        ext_flash_section_descriptor_concat,
+                                                                        ext_flash_hash)
+            args.out_file = save_out_file
+        else:
+            print("[WARNING] Bad .ext_flash_text section found in ELF file! Removing")
+            remove_section = subprocess.check_output(['arm-none-eabi-objcopy',
+                                                      '--remove-section=' + '.ext_flash_text',
+                                                      elf_file_name])
+            sections = parse_sections(elf_file_name)
+            error, boot_block_offset, img_total_len = UpdateLastSection(elf_file_name, sections, args,
+                                                                        image_addr,
+                                                                        stated_size, cert_file_path, False, b'',
+                                                                        0,
+                                                                        b'', b'')
+    if error < 0:
         print("Error while patching last section")
         return -6
+    else:
+        if error > 0:
+            print("Image already wrought")
+            return 1
 
     # force section parsing again because ELF file got updated
     sections = parse_sections(elf_file_name)
@@ -823,7 +900,20 @@ def BuildImageElf(args, elf_bin_file, bin_file_name, verbose):
     error = PatchImageHeader(first_section, elf_file_name, args, image_header_marker, boot_block_offset)
     if error != 0:
         print("Error while patching image header")
-        return -7 
+        return -7
+
+    # Copy image header to "concatenanted file"
+    if (is_ext_flash_section is True):
+        header_struct = struct.Struct('<7LLLLL')
+        header = ""
+        with open(args.out_file, 'r+b') as elf_file:
+            elf_file.seek(first_section.offset)
+            header = elf_file.read(header_struct.size)
+            elf_file.close()
+        with open(concatenated_elf_file_name, 'r+b') as elf_file:
+            elf_file.seek(first_section.offset)
+            elf_file.write(header)
+            elf_file.close()
 
     # Force CRC to 0 at this stage
     if (args.zgEmbedOtaHeader is True):
@@ -831,6 +921,14 @@ def BuildImageElf(args, elf_bin_file, bin_file_name, verbose):
         if error != 0:
             print("Error while patching embedded OTA header")
             return -8
+        if (is_ext_flash_section is True):
+            save_out_file = args.out_file
+            args.out_file = concatenated_elf_file_name
+            error = PopulateOtaHdrSection(sections, args, img_total_len, is_signature)
+            args.out_file = save_out_file
+            if error != 0:
+                print("Error while patching embedded OTA header")
+                return -8
 
     # The ELF file is patched at this stage : let's proceeed to the CRC computation
     if (args.zgEmbedOtaHeader is True):
@@ -844,6 +942,20 @@ def BuildImageElf(args, elf_bin_file, bin_file_name, verbose):
         if PatchOtaHeaderImageCrc(sections, args, int("0x"+imagecrc, 16)) != 0:
             print("Error while updating CRC in OTA header")
             return -9
+        if (is_ext_flash_section is True):
+            save_out_file = args.out_file
+            args.out_file = concatenated_elf_file_name
+            bin_output = subprocess.check_output(['arm-none-eabi-objcopy', '-O', 'binary', concatenated_elf_file_name, concatenated_bin_file_name])
+            with open(concatenated_bin_file_name, 'rb') as in_file:
+                input_file = in_file.read()
+            imagecrc = crccheck.crc.Crc32Bzip2().process(input_file).finalhex()
+            in_file.close()
+            print("Computed Concatenated Image CRC " + imagecrc)
+            if PatchOtaHeaderImageCrc(sections, args, int("0x" + imagecrc, 16)) != 0:
+                args.out_file = save_out_file
+                print("Error while updating CRC in OTA header")
+                return -9
+            args.out_file = save_out_file
 
 
     if (is_signature == True):
@@ -856,13 +968,31 @@ def BuildImageElf(args, elf_bin_file, bin_file_name, verbose):
         signature = signer.sign(hash)
         # append signature to last section
 
-        error, boot_block_offset, img_total_len = UpdateLastSection(sections, args,
+        error, boot_block_offset, img_total_len = UpdateLastSection(elf_file_name, sections, args,
                                                                     image_addr, stated_size,
-                                                                    cert_file_path, True, signature)
+                                                                    cert_file_path, True, signature, 0, b'', b'')
+        if (is_ext_flash_section is True):
+            save_out_file = args.out_file
+            # read again the whole file and compute the hash and signature
+            bin_output = subprocess.check_output(
+                ['arm-none-eabi-objcopy', '-O', 'binary', concatenated_elf_file_name, concatenated_bin_file_name])
+            with open(concatenated_bin_file_name, 'rb') as in_file:
+                message = in_file.read()
+            hash = SHA256.new(message)
+            signer = pkcs1_15.new(key)
+            signature = signer.sign(hash)
+            args.out_file = concatenated_elf_file_name
+            error, boot_block_offset, img_total_len = UpdateLastSection(concatenated_elf_file_name, sections,
+                                                                        args, image_addr, stated_size,
+                                                                        cert_file_path, True, signature, 0, b'',
+                                                                        b'')
+            args.out_file = save_out_file
+
         print("Signature processing...")
         if error != 0:
             print("Error while signing image")
             return -10
+        delete_file('postbuild_process_ongoing')
 
     bin_output = subprocess.check_output(['arm-none-eabi-objcopy',
                                           '-O',
@@ -870,6 +1000,18 @@ def BuildImageElf(args, elf_bin_file, bin_file_name, verbose):
                                           elf_file_name,
                                           bin_file_name])
 
+    # if data in external flash, need to create specific bin for OTA
+    if (is_ext_flash_section is True):
+        bin_output = subprocess.check_output(['arm-none-eabi-objcopy',
+                                              '-O',
+                                              'binary',
+                                              concatenated_elf_file_name,
+                                              concatenated_bin_file_name])
+
+        extflash_bin_name = elf_file_name.split(".")[0] + '_extflash.bin'
+        if (os.path.exists(extflash_bin_name) != 0):
+            os.system("cat " + extflash_bin_name + " >> " + concatenated_bin_file_name);
+            
     out_file_sz = os.stat(bin_file_name).st_size
     print("Binary size is {:08x} ({})".format(out_file_sz, out_file_sz))
 
@@ -932,12 +1074,14 @@ out_file_path = args.out_file
 
 error = BuildImageElf(args, elf_file_name, bin_file_name, verbose)
 
+# set cleanup_on_error to 0 for debug purposes only
 cleanup_on_error = 1
-if error != 0 and cleanup_on_error:
-        os.remove(elf_file_name)
-        os.remove(out_file_path)
-os.remove(bin_file_name)
-os.remove('temp_last_section.bin')
+if error < 0 and cleanup_on_error:
+    delete_file(elf_file_name)
+    delete_file(out_file_path)
+delete_file(bin_file_name)
+delete_file('temp_last_section.bin')
+
 
 
 #

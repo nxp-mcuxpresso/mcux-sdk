@@ -1,5 +1,5 @@
 Release Name: MCUXpresso Software Development Kit (SDK)
-Release Version: 2.6.7
+Release Version: 2.6.8
 Package License: LA_OPT_NXP_Software_License.htm - Additional Distribution License, Section 2.3 applies
 
 KSDK_Peripheral_Driver     Description: Peripheral drivers are designed for  
@@ -82,7 +82,7 @@ HostSDK                    version: 1.8.0.2
                            name: HostSDK                                     
                            Format: Binaries, Source code and header files    
 
-FWK                        version: 5.7.4                                    
+FWK                        version: 5.7.6                                    
                            Location: middleware/wireless/framework           
                            Description: Connectivity Framework middleware for
                            Connectivity stacks                               
@@ -91,7 +91,7 @@ FWK                        version: 5.7.4
                            name: Connectivity Framework                      
                            Format: source code and header Files              
 
-SecLib                     version: 5.7.4                                    
+SecLib                     version: 5.7.6                                    
                            Location:                                         
                            middleware/wireless/framework/SecLib/lib_crypto_*.
                            a                                                 
@@ -130,59 +130,7 @@ BLE_ControllerLib          version: 9.4.21.4
                            name: Bluetooth Low Energy Controller Firmware    
                            Format: Binary libraries                          
 
-OpenThread                 version: 1.0.2                                    
-                           Location: middleware/wireless/openthread          
-                           Description: Specific Open Thread demo            
-                           applications for standard Thread devices over an  
-                           open-source implementation of the Thread          
-                           networking protocol                               
-                           License: Open Source - BSD-3-Clause               
-                           Author: NXP & The OpenThread Authors              
-                           name: Applications and stack for OpenThread       
-                           Format: Source code, header files and binaries    
-
-OpenThread_jlink           version: V640                                     
-                           Location:                                         
-                           middleware/wireless/openthread/openthread/third_pa
-                           rty/jlink/SEGGER_RTT_V640                         
-                           Description: Third-party code required by         
-                           OpenThread build system                           
-                           License: See                                      
-                           middleware/wireless/openthread/openthread/third_pa
-                           rty/jlink/SEGGER_RTT_V640/License.txt             
-                           Author: SEGGER Microcontroller GmbH               
-                           name: JLink Segger RTT                            
-                           Format: Source code and header files              
-
-OpenThread_mbedtls         version: 2.14.0                                   
-                           Location:                                         
-                           middleware/wireless/openthread/openthread/third_pa
-                           rty/mbedtls                                       
-                           Description: Third-party code required by         
-                           OpenThread build system                           
-                           License: Apache-2.0, See                          
-                           middleware/wireless/openthread/openthread/third_pa
-                           rty/mbedtls/repo/apache-2.0.txt                   
-                           Author:                                           
-                           https://github.com/ARMmbed/mbedtls/releases/tag/mb
-                           edtls-2.14.0                                      
-                           name: ARMMbed MBEDTLS                             
-                           Format: Source code and header files              
-
-OpenThread_nlbuild         version: 1.6.11                                   
-                           Location:                                         
-                           middleware/wireless/openthread/openthread/third_pa
-                           rty/nlbuild-autotools/repo                        
-                           Description: Third-party code required by         
-                           OpenThread build system                           
-                           License: Apache-2.0, See                          
-                           middleware/wireless/openthread/openthread/third_pa
-                           rty/nlbuild-autotools/repo/LICENSE                
-                           Author: Nest Labs                                 
-                           name: Nest Labs Build - GNU Autotools             
-                           Format: Source code, header files and binaries    
-
-ieee_802_15_4              version: 5.3.5                                    
+ieee_802_15_4              version: 5.3.7                                    
                            Location: middleware/wireless/ieee-802.15.4       
                            Description: NXP Wireless IEEE 802.15.4           
                            License: Proprietary, See EULA                    
@@ -193,7 +141,7 @@ ieee_802_15_4              version: 5.3.5
 
 ZigBee 3.0                 Author: NXP                                       
                            Name: JN518x ZigBee 3.0 Stack                     
-                           Version: 1.0.4                                    
+                           Version: 1.0.6                                    
                            Location: middleware/wireless/zigbee              
                            Description: ZigBee 3.0 protocol stack for JN518x 
                            License: Proprietary, See EULA                    
@@ -202,7 +150,7 @@ ZigBee 3.0                 Author: NXP
 
 ZigBee 3.0 ECB decrypt     Author: Niyaz PK                                  
                            Name: ECB decryption                              
-                           Version: 1.0.4                                    
+                           Version: 1.0.6                                    
                            Location:                                         
                            middleware/wireless/zigbee/BDB/Source/TouchLink   
                            Description: ECB decryption implementation        
@@ -214,7 +162,7 @@ ZigBee 3.0 ECB decrypt     Author: Niyaz PK
 
 ZigBee 3.0 Eclipse Plugins Author: NXP                                       
                            Name: ZigBee 3.0 Eclipse Plugins                  
-                           Version: 1.0.4                                    
+                           Version: 1.0.6                                    
                            Location: middleware/wireless/zigbee/tools        
                            Description: ZigBee 3.0 plugins for Eclipse for   
                            configuration of stack parameters                 
@@ -224,7 +172,7 @@ ZigBee 3.0 Eclipse Plugins Author: NXP
 
 ZigBee 3.0 PDUMConfig tool Author: NXP                                       
                            Name: ZigBee 3.0 PDU Manager Configuration Tool   
-                           Version: 1.0.4                                    
+                           Version: 1.0.6                                    
                            Location: middleware/wireless/zigbee/tools        
                            Description: Converts configuration data file into
                            C source and header files. Built with MS .NET     
@@ -235,7 +183,7 @@ ZigBee 3.0 PDUMConfig tool Author: NXP
 
 ZigBee 3.0 ZPSConfig tool  Author: NXP                                       
                            Name: ZigBee 3.0 ZPS Configuration Tool           
-                           Version: 1.0.4                                    
+                           Version: 1.0.6                                    
                            Location: middleware/wireless/zigbee/tools        
                            Description: Converts configuration data file into
                            C source and header files. Built with MS .NET     
@@ -243,3 +191,11 @@ ZigBee 3.0 ZPSConfig tool  Author: NXP
                            License: MIT License                              
                            URL: http://www.py2exe.org                        
                            Format: object code                               
+
+ntag_i2c_plus              Author: NXP                                       
+                           Description: NTAG I2C plus communication library  
+                           Format: source code                               
+                           License: Open Source - BSD-3-Clause               
+                           Location: middleware/ntag_i2c_plus                
+                           name: NTAG I2C plus                               
+                           version: 1.0.0                                    

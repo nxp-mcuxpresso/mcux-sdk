@@ -1,5 +1,5 @@
 //*****************************************************************************
-// JN518x Microcontroller Startup code for use with LPCXpresso IDE
+// K32W041A Microcontroller Startup code for use with LPCXpresso IDE
 //
 // Version : 141204
 //*****************************************************************************

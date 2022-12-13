@@ -1,5 +1,5 @@
 //*****************************************************************************
-// JN518x Microcontroller Startup code for use with LPCXpresso IDE
+// K32W061 Microcontroller Startup code for use with LPCXpresso IDE
 //
 // Version : 141204
 //*****************************************************************************
@@ -200,7 +200,7 @@ __attribute__((used, section(".isr_vector"))) void (*const g_pfnVectors[])(void)
     PendSV_Handler,     // The PendSV handler
     SysTick_Handler,    // The SysTick handler
 
-    // JN518x specific handlers
+    // K32W061 specific handlers
     System_IRQHandler,     /*!< System (BOD, Watchdog Timer, Flash controller) interrupt */
     DMA0_DriverIRQHandler, /*!< DMA interrupt */
     GINT_IRQHandler,       /*!< GPIO group interrupt */
