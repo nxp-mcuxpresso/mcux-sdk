@@ -689,24 +689,81 @@ hal_flash_status_t HAL_FlashEraseSector(uint32_t dest, uint32_t size)
  */
 hal_flash_status_t HAL_FlashRead(uint32_t src, uint32_t size, uint8_t *pData)
 {
-#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
-    bool DCacheEnableFlag = false;
-    /* Disable D cache. */
-    if (SCB_CCR_DC_Msk == (SCB_CCR_DC_Msk & SCB->CCR))
+    FLEXSPI_Type *base;
+    hal_flash_status_t status = kStatus_HAL_Flash_Success;
+    flexspi_transfer_t flashXfer;
+    uint32_t readAddress = src;
+    uint32_t key;
+
+    if (readAddress < FLEXSPI_AMBA_BASE)
     {
-        SCB_DisableDCache();
-        DCacheEnableFlag = true;
+        status = kStatus_HAL_Flash_InvalidArgument;
     }
-#endif /* __DCACHE_PRESENT */
-    (void)memcpy(pData, (uint8_t *)src, size);
-#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
-    if (DCacheEnableFlag)
+
+    if (kStatus_HAL_Flash_Success == status)
     {
-        /* Enable D cache. */
-        SCB_EnableDCache();
+        if ((0U != (size % 4U)) || (0U != (((uint32_t)pData) % 4U)))
+        {
+            status = kStatus_HAL_Flash_InvalidArgument;
+        }
     }
+
+    if (kStatus_HAL_Flash_Success == status)
+    {
+        readAddress = readAddress - FLEXSPI_AMBA_BASE;
+
+        base = NULL;
+        for (uint8_t i = 0; i < (sizeof(s_flexspiBase) / sizeof(FLEXSPI_Type *)); i++)
+        {
+            if (NULL != s_flexspiBase[i])
+            {
+                base = s_flexspiBase[i];
+                break;
+            }
+        }
+        if (NULL == base)
+        {
+            status = kStatus_HAL_Flash_Fail;
+        }
+    }
+
+    if (kStatus_HAL_Flash_Success == status)
+    {
+#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+        bool DCacheEnableFlag = false;
+        /* Disable D cache. */
+        if (SCB_CCR_DC_Msk == (SCB_CCR_DC_Msk & SCB->CCR))
+        {
+            SCB_DisableDCache();
+            DCacheEnableFlag = true;
+        }
 #endif /* __DCACHE_PRESENT */
-    return kStatus_HAL_Flash_Success;
+
+        /* Read page. */
+        flashXfer.deviceAddress = readAddress;
+        flashXfer.port          = kFLEXSPI_PortA1;
+        flashXfer.cmdType       = kFLEXSPI_Read;
+        flashXfer.SeqNumber     = 1;
+        flashXfer.seqIndex      = NOR_CMD_LUT_SEQ_IDX_READ_FAST_QUAD;
+        flashXfer.data          = (uint32_t *)((void *)(&pData[0]));
+        flashXfer.dataSize      = size;
+
+        key    = DisableGlobalIRQ();
+        status = (hal_flash_status_t)FLEXSPI_TransferBlocking(base, &flashXfer);
+        /* Do software reset. */
+        FLEXSPI_SoftwareReset(base);
+        SDK_DelayAtLeastUs(2U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+        EnableGlobalIRQ(key);
+
+#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+        if (DCacheEnableFlag)
+        {
+            /* Enable D cache. */
+            SCB_EnableDCache();
+        }
+#endif /* __DCACHE_PRESENT */
+    }
+    return status;
 }
 
 /*!

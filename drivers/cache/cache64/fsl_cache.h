@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief cache driver version 2.0.4. */
-#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+/*! @brief cache driver version. */
+#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
 /*@}*/
 
 /*! @brief cache line size. */
@@ -186,6 +186,7 @@ void CACHE64_CleanInvalidateCache(CACHE64_CTRL_Type *base);
  */
 void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte);
 
+#if !(defined(FSL_FEATURE_CACHE64_CTRL_HAS_NO_WRITE_BUF) && FSL_FEATURE_CACHE64_CTRL_HAS_NO_WRITE_BUF)
 /*!
  * @brief Enables/disables the write buffer.
  *
@@ -195,6 +196,7 @@ void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte);
  *       false - disable the write buffer.
  */
 void CACHE64_EnableWriteBuffer(CACHE64_CTRL_Type *base, bool enable);
+#endif
 
 /*@}*/
 

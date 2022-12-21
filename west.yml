@@ -16,98 +16,125 @@ manifest:
     url-base: https://github.com/NXPmicro
   - name: nxp
     url-base: https://github.com/NXP
+  - name: nxp_zephyr
+    url-base: https://github.com/nxp-zephyr
+  - name: nxp-mcuxpresso
+    url-base: https://github.com/nxp-mcuxpresso
   defaults:
     remote: nxpmicro
   projects:
   - name: mcux-sdk-examples
-    revision: MCUX_2.12.0_UPDATE
+    revision: MCUX_2.13.0
     path: examples
   - name: FreeRTOS-Kernel
-    revision: MCUX_2.12.0
-    path: rtos/freertos/freertos_kernel
+    revision: MCUX_2.13.0
+    path: rtos/freertos/freertos-kernel
   - name: mcux-sdk-middleware-sdmmc
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
     path: middleware/sdmmc
   - name: mcux-sdk-middleware-multicore
     path: middleware/multicore
-    revision: MCUX_2.12.0
+    revision: 899352d35dc83f1c296be4fa0d6af3befd65d41a
   - name: rpmsg-lite
     path: middleware/multicore/rpmsg_lite
     url: https://github.com/NXPmicro/rpmsg-lite
-    revision: v4.0.0
+    revision: 5c0369112c2fae97c87cf4ea190cb26ebfeb5587
   - name: erpc
     path: middleware/multicore/erpc
     url: https://github.com/EmbeddedRPC/erpc
-    revision: 1.9.1
+    revision: c4dadeab4a60dc9c302d85eceedb81b85a5f991d
   - name: mcux-soc-svd
-    revision: bbcf98332cafaa8e9200ebfc53b08e9634b94e6c
+    revision: 8e9c5f1e851c8a9cded1f3ced26b69f5510c76e4
     path: svd
   - name: fatfs
     path: middleware/fatfs
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
   - name: mcux-sdk-middleware-eiq
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
     path: middleware/eiq
   - name: mcux-sdk-middleware-deepviewrt
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
     path: middleware/eiq/deepviewrt
   - name: mcux-sdk-middleware-glow
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
     path: middleware/eiq/glow
   - name: mcux-sdk-middleware-tensorflow
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
     path: middleware/eiq/tensorflow-lite
   - name: mcux-sdk-middleware-usb
     path: middleware/usb
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
   - name: mcux-sdk-middleware-edgefast-bluetooth
     path: middleware/edgefast_bluetooth
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
   - name: mcux-sdk-middleware-ethermind
     path: middleware/wireless/ethermind
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
     remote: nxp
   - name: azure-rtos
     path: rtos/azure-rtos
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
     remote: nxp
   - name: threadx
     path: rtos/azure-rtos/threadx
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
     remote: nxp
   - name: filex
     path: rtos/azure-rtos/filex
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
     remote: nxp
   - name: levelx
     path: rtos/azure-rtos/levelx
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
     remote: nxp
   - name: netxduo
     path: rtos/azure-rtos/netxduo
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
     remote: nxp
   - name: usbx
     path: rtos/azure-rtos/usbx
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
     remote: nxp
   - name: guix
     path: rtos/azure-rtos/guix
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
     remote: nxp
   - name: mbedtls
     path: middleware/mbedtls
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
   - name: wifi_nxp
     path: middleware/wifi_nxp
-    revision: MCUX_2.12.0
+    revision: MCUX_2.13.0
     remote: nxp
   - name: lwip
     path: middleware/lwip
-    revision: a9b2406ad87c00cb2228ddbbc89085e8130963bd
+    revision: 4192f6c2989a139c7de7071563bfad095be01ff2
   - name: littlefs
     path: middleware/littlefs
-    revision: 40f28b24a0c9e0087d4641601f4c1f391e21d7d5
-
+    revision: MCUX_2.13.0
+  - name: maestro
+    path: middleware/maestro
+    revision: adb7bbe88238facc7cc8c16922a8de28b63f3148
+    remote: nxp-mcuxpresso
+  - name: mcuboot
+    path: middleware/mcuboot_opensource
+    revision: 39468301d620d9b152fa01c422b25c6387627559
+    remote: nxp_zephyr
+  - name: CMSIS_5
+    path: core/CMSIS
+    revision: MCUX_2.13.0
+    remote: nxp-mcuxpresso
+  - name: EAP
+    path: middleware/EAP
+    revision: 4e440c11cf3481c24cf2e0620400aa4774a56894
+    remote: nxp-mcuxpresso
+  - name: VIT
+    path: middleware/vit
+    revision: 1c2ef5dc34b0891cac0633d824740006951b52c7
+    remote: nxp-mcuxpresso
+  - name: VoiceSeeker
+    path: middleware/voice_seeker
+    revision: 3ab8288afb3d1c227c138e95ff6ee7a35613110a
+    remote: nxp-mcuxpresso
   self:
     path: core

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -512,16 +512,16 @@ static status_t I2S_TransferLoopDMA(I2S_Type *base,
         {
             /* set up linked descriptor */
             DMA_SetupDescriptor(&handle->i2sLoopDMADescriptor[i],
-                                DMA_CHANNEL_XFER(1UL, 0UL, intA, !intA, handle->bytesPerFrame, srcInc, destInc,
-                                                 currentTransfer->dataSize),
+                                DMA_CHANNEL_XFER(true, false, intA, !intA, handle->bytesPerFrame, (uint8_t)srcInc,
+                                                 (uint8_t)destInc, currentTransfer->dataSize),
                                 srcAddr, destAddr, &handle->i2sLoopDMADescriptor[0U]);
         }
         else
         {
             /* set up linked descriptor */
             DMA_SetupDescriptor(&handle->i2sLoopDMADescriptor[i],
-                                DMA_CHANNEL_XFER(1UL, 0UL, intA, !intA, handle->bytesPerFrame, srcInc, destInc,
-                                                 currentTransfer->dataSize),
+                                DMA_CHANNEL_XFER(true, false, intA, !intA, handle->bytesPerFrame, (uint8_t)srcInc,
+                                                 (uint8_t)destInc, currentTransfer->dataSize),
                                 srcAddr, destAddr, &handle->i2sLoopDMADescriptor[i + 1U]);
         }
     }
@@ -542,10 +542,10 @@ static status_t I2S_TransferLoopDMA(I2S_Type *base,
         destInc  = 1UL;
     }
 
-    DMA_SubmitChannelTransferParameter(
-        handle->dmaHandle,
-        DMA_CHANNEL_XFER(1UL, 0UL, 0UL, 1UL, handle->bytesPerFrame, srcInc, destInc, (uint32_t)xfer->dataSize), srcAddr,
-        destAddr, (void *)&handle->i2sLoopDMADescriptor[1U]);
+    DMA_SubmitChannelTransferParameter(handle->dmaHandle,
+                                       DMA_CHANNEL_XFER(true, false, false, true, handle->bytesPerFrame,
+                                                        (uint8_t)srcInc, (uint8_t)destInc, (uint32_t)xfer->dataSize),
+                                       srcAddr, destAddr, (void *)&handle->i2sLoopDMADescriptor[1U]);
 
     /* Submit and start initial DMA transfer */
     if (handle->state == (uint32_t)kI2S_DmaStateTx)
@@ -663,7 +663,8 @@ static status_t I2S_StartTransferDMA(I2S_Type *base, i2s_dma_handle_t *handle)
     privateHandle->intA               = false;
 
     /* submit transfer parameter directly */
-    xferConfig = DMA_CHANNEL_XFER(1UL, 0UL, 0UL, 1UL, handle->bytesPerFrame, srcInc, destInc, (uint32_t)transferBytes);
+    xferConfig = DMA_CHANNEL_XFER(true, false, false, true, handle->bytesPerFrame, (uint8_t)srcInc, (uint8_t)destInc,
+                                  (uint32_t)transferBytes);
 
     DMA_SubmitChannelTransferParameter(handle->dmaHandle, xferConfig, srcAddr, destAddr,
                                        (void *)&(s_DmaDescriptors[(instance * DMA_DESCRIPTORS) + 0U]));
@@ -763,8 +764,8 @@ static void I2S_AddTransferDMA(I2S_Type *base, i2s_dma_handle_t *handle)
         privateHandle->enqueuedBytes[privateHandle->enqueuedBytesEnd] = transferBytes;
         privateHandle->enqueuedBytesEnd = (privateHandle->enqueuedBytesEnd + 1U) % DMA_DESCRIPTORS;
 
-        xferConfig =
-            DMA_CHANNEL_XFER(1UL, 0UL, !intA, intA, handle->bytesPerFrame, srcInc, destInc, (uint32_t)transferBytes);
+        xferConfig = DMA_CHANNEL_XFER(true, false, !intA, intA, handle->bytesPerFrame, (uint8_t)srcInc,
+                                      (uint8_t)destInc, (uint32_t)transferBytes);
 
         DMA_SetupDescriptor(descriptor, xferConfig, srcAddr, destAddr, nextDescriptor);
 

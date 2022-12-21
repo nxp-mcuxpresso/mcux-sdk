@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 4.0, 2020-05-18
-**     Build:               b220505
+**     Build:               b221025
 **
 **     Abstract:
 **         Chip specific module features.
@@ -251,6 +251,10 @@
 
 /* @brief Number of channels */
 #define FSL_FEATURE_DMIC_CHANNEL_NUM (8)
+/* @brief DMIC channel support stereo data */
+#define FSL_FEATURE_DMIC_IO_HAS_STEREO_2_4_6 (1)
+/* @brief DMIC does not support bypass channel clock */
+#define FSL_FEATURE_DMIC_IO_HAS_NO_BYPASS (1)
 /* @brief DMIC channel FIFO register support sign extended */
 #define FSL_FEATURE_DMIC_CHANNEL_HAS_SIGNEXTEND (1)
 /* @brief DMIC has no IOCFG register */
@@ -424,6 +428,8 @@
 #define FSL_FEATURE_FLEXIO_VERID_RESET_VALUE (0x2010003)
 /* @brief Reset value of the FLEXIO_PARAM register */
 #define FSL_FEATURE_FLEXIO_PARAM_RESET_VALUE (0x10100808)
+/* @brief Represent the bit width of the TIMDCE field (FLEXIO_TIMCFGLn[TIMDEC]) */
+#define FSL_FEATURE_FLEXIO_TIMCFG_TIMDCE_FIELD_WIDTH (3)
 
 /* FLEXSPI module features */
 
@@ -447,6 +453,14 @@
 #define FSL_FEATURE_FLEXSPI_HAS_NO_AHB_PARALLEL_MODE (0)
 /* @brief FLEXSPI support address shift. */
 #define FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT (0)
+/* @brief FlexSPI has no FLSHCR4 WMENB bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_FLSHCR4_WMENB (1)
+/* @brief FlexSPI has no STS0 DATALEARNPHASEB bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_STS0_DATALEARNPHASEB (1)
+/* @brief FlexSPI has no MCR2 SCKBDIFFOPT bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_MCR2_SCKBDIFFOPT (1)
+/* @brief Has Errata 051426 */
+#define FSL_FEATURE_FLEXSPI_HAS_ERRATA_051426 (1)
 
 /* GPIO module features */
 
@@ -477,6 +491,8 @@
 #define FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH (0)
 /* @brief Register SCONFIG do not have IDRAND bitfield. */
 #define FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND (0)
+/* @brief Register SCONFIG has HDROK bitfield. */
+#define FSL_FEATURE_I3C_HAS_HDROK (0)
 
 /* INPUTMUX module features */
 

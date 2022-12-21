@@ -40,7 +40,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CLOCK driver version. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 2))
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 3))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -2089,9 +2089,9 @@ static inline clock_name_t CLOCK_GetRootClockSource(clock_root_t root, uint32_t 
  * @brief Set CCM Root Clock DIV certain value.
  *
  * @param root Which root clock to set, see \ref clock_root_t.
- * @param div Clock div value to set, different divider has different value range.
+ * @param div Clock div value to set range is 1-256, different divider has different value range.
  */
-static inline void CLOCK_SetRootClockDiv(clock_root_t root, uint8_t div)
+static inline void CLOCK_SetRootClockDiv(clock_root_t root, uint32_t div)
 {
     assert(div);
     CCM->CLOCK_ROOT[root].CONTROL = (CCM->CLOCK_ROOT[root].CONTROL & ~CCM_CLOCK_ROOT_CONTROL_DIV_MASK) |

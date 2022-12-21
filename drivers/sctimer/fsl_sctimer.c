@@ -336,7 +336,7 @@ status_t SCTIMER_SetupPwm(SCT_Type *base,
                 }
                 else
                 {
-                    /* Set the initial output level to high which is the inactive state */
+                    /* Set the initial output level to high which is the active state */
                     base->OUTPUT |= (1UL << (uint32_t)pwmParams->output);
                     /* Clear the output when we reach the PWM pulse event */
                     SCTIMER_SetupOutputClearAction(base, (uint32_t)pwmParams->output, pulseEvent);
@@ -361,7 +361,7 @@ status_t SCTIMER_SetupPwm(SCT_Type *base,
                 }
                 else
                 {
-                    /* Set the initial output level to low which is the inactive state */
+                    /* Set the initial output level to low which is the active state */
                     base->OUTPUT &= ~(1UL << (uint32_t)pwmParams->output);
                     /* Set the output when we reach the PWM pulse event */
                     SCTIMER_SetupOutputSetAction(base, (uint32_t)pwmParams->output, pulseEvent);
@@ -402,6 +402,7 @@ void SCTIMER_UpdatePwmDutycycle(SCT_Type *base, sctimer_out_t output, uint8_t du
 
     uint32_t periodMatchReg, pulseMatchReg;
     uint32_t pulsePeriod = 0, period;
+    bool isHighTrue      = (0U != (base->OUT[output].CLR & (1UL << (event + 1U))));
 
     /* Retrieve the match register number for the PWM period */
     periodMatchReg = base->EV[event].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
@@ -411,22 +412,32 @@ void SCTIMER_UpdatePwmDutycycle(SCT_Type *base, sctimer_out_t output, uint8_t du
 
     period = base->MATCH[periodMatchReg];
 
+    /* Stop the counter before updating match register */
+    SCTIMER_StopTimer(base, (uint32_t)kSCTIMER_Counter_U);
+
     /* For 100% dutycyle, make pulse period greater than period so the event will never occur */
     if (dutyCyclePercent >= 100U)
     {
         pulsePeriod = period + 2U;
+
+        /* Set the initial output level base on output mode */
+        if (isHighTrue)
+        {
+            base->OUTPUT |= (1UL << (uint32_t)output);
+        }
+        else
+        {
+            base->OUTPUT &= ~(1UL << (uint32_t)output);
+        }
     }
     else
     {
         pulsePeriod = (uint32_t)(((uint64_t)period * dutyCyclePercent) / 100U);
     }
 
-    /* Stop the counter before updating match register */
-    SCTIMER_StopTimer(base, (uint32_t)kSCTIMER_Counter_U);
-
     /* Update dutycycle */
-    base->MATCH[pulseMatchReg]    = SCT_MATCH_MATCHn_L(pulsePeriod);
-    base->MATCHREL[pulseMatchReg] = SCT_MATCHREL_RELOADn_L(pulsePeriod);
+    base->MATCH[pulseMatchReg]    = pulsePeriod;
+    base->MATCHREL[pulseMatchReg] = pulsePeriod;
 
     /* Restart the counter */
     SCTIMER_StartTimer(base, (uint32_t)kSCTIMER_Counter_U);

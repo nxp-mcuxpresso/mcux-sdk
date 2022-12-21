@@ -380,11 +380,6 @@ static void SAI_GetCommonConfig(sai_transceiver_t *config,
     config->serialData.dataWordNum         = 2U;
     config->serialData.dataMaskedWord      = (uint32_t)mode;
 
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
-    /* fifo configurations */
-    config->fifo.fifoWatermark = (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNT / 2U);
-#endif
-
 #if defined(FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_AFTER_ERROR) && FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_AFTER_ERROR
     config->fifo.fifoContinueOneError = true;
 #endif
@@ -652,7 +647,7 @@ void SAI_Init(I2S_Type *base)
     (void)CLOCK_EnableClock(s_saiClock[SAI_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     /* disable interrupt and DMA request*/
     base->TCSR &=
         ~(I2S_TCSR_FRIE_MASK | I2S_TCSR_FWIE_MASK | I2S_TCSR_FEIE_MASK | I2S_TCSR_FRDE_MASK | I2S_TCSR_FWDE_MASK);
@@ -1232,8 +1227,12 @@ void SAI_SetMasterClockConfig(I2S_Type *base, sai_master_clock_t *config)
 void SAI_TxSetFifoConfig(I2S_Type *base, sai_fifo_t *config)
 {
     assert(config != NULL);
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
-    assert(config->fifoWatermark <= (I2S_TCR1_TFW_MASK >> I2S_TCR1_TFW_SHIFT));
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
+    if ((config->fifoWatermark == 0U) ||
+        (config->fifoWatermark > (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base))))
+    {
+        config->fifoWatermark = (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base) / 2U);
+    }
 #endif
 
     uint32_t tcr4 = base->TCR4;
@@ -1260,7 +1259,7 @@ void SAI_TxSetFifoConfig(I2S_Type *base, sai_fifo_t *config)
 
     base->TCR4 = tcr4;
 
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     base->TCR1 = (base->TCR1 & (~I2S_TCR1_TFW_MASK)) | I2S_TCR1_TFW(config->fifoWatermark);
 #endif
 }
@@ -1274,8 +1273,12 @@ void SAI_TxSetFifoConfig(I2S_Type *base, sai_fifo_t *config)
 void SAI_RxSetFifoConfig(I2S_Type *base, sai_fifo_t *config)
 {
     assert(config != NULL);
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
-    assert(config->fifoWatermark <= (I2S_TCR1_TFW_MASK >> I2S_TCR1_TFW_SHIFT));
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
+    if ((config->fifoWatermark == 0U) ||
+        (config->fifoWatermark > (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base))))
+    {
+        config->fifoWatermark = (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base) / 2U);
+    }
 #endif
     uint32_t rcr4 = base->RCR4;
 
@@ -1296,7 +1299,7 @@ void SAI_RxSetFifoConfig(I2S_Type *base, sai_fifo_t *config)
 
     base->RCR4 = rcr4;
 
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     base->RCR1 = (base->RCR1 & (~I2S_RCR1_RFW_MASK)) | I2S_RCR1_RFW(config->fifoWatermark);
 #endif
 }
@@ -1531,7 +1534,12 @@ void SAI_TransferTxSetConfig(I2S_Type *base, sai_handle_t *handle, sai_transceiv
     assert(config->channelNums <= (uint32_t)FSL_FEATURE_SAI_CHANNEL_COUNTn(base));
 
     handle->bitWidth = config->frameSync.frameSyncWidth;
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
+    if ((config->fifo.fifoWatermark == 0U) ||
+        (config->fifo.fifoWatermark > (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base))))
+    {
+        config->fifo.fifoWatermark = (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base) / 2U);
+    }
     handle->watermark = config->fifo.fifoWatermark;
 #endif
 
@@ -1660,7 +1668,12 @@ void SAI_TransferRxSetConfig(I2S_Type *base, sai_handle_t *handle, sai_transceiv
     assert(config != NULL);
 
     handle->bitWidth = config->frameSync.frameSyncWidth;
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
+    if ((config->fifo.fifoWatermark == 0U) ||
+        (config->fifo.fifoWatermark > (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base))))
+    {
+        config->fifo.fifoWatermark = (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base) / 2U);
+    }
     handle->watermark = config->fifo.fifoWatermark;
 #endif
 
@@ -1956,10 +1969,10 @@ void SAI_TxSetFormat(I2S_Type *base,
     base->TCR3 &= ~I2S_TCR3_TCE_MASK;
     base->TCR3 |= I2S_TCR3_TCE(format->channelMask);
 
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     /* Set watermark */
     base->TCR1 = format->watermark;
-#endif /* FSL_FEATURE_SAI_FIFO_COUNT  */
+#endif /* FSL_FEATURE_SAI_HAS_FIFO */
 }
 
 /*!
@@ -2100,10 +2113,10 @@ void SAI_RxSetFormat(I2S_Type *base,
     /* enable all the channel */
     base->RCR3 |= I2S_RCR3_RCE(format->channelMask);
 
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     /* Set watermark */
     base->RCR1 = format->watermark;
-#endif /* FSL_FEATURE_SAI_FIFO_COUNT  */
+#endif /* FSL_FEATURE_SAI_HAS_FIFO */
 }
 
 /*!
@@ -2121,8 +2134,8 @@ void SAI_WriteBlocking(I2S_Type *base, uint32_t channel, uint32_t bitWidth, uint
 {
     uint32_t i            = 0;
     uint32_t bytesPerWord = bitWidth / 8U;
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
-    bytesPerWord = (((uint32_t)FSL_FEATURE_SAI_FIFO_COUNT - base->TCR1) * bytesPerWord);
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
+    bytesPerWord = (((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base) - base->TCR1) * bytesPerWord);
 #endif
 
     while (i < size)
@@ -2164,8 +2177,8 @@ void SAI_WriteMultiChannelBlocking(
     uint32_t bytesPerWord = bitWidth / 8U;
     uint32_t channelNums = 0U, endChannel = 0U;
 
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
-    bytesPerWord = (((uint32_t)FSL_FEATURE_SAI_FIFO_COUNT - base->TCR1) * bytesPerWord);
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
+    bytesPerWord = (((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base) - base->TCR1) * bytesPerWord);
 #endif
 
     for (i = 0U; (i < (uint32_t)FSL_FEATURE_SAI_CHANNEL_COUNTn(base)); i++)
@@ -2218,7 +2231,7 @@ void SAI_ReadMultiChannelBlocking(
     uint32_t i = 0, j = 0;
     uint32_t bytesPerWord = bitWidth / 8U;
     uint32_t channelNums = 0U, endChannel = 0U;
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     bytesPerWord = base->RCR1 * bytesPerWord;
 #endif
     for (i = 0U; (i < (uint32_t)FSL_FEATURE_SAI_CHANNEL_COUNTn(base)); i++)
@@ -2261,7 +2274,7 @@ void SAI_ReadBlocking(I2S_Type *base, uint32_t channel, uint32_t bitWidth, uint8
 {
     uint32_t i            = 0;
     uint32_t bytesPerWord = bitWidth / 8U;
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     bytesPerWord = base->RCR1 * bytesPerWord;
 #endif
 
@@ -2375,7 +2388,7 @@ status_t SAI_TransferTxSetFormat(I2S_Type *base,
 
     /* Copy format to handle */
     handle->bitWidth = (uint8_t)format->bitWidth;
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     handle->watermark = format->watermark;
 #endif
 
@@ -2425,7 +2438,7 @@ status_t SAI_TransferRxSetFormat(I2S_Type *base,
 
     /* Copy format to handle */
     handle->bitWidth = (uint8_t)format->bitWidth;
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     handle->watermark = format->watermark;
 #endif
 
@@ -2476,12 +2489,12 @@ status_t SAI_TransferSendNonBlocking(I2S_Type *base, sai_handle_t *handle, sai_t
     handle->state = (uint32_t)kSAI_Busy;
 
     /* Enable interrupt */
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     /* Use FIFO request interrupt and fifo error*/
     SAI_TxEnableInterrupts(base, I2S_TCSR_FEIE_MASK | I2S_TCSR_FRIE_MASK);
 #else
     SAI_TxEnableInterrupts(base, I2S_TCSR_FEIE_MASK | I2S_TCSR_FWIE_MASK);
-#endif /* FSL_FEATURE_SAI_FIFO_COUNT */
+#endif /* FSL_FEATURE_SAI_HAS_FIFO */
 
     /* Enable Tx transfer */
     SAI_TxEnable(base, true);
@@ -2525,12 +2538,12 @@ status_t SAI_TransferReceiveNonBlocking(I2S_Type *base, sai_handle_t *handle, sa
     handle->state = (uint32_t)kSAI_Busy;
 
 /* Enable interrupt */
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     /* Use FIFO request interrupt and fifo error*/
     SAI_RxEnableInterrupts(base, I2S_TCSR_FEIE_MASK | I2S_TCSR_FRIE_MASK);
 #else
     SAI_RxEnableInterrupts(base, I2S_TCSR_FEIE_MASK | I2S_TCSR_FWIE_MASK);
-#endif /* FSL_FEATURE_SAI_FIFO_COUNT */
+#endif /* FSL_FEATURE_SAI_HAS_FIFO */
 
     /* Enable Rx transfer */
     SAI_RxEnable(base, true);
@@ -2609,12 +2622,12 @@ void SAI_TransferAbortSend(I2S_Type *base, sai_handle_t *handle)
 
     /* Stop Tx transfer and disable interrupt */
     SAI_TxEnable(base, false);
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     /* Use FIFO request interrupt and fifo error */
     SAI_TxDisableInterrupts(base, I2S_TCSR_FEIE_MASK | I2S_TCSR_FRIE_MASK);
 #else
     SAI_TxDisableInterrupts(base, I2S_TCSR_FEIE_MASK | I2S_TCSR_FWIE_MASK);
-#endif /* FSL_FEATURE_SAI_FIFO_COUNT */
+#endif /* FSL_FEATURE_SAI_HAS_FIFO */
 
     handle->state = (uint32_t)kSAI_Idle;
 
@@ -2639,12 +2652,12 @@ void SAI_TransferAbortReceive(I2S_Type *base, sai_handle_t *handle)
 
     /* Stop Tx transfer and disable interrupt */
     SAI_RxEnable(base, false);
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     /* Use FIFO request interrupt and fifo error */
     SAI_RxDisableInterrupts(base, I2S_TCSR_FEIE_MASK | I2S_TCSR_FRIE_MASK);
 #else
     SAI_RxDisableInterrupts(base, I2S_TCSR_FEIE_MASK | I2S_TCSR_FWIE_MASK);
-#endif /* FSL_FEATURE_SAI_FIFO_COUNT */
+#endif /* FSL_FEATURE_SAI_HAS_FIFO */
 
     handle->state = (uint32_t)kSAI_Idle;
 
@@ -2732,12 +2745,12 @@ void SAI_TransferTxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
     }
 
 /* Handle transfer */
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if (IS_SAI_FLAG_SET(base->TCSR, I2S_TCSR_FRF_MASK))
     {
         /* Judge if the data need to transmit is less than space */
         size_t size = MIN((handle->saiQueue[handle->queueDriver].dataSize),
-                          (size_t)(((uint32_t)FSL_FEATURE_SAI_FIFO_COUNT - handle->watermark) * dataSize));
+                          (size_t)(((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base) - handle->watermark) * dataSize));
 
         /* Copy the data from sai buffer to FIFO */
         SAI_WriteNonBlocking(base, handle->channel, handle->channelMask, handle->endChannel, handle->bitWidth, buffer,
@@ -2759,7 +2772,7 @@ void SAI_TransferTxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
         handle->saiQueue[handle->queueDriver].dataSize -= size;
         handle->saiQueue[handle->queueDriver].data = (uint8_t *)((uintptr_t)buffer + size);
     }
-#endif /* FSL_FEATURE_SAI_FIFO_COUNT */
+#endif /* FSL_FEATURE_SAI_HAS_FIFO */
 
     /* If finished a block, call the callback function */
     if (handle->saiQueue[handle->queueDriver].dataSize == 0U)
@@ -2809,7 +2822,7 @@ void SAI_TransferRxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
     }
 
 /* Handle transfer */
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if (IS_SAI_FLAG_SET(base->RCSR, I2S_RCSR_FRF_MASK))
     {
         /* Judge if the data need to transmit is less than space */
@@ -2835,7 +2848,7 @@ void SAI_TransferRxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
         handle->saiQueue[handle->queueDriver].dataSize -= size;
         handle->saiQueue[handle->queueDriver].data = (uint8_t *)((uintptr_t)buffer + size);
     }
-#endif /* FSL_FEATURE_SAI_FIFO_COUNT */
+#endif /* FSL_FEATURE_SAI_HAS_FIFO */
 
     /* If finished a block, call the callback function */
     if (handle->saiQueue[handle->queueDriver].dataSize == 0U)
@@ -2859,7 +2872,7 @@ void SAI_TransferRxHandleIRQ(I2S_Type *base, sai_handle_t *handle)
 void I2S0_DriverIRQHandler(void);
 void I2S0_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[0][1] != NULL) && SAI_RxGetEnabledInterruptStatus(I2S0, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -2869,7 +2882,7 @@ void I2S0_DriverIRQHandler(void)
     {
         s_saiRxIsr(I2S0, s_saiHandle[0][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[0][0] != NULL) && SAI_TxGetEnabledInterruptStatus(I2S0, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -2903,7 +2916,7 @@ void I2S0_Rx_DriverIRQHandler(void)
 void I2S1_DriverIRQHandler(void);
 void I2S1_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][1] != NULL) && SAI_RxGetEnabledInterruptStatus(I2S1, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -2914,7 +2927,7 @@ void I2S1_DriverIRQHandler(void)
         s_saiRxIsr(I2S1, s_saiHandle[1][1]);
     }
 
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][0] != NULL) && SAI_TxGetEnabledInterruptStatus(I2S1, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -2948,7 +2961,7 @@ void I2S1_Rx_DriverIRQHandler(void)
 void I2S2_DriverIRQHandler(void);
 void I2S2_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[2][1] != NULL) && SAI_RxGetEnabledInterruptStatus(I2S2, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -2959,7 +2972,7 @@ void I2S2_DriverIRQHandler(void)
         s_saiRxIsr(I2S2, s_saiHandle[2][1]);
     }
 
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[2][0] != NULL) && SAI_TxGetEnabledInterruptStatus(I2S2, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -2993,7 +3006,7 @@ void I2S2_Rx_DriverIRQHandler(void)
 void I2S3_DriverIRQHandler(void);
 void I2S3_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[3][1] != NULL) && SAI_RxGetEnabledInterruptStatus(I2S3, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3003,7 +3016,7 @@ void I2S3_DriverIRQHandler(void)
     {
         s_saiRxIsr(I2S3, s_saiHandle[3][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[3][0] != NULL) && SAI_TxGetEnabledInterruptStatus(I2S3, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3037,7 +3050,7 @@ void I2S3_Rx_DriverIRQHandler(void)
 void I2S4_DriverIRQHandler(void);
 void I2S4_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[4][1] != NULL) && SAI_RxGetEnabledInterruptStatus(I2S4, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3048,7 +3061,7 @@ void I2S4_DriverIRQHandler(void)
         s_saiRxIsr(I2S4, s_saiHandle[4][1]);
     }
 
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[4][0] != NULL) && SAI_TxGetEnabledInterruptStatus(I2S4, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3085,7 +3098,7 @@ void I2S56_DriverIRQHandler(void)
 {
     /* use index 5 to get handle when I2S5 & I2S6 share IRQ NUMBER */
     I2S_Type *base = s_saiHandle[5][1]->base;
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[5][1] != NULL) && SAI_RxGetEnabledInterruptStatus(base, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3097,7 +3110,7 @@ void I2S56_DriverIRQHandler(void)
     }
 
     base = s_saiHandle[5][0]->base;
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[5][0] != NULL) && SAI_TxGetEnabledInterruptStatus(base, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3134,7 +3147,7 @@ void I2S56_Rx_DriverIRQHandler(void)
 void I2S5_DriverIRQHandler(void);
 void I2S5_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[5][1] != NULL) && SAI_RxGetEnabledInterruptStatus(I2S5, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3144,7 +3157,7 @@ void I2S5_DriverIRQHandler(void)
     {
         s_saiRxIsr(I2S5, s_saiHandle[5][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[5][0] != NULL) && SAI_TxGetEnabledInterruptStatus(I2S5, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3178,7 +3191,7 @@ void I2S5_Rx_DriverIRQHandler(void)
 void I2S6_DriverIRQHandler(void);
 void I2S6_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[6][1] != NULL) && SAI_RxGetEnabledInterruptStatus(I2S6, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3188,7 +3201,7 @@ void I2S6_DriverIRQHandler(void)
     {
         s_saiRxIsr(I2S6, s_saiHandle[6][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[6][0] != NULL) && SAI_TxGetEnabledInterruptStatus(I2S6, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3223,7 +3236,7 @@ void I2S6_Rx_DriverIRQHandler(void)
 void AUDIO_SAI0_INT_DriverIRQHandler(void);
 void AUDIO_SAI0_INT_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[0][1] != NULL) &&
         SAI_RxGetEnabledInterruptStatus(AUDIO__SAI0, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3236,7 +3249,7 @@ void AUDIO_SAI0_INT_DriverIRQHandler(void)
         s_saiRxIsr(AUDIO__SAI0, s_saiHandle[0][1]);
     }
 
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[0][0] != NULL) &&
         SAI_TxGetEnabledInterruptStatus(AUDIO__SAI0, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3256,7 +3269,7 @@ void AUDIO_SAI0_INT_DriverIRQHandler(void)
 void AUDIO_SAI1_INT_DriverIRQHandler(void);
 void AUDIO_SAI1_INT_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][1] != NULL) &&
         SAI_RxGetEnabledInterruptStatus(AUDIO__SAI1, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3268,7 +3281,7 @@ void AUDIO_SAI1_INT_DriverIRQHandler(void)
     {
         s_saiRxIsr(AUDIO__SAI1, s_saiHandle[1][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][0] != NULL) &&
         SAI_TxGetEnabledInterruptStatus(AUDIO__SAI1, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3288,7 +3301,7 @@ void AUDIO_SAI1_INT_DriverIRQHandler(void)
 void AUDIO_SAI2_INT_DriverIRQHandler(void);
 void AUDIO_SAI2_INT_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[2][1] != NULL) &&
         SAI_RxGetEnabledInterruptStatus(AUDIO__SAI2, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3300,7 +3313,7 @@ void AUDIO_SAI2_INT_DriverIRQHandler(void)
     {
         s_saiRxIsr(AUDIO__SAI2, s_saiHandle[2][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[2][0] != NULL) &&
         SAI_TxGetEnabledInterruptStatus(AUDIO__SAI2, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3320,7 +3333,7 @@ void AUDIO_SAI2_INT_DriverIRQHandler(void)
 void AUDIO_SAI3_INT_DriverIRQHandler(void);
 void AUDIO_SAI3_INT_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[3][1] != NULL) &&
         SAI_RxGetEnabledInterruptStatus(AUDIO__SAI3, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3332,7 +3345,7 @@ void AUDIO_SAI3_INT_DriverIRQHandler(void)
     {
         s_saiRxIsr(AUDIO__SAI3, s_saiHandle[3][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[3][0] != NULL) &&
         SAI_TxGetEnabledInterruptStatus(AUDIO__SAI3, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3352,7 +3365,7 @@ void AUDIO_SAI3_INT_DriverIRQHandler(void)
 void AUDIO_SAI6_INT_DriverIRQHandler(void);
 void AUDIO_SAI6_INT_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[6][1] != NULL) &&
         SAI_RxGetEnabledInterruptStatus(AUDIO__SAI6, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3364,7 +3377,7 @@ void AUDIO_SAI6_INT_DriverIRQHandler(void)
     {
         s_saiRxIsr(AUDIO__SAI6, s_saiHandle[6][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[6][0] != NULL) &&
         SAI_TxGetEnabledInterruptStatus(AUDIO__SAI6, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3384,7 +3397,7 @@ void AUDIO_SAI6_INT_DriverIRQHandler(void)
 void AUDIO_SAI7_INT_DriverIRQHandler(void);
 void AUDIO_SAI7_INT_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[7][1] != NULL) &&
         SAI_RxGetEnabledInterruptStatus(AUDIO__SAI7, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3396,7 +3409,7 @@ void AUDIO_SAI7_INT_DriverIRQHandler(void)
     {
         s_saiRxIsr(AUDIO__SAI7, s_saiHandle[7][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[7][0] != NULL) &&
         SAI_TxGetEnabledInterruptStatus(AUDIO__SAI7, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3416,7 +3429,7 @@ void AUDIO_SAI7_INT_DriverIRQHandler(void)
 void ADMA_SAI0_INT_DriverIRQHandler(void);
 void ADMA_SAI0_INT_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][1] != NULL) &&
         SAI_RxGetEnabledInterruptStatus(ADMA__SAI0, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3428,7 +3441,7 @@ void ADMA_SAI0_INT_DriverIRQHandler(void)
     {
         s_saiRxIsr(ADMA__SAI0, s_saiHandle[1][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][0] != NULL) &&
         SAI_TxGetEnabledInterruptStatus(ADMA__SAI0, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3448,7 +3461,7 @@ void ADMA_SAI0_INT_DriverIRQHandler(void)
 void ADMA_SAI1_INT_DriverIRQHandler(void);
 void ADMA_SAI1_INT_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][1] != NULL) &&
         SAI_RxGetEnabledInterruptStatus(ADMA__SAI1, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3460,7 +3473,7 @@ void ADMA_SAI1_INT_DriverIRQHandler(void)
     {
         s_saiRxIsr(ADMA__SAI1, s_saiHandle[1][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][0] != NULL) &&
         SAI_TxGetEnabledInterruptStatus(ADMA__SAI1, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3480,7 +3493,7 @@ void ADMA_SAI1_INT_DriverIRQHandler(void)
 void ADMA_SAI2_INT_DriverIRQHandler(void);
 void ADMA_SAI2_INT_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][1] != NULL) &&
         SAI_RxGetEnabledInterruptStatus(ADMA__SAI2, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3492,7 +3505,7 @@ void ADMA_SAI2_INT_DriverIRQHandler(void)
     {
         s_saiRxIsr(ADMA__SAI2, s_saiHandle[1][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][0] != NULL) &&
         SAI_TxGetEnabledInterruptStatus(ADMA__SAI2, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3512,7 +3525,7 @@ void ADMA_SAI2_INT_DriverIRQHandler(void)
 void ADMA_SAI3_INT_DriverIRQHandler(void);
 void ADMA_SAI3_INT_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][1] != NULL) &&
         SAI_RxGetEnabledInterruptStatus(ADMA__SAI3, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3524,7 +3537,7 @@ void ADMA_SAI3_INT_DriverIRQHandler(void)
     {
         s_saiRxIsr(ADMA__SAI3, s_saiHandle[1][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][0] != NULL) &&
         SAI_TxGetEnabledInterruptStatus(ADMA__SAI3, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3544,7 +3557,7 @@ void ADMA_SAI3_INT_DriverIRQHandler(void)
 void ADMA_SAI4_INT_DriverIRQHandler(void);
 void ADMA_SAI4_INT_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][1] != NULL) &&
         SAI_RxGetEnabledInterruptStatus(ADMA__SAI4, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3557,7 +3570,7 @@ void ADMA_SAI4_INT_DriverIRQHandler(void)
         s_saiRxIsr(ADMA__SAI4, s_saiHandle[1][1]);
     }
 
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][0] != NULL) &&
         SAI_TxGetEnabledInterruptStatus(ADMA__SAI4, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3577,7 +3590,7 @@ void ADMA_SAI4_INT_DriverIRQHandler(void)
 void ADMA_SAI5_INT_DriverIRQHandler(void);
 void ADMA_SAI5_INT_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][1] != NULL) &&
         SAI_RxGetEnabledInterruptStatus(ADMA__SAI5, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3589,7 +3602,7 @@ void ADMA_SAI5_INT_DriverIRQHandler(void)
     {
         s_saiRxIsr(ADMA__SAI5, s_saiHandle[1][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][0] != NULL) &&
         SAI_TxGetEnabledInterruptStatus(ADMA__SAI5, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                         (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
@@ -3609,7 +3622,7 @@ void ADMA_SAI5_INT_DriverIRQHandler(void)
 void SAI0_DriverIRQHandler(void);
 void SAI0_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[0][1] != NULL) && SAI_RxGetEnabledInterruptStatus(SAI0, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3619,7 +3632,7 @@ void SAI0_DriverIRQHandler(void)
     {
         s_saiRxIsr(SAI0, s_saiHandle[0][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[0][0] != NULL) && SAI_TxGetEnabledInterruptStatus(SAI0, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3637,7 +3650,7 @@ void SAI0_DriverIRQHandler(void)
 void SAI1_DriverIRQHandler(void);
 void SAI1_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][1] != NULL) && SAI_RxGetEnabledInterruptStatus(SAI1, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3647,7 +3660,7 @@ void SAI1_DriverIRQHandler(void)
     {
         s_saiRxIsr(SAI1, s_saiHandle[1][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[1][0] != NULL) && SAI_TxGetEnabledInterruptStatus(SAI1, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3665,7 +3678,7 @@ void SAI1_DriverIRQHandler(void)
 void SAI2_DriverIRQHandler(void);
 void SAI2_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[2][1] != NULL) && SAI_RxGetEnabledInterruptStatus(SAI2, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3675,7 +3688,7 @@ void SAI2_DriverIRQHandler(void)
     {
         s_saiRxIsr(SAI2, s_saiHandle[2][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[2][0] != NULL) && SAI_TxGetEnabledInterruptStatus(SAI2, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3693,7 +3706,7 @@ void SAI2_DriverIRQHandler(void)
 void SAI3_DriverIRQHandler(void);
 void SAI3_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[3][1] != NULL) && SAI_RxGetEnabledInterruptStatus(SAI3, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3703,7 +3716,7 @@ void SAI3_DriverIRQHandler(void)
     {
         s_saiRxIsr(SAI3, s_saiHandle[3][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[3][0] != NULL) && SAI_TxGetEnabledInterruptStatus(SAI3, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3737,7 +3750,7 @@ void SAI3_RX_DriverIRQHandler(void)
 void SAI4_DriverIRQHandler(void);
 void SAI4_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[4][1] != NULL) && SAI_RxGetEnabledInterruptStatus(SAI4, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3747,7 +3760,7 @@ void SAI4_DriverIRQHandler(void)
     {
         s_saiRxIsr(SAI4, s_saiHandle[4][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[4][0] != NULL) && SAI_TxGetEnabledInterruptStatus(SAI4, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3765,7 +3778,7 @@ void SAI4_DriverIRQHandler(void)
 void SAI5_DriverIRQHandler(void);
 void SAI5_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[5][1] != NULL) && SAI_RxGetEnabledInterruptStatus(SAI5, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3775,7 +3788,7 @@ void SAI5_DriverIRQHandler(void)
     {
         s_saiRxIsr(SAI5, s_saiHandle[5][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[5][0] != NULL) && SAI_TxGetEnabledInterruptStatus(SAI5, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3793,7 +3806,7 @@ void SAI5_DriverIRQHandler(void)
 void SAI6_DriverIRQHandler(void);
 void SAI6_DriverIRQHandler(void)
 {
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[6][1] != NULL) && SAI_RxGetEnabledInterruptStatus(SAI6, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else
@@ -3803,7 +3816,7 @@ void SAI6_DriverIRQHandler(void)
     {
         s_saiRxIsr(SAI6, s_saiHandle[6][1]);
     }
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     if ((s_saiHandle[6][0] != NULL) && SAI_TxGetEnabledInterruptStatus(SAI6, (I2S_TCSR_FRIE_MASK | I2S_TCSR_FEIE_MASK),
                                                                        (I2S_TCSR_FRF_MASK | I2S_TCSR_FEF_MASK)))
 #else

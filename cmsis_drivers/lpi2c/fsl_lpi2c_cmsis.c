@@ -166,6 +166,12 @@ static int32_t LPI2C_Master_EdmaInitialize(ARM_I2C_SignalEvent_t cb_event, cmsis
         /* Create edmaRxHandle */
         EDMA_CreateHandle(lpi2c->edmaRxHandle, lpi2c->edmaResource->rxEdmaBase, lpi2c->edmaResource->rxEdmaChannel);
 
+#if defined(FSL_FEATURE_EDMA_HAS_CHANNEL_MUX) && FSL_FEATURE_EDMA_HAS_CHANNEL_MUX
+        EDMA_SetChannelMux(lpi2c->edmaResource->txEdmaBase, lpi2c->edmaResource->txEdmaChannel,
+                           lpi2c->edmaResource->txDmaRequest);
+        EDMA_SetChannelMux(lpi2c->edmaResource->rxEdmaBase, lpi2c->edmaResource->rxEdmaChannel,
+                           lpi2c->edmaResource->rxDmaRequest);
+#endif
         /* Create master_edma_handle */
         LPI2C_MasterCreateEDMAHandle(lpi2c->resource->base, lpi2c->master_edma_handle, lpi2c->edmaRxHandle,
                                      lpi2c->edmaTxHandle, KSDK_LPI2C_MASTER_EdmaCallback, (void *)cb_event);

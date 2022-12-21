@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -67,6 +67,12 @@
 /*! @brief Defines the timeout macro. */
 #define PHY_READID_TIMEOUT_COUNT 1000U
 
+/*! @brief Defines the PHY resource interface. */
+#define PHY_AR8031_WRITE(handle, regAddr, data) \
+    ((phy_ar8031_resource_t *)(handle)->resource)->write((handle)->phyAddr, regAddr, data)
+#define PHY_AR8031_READ(handle, regAddr, pData) \
+    ((phy_ar8031_resource_t *)(handle)->resource)->read((handle)->phyAddr, regAddr, pData)
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -75,10 +81,10 @@ static status_t PHY_AR8031_MMD_SetDevice(phy_handle_t *handle,
                                          uint8_t device,
                                          uint16_t addr,
                                          phy_mmd_access_mode_t mode);
-static inline status_t PHY_AR8031_MMD_ReadData(phy_handle_t *handle, uint32_t *data);
-static inline status_t PHY_AR8031_MMD_WriteData(phy_handle_t *handle, uint32_t data);
-static status_t PHY_AR8031_MMD_Read(phy_handle_t *handle, uint8_t device, uint16_t addr, uint32_t *data);
-static status_t PHY_AR8031_MMD_Write(phy_handle_t *handle, uint8_t device, uint16_t addr, uint32_t data);
+static inline status_t PHY_AR8031_MMD_ReadData(phy_handle_t *handle, uint16_t *data);
+static inline status_t PHY_AR8031_MMD_WriteData(phy_handle_t *handle, uint16_t data);
+static status_t PHY_AR8031_MMD_Read(phy_handle_t *handle, uint8_t device, uint16_t addr, uint16_t *data);
+static status_t PHY_AR8031_MMD_Write(phy_handle_t *handle, uint8_t device, uint16_t addr, uint16_t data);
 
 /*******************************************************************************
  * Variables
@@ -100,18 +106,16 @@ status_t PHY_AR8031_Init(phy_handle_t *handle, const phy_config_t *config)
 {
     uint32_t counter  = PHY_READID_TIMEOUT_COUNT;
     status_t result   = kStatus_Success;
-    uint32_t regValue = 0;
+    uint16_t regValue = 0;
 
-    /* Init MDIO interface. */
-    MDIO_Init(handle->mdioHandle);
-
-    /* Assign phy address. */
-    handle->phyAddr = config->phyAddr;
+    /* Assign PHY address and operation resource. */
+    handle->phyAddr  = config->phyAddr;
+    handle->resource = config->resource;
 
     /* Check PHY ID. */
     do
     {
-        result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_ID1_REG, &regValue);
+        result = PHY_AR8031_READ(handle, PHY_ID1_REG, &regValue);
         if (result != kStatus_Success)
         {
             return result;
@@ -125,19 +129,19 @@ status_t PHY_AR8031_Init(phy_handle_t *handle, const phy_config_t *config)
     }
 
     /* Configure RMII voltage 1.8V */
-    result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_ADDR_REG, 0x1F);
+    result = PHY_AR8031_WRITE(handle, PHY_DEBUGPORT_ADDR_REG, 0x1F);
     if (result != kStatus_Success)
     {
         return result;
     }
-    result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_DATA_REG, 0x8);
+    result = PHY_AR8031_WRITE(handle, PHY_DEBUGPORT_DATA_REG, 0x8);
     if (result != kStatus_Success)
     {
         return result;
     }
 
     /* Reset PHY. */
-    result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, PHY_BCTL_RESET_MASK);
+    result = PHY_AR8031_WRITE(handle, PHY_BASICCONTROL_REG, PHY_BCTL_RESET_MASK);
     if (result == kStatus_Success)
     {
         /* Close smartEEE. */
@@ -157,34 +161,34 @@ status_t PHY_AR8031_Init(phy_handle_t *handle, const phy_config_t *config)
         }
 
         /* Enable Tx clock delay */
-        result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_ADDR_REG, 0x5);
+        result = PHY_AR8031_WRITE(handle, PHY_DEBUGPORT_ADDR_REG, 0x5);
         if (result != kStatus_Success)
         {
             return result;
         }
-        result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_DATA_REG, &regValue);
+        result = PHY_AR8031_READ(handle, PHY_DEBUGPORT_DATA_REG, &regValue);
         if (result != kStatus_Success)
         {
             return result;
         }
-        result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_DATA_REG, (regValue | 0x0100U));
+        result = PHY_AR8031_WRITE(handle, PHY_DEBUGPORT_DATA_REG, regValue | 0x0100U);
         if (result != kStatus_Success)
         {
             return result;
         }
 
         /* Enable Rx clock delay */
-        result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_ADDR_REG, 0x0);
+        result = PHY_AR8031_WRITE(handle, PHY_DEBUGPORT_ADDR_REG, 0x0);
         if (result != kStatus_Success)
         {
             return result;
         }
-        result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_DATA_REG, &regValue);
+        result = PHY_AR8031_READ(handle, PHY_DEBUGPORT_DATA_REG, &regValue);
         if (result != kStatus_Success)
         {
             return result;
         }
-        result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_DATA_REG, (regValue | 0x8000U));
+        result = PHY_AR8031_WRITE(handle, PHY_DEBUGPORT_DATA_REG, regValue | 0x8000U);
         if (result != kStatus_Success)
         {
             return result;
@@ -214,36 +218,35 @@ status_t PHY_AR8031_Init(phy_handle_t *handle, const phy_config_t *config)
         if (config->autoNeg)
         {
             /* Set the negotiation. */
-            result =
-                MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_AUTONEG_ADVERTISE_REG,
-                           (PHY_100BASETX_FULLDUPLEX_MASK | PHY_100BASETX_HALFDUPLEX_MASK |
-                            PHY_10BASETX_FULLDUPLEX_MASK | PHY_10BASETX_HALFDUPLEX_MASK | PHY_IEEE802_3_SELECTOR_MASK));
+            result = PHY_AR8031_WRITE(handle, PHY_AUTONEG_ADVERTISE_REG,
+                                      PHY_100BASETX_FULLDUPLEX_MASK | PHY_100BASETX_HALFDUPLEX_MASK |
+                                          PHY_10BASETX_FULLDUPLEX_MASK | PHY_10BASETX_HALFDUPLEX_MASK |
+                                          PHY_IEEE802_3_SELECTOR_MASK);
             if (result == kStatus_Success)
             {
-                result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_1000BASET_CONTROL_REG,
-                                    PHY_1000BASET_FULLDUPLEX_MASK | PHY_1000BASET_HALFDUPLEX_MASK);
+                result = PHY_AR8031_WRITE(handle, PHY_1000BASET_CONTROL_REG,
+                                          PHY_1000BASET_FULLDUPLEX_MASK | PHY_1000BASET_HALFDUPLEX_MASK);
                 if (result == kStatus_Success)
                 {
-                    result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, &regValue);
+                    result = PHY_AR8031_READ(handle, PHY_BASICCONTROL_REG, &regValue);
                     if (result != kStatus_Success)
                     {
                         return result;
                     }
-                    result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG,
-                                        (regValue | PHY_BCTL_AUTONEG_MASK | PHY_BCTL_RESTART_AUTONEG_MASK));
+                    result = PHY_AR8031_WRITE(handle, PHY_BASICCONTROL_REG,
+                                              regValue | PHY_BCTL_AUTONEG_MASK | PHY_BCTL_RESTART_AUTONEG_MASK);
                 }
             }
         }
         else
         {
-            /* Disable isolate mode */
-            result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, &regValue);
+            /* Disable isolate mode. */
+            result = PHY_AR8031_READ(handle, PHY_BASICCONTROL_REG, &regValue);
             if (result != kStatus_Success)
             {
                 return result;
             }
-            regValue &= ~PHY_BCTL_ISOLATE_MASK;
-            result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, regValue);
+            result = PHY_AR8031_WRITE(handle, PHY_BASICCONTROL_REG, regValue & ~PHY_BCTL_ISOLATE_MASK);
             if (result != kStatus_Success)
             {
                 return result;
@@ -257,14 +260,14 @@ status_t PHY_AR8031_Init(phy_handle_t *handle, const phy_config_t *config)
     return result;
 }
 
-status_t PHY_AR8031_Write(phy_handle_t *handle, uint32_t phyReg, uint32_t data)
+status_t PHY_AR8031_Write(phy_handle_t *handle, uint8_t phyReg, uint16_t data)
 {
-    return MDIO_Write(handle->mdioHandle, handle->phyAddr, phyReg, data);
+    return PHY_AR8031_WRITE(handle, phyReg, data);
 }
 
-status_t PHY_AR8031_Read(phy_handle_t *handle, uint32_t phyReg, uint32_t *dataPtr)
+status_t PHY_AR8031_Read(phy_handle_t *handle, uint8_t phyReg, uint16_t *pData)
 {
-    return MDIO_Read(handle->mdioHandle, handle->phyAddr, phyReg, dataPtr);
+    return PHY_AR8031_READ(handle, phyReg, pData);
 }
 
 status_t PHY_AR8031_GetAutoNegotiationStatus(phy_handle_t *handle, bool *status)
@@ -272,12 +275,12 @@ status_t PHY_AR8031_GetAutoNegotiationStatus(phy_handle_t *handle, bool *status)
     assert(status);
 
     status_t result;
-    uint32_t regValue;
+    uint16_t regValue;
 
     *status = false;
 
     /* Check auto negotiation complete. */
-    result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICSTATUS_REG, &regValue);
+    result = PHY_AR8031_READ(handle, PHY_BASICSTATUS_REG, &regValue);
     if (result == kStatus_Success)
     {
         if ((regValue & PHY_BSTATUS_AUTONEGCOMP_MASK) != 0U)
@@ -293,10 +296,10 @@ status_t PHY_AR8031_GetLinkStatus(phy_handle_t *handle, bool *status)
     assert(status);
 
     status_t result = kStatus_Success;
-    uint32_t regValue;
+    uint16_t regValue;
 
     /* Read the basic status register. */
-    result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_SPECIFIC_STATUS_REG, &regValue);
+    result = PHY_AR8031_READ(handle, PHY_SPECIFIC_STATUS_REG, &regValue);
     if (result == kStatus_Success)
     {
         if ((PHY_SSTATUS_LINKSTATUS_MASK & regValue) != 0U)
@@ -318,10 +321,10 @@ status_t PHY_AR8031_GetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t *speed,
     assert(!((speed == NULL) && (duplex == NULL)));
 
     status_t result;
-    uint32_t regValue;
+    uint16_t regValue;
 
     /* Read the specfic status register. */
-    result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_SPECIFIC_STATUS_REG, &regValue);
+    result = PHY_AR8031_READ(handle, PHY_SPECIFIC_STATUS_REG, &regValue);
     if (result == kStatus_Success)
     {
         if (speed != NULL)
@@ -362,9 +365,9 @@ status_t PHY_AR8031_GetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t *speed,
 status_t PHY_AR8031_SetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t speed, phy_duplex_t duplex)
 {
     status_t result;
-    uint32_t regValue;
+    uint16_t regValue;
 
-    result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, &regValue);
+    result = PHY_AR8031_READ(handle, PHY_BASICCONTROL_REG, &regValue);
     if (result == kStatus_Success)
     {
         /* Disable the auto-negotiation and set according to user-defined configuration. */
@@ -392,7 +395,7 @@ status_t PHY_AR8031_SetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t speed, 
         {
             regValue &= ~PHY_BCTL_DUPLEX_MASK;
         }
-        result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, regValue);
+        result = PHY_AR8031_WRITE(handle, PHY_BASICCONTROL_REG, regValue);
     }
     return result;
 }
@@ -400,7 +403,7 @@ status_t PHY_AR8031_SetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t speed, 
 status_t PHY_AR8031_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_speed_t speed, bool enable)
 {
     status_t result;
-    uint32_t regValue;
+    uint16_t regValue;
 
     /* Set the loop mode. */
     if (enable)
@@ -419,7 +422,7 @@ status_t PHY_AR8031_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_sp
             {
                 regValue = PHY_BCTL_DUPLEX_MASK | PHY_BCTL_LOOP_MASK;
             }
-            result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, regValue);
+            result = PHY_AR8031_WRITE(handle, PHY_BASICCONTROL_REG, regValue);
         }
         else if (mode == kPHY_RemoteLoop)
         {
@@ -427,18 +430,16 @@ status_t PHY_AR8031_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_sp
         }
         else
         {
-            result =
-                MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_ADDR_REG, PHY_DEBUG_HIBECTL_REG_OFFSET);
+            result = PHY_AR8031_WRITE(handle, PHY_DEBUGPORT_ADDR_REG, PHY_DEBUG_HIBECTL_REG_OFFSET);
             if (result == kStatus_Success)
             {
-                result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_DATA_REG, 0);
+                result = PHY_AR8031_WRITE(handle, PHY_DEBUGPORT_DATA_REG, 0);
                 if (result == kStatus_Success)
                 {
-                    result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_ADDR_REG,
-                                        PHY_DEBUG_EXTLOOP_REG_OFFSET);
+                    result = PHY_AR8031_WRITE(handle, PHY_DEBUGPORT_ADDR_REG, PHY_DEBUG_EXTLOOP_REG_OFFSET);
                     if (result == kStatus_Success)
                     {
-                        result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_DATA_REG, 1);
+                        result = PHY_AR8031_WRITE(handle, PHY_DEBUGPORT_DATA_REG, 1);
                         if (result == kStatus_Success)
                         {
                             if (speed == kPHY_Speed1000M)
@@ -453,7 +454,7 @@ status_t PHY_AR8031_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_sp
                             {
                                 regValue = PHY_BCTL_DUPLEX_MASK | PHY_BCTL_RESET_MASK;
                             }
-                            result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, regValue);
+                            result = PHY_AR8031_WRITE(handle, PHY_BASICCONTROL_REG, regValue);
                         }
                     }
                 }
@@ -466,12 +467,11 @@ status_t PHY_AR8031_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_sp
         if (mode == kPHY_LocalLoop)
         {
             /* First read the current status in control register. */
-            result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, &regValue);
+            result = PHY_AR8031_READ(handle, PHY_BASICCONTROL_REG, &regValue);
             if (result == kStatus_Success)
             {
                 regValue &= ~PHY_BCTL_LOOP_MASK;
-                result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG,
-                                    (regValue | PHY_BCTL_RESTART_AUTONEG_MASK));
+                result = PHY_AR8031_WRITE(handle, PHY_BASICCONTROL_REG, regValue | PHY_BCTL_RESTART_AUTONEG_MASK);
             }
         }
         else if (mode == kPHY_RemoteLoop)
@@ -480,22 +480,20 @@ status_t PHY_AR8031_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_sp
         }
         else
         {
-            result =
-                MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_ADDR_REG, PHY_DEBUG_HIBECTL_REG_OFFSET);
+            result = PHY_AR8031_WRITE(handle, PHY_DEBUGPORT_ADDR_REG, PHY_DEBUG_HIBECTL_REG_OFFSET);
             if (result == kStatus_Success)
             {
-                result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_DATA_REG, 0);
+                result = PHY_AR8031_WRITE(handle, PHY_DEBUGPORT_DATA_REG, 0);
                 if (result == kStatus_Success)
                 {
-                    result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_ADDR_REG,
-                                        PHY_DEBUG_EXTLOOP_REG_OFFSET);
+                    result = PHY_AR8031_WRITE(handle, PHY_DEBUGPORT_ADDR_REG, PHY_DEBUG_EXTLOOP_REG_OFFSET);
                     if (result == kStatus_Success)
                     {
-                        result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_DEBUGPORT_DATA_REG, 0);
+                        result = PHY_AR8031_WRITE(handle, PHY_DEBUGPORT_DATA_REG, 0);
                         if (result == kStatus_Success)
                         {
                             regValue = PHY_BCTL_AUTONEG_MASK | PHY_BCTL_RESET_MASK;
-                            result   = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, regValue);
+                            result   = PHY_AR8031_WRITE(handle, PHY_BASICCONTROL_REG, regValue);
                         }
                     }
                 }
@@ -513,36 +511,35 @@ static status_t PHY_AR8031_MMD_SetDevice(phy_handle_t *handle,
     status_t result = kStatus_Success;
 
     /* Set Function mode of address access(b00) and device address. */
-    result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_MMD_ACCESS_CONTROL_REG, device);
+    result = PHY_AR8031_WRITE(handle, PHY_MMD_ACCESS_CONTROL_REG, device);
     if (result != kStatus_Success)
     {
         return result;
     }
 
     /* Set register address. */
-    result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_MMD_ACCESS_DATA_REG, addr);
+    result = PHY_AR8031_WRITE(handle, PHY_MMD_ACCESS_DATA_REG, addr);
     if (result != kStatus_Success)
     {
         return result;
     }
 
     /* Set Function mode of data access(b01~11) and device address. */
-    result =
-        MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_MMD_ACCESS_CONTROL_REG, (uint32_t)mode | (uint32_t)device);
+    result = PHY_AR8031_WRITE(handle, PHY_MMD_ACCESS_CONTROL_REG, (uint16_t)mode | (uint16_t)device);
     return result;
 }
 
-static inline status_t PHY_AR8031_MMD_ReadData(phy_handle_t *handle, uint32_t *data)
+static inline status_t PHY_AR8031_MMD_ReadData(phy_handle_t *handle, uint16_t *data)
 {
-    return MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_MMD_ACCESS_DATA_REG, data);
+    return PHY_AR8031_READ(handle, PHY_MMD_ACCESS_DATA_REG, data);
 }
 
-static inline status_t PHY_AR8031_MMD_WriteData(phy_handle_t *handle, uint32_t data)
+static inline status_t PHY_AR8031_MMD_WriteData(phy_handle_t *handle, uint16_t data)
 {
-    return MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_MMD_ACCESS_DATA_REG, data);
+    return PHY_AR8031_WRITE(handle, PHY_MMD_ACCESS_DATA_REG, data);
 }
 
-static status_t PHY_AR8031_MMD_Read(phy_handle_t *handle, uint8_t device, uint16_t addr, uint32_t *data)
+static status_t PHY_AR8031_MMD_Read(phy_handle_t *handle, uint8_t device, uint16_t addr, uint16_t *data)
 {
     status_t result = kStatus_Success;
     result          = PHY_AR8031_MMD_SetDevice(handle, device, addr, kPHY_MMDAccessNoPostIncrement);
@@ -553,7 +550,7 @@ static status_t PHY_AR8031_MMD_Read(phy_handle_t *handle, uint8_t device, uint16
     return result;
 }
 
-static status_t PHY_AR8031_MMD_Write(phy_handle_t *handle, uint8_t device, uint16_t addr, uint32_t data)
+static status_t PHY_AR8031_MMD_Write(phy_handle_t *handle, uint8_t device, uint16_t addr, uint16_t data)
 {
     status_t result = kStatus_Success;
 

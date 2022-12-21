@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -553,6 +553,10 @@ status_t I2C_MasterTransferDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, 
     {
         return kStatus_I2C_Busy;
     }
+
+    /* Enable the master function and disable the slave function. */
+    I2C_MasterEnable(base, true);
+    I2C_SlaveEnable(base, false);
 
     /* Prepare transfer state machine. */
     result = I2C_InitTransferStateMachineDMA(base, handle, xfer);

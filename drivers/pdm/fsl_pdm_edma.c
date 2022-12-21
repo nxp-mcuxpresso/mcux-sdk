@@ -45,6 +45,12 @@ enum _pdm_edma_transfer_state
  */
 static void PDM_EDMACallback(edma_handle_t *handle, void *userData, bool done, uint32_t tcds);
 
+/*!
+ * @brief Mapping the enabled channel to a number power of 2.
+ *
+ * @param channel PDM channel number.
+ */
+static edma_modulo_t PDM_TransferMappingChannel(uint32_t *channel);
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -56,6 +62,28 @@ static pdm_edma_private_handle_t s_edmaPrivateHandle[ARRAY_SIZE(s_pdmBases)];
 /*******************************************************************************
  * Code
  ******************************************************************************/
+static edma_modulo_t PDM_TransferMappingChannel(uint32_t *channel)
+{
+    edma_modulo_t modulo = kEDMA_ModuloDisable;
+#if FSL_FEATURE_PDM_CHANNEL_NUM == 8U
+    if (*channel == 2U)
+    {
+        modulo = kEDMA_Modulo8bytes;
+    }
+    else if ((*channel == 3U) || (*channel == 4U))
+    {
+        *channel = 4U;
+        modulo   = kEDMA_Modulo16bytes;
+    }
+    else
+    {
+        modulo = kEDMA_ModuloDisable;
+    }
+#endif
+
+    return modulo;
+}
+
 static void PDM_EDMACallback(edma_handle_t *handle, void *userData, bool done, uint32_t tcds)
 {
     pdm_edma_private_handle_t *privHandle = (pdm_edma_private_handle_t *)userData;
@@ -122,6 +150,22 @@ void PDM_TransferCreateHandleEDMA(
 
     /* Install callback for Tx dma channel */
     EDMA_SetCallback(dmaHandle, PDM_EDMACallback, &s_edmaPrivateHandle[instance]);
+}
+
+/*!
+ * brief Initializes the multi PDM channel interleave type.
+ *
+ * This function initializes the PDM DMA handle member interleaveType, it shall be called only when application would
+ * like to use type kPDM_EDMAMultiChannelInterleavePerChannelBlock, since the default interleaveType is
+ * kPDM_EDMAMultiChannelInterleavePerChannelSample always
+ *
+ * param handle PDM eDMA handle pointer.
+ * param multiChannelInterleaveType Multi channel interleave type.
+ */
+void PDM_TransferSetMultiChannelInterleaveType(pdm_edma_handle_t *handle,
+                                               pdm_edma_multi_channel_interleave_t multiChannelInterleaveType)
+{
+    handle->interleaveType = multiChannelInterleaveType;
 }
 
 /*!
@@ -200,10 +244,29 @@ void PDM_TransferSetChannelConfigEDMA(PDM_Type *base,
  * PDM_TransferSetChannelConfigEDMA(DEMO_PDM, &s_pdmRxHandle_0, DEMO_PDM_ENABLE_CHANNEL_1, &channelConfig);
  * PDM_TransferReceiveEDMA(DEMO_PDM, &s_pdmRxHandle_0, pdmXfer);
  * endcode
- *Then the output data will be formatted as:
+ * The output data will be formatted as below if handle->interleaveType =
+ *kPDM_EDMAMultiChannelInterleavePerChannelSample :
  * -------------------------------------------------------------------------
  * |CHANNEL0 | CHANNEL1 | CHANNEL0 | CHANNEL1 | CHANNEL0 | CHANNEL 1 | ....|
  * -------------------------------------------------------------------------
+ *
+ * The output data will be formatted as below if handle->interleaveType = kPDM_EDMAMultiChannelInterleavePerChannelBlock
+ *:
+ * ----------------------------------------------------------------------------------------------------------------------
+ * |CHANNEL3 | CHANNEL3 | CHANNEL3 | .... | CHANNEL4 | CHANNEL 4 | CHANNEL4 |....| CHANNEL5 | CHANNEL 5 | CHANNEL5
+ *|....|
+ * ----------------------------------------------------------------------------------------------------------------------
+ * Note: the dataSize of xfer is the total data size, while application using
+ * kPDM_EDMAMultiChannelInterleavePerChannelBlock, the buffer size for each PDM channel is channelSize = dataSize /
+ * channelNums, there are limitation for this feature,
+ * 1. For 3 DMIC array: the dataSize shall be 4 * (channelSize)
+ * The addtional buffer is mandantory for edma modulo feature.
+ * 2. The kPDM_EDMAMultiChannelInterleavePerChannelBlock feature support below dmic array only,
+ *    2 DMIC array: CHANNEL3, CHANNEL4
+ *    3 DMIC array: CHANNEL3, CHANNEL4, CHANNEL5
+ *    4 DMIC array: CHANNEL3, CHANNEL4, CHANNEL5, CHANNEL6
+ * Any other combinations is not support, that is to SAY, THE FEATURE SUPPORT RECEIVE START FROM CHANNEL3 ONLY AND 4
+ * MAXIMUM DMIC CHANNELS.
  *
  * param base PDM base pointer
  * param handle PDM eDMA handle pointer.
@@ -219,16 +282,38 @@ status_t PDM_TransferReceiveEDMA(PDM_Type *base, pdm_edma_handle_t *handle, pdm_
     edma_transfer_config_t config = {0};
     uint32_t startAddr            = PDM_GetDataRegisterAddress(base, handle->endChannel - (handle->channelNums - 1UL));
     pdm_edma_transfer_t *currentTransfer = xfer;
-    uint32_t nextTcdIndex = 0U, tcdIndex = handle->tcdUser;
+    uint32_t nextTcdIndex = 0U, tcdIndex = handle->tcdUser, destOffset = FSL_FEATURE_PDM_FIFO_WIDTH;
+    uint32_t mappedChannel = handle->channelNums;
+    edma_modulo_t modulo   = kEDMA_ModuloDisable;
+    /* minor offset used for channel sample interleave transfer */
     edma_minor_offset_config_t minorOffset = {
         .enableSrcMinorOffset  = true,
         .enableDestMinorOffset = false,
-        .minorOffset           = 0xFFFFFU - handle->channelNums * (uint32_t)FSL_FEATURE_PDM_FIFO_OFFSET + 1U};
+        .minorOffset           = 0xFFFFFU - mappedChannel * (uint32_t)FSL_FEATURE_PDM_FIFO_OFFSET + 1U};
 
     /* Check if input parameter invalid */
     if ((xfer->data == NULL) || (xfer->dataSize == 0U))
     {
         return kStatus_InvalidArgument;
+    }
+
+    if ((handle->interleaveType == kPDM_EDMAMultiChannelInterleavePerChannelBlock) && (mappedChannel > 1U))
+    {
+        /* Limitation of the feature, reference the API comments */
+        if (((startAddr & 0xFU) != 0U) || (mappedChannel > 4U))
+        {
+            return kStatus_InvalidArgument;
+        }
+        modulo = PDM_TransferMappingChannel(&mappedChannel);
+        if ((xfer->dataSize % mappedChannel) != 0U)
+        {
+            return kStatus_InvalidArgument;
+        }
+        destOffset = xfer->dataSize / mappedChannel;
+        /* reconfigure the minor loop offset for channel block interleave */
+        minorOffset.enableSrcMinorOffset = false, minorOffset.enableDestMinorOffset = true,
+        minorOffset.minorOffset =
+            0xFFFFFU - mappedChannel * (uint32_t)destOffset + (uint32_t)FSL_FEATURE_PDM_FIFO_WIDTH + 1U;
     }
 
     while (currentTransfer != NULL)
@@ -246,7 +331,7 @@ status_t PDM_TransferReceiveEDMA(PDM_Type *base, pdm_edma_handle_t *handle, pdm_
 
         nextTcdIndex = (handle->tcdUser + 1U) % handle->tcdNum;
 
-        if (handle->channelNums == 1U)
+        if (mappedChannel == 1U)
         {
             EDMA_PrepareTransferConfig(&config, (void *)(uint32_t *)startAddr, FSL_FEATURE_PDM_FIFO_WIDTH, 0,
                                        (uint8_t *)(uint32_t)currentTransfer->data, FSL_FEATURE_PDM_FIFO_WIDTH,
@@ -255,18 +340,23 @@ status_t PDM_TransferReceiveEDMA(PDM_Type *base, pdm_edma_handle_t *handle, pdm_
         }
         else
         {
-            EDMA_PrepareTransferConfig(
-                &config, (void *)(uint32_t *)startAddr, FSL_FEATURE_PDM_FIFO_WIDTH, FSL_FEATURE_PDM_FIFO_OFFSET,
-                (uint8_t *)(uint32_t)currentTransfer->data, FSL_FEATURE_PDM_FIFO_WIDTH, FSL_FEATURE_PDM_FIFO_WIDTH,
-                handle->channelNums * (uint32_t)FSL_FEATURE_PDM_FIFO_WIDTH, currentTransfer->dataSize);
+            EDMA_PrepareTransferConfig(&config, (void *)(uint32_t *)startAddr, FSL_FEATURE_PDM_FIFO_WIDTH,
+                                       FSL_FEATURE_PDM_FIFO_OFFSET, (uint8_t *)(uint32_t)currentTransfer->data,
+                                       FSL_FEATURE_PDM_FIFO_WIDTH, (int16_t)destOffset,
+                                       mappedChannel * (uint32_t)FSL_FEATURE_PDM_FIFO_WIDTH, currentTransfer->dataSize);
         }
 
         EDMA_TcdSetTransferConfig((edma_tcd_t *)&handle->tcd[handle->tcdUser], &config,
                                   (edma_tcd_t *)&handle->tcd[nextTcdIndex]);
 
-        if (handle->channelNums > 1U)
+        if (mappedChannel > 1U)
         {
             EDMA_TcdSetMinorOffsetConfig((edma_tcd_t *)&handle->tcd[handle->tcdUser], &minorOffset);
+
+            if (handle->interleaveType == kPDM_EDMAMultiChannelInterleavePerChannelBlock)
+            {
+                EDMA_TcdSetModulo((edma_tcd_t *)&handle->tcd[handle->tcdUser], modulo, kEDMA_ModuloDisable);
+            }
         }
 
         EDMA_TcdEnableInterrupts((edma_tcd_t *)&handle->tcd[handle->tcdUser], (uint32_t)kEDMA_MajorInterruptEnable);

@@ -53,10 +53,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utilities
@@ -121,11 +120,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpspi)
 #    include(driver_gpio)
 #    include(middleware_issdk_sensor_allregdefs)
+#    include(driver_flexio_i2c_master)
 #    include(middleware_mbedtls_kinetis5)
 #    include(middleware_multicore_erpc_eRPC_server)
 #    include(CMSIS_Driver_Include_USART)
 #    include(CMSIS_Driver_Include_SPI)
 #    include(utility_debug_console_lite)
+#    include(driver_iomuxc)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_tty_rtos_remote_c_wrapper)
 #    include(utility_shell)
 #    include(utility_assert_lite)
@@ -135,7 +136,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_crc)
 #    include(component_wm8960_adapter)
 #    include(driver_lptmr)
-#    include(driver_flexio_i2c_master)
 #    include(middleware_issdk_algorithms_pedometer_lib_cm4)
 #    include(middleware_multicore_erpc_eRPC_port_freertos)
 #    include(driver_flexio_spi_edma)
@@ -143,8 +143,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_rpmsg_lite_MCIMX7U5)
 #    include(driver_sai_edma)
 #    include(component_lists)
-#    include(driver_tpm)
 #    include(middleware_issdk_algorithms_pedometer_common)
+#    include(driver_tpm)
 #    include(driver_acmp)
 #    include(driver_lpit)
 #    include(driver_fxos8700cq)

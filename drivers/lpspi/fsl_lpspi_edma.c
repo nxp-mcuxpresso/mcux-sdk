@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -232,10 +232,10 @@ status_t LPSPI_MasterTransferEDMA(LPSPI_Type *base, lpspi_master_edma_handle_t *
     uint32_t txAddr        = LPSPI_GetTxRegisterAddress(base);
     uint32_t whichPcs      = (transfer->configFlags & LPSPI_MASTER_PCS_MASK) >> LPSPI_MASTER_PCS_SHIFT;
     uint32_t bytesPerFrame = ((base->TCR & LPSPI_TCR_FRAMESZ_MASK) >> LPSPI_TCR_FRAMESZ_SHIFT) / 8U + 1U;
-    edma_transfer_config_t transferConfigRx;
-    edma_transfer_config_t transferConfigTx;
-    edma_tcd_t *softwareTCD_pcsContinuous = (edma_tcd_t *)((uint32_t)(&handle->lpspiSoftwareTCD[2]) & (~0x1FU));
-    edma_tcd_t *softwareTCD_extraBytes    = (edma_tcd_t *)((uint32_t)(&handle->lpspiSoftwareTCD[1]) & (~0x1FU));
+    edma_transfer_config_t transferConfigRx = {0};
+    edma_transfer_config_t transferConfigTx = {0};
+    edma_tcd_t *softwareTCD_pcsContinuous   = (edma_tcd_t *)((uint32_t)(&handle->lpspiSoftwareTCD[2]) & (~0x1FU));
+    edma_tcd_t *softwareTCD_extraBytes      = (edma_tcd_t *)((uint32_t)(&handle->lpspiSoftwareTCD[1]) & (~0x1FU));
 
     handle->state                  = (uint8_t)kLPSPI_Busy;
     handle->txData                 = transfer->txData;
@@ -715,9 +715,9 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
     uint32_t txAddr        = LPSPI_GetTxRegisterAddress(base);
     uint32_t whichPcs      = (transfer->configFlags & LPSPI_MASTER_PCS_MASK) >> LPSPI_MASTER_PCS_SHIFT;
     uint32_t bytesPerFrame = ((base->TCR & LPSPI_TCR_FRAMESZ_MASK) >> LPSPI_TCR_FRAMESZ_SHIFT) / 8U + 1U;
-    edma_transfer_config_t transferConfigRx;
-    edma_transfer_config_t transferConfigTx;
-    edma_tcd_t *softwareTCD_extraBytes = (edma_tcd_t *)((uint32_t)(&handle->lpspiSoftwareTCD[1]) & (~0x1FU));
+    edma_transfer_config_t transferConfigRx = {0};
+    edma_transfer_config_t transferConfigTx = {0};
+    edma_tcd_t *softwareTCD_extraBytes      = (edma_tcd_t *)((uint32_t)(&handle->lpspiSoftwareTCD[1]) & (~0x1FU));
 
     /* Assign the original value for members of transfer handle. */
     handle->state                  = (uint8_t)kLPSPI_Busy;

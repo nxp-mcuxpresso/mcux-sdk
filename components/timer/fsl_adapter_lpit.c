@@ -48,13 +48,22 @@ static void HAL_TimerInterruptHandle(uint8_t instance)
         halTimerState->callback(halTimerState->callbackParam);
     }
 }
-
+#if defined(LPIT0)
 void LPIT0_IRQHandler(void);
 void LPIT0_IRQHandler(void)
 {
     HAL_TimerInterruptHandle(0);
     SDK_ISR_EXIT_BARRIER;
 }
+#endif
+#if defined(LPIT1)
+void LPIT1_IRQHandler(void);
+void LPIT1_IRQHandler(void)
+{
+    HAL_TimerInterruptHandle(1);
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
 /************************************************************************************
 *************************************************************************************
 * Public functions

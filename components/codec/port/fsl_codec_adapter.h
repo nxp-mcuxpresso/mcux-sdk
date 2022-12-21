@@ -43,6 +43,20 @@
 
 #endif /* CODEC_WM8960_ENABLE */
 
+#ifdef CODEC_WM8962_ENABLE
+#include "fsl_codec_wm8962_adapter.h"
+
+#if ((defined HAL_CODEC_HANDLER_SIZE) && (HAL_CODEC_HANDLER_SIZE < HAL_CODEC_WM8962_HANDLER_SIZE))
+#undef HAL_CODEC_HANDLER_SIZE
+#define HAL_CODEC_HANDLER_SIZE HAL_CODEC_WM8962_HANDLER_SIZE
+#endif
+
+#if (!(defined HAL_CODEC_HANDLER_SIZE))
+#define HAL_CODEC_HANDLER_SIZE HAL_CODEC_WM8962_HANDLER_SIZE
+#endif
+
+#endif /* CODEC_WM8962_ENABLE */
+
 #ifdef CODEC_WM8524_ENABLE
 #include "fsl_codec_wm8524_adapter.h"
 
@@ -191,6 +205,7 @@ enum
     kCODEC_AK4458,   /*!< ak4458 */
     kCODEC_TFA9XXX,  /*!< tfa9xxx */
     kCODEC_TFA9896,  /*!< tfa9896 */
+    kCODEC_WM8962,   /*!< wm8962 */
 };
 /*******************************************************************************
  * API

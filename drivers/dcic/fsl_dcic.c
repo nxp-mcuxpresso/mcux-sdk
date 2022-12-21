@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 NXP
+ * Copyright 2020-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -25,16 +25,13 @@
  *
  * @param base DCIC peripheral base address.
  */
-static uint32_t DCIC_GetInstance(DCIC_Type *base);
+static uint32_t DCIC_GetInstance(const DCIC_Type *base);
 
 static void DCIC_ResetRegister(DCIC_Type *base);
 
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-
-/*! @brief Pointers to DCIC bases for each instance. */
-static DCIC_Type *const s_dcicBases[] = DCIC_BASE_PTRS;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to dcic clocks for each instance. */
@@ -44,8 +41,10 @@ static const clock_ip_name_t s_dcicClocks[] = DCIC_CLOCKS;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-static uint32_t DCIC_GetInstance(DCIC_Type *base)
+static uint32_t DCIC_GetInstance(const DCIC_Type *base)
 {
+    static DCIC_Type *const s_dcicBases[] = DCIC_BASE_PTRS;
+
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
@@ -92,7 +91,7 @@ static void DCIC_ResetRegister(DCIC_Type *base)
  */
 void DCIC_Init(DCIC_Type *base, const dcic_config_t *config)
 {
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && (0 != FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL))
     /* Enable the clock. */
     (void)CLOCK_EnableClock(s_dcicClocks[DCIC_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
@@ -114,7 +113,7 @@ void DCIC_Deinit(DCIC_Type *base)
 {
     base->DCICC = 0U;
 
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && (0 != FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL))
     /* Disable the clock. */
     (void)CLOCK_DisableClock(s_dcicClocks[DCIC_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
@@ -161,12 +160,15 @@ void DCIC_EnableRegion(DCIC_Type *base, uint8_t regionIdx, const dcic_region_con
     assert(regionIdx < DCIC_REGION_COUNT);
     assert(NULL != config);
 
-    base->REGION[regionIdx].DCICRRS = config->refCrc;
+    if (regionIdx < DCIC_REGION_COUNT)
+    {
+        base->REGION[regionIdx].DCICRRS = config->refCrc;
 
-    base->REGION[regionIdx].DCICRS = (((uint32_t)config->lowerRightX << DCIC_DCICRS_END_OFFSET_X_SHIFT) |
-                                      ((uint32_t)config->lowerRightY << DCIC_DCICRS_END_OFFSET_Y_SHIFT));
+        base->REGION[regionIdx].DCICRS = (((uint32_t)config->lowerRightX << DCIC_DCICRS_END_OFFSET_X_SHIFT) |
+                                          ((uint32_t)config->lowerRightY << DCIC_DCICRS_END_OFFSET_Y_SHIFT));
 
-    base->REGION[regionIdx].DCICRC = (((uint32_t)config->upperLeftX << DCIC_DCICRC_START_OFFSET_X_SHIFT) |
-                                      ((uint32_t)config->upperLeftY << DCIC_DCICRC_START_OFFSET_Y_SHIFT) |
-                                      (config->lock ? DCIC_DCICRC_ROI_FREEZE_MASK : 0UL) | DCIC_DCICRC_ROI_EN_MASK);
+        base->REGION[regionIdx].DCICRC = (((uint32_t)config->upperLeftX << DCIC_DCICRC_START_OFFSET_X_SHIFT) |
+                                          ((uint32_t)config->upperLeftY << DCIC_DCICRC_START_OFFSET_Y_SHIFT) |
+                                          (config->lock ? DCIC_DCICRC_ROI_FREEZE_MASK : 0UL) | DCIC_DCICRC_ROI_EN_MASK);
+    }
 }

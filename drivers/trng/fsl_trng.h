@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018, 2020-2021 NXP
+ * Copyright 2016-2018, 2020-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,12 +23,16 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief TRNG driver version 2.0.13.
+/*! @brief TRNG driver version 2.0.15.
  *
- * Current version: 2.0.13
+ * Current version: 2.0.15
  *
 
  * Change log:
+ * - version 2.0.15
+ *   - Changed TRNG_USER_CONFIG_DEFAULT_XXX values according to latest reccomended by design team.
+ * - version 2.0.14
+ *   - add support for RW610 and RW612
  * - version 2.0.13
  *   - After deepsleep it might return error, added clearing bits in TRNG_GetRandomData() and generating new entropy.
  *   - Modified reloading entropy in TRNG_GetRandomData(), for some data length it doesn't reloading entropy correctly.
@@ -59,7 +63,7 @@
  *   - add support for KL8x and KL28Z
  *   - update default OSCDIV for K81 to divide by 2
  */
-#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 13))
+#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 15))
 /*@}*/
 
 /*! @brief TRNG sample mode. Used by trng_config_t. */
@@ -164,26 +168,26 @@ extern "C" {
  *     userConfig->sampleMode = kTRNG_SampleModeRaw;
  *     userConfig->entropyDelay = 3200;
  *     userConfig->sampleSize = 2500;
- *     userConfig->sparseBitLimit = TRNG_USER_CONFIG_DEFAULT_SPARSE_BIT_LIMIT;
- *     userConfig->retryCount = 63;
- *     userConfig->longRunMaxLimit = 34;
- *     userConfig->monobitLimit.maximum = 1384;
- *     userConfig->monobitLimit.minimum = 1116;
- *     userConfig->runBit1Limit.maximum = 405;
- *     userConfig->runBit1Limit.minimum = 227;
- *     userConfig->runBit2Limit.maximum = 220;
- *     userConfig->runBit2Limit.minimum = 98;
- *     userConfig->runBit3Limit.maximum = 125;
- *     userConfig->runBit3Limit.minimum = 37;
- *     userConfig->runBit4Limit.maximum = 75;
- *     userConfig->runBit4Limit.minimum = 11;
- *     userConfig->runBit5Limit.maximum = 47;
- *     userConfig->runBit5Limit.minimum = 1;
- *     userConfig->runBit6PlusLimit.maximum = 47;
- *     userConfig->runBit6PlusLimit.minimum = 1;
- *     userConfig->pokerLimit.maximum = 26912;
- *     userConfig->pokerLimit.minimum = 24445;
- *     userConfig->frequencyCountLimit.maximum = 25600;
+ *     userConfig->sparseBitLimit = 63;
+ *     userConfig->retryCount = 1;
+ *     userConfig->longRunMaxLimit = 32;
+ *     userConfig->monobitLimit.maximum = 317;
+ *     userConfig->monobitLimit.minimum = 195;
+ *     userConfig->runBit1Limit.maximum = 107;
+ *     userConfig->runBit1Limit.minimum = 27;
+ *     userConfig->runBit2Limit.maximum = 62;
+ *     userConfig->runBit2Limit.minimum = 7;
+ *     userConfig->runBit3Limit.maximum = 39;
+ *     userConfig->runBit3Limit.minimum = 0;
+ *     userConfig->runBit4Limit.maximum = 26;
+ *     userConfig->runBit4Limit.minimum = 0;
+ *     userConfig->runBit5Limit.maximum = 18;
+ *     userConfig->runBit5Limit.minimum = 0;
+ *     userConfig->runBit6PlusLimit.maximum = 17;
+ *     userConfig->runBit6PlusLimit.minimum = 0;
+ *     userConfig->pokerLimit.maximum = 1600;
+ *     userConfig->pokerLimit.minimum = 1030;
+ *     userConfig->frequencyCountLimit.maximum = 30000;
  *     userConfig->frequencyCountLimit.minimum = 1600;
  * @endcode
  *

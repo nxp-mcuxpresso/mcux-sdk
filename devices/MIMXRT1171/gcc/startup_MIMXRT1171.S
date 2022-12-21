@@ -4,11 +4,11 @@
 /*            MIMXRT1171                                                     */
 /*  @version: 1.0                                                            */
 /*  @date:    2020-12-29                                                     */
-/*  @build:   b210402                                                        */
+/*  @build:   b220909                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2021 NXP                                                   */
+/* Copyright 2016-2022 NXP                                                   */
 /* All rights reserved.                                                      */
 /*                                                                           */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
@@ -183,8 +183,8 @@ __isr_vector:
     .long   ENET_1G_MAC0_Tx_Rx_2_IRQHandler                 /* ENET 1G MAC0 transmit/receive 2*/
     .long   ENET_1G_IRQHandler                              /* ENET 1G interrupt*/
     .long   ENET_1G_1588_Timer_IRQHandler                   /* ENET_1G_1588_Timer interrupt*/
-    .long   XBAR1_IRQ_0_1_IRQHandler                        /* XBAR1 interrupt*/
-    .long   XBAR1_IRQ_2_3_IRQHandler                        /* XBAR1 interrupt*/
+    .long   XBAR1_IRQ_0_1_IRQHandler                        /* XBARA1 output signal 0, 1 interrupt*/
+    .long   XBAR1_IRQ_2_3_IRQHandler                        /* XBARA1 output signal 2, 3 interrupt*/
     .long   ADC_ETC_IRQ0_IRQHandler                         /* ADCETC IRQ0 interrupt*/
     .long   ADC_ETC_IRQ1_IRQHandler                         /* ADCETC IRQ1 interrupt*/
     .long   ADC_ETC_IRQ2_IRQHandler                         /* ADCETC IRQ2 interrupt*/
@@ -240,8 +240,8 @@ __isr_vector:
     .long   Reserved213_IRQHandler                          /* Reserved interrupt*/
     .long   Reserved214_IRQHandler                          /* Reserved interrupt*/
     .long   Reserved215_IRQHandler                          /* Reserved interrupt*/
-    .long   HWVAD_EVENT_IRQHandler                          /* HWVAD event interrupt*/
-    .long   HWVAD_ERROR_IRQHandler                          /* HWVAD error interrupt*/
+    .long   PDM_HWVAD_EVENT_IRQHandler                      /* HWVAD event interrupt*/
+    .long   PDM_HWVAD_ERROR_IRQHandler                      /* HWVAD error interrupt*/
     .long   PDM_EVENT_IRQHandler                            /* PDM event interrupt*/
     .long   PDM_ERROR_IRQHandler                            /* PDM error interrupt*/
     .long   EMVSIM1_IRQHandler                              /* EMVSIM1 interrupt*/
@@ -281,7 +281,7 @@ __isr_vector:
     .long   DefaultISR                                      /* 254*/
     .long   0xFFFFFFFF                                      /*  Reserved for user TRIM value*/
 
-    .size    __isr_vector, . - __isr_vector
+    .size   __isr_vector, . - __isr_vector
 
     .text
     .thumb
@@ -951,6 +951,24 @@ CAN3_ERROR_IRQHandler:
 
     .align 1
     .thumb_func
+    .weak MIPI_CSI_IRQHandler
+    .type MIPI_CSI_IRQHandler, %function
+MIPI_CSI_IRQHandler:
+    ldr   r0,=MIPI_CSI_DriverIRQHandler
+    bx    r0
+    .size MIPI_CSI_IRQHandler, . - MIPI_CSI_IRQHandler
+
+    .align 1
+    .thumb_func
+    .weak MIPI_DSI_IRQHandler
+    .type MIPI_DSI_IRQHandler, %function
+MIPI_DSI_IRQHandler:
+    ldr   r0,=MIPI_DSI_DriverIRQHandler
+    bx    r0
+    .size MIPI_DSI_IRQHandler, . - MIPI_DSI_IRQHandler
+
+    .align 1
+    .thumb_func
     .weak CDOG_IRQHandler
     .type CDOG_IRQHandler, %function
 CDOG_IRQHandler:
@@ -1140,21 +1158,21 @@ ENET_1G_1588_Timer_IRQHandler:
 
     .align 1
     .thumb_func
-    .weak HWVAD_EVENT_IRQHandler
-    .type HWVAD_EVENT_IRQHandler, %function
-HWVAD_EVENT_IRQHandler:
-    ldr   r0,=HWVAD_EVENT_DriverIRQHandler
+    .weak PDM_HWVAD_EVENT_IRQHandler
+    .type PDM_HWVAD_EVENT_IRQHandler, %function
+PDM_HWVAD_EVENT_IRQHandler:
+    ldr   r0,=PDM_HWVAD_EVENT_DriverIRQHandler
     bx    r0
-    .size HWVAD_EVENT_IRQHandler, . - HWVAD_EVENT_IRQHandler
+    .size PDM_HWVAD_EVENT_IRQHandler, . - PDM_HWVAD_EVENT_IRQHandler
 
     .align 1
     .thumb_func
-    .weak HWVAD_ERROR_IRQHandler
-    .type HWVAD_ERROR_IRQHandler, %function
-HWVAD_ERROR_IRQHandler:
-    ldr   r0,=HWVAD_ERROR_DriverIRQHandler
+    .weak PDM_HWVAD_ERROR_IRQHandler
+    .type PDM_HWVAD_ERROR_IRQHandler, %function
+PDM_HWVAD_ERROR_IRQHandler:
+    ldr   r0,=PDM_HWVAD_ERROR_DriverIRQHandler
     bx    r0
-    .size HWVAD_ERROR_IRQHandler, . - HWVAD_ERROR_IRQHandler
+    .size PDM_HWVAD_ERROR_IRQHandler, . - PDM_HWVAD_ERROR_IRQHandler
 
     .align 1
     .thumb_func
@@ -1236,7 +1254,6 @@ ENET_QOS_PMT_IRQHandler:
     .weak \handler_name
     .set  \handler_name, DefaultISR
     .endm
-
 /* Exception Handlers */
     def_irq_handler    MemManage_Handler
     def_irq_handler    BusFault_Handler
@@ -1300,8 +1317,8 @@ ENET_QOS_PMT_IRQHandler:
     def_irq_handler    LCDIFv2_IRQHandler
     def_irq_handler    Reserved72_IRQHandler
     def_irq_handler    Reserved73_IRQHandler
-    def_irq_handler    MIPI_CSI_IRQHandler
-    def_irq_handler    MIPI_DSI_IRQHandler
+    def_irq_handler    MIPI_CSI_DriverIRQHandler
+    def_irq_handler    MIPI_DSI_DriverIRQHandler
     def_irq_handler    GPU2D_IRQHandler
     def_irq_handler    GPIO6_Combined_0_15_IRQHandler
     def_irq_handler    GPIO6_Combined_16_31_IRQHandler
@@ -1442,8 +1459,8 @@ ENET_QOS_PMT_IRQHandler:
     def_irq_handler    Reserved213_IRQHandler
     def_irq_handler    Reserved214_IRQHandler
     def_irq_handler    Reserved215_IRQHandler
-    def_irq_handler    HWVAD_EVENT_DriverIRQHandler
-    def_irq_handler    HWVAD_ERROR_DriverIRQHandler
+    def_irq_handler    PDM_HWVAD_EVENT_DriverIRQHandler
+    def_irq_handler    PDM_HWVAD_ERROR_DriverIRQHandler
     def_irq_handler    PDM_EVENT_DriverIRQHandler
     def_irq_handler    PDM_ERROR_DriverIRQHandler
     def_irq_handler    EMVSIM1_IRQHandler

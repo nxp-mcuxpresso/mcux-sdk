@@ -122,7 +122,11 @@ static void HAL_TIMER_Callback(void *param);
  *            Called by the kernel when the timer ISR posts a timer event.
  * \param[in] param - User parameter to timer thread; not used.
  *---------------------------------------------------------------------------*/
+#ifndef TIMER_MANAGER_TASK_PUBLIC
 static void TimerManagerTask(void *param);
+#else  /* TIMER_MANAGER_TASK_PUBLIC */
+void TimerManagerTask(void *param);
+#endif /* TIMER_MANAGER_TASK_PUBLIC */
 
 static void TimerEnable(timer_handle_t timerHandle);
 
@@ -280,6 +284,91 @@ static void TimersUpdate(bool updateRemainingUs, bool updateOnlyPowerTimer, uint
 }
 
 /*! -------------------------------------------------------------------------
+ * \brief  Internal process of Timer Task
+ * \return
+ *---------------------------------------------------------------------------*/
+static void TimerManagerTaskProcess(void)
+{
+    uint8_t timerType;
+    timer_state_t state;
+    uint8_t activeLPTimerNum, activeTimerNum;
+    uint32_t regPrimask               = DisableGlobalIRQ();
+    s_timermanager.mUsInTimerInterval = HAL_TimerGetMaxTimeout((hal_timer_handle_t)s_timermanager.halTimerHandle);
+    timer_handle_struct_t *th         = s_timermanager.timerHead;
+
+    while (NULL != th)
+    {
+        timerType = TimerGetTimerType(th);
+        state     = (timer_state_t)TimerGetTimerStatus(th);
+
+        if (kTimerStateReady_c == state)
+        {
+            TimerSetTimerStatus(th, (uint8_t)kTimerStateActive_c);
+            if (s_timermanager.mUsInTimerInterval > th->timeoutInUs)
+            {
+                s_timermanager.mUsInTimerInterval = (uint32_t)th->timeoutInUs;
+            }
+        }
+
+        if (kTimerStateActive_c == state)
+        {
+            /* This timer is active. Decrement it's countdown.. */
+            if (0U >= th->remainingUs)
+            {
+                /* If this is an interval timer, restart it. Otherwise, mark it as inactive. */
+                if (0U != (timerType & (uint32_t)(kTimerModeSingleShot)))
+                {
+                    th->remainingUs = 0;
+                    (void)TimerStop(th);
+                    state = (timer_state_t)TimerGetTimerStatus(th);
+                }
+                else
+                {
+                    th->remainingUs = th->timeoutInUs;
+                }
+
+                /* This timer has expired. */
+                /*Call callback if it is not NULL*/
+                EnableGlobalIRQ(regPrimask);
+                if (NULL != th->pfCallBack)
+                {
+                    th->pfCallBack(th->param);
+                }
+                regPrimask = DisableGlobalIRQ();
+            }
+
+            if ((kTimerStateActive_c == state) && (s_timermanager.mUsInTimerInterval > th->remainingUs))
+            {
+                s_timermanager.mUsInTimerInterval = (uint32_t)th->remainingUs;
+            }
+        }
+        else
+        {
+            /* Ignore any timer that is not active. */
+        }
+        th = th->next;
+    }
+
+    activeLPTimerNum = s_timermanager.numberOfLowPowerActiveTimers;
+    activeTimerNum   = s_timermanager.numberOfActiveTimers;
+    EnableGlobalIRQ(regPrimask);
+
+    if ((0U != activeLPTimerNum) || (0U != activeTimerNum))
+    {
+        if ((s_timermanager.mUsInTimerInterval != s_timermanager.mUsActiveInTimerInterval) ||
+            (0U == s_timermanager.timerHardwareIsRunning))
+        {
+            HAL_TimerDisable((hal_timer_handle_t)s_timermanager.halTimerHandle);
+            (void)HAL_TimerUpdateTimeout((hal_timer_handle_t)s_timermanager.halTimerHandle,
+                                         s_timermanager.mUsInTimerInterval);
+            s_timermanager.mUsActiveInTimerInterval = s_timermanager.mUsInTimerInterval;
+            HAL_TimerEnable((hal_timer_handle_t)s_timermanager.halTimerHandle);
+        }
+        s_timermanager.timerHardwareIsRunning = (uint8_t) true;
+    }
+}
+
+/*! -------------------------------------------------------------------------
  * \brief  Update Remaining Us for all Active timers and sync timer task
  * \return
  *---------------------------------------------------------------------------*/
@@ -291,23 +380,35 @@ static void TimersUpdateSyncTask(uint32_t remainingUs)
 }
 
 /*! -------------------------------------------------------------------------
+ * \brief  Update Remaining Us for all Active timers by bypassing timer Task
+ * \return
+ *---------------------------------------------------------------------------*/
+static void TimersUpdateDirectSync(uint32_t remainingUs)
+{
+    TimersUpdate(true, false, remainingUs);
+    s_timermanager.previousTimeInUs = HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
+    TimerManagerTaskProcess();
+}
+
+/*! -------------------------------------------------------------------------
  * \brief Function called by driver ISR on channel match in interrupt context.
  *---------------------------------------------------------------------------*/
 static void HAL_TIMER_Callback(void *param)
 {
     TimersUpdateSyncTask(s_timermanager.mUsActiveInTimerInterval);
 }
+
 /*! -------------------------------------------------------------------------
  * \brief     TimerManager task.
  *            Called by the kernel when the timer ISR posts a timer event.
  * \param[in] param
  *---------------------------------------------------------------------------*/
+#ifndef TIMER_MANAGER_TASK_PUBLIC
 static void TimerManagerTask(void *param)
+#else  /* TIMER_MANAGER_TASK_PUBLIC */
+void TimerManagerTask(void *param)
+#endif /* TIMER_MANAGER_TASK_PUBLIC */
 {
-    uint8_t timerType;
-    timer_state_t state;
-    uint8_t activeLPTimerNum, activeTimerNum;
-
 #if defined(OSA_USED)
 #if (defined(TM_COMMON_TASK_ENABLE) && (TM_COMMON_TASK_ENABLE > 0U))
     {
@@ -319,75 +420,8 @@ static void TimerManagerTask(void *param)
         {
 #endif
 #endif
+        TimerManagerTaskProcess();
 
-        uint32_t regPrimask               = DisableGlobalIRQ();
-        s_timermanager.mUsInTimerInterval = HAL_TimerGetMaxTimeout((hal_timer_handle_t)s_timermanager.halTimerHandle);
-        timer_handle_struct_t *th         = s_timermanager.timerHead;
-        while (NULL != th)
-        {
-            timerType = TimerGetTimerType(th);
-            state     = (timer_state_t)TimerGetTimerStatus(th);
-            if (kTimerStateReady_c == state)
-            {
-                TimerSetTimerStatus(th, (uint8_t)kTimerStateActive_c);
-                if (s_timermanager.mUsInTimerInterval > th->timeoutInUs)
-                {
-                    s_timermanager.mUsInTimerInterval = (uint32_t)th->timeoutInUs;
-                }
-            }
-            if (kTimerStateActive_c == state)
-            {
-                /* This timer is active. Decrement it's countdown.. */
-                if (0U >= th->remainingUs)
-                {
-                    /* If this is an interval timer, restart it. Otherwise, mark it as inactive. */
-                    if (0U != (timerType & (uint32_t)(kTimerModeSingleShot)))
-                    {
-                        th->remainingUs = 0;
-                        (void)TimerStop(th);
-                        state = (timer_state_t)TimerGetTimerStatus(th);
-                    }
-                    else
-                    {
-                        th->remainingUs = th->timeoutInUs;
-                    }
-                    /* This timer has expired. */
-                    /*Call callback if it is not NULL*/
-                    EnableGlobalIRQ(regPrimask);
-                    if (NULL != th->pfCallBack)
-                    {
-                        th->pfCallBack(th->param);
-                    }
-                    regPrimask = DisableGlobalIRQ();
-                }
-                if ((kTimerStateActive_c == state) && (s_timermanager.mUsInTimerInterval > th->remainingUs))
-                {
-                    s_timermanager.mUsInTimerInterval = (uint32_t)th->remainingUs;
-                }
-            }
-            else
-            {
-                /* Ignore any timer that is not active. */
-            }
-            th = th->next;
-        }
-
-        activeLPTimerNum = s_timermanager.numberOfLowPowerActiveTimers;
-        activeTimerNum   = s_timermanager.numberOfActiveTimers;
-        EnableGlobalIRQ(regPrimask);
-        if ((0U != activeLPTimerNum) || (0U != activeTimerNum))
-        {
-            if ((s_timermanager.mUsInTimerInterval != s_timermanager.mUsActiveInTimerInterval) ||
-                (0U == s_timermanager.timerHardwareIsRunning))
-            {
-                HAL_TimerDisable((hal_timer_handle_t)s_timermanager.halTimerHandle);
-                (void)HAL_TimerUpdateTimeout((hal_timer_handle_t)s_timermanager.halTimerHandle,
-                                             s_timermanager.mUsInTimerInterval);
-                s_timermanager.mUsActiveInTimerInterval = s_timermanager.mUsInTimerInterval;
-                HAL_TimerEnable((hal_timer_handle_t)s_timermanager.halTimerHandle);
-            }
-            s_timermanager.timerHardwareIsRunning = (uint8_t) true;
-        }
 #if defined(OSA_USED)
 #if (defined(TM_COMMON_TASK_ENABLE) && (TM_COMMON_TASK_ENABLE > 0U))
     }
@@ -448,6 +482,7 @@ static void TimerEnable(timer_handle_t timerHandle)
     {
         IncrementActiveTimerNumber(TimerGetTimerType(timerHandle));
         TimerSetTimerStatus(timerHandle, (uint8_t)kTimerStateReady_c);
+
         TimersUpdateSyncTask(HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle));
     }
     EnableGlobalIRQ(regPrimask);
@@ -494,6 +529,12 @@ timer_status_t TM_Init(timer_config_t *timerConfig)
         (void)COMMON_TASK_init();
 #else
         osa_status_t osaStatus;
+
+        osaStatus = OSA_SemaphorePrecreate((osa_event_handle_t)s_timermanager.halTimerTaskSemaphoreHandle,
+                                           (osa_task_ptr_t)TimerManagerTask);
+        assert(KOSA_StatusSuccess == (osa_status_t)osaStatus);
+        (void)osaStatus;
+
         osaStatus = OSA_SemaphoreCreate((osa_semaphore_handle_t)s_timermanager.halTimerTaskSemaphoreHandle, 1U);
         assert(KOSA_StatusSuccess == (osa_status_t)osaStatus);
         (void)osaStatus;
@@ -554,6 +595,68 @@ void TM_EnterLowpower(void)
 #if (defined(TM_ENABLE_LOW_POWER_TIMER) && (TM_ENABLE_LOW_POWER_TIMER > 0U))
     HAL_TimerEnterLowpower((hal_timer_handle_t)s_timermanager.halTimerHandle);
 #endif
+}
+
+/*!
+ * @brief Programs a timer needed for RTOS tickless low power period
+ *
+ * @param timerHandle    the handle of the timer
+ * @param timerTimeout   The timer timeout in microseconds unit
+ *
+ */
+void TM_EnterTickless(timer_handle_t timerHandle, uint64_t timerTimeout)
+{
+    timer_handle_struct_t *th = timerHandle;
+    uint8_t timerType         = (uint8_t)kTimerModeSingleShot;
+    uint32_t remainingUs;
+
+    assert(timerHandle);
+
+    uint32_t regPrimask = DisableGlobalIRQ();
+
+    /* Set current timer as a single shot timer */
+    TimerSetTimerType(timerHandle, timerType);
+
+    /* Register timeout */
+    th->timeoutInUs = timerTimeout;
+    th->remainingUs = timerTimeout;
+
+    /* Enable timer */
+    IncrementActiveTimerNumber(timerType);
+    TimerSetTimerStatus(timerHandle, (uint8_t)kTimerStateReady_c);
+
+    /* Sync directly the timer manager ressources while bypassing the task
+     * This allows to start a timer before going to low power and under masked
+     * interrupts
+     * This should guarantuee that the device will wake up at the latest in
+     * timerTimeout usec */
+    remainingUs = HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
+    TimersUpdateDirectSync(remainingUs);
+
+    EnableGlobalIRQ(regPrimask);
+}
+
+/*!
+ * @brief Resyncs timer manager ressources after tickless low power period
+ *
+ * @param timerHandle    the handle of the timer
+ *
+ */
+void TM_ExitTickless(timer_handle_t timerHandle)
+{
+    uint32_t remainingUs;
+
+    assert(timerHandle);
+
+    uint32_t regPrimask = DisableGlobalIRQ();
+
+    /* Stop timer */
+    (void)TimerStop(timerHandle);
+
+    remainingUs = HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
+    TimersUpdateDirectSync(remainingUs);
+
+    EnableGlobalIRQ(regPrimask);
 }
 
 /*!

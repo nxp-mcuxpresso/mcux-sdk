@@ -1,9 +1,13 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1062CVJ5A
+**                          MIMXRT1062CVJ5B
 **                          MIMXRT1062CVL5A
+**                          MIMXRT1062CVL5B
 **                          MIMXRT1062DVJ6A
+**                          MIMXRT1062DVJ6B
 **                          MIMXRT1062DVL6A
+**                          MIMXRT1062DVL6B
 **                          MIMXRT1062DVN6B
 **                          MIMXRT1062XVN5B
 **
@@ -15,7 +19,7 @@
 **
 **     Reference manual:    IMXRT1060RM Rev.3, 07/2021 | IMXRT106XSRM Rev.0
 **     Version:             rev. 1.4, 2022-03-25
-**     Build:               b220401
+**     Build:               b221009
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

@@ -79,7 +79,8 @@ uint32_t CACHE64_GetInstanceByAddr(uint32_t address)
 
     for (i = 0; i < ARRAY_SIZE(s_cache64ctrlBases); i++)
     {
-        if ((address >= s_cache64PhymemBases[i]) && (address < s_cache64PhymemBases[i] + s_cache64PhymemSizes[i]))
+        if ((address >= s_cache64PhymemBases[i]) &&
+            (address < (s_cache64PhymemBases[i] + s_cache64PhymemSizes[i] - 0x01U)))
         {
             break;
         }
@@ -154,11 +155,15 @@ void CACHE64_GetDefaultConfig(cache64_config_t *config)
  */
 void CACHE64_EnableCache(CACHE64_CTRL_Type *base)
 {
-    /* First, invalidate the entire cache. */
-    CACHE64_InvalidateCache(base);
+    /* if CACHE is not enabled */
+    if ((base->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK) == 0x00U)
+    {
+        /* First, invalidate the entire cache. */
+        CACHE64_InvalidateCache(base);
 
-    /* Now enable the cache. */
-    base->CCR |= CACHE64_CTRL_CCR_ENCACHE_MASK;
+        /* Now enable the cache. */
+        base->CCR |= CACHE64_CTRL_CCR_ENCACHE_MASK;
+    }
 }
 
 /*!
@@ -167,11 +172,15 @@ void CACHE64_EnableCache(CACHE64_CTRL_Type *base)
  */
 void CACHE64_DisableCache(CACHE64_CTRL_Type *base)
 {
-    /* First, push any modified contents. */
-    CACHE64_CleanCache(base);
+    /* if CACHE is enabled */
+    if ((base->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK) != 0x00U)
+    {
+        /* First, push any modified contents. */
+        CACHE64_CleanCache(base);
 
-    /* Now disable the cache. */
-    base->CCR &= ~CACHE64_CTRL_CCR_ENCACHE_MASK;
+        /* Now disable the cache. */
+        base->CCR &= ~CACHE64_CTRL_CCR_ENCACHE_MASK;
+    }
 }
 
 /*!
@@ -204,7 +213,7 @@ void CACHE64_InvalidateCache(CACHE64_CTRL_Type *base)
  */
 void CACHE64_InvalidateCacheByRange(uint32_t address, uint32_t size_byte)
 {
-    uint32_t endAddr = address + size_byte;
+    uint32_t endAddr = address + size_byte - 0x01U;
     uint32_t pccReg  = 0;
     /* Align address to cache line size. */
     uint32_t startAddr = address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U);
@@ -217,7 +226,7 @@ void CACHE64_InvalidateCacheByRange(uint32_t address, uint32_t size_byte)
         return;
     }
     base    = s_cache64ctrlBases[instance];
-    endLim  = s_cache64PhymemBases[instance] + s_cache64PhymemSizes[instance];
+    endLim  = s_cache64PhymemBases[instance] + s_cache64PhymemSizes[instance] - 0x01U;
     endAddr = endAddr > endLim ? endLim : endAddr;
 
     /* Set the invalidate by line command and use the physical address. */
@@ -267,7 +276,7 @@ void CACHE64_CleanCache(CACHE64_CTRL_Type *base)
  */
 void CACHE64_CleanCacheByRange(uint32_t address, uint32_t size_byte)
 {
-    uint32_t endAddr = address + size_byte;
+    uint32_t endAddr = address + size_byte - 0x01U;
     uint32_t pccReg  = 0;
     /* Align address to cache line size. */
     uint32_t startAddr = address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U);
@@ -280,7 +289,7 @@ void CACHE64_CleanCacheByRange(uint32_t address, uint32_t size_byte)
         return;
     }
     base    = s_cache64ctrlBases[instance];
-    endLim  = s_cache64PhymemBases[instance] + s_cache64PhymemSizes[instance];
+    endLim  = s_cache64PhymemBases[instance] + s_cache64PhymemSizes[instance] - 0x01U;
     endAddr = endAddr > endLim ? endLim : endAddr;
 
     /* Set the push by line command. */
@@ -332,7 +341,7 @@ void CACHE64_CleanInvalidateCache(CACHE64_CTRL_Type *base)
  */
 void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte)
 {
-    uint32_t endAddr = address + size_byte;
+    uint32_t endAddr = address + size_byte - 0x01U;
     uint32_t pccReg  = 0;
     /* Align address to cache line size. */
     uint32_t startAddr = address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U);
@@ -345,7 +354,7 @@ void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte)
         return;
     }
     base    = s_cache64ctrlBases[instance];
-    endLim  = s_cache64PhymemBases[instance] + s_cache64PhymemSizes[instance];
+    endLim  = s_cache64PhymemBases[instance] + s_cache64PhymemSizes[instance] - 0x01U;
     endAddr = endAddr > endLim ? endLim : endAddr;
 
     /* Set the push by line command. */
@@ -365,6 +374,7 @@ void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte)
     }
 }
 
+#if !(defined(FSL_FEATURE_CACHE64_CTRL_HAS_NO_WRITE_BUF) && FSL_FEATURE_CACHE64_CTRL_HAS_NO_WRITE_BUF)
 /*!
  * brief Enable the cache write buffer.
  *
@@ -380,5 +390,7 @@ void CACHE64_EnableWriteBuffer(CACHE64_CTRL_Type *base, bool enable)
         base->CCR &= ~CACHE64_CTRL_CCR_ENWRBUF_MASK;
     }
 }
+
+#endif
 
 #endif /* FSL_FEATURE_SOC_CACHE64_CTRL_COUNT > 0 */

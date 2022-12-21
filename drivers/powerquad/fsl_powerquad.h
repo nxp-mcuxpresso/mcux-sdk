@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -30,8 +30,19 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_POWERQUAD_DRIVER_VERSION (MAKE_VERSION(2, 0, 5)) /*!< Version. */
+#define FSL_POWERQUAD_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version. */
 /*@}*/
+
+/* For backword compatibility. */
+#define PQ_VectorBiqaudDf2F32             PQ_VectorBiquadDf2F32
+#define PQ_VectorBiqaudDf2Fixed32         PQ_VectorBiquadDf2Fixed32
+#define PQ_VectorBiqaudDf2Fixed16         PQ_VectorBiquadDf2Fixed16
+#define PQ_VectorBiqaudCascadeDf2F32      PQ_VectorBiquadCascadeDf2F32
+#define PQ_VectorBiqaudCascadeDf2Fixed32  PQ_VectorBiquadCascadeDf2Fixed32
+#define PQ_VectorBiqaudCascadeDf2Fixed16  PQ_VectorBiquadCascadeDf2Fixed16
+#define PQ_Vector8BiqaudDf2CascadeF32     PQ_Vector8BiquadDf2CascadeF32
+#define PQ_Vector8BiqaudDf2CascadeFixed32 PQ_Vector8BiquadDf2CascadeFixed32
+#define PQ_Vector8BiqaudDf2CascadeFixed16 PQ_Vector8BiquadDf2CascadeFixed16
 
 #define PQ_FLOAT32 0U
 #define PQ_FIXEDPT 1U
@@ -1309,12 +1320,12 @@
    PQ_BiquadRestoreInternalState(POWERQUAD, 1, &state1);
 
    PQ_StartVector(input, output, VECTOR_LEN);
-   PQ_Vector8BiqaudDf2CascadeF32();
+   PQ_Vector8BiquadDf2CascadeF32();
    PQ_EndVector();
    @endcode
  *
  */
-#define PQ_Vector8BiqaudDf2CascadeF32()                                                       \
+#define PQ_Vector8BiquadDf2CascadeF32()                                                       \
     __asm volatile(                                                                           \
         "1:                                      \n"                                          \
         "    MCR  p0,#0x1,r4,c2,c0,#2            \n" /* write biquad1*/                       \
@@ -1400,12 +1411,12 @@
    PQ_BiquadRestoreInternalState(POWERQUAD, 1, &state1);
 
    PQ_StartVector(input, output, VECTOR_LEN);
-   PQ_Vector8BiqaudDf2CascadeFixed32();
+   PQ_Vector8BiquadDf2CascadeFixed32();
    PQ_EndVector();
    @endcode
  *
  */
-#define PQ_Vector8BiqaudDf2CascadeFixed32()                                                   \
+#define PQ_Vector8BiquadDf2CascadeFixed32()                                                   \
     __asm volatile(                                                                           \
         "1:                                      \n"                                          \
         "    MCR  p0,#0x1,r4,c3,c0,#6            \n" /* write biquad1*/                       \
@@ -1499,12 +1510,12 @@
    PQ_BiquadRestoreInternalState(POWERQUAD, 1, &state1);
 
    PQ_StartVector(input, output, VECTOR_LEN);
-   PQ_Vector8BiqaudDf2CascadeFixed16();
+   PQ_Vector8BiquadDf2CascadeFixed16();
    PQ_EndVector();
    @endcode
  *
  */
-#define PQ_Vector8BiqaudDf2CascadeFixed16()                                              \
+#define PQ_Vector8BiquadDf2CascadeFixed16()                                              \
     __asm volatile(                                                                      \
         "1:                                      \n"                                     \
         "    MCR  p0,#0x1,r4,c3,c0,#6            \n" /* write biquad1*/                  \
@@ -2404,7 +2415,7 @@ void PQ_VectorEtonxFixed16(int16_t *pSrc, int16_t *pDst, int32_t length);
  * @param  *pDst      points to the block of output data
  * @param  length the block size of input data.
  */
-void PQ_VectorBiqaudDf2F32(float *pSrc, float *pDst, int32_t length);
+void PQ_VectorBiquadDf2F32(float *pSrc, float *pDst, int32_t length);
 
 /*!
  * @brief Processing function for the 32-bit integer vectorised biquad direct form II.
@@ -2413,7 +2424,7 @@ void PQ_VectorBiqaudDf2F32(float *pSrc, float *pDst, int32_t length);
  * @param  *pDst      points to the block of output data
  * @param  length the block size of input data
  */
-void PQ_VectorBiqaudDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t length);
+void PQ_VectorBiquadDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t length);
 
 /*!
  * @brief Processing function for the 16-bit integer vectorised biquad direct form II.
@@ -2422,7 +2433,7 @@ void PQ_VectorBiqaudDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t length);
  * @param  *pDst      points to the block of output data
  * @param  length the block size of input data
  */
-void PQ_VectorBiqaudDf2Fixed16(int16_t *pSrc, int16_t *pDst, int32_t length);
+void PQ_VectorBiquadDf2Fixed16(int16_t *pSrc, int16_t *pDst, int32_t length);
 
 /*!
  * @brief Processing function for the floating-point vectorised biquad direct form II.
@@ -2431,7 +2442,7 @@ void PQ_VectorBiqaudDf2Fixed16(int16_t *pSrc, int16_t *pDst, int32_t length);
  * @param  *pDst      points to the block of output data
  * @param  length the block size of input data
  */
-void PQ_VectorBiqaudCascadeDf2F32(float *pSrc, float *pDst, int32_t length);
+void PQ_VectorBiquadCascadeDf2F32(float *pSrc, float *pDst, int32_t length);
 
 /*!
  * @brief Processing function for the 32-bit integer vectorised biquad direct form II.
@@ -2440,7 +2451,7 @@ void PQ_VectorBiqaudCascadeDf2F32(float *pSrc, float *pDst, int32_t length);
  * @param  *pDst      points to the block of output data
  * @param  length the block size of input data
  */
-void PQ_VectorBiqaudCascadeDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t length);
+void PQ_VectorBiquadCascadeDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t length);
 
 /*!
  * @brief Processing function for the 16-bit integer vectorised biquad direct form II.
@@ -2449,7 +2460,7 @@ void PQ_VectorBiqaudCascadeDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t leng
  * @param  *pDst      points to the block of output data
  * @param  length the block size of input data
  */
-void PQ_VectorBiqaudCascadeDf2Fixed16(int16_t *pSrc, int16_t *pDst, int32_t length);
+void PQ_VectorBiquadCascadeDf2Fixed16(int16_t *pSrc, int16_t *pDst, int32_t length);
 
 /*!
  * @brief Processing function for the fixed inverse trigonometric.

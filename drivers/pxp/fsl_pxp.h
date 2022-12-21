@@ -48,7 +48,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PXP_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+#define FSL_PXP_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*@}*/
 
 /* This macto indicates whether the rotate sub module is shared by process surface and output buffer. */
@@ -1106,6 +1106,13 @@ void PXP_Deinit(PXP_Type *base);
  * @param base PXP peripheral base address.
  */
 void PXP_Reset(PXP_Type *base);
+
+/*!
+ * @brief Reset the PXP and the control register to initialized state.
+ *
+ * @param base PXP peripheral base address.
+ */
+void PXP_ResetControl(PXP_Type *base);
 /* @} */
 
 /*!

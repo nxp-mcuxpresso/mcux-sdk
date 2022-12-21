@@ -40,7 +40,7 @@ void BOARD_WIFI_BT_Enable(bool enable)
         vTaskDelay(pdMS_TO_TICKS(100));
 #elif defined(WIFI_BT_USE_USD_INTERFACE)
         /* Enable power supply for SD */
-        GPIO_PinWrite(BOARD_SDMMC_SD_POWER_RESET_GPIO_BASE, BOARD_SDMMC_SD_POWER_RESET_GPIO_PIN, 0);
+        BOARD_SDMMC_SD_POWER_RESET_GPIO_BASE->GDIR &= ~(1UL << BOARD_SDMMC_SD_POWER_RESET_GPIO_PIN);
         vTaskDelay(pdMS_TO_TICKS(100));
 #endif /* WIFI_BT_USE_M2_INTERFACE */
     }
@@ -54,7 +54,7 @@ void BOARD_WIFI_BT_Enable(bool enable)
         GPIO_PortClear(BOARD_INITPINSM2_SDIO_RST_GPIO, BOARD_INITPINSM2_SDIO_RST_PIN_MASK);
 #elif defined(WIFI_BT_USE_USD_INTERFACE)
         /* Disable power supply for SD */
-        GPIO_PinWrite(BOARD_SDMMC_SD_POWER_RESET_GPIO_BASE, BOARD_SDMMC_SD_POWER_RESET_GPIO_PIN, 1);
+        BOARD_SDMMC_SD_POWER_RESET_GPIO_BASE->GDIR |= (1UL << BOARD_SDMMC_SD_POWER_RESET_GPIO_PIN);
 #endif /* WIFI_BT_USE_M2_INTERFACE */
         vTaskDelay(pdMS_TO_TICKS(100));
     }
@@ -63,6 +63,7 @@ void BOARD_WIFI_BT_Enable(bool enable)
 void BOARD_WIFI_BT_Config(void *card, sdio_int_t cardInt)
 {
     BOARD_SDIO_Config(card, NULL, BOARD_SDMMC_SDIO_HOST_IRQ_PRIORITY, cardInt);
+    ((sdio_card_t *)card)->usrParam.pwr = NULL;
 
 #ifdef WIFI_BT_USE_M2_INTERFACE
     ((sdio_card_t *)card)->usrParam.pwr = NULL;

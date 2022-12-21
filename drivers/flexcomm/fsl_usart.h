@@ -28,9 +28,16 @@
 #define USART_FIFOTRIG_TXLVL_GET(base) (((base)->FIFOTRIG & USART_FIFOTRIG_TXLVL_MASK) >> USART_FIFOTRIG_TXLVL_SHIFT)
 #define USART_FIFOTRIG_RXLVL_GET(base) (((base)->FIFOTRIG & USART_FIFOTRIG_RXLVL_MASK) >> USART_FIFOTRIG_RXLVL_SHIFT)
 
-/*! @brief Retry times for waiting flag. */
+/*! @brief Retry times for waiting flag.
+ *
+ * Defining to zero means to keep waiting for the flag until it is assert/deassert in blocking transfer,
+ * otherwise the program will wait until the UART_RETRY_TIMES counts down to 0,
+ * if the flag still remains unchanged then program will return kStatus_USART_Timeout.
+ * It is not advised to use this macro in formal application to prevent any hardware error
+ * because the actual wait period is affected by the compiler and optimization.
+ */
 #ifndef UART_RETRY_TIMES
-#define UART_RETRY_TIMES 0U /* Defining to zero means to keep waiting for the flag until it is assert/deassert. */
+#define UART_RETRY_TIMES 0U
 #endif
 
 /*! @brief Error codes for the USART driver. */
@@ -135,12 +142,18 @@ enum _usart_interrupt_enable
     kUSART_ParityErrorInterruptEnable   = (USART_INTENSET_PARITYERREN_MASK), /*!< Parity error detected. */
     kUSART_NoiseErrorInterruptEnable    = (USART_INTENSET_RXNOISEEN_MASK),   /*!< Noise error detected. */
     kUSART_AutoBaudErrorInterruptEnable = (USART_INTENSET_ABERREN_MASK),     /*!< Auto baudrate error detected. */
-
+#if defined(FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG) && FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG
+    kUSART_RxTimeoutInterruptEnable = (USART_FIFOINTENSET_RXTIMEOUT_MASK), /*!< Receive timeout detected. */
+#endif
     kUSART_AllInterruptEnables =
         kUSART_TxErrorInterruptEnable | kUSART_RxErrorInterruptEnable | kUSART_TxLevelInterruptEnable |
         kUSART_RxLevelInterruptEnable | kUSART_TxIdleInterruptEnable | kUSART_CtsChangeInterruptEnable |
         kUSART_RxBreakChangeInterruptEnable | kUSART_RxStartInterruptEnable | kUSART_FramingErrorInterruptEnable |
-        kUSART_ParityErrorInterruptEnable | kUSART_NoiseErrorInterruptEnable | kUSART_AutoBaudErrorInterruptEnable,
+        kUSART_ParityErrorInterruptEnable | kUSART_NoiseErrorInterruptEnable |
+#if defined(FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG) && FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG
+        kUSART_RxTimeoutInterruptEnable |
+#endif
+        kUSART_AutoBaudErrorInterruptEnable,
 };
 
 /*!
@@ -169,11 +182,29 @@ enum _usart_flags
     kUSART_NoiseErrorFlag    = (USART_STAT_RXNOISEINT_MASK),     /*!< Noise error interrupt flag. */
     kUSART_AutobaudErrorFlag = (USART_STAT_ABERR_MASK), /*!< Auto baudrate error interrupt flag, caused by the baudrate
                                                            counter timeout before the end of start bit. */
-
+#if defined(FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG) && FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG
+    kUSART_RxTimeoutFlag = (USART_FIFOSTAT_RXTIMEOUT_MASK), /*!< RXTIMEOUT bit, sets if RX FIFO Timeout. */
+#endif
     kUSART_AllClearFlags = kUSART_TxError | kUSART_RxError | kUSART_CtsChangeFlag | kUSART_BreakDetectChangeFlag |
                            kUSART_RxStartFlag | kUSART_FramingErrorFlag | kUSART_ParityErrorFlag |
+#if defined(FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG) && FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG
+                           kUSART_RxTimeoutFlag |
+#endif
                            kUSART_NoiseErrorFlag | kUSART_AutobaudErrorFlag,
 };
+
+#if defined(FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG) && FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG
+/*! @brief USART receive timeout configuration structure. */
+typedef struct _usart_rx_timeout_config
+{
+    bool enable;                /*!< Enable RX timeout */
+    bool resetCounterOnEmpty;   /*!< Enable RX timeout counter reset when RX FIFO becames empty. */
+    bool resetCounterOnReceive; /*!< Enable RX timeout counter reset when RX FIFO receives data from the transmitter
+                                   side. */
+    uint32_t counter;           /*!< RX timeout counter*/
+    uint8_t prescaler;          /*!< RX timeout prescaler*/
+} usart_rx_timeout_config;
+#endif
 
 /*! @brief USART configuration structure. */
 typedef struct _usart_config
@@ -192,6 +223,9 @@ typedef struct _usart_config
     usart_rxfifo_watermark_t rxWatermark; /*!< rxFIFO watermark */
     usart_sync_mode_t syncMode; /*!< Transfer mode select - asynchronous, synchronous master, synchronous slave. */
     usart_clock_polarity_t clockPolarity; /*!< Selects the clock polarity and sampling edge in synchronous mode. */
+#if defined(FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG) && FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG
+    usart_rx_timeout_config rxTimeout; /*!< rx timeout configuration */
+#endif
 } usart_config_t;
 
 /*! @brief USART transfer structure. */
@@ -282,7 +316,41 @@ uint32_t USART_GetInstance(USART_Type *base);
  * @retval kStatus_Success Status USART initialize succeed
  */
 status_t USART_Init(USART_Type *base, const usart_config_t *config, uint32_t srcClock_Hz);
-
+#if defined(FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG) && FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG
+/*!
+ * @brief Calculate the USART instance RX timeout prescaler and counter.
+ *
+ * This function for calculate the USART RXFIFO timeout config. This function is used to calculate
+ * suitable prescaler and counter for target_us.
+ * @code
+ *   usart_config_t config;
+ *   config.rxWatermark                     = kUSART_RxFifo2;
+ *   config.rxTimeout.enable                = true;
+ *   config.rxTimeout.resetCounterOnEmpty   = true;
+ *   config.rxTimeout.resetCounterOnReceive = true;
+ *   USART_CalcTimeoutConfig(200U, &config.rxTimeout.prescaler, &config.rxTimeout.counter,
+ *                                    CLOCK_GetFreq(kCLOCK_BusClk));
+ * @endcode
+ * @param target_us  Time for rx timeout unit us.
+ * @param rxTimeoutPrescaler The prescaler to be setted after function.
+ * @param rxTimeoutcounter The counter to be setted after function.
+ * @param srcClock_Hz The clockSrc for rx timeout.
+ */
+void USART_CalcTimeoutConfig(uint32_t target_us,
+                             uint8_t *rxTimeoutPrescaler,
+                             uint32_t *rxTimeoutcounter,
+                             uint32_t srcClock_Hz);
+/*!
+ * @brief Sets the USART instance RX timeout config.
+ *
+ * This function configures the USART RXFIFO timeout config. This function is used to config
+ * the USART RXFIFO timeout config after the USART module is initialized by the USART_Init.
+ *
+ * @param base USART peripheral base address.
+ * @param config pointer to receive timeout configuration structure.
+ */
+void USART_SetRxTimeoutConfig(USART_Type *base, usart_rx_timeout_config *config);
+#endif
 /*!
  * @brief Deinitializes a USART instance.
  *
@@ -424,7 +492,7 @@ static inline void USART_EnableMatchAddress(USART_Type *base, bool match)
  */
 static inline uint32_t USART_GetStatusFlags(USART_Type *base)
 {
-    return (base->FIFOSTAT & 0xFFUL) | (base->STAT & 0xFFUL) << 16U | (base->STAT & 0xFFFF00UL);
+    return (base->FIFOSTAT & 0xFF0000FFUL) | (base->STAT & 0xFFUL) << 16U | (base->STAT & 0xFFFF00UL);
 }
 
 /*!
@@ -474,7 +542,7 @@ static inline void USART_EnableInterrupts(USART_Type *base, uint32_t mask)
 {
     mask &= (uint32_t)kUSART_AllInterruptEnables;
     base->INTENSET     = (mask & 0x1FF00UL) | ((mask & 0xFF0000UL) >> 16U);
-    base->FIFOINTENSET = mask & 0xFUL;
+    base->FIFOINTENSET = mask & 0xF00000FUL;
 }
 
 /*!

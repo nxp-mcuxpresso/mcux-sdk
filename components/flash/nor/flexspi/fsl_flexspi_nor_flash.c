@@ -3457,6 +3457,13 @@ static status_t FLEXSPI_NOR_GenerateConfigBlockUsingSFDP(nor_handle_t *handle, f
         FLEXSPI_UpdateLUT((FLEXSPI_Type *)handle->driverBaseAddr, NOR_CMD_LUT_SEQ_IDX_READID * 4UL,
                           (const uint32_t *)(const void *)&manufacturerIdLut, 4);
 
+        /* Do software reset. */
+        FLEXSPI_Type *base = (FLEXSPI_Type *)handle->driverBaseAddr;
+        base->MCR0 |= FLEXSPI_MCR0_SWRESET_MASK;
+        while (0U != (base->MCR0 & FLEXSPI_MCR0_SWRESET_MASK))
+        {
+        }
+
         flashXfer.deviceAddress = 0U;
         flashXfer.port          = port;
         flashXfer.cmdType       = kFLEXSPI_Read;
@@ -3468,6 +3475,12 @@ static status_t FLEXSPI_NOR_GenerateConfigBlockUsingSFDP(nor_handle_t *handle, f
         if (status != kStatus_Success)
         {
             break;
+        }
+
+        /* Do software reset. */
+        base->MCR0 |= FLEXSPI_MCR0_SWRESET_MASK;
+        while (0U != (base->MCR0 & FLEXSPI_MCR0_SWRESET_MASK))
+        {
         }
 
         for (uint8_t i = 0x00U; i < 10U; i++)
@@ -3749,6 +3762,10 @@ status_t Nor_Flash_Init(nor_config_t *config, nor_handle_t *handle)
 
     /* Configure flash settings according to serial flash feature. */
     FLEXSPI_SetFlashConfig((FLEXSPI_Type *)handle->driverBaseAddr, &(memConfig->deviceConfig), memConfig->devicePort);
+
+    /* Initialize LUT table. */
+    FLEXSPI_UpdateLUT((FLEXSPI_Type *)handle->driverBaseAddr, 0, memConfig->lookupTable,
+                      sizeof(memConfig->lookupTable) / sizeof(memConfig->lookupTable[0]));
 
     status = FLEXSPI_NOR_GenerateConfigBlockUsingSFDP(handle, memConfig);
 

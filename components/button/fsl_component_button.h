@@ -111,7 +111,7 @@ typedef void *button_handle_t;
 
 /*! @brief Definition of button task priority. */
 #ifndef BUTTON_TASK_PRIORITY
-#define BUTTON_TASK_PRIORITY (2U)
+#define BUTTON_TASK_PRIORITY (7U)
 #endif
 
 /*! @brief Definition of button task stack size. */

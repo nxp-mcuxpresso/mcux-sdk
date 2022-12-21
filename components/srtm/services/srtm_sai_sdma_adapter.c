@@ -1100,7 +1100,8 @@ static srtm_status_t SRTM_SaiSdmaAdapter_Start(srtm_sai_adapter_t adapter, srtm_
     /* Caculate the threshold based on the guardTime.*/
     if (*guardTime != 0U)
     {
-        guardPeroids = (uint32_t)((uint64_t)thisRtm->srate * thisRtm->bitWidth * channelNum * (*guardTime) /
+        guardPeroids = (uint32_t)(((uint64_t)thisRtm->srate * thisRtm->bitWidth * channelNum * (*guardTime) +
+                                   (uint64_t)thisRtm->periodSize * 8U * 1000U - 1U) /
                                   ((uint64_t)thisRtm->periodSize * 8U * 1000U));
         /* If the guardPeroids calculated based on the guardTime is larger than the threshold value ,
          * then the threshold should be enlarged to make sure there is enough time for A core resume and fill the DDR

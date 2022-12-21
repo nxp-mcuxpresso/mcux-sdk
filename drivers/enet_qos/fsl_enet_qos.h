@@ -33,7 +33,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Defines the driver version. */
-#define FSL_ENET_QOS_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
+#define FSL_ENET_QOS_DRIVER_VERSION (MAKE_VERSION(2, 5, 3))
 /*@}*/
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */
@@ -718,6 +718,14 @@ extern const clock_ip_name_t s_enetqosClock[];
  */
 extern void ENET_QOS_SetSYSControl(enet_qos_mii_mode_t miiMode);
 
+/*!
+ * @brief Enable/Disable ENET qos clock.
+ * @note User needs to provide the implementation because the implementation is SoC specific.
+ *  This function should be called before config RMII mode.
+ *
+ */
+extern void ENET_QOS_EnableClock(bool enable);
+
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -926,57 +934,105 @@ static inline uint16_t ENET_QOS_ReadSMIData(ENET_QOS_Type *base)
 }
 
 /*!
- * @brief Starts an SMI read command.
- * It supports MDIO IEEE802.3 Clause 22.
+ * @brief Sends the MDIO IEEE802.3 Clause 22 format write command.
  * After send command, user needs to check whether the transmission is over
  * with ENET_QOS_IsSMIBusy().
  *
  * @param base  ENET peripheral base address.
  * @param phyAddr The PHY address.
- * @param phyReg The PHY register.
- */
-void ENET_QOS_StartSMIRead(ENET_QOS_Type *base, uint32_t phyAddr, uint32_t phyReg);
-
-/*!
- * @brief Starts a SMI write command.
- * It supports MDIO IEEE802.3 Clause 22.
- * After send command, user needs to check whether the transmission is over
- * with ENET_QOS_IsSMIBusy().
- *
- * @param base  ENET peripheral base address.
- * @param phyAddr The PHY address.
- * @param phyReg The PHY register.
+ * @param regAddr The PHY register address.
  * @param data The data written to PHY.
  */
-void ENET_QOS_StartSMIWrite(ENET_QOS_Type *base, uint32_t phyAddr, uint32_t phyReg, uint32_t data);
+void ENET_QOS_StartSMIWrite(ENET_QOS_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t data);
 
 /*!
- * @brief Starts a SMI write command.
- * It supports MDIO IEEE802.3 Clause 45.
+ * @brief Sends the MDIO IEEE802.3 Clause 22 format read command.
  * After send command, user needs to check whether the transmission is over
  * with ENET_QOS_IsSMIBusy().
  *
  * @param base  ENET peripheral base address.
  * @param phyAddr The PHY address.
- * @param device The PHY device type.
- * @param phyReg The PHY register address.
+ * @param regAddr The PHY register address.
+ */
+void ENET_QOS_StartSMIRead(ENET_QOS_Type *base, uint8_t phyAddr, uint8_t regAddr);
+
+/*!
+ * @brief Sends the MDIO IEEE802.3 Clause 45 format write command.
+ * After send command, user needs to check whether the transmission is over
+ * with ENET_QOS_IsSMIBusy().
+ *
+ * @param base  ENET peripheral base address.
+ * @param portAddr  The MDIO port address(PHY address).
+ * @param devAddr  The device address.
+ * @param regAddr  The PHY register address.
  * @param data The data written to PHY.
  */
 void ENET_QOS_StartExtC45SMIWrite(
-    ENET_QOS_Type *base, uint32_t phyAddr, uint32_t device, uint32_t phyReg, uint32_t data);
+    ENET_QOS_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr, uint16_t data);
 
 /*!
- * @brief Starts a SMI read command.
- * It supports MDIO IEEE802.3 Clause 45.
+ * @brief Sends the MDIO IEEE802.3 Clause 45 format read command.
  * After send command, user needs to check whether the transmission is over
  * with ENET_QOS_IsSMIBusy().
  *
  * @param base  ENET peripheral base address.
- * @param phyAddr The PHY address.
- * @param device The PHY device type.
- * @param phyReg The PHY register address.
+ * @param portAddr  The MDIO port address(PHY address).
+ * @param devAddr  The device address.
+ * @param regAddr  The PHY register address.
  */
-void ENET_QOS_StartExtC45SMIRead(ENET_QOS_Type *base, uint32_t phyAddr, uint32_t device, uint32_t phyReg);
+void ENET_QOS_StartExtC45SMIRead(ENET_QOS_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr);
+
+/*!
+ * @brief MDIO write with IEEE802.3 MDIO Clause 22 format.
+ *
+ * @param base  ENET peripheral base address.
+ * @param phyAddr  The PHY address.
+ * @param regAddr  The PHY register.
+ * @param data  The data written to PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_QOS_MDIOWrite(ENET_QOS_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t data);
+
+/*!
+ * @brief MDIO read with IEEE802.3 MDIO Clause 22 format.
+ *
+ * @param base  ENET peripheral base address.
+ * @param phyAddr  The PHY address.
+ * @param regAddr  The PHY register.
+ * @param pData  The data read from PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_QOS_MDIORead(ENET_QOS_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t *pData);
+
+/*!
+ * @brief MDIO write with IEEE802.3 Clause 45 format.
+ *
+ * @param base  ENET peripheral base address.
+ * @param portAddr  The MDIO port address(PHY address).
+ * @param devAddr  The device address.
+ * @param regAddr  The PHY register address.
+ * @param data  The data written to PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_QOS_MDIOC45Write(ENET_QOS_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr, uint16_t data);
+
+/*!
+ * @brief MDIO read with IEEE802.3 Clause 45 format.
+ *
+ * @param base  ENET peripheral base address.
+ * @param portAddr  The MDIO port address(PHY address).
+ * @param devAddr  The device address.
+ * @param regAddr  The PHY register address.
+ * @param pData  The data read from PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_QOS_MDIOC45Read(
+    ENET_QOS_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr, uint16_t *pData);
+
 /* @} */
 
 /*!

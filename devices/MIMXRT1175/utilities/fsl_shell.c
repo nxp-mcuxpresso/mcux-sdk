@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -297,6 +297,44 @@ static int SHELL_Sprintf(void *buffer, const char *formatString, va_list ap)
     return (int32_t)length;
 }
 
+static void SHELL_hisOperation(uint8_t ch, shell_context_handle_t *shellContextHandle)
+{
+    switch ((char)ch)
+    {
+        /* History operation here */
+        case 'A': /* Up key */
+            SHELL_GetHistoryCommand(shellContextHandle, (uint8_t)shellContextHandle->hist_current);
+            if (shellContextHandle->hist_current < (shellContextHandle->hist_count - 1U))
+            {
+                shellContextHandle->hist_current++;
+            }
+            break;
+        case 'B': /* Down key */
+            SHELL_GetHistoryCommand(shellContextHandle, (uint8_t)shellContextHandle->hist_current);
+            if (shellContextHandle->hist_current > 0U)
+            {
+                shellContextHandle->hist_current--;
+            }
+            break;
+        case 'D': /* Left key */
+            if ((bool)shellContextHandle->c_pos)
+            {
+                (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
+                shellContextHandle->c_pos--;
+            }
+            break;
+        case 'C': /* Right key */
+            if (shellContextHandle->c_pos < shellContextHandle->l_pos)
+            {
+                (void)SHELL_WRITEX(shellContextHandle, &shellContextHandle->line[shellContextHandle->c_pos], 1);
+                shellContextHandle->c_pos++;
+            }
+            break;
+        default:
+            /* MISRA C-2012 Rule 16.4 */
+            break;
+    }
+}
 #if (defined(SHELL_NON_BLOCKING_MODE) && (SHELL_NON_BLOCKING_MODE > 0U))
 static void SHELL_Task(void *param)
 #else
@@ -385,43 +423,7 @@ void SHELL_Task(shell_handle_t shellHandle)
                 else if (shellContextHandle->stat == kSHELL_Function)
                 {
                     shellContextHandle->stat = kSHELL_Normal;
-
-                    switch ((char)ch)
-                    {
-                        /* History operation here */
-                        case 'A': /* Up key */
-                            SHELL_GetHistoryCommand(shellContextHandle, (uint8_t)shellContextHandle->hist_current);
-                            if (shellContextHandle->hist_current < (shellContextHandle->hist_count - 1U))
-                            {
-                                shellContextHandle->hist_current++;
-                            }
-                            break;
-                        case 'B': /* Down key */
-                            SHELL_GetHistoryCommand(shellContextHandle, (uint8_t)shellContextHandle->hist_current);
-                            if (shellContextHandle->hist_current > 0U)
-                            {
-                                shellContextHandle->hist_current--;
-                            }
-                            break;
-                        case 'D': /* Left key */
-                            if ((bool)shellContextHandle->c_pos)
-                            {
-                                (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
-                                shellContextHandle->c_pos--;
-                            }
-                            break;
-                        case 'C': /* Right key */
-                            if (shellContextHandle->c_pos < shellContextHandle->l_pos)
-                            {
-                                (void)SHELL_WRITEX(shellContextHandle,
-                                                   &shellContextHandle->line[shellContextHandle->c_pos], 1);
-                                shellContextHandle->c_pos++;
-                            }
-                            break;
-                        default:
-                            /* MISRA C-2012 Rule 16.4 */
-                            break;
-                    }
+                    SHELL_hisOperation(ch, shellContextHandle);
                     continue;
                 }
                 /* Handle tab key */
@@ -682,7 +684,17 @@ static void SHELL_ProcessCommand(shell_context_handle_t *shellContextHandle, con
                 shellContextHandle->hist_count++;
             }
         }
-        (void)tmpCommand->pFuncCallBack(shellContextHandle, argc, argv);
+        if (kStatus_SHELL_RetUsage == tmpCommand->pFuncCallBack(shellContextHandle, argc, argv))
+        {
+            if (NULL != tmpCommand->pcHelpString)
+            {
+                (void)SHELL_WRITEX(shellContextHandle, tmpCommand->pcHelpString, strlen(tmpCommand->pcHelpString));
+            }
+            else
+            {
+                (void)SHELL_HelpCommand(shellContextHandle, 0, NULL);
+            }
+        }
     }
     else
     {
@@ -972,7 +984,7 @@ shell_status_t SHELL_Init(shell_handle_t shellHandle, serial_handle_t serialHand
     (void)SHELL_RegisterCommand(shellContextHandle, SHELL_COMMAND(help));
     (void)SHELL_RegisterCommand(shellContextHandle, SHELL_COMMAND(exit));
     SHELL_MUTEX_CREATE();
-    (void)SHELL_Write(shellContextHandle, "\r\nCopyright  2020  NXP\r\n", strlen("\r\nCopyright  2020  NXP\r\n"));
+    (void)SHELL_Write(shellContextHandle, "\r\nCopyright  2022  NXP\r\n", strlen("\r\nCopyright  2022  NXP\r\n"));
     SHELL_PrintPrompt(shellContextHandle);
 
     return kStatus_SHELL_Success;

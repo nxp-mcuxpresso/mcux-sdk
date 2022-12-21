@@ -18,6 +18,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/log
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
     ${CMAKE_CURRENT_LIST_DIR}/../../components/panic
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
@@ -54,10 +55,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utilities
@@ -85,7 +85,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_sdmmc_host_sdif)
 #    include(component_log_backend_ringbuffer)
 #    include(driver_flexcomm_usart)
-#    include(driver_codec)
+#    include(driver_rtt_LPC55S28)
 #    include(driver_ostimer)
 #    include(driver_gint)
 #    include(driver_cmsis_flexcomm_i2c)
@@ -160,7 +160,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_i2c_dma)
 #    include(component_flexcomm_i2c_adapter)
 #    include(utility_assert_lite)
-#    include(middleware_fatfs)
 #    include(middleware_usb_host_audio)
 #    include(utility_debug_console)
 #    include(middleware_usb_host_hid)
@@ -186,6 +185,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_mbedtls_LPC55S28)
 #    include(component_osa)
 #    include(middleware_azure_rtos_tx_sp)
+#    include(middleware_fatfs_LPC55S28)
 #    include(driver_sdif)
 #    include(middleware_mbedtls_lpc1)
 #    include(middleware_sdmmc_host_sdif_interrupt)
@@ -203,3 +203,4 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_reset)
 #    include(middleware_usb_device_stack_external)
 #    include(driver_ft6x06)
+#    include(driver_codec)

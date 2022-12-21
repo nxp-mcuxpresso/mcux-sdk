@@ -11,9 +11,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1064RM Rev.2, 07/2021 | IMXRT106XSRM Rev.0
+**     Reference manual:    IMXRT1064RM Rev.2, 7/2021 | IMXRT106XSRM Rev.0
 **     Version:             rev. 1.3, 2021-08-10
-**     Build:               b220119
+**     Build:               b221010
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1064
@@ -205,8 +205,8 @@ typedef enum IRQn {
   USB_OTG1_IRQn                = 113,              /**< USBO2 USB OTG1 */
   ENET_IRQn                    = 114,              /**< ENET interrupt */
   ENET_1588_Timer_IRQn         = 115,              /**< ENET_1588_Timer interrupt */
-  XBAR1_IRQ_0_1_IRQn           = 116,              /**< XBAR1 interrupt */
-  XBAR1_IRQ_2_3_IRQn           = 117,              /**< XBAR1 interrupt */
+  XBAR1_IRQ_0_1_IRQn           = 116,              /**< XBARA1 output signal 0, 1 interrupt */
+  XBAR1_IRQ_2_3_IRQn           = 117,              /**< XBARA1 output signal 2, 3 interrupt */
   ADC_ETC_IRQ0_IRQn            = 118,              /**< ADCETC IRQ0 interrupt */
   ADC_ETC_IRQ1_IRQn            = 119,              /**< ADCETC IRQ1 interrupt */
   ADC_ETC_IRQ2_IRQn            = 120,              /**< ADCETC IRQ2 interrupt */
@@ -835,6 +835,17 @@ typedef enum _iomuxc_select_input_1
     kIOMUXC_ENET2_IPP_IND_MAC0_RXERR_SELECT_INPUT = 5U, /**< IOMUXC select input index */
     kIOMUXC_ENET2_IPP_IND_MAC0_TIMER_SELECT_INPUT_0 = 6U, /**< IOMUXC select input index */
     kIOMUXC_ENET2_IPP_IND_MAC0_TXCLK_SELECT_INPUT = 7U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_DQS_FA_SELECT_INPUT = 8U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FA_BIT0_SELECT_INPUT = 9U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FA_BIT1_SELECT_INPUT = 10U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FA_BIT2_SELECT_INPUT = 11U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FA_BIT3_SELECT_INPUT = 12U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FB_BIT0_SELECT_INPUT = 13U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FB_BIT1_SELECT_INPUT = 14U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FB_BIT2_SELECT_INPUT = 15U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_IO_FB_BIT3_SELECT_INPUT = 16U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_SCK_FA_SELECT_INPUT = 17U, /**< IOMUXC select input index */
+    kIOMUXC_FLEXSPI2_IPP_IND_SCK_FB_SELECT_INPUT = 18U, /**< IOMUXC select input index */
     kIOMUXC_GPT1_IPP_IND_CAPIN1_SELECT_INPUT = 19U, /**< IOMUXC select input index */
     kIOMUXC_GPT1_IPP_IND_CAPIN2_SELECT_INPUT = 20U, /**< IOMUXC select input index */
     kIOMUXC_GPT1_IPP_IND_CLKIN_SELECT_INPUT = 21U, /**< IOMUXC select input index */
@@ -4487,8 +4498,8 @@ typedef struct {
 #define CAN_MCR_HALT_MASK                        (0x10000000U)
 #define CAN_MCR_HALT_SHIFT                       (28U)
 /*! HALT - Halt FlexCAN
- *  0b1..Enters Freeze Mode if the FRZ bit is asserted.
- *  0b0..No Freeze Mode request.
+ *  0b0..No Freeze mode request.
+ *  0b1..Enters Freeze mode if the FRZ bit is asserted.
  */
 #define CAN_MCR_HALT(x)                          (((uint32_t)(((uint32_t)(x)) << CAN_MCR_HALT_SHIFT)) & CAN_MCR_HALT_MASK)
 
@@ -4545,8 +4556,8 @@ typedef struct {
 #define CAN_CTRL1_TSYN_MASK                      (0x20U)
 #define CAN_CTRL1_TSYN_SHIFT                     (5U)
 /*! TSYN - Timer Sync
- *  0b1..Timer Sync feature enabled
- *  0b0..Timer Sync feature disabled
+ *  0b0..Timer sync feature disabled
+ *  0b1..Timer sync feature enabled
  */
 #define CAN_CTRL1_TSYN(x)                        (((uint32_t)(((uint32_t)(x)) << CAN_CTRL1_TSYN_SHIFT)) & CAN_CTRL1_TSYN_MASK)
 
@@ -4736,8 +4747,8 @@ typedef struct {
 #define CAN_ESR1_BOFFINT_MASK                    (0x4U)
 #define CAN_ESR1_BOFFINT_SHIFT                   (2U)
 /*! BOFFINT - Bus Off Interrupt
- *  0b1..FLEXCAN module entered 'Bus Off' state
- *  0b0..No such occurrence
+ *  0b0..No such occurrence.
+ *  0b1..FlexCAN module entered Bus Off state.
  */
 #define CAN_ESR1_BOFFINT(x)                      (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_BOFFINT_SHIFT)) & CAN_ESR1_BOFFINT_MASK)
 
@@ -4793,8 +4804,8 @@ typedef struct {
 #define CAN_ESR1_STFERR_MASK                     (0x400U)
 #define CAN_ESR1_STFERR_SHIFT                    (10U)
 /*! STFERR - Stuffing Error
- *  0b1..A Stuffing Error occurred since last read of this register.
  *  0b0..No such occurrence.
+ *  0b1..A stuffing error occurred since last read of this register.
  */
 #define CAN_ESR1_STFERR(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_ESR1_STFERR_SHIFT)) & CAN_ESR1_STFERR_MASK)
 
@@ -5080,9 +5091,9 @@ typedef struct {
 #define CAN_CTRL2_EACEN_MASK                     (0x10000U)
 #define CAN_CTRL2_EACEN_SHIFT                    (16U)
 /*! EACEN - Entire Frame Arbitration Field Comparison Enable For Rx Mailboxes
- *  0b1..Enables the comparison of both Rx Mailbox filter's IDE and RTR bit with their corresponding bits within
+ *  0b0..Rx mailbox filter's IDE bit is always compared and RTR is never compared despite mask bits.
+ *  0b1..Enables the comparison of both Rx mailbox filter's IDE and RTR bit with their corresponding bits within
  *       the incoming frame. Mask bits do apply.
- *  0b0..Rx Mailbox filter's IDE bit is always compared and RTR is never compared despite mask bits.
  */
 #define CAN_CTRL2_EACEN(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_CTRL2_EACEN_SHIFT)) & CAN_CTRL2_EACEN_MASK)
 
@@ -9454,7 +9465,7 @@ typedef struct {
 #define CCM_ANALOG_PLL_SYS_SS_ENABLE_SHIFT       (15U)
 /*! ENABLE - Enable bit
  *  0b0..Spread spectrum modulation disabled
- *  0b1..Soread spectrum modulation enabled
+ *  0b1..Spread spectrum modulation enabled
  */
 #define CCM_ANALOG_PLL_SYS_SS_ENABLE(x)          (((uint32_t)(((uint32_t)(x)) << CCM_ANALOG_PLL_SYS_SS_ENABLE_SHIFT)) & CCM_ANALOG_PLL_SYS_SS_ENABLE_MASK)
 
@@ -22030,15 +22041,15 @@ typedef struct {
 /** Peripheral ENET2 base pointer */
 #define ENET2                                    ((ENET_Type *)ENET2_BASE)
 /** Array initializer of ENET peripheral base addresses */
-#define ENET_BASE_ADDRS                          { ENET_BASE, ENET2_BASE }
+#define ENET_BASE_ADDRS                          { ENET_BASE, 0u, ENET2_BASE }
 /** Array initializer of ENET peripheral base pointers */
-#define ENET_BASE_PTRS                           { ENET, ENET2 }
+#define ENET_BASE_PTRS                           { ENET, (ENET_Type *)0u, ENET2 }
 /** Interrupt vectors for the ENET peripheral type */
-#define ENET_Transmit_IRQS                       { ENET_IRQn, ENET2_IRQn }
-#define ENET_Receive_IRQS                        { ENET_IRQn, ENET2_IRQn }
-#define ENET_Error_IRQS                          { ENET_IRQn, ENET2_IRQn }
-#define ENET_1588_Timer_IRQS                     { ENET_1588_Timer_IRQn, ENET2_1588_Timer_IRQn }
-#define ENET_Ts_IRQS                             { ENET_1588_Timer_IRQn, ENET2_1588_Timer_IRQn }
+#define ENET_Transmit_IRQS                       { ENET_IRQn, NotAvail_IRQn, ENET2_IRQn }
+#define ENET_Receive_IRQS                        { ENET_IRQn, NotAvail_IRQn, ENET2_IRQn }
+#define ENET_Error_IRQS                          { ENET_IRQn, NotAvail_IRQn, ENET2_IRQn }
+#define ENET_1588_Timer_IRQS                     { ENET_1588_Timer_IRQn, NotAvail_IRQn, ENET2_1588_Timer_IRQn }
+#define ENET_Ts_IRQS                             { ENET_IRQn, NotAvail_IRQn, ENET2_IRQn }
 /* ENET Buffer Descriptor and Buffer Address Alignment. */
 #define ENET_BUFF_ALIGNMENT                      (64U)
 
@@ -49395,9 +49406,10 @@ typedef struct {
 #define USBHS_EPCR_TXE(x)                        USB_ENDPTCTRL_TXE(x)
 #define USBHS_EPCR_COUNT                         USB_ENDPTCTRL_COUNT
 #define USBHS_Type                               USB_Type
-#define USBHS_BASE_ADDRS                         { USB1_BASE, USB2_BASE }
+#define USBHS_BASE_ADDRS                         USB_BASE_ADDRS
 #define USBHS_IRQS                               { USB_OTG1_IRQn, USB_OTG2_IRQn }
 #define USBHS_IRQHandler                         USB_OTG1_IRQHandler
+#define USBHS_STACK_BASE_ADDRS                   { USB1_BASE, USB2_BASE }
 
 
 /*!
@@ -49546,6 +49558,9 @@ typedef struct {
 #define USBNC_BASE_ADDRS                         { 0u, USBNC1_BASE, USBNC2_BASE }
 /** Array initializer of USBNC peripheral base pointers */
 #define USBNC_BASE_PTRS                          { (USBNC_Type *)0u, USBNC1, USBNC2 }
+/* Backward compatibility */
+#define USBNC_STACK_BASE_ADDRS                   { USBNC1_BASE, USBNC2_BASE }
+
 
 /*!
  * @}
@@ -49581,7 +49596,7 @@ typedef struct {
   __IO uint32_t CTRL_TOG;                          /**< USB PHY General Control Register, offset: 0x3C */
   __IO uint32_t STATUS;                            /**< USB PHY Status Register, offset: 0x40 */
        uint8_t RESERVED_0[12];
-  __IO uint32_t DEBUGr;                            /**< USB PHY Debug Register, offset: 0x50 */
+  __IO uint32_t DEBUGr;                            /**< USB PHY Debug Register, offset: 0x50, 'r' suffix has been added to avoid clash with DEBUG symbolic constant */
   __IO uint32_t DEBUG_SET;                         /**< USB PHY Debug Register, offset: 0x54 */
   __IO uint32_t DEBUG_CLR;                         /**< USB PHY Debug Register, offset: 0x58 */
   __IO uint32_t DEBUG_TOG;                         /**< USB PHY Debug Register, offset: 0x5C */
@@ -50967,6 +50982,7 @@ typedef struct {
 #define USBPHY_TX_TXCAL45DM_MASK            USBPHY_TX_TXCAL45DN_MASK
 #define USBPHY_TX_TXCAL45DM_SHIFT           USBPHY_TX_TXCAL45DN_SHIFT
 #define USBPHY_TX_TXCAL45DM(x)              USBPHY_TX_TXCAL45DN(x)
+#define USBPHY_STACK_BASE_ADDRS             { USBPHY1_BASE, USBPHY2_BASE }
 
 
 /*!

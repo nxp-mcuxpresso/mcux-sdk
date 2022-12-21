@@ -59,8 +59,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.2. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+/*! @brief CLOCK driver version 2.2.3. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */

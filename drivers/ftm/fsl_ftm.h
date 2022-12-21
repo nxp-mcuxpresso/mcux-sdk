@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FTM driver version 2.5.0. */
-#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+/*! @brief FTM driver version 2.6.0. */
+#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
 /*@}*/
 
 /*!
@@ -361,10 +361,14 @@ typedef struct _ftm_config
     uint32_t extTriggers;                     /*!< External triggers to enable. Multiple trigger sources can be
                                                    enabled by providing an OR'ed list of options available in
                                                    enumeration ::ftm_external_trigger_t. */
-    uint8_t chnlInitState;  /*!< Defines the initialization value of the channels in OUTINT register */
-    uint8_t chnlPolarity;   /*!< Defines the output polarity of the channels in POL register */
-    bool useGlobalTimeBase; /*!< True: Use of an external global time base is enabled;
-                                 False: disabled */
+    uint8_t chnlInitState;    /*!< Defines the initialization value of the channels in OUTINT register */
+    uint8_t chnlPolarity;     /*!< Defines the output polarity of the channels in POL register */
+    bool useGlobalTimeBase;   /*!< True: Use of an external global time base is enabled;
+                                   False: disabled */
+    bool swTriggerResetCount; /*!< FTM counter synchronization activated by software trigger, avtive when (syncMethod &
+                                 FTM_SYNC_SWSYNC_MASK) != 0U  */
+    bool hwTriggerResetCount; /*!< FTM counter synchronization activated by hardware trigger, avtive when (syncMethod &
+                                 (FTM_SYNC_TRIG0_MASK | FTM_SYNC_TRIG1_MASK | FTM_SYNC_TRIG2_MASK)) != 0U */
 } ftm_config_t;
 
 /*******************************************************************************
@@ -417,6 +421,8 @@ void FTM_Deinit(FTM_Type *base);
  *   config->chnlInitState = 0;
  *   config->chnlPolarity = 0;
  *   config->useGlobalTimeBase = false;
+ *   config->hwTriggerResetCount = false;
+ *   config->swTriggerResetCount = true;
  * @endcode
  * @param config Pointer to the user configuration structure.
  */
@@ -1081,6 +1087,62 @@ static inline void FTM_EnableDmaTransfer(FTM_Type *base, ftm_chnl_t chnlNumber, 
     }
 }
 #endif /* FSL_FEATURE_FTM_HAS_DMA_SUPPORT */
+
+/*!
+ * @brief Enable the LDOK bit
+ *
+ * This function enables loading updated values.
+ *
+ * @param base FTM peripheral base address
+ * @param value true: loading updated values is enabled; false: loading updated values is disabled.
+ */
+static inline void FTM_SetLdok(FTM_Type *base, bool value)
+{
+    if (value)
+    {
+        base->PWMLOAD |= FTM_PWMLOAD_LDOK_MASK;
+    }
+    else
+    {
+        base->PWMLOAD &= ~FTM_PWMLOAD_LDOK_MASK;
+    }
+}
+
+#if defined(FSL_FEATURE_FTM_HAS_HALFCYCLE_RELOAD) && FSL_FEATURE_FTM_HAS_HALFCYCLE_RELOAD
+/*!
+ * @brief Sets the half cycle relade period in units of ticks.
+ *
+ * This function can be callled to set the half-cycle reload value when half-cycle matching is enabled as a reload
+ * point.
+ * Note: Need enable kFTM_HalfCycMatch as reload point, and when this API call after FTM_StartTimer(), the new
+ * HCR value will not be active until next reload point (need call FTM_SetLdok to set LDOK) or register synchronization.
+ *
+ * @param base FTM peripheral base address
+ * @param ticks A timer period in units of ticks, which should be equal or greater than 1.
+ */
+static inline void FTM_SetHalfCycReloadMatchValue(FTM_Type *base, uint32_t ticks)
+{
+    base->HCR = ticks;
+}
+#endif /* FSL_FEATURE_FTM_HAS_HALFCYCLE_RELOAD */
+
+#if defined(FSL_FEATURE_FTM_HAS_CONF_LDFQ_BIT) && FSL_FEATURE_FTM_HAS_CONF_LDFQ_BIT
+/*!
+ * @brief Set load frequency value.
+ *
+ * @param base   FTM peripheral base address.
+ *
+ * @param loadfreq PWM reload frequency, range: 0 ~ 31.
+ */
+static inline void FTM_SetLoadFreq(FTM_Type *base, uint32_t loadfreq)
+{
+    uint32_t reg = base->CONF;
+
+    reg &= ~(FTM_CONF_LDFQ_MASK);
+    reg |= FTM_CONF_LDFQ(loadfreq);
+    base->CONF = reg;
+}
+#endif /* FSL_FEATURE_FTM_HAS_CONF_LDFQ_BIT */
 
 #if defined(__cplusplus)
 }

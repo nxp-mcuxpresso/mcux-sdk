@@ -293,11 +293,11 @@ void SAI_TransferTxSetFormatEDMA(I2S_Type *base,
 
     /* Clear the channel enable bits until do a send/receive */
     base->TCR3 &= ~I2S_TCR3_TCE_MASK;
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
-    handle->count = (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNT - format->watermark);
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
+    handle->count = (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base) - format->watermark);
 #else
     handle->count = 1U;
-#endif /* FSL_FEATURE_SAI_FIFO_COUNT */
+#endif /* FSL_FEATURE_SAI_HAS_FIFO */
 }
 
 /*!
@@ -350,11 +350,11 @@ void SAI_TransferTxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
 
     /* Clear the channel enable bits until do a send/receive */
     base->TCR3 &= ~I2S_TCR3_TCE_MASK;
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
-    handle->count = (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNT - saiConfig->fifo.fifoWatermark);
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
+    handle->count = (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNTn(base) - saiConfig->fifo.fifoWatermark);
 #else
     handle->count = 1U;
-#endif /* FSL_FEATURE_SAI_FIFO_COUNT */
+#endif /* FSL_FEATURE_SAI_HAS_FIFO */
 }
 
 /*!
@@ -400,11 +400,11 @@ void SAI_TransferRxSetFormatEDMA(I2S_Type *base,
 
     /* Clear the channel enable bits until do a send/receive */
     base->RCR3 &= ~I2S_RCR3_RCE_MASK;
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     handle->count = format->watermark;
 #else
     handle->count = 1U;
-#endif /* FSL_FEATURE_SAI_FIFO_COUNT */
+#endif /* FSL_FEATURE_SAI_HAS_FIFO */
 }
 
 /*!
@@ -457,11 +457,11 @@ void SAI_TransferRxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     handle->channelNums = saiConfig->channelNums;
     /* Clear the channel enable bits until do a send/receive */
     base->RCR3 &= ~I2S_RCR3_RCE_MASK;
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     handle->count = saiConfig->fifo.fifoWatermark;
 #else
     handle->count = 1U;
-#endif /* FSL_FEATURE_SAI_FIFO_COUNT */
+#endif /* FSL_FEATURE_SAI_HAS_FIFO */
 }
 
 /*!
@@ -657,6 +657,7 @@ status_t SAI_TransferReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
  * note This function support loop transfer only,such as A->B->...->A, application must be aware of
  * that the more counts of the loop transfer, then more tcd memory required, as the function use the tcd pool in
  * sai_edma_handle_t, so application could redefine the SAI_XFER_QUEUE_SIZE to determine the proper TCD pool size.
+ * This function support one sai channel only.
  *
  * Once the loop transfer start, application can use function SAI_TransferAbortSendEDMA to stop the loop transfer.
  *
@@ -740,6 +741,7 @@ status_t SAI_TransferSendLoopEDMA(I2S_Type *base,
  * note This function support loop transfer only,such as A->B->...->A, application must be aware of
  * that the more counts of the loop transfer, then more tcd memory required, as the function use the tcd pool in
  * sai_edma_handle_t, so application could redefine the SAI_XFER_QUEUE_SIZE to determine the proper TCD pool size.
+ * This function support one sai channel only.
  *
  * Once the loop transfer start, application can use function SAI_TransferAbortReceiveEDMA to stop the loop transfer.
  *

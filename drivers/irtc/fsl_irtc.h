@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_IRTC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version. */
+#define FSL_IRTC_DRIVER_VERSION (MAKE_VERSION(2, 1, 3)) /*!< Version. */
 /*@}*/
 
 /*! @brief IRTC filter clock source options. */
@@ -401,8 +401,13 @@ static inline void IRTC_ClearStatusFlags(RTC_Type *base, uint32_t mask)
     base->ISR    = (uint16_t)mask;
     base->STATUS = (base->STATUS & ~((uint16_t)RTC_STATUS_BUS_ERR_MASK | (uint16_t)RTC_STATUS_CMP_DONE_MASK)) |
                    ((uint16_t)(mask >> 16U));
+    /* TAMPER flag need clear TAMPER_SCR[TMPR_STS] filed */
+    if (0U != (mask & (uint32_t)kIRTC_TamperFlag))
+    {
+        base->TAMPER_SCR |= RTC_TAMPER_SCR_TMPR_STS_MASK;
+    }
 #if defined(FSL_FEATURE_RTC_HAS_SUBSYSTEM) && FSL_FEATURE_RTC_HAS_SUBSYSTEM
-    if (0U != (mask & kIRTC_WakeTimerFlag))
+    if (0U != (mask & (uint32_t)kIRTC_WakeTimerFlag))
     {
         base->WAKE_TIMER_CTRL |= RTC_WAKE_TIMER_CTRL_WAKE_FLAG_MASK;
     }

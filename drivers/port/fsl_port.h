@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,7 +27,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief PORT driver version. */
-#define FSL_PORT_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+#define FSL_PORT_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*@}*/
 
 #if defined(FSL_FEATURE_PORT_HAS_PULL_ENABLE) && FSL_FEATURE_PORT_HAS_PULL_ENABLE
@@ -89,10 +89,28 @@ enum _port_drive_strength
 /*! @brief Configures the drive strength1. */
 enum _port_drive_strength1
 {
-    kPORT_NormalDriveStrength = 0, /*!< Normal drive strength */
-    kPORT_DoubleDriveStrength = 1, /*!< Double drive strength */
+    kPORT_NormalDriveStrength = 0U, /*!< Normal drive strength */
+    kPORT_DoubleDriveStrength = 1U, /*!< Double drive strength */
 };
 #endif /* FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH1 */
+
+#if defined(FSL_FEATURE_PORT_HAS_INPUT_BUFFER) && FSL_FEATURE_PORT_HAS_INPUT_BUFFER
+/*! @brief input buffer disable/enable. */
+enum _port_input_buffer
+{
+    kPORT_InputBufferDisable = 0U, /*!< Digital input is disabled */
+    kPORT_InputBufferEnable  = 1U, /*!< Digital input is enabled */
+};
+#endif /* FSL_FEATURE_PORT_HAS_INPUT_BUFFER */
+
+#if defined(FSL_FEATURE_PORT_HAS_INVERT_INPUT) && FSL_FEATURE_PORT_HAS_INVERT_INPUT
+/*! @brief Digital input is not inverted or it is inverted. */
+enum _port_invet_input
+{
+    kPORT_InputNormal = 0U, /*!< Digital input is not inverted */
+    kPORT_InputInvert = 1U, /*!< Digital input is inverted */
+};
+#endif /* FSL_FEATURE_PORT_HAS_INVERT_INPUT */
 
 #if defined(FSL_FEATURE_PORT_HAS_PIN_CONTROL_LOCK) && FSL_FEATURE_PORT_HAS_PIN_CONTROL_LOCK
 /*! @brief Unlock/lock the pin control register field[15:0] */
@@ -109,6 +127,8 @@ typedef enum _port_mux
 {
     kPORT_PinDisabledOrAnalog = 0U,  /*!< Corresponding pin is disabled, but is used as an analog pin. */
     kPORT_MuxAsGpio           = 1U,  /*!< Corresponding pin is configured as GPIO. */
+    kPORT_MuxAlt0             = 0U,  /*!< Chip-specific */
+    kPORT_MuxAlt1             = 1U,  /*!< Chip-specific */
     kPORT_MuxAlt2             = 2U,  /*!< Chip-specific */
     kPORT_MuxAlt3             = 3U,  /*!< Chip-specific */
     kPORT_MuxAlt4             = 4U,  /*!< Chip-specific */
@@ -211,7 +231,7 @@ typedef struct _port_pin_config
     uint16_t : 1;
 #endif
 
-#if defined(FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH1) && FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH
+#if defined(FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH1) && FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH1
     uint16_t driveStrength1 : 1; /*!< Normal/Double drive strength enable/disable */
 #else
     uint16_t : 1;
@@ -219,13 +239,26 @@ typedef struct _port_pin_config
 
 #if defined(FSL_FEATURE_PORT_PCR_MUX_WIDTH) && (FSL_FEATURE_PORT_PCR_MUX_WIDTH == 3)
     uint16_t mux : 3; /*!< Pin mux Configure */
-    uint16_t : 4;
+    uint16_t : 1;
 #elif defined(FSL_FEATURE_PORT_PCR_MUX_WIDTH) && (FSL_FEATURE_PORT_PCR_MUX_WIDTH == 4)
     uint16_t mux : 4; /*!< Pin mux Configure */
-    uint16_t : 3;
 #else
-    uint16_t : 7,
+    uint16_t : 4;
 #endif
+
+#if defined(FSL_FEATURE_PORT_HAS_INPUT_BUFFER) && FSL_FEATURE_PORT_HAS_INPUT_BUFFER
+    uint16_t inputBuffer : 1; /*!< Input Buffer Configure */
+#else
+    uint16_t : 1;
+#endif /* FSL_FEATURE_PORT_HAS_INPUT_BUFFER */
+
+#if defined(FSL_FEATURE_PORT_HAS_INVERT_INPUT) && FSL_FEATURE_PORT_HAS_INVERT_INPUT
+    uint16_t invertInput : 1; /*!< Invert Input Configure */
+#else
+    uint16_t : 1;
+#endif /* FSL_FEATURE_PORT_HAS_INVERT_INPUT */
+
+    uint16_t : 1;
 
 #if defined(FSL_FEATURE_PORT_HAS_PIN_CONTROL_LOCK) && FSL_FEATURE_PORT_HAS_PIN_CONTROL_LOCK
     uint16_t lockRegister : 1; /*!< Lock/unlock the PCR field[15:0] */
@@ -390,14 +423,14 @@ static inline void PORT_SetMultipleInterruptPinsConfig(PORT_Type *base, uint32_t
 {
     assert(config);
 
-    if (mask & 0xffffU)
+    if (0U != ((uint32_t)mask & 0xffffU))
     {
-        base->GICLR = ((uint32_t)(config << 16)) | (mask & 0xffffU);
+        base->GICLR = ((uint32_t)config << 16U) | ((uint32_t)mask & 0xffffU);
     }
     mask = mask >> 16;
     if (0U != mask)
     {
-        base->GICHR = ((uint32_t)(config << 16)) | (mask & 0xffffU);
+        base->GICHR = ((uint32_t)config << 16U) | ((uint32_t)mask & 0xffffU);
     }
 }
 #endif

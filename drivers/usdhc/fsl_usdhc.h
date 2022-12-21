@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Driver version 2.8.1. */
-#define FSL_USDHC_DRIVER_VERSION (MAKE_VERSION(2U, 8U, 1U))
+/*! @brief Driver version 2.8.2. */
+#define FSL_USDHC_DRIVER_VERSION (MAKE_VERSION(2U, 8U, 2U))
 /*@}*/
 
 /*! @brief Maximum block count can be set one time */
@@ -1303,6 +1303,7 @@ static inline void USDHC_SetForceEvent(USDHC_Type *base, uint32_t mask)
     base->FORCE_EVENT = mask;
 }
 
+#if !(defined(FSL_FEATURE_USDHC_HAS_NO_VOLTAGE_SELECT) && (FSL_FEATURE_USDHC_HAS_NO_VOLTAGE_SELECT))
 /*!
  * @brief Selects the USDHC output voltage.
  *
@@ -1320,6 +1321,7 @@ static inline void UDSHC_SelectVoltage(USDHC_Type *base, bool en18v)
         base->VEND_SPEC &= ~USDHC_VEND_SPEC_VSELECT_MASK;
     }
 }
+#endif
 
 #if defined(FSL_FEATURE_USDHC_HAS_SDR50_MODE) && (FSL_FEATURE_USDHC_HAS_SDR50_MODE)
 /*!

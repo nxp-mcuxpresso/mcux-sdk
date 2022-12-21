@@ -60,7 +60,7 @@ static i2c_bus_t SRTM_I2C_SearchBus(srtm_i2c_adapter_t adapter, uint8_t busID)
 }
 
 static srtm_status_t SRTM_I2CService_ReadBus(
-    srtm_service_t service, uint8_t busID, uint16_t slaveAddr, uint8_t *buf, uint8_t len, uint16_t flags)
+    srtm_service_t service, uint8_t busID, uint16_t slaveAddr, uint8_t *buf, uint16_t len, uint16_t flags)
 {
     srtm_i2c_service_t handle  = (srtm_i2c_service_t)(void *)service;
     srtm_i2c_adapter_t adapter = handle->adapter;
@@ -99,7 +99,7 @@ static srtm_status_t SRTM_I2CService_ReadBus(
 }
 
 static srtm_status_t SRTM_I2CService_WriteBus(
-    srtm_service_t service, uint8_t busID, uint16_t slaveAddr, uint8_t *buf, uint8_t len, uint16_t flags)
+    srtm_service_t service, uint8_t busID, uint16_t slaveAddr, uint8_t *buf, uint16_t len, uint16_t flags)
 {
     srtm_i2c_service_t handle  = (srtm_i2c_service_t)(void *)service;
     srtm_i2c_adapter_t adapter = handle->adapter;
@@ -197,9 +197,13 @@ static srtm_status_t SRTM_I2CService_Request(srtm_service_t service, srtm_reques
     command    = SRTM_CommMessage_GetCommand(request);
     i2cReq     = (struct _srtm_i2c_payload *)(void *)SRTM_CommMessage_GetPayload(request);
     payloadLen = SRTM_CommMessage_GetPayloadLen(request);
+    (void)payloadLen; /* try to fix warning: variable 'payloadLen' set but not used */
+    assert(i2cReq);
+    assert((uint32_t)(i2cReq->len + sizeof(struct _srtm_i2c_payload) - sizeof(i2cReq->data[0])) <= payloadLen);
 
-    response = SRTM_Response_Create(channel, SRTM_I2C_CATEGORY, SRTM_I2C_VERSION, command,
-                                    (uint16_t)sizeof(struct _srtm_i2c_payload));
+    response =
+        SRTM_Response_Create(channel, SRTM_I2C_CATEGORY, SRTM_I2C_VERSION, command,
+                             (uint16_t)((sizeof(struct _srtm_i2c_payload) - sizeof(i2cReq->data[0])) + i2cReq->len));
     if (response == NULL)
     {
         return SRTM_Status_OutOfMemory;
@@ -208,7 +212,7 @@ static srtm_status_t SRTM_I2CService_Request(srtm_service_t service, srtm_reques
     i2cResp = (struct _srtm_i2c_payload *)(void *)SRTM_CommMessage_GetPayload(response);
 
     status = SRTM_Service_CheckVersion(service, request, SRTM_I2C_VERSION);
-    if ((status != SRTM_Status_Success) || (i2cReq == NULL) || (payloadLen != sizeof(struct _srtm_i2c_payload)))
+    if (status != SRTM_Status_Success)
     {
         SRTM_DEBUG_MESSAGE(SRTM_DEBUG_VERBOSE_WARN, "%s: format error!\r\n", __func__);
         i2cResp->retCode = SRTM_I2C_RETURN_CODE_UNSUPPORTED;
@@ -218,19 +222,20 @@ static srtm_status_t SRTM_I2CService_Request(srtm_service_t service, srtm_reques
         SRTM_DEBUG_MESSAGE(SRTM_DEBUG_VERBOSE_INFO,
                            "SRTM receive I2C request:cmd=%x, busID %d, slaveAddr 0x%x!, data %d bytes\r\n", command,
                            i2cReq->busID, i2cReq->slaveAddr, i2cReq->len);
-        (void)memcpy(i2cResp, i2cReq, sizeof(struct _srtm_i2c_payload));
+        (void)memcpy(i2cResp, i2cReq,
+                     (sizeof(struct _srtm_i2c_payload) - sizeof(i2cReq->data[0]) + (size_t)i2cReq->len));
 
         switch (command)
         {
             case (uint8_t)SRTM_I2C_CMD_READ:
                 status = SRTM_I2CService_ReadBus(service, i2cResp->busID, i2cResp->slaveAddr, i2cResp->data,
-                                                 (uint8_t)i2cReq->len, i2cReq->flags);
+                                                 i2cReq->len, i2cReq->flags);
                 i2cResp->retCode =
                     status == SRTM_Status_Success ? SRTM_I2C_RETURN_CODE_SUCEESS : SRTM_I2C_RETURN_CODE_FAIL;
                 break;
             case (uint8_t)SRTM_I2C_CMD_WRITE:
                 status = SRTM_I2CService_WriteBus(service, i2cResp->busID, i2cResp->slaveAddr, i2cResp->data,
-                                                  (uint8_t)i2cReq->len, i2cReq->flags);
+                                                  i2cReq->len, i2cReq->flags);
                 i2cResp->retCode =
                     status == SRTM_Status_Success ? SRTM_I2C_RETURN_CODE_SUCEESS : SRTM_I2C_RETURN_CODE_FAIL;
                 break;
@@ -273,7 +278,7 @@ static void SRTM_I2C_HandleBusWrite(srtm_dispatcher_t dispatcher, void *param1, 
 }
 
 srtm_status_t SRTM_I2C_RequestBusRead(
-    srtm_service_t service, uint8_t busID, uint16_t slaveAddr, uint8_t *buf, uint8_t len)
+    srtm_service_t service, uint8_t busID, uint16_t slaveAddr, uint8_t *buf, uint16_t len)
 {
     srtm_request_t request;
     srtm_status_t status;
@@ -282,9 +287,8 @@ srtm_status_t SRTM_I2C_RequestBusRead(
     /*
      * Allocate an SRTM message and copy necessary information
      */
-    assert(SRTM_I2C_BUF_LEN >= len);
     request           = SRTM_Request_Create(NULL, SRTM_I2C_CATEGORY, SRTM_I2C_VERSION, (uint8_t)SRTM_I2C_CMD_READ,
-                                  (uint16_t)sizeof(struct _srtm_i2c_payload));
+                                  (uint16_t)((sizeof(struct _srtm_i2c_payload) - sizeof(uint8_t)) + len));
     i2cReq            = (struct _srtm_i2c_payload *)(void *)SRTM_CommMessage_GetPayload(request);
     i2cReq->busID     = busID;
     i2cReq->slaveAddr = slaveAddr;
@@ -310,7 +314,7 @@ srtm_status_t SRTM_I2C_RequestBusRead(
 }
 
 srtm_status_t SRTM_I2C_RequestBusWrite(
-    srtm_service_t service, uint8_t busID, uint16_t slaveAddr, uint8_t *buf, uint8_t len, uint8_t needStop)
+    srtm_service_t service, uint8_t busID, uint16_t slaveAddr, uint8_t *buf, uint16_t len, uint8_t needStop)
 {
     srtm_request_t request;
     srtm_status_t status;
@@ -319,9 +323,8 @@ srtm_status_t SRTM_I2C_RequestBusWrite(
     /*
      * Allocate an SRTM message and copy necessary information
      */
-    assert(SRTM_I2C_BUF_LEN >= len);
     request           = SRTM_Request_Create(NULL, SRTM_I2C_CATEGORY, SRTM_I2C_VERSION, (uint8_t)SRTM_I2C_CMD_WRITE,
-                                  (uint16_t)sizeof(struct _srtm_i2c_payload));
+                                  (uint16_t)((sizeof(struct _srtm_i2c_payload) - sizeof(uint8_t)) + len));
     i2cReq            = (struct _srtm_i2c_payload *)(void *)SRTM_CommMessage_GetPayload(request);
     i2cReq->busID     = busID;
     i2cReq->slaveAddr = slaveAddr;

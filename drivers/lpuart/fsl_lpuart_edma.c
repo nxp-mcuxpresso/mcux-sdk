@@ -226,7 +226,7 @@ void LPUART_TransferCreateHandleEDMA(LPUART_Type *base,
     /* Save the handle in global variables to support the double weak mechanism. */
     s_lpuartHandle[instance] = handle;
     /* Set LPUART_TransferEdmaHandleIRQ as DMA IRQ handler */
-    s_lpuartIsr = LPUART_TransferEdmaHandleIRQ;
+    s_lpuartIsr[instance] = LPUART_TransferEdmaHandleIRQ;
     /* Disable all LPUART internal interrupts */
     LPUART_DisableInterrupts(base, (uint32_t)kLPUART_AllInterruptEnable);
     /* Enable interrupt in NVIC. */

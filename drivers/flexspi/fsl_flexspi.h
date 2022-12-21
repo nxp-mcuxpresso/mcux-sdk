@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FLEXSPI driver version 2.3.5. */
-#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 6))
+/*! @brief FLEXSPI driver version. */
+#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*@}*/
 
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(0)
@@ -236,6 +236,12 @@ typedef struct _flexspi_config
     bool enableDoze;            /*!< Enable/disable doze mode support. */
     bool enableHalfSpeedAccess; /*!< Enable/disable divide by 2 of the clock for half
                                  speed commands. */
+#if defined(FSL_FEATURE_FLEXSPI_SUPPORT_SEPERATE_RXCLKSRC_PORTB) && FSL_FEATURE_FLEXSPI_SUPPORT_SEPERATE_RXCLKSRC_PORTB
+    flexspi_read_sample_clock_t rxSampleClockPortB; /*!< Sample Clock source_b selection for Flash Reading. */
+#endif
+#if defined(FSL_FEATURE_FLEXSPI_SUPPORT_RXCLKSRC_DIFF) && FSL_FEATURE_FLEXSPI_SUPPORT_RXCLKSRC_DIFF
+    bool rxSampleClockDiff; /*!< Sample Clock source or source_b selection for Flash Reading. */
+#endif
 #if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR2_SCKBDIFFOPT) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR2_SCKBDIFFOPT)
     bool enableSckBDiffOpt; /*!< Enable/disable SCKB pad use as SCKA differential clock
                              output, when enable, Port B flash access is not available. */
@@ -278,9 +284,12 @@ typedef struct _flexspi_config
 /*! @brief External device configuration items. */
 typedef struct _flexspi_device_config
 {
-    uint32_t flexspiRootClk;                         /*!< FLEXSPI serial root clock. */
-    bool isSck2Enabled;                              /*!< FLEXSPI use SCK2. */
-    uint32_t flashSize;                              /*!< Flash size in KByte. */
+    uint32_t flexspiRootClk; /*!< FLEXSPI serial root clock. */
+    bool isSck2Enabled;      /*!< FLEXSPI use SCK2. */
+    uint32_t flashSize;      /*!< Flash size in KByte. */
+#if defined(FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT) && (FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT)
+    bool addressShift;                               /*!< Address shift. */
+#endif                                               /* FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT */
     flexspi_cs_interval_cycle_unit_t CSIntervalUnit; /*!< CS interval unit, 1 or 256 cycle. */
     uint16_t CSInterval;                             /*!< CS line assert interval, multiply CS interval unit to
                                                       get the CS line assert interval cycles. */
@@ -298,6 +307,9 @@ typedef struct _flexspi_device_config
                                                       unit to get the AHB write wait cycles. */
     bool enableWriteMask;                            /*!< Enable/Disable FLEXSPI drive DQS pin as write mask
                                                       when writing to external device. */
+#if defined(FSL_FEATURE_FLEXSPI_HAS_ERRATA_051426) && (FSL_FEATURE_FLEXSPI_HAS_ERRATA_051426)
+    bool isFroClockSource; /*!< Is FRO clock source or not. */
+#endif
 } flexspi_device_config_t;
 
 /*! @brief Transfer structure for FLEXSPI. */
@@ -325,7 +337,7 @@ typedef void (*flexspi_transfer_callback_t)(FLEXSPI_Type *base,
 struct _flexspi_handle
 {
     uint32_t state;                                 /*!< Internal state for FLEXSPI transfer */
-    uint32_t *data;                                 /*!< Data buffer. */
+    uint8_t *data;                                  /*!< Data buffer. */
     size_t dataSize;                                /*!< Remaining Data size in bytes. */
     size_t transferTotalSize;                       /*!< Total Data size in bytes. */
     flexspi_transfer_callback_t completionCallback; /*!< Callback for users while transfer finish or error occurred */
@@ -689,7 +701,7 @@ static inline bool FLEXSPI_GetBusIdleStatus(FLEXSPI_Type *base)
  */
 void FLEXSPI_UpdateRxSampleClock(FLEXSPI_Type *base, flexspi_read_sample_clock_t clockSource);
 
-#if !((defined(FSL_FEATURE_FLEXSPI_HAS_NO_IPCR1_IPAREN)) && (FSL_FEATURE_FLEXSPI_HAS_NO_IPCR1_IPAREN))
+#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_IP_PARALLEL_MODE) && FSL_FEATURE_FLEXSPI_HAS_NO_IP_PARALLEL_MODE)
 /*! @brief Enables/disables the FLEXSPI IP command parallel mode.
  *
  * @param base FLEXSPI peripheral base address.
@@ -708,7 +720,7 @@ static inline void FLEXSPI_EnableIPParallelMode(FLEXSPI_Type *base, bool enable)
 }
 #endif
 
-#if !((defined(FSL_FEATURE_FLEXSPI_HAS_NO_AHBCR_APAREN)) && (FSL_FEATURE_FLEXSPI_HAS_NO_AHBCR_APAREN))
+#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_AHB_PARALLEL_MODE) && FSL_FEATURE_FLEXSPI_HAS_NO_AHB_PARALLEL_MODE)
 /*! @brief Enables/disables the FLEXSPI AHB command parallel mode.
  *
  * @param base FLEXSPI peripheral base address.
@@ -773,7 +785,7 @@ static inline uint32_t FLEXSPI_ReadData(FLEXSPI_Type *base, uint8_t fifoIndex)
  * @retval kStatus_FLEXSPI_IpCommandSequenceError IP command sequence error detected
  * @retval kStatus_FLEXSPI_IpCommandGrantTimeout IP command grant timeout detected
  */
-status_t FLEXSPI_WriteBlocking(FLEXSPI_Type *base, uint32_t *buffer, size_t size);
+status_t FLEXSPI_WriteBlocking(FLEXSPI_Type *base, uint8_t *buffer, size_t size);
 
 /*!
  * @brief Receives a buffer of data bytes using a blocking method.
@@ -786,7 +798,7 @@ status_t FLEXSPI_WriteBlocking(FLEXSPI_Type *base, uint32_t *buffer, size_t size
  * @retval kStatus_FLEXSPI_IpCommandSequenceError IP command sequencen error detected
  * @retval kStatus_FLEXSPI_IpCommandGrantTimeout IP command grant timeout detected
  */
-status_t FLEXSPI_ReadBlocking(FLEXSPI_Type *base, uint32_t *buffer, size_t size);
+status_t FLEXSPI_ReadBlocking(FLEXSPI_Type *base, uint8_t *buffer, size_t size);
 
 /*!
  * @brief Execute command to transfer a buffer data bytes using a blocking method.

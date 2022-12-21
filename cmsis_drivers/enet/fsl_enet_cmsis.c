@@ -47,12 +47,6 @@
 /* Define the timeout macro. */
 #define ENET_SMI_TIMEOUT_COUNT 0xffff
 
-typedef const struct _cmsis_enet_mac_resource
-{
-    ENET_Type *base;           /*!< ENET peripheral base address. */
-    uint32_t (*GetFreq)(void); /*!< Function to get frequency. */
-} cmsis_enet_mac_resource_t;
-
 typedef struct _cmsis_enet_mac_driver_state
 {
     cmsis_enet_mac_resource_t *resource;  /*!< Basic enet resource. */
@@ -529,20 +523,11 @@ SDK_ALIGN(static uint8_t g_rxDataBuff[ENET_RXBD_NUM][SDK_SIZEALIGN(ENET_RXBUFF_S
 SDK_ALIGN(static uint8_t g_txDataBuff[ENET_TXBD_NUM][SDK_SIZEALIGN(ENET_TXBUFF_SIZE, CMSIS_ENET_BUFF_ALIGNMENT)],
           CMSIS_ENET_BUFF_ALIGNMENT);
 
+extern cmsis_enet_mac_resource_t ENET0_Resource;
+
 extern void ENET0_InitPins(void);
 extern void ENET0_DeinitPins(void);
 
-#if (defined(ENET) && defined(ENET_1G))
-static cmsis_enet_mac_resource_t ENET0_Resource = {ENET_1G, ENET0_GetFreq};
-#elif defined(ENET)
-static cmsis_enet_mac_resource_t ENET0_Resource = {ENET, ENET0_GetFreq};
-#elif defined(ENET0)
-static cmsis_enet_mac_resource_t ENET0_Resource = {ENET0, ENET0_GetFreq};
-#elif defined(ENET1)
-static cmsis_enet_mac_resource_t ENET0_Resource = {ENET1, ENET0_GetFreq};
-#else
-static cmsis_enet_mac_resource_t ENET0_Resource = {CONNECTIVITY__ENET0, ENET0_GetFreq};
-#endif
 static enet_handle_t ENET0_Handle;
 static enet_buffer_config_t ENET0_BuffConfig = {ENET_RXBD_NUM,
                                                 ENET_TXBD_NUM,
@@ -561,7 +546,6 @@ static cmsis_enet_mac_driver_state_t ENET0_DriverState = {&ENET0_Resource, &ENET
 static int32_t ENET0_Initialize(ARM_ETH_MAC_SignalEvent_t cb_event)
 {
     ENET0_InitPins();
-
     return ENET_CommonInitialize(cb_event, &ENET0_DriverState);
 }
 

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2018-01-09
-**     Build:               b220303
+**     Build:               b220714
 **
 **     Abstract:
 **         Chip specific module features.
@@ -151,6 +151,8 @@
 #define FSL_FEATURE_CTIMER_HAS_CCR_CAP3 (0)
 /* @brief Writing a zero asserts the CTIMER reset. */
 #define FSL_FEATURE_CTIMER_WRITE_ZERO_ASSERT_RESET (1)
+/* @brief CTIMER Has register MSR */
+#define FSL_FEATURE_CTIMER_HAS_MSR (1)
 
 /* DAC module features */
 

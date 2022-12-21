@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPADC driver version 2.5.1. */
-#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
+/*! @brief LPADC driver version 2.6.1. */
+#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 6, 1))
 /*@}*/
 
 /*!
@@ -199,7 +199,8 @@ enum _lpadc_trigger_status_flags
  */
 typedef enum _lpadc_sample_scale_mode
 {
-    kLPADC_SamplePartScale = 0U, /*!< Use divided input voltage signal. (Factor of 30/64). */
+    kLPADC_SamplePartScale =
+        0U, /*!< Use divided input voltage signal. (For scale select,please refer to the reference manual). */
     kLPADC_SampleFullScale = 1U, /*!< Full scale (Factor of 1). */
 } lpadc_sample_scale_mode_t;
 
@@ -238,6 +239,12 @@ typedef enum _lpadc_hardware_average_mode
     kLPADC_HardwareAverageCount32  = 5U, /*!< 32 conversions averaged. */
     kLPADC_HardwareAverageCount64  = 6U, /*!< 64 conversions averaged. */
     kLPADC_HardwareAverageCount128 = 7U, /*!< 128 conversions averaged. */
+#if (defined(FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH) && \
+     (FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH == 4))
+    kLPADC_HardwareAverageCount256  = 8U,  /*!< 256 conversions averaged. */
+    kLPADC_HardwareAverageCount512  = 9U,  /*!< 512 conversions averaged. */
+    kLPADC_HardwareAverageCount1024 = 10U, /*!< 1024 conversions averaged. */
+#endif                                     /* FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH */
 } lpadc_hardware_average_mode_t;
 
 /*!
@@ -283,9 +290,9 @@ typedef enum _lpadc_hardware_compare_mode
 typedef enum _lpadc_conversion_resolution_mode
 {
     kLPADC_ConversionResolutionStandard = 0U, /*!< Standard resolution. Single-ended 12-bit conversion, Differential
-                                                   13-bit conversion with 2’s complement output. */
+                                                   13-bit conversion with 2's complement output. */
     kLPADC_ConversionResolutionHigh = 1U,     /*!< High resolution. Single-ended 16-bit conversion; Differential 16-bit
-                                                   conversion with 2’s complement output. */
+                                                   conversion with 2's complement output. */
 } lpadc_conversion_resolution_mode_t;
 #endif /* FSL_FEATURE_LPADC_HAS_CMDL_MODE */
 
@@ -305,6 +312,12 @@ typedef enum _lpadc_conversion_average_mode
     kLPADC_ConversionAverage32  = 5U, /*!< 32 conversions averaged. */
     kLPADC_ConversionAverage64  = 6U, /*!< 64 conversions averaged. */
     kLPADC_ConversionAverage128 = 7U, /*!< 128 conversions averaged. */
+#if (defined(FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH) && \
+     (FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH == 4))
+    kLPADC_ConversionAverage256  = 8U,  /*!< 256 conversions averaged. */
+    kLPADC_ConversionAverage512  = 9U,  /*!< 512 conversions averaged. */
+    kLPADC_ConversionAverage1024 = 10U, /*!< 1024 conversions averaged. */
+#endif                                  /* FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH */
 } lpadc_conversion_average_mode_t;
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS */
 
@@ -333,6 +346,18 @@ typedef enum _lpadc_power_level_mode
     kLPADC_PowerLevelAlt3 = 2U, /*!< ... */
     kLPADC_PowerLevelAlt4 = 3U, /*!< Highest power setting. */
 } lpadc_power_level_mode_t;
+
+#if (defined(FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE) && FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE)
+/*!
+ * @brief Define enumeration of offset calibration mode.
+ *
+ */
+typedef enum _lpadc_offset_calibration_mode
+{
+    kLPADC_OffsetCalibration12bitMode = 0U, /*!< 12 bit offset calibration mode. */
+    kLPADC_OffsetCalibration16bitMode = 1U, /*!< 16 bit offset calibration mode. */
+} lpadc_offset_calibration_mode_t;
+#endif /* FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE */
 
 /*!
  * @brief Define enumeration of trigger priority policy.
@@ -386,7 +411,10 @@ typedef struct
                                 result in a longer delay than the analog startup time. */
     lpadc_reference_voltage_source_t referenceVoltageSource; /*!< Selects the voltage reference high used for
                                                                   conversions.*/
-    lpadc_power_level_mode_t powerLevelMode;                 /*!< Power Configuration Selection. */
+
+#if !(defined(FSL_FEATURE_LPADC_HAS_CFG_PWRSEL) && (FSL_FEATURE_LPADC_HAS_CFG_PWRSEL == 0))
+    lpadc_power_level_mode_t powerLevelMode;               /*!< Power Configuration Selection. */
+#endif                                                     /* FSL_FEATURE_LPADC_HAS_CFG_PWRSEL */
     lpadc_trigger_priority_policy_t triggerPriorityPolicy; /*!< Control how higher priority triggers are handled, see to
                                                                 lpadc_trigger_priority_policy_t. */
     bool enableConvPause; /*!< Enables the ADC pausing function. When enabled, a programmable delay is inserted during
@@ -418,10 +446,16 @@ typedef struct
 typedef struct
 {
 #if defined(FSL_FEATURE_LPADC_HAS_CMDL_CSCALE) && FSL_FEATURE_LPADC_HAS_CMDL_CSCALE
-    lpadc_sample_scale_mode_t sampleScaleMode;     /*!< Sample scale mode. */
-#endif                                             /* FSL_FEATURE_LPADC_HAS_CMDL_CSCALE */
+    lpadc_sample_scale_mode_t sampleScaleMode; /*!< Sample scale mode. */
+#endif                                         /* FSL_FEATURE_LPADC_HAS_CMDL_CSCALE */
+#if defined(FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE) && FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE
+    lpadc_sample_scale_mode_t channelBScaleMode;   /*!< Alternate channe B Scale mode. */
+#endif                                             /* FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE */
     lpadc_sample_channel_mode_t sampleChannelMode; /*!< Channel sample mode. */
     uint32_t channelNumber;                        /*!< Channel number, select the channel or channel pair. */
+#if defined(FSL_FEATURE_LPADC_HAS_CMDL_ALTB_ADCH) && FSL_FEATURE_LPADC_HAS_CMDL_ALTB_ADCH
+    uint32_t channelBNumber; /*!< Alternate Channel B number, select the channel. */
+#endif
     uint32_t chainedNextCommandNumber; /*!< Selects the next command to be executed after this command completes.
                                             1-15 is available, 0 is to terminate the chain after this command. */
     bool enableAutoChannelIncrement;   /*!< Loop with increment: when disabled, the "loopCount" field selects the number
@@ -444,6 +478,9 @@ typedef struct
                                  automatically executed; when enabled, the active trigger must be asserted again before
                                  executing this command. */
 #endif                      /* FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG */
+#if defined(FSL_FEATURE_LPADC_HAS_CMDL_ALTBEN) && FSL_FEATURE_LPADC_HAS_CMDL_ALTBEN
+    bool enableChannelB; /*! Enable alternate Channel B */
+#endif                   /* FSL_FEATURE_LPADC_HAS_CMDL_ALTBEN */
 } lpadc_conv_command_config_t;
 
 /*!
@@ -824,6 +861,30 @@ static inline void LPADC_DoSoftwareTrigger(ADC_Type *base, uint32_t triggerIdMas
     base->SWTRIG = triggerIdMask;
 }
 
+#if defined(FSL_FEATURE_LPADC_HAS_TCTRL_CMD_SEL) && FSL_FEATURE_LPADC_HAS_TCTRL_CMD_SEL
+/*!
+ * @brief Enable hardware trigger command selection.
+ *
+ * This function will use the hardware trigger command from ADC_ETC.The trigger command is then defined
+ * by ADC hardware trigger command selection field in ADC_ETC- >TRIGx_CHAINy_z_n[CSEL].
+ *
+ * @param base LPADC peripheral base address.
+ * @param triggerId ID for each trigger. Typically, the available value range is from 0.
+ * @param enable  True to enable or flase to disable.
+ */
+static inline void LPADC_EnableHardwareTriggerCommandSelection(ADC_Type *base, uint32_t triggerId, bool enable)
+{
+    if (enable)
+    {
+        base->TCTRL[triggerId] |= ADC_TCTRL_CMD_SEL_MASK;
+    }
+    else
+    {
+        base->TCTRL[triggerId] &= ~ADC_TCTRL_CMD_SEL_MASK;
+    }
+}
+#endif /* FSL_FEATURE_LPADC_HAS_TCTRL_CMD_SEL*/
+
 /*!
  * @brief Configure conversion command.
  *
@@ -840,6 +901,7 @@ void LPADC_SetConvCommandConfig(ADC_Type *base, uint32_t commandId, const lpadc_
  * values are:
  * @code
  *   config->sampleScaleMode            = kLPADC_SampleFullScale;
+ *   config->channelBScaleMode          = kLPADC_SampleFullScale;
  *   config->channelSampleMode          = kLPADC_SampleChannelSingleEndSideA;
  *   config->channelNumber              = 0U;
  *   config->chainedNextCmdNumber       = 0U;
@@ -850,8 +912,9 @@ void LPADC_SetConvCommandConfig(ADC_Type *base, uint32_t commandId, const lpadc_
  *   config->hardwareCompareMode        = kLPADC_HardwareCompareDisabled;
  *   config->hardwareCompareValueHigh   = 0U;
  *   config->hardwareCompareValueLow    = 0U;
- *   config->conversionResolutionMode  = kLPADC_ConversionResolutionStandard;
+ *   config->conversionResolutionMode   = kLPADC_ConversionResolutionStandard;
  *   config->enableWaitTrigger          = false;
+ *   config->enableChannelB             = false;
  * @endcode
  * @param config Pointer to configuration structure.
  */
@@ -916,6 +979,36 @@ static inline void LPADC_SetOffsetValue(ADC_Type *base, uint32_t valueA, uint32_
 {
     base->OFSTRIM = ADC_OFSTRIM_OFSTRIM_A(valueA) | ADC_OFSTRIM_OFSTRIM_B(valueB);
 }
+#else
+/*!
+ * @brief Set proper offset value to trim 12 bit ADC conversion.
+ *
+ * Set the offset trim value for offset calibration manually.
+ *
+ * @param base  LPADC peripheral base address.
+ * @param valueA Setting offset value A.
+ * @param valueB Setting offset value B.
+ * @note In normal adc sequence, the values are automatically calculated by LPADC_EnableOffsetCalibration.
+ */
+static inline void LPADC_SetOffset12BitValue(ADC_Type *base, uint32_t valueA, uint32_t valueB)
+{
+    base->OFSTRIM12 = ADC_OFSTRIM12_OFSTRIM_A(valueA) | ADC_OFSTRIM12_OFSTRIM_A(valueB);
+}
+
+/*!
+ * @brief Set proper offset value to trim 16 bit ADC conversion.
+ *
+ * Set the offset trim value for offset calibration manually.
+ *
+ * @param base  LPADC peripheral base address.
+ * @param valueA Setting offset value A.
+ * @param valueB Setting offset value B.
+ * @note In normal adc sequence, the values are automatically calculated by LPADC_EnableOffsetCalibration.
+ */
+static inline void LPADC_SetOffset16BitValue(ADC_Type *base, uint32_t valueA, uint32_t valueB)
+{
+    base->OFSTRIM16 = ADC_OFSTRIM16_OFSTRIM_A(valueA) | ADC_OFSTRIM16_OFSTRIM_B(valueB);
+}
 #endif /* FSL_FEATURE_LPADC_HAS_OFSTRIM */
 
 /*!
@@ -935,6 +1028,19 @@ static inline void LPADC_EnableOffsetCalibration(ADC_Type *base, bool enable)
         base->CTRL &= ~ADC_CTRL_CALOFS_MASK;
     }
 }
+#if defined(FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE) && FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE
+/*!
+ * @brief Set offset calibration mode.
+ *
+ * @param base LPADC peripheral base address.
+ * @param mode set offset calibration mode.see to #lpadc_offset_calibration_mode_t .
+ */
+static inline void LPADC_SetOffsetCalibrationMode(ADC_Type *base, lpadc_offset_calibration_mode_t mode)
+{
+    base->CTRL = (base->CTRL & ~ADC_CTRL_CALOFSMODE_MASK) | ADC_CTRL_CALOFSMODE(mode);
+}
+
+#endif /* FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE */
 
 /*!
  * @brief Do offset calibration.

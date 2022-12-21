@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021, NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,8 +27,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.6.1 */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 6, 1))
+/*! @brief CLOCK driver version 2.7.0 */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -1275,6 +1275,12 @@ void CLOCK_EnableSysOscClk(bool enable, bool enableLowPower, uint32_t delay_us);
  */
 void CLOCK_EnableFroClk(uint32_t divOutEnable);
 
+/*! @brief  Enable/Disable FRO clock output with specified frequency using the FRO Tuner.
+ *  @param  targetFreq target fro frequency.
+ *  @param  divOutEnable Or'ed value of clock_fro_output_en_t to enable certain clock freq output.
+ */
+void CLOCK_EnableFroClkFreq(uint32_t targetFreq, uint32_t divOutEnable);
+
 #ifndef __XCC__
 /*! @brief  Enable/Disable FRO192M or FRO96M clock output.
  *  @param  froFreq : target fro frequency.
@@ -1490,6 +1496,16 @@ static inline void CLOCK_DeinitAudioPfd(uint32_t pfd)
 {
     CLKCTL1->AUDIOPLL0PFD |= ((uint32_t)CLKCTL1_AUDIOPLL0PFD_PFD0_CLKGATE_MASK << (8U * pfd));
 }
+
+/*! @brief  Tune the FRO to the specified frequency.
+ * @param targetFreq  The target frequency.
+ * @retval true The FRO is tuned successfully.
+ * @retval false The FRO is not tuned to the target frequency.
+ * @note This API can be used to tune the FRO to an accurate frequency periodicly using the reference clock(crystal
+ * oscillator). Make sure the reference clock is enabled before calling this API and the reference clock can be disabled
+ * after this API call.
+ */
+status_t CLOCK_FroTuneToFreq(uint32_t targetFreq);
 
 /*! @brief  Enable/Disable FRO tuning.
  *   On enable, the function will wait until FRO is close to the target frequency.

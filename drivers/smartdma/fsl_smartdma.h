@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2022 NXP
  * All rights reserved.
  *
  *
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SMARTDMA driver version */
-#define FSL_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 3))
+#define FSL_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
 /*@}*/
 
 /*! @brief The firmware used for display. */
@@ -63,14 +63,20 @@ enum _smartdma_flexio_mculcd_api
                                                  parameter smartdma_flexio_mculcd_param_t. */
     kSMARTDMA_FlexIO_DMA_ARGB2RGB_Endian_Swap_Reverse, /*!< Convert ARGB to RGB, then swap endian and reverse, and send
                                                  to FlexIO, use parameter smartdma_flexio_mculcd_param_t. */
-    kSMARTDMA_MIPI_RGB565_DMA,      /*!< Send RGB565 data to MIPI DSI, use parameter smartdma_dsi_param_t. */
-    kSMARTDMA_MIPI_RGB888_DMA,      /*!< Send RGB888 data to MIPI DSI, use parameter smartdma_dsi_param_t. */
-    kSMARTDMA_MIPI_XRGB2RGB_DMA,    /*!< Send XRGB8888 data to MIPI DSI, use parameter smartdma_param_t */
-    kSMARTDMA_MIPI_RGB565_R180_DMA, /*!< Send RGB565 data to MIPI DSI, Rotate 180, use parameter smartdma_dsi_param_t.
-                                     */
-    kSMARTDMA_MIPI_RGB888_R180_DMA, /*!< Send RGB888 data to MIPI DSI, Rotate 180, use parameter smartdma_dsi_param_t.
-                                     */
-    kSMARTDMA_FlexIO_DMA_ONELANE,   /*!< FlexIO DMA for one SHIFTBUF, Write Data to SHIFTBUF[OFFSET] */
+    kSMARTDMA_MIPI_RGB565_DMA,        /*!< Send RGB565 data to MIPI DSI, use parameter smartdma_dsi_param_t. */
+    kSMARTDMA_MIPI_RGB565_DMA2D,      /*!< Send RGB565 data to MIPI DSI, use parameter smartdma_dsi_2d_param_t. */
+    kSMARTDMA_MIPI_RGB888_DMA,        /*!< Send RGB888 data to MIPI DSI, use parameter smartdma_dsi_param_t. */
+    kSMARTDMA_MIPI_RGB888_DMA2D,      /*!< Send RGB565 data to MIPI DSI, use parameter smartdma_dsi_2d_param_t. */
+    kSMARTDMA_MIPI_XRGB2RGB_DMA,      /*!< Send XRGB8888 data to MIPI DSI, use parameter smartdma_param_t */
+    kSMARTDMA_MIPI_XRGB2RGB_DMA2D,    /*!< Send XRGB8888 data to MIPI DSI, use parameter smartdma_dsi_2d_param_t. */
+    kSMARTDMA_MIPI_RGB565_R180_DMA,   /*!< Send RGB565 data to MIPI DSI, Rotate 180, use parameter smartdma_dsi_param_t.
+                                       */
+    kSMARTDMA_MIPI_RGB888_R180_DMA,   /*!< Send RGB888 data to MIPI DSI, Rotate 180, use parameter smartdma_dsi_param_t.
+                                       */
+    kSMARTDMA_MIPI_XRGB2RGB_R180_DMA, /*!< Send XRGB8888 data to MIPI DSI, Rotate 180, use parameter
+                                         smartdma_dsi_param_t */
+
+    kSMARTDMA_FlexIO_DMA_ONELANE, /*!< FlexIO DMA for one SHIFTBUF, Write Data to SHIFTBUF[OFFSET] */
 };
 
 /*!
@@ -118,6 +124,32 @@ typedef struct _smartdma_dsi_param
      */
     uint32_t disablePixelByteSwap;
 } smartdma_dsi_param_t;
+
+typedef struct _smartdma_dsi_2d_param_t
+{
+    /*! Pointer to the buffer to send. */
+    const uint8_t *p_buffer;
+    /*! SRC data transfer in a minor loop */
+    uint32_t minorLoop;
+    /*! SRC data offset added after a minor loop */
+    uint32_t minorLoopOffset;
+    /*! SRC data transfer in a major loop */
+    uint32_t majorLoop;
+    /*! Stack used by SMARTDMA. */
+    uint32_t *smartdma_stack;
+    /*!
+     * If set to 1, the pixels are filled to MIPI DSI FIFO directly.
+     * If set to 0, the pixel bytes are swapped then filled to
+     * MIPI DSI FIFO. For example, when set to 0 and frame buffer pixel
+     * format is RGB565:
+     * LSB                                           MSB
+     * B0 B1 B2 B3 B4 G0 G1 G2 | G3 G4 G5 R0 R1 R2 R3 R4
+     * Then the pixel filled to DSI FIFO is:
+     * LSB                                           MSB
+     * G3 G4 G5 R0 R1 R2 R3 R4 | B0 B1 B2 B3 B4 G0 G1 G2
+     */
+    uint32_t disablePixelByteSwap;
+} smartdma_dsi_2d_param_t;
 
 /*!
  * @brief Parameter for RGB565To888

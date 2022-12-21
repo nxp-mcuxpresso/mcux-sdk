@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 5.0, 2021-03-01
-**     Build:               b220111
+**     Build:               b220718
 **
 **     Abstract:
 **         Chip specific module features.
@@ -263,8 +263,10 @@
 
 /* SAI module features */
 
+/* @brief SAI has FIFO in this soc (register bit fields TCR1[TFW]. */
+#define FSL_FEATURE_SAI_HAS_FIFO (1)
 /* @brief Receive/transmit FIFO size in item count (register bit fields TCSR[FRDE], TCSR[FRIE], TCSR[FRF], TCR1[TFW], RCSR[FRDE], RCSR[FRIE], RCSR[FRF], RCR1[RFW], registers TFRn, RFRn). */
-#define FSL_FEATURE_SAI_FIFO_COUNT (128)
+#define FSL_FEATURE_SAI_FIFO_COUNTn(x) (128)
 /* @brief Receive/transmit channel number (register bit fields TCR3[TCE], RCR3[RCE], registers TDRn and RDRn). */
 #define FSL_FEATURE_SAI_CHANNEL_COUNTn(x) (8)
 /* @brief Maximum words per frame (register bit fields TCR3[WDFL], TCR4[FRSZ], TMR[TWM], RCR3[WDFL], RCR4[FRSZ], RMR[RWM]). */
@@ -365,6 +367,8 @@
 #define FSL_FEATURE_PDM_HIGH_QUALITY_CLKDIV_FACTOR (125)
 /* @brief CLKDIV factor in Very Low Quality modes */
 #define FSL_FEATURE_PDM_VERY_LOW_QUALITY_CLKDIV_FACTOR (19)
+/* @brief PDM Has No VADEF Bitfield In PDM VAD0_STAT Register */
+#define FSL_FEATURE_PDM_HAS_NO_VADEF (0)
 
 /* RDC module features */
 

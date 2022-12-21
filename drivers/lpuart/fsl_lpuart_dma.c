@@ -220,7 +220,7 @@ void LPUART_TransferCreateHandleDMA(LPUART_Type *base,
     /* Save the handle in global variables to support the double weak mechanism. */
     s_lpuartHandle[instance] = handle;
     /* Set LPUART_TransferDMAHandleIRQ as DMA IRQ handler */
-    s_lpuartIsr = LPUART_TransferDMAHandleIRQ;
+    s_lpuartIsr[instance] = LPUART_TransferDMAHandleIRQ;
     /* Disable all LPUART internal interrupts */
     LPUART_DisableInterrupts(base, (uint32_t)kLPUART_AllInterruptEnable);
     /* Enable interrupt in NVIC. */

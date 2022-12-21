@@ -37,12 +37,7 @@ typedef struct _spi_dma_txdummy
     uint32_t word;
 } spi_dma_txdummy_t;
 
-/*! @brief Array to map SPI instance number to base address. */
-static const uint32_t s_spiBaseAddrs[] = SPI_BASE_ADDRS;
-
-/*<! Private handle only used for internally. */
-static spi_dma_private_handle_t s_dmaPrivateHandle[ARRAY_SIZE(s_spiBaseAddrs)];
-
+static spi_dma_private_handle_t s_dmaPrivateHandle[FSL_FEATURE_SOC_SPI_COUNT];
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -67,33 +62,33 @@ static void SPI_RxDMACallback(dma_handle_t *handle, void *userData, bool transfe
  * Variables
  ******************************************************************************/
 #if defined(__ICCARM__)
-#pragma data_alignment                                         = 4
-static spi_dma_txdummy_t s_txDummy[ARRAY_SIZE(s_spiBaseAddrs)] = {0};
+#pragma data_alignment                                        = 4
+static spi_dma_txdummy_t s_txDummy[FSL_FEATURE_SOC_SPI_COUNT] = {0};
 #elif defined(__CC_ARM) || defined(__ARMCC_VERSION)
-__attribute__((aligned(4))) static spi_dma_txdummy_t s_txDummy[ARRAY_SIZE(s_spiBaseAddrs)] = {0};
+__attribute__((aligned(4))) static spi_dma_txdummy_t s_txDummy[FSL_FEATURE_SOC_SPI_COUNT] = {0};
 #elif defined(__GNUC__)
-__attribute__((aligned(4))) static spi_dma_txdummy_t s_txDummy[ARRAY_SIZE(s_spiBaseAddrs)] = {0};
+__attribute__((aligned(4))) static spi_dma_txdummy_t s_txDummy[FSL_FEATURE_SOC_SPI_COUNT] = {0};
 #endif
 
 #if defined(__ICCARM__)
 #pragma data_alignment = 4
 static uint16_t s_rxDummy;
-static uint32_t s_txLastWord[ARRAY_SIZE(s_spiBaseAddrs)];
+static uint32_t s_txLastWord[FSL_FEATURE_SOC_SPI_COUNT];
 #elif defined(__CC_ARM) || defined(__ARMCC_VERSION)
 __attribute__((aligned(4))) static uint16_t s_rxDummy;
-__attribute__((aligned(4))) static uint32_t s_txLastWord[ARRAY_SIZE(s_spiBaseAddrs)];
+__attribute__((aligned(4))) static uint32_t s_txLastWord[FSL_FEATURE_SOC_SPI_COUNT];
 #elif defined(__GNUC__)
 __attribute__((aligned(4))) static uint16_t s_rxDummy;
-__attribute__((aligned(4))) static uint32_t s_txLastWord[ARRAY_SIZE(s_spiBaseAddrs)];
+__attribute__((aligned(4))) static uint32_t s_txLastWord[FSL_FEATURE_SOC_SPI_COUNT];
 #endif
 
 #if defined(__ICCARM__)
-#pragma data_alignment                                                     = 16
-static dma_descriptor_t s_spi_descriptor_table[ARRAY_SIZE(s_spiBaseAddrs)] = {0};
+#pragma data_alignment                                                    = 16
+static dma_descriptor_t s_spi_descriptor_table[FSL_FEATURE_SOC_SPI_COUNT] = {0};
 #elif defined(__CC_ARM) || defined(__ARMCC_VERSION)
-__attribute__((aligned(16))) static dma_descriptor_t s_spi_descriptor_table[ARRAY_SIZE(s_spiBaseAddrs)] = {0};
+__attribute__((aligned(16))) static dma_descriptor_t s_spi_descriptor_table[FSL_FEATURE_SOC_SPI_COUNT] = {0};
 #elif defined(__GNUC__)
-__attribute__((aligned(16))) static dma_descriptor_t s_spi_descriptor_table[ARRAY_SIZE(s_spiBaseAddrs)] = {0};
+__attribute__((aligned(16))) static dma_descriptor_t s_spi_descriptor_table[FSL_FEATURE_SOC_SPI_COUNT] = {0};
 #endif
 
 /*******************************************************************************

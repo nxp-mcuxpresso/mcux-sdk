@@ -170,11 +170,11 @@ static uint32_t CLOCK_GetFllRefClkFreq(void)
 
 static uint8_t CLOCK_GetOscRangeFromFreq(uint32_t freq)
 {
-    assert((freq <= 32768U) || (freq >= 4000000U));
+    assert((freq <= 39063U) || (freq >= 4000000U));
 
     uint8_t range = 0U;
 
-    if (freq <= 32768U)
+    if (freq <= 39063U)
     {
         range = 0U;
     }

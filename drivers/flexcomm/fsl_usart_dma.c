@@ -52,10 +52,8 @@ typedef union usart_dma_to_flexcomm
  ******************************************************************************/
 /*! @brief IRQ name array */
 static const IRQn_Type s_usartIRQ[] = USART_IRQS;
-/*! @brief Array to map USART instance number to base address. */
-static const uint32_t s_usartBaseAddrs[] = USART_BASE_ADDRS;
 /*<! Private handle only used for internally. */
-static usart_dma_private_handle_t s_dmaPrivateHandle[ARRAY_SIZE(s_usartBaseAddrs)];
+static usart_dma_private_handle_t s_dmaPrivateHandle[FSL_FEATURE_SOC_USART_COUNT];
 
 /*******************************************************************************
  * Prototypes

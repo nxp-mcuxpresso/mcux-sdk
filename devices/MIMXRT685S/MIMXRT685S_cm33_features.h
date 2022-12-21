@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2018-06-19
-**     Build:               b220505
+**     Build:               b220930
 **
 **     Abstract:
 **         Chip specific module features.
@@ -219,6 +219,8 @@
 #define FSL_FEATURE_CTIMER_HAS_NO_CCR_CAP2 (0)
 /* @brief Has CTIMER CCR_CAP3 (register bits CCR[CAP3RE][CAP3FE][CAP3I]). */
 #define FSL_FEATURE_CTIMER_HAS_CCR_CAP3 (1)
+/* @brief CTIMER Has register MSR */
+#define FSL_FEATURE_CTIMER_HAS_MSR (1)
 
 /* DMA module features */
 
@@ -237,6 +239,10 @@
 
 /* @brief Number of channels */
 #define FSL_FEATURE_DMIC_CHANNEL_NUM (8)
+/* @brief DMIC channel support stereo data */
+#define FSL_FEATURE_DMIC_IO_HAS_STEREO_2_4_6 (1)
+/* @brief DMIC does not support bypass channel clock */
+#define FSL_FEATURE_DMIC_IO_HAS_NO_BYPASS (1)
 /* @brief DMIC channel FIFO register support sign extended */
 #define FSL_FEATURE_DMIC_CHANNEL_HAS_SIGNEXTEND (1)
 /* @brief DMIC has no IOCFG register */
@@ -375,6 +381,8 @@
 #define FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH (0)
 /* @brief Register SCONFIG do not have IDRAND bitfield. */
 #define FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND (0)
+/* @brief Register SCONFIG has HDROK bitfield. */
+#define FSL_FEATURE_I3C_HAS_HDROK (0)
 
 /* INPUTMUX module features */
 

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2019-05-16
-**     Build:               b220303
+**     Build:               b220725
 **
 **     Abstract:
 **         Chip specific module features.
@@ -59,6 +59,8 @@
 #define FSL_FEATURE_SOC_IOCON_COUNT (1)
 /* @brief LPADC availability on the SoC. */
 #define FSL_FEATURE_SOC_LPADC_COUNT (1)
+/* @brief MPU availability on the SoC. */
+#define FSL_FEATURE_SOC_MPU_COUNT (1)
 /* @brief MRT availability on the SoC. */
 #define FSL_FEATURE_SOC_MRT_COUNT (1)
 /* @brief OSTIMER availability on the SoC. */
@@ -189,6 +191,8 @@
 #define FSL_FEATURE_CTIMER_HAS_NO_CCR_CAP2 (0)
 /* @brief Has CTIMER CCR_CAP3 (register bits CCR[CAP3RE][CAP3FE][CAP3I]). */
 #define FSL_FEATURE_CTIMER_HAS_CCR_CAP3 (1)
+/* @brief CTIMER Has register MSR */
+#define FSL_FEATURE_CTIMER_HAS_MSR (1)
 
 /* DMA module features */
 
@@ -269,6 +273,11 @@
 #define FSL_FEATURE_FLEXCOMM8_SPI_INDEX  (8)
 /* @brief I2S has DMIC interconnection */
 #define FSL_FEATURE_FLEXCOMM_INSTANCE_I2S_HAS_DMIC_INTERCONNECTIONn(x) (0)
+
+/* GINT module features */
+
+/* @brief The count of th port which are supported in GINT. */
+#define FSL_FEATURE_GINT_PORT_COUNT (2)
 
 /* HASHCRYPT module features */
 
@@ -351,6 +360,11 @@
 
 /* @brief Number of connected outputs */
 #define FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS (2)
+
+/* SPI module features */
+
+/* @brief SSEL pin count. */
+#define FSL_FEATURE_SPI_SSEL_COUNT (4)
 
 /* SYSCON module features */
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */
@@ -720,25 +720,47 @@ static inline uint16_t ENET_ReadSMIData(ENET_Type *base)
 }
 
 /*!
- * @brief Starts an SMI read command.
- * support both MDIO IEEE802.3 Clause 22 and clause 45.
+ * @brief Sends the MDIO IEEE802.3 Clause 22 format write command.
  *
  * @param base  ENET peripheral base address.
  * @param phyAddr The PHY address.
- * @param phyReg The PHY register.
- */
-void ENET_StartSMIRead(ENET_Type *base, uint32_t phyAddr, uint32_t phyReg);
-
-/*!
- * @brief Starts a SMI write command.
- * support both MDIO IEEE802.3 Clause 22 and clause 45.
- *
- * @param base  ENET peripheral base address.
- * @param phyAddr The PHY address.
- * @param phyReg The PHY register.
+ * @param regAddr The PHY register.
  * @param data The data written to PHY.
  */
-void ENET_StartSMIWrite(ENET_Type *base, uint32_t phyAddr, uint32_t phyReg, uint32_t data);
+void ENET_StartSMIWrite(ENET_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t data);
+
+/*!
+ * @brief Sends the MDIO IEEE802.3 Clause 22 format read command.
+ *
+ * @param base  ENET peripheral base address.
+ * @param phyAddr The PHY address.
+ * @param regAddr The PHY register.
+ */
+void ENET_StartSMIRead(ENET_Type *base, uint8_t phyAddr, uint8_t regAddr);
+
+/*!
+ * @brief MDIO write with IEEE802.3 Clause 22 format.
+ *
+ * @param base  ENET peripheral base address.
+ * @param phyAddr  The PHY address.
+ * @param regAddr  The PHY register.
+ * @param data  The data written to PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_MDIOWrite(ENET_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t data);
+
+/*!
+ * @brief MDIO read with IEEE802.3 Clause 22 format.
+ *
+ * @param base  ENET peripheral base address.
+ * @param phyAddr  The PHY address.
+ * @param regAddr  The PHY register.
+ * @param pData  The data read from PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_MDIORead(ENET_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t *pData);
 /* @} */
 
 /*!

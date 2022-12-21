@@ -52,6 +52,12 @@ status_t HAL_CODEC_Init(void *handle, void *config)
             break;
 #endif
 
+#ifdef CODEC_WM8962_ENABLE
+        case kCODEC_WM8962:
+            retVal = HAL_CODEC_WM8962_Init(handle, config);
+            break;
+#endif
+
 #ifdef CODEC_WM8524_ENABLE
         case kCODEC_WM8524:
             retVal = HAL_CODEC_WM8524_Init(handle, config);
@@ -138,6 +144,12 @@ status_t HAL_CODEC_Deinit(void *handle)
             break;
 #endif
 
+#ifdef CODEC_WM8962_ENABLE
+        case kCODEC_WM8962:
+            retVal = HAL_CODEC_WM8962_Deinit(handle);
+            break;
+#endif
+
 #ifdef CODEC_WM8524_ENABLE
         case kCODEC_WM8524:
             retVal = HAL_CODEC_WM8524_Deinit(handle);
@@ -218,6 +230,12 @@ status_t HAL_CODEC_SetFormat(void *handle, uint32_t mclk, uint32_t sampleRate, u
 #ifdef CODEC_WM8960_ENABLE
         case kCODEC_WM8960:
             retVal = HAL_CODEC_WM8960_SetFormat(handle, mclk, sampleRate, bitWidth);
+            break;
+#endif
+
+#ifdef CODEC_WM8962_ENABLE
+        case kCODEC_WM8962:
+            retVal = HAL_CODEC_WM8962_SetFormat(handle, mclk, sampleRate, bitWidth);
             break;
 #endif
 
@@ -303,6 +321,12 @@ status_t HAL_CODEC_SetVolume(void *handle, uint32_t playChannel, uint32_t volume
             break;
 #endif
 
+#ifdef CODEC_WM8962_ENABLE
+        case kCODEC_WM8962:
+            retVal = HAL_CODEC_WM8962_SetVolume(handle, playChannel, volume);
+            break;
+#endif
+
 #ifdef CODEC_WM8524_ENABLE
         case kCODEC_WM8524:
             retVal = HAL_CODEC_WM8524_SetVolume(handle, playChannel, volume);
@@ -382,6 +406,12 @@ status_t HAL_CODEC_SetMute(void *handle, uint32_t playChannel, bool isMute)
 #ifdef CODEC_WM8960_ENABLE
         case kCODEC_WM8960:
             retVal = HAL_CODEC_WM8960_SetMute(handle, playChannel, isMute);
+            break;
+#endif
+
+#ifdef CODEC_WM8962_ENABLE
+        case kCODEC_WM8962:
+            retVal = HAL_CODEC_WM8962_SetMute(handle, playChannel, isMute);
             break;
 #endif
 
@@ -467,6 +497,12 @@ status_t HAL_CODEC_SetPower(void *handle, uint32_t module, bool powerOn)
             break;
 #endif
 
+#ifdef CODEC_WM8962_ENABLE
+        case kCODEC_WM8962:
+            retVal = HAL_CODEC_WM8962_SetPower(handle, module, powerOn);
+            break;
+#endif
+
 #ifdef CODEC_WM8524_ENABLE
         case kCODEC_WM8524:
             retVal = HAL_CODEC_WM8524_SetPower(handle, module, powerOn);
@@ -546,6 +582,12 @@ status_t HAL_CODEC_SetRecord(void *handle, uint32_t recordSource)
 #ifdef CODEC_WM8960_ENABLE
         case kCODEC_WM8960:
             retVal = HAL_CODEC_WM8960_SetRecord(handle, recordSource);
+            break;
+#endif
+
+#ifdef CODEC_WM8962_ENABLE
+        case kCODEC_WM8962:
+            retVal = HAL_CODEC_WM8962_SetRecord(handle, recordSource);
             break;
 #endif
 
@@ -634,6 +676,12 @@ status_t HAL_CODEC_SetRecordChannel(void *handle, uint32_t leftRecordChannel, ui
             break;
 #endif
 
+#ifdef CODEC_WM8962_ENABLE
+        case kCODEC_WM8962:
+            retVal = HAL_CODEC_WM8962_SetRecordChannel(handle, leftRecordChannel, rightRecordChannel);
+            break;
+#endif
+
 #ifdef CODEC_WM8524_ENABLE
         case kCODEC_WM8524:
             retVal = HAL_CODEC_WM8524_SetRecordChannel(handle, leftRecordChannel, rightRecordChannel);
@@ -713,6 +761,12 @@ status_t HAL_CODEC_SetPlay(void *handle, uint32_t playSource)
 #ifdef CODEC_WM8960_ENABLE
         case kCODEC_WM8960:
             retVal = HAL_CODEC_WM8960_SetPlay(handle, playSource);
+            break;
+#endif
+
+#ifdef CODEC_WM8962_ENABLE
+        case kCODEC_WM8962:
+            retVal = HAL_CODEC_WM8962_SetPlay(handle, playSource);
             break;
 #endif
 
@@ -800,6 +854,12 @@ status_t HAL_CODEC_ModuleControl(void *handle, uint32_t cmd, uint32_t data)
 #ifdef CODEC_WM8960_ENABLE
         case kCODEC_WM8960:
             retVal = HAL_CODEC_WM8960_ModuleControl(handle, cmd, data);
+            break;
+#endif
+
+#ifdef CODEC_WM8962_ENABLE
+        case kCODEC_WM8962:
+            retVal = HAL_CODEC_WM8962_ModuleControl(handle, cmd, data);
             break;
 #endif
 

@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    RT500 Reference Manual. Rev.C, 8/2020
+**     Reference manual:    iMXRT500RM Rev.0, 01/2021
 **     Version:             rev. 5.0, 2020-08-27
-**     Build:               b201016
+**     Build:               b220711
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,7 +18,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -59,12 +59,6 @@
 #define SYSTEM_IS_XIP_FLEXSPI()                                                                               \
     ((((uint32_t)SystemCoreClockUpdate >= 0x08000000U) && ((uint32_t)SystemCoreClockUpdate < 0x10000000U)) || \
      (((uint32_t)SystemCoreClockUpdate >= 0x18000000U) && ((uint32_t)SystemCoreClockUpdate < 0x20000000U)))
-
-/* Get OSC clock from SYSOSCBYPASS */
-static uint32_t getOscClk(void)
-{
-    return (CLKCTL0->SYSOSCBYPASS == 0U) ? CLK_XTAL_OSC_CLK : ((CLKCTL0->SYSOSCBYPASS == 1U) ? CLK_EXT_CLKIN : 0U);
-}
 
 /* Get FRO DIV clock from FRODIVSEL */
 static uint32_t getFroDivClk(void)
@@ -122,7 +116,7 @@ __attribute__((weak)) void SystemInit(void)
     SCB->NSACR |= ((3UL << 0) | (3UL << 10)); /* enable CP0, CP1, CP10, CP11 Non-secure Access */
 
     SYSCTL0->DSPSTALL = SYSCTL0_DSPSTALL_DSPSTALL_MASK;
-    
+
     PMC->CTRL |= PMC_CTRL_CLKDIVEN_MASK; /* enable the internal clock divider for power saving */
 
     if (SYSTEM_IS_XIP_FLEXSPI() && (CACHE64_POLSEL0->POLSEL == 0U)) /* set CAHCHE64 if not configured */
@@ -171,7 +165,7 @@ void SystemCoreClockUpdate(void)
                     freq = getFroDivClk();
                     break;
                 case CLKCTL0_MAINCLKSELA_SEL(2): /* OSC clock */
-                    freq = getOscClk();
+                    freq = CLK_OSC_CLK;
                     break;
                 case CLKCTL0_MAINCLKSELA_SEL(3): /* FRO clock */
                     freq = CLK_FRO_CLK;
@@ -189,7 +183,7 @@ void SystemCoreClockUpdate(void)
                     freq = CLK_FRO_DIV8_CLK;
                     break;
                 case CLKCTL0_SYSPLL0CLKSEL_SEL(1): /* OSC clock */
-                    freq = getOscClk();
+                    freq = CLK_OSC_CLK;
                     break;
                 default:
                     freq = 0U;

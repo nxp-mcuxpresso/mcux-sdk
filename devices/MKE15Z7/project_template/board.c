@@ -25,5 +25,5 @@ void BOARD_InitDebugConsole(void)
 
     uint32_t uartClkSrcFreq = CLOCK_GetIpFreq(kCLOCK_Lpuart1);
 
-    DbgConsole_Init(BOARD_DEBUG_UART_BASEADDR, BOARD_DEBUG_UART_BAUDRATE, BOARD_DEBUG_UART_TYPE, uartClkSrcFreq);
+    DbgConsole_Init(BOARD_DEBUG_UART_INSTANCE, BOARD_DEBUG_UART_BAUDRATE, BOARD_DEBUG_UART_TYPE, uartClkSrcFreq);
 }

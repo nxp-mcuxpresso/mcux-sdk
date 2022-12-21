@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPUART driver version. */
-#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 5, 3))
+#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
@@ -327,7 +327,7 @@ extern const IRQn_Type s_lpuartIRQ[];
 #endif
 
 /* LPUART ISR for transactional APIs. */
-extern lpuart_isr_t s_lpuartIsr;
+extern lpuart_isr_t s_lpuartIsr[];
 
 /*******************************************************************************
  * API

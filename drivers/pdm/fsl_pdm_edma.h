@@ -22,11 +22,29 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PDM_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 0)) /*!< Version 2.5.0 */
+#define FSL_PDM_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 1)) /*!< Version 2.6.1 */
 /*@}*/
 
 /*! @brief PDM edma handler */
 typedef struct _pdm_edma_handle pdm_edma_handle_t;
+
+/*!@brief pdm multi channel interleave type */
+typedef enum _pdm_edma_multi_channel_interleave
+{
+    kPDM_EDMAMultiChannelInterleavePerChannelSample =
+        0U, /*!< multi channel PDM data interleave per channel sample
+             * -------------------------------------------------------------------------
+             * |CHANNEL0 | CHANNEL1 | CHANNEL0 | CHANNEL1 | CHANNEL0 | CHANNEL 1 | ....|
+             * -------------------------------------------------------------------------
+             */
+    kPDM_EDMAMultiChannelInterleavePerChannelBlock =
+        1U, /*!< multi channel PDM data interleave per channel block
+             * ----------------------------------------------------------------------------------------------------------------------------
+             * |CHANNEL0 | CHANNEL0 | CHANNEL0 | ...... | CHANNEL1 | CHANNEL 1 | CHANNEL 1 | ....| CHANNEL2 | CHANNEL 2
+             * | CHANNEL 2 | ....|
+             * ----------------------------------------------------------------------------------------------------------------------------
+             */
+} pdm_edma_multi_channel_interleave_t;
 
 /*! @brief PDM edma transfer */
 typedef struct _pdm_edma_transfer
@@ -54,6 +72,8 @@ struct _pdm_edma_handle
     uint32_t tcdUser;             /*!< Index for user to queue transfer. */
     uint32_t tcdDriver;           /*!< Index for driver to get the transfer data and size */
     volatile uint32_t tcdUsedNum; /*!< Index for user to queue transfer. */
+
+    pdm_edma_multi_channel_interleave_t interleaveType; /*!< multi channel transfer interleave type */
 
     uint8_t endChannel;  /*!< The last enabled channel */
     uint8_t channelNums; /*!< total channel numbers */
@@ -88,13 +108,25 @@ void PDM_TransferInstallEDMATCDMemory(pdm_edma_handle_t *handle, void *tcdAddr, 
  *
  * @param base PDM base pointer.
  * @param handle PDM eDMA handle pointer.
- * @param base PDM peripheral base address.
  * @param callback Pointer to user callback function.
  * @param userData User parameter passed to the callback function.
  * @param dmaHandle eDMA handle pointer, this handle shall be static allocated by users.
  */
 void PDM_TransferCreateHandleEDMA(
     PDM_Type *base, pdm_edma_handle_t *handle, pdm_edma_callback_t callback, void *userData, edma_handle_t *dmaHandle);
+
+/*!
+ * @brief Initializes the multi PDM channel interleave type.
+ *
+ * This function initializes the PDM DMA handle member interleaveType, it shall be called only when application would
+ * like to use type kPDM_EDMAMultiChannelInterleavePerChannelBlock, since the default interleaveType is
+ * kPDM_EDMAMultiChannelInterleavePerChannelSample always
+ *
+ * @param handle PDM eDMA handle pointer.
+ * @param multiChannelInterleaveType Multi channel interleave type.
+ */
+void PDM_TransferSetMultiChannelInterleaveType(pdm_edma_handle_t *handle,
+                                               pdm_edma_multi_channel_interleave_t multiChannelInterleaveType);
 
 /*!
  * @brief Configures the PDM channel.
@@ -119,10 +151,9 @@ void PDM_TransferSetChannelConfigEDMA(PDM_Type *base,
  * This functio support dynamic scatter gather and staic scatter gather,
  * a. for the dynamic scatter gather case:
  * Application should call PDM_TransferReceiveEDMA function continuously to make sure new receive request is submit
- *before the previous one finish. b. for the static scatter gather case: Application should use the link transfer
- *feature and make sure a loop link transfer is provided, such as:
- * @code
- * pdm_edma_transfer_t pdmXfer[2] =
+ * before the previous one finish. b. for the static scatter gather case: Application should use the link transfer
+ * feature and make sure a loop link transfer is provided, such as:
+ * @code pdm_edma_transfer_t pdmXfer[2] =
  *   {
  *       {
  *       .data  = s_buffer,
@@ -136,7 +167,7 @@ void PDM_TransferSetChannelConfigEDMA(PDM_Type *base,
  *       .linkTransfer = &pdmXfer[0]
  *       },
  *   };
- *@endcode
+ * @endcode
  *
  * 2. Multi channel case:
  * This function support receive multi pdm channel data, for example, if two channel is requested,
@@ -145,10 +176,29 @@ void PDM_TransferSetChannelConfigEDMA(PDM_Type *base,
  * PDM_TransferSetChannelConfigEDMA(DEMO_PDM, &s_pdmRxHandle_0, DEMO_PDM_ENABLE_CHANNEL_1, &channelConfig);
  * PDM_TransferReceiveEDMA(DEMO_PDM, &s_pdmRxHandle_0, pdmXfer);
  * @endcode
- *Then the output data will be formatted as:
+ * The output data will be formatted as below if handle->interleaveType =
+ * kPDM_EDMAMultiChannelInterleavePerChannelSample :
  * -------------------------------------------------------------------------
  * |CHANNEL0 | CHANNEL1 | CHANNEL0 | CHANNEL1 | CHANNEL0 | CHANNEL 1 | ....|
  * -------------------------------------------------------------------------
+ *
+ * The output data will be formatted as below if handle->interleaveType = kPDM_EDMAMultiChannelInterleavePerChannelBlock
+ * :
+ * ----------------------------------------------------------------------------------------------------------------------
+ * |CHANNEL3 | CHANNEL3 | CHANNEL3 | .... | CHANNEL4 | CHANNEL 4 | CHANNEL4 |....| CHANNEL5 | CHANNEL 5 | CHANNEL5
+ * |....|
+ * ----------------------------------------------------------------------------------------------------------------------
+ * Note: the dataSize of xfer is the total data size, while application using
+ * kPDM_EDMAMultiChannelInterleavePerChannelBlock, the buffer size for each PDM channel is channelSize = dataSize /
+ * channelNums, then there are limitation for this feature,
+ * 1. 3 DMIC array: the dataSize shall be 4 * (channelSize)
+ * The addtional buffer is mandantory for edma modulo feature.
+ * 2. The kPDM_EDMAMultiChannelInterleavePerChannelBlock feature support below dmic array only,
+ *    2 DMIC array: CHANNEL3, CHANNEL4
+ *    3 DMIC array: CHANNEL3, CHANNEL4, CHANNEL5
+ *    4 DMIC array: CHANNEL3, CHANNEL4, CHANNEL5, CHANNEL6
+ * Any other combinations is not support, that is to SAY, THE FEATURE SUPPORT RECEIVE START FROM CHANNEL3 ONLY AND 4
+ * MAXIMUM DMIC CHANNELS.
  *
  * @param base PDM base pointer
  * @param handle PDM eDMA handle pointer.

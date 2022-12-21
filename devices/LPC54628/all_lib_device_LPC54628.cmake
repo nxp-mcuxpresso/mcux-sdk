@@ -17,12 +17,11 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/led
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/log
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/mma8652fc
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
     ${CMAKE_CURRENT_LIST_DIR}/../../components/panic
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phylan8720a
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/lpc_enet
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/silicon_id
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
@@ -67,10 +66,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utilities
@@ -79,11 +77,12 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(middleware_usb_host_cdc_rndis)
+#    include(driver_rtt_LPC54628)
 #    include(middleware_mbedtls_LPC54628)
 #    include(driver_ctimer)
 #    include(middleware_sdmmc_osa_bm)
 #    include(middleware_sdmmc_mmc)
-#    include(driver_phy-common)
+#    include(middleware_lwip_apps_httpd)
 #    include(middleware_lwip_apps_lwiperf)
 #    include(utility_shell)
 #    include(driver_lpc_gpio)
@@ -93,7 +92,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_otp)
 #    include(middleware_usb_host_stack_LPC54628)
 #    include(driver_fmc)
-#    include(middleware_freertos-kernel_extension)
 #    include(driver_spifi_dma)
 #    include(middleware_baremetal)
 #    include(component_audio_flexcomm_i2s_dma_adapter)
@@ -125,8 +123,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_lwip_contrib_ping)
 #    include(driver_lpc_enet)
 #    include(driver_sctimer)
-#    include(middleware_usb_device_common_header)
-#    include(component_silicon_id)
+#    include(middleware_lwip_usb_ethernetif)
 #    include(middleware_lwip_apps_httpsrv)
 #    include(driver_lpc_adc)
 #    include(driver_flashiap)
@@ -137,27 +134,26 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_assert)
 #    include(driver_wm8904)
 #    include(middleware_lwip_enet_ethernetif_LPC54628)
-#    include(driver_mdio-common)
+#    include(middleware_freertos-kernel_extension)
 #    include(CMSIS_Driver_Include_I2C)
 #    include(component_led)
 #    include(middleware_usb_common_header)
 #    include(driver_flexcomm_spi)
 #    include(driver_utick)
 #    include(middleware_sdmmc_osa_freertos)
-#    include(middleware_lwip_apps_httpd)
 #    include(component_serial_manager_usb_cdc)
 #    include(driver_clock)
 #    include(device_CMSIS)
+#    include(component_silicon_id_LPC54628)
 #    include(CMSIS_Driver_Include_Common)
 #    include(driver_lpc_iocon)
 #    include(driver_spifi)
 #    include(driver_ft5406)
 #    include(component_osa_bm)
 #    include(middleware_usb_host_ohci)
-#    include(middleware_usb_host_common_header)
+#    include(driver_phy-common_LPC54628)
 #    include(middleware_usb_host_cdc)
 #    include(driver_gt911)
-#    include(driver_mma8652fc)
 #    include(component_mrt_adapter)
 #    include(middleware_lwip_apps_httpd_support)
 #    include(component_osa_free_rtos)
@@ -166,6 +162,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_core_cm)
 #    include(driver_video-common)
 #    include(driver_common)
+#    include(middleware_fatfs_LPC54628)
 #    include(middleware_usb_device_ip3511fs)
 #    include(middleware_lwip_apps_mdns)
 #    include(driver_sha)
@@ -174,6 +171,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_usart_adapter)
 #    include(middleware_usb_host_msd)
 #    include(driver_wwdt)
+#    include(middleware_usb_host_common_header)
 #    include(component_log)
 #    include(component_mflash_lpc54xxx)
 #    include(CMSIS_Driver_Include_USART)
@@ -187,16 +185,14 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_i2c_dma)
 #    include(component_flexcomm_i2c_adapter)
 #    include(utility_assert_lite)
-#    include(middleware_fatfs)
 #    include(component_mflash_file_LPC54628)
-#    include(driver_mdio-lpc-enet)
 #    include(middleware_usb_device_ip3511hs_LPC54628)
 #    include(middleware_usb_host_audio)
-#    include(middleware_lwip_usb_ethernetif)
+#    include(driver_flexcomm_usart_freertos)
 #    include(utility_debug_console)
 #    include(middleware_usb_host_hid)
 #    include(component_ctimer_adapter)
-#    include(driver_fro_calib)
+#    include(driver_rit)
 #    include(component_mflash_common)
 #    include(component_lpc_gpio_adapter)
 #    include(middleware_sdmmc_host_sdif)
@@ -206,7 +202,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_fatfs_usb)
 #    include(driver_dmic_dma)
 #    include(middleware_freertos-kernel_LPC54628)
-#    include(driver_rit)
+#    include(middleware_usb_device_common_header)
 #    include(driver_lpc_rtc)
 #    include(middleware_sdmmc_common)
 #    include(middleware_fatfs_sd)
@@ -227,7 +223,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_i2c_freertos)
 #    include(middleware_sdmmc_host_sdif_freertos)
 #    include(middleware_usb_host_phdc)
-#    include(driver_flexcomm_usart_freertos)
+#    include(driver_fro_calib)
 #    include(component_button_LPC54628)
 #    include(component_wm8904_adapter)
 #    include(driver_reset)

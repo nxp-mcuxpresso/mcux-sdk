@@ -264,6 +264,21 @@ __attribute__ ((weak)) void SystemInit (void) {
 #if !defined(DONT_ENABLE_DISABLED_RAMBANKS)
     SYSCON->AHBCLKCTRLSET[0] = SYSCON_AHBCLKCTRL0_SRAM_CTRL1_MASK | SYSCON_AHBCLKCTRL0_SRAM_CTRL2_MASK;
 #endif
+    /* Following code is to reset PUF to remove over consumption */
+    /* Enable PUF register clock to access register */
+    SYSCON->AHBCLKCTRLSET[2] = SYSCON_AHBCLKCTRL2_PUF_MASK;
+    /* Release PUF reset */
+    SYSCON->PRESETCTRLCLR[2] = SYSCON_PRESETCTRL2_PUF_RST_MASK ;
+    /* Enable PUF SRAM */
+    #define PUF_SRAM_CTRL_CFG  (*((volatile uint32_t*)(0x4003B000u + 0x300u)))
+    #define PUF_SRAM_CTRL_INT_STATUS  (*((volatile uint32_t*)(0x4003B000u + 0x3E0u)))
+    PUF_SRAM_CTRL_CFG |= 0x01 | 0x04 ;
+    /* Disable PUF register clock. */
+    // Delaying the line of code below until the PUF State Machine execution is completed:
+    // Shutting down the clock to early will prevent the state machine from reaching the end.
+    // => Wait for status bit in PUF Controller Registers before stop PUF clock.
+    while(!(PUF_SRAM_CTRL_INT_STATUS & 0x1));
+    SYSCON->AHBCLKCTRLCLR[2] = SYSCON_AHBCLKCTRL2_PUF_MASK ;
   SystemInitHook();
 }
 

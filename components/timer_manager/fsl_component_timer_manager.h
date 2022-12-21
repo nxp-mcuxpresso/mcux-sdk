@@ -73,7 +73,7 @@
  * @brief   Configures the timer task priority.
  */
 #ifndef TM_TASK_PRIORITY
-#define TM_TASK_PRIORITY (4U)
+#define TM_TASK_PRIORITY (1U)
 #endif
 
 /*
@@ -245,6 +245,31 @@ void TM_ExitLowpower(void);
  *
  */
 void TM_EnterLowpower(void);
+
+/*!
+ * @brief Programs a timer needed for RTOS tickless low power period
+ *
+ * Starts a timer and sync all timer manager ressources before programming HW
+ * timer module. Everything is done by bypassing the timer manager task as this
+ * function is usually called under masked interrupts (no context switch).
+ *
+ * @param timerHandle    the handle of the timer
+ * @param timerTimeout   The timer timeout in microseconds unit
+ *
+ */
+void TM_EnterTickless(timer_handle_t timerHandle, uint64_t timerTimeout);
+
+/*!
+ * @brief Resyncs timer manager ressources after tickless low power period
+ *
+ * Makes sure to stop the tickless timer and resync all existing timers.
+ * Everything is done by bypassing the timer manager task as this
+ * function is usually called under masked interrupts (no context switch).
+ *
+ * @param timerHandle    the handle of the timer
+ *
+ */
+void TM_ExitTickless(timer_handle_t timerHandle);
 
 /*!
  * @brief Open a timer with user handle.

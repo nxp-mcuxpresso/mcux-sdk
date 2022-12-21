@@ -142,7 +142,8 @@ uint32_t HAL_TimerGetMaxTimeout(hal_timer_handle_t halTimerHandle)
     {
         return 1000;
     }
-    return (uint32_t)COUNT_TO_USEC(((uint64_t)0xFFFF - reserveCount), halTimerState->timerClock_Hz);
+    return (uint32_t)COUNT_TO_USEC(((uint64_t)MRT_CHANNEL_INTVAL_IVALUE_MASK - reserveCount),
+                                   halTimerState->timerClock_Hz);
 }
 /* return micro us */
 uint32_t HAL_TimerGetCurrentTimerCount(hal_timer_handle_t halTimerHandle)
@@ -161,7 +162,7 @@ hal_timer_status_t HAL_TimerUpdateTimeout(hal_timer_handle_t halTimerHandle, uin
     hal_timer_handle_struct_t *halTimerState = halTimerHandle;
     halTimerState->timeout                   = timeout;
     tickCount = (uint32_t)USEC_TO_COUNT(halTimerState->timeout, halTimerState->timerClock_Hz);
-    if ((tickCount < 1U) || (tickCount > 0xfff0U))
+    if ((tickCount < 1U) || (tickCount > (MRT_CHANNEL_INTVAL_IVALUE_MASK - 0x10U)))
     {
         return kStatus_HAL_TimerOutOfRanger;
     }

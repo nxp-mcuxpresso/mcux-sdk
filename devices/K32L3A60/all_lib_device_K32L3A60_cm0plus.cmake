@@ -48,10 +48,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/drivers/cm0plus
@@ -95,6 +94,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_system_K32L3A60_cm0plus)
 #    include(driver_lpi2c_edma)
 #    include(middleware_sdmmc_osa_freertos)
+#    include(middleware_fatfs_K32L3A60_cm0plus)
 #    include(middleware_multicore_erpc_eRPC_mu_c_wrapper)
 #    include(middleware_sdmmc_host_usdhc_freertos_K32L3A60_cm0plus)
 #    include(driver_usdhc)
@@ -129,7 +129,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lptmr)
 #    include(utility_shell)
 #    include(utility_assert_lite)
-#    include(middleware_fatfs)
 #    include(driver_flash)
 #    include(utility_debug_console)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_remote_c_wrapper)

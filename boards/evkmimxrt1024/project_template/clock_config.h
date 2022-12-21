@@ -1,9 +1,10 @@
 /*
- * Copyright 2018-2020,2021 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+
 #ifndef _CLOCK_CONFIG_H_
 #define _CLOCK_CONFIG_H_
 
@@ -111,4 +112,83 @@ void BOARD_BootClockRUN(void);
 }
 #endif /* __cplusplus*/
 
+/*******************************************************************************
+ ******************* Configuration BOARD_BootClockRUN_400M *********************
+ ******************************************************************************/
+/*******************************************************************************
+ * Definitions for BOARD_BootClockRUN_400M configuration
+ ******************************************************************************/
+#define BOARD_BOOTCLOCKRUN_400M_CORE_CLOCK        396000000U  /*!< Core clock frequency: 396000000Hz */
+
+/* Clock outputs (values are in Hz): */
+#define BOARD_BOOTCLOCKRUN_400M_AHB_CLK_ROOT          396000000UL
+#define BOARD_BOOTCLOCKRUN_400M_CAN_CLK_ROOT          40000000UL
+#define BOARD_BOOTCLOCKRUN_400M_CKIL_SYNC_CLK_ROOT    32768UL
+#define BOARD_BOOTCLOCKRUN_400M_CLKO1_CLK             0UL
+#define BOARD_BOOTCLOCKRUN_400M_CLKO2_CLK             0UL
+#define BOARD_BOOTCLOCKRUN_400M_CLK_1M                1000000UL
+#define BOARD_BOOTCLOCKRUN_400M_CLK_24M               24000000UL
+#define BOARD_BOOTCLOCKRUN_400M_ENET_125M_CLK         0UL
+#define BOARD_BOOTCLOCKRUN_400M_ENET_25M_REF_CLK      0UL
+#define BOARD_BOOTCLOCKRUN_400M_ENET_500M_REF_CLK     500000000UL
+#define BOARD_BOOTCLOCKRUN_400M_ENET_REF_CLK          0UL
+#define BOARD_BOOTCLOCKRUN_400M_ENET_TX_CLK           0UL
+#define BOARD_BOOTCLOCKRUN_400M_FLEXIO1_CLK_ROOT      30000000UL
+#define BOARD_BOOTCLOCKRUN_400M_FLEXSPI_CLK_ROOT      132000000UL
+#define BOARD_BOOTCLOCKRUN_400M_GPT1_IPG_CLK_HIGHFREQ 49500000UL
+#define BOARD_BOOTCLOCKRUN_400M_GPT2_IPG_CLK_HIGHFREQ 49500000UL
+#define BOARD_BOOTCLOCKRUN_400M_IPG_CLK_ROOT          99000000UL
+#define BOARD_BOOTCLOCKRUN_400M_LPI2C_CLK_ROOT        60000000UL
+#define BOARD_BOOTCLOCKRUN_400M_LPSPI_CLK_ROOT        105600000UL
+#define BOARD_BOOTCLOCKRUN_400M_MQS_MCLK              63529411UL
+#define BOARD_BOOTCLOCKRUN_400M_PERCLK_CLK_ROOT       49500000UL
+#define BOARD_BOOTCLOCKRUN_400M_SAI1_CLK_ROOT         63529411UL
+#define BOARD_BOOTCLOCKRUN_400M_SAI1_MCLK1            63529411UL
+#define BOARD_BOOTCLOCKRUN_400M_SAI1_MCLK2            63529411UL
+#define BOARD_BOOTCLOCKRUN_400M_SAI1_MCLK3            30000000UL
+#define BOARD_BOOTCLOCKRUN_400M_SAI2_CLK_ROOT         63529411UL
+#define BOARD_BOOTCLOCKRUN_400M_SAI2_MCLK1            63529411UL
+#define BOARD_BOOTCLOCKRUN_400M_SAI2_MCLK2            0UL
+#define BOARD_BOOTCLOCKRUN_400M_SAI2_MCLK3            30000000UL
+#define BOARD_BOOTCLOCKRUN_400M_SAI3_CLK_ROOT         63529411UL
+#define BOARD_BOOTCLOCKRUN_400M_SAI3_MCLK1            63529411UL
+#define BOARD_BOOTCLOCKRUN_400M_SAI3_MCLK2            0UL
+#define BOARD_BOOTCLOCKRUN_400M_SAI3_MCLK3            30000000UL
+#define BOARD_BOOTCLOCKRUN_400M_SEMC_CLK_ROOT         49500000UL
+#define BOARD_BOOTCLOCKRUN_400M_SPDIF0_CLK_ROOT       30000000UL
+#define BOARD_BOOTCLOCKRUN_400M_SPDIF0_EXTCLK_OUT     0UL
+#define BOARD_BOOTCLOCKRUN_400M_TRACE_CLK_ROOT        132000000UL
+#define BOARD_BOOTCLOCKRUN_400M_UART_CLK_ROOT         80000000UL
+#define BOARD_BOOTCLOCKRUN_400M_USBPHY1_CLK           0UL
+#define BOARD_BOOTCLOCKRUN_400M_USDHC1_CLK_ROOT       176000000UL
+#define BOARD_BOOTCLOCKRUN_400M_USDHC2_CLK_ROOT       176000000UL
+
+/*! @brief Usb1 PLL set for BOARD_BootClockRUN_400M configuration.
+ */
+extern const clock_usb_pll_config_t usb1PllConfig_BOARD_BootClockRUN_400M;
+/*! @brief Sys PLL for BOARD_BootClockRUN_400M configuration.
+ */
+extern const clock_sys_pll_config_t sysPllConfig_BOARD_BootClockRUN_400M;
+/*! @brief Enet PLL set for BOARD_BootClockRUN_400M configuration.
+ */
+extern const clock_enet_pll_config_t enetPllConfig_BOARD_BootClockRUN_400M;
+
+/*******************************************************************************
+ * API for BOARD_BootClockRUN_400M configuration
+ ******************************************************************************/
+#if defined(__cplusplus)
+extern "C" {
+#endif /* __cplusplus*/
+
+/*!
+ * @brief This function executes configuration of clocks.
+ *
+ */
+void BOARD_BootClockRUN_400M(void);
+
+#if defined(__cplusplus)
+}
+#endif /* __cplusplus*/
+
 #endif /* _CLOCK_CONFIG_H_ */
+

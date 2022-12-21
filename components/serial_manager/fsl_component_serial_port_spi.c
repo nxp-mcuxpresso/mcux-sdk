@@ -394,8 +394,7 @@ serial_manager_status_t Serial_SpiSlaveRead(serial_handle_t serialHandle, uint8_
         ((hal_spi_slave_handle_t)&serialSpiSlaveHandle->spiSlaveHandleBuffer[0]), &slaveReceiver);
 }
 
-#else /* SERIAL_MANAGER_NON_BLOCKING_DUAL_MODE */
-
+#else /* SERIAL_MANAGER_NON_BLOCKING_MODE */
 serial_manager_status_t Serial_SpiMasterWrite(serial_handle_t serialHandle, uint8_t *buffer, uint32_t length)
 {
     serial_spi_master_state_t *serialSpiMasterHandle;

@@ -29,7 +29,7 @@
      (defined(RTE_SPI2) && RTE_SPI2 && defined(LPSPI2)) || (defined(RTE_SPI3) && RTE_SPI3 && defined(LPSPI3)) || \
      (defined(RTE_SPI4) && RTE_SPI4 && defined(LPSPI4)) || (defined(RTE_SPI5) && RTE_SPI5 && defined(LPSPI5)))
 
-#define ARM_LPSPI_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (4)) /* driver version */
+#define ARM_LPSPI_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (5)) /* driver version */
 
 /*
  * ARMCC does not support split the data section automatically, so the driver
@@ -354,89 +354,82 @@ static void LPSPI_SetTransferConfigFlags(bool isMaster, uint32_t instance, lpspi
     if (isMaster)
     {
         /* Set default config flag */
-        xfer->configFlags =
-            (uint32_t)kLPSPI_MasterPcs0 | (uint32_t)kLPSPI_MasterByteSwap | (uint32_t)kLPSPI_MasterPcsContinuous;
+        xfer->configFlags = (uint32_t)kLPSPI_MasterPcs0 | (uint32_t)kLPSPI_MasterPcsContinuous;
 #if (defined(RTE_SPI0_MASTER_PCS_PIN_SEL))
         if (0U == instance)
         {
-            xfer->configFlags = (uint32_t)RTE_SPI0_MASTER_PCS_PIN_SEL | (uint32_t)kLPSPI_MasterByteSwap |
-                                (uint32_t)kLPSPI_MasterPcsContinuous;
+            xfer->configFlags = (uint32_t)RTE_SPI0_MASTER_PCS_PIN_SEL | (uint32_t)kLPSPI_MasterPcsContinuous;
         }
 #endif /* LPSPI0 PCS pin configuration */
 #if (defined(RTE_SPI1_MASTER_PCS_PIN_SEL))
         if (1U == instance)
         {
-            xfer->configFlags = (uint32_t)RTE_SPI1_MASTER_PCS_PIN_SEL | (uint32_t)kLPSPI_MasterByteSwap |
-                                (uint32_t)kLPSPI_MasterPcsContinuous;
+            xfer->configFlags = (uint32_t)RTE_SPI1_MASTER_PCS_PIN_SEL | (uint32_t)kLPSPI_MasterPcsContinuous;
         }
 #endif /* LPSPI1 PCS pin configuration */
 #if (defined(RTE_SPI2_MASTER_PCS_PIN_SEL))
         if (2U == instance)
         {
-            xfer->configFlags = (uint32_t)RTE_SPI2_MASTER_PCS_PIN_SEL | (uint32_t)kLPSPI_MasterByteSwap |
-                                (uint32_t)kLPSPI_MasterPcsContinuous;
+            xfer->configFlags = (uint32_t)RTE_SPI2_MASTER_PCS_PIN_SEL | (uint32_t)kLPSPI_MasterPcsContinuous;
         }
 #endif /* LPSPI2 PCS pin configuration */
 #if (defined(RTE_SPI3_MASTER_PCS_PIN_SEL))
         if (3U == instance)
         {
-            xfer->configFlags = (uint32_t)RTE_SPI3_MASTER_PCS_PIN_SEL | (uint32_t)kLPSPI_MasterByteSwap |
-                                (uint32_t)kLPSPI_MasterPcsContinuous;
+            xfer->configFlags = (uint32_t)RTE_SPI3_MASTER_PCS_PIN_SEL | (uint32_t)kLPSPI_MasterPcsContinuous;
         }
 #endif /* LPSPI3 PCS pin configuration */
 #if (defined(RTE_SPI4_MASTER_PCS_PIN_SEL))
         if (4U == instance)
         {
-            xfer->configFlags = (uint32_t)RTE_SPI4_MASTER_PCS_PIN_SEL | (uint32_t)kLPSPI_MasterByteSwap |
-                                (uint32_t)kLPSPI_MasterPcsContinuous;
+            xfer->configFlags = (uint32_t)RTE_SPI4_MASTER_PCS_PIN_SEL | (uint32_t)kLPSPI_MasterPcsContinuous;
         }
 #endif /* LPSPI4 PCS pin configuration */
 #if (defined(RTE_SPI5_MASTER_PCS_PIN_SEL))
         if (5U == instance)
         {
-            xfer->configFlags = (uint32_t)RTE_SPI5_MASTER_PCS_PIN_SEL | (uint32_t)kLPSPI_MasterByteSwap |
-                                (uint32_t)kLPSPI_MasterPcsContinuous;
+            xfer->configFlags = (uint32_t)RTE_SPI5_MASTER_PCS_PIN_SEL | (uint32_t)kLPSPI_MasterPcsContinuous;
         }
 #endif /* LPSPI5 PCS pin configuration */
     }
     else
     {
         /* Set default config flag */
-        xfer->configFlags = (uint32_t)kLPSPI_SlavePcs0 | (uint32_t)kLPSPI_SlaveByteSwap;
+        xfer->configFlags = (uint32_t)kLPSPI_SlavePcs0;
 #if (defined(RTE_SPI0_SLAVE_PCS_PIN_SEL))
         if (0U == instance)
         {
-            xfer->configFlags = (uint32_t)RTE_SPI0_SLAVE_PCS_PIN_SEL | (uint32_t)kLPSPI_SlaveByteSwap;
+            xfer->configFlags = (uint32_t)RTE_SPI0_SLAVE_PCS_PIN_SEL;
         }
 #endif /* LPSPI0 PCS pin configuration */
 #if (defined(RTE_SPI1_SLAVE_PCS_PIN_SEL))
         if (1U == instance)
         {
-            xfer->configFlags = (uint32_t)RTE_SPI1_SLAVE_PCS_PIN_SEL | (uint32_t)kLPSPI_SlaveByteSwap;
+            xfer->configFlags = (uint32_t)RTE_SPI1_SLAVE_PCS_PIN_SEL;
         }
 #endif /* LPSPI1 PCS pin configuration */
 #if (defined(RTE_SPI2_SLAVE_PCS_PIN_SEL))
         if (2U == instance)
         {
-            xfer->configFlags = (uint32_t)RTE_SPI2_SLAVE_PCS_PIN_SEL | (uint32_t)kLPSPI_SlaveByteSwap;
+            xfer->configFlags = (uint32_t)RTE_SPI2_SLAVE_PCS_PIN_SEL;
         }
 #endif /* LPSPI2 PCS pin configuration */
 #if (defined(RTE_SPI3_SLAVE_PCS_PIN_SEL))
         if (3U == instance)
         {
-            xfer->configFlags = (uint32_t)RTE_SPI3_SLAVE_PCS_PIN_SEL | (uint32_t)kLPSPI_SlaveByteSwap;
+            xfer->configFlags = (uint32_t)RTE_SPI3_SLAVE_PCS_PIN_SEL;
         }
 #endif /* LPSPI3 PCS pin configuration */
 #if (defined(RTE_SPI4_SLAVE_PCS_PIN_SEL))
         if (4U == instance)
         {
-            xfer->configFlags = (uint32_t)RTE_SPI4_SLAVE_PCS_PIN_SEL | (uint32_t)kLPSPI_SlaveByteSwap;
+            xfer->configFlags = (uint32_t)RTE_SPI4_SLAVE_PCS_PIN_SEL;
         }
 #endif /* LPSPI4 PCS pin configuration */
 #if (defined(RTE_SPI5_SLAVE_PCS_PIN_SEL))
         if (5U == instance)
         {
-            xfer->configFlags = (uint32_t)RTE_SPI5_SLAVE_PCS_PIN_SEL | (uint32_t)kLPSPI_SlaveByteSwap;
+            xfer->configFlags = (uint32_t)RTE_SPI5_SLAVE_PCS_PIN_SEL;
         }
 #endif /* LPSPI5 PCS pin configuration */
     }

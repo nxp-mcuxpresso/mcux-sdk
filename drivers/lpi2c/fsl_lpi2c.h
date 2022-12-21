@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPI2C driver version. */
-#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */

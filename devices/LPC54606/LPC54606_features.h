@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.2, 2017-06-08
-**     Build:               b220414
+**     Build:               b220714
 **
 **     Abstract:
 **         Chip specific module features.
@@ -149,6 +149,8 @@
 #define FSL_FEATURE_CTIMER_HAS_NO_CCR_CAP2 (0)
 /* @brief Has CTIMER CCR_CAP3 (register bits CCR[CAP3RE][CAP3FE][CAP3I]). */
 #define FSL_FEATURE_CTIMER_HAS_CCR_CAP3 (1)
+/* @brief CTIMER Has register MSR */
+#define FSL_FEATURE_CTIMER_HAS_MSR (1)
 
 /* DMA module features */
 
@@ -304,6 +306,11 @@
 #define FSL_FEATURE_SDIF_INTERNAL_DMA_MAX_BUFFER_SIZE (4096)
 /* @brief Max source clock in HZ */
 #define FSL_FEATURE_SDIF_MAX_SOURCE_CLOCK (52000000)
+
+/* SPI module features */
+
+/* @brief SSEL pin count. */
+#define FSL_FEATURE_SPI_SSEL_COUNT (4)
 
 /* SPIFI module features */
 

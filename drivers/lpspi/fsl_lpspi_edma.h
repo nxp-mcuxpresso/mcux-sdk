@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPSPI EDMA driver version. */
-#define FSL_LPSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_LPSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*@}*/
 
 /*!

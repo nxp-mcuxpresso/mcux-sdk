@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 NXP
+ * Copyright 2020-2022 NXP
  * All rights reserved.
  *
  *
@@ -23,20 +23,27 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_TMPSNS_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3 */
+#define FSL_TMPSNS_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
-/*! @brief TMPSNS interrupt status type, tmpsns_interrupt_status_enable_t. */
+/*! @brief TMPSNS interrupt status enable type, tmpsns_interrupt_status_enable_t. */
 enum
 {
     kTEMPSENSOR_HighTempInterruptStatusEnable =
         TMPSNS_CTRL1_HIGH_TEMP_IE_MASK, /*!< High temperature interrupt status enable.*/
     kTEMPSENSOR_LowTempInterruptStatusEnable =
-        TMPSNS_CTRL1_LOW_TEMP_IE_MASK, /*!< High temperature interrupt status enable.*/
+        TMPSNS_CTRL1_LOW_TEMP_IE_MASK, /*!< Low temperature interrupt status enable.*/
     kTEMPSENSOR_PanicTempInterruptStatusEnable =
-        TMPSNS_CTRL1_PANIC_TEMP_IE_MASK, /*!< High temperature interrupt status enable.*/
-    kTEMPSENSOR_FinishInterruptStatusEnable =
-        TMPSNS_CTRL1_FINISH_IE_MASK, /*!< High temperature interrupt status enable.*/
+        TMPSNS_CTRL1_PANIC_TEMP_IE_MASK, /*!< Panic temperature interrupt status enable.*/
+    kTEMPSENSOR_FinishInterruptStatusEnable = TMPSNS_CTRL1_FINISH_IE_MASK, /*!< Finish interrupt enable.*/
+};
+
+/*! @brief TMPSNS interrupt status type, tmpsns_interrupt_status_t. */
+enum
+{
+    kTEMPSENSOR_HighTempInterruptStatus  = TMPSNS_STATUS0_HIGH_TEMP_MASK,  /*!< High temperature interrupt status.*/
+    kTEMPSENSOR_LowTempInterruptStatus   = TMPSNS_STATUS0_LOW_TEMP_MASK,   /*!< Low temperature interrupt status.*/
+    kTEMPSENSOR_PanicTempInterruptStatus = TMPSNS_STATUS0_PANIC_TEMP_MASK, /*!< Panic temperature interrupt status.*/
 };
 
 /*! @brief TMPSNS measure mode, tempsensor_measure_mode. */
@@ -147,6 +154,28 @@ void TMPSNS_EnableInterrupt(TMPSNS_Type *base, uint32_t mask);
  * @param mask The interrupts to disable from tmpsns_interrupt_status_enable_t.
  */
 void TMPSNS_DisableInterrupt(TMPSNS_Type *base, uint32_t mask);
+
+/*!
+ * @brief Get interrupt status flag.
+ *
+ * @param base TMPSNS base pointer
+ * @param mask The interrupts to disable from tmpsns_interrupt_status_t.
+ */
+static inline uint32_t TMPSNS_GetInterruptFlags(TMPSNS_Type *base)
+{
+    return base->STATUS0;
+}
+
+/*!
+ * @brief Clear interrupt status flag.
+ *
+ * @param base TMPSNS base pointer
+ * @param mask The interrupts to disable from tmpsns_interrupt_status_t.
+ */
+static inline void TMPSNS_ClearInterruptFlags(TMPSNS_Type *base, uint32_t mask)
+{
+    base->STATUS0 = mask;
+}
 
 #if defined(__cplusplus)
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -74,6 +74,7 @@ typedef enum _shell_status
     kStatus_SHELL_Error                 = MAKE_STATUS(kStatusGroup_SHELL, 1), /*!< Failed */
     kStatus_SHELL_OpenWriteHandleFailed = MAKE_STATUS(kStatusGroup_SHELL, 2), /*!< Open write handle failed */
     kStatus_SHELL_OpenReadHandleFailed  = MAKE_STATUS(kStatusGroup_SHELL, 3), /*!< Open read handle failed */
+    kStatus_SHELL_RetUsage              = MAKE_STATUS(kStatusGroup_SHELL, 4), /*!< RetUsage for print cmd usage */
 } shell_status_t;
 
 /*! @brief The handle of the shell module */

@@ -11,6 +11,9 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
+if(${MCUX_DEVICE} STREQUAL "MIMXRT555S_cm33")
+    include(driver_soc_mipi_dsi)
+endif()
 if(${MCUX_DEVICE} STREQUAL "MIMXRT595S_cm33")
     include(driver_soc_mipi_dsi)
 endif()

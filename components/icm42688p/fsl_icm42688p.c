@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2021-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -143,12 +143,12 @@ status_t ICM42688P_ReadSensorData(icm42688p_handle_t *handle, icm42688p_sensor_d
     result = ICM42688P_ReadReg(handle, FIFO_DATA, fifoData, 16U);
     if (result == kStatus_Success)
     {
-        sensorData->accelDataX = ((uint16_t)fifoData[1] << 8U) | (uint16_t)fifoData[2];
-        sensorData->accelDataY = ((uint16_t)fifoData[3] << 8U) | (uint16_t)fifoData[4];
-        sensorData->accelDataZ = ((uint16_t)fifoData[5] << 8U) | (uint16_t)fifoData[6];
-        sensorData->gyroDataX  = ((uint16_t)fifoData[7] << 8U) | (uint16_t)fifoData[8];
-        sensorData->gyroDataY  = ((uint16_t)fifoData[9] << 8U) | (uint16_t)fifoData[10];
-        sensorData->gyroDataZ  = ((uint16_t)fifoData[11] << 8U) | (uint16_t)fifoData[12];
+        sensorData->accelDataX = (int16_t)(uint16_t)(((uint16_t)fifoData[1] << 8U) | (uint16_t)fifoData[2]);
+        sensorData->accelDataY = (int16_t)(uint16_t)(((uint16_t)fifoData[3] << 8U) | (uint16_t)fifoData[4]);
+        sensorData->accelDataZ = (int16_t)(uint16_t)(((uint16_t)fifoData[5] << 8U) | (uint16_t)fifoData[6]);
+        sensorData->gyroDataX  = (int16_t)(uint16_t)(((uint16_t)fifoData[7] << 8U) | (uint16_t)fifoData[8]);
+        sensorData->gyroDataY  = (int16_t)(uint16_t)(((uint16_t)fifoData[9] << 8U) | (uint16_t)fifoData[10]);
+        sensorData->gyroDataZ  = (int16_t)(uint16_t)(((uint16_t)fifoData[11] << 8U) | (uint16_t)fifoData[12]);
     }
 
     return result;

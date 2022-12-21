@@ -111,20 +111,28 @@ typedef status_t (*mipi_dsi_transfer_func_t)(dsi_transfer_t *xfer);
 /*! @brief MIPI DSI memory write function. */
 typedef status_t (*mipi_dsi_mem_write_func_t)(uint8_t virtualChannel, const uint8_t *data, uint32_t length);
 
+/*! @brief MIPI DSI memory write function using 2-dimensional way. */
+typedef status_t (*mipi_dsi_mem_write_func_2D_t)(
+    uint8_t virtualChannel, const uint8_t *data, uint32_t minorLoop, uint32_t minorLoopOffset, uint32_t majorLoop);
+
 /*! @brief MIPI DSI device. */
 typedef struct _mipi_dsi_device
 {
     uint8_t virtualChannel;
     mipi_dsi_transfer_func_t xferFunc;
-    mipi_dsi_mem_write_func_t memWriteFunc; /*!< Function to write display memory,
+    mipi_dsi_mem_write_func_t memWriteFunc;      /*!< Function to write display memory,
+                                                   it should be non-blocking function and
+                                                   notify upper layer using callback when finished.
+                                                   Not used when panel works in video mode. */
+    mipi_dsi_mem_write_func_2D_t memWriteFunc2D; /*!< Function to write display memory using 2-dimensional way,
                                               it should be non-blocking function and
                                               notify upper layer using callback when finished.
                                               Not used when panel works in video mode. */
-    mipi_dsi_mem_done_callback_t callback;  /*!< The callback function to notify upper layer
-                                               that memory write done. Not used when panel
-                                               works in video mode. */
-    void *userData;                         /*!< Parameter for the memory write done callback.
-                                            not used when panel works in video mode. */
+    mipi_dsi_mem_done_callback_t callback;       /*!< The callback function to notify upper layer
+                                                    that memory write done. Not used when panel
+                                                    works in video mode. */
+    void *userData;                              /*!< Parameter for the memory write done callback.
+                                                 not used when panel works in video mode. */
 } mipi_dsi_device_t;
 
 /*******************************************************************************
@@ -280,6 +288,39 @@ status_t MIPI_DSI_SelectArea(mipi_dsi_device_t *device, uint16_t startX, uint16_
  * @return Returns @ref kStatus_Success if success, otherwise returns error code.
  */
 status_t MIPI_DSI_WriteMemory(mipi_dsi_device_t *device, const uint8_t *data, uint32_t length);
+
+/*!
+ * @brief Send pixel data to the display controller's frame memory in 2-dinmensional way.
+ *
+ * The pixels will be shown in the region selected by @ref MIPI_DSI_SelectArea.
+ * This function is non-blocking function, user should install callback function
+ * using @ref MIPI_DSI_SetMemoryDoneCallback to get informed when write finished.
+ *
+ * @verbatim
+ * +---------------------------------------------------+
+ * |                                                   |
+ * |         data                                      |
+ * |           +-------------------+                   |
+ * |           |    minorLoop     |                   |
+ * |           |                   |                   |
+ * |           |                   | majorLoop        |
+ * |           |                   |                   |
+ * |           |                   |                   |
+ * |           +-------------------+                   |
+ * |                                                   |
+ * |     minorLoop + minorLoopOffset                |
+ * +---------------------------------------------------+
+ * @endverbatim
+ *
+ * @param device The MIPI DSI device.
+ * @param data The pixel data to send.
+ * @param minorLoop Count of the data in one line in byte.
+ * @param minorLoopOffset The offset between line stride and the count of one line in byte.
+ * @param majorLoop Count of the lines in byte.
+ * @return Returns @ref kStatus_Success if success, otherwise returns error code.
+ */
+status_t MIPI_DSI_WriteMemory2D(
+    mipi_dsi_device_t *device, const uint8_t *data, uint32_t minorLoop, uint32_t minorLoopOffset, uint32_t majorLoop);
 
 /*!
  * @brief Install the callback called when write memory finished.

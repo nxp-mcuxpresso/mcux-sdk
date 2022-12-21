@@ -58,17 +58,18 @@
 #define HAL_UART_ADAPTER_LOWPOWER (0U)
 #endif /* HAL_UART_ADAPTER_LOWPOWER */
 
+/*! @brief Enable or disable uart hardware FIFO mode (1 - enable, 0 - disable) */
 #ifndef HAL_UART_ADAPTER_FIFO
-#define HAL_UART_ADAPTER_FIFO (0U)
+#define HAL_UART_ADAPTER_FIFO (1U)
 #endif /* HAL_UART_ADAPTER_FIFO */
 
 #ifndef HAL_UART_DMA_ENABLE
 #define HAL_UART_DMA_ENABLE (0U)
 #endif /* HAL_UART_DMA_ENABLE */
 
-/*! @brief Enable or disable master SPI DMA adapter int mode (1 - enable, 0 - disable) */
+/*! @brief Enable or disable uart DMA adapter int mode (1 - enable, 0 - disable) */
 #ifndef HAL_UART_DMA_INIT_ENABLE
-#define HAL_UART_DMA_INIT_ENABLE (0U)
+#define HAL_UART_DMA_INIT_ENABLE (1U)
 #endif /* HAL_SPI_MASTER_DMA_INIT_ENABLE */
 
 /*! @brief Definition of uart dma adapter software idleline detection timeout value in ms. */

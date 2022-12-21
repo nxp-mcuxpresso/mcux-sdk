@@ -62,15 +62,16 @@
 #endif /* FSL_FEATURE_SOC_DMA_COUNT */
 
 #elif (defined(FSL_FEATURE_SOC_I2S_COUNT) && (FSL_FEATURE_SOC_I2S_COUNT > 0U))
-#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U))
-#define HAL_AUDIO_SAI_EDMA_HANDLE_SIZE (HAL_AUDIO_QUEUE_SIZE * 44U + 84U)
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U)) || \
+    (defined(FSL_FEATURE_SOC_DMA4_COUNT) && (FSL_FEATURE_SOC_DMA4_COUNT > 0U))
+#define HAL_AUDIO_SAI_EDMA_HANDLE_SIZE (HAL_AUDIO_QUEUE_SIZE * 44U + 92U)
 #define HAL_AUDIO_HANDLE_SIZE_TEMP     (HAL_AUDIO_SAI_EDMA_HANDLE_SIZE + 12U)
 #elif (defined(FSL_FEATURE_SOC_DMA_COUNT) && (FSL_FEATURE_SOC_DMA_COUNT > 0U))
 #define HAL_AUDIO_SAI_DMA_HANDLE_SIZE (HAL_AUDIO_QUEUE_SIZE * 12U + 12U)
 #define HAL_AUDIO_HANDLE_SIZE_TEMP    (HAL_AUDIO_SAI_DMA_HANDLE_SIZE + 12U)
 #else
 #error This SOC does not have DMA or EDMA available!
-#endif /* FSL_FEATURE_SOC_EDMA_COUNT or FSL_FEATURE_SOC_DMA_COUNT */
+#endif /*FSL_FEATURE_SOC_EDMA_COUNT or FSL_FEATURE_SOC_DMA_COUNT */
 
 #else  /* FSL_FEATURE_SOC_FLEXCOMM_COUNT && FSL_FEATURE_SOC_I2S_COUNT */
 #endif /* FSL_FEATURE_SOC_FLEXCOMM_COUNT && FSL_FEATURE_SOC_I2S_COUNT */
@@ -245,10 +246,23 @@ typedef struct _hal_audio_dma_channel_mux_config_t
     {
         struct
         {
-            uint32_t dmaChannelMux;
+            uint32_t dmaRequestSource;
         } dmaChannelMuxConfig;
     };
 } hal_audio_dma_channel_mux_config_t;
+
+/*! @brief HAL Audio DMA extra user configuration */
+typedef struct _hal_audio_dma_extra_config_t
+{
+    union
+    {
+        /* DMA4 use this structure */
+        struct
+        {
+            bool enableMasterIdReplication;
+        } edmaExtraConfig;
+    };
+} hal_audio_dma_extra_config_t;
 
 /*! @brief HAL Audio DMA user configuration */
 typedef struct _hal_audio_dma_config
@@ -258,16 +272,33 @@ typedef struct _hal_audio_dma_config
     hal_audio_dma_channel_priority_t priority; /*!< DMA channel priority */
 
     bool enablePreemption;     /*!< If true, a channel can be suspended by other channel with higher priority.
-                                    Not all SOCs support this feature. for detailed information please refer to the
-                                    SOC corresponding RM. If not supported, the value should be set to false. */
+                                    Not all SOCs support this feature. For example, EDMA, DMA4 supports this feature.
+                                    For detailed information please refer to the SOC corresponding RM.
+                                    If not supported, the value should be set to false. */
     bool enablePreemptAbility; /*!< If true, a channel can suspend other channel with low priority
-                                    Not all SOCs support this feature. for detailed information please refer to the
-                                    SOC corresponding RM. If not supported, the value should be set to false. */
+                                    Not all SOCs support this feature. For example, EDMA, DMA4 supports this feature.
+                                    For detailed information please refer to the SOC corresponding RM.
+                                    If not supported, the value should be set to false. */
     void *dmaMuxConfig;        /*!< The pointer points to an entity defined by hal_audio_dma_mux_config_t.
-                                    Not all SOCs support this feature. for detailed information please refer to the
-                                    SOC corresponding RM. If not supported, the pointer should be set to NULL. */
+                                    Not all SOCs support this feature. In general, when the macro
+                                    FSL_FEATURE_SOC_DMAMUX_COUNT is defined as non-zero, the SOC supports this
+                                    feature. For detailed information please refer to the SOC corresponding RM.
+                                    If not supported, the pointer should be set to NULL. */
     void *dmaChannelMuxConfig; /*!< The pointer points to an entity defined by hal_audio_dma_channel_mux_config_t.
-                                    Not all SOCs support this feature. for detailed information please refer to the
+                                    Not all SOCs support this feature. In general, when the macro
+                                    FSL_FEATURE_EDMA_HAS_CHANNEL_MUX is defined as non-zero, the SOC supports this
+                                    feature. For detailed information please refer to the SOC corresponding RM.
+                                    If not supported, the pointer should be set to NULL. */
+    void *dmaChannelConfig;    /*!< The pointer points to an entity defined by channel configuration structure
+                                    that is defined in dma driver, such as edma_channel_config_t.
+                                    Not all SOCs support this feature. In general, when the macro
+                                    FSL_FEATURE_EDMA_HAS_CHANNEL_CONFIG is defined as non-zero, the SOC supports this
+                                    feature. For detailed information please refer to the SOC corresponding RM.
+                                    If not supported, the pointer should be set to NULL. */
+    void *dmaExtraConfig;      /*!< The pointer points to an entity defined by hal_audio_dma_extra_config_t.
+                                    Some DMA IPs have extra configurations, such as EDMA, DMA4.
+                                    The structure is used for these extra configurations.
+                                    Not all SOCs support this feature. For detailed information please refer to the
                                     SOC corresponding RM. If not supported, the pointer should be set to NULL. */
 } hal_audio_dma_config_t;
 

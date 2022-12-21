@@ -190,8 +190,31 @@ uint32_t HAL_TimerGetCurrentTimerCount(hal_timer_handle_t halTimerHandle)
 {
     assert(halTimerHandle);
     hal_timer_handle_struct_t *halTimerState = halTimerHandle;
-    return (uint32_t)COUNT_TO_USEC((uint64_t)LPTMR_GetCurrentTimerCount(s_LptmrBase[halTimerState->instance]),
+    uint32_t flags = LPTMR_GetStatusFlags(s_LptmrBase[halTimerState->instance]);
+    uint32_t count = 0U;
+
+#if !(defined(LPTMR_USE_FREE_RUNNING) && (LPTMR_USE_FREE_RUNNING > 0))
+    if(flags != 0U)
+    {
+        /* If HAL_TimerGetCurrentTimerCount is called from masked interrupt
+         * context, then it's possible the TCF flag is set, meaning the CNT
+         * register is reset. In such case, the current count value is not
+         * correct. We need to add the current compare value to the count
+         * This is true only when TFC is not set (not free running) */
+        count = (uint32_t)COUNT_TO_USEC((uint64_t)s_LptmrBase[halTimerState->instance]->CMR,
                                    halTimerState->timerClock_Hz);
+        count += (uint32_t)COUNT_TO_USEC((uint64_t)LPTMR_GetCurrentTimerCount(s_LptmrBase[halTimerState->instance]),
+                                   halTimerState->timerClock_Hz);
+        LPTMR_ClearStatusFlags(s_LptmrBase[halTimerState->instance], flags);
+    }
+    else
+#endif /* LPTMR_USE_FREE_RUNNING */
+    {
+        count = (uint32_t)COUNT_TO_USEC((uint64_t)LPTMR_GetCurrentTimerCount(s_LptmrBase[halTimerState->instance]),
+                                   halTimerState->timerClock_Hz);
+    }
+
+    return count;
 }
 
 hal_timer_status_t HAL_TimerUpdateTimeout(hal_timer_handle_t halTimerHandle, uint32_t timeout)

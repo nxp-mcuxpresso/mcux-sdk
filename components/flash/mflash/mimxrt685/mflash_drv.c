@@ -320,7 +320,17 @@ static int32_t mflash_drv_init_internal(void)
     uint64_t delay   = USEC_TO_COUNT(20, SystemCoreClock);
     uint32_t primask = __get_PRIMASK();
 
+    /* Define the init structure for the reset pin*/
+    gpio_pin_config_t reset_config = {
+        kGPIO_DigitalOutput,
+        1,
+    };
+
     __asm("cpsid i");
+
+    /* Init output reset pin. */
+    GPIO_PortInit(GPIO, BOARD_FLASH_RESET_GPIO_PORT);
+    GPIO_PinInit(GPIO, BOARD_FLASH_RESET_GPIO_PORT, BOARD_FLASH_RESET_GPIO_PIN, &reset_config);
 
 #ifndef XIP_EXTERNAL_FLASH
     flexspi_config_t config;

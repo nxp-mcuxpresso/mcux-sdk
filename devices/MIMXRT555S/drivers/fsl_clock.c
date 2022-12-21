@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1581,6 +1581,12 @@ void CLOCK_EnableFroClk(uint32_t divOutEnable)
     CLKCTL0->FRODIVOEN = divOutEnable & (uint32_t)kCLOCK_FroAllOutEn;
 }
 
+void CLOCK_EnableFroClkFreq(uint32_t targetFreq, uint32_t divOutEnable)
+{
+    (void)CLOCK_FroTuneToFreq(targetFreq);
+    CLOCK_EnableFroClk(divOutEnable);
+}
+
 #ifndef __XCC__
 /*! @brief  Enable/Disable FRO192M or FRO96M clock output.
  *  @param  froFreq : target fro frequency.
@@ -1607,6 +1613,7 @@ void CLOCK_EnableFroClkRange(clock_fro_freq_t froFreq, uint32_t divOutEnable)
 
     CLKCTL0->FRO_SCTRIM = CLKCTL0_FRO_SCTRIM_TRIM(scTrim);
     CLKCTL0->FRO_RDTRIM = CLKCTL0_FRO_RDTRIM_TRIM(rdTrim);
+    CLKCTL0->FRO_CONTROL &= ~CLKCTL0_FRO_CONTROL_EXP_COUNT_MASK; /* Reset the EXP_COUNT. */
     CLOCK_EnableFroClk(divOutEnable);
 }
 #endif /* __XCC__ */
@@ -1621,11 +1628,63 @@ void CLOCK_EnableLpOscClk(void)
     }
 }
 
+status_t CLOCK_FroTuneToFreq(uint32_t targetFreq)
+{
+    uint32_t xtalFreq = CLOCK_GetXtalInClkFreq();
+    uint32_t expected, up, low;
+    uint32_t captured, trim;
+
+    assert(xtalFreq);
+    assert(targetFreq >= CLK_FRO_LOW_FREQ);
+    assert(targetFreq <= CLK_FRO_HIGH_FREQ);
+
+    if (xtalFreq == 0U)
+    {
+        /* The reference clock for the tuner is unavailable. */
+        return kStatus_Fail;
+    }
+
+    targetFreq = (targetFreq / 4U);
+
+    /* Avoid the need for 64-bit calculation. */
+    targetFreq = targetFreq / 100U;
+    xtalFreq   = xtalFreq / 100U;
+
+    expected = ((targetFreq * 4095U) / xtalFreq + 6U) / 2U;
+    up       = ((((targetFreq * 2047U) / xtalFreq) * 100085U) / 100000U) + 2U;
+    low      = ((((targetFreq * 2048U) / xtalFreq) * 99915U + 100000U) / 100000U) + 3U;
+
+    /* Start tuning */
+    CLKCTL0->FRO_CONTROL = CLKCTL0_FRO_CONTROL_EXP_COUNT(expected) |
+                           CLKCTL0_FRO_CONTROL_THRESH_RANGE_UP(up - expected) |
+                           CLKCTL0_FRO_CONTROL_THRESH_RANGE_LOW(expected - low) | CLKCTL0_FRO_CONTROL_ENA_TUNE_MASK;
+
+    while (true)
+    {
+        while ((CLKCTL0->FRO_CAPVAL & CLKCTL0_FRO_CAPVAL_DATA_VALID_MASK) == 0U)
+        {
+        }
+
+        captured = CLKCTL0->FRO_CAPVAL & CLKCTL0_FRO_CAPVAL_CAPVAL_MASK;
+        trim     = CLKCTL0->FRO_RDTRIM;
+        /* Clear FRO_CAPVAL VALID flag */
+        CLKCTL0->FRO_RDTRIM = trim;
+        /* Reach the frequency range, then return. */
+        if ((captured <= up) && (captured >= low))
+        {
+            break;
+        }
+    }
+
+    CLKCTL0->FRO_CONTROL &= ~CLKCTL0_FRO_CONTROL_ENA_TUNE_MASK;
+
+    return kStatus_Success;
+}
+
 void CLOCK_EnableFroTuning(bool enable)
 {
-    uint32_t xtalFreq    = CLOCK_GetXtalInClkFreq();
-    uint32_t froDiv4Freq = CLK_FRO_DIV4_CLK;
-    uint64_t targetFreq  = (uint64_t)froDiv4Freq;
+    uint32_t xtalFreq   = CLOCK_GetXtalInClkFreq();
+    uint32_t targetFreq = CLK_FRO_DIV4_CLK;
     uint32_t expected, up, low;
     uint32_t captured, trim;
 
@@ -1634,9 +1693,13 @@ void CLOCK_EnableFroTuning(bool enable)
 
     if (enable)
     {
-        expected = (uint32_t)((targetFreq * (2047U * 2U + 1U) / xtalFreq + 6U) / 2U);
-        up       = (uint32_t)(targetFreq * 2047U * 100085U / xtalFreq / 100000U + 2U);
-        low      = (uint32_t)((targetFreq * 2048U * 99915U + (uint64_t)xtalFreq * 100000U) / xtalFreq / 100000U + 3U);
+        /* Avoid the need for 64-bit calculation. */
+        xtalFreq   = xtalFreq / 100U;
+        targetFreq = targetFreq / 100U;
+
+        expected = ((targetFreq * 4095U) / xtalFreq + 6U) / 2U;
+        up       = (((targetFreq * 2047U) / xtalFreq) * 100085U) / 100000U + 2U;
+        low      = (((targetFreq * 2048U) / xtalFreq) * 99915U + 100000U) / 100000U + 3U;
 
         /* Start tuning */
         CLKCTL0->FRO_CONTROL = CLKCTL0_FRO_CONTROL_EXP_COUNT(expected) |

@@ -72,18 +72,21 @@ static void FLEXCAN_ReceiveFifoEDMACallback(edma_handle_t *handle, void *param, 
     if (transferDone)
     {
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
-        framefd = flexcanPrivateHandle->handle->framefd;
-        for (uint32_t i = 0; i < flexcanPrivateHandle->handle->frameNum; i++)
+        if (0U != (flexcanPrivateHandle->base->ERFCR & CAN_ERFCR_ERFEN_MASK))
         {
-            /* Enhanced Rx FIFO ID HIT offset is changed dynamically according to data length code (DLC) . */
-            idHitIndex     = (DLC_LENGTH_DECODE(framefd->length) + 3U) / 4U;
-            framefd->idhit = framefd->dataWord[idHitIndex];
-            /* Clear the unused frame data. */
-            for (uint32_t j = idHitIndex; j < 16U; j++)
+            framefd = flexcanPrivateHandle->handle->framefd;
+            for (uint32_t i = 0; i < flexcanPrivateHandle->handle->frameNum; i++)
             {
-                framefd->dataWord[j] = 0x0U;
+                /* Enhanced Rx FIFO ID HIT offset is changed dynamically according to data length code (DLC) . */
+                idHitIndex     = (DLC_LENGTH_DECODE(framefd->length) + 3U) / 4U;
+                framefd->idhit = framefd->dataWord[idHitIndex];
+                /* Clear the unused frame data. */
+                for (uint32_t j = idHitIndex; j < 16U; j++)
+                {
+                    framefd->dataWord[j] = 0x0U;
+                }
+                framefd++;
             }
-            framefd++;
         }
 #endif
         /* Disable transfer. */
@@ -153,14 +156,15 @@ void FLEXCAN_PrepareTransfConfiguration(CAN_Type *base,
 
 #if (defined(FSL_FEATURE_EDMA_SUPPORT_16_BYTES_TRANSFER) && FSL_FEATURE_EDMA_SUPPORT_16_BYTES_TRANSFER)
     EDMA_PrepareTransfer(pEdmaConfig, (void *)fifoAddr, sizeof(flexcan_frame_t), (void *)pFifoXfer->frame,
-                         sizeof(uint32_t), sizeof(flexcan_frame_t), sizeof(flexcan_frame_t), kEDMA_PeripheralToMemory);
+                         sizeof(uint32_t), sizeof(flexcan_frame_t), sizeof(flexcan_frame_t) * pFifoXfer->frameNum,
+                         kEDMA_PeripheralToMemory);
 #else
     /* The Data Size of FLEXCAN Legacy RX FIFO output port is 16 Bytes, but lots of chips not support 16Bytes width DMA
      * transfer. These chips always support 4Byte width memory transfer, so we need prepare Memory to Memory mode by 4
      * Bytes width mode.
      */
     EDMA_PrepareTransfer(pEdmaConfig, (void *)fifoAddr, 4U, (void *)pFifoXfer->frame, sizeof(uint32_t),
-                         sizeof(flexcan_frame_t), sizeof(flexcan_frame_t), kEDMA_MemoryToMemory);
+                         sizeof(flexcan_frame_t), sizeof(flexcan_frame_t) * pFifoXfer->frameNum, kEDMA_MemoryToMemory);
 #endif
 }
 
@@ -197,6 +201,8 @@ status_t FLEXCAN_StartTransferDatafromRxFIFO(CAN_Type *base,
 
         /* Submit configuration. */
         (void)EDMA_SubmitTransfer(handle->rxFifoEdmaHandle, (const edma_transfer_config_t *)pEdmaConfig);
+        EDMA_SetModulo(handle->rxFifoEdmaHandle->base, handle->rxFifoEdmaHandle->channel, kEDMA_Modulo16bytes,
+                       kEDMA_ModuloDisable);
         /* Start transfer. */
         EDMA_StartTransfer(handle->rxFifoEdmaHandle);
 
@@ -207,7 +213,7 @@ status_t FLEXCAN_StartTransferDatafromRxFIFO(CAN_Type *base,
 }
 
 /*!
- * brief Receives the CAN Message from the Legacy Rx FIFO using eDMA.
+ * brief Receives the CAN Messages from the Legacy Rx FIFO using eDMA.
  *
  * This function receives the CAN Message using eDMA. This is a non-blocking function, which returns
  * right away. After the CAN Message is received, the receive callback function is called.
@@ -223,10 +229,12 @@ status_t FLEXCAN_TransferReceiveFifoEDMA(CAN_Type *base,
                                          flexcan_fifo_transfer_t *pFifoXfer)
 {
     assert(NULL != handle->rxFifoEdmaHandle);
+    assert(NULL != pFifoXfer->frame);
 
-    edma_transfer_config_t dmaXferConfig;
+    edma_transfer_config_t dmaXferConfig = {0};
     status_t status;
 
+    handle->frameNum = pFifoXfer->frameNum;
     /* Prepare transfer. */
     FLEXCAN_PrepareTransfConfiguration(base, pFifoXfer, &dmaXferConfig);
 
@@ -234,6 +242,35 @@ status_t FLEXCAN_TransferReceiveFifoEDMA(CAN_Type *base,
     status = FLEXCAN_StartTransferDatafromRxFIFO(base, handle, &dmaXferConfig);
 
     return status;
+}
+
+/*!
+ * brief Gets the Legacy Rx Fifo transfer status during a interrupt non-blocking receive.
+ *
+ * param base FlexCAN peripheral base address.
+ * param handle FlexCAN handle pointer.
+ * param count Number of CAN messages receive so far by the non-blocking transaction.
+ * retval kStatus_InvalidArgument count is Invalid.
+ * retval kStatus_Success Successfully return the count.
+ */
+
+status_t FLEXCAN_TransferGetReceiveFifoCountEMDA(CAN_Type *base, flexcan_edma_handle_t *handle, size_t *count)
+{
+    assert(NULL != handle);
+
+    status_t result = kStatus_Success;
+
+    if (handle->rxFifoState == (uint32_t)KFLEXCAN_RxFifoIdle)
+    {
+        result = kStatus_NoTransferInProgress;
+    }
+    else
+    {
+        *count = handle->frameNum -
+                 EDMA_GetRemainingMajorLoopCount(handle->rxFifoEdmaHandle->base, handle->rxFifoEdmaHandle->channel);
+    }
+
+    return result;
 }
 
 /*!
@@ -253,9 +290,9 @@ void FLEXCAN_TransferAbortReceiveFifoEDMA(CAN_Type *base, flexcan_edma_handle_t 
 
     handle->rxFifoState = (uint8_t)KFLEXCAN_RxFifoIdle;
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
-    handle->framefd  = NULL;
-    handle->frameNum = 0U;
+    handle->framefd = NULL;
 #endif
+    handle->frameNum = 0U;
     /* Disable FlexCAN Legacy/Enhanced Rx FIFO EDMA. */
     FLEXCAN_EnableRxFifoDMA(base, false);
 }
@@ -288,31 +325,6 @@ status_t FLEXCAN_TransferReceiveEnhancedFifoEDMA(CAN_Type *base,
     uint32_t perReadWords        = ((base->ERFCR & CAN_ERFCR_DMALW_MASK) >> CAN_ERFCR_DMALW_SHIFT) + 1U;
     uint32_t watermark           = ((base->ERFCR & CAN_ERFCR_ERFWM_MASK) >> CAN_ERFCR_ERFWM_SHIFT) + 1U;
 
-    handle->frameNum = pFifoXfer->frameNum;
-    handle->framefd  = pFifoXfer->framefd;
-    /*!< To reduce the complexity of DMA software configuration, need to set watermark to 1 to make that each DMA
-       request read once Rx FIFO. Because a DMA transfer cannot be dynamically changed, Number of words read per
-       transfer (ERFCR[DMALW] + 1) should be programmed so that the Enhanced Rx FIFO element can store the largest CAN
-       message present on the CAN bus. */
-    if ((watermark != 1U) || ((sizeof(uint32_t) * perReadWords) != sizeof(flexcan_fd_frame_t)))
-    {
-        return kStatus_InvalidArgument;
-    }
-
-    /* Prepare transfer. */
-    EDMA_PrepareTransfer(&dmaXferConfig, (void *)fifoAddr, sizeof(uint32_t), (void *)pFifoXfer->framefd,
-                         sizeof(uint32_t), sizeof(uint32_t) * perReadWords,  /* minor loop bytes : 4* perReadWords */
-                         sizeof(uint32_t) * perReadWords * handle->frameNum, /* major loop counts : handle->frameNum */
-                         kEDMA_MemoryToMemory);
-    /* Submit configuration. */
-    (void)EDMA_SubmitTransfer(handle->rxFifoEdmaHandle, &dmaXferConfig);
-    handle->rxFifoEdmaHandle->base->CH[handle->rxFifoEdmaHandle->channel].TCD_NBYTES_MLOFFYES &=
-        ~DMA_TCD_NBYTES_MLOFFYES_MLOFF_MASK;
-    handle->rxFifoEdmaHandle->base->CH[handle->rxFifoEdmaHandle->channel].TCD_NBYTES_MLOFFYES |=
-        DMA_TCD_NBYTES_MLOFFYES_MLOFF(128U - sizeof(uint32_t) * perReadWords) | DMA_TCD_NBYTES_MLOFFYES_SMLOE_MASK;
-    handle->rxFifoEdmaHandle->base->CH[handle->rxFifoEdmaHandle->channel].TCD_ATTR &= ~(uint16_t)DMA_TCD_ATTR_SMOD_MASK;
-    handle->rxFifoEdmaHandle->base->CH[handle->rxFifoEdmaHandle->channel].TCD_ATTR |= DMA_TCD_ATTR_SMOD(7U);
-
     /* If previous Rx FIFO receive not finished. */
     if ((uint8_t)KFLEXCAN_RxFifoBusy == handle->rxFifoState)
     {
@@ -320,6 +332,32 @@ status_t FLEXCAN_TransferReceiveEnhancedFifoEDMA(CAN_Type *base,
     }
     else
     {
+        handle->frameNum = pFifoXfer->frameNum;
+        handle->framefd  = pFifoXfer->framefd;
+        /*!< To reduce the complexity of DMA software configuration, need to set watermark to 1 to make that each DMA
+           request read once Rx FIFO. Because a DMA transfer cannot be dynamically changed, Number of words read per
+           transfer (ERFCR[DMALW] + 1) should be programmed so that the Enhanced Rx FIFO element can store the largest
+           CAN message present on the CAN bus. */
+        if ((watermark != 1U) || ((sizeof(uint32_t) * perReadWords) != sizeof(flexcan_fd_frame_t)))
+        {
+            return kStatus_InvalidArgument;
+        }
+
+        /* Prepare transfer. */
+        EDMA_PrepareTransfer(
+            &dmaXferConfig, (void *)fifoAddr, sizeof(uint32_t), (void *)pFifoXfer->framefd, sizeof(uint32_t),
+            sizeof(uint32_t) * perReadWords,                    /* minor loop bytes : 4* perReadWords */
+            sizeof(uint32_t) * perReadWords * handle->frameNum, /* major loop counts : handle->frameNum */
+            kEDMA_MemoryToMemory);
+        /* Submit configuration. */
+        (void)EDMA_SubmitTransfer(handle->rxFifoEdmaHandle, &dmaXferConfig);
+        handle->rxFifoEdmaHandle->base->CH[handle->rxFifoEdmaHandle->channel].TCD_NBYTES_MLOFFYES &=
+            ~DMA_TCD_NBYTES_MLOFFYES_MLOFF_MASK;
+        handle->rxFifoEdmaHandle->base->CH[handle->rxFifoEdmaHandle->channel].TCD_NBYTES_MLOFFYES |=
+            DMA_TCD_NBYTES_MLOFFYES_MLOFF(128U - sizeof(uint32_t) * perReadWords) | DMA_TCD_NBYTES_MLOFFYES_SMLOE_MASK;
+        handle->rxFifoEdmaHandle->base->CH[handle->rxFifoEdmaHandle->channel].TCD_ATTR &=
+            ~(uint16_t)DMA_TCD_ATTR_SMOD_MASK;
+        handle->rxFifoEdmaHandle->base->CH[handle->rxFifoEdmaHandle->channel].TCD_ATTR |= DMA_TCD_ATTR_SMOD(7U);
         handle->rxFifoState = (uint8_t)KFLEXCAN_RxFifoBusy;
 
         /* Enable FlexCAN Rx FIFO EDMA. */
@@ -331,34 +369,5 @@ status_t FLEXCAN_TransferReceiveEnhancedFifoEDMA(CAN_Type *base,
     }
 
     return status;
-}
-
-/*!
- * brief Gets the Enhanced Rx Fifo transfer status during a interrupt non-blocking receive.
- *
- * param base FlexCAN peripheral base address.
- * param handle FlexCAN handle pointer.
- * param count Number of CAN messages receive so far by the non-blocking transaction.
- * retval kStatus_InvalidArgument count is Invalid.
- * retval kStatus_Success Successfully return the count.
- */
-
-status_t FLEXCAN_TransferGetReceiveEnhancedFifoCountEMDA(CAN_Type *base, flexcan_edma_handle_t *handle, size_t *count)
-{
-    assert(NULL != handle);
-
-    status_t result = kStatus_Success;
-
-    if (handle->rxFifoState == (uint32_t)KFLEXCAN_RxFifoIdle)
-    {
-        result = kStatus_NoTransferInProgress;
-    }
-    else
-    {
-        *count = handle->frameNum -
-                 EDMA_GetRemainingMajorLoopCount(handle->rxFifoEdmaHandle->base, handle->rxFifoEdmaHandle->channel);
-    }
-
-    return result;
 }
 #endif

@@ -235,6 +235,173 @@ tpm_clock_prescale_t TPM_CalculateCounterClkDiv(TPM_Type *base, uint32_t counter
 }
 
 /*!
+ * brief Set parameters for PWM duty cycle and edges for a single tpm channel
+ *
+ * User calls this function to configure the mode, duty cycle and edge of a single PWM signal.
+ *
+ * param base        TPM peripheral base address
+ * param mod         PWM period
+ * param mode        PWM operation mode, options available in enumeration ::tpm_pwm_mode_t
+ * param chnlParams  A structure for configuring PWM channel parameters, used to configure the channel.
+ *
+ * return kStatus_Success if the PWM setup was successful,
+ *         kStatus_Error on failure
+ */
+static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
+                                          uint32_t mod,
+                                          tpm_pwm_mode_t mode,
+                                          tpm_chnl_pwm_signal_param_t chnlParams)
+{
+    uint32_t cnv;
+    uint32_t counterMax = TPM_MAX_COUNTER_VALUE(base);
+    uint8_t controlBits;
+    uint8_t chnlId;
+
+    /* MSnB:MSnA field value always be 10, ELSnB:ELSnA field value should config according to the channel params */
+#if defined(FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT) && FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT
+    controlBits =
+        (uint8_t)((uint32_t)kTPM_ChnlMSBMask | TPM_CnSC_ELSB(chnlParams.pauseLevel) | TPM_CnSC_ELSA(chnlParams.level));
+#else
+    controlBits = ((uint8_t)kTPM_ChnlMSBMask | ((uint8_t)chnlParams.level << TPM_CnSC_ELSA_SHIFT));
+#endif
+    chnlId = (uint8_t)chnlParams.chnlNumber;
+    /* Return error if requested dutycycle/chnlNumber is greater than the max allowed */
+    if ((chnlId >= (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) ||
+        (-1 == (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)))
+    {
+        return kStatus_InvalidArgument;
+    }
+    /* Return error if requested dutycycle is greater than the max allowed or MOD equal to 0xFFFF when it want get a
+     * 100% duty cycle PWM signal*/
+    if (((chnlParams.dutyCyclePercent == 100U) && (mod == counterMax)) || (chnlParams.dutyCyclePercent > 100U))
+    {
+        return kStatus_OutOfRange;
+    }
+
+#if defined(FSL_FEATURE_TPM_HAS_COMBINE) && FSL_FEATURE_TPM_HAS_COMBINE
+    if (mode == kTPM_CombinedPwm)
+    {
+        /* Check added for combined mode */
+        if ((chnlId >= ((uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base) / 2U)) ||
+            (1U != (uint8_t)FSL_FEATURE_TPM_COMBINE_HAS_EFFECTn(base)))
+        {
+            /* The instance should support combine mode and the channel number should be the pair number */
+            return kStatus_InvalidArgument;
+        }
+        if (((chnlParams.firstEdgeDelayPercent + chnlParams.dutyCyclePercent) > 100U) ||
+            ((chnlParams.firstEdgeDelayPercent > 0U) && (chnlParams.dutyCyclePercent == 0U)) ||
+            ((chnlParams.firstEdgeDelayPercent == 0U) && (chnlParams.deadTimeValue[0] != 0U)))
+        {
+            /* Return error if the following situation occurs :
+             * firstEdgeDelayPercent + dutyCyclePercent > 100
+             * firstEdgeDelayPercent > 0 and dutyCyclePercent == 0
+             * firstEdgeDelayPercent == 0 and deadTimeValue[0] != 0
+             */
+            return kStatus_OutOfRange;
+        }
+        /* Configure delay of the first edge */
+        uint32_t cnvFirstEdge;
+        /* Configure dutycycle */
+        if (chnlParams.dutyCyclePercent == 0U)
+        {
+            cnvFirstEdge = mod + 1U;
+            cnv          = 0;
+        }
+        else if (chnlParams.dutyCyclePercent == 100U)
+        {
+            cnvFirstEdge = 0U;
+            cnv          = mod + 1U;
+        }
+        else
+        {
+            cnvFirstEdge = (mod * chnlParams.firstEdgeDelayPercent) / 100U;
+            cnv          = (mod * chnlParams.dutyCyclePercent) / 100U;
+        }
+
+        /* Set the combine bit for the channel pair */
+        base->COMBINE |= 1UL << (TPM_COMBINE_SHIFT * chnlId);
+
+        chnlId *= 2U;
+        /* Set deadtime insertion for the channel pair using channel filter register */
+        uint32_t filterVal = base->FILTER;
+        /* Clear the channel pair's filter values */
+        filterVal &=
+            ~(((uint32_t)TPM_FILTER_CH0FVAL_MASK | TPM_FILTER_CH1FVAL_MASK) << (chnlId * TPM_FILTER_CH1FVAL_SHIFT));
+        /* Shift the deadtime insertion value to the right place in the register */
+        filterVal |= (TPM_FILTER_CH0FVAL(chnlParams.deadTimeValue[0]) | TPM_FILTER_CH1FVAL(chnlParams.deadTimeValue[1]))
+                     << (chnlId * TPM_FILTER_CH1FVAL_SHIFT);
+        base->FILTER = filterVal;
+
+        /* When switching mode, disable channel n first */
+        TPM_DisableChannel(base, (tpm_chnl_t)chnlId);
+        /* Set the requested PWM mode for channel n, under combine PWM mode, the active level is opposite of
+         * edge-aligned mode */
+        TPM_EnableChannel(base, (tpm_chnl_t)chnlId, controlBits ^ TPM_CnSC_ELSA_MASK);
+        /* Set the channel n value */
+        do
+        {
+            base->CONTROLS[chnlId].CnV = cnvFirstEdge;
+        } while (cnvFirstEdge != base->CONTROLS[chnlId].CnV);
+
+        chnlId += 1U;
+        /* When switching mode, disable channel n + 1 */
+        TPM_DisableChannel(base, (tpm_chnl_t)chnlId);
+#if defined(FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT) && FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT
+        /* Select the pause level for second channel */
+        controlBits = (uint8_t)((uint32_t)kTPM_ChnlMSBMask | TPM_CnSC_ELSB(chnlParams.secPauseLevel) |
+                                TPM_CnSC_ELSA(chnlParams.level));
+#endif
+        /* Set the requested PWM mode for channel n + 1 */
+        if (chnlParams.enableComplementary)
+        {
+            /* Change the polarity on the second channel get complementary PWM signals */
+            TPM_EnableChannel(base, (tpm_chnl_t)chnlId, controlBits);
+        }
+        else
+        {
+            /* Second channel use same control bits as first channel */
+            TPM_EnableChannel(base, (tpm_chnl_t)chnlId, controlBits ^ TPM_CnSC_ELSA_MASK);
+        }
+
+        /* Set the channel n+1 value */
+        do
+        {
+            base->CONTROLS[chnlId].CnV = cnvFirstEdge + cnv;
+        } while ((cnvFirstEdge + cnv) != base->CONTROLS[chnlId].CnV);
+    }
+    else
+    {
+#endif
+        /* Configure dutycycle */
+        if (chnlParams.dutyCyclePercent == 100U)
+        {
+            cnv = mod + 1U;
+        }
+        else
+        {
+            cnv = (mod * chnlParams.dutyCyclePercent) / 100U;
+        }
+        /* Fix ERROR050050 When TPM is configured in EPWM mode as PS = 0, the compare event is missed on
+        the first reload/overflow after writing 1 to the CnV register and causes an incorrect duty output.*/
+#if (defined(FSL_FEATURE_TPM_HAS_ERRATA_050050) && FSL_FEATURE_TPM_HAS_ERRATA_050050)
+        assert(!(mode == kTPM_EdgeAlignedPwm && cnv == 1U && (base->SC & TPM_SC_PS_MASK) == kTPM_Prescale_Divide_1));
+#endif
+        /* When switching mode, disable channel first */
+        TPM_DisableChannel(base, (tpm_chnl_t)chnlId);
+        /* Set the requested PWM mode, output mode MSnB:MSnA field value set to 10 */
+        TPM_EnableChannel(base, (tpm_chnl_t)chnlId, controlBits);
+        do
+        {
+            base->CONTROLS[chnlId].CnV = cnv;
+        } while (cnv != base->CONTROLS[chnlId].CnV);
+
+#if defined(FSL_FEATURE_TPM_HAS_COMBINE) && FSL_FEATURE_TPM_HAS_COMBINE
+    }
+#endif
+    return kStatus_Success;
+}
+
+/*!
  * brief Configures the PWM signal parameters
  *
  * User calls this function to configure the PWM signals period, mode, dutycycle and edge. Use this
@@ -259,12 +426,10 @@ status_t TPM_SetupPwm(TPM_Type *base,
 {
     assert(NULL != chnlParams);
 
-    uint32_t mod        = 0U, cnv;
+    uint32_t mod        = 0U;
     uint32_t counterMax = TPM_MAX_COUNTER_VALUE(base);
     uint32_t tpmClock   = (srcClock_Hz / (1UL << (base->SC & TPM_SC_PS_MASK)));
-    uint8_t controlBits;
-    uint8_t chnlId;
-    status_t status = kStatus_Success;
+    status_t status     = kStatus_Success;
 
     if ((0U == pwmFreq_Hz) || (0U == srcClock_Hz) || (0U == numOfChnls) || (tpmClock < pwmFreq_Hz))
     {
@@ -311,148 +476,12 @@ status_t TPM_SetupPwm(TPM_Type *base,
     /* Setup each TPM channel */
     for (uint8_t i = 0; i < numOfChnls; i++)
     {
-        /* MSnB:MSnA field value always be 10, ELSnB:ELSnA field value should config according to the channel params */
-#if defined(FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT) && FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT
-        controlBits = (uint8_t)((uint32_t)kTPM_ChnlMSBMask | TPM_CnSC_ELSB(chnlParams->pauseLevel) |
-                                TPM_CnSC_ELSA(chnlParams->level));
-#else
-        controlBits = ((uint8_t)kTPM_ChnlMSBMask | ((uint8_t)chnlParams->level << TPM_CnSC_ELSA_SHIFT));
-#endif
-        chnlId = (uint8_t)chnlParams->chnlNumber;
-        /* Return error if requested dutycycle/chnlNumber is greater than the max allowed */
-        if ((chnlId >= (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) ||
-            (-1 == (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)))
+        /* Setup a single PWM channel */
+        status = TPM_SetupSinglePwmChannel(base, mod, mode, *chnlParams);
+        if (status != kStatus_Success)
         {
-            return kStatus_InvalidArgument;
+            return status;
         }
-        /* Return error if requested dutycycle is greater than the max allowed or MOD equal to 0xFFFF when it want get a
-         * 100% duty cycle PWM signal*/
-        if (((chnlParams->dutyCyclePercent == 100U) && (mod == counterMax)) || (chnlParams->dutyCyclePercent > 100U))
-        {
-            return kStatus_OutOfRange;
-        }
-
-#if defined(FSL_FEATURE_TPM_HAS_COMBINE) && FSL_FEATURE_TPM_HAS_COMBINE
-        if (mode == kTPM_CombinedPwm)
-        {
-            /* Check added for combined mode */
-            if ((chnlId >= ((uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base) / 2U)) ||
-                (1U != (uint8_t)FSL_FEATURE_TPM_COMBINE_HAS_EFFECTn(base)))
-            {
-                /* The instance should support combine mode and the channel number should be the pair number */
-                return kStatus_InvalidArgument;
-            }
-            if (((chnlParams->firstEdgeDelayPercent + chnlParams->dutyCyclePercent) > 100U) ||
-                ((chnlParams->firstEdgeDelayPercent > 0U) && (chnlParams->dutyCyclePercent == 0U)) ||
-                ((chnlParams->firstEdgeDelayPercent == 0U) && (chnlParams->deadTimeValue[0] != 0U)))
-            {
-                /* Return error if the following situation occurs :
-                 * firstEdgeDelayPercent + dutyCyclePercent > 100
-                 * firstEdgeDelayPercent > 0 and dutyCyclePercent == 0
-                 * firstEdgeDelayPercent == 0 and deadTimeValue[0] != 0
-                 */
-                return kStatus_OutOfRange;
-            }
-            /* Configure delay of the first edge */
-            uint32_t cnvFirstEdge;
-            /* Configure dutycycle */
-            if (chnlParams->dutyCyclePercent == 0U)
-            {
-                cnvFirstEdge = mod + 1U;
-                cnv          = 0;
-            }
-            else if (chnlParams->dutyCyclePercent == 100U)
-            {
-                cnvFirstEdge = 0U;
-                cnv          = mod + 1U;
-            }
-            else
-            {
-                cnvFirstEdge = (mod * chnlParams->firstEdgeDelayPercent) / 100U;
-                cnv          = (mod * chnlParams->dutyCyclePercent) / 100U;
-            }
-
-            /* Set the combine bit for the channel pair */
-            base->COMBINE |= 1UL << (TPM_COMBINE_SHIFT * chnlId);
-
-            chnlId *= 2U;
-            /* Set deadtime insertion for the channel pair using channel filter register */
-            uint32_t filterVal = base->FILTER;
-            /* Clear the channel pair's filter values */
-            filterVal &=
-                ~(((uint32_t)TPM_FILTER_CH0FVAL_MASK | TPM_FILTER_CH1FVAL_MASK) << (chnlId * TPM_FILTER_CH1FVAL_SHIFT));
-            /* Shift the deadtime insertion value to the right place in the register */
-            filterVal |=
-                (TPM_FILTER_CH0FVAL(chnlParams->deadTimeValue[0]) | TPM_FILTER_CH1FVAL(chnlParams->deadTimeValue[1]))
-                << (chnlId * TPM_FILTER_CH1FVAL_SHIFT);
-            base->FILTER = filterVal;
-
-            /* When switching mode, disable channel n first */
-            TPM_DisableChannel(base, (tpm_chnl_t)chnlId);
-            /* Set the requested PWM mode for channel n, under combine PWM mode, the active level is opposite of
-             * edge-aligned mode */
-            TPM_EnableChannel(base, (tpm_chnl_t)chnlId, controlBits ^ TPM_CnSC_ELSA_MASK);
-            /* Set the channel n value */
-            do
-            {
-                base->CONTROLS[chnlId].CnV = cnvFirstEdge;
-            } while (cnvFirstEdge != base->CONTROLS[chnlId].CnV);
-
-            chnlId += 1U;
-            /* When switching mode, disable channel n + 1 */
-            TPM_DisableChannel(base, (tpm_chnl_t)chnlId);
-#if defined(FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT) && FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT
-            /* Select the pause level for second channel */
-            controlBits = (uint8_t)((uint32_t)kTPM_ChnlMSBMask | TPM_CnSC_ELSB(chnlParams->secPauseLevel) |
-                                    TPM_CnSC_ELSA(chnlParams->level));
-#endif
-            /* Set the requested PWM mode for channel n + 1 */
-            if (chnlParams->enableComplementary)
-            {
-                /* Change the polarity on the second channel get complementary PWM signals */
-                TPM_EnableChannel(base, (tpm_chnl_t)chnlId, controlBits);
-            }
-            else
-            {
-                /* Second channel use same control bits as first channel */
-                TPM_EnableChannel(base, (tpm_chnl_t)chnlId, controlBits ^ TPM_CnSC_ELSA_MASK);
-            }
-            /* Set the channel n+1 value */
-            do
-            {
-                base->CONTROLS[chnlId].CnV = cnvFirstEdge + cnv;
-            } while ((cnvFirstEdge + cnv) != base->CONTROLS[chnlId].CnV);
-        }
-        else
-        {
-#endif
-            /* Configure dutycycle */
-            if (chnlParams->dutyCyclePercent == 100U)
-            {
-                cnv = mod + 1U;
-            }
-            else
-            {
-                cnv = (mod * chnlParams->dutyCyclePercent) / 100U;
-            }
-            /* Fix ERROR050050 When TPM is configured in EPWM mode as PS = 0, the compare event is missed on
-            the first reload/overflow after writing 1 to the CnV register and causes an incorrect duty output.*/
-#if (defined(FSL_FEATURE_TPM_HAS_ERRATA_050050) && FSL_FEATURE_TPM_HAS_ERRATA_050050)
-            assert(
-                !(mode == kTPM_EdgeAlignedPwm && cnv == 1U && (base->SC & TPM_SC_PS_MASK) == kTPM_Prescale_Divide_1));
-#endif
-            /* When switching mode, disable channel first */
-            TPM_DisableChannel(base, (tpm_chnl_t)chnlId);
-            /* Set the requested PWM mode, output mode MSnB:MSnA field value set to 10 */
-            TPM_EnableChannel(base, (tpm_chnl_t)chnlId, controlBits);
-            do
-            {
-                base->CONTROLS[chnlId].CnV = cnv;
-            } while (cnv != base->CONTROLS[chnlId].CnV);
-
-#if defined(FSL_FEATURE_TPM_HAS_COMBINE) && FSL_FEATURE_TPM_HAS_COMBINE
-        }
-#endif
         chnlParams++;
     }
 
@@ -467,6 +496,7 @@ status_t TPM_SetupPwm(TPM_Type *base,
 
     return kStatus_Success;
 }
+
 /*!
  * brief Update the duty cycle of an active PWM signal
  *

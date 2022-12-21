@@ -264,9 +264,44 @@ static void ENET_QOS_SetDMAControl(ENET_QOS_Type *base, const enet_qos_config_t 
     uint32_t reg;
     uint32_t burstLen;
 
-    /* Reset first and wait for the complete
-     * The reset bit will automatically be cleared after complete. */
+    if (kENET_QOS_RmiiMode == config->miiMode)
+    {
+        /* Disable enet qos clock first. */
+        ENET_QOS_EnableClock(false);
+    }
+    else
+    {
+        /* Enable enet qos clock. */
+        ENET_QOS_EnableClock(true);
+    }
+    /* Set MII mode*/
+    ENET_QOS_SetSYSControl(config->miiMode);
+
+    /* Reset first, The reset bit will automatically be cleared after complete. */
     base->DMA_MODE |= ENET_QOS_DMA_MODE_SWR_MASK;
+    for (uint32_t i = 0U; i < 100UL; i++)
+    {
+        __NOP();
+    }
+    if (kENET_QOS_RmiiMode == config->miiMode)
+    {
+        /* Configure mac */
+        reg = ENET_QOS_MAC_CONFIGURATION_DM(config->miiDuplex) | (uint32_t)config->miiSpeed |
+              ENET_QOS_MAC_CONFIGURATION_S2KP(
+                  ((config->specialControl & (uint32_t)kENET_QOS_8023AS2KPacket) != 0U) ? 1U : 0U);
+        if (config->miiDuplex == kENET_QOS_MiiHalfDuplex)
+        {
+            reg |= ENET_QOS_MAC_CONFIGURATION_IPG(ENET_QOS_HALFDUPLEX_DEFAULTIPG);
+        }
+        base->MAC_CONFIGURATION = reg;
+        /* Enable enet qos clock. */
+        ENET_QOS_EnableClock(true);
+        for (uint32_t i = 0U; i < 100UL; i++)
+        {
+            __NOP();
+        }
+    }
+    /* Wait for the complete */
     while ((base->DMA_MODE & ENET_QOS_DMA_MODE_SWR_MASK) != 0U)
     {
     }
@@ -842,6 +877,9 @@ status_t ENET_QOS_Up(
     assert(config != NULL);
     status_t result = kStatus_Success;
 
+    /* Initializes the ENET MDIO. */
+    ENET_QOS_SetSMI(base, refclkSrc_Hz);
+
     /* Initializes the ENET MTL with basic function. */
     ENET_QOS_SetMTL(base, config);
 
@@ -877,9 +915,6 @@ status_t ENET_QOS_Init(
     /* Ungate ENET clock. */
     (void)CLOCK_EnableClock(s_enetqosClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
-    /* System configure fistly. */
-    ENET_QOS_SetSYSControl(config->miiMode);
 
     /* Initializes the ENET DMA with basic function. */
     ENET_QOS_SetDMAControl(base, config);
@@ -1700,91 +1735,205 @@ void ENET_QOS_SetSMI(ENET_QOS_Type *base, uint32_t csrClock_Hz)
 }
 
 /*!
- * brief Starts a SMI write command.
- * It supports MDIO IEEE802.3 Clause 22.
+ * @brief Sends the MDIO IEEE802.3 Clause 22 format write command.
  * After send command, user needs to check whether the transmission is over
  * with ENET_QOS_IsSMIBusy().
  *
- * param base  ENET peripheral base address.
- * param phyAddr The PHY address.
- * param phyReg The PHY register.
- * param data The data written to PHY.
+ * @param base  ENET peripheral base address.
+ * @param phyAddr The PHY address.
+ * @param regAddr The PHY register address.
+ * @param data The data written to PHY.
  */
-void ENET_QOS_StartSMIWrite(ENET_QOS_Type *base, uint32_t phyAddr, uint32_t phyReg, uint32_t data)
+void ENET_QOS_StartSMIWrite(ENET_QOS_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t data)
 {
     uint32_t reg = base->MAC_MDIO_ADDRESS & ENET_QOS_MAC_MDIO_ADDRESS_CR_MASK;
 
     /* Build MII write command. */
     base->MAC_MDIO_ADDRESS = reg | (uint32_t)kENET_QOS_MiiWriteFrame | ENET_QOS_MAC_MDIO_ADDRESS_PA(phyAddr) |
-                             ENET_QOS_MAC_MDIO_ADDRESS_RDA(phyReg);
+                             ENET_QOS_MAC_MDIO_ADDRESS_RDA(regAddr);
     base->MAC_MDIO_DATA = data;
     base->MAC_MDIO_ADDRESS |= ENET_QOS_MAC_MDIO_ADDRESS_GB_MASK;
 }
 
 /*!
- * brief Starts an SMI read command.
- * It supports MDIO IEEE802.3 Clause 22.
+ * @brief Sends the MDIO IEEE802.3 Clause 22 format read command.
  * After send command, user needs to check whether the transmission is over
  * with ENET_QOS_IsSMIBusy().
  *
- * param base  ENET peripheral base address.
- * param phyAddr The PHY address.
- * param phyReg The PHY register.
+ * @param base  ENET peripheral base address.
+ * @param phyAddr The PHY address.
+ * @param regAddr The PHY register address.
  */
-void ENET_QOS_StartSMIRead(ENET_QOS_Type *base, uint32_t phyAddr, uint32_t phyReg)
+void ENET_QOS_StartSMIRead(ENET_QOS_Type *base, uint8_t phyAddr, uint8_t regAddr)
 {
     uint32_t reg = base->MAC_MDIO_ADDRESS & ENET_QOS_MAC_MDIO_ADDRESS_CR_MASK;
 
     /* Build MII read command. */
     base->MAC_MDIO_ADDRESS = reg | (uint32_t)kENET_QOS_MiiReadFrame | ENET_QOS_MAC_MDIO_ADDRESS_PA(phyAddr) |
-                             ENET_QOS_MAC_MDIO_ADDRESS_RDA(phyReg);
+                             ENET_QOS_MAC_MDIO_ADDRESS_RDA(regAddr);
     base->MAC_MDIO_ADDRESS |= ENET_QOS_MAC_MDIO_ADDRESS_GB_MASK;
 }
 
 /*!
- * brief Starts a SMI write command.
- * It supports MDIO IEEE802.3 Clause 45.
+ * @brief Sends the MDIO IEEE802.3 Clause 45 format write command.
  * After send command, user needs to check whether the transmission is over
  * with ENET_QOS_IsSMIBusy().
  *
- * param base  ENET peripheral base address.
- * param phyAddr The PHY address.
- * param device The PHY device type.
- * param phyReg The PHY register address.
- * param data The data written to PHY.
+ * @param base  ENET peripheral base address.
+ * @param portAddr  The MDIO port address(PHY address).
+ * @param devAddr  The device address.
+ * @param regAddr  The PHY register address.
+ * @param data The data written to PHY.
  */
 void ENET_QOS_StartExtC45SMIWrite(
-    ENET_QOS_Type *base, uint32_t phyAddr, uint32_t device, uint32_t phyReg, uint32_t data)
+    ENET_QOS_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr, uint16_t data)
 {
     uint32_t reg = base->MAC_MDIO_ADDRESS & ENET_QOS_MAC_MDIO_ADDRESS_CR_MASK;
 
     /* Build MII write command. */
     base->MAC_MDIO_ADDRESS = reg | ENET_QOS_MAC_MDIO_ADDRESS_C45E_MASK | (uint32_t)kENET_QOS_MiiWriteFrame |
-                             ENET_QOS_MAC_MDIO_ADDRESS_PA(phyAddr) | ENET_QOS_MAC_MDIO_ADDRESS_RDA(device);
-    base->MAC_MDIO_DATA = data | ENET_QOS_MAC_MDIO_DATA_RA(phyReg);
+                             ENET_QOS_MAC_MDIO_ADDRESS_PA(portAddr) | ENET_QOS_MAC_MDIO_ADDRESS_RDA(devAddr);
+    base->MAC_MDIO_DATA = data | ENET_QOS_MAC_MDIO_DATA_RA(regAddr);
     base->MAC_MDIO_ADDRESS |= ENET_QOS_MAC_MDIO_ADDRESS_GB_MASK;
 }
 
 /*!
- * brief Starts a SMI write command.
- * It supports MDIO IEEE802.3 Clause 45.
+ * @brief Sends the MDIO IEEE802.3 Clause 45 format read command.
  * After send command, user needs to check whether the transmission is over
  * with ENET_QOS_IsSMIBusy().
  *
- * param base  ENET peripheral base address.
- * param phyAddr The PHY address.
- * param device The PHY device type.
- * param phyReg The PHY register address.
+ * @param base  ENET peripheral base address.
+ * @param portAddr  The MDIO port address(PHY address).
+ * @param devAddr  The device address.
+ * @param regAddr  The PHY register address.
  */
-void ENET_QOS_StartExtC45SMIRead(ENET_QOS_Type *base, uint32_t phyAddr, uint32_t device, uint32_t phyReg)
+void ENET_QOS_StartExtC45SMIRead(ENET_QOS_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr)
 {
     uint32_t reg = base->MAC_MDIO_ADDRESS & ENET_QOS_MAC_MDIO_ADDRESS_CR_MASK;
 
     /* Build MII read command. */
     base->MAC_MDIO_ADDRESS = reg | ENET_QOS_MAC_MDIO_ADDRESS_C45E_MASK | (uint32_t)kENET_QOS_MiiReadFrame |
-                             ENET_QOS_MAC_MDIO_ADDRESS_PA(phyAddr) | ENET_QOS_MAC_MDIO_ADDRESS_RDA(device);
-    base->MAC_MDIO_DATA = ENET_QOS_MAC_MDIO_DATA_RA(phyReg);
+                             ENET_QOS_MAC_MDIO_ADDRESS_PA(portAddr) | ENET_QOS_MAC_MDIO_ADDRESS_RDA(devAddr);
+    base->MAC_MDIO_DATA = ENET_QOS_MAC_MDIO_DATA_RA(regAddr);
     base->MAC_MDIO_ADDRESS |= ENET_QOS_MAC_MDIO_ADDRESS_GB_MASK;
+}
+
+static status_t ENET_QOS_MDIOWaitTransferOver(ENET_QOS_Type *base)
+{
+    status_t result = kStatus_Success;
+#ifdef ENET_QOS_MDIO_TIMEOUT_COUNT
+    uint32_t counter;
+#endif
+
+#ifdef ENET_QOS_MDIO_TIMEOUT_COUNT
+    for (counter = ENET_QOS_MDIO_TIMEOUT_COUNT; counter > 0U; counter--)
+    {
+        if (!ENET_QOS_IsSMIBusy(base))
+        {
+            break;
+        }
+    }
+    /* Check for timeout. */
+    if (0U == counter)
+    {
+        result = kStatus_Timeout;
+    }
+#else
+    while (ENET_QOS_IsSMIBusy(base))
+    {
+    }
+#endif
+    return result;
+}
+
+/*!
+ * @brief MDIO write with IEEE802.3 MDIO Clause 22 format.
+ *
+ * @param base  ENET peripheral base address.
+ * @param phyAddr  The PHY address.
+ * @param regAddr  The PHY register.
+ * @param data  The data written to PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_QOS_MDIOWrite(ENET_QOS_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t data)
+{
+    ENET_QOS_StartSMIWrite(base, phyAddr, regAddr, data);
+
+    return ENET_QOS_MDIOWaitTransferOver(base);
+}
+
+/*!
+ * @brief MDIO read with IEEE802.3 MDIO Clause 22 format.
+ *
+ * @param base  ENET peripheral base address.
+ * @param phyAddr  The PHY address.
+ * @param regAddr  The PHY register.
+ * @param pData  The data read from PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_QOS_MDIORead(ENET_QOS_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t *pData)
+{
+    assert(pData);
+
+    status_t result;
+
+    ENET_QOS_StartSMIRead(base, phyAddr, regAddr);
+
+    result = ENET_QOS_MDIOWaitTransferOver(base);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
+    *pData = ENET_QOS_ReadSMIData(base);
+
+    return result;
+}
+
+/*!
+ * @brief MDIO write with IEEE802.3 Clause 45 format.
+ *
+ * @param base  ENET peripheral base address.
+ * @param portAddr  The MDIO port address(PHY address).
+ * @param devAddr  The device address.
+ * @param regAddr  The PHY register address.
+ * @param data  The data written to PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_QOS_MDIOC45Write(ENET_QOS_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr, uint16_t data)
+{
+    ENET_QOS_StartExtC45SMIWrite(base, portAddr, devAddr, regAddr, data);
+
+    return ENET_QOS_MDIOWaitTransferOver(base);
+}
+
+/*!
+ * @brief MDIO read with IEEE802.3 Clause 45 format.
+ *
+ * @param base  ENET peripheral base address.
+ * @param portAddr  The MDIO port address(PHY address).
+ * @param devAddr  The device address.
+ * @param regAddr  The PHY register address.
+ * @param pData  The data read from PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_QOS_MDIOC45Read(ENET_QOS_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr, uint16_t *pData)
+{
+    status_t result = kStatus_Success;
+
+    ENET_QOS_StartExtC45SMIRead(base, portAddr, devAddr, regAddr);
+
+    result = ENET_QOS_MDIOWaitTransferOver(base);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
+    *pData = ENET_QOS_ReadSMIData(base);
+
+    return result;
 }
 
 /*!

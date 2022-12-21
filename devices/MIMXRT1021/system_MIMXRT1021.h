@@ -13,7 +13,7 @@
 **
 **     Reference manual:    IMXRT1020RM Rev.2, 01/2021 | IMXRT102XSRM Rev.0
 **     Version:             rev. 1.2, 2021-08-10
-**     Build:               b210811
+**     Build:               b220124
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +21,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause

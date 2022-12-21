@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2020, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -249,13 +249,15 @@ typedef struct _flexspi_nor_config
     uint32_t sectorSize;            //!< Sector size of Serial NOR
     uint8_t ipcmdSerialClkFreq;     //!< Clock frequency for IP command
     uint8_t isUniformBlockSize;     //!< Sector/Block size is the same
-    uint8_t reserved0[2];           //!< Reserved for future use
+    uint8_t isDataOrderSwapped;     //!< The data order is swapped in OPI DDR mode
+    uint8_t reserved0;              //!< Reserved for future use
     uint8_t serialNorType;          //!< Serial NOR Flash type: 0/1/2/3
     uint8_t needExitNoCmdMode;      //!< Need to exit NoCmd mode before other IP command
     uint8_t halfClkForNonReadCmd;   //!< Half the Serial Clock for non-read command: true/false
     uint8_t needRestoreNoCmdMode;   //!< Need to Restore NoCmd mode after IP commmand execution
     uint32_t blockSize;             //!< Block size
-    uint32_t reserve2[11];          //!< Reserved for future use
+    uint32_t FlashStateCtx;         //!< Flash State Context after being configured
+    uint32_t reserve2[10];          //!< Reserved for future use
 } flexspi_nor_config_t;
 
 #ifdef __cplusplus

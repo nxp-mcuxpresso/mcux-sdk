@@ -10,7 +10,9 @@
 #define _FSL_FLEXSPI_EDMA_H_
 
 #include "fsl_flexspi.h"
+#if defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT
 #include "fsl_dmamux.h"
+#endif
 #include "fsl_edma.h"
 
 /*!
