@@ -29,7 +29,7 @@
  *
  * @param base LCDIF peripheral base address
  */
-static uint32_t LCDIFV2_GetInstance(LCDIFV2_Type *base);
+static uint32_t LCDIFV2_GetInstance(const LCDIFV2_Type *base);
 
 /*!
  * @brief Reset register value to default status.
@@ -42,67 +42,18 @@ static void LCDIFV2_ResetRegister(LCDIFV2_Type *base);
  * Variables
  ******************************************************************************/
 
-/*! @brief Pointers to LCDIF bases for each instance. */
-static LCDIFV2_Type *const s_lcdifv2Bases[] = LCDIFV2_BASE_PTRS;
-
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to LCDIF clock for each instance. */
 static const clock_ip_name_t s_lcdifv2Clocks[] = LCDIFV2_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
-/*! @brief Porter Duff layer factors for different configuration. */
-static const lcdifv2_pd_factor_mode_t s_lcdifv2PdLayerFactors[][2] = {
-    /* kLCDIFV2_PD_Src */
-    {
-        /* s1_s0_factor_mode. */
-        kLCDIFV2_PD_FactorZero,
-
-        /* s0_s1_factor_mode. */
-        kLCDIFV2_PD_FactorOne,
-    },
-
-    /* kLCDIFV2_PD_Atop */
-    {kLCDIFV2_PD_FactorInversedAlpha, kLCDIFV2_PD_FactorStraightAlpha},
-
-    /* kLCDIFV2_PD_Over */
-    {kLCDIFV2_PD_FactorInversedAlpha, kLCDIFV2_PD_FactorOne},
-
-    /* kLCDIFV2_PD_In */
-    {kLCDIFV2_PD_FactorZero, kLCDIFV2_PD_FactorStraightAlpha},
-
-    /* kLCDIFV2_PD_Out */
-    {kLCDIFV2_PD_FactorZero, kLCDIFV2_PD_FactorInversedAlpha},
-
-    /* kLCDIFV2_PD_Dst */
-    {kLCDIFV2_PD_FactorOne, kLCDIFV2_PD_FactorZero},
-
-    /* kLCDIFV2_PD_DstAtop */
-    {kLCDIFV2_PD_FactorStraightAlpha, kLCDIFV2_PD_FactorInversedAlpha},
-
-    /* kLCDIFV2_PD_DstOver */
-    {kLCDIFV2_PD_FactorOne, kLCDIFV2_PD_FactorInversedAlpha},
-
-    /* kLCDIFV2_PD_DstIn */
-    {kLCDIFV2_PD_FactorStraightAlpha, kLCDIFV2_PD_FactorZero},
-
-    /* kLCDIFV2_PD_DstOut */
-    {kLCDIFV2_PD_FactorInversedAlpha, kLCDIFV2_PD_FactorZero},
-
-    /* kLCDIFV2_PD_Xor */
-    {kLCDIFV2_PD_FactorInversedAlpha, kLCDIFV2_PD_FactorInversedAlpha},
-
-    /* kLCDIFV2_PD_Clear */
-    {
-        kLCDIFV2_PD_FactorZero,
-        kLCDIFV2_PD_FactorZero,
-    },
-};
-
 /*******************************************************************************
  * Codes
  ******************************************************************************/
-static uint32_t LCDIFV2_GetInstance(LCDIFV2_Type *base)
+static uint32_t LCDIFV2_GetInstance(const LCDIFV2_Type *base)
 {
+    static LCDIFV2_Type *const s_lcdifv2Bases[] = LCDIFV2_BASE_PTRS;
+
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
@@ -163,7 +114,7 @@ static void LCDIFV2_ResetRegister(LCDIFV2_Type *base)
  */
 void LCDIFV2_Init(LCDIFV2_Type *base)
 {
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && (0 != FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL))
     uint32_t instance = LCDIFV2_GetInstance(base);
     /* Enable the clock. */
     CLOCK_EnableClock(s_lcdifv2Clocks[instance]);
@@ -184,7 +135,7 @@ void LCDIFV2_Deinit(LCDIFV2_Type *base)
 {
     LCDIFV2_ResetRegister(base);
 
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && (0 != FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL))
     uint32_t instance = LCDIFV2_GetInstance(base);
     /* Disable the clock. */
     CLOCK_DisableClock(s_lcdifv2Clocks[instance]);
@@ -249,7 +200,7 @@ void LCDIFV2_SetDisplayConfig(LCDIFV2_Type *base, const lcdifv2_display_config_t
                       ((uint32_t)config->vbp << LCDIFV2_VSYN_PARA_BP_V_SHIFT) |
                       ((uint32_t)config->vfp << LCDIFV2_VSYN_PARA_FP_V_SHIFT);
 
-    base->DISP_PARA = LCDIFV2_DISP_PARA_LINE_PATTERN(config->lineOrder);
+    base->DISP_PARA = LCDIFV2_DISP_PARA_LINE_PATTERN((uint32_t)config->lineOrder);
 
     base->CTRL = (uint32_t)(config->polarityFlags);
 }
@@ -371,7 +322,7 @@ status_t LCDIFV2_SetLut(
 
         for (i = 0; i < count; i++)
         {
-            (LCDIFV2_LUT_MEM(base))[i + LCDIFV2_LUT_ENTRY_NUM * layerIndex] = lutData[i];
+            (LCDIFV2_LUT_MEM(base))[i + (LCDIFV2_LUT_ENTRY_NUM * layerIndex)] = lutData[i];
         }
 
         status = kStatus_Success;
@@ -429,6 +380,53 @@ status_t LCDIFV2_GetPorterDuffConfig(lcdifv2_pd_blend_mode_t mode,
                                      lcdifv2_pd_layer_t layer,
                                      lcdifv2_blend_config_t *config)
 {
+    static const lcdifv2_pd_factor_mode_t s_lcdifv2PdLayerFactors[][2] = {
+        /* kLCDIFV2_PD_Src */
+        {
+            /* s1_s0_factor_mode. */
+            kLCDIFV2_PD_FactorZero,
+
+            /* s0_s1_factor_mode. */
+            kLCDIFV2_PD_FactorOne,
+        },
+
+        /* kLCDIFV2_PD_Atop */
+        {kLCDIFV2_PD_FactorInversedAlpha, kLCDIFV2_PD_FactorStraightAlpha},
+
+        /* kLCDIFV2_PD_Over */
+        {kLCDIFV2_PD_FactorInversedAlpha, kLCDIFV2_PD_FactorOne},
+
+        /* kLCDIFV2_PD_In */
+        {kLCDIFV2_PD_FactorZero, kLCDIFV2_PD_FactorStraightAlpha},
+
+        /* kLCDIFV2_PD_Out */
+        {kLCDIFV2_PD_FactorZero, kLCDIFV2_PD_FactorInversedAlpha},
+
+        /* kLCDIFV2_PD_Dst */
+        {kLCDIFV2_PD_FactorOne, kLCDIFV2_PD_FactorZero},
+
+        /* kLCDIFV2_PD_DstAtop */
+        {kLCDIFV2_PD_FactorStraightAlpha, kLCDIFV2_PD_FactorInversedAlpha},
+
+        /* kLCDIFV2_PD_DstOver */
+        {kLCDIFV2_PD_FactorOne, kLCDIFV2_PD_FactorInversedAlpha},
+
+        /* kLCDIFV2_PD_DstIn */
+        {kLCDIFV2_PD_FactorStraightAlpha, kLCDIFV2_PD_FactorZero},
+
+        /* kLCDIFV2_PD_DstOut */
+        {kLCDIFV2_PD_FactorInversedAlpha, kLCDIFV2_PD_FactorZero},
+
+        /* kLCDIFV2_PD_Xor */
+        {kLCDIFV2_PD_FactorInversedAlpha, kLCDIFV2_PD_FactorInversedAlpha},
+
+        /* kLCDIFV2_PD_Clear */
+        {
+            kLCDIFV2_PD_FactorZero,
+            kLCDIFV2_PD_FactorZero,
+        },
+    };
+
     status_t status;
 
     if ((NULL == config) || (mode >= kLCDIFV2_PD_Max) || (layer >= kLCDIFV2_PD_LayerMax))

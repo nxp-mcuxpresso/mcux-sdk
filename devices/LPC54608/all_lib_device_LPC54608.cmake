@@ -11,6 +11,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/log
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
     ${CMAKE_CURRENT_LIST_DIR}/../../components/panic
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer_manager
@@ -47,12 +48,13 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/utick
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/lwip
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utilities
@@ -61,11 +63,16 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(middleware_usb_host_cdc_rndis)
+#    include(middleware_mbedtls_LPC54628)
 #    include(driver_ctimer)
 #    include(middleware_sdmmc_osa_bm)
 #    include(middleware_sdmmc_mmc)
+#    include(middleware_lwip_apps_httpd)
+#    include(middleware_lwip_apps_lwiperf)
+#    include(utility_shell)
 #    include(driver_lpc_gpio)
 #    include(device_system)
+#    include(middleware_lwip_enet_ethernetif_LPC54628)
 #    include(driver_lpc_crc)
 #    include(driver_otp)
 #    include(middleware_usb_host_stack_LPC54628)
@@ -74,16 +81,20 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_log_backend_ringbuffer)
 #    include(driver_flexcomm_usart)
 #    include(driver_lpc_lcdc)
+#    include(middleware_lwip)
 #    include(driver_eeprom)
+#    include(middleware_lwip_contrib_tcpecho)
 #    include(driver_gint)
 #    include(driver_cmsis_flexcomm_i2c)
 #    include(driver_inputmux)
 #    include(driver_flexcomm_i2c)
 #    include(driver_iap)
 #    include(component_serial_manager)
+#    include(middleware_lwip_apps_mqtt)
 #    include(middleware_usb_device_cdc_external)
 #    include(driver_lpc_dma)
 #    include(component_serial_manager_uart)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(driver_flexcomm_i2s)
 #    include(component_log_backend_debugconsole)
 #    include(driver_flexcomm_spi_dma)
@@ -91,9 +102,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_sdmmc_host_sdif_polling)
 #    include(middleware_usb_host_ip3516hs_LPC54628)
 #    include(driver_pint)
+#    include(middleware_lwip_contrib_ping)
 #    include(driver_lpc_enet)
 #    include(driver_sctimer)
-#    include(middleware_usb_device_common_header)
+#    include(middleware_lwip_usb_ethernetif)
+#    include(middleware_lwip_apps_httpsrv)
 #    include(driver_lpc_adc)
 #    include(driver_flashiap)
 #    include(driver_flexcomm)
@@ -116,20 +129,24 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_debug_console_lite)
 #    include(component_osa_bm)
 #    include(middleware_usb_host_ohci)
-#    include(middleware_usb_host_common_header)
+#    include(driver_phy-common_LPC54628)
 #    include(middleware_usb_host_cdc)
 #    include(driver_common)
 #    include(driver_inputmux_connections)
+#    include(middleware_lwip_apps_httpd_support)
 #    include(component_osa_free_rtos)
 #    include(middleware_sdmmc_sd)
 #    include(middleware_freertos-kernel_heap_3)
 #    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
+#    include(middleware_fatfs_LPC54628)
 #    include(middleware_usb_device_ip3511fs)
+#    include(middleware_lwip_apps_mdns)
 #    include(middleware_sdmmc_sdio)
 #    include(component_usart_adapter)
 #    include(middleware_usb_host_msd)
 #    include(driver_wwdt)
+#    include(middleware_usb_host_common_header)
 #    include(component_log)
 #    include(CMSIS_Driver_Include_USART)
 #    include(CMSIS_Driver_Include_SPI)
@@ -140,11 +157,10 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_mcan)
 #    include(middleware_fatfs_mmc)
 #    include(driver_flexcomm_i2c_dma)
-#    include(middleware_usb_host_audio)
+#    include(middleware_usb_device_common_header)
 #    include(utility_assert_lite)
-#    include(middleware_fatfs)
 #    include(middleware_usb_device_ip3511hs_LPC54628)
-#    include(utility_shell)
+#    include(middleware_usb_host_audio)
 #    include(driver_flexcomm_usart_freertos)
 #    include(utility_debug_console)
 #    include(middleware_usb_host_hid)

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief I2S DMA driver version 2.3.1. */
-#define FSL_I2S_DMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+/*! @brief I2S DMA driver version 2.3.2. */
+#define FSL_I2S_DMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
 /*! @brief Members not to be accessed / modified outside of the driver. */

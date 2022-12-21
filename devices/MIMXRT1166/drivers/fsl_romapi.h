@@ -15,8 +15,8 @@
  * @{
  */
 
-/*! @brief ROM API version 1.0.0. */
-#define FSL_ROM_ROMAPI_VERSION (MAKE_VERSION(1U, 0U, 0U))
+/*! @brief ROM API version 1.1.1. */
+#define FSL_ROM_ROMAPI_VERSION (MAKE_VERSION(1U, 1U, 1U))
 /*! @brief ROM FLEXSPI NOR driver version 1.7.0. */
 #define FSL_ROM_FLEXSPINOR_DRIVER_VERSION (MAKE_VERSION(1U, 7U, 0U))
 
@@ -97,9 +97,9 @@
 #define FLEXSPI_8PAD 3U
 
 /*!
- * NOR LUT sequence index used for default LUT assignment
- * NOTE:
- *      The will take effect if the lut sequences are not customized.
+ * NOR LUT sequence index used for default LUT assignment.
+ *
+ * @note It will take effect if the lut sequences are not customized.
  */
 #define NOR_CMD_LUT_SEQ_IDX_READ       0U /*!< READ LUT sequence id in lookupTable stored in config block */
 #define NOR_CMD_LUT_SEQ_IDX_READSTATUS 1U /*!< Read Status LUT sequence id in lookupTable stored in config block */
@@ -168,10 +168,10 @@ typedef struct _serial_nor_config_option
 /*! @brief Flash Pad Definitions */
 enum
 {
-    kSerialFlash_1Pad  = 1U, /*!< 1-wire conmunication */
-    kSerialFlash_2Pads = 2U, /*!< 2-wire conmunication */
-    kSerialFlash_4Pads = 4U, /*!< 4-wire conmunication */
-    kSerialFlash_8Pads = 8U, /*!< 8-wire conmunication */
+    kSerialFlash_1Pad  = 1U, /*!< 1-wire communication */
+    kSerialFlash_2Pads = 2U, /*!< 2-wire communication */
+    kSerialFlash_4Pads = 4U, /*!< 4-wire communication */
+    kSerialFlash_8Pads = 8U, /*!< 8-wire communication */
 };
 
 /*! @brief FLEXSPI clock configuration type */
@@ -187,8 +187,8 @@ enum _flexspi_read_sample_clk
     kFLEXSPIReadSampleClk_LoopbackInternally = 0U, /*!< FLEXSPI Read Sample Clock Source from the Internal loopback */
     kFLEXSPIReadSampleClk_LoopbackFromDqsPad = 1U, /*!< FLEXSPI Read Sample Clock Source from the Dqs Pad loopback */
     kFLEXSPIReadSampleClk_LoopbackFromSckPad = 2U, /*!< FLEXSPI Read Sample Clock Source from the Sck Pad loopback */
-    kFLEXSPIReadSampleClk_ExternalInputFromDqsPad =
-        3U, /*!< FLEXSPI Read Sample Clock Source from the External Input by the Dqs Pad*/
+    kFLEXSPIReadSampleClk_ExternalInputFromDqsPad = 3U, /*!< FLEXSPI Read Sample Clock Source from the External Input
+                                                             by the Dqs Pad */
 };
 
 /*! @brief Flash Type Definition */
@@ -200,7 +200,7 @@ enum
 /*! @brief Flash Configuration Command Type */
 enum
 {
-    kDeviceConfigCmdType_Generic,    /*!< Generic command, for example: configure dummy cycles, drive strength, etc */
+    kDeviceConfigCmdType_Generic,    /*!< Generic command, for example: configure dummy cycles, drive strength, etc. */
     kDeviceConfigCmdType_QuadEnable, /*!< Quad Enable command */
     kDeviceConfigCmdType_Spi2Xpi,    /*!< Switch from SPI to DPI/QPI/OPI mode */
     kDeviceConfigCmdType_Xpi2Spi,    /*!< Switch from DPI/QPI/OPI to SPI mode */
@@ -231,7 +231,7 @@ enum
     kFLEXSPIMiscOffset_WordAddressableEnable    = 3U, /*!< Bit for Word Addressable enable */
     kFLEXSPIMiscOffset_SafeConfigFreqEnable     = 4U, /*!< Bit for Safe Configuration Frequency enable */
     kFLEXSPIMiscOffset_PadSettingOverrideEnable = 5U, /*!< Bit for Pad setting override enable */
-    kFLEXSPIMiscOffset_DdrModeEnable            = 6U, /*!< Bit for DDR clock confiuration indication. */
+    kFLEXSPIMiscOffset_DdrModeEnable            = 6U, /*!< Bit for DDR clock configuration indication. */
     kFLEXSPIMiscOffset_UseValidTimeForAllFreq   = 7U, /*!< Bit for DLLCR settings under all modes */
 };
 
@@ -274,6 +274,7 @@ typedef struct _flexspi_lut_seq
     uint16_t reserved;
 } flexspi_lut_seq_t;
 
+/*! @brief FLEXSPI DLL time */
 typedef struct
 {
     uint8_t time_100ps;  /*!< Data valid time, in terms of 100ps */
@@ -310,7 +311,7 @@ typedef struct _flexspi_mem_config
                                       details */
     uint8_t deviceType;            /*!< [0x044-0x044] Device Type:  See Flash Type Definition for more details */
     uint8_t sflashPadType; /*!< [0x045-0x045] Serial Flash Pad Type: 1 - Single, 2 - Dual, 4 - Quad, 8 - Octal */
-    uint8_t serialClkFreq; /*!< [0x046-0x046] Serial Flash Frequence, device specific definitions, See System Boot
+    uint8_t serialClkFreq; /*!< [0x046-0x046] Serial Flash Frequency, device specific definitions. See System Boot
                                               Chapter for more details */
     uint8_t
         lutCustomSeqEnable; /*!< [0x047-0x047] LUT customization Enable, it is required if the program/erase cannot
@@ -348,7 +349,7 @@ typedef struct _flexspi_nor_config
     uint8_t serialNorType;          /*!< Serial NOR Flash type: 0/1/2/3 */
     uint8_t needExitNoCmdMode;      /*!< Need to exit NoCmd mode before other IP command */
     uint8_t halfClkForNonReadCmd;   /*!< Half the Serial Clock for non-read command: true/false */
-    uint8_t needRestoreNoCmdMode;   /*!< Need to Restore NoCmd mode after IP commmand execution */
+    uint8_t needRestoreNoCmdMode;   /*!< Need to Restore NoCmd mode after IP command execution */
     uint32_t blockSize;             /*!< Block size */
     uint32_t reserve2[11];          /*!< Reserved for future use */
 } flexspi_nor_config_t;
@@ -358,12 +359,13 @@ typedef struct _flexspi_nor_config
 /*! @brief FLEXSPI Operation Context */
 typedef enum _flexspi_operation
 {
-    kFLEXSPIOperation_Command, /*!< FLEXSPI operation: Only command, both TX and RX buffer are ignored. */
-    kFLEXSPIOperation_Config,  /*!< FLEXSPI operation: Configure device mode, the TX FIFO size is fixed in LUT. */
-    kFLEXSPIOperation_Write,   /*!< FLEXSPI operation: Write, only TX buffer is effective */
-    kFLEXSPIOperation_Read,    /*!< FLEXSPI operation: Read, only Rx Buffer is effective. */
-    kFLEXSPIOperation_End = kFLEXSPIOperation_Read,
+    kFLEXSPIOperation_Command,  /*!< FLEXSPI operation: Only command, both TX and RX buffer are ignored. */
+    kFLEXSPIOperation_Config,   /*!< FLEXSPI operation: Configure device mode, the TX FIFO size is fixed in LUT. */
+    kFLEXSPIOperation_Write,    /*!< FLEXSPI operation: Write, only TX buffer is effective */
+    kFLEXSPIOperation_Read,     /*!< FLEXSPI operation: Read, only Rx Buffer is effective. */
 } flexspi_operation_t;
+
+#define kFLEXSPIOperation_End   kFLEXSPIOperation_Read
 
 /*! @brief FLEXSPI Transfer Context */
 typedef struct _flexspi_xfer
@@ -378,6 +380,18 @@ typedef struct _flexspi_xfer
     uint32_t *rxBuffer;            /*!< Rx buffer */
     uint32_t rxSize;               /*!< Rx size in bytes */
 } flexspi_xfer_t;
+
+/*! @brief convert the type for MISRA */
+#define MISRA_CAST(to_type, to_var, from_type, from_var)      \
+    do                                                        \
+    {                                                         \
+        union                                                 \
+        {                                                     \
+            to_type to_var_tmp;                               \
+            from_type from_var_tmp;                           \
+        } type_converter_var = {.from_var_tmp = (from_var)};  \
+        (to_var)             = type_converter_var.to_var_tmp; \
+    } while (false)
 
 #ifdef __cplusplus
 extern "C" {
@@ -414,7 +428,7 @@ void ROM_RunBootloader(void *arg);
  * @param config A pointer to the storage for the driver runtime state.
  * @param option A pointer to the storage Serial NOR Configuration Option Context.
  *
- * @retval kStatus_Success Api was executed succesfuly.
+ * @retval kStatus_Success Api was executed successfully.
  * @retval kStatus_InvalidArgument A invalid argument is provided.
  * @retval kStatus_ROM_FLEXSPI_InvalidSequence A invalid Sequence is provided.
  * @retval kStatus_ROM_FLEXSPI_SequenceExecutionTimeout Sequence Execution timeout.
@@ -438,7 +452,7 @@ status_t ROM_FLEXSPI_NorFlash_GetConfig(uint32_t instance,
  * @param instance storage the instance of FLEXSPI.
  * @param config A pointer to the storage for the driver runtime state.
  *
- * @retval kStatus_Success Api was executed succesfuly.
+ * @retval kStatus_Success Api was executed successfully.
  * @retval kStatus_InvalidArgument A invalid argument is provided.
  * @retval kStatus_ROM_FLEXSPI_InvalidSequence A invalid Sequence is provided.
  * @retval kStatus_ROM_FLEXSPI_SequenceExecutionTimeout Sequence Execution timeout.
@@ -462,14 +476,13 @@ status_t ROM_FLEXSPI_NorFlash_Init(uint32_t instance, flexspi_nor_config_t *conf
  * @param instance storage the instance of FLEXSPI.
  * @param config  A pointer to the storage for the driver runtime state.
  * @param dst_addr A pointer to the desired flash memory to be programmed.
- *                NOTE:
- *                It is recommended that use page aligned access;
+ *                @note It is recommended that use page aligned access;
  *                If the dst_addr is not aligned to page, the driver automatically
  *                aligns address down with the page address.
  * @param src A pointer to the source buffer of data that is to be programmed
  *            into the NOR flash.
  *
- * @retval kStatus_Success Api was executed succesfully.
+ * @retval kStatus_Success Api was executed successfully.
  * @retval kStatus_InvalidArgument A invalid argument is provided.
  * @retval kStatus_ROM_FLEXSPI_InvalidSequence A invalid Sequence is provided.
  * @retval kStatus_ROM_FLEXSPI_SequenceExecutionTimeout Sequence Execution timeout.
@@ -497,14 +510,13 @@ status_t ROM_FLEXSPI_NorFlash_ProgramPage(uint32_t instance,
  * @param instance storage the instance of FLEXSPI.
  * @param config  A pointer to the storage for the driver runtime state.
  * @param dst     A pointer to the dest buffer of data that is to be read from the NOR flash.
- *                NOTE:
- *                It is recommended that use page aligned access;
+ *                @note It is recommended that use page aligned access;
  *                If the dstAddr is not aligned to page, the driver automatically
  *                aligns address down with the page address.
  * @param start   The start address of the desired NOR flash memory to be read.
  * @param lengthInBytes The length, given in bytes to be read.
  *
- * @retval kStatus_Success Api was executed succesfuly.
+ * @retval kStatus_Success Api was executed successfully.
  * @retval kStatus_InvalidArgument A invalid argument is provided.
  * @retval kStatus_ROM_FLEXSPI_InvalidSequence A invalid Sequence is provided.
  * @retval kStatus_ROM_FLEXSPI_SequenceExecutionTimeout Sequence Execution timeout.
@@ -530,16 +542,14 @@ status_t ROM_FLEXSPI_NorFlash_Read(
  * @param instance storage the index of FLEXSPI.
  * @param config A pointer to the storage for the driver runtime state.
  * @param start The start address of the desired NOR flash memory to be erased.
- *              NOTE:
- *              It is recommended that use sector-aligned access nor device;
+ *              @note It is recommended that use sector-aligned access nor device;
  *              If dstAddr is not aligned with the sector,the driver automatically
  *              aligns address down with the sector address.
  * @param length The length, given in bytes to be erased.
- *              NOTE:
- *              It is recommended that use sector-aligned access nor device;
+ *              @note It is recommended that use sector-aligned access nor device;
  *              If length is not aligned with the sector,the driver automatically
  *              aligns up with the sector.
- * @retval kStatus_Success Api was executed succesfuly.
+ * @retval kStatus_Success Api was executed successfully.
  * @retval kStatus_InvalidArgument A invalid argument is provided.
  * @retval kStatus_ROM_FLEXSPI_InvalidSequence A invalid Sequence is provided.
  * @retval kStatus_ROM_FLEXSPI_SequenceExecutionTimeout Sequence Execution timeout.
@@ -555,19 +565,18 @@ status_t ROM_FLEXSPI_NorFlash_Erase(uint32_t instance, flexspi_nor_config_t *con
  *
  * @param instance storage the index of FLEXSPI.
  * @param config A pointer to the storage for the driver runtime state.
- * @param address The start address of the desired NOR flash memory to be erased.
- *                NOTE:
- *                It is recommended that use sector-aligned access nor device;
- *                If dstAddr is not aligned with the sector, The driver automatically
+ * @param start The start address of the desired NOR flash memory to be erased.
+ *                @note It is recommended that use sector-aligned access nor device;
+ *                If dstAddr is not aligned with the sector, the driver automatically
  *                aligns address down with the sector address.
  *
- * @retval kStatus_Success Api was executed succesfuly.
+ * @retval kStatus_Success Api was executed successfully.
  * @retval kStatus_InvalidArgument A invalid argument is provided.
  * @retval kStatus_ROM_FLEXSPI_InvalidSequence A invalid Sequence is provided.
  * @retval kStatus_ROM_FLEXSPI_SequenceExecutionTimeout Sequence Execution timeout.
  * @retval kStatus_ROM_FLEXSPI_DeviceTimeout the device timeout
  */
-status_t ROM_FLEXSPI_NorFlash_EraseSector(uint32_t instance, flexspi_nor_config_t *config, uint32_t address);
+status_t ROM_FLEXSPI_NorFlash_EraseSector(uint32_t instance, flexspi_nor_config_t *config, uint32_t start);
 #endif /* FSL_ROM_FLEXSPINOR_API_HAS_FEATURE_ERASE_SECTOR */
 
 #if defined(FSL_ROM_FLEXSPINOR_API_HAS_FEATURE_ERASE_BLOCK) && FSL_ROM_FLEXSPINOR_API_HAS_FEATURE_ERASE_BLOCK
@@ -579,12 +588,11 @@ status_t ROM_FLEXSPI_NorFlash_EraseSector(uint32_t instance, flexspi_nor_config_
  * @param instance storage the index of FLEXSPI.
  * @param config A pointer to the storage for the driver runtime state.
  * @param start The start address of the desired NOR flash memory to be erased.
- *              NOTE:
- *              It is recommended that use block-aligned access nor device;
- *              If dstAddr is not aligned with the block, The driver automatically
+ *              @note It is recommended that use block-aligned access nor device;
+ *              If dstAddr is not aligned with the block, the driver automatically
  *              aligns address down with the block address.
  *
- * @retval kStatus_Success Api was executed succesfully.
+ * @retval kStatus_Success Api was executed successfully.
  * @retval kStatus_InvalidArgument A invalid argument is provided.
  * @retval kStatus_ROM_FLEXSPI_InvalidSequence A invalid Sequence is provided.
  * @retval kStatus_ROM_FLEXSPI_SequenceExecutionTimeout Sequence Execution timeout.
@@ -600,7 +608,7 @@ status_t ROM_FLEXSPI_NorFlash_EraseBlock(uint32_t instance, flexspi_nor_config_t
  * @param instance storage the instance of FLEXSPI.
  * @param config A pointer to the storage for the driver runtime state.
  *
- * @retval kStatus_Success Api was executed succesfuly.
+ * @retval kStatus_Success Api was executed successfully.
  * @retval kStatus_InvalidArgument A invalid argument is provided.
  * @retval kStatus_ROM_FLEXSPI_InvalidSequence A invalid Sequence is provided.
  * @retval kStatus_ROM_FLEXSPI_SequenceExecutionTimeout Sequence Execution timeout.
@@ -624,7 +632,7 @@ status_t ROM_FLEXSPI_NorFlash_EraseAll(uint32_t instance, flexspi_nor_config_t *
  * @param instance storage the index of FLEXSPI.
  * @param xfer A pointer to the storage FLEXSPI Transfer Context.
  *
- * @retval kStatus_Success Api was executed succesfuly.
+ * @retval kStatus_Success Api was executed successfully.
  * @retval kStatus_InvalidArgument A invalid argument is provided.
  * @retval kStatus_ROM_FLEXSPI_InvalidSequence A invalid Sequence is provided.
  * @retval kStatus_ROM_FLEXSPI_SequenceExecutionTimeout Sequence Execution timeout.
@@ -646,7 +654,7 @@ status_t ROM_FLEXSPI_NorFlash_CommandXfer(uint32_t instance, flexspi_xfer_t *xfe
  * @param lutBase A pointer to the look-up-table for command sequences.
  * @param seqNumber storage sequence number.
  *
- * @retval kStatus_Success Api was executed succesfully.
+ * @retval kStatus_Success Api was executed successfully.
  * @retval kStatus_InvalidArgument A invalid argument is provided.
  * @retval kStatus_ROM_FLEXSPI_InvalidSequence A invalid Sequence is provided.
  * @retval kStatus_ROM_FLEXSPI_SequenceExecutionTimeout Sequence Execution timeout.
@@ -671,7 +679,7 @@ status_t ROM_FLEXSPI_NorFlash_UpdateLut(uint32_t instance,
  * @param isParallelMode Indicates whether NOR flash is in parallel mode.
  * @param address  Indicates the operation(erase/program/read) address for serial NOR flash.
  *
- * @retval kStatus_Success Api was executed succesfully.
+ * @retval kStatus_Success Api was executed successfully.
  * @retval kStatus_InvalidArgument A invalid argument is provided.
  * @retval kStatus_ROM_FLEXSPI_SequenceExecutionTimeout Sequence Execution timeout.
  * @retval kStatus_ROM_FLEXSPI_InvalidSequence A invalid Sequence is provided.

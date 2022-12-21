@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief TPM driver version 2.2.0. */
-#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief TPM driver version 2.2.1. */
+#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 /*! @brief Help macro to get the max counter value */
@@ -727,7 +727,7 @@ static inline uint32_t TPM_GetStatusFlags(TPM_Type *base)
         statusFlags |= (uint32_t)kTPM_TimeOverflowFlag;
     }
 
-    for (chanlNumber = 0; chanlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base); chanlNumber++)
+    for (chanlNumber = 0; (int8_t)chanlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base); chanlNumber++)
     {
         /* Check the channel flag */
         if (0U != (base->CONTROLS[chanlNumber].CnSC & TPM_CnSC_CHF_MASK))

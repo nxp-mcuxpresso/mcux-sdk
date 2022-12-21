@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FlexIO driver version. */
-#define FSL_FLEXIO_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+#define FSL_FLEXIO_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*! @brief Calculate FlexIO timer trigger.*/
@@ -83,14 +83,25 @@ typedef enum _flexio_timer_output
 /*! @brief Define type of timer decrement.*/
 typedef enum _flexio_timer_decrement_source
 {
-    kFLEXIO_TimerDecSrcOnFlexIOClockShiftTimerOutput = 0x0U,   /*!< Decrement counter on FlexIO clock, Shift clock
-                                                                equals Timer output. */
-    kFLEXIO_TimerDecSrcOnTriggerInputShiftTimerOutput = 0x1U,  /*!< Decrement counter on Trigger input (both edges),
+    kFLEXIO_TimerDecSrcOnFlexIOClockShiftTimerOutput = 0x0U, /*!< Decrement counter on FlexIO clock, Shift clock
+                                                              equals Timer output. */
+    kFLEXIO_TimerDecSrcOnTriggerInputShiftTimerOutput,       /*!< Decrement counter on Trigger input (both edges),
+                                                                     Shift clock equals Timer output. */
+    kFLEXIO_TimerDecSrcOnPinInputShiftPinInput,              /*!< Decrement counter on Pin input (both edges),
+                                                                     Shift clock equals Pin input. */
+    kFLEXIO_TimerDecSrcOnTriggerInputShiftTriggerInput       /*!< Decrement counter on Trigger input (both edges),
+                                                                     Shift clock equals Trigger input. */
+#if (defined(FSL_FEATURE_FLEXIO_TIMCFG_TIMDCE_FIELD_WIDTH) && (FSL_FEATURE_FLEXIO_TIMCFG_TIMDCE_FIELD_WIDTH == 3))
+    ,
+    kFLEXIO_TimerDecSrcDiv16OnFlexIOClockShiftTimerOutput,  /*!< Decrement counter on FlexIO clock divided by 16,
+                                                               Shift clock equals Timer output. */
+    kFLEXIO_TimerDecSrcDiv256OnFlexIOClockShiftTimerOutput, /*!< Decrement counter on FlexIO clock divided by 256,
                                                                 Shift clock equals Timer output. */
-    kFLEXIO_TimerDecSrcOnPinInputShiftPinInput = 0x2U,         /*!< Decrement counter on Pin input (both edges),
-                                                                Shift clock equals Pin input. */
-    kFLEXIO_TimerDecSrcOnTriggerInputShiftTriggerInput = 0x3U, /*!< Decrement counter on Trigger input (both edges),
-                                                                Shift clock equals Trigger input. */
+    kFLEXIO_TimerRisSrcOnPinInputShiftPinInput,             /*!< Decrement counter on Pin input (rising edges),
+                                                                     Shift clock equals Pin input. */
+    kFLEXIO_TimerRisSrcOnTriggerInputShiftTriggerInput /*!< Decrement counter on Trigger input (rising edges), Shift
+                                                          clock equals Trigger input. */
+#endif                                                 /* FSL_FEATURE_FLEXIO_TIMCFG_TIMDCE_FIELD_WIDTH */
 } flexio_timer_decrement_source_t;
 
 /*! @brief Define type of timer reset condition.*/
@@ -147,6 +158,13 @@ typedef enum _flexio_timer_start_bit_condition
     kFLEXIO_TimerStartBitDisabled = 0x0U, /*!< Start bit disabled. */
     kFLEXIO_TimerStartBitEnabled  = 0x1U, /*!< Start bit enabled. */
 } flexio_timer_start_bit_condition_t;
+
+/*! @brief FlexIO as PWM channel output state */
+typedef enum _flexio_timer_output_state
+{
+    kFLEXIO_PwmLow = 0, /*!< The output state of PWM channel is low */
+    kFLEXIO_PwmHigh,    /*!< The output state of PWM channel is high */
+} flexio_timer_output_state_t;
 
 /*! @brief Define type of timer polarity for shifter control. */
 typedef enum _flexio_shifter_timer_polarity
@@ -467,6 +485,23 @@ void FLEXIO_SetShifterConfig(FLEXIO_Type *base, uint8_t index, const flexio_shif
  * @param timerConfig Pointer to the flexio_timer_config_t structure
 */
 void FLEXIO_SetTimerConfig(FLEXIO_Type *base, uint8_t index, const flexio_timer_config_t *timerConfig);
+
+/*!
+ * @brief This function set the value of the prescaler on flexio channels
+ *
+ * @param base       Pointer to the FlexIO simulated peripheral type.
+ * @param clocksource  Set clock value
+ */
+static inline void FLEXIO_SetClockMode(FLEXIO_Type *base, uint8_t index, flexio_timer_decrement_source_t clocksource)
+{
+    uint32_t reg = base->TIMCFG[index];
+
+    reg &= ~FLEXIO_TIMCFG_TIMDEC_MASK;
+
+    reg |= FLEXIO_TIMCFG_TIMDEC(clocksource);
+
+    base->TIMCFG[index] = reg;
+}
 
 /* @} */
 

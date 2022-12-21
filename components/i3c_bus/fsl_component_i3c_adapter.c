@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -511,12 +511,14 @@ static status_t I3C_MasterAdapterDoI2CTransfer(i2c_device_t *device, i3c_bus_tra
     i3c_master_transfer_t masterXfer;
     (void)memset(&masterXfer, 0, sizeof(masterXfer));
 
-    masterXfer.slaveAddress = device->staticAddr;
-    masterXfer.data         = xfer->data;
-    masterXfer.dataSize     = xfer->dataSize;
-    masterXfer.direction    = xfer->isRead ? kI3C_Read : kI3C_Write;
-    masterXfer.busType      = kI3C_TypeI2C;
-    masterXfer.flags        = (uint32_t)kI3C_TransferDefaultFlag;
+    masterXfer.slaveAddress   = device->staticAddr;
+    masterXfer.subaddress     = xfer->regAddr;
+    masterXfer.subaddressSize = xfer->regAddrSize;
+    masterXfer.data           = xfer->data;
+    masterXfer.dataSize       = xfer->dataSize;
+    masterXfer.direction      = xfer->isRead ? kI3C_Read : kI3C_Write;
+    masterXfer.busType        = kI3C_TypeI2C;
+    masterXfer.flags          = (uint32_t)kI3C_TransferDefaultFlag;
 
     return I3CMasterAdapterTransfer(base, &masterXfer, transMode);
 }

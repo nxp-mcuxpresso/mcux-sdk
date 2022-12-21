@@ -185,6 +185,15 @@ status_t DC_FB_DSI_CMD_SetFrameBuffer(const dc_fb_t *dc, uint8_t layer, void *fr
     dc_fb_dsi_cmd_layer_t *pLayer    = &(dcHandle->layers[layer]);
     dc_fb_info_t *fbInfo             = &(pLayer->fbInfo);
     mipi_dsi_device_t *dsiDevice     = dcHandle->dsiDevice;
+    uint8_t byteperpixel             = VIDEO_GetPixelSizeBits(fbInfo->pixelFormat) / 8U;
+    uint32_t minorLoopBytes          = (uint32_t)fbInfo->width * (uint32_t)byteperpixel;
+
+    /* The selected area is non-constant in memory and the display device does not support 2-D memory write,
+       return kStatus_Fail directly. */
+    if ((dsiDevice->memWriteFunc2D == NULL) && (minorLoopBytes < (uint32_t)fbInfo->strideBytes))
+    {
+        return kStatus_Fail;
+    }
 
     status = MIPI_DSI_SelectArea(dsiDevice, fbInfo->startX, fbInfo->startY, fbInfo->startX + fbInfo->width - 1U,
                                  fbInfo->startY + fbInfo->height - 1U);
@@ -203,7 +212,18 @@ status_t DC_FB_DSI_CMD_SetFrameBuffer(const dc_fb_t *dc, uint8_t layer, void *fr
     if (!dcHandle->useTEPin)
     {
         pLayer->frameBuffer = frameBuffer;
-        status = MIPI_DSI_WriteMemory(dsiDevice, frameBuffer, (uint32_t)fbInfo->height * (uint32_t)fbInfo->strideBytes);
+        /* If the update width in byte is smaller than the stride, it means the pixel data is interleaved, use 2-D
+         * transfer. */
+        if (minorLoopBytes < (uint32_t)fbInfo->strideBytes)
+        {
+            status = MIPI_DSI_WriteMemory2D(dsiDevice, frameBuffer, minorLoopBytes,
+                                            (uint32_t)fbInfo->strideBytes - minorLoopBytes, (uint32_t)fbInfo->height);
+        }
+        else
+        {
+            status =
+                MIPI_DSI_WriteMemory(dsiDevice, frameBuffer, (uint32_t)fbInfo->height * (uint32_t)fbInfo->strideBytes);
+        }
     }
     else
     {
@@ -236,7 +256,16 @@ void DC_FB_DSI_CMD_SetCallback(const dc_fb_t *dc, uint8_t layer, dc_fb_callback_
 
 uint32_t DC_FB_DSI_CMD_GetProperty(const dc_fb_t *dc)
 {
-    return 0;
+    dc_fb_dsi_cmd_handle_t *dcHandle = dc->prvData;
+    mipi_dsi_device_t *dsiDevice     = dcHandle->dsiDevice;
+    if (dsiDevice->memWriteFunc2D != NULL)
+    {
+        return (uint32_t)kDC_FB_TwoDimensionMemoryWrite;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 void DC_FB_DSI_CMD_TE_IRQHandler(const dc_fb_t *dc)
@@ -244,7 +273,9 @@ void DC_FB_DSI_CMD_TE_IRQHandler(const dc_fb_t *dc)
     dc_fb_dsi_cmd_handle_t *dcHandle;
     dc_fb_dsi_cmd_layer_t *layer;
     dc_fb_info_t *fbInfo;
-    void *newFB;
+    uint8_t *newFB;
+    uint8_t byteperpixel;
+    uint32_t minorLoopBytes;
 
     dcHandle = (dc_fb_dsi_cmd_handle_t *)dc->prvData;
 
@@ -255,13 +286,21 @@ void DC_FB_DSI_CMD_TE_IRQHandler(const dc_fb_t *dc)
 
     if (NULL != newFB)
     {
-        fbInfo = &(layer->fbInfo);
-
-        layer->fbWaitTE = NULL;
-
+        fbInfo             = &(layer->fbInfo);
+        layer->fbWaitTE    = NULL;
         layer->frameBuffer = newFB;
-
-        (void)MIPI_DSI_WriteMemory(dcHandle->dsiDevice, newFB,
-                                   (uint32_t)fbInfo->height * (uint32_t)fbInfo->strideBytes);
+        byteperpixel       = VIDEO_GetPixelSizeBits(fbInfo->pixelFormat) / 8U;
+        minorLoopBytes     = (uint32_t)fbInfo->width * (uint32_t)byteperpixel;
+        /* If the updaett width is smaller than the stride, it means the pixel data is interleaved, use 2-D transfer. */
+        if (minorLoopBytes < (uint32_t)fbInfo->strideBytes)
+        {
+            (void)MIPI_DSI_WriteMemory2D(dcHandle->dsiDevice, newFB, minorLoopBytes,
+                                         (uint32_t)fbInfo->strideBytes - minorLoopBytes, (uint32_t)fbInfo->height);
+        }
+        else
+        {
+            (void)MIPI_DSI_WriteMemory(dcHandle->dsiDevice, newFB,
+                                       (uint32_t)fbInfo->height * (uint32_t)fbInfo->strideBytes);
+        }
     }
 }

@@ -52,12 +52,12 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/utick
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utilities
@@ -81,6 +81,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_sdmmc_osa_bm)
 #    include(component_log_backend_ringbuffer)
 #    include(driver_flexcomm_usart)
+#    include(middleware_mbedtls_MIMXRT595S_cm33)
 #    include(driver_i3c)
 #    include(driver_ostimer)
 #    include(driver_cmsis_flexcomm_i2c)
@@ -91,6 +92,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_device_cdc_external)
 #    include(driver_lpc_dma)
 #    include(component_serial_manager_uart)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(driver_flexcomm_i2s)
 #    include(component_log_backend_debugconsole)
 #    include(driver_flexcomm_spi_dma)
@@ -153,7 +155,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_i2c_dma)
 #    include(middleware_usb_host_audio)
 #    include(utility_assert_lite)
-#    include(middleware_fatfs)
 #    include(middleware_usb_host_ip3516hs_MIMXRT595S_cm33)
 #    include(driver_lcdif)
 #    include(utility_shell)
@@ -161,6 +162,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_debug_console)
 #    include(middleware_usb_host_hid)
 #    include(component_mflash_common)
+#    include(middleware_fatfs_MIMXRT595S_cm33)
 #    include(driver_cmsis_flexcomm_spi)
 #    include(driver_puf)
 #    include(driver_power)

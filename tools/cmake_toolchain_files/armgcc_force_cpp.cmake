@@ -54,3 +54,18 @@ SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 MESSAGE(STATUS "BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
+
+include(${CMAKE_CURRENT_LIST_DIR}/mcux_config.cmake)
+
+if(DEFINED LIBRARY_TYPE)
+    if(DEFINED LANGUAGE)
+        set_library(${LIBRARY_TYPE} ${LANGUAGE})
+    endif()
+    if(DEFINED DEBUG_CONSOLE)
+        set_debug_console(${DEBUG_CONSOLE} ${LIBRARY_TYPE})
+    endif()
+endif()
+
+if(DEFINED FPU_TYPE AND DEFINED FPU_ABI)
+    set_floating_point(${FPU_TYPE} ${FPU_ABI})
+endif()

@@ -34,10 +34,10 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sctimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/utick
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utilities
@@ -77,6 +77,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_i2c_dma)
 #    include(utility_shell)
 #    include(CMSIS_Driver_Include_I2C)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(utility_assert)
 #    include(driver_flexcomm_usart_dma)
 #    include(driver_iap1)
@@ -92,6 +93,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpc_iocon)
 #    include(driver_flexcomm_i2c_freertos)
 #    include(utility_debug_console_lite)
+#    include(middleware_mbedtls_LPC55S06)
 #    include(driver_ostimer)
 #    include(utilities_misc_utilities_LPC55S06)
 #    include(driver_common)

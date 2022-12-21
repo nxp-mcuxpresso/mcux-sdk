@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_MIPI_DSI_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+#define FSL_MIPI_DSI_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 /* Forward declaration of the handle typedef. */
@@ -59,12 +59,16 @@ typedef struct _dsi_smartdma_write_mem_transfer
 {
     dsi_smartdma_input_pixel_format_t inputFormat;   /*!< Input format. */
     dsi_smartdma_output_pixel_format_t outputFormat; /*!< Output format. */
-    const uint8_t *data;                             /*!< Data to send. */
-    size_t dataSize;                                 /*!< The byte count to be write. */
-    uint8_t virtualChannel;                          /*!< Virtual channel used in the transfer,
-                                                        current driver always use channel 0, added
-                                                        for future enhancement. */
-
+    const uint8_t *data;                             /*!< Pointer to the data to send. */
+    bool twoDimension;                               /*!< Whether to use 2-dimensional transfer. */
+    size_t dataSize;        /*!< The byte count to be write. In 2-dimensional transfer, this parameter is ignored. */
+    size_t minorLoop;       /*!< SRC data transfer byte count in a minor loop, only used in 2-dimensional transfer. */
+    size_t minorLoopOffset; /*!< SRC data byte offset added after a minor loop, only used in 2-dimensional transfer. */
+    size_t majorLoop;       /*!< SRC data transfer in a major loop of maw many minor loop is transfered, only used in
+                               2-dimensional transfer. */
+    uint8_t virtualChannel; /*!< Virtual channel used in the transfer,
+                               current driver always use channel 0, added
+                               for future enhancement. */
     /*!
      * If set to true, the pixels are filled to MIPI DSI FIFO directly.
      * If set to false, the pixel bytes are swapped then filled to
@@ -86,8 +90,12 @@ struct _dsi_smartdma_handle
     volatile bool isBusy;             /*!< MIPI DSI is busy with data transfer. */
     dsi_smartdma_callback_t callback; /*!< DSI callback */
     void *userData;                   /*!< Callback parameter */
-    smartdma_dsi_param_t param;       /*!< Parameter for smartdma function. */
-    uint32_t smartdmaStack[16];       /*!< Stack for smartdma function. */
+    union
+    {
+        smartdma_dsi_param_t param;      /*!< Parameter for smartdma function. */
+        smartdma_dsi_2d_param_t param2d; /*!< Parameter for 2-dimensional smartdma function. */
+    };
+    uint32_t smartdmaStack[16]; /*!< Stack for smartdma function. */
 };
 
 /*******************************************************************************

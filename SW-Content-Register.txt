@@ -1,6 +1,6 @@
 Release Name: MCUXpresso Software Development Kit (SDK)
-Release Version: 2.12.0
-Package License: LA_OPT_NXP_Software_License.txt v35 May 2022- Additional Distribution License granted, license in Section 2.3 applies
+Release Version: 2.13.0
+Package License: LA_OPT_NXP_Software_License.txt v39 August 2022- Additional Distribution License granted, license in Section 2.3 applies
 
 SDK_Peripheral_Driver      Name: SDK Peripheral Driver                       
                            Version: 2.x.x                                    
@@ -10,7 +10,7 @@ SDK_Peripheral_Driver      Name: SDK Peripheral Driver
                            Description: Peripheral drivers are designed for  
                            the most common use cases identified for the      
                            underlying hardware block.                        
-                           Location: drivers                                
+                           Location: devices/<device>/drivers                
                            Origin: NXP (BSD-3-Clause)                        
 
 SDK_Examples               Name: SDK examples                                
@@ -22,7 +22,7 @@ SDK_Examples               Name: SDK examples
                            Description: SDK out of box examples to show how  
                            to use peripheral drivers and integrate           
                            middleware.                                       
-                           Location: examples/<board>/                        
+                           Location: boards/<board>/                         
                            Origin: NXP (BSD-3-Clause)                        
 
 SDK_Device                 Name: SDK SoC files                               
@@ -60,7 +60,7 @@ SDK_Components             Name: SDK components and board peripheral drivers
                            Origin: NXP (BSD-3-Clause), ITE (BSD-3-Clause)    
 
 usb                        Name: USB                                         
-                           Version: 2.8.2                                    
+                           Version: 2.8.4                                    
                            Outgoing License: BSD-3-Clause                    
                            License File: COPYING-BSD-3                       
                            Format: source code                               
@@ -70,17 +70,16 @@ usb                        Name: USB
                            Location: middleware/usb                          
                            Origin: NXP (BSD-3-Clause)                        
 
-freertos_kernel            Name: FreeRTOS                                    
-                           Version: 10.4.3_rev1                              
-                           Outgoing License: MIT                             
-                           License File:                                     
-                           rtos/freertos/freertos_kernel/LICENSE.md          
+issdk                      Name: ISSDK                                       
+                           Version: 1.7                                      
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
                            Format: source code                               
-                           Description: Open source RTOS kernel for small    
-                           devices                                           
-                           Location: rtos/freertos/freertos_kernel           
-                           Origin: Amazon (MIT)                              
-                           Url: https://aws.amazon.com/freertos/             
+                           Description: NXP IoT Sensing SDK. It combines a   
+                           set of robust Sensor Drivers and algorithms along 
+                           with example applications.                        
+                           Location: middleware/issdk                        
+                           Origin: NXP (BSD-3-Clause)                        
 
 sdmmc                      Name: SD MMC SDIO Card middleware                 
                            Version: 2.2.7                                    
@@ -117,20 +116,20 @@ fatfs                      Name: FatFs
                            Url: http://elm-chan.org/fsw/ff/00index_e.html    
 
 mbedtls                    Name: Mbed TLS                                    
-                           Version: 2.28.0                                   
+                           Version: 2.28.1                                   
                            Outgoing License: Apache-2.0                      
                            License File: middleware/mbedtls/LICENSE          
                            Format: source code                               
                            Description: Cryptographic and SSL/TLS Library    
                            Location: middleware/mbedtls                      
                            Origin: ARM(Apache-2.0) -                         
-                           https://github.com/ARMmbed/mbedtls/releases/tag/v2
-                           .26.0                                             
+                           https://github.com/Mbed-TLS/mbedtls/releases/tag/v
+                           2.28.1                                            
 
 lwip                       Name: lwIP TCP/IP Stack                           
-                           Version: lwIP git repository (2022-03-25, branch: 
+                           Version: lwIP git repository (2022-05-09, branch: 
                            master, SHA-1:                                    
-                           124dc0a64ef5d7c14a27e3115e5888df6559cb72)         
+                           239918ccc173cb2c2a62f41a40fd893f57faf1d6)         
                            Outgoing License: BSD-3-Clause                    
                            License File: middleware/lwip/COPYING             
                            Format: source code                               
@@ -148,11 +147,11 @@ cmsis_drivers              Name: SDK CMSIS Peripheral Drivers
                            to provide hardware independent APIs which make   
                            application reusable across a wide range of       
                            supported microcontroller devices.                
-                           Location: cmsis_drivers                           
+                           Location: devices/<device>/cmsis_drivers          
                            Origin: NXP (Apache License 2.0)                  
 
 MCMGR                      Name: MCMGR                                       
-                           Version: 4.1.2                                    
+                           Version: 4.1.3                                    
                            Outgoing License: BSD-3-Clause                    
                            License File: COPYING-BSD-3                       
                            Format: source code                               
@@ -161,7 +160,7 @@ MCMGR                      Name: MCMGR
                            Origin: NXP (BSD-3-Clause)                        
 
 multicore                  Name: Multicore SDK                               
-                           Version: 2.12.0                                   
+                           Version: 2.13.0                                   
                            Outgoing License: BSD-3-Clause                    
                            License File: COPYING-BSD-3                       
                            Format: source code                               
@@ -171,7 +170,7 @@ multicore                  Name: Multicore SDK
                            Origin: NXP (BSD-3-Clause)                        
 
 rpmsg_lite                 Name: RPMsg-Lite                                  
-                           Version: 4.0.0                                    
+                           Version: 5.0.0                                    
                            Outgoing License: BSD-3-Clause                    
                            License File: COPYING-BSD-3                       
                            Format: source code                               
@@ -183,7 +182,7 @@ rpmsg_lite                 Name: RPMsg-Lite
                            Url: https://github.com/NXPmicro/rpmsg-lite       
 
 erpc                       Name: eRPC                                        
-                           Version: 1.9.1                                    
+                           Version: 1.10.0                                   
                            Outgoing License: BSD-3-Clause                    
                            License File: middleware/multicore/erpc/LICENSE   
                            Format: source code                               
@@ -235,8 +234,30 @@ cpp_option_parser          Name: C++ option-parser
                            http://www.bradapp.com/ftp/src/libs/C++/Options.ht
                            ml                                                
 
+freemaster                 Name: FreeMASTER                                  
+                           Version: 3.0.5                                    
+                           Outgoing License: LA_OPT_NXP_Software_License.txt 
+                           v39 August 2022 - Additional distribution license 
+                           granted - License in Section 2.3 applies          
+                           License File:                                     
+                           middleware/freemaster/license/LA_OPT_NXP_Software_
+                           License.txt                                       
+                           Format: source code & header files                
+                           Description: FreeMASTER communication driver      
+                           Location: middleware/freemaster/src               
+                           Origin: NXP                                       
+
+freemaster-examples        Name: FreeMASTER                                  
+                           Version: 3.0.5                                    
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code & header files                
+                           Description: FreeMASTER example applications      
+                           Location: boards/<board>/freemaster_examples      
+                           Origin: NXP                                       
+
 LittleFS                   Name: LittleFS                                    
-                           Version: 2.4.1                                    
+                           Version: 2.5.0                                    
                            Outgoing License: BSD-3-Clause                    
                            License File: middleware/littlefs/LICENSE.md      
                            Format: source code                               
@@ -248,7 +269,7 @@ LittleFS                   Name: LittleFS
                            Url: https://github.com/littlefs-project/littlefs 
 
 TensorFlow Lite            Name: TensorFlow Lite for Microcontrollers        
-                           Version: 22-02-16 (commit 9efa395)                
+                           Version: 22-09-19 (commit cdc3a32)                
                            Outgoing License: Apache-2.0                      
                            License File:                                     
                            middleware/eiq/tensorflow-lite/LICENSE            
@@ -274,7 +295,7 @@ FFT2D                      Name: FFT2D
                            http://www.kurims.kyoto-u.ac.jp/~ooura/fft.html   
 
 FlatBuffers                Name: FlatBuffers                                 
-                           Version: 2.0.6 (commit f28c2b2)                   
+                           Version: 2.0.6 (commit a66de58)                   
                            Outgoing License: Apache-2.0                      
                            License File:                                     
                            middleware/eiq/tensorflow-lite/third_party/flatbuf
@@ -332,8 +353,8 @@ ruy                        Name: ruy
                            Url: https://github.com/google/ruy                
 
 tensorflow_lite_micro_cmsisName: CMSIS-NN library                            
-_nn                        Version: 3.0.0 (commit 977abe9, CMSIS version     
-                           5.8.0)                                            
+_nn                        Version: 3.1.0 (commit 6a18a74, CMSIS version     
+                           5.9.0)                                            
                            Outgoing License: Apache-2.0                      
                            License File:                                     
                            middleware/eiq/tensorflow-lite/third_party/cmsis/L
@@ -347,9 +368,9 @@ _nn                        Version: 3.0.0 (commit 977abe9, CMSIS version
                            Url: https://github.com/ARM-software/CMSIS_5      
 
 tensorflow_lite_micro_xtensName: Cadence HiFi4 Neural Network (NN) Library   
-a_nn                       Version: 2.5.0                                    
+a_nn                       Version: 2.7.0                                    
                            Outgoing License: LA_OPT_NXP_Software_License.txt 
-                           v35 May 2022 - Additional distribution license    
+                           v39 August 2022 - Additional distribution license 
                            granted - License in Section 2.3 applies          
                            License File: LA_OPT_NXP_Software_License.txt     
                            Format: source code                               
@@ -376,8 +397,8 @@ Glow Utils                 Name: Glow Utils
 DeepviewRT Library         Name: DeepviewRT Library                          
                            Version: 2.4.20                                   
                            Outgoing License: LA_OPT_NXP_Software_License.txt 
-                           v35 May 2022- No distribution permitted, license  
-                           in Section 2.2 applies.                           
+                           v39 August 2022- No distribution permitted,       
+                           license in Section 2.2 applies.                   
                            License File: LA_OPT_NXP_Software_License.txt     
                            Format: machine learning library and header file  
                            Description: Au-Zone DeepViewRT and ModelRunner   
@@ -389,7 +410,7 @@ DeepviewRT Library         Name: DeepviewRT Library
 DeepviewRT Sample          Name: DeepviewRT Sample                           
                            Version: 1.0.0                                    
                            Outgoing License: LA_OPT_NXP_Software_License.txt 
-                           v35 May 2022- Additional distribution license     
+                           v39 August 2022- Additional distribution license  
                            granted, license in Section 2.3 applies.          
                            License File: LA_OPT_NXP_Software_License.txt     
                            Format: source code                               
@@ -399,10 +420,27 @@ DeepviewRT Sample          Name: DeepviewRT Sample
                            Origin: NXP (Proprietary)/Au-Zone (proprietary)   
                            Url: https://embeddedml.com                       
 
+maestro                    Name: Maestro Audio Framework                     
+                           Version: 1.5.0                                    
+                           Outgoing License: LA_OPT_NXP_Software_License.txt 
+                           v39 August 2022- Additional distribution license  
+                           granted - License in Section 2.3 applies          
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: Source                                    
+                           Description: Maestro MCU Audio Framework          
+                           Location: middleware/maestro                      
+                           Origin: NXP (Proprietary) Flac (BSD 3-clause) Ogg 
+                           (BSD 3-clause) Opus (BSD 3-clause) Opusfile (BSD  
+                           3-clause)                                         
+                           Url: https://github.com/xiph/flac                 
+                           https://github.com/xiph/ogg                       
+                           https://github.com/xiph/opus                      
+                           https://github.com/xiph/opusfile                  
+
 wifi_nxp                   Name: NXP Wi-Fi driver                            
                            Version: 1.3.r41.p2                               
                            Outgoing License: LA_OPT_NXP_Software_License.txt 
-                           v35 May 2022- Additional distribution license     
+                           v39 August 2022- Additional distribution license  
                            granted - License in Section 2.3 applies          
                            License File: LA_OPT_NXP_Software_License.txt     
                            Format: source code, header files, firmware       
@@ -412,10 +450,60 @@ wifi_nxp                   Name: NXP Wi-Fi driver
                            Location: middleware/wifi_nxp                     
                            Origin: NXP                                       
 
-azure_rtos_threadx         Name: Azure RTOS ThreadX                          
-                           Version: 6.1.10                                   
+EAP                        Name: EAP                                         
+                           Version: 3.0.12                                   
                            Outgoing License: LA_OPT_NXP_Software_License.txt 
-                           v35 May 2022 - Additional distribution license    
+                           v39 August 2022 - Additional distribution license 
+                           granted - License in Section 2.3 applies          
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: Precompiled libraries, header files,      
+                           XTENSA/ARMDS example application project          
+                           Description: essential audio processing library   
+                           EAP16 v3.0.12 for CM7, FusionF1, Hifi4 + EAP16    
+                           windows lib for simulation EAP32 v1.0.1 for RT600 
+                           + EAP32 v1.0.2 for CM7 + EAP32 windows lib for    
+                           simulation(v1.0.2)                                
+                           Location: middleware/EAP                          
+                           Origin: NXP (Proprietary)                         
+                           Url:                                              
+                           https://www.youtube.com/watch?v=qZ1fhDc27UU&featur
+                           e=youtu.be                                        
+
+VIT                        Name: VIT_v4.7.5                                  
+                           Version: 4.7.5                                    
+                           Outgoing License: LA_OPT_NXP_Software_License.txt 
+                           v39 August 2022 - Additional distribution license 
+                           granted - License in Section 2.3 applies          
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: Precompiled libraries, header files,      
+                           example application                               
+                           Description: Voice Intelligent Technology library 
+                           Location: middleware/vit                          
+                           Origin: NXP (Proprietary)                         
+
+VoiceSeeker_arm            Name: VoiceSeeker (no AEC)                        
+                           Version: 0.6.0                                    
+                           Outgoing License: LA_OPT_NXP_Software_License.txt 
+                           v39 August 2022 - Additional distribution license 
+                           granted - License in Section 2.3 applies          
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: Precompiled libraries, header files,      
+                           example application                               
+                           Description: VoiceSeeker is a multi-microphone    
+                           voice control audio front-end signal processing   
+                           solution. Acoustic Echo Cancellation (AEC) is not 
+                           enabled in this free version.                     
+                           Location: middleware/voice_seeker                 
+                           Origin: NXP (Proprietary) ARM (Apache-2.0)        
+                           Url:                                              
+                           https://www.nxp.com/design/software/embedded-softw
+                           are/voiceseeker-audio-front-end:VOICESEEKER       
+                           https://github.com/ARM-software/CMSIS_5           
+
+azure_rtos_threadx         Name: Azure RTOS ThreadX                          
+                           Version: 6.2.0                                    
+                           Outgoing License: LA_OPT_NXP_Software_License.txt 
+                           v39 August 2022 - Additional distribution license 
                            granted - License in Section 2.3 applies          
                            License File: LA_OPT_NXP_Software_License.txt     
                            Format: source code                               
@@ -426,9 +514,9 @@ azure_rtos_threadx         Name: Azure RTOS ThreadX
                            https://azure.microsoft.com/en-us/services/rtos/  
 
 azure_rtos_filex           Name: Azure RTOS FileX                            
-                           Version: 6.1.10                                   
+                           Version: 6.2.0                                    
                            Outgoing License: LA_OPT_NXP_Software_License.txt 
-                           v35 May 2022 - Additional distribution license    
+                           v39 August 2022 - Additional distribution license 
                            granted - License in Section 2.3 applies          
                            License File: LA_OPT_NXP_Software_License.txt     
                            Format: source code                               
@@ -439,9 +527,9 @@ azure_rtos_filex           Name: Azure RTOS FileX
                            https://azure.microsoft.com/en-us/services/rtos/  
 
 azure_rtos_levelx          Name: Azure RTOS LevelX                           
-                           Version: 6.1.10                                   
+                           Version: 6.2.0                                    
                            Outgoing License: LA_OPT_NXP_Software_License.txt 
-                           v35 May 2022 - Additional distribution license    
+                           v39 August 2022 - Additional distribution license 
                            granted - License in Section 2.3 applies          
                            License File: LA_OPT_NXP_Software_License.txt     
                            Format: source code                               
@@ -453,9 +541,9 @@ azure_rtos_levelx          Name: Azure RTOS LevelX
                            https://azure.microsoft.com/en-us/services/rtos/  
 
 azure_rtos_netxduo         Name: Azure RTOS NetX Duo                         
-                           Version: 6.1.10                                   
+                           Version: 6.2.0                                    
                            Outgoing License: LA_OPT_NXP_Software_License.txt 
-                           v35 May 2022 - Additional distribution license    
+                           v39 August 2022 - Additional distribution license 
                            granted - License in Section 2.3 applies          
                            License File: LA_OPT_NXP_Software_License.txt     
                            Format: source code                               
@@ -467,9 +555,9 @@ azure_rtos_netxduo         Name: Azure RTOS NetX Duo
                            https://azure.microsoft.com/en-us/services/rtos/  
 
 azure_rtos_guix            Name: Azure RTOS GUIX                             
-                           Version: 6.1.10                                   
+                           Version: 6.2.0                                    
                            Outgoing License: LA_OPT_NXP_Software_License.txt 
-                           v35 May 2022 - Additional distribution license    
+                           v39 August 2022 - Additional distribution license 
                            granted - License in Section 2.3 applies          
                            License File: LA_OPT_NXP_Software_License.txt     
                            Format: source code                               
@@ -481,9 +569,9 @@ azure_rtos_guix            Name: Azure RTOS GUIX
                            https://azure.microsoft.com/en-us/services/rtos/  
 
 azure_rtos_usbx            Name: Azure RTOS USBX                             
-                           Version: 6.1.10                                   
+                           Version: 6.2.0                                    
                            Outgoing License: LA_OPT_NXP_Software_License.txt 
-                           v35 May 2022 - Additional distribution license    
+                           v39 August 2022 - Additional distribution license 
                            granted - License in Section 2.3 applies          
                            License File: LA_OPT_NXP_Software_License.txt     
                            Format: source code                               
@@ -493,6 +581,18 @@ azure_rtos_usbx            Name: Azure RTOS USBX
                            Origin: Microsoft                                 
                            Url:                                              
                            https://azure.microsoft.com/en-us/services/rtos/  
+
+MCUBoot                    Name: MCUBoot                                     
+                           Version: 1.9.0                                    
+                           Outgoing License: Apache-2.0                      
+                           License File:                                     
+                           middleware/mcuboot_opensource/LICENSE             
+                           Format: source code                               
+                           Description: MCUBoot - a bootloader for           
+                           microcontrollers                                  
+                           Location: middleware/mcuboot_opensource           
+                           Origin: MCUBoot https://www.mcuboot.com/          
+                           Url: https://github.com/mcu-tools/mcuboot         
 
 RangeHTTPServer            Name: RangeHTTPServer                             
                            Version: 1.2.0                                    
@@ -509,9 +609,9 @@ RangeHTTPServer            Name: RangeHTTPServer
                            Url: https://github.com/danvk/RangeHTTPServer     
 
 mpp                        Name: Multimedia Processing Pipelines (MPP)       
-                           Version: 0.9.0                                    
+                           Version: 1.0.0                                    
                            Outgoing License: LA_OPT_NXP_Software_License.txt 
-                           v35 May 2022 - Additional distribution license    
+                           v39 August 2022 - Additional distribution license 
                            granted - License in Section 2.3 applies          
                            License File: LA_OPT_NXP_Software_License.txt     
                            Format: source code, header files                 
@@ -519,11 +619,31 @@ mpp                        Name: Multimedia Processing Pipelines (MPP)
                            Location: middleware/eiq/mpp                      
                            Origin: NXP                                       
 
+wifi_tx_pwr_limits         Name: Wi-Fi module Tx power limits                
+                           Version: 1.0.0                                    
+                           Outgoing License: BSD-3-Clause                    
+                           License File:                                     
+                           Format: source code                               
+                           Description: Wi-Fi module Tx power limits         
+                           Location: components/wifi_bt_module/Murata        
+                           Origin: Murata Manufacturing Co., Ltd.            
+                           (BSD-3-Clause)                                    
+
+rtcesl                     Name: rtcesl                                      
+                           Version: 4.7 (CM0,CM4,CM7,CM33) + 4.5 (DSC)       
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: object code & header files                
+                           Description: NXP Real Time Control Embedded       
+                           Software Library.                                 
+                           Location: middleware/rtcesl                       
+                           Origin: NXP (BSD-3-Clause)                        
+
 bt_ble_hoststack           Name: Bluetooth and Bluetooth Low Energy Host     
                            Stack                                             
                            Version: 16.5.16                                  
                            Outgoing License: LA_OPT_NXP_Software_License.txt 
-                           v35 May 2022 - Additional distribution license    
+                           v39 August 2022 - Additional distribution license 
                            granted - License in Section 2.3 applies          
                            License File: LA_OPT_NXP_Software_License.txt     
                            Format: Source, Binary libraries                  
@@ -531,6 +651,17 @@ bt_ble_hoststack           Name: Bluetooth and Bluetooth Low Energy Host
                            Host Stack.                                       
                            Location: middleware/wireless/ethermind           
                            Origin: Mindtree                                  
+
+segger_rtt                 Name: SEGGER Real Timer Transfer                  
+                           Version: 7.22                                     
+                           Outgoing License: LA_OPT_NXP_Software_License.txt 
+                           v39 August 2022 - Additional distribution license 
+                           granted - License in Section 2.3 applies          
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: source code                               
+                           Description: SEGGER Real Timer Transfer           
+                           Location: components/rtt                          
+                           Origin: SEGGER Microcontroller (proprietary)      
 
 EdgeFast_PAL               name: EdgeFast Protocol Abstraction Layer         
                            version: 0.1.0                                    
@@ -567,10 +698,67 @@ segger_systemview          Name: Segger SystemView Demo
                            s_segger_sysview                                  
                            Origin: Segger (BSD-1-Clause)                     
 
+dsp_audio_framework        Name: dsp_audio_framework                         
+                           Version: 3.2                                      
+                           Outgoing License: LA_OPT_NXP_Software_License.txt 
+                           v39 August 2022 - Additional distribution license 
+                           granted - License in Section 2.3 applies          
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: source code                               
+                           Description: DSP Audio Streamer Framework based on
+                           Xtensa Audio Framework from Cadence Design        
+                           Location: middleware/dsp/audio_framework          
+                           Origin: Cadence Design Systems, Inc. & NXP        
+
+dsp_nn                     Name: Cadence HiFi4 Neural Network (NN) Library   
+                           Version: 2.4.1                                    
+                           Outgoing License: LA_OPT_NXP_Software_License.txt 
+                           v39 August 2022 - No distribution permitted,      
+                           license in Section 2.2 applies.                   
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: source code, header files, binary files   
+                           Description: DSP Neural Networks Framework based  
+                           on Xtensa Neural Networks Library from Cadence    
+                           Design                                            
+                           Location: middleware/dsp/nn                       
+                           Origin: Cadence Design Systems, Inc. & NXP        
+                           (proprietary)                                     
+
+naturedsp_fusionf1         Name: naturedsp                                   
+                           Version: 1.2.0                                    
+                           Outgoing License: LA_OPT_NXP_Software_License.txt 
+                           v39 August 2022 - No distribution permitted,      
+                           license in Section 2.2 applies.                   
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: source code, precompiled library          
+                           Description: Digital Signal Processing for Xtensa 
+                           Fusion Audio Engines                              
+                           Location: middleware/dsp/naturedsp/fusionf1       
+                           Origin: Cadence Design Systems (Proprietary)      
+
+VoiceSeeker_dsp            Name: VoiceSeeker (no AEC)                        
+                           Version: 0.6.0                                    
+                           Outgoing License: LA_OPT_NXP_Software_License.txt 
+                           v39 August 2022 - Additional distribution license 
+                           granted - License in Section 2.3 applies          
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: Precompiled libraries, header files,      
+                           example application                               
+                           Description: VoiceSeeker is a multi-microphone    
+                           voice control audio front-end signal processing   
+                           solution. Acoustic Echo Cancellation (AEC) is not 
+                           enabled in this free version.                     
+                           Location: middleware/voice_seeker                 
+                           Origin: NXP (Proprietary) Cadence Design Systems  
+                           (Proprietary)                                     
+                           Url:                                              
+                           https://www.nxp.com/design/software/embedded-softw
+                           are/voiceseeker-audio-front-end:VOICESEEKER       
+
 Pedometer_Library          Name: Pedometer Library                           
                            Version: 1.0                                      
                            Outgoing License: LA_OPT_NXP_Software_License.txt 
-                           v35 May 2022- Additional Distribution License     
+                           v39 August 2022- Additional Distribution License  
                            granted, license in Section 2.3 applies           
                            License File: LA_OPT_NXP_Software_License.txt     
                            Format: binary library                            
@@ -579,6 +767,36 @@ Pedometer_Library          Name: Pedometer Library
                            Location:                                         
                            middleware/issdk/algorithms/pedometer/lib         
                            Origin: KEYnetik, Inc                             
+
+VoiceSpot                  Name: VoiceSpot_v0.23.2                           
+                           Version: 0.23.2                                   
+                           Outgoing License: LA_OPT_NXP_Software_License.txt 
+                           v39 August 2022 - License in Section 2.4 applies, 
+                           see Appendix A.                                   
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: Precompiled libraries, header files,      
+                           example application                               
+                           Description: VoiceSpot is a highly accurate, small
+                           memory and MIPS profile wake word engine          
+                           supporting custom voice trigger words and phrases 
+                           Location: middleware/voice_spot                   
+                           Origin: NXP (Proprietary) ARM (Apache-2.0)        
+                           Url:                                              
+                           https://www.nxp.com/design/software/embedded-softw
+                           are/voicespot-wake-word-engine:VOICESPOT          
+                           https://github.com/ARM-software/CMSIS_5           
+
+naturedsp_hifi4            Name: naturedsp                                   
+                           Version: 4.1.0                                    
+                           Outgoing License: LA_OPT_NXP_Software_License.txt 
+                           v39 August 2022 - No distribution permitted,      
+                           license in Section 2.2 applies.                   
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: source code                               
+                           Description: Digital Signal Processing for Xtensa 
+                           HiFi Audio Engines                                
+                           Location: middleware/dsp/naturedsp/hifi4          
+                           Origin: Cadence Design Systems (Proprietary)      
 
 CRC32-GS                   Name: CRC32 code                                  
                            Version: NA                                       

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2019-04-22
-**     Build:               b220216
+**     Build:               b220718
 **
 **     Abstract:
 **         Chip specific module features.
@@ -115,6 +115,13 @@
 /* AXBS module features */
 
 /* No feature definitions */
+
+/* interrupt module features */
+
+/* @brief Lowest interrupt request number. */
+#define FSL_FEATURE_INTERRUPT_IRQ_MIN (-14)
+/* @brief Highest interrupt request number. */
+#define FSL_FEATURE_INTERRUPT_IRQ_MAX (105)
 
 /* CRC module features */
 
@@ -429,8 +436,10 @@
 
 /* SAI module features */
 
+/* @brief SAI has FIFO in this soc (register bit fields TCR1[TFW]. */
+#define FSL_FEATURE_SAI_HAS_FIFO (1)
 /* @brief Receive/transmit FIFO size in item count (register bit fields TCSR[FRDE], TCSR[FRIE], TCSR[FRF], TCR1[TFW], RCSR[FRDE], RCSR[FRIE], RCSR[FRF], RCR1[RFW], registers TFRn, RFRn). */
-#define FSL_FEATURE_SAI_FIFO_COUNT (8)
+#define FSL_FEATURE_SAI_FIFO_COUNTn(x) (8)
 /* @brief Receive/transmit channel number (register bit fields TCR3[TCE], RCR3[RCE], registers TDRn and RDRn). */
 #define FSL_FEATURE_SAI_CHANNEL_COUNTn(x) (2)
 /* @brief Maximum words per frame (register bit fields TCR3[WDFL], TCR4[FRSZ], TMR[TWM], RCR3[WDFL], RCR4[FRSZ], RMR[RWM]). */
@@ -890,13 +899,6 @@
 #define FSL_FEATURE_MU_HAS_RESET_ASSERT_INT (1)
 /* @brief MU supports reset de-assert interrupt. CR[RDIE] or BCR[RDIE]. */
 #define FSL_FEATURE_MU_HAS_RESET_DEASSERT_INT (1)
-
-/* interrupt module features */
-
-/* @brief Lowest interrupt request number. */
-#define FSL_FEATURE_INTERRUPT_IRQ_MIN (-14)
-/* @brief Highest interrupt request number. */
-#define FSL_FEATURE_INTERRUPT_IRQ_MAX (65)
 
 /* PCC module features */
 

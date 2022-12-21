@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    RT500 Reference Manual. Rev.C, 8/2020
+**     Reference manual:    iMXRT500RM Rev.0, 01/2021
 **     Version:             rev. 5.0, 2020-08-27
-**     Build:               b201016
+**     Build:               b220711
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,7 +18,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -65,16 +65,31 @@ extern "C" {
 #ifndef CLK_XTAL_OSC_CLK
 #define CLK_XTAL_OSC_CLK 24000000u /* Default XTAL OSC clock */
 #endif
-#define CLK_RTC_32K_CLK   32768u   /* RTC oscillator 32 kHz (32k_clk) */
-#define CLK_LPOSC_1MHZ    1000000u /* Low power oscillator 1 MHz (1m_lposc) */
-#define CLK_FRO_CLK       ((CLKCTL0->FRO_SCTRIM & 0x3FU) == 0x2FU ? 96000000u : 192000000u) /* FRO clock frequency */
+#define CLK_RTC_32K_CLK 32768u   /* RTC oscillator 32 kHz (32k_clk) */
+#define CLK_LPOSC_1MHZ  1000000u /* Low power oscillator 1 MHz (1m_lposc) */
+#ifndef CLK_FRO_HIGH_FREQ
+#define CLK_FRO_HIGH_FREQ 192000000u /* The high frequency of the FRO clock */
+#endif
+#ifndef CLK_FRO_LOW_FREQ
+#define CLK_FRO_LOW_FREQ 96000000u /* The low frequency of the FRO clock */
+#endif
+#ifndef CLK_EXT_CLKIN
+#define CLK_EXT_CLKIN 0u /* Default external CLKIN pin clock */
+#endif
+#define CLK_OSC_CLK \
+    ((CLKCTL0->SYSOSCBYPASS == 0u) ? CLK_XTAL_OSC_CLK : ((CLKCTL0->SYSOSCBYPASS == 1u) ? CLK_EXT_CLKIN : 0u))
+
+#define FRO_TUNER_USED         ((CLKCTL0->FRO_CONTROL & CLKCTL0_FRO_CONTROL_EXP_COUNT_MASK) != 0u)
+#define FRO_FREQ_GET_FROM_FUSE ((CLKCTL0->FRO_SCTRIM & 0x3fu) == 0x2fu ? CLK_FRO_LOW_FREQ : CLK_FRO_HIGH_FREQ)
+/*  freq = reference_clk * (2 * FRO_CAPVAL - 6) / 4095 */
+#define FRO_FREQ_GET_FROM_TUNER \
+    (CLK_OSC_CLK / 4095u * (2u * (CLKCTL0->FRO_CAPVAL & CLKCTL0_FRO_CAPVAL_CAPVAL_MASK) - 6u) * 4u)
+
+#define CLK_FRO_CLK       (FRO_TUNER_USED ? FRO_FREQ_GET_FROM_TUNER : FRO_FREQ_GET_FROM_FUSE)
 #define CLK_FRO_DIV2_CLK  (CLK_FRO_CLK / 2u)  /* FRO_DIV2 clock frequency */
 #define CLK_FRO_DIV4_CLK  (CLK_FRO_CLK / 4u)  /* FRO_DIV4 clock frequency */
 #define CLK_FRO_DIV8_CLK  (CLK_FRO_CLK / 8u)  /* FRO_DIV8 clock frequency */
 #define CLK_FRO_DIV16_CLK (CLK_FRO_CLK / 16u) /* FRO_DIV16 clock frequency */
-#ifndef CLK_EXT_CLKIN
-#define CLK_EXT_CLKIN 0u /* Default external CLKIN pin clock */
-#endif
 
 /**
  * @brief System clock frequency (core clock)

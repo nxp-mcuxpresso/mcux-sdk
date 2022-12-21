@@ -969,7 +969,7 @@ uint32_t CLOCK_GetFRGClock(uint32_t id);
 void CLOCK_SetFRGClock(const clock_frg_clk_config_t *config);
 
 /*! @brief  Return Frequency of FRO 16MHz
- *  @return Frequency of FRO 12MHz
+ *  @return Frequency of FRO 16MHz
  */
 static inline uint32_t CLOCK_GetSFroFreq(void)
 {

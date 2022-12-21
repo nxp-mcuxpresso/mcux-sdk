@@ -1,10 +1,10 @@
 //*****************************************************************************
 // MIMXRT1176_cm4 startup code for use with MCUXpresso IDE
 //
-// Version : 221121
+// Version : 090922
 //*****************************************************************************
 //
-// Copyright 2016-2021 NXP
+// Copyright 2016-2022 NXP
 // All rights reserved.
 //
 // SPDX-License-Identifier: BSD-3-Clause
@@ -554,20 +554,20 @@ void (* const g_pfnVectors[])(void) = {
     // Core Level - CM4
     &_vStackTop,                       // The initial stack pointer
     ResetISR,                          // The reset handler
-    NMI_Handler,                       // The NMI handler
-    HardFault_Handler,                 // The hard fault handler
-    MemManage_Handler,                 // The MPU fault handler
-    BusFault_Handler,                  // The bus fault handler
-    UsageFault_Handler,                // The usage fault handler
+    NMI_Handler,                       // NMI Handler
+    HardFault_Handler,                 // Hard Fault Handler
+    MemManage_Handler,                 // MPU Fault Handler
+    BusFault_Handler,                  // Bus Fault Handler
+    UsageFault_Handler,                // Usage Fault Handler
     0,                                 // Reserved
     0,                                 // Reserved
     0,                                 // Reserved
     0,                                 // Reserved
-    SVC_Handler,                       // SVCall handler
+    SVC_Handler,                       // SVCall Handler
     0,                                 // Reserved
     0,                                 // Reserved
-    PendSV_Handler,                    // The PendSV handler
-    SysTick_Handler,                   // The SysTick handler
+    PendSV_Handler,                    // PendSV Handler
+    SysTick_Handler,                   // SysTick Handler
 
     // Chip Level - MIMXRT1176_cm4
     DMA0_DMA16_IRQHandler,               // 16 : DMA channel 0/16 transfer complete
@@ -713,8 +713,8 @@ void (* const g_pfnVectors[])(void) = {
     ENET_1G_MAC0_Tx_Rx_2_IRQHandler,     // 156: ENET 1G MAC0 transmit/receive 2
     ENET_1G_IRQHandler,                  // 157: ENET 1G interrupt
     ENET_1G_1588_Timer_IRQHandler,       // 158: ENET_1G_1588_Timer interrupt
-    XBAR1_IRQ_0_1_IRQHandler,            // 159: XBAR1 interrupt
-    XBAR1_IRQ_2_3_IRQHandler,            // 160: XBAR1 interrupt
+    XBAR1_IRQ_0_1_IRQHandler,            // 159: XBARA1 output signal 0, 1 interrupt
+    XBAR1_IRQ_2_3_IRQHandler,            // 160: XBARA1 output signal 2, 3 interrupt
     ADC_ETC_IRQ0_IRQHandler,             // 161: ADCETC IRQ0 interrupt
     ADC_ETC_IRQ1_IRQHandler,             // 162: ADCETC IRQ1 interrupt
     ADC_ETC_IRQ2_IRQHandler,             // 163: ADCETC IRQ2 interrupt

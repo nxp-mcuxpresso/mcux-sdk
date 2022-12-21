@@ -23,15 +23,15 @@
 
 /*! @brief The UART to use for debug messages. */
 /* TODO: rename UART to USART */
-#define BOARD_DEBUG_UART_TYPE kSerialPort_Uart
-#define BOARD_DEBUG_UART_BASEADDR (uint32_t) USART0
-#define BOARD_DEBUG_UART_INSTANCE 0U
-#define BOARD_DEBUG_UART_CLK_FREQ CLOCK_GetFlexCommClkFreq(0)
+#define BOARD_DEBUG_UART_TYPE       kSerialPort_Uart
+#define BOARD_DEBUG_UART_BASEADDR   (uint32_t) USART0
+#define BOARD_DEBUG_UART_INSTANCE   0U
+#define BOARD_DEBUG_UART_CLK_FREQ   CLOCK_GetFlexCommClkFreq(0)
 #define BOARD_DEBUG_UART_CLK_ATTACH kFRO12M_to_FLEXCOMM0
-#define BOARD_DEBUG_UART_RST kFC0_RST_SHIFT_RSTn
-#define BOARD_DEBUG_UART_CLKSRC kCLOCK_Flexcomm0
-#define BOARD_UART_IRQ_HANDLER FLEXCOMM0_IRQHandler
-#define BOARD_UART_IRQ FLEXCOMM0_IRQn
+#define BOARD_DEBUG_UART_RST        kFC0_RST_SHIFT_RSTn
+#define BOARD_DEBUG_UART_CLKSRC     kCLOCK_Flexcomm0
+#define BOARD_UART_IRQ_HANDLER      FLEXCOMM0_IRQHandler
+#define BOARD_UART_IRQ              FLEXCOMM0_IRQn
 /* TODO: obsolete */
 #define BOARD_DEBUG_SPI_CLK_FREQ 12000000
 
@@ -62,7 +62,7 @@
 #endif
 
 /* Board led color mapping */
-#define LOGIC_LED_ON 0U
+#define LOGIC_LED_ON  0U
 #define LOGIC_LED_OFF 1U
 
 #define LED_RED_INIT(output)                                                          \
@@ -103,6 +103,15 @@
 #define LED_BLUE_TOGGLE()                                          \
     GPIO_PortToggle(BOARD_LED_BLUE_GPIO, BOARD_LED_BLUE_GPIO_PORT, \
                     1U << BOARD_LED_BLUE_GPIO_PIN) /*!< Toggle on target LED_BLUE */
+
+/*! @brief Memory ranges not usable by the ENET DMA. */
+#ifndef BOARD_ENET_NON_DMA_MEMORY_ARRAY
+#define BOARD_ENET_NON_DMA_MEMORY_ARRAY                                                     \
+    {                                                                                       \
+        {0x00000000U, 0x0007FFFFU}, {0x10000000U, 0x17FFFFFFU}, {0x80000000U, 0xDFFFFFFFU}, \
+            {0x00000000U, 0x00000000U},                                                     \
+    }
+#endif /* BOARD_ENET_NON_DMA_MEMORY_ARRAY */
 
 #if defined(__cplusplus)
 extern "C" {

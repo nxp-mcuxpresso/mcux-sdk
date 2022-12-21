@@ -63,12 +63,12 @@ typedef status_t (*sensor_read_transfer_func_t)(uint8_t deviceAddress,
 
 typedef struct _icm42688p_sensor_data
 {
-    uint16_t accelDataX;
-    uint16_t accelDataY;
-    uint16_t accelDataZ;
-    uint16_t gyroDataX;
-    uint16_t gyroDataY;
-    uint16_t gyroDataZ;
+    int16_t accelDataX;
+    int16_t accelDataY;
+    int16_t accelDataZ;
+    int16_t gyroDataX;
+    int16_t gyroDataY;
+    int16_t gyroDataZ;
 } icm42688p_sensor_data_t;
 
 typedef struct _icm42688p_handle

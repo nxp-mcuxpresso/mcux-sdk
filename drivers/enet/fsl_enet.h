@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 5, 3))
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 6, 3))
 /*@}*/
 
 /*! @name ENET DESCRIPTOR QUEUE */
@@ -976,96 +976,146 @@ static inline uint32_t ENET_ReadSMIData(ENET_Type *base)
 }
 
 /*!
- * @brief Starts an SMI (Serial Management Interface) read command.
+ * @brief Sends the MDIO IEEE802.3 Clause 22 format write command.
  *
- * Used for standard IEEE802.3 MDIO Clause 22 format.
- *
- * @param base  ENET peripheral base address.
- * @param phyAddr The PHY address.
- * @param phyReg The PHY register. Range from 0 ~ 31.
- * @param operation The read operation.
- */
-void ENET_StartSMIRead(ENET_Type *base, uint32_t phyAddr, uint32_t phyReg, enet_mii_read_t operation);
-
-/*!
- * @brief Starts an SMI write command.
- *
- * Used for standard IEEE802.3 MDIO Clause 22 format.
+ * After calling this function, need to check whether the transmission is over then do next MDIO operation.
+ * For ease of use, encapsulated ENET_MDIOWrite() can be called. For customized requirements, implement
+ * with combining separated APIs.
  *
  * @param base  ENET peripheral base address.
- * @param phyAddr The PHY address.
- * @param phyReg The PHY register. Range from 0 ~ 31.
+ * @param phyAddr The PHY address. Range from 0 ~ 31.
+ * @param regAddr The PHY register address. Range from 0 ~ 31.
  * @param operation The write operation.
  * @param data The data written to PHY.
  */
-void ENET_StartSMIWrite(ENET_Type *base, uint32_t phyAddr, uint32_t phyReg, enet_mii_write_t operation, uint32_t data);
+static inline void ENET_StartSMIWrite(
+    ENET_Type *base, uint8_t phyAddr, uint8_t regAddr, enet_mii_write_t operation, uint16_t data)
+{
+    base->MMFR = ENET_MMFR_ST(1U) | ENET_MMFR_OP(operation) | ENET_MMFR_PA(phyAddr) | ENET_MMFR_RA(regAddr) |
+                 ENET_MMFR_TA(2U) | data;
+}
+
+/*!
+ * @brief Sends the MDIO IEEE802.3 Clause 22 format read command.
+ *
+ * After calling this function, need to check whether the transmission is over then do next MDIO operation.
+ * For ease of use, encapsulated ENET_MDIORead() can be called. For customized requirements, implement
+ * with combining separated APIs.
+ *
+ * @param base  ENET peripheral base address.
+ * @param phyAddr The PHY address. Range from 0 ~ 31.
+ * @param regAddr The PHY register address. Range from 0 ~ 31.
+ * @param operation The read operation.
+ */
+static inline void ENET_StartSMIRead(ENET_Type *base, uint8_t phyAddr, uint8_t regAddr, enet_mii_read_t operation)
+{
+    base->MMFR =
+        ENET_MMFR_ST(1U) | ENET_MMFR_OP(operation) | ENET_MMFR_PA(phyAddr) | ENET_MMFR_RA(regAddr) | ENET_MMFR_TA(2U);
+}
+
+/*!
+ * @brief MDIO write with IEEE802.3 Clause 22 format.
+ *
+ * @param base  ENET peripheral base address.
+ * @param phyAddr  The PHY address. Range from 0 ~ 31.
+ * @param regAddr  The PHY register. Range from 0 ~ 31.
+ * @param data  The data written to PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_MDIOWrite(ENET_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t data);
+
+/*!
+ * @brief MDIO read with IEEE802.3 Clause 22 format.
+ *
+ * @param base  ENET peripheral base address.
+ * @param phyAddr  The PHY address. Range from 0 ~ 31.
+ * @param regAddr  The PHY register. Range from 0 ~ 31.
+ * @param pData  The data read from PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_MDIORead(ENET_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t *pData);
 
 #if defined(FSL_FEATURE_ENET_HAS_EXTEND_MDIO) && FSL_FEATURE_ENET_HAS_EXTEND_MDIO
 /*!
- * @brief Starts the extended IEEE802.3 Clause 45 MDIO format SMI write register command.
+ * @brief Sends the MDIO IEEE802.3 Clause 45 format write register command.
+ *
+ * After calling this function, need to check whether the transmission is over then do next MDIO operation.
+ * For ease of use, encapsulated ENET_MDIOC45Write()/ENET_MDIOC45Read() can be called. For customized
+ * requirements, implement with combining separated APIs.
  *
  * @param base  ENET peripheral base address.
- * @param phyAddr The PHY address.
- * @param phyReg The PHY register. For MDIO IEEE802.3 Clause 45,
- *        the phyReg is a 21-bits combination of the devaddr (5 bits device address)
- *        and the regAddr (16 bits phy register): phyReg = (devaddr << 16) | regAddr.
+ * @param portAddr  The MDIO port address(PHY address).
+ * @param devAddr  The device address.
+ * @param regAddr  The PHY register address.
  */
-void ENET_StartExtC45SMIWriteReg(ENET_Type *base, uint32_t phyAddr, uint32_t phyReg);
+static inline void ENET_StartExtC45SMIWriteReg(ENET_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr)
+{
+    base->MMFR = ENET_MMFR_ST(0) | ENET_MMFR_OP(kENET_MiiAddrWrite_C45) | ENET_MMFR_PA(portAddr) |
+                 ENET_MMFR_RA(devAddr) | ENET_MMFR_TA(2) | ENET_MMFR_DATA(regAddr);
+}
 
 /*!
- * @brief Starts the extended IEEE802.3 Clause 45 MDIO format SMI write data command.
+ * @brief Sends the MDIO IEEE802.3 Clause 45 format write data command.
  *
- * After writing MMFR register, we need to check whether the transmission is over.
- * This is an example for whole precedure of clause 45 MDIO write.
- * @code
- *       ENET_ClearInterruptStatus(base, ENET_EIR_MII_MASK);
- *       ENET_StartExtC45SMIWriteReg(base, phyAddr, phyReg);
- *       while ((ENET_GetInterruptStatus(base) & ENET_EIR_MII_MASK) == 0U)
- *       {
- *       }
- *       ENET_ClearInterruptStatus(base, ENET_EIR_MII_MASK);
- *       ENET_StartExtC45SMIWriteData(base, phyAddr, phyReg, data);
- *       while ((ENET_GetInterruptStatus(base) & ENET_EIR_MII_MASK) == 0U)
- *       {
- *       }
- *       ENET_ClearInterruptStatus(base, ENET_EIR_MII_MASK);
- * @endcode
+ * After calling this function, need to check whether the transmission is over then do next MDIO operation.
+ * For ease of use, encapsulated ENET_MDIOC45Write() can be called. For customized requirements, implement
+ * with combining separated APIs.
+ *
  * @param base  ENET peripheral base address.
- * @param phyAddr The PHY address.
- * @param phyReg The PHY register. For MDIO IEEE802.3 Clause 45,
- *        the phyReg is a 21-bits combination of the devaddr (5 bits device address)
- *        and the regAddr (16 bits phy register): phyReg = (devaddr << 16) | regAddr.
- * @param data The data written to PHY.
+ * @param portAddr  The MDIO port address(PHY address).
+ * @param devAddr  The device address.
+ * @param data  The data written to PHY.
  */
-void ENET_StartExtC45SMIWriteData(ENET_Type *base, uint32_t phyAddr, uint32_t phyReg, uint32_t data);
+static inline void ENET_StartExtC45SMIWriteData(ENET_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t data)
+{
+    base->MMFR = ENET_MMFR_ST(0) | ENET_MMFR_OP(kENET_MiiWriteFrame_C45) | ENET_MMFR_PA(portAddr) |
+                 ENET_MMFR_RA(devAddr) | ENET_MMFR_TA(2) | ENET_MMFR_DATA(data);
+}
 
 /*!
- * @brief Starts the extended IEEE802.3 Clause 45 MDIO format SMI read data command.
+ * @brief Sends the MDIO IEEE802.3 Clause 45 format read data command.
  *
- * After writing MMFR register, we need to check whether the transmission is over.
- * This is an example for whole precedure of clause 45 MDIO read.
- * @code
- *       uint32_t data;
- *       ENET_ClearInterruptStatus(base, ENET_EIR_MII_MASK);
- *       ENET_StartExtC45SMIWriteReg(base, phyAddr, phyReg);
- *       while ((ENET_GetInterruptStatus(base) & ENET_EIR_MII_MASK) == 0U)
- *       {
- *       }
- *       ENET_ClearInterruptStatus(base, ENET_EIR_MII_MASK);
- *       ENET_StartExtC45SMIReadData(base, phyAddr, phyReg);
- *       while ((ENET_GetInterruptStatus(base) & ENET_EIR_MII_MASK) == 0U)
- *       {
- *       }
- *       ENET_ClearInterruptStatus(base, ENET_EIR_MII_MASK);
- *       data = ENET_ReadSMIData(base);
- * @endcode
+ * After calling this function, need to check whether the transmission is over then do next MDIO operation.
+ * For ease of use, encapsulated ENET_MDIOC45Read() can be called. For customized requirements, implement
+ * with combining separated APIs.
+ *
  * @param base  ENET peripheral base address.
- * @param phyAddr The PHY address.
- * @param phyReg The PHY register. For MDIO IEEE802.3 Clause 45,
- *        the phyReg is a 21-bits combination of the devaddr (5 bits device address)
- *        and the regAddr (16 bits phy register): phyReg = (devaddr << 16) | regAddr.
+ * @param portAddr  The MDIO port address(PHY address).
+ * @param devAddr  The device address.
  */
-void ENET_StartExtC45SMIReadData(ENET_Type *base, uint32_t phyAddr, uint32_t phyReg);
+static inline void ENET_StartExtC45SMIReadData(ENET_Type *base, uint8_t portAddr, uint8_t devAddr)
+{
+    base->MMFR = ENET_MMFR_ST(0) | ENET_MMFR_OP(kENET_MiiReadFrame_C45) | ENET_MMFR_PA(portAddr) |
+                 ENET_MMFR_RA(devAddr) | ENET_MMFR_TA(2);
+}
+
+/*!
+ * @brief MDIO write with IEEE802.3 Clause 45 format.
+ *
+ * @param base  ENET peripheral base address.
+ * @param portAddr  The MDIO port address(PHY address).
+ * @param devAddr  The device address.
+ * @param regAddr  The PHY register address.
+ * @param data  The data written to PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_MDIOC45Write(ENET_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr, uint16_t data);
+
+/*!
+ * @brief MDIO read with IEEE802.3 Clause 45 format.
+ *
+ * @param base  ENET peripheral base address.
+ * @param portAddr  The MDIO port address(PHY address).
+ * @param devAddr  The device address.
+ * @param regAddr  The PHY register address.
+ * @param pData  The data read from PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_MDIOC45Read(ENET_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr, uint16_t *pData);
 #endif /* FSL_FEATURE_ENET_HAS_EXTEND_MDIO */
 
 #if ((defined(FSL_FEATURE_ENET_HAS_RGMII_TXC_DELAY) && FSL_FEATURE_ENET_HAS_RGMII_TXC_DELAY) || \

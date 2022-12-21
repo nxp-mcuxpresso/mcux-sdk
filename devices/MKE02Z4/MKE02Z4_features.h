@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2017-05-19
-**     Build:               b210915
+**     Build:               b220803
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -117,6 +117,8 @@
     (((x) == FTM0) ? (1) : \
     (((x) == FTM1) ? (1) : \
     (((x) == FTM2) ? (0) : (-1))))
+/* @brief Has frequency of the reload opportunities, bitfield CONF[LDFQ]. */
+#define FSL_FEATURE_FTM_HAS_CONF_LDFQ_BIT (0)
 /* @brief TPM Has no CONF. */
 #define FSL_FEATURE_TPM_HAS_NO_CONF (1)
 /* @brief There is CLKS bit in SC register. */

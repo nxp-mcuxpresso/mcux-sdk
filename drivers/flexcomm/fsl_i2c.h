@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -28,7 +28,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief I2C driver version. */
-#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
@@ -923,7 +923,14 @@ void I2C_SlaveDeinit(I2C_Type *base);
 static inline void I2C_SlaveEnable(I2C_Type *base, bool enable)
 {
     /* Set or clear the SLVEN bit in the CFG register. */
-    base->CFG = I2C_CFG_SLVEN(enable);
+    if (enable)
+    {
+        base->CFG = (base->CFG & (uint32_t)I2C_CFG_MASK) | I2C_CFG_SLVEN_MASK;
+    }
+    else
+    {
+        base->CFG = (base->CFG & (uint32_t)I2C_CFG_MASK) & ~I2C_CFG_SLVEN_MASK;
+    }
 }
 
 /*@}*/ /* end of Slave initialization and deinitialization */

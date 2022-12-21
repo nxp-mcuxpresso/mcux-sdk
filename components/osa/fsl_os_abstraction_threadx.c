@@ -335,6 +335,22 @@ uint32_t OSA_TimeGetMsec(void)
 {
     return TICKS_TO_MSEC(tx_time_get());
 }
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : OSA_SemaphorePrecreate
+ * Description   : This function is used to pre-create a semaphore.
+ * Return         : KOSA_StatusSuccess
+ *
+ *END**************************************************************************/
+
+osa_status_t OSA_SemaphorePrecreate(osa_semaphore_handle_t semaphoreHandle, osa_task_ptr_t taskHandler)
+{
+    semaphoreHandle = semaphoreHandle;
+    taskHandler     = taskHandler;
+    return KOSA_StatusSuccess;
+}
+
 /*FUNCTION**********************************************************************
  *
  * Function Name : OSA_SemaphoreCreate
@@ -549,6 +565,21 @@ osa_status_t OSA_MutexDestroy(osa_mutex_handle_t mutexHandle)
         status = KOSA_StatusError;
     }
     return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : OSA_EventPrecreate
+ * Description   : This function is used to pre-create a event.
+ * Return         : KOSA_StatusSuccess
+ *
+ *END**************************************************************************/
+
+osa_status_t OSA_EventPrecreate(osa_event_handle_t eventHandle, osa_task_ptr_t taskHandler)
+{
+    eventHandle = eventHandle;
+    taskHandler = taskHandler;
+    return KOSA_StatusSuccess;
 }
 
 /*FUNCTION**********************************************************************

@@ -52,7 +52,8 @@ typedef struct _dc_fb_ops
 /*! @brief Display controller property. */
 enum _dc_fb_property
 {
-    kDC_FB_ReserveFrameBuffer = (1 << 0), /*< One frame buffer is always used as the DC active buffer. */
+    kDC_FB_ReserveFrameBuffer      = (1 << 0), /*< One frame buffer is always used as the DC active buffer. */
+    kDC_FB_TwoDimensionMemoryWrite = (1 << 1), /*< Support writing memory to device in two dimension way. */
 };
 
 /*! @brief Display controller driver handle. */

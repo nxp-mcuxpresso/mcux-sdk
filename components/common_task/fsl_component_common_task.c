@@ -113,5 +113,20 @@ common_task_status_t COMMON_TASK_post_message(common_task_message_t *msg)
     }
     return kStatus_COMMON_TASK_Success;
 }
+
+void *COMMON_TASK_get_instance(void)
+{
+    return (void *)&s_commonTaskState[0];
+}
+
+int COMMON_TASK_get_pending_message_count(void)
+{
+    if (!s_commonTaskState->isInitialized)
+    {
+        return -1;
+    }
+
+    return OSA_MsgQAvailableMsgs((osa_msgq_handle_t)s_commonTaskState->msgqhandle);
+}
 #endif
 #endif

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_RTC_DRIVER_VERSION (MAKE_VERSION(2, 1, 2)) /*!< Version 2.1.2 */
+#define FSL_RTC_DRIVER_VERSION (MAKE_VERSION(2, 1, 3)) /*!< Version 2.1.3 */
 /*@}*/
 
 /*! @brief List of RTC interrupts */
@@ -246,7 +246,7 @@ static inline uint32_t RTC_GetSecondsTimerCount(RTC_Type *base)
 /*!
  * @brief Enable the RTC wake-up timer (1KHZ) and set countdown value to the RTC WAKE register.
  *
- * @param base        RTC peripheral base address
+ * @param base RTC peripheral base address
  * @param wakeupValue The value to be loaded into the WAKE register in RTC wake-up timer (1KHZ).
  */
 static inline void RTC_SetWakeupCount(RTC_Type *base, uint16_t wakeupValue)
@@ -259,16 +259,26 @@ static inline void RTC_SetWakeupCount(RTC_Type *base, uint16_t wakeupValue)
 }
 
 /*!
- * @brief Read the actual value from the WAKE register value in RTC wake-up timer (1KHZ).
+ * @brief Read the actual value from the WAKE register value in RTC wake-up timer (1KHZ)
  *
- * @param base        RTC peripheral base address
+ * Read the WAKE register twice and compare the result, if the value match,the time can be used.
  *
- * @return The actual value of the WAKE register value in RTC wake-up timer (1HZ).
+ * @param base RTC peripheral base address
+ *
+ * @return The actual value of the WAKE register value in RTC wake-up timer (1KHZ).
  */
 static inline uint16_t RTC_GetWakeupCount(RTC_Type *base)
 {
-    /* Read current wake-up countdown value */
-    return (uint16_t)((base->WAKE & RTC_WAKE_VAL_MASK) >> RTC_WAKE_VAL_SHIFT);
+    uint16_t WakeupCountFirst = 0U, WakeupCountSecond = 0U;
+
+    /* Read wake-up countdown value twice until matched*/
+    do
+    {
+        WakeupCountFirst  = (uint16_t)((base->WAKE & RTC_WAKE_VAL_MASK) >> RTC_WAKE_VAL_SHIFT);
+        WakeupCountSecond = (uint16_t)((base->WAKE & RTC_WAKE_VAL_MASK) >> RTC_WAKE_VAL_SHIFT);
+    } while (WakeupCountFirst != WakeupCountSecond);
+
+    return WakeupCountSecond;
 }
 
 /*!

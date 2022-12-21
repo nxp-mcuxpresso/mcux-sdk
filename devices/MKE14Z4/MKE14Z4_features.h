@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2018-05-09
-**     Build:               b200927
+**     Build:               b220803
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -546,6 +546,8 @@
 #define FSL_FEATURE_FTM_HAS_CHANNEL7_TRIGGER (0)
 /* @brief If instance has only TPM function. */
 #define FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCEn(x) (0)
+/* @brief Has frequency of the reload opportunities, bitfield CONF[LDFQ]. */
+#define FSL_FEATURE_FTM_HAS_CONF_LDFQ_BIT (1)
 
 /* GPIO module features */
 

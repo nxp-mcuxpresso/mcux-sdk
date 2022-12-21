@@ -1,16 +1,20 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1062CVJ5A
+**                          MIMXRT1062CVJ5B
 **                          MIMXRT1062CVL5A
+**                          MIMXRT1062CVL5B
 **                          MIMXRT1062DVJ6A
+**                          MIMXRT1062DVJ6B
 **                          MIMXRT1062DVL6A
+**                          MIMXRT1062DVL6B
 **                          MIMXRT1062DVN6B
 **                          MIMXRT1062XVN5B
 **
 **     Compiler:            GNU C Compiler
 **     Reference manual:    IMXRT1060RM Rev.3, 07/2021 | IMXRT106XSRM Rev.0
 **     Version:             rev. 0.2, 2022-03-25
-**     Build:               b220401
+**     Build:               b221009
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
@@ -30,7 +34,7 @@
 /* Entry Point */
 ENTRY(Reset_Handler)
 
-HEAP_SIZE  = DEFINED(__heap_size__)  ? __heap_size__  : 0x80000;
+HEAP_SIZE  = DEFINED(__heap_size__)  ? __heap_size__  : 0x800000;
 STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x10000;
 VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? 0x00000400 : 0;
 NCACHE_HEAP_START = DEFINED(__heap_noncacheable__) ? 0x82000000 - HEAP_SIZE : 0x81E00000 - HEAP_SIZE;

@@ -13,13 +13,13 @@
 **
 **     Reference manual:    IMXRT1020RM Rev.2, 01/2021 | IMXRT102XSRM Rev.0
 **     Version:             rev. 1.2, 2021-08-10
-**     Build:               b211108
+**     Build:               b221010
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1021
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -196,15 +196,15 @@ typedef enum IRQn {
   PWM1_FAULT_IRQn              = 106,              /**< PWM1 fault or reload error interrupt */
   Reserved123_IRQn             = 107,              /**< Reserved interrupt */
   FLEXSPI_IRQn                 = 108,              /**< FlexSPI0 interrupt */
-  SEMC_IRQn                    = 109,              /**< Reserved interrupt */
+  SEMC_IRQn                    = 109,              /**< SEMC interrupt */
   USDHC1_IRQn                  = 110,              /**< USDHC1 interrupt */
   USDHC2_IRQn                  = 111,              /**< USDHC2 interrupt */
   Reserved128_IRQn             = 112,              /**< Reserved interrupt */
   USB_OTG1_IRQn                = 113,              /**< USBO2 USB OTG1 */
   ENET_IRQn                    = 114,              /**< ENET interrupt */
   ENET_1588_Timer_IRQn         = 115,              /**< ENET_1588_Timer interrupt */
-  XBAR1_IRQ_0_1_IRQn           = 116,              /**< XBAR1 interrupt */
-  XBAR1_IRQ_2_3_IRQn           = 117,              /**< XBAR1 interrupt */
+  XBAR1_IRQ_0_1_IRQn           = 116,              /**< XBARA output signal 0, 1 interrupt */
+  XBAR1_IRQ_2_3_IRQn           = 117,              /**< XBARA output signal 2, 3 interrupt */
   ADC_ETC_IRQ0_IRQn            = 118,              /**< ADCETC IRQ0 interrupt */
   ADC_ETC_IRQ1_IRQn            = 119,              /**< ADCETC IRQ1 interrupt */
   ADC_ETC_IRQ2_IRQn            = 120,              /**< ADCETC IRQ2 interrupt */
@@ -1104,11 +1104,14 @@ typedef struct {
 #define ADC_HC_ADCH_MASK                         (0x1FU)
 #define ADC_HC_ADCH_SHIFT                        (0U)
 /*! ADCH - Input Channel Select
+ *  0b00000-0b01111..External channels 0 to 15 See External Signals for more information
  *  0b10000..External channel selection from ADC_ETC
+ *  0b10001-0b10111..Reserved
  *  0b11000..Reserved.
  *  0b11001..VREFSH = internal channel, for ADC self-test, hard connected to VRH internally
  *  0b11010..Reserved.
  *  0b11011..Reserved.
+ *  0b11100-0b11110..Reserved.
  *  0b11111..Conversion Disabled. Hardware Triggers will not initiate any conversion.
  */
 #define ADC_HC_ADCH(x)                           (((uint32_t)(((uint32_t)(x)) << ADC_HC_ADCH_SHIFT)) & ADC_HC_ADCH_MASK)
@@ -18537,7 +18540,7 @@ typedef struct {
 #define ENET_Receive_IRQS                        { ENET_IRQn }
 #define ENET_Error_IRQS                          { ENET_IRQn }
 #define ENET_1588_Timer_IRQS                     { ENET_1588_Timer_IRQn }
-#define ENET_Ts_IRQS                             { ENET_1588_Timer_IRQn }
+#define ENET_Ts_IRQS                             { ENET_IRQn }
 /* ENET Buffer Descriptor and Buffer Address Alignment. */
 #define ENET_BUFF_ALIGNMENT                      (64U)
 
@@ -22521,21 +22524,21 @@ typedef struct {
 #define IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_MASK      (0x7U)
 #define IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_SHIFT     (0U)
 /*! MUX_MODE - MUX Mode Select Field.
- *  0b000..Select mux mode: ALT0 mux port: SEMC_DATA00 of instance: semc
- *  0b001..Select mux mode: ALT1 mux port: QTIMER2_TIMER0 of instance: qtimer2
- *  0b010..Select mux mode: ALT2 mux port: LPUART4_CTS_B of instance: lpuart4
- *  0b011..Select mux mode: ALT3 mux port: SPDIF_SR_CLK of instance: spdif
- *  0b100..Select mux mode: ALT4 mux port: LPSPI2_SCK of instance: lpspi2
- *  0b101..Select mux mode: ALT5 mux port: GPIO2_IO00 of instance: gpio2
- *  0b110..Select mux mode: ALT6 mux port: FLEXCAN1_TX of instance: flexcan1
- *  0b111..Select mux mode: ALT7 mux port: PIT_TRIGGER02 of instance: pit
+ *  0b000..Select mux mode: ALT0 mux port: SEMC_CSX02 of instance: semc
+ *  0b001..Select mux mode: ALT1 mux port: FLEXSPI_A_DATA02 of instance: flexspi_bus2bit
+ *  0b010..Select mux mode: ALT2 mux port: LPSPI4_PCS0 of instance: lpspi4
+ *  0b011..Select mux mode: ALT3 mux port: SAI1_TX_DATA00 of instance: sai1
+ *  0b100..Select mux mode: ALT4 mux port: FLEXIO1_FLEXIO12 of instance: flexio1
+ *  0b101..Select mux mode: ALT5 mux port: GPIO1_IO19 of instance: gpio1
+ *  0b110..Select mux mode: ALT6 mux port: ENET_1588_EVENT3_IN of instance: enet
+ *  0b111..Select mux mode: ALT7 mux port: KPP_ROW05 of instance: kpp
  */
 #define IOMUXC_SW_MUX_CTL_PAD_MUX_MODE(x)        (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_SHIFT)) & IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_MASK)
 
 #define IOMUXC_SW_MUX_CTL_PAD_SION_MASK          (0x10U)
 #define IOMUXC_SW_MUX_CTL_PAD_SION_SHIFT         (4U)
 /*! SION - Software Input On Field.
- *  0b1..Force input path of pad GPIO_EMC_00
+ *  0b1..Force input path of pad GPIO_AD_B0_00
  *  0b0..Input Path is determined by functionality
  */
 #define IOMUXC_SW_MUX_CTL_PAD_SION(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_MUX_CTL_PAD_SION_SHIFT)) & IOMUXC_SW_MUX_CTL_PAD_SION_MASK)
@@ -22631,9 +22634,11 @@ typedef struct {
 #define IOMUXC_SELECT_INPUT_DAISY_MASK           (0x7U)  /* Merged from fields with different position or width, of widths (1, 2, 3), largest definition used */
 #define IOMUXC_SELECT_INPUT_DAISY_SHIFT          (0U)
 /*! DAISY - Selecting Pads Involved in Daisy Chain.
- *  0b00..Selecting Pad: GPIO_AD_B0_05 for Mode: ALT6
- *  0b01..Selecting Pad: GPIO_AD_B1_11 for Mode: ALT0
- *  0b10..Selecting Pad: GPIO_EMC_40 for Mode: ALT3
+ *  0b000..Selecting Pad: GPIO_AD_B0_03 for Mode: ALT4
+ *  0b001..Selecting Pad: GPIO_AD_B0_04 for Mode: ALT2
+ *  0b010..Selecting Pad: GPIO_AD_B1_05 for Mode: ALT0
+ *  0b011..Selecting Pad: GPIO_AD_B1_11 for Mode: ALT3
+ *  0b100..Selecting Pad: GPIO_EMC_36 for Mode: ALT7
  */
 #define IOMUXC_SELECT_INPUT_DAISY(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_SELECT_INPUT_DAISY_SHIFT)) & IOMUXC_SELECT_INPUT_DAISY_MASK)  /* Merged from fields with different position or width, of widths (1, 2, 3), largest definition used */
 /*! @} */
@@ -37462,6 +37467,12 @@ typedef struct {
 
 #define TEMPMON_TEMPSENSE1_MEASURE_FREQ_MASK     (0xFFFFU)
 #define TEMPMON_TEMPSENSE1_MEASURE_FREQ_SHIFT    (0U)
+/*! MEASURE_FREQ
+ *  0b0000000000000000..Defines a single measurement with no repeat.
+ *  0b0000000000000001..Updates the temperature value at a RTC clock rate.
+ *  0b0000000000000010..Updates the temperature value at a RTC/2 clock rate.
+ *  0b1111111111111111..Determines a two second sample period with a 32.768KHz RTC clock. Exact timings depend on the accuracy of the RTC clock.
+ */
 #define TEMPMON_TEMPSENSE1_MEASURE_FREQ(x)       (((uint32_t)(((uint32_t)(x)) << TEMPMON_TEMPSENSE1_MEASURE_FREQ_SHIFT)) & TEMPMON_TEMPSENSE1_MEASURE_FREQ_MASK)
 /*! @} */
 
@@ -37470,6 +37481,12 @@ typedef struct {
 
 #define TEMPMON_TEMPSENSE1_SET_MEASURE_FREQ_MASK (0xFFFFU)
 #define TEMPMON_TEMPSENSE1_SET_MEASURE_FREQ_SHIFT (0U)
+/*! MEASURE_FREQ
+ *  0b0000000000000000..Defines a single measurement with no repeat.
+ *  0b0000000000000001..Updates the temperature value at a RTC clock rate.
+ *  0b0000000000000010..Updates the temperature value at a RTC/2 clock rate.
+ *  0b1111111111111111..Determines a two second sample period with a 32.768KHz RTC clock. Exact timings depend on the accuracy of the RTC clock.
+ */
 #define TEMPMON_TEMPSENSE1_SET_MEASURE_FREQ(x)   (((uint32_t)(((uint32_t)(x)) << TEMPMON_TEMPSENSE1_SET_MEASURE_FREQ_SHIFT)) & TEMPMON_TEMPSENSE1_SET_MEASURE_FREQ_MASK)
 /*! @} */
 
@@ -37478,6 +37495,12 @@ typedef struct {
 
 #define TEMPMON_TEMPSENSE1_CLR_MEASURE_FREQ_MASK (0xFFFFU)
 #define TEMPMON_TEMPSENSE1_CLR_MEASURE_FREQ_SHIFT (0U)
+/*! MEASURE_FREQ
+ *  0b0000000000000000..Defines a single measurement with no repeat.
+ *  0b0000000000000001..Updates the temperature value at a RTC clock rate.
+ *  0b0000000000000010..Updates the temperature value at a RTC/2 clock rate.
+ *  0b1111111111111111..Determines a two second sample period with a 32.768KHz RTC clock. Exact timings depend on the accuracy of the RTC clock.
+ */
 #define TEMPMON_TEMPSENSE1_CLR_MEASURE_FREQ(x)   (((uint32_t)(((uint32_t)(x)) << TEMPMON_TEMPSENSE1_CLR_MEASURE_FREQ_SHIFT)) & TEMPMON_TEMPSENSE1_CLR_MEASURE_FREQ_MASK)
 /*! @} */
 
@@ -37486,6 +37509,12 @@ typedef struct {
 
 #define TEMPMON_TEMPSENSE1_TOG_MEASURE_FREQ_MASK (0xFFFFU)
 #define TEMPMON_TEMPSENSE1_TOG_MEASURE_FREQ_SHIFT (0U)
+/*! MEASURE_FREQ
+ *  0b0000000000000000..Defines a single measurement with no repeat.
+ *  0b0000000000000001..Updates the temperature value at a RTC clock rate.
+ *  0b0000000000000010..Updates the temperature value at a RTC/2 clock rate.
+ *  0b1111111111111111..Determines a two second sample period with a 32.768KHz RTC clock. Exact timings depend on the accuracy of the RTC clock.
+ */
 #define TEMPMON_TEMPSENSE1_TOG_MEASURE_FREQ(x)   (((uint32_t)(((uint32_t)(x)) << TEMPMON_TEMPSENSE1_TOG_MEASURE_FREQ_SHIFT)) & TEMPMON_TEMPSENSE1_TOG_MEASURE_FREQ_MASK)
 /*! @} */
 
@@ -39680,6 +39709,7 @@ typedef struct {
  *  0b0101..FORCE_ENABLE_HS
  *  0b0110..FORCE_ENABLE_FS
  *  0b0111..FORCE_ENABLE_LS
+ *  0b1000-0b1111..Reserved
  */
 #define USB_PORTSC1_PTC(x)                       (((uint32_t)(((uint32_t)(x)) << USB_PORTSC1_PTC_SHIFT)) & USB_PORTSC1_PTC_MASK)
 
@@ -40035,11 +40065,11 @@ typedef struct {
 /** Peripheral USB base pointer */
 #define USB                                      ((USB_Type *)USB_BASE)
 /** Array initializer of USB peripheral base addresses */
-#define USB_BASE_ADDRS                           { 0u, USB_BASE }
+#define USB_BASE_ADDRS                           { USB_BASE }
 /** Array initializer of USB peripheral base pointers */
-#define USB_BASE_PTRS                            { (USB_Type *)0u, USB }
+#define USB_BASE_PTRS                            { USB }
 /** Interrupt vectors for the USB peripheral type */
-#define USB_IRQS                                 { NotAvail_IRQn, USB_OTG1_IRQn }
+#define USB_IRQS                                 { USB_OTG1_IRQn }
 /* Backward compatibility */
 #define GPTIMER0CTL                              GPTIMER0CTRL
 #define GPTIMER1CTL                              GPTIMER1CTRL
@@ -40607,8 +40637,8 @@ typedef struct {
 #define USBHS_EPCR_TXE(x)                        USB_ENDPTCTRL_TXE(x)
 #define USBHS_EPCR_COUNT                         USB_ENDPTCTRL_COUNT
 #define USBHS_Type                               USB_Type
-#define USBHS_BASE_ADDRS                         { USB_BASE }
-#define USBHS_IRQS                               { USB_OTG1_IRQn }
+#define USBHS_BASE_ADDRS                         USB_BASE_ADDRS
+#define USBHS_IRQS                               USB_IRQS
 #define USBHS_IRQHandler                         USB_OTG1_IRQHandler
 
 
@@ -40751,9 +40781,9 @@ typedef struct {
 /** Peripheral USBNC base pointer */
 #define USBNC                                    ((USBNC_Type *)USBNC_BASE)
 /** Array initializer of USBNC peripheral base addresses */
-#define USBNC_BASE_ADDRS                         { 0u, USBNC_BASE }
+#define USBNC_BASE_ADDRS                         { USBNC_BASE }
 /** Array initializer of USBNC peripheral base pointers */
-#define USBNC_BASE_PTRS                          { (USBNC_Type *)0u, USBNC }
+#define USBNC_BASE_PTRS                          { USBNC }
 
 /*!
  * @}
@@ -40789,7 +40819,7 @@ typedef struct {
   __IO uint32_t CTRL_TOG;                          /**< USB PHY General Control Register, offset: 0x3C */
   __IO uint32_t STATUS;                            /**< USB PHY Status Register, offset: 0x40 */
        uint8_t RESERVED_0[12];
-  __IO uint32_t DEBUGr;                            /**< USB PHY Debug Register, offset: 0x50 */
+  __IO uint32_t DEBUGr;                            /**< USB PHY Debug Register, offset: 0x50, 'r' suffix has been added to avoid clash with DEBUG symbolic constant */
   __IO uint32_t DEBUG_SET;                         /**< USB PHY Debug Register, offset: 0x54 */
   __IO uint32_t DEBUG_CLR;                         /**< USB PHY Debug Register, offset: 0x58 */
   __IO uint32_t DEBUG_TOG;                         /**< USB PHY Debug Register, offset: 0x5C */
@@ -42159,11 +42189,11 @@ typedef struct {
 /** Peripheral USBPHY base pointer */
 #define USBPHY                                   ((USBPHY_Type *)USBPHY_BASE)
 /** Array initializer of USBPHY peripheral base addresses */
-#define USBPHY_BASE_ADDRS                        { 0u, USBPHY_BASE }
+#define USBPHY_BASE_ADDRS                        { USBPHY_BASE }
 /** Array initializer of USBPHY peripheral base pointers */
-#define USBPHY_BASE_PTRS                         { (USBPHY_Type *)0u, USBPHY }
+#define USBPHY_BASE_PTRS                         { USBPHY }
 /** Interrupt vectors for the USBPHY peripheral type */
-#define USBPHY_IRQS                              { NotAvail_IRQn, USB_PHY_IRQn }
+#define USBPHY_IRQS                              { USB_PHY_IRQn }
 /* Backward compatibility */
 #define USBPHY_CTRL_ENDEVPLUGINDET_MASK     USBPHY_CTRL_ENDEVPLUGINDETECT_MASK
 #define USBPHY_CTRL_ENDEVPLUGINDET_SHIFT    USBPHY_CTRL_ENDEVPLUGINDETECT_SHIFT

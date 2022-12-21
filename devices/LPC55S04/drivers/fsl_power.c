@@ -571,19 +571,19 @@ void POWER_EnterPowerDown(uint32_t exclude_from_pd,
     cpu0_int_enable_0 = NVIC->ISER[0];
     cpu0_int_enable_1 = NVIC->ISER[1];
 
+    /* Save the configuration of the PMC RESETCTRL register */
+    pmc_reset_ctrl = PMC->RESETCTRL;
+
     /* Disable BoD VBAT and BoD Core resets */
     /* BOD VBAT disable reset */
-    pmc_reset_ctrl =
-        PMC->RESETCTRL & (~(PMC_RESETCTRL_BODVBATRESETENA_SECURE_MASK | PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_MASK));
-    pmc_reset_ctrl |= (0x2UL << PMC_RESETCTRL_BODVBATRESETENA_SECURE_SHIFT) |
+    PMC->RESETCTRL &= (~(PMC_RESETCTRL_BODVBATRESETENA_SECURE_MASK | PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_MASK));
+    PMC->RESETCTRL |= (0x2UL << PMC_RESETCTRL_BODVBATRESETENA_SECURE_SHIFT) |
                       (0x2UL << PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_SHIFT);
 
     /* BOD CORE disable reset */
-    pmc_reset_ctrl &= (~(PMC_RESETCTRL_BODCORERESETENA_SECURE_MASK | PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_MASK));
-    pmc_reset_ctrl |= (0x2UL << PMC_RESETCTRL_BODCORERESETENA_SECURE_SHIFT) |
+    PMC->RESETCTRL &= (~(PMC_RESETCTRL_BODCORERESETENA_SECURE_MASK | PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_MASK));
+    PMC->RESETCTRL |= (0x2UL << PMC_RESETCTRL_BODCORERESETENA_SECURE_SHIFT) |
                       (0x2UL << PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_SHIFT);
-
-    PMC->RESETCTRL = pmc_reset_ctrl;
 
     /* Enter low power mode */
     POWER_EnterLowPower(&lv_low_power_mode_cfg);
@@ -708,18 +708,18 @@ void POWER_EnterDeepPowerDown(uint32_t exclude_from_pd,
     cpu0_int_enable_1 = NVIC->ISER[1];
 
     /* Save the configuration of the PMC RESETCTRL register */
+    pmc_reset_ctrl = PMC->RESETCTRL;
+
+    /* Disable BoD VBAT and BoD Core resets */
     /* BOD VBAT disable reset */
-    pmc_reset_ctrl =
-        PMC->RESETCTRL & (~(PMC_RESETCTRL_BODVBATRESETENA_SECURE_MASK | PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_MASK));
-    pmc_reset_ctrl |= (0x2UL << PMC_RESETCTRL_BODVBATRESETENA_SECURE_SHIFT) |
+    PMC->RESETCTRL &= (~(PMC_RESETCTRL_BODVBATRESETENA_SECURE_MASK | PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_MASK));
+    PMC->RESETCTRL |= (0x2UL << PMC_RESETCTRL_BODVBATRESETENA_SECURE_SHIFT) |
                       (0x2UL << PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_SHIFT);
 
     /* BOD CORE disable reset */
-    pmc_reset_ctrl &= (~(PMC_RESETCTRL_BODCORERESETENA_SECURE_MASK | PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_MASK));
-    pmc_reset_ctrl |= (0x2UL << PMC_RESETCTRL_BODCORERESETENA_SECURE_SHIFT) |
+    PMC->RESETCTRL &= (~(PMC_RESETCTRL_BODCORERESETENA_SECURE_MASK | PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_MASK));
+    PMC->RESETCTRL |= (0x2UL << PMC_RESETCTRL_BODCORERESETENA_SECURE_SHIFT) |
                       (0x2UL << PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_SHIFT);
-
-    PMC->RESETCTRL = pmc_reset_ctrl;
 
     /* Enter low power mode */
     POWER_EnterLowPower(&lv_low_power_mode_cfg);

@@ -2,13 +2,13 @@
 /*  @file:    startup_MIMXRT1024.s                                           */
 /*  @purpose: CMSIS Cortex-M7 Core Device Startup File                       */
 /*            MIMXRT1024                                                     */
-/*  @version: 0.1                                                            */
-/*  @date:    2020-1-15                                                      */
-/*  @build:   b200515                                                        */
+/*  @version: 1.0                                                            */
+/*  @date:    2021-8-10                                                      */
+/*  @build:   b220124                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2020 NXP                                                   */
+/* Copyright 2016-2022 NXP                                                   */
 /* All rights reserved.                                                      */
 /*                                                                           */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
@@ -149,7 +149,7 @@ __isr_vector:
     .long   PWM1_FAULT_IRQHandler                           /* PWM1 fault or reload error interrupt*/
     .long   Reserved123_IRQHandler                          /* Reserved interrupt*/
     .long   FLEXSPI_IRQHandler                              /* FlexSPI0 interrupt*/
-    .long   SEMC_IRQHandler                                 /* Reserved interrupt*/
+    .long   SEMC_IRQHandler                                 /* SEMC interrupt*/
     .long   USDHC1_IRQHandler                               /* USDHC1 interrupt*/
     .long   USDHC2_IRQHandler                               /* USDHC2 interrupt*/
     .long   Reserved128_IRQHandler                          /* Reserved interrupt*/

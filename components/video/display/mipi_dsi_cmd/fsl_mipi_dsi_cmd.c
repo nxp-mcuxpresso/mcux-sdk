@@ -321,6 +321,19 @@ status_t MIPI_DSI_WriteMemory(mipi_dsi_device_t *device, const uint8_t *data, ui
     return device->memWriteFunc(device->virtualChannel, data, length);
 }
 
+status_t MIPI_DSI_WriteMemory2D(
+    mipi_dsi_device_t *device, const uint8_t *data, uint32_t minorLoop, uint32_t minorLoopOffset, uint32_t majorLoop)
+{
+    if (device->memWriteFunc2D != NULL)
+    {
+        return device->memWriteFunc2D(device->virtualChannel, data, minorLoop, minorLoopOffset, majorLoop);
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+}
+
 void MIPI_DSI_SetMemoryDoneCallback(mipi_dsi_device_t *device, mipi_dsi_mem_done_callback_t callback, void *userData)
 {
     device->callback = callback;

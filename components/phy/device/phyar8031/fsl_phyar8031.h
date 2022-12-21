@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -36,6 +36,13 @@
 /*! @brief PHY driver version */
 #define FSL_PHY_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
 
+/*! @brief PHY resource structure. */
+typedef struct _phy_ar8031_resource
+{
+    mdioWrite write;
+    mdioRead read;
+} phy_ar8031_resource_t;
+
 /*! @brief PHY operations structure. */
 extern const phy_operations_t phyar8031_ops;
 
@@ -54,50 +61,49 @@ extern "C" {
 
 /*!
  * @brief Initializes PHY.
- *
- *  This function initialize PHY.
+ * This function initializes PHY.
  *
  * @param handle       PHY device handle.
  * @param config       Pointer to structure of phy_config_t.
  * @retval kStatus_Success  PHY initialization succeeds
  * @retval kStatus_Fail  PHY initialization fails
- * @retval kStatus_PHY_SMIVisitTimeout  PHY SMI visit time out
+ * @retval kStatus_Timeout  PHY MDIO visit time out
  */
 status_t PHY_AR8031_Init(phy_handle_t *handle, const phy_config_t *config);
 
 /*!
- * @brief PHY Write function. This function write data over the SMI to
- * the specified PHY register. This function is called by all PHY interfaces.
+ * @brief PHY Write function.
+ * This function writes data over the MDIO to the specified PHY register.
  *
  * @param handle  PHY device handle.
  * @param phyReg  The PHY register.
  * @param data    The data written to the PHY register.
  * @retval kStatus_Success     PHY write success
- * @retval kStatus_PHY_SMIVisitTimeout  PHY SMI visit time out
+ * @retval kStatus_Timeout  PHY MDIO visit time out
  */
-status_t PHY_AR8031_Write(phy_handle_t *handle, uint32_t phyReg, uint32_t data);
+status_t PHY_AR8031_Write(phy_handle_t *handle, uint8_t phyReg, uint16_t data);
 
 /*!
- * @brief PHY Read function. This interface read data over the SMI from the
- * specified PHY register. This function is called by all PHY interfaces.
+ * @brief PHY Read function.
+ * This interface reads data over the MDIO from the specified PHY register.
  *
- * @param handle   PHY device handle.
- * @param phyReg   The PHY register.
- * @param dataPtr  The address to store the data read from the PHY register.
+ * @param handle  PHY device handle.
+ * @param phyReg  The PHY register.
+ * @param pData   The address to store the data read from the PHY register.
  * @retval kStatus_Success  PHY read success
- * @retval kStatus_PHY_SMIVisitTimeout  PHY SMI visit time out
+ * @retval kStatus_Timeout  PHY MDIO visit time out
  */
-status_t PHY_AR8031_Read(phy_handle_t *handle, uint32_t phyReg, uint32_t *dataPtr);
+status_t PHY_AR8031_Read(phy_handle_t *handle, uint8_t phyReg, uint16_t *pData);
 
 /*!
  * @brief Gets the PHY auto-negotiation status.
  *
- * @param handle   PHY device handle.
- * @param status   The auto-negotiation status of the PHY.
+ * @param handle  PHY device handle.
+ * @param status  The auto-negotiation status of the PHY.
  *         - true the auto-negotiation is over.
  *         - false the auto-negotiation is on-going or not started.
  * @retval kStatus_Success   PHY gets status success
- * @retval kStatus_PHY_SMIVisitTimeout  PHY SMI visit time out
+ * @retval kStatus_Timeout  PHY MDIO visit time out
  */
 status_t PHY_AR8031_GetAutoNegotiationStatus(phy_handle_t *handle, bool *status);
 
@@ -109,7 +115,7 @@ status_t PHY_AR8031_GetAutoNegotiationStatus(phy_handle_t *handle, bool *status)
  *         - true the link is up.
  *         - false the link is down.
  * @retval kStatus_Success   PHY gets link status success
- * @retval kStatus_PHY_SMIVisitTimeout  PHY SMI visit time out
+ * @retval kStatus_Timeout  PHY MDIO visit time out
  */
 status_t PHY_AR8031_GetLinkStatus(phy_handle_t *handle, bool *status);
 
@@ -119,11 +125,11 @@ status_t PHY_AR8031_GetLinkStatus(phy_handle_t *handle, bool *status);
  * @brief This function gets the speed and duplex mode of PHY. User can give one of speed
  * and duplex address paramter and set the other as NULL if only wants to get one of them.
  *
- * @param handle   PHY device handle.
- * @param speed    The address of PHY link speed.
- * @param duplex   The link duplex of PHY.
+ * @param handle  PHY device handle.
+ * @param speed   The address of PHY link speed.
+ * @param duplex  The link duplex of PHY.
  * @retval kStatus_Success   PHY gets link speed and duplex success
- * @retval kStatus_PHY_SMIVisitTimeout  PHY SMI visit time out
+ * @retval kStatus_Timeout  PHY MDIO visit time out
  */
 status_t PHY_AR8031_GetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t *speed, phy_duplex_t *duplex);
 
@@ -134,7 +140,7 @@ status_t PHY_AR8031_GetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t *speed,
  * @param speed    Specified PHY link speed.
  * @param duplex   Specified PHY link duplex.
  * @retval kStatus_Success   PHY gets status success
- * @retval kStatus_PHY_SMIVisitTimeout  PHY SMI visit time out
+ * @retval kStatus_Timeout  PHY MDIO visit time out
  */
 status_t PHY_AR8031_SetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t speed, phy_duplex_t duplex);
 
@@ -148,7 +154,7 @@ status_t PHY_AR8031_SetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t speed, 
  * @param speed    PHY speed for loopback mode.
  * @param enable   True to enable, false to disable.
  * @retval kStatus_Success  PHY loopback success
- * @retval kStatus_PHY_SMIVisitTimeout  PHY SMI visit time out
+ * @retval kStatus_Timeout  PHY MDIO visit time out
  */
 status_t PHY_AR8031_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_speed_t speed, bool enable);
 

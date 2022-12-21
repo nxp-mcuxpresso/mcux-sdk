@@ -30,8 +30,6 @@
 #endif
 
 /* Protocol definition */
-#define SRTM_I2C_BUF_LEN (16U)
-
 #define SRTM_I2C_FLAG_NEED_STOP (0x200U)
 
 /* I2C Service Notification Command definition */
@@ -58,7 +56,7 @@ SRTM_PACKED_BEGIN struct _srtm_i2c_payload
     uint16_t slaveAddr;
     uint16_t flags;
     uint16_t len;
-    uint8_t data[SRTM_I2C_BUF_LEN];
+    uint8_t data[1]; /* data size is decided by uint16_t len */
 } SRTM_PACKED_END;
 SRTM_ANON_DEC_END
 
@@ -123,14 +121,14 @@ struct _srtm_i2c_adapter
                           srtm_i2c_type_t type,
                           uint16_t slaveAddr,
                           uint8_t *buf,
-                          uint8_t len,
+                          uint16_t len,
                           uint16_t flags);
     srtm_status_t (*write)(srtm_i2c_adapter_t adapter,
                            uint32_t base_addr,
                            srtm_i2c_type_t type,
                            uint16_t slaveAddr,
                            uint8_t *buf,
-                           uint8_t len,
+                           uint16_t len,
                            uint16_t flags);
     srtm_status_t (*switchchannel)(srtm_i2c_adapter_t adapter,
                                    uint32_t base_addr,
@@ -171,13 +169,13 @@ void SRTM_I2CService_Reset(srtm_service_t service, srtm_peercore_t core);
  * @brief Perfrom a local read of I2C bus
  */
 srtm_status_t SRTM_I2C_RequestBusRead(
-    srtm_service_t service, uint8_t busID, uint16_t slaveAddr, uint8_t *buf, uint8_t len);
+    srtm_service_t service, uint8_t busID, uint16_t slaveAddr, uint8_t *buf, uint16_t len);
 
 /*!
  * @brief Perfrom a local write of I2C bus
  */
 srtm_status_t SRTM_I2C_RequestBusWrite(
-    srtm_service_t service, uint8_t busID, uint16_t slaveAddr, uint8_t *buf, uint8_t len, uint8_t needStop);
+    srtm_service_t service, uint8_t busID, uint16_t slaveAddr, uint8_t *buf, uint16_t len, uint8_t needStop);
 #ifdef __cplusplus
 }
 #endif

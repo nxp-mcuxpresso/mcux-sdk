@@ -155,9 +155,9 @@ status_t ROM_FLEXSPI_NorFlash_ProgramPage(uint32_t instance,
  * @param lengthInBytes The length, given in bytes to be read.
  */
 status_t ROM_FLEXSPI_NorFlash_Read(
-    uint32_t instance, flexspi_nor_config_t *config, uint32_t *dst, uint32_t addr, uint32_t lengthInBytes)
+    uint32_t instance, flexspi_nor_config_t *config, uint32_t *dst, uint32_t start, uint32_t lengthInBytes)
 {
-    return g_bootloaderTree->flexSpiNorDriver->read(instance, config, dst, addr, lengthInBytes);
+    return g_bootloaderTree->flexSpiNorDriver->read(instance, config, dst, start, lengthInBytes);
 }
 #endif /* FSL_ROM_FLEXSPINOR_API_HAS_FEATURE_READ */
 
@@ -232,8 +232,10 @@ status_t ROM_FLEXSPI_NorFlash_UpdateLut(uint32_t instance,
 /*! @brief Software reset for the FLEXSPI logic. */
 void ROM_FLEXSPI_NorFlash_ClearCache(uint32_t instance)
 {
-    clearCacheCommand_t clearCacheCommand = (clearCacheCommand_t)(0x0021a3b7U);
-    clearCacheCommand(instance);
+    uint32_t clearCacheFunctionAddress = 0x0021a3b7U;
+    clearCacheCommand_t clearCacheCommand;
+    MISRA_CAST(clearCacheCommand_t, clearCacheCommand, uint32_t, clearCacheFunctionAddress);
+    (void)clearCacheCommand(instance);
 }
 
 /*! @brief Wait until device is idle*/

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_middleware_nxp_iot_sensing_sdk_MCIMX7U5_manifest_v3_10" name="Nxp iot sensing sdk" brief="IoT Sensing SDK (ISSDK) provides sensor drivers and reference examples for NXP's IoT sensors." format_version="3.10" api_version="2.0.0" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.10.xsd">
-  <!--Timestamp (UTC): 2022-07-21 03:54:59.530981-->
-  <!--This manifest is generated based on sdk repo commit: 7fb442914f92023b395b260777eb2355254fd71d-->
+  <!--Timestamp (UTC): 2023-01-10 16:35:45.937761-->
+  <!--This manifest is generated based on sdk repo commit: 11a5f6af5190bfe018a89b4d02c239713dc4cfa6-->
   <externalDefinitions>
     <definition extID="MCIMX7U5xxxxx"/>
     <definition extID="CMSIS_Driver_Include.I2C.MCIMX7U5"/>
@@ -9,7 +9,7 @@
     <definition extID="armgcc"/>
     <definition extID="m4_MCIMX7U5xxxxx"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2120_middleware_nxp_iot_sensing_sdk_MCIMX7U5_manifest_v3_10" name="MCUXpressoSDK2120_middleware_nxp_iot_sensing_sdk_MCIMX7U5_manifest_v3_10" version="2.12.0"/>
+  <ksdk id="MCUXpressoSDK2130_middleware_nxp_iot_sensing_sdk_MCIMX7U5_manifest_v3_10" name="MCUXpressoSDK2130_middleware_nxp_iot_sensing_sdk_MCIMX7U5_manifest_v3_10" version="2.13.0"/>
   <components>
     <component id="middleware.issdk.algorithms.pedometer.MCIMX7U5" name="pedometer" brief="ISSDK Pedometer Algorithm Common" version="1.7.0" full_name="Middleware issdk algorithms pedometer common" devices="MCIMX7U5xxxxx" user_visible="false" type="middleware" package_base_path="./" project_base_path="pedometer">
       <dependencies>

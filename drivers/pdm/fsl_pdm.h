@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PDM_DRIVER_VERSION (MAKE_VERSION(2, 7, 1)) /*!< Version 2.7.1 */
+#define FSL_PDM_DRIVER_VERSION (MAKE_VERSION(2, 8, 0)) /*!< Version 2.8.0 */
 /*@}*/
 
 /*! @brief PDM XFER QUEUE SIZE */
@@ -40,9 +40,10 @@ enum
     kStatus_PDM_Idle                 = MAKE_STATUS(kStatusGroup_PDM, 4), /*!< PDM is idle */
     kStatus_PDM_Output_ERROR         = MAKE_STATUS(kStatusGroup_PDM, 5), /*!< PDM is output error */
     kStatus_PDM_ChannelConfig_Failed = MAKE_STATUS(kStatusGroup_PDM, 6), /*!< PDM channel config failed */
-    kStatus_PDM_HWVAD_VoiceDetected  = MAKE_STATUS(kStatusGroup_PDM, 7), /*!< PDM hwvad voice detected */
-    kStatus_PDM_HWVAD_Error          = MAKE_STATUS(kStatusGroup_PDM, 8), /*!< PDM hwvad error */
-
+#if !(defined(FSL_FEATURE_PDM_HAS_NO_HWVAD) && FSL_FEATURE_PDM_HAS_NO_HWVAD)
+    kStatus_PDM_HWVAD_VoiceDetected = MAKE_STATUS(kStatusGroup_PDM, 7), /*!< PDM hwvad voice detected */
+    kStatus_PDM_HWVAD_Error         = MAKE_STATUS(kStatusGroup_PDM, 8), /*!< PDM hwvad error */
+#endif
 };
 
 /*! @brief The PDM interrupt enable flag */
@@ -55,8 +56,10 @@ enum _pdm_interrupt_enable
 /*! @brief The PDM status */
 enum _pdm_internal_status
 {
-    kPDM_StatusDfBusyFlag     = (int)PDM_STAT_BSY_FIL_MASK, /*!< Decimation filter is busy processing data */
-    kPDM_StatusFIRFilterReady = PDM_STAT_FIR_RDY_MASK,      /*!< FIR filter data is ready */
+    kPDM_StatusDfBusyFlag = (int)PDM_STAT_BSY_FIL_MASK, /*!< Decimation filter is busy processing data */
+#if !(defined(FSL_FEATURE_PDM_HAS_NO_FIR_RDY) && FSL_FEATURE_PDM_HAS_NO_FIR_RDY)
+    kPDM_StatusFIRFilterReady = PDM_STAT_FIR_RDY_MASK, /*!< FIR filter data is ready */
+#endif
 #if (defined(FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ) && (FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ == 1U))
     kPDM_StatusFrequencyLow = PDM_STAT_LOWFREQF_MASK, /*!< Mic app clock frequency not high enough */
 #endif
@@ -266,6 +269,7 @@ typedef struct _pdm_config
     uint8_t cicOverSampleRate;         /*!< CIC filter over sampling rate */
 } pdm_config_t;
 
+#if !(defined(FSL_FEATURE_PDM_HAS_NO_HWVAD) && FSL_FEATURE_PDM_HAS_NO_HWVAD)
 /*! @brief PDM voice activity detector interrupt type */
 enum _pdm_hwvad_interrupt_enable
 {
@@ -338,6 +342,7 @@ typedef struct _pdm_hwvad_zero_cross_detector
     uint32_t threshold;            /*!< The adjustment value of the noise filter */
     uint32_t adjustmentThreshold;  /*!< Gain value for the noise energy or envelope estimated */
 } pdm_hwvad_zero_cross_detector_t;
+#endif
 
 /*! @brief PDM SDMA transfer structure */
 typedef struct _pdm_transfer
@@ -352,6 +357,7 @@ typedef struct _pdm_handle pdm_handle_t;
 /*! @brief PDM transfer callback prototype */
 typedef void (*pdm_transfer_callback_t)(PDM_Type *base, pdm_handle_t *handle, status_t status, void *userData);
 
+#if !(defined(FSL_FEATURE_PDM_HAS_NO_HWVAD) && FSL_FEATURE_PDM_HAS_NO_HWVAD)
 /*! @brief PDM HWVAD callback prototype */
 typedef void (*pdm_hwvad_callback_t)(status_t status, void *userData);
 /*! @brief PDM HWVAD notification structure */
@@ -360,6 +366,7 @@ typedef struct _pdm_hwvad_notification
     pdm_hwvad_callback_t callback;
     void *userData;
 } pdm_hwvad_notification_t;
+#endif
 
 /*! @brief PDM handle structure */
 struct _pdm_handle
@@ -823,6 +830,7 @@ static inline uint32_t PDM_ReadData(PDM_Type *base, uint32_t channel)
  */
 void PDM_SetChannelGain(PDM_Type *base, uint32_t channel, pdm_df_output_gain_t gain);
 
+#if !(defined(FSL_FEATURE_PDM_HAS_NO_HWVAD) && FSL_FEATURE_PDM_HAS_NO_HWVAD)
 /*! @} */
 
 /*!
@@ -945,6 +953,7 @@ static inline uint32_t PDM_GetHwvadInitialFlag(PDM_Type *base)
     return base->VAD0_STAT & PDM_VAD0_STAT_VADINITF_MASK;
 }
 
+#if !(defined(FSL_FEATURE_PDM_HAS_NO_VADEF) && (FSL_FEATURE_PDM_HAS_NO_VADEF))
 /*!
  * @brief Get the PDM voice activity detector voice detected flags.
  * NOte: this flag is auto cleared when voice gone.
@@ -955,6 +964,7 @@ static inline uint32_t PDM_GetHwvadVoiceDetectedFlag(PDM_Type *base)
 {
     return base->VAD0_STAT & PDM_VAD0_STAT_VADEF_MASK;
 }
+#endif
 
 /*!
  * @brief Enables/disables voice activity detector signal filter.
@@ -1124,6 +1134,7 @@ void PDM_SetHwvadInEnergyBasedMode(PDM_Type *base,
  */
 void PDM_EnableHwvadInterruptCallback(PDM_Type *base, pdm_hwvad_callback_t vadCallback, void *userData, bool enable);
 /*! @} */
+#endif
 
 /*!
  * @name Transactional

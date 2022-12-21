@@ -1,7 +1,7 @@
 //*****************************************************************************
 // MIMXRT1062 startup code for use with MCUXpresso IDE
 //
-// Version : 010422
+// Version : 091022
 //*****************************************************************************
 //
 // Copyright 2016-2022 NXP
@@ -564,8 +564,8 @@ void (* const g_pfnVectors[])(void) = {
     USB_OTG1_IRQHandler,              // 129: USBO2 USB OTG1
     ENET_IRQHandler,                  // 130: ENET interrupt
     ENET_1588_Timer_IRQHandler,       // 131: ENET_1588_Timer interrupt
-    XBAR1_IRQ_0_1_IRQHandler,         // 132: XBAR1 interrupt
-    XBAR1_IRQ_2_3_IRQHandler,         // 133: XBAR1 interrupt
+    XBAR1_IRQ_0_1_IRQHandler,         // 132: XBARA1 output signal 0, 1 interrupt
+    XBAR1_IRQ_2_3_IRQHandler,         // 133: XBARA1 output signal 2, 3 interrupt
     ADC_ETC_IRQ0_IRQHandler,          // 134: ADCETC IRQ0 interrupt
     ADC_ETC_IRQ1_IRQHandler,          // 135: ADCETC IRQ1 interrupt
     ADC_ETC_IRQ2_IRQHandler,          // 136: ADCETC IRQ2 interrupt

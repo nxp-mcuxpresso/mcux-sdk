@@ -9,13 +9,13 @@
 **
 **     Reference manual:    IMX8MDQLQRM, Rev. 0, Jan. 2018
 **     Version:             rev. 4.0, 2018-01-26
-**     Build:               b210824
+**     Build:               b220621
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMX8MQ5_cm4
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -201,10 +201,10 @@ typedef enum IRQn {
   CAAM_ERROR_IRQn              = 115,              /**< Recoverable error interrupt */
   HS_CP0_IRQn                  = 116,              /**< HS Interrupt Request */
   HEVC_IRQn                    = 117,              /**< HEVC interrupt */
-  ENET_MAC0_Rx_Tx_Done1_IRQn   = 118,              /**< MAC 0 Receive / Trasmit Frame / Buffer Done */
-  ENET_MAC0_Rx_Tx_Done2_IRQn   = 119,              /**< MAC 0 Receive / Trasmit Frame / Buffer Done */
-  ENET_IRQn                    = 120,              /**< MAC 0 IRQ */
-  ENET_1588_IRQn               = 121,              /**< MAC 0 1588 Timer Interrupt - synchronous */
+  ENET1_MAC0_Rx_Tx_Done1_IRQn  = 118,              /**< MAC 0 Receive / Trasmit Frame / Buffer Done */
+  ENET1_MAC0_Rx_Tx_Done2_IRQn  = 119,              /**< MAC 0 Receive / Trasmit Frame / Buffer Done */
+  ENET1_IRQn                   = 120,              /**< MAC 0 IRQ */
+  ENET1_1588_Timer_IRQn        = 121,              /**< MAC 0 1588 Timer Interrupt - synchronous */
   PCIE_CTRL1_IRQ0_IRQn         = 122,              /**< Coming from GLUE logic, of set / reset FF, driven by PCIE signals. */
   PCIE_CTRL1_IRQ1_IRQn         = 123,              /**< Coming from GLUE logic, of set / reset FF, driven by PCIE signals. */
   PCIE_CTRL1_IRQ2_IRQn         = 124,              /**< Coming from GLUE logic, of set / reset FF, driven by PCIE signals. */
@@ -1213,7 +1213,7 @@ typedef struct {
        uint8_t RESERVED_0[12];
   __IO uint32_t DMA_BURST_SIZE;                    /**< AHB to APBH DMA burst size, offset: 0x50 */
        uint8_t RESERVED_1[12];
-  __IO uint32_t DEBUGr;                            /**< AHB to APBH DMA Debug Register, offset: 0x60 */
+  __IO uint32_t DEBUGr;                            /**< AHB to APBH DMA Debug Register, offset: 0x60, 'r' suffix has been added to avoid clash with DEBUG symbolic constant */
        uint8_t RESERVED_2[156];
   __I  uint32_t CH0_CURCMDAR;                      /**< APBH DMA Channel n Current Command Address Register, offset: 0x100 */
        uint8_t RESERVED_3[12];
@@ -21502,6 +21502,7 @@ typedef struct {
 /*! TX_SCHEME - TX scheme configuration
  *  0b000..Credit-based scheme
  *  0b001..Round-robin scheme
+ *  0b010-0b111..Reserved
  */
 #define ENET_QOS_TX_SCHEME(x)                    (((uint32_t)(((uint32_t)(x)) << ENET_QOS_TX_SCHEME_SHIFT)) & ENET_QOS_TX_SCHEME_MASK)
 
@@ -22274,20 +22275,20 @@ typedef struct {
 
 
 /* ENET - Peripheral instance base addresses */
-/** Peripheral ENET base address */
-#define ENET_BASE                                (0x30BE0000u)
-/** Peripheral ENET base pointer */
-#define ENET                                     ((ENET_Type *)ENET_BASE)
+/** Peripheral ENET1 base address */
+#define ENET1_BASE                               (0x30BE0000u)
+/** Peripheral ENET1 base pointer */
+#define ENET1                                    ((ENET_Type *)ENET1_BASE)
 /** Array initializer of ENET peripheral base addresses */
-#define ENET_BASE_ADDRS                          { ENET_BASE }
+#define ENET_BASE_ADDRS                          { ENET1_BASE }
 /** Array initializer of ENET peripheral base pointers */
-#define ENET_BASE_PTRS                           { ENET }
+#define ENET_BASE_PTRS                           { ENET1 }
 /** Interrupt vectors for the ENET peripheral type */
-#define ENET_Transmit_IRQS                       { ENET_IRQn }
-#define ENET_Receive_IRQS                        { ENET_IRQn }
-#define ENET_Error_IRQS                          { ENET_IRQn }
-#define ENET_1588_Timer_IRQS                     { ENET_IRQn }
-#define ENET_Ts_IRQS                             { ENET_IRQn }
+#define ENET_Transmit_IRQS                       { ENET1_IRQn }
+#define ENET_Receive_IRQS                        { ENET1_IRQn }
+#define ENET_Error_IRQS                          { ENET1_IRQn }
+#define ENET_1588_Timer_IRQS                     { ENET1_1588_Timer_IRQn }
+#define ENET_Ts_IRQS                             { ENET1_1588_Timer_IRQn }
 /* ENET Buffer Descriptor and Buffer Address Alignment. */
 #define ENET_BUFF_ALIGNMENT                      (64U)
 
@@ -29265,7 +29266,7 @@ typedef struct {
        uint8_t RESERVED_7[12];
   __I  uint32_t STAT;                              /**< GPMI Status Register Description, offset: 0xB0 */
        uint8_t RESERVED_8[12];
-  __I  uint32_t DEBUGr;                            /**< GPMI Debug Information Register Description, offset: 0xC0 */
+  __I  uint32_t DEBUGr;                            /**< GPMI Debug Information Register Description, offset: 0xC0, 'r' suffix has been added to avoid clash with DEBUG symbolic constant */
        uint8_t RESERVED_9[12];
   __I  uint32_t VERSION;                           /**< GPMI Version Register Description, offset: 0xD0 */
        uint8_t RESERVED_10[12];
@@ -34582,18 +34583,21 @@ typedef struct {
 #define IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_MASK      (0x7U)
 #define IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_SHIFT     (0U)
 /*! MUX_MODE - MUX Mode Select Field
- *  0b000..Select mux mode: ALT0 mux port: IO00 of instance: GPIO1
- *  0b001..Select mux mode: ALT1 mux port: ENET_PHY_REF_CLK_ROOT of instance: CCM
- *  0b101..Select mux mode: ALT5 mux port: REF_CLK_32K of instance: ANAMIX
- *  0b110..Select mux mode: ALT6 mux port: EXT_CLK1 of instance: CCM
+ *  0b000..Select mux mode: ALT0 mux port: RX_DATA5 of instance: SAI1
+ *  0b001..Select mux mode: ALT1 mux port: TX_DATA0 of instance: SAI6
+ *  0b010..Select mux mode: ALT2 mux port: RX_DATA0 of instance: SAI6
+ *  0b011..Select mux mode: ALT3 mux port: RX_SYNC of instance: SAI1
+ *  0b100..Select mux mode: ALT4 mux port: TRACE5 of instance: CORESIGHT
+ *  0b101..Select mux mode: ALT5 mux port: IO07 of instance: GPIO4
+ *  0b110..Select mux mode: ALT6 mux port: BOOT_CFG5 of instance: SRC
  */
 #define IOMUXC_SW_MUX_CTL_PAD_MUX_MODE(x)        (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_SHIFT)) & IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_MASK)
 
 #define IOMUXC_SW_MUX_CTL_PAD_SION_MASK          (0x10U)
 #define IOMUXC_SW_MUX_CTL_PAD_SION_SHIFT         (4U)
 /*! SION - Software Input On Field
- *  0b0..Input Path of pad GPIO1_IO00 is determined by functionality
- *  0b1..Force Input Path of pad GPIO1_IO00
+ *  0b0..Input Path of pad SPDIF_EXT_CLK is determined by functionality
+ *  0b1..Force Input Path of pad SPDIF_EXT_CLK
  */
 #define IOMUXC_SW_MUX_CTL_PAD_SION(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_MUX_CTL_PAD_SION_SHIFT)) & IOMUXC_SW_MUX_CTL_PAD_SION_MASK)
 /*! @} */
@@ -34684,6 +34688,11 @@ typedef struct {
 #define IOMUXC_SELECT_INPUT_DAISY_MASK           (0x7U)  /* Merged from fields with different position or width, of widths (1, 2, 3), largest definition used */
 #define IOMUXC_SELECT_INPUT_DAISY_SHIFT          (0U)
 /*! DAISY - Input Select (DAISY) Field
+ *  0b000..Selecting Pad: SAI5_RXD1 Mode: ALT2 for SAI1_TX_SYNC
+ *  0b001..Selecting Pad: SAI5_RXD2 Mode: ALT2 for SAI1_TX_SYNC
+ *  0b010..Selecting Pad: SAI5_RXD3 Mode: ALT2 for SAI1_TX_SYNC
+ *  0b011..Selecting Pad: SAI1_TXFS Mode: ALT0 for SAI1_TX_SYNC
+ *  0b100..Selecting Pad: SAI1_RXD7 Mode: ALT2 for SAI1_TX_SYNC
  */
 #define IOMUXC_SELECT_INPUT_DAISY(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_SELECT_INPUT_DAISY_SHIFT)) & IOMUXC_SELECT_INPUT_DAISY_MASK)  /* Merged from fields with different position or width, of widths (1, 2, 3), largest definition used */
 /*! @} */

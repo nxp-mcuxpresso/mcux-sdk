@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,6 +22,15 @@
  * @param base LPADC peripheral base address
  */
 static uint32_t LPADC_GetInstance(ADC_Type *base);
+
+#if defined(FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE) && FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE
+/*!
+ * @brief Get gain conversion result .
+ *
+ * @param gainAdjustment gain adjustment value.
+ */
+static uint32_t LPADC_GetGainConvResult(float gainAdjustment);
+#endif /* FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE */
 
 /*******************************************************************************
  * Variables
@@ -53,6 +62,36 @@ static uint32_t LPADC_GetInstance(ADC_Type *base)
 
     return instance;
 }
+
+#if defined(FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE) && FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE
+/*!
+ * brief  Get gain conversion Result .
+ *
+ * param gainAdjustment gain adjustment value.
+ */
+static uint32_t LPADC_GetGainConvResult(float gainAdjustment)
+{
+    int8_t i          = 0;
+    uint32_t tmp32    = 0U;
+    uint32_t GCRa[17] = {0};
+    uint32_t GCALR    = 0U;
+
+    for (i = 0x10; i >= 0; i--)
+    {
+        tmp32          = (uint32_t)((gainAdjustment) / ((float)(1.0 / (0x01 << (0x10 - i)))));
+        GCRa[i]        = tmp32;
+        gainAdjustment = gainAdjustment - ((float)tmp32) * ((float)(1.0 / (0x01 << (0x10 - i))));
+    }
+    /* Get GCALR value calculated */
+    for (i = 0x10; i >= 0; i--)
+    {
+        GCALR += GCRa[i] * (0x01 << i);
+    }
+
+    /* to return GCALR value calculated */
+    return GCALR;
+}
+#endif /* FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE */
 
 /*!
  * brief Initializes the LPADC module.
@@ -116,9 +155,12 @@ void LPADC_Init(ADC_Type *base, const lpadc_config_t *config)
     {
         tmp32 |= ADC_CFG_PWREN_MASK;
     }
-    tmp32 |= ADC_CFG_PUDLY(config->powerUpDelay)                /* Power up delay. */
-             | ADC_CFG_REFSEL(config->referenceVoltageSource)   /* Reference voltage. */
+    tmp32 |= ADC_CFG_PUDLY(config->powerUpDelay)              /* Power up delay. */
+             | ADC_CFG_REFSEL(config->referenceVoltageSource) /* Reference voltage. */
+
+#if !(defined(FSL_FEATURE_LPADC_HAS_CFG_PWRSEL) && (FSL_FEATURE_LPADC_HAS_CFG_PWRSEL == 0))
              | ADC_CFG_PWRSEL(config->powerLevelMode)           /* Power configuration. */
+#endif                                                          /* FSL_FEATURE_LPADC_HAS_CFG_PWRSEL */
              | ADC_CFG_TPRICTRL(config->triggerPriorityPolicy); /* Trigger priority policy. */
     base->CFG = tmp32;
 
@@ -185,10 +227,12 @@ void LPADC_GetDefaultConfig(lpadc_config_t *config)
     config->enableAnalogPreliminary = false;
     config->powerUpDelay            = 0x80;
     config->referenceVoltageSource  = kLPADC_ReferenceVoltageAlt1;
-    config->powerLevelMode          = kLPADC_PowerLevelAlt1;
-    config->triggerPriorityPolicy   = kLPADC_TriggerPriorityPreemptImmediately;
-    config->enableConvPause         = false;
-    config->convPauseDelay          = 0U;
+#if !(defined(FSL_FEATURE_LPADC_HAS_CFG_PWRSEL) && (FSL_FEATURE_LPADC_HAS_CFG_PWRSEL == 0))
+    config->powerLevelMode = kLPADC_PowerLevelAlt1;
+#endif /* FSL_FEATURE_LPADC_HAS_CFG_PWRSEL */
+    config->triggerPriorityPolicy = kLPADC_TriggerPriorityPreemptImmediately;
+    config->enableConvPause       = false;
+    config->convPauseDelay        = 0U;
 #if (defined(FSL_FEATURE_LPADC_FIFO_COUNT) && (FSL_FEATURE_LPADC_FIFO_COUNT == 2))
     config->FIFO0Watermark = 0U;
     config->FIFO1Watermark = 0U;
@@ -357,9 +401,15 @@ void LPADC_SetConvCommandConfig(ADC_Type *base, uint32_t commandId, const lpadc_
 
     /* ADCx_CMDL. */
     tmp32 = ADC_CMDL_ADCH(config->channelNumber); /* Channel number. */
+#if defined(FSL_FEATURE_LPADC_HAS_CMDL_ALTB_ADCH) && FSL_FEATURE_LPADC_HAS_CMDL_ALTB_ADCH
+    tmp32 |= ADC_CMDL_ALTB_ADCH(config->channelBNumber); /* Alternate channel B number. */
+#endif
 #if defined(FSL_FEATURE_LPADC_HAS_CMDL_CSCALE) && FSL_FEATURE_LPADC_HAS_CMDL_CSCALE
     tmp32 |= ADC_CMDL_CSCALE(config->sampleScaleMode); /* Full/Part scale input voltage. */
 #endif                                                 /* FSL_FEATURE_LPADC_HAS_CMDL_CSCALE */
+#if defined(FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE) && FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE
+    tmp32 |= ADC_CMDL_ALTB_CSCALE(config->channelBScaleMode); /* Alternate channel B full/Part scale input voltage. */
+#endif                                                        /* FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE */
 #if defined(FSL_FEATURE_LPADC_HAS_CMDL_CTYPE) && FSL_FEATURE_LPADC_HAS_CMDL_CTYPE
     tmp32 |= ADC_CMDL_CTYPE(config->sampleChannelMode);
 #else
@@ -383,6 +433,15 @@ void LPADC_SetConvCommandConfig(ADC_Type *base, uint32_t commandId, const lpadc_
 #if defined(FSL_FEATURE_LPADC_HAS_CMDL_MODE) && FSL_FEATURE_LPADC_HAS_CMDL_MODE
     tmp32 |= ADC_CMDL_MODE(config->conversionResolutionMode);
 #endif /* FSL_FEATURE_LPADC_HAS_CMDL_MODE */
+
+#if defined(FSL_FEATURE_LPADC_HAS_CMDL_ALTBEN) && FSL_FEATURE_LPADC_HAS_CMDL_ALTBEN
+    /* Enable alternate channel B.*/
+    if (config->enableChannelB)
+    {
+        tmp32 |= ADC_CMDL_ALTBEN_MASK;
+    }
+#endif /* FSL_FEATURE_LPADC_HAS_CMDL_ALTBEN */
+
     base->CMD[commandId].CMDL = tmp32;
 
     /* ADCx_CMDH. */
@@ -426,8 +485,10 @@ void LPADC_SetConvCommandConfig(ADC_Type *base, uint32_t commandId, const lpadc_
  * values are:
  * code
  *   config->sampleScaleMode            = kLPADC_SampleFullScale;
+ *   config->channelBScaleMode          = kLPADC_SampleFullScale;
  *   config->channelSampleMode          = kLPADC_SampleChannelSingleEndSideA;
  *   config->channelNumber              = 0U;
+ *   config ->alternateChannelNumber    = 0U;
  *   config->chainedNextCmdNumber       = 0U;
  *   config->enableAutoChannelIncrement = false;
  *   config->loopCount                  = 0U;
@@ -436,8 +497,9 @@ void LPADC_SetConvCommandConfig(ADC_Type *base, uint32_t commandId, const lpadc_
  *   config->hardwareCompareMode        = kLPADC_HardwareCompareDisabled;
  *   config->hardwareCompareValueHigh   = 0U;
  *   config->hardwareCompareValueLow    = 0U;
- *   config->conversionResolutionMode  = kLPADC_ConversionResolutionStandard;
+ *   config->conversionResolutionMode   = kLPADC_ConversionResolutionStandard;
  *   config->enableWaitTrigger          = false;
+ *   config->enableChannelB             = false;
  * endcode
  * param config Pointer to configuration structure.
  */
@@ -451,8 +513,14 @@ void LPADC_GetDefaultConvCommandConfig(lpadc_conv_command_config_t *config)
 #if defined(FSL_FEATURE_LPADC_HAS_CMDL_CSCALE) && FSL_FEATURE_LPADC_HAS_CMDL_CSCALE
     config->sampleScaleMode = kLPADC_SampleFullScale;
 #endif /* FSL_FEATURE_LPADC_HAS_CMDL_CSCALE */
-    config->sampleChannelMode          = kLPADC_SampleChannelSingleEndSideA;
-    config->channelNumber              = 0U;
+#if defined(FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE) && FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE
+    config->channelBScaleMode = kLPADC_SampleFullScale;
+#endif /* FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE */
+    config->sampleChannelMode = kLPADC_SampleChannelSingleEndSideA;
+    config->channelNumber     = 0U;
+#if defined(FSL_FEATURE_LPADC_HAS_CMDL_ALTB_ADCH) && FSL_FEATURE_LPADC_HAS_CMDL_ALTB_ADCH
+    config->channelBNumber = 0U;
+#endif                                       /* FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE */
     config->chainedNextCommandNumber   = 0U; /* No next command defined. */
     config->enableAutoChannelIncrement = false;
     config->loopCount                  = 0U;
@@ -467,6 +535,9 @@ void LPADC_GetDefaultConvCommandConfig(lpadc_conv_command_config_t *config)
 #if defined(FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG) && FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG
     config->enableWaitTrigger = false;
 #endif /* FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG */
+#if defined(FSL_FEATURE_LPADC_HAS_CMDL_ALTBEN) && FSL_FEATURE_LPADC_HAS_CMDL_ALTBEN
+    config->enableChannelB = false; /* Enable alternate channel B.*/
+#endif                              /* FSL_FEATURE_LPADC_HAS_CMDL_ALTBEN */
 }
 
 #if defined(FSL_FEATURE_LPADC_HAS_CFG_CALOFS) && FSL_FEATURE_LPADC_HAS_CFG_CALOFS
@@ -578,10 +649,17 @@ void LPADC_DoAutoCalibration(ADC_Type *base)
 {
     assert((0u == LPADC_GetConvResultCount(base, 0)) && (0u == LPADC_GetConvResultCount(base, 1)));
 
+#if defined(FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE) && FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE
+    int32_t GCCa;
+    int32_t GCCb;
+    float GCRa;
+    float GCRb;
+#else
     uint32_t GCCa;
     uint32_t GCCb;
     uint32_t GCRa;
     uint32_t GCRb;
+#endif /* FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE */
 
     /* Request gain calibration. */
     base->CTRL |= ADC_CTRL_CAL_REQ_MASK;
@@ -591,15 +669,33 @@ void LPADC_DoAutoCalibration(ADC_Type *base)
     }
 
     /* Calculate gain offset. */
-    GCCa         = (base->GCC[0] & ADC_GCC_GAIN_CAL_MASK);
-    GCCb         = (base->GCC[1] & ADC_GCC_GAIN_CAL_MASK);
+    GCCa = (base->GCC[0] & ADC_GCC_GAIN_CAL_MASK);
+    GCCb = (base->GCC[1] & ADC_GCC_GAIN_CAL_MASK);
+
+#if defined(FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE) && FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE
+    if (((base->GCC[0]) & 0x8000U))
+    {
+        GCCa = GCCa - 0x10000;
+        GCRa =
+            (float)((131072.0) / (0x20000 - GCCa)); /* Gain_CalA = (131072.0 / (131072-(ADC_GCC_GAIN_CAL(ADC->GCC[0]))*/
+        base->GCR[0] = LPADC_GetGainConvResult(GCRa); /* write A side GCALR. */
+    }
+
+    if (((base->GCC[1]) & 0x8000U))
+    {
+        GCCb = GCCb - 0x10000;
+        GCRb =
+            (float)((131072.0) / (0x20000 - GCCb)); /* Gain_CalB = (131072.0 / (131072-(ADC_GCC_GAIN_CAL(ADC->GCC[1]))*/
+        base->GCR[1] = LPADC_GetGainConvResult(GCRb); /* write B side GCALR. */
+    }
+#else
     GCRa         = (uint16_t)((GCCa << 16U) /
                       (0x1FFFFU - GCCa)); /* Gain_CalA = (131072 / (131072-(ADC_GCC_GAIN_CAL(ADC0->GCC[0])) - 1. */
     GCRb         = (uint16_t)((GCCb << 16U) /
                       (0x1FFFFU - GCCb)); /* Gain_CalB = (131072 / (131072-(ADC_GCC_GAIN_CAL(ADC0->GCC[1])) - 1. */
     base->GCR[0] = ADC_GCR_GCALR(GCRa);
     base->GCR[1] = ADC_GCR_GCALR(GCRb);
-
+#endif /* FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE */
     /* Indicate the values are valid. */
     base->GCR[0] |= ADC_GCR_RDY_MASK;
     base->GCR[1] |= ADC_GCR_RDY_MASK;

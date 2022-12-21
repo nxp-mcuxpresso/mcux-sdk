@@ -43,10 +43,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/vref
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utilities
@@ -95,7 +94,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_wdog)
 #    include(component_led)
 #    include(utility_assert_lite)
-#    include(middleware_fatfs)
+#    include(middleware_fatfs_MK22F51212)
 #    include(driver_dspi_freertos)
 #    include(driver_port)
 #    include(driver_flash)

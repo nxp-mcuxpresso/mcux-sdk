@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -731,6 +731,10 @@ status_t I2C_MasterTransferBlocking(I2C_Type *base, i2c_master_transfer_t *xfer)
 
     assert(xfer != NULL);
 
+    /* Enable the master function and disable the slave function. */
+    I2C_MasterEnable(base, true);
+    I2C_SlaveEnable(base, false);
+
     /* If start signal is requested, send start signal. */
     if (0U == (xfer->flags & (uint32_t)kI2C_TransferNoStartFlag))
     {
@@ -871,6 +875,10 @@ status_t I2C_MasterTransferNonBlocking(I2C_Type *base, i2c_master_handle_t *hand
     {
         return kStatus_I2C_Busy;
     }
+
+    /* Enable the master function and disable the slave function. */
+    I2C_MasterEnable(base, true);
+    I2C_SlaveEnable(base, false);
 
     /* Disable I2C IRQ sources while we configure stuff. */
     I2C_DisableInterrupts(base, (uint32_t)kI2C_MasterIrqFlags);
@@ -1444,6 +1452,10 @@ static status_t I2C_SlaveTransferNonBlockingInternal(I2C_Type *base,
 
     status_t status;
     status = kStatus_Success;
+
+    /* Enable the slave function and disable the master function. */
+    I2C_MasterEnable(base, false);
+    I2C_SlaveEnable(base, true);
 
     /* Disable I2C IRQ sources while we configure stuff. */
     I2C_DisableInterrupts(base, (uint32_t)kI2C_SlaveIrqFlags);

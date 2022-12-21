@@ -21,9 +21,10 @@
 
 #include "usb_device_descriptor.h"
 #include "fsl_component_serial_port_usb.h"
-
 #if defined(USB_DEVICE_CONFIG_EHCI) && (USB_DEVICE_CONFIG_EHCI > 0)
+#if ((defined FSL_FEATURE_SOC_USBPHY_COUNT) && (FSL_FEATURE_SOC_USBPHY_COUNT > 0U))
 #include "usb_phy.h"
+#endif
 #endif
 #if (defined(FSL_FEATURE_SOC_SYSMPU_COUNT) && (FSL_FEATURE_SOC_SYSMPU_COUNT > 0U))
 #include "fsl_sysmpu.h"
@@ -729,9 +730,9 @@ void USB0_IRQHandler(void)
 {
     serial_usb_cdc_state_t *serialUsbCdc = s_UsbCdcHead;
 
-    while (serialUsbCdc)
+    while (NULL != serialUsbCdc)
     {
-        if ((kSerialManager_UsbControllerLpcIp3511Fs0 == serialUsbCdc->instance))
+        if (((uint8_t)kSerialManager_UsbControllerLpcIp3511Fs0 == serialUsbCdc->instance))
         {
             USB_DeviceLpcIp3511IsrFunction(serialUsbCdc->deviceHandle);
         }

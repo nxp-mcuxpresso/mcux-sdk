@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,13 +21,20 @@
 
 /*! @name I3C BUS management definitions*/
 /*@{*/
-#define I3C_BUS_MAX_DEVS       11U   /*!< Bus maximum device count. */
-#define I3C_BUS_HOT_JOIN_ADDR  0x2U  /*!< Hot join event device address. */
-#define I3C_BUS_BROADCAST_ADDR 0x7EU /*!< Broad cast address. */
-#define I3C_BUS_MAX_ADDR       0x7FU /*!< Maximum address allowed for address assignment. */
-#define I3C_BUS_ADDR_SLOTWIDTH 2U    /*!< Address slot width used in address management in bus pool. */
-#define I3C_BUS_ADDR_SLOTDEPTH 32U   /*!< Address slot depth used in address management in bus pool. */
-#define I3C_BUS_ADDR_SLOTMASK  3U    /*!< Address slot mask used in address management in bus pool. */
+#define I3C_BUS_MAX_DEVS                          11U   /*!< Bus maximum device count. */
+#define I3C_BUS_HOT_JOIN_ADDR                     0x2U  /*!< Hot join event device address. */
+#define I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR1 0x3EU /*!< Broadcast address single bit error detect address. */
+#define I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR2 0x5EU /*!< Broadcast address single bit error detect address. */
+#define I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR3 0x6EU /*!< Broadcast address single bit error detect address. */
+#define I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR4 0x76U /*!< Broadcast address single bit error detect address. */
+#define I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR5 0x7AU /*!< Broadcast address single bit error detect address. */
+#define I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR6 0x7CU /*!< Broadcast address single bit error detect address. */
+#define I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR7 0x7FU /*!< Broadcast address single bit error detect address. */
+#define I3C_BUS_BROADCAST_ADDR                    0x7EU /*!< Broad cast address. */
+#define I3C_BUS_MAX_ADDR                          0x7FU /*!< Maximum address allowed for address assignment. */
+#define I3C_BUS_ADDR_SLOTWIDTH                    2U  /*!< Address slot width used in address management in bus pool. */
+#define I3C_BUS_ADDR_SLOTDEPTH                    32U /*!< Address slot depth used in address management in bus pool. */
+#define I3C_BUS_ADDR_SLOTMASK                     3U  /*!< Address slot mask used in address management in bus pool. */
 
 /*@}*/
 

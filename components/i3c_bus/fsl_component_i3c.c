@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -41,12 +41,29 @@ static void I3C_BusInitAddrSlots(i3c_bus_t *bus)
 {
     uint8_t i;
 
-    /* Reserve address 0x0 to 0x7, reserve I3C broadcast address. */
+    /* Reserve address 0x0 to 0x7. */
     for (i = 0; i < 8U; i++)
     {
         I3C_BusSetAddrSlot(bus, i, kI3C_Bus_AddrSlot_Reserved);
     }
 
+    /* Reserve the conditional restriction I3C address. */
+    I3C_BusSetAddrSlot(bus, 0x78U, kI3C_Bus_AddrSlot_Reserved);
+    I3C_BusSetAddrSlot(bus, 0x79U, kI3C_Bus_AddrSlot_Reserved);
+    I3C_BusSetAddrSlot(bus, 0x7BU, kI3C_Bus_AddrSlot_Reserved);
+    I3C_BusSetAddrSlot(bus, 0x7DU, kI3C_Bus_AddrSlot_Reserved);
+
+    /* All are prohibited since I3C targets will interpret an I3C address header with any of these addresses as a
+     * broadcast address with a single-bit error. */
+    I3C_BusSetAddrSlot(bus, I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR1, kI3C_Bus_AddrSlot_Reserved);
+    I3C_BusSetAddrSlot(bus, I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR2, kI3C_Bus_AddrSlot_Reserved);
+    I3C_BusSetAddrSlot(bus, I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR3, kI3C_Bus_AddrSlot_Reserved);
+    I3C_BusSetAddrSlot(bus, I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR4, kI3C_Bus_AddrSlot_Reserved);
+    I3C_BusSetAddrSlot(bus, I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR5, kI3C_Bus_AddrSlot_Reserved);
+    I3C_BusSetAddrSlot(bus, I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR6, kI3C_Bus_AddrSlot_Reserved);
+    I3C_BusSetAddrSlot(bus, I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR7, kI3C_Bus_AddrSlot_Reserved);
+
+    /* Reserve I3C broadcast address. */
     I3C_BusSetAddrSlot(bus, I3C_BUS_BROADCAST_ADDR, kI3C_Bus_AddrSlot_Reserved);
 }
 

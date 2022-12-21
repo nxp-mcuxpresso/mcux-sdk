@@ -26,9 +26,9 @@ enum _hashcrypt_status
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief HASHCRYPT driver version. Version 2.2.6.
+/*! @brief HASHCRYPT driver version. Version 2.2.7.
  *
- * Current version: 2.2.6
+ * Current version: 2.2.7
  *
  * Change log:
  * - Version 2.0.0
@@ -74,8 +74,11 @@ enum _hashcrypt_status
  * - Version 2.2.6
  *   - Add data synchronization barrier inside HASHCRYPT_SHA_Update() and hashcrypt_get_data() function to fix
  * optimization issue on MDK and ARMGCC release targets
+ * - Version 2.2.7
+ *   - Add data synchronization barrier inside HASHCRYPT_SHA_Update() to fix optimization issue on MCUX IDE release
+ * target
  */
-#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 2, 6))
+#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 2, 7))
 /*@}*/
 
 /*! @brief Algorithm definitions correspond with the values for Mode field in Control register !*/

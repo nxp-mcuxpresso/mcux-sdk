@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_LPIT_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
+#define FSL_LPIT_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0 */
                                                         /*@{*/
 
 /*!
@@ -298,6 +298,26 @@ static inline void LPIT_SetTimerPeriod(LPIT_Type *base, lpit_chnl_t channel, uin
 {
     assert(ticks > 2U);
     base->CHANNEL[channel].TVAL = ticks - 1U;
+}
+
+/*!
+ * @brief Sets the timer period in units of count.
+ *
+ * In the Dual 16-bit Periodic Counter mode, the counter will load and then the lower
+ * 16-bits will decrement down to zero, which will assert the output pre-trigger. The
+ * upper 16-bits will then decrement down to zero, which will negate the output pre-trigger
+ * and set the timer interrupt flag.
+ *
+ * @note Set TVAL register to 0 or 1 is invalid in compare mode.
+ *
+ * @param base    LPIT peripheral base address.
+ * @param channel Timer channel number.
+ * @param ticks   Timer period in units of ticks.
+ */
+static inline void LPIT_SetTimerValue(LPIT_Type *base, lpit_chnl_t channel, uint32_t ticks)
+{
+    assert(ticks > 1U);
+    base->CHANNEL[channel].TVAL = ticks;
 }
 
 /*!

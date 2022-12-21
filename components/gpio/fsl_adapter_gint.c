@@ -103,7 +103,7 @@ hal_gpio_status_t HAL_GpioInit(hal_gpio_handle_t gpioHandle, hal_gpio_pin_config
 
     /* Check if the port is vaild! */
 #if defined(FSL_FEATURE_GINT_PORT_COUNT)
-    if (pinConfig->port >= FSL_FEATURE_GINT_PORT_COUNT)
+    if (pinConfig->port >= (uint8_t)FSL_FEATURE_GINT_PORT_COUNT)
     {
         return kStatus_HAL_GpioError;
     }

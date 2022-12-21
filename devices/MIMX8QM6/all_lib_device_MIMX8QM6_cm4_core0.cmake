@@ -41,7 +41,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -67,6 +67,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpi2c_edma)
 #    include(driver_sai_edma)
 #    include(component_lists)
+#    include(driver_phy-common_MIMX8QM6_cm4_core0)
 #    include(driver_tpm)
 #    include(driver_lpuart_freertos)
 #    include(utility_debug_console)
@@ -85,7 +86,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_rpmsg_lite_imx8qm_m4_freertos)
 #    include(middleware_mmcau_cm4_cm7)
 #    include(driver_lpspi_freertos)
-#    include(driver_phy-common)
 #    include(driver_ftm)
 #    include(utility_assert_lite)
 #    include(driver_cache_lmem)

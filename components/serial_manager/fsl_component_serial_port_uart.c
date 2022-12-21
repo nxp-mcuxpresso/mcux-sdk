@@ -131,38 +131,23 @@ static void Serial_UartCallback(hal_uart_handle_t handle, hal_uart_status_t stat
 {
     serial_uart_state_t *serialUartHandle;
     serial_manager_callback_message_t msg;
-#if (defined(HAL_UART_TRANSFER_MODE) && (HAL_UART_TRANSFER_MODE > 0U))
-    hal_uart_transfer_t transfer;
-#endif
 
     assert(userData);
     serialUartHandle = (serial_uart_state_t *)userData;
 
     if ((hal_uart_status_t)kStatus_HAL_UartRxIdle == status)
     {
+#if (defined(HAL_UART_TRANSFER_MODE) && (HAL_UART_TRANSFER_MODE > 0U))
+        (void)HAL_UartTransferAbortReceive(((hal_uart_handle_t)&serialUartHandle->usartHandleBuffer[0]));
+#else
         (void)HAL_UartAbortReceive(((hal_uart_handle_t)&serialUartHandle->usartHandleBuffer[0]));
+#endif
         if ((NULL != serialUartHandle->rx.callback))
         {
             msg.buffer = &serialUartHandle->rx.readBuffer[0];
             msg.length = sizeof(serialUartHandle->rx.readBuffer);
             serialUartHandle->rx.callback(serialUartHandle->rx.callbackParam, &msg, kStatus_SerialManager_Success);
         }
-#if 0
-#if (defined(HAL_UART_TRANSFER_MODE) && (HAL_UART_TRANSFER_MODE > 0U))
-        transfer.data             = &serialUartHandle->rx.readBuffer[0];
-        transfer.dataSize         = sizeof(serialUartHandle->rx.readBuffer);
-        serialUartHandle->rx.busy = 0U;
-        if (kStatus_HAL_UartSuccess ==
-            HAL_UartTransferReceiveNonBlocking(((hal_uart_handle_t)&serialUartHandle->usartHandleBuffer[0]), &transfer))
-#else
-        if ((hal_uart_status_t)kStatus_HAL_UartSuccess ==
-            HAL_UartReceiveNonBlocking(((hal_uart_handle_t)&serialUartHandle->usartHandleBuffer[0]),
-                                       &serialUartHandle->rx.readBuffer[0], sizeof(serialUartHandle->rx.readBuffer)))
-#endif
-        {
-            serialUartHandle->rx.busy = 1U;
-        }
-#endif
     }
     else if ((hal_uart_status_t)kStatus_HAL_UartTxIdle == status)
     {
@@ -471,9 +456,6 @@ static void Serial_UartDmaCallback(hal_uart_dma_handle_t handle, hal_dma_callbac
 {
     serial_uart_dma_state_t *serialUartHandle;
     serial_manager_callback_message_t cb_msg;
-#if (defined(HAL_UART_TRANSFER_MODE) && (HAL_UART_TRANSFER_MODE > 0U))
-    hal_uart_transfer_t transfer;
-#endif
 
     assert(callbackParam);
     serialUartHandle = (serial_uart_dma_state_t *)callbackParam;
@@ -524,13 +506,6 @@ serial_manager_status_t Serial_UartDmaInit(serial_handle_t serialHandle, void *s
     serial_port_uart_dma_config_t *uartConfig = (serial_port_uart_dma_config_t *)serialConfig;
 #endif
     serial_manager_status_t serialManagerStatus = kStatus_SerialManager_Success;
-#if (defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
-#if (defined(HAL_UART_TRANSFER_MODE) && (HAL_UART_TRANSFER_MODE > 0U))
-#if 0 /* Not used below! */
-        hal_uart_transfer_t transfer;
-#endif
-#endif
-#endif
 
     assert(serialConfig);
     assert(serialHandle);
@@ -600,9 +575,6 @@ serial_manager_status_t Serial_UartDmaWrite(serial_handle_t serialHandle, uint8_
 {
     serial_uart_dma_state_t *serialUartHandle;
     hal_uart_status_t uartstatus;
-#if (defined(HAL_UART_TRANSFER_MODE) && (HAL_UART_TRANSFER_MODE > 0U))
-    hal_uart_transfer_t transfer;
-#endif
 
     assert(serialHandle);
     assert(buffer);

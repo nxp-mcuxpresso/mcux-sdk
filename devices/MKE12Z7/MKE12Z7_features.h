@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.0, 2021-06-25
-**     Build:               b211108
+**     Build:               b220803
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -606,6 +606,8 @@
 #define FSL_FEATURE_FTM_HAS_NO_QDCTRL (1)
 /* @brief If instance has only TPM function. */
 #define FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCEn(x) (0)
+/* @brief Has frequency of the reload opportunities, bitfield CONF[LDFQ]. */
+#define FSL_FEATURE_FTM_HAS_CONF_LDFQ_BIT (1)
 /* @brief If has instance with only baisc feature. */
 #define FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE (1)
 /* @brief If instance has only basic feature. */

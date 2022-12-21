@@ -1,21 +1,20 @@
-/* -------------------------------------------------------------------------*/
-/* @file:    startup_MIMX8ML3_cm7.s                                         */
-/* @purpose: CMSIS Cortex-M7 Core Device Startup File                       */
-/*           MIMX8ML3_cm7                                                   */
-/* @version: 5.0                                                            */
-/* @date:    2021-3-1                                                      */
-/* --------------------------------------------------------------------------*/
+/* ------------------------------------------------------------------------- */
+/*  @file:    startup_MIMX8ML3_cm7.s                                         */
+/*  @purpose: CMSIS Cortex-M7 Core Device Startup File                       */
+/*            MIMX8ML3_cm7                                                   */
+/*  @version: 5.0                                                            */
+/*  @date:    2021-3-1                                                       */
+/*  @build:   b220621                                                        */
+/* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2021 NXP                                                   */
+/* Copyright 2016-2022 NXP                                                   */
 /* All rights reserved.                                                      */
 /*                                                                           */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
 /*****************************************************************************/
 /* Version: GCC for ARM Embedded Processors                                  */
 /*****************************************************************************/
-
-
     .syntax unified
     .arch armv7-m
 
@@ -23,180 +22,180 @@
     .align 2
     .globl __isr_vector
 __isr_vector:
-    .long   __StackTop                  /* Top of Stack */
-    .long   Reset_Handler               /* Reset Handler */
-    .long   NMI_Handler                 /* NMI Handler                  */
-    .long   HardFault_Handler           /* Hard Fault Handler           */
-    .long   MemManage_Handler           /* MPU Fault Handler            */
-    .long   BusFault_Handler            /* Bus Fault Handler            */
-    .long   UsageFault_Handler          /* Usage Fault Handler          */
-    .long   0                           /* Reserved                     */
-    .long   0                           /* Reserved                     */
-    .long   0                           /* Reserved                     */
-    .long   0                           /* Reserved                     */
-    .long   SVC_Handler                 /* SVCall Handler               */
-    .long   DebugMon_Handler            /* Debug Monitor Handler        */
-    .long   0                           /* Reserved                     */
-    .long   PendSV_Handler              /* PendSV Handler               */
-    .long   SysTick_Handler             /* SysTick Handler              */
+    .long   __StackTop                                      /* Top of Stack */
+    .long   Reset_Handler                                   /* Reset Handler */
+    .long   NMI_Handler                                     /* NMI Handler*/
+    .long   HardFault_Handler                               /* Hard Fault Handler*/
+    .long   MemManage_Handler                               /* MPU Fault Handler*/
+    .long   BusFault_Handler                                /* Bus Fault Handler*/
+    .long   UsageFault_Handler                              /* Usage Fault Handler*/
+    .long   0                                               /* Reserved*/
+    .long   0                                               /* Reserved*/
+    .long   0                                               /* Reserved*/
+    .long   0                                               /* Reserved*/
+    .long   SVC_Handler                                     /* SVCall Handler*/
+    .long   DebugMon_Handler                                /* Debug Monitor Handler*/
+    .long   0                                               /* Reserved*/
+    .long   PendSV_Handler                                  /* PendSV Handler*/
+    .long   SysTick_Handler                                 /* SysTick Handler*/
 
-    /* External Interrupts */
-    .long   Reserved16_IRQHandler  /* xxx Interrupt 16 */
-    .long   DAP_IRQHandler  /* DAP Interrupt */
-    .long   SDMA1_IRQHandler  /* AND of all 48 SDMA1 interrupts (events) from all the channels */
-    .long   GPU3D_IRQHandler  /* GPU3D Interrupt */
-    .long   SNVS_IRQHandler  /* ON-OFF button press shorter than 5 seconds (pulse event) */
-    .long   LCDIF1_IRQHandler  /* LCDIF1 Interrupt */
-    .long   LCDIF2_IRQHandler  /* LCDIF2 Interrupt */
-    .long   VPU_G1_IRQHandler  /* VPU G1 Decoder Interrupt */
-    .long   VPU_G2_IRQHandler  /* VPU G2 Decoder Interrupt */
-    .long   QOS_IRQHandler  /* QOS interrupt */
-    .long   WDOG3_IRQHandler  /* Watchdog Timer reset */
-    .long   HS_CP1_IRQHandler  /* HS Interrupt Request */
-    .long   APBHDMA_IRQHandler  /* GPMI operation channel 0-3 description complete interrupt */
-    .long   ML_IRQHandler  /* Machine Learning Processor Interrupt */
-    .long   BCH_IRQHandler  /* BCH operation complete interrupt */
-    .long   GPMI_IRQHandler  /* GPMI operation TIMEOUT ERROR interrupt */
-    .long   ISI_IRQHandler  /* ISI Interrupt */
-    .long   MIPI_CSI1_IRQHandler  /* MIPI CSI Interrupt */
-    .long   MIPI_DSI_IRQHandler  /* MIPI DSI Interrupt */
-    .long   SNVS_Consolidated_IRQHandler  /* SRTC Consolidated Interrupt. Non TZ. */
-    .long   SNVS_Security_IRQHandler  /* SRTC Security Interrupt. TZ. */
-    .long   CSU_IRQHandler  /* CSU Interrupt Request. Indicates to the processor that one or more alarm inputs were asserted. */
-    .long   USDHC1_IRQHandler  /* uSDHC1 Enhanced SDHC Interrupt Request */
-    .long   USDHC2_IRQHandler  /* uSDHC2 Enhanced SDHC Interrupt Request */
-    .long   USDHC3_IRQHandler  /* uSDHC3 Enhanced SDHC Interrupt Request */
-    .long   GPU2D_IRQHandler  /* GPU2D Interrupt */
-    .long   UART1_IRQHandler  /* UART-1 ORed interrupt */
-    .long   UART2_IRQHandler  /* UART-2 ORed interrupt */
-    .long   UART3_IRQHandler  /* UART-3 ORed interrupt */
-    .long   UART4_IRQHandler  /* UART-4 ORed interrupt */
-    .long   VPU_IRQHandler  /* VPU Encoder Interrupt */
-    .long   ECSPI1_IRQHandler  /* ECSPI1 interrupt request line to the core. */
-    .long   ECSPI2_IRQHandler  /* ECSPI2 interrupt request line to the core. */
-    .long   ECSPI3_IRQHandler  /* ECSPI3 interrupt request line to the core. */
-    .long   SDMA3_IRQHandler  /* AND of all 48 SDMA3 interrupts (events) from all the channels */
-    .long   I2C1_IRQHandler  /* I2C-1 Interrupt */
-    .long   I2C2_IRQHandler  /* I2C-2 Interrupt */
-    .long   I2C3_IRQHandler  /* I2C-3 Interrupt */
-    .long   I2C4_IRQHandler  /* I2C-4 Interrupt */
-    .long   RDC_IRQHandler  /* RDC interrupt */
-    .long   USB1_IRQHandler  /* USB1 Interrupt */
-    .long   USB2_IRQHandler  /* USB2 Interrupt */
-    .long   ISI_CH1_IRQHandler  /* ISI Camera Channel 1 Interrupt */
-    .long   HDMI_TX_IRQHandler  /* HDMI TX Subsystem Interrupt */
-    .long   PDM_HWVAD_EVENT_IRQHandler  /* Digital Microphone interface voice activity detector event interrupt */
-    .long   PDM_HWVAD_ERROR_IRQHandler  /* Digital Microphone interface voice activity detector error interrupt */
-    .long   GPT6_IRQHandler  /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
-    .long   SCTR_IRQ0_IRQHandler  /* System Counter Interrupt 0 */
-    .long   SCTR_IRQ1_IRQHandler  /* System Counter Interrupt 1 */
-    .long   ANAMIX_IRQHandler  /* TempSensor (Temperature alarm and criticl alarm). */
-    .long   I2S3_IRQHandler  /* SAI3 Receive / Transmit Interrupt */
-    .long   GPT5_IRQHandler  /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
-    .long   GPT4_IRQHandler  /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
-    .long   GPT3_IRQHandler  /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
-    .long   GPT2_IRQHandler  /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
-    .long   GPT1_IRQHandler  /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
-    .long   GPIO1_INT7_IRQHandler  /* Active HIGH Interrupt from INT7 from GPIO */
-    .long   GPIO1_INT6_IRQHandler  /* Active HIGH Interrupt from INT6 from GPIO */
-    .long   GPIO1_INT5_IRQHandler  /* Active HIGH Interrupt from INT5 from GPIO */
-    .long   GPIO1_INT4_IRQHandler  /* Active HIGH Interrupt from INT4 from GPIO */
-    .long   GPIO1_INT3_IRQHandler  /* Active HIGH Interrupt from INT3 from GPIO */
-    .long   GPIO1_INT2_IRQHandler  /* Active HIGH Interrupt from INT2 from GPIO */
-    .long   GPIO1_INT1_IRQHandler  /* Active HIGH Interrupt from INT1 from GPIO */
-    .long   GPIO1_INT0_IRQHandler  /* Active HIGH Interrupt from INT0 from GPIO */
-    .long   GPIO1_Combined_0_15_IRQHandler  /* Combined interrupt indication for GPIO1 signal 0 throughout 15 */
-    .long   GPIO1_Combined_16_31_IRQHandler  /* Combined interrupt indication for GPIO1 signal 16 throughout 31 */
-    .long   GPIO2_Combined_0_15_IRQHandler  /* Combined interrupt indication for GPIO2 signal 0 throughout 15 */
-    .long   GPIO2_Combined_16_31_IRQHandler  /* Combined interrupt indication for GPIO2 signal 16 throughout 31 */
-    .long   GPIO3_Combined_0_15_IRQHandler  /* Combined interrupt indication for GPIO3 signal 0 throughout 15 */
-    .long   GPIO3_Combined_16_31_IRQHandler  /* Combined interrupt indication for GPIO3 signal 16 throughout 31 */
-    .long   GPIO4_Combined_0_15_IRQHandler  /* Combined interrupt indication for GPIO4 signal 0 throughout 15 */
-    .long   GPIO4_Combined_16_31_IRQHandler  /* Combined interrupt indication for GPIO4 signal 16 throughout 31 */
-    .long   GPIO5_Combined_0_15_IRQHandler  /* Combined interrupt indication for GPIO5 signal 0 throughout 15 */
-    .long   GPIO5_Combined_16_31_IRQHandler  /* Combined interrupt indication for GPIO5 signal 16 throughout 31 */
-    .long   ISP1_IRQHandler  /* ISP 1 ISP Interrupts */
-    .long   ISP2_IRQHandler  /* ISP 2 ISP Interrupts */
-    .long   I2C5_IRQHandler  /* I2C-5 Interrupt */
-    .long   I2C6_IRQHandler  /* I2C-6 Interrupt */
-    .long   WDOG1_IRQHandler  /* Watchdog Timer reset */
-    .long   WDOG2_IRQHandler  /* Watchdog Timer reset */
-    .long   MIPI_CSI2_IRQHandler  /* MIPI CSI 2 Interrupt */
-    .long   PWM1_IRQHandler  /* Cumulative interrupt line. OR of Rollover Interrupt line, Compare Interrupt line and FIFO Waterlevel crossing interrupt line. */
-    .long   PWM2_IRQHandler  /* Cumulative interrupt line. OR of Rollover Interrupt line, Compare Interrupt line and FIFO Waterlevel crossing interrupt line. */
-    .long   PWM3_IRQHandler  /* Cumulative interrupt line. OR of Rollover Interrupt line, Compare Interrupt line and FIFO Waterlevel crossing interrupt line. */
-    .long   PWM4_IRQHandler  /* Cumulative interrupt line. OR of Rollover Interrupt line, Compare Interrupt line and FIFO Waterlevel crossing interrupt line. */
-    .long   CCM_IRQ1_IRQHandler  /* CCM Interrupt Request 1 */
-    .long   CCM_IRQ2_IRQHandler  /* CCM Interrupt Request 2 */
-    .long   GPC_IRQHandler  /* GPC Interrupt Request 1 */
-    .long   MU1_A53_IRQHandler  /* Interrupt to A53 (A53,M7 MU) */
-    .long   SRC_IRQHandler  /* SRC interrupt request */
-    .long   I2S56_IRQHandler  /* SAI5/6 Receive / Transmit Interrupt */
-    .long   RTIC_IRQHandler  /* RTIC Interrupt */
-    .long   CPU_PerformanceUnit_IRQHandler  /* Performance Unit Interrupts from Cheetah (interrnally: PMUIRQ[n] */
-    .long   CPU_CTI_Trigger_IRQHandler  /* CTI trigger outputs (internal: nCTIIRQ[n] */
-    .long   SRC_Combined_IRQHandler  /* Combined CPU wdog interrupts (4x) out of SRC. */
-    .long   I2S1_IRQHandler  /* SAI1 Receive / Transmit Interrupt */
-    .long   I2S2_IRQHandler  /* SAI2 Receive / Transmit Interrupt */
-    .long   MU1_M7_IRQHandler  /* Interrupt to M7 (A53, M7 MU) */
-    .long   DDR_PerformanceMonitor_IRQHandler  /* ddr Interrupt for performance monitor */
-    .long   DDR_IRQHandler  /* ddr Interrupt */
-    .long   DEWARP_IRQHandler  /* Dewarp Interrupt */
-    .long   CPU_Error_AXI_IRQHandler  /* CPU Error indicator for AXI transaction with a write response error condition */
-    .long   CPU_Error_L2RAM_IRQHandler  /* CPU Error indicator for L2 RAM double-bit ECC error */
-    .long   SDMA2_IRQHandler  /* AND of all 48 SDMA2 interrupts (events) from all the channels */
-    .long   SJC_IRQHandler  /* Interrupt triggered by SJC register */
-    .long   CAAM_IRQ0_IRQHandler  /* CAAM interrupt queue for JQ */
-    .long   CAAM_IRQ1_IRQHandler  /* CAAM interrupt queue for JQ */
-    .long   FlexSPI_IRQHandler  /* FlexSPI Interrupt */
-    .long   TZASC_IRQHandler  /* TZASC (PL380) interrupt */
-    .long   PDM_EVENT_IRQHandler  /* Digital Microphone interface interrupt */
-    .long   PDM_ERROR_IRQHandler  /* Digital Microphone interface error interrupt */
-    .long   I2S7_IRQHandler  /* SAI7 Receive / Transmit Interrupt */
-    .long   PERFMON1_IRQHandler  /* General Interrupt */
-    .long   PERFMON2_IRQHandler  /* General Interrupt */
-    .long   CAAM_IRQ2_IRQHandler  /* CAAM interrupt queue for JQ */
-    .long   CAAM_ERROR_IRQHandler  /* Recoverable error interrupt */
-    .long   HS_CP0_IRQHandler  /* HS Interrupt Request */
-    .long   CM7_CTI_IRQHandler  /* CTI trigger outputs from CM7 platform */
-    .long   ENET1_MAC0_Rx_Tx_Done0_IRQHandler  /* MAC 0 Receive / Trasmit Frame / Buffer Done */
-    .long   ENET1_MAC0_Rx_Tx_Done1_IRQHandler  /* MAC 0 Receive / Trasmit Frame / Buffer Done */
-    .long   ENET1_IRQHandler  /* MAC 0 IRQ */
-    .long   ENET1_1588_IRQHandler  /* MAC 0 1588 Timer Interrupt-synchronous */
-    .long   ASRC_IRQHandler  /* ASRC Interrupt */
-    .long   PCIE_CTRL1_0_IRQHandler  /* Coming from GLUE logic, of set/reset FF, driven by PCIE signals, interrupt 0 */
-    .long   PCIE_CTRL1_1_IRQHandler  /* Coming from GLUE logic, of set/reset FF, driven by PCIE signals, interrupt 1 */
-    .long   PCIE_CTRL1_2_IRQHandler  /* Coming from GLUE logic, of set/reset FF, driven by PCIE signals, interrupt 2 */
-    .long   PCIE_CTRL1_3_IRQHandler  /* Coming from GLUE logic, of set/reset FF, driven by PCIE signals, interrupt 3 */
-    .long   PCIE_EDMA_IRQHandler  /* Channels [63:32] interrupts requests */
-    .long   AUDIO_XCVR0_IRQHandler  /* eARC Interrupt 0 */
-    .long   AUDIO_XCVR1_IRQHandler  /* eARC Interrupt 1 */
-    .long   AUD2HTX_IRQHandler  /* Audio to HDMI TX Audio Link Master Interrupt */
-    .long   EDMA1_ERR_IRQHandler  /* Audio Subsystem eDMA Error Interrupt */
-    .long   EDMA1_0_15_IRQHandler  /* Audio Subsystem eDMA Channel Interrupts, Logical OR of channels [15:0] */
-    .long   EDMA1_16_31_IRQHandler  /* Audio Subsystem eDMA Channel Interrupts, Logical OR of channels [31:16] */
-    .long   ENET_QOS_PMT_IRQHandler  /* ENET QOS TSN Interrupt from PMT */
-    .long   ENET_QOS_IRQHandler  /* ENET QOS TSN LPI RX exit/Host System/RX/TX Channels[4:0] Interrupt */
-    .long   MU2_A53_IRQHandler  /* Interrupt to A53 (A53, Audio Processor MU) */
-    .long   MU2_AUDIO_IRQHandler  /* Interrupt to Audio Processor (A53, Audio Processor MU) */
-    .long   MU3_M7_IRQHandler  /* Interrupt to M7 (M7, Audio Processor MU) */
-    .long   MU3_AUDIO_IRQHandler  /* Interrupt to Audio Processor (M7, Audio Processor MU) */
-    .long   PCIE_CTRL1_IRQHandler  /* RC/EP message transaction Interrupt */
-    .long   PCIE_CTRL1_ERR_IRQHandler  /* RC/EP PME Message and Error Interrupt */
-    .long   CAN_FD1_IRQHandler  /* CAN-FD1 Interrupt from bus off/line error/RX warning/TX warning/wakeup/match in PN/timeout in PN/busoff done/FD error */
-    .long   CAN_FD1_ERROR_IRQHandler  /* CAN-FD1 Interrupt from correctable error/non correctable error int host/ non correctable error int internal */
-    .long   CAN_FD2_IRQHandler  /* CAN-FD2 Interrupt from bus off/line error/RX warning/TX warning/wakeup/match in PN/timeout in PN/busoff done/FD error */
-    .long   CAN_FD2_ERROR_IRQHandler  /* CAN-FD2 Interrupt from correctable error/non correctable error int host/ non correctable error int internal */
-    .long   AUDIO_XCVR_IRQHandler  /* eARC PHY - SPDIF wakeup interrupt */
-    .long   DDR_ERR_IRQHandler  /* DRAM Controller Error Interrupt  */
-    .long   USB1_WAKEUP_IRQHandler  /* USB-1 Wake-up Interrupt */
-    .long   USB2_WAKEUP_IRQHandler  /* USB-2 Wake-up Interrupt */
-    .long   MECC_IRQHandler  /* OCRAM Memory ECC Interrupt */
-    .long   MECC_ERR_IRQHandler  /* OCRAM Memory ECC Error Interrupt */
-    .long   MECC_S_IRQHandler  /* OCRAM_S Memory ECC Interrupt */
-    .long   MECC_S_ERR_IRQHandler  /* OCRAM_S Memory ECC Error Interrupt */
+                                                            /* External Interrupts*/
+    .long   Reserved16_IRQHandler                           /* xxx Interrupt 16*/
+    .long   DAP_IRQHandler                                  /* DAP Interrupt*/
+    .long   SDMA1_IRQHandler                                /* AND of all 48 SDMA1 interrupts (events) from all the channels*/
+    .long   GPU3D_IRQHandler                                /* GPU3D Interrupt*/
+    .long   SNVS_IRQHandler                                 /* ON-OFF button press shorter than 5 seconds (pulse event)*/
+    .long   LCDIF1_IRQHandler                               /* LCDIF1 Interrupt*/
+    .long   LCDIF2_IRQHandler                               /* LCDIF2 Interrupt*/
+    .long   VPU_G1_IRQHandler                               /* VPU G1 Decoder Interrupt*/
+    .long   VPU_G2_IRQHandler                               /* VPU G2 Decoder Interrupt*/
+    .long   QOS_IRQHandler                                  /* QOS interrupt*/
+    .long   WDOG3_IRQHandler                                /* Watchdog Timer reset*/
+    .long   HS_CP1_IRQHandler                               /* HS Interrupt Request*/
+    .long   APBHDMA_IRQHandler                              /* GPMI operation channel 0-3 description complete interrupt*/
+    .long   ML_IRQHandler                                   /* Machine Learning Processor Interrupt*/
+    .long   BCH_IRQHandler                                  /* BCH operation complete interrupt*/
+    .long   GPMI_IRQHandler                                 /* GPMI operation TIMEOUT ERROR interrupt*/
+    .long   ISI_IRQHandler                                  /* ISI Interrupt*/
+    .long   MIPI_CSI1_IRQHandler                            /* MIPI CSI Interrupt*/
+    .long   MIPI_DSI_IRQHandler                             /* MIPI DSI Interrupt*/
+    .long   SNVS_Consolidated_IRQHandler                    /* SRTC Consolidated Interrupt. Non TZ.*/
+    .long   SNVS_Security_IRQHandler                        /* SRTC Security Interrupt. TZ.*/
+    .long   CSU_IRQHandler                                  /* CSU Interrupt Request. Indicates to the processor that one or more alarm inputs were asserted.*/
+    .long   USDHC1_IRQHandler                               /* uSDHC1 Enhanced SDHC Interrupt Request*/
+    .long   USDHC2_IRQHandler                               /* uSDHC2 Enhanced SDHC Interrupt Request*/
+    .long   USDHC3_IRQHandler                               /* uSDHC3 Enhanced SDHC Interrupt Request*/
+    .long   GPU2D_IRQHandler                                /* GPU2D Interrupt*/
+    .long   UART1_IRQHandler                                /* UART-1 ORed interrupt*/
+    .long   UART2_IRQHandler                                /* UART-2 ORed interrupt*/
+    .long   UART3_IRQHandler                                /* UART-3 ORed interrupt*/
+    .long   UART4_IRQHandler                                /* UART-4 ORed interrupt*/
+    .long   VPU_IRQHandler                                  /* VPU Encoder Interrupt*/
+    .long   ECSPI1_IRQHandler                               /* ECSPI1 interrupt request line to the core.*/
+    .long   ECSPI2_IRQHandler                               /* ECSPI2 interrupt request line to the core.*/
+    .long   ECSPI3_IRQHandler                               /* ECSPI3 interrupt request line to the core.*/
+    .long   SDMA3_IRQHandler                                /* AND of all 48 SDMA3 interrupts (events) from all the channels*/
+    .long   I2C1_IRQHandler                                 /* I2C-1 Interrupt*/
+    .long   I2C2_IRQHandler                                 /* I2C-2 Interrupt*/
+    .long   I2C3_IRQHandler                                 /* I2C-3 Interrupt*/
+    .long   I2C4_IRQHandler                                 /* I2C-4 Interrupt*/
+    .long   RDC_IRQHandler                                  /* RDC interrupt*/
+    .long   USB1_IRQHandler                                 /* USB1 Interrupt*/
+    .long   USB2_IRQHandler                                 /* USB2 Interrupt*/
+    .long   ISI_CH1_IRQHandler                              /* ISI Camera Channel 1 Interrupt*/
+    .long   HDMI_TX_IRQHandler                              /* HDMI TX Subsystem Interrupt*/
+    .long   PDM_HWVAD_EVENT_IRQHandler                      /* Digital Microphone interface voice activity detector event interrupt*/
+    .long   PDM_HWVAD_ERROR_IRQHandler                      /* Digital Microphone interface voice activity detector error interrupt*/
+    .long   GPT6_IRQHandler                                 /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines*/
+    .long   SCTR_IRQ0_IRQHandler                            /* System Counter Interrupt 0*/
+    .long   SCTR_IRQ1_IRQHandler                            /* System Counter Interrupt 1*/
+    .long   ANAMIX_IRQHandler                               /* TempSensor (Temperature alarm and criticl alarm).*/
+    .long   I2S3_IRQHandler                                 /* SAI3 Receive / Transmit Interrupt*/
+    .long   GPT5_IRQHandler                                 /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines*/
+    .long   GPT4_IRQHandler                                 /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines*/
+    .long   GPT3_IRQHandler                                 /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines*/
+    .long   GPT2_IRQHandler                                 /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines*/
+    .long   GPT1_IRQHandler                                 /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines*/
+    .long   GPIO1_INT7_IRQHandler                           /* Active HIGH Interrupt from INT7 from GPIO*/
+    .long   GPIO1_INT6_IRQHandler                           /* Active HIGH Interrupt from INT6 from GPIO*/
+    .long   GPIO1_INT5_IRQHandler                           /* Active HIGH Interrupt from INT5 from GPIO*/
+    .long   GPIO1_INT4_IRQHandler                           /* Active HIGH Interrupt from INT4 from GPIO*/
+    .long   GPIO1_INT3_IRQHandler                           /* Active HIGH Interrupt from INT3 from GPIO*/
+    .long   GPIO1_INT2_IRQHandler                           /* Active HIGH Interrupt from INT2 from GPIO*/
+    .long   GPIO1_INT1_IRQHandler                           /* Active HIGH Interrupt from INT1 from GPIO*/
+    .long   GPIO1_INT0_IRQHandler                           /* Active HIGH Interrupt from INT0 from GPIO*/
+    .long   GPIO1_Combined_0_15_IRQHandler                  /* Combined interrupt indication for GPIO1 signal 0 throughout 15*/
+    .long   GPIO1_Combined_16_31_IRQHandler                 /* Combined interrupt indication for GPIO1 signal 16 throughout 31*/
+    .long   GPIO2_Combined_0_15_IRQHandler                  /* Combined interrupt indication for GPIO2 signal 0 throughout 15*/
+    .long   GPIO2_Combined_16_31_IRQHandler                 /* Combined interrupt indication for GPIO2 signal 16 throughout 31*/
+    .long   GPIO3_Combined_0_15_IRQHandler                  /* Combined interrupt indication for GPIO3 signal 0 throughout 15*/
+    .long   GPIO3_Combined_16_31_IRQHandler                 /* Combined interrupt indication for GPIO3 signal 16 throughout 31*/
+    .long   GPIO4_Combined_0_15_IRQHandler                  /* Combined interrupt indication for GPIO4 signal 0 throughout 15*/
+    .long   GPIO4_Combined_16_31_IRQHandler                 /* Combined interrupt indication for GPIO4 signal 16 throughout 31*/
+    .long   GPIO5_Combined_0_15_IRQHandler                  /* Combined interrupt indication for GPIO5 signal 0 throughout 15*/
+    .long   GPIO5_Combined_16_31_IRQHandler                 /* Combined interrupt indication for GPIO5 signal 16 throughout 31*/
+    .long   ISP1_IRQHandler                                 /* ISP 1 ISP Interrupts*/
+    .long   ISP2_IRQHandler                                 /* ISP 2 ISP Interrupts*/
+    .long   I2C5_IRQHandler                                 /* I2C-5 Interrupt*/
+    .long   I2C6_IRQHandler                                 /* I2C-6 Interrupt*/
+    .long   WDOG1_IRQHandler                                /* Watchdog Timer reset*/
+    .long   WDOG2_IRQHandler                                /* Watchdog Timer reset*/
+    .long   MIPI_CSI2_IRQHandler                            /* MIPI CSI 2 Interrupt*/
+    .long   PWM1_IRQHandler                                 /* Cumulative interrupt line. OR of Rollover Interrupt line, Compare Interrupt line and FIFO Waterlevel crossing interrupt line.*/
+    .long   PWM2_IRQHandler                                 /* Cumulative interrupt line. OR of Rollover Interrupt line, Compare Interrupt line and FIFO Waterlevel crossing interrupt line.*/
+    .long   PWM3_IRQHandler                                 /* Cumulative interrupt line. OR of Rollover Interrupt line, Compare Interrupt line and FIFO Waterlevel crossing interrupt line.*/
+    .long   PWM4_IRQHandler                                 /* Cumulative interrupt line. OR of Rollover Interrupt line, Compare Interrupt line and FIFO Waterlevel crossing interrupt line.*/
+    .long   CCM_IRQ1_IRQHandler                             /* CCM Interrupt Request 1*/
+    .long   CCM_IRQ2_IRQHandler                             /* CCM Interrupt Request 2*/
+    .long   GPC_IRQHandler                                  /* GPC Interrupt Request 1*/
+    .long   MU1_A53_IRQHandler                              /* Interrupt to A53 (A53,M7 MU)*/
+    .long   SRC_IRQHandler                                  /* SRC interrupt request*/
+    .long   I2S56_IRQHandler                                /* SAI5/6 Receive / Transmit Interrupt*/
+    .long   RTIC_IRQHandler                                 /* RTIC Interrupt*/
+    .long   CPU_PerformanceUnit_IRQHandler                  /* Performance Unit Interrupts from Cheetah (interrnally: PMUIRQ[n]*/
+    .long   CPU_CTI_Trigger_IRQHandler                      /* CTI trigger outputs (internal: nCTIIRQ[n]*/
+    .long   SRC_Combined_IRQHandler                         /* Combined CPU wdog interrupts (4x) out of SRC.*/
+    .long   I2S1_IRQHandler                                 /* SAI1 Receive / Transmit Interrupt*/
+    .long   I2S2_IRQHandler                                 /* SAI2 Receive / Transmit Interrupt*/
+    .long   MU1_M7_IRQHandler                               /* Interrupt to M7 (A53, M7 MU)*/
+    .long   DDR_PerformanceMonitor_IRQHandler               /* ddr Interrupt for performance monitor*/
+    .long   DDR_IRQHandler                                  /* ddr Interrupt*/
+    .long   DEWARP_IRQHandler                               /* Dewarp Interrupt*/
+    .long   CPU_Error_AXI_IRQHandler                        /* CPU Error indicator for AXI transaction with a write response error condition*/
+    .long   CPU_Error_L2RAM_IRQHandler                      /* CPU Error indicator for L2 RAM double-bit ECC error*/
+    .long   SDMA2_IRQHandler                                /* AND of all 48 SDMA2 interrupts (events) from all the channels*/
+    .long   SJC_IRQHandler                                  /* Interrupt triggered by SJC register*/
+    .long   CAAM_IRQ0_IRQHandler                            /* CAAM interrupt queue for JQ*/
+    .long   CAAM_IRQ1_IRQHandler                            /* CAAM interrupt queue for JQ*/
+    .long   FlexSPI_IRQHandler                              /* FlexSPI Interrupt*/
+    .long   TZASC_IRQHandler                                /* TZASC (PL380) interrupt*/
+    .long   PDM_EVENT_IRQHandler                            /* Digital Microphone interface interrupt*/
+    .long   PDM_ERROR_IRQHandler                            /* Digital Microphone interface error interrupt*/
+    .long   I2S7_IRQHandler                                 /* SAI7 Receive / Transmit Interrupt*/
+    .long   PERFMON1_IRQHandler                             /* General Interrupt*/
+    .long   PERFMON2_IRQHandler                             /* General Interrupt*/
+    .long   CAAM_IRQ2_IRQHandler                            /* CAAM interrupt queue for JQ*/
+    .long   CAAM_ERROR_IRQHandler                           /* Recoverable error interrupt*/
+    .long   HS_CP0_IRQHandler                               /* HS Interrupt Request*/
+    .long   CM7_CTI_IRQHandler                              /* CTI trigger outputs from CM7 platform*/
+    .long   ENET1_MAC0_Rx_Tx_Done1_IRQHandler               /* MAC 0 Receive / Trasmit Frame / Buffer Done*/
+    .long   ENET1_MAC0_Rx_Tx_Done2_IRQHandler               /* MAC 0 Receive / Trasmit Frame / Buffer Done*/
+    .long   ENET1_IRQHandler                                /* MAC 0 IRQ*/
+    .long   ENET1_1588_Timer_IRQHandler                     /* MAC 0 1588 Timer Interrupt-synchronous*/
+    .long   ASRC_IRQHandler                                 /* ASRC Interrupt*/
+    .long   PCIE_CTRL1_0_IRQHandler                         /* Coming from GLUE logic, of set/reset FF, driven by PCIE signals, interrupt 0*/
+    .long   PCIE_CTRL1_1_IRQHandler                         /* Coming from GLUE logic, of set/reset FF, driven by PCIE signals, interrupt 1*/
+    .long   PCIE_CTRL1_2_IRQHandler                         /* Coming from GLUE logic, of set/reset FF, driven by PCIE signals, interrupt 2*/
+    .long   PCIE_CTRL1_3_IRQHandler                         /* Coming from GLUE logic, of set/reset FF, driven by PCIE signals, interrupt 3*/
+    .long   PCIE_EDMA_IRQHandler                            /* Channels [63:32] interrupts requests*/
+    .long   AUDIO_XCVR0_IRQHandler                          /* eARC Interrupt 0*/
+    .long   AUDIO_XCVR1_IRQHandler                          /* eARC Interrupt 1*/
+    .long   AUD2HTX_IRQHandler                              /* Audio to HDMI TX Audio Link Master Interrupt*/
+    .long   EDMA1_ERR_IRQHandler                            /* Audio Subsystem eDMA Error Interrupt*/
+    .long   EDMA1_0_15_IRQHandler                           /* Audio Subsystem eDMA Channel Interrupts, Logical OR of channels [15:0]*/
+    .long   EDMA1_16_31_IRQHandler                          /* Audio Subsystem eDMA Channel Interrupts, Logical OR of channels [31:16]*/
+    .long   ENET_QOS_PMT_IRQHandler                         /* ENET QOS TSN Interrupt from PMT*/
+    .long   ENET_QOS_IRQHandler                             /* ENET QOS TSN LPI RX exit/Host System/RX/TX Channels[4:0] Interrupt*/
+    .long   MU2_A53_IRQHandler                              /* Interrupt to A53 (A53, Audio Processor MU)*/
+    .long   MU2_AUDIO_IRQHandler                            /* Interrupt to Audio Processor (A53, Audio Processor MU)*/
+    .long   MU3_M7_IRQHandler                               /* Interrupt to M7 (M7, Audio Processor MU)*/
+    .long   MU3_AUDIO_IRQHandler                            /* Interrupt to Audio Processor (M7, Audio Processor MU)*/
+    .long   PCIE_CTRL1_IRQHandler                           /* RC/EP message transaction Interrupt*/
+    .long   PCIE_CTRL1_ERR_IRQHandler                       /* RC/EP PME Message and Error Interrupt*/
+    .long   CAN_FD1_IRQHandler                              /* CAN-FD1 Interrupt from bus off/line error/RX warning/TX warning/wakeup/match in PN/timeout in PN/busoff done/FD error*/
+    .long   CAN_FD1_ERROR_IRQHandler                        /* CAN-FD1 Interrupt from correctable error/non correctable error int host/ non correctable error int internal*/
+    .long   CAN_FD2_IRQHandler                              /* CAN-FD2 Interrupt from bus off/line error/RX warning/TX warning/wakeup/match in PN/timeout in PN/busoff done/FD error*/
+    .long   CAN_FD2_ERROR_IRQHandler                        /* CAN-FD2 Interrupt from correctable error/non correctable error int host/ non correctable error int internal*/
+    .long   AUDIO_XCVR_IRQHandler                           /* eARC PHY - SPDIF wakeup interrupt*/
+    .long   DDR_ERR_IRQHandler                              /* DRAM Controller Error Interrupt */
+    .long   USB1_WAKEUP_IRQHandler                          /* USB-1 Wake-up Interrupt*/
+    .long   USB2_WAKEUP_IRQHandler                          /* USB-2 Wake-up Interrupt*/
+    .long   MECC_IRQHandler                                 /* OCRAM Memory ECC Interrupt*/
+    .long   MECC_ERR_IRQHandler                             /* OCRAM Memory ECC Error Interrupt*/
+    .long   MECC_S_IRQHandler                               /* OCRAM_S Memory ECC Interrupt*/
+    .long   MECC_S_ERR_IRQHandler                           /* OCRAM_S Memory ECC Error Interrupt*/
 
-    .size    __isr_vector, . - __isr_vector
+    .size   __isr_vector, . - __isr_vector
 
     .text
     .thumb
@@ -1438,21 +1437,21 @@ CM7_CTI_IRQHandler:
 
     .align 1
     .thumb_func
-    .weak ENET1_MAC0_Rx_Tx_Done0_IRQHandler
-    .type ENET1_MAC0_Rx_Tx_Done0_IRQHandler, %function
-ENET1_MAC0_Rx_Tx_Done0_IRQHandler:
-    ldr   r0,=ENET1_MAC0_Rx_Tx_Done0_DriverIRQHandler
-    bx    r0
-    .size ENET1_MAC0_Rx_Tx_Done0_IRQHandler, . - ENET1_MAC0_Rx_Tx_Done0_IRQHandler
-
-    .align 1
-    .thumb_func
     .weak ENET1_MAC0_Rx_Tx_Done1_IRQHandler
     .type ENET1_MAC0_Rx_Tx_Done1_IRQHandler, %function
 ENET1_MAC0_Rx_Tx_Done1_IRQHandler:
     ldr   r0,=ENET1_MAC0_Rx_Tx_Done1_DriverIRQHandler
     bx    r0
     .size ENET1_MAC0_Rx_Tx_Done1_IRQHandler, . - ENET1_MAC0_Rx_Tx_Done1_IRQHandler
+
+    .align 1
+    .thumb_func
+    .weak ENET1_MAC0_Rx_Tx_Done2_IRQHandler
+    .type ENET1_MAC0_Rx_Tx_Done2_IRQHandler, %function
+ENET1_MAC0_Rx_Tx_Done2_IRQHandler:
+    ldr   r0,=ENET1_MAC0_Rx_Tx_Done2_DriverIRQHandler
+    bx    r0
+    .size ENET1_MAC0_Rx_Tx_Done2_IRQHandler, . - ENET1_MAC0_Rx_Tx_Done2_IRQHandler
 
     .align 1
     .thumb_func
@@ -1465,12 +1464,12 @@ ENET1_IRQHandler:
 
     .align 1
     .thumb_func
-    .weak ENET1_1588_IRQHandler
-    .type ENET1_1588_IRQHandler, %function
-ENET1_1588_IRQHandler:
-    ldr   r0,=ENET1_1588_DriverIRQHandler
+    .weak ENET1_1588_Timer_IRQHandler
+    .type ENET1_1588_Timer_IRQHandler, %function
+ENET1_1588_Timer_IRQHandler:
+    ldr   r0,=ENET1_1588_Timer_DriverIRQHandler
     bx    r0
-    .size ENET1_1588_IRQHandler, . - ENET1_1588_IRQHandler
+    .size ENET1_1588_Timer_IRQHandler, . - ENET1_1588_Timer_IRQHandler
 
     .align 1
     .thumb_func
@@ -1760,6 +1759,7 @@ MECC_S_ERR_IRQHandler:
     bx    r0
     .size MECC_S_ERR_IRQHandler, . - MECC_S_ERR_IRQHandler
 
+
 /*    Macro to define default handlers. Default handler
  *    will be weak symbol and just dead loops. They can be
  *    overwritten by other handlers */
@@ -1772,159 +1772,159 @@ MECC_S_ERR_IRQHandler:
     def_irq_handler    BusFault_Handler
     def_irq_handler    UsageFault_Handler
     def_irq_handler    DebugMon_Handler
-    def_irq_handler    Reserved16_DriverIRQHandler                 /* xxx Interrupt 16 */
-    def_irq_handler    DAP_DriverIRQHandler                 /* DAP Interrupt */
-    def_irq_handler    SDMA1_DriverIRQHandler                 /* AND of all 48 SDMA1 interrupts (events) from all the channels */
-    def_irq_handler    GPU3D_DriverIRQHandler                 /* GPU3D Interrupt */
-    def_irq_handler    SNVS_DriverIRQHandler                 /* ON-OFF button press shorter than 5 seconds (pulse event) */
-    def_irq_handler    LCDIF1_DriverIRQHandler                 /* LCDIF1 Interrupt */
-    def_irq_handler    LCDIF2_DriverIRQHandler                 /* LCDIF2 Interrupt */
-    def_irq_handler    VPU_G1_DriverIRQHandler                 /* VPU G1 Decoder Interrupt */
-    def_irq_handler    VPU_G2_DriverIRQHandler                 /* VPU G2 Decoder Interrupt */
-    def_irq_handler    QOS_DriverIRQHandler                 /* QOS interrupt */
-    def_irq_handler    WDOG3_DriverIRQHandler                 /* Watchdog Timer reset */
-    def_irq_handler    HS_CP1_DriverIRQHandler                 /* HS Interrupt Request */
-    def_irq_handler    APBHDMA_DriverIRQHandler                 /* GPMI operation channel 0-3 description complete interrupt */
-    def_irq_handler    ML_DriverIRQHandler                 /* Machine Learning Processor Interrupt */
-    def_irq_handler    BCH_DriverIRQHandler                 /* BCH operation complete interrupt */
-    def_irq_handler    GPMI_DriverIRQHandler                 /* GPMI operation TIMEOUT ERROR interrupt */
-    def_irq_handler    ISI_DriverIRQHandler                 /* ISI Interrupt */
-    def_irq_handler    MIPI_CSI1_DriverIRQHandler                 /* MIPI CSI Interrupt */
-    def_irq_handler    MIPI_DSI_DriverIRQHandler                 /* MIPI DSI Interrupt */
-    def_irq_handler    SNVS_Consolidated_DriverIRQHandler                 /* SRTC Consolidated Interrupt. Non TZ. */
-    def_irq_handler    SNVS_Security_DriverIRQHandler                 /* SRTC Security Interrupt. TZ. */
-    def_irq_handler    CSU_DriverIRQHandler                 /* CSU Interrupt Request. Indicates to the processor that one or more alarm inputs were asserted. */
-    def_irq_handler    USDHC1_DriverIRQHandler                 /* uSDHC1 Enhanced SDHC Interrupt Request */
-    def_irq_handler    USDHC2_DriverIRQHandler                 /* uSDHC2 Enhanced SDHC Interrupt Request */
-    def_irq_handler    USDHC3_DriverIRQHandler                 /* uSDHC3 Enhanced SDHC Interrupt Request */
-    def_irq_handler    GPU2D_DriverIRQHandler                 /* GPU2D Interrupt */
-    def_irq_handler    UART1_DriverIRQHandler                 /* UART-1 ORed interrupt */
-    def_irq_handler    UART2_DriverIRQHandler                 /* UART-2 ORed interrupt */
-    def_irq_handler    UART3_DriverIRQHandler                 /* UART-3 ORed interrupt */
-    def_irq_handler    UART4_DriverIRQHandler                 /* UART-4 ORed interrupt */
-    def_irq_handler    VPU_DriverIRQHandler                 /* VPU Encoder Interrupt */
-    def_irq_handler    ECSPI1_DriverIRQHandler                 /* ECSPI1 interrupt request line to the core. */
-    def_irq_handler    ECSPI2_DriverIRQHandler                 /* ECSPI2 interrupt request line to the core. */
-    def_irq_handler    ECSPI3_DriverIRQHandler                 /* ECSPI3 interrupt request line to the core. */
-    def_irq_handler    SDMA3_DriverIRQHandler                 /* AND of all 48 SDMA3 interrupts (events) from all the channels */
-    def_irq_handler    I2C1_DriverIRQHandler                 /* I2C-1 Interrupt */
-    def_irq_handler    I2C2_DriverIRQHandler                 /* I2C-2 Interrupt */
-    def_irq_handler    I2C3_DriverIRQHandler                 /* I2C-3 Interrupt */
-    def_irq_handler    I2C4_DriverIRQHandler                 /* I2C-4 Interrupt */
-    def_irq_handler    RDC_DriverIRQHandler                 /* RDC interrupt */
-    def_irq_handler    USB1_DriverIRQHandler                 /* USB1 Interrupt */
-    def_irq_handler    USB2_DriverIRQHandler                 /* USB2 Interrupt */
-    def_irq_handler    ISI_CH1_DriverIRQHandler                 /* ISI Camera Channel 1 Interrupt */
-    def_irq_handler    HDMI_TX_DriverIRQHandler                 /* HDMI TX Subsystem Interrupt */
-    def_irq_handler    PDM_HWVAD_EVENT_DriverIRQHandler                 /* Digital Microphone interface voice activity detector event interrupt */
-    def_irq_handler    PDM_HWVAD_ERROR_DriverIRQHandler                 /* Digital Microphone interface voice activity detector error interrupt */
-    def_irq_handler    GPT6_DriverIRQHandler                 /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
-    def_irq_handler    SCTR_IRQ0_DriverIRQHandler                 /* System Counter Interrupt 0 */
-    def_irq_handler    SCTR_IRQ1_DriverIRQHandler                 /* System Counter Interrupt 1 */
-    def_irq_handler    ANAMIX_DriverIRQHandler                 /* TempSensor (Temperature alarm and criticl alarm). */
-    def_irq_handler    I2S3_DriverIRQHandler                 /* SAI3 Receive / Transmit Interrupt */
-    def_irq_handler    GPT5_DriverIRQHandler                 /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
-    def_irq_handler    GPT4_DriverIRQHandler                 /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
-    def_irq_handler    GPT3_DriverIRQHandler                 /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
-    def_irq_handler    GPT2_DriverIRQHandler                 /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
-    def_irq_handler    GPT1_DriverIRQHandler                 /* OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
-    def_irq_handler    GPIO1_INT7_DriverIRQHandler                 /* Active HIGH Interrupt from INT7 from GPIO */
-    def_irq_handler    GPIO1_INT6_DriverIRQHandler                 /* Active HIGH Interrupt from INT6 from GPIO */
-    def_irq_handler    GPIO1_INT5_DriverIRQHandler                 /* Active HIGH Interrupt from INT5 from GPIO */
-    def_irq_handler    GPIO1_INT4_DriverIRQHandler                 /* Active HIGH Interrupt from INT4 from GPIO */
-    def_irq_handler    GPIO1_INT3_DriverIRQHandler                 /* Active HIGH Interrupt from INT3 from GPIO */
-    def_irq_handler    GPIO1_INT2_DriverIRQHandler                 /* Active HIGH Interrupt from INT2 from GPIO */
-    def_irq_handler    GPIO1_INT1_DriverIRQHandler                 /* Active HIGH Interrupt from INT1 from GPIO */
-    def_irq_handler    GPIO1_INT0_DriverIRQHandler                 /* Active HIGH Interrupt from INT0 from GPIO */
-    def_irq_handler    GPIO1_Combined_0_15_DriverIRQHandler                 /* Combined interrupt indication for GPIO1 signal 0 throughout 15 */
-    def_irq_handler    GPIO1_Combined_16_31_DriverIRQHandler                 /* Combined interrupt indication for GPIO1 signal 16 throughout 31 */
-    def_irq_handler    GPIO2_Combined_0_15_DriverIRQHandler                 /* Combined interrupt indication for GPIO2 signal 0 throughout 15 */
-    def_irq_handler    GPIO2_Combined_16_31_DriverIRQHandler                 /* Combined interrupt indication for GPIO2 signal 16 throughout 31 */
-    def_irq_handler    GPIO3_Combined_0_15_DriverIRQHandler                 /* Combined interrupt indication for GPIO3 signal 0 throughout 15 */
-    def_irq_handler    GPIO3_Combined_16_31_DriverIRQHandler                 /* Combined interrupt indication for GPIO3 signal 16 throughout 31 */
-    def_irq_handler    GPIO4_Combined_0_15_DriverIRQHandler                 /* Combined interrupt indication for GPIO4 signal 0 throughout 15 */
-    def_irq_handler    GPIO4_Combined_16_31_DriverIRQHandler                 /* Combined interrupt indication for GPIO4 signal 16 throughout 31 */
-    def_irq_handler    GPIO5_Combined_0_15_DriverIRQHandler                 /* Combined interrupt indication for GPIO5 signal 0 throughout 15 */
-    def_irq_handler    GPIO5_Combined_16_31_DriverIRQHandler                 /* Combined interrupt indication for GPIO5 signal 16 throughout 31 */
-    def_irq_handler    ISP1_DriverIRQHandler                 /* ISP 1 ISP Interrupts */
-    def_irq_handler    ISP2_DriverIRQHandler                 /* ISP 2 ISP Interrupts */
-    def_irq_handler    I2C5_DriverIRQHandler                 /* I2C-5 Interrupt */
-    def_irq_handler    I2C6_DriverIRQHandler                 /* I2C-6 Interrupt */
-    def_irq_handler    WDOG1_DriverIRQHandler                 /* Watchdog Timer reset */
-    def_irq_handler    WDOG2_DriverIRQHandler                 /* Watchdog Timer reset */
-    def_irq_handler    MIPI_CSI2_DriverIRQHandler                 /* MIPI CSI 2 Interrupt */
-    def_irq_handler    PWM1_DriverIRQHandler                 /* Cumulative interrupt line. OR of Rollover Interrupt line, Compare Interrupt line and FIFO Waterlevel crossing interrupt line. */
-    def_irq_handler    PWM2_DriverIRQHandler                 /* Cumulative interrupt line. OR of Rollover Interrupt line, Compare Interrupt line and FIFO Waterlevel crossing interrupt line. */
-    def_irq_handler    PWM3_DriverIRQHandler                 /* Cumulative interrupt line. OR of Rollover Interrupt line, Compare Interrupt line and FIFO Waterlevel crossing interrupt line. */
-    def_irq_handler    PWM4_DriverIRQHandler                 /* Cumulative interrupt line. OR of Rollover Interrupt line, Compare Interrupt line and FIFO Waterlevel crossing interrupt line. */
-    def_irq_handler    CCM_IRQ1_DriverIRQHandler                 /* CCM Interrupt Request 1 */
-    def_irq_handler    CCM_IRQ2_DriverIRQHandler                 /* CCM Interrupt Request 2 */
-    def_irq_handler    GPC_DriverIRQHandler                 /* GPC Interrupt Request 1 */
-    def_irq_handler    MU1_A53_DriverIRQHandler                 /* Interrupt to A53 (A53,M7 MU) */
-    def_irq_handler    SRC_DriverIRQHandler                 /* SRC interrupt request */
-    def_irq_handler    I2S56_DriverIRQHandler                 /* SAI5/6 Receive / Transmit Interrupt */
-    def_irq_handler    RTIC_DriverIRQHandler                 /* RTIC Interrupt */
-    def_irq_handler    CPU_PerformanceUnit_DriverIRQHandler                 /* Performance Unit Interrupts from Cheetah (interrnally: PMUIRQ[n] */
-    def_irq_handler    CPU_CTI_Trigger_DriverIRQHandler                 /* CTI trigger outputs (internal: nCTIIRQ[n] */
-    def_irq_handler    SRC_Combined_DriverIRQHandler                 /* Combined CPU wdog interrupts (4x) out of SRC. */
-    def_irq_handler    I2S1_DriverIRQHandler                 /* SAI1 Receive / Transmit Interrupt */
-    def_irq_handler    I2S2_DriverIRQHandler                 /* SAI2 Receive / Transmit Interrupt */
-    def_irq_handler    MU1_M7_DriverIRQHandler                 /* Interrupt to M7 (A53, M7 MU) */
-    def_irq_handler    DDR_PerformanceMonitor_DriverIRQHandler                 /* ddr Interrupt for performance monitor */
-    def_irq_handler    DDR_DriverIRQHandler                 /* ddr Interrupt */
-    def_irq_handler    DEWARP_DriverIRQHandler                 /* Dewarp Interrupt */
-    def_irq_handler    CPU_Error_AXI_DriverIRQHandler                 /* CPU Error indicator for AXI transaction with a write response error condition */
-    def_irq_handler    CPU_Error_L2RAM_DriverIRQHandler                 /* CPU Error indicator for L2 RAM double-bit ECC error */
-    def_irq_handler    SDMA2_DriverIRQHandler                 /* AND of all 48 SDMA2 interrupts (events) from all the channels */
-    def_irq_handler    SJC_DriverIRQHandler                 /* Interrupt triggered by SJC register */
-    def_irq_handler    CAAM_IRQ0_DriverIRQHandler                 /* CAAM interrupt queue for JQ */
-    def_irq_handler    CAAM_IRQ1_DriverIRQHandler                 /* CAAM interrupt queue for JQ */
-    def_irq_handler    FlexSPI_DriverIRQHandler                 /* FlexSPI Interrupt */
-    def_irq_handler    TZASC_DriverIRQHandler                 /* TZASC (PL380) interrupt */
-    def_irq_handler    PDM_EVENT_DriverIRQHandler                 /* Digital Microphone interface interrupt */
-    def_irq_handler    PDM_ERROR_DriverIRQHandler                 /* Digital Microphone interface error interrupt */
-    def_irq_handler    I2S7_DriverIRQHandler                 /* SAI7 Receive / Transmit Interrupt */
-    def_irq_handler    PERFMON1_DriverIRQHandler                 /* General Interrupt */
-    def_irq_handler    PERFMON2_DriverIRQHandler                 /* General Interrupt */
-    def_irq_handler    CAAM_IRQ2_DriverIRQHandler                 /* CAAM interrupt queue for JQ */
-    def_irq_handler    CAAM_ERROR_DriverIRQHandler                 /* Recoverable error interrupt */
-    def_irq_handler    HS_CP0_DriverIRQHandler                 /* HS Interrupt Request */
-    def_irq_handler    CM7_CTI_DriverIRQHandler                 /* CTI trigger outputs from CM7 platform */
-    def_irq_handler    ENET1_MAC0_Rx_Tx_Done0_DriverIRQHandler                 /* MAC 0 Receive / Trasmit Frame / Buffer Done */
-    def_irq_handler    ENET1_MAC0_Rx_Tx_Done1_DriverIRQHandler                 /* MAC 0 Receive / Trasmit Frame / Buffer Done */
-    def_irq_handler    ENET1_DriverIRQHandler                 /* MAC 0 IRQ */
-    def_irq_handler    ENET1_1588_DriverIRQHandler                 /* MAC 0 1588 Timer Interrupt-synchronous */
-    def_irq_handler    ASRC_DriverIRQHandler                 /* ASRC Interrupt */
-    def_irq_handler    PCIE_CTRL1_0_DriverIRQHandler                 /* Coming from GLUE logic, of set/reset FF, driven by PCIE signals, interrupt 0 */
-    def_irq_handler    PCIE_CTRL1_1_DriverIRQHandler                 /* Coming from GLUE logic, of set/reset FF, driven by PCIE signals, interrupt 1 */
-    def_irq_handler    PCIE_CTRL1_2_DriverIRQHandler                 /* Coming from GLUE logic, of set/reset FF, driven by PCIE signals, interrupt 2 */
-    def_irq_handler    PCIE_CTRL1_3_DriverIRQHandler                 /* Coming from GLUE logic, of set/reset FF, driven by PCIE signals, interrupt 3 */
-    def_irq_handler    PCIE_EDMA_DriverIRQHandler                 /* Channels [63:32] interrupts requests */
-    def_irq_handler    AUDIO_XCVR0_DriverIRQHandler                 /* eARC Interrupt 0 */
-    def_irq_handler    AUDIO_XCVR1_DriverIRQHandler                 /* eARC Interrupt 1 */
-    def_irq_handler    AUD2HTX_DriverIRQHandler                 /* Audio to HDMI TX Audio Link Master Interrupt */
-    def_irq_handler    EDMA1_ERR_DriverIRQHandler                 /* Audio Subsystem eDMA Error Interrupt */
-    def_irq_handler    EDMA1_0_15_DriverIRQHandler                 /* Audio Subsystem eDMA Channel Interrupts, Logical OR of channels [15:0] */
-    def_irq_handler    EDMA1_16_31_DriverIRQHandler                 /* Audio Subsystem eDMA Channel Interrupts, Logical OR of channels [31:16] */
-    def_irq_handler    ENET_QOS_PMT_DriverIRQHandler                 /* ENET QOS TSN Interrupt from PMT */
-    def_irq_handler    ENET_QOS_DriverIRQHandler                 /* ENET QOS TSN LPI RX exit/Host System/RX/TX Channels[4:0] Interrupt */
-    def_irq_handler    MU2_A53_DriverIRQHandler                 /* Interrupt to A53 (A53, Audio Processor MU) */
-    def_irq_handler    MU2_AUDIO_DriverIRQHandler                 /* Interrupt to Audio Processor (A53, Audio Processor MU) */
-    def_irq_handler    MU3_M7_DriverIRQHandler                 /* Interrupt to M7 (M7, Audio Processor MU) */
-    def_irq_handler    MU3_AUDIO_DriverIRQHandler                 /* Interrupt to Audio Processor (M7, Audio Processor MU) */
-    def_irq_handler    PCIE_CTRL1_DriverIRQHandler                 /* RC/EP message transaction Interrupt */
-    def_irq_handler    PCIE_CTRL1_ERR_DriverIRQHandler                 /* RC/EP PME Message and Error Interrupt */
-    def_irq_handler    CAN_FD1_DriverIRQHandler                 /* CAN-FD1 Interrupt from bus off/line error/RX warning/TX warning/wakeup/match in PN/timeout in PN/busoff done/FD error */
-    def_irq_handler    CAN_FD1_ERROR_DriverIRQHandler                 /* CAN-FD1 Interrupt from correctable error/non correctable error int host/ non correctable error int internal */
-    def_irq_handler    CAN_FD2_DriverIRQHandler                 /* CAN-FD2 Interrupt from bus off/line error/RX warning/TX warning/wakeup/match in PN/timeout in PN/busoff done/FD error */
-    def_irq_handler    CAN_FD2_ERROR_DriverIRQHandler                 /* CAN-FD2 Interrupt from correctable error/non correctable error int host/ non correctable error int internal */
-    def_irq_handler    AUDIO_XCVR_DriverIRQHandler                 /* eARC PHY - SPDIF wakeup interrupt */
-    def_irq_handler    DDR_ERR_DriverIRQHandler                 /* DRAM Controller Error Interrupt  */
-    def_irq_handler    USB1_WAKEUP_DriverIRQHandler                 /* USB-1 Wake-up Interrupt */
-    def_irq_handler    USB2_WAKEUP_DriverIRQHandler                 /* USB-2 Wake-up Interrupt */
-    def_irq_handler    MECC_DriverIRQHandler                 /* OCRAM Memory ECC Interrupt */
-    def_irq_handler    MECC_ERR_DriverIRQHandler                 /* OCRAM Memory ECC Error Interrupt */
-    def_irq_handler    MECC_S_DriverIRQHandler                 /* OCRAM_S Memory ECC Interrupt */
-    def_irq_handler    MECC_S_ERR_DriverIRQHandler                 /* OCRAM_S Memory ECC Error Interrupt */
+    def_irq_handler    Reserved16_DriverIRQHandler
+    def_irq_handler    DAP_DriverIRQHandler
+    def_irq_handler    SDMA1_DriverIRQHandler
+    def_irq_handler    GPU3D_DriverIRQHandler
+    def_irq_handler    SNVS_DriverIRQHandler
+    def_irq_handler    LCDIF1_DriverIRQHandler
+    def_irq_handler    LCDIF2_DriverIRQHandler
+    def_irq_handler    VPU_G1_DriverIRQHandler
+    def_irq_handler    VPU_G2_DriverIRQHandler
+    def_irq_handler    QOS_DriverIRQHandler
+    def_irq_handler    WDOG3_DriverIRQHandler
+    def_irq_handler    HS_CP1_DriverIRQHandler
+    def_irq_handler    APBHDMA_DriverIRQHandler
+    def_irq_handler    ML_DriverIRQHandler
+    def_irq_handler    BCH_DriverIRQHandler
+    def_irq_handler    GPMI_DriverIRQHandler
+    def_irq_handler    ISI_DriverIRQHandler
+    def_irq_handler    MIPI_CSI1_DriverIRQHandler
+    def_irq_handler    MIPI_DSI_DriverIRQHandler
+    def_irq_handler    SNVS_Consolidated_DriverIRQHandler
+    def_irq_handler    SNVS_Security_DriverIRQHandler
+    def_irq_handler    CSU_DriverIRQHandler
+    def_irq_handler    USDHC1_DriverIRQHandler
+    def_irq_handler    USDHC2_DriverIRQHandler
+    def_irq_handler    USDHC3_DriverIRQHandler
+    def_irq_handler    GPU2D_DriverIRQHandler
+    def_irq_handler    UART1_DriverIRQHandler
+    def_irq_handler    UART2_DriverIRQHandler
+    def_irq_handler    UART3_DriverIRQHandler
+    def_irq_handler    UART4_DriverIRQHandler
+    def_irq_handler    VPU_DriverIRQHandler
+    def_irq_handler    ECSPI1_DriverIRQHandler
+    def_irq_handler    ECSPI2_DriverIRQHandler
+    def_irq_handler    ECSPI3_DriverIRQHandler
+    def_irq_handler    SDMA3_DriverIRQHandler
+    def_irq_handler    I2C1_DriverIRQHandler
+    def_irq_handler    I2C2_DriverIRQHandler
+    def_irq_handler    I2C3_DriverIRQHandler
+    def_irq_handler    I2C4_DriverIRQHandler
+    def_irq_handler    RDC_DriverIRQHandler
+    def_irq_handler    USB1_DriverIRQHandler
+    def_irq_handler    USB2_DriverIRQHandler
+    def_irq_handler    ISI_CH1_DriverIRQHandler
+    def_irq_handler    HDMI_TX_DriverIRQHandler
+    def_irq_handler    PDM_HWVAD_EVENT_DriverIRQHandler
+    def_irq_handler    PDM_HWVAD_ERROR_DriverIRQHandler
+    def_irq_handler    GPT6_DriverIRQHandler
+    def_irq_handler    SCTR_IRQ0_DriverIRQHandler
+    def_irq_handler    SCTR_IRQ1_DriverIRQHandler
+    def_irq_handler    ANAMIX_DriverIRQHandler
+    def_irq_handler    I2S3_DriverIRQHandler
+    def_irq_handler    GPT5_DriverIRQHandler
+    def_irq_handler    GPT4_DriverIRQHandler
+    def_irq_handler    GPT3_DriverIRQHandler
+    def_irq_handler    GPT2_DriverIRQHandler
+    def_irq_handler    GPT1_DriverIRQHandler
+    def_irq_handler    GPIO1_INT7_DriverIRQHandler
+    def_irq_handler    GPIO1_INT6_DriverIRQHandler
+    def_irq_handler    GPIO1_INT5_DriverIRQHandler
+    def_irq_handler    GPIO1_INT4_DriverIRQHandler
+    def_irq_handler    GPIO1_INT3_DriverIRQHandler
+    def_irq_handler    GPIO1_INT2_DriverIRQHandler
+    def_irq_handler    GPIO1_INT1_DriverIRQHandler
+    def_irq_handler    GPIO1_INT0_DriverIRQHandler
+    def_irq_handler    GPIO1_Combined_0_15_DriverIRQHandler
+    def_irq_handler    GPIO1_Combined_16_31_DriverIRQHandler
+    def_irq_handler    GPIO2_Combined_0_15_DriverIRQHandler
+    def_irq_handler    GPIO2_Combined_16_31_DriverIRQHandler
+    def_irq_handler    GPIO3_Combined_0_15_DriverIRQHandler
+    def_irq_handler    GPIO3_Combined_16_31_DriverIRQHandler
+    def_irq_handler    GPIO4_Combined_0_15_DriverIRQHandler
+    def_irq_handler    GPIO4_Combined_16_31_DriverIRQHandler
+    def_irq_handler    GPIO5_Combined_0_15_DriverIRQHandler
+    def_irq_handler    GPIO5_Combined_16_31_DriverIRQHandler
+    def_irq_handler    ISP1_DriverIRQHandler
+    def_irq_handler    ISP2_DriverIRQHandler
+    def_irq_handler    I2C5_DriverIRQHandler
+    def_irq_handler    I2C6_DriverIRQHandler
+    def_irq_handler    WDOG1_DriverIRQHandler
+    def_irq_handler    WDOG2_DriverIRQHandler
+    def_irq_handler    MIPI_CSI2_DriverIRQHandler
+    def_irq_handler    PWM1_DriverIRQHandler
+    def_irq_handler    PWM2_DriverIRQHandler
+    def_irq_handler    PWM3_DriverIRQHandler
+    def_irq_handler    PWM4_DriverIRQHandler
+    def_irq_handler    CCM_IRQ1_DriverIRQHandler
+    def_irq_handler    CCM_IRQ2_DriverIRQHandler
+    def_irq_handler    GPC_DriverIRQHandler
+    def_irq_handler    MU1_A53_DriverIRQHandler
+    def_irq_handler    SRC_DriverIRQHandler
+    def_irq_handler    I2S56_DriverIRQHandler
+    def_irq_handler    RTIC_DriverIRQHandler
+    def_irq_handler    CPU_PerformanceUnit_DriverIRQHandler
+    def_irq_handler    CPU_CTI_Trigger_DriverIRQHandler
+    def_irq_handler    SRC_Combined_DriverIRQHandler
+    def_irq_handler    I2S1_DriverIRQHandler
+    def_irq_handler    I2S2_DriverIRQHandler
+    def_irq_handler    MU1_M7_DriverIRQHandler
+    def_irq_handler    DDR_PerformanceMonitor_DriverIRQHandler
+    def_irq_handler    DDR_DriverIRQHandler
+    def_irq_handler    DEWARP_DriverIRQHandler
+    def_irq_handler    CPU_Error_AXI_DriverIRQHandler
+    def_irq_handler    CPU_Error_L2RAM_DriverIRQHandler
+    def_irq_handler    SDMA2_DriverIRQHandler
+    def_irq_handler    SJC_DriverIRQHandler
+    def_irq_handler    CAAM_IRQ0_DriverIRQHandler
+    def_irq_handler    CAAM_IRQ1_DriverIRQHandler
+    def_irq_handler    FlexSPI_DriverIRQHandler
+    def_irq_handler    TZASC_DriverIRQHandler
+    def_irq_handler    PDM_EVENT_DriverIRQHandler
+    def_irq_handler    PDM_ERROR_DriverIRQHandler
+    def_irq_handler    I2S7_DriverIRQHandler
+    def_irq_handler    PERFMON1_DriverIRQHandler
+    def_irq_handler    PERFMON2_DriverIRQHandler
+    def_irq_handler    CAAM_IRQ2_DriverIRQHandler
+    def_irq_handler    CAAM_ERROR_DriverIRQHandler
+    def_irq_handler    HS_CP0_DriverIRQHandler
+    def_irq_handler    CM7_CTI_DriverIRQHandler
+    def_irq_handler    ENET1_MAC0_Rx_Tx_Done1_DriverIRQHandler
+    def_irq_handler    ENET1_MAC0_Rx_Tx_Done2_DriverIRQHandler
+    def_irq_handler    ENET1_DriverIRQHandler
+    def_irq_handler    ENET1_1588_Timer_DriverIRQHandler
+    def_irq_handler    ASRC_DriverIRQHandler
+    def_irq_handler    PCIE_CTRL1_0_DriverIRQHandler
+    def_irq_handler    PCIE_CTRL1_1_DriverIRQHandler
+    def_irq_handler    PCIE_CTRL1_2_DriverIRQHandler
+    def_irq_handler    PCIE_CTRL1_3_DriverIRQHandler
+    def_irq_handler    PCIE_EDMA_DriverIRQHandler
+    def_irq_handler    AUDIO_XCVR0_DriverIRQHandler
+    def_irq_handler    AUDIO_XCVR1_DriverIRQHandler
+    def_irq_handler    AUD2HTX_DriverIRQHandler
+    def_irq_handler    EDMA1_ERR_DriverIRQHandler
+    def_irq_handler    EDMA1_0_15_DriverIRQHandler
+    def_irq_handler    EDMA1_16_31_DriverIRQHandler
+    def_irq_handler    ENET_QOS_PMT_DriverIRQHandler
+    def_irq_handler    ENET_QOS_DriverIRQHandler
+    def_irq_handler    MU2_A53_DriverIRQHandler
+    def_irq_handler    MU2_AUDIO_DriverIRQHandler
+    def_irq_handler    MU3_M7_DriverIRQHandler
+    def_irq_handler    MU3_AUDIO_DriverIRQHandler
+    def_irq_handler    PCIE_CTRL1_DriverIRQHandler
+    def_irq_handler    PCIE_CTRL1_ERR_DriverIRQHandler
+    def_irq_handler    CAN_FD1_DriverIRQHandler
+    def_irq_handler    CAN_FD1_ERROR_DriverIRQHandler
+    def_irq_handler    CAN_FD2_DriverIRQHandler
+    def_irq_handler    CAN_FD2_ERROR_DriverIRQHandler
+    def_irq_handler    AUDIO_XCVR_DriverIRQHandler
+    def_irq_handler    DDR_ERR_DriverIRQHandler
+    def_irq_handler    USB1_WAKEUP_DriverIRQHandler
+    def_irq_handler    USB2_WAKEUP_DriverIRQHandler
+    def_irq_handler    MECC_DriverIRQHandler
+    def_irq_handler    MECC_ERR_DriverIRQHandler
+    def_irq_handler    MECC_S_DriverIRQHandler
+    def_irq_handler    MECC_S_ERR_DriverIRQHandler
 
     .end

@@ -48,10 +48,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utilities
@@ -95,6 +94,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Driver_Include_I2C)
 #    include(component_led)
 #    include(middleware_usb_common_header)
+#    include(middleware_fatfs_MK22F51212)
 #    include(middleware_usb_device_common_header)
 #    include(component_uart_adapter)
 #    include(driver_clock)
@@ -125,7 +125,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_printer)
 #    include(middleware_usb_host_audio)
 #    include(utility_assert_lite)
-#    include(middleware_fatfs)
 #    include(driver_flash)
 #    include(utility_debug_console)
 #    include(middleware_usb_host_hid)

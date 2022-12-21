@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 NXP
+ * Copyright 2020-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,11 +39,11 @@ const flexspi_nor_config_t
                             .seqId    = 6, /* See Lookup table for more details */
                             .reserved = 0,
                         },
-                    .deviceModeArg   = 0,
-                    .configCmdEnable = 1,
-                    .configModeType  = {kDeviceConfigCmdType_Generic, kDeviceConfigCmdType_Spi2Xpi,
+                    .deviceModeArg        = 0,
+                    .configCmdEnable      = 1,
+                    .configModeType       = {kDeviceConfigCmdType_Generic, kDeviceConfigCmdType_Spi2Xpi,
                                        kDeviceConfigCmdType_Generic},
-                    .configCmdSeqs   = {{
+                    .configCmdSeqs        = {{
                                           .seqNum   = 1,
                                           .seqId    = 7,
                                           .reserved = 0,
@@ -53,16 +53,15 @@ const flexspi_nor_config_t
                                           .seqId    = 10,
                                           .reserved = 0,
                                       }},
-                    .configCmdArgs   = {0x2, 0x1},
-                    .controllerMiscOption =
-                        (1u << kFlexSpiMiscOffset_SafeConfigFreqEnable) | (1u << kFlexSpiMiscOffset_DdrModeEnable),
-                    .deviceType    = 0x1,
-                    .sflashPadType = kSerialFlash_8Pads,
-                    .serialClkFreq = kFlexSpiSerialClk_133MHz,
-                    .sflashA1Size  = 0,
-                    .sflashA2Size  = 0,
-                    .sflashB1Size  = 0x4000000U,
-                    .sflashB2Size  = 0,
+                    .configCmdArgs        = {0x2, 0x1},
+                    .controllerMiscOption = 1u << kFlexSpiMiscOffset_SafeConfigFreqEnable,
+                    .deviceType           = 0x1,
+                    .sflashPadType        = kSerialFlash_8Pads,
+                    .serialClkFreq        = kFlexSpiSerialClk_SDR_48MHz,
+                    .sflashA1Size         = 0,
+                    .sflashA2Size         = 0,
+                    .sflashB1Size         = 0x4000000U,
+                    .sflashB2Size         = 0,
                     .lookupTable =
                         {
                             /* Read */

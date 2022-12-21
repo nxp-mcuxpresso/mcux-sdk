@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -12,26 +12,38 @@
  ******************************************************************************/
 
 /*! @brief Defines the PHY KSZ8081 vendor defined registers. */
-#define PHY_CONTROL1_REG 0x1EU /*!< The PHY control one register. */
-#define PHY_CONTROL2_REG 0x1FU /*!< The PHY control two register. */
+#define PHY_INTR_CONTROL_STATUS_REG (0x1BU) /*!< The PHY interrupt control/status register. */
+#define PHY_CONTROL1_REG            (0x1EU) /*!< The PHY control one register. */
+#define PHY_CONTROL2_REG            (0x1FU) /*!< The PHY control two register. */
 
 /*! @brief Defines the PHY KSZ8081 ID number. */
 #define PHY_CONTROL_ID1 0x22U /*!< The PHY ID1 */
 
+/*! @brief Defines the mask flag of operation mode in interrupt control/status registers */
+#define PHY_INTR_CONTROL_STATUS_LINK_UP_MASK   ((uint16_t)0x0100U) /*!< The PHY link up interrupt mask. */
+#define PHY_INTR_CONTROL_STATUS_LINK_DOWN_MASK ((uint16_t)0x0400U) /*!< The PHY link down interrupt mask. */
+
 /*! @brief Defines the mask flag of operation mode in control registers */
-#define PHY_CTL2_REMOTELOOP_MASK    0x0004U /*!< The PHY remote loopback mask. */
-#define PHY_CTL2_REFCLK_SELECT_MASK 0x0080U /*!< The PHY RMII reference clock select. */
-#define PHY_CTL1_10HALFDUPLEX_MASK  0x0001U /*!< The PHY 10M half duplex mask. */
-#define PHY_CTL1_100HALFDUPLEX_MASK 0x0002U /*!< The PHY 100M half duplex mask. */
-#define PHY_CTL1_10FULLDUPLEX_MASK  0x0005U /*!< The PHY 10M full duplex mask. */
-#define PHY_CTL1_100FULLDUPLEX_MASK 0x0006U /*!< The PHY 100M full duplex mask. */
-#define PHY_CTL1_SPEEDUPLX_MASK     0x0007U /*!< The PHY speed and duplex mask. */
-#define PHY_CTL1_ENERGYDETECT_MASK  0x10U   /*!< The PHY signal present on rx differential pair. */
-#define PHY_CTL1_LINKUP_MASK        0x100U  /*!< The PHY link up. */
+#define PHY_CTL2_REMOTELOOP_MASK    ((uint16_t)0x0004U) /*!< The PHY remote loopback mask. */
+#define PHY_CTL2_REFCLK_SELECT_MASK ((uint16_t)0x0080U) /*!< The PHY RMII reference clock select. */
+#define PHY_CTL2_INTR_LEVEL_MASK    ((uint16_t)0x0200U) /*!< The PHY interrupt level mask. */
+#define PHY_CTL1_10HALFDUPLEX_MASK  ((uint16_t)0x0001U) /*!< The PHY 10M half duplex mask. */
+#define PHY_CTL1_100HALFDUPLEX_MASK ((uint16_t)0x0002U) /*!< The PHY 100M half duplex mask. */
+#define PHY_CTL1_10FULLDUPLEX_MASK  ((uint16_t)0x0005U) /*!< The PHY 10M full duplex mask. */
+#define PHY_CTL1_100FULLDUPLEX_MASK ((uint16_t)0x0006U) /*!< The PHY 100M full duplex mask. */
+#define PHY_CTL1_SPEEDUPLX_MASK     ((uint16_t)0x0007U) /*!< The PHY speed and duplex mask. */
+#define PHY_CTL1_ENERGYDETECT_MASK  ((uint16_t)0x0010U) /*!< The PHY signal present on rx differential pair. */
+#define PHY_CTL1_LINKUP_MASK        ((uint16_t)0x0100U) /*!< The PHY link up. */
 #define PHY_LINK_READY_MASK         (PHY_CTL1_ENERGYDETECT_MASK | PHY_CTL1_LINKUP_MASK)
 
 /*! @brief Defines the timeout macro. */
-#define PHY_READID_TIMEOUT_COUNT 1000U
+#define PHY_READID_TIMEOUT_COUNT (1000U)
+
+/*! @brief Defines the PHY resource interface. */
+#define PHY_KSZ8081_WRITE(handle, regAddr, data) \
+    (((phy_ksz8081_resource_t *)(handle)->resource)->write((handle)->phyAddr, regAddr, data))
+#define PHY_KSZ8081_READ(handle, regAddr, pData) \
+    (((phy_ksz8081_resource_t *)(handle)->resource)->read((handle)->phyAddr, regAddr, pData))
 
 /*******************************************************************************
  * Prototypes
@@ -40,14 +52,16 @@
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-const phy_operations_t phyksz8081_ops = {.phyInit            = PHY_KSZ8081_Init,
-                                         .phyWrite           = PHY_KSZ8081_Write,
-                                         .phyRead            = PHY_KSZ8081_Read,
-                                         .getAutoNegoStatus  = PHY_KSZ8081_GetAutoNegotiationStatus,
-                                         .getLinkStatus      = PHY_KSZ8081_GetLinkStatus,
-                                         .getLinkSpeedDuplex = PHY_KSZ8081_GetLinkSpeedDuplex,
-                                         .setLinkSpeedDuplex = PHY_KSZ8081_SetLinkSpeedDuplex,
-                                         .enableLoopback     = PHY_KSZ8081_EnableLoopback};
+const phy_operations_t phyksz8081_ops = {.phyInit             = PHY_KSZ8081_Init,
+                                         .phyWrite            = PHY_KSZ8081_Write,
+                                         .phyRead             = PHY_KSZ8081_Read,
+                                         .getAutoNegoStatus   = PHY_KSZ8081_GetAutoNegotiationStatus,
+                                         .getLinkStatus       = PHY_KSZ8081_GetLinkStatus,
+                                         .getLinkSpeedDuplex  = PHY_KSZ8081_GetLinkSpeedDuplex,
+                                         .setLinkSpeedDuplex  = PHY_KSZ8081_SetLinkSpeedDuplex,
+                                         .enableLoopback      = PHY_KSZ8081_EnableLoopback,
+                                         .enableLinkInterrupt = PHY_KSZ8081_EnableLinkInterrupt,
+                                         .clearInterrupt      = PHY_KSZ8081_ClearInterrupt};
 
 /*******************************************************************************
  * Code
@@ -57,18 +71,16 @@ status_t PHY_KSZ8081_Init(phy_handle_t *handle, const phy_config_t *config)
 {
     uint32_t counter  = PHY_READID_TIMEOUT_COUNT;
     status_t result   = kStatus_Success;
-    uint32_t regValue = 0;
+    uint16_t regValue = 0;
 
-    /* Init MDIO interface. */
-    MDIO_Init(handle->mdioHandle);
-
-    /* Assign phy address. */
-    handle->phyAddr = config->phyAddr;
+    /* Assign PHY address and operation resource. */
+    handle->phyAddr  = config->phyAddr;
+    handle->resource = config->resource;
 
     /* Check PHY ID. */
     do
     {
-        result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_ID1_REG, &regValue);
+        result = PHY_KSZ8081_READ(handle, PHY_ID1_REG, &regValue);
         if (result != kStatus_Success)
         {
             return result;
@@ -82,34 +94,40 @@ status_t PHY_KSZ8081_Init(phy_handle_t *handle, const phy_config_t *config)
     }
 
     /* Reset PHY. */
-    result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, PHY_BCTL_RESET_MASK);
+    result = PHY_KSZ8081_WRITE(handle, PHY_BASICCONTROL_REG, PHY_BCTL_RESET_MASK);
     if (result == kStatus_Success)
     {
 #if defined(FSL_FEATURE_PHYKSZ8081_USE_RMII50M_MODE)
-        result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_CONTROL2_REG, &regValue);
+        result = PHY_KSZ8081_READ(handle, PHY_CONTROL2_REG, &regValue);
         if (result != kStatus_Success)
         {
             return result;
         }
-        result =
-            MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_CONTROL2_REG, (regValue | PHY_CTL2_REFCLK_SELECT_MASK));
+        result = PHY_KSZ8081_WRITE(handle, PHY_CONTROL2_REG, (regValue | PHY_CTL2_REFCLK_SELECT_MASK));
         if (result != kStatus_Success)
         {
             return result;
         }
 #endif /* FSL_FEATURE_PHYKSZ8081_USE_RMII50M_MODE */
 
+        /* Set PHY link status management interrupt. */
+        result = PHY_KSZ8081_EnableLinkInterrupt(handle, config->intrType, config->enableLinkIntr);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+
         if (config->autoNeg)
         {
             /* Set the auto-negotiation then start it. */
-            result =
-                MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_AUTONEG_ADVERTISE_REG,
-                           (PHY_100BASETX_FULLDUPLEX_MASK | PHY_100BASETX_HALFDUPLEX_MASK |
-                            PHY_10BASETX_FULLDUPLEX_MASK | PHY_10BASETX_HALFDUPLEX_MASK | PHY_IEEE802_3_SELECTOR_MASK));
+            result = PHY_KSZ8081_WRITE(
+                handle, PHY_AUTONEG_ADVERTISE_REG,
+                (PHY_100BASETX_FULLDUPLEX_MASK | PHY_100BASETX_HALFDUPLEX_MASK | PHY_10BASETX_FULLDUPLEX_MASK |
+                 PHY_10BASETX_HALFDUPLEX_MASK | PHY_IEEE802_3_SELECTOR_MASK));
             if (result == kStatus_Success)
             {
-                result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG,
-                                    (PHY_BCTL_AUTONEG_MASK | PHY_BCTL_RESTART_AUTONEG_MASK));
+                result = PHY_KSZ8081_WRITE(handle, PHY_BASICCONTROL_REG,
+                                           (PHY_BCTL_AUTONEG_MASK | PHY_BCTL_RESTART_AUTONEG_MASK));
             }
         }
         else
@@ -118,13 +136,13 @@ status_t PHY_KSZ8081_Init(phy_handle_t *handle, const phy_config_t *config)
             assert(config->speed <= kPHY_Speed100M);
 
             /* Disable isolate mode */
-            result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, &regValue);
+            result = PHY_KSZ8081_READ(handle, PHY_BASICCONTROL_REG, &regValue);
             if (result != kStatus_Success)
             {
                 return result;
             }
             regValue &= ~PHY_BCTL_ISOLATE_MASK;
-            result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, regValue);
+            result = PHY_KSZ8081_WRITE(handle, PHY_BASICCONTROL_REG, regValue);
             if (result != kStatus_Success)
             {
                 return result;
@@ -137,14 +155,14 @@ status_t PHY_KSZ8081_Init(phy_handle_t *handle, const phy_config_t *config)
     return result;
 }
 
-status_t PHY_KSZ8081_Write(phy_handle_t *handle, uint32_t phyReg, uint32_t data)
+status_t PHY_KSZ8081_Write(phy_handle_t *handle, uint8_t phyReg, uint16_t data)
 {
-    return MDIO_Write(handle->mdioHandle, handle->phyAddr, phyReg, data);
+    return PHY_KSZ8081_WRITE(handle, phyReg, data);
 }
 
-status_t PHY_KSZ8081_Read(phy_handle_t *handle, uint32_t phyReg, uint32_t *dataPtr)
+status_t PHY_KSZ8081_Read(phy_handle_t *handle, uint8_t phyReg, uint16_t *pData)
 {
-    return MDIO_Read(handle->mdioHandle, handle->phyAddr, phyReg, dataPtr);
+    return PHY_KSZ8081_READ(handle, phyReg, pData);
 }
 
 status_t PHY_KSZ8081_GetAutoNegotiationStatus(phy_handle_t *handle, bool *status)
@@ -152,12 +170,12 @@ status_t PHY_KSZ8081_GetAutoNegotiationStatus(phy_handle_t *handle, bool *status
     assert(status);
 
     status_t result;
-    uint32_t regValue;
+    uint16_t regValue;
 
     *status = false;
 
     /* Check auto negotiation complete. */
-    result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICSTATUS_REG, &regValue);
+    result = PHY_KSZ8081_READ(handle, PHY_BASICSTATUS_REG, &regValue);
     if (result == kStatus_Success)
     {
         if ((regValue & PHY_BSTATUS_AUTONEGCOMP_MASK) != 0U)
@@ -173,10 +191,10 @@ status_t PHY_KSZ8081_GetLinkStatus(phy_handle_t *handle, bool *status)
     assert(status);
 
     status_t result;
-    uint32_t regValue;
+    uint16_t regValue;
 
     /* Read the basic status register. */
-    result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICSTATUS_REG, &regValue);
+    result = PHY_KSZ8081_READ(handle, PHY_BASICSTATUS_REG, &regValue);
     if (result == kStatus_Success)
     {
         if ((PHY_BSTATUS_LINKSTATUS_MASK & regValue) != 0U)
@@ -198,11 +216,11 @@ status_t PHY_KSZ8081_GetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t *speed
     assert(!((speed == NULL) && (duplex == NULL)));
 
     status_t result;
-    uint32_t regValue;
-    uint32_t flag;
+    uint16_t regValue;
+    uint16_t flag;
 
     /* Read the control register. */
-    result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_CONTROL1_REG, &regValue);
+    result = PHY_KSZ8081_READ(handle, PHY_CONTROL1_REG, &regValue);
     if (result == kStatus_Success)
     {
         if (speed != NULL)
@@ -240,9 +258,9 @@ status_t PHY_KSZ8081_SetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t speed,
     assert(speed <= kPHY_Speed100M);
 
     status_t result;
-    uint32_t regValue;
+    uint16_t regValue;
 
-    result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, &regValue);
+    result = PHY_KSZ8081_READ(handle, PHY_BASICCONTROL_REG, &regValue);
     if (result == kStatus_Success)
     {
         /* Disable the auto-negotiation and set according to user-defined configuration. */
@@ -263,7 +281,7 @@ status_t PHY_KSZ8081_SetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t speed,
         {
             regValue &= ~PHY_BCTL_DUPLEX_MASK;
         }
-        result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, regValue);
+        result = PHY_KSZ8081_WRITE(handle, PHY_BASICCONTROL_REG, regValue);
     }
     return result;
 }
@@ -275,7 +293,7 @@ status_t PHY_KSZ8081_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_s
     assert(speed <= kPHY_Speed100M);
 
     status_t result;
-    uint32_t regValue;
+    uint16_t regValue;
 
     /* Set the loop mode. */
     if (enable)
@@ -290,7 +308,7 @@ status_t PHY_KSZ8081_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_s
             {
                 regValue = PHY_BCTL_DUPLEX_MASK | PHY_BCTL_LOOP_MASK;
             }
-            return MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, regValue);
+            return PHY_KSZ8081_WRITE(handle, PHY_BASICCONTROL_REG, regValue);
         }
         else
         {
@@ -298,17 +316,16 @@ status_t PHY_KSZ8081_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_s
             assert(speed == kPHY_Speed100M);
 
             regValue = PHY_BCTL_SPEED0_MASK | PHY_BCTL_DUPLEX_MASK | PHY_BCTL_LOOP_MASK;
-            result   = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, regValue);
+            result   = PHY_KSZ8081_WRITE(handle, PHY_BASICCONTROL_REG, regValue);
             if (result != kStatus_Success)
             {
                 return result;
             }
             /* Set the remote loopback bit. */
-            result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_CONTROL2_REG, &regValue);
+            result = PHY_KSZ8081_READ(handle, PHY_CONTROL2_REG, &regValue);
             if (result == kStatus_Success)
             {
-                return MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_CONTROL2_REG,
-                                  (regValue | PHY_CTL2_REMOTELOOP_MASK));
+                return PHY_KSZ8081_WRITE(handle, PHY_CONTROL2_REG, (regValue | PHY_CTL2_REMOTELOOP_MASK));
             }
         }
     }
@@ -318,24 +335,77 @@ status_t PHY_KSZ8081_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_s
         if (mode == kPHY_LocalLoop)
         {
             /* First read the current status in control register. */
-            result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, &regValue);
+            result = PHY_KSZ8081_READ(handle, PHY_BASICCONTROL_REG, &regValue);
             if (result == kStatus_Success)
             {
                 regValue &= ~PHY_BCTL_LOOP_MASK;
-                return MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG,
-                                  (regValue | PHY_BCTL_RESTART_AUTONEG_MASK));
+                return PHY_KSZ8081_WRITE(handle, PHY_BASICCONTROL_REG, (regValue | PHY_BCTL_RESTART_AUTONEG_MASK));
             }
         }
         else
         {
             /* First read the current status in control one register. */
-            result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_CONTROL2_REG, &regValue);
+            result = PHY_KSZ8081_READ(handle, PHY_CONTROL2_REG, &regValue);
             if (result == kStatus_Success)
             {
-                return MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_CONTROL2_REG,
-                                  (regValue & ~PHY_CTL2_REMOTELOOP_MASK));
+                return PHY_KSZ8081_WRITE(handle, PHY_CONTROL2_REG, regValue & ~PHY_CTL2_REMOTELOOP_MASK);
             }
         }
     }
     return result;
+}
+
+status_t PHY_KSZ8081_EnableLinkInterrupt(phy_handle_t *handle, phy_interrupt_type_t type, bool enable)
+{
+    assert((type == kPHY_IntrActiveLow) || (type == kPHY_IntrActiveHigh));
+
+    status_t result;
+    uint16_t regValue;
+
+    /* Read operation will clear pending interrupt before enable interrupt. */
+    result = PHY_KSZ8081_READ(handle, PHY_INTR_CONTROL_STATUS_REG, &regValue);
+    if (result == kStatus_Success)
+    {
+        /* Enable/Disable link up+down interrupt. */
+        if (enable)
+        {
+            regValue |= (PHY_INTR_CONTROL_STATUS_LINK_UP_MASK | PHY_INTR_CONTROL_STATUS_LINK_DOWN_MASK);
+        }
+        else
+        {
+            regValue &= ~(PHY_INTR_CONTROL_STATUS_LINK_UP_MASK | PHY_INTR_CONTROL_STATUS_LINK_DOWN_MASK);
+        }
+        result = PHY_KSZ8081_WRITE(handle, PHY_INTR_CONTROL_STATUS_REG, regValue);
+    }
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
+
+    if (enable)
+    {
+        /* Set link interrupt type. */
+        result = PHY_KSZ8081_READ(handle, PHY_CONTROL2_REG, &regValue);
+        if (result == kStatus_Success)
+        {
+            if (type == kPHY_IntrActiveLow)
+            {
+                regValue &= ~PHY_CTL2_INTR_LEVEL_MASK;
+            }
+            else
+            {
+                regValue |= PHY_CTL2_INTR_LEVEL_MASK;
+            }
+            result = PHY_KSZ8081_WRITE(handle, PHY_CONTROL2_REG, regValue);
+        }
+    }
+
+    return result;
+}
+
+status_t PHY_KSZ8081_ClearInterrupt(phy_handle_t *handle)
+{
+    uint16_t regValue;
+
+    return PHY_KSZ8081_READ(handle, PHY_INTR_CONTROL_STATUS_REG, &regValue);
 }

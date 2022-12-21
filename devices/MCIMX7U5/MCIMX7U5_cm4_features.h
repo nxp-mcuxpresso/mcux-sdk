@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 7.0, 2018-11-05
-**     Build:               b220216
+**     Build:               b220718
 **
 **     Abstract:
 **         Chip specific module features.
@@ -213,6 +213,8 @@
 
 /* @brief Has no ITRM register. */
 #define FSL_FEATURE_DAC12_HAS_NO_ITRM_REGISTER (0)
+/* @brief Has hardware trigger. */
+#define FSL_FEATURE_DAC12_HAS_HW_TRIGGER (1)
 
 /* EDMA module features */
 
@@ -285,8 +287,10 @@
 
 /* SAI module features */
 
+/* @brief SAI has FIFO in this soc (register bit fields TCR1[TFW]. */
+#define FSL_FEATURE_SAI_HAS_FIFO (1)
 /* @brief Receive/transmit FIFO size in item count (register bit fields TCSR[FRDE], TCSR[FRIE], TCSR[FRF], TCR1[TFW], RCSR[FRDE], RCSR[FRIE], RCSR[FRF], RCR1[RFW], registers TFRn, RFRn). */
-#define FSL_FEATURE_SAI_FIFO_COUNT (16)
+#define FSL_FEATURE_SAI_FIFO_COUNTn(x) (16)
 /* @brief Receive/transmit channel number (register bit fields TCR3[TCE], RCR3[RCE], registers TDRn and RDRn). */
 #define FSL_FEATURE_SAI_CHANNEL_COUNTn(x) \
     (((x) == I2S0) ? (2) : \

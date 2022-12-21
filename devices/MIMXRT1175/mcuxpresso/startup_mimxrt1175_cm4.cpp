@@ -1,10 +1,10 @@
 //*****************************************************************************
 // MIMXRT1175_cm4 startup code for use with MCUXpresso IDE
 //
-// Version : 020421
+// Version : 090922
 //*****************************************************************************
 //
-// Copyright 2016-2021 NXP
+// Copyright 2016-2022 NXP
 // All rights reserved.
 //
 // SPDX-License-Identifier: BSD-3-Clause
@@ -46,7 +46,6 @@ extern "C" {
 //*****************************************************************************
 #include <NXP/crp.h>
 __CRP const unsigned int CRP_WORD = CRP_NO_CRP ;
-
 
 //*****************************************************************************
 // Declaration of external SystemInit function
@@ -280,8 +279,8 @@ WEAK void Reserved212_IRQHandler(void);
 WEAK void Reserved213_IRQHandler(void);
 WEAK void Reserved214_IRQHandler(void);
 WEAK void Reserved215_IRQHandler(void);
-WEAK void HWVAD_EVENT_IRQHandler(void);
-WEAK void HWVAD_ERROR_IRQHandler(void);
+WEAK void PDM_HWVAD_EVENT_IRQHandler(void);
+WEAK void PDM_HWVAD_ERROR_IRQHandler(void);
 WEAK void PDM_EVENT_IRQHandler(void);
 WEAK void PDM_ERROR_IRQHandler(void);
 WEAK void EMVSIM1_IRQHandler(void);
@@ -505,8 +504,8 @@ void Reserved212_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved213_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved214_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved215_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void HWVAD_EVENT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void HWVAD_ERROR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void PDM_HWVAD_EVENT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void PDM_HWVAD_ERROR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PDM_EVENT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PDM_ERROR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void EMVSIM1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
@@ -547,8 +546,6 @@ extern void _vStackTop(void);
 // This relies on the linker script to place at correct location in memory.
 //*****************************************************************************
 
-
-
 extern void (* const g_pfnVectors[])(void);
 extern void * __Vectors __attribute__ ((alias ("g_pfnVectors")));
 
@@ -557,20 +554,20 @@ void (* const g_pfnVectors[])(void) = {
     // Core Level - CM4
     &_vStackTop,                       // The initial stack pointer
     ResetISR,                          // The reset handler
-    NMI_Handler,                       // The NMI handler
-    HardFault_Handler,                 // The hard fault handler
-    MemManage_Handler,                 // The MPU fault handler
-    BusFault_Handler,                  // The bus fault handler
-    UsageFault_Handler,                // The usage fault handler
+    NMI_Handler,                       // NMI Handler
+    HardFault_Handler,                 // Hard Fault Handler
+    MemManage_Handler,                 // MPU Fault Handler
+    BusFault_Handler,                  // Bus Fault Handler
+    UsageFault_Handler,                // Usage Fault Handler
     0,                                 // Reserved
     0,                                 // Reserved
     0,                                 // Reserved
     0,                                 // Reserved
-    SVC_Handler,                       // SVCall handler
+    SVC_Handler,                       // SVCall Handler
     0,                                 // Reserved
     0,                                 // Reserved
-    PendSV_Handler,                    // The PendSV handler
-    SysTick_Handler,                   // The SysTick handler
+    PendSV_Handler,                    // PendSV Handler
+    SysTick_Handler,                   // SysTick Handler
 
     // Chip Level - MIMXRT1175_cm4
     DMA0_DMA16_IRQHandler,               // 16 : DMA channel 0/16 transfer complete
@@ -716,8 +713,8 @@ void (* const g_pfnVectors[])(void) = {
     ENET_1G_MAC0_Tx_Rx_2_IRQHandler,     // 156: ENET 1G MAC0 transmit/receive 2
     ENET_1G_IRQHandler,                  // 157: ENET 1G interrupt
     ENET_1G_1588_Timer_IRQHandler,       // 158: ENET_1G_1588_Timer interrupt
-    XBAR1_IRQ_0_1_IRQHandler,            // 159: XBAR1 interrupt
-    XBAR1_IRQ_2_3_IRQHandler,            // 160: XBAR1 interrupt
+    XBAR1_IRQ_0_1_IRQHandler,            // 159: XBARA1 output signal 0, 1 interrupt
+    XBAR1_IRQ_2_3_IRQHandler,            // 160: XBARA1 output signal 2, 3 interrupt
     ADC_ETC_IRQ0_IRQHandler,             // 161: ADCETC IRQ0 interrupt
     ADC_ETC_IRQ1_IRQHandler,             // 162: ADCETC IRQ1 interrupt
     ADC_ETC_IRQ2_IRQHandler,             // 163: ADCETC IRQ2 interrupt
@@ -773,8 +770,8 @@ void (* const g_pfnVectors[])(void) = {
     Reserved213_IRQHandler,              // 213: Reserved interrupt
     Reserved214_IRQHandler,              // 214: Reserved interrupt
     Reserved215_IRQHandler,              // 215: Reserved interrupt
-    HWVAD_EVENT_IRQHandler,              // 216: HWVAD event interrupt
-    HWVAD_ERROR_IRQHandler,              // 217: HWVAD error interrupt
+    PDM_HWVAD_EVENT_IRQHandler,          // 216: HWVAD event interrupt
+    PDM_HWVAD_ERROR_IRQHandler,          // 217: HWVAD error interrupt
     PDM_EVENT_IRQHandler,                // 218: PDM event interrupt
     PDM_ERROR_IRQHandler,                // 219: PDM error interrupt
     EMVSIM1_IRQHandler,                  // 220: EMVSIM1 interrupt
@@ -791,8 +788,6 @@ void (* const g_pfnVectors[])(void) = {
     XECC_SEMC_FATAL_INT_IRQHandler,      // 231: XECC fatal int
     ENET_QOS_IRQHandler,                 // 232: ENET_QOS interrupt
     ENET_QOS_PMT_IRQHandler,             // 233: ENET_QOS_PMT interrupt
-
-
 }; /* End of g_pfnVectors */
 
 //*****************************************************************************
@@ -837,14 +832,9 @@ extern unsigned int __bss_section_table_end;
 //*****************************************************************************
 __attribute__ ((naked, section(".after_vectors.reset")))
 void ResetISR(void) {
-
-
     // Disable interrupts
     __asm volatile ("cpsid i");
-
     __asm volatile ("MSR MSP, %0" : : "r" (&_vStackTop) : );
-
-
 
 #if defined (__USE_CMSIS)
 // If __USE_CMSIS defined, then call CMSIS SystemInit code
@@ -908,7 +898,6 @@ void ResetISR(void) {
                   "STR R1, [R0]");
 #endif // (__VFP_FP__) && !(__SOFTFP__)
 #endif // (__USE_CMSIS)
-
 
 #if !defined (__USE_CMSIS)
 // Assume that if __USE_CMSIS defined, then CMSIS SystemInit code
@@ -1798,12 +1787,12 @@ WEAK void Reserved215_IRQHandler(void)
 {   Reserved215_DriverIRQHandler();
 }
 
-WEAK void HWVAD_EVENT_IRQHandler(void)
-{   HWVAD_EVENT_DriverIRQHandler();
+WEAK void PDM_HWVAD_EVENT_IRQHandler(void)
+{   PDM_HWVAD_EVENT_DriverIRQHandler();
 }
 
-WEAK void HWVAD_ERROR_IRQHandler(void)
-{   HWVAD_ERROR_DriverIRQHandler();
+WEAK void PDM_HWVAD_ERROR_IRQHandler(void)
+{   PDM_HWVAD_ERROR_DriverIRQHandler();
 }
 
 WEAK void PDM_EVENT_IRQHandler(void)

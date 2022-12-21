@@ -236,7 +236,7 @@ osa_task_priority_t OSA_TaskGetPriority(osa_task_handle_t taskHandle)
 {
     assert(NULL != taskHandle);
     osa_freertos_task_t *ptask = (osa_freertos_task_t *)taskHandle;
-    return (osa_task_priority_t)(PRIORITY_RTOS_TO_OSA(uxTaskPriorityGet(ptask->taskHandle)));
+    return (osa_task_priority_t)(PRIORITY_RTOS_TO_OSA((uxTaskPriorityGet(ptask->taskHandle))));
 }
 #endif
 
@@ -251,7 +251,7 @@ osa_status_t OSA_TaskSetPriority(osa_task_handle_t taskHandle, osa_task_priority
 {
     assert(NULL != taskHandle);
     osa_freertos_task_t *ptask = (osa_freertos_task_t *)taskHandle;
-    vTaskPrioritySet((task_handler_t)ptask->taskHandle, PRIORITY_OSA_TO_RTOS(taskPriority));
+    vTaskPrioritySet((task_handler_t)ptask->taskHandle, PRIORITY_OSA_TO_RTOS(((uint32_t)taskPriority)));
     return KOSA_StatusSuccess;
 }
 #endif
@@ -274,13 +274,14 @@ osa_status_t OSA_TaskCreate(osa_task_handle_t taskHandle, const osa_task_def_t *
     TaskHandle_t pxCreatedTask;
     osa_freertos_task_t *ptask = (osa_freertos_task_t *)taskHandle;
     OSA_InterruptDisable();
-    if (xTaskCreate((TaskFunction_t)thread_def->pthread, /* pointer to the task */
-                    (char const *)thread_def->tname,     /* task name for kernel awareness debugging */
-                    (configSTACK_DEPTH_TYPE)thread_def->stacksize / sizeof(portSTACK_TYPE), /* task stack size */
-                    (task_param_t)task_param,                    /* optional task startup argument */
-                    PRIORITY_OSA_TO_RTOS(thread_def->tpriority), /* initial priority */
-                    &pxCreatedTask                               /* optional task handle to create */
-                    ) == pdPASS)
+    if (xTaskCreate(
+            (TaskFunction_t)thread_def->pthread, /* pointer to the task */
+            (char const *)thread_def->tname,     /* task name for kernel awareness debugging */
+            (configSTACK_DEPTH_TYPE)((uint16_t)thread_def->stacksize / sizeof(portSTACK_TYPE)), /* task stack size */
+            (task_param_t)task_param,                      /* optional task startup argument */
+            PRIORITY_OSA_TO_RTOS((thread_def->tpriority)), /* initial priority */
+            &pxCreatedTask                                 /* optional task handle to create */
+            ) == pdPASS)
     {
         ptask->taskHandle = pxCreatedTask;
 
@@ -356,6 +357,22 @@ uint32_t OSA_TimeGetMsec(void)
 
     return TICKS_TO_MSEC(ticks);
 }
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : OSA_SemaphorePrecreate
+ * Description   : This function is used to pre-create a semaphore.
+ * Return         : KOSA_StatusSuccess
+ *
+ *END**************************************************************************/
+
+osa_status_t OSA_SemaphorePrecreate(osa_semaphore_handle_t semaphoreHandle, osa_task_ptr_t taskHandler)
+{
+    semaphoreHandle = semaphoreHandle;
+    taskHandler     = taskHandler;
+    return KOSA_StatusSuccess;
+}
+
 /*FUNCTION**********************************************************************
  *
  * Function Name : OSA_SemaphoreCreate
@@ -486,7 +503,7 @@ osa_status_t OSA_SemaphorePost(osa_semaphore_handle_t semaphoreHandle)
 
         if (((BaseType_t)1) == (BaseType_t)xSemaphoreGiveFromISR(sem, &taskToWake))
         {
-            portYIELD_FROM_ISR((taskToWake));
+            portYIELD_FROM_ISR(((bool)(taskToWake)));
             status = KOSA_StatusSuccess;
         }
         else
@@ -610,6 +627,21 @@ osa_status_t OSA_MutexDestroy(osa_mutex_handle_t mutexHandle)
 
 /*FUNCTION**********************************************************************
  *
+ * Function Name : OSA_EventPrecreate
+ * Description   : This function is used to pre-create a event.
+ * Return         : KOSA_StatusSuccess
+ *
+ *END**************************************************************************/
+
+osa_status_t OSA_EventPrecreate(osa_event_handle_t eventHandle, osa_task_ptr_t taskHandler)
+{
+    eventHandle = eventHandle;
+    taskHandler = taskHandler;
+    return KOSA_StatusSuccess;
+}
+
+/*FUNCTION**********************************************************************
+ *
  * Function Name : OSA_EventCreate
  * Description   : This function is used to create a event object.
  * Return        : Event handle of the new event, or NULL if failed.
@@ -659,7 +691,7 @@ osa_status_t OSA_EventSet(osa_event_handle_t eventHandle, osa_event_flags_t flag
 #endif
         assert(pdPASS == result);
         (void)result;
-        portYIELD_FROM_ISR((taskToWake));
+        portYIELD_FROM_ISR(((bool)(taskToWake)));
     }
     else
     {
@@ -874,7 +906,7 @@ osa_status_t OSA_MsgQPut(osa_msgq_handle_t msgqHandle, osa_msg_handle_t pMessage
     {
         if (((BaseType_t)1) == (BaseType_t)xQueueSendToBackFromISR(handler, pMessage, &taskToWake))
         {
-            portYIELD_FROM_ISR((taskToWake));
+            portYIELD_FROM_ISR(((bool)(taskToWake)));
             osaStatus = KOSA_StatusSuccess;
         }
         else

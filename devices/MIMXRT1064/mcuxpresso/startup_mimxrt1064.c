@@ -1,7 +1,7 @@
 //*****************************************************************************
 // MIMXRT1064 startup code for use with MCUXpresso IDE
 //
-// Version : 070721
+// Version : 011221
 //*****************************************************************************
 //
 // Copyright 2016-2021 NXP
@@ -557,7 +557,7 @@ void (* const g_pfnVectors[])(void) = {
     PWM1_FAULT_IRQHandler,            // 122: PWM1 fault or reload error interrupt
     FLEXSPI2_IRQHandler,              // 123: FlexSPI2 interrupt
     FLEXSPI_IRQHandler,               // 124: FlexSPI0 interrupt
-    SEMC_IRQHandler,                  // 125: Reserved interrupt
+    SEMC_IRQHandler,                  // 125: SEMC interrupt
     USDHC1_IRQHandler,                // 126: USDHC1 interrupt
     USDHC2_IRQHandler,                // 127: USDHC2 interrupt
     USB_OTG2_IRQHandler,              // 128: USBO2 USB OTG2

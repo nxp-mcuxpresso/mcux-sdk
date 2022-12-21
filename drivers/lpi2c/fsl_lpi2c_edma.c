@@ -253,6 +253,10 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
         return kStatus_LPI2C_Busy;
     }
 
+    /* Enable the master function and disable the slave function. */
+    LPI2C_MasterEnable(base, true);
+    LPI2C_SlaveEnable(base, false);
+
     /* Return an error if the bus is already in use not by us. */
     result = LPI2C_CheckForBusyBus(base);
     if (result != kStatus_Success)
@@ -299,8 +303,8 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
     bool hasSendData    = (transfer->direction == kLPI2C_Write) && (transfer->dataSize != 0U);
     bool hasReceiveData = (transfer->direction == kLPI2C_Read) && (transfer->dataSize != 0U);
 
-    edma_transfer_config_t transferConfig;
-    edma_tcd_t *linkTcd = NULL;
+    edma_transfer_config_t transferConfig = {0};
+    edma_tcd_t *linkTcd                   = NULL;
 
     /* Set up data transmit. */
     if (hasSendData)

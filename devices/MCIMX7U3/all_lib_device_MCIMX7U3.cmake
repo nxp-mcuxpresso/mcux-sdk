@@ -41,10 +41,10 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tstmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xrdc
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utilities
@@ -84,6 +84,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexio_spi)
 #    include(driver_lpadc)
 #    include(driver_lpspi_edma)
+#    include(driver_iomuxc)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_flexio)
 #    include(utility_shell)
@@ -99,6 +100,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_edma_MCIMX7U5)
 #    include(driver_lpuart_edma)
 #    include(device_CMSIS)
+#    include(middleware_mbedtls_MCIMX7U5)
 #    include(driver_msmc)
 #    include(CMSIS_Driver_Include_Common)
 #    include(driver_tstmr)
@@ -116,6 +118,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_sai)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(driver_flexio_i2c_master)
 #    include(driver_mu)
 #    include(driver_tpm)

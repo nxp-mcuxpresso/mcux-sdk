@@ -19,6 +19,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/log
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
     ${CMAKE_CURRENT_LIST_DIR}/../../components/panic
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/timer
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
@@ -52,13 +53,13 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
+    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utilities
@@ -72,8 +73,10 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_device_ip3511fs)
 #    include(utility_shell)
 #    include(driver_lpc_gpio)
-#    include(middleware_azure_rtos_fx_template_LPC55S16)
+#    include(middleware_issdk_sensor_fxos8700)
+#    include(device_system)
 #    include(driver_lpadc)
+#    include(driver_rtt_LPC55S16)
 #    include(middleware_freertos-kernel_cm33_nonsecure_port)
 #    include(driver_lpc_crc)
 #    include(middleware_azure_rtos_nxd_sp)
@@ -89,6 +92,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_i2c)
 #    include(component_serial_manager)
 #    include(middleware_freertos-kernel_LPC55S16)
+#    include(middleware_issdk_sensor_fxas21002)
 #    include(middleware_usb_device_cdc_external)
 #    include(driver_lpc_dma)
 #    include(component_serial_manager_uart)
@@ -99,7 +103,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_spi_freertos)
 #    include(driver_ili9341)
 #    include(driver_pint)
-#    include(device_system)
+#    include(middleware_azure_rtos_fx_template_LPC55S16)
 #    include(driver_sctimer)
 #    include(middleware_mbedtls_LPC55S16)
 #    include(driver_flexcomm)
@@ -109,6 +113,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_panic)
 #    include(utility_assert)
 #    include(middleware_usb_host_ip3516hs_LPC55S16)
+#    include(middleware_issdk_sensor_interface_common)
 #    include(driver_rng_1)
 #    include(driver_wm8904)
 #    include(middleware_freertos-kernel_extension)
@@ -129,15 +134,18 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Driver_Include_Common)
 #    include(driver_lpc_iocon)
 #    include(utility_debug_console_lite)
+#    include(middleware_issdk_sensor_fxls896xaf)
 #    include(component_osa_bm)
 #    include(middleware_usb_host_ohci)
 #    include(middleware_usb_host_common_header)
 #    include(middleware_usb_host_cdc)
 #    include(driver_common)
+#    include(middleware_fatfs_LPC55S16)
 #    include(driver_inputmux_connections)
 #    include(component_osa_free_rtos)
 #    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
+#    include(middleware_usb_host_printer)
 #    include(component_codec_i2c_LPC55S16)
 #    include(middleware_azure_rtos_fx_sp)
 #    include(driver_hashcrypt)
@@ -152,13 +160,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_cmsis_flexcomm_usart)
 #    include(driver_flexcomm_i2s_dma)
 #    include(component_mrt_adapter)
-#    include(middleware_usb_host_printer)
+#    include(middleware_issdk_drivers_gpio_lpc)
 #    include(driver_mcan)
 #    include(driver_cmp_1)
 #    include(driver_flexcomm_i2c_dma)
 #    include(component_flexcomm_i2c_adapter)
 #    include(utility_assert_lite)
-#    include(middleware_fatfs)
 #    include(middleware_usb_device_ip3511hs_LPC55S16)
 #    include(middleware_usb_host_audio)
 #    include(utility_debug_console)
@@ -183,10 +190,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_stack_LPC55S16)
 #    include(middleware_mbedtls_lpc1)
 #    include(driver_flexcomm_usart_dma)
+#    include(middleware_issdk_drivers_systick_utils)
 #    include(driver_flexcomm_i2c_freertos)
+#    include(middleware_issdk_sensor_fxls8974cf)
 #    include(middleware_usb_host_phdc)
 #    include(driver_flexcomm_usart_freertos)
 #    include(middleware_azure_rtos_lx)
+#    include(middleware_issdk_drivers_cmsis_drivers)
 #    include(CMSIS_Device_API_OSTick)
 #    include(middleware_azure_rtos_nxd_template_LPC55S16)
 #    include(component_wm8904_adapter)

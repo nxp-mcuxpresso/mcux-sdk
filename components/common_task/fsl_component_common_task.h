@@ -113,6 +113,24 @@ common_task_status_t COMMON_TASK_deinit(void);
  */
 common_task_status_t COMMON_TASK_post_message(common_task_message_t *msg);
 
+/*!
+ * @brief Get the common task instance
+ *
+ * This function is used to get the common task instance.
+ *
+ * @retval The instance of the common task.
+ */
+void *COMMON_TASK_get_instance(void);
+
+/*!
+ * @brief Get the pending message count of common task
+ *
+ * This function is used to get the pending message count of common task.
+ *
+ * @retval Pending message count.
+ */
+int COMMON_TASK_get_pending_message_count(void);
+
 /*! @} */
 
 #if defined(__cplusplus)

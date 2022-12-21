@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 3, 6)) /*!< Version 2.3.6 */
+#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 3, 8)) /*!< Version 2.3.8 */
 /*@}*/
 
 /*! @brief _sai_status_t, SAI return status.*/
@@ -137,18 +137,18 @@ enum
     kSAI_SyncErrorInterruptEnable   = I2S_TCSR_SEIE_MASK, /*!< Sync error flag, means the sync error is detected */
     kSAI_FIFOWarningInterruptEnable = I2S_TCSR_FWIE_MASK, /*!< FIFO warning flag, means the FIFO is empty */
     kSAI_FIFOErrorInterruptEnable   = I2S_TCSR_FEIE_MASK, /*!< FIFO error flag */
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     kSAI_FIFORequestInterruptEnable = I2S_TCSR_FRIE_MASK, /*!< FIFO request, means reached watermark */
-#endif                                                    /* FSL_FEATURE_SAI_FIFO_COUNT */
+#endif                                                    /* FSL_FEATURE_SAI_HAS_FIFO */
 };
 
 /*! @brief _sai_dma_enable_t, The DMA request sources */
 enum
 {
     kSAI_FIFOWarningDMAEnable = I2S_TCSR_FWDE_MASK, /*!< FIFO warning caused by the DMA request */
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     kSAI_FIFORequestDMAEnable = I2S_TCSR_FRDE_MASK, /*!< FIFO request caused by the DMA request */
-#endif                                              /* FSL_FEATURE_SAI_FIFO_COUNT */
+#endif                                              /* FSL_FEATURE_SAI_HAS_FIFO */
 };
 
 /*! @brief _sai_flags, The SAI status flag */
@@ -157,9 +157,9 @@ enum
     kSAI_WordStartFlag = I2S_TCSR_WSF_MASK, /*!< Word start flag, means the first word in a frame detected */
     kSAI_SyncErrorFlag = I2S_TCSR_SEF_MASK, /*!< Sync error flag, means the sync error is detected */
     kSAI_FIFOErrorFlag = I2S_TCSR_FEF_MASK, /*!< FIFO error flag */
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     kSAI_FIFORequestFlag = I2S_TCSR_FRF_MASK, /*!< FIFO request flag. */
-#endif                                        /* FSL_FEATURE_SAI_FIFO_COUNT */
+#endif                                        /* FSL_FEATURE_SAI_HAS_FIFO */
     kSAI_FIFOWarningFlag = I2S_TCSR_FWF_MASK, /*!< FIFO warning flag */
 };
 
@@ -272,10 +272,12 @@ typedef struct _sai_transfer_format
     uint32_t sampleRate_Hz;   /*!< Sample rate of audio data */
     uint32_t bitWidth;        /*!< Data length of audio data, usually 8/16/24/32 bits */
     sai_mono_stereo_t stereo; /*!< Mono or stereo */
+#if defined(FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER) && (FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER)
     uint32_t masterClockHz; /*!< Master clock frequency in Hz */
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#endif                      /* FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER */
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     uint8_t watermark; /*!< Watermark value */
-#endif                 /* FSL_FEATURE_SAI_FIFO_COUNT */
+#endif                 /* FSL_FEATURE_SAI_HAS_FIFO */
 
     /* for the multi channel usage, user can provide channelMask Oonly, then sai driver will handle
      * other parameter carefully, such as
@@ -318,7 +320,7 @@ typedef struct _sai_master_clock
 #if (defined(FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_AFTER_ERROR) && FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_AFTER_ERROR) || \
     (defined(FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) && FSL_FEATURE_SAI_HAS_FIFO_COMBINE_MODE) ||                 \
     (defined(FSL_FEATURE_SAI_HAS_FIFO_PACKING) && FSL_FEATURE_SAI_HAS_FIFO_PACKING) ||                           \
-    (defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1))
+    (defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO))
 #define FSL_SAI_HAS_FIFO_EXTEND_FEATURE 1
 #else
 #define FSL_SAI_HAS_FIFO_EXTEND_FEATURE 0
@@ -339,7 +341,7 @@ typedef struct _sai_fifo
 #if defined(FSL_FEATURE_SAI_HAS_FIFO_PACKING) && FSL_FEATURE_SAI_HAS_FIFO_PACKING
     sai_fifo_packing_t fifoPacking; /*!< fifo packing mode */
 #endif
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     uint8_t fifoWatermark; /*!< fifo watermark */
 #endif
 } sai_fifo_t;
@@ -446,7 +448,7 @@ struct _sai_handle
     size_t transferSize[SAI_XFER_QUEUE_SIZE];     /*!< Data bytes need to transfer */
     volatile uint8_t queueUser;                   /*!< Index for user to queue transfer */
     volatile uint8_t queueDriver;                 /*!< Index for driver to get the transfer data and size */
-#if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
+#if defined(FSL_FEATURE_SAI_HAS_FIFO) && (FSL_FEATURE_SAI_HAS_FIFO)
     uint8_t watermark; /*!< Watermark value */
 #endif
 };
@@ -1572,36 +1574,6 @@ void SAI_TransferTxHandleIRQ(I2S_Type *base, sai_handle_t *handle);
  * @param handle Pointer to the sai_handle_t structure.
  */
 void SAI_TransferRxHandleIRQ(I2S_Type *base, sai_handle_t *handle);
-
-/*!
- * @brief sends a piece of data in non-blocking way.
- *
- * @param base SAI base pointer
- * @param channel start channel number.
- * @param channelMask enabled channels mask.
- * @param endChannel end channel numbers.
- * @param bitWidth How many bits in a audio word, usually 8/16/24/32 bits.
- * @param buffer Pointer to the data to be written.
- * @param size Bytes to be written.
- */
-void SAI_WriteNonBlocking(I2S_Type *base, uint32_t channel,
-		uint32_t channelMask, uint32_t endChannel, uint8_t bitWidth,
-		uint8_t *buffer, uint32_t size);
-
-/*!
- * @brief Receive a piece of data in non-blocking way.
- *
- * @param base SAI base pointer
- * @param channel start channel number.
- * @param channelMask enabled channels mask.
- * @param endChannel end channel numbers.
- * @param bitWidth How many bits in a audio word, usually 8/16/24/32 bits.
- * @param buffer Pointer to the data to be read.
- * @param size Bytes to be read.
- */
-void SAI_ReadNonBlocking(I2S_Type *base, uint32_t channel,
-		uint32_t channelMask, uint32_t endChannel, uint8_t bitWidth,
-		uint8_t *buffer, uint32_t size);
 
 /*! @} */
 

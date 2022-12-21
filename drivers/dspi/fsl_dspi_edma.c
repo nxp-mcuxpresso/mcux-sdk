@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -172,8 +172,8 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
 
     edma_tcd_t *softwareTCD = (edma_tcd_t *)((uint32_t)(&handle->dspiSoftwareTCD[1]) & (~0x1FU));
 
-    edma_transfer_config_t transferConfigA;
-    edma_transfer_config_t transferConfigB;
+    edma_transfer_config_t transferConfigA = {0};
+    edma_transfer_config_t transferConfigB = {0};
 
     handle->txBuffIfNull = ((uint32_t)dummyData << 8U) | dummyData;
 
@@ -769,7 +769,8 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
     /***channel_C ***carry the "intermediary" to SPIx_PUSHR. used the edma Scatter Gather function on channel_C to
     handle the last data */
 
-    edma_transfer_config_t transferConfigC;
+    edma_transfer_config_t transferConfigC = {0};
+
     EDMA_ResetChannel(handle->edmaIntermediaryToTxRegHandle->base, handle->edmaIntermediaryToTxRegHandle->channel);
 
     tmpRemainingSendByteCount = handle->remainingSendByteCount;
@@ -1210,8 +1211,8 @@ status_t DSPI_SlaveTransferEDMA(SPI_Type *base, dspi_slave_edma_handle_t *handle
     uint32_t rxAddr = DSPI_GetRxRegisterAddress(base);
     uint32_t txAddr = DSPI_SlaveGetTxRegisterAddress(base);
 
-    edma_transfer_config_t transferConfigA;
-    edma_transfer_config_t transferConfigC;
+    edma_transfer_config_t transferConfigA = {0};
+    edma_transfer_config_t transferConfigC = {0};
 
     DSPI_StopTransfer(base);
 

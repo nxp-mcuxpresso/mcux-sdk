@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2020, 2022 NXP
  * All rights reserved.
  *
  *
@@ -296,6 +296,12 @@ status_t BOARD_InitPsRam(void)
 
 void BOARD_DeinitXip(FLEXSPI_Type *base)
 {
+    /* Enable FLEXSPI clock again */
+    CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;
+
+    /* Enable FLEXSPI module */
+    base->MCR0 &= ~FLEXSPI_MCR0_MDIS_MASK;
+
     /* Wait until FLEXSPI is not busy */
     while (!((base->STS0 & FLEXSPI_STS0_ARBIDLE_MASK) && (base->STS0 & FLEXSPI_STS0_SEQIDLE_MASK)))
     {

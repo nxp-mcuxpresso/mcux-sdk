@@ -47,12 +47,12 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tstmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utilities
@@ -83,6 +83,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_device_cdc_external)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(component_log_backend_debugconsole)
 #    include(driver_llwu)
 #    include(component_lpuart_adapter)
@@ -112,6 +113,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)
+#    include(middleware_fatfs_K32L2A41A)
 #    include(driver_trgmux)
 #    include(middleware_usb_host_msd)
 #    include(driver_port)
@@ -132,7 +134,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_cmsis_lpspi)
 #    include(driver_crc)
 #    include(driver_lptmr)
-#    include(middleware_fatfs)
 #    include(driver_pmc)
 #    include(middleware_usb_host_stack_K32L2A41A)
 #    include(middleware_fatfs_usb)
@@ -158,4 +159,5 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_phdc)
 #    include(driver_trng)
 #    include(driver_intmux)
+#    include(middleware_mbedtls_K32L2A41A)
 #    include(middleware_usb_device_stack_external)

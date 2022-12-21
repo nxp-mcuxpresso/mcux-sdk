@@ -19,7 +19,7 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
-void PQ_VectorBiqaudDf2F32(float *pSrc, float *pDst, int32_t length)
+void PQ_VectorBiquadDf2F32(float *pSrc, float *pDst, int32_t length)
 {
     int32_t remainderBy8 = length % 8;
     pq_float_t val;
@@ -44,7 +44,7 @@ void PQ_VectorBiqaudDf2F32(float *pSrc, float *pDst, int32_t length)
     }
 }
 
-void PQ_VectorBiqaudDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t length)
+void PQ_VectorBiquadDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t length)
 {
     int32_t remainderBy8 = length % 8;
 
@@ -66,7 +66,7 @@ void PQ_VectorBiqaudDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t length)
     }
 }
 
-void PQ_VectorBiqaudDf2Fixed16(int16_t *pSrc, int16_t *pDst, int32_t length)
+void PQ_VectorBiquadDf2Fixed16(int16_t *pSrc, int16_t *pDst, int32_t length)
 {
     int32_t remainderBy8 = length % 8;
 
@@ -88,7 +88,7 @@ void PQ_VectorBiqaudDf2Fixed16(int16_t *pSrc, int16_t *pDst, int32_t length)
     }
 }
 
-void PQ_VectorBiqaudCascadeDf2F32(float *pSrc, float *pDst, int32_t length)
+void PQ_VectorBiquadCascadeDf2F32(float *pSrc, float *pDst, int32_t length)
 {
     int32_t remainderBy8 = length % 8;
     pq_float_t val;
@@ -120,12 +120,12 @@ void PQ_VectorBiqaudCascadeDf2F32(float *pSrc, float *pDst, int32_t length)
     if (length > 0)
     {
         PQ_StartVector(&pSrc[remainderBy8], &pDst[remainderBy8], length);
-        PQ_Vector8BiqaudDf2CascadeF32();
+        PQ_Vector8BiquadDf2CascadeF32();
         PQ_EndVector();
     }
 }
 
-void PQ_VectorBiqaudCascadeDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t length)
+void PQ_VectorBiquadCascadeDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t length)
 {
     int32_t remainderBy8 = length % 8;
 
@@ -151,12 +151,12 @@ void PQ_VectorBiqaudCascadeDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t leng
     if (length > 0)
     {
         PQ_StartVector(&pSrc[remainderBy8], &pDst[remainderBy8], length);
-        PQ_Vector8BiqaudDf2CascadeFixed32();
+        PQ_Vector8BiquadDf2CascadeFixed32();
         PQ_EndVector();
     }
 }
 
-void PQ_VectorBiqaudCascadeDf2Fixed16(int16_t *pSrc, int16_t *pDst, int32_t length)
+void PQ_VectorBiquadCascadeDf2Fixed16(int16_t *pSrc, int16_t *pDst, int32_t length)
 {
     int32_t remainderBy8 = length % 8;
 
@@ -182,7 +182,7 @@ void PQ_VectorBiqaudCascadeDf2Fixed16(int16_t *pSrc, int16_t *pDst, int32_t leng
     if (length > 0)
     {
         PQ_StartVectorFixed16(&pSrc[remainderBy8], &pDst[remainderBy8], length);
-        PQ_Vector8BiqaudDf2CascadeFixed16();
+        PQ_Vector8BiquadDf2CascadeFixed16();
         PQ_EndVector();
     }
 }
@@ -311,11 +311,11 @@ void PQ_BiquadCascadeDf2F32(const pq_biquad_cascade_df2_instance *S, float *pSrc
         (void)memcpy(pDst, pSrc, 4U * blockSize);
     }
 
-    if (stage % 2U != 0U)
+    if ((stage & 0x01U) == 0x01U)
     {
         PQ_BiquadRestoreInternalState(POWERQUAD, 0, states);
 
-        PQ_VectorBiqaudDf2F32(pSrc, pDst, (int32_t)blockSize);
+        PQ_VectorBiquadDf2F32(pSrc, pDst, (int32_t)blockSize);
 
         PQ_BiquadBackUpInternalState(POWERQUAD, 0, states);
 
@@ -323,13 +323,13 @@ void PQ_BiquadCascadeDf2F32(const pq_biquad_cascade_df2_instance *S, float *pSrc
         stage--;
     }
 
-    do
+    while (stage > 0U)
     {
         PQ_BiquadRestoreInternalState(POWERQUAD, 1, states);
         states++;
         PQ_BiquadRestoreInternalState(POWERQUAD, 0, states);
 
-        PQ_VectorBiqaudCascadeDf2F32(pDst, pDst, (int32_t)blockSize);
+        PQ_VectorBiquadCascadeDf2F32(pDst, pDst, (int32_t)blockSize);
 
         states--;
         PQ_BiquadBackUpInternalState(POWERQUAD, 1, states);
@@ -338,8 +338,7 @@ void PQ_BiquadCascadeDf2F32(const pq_biquad_cascade_df2_instance *S, float *pSrc
 
         states++;
         stage -= 2U;
-
-    } while (stage > 0U);
+    }
 }
 
 void PQ_BiquadCascadeDf2Fixed32(const pq_biquad_cascade_df2_instance *S,
@@ -355,11 +354,11 @@ void PQ_BiquadCascadeDf2Fixed32(const pq_biquad_cascade_df2_instance *S,
         (void)memcpy(pDst, pSrc, 4U * blockSize);
     }
 
-    if (stage % 2U != 0U)
+    if ((stage & 0x01U) == 0x01U)
     {
         PQ_BiquadRestoreInternalState(POWERQUAD, 0, states);
 
-        PQ_VectorBiqaudDf2Fixed32(pSrc, pDst, (int32_t)blockSize);
+        PQ_VectorBiquadDf2Fixed32(pSrc, pDst, (int32_t)blockSize);
 
         PQ_BiquadBackUpInternalState(POWERQUAD, 0, states);
 
@@ -367,13 +366,13 @@ void PQ_BiquadCascadeDf2Fixed32(const pq_biquad_cascade_df2_instance *S,
         stage--;
     }
 
-    do
+    while (stage > 0U)
     {
         PQ_BiquadRestoreInternalState(POWERQUAD, 0, states);
         states++;
         PQ_BiquadRestoreInternalState(POWERQUAD, 1, states);
 
-        PQ_VectorBiqaudCascadeDf2Fixed32(pDst, pDst, (int32_t)blockSize);
+        PQ_VectorBiquadCascadeDf2Fixed32(pDst, pDst, (int32_t)blockSize);
 
         states--;
         PQ_BiquadBackUpInternalState(POWERQUAD, 0, states);
@@ -382,7 +381,7 @@ void PQ_BiquadCascadeDf2Fixed32(const pq_biquad_cascade_df2_instance *S,
 
         states++;
         stage -= 2U;
-    } while (stage > 0U);
+    }
 }
 
 void PQ_BiquadCascadeDf2Fixed16(const pq_biquad_cascade_df2_instance *S,
@@ -398,11 +397,11 @@ void PQ_BiquadCascadeDf2Fixed16(const pq_biquad_cascade_df2_instance *S,
         (void)memcpy(pDst, pSrc, 2U * blockSize);
     }
 
-    if (stage % 2U != 0U)
+    if ((stage & 0x01U) == 0x01U)
     {
         PQ_BiquadRestoreInternalState(POWERQUAD, 0, states);
 
-        PQ_VectorBiqaudDf2Fixed16(pSrc, pDst, (int32_t)blockSize);
+        PQ_VectorBiquadDf2Fixed16(pSrc, pDst, (int32_t)blockSize);
 
         PQ_BiquadBackUpInternalState(POWERQUAD, 0, states);
 
@@ -410,13 +409,13 @@ void PQ_BiquadCascadeDf2Fixed16(const pq_biquad_cascade_df2_instance *S,
         stage--;
     }
 
-    do
+    while (stage > 0U)
     {
         PQ_BiquadRestoreInternalState(POWERQUAD, 0, states);
         states++;
         PQ_BiquadRestoreInternalState(POWERQUAD, 1, states);
 
-        PQ_VectorBiqaudCascadeDf2Fixed16(pDst, pDst, (int32_t)blockSize);
+        PQ_VectorBiquadCascadeDf2Fixed16(pDst, pDst, (int32_t)blockSize);
 
         states--;
         PQ_BiquadBackUpInternalState(POWERQUAD, 0, states);
@@ -425,5 +424,5 @@ void PQ_BiquadCascadeDf2Fixed16(const pq_biquad_cascade_df2_instance *S,
 
         states++;
         stage -= 2U;
-    } while (stage > 0U);
+    }
 }

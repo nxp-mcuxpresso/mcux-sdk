@@ -139,7 +139,10 @@ static inline void L1CACHE_EnableICache(void)
  */
 static inline void L1CACHE_DisableICache(void)
 {
-    SCB_DisableICache();
+    if (SCB_CCR_IC_Msk == (SCB_CCR_IC_Msk & SCB->CCR))
+    {
+        SCB_DisableICache();
+    }
 }
 
 /*!
@@ -178,7 +181,10 @@ static inline void L1CACHE_EnableDCache(void)
  */
 static inline void L1CACHE_DisableDCache(void)
 {
-    SCB_DisableDCache();
+    if (SCB_CCR_DC_Msk == (SCB_CCR_DC_Msk & SCB->CCR))
+    {
+        SCB_DisableDCache();
+    }
 }
 
 /*!

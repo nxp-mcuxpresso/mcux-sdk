@@ -586,19 +586,19 @@ void POWER_EnterPowerDown(uint32_t exclude_from_pd,
     cpu0_int_enable_0 = NVIC->ISER[0];
     cpu0_int_enable_1 = NVIC->ISER[1];
 
+    /* Save the configuration of the PMC RESETCTRL register */
+    pmc_reset_ctrl = PMC->RESETCTRL;
+
     /* Disable BoD VBAT and BoD Core resets */
     /* BOD VBAT disable reset */
-    pmc_reset_ctrl =
-        PMC->RESETCTRL & (~(PMC_RESETCTRL_BODVBATRESETENA_SECURE_MASK | PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_MASK));
-    pmc_reset_ctrl |= (0x2UL << PMC_RESETCTRL_BODVBATRESETENA_SECURE_SHIFT) |
+    PMC->RESETCTRL &= (~(PMC_RESETCTRL_BODVBATRESETENA_SECURE_MASK | PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_MASK));
+    PMC->RESETCTRL |= (0x2UL << PMC_RESETCTRL_BODVBATRESETENA_SECURE_SHIFT) |
                       (0x2UL << PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_SHIFT);
 
     /* BOD CORE disable reset */
-    pmc_reset_ctrl &= (~(PMC_RESETCTRL_BODCORERESETENA_SECURE_MASK | PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_MASK));
-    pmc_reset_ctrl |= (0x2UL << PMC_RESETCTRL_BODCORERESETENA_SECURE_SHIFT) |
+    PMC->RESETCTRL &= (~(PMC_RESETCTRL_BODCORERESETENA_SECURE_MASK | PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_MASK));
+    PMC->RESETCTRL |= (0x2UL << PMC_RESETCTRL_BODCORERESETENA_SECURE_SHIFT) |
                       (0x2UL << PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_SHIFT);
-
-    PMC->RESETCTRL = pmc_reset_ctrl;
 
     /* Enter low power mode */
     POWER_EnterLowPower(&lv_low_power_mode_cfg);
@@ -732,18 +732,18 @@ void POWER_EnterDeepPowerDown(uint32_t exclude_from_pd,
     cpu0_int_enable_1 = NVIC->ISER[1];
 
     /* Save the configuration of the PMC RESETCTRL register */
+    pmc_reset_ctrl = PMC->RESETCTRL;
+
+    /* Disable BoD VBAT and BoD Core resets */
     /* BOD VBAT disable reset */
-    pmc_reset_ctrl =
-        PMC->RESETCTRL & (~(PMC_RESETCTRL_BODVBATRESETENA_SECURE_MASK | PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_MASK));
-    pmc_reset_ctrl |= (0x2UL << PMC_RESETCTRL_BODVBATRESETENA_SECURE_SHIFT) |
+    PMC->RESETCTRL &= (~(PMC_RESETCTRL_BODVBATRESETENA_SECURE_MASK | PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_MASK));
+    PMC->RESETCTRL |= (0x2UL << PMC_RESETCTRL_BODVBATRESETENA_SECURE_SHIFT) |
                       (0x2UL << PMC_RESETCTRL_BODVBATRESETENA_SECURE_DP_SHIFT);
 
     /* BOD CORE disable reset */
-    pmc_reset_ctrl &= (~(PMC_RESETCTRL_BODCORERESETENA_SECURE_MASK | PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_MASK));
-    pmc_reset_ctrl |= (0x2UL << PMC_RESETCTRL_BODCORERESETENA_SECURE_SHIFT) |
+    PMC->RESETCTRL &= (~(PMC_RESETCTRL_BODCORERESETENA_SECURE_MASK | PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_MASK));
+    PMC->RESETCTRL |= (0x2UL << PMC_RESETCTRL_BODCORERESETENA_SECURE_SHIFT) |
                       (0x2UL << PMC_RESETCTRL_BODCORERESETENA_SECURE_DP_SHIFT);
-
-    PMC->RESETCTRL = pmc_reset_ctrl;
 
     /* Enter low power mode */
     POWER_EnterLowPower(&lv_low_power_mode_cfg);
@@ -787,14 +787,15 @@ void POWER_EnterSleep(void)
  */
 static void lf_get_deepsleep_core_supply_cfg(uint32_t exclude_from_pd, uint32_t *dcdc_voltage)
 {
-    *dcdc_voltage = V_DCDC_0P950; /* Default value */
+    *dcdc_voltage = (uint32_t)V_DCDC_0P950; /* Default value */
 
-    if (((exclude_from_pd & (uint32_t)kPDRUNCFG_PD_USB1_PHY) != 0) &&
-        ((exclude_from_pd & (uint32_t)kPDRUNCFG_PD_LDOUSBHS) != 0))
+    if (((exclude_from_pd & (uint32_t)kPDRUNCFG_PD_USB1_PHY) != 0UL) &&
+        ((exclude_from_pd & (uint32_t)kPDRUNCFG_PD_LDOUSBHS) != 0UL))
     {
         /* USB High Speed is required as wake-up source in Deep Sleep mode */
         PMC->MISCCTRL |= PMC_MISCCTRL_LOWPWR_FLASH_BUF_MASK; /* Force flash buffer in low power mode */
-        *dcdc_voltage = V_DCDC_1P000; /* Set DCDC voltage to be 1.000 V (USB HS IP cannot work below 0.990 V) */
+        *dcdc_voltage =
+            (uint32_t)V_DCDC_1P000; /* Set DCDC voltage to be 1.000 V (USB HS IP cannot work below 0.990 V) */
     }
 }
 

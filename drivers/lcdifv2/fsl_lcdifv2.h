@@ -11,7 +11,7 @@
 
 #include "fsl_common.h"
 
-#if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (0 != FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET))
 #include "fsl_memory.h"
 #endif
 
@@ -27,7 +27,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LCDIF v2 driver version */
-#define FSL_LCDIFV2_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+#define FSL_LCDIFV2_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
 #if defined(FSL_FEATURE_LCDIFV2_LAYER_COUNT) && (!defined(LCDIFV2_LAYER_COUNT))
@@ -38,18 +38,18 @@
 #define LCDIFV2_LAYER_CSC_COUNT FSL_FEATURE_LCDIFV2_LAYER_CSC_COUNT
 #endif
 
-#if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (0 != FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET))
 #define LCDIFV2_ADDR_CPU_2_IP(addr) (MEMORY_ConvertMemoryMapAddress((uint32_t)(addr), kMEMORY_Local2DMA))
 #else
 #define LCDIFV2_ADDR_CPU_2_IP(addr) (addr)
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
 
 /*! @brief LCDIF v2 FIFO empty interrupt. */
-#define LCDIFV2_MAKE_FIFO_EMPTY_INTERRUPT(layer) (1U << ((uint32_t)(layer) + 24U))
+#define LCDIFV2_MAKE_FIFO_EMPTY_INTERRUPT(layer) (1UL << ((uint32_t)(layer) + 24U))
 /*! @brief LCDIF v2 DMA done interrupt. */
-#define LCDIFV2_MAKE_DMA_DONE_INTERRUPT(layer) (1U << ((uint32_t)(layer) + 16U))
+#define LCDIFV2_MAKE_DMA_DONE_INTERRUPT(layer) (1UL << ((uint32_t)(layer) + 16U))
 /*! @brief LCDIF v2 DMA error interrupt. */
-#define LCDIFV2_MAKE_DMA_ERROR_INTERRUPT(layer) (1U << ((uint32_t)(layer) + 8U))
+#define LCDIFV2_MAKE_DMA_ERROR_INTERRUPT(layer) (1UL << ((uint32_t)(layer) + 8U))
 
 /* LUT memory entery number. */
 #define LCDIFV2_LUT_ENTRY_NUM 256U
@@ -59,18 +59,19 @@
  */
 enum _lcdifv2_polarity_flags
 {
+    kLCDIFV2_VsyncActiveHigh          = 0U, /*!< VSYNC active high. */
+    kLCDIFV2_HsyncActiveHigh          = 0U, /*!< HSYNC active high. */
+    kLCDIFV2_DataEnableActiveHigh     = 0U, /*!< Data enable line active high. */
+    kLCDIFV2_DriveDataOnRisingClkEdge = 0U, /*!< Output data on rising clock edge, capture data
+                                                 on falling clock edge. */
+    kLCDIFV2_DataActiveHigh = 0U,           /*!< Data active high. */
+
     kLCDIFV2_VsyncActiveLow            = LCDIFV2_CTRL_INV_VS_MASK,   /*!< VSYNC active low. */
-    kLCDIFV2_VsyncActiveHigh           = 0U,                         /*!< VSYNC active high. */
     kLCDIFV2_HsyncActiveLow            = LCDIFV2_CTRL_INV_HS_MASK,   /*!< HSYNC active low. */
-    kLCDIFV2_HsyncActiveHigh           = 0U,                         /*!< HSYNC active high. */
     kLCDIFV2_DataEnableActiveLow       = LCDIFV2_CTRL_INV_DE_MASK,   /*!< Data enable line active low. */
-    kLCDIFV2_DataEnableActiveHigh      = 0U,                         /*!< Data enable line active high. */
     kLCDIFV2_DriveDataOnFallingClkEdge = LCDIFV2_CTRL_INV_PXCK_MASK, /*!< Output data on falling clock edge, capture
                                                                         data on rising clock edge. */
-    kLCDIFV2_DriveDataOnRisingClkEdge = 0U,                          /*!< Output data on rising clock edge, capture data
-                                                                          on falling clock edge. */
-    kLCDIFV2_DataActiveLow  = LCDIFV2_CTRL_NEG_MASK,                 /*!< Data active high. */
-    kLCDIFV2_DataActiveHigh = 0U,                                    /*!< Data active high. */
+    kLCDIFV2_DataActiveLow = LCDIFV2_CTRL_NEG_MASK,                  /*!< Data active high. */
 };
 
 /*!

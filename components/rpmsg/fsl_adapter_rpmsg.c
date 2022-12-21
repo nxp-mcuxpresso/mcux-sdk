@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020, 2022 NXP
  * All rights reserved.
  *
  *
@@ -8,13 +8,23 @@
 
 #include "fsl_common.h"
 #include "rpmsg_lite.h"
-
+#include "fsl_component_generic_list.h"
 #include "fsl_adapter_rpmsg.h"
 #include "mcmgr.h"
 
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+/* Weak function. */
+#if defined(__GNUC__)
+#define __WEAK_FUNC __attribute__((weak))
+#elif defined(__ICCARM__)
+#define __WEAK_FUNC __weak
+#elif defined(__CC_ARM) || defined(__ARMCC_VERSION)
+#define __WEAK_FUNC __attribute__((weak))
+#elif defined(__DSC__) || defined(__CW__)
+#define __WEAK_FUNC __attribute__((weak))
+#endif
 
 typedef struct _hal_rpmsg_rx_state
 {
@@ -25,13 +35,21 @@ typedef struct _hal_rpmsg_rx_state
 /*! @brief rpmsg state structure. */
 typedef struct _hal_rpmsg_state
 {
-    uint32_t local_addr;
-    uint32_t remote_addr;
+    uint8_t local_addr;
+    uint8_t remote_addr;
+    volatile uint8_t rpmsg_lite_peer_ept_is_ready;
     struct rpmsg_lite_ept_static_context endpoint;
     struct rpmsg_lite_endpoint *pEndpoint;
     hal_rpmsg_rx_state_t rx;
 } hal_rpmsg_state_t;
 
+typedef struct _hal_rpmsg_peer_ept_state
+{
+    list_element_t link;
+    hal_rpmsg_state_t *rpmsgHandle;
+} hal_rpmsg_peer_ept_state;
+
+#ifndef RPMSG_GLOBAL_VARIABLE_ALLOC
 #if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
 #define SH_MEM_TOTAL_SIZE (6144U)
 #if defined(__ICCARM__) /* IAR Workbench */
@@ -48,6 +66,16 @@ static char rpmsg_lite_base[SH_MEM_TOTAL_SIZE] __attribute__((section(".noinit.$
 
 extern uint32_t rpmsg_sh_mem_start[];
 extern uint32_t rpmsg_sh_mem_end[];
+#else
+
+#if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
+#define SH_MEM_TOTAL_SIZE (6144U)
+extern char *rpmsg_lite_base;
+#endif /* HAL_RPMSG_SELECT_ROLE */
+
+extern uint32_t rpmsg_sh_mem_start[];
+extern uint32_t rpmsg_sh_mem_end[];
+#endif /* RPMSG_GLOBAL_VARIABLE_ALLOC */
 
 #define RPMSG_LITE_LINK_ID (0U)
 
@@ -55,15 +83,28 @@ extern uint32_t rpmsg_sh_mem_end[];
 #define APP_RPMSG_READY_EVENT_DATA    (1U)
 #define APP_RPMSG_EP_READY_EVENT_DATA (2U)
 
-static int32_t s_rpmsgEptCount                        = -1;
-static struct rpmsg_lite_instance *s_rpmsgContext     = NULL;
-static struct rpmsg_lite_instance s_context           = {0};
-static volatile uint16_t s_rpmsgEptData[MAX_EP_COUNT] = {0};
-static uint8_t s_rpmsg_init_golbal                    = 0U;
+static int32_t s_rpmsgEptCount                    = -1;
+static uint8_t s_peerRpmsgEptCount                = 0U;
+static struct rpmsg_lite_instance *s_rpmsgContext = NULL;
+static struct rpmsg_lite_instance s_context       = {0};
 
+static uint8_t s_rpmsg_init_golbal                               = 0U;
+static list_label_t s_rpmsgEpList                                = {0};
+static volatile uint8_t s_rpmsgPeerEptData[MAX_EP_COUNT]         = {0};
+static hal_rpmsg_peer_ept_state s_rpmsgPeerEptStat[MAX_EP_COUNT] = {0};
 /*******************************************************************************
  * Code
  ******************************************************************************/
+/*
+ * This function is used for periodic check if the rpmsg endpoint is ready, and will be called in rpmsg send..
+ * RPMsg_EpReadyTimeDelay is a weak function, so it could be re-implemented by
+ * upper layer.
+ */
+__WEAK_FUNC void RPMsg_EpReadyTimeDelay(uint32_t ms);
+__WEAK_FUNC void RPMsg_EpReadyTimeDelay(uint32_t ms)
+{
+    /* Reserved*/
+}
 #if 0  /* Reserved API */
 static uint16_t rpmsg_lite_recv_ack_flag;
 
@@ -96,18 +137,34 @@ static int32_t rpmsg_ept_read_cb(void *payload, uint32_t payload_len, uint32_t s
     return rpmsgHandle->rx.callback(rpmsgHandle->rx.param, payload, payload_len);
 }
 
-#if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
 static void RPMsgPeerReadyEventHandler(uint16_t eventData, void *context)
 {
     uint16_t *data = (uint16_t *)context;
+    list_element_handle_t list_element;
+    hal_rpmsg_peer_ept_state *rpmsgPeerEptState;
+    uint8_t address = 0U;
 
     if ((eventData & 0xff00U) == APP_RPMSG_EP_READY_EVENT_DATA << 0x8U)
     {
-        s_rpmsgEptData[(eventData & 0xffU)] = APP_RPMSG_EP_READY_EVENT_DATA;
+        address                                   = eventData & 0xffU;
+        s_rpmsgPeerEptData[s_peerRpmsgEptCount++] = address;
+    }
+
+    list_element = LIST_GetHead(&s_rpmsgEpList);
+    while (NULL != list_element)
+    {
+        rpmsgPeerEptState = (hal_rpmsg_peer_ept_state *)(void *)list_element;
+
+        if (rpmsgPeerEptState->rpmsgHandle->remote_addr == address)
+        {
+            rpmsgPeerEptState->rpmsgHandle->rpmsg_lite_peer_ept_is_ready = 1U;
+        }
+        list_element = LIST_GetNext(list_element);
     }
 
     *data = eventData;
 }
+#if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
 static hal_rpmsg_status_t HAL_RpmsgMcmgrMasterInit(void)
 {
     static volatile uint16_t RPMsgRemoteReadyEventData = 0;
@@ -117,6 +174,7 @@ static hal_rpmsg_status_t HAL_RpmsgMcmgrMasterInit(void)
         if (0U == s_rpmsg_init_golbal)
         {
             s_rpmsg_init_golbal = 1U;
+            LIST_Init((&s_rpmsgEpList), 0);
             (void)MCMGR_RegisterEvent(kMCMGR_RemoteApplicationEvent, RPMsgPeerReadyEventHandler,
                                       (void *)&RPMsgRemoteReadyEventData);
             (void)MCMGR_Init();
@@ -176,7 +234,10 @@ static hal_rpmsg_status_t HAL_RpmsgMcmgrRemoteInit()
     {
         if (0U == s_rpmsg_init_golbal)
         {
+            LIST_Init((&s_rpmsgEpList), 0);
             s_rpmsg_init_golbal = 1U;
+            (void)MCMGR_RegisterEvent(kMCMGR_RemoteApplicationEvent, RPMsgPeerReadyEventHandler,
+                                      (void *)&RPMsgRemoteReadyEventData);
             (void)MCMGR_Init();
             do
             {
@@ -248,6 +309,7 @@ hal_rpmsg_status_t HAL_RpmsgInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *
 {
     hal_rpmsg_status_t state;
     hal_rpmsg_state_t *rpmsgHandle;
+    uint8_t count = 0;
 
     assert(HAL_RPMSG_HANDLE_SIZE >= sizeof(hal_rpmsg_state_t));
     assert(NULL != handle);
@@ -260,6 +322,21 @@ hal_rpmsg_status_t HAL_RpmsgInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *
 #endif /* HAL_RPMSG_SELECT_ROLE */
     rpmsgHandle->rx.callback = config->callback;
     rpmsgHandle->rx.param    = config->param;
+
+    /* Send peer Edpt ready to peer device */
+    (void)MCMGR_TriggerEvent(kMCMGR_RemoteApplicationEvent, APP_RPMSG_EP_READY_EVENT_DATA << 0x8U | config->local_addr);
+    s_rpmsgPeerEptStat[s_rpmsgEptCount].rpmsgHandle = rpmsgHandle;
+    (void)LIST_AddTail(&s_rpmsgEpList, (list_element_handle_t)&s_rpmsgPeerEptStat[s_rpmsgEptCount]);
+    s_rpmsgEptCount++;
+
+    while (count < s_peerRpmsgEptCount)
+    {
+        if (rpmsgHandle->remote_addr == s_rpmsgPeerEptData[count++])
+        {
+            rpmsgHandle->rpmsg_lite_peer_ept_is_ready = 1U;
+        }
+    }
+
     return state;
 }
 
@@ -281,7 +358,7 @@ hal_rpmsg_status_t HAL_RpmsgDeinit(hal_rpmsg_handle_t handle)
         (void)rpmsg_lite_deinit(s_rpmsgContext);
         for (int i = 0; i < MAX_EP_COUNT; i++)
         {
-            s_rpmsgEptData[i] = 0U;
+            s_rpmsgPeerEptData[i] = 0U;
         }
     }
 
@@ -297,6 +374,11 @@ hal_rpmsg_status_t HAL_RpmsgSend(hal_rpmsg_handle_t handle, uint8_t *data, uint3
     assert(NULL != data);
 
     rpmsgHandle = (hal_rpmsg_state_t *)handle;
+    /* loop check peer device rpmsg endpoint is ready */
+    while (0 == rpmsgHandle->rpmsg_lite_peer_ept_is_ready)
+    {
+        RPMsg_EpReadyTimeDelay(1U);
+    }
 
     primask = DisableGlobalIRQ();
 
@@ -349,11 +431,15 @@ hal_rpmsg_status_t HAL_RpmsgNoCopySend(hal_rpmsg_handle_t handle, uint8_t *data,
     hal_rpmsg_state_t *rpmsgHandle;
     hal_rpmsg_status_t status = kStatus_HAL_RpmsgSuccess;
     uint32_t primask;
+    rpmsgHandle = (hal_rpmsg_state_t *)handle;
+    /* loop check peer device rpmsg endpoint is ready */
+    while (0 == rpmsgHandle->rpmsg_lite_peer_ept_is_ready)
+    {
+        RPMsg_EpReadyTimeDelay(1U);
+    }
 
     primask = DisableGlobalIRQ();
     assert(NULL != data);
-
-    rpmsgHandle = (hal_rpmsg_state_t *)handle;
 
     do
     {
@@ -383,21 +469,7 @@ hal_rpmsg_status_t HAL_RpmsgInstallRxCallback(hal_rpmsg_handle_t handle, rpmsg_r
 
     rpmsgHandle->rx.callback = callback;
     rpmsgHandle->rx.param    = param;
-#if (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 0U))
-    /* Wait for remote side endpoint initialize completed and install the RX call back. */
-    while ((APP_RPMSG_EP_READY_EVENT_DATA) != s_rpmsgEptData[s_rpmsgEptCount])
-    {
-    };
-    s_rpmsgEptData[s_rpmsgEptCount] = 0U;
 
-    /* Create end point success! */
-    s_rpmsgEptCount++;
-#elif (defined(HAL_RPMSG_SELECT_ROLE) && (HAL_RPMSG_SELECT_ROLE == 1U))
-    (void)MCMGR_TriggerEvent(kMCMGR_RemoteApplicationEvent, APP_RPMSG_EP_READY_EVENT_DATA << 0x8U | s_rpmsgEptCount);
-
-    /* Create end point success! */
-    s_rpmsgEptCount++;
-#endif /* HAL_RPMSG_SELECT_ROLE */
     return kStatus_HAL_RpmsgSuccess;
 }
 

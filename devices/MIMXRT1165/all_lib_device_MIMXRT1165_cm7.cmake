@@ -7,6 +7,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpi2c
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpspi
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpuart
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/common_task
     ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash
     ${CMAKE_CURRENT_LIST_DIR}/../../components/gpio
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
@@ -73,13 +74,15 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xecc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xrdc2
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/littlefs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/lwip
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/drivers/cm7
@@ -98,7 +101,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_rdc)
 #    include(driver_asrc)
 #    include(driver_dmamux)
-#    include(driver_phy-common)
+#    include(middleware_lwip_apps_httpd)
+#    include(middleware_lwip_apps_lwiperf)
 #    include(utility_shell)
 #    include(CMSIS_Driver_Include_Ethernet_MAC)
 #    include(middleware_sdmmc_sd)
@@ -122,6 +126,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_wdog01)
 #    include(driver_flexio_uart_edma)
 #    include(driver_ocotp)
+#    include(middleware_lwip_contrib_tcpecho)
 #    include(driver_edma_MIMXRT1166_cm7)
 #    include(driver_mipi_dsi_split)
 #    include(middleware_multicore_rpmsg_lite_MIMXRT1166_cm7)
@@ -130,12 +135,16 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_pit)
 #    include(middleware_usb_device_cdc_external)
 #    include(component_serial_manager_uart)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(component_log_backend_debugconsole)
 #    include(driver_cmsis_lpuart)
 #    include(driver_soc_src)
+#    include(middleware_lwip_contrib_ping)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_edma)
 #    include(middleware_sdmmc_osa_freertos)
+#    include(middleware_lwip_apps_mqtt)
+#    include(middleware_lwip_apps_httpsrv)
 #    include(driver_rdc_sema42)
 #    include(driver_cmsis_enet)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_rtos_master_c_wrapper)
@@ -162,6 +171,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_romapi)
 #    include(middleware_multicore_rpmsg_lite_freertos)
 #    include(CMSIS_Driver_Include_Common)
+#    include(middleware_lwip_apps_httpd_support)
 #    include(middleware_multicore_erpc_doc)
 #    include(middleware_multicore_erpc_common)
 #    include(component_osa_bm)
@@ -170,13 +180,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_common)
 #    include(middleware_multicore_erpc_eRPC_port_freertos)
 #    include(driver_kpp)
-#    include(middleware_usb_host_ehci)
 #    include(component_osa_free_rtos)
 #    include(driver_adc_etc)
 #    include(driver_key_manager)
 #    include(middleware_freertos-kernel_heap_3)
 #    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
+#    include(middleware_lwip_apps_mdns)
 #    include(middleware_sdmmc_sdio)
 #    include(CMSIS_DSP_Source)
 #    include(middleware_sdmmc_host_usdhc_interrupt_MIMXRT1166_cm7)
@@ -191,32 +201,34 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Driver_Include_USART)
 #    include(CMSIS_Driver_Include_SPI)
 #    include(utility_debug_console_lite)
-#    include(driver_mdio-common)
 #    include(middleware_usb_host_phdc)
 #    include(middleware_usb_host_printer)
-#    include(middleware_sdmmc_osa_azurertos)
+#    include(middleware_multicore_erpc_eRPC_mu_transport)
 #    include(driver_pgmc)
 #    include(driver_iomuxc)
 #    include(middleware_usb_device_common_header)
 #    include(driver_flexram)
 #    include(utility_assert_lite)
-#    include(middleware_fatfs)
 #    include(driver_semc)
 #    include(driver_xecc)
 #    include(driver_xbarb)
 #    include(driver_xbara)
+#    include(driver_phy-common_MIMXRT1166_cm7)
 #    include(driver_spdif)
+#    include(middleware_lwip_usb_ethernetif)
 #    include(driver_flexcan)
 #    include(utility_debug_console)
+#    include(middleware_sdmmc_osa_azurertos)
 #    include(middleware_usb_host_hid)
 #    include(component_osa_thread)
 #    include(driver_pmu_1)
+#    include(middleware_fatfs_ram)
 #    include(device_startup_MIMXRT1165_cm7)
+#    include(middleware_usb_host_ehci_MIMXRT1166_cm7)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_master_c_wrapper)
 #    include(middleware_multicore_mcmgr)
 #    include(component_mflash_common)
 #    include(driver_cmsis_lpspi)
-#    include(middleware_usb_device_ehci)
 #    include(driver_spdif_edma)
 #    include(middleware_sdmmc_host_usdhc)
 #    include(middleware_multicore_erpc_eRPC_port_stdlib)
@@ -230,30 +242,35 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_fatfs_usb)
 #    include(driver_iee)
 #    include(middleware_fatfs_sd)
-#    include(middleware_multicore_erpc_eRPC_mu_transport)
+#    include(middleware_lwip_enet_ethernetif_MIMXRT1166_cm7)
 #    include(driver_flexspi)
 #    include(driver_flexio_spi_edma)
 #    include(driver_lpi2c_freertos)
 #    include(driver_qtmr_1)
+#    include(component_common_task)
 #    include(driver_gpc_3)
 #    include(driver_sai_edma)
 #    include(component_lists)
 #    include(middleware_sdmmc_common)
 #    include(middleware_usb_host_stack_MIMXRT1166_cm7)
 #    include(driver_acmp)
+#    include(middleware_fatfs_MIMXRT1166_cm7)
 #    include(component_igpio_adapter)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_transport)
 #    include(component_osa)
 #    include(driver_memory)
 #    include(driver_lpuart)
+#    include(middleware_littlefs)
 #    include(driver_flexio_spi)
 #    include(component_pit_adapter)
 #    include(middleware_multicore_erpc_eRPC_mu_rtos_transport)
 #    include(driver_dac12)
+#    include(middleware_mbedtls_MIMXRT1166_cm7)
 #    include(driver_xrdc2)
 #    include(driver_lpi2c)
 #    include(CMSIS_Driver_Include_Ethernet_PHY)
 #    include(driver_flexio_i2s)
+#    include(middleware_lwip)
 #    include(middleware_usb_host_audio)
 #    include(driver_ssarc)
 #    include(driver_igpio)
@@ -261,6 +278,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_mipi_csi2rx)
 #    include(middleware_sdmmc_host_usdhc_azurertos)
 #    include(driver_sai)
+#    include(middleware_usb_device_ehci_MIMXRT1166_cm7)
 #    include(driver_pdm_edma)
 #    include(driver_iee_apc)
 #    include(driver_mu)

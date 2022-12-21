@@ -344,23 +344,6 @@ void MCAN_Deinit(CAN_Type *base)
 }
 
 /*!
- * brief MCAN enters normal mode.
- *
- * After initialization, INIT bit in CCCR register must be cleared to enter
- * normal mode thus synchronizes to the CAN bus and ready for communication.
- *
- * param base MCAN peripheral base address.
- */
-void MCAN_EnterNormalMode(CAN_Type *base)
-{
-    /* Reset INIT bit to enter normal mode. */
-    base->CCCR &= ~CAN_CCCR_INIT_MASK;
-    while (0U != (base->CCCR & CAN_CCCR_INIT_MASK))
-    {
-    }
-}
-
-/*!
  * brief Gets the default configuration structure.
  *
  * This function initializes the MCAN configuration structure to default values. The default
@@ -695,12 +678,7 @@ status_t MCAN_SetBaudRateFD(CAN_Type *base, uint32_t sourceClock_Hz, uint32_t ba
 
     if (MCAN_FDCalculateImprovedTimingValues(baudRateN_Bps, baudRateD_Bps, sourceClock_Hz, &timingCfg))
     {
-        /* Enable write access to the protected conﬁguration registers */
-        base->CCCR |= CAN_CCCR_INIT_MASK;
-        while (0U == (base->CCCR & CAN_CCCR_INIT_MASK))
-        {
-        }
-        base->CCCR |= CAN_CCCR_CCE_MASK;
+        MCAN_EnterInitialMode(base);
         /* Update actual timing characteristic. */
         MCAN_SetArbitrationTimingConfig(base, &timingCfg);
         MCAN_SetDataTimingConfig(base, &timingCfg);
@@ -854,12 +832,7 @@ status_t MCAN_SetBaudRate(CAN_Type *base, uint32_t sourceClock_Hz, uint32_t baud
 
     if (MCAN_CalculateImprovedTimingValues(baudRate_Bps, sourceClock_Hz, &timingCfg))
     {
-        /* Enable write access to the protected conﬁguration registers */
-        base->CCCR |= CAN_CCCR_INIT_MASK;
-        while (0U == (base->CCCR & CAN_CCCR_INIT_MASK))
-        {
-        }
-        base->CCCR |= CAN_CCCR_CCE_MASK;
+        MCAN_EnterInitialMode(base);
         /* Update actual timing characteristic. */
         MCAN_SetArbitrationTimingConfig(base, &timingCfg);
         MCAN_EnterNormalMode(base);
@@ -1007,6 +980,129 @@ void MCAN_SetTxBufferConfig(CAN_Type *base, const mcan_tx_buffer_config_t *confi
                   CAN_TXBC_TFQS(config->fqSize) | CAN_TXBC_TFQM(config->mode);
     /* Set Tx Buffer data field size */
     base->TXESC |= CAN_TXESC_TBDS(config->datafieldSize);
+}
+
+/*!
+ * brief Set Message RAM related configuration.
+ *
+ * note This function include Standard/extended ID filter, Rx FIFO 0/1, Rx buffer, Tx event FIFO and Tx buffer
+ *      configurations
+ * param base MCAN peripheral base address.
+ * param config The MCAN filter configuration.
+ * retval kStatus_Success - Message RAM related configuration Successfully.
+ * retval kStatus_Fail    - Message RAM related configure fail due to wrong address parameter.
+ */
+status_t MCAN_SetMessageRamConfig(CAN_Type *base, const mcan_memory_config_t *config)
+{
+    uint32_t temp   = 0U;
+    uint32_t eSize  = 0U;
+    status_t result = kStatus_Success;
+
+    MCAN_EnterInitialMode(base);
+    if (0U == (config->baseAddr % 4096U))
+    {
+        MCAN_SetMsgRAMBase(base, config->baseAddr);
+    }
+    else
+    {
+        result = kStatus_Fail;
+    }
+    if ((config->stdFilterCfg != NULL) && (kStatus_Success == result))
+    {
+        if ((config->stdFilterCfg->idFormat == kMCAN_FrameIDStandard) && (0U == (config->stdFilterCfg->address % 4U)))
+        {
+            temp = config->stdFilterCfg->listSize * 4U;
+            MCAN_SetFilterConfig(base, config->stdFilterCfg);
+        }
+        else
+        {
+            result = kStatus_Fail;
+        }
+    }
+    if ((config->extFilterCfg != NULL) && (kStatus_Success == result))
+    {
+        if ((config->extFilterCfg->idFormat == kMCAN_FrameIDExtend) && (config->extFilterCfg->address >= temp) &&
+            (0U == (config->extFilterCfg->address % 4U)))
+        {
+            temp = config->extFilterCfg->address + config->extFilterCfg->listSize * 8U;
+            MCAN_SetFilterConfig(base, config->extFilterCfg);
+        }
+        else
+        {
+            result = kStatus_Fail;
+        }
+    }
+    if ((config->rxFifo0Cfg != NULL) && (kStatus_Success == result))
+    {
+        eSize = ((uint32_t)config->rxFifo0Cfg->datafieldSize < 5U) ?
+                    ((uint32_t)config->rxFifo0Cfg->datafieldSize + 4U) :
+                    ((uint32_t)config->rxFifo0Cfg->datafieldSize * 4U - 10U);
+        if ((config->rxFifo0Cfg->address >= temp) && (0U == (config->rxFifo0Cfg->address % 4U)))
+        {
+            temp = config->rxFifo0Cfg->address + config->rxFifo0Cfg->elementSize * eSize * 4U;
+            MCAN_SetRxFifo0Config(base, config->rxFifo0Cfg);
+        }
+        else
+        {
+            result = kStatus_Fail;
+        }
+    }
+    if ((config->rxFifo1Cfg != NULL) && (kStatus_Success == result))
+    {
+        eSize = ((uint32_t)config->rxFifo1Cfg->datafieldSize < 5U) ?
+                    ((uint32_t)config->rxFifo1Cfg->datafieldSize + 4U) :
+                    ((uint32_t)config->rxFifo1Cfg->datafieldSize * 4U - 10U);
+        if ((config->rxFifo1Cfg->address >= temp) && (0U == (config->rxFifo1Cfg->address % 4U)))
+        {
+            temp = config->rxFifo1Cfg->address + config->rxFifo1Cfg->elementSize * eSize * 4U;
+            MCAN_SetRxFifo1Config(base, config->rxFifo1Cfg);
+        }
+        else
+        {
+            result = kStatus_Fail;
+        }
+    }
+    if ((config->rxBufferCfg != NULL) && (kStatus_Success == result))
+    {
+        eSize = ((uint32_t)config->rxBufferCfg->datafieldSize < 5U) ?
+                    ((uint32_t)config->rxBufferCfg->datafieldSize + 4U) :
+                    ((uint32_t)config->rxBufferCfg->datafieldSize * 4U - 10U);
+        if ((config->rxBufferCfg->address >= temp) && (0U == (config->rxBufferCfg->address % 4U)))
+        {
+            temp = config->rxBufferCfg->address + 64U * eSize * 4U;
+            MCAN_SetRxBufferConfig(base, config->rxBufferCfg);
+        }
+        else
+        {
+            result = kStatus_Fail;
+        }
+    }
+    if ((config->txFifoCfg != NULL) && (kStatus_Success == result))
+    {
+        if ((config->txFifoCfg->address >= temp) && (0U == (config->txFifoCfg->address % 4U)))
+        {
+            temp = config->txFifoCfg->address + config->txFifoCfg->elementSize * 8U;
+            MCAN_SetTxEventFifoConfig(base, config->txFifoCfg);
+        }
+        else
+        {
+            result = kStatus_Fail;
+        }
+    }
+    if ((config->txBufferCfg != NULL) && (kStatus_Success == result))
+    {
+        if ((config->txBufferCfg->address < temp) || (0U != (config->txBufferCfg->address % 4U)))
+        {
+            result = kStatus_Fail;
+        }
+        else
+        {
+            MCAN_SetTxBufferConfig(base, config->txBufferCfg);
+        }
+    }
+    MCAN_EnterNormalMode(base);
+
+    return result;
 }
 
 /*!
@@ -1454,7 +1550,7 @@ status_t MCAN_TransferSendNonBlocking(CAN_Type *base, mcan_handle_t *handle, mca
     if ((uint8_t)kMCAN_StateIdle == handle->bufferState[xfer->bufferIdx])
     {
         /* Distinguish transmit type. */
-        if ((uint8_t)kMCAN_FrameTypeRemote == xfer->frame->xtd)
+        if ((uint8_t)kMCAN_FrameTypeRemote == xfer->frame->rtr)
         {
             handle->bufferState[xfer->bufferIdx] = (uint8_t)kMCAN_StateTxRemote;
 

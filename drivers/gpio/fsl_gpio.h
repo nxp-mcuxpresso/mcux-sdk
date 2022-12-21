@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief GPIO driver version. */
-#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
+#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 7, 1))
 /*@}*/
 
 #if defined(FSL_FEATURE_GPIO_REGISTERS_WIDTH) && (FSL_FEATURE_GPIO_REGISTERS_WIDTH == 8U)
@@ -99,6 +99,15 @@ typedef enum _gpio_interrupt_config
     kGPIO_ActiveLowTriggerOutputEnable  = 0xEU,  /*!< Enable active low-trigger output. */
 } gpio_interrupt_config_t;
 #endif
+
+#if (defined(FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT) && FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT)
+/*! @brief Configures the selection of interrupt/DMA request/trigger output. */
+typedef enum _gpio_interrupt_selection
+{
+    kGPIO_InterruptOutput0  = 0x0U,  /*!< Interrupt/DMA request/trigger output 0. */
+    kGPIO_InterruptOutput1  = 0x1U,  /*!< Interrupt/DMA request/trigger output 1. */
+} gpio_interrupt_selection_t;
+#endif /* FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT */
 
 #if defined(FSL_FEATURE_GPIO_HAS_VERSION_INFO_REGISTER) && FSL_FEATURE_GPIO_HAS_VERSION_INFO_REGISTER
 /*! @brief GPIO version information. */
@@ -459,6 +468,23 @@ static inline void GPIO_SetPinInterruptConfig(GPIO_Type *base, uint32_t pin, gpi
     base->ICR[pin] = GPIO_FIT_REG((base->ICR[pin] & ~GPIO_ICR_IRQC_MASK) | GPIO_ICR_IRQC(config));
 }
 
+#if (defined(FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT) && FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT)
+/*!
+ * @brief Configures the gpio pin interrupt/DMA request/trigger output channel selection.
+ *
+ * @param base    GPIO peripheral base pointer.
+ * @param pin     GPIO pin number.
+ * @param selection  GPIO pin interrupt output selection.
+ *        - #kGPIO_InterruptOutput0: Interrupt/DMA request/trigger output 0.
+ *        - #kGPIO_InterruptOutput1 : Interrupt/DMA request/trigger output 1.
+ */
+static inline void GPIO_SetPinInterruptChannel(GPIO_Type *base, uint32_t pin, gpio_interrupt_selection_t selection)
+{
+    assert(base);
+
+    base->ICR[pin] = GPIO_FIT_REG((base->ICR[pin] & ~GPIO_ICR_IRQS_MASK) | GPIO_ICR_IRQS(selection));
+}
+#endif
 /*!
  * @brief Read the GPIO interrupt status flags.
  *
@@ -468,7 +494,18 @@ static inline void GPIO_SetPinInterruptConfig(GPIO_Type *base, uint32_t pin, gpi
  *          For example, the return value 0x00010001 means the pin 0 and 17 have the interrupt pending.
  */
 uint32_t GPIO_GpioGetInterruptFlags(GPIO_Type *base);
-
+#if (defined(FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT) && FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT)
+/*!
+ * @brief Read the GPIO interrupt status flags based on selected interrupt channel(IRQS).
+ * 
+ * @param base GPIO peripheral base pointer. (GPIOA, GPIOB, GPIOC, and so on.)
+ * @param channel '0' means selete interrupt channel 0, '1' means selete interrupt channel 1.
+ * @return The current GPIO's interrupt status flag based on the selected interrupt channel.
+ *         '1' means the related pin's flag is set, '0' means the related pin's flag not set.
+ *          For example, the return value 0x00010001 means the pin 0 and 17 have the interrupt pending.
+ */
+uint32_t GPIO_GpioGetInterruptChannelFlags(GPIO_Type *base, uint32_t channel);
+#endif
 /*!
  * @brief Read individual pin's interrupt status flag.
  *
@@ -485,7 +522,16 @@ uint8_t GPIO_PinGetInterruptFlag(GPIO_Type *base, uint32_t pin);
  * @param mask GPIO pin number macro
  */
 void GPIO_GpioClearInterruptFlags(GPIO_Type *base, uint32_t mask);
-
+#if (defined(FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT) && FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT)
+/*!
+ * @brief Clears GPIO pin interrupt status flags based on selected interrupt channel(IRQS).
+ *
+ * @param base GPIO peripheral base pointer (GPIOA, GPIOB, GPIOC, and so on.)
+ * @param mask GPIO pin number macro
+ * @param channel '0' means selete interrupt channel 0, '1' means selete interrupt channel 1.
+ */
+void GPIO_GpioClearInterruptChannelFlags(GPIO_Type *base, uint32_t mask, uint32_t channel);
+#endif
 /*!
  * @brief Clear GPIO individual pin's interrupt status flag.
  *

@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief DMA driver version */
-#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 4)) /*!< Version 2.4.4. */
+#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 0)) /*!< Version 2.5.0. */
 /*@}*/
 
 /*! @brief DMA max transfer size */
@@ -96,23 +96,8 @@
 #define DMA_DESCRIPTOR_END_ADDRESS(start, inc, bytes, width) \
     ((uint32_t *)((uint32_t)(start) + (inc) * (bytes) - (inc) * (width)))
 
-/*! @brief DMA channel transfer configurations macro
- * @param reload true is reload link descriptor after current exhaust, false is not
- * @param clrTrig true is clear trigger status, wait software trigger, false is not
- * @param intA enable interruptA
- * @param intB enable interruptB
- * @param width transfer width
- * @param srcInc source address interleave size
- * @param dstInc destination address interleave size
- * @param bytes transfer bytes
- */
-#define DMA_CHANNEL_XFER(reload, clrTrig, intA, intB, width, srcInc, dstInc, bytes)                                 \
-    DMA_CHANNEL_XFERCFG_CFGVALID_MASK | DMA_CHANNEL_XFERCFG_RELOAD(reload) | DMA_CHANNEL_XFERCFG_CLRTRIG(clrTrig) | \
-        DMA_CHANNEL_XFERCFG_SETINTA(intA) | DMA_CHANNEL_XFERCFG_SETINTB(intB) |                                     \
-        DMA_CHANNEL_XFERCFG_WIDTH(width == 4UL ? 2UL : (width - 1UL)) |                                             \
-        DMA_CHANNEL_XFERCFG_SRCINC(srcInc == (uint32_t)kDMA_AddressInterleave4xWidth ? (srcInc - 1UL) : srcInc) |   \
-        DMA_CHANNEL_XFERCFG_DSTINC(dstInc == (uint32_t)kDMA_AddressInterleave4xWidth ? (dstInc - 1UL) : dstInc) |   \
-        DMA_CHANNEL_XFERCFG_XFERCOUNT(bytes / width - 1UL)
+#define DMA_CHANNEL_XFER(reload, clrTrig, intA, intB, width, srcInc, dstInc, bytes) \
+    (DMA_SetChannelXferConfig(reload, clrTrig, intA, intB, width, srcInc, dstInc, bytes))
 
 /*! @brief _dma_transfer_status DMA transfer status */
 enum
@@ -485,6 +470,30 @@ void DMA_ConfigureChannelTrigger(DMA_Type *base, uint32_t channel, dma_channel_t
  * @param isPeriph true is periph request, false is not.
  */
 void DMA_SetChannelConfig(DMA_Type *base, uint32_t channel, dma_channel_trigger_t *trigger, bool isPeriph);
+
+/*! @brief DMA channel xfer transfer configurations
+ *
+ * @param reload true is reload link descriptor after current exhaust, false is not
+ * @param clrTrig true is clear trigger status, wait software trigger, false is not
+ * @param intA enable interruptA
+ * @param intB enable interruptB
+ * @param width transfer width
+ * @param srcInc source address interleave size
+ * @param dstInc destination address interleave size
+ * @param bytes transfer bytes
+ * @return The vaule of xfer config
+ */
+static inline uint32_t DMA_SetChannelXferConfig(
+    bool reload, bool clrTrig, bool intA, bool intB, uint8_t width, uint8_t srcInc, uint8_t dstInc, uint32_t bytes)
+{
+    return (DMA_CHANNEL_XFERCFG_CFGVALID_MASK | DMA_CHANNEL_XFERCFG_RELOAD(reload) |
+            DMA_CHANNEL_XFERCFG_CLRTRIG(clrTrig) | DMA_CHANNEL_XFERCFG_SETINTA(intA) |
+            DMA_CHANNEL_XFERCFG_SETINTB(intB) |
+            DMA_CHANNEL_XFERCFG_WIDTH((uint32_t)width == 4UL ? 2UL : ((uint32_t)width - 1UL)) |
+            DMA_CHANNEL_XFERCFG_SRCINC((uint32_t)srcInc == 4UL ? ((uint32_t)srcInc - 1UL) : (uint32_t)srcInc) |
+            DMA_CHANNEL_XFERCFG_DSTINC((uint32_t)dstInc == 4UL ? ((uint32_t)dstInc - 1UL) : (uint32_t)dstInc) |
+            DMA_CHANNEL_XFERCFG_XFERCOUNT((uint32_t)bytes / (uint32_t)width - 1UL));
+}
 
 /*!
  * @brief Gets the remaining bytes of the current DMA descriptor transfer.

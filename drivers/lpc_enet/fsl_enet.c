@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -984,16 +984,16 @@ void ENET_SetSMI(ENET_Type *base)
  *
  * param base  ENET peripheral base address.
  * param phyAddr The PHY address.
- * param phyReg The PHY register.
+ * param regAddr The PHY register.
  * param data The data written to PHY.
  */
-void ENET_StartSMIWrite(ENET_Type *base, uint32_t phyAddr, uint32_t phyReg, uint32_t data)
+void ENET_StartSMIWrite(ENET_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t data)
 {
     uint32_t reg = base->MAC_MDIO_ADDR & ENET_MAC_MDIO_ADDR_CR_MASK;
 
     /* Build MII write command. */
     base->MAC_MDIO_ADDR = reg | ENET_MAC_MDIO_ADDR_MOC(kENET_MiiWriteFrame) | ENET_MAC_MDIO_ADDR_PA(phyAddr) |
-                          ENET_MAC_MDIO_ADDR_RDA(phyReg);
+                          ENET_MAC_MDIO_ADDR_RDA(regAddr);
     base->MAC_MDIO_DATA = data;
     base->MAC_MDIO_ADDR |= ENET_MAC_MDIO_ADDR_MB_MASK;
 }
@@ -1004,16 +1004,89 @@ void ENET_StartSMIWrite(ENET_Type *base, uint32_t phyAddr, uint32_t phyReg, uint
  *
  * param base  ENET peripheral base address.
  * param phyAddr The PHY address.
- * param phyReg The PHY register.
+ * param regAddr The PHY register.
  */
-void ENET_StartSMIRead(ENET_Type *base, uint32_t phyAddr, uint32_t phyReg)
+void ENET_StartSMIRead(ENET_Type *base, uint8_t phyAddr, uint8_t regAddr)
 {
     uint32_t reg = base->MAC_MDIO_ADDR & ENET_MAC_MDIO_ADDR_CR_MASK;
 
     /* Build MII read command. */
     base->MAC_MDIO_ADDR = reg | ENET_MAC_MDIO_ADDR_MOC(kENET_MiiReadFrame) | ENET_MAC_MDIO_ADDR_PA(phyAddr) |
-                          ENET_MAC_MDIO_ADDR_RDA(phyReg);
+                          ENET_MAC_MDIO_ADDR_RDA(regAddr);
     base->MAC_MDIO_ADDR |= ENET_MAC_MDIO_ADDR_MB_MASK;
+}
+
+static status_t ENET_QOS_MDIOWaitTransferOver(ENET_Type *base)
+{
+    status_t result = kStatus_Success;
+#ifdef ENET_MDIO_TIMEOUT_COUNT
+    uint32_t counter;
+#endif
+
+#ifdef ENET_QOS_MDIO_TIMEOUT_COUNT
+    for (counter = ENET_MDIO_TIMEOUT_COUNT; counter > 0U; counter--)
+    {
+        if (!ENET_IsSMIBusy(base))
+        {
+            break;
+        }
+    }
+    /* Check for timeout. */
+    if (0U == counter)
+    {
+        result = kStatus_Timeout;
+    }
+#else
+    while (ENET_IsSMIBusy(base))
+    {
+    }
+#endif
+    return result;
+}
+
+/*!
+ * @brief MDIO write.
+ *
+ * @param base  ENET peripheral base address.
+ * @param phyAddr The PHY address.
+ * @param regAddr The PHY register.
+ * @param data The data written to PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_MDIOWrite(ENET_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t data)
+{
+    ENET_StartSMIWrite(base, phyAddr, regAddr, data);
+
+    return ENET_QOS_MDIOWaitTransferOver(base);
+}
+
+/*!
+ * @brief MDIO read.
+ *
+ * @param base  ENET peripheral base address.
+ * @param phyAddr The PHY address.
+ * @param regAddr The PHY register.
+ * @param pData  The data read from PHY.
+ * @return kStatus_Success  MDIO access succeeds.
+ * @return kStatus_Timeout  MDIO access timeout.
+ */
+status_t ENET_MDIORead(ENET_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t *pData)
+{
+    assert(pData);
+
+    status_t result;
+
+    ENET_StartSMIRead(base, phyAddr, regAddr);
+
+    result = ENET_QOS_MDIOWaitTransferOver(base);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
+    *pData = ENET_ReadSMIData(base);
+
+    return result;
 }
 
 /*!

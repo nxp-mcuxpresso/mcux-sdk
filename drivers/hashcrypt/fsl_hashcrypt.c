@@ -930,6 +930,7 @@ status_t HASHCRYPT_SHA_Update(HASHCRYPT_Type *base, hashcrypt_hash_ctx_t *ctx, c
     /* Data Synchronization Barrier */
     __DSB();
     status = hashcrypt_sha_process_message_data(base, ctxInternal, input, inputSize);
+    __DSB();
     hashcrypt_save_running_hash(base, ctxInternal);
     return status;
 }

@@ -4,7 +4,7 @@
 /*            MIMXRT1062                                                     */
 /*  @version: 1.4                                                            */
 /*  @date:    2022-3-25                                                      */
-/*  @build:   b220401                                                        */
+/*  @build:   b221009                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
@@ -156,8 +156,8 @@ __isr_vector:
     .long   USB_OTG1_IRQHandler                             /* USBO2 USB OTG1*/
     .long   ENET_IRQHandler                                 /* ENET interrupt*/
     .long   ENET_1588_Timer_IRQHandler                      /* ENET_1588_Timer interrupt*/
-    .long   XBAR1_IRQ_0_1_IRQHandler                        /* XBAR1 interrupt*/
-    .long   XBAR1_IRQ_2_3_IRQHandler                        /* XBAR1 interrupt*/
+    .long   XBAR1_IRQ_0_1_IRQHandler                        /* XBARA1 output signal 0, 1 interrupt*/
+    .long   XBAR1_IRQ_2_3_IRQHandler                        /* XBARA1 output signal 2, 3 interrupt*/
     .long   ADC_ETC_IRQ0_IRQHandler                         /* ADCETC IRQ0 interrupt*/
     .long   ADC_ETC_IRQ1_IRQHandler                         /* ADCETC IRQ1 interrupt*/
     .long   ADC_ETC_IRQ2_IRQHandler                         /* ADCETC IRQ2 interrupt*/
@@ -281,7 +281,7 @@ __isr_vector:
     .long   DefaultISR                                      /* 254*/
     .long   0xFFFFFFFF                                      /*  Reserved for user TRIM value*/
 
-    .size    __isr_vector, . - __isr_vector
+    .size   __isr_vector, . - __isr_vector
 
     .text
     .thumb
@@ -960,7 +960,6 @@ FLEXIO3_IRQHandler:
     .weak \handler_name
     .set  \handler_name, DefaultISR
     .endm
-
 /* Exception Handlers */
     def_irq_handler    MemManage_Handler
     def_irq_handler    BusFault_Handler

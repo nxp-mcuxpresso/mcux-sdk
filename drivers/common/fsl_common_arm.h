@@ -579,6 +579,144 @@ static inline status_t DisableIRQ(IRQn_Type interrupt)
 #endif
 
 /*!
+ * @brief Enable the IRQ, and also set the interrupt priority.
+ *
+ * Only handle LEVEL1 interrupt. For some devices, there might be multiple interrupt
+ * levels. For example, there are NVIC and intmux. Here the interrupts connected
+ * to NVIC are the LEVEL1 interrupts, because they are routed to the core directly.
+ * The interrupts connected to intmux are the LEVEL2 interrupts, they are routed
+ * to NVIC first then routed to core.
+ *
+ * This function only handles the LEVEL1 interrupts. The number of LEVEL1 interrupts
+ * is indicated by the feature macro FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS.
+ *
+ * @param interrupt The IRQ to Enable.
+ * @param priNum Priority number set to interrupt controller register.
+ * @retval kStatus_Success Interrupt priority set successfully
+ * @retval kStatus_Fail Failed to set the interrupt priority.
+ */
+static inline status_t EnableIRQWithPriority(IRQn_Type interrupt, uint8_t priNum)
+{
+    status_t status = kStatus_Success;
+
+    if (NotAvail_IRQn == interrupt)
+    {
+        status = kStatus_Fail;
+    }
+
+#if defined(FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS) && (FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS > 0)
+    else if ((int32_t)interrupt >= (int32_t)FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS)
+    {
+        status = kStatus_Fail;
+    }
+#endif
+
+    else
+    {
+#if defined(__GIC_PRIO_BITS)
+        GIC_SetPriority(interrupt, priNum);
+        GIC_EnableIRQ(interrupt);
+#else
+        NVIC_SetPriority(interrupt, priNum);
+        NVIC_EnableIRQ(interrupt);
+#endif
+    }
+
+    return status;
+}
+
+/*!
+ * @brief Set the IRQ priority.
+ *
+ * Only handle LEVEL1 interrupt. For some devices, there might be multiple interrupt
+ * levels. For example, there are NVIC and intmux. Here the interrupts connected
+ * to NVIC are the LEVEL1 interrupts, because they are routed to the core directly.
+ * The interrupts connected to intmux are the LEVEL2 interrupts, they are routed
+ * to NVIC first then routed to core.
+ *
+ * This function only handles the LEVEL1 interrupts. The number of LEVEL1 interrupts
+ * is indicated by the feature macro FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS.
+ *
+ * @param interrupt The IRQ to set.
+ * @param priNum Priority number set to interrupt controller register.
+ *
+ * @retval kStatus_Success Interrupt priority set successfully
+ * @retval kStatus_Fail Failed to set the interrupt priority.
+ */
+static inline status_t IRQ_SetPriority(IRQn_Type interrupt, uint8_t priNum)
+{
+    status_t status = kStatus_Success;
+
+    if (NotAvail_IRQn == interrupt)
+    {
+        status = kStatus_Fail;
+    }
+
+#if defined(FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS) && (FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS > 0)
+    else if ((int32_t)interrupt >= (int32_t)FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS)
+    {
+        status = kStatus_Fail;
+    }
+#endif
+
+    else
+    {
+#if defined(__GIC_PRIO_BITS)
+        GIC_SetPriority(interrupt, priNum);
+#else
+        NVIC_SetPriority(interrupt, priNum);
+#endif
+    }
+
+    return status;
+}
+
+/*!
+ * @brief Clear the pending IRQ flag.
+ *
+ * Only handle LEVEL1 interrupt. For some devices, there might be multiple interrupt
+ * levels. For example, there are NVIC and intmux. Here the interrupts connected
+ * to NVIC are the LEVEL1 interrupts, because they are routed to the core directly.
+ * The interrupts connected to intmux are the LEVEL2 interrupts, they are routed
+ * to NVIC first then routed to core.
+ *
+ * This function only handles the LEVEL1 interrupts. The number of LEVEL1 interrupts
+ * is indicated by the feature macro FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS.
+ *
+ * @param interrupt The flag which IRQ to clear.
+ *
+ * @retval kStatus_Success Interrupt priority set successfully
+ * @retval kStatus_Fail Failed to set the interrupt priority.
+ */
+static inline status_t IRQ_ClearPendingIRQ(IRQn_Type interrupt)
+{
+    status_t status = kStatus_Success;
+
+    if (NotAvail_IRQn == interrupt)
+    {
+        status = kStatus_Fail;
+    }
+
+#if defined(FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS) && (FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS > 0)
+    else if ((int32_t)interrupt >= (int32_t)FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS)
+    {
+        status = kStatus_Fail;
+    }
+#endif
+
+    else
+    {
+#if defined(__GIC_PRIO_BITS)
+        GIC_ClearPendingIRQ(interrupt);
+#else
+        NVIC_ClearPendingIRQ(interrupt);
+#endif
+    }
+
+    return status;
+}
+
+/*!
  * @brief Disable the global IRQ
  *
  * Disable the global interrupt and return the current primask register. User is required to provided the primask
@@ -617,8 +755,10 @@ static inline void EnableGlobalIRQ(uint32_t primask)
 #if defined(CPSR_I_Msk)
     __set_CPSR((__get_CPSR() & ~CPSR_I_Msk) | primask);
 #elif defined(DAIF_I_BIT)
-    if (!primask)
+    if (0UL == primask)
+    {
         __enable_irq();
+    }
 #else
     __set_PRIMASK(primask);
 #endif
@@ -673,6 +813,20 @@ void EnableDeepSleepIRQ(IRQn_Type interrupt);
 void DisableDeepSleepIRQ(IRQn_Type interrupt);
 #endif /* FSL_FEATURE_POWERLIB_EXTEND */
 #endif /* FSL_FEATURE_SOC_SYSCON_COUNT */
+
+#if defined(DWT)
+/*!
+ * @brief Enable the counter to get CPU cycles.
+ */
+void MSDK_EnableCpuCycleCounter(void);
+
+/*!
+ * @brief Get the current CPU cycle count.
+ *
+ * @return Current CPU cycle count.
+ */
+uint32_t MSDK_GetCpuCycleCount(void);
+#endif
 
 #if defined(__cplusplus)
 }

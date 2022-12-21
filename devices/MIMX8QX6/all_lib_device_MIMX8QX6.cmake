@@ -65,7 +65,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -80,7 +80,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_camera-device-ov5640)
 #    include(driver_sema42)
 #    include(driver_wdog32)
-#    include(driver_phy-common)
 #    include(device_system)
 #    include(driver_lpadc)
 #    include(driver_dpu_irqsteer)
@@ -113,6 +112,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_ftm)
 #    include(driver_ldb_combo_phy)
+#    include(driver_phy-common_MIMX8QX6)
 #    include(driver_camera-receiver-common)
 #    include(driver_flexcan_edma)
 #    include(driver_display-mipi-dsi-cmd)

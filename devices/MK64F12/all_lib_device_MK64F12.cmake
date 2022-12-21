@@ -64,7 +64,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
@@ -82,7 +82,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_vref)
 #    include(middleware_sdmmc_osa_bm)
 #    include(driver_dmamux)
-#    include(driver_phy-common)
 #    include(utility_shell)
 #    include(CMSIS_Driver_Include_Ethernet_MAC)
 #    include(driver_dac)
@@ -104,6 +103,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager)
 #    include(driver_pit)
 #    include(middleware_usb_device_cdc_external)
+#    include(driver_phy-common_MK64F12)
 #    include(component_serial_manager_uart)
 #    include(component_log_backend_debugconsole)
 #    include(driver_llwu)
@@ -171,7 +171,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_audio)
 #    include(middleware_usb_device_controller_driver_MK64F12)
 #    include(utility_assert_lite)
-#    include(middleware_fatfs)
 #    include(driver_flash)
 #    include(utility_debug_console)
 #    include(middleware_usb_host_hid)
@@ -189,6 +188,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_timer_manager)
 #    include(driver_i2c)
 #    include(driver_i2c_freertos)
+#    include(middleware_fatfs_MK64F12)
 #    include(component_lists)
 #    include(middleware_sdmmc_common)
 #    include(driver_cmt)

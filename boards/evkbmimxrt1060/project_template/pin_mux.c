@@ -14,8 +14,8 @@
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
 product: Pins v4.1
-processor: MIMXRT1062xxxxA
-package_id: MIMXRT1062DVL6A
+processor: MIMXRT1062xxxxB
+package_id: MIMXRT1062DVL6B
 mcu_data: ksdk2_0
 processor_version: 0.0.0
 board: MIMXRT1060-EVKB

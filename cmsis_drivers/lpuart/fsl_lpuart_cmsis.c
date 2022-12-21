@@ -267,11 +267,11 @@ typedef struct _cmsis_lpuart_edma_resource
 {
     DMA_Type *txEdmaBase;   /*!< EDMA peripheral base address for TX.    */
     uint32_t txEdmaChannel; /*!< EDMA channel for LPUART TX.             */
-    uint8_t txDmaRequest;   /*!< TX EDMA request source.                 */
+    uint32_t txDmaRequest;   /*!< TX EDMA request source.                 */
 
     DMA_Type *rxEdmaBase;   /*!< EDMA peripheral base address for RX.    */
     uint32_t rxEdmaChannel; /*!< EDMA channel for LPUART RX.             */
-    uint8_t rxDmaRequest;   /*!< RX EDMA request source.                 */
+    uint32_t rxDmaRequest;   /*!< RX EDMA request source.                 */
 
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
     DMAMUX_Type *txDmamuxBase; /*!< DMAMUX peripheral base address for TX. */
@@ -608,6 +608,7 @@ static int32_t LPUART_DmaPowerControl(ARM_POWER_STATE state, cmsis_lpuart_dma_dr
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txDmaChannel);
 #endif
 #endif
+
             /* Setup the LPUART. */
             (void)LPUART_Init(lpuart->resource->base, &config, lpuart->resource->GetFreq());
             LPUART_TransferCreateHandleDMA(lpuart->resource->base, lpuart->handle, KSDK_LPUART_DmaCallback,
@@ -873,6 +874,12 @@ static int32_t LPUART_EdmaPowerControl(ARM_POWER_STATE state, cmsis_lpuart_edma_
             DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txEdmaChannel, dmaResource->txDmaRequest);
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txEdmaChannel);
 #endif
+
+#if defined(FSL_FEATURE_EDMA_HAS_CHANNEL_MUX) && FSL_FEATURE_EDMA_HAS_CHANNEL_MUX
+            EDMA_SetChannelMux(dmaResource->rxEdmaBase, dmaResource->rxEdmaChannel, (dma_request_source_t)dmaResource->rxDmaRequest);
+            EDMA_SetChannelMux(dmaResource->txEdmaBase, dmaResource->txEdmaChannel, (dma_request_source_t)dmaResource->txDmaRequest);
+#endif
+
             /* Setup the LPUART. */
             (void)LPUART_Init(lpuart->resource->base, &config, lpuart->resource->GetFreq());
             LPUART_TransferCreateHandleEDMA(lpuart->resource->base, lpuart->handle, KSDK_LPUART_EdmaCallback,

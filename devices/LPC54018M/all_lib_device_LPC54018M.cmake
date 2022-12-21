@@ -42,12 +42,14 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/utick
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/littlefs
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/lwip
+    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
-    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos_kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utilities
@@ -59,6 +61,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_ctimer)
 #    include(middleware_sdmmc_osa_bm)
 #    include(middleware_sdmmc_mmc)
+#    include(middleware_lwip_apps_httpd)
+#    include(middleware_lwip_apps_lwiperf)
 #    include(driver_lpc_gpio)
 #    include(device_system)
 #    include(driver_lpc_crc)
@@ -67,24 +71,30 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_log_backend_ringbuffer)
 #    include(driver_flexcomm_usart)
 #    include(driver_lpc_lcdc)
+#    include(middleware_lwip)
+#    include(middleware_lwip_contrib_tcpecho)
 #    include(driver_gint)
 #    include(driver_cmsis_flexcomm_i2c)
 #    include(driver_inputmux)
 #    include(driver_flexcomm_i2c)
 #    include(driver_iap)
 #    include(component_serial_manager)
+#    include(middleware_lwip_apps_mqtt)
 #    include(middleware_usb_device_cdc_external)
 #    include(driver_lpc_dma)
 #    include(component_serial_manager_uart)
+#    include(middleware_mbedtls_port_ksdk)
 #    include(driver_flexcomm_i2s)
 #    include(component_log_backend_debugconsole)
 #    include(driver_flexcomm_spi_dma)
 #    include(driver_flexcomm_spi_freertos)
 #    include(middleware_sdmmc_host_sdif_polling)
 #    include(driver_pint)
+#    include(middleware_lwip_contrib_ping)
 #    include(driver_lpc_enet)
 #    include(driver_sctimer)
 #    include(middleware_usb_device_common_header)
+#    include(middleware_lwip_apps_httpsrv)
 #    include(driver_lpc_adc)
 #    include(driver_flexcomm)
 #    include(device_startup)
@@ -110,13 +120,15 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_cdc)
 #    include(driver_common)
 #    include(component_mrt_adapter)
+#    include(middleware_lwip_apps_httpd_support)
 #    include(component_osa_free_rtos)
-#    include(middleware_sdmmc_sd)
+#    include(middleware_mbedtls_LPC54S018M)
 #    include(middleware_usb_device_controller_driver_LPC54S018M)
 #    include(middleware_freertos-kernel_heap_3)
 #    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(middleware_usb_device_ip3511fs)
+#    include(middleware_lwip_apps_mdns)
 #    include(driver_sha)
 #    include(middleware_sdmmc_sdio)
 #    include(component_usart_adapter)
@@ -135,7 +147,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_i2c_dma)
 #    include(middleware_usb_host_audio)
 #    include(utility_assert_lite)
-#    include(middleware_fatfs)
 #    include(utility_shell)
 #    include(driver_flexcomm_usart_freertos)
 #    include(utility_debug_console)
@@ -153,6 +164,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpc_rtc)
 #    include(middleware_sdmmc_common)
 #    include(middleware_fatfs_sd)
+#    include(middleware_sdmmc_sd)
 #    include(driver_dmic)
 #    include(driver_cmsis_flexcomm_spi)
 #    include(middleware_usb_host_video)
@@ -161,6 +173,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_rng)
 #    include(component_osa)
 #    include(driver_fmeas)
+#    include(middleware_littlefs)
 #    include(driver_sdif)
 #    include(middleware_sdmmc_host_sdif_interrupt)
 #    include(driver_flexcomm_usart_dma)
@@ -169,5 +182,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_phdc)
 #    include(driver_fro_calib)
 #    include(middleware_usb_device_ip3511hs_LPC54S018M)
+#    include(middleware_fatfs_LPC54S018M)
 #    include(driver_reset)
 #    include(middleware_usb_device_stack_external)

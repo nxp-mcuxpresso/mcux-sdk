@@ -10,7 +10,7 @@
 **
 **     Reference manual:    LPC55S1x/LPC551x User manual Rev.0.6  15 November 2019
 **     Version:             rev. 1.1, 2019-12-03
-**     Build:               b220301
+**     Build:               b220718
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC5512
@@ -6332,17 +6332,17 @@ typedef struct {
  */
 #define CDOG_STATUS_NUMILSEQF(x)                 (((uint32_t)(((uint32_t)(x)) << CDOG_STATUS_NUMILSEQF_SHIFT)) & CDOG_STATUS_NUMILSEQF_MASK)
 
-#define CDOG_STATUS_CURST_MASK                   (0xF000000U)
-#define CDOG_STATUS_CURST_SHIFT                  (24U)
-/*! CURST - Current State
- */
-#define CDOG_STATUS_CURST(x)                     (((uint32_t)(((uint32_t)(x)) << CDOG_STATUS_CURST_SHIFT)) & CDOG_STATUS_CURST_MASK)
-
-#define CDOG_STATUS_uN_iMps_MASK                 (0xF0000000U)
-#define CDOG_STATUS_uN_iMps_SHIFT                (28U)
+#define CDOG_STATUS_uN_iMps_MASK                 (0xF000000U)
+#define CDOG_STATUS_uN_iMps_SHIFT                (24U)
 /*! uN_iMps - Un implemented
  */
 #define CDOG_STATUS_uN_iMps(x)                   (((uint32_t)(((uint32_t)(x)) << CDOG_STATUS_uN_iMps_SHIFT)) & CDOG_STATUS_uN_iMps_MASK)
+
+#define CDOG_STATUS_CURST_MASK                   (0xF0000000U)
+#define CDOG_STATUS_CURST_SHIFT                  (28U)
+/*! CURST - Current State
+ */
+#define CDOG_STATUS_CURST(x)                     (((uint32_t)(((uint32_t)(x)) << CDOG_STATUS_CURST_SHIFT)) & CDOG_STATUS_CURST_MASK)
 /*! @} */
 
 /*! @name STATUS2 - STATUS register (2 of 2) */
@@ -7334,6 +7334,11 @@ typedef struct {
 #endif
 /** Interrupt vectors for the CTIMER peripheral type */
 #define CTIMER_IRQS                              { CTIMER0_IRQn, CTIMER1_IRQn, CTIMER2_IRQn, CTIMER3_IRQn, CTIMER4_IRQn }
+/* Backward compatibility for bitfield SHADOW */
+#define CTIMER_MSR_MATCH_SHADOW_MASK   CTIMER_MSR_SHADOW_MASK
+#define CTIMER_MSR_MATCH_SHADOW_SHIFT   CTIMER_MSR_SHADOW_SHIFT
+#define CTIMER_MSR_MATCH_SHADOW   CTIMER_MSR_SHADOW
+
 
 /*!
  * @}
@@ -16890,7 +16895,7 @@ typedef struct {
   __IO uint32_t MISCCTRL;                          /**< Dummy Control bus to PMU [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Deep Power Down Reset, Software Reset], offset: 0x90 */
        uint8_t RESERVED_10[4];
   __IO uint32_t RTCOSC32K;                         /**< RTC 1 KHZ and 1 Hz clocks source control register [Reset by: PoR, Brown Out Detectors Reset], offset: 0x98 */
-  __IO uint32_t OSTIMERr;                          /**< OS Timer control register [Reset by: PoR, Brown Out Detectors Reset], offset: 0x9C */
+  __IO uint32_t OSTIMERr;                          /**< OS Timer control register [Reset by: PoR, Brown Out Detectors Reset], offset: 0x9C, 'r' suffix has been added to avoid a clash with peripheral base pointer macro 'OSTIMER' */
        uint8_t RESERVED_11[24];
   __IO uint32_t PDRUNCFG0;                         /**< Controls the power to various analog blocks [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Deep Power Down Reset, Software Reset], offset: 0xB8 */
        uint8_t RESERVED_12[4];

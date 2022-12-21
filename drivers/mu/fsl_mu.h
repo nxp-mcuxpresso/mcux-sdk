@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,7 +39,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief MU driver version. */
-#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /*!
@@ -58,9 +58,9 @@ enum _mu_status_flags
     kMU_Rx3FullFlag = (1U << (MU_SR_RFn_SHIFT + 0U)), /*!< RX3 full.  */
 
     kMU_GenInt0Flag = (1U << (MU_SR_GIPn_SHIFT + 3U)), /*!< General purpose interrupt 0 pending. */
-    kMU_GenInt1Flag = (1U << (MU_SR_GIPn_SHIFT + 2U)), /*!< General purpose interrupt 0 pending. */
-    kMU_GenInt2Flag = (1U << (MU_SR_GIPn_SHIFT + 1U)), /*!< General purpose interrupt 0 pending. */
-    kMU_GenInt3Flag = (1U << (MU_SR_GIPn_SHIFT + 0U)), /*!< General purpose interrupt 0 pending. */
+    kMU_GenInt1Flag = (1U << (MU_SR_GIPn_SHIFT + 2U)), /*!< General purpose interrupt 1 pending. */
+    kMU_GenInt2Flag = (1U << (MU_SR_GIPn_SHIFT + 1U)), /*!< General purpose interrupt 2 pending. */
+    kMU_GenInt3Flag = (1U << (MU_SR_GIPn_SHIFT + 0U)), /*!< General purpose interrupt 3 pending. */
 
     kMU_EventPendingFlag  = MU_SR_EP_MASK,  /*!< MU event pending.               */
     kMU_FlagsUpdatingFlag = MU_SR_FUP_MASK, /*!< MU flags update is on-going.    */

@@ -4,11 +4,11 @@
 /*            MIMX8MN3_cm7                                                   */
 /*  @version: 2.0                                                            */
 /*  @date:    2019-9-23                                                      */
-/*  @build:   b211101                                                        */
+/*  @build:   b220622                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2021 NXP                                                   */
+/* Copyright 2016-2022 NXP                                                   */
 /* All rights reserved.                                                      */
 /*                                                                           */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
@@ -158,10 +158,10 @@ __isr_vector:
     .long   CAAM_ERROR_IRQHandler                           /* Recoverable error interrupt*/
     .long   HS_CP0_IRQHandler                               /* HS Interrupt Request*/
     .long   CM7_CTI_IRQHandler                              /* CTI trigger outputs from CM7 platform*/
-    .long   ENET_MAC0_Rx_Tx_Done1_IRQHandler                /* MAC 0 Receive / Trasmit Frame / Buffer Done*/
-    .long   ENET_MAC0_Rx_Tx_Done2_IRQHandler                /* MAC 0 Receive / Trasmit Frame / Buffer Done*/
-    .long   ENET_IRQHandler                                 /* MAC 0 IRQ*/
-    .long   ENET_1588_IRQHandler                            /* MAC 0 1588 Timer Interrupt-synchronous*/
+    .long   ENET1_MAC0_Rx_Tx_Done1_IRQHandler               /* MAC 0 Receive / Trasmit Frame / Buffer Done*/
+    .long   ENET1_MAC0_Rx_Tx_Done2_IRQHandler               /* MAC 0 Receive / Trasmit Frame / Buffer Done*/
+    .long   ENET1_IRQHandler                                /* MAC 0 IRQ*/
+    .long   ENET1_1588_Timer_IRQHandler                     /* MAC 0 1588 Timer Interrupt-synchronous*/
     .long   ASRC_IRQHandler                                 /* ASRC Interrupt*/
     .long   Reserved139_IRQHandler                          /* Reserved Interrupt*/
     .long   Reserved140_IRQHandler                          /* Reserved Interrupt*/
@@ -169,7 +169,7 @@ __isr_vector:
     .long   ISI_CH3_IRQHandler                              /* ISI Camera Channel 3 Interrupt*/
     .long   Reserved143_IRQHandler                          /* Reserved Interrupt*/
 
-    .size    __isr_vector, . - __isr_vector
+    .size   __isr_vector, . - __isr_vector
 
     .text
     .thumb
@@ -592,39 +592,39 @@ I2S7_IRQHandler:
 
     .align 1
     .thumb_func
-    .weak ENET_MAC0_Rx_Tx_Done1_IRQHandler
-    .type ENET_MAC0_Rx_Tx_Done1_IRQHandler, %function
-ENET_MAC0_Rx_Tx_Done1_IRQHandler:
-    ldr   r0,=ENET_MAC0_Rx_Tx_Done1_DriverIRQHandler
+    .weak ENET1_MAC0_Rx_Tx_Done1_IRQHandler
+    .type ENET1_MAC0_Rx_Tx_Done1_IRQHandler, %function
+ENET1_MAC0_Rx_Tx_Done1_IRQHandler:
+    ldr   r0,=ENET1_MAC0_Rx_Tx_Done1_DriverIRQHandler
     bx    r0
-    .size ENET_MAC0_Rx_Tx_Done1_IRQHandler, . - ENET_MAC0_Rx_Tx_Done1_IRQHandler
+    .size ENET1_MAC0_Rx_Tx_Done1_IRQHandler, . - ENET1_MAC0_Rx_Tx_Done1_IRQHandler
 
     .align 1
     .thumb_func
-    .weak ENET_MAC0_Rx_Tx_Done2_IRQHandler
-    .type ENET_MAC0_Rx_Tx_Done2_IRQHandler, %function
-ENET_MAC0_Rx_Tx_Done2_IRQHandler:
-    ldr   r0,=ENET_MAC0_Rx_Tx_Done2_DriverIRQHandler
+    .weak ENET1_MAC0_Rx_Tx_Done2_IRQHandler
+    .type ENET1_MAC0_Rx_Tx_Done2_IRQHandler, %function
+ENET1_MAC0_Rx_Tx_Done2_IRQHandler:
+    ldr   r0,=ENET1_MAC0_Rx_Tx_Done2_DriverIRQHandler
     bx    r0
-    .size ENET_MAC0_Rx_Tx_Done2_IRQHandler, . - ENET_MAC0_Rx_Tx_Done2_IRQHandler
+    .size ENET1_MAC0_Rx_Tx_Done2_IRQHandler, . - ENET1_MAC0_Rx_Tx_Done2_IRQHandler
 
     .align 1
     .thumb_func
-    .weak ENET_IRQHandler
-    .type ENET_IRQHandler, %function
-ENET_IRQHandler:
-    ldr   r0,=ENET_DriverIRQHandler
+    .weak ENET1_IRQHandler
+    .type ENET1_IRQHandler, %function
+ENET1_IRQHandler:
+    ldr   r0,=ENET1_DriverIRQHandler
     bx    r0
-    .size ENET_IRQHandler, . - ENET_IRQHandler
+    .size ENET1_IRQHandler, . - ENET1_IRQHandler
 
     .align 1
     .thumb_func
-    .weak ENET_1588_IRQHandler
-    .type ENET_1588_IRQHandler, %function
-ENET_1588_IRQHandler:
-    ldr   r0,=ENET_1588_DriverIRQHandler
+    .weak ENET1_1588_Timer_IRQHandler
+    .type ENET1_1588_Timer_IRQHandler, %function
+ENET1_1588_Timer_IRQHandler:
+    ldr   r0,=ENET1_1588_Timer_DriverIRQHandler
     bx    r0
-    .size ENET_1588_IRQHandler, . - ENET_1588_IRQHandler
+    .size ENET1_1588_Timer_IRQHandler, . - ENET1_1588_Timer_IRQHandler
 
 
 /*    Macro to define default handlers. Default handler
@@ -634,7 +634,6 @@ ENET_1588_IRQHandler:
     .weak \handler_name
     .set  \handler_name, DefaultISR
     .endm
-
 /* Exception Handlers */
     def_irq_handler    MemManage_Handler
     def_irq_handler    BusFault_Handler
@@ -758,10 +757,10 @@ ENET_1588_IRQHandler:
     def_irq_handler    CAAM_ERROR_IRQHandler
     def_irq_handler    HS_CP0_IRQHandler
     def_irq_handler    CM7_CTI_IRQHandler
-    def_irq_handler    ENET_MAC0_Rx_Tx_Done1_DriverIRQHandler
-    def_irq_handler    ENET_MAC0_Rx_Tx_Done2_DriverIRQHandler
-    def_irq_handler    ENET_DriverIRQHandler
-    def_irq_handler    ENET_1588_DriverIRQHandler
+    def_irq_handler    ENET1_MAC0_Rx_Tx_Done1_DriverIRQHandler
+    def_irq_handler    ENET1_MAC0_Rx_Tx_Done2_DriverIRQHandler
+    def_irq_handler    ENET1_DriverIRQHandler
+    def_irq_handler    ENET1_1588_Timer_DriverIRQHandler
     def_irq_handler    ASRC_IRQHandler
     def_irq_handler    Reserved139_IRQHandler
     def_irq_handler    Reserved140_IRQHandler
