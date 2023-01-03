@@ -520,20 +520,24 @@ __STATIC_INLINE void GIC_RedistWakeUp(void)
   s_RedistBaseAddrs[core]->WAKER = 0x04;
 }
 
-/** \brief Read the current interrupt priority from GIC's IPRIORITYR register.
-* \param [in] IRQn The interrupt to be queried.
-*/
-__STATIC_INLINE uint32_t GIC_GetPriority(IRQn_Type IRQn)
-{
-  return (GICDistributor->IPRIORITYR[IRQn / 4U] >> ((IRQn % 4U) * 8U)) & 0xFFUL;
-}
-
 __STATIC_INLINE uint32_t GIC_GetRedistPriority(IRQn_Type IRQn)
 {
   uint32_t core = MPIDR_GetCoreID();
   static GICDistributor_Type *const s_RedistPPIBaseAddrs[] = GICRedistributorPPIArray;
 
   return (s_RedistPPIBaseAddrs[core]->IPRIORITYR[IRQn / 4U] >> ((IRQn % 4U) * 8U)) & 0xFFUL;
+}
+
+/** \brief Read the current interrupt priority from GIC's IPRIORITYR register.
+* \param [in] IRQn The interrupt to be queried.
+*/
+__STATIC_INLINE uint32_t GIC_GetPriority(IRQn_Type IRQn)
+{
+  if ((IRQn < 32) && (GIC_GetARE())) {
+    return GIC_GetRedistPriority(IRQn);
+  } else {
+    return (GICDistributor->IPRIORITYR[IRQn / 4U] >> ((IRQn % 4U) * 8U)) & 0xFFUL;
+  }
 }
 
 /** \brief Get the status for a given interrupt.
