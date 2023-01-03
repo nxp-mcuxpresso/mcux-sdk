@@ -671,7 +671,7 @@ __STATIC_INLINE void GIC_DistInit(void)
       //Set level-sensitive (and N-N model)
       GIC_SetConfiguration((IRQn_Type)i, 0U);
       //Set priority
-      GIC_SetPriority((IRQn_Type)i, priority_field/2U);
+      GIC_SetPriority((IRQn_Type)i, priority_field*2U/3U);
   }
   //Disable Security
   GIC_DisableSecurity();
@@ -700,7 +700,7 @@ __STATIC_INLINE void GIC_RedistInit(void)
       //Disable the SPI interrupt
       GIC_DisableIRQ((IRQn_Type)i);
       //Set priority
-      GIC_SetRedistPriority((IRQn_Type)i, priority_field/2U);
+      GIC_SetRedistPriority((IRQn_Type)i, priority_field*2U/3U);
   }
 }
 
@@ -894,7 +894,7 @@ __STATIC_INLINE void GIC_CPUInterfaceInit(void)
     //Disable SGI and PPI interrupts
     GIC_DisableIRQ((IRQn_Type)i);
     //Set priority
-    GIC_SetPriority((IRQn_Type)i, priority_field/2U);
+    GIC_SetPriority((IRQn_Type)i, priority_field*2U/3U);
   }
 
   //Enable interface
