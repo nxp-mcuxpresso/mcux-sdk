@@ -646,6 +646,7 @@ __STATIC_INLINE void GIC_DistInit(void)
   uint32_t i;
   uint32_t num_irq = 0U;
   uint32_t priority_field;
+  uint32_t ppi_priority;
 
   //A reset sets all bits in the IGROUPRs corresponding to the SPIs to 0,
   //configuring all of the interrupts as Secure.
@@ -657,9 +658,13 @@ __STATIC_INLINE void GIC_DistInit(void)
 
   /* Priority level is implementation defined.
    To determine the number of priority bits implemented write 0xFF to an IPRIORITYR
-   priority field and read back the value stored.*/
-  GIC_SetPriority((IRQn_Type)32U, 0xFFU);
-  priority_field = GIC_GetPriority((IRQn_Type)32U);
+   priority field and read back the value stored.
+   Use PPI, as it is always accessible, even for a Guest OS using a hypervisor.
+   Then restore the initial state.*/
+  ppi_priority = GIC_GetPriority((IRQn_Type)31U);
+  GIC_SetPriority((IRQn_Type)31U, 0xFFU);
+  priority_field = GIC_GetPriority((IRQn_Type)31U);
+  GIC_SetPriority((IRQn_Type)31U, ppi_priority);
 
   for (i = 32U; i < num_irq; i++)
   {
@@ -688,8 +693,8 @@ __STATIC_INLINE void GIC_RedistInit(void)
   /* Priority level is implementation defined.
    To determine the number of priority bits implemented write 0xFF to an IPRIORITYR
    priority field and read back the value stored.*/
-  GIC_SetRedistPriority((IRQn_Type)30U, 0xFFU);
-  priority_field = GIC_GetRedistPriority((IRQn_Type)30U);
+  GIC_SetRedistPriority((IRQn_Type)31U, 0xFFU);
+  priority_field = GIC_GetRedistPriority((IRQn_Type)31U);
 
   /* Wakeup the GIC */
   GIC_RedistWakeUp();
