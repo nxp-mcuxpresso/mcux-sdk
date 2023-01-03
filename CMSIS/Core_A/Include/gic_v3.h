@@ -314,9 +314,9 @@ __STATIC_INLINE uint32_t GIC_DistributorImplementer(void)
 */
 __STATIC_INLINE void GIC_SetTarget(IRQn_Type IRQn, uint32_t cpu_target)
 {
-  if(IRQn >= 32)
+  if (IRQn >= 32)
   {
-    if(GIC_GetARE())
+    if (GIC_GetARE())
     {
       /* affinity routing */
       GICDistributor->IROUTER[IRQn] = (uint64_t)cpu_target;
@@ -338,9 +338,9 @@ __STATIC_INLINE uint32_t GIC_GetTarget(IRQn_Type IRQn)
 {
   uint32_t cpu_target = 0;
 
-  if(IRQn >= 32)
+  if (IRQn >= 32)
   {
-    if(GIC_GetARE())
+    if (GIC_GetARE())
     {
       /* affinity routing */
       cpu_target = (uint32_t) (GICDistributor->IROUTER[IRQn] & 0xff);
@@ -658,8 +658,6 @@ __STATIC_INLINE void GIC_DistInit(void)
   /* Priority level is implementation defined.
    To determine the number of priority bits implemented write 0xFF to an IPRIORITYR
    priority field and read back the value stored.*/
-  // GIC_SetPriority((IRQn_Type)0U, 0xFFU);
-  // priority_field = GIC_GetPriority((IRQn_Type)0U);
   GIC_SetPriority((IRQn_Type)32U, 0xFFU);
   priority_field = GIC_GetPriority((IRQn_Type)32U);
 
@@ -685,7 +683,6 @@ __STATIC_INLINE void GIC_DistInit(void)
 __STATIC_INLINE void GIC_RedistInit(void)
 {
   uint32_t i;
-
   uint32_t priority_field;
 
   /* Priority level is implementation defined.
@@ -703,7 +700,6 @@ __STATIC_INLINE void GIC_RedistInit(void)
       GIC_DisableIRQ((IRQn_Type)i);
       //Set priority
       GIC_SetRedistPriority((IRQn_Type)i, priority_field/2U);
-      //Set target list to CPU0
   }
 }
 
@@ -890,7 +886,7 @@ __STATIC_INLINE void GIC_CPUInterfaceInit(void)
   //SGI and PPI
   for (i = 0U; i < 32U; i++)
   {
-    if(i > 15U) {
+    if (i > 15U) {
       //Set level-sensitive (and N-N model) for PPI
       GIC_SetConfiguration((IRQn_Type)i, 0U);
     }
