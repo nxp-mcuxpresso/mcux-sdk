@@ -672,8 +672,6 @@ __STATIC_INLINE void GIC_DistInit(void)
       GIC_SetConfiguration((IRQn_Type)i, 0U);
       //Set priority
       GIC_SetPriority((IRQn_Type)i, priority_field/2U);
-      //Set target list to CPU0
-      GIC_SetTarget((IRQn_Type)i, 1U);
   }
   //Disable Security
   GIC_DisableSecurity();
