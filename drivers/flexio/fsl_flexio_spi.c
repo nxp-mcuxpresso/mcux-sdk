@@ -1307,8 +1307,14 @@ void FLEXIO_SPI_MasterTransferHandleIRQ(void *spiType, void *spiHandle)
     base   = (FLEXIO_SPI_Type *)spiType;
     status = FLEXIO_SPI_GetStatusFlags(base);
 
+    /* Receive interrupt. */
+    if ((status & (uint32_t)kFLEXIO_SPI_RxBufferFullFlag) == 0)
+    {
+        return;
+    }
+
     /* Handle rx. */
-    if (((status & (uint32_t)kFLEXIO_SPI_RxBufferFullFlag) != 0U) && (handle->rxRemainingBytes != 0U))
+    if (handle->rxRemainingBytes != 0U)
     {
         FLEXIO_SPI_TransferReceiveTransaction(base, handle);
     }
