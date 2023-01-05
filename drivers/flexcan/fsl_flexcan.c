@@ -4253,22 +4253,28 @@ static status_t FLEXCAN_SubHandlerForDataTransfered(CAN_Type *base, flexcan_hand
                     if (0U != (base->MCR & CAN_MCR_FDEN_MASK))
                     {
                         status = FLEXCAN_ReadFDRxMb(base, (uint8_t)result, handle->mbFDFrameBuf[result]);
-                        if (kStatus_Success == status)
+                        if (kStatus_Success == status || kStatus_FLEXCAN_RxOverflow == status)
                         {
                             /* Align the current index of RX MB timestamp to the timestamp array by handle. */
                             handle->timestamp[result] = handle->mbFDFrameBuf[result]->timestamp;
-                            status                    = kStatus_FLEXCAN_RxIdle;
+                            if (kStatus_Success == status)
+                            {
+                                status = kStatus_FLEXCAN_RxIdle;
+                            }
                         }
                     }
                     else
 #endif
                     {
                         status = FLEXCAN_ReadRxMb(base, (uint8_t)result, handle->mbFrameBuf[result]);
-                        if (kStatus_Success == status)
+                        if (kStatus_Success == status || kStatus_FLEXCAN_RxOverflow == status)
                         {
                             /* Align the current index of RX MB timestamp to the timestamp array by handle. */
                             handle->timestamp[result] = handle->mbFrameBuf[result]->timestamp;
-                            status                    = kStatus_FLEXCAN_RxIdle;
+                            if (kStatus_Success == status)
+                            {
+                                status = kStatus_FLEXCAN_RxIdle;
+                            }
                         }
                     }
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE) && FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE)
