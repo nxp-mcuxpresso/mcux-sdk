@@ -218,7 +218,12 @@ typedef struct
 #define GICInterface        ((GICInterface_Type        *)     GIC_INTERFACE_BASE )   /*!< \brief GIC Interface register set access pointer */
 #endif /* GIC_INTERFACE_BASE */
 
+/* ctrl register access in non-secure */
 #define GICD_CTLR_RWP		31
+#define GICD_CTLR_ARE_NS	4
+#define GICD_CTLR_ENGRP1A	1
+#define GICD_CTLR_ENGRP1	0
+
 #define GICR_CTLR_RWP		3
 
 enum gic_rwp {
@@ -270,25 +275,11 @@ __STATIC_INLINE bool GIC_GetARE(void)
   return !!(GICDistributor->CTLR & 0x30);
 }
 
-/** \brief  Enable the interrupt distributor using the GIC's CTLR register.
-*/
-__STATIC_INLINE void GIC_EnableDistributor(void)
-{
-  GICDistributor->CTLR |= 1U;
-  GIC_WaitRWP(GICD_RWP);
-}
-
 /** \brief Disable the interrupt distributor using the GIC's CTLR register.
 */
 __STATIC_INLINE void GIC_DisableDistributor(void)
 {
   GICDistributor->CTLR &=~1U;
-  GIC_WaitRWP(GICD_RWP);
-}
-
-__STATIC_INLINE void GIC_DisableSecurity(void)
-{
-  GICDistributor->CTLR |= 0x40U;
   GIC_WaitRWP(GICD_RWP);
 }
 
@@ -668,6 +659,8 @@ __STATIC_INLINE void GIC_DistInit(void)
 
   for (i = 32U; i < num_irq; i++)
   {
+      /* Use non secure group1 for all SPI */
+      GIC_SetGroup(i, 1);
       //Disable the SPI interrupt
       GIC_DisableIRQ((IRQn_Type)i);
       //Set level-sensitive (and N-N model)
@@ -675,10 +668,10 @@ __STATIC_INLINE void GIC_DistInit(void)
       //Set priority
       GIC_SetPriority((IRQn_Type)i, priority_field*2U/3U);
   }
-  //Disable Security
-  GIC_DisableSecurity();
-  //Enable distributor
-  GIC_EnableDistributor();
+
+  /* Enable distributor with ARE_NS and NS_Group1 */
+  GICDistributor->CTLR = ((1U << GICD_CTLR_ARE_NS) | (1U <<  GICD_CTLR_ENGRP1A));
+  GIC_WaitRWP(GICD_RWP);
 }
 
 /** \brief Initialize the interrupt redistributor.
