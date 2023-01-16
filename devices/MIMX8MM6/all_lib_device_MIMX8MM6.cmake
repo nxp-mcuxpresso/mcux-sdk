@@ -15,6 +15,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyar8031
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet/
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/silicon_id
     ${CMAKE_CURRENT_LIST_DIR}/../../components/silicon_id/socs/imx8
@@ -60,6 +61,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_freertos-kernel_heap_4)
 #    include(CMSIS_DSP_Source)
 #    include(middleware_multicore_rpmsg_lite_imx8mm_m4_freertos)
+#    include(driver_enet)
+#    include(driver_mdio-enet)
+#    include(driver_phy-device-ar8031)
 #    include(driver_iuart_sdma)
 #    include(driver_rdc)
 #    include(driver_ii2c)
