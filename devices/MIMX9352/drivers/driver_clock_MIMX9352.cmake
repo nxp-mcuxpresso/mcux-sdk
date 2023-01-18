@@ -11,5 +11,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
 )
 
 
-include(driver_common_MIMX9352)
+include(driver_common)
 
