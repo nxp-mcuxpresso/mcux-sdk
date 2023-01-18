@@ -2231,3 +2231,21 @@ if(${MCUX_DEVICE} STREQUAL "MIMX8UX6")
     include(all_lib_device_MIMX8UX6)
 
 endif()
+
+if(${MCUX_DEVICE} STREQUAL "MIMX9352")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMX9352
+    )
+
+    include(all_lib_device_MIMX9352)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "MIMX9352_ca55")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMX9352
+    )
+
+    include(all_lib_device_MIMX9352_ca55)
+
+endif()
