@@ -129,9 +129,9 @@ __STATIC_FORCEINLINE void __disable_irq(void)
   \brief   Multiprocessor Affinity
   \details Indicates the core number in the Cortex-Axx processor.
  */
-__STATIC_FORCEINLINE uint32_t __get_MPIDR_EL1(void)
+__STATIC_FORCEINLINE uint64_t __get_MPIDR_EL1(void)
 {
-    uint32_t result;
+    uint64_t result;
     __MRS(MPIDR_EL1, &result);
     return result;
 }
