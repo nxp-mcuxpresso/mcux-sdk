@@ -318,20 +318,24 @@ __STATIC_INLINE void GIC_SetTarget(IRQn_Type IRQn, uint64_t cpu_target)
   }
 }
 
-/** \brief Read the GIC's ITARGETSR register.
+/** \brief Get the target core of the interrupt.
 * \param [in] IRQn Interrupt to acquire the configuration for.
-* \return GICDistributor_Type::ITARGETSR
+*
+* \return:
+* For SPI: GICDistributor_Type::ITARGETSR when Affinity Routing isn't enabled,
+* or GICDistributor_Type::IROUTER when Affinity Routing is enabled
+* For SGI/PPI: The Affinity fields of the MPIDR_EL1.
 */
-__STATIC_INLINE uint32_t GIC_GetTarget(IRQn_Type IRQn)
+__STATIC_INLINE uint64_t GIC_GetTarget(IRQn_Type IRQn)
 {
-  uint32_t cpu_target = 0;
+  uint64_t cpu_target = 0;
 
   if (IRQn >= 32)
   {
     if (GIC_GetARE())
     {
       /* affinity routing */
-      cpu_target = (uint32_t) (GICDistributor->IROUTER[IRQn] & 0xff);
+      cpu_target = GICDistributor->IROUTER[IRQn];
     }
     else
     {
@@ -342,7 +346,7 @@ __STATIC_INLINE uint32_t GIC_GetTarget(IRQn_Type IRQn)
   else
   {
       /* local */
-      cpu_target = MPIDR_GetCoreID();
+      cpu_target = __get_MPIDR_EL1() & MPIDR_AFFINITY_MASK;
   }
 
   return cpu_target;
