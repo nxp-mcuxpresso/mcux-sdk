@@ -300,14 +300,14 @@ __STATIC_INLINE uint32_t GIC_DistributorImplementer(void)
 * \param [in] IRQn Interrupt to be configured.
 * \param [in] cpu_target CPU interfaces to assign this interrupt to.
 */
-__STATIC_INLINE void GIC_SetTarget(IRQn_Type IRQn, uint32_t cpu_target)
+__STATIC_INLINE void GIC_SetTarget(IRQn_Type IRQn, uint64_t cpu_target)
 {
   if (IRQn >= 32)
   {
     if (GIC_GetARE())
     {
       /* affinity routing */
-      GICDistributor->IROUTER[IRQn] = (uint64_t)cpu_target;
+      GICDistributor->IROUTER[IRQn] = cpu_target;
     }
     else
     {
