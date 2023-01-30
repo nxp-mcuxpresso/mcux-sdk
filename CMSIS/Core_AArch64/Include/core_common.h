@@ -68,6 +68,22 @@
 
 #define GET_EL(_mode)		(((_mode) >> MODE_EL_SHIFT) & MODE_EL_MASK)
 
+/* MPIDR */
+#define MPIDR_AFFLVL_MASK	(0xfful)
+#define MPIDR_AFF0_SHIFT	(0)
+#define MPIDR_AFF1_SHIFT	(8)
+#define MPIDR_AFF2_SHIFT	(16)
+#define MPIDR_AFF3_SHIFT	(32)
+
+#define MPIDR_TO_AFF_LEVEL(mpidr, aff_level) \
+	(((mpidr) >> MPIDR_AFF##aff_level##_SHIFT) & MPIDR_AFFLVL_MASK)
+
+#define MPIDR_AFFINITY_MASK				\
+	((MPIDR_AFFLVL_MASK << MPIDR_AFF3_SHIFT) |	\
+	(MPIDR_AFFLVL_MASK << MPIDR_AFF2_SHIFT)  |	\
+	(MPIDR_AFFLVL_MASK << MPIDR_AFF1_SHIFT)  |	\
+	(MPIDR_AFFLVL_MASK << MPIDR_AFF0_SHIFT))
+
 /*******************************************************************************
  *                 Cache Functions
  ******************************************************************************/

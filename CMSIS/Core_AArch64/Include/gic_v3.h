@@ -79,16 +79,6 @@
 #define ICC_SGIR_RS_MASK		(0xf)
 #define ICC_SGIR_AFF3_SHIFT		(48)
 
-/* MPIDR */
-#define MPIDR_AFFLVL_MASK		(0xff)
-#define MPIDR_AFF0_SHIFT		(0)
-#define MPIDR_AFF1_SHIFT		(8)
-#define MPIDR_AFF2_SHIFT		(16)
-#define MPIDR_AFF3_SHIFT		(32)
-
-#define MPIDR_TO_AFF_LEVEL(mpidr, aff_level) \
-	(((mpidr) >> MPIDR_AFF##aff_level##_SHIFT) & MPIDR_AFFLVL_MASK)
-
 #define MPIDR_TO_RS(mpidr)		(MPIDR_TO_AFF_LEVEL(mpidr, 0) >> 4)
 
 #define COMPOSE_ICC_SGIR_VALUE(aff3, aff2, aff1, intid, irm, rs, tlist)	\
