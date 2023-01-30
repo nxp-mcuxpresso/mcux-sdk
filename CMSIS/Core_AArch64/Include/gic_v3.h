@@ -90,6 +90,14 @@
 	 (((aff1) & ICC_SGIR_AFF_MASK) << ICC_SGIR_AFF1_SHIFT) |		\
 	 (((tlist) & ICC_SGIR_TARGETLIST_MASK) << ICC_SGIR_TARGETLIST_SHIFT))
 
+#define GIC_REDISTRIBUTOR_STRIDE	(0x20000)
+#define GICR_SGI_BASE_OFF		(0x10000)
+
+#define GICR_TYPER_LAST_SHIFT		(4)
+#define GICR_TYPER_LAST_MASK		(1 << GICR_TYPER_LAST_SHIFT)
+#define GICR_TYPER_AFF_SHIFT		(32)
+
+
 /** \brief  Structure type to access the Generic Interrupt Controller Distributor (GICD)
 */
 typedef struct
@@ -160,21 +168,6 @@ typedef struct
   __IM  uint32_t SYNCR;                /*!< \brief  Offset: 0x0C0 (R/ ) Redistributor Synchronize Register */
 }  GICRedistributor_Type;
 
-#define GICRedistributorArray    { \
-                                  (GICRedistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 0)), \
-                                  (GICRedistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 1)), \
-                                  (GICRedistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 2)), \
-                                  (GICRedistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 3))  \
-                                 }
-
-#define GICRedistributorPPIArray { \
-                                  (GICDistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 0) + 0x10000), \
-                                  (GICDistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 1) + 0x10000), \
-                                  (GICDistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 2) + 0x10000), \
-                                  (GICDistributor_Type*) (GIC_REDISTRIBUTOR_BASE + (0x20000 * 3) + 0x10000)  \
-                                 }
-
-
 /* Memory mapped GIC interface may be disabled when ICC_SRE_ELx.SRE set 1 by hypervisor.
    In this case we will be using MSR/MRS system registers.  */
 #ifdef GIC_INTERFACE_BASE
@@ -221,14 +214,53 @@ enum gic_rwp {
 
 /* ##########################  GIC functions  ###################################### */
 
+/** \brief Get the recomposed MPIDR_EL1 Affinity fields.
+* the recomposed Affinity value format is (aff3:aff2:aff1:aff0)
+*/
+__STATIC_INLINE uint32_t GIC_MPIDRtoAffinity(void)
+{
+  uint32_t aff3, aff2, aff1, aff0, aff;
+  uint64_t mpidr = __get_MPIDR_EL1();
+
+  aff0 = MPIDR_TO_AFF_LEVEL(mpidr, 0);
+  aff1 = MPIDR_TO_AFF_LEVEL(mpidr, 1);
+  aff2 = MPIDR_TO_AFF_LEVEL(mpidr, 2);
+  aff3 = MPIDR_TO_AFF_LEVEL(mpidr, 3);
+
+  aff = (aff0 & MPIDR_AFFLVL_MASK) << 0  |
+        (aff1 & MPIDR_AFFLVL_MASK) << 8  |
+        (aff2 & MPIDR_AFFLVL_MASK) << 16 |
+        (aff3 & MPIDR_AFFLVL_MASK) << 24;
+
+  return aff;
+}
+
 /** \brief Get the Redistributor base.
 */
 __STATIC_INLINE GICRedistributor_Type *GIC_GetRdist(void)
 {
-  uint32_t core = MPIDR_GetCoreID();
-  static GICRedistributor_Type *const s_RedistBaseAddrs[] = GICRedistributorArray;
+  uintptr_t rd_addr = GIC_REDISTRIBUTOR_BASE;
+  uint32_t rd_aff, aff = GIC_MPIDRtoAffinity();
+  uint64_t rd_typer;
 
-  return s_RedistBaseAddrs[core];
+  do {
+    rd_typer = ((GICRedistributor_Type *)rd_addr)->TYPER;
+    rd_aff = rd_typer >> GICR_TYPER_AFF_SHIFT;
+
+    if (rd_aff == aff)
+      return (GICRedistributor_Type *)rd_addr;
+
+    rd_addr += GIC_REDISTRIBUTOR_STRIDE;
+  } while (!(rd_typer & GICR_TYPER_LAST_MASK));
+
+  return NULL;
+}
+
+/** \brief Get the Redistributor SGI_base.
+*/
+__STATIC_INLINE void *GIC_GetRdistSGIBase(void *rd_base)
+{
+  return (void *)((uintptr_t)rd_base + GICR_SGI_BASE_OFF);
 }
 
 /** \brief Wait for register write pending.
@@ -240,6 +272,8 @@ __STATIC_INLINE void GIC_WaitRWP(enum gic_rwp rwp)
 
   if (rwp == GICR_RWP) {
     base = &GIC_GetRdist()->CTLR;
+    if (!base)
+      return;
     rwp_mask = BIT(GICR_CTLR_RWP);
   } else if (rwp == GICD_RWP) {
     base = &GICDistributor->CTLR;
@@ -357,15 +391,15 @@ __STATIC_INLINE uint64_t GIC_GetTarget(IRQn_Type IRQn)
 */
 __STATIC_INLINE void GIC_EnableIRQ(IRQn_Type IRQn)
 {
-  static GICDistributor_Type *const s_RedistPPIBaseAddrs[] = GICRedistributorPPIArray;
-  uint32_t core = MPIDR_GetCoreID();
+  uint64_t mpidr = __get_MPIDR_EL1();
+  GICDistributor_Type *s_RedistPPIBaseAddrs;
 
-  GIC_SetTarget(IRQn, core);
+  GIC_SetTarget(IRQn, mpidr & MPIDR_AFFINITY_MASK);
 
   if (IRQn < 32) {
-    s_RedistPPIBaseAddrs[core]->ISENABLER[0] = 1U << IRQn;
-  }
-  else{
+    s_RedistPPIBaseAddrs = GIC_GetRdistSGIBase(GIC_GetRdist());
+    s_RedistPPIBaseAddrs->ISENABLER[0] = 1U << IRQn;
+  } else {
     GICDistributor->ISENABLER[IRQn / 32U] = 1U << (IRQn % 32U);
   }
 }
@@ -384,19 +418,16 @@ __STATIC_INLINE uint32_t GIC_GetEnableIRQ(IRQn_Type IRQn)
 */
 __STATIC_INLINE void GIC_DisableIRQ(IRQn_Type IRQn)
 {
-  static GICDistributor_Type *const s_RedistPPIBaseAddrs[] = GICRedistributorPPIArray;
-  uint32_t core;
+  GICDistributor_Type *s_RedistPPIBaseAddrs;
 
   if (IRQn < 32) {
-    core = MPIDR_GetCoreID();
-    s_RedistPPIBaseAddrs[core]->ICENABLER[0] = 1U << IRQn;
+    s_RedistPPIBaseAddrs = GIC_GetRdistSGIBase(GIC_GetRdist());
+    s_RedistPPIBaseAddrs->ICENABLER[0] = 1U << IRQn;
     GIC_WaitRWP(GICR_RWP);
-  }
-  else {
+  } else {
     GICDistributor->ICENABLER[IRQn / 32U] = 1U << (IRQn % 32U);
     GIC_WaitRWP(GICD_RWP);
   }
-
 }
 
 /** \brief Get interrupt pending status from GIC's ISPENDR register.
@@ -479,12 +510,10 @@ __STATIC_INLINE uint32_t GIC_GetConfiguration(IRQn_Type IRQn)
 
 __STATIC_INLINE void GIC_SetRedistPriority(IRQn_Type IRQn, uint32_t priority)
 {
-  uint32_t core = MPIDR_GetCoreID();
-  static GICDistributor_Type *const s_RedistPPIBaseAddrs[] = GICRedistributorPPIArray;
+  GICDistributor_Type *s_RedistPPIBaseAddrs = GIC_GetRdistSGIBase(GIC_GetRdist());
+  uint32_t mask = s_RedistPPIBaseAddrs->IPRIORITYR[IRQn / 4U] & ~(0xFFUL << ((IRQn % 4U) * 8U));
 
-  uint32_t mask = s_RedistPPIBaseAddrs[core]->IPRIORITYR[IRQn / 4U] & ~(0xFFUL << ((IRQn % 4U) * 8U));
-
-  s_RedistPPIBaseAddrs[core]->IPRIORITYR[IRQn / 4U] = mask | ((priority & 0xFFUL) << ((IRQn % 4U) * 8U));
+  s_RedistPPIBaseAddrs->IPRIORITYR[IRQn / 4U] = mask | ((priority & 0xFFUL) << ((IRQn % 4U) * 8U));
 }
 
 /** \brief Set the priority for the given interrupt.
@@ -505,20 +534,22 @@ __STATIC_INLINE void GIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
 
 __STATIC_INLINE void GIC_RedistWakeUp(void)
 {
-  uint32_t core = MPIDR_GetCoreID();
-  static GICRedistributor_Type *const s_RedistBaseAddrs[] = GICRedistributorArray;
+  GICRedistributor_Type *const s_RedistBaseAddrs = GIC_GetRdist();
+
+  if (!s_RedistBaseAddrs)
+    return;
 
   /* wakey wakey mr redistributor */
-  s_RedistBaseAddrs[core]->WAKER = 0x02;
-  s_RedistBaseAddrs[core]->WAKER = 0x04;
+  s_RedistBaseAddrs->WAKER = 0x02;
+  s_RedistBaseAddrs->WAKER = 0x04;
 }
 
 __STATIC_INLINE uint32_t GIC_GetRedistPriority(IRQn_Type IRQn)
 {
-  uint32_t core = MPIDR_GetCoreID();
-  static GICDistributor_Type *const s_RedistPPIBaseAddrs[] = GICRedistributorPPIArray;
+  GICDistributor_Type *s_RedistPPIBaseAddrs;
 
-  return (s_RedistPPIBaseAddrs[core]->IPRIORITYR[IRQn / 4U] >> ((IRQn % 4U) * 8U)) & 0xFFUL;
+  s_RedistPPIBaseAddrs = GIC_GetRdistSGIBase(GIC_GetRdist());
+  return (s_RedistPPIBaseAddrs->IPRIORITYR[IRQn / 4U] >> ((IRQn % 4U) * 8U)) & 0xFFUL;
 }
 
 /** \brief Read the current interrupt priority from GIC's IPRIORITYR register.
@@ -607,16 +638,17 @@ __STATIC_INLINE void GIC_SetGroup(IRQn_Type IRQn, uint32_t group)
 
 __STATIC_INLINE void GIC_SetRedistGroup(IRQn_Type IRQn, uint32_t group)
 {
-  uint32_t core = MPIDR_GetCoreID();
-  static GICDistributor_Type *const s_RedistPPIBaseAddrs[] = GICRedistributorPPIArray;
-
-  uint32_t igroupr = s_RedistPPIBaseAddrs[core]->IGROUPR[IRQn / 32U];
+  GICDistributor_Type *s_RedistPPIBaseAddrs;
   uint32_t shift   = (IRQn % 32U);
+  uint32_t igroupr;
+
+  s_RedistPPIBaseAddrs = GIC_GetRdistSGIBase(GIC_GetRdist());
+  igroupr = s_RedistPPIBaseAddrs->IGROUPR[IRQn / 32U];
 
   igroupr &= (~(1U          << shift));
   igroupr |= ( (group & 1U) << shift);
 
-  s_RedistPPIBaseAddrs[core]->IGROUPR[IRQn / 32U] = igroupr;
+  s_RedistPPIBaseAddrs->IGROUPR[IRQn / 32U] = igroupr;
 }
 #define GIC_SetSecurity         GIC_SetGroup
 
