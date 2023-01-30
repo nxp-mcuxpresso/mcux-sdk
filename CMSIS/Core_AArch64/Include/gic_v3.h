@@ -139,8 +139,7 @@ typedef struct
 {
   __IOM uint32_t CTLR;                 /*!< \brief  Offset: 0x000 (R/W) Redistributor Control Register */
   __IM  uint32_t IIDR;                 /*!< \brief  Offset: 0x004 (R/ ) Implementer Identification Register */
-  __IM  uint32_t TYPER;                /*!< \brief  Offset: 0x008 (R/ ) Redistributor Type Register */
-        RESERVED(0, uint32_t)
+  __IM  uint64_t TYPER;                /*!< \brief  Offset: 0x008 (R/ ) Redistributor Type Register */
   __IOM uint32_t STATUSR;              /*!< \brief  Offset: 0x010 (R/W) Error Reporting Status Register, optional */
   __IOM uint32_t WAKER;                /*!< \brief  Offset: 0x014 (R/W) Redistributor Wake Register */
   __IM  uint32_t MPAMIDR;              /*!< \brief  Offset: 0x018 (R/ ) Report maximum PARTID and PMG Register */
