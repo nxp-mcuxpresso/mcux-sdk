@@ -97,6 +97,9 @@
 #define GICR_TYPER_LAST_MASK		(1 << GICR_TYPER_LAST_SHIFT)
 #define GICR_TYPER_AFF_SHIFT		(32)
 
+#define GICR_WAKER_PS_SHIFT		(1)
+#define GICR_WAKER_CA_SHIFT		(2)
+
 
 /** \brief  Structure type to access the Generic Interrupt Controller Distributor (GICD)
 */
@@ -539,9 +542,12 @@ __STATIC_INLINE void GIC_RedistWakeUp(void)
   if (!s_RedistBaseAddrs)
     return;
 
-  /* wakey wakey mr redistributor */
-  s_RedistBaseAddrs->WAKER = 0x02;
-  s_RedistBaseAddrs->WAKER = 0x04;
+  if (!(s_RedistBaseAddrs->WAKER & (1 << GICR_WAKER_CA_SHIFT)))
+    return;
+
+  s_RedistBaseAddrs->WAKER &= ~ (1 << GICR_WAKER_PS_SHIFT);
+  while (s_RedistBaseAddrs->WAKER & (1 << GICR_WAKER_CA_SHIFT))
+    ;
 }
 
 __STATIC_INLINE uint32_t GIC_GetRedistPriority(IRQn_Type IRQn)
