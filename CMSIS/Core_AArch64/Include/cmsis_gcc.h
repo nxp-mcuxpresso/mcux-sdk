@@ -136,7 +136,9 @@ __STATIC_FORCEINLINE uint64_t __get_MPIDR_EL1(void)
     return result;
 }
 
-#define MPIDR_GetCoreID() (__get_MPIDR_EL1() & 0xff)
+#define MPIDR_GetCoreID()                                                   \
+        ({ uint64_t mpidr = __get_MPIDR_EL1();                              \
+           (mpidr >> (8 * MPIDR_SUPPORT_MT(mpidr))) & MPIDR_AFFLVL_MASK; })
 
 /**
   \brief   Instruction Synchronization Barrier

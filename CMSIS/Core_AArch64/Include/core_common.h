@@ -74,6 +74,11 @@
 #define MPIDR_AFF1_SHIFT	(8)
 #define MPIDR_AFF2_SHIFT	(16)
 #define MPIDR_AFF3_SHIFT	(32)
+#define MPIDR_MT_MASK		(0x1)
+#define MPIDR_MT_SHIFT		(24)
+
+#define MPIDR_SUPPORT_MT(mpidr)	((mpidr >> MPIDR_MT_SHIFT) & MPIDR_MT_MASK)
+
 
 #define MPIDR_TO_AFF_LEVEL(mpidr, aff_level) \
 	(((mpidr) >> MPIDR_AFF##aff_level##_SHIFT) & MPIDR_AFFLVL_MASK)
