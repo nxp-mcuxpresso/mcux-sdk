@@ -928,12 +928,12 @@ __STATIC_INLINE void GIC_CPUInterfaceInit(void)
     GIC_SetPriority((IRQn_Type)i, priority_field*2U/3U);
   }
 
-  //Enable interface
-  GIC_EnableInterface();
   //Set binary point to 0
   GIC_SetBinaryPoint(0U);
   //Set priority mask
   GIC_SetInterfacePriorityMask(0xFFU);
+  //Enable interface
+  GIC_EnableInterface();
 }
 
 /** \brief Initialize and enable the GIC
