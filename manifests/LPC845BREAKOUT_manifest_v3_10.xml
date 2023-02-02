@@ -2231,7 +2231,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="device.LPC845_debugger.LPC845" name="LPC845_debugger" brief="Device LPC845_debugger" version="1.0.0" full_name="Device LPC845_debugger" devices="LPC845" user_visible="true" type="debugger" package_base_path="../devices/LPC845" project_base_path="LPC845">
+    <component id="device.LPC845_debugger.LPC845" name="LPC845_debugger" brief="Device LPC845_debugger" version="1.0.0" full_name="Device LPC845_debugger" devices="LPC845" user_visible="true" type="debugger" package_base_path="../../svd/LPC845" project_base_path="LPC845">
       <source relative_path="./" type="xml">
         <files mask="LPC845.xml"/>
       </source>

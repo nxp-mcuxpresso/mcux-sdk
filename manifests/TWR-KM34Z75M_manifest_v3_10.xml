@@ -2206,7 +2206,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="device.MKM34Z7_debugger.MKM34Z7" name="MKM34Z7_debugger" brief="Device MKM34Z7_debugger" version="1.0.0" full_name="Device MKM34Z7_debugger" devices="MKM34Z256xxx7" user_visible="true" type="debugger" package_base_path="../devices/MKM34Z7" project_base_path="MKM34Z7">
+    <component id="device.MKM34Z7_debugger.MKM34Z7" name="MKM34Z7_debugger" brief="Device MKM34Z7_debugger" version="1.0.0" full_name="Device MKM34Z7_debugger" devices="MKM34Z256xxx7" user_visible="true" type="debugger" package_base_path="../../svd/MKM34Z7" project_base_path="MKM34Z7">
       <source relative_path="./" type="xml">
         <files mask="MKM34Z7.xml"/>
       </source>

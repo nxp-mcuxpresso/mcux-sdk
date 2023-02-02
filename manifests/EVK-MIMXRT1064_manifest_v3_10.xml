@@ -2961,7 +2961,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="device.MIMXRT1064_debugger.MIMXRT1064" name="MIMXRT1064_debugger" brief="Device MIMXRT1064_debugger" version="1.0.0" full_name="Device MIMXRT1064_debugger" devices="MIMXRT1064xxxxA" user_visible="true" type="debugger" package_base_path="../devices/MIMXRT1064" project_base_path="MIMXRT1064">
+    <component id="device.MIMXRT1064_debugger.MIMXRT1064" name="MIMXRT1064_debugger" brief="Device MIMXRT1064_debugger" version="1.0.0" full_name="Device MIMXRT1064_debugger" devices="MIMXRT1064xxxxA" user_visible="true" type="debugger" package_base_path="../../svd/MIMXRT1064" project_base_path="MIMXRT1064">
       <source relative_path="./" type="xml">
         <files mask="MIMXRT1064.xml"/>
       </source>

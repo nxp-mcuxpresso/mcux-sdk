@@ -3141,7 +3141,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.devices.MIMXRT685S_debugger.MIMXRT685S" name="MIMXRT685S_debugger" brief="Device MIMXRT685S_debugger" version="1.0.0" full_name="Device MIMXRT685S_debugger" devices="MIMXRT685S" user_visible="true" type="debugger" package_base_path="../devices/MIMXRT685S" project_base_path="svd">
+    <component id="platform.devices.MIMXRT685S_debugger.MIMXRT685S" name="MIMXRT685S_debugger" brief="Device MIMXRT685S_debugger" version="1.0.0" full_name="Device MIMXRT685S_debugger" devices="MIMXRT685S" user_visible="true" type="debugger" package_base_path="../../svd/MIMXRT685S" project_base_path="svd">
       <source relative_path="./" type="xml" device_cores="cm33_MIMXRT685S">
         <files mask="MIMXRT685S_cm33.xml"/>
       </source>

@@ -2745,7 +2745,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="device.LPC51U68_debugger.LPC51U68" name="LPC51U68_debugger" brief="Device LPC51U68_debugger" version="1.0.0" full_name="Device LPC51U68_debugger" devices="LPC51U68" user_visible="true" type="debugger" package_base_path="../devices/LPC51U68" project_base_path="LPC51U68">
+    <component id="device.LPC51U68_debugger.LPC51U68" name="LPC51U68_debugger" brief="Device LPC51U68_debugger" version="1.0.0" full_name="Device LPC51U68_debugger" devices="LPC51U68" user_visible="true" type="debugger" package_base_path="../../svd/LPC51U68" project_base_path="LPC51U68">
       <source relative_path="./" type="xml">
         <files mask="LPC51U68.xml"/>
       </source>

@@ -2582,7 +2582,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="device.MKV11Z7_debugger.MKV11Z7" name="MKV11Z7_debugger" brief="Device MKV11Z7_debugger" version="1.0.0" full_name="Device MKV11Z7_debugger" devices="MKV11Z128xxx7 MKV11Z64xxx7" user_visible="true" type="debugger" package_base_path="../devices/MKV11Z7" project_base_path="MKV11Z7">
+    <component id="device.MKV11Z7_debugger.MKV11Z7" name="MKV11Z7_debugger" brief="Device MKV11Z7_debugger" version="1.0.0" full_name="Device MKV11Z7_debugger" devices="MKV11Z128xxx7 MKV11Z64xxx7" user_visible="true" type="debugger" package_base_path="../../svd/MKV11Z7" project_base_path="MKV11Z7">
       <source relative_path="./" type="xml">
         <files mask="MKV11Z7.xml"/>
       </source>

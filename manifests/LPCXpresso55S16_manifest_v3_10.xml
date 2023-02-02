@@ -2881,7 +2881,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.devices.LPC55S16_debugger.LPC55S16" name="LPC55S16_debugger" brief="Device LPC55S16_debugger" version="1.0.0" full_name="Device LPC55S16_debugger" devices="LPC55S16" user_visible="true" type="debugger" package_base_path="../devices/LPC55S16" project_base_path="svd">
+    <component id="platform.devices.LPC55S16_debugger.LPC55S16" name="LPC55S16_debugger" brief="Device LPC55S16_debugger" version="1.0.0" full_name="Device LPC55S16_debugger" devices="LPC55S16" user_visible="true" type="debugger" package_base_path="../../svd/LPC55S16" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="LPC55S16.xml"/>
       </source>

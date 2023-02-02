@@ -2630,7 +2630,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="device.MKV31F51212_debugger.MKV31F51212" name="MKV31F51212_debugger" brief="Device MKV31F51212_debugger" version="1.0.0" full_name="Device MKV31F51212_debugger" devices="MKV31F512xxx12" user_visible="true" type="debugger" package_base_path="../devices/MKV31F51212" project_base_path="MKV31F51212">
+    <component id="device.MKV31F51212_debugger.MKV31F51212" name="MKV31F51212_debugger" brief="Device MKV31F51212_debugger" version="1.0.0" full_name="Device MKV31F51212_debugger" devices="MKV31F512xxx12" user_visible="true" type="debugger" package_base_path="../../svd/MKV31F51212" project_base_path="MKV31F51212">
       <source relative_path="./" type="xml">
         <files mask="MKV31F51212.xml"/>
       </source>
