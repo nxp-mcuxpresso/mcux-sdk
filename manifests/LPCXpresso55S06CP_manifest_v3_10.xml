@@ -2482,7 +2482,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.devices.LPC5506CPXXXX_debugger.LPC5506CPXXXX" name="LPC5506CPXXXX_debugger" brief="Device LPC5506CPXXXX_debugger" version="1.0.0" full_name="Device LPC5506CPXXXX_debugger" devices="LPC5506CPXXXX" user_visible="true" type="debugger" package_base_path="../devices/LPC5506CPXXXX" project_base_path="svd">
+    <component id="platform.devices.LPC5506CPXXXX_debugger.LPC5506CPXXXX" name="LPC5506CPXXXX_debugger" brief="Device LPC5506CPXXXX_debugger" version="1.0.0" full_name="Device LPC5506CPXXXX_debugger" devices="LPC5506CPXXXX" user_visible="true" type="debugger" package_base_path="../../svd/LPC5506CPXXXX" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="LPC5506CPXXXX.xml"/>
       </source>

@@ -34,15 +34,15 @@ manifest:
     path: middleware/sdmmc
   - name: mcux-sdk-middleware-multicore
     path: middleware/multicore
-    revision: 899352d35dc83f1c296be4fa0d6af3befd65d41a
+    revision: MCUX_2.13.0
   - name: rpmsg-lite
     path: middleware/multicore/rpmsg_lite
     url: https://github.com/NXPmicro/rpmsg-lite
-    revision: 5c0369112c2fae97c87cf4ea190cb26ebfeb5587
+    revision: v5.0.0
   - name: erpc
     path: middleware/multicore/erpc
     url: https://github.com/EmbeddedRPC/erpc
-    revision: c4dadeab4a60dc9c302d85eceedb81b85a5f991d
+    revision: 1.10.0
   - name: mcux-soc-svd
     revision: 8e9c5f1e851c8a9cded1f3ced26b69f5510c76e4
     path: svd
@@ -108,17 +108,17 @@ manifest:
     remote: nxp
   - name: lwip
     path: middleware/lwip
-    revision: 4192f6c2989a139c7de7071563bfad095be01ff2
+    revision: MCUX_2.13.0
   - name: littlefs
     path: middleware/littlefs
     revision: MCUX_2.13.0
   - name: maestro
     path: middleware/maestro
-    revision: adb7bbe88238facc7cc8c16922a8de28b63f3148
+    revision: MCUX_2.13.0
     remote: nxp-mcuxpresso
   - name: mcuboot
     path: middleware/mcuboot_opensource
-    revision: 39468301d620d9b152fa01c422b25c6387627559
+    revision: MCUX_2.13.0
     remote: nxp_zephyr
   - name: CMSIS_5
     path: core/CMSIS
@@ -126,15 +126,15 @@ manifest:
     remote: nxp-mcuxpresso
   - name: EAP
     path: middleware/EAP
-    revision: 4e440c11cf3481c24cf2e0620400aa4774a56894
+    revision: MCUX_2.13.0
     remote: nxp-mcuxpresso
   - name: VIT
     path: middleware/vit
-    revision: 1c2ef5dc34b0891cac0633d824740006951b52c7
+    revision: MCUX_2.13.0
     remote: nxp-mcuxpresso
   - name: VoiceSeeker
     path: middleware/voice_seeker
-    revision: 3ab8288afb3d1c227c138e95ff6ee7a35613110a
+    revision: MCUX_2.13.0
     remote: nxp-mcuxpresso
   self:
     path: core

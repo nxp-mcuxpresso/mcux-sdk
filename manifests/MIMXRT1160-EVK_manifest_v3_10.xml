@@ -3092,7 +3092,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include" device_cores="cm7_MIMXRT1166xxxxx"/>
       </include_paths>
     </component>
-    <component id="platform.devices.MIMXRT1166_debugger.MIMXRT1166" name="MIMXRT1166_debugger" brief="Device MIMXRT1166_debugger" version="1.0.0" full_name="Device MIMXRT1166_debugger" devices="MIMXRT1166xxxxx" user_visible="true" type="debugger" package_base_path="../devices/MIMXRT1166" project_base_path="svd">
+    <component id="platform.devices.MIMXRT1166_debugger.MIMXRT1166" name="MIMXRT1166_debugger" brief="Device MIMXRT1166_debugger" version="1.0.0" full_name="Device MIMXRT1166_debugger" devices="MIMXRT1166xxxxx" user_visible="true" type="debugger" package_base_path="../../svd/MIMXRT1166" project_base_path="svd">
       <source relative_path="./" type="xml" device_cores="cm4_MIMXRT1166xxxxx">
         <files mask="MIMXRT1166_cm4.xml"/>
       </source>

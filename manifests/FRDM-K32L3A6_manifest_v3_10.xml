@@ -2797,7 +2797,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include" device_cores="cm4_K32L3A60xxx"/>
       </include_paths>
     </component>
-    <component id="platform.devices.K32L3A60_debugger.K32L3A60" name="K32L3A60_debugger" brief="Device K32L3A60_debugger" version="1.0.0" full_name="Device K32L3A60_debugger" devices="K32L3A60xxx" user_visible="true" type="debugger" package_base_path="../devices/K32L3A60" project_base_path="svd">
+    <component id="platform.devices.K32L3A60_debugger.K32L3A60" name="K32L3A60_debugger" brief="Device K32L3A60_debugger" version="1.0.0" full_name="Device K32L3A60_debugger" devices="K32L3A60xxx" user_visible="true" type="debugger" package_base_path="../../svd/K32L3A60" project_base_path="svd">
       <source relative_path="./" type="xml" device_cores="cm0plus_K32L3A60xxx">
         <files mask="K32L3A60_cm0plus.xml"/>
       </source>

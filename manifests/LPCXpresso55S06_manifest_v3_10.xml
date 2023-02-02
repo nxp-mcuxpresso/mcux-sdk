@@ -2545,7 +2545,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.devices.LPC55S06_debugger.LPC55S06" name="LPC55S06_debugger" brief="Device LPC55S06_debugger" version="1.0.0" full_name="Device LPC55S06_debugger" devices="LPC55S06" user_visible="true" type="debugger" package_base_path="../devices/LPC55S06" project_base_path="svd">
+    <component id="platform.devices.LPC55S06_debugger.LPC55S06" name="LPC55S06_debugger" brief="Device LPC55S06_debugger" version="1.0.0" full_name="Device LPC55S06_debugger" devices="LPC55S06" user_visible="true" type="debugger" package_base_path="../../svd/LPC55S06" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="LPC55S06.xml"/>
       </source>

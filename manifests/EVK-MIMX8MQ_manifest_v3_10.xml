@@ -2416,7 +2416,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="device.MIMX8MQ6_debugger.MIMX8MQ6" name="MIMX8MQ6_debugger" brief="Device MIMX8MQ6_debugger" version="1.0.0" full_name="Device MIMX8MQ6_debugger" devices="MIMX8MQ6xxxHZ MIMX8MQ6xxxJZ" user_visible="true" type="debugger" package_base_path="../devices/MIMX8MQ6" project_base_path="MIMX8MQ6">
+    <component id="device.MIMX8MQ6_debugger.MIMX8MQ6" name="MIMX8MQ6_debugger" brief="Device MIMX8MQ6_debugger" version="1.0.0" full_name="Device MIMX8MQ6_debugger" devices="MIMX8MQ6xxxHZ MIMX8MQ6xxxJZ" user_visible="true" type="debugger" package_base_path="../../svd/MIMX8MQ6" project_base_path="MIMX8MQ6">
       <source relative_path="./" type="xml">
         <files mask="MIMX8MQ6_cm4.xml"/>
       </source>

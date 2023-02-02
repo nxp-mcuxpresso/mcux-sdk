@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2020, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief MsCAN driver version. */
-#define FSL_MSCAN_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
+#define FSL_MSCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*! @brief MsCAN Rx Message Buffer Mask helper macro. */
@@ -40,15 +40,16 @@ enum
     kStatus_MSCAN_TxIdle       = MAKE_STATUS(kStatusGroup_MSCAN, 1), /*!< Tx Message Buffer is Idle. */
     kStatus_MSCAN_TxSwitchToRx = MAKE_STATUS(
         kStatusGroup_MSCAN, 2), /*!< Remote Message is send out and Message buffer changed to Receive one. */
-    kStatus_MSCAN_RxBusy         = MAKE_STATUS(kStatusGroup_MSCAN, 3),  /*!< Rx Message Buffer is Busy. */
-    kStatus_MSCAN_RxIdle         = MAKE_STATUS(kStatusGroup_MSCAN, 4),  /*!< Rx Message Buffer is Idle. */
-    kStatus_MSCAN_RxOverflow     = MAKE_STATUS(kStatusGroup_MSCAN, 5),  /*!< Rx Message Buffer is Overflowed. */
-    kStatus_MSCAN_RxFifoBusy     = MAKE_STATUS(kStatusGroup_MSCAN, 6),  /*!< Rx Message FIFO is Busy. */
-    kStatus_MSCAN_RxFifoIdle     = MAKE_STATUS(kStatusGroup_MSCAN, 7),  /*!< Rx Message FIFO is Idle. */
-    kStatus_MSCAN_RxFifoOverflow = MAKE_STATUS(kStatusGroup_MSCAN, 8),  /*!< Rx Message FIFO is overflowed. */
-    kStatus_MSCAN_RxFifoWarning  = MAKE_STATUS(kStatusGroup_MSCAN, 9),  /*!< Rx Message FIFO is almost overflowed. */
-    kStatus_MSCAN_ErrorStatus    = MAKE_STATUS(kStatusGroup_MSCAN, 10), /*!< FlexCAN Module Error and Status. */
-    kStatus_MSCAN_UnHandled      = MAKE_STATUS(kStatusGroup_MSCAN, 11), /*!< UnHadled Interrupt asserted. */
+    kStatus_MSCAN_RxBusy          = MAKE_STATUS(kStatusGroup_MSCAN, 3),  /*!< Rx Message Buffer is Busy. */
+    kStatus_MSCAN_RxIdle          = MAKE_STATUS(kStatusGroup_MSCAN, 4),  /*!< Rx Message Buffer is Idle. */
+    kStatus_MSCAN_RxOverflow      = MAKE_STATUS(kStatusGroup_MSCAN, 5),  /*!< Rx Message Buffer is Overflowed. */
+    kStatus_MSCAN_RxFifoBusy      = MAKE_STATUS(kStatusGroup_MSCAN, 6),  /*!< Rx Message FIFO is Busy. */
+    kStatus_MSCAN_RxFifoIdle      = MAKE_STATUS(kStatusGroup_MSCAN, 7),  /*!< Rx Message FIFO is Idle. */
+    kStatus_MSCAN_RxFifoOverflow  = MAKE_STATUS(kStatusGroup_MSCAN, 8),  /*!< Rx Message FIFO is overflowed. */
+    kStatus_MSCAN_RxFifoWarning   = MAKE_STATUS(kStatusGroup_MSCAN, 9),  /*!< Rx Message FIFO is almost overflowed. */
+    kStatus_MSCAN_ErrorStatus     = MAKE_STATUS(kStatusGroup_MSCAN, 10), /*!< FlexCAN Module Error and Status. */
+    kStatus_MSCAN_UnHandled       = MAKE_STATUS(kStatusGroup_MSCAN, 11), /*!< UnHadled Interrupt asserted. */
+    kStatus_MSCAN_DataLengthError = MAKE_STATUS(kStatusGroup_MSCAN, 12), /*!< Frame data length is wrong. */
 };
 
 /*! @brief MsCAN frame format. */
@@ -263,6 +264,7 @@ typedef struct _mscan_handle mscan_handle_t;
  *  Message Buffer that generate transfer event.
  *  If the status equals to other MsCAN Message Buffer transfer status, the result is meaningless and should be
  *  Ignored.
+ *  If the status equals kStatus_MSCAN_DataLengthError, it means the received frame data length code (DLC) is wrong.
  */
 typedef void (*mscan_transfer_callback_t)(MSCAN_Type *base, mscan_handle_t *handle, status_t status, void *userData);
 
@@ -659,6 +661,7 @@ static inline void MSCAN_Enable(MSCAN_Type *base, bool enable)
  * @param pTxFrame Pointer to CAN message frame to be sent.
  * @retval kStatus_Success - Write Tx Message Buffer Successfully.
  * @retval kStatus_Fail    - Tx Message Buffer is currently in use.
+ * @retval kStatus_MSCAN_DataLengthError - Tx Message Buffer data length is wrong.
  */
 status_t MSCAN_WriteTxMb(MSCAN_Type *base, mscan_frame_t *pTxFrame);
 
@@ -674,6 +677,7 @@ status_t MSCAN_WriteTxMb(MSCAN_Type *base, mscan_frame_t *pTxFrame);
  * @param pRxFrame Pointer to CAN message frame structure for reception.
  * @retval kStatus_Success            - Rx Message Buffer is full and has been read successfully.
  * @retval kStatus_Fail               - Rx Message Buffer is empty.
+ * @retval kStatus_MSCAN_DataLengthError - Rx Message data length is wrong.
  */
 status_t MSCAN_ReadRxMb(MSCAN_Type *base, mscan_frame_t *pRxFrame);
 
@@ -710,6 +714,7 @@ void MSCAN_TransferCreateHandle(MSCAN_Type *base,
  * @param pTxFrame Pointer to CAN message frame to be sent.
  * @retval kStatus_Success - Write Tx Message Buffer Successfully.
  * @retval kStatus_Fail    - Tx Message Buffer is currently in use.
+ * @retval kStatus_MSCAN_DataLengthError - Tx Message Buffer data length is wrong.
  */
 status_t MSCAN_TransferSendBlocking(MSCAN_Type *base, mscan_frame_t *pTxFrame);
 
@@ -722,6 +727,7 @@ status_t MSCAN_TransferSendBlocking(MSCAN_Type *base, mscan_frame_t *pTxFrame);
  * @param pRxFrame Pointer to CAN message frame to be received.
  * @retval kStatus_Success - Read Rx Message Buffer Successfully.
  * @retval kStatus_Fail    - Tx Message Buffer is currently in use.
+ * @retval kStatus_MSCAN_DataLengthError - Rx Message data length is wrong.
  */
 status_t MSCAN_TransferReceiveBlocking(MSCAN_Type *base, mscan_frame_t *pRxFrame);
 
@@ -736,6 +742,7 @@ status_t MSCAN_TransferReceiveBlocking(MSCAN_Type *base, mscan_frame_t *pRxFrame
  * @param xfer MsCAN Message Buffer transfer structure. See the #mscan_mb_transfer_t.
  * @retval kStatus_Success        Start Tx Message Buffer sending process successfully.
  * @retval kStatus_Fail           Write Tx Message Buffer failed.
+ * @retval kStatus_MSCAN_DataLengthError - Tx Message Buffer data length is wrong.
  */
 status_t MSCAN_TransferSendNonBlocking(MSCAN_Type *base, mscan_handle_t *handle, mscan_mb_transfer_t *xfer);
 

@@ -2795,7 +2795,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="device.MIMXRT1011_debugger.MIMXRT1011" name="MIMXRT1011_debugger" brief="Device MIMXRT1011_debugger" version="1.0.0" full_name="Device MIMXRT1011_debugger" devices="MIMXRT1011xxxxx" user_visible="true" type="debugger" package_base_path="../devices/MIMXRT1011" project_base_path="MIMXRT1011">
+    <component id="device.MIMXRT1011_debugger.MIMXRT1011" name="MIMXRT1011_debugger" brief="Device MIMXRT1011_debugger" version="1.0.0" full_name="Device MIMXRT1011_debugger" devices="MIMXRT1011xxxxx" user_visible="true" type="debugger" package_base_path="../../svd/MIMXRT1011" project_base_path="MIMXRT1011">
       <source relative_path="./" type="xml">
         <files mask="MIMXRT1011.xml"/>
       </source>
