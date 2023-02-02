@@ -2178,8 +2178,10 @@ hal_uart_dma_status_t HAL_UartDMAAbortReceive(hal_uart_handle_t handle)
 
     assert(uartDmaHandle);
 
+#if (defined(HAL_UART_DMA_RING_BUFFER_ENABLE) && (HAL_UART_DMA_RING_BUFFER_ENABLE > 0U))
     /* Make sure to re-initialize the ring bufferIndex */
-    ringBufferIndex[uartDmaHandle->instance] = 0;
+    ringBufferIndex[uartDmaHandle->instance] = 0U;
+#endif
 
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U))
     LPUART_TransferAbortReceiveEDMA(s_LpuartAdapterBase[uartDmaHandle->instance], &uartDmaHandle->edmaHandle);
