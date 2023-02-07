@@ -1,5 +1,5 @@
 Release Name: MCUXpresso Software Development Kit (SDK)
-Release Version: 2.6.8
+Release Version: 2.6.9
 Package License: LA_OPT_NXP_Software_License.htm - Additional Distribution License, Section 2.3 applies
 
 KSDK_Peripheral_Driver     Description: Peripheral drivers are designed for  
@@ -82,7 +82,7 @@ HostSDK                    version: 1.8.0.2
                            name: HostSDK                                     
                            Format: Binaries, Source code and header files    
 
-FWK                        version: 5.7.6                                    
+FWK                        version: 5.7.7                                    
                            Location: middleware/wireless/framework           
                            Description: Connectivity Framework middleware for
                            Connectivity stacks                               
@@ -91,7 +91,7 @@ FWK                        version: 5.7.6
                            name: Connectivity Framework                      
                            Format: source code and header Files              
 
-SecLib                     version: 5.7.6                                    
+SecLib                     version: 5.7.7                                    
                            Location:                                         
                            middleware/wireless/framework/SecLib/lib_crypto_*.
                            a                                                 
@@ -130,7 +130,7 @@ BLE_ControllerLib          version: 9.4.21.4
                            name: Bluetooth Low Energy Controller Firmware    
                            Format: Binary libraries                          
 
-ieee_802_15_4              version: 5.3.7                                    
+ieee_802_15_4              version: 5.3.8                                    
                            Location: middleware/wireless/ieee-802.15.4       
                            Description: NXP Wireless IEEE 802.15.4           
                            License: Proprietary, See EULA                    
@@ -141,7 +141,7 @@ ieee_802_15_4              version: 5.3.7
 
 ZigBee 3.0                 Author: NXP                                       
                            Name: JN518x ZigBee 3.0 Stack                     
-                           Version: 1.0.6                                    
+                           Version: 1.0.7                                    
                            Location: middleware/wireless/zigbee              
                            Description: ZigBee 3.0 protocol stack for JN518x 
                            License: Proprietary, See EULA                    
@@ -150,7 +150,7 @@ ZigBee 3.0                 Author: NXP
 
 ZigBee 3.0 ECB decrypt     Author: Niyaz PK                                  
                            Name: ECB decryption                              
-                           Version: 1.0.6                                    
+                           Version: 1.0.7                                    
                            Location:                                         
                            middleware/wireless/zigbee/BDB/Source/TouchLink   
                            Description: ECB decryption implementation        
@@ -162,7 +162,7 @@ ZigBee 3.0 ECB decrypt     Author: Niyaz PK
 
 ZigBee 3.0 Eclipse Plugins Author: NXP                                       
                            Name: ZigBee 3.0 Eclipse Plugins                  
-                           Version: 1.0.6                                    
+                           Version: 1.0.7                                    
                            Location: middleware/wireless/zigbee/tools        
                            Description: ZigBee 3.0 plugins for Eclipse for   
                            configuration of stack parameters                 
@@ -172,7 +172,7 @@ ZigBee 3.0 Eclipse Plugins Author: NXP
 
 ZigBee 3.0 PDUMConfig tool Author: NXP                                       
                            Name: ZigBee 3.0 PDU Manager Configuration Tool   
-                           Version: 1.0.6                                    
+                           Version: 1.0.7                                    
                            Location: middleware/wireless/zigbee/tools        
                            Description: Converts configuration data file into
                            C source and header files. Built with MS .NET     
@@ -183,7 +183,7 @@ ZigBee 3.0 PDUMConfig tool Author: NXP
 
 ZigBee 3.0 ZPSConfig tool  Author: NXP                                       
                            Name: ZigBee 3.0 ZPS Configuration Tool           
-                           Version: 1.0.6                                    
+                           Version: 1.0.7                                    
                            Location: middleware/wireless/zigbee/tools        
                            Description: Converts configuration data file into
                            C source and header files. Built with MS .NET     

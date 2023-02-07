@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -50,11 +50,12 @@ extern "C" {
  * @name AES Functional Operation
  * @{
  */
-
+#ifndef AES_BLOCK_SIZE
 /*! AES block size in bytes */
-#define AES_BLOCK_SIZE 16
+#define AES_BLOCK_SIZE 16u
+#endif
 /*! AES Input Vector size in bytes */
-#define AES_IV_SIZE 16
+#define AES_IV_SIZE 16u
 
 /*!
  * @brief Sets AES key.
@@ -261,6 +262,51 @@ status_t AES_DecryptTagGcm(AES_Type *base,
 void AES_Init(AES_Type *base);
 
 void AES_Deinit(AES_Type *base);
+
+static inline uint32_t aesWaitForIdle(AES_Type *base, uint32_t max_cnt)
+{
+    uint32_t i = 0;
+    while (0U == (base->STAT & AES_STAT_IDLE_MASK))
+    {
+        i++;
+        if ((max_cnt != 0) && (i >= max_cnt))
+        {
+            i = ~0UL;
+            break;
+        }
+    }
+    return i;
+}
+
+static inline uint32_t aesWaitForOutputReady(AES_Type *base, uint32_t max_cnt)
+{
+    uint32_t i = 0;
+    while ((base->STAT & AES_STAT_OUT_READY_MASK) == 0)
+    {
+        i++;
+        if ((max_cnt != 0) && (i >= max_cnt))
+        {
+            i = ~0UL;
+            break;
+        }
+    }
+    return i;
+}
+
+static inline uint32_t aesWaitForInputReady(AES_Type *base, uint32_t max_cnt)
+{
+    uint32_t i = 0;
+    while ((base->STAT & AES_STAT_IN_READY_MASK) == 0)
+    {
+        i++;
+        if ((max_cnt != 0) && (i >= max_cnt))
+        {
+            i = ~0UL;
+            break;
+        }
+    }
+    return i;
+}
 
 #if defined(__cplusplus)
 }

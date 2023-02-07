@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2017, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,6 +20,32 @@
 
 /*!< Use standard C library memcpy  */
 #define aes_memcpy memcpy
+
+/*!
+ * @brief Swap bytes within 32-bit word.
+ *
+ * This macro changes endianess of a 32-bit word.
+ *
+ * @param in 32-bit unsigned integer
+ * @return 32-bit unsigned integer with different endianess (big endian to little endian and vice versa).
+ */
+#if (!(defined(__CORTEX_M)) || (defined(__CORTEX_M)))
+#if defined(__GNUC__)
+#define AES_REV32(x) __builtin_bswap32(x)
+#elif defined(__IAR_SYSTEMS_ICC__) || defined(__CC_ARM)
+#define AES_REV32(x) __REV(x)
+#endif
+#else
+#define AES_REV32(x) \
+    (((x & 0x000000ffu) << 24) | ((x & 0x0000ff00u) << 8) | ((x & 0x00ff0000u) >> 8) | ((x & 0xff000000u) >> 24))
+#endif
+#define swap_bytes(in) AES_REV32(in)
+
+#define AES_BLOCK_ITERATE(_out_, _in_, _sz_) \
+    aes_one_block(base, _out_, _in_);        \
+    _sz_ -= AES_BLOCK_SIZE;                  \
+    _in_ += AES_BLOCK_SIZE;                  \
+    _out_ += AES_BLOCK_SIZE;
 
 /*! @brief Definitions used for writing to the AES module CFG register. */
 typedef enum _aes_configuration
@@ -138,20 +164,6 @@ static inline void aes_set_unaligned_from_word(uint32_t srcWord, uint8_t *dstAdd
 }
 
 /*!
- * @brief Swap bytes withing 32-bit word.
- *
- * This function changes endianess of a 32-bit word.
- *
- * @param in 32-bit unsigned integer
- * @return 32-bit unsigned integer with different endianess (big endian to little endian and vice versa).
- */
-static uint32_t swap_bytes(uint32_t in)
-{
-    return (((in & 0x000000ffu) << 24) | ((in & 0x0000ff00u) << 8) | ((in & 0x00ff0000u) >> 8) |
-            ((in & 0xff000000u) >> 24));
-}
-
-/*!
  * @brief Loads key into key registers.
  *
  * This function loads the key into the AES key registers.
@@ -167,7 +179,7 @@ static status_t aes_load_key(AES_Type *base, const uint8_t *key, size_t keySize)
     uint32_t aesCfg;
     int index;
     int keyWords;
-
+    status_t st = kStatus_InvalidArgument;
     switch (keySize)
     {
         case 16u:
@@ -189,31 +201,47 @@ static status_t aes_load_key(AES_Type *base, const uint8_t *key, size_t keySize)
             keyWords = 0;
             break;
     }
-
-    if (0 == keyWords)
+    do
     {
-        /* invalidate a possibly valid key. user attempted to set a key but gives incorrect size. */
-        base->CMD = AES_CMD_WIPE(1);
-        /* wait for Idle */
-        while (0U == (base->STAT & AES_STAT_IDLE_MASK))
+        if (0 == keyWords)
         {
+            /* invalidate a possibly valid key. user attempted to set a key but gives incorrect size. */
+            base->CMD = AES_CMD_WIPE(1);
+            /* wait for Idle */
+            aesWaitForIdle(base, 0U);
+            base->CMD = AES_CMD_WIPE(0u);
+            break;
         }
-        base->CMD = AES_CMD_WIPE(0u);
-        return kStatus_InvalidArgument;
-    }
+        if (NULL != key)
+        {
+            aesCfg = base->CFG;
+            aesCfg &= ~AES_CFG_KEY_CFG_MASK;
+            aesCfg |= AES_CFG_KEY_CFG(aesCfgKeyCfg);
+            base->CFG = aesCfg;
 
-    aesCfg = base->CFG;
-    aesCfg &= ~AES_CFG_KEY_CFG_MASK;
-    aesCfg |= AES_CFG_KEY_CFG(aesCfgKeyCfg);
-    base->CFG = aesCfg;
+            for (index = 0; index < keyWords; index++)
+            {
+                base->KEY[index] = swap_bytes(aes_get_word_from_unaligned(key));
+                key += sizeof(uint32_t);
+            }
+        }
+        else
+        {
+            /* Load the secret key from EFUSE */
+            if (keySize != 16u)
+            {
+                break;
+            }
+            aesCfg = base->CFG;
 
-    for (index = 0; index < keyWords; index++)
-    {
-        base->KEY[index] = swap_bytes(aes_get_word_from_unaligned(key));
-        key += sizeof(uint32_t);
-    }
-
-    return kStatus_Success;
+            aesCfg &= ~AES_CFG_KEY_CFG_MASK; /* Only 128 bit keys are supported */
+            aesCfg |= AES_CFG_KEY_CFG(0);
+            base->CMD = AES_CMD_COPY_SKEY(1);
+            aesWaitForIdle(base, 0U);
+        }
+        st = kStatus_Success;
+    } while (false);
+    return st;
 }
 
 /*!
@@ -228,7 +256,6 @@ static status_t aes_load_key(AES_Type *base, const uint8_t *key, size_t keySize)
 static void aes_one_block(AES_Type *base, uint8_t *output, const uint8_t *input)
 {
     int index;
-    uint32_t aesStat;
 
     /* If defined FLS_FEATURE_AES_IRQ_DISABLE, disable IRQs during computing AES block, */
     /* please note that this can affect IRQs latency */
@@ -239,30 +266,20 @@ static void aes_one_block(AES_Type *base, uint8_t *output, const uint8_t *input)
 #endif /* FLS_FEATURE_AES_IRQ_DISABLE */
 
     /* If the IN_READY bit in STAT register is 1, write the input text in the INTEXT [3:0]
-       registers. */
-    aesStat = base->STAT;
-
-    /* Wait until input text can be written. */
-    while (0U == (aesStat & AES_STAT_IN_READY_MASK))
-    {
-        aesStat = base->STAT;
-    }
+     registers. */
+    aesWaitForInputReady(base, 0U);
 
     /* Write input data into INTEXT regs */
-    for (index = 0; index < 4; index++)
+    for (index = 0; index < AES_BLOCK_SIZE / sizeof(uint32_t); index++)
     {
         base->INTEXT[index] = aes_get_word_from_unaligned(input);
         input += sizeof(uint32_t);
     }
 
-    /* Wait until output text is ready to be read */
-    while (0U == (aesStat & AES_STAT_OUT_READY_MASK))
-    {
-        aesStat = base->STAT;
-    }
+    aesWaitForOutputReady(base, 0U);
 
     /* Read output data from OUTTEXT regs */
-    for (index = 0; index < 4; index++)
+    for (index = 0; index < AES_BLOCK_SIZE / sizeof(uint32_t); index++)
     {
         aes_set_unaligned_from_word(base->OUTTEXT[index], output);
         output += sizeof(uint32_t);
@@ -289,9 +306,7 @@ static void aes_set_forward(AES_Type *base)
         base->CMD = AES_CMD_SWITCH_MODE(1u);
 
         /* wait for Idle */
-        while (0U == (base->STAT & AES_STAT_IDLE_MASK))
-        {
-        }
+        aesWaitForIdle(base, 0U);
 
         base->CMD = AES_CMD_SWITCH_MODE(0u);
     }
@@ -312,9 +327,7 @@ static void aes_set_reverse(AES_Type *base)
         base->CMD = AES_CMD_SWITCH_MODE(1u);
 
         /* wait for Idle */
-        while (0U == (base->STAT & AES_STAT_IDLE_MASK))
-        {
-        }
+        aesWaitForIdle(base, 0U);
 
         base->CMD = AES_CMD_SWITCH_MODE(0u);
     }
@@ -388,34 +401,33 @@ status_t AES_SetKey(AES_Type *base, const uint8_t *key, size_t keySize)
 status_t AES_EncryptEcb(AES_Type *base, const uint8_t *plaintext, uint8_t *ciphertext, size_t size)
 {
     status_t status;
-
-    /* ECB mode, size must be 16-byte multiple */
-    if (0U != (size % 16u))
+    do
     {
-        return kStatus_InvalidArgument;
-    }
+        /* ECB mode, size must be 16-byte multiple */
+        if (0U != (size % AES_BLOCK_SIZE))
+        {
+            status = kStatus_InvalidArgument;
+            break;
+        }
 
-    /*5. Select the required crypto operation (encryption/decryption/hash) and AES mode in the CFG register.*/
-    *(volatile uint8_t *)((uint32_t)base)         = (uint8_t)kAES_CfgSwap;
-    *(volatile uint16_t *)(((uint32_t)base + 2u)) = (uint16_t)kAES_CfgEncryptEcb;
+        /*5. Select the required crypto operation (encryption/decryption/hash) and AES mode in the CFG register.*/
+        *(volatile uint8_t *)((uint32_t)base)         = (uint8_t)kAES_CfgSwap;
+        *(volatile uint16_t *)(((uint32_t)base + 2u)) = (uint16_t)kAES_CfgEncryptEcb;
 
-    status = aes_check_key_valid(base);
-    if (status != kStatus_Success)
-    {
-        return status;
-    }
+        status = aes_check_key_valid(base);
+        if (status != kStatus_Success)
+        {
+            break;
+        }
 
-    /* make sure AES is set to forward mode */
-    aes_set_forward(base);
+        /* make sure AES is set to forward mode */
+        aes_set_forward(base);
 
-    while (size != 0U)
-    {
-        aes_one_block(base, ciphertext, plaintext);
-        ciphertext += 16;
-        plaintext += 16;
-        size -= 16u;
-    }
-
+        while (size != 0U)
+        {
+            AES_BLOCK_ITERATE(ciphertext, plaintext, size);
+        }
+    } while (false);
     return status;
 }
 
@@ -434,35 +446,37 @@ status_t AES_DecryptEcb(AES_Type *base, const uint8_t *ciphertext, uint8_t *plai
 {
     status_t status;
 
-    /* ECB mode, size must be 16-byte multiple */
-    if (0U != (size % 16u))
+    do
     {
-        return kStatus_InvalidArgument;
-    }
+        /* ECB mode, size must be 16-byte multiple */
+        if (0U != (size % AES_BLOCK_SIZE))
+        {
+            status = kStatus_InvalidArgument;
+            break;
+        }
 
-    status = aes_check_key_valid(base);
-    if (status != kStatus_Success)
-    {
-        return status;
-    }
+        status = aes_check_key_valid(base);
+        if (status != kStatus_Success)
+        {
+            break;
+        }
 
-    /*5. Select the required crypto operation (encryption/decryption/hash) and AES mode in the CFG register.*/
-    *(volatile uint8_t *)((uint32_t)base)         = (uint8_t)kAES_CfgSwap;
-    *(volatile uint16_t *)(((uint32_t)base + 2u)) = (uint16_t)kAES_CfgDecryptEcb;
+        /*5. Select the required crypto operation (encryption/decryption/hash) and AES mode in the CFG register.*/
+        *(volatile uint8_t *)((uint32_t)base)         = (uint8_t)kAES_CfgSwap;
+        *(volatile uint16_t *)(((uint32_t)base + 2u)) = (uint16_t)kAES_CfgDecryptEcb;
 
-    /* make sure AES is set to reverse mode */
-    aes_set_reverse(base);
+        /* make sure AES is set to reverse mode */
+        aes_set_reverse(base);
 
-    while (size != 0U)
-    {
-        aes_one_block(base, plaintext, ciphertext);
-        ciphertext += 16;
-        plaintext += 16;
-        size -= 16u;
-    }
+        while (size != 0U)
+        {
+            AES_BLOCK_ITERATE(plaintext, ciphertext, size);
+        }
+    } while (false);
 
     return status;
 }
+volatile uint32_t hold_val[4];
 
 /*!
  * @brief Main function for CBC, CFB and OFB modes.
@@ -473,7 +487,7 @@ status_t AES_DecryptEcb(AES_Type *base, const uint8_t *ciphertext, uint8_t *plai
  * @param size Size of input and output data in bytes. For CBC and CFB it must be multiple of 16-bytes.
  * @param iv Input initial vector to combine with the first input block.
  * @return Status from the operation.
- */
+ * */
 static status_t aes_block_mode(AES_Type *base,
                                const uint8_t *input,
                                uint8_t *output,
@@ -490,7 +504,7 @@ static status_t aes_block_mode(AES_Type *base,
         case kAES_CfgDecryptCfb:
         case kAES_CfgEncryptCbc:
         case kAES_CfgDecryptCbc:
-            if (0U != (size % 16u))
+            if (0U != (size % AES_BLOCK_SIZE))
             {
                 status = kStatus_InvalidArgument;
             }
@@ -537,22 +551,19 @@ static status_t aes_block_mode(AES_Type *base,
     }
 
     /* For CBC, CFB and OFB modes write the Initialization Vector (IV) in the HOLDING
-       [3:0] registers. For CTR mode write the initial counter value in the HOLDING [3:0]
-       registers. */
+     [3:0] registers. For CTR mode write the initial counter value in the HOLDING [3:0]
+     registers. */
     aes_set_holding(base, iv);
 
-    while (size >= 16u)
+    while (size >= AES_BLOCK_SIZE)
     {
-        aes_one_block(base, output, input);
-        size -= 16u;
-        output += 16;
-        input += 16;
+        AES_BLOCK_ITERATE(output, input, size);
     }
 
     /* OFB can have non-block multiple size. CBC and CFB128 have size zero at this moment. */
-    if (0U != (size % 16u))
+    if (0U != (size % AES_BLOCK_SIZE))
     {
-        uint8_t blkTemp[16] = {0};
+        uint8_t blkTemp[AES_BLOCK_SIZE] = {0};
 
         (void)aes_memcpy(blkTemp, input, size);
         aes_one_block(base, blkTemp, blkTemp);
@@ -713,7 +724,7 @@ status_t AES_CryptCtr(AES_Type *base,
 
     /* Split the size into full 16-byte chunks and last incomplete block */
     lastSize = 0U;
-    if (size <= 16U)
+    if (size <= AES_BLOCK_SIZE)
     {
         lastSize = size;
         size     = 0U;
@@ -721,25 +732,21 @@ status_t AES_CryptCtr(AES_Type *base,
     else
     {
         /* Process all 16-byte data chunks. */
-        lastSize = size % 16U;
+        lastSize = size % AES_BLOCK_SIZE;
         if (lastSize == 0U)
         {
-            lastSize = 16U;
-            size -= 16U;
+            lastSize = AES_BLOCK_SIZE;
+            size -= AES_BLOCK_SIZE;
         }
         else
         {
             size -= lastSize; /* size will be rounded down to 16 byte boundary. remaining bytes in lastSize */
         }
     }
-
     /* full 16-byte blocks */
     while (size != 0U)
     {
-        aes_one_block(base, output, input);
-        size -= 16u;
-        input += 16;
-        output += 16;
+        AES_BLOCK_ITERATE(output, input, size);
     }
 
     /* last block */
@@ -752,7 +759,7 @@ status_t AES_CryptCtr(AES_Type *base,
         lastEncryptedCounter = lastBlock;
     }
     aes_one_block(base, lastEncryptedCounter, lastBlock); /* lastBlock is all zeroes, so I get directly ECB of the last
-                                                             counter, as the XOR with zeroes doesn't change */
+     counter, as the XOR with zeroes doesn't change */
 
     /* remain output = input XOR counterlast */
     for (uint32_t i = 0; i < lastSize; i++)
@@ -766,7 +773,7 @@ status_t AES_CryptCtr(AES_Type *base,
 
     if (szLeft != NULL)
     {
-        *szLeft = 16U - lastSize;
+        *szLeft = AES_BLOCK_SIZE - lastSize;
     }
 
     return status;
@@ -787,7 +794,7 @@ static void aes_gcm_one_block_input_only(AES_Type *base, const uint8_t *input)
     uint32_t aesStat;
 
     /* If the IN_READY bit in STAT register is 1, write the input text in the INTEXT [3:0]
-       registers. */
+     registers. */
     index = 0;
     while (index < 4)
     {
@@ -801,9 +808,7 @@ static void aes_gcm_one_block_input_only(AES_Type *base, const uint8_t *input)
         }
     }
 
-    while (0U == (base->STAT & AES_STAT_IDLE_MASK))
-    {
-    }
+    aesWaitForIdle(base, 0U);
 }
 
 /*!
@@ -818,9 +823,7 @@ static void aes_command(AES_Type *base, uint32_t cmdMask)
 {
     base->CMD = cmdMask;
     /* wait for Idle */
-    while (0U == (base->STAT & AES_STAT_IDLE_MASK))
-    {
-    }
+    aesWaitForIdle(base, 0U);
     base->CMD = 0;
 }
 
@@ -1004,9 +1007,9 @@ static status_t aes_gcm_process(AES_Type *base,
                                 size_t tagSize)
 {
     status_t status;
-    uint8_t blkZero[16] = {0};
-    uint8_t blkJ0[16]   = {0};
-    uint8_t blkTag[16]  = {0};
+    uint8_t blkZero[AES_BLOCK_SIZE] = {0};
+    uint8_t blkJ0[AES_BLOCK_SIZE]   = {0};
+    uint8_t blkTag[AES_BLOCK_SIZE]  = {0};
     uint32_t saveSize;
     uint32_t saveAadSize;
     uint32_t saveIvSize;
@@ -1045,14 +1048,14 @@ static status_t aes_gcm_process(AES_Type *base,
     if (ivSize != 12u)
     {
         /* if ivSize is not 12 bytes, we have to compute GF128 hash to get the initial counter J0 */
-        uint8_t ivBlkZero[16] = {0};
+        uint8_t ivBlkZero[AES_BLOCK_SIZE] = {0};
 
         *(volatile uint8_t *)((uint32_t)base) = (uint8_t)kAES_CfgSwapIntextHashIn;
-        while (ivSize >= 16u)
+        while (ivSize >= AES_BLOCK_SIZE)
         {
             aes_gcm_one_block_input_only(base, iv);
-            iv += 16;
-            ivSize -= 16u;
+            iv += AES_BLOCK_SIZE;
+            ivSize -= AES_BLOCK_SIZE;
         }
         if (ivSize != 0U)
         {
@@ -1060,7 +1063,7 @@ static status_t aes_gcm_process(AES_Type *base,
             aes_gcm_one_block_input_only(base, ivBlkZero);
         }
 
-        (void)aes_memcpy(ivBlkZero, blkZero, 16);
+        (void)aes_memcpy(ivBlkZero, blkZero, AES_BLOCK_SIZE);
         aes_set_unaligned_from_word(swap_bytes(8U * saveIvSize), &ivBlkZero[12]);
         aes_gcm_one_block_input_only(base, ivBlkZero);
 
@@ -1085,15 +1088,15 @@ static status_t aes_gcm_process(AES_Type *base,
     if (aadSize != 0U)
     {
         *(volatile uint8_t *)((uint32_t)base) = (uint8_t)kAES_CfgSwapIntextHashIn;
-        while (aadSize >= 16u)
+        while (aadSize >= AES_BLOCK_SIZE)
         {
             aes_gcm_one_block_input_only(base, aad);
-            aad += 16;
-            aadSize -= 16u;
+            aad += AES_BLOCK_SIZE;
+            aadSize -= AES_BLOCK_SIZE;
         }
         if (aadSize != 0U)
         {
-            uint8_t aadBlkZero[16] = {0};
+            uint8_t aadBlkZero[AES_BLOCK_SIZE] = {0};
             (void)aes_memcpy(aadBlkZero, aad, aadSize);
             aes_gcm_one_block_input_only(base, aadBlkZero);
         }
@@ -1122,19 +1125,16 @@ static status_t aes_gcm_process(AES_Type *base,
     if (inputSize != 0U)
     {
         /* full 16-byte blocks */
-        while (inputSize >= 16u)
+        while (inputSize >= AES_BLOCK_SIZE)
         {
-            aes_one_block(base, dst, src);
-            inputSize -= 16u;
-            src += 16;
-            dst += 16;
+            AES_BLOCK_ITERATE(dst, src, inputSize);
         }
         /* last incomplete block. output shall be padded. */
         if (inputSize != 0U)
         {
             if (encryptMode == kAES_ModeEncrypt)
             {
-                uint8_t outputBlkZero[16] = {0};
+                uint8_t outputBlkZero[AES_BLOCK_SIZE] = {0};
 
                 /* I need to pad ciphertext, so I turn off the hash, and after I have ciphertext, I pad it with zeroes
                  * and hash manually */
