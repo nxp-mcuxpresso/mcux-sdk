@@ -6,7 +6,7 @@
  ******************************************************************************/
 /*
  * Copyright (c) 2021 Arm Limited. All rights reserved.
- * Copyright 2021 NXP
+ * Copyright 2021,2023 NXP
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -92,81 +92,13 @@
 #endif
 
 /*******************************************************************************
- *                 Register Definitions
- ******************************************************************************/
-
-#ifndef BIT
-#define BIT(n) (1 << (n))
-#endif
-
-/* DAIF Register */
-#define DAIF_F_BIT                BIT(6)
-#define DAIF_I_BIT                BIT(7)
-#define DAIF_A_BIT                BIT(8)
-#define DAIF_D_BIT                BIT(9)
-
-/* System Control Register */
-#define SCTLR_M_BIT               BIT(0)
-#define SCTLR_A_BIT               BIT(1)
-#define SCTLR_C_BIT               BIT(2)
-#define SCTLR_SA_BIT              BIT(3)
-#define SCTLR_I_BIT               BIT(12)
-
-/* Exception levels EL0-EL3 */
-#define MODE_EL_SHIFT		(0x2)
-#define MODE_EL_MASK		(0x3)
-
-#define MODE_EL3		(0x3)
-#define MODE_EL2		(0x2)
-#define MODE_EL1		(0x1)
-#define MODE_EL0		(0x0)
-
-#define GET_EL(_mode)		(((_mode) >> MODE_EL_SHIFT) & MODE_EL_MASK)
-
-/*******************************************************************************
  *                 Cache Functions
  ******************************************************************************/
 
 #define ICACHE_LINE_SIZE	(64)
 #define DCACHE_LINE_SIZE	(64)
 
-#if defined (__CACHE_PRESENT) && (__CACHE_PRESENT == 1U)
-
-  #include "cache_armv8a.h"
-
-#endif
-
-
-/*******************************************************************************
- *                 GIC Functions
- ******************************************************************************/
-
-#if defined (__GIC_PRESENT) && (__GIC_PRESENT == 1U)
-
-  #include "gic_v3.h"
-
-#endif
-
-
-/*******************************************************************************
- *                 MMU Functions
- ******************************************************************************/
-
-#if defined (__MMU_PRESENT) && (__MMU_PRESENT == 1U)
-
-  #include "mmu_armv8a.h"
-
-#endif
-
-
-/*******************************************************************************
- *                 Timer Functions
- ******************************************************************************/
-
-#if defined (__TIM_PRESENT) && (__TIM_PRESENT == 1U)
-  #include "timer_armv8a.h"
-#endif
-
+#include "core_common.h"
 
 #ifdef __cplusplus
 }
