@@ -322,7 +322,7 @@ void SDK_DelayAtLeastUs(uint32_t delayTime_us, uint32_t coreClock_Hz);
 
 #if (defined(__DSC__) && defined(__CW__))
 #include "fsl_common_dsc.h"
-#elif defined(__XCC__)
+#elif defined(__XCC__) || defined(__XTENSA__)
 #include "fsl_common_dsp.h"
 #else
 #include "fsl_common_arm.h"
