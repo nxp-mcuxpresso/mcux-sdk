@@ -4607,7 +4607,7 @@ void CAN_FD2_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[2]);
 
-    s_flexcanIsr(FLEXCAN1, s_flexcanHandle[2]);
+    s_flexcanIsr(FLEXCAN2, s_flexcanHandle[2]);
     SDK_ISR_EXIT_BARRIER;
 }
 #endif
