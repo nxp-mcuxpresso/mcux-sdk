@@ -11,6 +11,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8960
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyrtl8211f
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/srtm
     ${CMAKE_CURRENT_LIST_DIR}/../../components/srtm/port
@@ -19,6 +22,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/easrc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ecspi
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcan
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpc_2
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpt
@@ -50,6 +54,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_codec_adapters)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(CMSIS_DSP_Source)
+#    include(driver_enet)
+#    include(driver_mdio-enet)
+#    include(driver_phy-device-rtl8211f)
 #    include(driver_iuart_sdma)
 #    include(driver_flexcan)
 #    include(driver_ii2c)
