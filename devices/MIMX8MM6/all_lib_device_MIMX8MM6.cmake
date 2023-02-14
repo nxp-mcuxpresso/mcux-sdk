@@ -19,6 +19,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/srtm
     ${CMAKE_CURRENT_LIST_DIR}/../../components/srtm/port
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/SOEM
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cache/lmem
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ecspi
@@ -116,3 +117,4 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_debug_console_lite)
 #    include(driver_cmsis_iuart)
 #    include(middleware_freertos-kernel_MIMX8MM6)
+#    include(component_soem)
