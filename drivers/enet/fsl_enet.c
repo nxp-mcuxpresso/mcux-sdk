@@ -887,7 +887,7 @@ static void ENET_SetRxBufferDescriptors(enet_handle_t *handle,
 #endif /* FSL_FEATURE_ENET_QUEUE > 1 */
 #endif /* ENET_ENHANCEDBUFFERDESCRIPTOR_MODE */
 
-        if ((buffCfg->rxBdStartAddrAlign != NULL) && ((buffCfg->rxBufferAlign != NULL) || config->rxBuffAlloc != NULL))
+        if ((buffCfg->rxBdStartAddrAlign != NULL) && (buffCfg->rxBufferAlign != NULL))
         {
             volatile enet_rx_bd_struct_t *curBuffDescrip = buffCfg->rxBdStartAddrAlign;
             rxBuffSizeAlign                              = buffCfg->rxBuffSizeAlign;
@@ -990,6 +990,13 @@ static status_t ENET_RxBufferAllocAll(ENET_Type *base, enet_handle_t *handle)
 
             /* Increase the buffer descriptor, if it's the last one, increase to first one of the ring. */
             index          = ENET_IncreaseIndex(index, rxBdRing->rxRingLen);
+
+            /* Sets the last buffer descriptor with the wrap flag. */
+            if (index == 0)
+            {
+                curBuffDescrip->control |= ENET_BUFFDESCRIPTOR_RX_WRAP_MASK;
+            }
+
             curBuffDescrip = rxBdRing->rxBdBase + index;
         } while (index != 0U);
     }
