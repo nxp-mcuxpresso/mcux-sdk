@@ -4,7 +4,7 @@
 // Version : 211119
 //*****************************************************************************
 //
-// Copyright 2016-2019 NXP
+// Copyright 2016-2019, 2023 NXP
 // All rights reserved.
 //
 // SPDX-License-Identifier: BSD-3-Clause
@@ -52,11 +52,6 @@ __CRP const unsigned int CRP_WORD = CRP_NO_CRP;
 #include "fsl_device_registers.h"
 #include "rom_api.h"
 
-#define PMC_PDSLEEPCFG_PDEN_PD_MEM_ALL_MASK                                                                   \
-    (PMC_PDSLEEPCFG_PDEN_PD_MEM0_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM1_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM2_MASK | \
-     PMC_PDSLEEPCFG_PDEN_PD_MEM3_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM4_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM5_MASK | \
-     PMC_PDSLEEPCFG_PDEN_PD_MEM6_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM7_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM8_MASK | \
-     PMC_PDSLEEPCFG_PDEN_PD_MEM9_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM10_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM11_MASK)
 
 //*****************************************************************************
 // Declaration of external SystemInit function
@@ -400,9 +395,9 @@ __attribute__((section(".after_vectors.reset"))) void ResetISR(void)
 
 __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
 {
-	/* Force clock to switch to FRO32M to speed up initialization */
-	SYSCON -> MAINCLKSEL = 3;
-    if (WarmMain)
+    /* Force clock to switch to FRO32M to speed up initialization */
+    SYSCON -> MAINCLKSEL = 3;
+    if ((void (*)(void))WarmMain != NULL)
     {
         unsigned int warm_start;
         uint32_t pmc_lpmode;
@@ -463,6 +458,16 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
             {
                 ;
             }
+        }
+        else
+        {
+            /*
+             * If we did not fall into the warm_start it must be a Cold Boot.
+             * Clear the WAKE_PD flag so that reading reset cause is enough to determine
+             * whether it is Cold or Warm boot. Otherwise need to resort to global variables.
+             * PMC_RESETCAUSE_WAKEUPPWDNRESET_MASK (K32W061.h) == RESET_WAKE_PD (fsl_power.h)
+             */
+            pmc_reset_clear_cause(PMC_RESETCAUSE_WAKEUPPWDNRESET_MASK);
         }
     }
 

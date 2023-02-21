@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2019-2020 NXP
+# Copyright 2019-2023 NXP
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -14,7 +14,7 @@
 
 function is_linux_package_installed()
 {
-	dpkg -s ${1} &> /dev/null
+	which ${1} &> /dev/null
 
 	if [ $? -ne 0 ]; then
         echo "Linux package ** ${1} ** is not installed! Please install it then recompile."
@@ -54,10 +54,10 @@ esac
 
 if [ "${machine}" == "LNX" ]; then
 	is_linux_package_installed "python3"
-	is_linux_package_installed "python3-pip"
+	is_linux_package_installed "pip3"
 else
 	is_win_package_installed "python3"
-	is_win_package_installed "pip"
+	is_win_package_installed "pip3"
 fi
 
 is_python_package_installed "pycrypto"

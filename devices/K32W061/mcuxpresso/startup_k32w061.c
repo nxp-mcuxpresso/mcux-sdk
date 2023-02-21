@@ -4,12 +4,11 @@
 // Version : 211119
 //*****************************************************************************
 //
-// Copyright 2016-2019 NXP
+// Copyright 2016-2019, 2023 NXP
 // All rights reserved.
 //
 // SPDX-License-Identifier: BSD-3-Clause
 //*****************************************************************************
-
 #if defined(DEBUG)
 #pragma GCC push_options
 #pragma GCC optimize("Og")
@@ -39,24 +38,11 @@ extern void __libc_init_array(void);
 extern "C" {
 #endif
 
-//*****************************************************************************
-// Variable to store CRP value in. Will be placed automatically
-// by the linker when "Enable Code Read Protect" selected.
-// See crp.h header for more information
-//*****************************************************************************
-#if (defined(__MCUXPRESSO))
-#include <NXP/crp.h>
-__CRP const unsigned int CRP_WORD = CRP_NO_CRP;
-#endif
 
 #include "fsl_device_registers.h"
 #include "rom_api.h"
+#include "rom_pmc.h"
 
-#define PMC_PDSLEEPCFG_PDEN_PD_MEM_ALL_MASK                                                                   \
-    (PMC_PDSLEEPCFG_PDEN_PD_MEM0_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM1_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM2_MASK | \
-     PMC_PDSLEEPCFG_PDEN_PD_MEM3_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM4_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM5_MASK | \
-     PMC_PDSLEEPCFG_PDEN_PD_MEM6_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM7_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM8_MASK | \
-     PMC_PDSLEEPCFG_PDEN_PD_MEM9_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM10_MASK | PMC_PDSLEEPCFG_PDEN_PD_MEM11_MASK)
 
 //*****************************************************************************
 // Declaration of external SystemInit function
@@ -219,9 +205,11 @@ void BLE_WAKE_UP_TIMER_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void SHA_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 
 //*****************************************************************************
+//
 // The entry point for the application.
 // __main() is the entry point for Redlib based applications
 // main() is the entry point for Newlib based applications
+//
 //*****************************************************************************
 #if defined(__REDLIB__)
 extern void __main(void);
@@ -229,7 +217,9 @@ extern void __main(void);
 extern int main(void);
 
 //*****************************************************************************
+//
 // External declaration for the pointer to the stack top from the Linker Script
+//
 //*****************************************************************************
 extern void _vStackTop(void);
 //*****************************************************************************
@@ -237,7 +227,6 @@ extern void _vStackTop(void);
 //*****************************************************************************
 WEAK extern void __valid_user_code_checksum();
 
-//*****************************************************************************
 //*****************************************************************************
 #if defined(__cplusplus)
 } // extern "C"
@@ -400,14 +389,14 @@ __attribute__((section(".after_vectors.reset"))) void ResetISR(void)
 
 __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
 {
-	/* Force clock to switch to FRO32M to speed up initialization */
-	SYSCON -> MAINCLKSEL = 3;
-    if (WarmMain)
+    /* Force clock to switch to FRO32M to speed up initialization */
+    SYSCON -> MAINCLKSEL = 3;
+    if ((void (*)(void))WarmMain != NULL)
     {
         unsigned int warm_start;
-        uint32_t pmc_lpmode;
-        uint32_t pmc_resetcause;
-        uint32_t pwr_pdsleepcfg;
+        uint32_t     pmc_lpmode;
+        uint32_t     pmc_resetcause;
+        uint32_t     pwr_pdsleepcfg;
 
         pmc_resetcause = PMC->RESETCAUSE;
         pwr_pdsleepcfg = PMC->PDSLEEPCFG;
@@ -417,25 +406,30 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
         warm_start = (pmc_lpmode == 0x02); /* coming from power down mode*/
 
         // check if the reset cause is only a timer wakeup or io wakeup with all memory banks held
-        warm_start &= (!(pmc_resetcause & (PMC_RESETCAUSE_POR_MASK | PMC_RESETCAUSE_PADRESET_MASK |
-                                           PMC_RESETCAUSE_BODRESET_MASK | PMC_RESETCAUSE_SYSTEMRESET_MASK |
-                                           PMC_RESETCAUSE_WDTRESET_MASK | PMC_RESETCAUSE_WAKEUPIORESET_MASK)) &&
-                       (pmc_resetcause & PMC_RESETCAUSE_WAKEUPPWDNRESET_MASK) &&
-                       ((pwr_pdsleepcfg & PMC_PDSLEEPCFG_PDEN_PD_MEM7_MASK) == 0x0) /* BANK7 memory bank held */
-                       && (pwr_pdsleepcfg & PMC_PDSLEEPCFG_PDEN_LDO_MEM_MASK)       /* LDO MEM enabled */
-        );
+        warm_start &= (!(pmc_resetcause & (PMC_RESETCAUSE_POR_MASK
+                                         | PMC_RESETCAUSE_PADRESET_MASK
+                                         | PMC_RESETCAUSE_BODRESET_MASK
+                                         | PMC_RESETCAUSE_SYSTEMRESET_MASK
+                                         | PMC_RESETCAUSE_WDTRESET_MASK
+                                         | PMC_RESETCAUSE_WAKEUPIORESET_MASK))
+                       && (pmc_resetcause & PMC_RESETCAUSE_WAKEUPPWDNRESET_MASK)
+                       && ((pwr_pdsleepcfg & PMC_PDSLEEPCFG_PDEN_PD_MEM7_MASK) == 0x0) /* BANK7 memory bank held */
+                       && (pwr_pdsleepcfg & PMC_PDSLEEPCFG_PDEN_LDO_MEM_MASK)          /* LDO MEM enabled */
+                      );
 
         if (warm_start)
         {
             if (SYSCON->CPSTACK)
             {
-                /* if CPSTACK is not NULL, switch to CPSTACK value so we avoid to corrupt the stack used before power
-                 * down Note: it looks like enough to switch to new SP now and not earlier */
+                /* if CPSTACK is not NULL, switch to CPSTACK value so we avoid to corrupt 
+                 * the stack used before power down. Note: it looks like enough to switch
+                 * to new SP now and not earlier */
                 __asm volatile(
                     ".set   coproc_stack,   0x40000808\t\n"
                     "LDR    R1,=coproc_stack\t\n" // load co-processor stack pointer (from CPSTACK)
                     "LDR    R1,[R1]\t\n"
-                    "MOV    SP,R1\t\n");
+                    "MOV    SP,R1\t\n"
+                    );
             }
 
             // Check to see if we are running the code from a non-zero
@@ -443,7 +437,7 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
             // to modify the VTOR register to tell the CPU that the
             // vector table is located at a non-0x0 address.
             unsigned int *pSCB_VTOR = (unsigned int *)0xE000ED08;
-            if (((unsigned int)g_pfnVectors != 0))
+            if ((unsigned int *)g_pfnVectors != (unsigned int *)0x00000000)
             {
                 // CMSIS : SCB->VTOR = <address of vector table>
                 *pSCB_VTOR = (unsigned int)g_pfnVectors;
@@ -464,12 +458,22 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
                 ;
             }
         }
+        else
+        {
+            /*
+             * If we did not fall into the warm_start it must be a Cold Boot.
+             * Clear the WAKE_PD flag so that reading reset cause is enough to determine
+             * whether it is Cold or Warm boot. Otherwise need to resort to global variables.
+             * PMC_RESETCAUSE_WAKEUPPWDNRESET_MASK (K32W061.h) == RESET_WAKE_PD (fsl_power.h)
+             */
+            pmc_reset_clear_cause(PMC_RESETCAUSE_WAKEUPPWDNRESET_MASK);
+        }
     }
+
 
 #if defined(__USE_CMSIS)
     // If __USE_CMSIS defined, then call CMSIS SystemInit code
     SystemInit();
-
 #endif // (__USE_CMSIS)
 
     //
@@ -478,7 +482,7 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
     unsigned int LoadAddr, ExeAddr, SectionLen;
     unsigned int *SectionTableAddr;
 
-    // Load base address of Global Section Table
+    // Load base address of Global Section Table A
     SectionTableAddr = &__data_section_table;
 
     // Copy the data sections from flash to SRAM.
@@ -499,25 +503,6 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
         bss_init(ExeAddr, SectionLen);
     }
 
-#if !defined(__USE_CMSIS)
-// Assume that if __USE_CMSIS defined, then CMSIS SystemInit code
-// will enable the FPU
-#if defined(__VFP_FP__) && !defined(__SOFTFP__)
-    //
-    // Code to enable the Cortex-M4 FPU only included
-    // if appropriate build options have been selected.
-    // Code taken from Section 7.1, Cortex-M4 TRM (DDI0439C)
-    //
-    // Read CPACR (located at address 0xE000ED88)
-    // Set bits 20-23 to enable CP10 and CP11 coprocessors
-    // Write back the modified value to the CPACR
-    __asm volatile(
-        "LDR.W R0, =0xE000ED88\n\t"
-        "LDR R1, [R0]\n\t"
-        "ORR R1, R1, #(0xF << 20)\n\t"
-        "STR R1, [R0]");
-#endif // (__VFP_FP__) && !(__SOFTFP__)
-#endif // (__USE_CMSIS)
 
 #if !defined(__USE_CMSIS)
     // Assume that if __USE_CMSIS defined, then CMSIS SystemInit code
@@ -530,9 +515,15 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
     unsigned int *pSCB_VTOR = (unsigned int *)0xE000ED08;
     if ((unsigned int *)g_pfnVectors != (unsigned int *)0x00000000)
     {
+        // CMSIS : SCB->VTOR = <address of vector table>
         *pSCB_VTOR = (unsigned int)g_pfnVectors;
     }
 #endif // (__USE_CMSIS)
+    if (SystemInit != 0)
+    {
+        SystemInit();
+    }
+
 
 #if defined(__cplusplus)
     //

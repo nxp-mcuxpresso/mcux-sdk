@@ -337,7 +337,7 @@ void DMA_Deinit(DMA_Type *base);
 /*!
  * @brief Install DMA descriptor memory.
  *
- * This function used to register DMA descriptor memory for linked transfer, a typical case is ping pong
+ * This function used to register DMA descriptor memory for linked transfer, a typical case is ping-pong
  * transfer which will request more than one DMA descriptor memory space, althrough current DMA driver has
  * a default DMA descriptor buffer, but it support one DMA descriptor for one channel only.
  *
@@ -453,7 +453,7 @@ static inline void DMA_DisableChannelPeriphRq(DMA_Type *base, uint32_t channel)
 
 /*!
  * @brief Set trigger settings of DMA channel.
- * @deprecated Do not use this function.  It has been superceded by @ref DMA_SetChannelConfig.
+ * @deprecated Do not use this function.  It has been superseded by @ref DMA_SetChannelConfig.
  *
  * @param base DMA peripheral base address.
  * @param channel DMA channel number.
@@ -464,7 +464,7 @@ void DMA_ConfigureChannelTrigger(DMA_Type *base, uint32_t channel, dma_channel_t
 /*!
  * @brief set channel config.
  *
- * This function provide a interface to configure channel configuration reisters.
+ * This function provide a interface to configure channel configuration registers.
  *
  * @param base DMA base address.
  * @param channel DMA channel number.
@@ -547,14 +547,14 @@ static inline void DMA_LoadChannelTransferConfig(DMA_Type *base, uint32_t channe
 /*!
  * @brief Create application specific DMA descriptor
  *        to be used in a chain in transfer
- * @deprecated Do not use this function.  It has been superceded by @ref DMA_SetupDescriptor.
+ * @deprecated Do not use this function.  It has been superseded by @ref DMA_SetupDescriptor.
  * @param desc DMA descriptor address.
  * @param xfercfg Transfer configuration for DMA descriptor.
  * @param srcAddr Address of last item to transmit
  * @param dstAddr Address of last item to receive.
  * @param nextDesc Address of next descriptor in chain.
  */
-void DMA_CreateDescriptor(dma_descriptor_t *desc, dma_xfercfg_t *xfercfg, void *srcAddr, void *dstAddr, void *nextDesc);
+void DMA_CreateDescriptor(dma_descriptor_t *desc, dma_xfercfg_t *xfercfg, const void *srcAddr, void *dstAddr, void *nextDesc);
 
 /*!
  * @brief setup dma descriptor
@@ -568,7 +568,7 @@ void DMA_CreateDescriptor(dma_descriptor_t *desc, dma_xfercfg_t *xfercfg, void *
  * @param nextDesc Address of next descriptor in chain.
  */
 void DMA_SetupDescriptor(
-    dma_descriptor_t *desc, uint32_t xfercfg, void *srcStartAddr, void *dstStartAddr, void *nextDesc);
+    dma_descriptor_t *desc, uint32_t xfercfg, const void *srcStartAddr, void *dstStartAddr, void *nextDesc);
 
 /*!
  * @brief setup dma channel descriptor
@@ -585,7 +585,7 @@ void DMA_SetupDescriptor(
  */
 void DMA_SetupChannelDescriptor(dma_descriptor_t *desc,
                                 uint32_t xfercfg,
-                                void *srcStartAddr,
+                                const void *srcStartAddr,
                                 void *dstStartAddr,
                                 void *nextDesc,
                                 dma_burst_wrap_t wrapType,
@@ -657,7 +657,7 @@ void DMA_SetCallback(dma_handle_t *handle, dma_callback callback, void *userData
 
 /*!
  * @brief Prepares the DMA transfer structure.
- * @deprecated Do not use this function.  It has been superceded by @ref DMA_PrepareChannelTransfer.
+ * @deprecated Do not use this function.  It has been superseded by @ref DMA_PrepareChannelTransfer.
  * This function prepares the transfer configuration structure according to the user input.
  *
  * @param config The user configuration structure of type dma_transfer_t.
@@ -672,7 +672,7 @@ void DMA_SetCallback(dma_handle_t *handle, dma_callback callback, void *userData
  *       source address error(SAE).
  */
 void DMA_PrepareTransfer(dma_transfer_config_t *config,
-                         void *srcAddr,
+                         const void *srcAddr,
                          void *dstAddr,
                          uint32_t byteWidth,
                          uint32_t transferBytes,
@@ -693,7 +693,7 @@ void DMA_PrepareTransfer(dma_transfer_config_t *config,
  * @param nextDesc address of next descriptor.
  */
 void DMA_PrepareChannelTransfer(dma_channel_config_t *config,
-                                void *srcStartAddr,
+                                const void *srcStartAddr,
                                 void *dstStartAddr,
                                 uint32_t xferCfg,
                                 dma_transfer_type_t type,
@@ -702,7 +702,7 @@ void DMA_PrepareChannelTransfer(dma_channel_config_t *config,
 
 /*!
  * @brief Submits the DMA transfer request.
- * @deprecated Do not use this function.  It has been superceded by @ref DMA_SubmitChannelTransfer.
+ * @deprecated Do not use this function.  It has been superseded by @ref DMA_SubmitChannelTransfer.
  *
  * This function submits the DMA transfer request according to the transfer configuration structure.
  * If the user submits the transfer request repeatedly, this function packs an unprocessed request as
@@ -758,16 +758,16 @@ status_t DMA_SubmitTransfer(dma_handle_t *handle, dma_transfer_config_t *config)
  * @param nextDesc address of next descriptor.
  */
 void DMA_SubmitChannelTransferParameter(
-    dma_handle_t *handle, uint32_t xfercfg, void *srcStartAddr, void *dstStartAddr, void *nextDesc);
+    dma_handle_t *handle, uint32_t xfercfg, const void *srcStartAddr, void *dstStartAddr, void *nextDesc);
 
 /*!
  * @brief Submit channel descriptor.
  *
  * This function used to configue channel head descriptor that is used to start DMA transfer, the head descriptor table
  is defined in
- * DMA driver, this functiono is typical for the ping pong case:
+ * DMA driver, this functiono is typical for the ping-pong case:
  *
- * 1. for the ping pong case, application should responsible for the descriptor, for example, application should
+ * 1. for the ping-pong case, application should responsible for the descriptor, for example, application should
  * prepare two descriptor table with macro.
  * @code
     //define link descriptor table in application with macro
@@ -822,7 +822,7 @@ void DMA_SubmitChannelDescriptor(dma_handle_t *handle, dma_descriptor_t *descrip
     DMA_StartTransfer(handle)
  * @endcode
  *
- * 3. for the ping pong case, application should responsible for link descriptor, for example, application should
+ * 3. for the ping-pong case, application should responsible for link descriptor, for example, application should
  prepare
  *  two descriptor table with macro , the head descriptor in driver can be used for the first transfer descriptor.
  * @code

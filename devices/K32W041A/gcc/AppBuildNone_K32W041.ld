@@ -1,8 +1,8 @@
 /*
  * GENERATED FILE - DO NOT EDIT
  * (c) Code Red Technologies Ltd, 2008-2013
- * (c) NXP Semiconductors 2013-2019
- * Generated linker script file for K32W041AM
+ * (c) NXP Semiconductors 2013-2023
+ * Generated linker script file for K32W061
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
  * LPCXpresso v8.2.2 [Build 650] [2016-09-09]  on 05-Jan-2017 14:07:01
@@ -208,6 +208,8 @@ SECTIONS
         *(.bss*)
         *(COMMON)
         *(g_u32NwkFrameCounter)
+        /* PDM discard bss */
+        *(.discard.bss.*)
         . = ALIGN(4) ;
         _ebss = .;
 

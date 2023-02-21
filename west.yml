@@ -22,23 +22,23 @@ manifest:
     path: core
   projects:
   - name: mcux-sdk-examples
-    revision: MCUX_2.6.9_K32W0
+    revision: MCUX_2.6.10_K32W0
     path: examples
   - name: mcux-sdk-middleware-connectivity-framework
-    revision: 26d54c68a6eb5d9dd4517d95dc8e76286ed5fef1
+    revision: 30e6fdbd399f08d18a4288ce4f53cb9ccdae8715
     path: middleware/wireless/framework
     remote: nxp
   - name: mcux-sdk-middleware-bluetooth-controller
     path: middleware/wireless/ble_controller
-    revision: f4c1766f0b817658db5ce51c417c521fb5360be3
+    revision: 5936fe8814edc9f785763ae4414ee71bbb452c2b
     remote: nxp
   - name: mcux-sdk-middleware-bluetooth-host
     path: middleware/wireless/bluetooth
-    revision: f10fb58e7e0dc7d966903563df9d20c0201ff370
+    revision: 42c28d0b18b55b7f741219ee5f27e8f7dadbf742
     remote: nxp
   - name: mcux-sdk-middleware-ieee_802.15.4
     path: middleware/wireless/ieee-802.15.4
-    revision: 9ceb9f3ae6c882315937de3a7d45530d7697060c
+    revision: 0154bdfd51021faf71fc4b6e16471745d3b70e1c
     remote: nxp
   - name: amazon-freertos
     path: rtos/amazon-freertos

@@ -148,3 +148,19 @@ void RESET_SystemReset(void)
      * controller can be correctly powered OFF before the reset */
     Chip_LOWPOWER_ChipSoftwareReset();
 }
+
+/*!
+ * @brief Reset the ARM core.
+ *
+ * Software reset of the ARM core not peripherals.
+ *
+ * Note: RAM is conserved, SWD remains attached. Flash controller is Power Down but LDO unchanged.
+ * On reboot, function POWER_GetResetCause() from fsl_power.h will return RESET_SW_REQ
+ */
+void RESET_ArmReset(void)
+{
+    /* Disable all interrupts */
+    __disable_irq();
+
+    Chip_LOWPOWER_ArmSoftwareReset();
+}
