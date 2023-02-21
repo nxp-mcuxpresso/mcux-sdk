@@ -1,5 +1,5 @@
 Release Name: MCUXpresso Software Development Kit (SDK)
-Release Version: 2.6.9
+Release Version: 2.6.10
 Package License: LA_OPT_NXP_Software_License.htm - Additional Distribution License, Section 2.3 applies
 
 KSDK_Peripheral_Driver     Description: Peripheral drivers are designed for  
@@ -71,126 +71,7 @@ cmsiscore                  Author: ARM
                            Location: CMSIS/Include                           
                            version: 5.1.1 (CMSIS Download 5.3.0)             
                            Description: Industry-standard header files       
-                           distributes by ARM for cortex-M cores             
-
-HostSDK                    version: 1.8.0.2                                  
-                           Location: tools/wireless/hsdk                     
-                           Description: Network Protocol stack serial bus    
-                           drivers and application code                      
-                           License: Open Source - BSD-3-Clause               
-                           Author: NXP                                       
-                           name: HostSDK                                     
-                           Format: Binaries, Source code and header files    
-
-FWK                        version: 5.7.7                                    
-                           Location: middleware/wireless/framework           
-                           Description: Connectivity Framework middleware for
-                           Connectivity stacks                               
-                           License: Open Source - BSD-3-Clause               
-                           Author: NXP                                       
-                           name: Connectivity Framework                      
-                           Format: source code and header Files              
-
-SecLib                     version: 5.7.7                                    
-                           Location:                                         
-                           middleware/wireless/framework/SecLib/lib_crypto_*.
-                           a                                                 
-                           Description: Connectivity Security Library        
-                           License: Proprietary, See EULA                    
-                           LA_OPT_NXP_Software_License.htm                   
-                           Author: NXP                                       
-                           name: Connectivity SecLib                         
-                           Format: Binary libraries                          
-
-BLE                        version: 1.7.4                                    
-                           Location: middleware/wireless/bluetooth           
-                           Description: Bluetooth Low Energy Software        
-                           License: Open Source - BSD-3-Clause               
-                           Author: NXP                                       
-                           name: Bluetooth Low Energy Application Source     
-                           Format: Source code and header Files              
-
-BLE_HostLib                version: 1.7.4                                    
-                           Location: middleware/wireless/bluetooth/host/lib  
-                           Description: Bluetooth Low Energy Stack (HCI,     
-                           L2CAP, ATT, GATT, GAP and SM)                     
-                           License: Proprietary, See EULA                    
-                           LA_OPT_NXP_Software_License.htm                   
-                           Author: NXP                                       
-                           name: Bluetooth Low Energy Host Firmware          
-                           Format: Binary libraries                          
-
-BLE_ControllerLib          version: 9.4.21.4                                 
-                           Location: middleware/wireless/ble_controller/lib  
-                           Description: Bluetooth Low Energy Controller      
-                           Firmware. Host Command Interface (HCI).           
-                           License: Proprietary, See EULA                    
-                           LA_OPT_NXP_Software_License.htm                   
-                           Author: RivieraWaves/CEVA                         
-                           name: Bluetooth Low Energy Controller Firmware    
-                           Format: Binary libraries                          
-
-ieee_802_15_4              version: 5.3.8                                    
-                           Location: middleware/wireless/ieee-802.15.4       
-                           Description: NXP Wireless IEEE 802.15.4           
-                           License: Proprietary, See EULA                    
-                           LA_OPT_NXP_Software_License.htm                   
-                           Author: NXP                                       
-                           name: Wireless 802.15.4                           
-                           Format: Binary libraries & header files           
-
-ZigBee 3.0                 Author: NXP                                       
-                           Name: JN518x ZigBee 3.0 Stack                     
-                           Version: 1.0.7                                    
-                           Location: middleware/wireless/zigbee              
-                           Description: ZigBee 3.0 protocol stack for JN518x 
-                           License: Proprietary, See EULA                    
-                           LA_OPT_NXP_Software_License.htm                   
-                           Format: object and source code                    
-
-ZigBee 3.0 ECB decrypt     Author: Niyaz PK                                  
-                           Name: ECB decryption                              
-                           Version: 1.0.7                                    
-                           Location:                                         
-                           middleware/wireless/zigbee/BDB/Source/TouchLink   
-                           Description: ECB decryption implementation        
-                           License: Public domain                            
-                           URL:                                              
-                           http://comp.ist.utl.pt/ec-csc/Code/Ciphers/AES_Enc
-                           rypt.cpp                                          
-                           Format: source code                               
-
-ZigBee 3.0 Eclipse Plugins Author: NXP                                       
-                           Name: ZigBee 3.0 Eclipse Plugins                  
-                           Version: 1.0.7                                    
-                           Location: middleware/wireless/zigbee/tools        
-                           Description: ZigBee 3.0 plugins for Eclipse for   
-                           configuration of stack parameters                 
-                           License: Eclipse Public License 1.0               
-                           URL: http://www.eclipse.org/emf                   
-                           Format: object code                               
-
-ZigBee 3.0 PDUMConfig tool Author: NXP                                       
-                           Name: ZigBee 3.0 PDU Manager Configuration Tool   
-                           Version: 1.0.7                                    
-                           Location: middleware/wireless/zigbee/tools        
-                           Description: Converts configuration data file into
-                           C source and header files. Built with MS .NET     
-                           framework and py2exe components                   
-                           License: MIT License                              
-                           URL: http://www.py2exe.org                        
-                           Format: object code                               
-
-ZigBee 3.0 ZPSConfig tool  Author: NXP                                       
-                           Name: ZigBee 3.0 ZPS Configuration Tool           
-                           Version: 1.0.7                                    
-                           Location: middleware/wireless/zigbee/tools        
-                           Description: Converts configuration data file into
-                           C source and header files. Built with MS .NET     
-                           framework and py2exe components                   
-                           License: MIT License                              
-                           URL: http://www.py2exe.org                        
-                           Format: object code                               
+                           distributes by ARM for cortex-M cores                                       
 
 ntag_i2c_plus              Author: NXP                                       
                            Description: NTAG I2C plus communication library  

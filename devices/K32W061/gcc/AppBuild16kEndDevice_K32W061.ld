@@ -1,7 +1,7 @@
 /*
  * GENERATED FILE - DO NOT EDIT
  * (c) Code Red Technologies Ltd, 2008-2013
- * (c) NXP Semiconductors 2013-2019
+ * (c) NXP Semiconductors 2013-2023
  * Generated linker script file for K32W061
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
@@ -303,11 +303,13 @@ SECTIONS
     } > Flash640
 
     /* BSS discard section */
-    .bss_discard : ALIGN(4)
+    .bss_discard (NOLOAD) : ALIGN(4)
     {
         _bss_discard = .;
         *(.bss.discard.stack)
         *(.bss.discard.app)
+       /* PDM discard bss */
+        *(.discard.bss.*)
         . = ALIGN(4) ;
         _ebss_discard = .;
         *(.bss.discard_noinit.stack)

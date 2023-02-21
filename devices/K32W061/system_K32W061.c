@@ -45,6 +45,7 @@
 #include <stdint.h>
 #include "fsl_device_registers.h"
 #include "rom_api.h"
+#include "rom_pmc.h"
 
 /**
  * Clock source selections for the Main Clock
@@ -257,7 +258,7 @@ void ResetISR2(void)
 {
     /* Force clock to switch to FRO32M to speed up initialization */
     SYSCON -> MAINCLKSEL = 3;  // BOARD_MAINCLK_FRO32M
- 
+
     if ((void (*)(void))WarmMain != NULL)
     {
         unsigned int warm_start;
@@ -318,6 +319,15 @@ void ResetISR2(void)
                 ;
             }
         }
+        else
+        {
+            /*
+             * If we did not fall into the warm_start it must be a Cold Boot.
+             * Clear the WAKE_PD flag so that reading reset cause is enough to determine
+             * whether it is Cold or Warm boot. Otherwise need to resort to global variables.
+             */
+            pmc_reset_clear_cause(PMC_RESETCAUSE_WAKEUPPWDNRESET_MASK);
+        }
     }
 
     // Check to see if we are running the code from a non-zero
@@ -325,7 +335,7 @@ void ResetISR2(void)
     // to modify the VTOR register to tell the CPU that the
     // vector table is located at a non-0x0 address.
     unsigned int *pSCB_VTOR = (unsigned int *)0xE000ED08;
-    if ((unsigned int)(&__Vectors) != 0)
+    if ((unsigned int)(&__Vectors) != 0UL)
     {
         // CMSIS : SCB->VTOR = <address of vector table>
         *pSCB_VTOR = (unsigned int)(&__Vectors);

@@ -247,6 +247,17 @@ void RESET_PeripheralReset(reset_ip_name_t peripheral);
  */
 void RESET_SystemReset(void);
 
+/*!
+ * @brief Reset the ARM core.
+ *
+ * Software reset of the ARM core not peripherals.
+ *
+ * Note: RAM is conserved, SWD remains attached. Flash controller is Power Down but LDO unchanged.
+ * On reboot, function POWER_GetResetCause() from fsl_power.h will return RESET_SW_REQ
+ */
+void RESET_ArmReset(void);
+
+
 #if defined(__cplusplus)
 }
 #endif

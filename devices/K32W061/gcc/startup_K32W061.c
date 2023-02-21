@@ -5,7 +5,7 @@
 //*****************************************************************************
 //
 // Copyright 1997-2016 Freescale Semiconductor, Inc.
-// Copyright 2016-2017 NXP
+// Copyright 2016-2017, 2023 NXP
 // SPDX-License-Identifier: BSD-3-Clause
 // --------------------------------------------------------------------------------------
 // Version: GCC for ARM Embedded Processors
@@ -27,6 +27,7 @@ extern void __libc_init_array(void);
 #endif
 
 #define WEAK __attribute__((weak))
+#define WEAK_AV __attribute__((weak, section(".after_vectors")))
 #define ALIAS(f) __attribute__((weak, alias(#f)))
 
 //*****************************************************************************
@@ -36,34 +37,27 @@ extern "C" {
 
 #include "fsl_device_registers.h"
 #include "rom_api.h"
+#include "rom_pmc.h"
 
-#define PMC_PDSLEEPCFG_PDEN_PD_MEM_ALL_MASK \
-    (PMC_PDSLEEPCFG_PDEN_PD_MEM0_MASK       \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM1_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM2_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM3_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM4_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM5_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM6_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM7_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM8_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM9_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM10_MASK    \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM11_MASK)
 
 //*****************************************************************************
 // Declaration of external SystemInit function
+//*****************************************************************************
 extern WEAK void SystemInit(void);
 
+//*****************************************************************************
 // Declaration of external WarmMain function
+//*****************************************************************************
 extern WEAK void WarmMain(void);
 
 //*****************************************************************************
-//
-// Forward declaration of the default handlers. These are aliased.
+// Forward declaration of the core exception handlers.
 // When the application defines a handler (with the same name), this will
-// automatically take precedence over these weak definitions
-//
+// automatically take precedence over these weak definitions.
+// If your application is a C++ one, then any interrupt handlers defined
+// in C++ files within in your main application will need to have C linkage
+// rather than C++ linkage. To do this, make sure that you are using extern "C"
+// { .... } around the interrupt handler within your main application code.
 //*****************************************************************************
 void ResetISR(void);
 void ResetISR2(void);
@@ -147,6 +141,7 @@ void PWM8_IRQHandler(void) ALIAS(IntDefaultHandler);
 void PWM9_IRQHandler(void) ALIAS(IntDefaultHandler);
 void PWM10_IRQHandler(void) ALIAS(IntDefaultHandler);
 void FLEXCOMM6_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void RTC_IRQHandler(void) ALIAS(IntDefaultHandler);
 void NFCTag_IRQHandler(void) ALIAS(IntDefaultHandler);
 void MAILBOX_IRQHandler(void) ALIAS(IntDefaultHandler);
 void ADC_SEQA_IRQHandler(void) ALIAS(IntDefaultHandler);
@@ -177,26 +172,25 @@ void SHA_IRQHandler(void) ALIAS(IntDefaultHandler);
  * defines a handler (with the same name), this will automatically take
  * precedence over weak definitions below
  */
-void DMA0_IRQHandler(void) __attribute__((weak));
-void GINT0_IRQHandler(void) __attribute__((weak));
-void PINT0_IRQHandler(void) __attribute__((weak));
-void PINT1_IRQHandler(void) __attribute__((weak));
-void PINT2_IRQHandler(void) __attribute__((weak));
-void PINT3_IRQHandler(void) __attribute__((weak));
-void CTIMER0_IRQHandler(void) __attribute__((weak));
-void CTIMER1_IRQHandler(void) __attribute__((weak));
-void FLEXCOMM0_IRQHandler(void) __attribute__((weak));
-void FLEXCOMM1_IRQHandler(void) __attribute__((weak));
-void FLEXCOMM2_IRQHandler(void) __attribute__((weak));
-void FLEXCOMM3_IRQHandler(void) __attribute__((weak));
-void FLEXCOMM4_IRQHandler(void) __attribute__((weak));
-void FLEXCOMM5_IRQHandler(void) __attribute__((weak));
-void FLEXCOMM6_IRQHandler(void) __attribute__((weak));
-void DMIC0_IRQHandler(void) __attribute__((weak));
-void HWVAD0_IRQHandler(void) __attribute__((weak));
-void CIC_IRB_IRQHandler(void) __attribute__((weak));
-void SHA_IRQHandler(void) __attribute__((weak));
-void RTC_IRQHandler(void) __attribute__((weak));
+void DMA0_IRQHandler(void) WEAK;
+void GINT0_IRQHandler(void) WEAK;
+void PINT0_IRQHandler(void) WEAK;
+void PINT1_IRQHandler(void) WEAK;
+void PINT2_IRQHandler(void) WEAK;
+void PINT3_IRQHandler(void) WEAK;
+void CTIMER0_IRQHandler(void) WEAK;
+void CTIMER1_IRQHandler(void) WEAK;
+void FLEXCOMM0_IRQHandler(void) WEAK;
+void FLEXCOMM1_IRQHandler(void) WEAK;
+void FLEXCOMM2_IRQHandler(void) WEAK;
+void FLEXCOMM3_IRQHandler(void) WEAK;
+void FLEXCOMM4_IRQHandler(void) WEAK;
+void FLEXCOMM5_IRQHandler(void) WEAK;
+void FLEXCOMM6_IRQHandler(void) WEAK;
+void DMIC0_IRQHandler(void) WEAK;
+void HWVAD0_IRQHandler(void) WEAK;
+void CIC_IRB_IRQHandler(void) WEAK;
+
 
 //*****************************************************************************
 //
@@ -215,6 +209,11 @@ extern int main(void);
 //
 //*****************************************************************************
 extern void _vStackTop(void);
+
+//*****************************************************************************
+// External declaration for LPC MCU vector table checksum from  Linker Script
+//*****************************************************************************
+WEAK extern void __valid_user_code_checksum();
 
 //*****************************************************************************
 #if defined(__cplusplus)
@@ -294,7 +293,7 @@ __attribute__((used, section(".isr_vector"))) void (*const g_pfnVectors[])(void)
     RFP_TMU_IRQHandler,         /*!< RFP modem */
     RFP_AGC_IRQHandler,         /*!< RFP modem */
     ISO7816_IRQHandler,         /*!< SmartCard interrupt */
-    ANA_COMP_IRQHandler,        /*!<  */
+    ANA_COMP_IRQHandler,        /*!< Analog comparator interrupt */
     WAKE_UP_TIMER0_IRQHandler,  /*!<Wakeup timer 0 interrupt */
     WAKE_UP_TIMER1_IRQHandler,  /*!<Wakeup timer 1 interrupt */
     PVT_AMBER0_IRQHandler,      /*!<PVT Amber 0 interrupt */
@@ -314,7 +313,6 @@ __attribute__((used, section(".isr_vector"))) void (*const g_pfnVectors[])(void)
 void data_init(unsigned int romstart, unsigned int start, unsigned int len);
 __attribute__((section(".after_vectors"))) void data_init(unsigned int romstart, unsigned int start, unsigned int len)
 {
-    
     unsigned int *pulSrc  = (unsigned int *)romstart;
     unsigned int *pulDest = (unsigned int *)start;
     unsigned int *pulEnd  = (unsigned int *)(start + len);
@@ -378,17 +376,13 @@ __attribute__((naked, section(".after_vectors.reset"))) void ResetISR(void)
         "LDR    R0, =ResetISR2\t\n" // jump to 'real' reset handler
         "BX     R0\t\n");
 }
-    
-
-
-
 
 
 __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
 {
     /* Force clock to switch to FRO32M to speed up initialization */
     SYSCON -> MAINCLKSEL = 3;
-    if (WarmMain)
+    if ((void (*)(void))WarmMain != NULL)
     {
         unsigned int warm_start;
         uint32_t     pmc_lpmode;
@@ -404,11 +398,11 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
 
         // check if the reset cause is only a timer wakeup or io wakeup with all memory banks held
         warm_start &= (!(pmc_resetcause & (PMC_RESETCAUSE_POR_MASK
-                                           | PMC_RESETCAUSE_PADRESET_MASK
-                                           | PMC_RESETCAUSE_BODRESET_MASK
-                                           | PMC_RESETCAUSE_SYSTEMRESET_MASK
-                                           | PMC_RESETCAUSE_WDTRESET_MASK
-                                           | PMC_RESETCAUSE_WAKEUPIORESET_MASK))
+                                         | PMC_RESETCAUSE_PADRESET_MASK
+                                         | PMC_RESETCAUSE_BODRESET_MASK
+                                         | PMC_RESETCAUSE_SYSTEMRESET_MASK
+                                         | PMC_RESETCAUSE_WDTRESET_MASK
+                                         | PMC_RESETCAUSE_WAKEUPIORESET_MASK))
                        && (pmc_resetcause & PMC_RESETCAUSE_WAKEUPPWDNRESET_MASK)
                        && ((pwr_pdsleepcfg & PMC_PDSLEEPCFG_PDEN_PD_MEM7_MASK) == 0x0) /* BANK7 memory bank held */
                        && (pwr_pdsleepcfg & PMC_PDSLEEPCFG_PDEN_LDO_MEM_MASK)          /* LDO MEM enabled */
@@ -421,7 +415,7 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
                 /* if CPSTACK is not NULL, switch to CPSTACK value so we avoid to corrupt 
                  * the stack used before power down. Note: it looks like enough to switch
                  * to new SP now and not earlier */
-                asm volatile(
+                __asm volatile(
                     ".set   coproc_stack,   0x40000808\t\n"
                     "LDR    R1,=coproc_stack\t\n" // load co-processor stack pointer (from CPSTACK)
                     "LDR    R1,[R1]\t\n"
@@ -490,6 +484,16 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
                 ;
             }
         }
+        else
+        {
+            /*
+             * If we did not fall into the warm_start it must be a Cold Boot.
+             * Clear the WAKE_PD flag so that reading reset cause is enough to determine
+             * whether it is Cold or Warm boot. Otherwise need to resort to global variables.
+             * PMC_RESETCAUSE_WAKEUPPWDNRESET_MASK (K32W061.h) == RESET_WAKE_PD (fsl_power.h)
+             */
+            pmc_reset_clear_cause(PMC_RESETCAUSE_WAKEUPPWDNRESET_MASK);
+        }
     }
 
     // Cold start
@@ -533,7 +537,6 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
         // CMSIS : SCB->VTOR = <address of vector table>
         *pSCB_VTOR = (unsigned int)g_pfnVectors;
     }
-
     if (SystemInit != 0)
     {
         SystemInit();
@@ -572,7 +575,7 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
 // handler is not present in the application code.
 //
 //*****************************************************************************
-__attribute__((weak, section(".after_vectors"))) void IntDefaultHandler(void)
+WEAK_AV void IntDefaultHandler(void)
 {
     while (1)
     {
@@ -583,63 +586,63 @@ __attribute__((weak, section(".after_vectors"))) void IntDefaultHandler(void)
  * handler routines in your application code.
  */
 
-__attribute__((weak, section(".after_vectors"))) void NMI_Handler(void)
+WEAK_AV void NMI_Handler(void)
 {
     while (1)
     {
     }
 }
 
-__attribute__((weak, section(".after_vectors"))) void HardFault_Handler(void)
+WEAK_AV void HardFault_Handler(void)
 {
     while (1)
     {
     }
 }
 
-__attribute__((weak, section(".after_vectors"))) void MemManage_Handler(void)
+WEAK_AV void MemManage_Handler(void)
 {
     while (1)
     {
     }
 }
 
-__attribute__((weak, section(".after_vectors"))) void BusFault_Handler(void)
+WEAK_AV void BusFault_Handler(void)
 {
     while (1)
     {
     }
 }
 
-__attribute__((weak, section(".after_vectors"))) void UsageFault_Handler(void)
+WEAK_AV void UsageFault_Handler(void)
 {
     while (1)
     {
     }
 }
 
-__attribute__((weak, section(".after_vectors"))) void SVC_Handler(void)
+WEAK_AV void SVC_Handler(void)
 {
     while (1)
     {
     }
 }
 
-__attribute__((weak, section(".after_vectors"))) void DebugMon_Handler(void)
+WEAK_AV void DebugMon_Handler(void)
 {
     while (1)
     {
     }
 }
 
-__attribute__((weak, section(".after_vectors"))) void PendSV_Handler(void)
+WEAK_AV void PendSV_Handler(void)
 {
     while (1)
     {
     }
 }
 
-__attribute__((weak, section(".after_vectors"))) void SysTick_Handler(void)
+WEAK_AV void SysTick_Handler(void)
 {
     while (1)
     {
@@ -648,7 +651,7 @@ __attribute__((weak, section(".after_vectors"))) void SysTick_Handler(void)
 
 /* Steering handlers for MAC and MODEM. These can be replaced by direct
  * handlers: see notes earlier in this file */
-__attribute__((weak, section(".after_vectors"))) void MAC_154_IRQHandler(void)
+WEAK_AV void MAC_154_IRQHandler(void)
 {
     if (vMMAC_IntHandlerBbc)
     {
@@ -664,7 +667,7 @@ __attribute__((weak, section(".after_vectors"))) void MAC_154_IRQHandler(void)
     }
 }
 
-__attribute__((weak, section(".after_vectors"))) void MODEM_154_IRQHandler(void)
+WEAK_AV void MODEM_154_IRQHandler(void)
 {
     if (vMMAC_IntHandlerPhy)
     {
@@ -686,121 +689,117 @@ __attribute__((weak, section(".after_vectors"))) void MODEM_154_IRQHandler(void)
  * or IntDefaultHandler() if no driver exception handler is included.
  */
 
-__attribute__((weak)) void DMIC0_IRQHandler(void)
+WEAK void DMIC0_IRQHandler(void)
 {
     DMIC0_DriverIRQHandler();
 }
 
-__attribute__((weak)) void CIC_IRB_IRQHandler(void)
+WEAK void CIC_IRB_IRQHandler(void)
 {
     CIC_IRB_DriverIRQHandler();
 }
 
-__attribute__((weak)) void HWVAD0_IRQHandler(void)
+WEAK void HWVAD0_IRQHandler(void)
 {
     HWVAD0_DriverIRQHandler();
 }
 
-__attribute__((weak)) void PINT0_IRQHandler(void)
+WEAK void PINT0_IRQHandler(void)
 {
     PIN_INT0_DriverIRQHandler();
 }
 
-__attribute__((weak)) void PINT1_IRQHandler(void)
+WEAK void PINT1_IRQHandler(void)
 {
     PIN_INT1_DriverIRQHandler();
 }
 
-__attribute__((weak)) void PINT2_IRQHandler(void)
+WEAK void PINT2_IRQHandler(void)
 {
     PIN_INT2_DriverIRQHandler();
 }
 
-__attribute__((weak)) void PINT3_IRQHandler(void)
+WEAK void PINT3_IRQHandler(void)
 {
     PIN_INT3_DriverIRQHandler();
 }
 
-__attribute__((weak)) void GINT0_IRQHandler(void)
+WEAK void GINT0_IRQHandler(void)
 {
     GINT0_DriverIRQHandler();
 }
 
-__attribute__((weak)) void DMA0_IRQHandler(void)
+WEAK void DMA0_IRQHandler(void)
 {
     DMA0_DriverIRQHandler();
 }
 
-__attribute__((weak)) void CTIMER0_IRQHandler(void)
+WEAK void CTIMER0_IRQHandler(void)
 {
     CTIMER0_DriverIRQHandler();
 }
 
-__attribute__((weak)) void CTIMER1_IRQHandler(void)
+WEAK void CTIMER1_IRQHandler(void)
 {
     CTIMER1_DriverIRQHandler();
 }
 
-__attribute__((weak)) void USART0_IRQHandler(void)
+WEAK void USART0_IRQHandler(void)
 {
     FLEXCOMM0_DriverIRQHandler();
 }
 
-__attribute__((weak)) void FLEXCOMM0_IRQHandler(void)
+WEAK void FLEXCOMM0_IRQHandler(void)
 {
     FLEXCOMM0_DriverIRQHandler();
 }
 
-__attribute__((weak)) void USART1_IRQHandler(void)
+WEAK void USART1_IRQHandler(void)
 {
     FLEXCOMM1_DriverIRQHandler();
 }
 
-__attribute__((weak)) void FLEXCOMM1_IRQHandler(void)
+WEAK void FLEXCOMM1_IRQHandler(void)
 {
     FLEXCOMM1_DriverIRQHandler();
 }
 
-__attribute__((weak)) void I2C0_IRQHandler(void)
+WEAK void I2C0_IRQHandler(void)
 {
     FLEXCOMM2_DriverIRQHandler();
 }
 
-__attribute__((weak)) void FLEXCOMM2_IRQHandler(void)
+WEAK void FLEXCOMM2_IRQHandler(void)
 {
     FLEXCOMM2_DriverIRQHandler();
 }
 
-__attribute__((weak)) void I2C1_IRQHandler(void)
+WEAK void I2C1_IRQHandler(void)
 {
     FLEXCOMM3_DriverIRQHandler();
 }
 
-__attribute__((weak)) void FLEXCOMM3_IRQHandler(void)
+WEAK void FLEXCOMM3_IRQHandler(void)
 {
     FLEXCOMM3_DriverIRQHandler();
 }
 
 #define SPI0_IRQHandler FLEXCOMM4_DriverIRQHandler
 
-__attribute__((weak)) void FLEXCOMM4_IRQHandler(void)
+WEAK void FLEXCOMM4_IRQHandler(void)
 {
     FLEXCOMM4_DriverIRQHandler();
 }
 
 #define SPI1_IRQHandler FLEXCOMM5_DriverIRQHandler
 
-__attribute__((weak)) void FLEXCOMM5_IRQHandler(void)
+WEAK void FLEXCOMM5_IRQHandler(void)
 {
     FLEXCOMM5_DriverIRQHandler();
 }
 
-__attribute__((weak)) void FLEXCOMM6_IRQHandler(void)
+ void FLEXCOMM6_IRQHandler(void)
 {
     FLEXCOMM6_DriverIRQHandler();
 }
 
-__attribute__((weak)) void RTC_IRQHandler(void)
-{
-    IntDefaultHandler();
-}
