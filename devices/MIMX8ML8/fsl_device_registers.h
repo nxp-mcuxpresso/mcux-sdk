@@ -31,6 +31,15 @@
 /* CPU specific feature definitions */
 #include "MIMX8ML8_cm7_features.h"
 
+#elif (defined(CPU_MIMX8ML8CVNKZ_dsp) || defined(CPU_MIMX8ML8DVNLZ_dsp))
+
+#define MIMX8ML8_dsp_SERIES
+
+/* CMSIS-style register definitions */
+#include "MIMX8ML8_dsp.h"
+/* CPU specific feature definitions */
+#include "MIMX8ML8_dsp_features.h"
+
 #else
 #error "No valid CPU defined!"
 #endif
