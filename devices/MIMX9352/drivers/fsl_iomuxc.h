@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -706,12 +706,12 @@ static inline void IOMUXC_SetPinMux(uint32_t muxRegister,
 {
     if (muxRegister)
     {
-        *((volatile uint32_t *)muxRegister) = IOMUXC_PAD_MUX_MODE(muxMode) | IOMUXC_PAD_SION(inputOnfield);
+        *((volatile uint32_t *)(uintptr_t)muxRegister) = IOMUXC_PAD_MUX_MODE(muxMode) | IOMUXC_PAD_SION(inputOnfield);
     }
 
     if (inputRegister)
     {
-        *((volatile uint32_t *)inputRegister) = inputDaisy;
+        *((volatile uint32_t *)(uintptr_t)inputRegister) = inputDaisy;
     }
 }
 /*!
@@ -734,7 +734,7 @@ static inline void IOMUXC_SetPinConfig(uint32_t muxRegister,
 {
     if (configRegister)
     {
-        *((volatile uint32_t *)configRegister) = configValue;
+        *((volatile uint32_t *)(uintptr_t)configRegister) = configValue;
     }
 }
 /*@}*/
