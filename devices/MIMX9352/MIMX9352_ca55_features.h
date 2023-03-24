@@ -7,7 +7,7 @@
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
+**     Copyright 2016-2023 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -391,8 +391,8 @@
 
 /* MEMORY module features */
 
-/* @brief Memory map has offset between subsystems. */
-#define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (1)
+/* @brief Memory map doesn't have offset between subsystems. */
+#define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (0)
 
 /* PDM module features */
 
