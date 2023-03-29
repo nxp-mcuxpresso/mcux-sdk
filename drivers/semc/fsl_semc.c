@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 NXP
+ * Copyright 2017-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -54,6 +54,43 @@
 #define SEMC_SDRAM_MODESETCAL_OFFSET          (4U)
 #define SEMC_BR_REG_NUM                       (9U)
 #define SEMC_BYTE_NUMBIT                      (8U)
+
+#ifdef SEMC_DBICR1_REH_MASK
+#if ((SEMC_DBICR1_REH_MASK >> SEMC_DBICR1_REH_SHIFT) == 0x1U)
+#define SEMC_DBICR1_REH_WIDTH 1U
+#elif ((SEMC_DBICR1_REH_MASK >> SEMC_DBICR1_REH_SHIFT) == 0x3U)
+#define SEMC_DBICR1_REH_WIDTH 2U
+#elif ((SEMC_DBICR1_REH_MASK >> SEMC_DBICR1_REH_SHIFT) == 0x7U)
+#define SEMC_DBICR1_REH_WIDTH 3U
+#elif ((SEMC_DBICR1_REH_MASK >> SEMC_DBICR1_REH_SHIFT) == 0xFU)
+#define SEMC_DBICR1_REH_WIDTH 4U
+#elif ((SEMC_DBICR1_REH_MASK >> SEMC_DBICR1_REH_SHIFT) == 0x1FU)
+#define SEMC_DBICR1_REH_WIDTH 5U
+#elif ((SEMC_DBICR1_REH_MASK >> SEMC_DBICR1_REH_SHIFT) == 0x3FU)
+#define SEMC_DBICR1_REH_WIDTH 6U
+#else
+#error SEMC_DBICR1_REH width not supported
+#endif
+#endif /* SEMC_DBICR1_REH_MASK */
+
+#ifdef SEMC_DBICR1_REL_MASK
+#if ((SEMC_DBICR1_REL_MASK >> SEMC_DBICR1_REL_SHIFT) == 0x1U)
+#define SEMC_DBICR1_REL_WIDTH 1U
+#elif ((SEMC_DBICR1_REL_MASK >> SEMC_DBICR1_REL_SHIFT) == 0x3U)
+#define SEMC_DBICR1_REL_WIDTH 2U
+#elif ((SEMC_DBICR1_REL_MASK >> SEMC_DBICR1_REL_SHIFT) == 0x7U)
+#define SEMC_DBICR1_REL_WIDTH 3U
+#elif ((SEMC_DBICR1_REL_MASK >> SEMC_DBICR1_REL_SHIFT) == 0xFU)
+#define SEMC_DBICR1_REL_WIDTH 4U
+#elif ((SEMC_DBICR1_REL_MASK >> SEMC_DBICR1_REL_SHIFT) == 0x1FU)
+#define SEMC_DBICR1_REL_WIDTH 5U
+#elif ((SEMC_DBICR1_REL_MASK >> SEMC_DBICR1_REL_SHIFT) == 0x3FU)
+#define SEMC_DBICR1_REL_WIDTH 6U
+#else
+#error SEMC_DBICR1_REL width not supported
+#endif
+#endif /* SEMC_DBICR1_REL_MASK */
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -1065,6 +1102,9 @@ status_t SEMC_ConfigureDBI(SEMC_Type *base, semc_dbi_config_t *config, uint32_t 
     uint8_t memsize;
     status_t result;
     uint32_t timing;
+#if (defined(SEMC_DBICR1_REL2_MASK) || defined(SEMC_DBICR1_REH2_MASK))
+    uint32_t cr1RE;
+#endif
 
     if ((config->address < SEMC_STARTADDRESS) || (config->address > SEMC_ENDADDRESS))
     {
@@ -1094,8 +1134,23 @@ status_t SEMC_ConfigureDBI(SEMC_Type *base, semc_dbi_config_t *config, uint32_t 
     timing |= SEMC_DBICR1_CEH(SEMC_ConvertTiming(config->tCsxHold_Ns, clkSrc_Hz));
     timing |= SEMC_DBICR1_WEL(SEMC_ConvertTiming(config->tWexLow_Ns, clkSrc_Hz));
     timing |= SEMC_DBICR1_WEH(SEMC_ConvertTiming(config->tWexHigh_Ns, clkSrc_Hz));
+
+#if defined(SEMC_DBICR1_REL2_MASK)
+    cr1RE = SEMC_ConvertTiming(config->tRdxLow_Ns, clkSrc_Hz);
+    timing |= SEMC_DBICR1_REL(cr1RE);
+    timing |= SEMC_DBICR1_REL2(cr1RE >> SEMC_DBICR1_REL_WIDTH);
+#else
     timing |= SEMC_DBICR1_REL(SEMC_ConvertTiming(config->tRdxLow_Ns, clkSrc_Hz));
+#endif
+
+#if defined(SEMC_DBICR1_REH2_MASK)
+    cr1RE = SEMC_ConvertTiming(config->tRdxHigh_Ns, clkSrc_Hz);
+    timing |= SEMC_DBICR1_REH(cr1RE);
+    timing |= SEMC_DBICR1_REH2(cr1RE >> SEMC_DBICR1_REH_WIDTH);
+#else
     timing |= SEMC_DBICR1_REH(SEMC_ConvertTiming(config->tRdxHigh_Ns, clkSrc_Hz));
+#endif
+
 #if defined(SEMC_DBICR1_CEITV_MASK)
     timing |= SEMC_DBICR1_CEITV(SEMC_ConvertTiming(config->tCsxInterval_Ns, clkSrc_Hz));
 #endif /* SEMC_DBICR1_CEITV_MASK */
