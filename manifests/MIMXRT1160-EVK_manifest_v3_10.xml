@@ -16,7 +16,7 @@
     <definition extID="middleware.multicore.MIMXRT1166"/>
     <definition extID="middleware.wifi.MIMXRT1166"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2130" name="MCUXpressoSDK2130" version="2.13.0"/>
+  <ksdk id="MCUXpressoSDK2131" name="MCUXpressoSDK2131" version="2.13.1"/>
   <manifest_includes>
     <manifest_include path="../../middleware/EAP/manifests/middleware_nxp_essential_audio_processing_MIMXRT1166_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/edgefast_bluetooth/manifests/middleware_nxp_edgefast_bluetooth_pal_MIMXRT1166_manifest_v3_10.xml"/>

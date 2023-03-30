@@ -1059,11 +1059,6 @@ void CLOCK_InitSysPll1(const clock_sys_pll1_config_t *config)
     div         = 41U;
     numerator   = 178956970UL;
 
-    if (config->ssEnable && (config->ss != NULL))
-    {
-        return;
-    }
-
     /* configure pll */
     ANATOP_PllConfigure(kAI_Itf_1g, div, numerator, 0U, denominator,
                         (config->ssEnable && (config->ss != NULL)) ? config->ss : NULL);

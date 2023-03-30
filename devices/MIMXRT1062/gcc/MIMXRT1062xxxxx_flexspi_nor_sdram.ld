@@ -34,7 +34,7 @@
 /* Entry Point */
 ENTRY(Reset_Handler)
 
-HEAP_SIZE  = DEFINED(__heap_size__)  ? __heap_size__  : 0x800000;
+HEAP_SIZE  = DEFINED(__heap_size__)  ? __heap_size__  : 0x200000;
 STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x10000;
 VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? 0x00000400 : 0;
 NCACHE_HEAP_START = DEFINED(__heap_noncacheable__) ? 0x82000000 - HEAP_SIZE : 0x81E00000 - HEAP_SIZE;

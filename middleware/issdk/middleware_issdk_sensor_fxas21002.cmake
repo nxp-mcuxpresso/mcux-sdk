@@ -1,4 +1,4 @@
-#Description: Middleware issdk sensor fxas21002; user_visible: True
+#Description: Middleware issdk sensor fxas21002; user_visible: False
 include_guard(GLOBAL)
 message("middleware_issdk_sensor_fxas21002 component is included.")
 

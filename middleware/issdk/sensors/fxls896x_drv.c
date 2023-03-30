@@ -107,7 +107,7 @@ int32_t FXLS896x_SPI_Initialize(
 	(*whoami) = reg;
     if (ARM_DRIVER_OK != status)
     {
-    	if ((FXLS8962_WHOAMI_VALUE != reg) || (FXLS8964_WHOAMI_VALUE != reg) || (FXLS8967_WHOAMI_VALUE != reg) || (FXLS8968_WHOAMI_VALUE != reg) || (FXLS8974_WHOAMI_VALUE != reg))
+    	if ((FXLS8962_WHOAMI_VALUE != reg) || (FXLS8964_WHOAMI_VALUE != reg) || (FXLS8967_WHOAMI_VALUE != reg) || (FXLS8968_WHOAMI_VALUE != reg) || (FXLS8974_WHOAMI_VALUE != reg) || (FXLS8971_WHOAMI_VALUE != reg) || (FXLS8961_WHOAMI_VALUE != reg))
     	{
             pSensorHandle->isInitialized = false;
     		return SENSOR_ERROR_BAD_ADDRESS;
@@ -258,7 +258,7 @@ int32_t FXLS896x_I2C_Initialize(
 	(*whoami) = reg;
     if (ARM_DRIVER_OK != status)
     {
-    	if ((FXLS8962_WHOAMI_VALUE != reg) || (FXLS8964_WHOAMI_VALUE != reg) || (FXLS8967_WHOAMI_VALUE != reg) || (FXLS8968_WHOAMI_VALUE != reg) || (FXLS8974_WHOAMI_VALUE != reg))
+    	if ((FXLS8962_WHOAMI_VALUE != reg) || (FXLS8964_WHOAMI_VALUE != reg) || (FXLS8967_WHOAMI_VALUE != reg) || (FXLS8968_WHOAMI_VALUE != reg) || (FXLS8974_WHOAMI_VALUE != reg) || (FXLS8971_WHOAMI_VALUE != reg) || (FXLS8961_WHOAMI_VALUE != reg))
     	{
     		pSensorHandle->isInitialized = false;
     		return SENSOR_ERROR_BAD_ADDRESS;

@@ -610,7 +610,17 @@ static void SHELL_ProcessCommand(shell_context_handle_t *shellContextHandle, con
     uint8_t i = 0;
 
     tmpLen = (uint8_t)strlen(cmd);
-    argc   = SHELL_ParseLine(cmd, tmpLen, argv);
+    if (tmpLen >= SHELL_BUFFER_SIZE - 1U)
+    {
+        (void)SHELL_Printf(shellContextHandle,
+                           "Command line length should not more than SHELL_BUFFER_SIZE, please input command less "
+                           "(SHELL_BUFFER_SIZE - 1) characters again!\r\n");
+        return;
+    }
+    else
+    {
+        argc = SHELL_ParseLine(cmd, tmpLen, argv);
+    }
 
     if ((argc > 0))
     {

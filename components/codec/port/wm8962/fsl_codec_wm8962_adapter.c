@@ -275,12 +275,12 @@ status_t HAL_CODEC_WM8962_SetPlay(void *handle, uint32_t playSource)
  *
  * param handle codec handle.
  * param cmd module control cmd, reference _codec_module_ctrl_cmd.
- * param data value to write, when cmd is kCODEC_ModuleRecordSourceChannel, the data should be a value combine
+ * param moduleData value to write, when cmd is kCODEC_ModuleRecordSourceChannel, the data should be a value combine
  *  of channel and source, please reference macro CODEC_MODULE_RECORD_SOURCE_CHANNEL(source, LP, LN, RP, RN), reference
  *  codec specific driver for detail configurations.
  * return kStatus_Success is success, else configure failed.
  */
-status_t HAL_CODEC_WM8962_ModuleControl(void *handle, uint32_t cmd, uint32_t data)
+status_t HAL_CODEC_WM8962_ModuleControl(void *handle, uint32_t cmd, uint32_t moduleData)
 {
     return kStatus_CODEC_NotSupport;
 }

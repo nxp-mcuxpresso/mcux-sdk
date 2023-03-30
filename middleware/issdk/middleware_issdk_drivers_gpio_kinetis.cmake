@@ -1,4 +1,4 @@
-#Description: Middleware issdk drivers gpio_kinetis; user_visible: True
+#Description: Middleware issdk drivers gpio_kinetis; user_visible: False
 include_guard(GLOBAL)
 message("middleware_issdk_drivers_gpio_kinetis component is included.")
 

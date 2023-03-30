@@ -48,6 +48,7 @@ typedef struct _hal_audio_state
 #endif /* FSL_FEATURE_SOC_DMAMUX_COUNT */
 #endif /* FSL_FEATURE_SOC_EDMA_COUNT or FSL_FEATURE_SOC_DMA4_COUNT */
     uint8_t dmaInstance;
+    uint8_t dmaChannel;
     uint8_t instance;
     uint8_t occupied;
 } hal_audio_state_t;
@@ -291,6 +292,7 @@ static hal_audio_status_t HAL_AudioCommonInit(hal_audio_handle_t handle,
 
     audioHandle->instance    = config->instance;
     audioHandle->dmaInstance = dmaConfig->instance;
+    audioHandle->dmaChannel  = dmaConfig->channel;
     audioHandle->occupied    = 1;
 
     SAI_GetClassicI2SConfig(&saiConfig, (sai_word_width_t)config->bitWidth, kSAI_Stereo, featureConfig->sai.lineMask);
@@ -483,6 +485,7 @@ static hal_audio_status_t HAL_AudioCommonInit(hal_audio_handle_t handle,
         EDMA_Init(dmaBases[dmaConfig->instance], &audioDmaConfig);
     }
     s_dmaOccupied[dmaConfig->instance]++;
+#endif /* HAL_AUDIO_DMA_INIT_ENABLE */
 
 #if (defined(FSL_FEATURE_EDMA_HAS_CHANNEL_CONFIG) && (FSL_FEATURE_EDMA_HAS_CHANNEL_CONFIG > 0U))
     if (dmaConfig->dmaChannelConfig != NULL)
@@ -490,19 +493,16 @@ static hal_audio_status_t HAL_AudioCommonInit(hal_audio_handle_t handle,
         EDMA_InitChannel(dmaBases[dmaConfig->instance], dmaConfig->channel, dmaConfig->dmaChannelConfig);
     }
 #endif /* FSL_FEATURE_EDMA_HAS_CHANNEL_CONFIG */
-#endif /* HAL_AUDIO_DMA_INIT_ENABLE */
 
     NVIC_SetPriority((IRQn_Type)dmaIrqNumber[dmaConfig->instance][dmaConfig->channel], HAL_AUDIO_ISR_PRIORITY);
     EDMA_CreateHandle(&audioHandle->dmaHandle, dmaBases[dmaConfig->instance], dmaConfig->channel);
 
-#if (defined(HAL_AUDIO_DMA_INIT_ENABLE) && (HAL_AUDIO_DMA_INIT_ENABLE > 0U))
 #if (defined(FSL_FEATURE_EDMA_HAS_CHANNEL_MUX) && (FSL_FEATURE_EDMA_HAS_CHANNEL_MUX > 0U))
     assert(dmaConfig->dmaChannelMuxConfig);
     EDMA_SetChannelMux(dmaBases[dmaConfig->instance], dmaConfig->channel,
                        (dma_request_source_t)((hal_audio_dma_channel_mux_config_t *)dmaConfig->dmaChannelMuxConfig)
                            ->dmaChannelMuxConfig.dmaRequestSource);
 #endif /* FSL_FEATURE_EDMA_HAS_CHANNEL_MUX */
-#endif /* HAL_AUDIO_DMA_INIT_ENABLE */
 
     if ((uint8_t)kHAL_AudioDmaChannelPriorityDefault != (uint8_t)dmaConfig->priority)
     {
@@ -577,12 +577,19 @@ static hal_audio_status_t HAL_AudioCommonInit(hal_audio_handle_t handle,
 static hal_audio_status_t HAL_AudioCommonDeinit(hal_audio_handle_t handle, bool direction)
 {
     hal_audio_state_t *audioHandle;
-#if (defined(HAL_AUDIO_DMA_INIT_ENABLE) && (HAL_AUDIO_DMA_INIT_ENABLE > 0U))
+
 #if (defined(FSL_FEATURE_SOC_DMA4_COUNT) && (FSL_FEATURE_SOC_DMA4_COUNT > 0U))
+#if (defined(HAL_AUDIO_DMA_INIT_ENABLE) && (HAL_AUDIO_DMA_INIT_ENABLE > 0U)) || \
+    (defined(FSL_FEATURE_EDMA_HAS_CHANNEL_MUX) && (FSL_FEATURE_EDMA_HAS_CHANNEL_MUX > 0U))
     EDMA_Type *dmaBases[] = EDMA_BASE_PTRS;
+#endif /* HAL_AUDIO_DMA_INIT_ENABLE or FSL_FEATURE_EDMA_HAS_CHANNEL_MUX */
 #else
-    DMA_Type *dmaBases[]                                      = DMA_BASE_PTRS;
+#if (defined(HAL_AUDIO_DMA_INIT_ENABLE) && (HAL_AUDIO_DMA_INIT_ENABLE > 0U)) || \
+    (defined(FSL_FEATURE_EDMA_HAS_CHANNEL_MUX) && (FSL_FEATURE_EDMA_HAS_CHANNEL_MUX > 0U))
+    DMA_Type *dmaBases[] = DMA_BASE_PTRS;
+#endif /* HAL_AUDIO_DMA_INIT_ENABLE or FSL_FEATURE_EDMA_HAS_CHANNEL_MUX */
 #endif /* FSL_FEATURE_SOC_DMA4_COUNT */
+#if (defined(HAL_AUDIO_DMA_INIT_ENABLE) && (HAL_AUDIO_DMA_INIT_ENABLE > 0U))
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U)) || \
     (defined(FSL_FEATURE_SOC_DMA4_COUNT) && (FSL_FEATURE_SOC_DMA4_COUNT > 0U))
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && (FSL_FEATURE_SOC_DMAMUX_COUNT > 0U))
@@ -619,6 +626,13 @@ static hal_audio_status_t HAL_AudioCommonDeinit(hal_audio_handle_t handle, bool 
             SAI_Deinit(s_i2sBases[audioHandle->instance]);
         }
     }
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U)) || \
+    (defined(FSL_FEATURE_SOC_DMA4_COUNT) && (FSL_FEATURE_SOC_DMA4_COUNT > 0U))
+#if (defined(FSL_FEATURE_EDMA_HAS_CHANNEL_MUX) && (FSL_FEATURE_EDMA_HAS_CHANNEL_MUX > 0U))
+    EDMA_SetChannelMux(dmaBases[audioHandle->dmaInstance], audioHandle->dmaChannel, kDmaRequestDisabled);
+#endif /* FSL_FEATURE_EDMA_HAS_CHANNEL_MUX */
+#endif /* FSL_FEATURE_SOC_EDMA_COUNT or FSL_FEATURE_SOC_DMA4_COUNT */
 
 #if (defined(HAL_AUDIO_DMA_INIT_ENABLE) && (HAL_AUDIO_DMA_INIT_ENABLE > 0U))
     if (s_dmaOccupied[audioHandle->dmaInstance] != 0U)

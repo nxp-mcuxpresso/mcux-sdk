@@ -1,4 +1,4 @@
-#Description: Middleware issdk sensor mpl3115; user_visible: True
+#Description: Middleware issdk sensor mpl3115; user_visible: False
 include_guard(GLOBAL)
 message("middleware_issdk_sensor_mpl3115 component is included.")
 

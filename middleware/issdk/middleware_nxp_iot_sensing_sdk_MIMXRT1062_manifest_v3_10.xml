@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_middleware_nxp_iot_sensing_sdk_MIMXRT1062_manifest_v3_10" name="Nxp iot sensing sdk" brief="IoT Sensing SDK (ISSDK) provides sensor drivers and reference examples for NXP's IoT sensors." format_version="3.10" api_version="2.0.0" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.10.xsd">
-  <!--Timestamp (UTC): 2023-01-10 16:34:30.926548-->
-  <!--This manifest is generated based on sdk repo commit: 11a5f6af5190bfe018a89b4d02c239713dc4cfa6-->
+  <!--Timestamp (UTC): 2023-03-27 10:46:25.185062-->
+  <!--This manifest is generated based on sdk repo commit: 7a3cf97dd3582e3ee8a98ede814ff1f2a45ea519-->
   <externalDefinitions>
     <definition extID="MIMXRT1062xxxxA"/>
-    <definition extID="MIMXRT1062xxxxB"/>
     <definition extID="armgcc"/>
     <definition extID="platform.drivers.common.MIMXRT1062"/>
     <definition extID="core0_MIMXRT1062xxxxA"/>
-    <definition extID="core0_MIMXRT1062xxxxB"/>
     <definition extID="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
     <definition extID="CMSIS_Driver_Include.SPI.MIMXRT1062"/>
   </externalDefinitions>
   <ksdk id="MCUXpressoSDK2130_middleware_nxp_iot_sensing_sdk_MIMXRT1062_manifest_v3_10" name="MCUXpressoSDK2130_middleware_nxp_iot_sensing_sdk_MIMXRT1062_manifest_v3_10" version="2.13.0"/>
   <components>
-    <component id="cmsis.drivers.include.MIMXRT1062" name="issdk_cmsis_drivers" brief="CMSIS Core header files" version="1.7.0" full_name="Middleware issdk drivers cmsis_drivers" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="../../CMSIS/Driver/Include" project_base_path="CMSIS_driver">
+    <component id="cmsis.drivers.include.MIMXRT1062" name="issdk_cmsis_drivers" brief="CMSIS Core header files" version="1.7.0" full_name="Middleware issdk drivers cmsis_drivers" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="../../CMSIS/Driver/Include" project_base_path="CMSIS_driver">
       <source relative_path="./" type="c_include">
         <files mask="Driver_SPI.h"/>
         <files mask="Driver_I2C.h"/>
@@ -28,7 +26,7 @@
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.drivers.gpio_imx.MIMXRT1062" name="gpio_imx" brief="ISSDK GPIO Driver for i.MXRT10xx" version="1.8.0" full_name="Middleware issdk drivers gpio_imx" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="false" type="middleware" package_base_path="./" project_base_path="gpio_driver">
+    <component id="middleware.issdk.drivers.gpio_imx.MIMXRT1062" name="gpio_imx" brief="ISSDK GPIO Driver for i.MXRT10xx" version="1.8.0" full_name="Middleware issdk drivers gpio_imx" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="gpio_driver">
       <dependencies>
         <component_dependency value="cmsis.drivers.include.MIMXRT1062"/>
       </dependencies>
@@ -50,7 +48,7 @@
         <include_path relative_path="./drivers/gpio" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.drivers.gpio_imx8.MIMXRT1062" name="gpio_imx" brief="ISSDK GPIO Driver for i.MX8xx" version="1.8.0" full_name="Middleware issdk drivers gpio_imx8" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="false" type="middleware" package_base_path="./" project_base_path="gpio_driver">
+    <component id="middleware.issdk.drivers.gpio_imx8.MIMXRT1062" name="gpio_imx" brief="ISSDK GPIO Driver for i.MX8xx" version="1.8.0" full_name="Middleware issdk drivers gpio_imx8" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="gpio_driver">
       <dependencies>
         <component_dependency value="cmsis.drivers.include.MIMXRT1062"/>
       </dependencies>
@@ -68,7 +66,7 @@
         <include_path relative_path="./drivers/gpio" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.drivers.gpio_imxrt.MIMXRT1062" name="gpio_imxrt" brief="ISSDK GPIO Driver for i.MXRT" version="1.8.0" full_name="Middleware issdk drivers gpio_imxrt" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="false" type="middleware" package_base_path="./" project_base_path="gpio_driver">
+    <component id="middleware.issdk.drivers.gpio_imxrt.MIMXRT1062" name="gpio_imxrt" brief="ISSDK GPIO Driver for i.MXRT" version="1.8.0" full_name="Middleware issdk drivers gpio_imxrt" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="gpio_driver">
       <dependencies>
         <component_dependency value="cmsis.drivers.include.MIMXRT1062"/>
       </dependencies>
@@ -86,7 +84,7 @@
         <include_path relative_path="./drivers/gpio" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.drivers.gpio_imxrt1180.MIMXRT1062" name="gpio_imx" brief="ISSDK GPIO Driver for i.MXRT1180" version="1.8.0" full_name="Middleware issdk drivers gpio_imxrt1180" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="false" type="middleware" package_base_path="./" project_base_path="gpio_driver">
+    <component id="middleware.issdk.drivers.gpio_imxrt1180.MIMXRT1062" name="gpio_imx" brief="ISSDK GPIO Driver for i.MXRT1180" version="1.8.0" full_name="Middleware issdk drivers gpio_imxrt1180" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="gpio_driver">
       <dependencies>
         <component_dependency value="cmsis.drivers.include.MIMXRT1062"/>
       </dependencies>
@@ -104,7 +102,7 @@
         <include_path relative_path="./drivers/gpio" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.drivers.gpio_imxrt600.MIMXRT1062" name="gpio_imx" brief="ISSDK GPIO Driver for i.MXRT685" version="1.8.0" full_name="Middleware issdk drivers gpio_imxrt600" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="false" type="middleware" package_base_path="./" project_base_path="gpio_driver">
+    <component id="middleware.issdk.drivers.gpio_imxrt600.MIMXRT1062" name="gpio_imx" brief="ISSDK GPIO Driver for i.MXRT685" version="1.8.0" full_name="Middleware issdk drivers gpio_imxrt600" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="gpio_driver">
       <dependencies>
         <component_dependency value="cmsis.drivers.include.MIMXRT1062"/>
       </dependencies>
@@ -122,7 +120,7 @@
         <include_path relative_path="./drivers/gpio" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.drivers.host.MIMXRT1062" name="issdk_host" brief="ISSDK Host Interface Service" version="1.7.0" full_name="Middleware issdk drivers host" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" device_cores="core0_MIMXRT1062xxxxA core0_MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="host">
+    <component id="middleware.issdk.drivers.host.MIMXRT1062" name="issdk_host" brief="ISSDK Host Interface Service" version="1.7.0" full_name="Middleware issdk drivers host" devices="MIMXRT1062xxxxA" device_cores="core0_MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="host">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1062"/>
@@ -153,7 +151,7 @@
         <include_path relative_path="./drivers/host" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.drivers.systick_utils.MIMXRT1062" name="systick_utils" brief="ISSDK Utils" version="1.8.0" full_name="Middleware issdk drivers systick_utils" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="utilities">
+    <component id="middleware.issdk.drivers.systick_utils.MIMXRT1062" name="systick_utils" brief="ISSDK Utils" version="1.8.0" full_name="Middleware issdk drivers systick_utils" devices="MIMXRT1062xxxxA" user_visible="true" type="middleware" package_base_path="./" project_base_path="utilities">
       <source relative_path="./drivers/systick" project_relative_path="./" type="src">
         <files mask="systick_utils.c"/>
       </source>
@@ -164,7 +162,7 @@
         <include_path relative_path="./drivers/systick" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.allregdefs.MIMXRT1062" name="issdk_allregdefs" brief="ISSDK Sensors RegDefs" version="1.8.0" full_name="Middleware issdk sensor allregdefs" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.allregdefs.MIMXRT1062" name="issdk_allregdefs" brief="ISSDK Sensors RegDefs" version="1.8.0" full_name="Middleware issdk sensor allregdefs" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -193,7 +191,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxas21002.MIMXRT1062" name="issdk_fxas21002" brief="ISSDK FXAS21002 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxas21002" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxas21002.MIMXRT1062" name="issdk_fxas21002" brief="ISSDK FXAS21002 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxas21002" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -214,7 +212,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxlc95000.MIMXRT1062" name="issdk_fxlc95000" brief="ISSDK FXLC95000 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxlc95000" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxlc95000.MIMXRT1062" name="issdk_fxlc95000" brief="ISSDK FXLC95000 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxlc95000" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -232,7 +230,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxls8471q.MIMXRT1062" name="issdk_fxls8471q" brief="ISSDK FXLS8471 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxls8471q" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxls8471q.MIMXRT1062" name="issdk_fxls8471q" brief="ISSDK FXLS8471 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxls8471q" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -250,7 +248,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxls8962.MIMXRT1062" name="issdk_fxls8962" brief="ISSDK FXLS8962 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxls8962" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxls8962.MIMXRT1062" name="issdk_fxls8962" brief="ISSDK FXLS8962 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxls8962" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -268,7 +266,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxls896xaf.MIMXRT1062" name="issdk_fxls896xaf" brief="ISSDK FXLS896xAF Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor FXLS896xAF" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxls896xaf.MIMXRT1062" name="issdk_fxls896xaf" brief="ISSDK FXLS896xAF Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor FXLS896xAF" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -286,7 +284,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxls8974cf.MIMXRT1062" name="issdk_fxls8974cf" brief="ISSDK FXLS8974CF Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor FXLS8974CF" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxls8974cf.MIMXRT1062" name="issdk_fxls8974cf" brief="ISSDK FXLS8974CF Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor FXLS8974CF" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -304,7 +302,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxos8700.MIMXRT1062" name="issdk_fxos8700" brief="ISSDK FXOS8700 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxos8700" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxos8700.MIMXRT1062" name="issdk_fxos8700" brief="ISSDK FXOS8700 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxos8700" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -325,7 +323,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxpq3115.MIMXRT1062" name="issdk_fxpq3115" brief="ISSDK FXPQ3115 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxpq3115" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxpq3115.MIMXRT1062" name="issdk_fxpq3115" brief="ISSDK FXPQ3115 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxpq3115" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -343,7 +341,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxps7250d4.MIMXRT1062" name="issdk_fxps7250d4" brief="ISSDK fxps7250d4 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxps7250d4" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxps7250d4.MIMXRT1062" name="issdk_fxps7250d4" brief="ISSDK fxps7250d4 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxps7250d4" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -361,7 +359,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.interface.common.MIMXRT1062" name="issdk_interfaces" brief="ISSDK Sensor Interface Common" version="1.7.0" full_name="Middleware issdk sensor interface common" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="interfaces">
+    <component id="middleware.issdk.sensor.interface.common.MIMXRT1062" name="issdk_interfaces" brief="ISSDK Sensor Interface Common" version="1.7.0" full_name="Middleware issdk sensor interface common" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="interfaces">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -388,7 +386,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.isl29023.MIMXRT1062" name="issdk_isl29023" brief="ISSDK ISL29023 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor isl29023" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.isl29023.MIMXRT1062" name="issdk_isl29023" brief="ISSDK ISL29023 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor isl29023" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -406,7 +404,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.mag3110.MIMXRT1062" name="issdk_mag3110" brief="ISSDK MAG3110 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mag3110" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.mag3110.MIMXRT1062" name="issdk_mag3110" brief="ISSDK MAG3110 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mag3110" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -424,7 +422,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.mma845x.MIMXRT1062" name="issdk_mma845x" brief="ISSDK MMA845x Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma845x" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.mma845x.MIMXRT1062" name="issdk_mma845x" brief="ISSDK MMA845x Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma845x" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -442,7 +440,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.mma8491q.MIMXRT1062" name="issdk_mma8491q" brief="ISSDK MMA8491 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma8491q" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.mma8491q.MIMXRT1062" name="issdk_mma8491q" brief="ISSDK MMA8491 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma8491q" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -460,7 +458,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.mma865x.MIMXRT1062" name="issdk_mma865x" brief="ISSDK MMA865x Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma865x" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.mma865x.MIMXRT1062" name="issdk_mma865x" brief="ISSDK MMA865x Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma865x" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -478,7 +476,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.mma9553.MIMXRT1062" name="issdk_mma9553" brief="ISSDK MMA9553 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma9553" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.mma9553.MIMXRT1062" name="issdk_mma9553" brief="ISSDK MMA9553 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma9553" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -496,7 +494,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.mpl3115.MIMXRT1062" name="issdk_mpl3115" brief="ISSDK MPL3115 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mpl3115" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="true" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.mpl3115.MIMXRT1062" name="issdk_mpl3115" brief="ISSDK MPL3115 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mpl3115" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -514,7 +512,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.nps300x.MIMXRT1062" name="issdk_nps300x" brief="ISSDK nps300x Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor nps300x" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.nps300x.MIMXRT1062" name="issdk_nps300x" brief="ISSDK nps300x Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor nps300x" devices="MIMXRT1062xxxxA" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
@@ -532,7 +530,7 @@
         <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.tools.MIMXRT1062" name="issdk_tools" brief="ISSDK Serial to MQTT bridge application" version="1.7.0" full_name="Middleware issdk sensor tools" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" user_visible="false" type="other" package_base_path="./" project_base_path="issdk_senor">
+    <component id="middleware.issdk.sensor.tools.MIMXRT1062" name="issdk_tools" brief="ISSDK Serial to MQTT bridge application" version="1.7.0" full_name="Middleware issdk sensor tools" devices="MIMXRT1062xxxxA" user_visible="false" type="other" package_base_path="./" project_base_path="issdk_senor">
       <source relative_path="./tools/Serial_To_MQTT" project_relative_path="./" type="script">
         <files mask="CloudBridgeNXPDemo.py"/>
       </source>
