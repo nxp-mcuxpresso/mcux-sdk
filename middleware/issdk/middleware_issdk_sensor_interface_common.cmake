@@ -1,4 +1,4 @@
-#Description: Middleware issdk sensor interface common; user_visible: True
+#Description: Middleware issdk sensor interface common; user_visible: False
 include_guard(GLOBAL)
 message("middleware_issdk_sensor_interface_common component is included.")
 

@@ -221,4 +221,5 @@ if(${MCUX_DEVICE} STREQUAL "MK26F18")
     include(driver_sysmpu)
 endif()
 
+include(driver_common)
 include(middleware_usb_device_cdc_external)

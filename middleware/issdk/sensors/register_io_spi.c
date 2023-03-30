@@ -29,7 +29,11 @@
  * Variables
  ******************************************************************************/
 GENERIC_DRIVER_GPIO *pDspiGpioDriver = &Driver_GPIO_KSDK;
+#if defined(CPU_MCXN947VDF_cm33_core0) || defined(CPU_MCXN548VDF_cm33_core0)
+LPSPI_Type *const spiBases[] = LPSPI_BASE_PTRS;
+#else
 SPI_Type *const spiBases[] = SPI_BASE_PTRS;
+#endif
 volatile bool b_SPI_CompletionFlag[SPI_COUNT] = {false};
 volatile uint32_t g_SPI_ErrorEvent[SPI_COUNT] = {ARM_SPI_EVENT_TRANSFER_COMPLETE};
 

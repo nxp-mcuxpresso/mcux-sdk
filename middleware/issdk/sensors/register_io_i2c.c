@@ -27,7 +27,11 @@
 /*******************************************************************************
  * Variables
  ******************************************************************************/
+#if defined(CPU_MCXN947VDF_cm33_core0) || defined(CPU_MCXN548VDF_cm33_core0)
+LPI2C_Type *const i2cBases[] = LPI2C_BASE_PTRS;
+#else
 I2C_Type *const i2cBases[] = I2C_BASE_PTRS;
+#endif
 volatile bool b_I2C_CompletionFlag[I2C_COUNT] = {false};
 volatile uint32_t g_I2C_ErrorEvent[I2C_COUNT] = {ARM_I2C_EVENT_TRANSFER_DONE};
 

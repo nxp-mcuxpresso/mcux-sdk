@@ -100,3 +100,4 @@ if(${MCUX_DEVICE} STREQUAL "MKL17Z644")
 endif()
 
 include(driver_i2c)
+include(middleware_freertos-kernel_MK22F51212)

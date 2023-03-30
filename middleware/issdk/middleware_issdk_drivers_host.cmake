@@ -1,4 +1,4 @@
-#Description: Middleware issdk drivers host; user_visible: True
+#Description: Middleware issdk drivers host; user_visible: False
 include_guard(GLOBAL)
 message("middleware_issdk_drivers_host component is included.")
 

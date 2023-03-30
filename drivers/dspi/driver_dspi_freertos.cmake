@@ -61,3 +61,4 @@ if(${MCUX_DEVICE} STREQUAL "MK27FA15")
 endif()
 
 include(driver_dspi)
+include(middleware_freertos-kernel_MK22F51212)

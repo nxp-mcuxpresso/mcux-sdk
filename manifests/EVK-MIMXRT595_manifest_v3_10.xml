@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_EVK-MIMXRT595_manifest_v3_10" name="SDKVersion 2.13.0 SuperSet" brief="This is SDK version 2.13.0 manifest file." format_version="3.10" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.10.xsd">
-  <!--Timestamp (UTC): 2023-01-10 16:34:10.006873-->
-  <!--This manifest is generated based on sdk repo commit: 11a5f6af5190bfe018a89b4d02c239713dc4cfa6-->
+  <!--Timestamp (UTC): 2023-03-27 10:46:12.248176-->
+  <!--This manifest is generated based on sdk repo commit: 7a3cf97dd3582e3ee8a98ede814ff1f2a45ea519-->
   <defines>
     <define name="CPU_$|package|" value=""/>
     <define name="CPU_$|package|_$|core|" value=""/>
@@ -14,7 +14,7 @@
     <definition extID="middleware.multicore.MIMXRT595S"/>
     <definition extID="middleware.wifi.MIMXRT595S"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2130" name="MCUXpressoSDK2130" version="2.13.0"/>
+  <ksdk id="MCUXpressoSDK2131" name="MCUXpressoSDK2131" version="2.13.1"/>
   <manifest_includes>
     <manifest_include path="../../middleware/wifi_nxp/manifests/middleware_nxp_wifi_MIMXRT595S_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/eiq/manifests/middleware_nxp_eiq_machine_learning_MIMXRT595S_manifest_v3_10.xml"/>
@@ -27,7 +27,6 @@
     <manifest_include path="../../middleware/multicore/manifests/middleware_nxp_multicore_MIMXRT595S_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/sdmmc/manifests/middleware_nxp_sd_mmc_sdio_card_MIMXRT595S_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/usb/manifests/middleware_nxp_usb_MIMXRT595S_manifest_v3_10.xml"/>
-    <manifest_include path="../../middleware/voice_seeker/manifests/middleware_nxp_voiceseeker_no_aec_MIMXRT595S_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/issdk/manifests/middleware_nxp_iot_sensing_sdk_MIMXRT595S_manifest_v3_10.xml"/>
     <manifest_include path="../../examples/evkmimxrt595/evkmimxrt595_example_manifest_v3_10.xml"/>
   </manifest_includes>
@@ -35,7 +34,7 @@
     <compiler id="compiler_gcc" name="gcc" type="gcc"/>
   </compilers>
   <toolchainSettings>
-    <toolchainSetting id="com.nxp.mcuxpresso" name="mcuxpresso" version="11.6.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" toolchain="mcuxpresso">
+    <toolchainSetting id="com.nxp.mcuxpresso" name="mcuxpresso" version="11.7.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" toolchain="mcuxpresso">
       <option id="gnu.cpp.compiler.option.optimization.flags" type="string" user_name="">
         <value>-fno-common</value>
       </option>
@@ -58,7 +57,7 @@
   </toolchainSettings>
   <toolchains>
     <toolchain id="armgcc" name="GCC_ARM_Embedded_10-2021.10" version="10.3.1" full_name="GCC ARM Embedded 10-2021.10" compiler="compiler_gcc" type="armgcc" vendor="GCC ARM Embedded" vendor_url="http://launchpad.net/gcc-arm-embedded"/>
-    <toolchain id="mcuxpresso" name="MCUXpresso_IDE" version="11.6.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" type="mcuxpresso" vendor="NXP Semiconductors" vendor_url="http://www.nxp.com">
+    <toolchain id="mcuxpresso" name="MCUXpresso_IDE" version="11.7.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" type="mcuxpresso" vendor="NXP Semiconductors" vendor_url="http://www.nxp.com">
       <debug>
         <debug_configuration id="com.crt.advproject.config.exe.release" name="Release Configuration" probe="LinkServer">
           <scripts>
@@ -2705,6 +2704,60 @@ ${load}</script>
       </source>
       <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm33_MIMXRT595S">
         <files mask="component_panic_MIMXRT595S_cm33.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.power_manager_core.MIMXRT595S" name="power_manager_core" brief="Component power manager core level" version="2.0.0" full_name="Component power manager core" devices="MIMXRT595S" device_cores="cm33_MIMXRT595S" user_visible="false" type="software_component" package_base_path="../components/power_manager/core" project_base_path="component/power_manager/core">
+      <defines>
+        <define name="GENERIC_LIST_LIGHT" value="1"/>
+      </defines>
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.MIMXRT595S"/>
+          <component_dependency value="component.lists.MIMXRT595S"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_pm_core.h"/>
+        <files mask="fsl_pm_config.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_pm_core.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm33_MIMXRT595S">
+        <files mask="component_power_manager_core_MIMXRT595S_cm33.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.power_manager_docs.MIMXRT595S" name="power_manager_docs" brief="Power Manager component documentation" version="2.0.0" full_name="Power Manager component documentation" devices="MIMXRT595S" category="Device/SDK Drivers" user_visible="true" type="documentation" package_base_path="../components/power_manager" project_base_path="component/power_manager">
+      <source relative_path="./" type="other">
+        <files mask="README.md"/>
+      </source>
+      <source relative_path="images" type="image">
+        <files mask="memory_example.png"/>
+        <files mask="SDK_PM_architecture.png"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.power_manager_evkmimxrt595.MIMXRT595S" name="power_manager_EVK-MIMXRT595" brief="Component power manager EVK-MIMXRT595" version="2.0.0" full_name="Component power manager EVK-MIMXRT595" devices="MIMXRT595S" device_cores="cm33_MIMXRT595S" user_visible="true" type="software_component" package_base_path="../components/power_manager/boards/EVK-MIMXRT595" project_base_path="component/power_manager/boards/EVK-MIMXRT595">
+      <dependencies>
+        <component_dependency value="component.power_manager_core.MIMXRT595S"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_pm_board.h"/>
+        <files mask="fsl_pm_board_config.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_pm_board.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm33_MIMXRT595S">
+        <files mask="component_power_manager_evkmimxrt595_MIMXRT595S_cm33.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>

@@ -93,4 +93,5 @@ if(${MCUX_DEVICE} STREQUAL "MKL17Z644")
     include(middleware_freertos-kernel_MKL27Z644)
 endif()
 
+include(middleware_freertos-kernel_MK22F51212)
 include(driver_uart)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1170-EVK_manifest_v3_10" name="SDKVersion 2.13.0 SuperSet" brief="This is SDK version 2.13.0 manifest file." format_version="3.10" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.10.xsd">
-  <!--Timestamp (UTC): 2023-01-10 16:33:03.048669-->
-  <!--This manifest is generated based on sdk repo commit: 11a5f6af5190bfe018a89b4d02c239713dc4cfa6-->
+  <!--Timestamp (UTC): 2023-03-27 10:45:42.686883-->
+  <!--This manifest is generated based on sdk repo commit: 7a3cf97dd3582e3ee8a98ede814ff1f2a45ea519-->
   <defines>
     <define name="CPU_$|package|" value=""/>
     <define name="CPU_$|package|_$|core|" value=""/>
@@ -18,9 +18,8 @@
     <definition extID="middleware.multicore.MIMXRT1176"/>
     <definition extID="middleware.wifi.MIMXRT1176"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2130" name="MCUXpressoSDK2130" version="2.13.0"/>
+  <ksdk id="MCUXpressoSDK2131" name="MCUXpressoSDK2131" version="2.13.1"/>
   <manifest_includes>
-    <manifest_include path="../../middleware/EAP/manifests/middleware_nxp_essential_audio_processing_MIMXRT1176_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/wifi_nxp/manifests/middleware_nxp_wifi_MIMXRT1176_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/eiq/manifests/middleware_nxp_eiq_machine_learning_MIMXRT1176_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/fatfs/manifests/middleware_elm_chan_fatfs_MIMXRT1176_manifest_v3_10.xml"/>
@@ -34,8 +33,6 @@
     <manifest_include path="../../middleware/multicore/manifests/middleware_nxp_multicore_MIMXRT1176_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/sdmmc/manifests/middleware_nxp_sd_mmc_sdio_card_MIMXRT1176_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/usb/manifests/middleware_nxp_usb_MIMXRT1176_manifest_v3_10.xml"/>
-    <manifest_include path="../../middleware/vit/manifests/middleware_nxp_voice_intelligent_technology_MIMXRT1176_manifest_v3_10.xml"/>
-    <manifest_include path="../../middleware/voice_seeker/manifests/middleware_nxp_voiceseeker_no_aec_MIMXRT1176_manifest_v3_10.xml"/>
     <manifest_include path="../../rtos/azure-rtos/manifests/middleware_microsoft_azure_rtos_azure_iot_MIMXRT1176_manifest_v3_10.xml"/>
     <manifest_include path="../../rtos/azure-rtos/manifests/middleware_microsoft_azure_rtos_fx_MIMXRT1176_manifest_v3_10.xml"/>
     <manifest_include path="../../rtos/azure-rtos/manifests/middleware_microsoft_azure_rtos_gx_MIMXRT1176_manifest_v3_10.xml"/>
@@ -54,7 +51,7 @@
     <slave_role id="M7SLAVE" name="Cortex-M7 acts as slave by default"/>
   </core_slave_roles_definitions>
   <toolchainSettings>
-    <toolchainSetting id="com.nxp.mcuxpresso" name="mcuxpresso" version="11.6.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" toolchain="mcuxpresso">
+    <toolchainSetting id="com.nxp.mcuxpresso" name="mcuxpresso" version="11.7.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" toolchain="mcuxpresso">
       <option id="gnu.cpp.compiler.option.optimization.flags" type="string" user_name="">
         <value>-fno-common</value>
       </option>
@@ -77,7 +74,7 @@
   </toolchainSettings>
   <toolchains>
     <toolchain id="armgcc" name="GCC_ARM_Embedded_10-2021.10" version="10.3.1" full_name="GCC ARM Embedded 10-2021.10" compiler="compiler_gcc" type="armgcc" vendor="GCC ARM Embedded" vendor_url="http://launchpad.net/gcc-arm-embedded"/>
-    <toolchain id="mcuxpresso" name="MCUXpresso_IDE" version="11.6.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" type="mcuxpresso" vendor="NXP Semiconductors" vendor_url="http://www.nxp.com">
+    <toolchain id="mcuxpresso" name="MCUXpresso_IDE" version="11.7.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" type="mcuxpresso" vendor="NXP Semiconductors" vendor_url="http://www.nxp.com">
       <debug>
         <debug_configuration id="com.crt.advproject.config.exe.release" name="Release Configuration" probe="LinkServer">
           <scripts>
@@ -236,28 +233,28 @@ ${load}</script>
     <component id="project_template.evkmimxrt1170.MIMXRT1176" name="evkmimxrt1170" brief="Board_project_template evkmimxrt1170" version="1.0.0" full_name="Board_project_template evkmimxrt1170" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" category="Board Support/SDK Project Template" user_visible="true" type="project_template" package_base_path="../boards/evkmimxrt1170/project_template" project_base_path="board">
       <dependencies>
         <all>
-          <component_dependency value="component.lpuart_adapter.MIMXRT1176"/>
           <component_dependency value="platform.devices.MIMXRT1176_startup.MIMXRT1176"/>
-          <component_dependency value="platform.drivers.clock.MIMXRT1176"/>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
-          <component_dependency value="platform.drivers.dcdc_soc.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.clock.MIMXRT1176"/>
           <component_dependency value="platform.drivers.igpio.MIMXRT1176"/>
           <component_dependency value="platform.drivers.iomuxc.MIMXRT1176"/>
           <component_dependency value="platform.drivers.lpuart.MIMXRT1176"/>
-          <component_dependency value="platform.drivers.nic301.MIMXRT1176"/>
+          <component_dependency value="component.lpuart_adapter.MIMXRT1176"/>
           <component_dependency value="platform.drivers.pmu_1.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.dcdc_soc.MIMXRT1176"/>
           <component_dependency value="platform.drivers.xip_board.evkmimxrt1170.MIMXRT1176"/>
           <component_dependency value="platform.drivers.xip_device.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.nic301.MIMXRT1176"/>
           <component_dependency value="platform.drivers.xmcd.evkmimxrt1170.MIMXRT1176"/>
           <any_of>
             <all>
-              <component_dependency value="component.serial_manager.MIMXRT1176"/>
-              <component_dependency value="platform.utilities.assert.MIMXRT1176"/>
               <component_dependency value="utility.debug_console.MIMXRT1176"/>
+              <component_dependency value="platform.utilities.assert.MIMXRT1176"/>
+              <component_dependency value="component.serial_manager.MIMXRT1176"/>
             </all>
             <all>
-              <component_dependency value="platform.utilities.assert_lite.MIMXRT1176"/>
               <component_dependency value="utility.debug_console_lite.MIMXRT1176"/>
+              <component_dependency value="platform.utilities.assert_lite.MIMXRT1176"/>
             </all>
           </any_of>
         </all>
@@ -2038,25 +2035,25 @@ ${load}</script>
     <component id="project_template.MIMXRT1176.MIMXRT1176" name="MIMXRT1176" brief="Devices_project_template MIMXRT1176" version="1.0.0" full_name="Devices_project_template MIMXRT1176" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" category="Board Support/SDK Project Template" user_visible="true" type="project_template" package_base_path="../devices/MIMXRT1176/project_template" project_base_path="board">
       <dependencies>
         <all>
-          <component_dependency value="component.lpuart_adapter.MIMXRT1176"/>
           <component_dependency value="platform.devices.MIMXRT1176_startup.MIMXRT1176"/>
-          <component_dependency value="platform.drivers.clock.MIMXRT1176"/>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
-          <component_dependency value="platform.drivers.dcdc_soc.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.clock.MIMXRT1176"/>
           <component_dependency value="platform.drivers.igpio.MIMXRT1176"/>
           <component_dependency value="platform.drivers.iomuxc.MIMXRT1176"/>
           <component_dependency value="platform.drivers.lpuart.MIMXRT1176"/>
-          <component_dependency value="platform.drivers.nic301.MIMXRT1176"/>
+          <component_dependency value="component.lpuart_adapter.MIMXRT1176"/>
           <component_dependency value="platform.drivers.pmu_1.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.dcdc_soc.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.nic301.MIMXRT1176"/>
           <any_of>
             <all>
-              <component_dependency value="component.serial_manager.MIMXRT1176"/>
-              <component_dependency value="platform.utilities.assert.MIMXRT1176"/>
               <component_dependency value="utility.debug_console.MIMXRT1176"/>
+              <component_dependency value="platform.utilities.assert.MIMXRT1176"/>
+              <component_dependency value="component.serial_manager.MIMXRT1176"/>
             </all>
             <all>
-              <component_dependency value="platform.utilities.assert_lite.MIMXRT1176"/>
               <component_dependency value="utility.debug_console_lite.MIMXRT1176"/>
+              <component_dependency value="platform.utilities.assert_lite.MIMXRT1176"/>
             </all>
           </any_of>
         </all>
@@ -2140,18 +2137,41 @@ ${load}</script>
     </component>
     <component id="component.codec_adapters.MIMXRT1176" name="codec_adapters" brief="Component codec adapters for multi codec" version="2.2.0" full_name="Component codec_adapters" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="abstraction_layer" package_base_path="../components/codec/" project_base_path="codec">
       <dependencies>
-        <all>
-          <component_dependency value="driver.codec.MIMXRT1176"/>
-          <any_of>
+        <any_of>
+          <all>
+            <component_dependency value="driver.codec.MIMXRT1176"/>
             <component_dependency value="component.wm8960_adapter.MIMXRT1176"/>
+          </all>
+          <all>
+            <component_dependency value="platform.drivers.common.MIMXRT1176"/>
+            <component_dependency value="component.cs42448_adapter.MIMXRT1176"/>
+          </all>
+          <all>
+            <component_dependency value="driver.codec.MIMXRT1176"/>
             <component_dependency value="component.cs42888_adapter.MIMXRT1176"/>
+          </all>
+          <all>
+            <component_dependency value="driver.codec.MIMXRT1176"/>
             <component_dependency value="component.da7212_adapter.MIMXRT1176"/>
+          </all>
+          <all>
+            <component_dependency value="driver.codec.MIMXRT1176"/>
             <component_dependency value="component.sgtl_adapter.MIMXRT1176"/>
-          </any_of>
-        </all>
+          </all>
+          <all>
+            <component_dependency value="driver.codec.MIMXRT1176"/>
+            <component_dependency value="component.wm8962_adapter.MIMXRT1176"/>
+          </all>
+        </any_of>
       </dependencies>
       <source relative_path="port" type="src">
         <files mask="fsl_codec_adapter.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm4_MIMXRT1176xxxxx">
+        <files mask="component_codec_adapters_MIMXRT1176_cm4.cmake" hidden="true"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm7_MIMXRT1176xxxxx">
+        <files mask="component_codec_adapters_MIMXRT1176_cm7.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./port" type="c_include"/>
@@ -2201,6 +2221,33 @@ ${load}</script>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.cs42448_adapter.MIMXRT1176" name="codec_cs42448_adapter" brief="Component cs42448 adapter for single codec" version="2.2.1" full_name="Component cs42448_adapter" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="abstraction_layer" package_base_path="../components/codec" project_base_path="codec">
+      <dependencies>
+        <all>
+          <component_dependency value="driver.cs42448.MIMXRT1176"/>
+          <component_dependency value="driver.codec.MIMXRT1176"/>
+        </all>
+      </dependencies>
+      <source relative_path="port/cs42448" type="src">
+        <files mask="fsl_codec_cs42448_adapter.c"/>
+      </source>
+      <source relative_path="port/cs42448" type="c_include">
+        <files mask="fsl_codec_cs42448_adapter.h"/>
+      </source>
+      <source relative_path="port" type="c_include">
+        <files mask="fsl_codec_adapter.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm4_MIMXRT1176xxxxx">
+        <files mask="component_cs42448_adapter_MIMXRT1176_cm4.cmake" hidden="true"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm7_MIMXRT1176xxxxx">
+        <files mask="component_cs42448_adapter_MIMXRT1176_cm7.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./port/cs42448" type="c_include"/>
+        <include_path relative_path="./port/" type="c_include"/>
       </include_paths>
     </component>
     <component id="component.cs42888_adapter.MIMXRT1176" name="codec_cs42888_adapter" brief="Component cs42888 adapter for single codec" version="2.2.1" full_name="Component cs42888_adapter" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="abstraction_layer" package_base_path="../components/codec" project_base_path="codec">
@@ -2263,6 +2310,29 @@ ${load}</script>
       </source>
       <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm7_MIMXRT1176xxxxx">
         <files mask="component_flexspi_nor_flash_adapter_rt1170_MIMXRT1176_cm7.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.flexspi_nor_flash_adapter_rt1170evkb.MIMXRT1176" name="flexspi_nor_flash_adapter_rt1170evkb" brief="Component flexspi_nor_flash_adapter_rt1170evkb" version="1.0.0" full_name="Component flexspi_nor_flash_adapter_rt1170evkb" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="abstraction_layer" package_base_path="../components/internal_flash" project_base_path="component/internal_flash">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.flexspi.MIMXRT1176"/>
+        </all>
+      </dependencies>
+      <source relative_path="evkbmimxrt1170" type="src">
+        <files mask="fsl_adapter_flexspi_nor_flash.c"/>
+      </source>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_adapter_flash.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm4_MIMXRT1176xxxxx">
+        <files mask="component_flexspi_nor_flash_adapter_rt1170evkb_MIMXRT1176_cm4.cmake" hidden="true"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm7_MIMXRT1176xxxxx">
+        <files mask="component_flexspi_nor_flash_adapter_rt1170evkb_MIMXRT1176_cm7.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
@@ -2564,6 +2634,33 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
+    <component id="component.mflash.mimxrt1170evkb.MIMXRT1176" name="mflash mimxrt1170evkb" brief="mflash mimxrt1170evkb" version="1.0.0" full_name="mflash mimxrt1170evkb" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="software_component" package_base_path="../components/flash/mflash/mimxrt1170evkb" project_base_path="flash/mflash/mimxrt1170evkb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.mflash.common.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.flexspi.MIMXRT1176"/>
+          <any_of>
+            <component_dependency value="platform.drivers.cache_armv7_m7.MIMXRT1176"/>
+            <component_dependency value="platform.drivers.cache_lmem.MIMXRT1176"/>
+          </any_of>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="mflash_drv.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="mflash_drv.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm4_MIMXRT1176xxxxx">
+        <files mask="component_mflash_mimxrt1170evkb_MIMXRT1176_cm4.cmake" hidden="true"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm7_MIMXRT1176xxxxx">
+        <files mask="component_mflash_mimxrt1170evkb_MIMXRT1176_cm7.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
     <component id="component.mflash.rt1170.MIMXRT1176" name="mflash rt1170" brief="mflash rt1170" version="1.0.0" full_name="mflash rt1170" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="software_component" package_base_path="../components/flash/mflash/mimxrt1170" project_base_path="flash/mflash/mimxrt1170">
       <dependencies>
         <all>
@@ -2601,7 +2698,10 @@ ${load}</script>
     </component>
     <component id="component.mflash_file.MIMXRT1176" name="mflash file" brief="mflash file" version="1.0.0" full_name="statically allocated file system for mflash" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="false" type="software_component" package_base_path="../components/flash/mflash" project_base_path="flash/mflash">
       <dependencies>
-        <component_dependency value="component.mflash.rt1170.MIMXRT1176"/>
+        <any_of>
+          <component_dependency value="component.mflash.rt1170.MIMXRT1176"/>
+          <component_dependency value="component.mflash.mimxrt1170evkb.MIMXRT1176"/>
+        </any_of>
       </dependencies>
       <source relative_path="./" type="c_include">
         <files mask="mflash_file.h"/>
@@ -3125,6 +3225,12 @@ ${load}</script>
       <source relative_path="port" type="c_include">
         <files mask="fsl_codec_adapter.h"/>
       </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm4_MIMXRT1176xxxxx">
+        <files mask="component_wm8962_adapter_MIMXRT1176_cm4.cmake" hidden="true"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm7_MIMXRT1176xxxxx">
+        <files mask="component_wm8962_adapter_MIMXRT1176_cm7.cmake" hidden="true"/>
+      </source>
       <include_paths>
         <include_path relative_path="./port/wm8962" type="c_include"/>
         <include_path relative_path="./port/" type="c_include"/>
@@ -3259,6 +3365,8 @@ ${load}</script>
       <source relative_path="./" type="doc">
         <files mask="Getting Started with MCUXpresso SDK for MIMXRT1170-EVK.pdf"/>
         <files mask="MCUXpresso SDK Release Notes for MIMXRT1170-EVK.pdf"/>
+        <files mask="Getting Started with MCUXpresso SDK for MIMXRT1170-EVKB.pdf"/>
+        <files mask="MCUXpresso SDK Release Notes for MIMXRT1170-EVKB.pdf"/>
         <files mask="Getting Started Guide for using MCUXpresso SDK online.pdf"/>
       </source>
     </component>
@@ -3294,7 +3402,7 @@ ${load}</script>
         <component_dependency value="middleware.maestro_framework.MIMXRT1176"/>
       </dependencies>
       <source relative_path="./" type="doc">
-        <files mask="Maestro_1.3_Release_Notes.pdf"/>
+        <files mask="Maestro_1.5_Release_Notes.pdf"/>
       </source>
     </component>
     <component id="docs.multicore.MIMXRT1176" name="docs_multicore" brief="Collection of Multicore SDK documentation" version="2.13.0" full_name="Multicore SDK documentation" devices="MIMXRT1176xxxxx" user_visible="true" type="documentation" package_base_path="../docs/MULTICORE" project_base_path="MULTICORE">
@@ -4615,6 +4723,7 @@ ${load}</script>
           <any_of>
             <component_dependency value="component.wm8960_adapter.MIMXRT1176"/>
             <component_dependency value="component.codec_adapters.MIMXRT1176"/>
+            <component_dependency value="component.cs42448_adapter.MIMXRT1176"/>
             <component_dependency value="component.cs42888_adapter.MIMXRT1176"/>
             <component_dependency value="component.da7212_adapter.MIMXRT1176"/>
             <component_dependency value="component.sgtl_adapter.MIMXRT1176"/>
@@ -4662,6 +4771,29 @@ ${load}</script>
       </source>
       <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm7_MIMXRT1176xxxxx">
         <files mask="driver_common_MIMXRT1176_cm7.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="driver.cs42448.MIMXRT1176" name="cs42448" brief="Driver cs42448" version="2.0.0" full_name="Driver cs42448" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="software_component" package_base_path="../components/codec/cs42448" project_base_path="codec">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.MIMXRT1176"/>
+          <component_dependency value="component.codec_i2c.MIMXRT1176"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_cs42448.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_cs42448.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm4_MIMXRT1176xxxxx">
+        <files mask="driver_cs42448_MIMXRT1176_cm4.cmake" hidden="true"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm7_MIMXRT1176xxxxx">
+        <files mask="driver_cs42448_MIMXRT1176_cm7.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
@@ -5796,7 +5928,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpspi.MIMXRT1176" name="lpspi" brief="LPSPI Driver" version="2.4.0" full_name="LPSPI Driver" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers">
+    <component id="platform.drivers.lpspi.MIMXRT1176" name="lpspi" brief="LPSPI Driver" version="2.4.3" full_name="LPSPI Driver" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers">
       <dependencies>
         <component_dependency value="platform.drivers.common.MIMXRT1176"/>
       </dependencies>
@@ -6150,6 +6282,20 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
+    <component id="driver.pf5020.MIMXRT1176" name="pf5020" brief="Driver pf5020" version="2.0.0" full_name="Driver pf5020" devices="MIMXRT1176xxxxx" user_visible="true" type="board_component" package_base_path="../components/pf5020" project_base_path="pmic_driver">
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_pf5020.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_pf5020.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm4_MIMXRT1176xxxxx">
+        <files mask="driver_pf5020_MIMXRT1176_cm4.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
     <component id="platform.drivers.pgmc.MIMXRT1176" name="pgmc" brief="PGMC Driver" version="2.1.1" full_name="PGMC Driver" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="driver" package_base_path="../devices/MIMXRT1176/drivers" project_base_path="drivers">
       <dependencies>
         <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -6204,6 +6350,26 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
+    <component id="driver.phy-device-rtl8201.MIMXRT1176" name="phy-device-rtl8201" brief="Driver phy-device-rtl8201" version="2.0.0" full_name="Driver phy-device-rtl8201" devices="MIMXRT1176xxxxx" user_visible="true" type="board_component" package_base_path="../components/phy/device/phyrtl8201" project_base_path="component/phy">
+      <dependencies>
+        <component_dependency value="driver.phy-common.MIMXRT1176"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_phyrtl8201.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_phyrtl8201.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm4_MIMXRT1176xxxxx">
+        <files mask="driver_phy-device-rtl8201_MIMXRT1176_cm4.cmake" hidden="true"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm7_MIMXRT1176xxxxx">
+        <files mask="driver_phy-device-rtl8201_MIMXRT1176_cm7.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
     <component id="driver.phy-device-rtl8211f.MIMXRT1176" name="phy-device-rtl8211f" brief="Driver phy-device-rtl8211f" version="2.0.0" full_name="Driver phy-device-rtl8211f" devices="MIMXRT1176xxxxx" user_visible="true" type="board_component" package_base_path="../components/phy/device/phyrtl8211f" project_base_path="component/phy">
       <dependencies>
         <component_dependency value="driver.phy-common.MIMXRT1176"/>
@@ -6244,7 +6410,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.pmu_1.MIMXRT1176" name="pmu" brief="PMU Driver" version="2.1.0" full_name="PMU Driver" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="driver" package_base_path="../devices/MIMXRT1176/drivers" project_base_path="drivers">
+    <component id="platform.drivers.pmu_1.MIMXRT1176" name="pmu" brief="PMU Driver" version="2.1.1" full_name="PMU Driver" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="driver" package_base_path="../devices/MIMXRT1176/drivers" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -6851,7 +7017,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="driver.wm8962.MIMXRT1176" name="wm8962" brief="Driver wm8962" version="2.0.1" full_name="Driver wm8962" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="software_component" package_base_path="../components/codec/wm8962" project_base_path="codec">
+    <component id="driver.wm8962.MIMXRT1176" name="wm8962" brief="Driver wm8962" version="2.0.3" full_name="Driver wm8962" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="software_component" package_base_path="../components/codec/wm8962" project_base_path="codec">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -6863,6 +7029,12 @@ ${load}</script>
       </source>
       <source relative_path="./" type="src">
         <files mask="fsl_wm8962.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm4_MIMXRT1176xxxxx">
+        <files mask="driver_wm8962_MIMXRT1176_cm4.cmake" hidden="true"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm7_MIMXRT1176xxxxx">
+        <files mask="driver_wm8962_MIMXRT1176_cm7.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
@@ -7184,6 +7356,128 @@ ${load}</script>
       </include_paths>
     </component>
     <component id="wireless.wireless_common_template_file.evkmimxrt1170_cm7.MIMXRT1176" name="Wireless common config template file for evkmimxrt1170 cm7" brief="Wireless common config template file for evkmimxrt1170 cm7" version="1.0.0" full_name="Wireless common template file" devices="MIMXRT1176xxxxx" user_visible="false" type="middleware" package_base_path="../boards/evkmimxrt1170/wireless_config_template" project_base_path="boards">
+      <source relative_path="./" type="src">
+        <files mask="wifi_bt_config.c"/>
+        <files mask="sdmmc_config.c"/>
+      </source>
+      <source relative_path="./" type="c_include">
+        <files mask="wifi_bt_config.h"/>
+        <files mask="sdmmc_config.h"/>
+      </source>
+    </component>
+    <component id="project_template.evkbmimxrt1170.MIMXRT1176" name="evkbmimxrt1170" brief="Board_project_template evkbmimxrt1170" version="1.0.0" full_name="Board_project_template evkbmimxrt1170" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" category="Board Support/SDK Project Template" user_visible="true" type="project_template" package_base_path="../boards/evkbmimxrt1170/project_template" project_base_path="board">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.devices.MIMXRT1176_startup.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.common.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.clock.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.igpio.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.iomuxc.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.lpuart.MIMXRT1176"/>
+          <component_dependency value="component.lpuart_adapter.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.pmu_1.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.dcdc_soc.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.xip_board.evkbmimxrt1170.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.xip_device.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.nic301.MIMXRT1176"/>
+          <component_dependency value="platform.drivers.xmcd.evkbmimxrt1170.MIMXRT1176"/>
+          <any_of>
+            <all>
+              <component_dependency value="utility.debug_console.MIMXRT1176"/>
+              <component_dependency value="platform.utilities.assert.MIMXRT1176"/>
+              <component_dependency value="component.serial_manager.MIMXRT1176"/>
+            </all>
+            <all>
+              <component_dependency value="utility.debug_console_lite.MIMXRT1176"/>
+              <component_dependency value="platform.utilities.assert_lite.MIMXRT1176"/>
+            </all>
+          </any_of>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="board.h"/>
+        <files mask="clock_config.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="board.c"/>
+        <files mask="clock_config.c"/>
+      </source>
+      <source relative_path="cm7" project_relative_path="./" type="c_include" device_cores="cm7_MIMXRT1176xxxxx">
+        <files mask="pin_mux.h"/>
+      </source>
+      <source relative_path="cm7" project_relative_path="./" type="src" device_cores="cm7_MIMXRT1176xxxxx">
+        <files mask="pin_mux.c"/>
+      </source>
+      <source relative_path="cm4" project_relative_path="./" type="c_include" device_cores="cm4_MIMXRT1176xxxxx">
+        <files mask="pin_mux.h"/>
+      </source>
+      <source relative_path="cm4" project_relative_path="./" type="src" device_cores="cm4_MIMXRT1176xxxxx">
+        <files mask="pin_mux.c"/>
+      </source>
+      <source relative_path="project_template" project_relative_path="./" type="c_include">
+        <files mask="peripherals.h"/>
+        <files mask="dcd.h"/>
+      </source>
+      <source relative_path="project_template" project_relative_path="./" type="src">
+        <files mask="peripherals.c"/>
+        <files mask="dcd.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="cm7" project_relative_path="./" type="c_include" device_cores="cm7_MIMXRT1176xxxxx"/>
+        <include_path relative_path="cm4" project_relative_path="./" type="c_include" device_cores="cm4_MIMXRT1176xxxxx"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.xip_board.evkbmimxrt1170.MIMXRT1176" name="xip_board" brief="XIP Board Driver" version="2.0.1" full_name="XIP Board Driver" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="board_component" package_base_path="../boards/evkbmimxrt1170/xip" project_base_path="xip">
+      <defines>
+        <define name="XIP_EXTERNAL_FLASH" value="1"/>
+        <define name="XIP_BOOT_HEADER_ENABLE" value="1"/>
+      </defines>
+      <dependencies>
+        <component_dependency value="platform.drivers.common.MIMXRT1176"/>
+      </dependencies>
+      <source relative_path="./" type="src">
+        <files mask="evkbmimxrt1170_flexspi_nor_config.c"/>
+      </source>
+      <source relative_path="./" type="c_include">
+        <files mask="evkbmimxrt1170_flexspi_nor_config.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm4_MIMXRT1176xxxxx">
+        <files mask="driver_xip_board_evkbmimxrt1170_MIMXRT1176_cm4.cmake" hidden="true"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm7_MIMXRT1176xxxxx">
+        <files mask="driver_xip_board_evkbmimxrt1170_MIMXRT1176_cm7.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.xmcd.evkbmimxrt1170.MIMXRT1176" name="xmcd" brief="XMCD Driver" version="2.0.0" full_name="XMCD Driver" devices="MIMXRT1176xxxxx" device_cores="cm4_MIMXRT1176xxxxx cm7_MIMXRT1176xxxxx" slave_roles="M4SLAVE M7SLAVE" user_visible="true" type="board_component" package_base_path="../boards/evkbmimxrt1170/xmcd" project_base_path="board">
+      <defines>
+        <define name="XIP_BOOT_HEADER_DCD_ENABLE" value="0"/>
+        <define name="XIP_BOOT_HEADER_XMCD_ENABLE" value="1"/>
+      </defines>
+      <dependencies>
+        <component_dependency value="platform.drivers.common.MIMXRT1176"/>
+      </dependencies>
+      <source relative_path="./" type="src">
+        <files mask="xmcd.c"/>
+      </source>
+      <source relative_path="./" type="c_include">
+        <files mask="xmcd.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm4_MIMXRT1176xxxxx">
+        <files mask="driver_xmcd_evkbmimxrt1170_MIMXRT1176_cm4.cmake" hidden="true"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace" device_cores="cm7_MIMXRT1176xxxxx">
+        <files mask="driver_xmcd_evkbmimxrt1170_MIMXRT1176_cm7.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="wireless.wireless_common_template_file.evkbmimxrt1170_cm7.MIMXRT1176" name="Wireless common config template file for evkbmimxrt1170 cm7" brief="Wireless common config template file for evkbmimxrt1170 cm7" version="1.0.0" full_name="Wireless common template file" devices="MIMXRT1176xxxxx" user_visible="false" type="middleware" package_base_path="../boards/evkbmimxrt1170/wireless_config_template" project_base_path="boards">
       <source relative_path="./" type="src">
         <files mask="wifi_bt_config.c"/>
         <files mask="sdmmc_config.c"/>

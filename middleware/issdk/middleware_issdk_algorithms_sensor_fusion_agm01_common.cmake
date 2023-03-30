@@ -1,4 +1,4 @@
-#Description: Middleware issdk algorithms sensor_fusion_agm01 common; user_visible: True
+#Description: Middleware issdk algorithms sensor_fusion_agm01 common; user_visible: False
 include_guard(GLOBAL)
 message("middleware_issdk_algorithms_sensor_fusion_agm01_common component is included.")
 

@@ -127,3 +127,4 @@ if(${MCUX_DEVICE} STREQUAL "MIMXRT1015")
 endif()
 
 include(CMSIS_Driver_Include_SPI)
+include(driver_lpspi_edma)

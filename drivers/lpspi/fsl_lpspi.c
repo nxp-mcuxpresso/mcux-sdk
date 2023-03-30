@@ -38,6 +38,8 @@ typedef struct _lpspi_transfer_blocking_param
     bool isPcsContinuous;
     uint8_t bytesEachWrite;
     uint8_t bytesEachRead;
+    uint8_t *txData;
+    uint8_t *rxData;
     uint32_t rxRemainingByteCount;
 } lpspi_transfer_blocking_param_t;
 
@@ -921,12 +923,12 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
         /*Wait until TX FIFO is not full*/
 #if SPI_RETRY_TIMES
         uint32_t waitTimes = SPI_RETRY_TIMES;
-        while ((LPSPI_GetTxFifoCount(base) == LPSPI_GetRxFifoSize(base)) && (--waitTimes) != 0U))
+        while ((LPSPI_GetTxFifoCount(base) == LPSPI_GetRxFifoSize(base)) && ((--waitTimes) != 0U))
 #else
         while (LPSPI_GetTxFifoCount(base) == LPSPI_GetRxFifoSize(base))
 #endif
-            {
-            }
+        {
+        }
 #if SPI_RETRY_TIMES
         if (waitTimes == 0U)
         {
@@ -935,7 +937,7 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
 #endif
 
         /* To prevent rxfifo overflow, ensure transmitting and receiving are executed in parallel */
-        if (((NULL == (transfer->rxData)) ||
+        if (((NULL == (stateParams->rxData)) ||
              ((stateParams->rxRemainingByteCount) - txRemainingByteCount) < rxFifoMaxBytes))
         {
             if (stateParams->isTxMask)
@@ -955,10 +957,11 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
             }
             else
             {
-                if ((transfer->txData) != NULL)
+                if ((stateParams->txData) != NULL)
                 {
-                    wordToSend = LPSPI_CombineWriteData((transfer->txData), (stateParams->bytesEachWrite), isByteSwap);
-                    (transfer->txData) += (stateParams->bytesEachWrite);
+                    wordToSend =
+                        LPSPI_CombineWriteData((stateParams->txData), (stateParams->bytesEachWrite), isByteSwap);
+                    (stateParams->txData) += (stateParams->bytesEachWrite);
                 }
                 /* Otherwise push data to tx FIFO to initiate transfer */
                 LPSPI_WriteData(base, wordToSend);
@@ -967,7 +970,7 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
         }
 
         /* Check whether there is RX data in RX FIFO . Read out the RX data so that the RX FIFO would not overrun. */
-        if (((transfer->rxData) != NULL) && ((stateParams->rxRemainingByteCount) != 0U))
+        if (((stateParams->rxData) != NULL) && ((stateParams->rxRemainingByteCount) != 0U))
         {
             /* To ensure parallel execution in 3-wire mode, after writting 1 to TXMSK to generate clock of
                bytesPerFrame's data wait until bytesPerFrame's data is received. */
@@ -987,8 +990,8 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
                     (stateParams->bytesEachRead) = (uint8_t)(stateParams->rxRemainingByteCount);
                 }
 
-                LPSPI_SeparateReadData((transfer->rxData), readData, (stateParams->bytesEachRead), isByteSwap);
-                (transfer->rxData) += (stateParams->bytesEachRead);
+                LPSPI_SeparateReadData((stateParams->rxData), readData, (stateParams->bytesEachRead), isByteSwap);
+                (stateParams->rxData) += (stateParams->bytesEachRead);
 
                 (stateParams->rxRemainingByteCount) -= (stateParams->bytesEachRead);
             }
@@ -1045,8 +1048,8 @@ static bool LPSPI_MasterTransferReadDataInFifo(LPSPI_Type *base,
                 (stateParams->bytesEachRead) = (uint8_t)(stateParams->rxRemainingByteCount);
             }
 
-            LPSPI_SeparateReadData((transfer->rxData), readData, (stateParams->bytesEachRead), isByteSwap);
-            (transfer->rxData) += (stateParams->bytesEachRead);
+            LPSPI_SeparateReadData((stateParams->rxData), readData, (stateParams->bytesEachRead), isByteSwap);
+            (stateParams->rxData) += (stateParams->bytesEachRead);
 
             (stateParams->rxRemainingByteCount) -= (stateParams->bytesEachRead);
         }
@@ -1057,6 +1060,7 @@ static bool LPSPI_MasterTransferReadDataInFifo(LPSPI_Type *base,
         }
 #endif
     }
+
     return true;
 }
 
@@ -1120,6 +1124,8 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
     lpspi_transfer_blocking_param_t stateParams;
     (void)memset(&stateParams, 0, sizeof(stateParams));
 
+    stateParams.txData               = transfer->txData;
+    stateParams.rxData               = transfer->rxData;
     stateParams.isTxMask             = false;
     stateParams.rxRemainingByteCount = transfer->dataSize;
     /*The TX and RX FIFO sizes are always the same*/
@@ -1130,7 +1136,7 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
 
     /* Mask tx data in half duplex mode */
     if (((temp == LPSPI_CFGR1_PINCFG(kLPSPI_SdiInSdiOut)) || (temp == LPSPI_CFGR1_PINCFG(kLPSPI_SdoInSdoOut))) &&
-        (transfer->txData == NULL))
+        (stateParams.txData == NULL))
     {
         stateParams.isTxMask = true;
     }
@@ -1151,7 +1157,7 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
 
     /* PCS should be configured separately from the other bits, otherwise it will not take effect. */
     base->TCR |= LPSPI_TCR_CONT(stateParams.isPcsContinuous) | LPSPI_TCR_CONTC(stateParams.isPcsContinuous) |
-                 LPSPI_TCR_RXMSK(NULL == transfer->rxData);
+                 LPSPI_TCR_RXMSK(NULL == stateParams.rxData);
 
     /*TCR is also shared the FIFO, so wait for TCR written.*/
     if (!LPSPI_TxFifoReady(base))
@@ -1187,7 +1193,7 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
     }
 
     /*Read out the RX data in FIFO*/
-    if (transfer->rxData != NULL)
+    if (stateParams.rxData != NULL)
     {
         if (false == LPSPI_MasterTransferReadDataInFifo(base, transfer, &stateParams))
         {
@@ -1196,7 +1202,6 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
     }
     else
     {
-        /* If no RX buffer, then transfer is not complete until transfer complete flag sets */
         if (false == LPSPI_MasterTransferReadDataInFifoNoBuf(base, &stateParams))
         {
             return kStatus_LPSPI_Timeout;
@@ -1780,7 +1785,7 @@ status_t LPSPI_SlaveTransferNonBlocking(LPSPI_Type *base, lpspi_slave_handle_t *
     if (handle->fifoSize > 1U)
     {
         txWatermark         = 1U;
-        handle->rxWatermark = handle->fifoSize - 2U;
+        handle->rxWatermark = handle->fifoSize / 2U;
     }
     else
     {
@@ -2092,7 +2097,7 @@ void LPSPI_SlaveTransferHandleIRQ(LPSPI_Type *base, lpspi_slave_handle_t *handle
     {
         LPSPI_ClearStatusFlags(base, (uint32_t)kLPSPI_ReceiveErrorFlag);
         /* Change state to error and clear flag */
-        if (handle->txData != NULL)
+        if (handle->rxData != NULL)
         {
             handle->state = (uint8_t)kLPSPI_Error;
         }

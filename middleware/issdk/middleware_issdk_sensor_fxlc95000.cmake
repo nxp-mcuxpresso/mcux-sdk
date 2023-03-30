@@ -1,4 +1,4 @@
-#Description: Middleware issdk sensor fxlc95000; user_visible: True
+#Description: Middleware issdk sensor fxlc95000; user_visible: False
 include_guard(GLOBAL)
 message("middleware_issdk_sensor_fxlc95000 component is included.")
 

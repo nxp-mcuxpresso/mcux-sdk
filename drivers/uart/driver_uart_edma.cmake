@@ -64,3 +64,4 @@ if(${MCUX_DEVICE} STREQUAL "MK26F18")
 endif()
 
 include(driver_uart)
+include(driver_edma_MK22F51212)

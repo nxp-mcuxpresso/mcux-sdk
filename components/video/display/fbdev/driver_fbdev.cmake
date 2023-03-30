@@ -11,18 +11,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
-if(${MCUX_DEVICE} STREQUAL "MIMXRT1166_cm4")
-    include(middleware_freertos-kernel_MIMXRT1166_cm4)
-endif()
-if(${MCUX_DEVICE} STREQUAL "MIMXRT1166_cm7")
-    include(middleware_freertos-kernel_MIMXRT1166_cm7)
-endif()
-if(${MCUX_DEVICE} STREQUAL "MIMXRT1052")
-    include(middleware_freertos-kernel_MIMXRT1052)
-endif()
-if(${MCUX_DEVICE} STREQUAL "MIMXRT1064")
-    include(middleware_freertos-kernel_MIMXRT1064)
-endif()
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1062")
     include(middleware_freertos-kernel_MIMXRT1062)
 endif()

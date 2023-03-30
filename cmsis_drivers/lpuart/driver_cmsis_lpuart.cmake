@@ -163,3 +163,4 @@ if(${MCUX_DEVICE} STREQUAL "MK26F18")
 endif()
 
 include(CMSIS_Driver_Include_USART)
+include(driver_lpuart_edma)

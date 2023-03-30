@@ -99,3 +99,4 @@ if(${MCUX_DEVICE} STREQUAL "MIMX8DX1")
     include(driver_common)
 endif()
 
+include(driver_soc_mipi_csi2rx)

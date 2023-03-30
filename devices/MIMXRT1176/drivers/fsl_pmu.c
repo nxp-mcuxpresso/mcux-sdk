@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 NXP
+ * Copyright 2020-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -40,6 +40,22 @@
 #define PMU_BIAS_CTRL_WB_CFG_1P8_OSCILLATOR_FREQ(x)                                    \
     (((uint32_t)(((uint32_t)(x)) << PMU_BIAS_CTRL_WB_CFG_1P8_OSCILLATOR_FREQ_SHIFT)) & \
      PMU_BIAS_CTRL_WB_CFG_1P8_OSCILLATOR_FREQ_MASK)
+
+#define PMU_BIAS_CTRL_WB_CFG_1P8_PULL_DOWN_OPTION_MASK  (0x1000U)
+#define PMU_BIAS_CTRL_WB_CFG_1P8_PULL_DOWN_OPTION_SHIFT 12U
+#define PMU_BIAS_CTRL_WB_CFG_1P8_PULL_DOWN_OPTION(x)                                    \
+    (((uint32_t)(((uint32_t)(x)) << PMU_BIAS_CTRL_WB_CFG_1P8_PULL_DOWN_OPTION_SHIFT)) & \
+     PMU_BIAS_CTRL_WB_CFG_1P8_PULL_DOWN_OPTION_MASK)
+
+#define PMU_BIAS_CTRL_WB_PW_LVL_1P8_MASK  (0xF000000U)
+#define PMU_BIAS_CTRL_WB_PW_LVL_1P8_SHIFT 24U
+#define PMU_BIAS_CTRL_WB_PW_LVL_1P8(x) \
+    (((uint32_t)(((uint32_t)(x)) << PMU_BIAS_CTRL_WB_PW_LVL_1P8_SHIFT)) & PMU_BIAS_CTRL_WB_PW_LVL_1P8_MASK)
+
+#define PMU_BIAS_CTRL_WB_NW_LVL_1P8_MASK  (0xF0000000U)
+#define PMU_BIAS_CTRL_WB_NW_LVL_1P8_SHIFT 28U
+#define PMU_BIAS_CTRL_WB_NW_LVL_1P8(x) \
+    (((uint32_t)(((uint32_t)(x)) << PMU_BIAS_CTRL_WB_NW_LVL_1P8_SHIFT)) & PMU_BIAS_CTRL_WB_NW_LVL_1P8_MASK)
 
 #define PMU_GET_ANADIG_PMU_MEMBER_ADDRESS(member) \
     ((uint32_t)((ANADIG_PMU_BASE) + (uint32_t)offsetof(ANADIG_PMU_Type, member)))
@@ -831,8 +847,11 @@ void PMU_EnableBodyBias(ANADIG_PMU_Type *base, pmu_body_bias_name_t name, bool e
             case kPMU_FBB_CM7:
             {
                 tmp32 = base->PMU_BIAS_CTRL;
-                tmp32 &= ~PMU_BIAS_CTRL_WB_CFG_1P8_WELL_SELECT_MASK;
-                tmp32 |= PMU_BIAS_CTRL_WB_CFG_1P8_VOLTAGE_THRESHOLD_MASK;
+                tmp32 &= ~(PMU_BIAS_CTRL_WB_NW_LVL_1P8_MASK | PMU_BIAS_CTRL_WB_PW_LVL_1P8_MASK |
+                           ANADIG_PMU_PMU_BIAS_CTRL_WB_CFG_1P8_MASK);
+                tmp32 |= PMU_BIAS_CTRL_WB_NW_LVL_1P8(1U) | PMU_BIAS_CTRL_WB_PW_LVL_1P8(1U) |
+                         PMU_BIAS_CTRL_WB_CFG_1P8_PULL_DOWN_OPTION_MASK |
+                         PMU_BIAS_CTRL_WB_CFG_1P8_VOLTAGE_THRESHOLD_MASK;
                 base->PMU_BIAS_CTRL = tmp32;
 
                 tmp32 = base->PMU_BIAS_CTRL2;

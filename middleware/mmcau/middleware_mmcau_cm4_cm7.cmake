@@ -101,3 +101,4 @@ if(${MCUX_DEVICE} STREQUAL "MK27FA15")
     include(middleware_mmcau_common_files)
 endif()
 
+include(driver_clock)

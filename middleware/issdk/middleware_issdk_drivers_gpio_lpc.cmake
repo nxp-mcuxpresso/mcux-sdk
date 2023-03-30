@@ -1,4 +1,4 @@
-#Description: Middleware issdk drivers gpio_lpc; user_visible: True
+#Description: Middleware issdk drivers gpio_lpc; user_visible: False
 include_guard(GLOBAL)
 message("middleware_issdk_drivers_gpio_lpc component is included.")
 

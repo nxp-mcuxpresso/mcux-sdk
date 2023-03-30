@@ -70,3 +70,4 @@ if(${MCUX_DEVICE} STREQUAL "MK27FA15")
 endif()
 
 include(driver_i2c)
+include(driver_edma_MK22F51212)

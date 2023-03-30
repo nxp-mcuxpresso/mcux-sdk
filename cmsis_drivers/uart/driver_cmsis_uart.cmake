@@ -100,3 +100,4 @@ if(${MCUX_DEVICE} STREQUAL "MKE04Z4")
 endif()
 
 include(CMSIS_Driver_Include_USART)
+include(driver_uart_edma)

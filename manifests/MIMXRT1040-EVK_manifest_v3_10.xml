@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1040-EVK_manifest_v3_10" name="SDKVersion 2.13.0 SuperSet" brief="This is SDK version 2.13.0 manifest file." format_version="3.10" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.10.xsd">
-  <!--Timestamp (UTC): 2023-01-10 16:33:31.624966-->
-  <!--This manifest is generated based on sdk repo commit: 11a5f6af5190bfe018a89b4d02c239713dc4cfa6-->
+  <!--Timestamp (UTC): 2023-03-27 10:46:02.613523-->
+  <!--This manifest is generated based on sdk repo commit: 7a3cf97dd3582e3ee8a98ede814ff1f2a45ea519-->
   <defines>
     <define name="CPU_$|package|" value=""/>
     <define name="CPU_$|package|_$|core|" value=""/>
@@ -14,7 +14,7 @@
     <definition extID="middleware.maestro_framework.MIMXRT1042"/>
     <definition extID="middleware.wifi.MIMXRT1042"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2130" name="MCUXpressoSDK2130" version="2.13.0"/>
+  <ksdk id="MCUXpressoSDK2131" name="MCUXpressoSDK2131" version="2.13.1"/>
   <manifest_includes>
     <manifest_include path="../../rtos/azure-rtos/manifests/middleware_microsoft_azure_rtos_azure_iot_MIMXRT1042_manifest_v3_10.xml"/>
     <manifest_include path="../../rtos/azure-rtos/manifests/middleware_microsoft_azure_rtos_fx_MIMXRT1042_manifest_v3_10.xml"/>
@@ -23,7 +23,6 @@
     <manifest_include path="../../rtos/azure-rtos/manifests/middleware_microsoft_azure_rtos_nxd_MIMXRT1042_manifest_v3_10.xml"/>
     <manifest_include path="../../rtos/azure-rtos/manifests/middleware_microsoft_azure_rtos_tx_MIMXRT1042_manifest_v3_10.xml"/>
     <manifest_include path="../../rtos/azure-rtos/manifests/middleware_microsoft_azure_rtos_ux_MIMXRT1042_manifest_v3_10.xml"/>
-    <manifest_include path="../../middleware/EAP/manifests/middleware_nxp_essential_audio_processing_MIMXRT1042_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/wifi_nxp/manifests/middleware_nxp_wifi_MIMXRT1042_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/eiq/manifests/middleware_nxp_eiq_machine_learning_MIMXRT1042_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/fatfs/manifests/middleware_elm_chan_fatfs_MIMXRT1042_manifest_v3_10.xml"/>
@@ -36,14 +35,13 @@
     <manifest_include path="../../middleware/mcuboot_opensource/manifests/middleware_mcuboot_opensource_MIMXRT1042_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/sdmmc/manifests/middleware_nxp_sd_mmc_sdio_card_MIMXRT1042_manifest_v3_10.xml"/>
     <manifest_include path="../../middleware/usb/manifests/middleware_nxp_usb_MIMXRT1042_manifest_v3_10.xml"/>
-    <manifest_include path="../../middleware/vit/manifests/middleware_nxp_voice_intelligent_technology_MIMXRT1042_manifest_v3_10.xml"/>
     <manifest_include path="../../examples/evkmimxrt1040/evkmimxrt1040_example_manifest_v3_10.xml"/>
   </manifest_includes>
   <compilers>
     <compiler id="compiler_gcc" name="gcc" type="gcc"/>
   </compilers>
   <toolchainSettings>
-    <toolchainSetting id="com.nxp.mcuxpresso" name="mcuxpresso" version="11.6.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" toolchain="mcuxpresso">
+    <toolchainSetting id="com.nxp.mcuxpresso" name="mcuxpresso" version="11.7.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" toolchain="mcuxpresso">
       <option id="gnu.cpp.compiler.option.optimization.flags" type="string" user_name="">
         <value>-fno-common</value>
       </option>
@@ -66,7 +64,7 @@
   </toolchainSettings>
   <toolchains>
     <toolchain id="armgcc" name="GCC_ARM_Embedded_10-2021.10" version="10.3.1" full_name="GCC ARM Embedded 10-2021.10" compiler="compiler_gcc" type="armgcc" vendor="GCC ARM Embedded" vendor_url="http://launchpad.net/gcc-arm-embedded"/>
-    <toolchain id="mcuxpresso" name="MCUXpresso_IDE" version="11.6.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" type="mcuxpresso" vendor="NXP Semiconductors" vendor_url="http://www.nxp.com">
+    <toolchain id="mcuxpresso" name="MCUXpresso_IDE" version="11.7.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" type="mcuxpresso" vendor="NXP Semiconductors" vendor_url="http://www.nxp.com">
       <debug>
         <debug_configuration id="com.crt.advproject.config.exe.release" name="Release Configuration" probe="LinkServer">
           <scripts>
@@ -2070,6 +2068,9 @@ ${load}</script>
       <source relative_path="port" type="src">
         <files mask="fsl_codec_adapter.c"/>
       </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="component_codec_adapters_MIMXRT1042.cmake" hidden="true"/>
+      </source>
       <include_paths>
         <include_path relative_path="./port" type="c_include"/>
       </include_paths>
@@ -2129,6 +2130,9 @@ ${load}</script>
       </source>
       <source relative_path="port" type="c_include">
         <files mask="fsl_codec_adapter.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="component_cs42448_adapter_MIMXRT1042.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./port/cs42448" type="c_include"/>
@@ -26126,7 +26130,7 @@ ${load}</script>
         <component_dependency value="middleware.maestro_framework.MIMXRT1042"/>
       </dependencies>
       <source relative_path="./" type="doc">
-        <files mask="Maestro_1.3_Release_Notes.pdf"/>
+        <files mask="Maestro_1.5_Release_Notes.pdf"/>
       </source>
     </component>
     <component id="docs.wifi.MIMXRT1042" name="doc_wifi" brief="Wi-Fi documentation" version="1.0.0" full_name="Wi-Fi documentation" devices="MIMXRT1042xxxxB" device_cores="core0_MIMXRT1042xxxxB" user_visible="true" type="documentation" package_base_path="../docs/wireless/Wi-Fi" project_base_path="wireless/Wi-Fi">
@@ -27162,6 +27166,9 @@ ${load}</script>
       <source relative_path="./" type="src">
         <files mask="fsl_cs42448.c"/>
       </source>
+      <source toolchain="armgcc" relative_path="." type="workspace">
+        <files mask="driver_cs42448_MIMXRT1042.cmake" hidden="true"/>
+      </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
@@ -27867,7 +27874,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpspi.MIMXRT1042" name="lpspi" brief="LPSPI Driver" version="2.4.0" full_name="LPSPI Driver" devices="MIMXRT1042xxxxB" device_cores="core0_MIMXRT1042xxxxB" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers">
+    <component id="platform.drivers.lpspi.MIMXRT1042" name="lpspi" brief="LPSPI Driver" version="2.4.3" full_name="LPSPI Driver" devices="MIMXRT1042xxxxB" device_cores="core0_MIMXRT1042xxxxB" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers">
       <dependencies>
         <component_dependency value="platform.drivers.common.MIMXRT1042"/>
       </dependencies>

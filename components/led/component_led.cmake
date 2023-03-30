@@ -69,4 +69,5 @@ if(${MCUX_DEVICE} STREQUAL "MK24F12")
     include(component_gpio_adapter)
 endif()
 
+include(component_gpio_adapter)
 include(component_timer_manager)

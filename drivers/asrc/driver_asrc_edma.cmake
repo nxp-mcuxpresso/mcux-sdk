@@ -36,4 +36,5 @@ if(${MCUX_DEVICE} STREQUAL "MIMXRT1165_cm7")
     include(driver_edma_MIMXRT1166_cm7)
 endif()
 
+include(driver_edma_MIMXRT1176_cm7)
 include(driver_asrc)
