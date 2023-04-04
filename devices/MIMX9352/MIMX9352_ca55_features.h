@@ -277,12 +277,14 @@
 /* @brief Register SCONFIG has HDROK bitfield. */
 #define FSL_FEATURE_I3C_HAS_HDROK (1)
 
-/* XCACHE module features */
+/* CACHE module features */
 
-/* @brief Cache Line size in byte. */
-#define FSL_FEATURE_XCACHE_LINESIZE_BYTE (16)
-/* @brief Cache doesn't support write buffer. */
-#define FSL_FEATURE_XCACHE_HAS_NO_WRITE_BUF (1)
+/* @brief L1 ICACHE line size in byte. */
+#define FSL_FEATURE_L1ICACHE_LINESIZE_BYTE (64)
+/* @brief L1 DCACHE line size in byte. */
+#define FSL_FEATURE_L1DCACHE_LINESIZE_BYTE (64)
+/* @brief Has NONCACHEABLE section. */
+#define FSL_FEATURE_HAS_NO_NONCACHEABLE_SECTION (0)
 
 /* LPI2C module features */
 
