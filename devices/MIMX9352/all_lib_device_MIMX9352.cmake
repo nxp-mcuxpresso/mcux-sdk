@@ -6,9 +6,13 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpuart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyrtl8211f
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcan
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lptmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rgpio
@@ -31,6 +35,9 @@ list(APPEND CMAKE_MODULE_PATH
 # Copy the cmake components into projects
 #    include(driver_cmsis_lpi2c)
 #    include(middleware_freertos-kernel_heap_4)
+#    include(driver_enet)
+#    include(driver_mdio-enet)
+#    include(driver_phy-device-rtl8211f)
 #    include(driver_lpuart_dma)
 #    include(driver_lpuart_edma)
 #    include(driver_flexcan)
