@@ -294,6 +294,9 @@
 /* @brief Cache doesn't support write buffer. */
 #define FSL_FEATURE_XCACHE_HAS_NO_WRITE_BUF (1)
 
+/* @brief L1 ICACHE line size in byte. */
+#define FSL_FEATURE_L1ICACHE_LINESIZE_BYTE (16)
+
 /* LPI2C module features */
 
 /* @brief Has separate DMA RX and TX requests. */
