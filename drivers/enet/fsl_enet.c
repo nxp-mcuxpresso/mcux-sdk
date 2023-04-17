@@ -2275,7 +2275,7 @@ void ENET_ReleaseRxBuffer(ENET_Type *base, enet_handle_t *handle, void *buffer, 
     do
     {
         /* Find the BD for releasing, do nothing if it's not owned by application. */
-        if (buffer == (void *)(uint8_t *)ownBuffDescrip->buffer)
+        if (buffer == (void *)(uintptr_t)ownBuffDescrip->buffer)
         {
             if (0U != (ownBuffDescrip->control & ENET_BUFFDESCRIPTOR_RX_SOFTOWNER1_MASK))
             {
@@ -2303,7 +2303,7 @@ void ENET_ReleaseRxBuffer(ENET_Type *base, enet_handle_t *handle, void *buffer, 
             }
             if (0U != (blockBuffDescrip->control & ENET_BUFFDESCRIPTOR_RX_WRAP_MASK))
             {
-                blockBuffDescrip = (enet_rx_bd_struct_t *)(uint32_t)rxBdRing->rxBdBase;
+                blockBuffDescrip = (enet_rx_bd_struct_t *)rxBdRing->rxBdBase;
             }
             else
             {
@@ -2453,7 +2453,7 @@ status_t ENET_GetRxFrame(ENET_Type *base, enet_handle_t *handle, enet_rx_frame_s
             if (0U != (curBuffDescrip->control & ENET_BUFFDESCRIPTOR_RX_LAST_MASK))
             {
                 /* The last buffer descriptor stores the status of rhis received frame. */
-                result = ENET_GetRxFrameErr((enet_rx_bd_struct_t *)(uint32_t)curBuffDescrip, &rxFrame->rxFrameError);
+                result = ENET_GetRxFrameErr((enet_rx_bd_struct_t *)curBuffDescrip, &rxFrame->rxFrameError);
                 break;
             }
 
