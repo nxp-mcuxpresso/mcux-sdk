@@ -12,6 +12,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cache/xcache
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcan
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lptmr
@@ -33,6 +34,7 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(driver_cache_xcache)
 #    include(driver_cmsis_lpi2c)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_enet)
