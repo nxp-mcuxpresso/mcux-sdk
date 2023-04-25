@@ -234,6 +234,15 @@ if(${MCUX_DEVICE} STREQUAL "MIMX8MM1")
 
 endif()
 
+if(${MCUX_DEVICE} STREQUAL "MIMX8MM6")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMX8MM6
+    )
+
+    include(all_lib_device_MIMX8MM6)
+
+endif()
+
 if(${MCUX_DEVICE} STREQUAL "MIMX8MM6_ca53")
     list(APPEND CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/devices/MIMX8MM6
