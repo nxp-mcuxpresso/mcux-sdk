@@ -16,6 +16,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/enet_qos
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcan
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lptmr
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tpm
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpi2c
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rgpio
@@ -46,6 +47,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_enet)
 #    include(driver_flexcan)
 #    include(driver_lptmr)
+#    include(driver_tpm)
 #    include(driver_rgpio)
 #    include(driver_lpuart)
 #    include(driver_mdio-enet)
