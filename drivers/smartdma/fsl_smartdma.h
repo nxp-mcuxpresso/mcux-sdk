@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 NXP
+ * Copyright 2019-2023 NXP
  * All rights reserved.
  *
  *
@@ -67,7 +67,7 @@ enum _smartdma_flexio_mculcd_api
     kSMARTDMA_MIPI_RGB565_DMA2D,      /*!< Send RGB565 data to MIPI DSI, use parameter smartdma_dsi_2d_param_t. */
     kSMARTDMA_MIPI_RGB888_DMA,        /*!< Send RGB888 data to MIPI DSI, use parameter smartdma_dsi_param_t. */
     kSMARTDMA_MIPI_RGB888_DMA2D,      /*!< Send RGB565 data to MIPI DSI, use parameter smartdma_dsi_2d_param_t. */
-    kSMARTDMA_MIPI_XRGB2RGB_DMA,      /*!< Send XRGB8888 data to MIPI DSI, use parameter smartdma_param_t */
+    kSMARTDMA_MIPI_XRGB2RGB_DMA,      /*!< Send XRGB8888 data to MIPI DSI, use parameter smartdma_dsi_param_t */
     kSMARTDMA_MIPI_XRGB2RGB_DMA2D,    /*!< Send XRGB8888 data to MIPI DSI, use parameter smartdma_dsi_2d_param_t. */
     kSMARTDMA_MIPI_RGB565_R180_DMA,   /*!< Send RGB565 data to MIPI DSI, Rotate 180, use parameter smartdma_dsi_param_t.
                                        */
@@ -75,8 +75,10 @@ enum _smartdma_flexio_mculcd_api
                                        */
     kSMARTDMA_MIPI_XRGB2RGB_R180_DMA, /*!< Send XRGB8888 data to MIPI DSI, Rotate 180, use parameter
                                          smartdma_dsi_param_t */
-
-    kSMARTDMA_FlexIO_DMA_ONELANE, /*!< FlexIO DMA for one SHIFTBUF, Write Data to SHIFTBUF[OFFSET] */
+    kSMARTDMA_MIPI_RGB5652RGB888_DMA, /*!< Send RGB565 data to MIPI DSI, use parameter smartdma_dsi_param_t. */
+    kSMARTDMA_MIPI_RGB888_CHECKER_BOARD_DMA, /*!< Send RGB888 data to MIPI DSI with checker board pattern, use parameter
+                                                smartdma_dsi_checkerboard_param_t. */
+    kSMARTDMA_FlexIO_DMA_ONELANE,            /*!< FlexIO DMA for one SHIFTBUF, Write Data to SHIFTBUF[OFFSET] */
 };
 
 /*!
@@ -125,7 +127,11 @@ typedef struct _smartdma_dsi_param
     uint32_t disablePixelByteSwap;
 } smartdma_dsi_param_t;
 
-typedef struct _smartdma_dsi_2d_param_t
+/*!
+ * @brief Parameter for kSMARTDMA_MIPI_RGB565_DMA2D, kSMARTDMA_MIPI_RGB888_DMA2D
+ * and kSMARTDMA_MIPI_XRGB2RGB_DMA2D.
+ */
+typedef struct _smartdma_dsi_2d_param
 {
     /*! Pointer to the buffer to send. */
     const uint8_t *p_buffer;
@@ -150,6 +156,42 @@ typedef struct _smartdma_dsi_2d_param_t
      */
     uint32_t disablePixelByteSwap;
 } smartdma_dsi_2d_param_t;
+
+/*!
+ * @brief Parameter for kSMARTDMA_MIPI_RGB888_CHECKER_BOARD_DMA
+ */
+typedef struct _smartdma_dsi_checkerboard_param
+{
+    /*! Pointer to the buffer to send, pixel format is ARGB8888. */
+    const uint8_t *p_buffer;
+    uint32_t height; /*! Height resolution in pixel. */
+    uint32_t width; /*! Width resolution in pixel. */
+    /*! Cube block type.
+     * cbType=1 : 1/2 pixel mask cases
+     * cbType=2 : 1/4 pixel mask cases
+     */
+    uint32_t cbType;
+    /*! which pixel is turned off in each type
+     *  cbType=2: indexOff= 1,2,3,4
+     *  cbType=1: indexOff= 0,1
+     */
+    uint32_t indexOff;
+    /*! Stack used by SMARTDMA. */
+    uint32_t *smartdma_stack;
+    /*!
+     * If set to 1, the pixels are filled to MIPI DSI FIFO directly.
+     * If set to 0, the pixel bytes are swapped then filled to
+     * MIPI DSI FIFO. For example, when set to 0 and frame buffer pixel
+     * for example
+     * format is RGB888:
+     * LSB                                           MSB
+     * B0 B1 B2 B3 B4 B5 B6 B7 | G0 G1 G2 G3 G4 G5 G6 G7 | R0 R1 R2 R3 R4 R5 R6 R7
+     * Then the pixel filled to DSI FIFO is:
+     * LSB                                           MSB
+     * R0 R1 R2 R3 R4 R5 R6 R7 | G0 G1 G2 G3 G4 G5 G6 G7 | B0 B1 B2 B3 B4 B5 B6 B7
+     */
+    uint32_t disablePixelByteSwap;
+} smartdma_dsi_checkerboard_param_t;
 
 /*!
  * @brief Parameter for RGB565To888
