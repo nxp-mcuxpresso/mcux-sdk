@@ -678,7 +678,7 @@ static inline void LPI2C_MasterEnableDMA(LPI2C_Type *base, bool enableTx, bool e
  */
 static inline uint32_t LPI2C_MasterGetTxFifoAddress(LPI2C_Type *base)
 {
-    return (uint32_t)&base->MTDR;
+    return (uint32_t)(uintptr_t)&base->MTDR;
 }
 
 /*!
@@ -689,7 +689,7 @@ static inline uint32_t LPI2C_MasterGetTxFifoAddress(LPI2C_Type *base)
  */
 static inline uint32_t LPI2C_MasterGetRxFifoAddress(LPI2C_Type *base)
 {
-    return (uint32_t)&base->MRDR;
+    return (uint32_t)(uintptr_t)&base->MRDR;
 }
 
 /*@}*/
