@@ -863,7 +863,7 @@ void EDMA_InstallTCDMemory(edma_handle_t *handle, edma_tcd_t *tcdPool, uint32_t 
     assert(((uint32_t)tcdPool & 0x1FU) == 0U);
 
     /* Initialize tcd queue attibute. */
-    handle->header  = 0;
+    handle->header  = 1;
     handle->tail    = 0;
     handle->tcdUsed = 0;
     handle->tcdSize = (int8_t)tcdSize;
@@ -924,9 +924,9 @@ void EDMA_PrepareTransferConfig(edma_transfer_config_t *config,
     assert(srcAddr != NULL);
     assert(destAddr != NULL);
     assert((srcWidth == 1U) || (srcWidth == 2U) || (srcWidth == 4U) || (srcWidth == 8U) || (srcWidth == 16U) ||
-           (srcWidth == 32U));
+           (srcWidth == 32U) || srcWidth == 64U);
     assert((destWidth == 1U) || (destWidth == 2U) || (destWidth == 4U) || (destWidth == 8U) || (destWidth == 16U) ||
-           (destWidth == 32U));
+           (destWidth == 32U) || (destWidth == 64U));
     assert(transferBytes % bytesEachRequest == 0U);
     assert(((uint32_t)(uint32_t *)srcAddr % srcWidth) == 0U);
     assert(((uint32_t)(uint32_t *)destAddr % destWidth) == 0U);
@@ -1338,6 +1338,14 @@ void EDMA_AbortTransfer(edma_handle_t *handle)
     handle->base->CH[handle->channel].TCD_CSR = 0;
     /* Cancel all next TCD transfer. */
     handle->base->CH[handle->channel].TCD_DLAST_SGA = 0;
+
+    /* Handle the tcd */
+    if (handle->tcdPool != NULL)
+    {
+        handle->header  = 1;
+        handle->tail    = 0;
+        handle->tcdUsed = 0;
+    }
 }
 
 /*!
@@ -1415,6 +1423,15 @@ void EDMA_HandleIRQ(edma_handle_t *handle)
             if (tcds_done < 0)
             {
                 tcds_done += handle->tcdSize;
+            }
+            /*
+             * While code run to here, it means a TCD transfer Done and a new TCD has loaded to the hardware
+             * so clear DONE here to allow submit scatter gather transfer request in the callback to avoid TCD
+             * overwritten.
+             */
+            if (transfer_done)
+            {
+                handle->base->CH[handle->channel].CH_CSR |= DMA_CH_CSR_DONE_MASK;
             }
         }
         /* Advance header to the point beyond the last finished TCD block. */
