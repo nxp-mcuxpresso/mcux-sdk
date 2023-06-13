@@ -323,7 +323,7 @@ static flexcan_isr_t s_flexcanIsr;
 static void flexcan_memset(void *s, uint32_t c, size_t n)
 {
     size_t m;
-    uint32_t *ptr = s;
+    volatile uint32_t *ptr = s;
 
     m = n / sizeof(*ptr);
 
