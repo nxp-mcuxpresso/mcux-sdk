@@ -1049,6 +1049,10 @@ void EDMA_PrepareTransfer(edma_transfer_config_t *config,
             destOffset = (int16_t)destWidth;
             srcOffset  = 0;
             break;
+        case kEDMA_PeripheralToPeripheral:
+            destOffset = 0;
+            srcOffset  = 0;
+            break;
         default:
             /* All the cases have been listed above, the default clause should not be reached. */
             assert(false);

@@ -140,6 +140,7 @@ typedef enum _edma_transfer_type
     kEDMA_MemoryToMemory = 0x0U, /*!< Transfer from memory to memory */
     kEDMA_PeripheralToMemory,    /*!< Transfer from peripheral to memory */
     kEDMA_MemoryToPeripheral,    /*!< Transfer from memory to peripheral */
+    kEDMA_PeripheralToPeripheral, /*!< Transfer from Peripheral to peripheral */
 } edma_transfer_type_t;
 
 /*! @brief eDMA transfer status, _edma_transfer_status*/
