@@ -819,7 +819,7 @@ status_t WM8962_WriteReg(wm8962_handle_t *handle, uint16_t reg, uint16_t val)
 {
     uint16_t buff = (uint16_t)(WM8962_SWAP_UINT16_BYTE_SEQUENCE(val) & 0xFFFFU);
 
-    return CODEC_I2C_Send(handle->i2cHandle, handle->config->slaveAddress, reg, 2U, (uint8_t *)(uint32_t)&buff, 2U);
+    return CODEC_I2C_Send(handle->i2cHandle, handle->config->slaveAddress, reg, 2U, (uint8_t *)(uintptr_t)&buff, 2U);
 }
 
 status_t WM8962_ReadReg(wm8962_handle_t *handle, uint16_t reg, uint16_t *val)
