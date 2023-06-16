@@ -393,6 +393,13 @@ status_t WM8962_Deinit(wm8962_handle_t *handle)
 {
     status_t ret = kStatus_Success;
 
+    /* Reinit I2C in case it has been stopped by concurrent codec driver */
+    if (CODEC_I2C_Init(handle->i2cHandle, handle->config->i2cConfig.codecI2CInstance, WM8962_I2C_BAUDRATE,
+                       handle->config->i2cConfig.codecI2CSourceClock) != (status_t)kStatus_HAL_I2cSuccess)
+    {
+        return kStatus_Fail;
+    }
+
     /* power down */
     WM8962_CHECK_RET(WM8962_StartSequence(handle, kWM8962_SequenceChipPowerDown), ret);
 
