@@ -17,6 +17,7 @@
 #define FSL_COMPONENT_ID "platform.drivers.dmamux"
 #endif
 
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -35,10 +36,8 @@ static uint32_t DMAMUX_GetInstance(DMAMUX_Type *base);
 /*! @brief Array to map DMAMUX instance number to base pointer. */
 static DMAMUX_Type *const s_dmamuxBases[] = DMAMUX_BASE_PTRS;
 
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Array to map DMAMUX instance number to clock name. */
 static const clock_ip_name_t s_dmamuxClockName[] = DMAMUX_CLOCKS;
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*******************************************************************************
  * Code
@@ -60,6 +59,7 @@ static uint32_t DMAMUX_GetInstance(DMAMUX_Type *base)
 
     return instance;
 }
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*!
  * brief Initializes the DMAMUX peripheral.
