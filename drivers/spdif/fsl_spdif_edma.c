@@ -8,6 +8,9 @@
  */
 
 #include "fsl_spdif_edma.h"
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#include "fsl_memory.h"
+#endif
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
@@ -164,7 +167,11 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
     /* Enable major interrupt */
     handle->tcdPool[currentTcd].CSR |= DMA_CSR_INTMAJOR_MASK;
     /* Link current TCD with next TCD for identification of current TCD */
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+    handle->tcdPool[currentTcd].DLAST_SGA = MEMORY_ConvertMemoryMapAddress((uint32_t)&handle->tcdPool[nextTcd], kMEMORY_Local2DMA);
+#else
     handle->tcdPool[currentTcd].DLAST_SGA = (uint32_t)&handle->tcdPool[nextTcd];
+#endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
     /* Chain from previous descriptor unless tcd pool size is 1(this descriptor is its own predecessor). */
     if (currentTcd != previousTcd)
     {
@@ -177,7 +184,11 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
             link the TCD register in case link the current TCD with the dead chain when TCD loading occurs
             before link the previous TCD block.
         */
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+        if (tcdRegs->DLAST_SGA == MEMORY_ConvertMemoryMapAddress((uint32_t)&handle->tcdPool[currentTcd], kMEMORY_Local2DMA))
+#else
         if (tcdRegs->DLAST_SGA == (uint32_t)&handle->tcdPool[currentTcd])
+#endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
         {
             /* Enable scatter/gather also in the TCD registers. */
             csr = (tcdRegs->CSR | (uint16_t)DMA_CSR_ESG_MASK) & ~(uint16_t)DMA_CSR_DREQ_MASK;
@@ -202,7 +213,11 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
                 condition when ESG bit is not set: it means the dynamic TCD link succeed and the current
                 TCD block has been loaded into TCD registers.
             */
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+            if (tcdRegs->DLAST_SGA == MEMORY_ConvertMemoryMapAddress((uint32_t)&handle->tcdPool[nextTcd], kMEMORY_Local2DMA))
+#else
             if (tcdRegs->DLAST_SGA == (uint32_t)&handle->tcdPool[nextTcd])
+#endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
             {
                 return kStatus_Success;
             }
