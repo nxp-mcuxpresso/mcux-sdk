@@ -24,6 +24,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ii2c
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/igpio
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iuart
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rdc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sai
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities
@@ -53,6 +54,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_iuart)
 #    include(driver_mdio-enet)
 #    include(driver_phy-device-rtl8211f)
+#    include(driver_rdc)
 #    include(driver_sai)
 #    include(driver_wm8960)
 #    include(driver_pcm186x)
