@@ -22,21 +22,21 @@ manifest:
     remote: nxp-mcuxpresso
   projects:
   - name: mcux-sdk-examples
-    revision: MCUX_2.13.1
+    revision: feature/heterogeneous_multicore
     path: examples
   - name: FreeRTOS-Kernel
-    revision: MCUX_2.13.1
+    revision: feature/heterogeneous_multicore
     path: rtos/freertos/freertos-kernel
   - name: mcux-sdk-middleware-sdmmc
     revision: MCUX_2.13.1
     path: middleware/sdmmc
   - name: mcux-sdk-middleware-multicore
     path: middleware/multicore
-    revision: MCUX_2.13.1
+    revision: feature/heterogeneous_multicore
   - name: rpmsg-lite
     path: middleware/multicore/rpmsg_lite
     url: https://github.com/nxp-mcuxpresso/rpmsg-lite
-    revision: v5.0.0
+    revision: feature/heterogeneous_multicore
   - name: erpc
     path: middleware/multicore/erpc
     url: https://github.com/EmbeddedRPC/erpc
@@ -119,7 +119,7 @@ manifest:
     remote: nxp_zephyr
   - name: CMSIS_5
     path: core/CMSIS
-    revision: MCUX_2.13.0
+    revision: feature/heterogeneous_multicore
   - name: EAP
     path: middleware/EAP
     revision: MCUX_2.13.0
