@@ -1,0 +1,96 @@
+/*
+ * Copyright 2019-2020 NXP
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+void PrepareTrapCode(void) {
+    unsigned int start;
+    start = 0x20200000;
+
+    // Prepare stack
+    JLINK_CORESIGHT_WriteAP(JLINK_CORESIGHT_AP_REG_ADDR, start);
+    JLINK_CORESIGHT_WriteAP(JLINK_CORESIGHT_AP_REG_DATA, start + 0x20);
+
+    // Prepare spin code provided by ROM
+    JLINK_CORESIGHT_WriteAP(JLINK_CORESIGHT_AP_REG_ADDR, start + 0x4);
+    JLINK_CORESIGHT_WriteAP(JLINK_CORESIGHT_AP_REG_DATA, 0x23F041);
+
+    // Configure LPSR_GPR0 and LPSR_GPR1 for CM4 init vector
+    JLINK_CORESIGHT_WriteAP(JLINK_CORESIGHT_AP_REG_ADDR, 0x40c0c000);
+    JLINK_CORESIGHT_WriteAP(JLINK_CORESIGHT_AP_REG_DATA, start & 0xFFFF);
+
+    JLINK_CORESIGHT_WriteAP(JLINK_CORESIGHT_AP_REG_ADDR, 0x40C0c004);
+    JLINK_CORESIGHT_WriteAP(JLINK_CORESIGHT_AP_REG_DATA, (start & 0xFFFF0000) >> 16);
+}
+
+void InitTarget(void) {
+    CPU = CORTEX_M7;
+    // Manually configure AP
+    JLINK_CORESIGHT_AddAP(0, CORESIGHT_AHB_AP);
+    JLINK_CORESIGHT_AddAP(1, CORESIGHT_AHB_AP);
+    JLINK_CORESIGHT_AddAP(2, CORESIGHT_APB_AP);
+
+    // Dummy read
+    JLINK_CORESIGHT_ReadAP(JLINK_CORESIGHT_AP_REG_IDR);
+    SYS_Sleep(10);
+
+    PrepareTrapCode();
+    // Release CM4 from SRC
+    JLINK_CORESIGHT_WriteAP(JLINK_CORESIGHT_AP_REG_ADDR, 0x40C04000);
+    JLINK_CORESIGHT_WriteAP(JLINK_CORESIGHT_AP_REG_DATA, 1);
+
+    // Disable system reset caused by sysrstreq from each core
+    JLINK_CORESIGHT_WriteAP(JLINK_CORESIGHT_AP_REG_ADDR, 0x40C04004);
+    JLINK_CORESIGHT_WriteAP(JLINK_CORESIGHT_AP_REG_DATA, 0xF << 10);
+    
+    // Switch to AP1
+    CPU = CORTEX_M4;
+    CORESIGHT_IndexAHBAPToUse = 1;
+	
+    // SetSkipRestoreRAMCode command is used to skip the restoring of the RAMCode
+    JLINK_ExecCommand("SetSkipRestoreRAMCode = 1");
+}
+
+void CM4VectReset()
+{
+    MEM_WriteU32(0xE000ED0C, 0x5FA0001);
+    SYS_Sleep(10);
+    Report("CM4 Vector Reset");
+}
+
+void CM4SrcReset()
+{
+    unsigned int t;
+
+    /* Issue M4 reset */
+    MEM_WriteU32(0x40c04284, 1);
+
+    /* Check M4 reset status */
+    t = MEM_ReadU32(0x40c04290);
+    t &= 0x1;
+    while (t)
+    {
+        t = MEM_ReadU32(0x40c04290);
+        t &= 0x1;
+    }
+    SYS_Sleep(10);
+    Report("CM4 SRC reset");
+
+}
+
+void ResetCM4()
+{
+    CM4SrcReset();
+}
+
+void ResetTarget()
+{
+    CORESIGHT_IndexAHBAPToUse = 0;
+    ResetCM4();
+    JLINK_CORESIGHT_WriteAP(JLINK_CORESIGHT_AP_REG_ADDR, 0x40C04000);
+    JLINK_CORESIGHT_WriteAP(JLINK_CORESIGHT_AP_REG_DATA, 1);
+    CORESIGHT_IndexAHBAPToUse = 1;
+}
+
