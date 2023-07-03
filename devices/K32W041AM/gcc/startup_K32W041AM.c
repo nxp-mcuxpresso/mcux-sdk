@@ -5,7 +5,7 @@
 //*****************************************************************************
 //
 // Copyright 1997-2016 Freescale Semiconductor, Inc.
-// Copyright 2016-2017 NXP
+// Copyright 2016-2017, 2023 NXP
 // SPDX-License-Identifier: BSD-3-Clause
 // --------------------------------------------------------------------------------------
 // Version: GCC for ARM Embedded Processors
@@ -36,20 +36,6 @@ extern "C" {
 
 #include "fsl_device_registers.h"
 #include "rom_api.h"
-
-#define PMC_PDSLEEPCFG_PDEN_PD_MEM_ALL_MASK \
-    (PMC_PDSLEEPCFG_PDEN_PD_MEM0_MASK       \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM1_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM2_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM3_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM4_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM5_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM6_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM7_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM8_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM9_MASK     \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM10_MASK    \
-     | PMC_PDSLEEPCFG_PDEN_PD_MEM11_MASK)
 
 //*****************************************************************************
 // Declaration of external SystemInit function

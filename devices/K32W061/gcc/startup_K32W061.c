@@ -484,16 +484,6 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
                 ;
             }
         }
-        else
-        {
-            /*
-             * If we did not fall into the warm_start it must be a Cold Boot.
-             * Clear the WAKE_PD flag so that reading reset cause is enough to determine
-             * whether it is Cold or Warm boot. Otherwise need to resort to global variables.
-             * PMC_RESETCAUSE_WAKEUPPWDNRESET_MASK (K32W061.h) == RESET_WAKE_PD (fsl_power.h)
-             */
-            pmc_reset_clear_cause(PMC_RESETCAUSE_WAKEUPPWDNRESET_MASK);
-        }
     }
 
     // Cold start

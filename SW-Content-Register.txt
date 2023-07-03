@@ -1,13 +1,15 @@
-Release Name: MCUXpresso Software Development Kit (SDK)
-Release Version: 2.6.10
-Package License: LA_OPT_NXP_Software_License.htm - Additional Distribution License, Section 2.3 applies
+NXP Software Content Register
+Outgoing License: LA_OPT_NXP_SOFTWARE_License v44 - Additional distribution license granted, license in Section 2.3 applies
+License in File: LICENSE.htm
+Release Version: 2.6.11
 
 KSDK_Peripheral_Driver     Description: Peripheral drivers are designed for  
                            the most common use cases identified for the      
                            underlying hardware block.                        
                            Author: Freescale                                 
                            Version: 2.x.x                                    
-                           License: Open Source - BSD-3-Clause               
+                           Outgoing License: BSD-3-Clause       
+                           License File: COPYING-BSD-3                       						   
                            Format: source code                               
                            name: KSDK Peripheral Driver                      
                            Location: devices/<device>/drivers                
@@ -16,7 +18,8 @@ Amazon_FreeRTOS            Author: Real Time Engineers, Ltd.
                            Description: IoT operating system for             
                            microcontrollers                                  
                            Format: source code                               
-                           License: MIT. See                                 
+                           Outgoing License: MIT                             
+                           License File:                                 
                            ,<rootfolder>/rtos/amazon-freertos/License.       
                            Location: rtos/amazon-freertos                    
                            name: Amazon FreeRTOS                             
@@ -27,7 +30,8 @@ FreeRTOS_heap_newlib       Author: Dave Nadler, Nadler & Associates
                            Consulting                                        
                            Description: Newlib allocator for FreeRTOS        
                            Format: source code                               
-                           License: Open Source - BSD-3-Clause               
+                           Outgoing License: BSD-3-Clause       
+                           License File: COPYING-BSD-3  
                            Location:                                         
                            rtos/amazon-freertos/lib/FreeRTOS/portable/MemMang
                            /                                                 
@@ -40,7 +44,8 @@ FreeRTOS_heap_newlib       Author: Dave Nadler, Nadler & Associates
 mbedtls                    Author: ARM                                       
                            Description: Cryptographic and SSL/TLS Library    
                            Format: source code                               
-                           License: Apache-2.0,                              
+                           Outgoing License: Apache-2.0                      
+                           License File:      
                            middleware/mbedtls/apache-2.0.txt                 
                            Location: middleware/mbedtls                      
                            name: MBED TLS stack                              
@@ -49,7 +54,9 @@ mbedtls                    Author: ARM
 
 cmsisdsp                   name: CMSIS DSP Library                           
                            Format: source code                               
-                           License: Apache License 2.0, See CMSIS/LICENSE.txt
+                           Outgoing License: Apache-2.0                      
+                           License File:  
+						   See CMSIS/LICENSE.txt
                            parentversion: 1.5.2                              
                            Author: ARM                                       
                            version: 1.5.2 (CMSIS download 5.3.0)             
@@ -67,7 +74,9 @@ cmsiscore                  Author: ARM
                            ag/5.3.0                                          
                            name: CMSIS Core header files                     
                            Format: source code                               
-                           License: Apache License 2.0, See CMSIS/LICENSE.txt
+                           Outgoing License: Apache-2.0                      
+                           License File: 
+						   See CMSIS/LICENSE.txt
                            Location: CMSIS/Include                           
                            version: 5.1.1 (CMSIS Download 5.3.0)             
                            Description: Industry-standard header files       
@@ -76,7 +85,8 @@ cmsiscore                  Author: ARM
 ntag_i2c_plus              Author: NXP                                       
                            Description: NTAG I2C plus communication library  
                            Format: source code                               
-                           License: Open Source - BSD-3-Clause               
+                           Outgoing License: BSD-3-Clause       
+                           License File: COPYING-BSD-3 
                            Location: middleware/ntag_i2c_plus                
                            name: NTAG I2C plus                               
-                           version: 1.0.0                                    
+                           version: 1.0.0        

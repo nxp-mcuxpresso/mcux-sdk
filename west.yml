@@ -16,33 +16,42 @@ manifest:
     url-base: https://github.com/NXPmicro
   - name: nxp
     url-base: https://github.com/NXP
+  - name: nxp-mcuxpresso
+    url-base: https://github.com/nxp-mcuxpresso
   defaults:
     remote: nxpmicro
   self:
     path: core
   projects:
-  - name: mcux-sdk-examples
-    revision: MCUX_2.6.10_K32W0
+   - name: mcux-sdk-examples
+    revision: a98766f509526eee144a7236b0f6052f052a7eaa
     path: examples
+    remote: nxp-mcuxpresso
   - name: mcux-sdk-middleware-connectivity-framework
-    revision: 30e6fdbd399f08d18a4288ce4f53cb9ccdae8715
+    revision: 4f19dad209d5cd5b7365f2906a85d10f7aeba32c
     path: middleware/wireless/framework
     remote: nxp
   - name: mcux-sdk-middleware-bluetooth-controller
     path: middleware/wireless/ble_controller
-    revision: 5936fe8814edc9f785763ae4414ee71bbb452c2b
+    revision: 0e4effc707a0d5569160b9335bc2e57c17255f01
     remote: nxp
   - name: mcux-sdk-middleware-bluetooth-host
     path: middleware/wireless/bluetooth
-    revision: 42c28d0b18b55b7f741219ee5f27e8f7dadbf742
+    revision: e5a1b7b9e3b44b49c6c0318edfc3acac74b342d8
     remote: nxp
   - name: mcux-sdk-middleware-ieee_802.15.4
     path: middleware/wireless/ieee-802.15.4
-    revision: 0154bdfd51021faf71fc4b6e16471745d3b70e1c
+    revision: ab22bc1a2cab53cb8ebf39cdbb3cdec0c99fc2d1
     remote: nxp
+  - name: mcux-sdk-middleware-zigbee
+    path: middleware/wireless/zigbee
+    revision: 2e05ccc4a89c7ccb33e28e4633c4d6a700f5d3a0
+    remote: nxp-mcuxpresso
   - name: amazon-freertos
     path: rtos/amazon-freertos
-    revision: ffb8ee5a7e0490df3ea235432a1af7740f74e3f0
+    revision: fb74168634e716fb5f0a61714e5c0d1ac6246bac
+    remote: nxp
   - name: mbedtls
     path: middleware/mbedtls
     revision: 15458495823165de372f62c3dad621a8da6c86e3
+    remote: nxp-mcuxpresso

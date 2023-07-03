@@ -38,11 +38,19 @@ extern void __libc_init_array(void);
 extern "C" {
 #endif
 
+//*****************************************************************************
+// Variable to store CRP value in. Will be placed automatically
+// by the linker when "Enable Code Read Protect" selected.
+// See crp.h header for more information
+//*****************************************************************************
+#if (defined(__MCUXPRESSO))
+#include <NXP/crp.h>
+__CRP const unsigned int CRP_WORD = CRP_NO_CRP;
+#endif
 
 #include "fsl_device_registers.h"
 #include "rom_api.h"
 #include "rom_pmc.h"
-
 
 //*****************************************************************************
 // Declaration of external SystemInit function
@@ -458,16 +466,6 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
                 ;
             }
         }
-        else
-        {
-            /*
-             * If we did not fall into the warm_start it must be a Cold Boot.
-             * Clear the WAKE_PD flag so that reading reset cause is enough to determine
-             * whether it is Cold or Warm boot. Otherwise need to resort to global variables.
-             * PMC_RESETCAUSE_WAKEUPPWDNRESET_MASK (K32W061.h) == RESET_WAKE_PD (fsl_power.h)
-             */
-            pmc_reset_clear_cause(PMC_RESETCAUSE_WAKEUPPWDNRESET_MASK);
-        }
     }
 
 
@@ -503,7 +501,6 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
         bss_init(ExeAddr, SectionLen);
     }
 
-
 #if !defined(__USE_CMSIS)
     // Assume that if __USE_CMSIS defined, then CMSIS SystemInit code
     // will setup the VTOR register
@@ -519,10 +516,6 @@ __attribute__((used, section(".after_vectors"))) void ResetISR2(void)
         *pSCB_VTOR = (unsigned int)g_pfnVectors;
     }
 #endif // (__USE_CMSIS)
-    if (SystemInit != 0)
-    {
-        SystemInit();
-    }
 
 
 #if defined(__cplusplus)
