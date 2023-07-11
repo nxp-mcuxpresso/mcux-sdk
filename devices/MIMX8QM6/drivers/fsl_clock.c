@@ -58,12 +58,26 @@ void CLOCK_Deinit(void)
  */
 bool CLOCK_EnableClockExt(clock_ip_name_t name, uint32_t gate)
 {
+	return CLOCK_EnableClockExtMapped((uint32_t *)LPCG_TUPLE_REG_BASE(name), name, gate);
+}
+
+
+/*!
+ * brief Enable the clock for specific IP, with gate setting (mapped version).
+ *
+ * param lpcgBase Virtual/physical base address of the LPCG region associated with IP.
+ * param name  Which clock to enable, see \ref clock_ip_name_t.
+ * param gate  0: clock always on, 1: HW auto clock gating.
+ * return true if success, false if failure.
+ */
+bool CLOCK_EnableClockExtMapped(uint32_t *lpcgBase, clock_ip_name_t name, uint32_t gate)
+{
     sc_err_t err;
 
     err = sc_pm_clock_enable(ipcHandle, LPCG_TUPLE_RSRC(name), SC_PM_CLK_PER, true, (bool)gate);
 
     /* Enable the Clock Gate control in LPCG */
-    CLOCK_ConfigLPCG(name, true, (bool)gate);
+    CLOCK_ConfigLPCGMapped(lpcgBase, name, true, (bool)gate);
 
     if (err != SC_ERR_NONE)
     {
@@ -83,10 +97,22 @@ bool CLOCK_EnableClockExt(clock_ip_name_t name, uint32_t gate)
  */
 bool CLOCK_DisableClock(clock_ip_name_t name)
 {
+	return CLOCK_DisableClockMapped((uint32_t *)LPCG_TUPLE_REG_BASE(name), name);
+}
+
+/*!
+ * brief Disable the clock for specific IP (mapped version).
+ *
+ * param lpcgBase Virtual/physical base address of the LPCG region associated with IP.
+ * param name  Which clock to disable, see \ref clock_ip_name_t.
+ * return true for success, false for failure.
+ */
+bool CLOCK_DisableClockMapped(uint32_t *lpcgBase, clock_ip_name_t name)
+{
     sc_err_t err;
 
     /* Disable the Clock Gate control in LPCG */
-    CLOCK_ConfigLPCG(name, false, false);
+    CLOCK_ConfigLPCGMapped(lpcgBase, name, false, false);
 
     err = sc_pm_clock_enable(ipcHandle, LPCG_TUPLE_RSRC(name), SC_PM_CLK_PER, false, false);
 
@@ -245,9 +271,22 @@ void CLOCK_SetLpcgGate(volatile uint32_t *regBase, bool swGate, bool hwGate, uin
  */
 void CLOCK_ConfigLPCG(clock_ip_name_t name, bool swGate, bool hwGate)
 {
+    CLOCK_ConfigLPCGMapped((uint32_t *)LPCG_TUPLE_REG_BASE(name), name, swGate, hwGate);
+}
+
+/*!
+ * brief Config the LPCG cell for specific IP (mapped version).
+ *
+ * param lpcgBase Virtual/physical base address of the LPCG region associated with IP.
+ * param name  Which clock to enable, see \ref clock_ip_name_t.
+ * param swGate Software clock gating. 0: clock is gated;  1: clock is enabled
+ * param swGate Hardware auto gating. 0: disable the HW clock gate control;  1: HW clock gating is enabled
+ */
+void CLOCK_ConfigLPCGMapped(uint32_t *lpcgBase, clock_ip_name_t name, bool swGate, bool hwGate)
+{
     volatile uint32_t *regBase;
 
-    regBase = LPCG_TUPLE_REG_BASE(name);
+    regBase = lpcgBase;
 
     /* Return if LPCG Cell is not available. */
     if (regBase == NULL)
