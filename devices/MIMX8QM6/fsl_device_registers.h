@@ -32,6 +32,16 @@
 /* CPU specific feature definitions */
 #include "MIMX8QM6_cm4_core1_features.h"
 
+#elif(defined(CPU_MIMX8QM6AVUFF_ca53))
+
+#define MIMX8QM6_ca53_SERIES
+
+/* CMSIS-style register definitions */
+#include "MIMX8QM6_ca53.h"
+
+/* CPU specific feature definitions */
+#include "MIMX8QM6_ca53_features.h"
+
 #else
 #error "No valid CPU defined!"
 #endif
