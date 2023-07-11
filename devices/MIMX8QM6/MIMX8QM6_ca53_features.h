@@ -557,5 +557,9 @@
 /* @brief Offset between MIPI CSI controller and CSR in the MIPI CSI subsystem. */
 #define FSL_FEATURE_CSI2RX_CSR_OFFSET (0x6100)
 
+#ifdef __ZEPHYR__
+#define FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL 1
+#endif /* __ZEPHYR__ */
+
 #endif /* _MIMX8QM6_ca53_FEATURES_H_ */
 
