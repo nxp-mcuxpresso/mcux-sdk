@@ -75,7 +75,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpc_crc)
 #    include(utility_assert)
 #    include(utilities_misc_utilities_LPC51U68)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_wwdt)
 #    include(driver_wm8904)
 #    include(middleware_freertos-kernel_extension)

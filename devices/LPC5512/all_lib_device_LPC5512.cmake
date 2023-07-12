@@ -102,7 +102,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_fatfs_LPC55S16)
 #    include(component_mrt_adapter)
 #    include(component_osa_free_rtos)
-#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(middleware_usb_device_ip3511fs)
 #    include(component_usart_adapter)

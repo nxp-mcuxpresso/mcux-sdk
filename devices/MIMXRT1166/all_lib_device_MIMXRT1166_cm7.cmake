@@ -296,7 +296,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_lpi2c_adapter)
 #    include(driver_dc-fb-lcdifv2)
 #    include(middleware_freertos-kernel_heap_3)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_video-common)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(middleware_wifi_sdio-2)

@@ -11,7 +11,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 
 
 if(${MCUX_DEVICE} STREQUAL "MIMX8MM6")
-    include(CMSIS_Include_core_cm)
 endif()
 
 if(${MCUX_DEVICE} STREQUAL "MIMX8MM6_ca53")

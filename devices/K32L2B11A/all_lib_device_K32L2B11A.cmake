@@ -129,7 +129,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_pit)
 #    include(middleware_usb_device_cdc_external)
 #    include(component_serial_manager)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_flexio_spi_dma)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)

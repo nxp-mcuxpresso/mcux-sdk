@@ -54,6 +54,5 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flash_ftmr)
 #    include(driver_irq)
 #    include(driver_pit)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_adc_5v12b_ll18_015)
 #    include(driver_cmsis_uart)

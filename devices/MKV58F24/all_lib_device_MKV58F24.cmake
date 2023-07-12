@@ -86,7 +86,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_phy-device-ksz8041)
 #    include(utility_assert)
 #    include(driver_enet)
-#    include(CMSIS_Include_core_cm)
 #    include(middleware_mmcau_cm4_cm7)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_uart_edma)

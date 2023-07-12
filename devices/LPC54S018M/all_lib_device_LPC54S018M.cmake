@@ -149,7 +149,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_mbedtls_LPC54S018M)
 #    include(middleware_usb_device_controller_driver_LPC54S018M)
 #    include(middleware_freertos-kernel_heap_3)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_video-common)
 #    include(driver_common)
 #    include(middleware_usb_device_ip3511fs)

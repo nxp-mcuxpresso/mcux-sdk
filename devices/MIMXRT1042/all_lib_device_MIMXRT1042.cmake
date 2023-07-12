@@ -232,7 +232,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_mflash_rt1040)
 #    include(component_lpi2c_adapter)
 #    include(middleware_freertos-kernel_heap_3)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_video-common)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(component_mflash_file_MIMXRT1042)

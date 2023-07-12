@@ -109,7 +109,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_erpc_common)
 #    include(driver_common)
 #    include(component_lpi2c_adapter)
-#    include(CMSIS_Include_core_cm)
 #    include(utilities_misc_utilities_MCIMX7U5)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_qspi)

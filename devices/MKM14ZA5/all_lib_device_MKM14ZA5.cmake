@@ -70,7 +70,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_shell)
 #    include(driver_ewm)
 #    include(utility_assert)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_cmp)
 #    include(driver_xbar)
 #    include(middleware_freertos-kernel_extension)

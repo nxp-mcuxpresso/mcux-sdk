@@ -139,7 +139,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_inputmux_connections)
 #    include(component_osa_free_rtos)
 #    include(middleware_sdmmc_sd)
-#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_lpc_crc)
 #    include(middleware_azure_rtos_fx_sp)

@@ -159,7 +159,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_osa_free_rtos)
 #    include(middleware_sdmmc_sd)
 #    include(middleware_freertos-kernel_heap_3)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_video-common)
 #    include(driver_common)
 #    include(middleware_fatfs_LPC54628)

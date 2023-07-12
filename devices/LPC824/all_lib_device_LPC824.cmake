@@ -56,7 +56,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utilities_misc_utilities_LPC824)
 #    include(driver_pint)
 #    include(driver_lpc_dma)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_syscon)
 #    include(driver_reset)
 #    include(driver_lpc_i2c)

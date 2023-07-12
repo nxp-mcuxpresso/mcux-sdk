@@ -83,7 +83,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_osa)
 #    include(driver_ewm)
 #    include(utility_assert)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_cmsis_i2c)
 #    include(component_pit_adapter)
 #    include(middleware_freertos-kernel_extension)

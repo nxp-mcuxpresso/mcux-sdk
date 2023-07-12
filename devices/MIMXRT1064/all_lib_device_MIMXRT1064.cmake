@@ -243,7 +243,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_eiq_deepviewrt_modelrunner_server_flash)
 #    include(component_lpi2c_adapter)
 #    include(middleware_freertos-kernel_heap_3)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_video-common)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_dcdc_1)

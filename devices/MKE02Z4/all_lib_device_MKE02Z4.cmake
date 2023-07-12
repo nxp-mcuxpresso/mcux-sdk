@@ -44,7 +44,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Driver_Include_SPI)
 #    include(utility_debug_console_lite)
 #    include(driver_acmp_1)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_ftm)
 #    include(CMSIS_Driver_Include_I2C)
 #    include(driver_gpio_1)

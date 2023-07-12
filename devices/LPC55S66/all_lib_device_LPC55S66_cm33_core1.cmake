@@ -42,7 +42,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager)
 #    include(device_system_LPC55S66_cm33_core1)
 #    include(driver_power)
-#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_reset)
 #    include(component_serial_manager_uart_LPC55S69_cm33_core1)

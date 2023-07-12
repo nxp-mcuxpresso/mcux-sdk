@@ -179,7 +179,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_erpc_doc)
 #    include(driver_key_manager)
 #    include(middleware_freertos-kernel_heap_3)
-#    include(CMSIS_Include_core_cm)
 #    include(utilities_misc_utilities_MIMXRT1176_cm4)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(middleware_multicore_erpc_common)

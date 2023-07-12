@@ -110,7 +110,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_common)
 #    include(driver_smc)
 #    include(component_osa_free_rtos)
-#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)
 #    include(middleware_fatfs_K32L2A41A)
