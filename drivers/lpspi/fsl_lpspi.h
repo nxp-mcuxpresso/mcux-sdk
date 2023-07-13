@@ -792,7 +792,40 @@ static inline bool LPSPI_IsMaster(LPSPI_Type *base)
  */
 static inline void LPSPI_FlushFifo(LPSPI_Type *base, bool flushTxFifo, bool flushRxFifo)
 {
+#if defined(FSL_FEATURE_LPSPI_HAS_ERRATA_050456) && FSL_FEATURE_LPSPI_HAS_ERRATA_050456
+    /*
+     * Resetting the FIFO using CR[RTF] and CR[RRF] does not clear the FIFO pointers completely.
+     * Workaround by reseting the entire module using CR[RST] bit.
+     */
+
+    (void)flushTxFifo;
+    (void)flushRxFifo;
+
+    /* Save current state before resetting */
+    bool enabled = base->CR & LPSPI_CR_MEN_MASK;
+    uint32_t cfgr1 = base->CFGR1;
+    uint32_t ccr = base->CCR;
+    uint32_t ccr1 = base->CCR1;
+
+    /* To read the current state of the existing command word, LPSPI must be enabled */
+    LPSPI_Enable(base, true);
+    uint32_t tcr = base->TCR;
+
+    /* Reset all internal logic and registers. Bit remains set until cleared by software */
+    LPSPI_Enable(base, false);
+    base->CR |= LPSPI_CR_RST_MASK;
+    base->CR &= ~LPSPI_CR_RST_MASK;
+
+    /* Restore saved registers */
+    base->CFGR1 = cfgr1;
+    base->CCR = ccr;
+    base->CCR1 = ccr1;
+    base->TCR = tcr;
+
+    LPSPI_Enable(base, enabled);
+#else
     base->CR |= ((uint32_t)flushTxFifo << LPSPI_CR_RTF_SHIFT) | ((uint32_t)flushRxFifo << LPSPI_CR_RRF_SHIFT);
+#endif
 }
 
 /*!
