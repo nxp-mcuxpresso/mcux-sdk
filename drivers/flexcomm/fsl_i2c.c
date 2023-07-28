@@ -52,6 +52,15 @@ static status_t I2C_SlaveTransferNonBlockingInternal(I2C_Type *base,
 /*! @brief Array to map i2c instance number to base address. */
 static const uint32_t s_i2cBaseAddrs[FSL_FEATURE_SOC_I2C_COUNT] = I2C_BASE_ADDRS;
 
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+/*! @brief Pointers to i2c clocks for each instance. */
+static const clock_ip_name_t s_i2cClocks[] = I2C_CLOCKS;
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if !(defined(FSL_FEATURE_I2C_HAS_NO_RESET) && FSL_FEATURE_I2C_HAS_NO_RESET)
+static const reset_ip_name_t s_i2cResets[] = I2C_RSTS;
+#endif
+
 /*! @brief IRQ name array */
 static const IRQn_Type s_i2cIRQ[] = I2C_IRQS;
 
@@ -131,7 +140,15 @@ void I2C_MasterGetDefaultConfig(i2c_master_config_t *masterConfig)
  */
 void I2C_MasterInit(I2C_Type *base, const i2c_master_config_t *masterConfig, uint32_t srcClock_Hz)
 {
-    FLEXCOMM_Init(base, FLEXCOMM_PERIPH_I2C);
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+    /* Enable the clock. */
+    CLOCK_EnableClock(s_i2cClocks[I2C_GetInstance(base)]);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if !(defined(FSL_FEATURE_I2C_HAS_NO_RESET) && FSL_FEATURE_I2C_HAS_NO_RESET)
+    RESET_PeripheralReset(s_i2cResets[I2C_GetInstance(base)]);
+#endif
+
     I2C_MasterEnable(base, masterConfig->enableMaster);
     I2C_MasterSetBaudRate(base, masterConfig->baudRate_Bps, srcClock_Hz);
 }
@@ -1433,7 +1450,14 @@ status_t I2C_SlaveInit(I2C_Type *base, const i2c_slave_config_t *slaveConfig, ui
         return status;
     }
 
-    FLEXCOMM_Init(base, FLEXCOMM_PERIPH_I2C);
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+    /* Enable the clock. */
+    CLOCK_EnableClock(s_i2cClocks[I2C_GetInstance(base)]);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if !(defined(FSL_FEATURE_I2C_HAS_NO_RESET) && FSL_FEATURE_I2C_HAS_NO_RESET)
+    RESET_PeripheralReset(s_i2cResets[I2C_GetInstance(base)]);
+#endif
 
     /* I2C Clock Divider register */
     base->CLKDIV = divVal;

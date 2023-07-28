@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2018-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -89,7 +89,11 @@
     {              \
         kCLOCK_Dma \
     }
-
+/*! @brief Clock ip name array for I2C. */
+#define I2C_CLOCKS                            \
+    {                                         \
+        kCLOCK_I2c0, kCLOCK_I2c1, kCLOCK_I2c2 \
+    }
 /* Test line to verify RCS */
 /* Another test line to verify source control */
 /* Test lines added by Robert Gee */

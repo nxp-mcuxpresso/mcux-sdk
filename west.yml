@@ -23,12 +23,12 @@ manifest:
   self:
     path: core
   projects:
-   - name: mcux-sdk-examples
-    revision: a98766f509526eee144a7236b0f6052f052a7eaa
+  - name: mcux-sdk-examples
+    revision: 39eed09d6a8485dcf365a24cd6ef957e7cc6fbf8
     path: examples
     remote: nxp-mcuxpresso
   - name: mcux-sdk-middleware-connectivity-framework
-    revision: 4f19dad209d5cd5b7365f2906a85d10f7aeba32c
+    revision: a45ed24bc5f8d54312c4d9243c4423d226084412
     path: middleware/wireless/framework
     remote: nxp
   - name: mcux-sdk-middleware-bluetooth-controller
@@ -41,11 +41,11 @@ manifest:
     remote: nxp
   - name: mcux-sdk-middleware-ieee_802.15.4
     path: middleware/wireless/ieee-802.15.4
-    revision: ab22bc1a2cab53cb8ebf39cdbb3cdec0c99fc2d1
+    revision: 7cca871d58e53c78a703a39b269c4366b03f26e4
     remote: nxp
   - name: mcux-sdk-middleware-zigbee
     path: middleware/wireless/zigbee
-    revision: 2e05ccc4a89c7ccb33e28e4633c4d6a700f5d3a0
+    revision: ef9636fafec2c76fa12d7ebe910b9925733b8ed0
     remote: nxp-mcuxpresso
   - name: amazon-freertos
     path: rtos/amazon-freertos

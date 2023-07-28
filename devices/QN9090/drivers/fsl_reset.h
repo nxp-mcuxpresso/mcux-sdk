@@ -199,6 +199,17 @@ typedef enum _SYSCON_RSTn
     {                        \
         kWWDT_RST_SHIFT_RSTn \
     } /* Reset bits for WWDT peripheral */
+#ifdef I2C2
+#define I2C_RSTS                                                         \
+    {                                                                    \
+        kI2C0_RST_SHIFT_RSTn, kI2C1_RST_SHIFT_RSTn, kI2C2_RST_SHIFT_RSTn \
+    } /* Reset bits for I2C peripheral */
+#else
+#define I2C_RSTS                                    \
+    {                                               \
+        kI2C0_RST_SHIFT_RSTn, kI2C1_RST_SHIFT_RSTn, \
+    } /* Reset bits for I2C peripheral */
+#endif
 
 typedef SYSCON_RSTn_t reset_ip_name_t;
 

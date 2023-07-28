@@ -1,7 +1,7 @@
 NXP Software Content Register
-Outgoing License: LA_OPT_NXP_SOFTWARE_License v44 - Additional distribution license granted, license in Section 2.3 applies
+Outgoing License: LA_OPT_NXP_SOFTWARE_License v46 - Additional distribution license granted, license in Section 2.3 applies
 License in File: LICENSE.htm
-Release Version: 2.6.11
+Release Version: 2.6.12
 
 KSDK_Peripheral_Driver     Description: Peripheral drivers are designed for  
                            the most common use cases identified for the      
