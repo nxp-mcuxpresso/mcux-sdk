@@ -231,7 +231,7 @@
 #endif
 /*! @brief FlexCAN Enhanced Rx FIFO base address helper macro. */
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
-#define E_RX_FIFO(base) ((uint32_t)(base) + 0x2000U)
+#define E_RX_FIFO(base) ((uintptr_t)(base) + 0x2000U)
 #else
 #define FLEXCAN_MEMORY_ENHANCED_RX_FIFO_INIT_FLAG (0U)
 #endif
