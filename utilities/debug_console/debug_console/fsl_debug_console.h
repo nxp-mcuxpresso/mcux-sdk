@@ -39,7 +39,8 @@ extern serial_handle_t g_serialHandle; /*!< serial manager handle */
 /*! @brief Definition select redirect toolchain printf, scanf to uart or not. */
 #define DEBUGCONSOLE_REDIRECT_TO_TOOLCHAIN 0U /*!< Select toolchain printf and scanf. */
 #define DEBUGCONSOLE_REDIRECT_TO_SDK       1U /*!< Select SDK version printf, scanf. */
-#define DEBUGCONSOLE_DISABLE               2U /*!< Disable debugconsole function. */
+#define DEBUGCONSOLE_RAM_CONSOLE           2U /*!< Select RAM Console version printf */
+#define DEBUGCONSOLE_DISABLE               3U /*!< Disable debugconsole function. */
 
 /*! @brief Definition to select sdk or toolchain printf, scanf. The macro only support
  * to be redefined in project setting.
@@ -80,6 +81,9 @@ static inline int DbgConsole_Disabled(void)
 #define SCANF   scanf
 #define PUTCHAR putchar
 #define GETCHAR getchar
+#elif SDK_DEBUGCONSOLE == DEBUGCONSOLE_RAM_CONSOLE /* Select RAM Console printf, putchar, no scanf and getchar available*/
+#define PRINTF RamConsole_Printf
+#define PUTCHAR RamConsole_Putchar
 #endif /* SDK_DEBUGCONSOLE */
 
 /*******************************************************************************
@@ -303,6 +307,54 @@ status_t DbgConsole_Flush(void);
  */
 status_t DbgConsole_TryGetchar(char *ch);
 #endif
+
+#endif /* SDK_DEBUGCONSOLE */
+
+#if (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE == DEBUGCONSOLE_RAM_CONSOLE))
+
+/*!
+ * @brief Initializes the RAM Console.
+ *
+ * Call this function to enable RAM Console with specified RAM address and size.
+ *
+ * @param addr          The RAM Address used by RAM console.
+ * @param length        The RAM Size used by RAM console.
+ * @return              Indicates whether initialization was successful or not.
+ * @retval kStatus_Success          Execution successfully
+ * @retval kStatus_Fail             Execution failure
+ */
+status_t RamConsole_Init(uintptr_t addr, size_t length);
+
+/*!
+ * @brief Writes formatted output to the standard output stream.
+ *
+ * Call this function to write a formatted output to the standard output stream.
+ *
+ * @param   fmt_s Format control string.
+ * @return  Returns the number of characters printed or a negative value if an error occurs.
+ */
+int RamConsole_Printf(const char *fmt_s, ...);
+
+/*!
+ * @brief Writes formatted output to the standard output stream.
+ *
+ * Call this function to write a formatted output to the standard output stream.
+ *
+ * @param   fmt_s Format control string.
+ * @param   formatStringArg Format arguments.
+ * @return  Returns the number of characters printed or a negative value if an error occurs.
+ */
+int RamConsole_Vprintf(const char *fmt_s, va_list formatStringArg);
+
+/*!
+ * @brief Writes a character to stdout.
+ *
+ * Call this function to write a character to stdout.
+ *
+ * @param   ch Character to be written.
+ * @return  Returns the character written.
+ */
+int RamConsole_Putchar(int ch);
 
 #endif /* SDK_DEBUGCONSOLE */
 
