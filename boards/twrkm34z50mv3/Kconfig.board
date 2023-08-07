@@ -1,0 +1,10 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+
+config MCUX_USE_BOARD_TWRKM34Z50MV3
+    bool "TWRKM34Z50MV3"
+    select MCUX_USE_SOC_MKM34ZA5
+    select MCUX_SOC_PART_MKM34Z128Axxx5

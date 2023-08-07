@@ -1,0 +1,10 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+
+config MCUX_USE_BOARD_EVKMIMX8MP
+    bool "EVKMIMX8MP"
+    select MCUX_USE_SOC_MIMX8ML8
+    select MCUX_SOC_PART_MIMX8ML8xxxLZ

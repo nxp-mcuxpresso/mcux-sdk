@@ -1,0 +1,6 @@
+<map id="CreateAndSendPackets" name="CreateAndSendPackets">
+<area shape="rect" id="node2" href="$output__stream_8c.html#a16d1508470294835d76682195104898e" title="(OVERSAMPLE_RATIO * MAXPACKETRATEHZ) / SENSORFS " alt="" coords="245,5,308,32"/>
+<area shape="rect" id="node3" href="$output__stream_8c.html#a7ad6e53b35d6fc860a1299ceff40a299" title="Utility function used to place data in output buffer about to be transmitted via UART. " alt="" coords="387,81,504,108"/>
+<area shape="rect" id="node4" href="$output__stream_8c.html#a93db92e775dee51c4dbf2dca2aed05b3" title="sBufAppendZeros" alt="" coords="215,107,339,133"/>
+<area shape="rect" id="node5" href="$output__stream_8c.html#a96da70ac128170ff0d03feffa05ef769" title="readCommon" alt="" coords="227,157,326,184"/>
+</map>

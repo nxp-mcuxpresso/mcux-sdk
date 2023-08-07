@@ -207,9 +207,8 @@ osa_task_handle_t OSA_TaskGetCurrentHandle(void)
  *
  *END**************************************************************************/
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
-osa_status_t OSA_TaskYield(void)
+void OSA_TaskYield(void)
 {
-    return KOSA_StatusSuccess;
 }
 #endif
 
@@ -262,7 +261,7 @@ osa_status_t OSA_TaskCreate(osa_task_handle_t taskHandle, const osa_task_def_t *
                          (void *)thread_def->tstack,                    /* stack start */
                          (ULONG)thread_def->stacksize,                  /* stack size */
                          PRIORITY_OSA_TO_THREAD(thread_def->tpriority), /* initial priority */
-                         0U,                                            /* preempt threshold */
+                         PRIORITY_OSA_TO_THREAD(thread_def->tpriority), /* preempt threshold (same value than the priority means disabled) */
                          0U,                                            /* time slice */
                          true                                           /* auto start */
                          ) == TX_SUCCESS)

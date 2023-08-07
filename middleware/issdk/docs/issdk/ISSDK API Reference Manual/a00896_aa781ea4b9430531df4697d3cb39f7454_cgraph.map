@@ -1,0 +1,5 @@
+<map id="fNEDAnglesDegFromRotationMatrix" name="fNEDAnglesDegFromRotationMatrix">
+<area shape="rect" id="node2" href="$a00761.html#a084fe0ff189767dca40fbe330d7394f0" title="facos_deg" alt="" coords="249,5,330,32"/>
+<area shape="rect" id="node3" href="$a00761.html#a956336cb9e7270c6cfbf667b1075c063" title="fasin_deg" alt="" coords="251,56,328,83"/>
+<area shape="rect" id="node4" href="$a00761.html#aebfdfbd2df0fe4472f9861b0738bb410" title="fatan2_deg" alt="" coords="247,107,332,133"/>
+</map>

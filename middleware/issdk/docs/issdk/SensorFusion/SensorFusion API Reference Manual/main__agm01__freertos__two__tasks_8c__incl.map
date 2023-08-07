@@ -1,0 +1,10 @@
+<map id="main_agm01_freertos_two_tasks.c" name="main_agm01_freertos_two_tasks.c">
+<area shape="rect" id="node16" href="$sensor__fusion_8h.html" title="The sensor_fusion.h file implements the top level programming interface. " alt="" coords="1596,95,1709,121"/>
+<area shape="rect" id="node28" href="$control_8h.html" title="Defines control sub&#45;system. " alt="" coords="1734,95,1806,121"/>
+<area shape="rect" id="node29" href="$status_8h.html" title="Application&#45;specific status subsystem. " alt="" coords="1830,95,1899,121"/>
+<area shape="rect" id="node30" href="$drivers_8h.html" title="Provides function prototypes for driver level interfaces. " alt="" coords="2281,95,2352,121"/>
+<area shape="rect" id="node24" href="$magnetic_8h.html" title="Lower level magnetic calibration interface. " alt="" coords="1756,169,1843,196"/>
+<area shape="rect" id="node25" href="$precisionAccelerometer_8h.html" title="Implements accelerometer calibration routines. " alt="" coords="1867,169,2036,196"/>
+<area shape="rect" id="node26" href="$orientation_8h.html" title="Functions to convert between various orientation representations. " alt="" coords="2061,169,2154,196"/>
+<area shape="rect" id="node27" href="$matrix_8h.html" title="Matrix manipulation functions. " alt="" coords="2178,169,2247,196"/>
+</map>

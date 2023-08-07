@@ -90,7 +90,7 @@ static status_t WM8960_SetInternalPllConfig(
     /* enable PLL power */
     WM8960_CHECK_RET(WM8960_ModifyReg(handle, WM8960_POWER2, 1U, 1U), ret);
 
-    WM8960_CHECK_RET(WM8960_ModifyReg(handle, WM8960_CLOCK1, 7U, ((sysclkDiv == 1U ? 0U : sysclkDiv) << 1U) | 1U), ret);
+    WM8960_CHECK_RET(WM8960_ModifyReg(handle, WM8960_CLOCK1, 7U, (uint16_t)(((sysclkDiv == 1U ? 0U : sysclkDiv) << 1U) | 1U)), ret);
 
     return ret;
 }

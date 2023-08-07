@@ -1171,7 +1171,7 @@ void CLOCK_SetFRGClock(const clock_frg_clk_config_t *config)
     }
 }
 
-#ifndef __XCC__
+#ifndef __XTENSA__
 /**
  * brief  Enable FFRO 48M/60M clock.
  * Note   Need to make sure FFRO and ROM has power(PDRUNCFG0[16] and PDRUNCFG1[28] = 0U) before calling this API
@@ -1238,7 +1238,7 @@ void CLOCK_EnableSfroClk(void)
     /* No SFRO enable/disable control in CLKCTL. Just wait SFRO stable in case SFRO just get powered on. */
     SDK_DelayAtLeastUs(sfro_delay, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 }
-#endif /* __XCC__ */
+#endif /* __XTENSA__ */
 
 /* Initialize the SYSTEM PLL Clk */
 /*! brief  Initialize the System PLL.
@@ -1541,7 +1541,6 @@ bool CLOCK_EnableUsbHs0PhyPllClock(clock_attach_id_t src, uint32_t freq)
         USBPHY->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
 
         USBPHY->CTRL_CLR = USBPHY_CTRL_CLR_CLKGATE_MASK;
-        USBPHY->PWD_SET  = 0x0;
 
         while (0UL == (USBPHY->PLL_SIC & USBPHY_PLL_SIC_PLL_LOCK_MASK))
         {

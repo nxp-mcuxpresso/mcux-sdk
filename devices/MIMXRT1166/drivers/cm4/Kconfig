@@ -1,0 +1,11 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_cache_lmem
+config MCUX_USE_driver_cache_lmem
+    bool "CACHE LMEM Driver"
+    select MCUX_USE_driver_common
+    help
+      CACHE LMEM Driver

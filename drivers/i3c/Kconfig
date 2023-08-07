@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_i3c
+config MCUX_HAS_driver_i3c
+    bool
+
+config MCUX_USE_driver_i3c
+    depends on MCUX_HAS_driver_i3c
+    bool "I3C Driver"
+    select MCUX_USE_driver_common
+    help
+      I3C Driver

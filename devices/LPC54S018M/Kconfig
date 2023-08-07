@@ -1,0 +1,195 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_USE_SOC_LPC54S018M
+    bool
+    select MCUX_CPU_ARCH_ARM_CM4F
+    select MCUX_CPU_HAS_SP_FPU
+if MCUX_USE_SOC_LPC54S018M
+
+# Part Number
+config MCUX_SOC_PART_LPC54S018J2M
+    bool
+
+config MCUX_SOC_PART_LPC54S018J4M
+    bool
+
+config MCUX_DEVICE
+    default "LPC54S018M"
+
+config MCUX_DEVICE_ID
+    default "LPC54S018J2M" if MCUX_SOC_PART_LPC54S018J2M
+    default "LPC54S018J4M" if MCUX_SOC_PART_LPC54S018J4M
+
+
+# Select supported components
+config MCUX_USE_SOC_LPC54S018M
+    select MCUX_HAS_CMSIS_DSP_Include
+    select MCUX_HAS_CMSIS_DSP_Source
+    select MCUX_HAS_CMSIS_Device_API_OSTick
+    select MCUX_HAS_CMSIS_Device_API_RTOS2
+    select MCUX_HAS_CMSIS_Driver_Include_CAN
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet_MAC
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet_PHY
+    select MCUX_HAS_CMSIS_Driver_Include_Flash
+    select MCUX_HAS_CMSIS_Driver_Include_I2C
+    select MCUX_HAS_CMSIS_Driver_Include_MCI
+    select MCUX_HAS_CMSIS_Driver_Include_NAND
+    select MCUX_HAS_CMSIS_Driver_Include_SAI
+    select MCUX_HAS_CMSIS_Driver_Include_SPI
+    select MCUX_HAS_CMSIS_Driver_Include_USART
+    select MCUX_HAS_CMSIS_Driver_Include_USB_Device
+    select MCUX_HAS_CMSIS_Driver_Include_USB_Host
+    select MCUX_HAS_CMSIS_Driver_Include_WiFi
+    select MCUX_HAS_CMSIS_Include_core_cm
+    select MCUX_HAS_CMSIS_NN_Source
+    select MCUX_HAS_CMSIS_RTOS2_NonSecure
+    select MCUX_HAS_CMSIS_RTOS2_Secure
+    select MCUX_HAS_component_ctimer_adapter
+    select MCUX_HAS_component_flexcomm_i2c_adapter
+    select MCUX_HAS_component_flexcomm_spi_adapter
+    select MCUX_HAS_component_gint_adapter
+    select MCUX_HAS_component_lists
+    select MCUX_HAS_component_lpc_gpio_adapter
+    select MCUX_HAS_component_mrt_adapter
+    select MCUX_HAS_component_serial_manager
+    select MCUX_HAS_component_serial_manager_spi
+    select MCUX_HAS_component_serial_manager_swo if (MCUX_CPU_ARCH_ARM_CM4F)
+    select MCUX_HAS_component_serial_manager_uart
+    select MCUX_HAS_component_usart_adapter
+    select MCUX_HAS_component_usart_dma_adapter
+    select MCUX_HAS_driver_aes
+    select MCUX_HAS_driver_cmsis_flexcomm_i2c
+    select MCUX_HAS_driver_cmsis_flexcomm_spi
+    select MCUX_HAS_driver_cmsis_flexcomm_usart
+    select MCUX_HAS_driver_common
+    select MCUX_HAS_driver_ctimer
+    select MCUX_HAS_driver_dmic
+    select MCUX_HAS_driver_dmic_dma
+    select MCUX_HAS_driver_dmic_hwvad
+    select MCUX_HAS_driver_emc
+    select MCUX_HAS_driver_flexcomm
+    select MCUX_HAS_driver_flexcomm_i2c
+    select MCUX_HAS_driver_flexcomm_i2c_dma
+    select MCUX_HAS_driver_flexcomm_i2c_freertos
+    select MCUX_HAS_driver_flexcomm_i2s
+    select MCUX_HAS_driver_flexcomm_i2s_dma
+    select MCUX_HAS_driver_flexcomm_spi
+    select MCUX_HAS_driver_flexcomm_spi_dma
+    select MCUX_HAS_driver_flexcomm_spi_freertos
+    select MCUX_HAS_driver_flexcomm_usart
+    select MCUX_HAS_driver_flexcomm_usart_dma
+    select MCUX_HAS_driver_flexcomm_usart_freertos
+    select MCUX_HAS_driver_fmeas
+    select MCUX_HAS_driver_gint
+    select MCUX_HAS_driver_iap
+    select MCUX_HAS_driver_inputmux
+    select MCUX_HAS_driver_lpc_adc
+    select MCUX_HAS_driver_lpc_crc
+    select MCUX_HAS_driver_lpc_dma
+    select MCUX_HAS_driver_lpc_enet
+    select MCUX_HAS_driver_lpc_gpio
+    select MCUX_HAS_driver_lpc_iocon
+    select MCUX_HAS_driver_lpc_lcdc
+    select MCUX_HAS_driver_lpc_rtc
+    select MCUX_HAS_driver_mcan
+    select MCUX_HAS_driver_mrt
+    select MCUX_HAS_driver_otp
+    select MCUX_HAS_driver_pint
+    select MCUX_HAS_driver_puf
+    select MCUX_HAS_driver_rit
+    select MCUX_HAS_driver_rng
+    select MCUX_HAS_driver_sctimer
+    select MCUX_HAS_driver_sdif
+    select MCUX_HAS_driver_sha
+    select MCUX_HAS_driver_spifi
+    select MCUX_HAS_driver_spifi_dma
+    select MCUX_HAS_driver_utick
+    select MCUX_HAS_driver_wwdt
+    select MCUX_HAS_utilities_misc_utilities
+    select MCUX_HAS_utility_assert
+    select MCUX_HAS_utility_assert_lite
+    select MCUX_HAS_utility_debug_console
+    select MCUX_HAS_utility_debug_console_lite
+    select MCUX_HAS_utility_notifier
+    select MCUX_HAS_utility_shell
+    select MCUX_HAS_utility_str
+
+#### SOC specific dependency ####
+config MCUX_USE_RTE_Device
+    bool
+    select MCUX_USE_driver_lpc_dma
+
+config MCUX_USE_component_serial_manager_uart
+    bool
+    select MCUX_USE_component_usart_adapter
+
+config MCUX_USE_driver_dmic_dma
+    bool
+    select MCUX_USE_driver_lpc_dma
+
+config MCUX_USE_driver_flexcomm_i2c_dma
+    bool
+    select MCUX_USE_driver_lpc_dma
+
+config MCUX_USE_driver_flexcomm_i2s_dma
+    bool
+    select MCUX_USE_driver_lpc_dma
+
+config MCUX_USE_driver_flexcomm_spi_dma
+    bool
+    select MCUX_USE_driver_lpc_dma
+
+config MCUX_USE_driver_flexcomm_usart_dma
+    bool
+    select MCUX_USE_driver_lpc_dma
+
+config MCUX_USE_driver_spifi_dma
+    bool
+    select MCUX_USE_driver_lpc_dma
+
+config MCUX_USE_utility_debug_console_lite
+    bool
+    select MCUX_USE_component_usart_adapter
+
+
+#### SOC level drivers ####
+# device_LPC54S018M_CMSIS
+config MCUX_USE_device_LPC54S018M_CMSIS
+    bool "Device LPC54S018M_cmsis"
+    select MCUX_USE_CMSIS_Include_core_cm
+    help
+      Device LPC54S018M_cmsis
+
+# device_LPC54S018M_startup
+config MCUX_USE_device_LPC54S018M_startup
+    bool "Device LPC54S018M_startup"
+    help
+      Device LPC54S018M_startup
+
+# device_LPC54S018M_system
+config MCUX_USE_device_LPC54S018M_system
+    bool "Device LPC54S018M_system"
+    help
+      Device LPC54S018M_system
+
+# driver_fro_calib
+config MCUX_USE_driver_fro_calib
+    bool "Driver fro_calib"
+    select MCUX_USE_driver_common
+    help
+      FRO calibration Lib
+
+# driver_power
+config MCUX_USE_driver_power
+    bool "power"
+    select MCUX_USE_driver_common
+    help
+      Power driver
+
+rsource "drivers/Kconfig"
+
+endif # MCUX_USE_SOC_LPC54S018M

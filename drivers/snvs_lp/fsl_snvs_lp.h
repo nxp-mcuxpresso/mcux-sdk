@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SNVS_LP_DRIVER_VERSION (MAKE_VERSION(2, 4, 4)) /*!< Version 2.4.4 */
+#define FSL_SNVS_LP_DRIVER_VERSION (MAKE_VERSION(2, 4, 5)) /*!< Version 2.4.5 */
 /*@}*/
 
 /*! @brief Define of SNVS_LP Zeroizable Master Key registers */

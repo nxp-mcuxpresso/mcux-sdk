@@ -1,6 +1,8 @@
-; 
-; NXP  Communication Device Class driver installation file
-; Copyright 2016 NXP
+;
+; Copyright 2016 - 2018 NXP
+; All rights reserved.
+;
+; SPDX-License-Identifier: BSD-3-Clause
 ;
 
 [Version]
@@ -81,12 +83,16 @@ ServiceBinary=%12%\%DRIVERFILENAME%.sys
 %DESCRIPTION%=DriverInstall, USB\VID_1FC9&PID_009E&MI_00
 %DESCRIPTION%=DriverInstall, USB\VID_1FC9&PID_009F&MI_00
 %DESCRIPTION%=DriverInstall, USB\VID_1FC9&PID_00A3&MI_00
+%DESCRIPTION%=DriverInstall, USB\VID_1FC9&PID_00A6&MI_03
+%DESCRIPTION%=DriverInstall, USB\VID_1FC9&PID_00A7&MI_04
 
 [DeviceList.NTamd64]
 %DESCRIPTION% = DriverInstall, USB\VID_1FC9&PID_0094
 %DESCRIPTION% = DriverInstall, USB\VID_1FC9&PID_009E&MI_00
 %DESCRIPTION% = DriverInstall, USB\VID_1FC9&PID_009F&MI_00
 %DESCRIPTION% = DriverInstall, USB\VID_1FC9&PID_00A3&MI_00
+%DESCRIPTION% = DriverInstall, USB\VID_1FC9&PID_00A6&MI_03
+%DESCRIPTION% = DriverInstall, USB\VID_1FC9&PID_00A7&MI_04
 
 ;------------------------------------------------------------------------------
 ; String Definitions

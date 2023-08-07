@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_xbar
+config MCUX_HAS_driver_xbar
+    bool
+
+config MCUX_USE_driver_xbar
+    depends on MCUX_HAS_driver_xbar
+    bool "XBAR Driver"
+    select MCUX_USE_driver_common
+    help
+      XBAR Driver

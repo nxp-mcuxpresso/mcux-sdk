@@ -1,0 +1,107 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_USE_SOC_LPC804
+    bool
+    select MCUX_CPU_ARCH_ARM_CM0P
+if MCUX_USE_SOC_LPC804
+
+# Part Number
+config MCUX_SOC_PART_LPC804
+    bool
+
+config MCUX_DEVICE
+    default "LPC804"
+
+config MCUX_DEVICE_ID
+    default "LPC804" if MCUX_SOC_PART_LPC804
+
+
+# Select supported components
+config MCUX_USE_SOC_LPC804
+    select MCUX_HAS_CMSIS_DSP_Include
+    select MCUX_HAS_CMSIS_DSP_Source
+    select MCUX_HAS_CMSIS_Device_API_OSTick
+    select MCUX_HAS_CMSIS_Device_API_RTOS2
+    select MCUX_HAS_CMSIS_Driver_Include_CAN
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet_MAC
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet_PHY
+    select MCUX_HAS_CMSIS_Driver_Include_Flash
+    select MCUX_HAS_CMSIS_Driver_Include_I2C
+    select MCUX_HAS_CMSIS_Driver_Include_MCI
+    select MCUX_HAS_CMSIS_Driver_Include_NAND
+    select MCUX_HAS_CMSIS_Driver_Include_SAI
+    select MCUX_HAS_CMSIS_Driver_Include_SPI
+    select MCUX_HAS_CMSIS_Driver_Include_USART
+    select MCUX_HAS_CMSIS_Driver_Include_USB_Device
+    select MCUX_HAS_CMSIS_Driver_Include_USB_Host
+    select MCUX_HAS_CMSIS_Driver_Include_WiFi
+    select MCUX_HAS_CMSIS_Include_core_cm
+    select MCUX_HAS_CMSIS_NN_Source
+    select MCUX_HAS_CMSIS_RTOS2_NonSecure
+    select MCUX_HAS_CMSIS_RTOS2_Secure
+    select MCUX_HAS_component_ctimer_adapter
+    select MCUX_HAS_component_lists
+    select MCUX_HAS_component_lpc_i2c_adapter
+    select MCUX_HAS_component_miniusart_adapter
+    select MCUX_HAS_component_mrt_adapter
+    select MCUX_HAS_driver_capt
+    select MCUX_HAS_driver_common
+    select MCUX_HAS_driver_ctimer
+    select MCUX_HAS_driver_iap
+    select MCUX_HAS_driver_lpc_acomp
+    select MCUX_HAS_driver_lpc_adc
+    select MCUX_HAS_driver_lpc_crc
+    select MCUX_HAS_driver_lpc_dac
+    select MCUX_HAS_driver_lpc_gpio
+    select MCUX_HAS_driver_lpc_i2c
+    select MCUX_HAS_driver_lpc_iocon_lite
+    select MCUX_HAS_driver_lpc_minispi
+    select MCUX_HAS_driver_lpc_miniusart
+    select MCUX_HAS_driver_mrt
+    select MCUX_HAS_driver_pint
+    select MCUX_HAS_driver_plu
+    select MCUX_HAS_driver_swm
+    select MCUX_HAS_driver_syscon
+    select MCUX_HAS_driver_wkt
+    select MCUX_HAS_driver_wwdt
+    select MCUX_HAS_utilities_misc_utilities
+    select MCUX_HAS_utility_assert_lite
+    select MCUX_HAS_utility_debug_console_lite
+
+#### SOC specific dependency ####
+config MCUX_USE_component_lpc_gpio_adapter
+    bool
+    select MCUX_USE_driver_syscon
+
+config MCUX_USE_utility_debug_console_lite
+    bool
+    select MCUX_USE_component_miniusart_adapter
+
+
+#### SOC level drivers ####
+# device_LPC804_CMSIS
+config MCUX_USE_device_LPC804_CMSIS
+    bool "Device LPC804_cmsis"
+    select MCUX_USE_CMSIS_Include_core_cm
+    help
+      Device LPC804_cmsis
+
+# device_LPC804_startup
+config MCUX_USE_device_LPC804_startup
+    bool "Device LPC804_startup"
+    help
+      Device LPC804_startup
+
+# device_LPC804_system
+config MCUX_USE_device_LPC804_system
+    bool "Device LPC804_system"
+    help
+      Device LPC804_system
+
+rsource "drivers/Kconfig"
+
+endif # MCUX_USE_SOC_LPC804

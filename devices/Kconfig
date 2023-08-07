@@ -1,0 +1,19 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "SOC Configuration"
+
+config MCUX_DEVICE
+    string
+
+config MCUX_DEVICE_ID
+    string
+
+config MCUX_CORE_ID
+    string
+
+rsource "./*/Kconfig"
+
+endmenu

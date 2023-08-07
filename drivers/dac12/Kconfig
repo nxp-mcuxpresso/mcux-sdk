@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_dac12
+config MCUX_HAS_driver_dac12
+    bool
+
+config MCUX_USE_driver_dac12
+    depends on MCUX_HAS_driver_dac12
+    bool "DAC12 Driver"
+    select MCUX_USE_driver_common
+    help
+      DAC12 Driver

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -8,9 +8,9 @@
 
 #include "mx25r_flash.h"
 
-#define MX25R_BYTE_ADDR1(address) ((address >> 16) & 0xf)
-#define MX25R_BYTE_ADDR2(address) ((address >> 8) & 0xf)
-#define MX25R_BYTE_ADDR3(address) (address & 0xf)
+#define MX25R_BYTE_ADDR1(address) ((uint8_t)(((address) >> 16UL) & 0x0FUL))
+#define MX25R_BYTE_ADDR2(address) ((uint8_t)(((address) >> 8UL) & 0x0FUL))
+#define MX25R_BYTE_ADDR3(address) ((uint8_t)((address)&0x0FUL))
 
 /* initialize 'mx25r_instance' */
 mx25r_err_t mx25r_init(struct mx25r_instance *instance, transfer_cb_t callback, void *callback_prv)
@@ -32,7 +32,7 @@ mx25r_err_t mx25r_cmd_rdid(struct mx25r_instance *instance, struct mx25r_rdid_re
 /* read n bytes starting at 'address' */
 mx25r_err_t mx25r_cmd_read(struct mx25r_instance *instance, uint32_t address, uint8_t *buffer, uint32_t size)
 {
-    if (address & 0xFF000000U)
+    if ((address & 0xFF000000U) != 0x00U)
     {
         return mx25r_err_out_of_range;
     }
@@ -84,24 +84,24 @@ mx25r_err_t mx25r_cmd_write(struct mx25r_instance *instance,
                             uint32_t size_256_max)
 {
     struct mx25r_rdsr_result result;
-    if (address_256_align & 0xFF000000U)
+    if ((address_256_align & 0xFF000000U) != 0x00U)
     {
         return mx25r_err_out_of_range;
     }
-    if (address_256_align & 0xFFU)
+    if ((address_256_align & 0xFFU) != 0x00U)
     {
         return mx25r_err_alignement;
     }
-    if (size_256_max > 256)
+    if (size_256_max > 256U)
     {
         return mx25r_err_out_of_range;
     }
     /* enable write and wait until WEL is 1 */
-    mx25r_cmd_wren(instance);
+    (void)mx25r_cmd_wren(instance);
     do
     {
-        mx25r_cmd_rdsr(instance, &result);
-    } while (!(result.sr0 & 0x2));
+        (void)mx25r_cmd_rdsr(instance, &result);
+    } while (((uint8_t)result.sr0 & 0x2U) == 0x00U);
     /* write sequence */
     instance->cmd[0] = 0x02;
     instance->cmd[1] = MX25R_BYTE_ADDR1(address_256_align);
@@ -112,8 +112,8 @@ mx25r_err_t mx25r_cmd_write(struct mx25r_instance *instance,
     /* wait until WRI is 0 and WEL is 0 */
     do
     {
-        mx25r_cmd_rdsr(instance, &result);
-    } while (result.sr0 & 0x3);
+        (void)mx25r_cmd_rdsr(instance, &result);
+    } while (((uint8_t)result.sr0 & 0x3U) != 0x00U);
     return mx25r_err_ok;
 }
 
@@ -122,11 +122,11 @@ mx25r_err_t mx25r_cmd_sector_erase(struct mx25r_instance *instance, uint32_t add
 {
     struct mx25r_rdsr_result result;
     /* enable write and wait until WEL is 1 */
-    mx25r_cmd_wren(instance);
+    (void)mx25r_cmd_wren(instance);
     do
     {
-        mx25r_cmd_rdsr(instance, &result);
-    } while (!(result.sr0 & 0x2));
+        (void)mx25r_cmd_rdsr(instance, &result);
+    } while (((uint8_t)result.sr0 & 0x2U) == 0x00U);
     /* write sequence */
     instance->cmd[0] = 0x20;
     instance->cmd[1] = MX25R_BYTE_ADDR1(address);
@@ -136,7 +136,7 @@ mx25r_err_t mx25r_cmd_sector_erase(struct mx25r_instance *instance, uint32_t add
     /* wait until WRI is 0 and WEL is 0 */
     do
     {
-        mx25r_cmd_rdsr(instance, &result);
-    } while (result.sr0 & 0x3);
+        (void)mx25r_cmd_rdsr(instance, &result);
+    } while (((uint8_t)result.sr0 & 0x3U) != 0x00U);
     return mx25r_err_ok;
 }

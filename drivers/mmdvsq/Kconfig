@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_mmdvsq
+config MCUX_HAS_driver_mmdvsq
+    bool
+
+config MCUX_USE_driver_mmdvsq
+    depends on MCUX_HAS_driver_mmdvsq
+    bool "MMDVSQ Driver"
+    select MCUX_USE_driver_common
+    help
+      MMDVSQ Driver

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2020, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -88,11 +88,11 @@ void BOARD_BootClockRUN(void)
     // CLOCK_InitSysPll2(&g_sysPll2Config); /* init SYSTEM PLL2 run at 1000MHZ */
     // CLOCK_InitSysPll3(&g_sysPll3Config); /* init SYSTEM PLL3 run at 600MHZ */
 
-    CLOCK_InitAudioPll1(&g_audioPll1Config); /* init AUDIO PLL1 run at 393216000HZ */
-    CLOCK_InitAudioPll2(&g_audioPll2Config); /* init AUDIO PLL2 run at 361267200HZ */
+    CLOCK_InitAudioPll1(&g_audioPll1Config);                  /* init AUDIO PLL1 run at 393216000HZ */
+    CLOCK_InitAudioPll2(&g_audioPll2Config);                  /* init AUDIO PLL2 run at 361267200HZ */
     CLOCK_SetRootDivider(kCLOCK_RootM7, 1U, 1U);              /* Set root clock to 800M */
     CLOCK_SetRootMux(kCLOCK_RootM7, kCLOCK_M7RootmuxSysPll1); /* switch cortex-m7 to SYSTEM PLL1 */
-    
+
     // CLOCK_SetRootDivider(kCLOCK_RootQspi, 1U, 2U);              /* Set root clock to 800M */
     // CLOCK_SetRootMux(kCLOCK_RootM7, kCLOCK_M7RootmuxSysPll1); /* switch QSPI to SYSTEM PLL1 */
 
@@ -108,7 +108,7 @@ void BOARD_BootClockRUN(void)
     CLOCK_EnableClock(kCLOCK_Rdc);   /* Enable RDC clock */
     CLOCK_EnableClock(kCLOCK_Ocram); /* Enable Ocram clock */
     CLOCK_EnableClock(kCLOCK_Audio); /* Enable Audio clock to power on the audiomix domain*/
-    
+
     /* The purpose to enable the following modules clock is to make sure the M7 core could work normally when A53 core
      * enters the low power status.*/
     CLOCK_EnableClock(kCLOCK_Sim_m);
@@ -121,14 +121,25 @@ void BOARD_BootClockRUN(void)
 
     /* Power up the audiomix domain by M7 core.*/
     GPC->PGC_CPU_M7_MAPPING |= 1U << GPC_PGC_CPU_M7_MAPPING_AUDIOMIX_DOMAIN_SHIFT; /* Map the audiomix domain to M7 */
-    GPC->PU_PGC_SW_PUP_REQ |= 1U << GPC_PU_PGC_SW_PUP_REQ_AUDIOMIX_SW_PUP_REQ_SHIFT; /* Software request to trigger power up the domain */
-    
-    while(GPC->PU_PGC_SW_PUP_REQ & (1U << GPC_PU_PGC_SW_PUP_REQ_AUDIOMIX_SW_PUP_REQ_SHIFT)); /* Waiting the GPC_PU_PGC_SW_PUP_REQ_AUDIOMIX_SW_PUP_REQ bit self-cleared after power up */
+    GPC->PU_PGC_SW_PUP_REQ |=
+        1U << GPC_PU_PGC_SW_PUP_REQ_AUDIOMIX_SW_PUP_REQ_SHIFT; /* Software request to trigger power up the domain */
+
+    /* Waiting the GPC_PU_PGC_SW_PUP_REQ_AUDIOMIX_SW_PUP_REQ bit self-cleared after power up */
+    while (GPC->PU_PGC_SW_PUP_REQ & (1U << GPC_PU_PGC_SW_PUP_REQ_AUDIOMIX_SW_PUP_REQ_SHIFT))
+    {
+    }
     /* Do the handshake to make sure the NOC bus ready after power up the AUDIOMIX domain. */
     GPC->PU_PWRHSK |= 1U << GPC_PU_PWRHSK_GPC_AUDIOMIX_NOC_PWRDNREQN_SHIFT;
-    while(!(GPC->PU_PWRHSK & (1U << GPC_PU_PWRHSK_GPC_AUDIOMIX_PWRDNACKN_SHIFT))) ;
-    
-    AUDIOMIX_InitAudioPll(AUDIOMIX, &g_saiPLLConfig); /* init SAI PLL run at 361267200HZ */
+    while (!(GPC->PU_PWRHSK & (1U << GPC_PU_PWRHSK_GPC_AUDIOMIX_PWRDNACKN_SHIFT)))
+    {
+    }
+
+    /* Skip configuring AudioPLL when it's disabled by Acore. */
+    if (0U != (AUDIOMIX->CLKEN1 & AUDIOMIX_CLKEN1_PLL_MASK))
+    {
+        AUDIOMIX_InitAudioPll(AUDIOMIX, &g_saiPLLConfig); /* init SAI PLL run at 361267200HZ */
+    }
+
     /* Update core clock */
     SystemCoreClockUpdate();
 }

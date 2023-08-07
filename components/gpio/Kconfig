@@ -1,0 +1,62 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# component_gpio_adapter
+config MCUX_HAS_component_gpio_adapter
+    bool
+
+config MCUX_USE_component_gpio_adapter
+    depends on MCUX_HAS_component_gpio_adapter
+    bool "Component gpio_adapter"
+    select MCUX_USE_driver_gpio
+    select MCUX_USE_driver_port
+    help
+      Component gpio_adapter
+
+# component_lpc_gpio_adapter
+config MCUX_HAS_component_lpc_gpio_adapter
+    bool
+
+config MCUX_USE_component_lpc_gpio_adapter
+    depends on MCUX_HAS_component_lpc_gpio_adapter
+    bool "Component lpc_gpio_adapter"
+    select MCUX_USE_driver_lpc_gpio
+    select MCUX_USE_driver_inputmux
+    select MCUX_USE_driver_pint
+    help
+      Component lpc_gpio_adapter
+
+# component_igpio_adapter
+config MCUX_HAS_component_igpio_adapter
+    bool
+
+config MCUX_USE_component_igpio_adapter
+    depends on MCUX_HAS_component_igpio_adapter
+    bool "Component igpio_adapter"
+    select MCUX_USE_driver_igpio
+    help
+      Component igpio_adapter
+
+# component_gint_adapter
+config MCUX_HAS_component_gint_adapter
+    bool
+
+config MCUX_USE_component_gint_adapter
+    depends on MCUX_HAS_component_gint_adapter
+    bool "Component gint_adapter"
+    select MCUX_USE_driver_gint
+    help
+      Component gint_adapter
+
+# component_rt_gpio_adapter
+config MCUX_HAS_component_rt_gpio_adapter
+    bool
+
+config MCUX_USE_component_rt_gpio_adapter
+    depends on MCUX_HAS_component_rt_gpio_adapter
+    bool "Component rt_gpio_adapter"
+    select MCUX_USE_driver_lpc_gpio
+    help
+      Component rt_gpio_adapter

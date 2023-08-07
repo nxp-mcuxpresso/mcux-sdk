@@ -1,0 +1,122 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_component_serial_manager
+    bool
+
+config MCUX_HAS_component_serial_manager_uart
+    bool
+
+config MCUX_HAS_component_serial_manager_spi
+    bool
+
+config MCUX_HAS_component_serial_manager_swo
+    bool
+
+menuconfig MCUX_USE_component_serial_manager
+    depends on MCUX_HAS_component_serial_manager
+    bool "Serial Manager"
+    select MCUX_USE_driver_common
+    select MCUX_USE_component_lists
+
+    help
+      Component serial_manager
+
+
+if MCUX_USE_component_serial_manager
+
+# component_serial_manager_uart
+menuconfig MCUX_USE_component_serial_manager_uart
+    depends on MCUX_HAS_component_serial_manager_uart
+    bool "Serial Manager uart"
+
+    help
+      Component serial_manager_uart
+
+    if MCUX_USE_component_serial_manager_uart
+
+    config MCUX_component_serial_manager_uart_USE_flexcomm_usart
+        depends on MCUX_HAS_driver_flexcomm_usart
+        bool "Use flexcomm_usart"
+        select MCUX_USE_driver_flexcomm_usart
+
+    config MCUX_component_serial_manager_uart_USE_lpsci
+        depends on MCUX_HAS_driver_lpsci
+        bool "Use lpsci"
+        select MCUX_USE_driver_lpsci
+
+    config MCUX_component_serial_manager_uart_USE_lpuart
+        depends on MCUX_HAS_driver_lpuart
+        bool "Use lpuart"
+        select MCUX_USE_driver_lpuart
+
+    config MCUX_component_serial_manager_uart_USE_uart
+        depends on MCUX_HAS_driver_uart
+        bool "Use uart"
+        select MCUX_USE_driver_uart
+
+    config MCUX_component_serial_manager_uart_USE_iuart
+        depends on MCUX_HAS_driver_iuart
+        bool "Use iuart"
+        select MCUX_USE_driver_iuart
+
+    config MCUX_component_serial_manager_uart_USE_vusart
+        depends on MCUX_HAS_driver_vusart
+        bool "Use vusart"
+        select MCUX_USE_driver_vusart
+
+    config MCUX_component_serial_manager_uart_USE_lpc_miniusart
+        depends on MCUX_HAS_driver_lpc_miniusart
+        bool "Use lpc_miniusart"
+        select MCUX_USE_driver_lpc_miniusart
+
+    config MCUX_component_serial_manager_uart_USE_qsci
+        depends on MCUX_HAS_driver_qsci
+        bool "Use qsci"
+        select MCUX_USE_driver_qsci
+
+    endif # MCUX_USE_component_serial_manager_uart
+
+
+menuconfig MCUX_USE_component_serial_manager_spi
+    depends on MCUX_HAS_component_serial_manager_spi
+    bool "Serial Manager SPI"
+
+    if MCUX_USE_component_serial_manager_spi
+    config MCUX_component_serial_manager_spi_USE_dspi
+    depends on (MCUX_HAS_driver_dspi && MCUX_HAS_component_dspi_adapter)
+    bool "Use DSPI"
+    select MCUX_USE_driver_dspi
+    select MCUX_USE_component_dspi_adapter
+
+    config MCUX_component_serial_manager_spi_USE_flexcomm_spi
+    depends on (MCUX_HAS_driver_flexcomm_spi && MCUX_HAS_component_flexcomm_spi_adapter)
+    bool "Use Flexcomm SPI"
+    select MCUX_USE_driver_flexcomm_spi
+    select MCUX_USE_component_flexcomm_spi_adapter
+
+    config MCUX_component_serial_manager_spi_USE_lpspi
+    depends on (MCUX_HAS_driver_lpspi && MCUX_HAS_component_lpspi_adapter)
+    bool "Use LPSPI"
+    select MCUX_USE_driver_lpspi
+    select MCUX_USE_component_lpspi_adapter
+
+    config MCUX_component_serial_manager_spi_USE_spi
+    depends on (MCUX_HAS_driver_spi && MCUX_HAS_component_spi_adapter)
+    bool "Use SPI"
+    select MCUX_USE_driver_spi
+    select MCUX_USE_component_spi_adapter
+
+    endif # MCUX_USE_component_serial_manager_spi
+
+# component_serial_manager_swo
+config MCUX_USE_component_serial_manager_swo
+    depends on MCUX_HAS_component_serial_manager_swo
+    bool "Serial Manager Swo"
+    select MCUX_USE_driver_common
+    help
+      Component serial_manager_swo
+
+endif

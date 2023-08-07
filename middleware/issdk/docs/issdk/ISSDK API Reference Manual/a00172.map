@@ -1,0 +1,36 @@
+<map id="sensors/register_io_i2c.h" name="sensors/register_io_i2c.h">
+<area shape="rect" id="node2" href="$a00185.html" title="The sensor_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regist..." alt="" coords="1242,109,1405,136"/>
+<area shape="rect" id="node3" href="$a00023.html" title="The dbap_drv.h file describes the DBAP driver interface and structures. " alt="" coords="5,199,140,225"/>
+<area shape="rect" id="node4" href="$a00032.html" title="The fxas21002_drv.h file describes the fxas21002 driver interface and structures. ..." alt="" coords="165,199,330,225"/>
+<area shape="rect" id="node5" href="$a00041.html" title="The fxlc95000_drv.h file describes the FXLC95000L driver interface and structures. " alt="" coords="355,199,516,225"/>
+<area shape="rect" id="node6" href="$a00059.html" title="The fxls8962_drv.h file describes the FXLS8962AF driver interface and structures. ..." alt="" coords="541,199,695,225"/>
+<area shape="rect" id="node7" href="$a00068.html" title="The fxls896x_drv.h file describes the FXLS8964/67AF driver interface and structures. " alt="" coords="719,199,874,225"/>
+<area shape="rect" id="node8" href="$a00077.html" title="The fxls8974_drv.h file describes the FXLS8974CF driver interface and structures. ..." alt="" coords="898,199,1053,225"/>
+<area shape="rect" id="node9" href="$a00086.html" title="The fxos8700_drv.h file describes the fxos8700 driver interface and structures. " alt="" coords="1077,199,1236,225"/>
+<area shape="rect" id="node10" href="$a00095.html" title="The fxpq3115_drv.h file describes the fxpq3115 driver interface and structures. " alt="" coords="1260,199,1419,225"/>
+<area shape="rect" id="node11" href="$a00110.html" title="The isl29023_drv.h file describes the ISL29023 driver interface and structures. " alt="" coords="1443,199,1598,225"/>
+<area shape="rect" id="node12" href="$a00119.html" title="The mag3110_drv.h file describes the MAG3110 driver interface and structures. " alt="" coords="1623,199,1781,225"/>
+<area shape="rect" id="node13" href="$a00128.html" title="The mma845x_drv.h file describes the MMA845x driver interface and structures. " alt="" coords="1806,199,1969,225"/>
+<area shape="rect" id="node14" href="$a00137.html" title="The mma8491q_drv.h file describes the MMA8491Q driver interface and structures. " alt="" coords="1993,199,2163,225"/>
+<area shape="rect" id="node15" href="$a00146.html" title="The mma865x_drv.h file describes the MMA865x driver interface and structures. " alt="" coords="2187,199,2350,225"/>
+<area shape="rect" id="node16" href="$a00155.html" title="The mma9553_drv.h file describes the MMA9553L driver interface and structures. " alt="" coords="2374,199,2537,225"/>
+<area shape="rect" id="node17" href="$a00164.html" title="The mpl3115_drv.h file describes the MPL3115 driver interface and structures. " alt="" coords="2561,199,2715,225"/>
+<area shape="rect" id="node18" href="$a00098.html" title="The host_io_uart.c file contains definitions for UART based streaming interface for sending and resei..." alt="" coords="1834,109,1989,136"/>
+<area shape="rect" id="node19" href="$a00167.html" title="The register_io_i2c.c file contains definitions for low&#45;level interface functions for reading and wri..." alt="" coords="2013,102,2145,143"/>
+<area shape="rect" id="node20" href="$a00470.html" title="The orientaion_application_baremetal_agm01.c file implements the ISSDK baremetal orientation applicat..." alt="" coords="2169,95,2320,151"/>
+<area shape="rect" id="node21" href="$a00473.html" title="The orientaion_application_baremetal_agm04.c file implements the ISSDK baremetal orientation applicat..." alt="" coords="2344,95,2495,151"/>
+<area shape="rect" id="node22" href="$a00476.html" title="The orientaion_application_baremetal_agmp03.c file implements the ISSDK baremetal orientation applica..." alt="" coords="2519,95,2669,151"/>
+<area shape="rect" id="node23" href="$a04823.html" title="drivers/ads/lpc/auto\l_detection_service.c" alt="" coords="2693,102,2833,143"/>
+<area shape="rect" id="node24" href="$a04826.html" title="drivers/ads/kinetis\l/auto_detection_service.c" alt="" coords="2857,102,3027,143"/>
+<area shape="rect" id="node25" href="$a00542.html" title="The auto detection service file implements auto detection sequence for discovery of FRDM&#45;KL25Z Board ..." alt="" coords="3051,95,3209,151"/>
+<area shape="rect" id="node26" href="$a04829.html" title="drivers/ads/qn/auto\l_detection_service.c" alt="" coords="3233,102,3373,143"/>
+<area shape="rect" id="node27" href="$a00860.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F. " alt="" coords="3398,95,3598,151"/>
+<area shape="rect" id="node28" href="$a00863.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F/FRDM&#45;STBC&#45;AGM04 using MMA8652 (Accel..." alt="" coords="3622,95,3822,151"/>
+<area shape="rect" id="node29" href="$a00866.html" title="FreeRTOS (two task) implementation of sensor fusion. " alt="" coords="3847,95,4053,151"/>
+<area shape="rect" id="node30" href="$a00869.html" title="Bare metal implementation of sensor fusion on FRDM&#45;K64F. " alt="" coords="4078,102,4257,143"/>
+<area shape="rect" id="node31" href="$a00872.html" title="Bare metal implementation of sensor fusion on FRDM&#45;K64F/FRDM&#45;STBC&#45;AGM04 using MMA8652 (Accel)..." alt="" coords="4281,95,4449,151"/>
+<area shape="rect" id="node32" href="$a00875.html" title="Bare metal implementation of sensor fusion on FRDM&#45;K64F. " alt="" coords="4473,95,4641,151"/>
+<area shape="rect" id="node33" href="$a00878.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F/FRDM&#45;FXS&#45;AGM02. " alt="" coords="4665,95,4824,151"/>
+<area shape="rect" id="node34" href="$a00881.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F/FRDM&#45;FXS&#45;AGM02 with smart power&#45;cycl..." alt="" coords="4849,95,5017,151"/>
+<area shape="rect" id="node35" href="$a00884.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F. " alt="" coords="5041,95,5200,151"/>
+</map>

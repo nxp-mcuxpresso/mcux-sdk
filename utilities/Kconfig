@@ -1,0 +1,47 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "Utilities Configuration"
+
+
+# utility_str
+config MCUX_HAS_utility_str
+    bool
+
+config MCUX_USE_utility_str
+    depends on MCUX_HAS_utility_str
+    bool "Utility str"
+    select MCUX_USE_driver_common
+    help
+      Utility str
+
+# utility_debug_console_lite
+config MCUX_HAS_utility_debug_console_lite
+    bool
+
+config MCUX_USE_utility_debug_console_lite
+    depends on MCUX_HAS_utility_debug_console_lite
+    bool "Utility debug_console_lite"
+    select MCUX_USE_driver_common
+    help
+      Utility debug_console_lite
+
+# utility_debug_console
+config MCUX_HAS_utility_debug_console
+    bool
+
+config MCUX_USE_utility_debug_console
+    depends on MCUX_HAS_utility_debug_console
+    bool "Utility debug_console"
+    select MCUX_USE_component_serial_manager
+    select MCUX_USE_driver_common
+    help
+      Utility debug_console
+
+rsource "./assert/Kconfig"
+rsource "./misc_utilities/Kconfig"
+rsource "./shell/Kconfig"
+
+endmenu

@@ -1,5 +1,5 @@
 /*
- * Copyright  2017-2021 NXP
+ * Copyright 2017-2021, 2023 NXP
  * All rights reserved.
  *
  *
@@ -29,8 +29,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief IOCON driver version 2.0.1. */
-#define LPC_IOCON_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief IOCON driver version 2.0.2. */
+#define LPC_IOCON_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /**
@@ -117,7 +117,7 @@ __STATIC_INLINE void IOCON_SetPinMuxing(IOCON_Type *base, const iocon_group_t *p
 
     for (i = 0; i < arrayLength; i++)
     {
-        IOCON_PinMuxSet(base, pinArray[i].ionumber, pinArray[i].modefunc);
+        IOCON_PinMuxSet(base, (uint8_t)pinArray[i].ionumber, pinArray[i].modefunc);
     }
 }
 

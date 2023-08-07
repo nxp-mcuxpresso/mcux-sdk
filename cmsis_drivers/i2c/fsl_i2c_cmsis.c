@@ -154,11 +154,11 @@ static int32_t I2C_Master_DmaInitialize(ARM_I2C_SignalEvent_t cb_event, cmsis_i2
         /* Configure DMAMUX channel */
 #if FSL_FEATURE_DMA_MODULE_CHANNEL != FSL_FEATURE_DMAMUX_MODULE_CHANNEL
         DMAMUX_SetSource(i2c->dmaResource->i2cDmamuxBase, i2c->dmaResource->i2cDmamuxChannel,
-                         (uint8_t)i2c->dmaResource->i2cDmaRequest);
+                         (int32_t)i2c->dmaResource->i2cDmaRequest);
         DMAMUX_EnableChannel(i2c->dmaResource->i2cDmamuxBase, i2c->dmaResource->i2cDmamuxChannel);
 #else
         DMAMUX_SetSource(i2c->dmaResource->i2cDmamuxBase, i2c->dmaResource->i2cDmaChannel,
-                         (uint8_t)i2c->dmaResource->i2cDmaRequest);
+                         (int32_t)i2c->dmaResource->i2cDmaRequest);
         DMAMUX_EnableChannel(i2c->dmaResource->i2cDmamuxBase, i2c->dmaResource->i2cDmaChannel);
 #endif
         /* Creat dmahandle  */
@@ -472,7 +472,7 @@ static int32_t I2C_Master_EdmaInitialize(ARM_I2C_SignalEvent_t cb_event, cmsis_i
     {
         /* Configure DMAMUX channel */
         DMAMUX_SetSource(i2c->edmaResource->i2cDmamuxBase, i2c->edmaResource->i2cEdmaChannel,
-                         (uint8_t)i2c->edmaResource->i2cDmaRequest);
+                         (int32_t)i2c->edmaResource->i2cDmaRequest);
         DMAMUX_EnableChannel(i2c->edmaResource->i2cDmamuxBase, i2c->edmaResource->i2cEdmaChannel);
         /* Creat edmahandle  */
         EDMA_CreateHandle(i2c->edmaHandle, i2c->edmaResource->i2cEdmaBase, i2c->edmaResource->i2cEdmaChannel);

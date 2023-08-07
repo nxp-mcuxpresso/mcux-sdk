@@ -10,6 +10,12 @@
 
 #include "fsl_common.h"
 
+/*!
+ * @addtogroup debug_console_config
+ * @ingroup debugconsole
+ * @{ 
+ */
+
 /****************Debug console configuration********************/
 
 /*! @brief If Non-blocking mode is needed, please define it at project setting,
@@ -52,7 +58,7 @@
 #define DEBUG_CONSOLE_RECEIVE_BUFFER_LEN (1024U)
 #endif /* DEBUG_CONSOLE_RECEIVE_BUFFER_LEN */
 
-/*!@ brief Whether enable the reliable TX function
+/*!@brief Whether enable the reliable TX function
  * If the macro is zero, the reliable TX function of the debug console is disabled.
  * When the macro is zero, the string of PRINTF will be thrown away after the transmit buffer is full.
  */
@@ -64,14 +70,14 @@
 #define DEBUG_CONSOLE_TRANSFER_BLOCKING
 #endif /* DEBUG_CONSOLE_TRANSFER_NON_BLOCKING */
 
-/*!@ brief Whether enable the RX function
+/*!@brief Whether enable the RX function
  * If the macro is zero, the receive function of the debug console is disabled.
  */
 #ifndef DEBUG_CONSOLE_RX_ENABLE
 #define DEBUG_CONSOLE_RX_ENABLE (1U)
 #endif /* DEBUG_CONSOLE_RX_ENABLE */
 
-/*!@ brief define the MAX log length debug console support , that is when you call printf("log", x);, the log
+/*!@brief define the MAX log length debug console support , that is when you call printf("log", x);, the log
  * length can not bigger than this value.
  * This macro decide the local log buffer length, the buffer locate at stack, the stack maybe overflow if
  * the buffer is too big and current task stack size not big enough.
@@ -80,7 +86,7 @@
 #define DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN (128U)
 #endif /* DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN */
 
-/*!@ brief define the buffer support buffer scanf log length, that is when you call scanf("log", &x);, the log
+/*!@brief define the buffer support buffer scanf log length, that is when you call scanf("log", &x);, the log
  * length can not bigger than this value.
  * As same as the DEBUG_CONSOLE_BUFFER_PRINTF_MAX_LOG_LEN.
  */
@@ -131,30 +137,13 @@
 /*********************************************************************/
 
 /***************Debug console other configuration*********************/
-/*! @brief Definition to printf the float number. */
-#ifndef PRINTF_FLOAT_ENABLE
-#define PRINTF_FLOAT_ENABLE 0U
-#endif /* PRINTF_FLOAT_ENABLE */
-
-/*! @brief Definition to scanf the float number. */
-#ifndef SCANF_FLOAT_ENABLE
-#define SCANF_FLOAT_ENABLE 0U
-#endif /* SCANF_FLOAT_ENABLE */
-
-/*! @brief Definition to support advanced format specifier for printf. */
-#ifndef PRINTF_ADVANCED_ENABLE
-#define PRINTF_ADVANCED_ENABLE 0U
-#endif /* PRINTF_ADVANCED_ENABLE */
-
-/*! @brief Definition to support advanced format specifier for scanf. */
-#ifndef SCANF_ADVANCED_ENABLE
-#define SCANF_ADVANCED_ENABLE 0U
-#endif /* SCANF_ADVANCED_ENABLE */
 
 /*! @brief Definition to select virtual com(USB CDC) as the debug console. */
 #ifndef BOARD_USE_VIRTUALCOM
 #define BOARD_USE_VIRTUALCOM 0U
 #endif
 /*******************************************************************/
+
+/*! @} */
 
 #endif /* _FSL_DEBUG_CONSOLE_CONF_H_ */

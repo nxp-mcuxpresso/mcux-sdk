@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -15,6 +15,9 @@
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.sctimer"
+#endif
+#if defined(SCT_RSTS_N) || defined(SCT_RSTS)
+#define FSL_FEATURE_SCT_HAS_RESET
 #endif
 
 /*! @brief Typedef for interrupt handler. */
@@ -43,6 +46,7 @@ static SCT_Type *const s_sctBases[] = SCT_BASE_PTRS;
 static const clock_ip_name_t s_sctClocks[] = SCT_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if defined(FSL_FEATURE_SCT_HAS_RESET)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
 #if defined(FSL_FEATURE_SCT_WRITE_ZERO_ASSERT_RESET) && FSL_FEATURE_SCT_WRITE_ZERO_ASSERT_RESET
 /*! @brief Pointers to SCT resets for each instance, writing a zero asserts the reset */
@@ -52,6 +56,7 @@ static const reset_ip_name_t s_sctResets[] = SCT_RSTS_N;
 static const reset_ip_name_t s_sctResets[] = SCT_RSTS;
 #endif
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
+#endif /* FSL_FEATURE_SCT_HAS_RESET */
 
 /*!< @brief SCTimer event Callback function. */
 static sctimer_event_callback_t s_eventCallback[FSL_FEATURE_SCT_NUMBER_OF_EVENTS];
@@ -113,10 +118,12 @@ status_t SCTIMER_Init(SCT_Type *base, const sctimer_config_t *config)
     CLOCK_EnableClock(s_sctClocks[SCTIMER_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if defined(FSL_FEATURE_SCT_HAS_RESET)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
     /* Reset the module. */
     RESET_PeripheralReset(s_sctResets[SCTIMER_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
+#endif /* FSL_FEATURE_SCT_HAS_RESET */
 
     /* Setup the counter operation. For Current Driver interface SCTIMER_Init don't know detail
      * frequency of input clock, but User know it. So the INSYNC have to set by user level. */
@@ -765,9 +772,9 @@ void SCTIMER_SetCallback(SCT_Type *base, sctimer_event_callback_t callback, uint
  */
 void SCTIMER_EventHandleIRQ(SCT_Type *base)
 {
-    uint32_t eventFlag = SCT0->EVFLAG;
+    uint32_t eventFlag = base->EVFLAG;
     /* Only clear the flags whose interrupt field is enabled */
-    uint32_t clearFlag = (eventFlag & SCT0->EVEN);
+    uint32_t clearFlag = (eventFlag & base->EVEN);
     uint32_t mask      = eventFlag;
     uint32_t i;
 
@@ -791,12 +798,23 @@ void SCTIMER_EventHandleIRQ(SCT_Type *base)
     }
 
     /* Clear event interrupt flag */
-    SCT0->EVFLAG = clearFlag;
+    base->EVFLAG = clearFlag;
 }
 
+#if defined(SCT0)
 void SCT0_DriverIRQHandler(void);
 void SCT0_DriverIRQHandler(void)
 {
     s_sctimerIsr(SCT0);
     SDK_ISR_EXIT_BARRIER;
 }
+#endif
+
+#if defined(SCT)
+void SCT_DriverIRQHandler(void);
+void SCT_DriverIRQHandler(void)
+{
+    s_sctimerIsr(SCT);
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif

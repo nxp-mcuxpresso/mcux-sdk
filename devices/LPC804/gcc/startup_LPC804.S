@@ -1,21 +1,18 @@
-/* --------------------------------------------------------------------------*/
-/* @file:    startup_LPC804.S                                                */
-/* @purpose: CMSIS Cortex-M0+ Core Device Startup File                       */
-/*           LPC804                                                          */
-/* @version: 1.0                                                      */
-/* @date:    2018-1-9                                                         */
-/* --------------------------------------------------------------------------*/
+/* ------------------------------------------------------------------------- */
+/*  @file:    startup_LPC804.s                                               */
+/*  @purpose: CMSIS Cortex-M0P Core Device Startup File                      */
+/*            LPC804                                                         */
+/*  @version: 1.0                                                            */
+/*  @date:    2018-1-9                                                       */
+/*  @build:   b230529                                                        */
+/* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2020 NXP                                                   */
-/* All rights reserved.                                                      */
-/*                                                                           */
+/* Copyright 2016-2023 NXP                                                   */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
 /*****************************************************************************/
 /* Version: GCC for ARM Embedded Processors                                  */
 /*****************************************************************************/
-
-
     .syntax unified
     .arch armv6-m
 
@@ -23,58 +20,58 @@
     .align 2
     .globl __Vectors
 __Vectors:
-    .long   __StackTop                                      /* Top of Stack       */
-    .long   Reset_Handler                                   /* Reset Handler      */
-    .long   NMI_Handler                                     /* NMI Handler        */
-    .long   HardFault_Handler                               /* Hard Fault Handler */
-    .long   0                                               /* Reserved           */
-    .long   0                                               /* Reserved           */
-    .long   0                                               /* Reserved           */
-    .long   0                                               /* Reserved           */
-    .long   0                                               /* Reserved           */
-    .long   0                                               /* Reserved           */
-    .long   0                                               /* Reserved           */
-    .long   SVC_Handler                                     /* SVCall Handler     */
-    .long   0                                               /* Reserved           */
-    .long   0                                               /* Reserved           */
-    .long   PendSV_Handler                                  /* PendSV Handler     */
-    .long   SysTick_Handler                                 /* SysTick Handler    */
+    .long   __StackTop                                      /* Top of Stack */
+    .long   Reset_Handler                                   /* Reset Handler */
+    .long   NMI_Handler                                     /* NMI Handler*/
+    .long   HardFault_Handler                               /* Hard Fault Handler*/
+    .long   0                                               /* Reserved*/
+    .long   0                                               /* Reserved*/
+    .long   0                                               /* Reserved*/
+    .long   0                                               /* Reserved*/
+    .long   0                                               /* Reserved*/
+    .long   0                                               /* Reserved*/
+    .long   0                                               /* Reserved*/
+    .long   SVC_Handler                                     /* SVCall Handler*/
+    .long   0                                               /* Reserved*/
+    .long   0                                               /* Reserved*/
+    .long   PendSV_Handler                                  /* PendSV Handler*/
+    .long   SysTick_Handler                                 /* SysTick Handler*/
 
-    /* External Interrupts */
-    .long   SPI0_IRQHandler                     /* SPI0 interrupt */
-    .long   Reserved17_IRQHandler                     /* Reserved interrupt */
-    .long   DAC0_IRQHandler                     /* DAC0 interrupt */
-    .long   USART0_IRQHandler                     /* USART0 interrupt */
-    .long   USART1_IRQHandler                     /* USART1 interrupt */
-    .long   Reserved21_IRQHandler                     /* Reserved interrupt */
-    .long   Reserved22_IRQHandler                     /* Reserved interrupt */
-    .long   I2C1_IRQHandler                     /* I2C1 interrupt */
-    .long   I2C0_IRQHandler                     /* I2C0 interrupt */
-    .long   Reserved25_IRQHandler                     /* Reserved interrupt */
-    .long   MRT0_IRQHandler                     /* Multi-rate timer interrupt */
-    .long   CMP_CAPT_IRQHandler                     /* Analog comparator interrupt or Capacitive Touch interrupt */
-    .long   WDT_IRQHandler                     /* Windowed watchdog timer interrupt */
-    .long   BOD_IRQHandler                     /* BOD interrupts */
-    .long   FLASH_IRQHandler                     /* flash interrupt */
-    .long   WKT_IRQHandler                     /* Self-wake-up timer interrupt */
-    .long   ADC_SEQA_IRQHandler                     /* ADC sequence A completion. */
-    .long   ADC_SEQB_IRQHandler                     /* ADC sequence B completion. */
-    .long   ADC_THCMP_IRQHandler                     /* ADC threshold compare and error. */
-    .long   ADC_OVR_IRQHandler                     /* ADC overrun */
-    .long   Reserved36_IRQHandler                     /* Reserved interrupt */
-    .long   Reserved37_IRQHandler                     /* Reserved interrupt */
-    .long   Reserved38_IRQHandler                     /* Reserved interrupt */
-    .long   CTIMER0_IRQHandler                     /* Timer interrupt */
-    .long   PIN_INT0_IRQHandler                     /* Pin interrupt 0 or pattern match engine slice 0 interrupt */
-    .long   PIN_INT1_IRQHandler                     /* Pin interrupt 1 or pattern match engine slice 1 interrupt */
-    .long   PIN_INT2_IRQHandler                     /* Pin interrupt 2 or pattern match engine slice 2 interrupt */
-    .long   PIN_INT3_IRQHandler                     /* Pin interrupt 3 or pattern match engine slice 3 interrupt */
-    .long   PIN_INT4_IRQHandler                     /* Pin interrupt 4 or pattern match engine slice 4 interrupt */
-    .long   PIN_INT5_IRQHandler                     /* Pin interrupt 5 or pattern match engine slice 5 interrupt */
-    .long   PIN_INT6_IRQHandler                     /* Pin interrupt 6 or pattern match engine slice 6 interrupt */
-    .long   PIN_INT7_IRQHandler                     /* Pin interrupt 7 or pattern match engine slice 7 interrupt */
+                                                            /* External Interrupts*/
+    .long   SPI0_IRQHandler                                 /* SPI0 interrupt*/
+    .long   Reserved17_IRQHandler                           /* Reserved interrupt*/
+    .long   DAC0_IRQHandler                                 /* DAC0 interrupt*/
+    .long   USART0_IRQHandler                               /* USART0 interrupt*/
+    .long   USART1_IRQHandler                               /* USART1 interrupt*/
+    .long   Reserved21_IRQHandler                           /* Reserved interrupt*/
+    .long   Reserved22_IRQHandler                           /* Reserved interrupt*/
+    .long   I2C1_IRQHandler                                 /* I2C1 interrupt*/
+    .long   I2C0_IRQHandler                                 /* I2C0 interrupt*/
+    .long   Reserved25_IRQHandler                           /* Reserved interrupt*/
+    .long   MRT0_IRQHandler                                 /* Multi-rate timer interrupt*/
+    .long   CMP_CAPT_IRQHandler                             /* Analog comparator interrupt or Capacitive Touch interrupt*/
+    .long   WDT_IRQHandler                                  /* Windowed watchdog timer interrupt*/
+    .long   BOD_IRQHandler                                  /* BOD interrupts*/
+    .long   FLASH_IRQHandler                                /* flash interrupt*/
+    .long   WKT_IRQHandler                                  /* Self-wake-up timer interrupt*/
+    .long   ADC_SEQA_IRQHandler                             /* ADC sequence A completion.*/
+    .long   ADC_SEQB_IRQHandler                             /* ADC sequence B completion.*/
+    .long   ADC_THCMP_IRQHandler                            /* ADC threshold compare and error.*/
+    .long   ADC_OVR_IRQHandler                              /* ADC overrun*/
+    .long   Reserved36_IRQHandler                           /* Reserved interrupt*/
+    .long   Reserved37_IRQHandler                           /* Reserved interrupt*/
+    .long   Reserved38_IRQHandler                           /* Reserved interrupt*/
+    .long   CTIMER0_IRQHandler                              /* Timer interrupt*/
+    .long   PIN_INT0_IRQHandler                             /* Pin interrupt 0 or pattern match engine slice 0 interrupt*/
+    .long   PIN_INT1_IRQHandler                             /* Pin interrupt 1 or pattern match engine slice 1 interrupt*/
+    .long   PIN_INT2_IRQHandler                             /* Pin interrupt 2 or pattern match engine slice 2 interrupt*/
+    .long   PIN_INT3_IRQHandler                             /* Pin interrupt 3 or pattern match engine slice 3 interrupt*/
+    .long   PIN_INT4_IRQHandler                             /* Pin interrupt 4 or pattern match engine slice 4 interrupt*/
+    .long   PIN_INT5_IRQHandler                             /* Pin interrupt 5 or pattern match engine slice 5 interrupt*/
+    .long   PIN_INT6_IRQHandler                             /* Pin interrupt 6 or pattern match engine slice 6 interrupt*/
+    .long   PIN_INT7_IRQHandler                             /* Pin interrupt 7 or pattern match engine slice 7 interrupt*/
 
-    .size    __Vectors, . - __Vectors
+    .size   __Vectors, . - __Vectors
 
 /*  Variable to store CRP value in. No code read protection enabled by default
  *  Code Read Protection level (CRP)
@@ -90,10 +87,11 @@ __Vectors:
       .long 0xFFFFFFFF
     #endif
 
-   .text
+    .text
     .thumb
 
 /* Reset Handler */
+
     .thumb_func
     .align 2
     .globl   Reset_Handler
@@ -101,7 +99,6 @@ __Vectors:
     .type    Reset_Handler, %function
 Reset_Handler:
     cpsid   i               /* Mask interrupts */
-
 #ifndef __NO_SYSTEM_INIT
     ldr   r0,=SystemInit
     blx   r0
@@ -144,13 +141,12 @@ Reset_Handler:
 
     movs    r0, 0
 .LC2:
-    str r0, [r1, r2]
     subs    r2, 4
-    bge .LC2
+    str r0, [r1, r2]
+    bgt .LC2
 .LC3:
 #endif
     cpsie   i               /* Unmask interrupts */
-
 #ifndef __START
 #define __START _start
 #endif
@@ -507,6 +503,7 @@ PIN_INT7_IRQHandler:
     ldr   r0,=PIN_INT7_DriverIRQHandler
     bx    r0
     .size PIN_INT7_IRQHandler, . - PIN_INT7_IRQHandler
+
 
 /*    Macro to define default handlers. Default handler
  *    will be weak symbol and just dead loops. They can be

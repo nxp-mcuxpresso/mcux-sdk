@@ -22,8 +22,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.0.3 */
-#define FSL_WM8962_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief CLOCK driver version 2.1.0 */
+#define FSL_WM8962_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*! @brief wm8962 handle size */
@@ -269,6 +269,17 @@ typedef enum _wm8962_module
     kWM8962_ModuleHeaphoneMixer = 9,  /*!< Output mixer */
     kWM8962_ModuleSpeakerMixer  = 10, /*!< Output mixer */
 } wm8962_module_t;
+
+/*! @brief wm8962 play channel
+ * @anchor _wm8962_play_channel
+ */
+enum
+{
+    kWM8962_HeadphoneLeft  = 1, /*!< wm8962 headphone left channel */
+    kWM8962_HeadphoneRight = 2, /*!< wm8962 headphone right channel */
+    kWM8962_SpeakerLeft    = 4, /*!< wm8962 speaker left channel */
+    kWM8962_SpeakerRight   = 8, /*!< wm8962 speaker right channel */
+};
 
 /*!
  * @brief The audio data transfer protocol choice.

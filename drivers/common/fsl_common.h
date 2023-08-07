@@ -166,6 +166,7 @@ enum _status_groups
     kStatusGroup_HAL_PWM        = 127, /*!< Group number for HAL PWM status codes. */
     kStatusGroup_HAL_RNG        = 128, /*!< Group number for HAL RNG status codes. */
     kStatusGroup_HAL_I2S        = 129, /*!< Group number for HAL I2S status codes. */
+    kStatusGroup_HAL_ADC_SENSOR = 130, /*!< Group number for HAL ADC SENSOR status codes. */
     kStatusGroup_TIMERMANAGER   = 135, /*!< Group number for TiMER MANAGER status codes. */
     kStatusGroup_SERIALMANAGER  = 136, /*!< Group number for SERIAL MANAGER status codes. */
     kStatusGroup_LED            = 137, /*!< Group number for LED status codes. */
@@ -192,11 +193,12 @@ enum _status_groups
     kStatusGroup_QUEUEDSPI      = 158, /*!< Group number for QSPI status codes. */
     kStatusGroup_POWER_MANAGER  = 159, /*!< Group number for POWER_MANAGER status codes. */
     kStatusGroup_IPED           = 160, /*!< Group number for IPED status codes. */
-    kStatusGroup_CSS_PKC        = 161, /*!< Group number for CSS PKC status codes. */
-    kStatusGroup_HOSTIF         = 162, /*!< Group number for HOSTIF status codes. */
-    kStatusGroup_CLIF           = 163, /*!< Group number for CLIF status codes. */
-    kStatusGroup_BMA            = 164, /*!< Group number for BMA status codes. */
-    kStatusGroup_NETC           = 165, /*!< Group number for NETC status codes. */
+    kStatusGroup_ELS_PKC        = 161, /*!< Group number for ELS PKC status codes. */
+    kStatusGroup_CSS_PKC        = 162, /*!< Group number for CSS PKC status codes. */
+    kStatusGroup_HOSTIF         = 163, /*!< Group number for HOSTIF status codes. */
+    kStatusGroup_CLIF           = 164, /*!< Group number for CLIF status codes. */
+    kStatusGroup_BMA            = 165, /*!< Group number for BMA status codes. */
+    kStatusGroup_NETC           = 166, /*!< Group number for NETC status codes. */
 };
 
 /*! \public
@@ -309,7 +311,7 @@ void SDK_DelayAtLeastUs(uint32_t delayTime_us, uint32_t coreClock_Hz);
 
 #if (defined(__DSC__) && defined(__CW__))
 #include "fsl_common_dsc.h"
-#elif defined(__XCC__)
+#elif defined(__XTENSA__)
 #include "fsl_common_dsp.h"
 #else
 #include "fsl_common_arm.h"

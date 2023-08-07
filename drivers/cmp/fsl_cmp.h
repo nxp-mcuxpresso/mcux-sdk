@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CMP driver version 2.0.2. */
-#define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief CMP driver version 2.0.3. */
+#define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*!

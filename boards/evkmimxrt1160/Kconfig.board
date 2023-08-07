@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+
+config MCUX_USE_BOARD_EVKMIMXRT1160_CM4
+    bool "EVKMIMXRT1160 [CM4]"
+    select MCUX_USE_SOC_MIMXRT1166_CM4
+    select MCUX_SOC_PART_MIMXRT1166xxxxx
+
+config MCUX_USE_BOARD_EVKMIMXRT1160_CM7
+    bool "EVKMIMXRT1160 [CM7]"
+    select MCUX_USE_SOC_MIMXRT1166_CM7
+    select MCUX_SOC_PART_MIMXRT1166xxxxx

@@ -1,0 +1,26 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_lpi2c_edma
+config MCUX_HAS_driver_lpi2c_edma
+    bool
+
+config MCUX_USE_driver_lpi2c_edma
+    depends on MCUX_HAS_driver_lpi2c_edma
+    bool "LPI2C Edma Driver"
+    select MCUX_USE_driver_lpi2c
+    help
+      LPI2C Driver
+
+# driver_lpi2c
+config MCUX_HAS_driver_lpi2c
+    bool
+
+config MCUX_USE_driver_lpi2c
+    depends on MCUX_HAS_driver_lpi2c
+    bool "LPI2C Driver"
+    select MCUX_USE_driver_common
+    help
+      LPI2C Driver

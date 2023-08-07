@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -9,6 +9,14 @@
 #define _FSL_TPM_H_
 
 #include "fsl_common.h"
+
+/*
+ * $Coverage Justification Reference$
+ *
+ * $Justification tpm_h_ref_1$
+ * Hardware limitations make this code impossible to implement.
+ *
+ */
 
 /*!
  * @addtogroup tpm
@@ -504,6 +512,13 @@ static inline void TPM_DisableChannel(TPM_Type *base, tpm_chnl_t chnlNumber)
         base->CONTROLS[chnlNumber].CnSC &=
             ~(TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK);
         /* Wait till mode change to disable channel is acknowledged */
+        /*
+         * $Branch Coverage Justification$
+         * (0U != (base->CONTROLS[chnlNumber].CnSC &
+         *           (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)))
+         * not covered.  $ref tpm_h_ref_1$.
+         */
+
     } while (0U != (base->CONTROLS[chnlNumber].CnSC &
                     (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)));
 }
@@ -532,6 +547,13 @@ static inline void TPM_EnableChannel(TPM_Type *base, tpm_chnl_t chnlNumber, uint
              ~(TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)) |
             (control & (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK));
         /* Wait till mode change is acknowledged */
+        /*
+         * $Branch Coverage Justification$
+         * ((control & (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)) !=
+         *    (uint8_t)(base->CONTROLS[chnlNumber].CnSC &
+         *              (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)))
+         * not covered. $ref tpm_h_ref_1$.
+         */
     } while ((control & (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)) !=
              (uint8_t)(base->CONTROLS[chnlNumber].CnSC &
                        (TPM_CnSC_MSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_ELSB_MASK)));
@@ -830,7 +852,6 @@ static inline uint32_t TPM_GetCurrentTimerCount(TPM_Type *base)
 
 /*!
  * @brief Starts the TPM counter.
- *
  *
  * @param base        TPM peripheral base address
  * @param clockSource TPM clock source; once clock source is set the counter will start running

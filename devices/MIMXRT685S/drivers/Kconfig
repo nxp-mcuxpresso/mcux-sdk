@@ -1,0 +1,47 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_clock
+config MCUX_USE_driver_clock
+    bool "Clock Driver"
+    select MCUX_USE_driver_common
+    help
+      Clock Driver
+
+# driver_dsp
+config MCUX_USE_driver_dsp
+    bool "dsp Driver"
+    select MCUX_USE_driver_power
+    select MCUX_USE_driver_common
+    help
+      dsp Driver
+
+# driver_iap
+config MCUX_USE_driver_iap
+    bool "IAP Driver"
+    select MCUX_USE_driver_common
+    help
+      ROMIAP Driver
+
+# driver_inputmux_connections
+config MCUX_USE_driver_inputmux_connections
+    bool "Inputmux_connections Driver"
+    select MCUX_USE_driver_common
+    help
+      Inputmux_connections Driver
+
+# driver_power
+config MCUX_USE_driver_power
+    bool "Driver power"
+    select MCUX_USE_driver_common
+    help
+      Power driver
+
+# driver_reset
+config MCUX_USE_driver_reset
+    bool "Reset Driver"
+    select MCUX_USE_driver_common
+    help
+      Reset Driver

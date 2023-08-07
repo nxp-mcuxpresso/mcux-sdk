@@ -25,7 +25,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FLEXSPI driver version. */
-#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
 /*@}*/
 
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(0)
@@ -614,7 +614,7 @@ static inline uint32_t FLEXSPI_GetInterruptStatusFlags(FLEXSPI_Type *base)
  */
 static inline void FLEXSPI_ClearInterruptStatusFlags(FLEXSPI_Type *base, uint32_t mask)
 {
-    base->INTR |= mask;
+    base->INTR = mask;
 }
 
 #if !((defined(FSL_FEATURE_FLEXSPI_HAS_NO_DATA_LEARN)) && (FSL_FEATURE_FLEXSPI_HAS_NO_DATA_LEARN))

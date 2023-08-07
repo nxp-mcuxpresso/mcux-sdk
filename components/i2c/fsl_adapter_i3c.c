@@ -131,35 +131,35 @@ static void HAL_I2cSlaveCallback(I3C_Type *base, i3c_slave_transfer_t *xfer, voi
 }
 #endif
 
-hal_i2c_status_t HAL_I2cMasterInit(hal_i2c_master_handle_t handle, const hal_i2c_master_config_t *config)
+hal_i2c_status_t HAL_I2cMasterInit(hal_i2c_master_handle_t handle, const hal_i2c_master_config_t *halI2cConfig)
 {
     hal_i3c_master_t *i3cMasterHandle;
     i3c_master_config_t i3cConfig;
 
     assert(handle);
-    assert(config);
+    assert(halI2cConfig);
 
     assert(HAL_I2C_MASTER_HANDLE_SIZE >= sizeof(hal_i3c_master_t));
 
     i3cMasterHandle = (hal_i3c_master_t *)handle;
 
     I3C_MasterGetDefaultConfig(&i3cConfig);
-    i3cConfig.enableMaster        = (config->enableMaster ? kI3C_MasterOn : kI3C_MasterOff);
-    i3cConfig.baudRate_Hz.i2cBaud = config->baudRate_Bps;
-    i3cMasterHandle->instance     = config->instance;
+    i3cConfig.enableMaster        = (halI2cConfig->enableMaster ? kI3C_MasterOn : kI3C_MasterOff);
+    i3cConfig.baudRate_Hz.i2cBaud = halI2cConfig->baudRate_Bps;
+    i3cMasterHandle->instance     = halI2cConfig->instance;
 
-    I3C_MasterInit(s_i3cBases[i3cMasterHandle->instance], &i3cConfig, config->srcClock_Hz);
+    I3C_MasterInit(s_i3cBases[i3cMasterHandle->instance], &i3cConfig, halI2cConfig->srcClock_Hz);
 
     return kStatus_HAL_I2cSuccess;
 }
-hal_i2c_status_t HAL_I2cSlaveInit(hal_i2c_slave_handle_t handle, const hal_i2c_slave_config_t *config)
+hal_i2c_status_t HAL_I2cSlaveInit(hal_i2c_slave_handle_t handle, const hal_i2c_slave_config_t *halI2cConfig)
 {
 #if 0
     hal_i3c_slave_t *i2cSlaveHandle;
     i3c_slave_config_t i3cConfig;
 
     assert(handle);
-    assert(config);
+    assert(halI2cConfig);
 
     if (HAL_I2C_SLAVE_HANDLE_SIZE < sizeof(hal_i3c_slave_t))
     {
@@ -169,11 +169,11 @@ hal_i2c_status_t HAL_I2cSlaveInit(hal_i2c_slave_handle_t handle, const hal_i2c_s
     i2cSlaveHandle = (hal_i3c_slave_t *)handle;
 
     I3C_SlaveGetDefaultConfig(&i3cConfig);
-    i3cConfig.enableSlave    = config->enableSlave;
-    i3cConfig.address0       = config->slaveAddress;
-    i2cSlaveHandle->instance = config->instance;
+    i3cConfig.enableSlave    = halI2cConfig->enableSlave;
+    i3cConfig.address0       = halI2cConfig->slaveAddress;
+    i2cSlaveHandle->instance = halI2cConfig->instance;
 
-    I3C_SlaveInit(s_i3cBases[i2cSlaveHandle->instance], &i3cConfig, config->srcClock_Hz);
+    I3C_SlaveInit(s_i3cBases[i2cSlaveHandle->instance], &i3cConfig, halI2cConfig->srcClock_Hz);
 
     return kStatus_HAL_I2cSuccess;
 #else

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013-2016 ARM Limited. All rights reserved.
  * Copyright (c) 2016, Freescale Semiconductor, Inc. Not a Contribution.
- * Copyright 2016-2021 NXP. Not a Contribution.
+ * Copyright 2016-2021, 2023 NXP. Not a Contribution.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -25,7 +25,7 @@
 #define FSL_COMPONENT_ID "platform.drivers.enet_cmsis"
 #endif
 
-#define ARM_ETH_MAC_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2, 2)
+#define ARM_ETH_MAC_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2, 3)
 
 /* Define the alignment macro. */
 #if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
@@ -61,16 +61,16 @@ static const ARM_DRIVER_VERSION s_enetDriverVersion = {ARM_ETH_MAC_API_VERSION, 
 
 /* Driver Capabilities */
 static const ARM_ETH_MAC_CAPABILITIES s_enetDriverCapabilities = {
-    1,                                                                /* checksum_offload_rx_ip4  */
+    0,                                                                /* checksum_offload_rx_ip4  */
     0,                                                                /* checksum_offload_rx_ip6  */
-    1,                                                                /* checksum_offload_rx_udp  */
-    1,                                                                /* checksum_offload_rx_tcp  */
-    1,                                                                /* checksum_offload_rx_icmp */
-    1,                                                                /* checksum_offload_tx_ip4  */
-    1,                                                                /* checksum_offload_tx_ip6  */
-    1,                                                                /* checksum_offload_tx_udp  */
-    1,                                                                /* checksum_offload_tx_tcp  */
-    1,                                                                /* checksum_offload_tx_icmp */
+    0,                                                                /* checksum_offload_rx_udp  */
+    0,                                                                /* checksum_offload_rx_tcp  */
+    0,                                                                /* checksum_offload_rx_icmp */
+    0,                                                                /* checksum_offload_tx_ip4  */
+    0,                                                                /* checksum_offload_tx_ip6  */
+    0,                                                                /* checksum_offload_tx_udp  */
+    0,                                                                /* checksum_offload_tx_tcp  */
+    0,                                                                /* checksum_offload_tx_icmp */
     (RTE_ENET_RMII) ? ARM_ETH_INTERFACE_RMII : ARM_ETH_INTERFACE_MII, /* media_interface          */
     0,                                                                /* mac_address              */
     1,                                                                /* event_rx_frame           */
@@ -363,13 +363,12 @@ static int32_t ENET_CommonPowerControl(ARM_POWER_STATE state, cmsis_enet_mac_dri
                                (uint32_t)kENET_RxFrameInterrupt | (uint32_t)kENET_TxBufferInterrupt;
             /* Enable tx accelerate function. */
             config.txAccelerConfig = (uint8_t)kENET_TxAccelIpCheckEnabled | (uint8_t)kENET_TxAccelProtoCheckEnabled;
+            /* Callback setup */
+            config.callback  = ENET_SetInterruptCallback;
+            config.userData = (void *)enet->cb_event;
             /* Initialize Ethernet Mac. */
             freq = enet->resource->GetFreq();
             (void)ENET_Init(enet->resource->base, enet->handle, &config, enet->buffers, &macAddr[0], freq);
-
-            /* Callback setup */
-            ENET_SetCallback(enet->handle, ENET_SetInterruptCallback, (void *)enet->cb_event);
-
             enet->flags |= ENET_FLAG_POWER;
             break;
         }

@@ -1,0 +1,16 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_swm
+config MCUX_HAS_driver_swm
+    bool
+
+config MCUX_USE_driver_swm
+    depends on MCUX_HAS_driver_swm
+    bool "SWM Driver"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_swm_connections
+    help
+      SWM Driver

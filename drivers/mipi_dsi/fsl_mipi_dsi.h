@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019-2022 NXP
+ * Copyright 2017, 2019-2023 NXP
  * All rights reserved.
  *
  *
@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
+#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
 /*@}*/
 
 /* The max APB transfer size. */
@@ -502,8 +502,8 @@ void DSI_GetDphyDefaultConfig(dsi_dphy_config_t *config, uint32_t txHsBitClk_Hz,
  */
 static inline void DSI_EnableInterrupts(MIPI_DSI_HOST_Type *base, uint32_t intGroup1, uint32_t intGroup2)
 {
-    base->DSI_HOST_IRQ_MASK &= ~intGroup1;
-    base->DSI_HOST_IRQ_MASK2 &= ~intGroup2;
+    base->IRQ_MASK &= ~intGroup1;
+    base->IRQ_MASK2 &= ~intGroup2;
 }
 
 /*!
@@ -517,8 +517,8 @@ static inline void DSI_EnableInterrupts(MIPI_DSI_HOST_Type *base, uint32_t intGr
  */
 static inline void DSI_DisableInterrupts(MIPI_DSI_HOST_Type *base, uint32_t intGroup1, uint32_t intGroup2)
 {
-    base->DSI_HOST_IRQ_MASK |= intGroup1;
-    base->DSI_HOST_IRQ_MASK2 |= intGroup2;
+    base->IRQ_MASK |= intGroup1;
+    base->IRQ_MASK2 |= intGroup2;
 }
 
 /*!
@@ -530,8 +530,8 @@ static inline void DSI_DisableInterrupts(MIPI_DSI_HOST_Type *base, uint32_t intG
  */
 static inline void DSI_GetAndClearInterruptStatus(MIPI_DSI_HOST_Type *base, uint32_t *intGroup1, uint32_t *intGroup2)
 {
-    *intGroup2 = base->DSI_HOST_IRQ_STATUS2;
-    *intGroup1 = base->DSI_HOST_IRQ_STATUS;
+    *intGroup2 = base->IRQ_STATUS2;
+    *intGroup1 = base->IRQ_STATUS;
 }
 
 /*! @} */
@@ -616,7 +616,7 @@ void DSI_ReadApbRxPayload(MIPI_DSI_HOST_Type *base, uint8_t *payload, uint16_t p
  */
 static inline void DSI_SendApbPacket(MIPI_DSI_HOST_Type *base)
 {
-    base->DSI_HOST_SEND_PACKET = 0x1U;
+    base->SEND_PACKET = 0x1U;
 }
 
 /*!
@@ -629,7 +629,7 @@ static inline void DSI_SendApbPacket(MIPI_DSI_HOST_Type *base)
  */
 static inline uint32_t DSI_GetApbStatus(MIPI_DSI_HOST_Type *base)
 {
-    return base->DSI_HOST_PKT_STATUS;
+    return base->PKT_STATUS;
 }
 
 /*!
@@ -642,7 +642,7 @@ static inline uint32_t DSI_GetApbStatus(MIPI_DSI_HOST_Type *base)
  */
 static inline uint32_t DSI_GetRxErrorStatus(MIPI_DSI_HOST_Type *base)
 {
-    return base->DSI_HOST_RX_ERROR_STATUS;
+    return base->RX_ERROR_STATUS;
 }
 
 /*!
@@ -678,7 +678,7 @@ static inline uint8_t DSI_GetEccRxErrorPosition(uint32_t rxErrorStatus)
  */
 static inline uint32_t DSI_GetAndClearHostStatus(MIPI_DSI_HOST_Type *base)
 {
-    return base->DSI_HOST_CFG_STATUS_OUT;
+    return base->CFG_STATUS_OUT;
 }
 
 /*!
@@ -689,7 +689,7 @@ static inline uint32_t DSI_GetAndClearHostStatus(MIPI_DSI_HOST_Type *base)
  */
 static inline uint32_t DSI_GetRxPacketHeader(MIPI_DSI_HOST_Type *base)
 {
-    return base->DSI_HOST_PKT_RX_PKT_HEADER;
+    return base->PKT_RX_PKT_HEADER;
 }
 
 /*!

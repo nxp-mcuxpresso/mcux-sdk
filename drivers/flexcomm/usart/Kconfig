@@ -1,0 +1,27 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_flexcomm_usart
+config MCUX_HAS_driver_flexcomm_usart
+    bool
+
+config MCUX_USE_driver_flexcomm_usart
+    depends on MCUX_HAS_driver_flexcomm_usart
+    bool "FLEXCOMM USART Driver"
+    select MCUX_USE_driver_flexcomm
+    help
+      USART Driver
+
+# driver_flexcomm_usart_dma
+config MCUX_HAS_driver_flexcomm_usart_dma
+    bool
+
+config MCUX_USE_driver_flexcomm_usart_dma
+    depends on MCUX_HAS_driver_flexcomm_usart_dma
+    bool "FLEXCOMM USART DMA Driver"
+    select MCUX_USE_driver_flexcomm
+    select MCUX_USE_driver_flexcomm_usart
+    help
+      USART Driver

@@ -27,7 +27,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 2, 1)) /*!< Version */
+#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 2, 2)) /*!< Version */
 /*@}*/
 
 /*! @brief Quad Timer primary clock source selection*/

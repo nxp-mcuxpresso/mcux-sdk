@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021, NXP
+ * Copyright 2019-2021,2023 NXP
  * All rights reserved.
  *
  *
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief PGMC driver version 2.1.1. */
-#define FSL_PGMC_RIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief PGMC driver version 2.1.2. */
+#define FSL_PGMC_RIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 /*! @brief The enumeration of setpoint.
@@ -635,11 +635,11 @@ static inline void PGMC_PPC_TriggerPMICStandbySoftMode(PGMC_PPC_Type *base, bool
 {
     if (enable)
     {
-        PGMC_PPC0->PPC_STBY_CM_CTRL |= PGMC_PPC_PPC_STBY_CM_CTRL_STBY_ON_SOFT_MASK;
+        base->PPC_STBY_CM_CTRL |= PGMC_PPC_PPC_STBY_CM_CTRL_STBY_ON_SOFT_MASK;
     }
     else
     {
-        PGMC_PPC0->PPC_STBY_CM_CTRL |= PGMC_PPC_PPC_STBY_CM_CTRL_STBY_OFF_SOFT_MASK;
+        base->PPC_STBY_CM_CTRL |= PGMC_PPC_PPC_STBY_CM_CTRL_STBY_OFF_SOFT_MASK;
     }
 }
 

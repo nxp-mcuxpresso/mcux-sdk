@@ -124,9 +124,9 @@ extern volatile uint32_t g_xtal32Freq;
 #endif
 
 /*! @brief Clock ip name array for DMAMUX. */
-#define DMAMUX_CLOCKS  \
-    {                  \
-        kCLOCK_Dmamux0 \
+#define DMAMUX_CLOCKS                                                  \
+    {                                                                  \
+        kCLOCK_Dmamux0, kCLOCK_Dmamux1, kCLOCK_Dmamux2, kCLOCK_Dmamux3 \
     }
 
 /*! @brief Clock ip name array for RTC. */

@@ -36,7 +36,8 @@
 #define BOARD_CODEC_I2C_CLOCK_FREQ (16000000U)
 
 /* Shared memory base for RPMsg communication. */
-#define VDEV0_VRING_BASE (0x55000000U)
+#define VDEV0_VRING_BASE      (0x55000000U)
+#define RESOURCE_TABLE_OFFSET (0xFF000)
 
 #if defined(__cplusplus)
 extern "C" {

@@ -146,7 +146,7 @@ typedef enum _swm_pinassignfixed_select_movable_t
     kSWM_PLU_OUT6 = 12U, /*!< Movable function as PLU_OUT6. */
     kSWM_PLU_OUT7 = 13U, /*!< Movable function as PLU_OUT7. */
 
-    kSWM_PINASSINGNFIXED_MOVABLE_NUM_FUNCS = 13U, /*!< Movable function number. */
+    kSWM_PINASSINGNFIXED_MOVABLE_NUM_FUNCS = 14U, /*!< Movable function number. */
 } swm_select_fixed_movable_t;
 
 /*! @brief SWM movable selection */

@@ -1,0 +1,123 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_USE_SOC_MKE02Z4
+    bool
+    select MCUX_CPU_ARCH_ARM_CM0P
+if MCUX_USE_SOC_MKE02Z4
+
+# Part Number
+config MCUX_SOC_PART_MKE02Z16xxx4
+    bool
+
+config MCUX_SOC_PART_MKE02Z32xxx4
+    bool
+
+config MCUX_SOC_PART_MKE02Z64xxx4
+    bool
+
+config MCUX_DEVICE
+    default "MKE02Z4"
+
+config MCUX_DEVICE_ID
+    default "MKE02Z16xxx4" if MCUX_SOC_PART_MKE02Z16xxx4
+    default "MKE02Z32xxx4" if MCUX_SOC_PART_MKE02Z32xxx4
+    default "MKE02Z64xxx4" if MCUX_SOC_PART_MKE02Z64xxx4
+
+
+# Select supported components
+config MCUX_USE_SOC_MKE02Z4
+    select MCUX_HAS_CMSIS_DSP_Include
+    select MCUX_HAS_CMSIS_DSP_Source
+    select MCUX_HAS_CMSIS_Device_API_OSTick
+    select MCUX_HAS_CMSIS_Device_API_RTOS2
+    select MCUX_HAS_CMSIS_Driver_Include_CAN
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet_MAC
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet_PHY
+    select MCUX_HAS_CMSIS_Driver_Include_Flash
+    select MCUX_HAS_CMSIS_Driver_Include_I2C
+    select MCUX_HAS_CMSIS_Driver_Include_MCI
+    select MCUX_HAS_CMSIS_Driver_Include_NAND
+    select MCUX_HAS_CMSIS_Driver_Include_SAI
+    select MCUX_HAS_CMSIS_Driver_Include_SPI
+    select MCUX_HAS_CMSIS_Driver_Include_USART
+    select MCUX_HAS_CMSIS_Driver_Include_USB_Device
+    select MCUX_HAS_CMSIS_Driver_Include_USB_Host
+    select MCUX_HAS_CMSIS_Driver_Include_WiFi
+    select MCUX_HAS_CMSIS_Include_core_cm
+    select MCUX_HAS_CMSIS_NN_Source
+    select MCUX_HAS_CMSIS_RTOS2_NonSecure
+    select MCUX_HAS_CMSIS_RTOS2_Secure
+    select MCUX_HAS_component_ftm_adapter
+    select MCUX_HAS_component_i2c_adapter
+    select MCUX_HAS_component_lists
+    select MCUX_HAS_component_pit_adapter
+    select MCUX_HAS_component_serial_manager
+    select MCUX_HAS_component_serial_manager_spi
+    select MCUX_HAS_component_serial_manager_uart
+    select MCUX_HAS_component_spi_adapter
+    select MCUX_HAS_component_tpm_adapter
+    select MCUX_HAS_component_uart_adapter
+    select MCUX_HAS_driver_acmp_1
+    select MCUX_HAS_driver_adc_5v12b_ll18_015
+    select MCUX_HAS_driver_cmsis_i2c
+    select MCUX_HAS_driver_cmsis_spi
+    select MCUX_HAS_driver_cmsis_uart
+    select MCUX_HAS_driver_common
+    select MCUX_HAS_driver_flash_ftmr
+    select MCUX_HAS_driver_ftm
+    select MCUX_HAS_driver_gpio_1
+    select MCUX_HAS_driver_i2c
+    select MCUX_HAS_driver_irq
+    select MCUX_HAS_driver_kbi
+    select MCUX_HAS_driver_pit
+    select MCUX_HAS_driver_rtc_1
+    select MCUX_HAS_driver_spi
+    select MCUX_HAS_driver_tpm
+    select MCUX_HAS_driver_uart
+    select MCUX_HAS_driver_wdog8
+    select MCUX_HAS_utilities_misc_utilities
+    select MCUX_HAS_utility_assert
+    select MCUX_HAS_utility_assert_lite
+    select MCUX_HAS_utility_debug_console
+    select MCUX_HAS_utility_debug_console_lite
+    select MCUX_HAS_utility_notifier
+    select MCUX_HAS_utility_shell
+    select MCUX_HAS_utility_str
+
+#### SOC specific dependency ####
+config MCUX_USE_component_serial_manager_uart
+    bool
+    select MCUX_USE_component_uart_adapter
+
+config MCUX_USE_utility_debug_console_lite
+    bool
+    select MCUX_USE_component_uart_adapter
+
+
+#### SOC level drivers ####
+# device_MKE02Z4_CMSIS
+config MCUX_USE_device_MKE02Z4_CMSIS
+    bool "Device MKE02Z4_cmsis"
+    select MCUX_USE_CMSIS_Include_core_cm
+    help
+      Device MKE02Z4_cmsis
+
+# device_MKE02Z4_startup
+config MCUX_USE_device_MKE02Z4_startup
+    bool "Device MKE02Z4_startup"
+    help
+      Device MKE02Z4_startup
+
+# device_MKE02Z4_system
+config MCUX_USE_device_MKE02Z4_system
+    bool "Device MKE02Z4_system"
+    help
+      Device MKE02Z4_system
+
+rsource "drivers/Kconfig"
+
+endif # MCUX_USE_SOC_MKE02Z4

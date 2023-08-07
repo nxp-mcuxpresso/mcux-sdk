@@ -1,0 +1,12 @@
+<map id="driverexamples/demos/orientaion_application_baremetal_agm01.c" name="driverexamples/demos/orientaion_application_baremetal_agm01.c">
+<area shape="rect" id="node11" href="$a00026.html" title="The fxas21002.h contains the fxas21002 sensor register definitions and its bit mask. " alt="" coords="947,109,1039,136"/>
+<area shape="rect" id="node12" href="$a00080.html" title="The fxos8700.h file contains the register definitions for FXOS8700 sensor driver. ..." alt="" coords="1063,109,1149,136"/>
+<area shape="rect" id="node13" href="$a00170.html" title="The register_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="1173,109,1290,136"/>
+<area shape="rect" id="node14" href="$a00101.html" title="The host_io_uart.h file contains the Host Protocol interface definitions and configuration. " alt="" coords="1314,109,1418,136"/>
+<area shape="rect" id="node17" href="$a00533.html" title="ARM Systick Utilities. " alt="" coords="1751,109,1858,136"/>
+<area shape="rect" id="node18" href="$a00914.html" title="The sensor_fusion.h file implements the top level programming interface. " alt="" coords="1883,109,1996,136"/>
+<area shape="rect" id="node19" href="$a00779.html" title="Defines control sub&#45;system. " alt="" coords="2021,109,2093,136"/>
+<area shape="rect" id="node20" href="$a00923.html" title="Application&#45;specific status subsystem. " alt="" coords="2117,109,2186,136"/>
+<area shape="rect" id="node21" href="$a00842.html" title="Provides function prototypes for driver level interfaces. " alt="" coords="2211,109,2281,136"/>
+<area shape="rect" id="node22" href="$a00836.html" title="Provides a simple abstraction for a periodic interval timer. " alt="" coords="2305,109,2389,136"/>
+</map>

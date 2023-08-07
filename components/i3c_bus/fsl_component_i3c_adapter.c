@@ -1,12 +1,12 @@
 /*
- * Copyright 2020, 2022 NXP
- * All rights reserved.
+ * Copyright 2020, 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_component_i3c_adapter.h"
 #include "fsl_i3c.h"
+
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -540,7 +540,11 @@ static void I3C_MasterAdapterTakeOverMasterShip(i3c_device_t *master)
         for (uint8_t i = 0U; i < devCount; i++)
         {
             i3c_ccc_dev_t *cccDev = &devList[i];
+#if defined(I3C_SDYNADDR_DADDR_MASK)
             if (cccDev->dynamicAddr != (base->SDYNADDR & I3C_SDYNADDR_DADDR_MASK))
+#else
+            if (cccDev->dynamicAddr != (base->SMAPCTRL0 & I3C_SMAPCTRL0_DA_MASK))
+#endif
             {
                 if (cccDev->dynamicAddr != 0U)
                 {
@@ -732,7 +736,7 @@ static void I3C_SlaveAdapterRequestIBI(i3c_device_t *dev, void *data, size_t dat
 
     if (data != NULL)
     {
-        I3C_SlaveRequestIBIWithData(base, s_i3cSlaveHandle[I3C_GetInstance(base)], (uint8_t *)data, dataSize);
+        I3C_SlaveRequestIBIWithData(base, (uint8_t *)data, dataSize);
     }
     else
     {

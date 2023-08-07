@@ -1,0 +1,9 @@
+<map id="algorithms/sensorfusion/sources/sensor_fusion.c" name="algorithms/sensorfusion/sources/sensor_fusion.c">
+<area shape="rect" id="node3" href="$a00914.html" title="The sensor_fusion.h file implements the top level programming interface. " alt="" coords="87,169,201,196"/>
+<area shape="rect" id="node4" href="$a00857.html" title="Lower level magnetic calibration interface. " alt="" coords="102,244,189,271"/>
+<area shape="rect" id="node5" href="$a00842.html" title="Provides function prototypes for driver level interfaces. " alt="" coords="194,95,265,121"/>
+<area shape="rect" id="node6" href="$a00179.html" title="The sensor_drv.h file contains sensor state and error definitions. " alt="" coords="289,95,383,121"/>
+<area shape="rect" id="node7" href="$a00923.html" title="Application&#45;specific status subsystem. " alt="" coords="408,95,477,121"/>
+<area shape="rect" id="node8" href="$a00779.html" title="Defines control sub&#45;system. " alt="" coords="501,95,573,121"/>
+<area shape="rect" id="node9" href="$a00848.html" title="Lower level sensor fusion interface. " alt="" coords="52,95,119,121"/>
+</map>

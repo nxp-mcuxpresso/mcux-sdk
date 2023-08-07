@@ -1,0 +1,27 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_powerquad
+config MCUX_HAS_driver_powerquad
+    bool
+
+config MCUX_USE_driver_powerquad
+    depends on MCUX_HAS_driver_powerquad
+    bool "POWERQUAD Driver"
+    select MCUX_USE_driver_common
+    help
+      POWERQUAD Driver
+
+# driver_powerquad_cmsis
+config MCUX_HAS_driver_powerquad_cmsis
+    bool
+
+config MCUX_USE_driver_powerquad_cmsis
+    depends on MCUX_HAS_driver_powerquad_cmsis
+    bool "POWERQUAD CMSIS DSP Driver"
+    select MCUX_USE_driver_powerquad
+    select MCUX_USE_CMSIS_DSP_Include
+    help
+      CMSIS DSP functions based on POWERQUAD

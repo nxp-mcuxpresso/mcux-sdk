@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 NXP
+ * Copyright 2020-2021, 2023 NXP
  * All rights reserved.
  *
  *
@@ -16,12 +16,14 @@
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*!
  * brief Gets instance number for DCDC module.
  *
  * param base DCDC peripheral base address
  */
 static uint32_t DCDC_GetInstance(DCDC_Type *base);
+#endif /* defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*!
  * brief Converts the byte array to word.
@@ -35,9 +37,8 @@ static uint32_t DCDC_ConvertByteArrayToWord(uint8_t *ptrArray);
  * Variables
  ******************************************************************************/
 /*! brief Pointers to DCDC bases for each instance. */
-static DCDC_Type *const s_dcdcBases[] = DCDC_BASE_PTRS;
-
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+static DCDC_Type *const s_dcdcBases[] = DCDC_BASE_PTRS;
 /*! brief Pointers to DCDC clocks for each instance. */
 static const clock_ip_name_t s_dcdcClocks[] = DCDC_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
@@ -46,6 +47,7 @@ static const clock_ip_name_t s_dcdcClocks[] = DCDC_CLOCKS;
  * CodDCDC_GetstatusFlagse
  ******************************************************************************/
 
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 static uint32_t DCDC_GetInstance(DCDC_Type *base)
 {
     uint32_t instance;
@@ -63,6 +65,7 @@ static uint32_t DCDC_GetInstance(DCDC_Type *base)
 
     return instance;
 }
+#endif /* defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 static uint32_t DCDC_ConvertByteArrayToWord(uint8_t *ptrArray)
 {

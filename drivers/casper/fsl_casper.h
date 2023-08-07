@@ -23,9 +23,9 @@
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief CASPER driver version. Version 2.2.3.
+/*! @brief CASPER driver version. Version 2.2.4.
  *
- * Current version: 2.2.3
+ * Current version: 2.2.4
  *
  * Change log:
  * - Version 2.0.0
@@ -63,8 +63,10 @@
  *   - Enable hardware interleaving to RAMX0 and RAMX1 for CASPER by feature macro FSL_FEATURE_CASPER_RAM_HW_INTERLEAVE
  * - Version 2.2.3
  *   - Added macro into CASPER_Init and CASPER_Deinit to support devices without clock and reset control.
+ * - Version 2.2.4
+ *   - Fix MISRA-C 2012 issue.
  */
-#define FSL_CASPER_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
+#define FSL_CASPER_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
 /*@}*/
 
 /*! @brief CASPER operation

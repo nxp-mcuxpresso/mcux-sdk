@@ -143,8 +143,8 @@ typedef struct _caam_hash_ctx_internal
     uint32_t blksz;                       /*!< number of valid bytes in memory buffer */
     CAAM_Type *base;                      /*!< CAAM peripheral base address */
     caam_handle_t *handle;                /*!< CAAM handle (specifies jobRing and optional callback function) */
-    caam_hash_algo_t algo;        /*!< selected algorithm from the set of supported algorithms in caam_hash_algo_t */
-    caam_hash_algo_state_t state; /*!< finite machine state of the hash software process */
+    caam_hash_algo_t algo; /*!< selected algorithm from the set of supported algorithms in caam_hash_algo_t */
+    caam_hash_algo_state_t fsm_state; /*!< finite machine state of the hash software process */
 } caam_hash_ctx_internal_t;
 
 /*! Definitions of indexes into hash job descriptor */
@@ -193,9 +193,9 @@ typedef struct _caam_crc_ctx_internal
     uint32_t blksz;                       /*!< number of valid bytes in memory buffer */
     CAAM_Type *base;                      /*!< CAAM peripheral base address */
     caam_handle_t *handle;                /*!< CAAM handle (specifies jobRing and optional callback function) */
-    caam_crc_algo_t algo;         /*!< selected algorithm from the set of supported algorithms in caam_hash_algo_t */
-    caam_aai_crc_alg_t crcmode;   /*!< Specifies how CRC engine manipulates input and output data */
-    caam_hash_algo_state_t state; /*!< finite machine state of the hash software process */
+    caam_crc_algo_t algo;       /*!< selected algorithm from the set of supported algorithms in caam_hash_algo_t */
+    caam_aai_crc_alg_t crcmode; /*!< Specifies how CRC engine manipulates input and output data */
+    caam_hash_algo_state_t fsm_state; /*!< finite machine state of the hash software process */
 } caam_crc_ctx_internal_t;
 
 /*******************************************************************************
@@ -877,18 +877,18 @@ static void caam_aes_ccm_context_init(
 
     uint8_t q; /* octet length of binary representation of the octet length of the payload. computed as (15 - n), where
               n is length of nonce(=ivSize) */
-    uint8_t flags; /* flags field in B0 and CTR0 */
+    uint8_t flags_field; /* flags field in B0 and CTR0 */
 
     /* compute B0 */
     (void)caam_memcpy(&blk, &blkZero, sizeof(blk));
     /* tagSize - size of output MAC */
-    q     = 15U - (uint8_t)ivSize;
-    flags = (uint8_t)(8U * ((tagSize - 2U) / 2U) + q - 1U); /* 8*M' + L' */
+    q           = 15U - (uint8_t)ivSize;
+    flags_field = (uint8_t)(8U * ((tagSize - 2U) / 2U) + q - 1U); /* 8*M' + L' */
     if (aadSize != 0U)
     {
-        flags |= 0x40U; /* Adata */
+        flags_field |= 0x40U; /* Adata */
     }
-    blk.b[0] = flags;                         /* flags field */
+    blk.b[0] = flags_field;                   /* flags field */
     blk.w[3] = swap_bytes(inputSize);         /* message size, most significant byte first */
     (void)caam_memcpy(&blk.b[1], iv, ivSize); /* nonce field */
 
@@ -2839,14 +2839,7 @@ static status_t caam_hash_schedule_input_data(CAAM_Type *base,
     {
         if (outputSize != NULL)
         {
-            if (algOutSize < *outputSize)
-            {
-                *outputSize = algOutSize;
-            }
-            else
-            {
-                algOutSize = *outputSize;
-            }
+            *outputSize = algOutSize;
         }
         caamCtxSz = algOutSize;
     }
@@ -2973,9 +2966,9 @@ status_t CAAM_HASH_Init(CAAM_Type *base,
     {
         ctxInternal->blk.w[i] = 0u;
     }
-    ctxInternal->state  = kCAAM_HashInit;
-    ctxInternal->base   = base;
-    ctxInternal->handle = handle;
+    ctxInternal->fsm_state = kCAAM_HashInit;
+    ctxInternal->base      = base;
+    ctxInternal->handle    = handle;
 
     return kStatus_Success;
 }
@@ -3035,12 +3028,12 @@ status_t CAAM_HASH_Update(caam_hash_ctx_t *ctx, const uint8_t *input, size_t inp
     }
     else
     {
-        isUpdateState = ctxInternal->state == kCAAM_HashUpdate;
+        isUpdateState = ctxInternal->fsm_state == kCAAM_HashUpdate;
         if (!isUpdateState)
         {
             /* Step 2: schedule CAAM job in INITIALIZE mode.
              */
-            ctxInternal->state = kCAAM_HashUpdate;
+            ctxInternal->fsm_state = kCAAM_HashUpdate;
             /* skip load context as there is no running context yet. */
             status = caam_hash_append_data(ctxInternal, input, inputSize, kCAAM_AlgStateInit, descBuf, &numRemain, NULL,
                                            NULL);
@@ -3160,6 +3153,7 @@ status_t CAAM_HASH_Finish(caam_hash_ctx_t *ctx, uint8_t *output, size_t *outputS
     caam_hash_ctx_internal_t *ctxInternal;
     caam_desc_hash_t descBuf;
     caam_algorithm_state_t algState;
+    size_t outputSizeTmp;
 
     /* runtime input validity check */
     ctxInternal = (caam_hash_ctx_internal_t *)(uint32_t)ctx;
@@ -3175,7 +3169,7 @@ status_t CAAM_HASH_Finish(caam_hash_ctx_t *ctx, uint8_t *output, size_t *outputS
      * will be set to kCAAM_HashUpdate and so we will configure FINALIZE algorithm state.
      * Otherwise there is data only in the ctxInternal that we can process in INITIALIZE/FINALIZE.
      */
-    if (ctxInternal->state == kCAAM_HashInit)
+    if (ctxInternal->fsm_state == kCAAM_HashInit)
     {
         algState = kCAAM_AlgStateInitFinal;
     }
@@ -3186,7 +3180,7 @@ status_t CAAM_HASH_Finish(caam_hash_ctx_t *ctx, uint8_t *output, size_t *outputS
 
     status = caam_hash_append_data(
         ctxInternal, NULL, 0, /* we process only blksz bytes in ctxInternal, so giving NULL and zero size here */
-        algState, descBuf, NULL, output, outputSize);
+        algState, descBuf, NULL, output, &outputSizeTmp);
     if (kStatus_Success != status)
     {
         return status;
@@ -3198,8 +3192,13 @@ status_t CAAM_HASH_Finish(caam_hash_ctx_t *ctx, uint8_t *output, size_t *outputS
 #if defined(CAAM_OUT_INVALIDATE) && (CAAM_OUT_INVALIDATE > 0u)
     /* NOTE: DCACHE must be set to write-trough mode to safely invalidate cache!! */
     /* Invalidate unaligned data can cause memory corruption in write-back mode   */
-    DCACHE_InvalidateByRange((uint32_t)output, 32u);
+    DCACHE_InvalidateByRange((uint32_t)output, outputSizeTmp);
 #endif /* CAAM_OUT_INVALIDATE */
+
+    if (outputSize != NULL)
+    {
+        *outputSize = outputSizeTmp;
+    }
 
     (void)memset(ctx, 0, sizeof(caam_hash_ctx_t));
     return status;
@@ -3758,9 +3757,9 @@ status_t CAAM_CRC_Init(CAAM_Type *base,
     {
         ctxInternal->blk.w[i] = 0u;
     }
-    ctxInternal->state  = kCAAM_HashInit;
-    ctxInternal->base   = base;
-    ctxInternal->handle = handle;
+    ctxInternal->fsm_state = kCAAM_HashInit;
+    ctxInternal->base      = base;
+    ctxInternal->handle    = handle;
 
     return kStatus_Success;
 }
@@ -3819,12 +3818,12 @@ status_t CAAM_CRC_Update(caam_crc_ctx_t *ctx, const uint8_t *input, size_t input
     }
     else
     {
-        isUpdateState = ctxInternal->state == kCAAM_HashUpdate;
+        isUpdateState = ctxInternal->fsm_state == kCAAM_HashUpdate;
         if (!isUpdateState)
         {
             /* Step 2: schedule CAAM job in INITIALIZE mode.
              */
-            ctxInternal->state = kCAAM_HashUpdate;
+            ctxInternal->fsm_state = kCAAM_HashUpdate;
             /* skip load context as there is no running context yet. */
             status = caam_crc_append_data(ctxInternal, input, inputSize, kCAAM_AlgStateInit, descBuf, &numRemain, NULL,
                                           NULL);
@@ -3901,7 +3900,7 @@ status_t CAAM_CRC_Finish(caam_crc_ctx_t *ctx, uint8_t *output, size_t *outputSiz
      * will be set to kCAAM_HashUpdate and so we will configure FINALIZE algorithm state.
      * Otherwise there is data only in the ctxInternal that we can process in INITIALIZE/FINALIZE.
      */
-    if (ctxInternal->state == kCAAM_HashInit)
+    if (ctxInternal->fsm_state == kCAAM_HashInit)
     {
         algState = kCAAM_AlgStateInitFinal;
     }
@@ -4321,7 +4320,7 @@ static const uint32_t templateRng[] = {
     /* 02 */ 0x00000000u, /* place: additional input address */
     /* 03 */ 0x12820004u, /* LOAD Class 1 Data Size Register by IMM data */
     /* 04 */ 0x00000000u, /* place: data size to generate */
-    /* 05 */ 0x82500002u, /* RNG generate */
+    /* 05 */ 0x82500000u, /* RNG generate */
     /* 06 */ 0x60700000u, /* FIFO STORE message */
     /* 07 */ 0x00000000u, /* place: destination address */
     /* 08 */ 0x00000000u, /* place: destination size */
@@ -4365,6 +4364,7 @@ status_t CAAM_RNG_GetRandomDataNonBlocking(CAAM_Type *base,
     {
         descriptor[2] = ADD_OFFSET((uint32_t)additionalEntropy);
         descriptor[5] |= (uint32_t)1U << 11; /* set AI bit in ALG OPERATION */
+        descriptor[5] |= (uint32_t)1U << 1;  /* set PR bit in ALG OPERATION (entropy seed) */
     }
     else
     {

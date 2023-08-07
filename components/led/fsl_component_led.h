@@ -293,7 +293,7 @@ extern "C" {
  * @retval kStatus_LED_Error An error occurred.
  * @retval kStatus_LED_Success LED initialization succeed.
  */
-led_status_t LED_Init(led_handle_t ledHandle, led_config_t *ledConfig);
+led_status_t LED_Init(led_handle_t ledHandle, const led_config_t *ledConfig);
 
 /*!
  * @brief Deinitializes a LED instance.

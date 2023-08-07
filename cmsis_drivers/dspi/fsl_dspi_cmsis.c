@@ -695,7 +695,7 @@ static int32_t DSPI_EdmaControl(uint32_t control, uint32_t arg, cmsis_dspi_edma_
             (void)memset((dspi->edmaIntermediaryToTxRegHandle), 0, sizeof(edma_handle_t));
 
             EDMA_CreateHandle(dspi->edmaRxRegToRxDataHandle, dmaResource->rxEdmaBase, dmaResource->rxEdmaChannel);
-            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxEdmaChannel, dmaResource->rxDmaRequest);
+            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxEdmaChannel, (int32_t)dmaResource->rxDmaRequest);
             DMAMUX_EnableChannel(dmaResource->rxDmamuxBase, dmaResource->rxEdmaChannel);
 
             EDMA_CreateHandle(dspi->edmaTxDataToIntermediaryHandle, dmaResource->txEdmaBase,
@@ -706,7 +706,7 @@ static int32_t DSPI_EdmaControl(uint32_t control, uint32_t arg, cmsis_dspi_edma_
 
             if (1 == FSL_FEATURE_DSPI_HAS_SEPARATE_DMA_RX_TX_REQn(dspi->resource->base))
             {
-                DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->masterLinkChannel, dmaResource->txDmaRequest);
+                DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->masterLinkChannel, (int32_t)dmaResource->txDmaRequest);
                 DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->masterLinkChannel);
             }
             DSPI_MasterTransferCreateHandleEDMA(dspi->resource->base, &(dspi->handle->masterHandle),
@@ -727,12 +727,12 @@ static int32_t DSPI_EdmaControl(uint32_t control, uint32_t arg, cmsis_dspi_edma_
             EDMA_CreateHandle(dspi->edmaTxDataToTxRegHandle, dmaResource->txEdmaBase, dmaResource->txEdmaChannel);
             if (1 == FSL_FEATURE_DSPI_HAS_SEPARATE_DMA_RX_TX_REQn(dspi->resource->base))
             {
-                DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txEdmaChannel, dmaResource->txDmaRequest);
+                DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txEdmaChannel, (int32_t)dmaResource->txDmaRequest);
                 DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txEdmaChannel);
             }
 
             EDMA_CreateHandle(dspi->edmaRxRegToRxDataHandle, dmaResource->rxEdmaBase, dmaResource->rxEdmaChannel);
-            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxEdmaChannel, dmaResource->rxDmaRequest);
+            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxEdmaChannel, (int32_t)dmaResource->rxDmaRequest);
             DMAMUX_EnableChannel(dmaResource->rxDmamuxBase, dmaResource->rxEdmaChannel);
 
             DSPI_SlaveTransferCreateHandleEDMA(dspi->resource->base, &(dspi->handle->slaveHandle),

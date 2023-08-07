@@ -20,7 +20,7 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-#define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 5, 1)) /*!< Version 2.5.1 */
+#define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 6, 1)) /*!< Version 2.6.1 */
 /*@}*/
 
 /*! Number of bits per submodule for software output control */
@@ -1215,6 +1215,89 @@ void PWM_SetChannelOutput(PWM_Type *base,
                           pwm_submodule_t subModule,
                           pwm_channels_t pwmChannel,
                           pwm_output_state_t outputstate);
+
+#if defined(FSL_FEATURE_PWM_HAS_PHASE_DELAY) && FSL_FEATURE_PWM_HAS_PHASE_DELAY
+/*!
+ * @brief This function set the phase delay from the master sync signal of submodule 0.
+ *
+ * @param base               PWM peripheral base address
+ * @param subModule          PWM submodule to configure
+ * @param pwmChannel         PWM channel to configure
+ * @param delayCycles        Number of cycles delayed from submodule 0.
+ *
+ * @return kStatus_Fail if the number of delay cycles is set larger than the period defined in submodule 0;
+ *        kStatus_Success if set phase delay success
+ */
+status_t PWM_SetPhaseDelay(PWM_Type *base, pwm_channels_t pwmChannel, pwm_submodule_t subModule, uint16_t delayCycles);
+#endif
+
+#if defined(FSL_FEATURE_PWM_HAS_INPUT_FILTER_CAPTURE) && FSL_FEATURE_PWM_HAS_INPUT_FILTER_CAPTURE
+/*!
+ * @brief This function set the number of consecutive samples that must agree prior to the input filter.
+ *
+ * @param base               PWM peripheral base address
+ * @param subModule          PWM submodule to configure
+ * @param pwmChannel         PWM channel to configure
+ * @param filterSampleCount  Number of consecutive samples.
+ */
+static inline void PWM_SetFilterSampleCount(PWM_Type *base,
+                                             pwm_channels_t pwmChannel,
+                                             pwm_submodule_t subModule,
+                                             uint8_t filterSampleCount)
+{
+    switch(pwmChannel)
+    {
+        case kPWM_PwmA:
+            base->SM[subModule].CAPTFILTA &= ~((uint16_t)PWM_CAPTFILTA_CAPTA_FILT_CNT_MASK);
+            base->SM[subModule].CAPTFILTA |= PWM_CAPTFILTA_CAPTA_FILT_CNT(filterSampleCount);
+            break;
+        case kPWM_PwmB:
+            base->SM[subModule].CAPTFILTB &= ~((uint16_t)PWM_CAPTFILTB_CAPTB_FILT_CNT_MASK);
+            base->SM[subModule].CAPTFILTB |= PWM_CAPTFILTB_CAPTB_FILT_CNT(filterSampleCount);
+            break;
+        case kPWM_PwmX:
+            base->SM[subModule].CAPTFILTX &= ~((uint16_t)PWM_CAPTFILTX_CAPTX_FILT_CNT_MASK);
+            base->SM[subModule].CAPTFILTX |= PWM_CAPTFILTX_CAPTX_FILT_CNT(filterSampleCount);
+            break;
+        default:
+            assert(false);
+            break;
+    }
+}
+
+/*!
+ * @brief This function set the sampling period of the fault pin input filter.
+ *
+ * @param base                 PWM peripheral base address
+ * @param subModule            PWM submodule to configure
+ * @param pwmChannel           PWM channel to configure
+ * @param filterSamplePeriod   Sampling period of input filter.
+ */
+static inline void PWM_SetFilterSamplePeriod(PWM_Type *base,
+                                             pwm_channels_t pwmChannel,
+                                             pwm_submodule_t subModule,
+                                             uint8_t filterSamplePeriod)
+{
+    switch(pwmChannel)
+    {
+        case kPWM_PwmA:
+            base->SM[subModule].CAPTFILTA &= ~((uint16_t)PWM_CAPTFILTA_CAPTA_FILT_PER_MASK);
+            base->SM[subModule].CAPTFILTA |= PWM_CAPTFILTA_CAPTA_FILT_PER(filterSamplePeriod);
+            break;
+        case kPWM_PwmB:
+            base->SM[subModule].CAPTFILTB &= ~((uint16_t)PWM_CAPTFILTB_CAPTB_FILT_PER_MASK);
+            base->SM[subModule].CAPTFILTB |= PWM_CAPTFILTB_CAPTB_FILT_PER(filterSamplePeriod);
+            break;
+        case kPWM_PwmX:
+            base->SM[subModule].CAPTFILTX &= ~((uint16_t)PWM_CAPTFILTX_CAPTX_FILT_PER_MASK);
+            base->SM[subModule].CAPTFILTX |= PWM_CAPTFILTX_CAPTX_FILT_PER(filterSamplePeriod);
+            break;
+        default:
+            assert(false);
+            break;
+    }
+}
+#endif
 
 #if defined(__cplusplus)
 }

@@ -390,16 +390,16 @@ static int32_t UART_DmaPowerControl(ARM_POWER_STATE state, cmsis_uart_dma_driver
             DMA_CreateHandle(uart->rxHandle, dmaResource->rxDmaBase, dmaResource->rxDmaChannel);
             DMA_CreateHandle(uart->txHandle, dmaResource->txDmaBase, dmaResource->txDmaChannel);
 #if FSL_FEATURE_DMA_MODULE_CHANNEL != FSL_FEATURE_DMAMUX_MODULE_CHANNEL
-            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxDmamuxChannel, dmaResource->rxDmaRequest);
+            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxDmamuxChannel, (int32_t)dmaResource->rxDmaRequest);
             DMAMUX_EnableChannel(dmaResource->rxDmamuxBase, dmaResource->rxDmamuxChannel);
 
-            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txDmamuxChannel, dmaResource->txDmaRequest);
+            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txDmamuxChannel, (int32_t)dmaResource->txDmaRequest);
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txDmamuxChannel);
 #else
-            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxDmaChannel, dmaResource->rxDmaRequest);
+            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxDmaChannel, (int32_t)dmaResource->rxDmaRequest);
             DMAMUX_EnableChannel(dmaResource->rxDmamuxBase, dmaResource->rxDmaChannel);
 
-            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txDmaChannel, dmaResource->txDmaRequest);
+            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txDmaChannel, (int32_t)dmaResource->txDmaRequest);
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txDmaChannel);
 #endif
             /* Setup the uart. */
@@ -652,11 +652,11 @@ static int32_t UART_EdmaPowerControl(ARM_POWER_STATE state, cmsis_uart_edma_driv
 
             /* Set up EDMA setting. */
             EDMA_CreateHandle(uart->rxHandle, dmaResource->rxEdmaBase, dmaResource->rxEdmaChannel);
-            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxEdmaChannel, dmaResource->rxDmaRequest);
+            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxEdmaChannel, (int32_t)dmaResource->rxDmaRequest);
             DMAMUX_EnableChannel(dmaResource->rxDmamuxBase, dmaResource->rxEdmaChannel);
 
             EDMA_CreateHandle(uart->txHandle, dmaResource->txEdmaBase, dmaResource->txEdmaChannel);
-            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txEdmaChannel, dmaResource->txDmaRequest);
+            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txEdmaChannel, (int32_t)dmaResource->txDmaRequest);
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txEdmaChannel);
 
             /* Setup the uart. */

@@ -1,0 +1,16 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+if MCUX_USE_BOARD_LPCXPRESSO54628
+
+config MCUX_BOARD
+    default "lpcxpresso54628"
+
+config MCUX_KIT
+    default "lpcxpresso54628"
+
+
+#### Board level drivers ####
+
+endif

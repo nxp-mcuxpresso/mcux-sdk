@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SAI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 0)) /*!< Version 2.5.0 */
+#define FSL_SAI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 1)) /*!< Version 2.5.1 */
 /*@}*/
 
 typedef struct sai_edma_handle sai_edma_handle_t;

@@ -1,0 +1,26 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_qspi_edma
+config MCUX_HAS_driver_qspi_edma
+    bool
+
+config MCUX_USE_driver_qspi_edma
+    depends on MCUX_HAS_driver_qspi_edma
+    bool "QSPI EDMA Driver"
+    select MCUX_USE_driver_qspi
+    help
+      QSPI Driver
+
+# driver_qspi
+config MCUX_HAS_driver_qspi
+    bool
+
+config MCUX_USE_driver_qspi
+    depends on MCUX_HAS_driver_qspi
+    bool "QSPI Driver"
+    select MCUX_USE_driver_common
+    help
+      QSPI Driver

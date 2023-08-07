@@ -1,0 +1,8 @@
+<map id="fEigenCompute10" name="fEigenCompute10">
+<area shape="rect" id="node2" href="$precisionAccelerometer_8h.html#a752887e826809837549c391aa3a4cbaf" title="calculate the 10 element calibration from the available measurements " alt="" coords="177,5,363,32"/>
+<area shape="rect" id="node5" href="$precisionAccelerometer_8h.html#a2f17e091698125acbf0cdb780c2c93da" title="calculate the 7 element calibration from the available measurements " alt="" coords="181,56,359,83"/>
+<area shape="rect" id="node6" href="$magnetic_8c.html#a0c8d40902766e8a8d295d97948552cd7" title="fComputeMagCalibration10" alt="" coords="181,107,359,133"/>
+<area shape="rect" id="node7" href="$magnetic_8c.html#a5f40de5d6a5452756e4408a6eefbb9dc" title="fComputeMagCalibration7" alt="" coords="185,157,355,184"/>
+<area shape="rect" id="node3" href="$precisionAccelerometer_8h.html#a2670a39e8be35e9bad5a75d0ec8ca821" title="function runs the precision accelerometer calibration " alt="" coords="411,31,553,57"/>
+<area shape="rect" id="node4" href="$precisionAccelerometer_8h.html#a29cd1109b0584bd00d43c219f411437f" title="Update the buffer used to store samples used for accelerometer calibration. " alt="" coords="601,31,733,57"/>
+</map>

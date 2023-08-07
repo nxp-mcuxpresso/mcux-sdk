@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2020-2021 NXP
+ * Copyright 2017, 2020-2021, 2023 NXP
  * All rights reserved.
  *
  *
@@ -85,6 +85,11 @@ uint8_t VIDEO_GetPixelSizeBits(video_pixel_format_t pixelFormat)
             ret = 16;
             break;
 
+        case kVIDEO_PixelFormatRAW8:
+        case kVIDEO_PixelFormatLUT8:
+            ret = 8;
+            break;
+
         default:
             ret = 0;
             break;
@@ -95,7 +100,7 @@ uint8_t VIDEO_GetPixelSizeBits(video_pixel_format_t pixelFormat)
 
 status_t VIDEO_RINGBUF_Init(video_ringbuf_t *ringbuf, void **buf, uint32_t size)
 {
-    assert(ringbuf);
+    assert(ringbuf != NULL);
 
     ringbuf->rear  = 0;
     ringbuf->front = 0;
@@ -256,4 +261,48 @@ void *VIDEO_MEMPOOL_Get(video_mempool_t *mempool)
 uint32_t VIDEO_MEMPOOL_GetCount(video_mempool_t *mempool)
 {
     return mempool->cnt;
+}
+
+status_t VIDEO_STACK_Init(video_stack_t *stack, void **buf, uint32_t size)
+{
+    stack->buf      = buf;
+    stack->maxCount = size;
+    stack->top      = 0U;
+
+    return kStatus_Success;
+}
+
+status_t VIDEO_STACK_Pop(video_stack_t *stack, void **item)
+{
+    status_t status;
+
+    if (stack->top > 0U)
+    {
+        *item  = stack->buf[--stack->top];
+        status = kStatus_Success;
+    }
+    else
+    {
+        *item  = NULL;
+        status = kStatus_Fail;
+    }
+
+    return status;
+}
+
+status_t VIDEO_STACK_Push(video_stack_t *stack, void *item)
+{
+    status_t status;
+
+    if (stack->top < (stack->maxCount))
+    {
+        stack->buf[stack->top++] = item;
+        status                   = kStatus_Success;
+    }
+    else
+    {
+        status = kStatus_Fail;
+    }
+
+    return status;
 }

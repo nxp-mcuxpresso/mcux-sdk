@@ -1,0 +1,8 @@
+<map id="fUpdateMagCalibration10Slice" name="fUpdateMagCalibration10Slice">
+<area shape="rect" id="node2" href="$matrix_8c.html#aad87540028353c5db92043a38ed70c1a" title="fComputeEigSlice" alt="" coords="265,5,390,32"/>
+<area shape="rect" id="node3" href="$matrix_8c.html#a661c761f004eb9f4b050f201b0991004" title="function calculates the determinant of a 3x3 matrix " alt="" coords="272,56,383,83"/>
+<area shape="rect" id="node4" href="$matrix_8c.html#a810b959d44c67c3cd94347fe34d02d96" title="function negates all elements of 3x3 matrix A " alt="" coords="253,107,402,133"/>
+<area shape="rect" id="node5" href="$matrix_8c.html#a95d2ac82a68706e246b4cdd516f9378f" title="function directly calculates the symmetric inverse of a symmetric 3x3 matrix only the on and above di..." alt="" coords="249,157,405,184"/>
+<area shape="rect" id="node7" href="$matrix_8c.html#a36f36bcaf2395595541a20fd4ab7c351" title="function multiplies all elements of 3x3 matrix A by the specified scalar " alt="" coords="248,208,407,235"/>
+<area shape="rect" id="node6" href="$matrix_8c.html#a54f510d9d257d6063412a9ed5adddd6f" title="function sets the 3x3 matrix A to the identity matrix " alt="" coords="455,157,563,184"/>
+</map>

@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_tempsensor
+config MCUX_HAS_driver_tempsensor
+    bool
+
+config MCUX_USE_driver_tempsensor
+    depends on MCUX_HAS_driver_tempsensor
+    bool "TEMPSENSOR Driver"
+    select MCUX_USE_driver_common
+    help
+      TEMPSENSOR Driver

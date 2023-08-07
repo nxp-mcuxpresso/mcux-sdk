@@ -1,0 +1,12 @@
+<map id="algorithms/pedometer/include/pedometer.h" name="algorithms/pedometer/include/pedometer.h">
+<area shape="rect" id="node2" href="$a00926.html" title="The pedometer.c file contains the interface definitions for pedometer application. " alt="" coords="5,102,152,143"/>
+<area shape="rect" id="node3" href="$a00929.html" title="The pedometer_stepcount_fxls8962.c file implements the ISSDK FXLS896XAF sensor driver example demonst..." alt="" coords="176,95,387,151"/>
+<area shape="rect" id="node4" href="$a00932.html" title="The pedometer_stepcount_fxls896xaf.c file implements the ISSDK FXLS896XAF sensor driver example demon..." alt="" coords="411,95,621,151"/>
+<area shape="rect" id="node5" href="$a00935.html" title="The pedometer_stepcount_fxls8974cf.c file implements the ISSDK FXLS8974CF sensor driver example demon..." alt="" coords="645,95,856,151"/>
+<area shape="rect" id="node6" href="$a00938.html" title="The pedometer_stepcount_fxos8700.c file implements the ISSDK prdometer example using FXOS8700 sensor ..." alt="" coords="880,95,1091,151"/>
+<area shape="rect" id="node7" href="$a00941.html" title="The pedometer_stepcount_mma8451.c file implements the ISSDK prdometer example using MMA8451 sensor as..." alt="" coords="1115,95,1325,151"/>
+<area shape="rect" id="node8" href="$a00944.html" title="The pedometer_stepcount_mma8652.c file implements the ISSDK prdometer example using MMA8652 sensor as..." alt="" coords="1349,95,1560,151"/>
+<area shape="rect" id="node9" href="$a00947.html" title="algorithms/pedometer\l/examples/pedometer_stepcount\l_motion_fxls8962.c" alt="" coords="1584,95,1795,151"/>
+<area shape="rect" id="node10" href="$a00950.html" title="algorithms/pedometer\l/examples/pedometer_stepcount\l_motion_fxos8700.c" alt="" coords="1819,95,2029,151"/>
+<area shape="rect" id="node11" href="$a00953.html" title="algorithms/pedometer\l/examples/pedometer_stepcount\l_motion_mma8652.c" alt="" coords="2053,95,2264,151"/>
+</map>

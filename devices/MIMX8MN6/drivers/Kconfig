@@ -1,0 +1,25 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_clock
+config MCUX_USE_driver_clock
+    bool "Clock Driver"
+    select MCUX_USE_driver_common
+    help
+      Clock Driver
+
+# driver_iomuxc
+config MCUX_USE_driver_iomuxc
+    bool "IOMUXC Driver"
+    select MCUX_USE_driver_common
+    help
+      IOMUXC Driver
+
+# driver_memory
+config MCUX_USE_driver_memory
+    bool "Memory Driver"
+    select MCUX_USE_driver_common
+    help
+      MEMORY Driver

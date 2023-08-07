@@ -1,0 +1,11 @@
+<map id="fRun_3DOF_Y_BASIC" name="fRun_3DOF_Y_BASIC">
+<area shape="rect" id="node2" href="$a00896.html#a77eeda9a699b1456bb8b02665ad80522" title="extract the Android angles in degrees from the Android rotation matrix " alt="" coords="212,5,423,47"/>
+<area shape="rect" id="node3" href="$a00845.html#a0d585ddb24fa91e8d18228bee7a9539c" title="fInit_3DOF_Y_BASIC" alt="" coords="245,71,390,98"/>
+<area shape="rect" id="node4" href="$a00896.html#aa781ea4b9430531df4697d3cb39f7454" title="extract the NED angles in degrees from the NED rotation matrix " alt="" coords="221,123,414,164"/>
+<area shape="rect" id="node5" href="$a00896.html#a3bcc5aef9bd7abd545d33660aa3ccbd0" title="function normalizes a rotation quaternion and ensures q0 is non&#45;negative " alt="" coords="266,189,369,215"/>
+<area shape="rect" id="node6" href="$a00896.html#a9f946d534fae22e9e68b9f0e2e2822ef" title="computes normalized rotation quaternion from a rotation vector (deg) " alt="" coords="204,239,431,266"/>
+<area shape="rect" id="node7" href="$a00896.html#ab93a6fd700fd1557e9b8f6796bfe3035" title="compute the rotation matrix from an orientation quaternion " alt="" coords="216,290,419,317"/>
+<area shape="rect" id="node8" href="$a00896.html#aa48ae334cf6bbedf2b9e7423d17cb4ac" title="computes rotation vector (deg) from rotation quaternion " alt="" coords="204,341,431,367"/>
+<area shape="rect" id="node9" href="$a00896.html#a13cd93780206a620abc7bdf7907e6dc6" title="extract the Windows 8 angles in degrees from the Windows 8 rotation matrix " alt="" coords="219,392,415,433"/>
+<area shape="rect" id="node10" href="$a00896.html#a22a32becfcb162db012f41ff4f3bc942" title="function compute the quaternion product qA = qA * qB " alt="" coords="279,458,356,485"/>
+</map>

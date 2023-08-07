@@ -1,0 +1,7 @@
+<map id="fComputeMagCalibration7" name="fComputeMagCalibration7">
+<area shape="rect" id="node2" href="$matrix_8c.html#ad339757b32a57fddf1b820b8921a7903" title="function computes all eigenvalues and eigenvectors of a real symmetric matrix A[0..n&#45;1][0..n&#45;1] stored in the top left of a 10x10 array A[10][10] " alt="" coords="241,5,365,32"/>
+<area shape="rect" id="node3" href="$matrix_8c.html#adb2df4308a29b0e760877a4f4d1daa66" title="function sets every entry in the 3x3 matrix A to a constant scalar " alt="" coords="232,56,375,83"/>
+<area shape="rect" id="node4" href="$matrix_8c.html#a810b959d44c67c3cd94347fe34d02d96" title="function negates all elements of 3x3 matrix A " alt="" coords="229,107,378,133"/>
+<area shape="rect" id="node5" href="$matrix_8c.html#a36f36bcaf2395595541a20fd4ab7c351" title="function multiplies all elements of 3x3 matrix A by the specified scalar " alt="" coords="224,157,383,184"/>
+<area shape="rect" id="node6" href="$matrix_8c.html#a54f510d9d257d6063412a9ed5adddd6f" title="function sets the 3x3 matrix A to the identity matrix " alt="" coords="249,208,357,235"/>
+</map>

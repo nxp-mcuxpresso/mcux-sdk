@@ -1,0 +1,9 @@
+<map id="Register_I2C_BlockWrite" name="Register_I2C_BlockWrite">
+<area shape="rect" id="node2" href="$a00542.html#ad1db6927af79c26ca7b6447a93b42131" title="ADS_FXLC95000Query" alt="" coords="250,5,407,32"/>
+<area shape="rect" id="node3" href="$a00542.html#a61f59d3254fb54c57b010f2f9f8a7499" title="ADS_MMA9553Query" alt="" coords="253,56,404,83"/>
+<area shape="rect" id="node4" href="$a00041.html#ae354fc2aafbf7609f21ebc8cf2538db0" title="The interface function to check if the sensor is in ROM CI Mode. " alt="" coords="220,107,437,133"/>
+<area shape="rect" id="node5" href="$a00041.html#a32b4c71a3c3cbef9999416fdb83dc054" title="The interface function to initialize the sensor. " alt="" coords="245,157,413,184"/>
+<area shape="rect" id="node6" href="$a00101.html#a3924d21a0703878695ebdb68f720fff9" title="Host_IO_Receive" alt="" coords="268,208,389,235"/>
+<area shape="rect" id="node7" href="$a00155.html#af91dd70fb511444f848db38d965c68c0" title="The interface function to initialize the sensor. " alt="" coords="485,284,647,311"/>
+<area shape="rect" id="node8" href="$a00185.html#ad6c175b9a45aa936aa74abda223eeafe" title="Write commands to a sensor. " alt="" coords="249,309,409,336"/>
+</map>

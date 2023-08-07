@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
- * All rights reserved.
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,7 +21,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */
@@ -207,11 +206,12 @@ typedef enum _enet_special_config
     /**************************MTL************************************/
     kENET_StoreAndForward = 0x0002U, /*!< The Rx/Tx store and forward enable. */
     /***********************MAC****************************************/
-    kENET_PromiscuousEnable  = 0x0004U, /*!< The promiscuous enabled. */
-    kENET_FlowControlEnable  = 0x0008U, /*!< The flow control enabled. */
-    kENET_BroadCastRxDisable = 0x0010U, /*!< The broadcast disabled. */
-    kENET_MulticastAllEnable = 0x0020U, /*!< All multicast are passed. */
-    kENET_8023AS2KPacket     = 0x0040U  /*!< 8023as support for 2K packets. */
+    kENET_PromiscuousEnable       = 0x0004U, /*!< The promiscuous enabled. */
+    kENET_FlowControlEnable       = 0x0008U, /*!< The flow control enabled. */
+    kENET_BroadCastRxDisable      = 0x0010U, /*!< The broadcast disabled. */
+    kENET_MulticastAllEnable      = 0x0020U, /*!< All multicast are passed. */
+    kENET_8023AS2KPacket          = 0x0040U, /*!< 8023as support for 2K packets. */
+    kENET_RxChecksumOffloadEnable = 0x0080U, /*!< The Rx checksum offload enabled. */
 } enet_special_config_t;
 
 /*! @brief List of DMA interrupts supported by the ENET interrupt. This
@@ -291,6 +291,15 @@ typedef enum _enet_ptp_event_type
     kENET_PtpGnrlPort     = 320U  /*!< PTP general port number. */
 } enet_ptp_event_type_t;
 
+/*! @brief Define the Tx checksum offload options. */
+typedef enum _enet_tx_offload
+{
+    kENET_TxOffloadDisable             = 0U, /*!< Disable Tx checksum offload. */
+    kENET_TxOffloadIPHeader            = 1U, /*!< Enable IP header checksum calculation and insertion. */
+    kENET_TxOffloadIPHeaderPlusPayload = 2U, /*!< Enable IP header and payload checksum calculation and insertion. */
+    kENET_TxOffloadAll = 3U, /*!< Enable IP header, payload and pseudo header checksum calculation and insertion. */
+} enet_tx_offload_t;
+
 /*! @brief Defines the receive descriptor structure
  *  It has the read-format and write-back format structures. They both
  *  have the same size with different region definition. So we define
@@ -322,6 +331,21 @@ typedef struct _enet_tx_bd_struct
     __IO uint32_t tdes2; /*!< Transmit descriptor 2 */
     __IO uint32_t tdes3; /*!< Transmit descriptor 3 */
 } enet_tx_bd_struct_t;
+
+/*! @brief Defines the Tx BD configuration structure. */
+typedef struct _enet_tx_bd_config_struct
+{
+    void *buffer1;                  /*!< The first buffer address in the descriptor. */
+    uint32_t bytes1;                /*!< The bytes in the fist buffer. */
+    void *buffer2;                  /*!< The second buffer address in the descriptor. */
+    uint32_t bytes2;                /*!< The bytes in the second buffer. */
+    uint32_t framelen;              /*!< The length of the frame to be transmitted. */
+    bool intEnable;                 /*!< Interrupt enable flag. */
+    bool tsEnable;                  /*!< The timestamp enable. */
+    enet_tx_offload_t txOffloadOps; /*!< The Tx checksum offload option, only vaild for Queue 0. */
+    enet_desc_flag_t flag;          /*!< The flag of this tx desciriptor, see "enet_qos_desc_flag". */
+    uint8_t slotNum;                /*!< The slot number used for AV mode only. */
+} enet_tx_bd_config_struct_t;
 
 #ifdef ENET_PTP1588FEATURE_REQUIRED
 /*! @brief Defines the ENET PTP configuration structure. */
@@ -480,6 +504,7 @@ struct _enet_handle
     enet_tx_dirty_ring_t txDirtyRing[ENET_RING_NUM_MAX]; /*!< Transmit dirty buffers addresses.  */
     uint32_t *rxBufferStartAddr[ENET_RING_NUM_MAX];      /*!< The Init-Rx buffers used for reinit corrupted BD due to
                                                             write-back operation. */
+    uint32_t txLenLimitation[ENET_RING_NUM_MAX];         /*!< Tx frame length limitation. */
     enet_callback_t callback;                            /*!< Callback function. */
     void *userData;                                      /*!< Callback function parameter.*/
     enet_rx_alloc_callback_t rxBuffAlloc; /*!< Callback to alloc memory, must be provided for zero-copy Rx. */
@@ -521,9 +546,10 @@ typedef struct _enet_rx_frame_struct
 
 typedef struct _enet_tx_config_struct
 {
-    uint8_t intEnable : 1; /*!< Enable interrupt every time one BD is completed. */
-    uint8_t tsEnable : 1;  /*!< Transmit timestamp enable. */
-    uint8_t slotNum : 4;   /*!< Slot number control bits in AV mode. */
+    uint8_t intEnable : 1;          /*!< Enable interrupt every time one BD is completed. */
+    uint8_t tsEnable : 1;           /*!< Transmit timestamp enable. */
+    uint8_t slotNum : 4;            /*!< Slot number control bits in AV mode. */
+    enet_tx_offload_t txOffloadOps; /*!< Tx checksum offload option. */
 } enet_tx_config_struct_t;
 
 typedef struct _enet_tx_frame_struct

@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_otp
+config MCUX_HAS_driver_otp
+    bool
+
+config MCUX_USE_driver_otp
+    depends on MCUX_HAS_driver_otp
+    bool "OTP Driver"
+    select MCUX_USE_driver_common
+    help
+      OTP Driver

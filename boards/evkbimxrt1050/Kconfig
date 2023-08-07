@@ -1,0 +1,17 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+if MCUX_USE_BOARD_EVKBIMXRT1050
+
+config MCUX_BOARD
+    default "evkbimxrt1050"
+
+config MCUX_KIT
+    default "evkbimxrt1050"
+
+
+#### Board level drivers ####
+rsource "xip/Kconfig"
+
+endif

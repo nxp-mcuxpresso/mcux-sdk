@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 NXP
+ * Copyright 2019-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -155,12 +155,15 @@ void CLOCK_InitArmPll(const clock_arm_pll_config_t *config)
     reg &= ~(ANADIG_PLL_ARM_PLL_CTRL_DIV_SELECT_MASK | ANADIG_PLL_ARM_PLL_CTRL_POST_DIV_SEL_MASK);
     reg |= (ANADIG_PLL_ARM_PLL_CTRL_DIV_SELECT(config->loopDivider) |
             ANADIG_PLL_ARM_PLL_CTRL_POST_DIV_SEL(config->postDivider)) |
-           ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_GATE_MASK | ANADIG_PLL_ARM_PLL_CTRL_POWERUP_MASK;
+           ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_GATE_MASK | ANADIG_PLL_ARM_PLL_CTRL_POWERUP_MASK |
+           ANADIG_PLL_ARM_PLL_CTRL_HOLD_RING_OFF_MASK;
     ANADIG_PLL->ARM_PLL_CTRL = reg;
     __DSB();
     __ISB();
     SDK_DelayAtLeastUs(30, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
+    reg &= ~ANADIG_PLL_SYS_PLL2_CTRL_HOLD_RING_OFF_MASK;
+    ANADIG_PLL->ARM_PLL_CTRL = reg;
     /* Wait for the PLL stable, */
     while (0U == (ANADIG_PLL->ARM_PLL_CTRL & ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_STABLE_MASK))
     {
@@ -1045,11 +1048,6 @@ void CLOCK_InitSysPll1(const clock_sys_pll1_config_t *config)
     div         = 41U;
     numerator   = 178956970UL;
 
-    if (config->ssEnable && (config->ss != NULL))
-    {
-        return;
-    }
-
     /* configure pll */
     ANATOP_PllConfigure(kAI_Itf_1g, div, numerator, 0U, denominator,
                         (config->ssEnable && (config->ss != NULL)) ? config->ss : NULL);
@@ -1735,7 +1733,6 @@ bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
     USBPHY1->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
 
     USBPHY1->CTRL_CLR = USBPHY_CTRL_CLR_CLKGATE_MASK;
-    USBPHY1->PWD_SET  = 0x0;
 
     while (0UL == (USBPHY1->PLL_SIC & USBPHY_PLL_SIC_PLL_LOCK_MASK))
     {
@@ -1841,7 +1838,6 @@ bool CLOCK_EnableUsbhs1PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
     USBPHY2->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
 
     USBPHY2->CTRL_CLR = USBPHY_CTRL_CLR_CLKGATE_MASK;
-    USBPHY2->PWD_SET  = 0x0;
 
     while (0UL == (USBPHY2->PLL_SIC & USBPHY_PLL_SIC_PLL_LOCK_MASK))
     {

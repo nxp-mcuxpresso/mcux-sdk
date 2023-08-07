@@ -1,6 +1,6 @@
 /*!
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019,2022 NXP
  *
  *
  * This is the source file for the OS Abstraction layer for MQXLite.
@@ -281,9 +281,8 @@ osa_task_handle_t OSA_TaskGetCurrentHandle(void)
  *
  *END**************************************************************************/
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
-osa_status_t OSA_TaskYield(void)
+void OSA_TaskYield(void)
 {
-    return KOSA_StatusSuccess;
 }
 #endif
 /*FUNCTION**********************************************************************
@@ -720,8 +719,8 @@ osa_status_t OSA_SemaphorePost(osa_semaphore_handle_t semaphoreHandle)
     /* check whether max value is reached */
     if (((KOSA_CountingSemaphore == pSemStruct->semaphoreType) &&
          (0xFFU == pSemStruct->semCount)) || /* For counting semaphore: the max value is 0xFF */
-        ((KOSA_BinarySemaphore == pSemStruct->semaphoreType) &&
-         (0x01U == pSemStruct->semCount))) /* For binary semaphore: the max value is 0x01   */
+        ((0x01U == pSemStruct->semCount) &&
+         (KOSA_BinarySemaphore == pSemStruct->semaphoreType))) /* For binary semaphore: the max value is 0x01   */
     {
         return KOSA_StatusError;
     }
@@ -1395,33 +1394,12 @@ void OSA_Init(void)
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
 void OSA_Start(void)
 {
-    list_element_handle_t list_element;
-    task_control_block_t *tcb;
-
 #if (FSL_OSA_BM_TIMER_CONFIG != FSL_OSA_BM_TIMER_NONE)
     OSA_TimeInit();
 #endif
-
     while (true)
     {
-        list_element = LIST_GetHead(&s_osaState.taskList);
-        while (NULL != list_element)
-        {
-            tcb                       = (task_control_block_t *)(void *)list_element;
-            s_osaState.curTaskHandler = (osa_task_handle_t)tcb;
-            if (0U != tcb->haveToRun)
-            {
-                if (NULL != tcb->p_func)
-                {
-                    tcb->p_func(tcb->param);
-                }
-                list_element = LIST_GetHead(&s_osaState.taskList);
-            }
-            else
-            {
-                list_element = LIST_GetNext(list_element);
-            }
-        }
+        OSA_ProcessTasks();
     }
 }
 
@@ -1437,25 +1415,21 @@ void OSA_ProcessTasks(void)
     task_control_block_t *tcb;
 
     list_element = LIST_GetHead(&s_osaState.taskList);
-    while (list_element != NULL)
+    while (NULL != list_element)
     {
-        list_element = LIST_GetHead(&s_osaState.taskList);
-        while (NULL != list_element)
+        tcb                       = (task_control_block_t *)(void *)list_element;
+        s_osaState.curTaskHandler = (osa_task_handle_t)tcb;
+        if (0U != tcb->haveToRun)
         {
-            tcb                       = (task_control_block_t *)(void *)list_element;
-            s_osaState.curTaskHandler = (osa_task_handle_t)tcb;
-            if (0U != tcb->haveToRun)
+            if (NULL != tcb->p_func)
             {
-                if (NULL != tcb->p_func)
-                {
-                    tcb->p_func(tcb->param);
-                }
-                list_element = LIST_GetHead(&s_osaState.taskList);
+                tcb->p_func(tcb->param);
             }
-            else
-            {
-                list_element = LIST_GetNext(list_element);
-            }
+            list_element = LIST_GetHead(&s_osaState.taskList);
+        }
+        else
+        {
+            list_element = LIST_GetNext(list_element);
         }
     }
 }

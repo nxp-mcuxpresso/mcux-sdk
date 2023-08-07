@@ -1,0 +1,5 @@
+<map id="initializeSensors" name="initializeSensors">
+<area shape="rect" id="node2" href="$sensor__fusion_8c.html#ab088da7731ffdf25710a364a7f88b224" title="This function is responsible for initializing the system prior to starting the main fusion loop..." alt="" coords="171,5,319,32"/>
+<area shape="rect" id="node3" href="$sensor__fusion_8h.html#a367d92b99365a8143700b76439915d65" title="utility function to insert default values in the top level structure " alt="" coords="367,5,529,32"/>
+<area shape="rect" id="node4" href="$main__agm01__freertos__two__tasks_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is a FreeRTOS (dual task) implementation of the NXP sensor fusion demo build. " alt="" coords="577,5,628,32"/>
+</map>

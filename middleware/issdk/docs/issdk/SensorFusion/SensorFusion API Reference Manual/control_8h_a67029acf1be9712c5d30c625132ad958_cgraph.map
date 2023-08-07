@@ -1,0 +1,11 @@
+<map id="initializeControlPort" name="initializeControlPort">
+<area shape="rect" id="node2" href="$control_8c.html#a6d4965cc969559b94475da397011f314" title="writeControlPort" alt="" coords="211,5,326,32"/>
+<area shape="rect" id="node4" href="$control_8h.html#adbb4129e795ca534e4bb1649bb81b559" title="Called once per fusion cycle to stream information required by the NXP Sensor Fusion Toolbox..." alt="" coords="188,157,349,184"/>
+<area shape="rect" id="node9" href="$control_8c.html#a0022c0c45a3b736ffe21164001662b44" title="Used to initialize the Blue Radios Bluetooth module found on the FRDM&#45;FXS&#45;MULT2&#45;B sensor shield from ..." alt="" coords="213,56,325,83"/>
+<area shape="rect" id="node3" href="$control_8c.html#a9f548c7fc2a3dce2f1c2b0c044dbd2c8" title="myUART_WriteByte" alt="" coords="569,31,708,57"/>
+<area shape="rect" id="node5" href="$output__stream_8c.html#a16d1508470294835d76682195104898e" title="(OVERSAMPLE_RATIO * MAXPACKETRATEHZ) / SENSORFS " alt="" coords="428,157,491,184"/>
+<area shape="rect" id="node6" href="$output__stream_8c.html#a7ad6e53b35d6fc860a1299ceff40a299" title="Utility function used to place data in output buffer about to be transmitted via UART. " alt="" coords="580,233,697,260"/>
+<area shape="rect" id="node7" href="$output__stream_8c.html#a93db92e775dee51c4dbf2dca2aed05b3" title="sBufAppendZeros" alt="" coords="397,259,521,285"/>
+<area shape="rect" id="node8" href="$output__stream_8c.html#a96da70ac128170ff0d03feffa05ef769" title="readCommon" alt="" coords="410,107,509,133"/>
+<area shape="rect" id="node10" href="$control_8c.html#acb3383fd1d5fe2678879bb01266e7701" title="writeWirelessPort" alt="" coords="397,56,521,83"/>
+</map>

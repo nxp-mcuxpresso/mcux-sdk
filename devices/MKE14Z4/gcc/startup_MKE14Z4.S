@@ -4,13 +4,11 @@
 /*            MKE14Z4                                                        */
 /*  @version: 3.0                                                            */
 /*  @date:    2020-1-22                                                      */
-/*  @build:   b200122                                                        */
+/*  @build:   b230529                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2020 NXP                                                   */
-/* All rights reserved.                                                      */
-/*                                                                           */
+/* Copyright 2016-2023 NXP                                                   */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
 /*****************************************************************************/
 /* Version: GCC for ARM Embedded Processors                                  */
@@ -73,7 +71,7 @@ __isr_vector:
     .long   Reserved46_IRQHandler                           /* Reserved interrupt*/
     .long   Reserved47_IRQHandler                           /* Reserved interrupt*/
 
-    .size    __isr_vector, . - __isr_vector
+    .size   __isr_vector, . - __isr_vector
 
 /* Flash Configuration */
     .section .FlashConfig, "a"
@@ -144,7 +142,7 @@ Reset_Handler:
 .LC2:
     subs    r2, 4
     str r0, [r1, r2]
-    bge .LC2
+    bgt .LC2
 .LC3:
 #endif
     cpsie   i               /* Unmask interrupts */
@@ -270,7 +268,6 @@ LPUART2_IRQHandler:
     .weak \handler_name
     .set  \handler_name, DefaultISR
     .endm
-
 /* Exception Handlers */
     def_irq_handler    Reserved16_IRQHandler
     def_irq_handler    Reserved17_IRQHandler

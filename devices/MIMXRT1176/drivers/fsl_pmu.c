@@ -202,7 +202,7 @@ void PMU_StaticEnablePllLdo(ANADIG_PMU_Type *base)
         ANATOP_AI_Write(
             kAI_Itf_Ldo, kAI_PHY_LDO_CTRL0,
             (AI_PHY_LDO_CTRL0_OUTPUT_TRG(0x10) | AI_PHY_LDO_CTRL0_LINREG_EN_MASK | AI_PHY_LDO_CTRL0_LIMIT_EN_MASK));
-        SDK_DelayAtLeastUs(1, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+        SDK_DelayAtLeastUs(100, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
         /* Enable Voltage Reference for PLLs before those PLLs were enabled. */
         base->PMU_REF_CTRL |= ANADIG_PMU_PMU_REF_CTRL_EN_PLL_VOL_REF_BUFFER_MASK;

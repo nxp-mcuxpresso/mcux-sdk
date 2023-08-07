@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_lpcmp
+config MCUX_HAS_driver_lpcmp
+    bool
+
+config MCUX_USE_driver_lpcmp
+    depends on MCUX_HAS_driver_lpcmp
+    bool "LPCMP Driver"
+    select MCUX_USE_driver_common
+    help
+      LPCMP Driver

@@ -1,6 +1,5 @@
 /*
- * Copyright 2018-2022 NXP
- * All rights reserved.
+ * Copyright 2018-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -1212,6 +1211,21 @@ status_t I3C_MasterRepeatedStartWithRxSize(
     /* Clear all flags. */
     I3C_MasterClearStatusFlags(base, (uint32_t)kMasterClearFlags);
 
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_051617) && (FSL_FEATURE_I3C_HAS_ERRATA_051617)
+    /* ERRATA051617: When used as I2C controller generates repeated START randomly before the STOP under PVT condition.
+    This issue is caused by a glitch at the output of an internal clock MUX. The glitch when generates acts as a clock
+    pulse which causes the SDA line to fall early during SCL high period and creates the unintended Repeated START before
+    actual STOP. */
+    if (type == kI3C_TypeI2C)
+    {
+        base->MCONFIG |= I3C_MCONFIG_SKEW(1);
+    }
+    else
+    {
+        base->MCONFIG &= ~I3C_MCONFIG_SKEW_MASK;
+    }
+#endif
+
     /* Issue start command. */
     mctrlVal = base->MCTRL;
     mctrlVal &= ~(I3C_MCTRL_TYPE_MASK | I3C_MCTRL_REQUEST_MASK | I3C_MCTRL_DIR_MASK | I3C_MCTRL_ADDR_MASK |
@@ -1520,15 +1534,19 @@ status_t I3C_MasterProcessDAASpecifiedBaudrate(I3C_Type *base,
                                                uint32_t count,
                                                i3c_master_daa_baudrate_t *daaBaudRate)
 {
-    status_t result = kStatus_Success;
-    uint32_t status;
-    uint32_t errStatus;
-    uint32_t masterConfig;
+    assert(addressList != NULL);
+    assert(count != 0U);
+
+    status_t result       = kStatus_Success;
+    uint8_t rxBuffer[8]   = {0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU};
+    uint32_t masterConfig = 0;
+    uint32_t devCount     = 0;
+    uint8_t rxSize        = 0;
+    bool mctrlDone        = false;
     i3c_baudrate_hz_t baudRate_Hz;
+    uint32_t errStatus;
+    uint32_t status;
     size_t rxCount;
-    uint8_t rxBuffer[8] = {0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU};
-    uint8_t rxSize      = 0;
-    uint32_t devCount   = 0;
 
     /* Return an error if the bus is already in use not by us. */
     result = I3C_CheckForBusyBus(base);
@@ -1561,57 +1579,72 @@ status_t I3C_MasterProcessDAASpecifiedBaudrate(I3C_Type *base,
 
     do
     {
-        do
-        {
-            status = I3C_MasterGetStatusFlags(base);
-            I3C_MasterGetFifoCounts(base, &rxCount, NULL);
+        status = I3C_MasterGetStatusFlags(base);
 
-            /* Check for error flags. */
-            errStatus = I3C_MasterGetErrorStatusFlags(base);
-            result    = I3C_MasterCheckAndClearError(base, errStatus);
-            if (kStatus_Success != result)
-            {
-                if (daaBaudRate != NULL)
-                {
-                    base->MCONFIG = masterConfig;
-                }
-                return result;
-            }
+        /* Check for error flags. */
+        errStatus = I3C_MasterGetErrorStatusFlags(base);
+        result    = I3C_MasterCheckAndClearError(base, errStatus);
+        if (kStatus_Success != result)
+        {
+            break;
+        }
+
+        if ((!mctrlDone) || (rxSize < 8U))
+        {
+            I3C_MasterGetFifoCounts(base, &rxCount, NULL);
 
             if ((0UL != (status & (uint32_t)kI3C_MasterRxReadyFlag)) && (rxCount != 0U))
             {
                 rxBuffer[rxSize++] = (uint8_t)(base->MRDATAB & I3C_MRDATAB_VALUE_MASK);
             }
-        } while ((status & (uint32_t)kI3C_MasterControlDoneFlag) != (uint32_t)kI3C_MasterControlDoneFlag);
 
-        I3C_MasterClearStatusFlags(base, (uint32_t)kI3C_MasterControlDoneFlag);
-
-        if ((I3C_MasterGetState(base) == kI3C_MasterStateDaa) &&
-            (0UL != (I3C_MasterGetStatusFlags(base) & (uint32_t)kI3C_MasterBetweenFlag)))
-        {
-            rxSize = 0;
-            if ((devCount > (count - 1UL)) || ((devCount + 1UL) > I3C_MAX_DEVCNT))
+            if ((status & (uint32_t)kI3C_MasterControlDoneFlag) != 0U)
             {
-                if (daaBaudRate != NULL)
-                {
-                    base->MCONFIG = masterConfig;
-                }
-                return kStatus_I3C_SlaveCountExceed;
+                I3C_MasterClearStatusFlags(base, (uint32_t)kI3C_MasterControlDoneFlag);
+                mctrlDone = true;
+            }
+        }
+        else if ((I3C_MasterGetState(base) == kI3C_MasterStateDaa) &&
+                 (0UL != (I3C_MasterGetStatusFlags(base) & (uint32_t)kI3C_MasterBetweenFlag)))
+        {
+            if (((devCount + 1UL) > count) || ((devCount + 1UL) > I3C_MAX_DEVCNT))
+            {
+                result = kStatus_I3C_SlaveCountExceed;
+                break;
             }
 
+            /* Assign the dynamic address from address list. */
             devList[devCount].dynamicAddr = *addressList++;
-            devList[devCount].vendorID    = (((uint16_t)rxBuffer[0] << 8U | (uint16_t)rxBuffer[1]) & 0xFFFEU) >> 1U;
-            devList[devCount].partNumber  = ((uint32_t)rxBuffer[2] << 24U | (uint32_t)rxBuffer[3] << 16U |
-                                            (uint32_t)rxBuffer[4] << 8U | (uint32_t)rxBuffer[5]);
-            devList[devCount].bcr         = rxBuffer[6];
-            devList[devCount].dcr         = rxBuffer[7];
             base->MWDATAB                 = devList[devCount].dynamicAddr;
+
             /* Emit process DAA again. */
             I3C_MasterEmitRequest(base, kI3C_RequestProcessDAA);
+
+            devList[devCount].vendorID   = (((uint16_t)rxBuffer[0] << 8U | (uint16_t)rxBuffer[1]) & 0xFFFEU) >> 1U;
+            devList[devCount].partNumber = ((uint32_t)rxBuffer[2] << 24U | (uint32_t)rxBuffer[3] << 16U |
+                                            (uint32_t)rxBuffer[4] << 8U | (uint32_t)rxBuffer[5]);
+            devList[devCount].bcr        = rxBuffer[6];
+            devList[devCount].dcr        = rxBuffer[7];
             devCount++;
             usedDevCount++;
+
+            /* Ready to handle next device. */
+            mctrlDone = false;
+            rxSize    = 0;
+        }
+        else
+        {
+            /* Intentional empty */
         }
     } while ((status & (uint32_t)kI3C_MasterCompleteFlag) != (uint32_t)kI3C_MasterCompleteFlag);
+
+    /* Master stops DAA if slave device number exceeds the prepared address number. */
+    if (result == kStatus_I3C_SlaveCountExceed)
+    {
+        /* Send the STOP signal */
+        base->MCTRL = (base->MCTRL & ~(I3C_MCTRL_REQUEST_MASK | I3C_MCTRL_DIR_MASK | I3C_MCTRL_RDTERM_MASK)) |
+                      I3C_MCTRL_REQUEST(kI3C_RequestEmitStop);
+    }
 
     /* Set back initial baud rate after DAA is over. */
     if (daaBaudRate != NULL)
@@ -1619,8 +1652,8 @@ status_t I3C_MasterProcessDAASpecifiedBaudrate(I3C_Type *base,
         base->MCONFIG = masterConfig;
     }
 
-    I3C_MasterClearErrorStatusFlags(base, (uint32_t)kMasterErrorFlags);
     /* Clear all flags. */
+    I3C_MasterClearErrorStatusFlags(base, (uint32_t)kMasterErrorFlags);
     I3C_MasterClearStatusFlags(base, (uint32_t)kMasterClearFlags);
 
     /* Enable I3C IRQ sources while we configure stuff. */
@@ -2528,7 +2561,9 @@ void I3C_SlaveGetDefaultConfig(i3c_slave_config_t *slaveConfig)
     (void)memset(slaveConfig, 0, sizeof(*slaveConfig));
 
     slaveConfig->enableSlave = true;
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ) && FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ)
     slaveConfig->isHotJoin   = false;
+#endif
     slaveConfig->vendorID    = 0x11BU;
 #if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND)
     slaveConfig->enableRandomPart = false;
@@ -2635,10 +2670,12 @@ void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32
     base->SMAXLIMITS |=
         (I3C_SMAXLIMITS_MAXRD(slaveConfig->maxReadLength) | I3C_SMAXLIMITS_MAXWR(slaveConfig->maxWriteLength));
 
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ) && FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ)
     if (slaveConfig->isHotJoin)
     {
         I3C_SlaveRequestEvent(base, kI3C_SlaveEventHotJoinReq);
     }
+#endif
     base->SCONFIG = configValue;
 }
 
@@ -2700,6 +2737,7 @@ i3c_slave_activity_state_t I3C_SlaveGetActivityState(I3C_Type *base)
     return returnCode;
 }
 
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ) && FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ)
 /*!
  * brief I3C slave request event.
  *
@@ -2719,10 +2757,11 @@ void I3C_SlaveRequestEvent(I3C_Type *base, i3c_slave_event_t event)
 
 /*!
  * brief I3C slave request event.
+ * deprecated Do not use this function. It has been superseded by @ref I3C_SlaveRequestIBIWithData.
  *
  * param base The I3C peripheral base address.
  * param data IBI data
- * param dataSize IBI data length
+ * param dataSize IBI data size.
  */
 void I3C_SlaveRequestIBIWithSingleData(I3C_Type *base, uint8_t data, size_t dataSize)
 {
@@ -2735,24 +2774,64 @@ void I3C_SlaveRequestIBIWithSingleData(I3C_Type *base, uint8_t data, size_t data
 }
 
 /*!
- * brief I3C slave request event.
+ * brief I3C slave request IBI event with data payload(mandatory and extended).
  *
  * param base The I3C peripheral base address.
- * param data IBI data pointer
- * param dataSize IBI data length
+ * param data Pointer to IBI data to be sent in the request.
+ * param dataSize IBI data size.
  */
-void I3C_SlaveRequestIBIWithData(I3C_Type *base, i3c_slave_handle_t *handle, uint8_t *data, size_t dataSize)
+void I3C_SlaveRequestIBIWithData(I3C_Type *base, uint8_t *data, size_t dataSize)
 {
-    uint32_t ctrlValue = base->SCTRL;
+    assert((dataSize > 0U) && (dataSize <= 8U));
 
+    uint32_t ctrlValue;
+
+#if (defined(I3C_IBIEXT1_MAX_MASK) && I3C_IBIEXT1_MAX_MASK)
+    if (dataSize > 1U)
+    {
+        ctrlValue = I3C_IBIEXT1_EXT1(data[1]);
+        if (dataSize > 2U)
+        {
+            ctrlValue |= I3C_IBIEXT1_EXT2(data[2]);
+        }
+        if (dataSize > 3U)
+        {
+            ctrlValue |= I3C_IBIEXT1_EXT3(data[3]);
+        }
+        ctrlValue |= I3C_IBIEXT1_CNT(dataSize - 1U);
+        base->IBIEXT1 = ctrlValue;
+    }
+
+    if (dataSize > 4U)
+    {
+        ctrlValue = I3C_IBIEXT2_EXT4(data[4]);
+        if (dataSize > 5U)
+        {
+            ctrlValue |= I3C_IBIEXT2_EXT5(data[5]);
+        }
+        if (dataSize > 6U)
+        {
+            ctrlValue |= I3C_IBIEXT2_EXT6(data[6]);
+        }
+        if (dataSize > 7U)
+        {
+            ctrlValue |= I3C_IBIEXT2_EXT7(data[7]);
+        }
+        base->IBIEXT2 = ctrlValue;
+    }
+#endif
+
+    ctrlValue = base->SCTRL;
+#if (defined(I3C_IBIEXT1_MAX_MASK) && I3C_IBIEXT1_MAX_MASK)
+    ctrlValue &= ~(I3C_SCTRL_EVENT_MASK | I3C_SCTRL_IBIDATA_MASK | I3C_SCTRL_EXTDATA_MASK);
+    ctrlValue |= I3C_SCTRL_EVENT(1U) | I3C_SCTRL_IBIDATA(data[0]) | I3C_SCTRL_EXTDATA(dataSize > 1U);
+#else
     ctrlValue &= ~(I3C_SCTRL_EVENT_MASK | I3C_SCTRL_IBIDATA_MASK);
-    ctrlValue |= I3C_SCTRL_EVENT(1U) | I3C_SCTRL_IBIDATA(*data);
-
-    handle->ibiData     = &data[1];
-    handle->ibiDataSize = dataSize - 1U;
-
+    ctrlValue |= I3C_SCTRL_EVENT(1U) | I3C_SCTRL_IBIDATA(data[0]);
+#endif
     base->SCTRL = ctrlValue;
 }
+#endif /* !(defined(FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ) && FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ) */
 
 /*!
  * brief Performs a polling send transfer on the I3C bus.
@@ -3043,20 +3122,6 @@ static void I3C_SlaveTransferHandleBusStart(I3C_Type *base, i3c_slave_transfer_t
 static void I3C_SlaveTransferHandleEventSent(I3C_Type *base, i3c_slave_handle_t *handle, i3c_slave_transfer_t *xfer)
 {
     xfer->event = (uint32_t)kI3C_SlaveRequestSentEvent;
-    if (handle->ibiData != NULL)
-    {
-        size_t count = 0U;
-        while (count < handle->ibiDataSize)
-        {
-            base->SCTRL = (base->SCTRL & ~I3C_SCTRL_IBIDATA_MASK) | I3C_SCTRL_IBIDATA(handle->ibiData[count]) |
-                          I3C_SCTRL_EVENT(1U);
-            count++;
-        }
-    }
-
-    /* Reset IBI data buffer. */
-    handle->ibiData = NULL;
-
     if ((0UL != (handle->eventMask & xfer->event)) && (NULL != handle->callback))
     {
         handle->callback(base, xfer, handle->userData);

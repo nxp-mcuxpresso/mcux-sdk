@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_fmc
+config MCUX_HAS_driver_fmc
+    bool
+
+config MCUX_USE_driver_fmc
+    depends on MCUX_HAS_driver_fmc
+    bool "fmc Driver"
+    select MCUX_USE_driver_common
+    help
+      fmc Driver

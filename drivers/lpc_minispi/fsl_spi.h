@@ -25,12 +25,12 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SPI driver version. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
 /*@}*/
 
 #ifndef SPI_DUMMYDATA
 /*! @brief SPI dummy transfer data, the data is sent while txBuff is NULL. */
-#define SPI_DUMMYDATA (0xFFFFU)
+#define SPI_DUMMYDATA (0x00U)
 #endif
 
 /* Macro gate for enable/disable the SPI transactional API. 1 for enable, 0 for disable. */

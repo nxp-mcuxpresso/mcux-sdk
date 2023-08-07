@@ -1,0 +1,5 @@
+<map id="f3x3matrixDetA" name="f3x3matrixDetA">
+<area shape="rect" id="node2" href="$a00908.html#a752887e826809837549c391aa3a4cbaf" title="calculate the 10 element calibration from the available measurements " alt="" coords="169,5,354,32"/>
+<area shape="rect" id="node3" href="$a00854.html#aee45330512ed09a377b969fa229a2d45" title="fComputeMagCalibration10" alt="" coords="173,56,350,83"/>
+<area shape="rect" id="node4" href="$a00857.html#a51818fe46836eeda49b9da097725b49a" title="fUpdateMagCalibration10Slice" alt="" coords="164,107,359,133"/>
+</map>

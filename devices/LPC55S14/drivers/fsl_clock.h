@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.3.7. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 7))
+/*! @brief CLOCK driver version 2.3.8. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 8))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -500,7 +500,7 @@ typedef enum _clock_ip_name
 
     kCLOCK_Gpio_Sec = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 29), /*!< Clock gate name: GPIO Sec. */
 
-    kCLOCK_Gpio_Sec_Int = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 30) /*!< Clock gate name: Gpio Sec Int. */
+    kCLOCK_Gpio_Sec_Int = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 30) /*!< Clock gate name: GPIO SEC Int. */
 } clock_ip_name_t;
 
 /*! @brief Peripherals clock source definition. */
@@ -964,11 +964,11 @@ typedef enum _clock_div_name
 
     kCLOCK_DivFro1mClk = 40, /*!< Fro1m Clock Divider. */
 
-    kCLOCK_DivMClk = 43, /*!< Mains Clock Divider. */
+    kCLOCK_DivMClk = 43, /*!< I2S MCLK Clock Divider. */
 
     kCLOCK_DivSctClk = 45, /*!< Sct Clock Divider. */
 
-    kCLOCK_DivPll0Clk = 49 /*!< PLL0 clock divider. */
+    kCLOCK_DivPll0Clk = 49 /*!< PLL clock divider. */
 } clock_div_name_t;
 
 /*******************************************************************************

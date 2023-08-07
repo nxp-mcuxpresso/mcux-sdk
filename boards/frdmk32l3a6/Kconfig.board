@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+
+config MCUX_USE_BOARD_FRDMK32L3A6_CM0PLUS
+    bool "FRDMK32L3A6 [CM0PLUS]"
+    select MCUX_USE_SOC_K32L3A60_CM0PLUS
+    select MCUX_SOC_PART_K32L3A60xxx
+
+config MCUX_USE_BOARD_FRDMK32L3A6_CM4
+    bool "FRDMK32L3A6 [CM4]"
+    select MCUX_USE_SOC_K32L3A60_CM4
+    select MCUX_SOC_PART_K32L3A60xxx

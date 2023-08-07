@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_iap
+config MCUX_HAS_driver_iap
+    bool
+
+config MCUX_USE_driver_iap
+    depends on MCUX_HAS_driver_iap
+    bool "IAP Driver"
+    select MCUX_USE_driver_common
+    help
+      IAP Driver

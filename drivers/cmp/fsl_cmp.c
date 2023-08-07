@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -133,8 +133,9 @@ void CMP_Init(CMP_Type *base, const cmp_config_t *config)
  */
 void CMP_Deinit(CMP_Type *base)
 {
-    /* Disable the CMP module. */
-    CMP_Enable(base, false);
+    // Disable the CMP module.
+    base->CR0 = 0U;
+    base->CR1 = 0U;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Disable the clock. */

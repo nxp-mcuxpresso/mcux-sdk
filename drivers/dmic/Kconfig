@@ -1,0 +1,38 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_dmic
+config MCUX_HAS_driver_dmic
+    bool
+
+config MCUX_USE_driver_dmic
+    depends on MCUX_HAS_driver_dmic
+    bool "DMIC Driver"
+    select MCUX_USE_driver_common
+    help
+      DMIC Driver
+
+# driver_dmic_hwvad
+config MCUX_HAS_driver_dmic_hwvad
+    bool
+
+config MCUX_USE_driver_dmic_hwvad
+    depends on MCUX_HAS_driver_dmic_hwvad
+    bool "DMIC HWVAD Driver"
+    select MCUX_USE_driver_dmic
+    select MCUX_USE_driver_common
+    help
+      DMIC HWVAD Driver
+
+# driver_dmic_dma
+config MCUX_HAS_driver_dmic_dma
+    bool
+
+config MCUX_USE_driver_dmic_dma
+    depends on MCUX_HAS_driver_dmic_dma
+    bool "DMIC DMA Driver"
+    select MCUX_USE_driver_dmic
+    help
+      DMIC DMA Driver

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief GPIO driver version. */
-#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 7, 1))
+#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 7, 2))
 /*@}*/
 
 #if defined(FSL_FEATURE_GPIO_REGISTERS_WIDTH) && (FSL_FEATURE_GPIO_REGISTERS_WIDTH == 8U)
@@ -79,7 +79,8 @@ typedef struct _gpio_pin_config
     uint8_t outputLogic; /*!< Set a default output logic, which has no use in input */
 } gpio_pin_config_t;
 
-#if (defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
+#if (defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) || \
+     !(defined(FSL_FEATURE_SOC_PORT_COUNT))
 /*! @brief Configures the interrupt generation condition. */
 typedef enum _gpio_interrupt_config
 {
@@ -104,8 +105,8 @@ typedef enum _gpio_interrupt_config
 /*! @brief Configures the selection of interrupt/DMA request/trigger output. */
 typedef enum _gpio_interrupt_selection
 {
-    kGPIO_InterruptOutput0  = 0x0U,  /*!< Interrupt/DMA request/trigger output 0. */
-    kGPIO_InterruptOutput1  = 0x1U,  /*!< Interrupt/DMA request/trigger output 1. */
+    kGPIO_InterruptOutput0 = 0x0U, /*!< Interrupt/DMA request/trigger output 0. */
+    kGPIO_InterruptOutput1 = 0x1U, /*!< Interrupt/DMA request/trigger output 1. */
 } gpio_interrupt_selection_t;
 #endif /* FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT */
 
@@ -416,7 +417,8 @@ static inline uint32_t GPIO_PinRead(GPIO_Type *base, uint32_t pin)
 
 /*! @name GPIO Interrupt */
 /*@{*/
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
+#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
+    defined(FSL_FEATURE_SOC_PORT_COUNT)
 /*!
  * @brief Reads the GPIO port interrupt status flag.
  *
@@ -497,7 +499,7 @@ uint32_t GPIO_GpioGetInterruptFlags(GPIO_Type *base);
 #if (defined(FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT) && FSL_FEATURE_GPIO_HAS_INTERRUPT_CHANNEL_SELECT)
 /*!
  * @brief Read the GPIO interrupt status flags based on selected interrupt channel(IRQS).
- * 
+ *
  * @param base GPIO peripheral base pointer. (GPIOA, GPIOB, GPIOC, and so on.)
  * @param channel '0' means selete interrupt channel 0, '1' means selete interrupt channel 1.
  * @return The current GPIO's interrupt status flag based on the selected interrupt channel.
@@ -742,7 +744,8 @@ static inline uint32_t FGPIO_PinRead(FGPIO_Type *base, uint32_t pin)
 
 /*! @name FGPIO Interrupt */
 /*@{*/
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
+#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
+    defined(FSL_FEATURE_SOC_PORT_COUNT)
 
 /*!
  * @brief Reads the FGPIO port interrupt status flag.

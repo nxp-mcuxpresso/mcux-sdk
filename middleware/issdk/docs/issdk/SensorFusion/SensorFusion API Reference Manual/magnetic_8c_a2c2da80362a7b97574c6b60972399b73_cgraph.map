@@ -1,0 +1,13 @@
+<map id="fRunMagCalibration" name="fRunMagCalibration">
+<area shape="rect" id="node2" href="$magnetic_8c.html#ab6f86b6d28bc71b2ce3afc7c374c462e" title="fUpdateMagCalibration4Slice" alt="" coords="191,56,379,83"/>
+<area shape="rect" id="node6" href="$magnetic_8c.html#aad08380c7f86edfe8480d6a7555172b8" title="fUpdateMagCalibration7Slice" alt="" coords="191,107,379,133"/>
+<area shape="rect" id="node8" href="$magnetic_8c.html#a5798cb74fc7f5956db643d09a3750e09" title="fUpdateMagCalibration10Slice" alt="" coords="188,183,383,209"/>
+<area shape="rect" id="node3" href="$matrix_8c.html#a64363bfcc2226e12d1bc28e7382591cc" title="function uses Gauss&#45;Jordan elimination to compute the inverse of matrix A in situ on exit..." alt="" coords="456,5,564,32"/>
+<area shape="rect" id="node5" href="$matrix_8c.html#a54f510d9d257d6063412a9ed5adddd6f" title="function sets the 3x3 matrix A to the identity matrix " alt="" coords="637,157,745,184"/>
+<area shape="rect" id="node4" href="$matrix_8c.html#a744a51154ab26c7fcd0a020e98e038df" title="function sets the matrix A to the identity matrix " alt="" coords="648,5,735,32"/>
+<area shape="rect" id="node7" href="$matrix_8c.html#aad87540028353c5db92043a38ed70c1a" title="fComputeEigSlice" alt="" coords="447,107,573,133"/>
+<area shape="rect" id="node9" href="$matrix_8c.html#a661c761f004eb9f4b050f201b0991004" title="function calculates the determinant of a 3x3 matrix " alt="" coords="455,157,565,184"/>
+<area shape="rect" id="node10" href="$matrix_8c.html#a810b959d44c67c3cd94347fe34d02d96" title="function negates all elements of 3x3 matrix A " alt="" coords="435,208,585,235"/>
+<area shape="rect" id="node11" href="$matrix_8c.html#a95d2ac82a68706e246b4cdd516f9378f" title="function directly calculates the symmetric inverse of a symmetric 3x3 matrix only the on and above di..." alt="" coords="432,259,588,285"/>
+<area shape="rect" id="node12" href="$matrix_8c.html#a36f36bcaf2395595541a20fd4ab7c351" title="function multiplies all elements of 3x3 matrix A by the specified scalar " alt="" coords="431,309,589,336"/>
+</map>

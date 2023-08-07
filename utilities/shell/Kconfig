@@ -1,0 +1,17 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# utility_shell
+config MCUX_HAS_utility_shell
+    bool
+
+config MCUX_USE_utility_shell
+    depends on MCUX_HAS_utility_shell
+    bool "Utility shell"
+    select MCUX_USE_utility_str
+    select MCUX_USE_component_lists
+    select MCUX_USE_driver_common
+    help
+      Utility shell

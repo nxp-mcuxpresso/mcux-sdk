@@ -1,0 +1,14 @@
+	    *(.data*)
+	    . = ALIGN(4);
+	    _net_buf_pool_list = .;
+	    KEEP(*(SORT(._net_buf_pool*)))
+	    . = ALIGN(4);
+	    _k_mem_slab_list_start = .;
+	    KEEP(*(SORT(._k_mem_slab*)))
+	    _k_mem_slab_list_end = .;
+	    . = ALIGN(4);
+        <#if memory.name=="SRAM_OC1">
+        *fsl_adapter_flexspi_nor_flash.o(.text .text* .rodata .rodata*)
+        *fsl_flexspi.o(.text .text* .rodata .rodata*)
+        *mflash_drv.o(.text .text* .rodata .rodata*)
+        </#if>

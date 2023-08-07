@@ -958,8 +958,10 @@ static srtm_status_t SRTM_SaiSdmaAdapter_Open(srtm_sai_adapter_t adapter, srtm_a
     srtm_sai_sdma_adapter_t handle = (srtm_sai_sdma_adapter_t)(void *)adapter;
 #if SRTM_SAI_CONFIG_Rx_Enabled
     srtm_sai_sdma_runtime_t rtm = dir == SRTM_AudioDirTx ? &handle->txRtm : &handle->rxRtm;
+    srtm_sai_sdma_config_t *thisCfg = dir == SRTM_AudioDirTx ? &handle->txConfig : &handle->rxConfig;
 #else
     srtm_sai_sdma_runtime_t rtm        = &handle->txRtm;
+    srtm_sai_sdma_config_t *thisCfg    = &handle->txConfig;
 #endif
 
     SRTM_DEBUG_MESSAGE(SRTM_DEBUG_VERBOSE_INFO, "%s: %s%d\r\n", __func__, saiDirection[dir], index);
@@ -977,6 +979,11 @@ static srtm_status_t SRTM_SaiSdmaAdapter_Open(srtm_sai_adapter_t adapter, srtm_a
     rtm->state    = SRTM_AudioStateOpened;
     rtm->freeRun  = true;
     rtm->paramSet = false;
+
+    if (thisCfg->extendConfig.audioMclkConf != NULL)
+    {
+        thisCfg->extendConfig.audioMclkConf(handle->sai, &thisCfg->mclkConfig);
+    }
 
     return SRTM_Status_Success;
 }

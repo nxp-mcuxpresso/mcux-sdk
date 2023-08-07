@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018, 2020-2022 NXP
+ * Copyright 2016-2018, 2020-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,12 +23,14 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief TRNG driver version 2.0.15.
+/*! @brief TRNG driver version 2.0.16.
  *
- * Current version: 2.0.15
+ * Current version: 2.0.16
  *
 
  * Change log:
+ * - version 2.0.16
+ *   - Added support for Dual oscillator mode.
  * - version 2.0.15
  *   - Changed TRNG_USER_CONFIG_DEFAULT_XXX values according to latest reccomended by design team.
  * - version 2.0.14
@@ -63,7 +65,7 @@
  *   - add support for KL8x and KL28Z
  *   - update default OSCDIV for K81 to divide by 2
  */
-#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 15))
+#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 16))
 /*@}*/
 
 /*! @brief TRNG sample mode. Used by trng_config_t. */
@@ -92,6 +94,16 @@ typedef enum _trng_ring_osc_div
     kTRNG_RingOscDiv8 = 3U  /*!< Ring oscillator divided-by-8. */
 } trng_ring_osc_div_t;
 
+#if defined(FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS) && (FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS > 0)
+/*! @brief TRNG oscillator mode . Used by trng_config_t. */
+typedef enum trng_oscillator_mode_t
+{
+    kTRNG_SingleOscillatorModeOsc1 = 0U, /*!< Single oscillator mode, using OSC1 (default)*/
+    kTRNG_DualOscillatorMode       = 1U, /*!< Dual oscillator mode*/
+    kTRNG_SingleOscillatorModeOsc2 = 2U, /*!< Single oscillator mode, using OSC2 */
+} trng_oscillator_mode_t;
+#endif /* FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS */
+
 /*! @brief Data structure for definition of statistical check limits. Used by trng_config_t. */
 typedef struct _trng_statistical_check_limit
 {
@@ -111,6 +123,10 @@ typedef struct _trng_user_config
     trng_clock_mode_t clockMode;    /*!< @brief Clock mode used to operate TRNG.*/
     trng_ring_osc_div_t ringOscDiv; /*!< @brief Ring oscillator divide used by TRNG. */
     trng_sample_mode_t sampleMode;  /*!< @brief Sample mode of the TRNG ring oscillator. */
+#if defined(FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS) && (FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS > 0)
+    trng_oscillator_mode_t oscillatorMode; /*!< @brief TRNG oscillator mode . */
+    trng_ring_osc_div_t ringOsc2Div;       /*!< @brief Divider used for Ring oscillator 2. */
+#endif                                     /* FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS */
     /* Seed Control*/
     uint16_t
         entropyDelay; /*!< @brief Entropy Delay. Defines the length (in system clocks) of each Entropy sample taken. */

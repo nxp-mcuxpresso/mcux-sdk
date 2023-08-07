@@ -20,12 +20,6 @@
 extern "C" {
 #endif
 
-/** @defgroup FRO_CALIB_LIB_5411X CHIP: LPC5411X FRO CALIBRATION LIBRARY functions
- * The FRO Calibration library provides functions to control FRO clock frequency.<br>
- * @ingroup CHIP_5411X_DRIVERS
- * @{
- */
-
 /* Returns the version of the FRO Calibration library */
 unsigned int fro_calib_Get_Lib_Ver(void);
 

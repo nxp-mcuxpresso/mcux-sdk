@@ -1,0 +1,37 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_i2c
+config MCUX_HAS_driver_i2c
+    bool
+
+config MCUX_USE_driver_i2c
+    depends on MCUX_HAS_driver_i2c
+    bool "I2C Driver"
+    select MCUX_USE_driver_common
+    help
+      I2C Driver
+
+# driver_i2c_dma
+config MCUX_HAS_driver_i2c_dma
+    bool
+
+config MCUX_USE_driver_i2c_dma
+    depends on MCUX_HAS_driver_i2c_dma
+    bool "I2C DMA Driver"
+    select MCUX_USE_driver_i2c
+    help
+      I2C Driver
+
+# driver_i2c_edma
+config MCUX_HAS_driver_i2c_edma
+    bool
+
+config MCUX_USE_driver_i2c_edma
+    depends on MCUX_HAS_driver_i2c_edma
+    bool "I2C EDMA Driver"
+    select MCUX_USE_driver_i2c
+    help
+      I2C Driver

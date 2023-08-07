@@ -1,0 +1,4 @@
+<map id="boardkit/frdm&#45;kl25z/virtual_shield/issdk_hal.h" name="boardkit/frdm&#45;kl25z/virtual_shield/issdk_hal.h">
+<area shape="rect" id="node2" href="$a00620.html" title="The frdm_kl25z.h file defines GPIO pin mappings for FRDM&#45;KL25Z board. " alt="" coords="5,95,101,121"/>
+<area shape="rect" id="node3" href="$a00626.html" title="The virtual_shield.h file declares mapping of NXP sensor pins to I2C addresses and standard Arduino p..." alt="" coords="125,95,232,121"/>
+</map>

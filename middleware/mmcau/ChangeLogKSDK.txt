@@ -2,7 +2,11 @@
 @page middleware_log Middleware Change Log
  
 @section mmcau MMCAU library 
-  The current version is 2.0.2.
+  The current version is 2.0.4.
+
+  - 2.0.4
+    - Bug fixes:
+      - Fixed issue while multiple SHA blocks passed in HASH API.
   
   - 2.0.3
     - Bug fixes:

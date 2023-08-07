@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,7 +19,7 @@
 /******************************************************************************
  * Definitions
  *****************************************************************************/
-#define FSL_XRDC_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+#define FSL_XRDC_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
 
 #ifndef FSL_CLOCK_XRDC_GATE_COUNT
 #define FSL_CLOCK_XRDC_GATE_COUNT 1U

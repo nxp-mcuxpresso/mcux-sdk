@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2021, NXP
+ * Copyright 2017 - 2021 , NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.3.6. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 6))
+/*! @brief CLOCK driver version 2.3.7. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 7))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -977,7 +977,7 @@ extern "C" {
 
 /**
  * @brief Enable the clock for specific IP.
- * @param clk Clock to be enabled.
+ * @param clk : Clock to be enabled.
  * @return  Nothing
  */
 static inline void CLOCK_EnableClock(clock_ip_name_t clk)
@@ -987,7 +987,7 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
 }
 /**
  * @brief Disable the clock for specific IP.
- * @param clk Clock to be Disabled.
+ * @param clk : Clock to be Disabled.
  * @return  Nothing
  */
 static inline void CLOCK_DisableClock(clock_ip_name_t clk)

@@ -202,6 +202,12 @@ typedef enum _osa_status
 #define OSA_TASK_PRIORITY_MIN (15U)
 #endif
 
+/*
+ * Converse the percent of the priority to the priority of the OSA.
+ * The the range of the parameter x is 0-100.
+ */
+#define OSA_TASK_PRIORITY_PERCENT(x) ((((OSA_TASK_PRIORITY_MIN - OSA_TASK_PRIORITY_MAX) * (100 - (x))) / 100 ) + OSA_TASK_PRIORITY_MAX)
+
 #define SIZE_IN_UINT32_UNITS(size) (((size) + sizeof(uint32_t) - 1) / sizeof(uint32_t))
 
 /*! @brief Constant to pass as timeout value in order to wait indefinitely. */
@@ -377,6 +383,9 @@ typedef enum _osa_status
 
 extern const uint8_t gUseRtos_c;
 
+#ifndef __DSB
+#define __DSB()
+#endif
 /*
  * alloc the temporary memory to store the status
  */
@@ -388,7 +397,9 @@ extern const uint8_t gUseRtos_c;
 /*
  * Exit critical mode and retore the previous mode
  */
-#define OSA_EXIT_CRITICAL() OSA_ExitCritical(osaCurrentSr)
+#define OSA_EXIT_CRITICAL() \
+    __DSB();                \
+    OSA_ExitCritical(osaCurrentSr);
 
 /*******************************************************************************
  * API
@@ -507,11 +518,10 @@ osa_task_handle_t OSA_TaskGetCurrentHandle(void);
  * When a task calls this function, it gives up the CPU and puts itself to the
  * end of a task ready list.
  *
- * @retval KOSA_StatusSuccess The function is called successfully.
- * @retval KOSA_StatusError   Error occurs with this function.
+ * @retval NULL
  */
 #if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
-osa_status_t OSA_TaskYield(void);
+void OSA_TaskYield(void);
 #endif /* FSL_OSA_TASK_ENABLE */
 
 /*!

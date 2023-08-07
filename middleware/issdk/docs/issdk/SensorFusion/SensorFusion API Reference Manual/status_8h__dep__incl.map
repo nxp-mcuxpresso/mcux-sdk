@@ -1,0 +1,11 @@
+<map id="status.h" name="status.h">
+<area shape="rect" id="node2" href="$driver__FXOS8700_8c.html" title="Provides init() and read() functions for the FXOS8700 6&#45;axis accel plus mag. " alt="" coords="5,87,137,114"/>
+<area shape="rect" id="node3" href="$main__agm01__freertos__two__tasks_8c.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F. " alt="" coords="162,80,309,121"/>
+<area shape="rect" id="node4" href="$main__baremetal_8c.html" title="Bare metal implementation of sensor fusion on FRDM&#45;K64F. " alt="" coords="333,87,458,114"/>
+<area shape="rect" id="node5" href="$main__freertos__agm02_8c.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F/FRDM&#45;FXS&#45;AGM02. " alt="" coords="482,87,639,114"/>
+<area shape="rect" id="node6" href="$main__freertos__agm02__power__cycling_8c.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F/FRDM&#45;FXS&#45;AGM02 with smart power&#45;cycl..." alt="" coords="663,80,810,121"/>
+<area shape="rect" id="node7" href="$main__freertos__single__task_8c.html" title="FreeRTOS (single task) implementation of sensor fusion on FRDM&#45;K64F. " alt="" coords="834,80,975,121"/>
+<area shape="rect" id="node8" href="$main__freertos__two__tasks_8c.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F. " alt="" coords="1000,87,1177,114"/>
+<area shape="rect" id="node9" href="$sensor__fusion_8c.html" title="The sensor_fusion.c file implements the top level programming interface. " alt="" coords="1201,87,1315,114"/>
+<area shape="rect" id="node10" href="$status_8c.html" title="Application&#45;specific status subsystem. " alt="" coords="1339,87,1409,114"/>
+</map>

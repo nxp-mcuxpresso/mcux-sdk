@@ -1,0 +1,6 @@
+<map id="process_host_command" name="process_host_command">
+<area shape="rect" id="node2" href="$a00419.html#a4d3c6a49cdb7699813aa88ce1bc3d7e5" title="fxlc95000_enSensor" alt="" coords="257,5,395,32"/>
+<area shape="rect" id="node3" href="$a00038.html#ae354fc2aafbf7609f21ebc8cf2538db0" title="The interface function to check if the sensor is in ROM CI Mode. " alt="" coords="217,56,435,83"/>
+<area shape="rect" id="node4" href="$a00038.html#a871aa55982b73b6f38f5bfa87a3c070e" title="The interface function to write ROM CI Commands. " alt="" coords="483,132,701,159"/>
+<area shape="rect" id="node5" href="$a00038.html#a0ad7b40a417661e25cdee37caccc21a6" title="The interface function to write ROM CI Data Payload. " alt="" coords="226,157,426,184"/>
+</map>

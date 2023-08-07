@@ -12,7 +12,7 @@
 **
 **     Reference manual:    IMXRT1170RM, Rev 1, 02/2021
 **     Version:             rev. 1.0, 2020-12-29
-**     Build:               b210615
+**     Build:               b230223
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -20,7 +20,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2023 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -40,7 +40,7 @@
 /*!
  * @file MIMXRT1176_cm7
  * @version 1.0
- * @date 2021-06-15
+ * @date 2023-02-23
  * @brief Device specific configuration file for MIMXRT1176_cm7 (implementation
  *        file)
  *
@@ -115,7 +115,8 @@ void SystemInit (void) {
         SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
     }
 
-/* Enable instruction and data caches */
+   /* Enable instruction cache
+      Note: Data cache will be enabled in Board_ConfigMPU() function to avoid situations where instructions are lost. */
 #if defined(__ICACHE_PRESENT) && __ICACHE_PRESENT
     if (SCB_CCR_IC_Msk != (SCB_CCR_IC_Msk & SCB->CCR)) {
         SCB_EnableICache();

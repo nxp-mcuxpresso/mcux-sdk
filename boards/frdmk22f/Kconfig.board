@@ -1,0 +1,10 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+
+config MCUX_USE_BOARD_FRDMK22F
+    bool "FRDMK22F"
+    select MCUX_USE_SOC_MK22F51212
+    select MCUX_SOC_PART_MK22FN512xxx12

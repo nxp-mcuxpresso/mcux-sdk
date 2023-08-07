@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.3.7. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 7))
+/*! @brief CLOCK driver version 2.3.8. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 8))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -321,7 +321,7 @@
 /*! @brief Clock gate name used for CLOCK_EnableClock/CLOCK_DisableClock. */
 typedef enum _clock_ip_name
 {
-    kCLOCK_IpInvalid = 0U,
+    kCLOCK_IpInvalid = 0U,                                /*!< Invalid Ip Name. */
     kCLOCK_Rom       = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 1), /*!< Clock gate name: Rom. */
 
     kCLOCK_Sram1 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 3), /*!< Clock gate name: Sram1. */
@@ -498,7 +498,7 @@ typedef enum _clock_ip_name
 
     kCLOCK_Hs_Lspi = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 28), /*!< Clock gate name: Lspi. */
 
-    kCLOCK_Gpio_Sec = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 29), /*!< Clock gate name: Sec. */
+    kCLOCK_Gpio_Sec = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 29), /*!< Clock gate name: GPIO Sec. */
 
     kCLOCK_Gpio_Sec_Int = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 30) /*!< Clock gate name: GPIO SEC Int. */
 } clock_ip_name_t;

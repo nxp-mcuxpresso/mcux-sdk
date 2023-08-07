@@ -1,0 +1,10 @@
+<map id="f3DOFTiltWin8" name="f3DOFTiltWin8">
+<area shape="rect" id="node2" href="$fusion_8h.html#a41f2c6419c8e0c019e08618283338d21" title="fInit_3DOF_G_BASIC" alt="" coords="172,5,319,32"/>
+<area shape="rect" id="node3" href="$fusion_8h.html#a7b5db1923cfa0dc160016e7d9b45b1c2" title="fRun_3DOF_G_BASIC" alt="" coords="391,56,543,83"/>
+<area shape="rect" id="node5" href="$fusion_8h.html#adb837744c0801f50a0890f1385ca5c75" title="fInit_6DOF_GY_KALMAN" alt="" coords="160,107,331,133"/>
+<area shape="rect" id="node7" href="$precisionAccelerometer_8h.html#a2670a39e8be35e9bad5a75d0ec8ca821" title="function runs the precision accelerometer calibration " alt="" coords="174,157,317,184"/>
+<area shape="rect" id="node4" href="$fusion_8h.html#aeb60375528d75ee9fec67a96916141ca" title="fFuseSensors" alt="" coords="610,81,713,108"/>
+<area shape="rect" id="node6" href="$fusion_8h.html#a942d619f897d6820d5c148bdc910f962" title="fRun_6DOF_GY_KALMAN" alt="" coords="379,107,555,133"/>
+<area shape="rect" id="node8" href="$precisionAccelerometer_8h.html#a29cd1109b0584bd00d43c219f411437f" title="Update the buffer used to store samples used for accelerometer calibration. " alt="" coords="401,157,533,184"/>
+<area shape="rect" id="node9" href="$sensor__fusion_8c.html#ae748e1330b5a94783c6d4ea2ad9e4f28" title="initializeSensors" alt="" coords="603,157,720,184"/>
+</map>

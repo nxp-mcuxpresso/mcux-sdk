@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022, NXP
+ * Copyright 2018-2023, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.3.2. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+/*! @brief power driver version 2.5.0. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*@}*/
 
 #define MAKE_PD_BITS(reg, slot)  (((reg) << 8) | (slot))
@@ -34,8 +34,6 @@
 /*! PMIC is used but vddcore supply is always above LVD threshold. */
 #define PMIC_VDDCORE_RECOVERY_TIME_IGNORE (0xFFFFFFFFU)
 
-/*! Invalid voltage level. */
-#define POWER_INVALID_VOLT_LEVEL (0xFFFFFFFFU)
 /**
  * @brief PMC event flags.
  *
@@ -283,11 +281,30 @@ typedef enum _power_volt_op_range
                               CM33/DSP speed clarified in Data Sheet. */
 } power_volt_op_range_t;
 
-/*! Frequency levels defined in power library. */
-extern const uint32_t powerLowCm33FreqLevel[2][3];
-extern const uint32_t powerLowDspFreqLevel[2][3];
-extern const uint32_t powerFullCm33FreqLevel[2][5];
-extern const uint32_t powerFullDspFreqLevel[2][5];
+/*! @brief VDDCORE supply source. */
+typedef enum _power_vddcore_src
+{
+    kVddCoreSrc_LDO  = 0U, /*!< VDDCORE is supplied by onchip regulator. */
+    kVddCoreSrc_PMIC = 1U, /*!< VDDCORE is supplied by external PMIC. */
+} power_vddcore_src_t;
+
+/*!
+ * @brief vddcore or vdd1v8 power on selection for different PMIC mode.
+ * vddcore and vdd1v8 are always on in mode0. Refer to PMC->PMICCFG.
+ */
+typedef enum _power_control_for_pmic_mode
+{
+    kVddCoreOnMode1 = 0x2U,  /*!< VDDCORE is powered in PMIC mode1. */
+    kVddCoreOnMode2 = 0x4U,  /*!< VDDCORE is powered in PMIC mode2. */
+    kVddCoreOnMode3 = 0x8U,  /*!< VDDCORE is powered in PMIC mode3. */
+    kVdd1v8OnMode1  = 0x20U, /*!< VDD1V8 is powered in PMIC mode1. */
+    kVdd1v8OnMode2  = 0x40U, /*!< VDD1V8 is powered in PMIC mode2. */
+    kVdd1v8OnMode3  = 0x80U, /*!< VDD1V8 is powered in PMIC mode3. */
+} power_control_for_pmic_mode;
+
+/*! Callback function used to change VDDCORE when the VDDCORE is supplied by external PMIC. Refer to
+ * #POWER_SetVddCoreSupplySrc() */
+typedef void (*power_vddcore_set_func_t)(uint32_t millivolt);
 
 /*******************************************************************************
  * API
@@ -296,6 +313,25 @@ extern const uint32_t powerFullDspFreqLevel[2][5];
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*!
+ * @brief API to set vddcore or vdd1v8 power on for PMIC modes which is responded to PDRUNCFG0[PMIC_MODE] or
+ * PDSLEEPCFG0[PMIC_MODE] select pin values. If not set, the driver will use default configurations for different PMIC
+ * mode.
+ * The default configuration is as below.
+ *   PMIC_MODE: power mode select
+ *   0b00    run mode, all supplies on.
+ *   0b01    deep sleep mode, all supplies on.
+ *   0b10    deep powerdown mode, vddcore off.
+ *   0b11    full deep powerdown mode vdd1v8 and vddcore off.
+ *
+ * Note, be cautious to modify the VDD state in different PMIC mode. When the default configuration is changed, use
+ * exclude_from_pd[0] to configure the PMIC mode for deep sleep and power down mode.
+ *
+ * @param vddSelect the ORd value of @ref power_control_for_pmic_mode. Defines run (all supplies on), deep power-down
+ * (VDDCORE off), and true deep power-down (VDD1V8 and VDDCORE off).
+ */
+void POWER_PmicPowerModeSelectControl(uint32_t vddSelect);
 
 /*!
  * @brief API to enable PDRUNCFG bit in the Sysctl0. Note that enabling the bit powers down the peripheral
@@ -451,7 +487,7 @@ AT_QUICKACCESS_SECTION_CODE(void POWER_EnterNbb(void));
 #endif
 
 /**
- * @brief   PMC Set Ldo volatage for particular frequency.
+ * @brief Deprecated and replaced by #POWER_SetVoltageForFreq()! PMC Set Ldo volatage for particular frequency.
  * NOTE: The API is only valid when MAINPLLCLKDIV[7:0] and DSPPLLCLKDIV[7:0] are 0.
  *       If LVD falling trip voltage is higher than the required core voltage for particular frequency,
  *       LVD voltage will be decreased to safe level to avoid unexpected LVD reset or interrupt event.
@@ -465,6 +501,40 @@ bool POWER_SetLdoVoltageForFreq(power_part_temp_range_t tempRange,
                                 power_volt_op_range_t voltOpRange,
                                 uint32_t cm33Freq,
                                 uint32_t dspFreq);
+
+/**
+ * @brief Set VDDCORE supply source, PMIC or on-chip regulator.
+ * @param   src : #power_vddcore_src_t, VDDCore supply source
+ */
+void POWER_SetVddCoreSupplySrc(power_vddcore_src_t src);
+
+/**
+ * @brief Set the core supply setting function if PMIC is used. The function is not needed and ignored when
+ *        using the onchip regulator to supply VDDCORE.
+ * @param   func : #power_vddcore_set_func_t, the PMIC core supply voltage set function.
+ */
+void POWER_SetPmicCoreSupplyFunc(power_vddcore_set_func_t func);
+
+/**
+ * @brief PMC Set volatage for particular frequency with given minimum value. #POWER_SetVddCoreSupplySrc should be
+ *        called in advance to tell power driver the supply source. If PMIC is used, the VDDCORE setting function
+ *        should be set by #POWER_SetPmicCoreSupplyFunc before this API is called.
+ * NOTE: The API is only valid when MAINPLLCLKDIV[7:0] and DSPPLLCLKDIV[7:0] are 0.
+ *       If LVD falling trip voltage is higher than therequired core voltage for particular frequency,
+ *       LVD voltage will be decreased to safe level to avoid unexpected LVD reset or interrupt event.
+ * @param   tempRange : part temperature range
+ * @param   voltOpRange : voltage operation range.
+ * @param   cm33Freq : CM33 CPU clock frequency value
+ * @param   dspFreq : DSP CPU clock frequency value
+ * @param   mini_volt : minimum voltage in millivolt(mV) for VDDCORE. Should <= 1130mV, 0 means use the core frequency
+ * to calculate voltage.
+ * @return  true for success and false for CPU frequency out of specified voltOpRange or failed to set voltage.
+ */
+bool POWER_SetVoltageForFreq(power_part_temp_range_t tempRange,
+                             power_volt_op_range_t voltOpRange,
+                             uint32_t cm33Freq,
+                             uint32_t dspFreq,
+                             uint32_t mini_volt);
 
 /*!
  * @brief Set vddcore low voltage detection falling trip voltage.

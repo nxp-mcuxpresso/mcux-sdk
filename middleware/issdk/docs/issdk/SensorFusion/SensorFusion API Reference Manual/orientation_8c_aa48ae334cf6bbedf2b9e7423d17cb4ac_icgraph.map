@@ -1,0 +1,9 @@
+<map id="fRotationVectorDegFromQuaternion" name="fRotationVectorDegFromQuaternion">
+<area shape="rect" id="node2" href="$orientation_8h.html#ad60a32e44f24a4b8fa5bddfb23721bc8" title="function low pass filters an orientation quaternion and computes virtual gyro rotation rate ..." alt="" coords="281,30,455,57"/>
+<area shape="rect" id="node3" href="$fusion_8h.html#a7b5db1923cfa0dc160016e7d9b45b1c2" title="fRun_3DOF_G_BASIC" alt="" coords="509,30,661,57"/>
+<area shape="rect" id="node5" href="$fusion_8h.html#a2df5be5795338038774a64b41cf53a8e" title="fRun_3DOF_B_BASIC" alt="" coords="509,81,660,107"/>
+<area shape="rect" id="node6" href="$fusion_8h.html#a34c550860d0e4e42bf22a2a3527043b9" title="fRun_6DOF_GB_BASIC" alt="" coords="504,131,665,158"/>
+<area shape="rect" id="node7" href="$fusion_8h.html#a288f51cd39aeb8ace643d844e219e9d3" title="fRun_3DOF_Y_BASIC" alt="" coords="293,182,443,209"/>
+<area shape="rect" id="node8" href="$fusion_8h.html#a942d619f897d6820d5c148bdc910f962" title="fRun_6DOF_GY_KALMAN" alt="" coords="280,233,456,259"/>
+<area shape="rect" id="node4" href="$fusion_8h.html#aeb60375528d75ee9fec67a96916141ca" title="fFuseSensors" alt="" coords="713,131,816,158"/>
+</map>

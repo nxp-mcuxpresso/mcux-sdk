@@ -1,0 +1,16 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_flexram
+config MCUX_HAS_driver_flexram
+    bool
+
+config MCUX_USE_driver_flexram
+    depends on MCUX_HAS_driver_flexram
+    bool "FLEXRAM Driver"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_soc_flexram_allocate
+    help
+      FLEXRAM Driver

@@ -3753,6 +3753,47 @@ typedef struct {
   /** Array initializer of AHB_SECURE_CTRL peripheral base pointers */
   #define AHB_SECURE_CTRL_BASE_PTRS                { AHB_SECURE_CTRL }
 #endif
+/* AHB_SECURE_CTRL Mirror address */
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+  /** Peripheral AHB_SECURE_CTRL base address */
+  #define AHB_SECURE_CTRL_ALIAS1_BASE              (0x500AD000u)
+  /** Peripheral AHB_SECURE_CTRL base address */
+  #define AHB_SECURE_CTRL_ALIAS1_BASE_NS           (0x400AD000u)
+  /** Peripheral AHB_SECURE_CTRL base pointer */
+  #define AHB_SECURE_CTRL_ALIAS1                   ((AHB_SECURE_CTRL_Type *)AHB_SECURE_CTRL_ALIAS1_BASE)
+  /** Peripheral AHB_SECURE_CTRL base pointer */
+  #define AHB_SECURE_CTRL_ALIAS1_NS                ((AHB_SECURE_CTRL_Type *)AHB_SECURE_CTRL_ALIAS1_BASE_NS)
+  /** Peripheral AHB_SECURE_CTRL base address */
+  #define AHB_SECURE_CTRL_ALIAS2_BASE              (0x500AE000u)
+  /** Peripheral AHB_SECURE_CTRL base address */
+  #define AHB_SECURE_CTRL_ALIAS2_BASE_NS           (0x400AE000u)
+  /** Peripheral AHB_SECURE_CTRL base pointer */
+  #define AHB_SECURE_CTRL_ALIAS2                   ((AHB_SECURE_CTRL_Type *)AHB_SECURE_CTRL_ALIAS2_BASE)
+  /** Peripheral AHB_SECURE_CTRL base pointer */
+  #define AHB_SECURE_CTRL_ALIAS2_NS                ((AHB_SECURE_CTRL_Type *)AHB_SECURE_CTRL_ALIAS2_BASE_NS)
+  /** Peripheral AHB_SECURE_CTRL base address */
+  #define AHB_SECURE_CTRL_ALIAS3_BASE              (0x500AF000u)
+  /** Peripheral AHB_SECURE_CTRL base address */
+  #define AHB_SECURE_CTRL_ALIAS3_BASE_NS           (0x400AF000u)
+  /** Peripheral AHB_SECURE_CTRL base pointer */
+  #define AHB_SECURE_CTRL_ALIAS3                   ((AHB_SECURE_CTRL_Type *)AHB_SECURE_CTRL_ALIAS3_BASE)
+  /** Peripheral AHB_SECURE_CTRL base pointer */
+  #define AHB_SECURE_CTRL_ALIAS3_NS                ((AHB_SECURE_CTRL_Type *)AHB_SECURE_CTRL_ALIAS3_BASE_NS)
+#else
+  /** Peripheral AHB_SECURE_CTRL base address */
+  #define AHB_SECURE_CTRL_ALIAS1_BASE              (0x400AD000u)
+  /** Peripheral AHB_SECURE_CTRL base pointer */
+  #define AHB_SECURE_CTRL_ALIAS1                   ((AHB_SECURE_CTRL_Type *)AHB_SECURE_CTRL_ALIAS1_BASE)
+  /** Peripheral AHB_SECURE_CTRL base address */
+  #define AHB_SECURE_CTRL_ALIAS2_BASE              (0x400AE000u)
+  /** Peripheral AHB_SECURE_CTRL base pointer */
+  #define AHB_SECURE_CTRL_ALIAS2                   ((AHB_SECURE_CTRL_Type *)AHB_SECURE_CTRL_ALIAS2_BASE)
+  /** Peripheral AHB_SECURE_CTRL base address */
+  #define AHB_SECURE_CTRL_ALIAS3_BASE              (0x400AF000u)
+  /** Peripheral AHB_SECURE_CTRL base pointer */
+  #define AHB_SECURE_CTRL_ALIAS3                   ((AHB_SECURE_CTRL_Type *)AHB_SECURE_CTRL_ALIAS3_BASE)
+ #endif
+
 
 /*!
  * @}

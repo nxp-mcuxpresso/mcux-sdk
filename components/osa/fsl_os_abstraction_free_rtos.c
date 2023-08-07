@@ -218,10 +218,9 @@ osa_task_handle_t OSA_TaskGetCurrentHandle(void)
  *
  *END**************************************************************************/
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
-osa_status_t OSA_TaskYield(void)
+void OSA_TaskYield(void)
 {
     taskYIELD();
-    return KOSA_StatusSuccess;
 }
 #endif
 
@@ -308,17 +307,18 @@ osa_status_t OSA_TaskDestroy(osa_task_handle_t taskHandle)
     assert(NULL != taskHandle);
     osa_freertos_task_t *ptask = (osa_freertos_task_t *)taskHandle;
     osa_status_t status;
-    uint16_t oldPriority;
+    UBaseType_t oldPriority;
+
     /*Change priority to avoid context switches*/
-    oldPriority = OSA_TaskGetPriority(OSA_TaskGetCurrentHandle());
-    (void)OSA_TaskSetPriority(OSA_TaskGetCurrentHandle(), OSA_PRIORITY_REAL_TIME);
+    oldPriority = uxTaskPriorityGet(xTaskGetCurrentTaskHandle());
+    vTaskPrioritySet(xTaskGetCurrentTaskHandle(), (configMAX_PRIORITIES - 1));
 #if INCLUDE_vTaskDelete /* vTaskDelete() enabled */
     vTaskDelete((task_handler_t)ptask->taskHandle);
     status = KOSA_StatusSuccess;
 #else
     status = KOSA_StatusError; /* vTaskDelete() not available */
 #endif
-    (void)OSA_TaskSetPriority(OSA_TaskGetCurrentHandle(), oldPriority);
+    vTaskPrioritySet(xTaskGetCurrentTaskHandle(), oldPriority);
     OSA_InterruptDisable();
     (void)LIST_RemoveElement(taskHandle);
     OSA_InterruptEnable();
@@ -1088,7 +1088,7 @@ void OSA_InstallIntHandler(uint32_t IRQNumber, void (*handler)(void))
     _Pragma("diag_suppress = Pm138")
 #endif
 #if defined(ENABLE_RAM_VECTOR_TABLE)
-        (void) InstallIRQHandler((IRQn_Type)IRQNumber, (uint32_t) * (uint32_t *)&handler);
+        (void) InstallIRQHandler((IRQn_Type)IRQNumber, (uint32_t)handler);
 #endif /* ENABLE_RAM_VECTOR_TABLE. */
 #if defined(__IAR_SYSTEMS_ICC__)
     _Pragma("diag_remark = PM138")

@@ -332,6 +332,11 @@ static status_t sha_process_message_data(SHA_Type *base,
 }
 
 #if defined(FSL_FEATURE_SHA_HAS_MEMADDR_DMA) && (FSL_FEATURE_SHA_HAS_MEMADDR_DMA > 0)
+#if defined(__GNUC__)
+/* Enable optimizations for GCC - workaround for when this function hangs with -O0 */
+#pragma GCC push_options
+#pragma GCC optimize("-O2")
+#endif
 /*!
  * @brief Adds message to current hash.
  *
@@ -399,6 +404,10 @@ static status_t sha_process_message_data_master(SHA_Type *base,
     ctxInternal->state = kSHA_HashDone;
     return kStatus_Success;
 }
+#if defined(__GNUC__)
+/* Disable optimizations */
+#pragma GCC pop_options
+#endif
 #endif /* defined(FSL_FEATURE_SHA_HAS_MEMADDR_DMA) && (FSL_FEATURE_SHA_HAS_MEMADDR_DMA > 0) */
 
 /*!

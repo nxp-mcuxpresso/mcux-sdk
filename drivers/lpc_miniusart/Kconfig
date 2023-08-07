@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_lpc_miniusart
+config MCUX_HAS_driver_lpc_miniusart
+    bool
+
+config MCUX_USE_driver_lpc_miniusart
+    depends on MCUX_HAS_driver_lpc_miniusart
+    bool "Usart Driver"
+    select MCUX_USE_driver_common
+    help
+      USART Driver

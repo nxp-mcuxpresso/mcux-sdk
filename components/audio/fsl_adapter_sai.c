@@ -465,7 +465,7 @@ static hal_audio_status_t HAL_AudioCommonInit(hal_audio_handle_t handle,
 #endif /* HAL_AUDIO_DMA_INIT_ENABLE */
 
     DMAMUX_SetSource(dmaMuxBases[audioHandle->dmaMuxInstance], dmaConfig->channel,
-                     dmaMuxConfig->dmaMuxConfig.dmaRequestSource);
+                     (int32_t)dmaMuxConfig->dmaMuxConfig.dmaRequestSource);
 
     DMAMUX_EnableChannel(dmaMuxBases[audioHandle->dmaMuxInstance], dmaConfig->channel);
 #endif /* FSL_FEATURE_SOC_DMAMUX_COUNT */

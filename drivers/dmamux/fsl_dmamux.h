@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief DMAMUX driver version 2.0.5. */
-#define FSL_DMAMUX_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+/*! @brief DMAMUX driver version 2.1.0. */
+#define FSL_DMAMUX_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*******************************************************************************
@@ -104,9 +104,10 @@ static inline void DMAMUX_DisableChannel(DMAMUX_Type *base, uint32_t channel)
  *
  * @param base DMAMUX peripheral base address.
  * @param channel DMAMUX channel number.
- * @param source Channel source, which is used to trigger the DMA transfer.
+ * @param source Channel source, which is used to trigger the DMA transfer.User need to use the 
+ *               dma_request_source_t type as the input parameter.
  */
-static inline void DMAMUX_SetSource(DMAMUX_Type *base, uint32_t channel, uint32_t source)
+static inline void DMAMUX_SetSource(DMAMUX_Type *base, uint32_t channel, int32_t source)
 {
     assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 

@@ -33,7 +33,7 @@
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
-#ifdef __XCC__
+#ifdef __XTENSA__
 #define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (600000000UL)
 #else
 #define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (300000000UL)
@@ -1153,7 +1153,7 @@ uint32_t CLOCK_GetAdcClkFreq(void);
  *  @return Frequency of Flexspi.
  */
 uint32_t CLOCK_GetFlexspiClkFreq(void);
-#ifndef __XCC__
+#ifndef __XTENSA__
 /**
  * brief   Enable FFRO 48M/60M clock.
  * param   ffroFreq : target fro frequency.
@@ -1169,7 +1169,7 @@ void CLOCK_EnableSfroClk(void);
 /*! @brief  Initialize the System PLL.
  *  @param  config    : Configuration to set to PLL.
  */
-#endif /* __XCC__ */
+#endif /* __XTENSA__ */
 
 void CLOCK_InitSysPll(const clock_sys_pll_config_t *config);
 /*! brief  Deinit the System PLL.

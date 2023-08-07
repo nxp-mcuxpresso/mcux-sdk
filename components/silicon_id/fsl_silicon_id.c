@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,8 +9,9 @@
 #include "fsl_sim.h"
 #elif defined(FSL_FEATURE_SYSCON_IAP_ENTRY_LOCATION)
 #include "fsl_iap.h"
-#else
-#include "fsl_silicon_id_soc.h"
+#elif (defined(FSL_FEATURE_SYSCON_ROMAPI) && (FSL_FEATURE_SYSCON_ROMAPI == 1))
+#include "fsl_flash.h"
+#include "fsl_flash_ffr.h"
 #endif
 
 /* Component ID definition, used by tools. */
@@ -47,7 +48,24 @@ status_t SILICONID_GetID(uint8_t *siliconId, uint32_t *idLen)
     {
         *idLen = 0;
     }
+#elif (defined(FSL_FEATURE_SYSCON_ROMAPI) && FSL_FEATURE_SYSCON_ROMAPI)
+    flash_config_t s_flashDriver;
+    (void)memset(&s_flashDriver, 0, sizeof(flash_config_t));
+
+    result = FLASH_Init(&s_flashDriver);
+
+    if (result == kStatus_Success)
+    {
+        result = FFR_Init(&s_flashDriver);
+
+        if (result == kStatus_Success)
+        {
+            result = FFR_GetUUID(&s_flashDriver, siliconId);
+            *idLen = 4;
+        }
+    }
 #else
+    extern status_t SILICONID_ReadUniqueID(uint8_t *siliconId, uint32_t *idLen);
     result = SILICONID_ReadUniqueID(&siliconId[0], idLen);
 #endif
 

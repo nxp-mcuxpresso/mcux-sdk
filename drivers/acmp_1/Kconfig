@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_acmp_1
+config MCUX_HAS_driver_acmp_1
+    bool
+
+config MCUX_USE_driver_acmp_1
+    depends on MCUX_HAS_driver_acmp_1
+    bool "ACMP Driver"
+    select MCUX_USE_driver_common
+    help
+      ACMP Driver

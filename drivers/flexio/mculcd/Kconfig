@@ -1,0 +1,37 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_flexio_mculcd_edma
+config MCUX_HAS_driver_flexio_mculcd_edma
+    bool
+
+config MCUX_USE_driver_flexio_mculcd_edma
+    depends on MCUX_HAS_driver_flexio_mculcd_edma
+    bool "FLEXIO MCULCD EDMA Driver"
+    select MCUX_USE_driver_flexio_mculcd
+    help
+      FLEXIO MCULCD EDMA Driver
+
+# driver_flexio_mculcd
+config MCUX_HAS_driver_flexio_mculcd
+    bool
+
+config MCUX_USE_driver_flexio_mculcd
+    depends on MCUX_HAS_driver_flexio_mculcd
+    bool "FLEXIO MCULCD Driver"
+    select MCUX_USE_driver_flexio
+    help
+      FLEXIO MCULCD Driver
+
+# driver_flexio_mculcd_smartdma
+config MCUX_HAS_driver_flexio_mculcd_smartdma
+    bool
+
+config MCUX_USE_driver_flexio_mculcd_smartdma
+    depends on MCUX_HAS_driver_flexio_mculcd_smartdma
+    bool "FLEXIO MCULCD SMARTDMA Driver"
+    select MCUX_USE_driver_flexio_mculcd
+    help
+      FLEXIO MCULCD SMARTDMA Driver

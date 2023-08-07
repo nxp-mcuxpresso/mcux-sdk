@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2021 NXP
+ * Copyright 2016-2019, 2021, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SLCD driver version. */
-#define FSL_SLCD_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+#define FSL_SLCD_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
 
 /*! @brief SLCD power supply option. */

@@ -1,0 +1,4 @@
+<map id="queueStatus" name="queueStatus">
+<area shape="rect" id="node2" href="$sensor__fusion_8h.html#a367d92b99365a8143700b76439915d65" title="utility function to insert default values in the top level structure " alt="" coords="148,5,311,32"/>
+<area shape="rect" id="node3" href="$main__agm01__freertos__two__tasks_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is a FreeRTOS (dual task) implementation of the NXP sensor fusion demo build. " alt="" coords="359,5,409,32"/>
+</map>

@@ -56,14 +56,6 @@ void TMPSNS_Init(TMPSNS_Type *base, const tmpsns_config_t *config)
         10;
     s_Ts25c = (float)temp;
 
-    /* Select normal temperature measuring mode */
-#if defined(FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE) && FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE
-    controlVal = TMPSNS_AIReadAccess((uint32_t) & (base->CTRL0));
-    TMPSNS_AIWriteAccess((uint32_t) & (base->CTRL0), controlVal & (~TMPSNS_CTRL0_V_SEL_MASK));
-#else
-    base->CTRL0 &= ~TMPSNS_CTRL0_V_SEL_MASK;
-#endif
-
     if (config->measureMode == kTEMPSENSOR_SingleMode)
     {
         controlVal = TMPSNS_CTRL1_FREQ(0x00U);

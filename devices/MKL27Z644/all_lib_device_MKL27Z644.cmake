@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/DSP
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/mma8451q
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
@@ -34,8 +35,8 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utilities
@@ -47,7 +48,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_port)
 #    include(driver_lpuart_freertos)
 #    include(driver_uart_freertos)
-#    include(CMSIS_Include_dsp)
+#    include(CMSIS_DSP_Include)
 #    include(component_lpuart_adapter)
 #    include(driver_i2c)
 #    include(driver_i2c_freertos)
@@ -75,7 +76,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_device_common_header)
 #    include(utility_notifier)
 #    include(device_system)
-#    include(CMSIS_Include_core_cm0plus)
+#    include(CMSIS_Include_core_cm)
 #    include(driver_flexio_i2c_master)
 #    include(driver_pmc)
 #    include(middleware_baremetal)
@@ -88,7 +89,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(device_CMSIS)
 #    include(driver_uart)
 #    include(utility_assert_lite)
-#    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_rtc)
 #    include(driver_uart_dma)

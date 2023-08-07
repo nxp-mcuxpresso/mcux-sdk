@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 NXP
+ * Copyright 2017-2023 NXP
  * All rights reserved.
  *
  *
@@ -1061,15 +1061,37 @@ void PXP_SetPorterDuffConfig(PXP_Type *base, const pxp_porter_duff_config_t *con
 
 #if (!(defined(FSL_FEATURE_PXP_HAS_NO_PORTER_DUFF_CTRL) && FSL_FEATURE_PXP_HAS_NO_PORTER_DUFF_CTRL)) || \
     (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3)
-/*!
- * brief Get the Porter Duff configuration by blend mode.
+
+/*
+ * brief Get the Porter Duff configuration.
+ *
+ * The FactorMode are selected based on blend mode, the other values are set
+ * based on input parameters. These values could be modified after calling
+ * this function. This function is extened PXP_GetPorterDuffConfig.
  *
  * param mode The blend mode.
  * param config Pointer to the configuration.
+ * param dstGlobalAlphaMode Destination layer (or PS, s0) global alpha mode, see pxp_porter_duff_global_alpha_mode
+ * param dstAlphaMode Destination layer (or PS, s0) alpha mode, see pxp_porter_duff_alpha_mode.
+ * param dstColorMode Destination layer (or PS, s0) color mode, see pxp_porter_duff_color_mode.
+ * param srcGlobalAlphaMode Source layer (or AS, s1) global alpha mode, see pxp_porter_duff_global_alpha_mode
+ * param srcAlphaMode Source layer (or AS, s1) alpha mode, see pxp_porter_duff_alpha_mode.
+ * param srcColorMode Source layer (or AS, s1) color mode, see pxp_porter_duff_color_mode.
+ * param dstGlobalAlpha Destination layer (or PS, s0) global alpha value, 0~255
+ * param srcGlobalAlpha Source layer (or AS, s1) global alpha value, 0~255
  * retval kStatus_Success Successfully get the configuratoin.
  * retval kStatus_InvalidArgument The blend mode not supported.
  */
-status_t PXP_GetPorterDuffConfig(pxp_porter_duff_blend_mode_t mode, pxp_porter_duff_config_t *config)
+status_t PXP_GetPorterDuffConfigExt(pxp_porter_duff_blend_mode_t mode,
+                                    pxp_porter_duff_config_t *config,
+                                    uint8_t dstGlobalAlphaMode,
+                                    uint8_t dstAlphaMode,
+                                    uint8_t dstColorMode,
+                                    uint8_t srcGlobalAlphaMode,
+                                    uint8_t srcAlphaMode,
+                                    uint8_t srcColorMode,
+                                    uint8_t dstGlobalAlpha,
+                                    uint8_t srcGlobalAlpha)
 {
     status_t status;
 
@@ -1135,10 +1157,16 @@ status_t PXP_GetPorterDuffConfig(pxp_porter_duff_blend_mode_t mode, pxp_porter_d
     }
     else
     {
-        pdConfig.u32 = pdCtrl[(uint32_t)mode] | S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
-                       S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) | S0_COLOR_MODE(kPXP_PorterDuffColorWithAlpha) |
-                       S1_COLOR_MODE(kPXP_PorterDuffColorWithAlpha) | S0_ALPHA_MODE(kPXP_PorterDuffAlphaStraight) |
-                       S1_ALPHA_MODE(kPXP_PorterDuffAlphaStraight);
+        pdConfig.u32 = pdCtrl[(uint32_t)mode];
+
+        pdConfig.pdConfigStruct.dstGlobalAlphaMode = dstGlobalAlphaMode;
+        pdConfig.pdConfigStruct.dstAlphaMode       = dstAlphaMode;
+        pdConfig.pdConfigStruct.dstColorMode       = dstColorMode;
+        pdConfig.pdConfigStruct.srcGlobalAlphaMode = srcGlobalAlphaMode;
+        pdConfig.pdConfigStruct.srcAlphaMode       = srcAlphaMode;
+        pdConfig.pdConfigStruct.srcColorMode       = srcColorMode;
+        pdConfig.pdConfigStruct.dstGlobalAlpha     = dstGlobalAlpha;
+        pdConfig.pdConfigStruct.srcGlobalAlpha     = srcGlobalAlpha;
 
         *config = pdConfig.pdConfigStruct;
 
@@ -1457,15 +1485,22 @@ status_t PXP_SetFetchEngineConfig(PXP_Type *base,
         switch (channel)
         {
             case 0:
+                /* Each fetch engine channel supports up to 64-bit input and 32-bit output,
+                   so when the input format is 64-bit, set aribitration to allow only channel 0 input. */
+                if (config->activeBits == kPXP_Active64Bits)
+                {
+                    ctrlReg |= PXP_INPUT_FETCH_CTRL_CH0_ARBIT_EN_MASK;
+                }
                 base->INPUT_FETCH_CTRL_CH0            = ctrlReg;
                 base->INPUT_FETCH_ACTIVE_SIZE_ULC_CH0 = ulcReg;
                 base->INPUT_FETCH_ACTIVE_SIZE_LRC_CH0 = lrcReg;
                 base->INPUT_FETCH_SIZE_CH0            = fetchSizeReg;
                 base->INPUT_FETCH_PITCH = (base->INPUT_FETCH_PITCH & PXP_INPUT_FETCH_PITCH_CH1_INPUT_PITCH_MASK) |
                                           (uint32_t)config->pitchBytes;
-                base->INPUT_FETCH_SHIFT_CTRL_CH0 = shiftCtrlReg;
-                base->INPUT_FETCH_ADDR_0_CH0     = config->inputBaseAddr0;
-                base->INPUT_FETCH_ADDR_1_CH0     = config->inputBaseAddr1;
+                base->INPUT_FETCH_SHIFT_CTRL_CH0       = shiftCtrlReg;
+                base->INPUT_FETCH_ADDR_0_CH0           = config->inputBaseAddr0;
+                base->INPUT_FETCH_ADDR_1_CH0           = config->inputBaseAddr1;
+                base->INPUT_FETCH_BACKGROUND_COLOR_CH0 = config->backGroundColor;
                 if (!config->shiftConfig.shiftBypass)
                 {
                     base->INPUT_FETCH_SHIFT_OFFSET_CH0 = shiftOffsetReg;
@@ -1480,9 +1515,12 @@ status_t PXP_SetFetchEngineConfig(PXP_Type *base,
                 base->INPUT_FETCH_SIZE_CH1            = fetchSizeReg;
                 base->INPUT_FETCH_PITCH = (base->INPUT_FETCH_PITCH & PXP_INPUT_FETCH_PITCH_CH0_INPUT_PITCH_MASK) |
                                           ((uint32_t)config->pitchBytes << 16U);
-                base->INPUT_FETCH_SHIFT_CTRL_CH1 = shiftCtrlReg;
-                base->INPUT_FETCH_ADDR_0_CH1     = config->inputBaseAddr0;
-                base->INPUT_FETCH_ADDR_1_CH1     = config->inputBaseAddr1;
+                base->INPUT_FETCH_SHIFT_CTRL_CH1       = shiftCtrlReg;
+                base->INPUT_FETCH_ADDR_0_CH1           = config->inputBaseAddr0;
+                base->INPUT_FETCH_ADDR_1_CH1           = config->inputBaseAddr1;
+                base->INPUT_FETCH_BACKGROUND_COLOR_CH1 = config->backGroundColor;
+                base->INPUT_FETCH_CTRL_CH0 = (base->INPUT_FETCH_CTRL_CH0 & ~PXP_INPUT_FETCH_CTRL_CH0_HIGH_BYTE_MASK) |
+                                             PXP_INPUT_FETCH_CTRL_CH0_HIGH_BYTE((uint32_t)config->wordOrder);
                 if (!config->shiftConfig.shiftBypass)
                 {
                     base->INPUT_FETCH_SHIFT_OFFSET_CH1 = shiftOffsetReg;
@@ -1501,15 +1539,20 @@ status_t PXP_SetFetchEngineConfig(PXP_Type *base,
         switch (channel)
         {
             case 0:
+                if (config->activeBits == kPXP_Active64Bits)
+                {
+                    ctrlReg |= PXP_DITHER_FETCH_CTRL_CH0_ARBIT_EN_MASK;
+                }
                 base->DITHER_FETCH_CTRL_CH0            = ctrlReg;
                 base->DITHER_FETCH_ACTIVE_SIZE_ULC_CH0 = ulcReg;
                 base->DITHER_FETCH_ACTIVE_SIZE_LRC_CH0 = lrcReg;
                 base->DITHER_FETCH_SIZE_CH0            = fetchSizeReg;
                 base->DITHER_FETCH_PITCH = (base->INPUT_FETCH_PITCH & PXP_INPUT_FETCH_PITCH_CH1_INPUT_PITCH_MASK) |
                                            (uint32_t)config->pitchBytes;
-                base->DITHER_FETCH_SHIFT_CTRL_CH0 = shiftCtrlReg;
-                base->DITHER_FETCH_ADDR_0_CH0     = config->inputBaseAddr0;
-                base->DITHER_FETCH_ADDR_1_CH0     = config->inputBaseAddr1;
+                base->DITHER_FETCH_SHIFT_CTRL_CH0       = shiftCtrlReg;
+                base->DITHER_FETCH_ADDR_0_CH0           = config->inputBaseAddr0;
+                base->DITHER_FETCH_ADDR_1_CH0           = config->inputBaseAddr1;
+                base->DITHER_FETCH_BACKGROUND_COLOR_CH0 = config->backGroundColor;
                 if (!config->shiftConfig.shiftBypass)
                 {
                     base->DITHER_FETCH_SHIFT_OFFSET_CH0 = shiftOffsetReg;
@@ -1524,9 +1567,13 @@ status_t PXP_SetFetchEngineConfig(PXP_Type *base,
                 base->DITHER_FETCH_SIZE_CH1            = fetchSizeReg;
                 base->DITHER_FETCH_PITCH = (base->INPUT_FETCH_PITCH & PXP_INPUT_FETCH_PITCH_CH0_INPUT_PITCH_MASK) |
                                            ((uint32_t)config->pitchBytes << 16U);
-                base->DITHER_FETCH_SHIFT_CTRL_CH1 = shiftCtrlReg;
-                base->DITHER_FETCH_ADDR_0_CH1     = config->inputBaseAddr0;
-                base->DITHER_FETCH_ADDR_1_CH1     = config->inputBaseAddr1;
+                base->DITHER_FETCH_SHIFT_CTRL_CH1       = shiftCtrlReg;
+                base->DITHER_FETCH_ADDR_0_CH1           = config->inputBaseAddr0;
+                base->DITHER_FETCH_ADDR_1_CH1           = config->inputBaseAddr1;
+                base->DITHER_FETCH_BACKGROUND_COLOR_CH1 = config->backGroundColor;
+                base->DITHER_FETCH_CTRL_CH0 =
+                    (base->DITHER_FETCH_CTRL_CH0 & ~PXP_DITHER_FETCH_CTRL_CH0_HIGH_BYTE_MASK) |
+                    PXP_DITHER_FETCH_CTRL_CH0_HIGH_BYTE((uint32_t)config->wordOrder);
                 if (!config->shiftConfig.shiftBypass)
                 {
                     base->DITHER_FETCH_SHIFT_OFFSET_CH1 = shiftOffsetReg;
@@ -1596,8 +1643,8 @@ status_t PXP_SetStoreEngineConfig(PXP_Type *base,
               ((uint32_t)config->interface << PXP_INPUT_STORE_CTRL_CH0_HANDSHAKE_EN_SHIFT) |
               // PXP_INPUT_STORE_CTRL_CH0_ARRAY_LINE_NUM((uint32_t)config->arraySize) |
               PXP_INPUT_STORE_CTRL_CH0_ARRAY_LINE_NUM(0U) |
-              PXP_INPUT_STORE_CTRL_CH0_BLOCK_16((uint32_t)config->storeFormat.enableblock) |
-              PXP_INPUT_STORE_CTRL_CH0_BLOCK_EN((uint32_t)config->storeFormat.blockSize16) |
+              PXP_INPUT_STORE_CTRL_CH0_BLOCK_16((uint32_t)config->storeFormat.blockSize16) |
+              PXP_INPUT_STORE_CTRL_CH0_BLOCK_EN((uint32_t)config->storeFormat.enableblock) |
               PXP_INPUT_STORE_CTRL_CH0_CH_EN((uint32_t)config->channelEnable);
     shiftCtrlReg = PXP_INPUT_STORE_SHIFT_CTRL_CH0_SHIFT_BYPASS((uint32_t)config->shiftConfig.shiftBypass) |
                    ((uint32_t)config->yuvMode << PXP_INPUT_STORE_SHIFT_CTRL_CH0_OUT_YUV422_1P_EN_SHIFT) |
@@ -1606,35 +1653,39 @@ status_t PXP_SetStoreEngineConfig(PXP_Type *base,
 
     if (name == kPXP_StoreInput)
     {
+        dataShiftMaskRegAddr  = (uint32_t) & (base->INPUT_STORE_D_MASK0_H_CH0);
+        dataShiftWidthRegAddr = (uint32_t) & (base->INPUT_STORE_D_SHIFT_L_CH0);
+        flagShiftMaskRegAddr  = (uint32_t) & (base->INPUT_STORE_F_MASK_L_CH0);
+        flagShiftWidthRegAddr = (uint32_t) & (base->INPUT_STORE_F_SHIFT_L_CH0);
         switch (channel)
         {
             case 0:
+                /* Each store engine channel supports 32-bit input and up to 64-bit output,
+                   so when the output format is 64-bit, set aribitration to allow only channel 0 output. */
+                if (config->activeBits == kPXP_Active64Bits)
+                {
+                    ctrlReg |= PXP_INPUT_STORE_CTRL_CH0_ARBIT_EN_MASK;
+                }
                 base->INPUT_STORE_CTRL_CH0 = ctrlReg;
                 base->INPUT_STORE_SIZE_CH0 = sizeReg;
-                base->INPUT_STORE_PITCH    = (base->INPUT_STORE_PITCH & PXP_INPUT_STORE_PITCH_CH0_OUT_PITCH_MASK) |
+                base->INPUT_STORE_PITCH    = (base->INPUT_STORE_PITCH & PXP_INPUT_STORE_PITCH_CH1_OUT_PITCH_MASK) |
                                           (uint32_t)(config->pitchBytes);
                 base->INPUT_STORE_SHIFT_CTRL_CH0 = shiftCtrlReg;
                 base->INPUT_STORE_ADDR_0_CH0     = config->outputBaseAddr0;
                 base->INPUT_STORE_ADDR_1_CH0     = config->outputBaseAddr1;
                 base->INPUT_STORE_FILL_DATA_CH0  = config->fixedData;
-                dataShiftMaskRegAddr             = (uint32_t) & (base->INPUT_STORE_D_MASK0_H_CH0);
-                dataShiftWidthRegAddr            = (uint32_t) & (base->INPUT_STORE_D_SHIFT_L_CH0);
-                flagShiftMaskRegAddr             = (uint32_t) & (base->INPUT_STORE_F_MASK_L_CH0);
-                flagShiftWidthRegAddr            = (uint32_t) & (base->INPUT_STORE_F_SHIFT_L_CH0);
                 break;
 
             case 1:
+                /* If all 2 channels contain valid input data, then need to comnbine the 2 channels. */
+                base->INPUT_STORE_CTRL_CH0 |= PXP_INPUT_STORE_CTRL_CH0_COMBINE_2CHANNEL_MASK;
                 base->INPUT_STORE_CTRL_CH1 = ctrlReg;
                 base->INPUT_STORE_SIZE_CH1 = sizeReg;
                 base->INPUT_STORE_PITCH    = (base->INPUT_STORE_PITCH & PXP_INPUT_STORE_PITCH_CH0_OUT_PITCH_MASK) |
-                                          ((uint32_t)(config->pitchBytes) << 16U);
+                                          ((uint32_t)(config->pitchBytes) << PXP_INPUT_STORE_PITCH_CH1_OUT_PITCH_SHIFT);
                 base->INPUT_STORE_SHIFT_CTRL_CH1 = shiftCtrlReg;
                 base->INPUT_STORE_ADDR_0_CH1     = config->outputBaseAddr0;
                 base->INPUT_STORE_ADDR_1_CH1     = config->outputBaseAddr1;
-                dataShiftMaskRegAddr             = (uint32_t) & (base->INPUT_STORE_D_MASK0_H_CH0);
-                dataShiftWidthRegAddr            = (uint32_t) & (base->INPUT_STORE_D_SHIFT_L_CH0);
-                flagShiftMaskRegAddr             = (uint32_t) & (base->INPUT_STORE_F_MASK_L_CH0);
-                flagShiftWidthRegAddr            = (uint32_t) & (base->INPUT_STORE_F_SHIFT_L_CH0);
                 break;
 
             default:
@@ -1645,35 +1696,37 @@ status_t PXP_SetStoreEngineConfig(PXP_Type *base,
     }
     else
     {
+        dataShiftMaskRegAddr  = (uint32_t) & (base->DITHER_STORE_D_MASK0_H_CH0);
+        dataShiftWidthRegAddr = (uint32_t) & (base->DITHER_STORE_D_SHIFT_L_CH0);
+        flagShiftMaskRegAddr  = (uint32_t) & (base->DITHER_STORE_F_MASK_L_CH0);
+        flagShiftWidthRegAddr = (uint32_t) & (base->DITHER_STORE_F_SHIFT_L_CH0);
         switch (channel)
         {
             case 0:
+                if (config->activeBits == kPXP_Active64Bits)
+                {
+                    ctrlReg |= PXP_DITHER_STORE_CTRL_CH0_ARBIT_EN_MASK;
+                }
                 base->DITHER_STORE_CTRL_CH0 = ctrlReg;
                 base->DITHER_STORE_SIZE_CH0 = sizeReg;
-                base->DITHER_STORE_PITCH    = (base->DITHER_STORE_PITCH & PXP_DITHER_STORE_PITCH_CH0_OUT_PITCH_MASK) |
+                base->DITHER_STORE_PITCH    = (base->DITHER_STORE_PITCH & PXP_DITHER_STORE_PITCH_CH1_OUT_PITCH_MASK) |
                                            (uint32_t)(config->pitchBytes);
                 base->DITHER_STORE_SHIFT_CTRL_CH0 = shiftCtrlReg;
                 base->DITHER_STORE_ADDR_0_CH0     = config->outputBaseAddr0;
                 base->DITHER_STORE_ADDR_1_CH0     = config->outputBaseAddr1;
                 base->DITHER_STORE_FILL_DATA_CH0  = config->fixedData;
-                dataShiftMaskRegAddr              = (uint32_t) & (base->DITHER_STORE_D_MASK0_H_CH0);
-                dataShiftWidthRegAddr             = (uint32_t) & (base->DITHER_STORE_D_SHIFT_L_CH0);
-                flagShiftMaskRegAddr              = (uint32_t) & (base->DITHER_STORE_F_MASK_L_CH0);
-                flagShiftWidthRegAddr             = (uint32_t) & (base->DITHER_STORE_F_SHIFT_L_CH0);
                 break;
 
             case 1:
+                base->DITHER_STORE_CTRL_CH0 |= PXP_DITHER_STORE_CTRL_CH0_COMBINE_2CHANNEL_MASK;
                 base->DITHER_STORE_CTRL_CH1 = ctrlReg;
                 base->DITHER_STORE_SIZE_CH1 = sizeReg;
-                base->DITHER_STORE_PITCH    = (base->DITHER_STORE_PITCH & PXP_DITHER_STORE_PITCH_CH0_OUT_PITCH_MASK) |
-                                           ((uint32_t)(config->pitchBytes) << 16U);
+                base->DITHER_STORE_PITCH =
+                    (base->DITHER_STORE_PITCH & PXP_DITHER_STORE_PITCH_CH0_OUT_PITCH_MASK) |
+                    ((uint32_t)(config->pitchBytes) << PXP_DITHER_STORE_PITCH_CH1_OUT_PITCH_SHIFT);
                 base->DITHER_STORE_SHIFT_CTRL_CH1 = shiftCtrlReg;
                 base->DITHER_STORE_ADDR_0_CH1     = config->outputBaseAddr0;
                 base->DITHER_STORE_ADDR_1_CH1     = config->outputBaseAddr1;
-                dataShiftMaskRegAddr              = (uint32_t) & (base->DITHER_STORE_D_MASK0_H_CH0);
-                dataShiftWidthRegAddr             = (uint32_t) & (base->DITHER_STORE_D_SHIFT_L_CH0);
-                flagShiftMaskRegAddr              = (uint32_t) & (base->DITHER_STORE_F_MASK_L_CH0);
-                flagShiftWidthRegAddr             = (uint32_t) & (base->DITHER_STORE_F_SHIFT_L_CH0);
                 break;
 
             default:
@@ -1687,40 +1740,43 @@ status_t PXP_SetStoreEngineConfig(PXP_Type *base,
     if (!config->shiftConfig.shiftBypass)
     {
         uint8_t i;
-        uint32_t dataShiftMaskAddr  = (uint32_t) & (config->shiftConfig.pDataShiftMask);
-        uint32_t dataShiftWidthAddr = (uint32_t) & (config->shiftConfig.pDataShiftWidth);
-        uint32_t flagShiftMaskAddr  = (uint32_t) & (config->shiftConfig.pFlagShiftMask);
-        uint32_t flagShiftWidthAddr = (uint32_t) & (config->shiftConfig.pFlagShiftWidth);
+        uint32_t dataShiftMaskAddr  = (uint32_t)(config->shiftConfig.pDataShiftMask);
+        uint32_t dataShiftWidthAddr = (uint32_t)(config->shiftConfig.pDataShiftWidth);
+        uint32_t flagShiftMaskAddr  = (uint32_t)(config->shiftConfig.pFlagShiftMask);
+        uint32_t flagShiftWidthAddr = (uint32_t)(config->shiftConfig.pFlagShiftWidth);
 
         /* Configure data shift mask */
         for (i = 0U; i < 8U; i++)
         {
-            *(uint32_t *)dataShiftMaskRegAddr = (uint32_t)(*(uint64_t *)dataShiftMaskAddr >> 32U);
+            *(uint32_t *)dataShiftMaskRegAddr = (uint32_t)((*(uint64_t *)dataShiftMaskAddr) >> 32U);
             dataShiftMaskRegAddr += 0x10U;
+
+            if ((i == 7U) && (name == kPXP_StoreInput))
+            {
+                /* Extra increment needed between high and low word of Mask7 for input store engine. */
+                dataShiftMaskRegAddr += 0x10U;
+            }
+
             *(uint32_t *)dataShiftMaskRegAddr = (uint32_t)(*(uint64_t *)dataShiftMaskAddr);
             dataShiftMaskRegAddr += 0x10U;
             dataShiftMaskAddr += 8U;
         }
 
-        /* Configure data shift width, flag shift mask/width */
-        for (i = 0U; i < 8U; i++)
-        {
-            *(uint8_t *)dataShiftWidthRegAddr = *(uint8_t *)dataShiftWidthAddr;
-            *(uint8_t *)flagShiftMaskRegAddr  = *(uint8_t *)flagShiftMaskAddr;
-            *(uint8_t *)flagShiftWidthRegAddr = *(uint8_t *)flagShiftWidthAddr;
-            dataShiftWidthRegAddr++;
-            flagShiftMaskRegAddr++;
-            flagShiftWidthRegAddr++;
-            dataShiftWidthAddr++;
-            flagShiftMaskAddr++;
-            flagShiftWidthAddr++;
-            if (i == 3U)
-            {
-                dataShiftWidthRegAddr += 12U;
-                flagShiftMaskRegAddr += 12U;
-                flagShiftWidthRegAddr += 12U;
-            }
-        }
+        /* Configure data shift width, flag shift mask/width. Can only be written in word boundary. */
+        *(uint32_t *)dataShiftWidthRegAddr = PXP_COMBINE_BYTE_TO_WORD(dataShiftWidthAddr);
+        *(uint32_t *)flagShiftMaskRegAddr  = PXP_COMBINE_BYTE_TO_WORD(flagShiftMaskAddr);
+        *(uint32_t *)flagShiftWidthRegAddr = PXP_COMBINE_BYTE_TO_WORD(flagShiftWidthAddr);
+
+        dataShiftWidthRegAddr += 0x10;
+        flagShiftMaskRegAddr += 0x10;
+        flagShiftWidthRegAddr += 0x10;
+        dataShiftWidthAddr += 4U;
+        flagShiftMaskAddr += 4U;
+        flagShiftWidthAddr += 4U;
+
+        *(uint32_t *)dataShiftWidthRegAddr = PXP_COMBINE_BYTE_TO_WORD(dataShiftWidthAddr);
+        *(uint32_t *)flagShiftMaskRegAddr  = PXP_COMBINE_BYTE_TO_WORD(flagShiftMaskAddr);
+        *(uint32_t *)flagShiftWidthRegAddr = PXP_COMBINE_BYTE_TO_WORD(flagShiftWidthAddr);
     }
 
     return kStatus_Success;
@@ -1737,14 +1793,15 @@ status_t PXP_SetStoreEngineConfig(PXP_Type *base,
 status_t PXP_SetCfaConfig(PXP_Type *base, const pxp_cfa_config_t *config)
 {
     assert(NULL != config);
-    /* The CFA array cannot be larger than 15x15. */
-    if ((config->arrayWidth > 15U) || (config->arrayHeight > 15U))
+    /* The CFA array cannot be larger than 15x15(TODO) or smaller than 3x3. */
+    if ((config->arrayWidth > 15U) || (config->arrayHeight > 15U) || (config->arrayWidth < 3U) ||
+        (config->arrayHeight < 3U))
     {
         return kStatus_InvalidArgument;
     }
 
     uint32_t cfaArrayRegAddr = (uint32_t) & (base->CFA_ARRAY0);
-    uint32_t cfaValueAddr    = (uint32_t) & (config->cfaValue);
+    uint32_t cfaValueAddr    = (uint32_t)(config->cfaValue);
     uint8_t wordCount        = 0U; /* How many 32-bit word does the CFA array need. */
 
     base->CFA_CTRL = PXP_CFA_CTRL_CFA_ARRAY_HSIZE((uint32_t)config->arrayWidth) |
@@ -1753,9 +1810,10 @@ status_t PXP_SetCfaConfig(PXP_Type *base, const pxp_cfa_config_t *config)
                      PXP_CFA_CTRL_CFA_BYPASS((uint32_t)config->bypass);
     base->CFA_SIZE = ((uint32_t)(config->totalWidth) << 16U) | (uint32_t)(config->totalHeight);
 
-    /* Configure the CFA array value. */
-    wordCount = (config->arrayWidth * config->arrayHeight * 2U + 32U) / 32U;
+    /* Calculate how many registers to configure. If the value is not divisible then add 1 no matter the remainder. */
+    wordCount = (config->arrayWidth * config->arrayHeight * 2U + 31U) / 32U;
 
+    /* Configure the CFA array value. */
     for (uint8_t i = 0U; i < wordCount; i++)
     {
         *(uint32_t *)cfaArrayRegAddr = *(uint32_t *)cfaValueAddr;
@@ -1821,21 +1879,19 @@ status_t PXP_SetHistogramConfig(PXP_Type *base, uint8_t num, const pxp_histogram
     if (config->pParamValue != NULL)
     {
         uint32_t paramRegAddr   = (uint32_t) & (base->HIST2_PARAM);
-        uint32_t paramValueAddr = (uint32_t) & (config->pParamValue);
-        /* Configure the 2/4/8/16/32-level histogram params. */
-        for (uint8_t i = 0; i < 62U; i++)
+        uint32_t paramValueAddr = (uint32_t)(config->pParamValue);
+
+        /* Configure the 2-level histogram params. */
+        *(uint32_t *)paramRegAddr = (*(uint8_t *)(paramValueAddr)) | ((*(uint8_t *)((paramValueAddr) + 1U)) << 8U);
+        paramRegAddr += 0x10U;
+        paramValueAddr += 2U;
+
+        /* Configure the 4/8/16/32-level histogram params. */
+        for (uint8_t i = 0U; i < ((4U + 8U + 16U + 32U) / 4U); i++)
         {
-            *(uint8_t *)paramRegAddr = *(uint8_t *)paramValueAddr;
-            paramValueAddr += 1U;
-            paramRegAddr++;
-            if ((i % 4U) == 1U)
-            {
-                paramRegAddr += 12U;
-                if (i == 1U)
-                {
-                    paramRegAddr += 2U;
-                }
-            }
+            *(uint32_t *)paramRegAddr = PXP_COMBINE_BYTE_TO_WORD(paramValueAddr);
+            paramRegAddr += 0x10U;
+            paramValueAddr += 4U;
         }
     }
 

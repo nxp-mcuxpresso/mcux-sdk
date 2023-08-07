@@ -1,0 +1,5 @@
+<map id="initializeControlPort" name="initializeControlPort">
+<area shape="rect" id="node2" href="$a00776.html#a0022c0c45a3b736ffe21164001662b44" title="BlueRadios_Init" alt="" coords="213,5,325,32"/>
+<area shape="rect" id="node3" href="$a00779.html#adbb4129e795ca534e4bb1649bb81b559" title="CreateAndSendPackets" alt="" coords="188,56,349,83"/>
+<area shape="rect" id="node4" href="$a00776.html#a6d4965cc969559b94475da397011f314" title="writeControlPort" alt="" coords="211,107,326,133"/>
+</map>

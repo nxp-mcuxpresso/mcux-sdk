@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_flashiap
+config MCUX_HAS_driver_flashiap
+    bool
+
+config MCUX_USE_driver_flashiap
+    depends on MCUX_HAS_driver_flashiap
+    bool "FLASHIAP Driver"
+    select MCUX_USE_driver_common
+    help
+      FLASHIAP Driver

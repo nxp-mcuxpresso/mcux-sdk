@@ -1,0 +1,18 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+if (MCUX_USE_BOARD_EVKBMIMXRT1170_CM4 || MCUX_USE_BOARD_EVKBMIMXRT1170_CM7)
+
+config MCUX_BOARD
+    default "evkbmimxrt1170"
+
+config MCUX_KIT
+    default "evkbmimxrt1170"
+
+
+#### Board level drivers ####
+rsource "xip/Kconfig"
+rsource "xmcd/Kconfig"
+
+endif

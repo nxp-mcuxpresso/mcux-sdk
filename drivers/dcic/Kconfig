@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_dcic
+config MCUX_HAS_driver_dcic
+    bool
+
+config MCUX_USE_driver_dcic
+    depends on MCUX_HAS_driver_dcic
+    bool "DCIC Driver"
+    select MCUX_USE_driver_common
+    help
+      DCIC Driver

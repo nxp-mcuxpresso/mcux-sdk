@@ -1,0 +1,11 @@
+<map id="conditionSensorReadings" name="conditionSensorReadings">
+<area shape="rect" id="node2" href="$sensor__fusion_8c.html#aaf8b47198fa614f0b50265addf44a8b0" title="processMagData" alt="" coords="223,107,343,133"/>
+<area shape="rect" id="node3" href="$hal__frdm__fxs__mult2__b_8c.html#a61ed96ce5838a7f7952539b7d7d944dc" title="Apply the magnetometer Hardware Abstraction Layer. " alt="" coords="405,5,511,32"/>
+<area shape="rect" id="node4" href="$magnetic_8c.html#a0a0ba578c5de9f06431db84b2b8e3f9a" title="fInvertMagCal" alt="" coords="409,56,507,83"/>
+<area shape="rect" id="node5" href="$magnetic_8c.html#a3b07f7334d06c86a3e18732a5106a951" title="iUpdateMagBuffer" alt="" coords="396,107,520,133"/>
+<area shape="rect" id="node6" href="$magnetic_8c.html#a2c2da80362a7b97574c6b60972399b73" title="fRunMagCalibration" alt="" coords="391,157,525,184"/>
+<area shape="rect" id="node10" href="$hal__frdm__fxs__mult2__b_8c.html#a9b489a682e07db8c11a2121ede929e9e" title="Apply the gyroscope Hardware Abstraction Layer. " alt="" coords="404,208,512,235"/>
+<area shape="rect" id="node7" href="$magnetic_8c.html#ab6f86b6d28bc71b2ce3afc7c374c462e" title="fUpdateMagCalibration4Slice" alt="" coords="577,107,765,133"/>
+<area shape="rect" id="node8" href="$magnetic_8c.html#aad08380c7f86edfe8480d6a7555172b8" title="fUpdateMagCalibration7Slice" alt="" coords="577,157,765,184"/>
+<area shape="rect" id="node9" href="$magnetic_8c.html#a5798cb74fc7f5956db643d09a3750e09" title="fUpdateMagCalibration10Slice" alt="" coords="573,208,768,235"/>
+</map>

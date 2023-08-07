@@ -1,6 +1,5 @@
 /*
- * Copyright 2020-2022 NXP
- * All rights reserved.
+ * Copyright 2020-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -110,13 +109,6 @@ status_t PHY_KSZ8081_Init(phy_handle_t *handle, const phy_config_t *config)
         }
 #endif /* FSL_FEATURE_PHYKSZ8081_USE_RMII50M_MODE */
 
-        /* Set PHY link status management interrupt. */
-        result = PHY_KSZ8081_EnableLinkInterrupt(handle, config->intrType, config->enableLinkIntr);
-        if (result != kStatus_Success)
-        {
-            return result;
-        }
-
         if (config->autoNeg)
         {
             /* Set the auto-negotiation then start it. */
@@ -151,6 +143,13 @@ status_t PHY_KSZ8081_Init(phy_handle_t *handle, const phy_config_t *config)
             /* Disable the auto-negotiation and set user-defined speed/duplex configuration. */
             result = PHY_KSZ8081_SetLinkSpeedDuplex(handle, config->speed, config->duplex);
         }
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+        
+        /* Set PHY link status management interrupt. */
+        result = PHY_KSZ8081_EnableLinkInterrupt(handle, config->intrType);
     }
     return result;
 }
@@ -355,10 +354,8 @@ status_t PHY_KSZ8081_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_s
     return result;
 }
 
-status_t PHY_KSZ8081_EnableLinkInterrupt(phy_handle_t *handle, phy_interrupt_type_t type, bool enable)
+status_t PHY_KSZ8081_EnableLinkInterrupt(phy_handle_t *handle, phy_interrupt_type_t type)
 {
-    assert((type == kPHY_IntrActiveLow) || (type == kPHY_IntrActiveHigh));
-
     status_t result;
     uint16_t regValue;
 
@@ -367,7 +364,7 @@ status_t PHY_KSZ8081_EnableLinkInterrupt(phy_handle_t *handle, phy_interrupt_typ
     if (result == kStatus_Success)
     {
         /* Enable/Disable link up+down interrupt. */
-        if (enable)
+        if (type != kPHY_IntrDisable)
         {
             regValue |= (PHY_INTR_CONTROL_STATUS_LINK_UP_MASK | PHY_INTR_CONTROL_STATUS_LINK_DOWN_MASK);
         }
@@ -382,7 +379,7 @@ status_t PHY_KSZ8081_EnableLinkInterrupt(phy_handle_t *handle, phy_interrupt_typ
         return result;
     }
 
-    if (enable)
+    if (type != kPHY_IntrDisable)
     {
         /* Set link interrupt type. */
         result = PHY_KSZ8081_READ(handle, PHY_CONTROL2_REG, &regValue);

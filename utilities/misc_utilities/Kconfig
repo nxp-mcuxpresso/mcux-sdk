@@ -1,0 +1,24 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# utilities_misc_utilities
+config MCUX_HAS_utilities_misc_utilities
+    bool
+
+config MCUX_USE_utilities_misc_utilities
+    depends on MCUX_HAS_utilities_misc_utilities
+    bool "Utilities miscellaneous"
+    help
+      Utilities which is needed for particular toolchain like the SBRK function required to address limitation between HEAP and STACK in GCC toolchain library.
+
+# utility_incbin
+config MCUX_HAS_utility_incbin
+    bool
+
+config MCUX_USE_utility_incbin
+    depends on MCUX_HAS_utility_incbin
+    bool "utility incbin"
+    help
+      Used to include slave core binary into master core binary.

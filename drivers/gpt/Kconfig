@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_gpt
+config MCUX_HAS_driver_gpt
+    bool
+
+config MCUX_USE_driver_gpt
+    depends on MCUX_HAS_driver_gpt
+    bool "GPT Driver"
+    select MCUX_USE_driver_common
+    help
+      GPT Driver

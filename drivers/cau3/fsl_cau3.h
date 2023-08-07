@@ -21,9 +21,9 @@
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief CAU3 driver version. Version 2.0.4.
+/*! @brief CAU3 driver version. Version 2.0.5.
  *
- * Current version: 2.0.4
+ * Current version: 2.0.5
  *
  * Change log:
  * - Version 2.0.0
@@ -38,8 +38,10 @@
  *   - Fix MISRA C-2012 issue.
  * - Version 2.0.4
  *   - Fix MISRA C-2012 issue.
+ * - Version 2.0.5
+ *   - Fix MISRA-C 2012 issue.
  */
-#define FSL_CAU3_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+#define FSL_CAU3_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
 /*@}*/
 
 /*! @brief Hardware semaphore usage by driver functions.

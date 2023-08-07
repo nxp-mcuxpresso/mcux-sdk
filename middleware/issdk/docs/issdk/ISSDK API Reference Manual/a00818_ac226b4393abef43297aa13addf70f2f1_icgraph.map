@@ -1,0 +1,8 @@
+<map id="NVM_SetBlockFlash" name="NVM_SetBlockFlash">
+<area shape="rect" id="node2" href="$a00773.html#a3b4a1193ece3947c38651156293a7623" title="EraseAccelCalibrationFromNVM" alt="" coords="196,5,405,32"/>
+<area shape="rect" id="node3" href="$a00773.html#a98044dd5ba8a80f7e92b4567725e5193" title="EraseGyroCalibrationFromNVM" alt="" coords="199,56,403,83"/>
+<area shape="rect" id="node4" href="$a00773.html#a5004646fd5b485a74892b17e4a3af15b" title="EraseMagCalibrationFromNVM" alt="" coords="200,107,401,133"/>
+<area shape="rect" id="node5" href="$a00773.html#a6cbf0fc4417e3a411a9685e2a92f1816" title="SaveAccelCalibrationToNVM" alt="" coords="207,157,394,184"/>
+<area shape="rect" id="node6" href="$a00773.html#aa5684d700f135264e542f33071ed6a45" title="SaveGyroCalibrationToNVM" alt="" coords="209,208,392,235"/>
+<area shape="rect" id="node7" href="$a00773.html#ad08799ac63701e755fe2414b32f69b50" title="SaveMagCalibrationToNVM" alt="" coords="211,259,390,285"/>
+</map>

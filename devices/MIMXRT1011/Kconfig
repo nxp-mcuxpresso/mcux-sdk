@@ -1,0 +1,225 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_USE_SOC_MIMXRT1011
+    bool
+    select MCUX_CPU_ARCH_ARM_CM7F
+    select MCUX_CPU_HAS_SP_FPU
+if MCUX_USE_SOC_MIMXRT1011
+
+# Part Number
+config MCUX_SOC_PART_MIMXRT1011xxxxx
+    bool
+
+config MCUX_DEVICE
+    default "MIMXRT1011"
+
+config MCUX_DEVICE_ID
+    default "MIMXRT1011xxxxx" if MCUX_SOC_PART_MIMXRT1011xxxxx
+
+
+# Select supported components
+config MCUX_USE_SOC_MIMXRT1011
+    select MCUX_HAS_CMSIS_DSP_Include
+    select MCUX_HAS_CMSIS_DSP_Source
+    select MCUX_HAS_CMSIS_Device_API_OSTick
+    select MCUX_HAS_CMSIS_Device_API_RTOS2
+    select MCUX_HAS_CMSIS_Driver_Include_CAN
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet_MAC
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet_PHY
+    select MCUX_HAS_CMSIS_Driver_Include_Flash
+    select MCUX_HAS_CMSIS_Driver_Include_I2C
+    select MCUX_HAS_CMSIS_Driver_Include_MCI
+    select MCUX_HAS_CMSIS_Driver_Include_NAND
+    select MCUX_HAS_CMSIS_Driver_Include_SAI
+    select MCUX_HAS_CMSIS_Driver_Include_SPI
+    select MCUX_HAS_CMSIS_Driver_Include_USART
+    select MCUX_HAS_CMSIS_Driver_Include_USB_Device
+    select MCUX_HAS_CMSIS_Driver_Include_USB_Host
+    select MCUX_HAS_CMSIS_Driver_Include_WiFi
+    select MCUX_HAS_CMSIS_Include_core_cm
+    select MCUX_HAS_CMSIS_NN_Source
+    select MCUX_HAS_CMSIS_RTOS2_NonSecure
+    select MCUX_HAS_CMSIS_RTOS2_Secure
+    select MCUX_HAS_component_gpt_adapter
+    select MCUX_HAS_component_igpio_adapter
+    select MCUX_HAS_component_lists
+    select MCUX_HAS_component_lpi2c_adapter
+    select MCUX_HAS_component_lpspi_adapter
+    select MCUX_HAS_component_lpuart_adapter
+    select MCUX_HAS_component_lpuart_dma_adapter
+    select MCUX_HAS_component_pit_adapter
+    select MCUX_HAS_component_serial_manager
+    select MCUX_HAS_component_serial_manager_spi
+    select MCUX_HAS_component_serial_manager_swo if (MCUX_CPU_ARCH_ARM_CM7F)
+    select MCUX_HAS_component_serial_manager_uart
+    select MCUX_HAS_driver_adc_12b1msps_sar
+    select MCUX_HAS_driver_adc_etc
+    select MCUX_HAS_driver_aipstz
+    select MCUX_HAS_driver_aoi
+    select MCUX_HAS_driver_cache_armv7_m7
+    select MCUX_HAS_driver_cmsis_lpi2c
+    select MCUX_HAS_driver_cmsis_lpspi
+    select MCUX_HAS_driver_cmsis_lpuart
+    select MCUX_HAS_driver_common
+    select MCUX_HAS_driver_dcdc_1
+    select MCUX_HAS_driver_dcp
+    select MCUX_HAS_driver_dmamux
+    select MCUX_HAS_driver_edma
+    select MCUX_HAS_driver_ewm
+    select MCUX_HAS_driver_flexio
+    select MCUX_HAS_driver_flexio_camera
+    select MCUX_HAS_driver_flexio_camera_edma
+    select MCUX_HAS_driver_flexio_i2c_master
+    select MCUX_HAS_driver_flexio_i2s
+    select MCUX_HAS_driver_flexio_i2s_edma
+    select MCUX_HAS_driver_flexio_mculcd
+    select MCUX_HAS_driver_flexio_mculcd_edma
+    select MCUX_HAS_driver_flexio_spi
+    select MCUX_HAS_driver_flexio_spi_edma
+    select MCUX_HAS_driver_flexio_uart
+    select MCUX_HAS_driver_flexio_uart_edma
+    select MCUX_HAS_driver_flexram
+    select MCUX_HAS_driver_flexspi
+    select MCUX_HAS_driver_flexspi_edma
+    select MCUX_HAS_driver_gpc_1
+    select MCUX_HAS_driver_gpt
+    select MCUX_HAS_driver_igpio
+    select MCUX_HAS_driver_kpp
+    select MCUX_HAS_driver_lpi2c
+    select MCUX_HAS_driver_lpi2c_edma
+    select MCUX_HAS_driver_lpi2c_freertos
+    select MCUX_HAS_driver_lpspi
+    select MCUX_HAS_driver_lpspi_edma
+    select MCUX_HAS_driver_lpspi_freertos
+    select MCUX_HAS_driver_lpuart
+    select MCUX_HAS_driver_lpuart_edma
+    select MCUX_HAS_driver_lpuart_freertos
+    select MCUX_HAS_driver_ocotp
+    select MCUX_HAS_driver_otfad
+    select MCUX_HAS_driver_pit
+    select MCUX_HAS_driver_pmu
+    select MCUX_HAS_driver_pwm
+    select MCUX_HAS_driver_rtwdog
+    select MCUX_HAS_driver_sai
+    select MCUX_HAS_driver_sai_edma
+    select MCUX_HAS_driver_snvs_hp
+    select MCUX_HAS_driver_snvs_lp
+    select MCUX_HAS_driver_spdif
+    select MCUX_HAS_driver_spdif_edma
+    select MCUX_HAS_driver_src
+    select MCUX_HAS_driver_tempmon
+    select MCUX_HAS_driver_trng
+    select MCUX_HAS_driver_wdog01
+    select MCUX_HAS_driver_xbara
+    select MCUX_HAS_utilities_misc_utilities
+    select MCUX_HAS_utility_assert
+    select MCUX_HAS_utility_assert_lite
+    select MCUX_HAS_utility_debug_console
+    select MCUX_HAS_utility_debug_console_lite
+    select MCUX_HAS_utility_notifier
+    select MCUX_HAS_utility_shell
+    select MCUX_HAS_utility_str
+
+#### SOC specific dependency ####
+config MCUX_USE_RTE_Device
+    bool
+    select MCUX_USE_driver_dmamux
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_component_serial_manager_uart
+    bool
+    select MCUX_USE_component_lpuart_adapter
+
+config MCUX_USE_driver_cmsis_lpi2c
+    bool
+    select MCUX_USE_driver_lpi2c_edma
+
+config MCUX_USE_driver_cmsis_lpspi
+    bool
+    select MCUX_USE_driver_lpspi_edma
+
+config MCUX_USE_driver_cmsis_lpuart
+    bool
+    select MCUX_USE_driver_lpuart_edma
+
+config MCUX_USE_driver_dcp
+    bool
+    select MCUX_USE_driver_cache_armv7_m7
+
+config MCUX_USE_driver_flexio_camera_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_flexio_i2s_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_flexio_mculcd_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_flexio_spi_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_flexio_uart_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_flexspi_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_lpi2c_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_lpspi_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_lpuart_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_sai_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_spdif_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_utility_debug_console_lite
+    bool
+    select MCUX_USE_component_lpuart_adapter
+
+
+#### SOC level drivers ####
+# device_MIMXRT1011_CMSIS
+config MCUX_USE_device_MIMXRT1011_CMSIS
+    bool "Device MIMXRT1011_cmsis"
+    select MCUX_USE_CMSIS_Include_core_cm
+    help
+      Device MIMXRT1011_cmsis
+
+# device_MIMXRT1011_startup
+config MCUX_USE_device_MIMXRT1011_startup
+    bool "Device MIMXRT1011_startup"
+    help
+      Device MIMXRT1011_startup
+
+# device_MIMXRT1011_system
+config MCUX_USE_device_MIMXRT1011_system
+    bool "Device MIMXRT1011_system"
+    help
+      Device MIMXRT1011_system
+
+rsource "drivers/Kconfig"
+rsource "xip/Kconfig"
+
+endif # MCUX_USE_SOC_MIMXRT1011

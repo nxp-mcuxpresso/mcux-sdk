@@ -9,6 +9,7 @@
 #ifndef __HAL_SPI_ADAPTER_H__
 #define __HAL_SPI_ADAPTER_H__
 
+#include "fsl_common.h"
 /*!
  * @addtogroup SPI_Adapter
  * @{

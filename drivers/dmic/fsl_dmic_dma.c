@@ -141,6 +141,13 @@ status_t DMIC_TransferReceiveDMA(DMIC_Type *base, dmic_dma_handle_t *handle, dmi
         return kStatus_DMIC_Busy;
     }
 
+    /* Initialize DMIC channel */
+    if(handle->isChannelValid == false)
+    {
+        handle->isChannelValid = true;
+        handle->channel        = channel;
+    }
+
     while (currentTransfer != NULL)
     {
         /* set up linked descriptor */
@@ -231,6 +238,14 @@ void DMIC_TransferAbortReceiveDMA(DMIC_Type *base, dmic_dma_handle_t *handle)
 
     /* Stop transfer. */
     DMA_AbortTransfer(handle->rxDmaHandle);
+
+    /* Disable channel */
+    base->CHANEN &= ~(1UL << (handle->channel));
+
+    /* Disable dmic channel dma request */
+    DMIC_EnableChannelDma(base, (dmic_channel_t)(handle->channel), false);
+
+    /* Set the handle state */
     handle->state = kDMIC_Idle;
 }
 

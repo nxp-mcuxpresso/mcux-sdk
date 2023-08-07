@@ -1,0 +1,11 @@
+<map id="NVM_SetBlockFlash" name="NVM_SetBlockFlash">
+<area shape="rect" id="node2" href="$calibration__storage_8h.html#a3b4a1193ece3947c38651156293a7623" title="EraseAccelCalibrationFromNVM" alt="" coords="196,5,405,32"/>
+<area shape="rect" id="node6" href="$calibration__storage_8h.html#a98044dd5ba8a80f7e92b4567725e5193" title="EraseGyroCalibrationFromNVM" alt="" coords="199,56,403,83"/>
+<area shape="rect" id="node7" href="$calibration__storage_8h.html#a5004646fd5b485a74892b17e4a3af15b" title="EraseMagCalibrationFromNVM" alt="" coords="200,107,401,133"/>
+<area shape="rect" id="node8" href="$calibration__storage_8h.html#a6cbf0fc4417e3a411a9685e2a92f1816" title="SaveAccelCalibrationToNVM" alt="" coords="207,157,394,184"/>
+<area shape="rect" id="node9" href="$calibration__storage_8h.html#aa5684d700f135264e542f33071ed6a45" title="SaveGyroCalibrationToNVM" alt="" coords="209,208,392,235"/>
+<area shape="rect" id="node10" href="$calibration__storage_8h.html#ad08799ac63701e755fe2414b32f69b50" title="SaveMagCalibrationToNVM" alt="" coords="211,259,390,285"/>
+<area shape="rect" id="node3" href="$DecodeCommandBytes_8c.html#a2d80b68d03de87c2d3cce67273f8a165" title="This function is responsible for decoding commands sent by the NXP Sensor Fusion Toolbox and setting ..." alt="" coords="453,132,612,159"/>
+<area shape="rect" id="node4" href="$control_8c.html#a3dc36d292be101ea1070be615293d692" title="WIRED_UART_IRQHandler" alt="" coords="673,107,851,133"/>
+<area shape="rect" id="node5" href="$control_8c.html#a4954d90ce002a3c089f4d19a4c862692" title="WIRELESS_UART_IRQHandler" alt="" coords="660,157,864,184"/>
+</map>

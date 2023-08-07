@@ -1,0 +1,4 @@
+<map id="fInit_3DOF_Y_BASIC" name="fInit_3DOF_Y_BASIC">
+<area shape="rect" id="node2" href="$a00887.html#a54f510d9d257d6063412a9ed5adddd6f" title="function sets the 3x3 matrix A to the identity matrix " alt="" coords="199,5,307,32"/>
+<area shape="rect" id="node3" href="$a00896.html#a624e56625ef65d6af54643c866a6c64c" title="set a quaternion to the unit quaternion " alt="" coords="221,56,284,83"/>
+</map>

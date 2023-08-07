@@ -1,0 +1,16 @@
+<map id="initializeFusionEngine" name="initializeFusionEngine">
+<area shape="rect" id="node2" href="$driver__systick_8c.html#a12342d97ebedd191c344ea0d5e1e7646" title="ARM_systick_enable" alt="" coords="212,17,357,44"/>
+<area shape="rect" id="node3" href="$driver__systick_8c.html#a8075e82d5c7ce23802841551a953e170" title="ARM_systick_delay_ms" alt="" coords="203,68,366,95"/>
+<area shape="rect" id="node6" href="$sensor__fusion_8c.html#ae748e1330b5a94783c6d4ea2ad9e4f28" title="initializeSensors" alt="" coords="226,123,343,149"/>
+<area shape="rect" id="node11" href="$fusion_8c.html#ad9cb3659204ae7a30109ceaf4d94ecec" title="fInitializeFusion" alt="" coords="229,173,340,200"/>
+<area shape="rect" id="node12" href="$magnetic_8c.html#a793003e431e2705d081b5073144cb2c0" title="fInitializeMagCalibration" alt="" coords="205,224,364,251"/>
+<area shape="rect" id="node14" href="$precisionAccelerometer_8c.html#ab8572ce21837538a984e62035db4d89e" title="Initialize the accelerometer calibration functions. " alt="" coords="201,275,368,301"/>
+<area shape="rect" id="node15" href="$sensor__fusion_8c.html#a9af8710b3e87acd2a33e7988b2d75b6c" title="Function to clear FIFO at the end of each fusion computation. " alt="" coords="241,325,328,352"/>
+<area shape="rect" id="node4" href="$driver__systick_8c.html#a63b11c5b24615bf03103d7d9e923ba2f" title="ARM_systick_start_ticks" alt="" coords="416,5,584,32"/>
+<area shape="rect" id="node5" href="$driver__systick_8c.html#a11d2757f060c3c65c1dfe1f7a314bbb3" title="ARM_systick_elapsed\l_ticks" alt="" coords="424,57,576,98"/>
+<area shape="rect" id="node7" href="$hal__frdm__fxs__mult2__b_8c.html#a6bb19bade42d7adef32375e174de144d" title="Apply the accelerometer Hardware Abstraction Layer. " alt="" coords="443,123,557,149"/>
+<area shape="rect" id="node8" href="$precisionAccelerometer_8c.html#a3aa550d5d9b592df3fd8b10c97c07d98" title="function maps the accelerometer data fGs (g) onto precision calibrated and de&#45;rotated data fGc (g)..." alt="" coords="447,173,553,200"/>
+<area shape="rect" id="node9" href="$precisionAccelerometer_8c.html#a012ad7adb564defb7170c246cdb86b04" title="Update the buffer used to store samples used for accelerometer calibration. " alt="" coords="434,224,566,251"/>
+<area shape="rect" id="node10" href="$precisionAccelerometer_8c.html#a2670a39e8be35e9bad5a75d0ec8ca821" title="function runs the precision accelerometer calibration " alt="" coords="632,224,775,251"/>
+<area shape="rect" id="node13" href="$matrix_8c.html#a54f510d9d257d6063412a9ed5adddd6f" title="function sets the 3x3 matrix A to the identity matrix " alt="" coords="446,275,554,301"/>
+</map>

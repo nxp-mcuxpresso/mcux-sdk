@@ -1,0 +1,9 @@
+<map id="sensors/mag3110_drv.h" name="sensors/mag3110_drv.h">
+<area shape="rect" id="node2" href="$a00116.html" title="The mag3110_drv.c file implements the MAG3110 sensor driver interfaces. " alt="" coords="5,87,164,114"/>
+<area shape="rect" id="node3" href="$a00239.html" title="The mag3110_normal.c file implements the ISSDK MAG3110 sensor driver example demonstration with polli..." alt="" coords="189,80,354,121"/>
+<area shape="rect" id="node4" href="$a00242.html" title="The mag3110_normal_interrupt.c file implements the ISSDK MAG3110 sensor driver example demonstration ..." alt="" coords="379,80,569,121"/>
+<area shape="rect" id="node5" href="$a00245.html" title="The mag3110_oneshot.c file implements the ISSDK MAG3110 sensor driver example demonstration with poll..." alt="" coords="594,80,759,121"/>
+<area shape="rect" id="node6" href="$a00404.html" title="The demo_11_axis_mult2b.c file implements the ISSDK MMA8652, MAG3110, FXAS21002 and MPL3115 sensors 1..." alt="" coords="784,80,951,121"/>
+<area shape="rect" id="node7" href="$a00443.html" title="The mag3110_demo.c file implements the ISSDK MAG3110 sensor demo example demonstration with interrupt..." alt="" coords="975,80,1125,121"/>
+<area shape="rect" id="node8" href="$a00446.html" title="The mag3110_poll_demo.c file implements the ISSDK MAG3110 sensor demo example demonstration with poll..." alt="" coords="1149,80,1305,121"/>
+</map>

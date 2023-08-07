@@ -1,0 +1,6 @@
+<map id="clearFIFOs" name="clearFIFOs">
+<area shape="rect" id="node2" href="$sensor__fusion_8c.html#ab088da7731ffdf25710a364a7f88b224" title="This function is responsible for initializing the system prior to starting the main fusion loop..." alt="" coords="140,5,288,32"/>
+<area shape="rect" id="node3" href="$sensor__fusion_8h.html#a367d92b99365a8143700b76439915d65" title="utility function to insert default values in the top level structure " alt="" coords="336,56,499,83"/>
+<area shape="rect" id="node5" href="$sensor__fusion_8c.html#a8b90119fee979d0309cc923bf1fad543" title="runFusion the top level call that actually runs the sensor fusion. This is a utility function which m..." alt="" coords="175,107,253,133"/>
+<area shape="rect" id="node4" href="$main__agm01__freertos__two__tasks_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is a FreeRTOS (dual task) implementation of the NXP sensor fusion demo build. " alt="" coords="547,56,597,83"/>
+</map>

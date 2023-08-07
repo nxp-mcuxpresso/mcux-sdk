@@ -1,0 +1,4 @@
+<map id="FXOS8700_ReadMagData" name="FXOS8700_ReadMagData">
+<area shape="rect" id="node2" href="$drivers_8h.html#a15f78e72d6a7dec25d95d97fa4c8d00e" title="FXOS8700_Read" alt="" coords="227,5,348,32"/>
+<area shape="rect" id="node3" href="$main__agm01__freertos__two__tasks_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is a FreeRTOS (dual task) implementation of the NXP sensor fusion demo build. " alt="" coords="396,5,447,32"/>
+</map>

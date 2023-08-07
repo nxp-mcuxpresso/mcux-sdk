@@ -1,0 +1,27 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_mipi_dsi_smartdma
+config MCUX_HAS_driver_mipi_dsi_smartdma
+    bool
+
+config MCUX_USE_driver_mipi_dsi_smartdma
+    depends on MCUX_HAS_driver_mipi_dsi_smartdma
+    bool "MIPI DSI SMARTDMA Driver"
+    select MCUX_USE_driver_mipi_dsi
+    help
+      MIPI DSI Driver
+
+# driver_mipi_dsi
+config MCUX_HAS_driver_mipi_dsi
+    bool
+
+config MCUX_USE_driver_mipi_dsi
+    depends on MCUX_HAS_driver_mipi_dsi
+    bool "MIPI DSI Driver"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_soc_mipi_dsi
+    help
+      MIPI DSI Driver

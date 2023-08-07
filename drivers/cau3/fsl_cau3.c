@@ -860,7 +860,7 @@ static status_t cau3_process_task_completion(CAU3_Type *base, cau3_task_done_t t
 
         default: /* undefined taskDone specifier defaults to kStatus_Fail */
             break;
-    } /* end - switch (taskDone & 7U) */
+    }            /* end - switch (taskDone & 7U) */
 
     return (taskCompletionStatus);
 }
@@ -916,7 +916,7 @@ static status_t cau3_initialize_inst_memory(CAU3_Type *base, const uint32_t *cau
     base->DBGMADR = 0U;          /* imem starting address */
     for (i = 0; i < cau3ImemBytes / 4U; i++)
     {
-        if (base->DBGMDR != cau3ImemImage[i]) /* indirect read from cau3Imem */
+        if (base->DBGMDR != cau3ImemImage[i])            /* indirect read from cau3Imem */
         {
             return (int32_t)(uint32_t)(0xbad10000U + i); /* exit on miscompare */
         }
@@ -1893,7 +1893,7 @@ static status_t cau3_hash_process_message_data(CAU3_Type *base,
                                                size_t messageSize)
 {
     status_t status;
-    status_t (*funcUpdate)(CAU3_Type * cau3base, const uint8_t *msg, uint32_t numberOfBlocks, uint32_t *shaState,
+    status_t (*funcUpdate)(CAU3_Type *cau3base, const uint8_t *msg, uint32_t numberOfBlocks, uint32_t *shaState,
                            cau3_task_done_t taskDone);
 
     /* first fill the internal buffer to full block */
@@ -1964,7 +1964,7 @@ static status_t cau3_hash_finalize(CAU3_Type *base, cau3_hash_ctx_internal_t *ct
 {
     cau3_sha_block_t lastBlock;
     status_t status;
-    status_t (*funcUpdate)(CAU3_Type * cau3base, const uint8_t *msg, uint32_t numberOfBlocks, uint32_t *shaState,
+    status_t (*funcUpdate)(CAU3_Type *cau3base, const uint8_t *msg, uint32_t numberOfBlocks, uint32_t *shaState,
                            cau3_task_done_t taskDone);
 
     funcUpdate = NULL;
@@ -1990,7 +1990,6 @@ static status_t cau3_hash_finalize(CAU3_Type *base, cau3_hash_ctx_internal_t *ct
     }
 
     (void)memset(&lastBlock, 0, sizeof(cau3_sha_block_t));
-    status = kStatus_Success;
 
     while (ctxInternal->blksz >= 64u)
     {

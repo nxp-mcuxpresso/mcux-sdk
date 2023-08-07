@@ -1,0 +1,6 @@
+<map id="sensors/mma845x.h" name="sensors/mma845x.h">
+<area shape="rect" id="node2" href="$a00128.html" title="The mma845x_drv.h file describes the MMA845x driver interface and structures. " alt="" coords="5,95,168,121"/>
+<area shape="rect" id="node3" href="$a04826.html" title="drivers/ads/kinetis\l/auto_detection_service.c" alt="" coords="193,87,362,129"/>
+<area shape="rect" id="node4" href="$a00542.html" title="The auto detection service file implements auto detection sequence for discovery of FRDM&#45;KL25Z Board ..." alt="" coords="386,80,545,136"/>
+<area shape="rect" id="node5" href="$a00824.html" title="Provides init() and read() functions for the MMA845x 3&#45;axis accel family. " alt="" coords="569,87,751,129"/>
+</map>

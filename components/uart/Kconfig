@@ -1,0 +1,105 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# component_iuart_adapter
+config MCUX_HAS_component_iuart_adapter
+    bool
+
+config MCUX_USE_component_iuart_adapter
+    depends on MCUX_HAS_component_iuart_adapter
+    bool "iuart_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_iuart
+    help
+      Component iuart_adapter
+
+# component_lpuart_adapter
+config MCUX_HAS_component_lpuart_adapter
+    bool
+
+config MCUX_USE_component_lpuart_adapter
+    depends on MCUX_HAS_component_lpuart_adapter
+    bool "lpuart_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_lpuart
+    help
+      Component lpuart_adapter
+
+# component_lpuart_dma_adapter
+config MCUX_HAS_component_lpuart_dma_adapter
+    bool
+
+menuconfig MCUX_USE_component_lpuart_dma_adapter
+    depends on MCUX_HAS_component_lpuart_dma_adapter
+    bool "lpuart_dma_adapter"
+    select MCUX_USE_component_lpuart_adapter
+    select MCUX_USE_component_timer_manager
+
+    help
+      Component lpuart_dma_adapter
+
+    if MCUX_USE_component_lpuart_dma_adapter
+
+    config MCUX_component_lpuart_dma_adapter_USE_lpuart_edma
+        depends on MCUX_HAS_driver_lpuart_edma
+        bool "Use lpuart_edma"
+        select MCUX_USE_driver_lpuart_edma
+
+    config MCUX_component_lpuart_dma_adapter_USE_lpuart_dma
+        depends on MCUX_HAS_driver_lpuart_dma
+        bool "Use lpuart_dma"
+        select MCUX_USE_driver_lpuart_dma
+
+    endif # MCUX_USE_component_lpuart_dma_adapter
+
+# component_miniusart_adapter
+config MCUX_HAS_component_miniusart_adapter
+    bool
+
+config MCUX_USE_component_miniusart_adapter
+    depends on MCUX_HAS_component_miniusart_adapter
+    bool "miniusart_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_lpc_miniusart
+    help
+      Component miniusart_adapter
+
+# component_uart_adapter
+config MCUX_HAS_component_uart_adapter
+    bool
+
+config MCUX_USE_component_uart_adapter
+    depends on MCUX_HAS_component_uart_adapter
+    bool "uart_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_uart
+    help
+      Component uart_adapter
+
+# component_usart_adapter
+config MCUX_HAS_component_usart_adapter
+    bool
+
+config MCUX_USE_component_usart_adapter
+    depends on MCUX_HAS_component_usart_adapter
+    bool "usart_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_flexcomm_usart
+    select MCUX_USE_driver_flexcomm
+    help
+      Component usart_adapter
+
+# component_usart_dma_adapter
+config MCUX_HAS_component_usart_dma_adapter
+    bool
+
+config MCUX_USE_component_usart_dma_adapter
+    depends on MCUX_HAS_component_usart_dma_adapter
+    bool "usart_dma_adapter"
+    select MCUX_USE_component_usart_adapter
+    select MCUX_USE_component_timer_manager
+    select MCUX_USE_driver_flexcomm_usart_dma
+    help
+      Component usart_dma_adapter

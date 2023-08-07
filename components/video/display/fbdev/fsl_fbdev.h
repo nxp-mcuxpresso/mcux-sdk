@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2021, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -15,6 +15,11 @@
 
 /*
  * Change Log:
+ *
+ * 1.0.3:
+ *   - Bug Fixes:
+ *     - Fixed the issue that frame buffer content changed when saved
+ *       to free frame buffer list.
  *
  * 1.0.2:
  *   - Bug Fixes:
@@ -92,13 +97,14 @@ typedef struct _fbdev_fb_info
 /*! @brief FBDEV handle, user should not touch the members directly. */
 typedef struct _fbdev
 {
-    fbdev_fb_info_t fbInfo;             /*!< Frame buffer information. */
-    video_mempool_t fbManager;          /*!< Manage the framebuffers used by this device. */
-    const dc_fb_t *dc;                  /*!< Display controller handle. */
-    uint8_t layer;                      /*!< Layer in the display controller. */
-    bool enabled;                       /*!< The fbdev is enabled or not by @ref FBDEV_Enable. */
-    SemaphoreHandle_t semaFbManager;    /*!< Semaphore for the @ref fbManager. */
-    SemaphoreHandle_t semaFramePending; /*!< Semaphore for the @ref framePending. */
+    fbdev_fb_info_t fbInfo;                /*!< Frame buffer information. */
+    video_stack_t fbManager;               /*!< Manage the framebuffers used by this device. */
+    void *buffers[FBDEV_MAX_FRAME_BUFFER]; /*!< Memory used by @ref fbManager, to save the free frame buffers. */
+    const dc_fb_t *dc;                     /*!< Display controller handle. */
+    uint8_t layer;                         /*!< Layer in the display controller. */
+    bool enabled;                          /*!< The fbdev is enabled or not by @ref FBDEV_Enable. */
+    SemaphoreHandle_t semaFbManager;       /*!< Semaphore for the @ref fbManager. */
+    SemaphoreHandle_t semaFramePending;    /*!< Semaphore for the @ref framePending. */
 } fbdev_t;
 
 /*! @brief Flags used for FBDEV operations. */

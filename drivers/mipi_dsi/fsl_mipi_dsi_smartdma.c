@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 NXP
+ * Copyright 2019-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -116,7 +116,8 @@ status_t DSI_TransferWriteMemorySMARTDMA(MIPI_DSI_HOST_Type *base,
     else
     {
         if (((xfer->inputFormat == kDSI_SMARTDMA_InputPixelFormatRGB565) &&
-             (xfer->outputFormat == kDSI_SMARTDMA_OutputPixelFormatRGB565)) ||
+             ((xfer->outputFormat == kDSI_SMARTDMA_OutputPixelFormatRGB565) ||
+              (xfer->outputFormat == kDSI_SMARTDMA_OutputPixelFormatRGB888))) ||
             ((xfer->inputFormat == kDSI_SMARTDMA_InputPixelFormatRGB888) &&
              (xfer->outputFormat == kDSI_SMARTDMA_OutputPixelFormatRGB888)) ||
             ((xfer->inputFormat == kDSI_SMARTDMA_InputPixelFormatXRGB8888) &&
@@ -124,7 +125,14 @@ status_t DSI_TransferWriteMemorySMARTDMA(MIPI_DSI_HOST_Type *base,
         {
             if (xfer->inputFormat == kDSI_SMARTDMA_InputPixelFormatRGB565)
             {
-                smartdmaApi = (uint32_t)kSMARTDMA_MIPI_RGB565_DMA;
+                if (xfer->outputFormat == kDSI_SMARTDMA_OutputPixelFormatRGB565)
+                {
+                    smartdmaApi = (uint32_t)kSMARTDMA_MIPI_RGB565_DMA;
+                }
+                else
+                {
+                    smartdmaApi = (uint32_t)kSMARTDMA_MIPI_RGB5652RGB888_DMA;
+                }
             }
             else if (xfer->inputFormat == kDSI_SMARTDMA_InputPixelFormatRGB888)
             {
@@ -137,6 +145,10 @@ status_t DSI_TransferWriteMemorySMARTDMA(MIPI_DSI_HOST_Type *base,
 
             if (xfer->twoDimension)
             {
+                if (smartdmaApi == (uint32_t)kSMARTDMA_MIPI_RGB5652RGB888_DMA)
+                {
+                    return kStatus_DSI_NotSupported;
+                }
                 handle->param2d.p_buffer             = xfer->data;
                 handle->param2d.minorLoop            = xfer->minorLoop;
                 handle->param2d.minorLoopOffset      = xfer->minorLoopOffset;

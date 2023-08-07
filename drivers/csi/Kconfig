@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_csi
+config MCUX_HAS_driver_csi
+    bool
+
+config MCUX_USE_driver_csi
+    depends on MCUX_HAS_driver_csi
+    bool "CSI Driver"
+    select MCUX_USE_driver_common
+    help
+      CSI Driver

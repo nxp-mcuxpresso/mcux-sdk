@@ -1326,3 +1326,46 @@ void PWM_SetChannelOutput(PWM_Type *base,
     /* Restore the source of FORCE OUTPUT signal */
     base->SM[subModule].CTRL2 = reg;
 }
+
+#if defined(FSL_FEATURE_PWM_HAS_PHASE_DELAY) && FSL_FEATURE_PWM_HAS_PHASE_DELAY
+/*!
+ * brief This function set the phase delay from the master sync signal of submodule 0.
+ *
+ * param base               PWM peripheral base address
+ * param subModule          PWM submodule to configure
+ * param pwmChannel         PWM channel to configure
+ * param delayCycles        Number of cycles delayed from submodule 0.
+ *
+ * return kStatus_Fail if the number of delay cycles is set larger than the period defined in submodule 0;
+ *        kStatus_Success if set phase delay success
+ */
+status_t PWM_SetPhaseDelay(PWM_Type *base, pwm_channels_t pwmChannel, pwm_submodule_t subModule, uint16_t delayCycles)
+{
+    uint16_t reg = base->SM[subModule].CTRL2;
+    
+    /* Clear LDOK bit if it is set */
+    if (0U != (base->MCTRL & PWM_MCTRL_LDOK(1UL << (uint8_t)subModule)))
+    {
+        base->MCTRL |= PWM_MCTRL_CLDOK(1UL << (uint8_t)subModule);
+    }
+    
+    if(base->SM[kPWM_Module_0].VAL1 < delayCycles)
+    {
+        return kStatus_Fail;
+    }
+    else
+    {
+        base->SM[subModule].PHASEDLY = delayCycles;
+    }
+    
+    /* Select the master sync signal as the source for initialization */
+    reg = (reg & ~(uint16_t)PWM_CTRL2_INIT_SEL_MASK)| PWM_CTRL2_INIT_SEL(2);
+    /* Set Load mode to make Buffered registers take effect immediately when LDOK bit set */
+    base->SM[subModule].CTRL |= PWM_CTRL_LDMOD_MASK;
+    /* Set LDOK bit to load buffer registers */
+    base->MCTRL |= PWM_MCTRL_LDOK(1UL << (uint8_t)subModule);
+    /* Restore the source of phase delay register intialization */
+    base->SM[subModule].CTRL2 = reg;
+    return kStatus_Success;
+}
+#endif /* FSL_FEATURE_PWM_HAS_PHASE_DELAY */

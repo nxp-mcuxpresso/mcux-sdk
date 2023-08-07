@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief DMA driver version 2.1.1. */
-#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief DMA driver version 2.1.2. */
+#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 /*! @brief _dma_channel_status_flags status flag for the DMA driver. */

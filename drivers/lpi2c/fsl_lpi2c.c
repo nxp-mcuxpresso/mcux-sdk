@@ -10,6 +10,22 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
+ * $Coverage Justification Reference$
+ *
+ * $Justification fsl_lpi2c_c_ref_1$
+ * The default branch cannot be executed in any circumstances, it is only added to avoid MISRA violation.
+ *
+ * $Justification fsl_lpi2c_c_ref_2$
+ * Two instances failed to simulate #kStatus_LPI2C_Busy.
+ *
+ * $Justification fsl_lpi2c_c_ref_3$
+ * When the transmission is completed (remaining == 0), the SDF and RSF will be set, and the flags are get before
+ * that(get before set), it will be over when the next cycle occurs, the first condition cannot be verified, and the
+ * remaining will not be verified.(will improve)
+ *
+ */
+
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -281,6 +297,11 @@ status_t LPI2C_MasterCheckAndClearError(LPI2C_Type *base, uint32_t status)
         {
             result = kStatus_LPI2C_Nak;
         }
+        /*
+         * $Branch Coverage Justification$
+         * Before that, the state was stripped of other attributes, and it only contained the four brother flags.(will
+         * improve)
+         */
         else if (0U != (status & (uint32_t)kLPI2C_MasterFifoErrFlag))
         {
             result = kStatus_LPI2C_FifoError;
@@ -366,6 +387,10 @@ status_t LPI2C_CheckForBusyBus(LPI2C_Type *base)
     status_t ret = kStatus_Success;
 
     uint32_t status = LPI2C_MasterGetStatusFlags(base);
+    /*
+     * $Branch Coverage Justification$
+     * $ref fsl_lpi2c_c_ref_2$
+     */
     if ((0U != (status & (uint32_t)kLPI2C_MasterBusBusyFlag)) && (0U == (status & (uint32_t)kLPI2C_MasterBusyFlag)))
     {
         ret = kStatus_LPI2C_Busy;
@@ -731,6 +756,10 @@ status_t LPI2C_MasterStart(LPI2C_Type *base, uint8_t address, lpi2c_direction_t 
 {
     /* Return an error if the bus is already in use not by us. */
     status_t result = LPI2C_CheckForBusyBus(base);
+    /*
+     * $Branch Coverage Justification$
+     * $ref fsl_lpi2c_c_ref_2$
+     */
     if (kStatus_Success == result)
     {
         /* Clear all flags. */
@@ -988,6 +1017,10 @@ status_t LPI2C_MasterTransferBlocking(LPI2C_Type *base, lpi2c_master_transfer_t 
 
     /* Return an error if the bus is already in use not by us. */
     result = LPI2C_CheckForBusyBus(base);
+    /*
+     * $Branch Coverage Justification$
+     * $ref fsl_lpi2c_c_ref_2$
+     */
     if (kStatus_Success == result)
     {
         /* Clear all flags. */
@@ -1057,7 +1090,10 @@ status_t LPI2C_MasterTransferBlocking(LPI2C_Type *base, lpi2c_master_transfer_t 
             {
                 result = LPI2C_MasterReceive(base, transfer->data, transfer->dataSize);
             }
-
+            /*
+             * $Branch Coverage Justification$
+             * Errors cannot be simulated by software during transmission.(will improve)
+             */
             if (kStatus_Success == result)
             {
                 if ((transfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U)
@@ -1163,6 +1199,10 @@ static void LPI2C_TransferStateMachineSendCommand(LPI2C_Type *base,
                 while (tmpRxSize != 0U)
                 {
                     LPI2C_MasterGetFifoCounts(base, NULL, &stateParams->txCount);
+                    /*
+                     * $Branch Coverage Justification$
+                     * The transmission commands will not exceed FIFO SIZE.(will improve)
+                     */
                     while ((size_t)FSL_FEATURE_LPI2C_FIFO_SIZEn(base) == stateParams->txCount)
                     {
                         LPI2C_MasterGetFifoCounts(base, NULL, &stateParams->txCount);
@@ -1370,6 +1410,10 @@ static status_t LPI2C_RunTransferStateMachine(LPI2C_Type *base, lpi2c_master_han
         while (!stateParams.state_complete)
         {
             /* Execute the state. */
+            /*
+             * $Branch Coverage Justification$
+             * $ref fsl_lpi2c_c_ref_1$
+             */
             switch (handle->state)
             {
                 case (uint8_t)kSendCommandState:
@@ -1856,6 +1900,10 @@ static status_t LPI2C_SlaveCheckAndClearError(LPI2C_Type *base, uint32_t flags)
     flags &= (uint32_t)kLPI2C_SlaveErrorFlags;
     if (0U != flags)
     {
+        /*
+         * $Branch Coverage Justification$
+         * It is hard to simulate bitError in automation test environment, need interference on bus.(will improve)
+         */
         if (0U != (flags & (uint32_t)kLPI2C_SlaveBitErrFlag))
         {
             result = kStatus_LPI2C_BitError;
@@ -1950,6 +1998,10 @@ status_t LPI2C_SlaveSend(LPI2C_Type *base, void *txBuff, size_t txSize, size_t *
         }
 
         /* Exit loop if we see a stop or restart in transfer*/
+        /*
+         * $Branch Coverage Justification$
+         * $ref fsl_lpi2c_c_ref_3$
+         */
         if ((0U != (flags & ((uint32_t)kLPI2C_SlaveStopDetectFlag | (uint32_t)kLPI2C_SlaveRepeatedStartDetectFlag))) &&
             (remaining != 0U))
         {
@@ -2037,6 +2089,10 @@ status_t LPI2C_SlaveReceive(LPI2C_Type *base, void *rxBuff, size_t rxSize, size_
         }
 
         /* Exit loop if we see a stop or restart */
+        /*
+         * $Branch Coverage Justification$
+         * $ref fsl_lpi2c_c_ref_3$
+         */
         if ((0U != (flags & ((uint32_t)kLPI2C_SlaveStopDetectFlag | (uint32_t)kLPI2C_SlaveRepeatedStartDetectFlag))) &&
             (remaining != 0U))
         {
@@ -2145,6 +2201,10 @@ status_t LPI2C_SlaveTransferNonBlocking(LPI2C_Type *base, lpi2c_slave_handle_t *
         LPI2C_SlaveEnable(base, true);
         /* Return an error if the bus is already in use not by us. */
         uint32_t status = LPI2C_SlaveGetStatusFlags(base);
+        /*
+         * $Branch Coverage Justification$
+         * $ref fsl_lpi2c_c_ref_2$
+         */
         if ((0U != (status & (uint32_t)kLPI2C_SlaveBusBusyFlag)) && (0U == (status & (uint32_t)kLPI2C_SlaveBusyFlag)))
         {
             result = kStatus_LPI2C_Busy;

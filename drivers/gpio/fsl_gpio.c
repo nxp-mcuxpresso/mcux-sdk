@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -17,7 +17,8 @@
  * Variables
  ******************************************************************************/
 
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
+#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
+    defined(FSL_FEATURE_SOC_PORT_COUNT)
 static PORT_Type *const s_portBases[] = PORT_BASE_PTRS;
 static GPIO_Type *const s_gpioBases[] = GPIO_BASE_PTRS;
 #endif
@@ -38,7 +39,8 @@ static const clock_ip_name_t s_fgpioClockName[] = FGPIO_CLOCKS;
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
+#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
+    defined(FSL_FEATURE_SOC_PORT_COUNT)
 /*!
  * @brief Gets the GPIO instance according to the GPIO base
  *
@@ -50,7 +52,8 @@ static uint32_t GPIO_GetInstance(GPIO_Type *base);
 /*******************************************************************************
  * Code
  ******************************************************************************/
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
+#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
+    defined(FSL_FEATURE_SOC_PORT_COUNT)
 static uint32_t GPIO_GetInstance(GPIO_Type *base)
 {
     uint32_t instance;
@@ -119,7 +122,8 @@ void GPIO_GetVersionInfo(GPIO_Type *base, gpio_version_info_t *info)
 }
 #endif /* FSL_FEATURE_GPIO_HAS_VERSION_INFO_REGISTER */
 
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
+#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
+    defined(FSL_FEATURE_SOC_PORT_COUNT)
 /*!
  * brief Reads the GPIO port interrupt status flag.
  *
@@ -159,7 +163,7 @@ uint32_t GPIO_GpioGetInterruptFlags(GPIO_Type *base)
  * brief Read the GPIO interrupt status flags based on selected interrupt channel(IRQS).
  * param base GPIO peripheral base pointer. (GPIOA, GPIOB, GPIOC, and so on.)
  * param channel '0' means selete interrupt channel 0, '1' means selete interrupt channel 1.
- * 
+ *
  * return The current GPIO's interrupt status flag based on the selected interrupt channel.
  *         '1' means the related pin's flag is set, '0' means the related pin's flag not set.
  *          For example, the return value 0x00010001 means the pin 0 and 17 have the interrupt pending.
@@ -183,7 +187,8 @@ uint8_t GPIO_PinGetInterruptFlag(GPIO_Type *base, uint32_t pin)
 }
 #endif /* FSL_FEATURE_PORT_HAS_NO_INTERRUPT */
 
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
+#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
+    defined(FSL_FEATURE_SOC_PORT_COUNT)
 /*!
  * brief Clears multiple GPIO pin interrupt status flags.
  *
@@ -262,13 +267,15 @@ void GPIO_CheckAttributeBytes(GPIO_Type *base, gpio_checker_attribute_t attribut
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
+#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
+    defined(FSL_FEATURE_SOC_PORT_COUNT)
 static FGPIO_Type *const s_fgpioBases[] = FGPIO_BASE_PTRS;
 #endif
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
+#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
+    defined(FSL_FEATURE_SOC_PORT_COUNT)
 /*!
  * @brief Gets the FGPIO instance according to the GPIO base
  *
@@ -280,7 +287,8 @@ static uint32_t FGPIO_GetInstance(FGPIO_Type *base);
 /*******************************************************************************
  * Code
  ******************************************************************************/
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
+#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
+    defined(FSL_FEATURE_SOC_PORT_COUNT)
 static uint32_t FGPIO_GetInstance(FGPIO_Type *base)
 {
     uint32_t instance;
@@ -356,7 +364,8 @@ void FGPIO_PinInit(FGPIO_Type *base, uint32_t pin, const gpio_pin_config_t *conf
         base->PDDR |= (1UL << pin);
     }
 }
-#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
+#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
+    defined(FSL_FEATURE_SOC_PORT_COUNT)
 /*!
  * brief Reads the FGPIO port interrupt status flag.
  *

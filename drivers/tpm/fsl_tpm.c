@@ -8,6 +8,26 @@
 
 #include "fsl_tpm.h"
 
+/*
+ * $Coverage Justification Reference$
+ *
+ * $Justification tpm_c_ref_1$
+ * Hardware limitations make this code impossible to implement.
+ *
+ * $Justification tpm_c_ref_2$
+ * Because the incoming base is invalid, the second judgment is not continued after the first condition
+ * is established.
+ *
+ * $Justification tpm_c_ref_3$
+ * Hardware limitations, the 32-bit counter register makes counterMax = 0xffffffffu,
+ * and the mod vlue can't be greater than or equal to counterMax after the operation.
+ *
+ * $Justification tpm_c_ref_4$
+ * If the incoming base can not make (1U == (uint8_t)FSL_FEATURE_TPM_POL_HAS_EFFECTn(base) true,
+ * the subsequent register operation is incorrect.
+ *
+ */
+
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -56,6 +76,11 @@ static uint32_t TPM_GetInstance(TPM_Type *base)
     uint32_t tpmArrayCount = (sizeof(s_tpmBases) / sizeof(s_tpmBases[0]));
 
     /* Find the instance index from base address mappings. */
+    /*
+     * $Branch Coverage Justification$
+     * (instance >= tpmArrayCount) not covered.
+     * The peripheral base address is always valid.
+     */
     for (instance = 0; instance < tpmArrayCount; instance++)
     {
         if (s_tpmBases[instance] == base)
@@ -224,6 +249,7 @@ tpm_clock_prescale_t TPM_CalculateCounterClkDiv(TPM_Type *base, uint32_t counter
     uint32_t counterMax = TPM_MAX_COUNTER_VALUE(base);
     uint32_t i;
     assert(((srcClock_Hz / 2U) > counterPeriod_Hz) && ((srcClock_Hz / 128U / counterMax) <= counterPeriod_Hz));
+
     for (i = 0U; i < (uint32_t)kTPM_Prescale_Divide_128; i++)
     {
         if ((srcClock_Hz / (1UL << i) / counterMax) < counterPeriod_Hz)
@@ -266,13 +292,27 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
 #endif
     chnlId = (uint8_t)chnlParams.chnlNumber;
     /* Return error if requested dutycycle/chnlNumber is greater than the max allowed */
+    /*
+     * $Branch Coverage Justification$
+     * (-1 == (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) not covered.
+     * This function is called inside the TPM_SetupPwm() function.
+     * If you enter an invalid base, the function will not work properly.
+     */
     if ((chnlId >= (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) ||
+        /*
+         * $Branch Coverage Justification$
+         * (chnlId >= (uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)) not covered.  $ref tpm_c_ref_2$.
+         */
         (-1 == (int8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base)))
     {
         return kStatus_InvalidArgument;
     }
     /* Return error if requested dutycycle is greater than the max allowed or MOD equal to 0xFFFF when it want get a
      * 100% duty cycle PWM signal*/
+    /*
+     * $Branch Coverage Justification$
+     * (mod == counterMax) not covered. $ref tpm_c_ref_3$.
+     */
     if (((chnlParams.dutyCyclePercent == 100U) && (mod == counterMax)) || (chnlParams.dutyCyclePercent > 100U))
     {
         return kStatus_OutOfRange;
@@ -282,6 +322,10 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
     if (mode == kTPM_CombinedPwm)
     {
         /* Check added for combined mode */
+        /*
+         * $Branch Coverage Justification$
+         * (chnlId >= ((uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base) / 2U)) not covered. $ref tpm_c_ref_2$.
+         */
         if ((chnlId >= ((uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base) / 2U)) ||
             (1U != (uint8_t)FSL_FEATURE_TPM_COMBINE_HAS_EFFECTn(base)))
         {
@@ -341,6 +385,10 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
         do
         {
             base->CONTROLS[chnlId].CnV = cnvFirstEdge;
+            /*
+             * $Branch Coverage Justification$
+             * (cnvFirstEdge != base->CONTROLS[chnlId].CnV) not covered. $ref tpm_c_ref_1$.
+             */
         } while (cnvFirstEdge != base->CONTROLS[chnlId].CnV);
 
         chnlId += 1U;
@@ -367,6 +415,10 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
         do
         {
             base->CONTROLS[chnlId].CnV = cnvFirstEdge + cnv;
+            /*
+             * $Branch Coverage Justification$
+             * ((cnvFirstEdge + cnv) != base->CONTROLS[chnlId].CnV) not covered. $ref tpm_c_ref_1$.
+             */
         } while ((cnvFirstEdge + cnv) != base->CONTROLS[chnlId].CnV);
     }
     else
@@ -393,6 +445,10 @@ static status_t TPM_SetupSinglePwmChannel(TPM_Type *base,
         do
         {
             base->CONTROLS[chnlId].CnV = cnv;
+            /*
+             * $Branch Coverage Justification$
+             * (cnv != base->CONTROLS[chnlId].CnV) not covered. $ref tpm_c_ref_1$.
+             */
         } while (cnv != base->CONTROLS[chnlId].CnV);
 
 #if defined(FSL_FEATURE_TPM_HAS_COMBINE) && FSL_FEATURE_TPM_HAS_COMBINE
@@ -444,6 +500,11 @@ status_t TPM_SetupPwm(TPM_Type *base,
         case kTPM_EdgeAlignedPwm:
             base->SC &= ~TPM_SC_CPWMS_MASK;
             mod = (tpmClock / pwmFreq_Hz) - 1U;
+
+            /*
+             * $Branch Coverage Justification$
+             * (mod > counterMax) not covered. $ref tpm_c_tpm_3$.
+             */
             if ((mod > counterMax) || (mod == 0U))
             {
                 /*  The MOD greater than the maximum allowed (some instanse only support 16-bit counter) or smaller than
@@ -454,6 +515,10 @@ status_t TPM_SetupPwm(TPM_Type *base,
         case kTPM_CenterAlignedPwm:
             base->SC |= TPM_SC_CPWMS_MASK;
             mod = tpmClock / (pwmFreq_Hz * 2u);
+            /*
+             * $Branch Coverage Justification$
+             * (mod > counterMax >> 1U) not covered. $ref tpm_c_tpm_3$.
+             */
             if ((mod > (counterMax >> 1U)) || (mod == 0U))
             {
                 /* MOD values have additional requirements under center-aligned MODE, it must be kept in the range
@@ -539,6 +604,10 @@ status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
     if (currentPwmMode == kTPM_CombinedPwm)
     {
         /* Check added for combined mode */
+        /*
+         * $Branch Coverage Justification$
+         * (chnlId >= ((uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base) / 2U)) not covered. $ref tpm_c_ref_2$.
+         */
         if ((chnlId >= ((uint8_t)FSL_FEATURE_TPM_CHANNEL_COUNTn(base) / 2U)) ||
             (1U != (uint8_t)FSL_FEATURE_TPM_COMBINE_HAS_EFFECTn(base)))
         {
@@ -582,6 +651,10 @@ status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
         do
         {
             base->CONTROLS[chnlId * 2U].CnV = cnvFirstEdge;
+            /*
+             * $Branch Coverage Justification$
+             * (cnvFirstEdge != base->CONTROLS[chnlId * 2U].CnV) not covered. $ref tpm_c_ref_1$.
+             */
         } while (cnvFirstEdge != base->CONTROLS[chnlId * 2U].CnV);
         do
         {
@@ -608,6 +681,10 @@ status_t TPM_UpdatePwmDutycycle(TPM_Type *base,
         do
         {
             base->CONTROLS[chnlId].CnV = cnv;
+            /*
+             * $Branch Coverage Justification$
+             * (cnv != base->CONTROLS[chnlId].CnV) not covered. $ref tpm_c_ref_1$.
+             */
         } while (cnv != base->CONTROLS[chnlId].CnV);
 
 #if defined(FSL_FEATURE_TPM_HAS_COMBINE) && FSL_FEATURE_TPM_HAS_COMBINE
@@ -731,6 +808,10 @@ void TPM_SetupOutputCompare(TPM_Type *base,
     do
     {
         base->CONTROLS[chnlNumber].CnV = compareValue;
+        /*
+         * $Branch Coverage Justification$
+         * (compareValue != base->CONTROLS[chnlNumber].CnV) not covered. $ref tpm_c_ref_1$.
+         */
     } while (compareValue != base->CONTROLS[chnlNumber].CnV);
 }
 
@@ -846,6 +927,10 @@ void TPM_SetupQuadDecode(TPM_Type *base,
     base->FILTER = reg;
 
 #if defined(FSL_FEATURE_TPM_HAS_POL) && FSL_FEATURE_TPM_HAS_POL
+    /*
+     * $Branch Coverage Justification$
+     * (1U != FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(base)) not covered. $ref tpm_c_ref_4$.
+     */
     if (1U == (uint8_t)FSL_FEATURE_TPM_POL_HAS_EFFECTn(base))
     {
         /* Set Phase A polarity */
@@ -869,6 +954,10 @@ void TPM_SetupQuadDecode(TPM_Type *base,
     reg |= TPM_FILTER_CH1FVAL(phaseBParams->phaseFilterVal);
     base->FILTER = reg;
 #if defined(FSL_FEATURE_TPM_HAS_POL) && FSL_FEATURE_TPM_HAS_POL
+    /*
+     * $Branch Coverage Justification$
+     * (1U != FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(base)) not covered. $ref tpm_c_ref_4$.
+     */
     if (1U == (uint8_t)FSL_FEATURE_TPM_POL_HAS_EFFECTn(base))
     {
         /* Set Phase B polarity */

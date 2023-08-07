@@ -1,0 +1,21 @@
+<map id="Sensor_I2C_Write" name="Sensor_I2C_Write">
+<area shape="rect" id="node2" href="$a00023.html#a849b79b8590f04ee48ca7cca38b69106" title="The interface function to configure he sensor. " alt="" coords="196,5,341,32"/>
+<area shape="rect" id="node3" href="$a00032.html#abef3b2c3849b49331142f7a6266fde9a" title="The interface function to configure he sensor. " alt="" coords="180,56,357,83"/>
+<area shape="rect" id="node4" href="$a00842.html#a79f26568f569b2f59c6cbb818f885789" title="FXLS8471Q_Idle" alt="" coords="209,107,328,133"/>
+<area shape="rect" id="node5" href="$a00842.html#a7c8424e014e2bdbb1dd61fcb4731857b" title="FXLS8471Q_Init" alt="" coords="211,157,326,184"/>
+<area shape="rect" id="node6" href="$a00059.html#a1b62cba67669ae79f5f3c2e5f846a6c7" title="The interface function to configure he sensor. " alt="" coords="185,208,353,235"/>
+<area shape="rect" id="node7" href="$a00068.html#adc8ae229a44c0a20d100948b37627f55" title="The interface function to configure he sensor. " alt="" coords="185,259,353,285"/>
+<area shape="rect" id="node8" href="$a00077.html#a2b3b8d1e5ee7b6431002c387999ed8b9" title="The interface function to configure he sensor. " alt="" coords="185,309,353,336"/>
+<area shape="rect" id="node9" href="$a00086.html#adcb4dbaa31a6b4ccd6031ee6cc97bb66" title="The interface function to configure he sensor. " alt="" coords="183,360,354,387"/>
+<area shape="rect" id="node10" href="$a00842.html#a885024916f4959fb4d226465b68f8e90" title="FXOS8700_Idle" alt="" coords="213,411,324,437"/>
+<area shape="rect" id="node11" href="$a00842.html#ac61bf451efc3a4eab179dbc59268b3e7" title="FXOS8700_Init" alt="" coords="215,461,323,488"/>
+<area shape="rect" id="node12" href="$a00095.html#a02cdde2f932058060c53dc8314e8d03f" title="The interface function to configure he sensor. " alt="" coords="183,512,354,539"/>
+<area shape="rect" id="node13" href="$a00110.html#a7080e6e4c87f884467ded36ad2a1846a" title="The interface function to configure he sensor. " alt="" coords="187,563,350,589"/>
+<area shape="rect" id="node14" href="$a00119.html#a2de85bf13cfe26dbc0ca9be7f4625cba" title="The interface function to configure he sensor. " alt="" coords="185,613,352,640"/>
+<area shape="rect" id="node15" href="$a00842.html#a8b3e60cfe3482a21af1efd34d3e31cc2" title="MAG3110_Idle" alt="" coords="215,664,322,691"/>
+<area shape="rect" id="node16" href="$a00842.html#a20b118514f14ce008825433f72527ecd" title="MAG3110_Init" alt="" coords="217,715,321,741"/>
+<area shape="rect" id="node17" href="$a00947.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is the The main function implementation. " alt="" coords="243,765,294,792"/>
+<area shape="rect" id="node18" href="$a00128.html#a6c537b63c09b23480c1a3d6ef6e29fef" title="The interface function to configure he sensor. " alt="" coords="185,816,353,843"/>
+<area shape="rect" id="node19" href="$a00146.html#a5944d87d922a1bdbbf5f2574acc1e143" title="The interface function to configure he sensor. " alt="" coords="185,867,353,893"/>
+<area shape="rect" id="node20" href="$a00164.html#a8dce7c0e6c9d7ef6cf9c6c2fd3c093ae" title="The interface function to configure he sensor. " alt="" coords="187,917,351,944"/>
+</map>

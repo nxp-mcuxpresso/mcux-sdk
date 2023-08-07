@@ -344,7 +344,7 @@ static inline uint32_t ltc_get_word_from_unaligned(const uint8_t *srcAddr)
  */
 static inline void ltc_set_unaligned_from_word(uint32_t srcWord, uint8_t *dstAddr)
 {
-#if (!(defined(__CORTEX_M)) || (defined(__CORTEX_M) && (__CORTEX_M == 0)))
+#if (!(defined(__CORTEX_M)) || (defined(__CORTEX_M) && (__CORTEX_M == 0)) || defined(__CC_ARM))
     register uint8_t *dst = dstAddr;
     /* Cortex M0 does not support misaligned stores */
     if (0U != ((uint32_t)dst & 0x3u))
@@ -358,12 +358,6 @@ static inline void ltc_set_unaligned_from_word(uint32_t srcWord, uint8_t *dstAdd
     {
         *((uint32_t *)(uint32_t)dstAddr) = srcWord; /* addr aligned to 0-modulo-4 so it is safe to type cast */
     }
-#elif defined(__CC_ARM)
-    __asm
-    {
-        STR srcWord, [dstAddr]
-    }
-    return;
 #else
     *((uint32_t *)(uint32_t)dstAddr) = srcWord;
 #endif
@@ -1166,8 +1160,8 @@ static status_t ltc_aes_decrypt_ecb(LTC_Type *base,
  */
 status_t LTC_AES_GenerateDecryptKey(LTC_Type *base, const uint8_t *encryptKey, uint8_t *decryptKey, uint32_t keySize)
 {
-    uint8_t plaintext[LTC_AES_BLOCK_SIZE];
-    uint8_t ciphertext[LTC_AES_BLOCK_SIZE];
+    uint8_t plaintext[LTC_AES_BLOCK_SIZE]  = {0};
+    uint8_t ciphertext[LTC_AES_BLOCK_SIZE] = {0};
     status_t status;
 
     if (!ltc_check_key_size(keySize))

@@ -2,6 +2,7 @@
 ** ###################################################################
 **     Processors:          LPC54S016JBD100
 **                          LPC54S016JBD208
+**                          LPC54S016JET100
 **                          LPC54S016JET180
 **
 **     Compilers:           GNU C Compiler
@@ -11,7 +12,7 @@
 **
 **     Reference manual:    LPC540xx/LPC54S0xx User manual Rev.0.8 5 June 2018
 **     Version:             rev. 1.0, 2018-04-20
-**     Build:               b201015
+**     Build:               b230321
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -19,7 +20,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2023 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -48,18 +49,18 @@
 #include <stdint.h>
 #include "fsl_device_registers.h"
 
-#define NVALMAX        (0x100)
-#define PVALMAX        (0x20)
-#define MVALMAX        (0x8000)
-#define PLL_MDEC_VAL_P (0) /* MDEC is in bits  16:0 */
+#define NVALMAX (0x100)
+#define PVALMAX (0x20)
+#define MVALMAX (0x8000)
+#define PLL_MDEC_VAL_P (0)                                       /* MDEC is in bits  16:0 */
 #define PLL_MDEC_VAL_M (0x1FFFFUL << PLL_MDEC_VAL_P)
-#define PLL_NDEC_VAL_P (0) /* NDEC is in bits  9:0 */
+#define PLL_NDEC_VAL_P (0)                                       /* NDEC is in bits  9:0 */
 #define PLL_NDEC_VAL_M (0x3FFUL << PLL_NDEC_VAL_P)
-#define PLL_PDEC_VAL_P (0) /* PDEC is in bits  6:0 */
+#define PLL_PDEC_VAL_P (0)                                       /* PDEC is in bits  6:0 */
 #define PLL_PDEC_VAL_M (0x7FUL << PLL_PDEC_VAL_P)
 
-static const uint8_t wdtFreqLookup[32] = {0,  8,  12, 15, 18, 20, 24, 26, 28, 30, 32, 34, 36, 38, 40, 41,
-                                          42, 44, 45, 46, 48, 49, 50, 52, 53, 54, 56, 57, 58, 59, 60, 61};
+static const uint8_t wdtFreqLookup[32] = {0, 8, 12, 15, 18, 20, 24, 26, 28, 30, 32, 34, 36, 38, 40, 41, 42, 44, 45, 46,
+                                            48, 49, 50, 52, 53, 54, 56, 57, 58, 59, 60, 61};
 /* Get WATCH DOG Clk */
 static uint32_t getWdtOscFreq(void)
 {
@@ -71,9 +72,8 @@ static uint32_t getWdtOscFreq(void)
     else
     {
         div_sel = (uint8_t)((SYSCON->WDTOSCCTRL & SYSCON_WDTOSCCTRL_DIVSEL_MASK) + 1UL) << 1UL;
-        freq_sel =
-            wdtFreqLookup[((SYSCON->WDTOSCCTRL & SYSCON_WDTOSCCTRL_FREQSEL_MASK) >> SYSCON_WDTOSCCTRL_FREQSEL_SHIFT)];
-        return ((uint32_t)freq_sel * 50000U) / ((uint32_t)div_sel);
+        freq_sel = wdtFreqLookup[((SYSCON->WDTOSCCTRL & SYSCON_WDTOSCCTRL_FREQSEL_MASK) >> SYSCON_WDTOSCCTRL_FREQSEL_SHIFT)];
+        return ((uint32_t) freq_sel * 50000U)/((uint32_t)div_sel);
     }
 }
 /* Find decoded N value for raw NDEC value */
@@ -241,6 +241,8 @@ static uint32_t findPllMMult(uint32_t ctrlReg, uint32_t mDecReg)
     return mMult;
 }
 
+
+
 /* ----------------------------------------------------------------------------
    -- Core clock
    ---------------------------------------------------------------------------- */
@@ -251,38 +253,35 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
    -- SystemInit()
    ---------------------------------------------------------------------------- */
 
-void SystemInit(void)
-{
+void SystemInit (void) {
 #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-    SCB->CPACR |= ((3UL << 10 * 2) | (3UL << 11 * 2)); /* set CP10, CP11 Full Access */
-#endif                                                 /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
+  SCB->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access */
+#endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
 
 #if defined(__MCUXPRESSO)
-    extern void (*const g_pfnVectors[])(void);
-    SCB->VTOR = (uint32_t)&g_pfnVectors;
+    extern void(*const g_pfnVectors[]) (void);
+    SCB->VTOR = (uint32_t) &g_pfnVectors;
 #else
     extern void *__Vectors;
-    SCB->VTOR = (uint32_t)&__Vectors;
+    SCB->VTOR = (uint32_t) &__Vectors;
 #endif
     SYSCON->ARMTRACECLKDIV = 0;
 /* Optionally enable RAM banks that may be off by default at reset */
 #if !defined(DONT_ENABLE_DISABLED_RAMBANKS)
-    SYSCON->AHBCLKCTRLSET[0] =
-        SYSCON_AHBCLKCTRL_SRAM1_MASK | SYSCON_AHBCLKCTRL_SRAM2_MASK | SYSCON_AHBCLKCTRL_SRAM3_MASK;
+    SYSCON->AHBCLKCTRLSET[0] = SYSCON_AHBCLKCTRL_SRAM1_MASK | SYSCON_AHBCLKCTRL_SRAM2_MASK | SYSCON_AHBCLKCTRL_SRAM3_MASK;
 
 #endif
     SYSCON->MAINCLKSELA = 0U;
     SYSCON->MAINCLKSELB = 0U;
-    SystemInitHook();
+  SystemInitHook();
 }
 
 /* ----------------------------------------------------------------------------
    -- SystemCoreClockUpdate()
    ---------------------------------------------------------------------------- */
 
-void SystemCoreClockUpdate(void)
-{
-    uint32_t clkRate = 0;
+void SystemCoreClockUpdate (void) {
+uint32_t clkRate = 0;
     uint32_t prediv, postdiv;
     uint64_t workRate;
 
@@ -334,15 +333,15 @@ void SystemCoreClockUpdate(void)
             if ((SYSCON->SYSPLLCTRL & SYSCON_SYSPLLCTRL_BYPASS_MASK) == 0UL)
             {
                 /* PLL is not in bypass mode, get pre-divider, post-divider, and M divider */
-                prediv  = findPllPreDiv(SYSCON->SYSPLLCTRL, SYSCON->SYSPLLNDEC);
+                prediv = findPllPreDiv(SYSCON->SYSPLLCTRL, SYSCON->SYSPLLNDEC);
                 postdiv = findPllPostDiv(SYSCON->SYSPLLCTRL, SYSCON->SYSPLLPDEC);
                 /* Adjust input clock */
                 clkRate = clkRate / prediv;
 
                 /* MDEC used for rate */
                 workRate = (uint64_t)(clkRate) * (uint64_t)findPllMMult(SYSCON->SYSPLLCTRL, SYSCON->SYSPLLMDEC);
-                clkRate  = (uint32_t)(workRate / ((uint64_t)postdiv));
-                clkRate  = clkRate * 2UL; /* PLL CCO output is divided by 2 before to M-Divider */
+                clkRate = (uint32_t)(workRate / ((uint64_t)postdiv));
+                clkRate = clkRate * 2UL; /* PLL CCO output is divided by 2 before to M-Divider */
             }
             break;
         case 0x03: /* RTC oscillator 32 kHz output (32k_clk) */
@@ -359,7 +358,6 @@ void SystemCoreClockUpdate(void)
    -- SystemInitHook()
    ---------------------------------------------------------------------------- */
 
-__attribute__((weak)) void SystemInitHook(void)
-{
-    /* Void implementation of the weak function. */
+__attribute__ ((weak)) void SystemInitHook (void) {
+  /* Void implementation of the weak function. */
 }

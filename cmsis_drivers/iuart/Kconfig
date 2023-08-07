@@ -1,0 +1,17 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_cmsis_iuart
+config MCUX_HAS_driver_cmsis_iuart
+    bool
+
+config MCUX_USE_driver_cmsis_iuart
+    depends on MCUX_HAS_driver_cmsis_iuart
+    bool "IUART CMSIS Driver"
+    select MCUX_USE_driver_iuart
+    select MCUX_USE_CMSIS_Driver_Include_USART
+    select MCUX_USE_RTE_Device
+    help
+      UART CMSIS Driver

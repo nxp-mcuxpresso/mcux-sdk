@@ -7,7 +7,17 @@
  */
 
 #include "fsl_lpuart_edma.h"
-
+/*
+ * $Coverage Justification Reference$
+ *
+ * $Justification fsl_lpuart_edma_c_ref_1$
+ * The EDMA handle is only used by the LPUART EDMA driver, with the LPUART EDMA driver workflow,
+ * the callback is only called when EDMA transfer done.
+ *
+ * $Justification fsl_lpuart_edma_c_ref_2$
+ * This function only handles the kLPUART_TransmissionCompleteFlag event.
+ *
+ */
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -134,7 +144,10 @@ static void LPUART_SendEDMACallback(edma_handle_t *handle, void *param, bool tra
     /* Avoid the warning for unused variables. */
     handle = handle;
     tcds   = tcds;
-
+    /*
+     * $Branch Coverage Justification$
+     * $ref fsl_lpuart_edma_c_ref_1$
+     */
     if (transferDone)
     {
         /* Disable LPUART TX EDMA. */
@@ -157,7 +170,10 @@ static void LPUART_ReceiveEDMACallback(edma_handle_t *handle, void *param, bool 
     /* Avoid warning for unused parameters. */
     handle = handle;
     tcds   = tcds;
-
+    /*
+     * $Branch Coverage Justification$
+     * $ref fsl_lpuart_edma_c_ref_1$
+     */
     if (transferDone)
     {
         /* Disable transfer. */
@@ -485,7 +501,10 @@ status_t LPUART_TransferGetSendCountEDMA(LPUART_Type *base, lpuart_edma_handle_t
 void LPUART_TransferEdmaHandleIRQ(LPUART_Type *base, void *lpuartEdmaHandle)
 {
     assert(lpuartEdmaHandle != NULL);
-
+    /*
+     * $Branch Coverage Justification$
+     * $ref fsl_lpuart_edma_c_ref_2$
+     */
     if (((uint32_t)kLPUART_TransmissionCompleteFlag & LPUART_GetStatusFlags(base)) != 0U)
     {
         lpuart_edma_handle_t *handle = (lpuart_edma_handle_t *)lpuartEdmaHandle;

@@ -1,0 +1,4 @@
+<map id="ssTest" name="ssTest">
+<area shape="rect" id="node2" href="$status_8h.html#a01619741119cf3432f8cfff23334c793" title="initializeStatusSubsystem() should be called once at startup to initialize the data structure and to ..." alt="" coords="115,5,288,32"/>
+<area shape="rect" id="node3" href="$main__agm01__freertos__two__tasks_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is a FreeRTOS (dual task) implementation of the NXP sensor fusion demo build. " alt="" coords="336,5,387,32"/>
+</map>

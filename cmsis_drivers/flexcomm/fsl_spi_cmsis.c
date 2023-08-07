@@ -31,7 +31,7 @@
      (defined(RTE_SPI9) && RTE_SPI9) || (defined(RTE_SPI10) && RTE_SPI10) || (defined(RTE_SPI11) && RTE_SPI11) || \
      (defined(RTE_SPI12) && RTE_SPI12) || (defined(RTE_SPI13) && RTE_SPI13))
 
-#define ARM_SPI_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2, 4) /* driver version */
+#define ARM_SPI_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2, 5) /* driver version */
 
 /*! @brief IDs of clock for each FLEXCOMM module */
 static const clock_ip_name_t s_flexcommClocks[] = FLEXCOMM_CLOCKS;
@@ -513,6 +513,7 @@ static int32_t SPI_DMAInitialize(ARM_SPI_SignalEvent_t cb_event, cmsis_spi_dma_d
         spi->cb_event = cb_event;
         spi->flags    = (uint8_t)SPI_FLAG_INIT;
     }
+
     return ARM_DRIVER_OK;
 }
 
@@ -558,9 +559,6 @@ static int32_t SPI_DMAPowerControl(ARM_POWER_STATE state, cmsis_spi_dma_driver_s
 
             /* Enable flexcomm clock gate */
             CLOCK_EnableClock(s_flexcommClocks[spi->resource->instance]);
-            /* Init DMA */
-            DMA_Init(spi->dmaResource->rxdmaBase);
-            DMA_Init(spi->dmaResource->txdmaBase);
             spi->flags |= (uint8_t)SPI_FLAG_POWER;
             break;
         default:

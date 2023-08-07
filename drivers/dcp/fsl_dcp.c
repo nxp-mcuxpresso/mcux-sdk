@@ -42,13 +42,13 @@ typedef union _dcp_hash_block
 /*! internal dcp_hash context structure */
 typedef struct _dcp_hash_ctx_internal
 {
-    dcp_hash_block_t blk;        /*!< memory buffer. only full blocks are written to DCP during hash updates */
-    size_t blksz;                /*!< number of valid bytes in memory buffer */
-    dcp_hash_algo_t algo;        /*!< selected algorithm from the set of supported algorithms */
-    dcp_hash_algo_state_t state; /*!< finite machine state of the hash software process */
-    uint32_t fullMessageSize;    /*!< track message size */
-    uint32_t ctrl0;              /*!< HASH_INIT and HASH_TERM flags */
-    uint32_t runningHash[9];     /*!< running hash. up to SHA-256 plus size, that is 36 bytes. */
+    dcp_hash_block_t blk;            /*!< memory buffer. only full blocks are written to DCP during hash updates */
+    size_t blksz;                    /*!< number of valid bytes in memory buffer */
+    dcp_hash_algo_t algo;            /*!< selected algorithm from the set of supported algorithms */
+    dcp_hash_algo_state_t fsm_state; /*!< finite machine state of the hash software process */
+    uint32_t fullMessageSize;        /*!< track message size */
+    uint32_t ctrl0;                  /*!< HASH_INIT and HASH_TERM flags */
+    uint32_t runningHash[9];         /*!< running hash. up to SHA-256 plus size, that is 36 bytes. */
     dcp_handle_t *handle;
 } dcp_hash_ctx_internal_t;
 
@@ -96,6 +96,11 @@ AT_NONCACHEABLE_SECTION_INIT(static dcp_context_t s_dcpContextSwitchingBuffer);
 /*******************************************************************************
  * Code
  ******************************************************************************/
+#if defined(__GNUC__)
+/* Disable optimizations for GCC to prevent instruction reordering */
+#pragma GCC push_options
+#pragma GCC optimize("-O0")
+#endif
 
 static void dcp_reverse_and_copy(uint8_t *src, uint8_t *dest, size_t src_len)
 {
@@ -208,11 +213,6 @@ static status_t dcp_aes_set_sram_based_key(DCP_Type *base, dcp_handle_t *handle,
     return kStatus_Success;
 }
 
-/* Disable optimizations for GCC to prevent instruction reordering */
-#if defined(__GNUC__)
-#pragma GCC push_options
-#pragma GCC optimize("O0")
-#endif
 static status_t dcp_schedule_work(DCP_Type *base, dcp_handle_t *handle, dcp_work_packet_t *dcpPacket)
 {
     status_t status;
@@ -1229,7 +1229,7 @@ status_t DCP_HASH_Init(DCP_Type *base, dcp_handle_t *handle, dcp_hash_ctx_t *ctx
     {
         ctxInternal->blk.w[i] = 0u;
     }
-    ctxInternal->state           = kDCP_StateHashInit;
+    ctxInternal->fsm_state       = kDCP_StateHashInit;
     ctxInternal->fullMessageSize = 0;
     ctxInternal->handle          = handle;
     return status;
@@ -1286,7 +1286,7 @@ status_t DCP_HASH_Update(DCP_Type *base, dcp_hash_ctx_t *ctx, const uint8_t *inp
     }
     else
     {
-        isUpdateState = ctxInternal->state == kDCP_StateHashUpdate;
+        isUpdateState = ctxInternal->fsm_state == kDCP_StateHashUpdate;
         if (!isUpdateState)
         {
             /* start NEW hash */
@@ -1295,7 +1295,7 @@ status_t DCP_HASH_Update(DCP_Type *base, dcp_hash_ctx_t *ctx, const uint8_t *inp
             {
                 return status;
             }
-            ctxInternal->state = kDCP_StateHashUpdate;
+            ctxInternal->fsm_state = kDCP_StateHashUpdate;
         }
         else
         {
@@ -1340,7 +1340,7 @@ status_t DCP_HASH_Finish(DCP_Type *base, dcp_hash_ctx_t *ctx, uint8_t *output, s
         return status;
     }
 
-    if (ctxInternal->state == kDCP_StateHashInit)
+    if (ctxInternal->fsm_state == kDCP_StateHashInit)
     {
         status = dcp_hash_engine_init(base, ctxInternal);
         if (status != kStatus_Success)

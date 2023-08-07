@@ -1,0 +1,5 @@
+<map id="Host_IO_Send" name="Host_IO_Send">
+<area shape="rect" id="node2" href="$a00101.html#a3924d21a0703878695ebdb68f720fff9" title="Host_IO_Receive" alt="" coords="181,5,303,32"/>
+<area shape="rect" id="node3" href="$a00401.html#a840291bc02cba5474a4cb46a9b9566fe" title="Main function. " alt="" coords="372,31,423,57"/>
+<area shape="rect" id="node4" href="$a00428.html#a0076d28c9a17cd6908c7b3b0f5c6006c" title="process_host_command" alt="" coords="160,107,324,133"/>
+</map>

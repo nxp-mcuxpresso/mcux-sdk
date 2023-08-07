@@ -16,7 +16,7 @@
 static void ECSPI_RTOS_Callback(ECSPI_Type *base, ecspi_master_handle_t *drv_handle, status_t status, void *userData)
 {
     ecspi_rtos_handle_t *handle = (ecspi_rtos_handle_t *)userData;
-    BaseType_t reschedule;
+    BaseType_t reschedule = pdFALSE;
     handle->async_status = status;
     (void)xSemaphoreGiveFromISR(handle->event, &reschedule);
     portYIELD_FROM_ISR(reschedule);

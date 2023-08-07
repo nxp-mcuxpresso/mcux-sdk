@@ -1,0 +1,5 @@
+<map id="MMA865x_I2C_ReadData" name="MMA865x_I2C_ReadData">
+<area shape="rect" id="node2" href="$a00272.html#a5d3041f4d19c196fdf3d7b4df9856347" title="Function to apply MMA8652 register read operation. " alt="" coords="231,5,365,32"/>
+<area shape="rect" id="node3" href="$a00272.html#ad9f705b424facbad9e2c2130e245b45c" title="Function to apply MMA8652 register read&#45;all operation. " alt="" coords="224,56,372,83"/>
+<area shape="rect" id="node4" href="$a00944.html#a840291bc02cba5474a4cb46a9b9566fe" title="Main function. " alt="" coords="273,107,323,133"/>
+</map>

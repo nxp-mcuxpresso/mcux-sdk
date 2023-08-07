@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 NXP
+ * Copyright 2018-2021, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -48,6 +48,16 @@ static inline status_t translate_iap_status(uint32_t status);
  */
 static inline void iap_entry(uint32_t *cmd_param, uint32_t *status_result);
 
+/*!
+ * @brief IAP_ENTRY API function type.
+ *
+ * Wrapper for rom iap call, but doesn't disable global interrupt.
+ *
+ * @param cmd_param IAP command and relevant parameter array.
+ * @param status_result IAP status result array.
+ */
+static inline void iap_entry_no_disable_irq(uint32_t *cmd_param, uint32_t *status_result);
+
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -73,6 +83,11 @@ static inline void iap_entry(uint32_t *cmd_param, uint32_t *status_result)
     __disable_irq();
     ((IAP_ENTRY_T)FSL_FEATURE_SYSCON_IAP_ENTRY_LOCATION)(cmd_param, status_result);
     __enable_irq();
+}
+
+static inline void iap_entry_no_disable_irq(uint32_t *cmd_param, uint32_t *status_result)
+{
+    ((IAP_ENTRY_T)FSL_FEATURE_SYSCON_IAP_ENTRY_LOCATION)(cmd_param, status_result);
 }
 
 /*!
@@ -159,7 +174,7 @@ void IAP_ReinvokeISP(uint8_t ispType, uint32_t *status)
     ispParameterArray[7] = ispParameterArray[0] ^ ispParameterArray[1] ^ ispParameterArray[2] ^ ispParameterArray[3] ^
                            ispParameterArray[4] ^ ispParameterArray[5] ^ ispParameterArray[6];
     command[1] = (uint32_t)ispParameterArray;
-    iap_entry(command, result);
+    iap_entry_no_disable_irq(command, result);
     *status = (uint32_t)translate_iap_status(result[0]);
 #else
     uint32_t command[5] = {0x00U};
@@ -167,7 +182,7 @@ void IAP_ReinvokeISP(uint8_t ispType, uint32_t *status)
 
     command[0] = (uint32_t)kIapCmd_IAP_ReinvokeISP;
     command[1] = (uint32_t)ispType;
-    iap_entry(command, result);
+    iap_entry_no_disable_irq(command, result);
     *status             = (uint32_t)translate_iap_status(result[0]);
 #endif
 }
@@ -283,14 +298,15 @@ status_t IAP_PrepareSectorForWrite(uint32_t startSector, uint32_t endSector)
  * @brief Copy RAM to flash.
  *
  * This function programs the flash memory. Corresponding sectors must be prepared via IAP_PrepareSectorForWrite before
- * calling this function. The addresses should be a 256 byte boundary and the number of bytes should be 256 | 512 |
- * 1024 | 4096.
+ * calling this function. 
  *
- * @param dstAddr Destination flash address where data bytes are to be written.
+ * @param dstAddr Destination flash address where data bytes are to be written, the address should be multiples 
+ *      of FSL_FEATURE_SYSCON_FLASH_PAGE_SIZE_BYTES boundary.
  * @param srcAddr Source ram address from where data bytes are to be read.
- * @param numOfBytes Number of bytes to be written.
+ * @param numOfBytes Number of bytes to be written, it should be multiples of FSL_FEATURE_SYSCON_FLASH_PAGE_SIZE_BYTES, 
+ *      and ranges from FSL_FEATURE_SYSCON_FLASH_PAGE_SIZE_BYTES to FSL_FEATURE_SYSCON_FLASH_SECTOR_SIZE_BYTES.
  * @param systemCoreClock SystemCoreClock in Hz. It is converted to KHz before calling the rom IAP function. When the
- * flash controller has a fixed reference clock, this parameter is bypassed.
+ *      flash controller has a fixed reference clock, this parameter is bypassed.
  *
  * @retval kStatus_IAP_Success Api has been executed successfully.
  * @retval kStatus_IAP_NoPower Flash memory block is powered down.

@@ -54,10 +54,10 @@
 /*! @brief Indicates whether the secondary flash is supported in the Flash driver */
 #if defined(FSL_FEATURE_FLASH_HAS_MULTIPLE_FLASH) || defined(FSL_FEATURE_FLASH_PFLASH_1_START_ADDRESS)
 #define FTFx_DRIVER_HAS_FLASH1_SUPPORT (1U)
-#define FTFx_FLASH_COUNT (2U)
+#define FTFx_FLASH_COUNT               (2U)
 #else
 #define FTFx_DRIVER_HAS_FLASH1_SUPPORT (0U)
-#define FTFx_FLASH_COUNT (1U)
+#define FTFx_FLASH_COUNT               (1U)
 #endif
 
 /*!

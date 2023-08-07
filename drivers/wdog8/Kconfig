@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_wdog8
+config MCUX_HAS_driver_wdog8
+    bool
+
+config MCUX_USE_driver_wdog8
+    depends on MCUX_HAS_driver_wdog8
+    bool "WDOG Driver"
+    select MCUX_USE_driver_common
+    help
+      WDOG Driver

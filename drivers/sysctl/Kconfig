@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_sysctl
+config MCUX_HAS_driver_sysctl
+    bool
+
+config MCUX_USE_driver_sysctl
+    depends on MCUX_HAS_driver_sysctl
+    bool "SYSCTL Driver"
+    select MCUX_USE_driver_common
+    help
+      SYSCTL Driver

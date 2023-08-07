@@ -30,9 +30,9 @@ enum
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CAAM driver version. Version 2.2.1.
+/*! @brief CAAM driver version. Version 2.2.4.
  *
- * Current version: 2.2.1
+ * Current version: 2.2.4
  *
  * Change log:
  * - Version 2.0.0
@@ -64,8 +64,14 @@ enum
  *   - Added API for Blob functions and CRC
  * - Version 2.2.1
  *   - Fixed AES-CCM decrypt failing with TAG length bigger than 8 byte.
+ * - Version 2.2.2
+ *   - Modify RNG to not reseed with each request.
+ * - Version 2.2.3
+ *   - Fix DCACHE invalidation in CAAM_HASH_Finish().
+ * - Version 2.2.4
+ *   - Fix issue where the outputSize parameter of CAAM_HASH_Finish() has impact on hash calculation.
  */
-#define FSL_CAAM_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+#define FSL_CAAM_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
 /*@}*/
 
 /*! @brief CAAM callback function. */

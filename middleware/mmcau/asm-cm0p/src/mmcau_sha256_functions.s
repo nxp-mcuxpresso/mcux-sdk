@@ -548,7 +548,7 @@ repeat_next_blk:
     adds    r1, #1<<2                       @ move r0 by 4 bytes
     ldmia   r1!, {r2-r4}                    @ load sha256_reg_data[4-6] and move r0 by 12 bytes
     subs    r1, #1<<4                       @ move r0 back by 16 bytes
-    ldr     r1, [r0]                        @ load sha256_reg_data[3]
+    ldr     r1, [r1]                        @ load sha256_reg_data[3]
     ldr     r5, =MMCAU_PPB_DIRECT
     b       next_blk                        @ repeat next_blk
 

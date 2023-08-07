@@ -1,0 +1,16 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+if (MCUX_USE_BOARD_FRDMK32L3A6_CM0PLUS || MCUX_USE_BOARD_FRDMK32L3A6_CM4)
+
+config MCUX_BOARD
+    default "frdmk32l3a6"
+
+config MCUX_KIT
+    default "frdmk32l3a6"
+
+
+#### Board level drivers ####
+
+endif

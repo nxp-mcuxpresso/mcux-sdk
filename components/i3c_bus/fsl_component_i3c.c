@@ -1,6 +1,5 @@
 /*
- * Copyright 2020, 2022 NXP
- * All rights reserved.
+ * Copyright 2020, 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -552,8 +551,9 @@ status_t I3C_BusMasterSendCCC(i3c_device_t *masterDev, i3c_ccc_cmd_t *command)
  */
 status_t I3C_BusMasterResetDAA(i3c_device_t *masterDev, uint8_t slaveAddr)
 {
-    uint8_t addrStat;
     i3c_bus_t *i3cBus = masterDev->bus;
+    uint8_t addrStat;
+    status_t result;
 
     if (masterDev != masterDev->bus->currentMaster)
     {
@@ -572,7 +572,31 @@ status_t I3C_BusMasterResetDAA(i3c_device_t *masterDev, uint8_t slaveAddr)
     rstDaaCmd.destAddr = slaveAddr;
     rstDaaCmd.cmdId    = I3C_BUS_CCC_RSTDAA((slaveAddr != I3C_BUS_BROADCAST_ADDR));
 
-    return I3C_BusMasterSendCCC(masterDev, &rstDaaCmd);
+    result = I3C_BusMasterSendCCC(masterDev, &rstDaaCmd);
+    if (result == kStatus_Success)
+    {
+        if (slaveAddr != I3C_BUS_BROADCAST_ADDR)
+        {
+            /* Do not free current Controller's dynamic address. */
+            if (masterDev->info.dynamicAddr != slaveAddr)
+            {
+                I3C_BusSetAddrSlot(i3cBus, slaveAddr, kI3C_Bus_AddrSlot_Free);
+            }
+        }
+        else
+        {
+            for (uint8_t i = 0; i <= I3C_BUS_MAX_ADDR; i++)
+            {
+                addrStat = I3C_BusGetAddrSlotStatus(i3cBus, i);
+                if ((addrStat == (uint8_t)kI3C_Bus_AddrSlot_I3CDev) && (masterDev->info.dynamicAddr != i))
+                {
+                    I3C_BusSetAddrSlot(i3cBus, i, kI3C_Bus_AddrSlot_Free);
+                }
+            }
+        }
+    }
+
+    return result;
 }
 
 /*!

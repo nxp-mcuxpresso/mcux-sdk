@@ -1,0 +1,9 @@
+<map id="main" name="main">
+<area shape="rect" id="node2" href="$a04109.html#a4c84ccb952cb083367d7040cf9de3db8" title="BOARD_InitDebugConsole" alt="" coords="104,5,280,32"/>
+<area shape="rect" id="node3" href="$a00959.html#ga2c9fe54b6b84723fbaa590a6f4576966" title="Configures pin routing and optionally pin electrical features. " alt="" coords="133,56,251,83"/>
+<area shape="rect" id="node4" href="$a00530.html#ad43629969994e92bd3620e630bda24c8" title="Function to enable systicks framework. " alt="" coords="113,107,271,133"/>
+<area shape="rect" id="node5" href="$a00065.html#adc8ae229a44c0a20d100948b37627f55" title="The interface function to configure he sensor. " alt="" coords="108,157,276,184"/>
+<area shape="rect" id="node6" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="328,233,389,260"/>
+<area shape="rect" id="node7" href="$a00065.html#ac6e9e086c62c58d5a225a89a7abbe9ce" title="The interface function to initialize the sensor. " alt="" coords="111,259,273,285"/>
+<area shape="rect" id="node8" href="$a00065.html#ad01e593a8d907f415e370c4dbb8b85c6" title="The interface function to read the sensor data. " alt="" coords="107,309,277,336"/>
+</map>

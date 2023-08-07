@@ -27,8 +27,8 @@
  * @{
  */
 
-/*! @brief DMIC DMA driver version 2.3.1 */
-#define FSL_DMIC_DMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+/*! @brief DMIC DMA driver version 2.4.0 */
+#define FSL_DMIC_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*@}*/
 
 /*! @brief DMIC transfer structure. */
@@ -62,6 +62,8 @@ struct _dmic_dma_handle
     void *userData;                        /*!< DMIC callback function parameter.*/
     size_t transferSize;                   /*!< Size of the data to receive. */
     volatile uint8_t state;                /*!< Internal state of DMIC DMA transfer */
+    uint32_t channel;                      /*!< DMIC channel used. */
+    bool isChannelValid;                   /*!< DMIC channel initialization flag*/
 
     dma_descriptor_t *desLink; /*!< descriptor pool pointer */
     size_t linkNum;            /*!< number of descriptor in descriptors pool */

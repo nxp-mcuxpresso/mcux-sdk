@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.3.6. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 6))
+/*! @brief CLOCK driver version 2.3.7. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 7))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -895,7 +895,7 @@ typedef enum _clock_div_name
 
     kCLOCK_DivFro1mClk = 40, /*!< Fro1m Clock Divider. */
 
-    kCLOCK_DivMClk = 43, /*!< Main Clock Divider. */
+    kCLOCK_DivMClk = 43, /*!< I2S MCLK Clock Divider. */
 
     kCLOCK_DivSctClk = 45, /*!< Sct Clock Divider. */
 

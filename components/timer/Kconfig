@@ -1,0 +1,112 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# component_ctimer_adapter
+config MCUX_HAS_component_ctimer_adapter
+    bool
+
+config MCUX_USE_component_ctimer_adapter
+    depends on MCUX_HAS_component_ctimer_adapter
+    bool "Component ctimer_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_ctimer
+    help
+      Component ctimer_adapter
+
+# component_ftm_adapter
+config MCUX_HAS_component_ftm_adapter
+    bool
+
+config MCUX_USE_component_ftm_adapter
+    depends on MCUX_HAS_component_ftm_adapter
+    bool "Component ftm_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_ftm
+    help
+      Component ftm_adapter
+
+# component_gpt_adapter
+config MCUX_HAS_component_gpt_adapter
+    bool
+
+config MCUX_USE_component_gpt_adapter
+    depends on MCUX_HAS_component_gpt_adapter
+    bool "Component gpt_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_gpt
+    help
+      Component gpt_adapter
+
+# component_lpit_adapter
+config MCUX_HAS_component_lpit_adapter
+    bool
+
+config MCUX_USE_component_lpit_adapter
+    depends on MCUX_HAS_component_lpit_adapter
+    bool "Component lpit_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_lpit
+    help
+      Component lpit_adapter
+
+# component_lptmr_adapter
+config MCUX_HAS_component_lptmr_adapter
+    bool
+
+config MCUX_USE_component_lptmr_adapter
+    depends on MCUX_HAS_component_lptmr_adapter
+    bool "Component lptmr_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_lptmr
+    help
+      Component lptmr_adapter
+
+# component_mrt_adapter
+config MCUX_HAS_component_mrt_adapter
+    bool
+
+config MCUX_USE_component_mrt_adapter
+    depends on MCUX_HAS_component_mrt_adapter
+    bool "Component mrt_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_mrt
+    help
+      Component mrt_adapter
+
+# component_pit_adapter
+config MCUX_HAS_component_pit_adapter
+    bool
+
+config MCUX_USE_component_pit_adapter
+    depends on MCUX_HAS_component_pit_adapter
+    bool "Component pit_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_pit
+    help
+      Component pit_adapter
+
+# component_tpm_adapter
+config MCUX_HAS_component_tpm_adapter
+    bool
+
+config MCUX_USE_component_tpm_adapter
+    depends on MCUX_HAS_component_tpm_adapter
+    bool "Component tpm_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_tpm
+    help
+      Component tpm_adapter
+
+# component_ostimer_adapter
+config MCUX_HAS_component_ostimer_adapter
+    bool
+
+config MCUX_USE_component_ostimer_adapter
+    depends on MCUX_HAS_component_ostimer_adapter
+    bool "Component ostimer_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_ostimer
+    help
+      Component ostimer_adapter

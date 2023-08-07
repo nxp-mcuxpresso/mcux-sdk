@@ -1,0 +1,6 @@
+<map id="FXLS8471Q_Read" name="FXLS8471Q_Read">
+<area shape="rect" id="node2" href="$a00911.html#ae7d2343e9a63bd3879ae477ec4536f6a" title="addToFifo is called from within sensor driver read functions " alt="" coords="206,5,285,32"/>
+<area shape="rect" id="node3" href="$a00911.html#a2686eeb8ae44e588362478db1f757a0e" title="conditionSample ensures that we never encounter the maximum negative two&#39;s complement value for a 16&#45;..." alt="" coords="186,56,305,83"/>
+<area shape="rect" id="node4" href="$a00182.html#aa75349faed7c77807cb88d9224aa2636" title="Read register data from a sensor. " alt="" coords="182,107,309,133"/>
+<area shape="rect" id="node5" href="$a00188.html#a77509913bc008bceacf1e5f500e7499d" title="Read register data from a sensor. " alt="" coords="181,157,309,184"/>
+</map>

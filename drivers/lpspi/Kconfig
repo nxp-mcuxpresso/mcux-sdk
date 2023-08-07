@@ -1,0 +1,26 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_lpspi
+config MCUX_HAS_driver_lpspi
+    bool
+
+config MCUX_USE_driver_lpspi
+    depends on MCUX_HAS_driver_lpspi
+    bool "LPSPI Driver"
+    select MCUX_USE_driver_common
+    help
+      LPSPI Driver
+
+# driver_lpspi_edma
+config MCUX_HAS_driver_lpspi_edma
+    bool
+
+config MCUX_USE_driver_lpspi_edma
+    depends on MCUX_HAS_driver_lpspi_edma
+    bool "LPSPI Edma Driver"
+    select MCUX_USE_driver_lpspi
+    help
+      LPSPI Driver

@@ -1,0 +1,201 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_USE_SOC_K32L2A41A
+    bool
+    select MCUX_CPU_ARCH_ARM_CM0P
+if MCUX_USE_SOC_K32L2A41A
+
+# Part Number
+config MCUX_SOC_PART_K32L2A41xxxxA
+    bool
+
+config MCUX_DEVICE
+    default "K32L2A41A"
+
+config MCUX_DEVICE_ID
+    default "K32L2A41xxxxA" if MCUX_SOC_PART_K32L2A41xxxxA
+
+
+# Select supported components
+config MCUX_USE_SOC_K32L2A41A
+    select MCUX_HAS_CMSIS_DSP_Include
+    select MCUX_HAS_CMSIS_DSP_Source
+    select MCUX_HAS_CMSIS_Device_API_OSTick
+    select MCUX_HAS_CMSIS_Device_API_RTOS2
+    select MCUX_HAS_CMSIS_Driver_Include_CAN
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet_MAC
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet_PHY
+    select MCUX_HAS_CMSIS_Driver_Include_Flash
+    select MCUX_HAS_CMSIS_Driver_Include_I2C
+    select MCUX_HAS_CMSIS_Driver_Include_MCI
+    select MCUX_HAS_CMSIS_Driver_Include_NAND
+    select MCUX_HAS_CMSIS_Driver_Include_SAI
+    select MCUX_HAS_CMSIS_Driver_Include_SPI
+    select MCUX_HAS_CMSIS_Driver_Include_USART
+    select MCUX_HAS_CMSIS_Driver_Include_USB_Device
+    select MCUX_HAS_CMSIS_Driver_Include_USB_Host
+    select MCUX_HAS_CMSIS_Driver_Include_WiFi
+    select MCUX_HAS_CMSIS_Include_core_cm
+    select MCUX_HAS_CMSIS_NN_Source
+    select MCUX_HAS_CMSIS_RTOS2_NonSecure
+    select MCUX_HAS_CMSIS_RTOS2_Secure
+    select MCUX_HAS_component_gpio_adapter
+    select MCUX_HAS_component_lists
+    select MCUX_HAS_component_lpi2c_adapter
+    select MCUX_HAS_component_lpit_adapter
+    select MCUX_HAS_component_lpspi_adapter
+    select MCUX_HAS_component_lptmr_adapter
+    select MCUX_HAS_component_lpuart_adapter
+    select MCUX_HAS_component_lpuart_dma_adapter
+    select MCUX_HAS_component_serial_manager
+    select MCUX_HAS_component_serial_manager_spi
+    select MCUX_HAS_component_serial_manager_uart
+    select MCUX_HAS_component_tpm_adapter
+    select MCUX_HAS_driver_adc16
+    select MCUX_HAS_driver_cmp
+    select MCUX_HAS_driver_cmsis_lpi2c
+    select MCUX_HAS_driver_cmsis_lpspi
+    select MCUX_HAS_driver_cmsis_lpuart
+    select MCUX_HAS_driver_common
+    select MCUX_HAS_driver_crc
+    select MCUX_HAS_driver_dac
+    select MCUX_HAS_driver_dmamux
+    select MCUX_HAS_driver_edma
+    select MCUX_HAS_driver_flash
+    select MCUX_HAS_driver_flexio
+    select MCUX_HAS_driver_flexio_camera
+    select MCUX_HAS_driver_flexio_camera_edma
+    select MCUX_HAS_driver_flexio_i2c_master
+    select MCUX_HAS_driver_flexio_i2s
+    select MCUX_HAS_driver_flexio_i2s_edma
+    select MCUX_HAS_driver_flexio_mculcd
+    select MCUX_HAS_driver_flexio_mculcd_edma
+    select MCUX_HAS_driver_flexio_spi
+    select MCUX_HAS_driver_flexio_spi_edma
+    select MCUX_HAS_driver_flexio_uart
+    select MCUX_HAS_driver_flexio_uart_edma
+    select MCUX_HAS_driver_gpio
+    select MCUX_HAS_driver_intmux
+    select MCUX_HAS_driver_llwu
+    select MCUX_HAS_driver_lpi2c
+    select MCUX_HAS_driver_lpi2c_edma
+    select MCUX_HAS_driver_lpi2c_freertos
+    select MCUX_HAS_driver_lpit
+    select MCUX_HAS_driver_lpspi
+    select MCUX_HAS_driver_lpspi_edma
+    select MCUX_HAS_driver_lpspi_freertos
+    select MCUX_HAS_driver_lptmr
+    select MCUX_HAS_driver_lpuart
+    select MCUX_HAS_driver_lpuart_edma
+    select MCUX_HAS_driver_lpuart_freertos
+    select MCUX_HAS_driver_mmdvsq
+    select MCUX_HAS_driver_pmc
+    select MCUX_HAS_driver_port
+    select MCUX_HAS_driver_rcm
+    select MCUX_HAS_driver_rtc
+    select MCUX_HAS_driver_sim
+    select MCUX_HAS_driver_smartcard_emvsim
+    select MCUX_HAS_driver_smartcard_phy_emvsim
+    select MCUX_HAS_driver_smc
+    select MCUX_HAS_driver_tpm
+    select MCUX_HAS_driver_trgmux
+    select MCUX_HAS_driver_trng
+    select MCUX_HAS_driver_tsi_v4
+    select MCUX_HAS_driver_tstmr
+    select MCUX_HAS_driver_vref
+    select MCUX_HAS_driver_wdog32
+    select MCUX_HAS_utilities_misc_utilities
+    select MCUX_HAS_utility_assert
+    select MCUX_HAS_utility_assert_lite
+    select MCUX_HAS_utility_debug_console
+    select MCUX_HAS_utility_debug_console_lite
+    select MCUX_HAS_utility_notifier
+    select MCUX_HAS_utility_shell
+    select MCUX_HAS_utility_str
+
+#### SOC specific dependency ####
+config MCUX_USE_RTE_Device
+    bool
+    select MCUX_USE_driver_dmamux
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_component_serial_manager_uart
+    bool
+    select MCUX_USE_component_lpuart_adapter
+
+config MCUX_USE_driver_cmsis_lpi2c
+    bool
+    select MCUX_USE_driver_lpi2c_edma
+
+config MCUX_USE_driver_cmsis_lpspi
+    bool
+    select MCUX_USE_driver_lpspi_edma
+
+config MCUX_USE_driver_cmsis_lpuart
+    bool
+    select MCUX_USE_driver_lpuart_edma
+
+config MCUX_USE_driver_flexio_camera_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_flexio_i2s_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_flexio_mculcd_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_flexio_spi_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_flexio_uart_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_lpi2c_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_lpspi_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_driver_lpuart_edma
+    bool
+    select MCUX_USE_driver_edma
+
+config MCUX_USE_utility_debug_console_lite
+    bool
+    select MCUX_USE_component_lpuart_adapter
+
+
+#### SOC level drivers ####
+# device_K32L2A41A_CMSIS
+config MCUX_USE_device_K32L2A41A_CMSIS
+    bool "Device K32L2A41A_cmsis"
+    select MCUX_USE_CMSIS_Include_core_cm
+    help
+      Device K32L2A41A_cmsis
+
+# device_K32L2A41A_startup
+config MCUX_USE_device_K32L2A41A_startup
+    bool "Device K32L2A41A_startup"
+    help
+      Device K32L2A41A_startup
+
+# device_K32L2A41A_system
+config MCUX_USE_device_K32L2A41A_system
+    bool "Device K32L2A41A_system"
+    help
+      Device K32L2A41A_system
+
+rsource "drivers/Kconfig"
+
+endif # MCUX_USE_SOC_K32L2A41A

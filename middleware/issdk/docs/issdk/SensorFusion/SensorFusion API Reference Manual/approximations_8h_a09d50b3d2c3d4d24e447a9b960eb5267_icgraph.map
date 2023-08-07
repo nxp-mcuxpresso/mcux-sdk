@@ -1,0 +1,18 @@
+<map id="fatan_deg" name="fatan_deg">
+<area shape="rect" id="node2" href="$approximations_8h.html#a084fe0ff189767dca40fbe330d7394f0" title="facos_deg" alt="" coords="134,447,215,474"/>
+<area shape="rect" id="node10" href="$orientation_8h.html#a13cd93780206a620abc7bdf7907e6dc6" title="extract the Windows 8 angles in degrees from the Windows 8 rotation matrix " alt="" coords="273,541,469,583"/>
+<area shape="rect" id="node11" href="$approximations_8h.html#a956336cb9e7270c6cfbf667b1075c063" title="fasin_deg" alt="" coords="136,397,213,423"/>
+<area shape="rect" id="node17" href="$approximations_8h.html#aebfdfbd2df0fe4472f9861b0738bb410" title="fatan2_deg" alt="" coords="132,498,217,525"/>
+<area shape="rect" id="node3" href="$orientation_8h.html#a77eeda9a699b1456bb8b02665ad80522" title="extract the Android angles in degrees from the Android rotation matrix " alt="" coords="265,411,476,452"/>
+<area shape="rect" id="node9" href="$orientation_8h.html#aa781ea4b9430531df4697d3cb39f7454" title="extract the NED angles in degrees from the NED rotation matrix " alt="" coords="274,476,467,517"/>
+<area shape="rect" id="node4" href="$fusion_8h.html#a7b5db1923cfa0dc160016e7d9b45b1c2" title="fRun_3DOF_G_BASIC" alt="" coords="537,577,689,603"/>
+<area shape="rect" id="node5" href="$fusion_8h.html#a2df5be5795338038774a64b41cf53a8e" title="fRun_3DOF_B_BASIC" alt="" coords="538,425,689,451"/>
+<area shape="rect" id="node6" href="$fusion_8h.html#a288f51cd39aeb8ace643d844e219e9d3" title="fRun_3DOF_Y_BASIC" alt="" coords="538,526,689,553"/>
+<area shape="rect" id="node7" href="$fusion_8h.html#a34c550860d0e4e42bf22a2a3527043b9" title="fRun_6DOF_GB_BASIC" alt="" coords="758,323,919,350"/>
+<area shape="rect" id="node8" href="$fusion_8h.html#a942d619f897d6820d5c148bdc910f962" title="fRun_6DOF_GY_KALMAN" alt="" coords="751,222,927,249"/>
+<area shape="rect" id="node12" href="$orientation_8h.html#a43ad72cf13f54b0f96355bb7005b6872" title="Android: basic 6DOF e&#45;Compass function, computing rotation matrix fR and magnetic inclination angle f..." alt="" coords="305,222,436,249"/>
+<area shape="rect" id="node15" href="$orientation_8h.html#afcde979fba0bcae15591096fe68648c9" title="NED: basic 6DOF e&#45;Compass function, computing rotation matrix fR and magnetic inclination angle fDelt..." alt="" coords="313,121,428,147"/>
+<area shape="rect" id="node16" href="$orientation_8h.html#aabc044b27a0cdd7db677c3203b77de90" title="Win8: basic 6DOF e&#45;Compass function, computing rotation matrix fR and magnetic inclination angle fDel..." alt="" coords="312,70,429,97"/>
+<area shape="rect" id="node13" href="$fusion_8h.html#ab5f459ab0c8c9b4123e2fb33f5061332" title="fInit_6DOF_GB_BASIC" alt="" coords="536,121,691,147"/>
+<area shape="rect" id="node14" href="$fusion_8h.html#a5627f82d4cbb9af1102d10ad1bea3699" title="fInit_9DOF_GBY_KALMAN" alt="" coords="524,70,703,97"/>
+</map>

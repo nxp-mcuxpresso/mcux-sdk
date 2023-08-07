@@ -1,0 +1,19 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_BOARD
+    string
+
+config MCUX_KIT
+    string
+
+choice
+prompt "Select Board"
+rsource "./*/Kconfig.board"
+endchoice
+
+menu "Board Configuration"
+rsource "./*/Kconfig"
+endmenu

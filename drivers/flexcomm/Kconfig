@@ -1,0 +1,20 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_flexcomm
+config MCUX_HAS_driver_flexcomm
+    bool
+
+config MCUX_USE_driver_flexcomm
+    depends on MCUX_HAS_driver_flexcomm
+    bool "FLEXCOMM Driver"
+    select MCUX_USE_driver_common
+    help
+      FLEXCOMM Driver
+
+rsource "./i2c/Kconfig"
+rsource "./i2s/Kconfig"
+rsource "./spi/Kconfig"
+rsource "./usart/Kconfig"

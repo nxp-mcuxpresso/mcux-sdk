@@ -41,14 +41,11 @@ static void CS42448_DelayMs(uint32_t ms);
  ******************************************************************************/
 static void CS42448_DelayMs(uint32_t ms)
 {
-    uint32_t i = 0U, j = 0U;
+    uint32_t i = 0U;
 
     for (i = 0U; i < ms; i++)
     {
-        for (j = 0U; j < CS42448_MS_COUNTER; j++)
-        {
-            __NOP();
-        }
+        SDK_DelayAtLeastUs(1000U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
     }
 }
 status_t CS42448_Init(cs42448_handle_t *handle, cs42448_config_t *config)

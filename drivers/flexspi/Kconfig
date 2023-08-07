@@ -1,0 +1,37 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_flexspi_edma
+config MCUX_HAS_driver_flexspi_edma
+    bool
+
+config MCUX_USE_driver_flexspi_edma
+    depends on MCUX_HAS_driver_flexspi_edma
+    bool "FLEXSPI EDMA Driver"
+    select MCUX_USE_driver_flexspi
+    help
+      FLEXSPI Driver
+
+# driver_flexspi
+config MCUX_HAS_driver_flexspi
+    bool
+
+config MCUX_USE_driver_flexspi
+    depends on MCUX_HAS_driver_flexspi
+    bool "FLEXSPI Driver"
+    select MCUX_USE_driver_common
+    help
+      FLEXSPI Driver
+
+# driver_flexspi_dma
+config MCUX_HAS_driver_flexspi_dma
+    bool
+
+config MCUX_USE_driver_flexspi_dma
+    depends on MCUX_HAS_driver_flexspi_dma
+    bool "FLEXSPI DMA Driver"
+    select MCUX_USE_driver_flexspi
+    help
+      FLEXSPI DMA Driver

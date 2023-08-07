@@ -1,0 +1,5 @@
+<map id="initializeSensors" name="initializeSensors">
+<area shape="rect" id="node2" href="$a00851.html#afe116134dc1e5109171e81bab6c2afd8" title="Apply the accelerometer Hardware Abstraction Layer. " alt="" coords="180,5,293,32"/>
+<area shape="rect" id="node3" href="$a00905.html#a3aa550d5d9b592df3fd8b10c97c07d98" title="function maps the accelerometer data fGs (g) onto precision calibrated and de&#45;rotated data fGc (g)..." alt="" coords="183,56,290,83"/>
+<area shape="rect" id="node4" href="$a00905.html#a012ad7adb564defb7170c246cdb86b04" title="Update the buffer used to store samples used for accelerometer calibration. " alt="" coords="171,107,303,133"/>
+</map>

@@ -8,6 +8,15 @@
 
 #include "fsl_lpuart.h"
 
+/*
+ * $Coverage Justification Reference$
+ *
+ * $Justification fsl_lpuart_c_ref_1$
+ * (osr > 3) (false) can't be not covered, because osr(osrTemp) is increased from 4U.
+ *
+ * $Justification fsl_lpuart_c_ref_2$
+ * The flag is cleared successfully during test.
+ */
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -105,6 +114,9 @@ static void LPUART_TransferHandleTransmissionComplete(LPUART_Type *base, lpuart_
 /*******************************************************************************
  * Variables
  ******************************************************************************/
+#if defined(LPUART_BASE_PTRS_NS)
+static LPUART_Type *const s_lpuartBases_ns[] = LPUART_BASE_PTRS_NS;
+#endif
 /* Array of LPUART peripheral base address. */
 static LPUART_Type *const s_lpuartBases[] = LPUART_BASE_PTRS;
 /* Array of LPUART handle. */
@@ -153,11 +165,22 @@ uint32_t LPUART_GetInstance(LPUART_Type *base)
     {
         if (s_lpuartBases[instance] == base)
         {
-            break;
+            return instance;
         }
     }
-
+#if defined(LPUART_BASE_PTRS_NS)
+    /* Find the instance index from base address mappings. */
+    for (instance = 0U; instance < ARRAY_SIZE(s_lpuartBases_ns); instance++)
+    {
+        if (s_lpuartBases_ns[instance] == base)
+        {
+            return instance;
+        }
+    }
+    assert(instance < ARRAY_SIZE(s_lpuartBases_ns));
+#else
     assert(instance < ARRAY_SIZE(s_lpuartBases));
+#endif
 
     return instance;
 }
@@ -307,6 +330,14 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
         {
             sbrTemp = 1U;
         }
+		else if (sbrTemp > LPUART_BAUD_SBR_MASK)
+        {
+            sbrTemp = LPUART_BAUD_SBR_MASK;
+        }
+        else
+        {
+            /* Avoid MISRA 15.7 */
+        }
         /* Calculate the baud rate based on the temporary OSR and SBR values */
         calculatedBaud = (srcClock_Hz / ((uint32_t)osrTemp * (uint32_t)sbrTemp));
         tempDiff       = calculatedBaud > config->baudRate_Bps ? (calculatedBaud - config->baudRate_Bps) :
@@ -353,6 +384,10 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
 
         /* Acceptable baud rate, check if OSR is between 4x and 7x oversampling.
          * If so, then "BOTHEDGE" sampling must be turned on */
+        /*
+         * $Branch Coverage Justification$
+         * $ref fsl_lpuart_c_ref_1$
+         */
         if ((osr > 3U) && (osr < 8U))
         {
             temp |= LPUART_BAUD_BOTHEDGE_MASK;
@@ -623,6 +658,14 @@ status_t LPUART_SetBaudRate(LPUART_Type *base, uint32_t baudRate_Bps, uint32_t s
         {
             sbrTemp = 1U;
         }
+        else if (sbrTemp > LPUART_BAUD_SBR_MASK)
+        {
+            sbrTemp = LPUART_BAUD_SBR_MASK;
+        }
+        else
+        {
+            /* Avoid MISRA 15.7 */
+        }
         /* Calculate the baud rate based on the temporary OSR and SBR values */
         calculatedBaud = srcClock_Hz / ((uint32_t)osrTemp * (uint32_t)sbrTemp);
 
@@ -650,6 +693,10 @@ status_t LPUART_SetBaudRate(LPUART_Type *base, uint32_t baudRate_Bps, uint32_t s
 
         /* Acceptable baud rate, check if OSR is between 4x and 7x oversampling.
          * If so, then "BOTHEDGE" sampling must be turned on */
+        /*
+         * $Branch Coverage Justification$
+         * $ref fsl_lpuart_c_ref_1$
+         */
         if ((osr > 3U) && (osr < 8U))
         {
             temp |= LPUART_BAUD_BOTHEDGE_MASK;
@@ -1055,6 +1102,10 @@ status_t LPUART_ReadBlocking(LPUART_Type *base, uint8_t *data, size_t length)
 
             if (0U != (statusFlag & (uint32_t)kLPUART_RxOverrunFlag))
             {
+                /*
+                 * $Branch Coverage Justification$
+                 * $ref fsl_lpuart_c_ref_2$.
+                 */
                 status = ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_RxOverrunFlag)) ?
                               (kStatus_LPUART_RxHardwareOverrun) :
                               (kStatus_LPUART_FlagCannotClearManually));
@@ -1065,6 +1116,10 @@ status_t LPUART_ReadBlocking(LPUART_Type *base, uint8_t *data, size_t length)
 
             if (0U != (statusFlag & (uint32_t)kLPUART_ParityErrorFlag))
             {
+                /*
+                 * $Branch Coverage Justification$
+                 * $ref fsl_lpuart_c_ref_2$.
+                 */
                 status = ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_ParityErrorFlag)) ?
                               (kStatus_LPUART_ParityError) :
                               (kStatus_LPUART_FlagCannotClearManually));
@@ -1072,6 +1127,10 @@ status_t LPUART_ReadBlocking(LPUART_Type *base, uint8_t *data, size_t length)
 
             if (0U != (statusFlag & (uint32_t)kLPUART_FramingErrorFlag))
             {
+                /*
+                 * $Branch Coverage Justification$
+                 * $ref fsl_lpuart_c_ref_2$.
+                 */
                 status = ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_FramingErrorFlag)) ?
                               (kStatus_LPUART_FramingError) :
                               (kStatus_LPUART_FlagCannotClearManually));
@@ -1079,6 +1138,10 @@ status_t LPUART_ReadBlocking(LPUART_Type *base, uint8_t *data, size_t length)
 
             if (0U != (statusFlag & (uint32_t)kLPUART_NoiseErrorFlag))
             {
+                /*
+                 * $Branch Coverage Justification$
+                 * $ref fsl_lpuart_c_ref_2$.
+                 */
                 status = ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_NoiseErrorFlag)) ?
                               (kStatus_LPUART_NoiseError) :
                               (kStatus_LPUART_FlagCannotClearManually));

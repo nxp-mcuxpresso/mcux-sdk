@@ -22,9 +22,9 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Defines LPC SHA driver version 2.3.1.
+/*! @brief Defines LPC SHA driver version 2.3.2.
  *
- * Current version: 2.3.1
+ * Current version: 2.3.2
  *
  * Change log:
  * - Version 2.0.0
@@ -49,8 +49,11 @@
  * - Version 2.3.1
  *	 Modified sha_process_message_data_master() to ensure that MEMCTRL will be written within 64 cycles of writing last
  *word to INDATA as is mentioned in errata, even with different optimization levels.
+ * - Version 2.3.2
+ *   Add -O2 optimization for GCC to sha_process_message_data_master(), because without it the function hangs under some
+ *conditions.
  */
-#define FSL_SHA_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+#define FSL_SHA_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
 /*! Supported cryptographic block cipher functions for HASH creation */
@@ -200,4 +203,4 @@ void SHA_ClkDeinit(SHA_Type *base);
 /*! @}*/
 /*! @}*/ /* end of group sha */
 
-#endif /* _FSL_SHA_H_ */
+#endif   /* _FSL_SHA_H_ */
