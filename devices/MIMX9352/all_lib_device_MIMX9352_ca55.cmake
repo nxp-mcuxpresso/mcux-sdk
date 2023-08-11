@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core_AArch64/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/adp5585
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy
@@ -29,6 +30,7 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 # Copy the cmake components into projects
+#    include(driver_adp5585)
 #    include(driver_lpi2c)
 #    include(driver_lpi2c_edma)
 #    include(driver_lpi2c_freertos)
