@@ -1,0 +1,5 @@
+<map id="SaveMagCalibrationToNVM" name="SaveMagCalibrationToNVM">
+<area shape="rect" id="node2" href="$DecodeCommandBytes_8c.html#a2d80b68d03de87c2d3cce67273f8a165" title="This function is responsible for decoding commands sent by the NXP Sensor Fusion Toolbox and setting ..." alt="" coords="232,31,391,57"/>
+<area shape="rect" id="node3" href="$control_8c.html#a4954d90ce002a3c089f4d19a4c862692" title="WIRELESS_UART_IRQHandler" alt="" coords="439,5,643,32"/>
+<area shape="rect" id="node4" href="$control_8c.html#a3dc36d292be101ea1070be615293d692" title="WIRED_UART_IRQHandler" alt="" coords="451,56,630,83"/>
+</map>

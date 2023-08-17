@@ -1,0 +1,17 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_cmsis_dspi
+config MCUX_HAS_driver_cmsis_dspi
+    bool
+
+config MCUX_USE_driver_cmsis_dspi
+    depends on MCUX_HAS_driver_cmsis_dspi
+    bool "DSPI CMSIS Driver"
+    select MCUX_USE_driver_dspi_edma
+    select MCUX_USE_CMSIS_Driver_Include_SPI
+    select MCUX_USE_RTE_Device
+    help
+      DSPI CMSIS Driver

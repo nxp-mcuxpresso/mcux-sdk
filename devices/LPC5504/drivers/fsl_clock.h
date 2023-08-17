@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.3.6. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 6))
+/*! @brief CLOCK driver version 2.3.7. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 7))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -61,9 +61,9 @@
         kCLOCK_Rom \
     }
 /*! @brief Clock ip name array for SRAM. */
-#define SRAM_CLOCKS                \
-    {                              \
-        kCLOCK_Sram1, kCLOCK_Sram2 \
+#define SRAM_CLOCKS                              \
+    {                                            \
+        kCLOCK_Sram1, kCLOCK_Sram2, kCLOCK_Sram3 \
     }
 /*! @brief Clock ip name array for FLASH. */
 #define FLASH_CLOCKS \
@@ -416,6 +416,8 @@ typedef enum _clock_ip_name
 
     kCLOCK_Comp = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 2), /*!< Clock gate name: Comp. */
 
+    kCLOCK_Sram3 = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 6), /*!< Clock gate name: Sram3. */
+
     kCLOCK_Freqme = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 8), /*!< Clock gate name: Freqme. */
 
     kCLOCK_Cdog = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 11), /*!< Clock gate name: Cdog. */
@@ -440,9 +442,9 @@ typedef enum _clock_ip_name
 
     kCLOCK_Hs_Lspi = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 28), /*!< Clock gate name: Lspi. */
 
-    kCLOCK_Gpio_Sec = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 29), /*!< Clock gate name: Sec. */
+    kCLOCK_Gpio_Sec = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 29), /*!< Clock gate name: GPIO Sec. */
 
-    kCLOCK_Gpio_Sec_Int = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 30) /*!< Clock gate name: GPIO SEC Int. */
+    kCLOCK_Gpio_Sec_Int = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 30) /*!< Clock gate name: Gpio Sec Int */
 } clock_ip_name_t;
 
 /*! @brief Peripherals clock source definition. */
@@ -897,7 +899,7 @@ typedef enum _clock_div_name
 
     kCLOCK_DivSctClk = 45, /*!< Sct Clock Divider. */
 
-    kCLOCK_DivPll0Clk = 49 /*!< PLL clock divider. */
+    kCLOCK_DivPll0Clk = 49 /*!< PLL0 clock divider. */
 } clock_div_name_t;
 
 /*******************************************************************************

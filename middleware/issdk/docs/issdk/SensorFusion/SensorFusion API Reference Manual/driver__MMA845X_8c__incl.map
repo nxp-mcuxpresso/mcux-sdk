@@ -1,0 +1,8 @@
+<map id="driver_MMA845X.c" name="driver_MMA845X.c">
+<area shape="rect" id="node3" href="$sensor__fusion_8h.html" title="The sensor_fusion.h file implements the top level programming interface. " alt="" coords="563,80,676,107"/>
+<area shape="rect" id="node18" href="$drivers_8h.html" title="Provides function prototypes for driver level interfaces. " alt="" coords="1248,80,1319,107"/>
+<area shape="rect" id="node11" href="$magnetic_8h.html" title="Lower level magnetic calibration interface. " alt="" coords="723,155,809,181"/>
+<area shape="rect" id="node12" href="$precisionAccelerometer_8h.html" title="Implements accelerometer calibration routines. " alt="" coords="833,155,1003,181"/>
+<area shape="rect" id="node13" href="$orientation_8h.html" title="Functions to convert between various orientation representations. " alt="" coords="1027,155,1121,181"/>
+<area shape="rect" id="node14" href="$matrix_8h.html" title="Matrix manipulation functions. " alt="" coords="1145,155,1214,181"/>
+</map>

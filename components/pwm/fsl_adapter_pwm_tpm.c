@@ -124,8 +124,8 @@ hal_pwm_status_t HAL_PwmUpdateDutycycle(hal_pwm_handle_t halPwmHandle,
     assert(channel <= (uint8_t)kTPM_Chnl_7);
     assert(halPwmState->instance < (sizeof(s_tpmBase) / sizeof(s_tpmBase[0])));
 
-    TPM_UpdatePwmDutycycle(s_tpmBase[halPwmState->instance], (tpm_chnl_t)channel, (tpm_pwm_mode_t)mode,
-                           dutyCyclePercent);
+    (void)TPM_UpdatePwmDutycycle(s_tpmBase[halPwmState->instance], (tpm_chnl_t)channel, (tpm_pwm_mode_t)mode,
+                                 dutyCyclePercent);
 
     return kStatus_HAL_PwmSuccess;
 }

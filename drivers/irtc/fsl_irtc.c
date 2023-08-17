@@ -115,10 +115,30 @@ status_t IRTC_Init(RTC_Type *base, const irtc_config_t *config)
             base->CTRL2 &= ~(uint16_t)RTC_CTRL2_WAKEUP_MODE_MASK;
         }
 #endif
-        /* Setup alarm match operation and sampling clock operation in standby mode */
+        /* Setup alarm match operation, sampling clock operation in standby mode, 16.384kHz RTC clock and selected clock outout to other peripherals */
         reg = base->CTRL;
-        reg &= ~((uint16_t)RTC_CTRL_TIMER_STB_MASK_MASK | (uint16_t)RTC_CTRL_ALM_MATCH_MASK);
-        reg |= (RTC_CTRL_TIMER_STB_MASK(config->timerStdMask) | RTC_CTRL_ALM_MATCH(config->alrmMatch));
+        reg &= ~(
+#if !defined(FSL_FEATURE_RTC_HAS_NO_TIMER_STB_MASK) || (!FSL_FEATURE_RTC_HAS_NO_TIMER_STB_MASK)
+               (uint16_t)RTC_CTRL_TIMER_STB_MASK_MASK |
+#endif
+#if defined(FSL_FEATURE_RTC_HAS_CLOCK_SELECT) && FSL_FEATURE_RTC_HAS_CLOCK_SELECT
+               (uint16_t)RTC_CTRL_CLK_SEL_MASK |
+#endif 
+#if defined(FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT_DISABLE) && FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT_DISABLE
+               (uint16_t)RTC_CTRL_CLKO_DIS_MASK |
+#endif
+               (uint16_t)RTC_CTRL_ALM_MATCH_MASK);
+        reg |= (
+#if !defined(FSL_FEATURE_RTC_HAS_NO_TIMER_STB_MASK) || (!FSL_FEATURE_RTC_HAS_NO_TIMER_STB_MASK)
+               RTC_CTRL_TIMER_STB_MASK(config->timerStdMask) |
+#endif
+#if defined(FSL_FEATURE_RTC_HAS_CLOCK_SELECT) && FSL_FEATURE_RTC_HAS_CLOCK_SELECT
+               RTC_CTRL_CLK_SEL(config->clockSelect) |
+#endif
+#if defined(FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT_DISABLE) && FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT_DISABLE
+               RTC_CTRL_CLKO_DIS(config->disableClockOutput) |
+#endif
+               RTC_CTRL_ALM_MATCH(config->alrmMatch));
         base->CTRL = reg;
     }
     else
@@ -152,11 +172,23 @@ void IRTC_GetDefaultConfig(irtc_config_t *config)
     config->wakeupSelect = true;
 #endif
 
+#if !defined(FSL_FEATURE_RTC_HAS_NO_TIMER_STB_MASK) || (!FSL_FEATURE_RTC_HAS_NO_TIMER_STB_MASK)
     /* Sampling clock are not gated when in standby mode */
     config->timerStdMask = false;
+#endif
 
     /* Only seconds, minutes and hours are matched when generating an alarm */
     config->alrmMatch = kRTC_MatchSecMinHr;
+
+#if defined(FSL_FEATURE_RTC_HAS_CLOCK_SELECT) && FSL_FEATURE_RTC_HAS_CLOCK_SELECT
+    /* 16.384kHz clock is selected */
+    config->clockSelect = kIRTC_Clk16K;
+#endif
+
+#if defined(FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT_DISABLE) && FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT_DISABLE
+    /* The selected clock is not output to other peripherals */
+    config->disableClockOutput = true;
+#endif
 }
 
 /*!
@@ -466,6 +498,8 @@ void IRTC_SetFineCompensation(RTC_Type *base, uint8_t integralValue, uint8_t fra
     base->CTRL |= (RTC_CTRL_COMP_EN_MASK | RTC_CTRL_FINEEN_MASK);
 }
 
+#if !defined(FSL_FEATURE_RTC_HAS_NO_TAMPER_FEATURE) || (!FSL_FEATURE_RTC_HAS_NO_TAMPER_FEATURE)
+
 /*!
  * brief This function allows configuring the four tamper inputs.
  *
@@ -574,6 +608,9 @@ void IRTC_SetTamperParams(RTC_Type *base, irtc_tamper_pins_t tamperNumber, const
     }
 }
 
+#endif
+
+#if !defined(FSL_FEATURE_RTC_HAS_NO_TAMPER_FEATURE) || (!FSL_FEATURE_RTC_HAS_NO_TAMPER_FEATURE)
 #if defined(FSL_FEATURE_RTC_HAS_TAMPER_QUEUE) && (FSL_FEATURE_RTC_HAS_TAMPER_QUEUE)
 
 /*!
@@ -621,6 +658,7 @@ uint8_t IRTC_ReadTamperQueue(RTC_Type *base, irtc_datetime_t *tamperTimestamp)
 }
 
 #endif /* FSL_FEATURE_RTC_HAS_TAMPER_QUEUE */
+#endif /* FSL_FEATURE_RTC_HAS_NO_TAMPER_FEATURE */
 
 /*!
  * brief Select which clock to output from RTC.
@@ -653,3 +691,27 @@ void IRTC_ConfigClockOut(RTC_Type *base, irtc_clockout_sel_t clkOut)
 
     base->CTRL = ctrlVal;
 }
+
+#if defined(FSL_FEATURE_RTC_HAS_CLOCK_SELECT) && FSL_FEATURE_RTC_HAS_CLOCK_SELECT
+
+/*!
+ * brief Select which clock is used by RTC.
+ *
+ * Select which clock is used by RTC to output to the peripheral
+ * and divided to generate a 512 Hz clock and a 1 Hz clock.
+ *
+ * param base IRTC peripheral base address
+ * param clkSelect select clock used by RTC
+ */
+void IRTC_ConfigClockSelect(RTC_Type *base, irtc_clock_select_t clkSelect)
+{
+    uint16_t ctrlVal = base->CTRL;
+
+    ctrlVal &= (uint16_t)(~RTC_CTRL_CLK_SEL_MASK);
+
+    ctrlVal |= RTC_CTRL_CLK_SEL((uint16_t)clkSelect);
+
+    base->CTRL = ctrlVal;
+}
+
+#endif /* FSL_FEATURE_RTC_HAS_CLOCK_SELECT */

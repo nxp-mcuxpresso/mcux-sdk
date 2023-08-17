@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 NXP
+ * Copyright 2017-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SEMC driver version. */
-#define FSL_SEMC_DRIVER_VERSION (MAKE_VERSION(2, 4, 3))
+#define FSL_SEMC_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
 /*@}*/
 
 /*! @brief SEMC status, _semc_status. */
@@ -499,18 +499,18 @@ typedef struct _semc_sram_config
     semc_addr_mode_t addrMode;             /*!< Address mode. */
     sem_norsram_burst_len_t burstLen;      /*!< Burst length. */
     smec_port_size_t portSize;             /*!< Port size. */
-#if defined(SEMC_SRAMCR4_SYNCEN_MASK) && (SEMC_SRAMCR4_SYNCEN_MASK)
+#if defined(FSL_FEATURE_SEMC_HAS_SRAM_SYNCEN) && (FSL_FEATURE_SEMC_HAS_SRAM_SYNCEN)
     semc_sync_mode_t syncMode; /*!< Sync mode. */
-#endif                         /* SEMC_SRAMCR4_SYNCEN_MASK */
-#if defined(SEMC_SRAMCR0_WAITEN_MASK) && (SEMC_SRAMCR0_WAITEN_MASK)
+#endif                         /* FSL_FEATURE_SEMC_HAS_SRAM_SYNCEN */
+#if defined(FSL_FEATURE_SEMC_HAS_SRAM_WAITEN) && (FSL_FEATURE_SEMC_HAS_SRAM_WAITEN)
     bool waitEnable; /*!< Wait enable. */
-#endif               /* SEMC_SRAMCR0_WAITEN_MASK */
-#if defined(SEMC_SRAMCR0_WAITSP_MASK) && (SEMC_SRAMCR0_WAITSP_MASK)
+#endif               /* FSL_FEATURE_SEMC_HAS_SRAM_WAITEN */
+#if defined(FSL_FEATURE_SEMC_HAS_SRAM_WAITSP) && (FSL_FEATURE_SEMC_HAS_SRAM_WAITSP)
     uint8_t waitSample; /*!< Wait sample. */
-#endif                  /* SEMC_SRAMCR0_WAITSP_MASK */
-#if defined(SEMC_SRAMCR4_ADVH_MASK) && (SEMC_SRAMCR4_ADVH_MASK)
+#endif                  /* FSL_FEATURE_SEMC_HAS_SRAM_WAITSP */
+#if defined(FSL_FEATURE_SEMC_HAS_SRAM_ADVH) && (FSL_FEATURE_SEMC_HAS_SRAM_ADVH)
     semc_adv_level_control_t advLevelCtrl; /*!< ADV# level control during address hold state, 1: low, 0: high. */
-#endif                                     /* SEMC_SRAMCR4_ADVH_MASK */
+#endif                                     /* FSL_FEATURE_SEMC_HAS_SRAM_ADVH */
     uint8_t tCeSetup_Ns;                   /*!< The CE setup time. */
     uint8_t tCeHold_Ns;                    /*!< The CE hold time. */
     uint8_t tCeInterval_Ns;                /*!< CE interval minimum time. */
@@ -566,8 +566,8 @@ typedef struct _semc_queuea_weight_struct
 {
     uint32_t qos : 4;              /*!< weight of qos for queue 0 . */
     uint32_t aging : 4;            /*!< weight of aging for queue 0.*/
-    uint32_t slaveHitSwith : 8;    /*!< weight of read/write switch for queue 0.*/
     uint32_t slaveHitNoswitch : 8; /*!< weight of read/write no switch for queue 0  .*/
+    uint32_t slaveHitSwitch : 8;   /*!< weight of read/write switch for queue 0.*/
 } semc_queuea_weight_struct_t;
 
 /*! @brief SEMC AXI queue a weight setting union. */
@@ -580,11 +580,11 @@ typedef union _semc_queuea_weight
 /*! @brief SEMC AXI queue b weight setting structure. */
 typedef struct _semc_queueb_weight_struct
 {
-    uint32_t qos : 4;           /*!< weight of qos for queue 1. */
-    uint32_t aging : 4;         /*!< weight of aging for queue 1.*/
-    uint32_t slaveHitSwith : 8; /*!< weight of read/write switch for queue 1.*/
-    uint32_t weightPagehit : 8; /*!< weight of page hit for queue 1 only .*/
-    uint32_t bankRotation : 8;  /*!< weight of bank rotation for queue 1 only .*/
+    uint32_t qos : 4;              /*!< weight of qos for queue 1. */
+    uint32_t aging : 4;            /*!< weight of aging for queue 1.*/
+    uint32_t weightPagehit : 8;    /*!< weight of page hit for queue 1 only .*/
+    uint32_t slaveHitNoswitch : 8; /*!< weight of read/write no switch for queue 1.*/
+    uint32_t bankRotation : 8;     /*!< weight of bank rotation for queue 1 only .*/
 } semc_queueb_weight_struct_t;
 
 /*! @brief SEMC AXI queue b weight setting union. */

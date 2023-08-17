@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -51,8 +51,18 @@ uint32_t LPIT_GetInstance(LPIT_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
+    /*
+     * $Branch Coverage Justification$
+     * (instance >= ARRAY_SIZE(s_lpitBases)) not covered. The peripheral base
+     * address is always valid and checked by assert.
+     */
     for (instance = 0U; instance < ARRAY_SIZE(s_lpitBases); instance++)
     {
+        /*
+         * $Branch Coverage Justification$
+         * (s_lpitBases[instance] != base) not covered. The peripheral base
+         * address is always valid and checked by assert.
+         */
         if (s_lpitBases[instance] == base)
         {
             break;

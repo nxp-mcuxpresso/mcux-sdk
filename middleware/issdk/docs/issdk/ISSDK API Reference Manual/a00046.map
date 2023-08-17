@@ -1,0 +1,8 @@
+<map id="sensors/fxls8471q.h" name="sensors/fxls8471q.h">
+<area shape="rect" id="node2" href="$a00050.html" title="The fxls8471q_drv.h file describes the fxls8471q driver interface and structures. ..." alt="" coords="5,95,167,121"/>
+<area shape="rect" id="node3" href="$a00803.html" title="Provides init() and read() functions for the FXLS8471Q 3&#45;axis accel. " alt="" coords="48,184,241,225"/>
+<area shape="rect" id="node4" href="$a04823.html" title="drivers/ads/lpc/auto\l_detection_service.c" alt="" coords="243,87,383,129"/>
+<area shape="rect" id="node5" href="$a04826.html" title="drivers/ads/kinetis\l/auto_detection_service.c" alt="" coords="407,87,576,129"/>
+<area shape="rect" id="node6" href="$a00542.html" title="The auto detection service file implements auto detection sequence for discovery of FRDM&#45;KL25Z Board ..." alt="" coords="600,80,759,136"/>
+<area shape="rect" id="node7" href="$a04829.html" title="drivers/ads/qn/auto\l_detection_service.c" alt="" coords="783,87,923,129"/>
+</map>

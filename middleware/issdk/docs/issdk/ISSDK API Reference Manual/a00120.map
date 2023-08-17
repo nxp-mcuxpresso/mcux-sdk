@@ -1,0 +1,5 @@
+<map id="sensors/mag3110_drv.h" name="sensors/mag3110_drv.h">
+<area shape="rect" id="node3" href="$a00113.html" title="mag3110.h" alt="" coords="32,80,119,107"/>
+<area shape="rect" id="node4" href="$a00185.html" title="The sensor_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regist..." alt="" coords="143,80,256,107"/>
+<area shape="rect" id="node5" href="$a00170.html" title="The register_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="187,155,305,181"/>
+</map>

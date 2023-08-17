@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_dac_1
+config MCUX_HAS_driver_dac_1
+    bool
+
+config MCUX_USE_driver_dac_1
+    depends on MCUX_HAS_driver_dac_1
+    bool "DAC Driver"
+    select MCUX_USE_driver_common
+    help
+      DAC Driver

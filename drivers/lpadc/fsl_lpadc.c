@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -50,8 +50,18 @@ static uint32_t LPADC_GetInstance(ADC_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
+    /*
+     * $Branch Coverage Justification$
+     * (instance >= ARRAY_SIZE(s_lpadcBases)) not covered. The peripheral base
+     * address is always valid and checked by assert.
+     */
     for (instance = 0; instance < ARRAY_SIZE(s_lpadcBases); instance++)
     {
+        /*
+         * $Branch Coverage Justification$
+         * (s_lpadcBases[instance] != base) not covered. The peripheral base
+         * address is always valid and checked by assert.
+         */
         if (s_lpadcBases[instance] == base)
         {
             break;
@@ -71,22 +81,23 @@ static uint32_t LPADC_GetInstance(ADC_Type *base)
  */
 static uint32_t LPADC_GetGainConvResult(float gainAdjustment)
 {
-    int8_t i          = 0;
+    uint16_t i        = 0U;
     uint32_t tmp32    = 0U;
     uint32_t GCRa[17] = {0};
     uint32_t GCALR    = 0U;
 
-    for (i = 0x10; i >= 0; i--)
+    for (i = 0x11U; i > 0U; i--)
     {
-        tmp32          = (uint32_t)((gainAdjustment) / ((float)(1.0 / (0x01 << (0x10 - i)))));
-        GCRa[i]        = tmp32;
-        gainAdjustment = gainAdjustment - ((float)tmp32) * ((float)(1.0 / (0x01 << (0x10 - i))));
+        tmp32          = (uint32_t)((gainAdjustment) / ((float)(1.0 / (double)(1U << (0x10U - (i - 1U))))));
+        GCRa[i - 1U]   = tmp32;
+        gainAdjustment = gainAdjustment - ((float)tmp32) * ((float)(1.0 / (double)(1U << (0x10U - (i - 1U)))));
     }
     /* Get GCALR value calculated */
-    for (i = 0x10; i >= 0; i--)
+    for (i = 0x11U; i > 0U; i--)
     {
-        GCALR += GCRa[i] * (0x01 << i);
+        GCALR += GCRa[i - 1U] * ((uint32_t)(1UL << (uint32_t)(i - 1UL)));
     }
+
 
     /* to return GCALR value calculated */
     return GCALR;
@@ -271,13 +282,12 @@ bool LPADC_GetConvResult(ADC_Type *base, lpadc_conv_result_t *result, uint8_t in
 {
     assert(result != NULL); /* Check if the input pointer is available. */
 
-    uint32_t tmp32;
+    uint32_t tmp32 = 0;
 
-    tmp32 = base->RESFIFO[index];
-
-    if (0U == (ADC_RESFIFO_VALID_MASK & tmp32))
+    while (0U == (ADC_RESFIFO_VALID_MASK & tmp32))
     {
-        return false; /* FIFO is empty. Discard any read from RESFIFO. */
+        /* while loop until FIFO is not empty */
+        tmp32 = base->RESFIFO[index];
     }
 
     result->commandIdSource = (tmp32 & ADC_RESFIFO_CMDSRC_MASK) >> ADC_RESFIFO_CMDSRC_SHIFT;
@@ -300,13 +310,12 @@ bool LPADC_GetConvResult(ADC_Type *base, lpadc_conv_result_t *result)
 {
     assert(result != NULL); /* Check if the input pointer is available. */
 
-    uint32_t tmp32;
+    uint32_t tmp32 = 0U;
 
-    tmp32 = base->RESFIFO;
-
-    if (0U == (ADC_RESFIFO_VALID_MASK & tmp32))
+    while (0U == (ADC_RESFIFO_VALID_MASK & tmp32))
     {
-        return false; /* FIFO is empty. Discard any read from RESFIFO. */
+        /* while loop until FIFO is not empty */
+        tmp32 = base->RESFIFO;
     }
 
     result->commandIdSource = (tmp32 & ADC_RESFIFO_CMDSRC_MASK) >> ADC_RESFIFO_CMDSRC_SHIFT;
@@ -647,8 +656,31 @@ void LPADC_DoOffsetCalibration(ADC_Type *base)
  */
 void LPADC_DoAutoCalibration(ADC_Type *base)
 {
+    LPADC_PrepareAutoCalibration(base);
+    LPADC_FinishAutoCalibration(base);
+}
+
+/*!
+ * brief Prepare auto calibration, LPADC_FinishAutoCalibration has to be called before using the LPADC.
+ * LPADC_DoAutoCalibration has been split in two API to avoid to be stuck too long in the function.
+ *
+ * param base  LPADC peripheral base address.
+ */
+void LPADC_PrepareAutoCalibration(ADC_Type *base)
+{
     assert((0u == LPADC_GetConvResultCount(base, 0)) && (0u == LPADC_GetConvResultCount(base, 1)));
 
+    /* Request gain calibration. */
+    base->CTRL |= ADC_CTRL_CAL_REQ_MASK;
+}
+
+/*!
+ * brief Finish auto calibration start with LPADC_PrepareAutoCalibration.
+ *
+ * param base  LPADC peripheral base address.
+ */
+void LPADC_FinishAutoCalibration(ADC_Type *base)
+{
 #if defined(FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE) && FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE
     int32_t GCCa;
     int32_t GCCb;
@@ -661,34 +693,36 @@ void LPADC_DoAutoCalibration(ADC_Type *base)
     uint32_t GCRb;
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE */
 
-    /* Request gain calibration. */
-    base->CTRL |= ADC_CTRL_CAL_REQ_MASK;
     while ((ADC_GCC_RDY_MASK != (base->GCC[0] & ADC_GCC_RDY_MASK)) ||
            (ADC_GCC_RDY_MASK != (base->GCC[1] & ADC_GCC_RDY_MASK)))
     {
     }
 
+#if defined(FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE) && FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE
+    /* Calculate gain offset. */
+    GCCa = (int32_t)((base->GCC[0] & ADC_GCC_GAIN_CAL_MASK));
+    GCCb = (int32_t)((base->GCC[1] & ADC_GCC_GAIN_CAL_MASK));
+
+    if (0U != ((base->GCC[0]) & 0x8000U))
+    {
+        GCCa         = GCCa - 0x10000;
+        GCRa         = (float)((131072.0) /
+                       (131072.0 - (double)GCCa)); /* Gain_CalA = (131072.0 / (131072-(ADC_GCC_GAIN_CAL(ADC->GCC[0]))*/
+        base->GCR[0] = LPADC_GetGainConvResult(GCRa); /* write A side GCALR. */
+    }
+
+    if (0U != ((base->GCC[1]) & 0x8000U))
+    {
+        GCCb         = GCCb - 0x10000;
+        GCRb         = (float)((131072.0) /
+                       (131072.0 - (double)GCCb)); /* Gain_CalB = (131072.0 / (131072-(ADC_GCC_GAIN_CAL(ADC->GCC[1]))*/
+        base->GCR[1] = LPADC_GetGainConvResult(GCRb); /* write B side GCALR. */
+    }
+#else
     /* Calculate gain offset. */
     GCCa = (base->GCC[0] & ADC_GCC_GAIN_CAL_MASK);
     GCCb = (base->GCC[1] & ADC_GCC_GAIN_CAL_MASK);
 
-#if defined(FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE) && FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE
-    if (((base->GCC[0]) & 0x8000U))
-    {
-        GCCa = GCCa - 0x10000;
-        GCRa =
-            (float)((131072.0) / (0x20000 - GCCa)); /* Gain_CalA = (131072.0 / (131072-(ADC_GCC_GAIN_CAL(ADC->GCC[0]))*/
-        base->GCR[0] = LPADC_GetGainConvResult(GCRa); /* write A side GCALR. */
-    }
-
-    if (((base->GCC[1]) & 0x8000U))
-    {
-        GCCb = GCCb - 0x10000;
-        GCRb =
-            (float)((131072.0) / (0x20000 - GCCb)); /* Gain_CalB = (131072.0 / (131072-(ADC_GCC_GAIN_CAL(ADC->GCC[1]))*/
-        base->GCR[1] = LPADC_GetGainConvResult(GCRb); /* write B side GCALR. */
-    }
-#else
     GCRa         = (uint16_t)((GCCa << 16U) /
                       (0x1FFFFU - GCCa)); /* Gain_CalA = (131072 / (131072-(ADC_GCC_GAIN_CAL(ADC0->GCC[0])) - 1. */
     GCRb         = (uint16_t)((GCCb << 16U) /
@@ -705,4 +739,107 @@ void LPADC_DoAutoCalibration(ADC_Type *base)
     }
 }
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ */
+
+/*!
+ * brief Get calibration value into the memory which is defined by invoker.
+ *
+ * note Please note the ADC will be disabled temporary.
+ * note This function should be used after finish calibration.
+ *
+ * param base LPADC peripheral base address.
+ * param ptrCalibrationValue Pointer to lpadc_calibration_value_t structure, this memory block should be always powered
+ * on even in low power modes.
+ */
+void LPADC_GetCalibrationValue(ADC_Type *base, lpadc_calibration_value_t *ptrCalibrationValue)
+{
+    assert(ptrCalibrationValue != NULL);
+
+    bool adcEnabled = false;
+
+    /* Check if ADC is enabled. */
+    if ((base->CTRL & ADC_CTRL_ADCEN_MASK) != 0UL)
+    {
+        LPADC_Enable(base, false);
+        adcEnabled = true;
+    }
+
+#if (defined(FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ) && FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ)
+    uint32_t i;
+    for (i = 0UL; i < 33UL; i++)
+    {
+#if defined(ADC_CAL_GAR0_CAL_GAR_VAL_MASK)
+        ptrCalibrationValue->generalCalibrationValueA[i] =
+            (uint16_t)((*(((volatile uint32_t *)(&(base->CAL_GAR0))) + i)) & 0xFFFFU);
+        ptrCalibrationValue->generalCalibrationValueB[i] =
+            (uint16_t)((*(((volatile uint32_t *)(&(base->CAL_GBR0))) + i)) & 0xFFFFU);
+#else
+        ptrCalibrationValue->generalCalibrationValueA[i] =
+            (uint16_t)((*(((volatile uint32_t *)(&(base->CAL_GAR[0]))) + i)) & 0xFFFFU);
+        ptrCalibrationValue->generalCalibrationValueB[i] =
+            (uint16_t)((*(((volatile uint32_t *)(&(base->CAL_GBR[0]))) + i)) & 0xFFFFU);
+
+#endif /* defined(ADC_CAL_GAR0_CAL_GAR_VAL_MASK) */
+    }
+#endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ */
+
+    ptrCalibrationValue->gainCalibrationResultA = (uint16_t)(base->GCR[0] & ADC_GCR_GCALR_MASK);
+    ptrCalibrationValue->gainCalibrationResultB = (uint16_t)(base->GCR[1] & ADC_GCR_GCALR_MASK);
+
+    if (adcEnabled)
+    {
+        LPADC_Enable(base, true);
+    }
+}
+
+/*!
+ * brief Set calibration value into ADC calibration registers.
+ *
+ * note Please note the ADC will be disabled temporary.
+ *
+ * param base LPADC peripheral base address.
+ * param ptrCalibrationValue Pointer to lpadc_calibration_value_t structure which contains ADC's calibration value.
+ */
+void LPADC_SetCalibrationValue(ADC_Type *base, const lpadc_calibration_value_t *ptrCalibrationValue)
+{
+    assert(ptrCalibrationValue != NULL);
+
+    bool adcEnabled = false;
+
+    /* Check if ADC is enabled. */
+    if ((base->CTRL & ADC_CTRL_ADCEN_MASK) != 0UL)
+    {
+        LPADC_Enable(base, false);
+        adcEnabled = true;
+    }
+
+#if (defined(FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ) && FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ)
+    for (uint32_t i = 0UL; i < 33UL; i++)
+    {
+#if defined(ADC_CAL_GAR0_CAL_GAR_VAL_MASK)
+        *(((volatile uint32_t *)(&(base->CAL_GAR0))) + i) = ptrCalibrationValue->generalCalibrationValueA[i];
+        *(((volatile uint32_t *)(&(base->CAL_GBR0))) + i) = ptrCalibrationValue->generalCalibrationValueB[i];
+#else
+				*(((volatile uint32_t *)(&(base->CAL_GAR[0]))) + i) = ptrCalibrationValue->generalCalibrationValueA[i];
+				*(((volatile uint32_t *)(&(base->CAL_GBR[0]))) + i) = ptrCalibrationValue->generalCalibrationValueB[i];
+#endif /* defined(ADC_CAL_GAR0_CAL_GAR_VAL_MASK) */
+    }
+#endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ */
+
+    base->GCR[0] = ADC_GCR_GCALR(ptrCalibrationValue->gainCalibrationResultA) | ADC_GCR_RDY_MASK;
+    base->GCR[1] = ADC_GCR_GCALR(ptrCalibrationValue->gainCalibrationResultB) | ADC_GCR_RDY_MASK;
+    /*
+     * $Branch Coverage Justification$
+     * while ((base->STAT & ADC_STAT_CAL_RDY_MASK) == ADC_STAT_CAL_RDY_MASK) not covered. Test unfeasible,
+     * the calibration ready state is too short not to catch.
+     */
+    while (ADC_STAT_CAL_RDY_MASK != (base->STAT & ADC_STAT_CAL_RDY_MASK))
+    {
+    }
+
+    if (adcEnabled)
+    {
+        LPADC_Enable(base, true);
+    }
+}
+
 #endif /* FSL_FEATURE_LPADC_HAS_CFG_CALOFS */

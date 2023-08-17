@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 NXP
+ * Copyright 2017-2023 NXP
  * All rights reserved.
  *
  *
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Driver version. */
-#define FSL_FLEXRAM_DRIVER_VERSION (MAKE_VERSION(2U, 2U, 0U))
+#define FSL_FLEXRAM_DRIVER_VERSION (MAKE_VERSION(2U, 3U, 0U))
 /*@}*/
 
 /*! @brief Get ECC error detailed information. */
@@ -445,6 +445,7 @@ static inline void FLEXRAM_SetITCMMagicAddr(FLEXRAM_Type *base, uint16_t magicAd
  */
 void FLEXRAM_EnableECC(FLEXRAM_Type *base, bool OcramECCEnable, bool TcmECCEnable);
 
+#if (defined(FSL_FEATURE_FLEXRAM_HAS_ECC_ERROR_INJECTION) && (FSL_FEATURE_FLEXRAM_HAS_ECC_ERROR_INJECTION))
 /*!
  * @brief FLEXRAM ECC error injection.
  * @param base  FLEXRAM base address.
@@ -452,6 +453,7 @@ void FLEXRAM_EnableECC(FLEXRAM_Type *base, bool OcramECCEnable, bool TcmECCEnabl
  * @param error ECC error type.
  */
 void FLEXRAM_ErrorInjection(FLEXRAM_Type *base, flexram_memory_type_t memory, flexram_ecc_error_type_t *error);
+#endif /* FSL_FEATURE_FLEXRAM_HAS_ECC_ERROR_INJECTION */
 
 /*!
  * @brief FLEXRAM get ocram ecc single error information.

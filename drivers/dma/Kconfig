@@ -1,0 +1,16 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_dma
+config MCUX_HAS_driver_dma
+    bool
+
+config MCUX_USE_driver_dma
+    depends on MCUX_HAS_driver_dma
+    bool "DMA Driver"
+    select MCUX_USE_driver_dmamux
+    select MCUX_USE_driver_common
+    help
+      DMA Driver

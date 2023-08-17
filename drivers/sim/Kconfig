@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_sim
+config MCUX_HAS_driver_sim
+    bool
+
+config MCUX_USE_driver_sim
+    depends on MCUX_HAS_driver_sim
+    bool "SIM Driver"
+    select MCUX_USE_driver_common
+    help
+      SIM Driver

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -272,7 +272,7 @@ status_t FLEXSPI_TransferEDMA(FLEXSPI_Type *base, flexspi_edma_handle_t *handle,
 
         /* Submit transfer. */
         (void)EDMA_SubmitTransfer(handle->rxDmaHandle, &xferConfig);
-        EDMA_SetModulo(handle->txDmaHandle->base, handle->txDmaHandle->channel, (edma_modulo_t)power,
+        EDMA_SetModulo(handle->rxDmaHandle->base, handle->rxDmaHandle->channel, (edma_modulo_t)power,
                        kEDMA_ModuloDisable);
         EDMA_SetCallback(handle->rxDmaHandle, FLEXSPI_TransferEDMACallback, &s_edmaPrivateHandle[instance]);
         EDMA_StartTransfer(handle->rxDmaHandle);

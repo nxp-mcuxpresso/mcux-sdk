@@ -1,0 +1,17 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+if (MCUX_USE_BOARD_MIMXRT685AUDEVK_CM33)
+
+config MCUX_BOARD
+    default "mimxrt685audevk"
+
+config MCUX_KIT
+    default "mimxrt685audevk"
+
+
+#### Board level drivers ####
+rsource "flash_config/Kconfig"
+
+endif

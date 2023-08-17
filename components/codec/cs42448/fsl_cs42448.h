@@ -22,8 +22,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief cs42448 driver version 2.0.0. */
-#define FSL_CS42448_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief cs42448 driver version 2.0.1. */
+#define FSL_CS42448_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*! @brief CS42448 handle size */

@@ -1,0 +1,22 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_flexio
+config MCUX_HAS_driver_flexio
+    bool
+
+config MCUX_USE_driver_flexio
+    depends on MCUX_HAS_driver_flexio
+    bool "FLEXIO Driver"
+    select MCUX_USE_driver_common
+    help
+      FLEXIO Driver
+
+rsource "./camera/Kconfig"
+rsource "./i2c/Kconfig"
+rsource "./i2s/Kconfig"
+rsource "./mculcd/Kconfig"
+rsource "./spi/Kconfig"
+rsource "./uart/Kconfig"

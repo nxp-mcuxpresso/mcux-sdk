@@ -1,0 +1,5 @@
+<map id="sensors/mma8491q_drv.h" name="sensors/mma8491q_drv.h">
+<area shape="rect" id="node2" href="$a00134.html" title="The mma8491q_drv.c file implements the MMA8491 sensor driver interfaces. " alt="" coords="5,87,176,114"/>
+<area shape="rect" id="node3" href="$a00281.html" title="The mma8491q_example.c file implements the ISSDK MMA8491Q sensor driver example demonstration with Ti..." alt="" coords="200,80,376,121"/>
+<area shape="rect" id="node4" href="$a00452.html" title="The mma8491q_demo.c file implements the ISSDK MMA8491Q sensor driver demo demonstration with polling ..." alt="" coords="401,80,551,121"/>
+</map>

@@ -1,0 +1,26 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_iuart
+config MCUX_HAS_driver_iuart
+    bool
+
+config MCUX_USE_driver_iuart
+    depends on MCUX_HAS_driver_iuart
+    bool "IUART Driver"
+
+    help
+      IUART Driver
+
+# driver_iuart_sdma
+config MCUX_HAS_driver_iuart_sdma
+    bool
+
+config MCUX_USE_driver_iuart_sdma
+    depends on MCUX_HAS_driver_iuart_sdma
+    bool "IUART SDMA Driver"
+    select MCUX_USE_driver_iuart
+    help
+      IUART SDMA Driver

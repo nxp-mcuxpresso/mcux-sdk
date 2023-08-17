@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,7 +18,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define FSL_ENC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_ENC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 
 /*!
  * @brief Interrupt enable/disable mask.
@@ -169,6 +169,26 @@ typedef enum _enc_prescaler
 } enc_prescaler_t;
 #endif
 
+#if (defined(FSL_FEATURE_ENC_HAS_FILT_PRSC) && FSL_FEATURE_ENC_HAS_FILT_PRSC)
+/*!
+ * @brief Define input filter prescaler value.
+ *
+ * The input filter prescaler value is to prescale the IPBus clock.
+ * (Frequency of FILT clock) = (Frequency of IPBus clock) / 2^FILT_PRSC.
+ */
+typedef enum _enc_filter_prescaler
+{
+    kENC_FilterPrescalerDiv1   = 0U, /*!< Input filter prescaler is 1. */
+    kENC_FilterPrescalerDiv2   = 1U, /*!< Input filter prescaler is 2. */
+    kENC_FilterPrescalerDiv4   = 2U, /*!< Input filter prescaler is 4. */
+    kENC_FilterPrescalerDiv8   = 3U, /*!< Input filter prescaler is 8. */
+    kENC_FilterPrescalerDiv16  = 4U, /*!< Input filter prescaler is 16. */
+    kENC_FilterPrescalerDiv32  = 5U, /*!< Input filter prescaler is 32. */
+    kENC_FilterPrescalerDiv64  = 6U, /*!< Input filter prescaler is 64. */
+    kENC_FilterPrescalerDiv128 = 7U, /*!< Input filter prescaler is 128. */
+} enc_filter_prescaler_t;
+#endif
+
 /*!
  * @brief Define user configuration structure for ENC module.
  */
@@ -190,6 +210,10 @@ typedef struct _enc_config
     uint16_t watchdogTimeoutValue; /*!< Watchdog timeout count value. It stores the timeout count for the quadrature
                                         decoder module watchdog timer. This field is only available when
                                         "enableWatchdog" = true. The available value is a 16-bit unsigned number.*/
+
+#if (defined(FSL_FEATURE_ENC_HAS_FILT_PRSC) && FSL_FEATURE_ENC_HAS_FILT_PRSC)
+    enc_filter_prescaler_t filterPrescaler; /*!< Input filter prescaler. */
+#endif
 
     /* Filter for PHASEA, PHASEB, INDEX and HOME. */
     uint16_t filterCount; /*!< Input Filter Sample Count. This value should be chosen to reduce the probability of

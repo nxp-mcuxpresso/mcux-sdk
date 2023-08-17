@@ -1,0 +1,6 @@
+<map id="FXLS8974_I2C_ReadData" name="FXLS8974_I2C_ReadData">
+<area shape="rect" id="node2" href="$a00377.html#aeffde93b905c16890f0045231624911f" title="Function to apply FXLS8974 register read operation. " alt="" coords="231,5,365,32"/>
+<area shape="rect" id="node3" href="$a00377.html#a5da9533e6529adee86765d9fa1993000" title="Function to apply FXLS8974 register read&#45;all operation. " alt="" coords="224,56,372,83"/>
+<area shape="rect" id="node4" href="$a00935.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is the The main function implementation. " alt="" coords="273,107,323,133"/>
+<area shape="rect" id="node5" href="$a00377.html#aa4f43f2d187e1be0d714b6b3f37310e7" title="Function to perform FXLS8974 self test. " alt="" coords="241,157,355,184"/>
+</map>

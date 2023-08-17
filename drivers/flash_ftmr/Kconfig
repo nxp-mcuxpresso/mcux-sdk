@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_flash_ftmr
+config MCUX_HAS_driver_flash_ftmr
+    bool
+
+config MCUX_USE_driver_flash_ftmr
+    depends on MCUX_HAS_driver_flash_ftmr
+    bool "Flash Driver"
+    select MCUX_USE_driver_common
+    help
+      Flash Driver

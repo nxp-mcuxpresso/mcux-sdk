@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_rit
+config MCUX_HAS_driver_rit
+    bool
+
+config MCUX_USE_driver_rit
+    depends on MCUX_HAS_driver_rit
+    bool "RIT Driver"
+    select MCUX_USE_driver_common
+    help
+      RIT Driver

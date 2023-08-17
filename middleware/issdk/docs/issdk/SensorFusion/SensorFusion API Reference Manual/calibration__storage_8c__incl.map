@@ -1,0 +1,9 @@
+<map id="calibration_storage.c" name="calibration_storage.c">
+<area shape="rect" id="node3" href="$sensor__fusion_8h.html" title="The sensor_fusion.h file implements the top level programming interface. " alt="" coords="446,80,559,107"/>
+<area shape="rect" id="node14" href="$driver__KSDK__NVM_8h.html" title="middleware driver for NVM on Kinetis devices " alt="" coords="583,80,726,107"/>
+<area shape="rect" id="node15" href="$calibration__storage_8h.html" title="Provides functions to store calibration to NVM. " alt="" coords="750,80,893,107"/>
+<area shape="rect" id="node10" href="$magnetic_8h.html" title="Lower level magnetic calibration interface. " alt="" coords="723,155,810,181"/>
+<area shape="rect" id="node11" href="$precisionAccelerometer_8h.html" title="Implements accelerometer calibration routines. " alt="" coords="834,155,1003,181"/>
+<area shape="rect" id="node12" href="$orientation_8h.html" title="Functions to convert between various orientation representations. " alt="" coords="1028,155,1121,181"/>
+<area shape="rect" id="node13" href="$matrix_8h.html" title="Matrix manipulation functions. " alt="" coords="1145,155,1215,181"/>
+</map>

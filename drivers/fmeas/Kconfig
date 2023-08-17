@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_fmeas
+config MCUX_HAS_driver_fmeas
+    bool
+
+config MCUX_USE_driver_fmeas
+    depends on MCUX_HAS_driver_fmeas
+    bool "FMEAS Driver"
+    select MCUX_USE_driver_common
+    help
+      FMEAS Driver

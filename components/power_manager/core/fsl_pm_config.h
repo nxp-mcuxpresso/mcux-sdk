@@ -7,7 +7,7 @@
 #ifndef _FSL_PM_CONFIG_H_
 #define _FSL_PM_CONFIG_H_
 
-#include "fsl_pm_board_config.h"
+#include "fsl_pm_device_config.h"
 
 #ifndef FSL_PM_SUPPORT_NOTIFICATION
 #define FSL_PM_SUPPORT_NOTIFICATION (0)

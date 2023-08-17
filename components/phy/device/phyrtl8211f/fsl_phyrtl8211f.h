@@ -1,6 +1,5 @@
 /*
- * Copyright 2020-2022 NXP
- * All rights reserved.
+ * Copyright 2020-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -163,11 +162,10 @@ status_t PHY_RTL8211F_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_
  *
  * @param handle  PHY device handle.
  * @param type    PHY interrupt type.
- * @param enable  True to enable, false to disable.
  * @retval kStatus_Success  PHY enables/disables interrupt success
  * @retval kStatus_Timeout  PHY MDIO visit time out
  */
-status_t PHY_RTL8211F_EnableLinkInterrupt(phy_handle_t *handle, phy_interrupt_type_t type, bool enable);
+status_t PHY_RTL8211F_EnableLinkInterrupt(phy_handle_t *handle, phy_interrupt_type_t type);
 
 /*!
  * @brief Clears PHY interrupt status.

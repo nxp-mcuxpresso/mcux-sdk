@@ -1,0 +1,10 @@
+<map id="sensors/fxls8974_drv.h" name="sensors/fxls8974_drv.h">
+<area shape="rect" id="node2" href="$a00074.html" title="The fxls8974_drv.c file implements the FXLS8964/67 sensor driver interfaces. " alt="" coords="5,95,160,121"/>
+<area shape="rect" id="node3" href="$a00377.html" title="The fxls8974cf_freemaster_demo.c file implements FreeMASTER demo using the ISSDK FXLS8974CF sensor dr..." alt="" coords="184,87,387,129"/>
+<area shape="rect" id="node4" href="$a00380.html" title="The fxls8974cf_freemaster_usb_demo.c file implements FreeMASTER demo using the ISSDK FXLS8974CF senso..." alt="" coords="411,80,581,136"/>
+<area shape="rect" id="node5" href="$a00383.html" title="The fxls8974cf_interrupt.c file implements the ISSDK FXLS8974CF sensor driver example demonstration w..." alt="" coords="605,87,776,129"/>
+<area shape="rect" id="node6" href="$a00386.html" title="driverexamples/fxls8974cf\l/fxls8974cf_motion_wakeup.c" alt="" coords="800,87,992,129"/>
+<area shape="rect" id="node7" href="$a00389.html" title="The fxls8974cf_poll.c file implements the ISSDK FXLS8974 sensor driver example demonstration with pol..." alt="" coords="1016,87,1187,129"/>
+<area shape="rect" id="node8" href="$a00392.html" title="The fxls8974cf_spi.c file implements the ISSDK FXLS8974CF SPI sensor driver example demonstration for..." alt="" coords="1211,87,1381,129"/>
+<area shape="rect" id="node9" href="$a00935.html" title="The pedometer_stepcount_fxls8974cf.c file implements the ISSDK FXLS8974CF sensor driver example demon..." alt="" coords="1405,80,1616,136"/>
+</map>

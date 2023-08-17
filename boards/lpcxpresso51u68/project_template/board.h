@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
- * All rights reserved.
+ * Copyright 2016-2018 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -139,6 +138,10 @@
     GPIO_PortToggle(BOARD_LED_BLUE_GPIO, BOARD_LED_BLUE_GPIO_PORT, \
                     1U << BOARD_LED_BLUE_GPIO_PIN) /*!< Toggle on target LED_BLUE */
 
+#define BOARD_CODEC_I2C_BASEADDR   I2C4
+#define BOARD_CODEC_I2C_INSTANCE   4U
+#define BOARD_CODEC_I2C_CLOCK_FREQ 12000000
+
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
@@ -148,7 +151,26 @@ extern "C" {
  ******************************************************************************/
 
 status_t BOARD_InitDebugConsole(void);
-
+#if defined(SDK_I2C_BASED_COMPONENT_USED) && SDK_I2C_BASED_COMPONENT_USED
+void BOARD_I2C_Init(I2C_Type *base, uint32_t clkSrc_Hz);
+status_t BOARD_I2C_Send(I2C_Type *base,
+                        uint8_t deviceAddress,
+                        uint32_t subAddress,
+                        uint8_t subaddressSize,
+                        uint8_t *txBuff,
+                        uint8_t txBuffSize);
+status_t BOARD_I2C_Receive(I2C_Type *base,
+                           uint8_t deviceAddress,
+                           uint32_t subAddress,
+                           uint8_t subaddressSize,
+                           uint8_t *rxBuff,
+                           uint8_t rxBuffSize);
+void BOARD_Codec_I2C_Init(void);
+status_t BOARD_Codec_I2C_Send(
+    uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, const uint8_t *txBuff, uint8_t txBuffSize);
+status_t BOARD_Codec_I2C_Receive(
+    uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, uint8_t *rxBuff, uint8_t rxBuffSize);
+#endif /* SDK_I2C_BASED_COMPONENT_USED */
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */

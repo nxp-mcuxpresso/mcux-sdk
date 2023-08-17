@@ -54,8 +54,18 @@ uint32_t SEMA42_GetInstance(SEMA42_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
+    /*
+     * $Branch Coverage Justification$
+     * (instance >= ARRAY_SIZE(s_sema42Bases)) not covered. The peripheral base
+     * address is always valid and checked by assert.
+     */
     for (instance = 0; instance < ARRAY_SIZE(s_sema42Bases); instance++)
     {
+        /*
+         * $Branch Coverage Justification$
+         * (s_sema42Bases[instance] != base) not covered. The peripheral base
+         * address is always valid and checked by assert.
+         */
         if (s_sema42Bases[instance] == base)
         {
             break;
@@ -175,8 +185,17 @@ status_t SEMA42_ResetGate(SEMA42_Type *base, uint8_t gateNum)
     assert(!((gateNum < SEMA42_GATE_NUM_RESET_ALL) && (gateNum >= (uint8_t)FSL_FEATURE_SEMA42_GATE_COUNT)));
 
     /* Check whether some reset is ongoing. */
+    /*
+     * $Branch Coverage Justification$
+     * (0U == (base->RSTGT_R & SEMA42_RSTGT_R_RSTGSM_MASK))) not covered. Test unfeasible,
+     * the reset state is too short to catch.
+     */
     if (0U != (base->RSTGT_R & SEMA42_RSTGT_R_RSTGSM_MASK))
     {
+        /*
+         * $Line Coverage Justification$
+         * Block not covered. Test unfeasible, the reset state is too short to catch.
+         */
         status = kStatus_SEMA42_Reseting;
     }
     else

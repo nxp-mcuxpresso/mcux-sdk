@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2019-2020 NXP
+ * Copyright 2016-2017, 2019-2020, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -13,6 +13,9 @@
 
 /*
  * Change log:
+ *
+ *   1.0.2
+ *     - Add FT9341_Init1.
  *
  *   1.0.1
  *     - Fix MISRA 2012 issues.
@@ -70,6 +73,10 @@
 #define ILI9341_RESET_CANCEL_MS 120U
 
 typedef void (*ili9341_send_byte_t)(uint8_t dataToSend);
+typedef void (*ili9341_send_cmd_data_t)(uint8_t cmd, const uint8_t *data, uint32_t dataLen);
+
 void FT9341_Init(ili9341_send_byte_t _writeData, ili9341_send_byte_t _writeCommand);
+
+void FT9341_Init1(ili9341_send_cmd_data_t sendCmdData);
 
 #endif

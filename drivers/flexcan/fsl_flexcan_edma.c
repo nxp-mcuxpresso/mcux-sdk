@@ -69,6 +69,10 @@ static void FLEXCAN_ReceiveFifoEDMACallback(edma_handle_t *handle, void *param, 
 #endif
     flexcan_edma_private_handle_t *flexcanPrivateHandle = (flexcan_edma_private_handle_t *)param;
 
+    /*
+     * $Branch Coverage Justification$
+     * (!transferDone) not covered. Unable to simulate DMA transfer error.
+     */
     if (transferDone)
     {
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)

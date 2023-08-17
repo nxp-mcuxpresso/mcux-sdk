@@ -1,0 +1,7 @@
+<map id="algorithms/sensorfusion/sources/driver_MMA8652.c" name="algorithms/sensorfusion/sources/driver_MMA8652.c">
+<area shape="rect" id="node3" href="$a00914.html" title="The sensor_fusion.h file implements the top level programming interface. " alt="" coords="95,95,208,121"/>
+<area shape="rect" id="node4" href="$a00179.html" title="The sensor_drv.h file contains sensor state and error definitions. " alt="" coords="232,95,327,121"/>
+<area shape="rect" id="node5" href="$a00185.html" title="The sensor_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regist..." alt="" coords="351,95,464,121"/>
+<area shape="rect" id="node6" href="$a00140.html" title="mma865x.h" alt="" coords="489,95,579,121"/>
+<area shape="rect" id="node7" href="$a00842.html" title="Provides function prototypes for driver level interfaces. " alt="" coords="604,95,675,121"/>
+</map>

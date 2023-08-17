@@ -1,0 +1,76 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# component_flexcomm_i2c_adapter
+config MCUX_HAS_component_flexcomm_i2c_adapter
+    bool
+
+config MCUX_USE_component_flexcomm_i2c_adapter
+    depends on MCUX_HAS_component_flexcomm_i2c_adapter
+    bool "Component flexcomm_i2c_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_flexcomm_i2c
+    help
+      Component flexcomm_i2c_adapter
+
+# component_i2c_adapter
+config MCUX_HAS_component_i2c_adapter
+    bool
+
+config MCUX_USE_component_i2c_adapter
+    depends on MCUX_HAS_component_i2c_adapter
+    bool "Component i2c_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_i2c
+    help
+      Component i2c_adapter
+
+# component_ii2c_adapter
+config MCUX_HAS_component_ii2c_adapter
+    bool
+
+config MCUX_USE_component_ii2c_adapter
+    depends on MCUX_HAS_component_ii2c_adapter
+    bool "Component ii2c_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_ii2c
+    help
+      Component ii2c_adapter
+
+# component_lpc_i2c_adapter
+config MCUX_HAS_component_lpc_i2c_adapter
+    bool
+
+config MCUX_USE_component_lpc_i2c_adapter
+    depends on MCUX_HAS_component_lpc_i2c_adapter
+    bool "Component lpc_i2c_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_lpc_i2c
+    help
+      Component lpc_i2c_adapter
+
+# component_lpi2c_adapter
+config MCUX_HAS_component_lpi2c_adapter
+    bool
+
+config MCUX_USE_component_lpi2c_adapter
+    depends on MCUX_HAS_component_lpi2c_adapter
+    bool "Component lpi2c_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_lpi2c
+    help
+      Component lpi2c_adapter
+
+# component_i3c_adapter
+config MCUX_HAS_component_i3c_adapter
+    bool
+
+config MCUX_USE_component_i3c_adapter
+    depends on MCUX_HAS_component_i3c_adapter
+    bool "Component i3c_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_i3c
+    help
+      Component i3c_adapter

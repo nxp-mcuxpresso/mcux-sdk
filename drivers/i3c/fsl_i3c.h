@@ -1,6 +1,5 @@
 /*
- * Copyright 2018-2022 NXP
- * All rights reserved.
+ * Copyright 2018-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,7 +20,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 9, 0))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 10, 3))
 /*@}*/
 
 /*! @brief Timeout times for waiting flag. */
@@ -489,7 +488,9 @@ typedef enum _i3c_slave_activity_state
 typedef struct _i3c_slave_config
 {
     bool enableSlave;   /*!< Whether to enable slave. */
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ) && FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ)
     bool isHotJoin;     /*!< Whether to enable slave hotjoin before enable slave. */
+#endif
     uint8_t staticAddr; /*!< Static address. */
     uint16_t vendorID;  /*!< Device vendor ID(manufacture ID). */
 #if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND)
@@ -580,8 +581,6 @@ struct _i3c_slave_handle
     uint32_t transferredCount;              /*!< Count of bytes transferred. */
     i3c_slave_transfer_callback_t callback; /*!< Callback function called at transfer event. */
     void *userData;                         /*!< Callback parameter passed to callback. */
-    uint8_t *ibiData;                       /*!< IBI data buffer */
-    size_t ibiDataSize;                     /*!< IBI data size */
     uint8_t txFifoSize;                     /*!< Tx Fifo size */
 };
 
@@ -1717,6 +1716,7 @@ static inline void I3C_SlaveGetFifoCounts(I3C_Type *base, size_t *rxCount, size_
 /*! @name Bus operations */
 /*@{*/
 
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ) && FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ)
 /*!
  * @brief I3C slave request event.
  *
@@ -1724,6 +1724,7 @@ static inline void I3C_SlaveGetFifoCounts(I3C_Type *base, size_t *rxCount, size_
  * @param event I3C slave event of type #i3c_slave_event_t
  */
 void I3C_SlaveRequestEvent(I3C_Type *base, i3c_slave_event_t event);
+#endif
 
 /*!
  * @brief Performs a polling send transfer on the I3C bus.
@@ -1832,24 +1833,27 @@ void I3C_SlaveTransferAbort(I3C_Type *base, i3c_slave_handle_t *handle);
  */
 void I3C_SlaveTransferHandleIRQ(I3C_Type *base, void *intHandle);
 
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ) && FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ)
 /*!
- * @brief I3C slave request IBI event with multiple data payload.
+ * @brief I3C slave request IBI event with data payload(mandatory and extended).
  *
  * @param base The I3C peripheral base address.
- * @param handle Pointer to struct: _i3c_slave_handle structure which stores the transfer state.
  * @param data Pointer to IBI data to be sent in the request.
  * @param dataSize IBI data size.
  */
-void I3C_SlaveRequestIBIWithData(I3C_Type *base, i3c_slave_handle_t *handle, uint8_t *data, size_t dataSize);
+void I3C_SlaveRequestIBIWithData(I3C_Type *base, uint8_t *data, size_t dataSize);
 
 /*!
  * @brief I3C slave request IBI event with single data.
+ * @deprecated Do not use this function. It has been superseded by @ref I3C_SlaveRequestIBIWithData.
  *
  * @param base The I3C peripheral base address.
  * @param data IBI data to be sent in the request.
  * @param dataSize IBI data size.
  */
 void I3C_SlaveRequestIBIWithSingleData(I3C_Type *base, uint8_t data, size_t dataSize);
+#endif /* !(defined(FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ) && FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ) */
+
 /*@}*/
 /*! @} */
 #if defined(__cplusplus)

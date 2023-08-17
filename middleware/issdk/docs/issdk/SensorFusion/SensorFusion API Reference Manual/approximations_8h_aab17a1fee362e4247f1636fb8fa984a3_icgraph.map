@@ -1,0 +1,12 @@
+<map id="fatan_15deg" name="fatan_15deg">
+<area shape="rect" id="node2" href="$approximations_8h.html#a09d50b3d2c3d4d24e447a9b960eb5267" title="fatan_deg" alt="" coords="145,220,224,247"/>
+<area shape="rect" id="node3" href="$approximations_8h.html#a956336cb9e7270c6cfbf667b1075c063" title="fasin_deg" alt="" coords="276,144,353,171"/>
+<area shape="rect" id="node9" href="$orientation_8h.html#a13cd93780206a620abc7bdf7907e6dc6" title="extract the Windows 8 angles in degrees from the Windows 8 rotation matrix " alt="" coords="413,289,609,330"/>
+<area shape="rect" id="node10" href="$approximations_8h.html#a084fe0ff189767dca40fbe330d7394f0" title="facos_deg" alt="" coords="274,195,355,221"/>
+<area shape="rect" id="node11" href="$approximations_8h.html#aebfdfbd2df0fe4472f9861b0738bb410" title="fatan2_deg" alt="" coords="272,245,357,272"/>
+<area shape="rect" id="node4" href="$orientation_8h.html#a77eeda9a699b1456bb8b02665ad80522" title="extract the Android angles in degrees from the Android rotation matrix " alt="" coords="405,158,616,199"/>
+<area shape="rect" id="node5" href="$orientation_8h.html#a43ad72cf13f54b0f96355bb7005b6872" title="Android: basic 6DOF e&#45;Compass function, computing rotation matrix fR and magnetic inclination angle f..." alt="" coords="445,5,576,32"/>
+<area shape="rect" id="node6" href="$orientation_8h.html#afcde979fba0bcae15591096fe68648c9" title="NED: basic 6DOF e&#45;Compass function, computing rotation matrix fR and magnetic inclination angle fDelt..." alt="" coords="453,56,568,83"/>
+<area shape="rect" id="node7" href="$orientation_8h.html#aabc044b27a0cdd7db677c3203b77de90" title="Win8: basic 6DOF e&#45;Compass function, computing rotation matrix fR and magnetic inclination angle fDel..." alt="" coords="452,107,569,133"/>
+<area shape="rect" id="node8" href="$orientation_8h.html#aa781ea4b9430531df4697d3cb39f7454" title="extract the NED angles in degrees from the NED rotation matrix " alt="" coords="414,223,607,265"/>
+</map>

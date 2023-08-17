@@ -1,9 +1,11 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2019, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+
+#include "fsl_common.h"
 
 /*
  * The OSA_USED macro can only be defined when the OSA component is used.

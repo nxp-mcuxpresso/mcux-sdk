@@ -151,7 +151,7 @@ hal_flash_status_t HAL_FlashProgramUnaligned(uint32_t dest, uint32_t size, uint8
  * specified flash memory would be 0xFF.
  *
  * @param dest            The start address of the first sector to be erased
- * @param size            The number of bytes to be erase
+ * @param size            The number of bytes to be erased
  *
  * @retval #kStatus_HAL_Flash_Success API was executed successfully.
  *

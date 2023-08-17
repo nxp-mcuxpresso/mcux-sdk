@@ -8,6 +8,17 @@
 
 #include "fsl_rtc.h"
 
+/*
+ * $Coverage Justification Reference$
+ *
+ * $Justification rtc_c_ref_1$
+ * Month is always under 13 and checked by assert.
+ *
+ * $Justification rtc_c_ref_2$
+ * Can't simulate tamper in unit test environment.
+ *
+ */
+
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -173,6 +184,10 @@ static void RTC_ConvertSecondsToDatetime(uint32_t seconds, rtc_datetime_t *datet
         daysPerMonth[2] = 29U;
     }
 
+    /*
+     * $Branch Coverage Justification$
+     * (x > 12U) not covered. $ref rtc_c_ref_1$.
+     */
     for (x = 1U; x <= 12U; x++)
     {
         if (days <= daysPerMonth[x])
@@ -621,16 +636,32 @@ uint32_t RTC_GetStatusFlags(RTC_Type *base)
     }
 #endif /* FSL_FEATURE_RTC_HAS_MONOTONIC */
 #if (defined(FSL_FEATURE_RTC_HAS_SR_TIDF) && FSL_FEATURE_RTC_HAS_SR_TIDF)
+    /*
+     * $Branch Coverage Justification$
+     * (0U != (RTC_SR_TIDF_MASK & base->SR)) not covered. $ref rtc_c_ref_2$.
+     */
     if (0U != (RTC_SR_TIDF_MASK & base->SR))
     {
+        /*
+        * $Line Coverage Justification$
+        * $ref rtc_c_ref_2$.
+        */
         tmp32 |= (uint32_t)kRTC_TamperInterruptDetectFlag;
     }
 #endif /* FSL_FEATURE_RTC_HAS_SR_TIDF */
 
 #if (defined(FSL_FEATURE_RTC_HAS_TDR) && FSL_FEATURE_RTC_HAS_TDR)
     /* RTC_TDR */
+    /*
+     * $Branch Coverage Justification$
+     * (0U != (RTC_TDR_TMF_MASK & base->TDR)) not covered. $ref rtc_c_ref_2$.
+     */
     if (0U != (RTC_TDR_TMF_MASK & base->TDR))
     {
+        /*
+        * $Line Coverage Justification$
+        * $ref rtc_c_ref_2$.
+        */
         tmp32 |= (uint32_t)kRTC_TestModeFlag;
     }
     if (0U != (RTC_TDR_FSF_MASK & base->TDR))
@@ -638,20 +669,44 @@ uint32_t RTC_GetStatusFlags(RTC_Type *base)
         tmp32 |= (uint32_t)kRTC_FlashSecurityFlag;
     }
 #if (defined(FSL_FEATURE_RTC_HAS_TDR_TPF) && FSL_FEATURE_RTC_HAS_TDR_TPF)
+    /*
+     * $Branch Coverage Justification$
+     * (0U != (RTC_TDR_TPF_MASK & base->TDR)) not covered. $ref rtc_c_ref_2$.
+     */
     if (0U != (RTC_TDR_TPF_MASK & base->TDR))
     {
+        /*
+        * $Line Coverage Justification$
+        * $ref rtc_c_ref_2$.
+        */
         tmp32 |= (uint32_t)kRTC_TamperPinFlag;
     }
 #endif /* FSL_FEATURE_RTC_HAS_TDR_TPF */
 #if (defined(FSL_FEATURE_RTC_HAS_TDR_STF) && FSL_FEATURE_RTC_HAS_TDR_STF)
+    /*
+     * $Branch Coverage Justification$
+     * (0U != (RTC_TDR_STF_MASK & base->TDR)) not covered. $ref rtc_c_ref_2$.
+     */
     if (0U != (RTC_TDR_STF_MASK & base->TDR))
     {
+        /*
+        * $Line Coverage Justification$
+        * $ref rtc_c_ref_2$.
+        */
         tmp32 |= (uint32_t)kRTC_SecurityTamperFlag;
     }
 #endif /* FSL_FEATURE_RTC_HAS_TDR_STF */
 #if (defined(FSL_FEATURE_RTC_HAS_TDR_LCTF) && FSL_FEATURE_RTC_HAS_TDR_LCTF)
+    /*
+     * $Branch Coverage Justification$
+     * (0U != (RTC_TDR_LCTF_MASK & base->TDR)) not covered. $ref rtc_c_ref_2$.
+     */
     if (0U != (RTC_TDR_LCTF_MASK & base->TDR))
     {
+        /*
+        * $Line Coverage Justification$
+        * $ref rtc_c_ref_2$.
+        */
         tmp32 |= (uint32_t)kRTC_LossOfClockTamperFlag;
     }
 #endif /* FSL_FEATURE_RTC_HAS_TDR_LCTF */
@@ -693,33 +748,73 @@ void RTC_ClearStatusFlags(RTC_Type *base, uint32_t mask)
 
 #if (defined(FSL_FEATURE_RTC_HAS_TDR) && FSL_FEATURE_RTC_HAS_TDR)
     /* To clear, write logic one to this flag after exiting from all test modes */
+    /*
+     * $Branch Coverage Justification$
+     * (0U != ((uint32_t)kRTC_TestModeFlag & mask)) not covered. $ref rtc_c_ref_2$.
+     */
     if (0U != ((uint32_t)kRTC_TestModeFlag & mask))
     {
+        /*
+        * $Line Coverage Justification$
+        * $ref rtc_c_ref_2$.
+        */
         base->TDR = RTC_TDR_TMF_MASK;
     }
     /* To clear, write logic one to this flag after flash security is enabled */
+    /*
+     * $Branch Coverage Justification$
+     * (0U != ((uint32_t)kRTC_FlashSecurityFlag & mask)) not covered. $ref rtc_c_ref_2$.
+     */
     if (0U != ((uint32_t)kRTC_FlashSecurityFlag & mask))
     {
+        /*
+        * $Line Coverage Justification$
+        * $ref rtc_c_ref_2$.
+        */
         base->TDR = RTC_TDR_FSF_MASK;
     }
 #if (defined(FSL_FEATURE_RTC_HAS_TDR_TPF) && FSL_FEATURE_RTC_HAS_TDR_TPF)
     /* To clear, write logic one to the corresponding flag after that tamper pin negates */
+    /*
+     * $Branch Coverage Justification$
+     * (0U != ((uint32_t)kRTC_TamperPinFlag & mask)) not covered. $ref rtc_c_ref_2$.
+     */
     if (0U != ((uint32_t)kRTC_TamperPinFlag & mask))
     {
+        /*
+        * $Line Coverage Justification$
+        * $ref rtc_c_ref_2$.
+        */
         base->TDR = RTC_TDR_TPF_MASK;
     }
 #endif /* FSL_FEATURE_RTC_HAS_TDR_TPF */
 #if (defined(FSL_FEATURE_RTC_HAS_TDR_STF) && FSL_FEATURE_RTC_HAS_TDR_STF)
     /* To clear, write logic one to this flag after security module has negated its tamper detect */
+    /*
+     * $Branch Coverage Justification$
+     * (0U != ((uint32_t)kRTC_SecurityTamperFlag & mask)) not covered. $ref rtc_c_ref_2$.
+     */
     if (0U != ((uint32_t)kRTC_SecurityTamperFlag & mask))
     {
+        /*
+        * $Line Coverage Justification$
+        * $ref rtc_c_ref_2$.
+        */
         base->TDR = RTC_TDR_STF_MASK;
     }
 #endif /* FSL_FEATURE_RTC_HAS_TDR_STF */
 #if (defined(FSL_FEATURE_RTC_HAS_TDR_LCTF) && FSL_FEATURE_RTC_HAS_TDR_LCTF)
     /* To clear, write logic one to this flag after loss of clock negates */
+    /*
+     * $Branch Coverage Justification$
+     * (0U != ((uint32_t)kRTC_LossOfClockTamperFlag & mask)) not covered. $ref rtc_c_ref_2$.
+     */
     if (0U != ((uint32_t)kRTC_LossOfClockTamperFlag & mask))
     {
+        /*
+        * $Line Coverage Justification$
+        * $ref rtc_c_ref_2$.
+        */
         base->TDR = RTC_TDR_LCTF_MASK;
     }
 #endif /* FSL_FEATURE_RTC_HAS_TDR_LCTF */

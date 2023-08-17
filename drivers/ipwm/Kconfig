@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_ipwm
+config MCUX_HAS_driver_ipwm
+    bool
+
+config MCUX_USE_driver_ipwm
+    depends on MCUX_HAS_driver_ipwm
+    bool "PWM Driver"
+
+    help
+      PWM Driver

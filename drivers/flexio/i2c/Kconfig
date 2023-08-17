@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_flexio_i2c_master
+config MCUX_HAS_driver_flexio_i2c_master
+    bool
+
+config MCUX_USE_driver_flexio_i2c_master
+    depends on MCUX_HAS_driver_flexio_i2c_master
+    bool "FLEXIO I2C Driver"
+    select MCUX_USE_driver_flexio
+    help
+      FLEXIO I2C Driver

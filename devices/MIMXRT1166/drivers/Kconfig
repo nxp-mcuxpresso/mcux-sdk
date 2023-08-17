@@ -1,0 +1,98 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_anatop_ai
+config MCUX_USE_driver_anatop_ai
+    bool "ANATOP AI Driver"
+    select MCUX_USE_driver_common
+    help
+      ANATOP AI Driver
+
+# driver_clock
+config MCUX_USE_driver_clock
+    bool "Clock Driver"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_anatop_ai
+    select MCUX_USE_driver_pmu_1
+    help
+      Clock Driver
+
+# driver_dcdc_soc
+config MCUX_USE_driver_dcdc_soc
+    bool "DCDC SOC Driver"
+    select MCUX_USE_driver_common
+    help
+      DCDC SOC Driver
+
+# driver_gpc_3
+config MCUX_USE_driver_gpc_3
+    bool "GPC Driver"
+    select MCUX_USE_driver_common
+    help
+      GPC Driver
+
+# driver_iomuxc
+config MCUX_USE_driver_iomuxc
+    bool "IOMUXC Driver"
+    select MCUX_USE_driver_common
+    help
+      IOMUXC Driver
+
+# driver_memory
+config MCUX_USE_driver_memory
+    bool "Memory Driver"
+    select MCUX_USE_driver_common
+    help
+      MEMORY Driver
+
+# driver_nic301
+config MCUX_USE_driver_nic301
+    bool "NIC301 Driver"
+    select MCUX_USE_driver_common
+    help
+      NIC301 Driver
+
+# driver_pgmc
+config MCUX_USE_driver_pgmc
+    bool "PGMC Driver"
+    select MCUX_USE_driver_common
+    help
+      PGMC Driver
+
+# driver_pmu_1
+config MCUX_USE_driver_pmu_1
+    bool "PMU Driver"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_anatop_ai
+    help
+      PMU Driver
+
+# driver_romapi
+config MCUX_USE_driver_romapi
+    bool "ROMAPI Driver"
+    select MCUX_USE_driver_common
+    help
+      ROMAPI Driver
+
+# driver_soc_flexram_allocate
+config MCUX_USE_driver_soc_flexram_allocate
+    bool "SOC FLEXRAM ALLOCATE Driver"
+    select MCUX_USE_driver_common
+    help
+      SOC FLEXRAM ALLOCATE Driver
+
+# driver_soc_mipi_csi2rx
+config MCUX_USE_driver_soc_mipi_csi2rx
+    bool "SOC MIPI CSI2RX Driver"
+    select MCUX_USE_driver_common
+    help
+      SOC MIPI CSI2RX Driver
+
+# driver_soc_src
+config MCUX_USE_driver_soc_src
+    bool "SOC SRC Driver"
+    select MCUX_USE_driver_common
+    help
+      SOC SRC Driver

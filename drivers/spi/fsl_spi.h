@@ -22,12 +22,12 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SPI driver version. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 #ifndef SPI_DUMMYDATA
 /*! @brief SPI dummy transfer data, the data is sent while txBuff is NULL. */
-#define SPI_DUMMYDATA (0xFFU)
+#define SPI_DUMMYDATA (0x00U)
 #endif
 
 /*! @brief Retry times for waiting flag. */

@@ -1,6 +1,7 @@
 /*
  * Copyright 2014-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2023 NXP
+ * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *
@@ -14,7 +15,8 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_LPC54S016JBD100) || defined(CPU_LPC54S016JBD208) || defined(CPU_LPC54S016JET180))
+#if (defined(CPU_LPC54S016JBD100) || defined(CPU_LPC54S016JBD208) || defined(CPU_LPC54S016JET100) || \
+    defined(CPU_LPC54S016JET180))
 
 #define LPC54S016_SERIES
 

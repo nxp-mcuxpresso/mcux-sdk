@@ -1,0 +1,10 @@
+<map id="algorithms/sensorfusion/sources/main_agmp03_freertos_two_tasks.c" name="algorithms/sensorfusion/sources/main_agmp03_freertos_two_tasks.c">
+<area shape="rect" id="node13" href="$a00026.html" title="The fxas21002.h contains the fxas21002 sensor register definitions and its bit mask. " alt="" coords="1213,109,1305,136"/>
+<area shape="rect" id="node14" href="$a00053.html" title="This file contains the FXLS8962 Accelerometer register definitions, access macros, and device access functions. " alt="" coords="1329,109,1411,136"/>
+<area shape="rect" id="node15" href="$a00113.html" title="mag3110.h" alt="" coords="1435,109,1521,136"/>
+<area shape="rect" id="node16" href="$a00170.html" title="The register_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="1546,109,1663,136"/>
+<area shape="rect" id="node18" href="$a00914.html" title="The sensor_fusion.h file implements the top level programming interface. " alt="" coords="1824,109,1937,136"/>
+<area shape="rect" id="node19" href="$a00779.html" title="Defines control sub&#45;system. " alt="" coords="1962,109,2034,136"/>
+<area shape="rect" id="node20" href="$a00923.html" title="Application&#45;specific status subsystem. " alt="" coords="2058,109,2127,136"/>
+<area shape="rect" id="node21" href="$a00842.html" title="Provides function prototypes for driver level interfaces. " alt="" coords="2152,109,2223,136"/>
+</map>

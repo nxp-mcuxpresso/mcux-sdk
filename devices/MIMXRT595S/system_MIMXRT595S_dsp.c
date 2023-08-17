@@ -3,7 +3,7 @@
 **     Processors:          MIMXRT595SFAWC_dsp
 **                          MIMXRT595SFFOC_dsp
 **
-**     Compiler:            XCC Compiler
+**     Compiler:            Xtensa Compiler
 **     Reference manual:    iMXRT500RM Rev.0, 01/2021
 **     Version:             rev. 5.0, 2020-08-27
 **     Build:               b220711

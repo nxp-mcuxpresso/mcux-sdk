@@ -4,13 +4,11 @@
 /*            MKE12Z7                                                        */
 /*  @version: 3.0                                                            */
 /*  @date:    2021-10-8                                                      */
-/*  @build:   b211108                                                        */
+/*  @build:   b230529                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2021 NXP                                                   */
-/* All rights reserved.                                                      */
-/*                                                                           */
+/* Copyright 2016-2023 NXP                                                   */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
 /*****************************************************************************/
 /* Version: GCC for ARM Embedded Processors                                  */
@@ -73,7 +71,7 @@ __isr_vector:
     .long   Reserved46_IRQHandler                           /* Reserved interrupt*/
     .long   RCM_IRQHandler                                  /* RCM interrupt*/
 
-    .size    __isr_vector, . - __isr_vector
+    .size   __isr_vector, . - __isr_vector
 
 /* Flash Configuration */
     .section .FlashConfig, "a"
@@ -144,7 +142,7 @@ Reset_Handler:
 .LC2:
     subs    r2, 4
     str r0, [r1, r2]
-    bge .LC2
+    bgt .LC2
 .LC3:
 #endif
     cpsie   i               /* Unmask interrupts */
@@ -324,7 +322,6 @@ FLEXIO_IRQHandler:
     .weak \handler_name
     .set  \handler_name, DefaultISR
     .endm
-
 /* Exception Handlers */
     def_irq_handler    DMA0_04_DriverIRQHandler
     def_irq_handler    DMA0_15_DriverIRQHandler

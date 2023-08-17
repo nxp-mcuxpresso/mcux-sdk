@@ -1,0 +1,29 @@
+<map id="drivers/ads/qn/auto_detection_service.h" name="drivers/ads/qn/auto_detection_service.h">
+<area shape="rect" id="node2" href="$a00401.html" title="The data_logger_demo.c file implements the ISSDK Data Logger for RD&#45;KL25&#45;AGMP01 example demonstration..." alt="" coords="5,102,156,143"/>
+<area shape="rect" id="node3" href="$a00404.html" title="The demo_11_axis_mult2b.c file implements the ISSDK MMA8652, MAG3110, FXAS21002 and MPL3115 sensors 1..." alt="" coords="180,102,347,143"/>
+<area shape="rect" id="node4" href="$a00407.html" title="The diff_p_demo.c file implements the ISSDK DIFF_P sensor driver example demonstration with Interrupt..." alt="" coords="371,102,521,143"/>
+<area shape="rect" id="node5" href="$a00410.html" title="The dp5004_demo.c file implements the ISSDK MPXVDP5004 analog sensor driver demo demonstration in int..." alt="" coords="545,102,696,143"/>
+<area shape="rect" id="node6" href="$a00413.html" title="The fxas21002_demo.c file implements the ISSDK FXAS21002 sensor demo example demonstration with inter..." alt="" coords="720,102,871,143"/>
+<area shape="rect" id="node7" href="$a00416.html" title="The fxas21002_poll_demo.c file implements the ISSDK FXAS21002 sensor demo example demonstration with ..." alt="" coords="895,102,1058,143"/>
+<area shape="rect" id="node8" href="$a00419.html" title="The fxlc95000_flash_demo.c file implements the ISSDK FXLC95000L sensor driver example demonstration f..." alt="" coords="1082,102,1247,143"/>
+<area shape="rect" id="node9" href="$a00422.html" title="The fxls8471_demo.c file implements the ISSDK FXLS8471 sensor demo example demonstration with interru..." alt="" coords="1272,102,1423,143"/>
+<area shape="rect" id="node10" href="$a00425.html" title="driverexamples/demos\l/fxls8471_demo_kl25z.c" alt="" coords="1447,102,1610,143"/>
+<area shape="rect" id="node11" href="$a00428.html" title="The fxls8962_demo.c file implements the ISSDK FXLS8962 sensor demo example demonstration with interru..." alt="" coords="1635,102,1785,143"/>
+<area shape="rect" id="node12" href="$a00431.html" title="The fxos8700_demo.c file implements the ISSDK FXOS8700 sensor driver example demonstration with inter..." alt="" coords="1809,102,1960,143"/>
+<area shape="rect" id="node13" href="$a00434.html" title="driverexamples/demos\l/fxos8700_poll_demo.c" alt="" coords="1985,102,2139,143"/>
+<area shape="rect" id="node14" href="$a00437.html" title="The fxpq3115_demo.c file implements the ISSDK FXPQ3115 sensor demo example demonstration with One&#45;Sho..." alt="" coords="2164,102,2315,143"/>
+<area shape="rect" id="node15" href="$a00440.html" title="The host_demo.c file implements the ISSDK HOST I/O Demo. " alt="" coords="2339,102,2489,143"/>
+<area shape="rect" id="node16" href="$a00443.html" title="The mag3110_demo.c file implements the ISSDK MAG3110 sensor demo example demonstration with interrupt..." alt="" coords="2513,102,2664,143"/>
+<area shape="rect" id="node17" href="$a00446.html" title="The mag3110_poll_demo.c file implements the ISSDK MAG3110 sensor demo example demonstration with poll..." alt="" coords="2688,102,2844,143"/>
+<area shape="rect" id="node18" href="$a00449.html" title="The mma845x_demo.c file implements the ISSDK MMA845x sensor demo example demonstration with interrupt..." alt="" coords="2868,102,3019,143"/>
+<area shape="rect" id="node19" href="$a00452.html" title="The mma8491q_demo.c file implements the ISSDK MMA8491Q sensor driver demo demonstration with polling ..." alt="" coords="3043,102,3193,143"/>
+<area shape="rect" id="node20" href="$a00455.html" title="The mma865x_demo.c file implements the ISSDK MMA865x sensor demo example demonstration with interrupt..." alt="" coords="3217,102,3368,143"/>
+<area shape="rect" id="node21" href="$a00458.html" title="The mma9553_demo.c file implements the ISSDK MMA9553L sensor driver example demonstration as a Accele..." alt="" coords="3392,102,3543,143"/>
+<area shape="rect" id="node22" href="$a00461.html" title="The mpl3115_demo.c file implements the ISSDK MPL3115 sensor demo example demonstration with One&#45;Shot ..." alt="" coords="3567,102,3717,143"/>
+<area shape="rect" id="node23" href="$a00464.html" title="The mpl3115_oneShot_demo.c file implements the ISSDK MPL3115 sensor demo example demonstration with O..." alt="" coords="3741,102,3921,143"/>
+<area shape="rect" id="node24" href="$a00467.html" title="The mpl3115_poll_demo.c file implements the ISSDK MPL3115 sensor demo example demonstration with One&#45;..." alt="" coords="3946,102,4098,143"/>
+<area shape="rect" id="node25" href="$a00470.html" title="The orientaion_application_baremetal_agm01.c file implements the ISSDK baremetal orientation applicat..." alt="" coords="4123,95,4273,151"/>
+<area shape="rect" id="node26" href="$a00473.html" title="The orientaion_application_baremetal_agm04.c file implements the ISSDK baremetal orientation applicat..." alt="" coords="4297,95,4448,151"/>
+<area shape="rect" id="node27" href="$a00476.html" title="The orientaion_application_baremetal_agmp03.c file implements the ISSDK baremetal orientation applica..." alt="" coords="4472,95,4623,151"/>
+<area shape="rect" id="node28" href="$a04829.html" title="drivers/ads/qn/auto\l_detection_service.c" alt="" coords="4647,102,4787,143"/>
+</map>

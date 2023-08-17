@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_lpc_enet
+config MCUX_HAS_driver_lpc_enet
+    bool
+
+config MCUX_USE_driver_lpc_enet
+    depends on MCUX_HAS_driver_lpc_enet
+    bool "enet Driver"
+    select MCUX_USE_driver_common
+    help
+      enet Driver

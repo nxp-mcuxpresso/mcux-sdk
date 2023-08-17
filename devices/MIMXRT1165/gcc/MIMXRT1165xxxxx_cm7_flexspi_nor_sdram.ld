@@ -6,14 +6,14 @@
 **
 **     Compiler:            GNU C Compiler
 **     Reference manual:    IMXRT1160RM, Rev 0, 03/2021
-**     Version:             rev. 0.1, 2020-12-29
-**     Build:               b210709
+**     Version:             rev. 0.2, 2023-02-27
+**     Build:               b230302
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2023 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -32,14 +32,18 @@ STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x0400;
 VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? 0x00000400 : 0;
 NCACHE_HEAP_START = DEFINED(__heap_noncacheable__) ? 0x84000000 - HEAP_SIZE : 0x83000000 - HEAP_SIZE;
 NCACHE_HEAP_SIZE  = DEFINED(__heap_noncacheable__) ? HEAP_SIZE : 0x0000;
+TEXT_SIZE = 0x00FBDC00;
 
 /* Specify the memory areas */
 MEMORY
 {
   m_flash_config        (RX)  : ORIGIN = 0x30000400, LENGTH = 0x00000C00
-  m_ivt                 (RX)  : ORIGIN = 0x30001000, LENGTH = 0x00001000
+  m_ivt                 (RX)  : ORIGIN = 0x30001000, LENGTH = 0x00000020
+  m_boot_data           (RX)  : ORIGIN = 0x30001020, LENGTH = 0x00000010
+  m_dcd_data            (RX)  : ORIGIN = 0x30001030, LENGTH = 0x000006E8
+  m_xmcd_data           (RX)  : ORIGIN = 0x30001040, LENGTH = 0x00000204
   m_interrupts          (RX)  : ORIGIN = 0x30002000, LENGTH = 0x00000400
-  m_text                (RX)  : ORIGIN = 0x30002400, LENGTH = 0x00FFDC00
+  m_text                (RX)  : ORIGIN = 0x30002400, LENGTH = TEXT_SIZE
   m_qacode              (RX)  : ORIGIN = 0x00000000, LENGTH = 0x00040000
   m_data                (RW)  : ORIGIN = 0x80000000, LENGTH = DEFINED(__heap_noncacheable__) ? 0x03000000 : 0x03000000 - HEAP_SIZE
   m_data2               (RW)  : ORIGIN = 0x20000000, LENGTH = 0x00040000
@@ -62,16 +66,33 @@ SECTIONS
     . = ALIGN(4);
   } > m_flash_config
 
-  ivt_begin = ORIGIN(m_flash_config) + LENGTH(m_flash_config);
-
-  .ivt : AT(ivt_begin)
+  .ivt :
   {
     . = ALIGN(4);
     KEEP(* (.boot_hdr.ivt))           /* ivt section */
-    KEEP(* (.boot_hdr.boot_data))     /* boot section */
-    KEEP(* (.boot_hdr.dcd_data))      /* dcd section */
     . = ALIGN(4);
   } > m_ivt
+
+  .boot_data :
+  {
+    . = ALIGN(4);
+    KEEP(* (.boot_hdr.boot_data))     /* boot_data section */
+    . = ALIGN(4);
+  } > m_boot_data
+
+  .dcd_data :
+  {
+    . = ALIGN(4);
+    KEEP(* (.boot_hdr.dcd_data))     /* dcd_data section */
+    . = ALIGN(4);
+  } > m_dcd_data
+
+  .xmcd_data :
+  {
+    . = ALIGN(4);
+    KEEP(* (.boot_hdr.xmcd_data))    /* xmcd_data section */
+    . = ALIGN(4);
+  } > m_xmcd_data
 
   /* The startup code goes first into internal RAM */
   .interrupts :

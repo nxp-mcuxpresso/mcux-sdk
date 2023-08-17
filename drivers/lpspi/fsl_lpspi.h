@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPSPI driver version. */
-#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 4, 3))
+#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 4, 5))
 /*@}*/
 
 #ifndef LPSPI_DUMMY_DATA
@@ -513,6 +513,13 @@ static inline void LPSPI_Enable(LPSPI_Type *base, bool enable)
     else
     {
         base->CR &= ~LPSPI_CR_MEN_MASK;
+    }
+    /* ERRATA051472: The SR[REF] would assert if software disables the LPSPI module 
+       after receiving some data and then enabled the LPSPI again without performing a software reset.
+       Clear SR[REF] flag after LPSPI module enabled*/
+    if ((base->SR & (uint32_t)kLPSPI_ReceiveErrorFlag) != 0U)
+    {
+        base->SR = (uint32_t)kLPSPI_ReceiveErrorFlag;
     }
 }
 

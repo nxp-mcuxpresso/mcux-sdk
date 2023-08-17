@@ -1,0 +1,39 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_clock
+config MCUX_USE_driver_clock
+    bool "Clock Driver"
+    select MCUX_USE_driver_common
+    help
+      Clock Driver
+
+# driver_iomuxc
+config MCUX_USE_driver_iomuxc
+    bool "IOMUXC Driver"
+    select MCUX_USE_driver_common
+    help
+      IOMUXC Driver
+
+# driver_nic301
+config MCUX_USE_driver_nic301
+    bool "NIC301 Driver"
+    select MCUX_USE_driver_common
+    help
+      NIC301 Driver
+
+# driver_romapi
+config MCUX_USE_driver_romapi
+    bool "ROMAPI Driver"
+    select MCUX_USE_driver_common
+    help
+      ROMAPI Driver
+
+# driver_soc_flexram_allocate
+config MCUX_USE_driver_soc_flexram_allocate
+    bool "SOC FLEXRAM ALLOCATE Driver"
+    select MCUX_USE_driver_common
+    help
+      SOC FLEXRAM ALLOCATE Driver

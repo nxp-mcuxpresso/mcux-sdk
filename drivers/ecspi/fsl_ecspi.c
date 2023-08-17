@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -130,7 +130,7 @@ uint32_t ECSPI_GetInstance(ECSPI_Type *base)
             break;
         }
     }
-    assert(instance <= ARRAY_SIZE(s_ecspiBases));
+    assert(instance < ARRAY_SIZE(s_ecspiBases));
     return instance;
 }
 

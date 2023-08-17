@@ -1,0 +1,10 @@
+<map id="fmatrixAeqI" name="fmatrixAeqI">
+<area shape="rect" id="node2" href="$matrix_8h.html#a64363bfcc2226e12d1bc28e7382591cc" title="function uses Gauss&#45;Jordan elimination to compute the inverse of matrix A in situ on exit..." alt="" coords="140,81,248,108"/>
+<area shape="rect" id="node3" href="$fusion_8h.html#a942d619f897d6820d5c148bdc910f962" title="fRun_6DOF_GY_KALMAN" alt="" coords="302,5,478,32"/>
+<area shape="rect" id="node5" href="$magnetic_8h.html#a38eeceb44e144af5c9d497351519f5d2" title="fUpdateMagCalibration4Slice" alt="" coords="296,56,484,83"/>
+<area shape="rect" id="node7" href="$magnetic_8c.html#afbf2fc5eb28136286990669004238ff9" title="fComputeMagCalibration4" alt="" coords="305,107,475,133"/>
+<area shape="rect" id="node8" href="$precisionAccelerometer_8h.html#a32c25ed3da9ec249bba57bbb1ab2d091" title="calculate the 4 element calibration from the available measurements " alt="" coords="301,157,479,184"/>
+<area shape="rect" id="node4" href="$fusion_8h.html#aeb60375528d75ee9fec67a96916141ca" title="fFuseSensors" alt="" coords="552,5,655,32"/>
+<area shape="rect" id="node6" href="$magnetic_8h.html#a0cce4289e5bceba2b1a6cd59641f9fda" title="fRunMagCalibration" alt="" coords="536,56,671,83"/>
+<area shape="rect" id="node9" href="$precisionAccelerometer_8h.html#a2670a39e8be35e9bad5a75d0ec8ca821" title="function runs the precision accelerometer calibration " alt="" coords="532,157,675,184"/>
+</map>

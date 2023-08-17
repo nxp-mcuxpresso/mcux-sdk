@@ -1,0 +1,10 @@
+<map id="main" name="main">
+<area shape="rect" id="node2" href="$a04823.html#a95285f14f6707e326e523c82d926c900" title="The function to register Application Name and initialte ADS. " alt="" coords="128,5,253,32"/>
+<area shape="rect" id="node3" href="$a00530.html#ad43629969994e92bd3620e630bda24c8" title="Function to enable systicks framework. " alt="" coords="111,56,270,83"/>
+<area shape="rect" id="node4" href="$a00098.html#ab4b858422bbaae71aff2ab540ae0e2b1" title="Host_IO_Init" alt="" coords="144,107,237,133"/>
+<area shape="rect" id="node5" href="$a00098.html#a3924d21a0703878695ebdb68f720fff9" title="Host_IO_Receive" alt="" coords="130,208,251,235"/>
+<area shape="rect" id="node6" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="348,183,409,209"/>
+<area shape="rect" id="node7" href="$a00098.html#a719ad6da4502e713f1573b5353af9617" title="Host_IO_Send" alt="" coords="325,245,432,272"/>
+<area shape="rect" id="node8" href="$a00440.html#a0076d28c9a17cd6908c7b3b0f5c6006c" title="process_host_command" alt="" coords="109,309,273,336"/>
+<area shape="rect" id="node9" href="$a00638.html#a5423cac017d1d1a8ac8bba8e91e80e29" title="Configures the system to WAIT power mode. API name used from Kinetis family to maintain compatibility..." alt="" coords="104,360,277,387"/>
+</map>

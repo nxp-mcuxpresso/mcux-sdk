@@ -719,7 +719,7 @@ status_t WM8962_SetModuleMute(wm8962_handle_t *handle, wm8962_module_t module, b
             else
             {
                 WM8962_CHECK_RET(WM8962_WriteReg(handle, WM8962_LOUT2, 0x16F), ret);
-                WM8962_CHECK_RET(WM8962_WriteReg(handle, WM8962_ROUT2, 0x16f), ret);
+                WM8962_CHECK_RET(WM8962_WriteReg(handle, WM8962_ROUT2, 0x16F), ret);
             }
             break;
         default:

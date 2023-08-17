@@ -236,7 +236,7 @@ extern "C" {
  * @retval kStatus_HAL_I2cError An error occurred.
  * @retval kStatus_HAL_I2cSuccess i2c master initialization succeed
  */
-hal_i2c_status_t HAL_I2cMasterInit(hal_i2c_master_handle_t handle, const hal_i2c_master_config_t *config);
+hal_i2c_status_t HAL_I2cMasterInit(hal_i2c_master_handle_t handle, const hal_i2c_master_config_t *halI2cConfig);
 
 /*!
  * @brief Initializes the HAL I2C peripheral.
@@ -269,7 +269,7 @@ hal_i2c_status_t HAL_I2cMasterInit(hal_i2c_master_handle_t handle, const hal_i2c
  * @retval kStatus_HAL_I2cError An error occurred.
  * @retval kStatus_HAL_I2cSuccess i2c slave initialization succeed
  */
-hal_i2c_status_t HAL_I2cSlaveInit(hal_i2c_slave_handle_t handle, const hal_i2c_slave_config_t *config);
+hal_i2c_status_t HAL_I2cSlaveInit(hal_i2c_slave_handle_t handle, const hal_i2c_slave_config_t *halI2cConfig);
 
 /*!
  * @brief De-initializes the HAL I2C master peripheral. Call this API to gate the HAL I2C clock.

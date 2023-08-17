@@ -1,0 +1,5 @@
+<map id="MAG3110_I2C_Configure" name="MAG3110_I2C_Configure">
+<area shape="rect" id="node2" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="577,29,639,55"/>
+<area shape="rect" id="node3" href="$a00167.html#ad08d2c7880bc5f09fd27eee247311448" title="The interface function to write a sensor register. " alt="" coords="395,29,529,55"/>
+<area shape="rect" id="node4" href="$a00182.html#aaac4c4f34b4dd37d3f202a1dbb4b000b" title="Write register data to a sensor. " alt="" coords="220,79,347,106"/>
+</map>

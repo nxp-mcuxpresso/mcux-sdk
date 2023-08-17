@@ -4,7 +4,7 @@
 **                          MIMXRT685SFFOB_dsp
 **                          MIMXRT685SFVKB_dsp
 **
-**     Compiler:            XCC Compiler
+**     Compiler:            Xtensa Compiler
 **     Reference manual:    MIMXRT685 User manual Rev. 0.95 11 November 2019
 **     Version:             rev. 2.0, 2019-11-12
 **     Build:               b220401
@@ -184,7 +184,7 @@ typedef enum IRQn {
 ** Start of section using anonymous unions
 */
 
-#if defined(__XCC__)
+#if defined(__XTENSA__)
   /* anonymous unions are enabled by default */
 #else
   #error Not supported compiler type
@@ -34915,7 +34915,7 @@ typedef struct {
 ** End of section using anonymous unions
 */
 
-#if defined(__XCC__)
+#if defined(__XTENSA__)
   /* leave anonymous unions enabled */
 #else
   #error Not supported compiler type

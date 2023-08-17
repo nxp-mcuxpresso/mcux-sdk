@@ -194,7 +194,6 @@ status_t HAL_CODEC_WM8962_SetMute(void *handle, uint32_t playChannel, bool isMut
 
     status_t retVal = kStatus_Success;
 
-#if 0
     if (((playChannel & (uint32_t)kWM8962_HeadphoneLeft) != 0U) ||
         ((playChannel & (uint32_t)kWM8962_HeadphoneRight) != 0U))
     {
@@ -207,7 +206,6 @@ status_t HAL_CODEC_WM8962_SetMute(void *handle, uint32_t playChannel, bool isMut
         retVal = WM8962_SetModuleMute((wm8962_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)),
                                 kWM8962_ModuleSpeaker, isMute);
     }
-#endif
 
     return retVal;
 }

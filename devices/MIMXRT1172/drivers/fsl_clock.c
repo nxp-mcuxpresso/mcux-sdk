@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 NXP
+ * Copyright 2019-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -155,12 +155,15 @@ void CLOCK_InitArmPll(const clock_arm_pll_config_t *config)
     reg &= ~(ANADIG_PLL_ARM_PLL_CTRL_DIV_SELECT_MASK | ANADIG_PLL_ARM_PLL_CTRL_POST_DIV_SEL_MASK);
     reg |= (ANADIG_PLL_ARM_PLL_CTRL_DIV_SELECT(config->loopDivider) |
             ANADIG_PLL_ARM_PLL_CTRL_POST_DIV_SEL(config->postDivider)) |
-           ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_GATE_MASK | ANADIG_PLL_ARM_PLL_CTRL_POWERUP_MASK;
+           ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_GATE_MASK | ANADIG_PLL_ARM_PLL_CTRL_POWERUP_MASK |
+           ANADIG_PLL_ARM_PLL_CTRL_HOLD_RING_OFF_MASK;
     ANADIG_PLL->ARM_PLL_CTRL = reg;
     __DSB();
     __ISB();
     SDK_DelayAtLeastUs(30, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
+    reg &= ~ANADIG_PLL_SYS_PLL2_CTRL_HOLD_RING_OFF_MASK;
+    ANADIG_PLL->ARM_PLL_CTRL = reg;
     /* Wait for the PLL stable, */
     while (0U == (ANADIG_PLL->ARM_PLL_CTRL & ANADIG_PLL_ARM_PLL_CTRL_ARM_PLL_STABLE_MASK))
     {
@@ -239,12 +242,14 @@ void CLOCK_InitSysPll2(const clock_sys_pll2_config_t *config)
     }
 
     /* REG_EN = 1, GATE = 1, DIV_SEL = 0, POWERUP = 0 */
-    reg                       = ANADIG_PLL_SYS_PLL2_CTRL_PLL_REG_EN(1) | ANADIG_PLL_SYS_PLL2_CTRL_SYS_PLL2_GATE(1);
+    reg &= ~(ANADIG_PLL_SYS_PLL2_CTRL_PLL_REG_EN_MASK | ANADIG_PLL_SYS_PLL2_CTRL_SYS_PLL2_GATE_MASK);
+    reg |= ANADIG_PLL_SYS_PLL2_CTRL_PLL_REG_EN(1) | ANADIG_PLL_SYS_PLL2_CTRL_SYS_PLL2_GATE(1);
     ANADIG_PLL->SYS_PLL2_CTRL = reg;
     /* Wait until LDO is stable */
     SDK_DelayAtLeastUs(30, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
     /* REG_EN = 1, GATE = 1, DIV_SEL = 0, POWERUP = 1, HOLDRING_OFF = 1 */
+    reg &= ~(ANADIG_PLL_SYS_PLL2_CTRL_POWERUP_MASK);
     reg |= ANADIG_PLL_SYS_PLL2_CTRL_POWERUP(1) | ANADIG_PLL_SYS_PLL2_CTRL_HOLD_RING_OFF_MASK;
     ANADIG_PLL->SYS_PLL2_CTRL = reg;
     SDK_DelayAtLeastUs(250, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
@@ -438,8 +443,6 @@ uint32_t CLOCK_GetPfdFreq(clock_pll_t pll, clock_pfd_t pfd)
 /* 480PLL */
 void CLOCK_InitSysPll3(void)
 {
-    uint32_t reg;
-
     if (0UL != (ANADIG_PLL->SYS_PLL3_CTRL & ANADIG_PLL_SYS_PLL3_CTRL_POWERUP_MASK))
     {
         /* no need to reconfigure the PLL if all the configuration is the same */
@@ -464,22 +467,19 @@ void CLOCK_InitSysPll3(void)
     /*
      * 1. configure PLL registres
      * 2. Enable internal LDO
-     * 3. Wati LDO stable
+     * 3. Wait LDO stable
      * 4. Power up PLL, assert hold_ring_off (only needed for avpll)
      * 5. At half lock time, de-asserted hold_ring_off (only needed for avpll)
      * 6. Wait PLL lock
      * 7. Enable clock output, release pfd_gate
      */
-    reg                       = ANADIG_PLL_SYS_PLL3_CTRL_PLL_REG_EN(1) | ANADIG_PLL_SYS_PLL3_CTRL_SYS_PLL3_GATE(1);
-    ANADIG_PLL->SYS_PLL3_CTRL = reg;
+    ANADIG_PLL->SYS_PLL3_CTRL |= ANADIG_PLL_SYS_PLL3_CTRL_PLL_REG_EN(1) | ANADIG_PLL_SYS_PLL3_CTRL_SYS_PLL3_GATE(1);
     SDK_DelayAtLeastUs(30, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
-    reg |= ANADIG_PLL_SYS_PLL3_CTRL_POWERUP(1) | ANADIG_PLL_SYS_PLL3_CTRL_HOLD_RING_OFF_MASK;
-    ANADIG_PLL->SYS_PLL3_CTRL = reg;
+    ANADIG_PLL->SYS_PLL3_CTRL |= ANADIG_PLL_SYS_PLL3_CTRL_POWERUP(1) | ANADIG_PLL_SYS_PLL3_CTRL_HOLD_RING_OFF_MASK;
     SDK_DelayAtLeastUs(30, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
-    reg &= ~ANADIG_PLL_SYS_PLL3_CTRL_HOLD_RING_OFF_MASK;
-    ANADIG_PLL->SYS_PLL3_CTRL = reg;
+    ANADIG_PLL->SYS_PLL3_CTRL &= ~ANADIG_PLL_SYS_PLL3_CTRL_HOLD_RING_OFF_MASK;
 
     /* Wait for PLL stable */
     while (ANADIG_PLL_SYS_PLL3_CTRL_SYS_PLL3_STABLE_MASK !=
@@ -487,11 +487,9 @@ void CLOCK_InitSysPll3(void)
     {
     }
 
-    reg |= ANADIG_PLL_SYS_PLL3_CTRL_ENABLE_CLK(1) | ANADIG_PLL_SYS_PLL3_CTRL_SYS_PLL3_DIV2(1);
-    ANADIG_PLL->SYS_PLL3_CTRL = reg;
+    ANADIG_PLL->SYS_PLL3_CTRL |= ANADIG_PLL_SYS_PLL3_CTRL_ENABLE_CLK(1) | ANADIG_PLL_SYS_PLL3_CTRL_SYS_PLL3_DIV2(1);
 
-    reg &= ~ANADIG_PLL_SYS_PLL3_CTRL_SYS_PLL3_GATE_MASK;
-    ANADIG_PLL->SYS_PLL3_CTRL = reg;
+    ANADIG_PLL->SYS_PLL3_CTRL &= ~ANADIG_PLL_SYS_PLL3_CTRL_SYS_PLL3_GATE_MASK;
 }
 
 void CLOCK_DeinitSysPll3(void)
@@ -1058,11 +1056,6 @@ void CLOCK_InitSysPll1(const clock_sys_pll1_config_t *config)
     denominator = 0x0FFFFFFF;
     div         = 41U;
     numerator   = 178956970UL;
-
-    if (config->ssEnable && (config->ss != NULL))
-    {
-        return;
-    }
 
     /* configure pll */
     ANATOP_PllConfigure(kAI_Itf_1g, div, numerator, 0U, denominator,
@@ -1753,7 +1746,6 @@ bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
     USBPHY1->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
 
     USBPHY1->CTRL_CLR = USBPHY_CTRL_CLR_CLKGATE_MASK;
-    USBPHY1->PWD_SET  = 0x0;
 
     while (0UL == (USBPHY1->PLL_SIC & USBPHY_PLL_SIC_PLL_LOCK_MASK))
     {
@@ -1859,7 +1851,6 @@ bool CLOCK_EnableUsbhs1PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
     USBPHY2->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
 
     USBPHY2->CTRL_CLR = USBPHY_CTRL_CLR_CLKGATE_MASK;
-    USBPHY2->PWD_SET  = 0x0;
 
     while (0UL == (USBPHY2->PLL_SIC & USBPHY_PLL_SIC_PLL_LOCK_MASK))
     {

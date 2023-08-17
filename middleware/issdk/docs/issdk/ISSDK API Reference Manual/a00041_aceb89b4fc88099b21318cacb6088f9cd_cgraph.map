@@ -1,0 +1,5 @@
+<map id="FXLC95000_I2C_CommandResponse" name="FXLC95000_I2C_CommandResponse">
+<area shape="rect" id="node2" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="500,24,561,51"/>
+<area shape="rect" id="node3" href="$a00182.html#ad6c175b9a45aa936aa74abda223eeafe" title="Write commands to a sensor. " alt="" coords="292,24,452,51"/>
+<area shape="rect" id="node4" href="$a00182.html#aa75349faed7c77807cb88d9224aa2636" title="Read register data from a sensor. " alt="" coords="309,75,435,101"/>
+</map>

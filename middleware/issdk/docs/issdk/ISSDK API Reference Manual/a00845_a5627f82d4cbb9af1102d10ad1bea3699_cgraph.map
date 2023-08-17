@@ -1,0 +1,6 @@
+<map id="fInit_9DOF_GBY_KALMAN" name="fInit_9DOF_GBY_KALMAN">
+<area shape="rect" id="node2" href="$a00896.html#a43ad72cf13f54b0f96355bb7005b6872" title="Android: basic 6DOF e&#45;Compass function, computing rotation matrix fR and magnetic inclination angle f..." alt="" coords="268,5,399,32"/>
+<area shape="rect" id="node3" href="$a00896.html#afcde979fba0bcae15591096fe68648c9" title="NED: basic 6DOF e&#45;Compass function, computing rotation matrix fR and magnetic inclination angle fDelt..." alt="" coords="276,56,391,83"/>
+<area shape="rect" id="node4" href="$a00896.html#aabc044b27a0cdd7db677c3203b77de90" title="Win8: basic 6DOF e&#45;Compass function, computing rotation matrix fR and magnetic inclination angle fDel..." alt="" coords="275,107,392,133"/>
+<area shape="rect" id="node5" href="$a00896.html#a04da5468213c1687c5b3485f15af288e" title="compute the orientation quaternion from a 3x3 rotation matrix " alt="" coords="232,157,435,184"/>
+</map>

@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_usdhc
+config MCUX_HAS_driver_usdhc
+    bool
+
+config MCUX_USE_driver_usdhc
+    depends on MCUX_HAS_driver_usdhc
+    bool "USDHC Driver"
+    select MCUX_USE_driver_common
+    help
+      USDHC Driver

@@ -27,8 +27,8 @@
  * @{
  */
 
-/*! @brief DMIC driver version 2.3.0. */
-#define FSL_DMIC_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief DMIC driver version 2.3.1. */
+#define FSL_DMIC_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*@}*/
 
 /*! @brief _dmic_status DMIC transfer status.*/
@@ -354,7 +354,7 @@ static inline void DMIC_EnableChannelDma(DMIC_Type *base, dmic_channel_t channel
     }
     else
     {
-        base->CHANNEL[channel].FIFO_CTRL &= DMIC_CHANNEL_FIFO_CTRL_DMAEN_MASK;
+        base->CHANNEL[channel].FIFO_CTRL &= ~DMIC_CHANNEL_FIFO_CTRL_DMAEN_MASK;
     }
 }
 
@@ -372,7 +372,7 @@ static inline void DMIC_EnableChannelFifo(DMIC_Type *base, dmic_channel_t channe
     }
     else
     {
-        base->CHANNEL[channel].FIFO_CTRL &= DMIC_CHANNEL_FIFO_CTRL_ENABLE_MASK;
+        base->CHANNEL[channel].FIFO_CTRL &= ~DMIC_CHANNEL_FIFO_CTRL_ENABLE_MASK;
     }
 }
 

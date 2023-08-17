@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_anactrl
+config MCUX_HAS_driver_anactrl
+    bool
+
+config MCUX_USE_driver_anactrl
+    depends on MCUX_HAS_driver_anactrl
+    bool "anactrl Driver"
+    select MCUX_USE_driver_common
+    help
+      anactrl Driver

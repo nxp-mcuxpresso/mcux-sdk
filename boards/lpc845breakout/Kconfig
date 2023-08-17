@@ -1,0 +1,16 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+if MCUX_USE_BOARD_LPC845BREAKOUT
+
+config MCUX_BOARD
+    default "lpc845breakout"
+
+config MCUX_KIT
+    default "lpc845breakout"
+
+
+#### Board level drivers ####
+
+endif

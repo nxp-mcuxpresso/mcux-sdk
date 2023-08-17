@@ -1,0 +1,37 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_flexio_uart_edma
+config MCUX_HAS_driver_flexio_uart_edma
+    bool
+
+config MCUX_USE_driver_flexio_uart_edma
+    depends on MCUX_HAS_driver_flexio_uart_edma
+    bool "FLEXIO UART EDMA Driver"
+    select MCUX_USE_driver_flexio_uart
+    help
+      FLEXIO UART EDMA Driver
+
+# driver_flexio_uart_dma
+config MCUX_HAS_driver_flexio_uart_dma
+    bool
+
+config MCUX_USE_driver_flexio_uart_dma
+    depends on MCUX_HAS_driver_flexio_uart_dma
+    bool "FLEXIO UART DMA Driver"
+    select MCUX_USE_driver_flexio_uart
+    help
+      FLEXIO UART DMA Driver
+
+# driver_flexio_uart
+config MCUX_HAS_driver_flexio_uart
+    bool
+
+config MCUX_USE_driver_flexio_uart
+    depends on MCUX_HAS_driver_flexio_uart
+    bool "FLEXIO UART Driver"
+    select MCUX_USE_driver_flexio
+    help
+      FLEXIO UART Driver

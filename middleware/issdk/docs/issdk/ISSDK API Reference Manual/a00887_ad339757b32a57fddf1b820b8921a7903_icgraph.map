@@ -1,0 +1,6 @@
+<map id="fEigenCompute10" name="fEigenCompute10">
+<area shape="rect" id="node2" href="$a00908.html#a752887e826809837549c391aa3a4cbaf" title="calculate the 10 element calibration from the available measurements " alt="" coords="177,5,363,32"/>
+<area shape="rect" id="node3" href="$a00908.html#a2f17e091698125acbf0cdb780c2c93da" title="calculate the 7 element calibration from the available measurements " alt="" coords="181,56,359,83"/>
+<area shape="rect" id="node4" href="$a00854.html#aee45330512ed09a377b969fa229a2d45" title="fComputeMagCalibration10" alt="" coords="181,107,359,133"/>
+<area shape="rect" id="node5" href="$a00854.html#a25f3c141e543b477ed0885f38d9beda3" title="fComputeMagCalibration7" alt="" coords="185,157,355,184"/>
+</map>

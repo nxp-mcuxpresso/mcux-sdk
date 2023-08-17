@@ -1,0 +1,6 @@
+<map id="drivers/ads/auto_detection_shield.h" name="drivers/ads/auto_detection_shield.h">
+<area shape="rect" id="node2" href="$a04823.html" title="drivers/ads/lpc/auto\l_detection_service.c" alt="" coords="5,102,145,143"/>
+<area shape="rect" id="node3" href="$a04826.html" title="drivers/ads/kinetis\l/auto_detection_service.c" alt="" coords="169,102,339,143"/>
+<area shape="rect" id="node4" href="$a00542.html" title="The auto detection service file implements auto detection sequence for discovery of FRDM&#45;KL25Z Board ..." alt="" coords="363,95,521,151"/>
+<area shape="rect" id="node5" href="$a04829.html" title="drivers/ads/qn/auto\l_detection_service.c" alt="" coords="545,102,685,143"/>
+</map>

@@ -1,0 +1,16 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+if MCUX_USE_BOARD_LPCXPRESSO824MAX
+
+config MCUX_BOARD
+    default "lpcxpresso824max"
+
+config MCUX_KIT
+    default "lpcxpresso824max"
+
+
+#### Board level drivers ####
+
+endif

@@ -1,0 +1,6 @@
+<map id="initializeStatusSubsystem" name="initializeStatusSubsystem">
+<area shape="rect" id="node2" href="$a00920.html#a8b18fb2d1aa207d82a91b964e618fc6f" title="ssQueueStatus" alt="" coords="227,5,339,32"/>
+<area shape="rect" id="node3" href="$a00920.html#aa1eec664ba18958c8e54d696402232b9" title="ssSetStatus" alt="" coords="235,56,330,83"/>
+<area shape="rect" id="node4" href="$a00920.html#a163c3ee102397bef342e6e3e56b78a69" title="ssUpdateStatus" alt="" coords="387,81,501,108"/>
+<area shape="rect" id="node5" href="$a00920.html#a965d11d38c1ccddb703fe6e29d087d8d" title="ssTest" alt="" coords="252,157,313,184"/>
+</map>

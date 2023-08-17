@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2019 NXP
+ * Copyright 2016-2017, 2019, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -8,6 +8,10 @@
 
 #ifndef _SLCD_PANEL_H_
 #define _SLCD_PANEL_H_
+
+#ifdef _RTE_
+#include "RTE_Components.h"
+#endif
 
 #ifdef SLCD_PANEL_GDH_1247WP_H
 #include "GDH-1247WP.h"

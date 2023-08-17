@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2022 NXP
  * All rights reserved.
  *
  *
@@ -48,8 +48,18 @@ static uint32_t LPCMP_GetInstance(LPCMP_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
+    /*
+     * $Branch Coverage Justification$
+     * (instance >= ARRAY_SIZE(s_lpcmpBases)) not covered. The peripheral base
+     * address is always valid and checked by assert.
+     */
     for (instance = 0; instance < ARRAY_SIZE(s_lpcmpBases); instance++)
     {
+        /*
+         * $Branch Coverage Justification$
+         * (s_lpcmpBases[instance] != base) not covered. The peripheral base
+         * address is always valid and checked by assert.
+         */
         if (s_lpcmpBases[instance] == base)
         {
             break;

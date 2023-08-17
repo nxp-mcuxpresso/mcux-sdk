@@ -1,0 +1,5 @@
+<map id="MAG3110_Idle" name="MAG3110_Idle">
+<area shape="rect" id="node2" href="$main__freertos__agm02__power__cycling_8c.html#a022f0b0afee40ef57a0ac6e6db65cab6" title="fusion_task" alt="" coords="160,31,248,57"/>
+<area shape="rect" id="node3" href="$main__freertos__agm02__power__cycling_8c.html#a9ca051aa77e17583aa5a85d5de5c199a" title="vApplicationTickHook" alt="" coords="296,5,441,32"/>
+<area shape="rect" id="node4" href="$main__freertos__agm02__power__cycling_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is a FreeRTOS (dual task) implementation of the NXP sensor fusion demo build. " alt="" coords="343,56,394,83"/>
+</map>

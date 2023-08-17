@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/DSP
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iap
@@ -19,7 +20,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wkt
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
 )
@@ -27,7 +28,7 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(driver_lpc_miniusart)
-#    include(CMSIS_Include_dsp)
+#    include(CMSIS_DSP_Include)
 #    include(driver_sctimer)
 #    include(driver_wwdt)
 #    include(driver_swm)
@@ -40,13 +41,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_wkt)
 #    include(driver_lpc_crc)
 #    include(utilities_misc_utilities_LPC812)
-#    include(CMSIS_Include_core_cm0plus)
+#    include(CMSIS_Include_core_cm)
 #    include(component_miniusart_adapter)
 #    include(driver_lpc_acomp)
 #    include(driver_swm_connections)
 #    include(device_CMSIS)
 #    include(utility_debug_console_lite)
-#    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_syscon_connections)
 #    include(utility_assert_lite)

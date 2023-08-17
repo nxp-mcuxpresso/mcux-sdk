@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 NXP
+ * Copyright 2020-2021, 2023 NXP
  * All rights reserved.
  *
  *
@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief DCDC driver version. */
-#define FSL_DCDC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1. */
+#define FSL_DCDC_DRIVER_VERSION (MAKE_VERSION(2, 1, 2)) /*!< Version 2.1.2. */
 
 /*! @brief The array of VDD1P0 target voltage in standby mode. */
 #define STANDBY_MODE_VDD1P0_TARGET_VOLTAGE                                                                             \

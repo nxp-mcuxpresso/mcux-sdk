@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_lcdif
+config MCUX_HAS_driver_lcdif
+    bool
+
+config MCUX_USE_driver_lcdif
+    depends on MCUX_HAS_driver_lcdif
+    bool "LCDIF Driver"
+    select MCUX_USE_driver_common
+    help
+      LCDIF Driver

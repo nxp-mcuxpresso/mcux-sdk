@@ -1,0 +1,352 @@
+---
+middleware.mmcau.mmcau_files:
+  section-type: component
+  contents:
+    repo_base_path: middleware/mmcau
+    project_base_path: mmcau
+    files:
+    - source: middleware/mmcau/ChangeLogKSDK.txt
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: doc
+    - source: middleware/mmcau/README.txt
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: doc
+    - source: middleware/mmcau/asm-cm0p/src/cau2_defines.hdr
+      cores: cm0p
+      repo_relative_path: asm-cm0p/src
+      project_relative_path: asm-cm0p/src
+      package_relative_path: asm-cm0p/src
+      type: other
+    - source: middleware/mmcau/asm-cm0p/src/mmcau_aes_functions.s
+      cores: cm0p
+      repo_relative_path: asm-cm0p/src
+      project_relative_path: asm-cm0p/src
+      package_relative_path: asm-cm0p/src
+      type: asm_include
+    - source: middleware/mmcau/asm-cm0p/src/mmcau_des_functions.s
+      cores: cm0p
+      repo_relative_path: asm-cm0p/src
+      project_relative_path: asm-cm0p/src
+      package_relative_path: asm-cm0p/src
+      type: asm_include
+    - source: middleware/mmcau/asm-cm0p/src/mmcau_md5_functions.s
+      cores: cm0p
+      repo_relative_path: asm-cm0p/src
+      project_relative_path: asm-cm0p/src
+      package_relative_path: asm-cm0p/src
+      type: asm_include
+    - source: middleware/mmcau/asm-cm0p/src/mmcau_sha1_functions.s
+      cores: cm0p
+      repo_relative_path: asm-cm0p/src
+      project_relative_path: asm-cm0p/src
+      package_relative_path: asm-cm0p/src
+      type: asm_include
+    - source: middleware/mmcau/asm-cm0p/src/mmcau_sha256_functions.s
+      cores: cm0p
+      repo_relative_path: asm-cm0p/src
+      project_relative_path: asm-cm0p/src
+      package_relative_path: asm-cm0p/src
+      type: asm_include
+    - source: middleware/mmcau/asm-cm4-cm7/src/cau2_defines.hdr
+      cores: cm4f cm7f
+      repo_relative_path: asm-cm4-cm7/src
+      project_relative_path: asm-cm4-cm7/src
+      package_relative_path: asm-cm4-cm7/src
+      type: other
+    - source: middleware/mmcau/asm-cm4-cm7/src/mmcau_aes_functions.s
+      cores: cm4f cm7f
+      repo_relative_path: asm-cm4-cm7/src
+      project_relative_path: asm-cm4-cm7/src
+      package_relative_path: asm-cm4-cm7/src
+      type: asm_include
+    - source: middleware/mmcau/asm-cm4-cm7/src/mmcau_des_functions.s
+      cores: cm4f cm7f
+      repo_relative_path: asm-cm4-cm7/src
+      project_relative_path: asm-cm4-cm7/src
+      package_relative_path: asm-cm4-cm7/src
+      type: asm_include
+    - source: middleware/mmcau/asm-cm4-cm7/src/mmcau_md5_functions.s
+      cores: cm4f cm7f
+      repo_relative_path: asm-cm4-cm7/src
+      project_relative_path: asm-cm4-cm7/src
+      package_relative_path: asm-cm4-cm7/src
+      type: asm_include
+    - source: middleware/mmcau/asm-cm4-cm7/src/mmcau_sha1_functions.s
+      cores: cm4f cm7f
+      repo_relative_path: asm-cm4-cm7/src
+      project_relative_path: asm-cm4-cm7/src
+      package_relative_path: asm-cm4-cm7/src
+      type: asm_include
+    - source: middleware/mmcau/asm-cm4-cm7/src/mmcau_sha256_functions.s
+      cores: cm4f cm7f
+      repo_relative_path: asm-cm4-cm7/src
+      project_relative_path: asm-cm4-cm7/src
+      package_relative_path: asm-cm4-cm7/src
+      type: asm_include
+    - source: middleware/mmcau/middleware_mmcau_mmcau_files.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/mmcau
+  belong_to: set.middleware.mmcau
+  section_info:
+    version: 2.0.4
+    full_name: Kinetis MMCAU security function library source files
+    description: MMCAU security function library source files
+    user_visible: never
+    type: middleware
+    taxonomy:
+      csub: mmcau_files
+      cclass: MMCAU Security
+      cgroup: MMCAU library
+      cbundle: mmCAU
+      cbundle_version: 2.0.4
+    display_name: mmcau
+    vendor: NXP
+  meta-name: middleware.mmcau.mmcau_files
+  cmake_module_name: middleware_mmcau_mmcau_files
+middleware.mmcau.unused_files:
+  section-type: container
+  contents:
+    repo_base_path: middleware/mmcau
+    project_base_path: mmcau
+    files:
+    - source: middleware/mmcau/doxygen/fsl_mmcau.dox
+      hidden: true
+      exclude: true
+    package_base_path: middleware/mmcau
+  belong_to: set.middleware.mmcau
+  section_info:
+    description: MMCAU files unused by projects
+    version: 2.0.4
+    type: other
+    user_visible: never
+    full_name: MMCAU library unused files
+    display_name: MMCAU_unused_files
+set.middleware.mmcau:
+  section-type: set
+  belong_to: set.middleware.mmcau
+  section_info:
+    fixed_id: nxp_mmcau
+    version: 2.0.4
+    display_name: MMCAU
+    description: MMCAU
+    set_location:
+      repo_base_path: middleware/mmcau
+    type: middleware
+    vendor: NXP
+    product:
+      kex_package:
+        kex_web_ui:
+          ui_control: true
+          ui_release_specific: true
+          ui_control_default: true
+          ui_category: Middleware
+        scr:
+        - scr.middleware.mmcau
+      cmsis_pack:
+        vendor: NXP
+        pack_root:
+          pack_type: SWP
+          pack_name: MMCAU
+        scr:
+        - scr.middleware.mmcau
+    component_taxonomy:
+      mmcau:
+        cclass: MMCAU Security
+        cgroup: MMCAU library
+        cbundle: mmCAU
+        cbundle_version: 2.0.4
+  dependency:
+    anyOf:
+    - device_id:
+      - K32L2A31xxxxA
+      - K32L2A41xxxxA
+      - K32L3A60xxx
+      - MIMXRT1165xxxxx
+      - MIMXRT1166xxxxx
+      - MIMXRT1171xxxxx
+      - MIMXRT1172xxxxx
+      - MIMXRT1173xxxxx
+      - MIMXRT1175xxxxx
+      - MIMXRT1176xxxxx
+    - device_id:
+      - K32L2A41xxxxA
+      - MKM34Z256xxx7
+      - MKM35Z512xxx7
+      - MKM35Z256xxx7
+      - MCIMX7U5xxxxx
+      - MIMXRT1165xxxxx
+      - MIMXRT1166xxxxx
+      - MIMXRT1173xxxxx
+      - MIMXRT1175xxxxx
+      - MIMXRT1176xxxxx
+license.mmcau_license:
+  section-type: license
+  belong_to: set.middleware.mmcau
+  contents:
+    repo_base_path: middleware/mmcau
+    files:
+    - source: middleware/mmcau/LICENSE
+    package_base_path: middleware/mmcau
+  section_info:
+    Outgoing License: BSD-3-Clause
+scr.middleware.mmcau:
+  belong_to: set.middleware.mmcau
+  section-type: scr
+  contents:
+    license:
+    - license.mmcau_license
+    Name: mmCAU S/W Library
+    Version: 2.0.4
+    Format: source code
+    Description: S/W library that works with the memory-mapped cryptographic acceleration
+      unit present on some MCUXpresso SoCs
+    Location: middleware/mmcau
+    Origin: NXP (BSD-3-Clause)
+middleware.mmcau.cm4_cm7:
+  section-type: component
+  contents:
+    repo_base_path: middleware/mmcau
+    project_base_path: mmcau
+    cc-include:
+    - repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+    files:
+    - source: middleware/mmcau/asm-cm4-cm7/lib_mmcau.a
+      toolchains: armgcc mcux
+      attribute: extra-libraries
+      repo_relative_path: asm-cm4-cm7
+      project_relative_path: asm-cm4-cm7
+      package_relative_path: asm-cm4-cm7
+      type: lib
+    - source: middleware/mmcau/middleware_mmcau_cm4_cm7.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/mmcau
+  belong_to: set.middleware.mmcau
+  section_info:
+    description: MMCAU library for ARM Cortex M4/M7 core
+    version: 2.0.4
+    type: middleware
+    user_visible: always
+    full_name: Kinetis MMCAU security function library for Arm Cortex-M4 and Cortex-M7
+    taxonomy:
+      csub: cm4_cm7
+      cclass: MMCAU Security
+      cgroup: MMCAU library
+      cbundle: mmCAU
+      cbundle_version: 2.0.4
+    display_name: mmcau_cm4_cm7
+    vendor: NXP
+  dependency:
+    allOf:
+    - core:
+      - cm4f
+      - cm7f
+    - middleware.mmcau.common_files
+    - driver.clock
+    - driver.common
+  meta-name: middleware.mmcau.cm4_cm7
+  cmake_module_name: middleware_mmcau_cm4_cm7
+middleware.mmcau.cm0p:
+  section-type: component
+  contents:
+    repo_base_path: middleware/mmcau
+    project_base_path: mmcau
+    cc-include:
+    - repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+    files:
+    - source: middleware/mmcau/asm-cm0p/lib_mmcau-cm0p.a
+      toolchains: armgcc mcux
+      attribute: extra-libraries
+      repo_relative_path: asm-cm0p
+      project_relative_path: asm-cm0p
+      package_relative_path: asm-cm0p
+      type: lib
+    - source: middleware/mmcau/middleware_mmcau_cm0p.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/mmcau
+  belong_to: set.middleware.mmcau
+  section_info:
+    description: MMCAU library for ARM Cortex M0+ core
+    version: 2.0.4
+    type: middleware
+    user_visible: always
+    full_name: Kinetis MMCAU security function library for Arm Cortex-M0+
+    taxonomy:
+      csub: cm0p
+      cclass: MMCAU Security
+      cgroup: MMCAU library
+      cbundle: mmCAU
+      cbundle_version: 2.0.4
+    display_name: mmcau_cm0p
+    vendor: NXP
+  dependency:
+    allOf:
+    - core:
+      - cm0p
+    - middleware.mmcau.common_files
+    - driver.clock
+    - driver.common
+  meta-name: middleware.mmcau.cm0p
+  cmake_module_name: middleware_mmcau_cm0p
+middleware.mmcau.common_files:
+  section-type: component
+  contents:
+    repo_base_path: middleware/mmcau
+    project_base_path: mmcau
+    cc-include:
+    - repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+    files:
+    - source: middleware/mmcau/cau_api.h
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: c_include
+    - source: middleware/mmcau/fsl_mmcau.h
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: c_include
+    - source: middleware/mmcau/fsl_mmcau.c
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: src
+    - source: middleware/mmcau/middleware_mmcau_common_files.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/mmcau
+  belong_to: set.middleware.mmcau
+  section_info:
+    version: 2.0.4
+    full_name: Kinetis MMCAU common source files
+    description: MMCAU common library source files
+    type: middleware
+    taxonomy:
+      csub: common_files
+      cclass: MMCAU Security
+      cgroup: MMCAU library
+      cbundle: mmCAU
+      cbundle_version: 2.0.4
+    display_name: mmcau
+    vendor: NXP
+  dependency:
+    allOf:
+    - driver.common
+  meta-name: middleware.mmcau.common_files
+  cmake_module_name: middleware_mmcau_common_files

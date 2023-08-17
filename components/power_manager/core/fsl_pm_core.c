@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -7,13 +7,13 @@
 #include <stdarg.h>
 
 #include "fsl_pm_core.h"
-#include "fsl_pm_board.h"
+#include "fsl_pm_device.h"
 
 /*
  * $Coverage Justification Reference$
  *
  * $Justification pm_core_c_ref_1$
- * This depends on board implementation. The "clean" function is not NULL with tested boards.
+ * This depends on device implementation. The "clean" function is not NULL with tested devices.
  *
  * $Justification pm_core_c_ref_2$
  * Error doesn't happen in test case.
@@ -256,6 +256,11 @@ void PM_CreateHandle(pm_handle_t *handle)
 
     s_pmHandle = handle;
 
+    if (s_pmHandle->deviceOption->prepare != NULL)
+    {
+        s_pmHandle->deviceOption->prepare();
+    }
+
     /* Need to clean some device register for proper functioning */
     /*
      * $Branch Coverage Justification$
@@ -337,7 +342,6 @@ void PM_EnterLowPower(uint64_t duration)
     {
         /* 1. Based on duration and system constraints compute the next allowed deepest power state. */
         stateIndex = PM_findDeepestState(duration);
-
         if (stateIndex != 0xFFU)
         {
             s_pmHandle->targetState = stateIndex;
@@ -533,7 +537,7 @@ status_t PM_UnregisterNotify(void *notifyElement)
  * brief Initialize the wakeup source object.
  *
  * param ws    Pointer to the pm_wakeup_source_t variable.
- * param wsId  Used to select the wakeup source, the wsId of each wakeup source can be found in fsl_pm_board.h
+ * param wsId  Used to select the wakeup source, the wsId of each wakeup source can be found in fsl_pm_device.h
  * param service The function to be invoked when wake up source asserted.
  * param enable Used to enable/disable the selected wakeup source.
  */
@@ -746,13 +750,13 @@ status_t PM_TriggerWakeSourceService(pm_wakeup_source_t *ws)
 /*!
  * brief Used to set constraints(including power mode constraint and resource constraints)
  *
- * For example, if the board support 3 resource constraints: PM_RESC_1, PM_RESC_2, PM_RESC3
+ * For example, if the device support 3 resource constraints: PM_RESC_1, PM_RESC_2, PM_RESC3
  *  code
  *      PM_SetConstraints(Sleep_Mode, 3, PM_RESC_1, PM_RESC_2, PM_RESC_3);
  *  endcode
  *
  * param powerModeConstraint The lowest power mode allowed, the power mode constraint macros
- *                            can be found in fsl_pm_board.h
+ *                            can be found in fsl_pm_device.h
  * param rescNum The number of resource constraints to be set.
  * return status_t The status of set constraints behavior.
  */
@@ -804,7 +808,7 @@ status_t PM_SetConstraints(uint8_t powerModeConstraint, int32_t rescNum, ...)
             assert(rescShift < (uint32_t)PM_CONSTRAINT_COUNT);
             curRescOpMode = s_pmHandle->sysRescGroup.groupSlice[rescShift / 8UL];
             opModeToSet   = ((uint32_t)opMode << (4UL * ((uint32_t)rescShift % 8UL)));
-            if ((curRescOpMode & opModeToSet) == 0UL)
+            if (((curRescOpMode & opModeToSet) == 0UL) && (opMode != PM_RESOURCE_OFF))
             {
                 s_pmHandle->sysRescGroup.groupSlice[rescShift / 8UL] |=
                     ((uint32_t)opMode << (4UL * ((uint32_t)rescShift % 8UL)));
@@ -826,13 +830,13 @@ status_t PM_SetConstraints(uint8_t powerModeConstraint, int32_t rescNum, ...)
 /*!
  * brief Used to release constraints(including power mode constraint and resource constraints)
  *
- * For example, if the board support 3 resource constraints: PM_RESC_1, PM_RESC_2, PM_RESC3
+ * For example, if the device support 3 resource constraints: PM_RESC_1, PM_RESC_2, PM_RESC3
  *  code
  *      PM_ReleaseConstraints(Sleep_Mode, 1, PM_RESC_1);
  *  endcode
  *
  * param powerModeConstraint The lowest power mode allowed, the power mode constraint macros
- *                            can be found in fsl_pm_board.h
+ *                            can be found in fsl_pm_device.h
  * param rescNum The number of resource constraints to be released.
  * return status_t The status of set constraints behavior.
  */

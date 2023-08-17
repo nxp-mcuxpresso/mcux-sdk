@@ -1,0 +1,5 @@
+<map id="pedometer_t" name="pedometer_t">
+<area shape="rect" id="node2" href="$a04059.html" title="This defines the configuration structure of the pedometer. " alt="" coords="5,20,172,273"/>
+<area shape="rect" id="node3" href="$a04071.html" title="{pedometer_status_tag\n|+ activity\l+ suspend\l+ activitychange\l+ stepchange\l+ suspendchange\l+ mergedflags\l+ bits\l+ byte\l+ status\l+ version\l+ stepcount\l+ distance\l+ speed\l+ calories\l+ sleepcount\l|}" alt="" coords="196,5,347,288"/>
+<area shape="rect" id="node4" href="$a04083.html" title="{pedometer_private_tag\n|+ activitycount\l+ stepchg_stepcount\l|}" alt="" coords="371,101,523,193"/>
+</map>

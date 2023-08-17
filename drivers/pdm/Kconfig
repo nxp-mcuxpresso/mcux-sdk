@@ -1,0 +1,37 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_pdm_sdma
+config MCUX_HAS_driver_pdm_sdma
+    bool
+
+config MCUX_USE_driver_pdm_sdma
+    depends on MCUX_HAS_driver_pdm_sdma
+    bool "PDM SDMA Driver"
+    select MCUX_USE_driver_pdm
+    help
+      PDM SDMA Driver
+
+# driver_pdm_edma
+config MCUX_HAS_driver_pdm_edma
+    bool
+
+config MCUX_USE_driver_pdm_edma
+    depends on MCUX_HAS_driver_pdm_edma
+    bool "PDM EDMA Driver"
+    select MCUX_USE_driver_pdm
+    help
+      PDM EDMA Driver
+
+# driver_pdm
+config MCUX_HAS_driver_pdm
+    bool
+
+config MCUX_USE_driver_pdm
+    depends on MCUX_HAS_driver_pdm
+    bool "PDM Driver"
+    select MCUX_USE_driver_common
+    help
+      PDM Driver

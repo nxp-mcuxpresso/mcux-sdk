@@ -57,7 +57,7 @@ Firstly the “core” part, is generic across devices and provides APIs to be c
 - The wakeup-source manager module: configures the wakeup sources and processes registered wakeup-source handler callbacks.  
 - The notification module: Notifies the upper layer of specific power transitions and events.  
 
-Then the “board” part, is specific for each device and describes the entry/exit sequences of the power modes, called the sequencer. There is also the description of all the resource constraints available: the pre-defined constraints for the low-power states. This part is not intended to be modified by the user.  Instead, the application defines the resource constraints to keep enabled for a given low-power state.
+Then the “device” part, is specific for each device and describes the entry/exit sequences of the power modes, called the sequencer. There is also the description of all the resource constraints available: the pre-defined constraints for the low-power states. This part is not intended to be modified by the user.  Instead, the application defines the resource constraints to keep enabled for a given low-power state.
 
 <br/>
 
@@ -83,7 +83,7 @@ Here are examples of APIs to call in the application to leverage the SDK power m
 
 <br/>
 
-There is also macros that the user can modify depending on the need, located in *fsl_pm_board_config.h*:  
+There is also macros that the user can modify depending on the need, located in *fsl_pm_device_config.h*:  
 
 - **FSL_PM_SUPPORT_NOTIFICATION** --> Allows the Power Manager to notify created notification groups of power transitions, i.e entry/exit of a state. It can be useful to re-enable a peripheral just after exiting the low-power state.  
 
@@ -105,7 +105,7 @@ This example is a bare-metal application based on the [i.MX RT500 EVK](https://w
 
 ![iMXRT500 memory used](images/memory_example.png "iMXRT500 memory used")  
 
-The first step defines the resources the user wants to keep ON/retain for a given low-power state. Each resource-constraint definition can be found in the file *fsl_pm_board.h*.  
+The first step defines the resources the user wants to keep ON/retain for a given low-power state. Each resource-constraint definition can be found in the file *fsl_pm_device.h*.  
 
 `#define PM_RESC_ACMP_ACTIVE PM_ENCODE_RESC(PM_RESOURCE_FULL_ON, kResc_ACMP)`  
 `#define PM_RESC_PQ_SRAM_ACTIVE PM_ENCODE_RESC(PM_RESOURCE_FULL_ON, kResc_SRAM_PQ)`  
@@ -200,7 +200,7 @@ To enter in a low power mode, the following Power Manager function must be used:
 
 The *durationTicks* parameter can be useful and leveraged when an exit latency is declared for a low-power state. It will influence the low-power state entered if the specified duration is less than the exit latency of the low-power state.  
 
-The exit latency is declared by the developer for a low-power state. For example if the deep-sleep state has an exit latency of 250us, the declaration is as follow in *fsl_pm_board.c*:
+The exit latency is declared by the developer for a low-power state. For example if the deep-sleep state has an exit latency of 250us, the declaration is as follow in *fsl_pm_device.c*:
 
 `/* Deep Sleep */`  
 &emsp;&emsp;`{`  
@@ -343,7 +343,7 @@ Initialize the wakeup source object.
 
 *Parameters:*  
 ws : Pointer to the pm_wakeup_source_t variable.  
-wsId : Used to select the wakeup source, the wsId of each wakeup source can be found in fsl_pm_board.h or board description file.  
+wsId : Used to select the wakeup source, the wsId of each wakeup source can be found in fsl_pm_device.h or device description file.  
 service : The function to be invoked when wake up source asserted.  
 enable : Used to enable/disable the selected wakeup source.   
 
@@ -385,10 +385,10 @@ If the specific wakeup event occurs, invoke this API to execute its service func
 
 **status_t PM_SetConstraints (uint8_t  powerModeConstraint, int32_t  rescNum,   ...)**  
 Used to set constraints(including power mode constraint and resource constraints) 
-For example, if the board support 3 resource constraints: PM_RESC_1, PM_RESC_2, PM_RESC3. PM_SetConstraints(Sleep_Mode, 3, PM_RESC_1, PM_RESC_2, PM_RESC_3);  
+For example, if the device support 3 resource constraints: PM_RESC_1, PM_RESC_2, PM_RESC3. PM_SetConstraints(Sleep_Mode, 3, PM_RESC_1, PM_RESC_2, PM_RESC_3);  
 
 *Parameters:*  
-powerModeConstraint : The lowest power mode allowed, the power mode constraint macros can be found in fsl_pm_board.h.  
+powerModeConstraint : The lowest power mode allowed, the power mode constraint macros can be found in fsl_pm_device.h.  
 rescNum : The number of resource constraints to be set.   
 
 *Returns:* status_t The status of set constraints behavior.  
@@ -397,10 +397,10 @@ rescNum : The number of resource constraints to be set.
 
 **status_t PM_ReleaseConstraints (uint8_t  powerModeConstraint, int32_t  rescNum,   ...)**  
 Used to release constraints(including power mode constraint and resource constraints) 
-For example, if the board support 3 resource constraints: PM_RESC_1, PM_RESC_2, PM_RESC3. PM_ReleaseConstraints(Sleep_Mode, 1, PM_RESC_1);  
+For example, if the device support 3 resource constraints: PM_RESC_1, PM_RESC_2, PM_RESC3. PM_ReleaseConstraints(Sleep_Mode, 1, PM_RESC_1);  
  
 *Parameters:*  
-powerModeConstraint : The lowest power mode allowed, the power mode constraint macros can be found in fsl_pm_board.h.  
+powerModeConstraint : The lowest power mode allowed, the power mode constraint macros can be found in fsl_pm_device.h.  
 rescNum : The number of resource constraints to be released.  
 
 *Returns:* status_t The status of set constraints behavior.  

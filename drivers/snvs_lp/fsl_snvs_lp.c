@@ -1049,7 +1049,7 @@ status_t SNVS_LP_EnableRxActiveTamper(SNVS_Type *base, snvs_lp_external_tamper_t
             }
 
             /* Route TX to external tamper 1 */
-            base->LPATRC1R = SNVS_LPATRC1R_ET1RCTL(config.activeTamper);
+            base->LPATRC1R |= SNVS_LPATRC1R_ET1RCTL(config.activeTamper);
 
             /* enable tamper pin */
             base->LPTDCR |= SNVS_LPTDCR_ET1_EN_MASK;
@@ -1068,7 +1068,7 @@ status_t SNVS_LP_EnableRxActiveTamper(SNVS_Type *base, snvs_lp_external_tamper_t
             }
 
             /* Route TX to external tamper 2 */
-            base->LPATRC1R = SNVS_LPATRC1R_ET2RCTL(config.activeTamper);
+            base->LPATRC1R |= SNVS_LPATRC1R_ET2RCTL(config.activeTamper);
 
             /* enable tamper pin */
             SNVS->LPTDCR |= SNVS_LPTDCR_ET2_EN_MASK;
@@ -1085,7 +1085,7 @@ status_t SNVS_LP_EnableRxActiveTamper(SNVS_Type *base, snvs_lp_external_tamper_t
             }
 
             /* Route TX to external tamper 3 */
-            base->LPATRC1R = SNVS_LPATRC1R_ET3RCTL(config.activeTamper);
+            base->LPATRC1R |= SNVS_LPATRC1R_ET3RCTL(config.activeTamper);
 
             /* enable tamper pin */
             base->LPTDC2R |= SNVS_LPTDC2R_ET3_EN_MASK;
@@ -1101,7 +1101,7 @@ status_t SNVS_LP_EnableRxActiveTamper(SNVS_Type *base, snvs_lp_external_tamper_t
             }
 
             /* Route TX to external tamper 4 */
-            base->LPATRC1R = SNVS_LPATRC1R_ET4RCTL(config.activeTamper);
+            base->LPATRC1R |= SNVS_LPATRC1R_ET4RCTL(config.activeTamper);
 
             /* enable tamper pin */
             base->LPTDC2R |= SNVS_LPTDC2R_ET4_EN_MASK;
@@ -1117,7 +1117,7 @@ status_t SNVS_LP_EnableRxActiveTamper(SNVS_Type *base, snvs_lp_external_tamper_t
             }
 
             /* Route TX to external tamper 5 */
-            base->LPATRC1R = SNVS_LPATRC1R_ET5RCTL(config.activeTamper);
+            base->LPATRC1R |= SNVS_LPATRC1R_ET5RCTL(config.activeTamper);
 
             /* enable tamper pin */
             base->LPTDC2R |= SNVS_LPTDC2R_ET5_EN_MASK;
@@ -1133,7 +1133,7 @@ status_t SNVS_LP_EnableRxActiveTamper(SNVS_Type *base, snvs_lp_external_tamper_t
             }
 
             /* Route TX to external tamper 6 */
-            base->LPATRC1R = SNVS_LPATRC1R_ET6RCTL(config.activeTamper);
+            base->LPATRC1R |= SNVS_LPATRC1R_ET6RCTL(config.activeTamper);
 
             /* enable tamper pin */
             base->LPTDC2R |= SNVS_LPTDC2R_ET6_EN_MASK;
@@ -1149,7 +1149,7 @@ status_t SNVS_LP_EnableRxActiveTamper(SNVS_Type *base, snvs_lp_external_tamper_t
             }
 
             /* Route TX to external tamper 7 */
-            base->LPATRC1R = SNVS_LPATRC1R_ET7RCTL(config.activeTamper);
+            base->LPATRC1R |= SNVS_LPATRC1R_ET7RCTL(config.activeTamper);
 
             /* enable tamper pin */
             base->LPTDC2R |= SNVS_LPTDC2R_ET7_EN_MASK;
@@ -1165,7 +1165,7 @@ status_t SNVS_LP_EnableRxActiveTamper(SNVS_Type *base, snvs_lp_external_tamper_t
             }
 
             /* Route TX to external tamper 8 */
-            base->LPATRC1R = SNVS_LPATRC1R_ET8RCTL(config.activeTamper);
+            base->LPATRC1R |= SNVS_LPATRC1R_ET8RCTL(config.activeTamper);
 
             /* enable tamper pin */
             base->LPTDC2R |= SNVS_LPTDC2R_ET8_EN_MASK;
@@ -1181,7 +1181,7 @@ status_t SNVS_LP_EnableRxActiveTamper(SNVS_Type *base, snvs_lp_external_tamper_t
             }
 
             /* Route TX to external tamper 9 */
-            base->LPATRC1R = SNVS_LPATRC2R_ET9RCTL(config.activeTamper);
+            base->LPATRC1R |= SNVS_LPATRC2R_ET9RCTL(config.activeTamper);
 
             /* enable tamper pin */
             base->LPTDC2R |= SNVS_LPTDC2R_ET9_EN_MASK;
@@ -1197,7 +1197,7 @@ status_t SNVS_LP_EnableRxActiveTamper(SNVS_Type *base, snvs_lp_external_tamper_t
             }
 
             /* Route TX to external tamper 10 */
-            base->LPATRC1R = SNVS_LPATRC2R_ET10RCTL(config.activeTamper);
+            base->LPATRC1R |= SNVS_LPATRC2R_ET10RCTL(config.activeTamper);
 
             /* enable tamper pin */
             base->LPTDC2R |= SNVS_LPTDC2R_ET10_EN_MASK;

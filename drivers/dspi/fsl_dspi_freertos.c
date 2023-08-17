@@ -16,7 +16,7 @@
 static void DSPI_RTOS_Callback(SPI_Type *base, dspi_master_handle_t *drv_handle, status_t status, void *userData)
 {
     dspi_rtos_handle_t *handle = (dspi_rtos_handle_t *)userData;
-    BaseType_t reschedule;
+    BaseType_t reschedule = pdFALSE;
     handle->async_status = status;
     (void)xSemaphoreGiveFromISR(handle->event, &reschedule);
     portYIELD_FROM_ISR(reschedule);

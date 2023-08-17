@@ -215,26 +215,26 @@ static void HAL_UartInterruptHandle(uint8_t instance)
 
 #endif
 
-hal_uart_status_t HAL_UartInit(hal_uart_handle_t handle, const hal_uart_config_t *config)
+hal_uart_status_t HAL_UartInit(hal_uart_handle_t handle, const hal_uart_config_t *uart_config)
 {
     hal_uart_state_t *uartHandle;
     uart_config_t uartConfig;
     status_t status;
     assert(handle);
-    assert(config);
-    assert(config->instance < (sizeof(s_UartAdapterBase) / sizeof(UART_Type *)));
-    assert(s_UartAdapterBase[config->instance]);
+    assert(uart_config);
+    assert(uart_config->instance < (sizeof(s_UartAdapterBase) / sizeof(UART_Type *)));
+    assert(s_UartAdapterBase[uart_config->instance]);
 
     assert(HAL_UART_HANDLE_SIZE >= sizeof(hal_uart_state_t));
 
     UART_GetDefaultConfig(&uartConfig);
-    uartConfig.baudRate_Bps = config->baudRate_Bps;
+    uartConfig.baudRate_Bps = uart_config->baudRate_Bps;
 
-    if (kHAL_UartParityEven == config->parityMode)
+    if (kHAL_UartParityEven == uart_config->parityMode)
     {
         uartConfig.parityMode = kUART_ParityEven;
     }
-    else if (kHAL_UartParityOdd == config->parityMode)
+    else if (kHAL_UartParityOdd == uart_config->parityMode)
     {
         uartConfig.parityMode = kUART_ParityOdd;
     }
@@ -243,7 +243,7 @@ hal_uart_status_t HAL_UartInit(hal_uart_handle_t handle, const hal_uart_config_t
         uartConfig.parityMode = kUART_ParityDisabled;
     }
 
-    if (kHAL_UartTwoStopBit == config->stopBitCount)
+    if (kHAL_UartTwoStopBit == uart_config->stopBitCount)
     {
         uartConfig.stopBitCount = kUART_TwoStopBit;
     }
@@ -251,10 +251,10 @@ hal_uart_status_t HAL_UartInit(hal_uart_handle_t handle, const hal_uart_config_t
     {
         uartConfig.stopBitCount = kUART_OneStopBit;
     }
-    uartConfig.enableRx = (bool)config->enableRx;
-    uartConfig.enableTx = (bool)config->enableTx;
+    uartConfig.enableRx = (bool)uart_config->enableRx;
+    uartConfig.enableTx = (bool)uart_config->enableTx;
 
-    status = UART_Init(s_UartAdapterBase[config->instance], &uartConfig, config->srcClock_Hz);
+    status = UART_Init(s_UartAdapterBase[uart_config->instance], &uartConfig, uart_config->srcClock_Hz);
 
     if (kStatus_Success != status)
     {
@@ -262,18 +262,18 @@ hal_uart_status_t HAL_UartInit(hal_uart_handle_t handle, const hal_uart_config_t
     }
 
     uartHandle           = (hal_uart_state_t *)handle;
-    uartHandle->instance = config->instance;
+    uartHandle->instance = uart_config->instance;
 
 #if (defined(UART_ADAPTER_NON_BLOCKING_MODE) && (UART_ADAPTER_NON_BLOCKING_MODE > 0U))
 
 #if (defined(HAL_UART_TRANSFER_MODE) && (HAL_UART_TRANSFER_MODE > 0U))
-    UART_TransferCreateHandle(s_UartAdapterBase[config->instance], &uartHandle->hardwareHandle,
+    UART_TransferCreateHandle(s_UartAdapterBase[uart_config->instance], &uartHandle->hardwareHandle,
                               (uart_transfer_callback_t)HAL_UartCallback, handle);
 #else
     s_UartState[uartHandle->instance] = uartHandle;
     /* Enable interrupt in NVIC. */
-    NVIC_SetPriority((IRQn_Type)s_UartIRQ[config->instance], HAL_UART_ISR_PRIORITY);
-    EnableIRQ(s_UartIRQ[config->instance]);
+    NVIC_SetPriority((IRQn_Type)s_UartIRQ[uart_config->instance], HAL_UART_ISR_PRIORITY);
+    EnableIRQ(s_UartIRQ[uart_config->instance]);
 #endif
 
 #endif

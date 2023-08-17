@@ -1,0 +1,26 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_ecspi_sdma
+config MCUX_HAS_driver_ecspi_sdma
+    bool
+
+config MCUX_USE_driver_ecspi_sdma
+    depends on MCUX_HAS_driver_ecspi_sdma
+    bool "ECSPI SDMA Driver"
+    select MCUX_USE_driver_ecspi
+    help
+      ECSPI SDMA Driver
+
+# driver_ecspi
+config MCUX_HAS_driver_ecspi
+    bool
+
+config MCUX_USE_driver_ecspi
+    depends on MCUX_HAS_driver_ecspi
+    bool "ECSPI Driver"
+    select MCUX_USE_driver_common
+    help
+      ECSPI Driver

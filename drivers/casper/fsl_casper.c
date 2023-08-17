@@ -657,7 +657,7 @@ void MultprecModulo(unsigned r_out[], const unsigned v[], int top)
     /*  Since divide on CM3/4 is 32/32=32, we break into 16 bit halves, but */
     /*  multiply can be 32x32=64. */
     u_n    = 0;
-    u_shft = r_out; /*  u (shifted) is in r_out */
+    u_shft = r_out;                       /*  u (shifted) is in r_out */
 
     v_Nm1 = GET_WORD(&v[N_wordlen - 1U]); /*  MSw of public key */
     vl16  = v_Nm1 & 0xFFFFU;              /*  lower 16 */
@@ -668,7 +668,7 @@ void MultprecModulo(unsigned r_out[], const unsigned v[], int top)
         /*  Step 3. estimate q_hat as (U[j+n]*B + U[j+n-1]) / V[n-1] */
         /*  Note: using subset of Knuth algo since v is 1/2 len of u (which is */
         /*  from multiply or x^2 leading into this). */
-        u32  = u_n; /*  pickup u4u3u2, knowing u4 is 0 */
+        u32  = u_n;                                   /*  pickup u4u3u2, knowing u4 is 0 */
         u64  = ((uint64_t)u_n << 32) | GET_WORD(&u_shft[(uint32_t)j + N_wordlen - 1U]);
         ul16 = (unsigned int)(u64 & 0xFFFFU);         /*  lower 16 */
         uh16 = (unsigned int)((u64 >> 16) & 0xFFFFU); /*  upper 16 */
@@ -2009,7 +2009,7 @@ void Jac_addition(uint32_t *X3,
     multiply_casper(t0, Z2, Z2Z2);
     multiply_casper(S1, Y1, t0);
     multiply_casper(t0, Z1, Z1Z1);
-    multiply_casper(J, Y2, t0); /* if (S1 == J) then Y's are the same */
+    multiply_casper(J, Y2, t0);   /* if (S1 == J) then Y's are the same */
 
     CASPER_ECC_equal(&m1, H, U1); /* If H and U1 match then the X-coordinates are the same. */
     CASPER_ECC_equal(&m2, S1, J); /* If S1 and J match then the Y-coordinates are the same. */
@@ -2264,7 +2264,7 @@ static uint8_t int8abs(int8_t v)
 void Jac_scalar_multiplication(
     uint32_t *X3, uint32_t *Y3, uint32_t *Z3, uint32_t *X1, uint32_t *Y1, uint32_t *k, uint32_t *p, uint32_t *q)
 {
-    uint32_t *scalar, *M, *X, *Y, *Z, *mem;
+    uint32_t *scalar, *M, *X, *Y, *Z, *mem_loc;
     uint32_t *ONE = NULL;
     int i, sign, odd;
     uint8_t index;
@@ -2294,7 +2294,7 @@ void Jac_scalar_multiplication(
     }
 
     /* Point to the start of the LUT table space. */
-    mem = &CASPER_MEM[(20U * N_wordlen + 80U)];
+    mem_loc = &CASPER_MEM[(20U * N_wordlen + 80U)];
 
     scalar = &CASPER_MEM[(20U * N_wordlen + 80U) + 12U * (N_wordlen + 4U)];
     X      = &CASPER_MEM[(20U * N_wordlen + 80U) + 13U * (N_wordlen + 4U)];
@@ -2307,7 +2307,7 @@ void Jac_scalar_multiplication(
     CASPER_MEMCPY(scalar, k, sizeof(uint32_t) * N_wordlen);
 
 /* Precomputation: compute 1*P, 3*P, 5*P, and 7*P */
-#define FSL_CASPER_LUT(P, x) (mem + (3U * ((P)-1U) / 2U + (x)) * (N_wordlen + 4U))
+#define FSL_CASPER_LUT(P, x) (mem_loc + (3U * ((P)-1U) / 2U + (x)) * (N_wordlen + 4U))
 
     /* Set 1*P */
     CASPER_MEMCPY(Z3, ONE, N_wordlen * sizeof(uint32_t));
@@ -2430,12 +2430,12 @@ void Jac_scalar_multiplication(
  *
  * Input:   P = (X1 : Y1 : Z1) and
  *          Q = (X2 : Y2 : Z2)
- * Output: mem, memory location for the LUT.
+ * Output: mem_loc, memory location for the LUT.
  */
 
 static void precompute_double_scalar_LUT16(uint32_t *Px, uint32_t *Py, uint32_t *Qx, uint32_t *Qy)
 {
-    uint32_t *Q2x, *Q2y, *Q2z, *P2x, *P2y, *P2z, *Z, *mem;
+    uint32_t *Q2x, *Q2y, *Q2z, *P2x, *P2y, *P2z, *Z, *mem_loc;
     uint32_t *ONE  = NULL;
     uint32_t index = 0;
 
@@ -2460,116 +2460,116 @@ static void precompute_double_scalar_LUT16(uint32_t *Px, uint32_t *Py, uint32_t 
     P2y = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 7U * (N_wordlen + 4U)];
     Z   = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 8U * (N_wordlen + 4U)];
 
-    mem = &CASPER_MEM[(20U * N_wordlen + 80U)];
+    mem_loc = &CASPER_MEM[(20U * N_wordlen + 80U)];
 
     CASPER_MEMCPY(Z, ONE, N_wordlen * sizeof(uint32_t));
 
     // 00 10 = 0*P + 2*Q
     Jac_double(Q2x, Q2y, Q2z, Qx, Qy, Z);
-    CASPER_MEMCPY(&mem[index], Q2x, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2x, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Q2y, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2y, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Q2z, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2z, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
 
     // 00 11 = 0*P + 3*Q
     Jac_add_affine(P2x, P2y, P2z, Q2x, Q2y, Q2z, Qx, Qy);
-    CASPER_MEMCPY(&mem[index], P2x, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2x, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], P2y, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2y, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], P2z, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2z, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
 
     // 01 10 = 1*P + 2*Q
     Jac_add_affine(P2x, P2y, P2z, Q2x, Q2y, Q2z, Px, Py);
-    CASPER_MEMCPY(&mem[index], P2x, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2x, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], P2y, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2y, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], P2z, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2z, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
 
     // 01 11 = 1*P + 3*Q
     Jac_add_affine(P2x, P2y, P2z, P2x, P2y, P2z, Qx, Qy);
-    CASPER_MEMCPY(&mem[index], P2x, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2x, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], P2y, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2y, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], P2z, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2z, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
 
     // 10 00 = 2*P + 0*Q
     Jac_double(P2x, P2y, P2z, Px, Py, Z);
-    CASPER_MEMCPY(&mem[index], P2x, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2x, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], P2y, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2y, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], P2z, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2z, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
 
     // 10 01 = 2*P + 1*Q
     Jac_add_affine(Q2x, Q2y, Q2z, P2x, P2y, P2z, Qx, Qy);
-    CASPER_MEMCPY(&mem[index], Q2x, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2x, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Q2y, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2y, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Q2z, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2z, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
 
     // 10 10 = 2*P + 2*Q
     Jac_add_affine(Q2x, Q2y, Q2z, Q2x, Q2y, Q2z, Qx, Qy);
-    CASPER_MEMCPY(&mem[index], Q2x, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2x, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Q2y, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2y, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Q2z, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2z, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
 
     // 10 11 = 2*P + 3*Q
     Jac_add_affine(Q2x, Q2y, Q2z, Q2x, Q2y, Q2z, Qx, Qy);
-    CASPER_MEMCPY(&mem[index], Q2x, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2x, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Q2y, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2y, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Q2z, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2z, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
 
     // 11 00 = 3*P + 0*Q
     Jac_add_affine(P2x, P2y, P2z, P2x, P2y, P2z, Px, Py);
-    CASPER_MEMCPY(&mem[index], P2x, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2x, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], P2y, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2y, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], P2z, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], P2z, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
 
     // 11 01 = 3*P + 1*Q
     Jac_add_affine(Q2x, Q2y, Q2z, P2x, P2y, P2z, Qx, Qy);
-    CASPER_MEMCPY(&mem[index], Q2x, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2x, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Q2y, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2y, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Q2z, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2z, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
 
     // 11 10 = 3*P + 2*Q
     Jac_add_affine(Q2x, Q2y, Q2z, Q2x, Q2y, Q2z, Qx, Qy);
-    CASPER_MEMCPY(&mem[index], Q2x, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2x, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Q2y, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2y, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Q2z, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2z, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
 
     // 11 11 = 3*P + 3*Q
     Jac_add_affine(Q2x, Q2y, Q2z, Q2x, Q2y, Q2z, Qx, Qy);
-    CASPER_MEMCPY(&mem[index], Q2x, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2x, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Q2y, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2y, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Q2z, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Q2z, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
 }
 
@@ -2585,41 +2585,41 @@ static void precompute_double_scalar_LUT16(uint32_t *Px, uint32_t *Py, uint32_t 
  *
  * Input:   P = (X1 : Y1 : Z1) and
  *          Q = (X2 : Y2 : Z2)
- * Output: mem, memory location for the LUT.
+ * Output: mem_loc, memory location for the LUT.
  */
 
 static void precompute_double_scalar_LUT4(uint32_t *Px, uint32_t *Py, uint32_t *Qx, uint32_t *Qy)
 {
-    uint32_t *Z, *mem, *ONE;
+    uint32_t *Z, *mem_loc, *ONE;
     uint32_t index = 0;
 
     ONE = NISTr521;
 
     /* Re-use memory from different scratch space since no
      * projective point addition is used below. */
-    Z   = &CASPER_MEM[(11U * N_wordlen + 4U) + 5U * (N_wordlen + 4U)];
-    mem = &CASPER_MEM[(20U * N_wordlen + 80U)];
+    Z       = &CASPER_MEM[(11U * N_wordlen + 4U) + 5U * (N_wordlen + 4U)];
+    mem_loc = &CASPER_MEM[(20U * N_wordlen + 80U)];
 
     CASPER_MEMCPY(Z, ONE, N_wordlen * sizeof(uint32_t));
 
     // 0*P + 1*Q
-    CASPER_MEMCPY(&mem[index], Qx, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Qx, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Qy, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Qy, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Z, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Z, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
 
     // 1*P + 0*Q
-    CASPER_MEMCPY(&mem[index], Px, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Px, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Py, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Py, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
-    CASPER_MEMCPY(&mem[index], Z, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(&mem_loc[index], Z, N_wordlen * sizeof(uint32_t));
     index += N_wordlen;
 
     // 1*P + 1*Q
-    Jac_add_affine(&mem[index], &mem[index + N_wordlen], &mem[index + 2U * N_wordlen], Px, Py, Z, Qx, Qy);
+    Jac_add_affine(&mem_loc[index], &mem_loc[index + N_wordlen], &mem_loc[index + 2U * N_wordlen], Px, Py, Z, Qx, Qy);
 }
 
 #define GETLUTX(x) (3U * (x)*N_wordlen)

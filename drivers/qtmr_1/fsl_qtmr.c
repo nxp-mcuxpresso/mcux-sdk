@@ -681,12 +681,12 @@ void QTMR_SetPwmOutputToIdle(TMR_Type *base, qtmr_channel_selection_t channel, b
     if (0U != (reg & ((uint16_t)TMR_SCTRL_OPS_MASK)))
     {
         /* Inverted polarity. */
-        reg |= (TMR_SCTRL_FORCE_MASK | TMR_SCTRL_VAL(!idleStatus));
+        reg |= (uint16_t)(TMR_SCTRL_FORCE_MASK | TMR_SCTRL_VAL(!idleStatus));
     }
     else
     {
         /* True polarity. */
-        reg |= (TMR_SCTRL_FORCE_MASK | TMR_SCTRL_VAL(idleStatus));
+        reg |= (uint16_t)(TMR_SCTRL_FORCE_MASK | TMR_SCTRL_VAL(idleStatus));
     }
     base->CHANNEL[channel].SCTRL = reg;
 

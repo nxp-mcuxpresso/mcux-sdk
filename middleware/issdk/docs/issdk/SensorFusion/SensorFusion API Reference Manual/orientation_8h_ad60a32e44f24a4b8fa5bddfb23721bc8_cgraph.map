@@ -1,0 +1,6 @@
+<map id="fLPFOrientationQuaternion" name="fLPFOrientationQuaternion">
+<area shape="rect" id="node2" href="$orientation_8c.html#adb2ea2734ac13ca77b3218d761fe45e0" title="function compute the quaternion product conjg(qA) * qB " alt="" coords="299,5,384,32"/>
+<area shape="rect" id="node3" href="$orientation_8c.html#aa48ae334cf6bbedf2b9e7423d17cb4ac" title="computes rotation vector (deg) from rotation quaternion " alt="" coords="228,56,455,83"/>
+<area shape="rect" id="node4" href="$orientation_8c.html#a22a32becfcb162db012f41ff4f3bc942" title="function compute the quaternion product qA = qA * qB " alt="" coords="303,107,380,133"/>
+<area shape="rect" id="node5" href="$orientation_8c.html#a3bcc5aef9bd7abd545d33660aa3ccbd0" title="function normalizes a rotation quaternion and ensures q0 is non&#45;negative " alt="" coords="290,157,393,184"/>
+</map>

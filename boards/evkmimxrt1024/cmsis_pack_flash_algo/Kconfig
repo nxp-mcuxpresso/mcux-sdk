@@ -1,0 +1,11 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# component_cmsis_pack_flash_algo_MIMXRT1024
+config MCUX_USE_component_cmsis_pack_flash_algo_MIMXRT1024
+    bool "cmsis_pack_flash_algo"
+
+    help
+      cmsis_pack_flash_algo

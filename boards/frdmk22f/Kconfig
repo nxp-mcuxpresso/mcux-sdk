@@ -1,0 +1,16 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+if MCUX_USE_BOARD_FRDMK22F
+
+config MCUX_BOARD
+    default "frdmk22f"
+
+config MCUX_KIT
+    default "frdmk22f"
+
+
+#### Board level drivers ####
+
+endif

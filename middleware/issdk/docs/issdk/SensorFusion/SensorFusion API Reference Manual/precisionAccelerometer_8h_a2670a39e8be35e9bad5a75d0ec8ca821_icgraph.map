@@ -1,0 +1,5 @@
+<map id="fRunAccelCalibration" name="fRunAccelCalibration">
+<area shape="rect" id="node2" href="$precisionAccelerometer_8h.html#a29cd1109b0584bd00d43c219f411437f" title="Update the buffer used to store samples used for accelerometer calibration. " alt="" coords="196,5,328,32"/>
+<area shape="rect" id="node3" href="$sensor__fusion_8c.html#ae748e1330b5a94783c6d4ea2ad9e4f28" title="initializeSensors" alt="" coords="376,5,493,32"/>
+<area shape="rect" id="node4" href="$sensor__fusion_8c.html#ab088da7731ffdf25710a364a7f88b224" title="This function is responsible for initializing the system prior to starting the main fusion loop..." alt="" coords="541,5,689,32"/>
+</map>

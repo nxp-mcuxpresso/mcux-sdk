@@ -1,0 +1,57 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_CORE
+    string
+    default 'cm0p'  if MCUX_CPU_ARCH_ARM_CM0P
+    default 'cm4'   if MCUX_CPU_ARCH_ARM_CM4
+    default 'cm4f'  if MCUX_CPU_ARCH_ARM_CM4F
+    default 'cm7f'  if MCUX_CPU_ARCH_ARM_CM7F
+    default 'cm33'  if MCUX_CPU_ARCH_ARM_CM33
+    default 'cm33f' if MCUX_CPU_ARCH_ARM_CM33F
+    default 'ca7'   if MCUX_CPU_ARCH_ARM_CA7
+    default 'dsp'   if MCUX_CPU_ARCH_DSP
+
+config MCUX_FPU
+    string
+    default 'NO_FPU' if !MCUX_CPU_HAS_FPU
+    default 'SP_FPU' if MCUX_CPU_HAS_SP_FPU
+    default 'DP_FPU' if MCUX_CPU_HAS_DP_FPU
+
+config MCUX_DSP
+    string
+    default 'NO_DSP' if !MCUX_CPU_HAS_DSP
+    default 'DSP'    if MCUX_CPU_HAS_DSP
+
+
+# Architecture definition
+config MCUX_CPU_ARCH_ARM
+    bool
+
+config MCUX_CPU_ARCH_DSP
+    bool
+
+# CPU features
+config MCUX_CPU_HAS_FPU
+    bool
+
+config MCUX_CPU_HAS_SP_FPU
+    bool
+    select MCUX_CPU_HAS_FPU
+    help
+      Single-precision FPU
+
+config MCUX_CPU_HAS_DP_FPU
+    bool
+    select MCUX_CPU_HAS_FPU
+    help
+      Double-precision FPU
+
+config MCUX_CPU_HAS_DSP
+    bool
+    help
+      ARM DSP extension
+
+rsource "./*/Kconfig"

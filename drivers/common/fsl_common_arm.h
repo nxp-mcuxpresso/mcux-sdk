@@ -220,6 +220,12 @@ static inline void _SDK_AtomicLocalClearAndSet4Byte(volatile uint32_t *addr, uin
          ((2UL == sizeof(*(addr))) ? _SDK_AtomicLocalAdd2Byte((volatile uint16_t *)(volatile void *)(addr), (uint16_t)(val)) : \
                                      _SDK_AtomicLocalAdd4Byte((volatile uint32_t *)(volatile void *)(addr), (uint32_t)(val))))
 
+#define SDK_ATOMIC_LOCAL_SUB(addr, val)                                                                                        \
+    ((1UL == sizeof(*(addr))) ?                                                                                                \
+         _SDK_AtomicLocalSub1Byte((volatile uint8_t *)(volatile void *)(addr), (uint8_t)(val)) :                               \
+         ((2UL == sizeof(*(addr))) ? _SDK_AtomicLocalSub2Byte((volatile uint16_t *)(volatile void *)(addr), (uint16_t)(val)) : \
+                                     _SDK_AtomicLocalSub4Byte((volatile uint32_t *)(volatile void *)(addr), (uint32_t)(val))))
+
 #define SDK_ATOMIC_LOCAL_SET(addr, bits)                                                                                        \
     ((1UL == sizeof(*(addr))) ?                                                                                                 \
          _SDK_AtomicLocalSet1Byte((volatile uint8_t *)(volatile void *)(addr), (uint8_t)(bits)) :                               \
@@ -254,6 +260,15 @@ static inline void _SDK_AtomicLocalClearAndSet4Byte(volatile uint32_t *addr, uin
         uint32_t s_atomicOldInt;             \
         s_atomicOldInt = DisableGlobalIRQ(); \
         *(addr) += (val);                    \
+        EnableGlobalIRQ(s_atomicOldInt);     \
+    } while (0)
+
+#define SDK_ATOMIC_LOCAL_SUB(addr, val)      \
+    do                                       \
+    {                                        \
+        uint32_t s_atomicOldInt;             \
+        s_atomicOldInt = DisableGlobalIRQ(); \
+        *(addr) -= (val);                    \
         EnableGlobalIRQ(s_atomicOldInt);     \
     } while (0)
 

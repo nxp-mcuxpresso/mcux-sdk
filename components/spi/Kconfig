@@ -1,0 +1,52 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# component_dspi_adapter
+config MCUX_HAS_component_dspi_adapter
+    bool
+
+config MCUX_USE_component_dspi_adapter
+    depends on MCUX_HAS_component_dspi_adapter
+    bool "Component dspi_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_dspi
+    help
+      Component dspi_adapter
+
+# component_flexcomm_spi_adapter
+config MCUX_HAS_component_flexcomm_spi_adapter
+    bool
+
+config MCUX_USE_component_flexcomm_spi_adapter
+    depends on MCUX_HAS_component_flexcomm_spi_adapter
+    bool "Component flexcomm_spi_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_flexcomm_spi
+    help
+      Component flexcomm_spi_adapter
+
+# component_lpspi_adapter
+config MCUX_HAS_component_lpspi_adapter
+    bool
+
+config MCUX_USE_component_lpspi_adapter
+    depends on MCUX_HAS_component_lpspi_adapter
+    bool "Component lpspi_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_lpspi
+    help
+      Component lpspi_adapter
+
+# component_spi_adapter
+config MCUX_HAS_component_spi_adapter
+    bool
+
+config MCUX_USE_component_spi_adapter
+    depends on MCUX_HAS_component_spi_adapter
+    bool "Component spi_adapter"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_spi
+    help
+      Component spi_adapter

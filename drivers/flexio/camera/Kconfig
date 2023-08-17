@@ -1,0 +1,26 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_flexio_camera_edma
+config MCUX_HAS_driver_flexio_camera_edma
+    bool
+
+config MCUX_USE_driver_flexio_camera_edma
+    depends on MCUX_HAS_driver_flexio_camera_edma
+    bool "FLEXIO CAMERA EDMA Driver"
+    select MCUX_USE_driver_flexio_camera
+    help
+      FLEXIO CAMERA EDMA Driver
+
+# driver_flexio_camera
+config MCUX_HAS_driver_flexio_camera
+    bool
+
+config MCUX_USE_driver_flexio_camera
+    depends on MCUX_HAS_driver_flexio_camera
+    bool "FLEXIO CAMERA Driver"
+    select MCUX_USE_driver_flexio
+    help
+      FLEXIO Driver

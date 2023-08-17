@@ -1,0 +1,37 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_sai
+config MCUX_HAS_driver_sai
+    bool
+
+config MCUX_USE_driver_sai
+    depends on MCUX_HAS_driver_sai
+    bool "SAI Driver"
+    select MCUX_USE_driver_common
+    help
+      SAI Driver
+
+# driver_sai_edma
+config MCUX_HAS_driver_sai_edma
+    bool
+
+config MCUX_USE_driver_sai_edma
+    depends on MCUX_HAS_driver_sai_edma
+    bool "SAI EDMA Driver"
+    select MCUX_USE_driver_sai
+    help
+      SAI EDMA Driver
+
+# driver_sai_sdma
+config MCUX_HAS_driver_sai_sdma
+    bool
+
+config MCUX_USE_driver_sai_sdma
+    depends on MCUX_HAS_driver_sai_sdma
+    bool "SAI SDMA Driver"
+    select MCUX_USE_driver_sai
+    help
+      SAI SDMA Driver

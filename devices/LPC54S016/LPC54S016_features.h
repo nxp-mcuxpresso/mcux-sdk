@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.2, 2017-06-08
-**     Build:               b220714
+**     Build:               b230105
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
+**     Copyright 2016-2023 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -242,6 +242,11 @@
     (((x) == FLEXCOMM8) ? (0) : \
     (((x) == FLEXCOMM9) ? (0) : \
     (((x) == FLEXCOMM10) ? (0) : (-1))))))))))))
+
+/* GINT module features */
+
+/* @brief The count of th port which are supported in GINT. */
+#define FSL_FEATURE_GINT_PORT_COUNT (2)
 
 /* I2S module features */
 

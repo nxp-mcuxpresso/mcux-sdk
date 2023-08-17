@@ -1,0 +1,344 @@
+---
+set.component.osa:
+  section-type: set
+  section_info:
+    fixed_id: nxp_osa
+    version: 2.8.3
+    description: osa
+    display_name: osa
+    type: component
+    full_name: osa
+    vendor: NXP
+    set_location:
+      repo_base_path: components/osa
+    component_taxonomy:
+      component_osa:
+        cclass: NXP Component
+        cgroup: OS Abstraction Layer
+    product:
+      kex_package:
+        always_exist: true
+        scr:
+        - scr.component.osa
+        kex_web_ui:
+          ui_category: component
+          ui_control: false
+          ui_control_default: false
+          ui_release_specific: true
+      cmsis_pack:
+        vendor: NXP
+        scr:
+        - scr.component.osa
+        pack_root:
+          pack_type: SWP
+          pack_name: Component_OS_Abstraction_Layer
+          pack_version: 1.0.0
+  belong_to: set.component.osa
+scr.component.osa:
+  section-type: scr
+  belong_to: set.component.osa
+  contents:
+    Name: OSA
+    Version: 1.0.0
+    license:
+    - license.bsd-3
+    Format: source code
+    Description: NXP USB stack. This is a version of the USB stack that has been integrated
+      with the MCUXpresso SDK.
+    Origin: NXP (BSD-3-Clause)
+    Location: components/osa
+component.common_task:
+  section-type: component
+  contents:
+    repo_base_path: components/common_task
+    project_base_path: component/common_task
+    cc-include:
+    - repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+    files:
+    - source: components/common_task/fsl_component_common_task.h
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: c_include
+    - source: components/common_task/fsl_component_common_task.c
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: src
+    - source: components/common_task/component_common_task.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: components/common_task
+  belong_to: set.component.osa
+  section_info:
+    version: 1.0.0
+    type: software_component
+    full_name: Component common_task
+    description: Component common_task
+    taxonomy:
+      csub: common_task
+      cclass: NXP Component
+      cgroup: OS Abstraction Layer
+    display_name: common_task
+    vendor: NXP
+  dependency:
+    allOf:
+    - driver.common
+    - component.osa
+  meta-name: component.common_task
+  cmake_module_name: component_common_task
+component.osa_bm:
+  section-type: component
+  contents:
+    repo_base_path: components/osa
+    project_base_path: component/osa
+    cc-include:
+    - repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+    files:
+    - source: components/osa/fsl_os_abstraction_bm.h
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: c_include
+    - source: components/osa/fsl_os_abstraction_bm.c
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: src
+    - source: components/osa/component_osa_bm.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: components/osa
+  belong_to: set.component.osa
+  section_info:
+    version: 1.0.0
+    user_visible: always
+    type: software_component
+    full_name: Component osa_bm
+    description: Component osa_bm
+    taxonomy:
+      csub: osa_bm
+      cclass: NXP Component
+      cgroup: OS Abstraction Layer
+    display_name: osa_bm
+    vendor: NXP
+  dependency:
+    allOf:
+    - driver.common
+    - component.lists
+    - component.osa_interface
+  meta-name: component.osa_bm
+  cmake_module_name: component_osa_bm
+component.osa_free_rtos:
+  section-type: component
+  contents:
+    repo_base_path: components/osa
+    project_base_path: component/osa
+    cc-include:
+    - repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+    files:
+    - source: components/osa/fsl_os_abstraction_free_rtos.h
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: c_include
+    - source: components/osa/fsl_os_abstraction_free_rtos.c
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: src
+    - source: components/osa/component_osa_free_rtos.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: components/osa
+  belong_to: set.component.osa
+  section_info:
+    version: 1.0.0
+    user_visible: always
+    type: software_component
+    full_name: Component osa_free_rtos
+    description: Component osa_free_rtos
+    taxonomy:
+      csub: osa_free_rtos
+      cclass: NXP Component
+      cgroup: OS Abstraction Layer
+    display_name: osa_free_rtos
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.freertos-kernel
+    - driver.common
+    - component.lists
+    - component.osa_interface
+  meta-name: component.osa_free_rtos
+  cmake_module_name: component_osa_free_rtos
+component.osa:
+  section-type: component
+  contents:
+    repo_base_path: components/osa
+    project_base_path: component/osa
+    cc-include:
+    - repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+    files:
+    - source: components/osa/fsl_os_abstraction.h
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: c_include
+    - source: components/osa/fsl_os_abstraction_config.h
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: c_include
+    - source: components/osa/fsl_os_abstraction_bm.h
+      components: middleware.baremetal
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: c_include
+    - source: components/osa/fsl_os_abstraction_bm.c
+      components: middleware.baremetal
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: src
+    - source: components/osa/fsl_os_abstraction_free_rtos.h
+      components: middleware.freertos-kernel
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: c_include
+    - source: components/osa/fsl_os_abstraction_free_rtos.c
+      components: middleware.freertos-kernel
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: src
+    - source: components/osa/component_osa.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: components/osa
+  belong_to: set.component.osa
+  section_info:
+    version: 1.0.0
+    type: software_component
+    user_visible: never
+    full_name: Component osa
+    description: Component osa
+    taxonomy:
+      csub: osa
+      cclass: NXP Component
+      cgroup: OS Abstraction Layer
+    display_name: osa
+    vendor: NXP
+  dependency:
+    allOf:
+    - driver.common
+    - component.lists
+  meta-name: component.osa
+  cmake_module_name: component_osa
+component.osa_interface:
+  section-type: component
+  contents:
+    repo_base_path: components/osa
+    project_base_path: component/osa
+    cc-include:
+    - repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+    files:
+    - source: components/osa/fsl_os_abstraction.h
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: c_include
+    - source: components/osa/fsl_os_abstraction_config.h
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: c_include
+    - source: components/osa/component_osa_interface.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: components/osa
+  belong_to: set.component.osa
+  section_info:
+    version: 1.0.0
+    user_visible: always
+    type: software_component
+    full_name: Component osa interface
+    description: Component osa interface
+    taxonomy:
+      csub: osa_interface
+      cclass: NXP Component
+      cgroup: OS Abstraction Layer
+    display_name: osa_interface
+    vendor: NXP
+  dependency:
+    allOf:
+    - driver.common
+    - component.lists
+  meta-name: component.osa_interface
+  cmake_module_name: component_osa_interface
+component.osa_thread:
+  section-type: component
+  contents:
+    repo_base_path: components/osa
+    project_base_path: component/osa
+    cc-include:
+    - repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+    files:
+    - source: components/osa/fsl_os_abstraction_threadx.c
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: src
+    - source: components/osa/fsl_os_abstraction_threadx.h
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: c_include
+    - source: components/osa/component_osa_thread.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: components/osa
+  belong_to: set.component.osa
+  section_info:
+    version: 1.0.0
+    need_require: true
+    user_visible: never
+    type: software_component
+    full_name: Component osa thread
+    description: Component osa thread
+    taxonomy:
+      csub: osa_thread
+      cclass: NXP Component
+      cgroup: OS Abstraction Layer
+    display_name: osa thread
+    vendor: NXP
+  dependency:
+    allOf:
+    - driver.common
+    - component.lists
+    - component.osa_interface
+    - anyOf:
+      - middleware.azure_rtos.tx
+      - middleware.azure_rtos.tx.sp
+  meta-name: component.osa_thread
+  cmake_module_name: component_osa_thread

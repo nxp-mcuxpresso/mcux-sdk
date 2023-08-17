@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_xecc
+config MCUX_HAS_driver_xecc
+    bool
+
+config MCUX_USE_driver_xecc
+    depends on MCUX_HAS_driver_xecc
+    bool "XECC Driver"
+    select MCUX_USE_driver_common
+    help
+      XECC Driver

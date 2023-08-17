@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 4.0, 2020-05-18
-**     Build:               b221025
+**     Build:               b230407
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
+**     Copyright 2016-2023 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -233,6 +233,8 @@
 #define FSL_FEATURE_CTIMER_HAS_NO_CCR_CAP2 (0)
 /* @brief Has CTIMER CCR_CAP3 (register bits CCR[CAP3RE][CAP3FE][CAP3I]). */
 #define FSL_FEATURE_CTIMER_HAS_CCR_CAP3 (1)
+/* @brief CTIMER Has register MSR */
+#define FSL_FEATURE_CTIMER_HAS_MSR (1)
 
 /* DMA module features */
 
@@ -493,6 +495,8 @@
 #define FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND (0)
 /* @brief Register SCONFIG has HDROK bitfield. */
 #define FSL_FEATURE_I3C_HAS_HDROK (0)
+/* @brief Has ERRATA_051617. */
+#define FSL_FEATURE_I3C_HAS_ERRATA_051617 (1)
 
 /* INPUTMUX module features */
 
@@ -591,6 +595,11 @@
 /* @brief Gate counts */
 #define FSL_FEATURE_SEMA42_GATE_COUNT (16)
 
+/* SPI module features */
+
+/* @brief SSEL pin count. */
+#define FSL_FEATURE_SPI_SSEL_COUNT (4)
+
 /* TRNG module features */
 
 /* @brief Need configure default frequency minimum value */
@@ -655,6 +664,8 @@
 #define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_1V8_SIGNALn(x) (1)
 /* @brief Has no retuning time counter (HOST_CTRL_CAP[TIME_COUNT_RETURNING]) */
 #define FSL_FEATURE_USDHC_REGISTER_HOST_CTRL_CAP_HAS_NO_RETUNING_TIME_COUNTER (0)
+/* @brief Has no VSELECT bit in VEND_SPEC register */
+#define FSL_FEATURE_USDHC_HAS_NO_VOLTAGE_SELECT (0)
 
 /* UTICK module features */
 

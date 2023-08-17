@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2021, 2023 NXP
  * All rights reserved.
  *
  *
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief GPC driver version 2.2.0. */
-#define FSL_GPC_RIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief GPC driver version 2.3.0. */
+#define FSL_GPC_RIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*! @}*/
 
 #define GPC_RESERVED_USE_MACRO 0xFFFFFFFFU
@@ -55,7 +55,7 @@
 #define GPC_SP_BG_PLDO_OFF_CTRL_OFFSET  (0x190)
 #define GPC_SP_LDO_PRE_CTRL_OFFSET      (0x1A0)
 #define GPC_SP_DCDC_DOWN_CTRL_OFFSET    (0x1B0)
-#define GPC_SP_DCDC_UP_CTRL_OFFSET      (0x2B0)
+#define GPC_SP_DCDC_UP_CTRL_OFFSET      (0x200)
 #define GPC_SP_LDO_POST_CTRL_OFFSET     (0x210)
 #define GPC_SP_BG_PLDO_ON_CTRL_OFFSET   (0x220)
 #define GPC_SP_BIAS_ON_CTRL_OFFSET      (0x230)
@@ -288,6 +288,15 @@ typedef enum _gpc_stby_tran_step
     kGPC_STBY_PllOut     = 14UL, /*!< PLL out step. */
     kGPC_STBY_LpcgOut    = 15UL, /*!< LPCG out step. */
 } gpc_stby_tran_step_t;
+
+/*!
+ * @brief GPC CPU domain name, used to select the CPU domain.
+ */
+typedef enum _gpc_cpu_domain_name
+{
+    kGPC_CM7Core = 0U, /*!< CM7 core. */
+    kGPC_CM4Core = 1U, /*!< CM4 core. */
+} gpc_cpu_domain_name_t;
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -383,8 +392,6 @@ void GPC_CM_EnableIrqWakeup(GPC_CPU_MODE_CTRL_Type *base, uint32_t irqId, bool e
  */
 static inline void GPC_CM_EnableNonIrqWakeup(GPC_CPU_MODE_CTRL_Type *base, uint32_t mask, bool enable)
 {
-    assert(mask < 2UL);
-
     if (true == enable)
     {
         base->CM_NON_IRQ_WAKEUP_MASK &= ~mask;
@@ -630,7 +637,7 @@ static inline uint8_t GPC_SP_GetTargetSetPoint(GPC_SET_POINT_CTRL_Type *base)
 /*!
  * @brief Config the standby transition step.
  *
- * @param base GPC Setpoint controller base address.
+ * @param base GPC standby controller base address.
  * @param step step type, refer to "gpc_stby_tran_step_t".
  * @param config transition step configuration, refer to "gpc_tran_step_config_t".
  */
@@ -638,6 +645,16 @@ void GPC_STBY_ConfigStandbyTransitionStep(GPC_STBY_CTRL_Type *base,
                                           gpc_stby_tran_step_t step,
                                           const gpc_tran_step_config_t *config);
 
+/*!
+ * @brief Force selected CPU requesting standby mode.
+ *
+ * @param base GPC standby controller base address.
+ * @param cpuName The CPU name, refer to @ref gpc_cpu_domain_name_t.
+ */
+static inline void GPC_STBY_ForceCoreRequestStandbyMode(GPC_STBY_CTRL_Type *base, gpc_cpu_domain_name_t cpuName)
+{
+    base->STBY_MISC |= ((uint32_t)GPC_STBY_CTRL_STBY_MISC_FORCE_CPU0_STBY_MASK << (uint32_t)cpuName);
+}
 /*!
  * @}
  */

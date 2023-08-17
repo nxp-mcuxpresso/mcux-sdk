@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_pint
+config MCUX_HAS_driver_pint
+    bool
+
+config MCUX_USE_driver_pint
+    depends on MCUX_HAS_driver_pint
+    bool "PINT Driver"
+    select MCUX_USE_driver_common
+    help
+      PINT Driver

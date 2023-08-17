@@ -1,0 +1,16 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+if MCUX_USE_BOARD_FRDMKE15Z
+
+config MCUX_BOARD
+    default "frdmke15z"
+
+config MCUX_KIT
+    default "frdmke15z"
+
+
+#### Board level drivers ####
+
+endif

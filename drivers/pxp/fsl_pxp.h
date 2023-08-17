@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 NXP
+ * Copyright 2017-2023 NXP
  * All rights reserved.
  *
  *
@@ -48,7 +48,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PXP_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
+#define FSL_PXP_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
 /*@}*/
 
 /* This macto indicates whether the rotate sub module is shared by process surface and output buffer. */
@@ -70,6 +70,10 @@
 #define PXP_GET_MUX_FROM_PATH(path) ((path) >> 8U)
 #define PXP_GET_SEL_FROM_PATH(path) ((path)&0x03U)
 #endif /* PXP_USE_PATH */
+
+#define PXP_COMBINE_BYTE_TO_WORD(dataAddr)                                                                           \
+    ((*(uint8_t *)(dataAddr)) | ((*(uint8_t *)((dataAddr) + 1U)) << 8U) | ((*(uint8_t *)((dataAddr) + 2U)) << 16U) | \
+     ((*(uint8_t *)((dataAddr) + 3U)) << 24U));
 
 /*! @brief PXP interrupts to enable. */
 enum _pxp_interrupt_enable
@@ -338,9 +342,19 @@ typedef struct _pxp_output_buffer_config
 /*! @brief PXP process surface buffer pixel format. */
 typedef enum _pxp_ps_pixel_format
 {
-    kPXP_PsPixelFormatRGB888    = 0x4,  /*!< 32-bit pixels without alpha (unpacked 24-bit format) */
-    kPXP_PsPixelFormatRGB555    = 0xC,  /*!< 16-bit pixels without alpha. */
-    kPXP_PsPixelFormatRGB444    = 0xD,  /*!< 16-bit pixels without alpha. */
+#if (!(defined(FSL_FEATURE_PXP_HAS_NO_EXTEND_PIXEL_FORMAT) && FSL_FEATURE_PXP_HAS_NO_EXTEND_PIXEL_FORMAT)) && \
+    (!(defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3))
+    kPXP_PsPixelFormatARGB8888 = 0x4, /*!< 32-bit pixels with alpha(when participates in blend with
+        alpha surface uses pixel format that has alpha value) or without alpha (unpacked 24-bit format) */
+    kPXP_PsPixelFormatARGB1555 = 0xC, /*!< 16-bit pixels with alpha(when participates in blend with
+        alpha surface uses pixel format that has alpha value) or without alpha. */
+    kPXP_PsPixelFormatARGB4444 = 0xD, /*!< 16-bit pixels with alpha(when participates in blend with
+        alpha surface uses pixel format that has alpha value) or without alpha. */
+#else
+    kPXP_PsPixelFormatRGB888 = 0x4, /*!< 32-bit pixels without alpha (unpacked 24-bit format) */
+    kPXP_PsPixelFormatRGB555 = 0xC, /*!< 16-bit pixels without alpha. */
+    kPXP_PsPixelFormatRGB444 = 0xD, /*!< 16-bit pixels without alpha. */
+#endif
     kPXP_PsPixelFormatRGB565    = 0xE,  /*!< 16-bit pixels without alpha. */
     kPXP_PsPixelFormatYUV1P444  = 0x10, /*!< 32-bit pixels (1-plane XYUV unpacked). */
     kPXP_PsPixelFormatUYVY1P422 = 0x12, /*!< 16-bit pixels (1-plane U0,Y0,V0,Y1 interleaved bytes) */
@@ -353,6 +367,13 @@ typedef enum _pxp_ps_pixel_format
     kPXP_PsPixelFormatYVU2P420  = 0x1B, /*!< 16-bit pixels (2-plane VU) */
     kPXP_PsPixelFormatYVU422    = 0x1E, /*!< 16-bit pixels (3-plane) */
     kPXP_PsPixelFormatYVU420    = 0x1F, /*!< 16-bit pixels (3-plane) */
+#if !(defined(FSL_FEATURE_PXP_HAS_NO_EXTEND_PIXEL_FORMAT) && FSL_FEATURE_PXP_HAS_NO_EXTEND_PIXEL_FORMAT)
+#if !(defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3)
+    kPXP_PsPixelFormatRGBA8888 = 0x24, /*!< 32-bit pixels with alpha at low 8-bit */
+    kPXP_PsPixelFormatRGBA5551 = 0x2C, /*!< 16-bit pixels with alpha at low 1-bit. */
+    kPXP_PsPixelFormatRGBA4444 = 0x2D, /*!< 16-bit pixels with alpha at low 4-bit. */
+#endif
+#endif
 } pxp_ps_pixel_format_t;
 
 /*! @brief PXP process surface buffer YUV format. */
@@ -383,6 +404,13 @@ typedef enum _pxp_as_pixel_format
     kPXP_AsPixelFormatRGB555   = 0xC, /*!< 16-bit pixels without alpha. */
     kPXP_AsPixelFormatRGB444   = 0xD, /*!< 16-bit pixels without alpha. */
     kPXP_AsPixelFormatRGB565   = 0xE, /*!< 16-bit pixels without alpha. */
+#if !(defined(FSL_FEATURE_PXP_HAS_NO_EXTEND_PIXEL_FORMAT) && FSL_FEATURE_PXP_HAS_NO_EXTEND_PIXEL_FORMAT)
+#if !(defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3)
+    kPXP_AsPixelFormatRGBA8888 = 0x1, /*!< 32-bit pixels with alpha at low 8-bit. */
+    kPXP_AsPixelFormatRGBA5551 = 0xA, /*!< 16-bit pixels with alpha at low 1-bit. */
+    kPXP_AsPixelFormatRGBA4444 = 0xB, /*!< 16-bit pixels with alpha at low 4-bit. */
+#endif
+#endif
 } pxp_as_pixel_format_t;
 
 /*! @brief PXP alphs surface buffer configuration. */
@@ -857,14 +885,11 @@ typedef struct _pxp_fetch_engine_config
     uint16_t totalHeight; /*!< Total height for the actual fetch size. */
     uint16_t totalWidth;  /*!< Total width for the actual fetch size. */
     uint16_t pitchBytes;  /*!< Channel input pitch */
-    uint16_t
-        ulcX; /*!< X coordinate of upper left coordinate in pixels of the active surface of the total input memory */
-    uint16_t
-        ulcY; /*!< Y coordinate of upper left coordinate in pixels of the active surface of the total input memory */
-    uint16_t
-        lrcX; /*!< X coordinate of Lower right coordinate in pixels of the active surface of the total input memory */
-    uint16_t
-        lrcY; /*!< Y coordinate of Lower right coordinate in pixels of the active surface of the total input memory */
+    uint16_t ulcX; /*!< X coordinate of upper left coordinate in pixels of the active area of the total input memory */
+    uint16_t ulcY; /*!< Y coordinate of upper left coordinate in pixels of the active area of the total input memory */
+    uint16_t lrcX; /*!< X coordinate of Lower right coordinate in pixels of the active area of the total input memory */
+    uint16_t lrcY; /*!< Y coordinate of Lower right coordinate in pixels of the active area of the total input memory */
+    uint32_t backGroundColor; /*!< Pixel value of the background color for the space outside the active area. */
     /* Interface configuration */
     pxp_fetch_interface_mode_t interface; /*!< Interface mode, normal/bypass/handshake */
     /* Pixel configuration */
@@ -899,10 +924,12 @@ typedef enum _pxp_store_engine_name
 /*! @brief PXP store engine interface mode with the downstream fetch engine. */
 typedef enum _pxp_store_interface_mode
 {
-    kPXP_StoreModeBypass    = 0x20U,
-    kPXP_StoreModeNormal    = 0x40U,
-    kPXP_StoreModeHandshake = 0x43U,
-    kPXP_StoreModeDual      = 0x60U, /*!< Store engine outputs data directly to downstream fetch engine(Bypass) but also
+    kPXP_StoreModeBypass = 0x20U,    /*!< Store engine output the input data, after the shift function directly to the
+                                        downstream Fetch Engine. */
+    kPXP_StoreModeNormal    = 0x40U, /*!< Store engine stores the input data to memory. */
+    kPXP_StoreModeHandshake = 0x43U, /*!< Downstream fetch engine fetch data per scanline from memory using buffer
+                                        sharing with store engine. */
+    kPXP_StoreModeDual = 0x60U,      /*!< Store engine outputs data directly to downstream fetch engine(Bypass) but also
                                         storing it to memory at the same time. */
 } pxp_store_interface_mode_t;
 
@@ -960,7 +987,7 @@ typedef struct _pxp_store_engine_config
     uint32_t fixedData; /*!< The value of the fixed data. */
     /* Data packing */
     bool packInSelect; /*!< When enabled, channel 0 will select low 32 bit shift out data to pack while channel i select
-                          high 32 bit, otherwise all 64bit of data will be selected. */
+                          high 32 bit, otherwise all 64-bit of data will be selected. */
     /* Data store format */
     pxp_block_config_t storeFormat;       /*!< The format to store data, block or otherwise. */
     pxp_store_shift_config_t shiftConfig; /*!< Shift operation configuration. */
@@ -2067,6 +2094,38 @@ void PXP_SetPorterDuffConfig(PXP_Type *base, const pxp_porter_duff_config_t *con
 
 #if (!(defined(FSL_FEATURE_PXP_HAS_NO_PORTER_DUFF_CTRL) && FSL_FEATURE_PXP_HAS_NO_PORTER_DUFF_CTRL)) || \
     (defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3)
+
+/*!
+ * @brief Get the Porter Duff configuration.
+ *
+ * The FactorMode are selected based on blend mode, the other values are set
+ * based on input parameters. These values could be modified after calling
+ * this function. This function is extened @ref PXP_GetPorterDuffConfig.
+ *
+ * @param mode The blend mode.
+ * @param config Pointer to the configuration.
+ * @param dstGlobalAlphaMode Destination layer (or PS, s0) global alpha mode, see @ref pxp_porter_duff_global_alpha_mode
+ * @param dstAlphaMode Destination layer (or PS, s0) alpha mode, see @ref pxp_porter_duff_alpha_mode.
+ * @param dstColorMode Destination layer (or PS, s0) color mode, see @ref pxp_porter_duff_color_mode.
+ * @param srcGlobalAlphaMode Source layer (or AS, s1) global alpha mode, see @ref pxp_porter_duff_global_alpha_mode
+ * @param srcAlphaMode Source layer (or AS, s1) alpha mode, see @ref pxp_porter_duff_alpha_mode.
+ * @param srcColorMode Source layer (or AS, s1) color mode, see @ref pxp_porter_duff_color_mode.
+ * @param dstGlobalAlpha Destination layer (or PS, s0) global alpha value, 0~255
+ * @param srcGlobalAlpha Source layer (or AS, s1) global alpha value, 0~255
+ * @retval kStatus_Success Successfully get the configuratoin.
+ * @retval kStatus_InvalidArgument The blend mode not supported.
+ */
+status_t PXP_GetPorterDuffConfigExt(pxp_porter_duff_blend_mode_t mode,
+                                    pxp_porter_duff_config_t *config,
+                                    uint8_t dstGlobalAlphaMode,
+                                    uint8_t dstAlphaMode,
+                                    uint8_t dstColorMode,
+                                    uint8_t srcGlobalAlphaMode,
+                                    uint8_t srcAlphaMode,
+                                    uint8_t srcColorMode,
+                                    uint8_t dstGlobalAlpha,
+                                    uint8_t srcGlobalAlpha);
+
 /*!
  * @brief Get the Porter Duff configuration by blend mode.
  *
@@ -2081,7 +2140,20 @@ void PXP_SetPorterDuffConfig(PXP_Type *base, const pxp_porter_duff_config_t *con
  * @retval kStatus_Success Successfully get the configuratoin.
  * @retval kStatus_InvalidArgument The blend mode not supported.
  */
-status_t PXP_GetPorterDuffConfig(pxp_porter_duff_blend_mode_t mode, pxp_porter_duff_config_t *config);
+static inline status_t PXP_GetPorterDuffConfig(pxp_porter_duff_blend_mode_t mode, pxp_porter_duff_config_t *config)
+{
+    return PXP_GetPorterDuffConfigExt(mode,                          /* Blend mode.           */
+                                      config,                        /* Output configuration. */
+                                      kPXP_PorterDuffLocalAlpha,     /* dstGlobalAlphaMode    */
+                                      kPXP_PorterDuffAlphaStraight,  /* dstAlphaMode          */
+                                      kPXP_PorterDuffColorWithAlpha, /* dstColorMode          */
+                                      kPXP_PorterDuffLocalAlpha,     /* srcGlobalAlphaMode    */
+                                      kPXP_PorterDuffAlphaStraight,  /* srcAlphaMode          */
+                                      kPXP_PorterDuffColorWithAlpha, /* srcColorMode          */
+                                      0U,                            /* dstGlobalAlpha        */
+                                      0U                             /* srcGlobalAlpha        */
+    );
+}
 
 /* @} */
 #endif /* FSL_FEATURE_PXP_V3 || FSL_FEATURE_PXP_HAS_NO_PORTER_DUFF_CTRL  */

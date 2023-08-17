@@ -1,0 +1,7 @@
+<map id="algorithms/sensorfusion/sources/sensor_fusion.h" name="algorithms/sensorfusion/sources/sensor_fusion.h">
+<area shape="rect" id="node8" href="$a00857.html" title="Lower level magnetic calibration interface. " alt="" coords="564,95,651,121"/>
+<area shape="rect" id="node9" href="$a00908.html" title="Implements accelerometer calibration routines. " alt="" coords="675,95,844,121"/>
+<area shape="rect" id="node10" href="$a00899.html" title="Functions to convert between various orientation representations. " alt="" coords="869,95,962,121"/>
+<area shape="rect" id="node11" href="$a00176.html" title="The register_io_spi.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="986,95,1103,121"/>
+<area shape="rect" id="node12" href="$a00890.html" title="Matrix manipulation functions. " alt="" coords="1127,95,1197,121"/>
+</map>

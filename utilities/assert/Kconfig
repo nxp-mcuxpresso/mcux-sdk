@@ -1,0 +1,26 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# utility_assert
+config MCUX_HAS_utility_assert
+    bool
+
+config MCUX_USE_utility_assert
+    depends on MCUX_HAS_utility_assert
+    bool "Utility assert"
+    select MCUX_USE_utility_debug_console
+    help
+      Utility assert
+
+# utility_assert_lite
+config MCUX_HAS_utility_assert_lite
+    bool
+
+config MCUX_USE_utility_assert_lite
+    depends on MCUX_HAS_utility_assert_lite
+    bool "Utility assert_lite"
+    select MCUX_USE_utility_debug_console_lite
+    help
+      Utility assert_lite

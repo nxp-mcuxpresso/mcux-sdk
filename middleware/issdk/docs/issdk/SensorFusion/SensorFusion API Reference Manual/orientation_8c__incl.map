@@ -1,0 +1,9 @@
+<map id="orientation.c" name="orientation.c">
+<area shape="rect" id="node7" href="$sensor__fusion_8h.html" title="The sensor_fusion.h file implements the top level programming interface. " alt="" coords="558,155,671,181"/>
+<area shape="rect" id="node15" href="$orientation_8h.html" title="Functions to convert between various orientation representations. " alt="" coords="1028,229,1121,256"/>
+<area shape="rect" id="node16" href="$matrix_8h.html" title="Matrix manipulation functions. " alt="" coords="1145,229,1215,256"/>
+<area shape="rect" id="node17" href="$fusion_8h.html" title="Lower level sensor fusion interface. " alt="" coords="607,80,673,107"/>
+<area shape="rect" id="node18" href="$approximations_8h.html" title="Math approximations file. " alt="" coords="1059,80,1181,107"/>
+<area shape="rect" id="node13" href="$magnetic_8h.html" title="Lower level magnetic calibration interface. " alt="" coords="178,229,265,256"/>
+<area shape="rect" id="node14" href="$precisionAccelerometer_8h.html" title="Implements accelerometer calibration routines. " alt="" coords="289,229,458,256"/>
+</map>

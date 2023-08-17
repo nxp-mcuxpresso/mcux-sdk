@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/DSP
     ${CMAKE_CURRENT_LIST_DIR}/../../components/IS42SM16800H
     ${CMAKE_CURRENT_LIST_DIR}/../../components/ft5406
     ${CMAKE_CURRENT_LIST_DIR}/../../components/fxos8700cq
@@ -49,8 +50,8 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utilities
@@ -75,7 +76,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_cache_lmem)
 #    include(driver_lpuart_edma)
 #    include(driver_flexio_uart_edma)
-#    include(CMSIS_Include_core_cm4)
+#    include(CMSIS_Include_core_cm)
 #    include(driver_port)
 #    include(driver_rtc)
 #    include(driver_IS42SM16800H)
@@ -83,7 +84,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_pit)
 #    include(component_serial_manager_uart)
 #    include(driver_llwu)
-#    include(CMSIS_Include_dsp)
+#    include(CMSIS_DSP_Include)
 #    include(component_lpuart_adapter)
 #    include(driver_lptmr)
 #    include(driver_i2c_edma)
@@ -138,7 +139,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_notifier)
 #    include(driver_sim)
 #    include(driver_qspi_edma)
-#    include(CMSIS_Include_common)
 #    include(middleware_freertos-kernel_MK28FA15)
 #    include(driver_edma_MK28FA15)
 #    include(driver_trng)

@@ -396,6 +396,69 @@ static void FLEXIO_CommonIRQHandler(void)
     SDK_ISR_EXIT_BARRIER;
 }
 
+#if defined(FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER) && FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER
+/*!
+ * brief Configure a FLEXIO pin used by the board.
+ *
+ * To Config the FLEXIO PIN, define a pin configuration, as either input or output, in the user file.
+ * Then, call the FLEXIO_SetPinConfig() function.
+ *
+ * This is an example to define an input pin or an output pin configuration.
+ * code
+ * Define a digital input pin configuration,
+ * flexio_gpio_config_t config =
+ * {
+ *   kFLEXIO_DigitalInput,
+ *   0U,
+ *   kFLEXIO_FlagRisingEdgeEnable | kFLEXIO_InputInterruptEnable,
+ * }
+ * Define a digital output pin configuration,
+ * flexio_gpio_config_t config =
+ * {
+ *   kFLEXIO_DigitalOutput,
+ *   0U,
+ *   0U
+ * }
+ * endcode
+ * param base   FlexIO peripheral base address
+ * param pin    FLEXIO pin number.
+ * param config FLEXIO pin configuration pointer.
+ */
+void FLEXIO_SetPinConfig(FLEXIO_Type *base, uint32_t pin, flexio_gpio_config_t *config)
+{
+    assert(NULL != config);
+    IRQn_Type flexio_irqs[] = FLEXIO_IRQS;
+
+    if (config->pinDirection == kFLEXIO_DigitalInput)
+    {
+        base->PINOUTE &= ~(1UL << pin);
+        if (0U != (config->inputConfig & (uint8_t)kFLEXIO_InputInterruptEnable))
+        {
+            base->PINIEN = 1UL << pin;
+            /* Clear pending NVIC IRQ before enable NVIC IRQ. */
+            NVIC_ClearPendingIRQ(flexio_irqs[FLEXIO_GetInstance(base)]);
+            /* Enable interrupt in NVIC. */
+            (void)EnableIRQ(flexio_irqs[FLEXIO_GetInstance(base)]);
+        }
+        
+        if (0U != (config->inputConfig & (uint8_t)kFLEXIO_FlagRisingEdgeEnable))
+        {
+            base->PINREN = 1UL << pin;
+        }
+        
+        if (0U != (config->inputConfig & (uint8_t)kFLEXIO_FlagFallingEdgeEnable))
+        {
+            base->PINFEN = 1UL << pin;
+        }
+    }
+    else
+    {
+        FLEXIO_EnablePinOutput(base, pin);
+        FLEXIO_PinWrite(base, pin, config->outputLogic);
+    }
+}
+#endif /*FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER*/
+
 void FLEXIO_DriverIRQHandler(void);
 void FLEXIO_DriverIRQHandler(void)
 {

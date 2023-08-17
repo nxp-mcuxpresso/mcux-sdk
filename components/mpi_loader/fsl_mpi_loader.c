@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2021, 2023 NXP
  * All rights reserved.
  *
  *
@@ -33,13 +33,13 @@
         }                \
     } while (false)
 
-#if defined(MIMXRT595S_cm33_SERIES)
+#if defined(MIMXRT595S_cm33_SERIES) || defined(MIMXRT555S_SERIES) || defined(MIMXRT533S_SERIES)
 #define MPI_TZM_PRESET_SIZE MPI_TZM_PRESET_SIZE_RT5XX
 #define MPI_ADDRESS_MASK    (0xEFFFFFFFU) /* Bit28 is secure address indicator */
 #define MPI_MEMCPY          (void)memcpy
 #define MPI_MEMCLR          (void)memset
 
-#elif defined(MIMXRT685S_cm33_SERIES)
+#elif defined(MIMXRT685S_cm33_SERIES) || defined(MIMXRT633S_SERIES)
 #define MPI_TZM_PRESET_SIZE MPI_TZM_PRESET_SIZE_RT6XX
 #define MPI_ADDRESS_MASK    (0xEFFFFFFFU) /* Bit28 is secure address indicator */
 #define MPI_MEMCPY          MPI_WordCopy
@@ -107,7 +107,7 @@ typedef struct
 /*******************************************************************************
  * Code
  ******************************************************************************/
-#if defined(MIMXRT685S_cm33_SERIES)
+#if defined(MIMXRT685S_cm33_SERIES) || defined(MIMXRT633S_SERIES)
 static void MPI_WordCopy(void *dest, void *src, uint32_t size)
 {
     uint32_t *s, *d;

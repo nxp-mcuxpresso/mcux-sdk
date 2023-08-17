@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_rdc
+config MCUX_HAS_driver_rdc
+    bool
+
+config MCUX_USE_driver_rdc
+    depends on MCUX_HAS_driver_rdc
+    bool "RDC Driver"
+    select MCUX_USE_driver_common
+    help
+      RDC Driver

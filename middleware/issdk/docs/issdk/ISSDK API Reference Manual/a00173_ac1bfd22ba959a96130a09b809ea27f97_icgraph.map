@@ -1,0 +1,5 @@
+<map id="register_spi_control" name="register_spi_control">
+<area shape="rect" id="node2" href="$a00176.html#a0662e3575811a227d02c1cfe802744c5" title="The interface function to block write to a sensor register. " alt="" coords="188,5,357,32"/>
+<area shape="rect" id="node3" href="$a00176.html#a76a3aee498397854509b81ae2da2f85e" title="The interface function to read a sensor register. " alt="" coords="205,56,340,83"/>
+<area shape="rect" id="node4" href="$a00176.html#ac4eb16e5a939fce81270bab7f6707754" title="The interface function to write a sensor register. " alt="" coords="205,107,341,133"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="fUpdateMagCalibration7Slice" name="fUpdateMagCalibration7Slice">
+<area shape="rect" id="node2" href="$magnetic_8h.html#a0cce4289e5bceba2b1a6cd59641f9fda" title="fRunMagCalibration" alt="" coords="241,5,376,32"/>
+<area shape="rect" id="node3" href="$sensor__fusion_8c.html#aaf8b47198fa614f0b50265addf44a8b0" title="processMagData" alt="" coords="424,5,544,32"/>
+<area shape="rect" id="node4" href="$sensor__fusion_8h.html#aef2b1f23f820d2b513bc827f8baffd0d" title="conditionSensorReadings() transforms raw software FIFO readings into forms that can be consumed by th..." alt="" coords="592,5,761,32"/>
+</map>

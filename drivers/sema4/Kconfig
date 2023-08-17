@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_sema4
+config MCUX_HAS_driver_sema4
+    bool
+
+config MCUX_USE_driver_sema4
+    depends on MCUX_HAS_driver_sema4
+    bool "SEMA4 Driver"
+    select MCUX_USE_driver_common
+    help
+      SEMA4 Driver

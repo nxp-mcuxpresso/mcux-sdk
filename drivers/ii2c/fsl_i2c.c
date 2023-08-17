@@ -447,7 +447,7 @@ static void I2C_TransferCommonIRQHandler(I2C_Type *base, void *handle)
     {
         s_i2cSlaveIsr(base, handle);
     }
-    __DSB();
+    SDK_ISR_EXIT_BARRIER;
 }
 
 /*!

@@ -1,0 +1,29 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_flexcomm_i2c
+config MCUX_HAS_driver_flexcomm_i2c
+    bool
+
+config MCUX_USE_driver_flexcomm_i2c
+    depends on MCUX_HAS_driver_flexcomm_i2c
+    bool "FLEXCOMM I2C Driver"
+    select MCUX_USE_driver_flexcomm
+    select MCUX_USE_driver_common
+    help
+      I2C Driver
+
+# driver_flexcomm_i2c_dma
+config MCUX_HAS_driver_flexcomm_i2c_dma
+    bool
+
+config MCUX_USE_driver_flexcomm_i2c_dma
+    depends on MCUX_HAS_driver_flexcomm_i2c_dma
+    bool "FLEXCOMM I2C DMA Driver"
+    select MCUX_USE_driver_flexcomm
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_flexcomm_i2c
+    help
+      I2C Driver

@@ -13,12 +13,22 @@
 #define FSL_COMPONENT_ID "platform.drivers.wdog32"
 #endif
 
+/*
+ * $Coverage Justification Reference$
+ *
+ * $Justification wdog32_c_ref_1$
+ * Function not covered. Test unfeasible, the reset state is too short to catch.
+ *
+ */
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
-
 void WDOG32_ClearStatusFlags(WDOG_Type *base, uint32_t mask)
 {
+    
+    /* $Line Coverage Justification$ $ref wdog32_c_ref_1$. */
+    /* $Branch Coverage Justification$ $ref wdog32_c_ref_1$. */
     if (0U != (mask & (uint32_t)kWDOG32_InterruptFlag))
     {
         base->CS |= WDOG_CS_FLG_MASK;

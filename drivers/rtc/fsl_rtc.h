@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_RTC_DRIVER_VERSION (MAKE_VERSION(2, 2, 1)) /*!< Version 2.2.1 */
+#define FSL_RTC_DRIVER_VERSION (MAKE_VERSION(2, 2, 2)) /*!< Version 2.2.2 */
 /*@}*/
 
 /*! @brief List of RTC interrupts */
@@ -30,10 +30,10 @@ typedef enum _rtc_interrupt_enable
     kRTC_TimeInvalidInterruptEnable  = (1U << 0U), /*!< Time invalid interrupt.*/
     kRTC_TimeOverflowInterruptEnable = (1U << 1U), /*!< Time overflow interrupt.*/
     kRTC_AlarmInterruptEnable        = (1U << 2U), /*!< Alarm interrupt.*/
-    kRTC_SecondsInterruptEnable      = (1U << 3U), /*!< Seconds interrupt.*/
 #if defined(FSL_FEATURE_RTC_HAS_MONOTONIC) && (FSL_FEATURE_RTC_HAS_MONOTONIC)
-    kRTC_MonotonicOverflowInterruptEnable = (1U << 4U), /*!< Monotonic Overflow Interrupt Enable */
+    kRTC_MonotonicOverflowInterruptEnable = (1U << 3U), /*!< Monotonic Overflow Interrupt Enable */
 #endif                                                  /* FSL_FEATURE_RTC_HAS_MONOTONIC */
+    kRTC_SecondsInterruptEnable      = (1U << 4U), /*!< Seconds interrupt.*/
 #if (defined(FSL_FEATURE_RTC_HAS_TIR) && FSL_FEATURE_RTC_HAS_TIR)
     kRTC_TestModeInterruptEnable      = (1U << 5U), /* test mode interrupt */
     kRTC_FlashSecurityInterruptEnable = (1U << 6U), /* flash security interrupt */

@@ -336,7 +336,8 @@ static const WaitStateInterval_t IntervalList[] = {
 void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz)
 {
     /* Flash Controller & FMC internal number of Wait States (minus 1) */
-    uint32_t num_wait_states = 15UL; /* Default to the maximum number of wait states */
+    uint32_t num_wait_states      = 15UL; /* Default to the maximum number of wait states */
+    uint32_t prefetch_enable_mask = SYSCON->FMCCR & SYSCON_FMCCR_PREFEN_MASK;
 
     for (size_t cnt = 0; cnt < (sizeof(IntervalList) / sizeof(WaitStateInterval_t)); cnt++)
     {
@@ -346,6 +347,9 @@ void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz)
             break;
         }
     }
+
+    /*The prefetch bit must be disabled before any flash commands*/
+    SYSCON->FMCCR &= ~SYSCON_FMCCR_PREFEN_MASK;
 
     FLASH->INT_CLR_STATUS = 0x1F; /* Clear all status flags */
 
@@ -362,6 +366,9 @@ void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz)
     /* Adjust FMC waiting time cycles (num_wait_states) */
     SYSCON->FMCCR = (SYSCON->FMCCR & ~SYSCON_FMCCR_FLASHTIM_MASK) |
                     ((num_wait_states << SYSCON_FMCCR_FLASHTIM_SHIFT) & SYSCON_FMCCR_FLASHTIM_MASK);
+
+    /* restore prefetch enable */
+    SYSCON->FMCCR |= prefetch_enable_mask;
 }
 
 /* Set EXT OSC Clk */
@@ -982,7 +989,7 @@ static void pllFindSel(uint32_t M, uint32_t *pSelP, uint32_t *pSelI, uint32_t *p
 {
     uint32_t seli, selp;
     /* bandwidth: compute selP from Multiplier */
-    if ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_MDIV_EXT_MASK) != 0UL) /* normal mode */
+    if ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_SEL_EXT_MASK) != 0UL) /* normal mode */
     {
         selp = (M >> 2U) + 1U;
         if (selp >= 31U)
@@ -1639,7 +1646,8 @@ pll_error_t CLOCK_SetupPLL0Data(pll_config_t *pControl, pll_setup_t *pSetup)
 pll_error_t CLOCK_SetupPLL0Prec(pll_setup_t *pSetup, uint32_t flagcfg)
 {
     uint32_t inRate, clkRate, prediv;
-
+    uint32_t pll_lock_wait_time     = 0U;
+    uint32_t max_pll_lock_wait_time = 0U;
     /* Power off PLL during setup changes */
     POWER_EnablePD(kPDRUNCFG_PD_PLL0);
     POWER_EnablePD(kPDRUNCFG_PD_PLL0_SSCG);
@@ -1662,24 +1670,29 @@ pll_error_t CLOCK_SetupPLL0Prec(pll_setup_t *pSetup, uint32_t flagcfg)
 
     if ((pSetup->flags & PLL_SETUPFLAG_WAITLOCK) != 0UL)
     {
-        if ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_MDIV_EXT_MASK) != 0UL) /* normal mode */
+        if ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_SEL_EXT_MASK) != 0UL) /* normal mode */
         {
             inRate = CLOCK_GetPLL0InClockRate();
             prediv = findPll0PreDiv();
             /* Adjust input clock */
             clkRate = inRate / prediv;
-            /* The lock signal is only reliable between fref[2] :100 kHz to 20 MHz. */
-            if ((clkRate >= 100000UL) && (clkRate <= 20000000UL))
+
+            /* Need wait at least (500us + 400/Fref) (Fref in Hz result in s) to ensure the PLL is stable.
+               The lock bit could be used to shorten the wait time when freq<20MHZ */
+            max_pll_lock_wait_time = 500U + (400000000U / clkRate);
+
+            if (clkRate < 20000000UL)
             {
-                while (CLOCK_IsPLL0Locked() == false)
+                pll_lock_wait_time = 0U;
+                while ((CLOCK_IsPLL0Locked() == false) && (pll_lock_wait_time < max_pll_lock_wait_time))
                 {
+                    pll_lock_wait_time += 100U;
+                    SDK_DelayAtLeastUs(100U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
                 }
             }
             else
             {
-                SDK_DelayAtLeastUs(6000U,
-                                   SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY); /* software should use a 6 ms time interval
-                                                                               to insure the PLL will be stable */
+                SDK_DelayAtLeastUs(max_pll_lock_wait_time, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
             }
         }
         else /* spread spectrum mode */
@@ -1716,6 +1729,8 @@ pll_error_t CLOCK_SetupPLL0Prec(pll_setup_t *pSetup, uint32_t flagcfg)
 pll_error_t CLOCK_SetPLL0Freq(const pll_setup_t *pSetup)
 {
     uint32_t inRate, clkRate, prediv;
+    uint32_t pll_lock_wait_time     = 0U;
+    uint32_t max_pll_lock_wait_time = 0U;
     /* Power off PLL during setup changes */
     POWER_EnablePD(kPDRUNCFG_PD_PLL0);
     POWER_EnablePD(kPDRUNCFG_PD_PLL0_SSCG);
@@ -1736,31 +1751,36 @@ pll_error_t CLOCK_SetPLL0Freq(const pll_setup_t *pSetup)
 
     if ((pSetup->flags & PLL_SETUPFLAG_WAITLOCK) != 0UL)
     {
-        if ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_MDIV_EXT_MASK) != 0UL) /* normal mode */
+        if ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_SEL_EXT_MASK) != 0UL) /* normal mode */
         {
             inRate = CLOCK_GetPLL0InClockRate();
             prediv = findPll0PreDiv();
             /* Adjust input clock */
             clkRate = inRate / prediv;
-            /* The lock signal is only reliable between fref[2] :100 kHz to 20 MHz. */
-            if ((clkRate >= 100000UL) && (clkRate <= 20000000UL))
+
+            /* Need wait at least (500us + 400/Fref) (Fref in Hz result in s) to ensure the PLL is
+               stable. The lock bit could be used to shorten the wait time when freq<20MHZ */
+            max_pll_lock_wait_time = 500U + (400000000U / clkRate);
+
+            if (clkRate < 20000000UL)
             {
-                while (CLOCK_IsPLL0Locked() == false)
+                pll_lock_wait_time = 0U;
+                while ((CLOCK_IsPLL0Locked() == false) && (pll_lock_wait_time < max_pll_lock_wait_time))
                 {
+                    pll_lock_wait_time += 100U;
+                    SDK_DelayAtLeastUs(100U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
                 }
             }
             else
             {
-                SDK_DelayAtLeastUs(6000U,
-                                   SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY); /* software should use a 6 ms time interval
-                                                                               to insure the PLL will be stable */
+                SDK_DelayAtLeastUs(max_pll_lock_wait_time, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
             }
         }
         else /* spread spectrum mode */
         {
             SDK_DelayAtLeastUs(6000U,
-                               SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY); /* software should use a 6 ms time interval to
-                                                                           insure the PLL will be stable */
+                               SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY); /* software should use a 6 ms time interval
+                                                                           to insure the PLL will be stable */
         }
     }
 
@@ -1784,6 +1804,8 @@ pll_error_t CLOCK_SetPLL0Freq(const pll_setup_t *pSetup)
 pll_error_t CLOCK_SetPLL1Freq(const pll_setup_t *pSetup)
 {
     uint32_t inRate, clkRate, prediv;
+    uint32_t pll_lock_wait_time     = 0U;
+    uint32_t max_pll_lock_wait_time = 0U;
     /* Power off PLL during setup changes */
     POWER_EnablePD(kPDRUNCFG_PD_PLL1);
 
@@ -1804,18 +1826,23 @@ pll_error_t CLOCK_SetPLL1Freq(const pll_setup_t *pSetup)
         prediv = findPll1PreDiv();
         /* Adjust input clock */
         clkRate = inRate / prediv;
-        /* The lock signal is only reliable between fref[2] :100 kHz to 20 MHz. */
-        if ((clkRate >= 100000UL) && (clkRate <= 20000000UL))
+
+        /* Need wait at least (500us + 400/Fref) (Fref in Hz result in s) to ensure the PLL is stable.
+           The lock bit could be used to shorten the wait time when freq<20MHZ */
+        max_pll_lock_wait_time = 500U + (400000000U / clkRate);
+
+        if (clkRate < 20000000UL)
         {
-            while (CLOCK_IsPLL1Locked() == false)
+            pll_lock_wait_time = 0U;
+            while ((CLOCK_IsPLL1Locked() == false) && (pll_lock_wait_time < max_pll_lock_wait_time))
             {
+                pll_lock_wait_time += 100U;
+                SDK_DelayAtLeastUs(100U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
             }
         }
         else
         {
-            SDK_DelayAtLeastUs(6000U,
-                               SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY); /* software should use a 6 ms time interval to
-                                                                           insure the PLL will be stable */
+            SDK_DelayAtLeastUs(max_pll_lock_wait_time, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
         }
     }
 

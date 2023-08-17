@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 NXP
+ * Copyright 2018-2021, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_IAP_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
+#define FSL_IAP_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
 /*@}*/
 
 /*!
@@ -218,14 +218,15 @@ status_t IAP_PrepareSectorForWrite(uint32_t startSector, uint32_t endSector);
  * @brief Copy RAM to flash.
  *
  * This function programs the flash memory. Corresponding sectors must be prepared via IAP_PrepareSectorForWrite before
- * calling this function. The addresses should be a 256 byte boundary and the number of bytes should be 256 | 512 |
- * 1024 | 4096.
+ * calling this function. 
  *
- * @param dstAddr Destination flash address where data bytes are to be written.
+ * @param dstAddr Destination flash address where data bytes are to be written, the address should be multiples 
+ *      of FSL_FEATURE_SYSCON_FLASH_PAGE_SIZE_BYTES boundary.
  * @param srcAddr Source ram address from where data bytes are to be read.
- * @param numOfBytes Number of bytes to be written.
+ * @param numOfBytes Number of bytes to be written, it should be multiples of FSL_FEATURE_SYSCON_FLASH_PAGE_SIZE_BYTES, 
+ *      and ranges from FSL_FEATURE_SYSCON_FLASH_PAGE_SIZE_BYTES to FSL_FEATURE_SYSCON_FLASH_SECTOR_SIZE_BYTES.
  * @param systemCoreClock SystemCoreClock in Hz. It is converted to KHz before calling the rom IAP function. When the
- * flash controller has a fixed reference clock, this parameter is bypassed.
+ *      flash controller has a fixed reference clock, this parameter is bypassed.
  *
  * @retval kStatus_IAP_Success Api has been executed successfully.
  * @retval kStatus_IAP_NoPower Flash memory block is powered down.

@@ -1,6 +1,5 @@
 /*
- * Copyright 2019-2022 NXP
- * All rights reserved.
+ * Copyright 2019-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -437,7 +436,9 @@ static void ENET_QOS_SetMacControl(ENET_QOS_Type *base,
     /* Set the speed and duplex. */
     reg = ENET_QOS_MAC_CONFIGURATION_DM(config->miiDuplex) | (uint32_t)config->miiSpeed |
           ENET_QOS_MAC_CONFIGURATION_S2KP(((config->specialControl & (uint32_t)kENET_QOS_8023AS2KPacket) != 0U) ? 1U :
-                                                                                                                  0U);
+                                                                                                                  0U) |
+          ENET_QOS_MAC_CONFIGURATION_IPC(
+              ((config->specialControl & (uint32_t)kENET_QOS_RxChecksumOffloadEnable) != 0U) ? 1U : 0U);
     if (config->miiDuplex == kENET_QOS_MiiHalfDuplex)
     {
         reg |= ENET_QOS_MAC_CONFIGURATION_IPG(ENET_QOS_HALFDUPLEX_DEFAULTIPG);
@@ -2525,6 +2526,65 @@ void ENET_QOS_SetupTxDescriptor(enet_qos_tx_bd_struct_t *txDesc,
 }
 
 /*!
+ * brief Configure a given tx descriptor.
+ *  This function is a low level functional API to setup or prepare
+ *  a given tx descriptor.
+ *
+ * param txDesc  The given tx descriptor.
+ * param config  The tx descriptor configuration.
+ *
+ * note This must be called after all the ENET initilization.
+ * And should be called when the ENET receive/transmit is required.
+ * Transmit buffers are 'zero-copy' buffers, so the buffer must remain in
+ * memory until the packet has been fully transmitted. The buffers
+ * should be free or requeued in the transmit interrupt irq handler.
+ */
+static void ENET_QOS_ConfigTxDescriptor(enet_qos_tx_bd_struct_t *txDesc, enet_qos_tx_bd_config_struct_t *config)
+{
+    uint32_t control = ENET_QOS_TXDESCRIP_RD_BL1(config->bytes1) | ENET_QOS_TXDESCRIP_RD_BL2(config->bytes2);
+
+    if (config->tsEnable)
+    {
+        control |= ENET_QOS_TXDESCRIP_RD_TTSE_MASK;
+    }
+    else
+    {
+        control &= ~ENET_QOS_TXDESCRIP_RD_TTSE_MASK;
+    }
+
+    if (config->intEnable)
+    {
+        control |= ENET_QOS_TXDESCRIP_RD_IOC_MASK;
+    }
+    else
+    {
+        control &= ~ENET_QOS_TXDESCRIP_RD_IOC_MASK;
+    }
+
+    /* Preare the descriptor for transmit. */
+#if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+    txDesc->buff1Addr = MEMORY_ConvertMemoryMapAddress((uintptr_t)(uint8_t *)config->buffer1, kMEMORY_Local2DMA);
+    txDesc->buff2Addr = MEMORY_ConvertMemoryMapAddress((uintptr_t)(uint8_t *)config->buffer2, kMEMORY_Local2DMA);
+#else
+    txDesc->buff1Addr = (uint32_t)(uintptr_t)(uint8_t *)config->buffer1;
+    txDesc->buff2Addr = (uint32_t)(uintptr_t)(uint8_t *)config->buffer2;
+#endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
+    txDesc->buffLen   = control;
+
+    /* Make sure all fields of descriptor are written before setting ownership */
+    __DMB();
+
+    control = ENET_QOS_TXDESCRIP_RD_FL(config->framelen) |
+              ENET_QOS_TXDESCRIP_RD_CIC(config->txOffloadOps) | ENET_QOS_TXDESCRIP_RD_LDFD(config->flag) |
+              ENET_QOS_TXDESCRIP_RD_OWN_MASK;
+
+    txDesc->controlStat = control;
+
+    /* Make sure the descriptor is written in memory (before MAC starts checking it) */
+    __DSB();
+}
+
+/*!
  * brief Reclaim tx descriptors.
  *  This function is used to update the tx descriptor status and
  *  store the tx timestamp when the 1588 feature is enabled.
@@ -2612,6 +2672,7 @@ void ENET_QOS_ReclaimTxDescriptor(ENET_QOS_Type *base, enet_qos_handle_t *handle
  * param channel Channel to send the frame, same with queue index.
  * param isNeedTs True means save timestamp
  * param context pointer to user context to be kept in the tx dirty frame information.
+ * param txOffloadOps The Tx frame checksum offload option.
  * retval kStatus_Success  Send frame succeed.
  * retval kStatus_ENET_QOS_TxFrameBusy  Transmit buffer descriptor is busy under transmission.
  *         The transmit busy happens when the data send rate is over the MAC capacity.
@@ -2624,18 +2685,25 @@ status_t ENET_QOS_SendFrame(ENET_QOS_Type *base,
                             uint32_t length,
                             uint8_t channel,
                             bool isNeedTs,
-                            void *context)
+                            void *context,
+                            enet_qos_tx_offload_t txOffloadOps)
 {
     assert(handle != NULL);
     assert(data != NULL);
     assert(channel < handle->txQueueUse);
 
+    enet_qos_tx_bd_config_struct_t txDescConfig;
     enet_qos_tx_bd_ring_t *txBdRing;
     enet_qos_tx_bd_struct_t *txDesc;
     enet_qos_tx_dirty_ring_t *txDirtyRing;
     enet_qos_frame_info_t *txDirty;
     uint32_t primask;
     uint32_t txDescTail;
+
+    if (txOffloadOps != kENET_QOS_TxOffloadDisable)
+    {
+        assert(((uint32_t)FSL_FEATURE_ENET_QOS_TX_OFFLOAD_QUEUE_SUPPORT_BITMAP & ((uint32_t)1U << channel)) != 0U);
+    }
 
     if (length > 2U * ENET_QOS_TXDESCRIP_RD_BL1_MASK)
     {
@@ -2655,16 +2723,27 @@ status_t ENET_QOS_SendFrame(ENET_QOS_Type *base,
     txDirty->context = context;
 
     /* Fill the descriptor. */
+    txDescConfig.framelen  = length;
+    txDescConfig.flag      = kENET_QOS_FirstLastFlag;
+    txDescConfig.intEnable = true;
+    txDescConfig.tsEnable  = isNeedTs;
+    txDescConfig.txOffloadOps = txOffloadOps;
+
     if (length <= ENET_QOS_TXDESCRIP_RD_BL1_MASK)
     {
-        ENET_QOS_SetupTxDescriptor(txDesc, data, length, NULL, 0, length, true, isNeedTs, kENET_QOS_FirstLastFlag, 0);
+        txDescConfig.buffer1 = data;
+        txDescConfig.bytes1  = length;
+        txDescConfig.buffer2 = NULL;
+        txDescConfig.bytes2  = 0;
     }
     else
     {
-        ENET_QOS_SetupTxDescriptor(txDesc, data, ENET_QOS_TXDESCRIP_RD_BL1_MASK, &data[ENET_QOS_TXDESCRIP_RD_BL1_MASK],
-                                   (length - ENET_QOS_TXDESCRIP_RD_BL1_MASK), length, true, isNeedTs,
-                                   kENET_QOS_FirstLastFlag, 0);
+        txDescConfig.buffer1 = data;
+        txDescConfig.bytes1  = ENET_QOS_TXDESCRIP_RD_BL1_MASK;
+        txDescConfig.buffer2 = &data[ENET_QOS_TXDESCRIP_RD_BL1_MASK];
+        txDescConfig.bytes2  = length - ENET_QOS_TXDESCRIP_RD_BL1_MASK;
     }
+    ENET_QOS_ConfigTxDescriptor(txDesc, &txDescConfig);
 
     /* Increase the index. */
     txBdRing->txGenIdx = ENET_QOS_IncreaseIndex(txBdRing->txGenIdx, txBdRing->txRingLen);

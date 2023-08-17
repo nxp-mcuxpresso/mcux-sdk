@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2020, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -37,6 +37,7 @@ static status_t DC_FB_ELCDIF_GetPixelFormat(video_pixel_format_t input, elcdif_p
  * Variables
  ******************************************************************************/
 static const dc_fb_elcdif_pixel_foramt_map_t s_elcdifPixelFormatMap[] = {
+    {kVIDEO_PixelFormatLUT8, kELCDIF_PixelFormatRAW8},
     {kVIDEO_PixelFormatRGB565, kELCDIF_PixelFormatRGB565},
     {
         kVIDEO_PixelFormatXRGB8888,

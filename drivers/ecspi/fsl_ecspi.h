@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,12 +22,12 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief ECSPI driver version. */
-#define FSL_ECSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+#define FSL_ECSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
 #ifndef ECSPI_DUMMYDATA
 /*! @brief ECSPI dummy transfer data, the data is sent while txBuff is NULL. */
-#define ECSPI_DUMMYDATA (0xFFFFFFFFU)
+#define ECSPI_DUMMYDATA (0x00U)
 #endif
 
 /*! @brief Retry times for waiting flag. */

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020-2022 NXP
+ * Copyright 2016-2017, 2020-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,7 +27,12 @@
 #elif (defined(KV56F24_SERIES) || defined(KV58F24_SERIES) || defined(KL28Z7_SERIES) || defined(KL81Z7_SERIES) || \
        defined(KL82Z7_SERIES) || defined(K32L2A41A_SERIES))
 #define TRNG_USER_CONFIG_DEFAULT_OSC_DIV kTRNG_RingOscDiv4
-#elif (defined(K81F25615_SERIES) || defined(K32L3A60_cm4_SERIES) || defined(K32L3A60_cm0plus_SERIES))
+#elif (                                                                                                               \
+    defined(K81F25615_SERIES) || defined(K32L3A60_cm4_SERIES) || defined(K32L3A60_cm0plus_SERIES) ||                  \
+    defined(MCXN546_cm33_core0_SERIES) || defined(MCXN546_cm33_core1_SERIES) || defined(MCXN548_cm33_core0_SERIES) || \
+    defined(MCXN548_cm33_core1_SERIES) || defined(MCXN945_cm33_core0_SERIES) || defined(MCXN945_cm33_core1_SERIES) || \
+    defined(MCXN946_cm33_core0_SERIES) || defined(MCXN946_cm33_core1_SERIES) || defined(MCXN947_cm33_core0_SERIES) || \
+    defined(MCXN947_cm33_core1_SERIES) || defined(MCXN948_cm33_core0_SERIES) || defined(MCXN948_cm33_core1_SERIES))
 #define TRNG_USER_CONFIG_DEFAULT_OSC_DIV kTRNG_RingOscDiv2
 #else
 /* Default value for the TRNG user configuration structure can be optionally
@@ -68,6 +73,10 @@
 #define TRNG_USER_CONFIG_DEFAULT_POKER_MINIMUM       (TRNG_USER_CONFIG_DEFAULT_POKER_MAXIMUM - 2467)
 
 #else
+
+#ifndef TRNG_ENT_COUNT
+#define TRNG_ENT_COUNT TRNG_ENTA_ENT_COUNT
+#endif
 
 #define TRNG_USER_CONFIG_DEFAULT_LOCK             0
 #define TRNG_USER_CONFIG_DEFAULT_ENTROPY_DELAY    3200
@@ -1351,6 +1360,10 @@ status_t TRNG_GetDefaultConfig(trng_config_t *userConfig)
         userConfig->clockMode  = kTRNG_ClockModeRingOscillator;
         userConfig->ringOscDiv = TRNG_USER_CONFIG_DEFAULT_OSC_DIV;
         userConfig->sampleMode = kTRNG_SampleModeRaw;
+#if defined(FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS) && (FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS > 0)
+        userConfig->oscillatorMode = kTRNG_SingleOscillatorModeOsc1;
+        userConfig->ringOsc2Div    = kTRNG_RingOscDiv4;
+#endif /* FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS */
         /* Seed control*/
         userConfig->entropyDelay   = TRNG_USER_CONFIG_DEFAULT_ENTROPY_DELAY;
         userConfig->sampleSize     = TRNG_USER_CONFIG_DEFAULT_SAMPLE_SIZE;
@@ -1770,10 +1783,16 @@ static status_t trng_ApplyUserConfig(TRNG_Type *base, const trng_config_t *userC
 
     if (kStatus_Success == status)
     {
+#if !(defined(FSL_FEATURE_TRNG_HAS_NO_TRNG_MCTL_FOR_CLK_MODE) && FSL_FEATURE_TRNG_HAS_NO_TRNG_MCTL_FOR_CLK_MODE)
         /* Set clock mode used to operate TRNG */
         TRNG_WR_MCTL_FOR_SCLK(base, userConfig->clockMode);
+#endif /* FSL_FEATURE_TRNG_HAS_NO_TRNG_MCTL_FOR_CLK_MODE */
         /* Set ring oscillator divider used by TRNG */
         TRNG_WR_MCTL_OSC_DIV(base, userConfig->ringOscDiv);
+#if defined(FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS) && (FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS > 0)
+        base->OSC2_CTL |= TRNG_OSC2_CTL_TRNG_ENT_CTL(userConfig->oscillatorMode);
+        base->OSC2_CTL |= TRNG_OSC2_CTL_OSC2_DIV(userConfig->ringOsc2Div);
+#endif /* FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS */
 #if !(defined(FSL_FEATURE_TRNG_HAS_NO_TRNG_MCTL_SAMP_MODE) && FSL_FEATURE_TRNG_HAS_NO_TRNG_MCTL_SAMP_MODE)
         /* Set sample mode of the TRNG ring oscillator. */
         TRNG_WR_MCTL_SAMP_MODE(base, userConfig->sampleMode);
@@ -1838,7 +1857,9 @@ status_t TRNG_Init(TRNG_Type *base, const trng_config_t *userConfig)
     {
 #if defined(FSL_FEATURE_TRNG_HAS_RSTCTL) && (FSL_FEATURE_TRNG_HAS_RSTCTL > 0)
         /* Reset TRNG peripheral */
+#if (defined(RW610_SERIES) || defined(RW612_SERIES))
         SYSCTL2->TRNG_PIN_CTRL |= SYSCTL2_TRNG_PIN_CTRL_ENABLE_MASK;
+#endif /* RW610_SERIES  RW612_SERIES */
         RESET_PeripheralReset(trng_reset);
 #endif /* FSL_FEATURE_TRNG_HAS_RSTCTL */
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)

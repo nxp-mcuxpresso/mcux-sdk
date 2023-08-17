@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_enc
+config MCUX_HAS_driver_enc
+    bool
+
+config MCUX_USE_driver_enc
+    depends on MCUX_HAS_driver_enc
+    bool "ENC Driver"
+    select MCUX_USE_driver_common
+    help
+      ENC Driver

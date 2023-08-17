@@ -41,7 +41,7 @@ typedef struct _hal_gpio_state
  * Prototypes
  ******************************************************************************/
 
-static void HAL_GpioInterruptHandle(uint8_t port);
+static void HAL_GpioInterruptHandle(uint8_t gpio_port);
 
 /*******************************************************************************
  * Variables
@@ -53,22 +53,22 @@ static hal_gpio_state_t *s_GpioHead;
  * Code
  ******************************************************************************/
 
-static void HAL_GpioInterruptHandle(uint8_t port)
+static void HAL_GpioInterruptHandle(uint8_t gpio_port)
 {
     hal_gpio_state_t *head = s_GpioHead;
     GPIO_Type *gpioList[]  = GPIO_BASE_PTRS;
     uint32_t intFlag;
 
     /* Get and clear gpio pin interrupt Flag */
-    intFlag = GPIO_PortGetInterruptFlags(gpioList[port]);
-    GPIO_PortClearInterruptFlags(gpioList[port], intFlag);
+    intFlag = GPIO_PortGetInterruptFlags(gpioList[gpio_port]);
+    GPIO_PortClearInterruptFlags(gpioList[gpio_port], intFlag);
 
     while (NULL != head)
     {
         /* Check which triger is ON! */
         if (kHAL_GpioInterruptDisable != (hal_gpio_interrupt_trigger_t)head->pin.trigger)
         {
-            if ((port == head->pin.port) && (0U != (intFlag & ((uint32_t)1 << head->pin.pin))))
+            if ((gpio_port == head->pin.port) && (0U != (intFlag & ((uint32_t)1 << head->pin.pin))))
             {
                 if ((NULL != head->callback))
                 {
@@ -187,11 +187,11 @@ void GPIO13_Combined_0_31_IRQHandler(void)
     SDK_ISR_EXIT_BARRIER;
 }
 #endif
-static hal_gpio_status_t HAL_GpioConflictSearch(hal_gpio_state_t *head, uint8_t port, uint8_t pin)
+static hal_gpio_status_t HAL_GpioConflictSearch(hal_gpio_state_t *head, uint8_t gpio_port, uint8_t pin)
 {
     while (NULL != head)
     {
-        if ((head->pin.port == port) && (head->pin.pin == pin))
+        if ((head->pin.port == gpio_port) && (head->pin.pin == pin))
         {
             return kStatus_HAL_GpioPinConflict;
         }

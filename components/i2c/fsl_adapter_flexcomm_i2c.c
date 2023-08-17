@@ -136,48 +136,48 @@ static void HAL_I2cSlaveCallback(I2C_Type *base, volatile i2c_slave_transfer_t *
     }
 }
 
-hal_i2c_status_t HAL_I2cMasterInit(hal_i2c_master_handle_t handle, const hal_i2c_master_config_t *config)
+hal_i2c_status_t HAL_I2cMasterInit(hal_i2c_master_handle_t handle, const hal_i2c_master_config_t *halI2cConfig)
 {
     hal_i2c_master_t *i2cMasterHandle;
     i2c_master_config_t i2cConfig;
 
     assert(handle);
-    assert(config);
+    assert(halI2cConfig);
 
     assert(HAL_I2C_MASTER_HANDLE_SIZE >= sizeof(hal_i2c_master_t));
 
     i2cMasterHandle = (hal_i2c_master_t *)handle;
 
     I2C_MasterGetDefaultConfig(&i2cConfig); /* Get a default configuration of master */
-    i2cConfig.enableMaster    = config->enableMaster;
-    i2cConfig.baudRate_Bps    = config->baudRate_Bps;
-    i2cMasterHandle->instance = config->instance;
+    i2cConfig.enableMaster    = halI2cConfig->enableMaster;
+    i2cConfig.baudRate_Bps    = halI2cConfig->baudRate_Bps;
+    i2cMasterHandle->instance = halI2cConfig->instance;
 
     /* I2C Master initization*/
-    I2C_MasterInit(s_i2cBases[i2cMasterHandle->instance], &i2cConfig, config->srcClock_Hz);
+    I2C_MasterInit(s_i2cBases[i2cMasterHandle->instance], &i2cConfig, halI2cConfig->srcClock_Hz);
 
     return kStatus_HAL_I2cSuccess;
 }
 
-hal_i2c_status_t HAL_I2cSlaveInit(hal_i2c_slave_handle_t handle, const hal_i2c_slave_config_t *config)
+hal_i2c_status_t HAL_I2cSlaveInit(hal_i2c_slave_handle_t handle, const hal_i2c_slave_config_t *halI2cConfig)
 {
     hal_i2c_slave_t *i2cSlaveHandle;
     i2c_slave_config_t i2cConfig;
 
     assert(handle);
-    assert(config);
+    assert(halI2cConfig);
 
     assert(HAL_I2C_SLAVE_HANDLE_SIZE >= sizeof(hal_i2c_slave_t));
 
     i2cSlaveHandle = (hal_i2c_slave_t *)handle;
 
     I2C_SlaveGetDefaultConfig(&i2cConfig); /* To get a default configuration of slave*/
-    i2cConfig.enableSlave      = config->enableSlave;
-    i2cConfig.address0.address = (uint8_t)config->slaveAddress;
-    i2cSlaveHandle->instance   = config->instance;
+    i2cConfig.enableSlave      = halI2cConfig->enableSlave;
+    i2cConfig.address0.address = (uint8_t)halI2cConfig->slaveAddress;
+    i2cSlaveHandle->instance   = halI2cConfig->instance;
 
     /* I2C Slave initization*/
-    (void)I2C_SlaveInit(s_i2cBases[i2cSlaveHandle->instance], &i2cConfig, config->srcClock_Hz);
+    (void)I2C_SlaveInit(s_i2cBases[i2cSlaveHandle->instance], &i2cConfig, halI2cConfig->srcClock_Hz);
 
     return kStatus_HAL_I2cSuccess;
 }

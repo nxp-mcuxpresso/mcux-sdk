@@ -660,16 +660,16 @@ static int32_t SPI_DMAControl(uint32_t control, uint32_t arg, cmsis_SPI_dma_driv
             DMA_CreateHandle(SPI->dmaRxDataHandle, dmaResource->rxdmaBase, dmaResource->rxdmaChannel);
             DMA_CreateHandle(SPI->dmaTxDataHandle, dmaResource->txdmaBase, dmaResource->txdmaChannel);
 #if FSL_FEATURE_DMA_MODULE_CHANNEL != FSL_FEATURE_DMAMUX_MODULE_CHANNEL
-            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmamuxChannel, dmaResource->rxDmaRequest);
+            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmamuxChannel, (int32_t)dmaResource->rxDmaRequest);
             DMAMUX_EnableChannel(dmaResource->rxDmamuxBase, dmaResource->rxdmamuxChannel);
 
-            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmamuxChannel, dmaResource->txDmaRequest);
+            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmamuxChannel, (int32_t)dmaResource->txDmaRequest);
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txdmamuxChannel);
 #else
-            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmaChannel, dmaResource->rxDmaRequest);
+            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmaChannel, (int32_t)dmaResource->rxDmaRequest);
             DMAMUX_EnableChannel(dmaResource->rxDmamuxBase, dmaResource->rxdmaChannel);
 
-            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmaChannel, dmaResource->txDmaRequest);
+            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmaChannel, (int32_t)dmaResource->txDmaRequest);
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txdmaChannel);
 #endif
             SPI_MasterTransferCreateHandleDMA(SPI->resource->base, &SPI->handle->masterHandle,
@@ -689,16 +689,16 @@ static int32_t SPI_DMAControl(uint32_t control, uint32_t arg, cmsis_SPI_dma_driv
             DMA_CreateHandle(SPI->dmaTxDataHandle, dmaResource->txdmaBase, dmaResource->txdmaChannel);
             DMA_CreateHandle(SPI->dmaRxDataHandle, dmaResource->rxdmaBase, dmaResource->rxdmaChannel);
 #if FSL_FEATURE_DMA_MODULE_CHANNEL != FSL_FEATURE_DMAMUX_MODULE_CHANNEL
-            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmamuxChannel, dmaResource->txDmaRequest);
+            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmamuxChannel, (int32_t)dmaResource->txDmaRequest);
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txdmamuxChannel);
 
-            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmamuxChannel, dmaResource->rxDmaRequest);
+            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmamuxChannel, (int32_t)dmaResource->rxDmaRequest);
             DMAMUX_EnableChannel(dmaResource->rxDmamuxBase, dmaResource->rxdmamuxChannel);
 #else
-            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmaChannel, dmaResource->txDmaRequest);
+            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmaChannel, (int32_t)dmaResource->txDmaRequest);
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txdmaChannel);
 
-            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmaChannel, dmaResource->rxDmaRequest);
+            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmaChannel, (int32_t)dmaResource->rxDmaRequest);
             DMAMUX_EnableChannel(dmaResource->rxDmamuxBase, dmaResource->rxdmaChannel);
 #endif
             SPI_SlaveTransferCreateHandleDMA(SPI->resource->base, &SPI->handle->slaveHandle, KSDK_SPI_SlaveDMACallback,
@@ -749,16 +749,16 @@ static int32_t SPI_DMAControl(uint32_t control, uint32_t arg, cmsis_SPI_dma_driv
             DMA_CreateHandle(SPI->dmaRxDataHandle, dmaResource->rxdmaBase, dmaResource->rxdmaChannel);
             DMA_CreateHandle(SPI->dmaTxDataHandle, dmaResource->txdmaBase, dmaResource->txdmaChannel);
 #if FSL_FEATURE_DMA_MODULE_CHANNEL != FSL_FEATURE_DMAMUX_MODULE_CHANNEL
-            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmamuxChannel, dmaResource->rxDmaRequest);
+            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmamuxChannel, (int32_t)dmaResource->rxDmaRequest);
             DMAMUX_EnableChannel(dmaResource->rxDmamuxBase, dmaResource->rxdmamuxChannel);
 
-            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmamuxChannel, dmaResource->txDmaRequest);
+            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmamuxChannel, (int32_t)dmaResource->txDmaRequest);
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txdmamuxChannel);
 #else
-            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmaChannel, dmaResource->rxDmaRequest);
+            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmaChannel, (int32_t)dmaResource->rxDmaRequest);
             DMAMUX_EnableChannel(dmaResource->rxDmamuxBase, dmaResource->rxdmaChannel);
 
-            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmaChannel, dmaResource->txDmaRequest);
+            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmaChannel, (int32_t)dmaResource->txDmaRequest);
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txdmaChannel);
 #endif
             SPI_MasterTransferCreateHandleDMA(SPI->resource->base, &SPI->handle->masterHandle,
@@ -778,16 +778,16 @@ static int32_t SPI_DMAControl(uint32_t control, uint32_t arg, cmsis_SPI_dma_driv
             DMA_CreateHandle(SPI->dmaTxDataHandle, dmaResource->txdmaBase, dmaResource->txdmaChannel);
             DMA_CreateHandle(SPI->dmaRxDataHandle, dmaResource->rxdmaBase, dmaResource->rxdmaChannel);
 #if FSL_FEATURE_DMA_MODULE_CHANNEL != FSL_FEATURE_DMAMUX_MODULE_CHANNEL
-            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmamuxChannel, dmaResource->txDmaRequest);
+            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmamuxChannel, (int32_t)dmaResource->txDmaRequest);
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txdmamuxChannel);
 
-            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmamuxChannel, dmaResource->rxDmaRequest);
+            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmamuxChannel, (int32_t)dmaResource->rxDmaRequest);
             DMAMUX_EnableChannel(dmaResource->rxDmamuxBase, dmaResource->rxdmamuxChannel);
 #else
-            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmaChannel, dmaResource->txDmaRequest);
+            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txdmaChannel, (int32_t)dmaResource->txDmaRequest);
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txdmaChannel);
 
-            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmaChannel, dmaResource->rxDmaRequest);
+            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxdmaChannel, (int32_t)dmaResource->rxDmaRequest);
             DMAMUX_EnableChannel(dmaResource->rxDmamuxBase, dmaResource->rxdmaChannel);
 #endif
             SPI_SlaveTransferCreateHandleDMA(SPI->resource->base, &SPI->handle->slaveHandle, KSDK_SPI_SlaveDMACallback,

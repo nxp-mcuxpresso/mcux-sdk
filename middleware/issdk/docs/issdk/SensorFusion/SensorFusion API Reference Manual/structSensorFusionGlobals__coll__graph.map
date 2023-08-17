@@ -1,0 +1,8 @@
+<map id="SensorFusionGlobals" name="SensorFusionGlobals">
+<area shape="rect" id="node2" href="$structStatusSubsystem.html" title="StatusSubsystem() provides an object&#45;like interface for communicating status to the user..." alt="" coords="5,5,132,32"/>
+<area shape="rect" id="node3" href="$structPhysicalSensor.html" title="An instance of PhysicalSensor structure type should be allocated for each physical sensors (combo dev..." alt="" coords="156,5,269,32"/>
+<area shape="rect" id="node4" href="$structMagCalibration.html" title="Magnetic Calibration Structure. " alt="" coords="347,5,455,32"/>
+<area shape="rect" id="node5" href="$structMagBuffer.html" title="The Magnetometer Measurement Buffer holds a 3&#45;dimensional &quot;constellation&quot; of data points..." alt="" coords="479,5,559,32"/>
+<area shape="rect" id="node6" href="$structMagSensor.html" title="The MagSensor structure stores raw and processed measurements for a 3&#45;axis magnetic sensor..." alt="" coords="583,5,671,32"/>
+<area shape="rect" id="node7" href="$structControlSubsystem.html" title="he ControlSubsystem encapsulates command and data streaming functions. " alt="" coords="696,5,825,32"/>
+</map>

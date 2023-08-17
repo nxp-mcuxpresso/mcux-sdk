@@ -1,0 +1,149 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_USE_SOC_MIMX8ML8
+    bool
+    select MCUX_CPU_ARCH_ARM_CM7F
+    select MCUX_CPU_HAS_SP_FPU
+if MCUX_USE_SOC_MIMX8ML8
+
+# Part Number
+config MCUX_SOC_PART_MIMX8ML8xxxKZ
+    bool
+
+config MCUX_SOC_PART_MIMX8ML8xxxLZ
+    bool
+
+config MCUX_DEVICE
+    default "MIMX8ML8"
+
+config MCUX_DEVICE_ID
+    default "MIMX8ML8xxxKZ" if MCUX_SOC_PART_MIMX8ML8xxxKZ
+    default "MIMX8ML8xxxLZ" if MCUX_SOC_PART_MIMX8ML8xxxLZ
+
+
+# Select supported components
+config MCUX_USE_SOC_MIMX8ML8
+    select MCUX_HAS_CMSIS_DSP_Include
+    select MCUX_HAS_CMSIS_DSP_Source
+    select MCUX_HAS_CMSIS_Device_API_OSTick
+    select MCUX_HAS_CMSIS_Device_API_RTOS2
+    select MCUX_HAS_CMSIS_Driver_Include_CAN
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet_MAC
+    select MCUX_HAS_CMSIS_Driver_Include_Ethernet_PHY
+    select MCUX_HAS_CMSIS_Driver_Include_Flash
+    select MCUX_HAS_CMSIS_Driver_Include_I2C
+    select MCUX_HAS_CMSIS_Driver_Include_MCI
+    select MCUX_HAS_CMSIS_Driver_Include_NAND
+    select MCUX_HAS_CMSIS_Driver_Include_SAI
+    select MCUX_HAS_CMSIS_Driver_Include_SPI
+    select MCUX_HAS_CMSIS_Driver_Include_USART
+    select MCUX_HAS_CMSIS_Driver_Include_USB_Device
+    select MCUX_HAS_CMSIS_Driver_Include_USB_Host
+    select MCUX_HAS_CMSIS_Driver_Include_WiFi
+    select MCUX_HAS_CMSIS_Include_core_cm
+    select MCUX_HAS_CMSIS_NN_Source
+    select MCUX_HAS_CMSIS_RTOS2_NonSecure
+    select MCUX_HAS_CMSIS_RTOS2_Secure
+    select MCUX_HAS_component_ii2c_adapter
+    select MCUX_HAS_component_iuart_adapter
+    select MCUX_HAS_component_lists
+    select MCUX_HAS_component_serial_manager
+    select MCUX_HAS_component_serial_manager_swo if (MCUX_CPU_ARCH_ARM_CM7F)
+    select MCUX_HAS_component_serial_manager_uart
+    select MCUX_HAS_driver_cache_armv7_m7 if (MCUX_CPU_ARCH_ARM_CM7F)
+    select MCUX_HAS_driver_cmsis_ecspi
+    select MCUX_HAS_driver_cmsis_enet
+    select MCUX_HAS_driver_cmsis_ii2c
+    select MCUX_HAS_driver_cmsis_iuart
+    select MCUX_HAS_driver_common
+    select MCUX_HAS_driver_easrc
+    select MCUX_HAS_driver_easrc_sdma
+    select MCUX_HAS_driver_ecspi
+    select MCUX_HAS_driver_ecspi_freertos
+    select MCUX_HAS_driver_ecspi_sdma
+    select MCUX_HAS_driver_enet
+    select MCUX_HAS_driver_flexcan
+    select MCUX_HAS_driver_gpc_2
+    select MCUX_HAS_driver_gpt
+    select MCUX_HAS_driver_igpio
+    select MCUX_HAS_driver_ii2c
+    select MCUX_HAS_driver_ii2c_freertos
+    select MCUX_HAS_driver_ipwm
+    select MCUX_HAS_driver_iuart
+    select MCUX_HAS_driver_iuart_freertos
+    select MCUX_HAS_driver_iuart_sdma
+    select MCUX_HAS_driver_mu
+    select MCUX_HAS_driver_pdm
+    select MCUX_HAS_driver_pdm_sdma
+    select MCUX_HAS_driver_rdc
+    select MCUX_HAS_driver_rdc_sema42
+    select MCUX_HAS_driver_sai
+    select MCUX_HAS_driver_sai_sdma
+    select MCUX_HAS_driver_sdma
+    select MCUX_HAS_driver_sema4
+    select MCUX_HAS_driver_tmu_2
+    select MCUX_HAS_driver_wdog01
+    select MCUX_HAS_utilities_misc_utilities
+    select MCUX_HAS_utility_assert
+    select MCUX_HAS_utility_assert_lite
+    select MCUX_HAS_utility_debug_console
+    select MCUX_HAS_utility_debug_console_lite
+    select MCUX_HAS_utility_str
+
+#### SOC specific dependency ####
+config MCUX_USE_component_serial_manager_uart
+    bool
+    select MCUX_USE_component_iuart_adapter
+
+config MCUX_USE_driver_ecspi_sdma
+    bool
+    select MCUX_USE_driver_sdma
+
+config MCUX_USE_driver_enet
+    bool
+    select MCUX_USE_driver_memory
+
+config MCUX_USE_driver_iuart_sdma
+    bool
+    select MCUX_USE_driver_sdma
+
+config MCUX_USE_driver_sai_sdma
+    bool
+    select MCUX_USE_driver_sdma
+
+config MCUX_USE_driver_sdma
+    bool
+    select MCUX_USE_driver_memory
+
+config MCUX_USE_utility_debug_console_lite
+    bool
+    select MCUX_USE_component_iuart_adapter
+
+
+#### SOC level drivers ####
+# device_MIMX8ML8_CMSIS
+config MCUX_USE_device_MIMX8ML8_CMSIS
+    bool "Device MIMX8ML8_cmsis"
+    select MCUX_USE_CMSIS_Include_core_cm
+    help
+      Device MIMX8ML8_cmsis
+
+# device_MIMX8ML8_startup
+config MCUX_USE_device_MIMX8ML8_startup
+    bool "Device MIMX8ML8_startup"
+    help
+      Device MIMX8ML8_startup
+
+# device_MIMX8ML8_system
+config MCUX_USE_device_MIMX8ML8_system
+    bool "Device MIMX8ML8_system"
+    help
+      Device MIMX8ML8_system
+
+rsource "drivers/Kconfig"
+
+endif # MCUX_USE_SOC_MIMX8ML8

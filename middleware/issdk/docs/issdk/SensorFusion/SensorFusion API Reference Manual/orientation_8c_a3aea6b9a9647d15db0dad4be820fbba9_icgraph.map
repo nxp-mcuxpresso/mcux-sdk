@@ -1,0 +1,5 @@
+<map id="f3DOFMagnetometerMatrixNED" name="f3DOFMagnetometerMatrixNED">
+<area shape="rect" id="node2" href="$fusion_8h.html#adc49d74394c2a94a33ff65edea18233b" title="fInit_3DOF_B_BASIC" alt="" coords="259,5,404,32"/>
+<area shape="rect" id="node3" href="$fusion_8h.html#a2df5be5795338038774a64b41cf53a8e" title="fRun_3DOF_B_BASIC" alt="" coords="452,31,603,57"/>
+<area shape="rect" id="node4" href="$fusion_8h.html#aeb60375528d75ee9fec67a96916141ca" title="fFuseSensors" alt="" coords="651,31,753,57"/>
+</map>

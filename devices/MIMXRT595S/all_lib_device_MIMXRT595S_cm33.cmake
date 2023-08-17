@@ -33,7 +33,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
     ${CMAKE_CURRENT_LIST_DIR}/../../components/panic
     ${CMAKE_CURRENT_LIST_DIR}/../../components/pca9420
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/power_manager/boards/EVK-MIMXRT595
     ${CMAKE_CURRENT_LIST_DIR}/../../components/power_manager/core
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/ssd1963
@@ -262,7 +261,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_assert_lite)
 #    include(middleware_fatfs)
 #    include(driver_flexio)
-#    include(component_power_manager_evkmimxrt595)
 #    include(driver_lcdif)
 #    include(component_wifi_bt_module_tx_pwr_limits)
 #    include(driver_otfad)

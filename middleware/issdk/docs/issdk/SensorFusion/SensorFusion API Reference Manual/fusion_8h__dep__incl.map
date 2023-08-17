@@ -1,0 +1,8 @@
+<map id="fusion.h" name="fusion.h">
+<area shape="rect" id="node2" href="$DecodeCommandBytes_8c.html" title="Command interpreter which interfaces to the Sensor Fusion Toolbox. " alt="" coords="5,87,176,114"/>
+<area shape="rect" id="node3" href="$fusion_8c.html" title="Lower level sensor fusion interface. " alt="" coords="200,87,267,114"/>
+<area shape="rect" id="node4" href="$main__freertos__agm02__power__cycling_8c.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F/FRDM&#45;FXS&#45;AGM02 with smart power&#45;cycl..." alt="" coords="291,80,437,121"/>
+<area shape="rect" id="node5" href="$orientation_8c.html" title="Functions to convert between various orientation representations. " alt="" coords="461,87,555,114"/>
+<area shape="rect" id="node6" href="$precisionAccelerometer_8c.html" title="Implements accelerometer calibration routines. " alt="" coords="579,87,749,114"/>
+<area shape="rect" id="node7" href="$sensor__fusion_8c.html" title="The sensor_fusion.c file implements the top level programming interface. " alt="" coords="773,87,886,114"/>
+</map>

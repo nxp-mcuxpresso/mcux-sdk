@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPC SWM driver version. */
-#define FSL_SWM_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_SWM_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 /*******************************************************************************

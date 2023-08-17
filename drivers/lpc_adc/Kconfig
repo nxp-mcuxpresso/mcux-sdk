@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_lpc_adc
+config MCUX_HAS_driver_lpc_adc
+    bool
+
+config MCUX_USE_driver_lpc_adc
+    depends on MCUX_HAS_driver_lpc_adc
+    bool "ADC Driver"
+    select MCUX_USE_driver_common
+    help
+      ADC Driver

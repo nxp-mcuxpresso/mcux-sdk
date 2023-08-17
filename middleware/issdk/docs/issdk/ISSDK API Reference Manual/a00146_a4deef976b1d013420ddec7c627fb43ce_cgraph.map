@@ -1,0 +1,4 @@
+<map id="MMA865x_I2C_DeInit" name="MMA865x_I2C_DeInit">
+<area shape="rect" id="node2" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="383,5,444,32"/>
+<area shape="rect" id="node3" href="$a00167.html#ad08d2c7880bc5f09fd27eee247311448" title="The interface function to write a sensor register. " alt="" coords="200,31,335,57"/>
+</map>

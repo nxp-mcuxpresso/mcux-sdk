@@ -57,6 +57,7 @@ typedef int (*PUTCHAR_FUNC)(int a);
 /*! @brief Debug UART state information. */
 static debug_console_state_t s_debugConsole;
 #endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -117,9 +118,31 @@ status_t DbgConsole_Deinit(void)
     (void)HAL_UartDeinit((hal_uart_handle_t)&s_debugConsole.uartHandleBuffer[0]);
 
     s_debugConsole.serial_port_type = kSerialPort_None;
-
     return kStatus_Success;
 }
+
+/* See fsl_debug_console.h for documentation of this function. */
+status_t DbgConsole_EnterLowpower(void)
+{
+    hal_uart_status_t status = kStatus_HAL_UartError;
+    if (kSerialPort_Uart == s_debugConsole.serial_port_type)
+    {
+        status = HAL_UartEnterLowpower((hal_uart_handle_t)&s_debugConsole.uartHandleBuffer[0]);
+    }
+    return (status_t)status;
+}
+
+/* See fsl_debug_console.h for documentation of this function. */
+status_t DbgConsole_ExitLowpower(void)
+{
+    hal_uart_status_t status = kStatus_HAL_UartError;
+    if (kSerialPort_Uart == s_debugConsole.serial_port_type)
+    {
+        status = HAL_UartExitLowpower((hal_uart_handle_t)&s_debugConsole.uartHandleBuffer[0]);
+    }
+    return (status_t)status;
+}
+
 #endif /* DEBUGCONSOLE_REDIRECT_TO_SDK */
 
 #if (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE == DEBUGCONSOLE_REDIRECT_TO_SDK))
@@ -946,7 +969,7 @@ static int DbgConsole_PrintfFormattedData(PUTCHAR_FUNC func_ptr, const char *fmt
                     }
                     else
                     {
-                        if (0U == (flags_used & (uint32_t)kPRINTF_Pound))
+                        if (0U == (flags_used & (uint32_t)kPRINTF_Minus))
                         {
                             if (0U != (flags_used & (uint32_t)kPRINTF_Pound))
                             {
@@ -1129,7 +1152,7 @@ static int DbgConsole_PrintfFormattedData(PUTCHAR_FUNC func_ptr, const char *fmt
         }
         p++;
     }
-    return (int)count;
+    return count;
 }
 
 #endif /* SDK_DEBUGCONSOLE */

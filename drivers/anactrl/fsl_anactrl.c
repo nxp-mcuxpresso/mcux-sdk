@@ -244,7 +244,7 @@ uint32_t ANACTRL_MeasureFrequency(ANACTRL_Type *base, uint8_t scale, uint32_t re
 
     /* Calculate the target clock frequency. */
     capval        = (base->FREQ_ME_CTRL & ANACTRL_FREQ_ME_CTRL_CAPVAL_SCALE_MASK);
-    targetClkFreq = (capval * refClkFreq) / ((1UL << scale) - 1UL);
+    targetClkFreq = (uint32_t)(uint64_t)(((uint64_t)capval * (uint64_t)refClkFreq) / ((1ULL << scale) - 1ULL));
 
     return targetClkFreq;
 }

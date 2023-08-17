@@ -1,6 +1,5 @@
 /*
- * Copyright 2020-2022 NXP
- * All rights reserved.
+ * Copyright 2020-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -111,8 +110,9 @@ typedef enum _phy_mmd_access_mode
 /*! @brief Defines the PHY interrupt type. */
 typedef enum _phy_interrupt_type
 {
-    kPHY_IntrActiveLow = 0U, /*!< ENET PHY active low. */
-    kPHY_IntrActiveHigh,     /*!< ENET PHY active high. */
+    kPHY_IntrDisable = 0U, /*!< ENET PHY interrupt disable. */
+    kPHY_IntrActiveLow,    /*!< ENET PHY interrupt active low. */
+    kPHY_IntrActiveHigh,   /*!< ENET PHY interrupt active high. */
 } phy_interrupt_type_t;
 
 /*! @brief PHY device operations. */
@@ -126,7 +126,7 @@ typedef struct _phy_operations
     status_t (*getLinkSpeedDuplex)(phy_handle_t *handle, phy_speed_t *speed, phy_duplex_t *duplex);
     status_t (*setLinkSpeedDuplex)(phy_handle_t *handle, phy_speed_t speed, phy_duplex_t duplex);
     status_t (*enableLoopback)(phy_handle_t *handle, phy_loop_t mode, phy_speed_t speed, bool enable);
-    status_t (*enableLinkInterrupt)(phy_handle_t *handle, phy_interrupt_type_t type, bool enable);
+    status_t (*enableLinkInterrupt)(phy_handle_t *handle, phy_interrupt_type_t type);
     status_t (*clearInterrupt)(phy_handle_t *handle);
 } phy_operations_t;
 
@@ -140,8 +140,7 @@ struct _phy_config
     phy_duplex_t duplex;           /*!< PHY duplex configuration. */
     bool autoNeg;                  /*!< PHY auto-negotiation, true: enable, false: disable. */
     bool enableEEE;                /*!< PHY Energy Efficient Ethernet, true: enable, false: disable. */
-    bool enableLinkIntr;           /*!< PHY Link management interrupt, true: enable, false: disable. */
-    phy_interrupt_type_t intrType; /*!< PHY interrupt assert type. */
+    phy_interrupt_type_t intrType; /*!< PHY interrupt configuration. */
 };
 
 /*! @brief PHY device handle. */
@@ -302,13 +301,12 @@ static inline status_t PHY_EnableLoopback(phy_handle_t *handle, phy_loop_t mode,
  *
  * @param handle  PHY device handle.
  * @param type    PHY interrupt type.
- * @param enable  True to enable, false to disable.
  * @retval kStatus_Success  PHY enables/disables interrupt success
  * @retval kStatus_Timeout  PHY MDIO visit time out
  */
-static inline status_t PHY_EnableLinkInterrupt(phy_handle_t *handle, phy_interrupt_type_t type, bool enable)
+static inline status_t PHY_EnableLinkInterrupt(phy_handle_t *handle, phy_interrupt_type_t type)
 {
-    return handle->ops->enableLinkInterrupt(handle, type, enable);
+    return handle->ops->enableLinkInterrupt(handle, type);
 }
 
 /*!

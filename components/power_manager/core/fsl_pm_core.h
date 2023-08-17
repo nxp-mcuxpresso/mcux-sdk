@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -205,7 +205,7 @@ typedef struct _pm_wakeup_source
  */
 typedef struct _pm_resc_group
 {
-    uint32_t groupSlice[PM_RESC_GROUP_ARRAY_SIZE];
+    uint32_t groupSlice[PM_RESC_GROUP_ARRAY_SIZE];  /*!< The resource constraint group. */
 } pm_resc_group_t;
 
 /*!
@@ -213,7 +213,7 @@ typedef struct _pm_resc_group
  */
 typedef struct _pm_resc_mask
 {
-    uint32_t rescMask[PM_RESC_MASK_ARRAY_SIZE];
+    uint32_t rescMask[PM_RESC_MASK_ARRAY_SIZE]; /*!< The resource constraint mask. */
 } pm_resc_mask_t;
 
 /*!
@@ -235,9 +235,9 @@ typedef struct _pm_device_option
     pm_state_t states[PM_LP_STATE_COUNT]; /*!< The array of device's power state, states array must be ordered in
                                             decreasing power consumption. */
     uint8_t stateCount;                    /*!< The counts of device's power state. */
-
-    void (*enter)(uint8_t powerState, pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup);
-    void (*clean)(void);
+    void (*prepare)(void);                 /*!< prepare for power state transition */
+    void (*enter)(uint8_t powerState, pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup);   /*!< enter power state */
+    void (*clean)(void);                  /*!< clean after power state transition */
 
 #if (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER)
     status_t (*manageWakeupSource)(pm_wakeup_source_t *ws, bool enable); /*!< The function used to enable/disable
@@ -443,7 +443,7 @@ status_t PM_UnregisterNotify(void *notifyElement);
  * @brief Initialize the wakeup source object.
  *
  * @param ws    Pointer to the @ref pm_wakeup_source_t variable.
- * @param wsId  Used to select the wakeup source, the wsId of each wakeup source can be found in fsl_pm_board.h
+ * @param wsId  Used to select the wakeup source, the wsId of each wakeup source can be found in fsl_pm_device.h
  * @param service The function to be invoked when wake up source asserted.
  * @param enable Used to enable/disable the selected wakeup source.
  */
@@ -492,13 +492,13 @@ status_t PM_TriggerWakeSourceService(pm_wakeup_source_t *ws);
 /*!
  * @brief Used to set constraints(including power mode constraint and resource constraints)
  *
- * For example, if the board support 3 resource constraints: PM_RESC_1, PM_RESC_2, PM_RESC3
+ * For example, if the device support 3 resource constraints: PM_RESC_1, PM_RESC_2, PM_RESC3
  *  @code
  *      PM_SetConstraints(Sleep_Mode, 3, PM_RESC_1, PM_RESC_2, PM_RESC_3);
  *  @endcode
  *
  * @param powerModeConstraint The lowest power mode allowed, the power mode constraint macros
- *                            can be found in fsl_pm_board.h
+ *                            can be found in fsl_pm_device.h
  * @param rescNum The number of resource constraints to be set.
  * @return status_t The status of set constraints behavior.
  */
@@ -507,13 +507,13 @@ status_t PM_SetConstraints(uint8_t powerModeConstraint, int32_t rescNum, ...);
 /*!
  * @brief Used to release constraints(including power mode constraint and resource constraints)
  *
- * For example, if the board support 3 resource constraints: PM_RESC_1, PM_RESC_2, PM_RESC3
+ * For example, if the device support 3 resource constraints: PM_RESC_1, PM_RESC_2, PM_RESC3
  *  @code
  *      PM_ReleaseConstraints(Sleep_Mode, 1, PM_RESC_1);
  *  @endcode
  *
  * @param powerModeConstraint The lowest power mode allowed, the power mode constraint macros
- *                            can be found in fsl_pm_board.h
+ *                            can be found in fsl_pm_device.h
  * @param rescNum The number of resource constraints to be released.
  * @return status_t The status of set constraints behavior.
  */

@@ -1,0 +1,26 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_ltc
+config MCUX_HAS_driver_ltc
+    bool
+
+config MCUX_USE_driver_ltc
+    depends on MCUX_HAS_driver_ltc
+    bool "LTC Driver"
+    select MCUX_USE_driver_common
+    help
+      LTC Driver
+
+# driver_ltc_edma
+config MCUX_HAS_driver_ltc_edma
+    bool
+
+config MCUX_USE_driver_ltc_edma
+    depends on MCUX_HAS_driver_ltc_edma
+    bool "LTC EDMA Driver"
+    select MCUX_USE_driver_ltc
+    help
+      LTC Driver

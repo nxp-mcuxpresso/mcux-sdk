@@ -21,7 +21,7 @@
 
 static I2S_Type *const s_saiBases[] = I2S_BASE_PTRS;
 /* Only support 2 and 4 channel */
-#define SAI_CHANNEL_MAP_MODULO(channel) (channel == 2U ? kEDMA_Modulo8bytes : kEDMA_Modulo16bytes)
+#define SAI_CHANNEL_MAP_MODULO(channel) ((channel) == 2U ? kEDMA_Modulo8bytes : kEDMA_Modulo16bytes)
 
 /*<! Structure definition for uart_edma_private_handle_t. The structure is private. */
 typedef struct sai_edma_private_handle

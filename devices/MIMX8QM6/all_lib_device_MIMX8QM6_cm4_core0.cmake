@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/DSP
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/cs42888
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
@@ -43,8 +44,8 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/scfw_api
@@ -59,7 +60,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_mdio-enet)
 #    include(driver_flexspi)
 #    include(driver_lpuart)
-#    include(CMSIS_Include_dsp)
+#    include(CMSIS_DSP_Include)
 #    include(component_lpuart_adapter)
 #    include(driver_lpi2c_freertos)
 #    include(driver_wdog32)
@@ -101,9 +102,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_sc_event)
 #    include(driver_tstmr)
 #    include(driver_codec)
-#    include(CMSIS_Include_core_cm4)
+#    include(CMSIS_Include_core_cm)
 #    include(driver_scfw_api)
-#    include(CMSIS_Include_common)
 #    include(driver_common)
 #    include(driver_asmc)
 #    include(middleware_freertos-kernel_heap_4)

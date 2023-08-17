@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019-2022 NXP
+ * Copyright 2017, 2019-2023 NXP
  * All rights reserved.
  *
  *
@@ -72,10 +72,10 @@
      (uint32_t)kDSI_InterruptGroup1AckTriggerReceived)
 #define DSI_INT_STATUS_ERROR_REPORT_MASK (0xFFFFU << 9U)
 
-#if defined(MIPI_DSI_HOST_DPHY_PD_TX_dphy_pd_tx_MASK)
-#define DPHY_PD_REG DPHY_PD_TX
-#elif (defined(MIPI_DSI_HOST_DPHY_PD_DPHY_dphy_pd_dphy_MASK) || defined(MIPI_DSI_HOST_DPHY_PD_DPHY_PD_DPHY_MASK))
-#define DPHY_PD_REG DPHY_PD_DPHY
+#if defined(MIPI_DSI_HOST_PD_TX_PD_TX_MASK)
+#define DPHY_PD_REG PD_TX
+#elif defined(MIPI_DSI_HOST_PD_DPHY_PD_DPHY_MASK)
+#define DPHY_PD_REG PD_DPHY
 #endif
 
 /*! @brief Typedef for MIPI DSI interrupt handler. */
@@ -389,11 +389,11 @@ static uint32_t DSI_DphyGetPllDivider(
 static void DSI_ApbClearRxFifo(MIPI_DSI_HOST_Type *base)
 {
     volatile uint32_t dummy = 0U;
-    uint32_t level          = base->DSI_HOST_PKT_FIFO_RD_LEVEL;
+    uint32_t level          = base->PKT_FIFO_RD_LEVEL;
 
     while (0U != (level--))
     {
-        dummy = base->DSI_HOST_PKT_RX_PAYLOAD;
+        dummy = base->PKT_RX_PAYLOAD;
     }
 
     (void)dummy;
@@ -420,38 +420,38 @@ void DSI_Init(MIPI_DSI_HOST_Type *base, const dsi_config_t *config)
     SOC_MIPI_DSI_EnableUlps(base, config->enableTxUlps);
 #endif /* FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS_CTRL */
 
-    base->DSI_HOST_CFG_NUM_LANES = config->numLanes - 1UL;
+    base->CFG_NUM_LANES = config->numLanes - 1UL;
 
     if (config->enableNonContinuousHsClk)
     {
-        base->DSI_HOST_CFG_NONCONTINUOUS_CLK = 0x01U;
+        base->CFG_NONCONTINUOUS_CLK = 0x01U;
     }
     else
     {
-        base->DSI_HOST_CFG_NONCONTINUOUS_CLK = 0x00U;
+        base->CFG_NONCONTINUOUS_CLK = 0x00U;
     }
 
     if (config->autoInsertEoTp)
     {
-        base->DSI_HOST_CFG_AUTOINSERT_EOTP = 0x01U;
+        base->CFG_AUTOINSERT_EOTP = 0x01U;
     }
     else
     {
-        base->DSI_HOST_CFG_AUTOINSERT_EOTP = 0x00U;
+        base->CFG_AUTOINSERT_EOTP = 0x00U;
     }
 
-    base->DSI_HOST_CFG_EXTRA_CMDS_AFTER_EOTP = config->numExtraEoTp;
-    base->DSI_HOST_CFG_HTX_TO_COUNT          = config->htxTo_ByteClk;
-    base->DSI_HOST_CFG_LRX_H_TO_COUNT        = config->lrxHostTo_ByteClk;
-    base->DSI_HOST_CFG_BTA_H_TO_COUNT        = config->btaTo_ByteClk;
+    base->CFG_EXTRA_CMDS_AFTER_EOTP = config->numExtraEoTp;
+    base->CFG_HTX_TO_COUNT          = config->htxTo_ByteClk;
+    base->CFG_LRX_H_TO_COUNT        = config->lrxHostTo_ByteClk;
+    base->CFG_BTA_H_TO_COUNT        = config->btaTo_ByteClk;
 
     DSI_ApbClearRxFifo(base);
 
     /* Disable all interrupts by default, user could enable
      * the desired interrupts later.
      */
-    base->DSI_HOST_IRQ_MASK  = 0xFFFFFFFFU;
-    base->DSI_HOST_IRQ_MASK2 = 0xFFFFFFFFU;
+    base->IRQ_MASK  = 0xFFFFFFFFU;
+    base->IRQ_MASK2 = 0xFFFFFFFFU;
 }
 
 /*!
@@ -532,55 +532,55 @@ void DSI_SetDpiConfig(MIPI_DSI_HOST_Type *base,
     SOC_MIPI_DSI_SetPixelDpiMap(base, (uint32_t)config->dpiColorCoding);
 #endif /* FSL_FEATURE_MIPI_DSI_HOST_HAS_PXL2DPI */
 
-    base->DSI_HOST_CFG_DPI_PIXEL_PAYLOAD_SIZE     = config->pixelPayloadSize;
-    base->DSI_HOST_CFG_DPI_INTERFACE_COLOR_CODING = (uint32_t)config->dpiColorCoding;
-    base->DSI_HOST_CFG_DPI_PIXEL_FORMAT           = (uint32_t)config->pixelPacket;
-    base->DSI_HOST_CFG_DPI_VIDEO_MODE             = (uint32_t)config->videoMode;
+    base->CFG_DPI_PIXEL_PAYLOAD_SIZE     = config->pixelPayloadSize;
+    base->CFG_DPI_INTERFACE_COLOR_CODING = (uint32_t)config->dpiColorCoding;
+    base->CFG_DPI_PIXEL_FORMAT           = (uint32_t)config->pixelPacket;
+    base->CFG_DPI_VIDEO_MODE             = (uint32_t)config->videoMode;
 
     if (kDSI_DpiBllpLowPower == config->bllpMode)
     {
-        base->DSI_HOST_CFG_DPI_BLLP_MODE         = 0x1U;
-        base->DSI_HOST_CFG_DPI_USE_NULL_PKT_BLLP = 0x0U;
+        base->CFG_DPI_BLLP_MODE         = 0x1U;
+        base->CFG_DPI_USE_NULL_PKT_BLLP = 0x0U;
     }
     else if (kDSI_DpiBllpBlanking == config->bllpMode)
     {
-        base->DSI_HOST_CFG_DPI_BLLP_MODE         = 0x0U;
-        base->DSI_HOST_CFG_DPI_USE_NULL_PKT_BLLP = 0x0U;
+        base->CFG_DPI_BLLP_MODE         = 0x0U;
+        base->CFG_DPI_USE_NULL_PKT_BLLP = 0x0U;
     }
     else
     {
-        base->DSI_HOST_CFG_DPI_BLLP_MODE         = 0x0U;
-        base->DSI_HOST_CFG_DPI_USE_NULL_PKT_BLLP = 0x1U;
+        base->CFG_DPI_BLLP_MODE         = 0x0U;
+        base->CFG_DPI_USE_NULL_PKT_BLLP = 0x1U;
     }
 
     if (0U != (config->polarityFlags & (uint32_t)kDSI_DpiVsyncActiveHigh))
     {
-        base->DSI_HOST_CFG_DPI_VSYNC_POLARITY = 0x01U;
+        base->CFG_DPI_VSYNC_POLARITY = 0x01U;
     }
     else
     {
-        base->DSI_HOST_CFG_DPI_VSYNC_POLARITY = 0x00U;
+        base->CFG_DPI_VSYNC_POLARITY = 0x00U;
     }
 
     if (0U != (config->polarityFlags & (uint32_t)kDSI_DpiHsyncActiveHigh))
     {
-        base->DSI_HOST_CFG_DPI_HSYNC_POLARITY = 0x01U;
+        base->CFG_DPI_HSYNC_POLARITY = 0x01U;
     }
     else
     {
-        base->DSI_HOST_CFG_DPI_HSYNC_POLARITY = 0x00U;
+        base->CFG_DPI_HSYNC_POLARITY = 0x00U;
     }
 
-    base->DSI_HOST_CFG_DPI_HFP                   = config->hfp * coff - DSI_HFP_OVERHEAD_BYTE;
-    base->DSI_HOST_CFG_DPI_HBP                   = config->hbp * coff - DSI_HBP_OVERHEAD_BYTE;
-    base->DSI_HOST_CFG_DPI_HSA                   = config->hsw * coff - DSI_HSA_OVERHEAD_BYTE;
-    base->DSI_HOST_CFG_DPI_PIXEL_FIFO_SEND_LEVEL = config->pixelPayloadSize;
+    base->CFG_DPI_HFP                   = config->hfp * coff - DSI_HFP_OVERHEAD_BYTE;
+    base->CFG_DPI_HBP                   = config->hbp * coff - DSI_HBP_OVERHEAD_BYTE;
+    base->CFG_DPI_HSA                   = config->hsw * coff - DSI_HSA_OVERHEAD_BYTE;
+    base->CFG_DPI_PIXEL_FIFO_SEND_LEVEL = config->pixelPayloadSize;
 
-    base->DSI_HOST_CFG_DPI_VBP = config->vbp;
-    base->DSI_HOST_CFG_DPI_VFP = config->vfp;
+    base->CFG_DPI_VBP = config->vbp;
+    base->CFG_DPI_VFP = config->vfp;
 
-    base->DSI_HOST_CFG_DPI_VACTIVE = config->panelHeight - 1UL;
-    base->DSI_HOST_CFG_DPI_VC      = config->virtualChannel;
+    base->CFG_DPI_VACTIVE = config->panelHeight - 1UL;
+    base->CFG_DPI_VC      = config->virtualChannel;
 }
 
 /*!
@@ -615,46 +615,46 @@ uint32_t DSI_InitDphy(MIPI_DSI_HOST_Type *base, const dsi_dphy_config_t *config,
     }
 
     /* Set the DPHY parameters. */
-    base->DPHY_CN = (uint32_t)DSI_EncodeDphyPllCn((uint8_t)cn);
-    base->DPHY_CM = (uint32_t)DSI_EncodeDphyPllCm((uint8_t)cm);
-    base->DPHY_CO = co;
+    base->CN = (uint32_t)DSI_EncodeDphyPllCn((uint8_t)cn);
+    base->CM = (uint32_t)DSI_EncodeDphyPllCm((uint8_t)cm);
+    base->CO = co;
 #endif
 
     /* Set the timing parameters. */
-    base->DPHY_M_PRG_HS_PREPARE  = (uint32_t)config->tHsPrepare_HalfEscClk - DSI_THS_PREPARE_HALF_ESC_CLK_BASE;
-    base->DPHY_MC_PRG_HS_PREPARE = (uint32_t)config->tClkPrepare_HalfEscClk - DSI_TCLK_PREPARE_HALF_ESC_CLK_BASE;
-    base->DPHY_M_PRG_HS_ZERO     = (uint32_t)config->tHsZero_ByteClk - DSI_THS_ZERO_BYTE_CLK_BASE;
-    base->DPHY_MC_PRG_HS_ZERO    = (uint32_t)config->tClkZero_ByteClk - DSI_TCLK_ZERO_BYTE_CLK_BASE;
-    base->DPHY_M_PRG_HS_TRAIL    = config->tHsTrail_ByteClk;
-    base->DPHY_MC_PRG_HS_TRAIL   = config->tClkTrail_ByteClk;
+    base->M_PRG_HS_PREPARE  = (uint32_t)config->tHsPrepare_HalfEscClk - DSI_THS_PREPARE_HALF_ESC_CLK_BASE;
+    base->MC_PRG_HS_PREPARE = (uint32_t)config->tClkPrepare_HalfEscClk - DSI_TCLK_PREPARE_HALF_ESC_CLK_BASE;
+    base->M_PRG_HS_ZERO     = (uint32_t)config->tHsZero_ByteClk - DSI_THS_ZERO_BYTE_CLK_BASE;
+    base->MC_PRG_HS_ZERO    = (uint32_t)config->tClkZero_ByteClk - DSI_TCLK_ZERO_BYTE_CLK_BASE;
+    base->M_PRG_HS_TRAIL    = config->tHsTrail_ByteClk;
+    base->MC_PRG_HS_TRAIL   = config->tClkTrail_ByteClk;
 
-    base->DSI_HOST_CFG_T_PRE  = config->tClkPre_ByteClk;
-    base->DSI_HOST_CFG_T_POST = config->tClkPost_ByteClk;
-    base->DSI_HOST_CFG_TX_GAP = config->tHsExit_ByteClk;
+    base->CFG_T_PRE  = config->tClkPre_ByteClk;
+    base->CFG_T_POST = config->tClkPost_ByteClk;
+    base->CFG_TX_GAP = config->tHsExit_ByteClk;
 #if (defined(FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS) && FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS)
-    base->DSI_HOST_CFG_TWAKEUP = config->tWakeup_EscClk;
+    base->CFG_TWAKEUP = config->tWakeup_EscClk;
 #endif
 
-#if defined(MIPI_DSI_HOST_DPHY_RTERM_SEL_dphy_rterm_sel_MASK)
-    base->DPHY_RTERM_SEL = MIPI_DSI_HOST_DPHY_RTERM_SEL_dphy_rterm_sel_MASK;
+#if defined(MIPI_DSI_HOST_RTERM_SEL_RTERM_SEL_MASK)
+    base->RTERM_SEL = MIPI_DSI_HOST_RTERM_SEL_RTERM_SEL_MASK;
 #endif
-#if defined(MIPI_DSI_HOST_DPHY_TX_RCAL_dphy_tx_rcal_MASK)
-    base->DPHY_TX_RCAL = 1;
+#if defined(MIPI_DSI_HOST_TX_RCAL_TX_RCAL_MASK)
+    base->TX_RCAL = 1;
 #endif
-    base->DPHY_RXLPRP = 1;
-    base->DPHY_RXCDRP = 1;
+    base->RXLPRP = 1;
+    base->RXCDRP = 1;
 
     /* Auto power down the inactive lanes. */
-    base->DPHY_AUTO_PD_EN = 0x1U;
+    base->AUTO_PD_EN = 0x1U;
 
-    base->DPHY_TST = 0x25U;
+    base->TST = 0x25U;
 
 #if !((defined(FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL) && (FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL)))
     /* Power up the PLL. */
-    base->DPHY_PD_PLL = 0U;
+    base->PD_PLL = 0U;
 
     /* Wait for the PLL lock. */
-    while (0UL == base->DPHY_LOCK)
+    while (0UL == base->LOCK)
     {
     }
 #endif
@@ -680,11 +680,11 @@ void DSI_DeinitDphy(MIPI_DSI_HOST_Type *base)
 {
 #if !((defined(FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL) && (FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL)))
     /* Power down the PLL. */
-    base->DPHY_PD_PLL = 1U;
+    base->PD_PLL = 1U;
 #endif
 
     /* Power down the DPHY. */
-    base->DPHY_PD_REG = 1U;
+    base->AUTO_PD_EN = 1U;
 }
 
 /*!
@@ -819,7 +819,7 @@ void DSI_SetApbPacketControl(
         pktCtrl |= DSI_HOST_PKT_CONTROL_BTA_MASK;
     }
 
-    base->DSI_HOST_PKT_CONTROL = pktCtrl;
+    base->PKT_CONTROL = pktCtrl;
 }
 
 /*!
@@ -878,13 +878,13 @@ void DSI_WriteApbTxPayloadExt(
         }
     }
 
-    base->DSI_HOST_TX_PAYLOAD = firstWord;
+    base->TX_PAYLOAD = firstWord;
 
     /* Write the payloadLocal to the FIFO. */
     for (i = 0; i < (payloadSizeLocal / 4U); i++)
     {
-        base->DSI_HOST_TX_PAYLOAD = ((uint32_t)payloadLocal[3] << 24U) | ((uint32_t)payloadLocal[2] << 16U) |
-                                    ((uint32_t)payloadLocal[1] << 8U) | payloadLocal[0];
+        base->TX_PAYLOAD = ((uint32_t)payloadLocal[3] << 24U) | ((uint32_t)payloadLocal[2] << 16U) |
+                           ((uint32_t)payloadLocal[1] << 8U) | payloadLocal[0];
         payloadLocal = &payloadLocal[4];
     }
 
@@ -892,14 +892,13 @@ void DSI_WriteApbTxPayloadExt(
     switch (payloadSizeLocal & 0x03U)
     {
         case 3:
-            base->DSI_HOST_TX_PAYLOAD =
-                ((uint32_t)payloadLocal[2] << 16U) | ((uint32_t)payloadLocal[1] << 8U) | payloadLocal[0];
+            base->TX_PAYLOAD = ((uint32_t)payloadLocal[2] << 16U) | ((uint32_t)payloadLocal[1] << 8U) | payloadLocal[0];
             break;
         case 2:
-            base->DSI_HOST_TX_PAYLOAD = ((uint32_t)payloadLocal[1] << 8U) | payloadLocal[0];
+            base->TX_PAYLOAD = ((uint32_t)payloadLocal[1] << 8U) | payloadLocal[0];
             break;
         case 1:
-            base->DSI_HOST_TX_PAYLOAD = payloadLocal[0];
+            base->TX_PAYLOAD = payloadLocal[0];
             break;
         default:
             /* For MISRA 2012 16.4 */
@@ -1008,7 +1007,7 @@ void DSI_ReadApbRxPayload(MIPI_DSI_HOST_Type *base, uint8_t *payload, uint16_t p
 
     for (i = 0; i < payloadSize / 4U; i++)
     {
-        tmp             = base->DSI_HOST_PKT_RX_PAYLOAD;
+        tmp             = base->PKT_RX_PAYLOAD;
         payloadLocal[0] = (uint8_t)(tmp & 0xFFU);
         payloadLocal[1] = (uint8_t)((tmp >> 8U) & 0xFFU);
         payloadLocal[2] = (uint8_t)((tmp >> 16U) & 0xFFU);
@@ -1019,7 +1018,7 @@ void DSI_ReadApbRxPayload(MIPI_DSI_HOST_Type *base, uint8_t *payload, uint16_t p
     /* Read out the remaining data. */
     if (0U != (payloadSize & 0x03U))
     {
-        tmp = base->DSI_HOST_PKT_RX_PAYLOAD;
+        tmp = base->PKT_RX_PAYLOAD;
 
         for (i = 0; i < (payloadSize & 0x3U); i++)
         {
@@ -1055,7 +1054,7 @@ status_t DSI_TransferBlocking(MIPI_DSI_HOST_Type *base, dsi_transfer_t *xfer)
     uint32_t intFlags2New;
 
     /* Wait for the APB state idle. */
-    while (0U != (base->DSI_HOST_PKT_STATUS & (uint32_t)kDSI_ApbNotIdle))
+    while (0U != (base->PKT_STATUS & (uint32_t)kDSI_ApbNotIdle))
     {
     }
 
@@ -1080,13 +1079,13 @@ status_t DSI_TransferBlocking(MIPI_DSI_HOST_Type *base, dsi_transfer_t *xfer)
         while (true)
         {
             /* Transfer completed. */
-            if (0U == (base->DSI_HOST_PKT_STATUS & (uint32_t)kDSI_ApbNotIdle))
+            if (0U == (base->PKT_STATUS & (uint32_t)kDSI_ApbNotIdle))
             {
                 break;
             }
 
             /* Time out. */
-            if (0U != (base->DSI_HOST_RX_ERROR_STATUS &
+            if (0U != (base->RX_ERROR_STATUS &
                        ((uint32_t)kDSI_RxErrorHtxTo | (uint32_t)kDSI_RxErrorLrxTo | (uint32_t)kDSI_RxErrorBtaTo)))
             {
                 status = kStatus_Timeout;
@@ -1266,7 +1265,7 @@ status_t DSI_TransferNonBlocking(MIPI_DSI_HOST_Type *base, dsi_handle_t *handle,
     {
         status = kStatus_DSI_Busy;
     }
-    else if (0U != (base->DSI_HOST_PKT_STATUS & (uint32_t)kDSI_ApbNotIdle))
+    else if (0U != (base->PKT_STATUS & (uint32_t)kDSI_ApbNotIdle))
     {
         status = kStatus_DSI_Busy;
     }
@@ -1354,7 +1353,7 @@ void DSI_TransferHandleIRQ(MIPI_DSI_HOST_Type *base, dsi_handle_t *handle)
         timeout = FSL_MIPI_DSI_IDLE_TIMEOUT;
         while (0U != (timeout--))
         {
-            if (0U == (base->DSI_HOST_PKT_STATUS & (uint32_t)kDSI_ApbNotIdle))
+            if (0U == (base->PKT_STATUS & (uint32_t)kDSI_ApbNotIdle))
             {
                 break;
             }

@@ -1,0 +1,8 @@
+<map id="Sensor_I2C_BlockWrite" name="Sensor_I2C_BlockWrite">
+<area shape="rect" id="node2" href="$a00041.html#aceb89b4fc88099b21318cacb6088f9cd" title="The interface function to read the sensor data. " alt="" coords="213,5,452,32"/>
+<area shape="rect" id="node3" href="$a00041.html#a871aa55982b73b6f38f5bfa87a3c070e" title="The interface function to write ROM CI Commands. " alt="" coords="223,56,442,83"/>
+<area shape="rect" id="node4" href="$a00155.html#ac2adf4021d79f76664f040c381399468" title="The interface function to read the sensor data. " alt="" coords="217,107,448,133"/>
+<area shape="rect" id="node5" href="$a00155.html#a98085b8d1389e48df874d4115f7ee2ac" title="The interface function to configure he sensor. " alt="" coords="249,157,417,184"/>
+<area shape="rect" id="node6" href="$a00155.html#ad12d67ce4ddd0b5d95a937d643e3f369" title="The interface function to De Initialize sensor.. " alt="" coords="259,208,406,235"/>
+<area shape="rect" id="node7" href="$a00155.html#af91dd70fb511444f848db38d965c68c0" title="The interface function to initialize the sensor. " alt="" coords="252,259,413,285"/>
+</map>

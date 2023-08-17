@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPADC driver version 2.6.1. */
-#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 6, 1))
+/*! @brief LPADC driver version 2.6.2. */
+#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 6, 2))
 /*@}*/
 
 /*!
@@ -515,6 +515,24 @@ typedef struct
     uint32_t triggerIdSource; /*!< Indicate the trigger source that initiated a conversion and generated this result. */
     uint16_t convValue;       /*!< Data result. */
 } lpadc_conv_result_t;
+
+#if defined(FSL_FEATURE_LPADC_HAS_CTRL_CALOFS) && FSL_FEATURE_LPADC_HAS_CTRL_CALOFS
+/*!
+ * @brief A structure of calibration value.
+ */
+typedef struct _lpadc_calibration_value
+{
+    /* gain calibration result. */
+    uint16_t gainCalibrationResultA;
+    uint16_t gainCalibrationResultB;
+#if (defined(FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ) && FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ)
+    /* general calibration value. */
+    uint16_t generalCalibrationValueA[33U];
+    uint16_t generalCalibrationValueB[33U];
+#endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ */
+} lpadc_calibration_value_t;
+
+#endif /* FSL_FEATURE_LPADC_HAS_CTRL_CALOFS */
 
 #if defined(__cplusplus)
 extern "C" {
@@ -1051,12 +1069,50 @@ void LPADC_DoOffsetCalibration(ADC_Type *base);
 
 #if defined(FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ) && FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ
 /*!
- * brief Do auto calibration.
+ * @brief Do auto calibration.
  *
- * param base  LPADC peripheral base address.
+ * @param base  LPADC peripheral base address.
  */
 void LPADC_DoAutoCalibration(ADC_Type *base);
+
+/*!
+ * @brief Prepare auto calibration, LPADC_FinishAutoCalibration has to be called before using the LPADC.
+ * LPADC_DoAutoCalibration has been split in two API to avoid to be stuck too long in the function.
+ *
+ * @param base  LPADC peripheral base address.
+ */
+void LPADC_PrepareAutoCalibration(ADC_Type *base);
+
+/*!
+ * @brief Finish auto calibration start with LPADC_PrepareAutoCalibration.
+ *
+ * @param base  LPADC peripheral base address.
+ */
+void LPADC_FinishAutoCalibration(ADC_Type *base);
+
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ */
+
+/*!
+ * @brief Get calibration value into the memory which is defined by invoker.
+ * 
+ * @note Please note the ADC will be disabled temporary.
+ * @note This function should be used after finish calibration.
+ * 
+ * @param base LPADC peripheral base address.
+ * @param ptrCalibrationValue Pointer to @ref lpadc_calibration_value_t structure, this memory block should be always powered on even in low power modes.
+ */
+void LPADC_GetCalibrationValue(ADC_Type *base, lpadc_calibration_value_t *ptrCalibrationValue);
+
+/*!
+ * @brief Set calibration value into ADC calibration registers.
+ * 
+ * @note Please note the ADC will be disabled temporary.
+ * 
+ * @param base LPADC peripheral base address.
+ * @param ptrCalibrationValue Pointer to @ref lpadc_calibration_value_t structure which contains ADC's calibration value.
+ */
+void LPADC_SetCalibrationValue(ADC_Type *base, const lpadc_calibration_value_t *ptrCalibrationValue);
+
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CALOFS */
 
 /* @} */

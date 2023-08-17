@@ -1,6 +1,5 @@
 /*
- * Copyright 2021 NXP
- * All rights reserved.
+ * Copyright 2021-2022 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,6 +8,8 @@
 #define _FSL_ICM42688P_H_
 
 #include "fsl_common.h"
+
+#define INVALID_DATA (-32768)
 
 /* Locate in bank 0. */
 #define DEVICE_CONFIG      0x11U
@@ -148,6 +149,7 @@ status_t ICM42688P_ConfigureTapDetectIBI(icm42688p_handle_t *handle);
  * @param icm42688p_sensor_data_t The pointer to #icm42688p_sensor_data_t which stores the read out data.
  *
  * @return kStatus_Success if success or kStatus_Fail if error.
+ * @return kStatus_NoData There's invalid data in sensorData structure.
  */
 status_t ICM42688P_ReadSensorData(icm42688p_handle_t *handle, icm42688p_sensor_data_t *sensorData);
 #if defined(__cplusplus)

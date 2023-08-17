@@ -1,0 +1,17 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_cmsis_ii2c
+config MCUX_HAS_driver_cmsis_ii2c
+    bool
+
+config MCUX_USE_driver_cmsis_ii2c
+    depends on MCUX_HAS_driver_cmsis_ii2c
+    bool "II2C CMSIS Driver"
+    select MCUX_USE_driver_ii2c
+    select MCUX_USE_CMSIS_Driver_Include_I2C
+    select MCUX_USE_RTE_Device
+    help
+      I2C CMSIS Driver

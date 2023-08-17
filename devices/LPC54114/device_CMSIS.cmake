@@ -9,13 +9,7 @@ if(NOT DEVICE_CMSIS_INCLUDED)
         ${CMAKE_CURRENT_LIST_DIR}/.
     )
 
-    #OR Logic component
-    if(CONFIG_DEVICE_LPC54114_cm4) 
-        include(CMSIS_Include_core_cm4)
-    endif()
-    if(CONFIG_DEVICE_LPC54114_cm0plus) 
-        include(CMSIS_Include_core_cm0plus)
-    endif()
+    include(CMSIS_Include_core_cm)
 
 
 endif()

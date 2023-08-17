@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -200,6 +200,11 @@ status_t XRDC_GetAndClearFirstSpecificDomainError(XRDC_Type *base, xrdc_error_t 
     uint8_t errorIndex;   /* The index of first domain error. */
     uint32_t errorBitMap; /* Domain error location bit map.   */
     uint32_t regW1;       /* To save XRDC_DERR_W1.            */
+
+    if (domainId >= ARRAY_SIZE(base->DERRLOC))
+    {
+        return kStatus_InvalidArgument;
+    }
 
     /* Get the error bitmap. */
     errorBitMap = base->DERRLOC[domainId];

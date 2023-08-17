@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_wwdt
+config MCUX_HAS_driver_wwdt
+    bool
+
+config MCUX_USE_driver_wwdt
+    depends on MCUX_HAS_driver_wwdt
+    bool "WWDT Driver"
+    select MCUX_USE_driver_common
+    help
+      WWDT Driver

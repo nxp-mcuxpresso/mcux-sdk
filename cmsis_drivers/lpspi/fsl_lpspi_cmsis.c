@@ -29,7 +29,7 @@
      (defined(RTE_SPI2) && RTE_SPI2 && defined(LPSPI2)) || (defined(RTE_SPI3) && RTE_SPI3 && defined(LPSPI3)) || \
      (defined(RTE_SPI4) && RTE_SPI4 && defined(LPSPI4)) || (defined(RTE_SPI5) && RTE_SPI5 && defined(LPSPI5)))
 
-#define ARM_LPSPI_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (5)) /* driver version */
+#define ARM_LPSPI_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (6)) /* driver version */
 
 /*
  * ARMCC does not support split the data section automatically, so the driver
@@ -68,11 +68,11 @@ typedef const struct _cmsis_lpspi_edma_resource
 {
     DMA_Type *txEdmaBase;
     uint32_t txEdmaChannel;
-    uint8_t txDmaRequest;
+    uint16_t txDmaRequest;
 
     DMA_Type *rxEdmaBase;
     uint32_t rxEdmaChannel;
-    uint8_t rxDmaRequest;
+    uint16_t rxDmaRequest;
 
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
     DMAMUX_Type *txDmamuxBase;
@@ -122,6 +122,8 @@ static int32_t LPSPI_CommonControl(uint32_t control,
     LPSPI_MasterGetDefaultConfig(&masterConfig);
     lpspi_slave_config_t slaveConfig;
     LPSPI_SlaveGetDefaultConfig(&slaveConfig);
+    bool isMaster = ((control & ARM_SPI_CONTROL_Msk) == ARM_SPI_MODE_MASTER) ||
+                    ((control & ARM_SPI_CONTROL_Msk) == ARM_SPI_MODE_MASTER_SIMPLEX);
     masterConfig.baudRate = arg;
 
     if (ARM_SPI_MODE_MASTER_SIMPLEX == (control & (uint32_t)ARM_SPI_CONTROL_Msk))
@@ -195,7 +197,7 @@ static int32_t LPSPI_CommonControl(uint32_t control,
     switch (control & (uint32_t)ARM_SPI_FRAME_FORMAT_Msk)
     {
         case ARM_SPI_CPOL0_CPHA0: /* Clock Polarity 0, Clock Phase 0*/
-            if (LPSPI_IsMaster(resource->base))
+            if (isMaster)
             {
                 masterConfig.cpol = kLPSPI_ClockPolarityActiveHigh;
                 masterConfig.cpha = kLPSPI_ClockPhaseFirstEdge;
@@ -207,7 +209,7 @@ static int32_t LPSPI_CommonControl(uint32_t control,
             }
             break;
         case ARM_SPI_CPOL0_CPHA1: /* Clock Polarity 0, Clock Phase 1*/
-            if (LPSPI_IsMaster(resource->base))
+            if (isMaster)
             {
                 masterConfig.cpol = kLPSPI_ClockPolarityActiveHigh;
                 masterConfig.cpha = kLPSPI_ClockPhaseSecondEdge;
@@ -219,7 +221,7 @@ static int32_t LPSPI_CommonControl(uint32_t control,
             }
             break;
         case ARM_SPI_CPOL1_CPHA0: /* Clock Polarity 1, Clock Phase 0*/
-            if (LPSPI_IsMaster(resource->base))
+            if (isMaster)
             {
                 masterConfig.cpol = kLPSPI_ClockPolarityActiveLow;
                 masterConfig.cpha = kLPSPI_ClockPhaseFirstEdge;
@@ -231,7 +233,7 @@ static int32_t LPSPI_CommonControl(uint32_t control,
             }
             break;
         case ARM_SPI_CPOL1_CPHA1: /* Clock Polarity 1, Clock Phase 1*/
-            if (LPSPI_IsMaster(resource->base))
+            if (isMaster)
             {
                 masterConfig.cpol = kLPSPI_ClockPolarityActiveLow;
                 masterConfig.cpha = kLPSPI_ClockPhaseSecondEdge;
@@ -251,7 +253,7 @@ static int32_t LPSPI_CommonControl(uint32_t control,
     {
         if ((((control & (uint32_t)ARM_SPI_DATA_BITS_Msk) >> ARM_SPI_DATA_BITS_Pos) >= 8UL))
         {
-            if (LPSPI_IsMaster(resource->base))
+            if (isMaster)
             {
                 masterConfig.bitsPerFrame = ((control & ARM_SPI_DATA_BITS_Msk) >> ARM_SPI_DATA_BITS_Pos);
             }
@@ -269,7 +271,7 @@ static int32_t LPSPI_CommonControl(uint32_t control,
     switch (control & (uint32_t)ARM_SPI_BIT_ORDER_Msk)
     {
         case ARM_SPI_LSB_MSB: /* SPI Bit order from LSB to MSB */
-            if (LPSPI_IsMaster(resource->base))
+            if (isMaster)
             {
                 masterConfig.direction = kLPSPI_LsbFirst;
             }
@@ -279,7 +281,7 @@ static int32_t LPSPI_CommonControl(uint32_t control,
             }
             break;
         case ARM_SPI_MSB_LSB: /* SPI Bit order from MSB to LSB */
-            if (LPSPI_IsMaster(resource->base))
+            if (isMaster)
             {
                 masterConfig.direction = kLPSPI_MsbFirst;
             }
@@ -293,7 +295,7 @@ static int32_t LPSPI_CommonControl(uint32_t control,
             break;
     }
 
-    if (LPSPI_IsMaster(resource->base))
+    if (isMaster)
     {
         /* The SPI slave select is controlled by hardware, the other mode is not supported by current driver. */
         switch (control & (uint32_t)ARM_SPI_SS_MASTER_MODE_Msk)
@@ -327,7 +329,7 @@ static int32_t LPSPI_CommonControl(uint32_t control,
     }
 
     /* LPSPI Init*/
-    if (LPSPI_IsMaster(resource->base))
+    if (isMaster)
     {
         if (((*isConfigured) & (uint8_t)SPI_FLAG_CONFIGURED) != 0U)
         {
@@ -562,12 +564,16 @@ static int32_t LPSPI_EdmaPowerControl(ARM_POWER_STATE state, cmsis_lpspi_edma_dr
 
             EDMA_CreateHandle(lpspi->edmaRxRegToRxDataHandle, dmaResource->rxEdmaBase, dmaResource->rxEdmaChannel);
             EDMA_CreateHandle(lpspi->edmaTxDataToTxRegHandle, dmaResource->txEdmaBase, dmaResource->txEdmaChannel);
+#if defined(FSL_FEATURE_EDMA_HAS_CHANNEL_MUX) && FSL_FEATURE_EDMA_HAS_CHANNEL_MUX
+            EDMA_SetChannelMux(dmaResource->txEdmaBase, dmaResource->txEdmaChannel, dmaResource->txDmaRequest);
+            EDMA_SetChannelMux(dmaResource->rxEdmaBase, dmaResource->rxEdmaChannel, dmaResource->rxDmaRequest);
+#endif
 
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
-            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxEdmaChannel, dmaResource->rxDmaRequest);
+            DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxEdmaChannel, (int32_t)dmaResource->rxDmaRequest);
             DMAMUX_EnableChannel(dmaResource->rxDmamuxBase, dmaResource->rxEdmaChannel);
 
-            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txEdmaChannel, dmaResource->txDmaRequest);
+            DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txEdmaChannel, (int32_t)dmaResource->txDmaRequest);
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txEdmaChannel);
 #endif
             lpspi->flags |= (uint8_t)SPI_FLAG_POWER;
@@ -744,7 +750,6 @@ static int32_t LPSPI_EdmaControl(uint32_t control, uint32_t arg, cmsis_lpspi_edm
             break;
         case ARM_SPI_MODE_MASTER: /* SPI Master (Output on SOUT, Input on SIN); arg = Bus Speed in bps */
         {
-            LPSPI_SetMasterSlaveMode(lpspi->resource->base, kLPSPI_Master);
             LPSPI_MasterTransferCreateHandleEDMA(lpspi->resource->base, &(lpspi->handle->masterHandle),
                                                  KSDK_LPSPI_MasterEdmaCallback, (void *)lpspi->cb_event,
                                                  lpspi->edmaRxRegToRxDataHandle, lpspi->edmaTxDataToTxRegHandle);
@@ -755,7 +760,6 @@ static int32_t LPSPI_EdmaControl(uint32_t control, uint32_t arg, cmsis_lpspi_edm
         }
         case ARM_SPI_MODE_SLAVE: /* SPI Slave  (Output on SOUT, Input on SIN) */
         {
-            LPSPI_SetMasterSlaveMode(lpspi->resource->base, kLPSPI_Slave);
             LPSPI_SlaveTransferCreateHandleEDMA(lpspi->resource->base, &(lpspi->handle->slaveHandle),
                                                 KSDK_LPSPI_SlaveEdmaCallback, (void *)lpspi->cb_event,
                                                 lpspi->edmaRxRegToRxDataHandle, lpspi->edmaTxDataToTxRegHandle);
@@ -816,7 +820,6 @@ static int32_t LPSPI_EdmaControl(uint32_t control, uint32_t arg, cmsis_lpspi_edm
 
         case ARM_SPI_MODE_MASTER_SIMPLEX: /* SPI Master (Output/Input on SOUT); arg = Bus Speed in bps */
         {
-            LPSPI_SetMasterSlaveMode(lpspi->resource->base, kLPSPI_Master);
             LPSPI_MasterTransferCreateHandleEDMA(lpspi->resource->base, &(lpspi->handle->masterHandle),
                                                  KSDK_LPSPI_MasterEdmaCallback, (void *)lpspi->cb_event,
                                                  lpspi->edmaRxRegToRxDataHandle, lpspi->edmaTxDataToTxRegHandle);
@@ -828,7 +831,6 @@ static int32_t LPSPI_EdmaControl(uint32_t control, uint32_t arg, cmsis_lpspi_edm
 
         case ARM_SPI_MODE_SLAVE_SIMPLEX: /* SPI Slave  (Output/Input on SIN) */
         {
-            LPSPI_SetMasterSlaveMode(lpspi->resource->base, kLPSPI_Slave);
             LPSPI_SlaveTransferCreateHandleEDMA(lpspi->resource->base, &(lpspi->handle->slaveHandle),
                                                 KSDK_LPSPI_SlaveEdmaCallback, (void *)lpspi->cb_event,
                                                 lpspi->edmaRxRegToRxDataHandle, lpspi->edmaTxDataToTxRegHandle);
@@ -1145,7 +1147,6 @@ static int32_t LPSPI_InterruptControl(uint32_t control, uint32_t arg, cmsis_lpsp
             break;
         case ARM_SPI_MODE_MASTER: /* SPI Master (Output on SOUT, Input on SIN); arg = Bus Speed in bps */
         {
-            LPSPI_SetMasterSlaveMode(lpspi->resource->base, kLPSPI_Master);
             LPSPI_MasterTransferCreateHandle(lpspi->resource->base, &(lpspi->handle->masterHandle),
                                              KSDK_LPSPI_MasterInterruptCallback, (void *)lpspi->cb_event);
             lpspi->baudRate_Bps = arg;
@@ -1154,7 +1155,6 @@ static int32_t LPSPI_InterruptControl(uint32_t control, uint32_t arg, cmsis_lpsp
         }
         case ARM_SPI_MODE_SLAVE: /* SPI Slave  (Output on SOUT, Input on SIN) */
         {
-            LPSPI_SetMasterSlaveMode(lpspi->resource->base, kLPSPI_Slave);
             LPSPI_SlaveTransferCreateHandle(lpspi->resource->base, &(lpspi->handle->slaveHandle),
                                             KSDK_LPSPI_SlaveInterruptCallback, (void *)lpspi->cb_event);
             isContinue = true;
@@ -1220,7 +1220,6 @@ static int32_t LPSPI_InterruptControl(uint32_t control, uint32_t arg, cmsis_lpsp
 
         case ARM_SPI_MODE_MASTER_SIMPLEX: /* SPI Master (Output/Input on SOUT); arg = Bus Speed in bps */
         {
-            LPSPI_SetMasterSlaveMode(lpspi->resource->base, kLPSPI_Master);
             LPSPI_MasterTransferCreateHandle(lpspi->resource->base, &(lpspi->handle->masterHandle),
                                              KSDK_LPSPI_MasterInterruptCallback, (void *)lpspi->cb_event);
             lpspi->baudRate_Bps = arg;
@@ -1229,7 +1228,6 @@ static int32_t LPSPI_InterruptControl(uint32_t control, uint32_t arg, cmsis_lpsp
         }
         case ARM_SPI_MODE_SLAVE_SIMPLEX: /* SPI Slave  (Output/Input on SIN) */
         {
-            LPSPI_SetMasterSlaveMode(lpspi->resource->base, kLPSPI_Slave);
             LPSPI_SlaveTransferCreateHandle(lpspi->resource->base, &(lpspi->handle->slaveHandle),
                                             KSDK_LPSPI_SlaveInterruptCallback, (void *)lpspi->cb_event);
             isContinue = true;
@@ -1253,18 +1251,12 @@ static ARM_SPI_STATUS LPSPI_InterruptGetStatus(cmsis_lpspi_interrupt_driver_stat
 
     if (LPSPI_IsMaster(lpspi->resource->base))
     {
-        stat.busy = ((lpspi->handle->masterHandle.rxRemainingByteCount > 0U) ||
-                     (lpspi->handle->masterHandle.txRemainingByteCount > 0U)) ?
-                        (1U) :
-                        (0U);
+        stat.busy = ((uint8_t)kLPSPI_Busy == lpspi->handle->masterHandle.state) ? (1U) : (0U);
         stat.data_lost = ((uint8_t)kLPSPI_Error == lpspi->handle->masterHandle.state) ? (1U) : (0U);
     }
     else
     {
-        stat.busy = ((lpspi->handle->slaveHandle.rxRemainingByteCount > 0U) ||
-                     (lpspi->handle->slaveHandle.txRemainingByteCount > 0U)) ?
-                        (1U) :
-                        (0U);
+        stat.busy = ((uint8_t)kLPSPI_Busy == lpspi->handle->slaveHandle.state) ? (1U) : (0U);
         stat.data_lost = ((uint8_t)kLPSPI_Error == lpspi->handle->slaveHandle.state) ? (1U) : (0U);
     }
     stat.mode_fault = 0U;

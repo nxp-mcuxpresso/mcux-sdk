@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_cdog
+config MCUX_HAS_driver_cdog
+    bool
+
+config MCUX_USE_driver_cdog
+    depends on MCUX_HAS_driver_cdog
+    bool "cdog Driver"
+    select MCUX_USE_driver_common
+    help
+      cdog Driver

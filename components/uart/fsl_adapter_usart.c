@@ -103,6 +103,9 @@ typedef struct _hal_uart_state
 #if (defined(HAL_UART_DMA_ENABLE) && (HAL_UART_DMA_ENABLE > 0U))
     hal_uart_dma_state_t *dmaHandle;
 #endif /* HAL_UART_DMA_ENABLE */
+#if (defined(HAL_UART_ADAPTER_LOWPOWER) && (HAL_UART_ADAPTER_LOWPOWER > 0U))
+    hal_uart_config_t config;
+#endif
 } hal_uart_state_t;
 
 /*******************************************************************************
@@ -324,34 +327,37 @@ static hal_uart_status_t HAL_UartInitCommon(hal_uart_handle_t handle, const hal_
     return kStatus_HAL_UartSuccess;
 }
 
-hal_uart_status_t HAL_UartInit(hal_uart_handle_t handle, const hal_uart_config_t *config)
+hal_uart_status_t HAL_UartInit(hal_uart_handle_t handle, const hal_uart_config_t *uart_config)
 {
     hal_uart_state_t *uartHandle;
     hal_uart_status_t status;
 
     /* Init serial port */
-    status = HAL_UartInitCommon(handle, config);
+    status = HAL_UartInitCommon(handle, uart_config);
     if (kStatus_HAL_UartSuccess != status)
     {
         return status;
     }
 
     uartHandle           = (hal_uart_state_t *)handle;
-    uartHandle->instance = config->instance;
+    uartHandle->instance = uart_config->instance;
 #if (defined(HAL_UART_DMA_ENABLE) && (HAL_UART_DMA_ENABLE > 0U))
     uartHandle->dmaHandle = NULL;
 #endif /* HAL_UART_DMA_ENABLE */
+#if (defined(HAL_UART_ADAPTER_LOWPOWER) && (HAL_UART_ADAPTER_LOWPOWER > 0U))
+    (void)memcpy(&uartHandle->config, uart_config, sizeof(hal_uart_config_t));
+#endif
 
 #if (defined(UART_ADAPTER_NON_BLOCKING_MODE) && (UART_ADAPTER_NON_BLOCKING_MODE > 0U))
 
 #if (defined(HAL_UART_TRANSFER_MODE) && (HAL_UART_TRANSFER_MODE > 0U))
-    USART_TransferCreateHandle(s_UsartAdapterBase[config->instance], &uartHandle->hardwareHandle,
+    USART_TransferCreateHandle(s_UsartAdapterBase[uart_config->instance], &uartHandle->hardwareHandle,
                                (usart_transfer_callback_t)HAL_UartCallback, handle);
 #else
     /* Enable interrupt in NVIC. */
-    FLEXCOMM_SetIRQHandler(s_UsartAdapterBase[config->instance], HAL_UartInterruptHandle_Wapper, handle);
-    NVIC_SetPriority((IRQn_Type)s_UsartIRQ[config->instance], HAL_UART_ISR_PRIORITY);
-    (void)EnableIRQ(s_UsartIRQ[config->instance]);
+    FLEXCOMM_SetIRQHandler(s_UsartAdapterBase[uart_config->instance], HAL_UartInterruptHandle_Wapper, handle);
+    NVIC_SetPriority((IRQn_Type)s_UsartIRQ[uart_config->instance], HAL_UART_ISR_PRIORITY);
+    (void)EnableIRQ(s_UsartIRQ[uart_config->instance]);
 #endif
 
 #endif
@@ -424,8 +430,17 @@ hal_uart_status_t HAL_UartEnterLowpower(hal_uart_handle_t handle)
 
 hal_uart_status_t HAL_UartExitLowpower(hal_uart_handle_t handle)
 {
+#if (defined(HAL_UART_ADAPTER_LOWPOWER) && (HAL_UART_ADAPTER_LOWPOWER > 0U))
+    hal_uart_state_t *uartHandle;
     assert(handle);
 
+    uartHandle = (hal_uart_state_t *)handle;
+
+    HAL_UartInit(handle, &uartHandle->config);
+#if (defined(UART_ADAPTER_NON_BLOCKING_MODE) && (UART_ADAPTER_NON_BLOCKING_MODE > 0U))
+    USART_EnableInterrupts(s_UsartAdapterBase[uartHandle->instance], USART_FIFOINTENSET_RXLVL_MASK);
+#endif
+#endif
     return kStatus_HAL_UartSuccess;
 }
 

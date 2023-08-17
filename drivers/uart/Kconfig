@@ -1,0 +1,37 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_uart_edma
+config MCUX_HAS_driver_uart_edma
+    bool
+
+config MCUX_USE_driver_uart_edma
+    depends on MCUX_HAS_driver_uart_edma
+    bool "UART EDMA Driver"
+    select MCUX_USE_driver_uart
+    help
+      UART Driver
+
+# driver_uart
+config MCUX_HAS_driver_uart
+    bool
+
+config MCUX_USE_driver_uart
+    depends on MCUX_HAS_driver_uart
+    bool "UART Driver"
+    select MCUX_USE_driver_common
+    help
+      UART Driver
+
+# driver_uart_dma
+config MCUX_HAS_driver_uart_dma
+    bool
+
+config MCUX_USE_driver_uart_dma
+    depends on MCUX_HAS_driver_uart_dma
+    bool "UART DMA Driver"
+    select MCUX_USE_driver_uart
+    help
+      UART Driver

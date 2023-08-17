@@ -19,7 +19,7 @@
 #if (defined(FSL_FEATURE_SWM_HAS_FLEXTIMER_PINASSIGN_REGISTER) && \
      (FSL_FEATURE_SWM_HAS_FLEXTIMER_PINASSIGN_REGISTER == 1))
 /*! @brief Flextimer pin assignments. */
-static uint32_t s_swmFlextimerFuncMatrix[18][4] = {
+static const uint32_t s_swmFlextimerFuncMatrix[18][4] = {
     {(uint32_t)kSWM_FTM_Selection0, (uint32_t)kSWM_FTM_Selection1, 0xff,
      0xff}, /* FTM0_EXTCLK: P0_24, P0_30, none, Not connected */
     {(uint32_t)kSWM_FTM_Selection0, (uint32_t)kSWM_FTM_Selection1, (uint32_t)kSWM_FTM_Selection2,

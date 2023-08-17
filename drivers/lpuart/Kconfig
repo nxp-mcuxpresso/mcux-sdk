@@ -1,0 +1,37 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_lpuart_dma
+config MCUX_HAS_driver_lpuart_dma
+    bool
+
+config MCUX_USE_driver_lpuart_dma
+    depends on MCUX_HAS_driver_lpuart_dma
+    bool "LPUART DMA Driver"
+    select MCUX_USE_driver_lpuart
+    help
+      LPUART Driver
+
+# driver_lpuart
+config MCUX_HAS_driver_lpuart
+    bool
+
+config MCUX_USE_driver_lpuart
+    depends on MCUX_HAS_driver_lpuart
+    bool "LPUART Driver"
+    select MCUX_USE_driver_common
+    help
+      LPUART Driver
+
+# driver_lpuart_edma
+config MCUX_HAS_driver_lpuart_edma
+    bool
+
+config MCUX_USE_driver_lpuart_edma
+    depends on MCUX_HAS_driver_lpuart_edma
+    bool "LPUART Edma Driver"
+    select MCUX_USE_driver_lpuart
+    help
+      LPUART Driver

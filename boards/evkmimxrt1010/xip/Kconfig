@@ -1,0 +1,11 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_xip_board_evkmimxrt1010
+config MCUX_USE_driver_xip_board_evkmimxrt1010
+    bool "XIP Board Driver"
+    select MCUX_USE_driver_common
+    help
+      XIP Board Driver

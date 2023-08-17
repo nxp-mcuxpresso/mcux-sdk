@@ -1,0 +1,14 @@
+<map id="control.h" name="control.h">
+<area shape="rect" id="node2" href="$control_8c.html" title="Defines control sub&#45;system. " alt="" coords="5,87,77,114"/>
+<area shape="rect" id="node3" href="$debug_8c.html" title="ApplyPerturbation function used to analyze dynamic performance. " alt="" coords="102,87,170,114"/>
+<area shape="rect" id="node4" href="$DecodeCommandBytes_8c.html" title="Command interpreter which interfaces to the Sensor Fusion Toolbox. " alt="" coords="195,87,365,114"/>
+<area shape="rect" id="node5" href="$fusion_8c.html" title="Lower level sensor fusion interface. " alt="" coords="389,87,456,114"/>
+<area shape="rect" id="node6" href="$main__agm01__freertos__two__tasks_8c.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F. " alt="" coords="480,80,627,121"/>
+<area shape="rect" id="node7" href="$main__baremetal_8c.html" title="Bare metal implementation of sensor fusion on FRDM&#45;K64F. " alt="" coords="651,87,776,114"/>
+<area shape="rect" id="node8" href="$main__freertos__agm02_8c.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F/FRDM&#45;FXS&#45;AGM02. " alt="" coords="800,87,957,114"/>
+<area shape="rect" id="node9" href="$main__freertos__agm02__power__cycling_8c.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F/FRDM&#45;FXS&#45;AGM02 with smart power&#45;cycl..." alt="" coords="981,80,1128,121"/>
+<area shape="rect" id="node10" href="$main__freertos__single__task_8c.html" title="FreeRTOS (single task) implementation of sensor fusion on FRDM&#45;K64F. " alt="" coords="1152,80,1293,121"/>
+<area shape="rect" id="node11" href="$main__freertos__two__tasks_8c.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F. " alt="" coords="1318,87,1495,114"/>
+<area shape="rect" id="node12" href="$output__stream_8c.html" title="Implements streaming function for the status subsystem. See status.h. " alt="" coords="1519,87,1635,114"/>
+<area shape="rect" id="node13" href="$sensor__fusion_8c.html" title="The sensor_fusion.c file implements the top level programming interface. " alt="" coords="1659,87,1773,114"/>
+</map>

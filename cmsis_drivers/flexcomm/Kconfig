@@ -1,0 +1,43 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_cmsis_flexcomm_i2c
+config MCUX_HAS_driver_cmsis_flexcomm_i2c
+    bool
+
+config MCUX_USE_driver_cmsis_flexcomm_i2c
+    depends on MCUX_HAS_driver_cmsis_flexcomm_i2c
+    bool "I2C CMSIS Driver"
+    select MCUX_USE_driver_flexcomm_i2c_dma
+    select MCUX_USE_CMSIS_Driver_Include_I2C
+    select MCUX_USE_RTE_Device
+    help
+      I2C CMSIS Driver
+
+# driver_cmsis_flexcomm_spi
+config MCUX_HAS_driver_cmsis_flexcomm_spi
+    bool
+
+config MCUX_USE_driver_cmsis_flexcomm_spi
+    depends on MCUX_HAS_driver_cmsis_flexcomm_spi
+    bool "SPI CMSIS Driver"
+    select MCUX_USE_driver_flexcomm_spi_dma
+    select MCUX_USE_CMSIS_Driver_Include_SPI
+    select MCUX_USE_RTE_Device
+    help
+      SPI CMSIS Driver
+
+# driver_cmsis_flexcomm_usart
+config MCUX_HAS_driver_cmsis_flexcomm_usart
+    bool
+
+config MCUX_USE_driver_cmsis_flexcomm_usart
+    depends on MCUX_HAS_driver_cmsis_flexcomm_usart
+    bool "USART CMSIS Driver"
+    select MCUX_USE_driver_flexcomm_usart_dma
+    select MCUX_USE_CMSIS_Driver_Include_USART
+    select MCUX_USE_RTE_Device
+    help
+      USART CMSIS Driver

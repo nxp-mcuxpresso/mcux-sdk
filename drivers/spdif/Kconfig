@@ -1,0 +1,26 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_spdif_edma
+config MCUX_HAS_driver_spdif_edma
+    bool
+
+config MCUX_USE_driver_spdif_edma
+    depends on MCUX_HAS_driver_spdif_edma
+    bool "SPDIF EDMA Driver"
+    select MCUX_USE_driver_spdif
+    help
+      SPDIF EDMA Driver
+
+# driver_spdif
+config MCUX_HAS_driver_spdif
+    bool
+
+config MCUX_USE_driver_spdif
+    depends on MCUX_HAS_driver_spdif
+    bool "SPDIF Driver"
+    select MCUX_USE_driver_common
+    help
+      SPDIF Driver

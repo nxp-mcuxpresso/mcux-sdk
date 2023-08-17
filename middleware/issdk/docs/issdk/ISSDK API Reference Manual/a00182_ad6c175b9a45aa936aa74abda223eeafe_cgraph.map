@@ -1,0 +1,6 @@
+<map id="Sensor_I2C_BlockWrite" name="Sensor_I2C_BlockWrite">
+<area shape="rect" id="node2" href="$a00530.html#ab052b802081fd87e1bda8d56e2c0db42" title="Function to insert delays. " alt="" coords="225,5,368,32"/>
+<area shape="rect" id="node3" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="428,81,489,108"/>
+<area shape="rect" id="node4" href="$a00167.html#ac5a66aa1b8d95d267c9d68cb475c9e01" title="The interface function to write a sensor register. " alt="" coords="213,107,380,133"/>
+<area shape="rect" id="node5" href="$a00167.html#ac8a60c799d9dbc84531b4680762eb8dc" title="The interface function to read a sensor register. " alt="" coords="230,157,363,184"/>
+</map>

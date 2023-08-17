@@ -1,0 +1,11 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_xmcd_evkmimxrt1170
+config MCUX_USE_driver_xmcd_evkmimxrt1170
+    bool "XMCD Driver"
+    select MCUX_USE_driver_common
+    help
+      XMCD Driver

@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_key_manager
+config MCUX_HAS_driver_key_manager
+    bool
+
+config MCUX_USE_driver_key_manager
+    depends on MCUX_HAS_driver_key_manager
+    bool "Key Manager Driver"
+    select MCUX_USE_driver_common
+    help
+      Key Manager Driver

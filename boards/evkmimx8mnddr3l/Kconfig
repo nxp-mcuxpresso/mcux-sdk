@@ -1,0 +1,16 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+if MCUX_USE_BOARD_EVKMIMX8MNDDR3L
+
+config MCUX_BOARD
+    default "evkmimx8mnddr3l"
+
+config MCUX_KIT
+    default "evkmimx8mnddr3l"
+
+
+#### Board level drivers ####
+
+endif

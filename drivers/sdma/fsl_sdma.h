@@ -10,6 +10,7 @@
 #define _FSL_SDMA_H_
 
 #include "fsl_common.h"
+#include "fsl_sdma_script.h"
 
 /*!
  * @addtogroup sdma
@@ -23,8 +24,12 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SDMA driver version */
-#define FSL_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 6)) /*!< Version 2.3.6. */
+#define FSL_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 1)) /*!< Version 2.4.1. */
 /*@}*/
+
+#ifndef SDMA_DRIVER_LOAD_RAM_SCRIPT
+#define SDMA_DRIVER_LOAD_RAM_SCRIPT (1)
+#endif
 
 /*! @brief SDMA transfer configuration */
 typedef enum _sdma_transfer_size
@@ -330,6 +335,11 @@ typedef struct _sdma_handle
     uint8_t channel;                  /*!< SDMA channel number. */
     uint8_t priority;                 /*!< SDMA channel priority */
     uint8_t flags;                    /*!< The status of the current channel. */
+
+#if SDMA_DRIVER_LOAD_RAM_SCRIPT
+    bool isRamscriptLoaded; /*!< Flag to indicate the status of ram script */
+#endif
+
 } sdma_handle_t;
 
 /*******************************************************************************
@@ -732,6 +742,17 @@ void SDMA_LoadScript(SDMAARM_Type *base, uint32_t destAddr, void *srcAddr, size_
  * @param bufferSizeBytes bytes size of script.
  */
 void SDMA_DumpScript(SDMAARM_Type *base, uint32_t srcAddr, void *destAddr, size_t bufferSizeBytes);
+
+/*!
+ * @brief Get RAM script version.
+ *
+ * @param base SDMA base.
+ * @return The script version of RAM.
+ */
+static inline const char * SDMA_GetRamScriptVersion(SDMAARM_Type *base)
+{
+    return FSL_SDMA_SCRIPT_VERSION;
+}
 
 /*!
  * @brief Prepares the SDMA transfer structure.

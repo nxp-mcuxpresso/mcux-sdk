@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_plu
+config MCUX_HAS_driver_plu
+    bool
+
+config MCUX_USE_driver_plu
+    depends on MCUX_HAS_driver_plu
+    bool "PLU Driver"
+    select MCUX_USE_driver_common
+    help
+      PLU Driver

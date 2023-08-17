@@ -20,9 +20,9 @@
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief LTC driver version. Version 2.0.15.
+/*! @brief LTC driver version. Version 2.0.16.
  *
- * Current version: 2.0.14
+ * Current version: 2.0.16
  *
  * Change log:
  * - Version 2.0.1
@@ -69,8 +69,11 @@
  *
  * - Version 2.0.15
  *   - Fix MISRA-2012 issues
+ *
+ * - Version 2.0.16
+ *   - Fix unitialized GCC warning in LTC_AES_GenerateDecryptKey()
  */
-#define FSL_LTC_DRIVER_VERSION (MAKE_VERSION(2, 0, 15))
+#define FSL_LTC_DRIVER_VERSION (MAKE_VERSION(2, 0, 16))
 /*@}*/
 /*! @} */
 

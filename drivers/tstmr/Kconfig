@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_tstmr
+config MCUX_HAS_driver_tstmr
+    bool
+
+config MCUX_USE_driver_tstmr
+    depends on MCUX_HAS_driver_tstmr
+    bool "TSTMR Driver"
+    select MCUX_USE_driver_common
+    help
+      TSTMR Driver

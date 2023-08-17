@@ -1281,13 +1281,13 @@ void CLOCK_EnableFroClk(uint32_t divOutEnable);
  */
 void CLOCK_EnableFroClkFreq(uint32_t targetFreq, uint32_t divOutEnable);
 
-#ifndef __XCC__
+#ifndef __XTENSA__
 /*! @brief  Enable/Disable FRO192M or FRO96M clock output.
  *  @param  froFreq : target fro frequency.
  *  @param  divOutEnable : Or'ed value of clock_fro_output_en_t to enable certain clock freq output.
  */
 void CLOCK_EnableFroClkRange(clock_fro_freq_t froFreq, uint32_t divOutEnable);
-#endif /* __XCC__ */
+#endif /* __XTENSA__ */
 
 /*! @brief  Enable LPOSC 1MHz clock.
  */

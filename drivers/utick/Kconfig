@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_utick
+config MCUX_HAS_driver_utick
+    bool
+
+config MCUX_USE_driver_utick
+    depends on MCUX_HAS_driver_utick
+    bool "UTICK Driver"
+    select MCUX_USE_driver_common
+    help
+      UTICK Driver

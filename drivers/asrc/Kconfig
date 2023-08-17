@@ -1,0 +1,27 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_asrc
+config MCUX_HAS_driver_asrc
+    bool
+
+config MCUX_USE_driver_asrc
+    depends on MCUX_HAS_driver_asrc
+    bool "asrc Driver"
+    select MCUX_USE_driver_common
+    help
+      asrc Driver
+
+# driver_asrc_edma
+config MCUX_HAS_driver_asrc_edma
+    bool
+
+config MCUX_USE_driver_asrc_edma
+    depends on MCUX_HAS_driver_asrc_edma
+    bool "asrc_edma Driver"
+    select MCUX_USE_driver_common
+    select MCUX_USE_driver_asrc
+    help
+      asrc_edma Driver

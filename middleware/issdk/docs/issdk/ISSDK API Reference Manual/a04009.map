@@ -1,0 +1,5 @@
+<map id="FifoSensor" name="FifoSensor">
+<area shape="rect" id="node2" href="$a04003.html" title="The MagSensor structure stores raw and processed measurements for a 3&#45;axis magnetic sensor..." alt="" coords="5,5,129,244"/>
+<area shape="rect" id="node3" href="$a04007.html" title="The GyroSensor structure stores raw and processed measurements for a 3&#45;axis gyroscope. " alt="" coords="153,27,317,222"/>
+<area shape="rect" id="node4" href="$a03999.html" title="The AccelSensor structure stores raw and processed measurements for a 3&#45;axis accelerometer. " alt="" coords="341,5,465,244"/>
+</map>

@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_bee
+config MCUX_HAS_driver_bee
+    bool
+
+config MCUX_USE_driver_bee
+    depends on MCUX_HAS_driver_bee
+    bool "BEE Driver"
+    select MCUX_USE_driver_common
+    help
+      BEE Driver

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP.
+ * Copyright 2018, 2023 NXP.
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -14,11 +14,11 @@
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
 product: Peripherals v4.1
-processor: MKE15Z256xxx7
-package_id: MKE15Z256VLL7
+processor: MKE16Z64xxx4
+package_id: MKE16Z64VLF4
 mcu_data: ksdk2_0
 processor_version: 4.0.0
-board: FRDM-KE15Z
+board: FRDM-KE16Z
 functionalGroups:
 - name: BOARD_InitPeripherals
   called_from_default_init: true

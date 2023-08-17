@@ -1,0 +1,21 @@
+<map id="fRun_3DOF_B_BASIC" name="fRun_3DOF_B_BASIC">
+<area shape="rect" id="node2" href="$fusion_8c.html#adc49d74394c2a94a33ff65edea18233b" title="fInit_3DOF_B_BASIC" alt="" coords="237,165,382,192"/>
+<area shape="rect" id="node3" href="$orientation_8c.html#a3aea6b9a9647d15db0dad4be820fbba9" title="Aerospace NED magnetometer 3DOF flat eCompass function, computing rotation matrix fR..." alt="" coords="473,13,679,40"/>
+<area shape="rect" id="node5" href="$orientation_8c.html#a765e472022e2ba9717989e6527df49a8" title="Android magnetometer 3DOF flat eCompass function, computing rotation matrix fR. " alt="" coords="737,102,960,129"/>
+<area shape="rect" id="node6" href="$orientation_8c.html#a79e9bfb4c86c1cd82b83058afd08df10" title="Windows 8 magnetometer 3DOF flat eCompass function, computing rotation matrix fR. ..." alt="" coords="472,114,680,141"/>
+<area shape="rect" id="node7" href="$orientation_8c.html#a04da5468213c1687c5b3485f15af288e" title="compute the orientation quaternion from a 3x3 rotation matrix " alt="" coords="475,216,677,242"/>
+<area shape="rect" id="node9" href="$orientation_8c.html#ad60a32e44f24a4b8fa5bddfb23721bc8" title="function low pass filters an orientation quaternion and computes virtual gyro rotation rate ..." alt="" coords="222,313,397,340"/>
+<area shape="rect" id="node11" href="$orientation_8c.html#aa48ae334cf6bbedf2b9e7423d17cb4ac" title="computes rotation vector (deg) from rotation quaternion " alt="" coords="463,418,689,445"/>
+<area shape="rect" id="node13" href="$orientation_8c.html#ab93a6fd700fd1557e9b8f6796bfe3035" title="compute the rotation matrix from an orientation quaternion " alt="" coords="208,414,411,441"/>
+<area shape="rect" id="node14" href="$orientation_8c.html#aa781ea4b9430531df4697d3cb39f7454" title="extract the NED angles in degrees from the NED rotation matrix " alt="" coords="213,596,406,638"/>
+<area shape="rect" id="node19" href="$orientation_8c.html#a77eeda9a699b1456bb8b02665ad80522" title="extract the Android angles in degrees from the Android rotation matrix " alt="" coords="204,531,415,572"/>
+<area shape="rect" id="node20" href="$orientation_8c.html#a13cd93780206a620abc7bdf7907e6dc6" title="extract the Windows 8 angles in degrees from the Windows 8 rotation matrix " alt="" coords="211,466,407,507"/>
+<area shape="rect" id="node4" href="$matrix_8c.html#a54f510d9d257d6063412a9ed5adddd6f" title="function sets the 3x3 matrix A to the identity matrix " alt="" coords="1008,65,1116,92"/>
+<area shape="rect" id="node8" href="$orientation_8c.html#a3bcc5aef9bd7abd545d33660aa3ccbd0" title="function normalizes a rotation quaternion and ensures q0 is non&#45;negative " alt="" coords="797,241,900,268"/>
+<area shape="rect" id="node10" href="$orientation_8c.html#adb2ea2734ac13ca77b3218d761fe45e0" title="function compute the quaternion product conjg(qA) * qB " alt="" coords="533,368,619,394"/>
+<area shape="rect" id="node12" href="$orientation_8c.html#a22a32becfcb162db012f41ff4f3bc942" title="function compute the quaternion product qA = qA * qB " alt="" coords="537,317,615,344"/>
+<area shape="rect" id="node15" href="$approximations_8c.html#a956336cb9e7270c6cfbf667b1075c063" title="fasin_deg" alt="" coords="537,621,615,648"/>
+<area shape="rect" id="node17" href="$approximations_8c.html#aebfdfbd2df0fe4472f9861b0738bb410" title="fatan2_deg" alt="" coords="533,520,619,546"/>
+<area shape="rect" id="node18" href="$approximations_8c.html#a084fe0ff189767dca40fbe330d7394f0" title="facos_deg" alt="" coords="535,570,617,597"/>
+<area shape="rect" id="node16" href="$approximations_8c.html#a09d50b3d2c3d4d24e447a9b960eb5267" title="fatan_deg" alt="" coords="809,545,888,572"/>
+</map>

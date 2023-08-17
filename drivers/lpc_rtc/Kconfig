@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_lpc_rtc
+config MCUX_HAS_driver_lpc_rtc
+    bool
+
+config MCUX_USE_driver_lpc_rtc
+    depends on MCUX_HAS_driver_lpc_rtc
+    bool "RTC Driver"
+    select MCUX_USE_driver_common
+    help
+      RTC Driver

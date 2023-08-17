@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 5.0, 2021-03-01
-**     Build:               b220718
+**     Build:               b230203
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
+**     Copyright 2016-2023 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -161,6 +161,14 @@
 #define FSL_FEATURE_EDMA_HAS_COMMON_CLOCK_GATE (0)
 /* @brief If dma channel IRQ support parameter */
 #define FSL_FEATURE_EDMA_MODULE_CHANNEL_IRQ_ENTRY_SUPPORT_PARAMETER (0)
+/* @brief If 8 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_8_BYTES_TRANSFER (1)
+/* @brief If 16 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_16_BYTES_TRANSFER (1)
+/* @brief If 64 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_64_BYTES_TRANSFER (1)
+/* @brief Has no register bit fields CH_SBR[ATTR]. */
+#define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_ATTR (1)
 
 /* ENET module features */
 
@@ -205,52 +213,105 @@
 
 /* FLEXCAN module features */
 
-/* @brief Message buffer size */
-#define FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(x) (64)
-/* @brief Has doze mode support (register bit field MCR[DOZE]). */
-#define FSL_FEATURE_FLEXCAN_HAS_DOZE_MODE_SUPPORT (1)
-/* @brief Insatnce has doze mode support (register bit field MCR[DOZE]). */
-#define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_DOZE_MODE_SUPPORTn(x) (1)
-/* @brief Has a glitch filter on the receive pin (register bit field MCR[WAKSRC]). */
-#define FSL_FEATURE_FLEXCAN_HAS_GLITCH_FILTER (1)
-/* @brief Has extended interrupt mask and flag register (register IMASK2, IFLAG2). */
-#define FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER (1)
-/* @brief Instance has extended bit timing register (register CBT). */
-#define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_EXTENDED_TIMING_REGISTERn(x) (1)
-/* @brief Has a receive FIFO DMA feature (register bit field MCR[DMA]). */
-#define FSL_FEATURE_FLEXCAN_HAS_RX_FIFO_DMA (1)
-/* @brief Instance has a receive FIFO DMA feature (register bit field MCR[DMA]). */
-#define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_RX_FIFO_DMAn(x) (1)
-/* @brief Remove CAN Engine Clock Source Selection from unsupported part. */
-#define FSL_FEATURE_FLEXCAN_SUPPORT_ENGINE_CLK_SEL_REMOVE (0)
-/* @brief Instance remove CAN Engine Clock Source Selection from unsupported part. */
-#define FSL_FEATURE_FLEXCAN_INSTANCE_SUPPORT_ENGINE_CLK_SEL_REMOVEn(x) (0)
-/* @brief Is affected by errata with ID 5641 (Module does not transmit a message that is enabled to be transmitted at a specific moment during the arbitration process). */
-#define FSL_FEATURE_FLEXCAN_HAS_ERRATA_5641 (0)
-/* @brief Is affected by errata with ID 5829 (FlexCAN: FlexCAN does not transmit a message that is enabled to be transmitted in a specific moment during the arbitration process). */
-#define FSL_FEATURE_FLEXCAN_HAS_ERRATA_5829 (0)
-/* @brief Is affected by errata with ID 6032 (FlexCAN: A frame with wrong ID or payload is transmitted into the CAN bus when the Message Buffer under transmission is either aborted or deactivated while the CAN bus is in the Bus Idle state). */
-#define FSL_FEATURE_FLEXCAN_HAS_ERRATA_6032 (0)
-/* @brief Is affected by errata with ID 9595 (FlexCAN: Corrupt frame possible if the Freeze Mode or the Low-Power Mode are entered during a Bus-Off state). */
-#define FSL_FEATURE_FLEXCAN_HAS_ERRATA_9595 (0)
-/* @brief Has CAN with Flexible Data rate (CAN FD) protocol. */
-#define FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE (1)
-/* @brief CAN instance support Flexible Data rate (CAN FD) protocol. */
-#define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_FLEXIBLE_DATA_RATEn(x) (1)
-/* @brief Has memory error control (register MECR). */
-#define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL (1)
-/* @brief Init memory base 1 */
-#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_1 (0x80)
-/* @brief Init memory size 1 */
-#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_1 (0xA60)
-/* @brief Init memory base 2 */
-#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_2 (0xF28)
-/* @brief Init memory size 2 */
-#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_2 (0xD8)
-/* @brief Has enhanced bit timing register (register EPRS, ENCBT, EDCBT and ETDC). */
-#define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_BIT_TIMING_REG (0)
-/* @brief Has Pretended Networking mode support. */
-#define FSL_FEATURE_FLEXCAN_HAS_PN_MODE (0)
+#if defined(CPU_MIMX8ML4CVNKZ)
+    /* @brief Message buffer size */
+    #define FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(x) (64)
+    /* @brief Has doze mode support (register bit field MCR[DOZE]). */
+    #define FSL_FEATURE_FLEXCAN_HAS_DOZE_MODE_SUPPORT (1)
+    /* @brief Insatnce has doze mode support (register bit field MCR[DOZE]). */
+    #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_DOZE_MODE_SUPPORTn(x) (1)
+    /* @brief Has a glitch filter on the receive pin (register bit field MCR[WAKSRC]). */
+    #define FSL_FEATURE_FLEXCAN_HAS_GLITCH_FILTER (1)
+    /* @brief Has extended interrupt mask and flag register (register IMASK2, IFLAG2). */
+    #define FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER (1)
+    /* @brief Instance has extended bit timing register (register CBT). */
+    #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_EXTENDED_TIMING_REGISTERn(x) (1)
+    /* @brief Has a receive FIFO DMA feature (register bit field MCR[DMA]). */
+    #define FSL_FEATURE_FLEXCAN_HAS_RX_FIFO_DMA (1)
+    /* @brief Instance has a receive FIFO DMA feature (register bit field MCR[DMA]). */
+    #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_RX_FIFO_DMAn(x) (1)
+    /* @brief Remove CAN Engine Clock Source Selection from unsupported part. */
+    #define FSL_FEATURE_FLEXCAN_SUPPORT_ENGINE_CLK_SEL_REMOVE (0)
+    /* @brief Instance remove CAN Engine Clock Source Selection from unsupported part. */
+    #define FSL_FEATURE_FLEXCAN_INSTANCE_SUPPORT_ENGINE_CLK_SEL_REMOVEn(x) (0)
+    /* @brief Is affected by errata with ID 5641 (Module does not transmit a message that is enabled to be transmitted at a specific moment during the arbitration process). */
+    #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_5641 (0)
+    /* @brief Is affected by errata with ID 5829 (FlexCAN: FlexCAN does not transmit a message that is enabled to be transmitted in a specific moment during the arbitration process). */
+    #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_5829 (0)
+    /* @brief Is affected by errata with ID 6032 (FlexCAN: A frame with wrong ID or payload is transmitted into the CAN bus when the Message Buffer under transmission is either aborted or deactivated while the CAN bus is in the Bus Idle state). */
+    #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_6032 (0)
+    /* @brief Is affected by errata with ID 9595 (FlexCAN: Corrupt frame possible if the Freeze Mode or the Low-Power Mode are entered during a Bus-Off state). */
+    #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_9595 (0)
+    /* @brief Has CAN with Flexible Data rate (CAN FD) protocol. */
+    #define FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE (1)
+    /* @brief CAN instance support Flexible Data rate (CAN FD) protocol. */
+    #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_FLEXIBLE_DATA_RATEn(x) (1)
+    /* @brief Has memory error control (register MECR). */
+    #define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL (1)
+    /* @brief Init memory base 1 */
+    #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_1 (0x80)
+    /* @brief Init memory size 1 */
+    #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_1 (0xA60)
+    /* @brief Init memory base 2 */
+    #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_2 (0xF28)
+    /* @brief Init memory size 2 */
+    #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_2 (0xD8)
+    /* @brief Has enhanced bit timing register (register EPRS, ENCBT, EDCBT and ETDC). */
+    #define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_BIT_TIMING_REG (0)
+    /* @brief Has Pretended Networking mode support. */
+    #define FSL_FEATURE_FLEXCAN_HAS_PN_MODE (0)
+    /* @brief Does not support Supervisor Mode (bitfield MCR[SUPV]. */
+    #define FSL_FEATURE_FLEXCAN_HAS_NO_SUPV_SUPPORT (0)
+#elif defined(CPU_MIMX8ML4DVNLZ)
+    /* @brief Message buffer size */
+    #define FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(x) (64)
+    /* @brief Has doze mode support (register bit field MCR[DOZE]). */
+    #define FSL_FEATURE_FLEXCAN_HAS_DOZE_MODE_SUPPORT (1)
+    /* @brief Insatnce has doze mode support (register bit field MCR[DOZE]). */
+    #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_DOZE_MODE_SUPPORTn(x) (1)
+    /* @brief Has a glitch filter on the receive pin (register bit field MCR[WAKSRC]). */
+    #define FSL_FEATURE_FLEXCAN_HAS_GLITCH_FILTER (1)
+    /* @brief Has extended interrupt mask and flag register (register IMASK2, IFLAG2). */
+    #define FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER (1)
+    /* @brief Instance has extended bit timing register (register CBT). */
+    #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_EXTENDED_TIMING_REGISTERn(x) (1)
+    /* @brief Has a receive FIFO DMA feature (register bit field MCR[DMA]). */
+    #define FSL_FEATURE_FLEXCAN_HAS_RX_FIFO_DMA (1)
+    /* @brief Instance has a receive FIFO DMA feature (register bit field MCR[DMA]). */
+    #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_RX_FIFO_DMAn(x) (1)
+    /* @brief Remove CAN Engine Clock Source Selection from unsupported part. */
+    #define FSL_FEATURE_FLEXCAN_SUPPORT_ENGINE_CLK_SEL_REMOVE (0)
+    /* @brief Instance remove CAN Engine Clock Source Selection from unsupported part. */
+    #define FSL_FEATURE_FLEXCAN_INSTANCE_SUPPORT_ENGINE_CLK_SEL_REMOVEn(x) (0)
+    /* @brief Is affected by errata with ID 5641 (Module does not transmit a message that is enabled to be transmitted at a specific moment during the arbitration process). */
+    #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_5641 (0)
+    /* @brief Is affected by errata with ID 5829 (FlexCAN: FlexCAN does not transmit a message that is enabled to be transmitted in a specific moment during the arbitration process). */
+    #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_5829 (0)
+    /* @brief Is affected by errata with ID 6032 (FlexCAN: A frame with wrong ID or payload is transmitted into the CAN bus when the Message Buffer under transmission is either aborted or deactivated while the CAN bus is in the Bus Idle state). */
+    #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_6032 (0)
+    /* @brief Is affected by errata with ID 9595 (FlexCAN: Corrupt frame possible if the Freeze Mode or the Low-Power Mode are entered during a Bus-Off state). */
+    #define FSL_FEATURE_FLEXCAN_HAS_ERRATA_9595 (0)
+    /* @brief Has CAN with Flexible Data rate (CAN FD) protocol. */
+    #define FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE (0)
+    /* @brief CAN instance support Flexible Data rate (CAN FD) protocol. */
+    #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_FLEXIBLE_DATA_RATEn(x) (0)
+    /* @brief Has memory error control (register MECR). */
+    #define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL (1)
+    /* @brief Init memory base 1 */
+    #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_1 (0x80)
+    /* @brief Init memory size 1 */
+    #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_1 (0xA60)
+    /* @brief Init memory base 2 */
+    #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_2 (0xF28)
+    /* @brief Init memory size 2 */
+    #define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_2 (0xD8)
+    /* @brief Has enhanced bit timing register (register EPRS, ENCBT, EDCBT and ETDC). */
+    #define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_BIT_TIMING_REG (0)
+    /* @brief Has Pretended Networking mode support. */
+    #define FSL_FEATURE_FLEXCAN_HAS_PN_MODE (0)
+    /* @brief Does not support Supervisor Mode (bitfield MCR[SUPV]. */
+    #define FSL_FEATURE_FLEXCAN_HAS_NO_SUPV_SUPPORT (0)
+#endif /* defined(CPU_MIMX8ML4CVNKZ) */
 
 /* IGPIO module features */
 
@@ -369,6 +430,8 @@
 #define FSL_FEATURE_PDM_VERY_LOW_QUALITY_CLKDIV_FACTOR (19)
 /* @brief PDM Has No VADEF Bitfield In PDM VAD0_STAT Register */
 #define FSL_FEATURE_PDM_HAS_NO_VADEF (0)
+/* @brief PDM Has no FIR_RDY Bitfield In PDM STAT Register */
+#define FSL_FEATURE_PDM_HAS_NO_FIR_RDY (1)
 
 /* RDC module features */
 

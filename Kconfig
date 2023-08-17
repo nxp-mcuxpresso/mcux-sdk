@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+mainmenu "MCUX SDK Configuration"
+
+rsource "./boards/Kconfig"
+rsource "./arch/Kconfig"
+rsource "./devices/Kconfig"
+rsource "./drivers/Kconfig"
+rsource "./components/Kconfig"
+rsource "./utilities/Kconfig"
+orsource  "./CMSIS/Kconfig"
+rsource "./cmsis_drivers/Kconfig"

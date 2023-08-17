@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -139,7 +139,7 @@ void DAC_Init(LPDAC_Type *base, const dac_config_t *config)
     tmp32 |= LPDAC_GCR_LATCH_CYC(config->syncTime);
 #endif /* FSL_FEATURE_LPDAC_HAS_GCR_LATCH_CYC */
 #if defined(FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT) && FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT
-    tmp32 |= config->referenceCurrentSource;
+    tmp32 |= (uint32_t)config->referenceCurrentSource;
 #endif /* FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT */
     /* Set reference voltage source. */
     tmp32 |= LPDAC_GCR_DACRFS(config->referenceVoltageSource);

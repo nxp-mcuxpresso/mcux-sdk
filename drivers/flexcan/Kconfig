@@ -1,0 +1,26 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_flexcan
+config MCUX_HAS_driver_flexcan
+    bool
+
+config MCUX_USE_driver_flexcan
+    depends on MCUX_HAS_driver_flexcan
+    bool "FLEXCAN Driver"
+    select MCUX_USE_driver_common
+    help
+      FLEXCAN Driver
+
+# driver_flexcan_edma
+config MCUX_HAS_driver_flexcan_edma
+    bool
+
+config MCUX_USE_driver_flexcan_edma
+    depends on MCUX_HAS_driver_flexcan_edma
+    bool "FLEXCAN EDMA Driver"
+    select MCUX_USE_driver_flexcan
+    help
+      FLEXCAN Driver

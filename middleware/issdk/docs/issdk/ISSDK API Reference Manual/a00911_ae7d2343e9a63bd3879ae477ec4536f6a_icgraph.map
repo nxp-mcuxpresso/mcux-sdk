@@ -1,0 +1,6 @@
+<map id="addToFifo" name="addToFifo">
+<area shape="rect" id="node2" href="$a00842.html#ac818465f3f2f5bd60e71c5c7d8a8a261" title="FXLS8471Q_Read" alt="" coords="155,5,283,32"/>
+<area shape="rect" id="node3" href="$a00842.html#ac61bf451efc3a4eab179dbc59268b3e7" title="FXOS8700_Init" alt="" coords="165,56,273,83"/>
+<area shape="rect" id="node4" href="$a00812.html#a16645c35980d715e5252f30beebecaa2" title="FXOS8700_ReadMagData" alt="" coords="132,107,305,133"/>
+<area shape="rect" id="node5" href="$a00842.html#a2592117f3e2fed5f61ff029cb18fa556" title="MAG3110_Read" alt="" coords="160,157,277,184"/>
+</map>

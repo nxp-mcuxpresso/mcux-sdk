@@ -1,0 +1,4 @@
+<map id="PhysicalSensor" name="PhysicalSensor">
+<area shape="rect" id="node2" href="$a03819.html" title="This structure defines the device specific info required by register I/O. " alt="" coords="5,20,140,127"/>
+<area shape="rect" id="node3" href="$a03803.html" title="This structure defines the spi slave command format. " alt="" coords="164,5,336,141"/>
+</map>

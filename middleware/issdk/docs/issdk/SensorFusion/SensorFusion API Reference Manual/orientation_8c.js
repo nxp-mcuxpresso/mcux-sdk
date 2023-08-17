@@ -1,0 +1,26 @@
+var orientation_8c =
+[
+    [ "CORRUPTQUAT", "orientation_8c.html#ac8e335a45faed642aab8a104b24b68c6", null ],
+    [ "SMALLMODULUS", "orientation_8c.html#a75fd3bc70409015ca43f604bb0ba3c4c", null ],
+    [ "SMALLQ0", "orientation_8c.html#a66564e58123257e31716bc9cfdc0754b", null ],
+    [ "f3DOFMagnetometerMatrixAndroid", "orientation_8c.html#a765e472022e2ba9717989e6527df49a8", null ],
+    [ "f3DOFMagnetometerMatrixNED", "orientation_8c.html#a3aea6b9a9647d15db0dad4be820fbba9", null ],
+    [ "f3DOFMagnetometerMatrixWin8", "orientation_8c.html#a79e9bfb4c86c1cd82b83058afd08df10", null ],
+    [ "fAndroidAnglesDegFromRotationMatrix", "orientation_8c.html#a77eeda9a699b1456bb8b02665ad80522", null ],
+    [ "feCompassAndroid", "orientation_8c.html#a43ad72cf13f54b0f96355bb7005b6872", null ],
+    [ "feCompassNED", "orientation_8c.html#afcde979fba0bcae15591096fe68648c9", null ],
+    [ "feCompassWin8", "orientation_8c.html#aabc044b27a0cdd7db677c3203b77de90", null ],
+    [ "fLPFOrientationQuaternion", "orientation_8c.html#ad60a32e44f24a4b8fa5bddfb23721bc8", null ],
+    [ "fNEDAnglesDegFromRotationMatrix", "orientation_8c.html#aa781ea4b9430531df4697d3cb39f7454", null ],
+    [ "fqAeq1", "orientation_8c.html#a624e56625ef65d6af54643c866a6c64c", null ],
+    [ "fqAeqNormqA", "orientation_8c.html#a3bcc5aef9bd7abd545d33660aa3ccbd0", null ],
+    [ "fQuaternionFromRotationMatrix", "orientation_8c.html#a04da5468213c1687c5b3485f15af288e", null ],
+    [ "fQuaternionFromRotationVectorDeg", "orientation_8c.html#a9f946d534fae22e9e68b9f0e2e2822ef", null ],
+    [ "fRotationMatrixFromQuaternion", "orientation_8c.html#ab93a6fd700fd1557e9b8f6796bfe3035", null ],
+    [ "fRotationVectorDegFromQuaternion", "orientation_8c.html#aa48ae334cf6bbedf2b9e7423d17cb4ac", null ],
+    [ "fveqconjgquq", "orientation_8c.html#a4ced4d83316052e2c97ce2746abdc1e0", null ],
+    [ "fWin8AnglesDegFromRotationMatrix", "orientation_8c.html#a13cd93780206a620abc7bdf7907e6dc6", null ],
+    [ "qAeqAxB", "orientation_8c.html#a22a32becfcb162db012f41ff4f3bc942", null ],
+    [ "qAeqBxC", "orientation_8c.html#a12448c36b93d8f3375ce000ef4527b4a", null ],
+    [ "qconjgAxB", "orientation_8c.html#adb2ea2734ac13ca77b3218d761fe45e0", null ]
+];

@@ -1,0 +1,26 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_spi
+config MCUX_HAS_driver_spi
+    bool
+
+config MCUX_USE_driver_spi
+    depends on MCUX_HAS_driver_spi
+    bool "SPI Driver"
+    select MCUX_USE_driver_common
+    help
+      SPI Driver
+
+# driver_spi_dma
+config MCUX_HAS_driver_spi_dma
+    bool
+
+config MCUX_USE_driver_spi_dma
+    depends on MCUX_HAS_driver_spi_dma
+    bool "SPI DMA Driver"
+    select MCUX_USE_driver_spi
+    help
+      SPI Driver

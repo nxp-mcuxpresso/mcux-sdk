@@ -1,0 +1,6 @@
+<map id="fComputeEigSlice" name="fComputeEigSlice">
+<area shape="rect" id="node2" href="$magnetic_8h.html#a51818fe46836eeda49b9da097725b49a" title="fUpdateMagCalibration10Slice" alt="" coords="179,5,373,32"/>
+<area shape="rect" id="node5" href="$magnetic_8h.html#a4c3eeca39b96d284d19c2f1191a1b8d2" title="fUpdateMagCalibration7Slice" alt="" coords="182,56,370,83"/>
+<area shape="rect" id="node3" href="$magnetic_8h.html#a0cce4289e5bceba2b1a6cd59641f9fda" title="fRunMagCalibration" alt="" coords="421,31,556,57"/>
+<area shape="rect" id="node4" href="$sensor__fusion_8c.html#aaf8b47198fa614f0b50265addf44a8b0" title="processMagData" alt="" coords="604,31,724,57"/>
+</map>

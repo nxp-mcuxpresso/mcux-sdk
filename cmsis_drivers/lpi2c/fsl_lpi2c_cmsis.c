@@ -25,7 +25,7 @@
      (defined(RTE_I2C4) && RTE_I2C4 && defined(LPI2C4)) || (defined(RTE_I2C5) && RTE_I2C5 && defined(LPI2C5)) || \
      (defined(RTE_I2C6) && RTE_I2C6 && defined(LPI2C6)))
 
-#define ARM_LPI2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (1))
+#define ARM_LPI2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (2))
 
 /*
  * ARMCC does not support split the data section automatically, so the driver
@@ -70,13 +70,13 @@ typedef struct _cmsis_lpi2c_interrupt_driver_state
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
 typedef const struct _cmsis_lpi2c_edma_resource
 {
-    DMA_Type *txEdmaBase;   /*!< EDMA peripheral base address for Tx.  */
-    uint32_t txEdmaChannel; /*!< EDMA channel for Tx                   */
-    uint16_t txDmaRequest;  /*!< Tx EDMA request source.               */
+    DMA_Type *txEdmaBase;              /*!< EDMA peripheral base address for Tx.  */
+    uint32_t txEdmaChannel;            /*!< EDMA channel for Tx                   */
+    uint16_t txDmaRequest; /*!< Tx EDMA request source.               */
 
-    DMA_Type *rxEdmaBase;   /*!< EDMA peripheral base address for Rx.  */
-    uint32_t rxEdmaChannel; /*!< EDMA channel for Rx                   */
-    uint16_t rxDmaRequest;  /*!< Rx EDMA request source.               */
+    DMA_Type *rxEdmaBase;              /*!< EDMA peripheral base address for Rx.  */
+    uint32_t rxEdmaChannel;            /*!< EDMA channel for Rx                   */
+    uint16_t rxDmaRequest; /*!< Rx EDMA request source.               */
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
     DMAMUX_Type *txDmamuxBase; /*!< DMAMUX peripheral base address for Tx */
     DMAMUX_Type *rxDmamuxBase; /*!< DMAMUX peripheral base address for Rx */
@@ -153,11 +153,11 @@ static int32_t LPI2C_Master_EdmaInitialize(ARM_I2C_SignalEvent_t cb_event, cmsis
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
         /* TxDMAMUX init */
         DMAMUX_SetSource(lpi2c->edmaResource->txDmamuxBase, lpi2c->edmaResource->txEdmaChannel,
-                         (uint8_t)lpi2c->edmaResource->txDmaRequest);
+                         (int32_t)lpi2c->edmaResource->txDmaRequest);
         DMAMUX_EnableChannel(lpi2c->edmaResource->txDmamuxBase, lpi2c->edmaResource->txEdmaChannel);
         /* RxDMAMUX init */
         DMAMUX_SetSource(lpi2c->edmaResource->rxDmamuxBase, lpi2c->edmaResource->rxEdmaChannel,
-                         (uint8_t)lpi2c->edmaResource->rxDmaRequest);
+                         (int32_t)lpi2c->edmaResource->rxDmaRequest);
         DMAMUX_EnableChannel(lpi2c->edmaResource->rxDmamuxBase, lpi2c->edmaResource->rxEdmaChannel);
 #endif
         /* Create edmaTxHandle */

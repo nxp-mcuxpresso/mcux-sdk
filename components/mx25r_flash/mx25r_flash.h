@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@ typedef enum mx25r_err
     mx25r_err_alignement,
 } mx25r_err_t;
 
-typedef int (*transfer_cb_t)(void *transfer_prv, uint8_t *tx_data, uint8_t *rx_data, size_t dataSize, bool eof);
+typedef void (*transfer_cb_t)(void *transfer_prv, uint8_t *tx_data, uint8_t *rx_data, size_t dataSize, bool eof);
 
 struct mx25r_instance
 {

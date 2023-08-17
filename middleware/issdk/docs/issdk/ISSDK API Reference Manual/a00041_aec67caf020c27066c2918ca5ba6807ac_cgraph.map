@@ -1,0 +1,7 @@
+<map id="FXLC95000_SPI_Initialize" name="FXLC95000_SPI_Initialize">
+<area shape="rect" id="node2" href="$a00530.html#ab052b802081fd87e1bda8d56e2c0db42" title="Function to insert delays. " alt="" coords="263,5,405,32"/>
+<area shape="rect" id="node3" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="492,56,553,83"/>
+<area shape="rect" id="node4" href="$a00038.html#a8e3488e3a4db535a6c822746377c289b" title="The SPI Read Pre&#45;Process function to generate Sensor specific SPI Message Header. ..." alt="" coords="225,107,443,133"/>
+<area shape="rect" id="node5" href="$a00038.html#a627506e76cad9d842873b8e549998baf" title="The SPI Write Pre&#45;Process function to generate Sensor specific SPI Message Header. " alt="" coords="224,157,444,184"/>
+<area shape="rect" id="node6" href="$a00173.html#a0662e3575811a227d02c1cfe802744c5" title="The interface function to block write to a sensor register. " alt="" coords="249,208,419,235"/>
+</map>

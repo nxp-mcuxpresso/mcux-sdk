@@ -1,0 +1,11 @@
+<map id="main_freertos_single_task.c" name="main_freertos_single_task.c">
+<area shape="rect" id="node20" href="$sensor__fusion_8h.html" title="The sensor_fusion.h file implements the top level programming interface. " alt="" coords="1999,95,2112,121"/>
+<area shape="rect" id="node33" href="$control_8h.html" title="Defines control sub&#45;system. " alt="" coords="2211,95,2283,121"/>
+<area shape="rect" id="node34" href="$status_8h.html" title="Application&#45;specific status subsystem. " alt="" coords="2307,95,2377,121"/>
+<area shape="rect" id="node35" href="$drivers_8h.html" title="Provides function prototypes for driver level interfaces. " alt="" coords="2519,95,2589,121"/>
+<area shape="rect" id="node38" href="$driver__pit_8h.html" title="Provides a simple abstraction for a periodic interval timer. " alt="" coords="2613,95,2697,121"/>
+<area shape="rect" id="node28" href="$magnetic_8h.html" title="Lower level magnetic calibration interface. " alt="" coords="2109,169,2196,196"/>
+<area shape="rect" id="node29" href="$precisionAccelerometer_8h.html" title="Implements accelerometer calibration routines. " alt="" coords="2220,169,2389,196"/>
+<area shape="rect" id="node30" href="$orientation_8h.html" title="Functions to convert between various orientation representations. " alt="" coords="2414,169,2507,196"/>
+<area shape="rect" id="node31" href="$matrix_8h.html" title="Matrix manipulation functions. " alt="" coords="2531,169,2601,196"/>
+</map>

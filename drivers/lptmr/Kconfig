@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_lptmr
+config MCUX_HAS_driver_lptmr
+    bool
+
+config MCUX_USE_driver_lptmr
+    depends on MCUX_HAS_driver_lptmr
+    bool "LPTMR Driver"
+    select MCUX_USE_driver_common
+    help
+      LPTMR Driver

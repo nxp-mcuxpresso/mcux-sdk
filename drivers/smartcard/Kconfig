@@ -1,0 +1,27 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_smartcard_emvsim
+config MCUX_HAS_driver_smartcard_emvsim
+    bool
+
+config MCUX_USE_driver_smartcard_emvsim
+    depends on MCUX_HAS_driver_smartcard_emvsim
+    bool "SMARTCARD EMVSIM Driver"
+    select MCUX_USE_driver_common
+    help
+      SMARTCARD EMVSIM Driver
+
+# driver_smartcard_phy_emvsim
+config MCUX_HAS_driver_smartcard_phy_emvsim
+    bool
+
+config MCUX_USE_driver_smartcard_phy_emvsim
+    depends on MCUX_HAS_driver_smartcard_phy_emvsim
+    bool "SMARTCARD PHY EMVSIM"
+    select MCUX_USE_driver_smartcard_emvsim
+    select MCUX_USE_driver_common
+    help
+      SMARTCARD PHY EMVSIM, use only one SMARTCARD PHY in the project

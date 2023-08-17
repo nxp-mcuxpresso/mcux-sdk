@@ -1,0 +1,5 @@
+<map id="writeWirelessPort" name="writeWirelessPort">
+<area shape="rect" id="node2" href="$control_8h.html#a0022c0c45a3b736ffe21164001662b44" title="Used to initialize the Blue Radios Bluetooth module found on the FRDM&#45;FXS&#45;MULT2&#45;B sensor shield from ..." alt="" coords="177,5,289,32"/>
+<area shape="rect" id="node3" href="$control_8h.html#a67029acf1be9712c5d30c625132ad958" title="Call this once to initialize structures, ports, etc. " alt="" coords="337,5,472,32"/>
+<area shape="rect" id="node4" href="$main__agm01__freertos__two__tasks_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is a FreeRTOS (dual task) implementation of the NXP sensor fusion demo build. " alt="" coords="520,5,571,32"/>
+</map>
