@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2021-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -63,22 +63,56 @@ void OPAMP_Init(OPAMP_Type *base, const opamp_config_t *config)
 {
     assert(config != NULL);
 
-    uint32_t tmp32;
+    uint32_t tmp32 = 0U;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the clock. */
     CLOCK_EnableClock(s_opampClocks[OPAMP_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
-    tmp32 = base->OPAMP_CTR;
-    tmp32 &= ~(OPAMP_OPAMP_CTR_EN_MASK | OPAMP_OPAMP_CTR_MODE_MASK | OPAMP_OPAMP_CTR_BIASC_MASK |
-               OPAMP_OPAMP_CTR_INTREF_MASK | OPAMP_OPAMP_CTR_ADCSW_MASK | OPAMP_OPAMP_CTR_PREF_MASK |
-               OPAMP_OPAMP_CTR_PGAIN_MASK | OPAMP_OPAMP_CTR_NGAIN_MASK);
-    tmp32 |= OPAMP_OPAMP_CTR_EN(config->enable) | OPAMP_OPAMP_CTR_MODE(config->mode) |
-             OPAMP_OPAMP_CTR_BIASC(config->trimOption) | OPAMP_OPAMP_CTR_INTREF(config->intRefVoltage) |
-             OPAMP_OPAMP_CTR_ADCSW(config->enablePosADCSw) | OPAMP_OPAMP_CTR_PREF(config->posRefVoltage) |
-             OPAMP_OPAMP_CTR_PGAIN(config->posGain) | OPAMP_OPAMP_CTR_NGAIN(config->negGain);
+    tmp32 = OPAMP_OPAMP_CTR_EN(config->enable) | OPAMP_OPAMP_CTR_MODE(config->mode) |
+            OPAMP_OPAMP_CTR_BIASC(config->trimOption) | OPAMP_OPAMP_CTR_INTREF(config->intRefVoltage) |
+            OPAMP_OPAMP_CTR_PREF(config->posRefVoltage) |
+#if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_OUTSW) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_OUTSW
+            OPAMP_OPAMP_CTR_OUTSW(config->enableOutputSwitch) |
+#endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_OUTSW */
+#if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW1) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW1
+            OPAMP_OPAMP_CTR_ADCSW1(config->enablePosADCSw1) |
+#else
+            OPAMP_OPAMP_CTR_ADCSW(config->enablePosADCSw) |
+#endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW1 */
+#if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW2) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW2
+            OPAMP_OPAMP_CTR_ADCSW2(config->enablePosADCSw2) |
+#endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW2 */
+#if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_INPSEL) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_INPSEL
+            OPAMP_OPAMP_CTR_INPSEL(config->PosInputChannelSelection) |
+#endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_INPSEL */
+#if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_TRIGMD) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_TRIGMD
+            OPAMP_OPAMP_CTR_TRIGMD(config->enableTriggerMode) |
+#endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_TRIGMD */
+            OPAMP_OPAMP_CTR_NGAIN(config->negGain);
     base->OPAMP_CTR = tmp32;
+#if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_BUFEN) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_BUFEN
+    if (config->enableRefBuffer)
+    {
+        assert((uint32_t)(config->posGain) <= 7UL);
+        base->OPAMP_CTR |= OPAMP_OPAMP_CTR_PGAIN(config->posGain) | OPAMP_OPAMP_CTR_BUFEN_MASK;
+    }
+    else
+    {
+        if ((uint32_t)(config->posGain) > 7UL)
+        {
+            base->OPAMP_CTR |= OPAMP_OPAMP_CTR_PGAIN((uint32_t)(config->posGain) - 7UL);
+        }
+        else
+        {
+            assert((uint32_t)(config->posGain) == 0UL);
+            base->OPAMP_CTR |= OPAMP_OPAMP_CTR_PGAIN(config->posGain);
+        }
+    }
+#else
+    base->OPAMP_CTR |= OPAMP_OPAMP_CTR_PGAIN(config->posGain);
+#endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_TRIGMD */
 }
 
 /*!
@@ -88,13 +122,13 @@ void OPAMP_Init(OPAMP_Type *base, const opamp_config_t *config)
  */
 void OPAMP_Deinit(OPAMP_Type *base)
 {
+    /* Disable OPAMP instance. */
+    base->OPAMP_CTR &= ~OPAMP_OPAMP_CTR_EN_MASK;
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Disable the clock. */
     CLOCK_DisableClock(s_opampClocks[OPAMP_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
-    /* Disable OPAMP instance. */
-    base->OPAMP_CTR &= ~OPAMP_OPAMP_CTR_EN_MASK;
 }
 
 /*!
@@ -121,10 +155,27 @@ void OPAMP_GetDefaultConfig(opamp_config_t *config)
     config->mode          = kOPAMP_LowNoiseMode;
     config->trimOption    = kOPAMP_TrimOptionDefault;
     config->intRefVoltage = kOPAMP_IntRefVoltVddaDiv2;
-
+    config->posRefVoltage = kOPAMP_PosRefVoltVrefh3;
+    config->posGain       = kOPAMP_PosGainReserved;
+    config->negGain       = kOPAMP_NegGainBufferMode;
+#if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_OUTSW) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_OUTSW
+    config->enableOutputSwitch = true;
+#endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_OUTSW */
+#if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW1) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW1
+    config->enablePosADCSw1 = false;
+#else
     config->enablePosADCSw = false;
-    config->posRefVoltage  = kOPAMP_PosRefVoltVrefh3;
-    config->posGain        = kOPAMP_PosGainReserved;
-
-    config->negGain = kOPAMP_NegGainBufferMode;
+#endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW1 */
+#if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW2) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW2
+    config->enablePosADCSw2 = false;
+#endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_ADCSW2 */
+#if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_BUFEN) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_BUFEN
+    config->enableRefBuffer = false;
+#endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_BUFEN */
+#if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_INPSEL) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_INPSEL
+    config->PosInputChannelSelection = kOPAMP_PosInputChannel0;
+#endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_INPSEL */
+#if defined(FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_TRIGMD) && FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_TRIGMD
+    config->enableTriggerMode = false;
+#endif /* FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_TRIGMD */
 }

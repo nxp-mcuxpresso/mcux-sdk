@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2020 NXP
+ * Copyright 2016 - 2020, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -655,6 +655,7 @@ static usb_status_t USB_DeviceCallback(usb_device_handle handle, uint32_t event,
 }
 
 #if (defined(USB_DEVICE_CONFIG_EHCI) && (USB_DEVICE_CONFIG_EHCI > 0U))
+#ifndef SERIAL_PORT_USB_CDC_USB_OTG2_IRQ_HANDLER_DISABLE
 void USB_OTG2_IRQHandler(void);
 void USB_OTG2_IRQHandler(void)
 {
@@ -669,9 +670,11 @@ void USB_OTG2_IRQHandler(void)
         serialUsbCdc = serialUsbCdc->next;
     }
 }
+#endif /* SERIAL_PORT_USB_CDC_USB_OTG2_IRQ_HANDLER_DISABLE */
 #endif
 
 #if defined(USB_DEVICE_CONFIG_EHCI) && (USB_DEVICE_CONFIG_EHCI > 0U)
+#ifndef SERIAL_PORT_USB_CDC_USBHS_IRQ_HANDLER_DISABLE
 void USBHS_IRQHandler(void);
 void USBHS_IRQHandler(void)
 {
@@ -687,8 +690,10 @@ void USBHS_IRQHandler(void)
     }
     SDK_ISR_EXIT_BARRIER;
 }
+#endif /* SERIAL_PORT_USB_CDC_USBHS_IRQ_HANDLER_DISABLE */
 #if defined(USB_DEVICE_CONFIG_EHCI) && (USB_DEVICE_CONFIG_EHCI > 1U)
 #if defined(FSL_FEATURE_USBHS_EHCI_COUNT) && (FSL_FEATURE_USBHS_EHCI_COUNT > 1U)
+#ifndef SERIAL_PORT_USB_CDC_USB1_IRQ_HANDLER_DISABLE
 void USB1_IRQHandler(void);
 void USB1_IRQHandler(void)
 {
@@ -704,10 +709,12 @@ void USB1_IRQHandler(void)
     }
     SDK_ISR_EXIT_BARRIER;
 }
+#endif /* SERIAL_PORT_USB_CDC_USB1_IRQ_HANDLER_DISABLE */
 #endif
 #endif
 #endif
 #if defined(USB_DEVICE_CONFIG_KHCI) && (USB_DEVICE_CONFIG_KHCI > 0U)
+#ifndef SERIAL_PORT_USB_CDC_USB0_IRQ_HANDLER_DISABLE
 void USB0_IRQHandler(void);
 void USB0_IRQHandler(void)
 {
@@ -723,8 +730,10 @@ void USB0_IRQHandler(void)
     }
     SDK_ISR_EXIT_BARRIER;
 }
+#endif /* SERIAL_PORT_USB_CDC_USB0_IRQ_HANDLER_DISABLE */
 #endif
 #if defined(USB_DEVICE_CONFIG_LPCIP3511FS) && (USB_DEVICE_CONFIG_LPCIP3511FS > 0U)
+#ifndef SERIAL_PORT_USB_CDC_USB0_IRQ_HANDLER_DISABLE
 void USB0_IRQHandler(void);
 void USB0_IRQHandler(void)
 {
@@ -740,8 +749,10 @@ void USB0_IRQHandler(void)
     }
     SDK_ISR_EXIT_BARRIER;
 }
+#endif /* SERIAL_PORT_USB_CDC_USB0_IRQ_HANDLER_DISABLE */
 #endif
 #if defined(USB_DEVICE_CONFIG_LPCIP3511HS) && (USB_DEVICE_CONFIG_LPCIP3511HS > 0U)
+#ifndef SERIAL_PORT_USB_CDC_USB1_IRQ_HANDLER_DISABLE
 void USB1_IRQHandler(void);
 void USB1_IRQHandler(void)
 {
@@ -757,6 +768,7 @@ void USB1_IRQHandler(void)
     }
     SDK_ISR_EXIT_BARRIER;
 }
+#endif /* SERIAL_PORT_USB_CDC_USB1_IRQ_HANDLER_DISABLE */
 #endif
 
 static void USB_DeviceIsrEnable(serial_usb_cdc_state_t *serialUsbCdc)

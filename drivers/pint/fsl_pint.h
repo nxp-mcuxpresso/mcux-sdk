@@ -24,7 +24,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 1, 11))
+#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 1, 12))
 /*@}*/
 
 /* Number of interrupt line supported by PINT */

@@ -130,7 +130,7 @@ static serial_manager_status_t Serial_UartEnableReceiving(serial_uart_state_t *s
 static void Serial_UartCallback(hal_uart_handle_t handle, hal_uart_status_t status, void *userData)
 {
     serial_uart_state_t *serialUartHandle;
-    serial_manager_callback_message_t serialMsg;
+    serial_manager_callback_message_t msg;
 
     assert(userData);
     serialUartHandle = (serial_uart_state_t *)userData;
@@ -144,9 +144,9 @@ static void Serial_UartCallback(hal_uart_handle_t handle, hal_uart_status_t stat
 #endif
         if ((NULL != serialUartHandle->rx.callback))
         {
-            serialMsg.buffer = &serialUartHandle->rx.readBuffer[0];
-            serialMsg.length = sizeof(serialUartHandle->rx.readBuffer);
-            serialUartHandle->rx.callback(serialUartHandle->rx.callbackParam, &serialMsg, kStatus_SerialManager_Success);
+            msg.buffer = &serialUartHandle->rx.readBuffer[0];
+            msg.length = sizeof(serialUartHandle->rx.readBuffer);
+            serialUartHandle->rx.callback(serialUartHandle->rx.callbackParam, &msg, kStatus_SerialManager_Success);
         }
     }
     else if ((hal_uart_status_t)kStatus_HAL_UartTxIdle == status)
@@ -156,9 +156,9 @@ static void Serial_UartCallback(hal_uart_handle_t handle, hal_uart_status_t stat
             serialUartHandle->tx.busy = 0U;
             if ((NULL != serialUartHandle->tx.callback))
             {
-                serialMsg.buffer = serialUartHandle->tx.buffer;
-                serialMsg.length = serialUartHandle->tx.length;
-                serialUartHandle->tx.callback(serialUartHandle->tx.callbackParam, &serialMsg, kStatus_SerialManager_Success);
+                msg.buffer = serialUartHandle->tx.buffer;
+                msg.length = serialUartHandle->tx.length;
+                serialUartHandle->tx.callback(serialUartHandle->tx.callbackParam, &msg, kStatus_SerialManager_Success);
             }
         }
     }
@@ -316,7 +316,7 @@ serial_manager_status_t Serial_UartRead(serial_handle_t serialHandle, uint8_t *b
 serial_manager_status_t Serial_UartCancelWrite(serial_handle_t serialHandle)
 {
     serial_uart_state_t *serialUartHandle;
-    serial_manager_callback_message_t serialMsg;
+    serial_manager_callback_message_t msg;
     uint32_t primask;
     uint8_t isBusy = 0U;
 
@@ -338,9 +338,9 @@ serial_manager_status_t Serial_UartCancelWrite(serial_handle_t serialHandle)
     {
         if ((NULL != serialUartHandle->tx.callback))
         {
-            serialMsg.buffer = serialUartHandle->tx.buffer;
-            serialMsg.length = serialUartHandle->tx.length;
-            serialUartHandle->tx.callback(serialUartHandle->tx.callbackParam, &serialMsg, kStatus_SerialManager_Canceled);
+            msg.buffer = serialUartHandle->tx.buffer;
+            msg.length = serialUartHandle->tx.length;
+            serialUartHandle->tx.callback(serialUartHandle->tx.callbackParam, &msg, kStatus_SerialManager_Canceled);
         }
     }
     return kStatus_SerialManager_Success;
@@ -452,7 +452,7 @@ static serial_manager_status_t Serial_UartDmaEnableReceiving(serial_uart_dma_sta
 }
 
 /* UART user callback */
-static void Serial_UartDmaCallback(hal_uart_dma_handle_t handle, hal_dma_callback_msg_t *dmaMsg, void *callbackParam)
+static void Serial_UartDmaCallback(hal_uart_dma_handle_t handle, hal_dma_callback_msg_t *msg, void *callbackParam)
 {
     serial_uart_dma_state_t *serialUartHandle;
     serial_manager_callback_message_t cb_msg;
@@ -460,13 +460,13 @@ static void Serial_UartDmaCallback(hal_uart_dma_handle_t handle, hal_dma_callbac
     assert(callbackParam);
     serialUartHandle = (serial_uart_dma_state_t *)callbackParam;
 
-    if (((hal_uart_dma_status_t)kStatus_HAL_UartDmaRxIdle == dmaMsg->status) ||
-        (kStatus_HAL_UartDmaIdleline == dmaMsg->status))
+    if (((hal_uart_dma_status_t)kStatus_HAL_UartDmaRxIdle == msg->status) ||
+        (kStatus_HAL_UartDmaIdleline == msg->status))
     {
         if ((NULL != serialUartHandle->rx.callback))
         {
-            cb_msg.buffer = dmaMsg->data;
-            cb_msg.length = dmaMsg->dataSize;
+            cb_msg.buffer = msg->data;
+            cb_msg.length = msg->dataSize;
             serialUartHandle->rx.callback(serialUartHandle->rx.callbackParam, &cb_msg, kStatus_SerialManager_Success);
         }
 
@@ -478,15 +478,15 @@ static void Serial_UartDmaCallback(hal_uart_dma_handle_t handle, hal_dma_callbac
             serialUartHandle->rx.busy = 1U;
         }
     }
-    else if (kStatus_HAL_UartDmaTxIdle == dmaMsg->status)
+    else if (kStatus_HAL_UartDmaTxIdle == msg->status)
     {
         if (0U != serialUartHandle->tx.busy)
         {
             serialUartHandle->tx.busy = 0U;
             if ((NULL != serialUartHandle->tx.callback))
             {
-                cb_msg.buffer = dmaMsg->data;
-                cb_msg.length = dmaMsg->dataSize;
+                cb_msg.buffer = msg->data;
+                cb_msg.length = msg->dataSize;
                 serialUartHandle->tx.callback(serialUartHandle->tx.callbackParam, &cb_msg,
                                               kStatus_SerialManager_Success);
             }
@@ -606,7 +606,7 @@ serial_manager_status_t Serial_UartDmaWrite(serial_handle_t serialHandle, uint8_
 serial_manager_status_t Serial_UartDmaCancelWrite(serial_handle_t serialHandle)
 {
     serial_uart_dma_state_t *serialUartHandle;
-    serial_manager_callback_message_t serialMsg;
+    serial_manager_callback_message_t msg;
     uint32_t primask;
     uint8_t isBusy = 0U;
 
@@ -625,9 +625,9 @@ serial_manager_status_t Serial_UartDmaCancelWrite(serial_handle_t serialHandle)
     {
         if ((NULL != serialUartHandle->tx.callback))
         {
-            serialMsg.buffer = serialUartHandle->tx.buffer;
-            serialMsg.length = serialUartHandle->tx.length;
-            serialUartHandle->tx.callback(serialUartHandle->tx.callbackParam, &serialMsg, kStatus_SerialManager_Canceled);
+            msg.buffer = serialUartHandle->tx.buffer;
+            msg.length = serialUartHandle->tx.length;
+            serialUartHandle->tx.callback(serialUartHandle->tx.callbackParam, &msg, kStatus_SerialManager_Canceled);
         }
     }
     return kStatus_SerialManager_Success;

@@ -39,7 +39,7 @@ struct _ldr_buf
 typedef struct _ldr_Context_v3 ldr_Context_v3_t;
 
 /*! @brief Function pointer definition for all loader action functions. */
-typedef status_t (*pLdrFnc_v3_t)(ldr_Context_v3_t *);
+typedef status_t (*pLdrFnc_v3_t)(ldr_Context_v3_t *content);
 
 /*! @brief sb3 section definitions */
 /*! @brief section type */

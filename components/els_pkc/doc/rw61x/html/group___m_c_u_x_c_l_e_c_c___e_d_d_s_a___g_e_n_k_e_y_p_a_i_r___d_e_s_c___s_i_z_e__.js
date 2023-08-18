@@ -1,0 +1,4 @@
+var group___m_c_u_x_c_l_e_c_c___e_d_d_s_a___g_e_n_k_e_y_p_a_i_r___d_e_s_c___s_i_z_e__ =
+[
+    [ "MCUXCLECC_EDDSA_GENERATEKEYPAIR_DESCRIPTOR_SIZE", "group___m_c_u_x_c_l_e_c_c___e_d_d_s_a___g_e_n_k_e_y_p_a_i_r___d_e_s_c___s_i_z_e__.html#ga435b584a2a74e53c5987727a938aa65d", null ]
+];

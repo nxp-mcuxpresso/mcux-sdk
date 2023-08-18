@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 1.0.0. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(1, 0, 0))
+/*! @brief power driver version 2.0.1. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /**
@@ -111,17 +111,11 @@ typedef enum _power_pd_bit
     kPDRUNCFG_PD_PLL0       = (1UL << 9),
     kPDRUNCFG_PD_PLL1       = (1UL << 10),
     kPDRUNCFG_PD_USBFSPHY   = (1UL << 11),
-    // kPDRUNCFG_PD_          = (1UL << 12), /*!< RESERVED */
     kPDRUNCFG_PD_COMP = (1UL << 13),
-    // kPDRUNCFG_PD_          = (1UL << 14), /*!< RESERVED */
-    // kPDRUNCFG_PD_          = (1UL << 15), /*!< RESERVED */
     kPDRUNCFG_PD_LDOMEM = (1UL << 16),
-    // kPDRUNCFG_PD_          = (1UL << 17), /*!< RESERVED */
     kPDRUNCFG_PD_LDOEFUSEPROG = (1UL << 18),
-    // kPDRUNCFG_PD_          = (1UL << 19), /*!< RESERVED */
     kPDRUNCFG_PD_LDOXTALHF  = (1UL << 20),
     kPDRUNCFG_PD_LDOFLASHNV = (1UL << 21),
-    // kPDRUNCFG_PD_          = (1UL << 22), /*!< RESERVED */
     kPDRUNCFG_PD_PLL0_SSCG = (1UL << 23),
     kPDRUNCFG_PD_ROM       = (1UL << 24),
     kPDRUNCFG_PD_HSCMP0    = (1UL << 25),
@@ -254,14 +248,17 @@ typedef enum _power_bod_vddmain_level
 /*@brief BOD core level */
 typedef enum _power_bod_core_level
 {
-    kPOWER_BodCoreLevel600mv = 0, /*!< core Brown out detector level 600mV */
-    kPOWER_BodCoreLevel650mv = 1, /*!< core Brown out detector level 650mV */
-    kPOWER_BodCoreLevel700mv = 2, /*!< core Brown out detector level 700mV */
-    kPOWER_BodCoreLevel750mv = 3, /*!< core Brown out detector level 750mV */
-    kPOWER_BodCoreLevel800mv = 4, /*!< core Brown out detector level 800mV */
-    kPOWER_BodCoreLevel850mv = 5, /*!< core Brown out detector level 850mV */
-    kPOWER_BodCoreLevel900mv = 6, /*!< core Brown out detector level 900mV */
-    kPOWER_BodCoreLevel950mv = 7, /*!< core Brown out detector level 950mV */
+    kPOWER_BodCoreLevel0A600mv  = 0, /*!< core Brown out detector level 600mV for 0A */
+    kPOWER_BodCoreLevel0A650mv  = 1, /*!< core Brown out detector level 650mV for 0A */
+    kPOWER_BodCoreLevel0A700mv  = 2, /*!< core Brown out detector level 700mV for 0A */
+    kPOWER_BodCoreLevel0A750mv  = 3, /*!< core Brown out detector level 750mV for 0A */
+    kPOWER_BodCoreLevel0A800mv  = 4, /*!< core Brown out detector level 800mV for 0A */
+    kPOWER_BodCoreLevel0A850mv  = 5, /*!< core Brown out detector level 850mV for 0A */
+    kPOWER_BodCoreLevel0A900mv  = 6, /*!< core Brown out detector level 900mV for 0A */
+    kPOWER_BodCoreLevel0A950mv  = 7, /*!< core Brown out detector level 950mV for 0A */
+    kPOWER_BodCoreLevel1B929mv  = 5, /*!< core Brown out detector level 929mV for 1B */
+    kPOWER_BodCoreLevel1B984mv  = 6, /*!< core Brown out detector level 984mV for 1B */
+    kPOWER_BodCoreLevel1B1038mv = 7, /*!< core Brown out detector level 1038mV for 1B */
 } power_bod_core_level_t;
 
 /*@brief BODs (VDDMAIN & Core) Hysteresis control */
@@ -475,10 +472,10 @@ typedef enum _power_status
 #define LOWPOWER_WAKEUPIOSRC_PIO3_INDEX 6 /*!< Pin P1(30) */
 #define LOWPOWER_WAKEUPIOSRC_PIO4_INDEX 8 /*!< Pin P0(26) */
 
-#define LOWPOWER_WAKEUPIOSRC_DISABLE        0 /*!< Wake up is disable                      */
-#define LOWPOWER_WAKEUPIOSRC_RISING         1 /*!< Wake up on rising edge                  */
-#define LOWPOWER_WAKEUPIOSRC_FALLING        2 /*!< Wake up on falling edge                 */
-#define LOWPOWER_WAKEUPIOSRC_RISING_FALLING 3 /*!< Wake up on both rising or falling edges */
+#define LOWPOWER_WAKEUPIOSRC_DISABLE        0UL /*!< Wake up is disable                      */
+#define LOWPOWER_WAKEUPIOSRC_RISING         1UL /*!< Wake up on rising edge                  */
+#define LOWPOWER_WAKEUPIOSRC_FALLING        2UL /*!< Wake up on falling edge                 */
+#define LOWPOWER_WAKEUPIOSRC_RISING_FALLING 3UL /*!< Wake up on both rising or falling edges */
 
 #define LOWPOWER_WAKEUPIOSRC_PIO0MODE_INDEX 10 /*!< Pin P1( 1) */
 #define LOWPOWER_WAKEUPIOSRC_PIO1MODE_INDEX 12 /*!< Pin P0(28) */
@@ -555,10 +552,10 @@ extern "C" {
  */
 static inline void POWER_EnablePD(pd_bit_t en)
 {
-    if (((en & (1UL << 31)) != 0UL) && (en != (1UL << 31)))
+    if ((((uint32_t)en & (1UL << 31)) != 0UL) && ((uint32_t)en != (1UL << 31)))
     {
         /* PDRUNCFGSET1 */
-        PMC->PDRUNCFGSET1 = (uint32_t)(en & ~(1UL << 31));
+        PMC->PDRUNCFGSET1 = (uint32_t)((uint32_t)en & ~(1UL << 31));
     }
     else
     {
@@ -575,10 +572,10 @@ static inline void POWER_EnablePD(pd_bit_t en)
  */
 static inline void POWER_DisablePD(pd_bit_t en)
 {
-    if (((en & (1UL << 31)) != 0UL) && (en != (1UL << 31)))
+    if ((((uint32_t)en & (1UL << 31)) != 0UL) && ((uint32_t)en != (1UL << 31)))
     {
         /* PDRUNCFGCLR1 */
-        PMC->PDRUNCFGCLR1 = (uint32_t)(en & ~(1UL << 31));
+        PMC->PDRUNCFGCLR1 = (uint32_t)((uint32_t)en & ~(1UL << 31));
     }
     else
     {
@@ -747,5 +744,7 @@ void POWER_SetVoltageForFreq(uint32_t system_freq_hz);
 #ifdef __cplusplus
 }
 #endif
+
+/*! @} */
 
 #endif /* _FSL_POWER_H_ */

@@ -337,8 +337,5 @@ component.osa_thread:
     - driver.common
     - component.lists
     - component.osa_interface
-    - anyOf:
-      - middleware.azure_rtos.tx
-      - middleware.azure_rtos.tx.sp
   meta-name: component.osa_thread
   cmake_module_name: component_osa_thread

@@ -1,0 +1,88 @@
+CLNS SDK (1.5.0) Release Notes
+
+- Release: RW61x_EAR7
+- Version: CLNS_SDK_1.5.0
+- Date:    2023-05-26
+- Compiler: ARMCLANG keilmdk 533
+--- Test Target:   
+   - RW610 A0 Sample
+--- CLNS memory consumption: static_library/RW61x/libclns.a
+    TEXT  RO    RW ZI TOTAL_CONSUMPTION
+    78558 23909 0  0  102467 
+
+--- New Features 
+   - Bugfixes
+   - ECC and RSA security check enabled to ensure a random DRBG with sufficient entropy is provided
+   
+--- Features:
+   - Components included: mcuxClAead, mcuxClAeadModes, mcuxClAes, mcuxClCipher, mcuxClCipherModes, mcuxClCore,
+   mcuxClEcc, mcuxClEls, mcuxClExample, mcuxClHash, mcuxClKey, mcuxClMac, mcuxClMacModes, mcuxClMath, mcuxClMemory,
+   mcuxClPadding, mcuxClPkc, mcuxClPrng, mcuxClPsaDriver, mcuxClRandom, mcuxClRandomModes, mcuxClRsa, mcuxClSession,
+   mcuxClTrng, mcuxCsslCPreProcessor, mcuxCsslFlowProtection, mcuxCsslMemory, mcuxCsslParamIntegrity, mcuxCsslSecureCounter
+
+--- Known Issues Limitations:
+   - platform_specific_headers.h: 
+      #include "fsl_device_registers.h" 
+      // #include "RW610.h" 
+      // #include "RW610_features.h" 
+      // #include "system_RW610.h"
+   - 390 "required" MISRA violations pending
+   - 13 "high" + 153 "medium" impact Cert-C / Coverity static analysis violations
+   - When MCUXCLECC_STATUS_RNG_ERROR or MCUXCLRSA_STATUS_RNG_ERROR is returned the security counter is not guaranteed to be balanced
+
+- Release: MCXN_PRC
+- Version: CLNS_SDK_1.5.0
+- Date:    2023-05-26
+- Compiler: IAR Compiler v.8.40.1
+--- Test Target:   
+   - MCXN sample
+--- CLNS memory consumption: static_library/mcxn/libclns.a
+    TEXT  RO    RW ZI TOTAL_CONSUMPTION
+    68176 19684 0  0  87860
+
+
+--- New Features: 
+   - Bugfixes
+   - 0 unjustified "mandatory" and "required" MISRA violations
+   
+--- Features:
+   - Components included: mcuxClAead, mcuxClAeadModes, mcuxClAes, mcuxClCipher, mcuxClCipherModes, mcuxClCore,
+   mcuxClEcc, mcuxClEls, mcuxClExample, mcuxClHash, mcuxClKey, mcuxClMac, mcuxClMacModes, mcuxClMath, mcuxClMemory,
+   mcuxClOsccaPkc, mcuxClOsccaSm3, mcuxClPadding, mcuxClPkc, mcuxClPrng, mcuxClRandom, mcuxClRandomModes, mcuxClRsa, mcuxClSession,
+   mcuxClTrng, mcuxCsslCPreProcessor, mcuxCsslFlowProtection, mcuxCsslMemory, mcuxCsslParamIntegrity, mcuxCsslSecureCounter
+
+--- Known Issues Limitations: 
+   - par_els_semaphore_master tests failed due to test issues (reading MASTER ID SFR from ELS "secure" BASE in non-secure mode, missing exception/fault handling when exceptions/faults occur in non-secure)
+   - 10 "high" + 155 "medium" impact Cert-C / Coverity static analysis violations
+   - When MCUXCLECC_STATUS_RNG_ERROR or MCUXCLRSA_STATUS_RNG_ERROR is returned the security counter is not guaranteed to be balanced
+
+- Release: LPC_PRC
+- Version: CLNS_SDK_1.5.0
+- Date:    2023-05-26
+- Compiler: IAR Compiler v.8.40.1
+--- Test Target:   
+   - LPC55S36_sample
+--- CLNS memory consumption: static_library/lpc/libclns.a
+    TEXT  RO    RW ZI TOTAL_CONSUMPTION
+    58168 19016 0  4  77188
+
+ 
+
+--- New Features: 
+   - ELS DRBG iterative seeding update
+      - New public function mcuxClEls_Dtrng_IterativeReseeding_CheckAndReseed introduced
+         - This function needs to be called from the ELS interrupt handler and ELS interrupts need to be enabled for the ELS iterative reseeding to work
+         - Function mcuxClEls_Dtrng_IterativeReseeding_CheckAndReseed needs to be provided with a pointer to the ELS DRBG configuration data
+      - Global counter mcuxClEls_rng_drbg_block_counter (uint32_t) is required
+   - 0 unjustified "mandatory" and "required" MISRA violations
+   
+--- Features:
+   - Components included: mcuxClAead, mcuxClAeadModes, mcuxClAes, mcuxClCipher, mcuxClCipherModes, mcuxClCore,
+   mcuxClEcc, mcuxClEls, mcuxClExample, mcuxClHash, mcuxClKey, mcuxClMac, mcuxClMacModes, mcuxClMath, mcuxClMemory,
+   mcuxClPadding, mcuxClPkc, mcuxClPrng, mcuxClRandom, mcuxClRandomModes, mcuxClRsa, mcuxClSession,
+   mcuxCsslCPreProcessor, mcuxCsslFlowProtection, mcuxCsslMemory, mcuxCsslParamIntegrity, mcuxCsslSecureCounter
+
+--- Known Issues Limitations:
+   - Negative tests which try to provoke an uninitialized PRNG error had to be disabled since ELS_ITERATIVE_SEEDING inherently always initalizes the PRNG (sim_random_ncGenerate_negative, par_ecc_pkc_keygen_rng_error, par_ecc_pkc_sign_rng_error)
+   - 9 "high" + 130 "medium" impact Cert-C / Coverity static analysis violations   
+   - When MCUXCLECC_STATUS_RNG_ERROR or MCUXCLRSA_STATUS_RNG_ERROR is returned the security counter is not guaranteed to be balanced

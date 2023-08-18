@@ -32,38 +32,38 @@
 #define ALIGN_UP(x, a) (-((int32_t)((uint32_t)(-((int32_t)(x))) & (uint32_t)(-((int32_t)(a))))))
 #endif
 
-#define FLASH_FFR_MAX_PAGE_SIZE (512U)
+#define FLASH_FFR_MAX_PAGE_SIZE    (512U)
 #define FLASH_FFR_HASH_DIGEST_SIZE (32U)
-#define FLASH_FFR_IV_CODE_SIZE (52U)
+#define FLASH_FFR_IV_CODE_SIZE     (52U)
 
 enum flash_ffr_page_offset
 {
-    kFfrPageOffset_CFPA = 0U,         /*!< Customer In-Field programmed area*/
+    kFfrPageOffset_CFPA         = 0U, /*!< Customer In-Field programmed area*/
     kFfrPageOffset_CFPA_Scratch = 0U, /*!< CFPA Scratch page */
     kFfrPageOffset_CFPA_CfgPing = 1U, /*!< CFPA Configuration area (Ping page)*/
     kFfrPageOffset_CFPA_CfgPong = 2U, /*!< Same as CFPA page (Pong page)*/
 
 #if defined(LPC55S36_SERIES)
-    kFfrPageOffset_CMPA = 3U,         /*!< Customer Manufacturing programmed area*/
-    kFfrPageOffset_CMPA_Cfg = 3U,     /*!< CMPA Configuration area (Part of CMPA)*/
+    kFfrPageOffset_CMPA         = 3U, /*!< Customer Manufacturing programmed area*/
+    kFfrPageOffset_CMPA_Cfg     = 3U, /*!< CMPA Configuration area (Part of CMPA)*/
     kFfrPageOffset_CMPA_Csr_Key = 4U, /*!< Customer Key Store Area (Part of CMPA)*/
 
-    kFfrPageOffset_NMPA_Key = 5U,     /*!< Key Store area (Part of NMPA)*/
-    kFfrPageOffset_NMPA = 5U,         /*!< NXP Manufacturing programmed area*/
-    kFfrPageOffset_NMPA_Romcp = 8U,   /*!< ROM patch area (Part of NMPA)*/
+    kFfrPageOffset_NMPA_Key    = 5U,  /*!< Key Store area (Part of NMPA)*/
+    kFfrPageOffset_NMPA        = 5U,  /*!< NXP Manufacturing programmed area*/
+    kFfrPageOffset_NMPA_Romcp  = 8U,  /*!< ROM patch area (Part of NMPA)*/
     kFfrPageOffset_NMPA_Repair = 10U, /*!< Repair area (Part of NMPA)*/
-    kFfrPageOffset_NMPA_Cfg = 16U,    /*!< NMPA configuration area (Part of NMPA)*/
-    kFfrPageOffset_NMPA_End = 17U,    /*!< Reserved (Part of NMPA)*/
+    kFfrPageOffset_NMPA_Cfg    = 16U, /*!< NMPA configuration area (Part of NMPA)*/
+    kFfrPageOffset_NMPA_End    = 17U, /*!< Reserved (Part of NMPA)*/
 #else
-    kFfrPageOffset_CMPA = 3U,     /*!< Customer Manufacturing programmed area*/
+    kFfrPageOffset_CMPA     = 3U, /*!< Customer Manufacturing programmed area*/
     kFfrPageOffset_CMPA_Cfg = 3U, /*!< CMPA Configuration area (Part of CMPA)*/
     kFfrPageOffset_CMPA_Key = 4U, /*!< Key Store area (Part of CMPA)*/
 
-    kFfrPageOffset_NMPA = 7U,        /*!< NXP Manufacturing programmed area*/
-    kFfrPageOffset_NMPA_Romcp = 7U,  /*!< ROM patch area (Part of NMPA)*/
-    kFfrPageOffset_NMPA_Repair = 9U, /*!< Repair area (Part of NMPA)*/
-    kFfrPageOffset_NMPA_Cfg = 15U,   /*!< NMPA configuration area (Part of NMPA)*/
-    kFfrPageOffset_NMPA_End = 16U,   /*!< Reserved (Part of NMPA)*/
+    kFfrPageOffset_NMPA          = 7U,  /*!< NXP Manufacturing programmed area*/
+    kFfrPageOffset_NMPA_Romcp    = 7U,  /*!< ROM patch area (Part of NMPA)*/
+    kFfrPageOffset_NMPA_Repair   = 9U,  /*!< Repair area (Part of NMPA)*/
+    kFfrPageOffset_NMPA_Cfg      = 15U, /*!< NMPA configuration area (Part of NMPA)*/
+    kFfrPageOffset_NMPA_End      = 16U, /*!< Reserved (Part of NMPA)*/
 #endif
 
 };
@@ -74,15 +74,15 @@ enum flash_ffr_page_num
 #if defined(LPC55S36_SERIES)
     kFfrPageNum_CMPA = 2U, /*!< Customer Manufacturing programmed area*/
 #else
-    kFfrPageNum_CMPA = 4U,           /*!< Customer Manufacturing programmed area*/
+    kFfrPageNum_CMPA             = 4U,  /*!< Customer Manufacturing programmed area*/
 #endif
     kFfrPageNum_NMPA = 13U, /*!< NXP Manufacturing programmed area*/
 
-    kFfrPageNum_CMPA_Cfg = 1U,
+    kFfrPageNum_CMPA_Cfg   = 1U,
     kFfrPageNum_NMPA_Romcp = 2U,
 
     kFfrPageNum_SpecArea = kFfrPageNum_CFPA + kFfrPageNum_CMPA,
-    kFfrPageNum_Total = (kFfrPageNum_CFPA + kFfrPageNum_CMPA + kFfrPageNum_NMPA),
+    kFfrPageNum_Total    = (kFfrPageNum_CFPA + kFfrPageNum_CMPA + kFfrPageNum_NMPA),
 };
 
 enum flash_ffr_block_size
@@ -97,13 +97,13 @@ enum flash_ffr_block_size
 
 enum cfpa_cfg_cmpa_prog_status
 {
-    kFfrCmpaProgStatus_Idle = 0x0U,
+    kFfrCmpaProgStatus_Idle       = 0x0U,
     kFfrCmpaProgStatus_InProgress = 0x5CC55AA5U,
 };
 
 typedef enum
 {
-    kFfrCmpaProgProcess_Pre = 0x0U,
+    kFfrCmpaProgProcess_Pre  = 0x0U,
     kFfrCmpaProgProcess_Post = 0xFFFFFFFFU,
 } cmpa_prog_process_t;
 
@@ -132,22 +132,22 @@ typedef struct
     uint32_t cfpaCmac[4];        /*!< [0x1f0-0x1ff] */
 } cfpa_cfg_info_t;
 
-#define FFR_BOOTCFG_USBSPEED_SHIFT (9U)
-#define FFR_BOOTCFG_USBSPEED_MASK (0x3u << FFR_BOOTCFG_USBSPEED_SHIFT)
+#define FFR_BOOTCFG_USBSPEED_SHIFT    (9U)
+#define FFR_BOOTCFG_USBSPEED_MASK     (0x3u << FFR_BOOTCFG_USBSPEED_SHIFT)
 #define FFR_BOOTCFG_USBSPEED_NMPASEL0 (0x0U)
-#define FFR_BOOTCFG_USBSPEED_FS (0x1U)
-#define FFR_BOOTCFG_USBSPEED_HS (0x2U)
+#define FFR_BOOTCFG_USBSPEED_FS       (0x1U)
+#define FFR_BOOTCFG_USBSPEED_HS       (0x2U)
 #define FFR_BOOTCFG_USBSPEED_NMPASEL3 (0x3U)
 
-#define FFR_BOOTCFG_BOOTSPEED_MASK (0x18U)
-#define FFR_BOOTCFG_BOOTSPEED_SHIFT (7U)
+#define FFR_BOOTCFG_BOOTSPEED_MASK    (0x18U)
+#define FFR_BOOTCFG_BOOTSPEED_SHIFT   (7U)
 #define FFR_BOOTCFG_BOOTSPEED_NMPASEL (0x0U)
-#define FFR_BOOTCFG_BOOTSPEED_48MHZ (0x1U)
-#define FFR_BOOTCFG_BOOTSPEED_96MHZ (0x2U)
+#define FFR_BOOTCFG_BOOTSPEED_48MHZ   (0x1U)
+#define FFR_BOOTCFG_BOOTSPEED_96MHZ   (0x2U)
 
-#define FFR_USBID_VENDORID_MASK (0xFFFFU)
-#define FFR_USBID_VENDORID_SHIFT (0U)
-#define FFR_USBID_PRODUCTID_MASK (0xFFFF0000U)
+#define FFR_USBID_VENDORID_MASK   (0xFFFFU)
+#define FFR_USBID_VENDORID_SHIFT  (0U)
+#define FFR_USBID_PRODUCTID_MASK  (0xFFFF0000U)
 #define FFR_USBID_PRODUCTID_SHIFT (16U)
 
 #define FFR_IMAGE0_CMAC_UPDATE_MASK (0x1U)
@@ -195,9 +195,9 @@ typedef struct
     uint8_t reserved[4];
 } cmpa_key_store_header_t;
 
-#define FFR_SYSTEM_SPEED_CODE_MASK (0x3U)
-#define FFR_SYSTEM_SPEED_CODE_SHIFT (0U)
-#define FFR_SYSTEM_SPEED_CODE_FRO12MHZ_12MHZ (0x0U)
+#define FFR_SYSTEM_SPEED_CODE_MASK             (0x3U)
+#define FFR_SYSTEM_SPEED_CODE_SHIFT            (0U)
+#define FFR_SYSTEM_SPEED_CODE_FRO12MHZ_12MHZ   (0x0U)
 #define FFR_SYSTEM_SPEED_CODE_FROHF96MHZ_24MHZ (0x1U)
 #define FFR_SYSTEM_SPEED_CODE_FROHF96MHZ_48MHZ (0x2U)
 #define FFR_SYSTEM_SPEED_CODE_FROHF96MHZ_96MHZ (0x3U)
@@ -206,40 +206,40 @@ typedef struct
 #define FFR_USBCFG_USBSPEED_FS (0x1U)
 #define FFR_USBCFG_USBSPEED_NO (0x2U)
 
-#define FFR_MCAN_BAUDRATE_MASK (0xF0000U)
+#define FFR_MCAN_BAUDRATE_MASK  (0xF0000U)
 #define FFR_MCAN_BAUDRATE_SHIFT (16U)
 
-#define FFR_PERIPHERALCFG_PERI_MASK (0x7FFFFFFFU)
-#define FFR_PERIPHERALCFG_PERI_SHIFT (0U)
-#define FFR_PERIPHERALCFG_COREEN_MASK (0x10000000U)
+#define FFR_PERIPHERALCFG_PERI_MASK    (0x7FFFFFFFU)
+#define FFR_PERIPHERALCFG_PERI_SHIFT   (0U)
+#define FFR_PERIPHERALCFG_COREEN_MASK  (0x10000000U)
 #define FFR_PERIPHERALCFG_COREEN_SHIFT (31U)
 
-#define FFR_PUF_SRAM_CONFIG_MASK (0x3FFFF07)
+#define FFR_PUF_SRAM_CONFIG_MASK       (0x3FFFF07)
 #define FFR_PUF_SRAM_CONFIG_MASK_SHIFT (0U)
-#define FFR_PUF_SRAM_VALID_MASK (0x1U)
-#define FFR_PUF_SRAM_VALID_SHIFT (0U)
-#define FFR_PUF_SRAM_MODE_MASK (0x2U)
-#define FFR_PUF_SRAM_MODE_SHIFT (1U)
-#define FFR_PUF_SRAM_CKGATING_MASK (0x4U)
-#define FFR_PUF_SRAM_CKGATING_SHIFT (2U)
-#define FFR_PUF_SRAM_SMB_MASK (0x300U)
-#define FFR_PUF_SRAM_SMB_SHIFT (8U)
-#define FFR_PUF_SRAM_RM_MASK (0x1C00U)
-#define FFR_PUF_SRAM_RM_SHIFT (10U)
-#define FFR_PUF_SRAM_WM_MASK (0xE000U)
-#define FFR_PUF_SRAM_WM_SHIFT (13U)
-#define FFR_PUF_SRAM_WRME_MASK (0x10000U)
-#define FFR_PUF_SRAM_WRME_SHIFT (16U)
-#define FFR_PUF_SRAM_RAEN_MASK (0x20000U)
-#define FFR_PUF_SRAM_RAEN_SHIFT (17U)
-#define FFR_PUF_SRAM_RAM_MASK (0x3C0000U)
-#define FFR_PUF_SRAM_RAM_SHIFT (18U)
-#define FFR_PUF_SRAM_WAEN_MASK (0x400000U)
-#define FFR_PUF_SRAM_WAEN_SHIFT (22U)
-#define FFR_PUF_SRAM_WAM_MASK (0x1800000U)
-#define FFR_PUF_SRAM_WAM_SHIFT (23U)
-#define FFR_PUF_SRAM_STBP_MASK (0x2000000U)
-#define FFR_PUF_SRAM_STBP_SHIFT (25U)
+#define FFR_PUF_SRAM_VALID_MASK        (0x1U)
+#define FFR_PUF_SRAM_VALID_SHIFT       (0U)
+#define FFR_PUF_SRAM_MODE_MASK         (0x2U)
+#define FFR_PUF_SRAM_MODE_SHIFT        (1U)
+#define FFR_PUF_SRAM_CKGATING_MASK     (0x4U)
+#define FFR_PUF_SRAM_CKGATING_SHIFT    (2U)
+#define FFR_PUF_SRAM_SMB_MASK          (0x300U)
+#define FFR_PUF_SRAM_SMB_SHIFT         (8U)
+#define FFR_PUF_SRAM_RM_MASK           (0x1C00U)
+#define FFR_PUF_SRAM_RM_SHIFT          (10U)
+#define FFR_PUF_SRAM_WM_MASK           (0xE000U)
+#define FFR_PUF_SRAM_WM_SHIFT          (13U)
+#define FFR_PUF_SRAM_WRME_MASK         (0x10000U)
+#define FFR_PUF_SRAM_WRME_SHIFT        (16U)
+#define FFR_PUF_SRAM_RAEN_MASK         (0x20000U)
+#define FFR_PUF_SRAM_RAEN_SHIFT        (17U)
+#define FFR_PUF_SRAM_RAM_MASK          (0x3C0000U)
+#define FFR_PUF_SRAM_RAM_SHIFT         (18U)
+#define FFR_PUF_SRAM_WAEN_MASK         (0x400000U)
+#define FFR_PUF_SRAM_WAEN_SHIFT        (22U)
+#define FFR_PUF_SRAM_WAM_MASK          (0x1800000U)
+#define FFR_PUF_SRAM_WAM_SHIFT         (23U)
+#define FFR_PUF_SRAM_STBP_MASK         (0x2000000U)
+#define FFR_PUF_SRAM_STBP_SHIFT        (25U)
 
 typedef struct
 {
@@ -281,9 +281,9 @@ typedef struct
 
 typedef enum
 {
-    kFFR_KeyTypeSbkek = 0x00U,
-    kFFR_KeyTypeUser = 0x01U,
-    kFFR_KeyTypeUds = 0x02U,
+    kFFR_KeyTypeSbkek         = 0x00U,
+    kFFR_KeyTypeUser          = 0x01U,
+    kFFR_KeyTypeUds           = 0x02U,
     kFFR_KeyTypePrinceRegion0 = 0x03U,
     kFFR_KeyTypePrinceRegion1 = 0x04U,
     kFFR_KeyTypePrinceRegion2 = 0x05U,
@@ -340,35 +340,6 @@ status_t FFR_Lock(flash_config_t *config);
  * @retval #kStatus_FLASH_InvalidArgument An invalid argument is provided.
  */
 status_t FFR_SecLibInit(flash_config_t *config, uint32_t *context);
-
-status_t FFR_GetCustKeystoreData(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len);
-
-/*!
- * @brief APIs to access CFPA pages
- *
- * This routine will erase CFPA and program the CFPA page with passed data.
- *
- * @param config A pointer to the storage for the driver runtime state.
- *
- * @retval #kStatus_FLASH_Success The desire page-data were programed successfully into CFPA.
- * @retval #kStatus_FLASH_InvalidArgument An invalid argument is provided.
- * @retval #kStatus_FLASH_FfrBankIsLocked The FFR bank region is locked.
- * @retval #kStatus_FLASH_InvalidArgument An invalid argument is provided.
- * @retval #kStatus_FTFx_AddressError Address is out of range.
- * @retval #kStatus_FLASH_ReadHidingAreaDisallowed Flash hiding read is not allowed
- * @retval #kStatus_FLASH_CfpaScratchPageInvalid CFPA Scratch Page is invalid
- * @retval #kStatus_FLASH_CfpaVersionRollbackDisallowed CFPA version rollback is not allowed
- * @retval #kStatus_FLASH_AlignmentError Parameter is not aligned with the specified baseline
- * @retval #kStatus_FLASH_EraseKeyError API erase key is invalid.
- * @retval #kStatus_FLASH_ModifyProtectedAreaDisallowed Flash firewall page locked erase and program are not allowed
- * @retval #kStatus_FLASH_FfrBankIsLocked The CFPA was locked.
- * @retval #kStatus_FLASH_OutOfDateCfpaPage It is not newest CFPA page.
- * @retval #kStatus_FLASH_CommandFailure access error.
- * @retval #kStatus_FLASH_CommandNotSupported Flash API is not supported
- * @retval #kStatus_FLASH_EccError A correctable or uncorrectable error during command execution.
- * @retval #kStatus_FLASH_RegulationLoss A loss of regulation during read.
- */
-status_t FFR_CustomerPagesInit(flash_config_t *config);
 
 /*!
  * @brief APIs to access CFPA pages
@@ -474,7 +445,7 @@ status_t FFR_CustFactoryPageWrite(flash_config_t *config, uint8_t *page_data, bo
 status_t FFR_GetCustomerData(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len);
 
 /*!
- * @brief The API is used for getting the customer key store data from the customer key store region(0x3e400 ¨C 0x3e600),
+ * @brief The API is used for getting the customer key store data from the customer key store region(0x3e400 - 0x3e600),
  * and the API should be called after the FLASH_Init and FFR_Init.
  *
  * @param config A pointer to the storage for the driver runtime state.
@@ -531,31 +502,6 @@ status_t FFR_CustKeystoreWrite(flash_config_t *config, ffr_key_store_t *pKeyStor
  * @retval #kStatus_FLASH_RegulationLoss A loss of regulation during read.
  */
 status_t FFR_GetUUID(flash_config_t *config, uint8_t *uuid);
-
-/*!
- * @brief This routine writes the 3 pages allocated for Key store data,
- *
- * 1.Used during manufacturing. Should write pages when 'customer factory page' is not in sealed state.
- * 2.Optional routines to set individual data members (activation code, key codes etc) to construct
- * the key store structure in RAM before committing it to IFR/FFR.
- *
- * @param config A pointer to the storage for the driver runtime state.
- * @param pKeyStore A Pointer to the 3 pages allocated for Key store data.
- *        that will be written to 'customer factory page'.
- *
- * @retval #kStatus_FLASH_Success The key were programed successfully into FFR.
- * @retval #kStatus_FLASH_InvalidArgument Parameter is not aligned with the specified baseline.
- * @retval #kStatus_FTFx_AddressError Address is out of range.
- * @retval #kStatus_FLASH_CommandFailure access error.
- * @retval #kStatus_FLASH_SealedFfrRegion The FFR region is sealed.
- * @retval #kStatus_FLASH_AlignmentError Parameter is not aligned with the specified baseline.
- * @retval #kStatus_FLASH_AddressError Address is out of range
- * @retval #kStatus_FLASH_EraseKeyError API erase key is invalid.
- * @retval #kStatus_FLASH_ModifyProtectedAreaDisallowed Flash firewall page locked erase and program are not allowed
- * @retval #kStatus_FLASH_CommandNotSupported Flash API is not supported
- * @retval #kStatus_FLASH_RegulationLoss A loss of regulation during read.
- */
-status_t FFR_CustKeystoreWrite(flash_config_t *config, ffr_key_store_t *pKeyStore);
 
 /*@}*/
 

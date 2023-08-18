@@ -25,7 +25,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SPI driver version. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 /*! @brief SPI default SSEL COUNT*/
 #if !(defined(FSL_FEATURE_SPI_SSEL_COUNT) || defined(FSL_FEATURE_SPI_IS_SSEL_PIN_COUNT_EQUAL_TO_THREE))
@@ -37,7 +37,7 @@ extern volatile uint8_t s_dummyData[];
 
 #ifndef SPI_DUMMYDATA
 /*! @brief SPI dummy transfer data, the data is sent while txBuff is NULL. */
-#define SPI_DUMMYDATA (0x00U)
+#define SPI_DUMMYDATA (0xFFU)
 #endif
 
 /*! @brief Retry times for waiting flag. */

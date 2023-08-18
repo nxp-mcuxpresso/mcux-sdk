@@ -46,8 +46,18 @@ static uint32_t VREF_GetInstance(VREF_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
+    /*
+     * $Branch Coverage Justification$
+     * (instance >= ARRAY_SIZE(s_vrefBases)) not covered. The peripheral base
+     * address is always valid and checked by assert.
+     */
     for (instance = 0; instance < ARRAY_SIZE(s_vrefBases); instance++)
     {
+        /*
+         * $Branch Coverage Justification$
+         * (s_vrefBases[instance] != base) not covered. The peripheral base
+         * address is always valid and checked by assert.
+         */
         if (s_vrefBases[instance] == base)
         {
             break;
@@ -86,57 +96,50 @@ void VREF_Init(VREF_Type *base, const vref_config_t *config)
     CLOCK_EnableClock(s_vrefClocks[VREF_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
-    /* Enable low power bandgap at first. */
-    tmp32 = VREF_CSR_LPBGEN_MASK | VREF_CSR_LPBG_BUF_EN_MASK | VREF_CSR_VRSEL(config->vrefSel);
+    base->CSR |= VREF_CSR_LPBGEN_MASK;
+    /* After enabling low power bandgap, delay 20 us. */
+    SDK_DelayAtLeastUs(20U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
-    /* Configure buffer mode. */
-    switch (config->bufferMode)
+    /* Provides bias current for other peripherals. */
+    if (config->enableLowPowerBuff)
     {
-        case kVREF_ModeBandgapOnly:
-            break;
-        case kVREF_ModeLowPowerBuffer:
-            tmp32 |= VREF_CSR_BUF21EN_MASK;
-            break;
-        case kVREF_ModeHighPowerBuffer:
-            tmp32 |= (VREF_CSR_BUF21EN_MASK | VREF_CSR_HI_PWR_LV_MASK);
-            break;
-        default:
-            assert(false);
-            break;
+        base->CSR |= VREF_CSR_LPBG_BUF_EN_MASK;
     }
 
-    /* Enable internal voltage regulator */
-    if (config->enableInternalVoltageRegulator)
+    if (config->bufferMode != kVREF_ModeBandgapOnly)
     {
-        /* Enable internal voltage regulator to provide the optimum VREF performance. */
-        tmp32 |= VREF_CSR_REGEN_MASK | VREF_CSR_CHOPEN_MASK | VREF_CSR_ICOMPEN_MASK;
-        base->CSR = tmp32;
-        /* After enabling low power bandgap, delay 20 us. */
-        SDK_DelayAtLeastUs(20U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
-        /* Enable high accurancy bandgap for vref output. */
-        if (config->enableVrefOut)
-        {
-            base->CSR |= VREF_CSR_HCBGEN_MASK;
-        }
-        /* After enabling high accurancy bandgap, delay 400 us. */
-        SDK_DelayAtLeastUs(400U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
-    }
-    else
-    {
-        /* Enable high accurancy bandgap for vref output. */
-        if (config->enableVrefOut)
+        if (config->enableHCBandgap)
         {
             tmp32 |= VREF_CSR_HCBGEN_MASK;
-            base->CSR = tmp32;
-            /* Wait until internal voltage stable */
-            while ((base->CSR & VREF_CSR_VREFST_MASK) == 0U)
-            {
-            }
+        }
+
+        if (config->enableInternalVoltageRegulator)
+        {
+            tmp32 |= VREF_CSR_REGEN_MASK;
+        }
+
+        if (config->enableChopOscillator)
+        {
+            tmp32 |= (VREF_CSR_REGEN_MASK | VREF_CSR_CHOPEN_MASK);
+        }
+
+        if (config->enableCurvatureCompensation)
+        {
+            tmp32 |= VREF_CSR_ICOMPEN_MASK;
+        }
+
+        if (config->bufferMode == kVREF_ModeLowPowerBuffer)
+        {
+            tmp32 |= VREF_CSR_BUF21EN_MASK;
         }
         else
         {
-            base->CSR = tmp32;
+            tmp32 |= (VREF_CSR_BUF21EN_MASK | VREF_CSR_HI_PWR_LV_MASK);
         }
+
+        base->CSR |= tmp32;
+        /* After enabling high accurancy bandgap, delay 400 us. */
+        SDK_DelayAtLeastUs(400U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
     }
 }
 
@@ -171,8 +174,10 @@ void VREF_Deinit(VREF_Type *base)
  * code
  *    config->bufferMode = kVREF_ModeHighPowerBuffer;
  *    config->enableInternalVoltageRegulator = true;
- *    config->enableVrefOut = true;
- *    config->vrefSel = kVREF_InternalBandgap;
+ *    config->enableChopOscillator           = true;
+ *    config->enableHCBandgap                = true;
+ *    config->enableCurvatureCompensation    = true;
+ *    config->enableLowPowerBuff             = true;
  * endcode
  *
  * param config Pointer to the initialization structure.
@@ -186,8 +191,10 @@ void VREF_GetDefaultConfig(vref_config_t *config)
 
     config->bufferMode                     = kVREF_ModeHighPowerBuffer;
     config->enableInternalVoltageRegulator = true;
-    config->enableVrefOut                  = true;
-    config->vrefSel                        = kVREF_InternalBandgap;
+    config->enableChopOscillator           = true;
+    config->enableHCBandgap                = true;
+    config->enableCurvatureCompensation    = true;
+    config->enableLowPowerBuff             = true;
 }
 
 /*!
@@ -214,6 +221,12 @@ void VREF_SetVrefTrimVal(VREF_Type *base, uint8_t trimValue)
     }
     else
     {
+        /*Wait internal HC voltage reference stable*/
+        /*
+         * $Branch Coverage Justification$
+         * while ((base->CSR & VREF_CSR_VREFST_MASK) != 0U) not covered. Test unfeasible,
+         * the internal HC voltage stable state is too short not to catch.
+         */
         while ((base->CSR & VREF_CSR_VREFST_MASK) == 0U)
         {
         }
@@ -230,17 +243,14 @@ void VREF_SetVrefTrimVal(VREF_Type *base, uint8_t trimValue)
  * output voltage from 1.0V to 2.1V, other values will make the VREF_OUT to default value, 1.0V.
  *
  * param base VREF peripheral address.
- * param trimValue Value of the trim register to set the output reference voltage (maximum 0xF (4-bit)).
+ * param trim21Value Value of the trim register to set the output reference voltage (maximum 0xF (4-bit)).
  */
 void VREF_SetTrim21Val(VREF_Type *base, uint8_t trim21Value)
 {
     uint32_t tmp32 = base->UTRIM;
 
-    if (VREF_CSR_BUF21EN_MASK == (base->CSR & VREF_CSR_BUF21EN_MASK))
-    {
-        tmp32 &= (~VREF_UTRIM_TRIM2V1_MASK);
-        tmp32 |= VREF_UTRIM_TRIM2V1(trim21Value);
-    }
+    tmp32 &= (~VREF_UTRIM_TRIM2V1_MASK);
+    tmp32 |= VREF_UTRIM_TRIM2V1(trim21Value);
 
     base->UTRIM = tmp32;
 
@@ -251,6 +261,12 @@ void VREF_SetTrim21Val(VREF_Type *base, uint8_t trim21Value)
     }
     else
     {
+        /*Wait internal HC voltage reference stable*/
+        /*
+         * $Branch Coverage Justification$
+         * while ((base->CSR & VREF_CSR_VREFST_MASK) != 0U) not covered. Test unfeasible,
+         * the internal HC voltage stable state is too short not to catch.
+         */
         while ((base->CSR & VREF_CSR_VREFST_MASK) == 0U)
         {
         }
@@ -258,7 +274,7 @@ void VREF_SetTrim21Val(VREF_Type *base, uint8_t trim21Value)
 }
 
 /*!
- * brief Reads the VREF trim value..
+ * brief Reads the VREF trim value.
  *
  * This function gets the TRIM value from the UTRIM register. It reads UTRIM[VREFTRIM] (13:8)
  *
@@ -275,7 +291,7 @@ uint8_t VREF_GetVrefTrimVal(VREF_Type *base)
 }
 
 /*!
- * brief Reads the VREF 2.1V trim value..
+ * brief Reads the VREF 2.1V trim value.
  *
  * This function gets the TRIM value from the UTRIM register. It reads UTRIM[TRIM2V1] (3:0),
  *

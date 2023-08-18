@@ -243,6 +243,10 @@ typedef enum _SYSCON_RSTn
     {                             \
         kPOWERQUAD_RST_SHIFT_RSTn \
     } /* Reset bits for Powerquad peripheral */
+#define PUF_RSTS            \
+    {                       \
+        kPUF_RST_SHIFT_RSTn \
+    } /* Reset bits for PUF peripheral */
 typedef SYSCON_RSTn_t reset_ip_name_t;
 
 /*******************************************************************************

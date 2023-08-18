@@ -303,7 +303,7 @@ extern "C" {
  * @retval kStatus_HAL_UartBaudrateNotSupport Baudrate is not support in current clock source.
  * @retval kStatus_HAL_UartSuccess UART initialization succeed
  */
-hal_uart_status_t HAL_UartInit(hal_uart_handle_t handle, const hal_uart_config_t *uart_config);
+hal_uart_status_t HAL_UartInit(hal_uart_handle_t handle, const hal_uart_config_t *config);
 
 /*!
  * @brief Deinitializes a UART instance.

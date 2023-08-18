@@ -9,6 +9,7 @@
 
 #include "mflash_drv.h"
 #include "fsl_flash.h"
+#include "fsl_flash_ffr.h"
 #include "pin_mux.h"
 
 static flash_config_t g_flash_instance = {0};
@@ -24,6 +25,10 @@ int32_t mflash_drv_init(void)
     status_t result;
 
     result = FLASH_Init(&g_flash_instance);
+    if (result != kStatus_Success)
+        return result;
+
+    result = FFR_Init(&g_flash_instance);
     if (result != kStatus_Success)
         return result;
 

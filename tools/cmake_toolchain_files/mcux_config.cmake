@@ -44,6 +44,7 @@ endfunction()
 
 function(set_debug_console DEBUG_CONSOLE LIBRARY_TYPE)
 if(${DEBUG_CONSOLE} MATCHES "SEMIHOST")
+    set(SPECS "--specs=rdimon.specs" PARENT_SCOPE)
     set(DEBUG_CONSOLE_CONFIG "-DSDK_DEBUGCONSOLE=0" PARENT_SCOPE)
 else()
     set(SPECS "--specs=nano.specs --specs=nosys.specs" PARENT_SCOPE)

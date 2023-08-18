@@ -172,6 +172,9 @@
 #define BOARD_SERIAL_MWM_PORT_IRQn     FLEXCOMM2_IRQn
 #define BOARD_SERIAL_MWM_RST_WRITE(output)
 
+/* DMIC channel configuration */
+#define BOARD_DMIC_CHANNEL_STEREO_SIDE_SWAP (1)
+
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */

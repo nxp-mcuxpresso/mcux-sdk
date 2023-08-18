@@ -130,7 +130,7 @@ if (CONFIG_USE_component_osa_thread)
 
 message("component_osa_thread component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_common AND CONFIG_USE_component_lists AND CONFIG_USE_component_osa_interface AND (CONFIG_USE_middleware_azure_rtos_tx OR CONFIG_USE_middleware_azure_rtos_tx_sp))
+if(CONFIG_USE_driver_common AND CONFIG_USE_component_lists AND CONFIG_USE_component_osa_interface)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/./fsl_os_abstraction_threadx.c

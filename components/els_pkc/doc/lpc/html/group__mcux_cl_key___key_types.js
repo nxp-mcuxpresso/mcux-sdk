@@ -1,0 +1,26 @@
+var group__mcux_cl_key___key_types =
+[
+    [ "MCUXCLKEY_ALGO_ID_AES", "group__mcux_cl_key___key_types.html#gaf342031191b667161f2db471ddbc1724", null ],
+    [ "MCUXCLKEY_ALGO_ID_RSA", "group__mcux_cl_key___key_types.html#ga728c97658536b4430e2b0e2c7373f141", null ],
+    [ "MCUXCLKEY_ALGO_ID_ECC_SHWS_GFP", "group__mcux_cl_key___key_types.html#ga2270daa12f0592b07c5a657d3cc1ae87", null ],
+    [ "MCUXCLKEY_ALGO_ID_ECC_SHWS_GF2M", "group__mcux_cl_key___key_types.html#ga77f445482782348f049443d35a21662e", null ],
+    [ "MCUXCLKEY_ALGO_ID_ECC_MONTDH", "group__mcux_cl_key___key_types.html#gaace809498ccbffd63bc29f2b6d3a8db3", null ],
+    [ "MCUXCLKEY_ALGO_ID_ECC_EDDSA", "group__mcux_cl_key___key_types.html#gacbfa2e595e1fb1c6152cb4587ea01346", null ],
+    [ "MCUXCLKEY_ALGO_ID_HMAC", "group__mcux_cl_key___key_types.html#gadb9ccdf41fc6a4868a0db982a601e226", null ],
+    [ "MCUXCLKEY_ALGO_ID_SM4", "group__mcux_cl_key___key_types.html#ga8edc6b9dbe321d4e8a7f0681c4109111", null ],
+    [ "MCUXCLKEY_ALGO_ID_SM2", "group__mcux_cl_key___key_types.html#gad4879e15a76d3c52e08855d993ba252e", null ],
+    [ "MCUXCLKEY_ALGO_ID_ECC_SHWS_GFP_EPHEMERAL_CUSTOM", "group__mcux_cl_key___key_types.html#gad51657624280512bd92719790363d763", null ],
+    [ "MCUXCLKEY_ALGO_ID_ECC_SHWS_GFP_STATIC_CUSTOM", "group__mcux_cl_key___key_types.html#ga8de9456ab126f7227b1077462fbca3b4", null ],
+    [ "MCUXCLKEY_ALGO_ID_ALGO_MASK", "group__mcux_cl_key___key_types.html#gaf933f3469276e89b07aa395f90e2d180", null ],
+    [ "MCUXCLKEY_ALGO_ID_SYMMETRIC_KEY", "group__mcux_cl_key___key_types.html#gaa4fb66afe4c13047acc47ebf6d69e16e", null ],
+    [ "MCUXCLKEY_ALGO_ID_PUBLIC_KEY", "group__mcux_cl_key___key_types.html#ga59fde148cf2683ed4371524df7ae3f06", null ],
+    [ "MCUXCLKEY_ALGO_ID_PRIVATE_KEY", "group__mcux_cl_key___key_types.html#ga18dcc408cf88d59a8d55fcfd3efd3b75", null ],
+    [ "MCUXCLKEY_ALGO_ID_PRIVATE_KEY_CRT", "group__mcux_cl_key___key_types.html#gacc27c79457fc64101a84a110014f92e1", null ],
+    [ "MCUXCLKEY_ALGO_ID_KEY_PAIR", "group__mcux_cl_key___key_types.html#ga73033441ba95ee2e3dd88a2d14f30bd5", null ],
+    [ "MCUXCLKEY_ALGO_ID_PRIVATE_KEY_CRT_DFA", "group__mcux_cl_key___key_types.html#gabe8f17c80217f51dd7833e97ca169eee", null ],
+    [ "MCUXCLKEY_ALGO_ID_USAGE_MASK", "group__mcux_cl_key___key_types.html#gadb73c82af33ca9b97d8465c36defdd6a", null ],
+    [ "mcuxClKey_TypeDescriptor_HmacSha256_variableLength", "group__mcux_cl_key___key_types.html#ga127988458fbd71baa9a726494f54f1b9", null ],
+    [ "mcuxClKey_Type_HmacSha256_variableLength", "group__mcux_cl_key___key_types.html#gab3207c05bd6ad538732fdf17186e780a", null ],
+    [ "mcuxClKey_TypeDescriptor_HmacSha256", "group__mcux_cl_key___key_types.html#gaa7829411660f435c478e54884f9dc235", null ],
+    [ "mcuxClKey_Type_HmacSha256", "group__mcux_cl_key___key_types.html#ga6d1ebb714b890c9b193a68edb3038720", null ]
+];

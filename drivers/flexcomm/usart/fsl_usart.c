@@ -230,7 +230,7 @@ status_t USART_Init(USART_Type *base, const usart_config_t *config, uint32_t src
         base->FIFOTRIG |= USART_FIFOTRIG_RXLVLENA_MASK;
     }
 #if defined(FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG) && FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG
-    USART_SetRxTimeoutConfig(base, (usart_rx_timeout_config *)&(config->rxTimeout));
+    USART_SetRxTimeoutConfig(base, &(config->rxTimeout));
 #endif
     /* setup configuration and enable USART */
     base->CFG = USART_CFG_PARITYSEL(config->parityMode) | USART_CFG_STOPLEN(config->stopBitCount) |
@@ -361,17 +361,17 @@ void USART_CalcTimeoutConfig(uint32_t target_us,
                              uint32_t *rxTimeoutcounter,
                              uint32_t srcClock_Hz)
 {
-    uint16_t counter   = 0U;
+    uint32_t counter   = 0U;
     uint32_t perscalar = 0U, calculate_us = 0U, us_diff = 0U, min_diff = 0xffffffffUL;
     /* find the suitable value */
     for (perscalar = 0U; perscalar < 256U; perscalar++)
     {
-        counter      = target_us * (srcClock_Hz / 1000000UL) / (16U * (perscalar + 1U));
+        counter      =  target_us * (srcClock_Hz / 1000000UL) / (16U * (perscalar + 1U));
         calculate_us = 16U * (perscalar + 1U) * counter / (srcClock_Hz / 1000000UL);
         us_diff      = (calculate_us > target_us) ? (calculate_us - target_us) : (target_us - calculate_us);
         if (us_diff == 0U)
         {
-            *rxTimeoutPrescaler = perscalar;
+            *rxTimeoutPrescaler = (uint8_t)perscalar;
             *rxTimeoutcounter   = counter;
             break;
         }
@@ -380,7 +380,7 @@ void USART_CalcTimeoutConfig(uint32_t target_us,
             if (min_diff > us_diff)
             {
                 min_diff            = us_diff;
-                *rxTimeoutPrescaler = perscalar;
+                *rxTimeoutPrescaler = (uint8_t)perscalar;
                 *rxTimeoutcounter   = counter;
             }
         }
@@ -395,7 +395,7 @@ void USART_CalcTimeoutConfig(uint32_t target_us,
  * param base USART peripheral base address.
  * param config pointer to receive timeout configuration structure.
  */
-void USART_SetRxTimeoutConfig(USART_Type *base, usart_rx_timeout_config *config)
+void USART_SetRxTimeoutConfig(USART_Type *base, const usart_rx_timeout_config *config)
 {
     base->FIFORXTIMEOUTCFG = 0U;
     base->FIFORXTIMEOUTCFG = USART_FIFORXTIMEOUTCFG_RXTIMEOUT_COW((config->resetCounterOnReceive) ? 0U : 1U) |

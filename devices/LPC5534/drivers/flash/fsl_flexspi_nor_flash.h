@@ -592,7 +592,7 @@ status_t FLEXSPI_NorFlash_EraseSector(uint32_t instance, flexspi_nor_config_t *c
  * @retval #kStatus_FLEXSPI_SequenceExecutionTimeout Sequence Execution timeout.
  * @retval #kStatus_FLEXSPI_DeviceTimeout the device timeout
  */
-status_t FLEXSPI_NorFlash_Erase_Block(uint32_t instance, flexspi_nor_config_t *config, uint32_t address);
+status_t FLEXSPI_NorFlash_EraseBlock(uint32_t instance, flexspi_nor_config_t *config, uint32_t address);
 
 /*!
  * @brief Get FLEXSPI NOR Configuration Block based on specified option.
@@ -683,14 +683,14 @@ status_t FLEXSPI_NorFlash_CommandXfer(uint32_t instance, flexspi_xfer_t *xfer);
  * @param instance storage the index of FLEXSPI.
  * @param seqIndex storage the sequence Id.
  * @param lutBase A pointer to the look-up-table for command sequences.
- * @param seqNumber storage sequence number.
+ * @param numberOfSeq storage sequence number.
  *
  * @retval kStatus_Success Api was executed succesfuly.
  * @retval kStatus_InvalidArgument A invalid argument is provided.
  * @retval kStatus_ROM_FLEXSPI_InvalidSequence A invalid Sequence is provided.
  * @retval kStatus_ROM_FLEXSPI_SequenceExecutionTimeout Sequence Execution timeout.
  */
-status_t FLEXSPI_NorFlash_UpdateLut(uint32_t instance, uint32_t seqIndex, const uint32_t *lutBase, uint32_t seqNumber);
+status_t FLEXSPI_NorFlash_UpdateLut(uint32_t instance, uint32_t seqIndex, const uint32_t *lutBase, uint32_t numberOfSeq);
 
 /*!
  * @brief Set the clock source for FLEXSPI NOR
@@ -701,6 +701,15 @@ status_t FLEXSPI_NorFlash_UpdateLut(uint32_t instance, uint32_t seqIndex, const 
  * @retval #kStatus_InvalidArgument A invalid argument is provided.
  */
 status_t FLEXSPI_NorFlash_SetClockSource(uint32_t clockSource);
+
+/*!
+ * @brief config flexspi clock
+ *
+ * @param instance storage the index of FLEXSPI.
+ * @param freqOption pointer to FlexSPIFlexSPI flash serial clock frequency.
+ * @param sampleClkMode pointer to configure the FlexSPI clock configuration type.
+ */
+void FLEXSPI_NorFlash_ConfigClock(uint32_t instance, uint32_t freqOption, uint32_t sampleClkMode);
 
 #ifdef __cplusplus
 }

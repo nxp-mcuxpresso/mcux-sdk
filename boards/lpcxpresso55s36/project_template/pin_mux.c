@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -14,16 +14,18 @@
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Pins v10.0
+product: Pins v11.0
 processor: LPC55S36
 package_id: LPC55S36JBD100
 mcu_data: ksdk2_0
-processor_version: 0.10.2
+processor_version: 11.0.0
+board: LPCXpresso55S36
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
 
 #include "fsl_common.h"
+#include "fsl_gpio.h"
 #include "fsl_iocon.h"
 #include "pin_mux.h"
 
@@ -35,13 +37,13 @@ processor_version: 0.10.2
  * END ****************************************************************************************************************/
 void BOARD_InitBootPins(void)
 {
-    BOARD_InitPins();
+    BOARD_InitDEBUG_UARTPins();
 }
 
 /* clang-format off */
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-BOARD_InitPins:
+BOARD_InitDEBUG_UARTPins:
 - options: {callFromInitBoot: 'true', coreID: cm33_core0, enableClock: 'true'}
 - pin_list:
   - {pin_num: '93', peripheral: FLEXCOMM0, signal: RXD_SDA_MOSI_DATA, pin_signal: PIO0_29/FC0_RXD_SDA_MOSI_DATA/CTIMER2_MAT3/SCT0_OUT8/TRACEDATA2/FC6_RXD_SDA_MOSI_DATA/CMP0_OUT/SECURE_GPIO0_29/PWM0_A1/SPI_DIN/EXTTRIG_IN3,
@@ -54,12 +56,12 @@ BOARD_InitPins:
 
 /* FUNCTION ************************************************************************************************************
  *
- * Function Name : BOARD_InitPins
+ * Function Name : BOARD_InitDEBUG_UARTPins
  * Description   : Configures pin routing and optionally pin electrical features.
  *
  * END ****************************************************************************************************************/
 /* Function assigned for the Cortex-M33 */
-void BOARD_InitPins(void)
+void BOARD_InitDEBUG_UARTPins(void)
 {
     /* Enables the clock for the I/O controller.: Enable Clock. */
     CLOCK_EnableClock(kCLOCK_Iocon);
@@ -93,6 +95,424 @@ void BOARD_InitPins(void)
                                          IOCON_PIO_OPENDRAIN_DI);
     /* PORT0 PIN30 (coords: 95) is configured as FC0_TXD_SCL_MISO_WS */
     IOCON_PinMuxSet(IOCON, 0U, 30U, port0_pin30_config);
+}
+
+/* clang-format off */
+/*
+ * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+BOARD_InitSWD_DEBUGPins:
+- options: {callFromInitBoot: 'false', coreID: cm33_core0, enableClock: 'true'}
+- pin_list:
+  - {pin_num: '54', peripheral: SWD, signal: SWCLK, pin_signal: PIO0_0/FC3_SCK/CTIMER0_MAT0/SCT_GPI0/PDM_DATA0/SWCLK/SECURE_GPIO0_0/PWM1_B2/EXTTRIG_IN8/ACMP0_A, mode: pullDown,
+    slew_rate: standard, invert: disabled, open_drain: disabled, asw0: disabled}
+  - {pin_num: '55', peripheral: SWD, signal: SWDIO, pin_signal: PIO0_9/FC3_SSEL2/FC5_TXD_SCL_MISO_WS/I3C0_SCL/SWDIO/SECURE_GPIO0_9/PWM1_A2/TRIGOUT_2/ACMP0_B, mode: pullUp,
+    slew_rate: standard, invert: disabled, open_drain: disabled, asw0: disabled}
+  - {pin_num: '56', peripheral: SWD, signal: SWO, pin_signal: PIO0_18/FC4_CTS_SDA_SSEL0/CTIMER1_MAT0/SCT0_OUT1/FC5_RXD_SDA_MOSI_DATA/SWO/SECURE_GPIO0_18/PWM1_A0/QSPI_DIN1/TRIGOUT_7/ACMP0_C,
+    mode: inactive, slew_rate: standard, invert: disabled, open_drain: disabled, asw0: disabled}
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
+ */
+/* clang-format on */
+
+/* FUNCTION ************************************************************************************************************
+ *
+ * Function Name : BOARD_InitSWD_DEBUGPins
+ * Description   : Configures pin routing and optionally pin electrical features.
+ *
+ * END ****************************************************************************************************************/
+/* Function assigned for the Cortex-M33 */
+void BOARD_InitSWD_DEBUGPins(void)
+{
+    /* Enables the clock for the I/O controller.: Enable Clock. */
+    CLOCK_EnableClock(kCLOCK_Iocon);
+
+    const uint32_t port0_pin0_config = (/* Pin is configured as SWCLK */
+                                        IOCON_PIO_FUNC9 |
+                                        /* Selects pull-down function */
+                                        IOCON_PIO_MODE_PULLDOWN |
+                                        /* Standard mode, output slew rate control is enabled */
+                                        IOCON_PIO_SLEW_STANDARD |
+                                        /* Input function is not inverted */
+                                        IOCON_PIO_INV_DI |
+                                        /* Enables digital function */
+                                        IOCON_PIO_DIGITAL_EN |
+                                        /* Open drain is disabled */
+                                        IOCON_PIO_OPENDRAIN_DI |
+                                        /* Analog switch 0 is open (disabled) */
+                                        IOCON_PIO_ASW0_DI);
+    /* PORT0 PIN0 (coords: 54) is configured as SWCLK */
+    IOCON_PinMuxSet(IOCON, 0U, 0U, port0_pin0_config);
+
+    const uint32_t port0_pin18_config = (/* Pin is configured as SWO */
+                                         IOCON_PIO_FUNC8 |
+                                         /* No addition pin function */
+                                         IOCON_PIO_MODE_INACT |
+                                         /* Standard mode, output slew rate control is enabled */
+                                         IOCON_PIO_SLEW_STANDARD |
+                                         /* Input function is not inverted */
+                                         IOCON_PIO_INV_DI |
+                                         /* Enables digital function */
+                                         IOCON_PIO_DIGITAL_EN |
+                                         /* Open drain is disabled */
+                                         IOCON_PIO_OPENDRAIN_DI |
+                                         /* Analog switch 0 is open (disabled) */
+                                         IOCON_PIO_ASW0_DI);
+    /* PORT0 PIN18 (coords: 56) is configured as SWO */
+    IOCON_PinMuxSet(IOCON, 0U, 18U, port0_pin18_config);
+
+    const uint32_t port0_pin9_config = (/* Pin is configured as SWDIO */
+                                        IOCON_PIO_FUNC9 |
+                                        /* Selects pull-up function */
+                                        IOCON_PIO_MODE_PULLUP |
+                                        /* Standard mode, output slew rate control is enabled */
+                                        IOCON_PIO_SLEW_STANDARD |
+                                        /* Input function is not inverted */
+                                        IOCON_PIO_INV_DI |
+                                        /* Enables digital function */
+                                        IOCON_PIO_DIGITAL_EN |
+                                        /* Open drain is disabled */
+                                        IOCON_PIO_OPENDRAIN_DI |
+                                        /* Analog switch 0 is open (disabled) */
+                                        IOCON_PIO_ASW0_DI);
+    /* PORT0 PIN9 (coords: 55) is configured as SWDIO */
+    IOCON_PinMuxSet(IOCON, 0U, 9U, port0_pin9_config);
+}
+
+/* clang-format off */
+/*
+ * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+BOARD_InitUSBPins:
+- options: {callFromInitBoot: 'false', coreID: cm33_core0, enableClock: 'true'}
+- pin_list:
+  - {pin_num: '92', peripheral: USBFSH, signal: USB_VBUS, pin_signal: PIO1_31/MCLK/CTIMER0_MAT2/SCT0_OUT6/USB0_VBUS/PWM1_B2/EXTTRIG_IN2, mode: inactive, slew_rate: standard,
+    invert: disabled, open_drain: disabled}
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
+ */
+/* clang-format on */
+
+/* FUNCTION ************************************************************************************************************
+ *
+ * Function Name : BOARD_InitUSBPins
+ * Description   : Configures pin routing and optionally pin electrical features.
+ *
+ * END ****************************************************************************************************************/
+/* Function assigned for the Cortex-M33 */
+void BOARD_InitUSBPins(void)
+{
+    /* Enables the clock for the I/O controller.: Enable Clock. */
+    CLOCK_EnableClock(kCLOCK_Iocon);
+
+    const uint32_t port1_pin31_config = (/* Pin is configured as USB0_VBUS */
+                                         IOCON_PIO_FUNC7 |
+                                         /* No addition pin function */
+                                         IOCON_PIO_MODE_INACT |
+                                         /* Standard mode, output slew rate control is enabled */
+                                         IOCON_PIO_SLEW_STANDARD |
+                                         /* Input function is not inverted */
+                                         IOCON_PIO_INV_DI |
+                                         /* Enables digital function */
+                                         IOCON_PIO_DIGITAL_EN |
+                                         /* Open drain is disabled */
+                                         IOCON_PIO_OPENDRAIN_DI);
+    /* PORT1 PIN31 (coords: 92) is configured as USB0_VBUS */
+    IOCON_PinMuxSet(IOCON, 1U, 31U, port1_pin31_config);
+}
+
+/* clang-format off */
+/*
+ * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+BOARD_InitLEDsPins:
+- options: {callFromInitBoot: 'false', coreID: cm33_core0, enableClock: 'true'}
+- pin_list:
+  - {pin_num: '72', peripheral: GPIO, signal: 'PIO1, 28', pin_signal: PIO1_28/FC7_SCK/CT_INP2/TRIGOUT_4/PWM1_X3/SPI_CS1_DIS/HSCMP1_OUT, direction: OUTPUT, gpio_init_state: 'true',
+    mode: inactive, slew_rate: standard, invert: disabled, open_drain: disabled}
+  - {pin_num: '78', peripheral: GPIO, signal: 'PIO0, 22', pin_signal: PIO0_22/FC6_TXD_SCL_MISO_WS/UTICK_CAP1/CT_INP15/SCT0_OUT3/FLEXSPI0_SCLK_N/FLEXSPI0_SS1_N/USB0_VBUS/FC7_RTS_SCL_SSEL1/SECURE_GPIO0_22/PWM1_X0/EXTTRIG_IN5,
+    direction: OUTPUT, gpio_init_state: 'true', mode: inactive, slew_rate: standard, invert: disabled, open_drain: disabled}
+  - {pin_num: '94', peripheral: GPIO, signal: 'PIO1, 11', pin_signal: PIO1_11/FC1_TXD_SCL_MISO_WS/CT_INP5/USB0_VBUS/HS_SPI_SSEL0/FC6_SCK/PWM0_A0/SPI_SCLK/EXTTRIG_IN8,
+    direction: OUTPUT, gpio_init_state: 'true', mode: inactive, slew_rate: standard, invert: disabled, open_drain: disabled}
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
+ */
+/* clang-format on */
+
+/* FUNCTION ************************************************************************************************************
+ *
+ * Function Name : BOARD_InitLEDsPins
+ * Description   : Configures pin routing and optionally pin electrical features.
+ *
+ * END ****************************************************************************************************************/
+/* Function assigned for the Cortex-M33 */
+void BOARD_InitLEDsPins(void)
+{
+    /* Enables the clock for the I/O controller.: Enable Clock. */
+    CLOCK_EnableClock(kCLOCK_Iocon);
+
+    /* Enables the clock for the GPIO0 module */
+    CLOCK_EnableClock(kCLOCK_Gpio0);
+
+    /* Enables the clock for the GPIO1 module */
+    CLOCK_EnableClock(kCLOCK_Gpio1);
+
+    gpio_pin_config_t LED_GREEN_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 1U
+    };
+    /* Initialize GPIO functionality on pin PIO0_22 (pin 78)  */
+    GPIO_PinInit(BOARD_INITLEDSPINS_LED_GREEN_GPIO, BOARD_INITLEDSPINS_LED_GREEN_PORT, BOARD_INITLEDSPINS_LED_GREEN_PIN, &LED_GREEN_config);
+
+    gpio_pin_config_t LED_BLUE_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 1U
+    };
+    /* Initialize GPIO functionality on pin PIO1_11 (pin 94)  */
+    GPIO_PinInit(BOARD_INITLEDSPINS_LED_BLUE_GPIO, BOARD_INITLEDSPINS_LED_BLUE_PORT, BOARD_INITLEDSPINS_LED_BLUE_PIN, &LED_BLUE_config);
+
+    gpio_pin_config_t LED_RED_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 1U
+    };
+    /* Initialize GPIO functionality on pin PIO1_28 (pin 72)  */
+    GPIO_PinInit(BOARD_INITLEDSPINS_LED_RED_GPIO, BOARD_INITLEDSPINS_LED_RED_PORT, BOARD_INITLEDSPINS_LED_RED_PIN, &LED_RED_config);
+
+    const uint32_t LED_GREEN = (/* Pin is configured as PIO0_22 */
+                                IOCON_PIO_FUNC0 |
+                                /* No addition pin function */
+                                IOCON_PIO_MODE_INACT |
+                                /* Standard mode, output slew rate control is enabled */
+                                IOCON_PIO_SLEW_STANDARD |
+                                /* Input function is not inverted */
+                                IOCON_PIO_INV_DI |
+                                /* Enables digital function */
+                                IOCON_PIO_DIGITAL_EN |
+                                /* Open drain is disabled */
+                                IOCON_PIO_OPENDRAIN_DI);
+    /* PORT0 PIN22 (coords: 78) is configured as PIO0_22 */
+    IOCON_PinMuxSet(IOCON, BOARD_INITLEDSPINS_LED_GREEN_PORT, BOARD_INITLEDSPINS_LED_GREEN_PIN, LED_GREEN);
+
+    const uint32_t LED_BLUE = (/* Pin is configured as PIO1_11 */
+                               IOCON_PIO_FUNC0 |
+                               /* No addition pin function */
+                               IOCON_PIO_MODE_INACT |
+                               /* Standard mode, output slew rate control is enabled */
+                               IOCON_PIO_SLEW_STANDARD |
+                               /* Input function is not inverted */
+                               IOCON_PIO_INV_DI |
+                               /* Enables digital function */
+                               IOCON_PIO_DIGITAL_EN |
+                               /* Open drain is disabled */
+                               IOCON_PIO_OPENDRAIN_DI);
+    /* PORT1 PIN11 (coords: 94) is configured as PIO1_11 */
+    IOCON_PinMuxSet(IOCON, BOARD_INITLEDSPINS_LED_BLUE_PORT, BOARD_INITLEDSPINS_LED_BLUE_PIN, LED_BLUE);
+
+    const uint32_t LED_RED = (/* Pin is configured as PIO1_28 */
+                              IOCON_PIO_FUNC0 |
+                              /* No addition pin function */
+                              IOCON_PIO_MODE_INACT |
+                              /* Standard mode, output slew rate control is enabled */
+                              IOCON_PIO_SLEW_STANDARD |
+                              /* Input function is not inverted */
+                              IOCON_PIO_INV_DI |
+                              /* Enables digital function */
+                              IOCON_PIO_DIGITAL_EN |
+                              /* Open drain is disabled */
+                              IOCON_PIO_OPENDRAIN_DI);
+    /* PORT1 PIN28 (coords: 72) is configured as PIO1_28 */
+    IOCON_PinMuxSet(IOCON, BOARD_INITLEDSPINS_LED_RED_PORT, BOARD_INITLEDSPINS_LED_RED_PIN, LED_RED);
+}
+
+/* clang-format off */
+/*
+ * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+BOARD_InitBUTTONsPins:
+- options: {callFromInitBoot: 'false', coreID: cm33_core0, enableClock: 'true'}
+- pin_list:
+  - {pin_num: '41', peripheral: GPIO, signal: 'PIO0, 17', pin_signal: PIO0_17/FC4_SSEL2/SCT_GPI7/SCT0_OUT0/FC5_RXD_SDA_MOSI_DATA/QSPI_SCLK/SECURE_GPIO0_17/TRIGOUT_7/HSCMP1_OUT/HSCMP2_IN0,
+    identifier: USR, direction: INPUT, mode: inactive, slew_rate: standard, invert: disabled, open_drain: disabled, asw0: disabled}
+  - {pin_num: '64', peripheral: GPIO, signal: 'PIO1, 18', pin_signal: PIO1_18/TAMPER3/SCT0_OUT5/RTC_ALARMOUT/PWM0_A2/QSPI_DIN3/HSCMP2_OUT, identifier: WK_TMP, direction: INPUT,
+    mode: inactive, slew_rate: standard, invert: disabled, open_drain: disabled}
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
+ */
+/* clang-format on */
+
+/* FUNCTION ************************************************************************************************************
+ *
+ * Function Name : BOARD_InitBUTTONsPins
+ * Description   : Configures pin routing and optionally pin electrical features.
+ *
+ * END ****************************************************************************************************************/
+/* Function assigned for the Cortex-M33 */
+void BOARD_InitBUTTONsPins(void)
+{
+    /* Enables the clock for the I/O controller.: Enable Clock. */
+    CLOCK_EnableClock(kCLOCK_Iocon);
+
+    /* Enables the clock for the GPIO0 module */
+    CLOCK_EnableClock(kCLOCK_Gpio0);
+
+    /* Enables the clock for the GPIO1 module */
+    CLOCK_EnableClock(kCLOCK_Gpio1);
+
+    gpio_pin_config_t USR_config = {
+        .pinDirection = kGPIO_DigitalInput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PIO0_17 (pin 41)  */
+    GPIO_PinInit(BOARD_INITBUTTONSPINS_USR_GPIO, BOARD_INITBUTTONSPINS_USR_PORT, BOARD_INITBUTTONSPINS_USR_PIN, &USR_config);
+
+    gpio_pin_config_t WK_TMP_config = {
+        .pinDirection = kGPIO_DigitalInput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PIO1_18 (pin 64)  */
+    GPIO_PinInit(BOARD_INITBUTTONSPINS_WK_TMP_GPIO, BOARD_INITBUTTONSPINS_WK_TMP_PORT, BOARD_INITBUTTONSPINS_WK_TMP_PIN, &WK_TMP_config);
+
+    const uint32_t USR = (/* Pin is configured as PIO0_17 */
+                          IOCON_PIO_FUNC0 |
+                          /* No addition pin function */
+                          IOCON_PIO_MODE_INACT |
+                          /* Standard mode, output slew rate control is enabled */
+                          IOCON_PIO_SLEW_STANDARD |
+                          /* Input function is not inverted */
+                          IOCON_PIO_INV_DI |
+                          /* Enables digital function */
+                          IOCON_PIO_DIGITAL_EN |
+                          /* Open drain is disabled */
+                          IOCON_PIO_OPENDRAIN_DI |
+                          /* Analog switch 0 is open (disabled) */
+                          IOCON_PIO_ASW0_DI);
+    /* PORT0 PIN17 (coords: 41) is configured as PIO0_17 */
+    IOCON_PinMuxSet(IOCON, BOARD_INITBUTTONSPINS_USR_PORT, BOARD_INITBUTTONSPINS_USR_PIN, USR);
+
+    const uint32_t WK_TMP = (/* Pin is configured as PIO1_18 */
+                             IOCON_PIO_FUNC0 |
+                             /* No addition pin function */
+                             IOCON_PIO_MODE_INACT |
+                             /* Standard mode, output slew rate control is enabled */
+                             IOCON_PIO_SLEW_STANDARD |
+                             /* Input function is not inverted */
+                             IOCON_PIO_INV_DI |
+                             /* Enables digital function */
+                             IOCON_PIO_DIGITAL_EN |
+                             /* Open drain is disabled */
+                             IOCON_PIO_OPENDRAIN_DI);
+    /* PORT1 PIN18 (coords: 64) is configured as PIO1_18 */
+    IOCON_PinMuxSet(IOCON, BOARD_INITBUTTONSPINS_WK_TMP_PORT, BOARD_INITBUTTONSPINS_WK_TMP_PIN, WK_TMP);
+}
+
+/* clang-format off */
+/*
+ * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+BOARD_InitCANPins:
+- options: {callFromInitBoot: 'false', coreID: cm33_core0, enableClock: 'true'}
+- pin_list:
+  - {pin_num: '62', peripheral: CAN0, signal: CAN_RD, pin_signal: PIO1_3/CAN0_RD/FC2_TXD_SCL_MISO_WS/SCT0_OUT4/PDM_DATA1/HS_SPI_MISO/USB0_PORTPWRN/PWM0_A3, mode: inactive,
+    slew_rate: standard, invert: disabled, open_drain: disabled}
+  - {pin_num: '61', peripheral: CAN0, signal: CAN_TD, pin_signal: PIO1_2/CAN0_TD/CTIMER0_MAT3/SCT_GPI6/PDM_CLK1/HS_SPI_SCK/PWM0_B0/AOI0_OUT0, mode: inactive, slew_rate: standard,
+    invert: disabled, open_drain: disabled}
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
+ */
+/* clang-format on */
+
+/* FUNCTION ************************************************************************************************************
+ *
+ * Function Name : BOARD_InitCANPins
+ * Description   : Configures pin routing and optionally pin electrical features.
+ *
+ * END ****************************************************************************************************************/
+/* Function assigned for the Cortex-M33 */
+void BOARD_InitCANPins(void)
+{
+    /* Enables the clock for the I/O controller.: Enable Clock. */
+    CLOCK_EnableClock(kCLOCK_Iocon);
+
+    const uint32_t port1_pin2_config = (/* Pin is configured as CAN0_TD */
+                                        IOCON_PIO_FUNC1 |
+                                        /* No addition pin function */
+                                        IOCON_PIO_MODE_INACT |
+                                        /* Standard mode, output slew rate control is enabled */
+                                        IOCON_PIO_SLEW_STANDARD |
+                                        /* Input function is not inverted */
+                                        IOCON_PIO_INV_DI |
+                                        /* Enables digital function */
+                                        IOCON_PIO_DIGITAL_EN |
+                                        /* Open drain is disabled */
+                                        IOCON_PIO_OPENDRAIN_DI);
+    /* PORT1 PIN2 (coords: 61) is configured as CAN0_TD */
+    IOCON_PinMuxSet(IOCON, 1U, 2U, port1_pin2_config);
+
+    const uint32_t port1_pin3_config = (/* Pin is configured as CAN0_RD */
+                                        IOCON_PIO_FUNC1 |
+                                        /* No addition pin function */
+                                        IOCON_PIO_MODE_INACT |
+                                        /* Standard mode, output slew rate control is enabled */
+                                        IOCON_PIO_SLEW_STANDARD |
+                                        /* Input function is not inverted */
+                                        IOCON_PIO_INV_DI |
+                                        /* Enables digital function */
+                                        IOCON_PIO_DIGITAL_EN |
+                                        /* Open drain is disabled */
+                                        IOCON_PIO_OPENDRAIN_DI);
+    /* PORT1 PIN3 (coords: 62) is configured as CAN0_RD */
+    IOCON_PinMuxSet(IOCON, 1U, 3U, port1_pin3_config);
+}
+
+/* clang-format off */
+/*
+ * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+BOARD_InitGYROACCELPins:
+- options: {callFromInitBoot: 'false', coreID: cm33_core0, enableClock: 'true'}
+- pin_list:
+  - {pin_num: '69', peripheral: I3C0, signal: SDA, pin_signal: PIO0_24/FC0_RXD_SDA_MOSI_DATA/CT_INP8/SCT_GPI0/I3C0_SDA/TRACEDATA0/SECURE_GPIO0_24/PWM0_A1/SPI_CS0_DIS/PWM0_X0/HSCMP0_IN0,
+    mode: pullUp, slew_rate: standard, invert: disabled, open_drain: disabled, asw0: disabled}
+  - {pin_num: '55', peripheral: I3C0, signal: SCL, pin_signal: PIO0_9/FC3_SSEL2/FC5_TXD_SCL_MISO_WS/I3C0_SCL/SWDIO/SECURE_GPIO0_9/PWM1_A2/TRIGOUT_2/ACMP0_B, mode: pullUp,
+    slew_rate: standard, invert: disabled, open_drain: disabled, asw0: disabled}
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
+ */
+/* clang-format on */
+
+/* FUNCTION ************************************************************************************************************
+ *
+ * Function Name : BOARD_InitGYROACCELPins
+ * Description   : Configures pin routing and optionally pin electrical features.
+ *
+ * END ****************************************************************************************************************/
+/* Function assigned for the Cortex-M33 */
+void BOARD_InitGYROACCELPins(void)
+{
+    /* Enables the clock for the I/O controller.: Enable Clock. */
+    CLOCK_EnableClock(kCLOCK_Iocon);
+
+    const uint32_t port0_pin24_config = (/* Pin is configured as I3C0_SDA */
+                                         IOCON_PIO_FUNC5 |
+                                         /* Selects pull-up function */
+                                         IOCON_PIO_MODE_PULLUP |
+                                         /* Standard mode, output slew rate control is enabled */
+                                         IOCON_PIO_SLEW_STANDARD |
+                                         /* Input function is not inverted */
+                                         IOCON_PIO_INV_DI |
+                                         /* Enables digital function */
+                                         IOCON_PIO_DIGITAL_EN |
+                                         /* Open drain is disabled */
+                                         IOCON_PIO_OPENDRAIN_DI |
+                                         /* Analog switch 0 is open (disabled) */
+                                         IOCON_PIO_ASW0_DI);
+    /* PORT0 PIN24 (coords: 69) is configured as I3C0_SDA */
+    IOCON_PinMuxSet(IOCON, 0U, 24U, port0_pin24_config);
+
+    const uint32_t port0_pin9_config = (/* Pin is configured as I3C0_SCL */
+                                        IOCON_PIO_FUNC7 |
+                                        /* Selects pull-up function */
+                                        IOCON_PIO_MODE_PULLUP |
+                                        /* Standard mode, output slew rate control is enabled */
+                                        IOCON_PIO_SLEW_STANDARD |
+                                        /* Input function is not inverted */
+                                        IOCON_PIO_INV_DI |
+                                        /* Enables digital function */
+                                        IOCON_PIO_DIGITAL_EN |
+                                        /* Open drain is disabled */
+                                        IOCON_PIO_OPENDRAIN_DI |
+                                        /* Analog switch 0 is open (disabled) */
+                                        IOCON_PIO_ASW0_DI);
+    /* PORT0 PIN9 (coords: 55) is configured as I3C0_SCL */
+    IOCON_PinMuxSet(IOCON, 0U, 9U, port0_pin9_config);
 }
 /***********************************************************************************************************************
  * EOF

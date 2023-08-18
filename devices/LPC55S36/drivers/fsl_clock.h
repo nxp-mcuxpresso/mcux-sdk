@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.3.1. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+/*! @brief CLOCK driver version 2.3.2. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -260,12 +260,12 @@
         kCLOCK_Dmic \
     }
 /*! @brief Clock ip name array for PWM. */
-#define PWM_CLOCKS                                             \
-    {                                                          \
-        {kCLOCK_Pwm0, kCLOCK_Pwm0, kCLOCK_Pwm0, kCLOCK_Pwm0},  \
-        {                                                      \
-            kCLOCK_Pwm1, kCLOCK_Pwm1, kCLOCK_Pwm1, kCLOCK_Pwm1 \
-        }                                                      \
+#define PWM_CLOCKS                                                             \
+    {                                                                          \
+        {kCLOCK_Pwm0_Sm0, kCLOCK_Pwm0_Sm1, kCLOCK_Pwm0_Sm2, kCLOCK_Pwm0_Sm3},  \
+        {                                                                      \
+            kCLOCK_Pwm1_Sm0, kCLOCK_Pwm1_Sm1, kCLOCK_Pwm1_Sm2, kCLOCK_Pwm1_Sm3 \
+        }                                                                      \
     }
 /*! @brief Clock ip name array for ENC. */
 #define ENC_CLOCKS               \
@@ -329,234 +329,140 @@
 #define CLK_GATE_ABSTRACT_REG_OFFSET(x) (((uint32_t)(x)&CLK_GATE_REG_OFFSET_MASK) >> CLK_GATE_REG_OFFSET_SHIFT)
 #define CLK_GATE_ABSTRACT_BITS_SHIFT(x) (((uint32_t)(x)&CLK_GATE_BIT_SHIFT_MASK) >> CLK_GATE_BIT_SHIFT_SHIFT)
 
-#define AHB_CLK_CTRL0 0
-#define AHB_CLK_CTRL1 1
-#define AHB_CLK_CTRL2 2
-#define AHB_CLK_CTRL3 3
+#define AHB_CLK_CTRL0  0
+#define AHB_CLK_CTRL1  1
+#define AHB_CLK_CTRL2  2
+#define AHB_CLK_CTRL3  3
+#define REG_PWM0SUBCTL 250
+#define REG_PWM1SUBCTL 251
 
 /*! @brief Clock gate name used for CLOCK_EnableClock/CLOCK_DisableClock. */
 typedef enum _clock_ip_name
 {
-    kCLOCK_IpInvalid = 0U,                                 /*!< Invalid IP name. */
-    kCLOCK_Rom       = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 1U), /*!< Clock gate name: Rom. */
+    kCLOCK_IpInvalid = 0U,                                  /*!< Invalid IP name. */
+    kCLOCK_Rom       = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 1U),  /*!< Clock gate name: Rom. */
+    kCLOCK_Sram1     = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 3U),  /*!< Clock gate name: Sram1. */
+    kCLOCK_Sram2     = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 4U),  /*!< Clock gate name: Sram2. */
+    kCLOCK_Sram3     = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 5U),  /*!< Clock gate name: Sram3. */
+    kCLOCK_Sram4     = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 6U),  /*!< Clock gate name: Sram4. */
+    kCLOCK_Flash     = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 7U),  /*!< Clock gate name: Flash. */
+    kCLOCK_Fmc       = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 8U),  /*!< Clock gate name: Fmc. */
+    kCLOCK_Flexspi   = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 10U), /*!< Clock gate name: Flexspi. */
+    kCLOCK_InputMux  = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 11U), /*!< Clock gate name: InputMux. */
+    kCLOCK_Iocon     = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 13U), /*!< Clock gate name: Iocon. */
+    kCLOCK_Gpio0     = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 14U), /*!< Clock gate name: Gpio0. */
+    kCLOCK_Gpio1     = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 15U), /*!< Clock gate name: Gpio1. */
+    kCLOCK_Gpio2     = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 16U), /*!< Clock gate name: Gpio2. */
+    kCLOCK_Gpio3     = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 17U), /*!< Clock gate name: Gpio3. */
+    kCLOCK_Pint      = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 18U), /*!< Clock gate name: Pint. */
+    kCLOCK_Gint      = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 19U), /*!< Clock gate name: Gint. */
+    kCLOCK_Dma0      = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 20U), /*!< Clock gate name: Dma0. */
+    kCLOCK_Crc0      = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 21U), /*!< Clock gate name: Crc. */
+    kCLOCK_Wwdt      = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 22U), /*!< Clock gate name: Wwdt. */
+    kCLOCK_Rtc0      = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 23U), /*!< Clock gate name: Rtc0. */
+    kCLOCK_Mailbox   = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 26U), /*!< Clock gate name: Mailbox. */
+    kCLOCK_Adc0      = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 27U), /*!< Clock gate name: Adc0. */
+    kCLOCK_Adc1      = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 28U), /*!< Clock gate name: Adc1. */
+    kCLOCK_Dac0      = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 29U), /*!< Clock gate name: Dac0. */
 
-    kCLOCK_Sram1 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 3U), /*!< Clock gate name: Sram1. */
-
-    kCLOCK_Sram2 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 4U), /*!< Clock gate name: Sram2. */
-
-    kCLOCK_Sram3 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 5U), /*!< Clock gate name: Sram3. */
-
-    kCLOCK_Sram4 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 6U), /*!< Clock gate name: Sram4. */
-
-    kCLOCK_Flash = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 7U), /*!< Clock gate name: Flash. */
-
-    kCLOCK_Fmc = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 8U), /*!< Clock gate name: Fmc. */
-
-    kCLOCK_Flexspi = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 10U), /*!< Clock gate name: Flexspi. */
-
-    kCLOCK_InputMux = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 11U), /*!< Clock gate name: InputMux. */
-
-    kCLOCK_Iocon = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 13U), /*!< Clock gate name: Iocon. */
-
-    kCLOCK_Gpio0 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 14U), /*!< Clock gate name: Gpio0. */
-
-    kCLOCK_Gpio1 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 15U), /*!< Clock gate name: Gpio1. */
-
-    kCLOCK_Gpio2 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 16U), /*!< Clock gate name: Gpio2. */
-
-    kCLOCK_Gpio3 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 17U), /*!< Clock gate name: Gpio3. */
-
-    kCLOCK_Pint = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 18U), /*!< Clock gate name: Pint. */
-
-    kCLOCK_Gint = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 19U), /*!< Clock gate name: Gint. */
-
-    kCLOCK_Dma0 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 20U), /*!< Clock gate name: Dma0. */
-
-    kCLOCK_Crc0 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 21U), /*!< Clock gate name: Crc. */
-
-    kCLOCK_Wwdt = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 22U), /*!< Clock gate name: Wwdt. */
-
-    kCLOCK_Rtc0 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 23U), /*!< Clock gate name: Rtc0. */
-
-    kCLOCK_Mailbox = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 26U), /*!< Clock gate name: Mailbox. */
-
-    kCLOCK_Adc0 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 27U), /*!< Clock gate name: Adc0. */
-
-    kCLOCK_Adc1 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 28U), /*!< Clock gate name: Adc1. */
-
-    kCLOCK_Dac0 = CLK_GATE_DEFINE(AHB_CLK_CTRL0, 29U), /*!< Clock gate name: Dac0. */
-
-    kCLOCK_Mrt = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 0U), /*!< Clock gate name: Mrt. */
-
-    kCLOCK_Ostimer = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 1U), /*!< Clock gate name: Ostimer. */
-
-    kCLOCK_Sct = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 2U), /*!< Clock gate name: Sct. */
-
-    kCLOCK_Mcan = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 7U), /*!< Clock gate name: Mcan. */
-
-    kCLOCK_Utick = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 10U), /*!< Clock gate name: Utick. */
-
+    kCLOCK_Mrt       = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 0U),  /*!< Clock gate name: Mrt. */
+    kCLOCK_Ostimer   = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 1U),  /*!< Clock gate name: Ostimer. */
+    kCLOCK_Sct       = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 2U),  /*!< Clock gate name: Sct. */
+    kCLOCK_Mcan      = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 7U),  /*!< Clock gate name: Mcan. */
+    kCLOCK_Utick     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 10U), /*!< Clock gate name: Utick. */
     kCLOCK_FlexComm0 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 11U), /*!< Clock gate name: FlexComm0. */
-
     kCLOCK_FlexComm1 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 12U), /*!< Clock gate name: FlexComm1. */
-
     kCLOCK_FlexComm2 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 13U), /*!< Clock gate name: FlexComm2. */
-
     kCLOCK_FlexComm3 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 14U), /*!< Clock gate name: FlexComm3. */
-
     kCLOCK_FlexComm4 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 15U), /*!< Clock gate name: FlexComm4. */
-
     kCLOCK_FlexComm5 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 16U), /*!< Clock gate name: FlexComm5. */
-
     kCLOCK_FlexComm6 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17U), /*!< Clock gate name: FlexComm6. */
-
     kCLOCK_FlexComm7 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18U), /*!< Clock gate name: FlexComm7. */
+    kCLOCK_MinUart0  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 11),  /*!< Clock gate name: MinUart0. */
+    kCLOCK_MinUart1  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 12),  /*!< Clock gate name: MinUart1. */
+    kCLOCK_MinUart2  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 13),  /*!< Clock gate name: MinUart2. */
+    kCLOCK_MinUart3  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 14),  /*!< Clock gate name: MinUart3. */
+    kCLOCK_MinUart4  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 15),  /*!< Clock gate name: MinUart4. */
+    kCLOCK_MinUart5  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 16),  /*!< Clock gate name: MinUart5. */
+    kCLOCK_MinUart6  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17),  /*!< Clock gate name: MinUart6. */
+    kCLOCK_MinUart7  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18),  /*!< Clock gate name: MinUart7. */
+    kCLOCK_LSpi0     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 11),  /*!< Clock gate name: LSpi0. */
+    kCLOCK_LSpi1     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 12),  /*!< Clock gate name: LSpi1. */
+    kCLOCK_LSpi2     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 13),  /*!< Clock gate name: LSpi2. */
+    kCLOCK_LSpi3     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 14),  /*!< Clock gate name: LSpi3. */
+    kCLOCK_LSpi4     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 15),  /*!< Clock gate name: LSpi4. */
+    kCLOCK_LSpi5     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 16),  /*!< Clock gate name: LSpi5. */
+    kCLOCK_LSpi6     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17),  /*!< Clock gate name: LSpi6. */
+    kCLOCK_LSpi7     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18),  /*!< Clock gate name: LSpi7. */
+    kCLOCK_BI2c0     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 11),  /*!< Clock gate name: BI2c0. */
+    kCLOCK_BI2c1     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 12),  /*!< Clock gate name: BI2c1. */
+    kCLOCK_BI2c2     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 13),  /*!< Clock gate name: BI2c2. */
+    kCLOCK_BI2c3     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 14),  /*!< Clock gate name: BI2c3. */
+    kCLOCK_BI2c4     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 15),  /*!< Clock gate name: BI2c4. */
+    kCLOCK_BI2c5     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 16),  /*!< Clock gate name: BI2c5. */
+    kCLOCK_BI2c6     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17),  /*!< Clock gate name: BI2c6. */
+    kCLOCK_BI2c7     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18),  /*!< Clock gate name: BI2c7. */
+    kCLOCK_FlexI2s0  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 11),  /*!< Clock gate name: FlexI2s0. */
+    kCLOCK_FlexI2s1  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 12),  /*!< Clock gate name: FlexI2s1. */
+    kCLOCK_FlexI2s2  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 13),  /*!< Clock gate name: FlexI2s2. */
+    kCLOCK_FlexI2s3  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 14),  /*!< Clock gate name: FlexI2s3. */
+    kCLOCK_FlexI2s4  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 15),  /*!< Clock gate name: FlexI2s4. */
+    kCLOCK_FlexI2s5  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 16),  /*!< Clock gate name: FlexI2s5. */
+    kCLOCK_FlexI2s6  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17),  /*!< Clock gate name: FlexI2s6. */
+    kCLOCK_FlexI2s7  = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18),  /*!< Clock gate name: FlexI2s7. */
+    kCLOCK_Dmic      = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 19U), /*!< Clock gate name: Dmic. */
+    kCLOCK_Timer2    = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 22U), /*!< Clock gate name: Timer2. */
+    kCLOCK_Usbd0     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 25U), /*!< Clock gate name: Usbd0. */
+    kCLOCK_Timer0    = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 26U), /*!< Clock gate name: Timer0. */
+    kCLOCK_Timer1    = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 27U), /*!< Clock gate name: Timer1. */
+    kCLOCK_Ezhb      = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 31),  /*!< Clock gate name: Ezhb. */
 
-    kCLOCK_MinUart0 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 11), /*!< Clock gate name: MinUart0. */
-
-    kCLOCK_MinUart1 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 12), /*!< Clock gate name: MinUart1. */
-
-    kCLOCK_MinUart2 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 13), /*!< Clock gate name: MinUart2. */
-
-    kCLOCK_MinUart3 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 14), /*!< Clock gate name: MinUart3. */
-
-    kCLOCK_MinUart4 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 15), /*!< Clock gate name: MinUart4. */
-
-    kCLOCK_MinUart5 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 16), /*!< Clock gate name: MinUart5. */
-
-    kCLOCK_MinUart6 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17), /*!< Clock gate name: MinUart6. */
-
-    kCLOCK_MinUart7 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18), /*!< Clock gate name: MinUart7. */
-
-    kCLOCK_LSpi0 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 11), /*!< Clock gate name: LSpi0. */
-
-    kCLOCK_LSpi1 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 12), /*!< Clock gate name: LSpi1. */
-
-    kCLOCK_LSpi2 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 13), /*!< Clock gate name: LSpi2. */
-
-    kCLOCK_LSpi3 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 14), /*!< Clock gate name: LSpi3. */
-
-    kCLOCK_LSpi4 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 15), /*!< Clock gate name: LSpi4. */
-
-    kCLOCK_LSpi5 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 16), /*!< Clock gate name: LSpi5. */
-
-    kCLOCK_LSpi6 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17), /*!< Clock gate name: LSpi6. */
-
-    kCLOCK_LSpi7 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18), /*!< Clock gate name: LSpi7. */
-
-    kCLOCK_BI2c0 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 11), /*!< Clock gate name: BI2c0. */
-
-    kCLOCK_BI2c1 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 12), /*!< Clock gate name: BI2c1. */
-
-    kCLOCK_BI2c2 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 13), /*!< Clock gate name: BI2c2. */
-
-    kCLOCK_BI2c3 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 14), /*!< Clock gate name: BI2c3. */
-
-    kCLOCK_BI2c4 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 15), /*!< Clock gate name: BI2c4. */
-
-    kCLOCK_BI2c5 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 16), /*!< Clock gate name: BI2c5. */
-
-    kCLOCK_BI2c6 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17), /*!< Clock gate name: BI2c6. */
-
-    kCLOCK_BI2c7 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18), /*!< Clock gate name: BI2c7. */
-
-    kCLOCK_FlexI2s0 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 11), /*!< Clock gate name: FlexI2s0. */
-
-    kCLOCK_FlexI2s1 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 12), /*!< Clock gate name: FlexI2s1. */
-
-    kCLOCK_FlexI2s2 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 13), /*!< Clock gate name: FlexI2s2. */
-
-    kCLOCK_FlexI2s3 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 14), /*!< Clock gate name: FlexI2s3. */
-
-    kCLOCK_FlexI2s4 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 15), /*!< Clock gate name: FlexI2s4. */
-
-    kCLOCK_FlexI2s5 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 16), /*!< Clock gate name: FlexI2s5. */
-
-    kCLOCK_FlexI2s6 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17), /*!< Clock gate name: FlexI2s6. */
-
-    kCLOCK_FlexI2s7 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18), /*!< Clock gate name: FlexI2s7. */
-
-    kCLOCK_Dmic = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 19U), /*!< Clock gate name: Dmic. */
-
-    kCLOCK_Timer2 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 22U), /*!< Clock gate name: Timer2. */
-
-    kCLOCK_Usbd0 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 25U), /*!< Clock gate name: Usbd0. */
-
-    kCLOCK_Timer0 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 26U), /*!< Clock gate name: Timer0. */
-
-    kCLOCK_Timer1 = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 27U), /*!< Clock gate name: Timer1. */
-
-    kCLOCK_Dma1 = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 1U), /*!< Clock gate name: Dma1. */
-
-    kCLOCK_Comp = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 2U), /*!< Clock gate name: Comp. */
-
-    kCLOCK_Freqme = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 8U), /*!< Clock gate name: Freqme. */
-
-    kCLOCK_Cdog = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 11U), /*!< Clock gate name: Cdog. */
-
-    kCLOCK_Rng = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 13U), /*!< Clock gate name: Rng. */
-
-    kCLOCK_Pmux1 = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 14U), /*!< Clock gate name: Pmux1. */
-
-    kCLOCK_Sysctl = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 15U), /*!< Clock gate name: Sysctl. */
-
-    kCLOCK_Usbhmr0 = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 16U), /*!< Clock gate name: Usbhmr0. */
-
-    kCLOCK_Usbhsl0 = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 17U), /*!< Clock gate name: Usbhsl0. */
-
-    kCLOCK_Css = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 18U), /*!< Clock gate name: Css. */
-
-    kCLOCK_PowerQuad = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 19U), /*!< Clock gate name: PowerQuad. */
-
-    kCLOCK_Timer3 = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 21U), /*!< Clock gate name: Timer3. */
-
-    kCLOCK_Timer4 = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 22U), /*!< Clock gate name: Timer4. */
-
-    kCLOCK_Puf = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 23U), /*!< Clock gate name: Puf. */
-
-    kCLOCK_Pkc = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 24U), /*!< Clock gate name: Pkc. */
-
-    kCLOCK_AnalogCtrl = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 27U), /*!< Clock gate name: AnalogCtrl. */
-
-    kCLOCK_Hs_Lspi = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 28U), /*!< Clock gate name: Lspi. */
-
-    kCLOCK_Gpio_Sec = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 29U), /*!< Clock gate name: Sec. */
-
+    kCLOCK_Dma1         = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 1U),  /*!< Clock gate name: Dma1. */
+    kCLOCK_Comp         = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 2U),  /*!< Clock gate name: Comp. */
+    kCLOCK_Freqme       = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 8U),  /*!< Clock gate name: Freqme. */
+    kCLOCK_Cdog         = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 11U), /*!< Clock gate name: Cdog. */
+    kCLOCK_Rng          = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 13U), /*!< Clock gate name: Rng. */
+    kCLOCK_Pmux1        = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 14U), /*!< Clock gate name: Pmux1. */
+    kCLOCK_Sysctl       = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 15U), /*!< Clock gate name: Sysctl. */
+    kCLOCK_Usbhmr0      = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 16U), /*!< Clock gate name: Usbhmr0. */
+    kCLOCK_Usbhsl0      = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 17U), /*!< Clock gate name: Usbhsl0. */
+    kCLOCK_Css          = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 18U), /*!< Clock gate name: Css. */
+    kCLOCK_PowerQuad    = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 19U), /*!< Clock gate name: PowerQuad. */
+    kCLOCK_Timer3       = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 21U), /*!< Clock gate name: Timer3. */
+    kCLOCK_Timer4       = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 22U), /*!< Clock gate name: Timer4. */
+    kCLOCK_Puf          = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 23U), /*!< Clock gate name: Puf. */
+    kCLOCK_Pkc          = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 24U), /*!< Clock gate name: Pkc. */
+    kCLOCK_AnalogCtrl   = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 27U), /*!< Clock gate name: AnalogCtrl. */
+    kCLOCK_Hs_Lspi      = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 28U), /*!< Clock gate name: Lspi. */
+    kCLOCK_Gpio_Sec     = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 29U), /*!< Clock gate name: Sec. */
     kCLOCK_Gpio_Sec_Int = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 30U), /*!< Clock gate name: Int. */
+    kCLOCK_I3c0         = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 0U),  /*!< Clock gate name: I3c0. */
+    kCLOCK_Enc0         = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 3U),  /*!< Clock gate name: Enc0. */
+    kCLOCK_Enc1         = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 4U),  /*!< Clock gate name: Enc1. */
+    kCLOCK_Pwm0         = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 5U),  /*!< Clock gate name: Pwm0. */
+    kCLOCK_Pwm1         = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 6U),  /*!< Clock gate name: Pwm1. */
+    kCLOCK_Aoi0         = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 7U),  /*!< Clock gate name: Aoi0. */
+    kCLOCK_Aoi1         = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 8U),  /*!< Clock gate name: Aoi1. */
+    kCLOCK_Ftm0         = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 9U),  /*!< Clock gate name: Ftm0. */
+    kCLOCK_Dac1         = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 10U), /*!< Clock gate name: Dac1. */
+    kCLOCK_Dac2         = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 11U), /*!< Clock gate name: Dac2. */
+    kCLOCK_Opamp0       = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 12U), /*!< Clock gate name: Opamp0. */
+    kCLOCK_Opamp1       = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 13U), /*!< Clock gate name: Opamp1. */
+    kCLOCK_Opamp2       = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 14U), /*!< Clock gate name: Opamp2. */
+    kCLOCK_Hscmp0       = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 15U), /*!< Clock gate name: Hscmp0. */
+    kCLOCK_Hscmp1       = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 16U), /*!< Clock gate name: Hscmp1. */
+    kCLOCK_Hscmp2       = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 17U), /*!< Clock gate name: Hscmp2. */
+    kCLOCK_Vref         = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 18U), /*!< Clock gate name: Vref. */
 
-    kCLOCK_I3c0 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 0U), /*!< Clock gate name: I3c0. */
+    kCLOCK_Pwm0_Sm0 = CLK_GATE_DEFINE(REG_PWM0SUBCTL, 0U), /*!< Clock gate name: PWM0 SM0. */
+    kCLOCK_Pwm0_Sm1 = CLK_GATE_DEFINE(REG_PWM0SUBCTL, 1U), /*!< Clock gate name: PWM0 SM1. */
+    kCLOCK_Pwm0_Sm2 = CLK_GATE_DEFINE(REG_PWM0SUBCTL, 2U), /*!< Clock gate name: PWM0 SM2. */
+    kCLOCK_Pwm0_Sm3 = CLK_GATE_DEFINE(REG_PWM0SUBCTL, 3U), /*!< Clock gate name: PWM0 SM3. */
 
-    kCLOCK_Enc0 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 3U), /*!< Clock gate name: Enc0. */
-
-    kCLOCK_Enc1 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 4U), /*!< Clock gate name: Enc1. */
-
-    kCLOCK_Pwm0 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 5U), /*!< Clock gate name: Pwm0. */
-
-    kCLOCK_Pwm1 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 6U), /*!< Clock gate name: Pwm1. */
-
-    kCLOCK_Aoi0 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 7U), /*!< Clock gate name: Aoi0. */
-
-    kCLOCK_Aoi1 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 8U), /*!< Clock gate name: Aoi1. */
-
-    kCLOCK_Ftm0 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 9U), /*!< Clock gate name: Ftm0. */
-
-    kCLOCK_Dac1 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 10U), /*!< Clock gate name: Dac1. */
-
-    kCLOCK_Dac2 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 11U), /*!< Clock gate name: Dac2. */
-
-    kCLOCK_Opamp0 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 12U), /*!< Clock gate name: Opamp0. */
-
-    kCLOCK_Opamp1 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 13U), /*!< Clock gate name: Opamp1. */
-
-    kCLOCK_Opamp2 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 14U), /*!< Clock gate name: Opamp2. */
-
-    kCLOCK_Hscmp0 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 15U), /*!< Clock gate name: Hscmp0. */
-
-    kCLOCK_Hscmp1 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 16U), /*!< Clock gate name: Hscmp1. */
-
-    kCLOCK_Hscmp2 = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 17U), /*!< Clock gate name: Hscmp2. */
-
-    kCLOCK_Vref = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 18U) /*!< Clock gate name: Vref. */
+    kCLOCK_Pwm1_Sm0 = CLK_GATE_DEFINE(REG_PWM1SUBCTL, 0U), /*!< Clock gate name: PWM1 SM0. */
+    kCLOCK_Pwm1_Sm1 = CLK_GATE_DEFINE(REG_PWM1SUBCTL, 1U), /*!< Clock gate name: PWM1 SM1. */
+    kCLOCK_Pwm1_Sm2 = CLK_GATE_DEFINE(REG_PWM1SUBCTL, 2U), /*!< Clock gate name: PWM1 SM2. */
+    kCLOCK_Pwm1_Sm3 = CLK_GATE_DEFINE(REG_PWM1SUBCTL, 3U)  /*!< Clock gate name: PWM1 SM3. */
 
 } clock_ip_name_t;
 
@@ -752,6 +658,7 @@ typedef enum _clock_attach_id
     kMAIN_CLK_to_ADC1 = MUX_A(CM_ADC1CLKSEL, 0), /*!< Attach MAIN_CLK to ADC1. */
     kPLL0_to_ADC1     = MUX_A(CM_ADC1CLKSEL, 1), /*!< Attach PLL0 to ADC1. */
     kFRO_HF_to_ADC1   = MUX_A(CM_ADC1CLKSEL, 2), /*!< Attach FRO_HF to ADC1. */
+    kEXT_CLK_to_ADC1  = MUX_A(CM_ADC1CLKSEL, 4), /*!< Attach XO to ADC1. */
     kNONE_to_ADC1     = MUX_A(CM_ADC1CLKSEL, 7), /*!< Attach NONE to ADC1. */
 
     kMAIN_CLK_to_USB0 = MUX_A(CM_USB0CLKSEL, 0), /*!< Attach MAIN_CLK to USB0. */
@@ -938,7 +845,7 @@ typedef enum _clock_attach_id
     kPLL0_to_DMIC     = MUX_A(CM_DMICFCLKSEL, 1), /*!< Attach PLL0 to DMIC. */
     kEXT_CLK_to_DMIC  = MUX_A(CM_DMICFCLKSEL, 2), /*!< Attach EXT_CLK to DMIC. */
     kFRO_HF_to_DMIC   = MUX_A(CM_DMICFCLKSEL, 3), /*!< Attach FRO_HF to DMIC. */
-    kPLL1_to_DMIC     = MUX_A(CM_DMICFCLKSEL, 2), /*!< Attach PLL1 to DMIC. */
+    kPLL1_to_DMIC     = MUX_A(CM_DMICFCLKSEL, 4), /*!< Attach PLL1 to DMIC. */
     kMCLK_IN_to_DMIC  = MUX_A(CM_DMICFCLKSEL, 5), /*!< Attach MCLK_IN to DMIC. */
     kNONE_to_DMIC     = MUX_A(CM_DMICFCLKSEL, 7), /*!< Attach NONE to DMIC. */
 
@@ -1019,8 +926,23 @@ extern "C" {
  */
 static inline void CLOCK_EnableClock(clock_ip_name_t clk)
 {
-    uint32_t index               = CLK_GATE_ABSTRACT_REG_OFFSET(clk);
-    SYSCON->AHBCLKCTRLSET[index] = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+    uint32_t index = CLK_GATE_ABSTRACT_REG_OFFSET(clk);
+    uint32_t bit   = CLK_GATE_ABSTRACT_BITS_SHIFT(clk);
+
+    if (index == (uint32_t)REG_PWM0SUBCTL)
+    {
+        SYSCON->PWM0SUBCTL |= (1UL << bit);
+        SYSCON->AHBCLKCTRLSET[3] = 0x20U;
+    }
+    else if (index == (uint32_t)REG_PWM1SUBCTL)
+    {
+        SYSCON->PWM1SUBCTL |= (1UL << bit);
+        SYSCON->AHBCLKCTRLSET[3] = 0x40U;
+    }
+    else
+    {
+        SYSCON->AHBCLKCTRLSET[index] = (1UL << bit);
+    }
 }
 /**
  * @brief Disable the clock for specific IP.
@@ -1029,8 +951,29 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
  */
 static inline void CLOCK_DisableClock(clock_ip_name_t clk)
 {
-    uint32_t index               = CLK_GATE_ABSTRACT_REG_OFFSET(clk);
-    SYSCON->AHBCLKCTRLCLR[index] = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+    uint32_t index = CLK_GATE_ABSTRACT_REG_OFFSET(clk);
+    uint32_t bit   = CLK_GATE_ABSTRACT_BITS_SHIFT(clk);
+
+    if (index == (uint32_t)REG_PWM0SUBCTL)
+    {
+        SYSCON->PWM0SUBCTL &= ~(1UL << bit);
+        if (0U == (SYSCON->PWM0SUBCTL & 0xFU))
+        {
+            SYSCON->AHBCLKCTRLCLR[3] = 0x20U;
+        }
+    }
+    else if (index == (uint32_t)REG_PWM1SUBCTL)
+    {
+        SYSCON->PWM1SUBCTL &= ~(1UL << bit);
+        if (0U == (SYSCON->PWM1SUBCTL & 0xFU))
+        {
+            SYSCON->AHBCLKCTRLCLR[3] = 0x40U;
+        }
+    }
+    else
+    {
+        SYSCON->AHBCLKCTRLCLR[index] = (1UL << bit);
+    }
 }
 /**
  * @brief   Initialize the Core clock to given frequency (12, 48 or 96 MHz).
@@ -1041,9 +984,9 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
  */
 status_t CLOCK_SetupFROClocking(uint32_t iFreq);
 /**
- * @brief	Set the flash wait states for the input freuqency.
- * @param	system_freq_hz	: Input frequency
- * @return	Nothing
+ * @brief   Set the flash wait states for the input freuqency.
+ * @param   system_freq_hz: Input frequency
+ * @return  Nothing
  */
 void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz);
 /**
@@ -1058,12 +1001,6 @@ status_t CLOCK_SetupExtClocking(uint32_t iFreq);
  * @return  returns success or fail status.
  */
 status_t CLOCK_SetupI2SMClkClocking(uint32_t iFreq);
-/**
- * @brief   Initialize the PLU CLKIN clock to given frequency.
- * @param   iFreq   : Desired frequency (must be equal to exact rate in Hz)
- * @return  returns success or fail status.
- */
-status_t CLOCK_SetupPLUClkInClocking(uint32_t iFreq);
 /**
  * @brief   Configure the clock selection muxes.
  * @param   connection  : Clock to be configured.
@@ -1278,8 +1215,8 @@ __STATIC_INLINE bool CLOCK_IsPLL0Locked(void)
     return (bool)((SYSCON->PLL0STAT & SYSCON_PLL0STAT_LOCK_MASK) != 0UL);
 }
 
-/*! @brief	Check if PLL1 is locked or not
- *  @return	true if the PLL1 is locked, false if not locked
+/*! @brief  Check if PLL1 is locked or not
+ *  @return true if the PLL1 is locked, false if not locked
  */
 __STATIC_INLINE bool CLOCK_IsPLL1Locked(void)
 {

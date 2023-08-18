@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,11 +39,175 @@ void BOARD_InitBootPins(void);
 #define IOCON_PIO_OPENDRAIN_DI 0x00u  /*!<@brief Open drain is disabled */
 #define IOCON_PIO_SLEW_STANDARD 0x00u /*!<@brief Standard mode, output slew rate control is enabled */
 
+/*! @name FC0_RXD_SDA_MOSI_DATA (number 93), JP78[2]/P0_29-FC0_RXD_SDA_MOSI_DATA-TRACED2
+  @{ */
+/* @} */
+
+/*! @name FC0_TXD_SCL_MISO_WS (number 95), JP49[3]/JP80[2]/P0_30-FC0_TXD_SCL_MISO_WS-TRACED1-CAN0_TD
+  @{ */
+/* @} */
+
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
  */
-void BOARD_InitPins(void); /* Function assigned for the Cortex-M33 */
+void BOARD_InitDEBUG_UARTPins(void); /* Function assigned for the Cortex-M33 */
+
+#define IOCON_PIO_ASW0_DI 0x00u       /*!<@brief Analog switch 0 is open (disabled) */
+#define IOCON_PIO_DIGITAL_EN 0x0100u  /*!<@brief Enables digital function */
+#define IOCON_PIO_FUNC8 0x08u         /*!<@brief Selects pin function 8 */
+#define IOCON_PIO_FUNC9 0x09u         /*!<@brief Selects pin function 9 */
+#define IOCON_PIO_INV_DI 0x00u        /*!<@brief Input function is not inverted */
+#define IOCON_PIO_MODE_INACT 0x00u    /*!<@brief No addition pin function */
+#define IOCON_PIO_MODE_PULLDOWN 0x10u /*!<@brief Selects pull-down function */
+#define IOCON_PIO_MODE_PULLUP 0x20u   /*!<@brief Selects pull-up function */
+#define IOCON_PIO_OPENDRAIN_DI 0x00u  /*!<@brief Open drain is disabled */
+#define IOCON_PIO_SLEW_STANDARD 0x00u /*!<@brief Standard mode, output slew rate control is enabled */
+
+/*! @name SWCLK (number 54), J132[6]/U18[4]/P0_0-SWCLK-ACMP0_A
+  @{ */
+/* @} */
+
+/*! @name SWO (number 56), U18[12]/P0_18-SWO-PWM1_A0
+  @{ */
+/* @} */
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void BOARD_InitSWD_DEBUGPins(void); /* Function assigned for the Cortex-M33 */
+
+#define IOCON_PIO_DIGITAL_EN 0x0100u  /*!<@brief Enables digital function */
+#define IOCON_PIO_FUNC7 0x07u         /*!<@brief Selects pin function 7 */
+#define IOCON_PIO_INV_DI 0x00u        /*!<@brief Input function is not inverted */
+#define IOCON_PIO_MODE_INACT 0x00u    /*!<@brief No addition pin function */
+#define IOCON_PIO_OPENDRAIN_DI 0x00u  /*!<@brief Open drain is disabled */
+#define IOCON_PIO_SLEW_STANDARD 0x00u /*!<@brief Standard mode, output slew rate control is enabled */
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void BOARD_InitUSBPins(void); /* Function assigned for the Cortex-M33 */
+
+#define IOCON_PIO_DIGITAL_EN 0x0100u  /*!<@brief Enables digital function */
+#define IOCON_PIO_FUNC0 0x00u         /*!<@brief Selects pin function 0 */
+#define IOCON_PIO_INV_DI 0x00u        /*!<@brief Input function is not inverted */
+#define IOCON_PIO_MODE_INACT 0x00u    /*!<@brief No addition pin function */
+#define IOCON_PIO_OPENDRAIN_DI 0x00u  /*!<@brief Open drain is disabled */
+#define IOCON_PIO_SLEW_STANDARD 0x00u /*!<@brief Standard mode, output slew rate control is enabled */
+
+/*! @name PIO1_28 (number 72), J122[16]/P1_28
+  @{ */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITLEDSPINS_LED_RED_GPIO GPIO                 /*!<@brief GPIO peripheral base pointer */
+#define BOARD_INITLEDSPINS_LED_RED_GPIO_PIN_MASK (1U << 28U) /*!<@brief GPIO pin mask */
+#define BOARD_INITLEDSPINS_LED_RED_PORT 1U                   /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITLEDSPINS_LED_RED_PIN 28U                   /*!<@brief PORT pin number */
+#define BOARD_INITLEDSPINS_LED_RED_PIN_MASK (1U << 28U)      /*!<@brief PORT pin mask */
+                                                             /* @} */
+
+/*! @name PIO0_22 (number 78), J12[8]/JP72[2]/P0_22
+  @{ */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITLEDSPINS_LED_GREEN_GPIO GPIO                 /*!<@brief GPIO peripheral base pointer */
+#define BOARD_INITLEDSPINS_LED_GREEN_GPIO_PIN_MASK (1U << 22U) /*!<@brief GPIO pin mask */
+#define BOARD_INITLEDSPINS_LED_GREEN_PORT 0U                   /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITLEDSPINS_LED_GREEN_PIN 22U                   /*!<@brief PORT pin number */
+#define BOARD_INITLEDSPINS_LED_GREEN_PIN_MASK (1U << 22U)      /*!<@brief PORT pin mask */
+                                                               /* @} */
+
+/*! @name PIO1_11 (number 94), J12[3]/P1_11-CTIMER_INP5-EXTTRIG_IN8
+  @{ */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITLEDSPINS_LED_BLUE_GPIO GPIO                 /*!<@brief GPIO peripheral base pointer */
+#define BOARD_INITLEDSPINS_LED_BLUE_GPIO_PIN_MASK (1U << 11U) /*!<@brief GPIO pin mask */
+#define BOARD_INITLEDSPINS_LED_BLUE_PORT 1U                   /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITLEDSPINS_LED_BLUE_PIN 11U                   /*!<@brief PORT pin number */
+#define BOARD_INITLEDSPINS_LED_BLUE_PIN_MASK (1U << 11U)      /*!<@brief PORT pin mask */
+                                                              /* @} */
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void BOARD_InitLEDsPins(void); /* Function assigned for the Cortex-M33 */
+
+#define IOCON_PIO_ASW0_DI 0x00u       /*!<@brief Analog switch 0 is open (disabled) */
+#define IOCON_PIO_DIGITAL_EN 0x0100u  /*!<@brief Enables digital function */
+#define IOCON_PIO_FUNC0 0x00u         /*!<@brief Selects pin function 0 */
+#define IOCON_PIO_INV_DI 0x00u        /*!<@brief Input function is not inverted */
+#define IOCON_PIO_MODE_INACT 0x00u    /*!<@brief No addition pin function */
+#define IOCON_PIO_OPENDRAIN_DI 0x00u  /*!<@brief Open drain is disabled */
+#define IOCON_PIO_SLEW_STANDARD 0x00u /*!<@brief Standard mode, output slew rate control is enabled */
+
+/*! @name PIO0_17 (number 41), J8[2]/P0_17
+  @{ */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITBUTTONSPINS_USR_GPIO GPIO                 /*!<@brief GPIO peripheral base pointer */
+#define BOARD_INITBUTTONSPINS_USR_GPIO_PIN_MASK (1U << 17U) /*!<@brief GPIO pin mask */
+#define BOARD_INITBUTTONSPINS_USR_PORT 0U                   /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITBUTTONSPINS_USR_PIN 17U                   /*!<@brief PORT pin number */
+#define BOARD_INITBUTTONSPINS_USR_PIN_MASK (1U << 17U)      /*!<@brief PORT pin mask */
+                                                            /* @} */
+
+/*! @name PIO1_18 (number 64), P1_18-WAKEUP2-TAMPER3
+  @{ */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITBUTTONSPINS_WK_TMP_GPIO GPIO                 /*!<@brief GPIO peripheral base pointer */
+#define BOARD_INITBUTTONSPINS_WK_TMP_GPIO_PIN_MASK (1U << 18U) /*!<@brief GPIO pin mask */
+#define BOARD_INITBUTTONSPINS_WK_TMP_PORT 1U                   /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITBUTTONSPINS_WK_TMP_PIN 18U                   /*!<@brief PORT pin number */
+#define BOARD_INITBUTTONSPINS_WK_TMP_PIN_MASK (1U << 18U)      /*!<@brief PORT pin mask */
+                                                               /* @} */
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void BOARD_InitBUTTONsPins(void); /* Function assigned for the Cortex-M33 */
+
+#define IOCON_PIO_DIGITAL_EN 0x0100u  /*!<@brief Enables digital function */
+#define IOCON_PIO_FUNC1 0x01u         /*!<@brief Selects pin function 1 */
+#define IOCON_PIO_INV_DI 0x00u        /*!<@brief Input function is not inverted */
+#define IOCON_PIO_MODE_INACT 0x00u    /*!<@brief No addition pin function */
+#define IOCON_PIO_OPENDRAIN_DI 0x00u  /*!<@brief Open drain is disabled */
+#define IOCON_PIO_SLEW_STANDARD 0x00u /*!<@brief Standard mode, output slew rate control is enabled */
+
+/*! @name CAN0_RD (number 62), JP48[1]/J41[6]/J92[10]/J7[5]/P1_3-CAN0_RD-PDM_DATA1-HS_SPI_MISO
+  @{ */
+/* @} */
+
+/*! @name CAN0_TD (number 61), JP49[1]/J41[5]/J92[12]/J7[4]/P1_2-CAN0_TD-PDM_CLK1-HS_SPI_SCK
+  @{ */
+/* @} */
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void BOARD_InitCANPins(void); /* Function assigned for the Cortex-M33 */
+
+#define IOCON_PIO_ASW0_DI 0x00u       /*!<@brief Analog switch 0 is open (disabled) */
+#define IOCON_PIO_DIGITAL_EN 0x0100u  /*!<@brief Enables digital function */
+#define IOCON_PIO_FUNC5 0x05u         /*!<@brief Selects pin function 5 */
+#define IOCON_PIO_FUNC7 0x07u         /*!<@brief Selects pin function 7 */
+#define IOCON_PIO_INV_DI 0x00u        /*!<@brief Input function is not inverted */
+#define IOCON_PIO_MODE_PULLUP 0x20u   /*!<@brief Selects pull-up function */
+#define IOCON_PIO_OPENDRAIN_DI 0x00u  /*!<@brief Open drain is disabled */
+#define IOCON_PIO_SLEW_STANDARD 0x00u /*!<@brief Standard mode, output slew rate control is enabled */
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void BOARD_InitGYROACCELPins(void); /* Function assigned for the Cortex-M33 */
 
 #if defined(__cplusplus)
 }

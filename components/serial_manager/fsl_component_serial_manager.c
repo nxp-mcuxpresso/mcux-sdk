@@ -593,7 +593,7 @@ static void SerialManager_Task(void *param)
     serial_manager_write_handle_t *serialWriteHandle;
     serial_manager_read_handle_t *serialReadHandle;
     uint32_t primask;
-    serial_manager_callback_message_t serialMsg;
+    serial_manager_callback_message_t msg;
 #if (defined(SERIAL_MANAGER_TASK_HANDLE_RX_AVAILABLE_NOTIFY) && (SERIAL_MANAGER_TASK_HANDLE_RX_AVAILABLE_NOTIFY > 0U))
     uint32_t ringBufferLength;
 #endif /* SERIAL_MANAGER_TASK_HANDLE_RX_AVAILABLE_NOTIFY */
@@ -646,12 +646,12 @@ static void SerialManager_Task(void *param)
             while (NULL != serialWriteHandle)
             {
                 SerialManager_RemoveHead(&handle->completedWriteHandleHead);
-                serialMsg.buffer                         = serialWriteHandle->transfer.buffer;
-                serialMsg.length                         = serialWriteHandle->transfer.soFar;
+                msg.buffer                         = serialWriteHandle->transfer.buffer;
+                msg.length                         = serialWriteHandle->transfer.soFar;
                 serialWriteHandle->transfer.buffer = NULL;
                 if (NULL != serialWriteHandle->callback)
                 {
-                    serialWriteHandle->callback(serialWriteHandle->callbackParam, &serialMsg,
+                    serialWriteHandle->callback(serialWriteHandle->callbackParam, &msg,
                                                 serialWriteHandle->transfer.status);
                 }
                 serialWriteHandle =
@@ -686,12 +686,12 @@ static void SerialManager_Task(void *param)
                 {
                     if (serialReadHandle->transfer.soFar >= serialReadHandle->transfer.length)
                     {
-                        serialMsg.buffer                        = serialReadHandle->transfer.buffer;
-                        serialMsg.length                        = serialReadHandle->transfer.soFar;
+                        msg.buffer                        = serialReadHandle->transfer.buffer;
+                        msg.length                        = serialReadHandle->transfer.soFar;
                         serialReadHandle->transfer.buffer = NULL;
                         if (NULL != serialReadHandle->callback)
                         {
-                            serialReadHandle->callback(serialReadHandle->callbackParam, &serialMsg,
+                            serialReadHandle->callback(serialReadHandle->callbackParam, &msg,
                                                        serialReadHandle->transfer.status);
                         }
                     }
@@ -722,11 +722,11 @@ static void SerialManager_Task(void *param)
             /* Notify there are data in ringbuffer */
             if (0U != ringBufferLength)
             {
-                serialMsg.buffer = NULL;
-                serialMsg.length = ringBufferLength;
+                msg.buffer = NULL;
+                msg.length = ringBufferLength;
                 if ((NULL != handle->openedReadHandleHead) && (NULL != handle->openedReadHandleHead->callback))
                 {
-                    handle->openedReadHandleHead->callback(handle->openedReadHandleHead->callbackParam, &serialMsg,
+                    handle->openedReadHandleHead->callback(handle->openedReadHandleHead->callbackParam, &msg,
                                                            kStatus_SerialManager_Notify);
                 }
             }
@@ -1196,10 +1196,10 @@ static serial_manager_status_t SerialManager_Read(serial_read_handle_t readHandl
             {
                 if (NULL != serialReadHandle->callback)
                 {
-                    serial_manager_callback_message_t serialMsg;
-                    serialMsg.buffer = buffer;
-                    serialMsg.length = serialReadHandle->transfer.soFar;
-                    serialReadHandle->callback(serialReadHandle->callbackParam, &serialMsg, kStatus_SerialManager_Success);
+                    serial_manager_callback_message_t msg;
+                    msg.buffer = buffer;
+                    msg.length = serialReadHandle->transfer.soFar;
+                    serialReadHandle->callback(serialReadHandle->callbackParam, &msg, kStatus_SerialManager_Success);
                 }
             }
         }
@@ -1861,7 +1861,7 @@ serial_manager_status_t SerialManager_CancelWriting(serial_write_handle_t writeH
 serial_manager_status_t SerialManager_CancelReading(serial_read_handle_t readHandle)
 {
     serial_manager_read_handle_t *serialReadHandle;
-    serial_manager_callback_message_t serialMsg;
+    serial_manager_callback_message_t msg;
     uint8_t *buffer;
     uint32_t primask;
 
@@ -1881,15 +1881,15 @@ serial_manager_status_t SerialManager_CancelReading(serial_read_handle_t readHan
     buffer                            = serialReadHandle->transfer.buffer;
     serialReadHandle->transfer.buffer = NULL;
     serialReadHandle->transfer.length = 0;
-    serialMsg.buffer                        = buffer;
-    serialMsg.length                        = serialReadHandle->transfer.soFar;
+    msg.buffer                        = buffer;
+    msg.length                        = serialReadHandle->transfer.soFar;
     EnableGlobalIRQ(primask);
 
     if (NULL != buffer)
     {
         if (NULL != serialReadHandle->callback)
         {
-            serialReadHandle->callback(serialReadHandle->callbackParam, &serialMsg, kStatus_SerialManager_Canceled);
+            serialReadHandle->callback(serialReadHandle->callbackParam, &msg, kStatus_SerialManager_Canceled);
         }
     }
     return kStatus_SerialManager_Success;
