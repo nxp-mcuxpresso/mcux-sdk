@@ -511,7 +511,7 @@ extern "C" {
  * @retval kStatus_SerialManager_Error An error occurred.
  * @retval kStatus_SerialManager_Success The Serial Manager module initialization succeed.
  */
-serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const serial_manager_config_t *config);
+serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const serial_manager_config_t *serialConfig);
 
 /*!
  * @brief De-initializes the serial manager module instance.

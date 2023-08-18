@@ -100,34 +100,6 @@ int __attribute__((weak)) _kill(int pid, int sig)
     return -1;
 }
 
-int __attribute__((weak)) _link(const char *path1, const char *path2);
-int __attribute__((weak)) _link(const char *path1, const char *path2)
-{
-    errno = ENOSYS;
-    return -1;
-}
-
-int __attribute__((weak)) _unlink(const char *path);
-int __attribute__((weak)) _unlink(const char *path)
-{
-    errno = ENOSYS;
-    return -1;
-}
-
-int __attribute__((weak)) _open(const char *filename, int oflag);
-int __attribute__((weak)) _open(const char *filename, int oflag)
-{
-    errno = ENOSYS;
-    return -1;
-}
-
-int __attribute__((weak)) _stat (const char *f, struct stat *st);
-int __attribute__((weak)) _stat (const char *f, struct stat *st)
-{
-    errno = ENOSYS;
-    return -1;
-}
-
 #endif /* SDK_USE_SYSCALL_STUB */
 
 #endif /* __GNUC__ */

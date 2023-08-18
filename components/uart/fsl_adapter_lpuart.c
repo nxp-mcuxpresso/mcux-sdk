@@ -681,7 +681,7 @@ static hal_uart_status_t HAL_UartInitCommon(hal_uart_handle_t handle, const hal_
     lpuartConfig.rxIdleConfig = kLPUART_IdleCharacter2;
 #endif /* HAL_UART_DMA_USE_SOFTWARE_IDLELINE_DETECTION */
 
-    status = LPUART_Init(s_LpuartAdapterBase[uart_config->instance], (const void *)&lpuartConfig, uart_config->srcClock_Hz);
+    status = LPUART_Init(s_LpuartAdapterBase[uart_config->instance], (void *)&lpuartConfig, uart_config->srcClock_Hz);
 
     if ((int32_t)kStatus_Success != status)
     {
@@ -1741,7 +1741,6 @@ static void LPUART_StartRingBufferEDMA(hal_uart_handle_t handle)
     //   EnableIRQ(s_LpuartRxIRQ[uartHandle->instance]);
 }
 #endif
-#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U))
 static void LPUART_DMACallbacks(LPUART_Type *base, lpuart_edma_handle_t *handle, status_t status, void *userData)
 {
     hal_uart_dma_state_t *uartDmaHandle;
@@ -1775,7 +1774,7 @@ static void LPUART_DMACallbacks(LPUART_Type *base, lpuart_edma_handle_t *handle,
         uartDmaHandle->dma_callback(uartDmaHandle, &dmaMsg, uartDmaHandle->dma_callback_param);
     }
 }
-#endif
+
 #if (defined(HAL_UART_DMA_USE_SOFTWARE_IDLELINE_DETECTION) && (HAL_UART_DMA_USE_SOFTWARE_IDLELINE_DETECTION > 0U))
 static void TimeoutTimer_Callbcak(void *param)
 {
@@ -1859,9 +1858,9 @@ hal_uart_dma_status_t HAL_UartDMAInit(hal_uart_handle_t handle,
     DMAMUX_Type *dmaMuxBases[] = DMAMUX_BASE_PTRS;
     DMAMUX_Init(dmaMuxBases[dmaMux->dma_dmamux_configure.dma_mux_instance]);
     DMAMUX_SetSource(dmaMuxBases[dmaMux->dma_dmamux_configure.dma_mux_instance], dmaConfig->tx_channel,
-                     dmaMux->dma_dmamux_configure.tx_request);
+                     (int32_t)dmaMux->dma_dmamux_configure.tx_request);
     DMAMUX_SetSource(dmaMuxBases[dmaMux->dma_dmamux_configure.dma_mux_instance], dmaConfig->rx_channel,
-                     dmaMux->dma_dmamux_configure.rx_request);
+                     (int32_t)dmaMux->dma_dmamux_configure.rx_request);
     DMAMUX_EnableChannel(dmaMuxBases[dmaMux->dma_dmamux_configure.dma_mux_instance], dmaConfig->tx_channel);
     DMAMUX_EnableChannel(dmaMuxBases[dmaMux->dma_dmamux_configure.dma_mux_instance], dmaConfig->rx_channel);
 #if (defined(HAL_UART_ADAPTER_LOWPOWER) && (HAL_UART_ADAPTER_LOWPOWER > 0U))
@@ -1915,10 +1914,8 @@ hal_uart_dma_status_t HAL_UartDMAInit(hal_uart_handle_t handle,
 #endif /* HAL_UART_ADAPTER_LOWPOWER */
 #elif (defined(FSL_FEATURE_SOC_DMA_COUNT) && (FSL_FEATURE_SOC_DMA_COUNT > 0U))
 #endif /* FSL_FEATURE_SOC_EDMA_COUNT */
-#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U))
     NVIC_SetPriority(s_edmaIRQNumbers[dmaConfig->dma_instance][dmaConfig->tx_channel], HAL_UART_ISR_PRIORITY);
     NVIC_SetPriority(s_edmaIRQNumbers[dmaConfig->dma_instance][dmaConfig->rx_channel], HAL_UART_ISR_PRIORITY);
-#endif
 #if (defined(HAL_UART_DMA_USE_SOFTWARE_IDLELINE_DETECTION) && (HAL_UART_DMA_USE_SOFTWARE_IDLELINE_DETECTION > 0U))
 #else /* HAL_UART_DMA_USE_SOFTWARE_IDLELINE_DETECTION */
     s_UartDmaState[uartDmaHandle->instance] = uartDmaHandle;
@@ -2112,11 +2109,10 @@ hal_uart_dma_status_t HAL_UartDMATransferReceive(hal_uart_handle_t handle,
     HAL_UartDMAIdlelineInterruptHandle(uartHandle->instance);
 #endif
 #else /* HAL_UART_DMA_RING_BUFFER_ENABLE */
-#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U))
     lpuart_transfer_t xfer;
     xfer.data = data;
     xfer.dataSize = length;
-#endif
+
 #if (defined(FSL_FEATURE_SOC_DMA_COUNT) && (FSL_FEATURE_SOC_DMA_COUNT > 0U))
 
 #elif (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U))

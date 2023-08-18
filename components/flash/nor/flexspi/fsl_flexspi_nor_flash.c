@@ -3779,6 +3779,14 @@ status_t Nor_Flash_Init(nor_config_t *config, nor_handle_t *handle)
         FLEXSPI_SoftwareReset((FLEXSPI_Type *)handle->driverBaseAddr);
     }
 
+#if defined(__ICACHE_PRESENT) && (__ICACHE_PRESENT == 1U)
+    if (SCB_CCR_IC_Msk == (SCB_CCR_IC_Msk & SCB->CCR))
+    {
+    	/* Invalidate ICache to prevent that instructions from flash may be cached during FLEXSPI re-configuration. */
+    	SCB_InvalidateICache();
+    }	
+#endif /* __ICACHE_PRESENT */
+
 #if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
     if (DCacheEnableFlag)
     {

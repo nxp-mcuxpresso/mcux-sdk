@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_middleware_nxp_iot_sensing_sdk_MIMXRT1062_manifest_v3_13" name="Nxp iot sensing sdk" brief="IoT Sensing SDK (ISSDK) provides sensor drivers and reference examples for NXP's IoT sensors." format_version="3.13" api_version="2.0.0" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.13.xsd">
-  <!--Timestamp (UTC): 2023-08-01 10:07:41.983347-->
-  <!--This manifest is generated based on sdk repo commit: e54814879516c4a41911f9db38131264e352b311-->
+  <!--Timestamp (UTC): 2023-08-10 10:32:03.802282-->
+  <!--This manifest is generated based on sdk repo commit: 59fd87bbfb04c6a1300c6f1786d269080579f205-->
   <externalDefinitions>
     <definition extID="MIMXRT1062xxxxA"/>
     <definition extID="MIMXRT1062xxxxB"/>
     <definition extID="armgcc"/>
     <definition extID="CMSIS_Driver_Include.I2C.MIMXRT1062"/>
     <definition extID="CMSIS_Driver_Include.SPI.MIMXRT1062"/>
-    <definition extID="platform.drivers.common.MIMXRT1062"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2140_middleware_nxp_iot_sensing_sdk_MIMXRT1062_manifest_v3_13" name="MCUXpressoSDK2140_middleware_nxp_iot_sensing_sdk_MIMXRT1062_manifest_v3_13" version="2.14.0"/>
+  <ksdk id="MCUXpressoSDK2141_middleware_nxp_iot_sensing_sdk_MIMXRT1062_manifest_v3_13" name="MCUXpressoSDK2141_middleware_nxp_iot_sensing_sdk_MIMXRT1062_manifest_v3_13" version="2.14.1" revision="Provided by Script"/>
   <components>
     <component id="middleware.issdk.sensor.tools.MIMXRT1062" name="issdk_tools" brief="ISSDK Serial to MQTT bridge application" version="1.7.0" full_name="Middleware issdk sensor tools" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" category="Sensors/misc" user_visible="false" type="other" package_base_path="middleware/issdk" project_base_path="issdk_senor">
       <source relative_path="../../tools/Serial_To_MQTT" project_relative_path="./" type="script">
@@ -605,37 +604,6 @@
       <include_paths>
         <include_path relative_path="../../drivers/gpio/i.mx" project_relative_path="./" type="c_include"/>
         <include_path relative_path="../../drivers/gpio" project_relative_path="./" type="c_include"/>
-      </include_paths>
-    </component>
-    <component id="middleware.issdk.drivers.host.MIMXRT1062" name="issdk_host" brief="ISSDK Host Interface Service" version="1.7.0" full_name="Middleware issdk drivers host" devices="MIMXRT1062xxxxA MIMXRT1062xxxxB" category="Sensors/drivers" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="host">
-      <dependencies>
-        <component_dependency value="platform.drivers.common.MIMXRT1062"/>
-      </dependencies>
-      <source relative_path="../../sensors" project_relative_path="./" type="src">
-        <files mask="host_io_uart.c"/>
-      </source>
-      <source relative_path="../../sensors" project_relative_path="./" type="c_include">
-        <files mask="host_io_uart.h"/>
-      </source>
-      <source relative_path="../../drivers/host" project_relative_path="./" type="src">
-        <files mask="comm_if_uart.c"/>
-        <files mask="data_format_hdlc.c"/>
-        <files mask="data_format_json.c"/>
-        <files mask="host_interface_service.c"/>
-      </source>
-      <source relative_path="../../drivers/host" project_relative_path="./" type="c_include">
-        <files mask="comm_interface.h"/>
-        <files mask="data_format_hdlc.h"/>
-        <files mask="data_format_json.h"/>
-        <files mask="data_format_service.h"/>
-        <files mask="host_interface_service.h"/>
-      </source>
-      <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="middleware_issdk_drivers_host.cmake" hidden="true"/>
-      </source>
-      <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
-        <include_path relative_path="../../drivers/host" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
   </components>

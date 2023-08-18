@@ -179,16 +179,40 @@ if(CONFIG_USE_component_lpuart_adapter AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1062
 
 add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/board.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
 add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/board.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/clock_config.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/clock_config.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/pin_mux.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/pin_mux.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/peripherals.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/peripherals.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+
+if(CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxA)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxA/clock_config.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxA/clock_config.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxA/pin_mux.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxA/pin_mux.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxA/peripherals.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxA/peripherals.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+endif()
+
+if(CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxB)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxB/clock_config.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxB/clock_config.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxB/pin_mux.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxB/pin_mux.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxB/peripherals.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxB/peripherals.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+endif()
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/project_template/.
 )
+
+if(CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxA)
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxA
+)
+endif()
+
+if(CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxB)
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxB
+)
+endif()
 
 else()
 
@@ -1717,54 +1741,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_component_flexspi_nor_flash_adapter_rt1060)
-# Add set(CONFIG_USE_component_flexspi_nor_flash_adapter_rt1060 true) in config.cmake to use this component
-
-message("component_flexspi_nor_flash_adapter_rt1060 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_BOARD STREQUAL evkmimxrt1060) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_flexspi)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/internal_flash/fsl_adapter_flexspi_nor_flash.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/internal_flash/.
-)
-
-else()
-
-message(SEND_ERROR "component_flexspi_nor_flash_adapter_rt1060.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_component_flexspi_nor_flash_adapter_rt1060evkb)
-# Add set(CONFIG_USE_component_flexspi_nor_flash_adapter_rt1060evkb true) in config.cmake to use this component
-
-message("component_flexspi_nor_flash_adapter_rt1060evkb component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_BOARD STREQUAL evkbmimxrt1060) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_flexspi)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/internal_flash/evkbmimxrt1060/fsl_adapter_flexspi_nor_flash.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/internal_flash/.
-)
-
-else()
-
-message(SEND_ERROR "component_flexspi_nor_flash_adapter_rt1060evkb.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_component_led)
 # Add set(CONFIG_USE_component_led true) in config.cmake to use this component
 
@@ -1986,7 +1962,7 @@ if (CONFIG_USE_component_mflash_file)
 
 message("component_mflash_file component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_mflash_rt1060)
+if(CONFIG_USE_component_mflash_evkcmimxrt1060)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mflash_file.c
@@ -2025,19 +2001,19 @@ endif()
 endif()
 
 
-if (CONFIG_USE_component_mflash_rt1060)
-# Add set(CONFIG_USE_component_mflash_rt1060 true) in config.cmake to use this component
+if (CONFIG_USE_component_mflash_evkcmimxrt1060)
+# Add set(CONFIG_USE_component_mflash_evkcmimxrt1060 true) in config.cmake to use this component
 
-message("component_mflash_rt1060 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+message("component_mflash_evkcmimxrt1060 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_mflash_common AND (CONFIG_BOARD STREQUAL evkmimxrt1060 OR CONFIG_BOARD STREQUAL evkbmimxrt1060) AND CONFIG_USE_driver_flexspi AND CONFIG_USE_driver_cache_armv7_m7)
+if(CONFIG_USE_component_mflash_common AND (CONFIG_BOARD STREQUAL evkcmimxrt1060) AND CONFIG_USE_driver_flexspi AND CONFIG_USE_driver_cache_armv7_m7)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mimxrt1062/mflash_drv.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/evkcmimxrt1060/mflash_drv.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mimxrt1062/.
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/evkcmimxrt1060/.
 )
 
 if(CONFIG_USE_COMPONENT_CONFIGURATION)
@@ -2051,7 +2027,7 @@ endif()
 
 else()
 
-message(SEND_ERROR "component_mflash_rt1060.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+message(SEND_ERROR "component_mflash_evkcmimxrt1060.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -2482,6 +2458,30 @@ endif()
 endif()
 
 
+if (CONFIG_USE_component_ecspi_adapter)
+# Add set(CONFIG_USE_component_ecspi_adapter true) in config.cmake to use this component
+
+message("component_ecspi_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/spi/fsl_adapter_ecspi.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/spi/.
+)
+
+else()
+
+message(SEND_ERROR "component_ecspi_adapter.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_component_lpspi_adapter)
 # Add set(CONFIG_USE_component_lpspi_adapter true) in config.cmake to use this component
 
@@ -2500,6 +2500,54 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "component_lpspi_adapter.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_minispi_adapter)
+# Add set(CONFIG_USE_component_minispi_adapter true) in config.cmake to use this component
+
+message("component_minispi_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/spi/fsl_adapter_minispi.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/spi/.
+)
+
+else()
+
+message(SEND_ERROR "component_minispi_adapter.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_vspi_adapter)
+# Add set(CONFIG_USE_component_vspi_adapter true) in config.cmake to use this component
+
+message("component_vspi_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/spi/fsl_adapter_vspi.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/spi/.
+)
+
+else()
+
+message(SEND_ERROR "component_vspi_adapter.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

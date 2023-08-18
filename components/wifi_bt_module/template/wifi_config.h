@@ -80,8 +80,8 @@
 #define CONFIG_MBO
 #endif
 
-//#define CONFIG_IPV6               1
-//#define CONFIG_MAX_IPV6_ADDRESSES 5
+#define CONFIG_IPV6               1
+#define CONFIG_MAX_IPV6_ADDRESSES 5
 
 /* Logs */
 #define CONFIG_ENABLE_ERROR_LOGS   1

@@ -24,12 +24,12 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FlexIO SPI driver version. */
-#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 #ifndef FLEXIO_SPI_DUMMYDATA
 /*! @brief FlexIO SPI dummy transfer data, the data is sent while txData is NULL. */
-#define FLEXIO_SPI_DUMMYDATA (0x00U)
+#define FLEXIO_SPI_DUMMYDATA (0xFFFFFFFFU)
 #endif
 
 /*! @brief Retry times for waiting flag. */

@@ -1408,7 +1408,7 @@ int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
 
     int32_t val;
 
-    uint8_t added;
+    uint8_t added = 0U;
 
     uint8_t exitPending = 0;
 
@@ -1462,7 +1462,6 @@ int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
             flag        = 0;
             field_width = MAX_FIELD_WIDTH;
             base        = 0;
-            added       = 0U;
 
             exitPending = StrFormatScanfStringHandling(&c, &flag, &field_width, &base);
 
@@ -1568,7 +1567,6 @@ int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
                 else
                 {
                     char *tempEnd;
-                    val   = 0;
                     errno = 0;
                     val   = (int32_t)strtoul(p, &tempEnd, (int)base);
                     if (0 != errno)
@@ -1587,7 +1585,6 @@ int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
             else if ((flag & (uint32_t)kSCANF_DestMask) == (uint32_t)kSCANF_DestFloat)
             {
                 n_decode += ScanIgnoreWhiteSpace(&p);
-                fnum  = 0.0;
                 errno = 0;
 
                 fnum = strtod(p, (char **)&s_temp);

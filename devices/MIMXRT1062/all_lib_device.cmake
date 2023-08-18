@@ -1,17 +1,29 @@
 # Copy variable into project config.cmake to use software component
-#set.board.evkmimxrt1060
-#  # description: Board_project_template evkmimxrt1060
-#  set(CONFIG_USE_BOARD_Project_Template_evkmimxrt1060 true)
+#set.board.evkcmimxrt1060
+#  # description: Board_project_template evkcmimxrt1060
+#  set(CONFIG_USE_BOARD_Project_Template_evkcmimxrt1060 true)
 
 #  # description: XIP Board Driver
-#  set(CONFIG_USE_driver_xip_board_evkmimxrt1060 true)
+#  set(CONFIG_USE_driver_xip_board_evkcmimxrt1060 true)
 
-#set.board.evkbmimxrt1060
-#  # description: Board_project_template evkbmimxrt1060
-#  set(CONFIG_USE_BOARD_Project_Template_evkbmimxrt1060 true)
+#set.middleware.maestro_framework
+#  # description: MCU Maestro Audio Framework Opus
+#  set(CONFIG_USE_middleware_maestro_framework_opus true)
 
-#  # description: XIP Board Driver
-#  set(CONFIG_USE_driver_xip_board_evkbmimxrt1060 true)
+#  # description: MCU Maestro Audio Framework Opusfile
+#  set(CONFIG_USE_middleware_maestro_framework_opusfile true)
+
+#  # description: MCU Maestro Audio Framework Ogg
+#  set(CONFIG_USE_middleware_maestro_framework_ogg true)
+
+#  # description: MCU Maestro Audio Framework Doc
+#  set(CONFIG_USE_middleware_maestro_framework_doc true)
+
+#  # description: MCU Maestro Audio Framework
+#  set(CONFIG_USE_middleware_maestro_framework_codecs true)
+
+#  # description: MCU Maestro Audio Framework Streamer Core
+#  set(CONFIG_USE_middleware_maestro_framework true)
 
 #set.middleware.wifi
 #  # description: NXP WLAN common files
@@ -261,12 +273,6 @@
 #  # description: Driver ili9341
 #  set(CONFIG_USE_driver_ili9341 true)
 
-#  # description: Component flexspi_nor_flash_adapter_rt1060
-#  set(CONFIG_USE_component_flexspi_nor_flash_adapter_rt1060 true)
-
-#  # description: Component flexspi_nor_flash_adapter_rt1060evkb
-#  set(CONFIG_USE_component_flexspi_nor_flash_adapter_rt1060evkb true)
-
 #  # description: Component led
 #  set(CONFIG_USE_component_led true)
 
@@ -300,8 +306,8 @@
 #  # description: dummy file for overwriting mflash when dowloading
 #  set(CONFIG_USE_component_mflash_dummy true)
 
-#  # description: mflash rt1060
-#  set(CONFIG_USE_component_mflash_rt1060 true)
+#  # description: mflash evkcmimxrt1060
+#  set(CONFIG_USE_component_mflash_evkcmimxrt1060 true)
 
 #  # description: Driver mma8451q
 #  set(CONFIG_USE_driver_mma8451q true)
@@ -348,8 +354,17 @@
 #  # description: Driver silicon_id
 #  set(CONFIG_USE_component_silicon_id true)
 
+#  # description: Component ecspi_adapter
+#  set(CONFIG_USE_component_ecspi_adapter true)
+
 #  # description: Component lpspi_adapter
 #  set(CONFIG_USE_component_lpspi_adapter true)
+
+#  # description: Component minispi_adapter
+#  set(CONFIG_USE_component_minispi_adapter true)
+
+#  # description: Component vspi_adapter
+#  set(CONFIG_USE_component_vspi_adapter true)
 
 #  # description: Component pit time stamp adapter
 #  set(CONFIG_USE_component_pit_time_stamp_adapter true)
@@ -808,25 +823,6 @@
 #  # description: lwIP UDP Echo Raw API contrib
 #  set(CONFIG_USE_middleware_lwip_contrib_udpecho_raw true)
 
-#set.middleware.maestro_framework
-#  # description: MCU Maestro Audio Framework Opus
-#  set(CONFIG_USE_middleware_maestro_framework_opus true)
-
-#  # description: MCU Maestro Audio Framework Opusfile
-#  set(CONFIG_USE_middleware_maestro_framework_opusfile true)
-
-#  # description: MCU Maestro Audio Framework Ogg
-#  set(CONFIG_USE_middleware_maestro_framework_ogg true)
-
-#  # description: MCU Maestro Audio Framework Doc
-#  set(CONFIG_USE_middleware_maestro_framework_doc true)
-
-#  # description: MCU Maestro Audio Framework
-#  set(CONFIG_USE_middleware_maestro_framework_codecs true)
-
-#  # description: MCU Maestro Audio Framework Streamer Core
-#  set(CONFIG_USE_middleware_maestro_framework true)
-
 #set.middleware.mcuboot
 #  # description: mcuboot
 #  set(CONFIG_USE_middleware_mcuboot true)
@@ -1019,6 +1015,124 @@
 #  # description: Voice seeker library for Cortex M7
 #  set(CONFIG_USE_middleware_voice_seeker_cm7 true)
 
+#set.middleware.edgefast_bluetooth
+#  # description: edgefast_bluetooth PAL configuration template
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_config_template true)
+
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_sdio_template_evkcmimxrt1060 true)
+
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_mcux_linker_template_evkcmimxrt1060 true)
+
+#  # description: edgefast_bluetooth Abstraction Layer
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_pal true)
+
+#  # description: edgefast_bluetooth HCI
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_common_ethermind_hci true)
+
+#  # description: edgefast_bluetooth HCI UART
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_common_ethermind_hci_uart true)
+
+#  # description: edgefast_bluetooth bt_ble host stack
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_common_ethermind true)
+
+#  # description: edgefast_bluetooth wifi_nxp controller
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_wifi_nxp_controller_base true)
+
+#  # description: edgefast_bluetooth k32w061 controller
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_k32w061_controller true)
+
+#  # description: edgefast_bluetooth configuration for bt_ble Host stack
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_config_ethermind true)
+
+#  # description: edgefast_bluetooth extension for bt_ble Host stack
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_extension_common_ethermind true)
+
+#  # description: edgefast_bluetooth bt_ble Host stack(including BR and BLE)
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_btble_ethermind_cm7f true)
+
+#  # description: edgefast_bluetooth bt_ble Host stack(including BLE only)
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_ble_ethermind_cm7f true)
+
+#  # description: edgefast_bluetooth bt_ble Host stack(including BR only)
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_br_ethermind_cm7f true)
+
+#  # description: edgefast_bluetooth profile hrs
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_profile_hrs true)
+
+#  # description: edgefast_bluetooth profile bas
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_profile_bas true)
+
+#  # description: edgefast_bluetooth profile dis
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_profile_dis true)
+
+#  # description: edgefast_bluetooth profile hts
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_profile_hts true)
+
+#  # description: edgefast_bluetooth profile hps
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_profile_hps true)
+
+#  # description: edgefast_bluetooth profile pxr
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_profile_pxr true)
+
+#  # description: edgefast_bluetooth profile ipsp
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_profile_ipsp true)
+
+#  # description: edgefast_bluetooth profile wu
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_profile_wu true)
+
+#  # description: edgefast_bluetooth profile fmp
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_profile_fmp true)
+
+#  # description: edgefast_bluetooth profile tip
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_profile_tip true)
+
+#  # description: edgefast_bluetooth PAL platform for bt_ble Host stack
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_pal_platform_ethermind true)
+
+#  # description: edgefast_bluetooth host_msd_fatfs for bt_ble Host stack
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_pal_host_msd_fatfs_ethermind true)
+
+#  # description: edgefast_bluetooth db_gen for bt_ble Host stack
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_pal_db_gen_ethermind true)
+
+#  # description: edgefast_bluetooth porting.atomic
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_porting_atomic true)
+
+#  # description: edgefast_bluetooth porting.list
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_porting_list true)
+
+#  # description: edgefast_bluetooth porting.netbuf
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_porting_net true)
+
+#  # description: edgefast_bluetooth porting.toolchain
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_porting_toolchain true)
+
+#  # description: edgefast_bluetooth porting.work_queue
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_porting_work_queue true)
+
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_template true)
+
+#  # description: edgefast_bluetooth porting
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_porting true)
+
+#  # description: edgefast_bluetooth shell
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_shell true)
+
+#  # description: edgefast_bluetooth shell_ble
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_shell_ble true)
+
+#  # description: btble libraries for bt_ble Host stack
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_btble_ethermind_lib_cm7f true)
+
+#  # description: BR libraries for bt_ble Host stack
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_br_ethermind_lib_cm7f true)
+
+#  # description: BLE libraries for bt_ble Host stack
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_ble_ethermind_lib_cm7f true)
+
 #set.middleware.issdk
 #  # description: ISSDK Serial to MQTT bridge application
 #  set(CONFIG_USE_middleware_issdk_sensor_tools true)
@@ -1107,9 +1221,6 @@
 #  # description: ISSDK GPIO Driver for i.MXRT
 #  set(CONFIG_USE_middleware_issdk_drivers_gpio_imxrt true)
 
-#  # description: ISSDK Host Interface Service
-#  set(CONFIG_USE_middleware_issdk_drivers_host true)
-
 #set.middleware.eiq
 #  # description: Video and audio interface layer
 #  set(CONFIG_USE_middleware_eiq_worker true)
@@ -1139,7 +1250,7 @@
 #  set(CONFIG_USE_middleware_eiq_glow true)
 
 #  # description: Video capture and display abstract layer
-#  set(CONFIG_USE_middleware_eiq_worker_video_evkmimxrt1060 true)
+#  set(CONFIG_USE_middleware_eiq_worker_video_evkcmimxrt1060 true)
 
 #  # description: Audio capture and play abstract layer
 #  set(CONFIG_USE_middleware_eiq_worker_audio true)
@@ -1161,27 +1272,6 @@
 
 #  # description: TensorFlow Lite Micro word detection library
 #  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_examples_microspeech true)
-
-#  # description: DeepViewRT Runtime library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_nnlib true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_modelrunner_server true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_modelrunner_server_flash true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_flatcc true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_json true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_stb true)
-
-#  # description: Video capture and display abstract layer
-#  set(CONFIG_USE_middleware_eiq_worker_video_evkbmimxrt1060 true)
 
 #set.middleware.azure_rtos
 #  # description: Azure RTOS Core
@@ -1385,6 +1475,7 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
   ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/EAP
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/edgefast_bluetooth
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
   ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
@@ -1406,22 +1497,18 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/xip
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
-  ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkbmimxrt1060
-  ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt1060
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1166
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1052
+  ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkcmimxrt1060
   ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1062
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MK22F51212
 )
 
-include(set_board_evkbmimxrt1060 OPTIONAL)
-include(set_board_evkmimxrt1060 OPTIONAL)
+include(set_board_evkcmimxrt1060 OPTIONAL)
 include(set_CMSIS_DSP_Lib OPTIONAL)
 include(set_CMSIS OPTIONAL)
 include(set_device_MIMXRT1062 OPTIONAL)
 include(set_component_osa OPTIONAL)
 include(set_middleware_azure_rtos OPTIONAL)
 include(set_middleware_eap OPTIONAL)
+include(set_middleware_edgefast_bluetooth OPTIONAL)
 include(set_middleware_wifi OPTIONAL)
 include(set_middleware_eiq OPTIONAL)
 include(set_middleware_fatfs OPTIONAL)

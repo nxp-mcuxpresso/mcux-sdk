@@ -1240,7 +1240,7 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
     {
         /* In PCS continous mode(TCR[CONT]), after write all the data in TX FIFO, TCR[CONTC] and TCR[CONT] should be
            cleared to de-assert the PCS. Note that TCR register also use the TX FIFO. Also CONTC should be cleared when
-           tx is not masked, otherwise written to TCR register with TXMSK bit set will initiate a new transfer. */
+           tx is not masked, otherwise written to TCR register with TXMSK bit wet will initiate a new transfer. */
         /*
          * $Branch Coverage Justification$
          * $ref fsl_lpspi_c_ref_2$
