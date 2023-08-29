@@ -3,11 +3,11 @@ include_guard(GLOBAL)
 message("driver_flexio_i2s component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_LIST_DIR}/fsl_flexio_i2s.c
+    ${CMAKE_CURRENT_LIST_DIR}/i2s/fsl_flexio_i2s.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-    ${CMAKE_CURRENT_LIST_DIR}/.
+    ${CMAKE_CURRENT_LIST_DIR}/i2s/.
 )
 
 
