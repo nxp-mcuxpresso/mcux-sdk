@@ -2,7 +2,7 @@
 include_guard(GLOBAL)
 message("driver_common component is included.")
 
-if((DEFINED CMAKE_C_COMPILER) AND (${CMAKE_C_COMPILER} MATCHES "xtensa"))
+if((DEFINED CMAKE_C_COMPILER) AND ((${CMAKE_C_COMPILER} MATCHES "xtensa") OR (${CMAKE_C_COMPILER} MATCHES "xt-clang")))
     set(MCUX_CPU_ARCH "DSP")
 endif()
 
