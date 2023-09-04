@@ -21,8 +21,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.0 */
-#define FSL_PCM512X_DRIVER_VERSION (MAKE_VERSION(0, 1, 0))
+/*! @brief PCM512X driver version 2.0.0 */
+#define FSL_PCM512X_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
 /*@}*/
 
 /*! @brief PCM512x handle size */
