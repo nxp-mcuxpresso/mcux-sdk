@@ -1767,7 +1767,7 @@ void MCAN_TransferHandleIRQ(CAN_Type *base, mcan_handle_t *handle)
         else if (0U != (valueIR & (uint32_t)kMCAN_RxFifo1LostFlag))
         {
             result = (uint32_t)kMCAN_RxFifo1LostFlag;
-            status = kStatus_MCAN_RxFifo0Lost;
+            status = kStatus_MCAN_RxFifo1Lost;
         }
         else
         {
