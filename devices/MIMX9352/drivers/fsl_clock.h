@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1157,6 +1157,8 @@ typedef enum _clock_lpcg
         kCLOCK_IpInvalid, kCLOCK_I3c1, kCLOCK_I3c2 \
     }
 
+void CLOCK_Init(CCM_Type *regBase);
+
 /*******************************************************************************
  * Clock Root APIs
  ******************************************************************************/
@@ -1167,14 +1169,7 @@ typedef enum _clock_lpcg
  * @param root Which root clock node to set, see \ref clock_root_t.
  * @param src Clock mux value to set, different mux has different value range. See \ref clock_root_mux_source_t.
  */
-static inline void CLOCK_SetRootClockMux(clock_root_t root, uint8_t src)
-{
-    assert(src < 8U);
-    CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW =
-        (CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW & ~(CCM_CLOCK_ROOT_MUX_MASK)) | CCM_CLOCK_ROOT_MUX(src);
-    __DSB();
-    __ISB();
-}
+void CLOCK_SetRootClockMux(clock_root_t root, uint8_t src);
 
 /*!
  * @brief Get CCM Root Clock MUX value.
@@ -1182,10 +1177,7 @@ static inline void CLOCK_SetRootClockMux(clock_root_t root, uint8_t src)
  * @param root Which root clock node to get, see \ref clock_root_t.
  * @return Clock mux value.
  */
-static inline uint32_t CLOCK_GetRootClockMux(clock_root_t root)
-{
-    return (CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW & CCM_CLOCK_ROOT_MUX_MASK) >> CCM_CLOCK_ROOT_MUX_SHIFT;
-}
+uint32_t CLOCK_GetRootClockMux(clock_root_t root);
 
 /*!
  * @brief Get CCM Root Clock Source.
@@ -1205,15 +1197,7 @@ static inline clock_name_t CLOCK_GetRootClockSource(clock_root_t root, uint32_t 
  * @param root Which root clock to set, see \ref clock_root_t.
  * @param div Clock div value to set, different divider has different value range.
  */
-static inline void CLOCK_SetRootClockDiv(clock_root_t root, uint8_t div)
-{
-    assert(div);
-    CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW =
-        (CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW & ~CCM_CLOCK_ROOT_DIV_MASK) |
-        CCM_CLOCK_ROOT_DIV((uint32_t)div - 1UL);
-    __DSB();
-    __ISB();
-}
+void CLOCK_SetRootClockDiv(clock_root_t root, uint8_t div);
 
 /*!
  * @brief Get CCM DIV node value.
@@ -1221,38 +1205,21 @@ static inline void CLOCK_SetRootClockDiv(clock_root_t root, uint8_t div)
  * @param root Which root clock node to get, see \ref clock_root_t.
  * @return divider set for this root
  */
-static inline uint32_t CLOCK_GetRootClockDiv(clock_root_t root)
-{
-    return ((CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW & CCM_CLOCK_ROOT_DIV_MASK) >> CCM_CLOCK_ROOT_DIV_SHIFT) +
-           1UL;
-}
+uint32_t CLOCK_GetRootClockDiv(clock_root_t root);
 
 /*!
  * @brief Power Off Root Clock
  *
  * @param root Which root clock node to set, see \ref clock_root_t.
  */
-static inline void CLOCK_PowerOffRootClock(clock_root_t root)
-{
-    if (0UL == (CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW & CCM_CLOCK_ROOT_OFF_MASK))
-    {
-        CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.SET = CCM_CLOCK_ROOT_OFF_MASK;
-        __DSB();
-        __ISB();
-    }
-}
+void CLOCK_PowerOffRootClock(clock_root_t root);
 
 /*!
  * @brief Power On Root Clock
  *
  * @param root Which root clock node to set, see \ref clock_root_t.
  */
-static inline void CLOCK_PowerOnRootClock(clock_root_t root)
-{
-    CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.CLR = CCM_CLOCK_ROOT_OFF_MASK;
-    __DSB();
-    __ISB();
-}
+void CLOCK_PowerOnRootClock(clock_root_t root);
 
 /*!
  * @brief Configure Root Clock
@@ -1260,15 +1227,7 @@ static inline void CLOCK_PowerOnRootClock(clock_root_t root)
  * @param root Which root clock node to set, see \ref clock_root_t.
  * @param config root clock config, see \ref clock_root_config_t
  */
-static inline void CLOCK_SetRootClock(clock_root_t root, const clock_root_config_t *config)
-{
-    assert(config);
-    CCM_CTRL->CLOCK_ROOT[root].CLOCK_ROOT_CONTROL.RW = CCM_CLOCK_ROOT_MUX(config->mux) |
-                                                       CCM_CLOCK_ROOT_DIV((uint32_t)config->div - 1UL) |
-                                                       (config->clockOff ? CCM_CLOCK_ROOT_OFF(config->clockOff) : 0UL);
-    __DSB();
-    __ISB();
-}
+void CLOCK_SetRootClock(clock_root_t root, const clock_root_config_t *config);
 
 /*******************************************************************************
  * Clock Gate APIs
@@ -1282,15 +1241,7 @@ static inline void CLOCK_SetRootClock(clock_root_t root, const clock_root_config
  * @param name  Which clock to enable, see \ref clock_lpcg_t.
  * @param value Clock gate value to set, see \ref clock_gate_value_t.
  */
-static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t value)
-{
-    if (((uint32_t)value & CCM_LPCG_DIRECT_ON_MASK) != (CCM_CTRL->LPCG[name].DIRECT & CCM_LPCG_DIRECT_ON_MASK))
-    {
-        CCM_CTRL->LPCG[name].DIRECT = ((uint32_t)value & CCM_LPCG_DIRECT_ON_MASK);
-        __DSB();
-        __ISB();
-    }
-}
+void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t value);
 
 /*!
  * @brief Enable the clock for specific IP.
