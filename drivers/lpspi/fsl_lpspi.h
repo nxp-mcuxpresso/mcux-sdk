@@ -514,6 +514,7 @@ static inline void LPSPI_Enable(LPSPI_Type *base, bool enable)
     {
         base->CR &= ~LPSPI_CR_MEN_MASK;
     }
+#if defined(FSL_FEATURE_LPSPI_HAS_ERRATA_051472) && FSL_FEATURE_LPSPI_HAS_ERRATA_051472
     /* ERRATA051472: The SR[REF] would assert if software disables the LPSPI module 
        after receiving some data and then enabled the LPSPI again without performing a software reset.
        Clear SR[REF] flag after LPSPI module enabled*/
@@ -521,6 +522,7 @@ static inline void LPSPI_Enable(LPSPI_Type *base, bool enable)
     {
         base->SR = (uint32_t)kLPSPI_ReceiveErrorFlag;
     }
+#endif
 }
 
 /*!
