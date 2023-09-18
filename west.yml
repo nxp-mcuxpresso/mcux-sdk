@@ -23,7 +23,6 @@ manifest:
     revision: MCUX_2.14.0
   - name: rpmsg-lite
     path: middleware/multicore/rpmsg_lite
-    url: https://github.com/nxp-mcuxpresso/rpmsg-lite
     revision: v5.1.0
   - name: erpc
     path: middleware/multicore/erpc
