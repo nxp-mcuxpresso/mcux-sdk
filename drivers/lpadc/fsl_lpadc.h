@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPADC driver version 2.6.2. */
-#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 6, 2))
+/*! @brief LPADC driver version 2.7.0. */
+#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
 /*@}*/
 
 /*!
@@ -810,15 +810,24 @@ static inline uint32_t LPADC_GetConvResultCount(ADC_Type *base, uint8_t index)
 }
 
 /*!
- * brief Get the result in conversion FIFOn.
+ * @brief Get the result in conversion FIFOn.
  *
- * param base LPADC peripheral base address.
- * param result Pointer to structure variable that keeps the conversion result in conversion FIFOn.
- * param index Result FIFO index.
+ * @param base LPADC peripheral base address.
+ * @param result Pointer to structure variable that keeps the conversion result in conversion FIFOn.
+ * @param index Result FIFO index.
  *
- * return Status whether FIFOn entry is valid.
+ * @return Status whether FIFOn entry is valid.
  */
 bool LPADC_GetConvResult(ADC_Type *base, lpadc_conv_result_t *result, uint8_t index);
+
+/*!
+ * @brief Get the result in conversion FIFOn using blocking method.
+ *
+ * @param base LPADC peripheral base address.
+ * @param result Pointer to structure variable that keeps the conversion result in conversion FIFOn.
+ * @param index Result FIFO index.
+ */
+void LPADC_GetConvResultBlocking(ADC_Type *base, lpadc_conv_result_t *result, uint8_t index);
 #else
 /*!
  * @brief Get the count of result kept in conversion FIFO.
@@ -840,6 +849,14 @@ static inline uint32_t LPADC_GetConvResultCount(ADC_Type *base)
  * @return Status whether FIFO entry is valid.
  */
 bool LPADC_GetConvResult(ADC_Type *base, lpadc_conv_result_t *result);
+
+/*!
+ * @brief Get the result in conversion FIFO using blocking method.
+ *
+ * @param base LPADC peripheral base address.
+ * @param result Pointer to structure variable that keeps the conversion result in conversion FIFO.
+ */
+void LPADC_GetConvResultBlocking(ADC_Type *base, lpadc_conv_result_t *result);
 #endif /* FSL_FEATURE_LPADC_FIFO_COUNT */
 
 /*!

@@ -282,20 +282,46 @@ bool LPADC_GetConvResult(ADC_Type *base, lpadc_conv_result_t *result, uint8_t in
 {
     assert(result != NULL); /* Check if the input pointer is available. */
 
-    uint32_t tmp32 = 0;
+    uint32_t tmp32 = 0U;
 
-    while (0U == (ADC_RESFIFO_VALID_MASK & tmp32))
+    tmp32 = base->RESFIFO[index];
+
+    if (ADC_RESFIFO_VALID_MASK != (tmp32 & ADC_RESFIFO_VALID_MASK))
     {
-        /* while loop until FIFO is not empty */
+        return false; /* FIFO is empty. Discard any read from RESFIFO. */
+    }
+
+    result->commandIdSource = (tmp32 & ADC_RESFIFO_CMDSRC_MASK) >> ADC_RESFIFO_CMDSRC_SHIFT;
+    result->loopCountIndex = (tmp32 & ADC_RESFIFO_LOOPCNT_MASK) >> ADC_RESFIFO_LOOPCNT_SHIFT;
+    result->triggerIdSource = (tmp32 & ADC_RESFIFO_TSRC_MASK) >> ADC_RESFIFO_TSRC_SHIFT;
+    result->convValue = (uint16_t)(tmp32 & ADC_RESFIFO_D_MASK);
+
+    return true;
+}
+/*!
+ * brief Get the result in conversion FIFOn using blocking method.
+ *
+ * param base LPADC peripheral base address.
+ * param result Pointer to structure variable that keeps the conversion result in conversion FIFOn.
+ * param index Result FIFO index.
+ */
+void LPADC_GetConvResultBlocking(ADC_Type *base, lpadc_conv_result_t *result, uint8_t index)
+{
+    assert(result != NULL); /* Check if the input pointer is available. */
+
+    uint32_t tmp32 = 0U;
+
+    tmp32 = base->RESFIFO[index];
+
+    while (ADC_RESFIFO_VALID_MASK != (tmp32 & ADC_RESFIFO_VALID_MASK))
+    {
         tmp32 = base->RESFIFO[index];
     }
 
     result->commandIdSource = (tmp32 & ADC_RESFIFO_CMDSRC_MASK) >> ADC_RESFIFO_CMDSRC_SHIFT;
     result->loopCountIndex  = (tmp32 & ADC_RESFIFO_LOOPCNT_MASK) >> ADC_RESFIFO_LOOPCNT_SHIFT;
     result->triggerIdSource = (tmp32 & ADC_RESFIFO_TSRC_MASK) >> ADC_RESFIFO_TSRC_SHIFT;
-    result->convValue       = (uint16_t)(tmp32 & ADC_RESFIFO_D_MASK);
-
-    return true;
+    result->convValue = (uint16_t)(tmp32 & ADC_RESFIFO_D_MASK);
 }
 #else
 /*!
@@ -312,10 +338,11 @@ bool LPADC_GetConvResult(ADC_Type *base, lpadc_conv_result_t *result)
 
     uint32_t tmp32 = 0U;
 
-    while (0U == (ADC_RESFIFO_VALID_MASK & tmp32))
+    tmp32 = base->RESFIFO;
+
+    if (ADC_RESFIFO_VALID_MASK != (tmp32 & ADC_RESFIFO_VALID_MASK))
     {
-        /* while loop until FIFO is not empty */
-        tmp32 = base->RESFIFO;
+        return false; /* FIFO is empty. Discard any read from RESFIFO. */
     }
 
     result->commandIdSource = (tmp32 & ADC_RESFIFO_CMDSRC_MASK) >> ADC_RESFIFO_CMDSRC_SHIFT;
@@ -324,6 +351,30 @@ bool LPADC_GetConvResult(ADC_Type *base, lpadc_conv_result_t *result)
     result->convValue = (uint16_t)(tmp32 & ADC_RESFIFO_D_MASK);
 
     return true;
+}
+/*!
+ * @brief Get the result in conversion FIFO using blocking method.
+ *
+ * @param base LPADC peripheral base address.
+ * @param result Pointer to structure variable that keeps the conversion result in conversion FIFO.
+ */
+void LPADC_GetConvResultBlocking(ADC_Type *base, lpadc_conv_result_t *result)
+{
+    assert(result != NULL); /* Check if the input pointer is available. */
+
+    uint32_t tmp32 = 0U;
+    
+    tmp32 = base->RESFIFO;
+
+    while (ADC_RESFIFO_VALID_MASK != (tmp32 & ADC_RESFIFO_VALID_MASK))
+    {
+        tmp32 = base->RESFIFO;
+    }
+
+    result->commandIdSource = (tmp32 & ADC_RESFIFO_CMDSRC_MASK) >> ADC_RESFIFO_CMDSRC_SHIFT;
+    result->loopCountIndex = (tmp32 & ADC_RESFIFO_LOOPCNT_MASK) >> ADC_RESFIFO_LOOPCNT_SHIFT;
+    result->triggerIdSource = (tmp32 & ADC_RESFIFO_TSRC_MASK) >> ADC_RESFIFO_TSRC_SHIFT;
+    result->convValue = (uint16_t)(tmp32 & ADC_RESFIFO_D_MASK);
 }
 #endif /* FSL_FEATURE_LPADC_FIFO_COUNT */
 
