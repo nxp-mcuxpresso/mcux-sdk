@@ -469,5 +469,14 @@
 /* @brief Has no VSELECT bit in VEND_SPEC register */
 #define FSL_FEATURE_USDHC_HAS_NO_VOLTAGE_SELECT (1)
 
+/* IRQSTEER module features */
+
+/* @brief Number of IRQSTEERN CHN_MASK register. */
+#define FSL_FEATURE_IRQSTEER_CHN_MASK_COUNT (5)
+/* @brief The start IRQ index of first IRQSTEER source IRQ. */
+#define FSL_FEATURE_IRQSTEER_IRQ_START_INDEX (0)
+/* @brief Number of interrupts multiplexed by the IRQ_STEER IP. */
+#define FSL_FEATURE_IRQSTEER_IRQ_NUM (160)
+
 #endif /* _MIMX8ML8_dsp_FEATURES_H_ */
 
