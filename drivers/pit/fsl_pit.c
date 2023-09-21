@@ -23,15 +23,16 @@
  *
  * @return The PIT instance
  */
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 static uint32_t PIT_GetInstance(PIT_Type *base);
+#endif
 
 /*******************************************************************************
  * Variables
  ******************************************************************************/
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to PIT bases for each instance. */
 static PIT_Type *const s_pitBases[] = PIT_BASE_PTRS;
-
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to PIT clocks for each instance. */
 static const clock_ip_name_t s_pitClocks[] = PIT_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
@@ -39,6 +40,7 @@ static const clock_ip_name_t s_pitClocks[] = PIT_CLOCKS;
 /*******************************************************************************
  * Code
  ******************************************************************************/
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 static uint32_t PIT_GetInstance(PIT_Type *base)
 {
     uint32_t instance;
@@ -56,6 +58,7 @@ static uint32_t PIT_GetInstance(PIT_Type *base)
 
     return instance;
 }
+#endif
 
 /*!
  * brief Ungates the PIT clock, enables the PIT module, and configures the peripheral for basic operations.
