@@ -12,7 +12,7 @@
     <definition extID="M7SLAVE"/>
     <definition extID="mcuxpresso"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2140_middleware_nxp_mmcau_MIMXRT1176_manifest_v3_13" name="MCUXpressoSDK2140_middleware_nxp_mmcau_MIMXRT1176_manifest_v3_13" version="2.14.0"/>
+  <ksdk id="MCUXpressoSDK2140_middleware_nxp_mmcau_MIMXRT1176_manifest_v3_13" name="MCUXpressoSDK2140_middleware_nxp_mmcau_MIMXRT1176_manifest_v3_13" version="2.14.0" revision="Provided by Script"/>
   <components>
     <component id="middleware.mmcau.mmcau_files.MIMXRT1176" name="mmcau" brief="MMCAU security function library source files" version="2.0.4" full_name="Kinetis MMCAU security function library source files" devices="MIMXRT1176xxxxx" category="MMCAU Security/MMCAU library" user_visible="false" type="middleware" package_base_path="../middleware/mmcau" project_base_path="mmcau">
       <source relative_path="./" type="doc">

@@ -252,18 +252,6 @@ message("device_MIMXRT595S_DSP component is included from ${CMAKE_CURRENT_LIST_F
 
 if((CONFIG_DEVICE_ID STREQUAL MIMXRT595S))
 
-if(CONFIG_TOOLCHAIN STREQUAL xcc)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./system_MIMXRT595S_dsp.c
-  )
-endif()
-
-if(CONFIG_TOOLCHAIN STREQUAL xcc)
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./.
-)
-endif()
-
 else()
 
 message(SEND_ERROR "device_MIMXRT595S_DSP.MIMXRT595S dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")

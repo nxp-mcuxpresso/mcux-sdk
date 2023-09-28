@@ -1009,6 +1009,14 @@
 #  # description: Xtensa HiFi4 NN library binary for i.MX RT595
 #  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_xa_nnlib_hifi4_binary true)
 
+#set.middleware.wireless.wpa_supplicant
+#  # description: Wpa supplicant rtos
+#  set(CONFIG_USE_middleware_wireless_wpa_supplicant_rtos true)
+
+#set.middleware.naturedsp_fusionf1
+#  # description: NatureDSP
+#  set(CONFIG_USE_middleware_naturedsp_naturedsp_fusionf1 true)
+
 #set.middleware.usb
 #  # description: USB device ip3511hs config header
 #  set(CONFIG_USE_middleware_usb_device_ip3511hs_config_header true)
@@ -1132,6 +1140,7 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/vit
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/voice_seeker
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wifi_nxp
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/wpa_supplicant-rtos
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
   ${CMAKE_CURRENT_LIST_DIR}/drivers
   ${CMAKE_CURRENT_LIST_DIR}/project_template
@@ -1139,18 +1148,13 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT595S
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt595
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S06
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1166
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1052
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT685S
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1176
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC845
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MK22F51212
   ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC54628
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1011
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S69
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/K32L3A60
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MQ6
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1042
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S16
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1021
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1176
 )
 
 include(set_board_evkmimxrt595 OPTIONAL)
@@ -1171,7 +1175,9 @@ include(set_middleware_lwip OPTIONAL)
 include(set_middleware_mbedtls OPTIONAL)
 include(set_middleware_mcuboot OPTIONAL)
 include(set_middleware_multicore OPTIONAL)
+include(set_middleware_naturedsp_fusionf1 OPTIONAL)
 include(set_middleware_sdmmc OPTIONAL)
 include(set_middleware_usb OPTIONAL)
 include(set_middleware_vit OPTIONAL)
 include(set_middleware_voice_seeker OPTIONAL)
+include(set_middleware_wireless_wpa_supplicant OPTIONAL)

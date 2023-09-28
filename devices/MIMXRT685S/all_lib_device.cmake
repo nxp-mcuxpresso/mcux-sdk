@@ -1,11 +1,11 @@
 # Copy variable into project config.cmake to use software component
-#set.board.evkmimxrt685
-#  # description: Board_project_template evkmimxrt685
-#  set(CONFIG_USE_BOARD_Project_Template_evkmimxrt685 true)
-
 #set.board.mimxrt685audevk
 #  # description: Board_project_template mimxrt685audevk
 #  set(CONFIG_USE_BOARD_Project_Template_mimxrt685audevk true)
+
+#set.board.evkmimxrt685
+#  # description: Board_project_template evkmimxrt685
+#  set(CONFIG_USE_BOARD_Project_Template_evkmimxrt685 true)
 
 #set.device.MIMXRT685S
 #  # description: Device MIMXRT685S_startup
@@ -408,10 +408,10 @@
 #  set(CONFIG_USE_driver_wwdt true)
 
 #  # description: flash config block
-#  set(CONFIG_USE_driver_flash_config_evkmimxrt685 true)
+#  set(CONFIG_USE_driver_flash_config_mimxrt685audevk true)
 
 #  # description: flash config block
-#  set(CONFIG_USE_driver_flash_config_mimxrt685audevk true)
+#  set(CONFIG_USE_driver_flash_config_evkmimxrt685 true)
 
 #set.middleware.wifi
 #  # description: NXP WLAN common files
@@ -888,6 +888,70 @@
 #  # description: Voice seeker library for HiFi4
 #  set(CONFIG_USE_middleware_voice_seeker_hifi4 true)
 
+#set.middleware.eiq
+#  # description: eIQ audio stream from microphone to speaker abstraction
+#  set(CONFIG_USE_middleware_eiq_audio_mimxrt685audevk true)
+
+#  # description: Video and audio interface layer
+#  set(CONFIG_USE_middleware_eiq_worker true)
+
+#  # description: Flatbuffers library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_flatbuffers true)
+
+#  # description: Gemmlowp library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_gemmlowp true)
+
+#  # description: Ruy library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_ruy true)
+
+#  # description: General Purpose FFT (Fast Fourier/Cosine/Sine Transform) Package
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_fft2d true)
+
+#  # description: A mixed-radix Fast Fourier Transform library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_kissfft true)
+
+#  # description: CMSIS-NN library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_cmsis_nn true)
+
+#  # description: Xtensa HiFi4 NN library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_xa_nnlib_hifi4 true)
+
+#  # description: eIQ audio stream from microphone to speaker abstraction
+#  set(CONFIG_USE_middleware_eiq_audio_evkmimxrt685 true)
+
+#  # description: Audio capture and play abstract layer
+#  set(CONFIG_USE_middleware_eiq_worker_audio true)
+
+#  # description: Video capture and display abstract layer
+#  set(CONFIG_USE_middleware_eiq_worker_video_mimxrt685audevk true)
+
+#  # description: Video capture and display abstract layer
+#  set(CONFIG_USE_middleware_eiq_gui_printf true)
+
+#  # description: TensorFlow Lite Micro library with reference kernel implementations
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_reference true)
+
+#  # description: TensorFlow Lite Micro library with CMSIS-NN kernel implementations
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn true)
+
+#  # description: TensorFlow Lite Micro library with CMSIS-NN and Ethos-U kernel implementations
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn_ethosu true)
+
+#  # description: TensorFlow Lite Micro library with Xtensa HiFi4 DSP kernel implementations
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_xtensa true)
+
+#  # description: TensorFlow Lite Micro library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro true)
+
+#  # description: TensorFlow Lite Micro word detection library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_examples_microspeech true)
+
+#  # description: Xtensa HiFi4 NN library binary for i.MX RT685
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_xa_nnlib_hifi4_binary true)
+
+#  # description: Video capture and display abstract layer
+#  set(CONFIG_USE_middleware_eiq_worker_video_evkmimxrt685 true)
+
 #set.middleware.issdk
 #  # description: ISSDK Serial to MQTT bridge application
 #  set(CONFIG_USE_middleware_issdk_sensor_tools true)
@@ -979,69 +1043,13 @@
 #  # description: ISSDK Host Interface Service
 #  set(CONFIG_USE_middleware_issdk_drivers_host true)
 
-#set.middleware.eiq
-#  # description: eIQ audio stream from microphone to speaker abstraction
-#  set(CONFIG_USE_middleware_eiq_audio_evkmimxrt685 true)
+#set.middleware.wireless.wpa_supplicant
+#  # description: Wpa supplicant rtos
+#  set(CONFIG_USE_middleware_wireless_wpa_supplicant_rtos true)
 
-#  # description: Video and audio interface layer
-#  set(CONFIG_USE_middleware_eiq_worker true)
-
-#  # description: Flatbuffers library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_flatbuffers true)
-
-#  # description: Gemmlowp library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_gemmlowp true)
-
-#  # description: Ruy library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_ruy true)
-
-#  # description: General Purpose FFT (Fast Fourier/Cosine/Sine Transform) Package
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_fft2d true)
-
-#  # description: A mixed-radix Fast Fourier Transform library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_kissfft true)
-
-#  # description: CMSIS-NN library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_cmsis_nn true)
-
-#  # description: Xtensa HiFi4 NN library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_xa_nnlib_hifi4 true)
-
-#  # description: eIQ audio stream from microphone to speaker abstraction
-#  set(CONFIG_USE_middleware_eiq_audio_mimxrt685audevk true)
-
-#  # description: Audio capture and play abstract layer
-#  set(CONFIG_USE_middleware_eiq_worker_audio true)
-
-#  # description: Video capture and display abstract layer
-#  set(CONFIG_USE_middleware_eiq_worker_video_evkmimxrt685 true)
-
-#  # description: Video capture and display abstract layer
-#  set(CONFIG_USE_middleware_eiq_gui_printf true)
-
-#  # description: TensorFlow Lite Micro library with reference kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_reference true)
-
-#  # description: TensorFlow Lite Micro library with CMSIS-NN kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn true)
-
-#  # description: TensorFlow Lite Micro library with CMSIS-NN and Ethos-U kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn_ethosu true)
-
-#  # description: TensorFlow Lite Micro library with Xtensa HiFi4 DSP kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_xtensa true)
-
-#  # description: TensorFlow Lite Micro library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro true)
-
-#  # description: TensorFlow Lite Micro word detection library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_examples_microspeech true)
-
-#  # description: Xtensa HiFi4 NN library binary for i.MX RT685
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_xa_nnlib_hifi4_binary true)
-
-#  # description: Video capture and display abstract layer
-#  set(CONFIG_USE_middleware_eiq_worker_video_mimxrt685audevk true)
+#set.middleware.naturedsp_hifi4
+#  # description: NatureDSP
+#  set(CONFIG_USE_middleware_naturedsp_naturedsp_hifi4 true)
 
 #set.middleware.usb
 #  # description: USB device ip3511hs config header
@@ -1166,6 +1174,7 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/vit
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/voice_seeker
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wifi_nxp
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/wpa_supplicant-rtos
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
   ${CMAKE_CURRENT_LIST_DIR}/drivers
   ${CMAKE_CURRENT_LIST_DIR}/project_template
@@ -1174,16 +1183,14 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT685S
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt685
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/mimxrt685audevk
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S06
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1166
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1052
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1176
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC845
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
   ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC54628
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1011
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S69
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/K32L3A60
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MQ6
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1042
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT595S
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1176
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1021
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S16
 )
 
 include(set_board_evkmimxrt685 OPTIONAL)
@@ -1205,7 +1212,9 @@ include(set_middleware_lwip OPTIONAL)
 include(set_middleware_mbedtls OPTIONAL)
 include(set_middleware_mcuboot OPTIONAL)
 include(set_middleware_multicore OPTIONAL)
+include(set_middleware_naturedsp_hifi4 OPTIONAL)
 include(set_middleware_sdmmc OPTIONAL)
 include(set_middleware_usb OPTIONAL)
 include(set_middleware_vit OPTIONAL)
 include(set_middleware_voice_seeker OPTIONAL)
+include(set_middleware_wireless_wpa_supplicant OPTIONAL)

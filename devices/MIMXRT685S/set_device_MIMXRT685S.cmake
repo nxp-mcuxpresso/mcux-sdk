@@ -190,19 +190,7 @@ message("device_MIMXRT685S_CMSIS component is included from ${CMAKE_CURRENT_LIST
 
 if(CONFIG_USE_CMSIS_Include_core_cm AND (CONFIG_DEVICE_ID STREQUAL MIMXRT685S))
 
-if(CONFIG_TOOLCHAIN STREQUAL xcc)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./system_MIMXRT685S_dsp.c
-  )
-endif()
-
 if(CONFIG_CORE STREQUAL cm33)
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./.
-)
-endif()
-
-if(CONFIG_TOOLCHAIN STREQUAL xcc)
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/./.
 )
@@ -3366,39 +3354,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_driver_flash_config_evkmimxrt685)
-# Add set(CONFIG_USE_driver_flash_config_evkmimxrt685 true) in config.cmake to use this component
-
-message("driver_flash_config_evkmimxrt685 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_BOARD STREQUAL evkmimxrt685) AND CONFIG_USE_driver_common)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt685/flash_config/flash_config.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt685/flash_config/.
-)
-
-if(CONFIG_USE_COMPONENT_CONFIGURATION)
-  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
-
-  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
-    -DBOOT_HEADER_ENABLE=1
-  )
-
-endif()
-
-else()
-
-message(SEND_ERROR "driver_flash_config_evkmimxrt685.MIMXRT685S dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_driver_flash_config_mimxrt685audevk)
 # Add set(CONFIG_USE_driver_flash_config_mimxrt685audevk true) in config.cmake to use this component
 
@@ -3426,6 +3381,39 @@ endif()
 else()
 
 message(SEND_ERROR "driver_flash_config_mimxrt685audevk.MIMXRT685S dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_flash_config_evkmimxrt685)
+# Add set(CONFIG_USE_driver_flash_config_evkmimxrt685 true) in config.cmake to use this component
+
+message("driver_flash_config_evkmimxrt685 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_BOARD STREQUAL evkmimxrt685) AND CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt685/flash_config/flash_config.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt685/flash_config/.
+)
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DBOOT_HEADER_ENABLE=1
+  )
+
+endif()
+
+else()
+
+message(SEND_ERROR "driver_flash_config_evkmimxrt685.MIMXRT685S dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
