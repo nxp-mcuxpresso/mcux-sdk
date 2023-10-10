@@ -12,21 +12,26 @@
 #endif
 
 #include "fsl_debug_console.h"
+#include "fsl_ram_console.h"
 #include "fsl_str.h"
 
 #if (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE == DEBUGCONSOLE_RAM_CONSOLE))
-static char *ram_console_buf;
-static size_t ram_console_buf_size;
-static int pos;
+
+static struct ram_console_header *header;
 
 status_t RamConsole_Init(uintptr_t buf_addr, size_t buf_size)
 {
     if (buf_addr == 0UL)
         return kStatus_Fail;
 
-    ram_console_buf = (char *)buf_addr;
-    ram_console_buf_size = buf_size;
-    memset(ram_console_buf, 0, ram_console_buf_size);
+    memset((void *)buf_addr, 0, buf_size);
+
+    header = (void *)buf_addr;
+
+    strcpy(header->flag_string, RAM_CONSOLE_HEAD_STR);
+    header->ram_console_buf_addr = (char *)(buf_addr + RAM_CONSOLE_HEAD_SIZE);
+    header->ram_console_buf_size = buf_size - RAM_CONSOLE_HEAD_SIZE;
+    header->pos = 0;
 
     return kStatus_Success;
 }
@@ -49,13 +54,6 @@ static void RamConsole_PrintCallback(char *buf, int32_t *indicator, char dbgVal,
 
     for (i = 0; i < len; i++)
     {
-#if 0
-        if (((uint32_t)*indicator + 1UL) >= (uint32_t)DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN)
-        {
-            (void)DbgConsole_SendDataReliable((uint8_t *)buf, (size_t)(*indicator));
-            *indicator = 0;
-        }
-#endif
         buf[*indicator] = dbgVal;
         (*indicator)++;
     }
@@ -68,7 +66,7 @@ int RamConsole_Vprintf(const char *fmt_s, va_list formatStringArg)
     char printBuf[DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN] = {'\0'};
     int i;
 
-    if (NULL == ram_console_buf)
+    if (NULL == header)
         return -1;
 
     /* format print log first */
@@ -76,8 +74,8 @@ int RamConsole_Vprintf(const char *fmt_s, va_list formatStringArg)
     /* print log */
     for (i = 0; i < logLength; i++)
     {
-        ram_console_buf[pos] = printBuf[i];
-        pos = (pos + 1) % ram_console_buf_size;
+        header->ram_console_buf_addr[header->pos] = printBuf[i];
+        header->pos = (header->pos + 1) % header->ram_console_buf_size;
     }
 
     return logLength;
@@ -86,12 +84,12 @@ int RamConsole_Vprintf(const char *fmt_s, va_list formatStringArg)
 /* See fsl_debug_console.h for documentation of this function. */
 int RamConsole_Putchar(int ch)
 {
-    if (NULL == ram_console_buf)
+    if (NULL == header)
         return -1;
 
     /* print char */
-    ram_console_buf[pos] = ch;
-    pos = (pos + 1) % ram_console_buf_size;
+    header->ram_console_buf_addr[header->pos] = ch;
+    header->pos = (header->pos + 1) % header->ram_console_buf_size;
 
     return ch;
 }
