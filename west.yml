@@ -24,7 +24,7 @@ manifest:
     remote: nxpmicro
   projects:
   - name: mcux-sdk-examples
-    revision: MCUX_2.13.0
+    revision: 3cb54d89a3e3820a7fae99acb3b8dc6aea67027b
     path: examples
   - name: FreeRTOS-Kernel
     revision: MCUX_2.13.0
@@ -66,10 +66,10 @@ manifest:
     revision: MCUX_2.13.0
   - name: mcux-sdk-middleware-edgefast-bluetooth
     path: middleware/edgefast_bluetooth
-    revision: MCUX_2.13.0
+    revision: b4905e020dfceffda3b501ceb6a78462b45edb9f
   - name: mcux-sdk-middleware-ethermind
     path: middleware/wireless/ethermind
-    revision: MCUX_2.13.0
+    revision: d7a91fc3c1ec2b6f47ea915f6d80887a6f8a40ea
     remote: nxp
   - name: azure-rtos
     path: rtos/azure-rtos
