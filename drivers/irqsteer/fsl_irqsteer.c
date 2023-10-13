@@ -40,8 +40,10 @@ static IRQSTEER_Type *const s_irqsteerBases[] = IRQSTEER_BASE_PTRS;
 static const clock_ip_name_t s_irqsteerClockName[] = IRQSTEER_CLOCKS;
 #endif
 
+#if FSL_IRQSTEER_ENABLE_MASTER_INT
 /*! @brief Array to map IRQSTEER instance number to IRQ number. */
 static const IRQn_Type s_irqsteerIRQNumber[] = IRQSTEER_IRQS;
+#endif
 
 /*******************************************************************************
  * Code
@@ -84,11 +86,14 @@ void IRQSTEER_Init(IRQSTEER_Type *base)
     {
         base->CHn_MASK[i] &= ~IRQSTEER_CHn_MASK_MASKFLD_MASK;
     }
+
+#if FSL_IRQSTEER_ENABLE_MASTER_INT
     /* Enable NVIC vectors for all IRQSTEER master. */
     for (i = 0; i < (uint32_t)FSL_FEATURE_IRQSTEER_MASTER_COUNT; i++)
     {
         (void)EnableIRQ(s_irqsteerIRQNumber[i]);
     }
+#endif
 }
 
 /*!
@@ -100,16 +105,67 @@ void IRQSTEER_Init(IRQSTEER_Type *base)
  */
 void IRQSTEER_Deinit(IRQSTEER_Type *base)
 {
-    uint32_t master;
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Disable clock. */
     (void)CLOCK_DisableClock(s_irqsteerClockName[IRQSTEER_GetInstance(base)]);
 #endif
+
+#if FSL_IRQSTEER_ENABLE_MASTER_INT
+    uint32_t master;
+
     /* Disable NVIC vectors for all IRQSTEER master. */
     for (master = 0; master < (uint32_t)FSL_FEATURE_IRQSTEER_MASTER_COUNT; master++)
     {
         (void)DisableIRQ(s_irqsteerIRQNumber[master]);
     }
+#endif
+}
+
+/*
+ * brief Get the number of interrupt for a given master.
+ *
+ * param base IRQSTEER peripheral base address.
+ * param intMasterIndex Master index of interrupt sources, options available in
+ * enumeration ::irqsteer_int_master_t.
+ * return Number of interrupts for a given master.
+ */
+uint32_t IRQSTEER_GetMasterIrqCount(IRQSTEER_Type *base, irqsteer_int_master_t intMasterIndex)
+{
+    uint32_t count;
+
+    /*
+     * With IRQSTEER, each interrupt group has 32 interrupt sources. How many
+     * interrupt groups are connected to one interrupt master, it relates to
+     * the SOC integration.
+     *
+     * There are two cases based on SOC integration:
+     *
+     * 1. The interrupt group count (number of CHn_MASKx registers) is even number.
+     *    In this case, every two interrupt groups are connected to one interrupt master.
+     *    So each master has 64 interrupt sources connected.
+     * 2. The interrupt group count (number of CHn_MASKx registers) is odd number.
+     *    In this case, master 0 is connected to one interrupt group, while other masters
+     *    are all connected to two interrupt groups.
+     *    So each master 0 has 32 interrupt sources connected, and for other masters,
+     *    every master has 64 interrupt sources connected.
+     */
+    if ((FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT % 2U) == 0U)
+    {
+        count = IRQSTEER_INT_MASTER_AGGREGATED_INT_NUM;
+    }
+    else
+    {
+        if (intMasterIndex == 0U)
+        {
+            count = IRQSTEER_INT_SRC_REG_WIDTH;
+        }
+        else
+        {
+            count = IRQSTEER_INT_MASTER_AGGREGATED_INT_NUM;
+        }
+    }
+
+    return count;
 }
 
 /*!
@@ -120,6 +176,7 @@ void IRQSTEER_Deinit(IRQSTEER_Type *base)
  * return The current set next interrupt source number of one specific master.
  *         Return IRQSTEER_INT_Invalid if no interrupt set.
  */
+#if defined(__CORTEX_M)
 IRQn_Type IRQSTEER_GetMasterNextInterrupt(IRQSTEER_Type *base, irqsteer_int_master_t intMasterIndex)
 {
     uint32_t regIndex = (uint32_t)FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT - 1U - ((uint32_t)intMasterIndex) * 2U;
@@ -144,7 +201,41 @@ IRQn_Type IRQSTEER_GetMasterNextInterrupt(IRQSTEER_Type *base, irqsteer_int_mast
         return (IRQn_Type)irqNum;
     }
 }
+#else  /* **not** __CORTEX_M */
+IRQn_Type IRQSTEER_GetMasterNextInterrupt(IRQSTEER_Type *base, irqsteer_int_master_t intMasterIndex)
+{
+    uint32_t bitOffset, regIndex, chanStatus, sliceNum;
+    int i, j;
 
+    sliceNum = IRQSTEER_GetMasterIrqCount(base, intMasterIndex) / 32 - 1;
+
+    for (i = 0; i <= sliceNum; i++)
+    {
+        bitOffset = 0;
+
+        /* compute the index of the register to be queried */
+        regIndex = FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT - 1 - intMasterIndex * 2 + i;
+
+        /* get register's value */
+        chanStatus = base->CHn_STATUS[regIndex];
+
+        for (j = 0; j < IRQSTEER_INT_SRC_REG_WIDTH; j++)
+        {
+            if ((chanStatus & 1U) != 0U)
+            {
+                return (IRQn_Type)(uint32_t)IRQSTEER_INT_SRC_NUM(regIndex, bitOffset);
+            }
+
+            bitOffset++;
+            chanStatus = chanStatus >> 1U;
+        }
+    }
+
+    return NotAvail_IRQn;
+}
+#endif /* __CORTEX_M */
+
+#if FSL_IRQSTEER_USE_DRIVER_IRQ_HANDLER
 static void IRQSTEER_CommonIRQHandler(IRQSTEER_Type *base, irqsteer_int_master_t intMasterIndex)
 {
     IRQn_Type intSource;
@@ -171,6 +262,7 @@ static void IRQSTEER_CommonIRQHandler(IRQSTEER_Type *base, irqsteer_int_master_t
     SDK_ISR_EXIT_BARRIER;
 }
 
+#if defined(IRQSTEER)
 void IRQSTEER_0_DriverIRQHandler(void);
 void IRQSTEER_0_DriverIRQHandler(void)
 {
@@ -218,3 +310,5 @@ void IRQSTEER_7_DriverIRQHandler(void)
 {
     IRQSTEER_CommonIRQHandler(IRQSTEER, kIRQSTEER_InterruptMaster7);
 }
+#endif /* defined(IRQSTEER) */
+#endif /* FSL_IRQSTEER_USE_DRIVER_IRQ_HANDLER */

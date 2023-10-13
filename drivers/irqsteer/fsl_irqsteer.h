@@ -26,8 +26,37 @@
 #define FSL_IRQSTEER_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
+/*!
+ * @brief Use the IRQSTEER driver IRQ Handler or not.
+ *
+ * When define as 1, IRQSTEER driver implements the IRQSTEER ISR, otherwise user
+ * shall implement it. Currently the IRQSTEER ISR is only available for Cortex-M
+ * platforms.
+ */
+#if defined(__CORTEX_M)
+#ifndef FSL_IRQSTEER_USE_DRIVER_IRQ_HANDLER
+#define FSL_IRQSTEER_USE_DRIVER_IRQ_HANDLER 1
+#endif
+#else
+#define FSL_IRQSTEER_USE_DRIVER_IRQ_HANDLER 0
+#endif /* __CORTEX_M */
+
+/*!
+ * @brief IRQSTEER_Init/IRQSTEER_Deinit enables/disables IRQSTEER master interrupt or not.
+ *
+ * When define as 1, IRQSTEER_Init will enable the IRQSTEER master interrupt in
+ * system level interrupt controller (such as NVIC, GIC), IRQSTEER_Deinit will
+ * disable it. Otherwise IRQSTEER_Init/IRQSTEER_Deinit won't touch.
+ */
+#ifndef FSL_IRQSTEER_ENABLE_MASTER_INT
+#define FSL_IRQSTEER_ENABLE_MASTER_INT 1
+#endif
+
 /*! @brief IRQSTEER interrupt source register width. */
 #define IRQSTEER_INT_SRC_REG_WIDTH 32U
+
+/*! @brief IRQSTEER aggregated interrupt source number for each master. */
+#define IRQSTEER_INT_MASTER_AGGREGATED_INT_NUM 64U
 
 /*! @brief IRQSTEER interrupt source mapping register index. */
 #define IRQSTEER_INT_SRC_REG_INDEX(irq)                     \
@@ -136,6 +165,21 @@ static inline void IRQSTEER_DisableInterrupt(IRQSTEER_Type *base, IRQn_Type irq)
 
     base->CHn_MASK[(IRQSTEER_INT_SRC_REG_INDEX(((uint32_t)irq)))] &=
         ~(1UL << ((uint32_t)IRQSTEER_INT_SRC_BIT_OFFSET(((uint32_t)irq))));
+}
+
+/*!
+ * @brief Check if an interrupt source is enabled.
+ *
+ * @param base IRQSTEER peripheral base address.
+ * @param irq Interrupt to be queried. The interrupt must be an IRQSTEER source.
+ * @return true if the interrupt is not masked, false otherwise.
+ */
+static inline bool IRQSTEER_InterruptIsEnabled(IRQSTEER_Type *base, IRQn_Type irq)
+{
+    assert((uint32_t)irq >= (uint32_t)FSL_FEATURE_IRQSTEER_IRQ_START_INDEX);
+
+    return base->CHn_MASK[((uint32_t)IRQSTEER_INT_SRC_REG_INDEX(((uint32_t)irq)))] &
+           (1UL << ((uint32_t)IRQSTEER_INT_SRC_BIT_OFFSET(((uint32_t)irq))));
 }
 
 /*!
@@ -262,6 +306,16 @@ static inline uint32_t IRQSTEER_GetGroupInterruptStatus(IRQSTEER_Type *base, irq
  *         Return IRQSTEER_INT_Invalid if no interrupt set.
  */
 IRQn_Type IRQSTEER_GetMasterNextInterrupt(IRQSTEER_Type *base, irqsteer_int_master_t intMasterIndex);
+
+/*!
+ * @brief Get the number of interrupt for a given master.
+ *
+ * @param base IRQSTEER peripheral base address.
+ * @param intMasterIndex Master index of interrupt sources, options available in
+ * enumeration ::irqsteer_int_master_t.
+ * @return Number of interrupts for a given master.
+ */
+uint32_t IRQSTEER_GetMasterIrqCount(IRQSTEER_Type *base, irqsteer_int_master_t intMasterIndex);
 
 /*@}*/
 
