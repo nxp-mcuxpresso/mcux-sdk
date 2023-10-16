@@ -24,6 +24,15 @@
 /* CPU specific feature definitions */
 #include "MIMX8QX6_cm4_features.h"
 
+#elif (defined(CPU_MIMX8QX6AVLFZ_dsp))
+
+#define MIMX8QX6_dsp_SERIES
+
+/* CMSIS-style register definitions */
+#include "MIMX8QX6_dsp.h"
+/* CPU specific feature definitions */
+#include "MIMX8QX6_dsp_features.h"
+
 #else
     #error "No valid CPU defined!"
 #endif
