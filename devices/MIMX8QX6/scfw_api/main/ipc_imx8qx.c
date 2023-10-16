@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#include "MIMX8QX6_cm4.h"
+#include "fsl_device_registers.h"
 #include "main/ipc.h"
 #include "main/rpc.h"
 #ifdef FSL_RTOS_FREE_RTOS
