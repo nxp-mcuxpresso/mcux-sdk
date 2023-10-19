@@ -1,11 +1,11 @@
 # Copy variable into project config.cmake to use software component
-#set.board.evkmimx8mn
-#  # description: Board_project_template evkmimx8mn
-#  set(CONFIG_USE_BOARD_Project_Template_evkmimx8mn true)
-
 #set.board.evkmimx8mnddr3l
 #  # description: Board_project_template evkmimx8mnddr3l
 #  set(CONFIG_USE_BOARD_Project_Template_evkmimx8mnddr3l true)
+
+#set.board.evkmimx8mn
+#  # description: Board_project_template evkmimx8mn
+#  set(CONFIG_USE_BOARD_Project_Template_evkmimx8mn true)
 
 #set.device.MIMX8MN6
 #  # description: Middleware baremetal
@@ -314,7 +314,7 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimx8mn
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimx8mnddr3l
   ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MQ6
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1166
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
   ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MM6
   ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MN6
 )

@@ -1,15 +1,6 @@
 include_guard(GLOBAL)
 
 
-if (CONFIG_USE_middleware_issdk_sensor_tools)
-# Add set(CONFIG_USE_middleware_issdk_sensor_tools true) in config.cmake to use this component
-
-message("middleware_issdk_sensor_tools component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-
-endif()
-
-
 if (CONFIG_USE_middleware_issdk_drivers_systick_utils)
 # Add set(CONFIG_USE_middleware_issdk_drivers_systick_utils true) in config.cmake to use this component
 
@@ -22,6 +13,15 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/./drivers/systick
 )
+
+
+endif()
+
+
+if (CONFIG_USE_middleware_issdk_sensor_tools)
+# Add set(CONFIG_USE_middleware_issdk_sensor_tools true) in config.cmake to use this component
+
+message("middleware_issdk_sensor_tools component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
 
 endif()
@@ -527,316 +527,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_middleware_issdk_sensor_interface_common)
-# Add set(CONFIG_USE_middleware_issdk_sensor_interface_common true) in config.cmake to use this component
-
-message("middleware_issdk_sensor_interface_common component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_CMSIS_Driver_Include_I2C AND CONFIG_USE_CMSIS_Driver_Include_SPI)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./sensors/register_io_i2c.c
-  ${CMAKE_CURRENT_LIST_DIR}/./sensors/register_io_spi.c
-  ${CMAKE_CURRENT_LIST_DIR}/./sensors/sensor_io_spi.c
-  ${CMAKE_CURRENT_LIST_DIR}/./sensors/sensor_io_i2c.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./sensors
-)
-
-else()
-
-message(SEND_ERROR "middleware_issdk_sensor_interface_common dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_middleware_issdk_drivers_gpio_kinetis)
-# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_kinetis true) in config.cmake to use this component
-
-message("middleware_issdk_drivers_gpio_kinetis component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL MK22FN128xxx10 OR CONFIG_DEVICE_ID STREQUAL MK22FN128xxx12 OR CONFIG_DEVICE_ID STREQUAL MK22FN256xxx12 OR CONFIG_DEVICE_ID STREQUAL MK22FN512xxx12 OR CONFIG_DEVICE_ID STREQUAL MK02FN128xxx10 OR CONFIG_DEVICE_ID STREQUAL MK02FN64xxx10 OR CONFIG_DEVICE_ID STREQUAL MKE14Z256xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE14Z128xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE15Z256xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE15Z128xxx7 OR CONFIG_DEVICE_ID STREQUAL K32L3A60xxx))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/kinetis/gpio_driver_irq.c
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/kinetis/gpio_driver.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/kinetis
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
-)
-
-else()
-
-message(SEND_ERROR "middleware_issdk_drivers_gpio_kinetis dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_middleware_issdk_drivers_gpio_kinetis_ke15z)
-# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_kinetis_ke15z true) in config.cmake to use this component
-
-message("middleware_issdk_drivers_gpio_kinetis_ke15z component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL MKE14Z256xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE14Z128xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE15Z256xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE15Z128xxx7))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/kinetis/gpio_driver_irq_ke15z.c
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/kinetis/gpio_driver.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/kinetis
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
-)
-
-else()
-
-message(SEND_ERROR "middleware_issdk_drivers_gpio_kinetis_ke15z dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_middleware_issdk_drivers_gpio_lpc)
-# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_lpc true) in config.cmake to use this component
-
-message("middleware_issdk_drivers_gpio_lpc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL LPC55S69 OR CONFIG_DEVICE_ID STREQUAL LPC55S66 OR CONFIG_DEVICE_ID STREQUAL LPC55S16 OR CONFIG_DEVICE_ID STREQUAL LPC55S14 OR CONFIG_DEVICE_ID STREQUAL LPC5512 OR CONFIG_DEVICE_ID STREQUAL LPC5514 OR CONFIG_DEVICE_ID STREQUAL LPC5516 OR CONFIG_DEVICE_ID STREQUAL LPC5502 OR CONFIG_DEVICE_ID STREQUAL LPC5504 OR CONFIG_DEVICE_ID STREQUAL LPC5506 OR CONFIG_DEVICE_ID STREQUAL LPC55S04 OR CONFIG_DEVICE_ID STREQUAL LPC55S06))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/lpc/gpio_driver_irq.c
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/lpc/gpio_driver.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/lpc
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
-)
-
-else()
-
-message(SEND_ERROR "middleware_issdk_drivers_gpio_lpc dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_middleware_issdk_drivers_gpio_imx)
-# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_imx true) in config.cmake to use this component
-
-message("middleware_issdk_drivers_gpio_imx component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL MIMXRT1051xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1052xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1021xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1024xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1041xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1042xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1064xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1015xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1011xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT685S OR CONFIG_DEVICE_ID STREQUAL MIMXRT633S OR CONFIG_DEVICE_ID STREQUAL MIMXRT1171xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1172xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1173xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1175xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1165xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1166xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT533S OR CONFIG_DEVICE_ID STREQUAL MIMXRT555S OR CONFIG_DEVICE_ID STREQUAL MIMXRT595S))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/gpio_driver_irq.c
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/gpio_driver.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
-)
-
-else()
-
-message(SEND_ERROR "middleware_issdk_drivers_gpio_imx dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_middleware_issdk_drivers_gpio_imx8)
-# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_imx8 true) in config.cmake to use this component
-
-message("middleware_issdk_drivers_gpio_imx8 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL MIMXRT1051xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1052xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1021xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1024xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1041xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1042xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1064xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1015xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1011xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT685S OR CONFIG_DEVICE_ID STREQUAL MIMXRT633S OR CONFIG_DEVICE_ID STREQUAL MIMXRT1171xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1172xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1173xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1175xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1165xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1166xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT533S OR CONFIG_DEVICE_ID STREQUAL MIMXRT555S OR CONFIG_DEVICE_ID STREQUAL MIMXRT595S))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/gpio_driver.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
-)
-
-else()
-
-message(SEND_ERROR "middleware_issdk_drivers_gpio_imx8 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_middleware_issdk_drivers_gpio_imxrt600)
-# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_imxrt600 true) in config.cmake to use this component
-
-message("middleware_issdk_drivers_gpio_imxrt600 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL MIMXRT1051xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1052xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1021xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1024xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1041xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1042xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1064xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1015xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1011xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT685S OR CONFIG_DEVICE_ID STREQUAL MIMXRT633S OR CONFIG_DEVICE_ID STREQUAL MIMXRT1171xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1172xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1173xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1175xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1165xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1166xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT533S OR CONFIG_DEVICE_ID STREQUAL MIMXRT555S OR CONFIG_DEVICE_ID STREQUAL MIMXRT595S))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/i.mxrt600/gpio_driver.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/i.mxrt600
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
-)
-
-else()
-
-message(SEND_ERROR "middleware_issdk_drivers_gpio_imxrt600 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_middleware_issdk_drivers_gpio_imxrt1180)
-# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_imxrt1180 true) in config.cmake to use this component
-
-message("middleware_issdk_drivers_gpio_imxrt1180 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL MIMXRT1051xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1052xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1021xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1024xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1041xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1042xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1064xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1015xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1011xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT685S OR CONFIG_DEVICE_ID STREQUAL MIMXRT633S OR CONFIG_DEVICE_ID STREQUAL MIMXRT1171xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1172xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1173xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1175xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1165xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1166xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT533S OR CONFIG_DEVICE_ID STREQUAL MIMXRT555S OR CONFIG_DEVICE_ID STREQUAL MIMXRT595S))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/i.mxrt1180/gpio_driver.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/i.mxrt1180
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
-)
-
-else()
-
-message(SEND_ERROR "middleware_issdk_drivers_gpio_imxrt1180 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_middleware_issdk_drivers_gpio_imxrt)
-# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_imxrt true) in config.cmake to use this component
-
-message("middleware_issdk_drivers_gpio_imxrt component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL MIMXRT1051xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1052xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1021xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1024xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1041xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1042xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1064xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1015xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1011xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT685S OR CONFIG_DEVICE_ID STREQUAL MIMXRT633S OR CONFIG_DEVICE_ID STREQUAL MIMXRT1171xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1172xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1173xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1175xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1165xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1166xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT533S OR CONFIG_DEVICE_ID STREQUAL MIMXRT555S OR CONFIG_DEVICE_ID STREQUAL MIMXRT595S))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/gpio_driver.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
-)
-
-else()
-
-message(SEND_ERROR "middleware_issdk_drivers_gpio_imxrt dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_middleware_issdk_drivers_ads)
-# Add set(CONFIG_USE_middleware_issdk_drivers_ads true) in config.cmake to use this component
-
-message("middleware_issdk_drivers_ads component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL MK22FN128xxx10 OR CONFIG_DEVICE_ID STREQUAL MK22FN128xxx12 OR CONFIG_DEVICE_ID STREQUAL MK22FN256xxx12 OR CONFIG_DEVICE_ID STREQUAL MK22FN512xxx12 OR CONFIG_DEVICE_ID STREQUAL MK02FN128xxx10 OR CONFIG_DEVICE_ID STREQUAL MK02FN64xxx10 OR CONFIG_DEVICE_ID STREQUAL MKE14Z256xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE14Z128xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE15Z256xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE15Z128xxx7 OR CONFIG_DEVICE_ID STREQUAL K32L3A60xxx))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/ads/kinetis/auto_detection_service.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/ads/kinetis
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/ads
-)
-
-else()
-
-message(SEND_ERROR "middleware_issdk_drivers_ads dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_middleware_issdk_drivers_ads_lpc)
-# Add set(CONFIG_USE_middleware_issdk_drivers_ads_lpc true) in config.cmake to use this component
-
-message("middleware_issdk_drivers_ads_lpc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL LPC55S69 OR CONFIG_DEVICE_ID STREQUAL LPC55S66 OR CONFIG_DEVICE_ID STREQUAL LPC55S16 OR CONFIG_DEVICE_ID STREQUAL LPC55S14 OR CONFIG_DEVICE_ID STREQUAL LPC5512 OR CONFIG_DEVICE_ID STREQUAL LPC5514 OR CONFIG_DEVICE_ID STREQUAL LPC5516 OR CONFIG_DEVICE_ID STREQUAL LPC5502 OR CONFIG_DEVICE_ID STREQUAL LPC5504 OR CONFIG_DEVICE_ID STREQUAL LPC5506 OR CONFIG_DEVICE_ID STREQUAL LPC55S04 OR CONFIG_DEVICE_ID STREQUAL LPC55S06))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/ads/lpc/auto_detection_service.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/ads/lpc
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/ads
-)
-
-else()
-
-message(SEND_ERROR "middleware_issdk_drivers_ads_lpc dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_middleware_issdk_drivers_host)
-# Add set(CONFIG_USE_middleware_issdk_drivers_host true) in config.cmake to use this component
-
-message("middleware_issdk_drivers_host component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_common)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./sensors/host_io_uart.c
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/host/comm_if_uart.c
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/host/data_format_hdlc.c
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/host/data_format_json.c
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/host/host_interface_service.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./sensors
-  ${CMAKE_CURRENT_LIST_DIR}/./drivers/host
-)
-
-else()
-
-message(SEND_ERROR "middleware_issdk_drivers_host dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_middleware_issdk_algorithms_sensor_fusion_agm01_common)
 # Add set(CONFIG_USE_middleware_issdk_algorithms_sensor_fusion_agm01_common true) in config.cmake to use this component
 
@@ -1158,6 +848,316 @@ target_link_libraries(${MCUX_SDK_PROJECT_NAME} PRIVATE
 else()
 
 message(SEND_ERROR "middleware_issdk_algorithms_pedometer_lib_cm0 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_middleware_issdk_sensor_interface_common)
+# Add set(CONFIG_USE_middleware_issdk_sensor_interface_common true) in config.cmake to use this component
+
+message("middleware_issdk_sensor_interface_common component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_CMSIS_Driver_Include_I2C AND CONFIG_USE_CMSIS_Driver_Include_SPI)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./sensors/register_io_i2c.c
+  ${CMAKE_CURRENT_LIST_DIR}/./sensors/register_io_spi.c
+  ${CMAKE_CURRENT_LIST_DIR}/./sensors/sensor_io_spi.c
+  ${CMAKE_CURRENT_LIST_DIR}/./sensors/sensor_io_i2c.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./sensors
+)
+
+else()
+
+message(SEND_ERROR "middleware_issdk_sensor_interface_common dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_middleware_issdk_drivers_gpio_kinetis)
+# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_kinetis true) in config.cmake to use this component
+
+message("middleware_issdk_drivers_gpio_kinetis component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MK22FN128xxx10 OR CONFIG_DEVICE_ID STREQUAL MK22FN128xxx12 OR CONFIG_DEVICE_ID STREQUAL MK22FN256xxx12 OR CONFIG_DEVICE_ID STREQUAL MK22FN512xxx12 OR CONFIG_DEVICE_ID STREQUAL MK02FN128xxx10 OR CONFIG_DEVICE_ID STREQUAL MK02FN64xxx10 OR CONFIG_DEVICE_ID STREQUAL MKE14Z256xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE14Z128xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE15Z256xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE15Z128xxx7 OR CONFIG_DEVICE_ID STREQUAL K32L3A60xxx))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/kinetis/gpio_driver_irq.c
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/kinetis/gpio_driver.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/kinetis
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
+)
+
+else()
+
+message(SEND_ERROR "middleware_issdk_drivers_gpio_kinetis dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_middleware_issdk_drivers_gpio_kinetis_ke15z)
+# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_kinetis_ke15z true) in config.cmake to use this component
+
+message("middleware_issdk_drivers_gpio_kinetis_ke15z component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MKE14Z256xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE14Z128xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE15Z256xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE15Z128xxx7))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/kinetis/gpio_driver_irq_ke15z.c
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/kinetis/gpio_driver.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/kinetis
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
+)
+
+else()
+
+message(SEND_ERROR "middleware_issdk_drivers_gpio_kinetis_ke15z dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_middleware_issdk_drivers_gpio_lpc)
+# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_lpc true) in config.cmake to use this component
+
+message("middleware_issdk_drivers_gpio_lpc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL LPC55S69 OR CONFIG_DEVICE_ID STREQUAL LPC55S66 OR CONFIG_DEVICE_ID STREQUAL LPC55S16 OR CONFIG_DEVICE_ID STREQUAL LPC55S14 OR CONFIG_DEVICE_ID STREQUAL LPC5512 OR CONFIG_DEVICE_ID STREQUAL LPC5514 OR CONFIG_DEVICE_ID STREQUAL LPC5516 OR CONFIG_DEVICE_ID STREQUAL LPC5502 OR CONFIG_DEVICE_ID STREQUAL LPC5504 OR CONFIG_DEVICE_ID STREQUAL LPC5506 OR CONFIG_DEVICE_ID STREQUAL LPC55S04 OR CONFIG_DEVICE_ID STREQUAL LPC55S06))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/lpc/gpio_driver_irq.c
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/lpc/gpio_driver.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/lpc
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
+)
+
+else()
+
+message(SEND_ERROR "middleware_issdk_drivers_gpio_lpc dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_middleware_issdk_drivers_gpio_imx)
+# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_imx true) in config.cmake to use this component
+
+message("middleware_issdk_drivers_gpio_imx component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MIMXRT1051xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1052xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1021xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1024xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1041xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1042xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1064xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1015xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1011xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT685S OR CONFIG_DEVICE_ID STREQUAL MIMXRT633S OR CONFIG_DEVICE_ID STREQUAL MIMXRT1171xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1172xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1173xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1175xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1165xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1166xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT533S OR CONFIG_DEVICE_ID STREQUAL MIMXRT555S OR CONFIG_DEVICE_ID STREQUAL MIMXRT595S))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/gpio_driver_irq.c
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/gpio_driver.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
+)
+
+else()
+
+message(SEND_ERROR "middleware_issdk_drivers_gpio_imx dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_middleware_issdk_drivers_gpio_imx8)
+# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_imx8 true) in config.cmake to use this component
+
+message("middleware_issdk_drivers_gpio_imx8 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MIMXRT1051xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1052xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1021xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1024xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1041xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1042xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1064xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1015xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1011xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT685S OR CONFIG_DEVICE_ID STREQUAL MIMXRT633S OR CONFIG_DEVICE_ID STREQUAL MIMXRT1171xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1172xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1173xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1175xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1165xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1166xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT533S OR CONFIG_DEVICE_ID STREQUAL MIMXRT555S OR CONFIG_DEVICE_ID STREQUAL MIMXRT595S))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/gpio_driver.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
+)
+
+else()
+
+message(SEND_ERROR "middleware_issdk_drivers_gpio_imx8 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_middleware_issdk_drivers_gpio_imxrt600)
+# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_imxrt600 true) in config.cmake to use this component
+
+message("middleware_issdk_drivers_gpio_imxrt600 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MIMXRT1051xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1052xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1021xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1024xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1041xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1042xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1064xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1015xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1011xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT685S OR CONFIG_DEVICE_ID STREQUAL MIMXRT633S OR CONFIG_DEVICE_ID STREQUAL MIMXRT1171xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1172xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1173xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1175xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1165xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1166xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT533S OR CONFIG_DEVICE_ID STREQUAL MIMXRT555S OR CONFIG_DEVICE_ID STREQUAL MIMXRT595S))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/i.mxrt600/gpio_driver.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/i.mxrt600
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
+)
+
+else()
+
+message(SEND_ERROR "middleware_issdk_drivers_gpio_imxrt600 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_middleware_issdk_drivers_gpio_imxrt1180)
+# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_imxrt1180 true) in config.cmake to use this component
+
+message("middleware_issdk_drivers_gpio_imxrt1180 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MIMXRT1051xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1052xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1021xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1024xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1041xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1042xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1064xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1015xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1011xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT685S OR CONFIG_DEVICE_ID STREQUAL MIMXRT633S OR CONFIG_DEVICE_ID STREQUAL MIMXRT1171xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1172xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1173xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1175xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1165xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1166xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT533S OR CONFIG_DEVICE_ID STREQUAL MIMXRT555S OR CONFIG_DEVICE_ID STREQUAL MIMXRT595S))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/i.mxrt1180/gpio_driver.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/i.mxrt1180
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
+)
+
+else()
+
+message(SEND_ERROR "middleware_issdk_drivers_gpio_imxrt1180 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_middleware_issdk_drivers_gpio_imxrt)
+# Add set(CONFIG_USE_middleware_issdk_drivers_gpio_imxrt true) in config.cmake to use this component
+
+message("middleware_issdk_drivers_gpio_imxrt component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MIMXRT1051xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1052xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1021xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1024xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1061xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1041xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1042xxxxB OR CONFIG_DEVICE_ID STREQUAL MIMXRT1064xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1015xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1011xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT685S OR CONFIG_DEVICE_ID STREQUAL MIMXRT633S OR CONFIG_DEVICE_ID STREQUAL MIMXRT1171xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1172xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1173xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1175xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1165xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT1166xxxxx OR CONFIG_DEVICE_ID STREQUAL MIMXRT533S OR CONFIG_DEVICE_ID STREQUAL MIMXRT555S OR CONFIG_DEVICE_ID STREQUAL MIMXRT595S))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx/gpio_driver.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio/i.mx
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/gpio
+)
+
+else()
+
+message(SEND_ERROR "middleware_issdk_drivers_gpio_imxrt dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_middleware_issdk_drivers_ads)
+# Add set(CONFIG_USE_middleware_issdk_drivers_ads true) in config.cmake to use this component
+
+message("middleware_issdk_drivers_ads component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MK22FN128xxx10 OR CONFIG_DEVICE_ID STREQUAL MK22FN128xxx12 OR CONFIG_DEVICE_ID STREQUAL MK22FN256xxx12 OR CONFIG_DEVICE_ID STREQUAL MK22FN512xxx12 OR CONFIG_DEVICE_ID STREQUAL MK02FN128xxx10 OR CONFIG_DEVICE_ID STREQUAL MK02FN64xxx10 OR CONFIG_DEVICE_ID STREQUAL MKE14Z256xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE14Z128xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE15Z256xxx7 OR CONFIG_DEVICE_ID STREQUAL MKE15Z128xxx7 OR CONFIG_DEVICE_ID STREQUAL K32L3A60xxx))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/ads/kinetis/auto_detection_service.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/ads/kinetis
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/ads
+)
+
+else()
+
+message(SEND_ERROR "middleware_issdk_drivers_ads dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_middleware_issdk_drivers_ads_lpc)
+# Add set(CONFIG_USE_middleware_issdk_drivers_ads_lpc true) in config.cmake to use this component
+
+message("middleware_issdk_drivers_ads_lpc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL LPC55S69 OR CONFIG_DEVICE_ID STREQUAL LPC55S66 OR CONFIG_DEVICE_ID STREQUAL LPC55S16 OR CONFIG_DEVICE_ID STREQUAL LPC55S14 OR CONFIG_DEVICE_ID STREQUAL LPC5512 OR CONFIG_DEVICE_ID STREQUAL LPC5514 OR CONFIG_DEVICE_ID STREQUAL LPC5516 OR CONFIG_DEVICE_ID STREQUAL LPC5502 OR CONFIG_DEVICE_ID STREQUAL LPC5504 OR CONFIG_DEVICE_ID STREQUAL LPC5506 OR CONFIG_DEVICE_ID STREQUAL LPC55S04 OR CONFIG_DEVICE_ID STREQUAL LPC55S06))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/ads/lpc/auto_detection_service.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/ads/lpc
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/ads
+)
+
+else()
+
+message(SEND_ERROR "middleware_issdk_drivers_ads_lpc dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_middleware_issdk_drivers_host)
+# Add set(CONFIG_USE_middleware_issdk_drivers_host true) in config.cmake to use this component
+
+message("middleware_issdk_drivers_host component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./sensors/host_io_uart.c
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/host/comm_if_uart.c
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/host/data_format_hdlc.c
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/host/data_format_json.c
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/host/host_interface_service.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./sensors
+  ${CMAKE_CURRENT_LIST_DIR}/./drivers/host
+)
+
+else()
+
+message(SEND_ERROR "middleware_issdk_drivers_host dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

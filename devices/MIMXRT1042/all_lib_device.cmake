@@ -1228,6 +1228,10 @@
 #  # description: A software package that connects to the IoT Hub through Azure RTOS
 #  set(CONFIG_USE_middleware_azure_rtos_azure_iot true)
 
+#set.middleware.wireless.wpa_supplicant
+#  # description: Wpa supplicant rtos
+#  set(CONFIG_USE_middleware_wireless_wpa_supplicant_rtos true)
+
 #set.middleware.usb
 #  # description: USB device ehci config header
 #  set(CONFIG_USE_middleware_usb_device_ehci_config_header true)
@@ -1353,6 +1357,7 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/vit
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/voice_seeker
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wifi_nxp
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/wpa_supplicant-rtos
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
   ${CMAKE_CURRENT_LIST_DIR}/drivers
@@ -1361,11 +1366,14 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/xip
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt1040
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1166
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1052
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MM6
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC54628
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MQ6
   ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1042
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1062
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MK22F51212
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1021
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S16
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/K32L2B31A
 )
 
 include(set_board_evkmimxrt1040 OPTIONAL)
@@ -1390,3 +1398,4 @@ include(set_middleware_sdmmc OPTIONAL)
 include(set_middleware_usb OPTIONAL)
 include(set_middleware_vit OPTIONAL)
 include(set_middleware_voice_seeker OPTIONAL)
+include(set_middleware_wireless_wpa_supplicant OPTIONAL)

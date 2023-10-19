@@ -10,7 +10,7 @@ manifest:
     remote: nxp-mcuxpresso
   projects:
   - name: mcux-sdk-examples
-    revision: fb127c559e82acc0dbbf64df40197ed81e6bd5fc
+    revision: MCUX_2.14.0_UPDATE
     path: examples
   - name: FreeRTOS-Kernel
     revision: MCUX_2.14.0
@@ -115,6 +115,12 @@ manifest:
     revision: MCUX_2.14.0
   - name: VoiceSeeker
     path: middleware/voice_seeker
+    revision: MCUX_2.14.0
+  - name: NatureDSP
+    path: middleware/dsp
+    revision: MCUX_2.14.0
+  - name: wpa_supplicant-rtos
+    path: middleware/wireless/wpa_supplicant-rtos
     revision: MCUX_2.14.0
   self:
     path: core

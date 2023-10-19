@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_middleware_nxp_iot_sensing_sdk_MIMXRT1021_manifest_v3_13" name="Nxp iot sensing sdk" brief="IoT Sensing SDK (ISSDK) provides sensor drivers and reference examples for NXP's IoT sensors." format_version="3.13" api_version="2.0.0" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.13.xsd">
-  <!--Timestamp (UTC): 2023-08-01 10:07:28.751119-->
-  <!--This manifest is generated based on sdk repo commit: e54814879516c4a41911f9db38131264e352b311-->
+  <!--Timestamp (UTC): 2023-09-11 17:47:21.412348-->
+  <!--This manifest is generated based on sdk repo commit: eb85729d74681e2463278351fc8804e35454d7d1-->
   <externalDefinitions>
     <definition extID="MIMXRT1021xxxxx"/>
     <definition extID="armgcc"/>
@@ -9,7 +9,7 @@
     <definition extID="CMSIS_Driver_Include.SPI.MIMXRT1021"/>
     <definition extID="platform.drivers.common.MIMXRT1021"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2140_middleware_nxp_iot_sensing_sdk_MIMXRT1021_manifest_v3_13" name="MCUXpressoSDK2140_middleware_nxp_iot_sensing_sdk_MIMXRT1021_manifest_v3_13" version="2.14.0"/>
+  <ksdk id="MCUXpressoSDK2140_middleware_nxp_iot_sensing_sdk_MIMXRT1021_manifest_v3_13" name="MCUXpressoSDK2140_middleware_nxp_iot_sensing_sdk_MIMXRT1021_manifest_v3_13" version="2.14.0" revision="Provided by Script"/>
   <components>
     <component id="middleware.issdk.sensor.tools.MIMXRT1021" name="issdk_tools" brief="ISSDK Serial to MQTT bridge application" version="1.7.0" full_name="Middleware issdk sensor tools" devices="MIMXRT1021xxxxx" category="Sensors/misc" user_visible="false" type="other" package_base_path="middleware/issdk" project_base_path="issdk_senor">
       <source relative_path="../../tools/Serial_To_MQTT" project_relative_path="./" type="script">

@@ -1,14 +1,4 @@
 # Copy variable into project config.cmake to use software component
-#set.board.evkbmimxrt1170
-#  # description: Board_project_template evkbmimxrt1170
-#  set(CONFIG_USE_BOARD_Project_Template_evkbmimxrt1170 true)
-
-#  # description: XIP Board Driver
-#  set(CONFIG_USE_driver_xip_board_evkbmimxrt1170 true)
-
-#  # description: XMCD Driver
-#  set(CONFIG_USE_driver_xmcd_evkbmimxrt1170 true)
-
 #set.board.evkmimxrt1170
 #  # description: XMCD Driver
 #  set(CONFIG_USE_driver_xmcd_evkmimxrt1170 true)
@@ -19,24 +9,15 @@
 #  # description: XIP Board Driver
 #  set(CONFIG_USE_driver_xip_board_evkmimxrt1170 true)
 
-#set.middleware.maestro_framework
-#  # description: MCU Maestro Audio Framework Opus
-#  set(CONFIG_USE_middleware_maestro_framework_opus true)
+#set.board.evkbmimxrt1170
+#  # description: Board_project_template evkbmimxrt1170
+#  set(CONFIG_USE_BOARD_Project_Template_evkbmimxrt1170 true)
 
-#  # description: MCU Maestro Audio Framework Opusfile
-#  set(CONFIG_USE_middleware_maestro_framework_opusfile true)
+#  # description: XIP Board Driver
+#  set(CONFIG_USE_driver_xip_board_evkbmimxrt1170 true)
 
-#  # description: MCU Maestro Audio Framework Ogg
-#  set(CONFIG_USE_middleware_maestro_framework_ogg true)
-
-#  # description: MCU Maestro Audio Framework Doc
-#  set(CONFIG_USE_middleware_maestro_framework_doc true)
-
-#  # description: MCU Maestro Audio Framework
-#  set(CONFIG_USE_middleware_maestro_framework_codecs true)
-
-#  # description: MCU Maestro Audio Framework Streamer Core
-#  set(CONFIG_USE_middleware_maestro_framework true)
+#  # description: XMCD Driver
+#  set(CONFIG_USE_driver_xmcd_evkbmimxrt1170 true)
 
 #set.middleware.wifi
 #  # description: NXP WLAN common files
@@ -920,6 +901,25 @@
 #  # description: lwIP UDP Echo Raw API contrib
 #  set(CONFIG_USE_middleware_lwip_contrib_udpecho_raw true)
 
+#set.middleware.maestro_framework
+#  # description: MCU Maestro Audio Framework Opus
+#  set(CONFIG_USE_middleware_maestro_framework_opus true)
+
+#  # description: MCU Maestro Audio Framework Opusfile
+#  set(CONFIG_USE_middleware_maestro_framework_opusfile true)
+
+#  # description: MCU Maestro Audio Framework Ogg
+#  set(CONFIG_USE_middleware_maestro_framework_ogg true)
+
+#  # description: MCU Maestro Audio Framework Doc
+#  set(CONFIG_USE_middleware_maestro_framework_doc true)
+
+#  # description: MCU Maestro Audio Framework
+#  set(CONFIG_USE_middleware_maestro_framework_codecs true)
+
+#  # description: MCU Maestro Audio Framework Streamer Core
+#  set(CONFIG_USE_middleware_maestro_framework true)
+
 #set.middleware.mcuboot
 #  # description: mcuboot
 #  set(CONFIG_USE_middleware_mcuboot true)
@@ -1152,6 +1152,264 @@
 #  # description: Voice seeker library for Cortex M7
 #  set(CONFIG_USE_middleware_voice_seeker_cm7 true)
 
+#set.middleware.eiq
+#  # description: Video and audio interface layer
+#  set(CONFIG_USE_middleware_eiq_worker true)
+
+#  # description: Utilities for Glow NN compiler.
+#  set(CONFIG_USE_middleware_eiq_glow true)
+
+#  # description: Flatbuffers library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_flatbuffers true)
+
+#  # description: Gemmlowp library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_gemmlowp true)
+
+#  # description: Ruy library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_ruy true)
+
+#  # description: General Purpose FFT (Fast Fourier/Cosine/Sine Transform) Package
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_fft2d true)
+
+#  # description: A mixed-radix Fast Fourier Transform library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_kissfft true)
+
+#  # description: CMSIS-NN library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_cmsis_nn true)
+
+#  # description: Xtensa HiFi4 NN library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_xa_nnlib_hifi4 true)
+
+#  # description: Video record&play abstract layer
+#  set(CONFIG_USE_middleware_eiq_worker_video_evkmimxrt1170 true)
+
+#  # description: Audio capture and play abstract layer
+#  set(CONFIG_USE_middleware_eiq_worker_audio true)
+
+#  # description: Video capture and display abstract layer
+#  set(CONFIG_USE_middleware_eiq_gui_printf true)
+
+#  # description: TensorFlow Lite Micro library with reference kernel implementations
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_reference true)
+
+#  # description: TensorFlow Lite Micro library with CMSIS-NN kernel implementations
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn true)
+
+#  # description: TensorFlow Lite Micro library with CMSIS-NN and Ethos-U kernel implementations
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn_ethosu true)
+
+#  # description: TensorFlow Lite Micro library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro true)
+
+#  # description: TensorFlow Lite Micro word detection library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_examples_microspeech true)
+
+#  # description: DeepViewRT Runtime library
+#  set(CONFIG_USE_middleware_eiq_deepviewrt_nnlib true)
+
+#  # description: DeepViewRT modelrunner server library
+#  set(CONFIG_USE_middleware_eiq_deepviewrt_modelrunner_server true)
+
+#  # description: DeepViewRT modelrunner server library
+#  set(CONFIG_USE_middleware_eiq_deepviewrt_modelrunner_server_flash true)
+
+#  # description: DeepViewRT modelrunner server library
+#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_flatcc true)
+
+#  # description: DeepViewRT modelrunner server library
+#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_json true)
+
+#  # description: DeepViewRT modelrunner server library
+#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_stb true)
+
+#  # description: Multimedia Processing Pipelines Library
+#  set(CONFIG_USE_middleware_eiq_mpp true)
+
+#  # description: Video record&play abstract layer
+#  set(CONFIG_USE_middleware_eiq_worker_video_evkbmimxrt1170 true)
+
+#set.middleware.issdk
+#  # description: ISSDK Serial to MQTT bridge application
+#  set(CONFIG_USE_middleware_issdk_sensor_tools true)
+
+#  # description: ISSDK Utils
+#  set(CONFIG_USE_middleware_issdk_drivers_systick_utils true)
+
+#  # description: ISSDK Sensors RegDefs
+#  set(CONFIG_USE_middleware_issdk_sensor_allregdefs true)
+
+#  # description: ISSDK FXAS21002 Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_fxas21002 true)
+
+#  # description: ISSDK FXOS8700 Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_fxos8700 true)
+
+#  # description: ISSDK MPL3115 Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_mpl3115 true)
+
+#  # description: ISSDK FXLC95000 Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_fxlc95000 true)
+
+#  # description: ISSDK MMA8491 Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_mma8491q true)
+
+#  # description: ISSDK FXLS8471 Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_fxls8471q true)
+
+#  # description: ISSDK MAG3110 Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_mag3110 true)
+
+#  # description: ISSDK MMA845x Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_mma845x true)
+
+#  # description: ISSDK MMA865x Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_mma865x true)
+
+#  # description: ISSDK FXPQ3115 Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_fxpq3115 true)
+
+#  # description: ISSDK FXLS8962 Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_fxls8962 true)
+
+#  # description: ISSDK MMA9553 Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_mma9553 true)
+
+#  # description: ISSDK nps300x Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_nps300x true)
+
+#  # description: ISSDK ISL29023 Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_isl29023 true)
+
+#  # description: ISSDK fxps7250d4 Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_fxps7250d4 true)
+
+#  # description: ISSDK FXLS896xAF Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_fxls896xaf true)
+
+#  # description: ISSDK FXLS8974CF Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_fxls8974cf true)
+
+#  # description: ISSDK FXLS8961AF Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_fxls8961af true)
+
+#  # description: ISSDK FXLS8971CF Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_fxls8971cf true)
+
+#  # description: ISSDK NMH1000 Sensor Driver Files
+#  set(CONFIG_USE_middleware_issdk_sensor_nmh1000 true)
+
+#  # description: ISSDK Sensor Interface Common
+#  set(CONFIG_USE_middleware_issdk_sensor_interface_common true)
+
+#  # description: ISSDK GPIO Driver for i.MXRT10xx
+#  set(CONFIG_USE_middleware_issdk_drivers_gpio_imx true)
+
+#  # description: ISSDK GPIO Driver for i.MX8xx
+#  set(CONFIG_USE_middleware_issdk_drivers_gpio_imx8 true)
+
+#  # description: ISSDK GPIO Driver for i.MXRT685
+#  set(CONFIG_USE_middleware_issdk_drivers_gpio_imxrt600 true)
+
+#  # description: ISSDK GPIO Driver for i.MXRT1180
+#  set(CONFIG_USE_middleware_issdk_drivers_gpio_imxrt1180 true)
+
+#  # description: ISSDK GPIO Driver for i.MXRT
+#  set(CONFIG_USE_middleware_issdk_drivers_gpio_imxrt true)
+
+#  # description: ISSDK Host Interface Service
+#  set(CONFIG_USE_middleware_issdk_drivers_host true)
+
+#set.middleware.azure_rtos
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx_template true)
+
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr_template true)
+
+#  # description: Real Time Operating System Kernel
+#  set(CONFIG_USE_middleware_azure_rtos_tx_lib true)
+
+#  # description: Real Time Operating System Kernel
+#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr_lib true)
+
+#  # description: Real Time Operating System Kernel
+#  set(CONFIG_USE_middleware_azure_rtos_txm_lib true)
+
+#  # description: A file system based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_fx_template true)
+
+#  # description: A file system based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_fx_lib true)
+
+#  # description: A GUI library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_gx_lib true)
+
+#  # description: A network protocol stack based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_nxd_template true)
+
+#  # description: A network protocol stack based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_nxd_lib true)
+
+#  # description: A USB library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_ux_template true)
+
+#  # description: Azure RTOS USBX Host Controller EHCI
+#  set(CONFIG_USE_middleware_azure_rtos_ux_ehci true)
+
+#  # description: Azure RTOS USBX Host Controller OHCI
+#  set(CONFIG_USE_middleware_azure_rtos_ux_ohci true)
+
+#  # description: Azure RTOS USBX Host Controller IP3516
+#  set(CONFIG_USE_middleware_azure_rtos_ux_ip3516 true)
+
+#  # description: Azure RTOS USBX Device Controller IP3511
+#  set(CONFIG_USE_middleware_azure_rtos_ux_ip3511 true)
+
+#  # description: Azure RTOS USBX Device Controller for i.MX RT
+#  set(CONFIG_USE_middleware_azure_rtos_ux_dci true)
+
+#  # description: A USB library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_ux_lib true)
+
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx true)
+
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr true)
+
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx_sp true)
+
+#  # description: A file system based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_fx true)
+
+#  # description: A file system based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_fx_sp true)
+
+#  # description: A GUI library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_gx true)
+
+#  # description: LevelX provides NAND and NOR flash wear leveling facilities to embedded applications
+#  set(CONFIG_USE_middleware_azure_rtos_lx true)
+
+#  # description: A network protocol stack based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_nxd true)
+
+#  # description: A network protocol stack based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_nxd_sp true)
+
+#  # description: Azure NetX Duo driver based on i.MXRT series
+#  set(CONFIG_USE_middleware_netxduo_imxrt true)
+
+#  # description: A USB library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_ux true)
+
+#  # description: A USB library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_ux_sp true)
+
+#  # description: A software package that connects to the IoT Hub through Azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_azure_iot true)
+
 #set.middleware.edgefast_bluetooth
 #  # description: edgefast_bluetooth PAL configuration template
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_config_template true)
@@ -1288,263 +1546,9 @@
 #  # description: BLE libraries for bt_ble Host stack
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_ble_ethermind_lib_cm7f true)
 
-#set.middleware.eiq
-#  # description: Video and audio interface layer
-#  set(CONFIG_USE_middleware_eiq_worker true)
-
-#  # description: Flatbuffers library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_flatbuffers true)
-
-#  # description: Gemmlowp library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_gemmlowp true)
-
-#  # description: Ruy library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_ruy true)
-
-#  # description: General Purpose FFT (Fast Fourier/Cosine/Sine Transform) Package
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_fft2d true)
-
-#  # description: A mixed-radix Fast Fourier Transform library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_kissfft true)
-
-#  # description: CMSIS-NN library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_cmsis_nn true)
-
-#  # description: Xtensa HiFi4 NN library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_xa_nnlib_hifi4 true)
-
-#  # description: Utilities for Glow NN compiler.
-#  set(CONFIG_USE_middleware_eiq_glow true)
-
-#  # description: Video record&play abstract layer
-#  set(CONFIG_USE_middleware_eiq_worker_video_evkbmimxrt1170 true)
-
-#  # description: Audio capture and play abstract layer
-#  set(CONFIG_USE_middleware_eiq_worker_audio true)
-
-#  # description: Video capture and display abstract layer
-#  set(CONFIG_USE_middleware_eiq_gui_printf true)
-
-#  # description: TensorFlow Lite Micro library with reference kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_reference true)
-
-#  # description: TensorFlow Lite Micro library with CMSIS-NN kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn true)
-
-#  # description: TensorFlow Lite Micro library with CMSIS-NN and Ethos-U kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn_ethosu true)
-
-#  # description: TensorFlow Lite Micro library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro true)
-
-#  # description: TensorFlow Lite Micro word detection library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_examples_microspeech true)
-
-#  # description: DeepViewRT Runtime library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_nnlib true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_modelrunner_server true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_modelrunner_server_flash true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_flatcc true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_json true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_stb true)
-
-#  # description: Multimedia Processing Pipelines Library
-#  set(CONFIG_USE_middleware_eiq_mpp true)
-
-#  # description: Video record&play abstract layer
-#  set(CONFIG_USE_middleware_eiq_worker_video_evkmimxrt1170 true)
-
-#set.middleware.azure_rtos
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx_template true)
-
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr_template true)
-
-#  # description: Real Time Operating System Kernel
-#  set(CONFIG_USE_middleware_azure_rtos_tx_lib true)
-
-#  # description: Real Time Operating System Kernel
-#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr_lib true)
-
-#  # description: Real Time Operating System Kernel
-#  set(CONFIG_USE_middleware_azure_rtos_txm_lib true)
-
-#  # description: A file system based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_fx_template true)
-
-#  # description: A file system based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_fx_lib true)
-
-#  # description: A GUI library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_gx_lib true)
-
-#  # description: A network protocol stack based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_nxd_template true)
-
-#  # description: A network protocol stack based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_nxd_lib true)
-
-#  # description: A USB library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_ux_template true)
-
-#  # description: Azure RTOS USBX Host Controller EHCI
-#  set(CONFIG_USE_middleware_azure_rtos_ux_ehci true)
-
-#  # description: Azure RTOS USBX Host Controller OHCI
-#  set(CONFIG_USE_middleware_azure_rtos_ux_ohci true)
-
-#  # description: Azure RTOS USBX Host Controller IP3516
-#  set(CONFIG_USE_middleware_azure_rtos_ux_ip3516 true)
-
-#  # description: Azure RTOS USBX Device Controller IP3511
-#  set(CONFIG_USE_middleware_azure_rtos_ux_ip3511 true)
-
-#  # description: Azure RTOS USBX Device Controller for i.MX RT
-#  set(CONFIG_USE_middleware_azure_rtos_ux_dci true)
-
-#  # description: A USB library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_ux_lib true)
-
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx true)
-
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr true)
-
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx_sp true)
-
-#  # description: A file system based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_fx true)
-
-#  # description: A file system based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_fx_sp true)
-
-#  # description: A GUI library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_gx true)
-
-#  # description: LevelX provides NAND and NOR flash wear leveling facilities to embedded applications
-#  set(CONFIG_USE_middleware_azure_rtos_lx true)
-
-#  # description: A network protocol stack based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_nxd true)
-
-#  # description: A network protocol stack based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_nxd_sp true)
-
-#  # description: Azure NetX Duo driver based on i.MXRT series
-#  set(CONFIG_USE_middleware_netxduo_imxrt true)
-
-#  # description: A USB library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_ux true)
-
-#  # description: A USB library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_ux_sp true)
-
-#  # description: A software package that connects to the IoT Hub through Azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_azure_iot true)
-
-#set.middleware.issdk
-#  # description: ISSDK Serial to MQTT bridge application
-#  set(CONFIG_USE_middleware_issdk_sensor_tools true)
-
-#  # description: ISSDK Utils
-#  set(CONFIG_USE_middleware_issdk_drivers_systick_utils true)
-
-#  # description: ISSDK Sensors RegDefs
-#  set(CONFIG_USE_middleware_issdk_sensor_allregdefs true)
-
-#  # description: ISSDK FXAS21002 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxas21002 true)
-
-#  # description: ISSDK FXOS8700 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxos8700 true)
-
-#  # description: ISSDK MPL3115 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mpl3115 true)
-
-#  # description: ISSDK FXLC95000 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxlc95000 true)
-
-#  # description: ISSDK MMA8491 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma8491q true)
-
-#  # description: ISSDK FXLS8471 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8471q true)
-
-#  # description: ISSDK MAG3110 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mag3110 true)
-
-#  # description: ISSDK MMA845x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma845x true)
-
-#  # description: ISSDK MMA865x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma865x true)
-
-#  # description: ISSDK FXPQ3115 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxpq3115 true)
-
-#  # description: ISSDK FXLS8962 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8962 true)
-
-#  # description: ISSDK MMA9553 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma9553 true)
-
-#  # description: ISSDK nps300x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_nps300x true)
-
-#  # description: ISSDK ISL29023 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_isl29023 true)
-
-#  # description: ISSDK fxps7250d4 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxps7250d4 true)
-
-#  # description: ISSDK FXLS896xAF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls896xaf true)
-
-#  # description: ISSDK FXLS8974CF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8974cf true)
-
-#  # description: ISSDK FXLS8961AF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8961af true)
-
-#  # description: ISSDK FXLS8971CF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8971cf true)
-
-#  # description: ISSDK NMH1000 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_nmh1000 true)
-
-#  # description: ISSDK Sensor Interface Common
-#  set(CONFIG_USE_middleware_issdk_sensor_interface_common true)
-
-#  # description: ISSDK GPIO Driver for i.MXRT10xx
-#  set(CONFIG_USE_middleware_issdk_drivers_gpio_imx true)
-
-#  # description: ISSDK GPIO Driver for i.MX8xx
-#  set(CONFIG_USE_middleware_issdk_drivers_gpio_imx8 true)
-
-#  # description: ISSDK GPIO Driver for i.MXRT685
-#  set(CONFIG_USE_middleware_issdk_drivers_gpio_imxrt600 true)
-
-#  # description: ISSDK GPIO Driver for i.MXRT1180
-#  set(CONFIG_USE_middleware_issdk_drivers_gpio_imxrt1180 true)
-
-#  # description: ISSDK GPIO Driver for i.MXRT
-#  set(CONFIG_USE_middleware_issdk_drivers_gpio_imxrt true)
-
-#  # description: ISSDK Host Interface Service
-#  set(CONFIG_USE_middleware_issdk_drivers_host true)
+#set.middleware.wireless.wpa_supplicant
+#  # description: Wpa supplicant rtos
+#  set(CONFIG_USE_middleware_wireless_wpa_supplicant_rtos true)
 
 #set.middleware.usb
 #  # description: USB device ehci config header
@@ -1674,6 +1678,7 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/vit
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/voice_seeker
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wifi_nxp
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/wpa_supplicant-rtos
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
   ${CMAKE_CURRENT_LIST_DIR}/drivers
@@ -1685,10 +1690,16 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkbmimxrt1170
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt1170
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1166
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1052
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1062
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MM6
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC54628
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MQ6
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1042
   ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1176
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1021
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S16
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/K32L2B31A
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/K32L2A41A
 )
 
 include(set_board_evkbmimxrt1170 OPTIONAL)
@@ -1716,3 +1727,4 @@ include(set_middleware_sdmmc OPTIONAL)
 include(set_middleware_usb OPTIONAL)
 include(set_middleware_vit OPTIONAL)
 include(set_middleware_voice_seeker OPTIONAL)
+include(set_middleware_wireless_wpa_supplicant OPTIONAL)
