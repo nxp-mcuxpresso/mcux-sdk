@@ -29377,7 +29377,7 @@ ${load}</script>
         <include_path relative_path="RTT" type="asm_include"/>
       </include_paths>
     </component>
-    <component id="platform.devices.MIMXRT1021_debugger.MIMXRT1021" name="MIMXRT1021" brief="Device MIMXRT1021_debugger" version="1.0.0" full_name="Device MIMXRT1021_debugger" devices="MIMXRT1021xxxxx" user_visible="true" type="debugger" package_base_path="../devices/MIMXRT1021" project_base_path="svd">
+    <component id="platform.devices.MIMXRT1021_debugger.MIMXRT1021" name="MIMXRT1021" brief="Device MIMXRT1021_debugger" version="1.0.0" full_name="Device MIMXRT1021_debugger" devices="MIMXRT1021xxxxx" user_visible="true" type="debugger" package_base_path="../../svd/MIMXRT1021" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="MIMXRT1021.xml"/>
       </source>

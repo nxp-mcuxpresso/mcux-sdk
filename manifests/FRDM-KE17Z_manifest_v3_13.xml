@@ -3856,7 +3856,7 @@ ${load}</script>
         <files mask="MCU Bootloader Release Notes.pdf"/>
       </source>
     </component>
-    <component id="platform.devices.MKE17Z7_debugger.MKE17Z7" name="MKE17Z7" brief="Device MKE17Z7_debugger" version="1.0.0" full_name="Device MKE17Z7_debugger" devices="MKE17Z128xxx7 MKE17Z256xxx7" user_visible="true" type="debugger" package_base_path="../devices/MKE17Z7" project_base_path="svd">
+    <component id="platform.devices.MKE17Z7_debugger.MKE17Z7" name="MKE17Z7" brief="Device MKE17Z7_debugger" version="1.0.0" full_name="Device MKE17Z7_debugger" devices="MKE17Z128xxx7 MKE17Z256xxx7" user_visible="true" type="debugger" package_base_path="../../svd/MKE17Z7" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="MKE17Z7.xml"/>
       </source>

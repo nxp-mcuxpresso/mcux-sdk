@@ -3627,7 +3627,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.devices.MKE02Z4_debugger.MKE02Z4" name="MKE02Z4" brief="Device MKE02Z4_debugger" version="1.0.0" full_name="Device MKE02Z4_debugger" devices="MKE02Z64xxx4 MKE02Z32xxx4 MKE02Z16xxx4" user_visible="true" type="debugger" package_base_path="../devices/MKE02Z4" project_base_path="svd">
+    <component id="platform.devices.MKE02Z4_debugger.MKE02Z4" name="MKE02Z4" brief="Device MKE02Z4_debugger" version="1.0.0" full_name="Device MKE02Z4_debugger" devices="MKE02Z64xxx4 MKE02Z32xxx4 MKE02Z16xxx4" user_visible="true" type="debugger" package_base_path="../../svd/MKE02Z4" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="MKE02Z4.xml"/>
       </source>

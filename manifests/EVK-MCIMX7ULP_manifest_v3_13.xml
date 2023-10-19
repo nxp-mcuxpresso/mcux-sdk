@@ -28369,7 +28369,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.devices.MCIMX7U5_debugger.MCIMX7U5" name="MCIMX7U5" brief="Device MCIMX7U5_debugger" version="1.0.0" full_name="Device MCIMX7U5_debugger" devices="MCIMX7U5xxxxx" user_visible="true" type="debugger" package_base_path="../devices/MCIMX7U5" project_base_path="svd">
+    <component id="platform.devices.MCIMX7U5_debugger.MCIMX7U5" name="MCIMX7U5" brief="Device MCIMX7U5_debugger" version="1.0.0" full_name="Device MCIMX7U5_debugger" devices="MCIMX7U5xxxxx" user_visible="true" type="debugger" package_base_path="../../svd/MCIMX7U5" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="MCIMX7U5_cm4.xml"/>
       </source>

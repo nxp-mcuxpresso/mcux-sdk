@@ -3222,7 +3222,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.devices.LPC824_debugger.LPC824" name="LPC824" brief="Device LPC824_debugger" version="1.0.0" full_name="Device LPC824_debugger" devices="LPC824" user_visible="true" type="debugger" package_base_path="../devices/LPC824" project_base_path="svd">
+    <component id="platform.devices.LPC824_debugger.LPC824" name="LPC824" brief="Device LPC824_debugger" version="1.0.0" full_name="Device LPC824_debugger" devices="LPC824" user_visible="true" type="debugger" package_base_path="../../svd/LPC824" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="LPC824.xml"/>
       </source>

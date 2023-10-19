@@ -3683,7 +3683,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.devices.MKM34ZA5_debugger.MKM34ZA5" name="MKM34ZA5" brief="Device MKM34ZA5_debugger" version="1.0.0" full_name="Device MKM34ZA5_debugger" devices="MKM34Z128Axxx5" user_visible="true" type="debugger" package_base_path="../devices/MKM34ZA5" project_base_path="svd">
+    <component id="platform.devices.MKM34ZA5_debugger.MKM34ZA5" name="MKM34ZA5" brief="Device MKM34ZA5_debugger" version="1.0.0" full_name="Device MKM34ZA5_debugger" devices="MKM34Z128Axxx5" user_visible="true" type="debugger" package_base_path="../../svd/MKM34ZA5" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="MKM34ZA5.xml"/>
       </source>

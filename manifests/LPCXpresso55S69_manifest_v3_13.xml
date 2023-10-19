@@ -28876,7 +28876,7 @@ ${load}</script>
         <include_path relative_path="RTT" type="asm_include"/>
       </include_paths>
     </component>
-    <component id="platform.devices.LPC55S69_debugger.LPC55S69" name="LPC55S69" brief="Device LPC55S69_debugger" version="1.0.0" full_name="Device LPC55S69_debugger" devices="LPC55S69" user_visible="true" type="debugger" package_base_path="../devices/LPC55S69" project_base_path="svd">
+    <component id="platform.devices.LPC55S69_debugger.LPC55S69" name="LPC55S69" brief="Device LPC55S69_debugger" version="1.0.0" full_name="Device LPC55S69_debugger" devices="LPC55S69" user_visible="true" type="debugger" package_base_path="../../svd/LPC55S69" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="LPC55S69_cm33_core0.xml"/>
         <files mask="LPC55S69_cm33_core1.xml"/>

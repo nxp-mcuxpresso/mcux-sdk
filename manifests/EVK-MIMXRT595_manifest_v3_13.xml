@@ -29493,7 +29493,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.devices.MIMXRT595S_debugger.MIMXRT595S" name="MIMXRT595S" brief="Device MIMXRT595S_debugger" version="1.0.0" full_name="Device MIMXRT595S_debugger" devices="MIMXRT595S" user_visible="true" type="debugger" package_base_path="../devices/MIMXRT595S" project_base_path="svd">
+    <component id="platform.devices.MIMXRT595S_debugger.MIMXRT595S" name="MIMXRT595S" brief="Device MIMXRT595S_debugger" version="1.0.0" full_name="Device MIMXRT595S_debugger" devices="MIMXRT595S" user_visible="true" type="debugger" package_base_path="../../svd/MIMXRT595S" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="MIMXRT595S_cm33.xml"/>
       </source>

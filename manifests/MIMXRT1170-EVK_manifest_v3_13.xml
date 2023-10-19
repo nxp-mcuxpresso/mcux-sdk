@@ -30862,7 +30862,7 @@ ${load}</script>
         <files mask="i.MX RT1170 Flashloader Release Notes.pdf"/>
       </source>
     </component>
-    <component id="platform.devices.MIMXRT1176_debugger.MIMXRT1176" name="MIMXRT1176" brief="Device MIMXRT1176_debugger" version="1.0.0" full_name="Device MIMXRT1176_debugger" devices="MIMXRT1176xxxxx" user_visible="true" type="debugger" package_base_path="../devices/MIMXRT1176" project_base_path="svd">
+    <component id="platform.devices.MIMXRT1176_debugger.MIMXRT1176" name="MIMXRT1176" brief="Device MIMXRT1176_debugger" version="1.0.0" full_name="Device MIMXRT1176_debugger" devices="MIMXRT1176xxxxx" user_visible="true" type="debugger" package_base_path="../../svd/MIMXRT1176" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="MIMXRT1176_cm4.xml"/>
         <files mask="MIMXRT1176_cm7.xml"/>

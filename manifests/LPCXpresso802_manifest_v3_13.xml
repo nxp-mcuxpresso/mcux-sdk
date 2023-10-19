@@ -3145,7 +3145,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.devices.LPC802_debugger.LPC802" name="LPC802" brief="Device LPC802_debugger" version="1.0.0" full_name="Device LPC802_debugger" devices="LPC802" user_visible="true" type="debugger" package_base_path="../devices/LPC802" project_base_path="svd">
+    <component id="platform.devices.LPC802_debugger.LPC802" name="LPC802" brief="Device LPC802_debugger" version="1.0.0" full_name="Device LPC802_debugger" devices="LPC802" user_visible="true" type="debugger" package_base_path="../../svd/LPC802" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="LPC802.xml"/>
       </source>

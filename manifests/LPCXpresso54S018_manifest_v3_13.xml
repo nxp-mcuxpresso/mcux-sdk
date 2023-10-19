@@ -5730,7 +5730,7 @@ ${load}</script>
         <files mask="LPC540xxLPC54S0xx Flashloader Release Notes.pdf"/>
       </source>
     </component>
-    <component id="platform.devices.LPC54S018_debugger.LPC54S018" name="LPC54S018" brief="Device LPC54S018_debugger" version="1.0.0" full_name="Device LPC54S018_debugger" devices="LPC54S018" user_visible="true" type="debugger" package_base_path="../devices/LPC54S018" project_base_path="svd">
+    <component id="platform.devices.LPC54S018_debugger.LPC54S018" name="LPC54S018" brief="Device LPC54S018_debugger" version="1.0.0" full_name="Device LPC54S018_debugger" devices="LPC54S018" user_visible="true" type="debugger" package_base_path="../../svd/LPC54S018" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="LPC54S018.xml"/>
       </source>

@@ -10,7 +10,7 @@ manifest:
     remote: nxp-mcuxpresso
   projects:
   - name: mcux-sdk-examples
-    revision: 3ce9dbece54fbae13f7e20b234f8ae167b8de3bb
+    revision: 1db053064902221473bdbda64fa4bd81a07f5dca
     path: examples
   - name: FreeRTOS-Kernel
     revision: MCUX_2.14.0

@@ -3660,7 +3660,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.devices.MIMX8MM6_debugger.MIMX8MM6" name="MIMX8MM6" brief="Device MIMX8MM6_debugger" version="1.0.0" full_name="Device MIMX8MM6_debugger" devices="MIMX8MM6xxxKZ MIMX8MM6xxxLZ" user_visible="true" type="debugger" package_base_path="../devices/MIMX8MM6" project_base_path="svd">
+    <component id="platform.devices.MIMX8MM6_debugger.MIMX8MM6" name="MIMX8MM6" brief="Device MIMX8MM6_debugger" version="1.0.0" full_name="Device MIMX8MM6_debugger" devices="MIMX8MM6xxxKZ MIMX8MM6xxxLZ" user_visible="true" type="debugger" package_base_path="../../svd/MIMX8MM6" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="MIMX8MM6_cm4.xml"/>
       </source>

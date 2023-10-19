@@ -27422,7 +27422,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.devices.MKE15Z7_debugger.MKE15Z7" name="MKE15Z7" brief="Device MKE15Z7_debugger" version="1.0.0" full_name="Device MKE15Z7_debugger" devices="MKE15Z256xxx7 MKE15Z128xxx7" user_visible="true" type="debugger" package_base_path="../devices/MKE15Z7" project_base_path="svd">
+    <component id="platform.devices.MKE15Z7_debugger.MKE15Z7" name="MKE15Z7" brief="Device MKE15Z7_debugger" version="1.0.0" full_name="Device MKE15Z7_debugger" devices="MKE15Z256xxx7 MKE15Z128xxx7" user_visible="true" type="debugger" package_base_path="../../svd/MKE15Z7" project_base_path="svd">
       <source relative_path="./" type="xml">
         <files mask="MKE15Z7.xml"/>
       </source>
