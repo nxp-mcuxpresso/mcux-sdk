@@ -6792,6 +6792,38 @@ wifi_cert:
   - driver.xip_device
   - driver.xip_board.evkbmimxrt1060
   - utilities.misc_utilities
+uart_wifi_bridge:
+  dependency:
+  - driver.cache_armv7_m7
+  - middleware.wifi.sdio
+  - middleware.wifi.wifidriver
+  - middleware.sdmmc.host.usdhc
+  - middleware.sdmmc.sdio
+  - middleware.sdmmc.host.usdhc.freertos
+  - component.igpio_adapter
+  - driver.lpuart
+  - driver.lpuart_freertos
+  - middleware.freertos-kernel
+  - middleware.freertos-kernel.heap_4
+  - middleware.wifi
+  - middleware.lwip
+  - middleware.lwip.apps.lwiperf
+  - middleware.wifi.cli
+  - driver.clock
+  - driver.common
+  - device.MIMXRT1062_CMSIS
+  - utility.debug_console
+  - component.lpuart_adapter
+  - component.serial_manager_uart
+  - component.serial_manager
+  - component.lists
+  - device.MIMXRT1062_startup
+  - driver.iomuxc
+  - utility.assert
+  - driver.igpio
+  - driver.xip_device
+  - driver.xip_board.evkbmimxrt1060
+  - utilities.misc_utilities
 wifi_cli:
   dependency:
   - driver.cache_armv7_m7

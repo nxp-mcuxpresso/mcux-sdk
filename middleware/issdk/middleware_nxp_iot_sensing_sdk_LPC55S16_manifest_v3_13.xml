@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_middleware_nxp_iot_sensing_sdk_LPC55S16_manifest_v3_13" name="Nxp iot sensing sdk" brief="IoT Sensing SDK (ISSDK) provides sensor drivers and reference examples for NXP's IoT sensors." format_version="3.13" api_version="2.0.0" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.13.xsd">
-  <!--Timestamp (UTC): 2023-09-11 17:47:02.043756-->
-  <!--This manifest is generated based on sdk repo commit: eb85729d74681e2463278351fc8804e35454d7d1-->
+  <!--Timestamp (UTC): 2023-10-17 15:55:51.382674-->
+  <!--This manifest is generated based on sdk repo commit: db2b10111f92f5ab05f933dfaf13b7880e4f3f38-->
   <externalDefinitions>
     <definition extID="LPC55S16"/>
     <definition extID="armgcc"/>

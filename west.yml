@@ -10,7 +10,7 @@ manifest:
     remote: nxp-mcuxpresso
   projects:
   - name: mcux-sdk-examples
-    revision: MCUX_2.14.0_UPDATE
+    revision: MCUX_2.14.0_UPDATE_ENHC1
     path: examples
   - name: FreeRTOS-Kernel
     revision: MCUX_2.14.0
@@ -89,7 +89,7 @@ manifest:
     revision: MCUX_2.14.0
   - name: wifi_nxp
     path: middleware/wifi_nxp
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UPDATE_ENHC1
     remote: nxp
   - name: lwip
     path: middleware/lwip
@@ -121,6 +121,6 @@ manifest:
     revision: MCUX_2.14.0
   - name: wpa_supplicant-rtos
     path: middleware/wireless/wpa_supplicant-rtos
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UPDATE_ENHC1
   self:
     path: core

@@ -484,9 +484,11 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/lpcxpresso51u68
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC54628
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MQ6
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S28
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC824
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE17Z7
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC51U68
+  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC54S018M
 )
 
 include(set_board_lpcxpresso51u68 OPTIONAL)
