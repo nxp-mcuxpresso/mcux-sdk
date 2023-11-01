@@ -2322,12 +2322,9 @@ status_t ENET_QOS_ReadFrame(ENET_QOS_Type *base,
                         }
                         control = rxDesc->control;
                     }
-                }
 
-                /* Reinit for the context descritor which has been updated by DMA. */
-                if ((control & ENET_QOS_RXDESCRIP_WR_CTXT_MASK) != 0U)
-                {
-                    if (tsAvailable && (NULL != ts))
+                    /* Reinit for the context descriptor which has been updated by DMA. */
+                    if (NULL != ts)
                     {
                         ENET_QOS_StoreRxFrameTime(base, handle, rxDesc, ts);
                     }
