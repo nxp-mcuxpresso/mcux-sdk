@@ -18,7 +18,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief HAL I2C master handle size. */
-#define HAL_I2C_MASTER_HANDLE_SIZE (104U)
+#define HAL_I2C_MASTER_HANDLE_SIZE (112U)
 
 /*! @brief HAL I2C slave handle size. */
 #define HAL_I2C_SLAVE_HANDLE_SIZE (144U)
