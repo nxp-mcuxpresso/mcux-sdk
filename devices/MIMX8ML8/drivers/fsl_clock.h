@@ -44,6 +44,12 @@
  */
 #define CLKPAD_FREQ 0U
 
+/*! @brief Clock ip name array for IRQ_STEER. */
+#define IRQSTEER_CLOCKS					\
+    {							\
+        kCLOCK_AudioProcessorIrqsteer, kCLOCK_Hdmi,	\
+    }
+
 /*! @brief Clock ip name array for ECSPI. */
 #define ECSPI_CLOCKS                                                   \
     {                                                                  \
@@ -565,6 +571,8 @@ typedef enum _clock_ip_name
 
     kCLOCK_Sema42_1 = CCM_TUPLE(61U, 33U), /*!< RDC SEMA42 Clock Gate.*/
     kCLOCK_Sema42_2 = CCM_TUPLE(62U, 33U), /*!< RDC SEMA42 Clock Gate.*/
+
+    kCLOCK_AudioProcessorIrqsteer = CCM_TUPLE(63U, 33U), /*!< Audio Processor IRQ_STEER Clock Gate. */
 
     kCLOCK_Sim_enet   = CCM_TUPLE(64U, 17U), /*!< SIM_ENET Clock Gate.*/
     kCLOCK_Sim_m      = CCM_TUPLE(65U, 32U), /*!< SIM_M Clock Gate.*/
