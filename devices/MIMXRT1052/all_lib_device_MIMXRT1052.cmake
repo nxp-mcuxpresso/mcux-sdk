@@ -252,7 +252,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_camera-device-common)
 #    include(component_lpi2c_adapter)
 #    include(middleware_freertos-kernel_heap_3)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_video-common)
 #    include(driver_xip_board_evkbimxrt1050)
 #    include(middleware_freertos-kernel_heap_4)

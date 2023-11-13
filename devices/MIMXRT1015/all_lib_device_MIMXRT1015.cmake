@@ -149,7 +149,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_osa_free_rtos)
 #    include(driver_adc_etc)
 #    include(component_lpi2c_adapter)
-#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_dcdc_1)
 #    include(middleware_azure_rtos_fx_sp)

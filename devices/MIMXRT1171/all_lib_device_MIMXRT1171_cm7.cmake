@@ -161,7 +161,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_adc_etc)
 #    include(driver_key_manager)
 #    include(middleware_freertos-kernel_heap_3)
-#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(middleware_lwip_apps_mdns)
 #    include(CMSIS_DSP_Source)

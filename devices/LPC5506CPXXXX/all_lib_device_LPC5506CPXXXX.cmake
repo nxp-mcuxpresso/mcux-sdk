@@ -64,7 +64,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_inputmux_connections)
 #    include(driver_lpc_crc)
 #    include(driver_mcan)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_wwdt)
 #    include(driver_rng_1)
 #    include(driver_cmp_1)

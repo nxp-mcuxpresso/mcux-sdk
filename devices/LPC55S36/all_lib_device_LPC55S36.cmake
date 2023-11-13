@@ -139,7 +139,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_vref_1)
 #    include(driver_mem_interface)
 #    include(component_css_pkc_common)
-#    include(CMSIS_Include_core_cm)
 #    include(component_css_pkc_pre_processor)
 #    include(component_usart_adapter)
 #    include(driver_wwdt)

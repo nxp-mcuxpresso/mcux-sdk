@@ -75,7 +75,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_fxos8700cq)
 #    include(driver_ewm)
 #    include(driver_flexcan_edma)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_cmsis_i2c)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_ftm)

@@ -47,7 +47,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_ii2c_freertos)
 #    include(driver_gpt)
 #    include(utility_assert)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_iuart)
 #    include(driver_ipwm)
 #    include(middleware_freertos-kernel_extension)

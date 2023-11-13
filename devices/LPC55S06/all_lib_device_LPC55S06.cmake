@@ -100,7 +100,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_mbedtls_LPC55S06)
 #    include(utilities_misc_utilities_LPC55S06)
 #    include(driver_common)
-#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(middleware_freertos-kernel_LPC55S06)
 #    include(middleware_azure_rtos_fx_sp)

@@ -106,7 +106,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_cmsis_uart)
 #    include(driver_smc)
 #    include(component_osa_free_rtos)
-#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_1)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_rcm)

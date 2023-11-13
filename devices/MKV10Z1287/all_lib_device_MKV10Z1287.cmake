@@ -71,7 +71,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_panic)
 #    include(driver_ewm)
 #    include(utility_assert)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_cmsis_i2c)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_ftm)

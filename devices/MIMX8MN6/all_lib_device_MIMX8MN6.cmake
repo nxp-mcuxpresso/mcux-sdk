@@ -62,7 +62,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_memory)
 #    include(driver_gpt)
 #    include(driver_easrc)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_iuart)
 #    include(driver_ipwm)
 #    include(driver_ecspi_sdma)

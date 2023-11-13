@@ -81,7 +81,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_ewm)
 #    include(utility_assert)
 #    include(driver_lpuart)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_flexio_spi)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_flexio)

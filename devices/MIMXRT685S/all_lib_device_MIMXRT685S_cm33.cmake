@@ -197,7 +197,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_rpmsg_lite_evkmimxrt685_freertos)
 #    include(middleware_sdmmc_sd)
 #    include(middleware_freertos-kernel_heap_3)
-#    include(CMSIS_Include_core_cm)
 #    include(middleware_sdmmc_host_usdhc_interrupt_MIMXRT685S_cm33)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(driver_lpc_crc)

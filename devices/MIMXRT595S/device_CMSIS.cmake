@@ -11,4 +11,3 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(CMSIS_Include_core_cm)

@@ -118,7 +118,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_osa_free_rtos)
 #    include(middleware_sdmmc_sd)
 #    include(middleware_usb_device_controller_driver_LPC55S69_cm33_core0)
-#    include(CMSIS_Include_core_cm)
 #    include(middleware_freertos-kernel_heap_4)
 #    include(middleware_freertos-kernel_mpu_wrappers)
 #    include(driver_hashcrypt)

@@ -119,7 +119,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_codec_i2c_MIMX8MM6)
 #    include(driver_sai)
 #    include(middleware_multicore_rpmsg_lite_MIMX8MM6)
-#    include(CMSIS_Include_core_cm)
 #    include(driver_wm8524)
 #    include(driver_pdm)
 #    include(utility_debug_console_lite)
