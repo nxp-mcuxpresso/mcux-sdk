@@ -25,7 +25,7 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(utilities_misc_utilities_LPC54114_cm0plus)
-#    include(CMSIS_DSP_Include)
+#    include(CMSIS_DSP_Include OPTIONAL)
 #    include(component_usart_adapter)
 #    include(component_lists)
 #    include(driver_lpc_gpio)
@@ -42,7 +42,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_mailbox)
 #    include(middleware_multicore_rpmsg_lite_LPC54114_cm0plus)
 #    include(middleware_freertos-kernel_extension)
-#    include(CMSIS_Include_core_cm)
+#    include(CMSIS_Include_core_cm OPTIONAL)
 #    include(middleware_baremetal)
 #    include(driver_utick)
 #    include(utility_debug_console)

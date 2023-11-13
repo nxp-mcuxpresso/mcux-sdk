@@ -9,6 +9,6 @@ if(NOT DEVICE_CMSIS_INCLUDED)
         ${CMAKE_CURRENT_LIST_DIR}/.
     )
   
-    include(CMSIS_Include_core_cm)
+    include(CMSIS_Include_core_cm OPTIONAL)
 
 endif()

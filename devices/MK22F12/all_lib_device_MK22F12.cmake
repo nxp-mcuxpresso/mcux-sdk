@@ -91,7 +91,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_notifier)
 #    include(utility_debug_console_lite)
 #    include(utility_assert)
-#    include(CMSIS_Include_core_cm)
+#    include(CMSIS_Include_core_cm OPTIONAL)
 #    include(utility_assert_lite)
 #    include(utility_debug_console)
 #    include(device_CMSIS)

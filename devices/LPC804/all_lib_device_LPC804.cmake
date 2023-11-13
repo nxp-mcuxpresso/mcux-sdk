@@ -58,7 +58,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_syscon_connections)
 #    include(driver_iap)
 #    include(utilities_misc_utilities_LPC804)
-#    include(CMSIS_Include_core_cm)
+#    include(CMSIS_Include_core_cm OPTIONAL)
 #    include(driver_syscon)
 #    include(driver_reset)
 #    include(driver_lpc_i2c)

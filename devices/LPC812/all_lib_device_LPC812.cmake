@@ -28,7 +28,7 @@ list(APPEND CMAKE_MODULE_PATH
 
 # Copy the cmake components into projects
 #    include(driver_lpc_miniusart)
-#    include(CMSIS_DSP_Include)
+#    include(CMSIS_DSP_Include OPTIONAL)
 #    include(driver_sctimer)
 #    include(driver_wwdt)
 #    include(driver_swm)
@@ -41,7 +41,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_wkt)
 #    include(driver_lpc_crc)
 #    include(utilities_misc_utilities_LPC812)
-#    include(CMSIS_Include_core_cm)
+#    include(CMSIS_Include_core_cm OPTIONAL)
 #    include(component_miniusart_adapter)
 #    include(driver_lpc_acomp)
 #    include(driver_swm_connections)

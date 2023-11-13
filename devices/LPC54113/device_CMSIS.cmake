@@ -11,7 +11,7 @@ if(NOT DEVICE_CMSIS_INCLUDED)
 
     #OR Logic component
     if(CONFIG_DEVICE_LPC54113_cm4) 
-        include(CMSIS_Include_core_cm4)
+        include(CMSIS_Include_core_cm4 OPTIONAL)
     endif()
 
 endif()
