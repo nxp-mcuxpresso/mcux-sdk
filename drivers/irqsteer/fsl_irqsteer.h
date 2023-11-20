@@ -317,6 +317,25 @@ IRQn_Type IRQSTEER_GetMasterNextInterrupt(IRQSTEER_Type *base, irqsteer_int_mast
  */
 uint32_t IRQSTEER_GetMasterIrqCount(IRQSTEER_Type *base, irqsteer_int_master_t intMasterIndex);
 
+/*!
+ * @brief Get the status of the interrupts a master is in charge of.
+ *
+ * What this function does is it takes the CHn_STATUS registers associated
+ * with the interrupts a master is in charge of and puts them in 64-bit
+ * variable. The order they are put in the 64-bit variable is the following:
+ * CHn_STATUS[i] : CHn_STATUS[i + 1], where CHn_STATUS[i + 1] is placed in
+ * the least significant half of the 64-bit variable. Assuming a master is
+ * in charge of 64 interrupts, the user may use the result of this function
+ * as such: BIT(i) & IRQSTEER_GetMasterInterrupts() to check if interrupt i
+ * is asserted.
+ *
+ * @param base IRQSTEER peripheral base address.
+ * @param intMasterIndex Master index of interrupt sources, options available in
+ * enumeration ::irqsteer_int_master_t.
+ * @return 64-bit variable containing the status of the interrupts a master is in charge of.
+ */
+uint64_t IRQSTEER_GetMasterInterruptsStatus(IRQSTEER_Type *base, irqsteer_int_master_t intMasterIndex);
+
 /*@}*/
 
 #if defined(__cplusplus)
