@@ -315,11 +315,13 @@ SECTIONS
     } > Flash640
 
     /* BSS discard section */
-    .bss_discard : ALIGN(4)
+    .bss_discard (NOLOAD) : ALIGN(4)
     {
         _bss_discard = .;
         *(.bss.discard.stack)
         *(.bss.discard.app)
+       /* PDM discard bss */
+        *(.discard.bss.*)
         Mini*.o(.bss*)
         Mini*.o(COMMON)
         MMAC*.o(.bss*)

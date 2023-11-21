@@ -142,6 +142,7 @@ typedef struct
 
 #if gAdcUsed_d
 static adc_conv_seq_config_t adcConvSeqConfigStruct;
+static bool do_temp_measure = false;
 #endif
 
 /* Need to remember the latest temperature value */
@@ -479,38 +480,51 @@ int32_t BOARD_GetTemperature(void)
 {
     uint32_t status                     = 0;
     int32_t temperature_in_128th_degree = 0;
-    int32_t temp_int_part               = 0;
+    int32_t temp_int_part               = 0xFFFFFFFF;
 
 #if (ADC_TEMP_SENSOR_DRIVER_EN)
     int32_t temp_dec_part = 0;
-    bool do_measure       = false;
 
     status = load_calibration_param_from_flash(ADC0);
 
     if (status)
     {
-        /*  ADC is enabled, do temperature measurement*/
-        if (BOARD_IsADCEnabled())
+        if (do_temp_measure == false)
         {
-            ADC_DBG_LOG("ADC not enabled");
-            BOARD_CheckADCReady();
-            do_measure = true;
-        }
-        /* ADC is not enabled and last measured temperature is not valid, need to initialise ADC and do temperature
-         * measurement*/
-        else if (last_temperature_report_in_128th_of_degree == TEMP_ZERO_K_128th_DEG)
-        {
-            ADC_DBG_LOG("ADC not initialized");
-            BOARD_InitAdc();
-            // A problem with the ADC requires a delay after setup, see RFT 1340
-            CLOCK_uDelay(ADC_WAIT_TIME_US);
-            do_measure = true;
+            /*  ADC is enabled, do temperature measurement*/
+            if (BOARD_IsADCEnabled())
+            {
+                ADC_DBG_LOG("ADC not enabled");
+                if (BOARD_CheckADCReady())
+                {
+                    do_temp_measure = true;
+                }
+            }
+            /* ADC is not enabled and last measured temperature is not valid, need to initialise ADC and do temperature
+             * measurement*/
+            else if (last_temperature_report_in_128th_of_degree == TEMP_ZERO_K_128th_DEG)
+            {
+                ADC_DBG_LOG("ADC not initialized");
+                BOARD_InitAdc();
+                // A problem with the ADC requires a delay after setup, see RFT 1340
+                if (BOARD_CheckADCReady())
+                {
+                    do_temp_measure = true;
+                }
+            }
         }
 
-        if (do_measure)
+        if (do_temp_measure)
         {
             get_temperature(ADC0, TEMPERATURE_SENSOR_CHANNEL, 8, &temperature_in_128th_degree);
             last_temperature_report_in_128th_of_degree = temperature_in_128th_degree;
+            do_temp_measure                            = false;
+            /* If blocking state is false, meaning that conversion is asynchronous, set it to true to be able to read in
+             * one go for modules that need backward compatibility */
+            if (BOARD_GetBlockingAdcReadState() == false)
+            {
+                BOARD_SetBlockingAdcRead();
+            }
         }
 
         // integer part
