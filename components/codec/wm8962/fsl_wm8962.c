@@ -1,6 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
- * All rights reserved.
+ * Copyright 2022-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -62,7 +61,12 @@ static status_t WM8962_StartSequence(wm8962_handle_t *handle, wm8962_sequence_id
             delayUs = 75000U;
             break;
         case kWM8962_SequenceChipPowerDown:
-            delayUs = 32000U;
+            /*
+             * Increase the polling time to the double of the original value,
+             * since the actual completion time of this sequence is up to 48ms
+             * for the sample rates >= 88200 Hz.
+             */
+            delayUs = 64000U;
             break;
         case kWM8962_SequenceSpeakerSleep:
             delayUs = 2000U;
