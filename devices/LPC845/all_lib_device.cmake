@@ -1,11 +1,11 @@
 # Copy variable into project config.cmake to use software component
-#set.board.lpcxpresso845max
-#  # description: Board_project_template lpcxpresso845max
-#  set(CONFIG_USE_BOARD_Project_Template_lpcxpresso845max true)
-
 #set.board.lpc845breakout
 #  # description: Board_project_template lpc845breakout
 #  set(CONFIG_USE_BOARD_Project_Template_lpc845breakout true)
+
+#set.board.lpcxpresso845max
+#  # description: Board_project_template lpcxpresso845max
+#  set(CONFIG_USE_BOARD_Project_Template_lpcxpresso845max true)
 
 #set.device.LPC845
 #  # description: Middleware baremetal
@@ -259,10 +259,6 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/lpc845breakout
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/lpcxpresso845max
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC824
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE17Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S28
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC845
 )
 
 include(set_board_lpc845breakout OPTIONAL)

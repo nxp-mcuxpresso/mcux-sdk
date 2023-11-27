@@ -1,15 +1,6 @@
 include_guard(GLOBAL)
 
 
-if (CONFIG_USE_middleware_issdk_sensor_tools)
-# Add set(CONFIG_USE_middleware_issdk_sensor_tools true) in config.cmake to use this component
-
-message("middleware_issdk_sensor_tools component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-
-endif()
-
-
 if (CONFIG_USE_middleware_issdk_drivers_systick_utils)
 # Add set(CONFIG_USE_middleware_issdk_drivers_systick_utils true) in config.cmake to use this component
 
@@ -22,6 +13,15 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/./drivers/systick
 )
+
+
+endif()
+
+
+if (CONFIG_USE_middleware_issdk_sensor_tools)
+# Add set(CONFIG_USE_middleware_issdk_sensor_tools true) in config.cmake to use this component
+
+message("middleware_issdk_sensor_tools component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
 
 endif()

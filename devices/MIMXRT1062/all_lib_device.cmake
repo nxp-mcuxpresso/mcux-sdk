@@ -1,17 +1,17 @@
 # Copy variable into project config.cmake to use software component
-#set.board.evkmimxrt1060
-#  # description: Board_project_template evkmimxrt1060
-#  set(CONFIG_USE_BOARD_Project_Template_evkmimxrt1060 true)
-
-#  # description: XIP Board Driver
-#  set(CONFIG_USE_driver_xip_board_evkmimxrt1060 true)
-
 #set.board.evkbmimxrt1060
 #  # description: Board_project_template evkbmimxrt1060
 #  set(CONFIG_USE_BOARD_Project_Template_evkbmimxrt1060 true)
 
 #  # description: XIP Board Driver
 #  set(CONFIG_USE_driver_xip_board_evkbmimxrt1060 true)
+
+#set.board.evkmimxrt1060
+#  # description: Board_project_template evkmimxrt1060
+#  set(CONFIG_USE_BOARD_Project_Template_evkmimxrt1060 true)
+
+#  # description: XIP Board Driver
+#  set(CONFIG_USE_driver_xip_board_evkmimxrt1060 true)
 
 #set.middleware.wifi
 #  # description: NXP WLAN common files
@@ -1139,7 +1139,7 @@
 #  set(CONFIG_USE_middleware_eiq_glow true)
 
 #  # description: Video capture and display abstract layer
-#  set(CONFIG_USE_middleware_eiq_worker_video_evkmimxrt1060 true)
+#  set(CONFIG_USE_middleware_eiq_worker_video_evkbmimxrt1060 true)
 
 #  # description: Audio capture and play abstract layer
 #  set(CONFIG_USE_middleware_eiq_worker_audio true)
@@ -1181,7 +1181,7 @@
 #  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_stb true)
 
 #  # description: Video capture and display abstract layer
-#  set(CONFIG_USE_middleware_eiq_worker_video_evkbmimxrt1060 true)
+#  set(CONFIG_USE_middleware_eiq_worker_video_evkmimxrt1060 true)
 
 #set.middleware.azure_rtos
 #  # description: Azure RTOS Core
@@ -1413,15 +1413,6 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkbmimxrt1060
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt1060
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1176
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE17Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S28
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC824
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1062
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC54S018M
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKM35Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1015
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT685S
 )
 
 include(set_board_evkbmimxrt1060 OPTIONAL)

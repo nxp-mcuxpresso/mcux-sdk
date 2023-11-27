@@ -342,13 +342,6 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimx8mq
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8ML8
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC824
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S28
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MQ6
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE17Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MCIMX7U5
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1176
 )
 
 include(set_board_evkmimx8mq OPTIONAL)

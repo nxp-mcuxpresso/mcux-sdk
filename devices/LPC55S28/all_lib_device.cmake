@@ -804,9 +804,6 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/lpcxpresso55s28
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S28
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC824
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE17Z7
 )
 
 include(set_board_lpcxpresso55s28 OPTIONAL)

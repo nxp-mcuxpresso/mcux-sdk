@@ -366,9 +366,6 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/twrkm35z75m
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKM35Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE17Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC824
 )
 
 include(set_board_twrkm35z75m OPTIONAL)
