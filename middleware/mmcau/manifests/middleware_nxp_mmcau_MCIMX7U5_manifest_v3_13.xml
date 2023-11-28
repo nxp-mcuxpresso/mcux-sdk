@@ -9,9 +9,9 @@
     <definition extID="platform.drivers.common.MCIMX7U5"/>
     <definition extID="mcuxpresso"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2140_middleware_nxp_mmcau_MCIMX7U5_manifest_v3_13" name="MCUXpressoSDK2140_middleware_nxp_mmcau_MCIMX7U5_manifest_v3_13" version="2.14.0" revision="Provided by Script"/>
+  <ksdk id="MCUXpressoSDK2140_middleware_nxp_mmcau_MCIMX7U5_manifest_v3_13" name="MCUXpressoSDK2140_middleware_nxp_mmcau_MCIMX7U5_manifest_v3_13" version="2.14.0" revision="2.14.0"/>
   <components>
-    <component id="middleware.mmcau.mmcau_files.MCIMX7U5" name="mmcau" brief="MMCAU security function library source files" version="2.0.4" full_name="Kinetis MMCAU security function library source files" devices="MCIMX7U5xxxxx" category="MMCAU Security/MMCAU library" user_visible="false" type="middleware" package_base_path="../middleware/mmcau" project_base_path="mmcau">
+    <component id="middleware.mmcau.mmcau_files.MCIMX7U5" name="mmcau" brief="MMCAU security function library source files" version="2.0.4" full_name="Kinetis MMCAU security function library source files" devices="MCIMX7U5xxxxx" category="MMCAU Security/MMCAU library" user_visible="false" type="middleware" package_base_path=".././" project_base_path="mmcau">
       <source relative_path="./" type="doc">
         <files mask="ChangeLogKSDK.txt"/>
         <files mask="README.txt"/>
@@ -30,12 +30,12 @@
         <files mask="middleware_mmcau_mmcau_files.cmake" hidden="true"/>
       </source>
     </component>
-    <!--<component id="middleware.mmcau.unused_files.MCIMX7U5" name="MMCAU_unused_files" version="2.0.4" package_base_path="../middleware/mmcau" project_base_path="mmcau">
+    <!--<component id="middleware.mmcau.unused_files.MCIMX7U5" name="MMCAU_unused_files" version="2.0.4" package_base_path=".././" project_base_path="mmcau">
   <source exclude="true" relative_path="./" type="other">
     <files mask="fsl_mmcau.dox" hidden="true"/>
   </source>
 </component>-->
-    <component id="middleware.mmcau.cm4_cm7.MCIMX7U5" name="mmcau_cm4_cm7" brief="MMCAU library for ARM Cortex M4/M7 core" version="2.0.4" full_name="Kinetis MMCAU security function library for Arm Cortex-M4 and Cortex-M7" devices="MCIMX7U5xxxxx" device_cores="m4_MCIMX7U5xxxxx" category="MMCAU Security/MMCAU library" user_visible="true" type="middleware" package_base_path="../middleware/mmcau" project_base_path="mmcau">
+    <component id="middleware.mmcau.cm4_cm7.MCIMX7U5" name="mmcau_cm4_cm7" brief="MMCAU library for ARM Cortex M4/M7 core" version="2.0.4" full_name="Kinetis MMCAU security function library for Arm Cortex-M4 and Cortex-M7" devices="MCIMX7U5xxxxx" device_cores="m4_MCIMX7U5xxxxx" category="MMCAU Security/MMCAU library" user_visible="true" type="middleware" package_base_path=".././" project_base_path="mmcau">
       <dependencies>
         <all>
           <component_dependency value="middleware.mmcau.common_files.MCIMX7U5"/>
@@ -53,7 +53,7 @@
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.mmcau.common_files.MCIMX7U5" name="mmcau" brief="MMCAU common library source files" version="2.0.4" full_name="Kinetis MMCAU common source files" devices="MCIMX7U5xxxxx" category="MMCAU Security/MMCAU library" user_visible="true" type="middleware" package_base_path="../middleware/mmcau" project_base_path="mmcau">
+    <component id="middleware.mmcau.common_files.MCIMX7U5" name="mmcau" brief="MMCAU common library source files" version="2.0.4" full_name="Kinetis MMCAU common source files" devices="MCIMX7U5xxxxx" category="MMCAU Security/MMCAU library" user_visible="true" type="middleware" package_base_path=".././" project_base_path="mmcau">
       <dependencies>
         <component_dependency value="platform.drivers.common.MCIMX7U5"/>
       </dependencies>

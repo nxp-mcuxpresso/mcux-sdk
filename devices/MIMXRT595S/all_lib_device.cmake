@@ -1014,6 +1014,9 @@
 #  set(CONFIG_USE_middleware_wireless_wpa_supplicant_rtos true)
 
 #set.middleware.naturedsp_fusionf1
+#  # description: DSP Audio Streamer FusionF1 codecs
+#  set(CONFIG_USE_middleware_dsp_audio_streamer_fusionf1_dec true)
+
 #  # description: NatureDSP
 #  set(CONFIG_USE_middleware_naturedsp_naturedsp_fusionf1 true)
 
@@ -1146,15 +1149,7 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/project_template
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT595S
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt595
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC54628
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MQ6
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1042
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S16
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1021
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1176
 )
 
 include(set_board_evkmimxrt595 OPTIONAL)
@@ -1162,6 +1157,7 @@ include(set_CMSIS_DSP_Lib OPTIONAL)
 include(set_CMSIS OPTIONAL)
 include(set_device_MIMXRT595S OPTIONAL)
 include(set_component_osa OPTIONAL)
+include(set_middleware_naturedsp_fusionf1 OPTIONAL)
 include(set_middleware_dsp_audio_streamer OPTIONAL)
 include(set_middleware_dsp_nn OPTIONAL)
 include(set_middleware_eap OPTIONAL)
@@ -1175,7 +1171,6 @@ include(set_middleware_lwip OPTIONAL)
 include(set_middleware_mbedtls OPTIONAL)
 include(set_middleware_mcuboot OPTIONAL)
 include(set_middleware_multicore OPTIONAL)
-include(set_middleware_naturedsp_fusionf1 OPTIONAL)
 include(set_middleware_sdmmc OPTIONAL)
 include(set_middleware_usb OPTIONAL)
 include(set_middleware_vit OPTIONAL)

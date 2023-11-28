@@ -10,17 +10,17 @@ manifest:
     remote: nxp-mcuxpresso
   projects:
   - name: mcux-sdk-examples
-    revision: 4344b3c675f5d8ed89308508d6a572d0dcfffd71
+    revision: 5b31db02655917d53600978fe7f0cc314e5def21
     path: examples
   - name: FreeRTOS-Kernel
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
     path: rtos/freertos/freertos-kernel
   - name: mcux-sdk-middleware-sdmmc
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
     path: middleware/sdmmc
   - name: mcux-sdk-middleware-multicore
     path: middleware/multicore
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
   - name: rpmsg-lite
     path: middleware/multicore/rpmsg_lite
     revision: v5.1.0
@@ -33,9 +33,9 @@ manifest:
     path: svd
   - name: fatfs
     path: middleware/fatfs
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
   - name: mcux-sdk-middleware-eiq
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
     path: middleware/eiq
   - name: mcux-sdk-middleware-deepviewrt
     revision: MCUX_2.13.1
@@ -44,21 +44,21 @@ manifest:
     revision: MCUX_2.14.0
     path: middleware/eiq/glow
   - name: mcux-sdk-middleware-tensorflow
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
     path: middleware/eiq/tensorflow-lite
   - name: mcux-sdk-middleware-usb
     path: middleware/usb
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
   - name: mcux-sdk-middleware-edgefast-bluetooth
     path: middleware/edgefast_bluetooth
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
   - name: mcux-sdk-middleware-ethermind
     path: middleware/wireless/ethermind
     revision: MCUX_2.14.0
     remote: nxp
   - name: azure-rtos
     path: rtos/azure-rtos
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
     remote: nxp
   - name: threadx
     path: rtos/azure-rtos/threadx
@@ -86,41 +86,41 @@ manifest:
     remote: nxp
   - name: mbedtls
     path: middleware/mbedtls
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
   - name: wifi_nxp
     path: middleware/wifi_nxp
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
     remote: nxp
   - name: lwip
     path: middleware/lwip
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
   - name: littlefs
     path: middleware/littlefs
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
   - name: maestro
     path: middleware/maestro
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
   - name: mcuboot
     path: middleware/mcuboot_opensource
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
     remote: nxp_zephyr
   - name: CMSIS_5
     path: core/CMSIS
     revision: MCUX_2.14.0
   - name: EAP
     path: middleware/EAP
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
   - name: VIT
     path: middleware/vit
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
   - name: VoiceSeeker
     path: middleware/voice_seeker
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
   - name: NatureDSP
     path: middleware/dsp
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
   - name: wpa_supplicant-rtos
     path: middleware/wireless/wpa_supplicant-rtos
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_UpdRev1
   self:
     path: core

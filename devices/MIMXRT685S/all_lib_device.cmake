@@ -1048,6 +1048,9 @@
 #  set(CONFIG_USE_middleware_wireless_wpa_supplicant_rtos true)
 
 #set.middleware.naturedsp_hifi4
+#  # description: DSP Audio Streamer HiFi4 codecs
+#  set(CONFIG_USE_middleware_dsp_audio_streamer_hifi4_dec true)
+
 #  # description: NatureDSP
 #  set(CONFIG_USE_middleware_naturedsp_naturedsp_hifi4 true)
 
@@ -1180,17 +1183,8 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/project_template
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT685S
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt685
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/mimxrt685audevk
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC54628
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MQ6
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1042
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT595S
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1176
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1021
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S16
 )
 
 include(set_board_evkmimxrt685 OPTIONAL)
@@ -1199,6 +1193,7 @@ include(set_CMSIS_DSP_Lib OPTIONAL)
 include(set_CMSIS OPTIONAL)
 include(set_device_MIMXRT685S OPTIONAL)
 include(set_component_osa OPTIONAL)
+include(set_middleware_naturedsp_hifi4 OPTIONAL)
 include(set_middleware_dsp_audio_streamer OPTIONAL)
 include(set_middleware_dsp_nn OPTIONAL)
 include(set_middleware_eap OPTIONAL)
@@ -1212,7 +1207,6 @@ include(set_middleware_lwip OPTIONAL)
 include(set_middleware_mbedtls OPTIONAL)
 include(set_middleware_mcuboot OPTIONAL)
 include(set_middleware_multicore OPTIONAL)
-include(set_middleware_naturedsp_hifi4 OPTIONAL)
 include(set_middleware_sdmmc OPTIONAL)
 include(set_middleware_usb OPTIONAL)
 include(set_middleware_vit OPTIONAL)

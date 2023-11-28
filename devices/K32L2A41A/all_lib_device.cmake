@@ -604,11 +604,6 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/frdmk32l2a4s
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1042
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/K32L2A41A
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/K32L2B31A
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1021
 )
 
 include(set_board_frdmk32l2a4s OPTIONAL)

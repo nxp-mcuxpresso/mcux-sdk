@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_middleware_nxp_iot_sensing_sdk_MK22F51212_manifest_v3_13" name="Nxp iot sensing sdk" brief="IoT Sensing SDK (ISSDK) provides sensor drivers and reference examples for NXP's IoT sensors." format_version="3.13" api_version="2.0.0" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.13.xsd">
-  <!--Timestamp (UTC): 2023-09-11 17:46:24.835050-->
-  <!--This manifest is generated based on sdk repo commit: eb85729d74681e2463278351fc8804e35454d7d1-->
+  <!--Timestamp (UTC): 2023-11-15 12:09:29.409198-->
+  <!--This manifest is generated based on sdk repo commit: 1701d283a1118774fb13c67cf61a3e5c51a3feff-->
   <externalDefinitions>
     <definition extID="MK22FN512xxx12"/>
     <definition extID="armgcc"/>
@@ -10,9 +10,9 @@
     <definition extID="core0_MK22FN512xxx12"/>
     <definition extID="platform.drivers.common.MK22F51212"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2140_middleware_nxp_iot_sensing_sdk_MK22F51212_manifest_v3_13" name="MCUXpressoSDK2140_middleware_nxp_iot_sensing_sdk_MK22F51212_manifest_v3_13" version="2.14.0" revision="Provided by Script"/>
+  <ksdk id="MCUXpressoSDK2140_middleware_nxp_iot_sensing_sdk_MK22F51212_manifest_v3_13" name="MCUXpressoSDK2140_middleware_nxp_iot_sensing_sdk_MK22F51212_manifest_v3_13" version="2.14.0" revision="2.14.0"/>
   <components>
-    <component id="middleware.issdk.drivers.systick_utils.MK22F51212" name="systick_utils" brief="ISSDK Utils" version="1.8.0" full_name="Middleware issdk drivers systick_utils" devices="MK22FN512xxx12" category="Sensors/utils" user_visible="true" type="middleware" package_base_path="middleware/issdk" project_base_path="utilities">
+    <component id="middleware.issdk.drivers.systick_utils.MK22F51212" name="systick_utils" brief="ISSDK Utils" version="1.8.0" full_name="Middleware issdk drivers systick_utils" devices="MK22FN512xxx12" category="Sensors/utils" user_visible="true" type="middleware" package_base_path="./" project_base_path="utilities">
       <source relative_path="../../drivers/systick" project_relative_path="./" type="src">
         <files mask="systick_utils.c"/>
       </source>
@@ -23,10 +23,10 @@
         <files mask="middleware_issdk_drivers_systick_utils.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../drivers/systick" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./drivers/systick" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.tools.MK22F51212" name="issdk_tools" brief="ISSDK Serial to MQTT bridge application" version="1.7.0" full_name="Middleware issdk sensor tools" devices="MK22FN512xxx12" category="Sensors/misc" user_visible="false" type="other" package_base_path="middleware/issdk" project_base_path="issdk_senor">
+    <component id="middleware.issdk.sensor.tools.MK22F51212" name="issdk_tools" brief="ISSDK Serial to MQTT bridge application" version="1.7.0" full_name="Middleware issdk sensor tools" devices="MK22FN512xxx12" category="Sensors/misc" user_visible="false" type="other" package_base_path="./" project_base_path="issdk_senor">
       <source relative_path="../../tools/Serial_To_MQTT" project_relative_path="./" type="script">
         <files mask="CloudBridgeNXPDemo.py"/>
       </source>
@@ -34,7 +34,7 @@
         <files mask="middleware_issdk_sensor_tools.cmake" hidden="true"/>
       </source>
     </component>
-    <component id="middleware.issdk.sensor.allregdefs.MK22F51212" name="issdk_allregdefs" brief="ISSDK Sensors RegDefs" version="1.8.0" full_name="Middleware issdk sensor allregdefs" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.allregdefs.MK22F51212" name="issdk_allregdefs" brief="ISSDK Sensors RegDefs" version="1.8.0" full_name="Middleware issdk sensor allregdefs" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -66,10 +66,10 @@
         <files mask="middleware_issdk_sensor_allregdefs.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxas21002.MK22F51212" name="issdk_fxas21002" brief="ISSDK FXAS21002 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxas21002" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxas21002.MK22F51212" name="issdk_fxas21002" brief="ISSDK FXAS21002 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxas21002" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -87,10 +87,10 @@
         <files mask="middleware_issdk_sensor_fxas21002.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxos8700.MK22F51212" name="issdk_fxos8700" brief="ISSDK FXOS8700 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxos8700" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxos8700.MK22F51212" name="issdk_fxos8700" brief="ISSDK FXOS8700 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxos8700" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -108,10 +108,10 @@
         <files mask="middleware_issdk_sensor_fxos8700.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.mpl3115.MK22F51212" name="issdk_mpl3115" brief="ISSDK MPL3115 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mpl3115" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.mpl3115.MK22F51212" name="issdk_mpl3115" brief="ISSDK MPL3115 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mpl3115" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -129,10 +129,10 @@
         <files mask="middleware_issdk_sensor_mpl3115.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxlc95000.MK22F51212" name="issdk_fxlc95000" brief="ISSDK FXLC95000 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxlc95000" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxlc95000.MK22F51212" name="issdk_fxlc95000" brief="ISSDK FXLC95000 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxlc95000" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -150,10 +150,10 @@
         <files mask="middleware_issdk_sensor_fxlc95000.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.mma8491q.MK22F51212" name="issdk_mma8491q" brief="ISSDK MMA8491 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma8491q" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.mma8491q.MK22F51212" name="issdk_mma8491q" brief="ISSDK MMA8491 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma8491q" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -171,10 +171,10 @@
         <files mask="middleware_issdk_sensor_mma8491q.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxls8471q.MK22F51212" name="issdk_fxls8471q" brief="ISSDK FXLS8471 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxls8471q" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxls8471q.MK22F51212" name="issdk_fxls8471q" brief="ISSDK FXLS8471 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxls8471q" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -192,10 +192,10 @@
         <files mask="middleware_issdk_sensor_fxls8471q.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.mag3110.MK22F51212" name="issdk_mag3110" brief="ISSDK MAG3110 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mag3110" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.mag3110.MK22F51212" name="issdk_mag3110" brief="ISSDK MAG3110 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mag3110" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -213,10 +213,10 @@
         <files mask="middleware_issdk_sensor_mag3110.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.mma845x.MK22F51212" name="issdk_mma845x" brief="ISSDK MMA845x Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma845x" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.mma845x.MK22F51212" name="issdk_mma845x" brief="ISSDK MMA845x Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma845x" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -234,10 +234,10 @@
         <files mask="middleware_issdk_sensor_mma845x.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.mma865x.MK22F51212" name="issdk_mma865x" brief="ISSDK MMA865x Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma865x" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.mma865x.MK22F51212" name="issdk_mma865x" brief="ISSDK MMA865x Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma865x" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -255,10 +255,10 @@
         <files mask="middleware_issdk_sensor_mma865x.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxpq3115.MK22F51212" name="issdk_fxpq3115" brief="ISSDK FXPQ3115 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxpq3115" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxpq3115.MK22F51212" name="issdk_fxpq3115" brief="ISSDK FXPQ3115 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxpq3115" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -276,10 +276,10 @@
         <files mask="middleware_issdk_sensor_fxpq3115.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxls8962.MK22F51212" name="issdk_fxls8962" brief="ISSDK FXLS8962 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxls8962" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxls8962.MK22F51212" name="issdk_fxls8962" brief="ISSDK FXLS8962 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxls8962" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -297,10 +297,10 @@
         <files mask="middleware_issdk_sensor_fxls8962.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.mma9553.MK22F51212" name="issdk_mma9553" brief="ISSDK MMA9553 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma9553" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.mma9553.MK22F51212" name="issdk_mma9553" brief="ISSDK MMA9553 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor mma9553" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -318,10 +318,10 @@
         <files mask="middleware_issdk_sensor_mma9553.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.nps300x.MK22F51212" name="issdk_nps300x" brief="ISSDK nps300x Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor nps300x" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.nps300x.MK22F51212" name="issdk_nps300x" brief="ISSDK nps300x Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor nps300x" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -339,10 +339,10 @@
         <files mask="middleware_issdk_sensor_nps300x.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.isl29023.MK22F51212" name="issdk_isl29023" brief="ISSDK ISL29023 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor isl29023" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.isl29023.MK22F51212" name="issdk_isl29023" brief="ISSDK ISL29023 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor isl29023" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -360,10 +360,10 @@
         <files mask="middleware_issdk_sensor_isl29023.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxps7250d4.MK22F51212" name="issdk_fxps7250d4" brief="ISSDK fxps7250d4 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxps7250d4" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxps7250d4.MK22F51212" name="issdk_fxps7250d4" brief="ISSDK fxps7250d4 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor fxps7250d4" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -381,10 +381,10 @@
         <files mask="middleware_issdk_sensor_fxps7250d4.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxls896xaf.MK22F51212" name="issdk_fxls896xaf" brief="ISSDK FXLS896xAF Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor FXLS896xAF" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxls896xaf.MK22F51212" name="issdk_fxls896xaf" brief="ISSDK FXLS896xAF Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor FXLS896xAF" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -402,10 +402,10 @@
         <files mask="middleware_issdk_sensor_fxls896xaf.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxls8974cf.MK22F51212" name="issdk_fxls8974cf" brief="ISSDK FXLS8974CF Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor FXLS8974CF" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxls8974cf.MK22F51212" name="issdk_fxls8974cf" brief="ISSDK FXLS8974CF Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor FXLS8974CF" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -423,10 +423,10 @@
         <files mask="middleware_issdk_sensor_fxls8974cf.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxls8961af.MK22F51212" name="issdk_fxls8961af" brief="ISSDK FXLS8961AF Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor FXLS8961AF" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxls8961af.MK22F51212" name="issdk_fxls8961af" brief="ISSDK FXLS8961AF Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor FXLS8961AF" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -444,10 +444,10 @@
         <files mask="middleware_issdk_sensor_fxls8961af.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.fxls8971cf.MK22F51212" name="issdk_fxls8971cf" brief="ISSDK FXLS8971CF Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor FXLS8971CF" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.fxls8971cf.MK22F51212" name="issdk_fxls8971cf" brief="ISSDK FXLS8971CF Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor FXLS8971CF" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -465,10 +465,10 @@
         <files mask="middleware_issdk_sensor_fxls8971cf.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.sensor.nmh1000.MK22F51212" name="issdk_nmh1000" brief="ISSDK NMH1000 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor NMH1000" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensors">
+    <component id="middleware.issdk.sensor.nmh1000.MK22F51212" name="issdk_nmh1000" brief="ISSDK NMH1000 Sensor Driver Files" version="1.8.0" full_name="Middleware issdk sensor NMH1000" devices="MK22FN512xxx12" category="Sensors/sensors" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensors">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -486,10 +486,10 @@
         <files mask="middleware_issdk_sensor_nmh1000.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.algorithms.sensor_fusion_agm01.MK22F51212" name="sensor_fusion_agm01" brief="ISSDK Sensor Fusion Algorithm Common for Kinetis MCU with AGM01" version="1.7.0" full_name="Middleware issdk algorithms sensor_fusion_agm01 common" devices="MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensor_fusion">
+    <component id="middleware.issdk.algorithms.sensor_fusion_agm01.MK22F51212" name="sensor_fusion_agm01" brief="ISSDK Sensor Fusion Algorithm Common for Kinetis MCU with AGM01" version="1.7.0" full_name="Middleware issdk algorithms sensor_fusion_agm01 common" devices="MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensor_fusion">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -538,10 +538,10 @@
         <files mask="middleware_issdk_algorithms_sensor_fusion_agm01_common.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../algorithms/sensorfusion/sources" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./algorithms/sensorfusion/sources" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.algorithms.sensor_fusion_lpc_agm01.MK22F51212" name="sensor_fusion_lpc_agm01" brief="ISSDK Sensor Fusion Algorithm Common for LPC MCU with AGM01" version="1.7.0" full_name="Middleware issdk algorithms sensor_fusion_lpc_agm01 common" devices="MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensor_fusion">
+    <component id="middleware.issdk.algorithms.sensor_fusion_lpc_agm01.MK22F51212" name="sensor_fusion_lpc_agm01" brief="ISSDK Sensor Fusion Algorithm Common for LPC MCU with AGM01" version="1.7.0" full_name="Middleware issdk algorithms sensor_fusion_lpc_agm01 common" devices="MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensor_fusion">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -588,10 +588,10 @@
         <files mask="middleware_issdk_algorithms_sensor_fusion_lpc_agm01_common.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../algorithms/sensorfusion/sources" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./algorithms/sensorfusion/sources" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.algorithms.sensor_fusion_agm04.MK22F51212" name="sensor_fusion_agm04" brief="ISSDK Sensor Fusion Algorithm Common for Kinetis MCU with AGM04" version="1.7.0" full_name="Middleware issdk algorithms sensor_fusion_agm04 common" devices="MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensor_fusion">
+    <component id="middleware.issdk.algorithms.sensor_fusion_agm04.MK22F51212" name="sensor_fusion_agm04" brief="ISSDK Sensor Fusion Algorithm Common for Kinetis MCU with AGM04" version="1.7.0" full_name="Middleware issdk algorithms sensor_fusion_agm04 common" devices="MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensor_fusion">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -640,10 +640,10 @@
         <files mask="middleware_issdk_algorithms_sensor_fusion_agm04_common.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../algorithms/sensorfusion/sources" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./algorithms/sensorfusion/sources" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.algorithms.sensor_fusion_agmp03.MK22F51212" name="sensor_fusion_agmp03" brief="ISSDK Sensor Fusion Algorithm Common for Kinetis MCU with AGMP03" version="1.7.0" full_name="Middleware issdk algorithms sensor_fusion_agmp03 common" devices="MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensor_fusion">
+    <component id="middleware.issdk.algorithms.sensor_fusion_agmp03.MK22F51212" name="sensor_fusion_agmp03" brief="ISSDK Sensor Fusion Algorithm Common for Kinetis MCU with AGMP03" version="1.7.0" full_name="Middleware issdk algorithms sensor_fusion_agmp03 common" devices="MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensor_fusion">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -693,10 +693,10 @@
         <files mask="middleware_issdk_algorithms_sensor_fusion_agmp03_common.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../algorithms/sensorfusion/sources" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./algorithms/sensorfusion/sources" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.algorithms.sensor_fusion_lpc_agmp03.MK22F51212" name="sensor_fusion_lpc_agmp03" brief="ISSDK Sensor Fusion Algorithm Common for LPC MCU with AGMP03" version="1.7.0" full_name="Middleware issdk algorithms sensor_fusion_lpc_agmp03 common" devices="MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensor_fusion">
+    <component id="middleware.issdk.algorithms.sensor_fusion_lpc_agmp03.MK22F51212" name="sensor_fusion_lpc_agmp03" brief="ISSDK Sensor Fusion Algorithm Common for LPC MCU with AGMP03" version="1.7.0" full_name="Middleware issdk algorithms sensor_fusion_lpc_agmp03 common" devices="MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensor_fusion">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -744,10 +744,10 @@
         <files mask="middleware_issdk_algorithms_sensor_fusion_lpc_agmp03_common.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../algorithms/sensorfusion/sources" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./algorithms/sensorfusion/sources" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.algorithms.sensor_fusion_mult2b.MK22F51212" name="sensor_fusion_mult2b" brief="ISSDK Sensor Fusion Algorithm Common for Kinetis MCU with MULT2B" version="1.7.0" full_name="Middleware issdk algorithms sensor_fusion_mult2b common" devices="MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="sensor_fusion">
+    <component id="middleware.issdk.algorithms.sensor_fusion_mult2b.MK22F51212" name="sensor_fusion_mult2b" brief="ISSDK Sensor Fusion Algorithm Common for Kinetis MCU with MULT2B" version="1.7.0" full_name="Middleware issdk algorithms sensor_fusion_mult2b common" devices="MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="./" project_base_path="sensor_fusion">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -796,10 +796,10 @@
         <files mask="middleware_issdk_algorithms_sensor_fusion_mult2b_common.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../algorithms/sensorfusion/sources" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./algorithms/sensorfusion/sources" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.algorithms.pedometer.MK22F51212" name="pedometer" brief="ISSDK Pedometer Algorithm Common" version="1.7.0" full_name="Middleware issdk algorithms pedometer common" devices="MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="pedometer">
+    <component id="middleware.issdk.algorithms.pedometer.MK22F51212" name="pedometer" brief="ISSDK Pedometer Algorithm Common" version="1.7.0" full_name="Middleware issdk algorithms pedometer common" devices="MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="./" project_base_path="pedometer">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -819,11 +819,11 @@
         <files mask="middleware_issdk_algorithms_pedometer_common.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../algorithms/pedometer/include" project_relative_path="./" type="c_include"/>
-        <include_path relative_path="../../algorithms/pedometer/include/libinclude" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./algorithms/pedometer/include" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./algorithms/pedometer/include/libinclude" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.algorithms.pedometer.lib_cm4.MK22F51212" name="pedometer_lib_cm4" brief="ISSDK Pedometer Algorithm Library for CM4" version="1.7.0" full_name="Middleware issdk algorithms pedometer lib_cm4" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="libs">
+    <component id="middleware.issdk.algorithms.pedometer.lib_cm4.MK22F51212" name="pedometer_lib_cm4" brief="ISSDK Pedometer Algorithm Library for CM4" version="1.7.0" full_name="Middleware issdk algorithms pedometer lib_cm4" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="Sensors/algorithms" user_visible="false" type="middleware" package_base_path="./" project_base_path="libs">
       <source relative_path="../../algorithms/pedometer/lib" project_relative_path="./" type="lib">
         <files mask="libpedometerm4.a"/>
       </source>
@@ -831,7 +831,7 @@
         <files mask="middleware_issdk_algorithms_pedometer_lib_cm4.cmake" hidden="true"/>
       </source>
     </component>
-    <component id="middleware.issdk.sensor.interface.common.MK22F51212" name="issdk_interfaces" brief="ISSDK Sensor Interface Common" version="1.7.0" full_name="Middleware issdk sensor interface common" devices="MK22FN512xxx12" category="Sensors/drivers" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="interfaces">
+    <component id="middleware.issdk.sensor.interface.common.MK22F51212" name="issdk_interfaces" brief="ISSDK Sensor Interface Common" version="1.7.0" full_name="Middleware issdk sensor interface common" devices="MK22FN512xxx12" category="Sensors/drivers" user_visible="false" type="middleware" package_base_path="./" project_base_path="interfaces">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_Driver_Include.I2C.MK22F51212"/>
@@ -855,10 +855,10 @@
         <files mask="middleware_issdk_sensor_interface_common.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.drivers.gpio_kinetis.MK22F51212" name="gpio_kinetis" brief="ISSDK GPIO Driver for Kinetis" version="1.8.0" full_name="Middleware issdk drivers gpio_kinetis" devices="MK22FN512xxx12" category="Sensors/drivers" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="gpio_driver">
+    <component id="middleware.issdk.drivers.gpio_kinetis.MK22F51212" name="gpio_kinetis" brief="ISSDK GPIO Driver for Kinetis" version="1.8.0" full_name="Middleware issdk drivers gpio_kinetis" devices="MK22FN512xxx12" category="Sensors/drivers" user_visible="false" type="middleware" package_base_path="./" project_base_path="gpio_driver">
       <source relative_path="../../drivers/gpio/kinetis" project_relative_path="./" type="src">
         <files mask="gpio_driver_irq.c"/>
         <files mask="gpio_driver.c"/>
@@ -873,11 +873,11 @@
         <files mask="middleware_issdk_drivers_gpio_kinetis.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../drivers/gpio/kinetis" project_relative_path="./" type="c_include"/>
-        <include_path relative_path="../../drivers/gpio" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./drivers/gpio/kinetis" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./drivers/gpio" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.drivers.ads.MK22F51212" name="ads" brief="ISSDK Auto Detection Service for Kinetis Kits" version="1.7.0" full_name="Middleware issdk drivers ads" devices="MK22FN512xxx12" category="Sensors/drivers" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="ads">
+    <component id="middleware.issdk.drivers.ads.MK22F51212" name="ads" brief="ISSDK Auto Detection Service for Kinetis Kits" version="1.7.0" full_name="Middleware issdk drivers ads" devices="MK22FN512xxx12" category="Sensors/drivers" user_visible="false" type="middleware" package_base_path="./" project_base_path="ads">
       <source relative_path="../../drivers/ads/kinetis" project_relative_path="./" type="src">
         <files mask="auto_detection_service.c"/>
       </source>
@@ -891,11 +891,11 @@
         <files mask="middleware_issdk_drivers_ads.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../drivers/ads/kinetis" project_relative_path="./" type="c_include"/>
-        <include_path relative_path="../../drivers/ads" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./drivers/ads/kinetis" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./drivers/ads" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="middleware.issdk.drivers.host.MK22F51212" name="issdk_host" brief="ISSDK Host Interface Service" version="1.7.0" full_name="Middleware issdk drivers host" devices="MK22FN512xxx12" category="Sensors/drivers" user_visible="false" type="middleware" package_base_path="middleware/issdk" project_base_path="host">
+    <component id="middleware.issdk.drivers.host.MK22F51212" name="issdk_host" brief="ISSDK Host Interface Service" version="1.7.0" full_name="Middleware issdk drivers host" devices="MK22FN512xxx12" category="Sensors/drivers" user_visible="false" type="middleware" package_base_path="./" project_base_path="host">
       <dependencies>
         <component_dependency value="platform.drivers.common.MK22F51212"/>
       </dependencies>
@@ -922,8 +922,8 @@
         <files mask="middleware_issdk_drivers_host.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="../../sensors" project_relative_path="./" type="c_include"/>
-        <include_path relative_path="../../drivers/host" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./sensors" project_relative_path="./" type="c_include"/>
+        <include_path relative_path="./drivers/host" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
   </components>

@@ -309,9 +309,6 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/twrkm34z50mv3
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/K32L2B31A
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKM34ZA5
 )
 
 include(set_board_twrkm34z50mv3 OPTIONAL)
