@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -73,6 +73,7 @@
 #define SRTM_UART_RETURN_CODE_UNSUPPORTED (0x2U)
 
 #define SRTM_UART_CMD_SEND (0x1U)
+#define SRTM_UART_CMD_HELLO (0x2U)
 
 /* define multi uart message protocol to send data through uart to destination uart */
 #define MULTI_UART_MSG_PREAMBLE0 (0x24U)
