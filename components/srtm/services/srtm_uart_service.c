@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -456,6 +456,15 @@ static srtm_status_t SRTM_UartService_ReceiveNotify(srtm_service_t service, srtm
                     status = adapter->send(adapter, uartNotif->busId, data, dataLen); /* non blocking transfer mode */
                     goto exit1;
                 }
+                break;
+            case SRTM_UART_CMD_HELLO:
+                status = SRTM_UartService_FindUartIdByChannel(channel, &src_uart_id);
+                if (status != SRTM_Status_Success)
+                {
+                    SRTM_DEBUG_MESSAGE(SRTM_DEBUG_VERBOSE_WARN, "%s failed to find channel\r\n", __func__);
+                    goto exit0;
+                }
+                SRTM_UartService_BindChanByUartId(NULL, uartNotif->busId, uartNotif->flags, src_uart_id);
                 break;
             default:
                 SRTM_DEBUG_MESSAGE(SRTM_DEBUG_VERBOSE_WARN, "%s: command %d unsupported\r\n", __func__, command);
