@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2017, 2020-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief RGPIO driver version 2.0.3. */
-#define FSL_RGPIO_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief RGPIO driver version 2.1.0. */
+#define FSL_RGPIO_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*! @brief RGPIO direction definition */
@@ -55,6 +55,36 @@ typedef enum _rgpio_checker_attribute
         0x07U, /*!< User nonsecure:None;       User Secure:None;       Privileged Secure:None */
     kRGPIO_IgnoreAttributeCheck = 0x80U, /*!< Ignores the attribute check */
 } rgpio_checker_attribute_t;
+#endif
+
+#if defined(FSL_FEATURE_RGPIO_HAS_IRQ_CONFIG) && FSL_FEATURE_RGPIO_HAS_IRQ_CONFIG
+/*! @brief Configures the interrupt generation condition. */
+typedef enum _rgpio_interrupt_sel
+{
+    kRGPIO_InterruptOutput0 = 0x0U, /*!< Interrupt/DMA request/trigger output 0. */
+    kRGPIO_InterruptOutput1 = 0x1U, /*!< Interrupt/DMA request/trigger output 1. */
+    kRGPIO_InterruptOutput2 = 0x2U, /*!< Interrupt/DMA request/trigger output 2. */
+    kRGPIO_InterruptOutput3 = 0x3U, /*!< Interrupt/DMA request/trigger output 3. */
+} rgpio_interrupt_sel_t;
+
+/*! @brief Configures the interrupt generation condition. */
+typedef enum _rgpio_interrupt_config
+{
+    kRGPIO_InterruptOrDMADisabled        = 0x0U,  /*!< Interrupt/DMA request is disabled. */
+    kRGPIO_DMARisingEdge                 = 0x1U,  /*!< DMA request on rising edge. */
+    kRGPIO_DMAFallingEdge                = 0x2U,  /*!< DMA request on falling edge. */
+    kRGPIO_DMAEitherEdge                 = 0x3U,  /*!< DMA request on either edge. */
+    kRGPIO_FlagRisingEdge                = 0x05U, /*!< Flag sets on rising edge. */
+    kRGPIO_FlagFallingEdge               = 0x06U, /*!< Flag sets on falling edge. */
+    kRGPIO_FlagEitherEdge                = 0x07U, /*!< Flag sets on either edge. */
+    kRGPIO_InterruptLogicZero            = 0x8U,  /*!< Interrupt when logic zero. */
+    kRGPIO_InterruptRisingEdge           = 0x9U,  /*!< Interrupt on rising edge. */
+    kRGPIO_InterruptFallingEdge          = 0xAU,  /*!< Interrupt on falling edge. */
+    kRGPIO_InterruptEitherEdge           = 0xBU,  /*!< Interrupt on either edge. */
+    kRGPIO_InterruptLogicOne             = 0xCU,  /*!< Interrupt when logic one. */
+    kRGPIO_ActiveHighTriggerOutputEnable = 0xDU,  /*!< Enable active high-trigger output. */
+    kRGPIO_ActiveLowTriggerOutputEnable  = 0xEU,  /*!< Enable active low-trigger output. */
+} rgpio_interrupt_config_t;
 #endif
 
 /*!
@@ -250,6 +280,25 @@ static inline uint32_t RGPIO_ReadPinInput(RGPIO_Type *base, uint32_t pin)
     return RGPIO_PinRead(base, pin);
 }
 
+#if defined(FSL_FEATURE_RGPIO_HAS_PORT_INPUT_DISABLE) && FSL_FEATURE_RGPIO_HAS_PORT_INPUT_DISABLE
+/*!
+ * @param base   RGPIO peripheral base pointer (RGPIOA, RGPIOB, RGPIOC, and so on.)
+ * @param mask   RGPIO pin number mask
+ * @param enable RGPIO digital input enable/disable flag.
+ */
+static inline void RGPIO_EnablePortInput(RGPIO_Type *base, uint32_t mask, bool enable)
+{
+    if (enable)
+    {
+        base->PIDR &= ~mask;
+    }
+    else
+    {
+        base->PIDR |= mask;
+    }
+}
+#endif
+
 /*@}*/
 
 #if defined(FSL_FEATURE_SOC_PORT_COUNT) && FSL_FEATURE_SOC_PORT_COUNT
@@ -309,6 +358,82 @@ static inline void RGPIO_ClearPinsInterruptFlags(RGPIO_Type *base, uint32_t mask
  * @param mask RGPIO pin number macro
  */
 void RGPIO_CheckAttributeBytes(RGPIO_Type *base, rgpio_checker_attribute_t attribute);
+#endif
+
+#if defined(FSL_FEATURE_RGPIO_HAS_IRQ_CONFIG) && FSL_FEATURE_RGPIO_HAS_IRQ_CONFIG
+/*!
+ * @brief Configures the gpio pin interrupt/DMA request.
+ *
+ * @param base    RGPIO peripheral base pointer.
+ * @param pin     RGPIO pin number.
+ * @param sel     RGPIO pin interrupt selection(0-3).
+ * @param config  RGPIO pin interrupt configuration.
+ */
+static inline void RGPIO_SetPinInterruptConfig(RGPIO_Type *base,
+                                               uint32_t pin,
+                                               rgpio_interrupt_sel_t sel,
+                                               rgpio_interrupt_config_t config)
+{
+    base->ICR[pin] =
+        (base->ICR[pin] & ~(RGPIO_ICR_IRQC_MASK | RGPIO_ICR_IRQS_MASK)) | RGPIO_ICR_IRQC(config) | RGPIO_ICR_IRQS(sel);
+}
+
+/*!
+ * @brief Sets the gpio interrupt configuration in ICR register for multiple pins.
+ *
+ * @param base   RGPIO peripheral base pointer (RGPIOA, RGPIOB, RGPIOC, and so on.)
+ * @param mask   RGPIO pin number macro.
+ * @param sel    RGPIO pin interrupt selection(0-3).
+ * @param config RGPIO pin interrupt configuration.
+ */
+static inline void _SetMultipleInterruptPinsConfig(RGPIO_Type *base,
+                                                   uint32_t mask,
+                                                   rgpio_interrupt_sel_t sel,
+                                                   rgpio_interrupt_config_t config)
+{
+    if (0U != (mask & 0xFFFFU))
+    {
+        base->GICLR =
+            ((uint32_t)sel << RGPIO_ICR_IRQS_SHIFT) | ((uint32_t)config << RGPIO_ICR_IRQC_SHIFT) | (mask & 0xFFFFU);
+    }
+    mask = mask >> 16;
+    if (0U != mask)
+    {
+        base->GICHR =
+            ((uint32_t)sel << RGPIO_ICR_IRQS_SHIFT) | ((uint32_t)config << RGPIO_ICR_IRQC_SHIFT) | (mask & 0xFFFFU);
+    }
+}
+
+/*!
+ * @brief Reads the whole gpio status flag.
+ *
+ * If a pin is configured to generate the DMA request,  the corresponding flag
+ * is cleared automatically at the completion of the requested DMA transfer.
+ * Otherwise, the flag remains set until a logic one is written to that flag.
+ * If configured for a level sensitive interrupt that remains asserted, the flag
+ * is set again immediately.
+ *
+ * @param base RGPIO peripheral base pointer.
+ * @param sel  RGPIO pin interrupt selection(0-3).
+ * @return Current gpio interrupt status flags, for example, 0x00010001 means the
+ *         pin 0 and 16 have the interrupt.
+ */
+static inline uint32_t RGPIO_GetPinsInterruptFlags(RGPIO_Type *base, rgpio_interrupt_sel_t sel)
+{
+    return base->ISFR[(uint8_t)sel];
+}
+
+/*!
+ * @brief Clears the multiple pin interrupt status flag.
+ *
+ * @param base RGPIO peripheral base pointer.
+ * @param sel  RGPIO pin interrupt selection(0-3).
+ * @param mask RGPIO pin number macro.
+ */
+static inline void RGPIO_ClearPinsInterruptFlags(RGPIO_Type *base, rgpio_interrupt_sel_t sel, uint32_t mask)
+{
+    base->ISFR[(uint8_t)sel] = mask;
+}
 #endif
 
 /*@}*/
