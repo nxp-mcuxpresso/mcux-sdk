@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2020, NXP
+ * Copyright 2016 - 2020, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -58,8 +58,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.0.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief CLOCK driver version 2.0.1. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*! @brief External XTAL0 (OSC0) clock frequency.
