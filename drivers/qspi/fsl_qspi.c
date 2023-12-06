@@ -505,7 +505,7 @@ uint32_t QSPI_ReadData(QuadSPI_Type *base)
  * param buffer The data bytes to send
  * param size The number of data bytes to send
  */
-void QSPI_WriteBlocking(QuadSPI_Type *base, uint32_t *buffer, size_t size)
+void QSPI_WriteBlocking(QuadSPI_Type *base, const uint32_t *buffer, size_t size)
 {
     assert(size >= 16U);
 

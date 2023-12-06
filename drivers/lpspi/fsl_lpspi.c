@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -55,7 +55,7 @@ typedef struct _lpspi_transfer_blocking_param
     bool isPcsContinuous;
     uint8_t bytesEachWrite;
     uint8_t bytesEachRead;    
-    uint8_t *txData;
+    const uint8_t *txData;
     uint8_t *rxData;
     uint32_t rxRemainingByteCount;
 } lpspi_transfer_blocking_param_t;
@@ -90,7 +90,7 @@ static void LPSPI_SetOnePcsPolarity(LPSPI_Type *base,
  * @brief Combine the write data for 1 byte to 4 bytes.
  * This is not a public API.
  */
-static uint32_t LPSPI_CombineWriteData(uint8_t *txData, uint8_t bytesEachWrite, bool isByteSwap);
+static uint32_t LPSPI_CombineWriteData(const uint8_t *txData, uint8_t bytesEachWrite, bool isByteSwap);
 
 /*!
  * @brief Separate the read data for 1 byte to 4 bytes.
@@ -2210,7 +2210,7 @@ void LPSPI_SlaveTransferHandleIRQ(LPSPI_Type *base, lpspi_slave_handle_t *handle
     }
 }
 
-static uint32_t LPSPI_CombineWriteData(uint8_t *txData, uint8_t bytesEachWrite, bool isByteSwap)
+static uint32_t LPSPI_CombineWriteData(const uint8_t *txData, uint8_t bytesEachWrite, bool isByteSwap)
 {
     assert(txData != NULL);
 

@@ -894,7 +894,7 @@ status_t DSPI_MasterTransferBlocking(SPI_Type *base, dspi_transfer_t *transfer)
     uint32_t command;
     uint32_t lastCommand;
 
-    uint8_t *txData;
+    const uint8_t *txData;
     uint8_t *rxData;
     uint32_t remainingSendByteCount;
     uint32_t remainingReceiveByteCount;

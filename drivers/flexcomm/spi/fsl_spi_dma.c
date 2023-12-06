@@ -299,7 +299,7 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
                                      (uint32_t *)address, NULL);
 
                 DMA_PrepareTransfer(
-                    &xferConfig, xfer->txData, (uint32_t *)address,
+                    &xferConfig, (void *)xfer->txData, (uint32_t *)address,
                     ((spi_config_p->dataWidth > kSPI_Data8Bits) ? (sizeof(uint16_t)) : (sizeof(uint8_t))),
                     ((spi_config_p->dataWidth > kSPI_Data8Bits) ? (xfer->dataSize - 2U) : (xfer->dataSize - 1U)),
                     kDMA_MemoryToPeripheral, &s_spi_descriptor_table[instance]);
@@ -315,7 +315,7 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
             else
             {
                 DMA_PrepareTransfer(
-                    &xferConfig, xfer->txData, (uint32_t *)address,
+                    &xferConfig, (void *)xfer->txData, (uint32_t *)address,
                     ((spi_config_p->dataWidth > kSPI_Data8Bits) ? (sizeof(uint16_t)) : (sizeof(uint8_t))),
                     xfer->dataSize, kDMA_MemoryToPeripheral, NULL);
                 (void)DMA_SubmitTransfer(handle->txHandle, &xferConfig);

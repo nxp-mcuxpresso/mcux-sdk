@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief QSPI driver version 2.2.3. */
-#define FSL_QSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
+/*! @brief QSPI driver version 2.2.5. */
+#define FSL_QSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 5))
 /*@}*/
 
 /*! @brief Macro functions for LUT table */
@@ -670,7 +670,7 @@ void QSPI_SetReadDataArea(QuadSPI_Type *base, qspi_read_area_t area);
  * @param buffer The data bytes to send
  * @param size The number of data bytes to send
  */
-void QSPI_WriteBlocking(QuadSPI_Type *base, uint32_t *buffer, size_t size);
+void QSPI_WriteBlocking(QuadSPI_Type *base, const uint32_t *buffer, size_t size);
 
 /*!
  * @brief Writes data into FIFO.

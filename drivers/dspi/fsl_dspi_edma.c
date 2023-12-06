@@ -497,7 +497,7 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
             }
 
             uint32_t tmpLastCommand = handle->lastCommand;
-            uint8_t *tmpTxData      = handle->txData;
+            const uint8_t *tmpTxData      = handle->txData;
 
             if (handle->bitsPerFrame <= 8U)
             {

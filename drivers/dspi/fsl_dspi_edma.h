@@ -83,7 +83,7 @@ struct _dspi_master_edma_handle
     uint8_t nbytes;         /*!< eDMA minor byte transfer count initially configured. */
     volatile uint8_t state; /*!< DSPI transfer state, see @ref _dspi_transfer_state.*/
 
-    uint8_t *volatile txData;                  /*!< Send buffer. */
+    const uint8_t *volatile txData;                  /*!< Send buffer. */
     uint8_t *volatile rxData;                  /*!< Receive buffer. */
     volatile size_t remainingSendByteCount;    /*!< A number of bytes remaining to send.*/
     volatile size_t remainingReceiveByteCount; /*!< A number of bytes remaining to receive.*/
@@ -107,7 +107,7 @@ struct _dspi_slave_edma_handle
 {
     uint32_t bitsPerFrame; /*!< The desired number of bits per frame. */
 
-    uint8_t *volatile txData;                  /*!< Send buffer. */
+    const uint8_t *volatile txData;            /*!< Send buffer. */
     uint8_t *volatile rxData;                  /*!< Receive buffer. */
     volatile size_t remainingSendByteCount;    /*!< A number of bytes remaining to send.*/
     volatile size_t remainingReceiveByteCount; /*!< A number of bytes remaining to receive.*/

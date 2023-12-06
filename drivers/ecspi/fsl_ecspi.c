@@ -37,7 +37,7 @@ typedef void (*ecspi_isr_t)(ECSPI_Type *base, ecspi_master_handle_t *ecspiHandle
  * @param buffer The data bytes to send
  * @param size The number of data bytes to send
  */
-static void ECSPI_WriteNonBlocking(ECSPI_Type *base, uint32_t *buffer, size_t size);
+static void ECSPI_WriteNonBlocking(ECSPI_Type *base, const uint32_t *buffer, size_t size);
 
 /*!
  * @brief Receive a buffer of data bytes in non-blocking way.
@@ -134,7 +134,7 @@ uint32_t ECSPI_GetInstance(ECSPI_Type *base)
     return instance;
 }
 
-static void ECSPI_WriteNonBlocking(ECSPI_Type *base, uint32_t *buffer, size_t size)
+static void ECSPI_WriteNonBlocking(ECSPI_Type *base,const uint32_t *buffer, size_t size)
 {
     size_t i = 0U;
 
@@ -516,7 +516,7 @@ void ECSPI_SetChannelConfig(ECSPI_Type *base, ecspi_channel_source_t channel, co
  * retval kStatus_Success Successfully start a transfer.
  * retval kStatus_ECSPI_Timeout The transfer timed out and was aborted.
  */
-status_t ECSPI_WriteBlocking(ECSPI_Type *base, uint32_t *buffer, size_t size)
+status_t ECSPI_WriteBlocking(ECSPI_Type *base, const uint32_t *buffer, size_t size)
 {
     size_t i = 0U;
 #if SPI_RETRY_TIMES

@@ -526,7 +526,8 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
     uint32_t tx_ctrl = 0U, last_ctrl = 0U;
     uint32_t tmp32, rxRemainingBytes, txRemainingBytes, dataWidth;
     uint32_t toReceiveCount = 0;
-    uint8_t *txData, *rxData;
+    const uint8_t *txData;
+    uint8_t *rxData;
     uint32_t fifoDepth;
 #if SPI_RETRY_TIMES
     uint32_t waitTimes = SPI_RETRY_TIMES;

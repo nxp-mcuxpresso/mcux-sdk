@@ -77,7 +77,7 @@ struct _lpspi_master_edma_handle
     volatile uint8_t bytesLastRead;    /*!< Bytes for last read RDR. */
     volatile bool isThereExtraRxBytes; /*!< Is there extra RX byte. */
 
-    uint8_t *volatile txData;             /*!< Send buffer. */
+    const uint8_t *volatile txData;       /*!< Send buffer. */
     uint8_t *volatile rxData;             /*!< Receive buffer. */
     volatile size_t txRemainingByteCount; /*!< Number of bytes remaining to send.*/
     volatile size_t rxRemainingByteCount; /*!< Number of bytes remaining to receive.*/
@@ -122,7 +122,7 @@ struct _lpspi_slave_edma_handle
 
     uint8_t nbytes; /*!< eDMA minor byte transfer count initially configured. */
 
-    uint8_t *volatile txData;             /*!< Send buffer. */
+    const uint8_t *volatile txData;       /*!< Send buffer. */
     uint8_t *volatile rxData;             /*!< Receive buffer. */
     volatile size_t txRemainingByteCount; /*!< Number of bytes remaining to send.*/
     volatile size_t rxRemainingByteCount; /*!< Number of bytes remaining to receive.*/
