@@ -459,6 +459,36 @@
 #define FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV (1)
 /* @brief Support Channel Mode (register bit fields TCR4[CHMOD]). */
 #define FSL_FEATURE_SAI_HAS_CHANNEL_MODE (1)
+/* @brief Used to retrieve the physical base address of a transmit FIFO.
+ * The index of the transmit FIFO is specified through the fifo_index argument.
+ * The sai_base argument needs to be the physical base address of the SAI.
+ */
+#define FSL_FEATURE_SAI_TX_FIFO_BASEn(sai_base, fifo_index)\
+    (((sai_base) == SAI1) ? ((uintptr_t)SAI1 + 0x20 + (fifo_index) * 0x4) :\
+    (((sai_base) == SAI2) ? ((uintptr_t)SAI2 + 0x20 + (fifo_index) * 0x4) :\
+    (((sai_base) == SAI3) ? ((uintptr_t)SAI3 + 0x20 + (fifo_index) * 0x4) : (0))))
+/* @brief Used to retrieve the physical base address of a receive FIFO.
+ * The index of the receive FIFO is specified through the fifo_index argument.
+ * The sai_base argument needs to be the physical base address of the SAI.
+ */
+#define FSL_FEATURE_SAI_RX_FIFO_BASEn(sai_base, fifo_index)\
+    (((sai_base) == SAI1) ? ((uintptr_t)SAI1 + 0xa0 + (fifo_index) * 0x4) :\
+    (((sai_base) == SAI2) ? ((uintptr_t)SAI2 + 0xa0 + (fifo_index) * 0x4) :\
+    (((sai_base) == SAI3) ? ((uintptr_t)SAI3 + 0xa0 + (fifo_index) * 0x4) : (0))))
+/* @brief Used to retrieve the DMA MUX value for a SAI's transmitter.
+ * The sai_base argument needs to be the physical base address of the SAI.
+ */
+#define FSL_FEATURE_SAI_TX_DMA_MUXn(sai_base)\
+    (((sai_base) == SAI1) ? (21) : \
+    (((sai_base) == SAI2) ? (58) : \
+    (((sai_base) == SAI3) ? (60) : (0))))
+/* @brief Used to retrieve the DMA MUX value for a SAI's receiver.
+ * The sai_base argument needs to be the physical base address of the SAI.
+ */
+#define FSL_FEATURE_SAI_RX_DMA_MUXn(sai_base)\
+    (((sai_base) == SAI1) ? (22) : \
+    (((sai_base) == SAI2) ? (59) : \
+    (((sai_base) == SAI3) ? (61) : (0))))
 
 /* SEMA42 module features */
 
