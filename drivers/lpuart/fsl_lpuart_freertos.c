@@ -229,7 +229,7 @@ int LPUART_RTOS_Deinit(lpuart_rtos_handle_t *handle)
  * param buffer The pointer to buffer to send.
  * param length The number of bytes to send.
  */
-int LPUART_RTOS_Send(lpuart_rtos_handle_t *handle, uint8_t *buffer, uint32_t length)
+int LPUART_RTOS_Send(lpuart_rtos_handle_t *handle, const uint8_t *buffer, uint32_t length)
 {
     EventBits_t ev;
     int retval = kStatus_Fail;
@@ -257,8 +257,8 @@ int LPUART_RTOS_Send(lpuart_rtos_handle_t *handle, uint8_t *buffer, uint32_t len
         return kStatus_Fail;
     }
 
-    handle->txTransfer.data     = (uint8_t *)buffer;
-    handle->txTransfer.dataSize = (uint32_t)length;
+    handle->txTransfer.txData   = buffer;
+    handle->txTransfer.dataSize = length;
 
     /* Non-blocking call */
     status = LPUART_TransferSendNonBlocking(handle->base, handle->t_state, &handle->txTransfer);
