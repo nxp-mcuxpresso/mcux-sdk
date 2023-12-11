@@ -2697,10 +2697,12 @@ status_t ENET_QOS_SendFrame(ENET_QOS_Type *base,
     uint32_t primask;
     uint32_t txDescTail;
 
+#ifdef FSL_FEATURE_ENET_QOS_TX_OFFLOAD_QUEUE_SUPPORT_BITMAP
     if (txOffloadOps != kENET_QOS_TxOffloadDisable)
     {
         assert(((uint32_t)FSL_FEATURE_ENET_QOS_TX_OFFLOAD_QUEUE_SUPPORT_BITMAP & ((uint32_t)1U << channel)) != 0U);
     }
+#endif
 
     if (length > 2U * ENET_QOS_TXDESCRIP_RD_BL1_MASK)
     {
