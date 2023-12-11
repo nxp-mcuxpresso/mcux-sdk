@@ -123,7 +123,7 @@ int UART_RTOS_Deinit(uart_rtos_handle_t *handle);
  * @param buffer The pointer to the buffer to send.
  * @param length The number of bytes to send.
  */
-int UART_RTOS_Send(uart_rtos_handle_t *handle, uint8_t *buffer, uint32_t length);
+int UART_RTOS_Send(uart_rtos_handle_t *handle, const uint8_t *buffer, uint32_t length);
 
 /*!
  * @brief Receives data.

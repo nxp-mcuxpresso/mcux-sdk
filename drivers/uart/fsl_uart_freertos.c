@@ -219,7 +219,7 @@ int UART_RTOS_Deinit(uart_rtos_handle_t *handle)
  * param buffer The pointer to the buffer to send.
  * param length The number of bytes to send.
  */
-int UART_RTOS_Send(uart_rtos_handle_t *handle, uint8_t *buffer, uint32_t length)
+int UART_RTOS_Send(uart_rtos_handle_t *handle, const uint8_t *buffer, uint32_t length)
 {
     EventBits_t ev;
     int retval = kStatus_Success;
@@ -245,7 +245,7 @@ int UART_RTOS_Send(uart_rtos_handle_t *handle, uint8_t *buffer, uint32_t length)
         return kStatus_Fail;
     }
 
-    handle->txTransfer.data     = (uint8_t *)buffer;
+    handle->txTransfer.txData   = buffer;
     handle->txTransfer.dataSize = (uint32_t)length;
 
     /* Non-blocking call */
