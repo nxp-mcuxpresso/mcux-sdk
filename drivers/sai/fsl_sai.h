@@ -20,6 +20,19 @@
  * Definitions
  ******************************************************************************/
 
+/*! @brief Disable implicit channel data configuration within SAI_TxSetConfig()/SAI_RxSetConfig().
+ *
+ * Use this macro to control whether SAI_RxSetConfig()/SAI_TxSetConfig() will
+ * attempt to implicitly configure the channel data. By channel data we mean
+ * the startChannel, channelMask, endChannel, and channelNums fields from the
+ * sai_transciever_t structure. By default, SAI_TxSetConfig()/SAI_RxSetConfig()
+ * will attempt to compute these fields, which may not be desired in cases where
+ * the user wants to set them before the call to said functions.
+ */
+#ifndef MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG
+#define MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG 0
+#endif /* MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG */
+
 /*! @name Driver version */
 /*@{*/
 #define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 3, 8)) /*!< Version 2.3.8 */
