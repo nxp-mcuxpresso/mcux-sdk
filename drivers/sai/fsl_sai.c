@@ -269,7 +269,16 @@ static uint32_t SAI_GetInstance(I2S_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_saiBases));
+    if (instance == ARRAY_SIZE(s_saiBases)) {
+        assert(false);
+	/* asserts may not always be enabled. As such, return NULL here to
+	 * avoid compilation warnings complaining about a possible out-of-bounds
+	 * access. If the user decides to disable the asserts, it is up to them
+	 * to debug in case of out-of-bounds access as SAI_GetInstance() will
+	 * return a valid instance.
+	 */
+	return 0;
+    }
 
     return instance;
 }
