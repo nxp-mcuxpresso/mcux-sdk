@@ -350,7 +350,7 @@ int LPUART_RTOS_Receive(lpuart_rtos_handle_t *handle, uint8_t *buffer, uint32_t 
     }
 
     handle->rxTransfer.data     = buffer;
-    handle->rxTransfer.dataSize = (uint32_t)length;
+    handle->rxTransfer.dataSize = length;
 
     /* Non-blocking call */
     status = LPUART_TransferReceiveNonBlocking(handle->base, handle->t_state, &handle->rxTransfer, &n);

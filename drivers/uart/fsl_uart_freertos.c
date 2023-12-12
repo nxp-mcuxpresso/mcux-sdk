@@ -246,7 +246,7 @@ int UART_RTOS_Send(uart_rtos_handle_t *handle, const uint8_t *buffer, uint32_t l
     }
 
     handle->txTransfer.txData   = buffer;
-    handle->txTransfer.dataSize = (uint32_t)length;
+    handle->txTransfer.dataSize = length;
 
     /* Non-blocking call */
     status = UART_TransferSendNonBlocking(handle->base, handle->t_state, &handle->txTransfer);
@@ -322,7 +322,7 @@ int UART_RTOS_Receive(uart_rtos_handle_t *handle, uint8_t *buffer, uint32_t leng
     }
 
     handle->rxTransfer.data     = buffer;
-    handle->rxTransfer.dataSize = (uint32_t)length;
+    handle->rxTransfer.dataSize = length;
 
     /* Non-blocking call */
     status = UART_TransferReceiveNonBlocking(handle->base, handle->t_state, &handle->rxTransfer, &n);
