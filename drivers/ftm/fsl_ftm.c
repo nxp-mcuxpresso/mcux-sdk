@@ -17,15 +17,6 @@
  * Prototypes
  ******************************************************************************/
 /*!
- * @brief Gets the instance from the base address
- *
- * @param base FTM peripheral base address
- *
- * @return The FTM instance
- */
-static uint32_t FTM_GetInstance(FTM_Type *base);
-
-/*!
  * @brief Sets the FTM register PWM synchronization method
  *
  * This function will set the necessary bits for the PWM synchronization mode that
@@ -69,7 +60,7 @@ static const clock_ip_name_t s_ftmClocks[] = FTM_CLOCKS;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-static uint32_t FTM_GetInstance(FTM_Type *base)
+uint32_t FTM_GetInstance(FTM_Type *base)
 {
     uint32_t instance;
     uint32_t ftmArrayCount = (sizeof(s_ftmBases) / sizeof(s_ftmBases[0]));
