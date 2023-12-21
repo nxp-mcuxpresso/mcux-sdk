@@ -2,6 +2,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core_AArch64/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8962
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/cs42448
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
@@ -40,9 +41,11 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpuart_edma)
 #    include(driver_lpuart_freertos)
 #    include(driver_codec)
+#    include(driver_cs42448)
 #    include(driver_wm8962)
 #    include(component_codec_adapters)
 #    include(component_codec_i2c_MIMX9352)
+#    include(component_cs42448_adapter)
 #    include(component_wm8962_adapter)
 #    include(component_lpi2c_adapter)
 #    include(component_lpuart_adapter)
