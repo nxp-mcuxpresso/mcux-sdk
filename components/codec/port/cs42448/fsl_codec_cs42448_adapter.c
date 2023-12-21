@@ -49,7 +49,7 @@ status_t HAL_CODEC_CS42448_Init(void *handle, void *config)
     codec_config_t *codecConfig = (codec_config_t *)config;
 
     cs42448_config_t *devConfig = (cs42448_config_t *)(codecConfig->codecDevConfig);
-    cs42448_handle_t *devHandle = (cs42448_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle));
+    cs42448_handle_t *devHandle = (cs42448_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle));
 
     /* load codec capability */
     ((codec_handle_t *)handle)->codecCapability = &s_cs42448_capability;
@@ -73,7 +73,7 @@ status_t HAL_CODEC_CS42448_Deinit(void *handle)
 {
     assert(handle != NULL);
 
-    return CS42448_Deinit((cs42448_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)));
+    return CS42448_Deinit((cs42448_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)));
 }
 
 /*!
@@ -89,7 +89,7 @@ status_t HAL_CODEC_CS42448_SetFormat(void *handle, uint32_t mclk, uint32_t sampl
 {
     assert(handle != NULL);
 
-    return CS42448_ConfigDataFormat((cs42448_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)), mclk,
+    return CS42448_ConfigDataFormat((cs42448_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)), mclk,
                                     sampleRate, bitWidth);
 }
 
@@ -117,7 +117,7 @@ status_t HAL_CODEC_CS42448_SetVolume(void *handle, uint32_t playChannel, uint32_
 
         if (volume == 0U)
         {
-            ret = CS42448_SetChannelMute((cs42448_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
+            ret = CS42448_SetChannelMute((cs42448_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)),
                                          (uint8_t)(i + 1U), true);
         }
         else
@@ -126,13 +126,13 @@ status_t HAL_CODEC_CS42448_SetVolume(void *handle, uint32_t playChannel, uint32_
             mappedVolume = (uint8_t)(CS42448_AOUT_MAX_VOLUME_VALUE -
                                      ((volume - 1U) * (CS42448_AOUT_MAX_VOLUME_VALUE + 3U)) / 100U);
 
-            ret = CS42448_SetAOUTVolume((cs42448_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
+            ret = CS42448_SetAOUTVolume((cs42448_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)),
                                         (uint8_t)(i + 1U), mappedVolume);
             /* unmute the channel */
             if (ret == kStatus_Success)
             {
                 ret =
-                    CS42448_SetChannelMute((cs42448_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
+                    CS42448_SetChannelMute((cs42448_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)),
                                            (uint8_t)(i + 1U), false);
             }
         }
@@ -167,7 +167,7 @@ status_t HAL_CODEC_CS42448_SetMute(void *handle, uint32_t playChannel, bool isMu
             continue;
         }
 
-        ret = CS42448_SetChannelMute((cs42448_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
+        ret = CS42448_SetChannelMute((cs42448_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)),
                                      (uint8_t)(i + 1U), isMute);
         if (ret != kStatus_Success)
         {
