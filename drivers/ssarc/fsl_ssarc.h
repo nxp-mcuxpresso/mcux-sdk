@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SSARC_H_
-#define _FSL_SSARC_H_
+#ifndef FSL_SSARC_H_
+#define FSL_SSARC_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SSARC driver version 2.1.0. */
 #define FSL_SSARC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
-/*@}*/
+/*! @} */
 
 #define SSARC_INT_STATUS_ALL                                                                                       \
     (SSARC_LP_INT_STATUS_ADDR_ERR_MASK | SSARC_LP_INT_STATUS_AHB_ERR_MASK | SSARC_LP_INT_STATUS_SW_REQ_DONE_MASK | \
@@ -471,4 +471,4 @@ static inline uint16_t SSARC_GetSoftwareRequestSavePendingGroup(SSARC_LP_Type *b
  * @}
  */
 
-#endif /* _FSL_SSARC_H_ */
+#endif /* FSL_SSARC_H_ */

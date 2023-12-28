@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SDMA_SCRIPT_H_
-#define _FSL_SDMA_SCRIPT_H_
+#ifndef FSL_SDMA_SCRIPT_H_
+#define FSL_SDMA_SCRIPT_H_
 
 /*! @brief SDMA start address. */
 #define FSL_SDMA_START_ADDR 0
@@ -280,4 +280,4 @@
     0x52c3, 0x53cb, 0xc159, 0x7dec, 0x0200, 0x9dba\
 }
 
-#endif /* _FSL_SDMA_SCRIPT_H_ */
+#endif /* FSL_SDMA_SCRIPT_H_ */

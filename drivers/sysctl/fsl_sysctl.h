@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SYSCTL_H_
-#define _FSL_SYSCTL_H_
+#ifndef FSL_SYSCTL_H_
+#define FSL_SYSCTL_H_
 
 #include "fsl_common.h"
 /*******************************************************************************
@@ -27,10 +27,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Group sysctl driver version for SDK */
 #define FSL_SYSCTL_DRIVER_VERSION (MAKE_VERSION(2, 0, 5)) /*!< Version 2.0.5. */
-/*@}*/
+/*! @} */
 
 /*! @brief SYSCTL share set*/
 enum _sysctl_share_set_index
@@ -107,7 +107,7 @@ void SYSCTL_Init(SYSCTL_Type *base);
  */
 void SYSCTL_Deinit(SYSCTL_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name SYSCTL share signal configure
@@ -175,12 +175,12 @@ void SYSCTL_SetShareSignalSrc(SYSCTL_Type *base,
                               sysctl_sharedctrlset_signal_t signal,
                               uint32_t shareSrc);
 
-/* @} */
+/*! @} */
 
 #ifdef __cplusplus
 }
 #endif
 
-/*@}*/
+/*! @} */
 
-#endif /* _FSL_SYSCTL_H_ */
+#endif /* FSL_SYSCTL_H_ */

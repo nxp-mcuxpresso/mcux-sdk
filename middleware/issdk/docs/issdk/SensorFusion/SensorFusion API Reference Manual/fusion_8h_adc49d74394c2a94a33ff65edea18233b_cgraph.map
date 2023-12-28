@@ -1,8 +1,0 @@
-<map id="fInit_3DOF_B_BASIC" name="fInit_3DOF_B_BASIC">
-<area shape="rect" id="node2" href="$orientation_8c.html#a3aea6b9a9647d15db0dad4be820fbba9" title="Aerospace NED magnetometer 3DOF flat eCompass function, computing rotation matrix fR..." alt="" coords="463,5,669,32"/>
-<area shape="rect" id="node4" href="$orientation_8c.html#a765e472022e2ba9717989e6527df49a8" title="Android magnetometer 3DOF flat eCompass function, computing rotation matrix fR. " alt="" coords="455,56,677,83"/>
-<area shape="rect" id="node5" href="$orientation_8c.html#a79e9bfb4c86c1cd82b83058afd08df10" title="Windows 8 magnetometer 3DOF flat eCompass function, computing rotation matrix fR. ..." alt="" coords="199,107,407,133"/>
-<area shape="rect" id="node6" href="$orientation_8c.html#a04da5468213c1687c5b3485f15af288e" title="compute the orientation quaternion from a 3x3 rotation matrix " alt="" coords="201,157,404,184"/>
-<area shape="rect" id="node3" href="$matrix_8c.html#a54f510d9d257d6063412a9ed5adddd6f" title="function sets the 3x3 matrix A to the identity matrix " alt="" coords="725,31,833,57"/>
-<area shape="rect" id="node7" href="$orientation_8c.html#a3bcc5aef9bd7abd545d33660aa3ccbd0" title="function normalizes a rotation quaternion and ensures q0 is non&#45;negative " alt="" coords="515,157,617,184"/>
-</map>

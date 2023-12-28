@@ -1,0 +1,25 @@
+---
+set.board.mimxrt685audevk.fmstr:
+  section-type: set
+  belong_to: set.board.mimxrt685audevk.fmstr
+  section_info:
+    fixed_id: fmstr_board_mimxrt685audevk
+    display_name: fmstr_mimxrt685audevk
+    full_name: FreeMASTER mimxrt685audevk
+    description: FreeMASTER examples for mimxrt685audevk
+    type: board
+    version: 1.0.0
+    set_location:
+      repo_base_path: "./boards/mimxrt685audevk/freemaster_examples"
+    product:
+      cmsis_pack:
+        scr:
+        - scr.board.mimxrt685audevk.fmstr-examples
+        vendor: NXP
+        pack_root:
+          pack_type: sBSP
+          pack_name: mimxrt685audevk_FREEMASTER
+          pack_version: 1.0.0
+  dependency:
+    allOf:
+    - set.middleware.fmstr

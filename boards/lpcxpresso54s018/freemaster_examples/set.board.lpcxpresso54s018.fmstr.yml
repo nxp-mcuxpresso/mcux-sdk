@@ -1,0 +1,25 @@
+---
+set.board.lpcxpresso54s018.fmstr:
+  section-type: set
+  belong_to: set.board.lpcxpresso54s018.fmstr
+  section_info:
+    fixed_id: fmstr_board_lpcxpresso54s018
+    display_name: fmstr_lpcxpresso54s018
+    full_name: FreeMASTER lpcxpresso54s018
+    description: FreeMASTER examples for lpcxpresso54s018
+    type: board
+    version: 1.0.0
+    set_location:
+      repo_base_path: "./boards/lpcxpresso54s018/freemaster_examples"
+    product:
+      cmsis_pack:
+        scr:
+        - scr.board.lpcxpresso54s018.fmstr-examples
+        vendor: NXP
+        pack_root:
+          pack_type: sBSP
+          pack_name: lpcxpresso54s018_FREEMASTER
+          pack_version: 1.0.0
+  dependency:
+    allOf:
+    - set.middleware.fmstr

@@ -7,8 +7,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SPDIF_H_
-#define _FSL_SPDIF_H_
+#ifndef FSL_SPDIF_H_
+#define FSL_SPDIF_H_
 
 #include "fsl_common.h"
 
@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 6)) /*!< Version 2.0.6 */
-/*@}*/
+/*! @} */
 
 /*! @brief SPDIF return status*/
 enum
@@ -750,4 +750,4 @@ void SPDIF_TransferRxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle);
 
 /*! @} */
 
-#endif /* _FSL_SPDIF_H_ */
+#endif /* FSL_SPDIF_H_ */

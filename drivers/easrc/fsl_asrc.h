@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_ASRC_H_
-#define _FSL_ASRC_H_
+#ifndef FSL_ASRC_H_
+#define FSL_ASRC_H_
 
 #include "fsl_common.h"
 
@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 6)) /*!< Version 2.0.6 */
-/*@}*/
+/*! @} */
 
 /*! @brief ASRC fifo depth */
 #define FSL_ASRC_INPUT_FIFO_DEPTH  (128U)
@@ -671,4 +671,4 @@ status_t ASRC_TransferBlocking(ASRC_Type *base, asrc_context_t context, asrc_tra
 
 /*! @} */
 
-#endif /* _FSL_ASRC_H_ */
+#endif /* FSL_ASRC_H_ */

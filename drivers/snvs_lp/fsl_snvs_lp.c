@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017-2022, NXP
+ * Copyright 2017-2023, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1181,7 +1181,7 @@ status_t SNVS_LP_EnableRxActiveTamper(SNVS_Type *base, snvs_lp_external_tamper_t
             }
 
             /* Route TX to external tamper 9 */
-            base->LPATRC1R |= SNVS_LPATRC2R_ET9RCTL(config.activeTamper);
+            base->LPATRC2R |= SNVS_LPATRC2R_ET9RCTL(config.activeTamper);
 
             /* enable tamper pin */
             base->LPTDC2R |= SNVS_LPTDC2R_ET9_EN_MASK;
@@ -1197,7 +1197,7 @@ status_t SNVS_LP_EnableRxActiveTamper(SNVS_Type *base, snvs_lp_external_tamper_t
             }
 
             /* Route TX to external tamper 10 */
-            base->LPATRC1R |= SNVS_LPATRC2R_ET10RCTL(config.activeTamper);
+            base->LPATRC2R |= SNVS_LPATRC2R_ET10RCTL(config.activeTamper);
 
             /* enable tamper pin */
             base->LPTDC2R |= SNVS_LPTDC2R_ET10_EN_MASK;

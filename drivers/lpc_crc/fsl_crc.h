@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_CRC_H_
-#define _FSL_CRC_H_
+#ifndef FSL_CRC_H_
+#define FSL_CRC_H_
 
 #include "fsl_common.h"
 
@@ -23,7 +23,7 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief CRC driver version. Version 2.1.1.
  *
  * Current version: 2.1.1
@@ -41,7 +41,7 @@
  *   - Fix MISRA issue
  */
 #define FSL_CRC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*@}*/
+/*! @} */
 
 #ifndef CRC_DRIVER_CUSTOM_DEFAULTS
 /*! @brief Default configuration structure filled by CRC_GetDefaultConfig(). Uses CRC-16/CCITT-FALSE as default. */
@@ -192,4 +192,4 @@ static inline uint16_t CRC_Get16bitResult(CRC_Type *base)
  *@}
  */
 
-#endif /* _FSL_CRC_H_ */
+#endif /* FSL_CRC_H_ */

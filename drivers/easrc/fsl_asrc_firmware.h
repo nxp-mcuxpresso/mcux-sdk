@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_ASRC_FIRMWARE_H_
-#define _FSL_ASRC_FIRMWARE_H_
+#ifndef FSL_ASRC_FIRMWARE_H_
+#define FSL_ASRC_FIRMWARE_H_
 
 /*! @brief ASRC filter firmware info*/
 #define ASRC_FILTER_FIRMWARE_VER  2U
@@ -7834,4 +7834,4 @@
 
 /*! @} */
 
-#endif /* _FSL_ASRC_FIRMWARE_H_ */
+#endif /* FSL_ASRC_FIRMWARE_H_ */

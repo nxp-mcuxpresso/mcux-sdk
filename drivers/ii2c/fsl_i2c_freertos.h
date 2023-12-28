@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef __FSL_I2C_FREERTOS_H__
-#define __FSL_I2C_FREERTOS_H__
+#ifndef FSL_I2C_FREERTOS_H__
+#define FSL_I2C_FREERTOS_H__
 
 #include "FreeRTOS.h"
 #include "portable.h"
@@ -24,10 +24,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief I2C FreeRTOS driver version. */
 #define FSL_I2C_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
-/*@}*/
+/*! @} */
 
 /*!
  * @cond RTOS_PRIVATE
@@ -108,4 +108,4 @@ status_t I2C_RTOS_Transfer(i2c_rtos_handle_t *handle, i2c_master_transfer_t *tra
  * @}
  */
 
-#endif /* __FSL_I2C_FREERTOS_H__ */
+#endif /* FSL_I2C_FREERTOS_H__ */

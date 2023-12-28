@@ -1,7 +1,0 @@
-<map id="ssSetLeds" name="ssSetLeds">
-<area shape="rect" id="node2" href="$status_8c.html#a0c95bafe270ab48a3f4397bff655bad8" title="ssSetStatusNow" alt="" coords="137,31,256,57"/>
-<area shape="rect" id="node3" href="$status_8c.html#a965d11d38c1ccddb703fe6e29d087d8d" title="ssTest" alt="" coords="483,5,545,32"/>
-<area shape="rect" id="node5" href="$status_8c.html#a163c3ee102397bef342e6e3e56b78a69" title="ssUpdateStatus" alt="" coords="304,56,419,83"/>
-<area shape="rect" id="node4" href="$status_8h.html#a01619741119cf3432f8cfff23334c793" title="initializeStatusSubsystem() should be called once at startup to initialize the data structure and to ..." alt="" coords="609,56,783,83"/>
-<area shape="rect" id="node6" href="$status_8c.html#aa1eec664ba18958c8e54d696402232b9" title="ssSetStatus" alt="" coords="467,107,561,133"/>
-</map>

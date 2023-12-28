@@ -1,8 +1,0 @@
-<map id="driverexamples/demos/demo_11_axis_mult2b.c" name="driverexamples/demos/demo_11_axis_mult2b.c">
-<area shape="rect" id="node9" href="$a00119.html" title="The mag3110_drv.h file describes the MAG3110 driver interface and structures. " alt="" coords="730,95,839,121"/>
-<area shape="rect" id="node10" href="$a00164.html" title="The mpl3115_drv.h file describes the MPL3115 driver interface and structures. " alt="" coords="864,95,969,121"/>
-<area shape="rect" id="node11" href="$a00146.html" title="The mma865x_drv.h file describes the MMA865x driver interface and structures. " alt="" coords="993,95,1107,121"/>
-<area shape="rect" id="node12" href="$a00032.html" title="The fxas21002_drv.h file describes the fxas21002 driver interface and structures. ..." alt="" coords="1131,95,1246,121"/>
-<area shape="rect" id="node13" href="$a00101.html" title="The host_io_uart.h file contains the Host Protocol interface definitions and configuration. " alt="" coords="1270,95,1374,121"/>
-<area shape="rect" id="node14" href="$a00533.html" title="ARM Systick Utilities. " alt="" coords="1398,95,1505,121"/>
-</map>

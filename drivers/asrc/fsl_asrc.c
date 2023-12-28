@@ -659,8 +659,7 @@ status_t ASRC_TransferBlocking(ASRC_Type *base, asrc_channel_pair_t channelPair,
     {
         status = ASRC_GetStatus(base);
 
-        if ((status & ((uint32_t)kASRC_StatusPairCInputReady | (uint32_t)kASRC_StatusPairBInputReady |
-                       (uint32_t)kASRC_StatusPairAInputReady)) != 0U)
+        if ((status & (1UL << ((uint32_t)channelPair + ASRC_ASRSTR_AIDEA_SHIFT))) != 0U)
         {
             onceWriteSamples =
                 MIN(inSamples, (size_t)((FSL_ASRC_CHANNEL_PAIR_FIFO_DEPTH * audioChannels - inWaterMark)));
@@ -672,8 +671,7 @@ status_t ASRC_TransferBlocking(ASRC_Type *base, asrc_channel_pair_t channelPair,
 
         if (outSamples > outWaterMark)
         {
-            if ((status & ((uint32_t)kASRC_StatusPairCOutputReady | (uint32_t)kASRC_StatusPairAOutputReady |
-                           (uint32_t)kASRC_StatusPairBOutputReady)) != 0U)
+            if ((status & (1UL << ((uint32_t)channelPair + ASRC_ASRSTR_AODFA_SHIFT))) != 0U)
             {
                 ASRC_ReadNonBlocking(base, channelPair, (uint32_t *)(uint32_t)outAddr, outWaterMark, outWidth);
                 outAddr = (uint8_t *)((uint32_t)outAddr + outWaterMark * outWidth);
@@ -942,8 +940,7 @@ void ASRC_TransferHandleIRQ(ASRC_Type *base, asrc_handle_t *handle)
     }
 
     /* Handle transfer */
-    if ((status & ((uint32_t)kASRC_StatusPairCOutputReady | (uint32_t)kASRC_StatusPairAOutputReady |
-                   (uint32_t)kASRC_StatusPairBOutputReady)) != 0U)
+    if ((status & (1UL << ((uint32_t)handle->channelPair + ASRC_ASRSTR_AODFA_SHIFT))) != 0U)
     {
         if (handle->out.transferSamples[handle->out.queueDriver] != 0U)
         {
@@ -957,8 +954,7 @@ void ASRC_TransferHandleIRQ(ASRC_Type *base, asrc_handle_t *handle)
         }
     }
 
-    if ((status & ((uint32_t)kASRC_StatusPairCInputReady | (uint32_t)kASRC_StatusPairBInputReady |
-                   (uint32_t)kASRC_StatusPairAInputReady)) != 0U)
+    if ((status & (1UL << ((uint32_t)handle->channelPair + ASRC_ASRSTR_AIDEA_SHIFT))) != 0U)
     {
         /* Judge if the data need to transmit is less than space */
         uint32_t size = MIN((handle->in.transferSamples[handle->in.queueDriver]),

@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SNVS_HP_H_
-#define _FSL_SNVS_HP_H_
+#ifndef FSL_SNVS_HP_H_
+#define FSL_SNVS_HP_H_
 
 #include "fsl_common.h"
 
@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_SNVS_HP_DRIVER_VERSION (MAKE_VERSION(2, 3, 2)) /*!< Version 2.3.2 */
-/*@}*/
+/*! @} */
 
 /*! @brief List of SNVS interrupts */
 typedef enum _snvs_hp_interrupts
@@ -646,4 +646,4 @@ void SNVS_HP_SetLocks(SNVS_Type *base);
 
 /*! @}*/
 
-#endif /* _FSL_SNVS_HP_H_ */
+#endif /* FSL_SNVS_HP_H_ */

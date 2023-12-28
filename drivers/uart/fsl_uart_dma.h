@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_UART_DMA_H_
-#define _FSL_UART_DMA_H_
+#ifndef FSL_UART_DMA_H_
+#define FSL_UART_DMA_H_
 
 #include "fsl_uart.h"
 #include "fsl_dma.h"
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief UART DMA driver version. */
 #define FSL_UART_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
-/*@}*/
+/*! @} */
 
 /* Forward declaration of the handle typedef. */
 typedef struct _uart_dma_handle uart_dma_handle_t;
@@ -172,7 +172,7 @@ status_t UART_TransferGetReceiveCountDMA(UART_Type *base, uart_dma_handle_t *han
  * @param uartDmaHandle UART handle pointer.
  */
 void UART_TransferDMAHandleIRQ(UART_Type *base, void *uartDmaHandle);
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -180,4 +180,4 @@ void UART_TransferDMAHandleIRQ(UART_Type *base, void *uartDmaHandle);
 
 /*! @}*/
 
-#endif /* _FSL_UART_DMA_H_ */
+#endif /* FSL_UART_DMA_H_ */

@@ -60,8 +60,8 @@ status_t DSI_TransferCreateHandleSMARTDMA(MIPI_DSI_HOST_Type *base,
     handle->userData = userData;
     handle->isBusy   = false;
 
-    SMARTDMA_InstallFirmware(SMARTDMA_FLEXIO_MCULCD_MEM_ADDR, s_smartdmaFlexioMcuLcdFirmware,
-                             SMARTDMA_FLEXIO_MCULCD_FIRMWARE_SIZE);
+    SMARTDMA_InstallFirmware(SMARTDMA_DISPLAY_MEM_ADDR, s_smartdmaDisplayFirmware,
+                             SMARTDMA_DISPLAY_FIRMWARE_SIZE);
 
     SMARTDMA_InstallCallback(DSI_SMARTDMA_Callback, handle);
 

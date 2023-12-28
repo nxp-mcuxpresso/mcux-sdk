@@ -106,6 +106,9 @@
 #  # description: Utility debug_console
 #  set(CONFIG_USE_utility_debug_console true)
 
+#  # description: Component sai_edma_adapter
+#  set(CONFIG_USE_component_audio_sai_edma_adapter true)
+
 #  # description: Component button
 #  set(CONFIG_USE_component_button true)
 
@@ -310,6 +313,9 @@
 #  # description: RTC Driver
 #  set(CONFIG_USE_driver_rtc true)
 
+#  # description: SAI EDMA Driver
+#  set(CONFIG_USE_driver_sai_edma true)
+
 #  # description: SAI Driver
 #  set(CONFIG_USE_driver_sai true)
 
@@ -492,6 +498,9 @@
 #  # description: RPMsg-Lite XOS environment layer sources
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_xos true)
 
+#  # description: RPMsg-Lite Azure RTOS environment sources
+#  set(CONFIG_USE_middleware_multicore_rpmsg_lite_azurertos true)
+
 #  # description: eRPC
 #  set(CONFIG_USE_middleware_multicore_erpc_common true)
 
@@ -615,6 +624,21 @@
 #  # description: RPMsg-Lite
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite true)
 
+#  # description: erpc examples common files
+#  set(CONFIG_USE_middleware_multicore_erpc_common_multicore true)
+
+#  # description: erpc matrix_multiply_client examples common files
+#  set(CONFIG_USE_middleware_multicore_erpc_common_multicore_matrix_multiply_client true)
+
+#  # description: erpc matrix_multiply_server examples common files
+#  set(CONFIG_USE_middleware_multicore_erpc_common_multicore_matrix_multiply_server true)
+
+#  # description: erpc erpc_two_way_rpc_core0 examples common files
+#  set(CONFIG_USE_middleware_multicore_erpc_common_two_way_rpc_core0 true)
+
+#  # description: erpc erpc_two_way_rpc_core1 examples common files
+#  set(CONFIG_USE_middleware_multicore_erpc_common_two_way_rpc_core1 true)
+
 #set.middleware.sdmmc
 #  # description: Middleware sdmmc common
 #  set(CONFIG_USE_middleware_sdmmc_common true)
@@ -671,83 +695,13 @@
 #  # description: mbedTLS library
 #  set(CONFIG_USE_middleware_mbedtls true)
 
-#set.middleware.issdk
-#  # description: ISSDK Utils
-#  set(CONFIG_USE_middleware_issdk_drivers_systick_utils true)
-
-#  # description: ISSDK Serial to MQTT bridge application
-#  set(CONFIG_USE_middleware_issdk_sensor_tools true)
-
-#  # description: ISSDK Sensors RegDefs
-#  set(CONFIG_USE_middleware_issdk_sensor_allregdefs true)
-
-#  # description: ISSDK FXAS21002 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxas21002 true)
-
-#  # description: ISSDK FXOS8700 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxos8700 true)
-
-#  # description: ISSDK MPL3115 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mpl3115 true)
-
-#  # description: ISSDK FXLC95000 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxlc95000 true)
-
-#  # description: ISSDK MMA8491 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma8491q true)
-
-#  # description: ISSDK FXLS8471 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8471q true)
-
-#  # description: ISSDK MAG3110 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mag3110 true)
-
-#  # description: ISSDK MMA845x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma845x true)
-
-#  # description: ISSDK MMA865x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma865x true)
-
-#  # description: ISSDK FXPQ3115 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxpq3115 true)
-
-#  # description: ISSDK FXLS8962 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8962 true)
-
-#  # description: ISSDK MMA9553 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma9553 true)
-
-#  # description: ISSDK nps300x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_nps300x true)
-
-#  # description: ISSDK ISL29023 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_isl29023 true)
-
-#  # description: ISSDK fxps7250d4 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxps7250d4 true)
-
-#  # description: ISSDK FXLS896xAF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls896xaf true)
-
-#  # description: ISSDK FXLS8974CF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8974cf true)
-
-#  # description: ISSDK FXLS8961AF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8961af true)
-
-#  # description: ISSDK FXLS8971CF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8971cf true)
-
-#  # description: ISSDK NMH1000 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_nmh1000 true)
-
-#  # description: ISSDK Sensor Interface Common
-#  set(CONFIG_USE_middleware_issdk_sensor_interface_common true)
-
-#  # description: ISSDK GPIO Driver for Kinetis
-#  set(CONFIG_USE_middleware_issdk_drivers_gpio_kinetis true)
-
 #set.middleware.usb
+#  # description: USB device phydcd config header
+#  set(CONFIG_USE_middleware_usb_phydcd_config_header true)
+
+#  # description: USB device hsdcd config header
+#  set(CONFIG_USE_middleware_usb_hsdcd_config_header true)
+
 #  # description: USB device khci config header
 #  set(CONFIG_USE_middleware_usb_device_khci_config_header true)
 
@@ -796,6 +750,31 @@
 #  # description: Middleware usb device controller driver
 #  set(CONFIG_USE_middleware_usb_device_controller_driver true)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #set.component.osa
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)
@@ -816,7 +795,6 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
   ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
@@ -838,7 +816,6 @@ include(set_device_K32L3A60 OPTIONAL)
 include(set_component_osa OPTIONAL)
 include(set_middleware_fatfs OPTIONAL)
 include(set_middleware_freertos-kernel OPTIONAL)
-include(set_middleware_issdk OPTIONAL)
 include(set_middleware_mbedtls OPTIONAL)
 include(set_middleware_multicore OPTIONAL)
 include(set_middleware_sdmmc OPTIONAL)

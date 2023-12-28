@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_WDOG_H_
-#define _FSL_WDOG_H_
+#ifndef FSL_WDOG_H_
+#define FSL_WDOG_H_
 
 #include "fsl_common.h"
 
@@ -19,21 +19,21 @@
  * Definitions
  *******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Defines WDOG driver version */
-#define FSL_WDOG_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*@}*/
+#define FSL_WDOG_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @} */
 /*! @name Refresh sequence */
-/*@{*/
+/*! @{ */
 #define WDOG_REFRESH_KEY (0xAAAA5555U)
-/*@}*/
+/*! @} */
 
 /*! @brief Defines WDOG work mode. */
 typedef struct _wdog_work_mode
 {
-    bool enableWait;  /*!< continue or suspend WDOG in wait mode  */
-    bool enableStop;  /*!< continue or suspend WDOG in stop mode  */
-    bool enableDebug; /*!< continue or suspend WDOG in debug mode */
+    bool enableWait;  /*!< If set to true, WDOG continues in wait mode  */
+    bool enableStop;  /*!< If set to true, WDOG continues in stop mode  */
+    bool enableDebug; /*!< If set to true, WDOG continues in debug mode */
 } wdog_work_mode_t;
 
 /*! @brief Describes WDOG configuration structure. */
@@ -94,8 +94,8 @@ extern "C" {
  * @code
  *   wdogConfig->enableWdog = true;
  *   wdogConfig->workMode.enableWait = true;
- *   wdogConfig->workMode.enableStop = false;
- *   wdogConfig->workMode.enableDebug = false;
+ *   wdogConfig->workMode.enableStop = true;
+ *   wdogConfig->workMode.enableDebug = true;
  *   wdogConfig->enableInterrupt = false;
  *   wdogConfig->enablePowerdown = false;
  *   wdogConfig->resetExtension = flase;
@@ -294,7 +294,7 @@ static inline void WDOG_DisablePowerDownEnable(WDOG_Type *base)
  * @param base WDOG peripheral base address
  */
 void WDOG_Refresh(WDOG_Type *base);
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -302,4 +302,4 @@ void WDOG_Refresh(WDOG_Type *base);
 
 /*! @}*/
 
-#endif /* _FSL_WDOG_H_ */
+#endif /* FSL_WDOG_H_ */

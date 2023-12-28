@@ -1,15 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2021-08-04
-**     Build:               b220118
+**     Build:               b231016
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2023 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -38,6 +36,10 @@
     #define FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT (1)
     /* @brief LPC_CAN availability on the SoC. */
     #define FSL_FEATURE_SOC_LPC_CAN_COUNT (1)
+    /* @brief CDOG availability on the SoC. */
+    #define FSL_FEATURE_SOC_CDOG_COUNT (1)
+    /* @brief CRC availability on the SoC. */
+    #define FSL_FEATURE_SOC_CRC_COUNT (1)
     /* @brief CTIMER availability on the SoC. */
     #define FSL_FEATURE_SOC_CTIMER_COUNT (5)
     /* @brief DMA availability on the SoC. */
@@ -57,9 +59,7 @@
     /* @brief GINT availability on the SoC. */
     #define FSL_FEATURE_SOC_GINT_COUNT (2)
     /* @brief GPIO availability on the SoC. */
-    #define FSL_FEATURE_SOC_GPIO_COUNT (1)
-    /* @brief SECGPIO availability on the SoC. */
-    #define FSL_FEATURE_SOC_SECGPIO_COUNT (1)
+    #define FSL_FEATURE_SOC_GPIO_COUNT (2)
     /* @brief I2C availability on the SoC. */
     #define FSL_FEATURE_SOC_I2C_COUNT (8)
     /* @brief I3C availability on the SoC. */
@@ -83,9 +83,7 @@
     /* @brief OSTIMER availability on the SoC. */
     #define FSL_FEATURE_SOC_OSTIMER_COUNT (1)
     /* @brief PINT availability on the SoC. */
-    #define FSL_FEATURE_SOC_PINT_COUNT (1)
-    /* @brief SECPINT availability on the SoC. */
-    #define FSL_FEATURE_SOC_SECPINT_COUNT (1)
+    #define FSL_FEATURE_SOC_PINT_COUNT (2)
     /* @brief PMC availability on the SoC. */
     #define FSL_FEATURE_SOC_PMC_COUNT (1)
     /* @brief POWERQUAD availability on the SoC. */
@@ -121,6 +119,10 @@
     #define FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT (1)
     /* @brief LPC_CAN availability on the SoC. */
     #define FSL_FEATURE_SOC_LPC_CAN_COUNT (1)
+    /* @brief CDOG availability on the SoC. */
+    #define FSL_FEATURE_SOC_CDOG_COUNT (1)
+    /* @brief CRC availability on the SoC. */
+    #define FSL_FEATURE_SOC_CRC_COUNT (1)
     /* @brief CTIMER availability on the SoC. */
     #define FSL_FEATURE_SOC_CTIMER_COUNT (5)
     /* @brief DMA availability on the SoC. */
@@ -140,9 +142,7 @@
     /* @brief GINT availability on the SoC. */
     #define FSL_FEATURE_SOC_GINT_COUNT (2)
     /* @brief GPIO availability on the SoC. */
-    #define FSL_FEATURE_SOC_GPIO_COUNT (1)
-    /* @brief SECGPIO availability on the SoC. */
-    #define FSL_FEATURE_SOC_SECGPIO_COUNT (1)
+    #define FSL_FEATURE_SOC_GPIO_COUNT (2)
     /* @brief I2C availability on the SoC. */
     #define FSL_FEATURE_SOC_I2C_COUNT (8)
     /* @brief I3C availability on the SoC. */
@@ -166,9 +166,7 @@
     /* @brief OSTIMER availability on the SoC. */
     #define FSL_FEATURE_SOC_OSTIMER_COUNT (1)
     /* @brief PINT availability on the SoC. */
-    #define FSL_FEATURE_SOC_PINT_COUNT (1)
-    /* @brief SECPINT availability on the SoC. */
-    #define FSL_FEATURE_SOC_SECPINT_COUNT (1)
+    #define FSL_FEATURE_SOC_PINT_COUNT (2)
     /* @brief PMC availability on the SoC. */
     #define FSL_FEATURE_SOC_PMC_COUNT (1)
     /* @brief POWERQUAD availability on the SoC. */
@@ -225,8 +223,44 @@
 #define FSL_FEATURE_LPADC_HAS_CFG_CALOFS (0)
 /* @brief Has offset trim (register OFSTRIM). */
 #define FSL_FEATURE_LPADC_HAS_OFSTRIM (1)
-/* @brief Has trigger status (register TSTAT). */
+/* @brief OFSTRIM availability on the SoC. */
+#define FSL_FEATURE_LPADC_OFSTRIM_COUNT (2)
+/* @brief Has Trigger status register. */
 #define FSL_FEATURE_LPADC_HAS_TSTAT (1)
+/* @brief Has power select (bitfield CFG[PWRSEL]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_PWRSEL (1)
+/* @brief Has alternate channel B scale (bitfield CMDLn[ALTB_CSCALE]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_ALTB_CSCALE (0)
+/* @brief Has alternate channel B select enable (bitfield CMDLn[ALTBEN]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_ALTBEN (1)
+/* @brief Has alternate channel input (bitfield CMDLn[ALTB_ADCH]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_ALTB_ADCH (1)
+/* @brief Has offset calibration mode (bitfield CTRL[CALOFSMODE]). */
+#define FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE (0)
+/* @brief Conversion averaged bitfiled width. */
+#define FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH (3)
+/* @brief Has B side channels. */
+#define FSL_FEATURE_LPADC_HAS_B_SIDE_CHANNELS (1)
+/* @brief Indicate whether the LPADC STAT register has trigger exception interrupt function (bitfield STAT[TEXC_INT]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_TEXC_INT (1)
+/* @brief Indicate whether the LPADC STAT register has trigger completion interrupt function (bitfield STAT[TCOMP_INT]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_TCOMP_INT (1)
+/* @brief Indicate whether the LPADC STAT register has calibration ready function (bitfield STAT[CAL_RDY]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_CAL_RDY (1)
+/* @brief Indicate whether the LPADC STAT register has ADC active function (bitfield STAT[ADC_ACTIVE]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_ADC_ACTIVE (1)
+/* @brief Indicate whether the LPADC IE register has trigger exception interrupt enable function (bitfield IE[TEXC_IE]). */
+#define FSL_FEATURE_LPADC_HAS_IE_TEXC_IE (1)
+/* @brief Indicate whether the LPADC IE register has trigger completion interrupt enable function (bitfield IE[TCOMP_IE]). */
+#define FSL_FEATURE_LPADC_HAS_IE_TCOMP_IE (1)
+/* @brief Indicate whether the LPADC CFG register has trigger resume/restart enable function (bitfield CFG[TRES]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_TRES (1)
+/* @brief Indicate whether the LPADC CFG register has trigger command resume/restart enable function (bitfield CFG[TCMDRES]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_TCMDRES (1)
+/* @brief Indicate whether the LPADC CFG register has high priority trigger exception disable function (bitfield CFG[HPT_EXDI]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_HPT_EXDI (1)
+/* @brief Indicate LPADC CFG register TPRICTRL bitfield width. */
+#define FSL_FEATURE_LPADC_CFG_TPRICTRL_BITFIELD_WIDTH (2)
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Temperature sensor parameter A (slope). */
@@ -250,12 +284,10 @@
 #define FSL_FEATURE_ANACTRL_HAS_NO_ENABLE_PLL_USB_OUT_BIT_FIELD (1)
 /* @brief Has XO32M_ADC_CLK_MODE bitfile in DUMMY_CTRL reigster. */
 #define FSL_FEATURE_ANACTRL_HAS_XO32M_ADC_CLK_MODE_BIF_FIELD (1)
+/* @brief Has auxiliary bias(register AUX_BIAS). */
+#define FSL_FEATURE_ANACTRL_HAS_AUX_BIAS_REG (1)
 /* @brief Has FREQ_ME_CTRL reigster. */
 #define FSL_FEATURE_ANACTRL_HAS_NO_FREQ_ME_CTRL (1)
-/* @brief Has auxiliary bias(register AUX_BIAS). */
-#define FSL_FEATURE_ANACTRL_HAS_AUX_BIAS_REG (0)
-/* @brief ANACTRL control VDDMAIN. */
-#define FSL_FEATURE_ANACTRL_CONTROL_VDD_MAIN (1)
 
 /* AOI module features */
 
@@ -278,9 +310,29 @@
 /* @brief Support CANFD or not */
 #define FSL_FEATURE_CAN_SUPPORT_CANFD (1)
 
-/* CTIMER module features */
+/* CDOG module features */
 
 /* No feature definitions */
+
+/* CRC module features */
+
+/* @brief Has data register with name CRC */
+#define FSL_FEATURE_CRC_HAS_CRC_REG (0)
+
+/* CTIMER module features */
+
+/* @brief CTIMER has no capture channel. */
+#define FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE (0)
+/* @brief CTIMER has no capture 2 interrupt. */
+#define FSL_FEATURE_CTIMER_HAS_NO_IR_CR2INT (0)
+/* @brief CTIMER capture 3 interrupt. */
+#define FSL_FEATURE_CTIMER_HAS_IR_CR3INT (1)
+/* @brief Has CTIMER CCR_CAP2 (register bits CCR[CAP2RE][CAP2FE][CAP2I]. */
+#define FSL_FEATURE_CTIMER_HAS_NO_CCR_CAP2 (0)
+/* @brief Has CTIMER CCR_CAP3 (register bits CCR[CAP3RE][CAP3FE][CAP3I]). */
+#define FSL_FEATURE_CTIMER_HAS_CCR_CAP3 (1)
+/* @brief CTIMER Has register MSR */
+#define FSL_FEATURE_CTIMER_HAS_MSR (1)
 
 /* LPDAC module features */
 
@@ -322,6 +374,10 @@
 
 /* @brief Number of channels */
 #define FSL_FEATURE_DMIC_CHANNEL_NUM (2)
+/* @brief DMIC channel support stereo data */
+#define FSL_FEATURE_DMIC_IO_HAS_STEREO_2_4_6 (0)
+/* @brief DMIC does not support bypass channel clock */
+#define FSL_FEATURE_DMIC_IO_HAS_NO_BYPASS (1)
 /* @brief DMIC channel FIFO register support sign extended */
 #define FSL_FEATURE_DMIC_CHANNEL_HAS_SIGNEXTEND (1)
 /* @brief DMIC has no IOCFG register */
@@ -330,6 +386,19 @@
 #define FSL_FEATURE_DMIC_HAS_DECIMATOR_RESET_FUNC (1)
 /* @brief DMIC has global channel synchronization function */
 #define FSL_FEATURE_DMIC_HAS_GLOBAL_SYNC_FUNC (1)
+
+/* ENC module features */
+
+/* @brief Has no simultaneous PHASEA and PHASEB change interrupt (register bit field CTRL2[SABIE] and CTRL2[SABIRQ]). */
+#define FSL_FEATURE_ENC_HAS_NO_CTRL2_SAB_INT (0)
+/* @brief Has register CTRL3. */
+#define FSL_FEATURE_ENC_HAS_CTRL3 (1)
+/* @brief Has register LASTEDGE or LASTEDGEH. */
+#define FSL_FEATURE_ENC_HAS_LASTEDGE (1)
+/* @brief Has register POSDPERBFR, POSDPERH, or POSDPER. */
+#define FSL_FEATURE_ENC_HAS_POSDPER (1)
+/* @brief Has bitfiled FILT[FILT_PRSC]. */
+#define FSL_FEATURE_ENC_HAS_FILT_PRSC (1)
 
 /* FLEXCOMM module features */
 
@@ -450,22 +519,47 @@
 #define FSL_FEATURE_FLEXSPI_NO_SUPPORT_PORTB (1)
 /* @brief FlexSPI LUTKEY is read only. */
 #define FSL_FEATURE_FLEXSPI_LUTKEY_IS_RO (1)
+/* @brief There is AHBBUSERROREN bit in INTEN register. */
+#define FSL_FEATURE_FLEXSPI_HAS_INTEN_AHBBUSERROREN (0)
+/* @brief There is CLRAHBTX_RXBUF bit in AHBCR register. */
+#define FSL_FEATURE_FLEXSPI_HAS_AHBCR_CLRAHBTX_RXBUF (1)
+/* @brief FLEXSPI has no IP parallel mode. */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_IP_PARALLEL_MODE (1)
+/* @brief FLEXSPI has no AHB parallel mode. */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_AHB_PARALLEL_MODE (1)
+/* @brief FLEXSPI support address shift. */
+#define FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT (0)
+
+/* GINT module features */
+
+/* @brief The count of th port which are supported in GINT. */
+#define FSL_FEATURE_GINT_PORT_COUNT (2)
 
 /* I2S module features */
 
 /* @brief I2S support dual channel transfer. */
 #define FSL_FEATURE_I2S_SUPPORT_SECONDARY_CHANNEL (1)
 /* @brief I2S has DMIC interconnection. */
-#define FSL_FEATURE_FLEXCOMM_I2S_HAS_DMIC_INTERCONNECTION  (1)
+#define FSL_FEATURE_FLEXCOMM_I2S_HAS_DMIC_INTERCONNECTION (1)
 
 /* I3C module features */
 
-/* @brief Has TERM bitfile in MERRWARN reigster. */
+/* @brief Has TERM bitfile in MERRWARN register. */
 #define FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM (1)
+/* @brief SOC has no reset driver. */
+#define FSL_FEATURE_I3C_HAS_NO_RESET (0)
+/* @brief Use fixed BAMATCH count, do not provide editable BAMATCH. */
+#define FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH (0)
+/* @brief Register SCONFIG do not have IDRAND bitfield. */
+#define FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND (0)
+/* @brief Register SCONFIG has HDROK bitfield. */
+#define FSL_FEATURE_I3C_HAS_HDROK (0)
+/* @brief SOC doesn't support slave IBI/MR/HJ. */
+#define FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ (0)
 
 /* INPUTMUX module features */
 
-/* @brief Number of channels */
+/* @brief Inputmux has DMA Request Enable */
 #define FSL_FEATURE_INPUTMUX_HAS_SIGNAL_ENA (1)
 /* @brief Inputmux has channel mux control */
 #define FSL_FEATURE_INPUTMUX_HAS_CHANNEL_MUX (0)
@@ -512,9 +606,21 @@
 /* @brief If (e)FlexPWM has mux trigger source select bit field. */
 #define FSL_FEATURE_PWM_HAS_MUX_TRIGGER_SOURCE_SEL (1)
 /* @brief Number of submodules in each (e)FlexPWM module. */
-#define FSL_FEATURE_PWM_SUBMODULE_COUNT (4U)
+#define FSL_FEATURE_PWM_SUBMODULE_COUNT (4)
 /* @brief Number of fault channel in each (e)FlexPWM module. */
 #define FSL_FEATURE_PWM_FAULT_CH_COUNT (1)
+/* @brief (e)FlexPWM has no WAITEN Bitfield In CTRL2 Register. */
+#define FSL_FEATURE_PWM_HAS_NO_WAITEN (1)
+/* @brief If (e)FlexPWM has phase delay feature. */
+#define FSL_FEATURE_PWM_HAS_PHASE_DELAY (1)
+/* @brief If (e)FlexPWM has input filter capture feature. */
+#define FSL_FEATURE_PWM_HAS_INPUT_FILTER_CAPTURE (1)
+/* @brief If (e)FlexPWM has module capture functionality on A channels (inputs). */
+#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELA (1)
+/* @brief If (e)FlexPWM has module capture functionality on B channels (inputs). */
+#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELB (1)
+/* @brief If (e)FlexPWM has module capture functionality on X channels (inputs). */
+#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
 
 /* RTC module features */
 
@@ -528,8 +634,22 @@
 #define FSL_FEATURE_RTC_HAS_RESET (1)
 /* @brief Has RTC Tamper 23 Filter Configuration Register support. */
 #define FSL_FEATURE_RTC_HAS_FILTER23_CFG (1)
-/* @brief Has WAKEUP_MODE bitfile in CTRL2 reigster. */
+/* @brief Has WAKEUP_MODE bitfile in CTRL2 register. */
 #define FSL_FEATURE_RTC_HAS_NO_CTRL2_WAKEUP_MODE (1)
+/* @brief Has CLK_SEL bitfile in CTRL register. */
+#define FSL_FEATURE_RTC_HAS_CLOCK_SELECT (0)
+/* @brief Has CLKO_DIS bitfile in CTRL register. */
+#define FSL_FEATURE_RTC_HAS_CLOCK_OUTPUT_DISABLE (0)
+/* @brief Has No Tamper in RTC. */
+#define FSL_FEATURE_RTC_HAS_NO_TAMPER_FEATURE (0)
+/* @brief Has CPU_LOW_VOLT bitfile in STATUS register. */
+#define FSL_FEATURE_RTC_HAS_NO_CPU_LOW_VOLT_FLAG (0)
+/* @brief Has RST_SRC bitfile in STATUS register. */
+#define FSL_FEATURE_RTC_HAS_NO_RST_SRC_FLAG (0)
+/* @brief Has GP_DATA_REG register. */
+#define FSL_FEATURE_RTC_HAS_NO_GP_DATA_REG (0)
+/* @brief Has TIMER_STB_MASK bitfile in CTRL register. */
+#define FSL_FEATURE_RTC_HAS_NO_TIMER_STB_MASK (0)
 
 /* SCT module features */
 
@@ -542,10 +662,10 @@
 /* @brief Number of outputs */
 #define FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS (10)
 
-/* SECPINT module features */
+/* SPI module features */
 
-/* @brief Number of connected outputs */
-#define FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS (2)
+/* @brief SSEL pin count. */
+#define FSL_FEATURE_SPI_SSEL_COUNT (4)
 
 /* SYSCON module features */
 
@@ -560,6 +680,11 @@
 
 /* @brief SYSCTRL has Code Gray feature. */
 #define FSL_FEATURE_SYSCTRL_HAS_CODE_GRAY (1)
+
+/* USART module features */
+
+/* @brief Has FIFO Receive Timeout Configuration (register FIFORXTIMEOUTCFG). */
+#define FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG (1)
 
 /* USB module features */
 
@@ -592,7 +717,8 @@
 
 /* WWDT module features */
 
-/* No feature definitions */
+/* @brief Has no RESET register. */
+#define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
 
 #endif /* _LPC5536_FEATURES_H_ */
 

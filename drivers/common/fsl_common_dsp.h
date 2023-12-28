@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_COMMON_DSP_H_
-#define _FSL_COMMON_DSP_H_
+#ifndef FSL_COMMON_DSP_H_
+#define FSL_COMMON_DSP_H_
 
 /*!
  * @addtogroup ksdk_common
@@ -19,7 +19,7 @@
  ******************************************************************************/
 
 /*! @name Timer utilities */
-/* @{ */
+/*! @{ */
 /*! Macro to convert a microsecond period to raw count value */
 #define USEC_TO_COUNT(us, clockFreqInHz) (uint64_t)(((uint64_t)(us) * (clockFreqInHz)) / 1000000U)
 /*! Macro to convert a raw count value to microsecond */
@@ -29,12 +29,12 @@
 #define MSEC_TO_COUNT(ms, clockFreqInHz) (uint64_t)((uint64_t)(ms) * (clockFreqInHz) / 1000U)
 /*! Macro to convert a raw count value to millisecond */
 #define COUNT_TO_MSEC(count, clockFreqInHz) (uint64_t)((uint64_t)(count) * 1000U / (clockFreqInHz))
-/* @} */
+/*! @} */
 
 #define SDK_ISR_EXIT_BARRIER
 
 /*! @name Alignment variable definition macros */
-/* @{ */
+/*! @{ */
 /*! Macro to define a variable with alignbytes alignment */
 #define SDK_ALIGN(var, alignbytes) var __attribute__((aligned(alignbytes)))
 
@@ -51,7 +51,7 @@
 /*! Macro to change a value to a given size aligned value */
 #define SDK_SIZEALIGN(var, alignbytes) \
     ((unsigned int)((var) + ((alignbytes)-1U)) & (unsigned int)(~(unsigned int)((alignbytes)-1U)))
-/* @} */
+/*! @} */
 
 /*! @name Non-cacheable region definition macros */
 /* For initialized non-zero non-cacheable variables, please using "AT_NONCACHEABLE_SECTION_INIT(var) ={xx};" or
@@ -59,7 +59,7 @@
  * please using "AT_NONCACHEABLE_SECTION(var);" or "AT_NONCACHEABLE_SECTION_ALIGN(var);" to define them, these zero-inited variables
  * will be initialized to zero in system startup.
  */
-/* @{ */
+/*! @{ */
 
 #define AT_NONCACHEABLE_SECTION_INIT(var) __attribute__((section("NonCacheable.init"))) var
 #define AT_NONCACHEABLE_SECTION(var) __attribute__((section("NonCacheable"))) var
@@ -68,7 +68,7 @@
 #define AT_NONCACHEABLE_SECTION_ALIGN(var, alignbytes) \
     __attribute__((section("NonCacheable"))) var __attribute__((aligned(alignbytes)))
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Time sensitive region
@@ -85,7 +85,7 @@
 #define AT_QUICKACCESS_SECTION_DATA(func) func
 
 #endif /* __FSL_SDK_DRIVER_QUICK_ACCESS_ENABLE */
-/* @} */
+/*! @} */
 
 /* Macros for compatibility. */
 #define NVIC_SetPriorityGrouping(value) do {} while(0)
@@ -167,4 +167,4 @@ static inline void EnableGlobalIRQ(uint32_t primask)
 
 /*! @} */
 
-#endif /* _FSL_COMMON_DSP_H_ */
+#endif /* FSL_COMMON_DSP_H_ */

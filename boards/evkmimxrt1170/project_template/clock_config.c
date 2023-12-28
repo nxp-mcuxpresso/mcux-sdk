@@ -1,6 +1,5 @@
 /*
- * Copyright 2022 NXP
- * All rights reserved.
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -18,11 +17,11 @@
 
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Clocks v10.0
+product: Clocks v11.0
 processor: MIMXRT1176xxxxx
 package_id: MIMXRT1176DVMAA
 mcu_data: ksdk2_0
-processor_version: 0.12.10
+processor_version: 0.14.8
 board: MIMXRT1170-EVK
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
@@ -282,6 +281,7 @@ void BOARD_BootClockRUN(void)
 {
     clock_root_config_t rootCfg = {0};
 
+#if !defined(SKIP_DCDC_CONFIGURATION) || (!SKIP_DCDC_CONFIGURATION)
     /* Set DCDC to DCM mode to improve the efficiency for light loading in run mode and transient performance with a big loading step. */
     DCDC_BootIntoDCM(DCDC);
 
@@ -295,7 +295,8 @@ void BOARD_BootClockRUN(void)
         /* Set 1.125V for production samples to align with data sheet requirement */
         DCDC_SetVDD1P0BuckModeTargetVoltage(DCDC, kDCDC_1P0BuckTarget1P125V);
     }
-#endif
+#endif /* SKIP_DCDC_ADJUSTMENT */
+#endif /* SKIP_DCDC_CONFIGURATION */
 
 #if !defined(SKIP_FBB_ENABLE) || (!SKIP_FBB_ENABLE)
     /* Check if FBB need to be enabled in OverDrive(OD) mode */
@@ -340,7 +341,7 @@ void BOARD_BootClockRUN(void)
 
     /* Init OSC RC 400M */
     CLOCK_OSC_EnableOscRc400M();
-    CLOCK_OSC_GateOscRc400M(true);
+    CLOCK_OSC_GateOscRc400M(false);
 
     /* Init OSC RC 48M */
     CLOCK_OSC_EnableOsc48M(true);
@@ -892,9 +893,9 @@ outputs:
 - {id: ACMP_CLK_ROOT.outFreq, value: 24 MHz}
 - {id: ADC1_CLK_ROOT.outFreq, value: 24 MHz}
 - {id: ADC2_CLK_ROOT.outFreq, value: 24 MHz}
-- {id: ARM_PLL_CLK.outFreq, value: 2.4 GHz}
+- {id: ARM_PLL_CLK.outFreq, value: 798 MHz}
 - {id: ASRC_CLK_ROOT.outFreq, value: 24 MHz}
-- {id: AXI_CLK_ROOT.outFreq, value: 800 MHz}
+- {id: AXI_CLK_ROOT.outFreq, value: 798 MHz}
 - {id: BUS_CLK_ROOT.outFreq, value: 240 MHz}
 - {id: BUS_LPSR_CLK_ROOT.outFreq, value: 160 MHz}
 - {id: CAN1_CLK_ROOT.outFreq, value: 24 MHz}
@@ -964,7 +965,7 @@ outputs:
 - {id: LPUART9_CLK_ROOT.outFreq, value: 24 MHz}
 - {id: M4_CLK_ROOT.outFreq, value: 4320/11 MHz}
 - {id: M4_SYSTICK_CLK_ROOT.outFreq, value: 24 MHz}
-- {id: M7_CLK_ROOT.outFreq, value: 800 MHz, locked: true, accuracy: '0.001'}
+- {id: M7_CLK_ROOT.outFreq, value: 798 MHz, locked: true, accuracy: '0.001'}
 - {id: M7_SYSTICK_CLK_ROOT.outFreq, value: 100 kHz}
 - {id: MIC_CLK_ROOT.outFreq, value: 24 MHz}
 - {id: MIPI_DSI_TX_CLK_ESC_ROOT.outFreq, value: 24 MHz}
@@ -1010,8 +1011,9 @@ settings:
 - {id: SOCDomainVoltage, value: OD}
 - {id: ANADIG_OSC_OSC_24M_CTRL_LP_EN_CFG, value: Low}
 - {id: ANADIG_OSC_OSC_24M_CTRL_OSC_EN_CFG, value: Enabled}
-- {id: ANADIG_PLL.ARM_PLL_POST_DIV.scale, value: '1'}
-- {id: ANADIG_PLL.ARM_PLL_VDIV.scale, value: '100'}
+- {id: ANADIG_PLL.ARM_PLL_POST_DIV.scale, value: '2', locked: true}
+- {id: ANADIG_PLL.ARM_PLL_PREDIV.scale, value: '1', locked: true}
+- {id: ANADIG_PLL.ARM_PLL_VDIV.scale, value: '133', locked: true}
 - {id: ANADIG_PLL.PLL_AUDIO_BYPASS.sel, value: ANADIG_OSC.OSC_24M}
 - {id: ANADIG_PLL.PLL_VIDEO.denom, value: '960000'}
 - {id: ANADIG_PLL.PLL_VIDEO.div, value: '41'}
@@ -1031,7 +1033,6 @@ settings:
 - {id: ANADIG_PLL_SYS_PLL2_CTRL_POWERUP_CFG, value: Enabled}
 - {id: ANADIG_PLL_SYS_PLL3_CTRL_POWERUP_CFG, value: Enabled}
 - {id: ANADIG_PLL_SYS_PLL3_CTRL_SYS_PLL3_DIV2_CFG, value: Enabled}
-- {id: CCM.CLOCK_ROOT0.DIV.scale, value: '3'}
 - {id: CCM.CLOCK_ROOT0.MUX.sel, value: ANADIG_PLL.ARM_PLL_CLK}
 - {id: CCM.CLOCK_ROOT1.MUX.sel, value: ANADIG_PLL.SYS_PLL3_PFD3_CLK}
 - {id: CCM.CLOCK_ROOT2.DIV.scale, value: '2'}
@@ -1067,8 +1068,8 @@ settings:
 
 const clock_arm_pll_config_t armPllConfig_BOARD_BootClockRUN_800M =
     {
-        .postDivider = kCLOCK_PllPostDiv1,        /* Post divider, 0 - DIV by 2, 1 - DIV by 4, 2 - DIV by 8, 3 - DIV by 1 */
-        .loopDivider = 200,                       /* PLL Loop divider, Fout = Fin * ( loopDivider / ( 2 * postDivider ) ) */
+        .postDivider = kCLOCK_PllPostDiv2,        /* Post divider, 0 - DIV by 2, 1 - DIV by 4, 2 - DIV by 8, 3 - DIV by 1 */
+        .loopDivider = 133,                       /* PLL Loop divider, Fout = Fin * ( loopDivider / ( 2 * postDivider ) ) */
     };
 
 const clock_sys_pll2_config_t sysPll2Config_BOARD_BootClockRUN_800M =
@@ -1095,6 +1096,7 @@ void BOARD_BootClockRUN_800M(void)
 {
     clock_root_config_t rootCfg = {0};
 
+#if !defined(SKIP_DCDC_CONFIGURATION) || (!SKIP_DCDC_CONFIGURATION)
     /* Set DCDC to DCM mode to improve the efficiency for light loading in run mode and transient performance with a big loading step. */
     DCDC_BootIntoDCM(DCDC);
 
@@ -1108,7 +1110,8 @@ void BOARD_BootClockRUN_800M(void)
         /* Set 1.125V for production samples to align with data sheet requirement */
         DCDC_SetVDD1P0BuckModeTargetVoltage(DCDC, kDCDC_1P0BuckTarget1P125V);
     }
-#endif
+#endif /* SKIP_DCDC_ADJUSTMENT */
+#endif /* SKIP_DCDC_CONFIGURATION */
 
 #if !defined(SKIP_FBB_ENABLE) || (!SKIP_FBB_ENABLE)
     /* Check if FBB need to be enabled in OverDrive(OD) mode */
@@ -1153,7 +1156,7 @@ void BOARD_BootClockRUN_800M(void)
 
     /* Init OSC RC 400M */
     CLOCK_OSC_EnableOscRc400M();
-    CLOCK_OSC_GateOscRc400M(true);
+    CLOCK_OSC_GateOscRc400M(false);
 
     /* Init OSC RC 48M */
     CLOCK_OSC_EnableOsc48M(true);
@@ -1243,7 +1246,7 @@ void BOARD_BootClockRUN_800M(void)
     /* Configure M7 using ARM_PLL_CLK */
 #if __CORTEX_M == 7
     rootCfg.mux = kCLOCK_M7_ClockRoot_MuxArmPllOut;
-    rootCfg.div = 3;
+    rootCfg.div = 1;
     CLOCK_SetRootClock(kCLOCK_Root_M7, &rootCfg);
 #endif
 

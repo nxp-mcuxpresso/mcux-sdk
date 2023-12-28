@@ -76,7 +76,7 @@
 #define SPKRBST_HEADROOM        7                /* Headroom applied to the main input signal */
 #define SPKRBST_AGCGAIN_EXP     SPKRBST_HEADROOM /* Exponent used for AGC Gain related variables */
 #define SPKRBST_TEMPERATURE_EXP 9
-#define SPKRBST_LIMGAIN_EXP     4 /* Exponent used for Gain Corection related variables */
+#define SPKRBST_LIMGAIN_EXP     4                /* Exponent used for Gain Corection related variables */
 #define SPKRBST_TIMECTE_EXP     1
 #define TFA1_BF_VOL             0x0687
 #define TFA1_BF_ACS             0x00b0
@@ -161,7 +161,7 @@ enum
     kStatus_TFA9896_I2C_Fatal =
         MAKE_STATUS(kStatusGroup_Generic, 108), /*!< Fatal I2C error occurred  kStatus_TFA9896_I2C_Fatal*/
     kStatus_TFA9896_I2C_NonFatal =
-        MAKE_STATUS(kStatusGroup_Generic, 109),                     /*!< Nonfatal I2C error, and retry count reached */
+        MAKE_STATUS(kStatusGroup_Generic, 109), /*!< Nonfatal I2C error, and retry count reached */
     kStatus_TFA9896_Other = MAKE_STATUS(kStatusGroup_Generic, 1000) /*!< kStatus_TFA9896_Other = 1000*/
 };
 
@@ -193,11 +193,11 @@ typedef struct _tfa9896FilterM
 /*! @brief cont anti alias*/
 typedef struct _tfa9896ContAntiAliasM
 {
-    unsigned char index; /*!< index determines destination type; anti-alias, integrator,eq */
+    unsigned char index;  /*!< index determines destination type; anti-alias, integrator,eq */
     unsigned char type;
-    float cutOffFreq; /*!< cut off frequency*/
+    float cutOffFreq;     /*!< cut off frequency*/
     float samplingFreq;
-    float rippleDb; /*!< integrator leakage*/
+    float rippleDb;       /*!< integrator leakage*/
     float rolloff;
     uint8_t bytes[5 * 3]; /*!< payload 5*24buts coeffs*/
 } tfa9896ContAntiAliasM_t;
@@ -205,11 +205,11 @@ typedef struct _tfa9896ContAntiAliasM
 /*! @brief cont integrator */
 typedef struct _tfa9896ContIntegratorM
 {
-    int8_t index; /*!< index determines destination type; anti-alias, integrator,eq */
+    int8_t index;         /*!< index determines destination type; anti-alias, integrator,eq */
     uint8_t type;
-    float cutOffFreq; /*!< cut off frequency*/
+    float cutOffFreq;     /*!< cut off frequency*/
     float samplingFreq;
-    float leakage; /*!< integrator leakage*/
+    float leakage;        /*!< integrator leakage*/
     float reserved;
     uint8_t bytes[5 * 3]; /*!< payload 5*24buts coeffs*/
 } tfa9896ContIntegratorM_t;

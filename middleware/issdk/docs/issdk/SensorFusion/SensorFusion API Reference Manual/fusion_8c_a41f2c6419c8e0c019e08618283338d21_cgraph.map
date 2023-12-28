@@ -1,7 +1,0 @@
-<map id="fInit_3DOF_G_BASIC" name="fInit_3DOF_G_BASIC">
-<area shape="rect" id="node2" href="$orientation_8h.html#addec350696b9ab89918808b56292bd9a" title="Aerospace NED accelerometer 3DOF tilt function, computing rotation matrix fR. " alt="" coords="250,5,353,32"/>
-<area shape="rect" id="node3" href="$orientation_8h.html#a480280c72c7243e5c192cab628e0a38d" title="Android accelerometer 3DOF tilt function computing, rotation matrix fR. " alt="" coords="241,56,361,83"/>
-<area shape="rect" id="node4" href="$orientation_8h.html#a292e27a8f966749f38e5e7936b05e29b" title="Windows 8 accelerometer 3DOF tilt function computing, rotation matrix fR. " alt="" coords="248,107,355,133"/>
-<area shape="rect" id="node5" href="$orientation_8c.html#a04da5468213c1687c5b3485f15af288e" title="compute the orientation quaternion from a 3x3 rotation matrix " alt="" coords="200,157,403,184"/>
-<area shape="rect" id="node6" href="$orientation_8c.html#a3bcc5aef9bd7abd545d33660aa3ccbd0" title="function normalizes a rotation quaternion and ensures q0 is non&#45;negative " alt="" coords="451,157,553,184"/>
-</map>

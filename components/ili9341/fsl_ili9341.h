@@ -73,10 +73,13 @@
 #define ILI9341_RESET_CANCEL_MS 120U
 
 typedef void (*ili9341_send_byte_t)(uint8_t dataToSend);
+
 typedef void (*ili9341_send_cmd_data_t)(uint8_t cmd, const uint8_t *data, uint32_t dataLen);
 
 void FT9341_Init(ili9341_send_byte_t _writeData, ili9341_send_byte_t _writeCommand);
 
 void FT9341_Init1(ili9341_send_cmd_data_t sendCmdData);
 
-#endif
+/*! @} */
+
+#endif /* _FSL_ILI9341_H_ */

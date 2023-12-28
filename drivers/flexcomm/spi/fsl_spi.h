@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_SPI_H_
-#define _FSL_SPI_H_
+#ifndef FSL_SPI_H_
+#define FSL_SPI_H_
 
 #include "fsl_common.h"
 #include "fsl_flexcomm.h"
@@ -23,10 +23,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SPI driver version. */
 #define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
-/*@}*/
+/*! @} */
 /*! @brief SPI default SSEL COUNT*/
 #if !(defined(FSL_FEATURE_SPI_SSEL_COUNT) || defined(FSL_FEATURE_SPI_IS_SSEL_PIN_COUNT_EQUAL_TO_THREE))
 #define FSL_FEATURE_SPI_SSEL_COUNT (4U)
@@ -755,4 +755,4 @@ static inline void SPI_SlaveTransferHandleIRQ(SPI_Type *base, spi_slave_handle_t
 
 /*! @} */
 
-#endif /* _FSL_SPI_H_*/
+#endif /* FSL_SPI_H_*/

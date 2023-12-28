@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 NXP
+ * Copyright 2017-2023 NXP
  * All rights reserved.
  *
  *
@@ -242,7 +242,7 @@ void ELCDIF_RgbModeStop(LCDIF_Type *base)
     base->CTRL_CLR = LCDIF_CTRL_DOTCLK_MODE_MASK;
 
     /* Wait for data transfer finished. */
-    while (0U != (base->CTRL & LCDIF_CTRL_DOTCLK_MODE_MASK))
+    while (0U != (base->CTRL & (LCDIF_CTRL_DOTCLK_MODE_MASK | LCDIF_CTRL_RUN_MASK)))
     {
     }
 }

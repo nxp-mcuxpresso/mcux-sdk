@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,10 +21,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*@{*/
-/*! @brief CLOCK driver version 2.1.0 */
-#define FSL_WM8962_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
-/*@}*/
+/*! @{ */
+/*! @brief CLOCK driver version 2.1.3 */
+#define FSL_WM8962_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @} */
 
 /*! @brief wm8962 handle size */
 #ifndef WM8962_I2C_HANDLER_SIZE
@@ -35,6 +35,8 @@
 #if DEBUG_WM8962_REGISTER
 #include "fsl_debug_console.h"
 #endif
+
+#define DEBUG_WM8962_MODULE_NUM 11
 
 /*! @brief Define the register address of WM8962. */
 #define WM8962_LINVOL  0x0U
@@ -227,10 +229,10 @@
 #define WM8962_ADC_MAX_VOLUME_vALUE       0xFFU
 #define WM8962_DAC_MAX_VOLUME_vALUE       0xFFU
 #define WM8962_HEADPHONE_MAX_VOLUME_vALUE 0x7FU
-#define WM8962_HEADPHONE_MIN_VOLUME_vALUE 0x30U
+#define WM8962_HEADPHONE_MIN_VOLUME_vALUE 0x2FU
 #define WM8962_LINEIN_MAX_VOLUME_vALUE    0x3FU
 #define WM8962_SPEAKER_MAX_VOLUME_vALUE   0x7FU
-#define WM8962_SPEAKER_MIN_VOLUME_vALUE   0x30U
+#define WM8962_SPEAKER_MIN_VOLUME_vALUE   0x2FU
 
 /*! @brief wm8962 input mixer source.
  * @anchor wm8962_input_mixer_source_t
@@ -394,7 +396,7 @@ typedef struct _wm8962_route_config
 
     uint32_t
         leftHeadphoneMixerSource; /*!< headphone left MIXER source, combination value of wm8962_output_mixer_source_t */
-    wm8962_output_pga_source_t leftHeadphonePGASource; /*!< speaker left PGA source */
+    wm8962_output_pga_source_t leftHeadphonePGASource;  /*!< speaker left PGA source */
 
     uint32_t rightHeadphoneMixerSource;                 /*!< headphone left MIXER source, combination value of
                                                            wm8962_output_mixer_source_t */
@@ -404,17 +406,17 @@ typedef struct _wm8962_route_config
 /*! @brief Initialize structure of WM8962 */
 typedef struct wm8962_config
 {
-    wm8962_route_config_t route; /*!< Audio data route.*/
+    wm8962_route_config_t route;         /*!< Audio data route.*/
 
-    wm8962_protocol_t bus;        /*!< Audio transfer protocol */
-    wm8962_audio_format_t format; /*!< Audio format */
+    wm8962_protocol_t bus;               /*!< Audio transfer protocol */
+    wm8962_audio_format_t format;        /*!< Audio format */
 
     bool masterSlave;                    /*!< Master or slave. true: master mode, false: slave mode */
     wm8962_sysclk_source_t sysclkSource; /*!< sysclk source */
     wm8962_fll_clk_config_t fllClock;    /*!< FLL clock configurations, shall be configured when masterSlave is true */
 
-    uint8_t slaveAddress;         /*!< wm8962 device address */
-    codec_i2c_config_t i2cConfig; /*!< i2c configuration */
+    uint8_t slaveAddress;                /*!< wm8962 device address */
+    codec_i2c_config_t i2cConfig;        /*!< i2c configuration */
 } wm8962_config_t;
 
 /*! @brief wm8962 codec handler
@@ -422,6 +424,7 @@ typedef struct wm8962_config
 typedef struct _wm8962_handle
 {
     const wm8962_config_t *config;              /*!< wm8904 config pointer */
+    uint16_t volume[DEBUG_WM8962_MODULE_NUM];   /*!< Audio volume value */
     uint8_t i2cHandle[WM8962_I2C_HANDLER_SIZE]; /*!< i2c handle */
 } wm8962_handle_t;
 /*******************************************************************************
@@ -553,6 +556,8 @@ status_t WM8962_WriteReg(wm8962_handle_t *handle, uint16_t reg, uint16_t val);
 
 /*!
  * @brief Read register from WM8962 using I2C.
+ *
+ * @param handle WM8962 handle structure.
  * @param reg The register address in WM8962.
  * @param val Value written to.
  */

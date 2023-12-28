@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_MIPI_CSI2RX_H_
-#define _FSL_MIPI_CSI2RX_H_
+#ifndef FSL_MIPI_CSI2RX_H_
+#define FSL_MIPI_CSI2RX_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief CSI2RX driver version. */
 #define FSL_CSI2RX_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
-/*@}*/
+/*! @} */
 
 #if (defined(FSL_FEATURE_CSI2RX_HAS_NO_REG_PREFIX) && FSL_FEATURE_CSI2RX_HAS_NO_REG_PREFIX)
 
@@ -380,4 +380,4 @@ static inline uint32_t CSI2RX_GetInterruptStatus(MIPI_CSI2RX_Type *base)
  *@}
  */
 
-#endif /* _FSL_MIPI_CSI2RX_H_ */
+#endif /* FSL_MIPI_CSI2RX_H_ */

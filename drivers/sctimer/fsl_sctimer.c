@@ -20,6 +20,7 @@
 #define FSL_FEATURE_SCT_HAS_RESET
 #endif
 
+
 /*! @brief Typedef for interrupt handler. */
 typedef void (*sctimer_isr_t)(SCT_Type *base);
 

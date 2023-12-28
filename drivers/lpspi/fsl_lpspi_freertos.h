@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef __FSL_LPSPI_FREERTOS_H__
-#define __FSL_LPSPI_FREERTOS_H__
+#ifndef FSL_LPSPI_FREERTOS_H__
+#define FSL_LPSPI_FREERTOS_H__
 
 #include "FreeRTOS.h"
 #include "portable.h"
@@ -24,10 +24,10 @@
  *********************************************************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LPSPI FreeRTOS driver version 2.3.1. */
 #define FSL_LPSPI_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
-/*@}*/
+/*! @} */
 
 /*!
  * @cond RTOS_PRIVATE
@@ -104,4 +104,4 @@ status_t LPSPI_RTOS_Transfer(lpspi_rtos_handle_t *handle, lpspi_transfer_t *tran
  * @}
  */
 
-#endif /* __FSL_LPSPI_FREERTOS_H__ */
+#endif /* FSL_LPSPI_FREERTOS_H__ */

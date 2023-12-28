@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_TSI_V5_H_
-#define _FSL_TSI_V5_H_
+#ifndef FSL_TSI_V5_H_
+#define FSL_TSI_V5_H_
 
 #include "fsl_common.h"
 
@@ -28,7 +28,7 @@ extern TSI_Type *const s_tsiBases[];
  ******************************************************************************/
 
 /*! @brief TSI driver version */
-#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 
 /*! @brief TSI status flags macro collection */
 #define ALL_FLAGS_MASK (TSI_GENCS_EOSF_MASK | TSI_GENCS_OUTRGF_MASK)
@@ -89,6 +89,44 @@ typedef enum _tsi_sensitivity_xdn_option
 #endif
 } tsi_sensitivity_xdn_option_t;
 
+#if (defined(FSL_FEATURE_TSI_HAS_SHIELD_REGISTER) && FSL_FEATURE_TSI_HAS_SHIELD_REGISTER)
+/*!
+ * @brief TSI Shield setting (TSI SHIELD register).
+ *
+ * These constants define the TSI channel used as shiel channel for HW shielding functionality.
+ * One channel can be selected direclty or more channels can be selected using OR logic.
+ * The bitfield is determinde for device KE17Z9 supporting 24 channels for shielding functionality.
+ */
+typedef enum _tsi_shield
+{
+    kTSI_shieldAllOff = 0x00000000U, /*!< No shiled channel used */
+    kTSI_ShieldSel0   = 0x00000001U, /*!< TSI channel  0 is configured as shield channel */
+    kTSI_ShieldSel1   = 0x00000002U, /*!< TSI channel  1 is configured as shield channel */
+    kTSI_ShieldSel2   = 0x00000004U, /*!< TSI channel  2 is configured as shield channel */
+    kTSI_ShieldSel3   = 0x00000008U, /*!< TSI channel  3 is configured as shield channel */
+    kTSI_ShieldSel4   = 0x00000010U, /*!< TSI channel  4 is configured as shield channel */
+    kTSI_ShieldSel5   = 0x00000020U, /*!< TSI channel  5 is configured as shield channel */
+    kTSI_ShieldSel6   = 0x00000040U, /*!< TSI channel  6 is configured as shield channel */
+    kTSI_ShieldSel7   = 0x00000080U, /*!< TSI channel  7 is configured as shield channel */ 
+    kTSI_ShieldSel8   = 0x00000100U, /*!< TSI channel  8 is configured as shield channel */
+    kTSI_ShieldSel9   = 0x00000200U, /*!< TSI channel  9 is configured as shield channel */
+    kTSI_ShieldSel10  = 0x00000400U, /*!< TSI channel 10 is configured as shield channel */
+    kTSI_ShieldSel11  = 0x00000800U, /*!< TSI channel 11 is configured as shield channel */
+    kTSI_ShieldSel12  = 0x00001000U, /*!< TSI channel 12 is configured as shield channel */
+    kTSI_ShieldSel13  = 0x00002000U, /*!< TSI channel 13 is configured as shield channel */
+    kTSI_ShieldSel14  = 0x00004000U, /*!< TSI channel 14 is configured as shield channel */
+    kTSI_ShieldSel15  = 0x00008000U, /*!< TSI channel 15 is configured as shield channel */
+    kTSI_ShieldSel16  = 0x00010000U, /*!< TSI channel 16 is configured as shield channel */
+    kTSI_ShieldSel17  = 0x00020000U, /*!< TSI channel 17 is configured as shield channel */    
+    kTSI_ShieldSel18  = 0x00040000U, /*!< TSI channel 18 is configured as shield channel */    
+    kTSI_ShieldSel19  = 0x00080000U, /*!< TSI channel 19 is configured as shield channel */    
+    kTSI_ShieldSel20  = 0x00100000U, /*!< TSI channel 20 is configured as shield channel */    
+    kTSI_ShieldSel21  = 0x00200000U, /*!< TSI channel 21 is configured as shield channel */    
+    kTSI_ShieldSel22  = 0x00400000U, /*!< TSI channel 22 is configured as shield channel */    
+    kTSI_ShieldSel23  = 0x00800000U, /*!< TSI channel 23 is configured as shield channel */     
+    kTSI_ShieldSel24  = 0x01000000U, /*!< TSI channel 24 is configured as shield channel */    
+} tsi_shield_t;
+#else
 /*!
  * @brief TSI Shield setting (S_W_SHIELD option).
  *
@@ -107,6 +145,7 @@ typedef enum _tsi_shield
     kTSI_shield2and1On = 6U, /*!< Shield 2,1 pins used */
     kTSI_shieldAllOn   = 7U, /*!< Shield 2,1,0 pins used */
 } tsi_shield_t;
+#endif
 
 /*!
  * @brief TSI sensitivity ajustment (CTRIM option).
@@ -748,6 +787,16 @@ void TSI_EnableInterrupts(TSI_Type *base, uint32_t mask);
  */
 void TSI_DisableInterrupts(TSI_Type *base, uint32_t mask);
 
+#if defined(FSL_FEATURE_TSI_HAS_SHIELD_REGISTER) && FSL_FEATURE_TSI_HAS_SHIELD_REGISTER
+/*!
+ * @brief Enable/disable TSI shield channels.
+ * @param base TSI peripheral base address.
+ * @param channelsMask Channels mask, 1 means channel 0, 3 means channel 0 and channel 1.
+ * @param enable True means enable TSI shield channels, false means disable.
+ */
+void TSI_EnableShieldChannels(TSI_Type *base, uint32_t channelsMask, bool enable);
+#endif
+
 /*!
  * @brief Get interrupt flag.
  * This function get tsi interrupt flags.
@@ -1144,4 +1193,4 @@ static inline void TSI_ClearUsedTxChannel(TSI_Type *base, tsi_mutual_tx_channel_
 
 /*! @}*/
 
-#endif /* _FSL_TSI_V5_H_ */
+#endif /* FSL_TSI_V5_H_ */

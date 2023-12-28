@@ -76,9 +76,9 @@
     GPIOB->PDDR |= (1U << (BOARD_LED_RED_GPIO_PIN + ((BOARD_LED_RED_GPIO_PORT % 4) * 8))) /*!< Enable target LED_RED1 \
                                                                                            */
 #define LED_RED1_ON() \
-    GPIO_PortClear(BOARD_LED_RED_GPIO_PORT, 1U << BOARD_LED_RED_GPIO_PIN) /*!< Turn on target LED_RED1 */
+    GPIO_PortClear(BOARD_LED_RED_GPIO_PORT, 1U << BOARD_LED_RED_GPIO_PIN)  /*!< Turn on target LED_RED1 */
 #define LED_RED1_OFF() \
-    GPIO_PortSet(BOARD_LED_RED_GPIO_PORT, 1U << BOARD_LED_RED_GPIO_PIN) /*!< Turn off target LED_RED1 */
+    GPIO_PortSet(BOARD_LED_RED_GPIO_PORT, 1U << BOARD_LED_RED_GPIO_PIN)    /*!< Turn off target LED_RED1 */
 #define LED_RED1_TOGGLE() \
     GPIO_PortToggle(BOARD_LED_RED_GPIO_PORT, 1U << BOARD_LED_RED_GPIO_PIN) /*!< Toggle on target LED_RED1 */
 
@@ -87,22 +87,22 @@
     GPIOB->PDDR |=                                                              \
         (1U << (BOARD_LED_GREEN_GPIO_PIN + ((BOARD_LED_GREEN_GPIO_PORT % 4) * 8))) /*!< Enable target LED_GREEN1 */
 #define LED_GREEN1_ON() \
-    GPIO_PortClear(BOARD_LED_GREEN_GPIO_PORT, 1U << BOARD_LED_GREEN_GPIO_PIN) /*!< Turn on target LED_GREEN1 */
+    GPIO_PortClear(BOARD_LED_GREEN_GPIO_PORT, 1U << BOARD_LED_GREEN_GPIO_PIN)      /*!< Turn on target LED_GREEN1 */
 #define LED_GREEN1_OFF() \
-    GPIO_PortSet(BOARD_LED_GREEN_GPIO_PORT, 1U << BOARD_LED_GREEN_GPIO_PIN) /*!< Turn off target LED_GREEN1 */
+    GPIO_PortSet(BOARD_LED_GREEN_GPIO_PORT, 1U << BOARD_LED_GREEN_GPIO_PIN)        /*!< Turn off target LED_GREEN1 */
 #define LED_GREEN1_TOGGLE() \
-    GPIO_PortToggle(BOARD_LED_GREEN_GPIO_PORT, 1U << BOARD_LED_GREEN_GPIO_PIN) /*!< Toggle on target LED_GREEN1 */
+    GPIO_PortToggle(BOARD_LED_GREEN_GPIO_PORT, 1U << BOARD_LED_GREEN_GPIO_PIN)     /*!< Toggle on target LED_GREEN1 */
 
 #define LED_BLUE_INIT(output)                                                 \
     GPIO_PinWrite(BOARD_LED_BLUE_GPIO_PORT, BOARD_LED_BLUE_GPIO_PIN, output); \
     GPIOB->PDDR |=                                                            \
         (1U << (BOARD_LED_BLUE_GPIO_PIN + ((BOARD_LED_BLUE_GPIO_PORT % 4) * 8))) /*!< Enable target LED_BLUE */
 #define LED_BLUE_ON() \
-    GPIO_PortClear(BOARD_LED_BLUE_GPIO_PORT, 1U << BOARD_LED_BLUE_GPIO_PIN) /*!< Turn on target LED_BLUE */
+    GPIO_PortClear(BOARD_LED_BLUE_GPIO_PORT, 1U << BOARD_LED_BLUE_GPIO_PIN)      /*!< Turn on target LED_BLUE */
 #define LED_BLUE_OFF() \
-    GPIO_PortSet(BOARD_LED_BLUE_GPIO_PORT, 1U << BOARD_LED_BLUE_GPIO_PIN) /*!< Turn off target LED_BLUE */
+    GPIO_PortSet(BOARD_LED_BLUE_GPIO_PORT, 1U << BOARD_LED_BLUE_GPIO_PIN)        /*!< Turn off target LED_BLUE */
 #define LED_BLUE_TOGGLE() \
-    GPIO_PortToggle(BOARD_LED_BLUE_GPIO_PORT, 1U << BOARD_LED_BLUE_GPIO_PIN) /*!< Toggle on target LED_BLUE */
+    GPIO_PortToggle(BOARD_LED_BLUE_GPIO_PORT, 1U << BOARD_LED_BLUE_GPIO_PIN)     /*!< Toggle on target LED_BLUE */
 
 #if defined(__cplusplus)
 extern "C" {

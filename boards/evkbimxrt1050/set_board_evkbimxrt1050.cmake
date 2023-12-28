@@ -49,7 +49,7 @@ if (CONFIG_USE_driver_xip_board_evkbimxrt1050)
 
 message("driver_xip_board_evkbimxrt1050 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_common AND (CONFIG_BOARD STREQUAL evkbimxrt1050))
+if(CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/xip/evkbimxrt1050_flexspi_nor_config.c

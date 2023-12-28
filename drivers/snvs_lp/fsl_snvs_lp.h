@@ -1,13 +1,13 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017-2022, NXP
+ * Copyright 2017-2023, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SNVS_LP_H_
-#define _FSL_SNVS_LP_H_
+#ifndef FSL_SNVS_LP_H_
+#define FSL_SNVS_LP_H_
 
 #include "fsl_common.h"
 
@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-#define FSL_SNVS_LP_DRIVER_VERSION (MAKE_VERSION(2, 4, 5)) /*!< Version 2.4.5 */
-/*@}*/
+/*! @{ */
+#define FSL_SNVS_LP_DRIVER_VERSION (MAKE_VERSION(2, 4, 6)) /*!< Version 2.4.6 */
+/*! @} */
 
 /*! @brief Define of SNVS_LP Zeroizable Master Key registers */
 #define SNVS_ZMK_REG_COUNT 8U /* 8 Zeroizable Master Key registers. */
@@ -730,4 +730,4 @@ status_t SNVS_LP_SSM_State_Transition(SNVS_Type *base);
 
 /*! @}*/
 
-#endif /* _FSL_SNVS_LP_H_ */
+#endif /* FSL_SNVS_LP_H_ */

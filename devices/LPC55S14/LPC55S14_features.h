@@ -1,15 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2019-12-03
-**     Build:               b220725
+**     Build:               b231016
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2023 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,12 +31,12 @@
 #define FSL_FEATURE_SOC_LPC_CAN_COUNT (1)
 /* @brief CASPER availability on the SoC. */
 #define FSL_FEATURE_SOC_CASPER_COUNT (1)
+/* @brief CDOG availability on the SoC. */
+#define FSL_FEATURE_SOC_CDOG_COUNT (1)
 /* @brief CRC availability on the SoC. */
 #define FSL_FEATURE_SOC_CRC_COUNT (1)
 /* @brief CTIMER availability on the SoC. */
 #define FSL_FEATURE_SOC_CTIMER_COUNT (5)
-/* @brief CDOG availability on the SoC. */
-#define FSL_FEATURE_SOC_CDOG_COUNT (1)
 /* @brief DMA availability on the SoC. */
 #define FSL_FEATURE_SOC_DMA_COUNT (2)
 /* @brief FLASH availability on the SoC. */
@@ -140,6 +138,8 @@
 #define FSL_FEATURE_LPADC_HAS_CFG_CALOFS (0)
 /* @brief Has offset trim (register OFSTRIM). */
 #define FSL_FEATURE_LPADC_HAS_OFSTRIM (1)
+/* @brief OFSTRIM availability on the SoC. */
+#define FSL_FEATURE_LPADC_OFSTRIM_COUNT (2)
 /* @brief Has Trigger status register. */
 #define FSL_FEATURE_LPADC_HAS_TSTAT (1)
 /* @brief Has power select (bitfield CFG[PWRSEL]). */
@@ -154,6 +154,28 @@
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE (0)
 /* @brief Conversion averaged bitfiled width. */
 #define FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH (3)
+/* @brief Has B side channels. */
+#define FSL_FEATURE_LPADC_HAS_B_SIDE_CHANNELS (1)
+/* @brief Indicate whether the LPADC STAT register has trigger exception interrupt function (bitfield STAT[TEXC_INT]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_TEXC_INT (1)
+/* @brief Indicate whether the LPADC STAT register has trigger completion interrupt function (bitfield STAT[TCOMP_INT]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_TCOMP_INT (1)
+/* @brief Indicate whether the LPADC STAT register has calibration ready function (bitfield STAT[CAL_RDY]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_CAL_RDY (1)
+/* @brief Indicate whether the LPADC STAT register has ADC active function (bitfield STAT[ADC_ACTIVE]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_ADC_ACTIVE (1)
+/* @brief Indicate whether the LPADC IE register has trigger exception interrupt enable function (bitfield IE[TEXC_IE]). */
+#define FSL_FEATURE_LPADC_HAS_IE_TEXC_IE (1)
+/* @brief Indicate whether the LPADC IE register has trigger completion interrupt enable function (bitfield IE[TCOMP_IE]). */
+#define FSL_FEATURE_LPADC_HAS_IE_TCOMP_IE (1)
+/* @brief Indicate whether the LPADC CFG register has trigger resume/restart enable function (bitfield CFG[TRES]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_TRES (1)
+/* @brief Indicate whether the LPADC CFG register has trigger command resume/restart enable function (bitfield CFG[TCMDRES]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_TCMDRES (1)
+/* @brief Indicate whether the LPADC CFG register has high priority trigger exception disable function (bitfield CFG[HPT_EXDI]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_HPT_EXDI (1)
+/* @brief Indicate LPADC CFG register TPRICTRL bitfield width. */
+#define FSL_FEATURE_LPADC_CFG_TPRICTRL_BITFIELD_WIDTH (2)
 /* @brief Has internal temperature sensor. */
 #define FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR (1)
 /* @brief Temperature sensor parameter A (slope). */
@@ -191,6 +213,10 @@
 #define FSL_FEATURE_CASPER_RAM_BASE_ADDRESS (0x04000000)
 /* @brief HW interleaving of the CASPER dedicated RAM */
 #define FSL_FEATURE_CASPER_RAM_HW_INTERLEAVE (1)
+
+/* CDOG module features */
+
+/* No feature definitions */
 
 /* CTIMER module features */
 
@@ -317,6 +343,13 @@
 /* @brief I2S has DMIC interconnection */
 #define FSL_FEATURE_FLEXCOMM_I2S_HAS_DMIC_INTERCONNECTION (0)
 
+/* INPUTMUX module features */
+
+/* @brief Inputmux has DMA Request Enable */
+#define FSL_FEATURE_INPUTMUX_HAS_SIGNAL_ENA (0)
+/* @brief Inputmux has channel mux control */
+#define FSL_FEATURE_INPUTMUX_HAS_CHANNEL_MUX (0)
+
 /* IOCON module features */
 
 /* @brief Func bit field width */
@@ -357,10 +390,15 @@
 #define FSL_FEATURE_PUF_HAS_SHIFT_STATUS (1)
 /* @brief PUF has dedicated SRAM control */
 #define FSL_FEATURE_PUF_HAS_SRAM_CTRL (1)
+/* @brief Puf Activation Code Address. */
+#define FSL_FEATURE_PUF_ACTIVATION_CODE_ADDRESS (255488)
+/* @brief Puf Activation Code Size. */
+#define FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE (1192)
 
 /* RTC module features */
 
-/* No feature definitions */
+/* @brief Has SUBSEC Register (register SUBSEC) */
+#define FSL_FEATURE_RTC_HAS_SUBSEC (1)
 
 /* SCT module features */
 

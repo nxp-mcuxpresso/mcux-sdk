@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_ENET_H_
-#define _FSL_ENET_H_
+#ifndef FSL_ENET_H_
+#define FSL_ENET_H_
 
 #include "fsl_common.h"
 
@@ -19,13 +19,13 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
-/*@}*/
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 3, 4))
+/*! @} */
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */
-/*@{*/
+/*! @{ */
 /*! @brief Defines for read format. */
 #define ENET_RXDESCRIP_RD_BUFF1VALID_MASK (1UL << 24) /*!< Buffer1 address valid. */
 #define ENET_RXDESCRIP_RD_BUFF2VALID_MASK (1UL << 25) /*!< Buffer2 address valid. */
@@ -52,10 +52,10 @@
 #define ENET_RXDESCRIP_WR_FD_MASK         (1UL << 29)
 #define ENET_RXDESCRIP_WR_CTXT_MASK       (1UL << 30)
 #define ENET_RXDESCRIP_WR_OWN_MASK        (1UL << 31)
-/*@}*/
+/*! @} */
 
 /*! @name Control and status bit masks of the transmit buffer descriptor. */
-/*@{*/
+/*! @{ */
 /*! @brief Defines for read format. */
 #define ENET_TXDESCRIP_RD_BL1_MASK  (0x3fffU)
 #define ENET_TXDESCRIP_RD_BL2_MASK  (ENET_TXDESCRIP_RD_BL1_MASK << 16)
@@ -79,10 +79,10 @@
 
 /*! @brief Defines for write back format. */
 #define ENET_TXDESCRIP_WB_TTSS_MASK (1UL << 17)
-/*@}*/
+/*! @} */
 
 /*! @name Bit mask for interrupt enable type. */
-/*@{*/
+/*! @{ */
 #define ENET_ABNORM_INT_MASK                                                      \
     (ENET_DMA_CH_DMA_CHX_INT_EN_TSE_MASK | ENET_DMA_CH_DMA_CHX_INT_EN_RBUE_MASK | \
      ENET_DMA_CH_DMA_CHX_INT_EN_RSE_MASK | ENET_DMA_CH_DMA_CHX_INT_EN_RWTE_MASK | \
@@ -90,10 +90,10 @@
 #define ENET_NORM_INT_MASK                                                        \
     (ENET_DMA_CH_DMA_CHX_INT_EN_TIE_MASK | ENET_DMA_CH_DMA_CHX_INT_EN_TBUE_MASK | \
      ENET_DMA_CH_DMA_CHX_INT_EN_RIE_MASK | ENET_DMA_CH_DMA_CHX_INT_EN_ERIE_MASK)
-/*@}*/
+/*! @} */
 
 /*! @name Defines some Ethernet parameters. */
-/*@{*/
+/*! @{ */
 #define ENET_FRAME_MAX_FRAMELEN      (1518U) /*!< Default maximum ethernet frame size. */
 #define ENET_FCS_LEN                 (4U)    /*!< Ethernet Rx frame FCS length. */
 #define ENET_ADDR_ALIGNMENT          (0x3U)  /*!< Recommended ethernet buffer alignment. */
@@ -104,7 +104,7 @@
 #define ENET_MACINT_ENUM_OFFSET      (16U)   /*!< The offset for mac interrupt in enum type. */
 #define ENET_FRAME_TX_LEN_LIMITATION (ENET_TXDESCRIP_RD_BL1_MASK) /*!< The Tx frame length software limitation. */
 #define ENET_FRAME_RX_ERROR_BITS(x)  (((x) >> 19U) & 0x3FU)       /*!< The Rx frame error bits field. */
-/*@}*/
+/*! @} */
 
 /*! @brief Defines the status return codes for transaction. */
 enum
@@ -692,7 +692,7 @@ void ENET_StartRxTx(ENET_Type *base, uint8_t txRingNum, uint8_t rxRingNum);
  */
 void ENET_SetISRHandler(ENET_Type *base, enet_isr_t ISRHandler);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name MII interface operation
@@ -787,7 +787,7 @@ status_t ENET_MDIOWrite(ENET_Type *base, uint8_t phyAddr, uint8_t regAddr, uint1
  * @return kStatus_Timeout  MDIO access timeout.
  */
 status_t ENET_MDIORead(ENET_Type *base, uint8_t phyAddr, uint8_t regAddr, uint16_t *pData);
-/* @} */
+/*! @} */
 
 /*!
  * @name Other basic operation
@@ -886,7 +886,7 @@ static inline void ENET_ExitPowerDown(ENET_Type *base)
     base->MAC_CONFIG |= ENET_MAC_CONFIG_TE_MASK;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts.
@@ -982,7 +982,7 @@ static inline uint32_t ENET_GetMacInterruptStatus(ENET_Type *base)
  */
 void ENET_ClearMacInterruptStatus(ENET_Type *base, uint32_t mask);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Functional operation.
@@ -1103,7 +1103,7 @@ static inline uint32_t ENET_GetRxDescriptor(enet_rx_bd_struct_t *rxDesc)
 void ENET_UpdateRxDescriptor(
     enet_rx_bd_struct_t *rxDesc, void *buffer1, void *buffer2, bool intEnable, bool doubleBuffEnable);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Transactional operation
@@ -1202,10 +1202,7 @@ status_t ENET_ReadFrame(ENET_Type *base,
  * this function, driver will allocate new buffers for the BDs whose buffers have been taken by application.
  * @note This function will drop current frame and update related BDs as available for DMA if new buffers allocating
  * fails. Application must provide a memory pool including at least BD number + 1 buffers(+2 if enable double buffer)
- * to make this function work normally. If user calls this function in Rx interrupt handler, be careful that this
- * function makes Rx BD ready with allocating new buffer(normal) or updating current BD(out of memory). If there's
- * always new Rx frame input, Rx interrupt will be triggered forever. Application need to disable Rx interrupt according
- * to specific design in this case.
+ * to make this function work normally.
  *
  * @param base   ENET peripheral base address.
  * @param handle The ENET handler pointer. This is the same handler pointer used in the ENET_Init.
@@ -1259,7 +1256,7 @@ void ENET_ReclaimTxDescriptor(ENET_Type *base, enet_handle_t *handle, uint8_t ch
  */
 void ENET_IRQHandler(ENET_Type *base, enet_handle_t *handle);
 
-/* @} */
+/*! @} */
 
 #ifdef ENET_PTP1588FEATURE_REQUIRED
 /*!
@@ -1327,7 +1324,7 @@ void ENET_Ptp1588GetTimerNoIrqDisable(ENET_Type *base, uint64_t *second, uint32_
  */
 void ENET_Ptp1588GetTimer(ENET_Type *base, uint64_t *second, uint32_t *nanosecond);
 #endif /* ENET_PTP1588FEATURE_REQUIRED */
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -1335,4 +1332,4 @@ void ENET_Ptp1588GetTimer(ENET_Type *base, uint64_t *second, uint32_t *nanosecon
 
 /*! @}*/
 
-#endif /* _FSL_ENET_H_ */
+#endif /* FSL_ENET_H_ */

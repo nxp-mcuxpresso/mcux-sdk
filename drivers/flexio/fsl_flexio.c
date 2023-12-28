@@ -20,6 +20,12 @@
 /*< @brief user configurable flexio handle count. */
 #define FLEXIO_HANDLE_COUNT 2
 
+#if defined(FLEXIO_RSTS)
+#define FLEXIO_RESETS_ARRAY FLEXIO_RSTS
+#elif defined(FLEXIO_RSTS_N)
+#define FLEXIO_RESETS_ARRAY FLEXIO_RSTS_N
+#endif
+
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -42,6 +48,11 @@ static flexio_isr_t s_flexioIsr[FLEXIO_HANDLE_COUNT];
 
 /* FlexIO common IRQ Handler. */
 static void FLEXIO_CommonIRQHandler(void);
+
+#if defined(FLEXIO_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_flexioResets[] = FLEXIO_RESETS_ARRAY;
+#endif
 
 /*******************************************************************************
  * Codes
@@ -95,6 +106,10 @@ void FLEXIO_Init(FLEXIO_Type *base, const flexio_config_t *userConfig)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     CLOCK_EnableClock(s_flexioClocks[FLEXIO_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(FLEXIO_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_flexioResets[FLEXIO_GetInstance(base)]);
+#endif
 
     FLEXIO_Reset(base);
 

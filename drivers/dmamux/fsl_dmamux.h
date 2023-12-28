@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_DMAMUX_H_
-#define _FSL_DMAMUX_H_
+#ifndef FSL_DMAMUX_H_
+#define FSL_DMAMUX_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief DMAMUX driver version 2.1.0. */
 #define FSL_DMAMUX_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
-/*@}*/
+/*! @} */
 
 /*******************************************************************************
  * API
@@ -58,7 +58,7 @@ void DMAMUX_Init(DMAMUX_Type *base);
  */
 void DMAMUX_Deinit(DMAMUX_Type *base);
 
-/* @} */
+/*! @} */
 /*!
  * @name DMAMUX Channel Operation
  * @{
@@ -179,12 +179,12 @@ static inline void DMAMUX_EnableAlwaysOn(DMAMUX_Type *base, uint32_t channel, bo
 }
 #endif /* FSL_FEATURE_DMAMUX_HAS_A_ON */
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */
 
-/* @} */
+/*! @} */
 
-#endif /* _FSL_DMAMUX_H_ */
+#endif /* FSL_DMAMUX_H_ */

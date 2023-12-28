@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_CACHE_H_
-#define _FSL_CACHE_H_
+#ifndef FSL_CACHE_H_
+#define FSL_CACHE_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief cache driver version. */
 #define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
-/*@}*/
+/*! @} */
 
 /*! @brief code bus cache line size is equal to system bus line size, so the unified I/D cache line size equals too. */
 #define L1CODEBUSCACHE_LINESIZE_BYTE \
@@ -215,7 +215,7 @@ static inline void L1CACHE_EnableSystemCacheWriteBuffer(bool enable)
         LMEM->PSCCR &= ~LMEM_PSCCR_ENWRBUF_MASK;
     }
 }
-/*@}*/
+/*! @} */
 #endif /* FSL_FEATURE_LMEM_HAS_SYSTEMBUS_CACHE */
 
 /*!
@@ -261,7 +261,7 @@ void L1CACHE_CleanDCacheByRange(uint32_t address, uint32_t size_byte);
  * @note The start address and size_byte should be 16-Byte(FSL_FEATURE_L1DCACHE_LINESIZE_BYTE) aligned.
  */
 void L1CACHE_CleanInvalidateDCacheByRange(uint32_t address, uint32_t size_byte);
-/*@}*/
+/*! @} */
 #endif /* FSL_FEATURE_SOC_LMEM_COUNT == 1 */
 
 /*!
@@ -329,7 +329,7 @@ static inline void DCACHE_CleanInvalidateByRange(uint32_t address, uint32_t size
     L1CACHE_CleanInvalidateDCacheByRange(address, size_byte);
 }
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -337,4 +337,4 @@ static inline void DCACHE_CleanInvalidateByRange(uint32_t address, uint32_t size
 
 /*! @}*/
 
-#endif /* _FSL_CACHE_H_*/
+#endif /* FSL_CACHE_H_*/

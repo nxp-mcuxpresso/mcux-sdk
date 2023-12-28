@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_TRGMUX_H_
-#define _FSL_TRGMUX_H_
+#ifndef FSL_TRGMUX_H_
+#define FSL_TRGMUX_H_
 
 #include "fsl_common.h"
 
@@ -19,10 +19,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief TRGMUX driver version. */
 #define FSL_TRGMUX_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief TRGMUX configure status. */
 enum
@@ -91,7 +91,7 @@ static inline void TRGMUX_LockRegister(TRGMUX_Type *base, uint32_t index)
  */
 status_t TRGMUX_SetTriggerSource(TRGMUX_Type *base, uint32_t index, trgmux_trigger_input_t input, uint32_t trigger_src);
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -99,4 +99,4 @@ status_t TRGMUX_SetTriggerSource(TRGMUX_Type *base, uint32_t index, trgmux_trigg
 
 /*! @}*/
 
-#endif /* _FSL_TRGMUX_H_*/
+#endif /* FSL_TRGMUX_H_*/

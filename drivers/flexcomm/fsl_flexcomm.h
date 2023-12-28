@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_FLEXCOMM_H_
-#define _FSL_FLEXCOMM_H_
+#ifndef FSL_FLEXCOMM_H_
+#define FSL_FLEXCOMM_H_
 
 #include "fsl_common.h"
 
@@ -16,10 +16,10 @@
  */
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief FlexCOMM driver version 2.0.2. */
 #define FSL_FLEXCOMM_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
-/*@}*/
+/*! @} */
 
 /*! @brief FLEXCOMM peripheral modes. */
 typedef enum
@@ -59,6 +59,6 @@ void FLEXCOMM_SetIRQHandler(void *base, flexcomm_irq_handler_t handler, void *fl
 }
 #endif
 
-/*@}*/
+/*! @} */
 
-#endif /* _FSL_FLEXCOMM_H_*/
+#endif /* FSL_FLEXCOMM_H_*/

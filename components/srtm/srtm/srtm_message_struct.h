@@ -22,10 +22,10 @@
  */
 typedef enum _srtm_message_type
 {
-    SRTM_MessageTypeRequest = 0x00U, /*!< Request message */
-    SRTM_MessageTypeResponse,        /*!< Response message for certain Request */
-    SRTM_MessageTypeNotification,    /*!< Notification message that doesn't require response */
-    SRTM_MessageTypeCommLast,        /*!< Last value of communication message */
+    SRTM_MessageTypeRequest = 0x00U,  /*!< Request message */
+    SRTM_MessageTypeResponse,         /*!< Response message for certain Request */
+    SRTM_MessageTypeNotification,     /*!< Notification message that doesn't require response */
+    SRTM_MessageTypeCommLast,         /*!< Last value of communication message */
 
     SRTM_MessageTypeProcedure = 0x40, /*!< Local procedure */
     SRTM_MessageTypeRawData   = 0x41, /*!< Raw data message */

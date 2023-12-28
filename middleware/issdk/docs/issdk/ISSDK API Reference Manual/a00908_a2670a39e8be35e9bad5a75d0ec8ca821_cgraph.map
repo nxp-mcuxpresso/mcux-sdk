@@ -1,9 +1,0 @@
-<map id="fRunAccelCalibration" name="fRunAccelCalibration">
-<area shape="rect" id="node2" href="$a00899.html#a480280c72c7243e5c192cab628e0a38d" title="Android accelerometer 3DOF tilt function computing, rotation matrix fR. " alt="" coords="229,5,349,32"/>
-<area shape="rect" id="node3" href="$a00899.html#addec350696b9ab89918808b56292bd9a" title="Aerospace NED accelerometer 3DOF tilt function, computing rotation matrix fR. " alt="" coords="237,56,340,83"/>
-<area shape="rect" id="node4" href="$a00899.html#a292e27a8f966749f38e5e7936b05e29b" title="Windows 8 accelerometer 3DOF tilt function computing, rotation matrix fR. " alt="" coords="235,107,342,133"/>
-<area shape="rect" id="node5" href="$a00905.html#a752887e826809837549c391aa3a4cbaf" title="calculate the 10 element calibration from the available measurements " alt="" coords="196,157,381,184"/>
-<area shape="rect" id="node6" href="$a00905.html#a32c25ed3da9ec249bba57bbb1ab2d091" title="calculate the 4 element calibration from the available measurements " alt="" coords="199,208,378,235"/>
-<area shape="rect" id="node7" href="$a00905.html#a2f17e091698125acbf0cdb780c2c93da" title="calculate the 7 element calibration from the available measurements " alt="" coords="199,259,378,285"/>
-<area shape="rect" id="node8" href="$a00887.html#ae6e2a4eb7863e79c5e8146dd27f9d608" title="function multiplies the 3x1 vector V by a 3x3 matrix A " alt="" coords="241,309,336,336"/>
-</map>

@@ -293,6 +293,9 @@
 #  # description: RPMsg-Lite XOS environment layer sources
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_xos true)
 
+#  # description: RPMsg-Lite Azure RTOS environment sources
+#  set(CONFIG_USE_middleware_multicore_rpmsg_lite_azurertos true)
+
 #  # description: RPMsg-Lite for evkmimx8mq baremetal application
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_imx8mq_m4_bm true)
 
@@ -309,6 +312,12 @@
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite true)
 
 #set.middleware.usb
+#  # description: USB device phydcd config header
+#  set(CONFIG_USE_middleware_usb_phydcd_config_header true)
+
+#  # description: USB device hsdcd config header
+#  set(CONFIG_USE_middleware_usb_hsdcd_config_header true)
+
 #  # description: Middleware usb common_header
 #  set(CONFIG_USE_middleware_usb_common_header true)
 

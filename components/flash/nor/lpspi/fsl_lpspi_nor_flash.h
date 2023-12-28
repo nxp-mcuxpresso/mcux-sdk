@@ -55,6 +55,22 @@ status_t Nor_Flash_Erase_Block_32K(nor_handle_t *handle, uint32_t address);
  */
 status_t Nor_Flash_Erase_Block_64K(nor_handle_t *handle, uint32_t address);
 
+/*!
+ * @brief Prepare the NOR flash for low power entry
+ *
+ * @param handle The NOR Flash handler.
+ * @retval status_t execution status
+ */
+status_t Nor_Flash_Enter_Lowpower(nor_handle_t *handle);
+
+/*!
+ * @brief Prepare the NOR flash for low power exit
+ *
+ * @param handle The NOR Flash handler.
+ * @retval status_t execution status
+ */
+status_t Nor_Flash_Exit_Lowpower(nor_handle_t *handle);
+
 #ifdef __cplusplus
 }
 #endif

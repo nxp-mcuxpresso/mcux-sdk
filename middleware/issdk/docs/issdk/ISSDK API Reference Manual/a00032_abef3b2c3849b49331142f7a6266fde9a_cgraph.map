@@ -1,5 +1,0 @@
-<map id="FXAS21002_I2C_Configure" name="FXAS21002_I2C_Configure">
-<area shape="rect" id="node2" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="588,28,649,55"/>
-<area shape="rect" id="node3" href="$a00167.html#ad08d2c7880bc5f09fd27eee247311448" title="The interface function to write a sensor register. " alt="" coords="405,28,540,55"/>
-<area shape="rect" id="node4" href="$a00182.html#aaac4c4f34b4dd37d3f202a1dbb4b000b" title="Write register data to a sensor. " alt="" coords="231,79,357,106"/>
-</map>

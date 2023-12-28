@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -16,9 +16,13 @@
 #define FSL_COMPONENT_ID "platform.drivers.itrc"
 #endif
 
-#define b11 0x3u
+#define b11 0x3UL
 #define b10 0x2u
 #define b01 0x1u
+
+#define OUT_SEL_0_COUNT (16u)
+#define OUT_SEL_1_COUNT (32u)
+#define OUT_SEL_2_COUNT (48u)
 
 /* Value used to trigger SW Events */
 #define SW_EVENT_VAL 0x5AA55AA5u
@@ -54,7 +58,7 @@ __WEAK void ITRC0_DriverIRQHandler(void)
 status_t ITRC_ClearStatus(ITRC_Type *base, uint32_t word)
 {
     /* If reserved/unused bits in STATUS register are set in 'word' parameter, return kStatus_InvalidArgument */
-    if ((word & ~(IN_EVENTS_MASK | OUT_ACTIONS_MASK)) != 0u)
+    if ((word & ~(IN_0_15_EVENTS_MASK | OUT_ACTIONS_MASK)) != 0u)
     {
         return kStatus_InvalidArgument;
     }
@@ -65,16 +69,71 @@ status_t ITRC_ClearStatus(ITRC_Type *base, uint32_t word)
 }
 
 /*!
- * brief Clear all ITRC status
+ * brief Get ITRC Status
  *
- * This clears all event and action status.
+ * This function returns ITRC STATUS1 register value.
  *
  * param base ITRC peripheral base address
- * return Status of the ITRC
+ * return Value of ITRC STATUS register
+ */
+uint32_t ITRC_GetStatus(ITRC_Type *base)
+{
+    return base->STATUS;
+}
+
+#if defined(ITRC_STATUS1_IN16_STATUS_MASK)
+/*!
+ * brief Clear ITRC status 1
+ *
+ * This function clears corresponding ITRC event or action in STATUS1 register.
+ *
+ * param base ITRC peripheral base address
+ * param word 32bit word represent corresponding event/action in STATUS1 register to be cleared (see
+ * ITRC_STATUS_INx/OUTx_STATUS)
+ * return kStatus_Success if success, kStatus_InvalidArgument otherwise
+ */
+status_t ITRC_ClearStatus1(ITRC_Type *base, uint32_t word)
+{
+    /* If reserved/unused bits in STATUS register are set in 'word' parameter, return kStatus_InvalidArgument */
+    if ((word & ~(IN_16_47_EVENTS_MASK)) != 0u)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    base->STATUS1 |= word;
+
+    return kStatus_Success;
+}
+
+/*!
+ * brief Get ITRC Status 1
+ *
+ * This function returns ITRC STATUS1 register value.
+ *
+ * param base ITRC peripheral base address
+ * return Value of ITRC STATUS1 register
+ */
+uint32_t ITRC_GetStatus1(ITRC_Type *base)
+{
+    return base->STATUS1;
+}
+
+#endif /* defined(ITRC_STATUS1_IN16_STATUS_MASK) */
+
+/*!
+ * brief Clear all ITRC status
+ *
+ * This clears all event and action in STATUS and STATUS1 registers.
+ *
+ * param base ITRC peripheral base address
+ * return kStatus_Success
  */
 status_t ITRC_ClearAllStatus(ITRC_Type *base)
 {
-    base->STATUS |= (IN_EVENTS_MASK | OUT_ACTIONS_MASK);
+    base->STATUS |= (IN_0_15_EVENTS_MASK | OUT_ACTIONS_MASK);
+#if defined(ITRC_STATUS1_IN16_STATUS_MASK)
+    base->STATUS1 |= (IN_16_47_EVENTS_MASK);
+#endif /* defined(ITRC_STATUS1_IN16_STATUS_MASK) */
 
     return kStatus_Success;
 }
@@ -147,65 +206,63 @@ status_t ITRC_SetActionToEvent(
     }
 
     /* Compute index for INx_SEL0/1 bit-field within OUTy_SEL0/1 registers */
-    index = 2u * in;
-    /* Prepare AND mask to set INx_SEL0 accordingly */
-    select_AND_mask = ~(b11 << index);
-
-    /* Last possible index in OUTx_SELy registers is 30 */
-    if (index > 30u)
+    if ((uint32_t)in < OUT_SEL_0_COUNT)
+    {
+        index = 2u * (uint32_t)in;
+    }
+    else if (OUT_SEL_0_COUNT <= (uint32_t)in && (uint32_t)in < OUT_SEL_1_COUNT)
+    {
+        index = 2u * ((uint32_t)in - OUT_SEL_0_COUNT);
+    }
+    else if (OUT_SEL_1_COUNT <= (uint32_t)in && (uint32_t)in < OUT_SEL_2_COUNT)
+    {
+        index = 2u * ((uint32_t)in - OUT_SEL_1_COUNT);
+    }
+    else
     {
         return kStatus_InvalidArgument;
     }
 
-    switch (out)
+    /* Prepare AND mask to set INx_SEL0 accordingly */
+    select_AND_mask = ~(uint32_t)(b11 << index);
+
+    /* Configure OUT action for IN event */
+    for (uint8_t i = (uint8_t)kITRC_Irq; i < ITRC_OUT_COUNT; i++)
     {
-        case kITRC_Irq:
-            base->OUT0_SEL0 = (base->OUT0_SEL0 & select_AND_mask) | (sel0 << index);
-            base->OUT0_SEL1 |= sel1 << index;
-            break;
-        case kITRC_CssReset:
-            base->OUT1_SEL0 = (base->OUT1_SEL0 & select_AND_mask) | (sel0 << index);
-            base->OUT1_SEL1 |= sel1 << index;
-            break;
-
-        case kITRC_PufZeroize:
-            base->OUT2_SEL0 = (base->OUT2_SEL0 & select_AND_mask) | (sel0 << index);
-            base->OUT2_SEL1 |= sel1 << index;
-            break;
-
-        case kITRC_RamZeroize:
-            base->OUT3_SEL0 = (base->OUT3_SEL0 & select_AND_mask) | (sel0 << index);
-            base->OUT3_SEL1 |= sel1 << index;
-            break;
-
-        case kITRC_ChipReset:
-            base->OUT4_SEL0 = (base->OUT4_SEL0 & select_AND_mask) | (sel0 << index);
-            base->OUT4_SEL1 |= sel1 << index;
-            break;
-
-        case kITRC_TamperOut:
-            base->OUT5_SEL0 = (base->OUT5_SEL0 & select_AND_mask) | (sel0 << index);
-            base->OUT5_SEL1 |= sel1 << index;
-            break;
-        default:
-            /* This case shouldn't be reached. */
-            return kStatus_InvalidArgument;
+        /* Loop over all OUT actions, set only requested one */
+        if (i == (uint8_t)out)
+        {
+            if ((uint32_t)in < OUT_SEL_0_COUNT)
+            {
+                base->OUT_SEL[i][0] = (base->OUT_SEL[i][0] & select_AND_mask) | (sel0 << index);
+                base->OUT_SEL[i][1] |= sel1 << index;
+                break;
+            }
+#if defined(ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_COUNT)
+            else if (OUT_SEL_0_COUNT <= (uint32_t)in && (uint32_t)in < OUT_SEL_1_COUNT)
+            {
+                base->OUT_SEL_1[i][0] = (base->OUT_SEL[i][0] & select_AND_mask) | (sel0 << index);
+                base->OUT_SEL_1[i][1] |= sel1 << index;
+                break;
+            }
+#endif /* defined(OUT_SEL_1) */
+#if defined(ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_COUNT)
+            else if (OUT_SEL_1_COUNT <= (uint32_t)in && (uint32_t)in < OUT_SEL_2_COUNT)
+            {
+                base->OUT_SEL_2[i][0] = (base->OUT_SEL[i][0] & select_AND_mask) | (sel0 << index);
+                base->OUT_SEL_2[i][1] |= sel1 << index;
+                break;
+            }
+            else
+            {
+                /* All the cases have been listed above, this branch should not be reached. */
+                return kStatus_InvalidArgument;
+            }
+#endif /* defined(OUT_SEL_2) */
+        }
     }
 
     return kStatus_Success;
-}
-
-/*!
- * brief Get ITRC Status
- *
- * This function returns ITRC register status.
- *
- * param base ITRC peripheral base address
- * return Value of ITRC STATUS register
- */
-status_t ITRC_GetStatus(ITRC_Type *base)
-{
-    return base->STATUS;
 }
 
 /*!

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020-2021 NXP
+ *  Copyright 2020-2023 NXP
  *  All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-3-Clause
@@ -16,7 +16,9 @@
 #define CONFIG_MAX_AP_ENTRIES 30
 #endif
 
-#if defined(SD8978) || defined(SD8987) || defined(RW610)
+#define CONFIG_MAX_RESCAN_LIMIT 30
+
+#if defined(SD8978) || defined(SD8987) || defined(RW610) || defined(SD9177)
 #define CONFIG_5GHz_SUPPORT 1
 #endif
 
@@ -24,13 +26,23 @@
 #define CONFIG_SDIO_MULTI_PORT_RX_AGGR 1
 #endif
 
-#if defined(SD8987) || defined(RW610)
+#if defined(SD8987) || defined(RW610) || defined(SD9177)
 #define CONFIG_11AC
 #undef CONFIG_WMM
 #endif
 
+#if defined(SD9177)
+#undef CONFIG_WMM
+#undef CONFIG_SDIO_MULTI_PORT_TX_AGGR
+#define CONFIG_COMPRESS_TX_PWTBL
+#define CONFIG_COMPRESS_RU_TX_PWTBL
+#ifdef CONFIG_11AC
+#define CONFIG_11AX
+#endif
+#endif
+
 #if defined(RW610)
-#define PRINTF_FLOAT_ENABLE 1
+#define CONFIG_RW610_A1
 #define CONFIG_11AX
 #undef CONFIG_IMU_GDMA
 /* WMM options */
@@ -58,9 +70,7 @@
 #define CONFIG_WIFI_TX_PER_TRACK
 #define CONFIG_ROAMING
 #define CONFIG_HOST_SLEEP
-#ifdef CONFIG_POWER_MANAGER
-#undef CONFIG_POWER_MANAGER
-#endif
+#define CONFIG_POWER_MANAGER
 #define CONFIG_CSI
 #define CONFIG_WIFI_RESET
 #define CONFIG_NET_MONITOR
@@ -74,14 +84,53 @@
 #define CONFIG_11V
 #define CONFIG_COMPRESS_TX_PWTBL
 #define CONFIG_RX_ABORT_CFG
+#define CONFIG_RX_ABORT_CFG_EXT
 #define CONFIG_CCK_DESENSE_CFG
 #define CONFIG_11AX_TWT
 #define CONFIG_IPS
 #define CONFIG_MBO
+#define CONFIG_SUBSCRIBE_EVENT_SUPPORT
+#define CONFIG_WIFI_FORCE_RTS
+#define CONFIG_TX_AMPDU_PROT_MODE
+#define CONFIG_EU_VALIDATION
+#define CONFIG_TSP
+#define CONFIG_TX_RX_HISTOGRAM
+#define CONFIG_CLOUD_KEEP_ALIVE
+#define MULTI_BSSID_SUPPORT
+#define CONFIG_TURBO_MODE
 #endif
 
-//#define CONFIG_IPV6               1
-//#define CONFIG_MAX_IPV6_ADDRESSES 5
+// #define CONFIG_IPV6               1
+// #define CONFIG_MAX_IPV6_ADDRESSES 3
+
+#if defined(SD8978) || defined(SD8987) || defined(SD8801) || defined(SD9177)
+#define CONFIG_WIFI_CAPA        1
+#define CONFIG_ROAMING          1
+#define CONFIG_CLOUD_KEEP_ALIVE 1
+#define CONFIG_TURBO_MODE       1
+#if defined(SD8978) || defined(SD8987)
+#define CONFIG_AUTO_RECONNECT 1
+#undef CONFIG_WIFI_IND_DNLD
+#undef CONFIG_WIFI_IND_RESET
+#endif
+
+#if !defined(SD8801)
+#define CONFIG_EXT_SCAN_SUPPORT 1
+#define CONFIG_WIFI_EU_CRYPTO   1
+#if !defined(SD9177)
+#define CONFIG_11R 1
+#endif
+#define CONFIG_OWE 1
+#endif
+
+#undef CONFIG_HOST_SLEEP
+#undef CONFIG_MEF_CFG
+#undef CONFIG_FIPS
+
+#define CONFIG_11K 1
+#define CONFIG_11V 1
+
+#endif
 
 /* Logs */
 #define CONFIG_ENABLE_ERROR_LOGS   1
@@ -96,6 +145,7 @@
 #undef CONFIG_WIFI_EXTRA_DEBUG
 #undef CONFIG_WIFI_EVENTS_DEBUG
 #undef CONFIG_WIFI_CMD_RESP_DEBUG
+#undef CONFIG_WIFI_PS_DEBUG
 #undef CONFIG_WIFI_PKT_DEBUG
 #undef CONFIG_WIFI_SCAN_DEBUG
 #undef CONFIG_WIFI_IO_INFO_DUMP
@@ -104,9 +154,13 @@
 #undef CONFIG_WIFI_MEM_DEBUG
 #undef CONFIG_WIFI_AMPDU_DEBUG
 #undef CONFIG_WIFI_TIMER_DEBUG
-#undef CONFIG_WIFI_SDIO_DEBUG
 #undef CONFIG_WIFI_FW_DEBUG
+#undef CONFIG_WIFI_UAP_DEBUG
 #undef CONFIG_WPS_DEBUG
+#undef CONFIG_FW_VDLL_DEBUG
+#undef CONFIG_DHCP_SERVER_DEBUG
+#undef CONFIG_WIFI_SDIO_DEBUG
+#undef CONFIG_FWDNLD_IO_DEBUG
 
 /*
  * Heap debug options

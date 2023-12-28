@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SDMA_H_
-#define _FSL_SDMA_H_
+#ifndef FSL_SDMA_H_
+#define FSL_SDMA_H_
 
 #include "fsl_common.h"
 #include "fsl_sdma_script.h"
@@ -22,10 +22,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SDMA driver version */
-#define FSL_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 1)) /*!< Version 2.4.1. */
-/*@}*/
+#define FSL_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 2)) /*!< Version 2.4.2. */
+/*! @} */
 
 #ifndef SDMA_DRIVER_LOAD_RAM_SCRIPT
 #define SDMA_DRIVER_LOAD_RAM_SCRIPT (1)
@@ -335,11 +335,6 @@ typedef struct _sdma_handle
     uint8_t channel;                  /*!< SDMA channel number. */
     uint8_t priority;                 /*!< SDMA channel priority */
     uint8_t flags;                    /*!< The status of the current channel. */
-
-#if SDMA_DRIVER_LOAD_RAM_SCRIPT
-    bool isRamscriptLoaded; /*!< Flag to indicate the status of ram script */
-#endif
-
 } sdma_handle_t;
 
 /*******************************************************************************
@@ -400,7 +395,7 @@ void SDMA_GetDefaultConfig(sdma_config_t *config);
  */
 void SDMA_ResetModule(SDMAARM_Type *base);
 
-/* @} */
+/*! @} */
 /*!
  * @name SDMA Channel Operation
  * @{
@@ -429,7 +424,7 @@ static inline void SDMA_DisableChannelErrorInterrupts(SDMAARM_Type *base, uint32
     base->INTRMASK &= ~(1UL << channel);
 }
 
-/* @} */
+/*! @} */
 /*!
  * @name SDMA Buffer Descriptor Operation
  * @{
@@ -889,12 +884,12 @@ bool SDMA_IsPeripheralInSPBA(uint32_t addr);
  */
 void SDMA_HandleIRQ(sdma_handle_t *handle);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */
 
-/* @} */
+/*! @} */
 
-#endif /*_FSL_SDMA_H_*/
+#endif /*FSL_SDMA_H_*/

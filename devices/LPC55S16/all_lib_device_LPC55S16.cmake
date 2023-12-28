@@ -53,7 +53,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
@@ -73,7 +72,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_device_ip3511fs)
 #    include(utility_shell)
 #    include(driver_lpc_gpio)
-#    include(middleware_issdk_sensor_fxos8700)
 #    include(device_system)
 #    include(driver_lpadc)
 #    include(driver_rtt_LPC55S16)
@@ -92,7 +90,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_i2c)
 #    include(component_serial_manager)
 #    include(middleware_freertos-kernel_LPC55S16)
-#    include(middleware_issdk_sensor_fxas21002)
 #    include(middleware_usb_device_cdc_external)
 #    include(driver_lpc_dma)
 #    include(component_serial_manager_uart)
@@ -113,7 +110,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_panic)
 #    include(utility_assert)
 #    include(middleware_usb_host_ip3516hs_LPC55S16)
-#    include(middleware_issdk_sensor_interface_common)
 #    include(driver_rng_1)
 #    include(driver_wm8904)
 #    include(middleware_freertos-kernel_extension)
@@ -134,7 +130,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Driver_Include_Common OPTIONAL)
 #    include(driver_lpc_iocon)
 #    include(utility_debug_console_lite)
-#    include(middleware_issdk_sensor_fxls896xaf)
 #    include(component_osa_bm)
 #    include(middleware_usb_host_ohci)
 #    include(middleware_usb_host_common_header)
@@ -160,7 +155,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_cmsis_flexcomm_usart)
 #    include(driver_flexcomm_i2s_dma)
 #    include(component_mrt_adapter)
-#    include(middleware_issdk_drivers_gpio_lpc)
 #    include(driver_mcan)
 #    include(driver_cmp_1)
 #    include(driver_flexcomm_i2c_dma)
@@ -190,13 +184,10 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_stack_LPC55S16)
 #    include(middleware_mbedtls_lpc1)
 #    include(driver_flexcomm_usart_dma)
-#    include(middleware_issdk_drivers_systick_utils)
 #    include(driver_flexcomm_i2c_freertos)
-#    include(middleware_issdk_sensor_fxls8974cf)
 #    include(middleware_usb_host_phdc)
 #    include(driver_flexcomm_usart_freertos)
 #    include(middleware_azure_rtos_lx)
-#    include(middleware_issdk_drivers_cmsis_drivers)
 #    include(CMSIS_Device_API_OSTick OPTIONAL)
 #    include(middleware_azure_rtos_nxd_template_LPC55S16)
 #    include(component_wm8904_adapter)

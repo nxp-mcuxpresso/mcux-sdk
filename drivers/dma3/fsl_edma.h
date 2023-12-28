@@ -1,13 +1,13 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_EDMA_H_
-#define _FSL_EDMA_H_
+#ifndef FSL_EDMA_H_
+#define FSL_EDMA_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 2)) /*!< Version 2.2.2. */
-/*@}*/
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0)) /*!< Version 2.3.0. */
+/*! @} */
 
 /*! @brief eDMA transfer configuration */
 typedef enum _edma_transfer_size
@@ -119,9 +119,12 @@ enum
 /*! @brief eDMA channel system bus information, _edma_channel_sys_bus_info*/
 enum
 {
-    kEDMA_AttributeOutput       = DMA_CH_SBR_ATTR_MASK, /*!< DMA's AHB system bus attribute output value. */
-    kEDMA_PrivilegedAccessLevel = DMA_CH_SBR_PAL_MASK,  /*!< Privileged Access Level for DMA transfers. 0b - User
-                                                           protection level; 1b - Privileged protection level. */
+#if !(defined(FSL_FEATURE_EDMA_HAS_NO_CH_SBR_ATTR) && FSL_FEATURE_EDMA_HAS_NO_CH_SBR_ATTR)
+    kEDMA_AttributeOutput = DMA_CH_SBR_ATTR_MASK, /*!< DMA's AHB system bus attribute output value. */
+#endif
+
+    kEDMA_PrivilegedAccessLevel = DMA_CH_SBR_PAL_MASK, /*!< Privileged Access Level for DMA transfers. 0b - User
+                                                          protection level; 1b - Privileged protection level. */
     kEDMA_MasterId =
         DMA_CH_SBR_MID_MASK, /*!< DMA's master ID when channel is active and master ID replication is enabled. */
 };
@@ -340,7 +343,7 @@ static inline void EDMA_EnableAllChannelLink(DMA_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 /*!
  * @name eDMA Channel Operation
  * @{
@@ -565,7 +568,7 @@ void EDMA_DisableChannelInterrupts(DMA_Type *base, uint32_t channel, uint32_t ma
  */
 static inline void EDMA_SetChannelMux(DMA_Type *base, uint32_t channel, uint32_t mux)
 {
-    assert(channel < FSL_FEATURE_EDMA_MODULE_CHANNEL);
+    assert(channel < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL);
 
     if ((base->CH[channel].CH_MUX & DMA_CH_MUX_SRC_MASK) != DMA_CH_MUX_SRC(mux))
     {
@@ -574,7 +577,7 @@ static inline void EDMA_SetChannelMux(DMA_Type *base, uint32_t channel, uint32_t
 }
 #endif
 
-/* @} */
+/*! @} */
 /*!
  * @name eDMA TCD Operation
  * @{
@@ -909,7 +912,7 @@ void EDMA_PrepareTransferConfig(edma_transfer_config_t *config,
  * @param destWidth eDMA transfer destination address width(bytes).
  * @param bytesEachRequest eDMA transfer bytes per channel request.
  * @param transferBytes eDMA transfer bytes to be transferred.
- * @param type eDMA transfer type.
+ * @param transferType eDMA transfer type.
  * @note The data address and the data width must be consistent. For example, if the SRC
  *       is 4 bytes, the source address must be 4 bytes aligned, or it results in
  *       source address error (SAE).
@@ -921,7 +924,7 @@ void EDMA_PrepareTransfer(edma_transfer_config_t *config,
                           uint32_t destWidth,
                           uint32_t bytesEachRequest,
                           uint32_t transferBytes,
-                          edma_transfer_type_t type);
+                          edma_transfer_type_t transferType);
 
 /*!
  * @brief Submits the eDMA transfer request.
@@ -1006,12 +1009,12 @@ static inline uint32_t EDMA_GetNextTCDAddress(edma_handle_t *handle)
  */
 void EDMA_HandleIRQ(edma_handle_t *handle);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */
 
-/* @} */
+/*! @} */
 
-#endif /*_FSL_EDMA_H_*/
+#endif /*FSL_EDMA_H_*/

@@ -356,6 +356,7 @@ typedef struct _flexspi_nor_config
 
 /*@}*/
 
+/*! @brief FLEXSPI Operation Context */
 typedef enum _flexspi_operation
 {
     kFLEXSPIOperation_Command, /*!< FLEXSPI operation: Only command, both TX and RX buffer are ignored. */

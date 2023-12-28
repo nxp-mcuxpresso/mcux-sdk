@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_WKT_H_
-#define _FSL_WKT_H_
+#ifndef FSL_WKT_H_
+#define FSL_WKT_H_
 
 #include "fsl_common.h"
 
@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_WKT_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
-/*@}*/
+/*! @} */
 
 /*! @brief Describes WKT clock source. */
 typedef enum _wkt_clock_source
@@ -192,4 +192,4 @@ static inline void WKT_StopTimer(WKT_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_WKT_H_ */
+#endif /* FSL_WKT_H_ */

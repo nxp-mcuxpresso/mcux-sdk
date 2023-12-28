@@ -436,7 +436,7 @@ hal_uart_status_t HAL_UartExitLowpower(hal_uart_handle_t handle)
 
     uartHandle = (hal_uart_state_t *)handle;
 
-    HAL_UartInit(handle, &uartHandle->config);
+    (void)HAL_UartInit(handle, &uartHandle->config);
 #if (defined(UART_ADAPTER_NON_BLOCKING_MODE) && (UART_ADAPTER_NON_BLOCKING_MODE > 0U))
     USART_EnableInterrupts(s_UsartAdapterBase[uartHandle->instance], USART_FIFOINTENSET_RXLVL_MASK);
 #endif

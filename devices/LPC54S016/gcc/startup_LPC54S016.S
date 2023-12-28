@@ -1,21 +1,18 @@
-/* --------------------------------------------------------------------------*/
-/* @file:    startup_LPC54S016.S                                                */
-/* @purpose: CMSIS Cortex-M4 Core Device Startup File                        */
-/*           LPC54S016                                                          */
-/* @version: 1.0                                                      */
-/* @date:    2018-4-20                                                         */
-/* --------------------------------------------------------------------------*/
+/* ------------------------------------------------------------------------- */
+/*  @file:    startup_LPC54S016.s                                            */
+/*  @purpose: CMSIS Cortex-M4 Core Device Startup File                       */
+/*            LPC54S016                                                      */
+/*  @version: 1.0                                                            */
+/*  @date:    2018-4-20                                                      */
+/*  @build:   b231018                                                        */
+/* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2019 NXP                                                   */
-/* All rights reserved.                                                      */
-/*                                                                           */
+/* Copyright 2016-2023 NXP                                                   */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
 /*****************************************************************************/
 /* Version: GCC for ARM Embedded Processors                                  */
 /*****************************************************************************/
-
-
     .syntax unified
     .arch armv7-m
 
@@ -32,76 +29,76 @@ __Vectors:
     .long   UsageFault_Handler                              /* Usage Fault Handler*/
     .long   0                                               /* Reserved*/
     .long   0                                               /* Reserved*/
-    .long   0xEDDC94BD                                      /* Enhanced image marker, set to 0x0 for legacy boot */
-    .long   0x160                                           /* Pointer to enhanced boot block, set to 0x0 for legacy boot */
+    .long   0xEDDC94BD                                      /* Enhanced image marker, set to 0x0 for legacy boot*/
+    .long   0x160                                           /* Pointer to enhanced boot block, set to 0x0 for legacy boot*/
     .long   SVC_Handler                                     /* SVCall Handler*/
     .long   DebugMon_Handler                                /* Debug Monitor Handler*/
     .long   0                                               /* Reserved*/
     .long   PendSV_Handler                                  /* PendSV Handler*/
     .long   SysTick_Handler                                 /* SysTick Handler*/
 
-    /* External Interrupts */
-    .long   WDT_BOD_IRQHandler                     /* Windowed watchdog timer, Brownout detect */
-    .long   DMA0_IRQHandler                     /* DMA controller */
-    .long   GINT0_IRQHandler                     /* GPIO group 0 */
-    .long   GINT1_IRQHandler                     /* GPIO group 1 */
-    .long   PIN_INT0_IRQHandler                     /* Pin interrupt 0 or pattern match engine slice 0 */
-    .long   PIN_INT1_IRQHandler                     /* Pin interrupt 1or pattern match engine slice 1 */
-    .long   PIN_INT2_IRQHandler                     /* Pin interrupt 2 or pattern match engine slice 2 */
-    .long   PIN_INT3_IRQHandler                     /* Pin interrupt 3 or pattern match engine slice 3 */
-    .long   UTICK0_IRQHandler                     /* Micro-tick Timer */
-    .long   MRT0_IRQHandler                     /* Multi-rate timer */
-    .long   CTIMER0_IRQHandler                     /* Standard counter/timer CTIMER0 */
-    .long   CTIMER1_IRQHandler                     /* Standard counter/timer CTIMER1 */
-    .long   SCT0_IRQHandler                     /* SCTimer/PWM */
-    .long   CTIMER3_IRQHandler                     /* Standard counter/timer CTIMER3 */
-    .long   FLEXCOMM0_IRQHandler                     /* Flexcomm Interface 0 (USART, SPI, I2C, FLEXCOMM) */
-    .long   FLEXCOMM1_IRQHandler                     /* Flexcomm Interface 1 (USART, SPI, I2C, FLEXCOMM) */
-    .long   FLEXCOMM2_IRQHandler                     /* Flexcomm Interface 2 (USART, SPI, I2C, FLEXCOMM) */
-    .long   FLEXCOMM3_IRQHandler                     /* Flexcomm Interface 3 (USART, SPI, I2C, FLEXCOMM) */
-    .long   FLEXCOMM4_IRQHandler                     /* Flexcomm Interface 4 (USART, SPI, I2C, FLEXCOMM) */
-    .long   FLEXCOMM5_IRQHandler                     /* Flexcomm Interface 5 (USART, SPI, I2C,, FLEXCOMM) */
-    .long   FLEXCOMM6_IRQHandler                     /* Flexcomm Interface 6 (USART, SPI, I2C, I2S,, FLEXCOMM) */
-    .long   FLEXCOMM7_IRQHandler                     /* Flexcomm Interface 7 (USART, SPI, I2C, I2S,, FLEXCOMM) */
-    .long   ADC0_SEQA_IRQHandler                     /* ADC0 sequence A completion. */
-    .long   ADC0_SEQB_IRQHandler                     /* ADC0 sequence B completion. */
-    .long   ADC0_THCMP_IRQHandler                     /* ADC0 threshold compare and error. */
-    .long   DMIC0_IRQHandler                     /* Digital microphone and DMIC subsystem */
-    .long   HWVAD0_IRQHandler                     /* Hardware Voice Activity Detector */
-    .long   USB0_NEEDCLK_IRQHandler                     /* USB Activity Wake-up Interrupt */
-    .long   USB0_IRQHandler                     /* USB device */
-    .long   RTC_IRQHandler                     /* RTC alarm and wake-up interrupts */
-    .long   FLEXCOMM10_IRQHandler                     /* Flexcomm Interface 10 (SPI, FLEXCOMM) */
-    .long   Reserved47_IRQHandler                     /* Reserved interrupt */
-    .long   PIN_INT4_IRQHandler                     /* Pin interrupt 4 or pattern match engine slice 4 int */
-    .long   PIN_INT5_IRQHandler                     /* Pin interrupt 5 or pattern match engine slice 5 int */
-    .long   PIN_INT6_IRQHandler                     /* Pin interrupt 6 or pattern match engine slice 6 int */
-    .long   PIN_INT7_IRQHandler                     /* Pin interrupt 7 or pattern match engine slice 7 int */
-    .long   CTIMER2_IRQHandler                     /* Standard counter/timer CTIMER2 */
-    .long   CTIMER4_IRQHandler                     /* Standard counter/timer CTIMER4 */
-    .long   RIT_IRQHandler                     /* Repetitive Interrupt Timer */
-    .long   SPIFI0_IRQHandler                     /* SPI flash interface */
-    .long   FLEXCOMM8_IRQHandler                     /* Flexcomm Interface 8 (USART, SPI, I2C, FLEXCOMM) */
-    .long   FLEXCOMM9_IRQHandler                     /* Flexcomm Interface 9 (USART, SPI, I2C, FLEXCOMM) */
-    .long   SDIO_IRQHandler                     /* SD/MMC  */
-    .long   CAN0_IRQ0_IRQHandler                     /* CAN0 interrupt0 */
-    .long   CAN0_IRQ1_IRQHandler                     /* CAN0 interrupt1 */
-    .long   CAN1_IRQ0_IRQHandler                     /* CAN1 interrupt0 */
-    .long   CAN1_IRQ1_IRQHandler                     /* CAN1 interrupt1 */
-    .long   USB1_IRQHandler                     /* USB1 interrupt */
-    .long   USB1_NEEDCLK_IRQHandler                     /* USB1 activity */
-    .long   ETHERNET_IRQHandler                     /* Ethernet */
-    .long   ETHERNET_PMT_IRQHandler                     /* Ethernet power management interrupt */
-    .long   ETHERNET_MACLP_IRQHandler                     /* Ethernet MAC interrupt */
-    .long   Reserved68_IRQHandler                     /* Reserved interrupt */
-    .long   LCD_IRQHandler                     /* LCD interrupt */
-    .long   SHA_IRQHandler                     /* SHA interrupt */
-    .long   SMARTCARD0_IRQHandler                     /* Smart card 0 interrupt */
-    .long   SMARTCARD1_IRQHandler                     /* Smart card 1 interrupt */
-    .long   Reserved73_IRQHandler                     /* Reserved interrupt */
-    .long   PUF_IRQHandler                     /* PUF interrupt */
+                                                            /* External Interrupts*/
+    .long   WDT_BOD_IRQHandler                              /* Windowed watchdog timer, Brownout detect*/
+    .long   DMA0_IRQHandler                                 /* DMA controller*/
+    .long   GINT0_IRQHandler                                /* GPIO group 0*/
+    .long   GINT1_IRQHandler                                /* GPIO group 1*/
+    .long   PIN_INT0_IRQHandler                             /* Pin interrupt 0 or pattern match engine slice 0*/
+    .long   PIN_INT1_IRQHandler                             /* Pin interrupt 1or pattern match engine slice 1*/
+    .long   PIN_INT2_IRQHandler                             /* Pin interrupt 2 or pattern match engine slice 2*/
+    .long   PIN_INT3_IRQHandler                             /* Pin interrupt 3 or pattern match engine slice 3*/
+    .long   UTICK0_IRQHandler                               /* Micro-tick Timer*/
+    .long   MRT0_IRQHandler                                 /* Multi-rate timer*/
+    .long   CTIMER0_IRQHandler                              /* Standard counter/timer CTIMER0*/
+    .long   CTIMER1_IRQHandler                              /* Standard counter/timer CTIMER1*/
+    .long   SCT0_IRQHandler                                 /* SCTimer/PWM*/
+    .long   CTIMER3_IRQHandler                              /* Standard counter/timer CTIMER3*/
+    .long   FLEXCOMM0_IRQHandler                            /* Flexcomm Interface 0 (USART, SPI, I2C, FLEXCOMM)*/
+    .long   FLEXCOMM1_IRQHandler                            /* Flexcomm Interface 1 (USART, SPI, I2C, FLEXCOMM)*/
+    .long   FLEXCOMM2_IRQHandler                            /* Flexcomm Interface 2 (USART, SPI, I2C, FLEXCOMM)*/
+    .long   FLEXCOMM3_IRQHandler                            /* Flexcomm Interface 3 (USART, SPI, I2C, FLEXCOMM)*/
+    .long   FLEXCOMM4_IRQHandler                            /* Flexcomm Interface 4 (USART, SPI, I2C, FLEXCOMM)*/
+    .long   FLEXCOMM5_IRQHandler                            /* Flexcomm Interface 5 (USART, SPI, I2C,, FLEXCOMM)*/
+    .long   FLEXCOMM6_IRQHandler                            /* Flexcomm Interface 6 (USART, SPI, I2C, I2S,, FLEXCOMM)*/
+    .long   FLEXCOMM7_IRQHandler                            /* Flexcomm Interface 7 (USART, SPI, I2C, I2S,, FLEXCOMM)*/
+    .long   ADC0_SEQA_IRQHandler                            /* ADC0 sequence A completion.*/
+    .long   ADC0_SEQB_IRQHandler                            /* ADC0 sequence B completion.*/
+    .long   ADC0_THCMP_IRQHandler                           /* ADC0 threshold compare and error.*/
+    .long   DMIC0_IRQHandler                                /* Digital microphone and DMIC subsystem*/
+    .long   HWVAD0_IRQHandler                               /* Hardware Voice Activity Detector*/
+    .long   USB0_NEEDCLK_IRQHandler                         /* USB Activity Wake-up Interrupt*/
+    .long   USB0_IRQHandler                                 /* USB device*/
+    .long   RTC_IRQHandler                                  /* RTC alarm and wake-up interrupts*/
+    .long   FLEXCOMM10_IRQHandler                           /* Flexcomm Interface 10 (SPI, FLEXCOMM)*/
+    .long   Reserved47_IRQHandler                           /* Reserved interrupt*/
+    .long   PIN_INT4_IRQHandler                             /* Pin interrupt 4 or pattern match engine slice 4 int*/
+    .long   PIN_INT5_IRQHandler                             /* Pin interrupt 5 or pattern match engine slice 5 int*/
+    .long   PIN_INT6_IRQHandler                             /* Pin interrupt 6 or pattern match engine slice 6 int*/
+    .long   PIN_INT7_IRQHandler                             /* Pin interrupt 7 or pattern match engine slice 7 int*/
+    .long   CTIMER2_IRQHandler                              /* Standard counter/timer CTIMER2*/
+    .long   CTIMER4_IRQHandler                              /* Standard counter/timer CTIMER4*/
+    .long   RIT_IRQHandler                                  /* Repetitive Interrupt Timer*/
+    .long   SPIFI0_IRQHandler                               /* SPI flash interface*/
+    .long   FLEXCOMM8_IRQHandler                            /* Flexcomm Interface 8 (USART, SPI, I2C, FLEXCOMM)*/
+    .long   FLEXCOMM9_IRQHandler                            /* Flexcomm Interface 9 (USART, SPI, I2C, FLEXCOMM)*/
+    .long   SDIO_IRQHandler                                 /* SD/MMC */
+    .long   CAN0_IRQ0_IRQHandler                            /* CAN0 interrupt0*/
+    .long   CAN0_IRQ1_IRQHandler                            /* CAN0 interrupt1*/
+    .long   CAN1_IRQ0_IRQHandler                            /* CAN1 interrupt0*/
+    .long   CAN1_IRQ1_IRQHandler                            /* CAN1 interrupt1*/
+    .long   USB1_IRQHandler                                 /* USB1 interrupt*/
+    .long   USB1_NEEDCLK_IRQHandler                         /* USB1 activity*/
+    .long   ETHERNET_IRQHandler                             /* Ethernet*/
+    .long   ETHERNET_PMT_IRQHandler                         /* Ethernet power management interrupt*/
+    .long   ETHERNET_MACLP_IRQHandler                       /* Ethernet MAC interrupt*/
+    .long   Reserved68_IRQHandler                           /* Reserved interrupt*/
+    .long   LCD_IRQHandler                                  /* LCD interrupt*/
+    .long   SHA_IRQHandler                                  /* SHA interrupt*/
+    .long   SMARTCARD0_IRQHandler                           /* Smart card 0 interrupt*/
+    .long   SMARTCARD1_IRQHandler                           /* Smart card 1 interrupt*/
+    .long   Reserved73_IRQHandler                           /* Reserved interrupt*/
+    .long   PUF_IRQHandler                                  /* PUF interrupt*/
 
-    .size    __Vectors, . - __Vectors
+    .size   __Vectors, . - __Vectors
 
 
     .long   0                                               /* Reserved */
@@ -185,17 +182,23 @@ __image_header:
     .long   0x06030050                                      /* maxHSProgramRate,initDeInitFxId,clearStatusFxId,getStatusFxId */
     .long   0x14110F0B                                      /* setStatusFxId,setOptionsFxId,getReadCmdFxId,getWriteCmdFxId */
     #endif
+
     .text
     .thumb
 
+#if defined (__cplusplus)
+#ifdef __REDLIB__
+#error Redlib does not support C++
+#endif
+#endif
 /* Reset Handler */
+
     .thumb_func
     .align 2
     .globl   Reset_Handler
     .weak    Reset_Handler
     .type    Reset_Handler, %function
 Reset_Handler:
-
 #ifndef __NO_SYSTEM_INIT
     movs  r0,#56
     ldr   r1, =0x40000220
@@ -256,7 +259,11 @@ Reset_Handler:
 #endif /* __STARTUP_CLEAR_BSS */
 
 #ifndef __START
+#ifdef __REDLIB__
+#define __START __main
+#else
 #define __START _start
+#endif
 #endif
 #ifndef __ATOLLIC__
     ldr   r0,=__START
@@ -853,6 +860,7 @@ PUF_IRQHandler:
     ldr   r0,=PUF_DriverIRQHandler
     bx    r0
     .size PUF_IRQHandler, . - PUF_IRQHandler
+
 
 /*    Macro to define default handlers. Default handler
  *    will be weak symbol and just dead loops. They can be

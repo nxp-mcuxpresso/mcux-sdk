@@ -419,90 +419,49 @@
 #  # description: FreeRTOS MPU wrappers
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
-#set.middleware.issdk
-#  # description: ISSDK Utils
-#  set(CONFIG_USE_middleware_issdk_drivers_systick_utils true)
+#set.middleware.sdmmc
+#  # description: Middleware sdmmc common
+#  set(CONFIG_USE_middleware_sdmmc_common true)
 
-#  # description: ISSDK Serial to MQTT bridge application
-#  set(CONFIG_USE_middleware_issdk_sensor_tools true)
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_sdmmc_sdhc_template true)
 
-#  # description: ISSDK Sensors RegDefs
-#  set(CONFIG_USE_middleware_issdk_sensor_allregdefs true)
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_sdmmc_sdif_template true)
 
-#  # description: ISSDK FXAS21002 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxas21002 true)
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_sdmmc_usdhc_template true)
 
-#  # description: ISSDK FXOS8700 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxos8700 true)
+#  # description: SDMMC host controller cache dependency
+#  set(CONFIG_USE_middleware_sdmmc_host_usdhc_cache true)
 
-#  # description: ISSDK MPL3115 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mpl3115 true)
 
-#  # description: ISSDK FXLC95000 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxlc95000 true)
 
-#  # description: ISSDK MMA8491 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma8491q true)
 
-#  # description: ISSDK FXLS8471 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8471q true)
 
-#  # description: ISSDK MAG3110 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mag3110 true)
 
-#  # description: ISSDK MMA845x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma845x true)
 
-#  # description: ISSDK MMA865x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma865x true)
 
-#  # description: ISSDK FXPQ3115 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxpq3115 true)
 
-#  # description: ISSDK FXLS8962 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8962 true)
 
-#  # description: ISSDK MMA9553 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma9553 true)
 
-#  # description: ISSDK nps300x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_nps300x true)
 
-#  # description: ISSDK ISL29023 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_isl29023 true)
 
-#  # description: ISSDK fxps7250d4 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxps7250d4 true)
 
-#  # description: ISSDK FXLS896xAF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls896xaf true)
 
-#  # description: ISSDK FXLS8974CF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8974cf true)
 
-#  # description: ISSDK FXLS8961AF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8961af true)
 
-#  # description: ISSDK FXLS8971CF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8971cf true)
 
-#  # description: ISSDK NMH1000 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_nmh1000 true)
 
-#  # description: ISSDK Sensor Interface Common
-#  set(CONFIG_USE_middleware_issdk_sensor_interface_common true)
 
-#  # description: ISSDK GPIO Driver for Kinetis
-#  set(CONFIG_USE_middleware_issdk_drivers_gpio_kinetis true)
 
-#  # description: ISSDK GPIO Driver for Kinetis FRDM-KE15Z
-#  set(CONFIG_USE_middleware_issdk_drivers_gpio_kinetis_ke15z true)
 
-#  # description: ISSDK Auto Detection Service for Kinetis Kits
-#  set(CONFIG_USE_middleware_issdk_drivers_ads true)
 
-#  # description: ISSDK Host Interface Service
-#  set(CONFIG_USE_middleware_issdk_drivers_host true)
+
+
+
+
+
 
 #set.component.osa
 #  # description: Component common_task
@@ -524,7 +483,7 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
   ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
   ${CMAKE_CURRENT_LIST_DIR}/drivers
   ${CMAKE_CURRENT_LIST_DIR}/project_template
@@ -540,4 +499,4 @@ include(set_device_MKE15Z7 OPTIONAL)
 include(set_component_osa OPTIONAL)
 include(set_middleware_fatfs OPTIONAL)
 include(set_middleware_freertos-kernel OPTIONAL)
-include(set_middleware_issdk OPTIONAL)
+include(set_middleware_sdmmc OPTIONAL)

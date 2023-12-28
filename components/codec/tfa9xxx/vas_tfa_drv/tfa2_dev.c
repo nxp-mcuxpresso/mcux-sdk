@@ -170,8 +170,8 @@ int tfa2_set_query_info(struct tfa2_device *tfa)
     tfa->bf_lpm1mode = TFA9XXX_BF_LPM1MODE; /* default 94N1A */
     tfa->bf_r25c     = TFA9XXX_BF_R25C;     /* default 94N1A */
 
-    tfa->status_mask[0] = 0x085c; /* SWS, CLKS, UVDS, OVDS, OTDS */
-    tfa->status_mask[1] = 0x0c00; /* TDMLUTER, TDMERR */
+    tfa->status_mask[0] = 0x085c;           /* SWS, CLKS, UVDS, OVDS, OTDS */
+    tfa->status_mask[1] = 0x0c00;           /* TDMLUTER, TDMERR */
     tfa->status_mask[2] = 0x0000;
     tfa->status_mask[3] = 0x0000;
 
@@ -234,7 +234,7 @@ int tfa2_dev_start_hw(struct tfa2_device *tfa, int profile)
     if (rc == 4 || rc == 5)
         msleep_interruptible(2); /* wait for transition states */
 
-    tfa->need_hw_init = 0; /* hw init has been done now */
+    tfa->need_hw_init = 0;       /* hw init has been done now */
 
     return rc;
 }
@@ -753,8 +753,8 @@ int tfa2_dev_set_state(struct tfa2_device *tfa, enum tfa_state state)
                 /* if calibration once is in progress wait to allow CF to write MTP */
                 if (tfa2_i2c_read_bf(tfa->i2c, TFA9XXX_BF_ACS) == 0 && /* warm */
                     tfa2_i2c_read_bf(tfa->i2c, TFA9XXX_BF_MTPOTC) == 1)
-                {                       /* once */
-                    int count = 50 * 4; /* Calibration takes ~500mS */
+                {                                                      /* once */
+                    int count = 50 * 4;                                /* Calibration takes ~500mS */
                     while ((tfa2_i2c_read_bf(tfa->i2c, TFA9XXX_BF_MTPEX) != 1) && count)
                     {
                         msleep_interruptible(10);
@@ -1168,7 +1168,7 @@ int tfa2_i2c_dsp_execute(struct tfa2_device *tfa, const char *cmd_buf, size_t cm
     {
         rc = tfa2_i2c_rpc_status(i2c, &rpc_status);
         if (rc || rpc_status != tfa9xxx_I2C_Req_Busy)
-            break; /* Return on I/O error or error status from DSP */
+            break;               /* Return on I/O error or error status from DSP */
 
         msleep_interruptible(1); /* Add non-busy wait to give DSP processing time */
     }

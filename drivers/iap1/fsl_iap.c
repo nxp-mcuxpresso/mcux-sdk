@@ -50,7 +50,7 @@ typedef union functionCommandOption
 {
     uint32_t commandAddr;
     status_t (*eraseCommand)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key);
-    status_t (*programCommand)(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
+    status_t (*programCommand)(flash_config_t *config, uint32_t start, const uint8_t *src, uint32_t lengthInBytes);
     status_t (*verifyProgramCommand)(flash_config_t *config,
                                      uint32_t start,
                                      uint32_t lengthInBytes,
@@ -93,7 +93,7 @@ typedef struct version1FlashDriverInterface
     /*!< Flash driver.*/
     status_t (*flash_init)(flash_config_t *config);
     status_t (*flash_erase)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key);
-    status_t (*flash_program)(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
+    status_t (*flash_program)(flash_config_t *config, uint32_t start, const uint8_t *src, uint32_t lengthInBytes);
     status_t (*flash_verify_erase)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes);
     status_t (*flash_verify_program)(flash_config_t *config,
                                      uint32_t start,
@@ -124,7 +124,7 @@ typedef struct version0FlashDriverInterface
     /*!< Flash driver.*/
     status_t (*flash_init)(flash_config_t *config);
     status_t (*flash_erase)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key);
-    status_t (*flash_program)(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
+    status_t (*flash_program)(flash_config_t *config, uint32_t start, const uint8_t *src, uint32_t lengthInBytes);
     status_t (*flash_verify_erase)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes);
     status_t (*flash_verify_program)(flash_config_t *config,
                                      uint32_t start,
@@ -264,6 +264,14 @@ status_t FLASH_Init(flash_config_t *config)
  */
 status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key)
 {
+    uint32_t core_frequency = CLOCK_GetFreq(kCLOCK_CoreSysClk);
+
+    /* Flash ERASE operations must be performed with a system clock below or equal to 100 MHz.*/
+    if (core_frequency > 100000000U)
+    {
+        return (status_t)kStatus_FLASH_EraseFrequencyError;
+    }
+
     if (get_rom_api_version() == 0u)
     {
         function_command_option_t runCmdFuncOption;
@@ -277,8 +285,16 @@ status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBy
 }
 
 /*! See fsl_iap.h for documentation of this function. */
-status_t FLASH_Program(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes)
+status_t FLASH_Program(flash_config_t *config, uint32_t start, const uint8_t *src, uint32_t lengthInBytes)
 {
+    uint32_t core_frequency = CLOCK_GetFreq(kCLOCK_CoreSysClk);
+
+    /* Flash PROGRAM operations must be performed with a system clock below or equal to 100 MHz.*/
+    if (core_frequency > 100000000U)
+    {
+        return (status_t)kStatus_FLASH_ProgramFrequencyError;
+    }
+
     if (get_rom_api_version() == 0u)
     {
         function_command_option_t runCmdFuncOption;
@@ -660,6 +676,15 @@ void HASH_IRQHandler(void)
 {
     assert(BOOTLOADER_API_TREE_POINTER);
     BOOTLOADER_API_TREE_POINTER->skbootAuthenticate->skboot_hashcrypt_irq_handler();
+}
+
+/********************************************************************************
+ * runBootloader API
+ *******************************************************************************/
+void BOOTLOADER_UserEntry(void *arg)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    BOOTLOADER_API_TREE_POINTER->runBootloader(arg);
 }
 /********************************************************************************
  * EOF

@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SRC_H_
-#define _FSL_SRC_H_
+#ifndef FSL_SRC_H_
+#define FSL_SRC_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SRC driver version 2.0.1. */
 #define FSL_SRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief SRC reset status flags.
@@ -599,4 +599,4 @@ static inline uint32_t SRC_GetGeneralPurposeRegister(SRC_Type *base, uint32_t in
 /*!
  * @}
  */
-#endif /* _FSL_SRC_H_ */
+#endif /* FSL_SRC_H_ */

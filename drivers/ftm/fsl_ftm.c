@@ -8,9 +8,16 @@
 
 #include "fsl_ftm.h"
 
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.ftm"
+#endif
+
+#if defined(FTM_RSTS)
+#define FTM_RESETS_ARRAY FTM_RSTS
 #endif
 
 /*******************************************************************************
@@ -56,6 +63,10 @@ static FTM_Type *const s_ftmBases[] = FTM_BASE_PTRS;
 /*! @brief Pointers to FTM clocks for each instance. */
 static const clock_ip_name_t s_ftmClocks[] = FTM_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+#if defined(FTM_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_ftmResets[] = FTM_RESETS_ARRAY;
+#endif
 
 /*******************************************************************************
  * Code
@@ -244,6 +255,10 @@ status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
     /* Ungate the FTM clock*/
     (void)CLOCK_EnableClock(s_ftmClocks[FTM_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(FTM_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_ftmResets[FTM_GetInstance(base)]);
+#endif
 
 #if (defined(FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE) && FSL_FEATURE_FTM_HAS_BASIC_FEATURE_ONLY_INSTANCE)
     if (0 != FSL_FEATURE_FTM_IS_BASIC_FEATURE_ONLY_INSTANCEn(base))

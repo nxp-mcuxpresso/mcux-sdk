@@ -1,0 +1,25 @@
+---
+set.board.twrkm35z75m.fmstr:
+  section-type: set
+  belong_to: set.board.twrkm35z75m.fmstr
+  section_info:
+    fixed_id: fmstr_board_twrkm35z75m
+    display_name: fmstr_twrkm35z75m
+    full_name: FreeMASTER twrkm35z75m
+    description: FreeMASTER examples for twrkm35z75m
+    type: board
+    version: 1.0.0
+    set_location:
+      repo_base_path: "./boards/twrkm35z75m/freemaster_examples"
+    product:
+      cmsis_pack:
+        scr:
+        - scr.board.twrkm35z75m.fmstr-examples
+        vendor: NXP
+        pack_root:
+          pack_type: sBSP
+          pack_name: twrkm35z75m_FREEMASTER
+          pack_version: 1.0.0
+  dependency:
+    allOf:
+    - set.middleware.fmstr

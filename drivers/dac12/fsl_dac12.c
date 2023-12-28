@@ -8,9 +8,16 @@
 
 #include "fsl_dac12.h"
 
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.dac12"
+#endif
+
+#if defined(DAC_RSTS)
+#define DAC_RESETS_ARRAY DAC_RSTS
 #endif
 
 /*******************************************************************************
@@ -33,6 +40,10 @@ static DAC_Type *const s_dac12Bases[] = DAC_BASE_PTRS;
 /*! @brief Pointers to DAC clocks for each instance. */
 static const clock_ip_name_t s_dac12Clocks[] = DAC_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+#if defined(DAC_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_dac12Resets[] = DAC_RESETS_ARRAY;
+#endif
 
 /*******************************************************************************
  * Codes
@@ -85,6 +96,10 @@ void DAC12_Init(DAC_Type *base, const dac12_config_t *config)
     /* Enable the clock. */
     CLOCK_EnableClock(s_dac12Clocks[DAC12_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(DAC_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_dac12Resets[DAC12_GetInstance(base)]);
+#endif
 
     tmp32 = DAC_CR_WML(config->fifoWatermarkLevel); /* FIFO watermark level. */
     switch (config->fifoWorkMode)                   /* FIFO work mode. */

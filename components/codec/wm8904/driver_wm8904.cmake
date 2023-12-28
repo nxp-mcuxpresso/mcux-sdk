@@ -11,6 +11,9 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
+if(${MCUX_DEVICE} STREQUAL "RW612")
+    include(component_codec_i2c_RW612)
+endif()
 if(${MCUX_DEVICE} STREQUAL "LPC55S69_cm33_core0")
     include(component_codec_i2c_LPC55S69_cm33_core0)
 endif()

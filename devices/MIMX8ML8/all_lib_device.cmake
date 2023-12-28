@@ -34,6 +34,9 @@
 #  # description: ENET Driver
 #  set(CONFIG_USE_driver_enet true)
 
+#  # description: ENET QoS Driver
+#  set(CONFIG_USE_driver_enet_qos true)
+
 #  # description: SDMA Driver
 #  set(CONFIG_USE_driver_sdma true)
 
@@ -317,6 +320,9 @@
 #  # description: RPMsg-Lite XOS environment layer sources
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_xos true)
 
+#  # description: RPMsg-Lite Azure RTOS environment sources
+#  set(CONFIG_USE_middleware_multicore_rpmsg_lite_azurertos true)
+
 #  # description: RPMsg-Lite for evkmimx8mp baremetal application
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_imx8mp_m7_bm true)
 
@@ -333,22 +339,22 @@
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite true)
 
 #set.middleware.voice_seeker
-#  # description: Voice seeker memory utilities
-#  set(CONFIG_USE_middleware_voice_seeker_rdsp_utilities_public true)
-
 #  # description: Voice seeker library for Cortex M7
 #  set(CONFIG_USE_middleware_voice_seeker_cm7 true)
+
+#  # description: Voice seeker memory utilities for Cortex M7
+#  set(CONFIG_USE_middleware_voice_seeker_rdsp_utilities_public_cm7 true)
 
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
-  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/voice_seeker
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
   ${CMAKE_CURRENT_LIST_DIR}/drivers
   ${CMAKE_CURRENT_LIST_DIR}/project_template
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimx8mp
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/voice_seeker
 )
 
 include(set_board_evkmimx8mp OPTIONAL)

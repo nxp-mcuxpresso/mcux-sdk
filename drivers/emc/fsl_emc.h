@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_EMC_H_
-#define _FSL_EMC_H_
+#ifndef FSL_EMC_H_
+#define FSL_EMC_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief EMC driver version. */
 #define FSL_EMC_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
-/*@}*/
+/*! @} */
 
 /*! @brief Define the chip numbers for dynamic and static memory devices. */
 #define EMC_STATIC_MEMDEV_NUM   (4U)
@@ -238,7 +238,7 @@ void EMC_StaticMemInit(EMC_Type *base, uint32_t *extWait_Ns, emc_static_chip_con
  */
 void EMC_Deinit(EMC_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name EMC Basic Operation
@@ -353,7 +353,7 @@ static inline void EMC_EnterLowPowerMode(EMC_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -361,4 +361,4 @@ static inline void EMC_EnterLowPowerMode(EMC_Type *base, bool enable)
 
 /*! @}*/
 
-#endif /* _FSL_EMC_H_*/
+#endif /* FSL_EMC_H_*/

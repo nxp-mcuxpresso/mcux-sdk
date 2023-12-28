@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_PORT_H_
-#define _FSL_PORT_H_
+#ifndef FSL_PORT_H_
+#define FSL_PORT_H_
 
 #include "fsl_common.h"
 
@@ -25,10 +25,10 @@
 #endif
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief PORT driver version. */
 #define FSL_PORT_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
-/*@}*/
+/*! @} */
 
 #if defined(FSL_FEATURE_PORT_HAS_PULL_ENABLE) && FSL_FEATURE_PORT_HAS_PULL_ENABLE
 /*! @brief Internal resistor pull feature selection */
@@ -295,9 +295,10 @@ typedef enum _port_voltage_range
 extern "C" {
 #endif
 
-#if defined(FSL_FEATURE_PORT_PCR_MUX_WIDTH) && FSL_FEATURE_PORT_PCR_MUX_WIDTH
 /*! @name Configuration */
-/*@{*/
+/*! @{ */
+
+#if defined(FSL_FEATURE_PORT_PCR_MUX_WIDTH) && FSL_FEATURE_PORT_PCR_MUX_WIDTH
 
 #if defined(FSL_FEATURE_PORT_HAS_VERSION_INFO_REGISTER) && FSL_FEATURE_PORT_HAS_VERSION_INFO_REGISTER
 /*!
@@ -497,10 +498,10 @@ static inline void PORT_SetDigitalFilterConfig(PORT_Type *base, const port_digit
 }
 
 #endif /* FSL_FEATURE_PORT_HAS_DIGITAL_FILTER */
-/*@}*/
+/*! @} */
 
 /*! @name Interrupt */
-/*@{*/
+/*! @{ */
 
 #if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
 /*!
@@ -668,7 +669,7 @@ static inline void PORT_ClearAllHighEFTDetectors(PORT_Type *base)
 }
 #endif /* FSL_FEATURE_PORT_SUPPORT_EFT */
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -676,4 +677,4 @@ static inline void PORT_ClearAllHighEFTDetectors(PORT_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_PORT_H_ */
+#endif /* FSL_PORT_H_ */

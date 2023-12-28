@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_UART_H_
-#define _FSL_UART_H_
+#ifndef FSL_UART_H_
+#define FSL_UART_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief UART driver version. */
 #define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief Retry times for waiting flag. */
 #ifndef UART_RETRY_TIMES
@@ -408,7 +408,7 @@ static inline void UART_Clear9thTransmitBit(UART_Type *base)
     base->C3 &= ~(uint8_t)UART_C3_T8_MASK;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -453,7 +453,7 @@ uint32_t UART_GetStatusFlags(UART_Type *base);
  */
 status_t UART_ClearStatusFlags(UART_Type *base, uint32_t mask);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -512,7 +512,7 @@ void UART_DisableInterrupts(UART_Type *base, uint32_t mask);
  */
 uint32_t UART_GetEnabledInterrupts(UART_Type *base);
 
-/* @} */
+/*! @} */
 
 #if defined(FSL_FEATURE_UART_HAS_DMA_SELECT) && FSL_FEATURE_UART_HAS_DMA_SELECT
 /*!
@@ -593,7 +593,7 @@ static inline void UART_EnableRxDMA(UART_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 #endif /* FSL_FEATURE_UART_HAS_DMA_SELECT */
 
 /*!
@@ -735,7 +735,7 @@ status_t UART_WriteBlocking(UART_Type *base, const uint8_t *data, size_t length)
  */
 status_t UART_ReadBlocking(UART_Type *base, uint8_t *data, size_t length);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Transactional
@@ -968,7 +968,7 @@ void UART_TransferHandleIRQ(UART_Type *base, void *irqHandle);
  */
 void UART_TransferHandleErrorIRQ(UART_Type *base, void *irqHandle);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -976,4 +976,4 @@ void UART_TransferHandleErrorIRQ(UART_Type *base, void *irqHandle);
 
 /*! @}*/
 
-#endif /* _FSL_UART_H_ */
+#endif /* FSL_UART_H_ */

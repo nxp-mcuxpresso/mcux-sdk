@@ -2,6 +2,7 @@
 ** ###################################################################
 **     Processors:          LPC55S69JBD100_cm33_core1
 **                          LPC55S69JBD64_cm33_core1
+**                          LPC55S69JEV59_cm33_core1
 **                          LPC55S69JEV98_cm33_core1
 **
 **     Compilers:           GNU C Compiler
@@ -11,15 +12,13 @@
 **
 **     Reference manual:    LPC55S6x/LPC55S2x/LPC552x User manual(UM11126) Rev.1.3  16 May 2019
 **     Version:             rev. 1.1, 2019-05-16
-**     Build:               b220718
+**     Build:               b231019
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC55S69_cm33_core1
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2023 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -43,8 +42,8 @@
  * CMSIS Peripheral Access Layer for LPC55S69_cm33_core1
  */
 
-#ifndef _LPC55S69_CM33_CORE1_H_
-#define _LPC55S69_CM33_CORE1_H_                  /**< Symbol preventing repeated inclusion */
+#if !defined(LPC55S69_CM33_CORE1_H_)
+#define LPC55S69_CM33_CORE1_H_                   /**< Symbol preventing repeated inclusion */
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
@@ -8032,14 +8031,6 @@ typedef struct {
  */
 #define FLASH_CFPA_DCFG_CC_SOCU_PIN_FA_CMD_EN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_PIN_FA_CMD_EN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_PIN_FA_CMD_EN_MASK)
 
-#define FLASH_CFPA_DCFG_CC_SOCU_PIN_ME_CMD_EN_MASK (0x100U)
-#define FLASH_CFPA_DCFG_CC_SOCU_PIN_ME_CMD_EN_SHIFT (8U)
-/*! ME_CMD_EN - Flash Mass Erase Command enable
- *  0b0..Use DAP to enable
- *  0b1..Fixed state
- */
-#define FLASH_CFPA_DCFG_CC_SOCU_PIN_ME_CMD_EN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_PIN_ME_CMD_EN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_PIN_ME_CMD_EN_MASK)
-
 #define FLASH_CFPA_DCFG_CC_SOCU_PIN_CPU1_NIDEN_MASK (0x200U)
 #define FLASH_CFPA_DCFG_CC_SOCU_PIN_CPU1_NIDEN_SHIFT (9U)
 /*! CPU1_NIDEN - CPU1 (Micro cortex M33) non-invasive debug enable
@@ -8127,14 +8118,6 @@ typedef struct {
  *  0b1..Enable
  */
 #define FLASH_CFPA_DCFG_CC_SOCU_DFLT_FA_CMD_EN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_DFLT_FA_CMD_EN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_DFLT_FA_CMD_EN_MASK)
-
-#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_ME_CMD_EN_MASK (0x100U)
-#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_ME_CMD_EN_SHIFT (8U)
-/*! ME_CMD_EN - Flash Mass Erase Command fixed state
- *  0b0..Disable
- *  0b1..Enable
- */
-#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_ME_CMD_EN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_DFLT_ME_CMD_EN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_DFLT_ME_CMD_EN_MASK)
 
 #define FLASH_CFPA_DCFG_CC_SOCU_DFLT_CPU1_NIDEN_MASK (0x200U)
 #define FLASH_CFPA_DCFG_CC_SOCU_DFLT_CPU1_NIDEN_SHIFT (9U)

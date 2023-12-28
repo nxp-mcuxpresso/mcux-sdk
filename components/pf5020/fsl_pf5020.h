@@ -256,26 +256,26 @@ typedef enum _pf5020_swnd1_output_voltage
     kPF5020_Swnd1Output1P8V,      /*!< SWND1 output 1.8V during run state and standby state. */
     kPF5020_Swnd1Output1P85V,     /*!< SWND1 output 1.85V during run state and standby state. */
 
-    kPF5020_Swnd1Output2P0V,  /*!< SWND1 output 2.0V during run state and standby state. */
-    kPF5020_Swnd1Output2P1V,  /*!< SWND1 output 2.1V during run state and standby state. */
-    kPF5020_Swnd1Output2P15V, /*!< SWND1 output 2.15V during run state and standby state. */
-    kPF5020_Swnd1Output2P25V, /*!< SWND1 output 2.25V during run state and standby state. */
-    kPF5020_Swnd1Output2P3V,  /*!< SWND1 output 2.3V during run state and standby state. */
-    kPF5020_Swnd1Output2P4V,  /*!< SWND1 output 2.4V during run state and standby state. */
-    kPF5020_Swnd1Output2P5V,  /*!< SWND1 output 2.5V during run state and standby state. */
-    kPF5020_Swnd1Output2P8V,  /*!< SWND1 output 2.8V during run state and standby state. */
+    kPF5020_Swnd1Output2P0V,      /*!< SWND1 output 2.0V during run state and standby state. */
+    kPF5020_Swnd1Output2P1V,      /*!< SWND1 output 2.1V during run state and standby state. */
+    kPF5020_Swnd1Output2P15V,     /*!< SWND1 output 2.15V during run state and standby state. */
+    kPF5020_Swnd1Output2P25V,     /*!< SWND1 output 2.25V during run state and standby state. */
+    kPF5020_Swnd1Output2P3V,      /*!< SWND1 output 2.3V during run state and standby state. */
+    kPF5020_Swnd1Output2P4V,      /*!< SWND1 output 2.4V during run state and standby state. */
+    kPF5020_Swnd1Output2P5V,      /*!< SWND1 output 2.5V during run state and standby state. */
+    kPF5020_Swnd1Output2P8V,      /*!< SWND1 output 2.8V during run state and standby state. */
 
-    kPF5020_Swnd1Output3P15V, /*!< SWND1 output 3.15V during run state and standby state. */
-    kPF5020_Swnd1Output3P20V, /*!< SWND1 output 3.20V during run state and standby state. */
-    kPF5020_Swnd1Output3P25V, /*!< SWND1 output 3.25V during run state and standby state. */
-    kPF5020_Swnd1Output3P30V, /*!< SWND1 output 3.30V during run state and standby state. */
-    kPF5020_Swnd1Output3P35V, /*!< SWND1 output 3.3V during run state and standby state. */
-    kPF5020_Swnd1Output3P40V, /*!< SWND1 output 3.40V during run state and standby state. */
-    kPF5020_Swnd1Output3P50V, /*!< SWND1 output 3.50V during run state and standby state. */
-    kPF5020_Swnd1Output3P80V, /*!< SWND1 output 3.80V during run state and standby state. */
+    kPF5020_Swnd1Output3P15V,     /*!< SWND1 output 3.15V during run state and standby state. */
+    kPF5020_Swnd1Output3P20V,     /*!< SWND1 output 3.20V during run state and standby state. */
+    kPF5020_Swnd1Output3P25V,     /*!< SWND1 output 3.25V during run state and standby state. */
+    kPF5020_Swnd1Output3P30V,     /*!< SWND1 output 3.30V during run state and standby state. */
+    kPF5020_Swnd1Output3P35V,     /*!< SWND1 output 3.3V during run state and standby state. */
+    kPF5020_Swnd1Output3P40V,     /*!< SWND1 output 3.40V during run state and standby state. */
+    kPF5020_Swnd1Output3P50V,     /*!< SWND1 output 3.50V during run state and standby state. */
+    kPF5020_Swnd1Output3P80V,     /*!< SWND1 output 3.80V during run state and standby state. */
 
-    kPF5020_Swnd1Output4P0V, /*!< SWND1 output 4.0V during run state and standby state. */
-    kPF5020_Swnd1Output4P1V, /*!< SWND1 output 4.1V during run state and standby state. */
+    kPF5020_Swnd1Output4P0V,      /*!< SWND1 output 4.0V during run state and standby state. */
+    kPF5020_Swnd1Output4P1V,      /*!< SWND1 output 4.1V during run state and standby state. */
 } pf5020_swnd1_output_voltage_t;
 
 /*!
@@ -381,38 +381,38 @@ typedef enum _pf5020_interrupts
                                                                 Status2 Fsync filter interrupt. */
     kPF5020_IntStatus2_WdiInterrupt = (0x80ULL << 8ULL),      /*!< Used to enable/disable Int Status2 WDI interrupt. */
 
-    kPF5020_SwMode_Sw1ModeInterrupt   = (0x1ULL << 16ULL),  /*!< Used to enable/disable SW1 mode interrupt. */
-    kPF5020_SwMode_Sw2ModeInterrupt   = (0x2ULL << 16ULL),  /*!< Used to enable/disable SW2 interrupt. */
-    kPF5020_SwMode_Swnd1ModeInterrupt = (0x40ULL << 16ULL), /*!< Used to enable/disable SWND1 interrupt. */
+    kPF5020_SwMode_Sw1ModeInterrupt   = (0x1ULL << 16ULL),    /*!< Used to enable/disable SW1 mode interrupt. */
+    kPF5020_SwMode_Sw2ModeInterrupt   = (0x2ULL << 16ULL),    /*!< Used to enable/disable SW2 interrupt. */
+    kPF5020_SwMode_Swnd1ModeInterrupt = (0x40ULL << 16ULL),   /*!< Used to enable/disable SWND1 interrupt. */
 
-    kPF5020_ILIM_Sw1IlimInterrupt   = (0x1ULL << 24ULL),  /*!< Used to enable/disable SW1 ILIM interrupt. */
-    kPF5020_ILIM_Sw2IlimInterrupt   = (0x2ULL << 24ULL),  /*!< Used to enable/disable SW2 ILIM interrupt. */
-    kPF5020_ILIM_Swnd1IlimInterrupt = (0x40ULL << 24ULL), /*!< Used to enable/disable SWND1 ILIM interrupt. */
+    kPF5020_ILIM_Sw1IlimInterrupt   = (0x1ULL << 24ULL),      /*!< Used to enable/disable SW1 ILIM interrupt. */
+    kPF5020_ILIM_Sw2IlimInterrupt   = (0x2ULL << 24ULL),      /*!< Used to enable/disable SW2 ILIM interrupt. */
+    kPF5020_ILIM_Swnd1IlimInterrupt = (0x40ULL << 24ULL),     /*!< Used to enable/disable SWND1 ILIM interrupt. */
 
-    kPF5020_ILIM_Ldo1IlimInterrupt = (0x80ULL << 24ULL), /*!< Used to enable/disable LDO1 ILIM interrupt. */
+    kPF5020_ILIM_Ldo1IlimInterrupt = (0x80ULL << 24ULL),      /*!< Used to enable/disable LDO1 ILIM interrupt. */
 
-    kPF5020_UV_Sw1UvInterrupt   = (0x1ULL << 32ULL),  /*!< Used to enable/disable SW1 UV interrupt. */
-    kPF5020_UV_Sw2UvInterrupt   = (0x2ULL << 32ULL),  /*!< Used to enable/disable SW2 UV interrupt. */
-    kPF5020_UV_Swnd1UvInterrupt = (0x40ULL << 32ULL), /*!< Used to enable/disable SWND1 UV interrupt. */
+    kPF5020_UV_Sw1UvInterrupt   = (0x1ULL << 32ULL),          /*!< Used to enable/disable SW1 UV interrupt. */
+    kPF5020_UV_Sw2UvInterrupt   = (0x2ULL << 32ULL),          /*!< Used to enable/disable SW2 UV interrupt. */
+    kPF5020_UV_Swnd1UvInterrupt = (0x40ULL << 32ULL),         /*!< Used to enable/disable SWND1 UV interrupt. */
 
-    kPF5020_UV_Ldo1UvInterrupt = (0x80ULL << 32ULL), /*!< Used to enable/disable SW1 LDO1 interrupt. */
+    kPF5020_UV_Ldo1UvInterrupt = (0x80ULL << 32ULL),          /*!< Used to enable/disable SW1 LDO1 interrupt. */
 
-    kPF5020_OV_Sw1OvInterrupt   = (0x1ULL << 40ULL),  /*!< Used to enable/disable SW1 OV interrupt. */
-    kPF5020_OV_Sw2OvInterrupt   = (0x2ULL << 40ULL),  /*!< Used to enable/disable SW2 OV interrupt. */
-    kPF5020_OV_Swnd1OvInterrupt = (0x40ULL << 40ULL), /*!< Used to enable/disable SWND1 OV interrupt. */
+    kPF5020_OV_Sw1OvInterrupt   = (0x1ULL << 40ULL),          /*!< Used to enable/disable SW1 OV interrupt. */
+    kPF5020_OV_Sw2OvInterrupt   = (0x2ULL << 40ULL),          /*!< Used to enable/disable SW2 OV interrupt. */
+    kPF5020_OV_Swnd1OvInterrupt = (0x40ULL << 40ULL),         /*!< Used to enable/disable SWND1 OV interrupt. */
 
-    kPF5020_OV_Ldo1OvInterrupt = (0x80ULL << 40ULL), /*!< Used to enable/disable LDO1 OV interrupt. */
+    kPF5020_OV_Ldo1OvInterrupt = (0x80ULL << 40ULL),          /*!< Used to enable/disable LDO1 OV interrupt. */
 
-    kPF5020_Pwron_PushInterrupt  = (0x1ULL << 48ULL),  /*!< Used to enable/disable PWRON Push interrupt. */
-    kPF5020_Pwron_RelInterrupt   = (0x2ULL << 48ULL),  /*!< Used to enable/disable PWRON REL interrupt. */
-    kPF5020_Pwron_1sInterrupt    = (0x4ULL << 48ULL),  /*!< Used to enable/disable PWRON 1s interrupt. */
-    kPF5020_Pwron_2sInterrupt    = (0x8ULL << 48ULL),  /*!< Used to enable/disable PWRON 2s interrupt. */
-    kPF5020_Pwron_3sInterrupt    = (0x10ULL << 48ULL), /*!< Used to enable/disable PWRON 3s interrupt. */
-    kPF5020_Pwron_4sInterrupt    = (0x20ULL << 48ULL), /*!< Used to enable/disable PWRON 4s interrupt. */
-    kPF5020_Pwron_8sInterrupt    = (0x40ULL << 48ULL), /*!< Used to enable/disable PWRON 8s interrupt. */
-    kPF5020_Pwron_BgmonInterrupt = (0x80ULL << 48ULL), /*!< Used to enable/disable PWRON BGMON interrupt. */
+    kPF5020_Pwron_PushInterrupt  = (0x1ULL << 48ULL),         /*!< Used to enable/disable PWRON Push interrupt. */
+    kPF5020_Pwron_RelInterrupt   = (0x2ULL << 48ULL),         /*!< Used to enable/disable PWRON REL interrupt. */
+    kPF5020_Pwron_1sInterrupt    = (0x4ULL << 48ULL),         /*!< Used to enable/disable PWRON 1s interrupt. */
+    kPF5020_Pwron_2sInterrupt    = (0x8ULL << 48ULL),         /*!< Used to enable/disable PWRON 2s interrupt. */
+    kPF5020_Pwron_3sInterrupt    = (0x10ULL << 48ULL),        /*!< Used to enable/disable PWRON 3s interrupt. */
+    kPF5020_Pwron_4sInterrupt    = (0x20ULL << 48ULL),        /*!< Used to enable/disable PWRON 4s interrupt. */
+    kPF5020_Pwron_8sInterrupt    = (0x40ULL << 48ULL),        /*!< Used to enable/disable PWRON 8s interrupt. */
+    kPF5020_Pwron_BgmonInterrupt = (0x80ULL << 48ULL),        /*!< Used to enable/disable PWRON BGMON interrupt. */
 
-    kPF5020_AllInterrupts = 0xFFC3C3C343FFFBULL, /*!< All interrupts. */
+    kPF5020_AllInterrupts = 0xFFC3C3C343FFFBULL,              /*!< All interrupts. */
 } pf5020_interrupt_t;
 
 /*!
@@ -495,8 +495,8 @@ typedef struct _pf5020_sw1_regulator_config
                                                            @ref pf5020_type1_buck_regulator_dvs_ramp_t
                                                            for details. */
 
-    uint8_t sw1RunOutputVolt; /*!< The output voltage during RUN state, the step is 6.25mV,
-                               0: 0.4V, 177: 1.8V, 178 to 255 reserved. */
+    uint8_t sw1RunOutputVolt;                          /*!< The output voltage during RUN state, the step is 6.25mV,
+                                                        0: 0.4V, 177: 1.8V, 178 to 255 reserved. */
     pf5020_buck_regulator_operate_mode_t sw1RunOperateMode; /*!< SW1 operate mode in run state, please refer to
                                                             @ref pf5020_buck_regulator_operate_mode_t for details. */
 
@@ -504,25 +504,25 @@ typedef struct _pf5020_sw1_regulator_config
                                    0: 0.4V, 177: 1.8V, 178 to 255 reserved. */
     pf5020_buck_regulator_operate_mode_t sw1StandbyOperateMode; /*!< SW1 operate mode in standby mode. */
 
-    pf5020_buck_regulator_phase_shift_t sw1PhaseShift; /*!< SW1 buck regulator phase shift value, please refer
-                                                           to @ref pf5020_buck_regulator_phase_shift_t for details. */
+    pf5020_buck_regulator_phase_shift_t sw1PhaseShift;          /*!< SW1 buck regulator phase shift value, please refer
+                                                                    to @ref pf5020_buck_regulator_phase_shift_t for details. */
 
-    pf5020_buck_regulator_current_limit_t sw1CurrentLimit; /*!< SW1 buck regulator current limitation value, please
-                                                               refer to @ref pf5020_buck_regulator_current_limit_t
-                                                               for details. */
-    bool sw1EnableUVBypass;                                /*!< Used to control whether bypass UV monitor for SW1,
-                                                               - \b true Bypass UV monitor for SW1.
-                                                               - \b false Don't bypass UV monitor for SW1. */
-    bool sw1EnableOVBypass;                                /*!< Used to control whether bypass OV monitor for SW1,
-                                                               - \b true Bypass OV monitor for SW1.
-                                                               - \b false Don't bypass OV monitor for SW1. */
-    bool sw1FaultReEnabled; /*!< Used to control whether return to sw1 regulator previous state
-                            if fault condition is cleared.
-                            - \b true  SW1 regulator remains disabled after the fault condition is cleared
-                                        or no longer present.
-                            - \b false SW1 regulator returns to its previous state if fault condition is cleared. */
+    pf5020_buck_regulator_current_limit_t sw1CurrentLimit;      /*!< SW1 buck regulator current limitation value, please
+                                                                    refer to @ref pf5020_buck_regulator_current_limit_t
+                                                                    for details. */
+    bool sw1EnableUVBypass;                                     /*!< Used to control whether bypass UV monitor for SW1,
+                                                                    - \b true Bypass UV monitor for SW1.
+                                                                    - \b false Don't bypass UV monitor for SW1. */
+    bool sw1EnableOVBypass;                                     /*!< Used to control whether bypass OV monitor for SW1,
+                                                                    - \b true Bypass OV monitor for SW1.
+                                                                    - \b false Don't bypass OV monitor for SW1. */
+    bool sw1FaultReEnabled;       /*!< Used to control whether return to sw1 regulator previous state
+                                  if fault condition is cleared.
+                                  - \b true  SW1 regulator remains disabled after the fault condition is cleared
+                                              or no longer present.
+                                  - \b false SW1 regulator returns to its previous state if fault condition is cleared. */
 
-    bool sw1EnablePGMonitor; /*!< Enable/disable SW1 regulator PG monitor. */
+    bool sw1EnablePGMonitor;      /*!< Enable/disable SW1 regulator PG monitor. */
 
     bool sw1EnableWatchdogBypass; /*!< Enable/disable watchdog bypass,
                                       - \b true The watchdog bypass is enabled and the output of the SW1 regulator
@@ -542,18 +542,18 @@ typedef struct _pf5020_sw2_regulator_config
                                                            @ref pf5020_type1_buck_regulator_dvs_ramp_t
                                                            for details. */
 
-    uint8_t sw2RunOutputVolt; /*!< The output voltage during RUN state, the step is 6.25mV,
-                               0: 0.4V, 177: 1.8V, 178 to 255 reserved. */
+    uint8_t sw2RunOutputVolt;                          /*!< The output voltage during RUN state, the step is 6.25mV,
+                                                        0: 0.4V, 177: 1.8V, 178 to 255 reserved. */
     pf5020_buck_regulator_operate_mode_t
-        sw2RunOperateMode; /*!< SW2 operate mode in run state, please refer to
-                               @ref pf5020_buck_regulator_operate_mode_t for details. */
+        sw2RunOperateMode;                             /*!< SW2 operate mode in run state, please refer to
+                                                           @ref pf5020_buck_regulator_operate_mode_t for details. */
 
-    uint8_t sw2StandbyOutputVolt; /*!< The output voltage during standby state, the step is 6.25mV,
-                                   0: 0.4V, 177: 1.8V, 178 to 255 reserved. */
+    uint8_t sw2StandbyOutputVolt;                      /*!< The output voltage during standby state, the step is 6.25mV,
+                                                        0: 0.4V, 177: 1.8V, 178 to 255 reserved. */
     pf5020_buck_regulator_operate_mode_t sw2StandbyOperateMode; /*!< SW2 operate mode in standby mode. */
 
-    pf5020_buck_regulator_phase_shift_t sw2PhaseShift; /*!< SW2 buck regulator phase shift value, please refer
-                                                           to @ref pf5020_buck_regulator_phase_shift_t for details. */
+    pf5020_buck_regulator_phase_shift_t sw2PhaseShift;          /*!< SW2 buck regulator phase shift value, please refer
+                                                                    to @ref pf5020_buck_regulator_phase_shift_t for details. */
 
     bool sw2EnableVTTOperation; /*!< Enable/disable VTT mode, VTT mode used to create VTT termination
                                     for DDR memories. */
@@ -567,13 +567,13 @@ typedef struct _pf5020_sw2_regulator_config
     bool sw2EnableOVBypass;                                /*!< Used to control whether bypass OV monitor for SW2,
                                                                - \b true Bypass OV monitor for SW2.
                                                                - \b false Don't bypass OV monitor for SW2. */
-    bool sw2FaultReEnabled; /*!< Used to control whether return to sw2 regulator previous state
-                                if fault condition is cleared.
-                            - \b true  SW2 regulator remains disabled after the fault condition is cleared
-                                        or no longer present.
-                            - \b false SW2 regulator returns to its previous state if fault condition is cleared. */
+    bool sw2FaultReEnabled;       /*!< Used to control whether return to sw2 regulator previous state
+                                      if fault condition is cleared.
+                                  - \b true  SW2 regulator remains disabled after the fault condition is cleared
+                                              or no longer present.
+                                  - \b false SW2 regulator returns to its previous state if fault condition is cleared. */
 
-    bool sw2EnablePGMonitor; /*!< Enable/disable SW2 regulator PG monitor. */
+    bool sw2EnablePGMonitor;      /*!< Enable/disable SW2 regulator PG monitor. */
 
     bool sw2EnableWatchdogBypass; /*!< Enable/disable watchdog bypass,
                                       - \b true The watchdog bypass is enabled and the output of the SW2 regulator
@@ -596,8 +596,8 @@ typedef struct _pf5020_swnd1_regulator_config
                                                                   @ref pf5020_buck_regulator_operate_mode_t for details. */
     pf5020_buck_regulator_operate_mode_t swnd1StandbyOperateMode; /*!< SWND1 operate mode in standby mode. */
 
-    pf5020_buck_regulator_phase_shift_t swnd1PhaseShift; /*!< SWND1 buck regulator phase shift value, please refer
-                                                         to @ref pf5020_buck_regulator_phase_shift_t for details. */
+    pf5020_buck_regulator_phase_shift_t swnd1PhaseShift;     /*!< SWND1 buck regulator phase shift value, please refer
+                                                             to @ref pf5020_buck_regulator_phase_shift_t for details. */
 
     pf5020_buck_regulator_current_limit_t swnd1CurrentLimit; /*!< SWND1 buck regulator current limitation value, please
                                                                 refer to @ref pf5020_buck_regulator_current_limit_t
@@ -608,13 +608,13 @@ typedef struct _pf5020_swnd1_regulator_config
     bool swnd1EnableOVBypass;                                /*!< Used to control whether bypass OV monitor for SWND1,
                                                                  - \b true Bypass OV monitor for SWND1.
                                                                  - \b false Don't bypass OV monitor for SWND1. */
-    bool swnd1FaultReEnabled; /*!< Used to control whether return to swnd1 regulator previous state
-                                if fault condition is cleared.
-                            - \b true  SWND1 regulator remains disabled after the fault condition is cleared
-                                        or no longer present.
-                            - \b false SWND1 regulator returns to its previous state if fault condition is cleared. */
+    bool swnd1FaultReEnabled;       /*!< Used to control whether return to swnd1 regulator previous state
+                                      if fault condition is cleared.
+                                  - \b true  SWND1 regulator remains disabled after the fault condition is cleared
+                                              or no longer present.
+                                  - \b false SWND1 regulator returns to its previous state if fault condition is cleared. */
 
-    bool swnd1EnablePGMonitor; /*!< Enable/disable SWND1 regulator PG monitor. */
+    bool swnd1EnablePGMonitor;      /*!< Enable/disable SWND1 regulator PG monitor. */
 
     bool swnd1EnableWatchdogBypass; /*!< Enable/disable watchdog bypass,
                                       - \b true The watchdog bypass is enabled and the output of the SWND1 regulator
@@ -631,11 +631,11 @@ typedef struct _pf5020_swnd1_regulator_config
  */
 typedef struct _pf5020_ldo1_regulator_config
 {
-    bool ldo1RunEnable;                             /*!< Enable/disable LDO1 in run state,
-                                                        - \b true Enable LDO1 in run state;
-                                                        - \b false Disable LDO1 in run state. */
-    pf5020_ldo1_output_voltage_t ldo1RunOutputVolt; /*!< Used to set the output voltage of LDO1 in run state,
-                                                        please refer to @ref pf5020_ldo1_output_voltage_t. */
+    bool ldo1RunEnable;                                 /*!< Enable/disable LDO1 in run state,
+                                                            - \b true Enable LDO1 in run state;
+                                                            - \b false Disable LDO1 in run state. */
+    pf5020_ldo1_output_voltage_t ldo1RunOutputVolt;     /*!< Used to set the output voltage of LDO1 in run state,
+                                                            please refer to @ref pf5020_ldo1_output_voltage_t. */
 
     bool ldo1StandbyEnable;                             /*!< Enable/disable LDO1 in standby state,
                                                             - \b true Enable LDO1 in standby state;
@@ -643,24 +643,24 @@ typedef struct _pf5020_ldo1_regulator_config
     pf5020_ldo1_output_voltage_t ldo1StandbyOutputVolt; /*!< Used to set the output voltage of LDO1 in standby state,
                                                         please refer to @ref pf5020_ldo1_output_voltage_t. */
 
-    bool ldo1EnableUVBypass;   /*!< Used to control whether bypass UV monitor for LDO1,
-                                   - \b true Bypass UV monitor for LDO1.
-                                   - \b false Don't bypass UV monitor for LDO1. */
-    bool ldo1EnableOVBypass;   /*!< Used to control whether bypass OV monitor for LDO1,
-                                   - \b true Bypass OV monitor for LDO1.
-                                   - \b false Don't bypass OV monitor for LDO1. */
-    bool ldo1EnableILIMBypass; /*!< Used to control whether bypass ILIM monitor for LDO1,
-                                   - \b true Bypass ILIM monitor for LDO1.
-                                   - \b false Don't bypass ILIM monitor for LDO1. */
+    bool ldo1EnableUVBypass;                            /*!< Used to control whether bypass UV monitor for LDO1,
+                                                            - \b true Bypass UV monitor for LDO1.
+                                                            - \b false Don't bypass UV monitor for LDO1. */
+    bool ldo1EnableOVBypass;                            /*!< Used to control whether bypass OV monitor for LDO1,
+                                                            - \b true Bypass OV monitor for LDO1.
+                                                            - \b false Don't bypass OV monitor for LDO1. */
+    bool ldo1EnableILIMBypass;                          /*!< Used to control whether bypass ILIM monitor for LDO1,
+                                                            - \b true Bypass ILIM monitor for LDO1.
+                                                            - \b false Don't bypass ILIM monitor for LDO1. */
 
-    bool ldo1FaultReEnabled; /*!< Used to control whether return to ldo1 regulator previous state
-                                if fault condition is cleared.
-                            - \b true  LDO1 regulator remains disabled after the fault condition is cleared
-                                        or no longer present.
-                            - \b false LDO1 regulator returns to its previous state if fault condition is
-                                        cleared. */
+    bool ldo1FaultReEnabled;       /*!< Used to control whether return to ldo1 regulator previous state
+                                      if fault condition is cleared.
+                                  - \b true  LDO1 regulator remains disabled after the fault condition is cleared
+                                              or no longer present.
+                                  - \b false LDO1 regulator returns to its previous state if fault condition is
+                                              cleared. */
 
-    bool ldo1EnablePGMonitor; /*!< Enable/disable LDO1 regulator PG monitor. */
+    bool ldo1EnablePGMonitor;      /*!< Enable/disable LDO1 regulator PG monitor. */
 
     bool ldo1EnableWatchdogBypass; /*!< Enable/disable watchdog bypass,
                                       - \b true The watchdog bypass is enabled and the output of the LDO1 regulator
@@ -834,7 +834,7 @@ void PF5020_GetDefaultConfig(pf5020_config_t *config);
  */
 void PF5020_CreateHandle(pf5020_handle_t *handle, const pf5020_config_t *config);
 
-/* @} */
+/*! @} */
 
 /*! @name Power Up/Down Sequence Control API
  *@{
@@ -921,7 +921,7 @@ status_t PF5020_SetPowerDownGroupDelay(pf5020_handle_t *handle,
  */
 status_t PF5020_SetResetBMcuPinDelay(pf5020_handle_t *handle, pf5020_resetBMCU_delay_t delay);
 
-/* @} */
+/*! @} */
 
 /*! @name Clock Management
  *@{
@@ -949,7 +949,7 @@ status_t PF5020_CLK_ConfigHighSpeedClock(pf5020_handle_t *handle, const pf5020_h
  */
 status_t PF5020_CLK_EnableSyncOut(pf5020_handle_t *handle, bool enable);
 
-/* @} */
+/*! @} */
 
 /*! @name Converters Management
  * @{
@@ -1356,7 +1356,7 @@ status_t PF5020_LDO1_EnablePGMonitor(pf5020_handle_t *handle, bool enable);
  */
 status_t PF5020_LDO1_EnableWatchDogBypass(pf5020_handle_t *handle, bool enable);
 
-/* @} */
+/*! @} */
 
 /*! @name Fault Detection
  * @{
@@ -1421,7 +1421,7 @@ uint8_t PF5020_GetFaultCounterCurrentValue(pf5020_handle_t *handle);
  */
 status_t PF5020_SetFaultTimerExpireValue(pf5020_handle_t *handle, uint8_t expireValue);
 
-/* @} */
+/*! @} */
 
 /*! @name Watchdog Management
  * @{
@@ -1497,7 +1497,7 @@ status_t PF5020_WDOG_SetWDEventCounterMaxValue(pf5020_handle_t *handle, uint8_t 
  */
 uint8_t PF5020_WDOG_GetWDEventCounterCurrentValue(pf5020_handle_t *handle);
 
-/* @} */
+/*! @} */
 
 /*! @name Temperature Sensor
  * @{
@@ -1517,7 +1517,7 @@ status_t PF5020_TMP_SetThermalMonitorConfig(pf5020_handle_t *handle,
                                             bool enable,
                                             pf5020_temp_sensor_operate_mode_t mode);
 
-/* @} */
+/*! @} */
 
 /*! @name Analog Multiplexer Control APIs
  * @{
@@ -1535,7 +1535,7 @@ status_t PF5020_TMP_SetThermalMonitorConfig(pf5020_handle_t *handle,
  */
 status_t PF5020_AMUX_SetAnalogMuxConfig(pf5020_handle_t *handle, bool enable, pf5020_amux_selection_t amuxSel);
 
-/* @} */
+/*! @} */
 
 /*! @name Interrupt Control
  * @{
@@ -1585,6 +1585,6 @@ status_t PF5020_GetInterruptLatchStatus(pf5020_handle_t *handle, uint64_t *inter
  */
 status_t PF5020_ClearInterruptStatus(pf5020_handle_t *handle, uint64_t interruptMask);
 
-/* @} */
+/*! @} */
 
 #endif /* _FSL_PF5020_H_ */

@@ -1,13 +1,13 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020,2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FLEXIO_MCULCD_EDMA_H_
-#define _FSL_FLEXIO_MCULCD_EDMA_H_
+#ifndef FSL_FLEXIO_MCULCD_EDMA_H_
+#define FSL_FLEXIO_MCULCD_EDMA_H_
 
 #include "fsl_edma.h"
 #include "fsl_flexio_mculcd.h"
@@ -21,10 +21,10 @@
  * Definitions
  ******************************************************************************/
 
-/*@{*/
+/*! @{ */
 /*! @brief FlexIO MCULCD EDMA driver version. */
-#define FSL_FLEXIO_MCULCD_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
-/*@}*/
+#define FSL_FLEXIO_MCULCD_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+/*! @} */
 
 /*! @brief  typedef for flexio_mculcd_edma_handle_t in advance. */
 typedef struct _flexio_mculcd_edma_handle flexio_mculcd_edma_handle_t;
@@ -150,4 +150,4 @@ status_t FLEXIO_MCULCD_TransferGetCountEDMA(FLEXIO_MCULCD_Type *base,
 /*!
  * @}
  */
-#endif /* _FSL_FLEXIO_MCULCD_EDMA_H_ */
+#endif /* FSL_FLEXIO_MCULCD_EDMA_H_ */

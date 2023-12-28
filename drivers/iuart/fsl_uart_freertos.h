@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef __FSL_UART_RTOS_H__
-#define __FSL_UART_RTOS_H__
+#ifndef FSL_UART_RTOS_H__
+#define FSL_UART_RTOS_H__
 
 #include "fsl_uart.h"
 #include <FreeRTOS.h>
@@ -23,10 +23,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief UART FreeRTOS driver version 2.1.1. */
 #define FSL_UART_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief UART configuration structure */
 typedef struct _uart_rtos_config
@@ -46,14 +46,14 @@ typedef struct _uart_rtos_config
  *
  * These are the only valid states for txEvent and rxEvent (uart_rtos_handle_t).
  */
-/*@{*/
+/*! @{ */
 /*! @brief Event flag - transfer complete. */
 #define RTOS_UART_COMPLETE 0x1U
 /*! @brief Event flag - ring buffer overrun. */
 #define RTOS_UART_RING_BUFFER_OVERRUN 0x2U
 /*! @brief Event flag - hardware buffer overrun. */
 #define RTOS_UART_HARDWARE_BUFFER_OVERRUN 0x4U
-/*@}*/
+/*! @} */
 
 /*! @brief UART FreeRTOS transfer structure. */
 typedef struct _uart_rtos_handle
@@ -138,7 +138,7 @@ int UART_RTOS_Send(uart_rtos_handle_t *handle, uint8_t *buffer, uint32_t length)
  */
 int UART_RTOS_Receive(uart_rtos_handle_t *handle, uint8_t *buffer, uint32_t length, size_t *received);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -146,4 +146,4 @@ int UART_RTOS_Receive(uart_rtos_handle_t *handle, uint8_t *buffer, uint32_t leng
 
 /*! @}*/
 
-#endif /* __FSL_UART_RTOS_H__ */
+#endif /* FSL_UART_RTOS_H__ */

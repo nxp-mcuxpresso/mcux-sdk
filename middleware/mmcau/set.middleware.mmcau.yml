@@ -167,6 +167,7 @@ set.middleware.mmcau:
       - K32L2A31xxxxA
       - K32L2A41xxxxA
       - K32L3A60xxx
+      - K32W032S1M2xxx
       - MIMXRT1165xxxxx
       - MIMXRT1166xxxxx
       - MIMXRT1171xxxxx
@@ -174,12 +175,68 @@ set.middleware.mmcau:
       - MIMXRT1173xxxxx
       - MIMXRT1175xxxxx
       - MIMXRT1176xxxxx
+      - MIMXRT117Hxxxxx
+      - MK27FN2M0xxx15
+      - MK27FN2M0Axxx15
+      - MK28FN2M0xxx15
+      - MK28FN2M0Axxx15
+      - MK80FN256xxx15
+      - MK81FN256xxx15
+      - MK82FN256xxx15
+      - MKL28Z512xxx7
+      - MKV56F1M0xxx24
+      - MKV56F512xxx24
+      - MKV58F1M0xxx24
+      - MKV58F512xxx24
     - device_id:
+      - MK11DN512Axxx5
+      - MK11DX128Axxx5
+      - MK11DX256Axxx5
+      - MK21DN512Axxx5
+      - MK21DX128Axxx5
+      - MK21DX256Axxx5
+      - MK21FN1M0Axxx12
+      - MK21FX512Axxx12
+      - MK24FN1M0xxx12
+      - MK26FN2M0xxx18
+      - MK52DN512xxx10
+      - MK53DN512xxx10
+      - MK53DX256xxx10
+      - MK60DN256xxx10
+      - MK60DN512xxx10
+      - MK60DX256xxx10
+      - MK63FN1M0xxx12
+      - MK64FN1M0xxx12
+      - MK64FX512xxx12
+      - MK65FN2M0xxx18
+      - MK65FX1M0xxx18
+      - MK66FN2M0xxx18
+      - MK66FX1M0xxx18
+      - MK70FN1M0xxx12
+      - MK70FX512xxx12
+      - MK70FN1M0xxx15
+      - MK70FX512xxx15
+      - MK80FN256xxx15
+      - MK81FN256xxx15
+      - MK82FN256xxx15
+      - MKL28Z512xxx7
       - K32L2A41xxxxA
       - MKM34Z256xxx7
       - MKM35Z512xxx7
       - MKM35Z256xxx7
+      - MKV56F1M0xxx24
+      - MKV56F512xxx24
+      - MKV58F1M0xxx24
+      - MKV58F512xxx24
+      - MKW21D256xxx5
+      - MKW21D512xxx5
+      - MKW22D512xxx5
+      - MKW24D512xxx5
       - MCIMX7U5xxxxx
+      - MIMX8QM6xxxFF
+      - MIMX8QX6xxxFZ
+      - MIMX8QX6xxxDZ
+      - MIMX8DL1xxxFZ
       - MIMXRT1165xxxxx
       - MIMXRT1166xxxxx
       - MIMXRT1173xxxxx

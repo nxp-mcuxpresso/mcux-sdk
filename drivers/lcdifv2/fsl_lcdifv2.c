@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 NXP
+ * Copyright 2019-2023 NXP
  * All rights reserved.
  *
  *
@@ -81,7 +81,6 @@ static void LCDIFV2_ResetRegister(LCDIFV2_Type *base)
     base->VSYN_PARA         = 0x00C01803U;
     base->INT[0].INT_ENABLE = 0U;
     base->INT[1].INT_ENABLE = 0U;
-    base->PDI_PARA          = 0x00001000U;
 
     for (i = 0; i < (uint32_t)LCDIFV2_LAYER_COUNT; i++)
     {

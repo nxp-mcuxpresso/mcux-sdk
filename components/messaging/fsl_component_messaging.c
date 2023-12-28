@@ -1,6 +1,6 @@
 /*!
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2023 NXP
  * All rights reserved.
  *
  *
@@ -155,7 +155,9 @@ void *MSG_Alloc(uint32_t length)
     buffer = MEM_BufferAlloc(length + sizeof(list_element_t));
     if (buffer != NULL)
     {
-        buffer = (list_element_t *)buffer + 1;
+        ((list_element_t *)buffer)->list = NULL;
+        buffer                           = (list_element_t *)buffer + 1;
+        memset(buffer, 0u, length);
     }
     return buffer;
 }

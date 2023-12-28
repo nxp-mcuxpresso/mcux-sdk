@@ -64,7 +64,7 @@ typedef enum _serial_port_usb_cdc_controller_index
     kSerialManager_UsbControllerLpcIp3511Hs1 = 7U, /*!< LPC USB IP3511 HS controller 1, there are no platforms which
                                                      have two IP3511 IPs, this is reserved to be used in the future. */
 
-    kSerialManager_UsbControllerOhci0 = 8U, /*!< OHCI 0U */
+    kSerialManager_UsbControllerOhci0 = 8U,        /*!< OHCI 0U */
     kSerialManager_UsbControllerOhci1 = 9U, /*!< OHCI 1U, Currently, there are no platforms which have two OHCI IPs,
                                   this is reserved to be used in the future. */
 

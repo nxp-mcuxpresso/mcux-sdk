@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef __FSL_DCDC_H__
-#define __FSL_DCDC_H__
+#ifndef FSL_DCDC_H__
+#define FSL_DCDC_H__
 
 #include "fsl_common.h"
 
@@ -338,7 +338,7 @@ void DCDC_Deinit(DCDC_Type *base);
 void DCDC_GetDefaultConfig(DCDC_Type *base, dcdc_config_t *config);
 #endif /* FSL_FEATURE_DCDC_HAS_CTRL_REGp */
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -353,7 +353,7 @@ void DCDC_GetDefaultConfig(DCDC_Type *base, dcdc_config_t *config);
  */
 uint32_t DCDC_GetstatusFlags(DCDC_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Misc control
@@ -663,7 +663,7 @@ static inline void DCDC_EnableImproveTransition(DCDC_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 
 #if defined(DCDC_REG4_ENABLE_SP_MASK) && DCDC_REG4_ENABLE_SP_MASK
 /*!
@@ -693,7 +693,7 @@ static inline void DCDC_SetPointDeinit(DCDC_Type *base, uint32_t setpointMap)
     base->REG4 &= ~setpointMap;
 }
 
-/* @} */
+/*! @} */
 #endif /* DCDC_REG4_ENABLE_SP_MASK */
 
 /*!
@@ -724,12 +724,12 @@ void DCDC_BootIntoDCM(DCDC_Type *base);
  */
 void DCDC_BootIntoCCM(DCDC_Type *base);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
-/* @} */
+/*! @} */
 
-#endif /* __FSL_DCDC_H__ */
+#endif /* FSL_DCDC_H__ */

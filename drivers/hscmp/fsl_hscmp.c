@@ -7,9 +7,16 @@
 
 #include "fsl_hscmp.h"
 
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.hscmp"
+#endif
+
+#if defined(HSCMP_RSTS)
+#define HSCMP_RESETS_ARRAY HSCMP_RSTS
 #endif
 
 /*******************************************************************************
@@ -37,10 +44,15 @@ static const clock_ip_name_t s_hscmpClocks[] = HSCMP_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 #endif /* HSCMP_CLOCKS */
 
+#if defined(HSCMP_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_hscmpResets[] = HSCMP_RESETS_ARRAY;
+#endif
+
 /*******************************************************************************
  * Codes
  ******************************************************************************/
-#if defined(HSCMP_CLOCKS)
+#if defined(HSCMP_CLOCKS) || defined(HSCMP_RESETS_ARRAY)
 static uint32_t HSCMP_GetInstance(HSCMP_Type *base)
 {
     uint32_t instance;
@@ -85,6 +97,10 @@ void HSCMP_Init(HSCMP_Type *base, const hscmp_config_t *config)
     CLOCK_EnableClock(s_hscmpClocks[HSCMP_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 #endif /* HSCMP_CLOCKS */
+
+#if defined(HSCMP_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_hscmpResets[HSCMP_GetInstance(base)]);
+#endif
 
     /* Configure. */
     HSCMP_Enable(base, false);

@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SEMA42_H_
-#define _FSL_SEMA42_H_
+#ifndef FSL_SEMA42_H_
+#define FSL_SEMA42_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SEMA42 driver version */
-#define FSL_SEMA42_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
-/*@}*/
+#define FSL_SEMA42_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+/*! @} */
 
 /*!
  * @brief SEMA42 status return codes.
@@ -209,4 +209,4 @@ static inline status_t SEMA42_ResetAllGates(SEMA42_Type *base)
  * @}
  */
 
-#endif /* _FSL_SEMA42_H_ */
+#endif /* FSL_SEMA42_H_ */

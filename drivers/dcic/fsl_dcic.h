@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_DCIC_H_
-#define _FSL_DCIC_H_
+#ifndef FSL_DCIC_H_
+#define FSL_DCIC_H_
 
 #include "fsl_common.h"
 
@@ -183,7 +183,7 @@ static inline void DCIC_Enable(DCIC_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -218,7 +218,7 @@ static inline void DCIC_ClearStatusFlags(DCIC_Type *base, uint32_t mask)
     base->DCICS = (mask & (DCIC_DCICS_FI_STAT_MASK | DCIC_DCICS_ROI_MATCH_STAT_MASK));
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -260,7 +260,7 @@ static inline void DCIC_DisableInterrupts(DCIC_Type *base, uint32_t mask)
     base->DCICIC |= mask;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Region
@@ -337,7 +337,7 @@ static inline uint32_t DCIC_GetRegionCalculatedCrc(DCIC_Type *base, uint8_t regi
     return localdcicrcs;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Misc control.
@@ -355,7 +355,7 @@ static inline uint32_t DCIC_GetRegionCalculatedCrc(DCIC_Type *base, uint8_t regi
  *   - If integrity check is disabled, the signal is idle.
  *
  * @param base DCIC peripheral base address.
- * @param enable. Use true to enable, false to disable.
+ * @param enable Use true to enable, false to disable.
  */
 static inline void DCIC_EnableMismatchExternalSignal(DCIC_Type *base, bool enable)
 {
@@ -369,7 +369,7 @@ static inline void DCIC_EnableMismatchExternalSignal(DCIC_Type *base, bool enabl
     }
 }
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -377,4 +377,4 @@ static inline void DCIC_EnableMismatchExternalSignal(DCIC_Type *base, bool enabl
 /*!
  * @}
  */
-#endif /* _FSL_DCIC_H_ */
+#endif /* FSL_DCIC_H_ */

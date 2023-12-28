@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2021,2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -25,10 +25,13 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Driver version 2.0.0. */
-#define FSL_SOC_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief Driver version. */
+#define FSL_SOC_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
+/* PLL VCO output frequency max value is 1.5GHz, VCO output is (refClk / CN ) * CM. */
+#define DSI_DPHY_PLL_VCO_MAX 1500000000U
+#define DSI_DPHY_PLL_VCO_MIN 640000000U
 /*******************************************************************************
  * API
  ******************************************************************************/

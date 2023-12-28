@@ -109,7 +109,7 @@
 #define NOR_CMD_LUT_SEQ_IDX_WRITEENABLE 3U /*!< Write Enable sequence id in lookupTable stored in config block */
 #define NOR_CMD_LUT_SEQ_IDX_WRITEENABLE_XPI \
     4U /*!< Write Enable DPI/QPI/OPI sequence id in lookupTable stored in config block */
-#define NOR_CMD_LUT_SEQ_IDX_ERASESECTOR 5U /*!< Erase Sector sequence id in lookupTable stored in config block */
+#define NOR_CMD_LUT_SEQ_IDX_ERASESECTOR 5U  /*!< Erase Sector sequence id in lookupTable stored in config block */
 #define NOR_CMD_LUT_SEQ_IDX_READID      7U
 #define NOR_CMD_LUT_SEQ_IDX_ERASEBLOCK  8U  /*!< Erase Block sequence id in lookupTable stored in config block */
 #define NOR_CMD_LUT_SEQ_IDX_PAGEPROGRAM 9U  /*!< Program sequence id in lookupTable stored in config block */
@@ -244,9 +244,9 @@ typedef struct _flexspi_mem_config
     uint32_t controllerMiscOption; /*!< [0x040-0x043] Controller Misc Options, see Misc feature bit definitions for more
                                       details */
     uint8_t deviceType;            /*!< [0x044-0x044] Device Type:  See Flash Type Definition for more details */
-    uint8_t sflashPadType; /*!< [0x045-0x045] Serial Flash Pad Type: 1 - Single, 2 - Dual, 4 - Quad, 8 - Octal */
-    uint8_t serialClkFreq; /*!< [0x046-0x046] Serial Flash Frequencey, device specific definitions, See System Boot
-                                              Chapter for more details */
+    uint8_t sflashPadType;  /*!< [0x045-0x045] Serial Flash Pad Type: 1 - Single, 2 - Dual, 4 - Quad, 8 - Octal */
+    uint8_t serialClkFreq;  /*!< [0x046-0x046] Serial Flash Frequencey, device specific definitions, See System Boot
+                                               Chapter for more details */
     uint8_t
         lutCustomSeqEnable; /*!< [0x047-0x047] LUT customization Enable, it is required if the program/erase cannot
                                               be done using 1 LUT sequence, currently, only applicable to HyperFLASH */
@@ -309,9 +309,9 @@ enum _flexspi_nor_status
     kStatus_FLEXSPINOR_DTRRead_DummyProbeFailed =
         MAKE_STATUS(kROM_StatusGroup_FLEXSPINOR, 10), /*!< Status for DDR Read dummy probe failure */
     kStatus_ROM_FLEXSPINOR_SFDP_NotFound =
-        MAKE_STATUS(kROM_StatusGroup_FLEXSPINOR, 7), /*!< Status for SFDP read failure */
+        MAKE_STATUS(kROM_StatusGroup_FLEXSPINOR, 7),  /*!< Status for SFDP read failure */
     kStatus_ROM_FLEXSPINOR_Flash_NotFound =
-        MAKE_STATUS(kROM_StatusGroup_FLEXSPINOR, 9), /*!< Status for Flash detection failure */
+        MAKE_STATUS(kROM_StatusGroup_FLEXSPINOR, 9),  /*!< Status for Flash detection failure */
 };
 
 typedef enum _flexspi_operation

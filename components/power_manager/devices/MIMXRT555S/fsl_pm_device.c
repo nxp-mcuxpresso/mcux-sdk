@@ -15,12 +15,16 @@
  * Macros
  ******************************************************************************/
 
- /*******************************************************************************
+/*******************************************************************************
  * Prototypes
  ******************************************************************************/
-static void IMXRT500_EnterLowPowerMode(uint8_t stateIndex, pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup);
+static void IMXRT500_EnterLowPowerMode(uint8_t stateIndex,
+                                       pm_resc_mask_t *pSoftRescMask,
+                                       pm_resc_group_t *pSysRescGroup);
 static void IMXRT500_CleanExitLowPowerMode(void);
-static void iMXRT500_EnablePeripheralsDeepSleep(pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup, uint32_t *enabledResources);
+static void iMXRT500_EnablePeripheralsDeepSleep(pm_resc_mask_t *pSoftRescMask,
+                                                pm_resc_group_t *pSysRescGroup,
+                                                uint32_t *enabledResources);
 static void iMXRT500_DisablePeripheralsSleep(pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup);
 
 #if (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER)
@@ -142,100 +146,99 @@ const pm_device_option_t g_devicePMOption = {
 };
 
 /* Table of PDSLEEPCFG1 masks for each dedicated Peripheral RAM (PRAM) constraint */
-static const enabled_resources_prams_t enResPRAMs[RESC_GROUP_PRAMS_SIZE] = 
-{
-  [kResc_SRAM_FLEXSPI0  - RESC_GROUP_PRAMS_START] = 
-      {SYSCTL0_PDSLEEPCFG1_FLEXSPI0_SRAM_APD_MASK, SYSCTL0_PDSLEEPCFG1_FLEXSPI0_SRAM_PPD_MASK},
-  [kResc_SRAM_FLEXSPI1  - RESC_GROUP_PRAMS_START] = 
-      {SYSCTL0_PDSLEEPCFG1_FLEXSPI1_SRAM_APD_MASK, SYSCTL0_PDSLEEPCFG1_FLEXSPI1_SRAM_PPD_MASK},
-  [kResc_SRAM_USB       - RESC_GROUP_PRAMS_START] = 
-      {SYSCTL0_PDSLEEPCFG1_USBHS_SRAM_APD_MASK, SYSCTL0_PDSLEEPCFG1_USBHS_SRAM_PPD_MASK},
-  [kResc_SRAM_USDHC0    - RESC_GROUP_PRAMS_START] = 
-      {SYSCTL0_PDSLEEPCFG1_USDHC0_SRAM_APD_MASK, SYSCTL0_PDSLEEPCFG1_USDHC0_SRAM_PPD_MASK},
-  [kResc_SRAM_USDHC1    - RESC_GROUP_PRAMS_START] = 
-      {SYSCTL0_PDSLEEPCFG1_USDHC1_SRAM_APD_MASK, SYSCTL0_PDSLEEPCFG1_USDHC1_SRAM_PPD_MASK},
-  [kResc_SRAM_GPU       - RESC_GROUP_PRAMS_START] = 
-      {SYSCTL0_PDSLEEPCFG1_GPU_SRAM_APD_MASK, SYSCTL0_PDSLEEPCFG1_GPU_SRAM_PPD_MASK},
-  [kResc_SRAM_SMARTDMA  - RESC_GROUP_PRAMS_START] = 
-      {SYSCTL0_PDSLEEPCFG1_SMARTDMA_SRAM_APD_MASK, SYSCTL0_PDSLEEPCFG1_SMARTDMA_SRAM_PPD_MASK},
-  [kResc_SRAM_MIPIDSI   - RESC_GROUP_PRAMS_START] = 
-      {SYSCTL0_PDSLEEPCFG1_MIPIDSI_SRAM_APD_MASK, SYSCTL0_PDSLEEPCFG1_MIPIDSI_SRAM_PPD_MASK},
-  [kResc_SRAM_LCDIF     - RESC_GROUP_PRAMS_START] = 
-      {SYSCTL0_PDSLEEPCFG1_LCDIF_SRAM_APD_MASK, SYSCTL0_PDSLEEPCFG1_LCDIF_SRAM_PPD_MASK},
+static const enabled_resources_prams_t enResPRAMs[RESC_GROUP_PRAMS_SIZE] = {
+    [kResc_SRAM_FLEXSPI0 - RESC_GROUP_PRAMS_START] = {SYSCTL0_PDSLEEPCFG1_FLEXSPI0_SRAM_APD_MASK,
+                                                      SYSCTL0_PDSLEEPCFG1_FLEXSPI0_SRAM_PPD_MASK},
+    [kResc_SRAM_FLEXSPI1 - RESC_GROUP_PRAMS_START] = {SYSCTL0_PDSLEEPCFG1_FLEXSPI1_SRAM_APD_MASK,
+                                                      SYSCTL0_PDSLEEPCFG1_FLEXSPI1_SRAM_PPD_MASK},
+    [kResc_SRAM_USB -
+        RESC_GROUP_PRAMS_START] = {SYSCTL0_PDSLEEPCFG1_USBHS_SRAM_APD_MASK, SYSCTL0_PDSLEEPCFG1_USBHS_SRAM_PPD_MASK},
+    [kResc_SRAM_USDHC0 -
+        RESC_GROUP_PRAMS_START] = {SYSCTL0_PDSLEEPCFG1_USDHC0_SRAM_APD_MASK, SYSCTL0_PDSLEEPCFG1_USDHC0_SRAM_PPD_MASK},
+    [kResc_SRAM_USDHC1 -
+        RESC_GROUP_PRAMS_START] = {SYSCTL0_PDSLEEPCFG1_USDHC1_SRAM_APD_MASK, SYSCTL0_PDSLEEPCFG1_USDHC1_SRAM_PPD_MASK},
+    [kResc_SRAM_GPU -
+        RESC_GROUP_PRAMS_START] = {SYSCTL0_PDSLEEPCFG1_GPU_SRAM_APD_MASK, SYSCTL0_PDSLEEPCFG1_GPU_SRAM_PPD_MASK},
+    [kResc_SRAM_SMARTDMA - RESC_GROUP_PRAMS_START] = {SYSCTL0_PDSLEEPCFG1_SMARTDMA_SRAM_APD_MASK,
+                                                      SYSCTL0_PDSLEEPCFG1_SMARTDMA_SRAM_PPD_MASK},
+    [kResc_SRAM_MIPIDSI - RESC_GROUP_PRAMS_START]  = {SYSCTL0_PDSLEEPCFG1_MIPIDSI_SRAM_APD_MASK,
+                                                      SYSCTL0_PDSLEEPCFG1_MIPIDSI_SRAM_PPD_MASK},
+    [kResc_SRAM_LCDIF -
+        RESC_GROUP_PRAMS_START] = {SYSCTL0_PDSLEEPCFG1_LCDIF_SRAM_APD_MASK, SYSCTL0_PDSLEEPCFG1_LCDIF_SRAM_PPD_MASK},
 };
 
 /* PDSLEEPCFG masks for each System SRAM resource constraint */
-static const uint32_t enResSRAMs[RESC_GROUP_SRAMS_SIZE] = 
-{
-  [kResc_SRAM0_32KB   - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF0_APD_MASK,
-  [kResc_SRAM1_32KB   - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF1_APD_MASK,
-  [kResc_SRAM2_32KB   - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF2_APD_MASK,
-  [kResc_SRAM3_32KB   - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF3_APD_MASK,
-  [kResc_SRAM4_32KB   - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF4_APD_MASK,
-  [kResc_SRAM5_32KB   - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF5_APD_MASK,
-  [kResc_SRAM6_32KB   - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF6_APD_MASK,
-  [kResc_SRAM7_32KB   - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF7_APD_MASK,
-  [kResc_SRAM8_64KB   - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF8_APD_MASK,
-  [kResc_SRAM9_64KB   - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF9_APD_MASK,
-  [kResc_SRAM10_64KB  - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF10_APD_MASK,
-  [kResc_SRAM11_64KB  - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF11_APD_MASK,
-  [kResc_SRAM12_128KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF12_APD_MASK,
-  [kResc_SRAM13_128KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF13_APD_MASK,
-  [kResc_SRAM14_128KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF14_APD_MASK,
-  [kResc_SRAM15_128KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF15_APD_MASK,
-  [kResc_SRAM16_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF16_APD_MASK,
-  [kResc_SRAM17_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF17_APD_MASK,
-  [kResc_SRAM18_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF18_APD_MASK,
-  [kResc_SRAM19_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF19_APD_MASK,
-  [kResc_SRAM20_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF20_APD_MASK,
-  [kResc_SRAM21_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF21_APD_MASK,
-  [kResc_SRAM22_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF22_APD_MASK,
-  [kResc_SRAM23_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF23_APD_MASK,
-  [kResc_SRAM24_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF24_APD_MASK,
-  [kResc_SRAM25_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF25_APD_MASK,
-  [kResc_SRAM26_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF26_APD_MASK,
-  [kResc_SRAM27_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF27_APD_MASK,
-  [kResc_SRAM28_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF28_APD_MASK,
-  [kResc_SRAM29_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF29_APD_MASK,
-  [kResc_SRAM30_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF30_APD_MASK,
-  [kResc_SRAM31_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF31_APD_MASK,
+static const uint32_t enResSRAMs[RESC_GROUP_SRAMS_SIZE] = {
+    [kResc_SRAM0_32KB - RESC_GROUP_SRAMS_START]   = SYSCTL0_PDSLEEPCFG2_SRAM_IF0_APD_MASK,
+    [kResc_SRAM1_32KB - RESC_GROUP_SRAMS_START]   = SYSCTL0_PDSLEEPCFG2_SRAM_IF1_APD_MASK,
+    [kResc_SRAM2_32KB - RESC_GROUP_SRAMS_START]   = SYSCTL0_PDSLEEPCFG2_SRAM_IF2_APD_MASK,
+    [kResc_SRAM3_32KB - RESC_GROUP_SRAMS_START]   = SYSCTL0_PDSLEEPCFG2_SRAM_IF3_APD_MASK,
+    [kResc_SRAM4_32KB - RESC_GROUP_SRAMS_START]   = SYSCTL0_PDSLEEPCFG2_SRAM_IF4_APD_MASK,
+    [kResc_SRAM5_32KB - RESC_GROUP_SRAMS_START]   = SYSCTL0_PDSLEEPCFG2_SRAM_IF5_APD_MASK,
+    [kResc_SRAM6_32KB - RESC_GROUP_SRAMS_START]   = SYSCTL0_PDSLEEPCFG2_SRAM_IF6_APD_MASK,
+    [kResc_SRAM7_32KB - RESC_GROUP_SRAMS_START]   = SYSCTL0_PDSLEEPCFG2_SRAM_IF7_APD_MASK,
+    [kResc_SRAM8_64KB - RESC_GROUP_SRAMS_START]   = SYSCTL0_PDSLEEPCFG2_SRAM_IF8_APD_MASK,
+    [kResc_SRAM9_64KB - RESC_GROUP_SRAMS_START]   = SYSCTL0_PDSLEEPCFG2_SRAM_IF9_APD_MASK,
+    [kResc_SRAM10_64KB - RESC_GROUP_SRAMS_START]  = SYSCTL0_PDSLEEPCFG2_SRAM_IF10_APD_MASK,
+    [kResc_SRAM11_64KB - RESC_GROUP_SRAMS_START]  = SYSCTL0_PDSLEEPCFG2_SRAM_IF11_APD_MASK,
+    [kResc_SRAM12_128KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF12_APD_MASK,
+    [kResc_SRAM13_128KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF13_APD_MASK,
+    [kResc_SRAM14_128KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF14_APD_MASK,
+    [kResc_SRAM15_128KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF15_APD_MASK,
+    [kResc_SRAM16_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF16_APD_MASK,
+    [kResc_SRAM17_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF17_APD_MASK,
+    [kResc_SRAM18_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF18_APD_MASK,
+    [kResc_SRAM19_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF19_APD_MASK,
+    [kResc_SRAM20_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF20_APD_MASK,
+    [kResc_SRAM21_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF21_APD_MASK,
+    [kResc_SRAM22_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF22_APD_MASK,
+    [kResc_SRAM23_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF23_APD_MASK,
+    [kResc_SRAM24_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF24_APD_MASK,
+    [kResc_SRAM25_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF25_APD_MASK,
+    [kResc_SRAM26_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF26_APD_MASK,
+    [kResc_SRAM27_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF27_APD_MASK,
+    [kResc_SRAM28_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF28_APD_MASK,
+    [kResc_SRAM29_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF29_APD_MASK,
+    [kResc_SRAM30_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF30_APD_MASK,
+    [kResc_SRAM31_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF31_APD_MASK,
 };
 
 /* Table of PDSLEEPCFG group number and mask for each Peripheral constraint */
-static const enabled_resources_peripherals_t enResPeripherals[RESC_GROUP_PERIPHERALS_SIZE] = 
-{
-  [kResc_MAIN_CLK      - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_MAINCLK_SHUTOFF_MASK},
-  [kResc_VDDCOREREG_HP - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_VDDCOREREG_LP_MASK  },
-  [kResc_PMCREF_HP     - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_PMCREF_LP_MASK      },
-  [kResc_HVD1V8        - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_HVD1V8_PD_MASK      },
-  [kResc_PORCORE_HP    - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_PORCORE_LP_MASK     },
-  [kResc_LVDCORE_HP    - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_LVDCORE_LP_MASK     },
-  [kResc_HVDCORE       - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_HVDCORE_PD_MASK     },
-  [kResc_SYSXTAL       - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_SYSXTAL_PD_MASK     },
-  [kResc_LPOSC         - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_LPOSC_PD_MASK       },
-  [kResc_FRO           - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_FFRO_PD_MASK        },
-  [kResc_SYSPLLLDO     - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_SYSPLLLDO_PD_MASK   },
-  [kResc_SYSPLLANA     - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_SYSPLLANA_PD_MASK   },
-  [kResc_AUDIOPLLLDO   - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_AUDPLLLDO_PD_MASK   },
-  [kResc_AUDIOPLLANA   - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_AUDPLLANA_PD_MASK   },
-  [kResc_ADC_ACTIVE    - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_ADC_PD_MASK         },
-  [kResc_ADC_TEMP      - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_ADC_TEMPSNS_PD_MASK },
-  [kResc_PMC_TEMP      - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_PMC_TEMPSNS_PD_MASK },
-  [kResc_ACMP          - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_ACMP_PD_MASK        },
+static const enabled_resources_peripherals_t enResPeripherals[RESC_GROUP_PERIPHERALS_SIZE] = {
+    [kResc_MAIN_CLK - RESC_GROUP_PERIPHERALS_START]      = {0, SYSCTL0_PDSLEEPCFG0_MAINCLK_SHUTOFF_MASK},
+    [kResc_VDDCOREREG_HP - RESC_GROUP_PERIPHERALS_START] = {0, SYSCTL0_PDSLEEPCFG0_VDDCOREREG_LP_MASK},
+    [kResc_PMCREF_HP - RESC_GROUP_PERIPHERALS_START]     = {0, SYSCTL0_PDSLEEPCFG0_PMCREF_LP_MASK},
+    [kResc_HVD1V8 - RESC_GROUP_PERIPHERALS_START]        = {0, SYSCTL0_PDSLEEPCFG0_HVD1V8_PD_MASK},
+    [kResc_PORCORE_HP - RESC_GROUP_PERIPHERALS_START]    = {0, SYSCTL0_PDSLEEPCFG0_PORCORE_LP_MASK},
+    [kResc_LVDCORE_HP - RESC_GROUP_PERIPHERALS_START]    = {0, SYSCTL0_PDSLEEPCFG0_LVDCORE_LP_MASK},
+    [kResc_HVDCORE - RESC_GROUP_PERIPHERALS_START]       = {0, SYSCTL0_PDSLEEPCFG0_HVDCORE_PD_MASK},
+    [kResc_SYSXTAL - RESC_GROUP_PERIPHERALS_START]       = {0, SYSCTL0_PDSLEEPCFG0_SYSXTAL_PD_MASK},
+    [kResc_LPOSC - RESC_GROUP_PERIPHERALS_START]         = {0, SYSCTL0_PDSLEEPCFG0_LPOSC_PD_MASK},
+    [kResc_FRO - RESC_GROUP_PERIPHERALS_START]           = {0, SYSCTL0_PDSLEEPCFG0_FFRO_PD_MASK},
+    [kResc_SYSPLLLDO - RESC_GROUP_PERIPHERALS_START]     = {0, SYSCTL0_PDSLEEPCFG0_SYSPLLLDO_PD_MASK},
+    [kResc_SYSPLLANA - RESC_GROUP_PERIPHERALS_START]     = {0, SYSCTL0_PDSLEEPCFG0_SYSPLLANA_PD_MASK},
+    [kResc_AUDIOPLLLDO - RESC_GROUP_PERIPHERALS_START]   = {0, SYSCTL0_PDSLEEPCFG0_AUDPLLLDO_PD_MASK},
+    [kResc_AUDIOPLLANA - RESC_GROUP_PERIPHERALS_START]   = {0, SYSCTL0_PDSLEEPCFG0_AUDPLLANA_PD_MASK},
+    [kResc_ADC_ACTIVE - RESC_GROUP_PERIPHERALS_START]    = {0, SYSCTL0_PDSLEEPCFG0_ADC_PD_MASK},
+    [kResc_ADC_TEMP - RESC_GROUP_PERIPHERALS_START]      = {0, SYSCTL0_PDSLEEPCFG0_ADC_TEMPSNS_PD_MASK},
+    [kResc_PMC_TEMP - RESC_GROUP_PERIPHERALS_START]      = {0, SYSCTL0_PDSLEEPCFG0_PMC_TEMPSNS_PD_MASK},
+    [kResc_ACMP - RESC_GROUP_PERIPHERALS_START]          = {0, SYSCTL0_PDSLEEPCFG0_ACMP_PD_MASK},
 
-  [kResc_SRAM_PQ       - RESC_GROUP_PERIPHERALS_START] = {1, SYSCTL0_PDSLEEPCFG1_PQ_SRAM_PPD_MASK    },
-  [kResc_SRAM_CASPER   - RESC_GROUP_PERIPHERALS_START] = {1, SYSCTL0_PDSLEEPCFG1_CASPER_SRAM_PPD_MASK},
-  [kResc_DSP           - RESC_GROUP_PERIPHERALS_START] = {1, SYSCTL0_PDSLEEPCFG1_DSP_PD_MASK         },
-  [kResc_MIPIDSI       - RESC_GROUP_PERIPHERALS_START] = {1, SYSCTL0_PDSLEEPCFG1_MIPIDSI_PD_MASK     },
-  [kResc_OTP           - RESC_GROUP_PERIPHERALS_START] = {1, SYSCTL0_PDSLEEPCFG1_OTP_PD_MASK         },
-  [kResc_ROM           - RESC_GROUP_PERIPHERALS_START] = {1, SYSCTL0_PDSLEEPCFG1_ROM_PD_MASK         },
+    [kResc_SRAM_PQ - RESC_GROUP_PERIPHERALS_START]     = {1, SYSCTL0_PDSLEEPCFG1_PQ_SRAM_PPD_MASK},
+    [kResc_SRAM_CASPER - RESC_GROUP_PERIPHERALS_START] = {1, SYSCTL0_PDSLEEPCFG1_CASPER_SRAM_PPD_MASK},
+    [kResc_DSP - RESC_GROUP_PERIPHERALS_START]         = {1, SYSCTL0_PDSLEEPCFG1_DSP_PD_MASK},
+    [kResc_MIPIDSI - RESC_GROUP_PERIPHERALS_START]     = {1, SYSCTL0_PDSLEEPCFG1_MIPIDSI_PD_MASK},
+    [kResc_OTP - RESC_GROUP_PERIPHERALS_START]         = {1, SYSCTL0_PDSLEEPCFG1_OTP_PD_MASK},
+    [kResc_ROM - RESC_GROUP_PERIPHERALS_START]         = {1, SYSCTL0_PDSLEEPCFG1_ROM_PD_MASK},
 };
 
 /*******************************************************************************
  * Code
  ******************************************************************************/
 
-static void iMXRT500_EnablePeripheralsDeepSleep(pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup, uint32_t *enabledResources)
+static void iMXRT500_EnablePeripheralsDeepSleep(pm_resc_mask_t *pSoftRescMask,
+                                                pm_resc_group_t *pSysRescGroup,
+                                                uint32_t *enabledResources)
 {
     uint32_t rescMask;
     uint32_t rescGroup;
@@ -245,9 +248,9 @@ static void iMXRT500_EnablePeripheralsDeepSleep(pm_resc_mask_t *pSoftRescMask, p
     /* Configure Dedicated Peripheral RAMs (PRAMs) */
     for (resc = RESC_GROUP_PRAMS_START; resc <= RESC_GROUP_PRAMS_END; resc++)
     {
-        rescMask  = PM_RESC_MASK(pSoftRescMask,  resc);
+        rescMask  = PM_RESC_MASK(pSoftRescMask, resc);
         rescGroup = PM_RESC_GROUP(pSysRescGroup, resc);
-        feature = resc - RESC_GROUP_PRAMS_START;
+        feature   = resc - RESC_GROUP_PRAMS_START;
 
         if (rescMask && ((rescGroup & PM_RESOURCE_FULL_ON) != 0U))
         {
@@ -264,9 +267,9 @@ static void iMXRT500_EnablePeripheralsDeepSleep(pm_resc_mask_t *pSoftRescMask, p
     /* Configure System RAMs (SRAMs) */
     for (resc = RESC_GROUP_SRAMS_START; resc <= RESC_GROUP_SRAMS_END; resc++)
     {
-        rescMask  = PM_RESC_MASK(pSoftRescMask,  resc);
+        rescMask  = PM_RESC_MASK(pSoftRescMask, resc);
         rescGroup = PM_RESC_GROUP(pSysRescGroup, resc);
-        feature = resc - RESC_GROUP_SRAMS_START;
+        feature   = resc - RESC_GROUP_SRAMS_START;
 
         if (rescMask && ((rescGroup & PM_RESOURCE_FULL_ON) != 0U))
         {
@@ -284,9 +287,9 @@ static void iMXRT500_EnablePeripheralsDeepSleep(pm_resc_mask_t *pSoftRescMask, p
     /* Configure remaining peripherals with single PDSLEEPCFG bit */
     for (resc = RESC_GROUP_PERIPHERALS_START; resc <= RESC_GROUP_PERIPHERALS_END; resc++)
     {
-        rescMask  = PM_RESC_MASK(pSoftRescMask,  resc);
+        rescMask  = PM_RESC_MASK(pSoftRescMask, resc);
         rescGroup = PM_RESC_GROUP(pSysRescGroup, resc);
-        feature = resc - RESC_GROUP_PERIPHERALS_START;
+        feature   = resc - RESC_GROUP_PERIPHERALS_START;
 
         if (rescMask && ((rescGroup & PM_RESOURCE_FULL_ON) != 0U))
         {
@@ -309,11 +312,11 @@ static void iMXRT500_DisablePeripheralsSleep(pm_resc_mask_t *pSoftRescMask, pm_r
     /* Configure Dedicated Peripheral RAMs (PRAMs) */
     for (resc = RESC_GROUP_PRAMS_START; resc <= RESC_GROUP_PRAMS_END; resc++)
     {
-        rescMask  = PM_RESC_MASK(pSoftRescMask,  resc);
+        rescMask  = PM_RESC_MASK(pSoftRescMask, resc);
         rescGroup = PM_RESC_GROUP(pSysRescGroup, resc);
-        feature = resc - RESC_GROUP_PRAMS_START;
+        feature   = resc - RESC_GROUP_PRAMS_START;
 
-        if(rescMask)
+        if (rescMask)
         {
             if ((rescGroup & PM_RESOURCE_FULL_ON) != 0U)
             {
@@ -338,13 +341,13 @@ static void iMXRT500_DisablePeripheralsSleep(pm_resc_mask_t *pSoftRescMask, pm_r
     /* Configure System RAMs (SRAMs) */
     for (resc = RESC_GROUP_SRAMS_START; resc <= RESC_GROUP_SRAMS_END; resc++)
     {
-        rescMask  = PM_RESC_MASK(pSoftRescMask,  resc);
+        rescMask  = PM_RESC_MASK(pSoftRescMask, resc);
         rescGroup = PM_RESC_GROUP(pSysRescGroup, resc);
-        feature = resc - RESC_GROUP_SRAMS_START;
+        feature   = resc - RESC_GROUP_SRAMS_START;
 
         if (rescMask)
         {
-			if ((rescGroup & PM_RESOURCE_FULL_ON) != 0U)
+            if ((rescGroup & PM_RESOURCE_FULL_ON) != 0U)
             {
                 /* Clear APD bit in PDRUNCFG2 and PPD bit in PDRUNCFG3 for each enabled SRAM */
                 SYSCTL0_PDRCFGCLR_REG(2) = enResSRAMs[feature];
@@ -369,9 +372,9 @@ static void iMXRT500_DisablePeripheralsSleep(pm_resc_mask_t *pSoftRescMask, pm_r
     /* Configure remaining peripherals with single PDRUNCFG bit */
     for (resc = RESC_GROUP_PERIPHERALS_START; resc <= RESC_GROUP_PERIPHERALS_END; resc++)
     {
-        rescMask  = PM_RESC_MASK(pSoftRescMask,  resc);
+        rescMask  = PM_RESC_MASK(pSoftRescMask, resc);
         rescGroup = PM_RESC_GROUP(pSysRescGroup, resc);
-        feature = resc - RESC_GROUP_PERIPHERALS_START;
+        feature   = resc - RESC_GROUP_PERIPHERALS_START;
 
         if (rescMask && ((rescGroup & PM_RESOURCE_FULL_ON) != 0U))
         {
@@ -386,7 +389,7 @@ static void iMXRT500_DisablePeripheralsSleep(pm_resc_mask_t *pSoftRescMask, pm_r
     }
 
     /* Configure OTP Switch RBB, since not calling POWER_EnablePD/POWER_DisablePD() */
-    rescMask  = PM_RESC_MASK(pSoftRescMask,  kResc_OTP);
+    rescMask  = PM_RESC_MASK(pSoftRescMask, kResc_OTP);
     rescGroup = PM_RESC_GROUP(pSysRescGroup, kResc_OTP);
 
     if (rescMask && ((rescGroup & PM_RESOURCE_FULL_ON) != 0U))
@@ -398,40 +401,42 @@ static void iMXRT500_DisablePeripheralsSleep(pm_resc_mask_t *pSoftRescMask, pm_r
         PMC->CTRL |= PMC_CTRL_OTPSWREN_MASK; /* Enable RBB for OTP switch */
     }
 
-	POWER_ApplyPD();
+    POWER_ApplyPD();
 }
 
-static void IMXRT500_EnterLowPowerMode(uint8_t stateIndex, pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup)
+static void IMXRT500_EnterLowPowerMode(uint8_t stateIndex,
+                                       pm_resc_mask_t *pSoftRescMask,
+                                       pm_resc_group_t *pSysRescGroup)
 {
-	uint32_t enabledResources[4] = {0, 0, 0, 0}; /* SYSPDSLEEPCFG0-3 */
+    uint32_t enabledResources[4] = {0, 0, 0, 0}; /* SYSPDSLEEPCFG0-3 */
 
-	assert(pSoftRescMask != NULL);
+    assert(pSoftRescMask != NULL);
     assert(pSysRescGroup != NULL);
 
     switch (stateIndex)
     {
         case PM_LP_STATE_SLEEP:
-        /*
-         * Change SYSPDRUNCFG depending on constraints, POWER_EnablePD then POWER_ApplyPD
-         */
-			iMXRT500_DisablePeripheralsSleep(pSoftRescMask, pSysRescGroup);
-			break;
+            /*
+             * Change SYSPDRUNCFG depending on constraints, POWER_EnablePD then POWER_ApplyPD
+             */
+            iMXRT500_DisablePeripheralsSleep(pSoftRescMask, pSysRescGroup);
+            break;
         case PM_LP_STATE_DEEP_SLEEP:
-        /*
-         * Change SYSPDSLEEPCFG depending on constraints
-         */
-			iMXRT500_EnablePeripheralsDeepSleep(pSoftRescMask, pSysRescGroup, enabledResources);
-			break;
+            /*
+             * Change SYSPDSLEEPCFG depending on constraints
+             */
+            iMXRT500_EnablePeripheralsDeepSleep(pSoftRescMask, pSysRescGroup, enabledResources);
+            break;
         case PM_LP_STATE_DEEP_POWER_DOWN:
-        /*
-         * Do nothing
-         */
-			break;
+            /*
+             * Do nothing
+             */
+            break;
         case PM_LP_STATE_FULL_DEEP_POWER_DOWN:
-        /*
-         * Do nothing
-         */
-			break;
+            /*
+             * Do nothing
+             */
+            break;
         default:
             return;
     }
@@ -440,26 +445,26 @@ static void IMXRT500_EnterLowPowerMode(uint8_t stateIndex, pm_resc_mask_t *pSoft
 
 static void IMXRT500_CleanExitLowPowerMode(void)
 {
-	/* Do nothing. */
+    /* Do nothing. */
 }
 
 static status_t IMXRT500_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable)
 {
-	uint32_t irqn;
+    uint32_t irqn;
     uint32_t misc;
 
     (void)(misc);
-    
+
     assert(ws != NULL);
     PM_DECODE_WAKEUP_SOURCE_ID(ws->wsId);
 
     if (enable)
     {
-		EnableDeepSleepIRQ((IRQn_Type)irqn);
+        EnableDeepSleepIRQ((IRQn_Type)irqn);
     }
     else
     {
-		DisableDeepSleepIRQ((IRQn_Type)irqn);
+        DisableDeepSleepIRQ((IRQn_Type)irqn);
     }
     return kStatus_Success;
 }

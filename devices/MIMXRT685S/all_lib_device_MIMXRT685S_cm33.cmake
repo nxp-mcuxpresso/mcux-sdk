@@ -77,7 +77,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/tensorflow-lite
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/tensorflow-lite/third_party/cmsis
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/littlefs
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/lwip
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
@@ -103,7 +102,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_lwip_apps_lwiperf)
 #    include(middleware_usb_host_stack_MIMXRT685S_cm33)
 #    include(driver_lpc_gpio)
-#    include(middleware_issdk_sensor_fxos8700)
 #    include(middleware_wifi)
 #    include(component_rt_gpio_adapter)
 #    include(middleware_freertos-kernel_cm33_nonsecure_port)
@@ -133,7 +131,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_i2c)
 #    include(driver_iap)
 #    include(component_serial_manager)
-#    include(middleware_issdk_sensor_fxas21002)
 #    include(middleware_edgefast_wifi_nxp)
 #    include(middleware_usb_device_cdc_external)
 #    include(component_i3c_bus_adapter)
@@ -162,7 +159,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpc_dma)
 #    include(driver_dsp)
 #    include(utility_assert)
-#    include(middleware_issdk_sensor_interface_common)
 #    include(driver_lpadc)
 #    include(middleware_wifi_wifidriver)
 #    include(driver_wm8904)
@@ -220,7 +216,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_flexcomm_i2s_dma)
 #    include(component_mrt_adapter)
 #    include(middleware_usb_host_printer)
-#    include(middleware_issdk_drivers_gpio_imxrt600)
 #    include(middleware_eiq_audio_mimxrt685audevk)
 #    include(middleware_multicore_erpc_eRPC_uart_cmsis_transport)
 #    include(driver_flexcomm_i2c_dma)
@@ -290,7 +285,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_audio)
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_flatbuffers)
 #    include(driver_lpc_iopctl)
-#    include(middleware_issdk_drivers_cmsis_drivers)
 #    include(CMSIS_Device_API_OSTick OPTIONAL)
 #    include(middleware_multicore_rpmsg_lite_mimxrt685audevk_bm)
 #    include(driver_trng)

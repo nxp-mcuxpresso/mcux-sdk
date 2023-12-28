@@ -180,6 +180,21 @@ hal_flash_status_t HAL_FlashVerifyErase(uint32_t start, uint32_t lengthInBytes, 
 hal_flash_status_t HAL_FlashRead(uint32_t src, uint32_t size, uint8_t *pData);
 
 /*!
+ * \brief  Read data from FLASH with ECC Fault detection enabled.
+ *
+ *  Note : BusFault is not raised, just SoC indication
+ *
+ * @param scr             The address of the Flash location to be read
+ * @param size            The number of bytes to be read
+ * @param pData           Pointer to the data to be read from Flash
+ *
+ * @retval #kStatus_HAL_Flash_Success API was executed successfully.
+ *         #kStatus_HAL_Flash_EccError if ECC Fault error got raised
+ *
+ */
+hal_flash_status_t HAL_FlashReadCheckEccFaults(uint32_t src, uint32_t size, uint8_t *pData);
+
+/*!
  * @brief Returns the desired hal flash property.
  *
  * @param Property        The desired property from the list of properties in

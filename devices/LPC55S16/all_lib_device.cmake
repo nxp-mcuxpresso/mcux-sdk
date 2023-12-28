@@ -10,6 +10,9 @@
 #  # description: Utilities which is needed for particular toolchain like the SBRK function required to address limitation between HEAP and STACK in GCC toolchain library.
 #  set(CONFIG_USE_utilities_misc_utilities true)
 
+#  # description: RTT template configuration
+#  set(CONFIG_USE_driver_rtt_template true)
+
 #  # description: Driver nand_flash-common
 #  set(CONFIG_USE_driver_nand_flash-common true)
 
@@ -24,9 +27,6 @@
 
 #  # description: Driver pf3000
 #  set(CONFIG_USE_driver_pf3000 true)
-
-#  # description: RTT template configuration
-#  set(CONFIG_USE_driver_rtt_template true)
 
 #  # description: Devices_project_template LPC55S16
 #  set(CONFIG_USE_DEVICES_Project_Template_LPC55S16 true)
@@ -93,6 +93,9 @@
 
 #  # description: Utility debug_console
 #  set(CONFIG_USE_utility_debug_console true)
+
+#  # description: SEGGER Real Time Transfer(RTT)
+#  set(CONFIG_USE_driver_rtt true)
 
 #  # description: I2C CMSIS Driver
 #  set(CONFIG_USE_driver_cmsis_flexcomm_i2c true)
@@ -364,9 +367,6 @@
 #  # description: WWDT Driver
 #  set(CONFIG_USE_driver_wwdt true)
 
-#  # description: SEGGER Real Time Transfer(RTT)
-#  set(CONFIG_USE_driver_rtt true)
-
 #set.CMSIS
 #  # description: CMSIS-CORE for Cortex-M, ARMv8-M, ARMv8.1-M
 #  set(CONFIG_USE_CMSIS_Include_core_cm true)
@@ -503,6 +503,71 @@
 #  # description: FreeRTOS Secure Context
 #  set(CONFIG_USE_middleware_freertos-kernel_cm33_trustzone_secure true)
 
+#set.middleware.lwip
+#  # description: lwIP Template
+#  set(CONFIG_USE_middleware_lwip_template true)
+
+#  # description: lwIP - A Lightweight TCP/IP Stack
+#  set(CONFIG_USE_middleware_lwip true)
+
+#  # description: USB network layer
+#  set(CONFIG_USE_middleware_lwip_usb_ethernetif true)
+
+#  # description: lwIP HTTP Daemon Implementation Support Files
+#  set(CONFIG_USE_middleware_lwip_apps_httpd_support true)
+
+#  # description: lwIP HTTP Daemon
+#  set(CONFIG_USE_middleware_lwip_apps_httpd true)
+
+#  # description: lwIP HTTP Server Implementation
+#  set(CONFIG_USE_middleware_lwip_apps_httpsrv true)
+
+#  # description: lwIP HTTPS Server Implementation
+#  set(CONFIG_USE_middleware_lwip_apps_httpssrv true)
+
+#  # description: lwIP mDNS Implementation
+#  set(CONFIG_USE_middleware_lwip_apps_mdns true)
+
+#  # description: lwIP IPERF Implementation
+#  set(CONFIG_USE_middleware_lwip_apps_lwiperf true)
+
+#  # description: lwIP MQTT Client
+#  set(CONFIG_USE_middleware_lwip_apps_mqtt true)
+
+#  # description: lwIP SNTP
+#  set(CONFIG_USE_middleware_lwip_apps_sntp true)
+
+#  # description: lwIP Ping Sender contrib
+#  set(CONFIG_USE_middleware_lwip_contrib_ping true)
+
+#  # description: lwIP TCP Echo contrib
+#  set(CONFIG_USE_middleware_lwip_contrib_tcpecho true)
+
+#  # description: lwIP TCP Echo Raw API contrib
+#  set(CONFIG_USE_middleware_lwip_contrib_tcpecho_raw true)
+
+#  # description: lwIP UDP Echo contrib
+#  set(CONFIG_USE_middleware_lwip_contrib_udpecho true)
+
+#  # description: lwIP UDP Echo Raw API contrib
+#  set(CONFIG_USE_middleware_lwip_contrib_udpecho_raw true)
+
+#set.middleware.sdmmc
+#  # description: Middleware sdmmc common
+#  set(CONFIG_USE_middleware_sdmmc_common true)
+
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_sdmmc_sdhc_template true)
+
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_sdmmc_sdif_template true)
+
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_sdmmc_usdhc_template true)
+
+#  # description: SDMMC host controller cache dependency
+#  set(CONFIG_USE_middleware_sdmmc_host_usdhc_cache true)
+
 #set.middleware.mbedtls
 #  # description: mbedTLS Template
 #  set(CONFIG_USE_middleware_mbedtls_template true)
@@ -516,180 +581,13 @@
 #  # description: mbedTLS library
 #  set(CONFIG_USE_middleware_mbedtls true)
 
-#set.middleware.issdk
-#  # description: ISSDK Utils
-#  set(CONFIG_USE_middleware_issdk_drivers_systick_utils true)
-
-#  # description: ISSDK Serial to MQTT bridge application
-#  set(CONFIG_USE_middleware_issdk_sensor_tools true)
-
-#  # description: ISSDK Sensors RegDefs
-#  set(CONFIG_USE_middleware_issdk_sensor_allregdefs true)
-
-#  # description: ISSDK FXAS21002 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxas21002 true)
-
-#  # description: ISSDK FXOS8700 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxos8700 true)
-
-#  # description: ISSDK MPL3115 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mpl3115 true)
-
-#  # description: ISSDK FXLC95000 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxlc95000 true)
-
-#  # description: ISSDK MMA8491 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma8491q true)
-
-#  # description: ISSDK FXLS8471 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8471q true)
-
-#  # description: ISSDK MAG3110 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mag3110 true)
-
-#  # description: ISSDK MMA845x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma845x true)
-
-#  # description: ISSDK MMA865x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma865x true)
-
-#  # description: ISSDK FXPQ3115 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxpq3115 true)
-
-#  # description: ISSDK FXLS8962 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8962 true)
-
-#  # description: ISSDK MMA9553 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma9553 true)
-
-#  # description: ISSDK nps300x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_nps300x true)
-
-#  # description: ISSDK ISL29023 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_isl29023 true)
-
-#  # description: ISSDK fxps7250d4 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxps7250d4 true)
-
-#  # description: ISSDK FXLS896xAF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls896xaf true)
-
-#  # description: ISSDK FXLS8974CF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8974cf true)
-
-#  # description: ISSDK FXLS8961AF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8961af true)
-
-#  # description: ISSDK FXLS8971CF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8971cf true)
-
-#  # description: ISSDK NMH1000 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_nmh1000 true)
-
-#  # description: ISSDK Sensor Interface Common
-#  set(CONFIG_USE_middleware_issdk_sensor_interface_common true)
-
-#  # description: ISSDK GPIO Driver for LPC
-#  set(CONFIG_USE_middleware_issdk_drivers_gpio_lpc true)
-
-#  # description: ISSDK Auto Detection Service for LPC Kits
-#  set(CONFIG_USE_middleware_issdk_drivers_ads_lpc true)
-
-#  # description: ISSDK Host Interface Service
-#  set(CONFIG_USE_middleware_issdk_drivers_host true)
-
-#set.middleware.azure_rtos
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx_template true)
-
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr_template true)
-
-#  # description: Real Time Operating System Kernel
-#  set(CONFIG_USE_middleware_azure_rtos_tx_lib true)
-
-#  # description: Real Time Operating System Kernel
-#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr_lib true)
-
-#  # description: Real Time Operating System Kernel
-#  set(CONFIG_USE_middleware_azure_rtos_txm_lib true)
-
-#  # description: A file system based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_fx_template true)
-
-#  # description: A file system based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_fx_lib true)
-
-#  # description: A GUI library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_gx_lib true)
-
-#  # description: A network protocol stack based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_nxd_template true)
-
-#  # description: A network protocol stack based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_nxd_lib true)
-
-#  # description: A USB library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_ux_template true)
-
-#  # description: Azure RTOS USBX Host Controller EHCI
-#  set(CONFIG_USE_middleware_azure_rtos_ux_ehci true)
-
-#  # description: Azure RTOS USBX Host Controller OHCI
-#  set(CONFIG_USE_middleware_azure_rtos_ux_ohci true)
-
-#  # description: Azure RTOS USBX Host Controller IP3516
-#  set(CONFIG_USE_middleware_azure_rtos_ux_ip3516 true)
-
-#  # description: Azure RTOS USBX Device Controller IP3511
-#  set(CONFIG_USE_middleware_azure_rtos_ux_ip3511 true)
-
-#  # description: Azure RTOS USBX Device Controller for i.MX RT
-#  set(CONFIG_USE_middleware_azure_rtos_ux_dci true)
-
-#  # description: A USB library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_ux_lib true)
-
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx true)
-
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr true)
-
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx_sp true)
-
-#  # description: A file system based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_fx true)
-
-#  # description: A file system based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_fx_sp true)
-
-#  # description: A GUI library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_gx true)
-
-#  # description: LevelX provides NAND and NOR flash wear leveling facilities to embedded applications
-#  set(CONFIG_USE_middleware_azure_rtos_lx true)
-
-#  # description: A network protocol stack based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_nxd true)
-
-#  # description: A network protocol stack based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_nxd_sp true)
-
-#  # description: Azure NetX Duo driver based on i.MXRT series
-#  set(CONFIG_USE_middleware_netxduo_imxrt true)
-
-#  # description: A USB library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_ux true)
-
-#  # description: A USB library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_ux_sp true)
-
-#  # description: A software package that connects to the IoT Hub through Azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_azure_iot true)
-
 #set.middleware.usb
+#  # description: USB device phydcd config header
+#  set(CONFIG_USE_middleware_usb_phydcd_config_header true)
+
+#  # description: USB device hsdcd config header
+#  set(CONFIG_USE_middleware_usb_hsdcd_config_header true)
+
 #  # description: USB device ip3511fs config header
 #  set(CONFIG_USE_middleware_usb_device_ip3511fs_config_header true)
 
@@ -789,6 +687,124 @@
 #  # description: Middleware usb host stack
 #  set(CONFIG_USE_middleware_usb_host_stack true)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#set.middleware.azure_rtos
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx_template true)
+
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr_template true)
+
+#  # description: Real Time Operating System Kernel
+#  set(CONFIG_USE_middleware_azure_rtos_tx_lib true)
+
+#  # description: Real Time Operating System Kernel
+#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr_lib true)
+
+#  # description: Real Time Operating System Kernel
+#  set(CONFIG_USE_middleware_azure_rtos_txm_lib true)
+
+#  # description: A file system based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_fx_template true)
+
+#  # description: A file system based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_fx_lib true)
+
+#  # description: A GUI library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_gx_lib true)
+
+#  # description: A network protocol stack based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_nxd_template true)
+
+#  # description: A network protocol stack based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_nxd_lib true)
+
+#  # description: A USB library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_ux_template true)
+
+#  # description: Azure RTOS USBX Host Controller EHCI
+#  set(CONFIG_USE_middleware_azure_rtos_ux_ehci true)
+
+#  # description: Azure RTOS USBX Host Controller OHCI
+#  set(CONFIG_USE_middleware_azure_rtos_ux_ohci true)
+
+#  # description: Azure RTOS USBX Host Controller IP3516
+#  set(CONFIG_USE_middleware_azure_rtos_ux_ip3516 true)
+
+#  # description: Azure RTOS USBX Device Controller IP3511
+#  set(CONFIG_USE_middleware_azure_rtos_ux_ip3511 true)
+
+#  # description: Azure RTOS USBX Device Controller for i.MX RT
+#  set(CONFIG_USE_middleware_azure_rtos_ux_dci true)
+
+#  # description: A USB library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_ux_lib true)
+
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx true)
+
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr true)
+
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx_sp true)
+
+#  # description: A file system based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_fx true)
+
+#  # description: A file system based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_fx_sp true)
+
+#  # description: A GUI library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_gx true)
+
+#  # description: LevelX provides NAND and NOR flash wear leveling facilities to embedded applications
+#  set(CONFIG_USE_middleware_azure_rtos_lx true)
+
+#  # description: A network protocol stack based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_nxd true)
+
+#  # description: A network protocol stack based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_nxd_sp true)
+
+#  # description: Azure NetX Duo driver based on i.MXRT series
+#  set(CONFIG_USE_middleware_netxduo_imxrt true)
+
+#  # description: A USB library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_ux true)
+
+#  # description: A USB library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_ux_sp true)
+
+#  # description: A software package that connects to the IoT Hub through Azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_azure_iot true)
+
 #set.component.osa
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)
@@ -812,8 +828,9 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
   ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/lwip
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
@@ -832,6 +849,7 @@ include(set_component_osa OPTIONAL)
 include(set_middleware_azure_rtos OPTIONAL)
 include(set_middleware_fatfs OPTIONAL)
 include(set_middleware_freertos-kernel OPTIONAL)
-include(set_middleware_issdk OPTIONAL)
+include(set_middleware_lwip OPTIONAL)
 include(set_middleware_mbedtls OPTIONAL)
+include(set_middleware_sdmmc OPTIONAL)
 include(set_middleware_usb OPTIONAL)

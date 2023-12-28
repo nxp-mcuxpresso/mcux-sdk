@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_AIPSTZ_H_
-#define _FSL_AIPSTZ_H_
+#ifndef FSL_AIPSTZ_H_
+#define FSL_AIPSTZ_H_
 
 #include "fsl_common.h"
 
@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_AIPSTZ_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
-/*@}*/
+/*! @} */
 
 /*! @brief List of AIPSTZ privilege configuration.*/
 typedef enum _aipstz_master_privilege_level
@@ -131,4 +131,4 @@ void AIPSTZ_SetPeripheralAccessControl(AIPSTZ_Type *base, aipstz_peripheral_t pe
 
 /*! @}*/
 
-#endif /* _FSL_AIPSTZ_H_ */
+#endif /* FSL_AIPSTZ_H_ */

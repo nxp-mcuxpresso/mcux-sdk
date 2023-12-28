@@ -971,7 +971,7 @@ void ENET_GetMacAddr(ENET_Type *base, uint8_t *macAddr)
 void ENET_SetSMI(ENET_Type *base)
 {
     uint32_t crDiv       = 0;
-    uint32_t srcClock_Hz = CLOCK_GetCoreSysClkFreq() / 1000000U;
+    uint32_t srcClock_Hz = CLOCK_GetFreq(kCLOCK_BusClk) / 1000000U;
 
     assert((srcClock_Hz >= 20U) && (srcClock_Hz < 250U));
 
@@ -1568,7 +1568,6 @@ void ENET_RxBufferFreeAll(ENET_Type *base, enet_handle_t *handle)
 
 static inline void ENET_GetRxFrameErr(enet_rx_bd_struct_t *rxDesc, enet_rx_frame_error_t *rxFrameError)
 {
-    uint32_t rdes3 = rxDesc->rdes3;
     union _frame_error
     {
         uint32_t data;
@@ -1576,9 +1575,8 @@ static inline void ENET_GetRxFrameErr(enet_rx_bd_struct_t *rxDesc, enet_rx_frame
     };
     union _frame_error error;
 
-    (void)memset((void *)&error.frameError, 0, sizeof(enet_rx_frame_error_t));
-
-    error.data = ENET_FRAME_RX_ERROR_BITS(rdes3);
+    error.data = ENET_FRAME_RX_ERROR_BITS(rxDesc->rdes3);
+    *rxFrameError = error.frameError;
 }
 
 static void ENET_DropFrame(ENET_Type *base, enet_handle_t *handle, uint8_t channel)
@@ -1590,23 +1588,29 @@ static void ENET_DropFrame(ENET_Type *base, enet_handle_t *handle, uint8_t chann
     bool tsAvailable   = false;
     uint32_t buff1Addr = 0;
     uint32_t buff2Addr = 0;
+    uint32_t rdes1;
 #endif /* ENET_PTP1588FEATURE_REQUIRED */
+    uint32_t rdes3;
 
     /* Not check DMA ownership here, assume there's at least one valid frame left in BD ring */
     do
     {
         /* Update the BD to idle status. */
         rxDesc = &rxBdRing->rxBdBase[rxBdRing->rxGenIdx];
+#ifdef ENET_PTP1588FEATURE_REQUIRED
+        rdes1 = rxDesc->rdes1;
+#endif
+        rdes3 = rxDesc->rdes3;
         ENET_UpdateRxDescriptor(rxDesc, NULL, NULL, handle->rxintEnable, handle->doubleBuffEnable);
         rxBdRing->rxGenIdx = ENET_IncreaseIndex(rxBdRing->rxGenIdx, rxBdRing->rxRingLen);
 
         /* Find the last buffer descriptor for the frame. */
-        if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_LD_MASK) != 0U)
+        if ((rdes3 & ENET_RXDESCRIP_WR_LD_MASK) != 0U)
         {
 #ifdef ENET_PTP1588FEATURE_REQUIRED
-            if ((rxDesc->rdes3 & ENET_RXDESCRIP_WR_RS1V_MASK) != 0U)
+            if ((rdes3 & ENET_RXDESCRIP_WR_RS1V_MASK) != 0U)
             {
-                if ((rxDesc->rdes1 & ENET_RXDESCRIP_WR_PTPTSA_MASK) != 0U)
+                if ((rdes1 & ENET_RXDESCRIP_WR_PTPTSA_MASK) != 0U)
                 {
                     tsAvailable = true;
                 }
@@ -1648,10 +1652,7 @@ static void ENET_DropFrame(ENET_Type *base, enet_handle_t *handle, uint8_t chann
  * this function, driver will allocate new buffers for the BDs whose buffers have been taken by application.
  * note This function will drop current frame and update related BDs as available for DMA if new buffers allocating
  * fails. Application must provide a memory pool including at least BD number + 1 buffers(+2 if enable double buffer)
- * to make this function work normally. If user calls this function in Rx interrupt handler, be careful that this
- * function makes Rx BD ready with allocating new buffer(normal) or updating current BD(out of memory). If there's
- * always new Rx frame input, Rx interrupt will be triggered forever. Application need to disable Rx interrupt according
- * to specific design in this case.
+ * to make this function work normally.
  *
  * param base   ENET peripheral base address.
  * param handle The ENET handler pointer. This is the same handler pointer used in the ENET_Init.
@@ -1756,17 +1757,16 @@ status_t ENET_GetRxFrame(ENET_Type *base, enet_handle_t *handle, enet_rx_frame_s
 
             if (rxFrame->totLen - offset > (uint16_t)rxBdRing->rxBuffSizeAlign)
             {
+                /* Here must be double buffer. */
+                assert(handle->doubleBuffEnable);
+
                 buff1Len = (uint16_t)rxBdRing->rxBuffSizeAlign;
-                if (handle->doubleBuffEnable)
-                {
-                    buff2Len = rxFrame->totLen - offset - (uint16_t)rxBdRing->rxBuffSizeAlign - ENET_FCS_LEN;
-                }
+                buff2Len = rxFrame->totLen - offset - (uint16_t)rxBdRing->rxBuffSizeAlign;
             }
             else
             {
-                buff1Len = rxFrame->totLen - offset - ENET_FCS_LEN;
+                buff1Len = rxFrame->totLen - offset;
             }
-            rxFrame->totLen -= ENET_FCS_LEN;
         }
         else
         {
@@ -1913,7 +1913,7 @@ status_t ENET_GetRxFrame(ENET_Type *base, enet_handle_t *handle, enet_rx_frame_s
             /* Free the incomplete frame buffers. */
             while (index-- != 0U)
             {
-                handle->rxBuffFree(base, &rxFrame->rxBuffArray[index].buffer, handle->userData, channel);
+                handle->rxBuffFree(base, rxFrame->rxBuffArray[index].buffer, handle->userData, channel);
             }
 
             /* Update all left BDs of this frame from current index. */
@@ -1923,6 +1923,27 @@ status_t ENET_GetRxFrame(ENET_Type *base, enet_handle_t *handle, enet_rx_frame_s
             break;
         }
     } while (!isLastBuff);
+
+    /* Remove 4 bytes FCS. */
+    if (result == kStatus_Success)
+    {
+        /* Find the last 4 bytes in the linked buffers and remove these FCS data. */
+        buff1Len = rxFrame->rxBuffArray[--index].length;
+        if (buff1Len > ENET_FCS_LEN)
+        {
+            rxFrame->rxBuffArray[index].length -= ENET_FCS_LEN;
+        }
+        else
+        {
+            rxFrame->rxBuffArray[index].length = 0;
+            handle->rxBuffFree(base, rxFrame->rxBuffArray[index].buffer, handle->userData, channel);
+            if (buff1Len < ENET_FCS_LEN)
+            {
+                rxFrame->rxBuffArray[--index].length -= (ENET_FCS_LEN - buff1Len);
+            }
+        }
+        rxFrame->totLen -= ENET_FCS_LEN;
+    }
 
     return result;
 }

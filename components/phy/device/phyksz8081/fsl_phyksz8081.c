@@ -147,7 +147,7 @@ status_t PHY_KSZ8081_Init(phy_handle_t *handle, const phy_config_t *config)
         {
             return result;
         }
-        
+
         /* Set PHY link status management interrupt. */
         result = PHY_KSZ8081_EnableLinkInterrupt(handle, config->intrType);
     }

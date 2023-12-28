@@ -1,0 +1,25 @@
+---
+set.board.lpcxpresso860max.fmstr:
+  section-type: set
+  belong_to: set.board.lpcxpresso860max.fmstr
+  section_info:
+    fixed_id: fmstr_board_lpcxpresso860max
+    display_name: fmstr_lpcxpresso860max
+    full_name: FreeMASTER lpcxpresso860max
+    description: FreeMASTER examples for lpcxpresso860max
+    type: board
+    version: 1.0.0
+    set_location:
+      repo_base_path: "./boards/lpcxpresso860max/freemaster_examples"
+    product:
+      cmsis_pack:
+        scr:
+        - scr.board.lpcxpresso860max.fmstr-examples
+        vendor: NXP
+        pack_root:
+          pack_type: sBSP
+          pack_name: lpcxpresso860max_FREEMASTER
+          pack_version: 1.0.0
+  dependency:
+    allOf:
+    - set.middleware.fmstr

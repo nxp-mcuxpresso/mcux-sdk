@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_FLEXIO_SPI_DMA_H_
-#define _FSL_FLEXIO_SPI_DMA_H_
+#ifndef FSL_FLEXIO_SPI_DMA_H_
+#define FSL_FLEXIO_SPI_DMA_H_
 
 #include "fsl_flexio_spi.h"
 #include "fsl_dma.h"
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief FlexIO SPI DMA driver version 2.3.0. */
 #define FSL_FLEXIO_SPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
-/*@}*/
+/*! @} */
 
 /*! @brief  typedef for flexio_spi_master_dma_handle_t in advance. */
 typedef struct _flexio_spi_master_dma_handle flexio_spi_master_dma_handle_t;

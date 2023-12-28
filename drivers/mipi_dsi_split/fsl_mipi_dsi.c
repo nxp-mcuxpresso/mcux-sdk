@@ -33,10 +33,6 @@
 #define DSI_DPHY_PLL_CM_MIN 16U
 #define DSI_DPHY_PLL_CM_MAX 255U
 
-/* PLL VCO output frequency max value is 1.5GHz, VCO output is (refClk / CN ) * CM. */
-#define DSI_DPHY_PLL_VCO_MAX 1500000000U
-#define DSI_DPHY_PLL_VCO_MIN (DSI_DPHY_PLL_REFCLK_CN_MIN * DSI_DPHY_PLL_CM_MIN)
-
 #define PKT_CONTROL_WORD_COUNT(wc)  ((uint32_t)(wc) << 0U)
 #define PKT_CONTROL_VC(vc)          ((uint32_t)(vc) << 16U)
 #define PKT_CONTROL_HEADER_TYPE(ht) ((uint32_t)(ht) << 18U)

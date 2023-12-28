@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_I2S_DMA_H_
-#define _FSL_I2S_DMA_H_
+#ifndef FSL_I2S_DMA_H_
+#define FSL_I2S_DMA_H_
 
 #include "fsl_device_registers.h"
 #include "fsl_common.h"
@@ -25,10 +25,10 @@
  */
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief I2S DMA driver version 2.3.2. */
 #define FSL_I2S_DMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
-/*@}*/
+/*! @} */
 
 /*! @brief Members not to be accessed / modified outside of the driver. */
 typedef struct _i2s_dma_handle i2s_dma_handle_t;
@@ -232,4 +232,4 @@ status_t I2S_TransferReceiveLoopDMA(I2S_Type *base,
 }
 #endif
 
-#endif /* _FSL_I2S_DMA_H_ */
+#endif /* FSL_I2S_DMA_H_ */

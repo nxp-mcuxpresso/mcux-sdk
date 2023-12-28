@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_RTWDOG_H_
-#define _FSL_RTWDOG_H_
+#ifndef FSL_RTWDOG_H_
+#define FSL_RTWDOG_H_
 
 #include "fsl_common.h"
 
@@ -19,21 +19,21 @@
  * Definitions
  *******************************************************************************/
 /*! @name Unlock sequence */
-/*@{*/
+/*! @{ */
 #define WDOG_FIRST_WORD_OF_UNLOCK  (RTWDOG_UPDATE_KEY & 0xFFFFU)          /*!< First word of unlock sequence */
 #define WDOG_SECOND_WORD_OF_UNLOCK ((RTWDOG_UPDATE_KEY >> 16U) & 0xFFFFU) /*!< Second word of unlock sequence */
-/*@}*/
+/*! @} */
 
 /*! @name Refresh sequence */
-/*@{*/
+/*! @{ */
 #define WDOG_FIRST_WORD_OF_REFRESH  (RTWDOG_REFRESH_KEY & 0xFFFFU)          /*!< First word of refresh sequence */
 #define WDOG_SECOND_WORD_OF_REFRESH ((RTWDOG_REFRESH_KEY >> 16U) & 0xFFFFU) /*!< Second word of refresh sequence */
-/*@}*/
+/*! @} */
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief RTWDOG driver version 2.1.2. */
 #define FSL_RTWDOG_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
-/*@}*/
+/*! @} */
 
 /*! @brief Describes RTWDOG clock source. */
 typedef enum _rtwdog_clock_source
@@ -178,7 +178,7 @@ AT_QUICKACCESS_SECTION_CODE(void RTWDOG_Init(RTWDOG_Type *base, const rtwdog_con
  */
 void RTWDOG_Deinit(RTWDOG_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name RTWDOG functional Operation
@@ -414,7 +414,7 @@ static inline uint16_t RTWDOG_GetCounterValue(RTWDOG_Type *base)
     return (uint16_t)base->CNT;
 }
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -422,4 +422,4 @@ static inline uint16_t RTWDOG_GetCounterValue(RTWDOG_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_RTWDOG_H_ */
+#endif /* FSL_RTWDOG_H_ */

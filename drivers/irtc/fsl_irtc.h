@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2022 NXP
+ * Copyright 2016-2019, 2022-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_IRTC_H_
-#define _FSL_IRTC_H_
+#ifndef FSL_IRTC_H_
+#define FSL_IRTC_H_
 
 #include "fsl_common.h"
 
@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-#define FSL_IRTC_DRIVER_VERSION (MAKE_VERSION(2, 2, 3)) /*!< Version. */
-/*@}*/
+/*! @{ */
+#define FSL_IRTC_DRIVER_VERSION (MAKE_VERSION(2, 2, 4)) /*!< Version. */
+/*! @} */
 
 #if defined(FSL_FEATURE_RTC_HAS_CLOCK_SELECT) && FSL_FEATURE_RTC_HAS_CLOCK_SELECT
 /*! @brief IRTC clock select. */
@@ -346,7 +346,7 @@ static inline void IRTC_EnableInterrupts(RTC_Type *base, uint32_t mask)
 #endif
 #if !defined(FSL_FEATURE_RTC_HAS_NO_TAMPER_FEATURE) || (!FSL_FEATURE_RTC_HAS_NO_TAMPER_FEATURE)
 #if defined(FSL_FEATURE_RTC_HAS_TAMPER_QUEUE) && (FSL_FEATURE_RTC_HAS_TAMPER_QUEUE)
-    if (0U != (mask & kIRTC_TamperQueueFullInterruptEnable))
+    if (0U != (mask & (uint32_t)kIRTC_TamperQueueFullInterruptEnable))
     {
         base->TAMPER_QSCR |= RTC_TAMPER_QSCR_Q_FULL_INT_EN_MASK;
     }
@@ -367,14 +367,14 @@ static inline void IRTC_DisableInterrupts(RTC_Type *base, uint32_t mask)
 #if defined(FSL_FEATURE_RTC_HAS_SUBSYSTEM) && FSL_FEATURE_RTC_HAS_SUBSYSTEM
     if (0U != (mask & (uint32_t)kIRTC_WakeTimerInterruptEnable))
     {
-        base->WAKE_TIMER_CTRL &= ~RTC_WAKE_TIMER_CTRL_INTR_EN_MASK;
+        base->WAKE_TIMER_CTRL &= ~(uint16_t)RTC_WAKE_TIMER_CTRL_INTR_EN_MASK;
     }
 #endif
 #if !defined(FSL_FEATURE_RTC_HAS_NO_TAMPER_FEATURE) || (!FSL_FEATURE_RTC_HAS_NO_TAMPER_FEATURE)
 #if defined(FSL_FEATURE_RTC_HAS_TAMPER_QUEUE) && (FSL_FEATURE_RTC_HAS_TAMPER_QUEUE)
-    if (0U != (mask & kIRTC_TamperQueueFullInterruptEnable))
+    if (0U != (mask & (uint32_t)kIRTC_TamperQueueFullInterruptEnable))
     {
-        base->TAMPER_QSCR &= ~RTC_TAMPER_QSCR_Q_FULL_INT_EN_MASK;
+        base->TAMPER_QSCR &= ~(uint16_t)RTC_TAMPER_QSCR_Q_FULL_INT_EN_MASK;
     }
 #endif
 #endif
@@ -392,11 +392,11 @@ static inline uint32_t IRTC_GetEnabledInterrupts(RTC_Type *base)
 {
     uint32_t intsEnabled = base->IER;
 #if defined(FSL_FEATURE_RTC_HAS_SUBSYSTEM) && FSL_FEATURE_RTC_HAS_SUBSYSTEM
-    intsEnabled |= (base->WAKE_TIMER_CTRL & RTC_WAKE_TIMER_CTRL_INTR_EN_MASK) << 16U;
+    intsEnabled |= (base->WAKE_TIMER_CTRL & (uint32_t)RTC_WAKE_TIMER_CTRL_INTR_EN_MASK) << 16U;
 #endif
 #if !defined(FSL_FEATURE_RTC_HAS_NO_TAMPER_FEATURE) || (!FSL_FEATURE_RTC_HAS_NO_TAMPER_FEATURE)
 #if defined(FSL_FEATURE_RTC_HAS_TAMPER_QUEUE) && (FSL_FEATURE_RTC_HAS_TAMPER_QUEUE)
-    intsEnabled |= (base->TAMPER_QSCR & RTC_TAMPER_QSCR_Q_FULL_INT_EN_MASK) << 24U;
+    intsEnabled |= (base->TAMPER_QSCR & (uint32_t)RTC_TAMPER_QSCR_Q_FULL_INT_EN_MASK) << 24U;
 #endif
 #endif
 
@@ -541,7 +541,7 @@ static inline void IRTC_Enable32kClkDuringRegisterWrite(RTC_Type *base, bool ena
  * RTC subsystem needs RTC to output 1HZ clock for sub-second counter.
  *
  * @param base IRTC peripheral base address
- * @param cloOut select clock to use for output,
+ * @param clkOut select clock to use for output,
  */
 void IRTC_ConfigClockOut(RTC_Type *base, irtc_clockout_sel_t clkOut);
 
@@ -849,4 +849,4 @@ static inline uint32_t IRTC_GetWakeupCount(RTC_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_IRTC_H_ */
+#endif /* FSL_IRTC_H_ */

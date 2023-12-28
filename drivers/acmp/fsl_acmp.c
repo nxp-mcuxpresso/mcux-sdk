@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -85,7 +85,10 @@ void ACMP_Init(CMP_Type *base, const acmp_config_t *config)
      * Set control bit. Avoid clearing status flags at the same time.
      */
     tmp32 = (base->C0 & (~(CMP_C0_PMODE_MASK | CMP_C0_INVT_MASK | CMP_C0_COS_MASK | CMP_C0_OPE_MASK |
-                           CMP_C0_HYSTCTR_MASK | CMP_C0_CFx_MASK)));
+#if defined(FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT) && (FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT == 1U)
+                            CMP_C0_HYSTCTR_MASK |
+#endif /* FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT */                           
+                            CMP_C0_CFx_MASK)));
 #if defined(FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT) && (FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT == 1U)
     tmp32 &= ~CMP_C0_OFFSET_MASK;
 #endif /* FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT */
@@ -105,7 +108,9 @@ void ACMP_Init(CMP_Type *base, const acmp_config_t *config)
     {
         tmp32 |= CMP_C0_OPE_MASK;
     }
+#if defined (FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT) && (FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT == 1U)
     tmp32 |= CMP_C0_HYSTCTR(config->hysteresisMode);
+#endif /* FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT */
 #if defined(FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT) && (FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT == 1U)
     tmp32 |= CMP_C0_OFFSET(config->offsetMode);
 #endif /* FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT */
@@ -160,7 +165,9 @@ void ACMP_GetDefaultConfig(acmp_config_t *config)
 #if defined(FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT) && (FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT == 1U)
     config->offsetMode = kACMP_OffsetLevel0;
 #endif /* FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT */
+#if defined(FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT) && (FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT == 1U)
     config->hysteresisMode = kACMP_HysteresisLevel0;
+#endif /* FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT */
 }
 
 /*!

@@ -1,8 +1,0 @@
-<map id="fInitializeMagCalibration" name="fInitializeMagCalibration">
-<area shape="rect" id="node2" href="$DecodeCommandBytes_8c.html#a2d80b68d03de87c2d3cce67273f8a165" title="This function is responsible for decoding commands sent by the NXP Sensor Fusion Toolbox and setting ..." alt="" coords="212,56,371,83"/>
-<area shape="rect" id="node5" href="$sensor__fusion_8c.html#ab088da7731ffdf25710a364a7f88b224" title="This function is responsible for initializing the system prior to starting the main fusion loop..." alt="" coords="217,107,365,133"/>
-<area shape="rect" id="node3" href="$control_8c.html#a3dc36d292be101ea1070be615293d692" title="WIRED_UART_IRQHandler" alt="" coords="431,5,610,32"/>
-<area shape="rect" id="node4" href="$control_8c.html#a4954d90ce002a3c089f4d19a4c862692" title="WIRELESS_UART_IRQHandler" alt="" coords="419,56,623,83"/>
-<area shape="rect" id="node6" href="$sensor__fusion_8h.html#a367d92b99365a8143700b76439915d65" title="utility function to insert default values in the top level structure " alt="" coords="439,107,602,133"/>
-<area shape="rect" id="node7" href="$main__agm01__freertos__two__tasks_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is a FreeRTOS (dual task) implementation of the NXP sensor fusion demo build. " alt="" coords="671,107,721,133"/>
-</map>

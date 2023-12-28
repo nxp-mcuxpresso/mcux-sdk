@@ -728,8 +728,8 @@ int tfa2_dev_specific(struct tfa2_device *tfa)
             tfa->bf_mtpb     = 0x1060;
             tfa->bf_swprofil = 0xee0f;
             tfa->bf_swvstep  = 0xef0f;
-            tfa->bf_openmtp  = 0x05c0; /* TFA9872_BF_SSFAIME */
-            tfa->bf_lpm1mode = 0x65c0; /* TFA9872_BF_LPM1DIS */
+            tfa->bf_openmtp  = 0x05c0;    /* TFA9872_BF_SSFAIME */
+            tfa->bf_lpm1mode = 0x65c0;    /* TFA9872_BF_LPM1DIS */
 
             tfa->status_mask[0] = 0x043c; /* SWS, CLKS, UVDS, OVDS, OTDS */
             tfa->status_mask[1] = 0x0100; /* TDMLUTER */

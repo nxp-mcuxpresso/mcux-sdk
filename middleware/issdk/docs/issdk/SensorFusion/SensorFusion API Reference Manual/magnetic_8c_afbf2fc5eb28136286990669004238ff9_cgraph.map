@@ -1,5 +1,0 @@
-<map id="fComputeMagCalibration4" name="fComputeMagCalibration4">
-<area shape="rect" id="node2" href="$matrix_8c.html#a54f510d9d257d6063412a9ed5adddd6f" title="function sets the 3x3 matrix A to the identity matrix " alt="" coords="224,5,332,32"/>
-<area shape="rect" id="node3" href="$matrix_8c.html#a64363bfcc2226e12d1bc28e7382591cc" title="function uses Gauss&#45;Jordan elimination to compute the inverse of matrix A in situ on exit..." alt="" coords="224,56,332,83"/>
-<area shape="rect" id="node4" href="$matrix_8c.html#a744a51154ab26c7fcd0a020e98e038df" title="function sets the matrix A to the identity matrix " alt="" coords="380,56,467,83"/>
-</map>

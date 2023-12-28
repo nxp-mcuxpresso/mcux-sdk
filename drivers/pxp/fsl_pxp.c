@@ -72,6 +72,10 @@
 #define PORTER_DUFF_ENABLE_MASK PXP_ALPHA_A_CTRL_PORTER_DUFF_ENABLE_MASK
 #endif /* FSL_FEATURE_PXP_V3 */
 
+#if defined(PXP_RSTS)
+#define PXP_RESETS_ARRAY PXP_RSTS
+#endif
+
 typedef union _u32_f32
 {
     float f32;
@@ -159,6 +163,11 @@ static PXP_Type *const s_pxpBases[] = PXP_BASE_PTRS;
 /*! @brief Pointers to PXP clocks for each PXP submodule. */
 static const clock_ip_name_t s_pxpClocks[] = PXP_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(PXP_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_pxpResets[] = PXP_RESETS_ARRAY;
+#endif
 
 /*******************************************************************************
  * Code
@@ -304,6 +313,10 @@ void PXP_Init(PXP_Type *base)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     uint32_t instance = PXP_GetInstance(base);
     CLOCK_EnableClock(s_pxpClocks[instance]);
+#endif
+
+#if defined(PXP_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_pxpResets[PXP_GetInstance(base)]);
 #endif
 
     PXP_ResetControl(base);
@@ -1767,9 +1780,9 @@ status_t PXP_SetStoreEngineConfig(PXP_Type *base,
         *(uint32_t *)flagShiftMaskRegAddr  = PXP_COMBINE_BYTE_TO_WORD(flagShiftMaskAddr);
         *(uint32_t *)flagShiftWidthRegAddr = PXP_COMBINE_BYTE_TO_WORD(flagShiftWidthAddr);
 
-        dataShiftWidthRegAddr += 0x10;
-        flagShiftMaskRegAddr += 0x10;
-        flagShiftWidthRegAddr += 0x10;
+        dataShiftWidthRegAddr += 0x10U;
+        flagShiftMaskRegAddr += 0x10U;
+        flagShiftWidthRegAddr += 0x10U;
         dataShiftWidthAddr += 4U;
         flagShiftMaskAddr += 4U;
         flagShiftWidthAddr += 4U;
@@ -1882,7 +1895,7 @@ status_t PXP_SetHistogramConfig(PXP_Type *base, uint8_t num, const pxp_histogram
         uint32_t paramValueAddr = (uint32_t)(config->pParamValue);
 
         /* Configure the 2-level histogram params. */
-        *(uint32_t *)paramRegAddr = (*(uint8_t *)(paramValueAddr)) | ((*(uint8_t *)((paramValueAddr) + 1U)) << 8U);
+        *(uint32_t *)paramRegAddr = (uint32_t)(*(uint8_t *)(paramValueAddr)) | ((uint32_t)(*(uint8_t *)((paramValueAddr) + 1U)) << 8U);
         paramRegAddr += 0x10U;
         paramValueAddr += 2U;
 

@@ -4,7 +4,7 @@
 /*            LPC844                                                         */
 /*  @version: 1.2                                                            */
 /*  @date:    2017-6-8                                                       */
-/*  @build:   b230529                                                        */
+/*  @build:   b231018                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
@@ -90,6 +90,11 @@ __Vectors:
     .text
     .thumb
 
+#if defined (__cplusplus)
+#ifdef __REDLIB__
+#error Redlib does not support C++
+#endif
+#endif
 /* Reset Handler */
 
     .thumb_func
@@ -148,7 +153,11 @@ Reset_Handler:
 #endif
     cpsie   i               /* Unmask interrupts */
 #ifndef __START
+#ifdef __REDLIB__
+#define __START __main
+#else
 #define __START _start
+#endif
 #endif
 #ifndef __ATOLLIC__
     ldr   r0,=__START

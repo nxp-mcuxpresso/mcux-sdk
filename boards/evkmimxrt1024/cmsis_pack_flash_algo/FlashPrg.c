@@ -41,10 +41,10 @@ void flexspi_nor_get_config(flexspi_nor_config_t *config)
     config->memConfig.version          = FLEXSPI_CFG_BLK_VERSION;
     config->memConfig.readSampleClkSrc = kFLEXSPIReadSampleClk_LoopbackFromDqsPad;
     config->memConfig.serialClkFreq =
-        kFLEXSPISerialClk_133MHz; /* Serial Flash Frequencey.See System Boot Chapter for more details */
+        kFLEXSPISerialClk_133MHz;          /* Serial Flash Frequencey.See System Boot Chapter for more details */
     config->memConfig.sflashA1Size   = FLASH_SIZE;
-    config->memConfig.csHoldTime     = 3U;                           /* Data hold time, default value: 3 */
-    config->memConfig.csSetupTime    = 3U;                           /* Date setup time, default value: 3 */
+    config->memConfig.csHoldTime     = 3U; /* Data hold time, default value: 3 */
+    config->memConfig.csSetupTime    = 3U; /* Date setup time, default value: 3 */
     config->memConfig.deviceType     = kFLEXSPIDeviceType_SerialNOR; /* Flash device type default type: Serial NOR */
     config->memConfig.deviceModeType = kDeviceConfigCmdType_Generic;
     config->memConfig.columnAddressWidth  = 0U;

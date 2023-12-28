@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_DAC_H_
-#define _FSL_DAC_H_
+#ifndef FSL_DAC_H_
+#define FSL_DAC_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief DAC driver version 2.0.2. */
 #define FSL_DAC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief DAC buffer flags.
@@ -196,7 +196,7 @@ static inline void DAC_Enable(DAC_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Buffer
@@ -346,7 +346,7 @@ uint8_t DAC_GetBufferStatusFlags(DAC_Type *base);
  */
 void DAC_ClearBufferStatusFlags(DAC_Type *base, uint32_t mask);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -354,4 +354,4 @@ void DAC_ClearBufferStatusFlags(DAC_Type *base, uint32_t mask);
 /*!
  * @}
  */
-#endif /* _FSL_DAC_H_ */
+#endif /* FSL_DAC_H_ */

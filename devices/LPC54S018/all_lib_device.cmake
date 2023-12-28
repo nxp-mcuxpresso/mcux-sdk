@@ -637,6 +637,12 @@
 #  set(CONFIG_USE_middleware_sdmmc_host_usdhc_cache true)
 
 #set.middleware.usb
+#  # description: USB device phydcd config header
+#  set(CONFIG_USE_middleware_usb_phydcd_config_header true)
+
+#  # description: USB device hsdcd config header
+#  set(CONFIG_USE_middleware_usb_hsdcd_config_header true)
+
 #  # description: USB device ip3511fs config header
 #  set(CONFIG_USE_middleware_usb_device_ip3511fs_config_header true)
 

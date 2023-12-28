@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_PIT_H_
-#define _FSL_PIT_H_
+#ifndef FSL_PIT_H_
+#define FSL_PIT_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief PIT Driver Version 2.0.4 */
 #define FSL_PIT_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief List of PIT channels
@@ -331,4 +331,4 @@ uint64_t PIT_GetLifetimeTimerCount(PIT_Type *base);
 
 /*! @}*/
 
-#endif /* _FSL_PIT_H_ */
+#endif /* FSL_PIT_H_ */

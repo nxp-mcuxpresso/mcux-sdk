@@ -24,7 +24,7 @@
  */
 
 /*! @brief PMU driver version */
-#define FSL_PMU_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1. */
+#define FSL_PMU_DRIVER_VERSION (MAKE_VERSION(2, 1, 2)) /*!< Version 2.1.2. */
 
 /*!
  * @}

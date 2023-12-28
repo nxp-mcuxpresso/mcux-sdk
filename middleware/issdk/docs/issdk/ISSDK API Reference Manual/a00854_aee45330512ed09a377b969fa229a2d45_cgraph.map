@@ -1,7 +1,0 @@
-<map id="fComputeMagCalibration10" name="fComputeMagCalibration10">
-<area shape="rect" id="node2" href="$a00887.html#a36f36bcaf2395595541a20fd4ab7c351" title="function multiplies all elements of 3x3 matrix A by the specified scalar " alt="" coords="231,5,389,32"/>
-<area shape="rect" id="node3" href="$a00887.html#a95d2ac82a68706e246b4cdd516f9378f" title="f3x3matrixAeqInvSymB" alt="" coords="232,56,388,83"/>
-<area shape="rect" id="node4" href="$a00887.html#a810b959d44c67c3cd94347fe34d02d96" title="function negates all elements of 3x3 matrix A " alt="" coords="235,107,385,133"/>
-<area shape="rect" id="node5" href="$a00887.html#a661c761f004eb9f4b050f201b0991004" title="function calculates the determinant of a 3x3 matrix " alt="" coords="255,157,365,184"/>
-<area shape="rect" id="node6" href="$a00887.html#ad339757b32a57fddf1b820b8921a7903" title="fEigenCompute10" alt="" coords="248,208,372,235"/>
-</map>

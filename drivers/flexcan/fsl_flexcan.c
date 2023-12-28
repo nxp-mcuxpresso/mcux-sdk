@@ -98,7 +98,11 @@
 #define MIN_TIME_SEGMENT2 (2U)
 
 /* Define maximum CAN and CAN FD bit rate supported by FLEXCAN. */
+#if (defined(FSL_FEATURE_FLEXCAN_MAX_CANFD_BITRATE))
+#define MAX_CANFD_BITRATE ((uint32_t)(FSL_FEATURE_FLEXCAN_MAX_CANFD_BITRATE))
+#else
 #define MAX_CANFD_BITRATE (8000000U)
+#endif
 #define MAX_CAN_BITRATE   (1000000U)
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ERRATA_9595) && FSL_FEATURE_FLEXCAN_HAS_ERRATA_9595)
@@ -120,6 +124,12 @@
 #define CAN_CLOCK_CHECK_NO_AFFECTS (true)
 #endif /* CAN_CLOCK_CHECK_NO_AFFECTS */
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(FLEXCAN_RSTS)
+#define FLEXCAN_RESETS_ARRAY FLEXCAN_RSTS
+#elif defined(FLEXCAN_RSTS_N)
+#define FLEXCAN_RESETS_ARRAY FLEXCAN_RSTS_N
+#endif
 
 /*! @brief FlexCAN Internal State. */
 enum _flexcan_state
@@ -319,6 +329,11 @@ static const clock_ip_name_t s_flexcanClock[] = FLEXCAN_CLOCKS;
 static const clock_ip_name_t s_flexcanPeriphClock[] = FLEXCAN_PERIPH_CLOCKS;
 #endif /* FLEXCAN_PERIPH_CLOCKS */
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(FLEXCAN_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_flexcanResets[] = FLEXCAN_RESETS_ARRAY;
+#endif
 
 /* FlexCAN ISR for transactional APIs. */
 #if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
@@ -889,6 +904,10 @@ void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *pConfig, uint32_t sour
 #endif /* FLEXCAN_PERIPH_CLOCKS */
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if defined(FLEXCAN_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_flexcanResets[FLEXCAN_GetInstance(base)]);
+#endif
+
 #if defined(CAN_CTRL1_CLKSRC_MASK)
 #if (defined(FSL_FEATURE_FLEXCAN_SUPPORT_ENGINE_CLK_SEL_REMOVE) && FSL_FEATURE_FLEXCAN_SUPPORT_ENGINE_CLK_SEL_REMOVE)
     if (0 == FSL_FEATURE_FLEXCAN_INSTANCE_SUPPORT_ENGINE_CLK_SEL_REMOVEn(base))
@@ -1041,7 +1060,7 @@ void FLEXCAN_FDInit(
     uint16_t maxDivider;
 
     /* Check bit rate value. */
-    assert((pConfig->bitRateFD <= 8000000U) && (tqFre <= sourceClock_Hz));
+    assert((pConfig->bitRateFD <= MAX_CANFD_BITRATE) && (tqFre <= sourceClock_Hz));
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_BIT_TIMING_REG) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_BIT_TIMING_REG)
     assert((tqFre * MAX_EDPRESDIV) >= sourceClock_Hz);
     maxDivider = MAX_EDPRESDIV;
@@ -4388,10 +4407,11 @@ static status_t FLEXCAN_SubHandlerForMB(CAN_Type *base, flexcan_handle_t *handle
             if (0U != (base->MCR & CAN_MCR_FDEN_MASK))
             {
                 status = FLEXCAN_ReadFDRxMb(base, (uint8_t)result, handle->mbFDFrameBuf[result]);
-                if (kStatus_Success == status || kStatus_FLEXCAN_RxOverflow == status)
+                if ((kStatus_Success == status) || (kStatus_FLEXCAN_RxOverflow == status))
                 {
                     /* Align the current index of RX MB timestamp to the timestamp array by handle. */
                     handle->timestamp[result] = handle->mbFDFrameBuf[result]->timestamp;
+
                     if (kStatus_Success == status)
                     {
                         status = kStatus_FLEXCAN_RxIdle;
@@ -4402,10 +4422,11 @@ static status_t FLEXCAN_SubHandlerForMB(CAN_Type *base, flexcan_handle_t *handle
 #endif
             {
                 status = FLEXCAN_ReadRxMb(base, (uint8_t)result, handle->mbFrameBuf[result]);
-                if (kStatus_Success == status || kStatus_FLEXCAN_RxOverflow == status)
+                if ((kStatus_Success == status) || (kStatus_FLEXCAN_RxOverflow == status))
                 {
                     /* Align the current index of RX MB timestamp to the timestamp array by handle. */
                     handle->timestamp[result] = handle->mbFrameBuf[result]->timestamp;
+
                     if (kStatus_Success == status)
                     {
                         status = kStatus_FLEXCAN_RxIdle;

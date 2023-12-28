@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_CSI_H_
-#define _FSL_CSI_H_
+#ifndef FSL_CSI_H_
+#define FSL_CSI_H_
 
 #include "fsl_common.h"
 
@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
-/*@}*/
+/*! @} */
 
 #define CSI_REG_CR1(base)       (base)->CR1
 #define CSI_REG_CR2(base)       (base)->CR2
@@ -407,7 +407,7 @@ void CSI_Reset(CSI_Type *base);
  */
 void CSI_GetDefaultConfig(csi_config_t *config);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Module operation
@@ -478,7 +478,7 @@ static inline void CSI_Stop(CSI_Type *base)
  * @param addr Frame buffer address to set.
  */
 void CSI_SetRxBufferAddr(CSI_Type *base, uint8_t index, uint32_t addr);
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -501,7 +501,7 @@ void CSI_EnableInterrupts(CSI_Type *base, uint32_t mask);
  */
 void CSI_DisableInterrupts(CSI_Type *base, uint32_t mask);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -538,7 +538,7 @@ static inline void CSI_ClearStatusFlags(CSI_Type *base, uint32_t statusMask)
 {
     CSI_REG_SR(base) = statusMask;
 }
-/* @} */
+/*! @} */
 
 #if !CSI_DRIVER_FRAG_MODE
 /*!
@@ -637,7 +637,7 @@ status_t CSI_TransferGetFullBuffer(CSI_Type *base, csi_handle_t *handle, uint32_
  * @param handle CSI handle pointer.
  */
 void CSI_TransferHandleIRQ(CSI_Type *base, csi_handle_t *handle);
-/* @} */
+/*! @} */
 
 #else
 
@@ -717,7 +717,7 @@ void CSI_FragModeTransferAbortCaptureImage(CSI_Type *base, csi_frag_handle_t *ha
  */
 void CSI_FragModeTransferHandleIRQ(CSI_Type *base, csi_frag_handle_t *handle);
 
-/* @} */
+/*! @} */
 
 #endif /* CSI_DRIVER_FRAG_MODE */
 
@@ -727,4 +727,4 @@ void CSI_FragModeTransferHandleIRQ(CSI_Type *base, csi_frag_handle_t *handle);
 
 /*! @}*/
 
-#endif /* _FSL_CSI_H_ */
+#endif /* FSL_CSI_H_ */

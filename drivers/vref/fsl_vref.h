@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_VREF_H_
-#define _FSL_VREF_H_
+#ifndef FSL_VREF_H_
+#define FSL_VREF_H_
 
 #include "fsl_common.h"
 
@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_VREF_DRIVER_VERSION (MAKE_VERSION(2, 1, 2)) /*!< Version 2.1.2. */
-/*@}*/
+/*! @} */
 
 /* Those macros below defined to support SoC family which have VREFL (0.4V) reference */
 #if defined(FSL_FEATURE_VREF_HAS_LOW_REFERENCE) && FSL_FEATURE_VREF_HAS_LOW_REFERENCE
@@ -222,7 +222,7 @@ static inline uint8_t VREF_GetLowReferenceTrimVal(VREF_Type *base)
 }
 #endif /* FSL_FEATURE_VREF_HAS_LOW_REFERENCE */
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -230,4 +230,4 @@ static inline uint8_t VREF_GetLowReferenceTrimVal(VREF_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_VREF_H_ */
+#endif /* FSL_VREF_H_ */

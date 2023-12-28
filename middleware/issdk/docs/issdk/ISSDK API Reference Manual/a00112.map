@@ -1,4 +1,0 @@
-<map id="sensors/isl29023_drv.h" name="sensors/isl29023_drv.h">
-<area shape="rect" id="node2" href="$a00107.html" title="The isl29023_drv.c file implements the isl29023 functional interface. " alt="" coords="5,95,160,121"/>
-<area shape="rect" id="node3" href="$a00479.html" title="The isl29023_poll.c file implements the ISSDK ISL29023 sensor driver example demonstration in poll mo..." alt="" coords="184,80,344,136"/>
-</map>

@@ -77,7 +77,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbarb
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/lwip
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
@@ -106,7 +105,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_nor_flash-controller-flexspi)
 #    include(driver_cmsis_lpuart)
 #    include(middleware_azure_rtos_nxd)
-#    include(middleware_issdk_sensor_fxos8700)
 #    include(device_system)
 #    include(driver_snvs_lp)
 #    include(driver_flexio_uart)
@@ -134,7 +132,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_sdmmc_osa_freertos)
 #    include(component_serial_manager)
 #    include(driver_phy-common_MIMXRT1024)
-#    include(middleware_issdk_sensor_fxas21002)
 #    include(driver_pit)
 #    include(middleware_freertos-kernel_MIMXRT1024)
 #    include(middleware_azure_rtos_ux)
@@ -163,7 +160,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_gpt)
 #    include(middleware_usb_host_stack_MIMXRT1024)
 #    include(driver_enet)
-#    include(middleware_issdk_sensor_interface_common)
 #    include(driver_rtwdog)
 #    include(middleware_freertos-kernel_extension)
 #    include(component_serial_manager_swo)

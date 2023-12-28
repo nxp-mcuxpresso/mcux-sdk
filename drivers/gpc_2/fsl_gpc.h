@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_GPC_H_
-#define _FSL_GPC_H_
+#ifndef FSL_GPC_H_
+#define FSL_GPC_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief GPC driver version 2.2.0. */
 #define FSL_GPC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
-/*@}*/
+/*! @} */
 
 /* Re-map the register and bitfields name for different ARM cortex M cores. */
 #if defined __CORTEX_M && (__CORTEX_M == 4U)
@@ -372,4 +372,4 @@ void GPC_Init(GPC_Type *base, uint32_t powerUpSlot, uint32_t powerDownSlot);
 /*!
  * @}
  */
-#endif /* _FSL_GPC_H_ */
+#endif /* FSL_GPC_H_ */

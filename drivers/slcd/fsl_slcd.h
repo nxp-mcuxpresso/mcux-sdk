@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SLCD_H_
-#define _FSL_SLCD_H_
+#ifndef FSL_SLCD_H_
+#define FSL_SLCD_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SLCD driver version. */
 #define FSL_SLCD_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
-/*@}*/
+/*! @} */
 
 /*! @brief SLCD power supply option. */
 typedef enum _slcd_power_supply_option
@@ -334,7 +334,7 @@ void SLCD_Deinit(LCD_Type *base);
  */
 void SLCD_GetDefaultConfig(slcd_config_t *configure);
 
-/* @}*/
+/*! @} */
 
 /*!
  * @name Plane Setting and Display Control
@@ -497,7 +497,7 @@ static inline uint32_t SLCD_GetFaultDetectCounter(LCD_Type *base)
     return base->FDSR & LCD_FDSR_FDCNT_MASK;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts.
@@ -550,7 +550,7 @@ uint32_t SLCD_GetInterruptStatus(LCD_Type *base);
  */
 void SLCD_ClearInterruptStatus(LCD_Type *base, uint32_t mask);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -558,4 +558,4 @@ void SLCD_ClearInterruptStatus(LCD_Type *base, uint32_t mask);
 
 /*! @}*/
 
-#endif /* _FSL_SLCD_H_*/
+#endif /* FSL_SLCD_H_*/

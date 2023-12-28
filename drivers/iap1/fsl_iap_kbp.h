@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_IAP_KBP_H_
-#define _FSL_IAP_KBP_H_
+#ifndef FSL_IAP_KBP_H_
+#define FSL_IAP_KBP_H_
 
 #include "fsl_common.h"
 
@@ -242,4 +242,4 @@ status_t kb_execute(kb_session_ref_t *session, const uint8_t *data, uint32_t dat
  *@}
  */
 
-#endif /* _FSL_IAP_KBP_H_ */
+#endif /* FSL_IAP_KBP_H_ */

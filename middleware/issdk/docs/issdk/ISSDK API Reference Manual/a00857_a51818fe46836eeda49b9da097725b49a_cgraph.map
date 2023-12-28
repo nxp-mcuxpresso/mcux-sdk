@@ -1,7 +1,0 @@
-<map id="fUpdateMagCalibration10Slice" name="fUpdateMagCalibration10Slice">
-<area shape="rect" id="node2" href="$a00887.html#a36f36bcaf2395595541a20fd4ab7c351" title="function multiplies all elements of 3x3 matrix A by the specified scalar " alt="" coords="248,5,407,32"/>
-<area shape="rect" id="node3" href="$a00887.html#a95d2ac82a68706e246b4cdd516f9378f" title="f3x3matrixAeqInvSymB" alt="" coords="249,56,405,83"/>
-<area shape="rect" id="node4" href="$a00887.html#a810b959d44c67c3cd94347fe34d02d96" title="function negates all elements of 3x3 matrix A " alt="" coords="253,107,402,133"/>
-<area shape="rect" id="node5" href="$a00887.html#a661c761f004eb9f4b050f201b0991004" title="function calculates the determinant of a 3x3 matrix " alt="" coords="272,157,383,184"/>
-<area shape="rect" id="node6" href="$a00887.html#aad87540028353c5db92043a38ed70c1a" title="fComputeEigSlice" alt="" coords="265,208,390,235"/>
-</map>

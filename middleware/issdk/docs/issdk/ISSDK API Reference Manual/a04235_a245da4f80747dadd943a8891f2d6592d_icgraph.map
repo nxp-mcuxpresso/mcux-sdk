@@ -1,4 +1,0 @@
-<map id="BOARD_BootClockFROHF96M" name="BOARD_BootClockFROHF96M">
-<area shape="rect" id="node2" href="$a00650.html#a5e69c4eff0fd5236bbb0ff4e1d5a7a7e" title="Kinetis style Wrapper API for handling all Clock related configurations. " alt="" coords="257,5,420,32"/>
-<area shape="rect" id="node3" href="$a04334.html#a09a9a2026d4c394534e528d519370d3e" title="This function executes default configuration of clocks. " alt="" coords="259,56,418,83"/>
-</map>

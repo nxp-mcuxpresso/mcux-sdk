@@ -1,13 +1,13 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef __FSL_FLEXSPI_H_
-#define __FSL_FLEXSPI_H_
+#ifndef FSL_FLEXSPI_H_
+#define FSL_FLEXSPI_H_
 
 #include <stddef.h>
 #include "fsl_device_registers.h"
@@ -23,10 +23,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief FLEXSPI driver version. */
-#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
-/*@}*/
+#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
+/*! @} */
 
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(0)
 
@@ -454,7 +454,7 @@ static inline void FLEXSPI_Enable(FLEXSPI_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -482,10 +482,10 @@ static inline void FLEXSPI_DisableInterrupts(FLEXSPI_Type *base, uint32_t mask)
     base->INTEN &= ~mask;
 }
 
-/* @} */
+/*! @} */
 
 /*! @name DMA control */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Enables or disables FLEXSPI IP Tx FIFO DMA requests.
@@ -545,10 +545,10 @@ static inline uint32_t FLEXSPI_GetRxFifoAddress(FLEXSPI_Type *base)
     return (uint32_t)&base->RFDR[0];
 }
 
-/*@}*/
+/*! @} */
 
 /*! @name FIFO control */
-/*@{*/
+/*! @{ */
 
 /*! @brief Clears the FLEXSPI IP FIFO logic.
  *
@@ -589,7 +589,7 @@ static inline void FLEXSPI_GetFifoCounts(FLEXSPI_Type *base, size_t *txCount, si
     }
 }
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Status
@@ -687,7 +687,7 @@ static inline bool FLEXSPI_GetBusIdleStatus(FLEXSPI_Type *base)
 {
     return (0U != (base->STS0 & FLEXSPI_STS0_ARBIDLE_MASK)) && (0U != (base->STS0 & FLEXSPI_STS0_SEQIDLE_MASK));
 }
-/*@}*/
+/*! @} */
 
 /*!
  * @name Bus Operations
@@ -738,6 +738,22 @@ static inline void FLEXSPI_EnableAHBParallelMode(FLEXSPI_Type *base, bool enable
     }
 }
 #endif
+
+#if (defined(FSL_FEATURE_FLEXSPI_HAS_AHBCR_AFLASHBASE_BIT) && FSL_FEATURE_FLEXSPI_HAS_AHBCR_AFLASHBASE_BIT)
+/*!
+ * @brief Set AHB Memory-Mapped Flash base address.
+ * 
+ * @note The length of base address may be different for differnt instance, please refer to the reference manual.
+ * @note This function should be called when FLEXSPI is in stop mode.
+ * 
+ * @param base FLEXSPI peripheral base address.
+ * @param address AHB Memory-Mapped Flash base address.
+ */
+static inline void FLEXSPI_SetAHBFlashBaseAddress(FLEXSPI_Type *base, uint8_t address)
+{
+    base->AHBCR = (base->AHBCR & (~FLEXSPI_AHBCR_AFLASHBASE_MASK)) | FLEXSPI_AHBCR_AFLASHBASE(address);
+}
+#endif /* (defined(FSL_FEATURE_FLEXSPI_HAS_AHBCR_AFLASHBASE_BIT) && FSL_FEATURE_FLEXSPI_HAS_AHBCR_AFLASHBASE_BIT) */
 
 /*! @brief Updates the LUT table.
  *
@@ -881,6 +897,6 @@ void FLEXSPI_TransferHandleIRQ(FLEXSPI_Type *base, flexspi_handle_t *handle);
 #if defined(__cplusplus)
 }
 #endif /*_cplusplus. */
-/*@}*/
+/*! @} */
 
-#endif /* __FSL_FLEXSPI_H_ */
+#endif /* FSL_FLEXSPI_H_ */

@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_ENET_H_
-#define _FSL_ENET_H_
+#ifndef FSL_ENET_H_
+#define FSL_ENET_H_
 
 #include "fsl_common.h"
 #if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
@@ -21,21 +21,21 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
-/*@}*/
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 7, 1))
+/*! @} */
 
 /*! @name ENET DESCRIPTOR QUEUE */
-/*@{*/
+/*! @{ */
 /*! @brief Defines the queue number. */
 #ifndef FSL_FEATURE_ENET_QUEUE
 #define FSL_FEATURE_ENET_QUEUE 1 /* Singal queue for previous IP. */
 #endif
-/*@}*/
+/*! @} */
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */
-/*@{*/
+/*! @{ */
 #define ENET_BUFFDESCRIPTOR_RX_EMPTY_MASK       0x8000U /*!< Empty bit mask. */
 #define ENET_BUFFDESCRIPTOR_RX_SOFTOWNER1_MASK  0x4000U /*!< Software owner one mask. */
 #define ENET_BUFFDESCRIPTOR_RX_WRAP_MASK        0x2000U /*!< Next buffer descriptor is the start address. */
@@ -49,40 +49,40 @@
 #define ENET_BUFFDESCRIPTOR_RX_CRC_MASK         0x0004U /*!< CRC error mask. */
 #define ENET_BUFFDESCRIPTOR_RX_OVERRUN_MASK     0x0002U /*!< FIFO overrun mask. */
 #define ENET_BUFFDESCRIPTOR_RX_TRUNC_MASK       0x0001U /*!< Frame is truncated mask. */
-/*@}*/
+/*! @} */
 
 /*! @name Control and status bit masks of the transmit buffer descriptor. */
-/*@{*/
+/*! @{ */
 #define ENET_BUFFDESCRIPTOR_TX_READY_MASK       0x8000U /*!< Ready bit mask. */
 #define ENET_BUFFDESCRIPTOR_TX_SOFTOWENER1_MASK 0x4000U /*!< Software owner one mask. */
 #define ENET_BUFFDESCRIPTOR_TX_WRAP_MASK        0x2000U /*!< Wrap buffer descriptor mask. */
 #define ENET_BUFFDESCRIPTOR_TX_SOFTOWENER2_MASK 0x1000U /*!< Software owner two mask. */
 #define ENET_BUFFDESCRIPTOR_TX_LAST_MASK        0x0800U /*!< Last BD of the frame mask. */
 #define ENET_BUFFDESCRIPTOR_TX_TRANMITCRC_MASK  0x0400U /*!< Transmit CRC mask. */
-/*@}*/
+/*! @} */
 
 /* Extended control regions for enhanced buffer descriptors. */
 #ifdef ENET_ENHANCEDBUFFERDESCRIPTOR_MODE
 /*! @name First extended control region bit masks of the receive buffer descriptor. */
-/*@{*/
+/*! @{ */
 #define ENET_BUFFDESCRIPTOR_RX_IPV4_MASK             0x0001U /*!< Ipv4 frame mask. */
 #define ENET_BUFFDESCRIPTOR_RX_IPV6_MASK             0x0002U /*!< Ipv6 frame mask. */
 #define ENET_BUFFDESCRIPTOR_RX_VLAN_MASK             0x0004U /*!< VLAN frame mask. */
 #define ENET_BUFFDESCRIPTOR_RX_PROTOCOLCHECKSUM_MASK 0x0010U /*!< Protocol checksum error mask. */
 #define ENET_BUFFDESCRIPTOR_RX_IPHEADCHECKSUM_MASK   0x0020U /*!< IP header checksum error mask. */
-/*@}*/
+/*! @} */
 
 /*! @name Second extended control region bit masks of the receive buffer descriptor. */
-/*@{*/
+/*! @{ */
 #define ENET_BUFFDESCRIPTOR_RX_INTERRUPT_MASK 0x0080U /*!< BD interrupt mask. */
 #define ENET_BUFFDESCRIPTOR_RX_UNICAST_MASK   0x0100U /*!< Unicast frame mask. */
 #define ENET_BUFFDESCRIPTOR_RX_COLLISION_MASK 0x0200U /*!< BD collision mask. */
 #define ENET_BUFFDESCRIPTOR_RX_PHYERR_MASK    0x0400U /*!< PHY error mask. */
 #define ENET_BUFFDESCRIPTOR_RX_MACERR_MASK    0x8000U /*!< Mac error mask. */
-/*@}*/
+/*! @} */
 
 /*! @name First extended control region bit masks of the transmit buffer descriptor. */
-/*@{*/
+/*! @{ */
 #define ENET_BUFFDESCRIPTOR_TX_ERR_MASK              0x8000U /*!< Transmit error mask. */
 #define ENET_BUFFDESCRIPTOR_TX_UNDERFLOWERR_MASK     0x2000U /*!< Underflow error mask. */
 #define ENET_BUFFDESCRIPTOR_TX_EXCCOLLISIONERR_MASK  0x1000U /*!< Excess collision error mask. */
@@ -90,10 +90,10 @@
 #define ENET_BUFFDESCRIPTOR_TX_LATECOLLISIONERR_MASK 0x0400U /*!< Late collision error mask. */
 #define ENET_BUFFDESCRIPTOR_TX_OVERFLOWERR_MASK      0x0200U /*!< Overflow error mask. */
 #define ENET_BUFFDESCRIPTOR_TX_TIMESTAMPERR_MASK     0x0100U /*!< Timestamp error mask. */
-/*@}*/
+/*! @} */
 
 /*! @name Second extended control region bit masks of the transmit buffer descriptor. */
-/*@{*/
+/*! @{ */
 #define ENET_BUFFDESCRIPTOR_TX_INTERRUPT_MASK     0x4000U /*!< Interrupt mask. */
 #define ENET_BUFFDESCRIPTOR_TX_TIMESTAMP_MASK     0x2000U /*!< Timestamp flag mask. */
 #define ENET_BUFFDESCRIPTOR_TX_PROTOCHECKSUM_MASK 0x1000U /*!< Protocal checksum mask. */
@@ -105,7 +105,7 @@
 #define ENET_BD_FTYPE(n) \
     (((uint32_t)(n) << ENET_BUFFDESCRIPTOR_TX_FRAMETYPE_SHIFT) & ENET_BUFFDESCRIPTOR_TX_FRAMETYPE_MASK)
 #endif /* FSL_FEATURE_ENET_HAS_AVB */
-/*@}*/
+/*! @} */
 #endif /* ENET_ENHANCEDBUFFERDESCRIPTOR_MODE */
 
 /*! @brief Defines the receive error status flag mask. */
@@ -118,7 +118,7 @@
 #endif
 
 /*! @name Defines some Ethernet parameters. */
-/*@{*/
+/*! @{ */
 #define ENET_FRAME_MAX_FRAMELEN 1518U /*!< Default maximum Ethernet frame size without VLAN tag. */
 #define ENET_FRAME_VLAN_TAGLEN  4U    /*!< Ethernet single VLAN tag size. */
 #define ENET_FRAME_CRC_LEN      4U    /*!< CRC size in a frame. */
@@ -150,7 +150,7 @@
     ((uint32_t)kENET_BabrInterrupt | (uint32_t)kENET_BabtInterrupt | (uint32_t)kENET_EBusERInterrupt | \
      (uint32_t)kENET_LateCollisionInterrupt | (uint32_t)kENET_RetryLimitInterrupt |                    \
      (uint32_t)kENET_UnderrunInterrupt | (uint32_t)kENET_PayloadRxInterrupt) /*!< Enet error interrupt flag. */
-/*@}*/
+/*! @} */
 
 /*! @brief Defines the status return codes for transaction. */
 enum
@@ -920,7 +920,7 @@ static inline void ENET_Reset(ENET_Type *base)
     base->ECR |= ENET_ECR_RESET_MASK;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name MII interface operation
@@ -1157,7 +1157,7 @@ static inline void ENET_SetRGMIIClockDelay(ENET_Type *base, bool txEnabled, bool
 }
 #endif
 
-/* @} */
+/*! @} */
 
 /*!
  * @name MAC Address Filter
@@ -1198,7 +1198,7 @@ void ENET_AddMulticastGroup(ENET_Type *base, uint8_t *address);
  */
 void ENET_LeaveMulticastGroup(ENET_Type *base, uint8_t *address);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Other basic operation
@@ -1288,7 +1288,7 @@ static inline void ENET_GetAccelFunction(ENET_Type *base, uint32_t *txAccelOptio
     *rxAccelOption = base->RACC;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts.
@@ -1423,7 +1423,7 @@ void ENET_SetTsISRHandler(ENET_Type *base, enet_isr_t ISRHandler);
 void ENET_Set1588TimerISRHandler(ENET_Type *base, enet_isr_t ISRHandler);
 #endif /* ENET_ENHANCEDBUFFERDESCRIPTOR_MODE */
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Transactional operation
@@ -1719,7 +1719,7 @@ void ENET_Ptp1588IRQHandler(ENET_Type *base);
  * @param base  ENET peripheral base address.
  */
 void ENET_CommonFrame0IRQHandler(ENET_Type *base);
-/* @} */
+/*! @} */
 
 #ifdef ENET_ENHANCEDBUFFERDESCRIPTOR_MODE
 /*!
@@ -1930,7 +1930,7 @@ void ENET_Ptp1588SetTimer(ENET_Type *base, enet_handle_t *handle, enet_ptp_time_
  */
 void ENET_TimeStampIRQHandler(ENET_Type *base, enet_handle_t *handle);
 
-/* @} */
+/*! @} */
 
 #endif /* ENET_ENHANCEDBUFFERDESCRIPTOR_MODE */
 
@@ -1940,4 +1940,4 @@ void ENET_TimeStampIRQHandler(ENET_Type *base, enet_handle_t *handle);
 
 /*! @}*/
 
-#endif /* _FSL_ENET_H_ */
+#endif /* FSL_ENET_H_ */

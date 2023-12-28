@@ -53,14 +53,17 @@
 /*!
  * @brief Definition of DCDC's setpoint map.
  */
-#define PM_RT1170_DCDC_ENABLE_SETPOINT_MAP     (0x7FFU)    // DCDC will be powered off from setpoint 11 to setpoint 15.
-#define PM_RT1170_DCDC_DIG_ENABLE_SETPOINT_MAP (0x7FFU)    // DCDC_DIG will be powered off from setpoint 11 to
-                                                           // setpoint 15.
-#define PM_RT1170_DCDC_LP_MODE_SETPOINT_MAP (0x0U)         // DCDC_LP_MODE will be disabled from all setpoint.
-#define PM_RT1170_DCDC_STANDBY_SETPOINT_MAP (0x7FFU)       // DCDC standby mode will be disabled from setpoint 11 to
-                                                           // setpoint 15.
-#define PM_RT1170_DCDC_LP_MODE_STANDBY_SETPOINT_MAP (0x0U) // Disable standby request from GPC to enter LP mode
-                                                           // for all setpoints.S
+#define PM_RT1170_DCDC_ENABLE_SETPOINT_MAP (0x7FFU) // DCDC will be powered off from setpoint 11 to setpoint 15.
+#define PM_RT1170_DCDC_DIG_ENABLE_SETPOINT_MAP \
+    (0x7FFU)                                        // DCDC_DIG will be powered off from setpoint 11 to
+                                                    // setpoint 15.
+#define PM_RT1170_DCDC_LP_MODE_SETPOINT_MAP (0x0U)  // DCDC_LP_MODE will be disabled from all setpoint.
+#define PM_RT1170_DCDC_STANDBY_SETPOINT_MAP \
+    (0x7FFU)                                        // DCDC standby mode will be disabled from setpoint 11 to
+                                                    // setpoint 15.
+#define PM_RT1170_DCDC_LP_MODE_STANDBY_SETPOINT_MAP \
+    (0x0U)                                          // Disable standby request from GPC to enter LP mode
+                                                    // for all setpoints.S
 
 /*!
  * @brief Definition of bandgap's setpoint map.
@@ -91,20 +94,21 @@
 #define PM_RT1170_PLL_LDO_STANDBY_SETPOINT_MAP (0xFFFFU) // PLL_LDO standby mode is disabled for all setpoints.
 #define PM_RT1170_LPSR_ANA_LDO_EN_SETPOINT_MAP (0xF800U) // LPSR_ANA_DO is enabled from setpoint 11 to setpoint 15.
 #define PM_RT1170_LPSR_ANA_LDO_STANDBY_SETPOINT_MAP \
-    (0xFFFFU) // LPSR_ANA_LDO standby mode is disabled for all setpoints.
+    (0xFFFFU)                                            // LPSR_ANA_LDO standby mode is disabled for all setpoints.
 #define PM_RT1170_LPSR_ANA_LDO_LP_MODE_SETPOINT_MAP \
-    (0xFFFFU) // LPSR_ANA_LDO lowpower mode is disabled for all setpoints.
+    (0xFFFFU)                                            // LPSR_ANA_LDO lowpower mode is disabled for all setpoints.
 #define PM_RT1170_LPSR_ANA_LDO_TRACKING_EN_SETPOINT_MAP \
-    (~PM_RT1170_LPSR_ANA_LDO_EN_SETPOINT_MAP) // LPSR_ANA_DO tracking is enabled
-                                              // from setpoint 0 to setpoint 10.
+    (~PM_RT1170_LPSR_ANA_LDO_EN_SETPOINT_MAP)            // LPSR_ANA_DO tracking is enabled
+                                                         // from setpoint 0 to setpoint 10.
 #define PM_RT1170_LPSR_ANA_LDO_BYPASS_EN_SETPOINT_MAP \
-    (~PM_RT1170_LPSR_ANA_LDO_EN_SETPOINT_MAP)                 // LPSR_ANA_DO bypass is enabled from
-                                                              // setpoint 0 to setpoint 10.
-#define PM_RT1170_LPSR_DIG_LDO_EN_SETPOINT_MAP (0xF81C)       // LPSR_DIG_DO is enabled from setpoint 2 to setpoint 4,
-                                                              // and setpoint 11 to setpoint 15.
+    (~PM_RT1170_LPSR_ANA_LDO_EN_SETPOINT_MAP)            // LPSR_ANA_DO bypass is enabled from
+                                                         // setpoint 0 to setpoint 10.
+#define PM_RT1170_LPSR_DIG_LDO_EN_SETPOINT_MAP \
+    (0xF81C)                                             // LPSR_DIG_DO is enabled from setpoint 2 to setpoint 4,
+                                                         // and setpoint 11 to setpoint 15.
 #define PM_RT1170_LPSR_DIG_LDO_STANDBY_SETPOINT_MAP (0xFFFFU) // LPSR_DIG_DO standby mode is disabled for all setpoints.
 #define PM_RT1170_LPSR_DIG_LDO_LP_MODE_SETPOINT_MAP \
-    (0xFFFFU) // LPSR_DIG_DO lowpower mode is disabled for all setpoints.
+    (0xFFFFU)                                 // LPSR_DIG_DO lowpower mode is disabled for all setpoints.
 #define PM_RT1170_LPSR_DIG_LDO_TRACKING_EN_SETPOINT_MAP \
     (~PM_RT1170_LPSR_DIG_LDO_EN_SETPOINT_MAP) // LPSR_DIG_DO tracking is enabled
                                               // from setpoint 0 to setpoint 1,
@@ -195,8 +199,6 @@ static inline void RT1170_SetCore1PlatformSetpointMap(GPC_CPU_MODE_CTRL_Type *ba
 
 static inline uint8_t RT1170_FindOperateMode(uint32_t rescIndex, pm_resc_group_t *pSysRescGroup);
 static inline void RT1170_SetSleepTransitionFlow(void);
-
-
 
 static void RT1170_PreparePowerSetting(void);
 static void RT1170_EnterPowerState(uint8_t stateIndex, pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup);
@@ -340,24 +342,24 @@ static const dcdc_setpoint_config_t g_dcdcSpConfig = {
 };
 
 static const pmu_lpsr_dig_target_output_voltage_t g_lpsrDigLdoTargetVoltage[16U] = {
-     kPMU_LpsrDigTargetStableVoltage1P0V,   // setpoint 0, target voltage is 1.0V
-     kPMU_LpsrDigTargetStableVoltage1P097V, // setpoint 1, target voltage is 1.097V
-     kPMU_LpsrDigTargetStableVoltage1P0V,   // setpoint 2, target voltage is 1.0V
-     kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 3, target voltage is 0.903V
-     kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 4, target voltage is 0.903V
-     kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 5, target voltage is 0.903V
-     kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 6, target voltage is 0.903V
-     kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 7, target voltage is 0.903V
-     kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 8, target voltage is 0.903V
-     kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 9, target voltage is 0.903V
-     kPMU_LpsrDigTargetStableVoltage0P806V, // setpoint 10, target voltage is 0.806V
-     kPMU_LpsrDigTargetStableVoltage1P0V,   // setpoint 11, target voltage is 1.0V
-     kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 12, target voltage is 0.903V
-     kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 13, target voltage is 0.903V
-     kPMU_LpsrDigTargetStableVoltage0P806V, // setpoint 14, target voltage is 0.806V
-     kPMU_LpsrDigTargetStableVoltage0P806V  // setpoint 15, target voltage is 0.806V
- };
-#endif /* __CORTEX_M == 7 */
+    kPMU_LpsrDigTargetStableVoltage1P0V,   // setpoint 0, target voltage is 1.0V
+    kPMU_LpsrDigTargetStableVoltage1P097V, // setpoint 1, target voltage is 1.097V
+    kPMU_LpsrDigTargetStableVoltage1P0V,   // setpoint 2, target voltage is 1.0V
+    kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 3, target voltage is 0.903V
+    kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 4, target voltage is 0.903V
+    kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 5, target voltage is 0.903V
+    kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 6, target voltage is 0.903V
+    kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 7, target voltage is 0.903V
+    kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 8, target voltage is 0.903V
+    kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 9, target voltage is 0.903V
+    kPMU_LpsrDigTargetStableVoltage0P806V, // setpoint 10, target voltage is 0.806V
+    kPMU_LpsrDigTargetStableVoltage1P0V,   // setpoint 11, target voltage is 1.0V
+    kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 12, target voltage is 0.903V
+    kPMU_LpsrDigTargetStableVoltage0P903V, // setpoint 13, target voltage is 0.903V
+    kPMU_LpsrDigTargetStableVoltage0P806V, // setpoint 14, target voltage is 0.806V
+    kPMU_LpsrDigTargetStableVoltage0P806V  // setpoint 15, target voltage is 0.806V
+};
+#endif                                     /* __CORTEX_M == 7 */
 
 /*!
  * @brief State table for dual-core applications.
@@ -998,7 +1000,7 @@ static inline void RT1170_SetPowerSupplyControlBySetpoint(void)
     PMU_GPCEnableLdoBypassMode(kPMU_LpsrDigLdo, PM_RT1170_LPSR_DIG_LDO_BYPASS_EN_SETPOINT_MAP);
     for (uint8_t i = 0U; i < 16U; i++)
     {
-       PMU_GPCSetLpsrDigLdoTargetVoltage(1U << i, g_lpsrDigLdoTargetVoltage[i]);
+        PMU_GPCSetLpsrDigLdoTargetVoltage(1U << i, g_lpsrDigLdoTargetVoltage[i]);
     }
     PMU_SetLpsrDigLdoControlMode(ANADIG_LDO_SNVS, kPMU_GPCMode);
 

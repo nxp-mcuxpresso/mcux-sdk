@@ -1,9 +1,0 @@
-<map id="BOARD_RunADS" name="BOARD_RunADS">
-<area shape="rect" id="node2" href="$a00542.html#a0d4429edc33993cd95b7c61e3ea9fdc3" title="ADS_DetectFRDM" alt="" coords="183,5,314,32"/>
-<area shape="rect" id="node3" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="367,107,428,133"/>
-<area shape="rect" id="node4" href="$a04823.html#aa31f9674d05e903bd620ccd286af1e6f" title="ADS_DetectLPC" alt="" coords="189,107,308,133"/>
-<area shape="rect" id="node5" href="$a04829.html#a5a7a73e2d22869c0412a6ccd565930e1" title="ADS_DetectQN" alt="" coords="192,157,305,184"/>
-<area shape="rect" id="node6" href="$a00542.html#a01f30c94c49eadb65cc176f79209e84c" title="ADS_DetectShield" alt="" coords="183,208,314,235"/>
-<area shape="rect" id="node7" href="$a00542.html#a183ae73ebe136fd547ba788842509b4d" title="ADS_FlashCompare" alt="" coords="179,259,319,285"/>
-<area shape="rect" id="node8" href="$a00542.html#a7166b41888dc22e6a6090e081f072fe7" title="ADS_FlashUpdate" alt="" coords="184,309,313,336"/>
-</map>

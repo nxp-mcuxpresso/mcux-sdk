@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_AFE_H_
-#define _FSL_AFE_H_
+#ifndef FSL_AFE_H_
+#define FSL_AFE_H_
 
 #include "fsl_common.h"
 
@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_AFE_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2. */
-/*@}*/
+/*! @} */
 
 /*!
  * @brief Defines the type of status flags.
@@ -288,7 +288,7 @@ static inline void AFE_Enable(AFE_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name AFE Conversion
@@ -463,7 +463,7 @@ static inline uint32_t AFE_GetEnabledChannelInterrupts(AFE_Type *base)
  */
 void AFE_EnableChannelDMA(AFE_Type *base, uint32_t mask, bool enable);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -471,4 +471,4 @@ void AFE_EnableChannelDMA(AFE_Type *base, uint32_t mask, bool enable);
 /*!
  * @}
  */
-#endif /* _FSL_AFE_H_ */
+#endif /* FSL_AFE_H_ */

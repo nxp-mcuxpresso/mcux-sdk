@@ -259,10 +259,10 @@ int DbgConsole_Vprintf(const char *fmt_s, va_list formatStringArg);
  *
  * Call this function to write a character to stdout.
  *
- * @param   ch Character to be written.
+ * @param   dbgConsoleCh Character to be written.
  * @return  Returns the character written.
  */
-int DbgConsole_Putchar(int ch);
+int DbgConsole_Putchar(int dbgConsoleCh);
 
 /*!
  * @brief Reads formatted data from the standard input stream.

@@ -8,7 +8,7 @@
 #include "fsl_device_registers.h"
 #include "fsl_gpio.h"
 #if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
-    defined(FSL_FEATURE_SOC_PORT_COUNT)   
+    defined(FSL_FEATURE_SOC_PORT_COUNT)
 #include "fsl_port.h"
 #endif
 #include "fsl_adapter_gpio.h"
@@ -95,7 +95,7 @@ static void HAL_GpioInterruptHandle(uint8_t port)
     head = s_GpioHead;
 
 #if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
-    defined(FSL_FEATURE_SOC_PORT_COUNT)   
+    defined(FSL_FEATURE_SOC_PORT_COUNT)
     pinInterruptSetFlag = GPIO_PortGetInterruptFlags(s_GpioPort[port]);
     /* Clear external interrupt flag. */
     GPIO_PortClearInterruptFlags(s_GpioPort[port], pinInterruptSetFlag);
@@ -508,6 +508,42 @@ void GPIO101_IRQHandler(void)
 }
 #endif
 
+#if (FSL_FEATURE_SOC_GPIO_COUNT > 0U)
+void GPIO0_IRQHandler(void);
+void GPIO0_IRQHandler(void)
+{
+    HAL_GpioInterruptHandle(0);
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
+
+#if (FSL_FEATURE_SOC_GPIO_COUNT > 1U)
+void GPIO1_IRQHandler(void);
+void GPIO1_IRQHandler(void)
+{
+    HAL_GpioInterruptHandle(1);
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
+
+#if (FSL_FEATURE_SOC_GPIO_COUNT > 2U)
+void GPIO2_IRQHandler(void);
+void GPIO2_IRQHandler(void)
+{
+    HAL_GpioInterruptHandle(2);
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
+
+#if (FSL_FEATURE_SOC_GPIO_COUNT > 3U)
+void GPIO3_IRQHandler(void);
+void GPIO3_IRQHandler(void)
+{
+    HAL_GpioInterruptHandle(3);
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
+
 #endif
 
 void HAL_GpioPreInit(void)
@@ -624,7 +660,7 @@ hal_gpio_status_t HAL_GpioSetTriggerMode(hal_gpio_handle_t gpioHandle, hal_gpio_
     hal_gpio_state_t *gpioState;
 #if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
     defined(FSL_FEATURE_SOC_PORT_COUNT)
-    PORT_Type *portList[] = PORT_BASE_PTRS;
+    PORT_Type *portList[]          = PORT_BASE_PTRS;
     static const IRQn_Type irqNo[] = PORT_IRQS;
     port_interrupt_t pinInt;
 #else
@@ -654,11 +690,11 @@ hal_gpio_status_t HAL_GpioSetTriggerMode(hal_gpio_handle_t gpioHandle, hal_gpio_
 #else
             pinInt = kGPIO_InterruptLogicOne;
 #endif
-	    break;
+            break;
         case kHAL_GpioInterruptRisingEdge:
 #if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
     defined(FSL_FEATURE_SOC_PORT_COUNT)
-            pinInt = kPORT_InterruptRisingEdge; 
+            pinInt = kPORT_InterruptRisingEdge;
 #else
             pinInt = kGPIO_InterruptRisingEdge;
 #endif
@@ -666,7 +702,7 @@ hal_gpio_status_t HAL_GpioSetTriggerMode(hal_gpio_handle_t gpioHandle, hal_gpio_
         case kHAL_GpioInterruptFallingEdge:
 #if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
     defined(FSL_FEATURE_SOC_PORT_COUNT)
-            pinInt = kPORT_InterruptFallingEdge;   
+            pinInt = kPORT_InterruptFallingEdge;
 #else
             pinInt = kGPIO_InterruptFallingEdge;
 #endif
@@ -682,7 +718,7 @@ hal_gpio_status_t HAL_GpioSetTriggerMode(hal_gpio_handle_t gpioHandle, hal_gpio_
         default:
 #if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
     defined(FSL_FEATURE_SOC_PORT_COUNT)
-            pinInt = kPORT_InterruptOrDMADisabled;         
+            pinInt = kPORT_InterruptOrDMADisabled;
 #else
             pinInt = kGPIO_InterruptStatusFlagDisabled;
 #endif
@@ -694,9 +730,9 @@ hal_gpio_status_t HAL_GpioSetTriggerMode(hal_gpio_handle_t gpioHandle, hal_gpio_
     /* initialize port interrupt */
 #if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
     defined(FSL_FEATURE_SOC_PORT_COUNT)
-          PORT_SetPinInterruptConfig(portList[gpioState->port], gpioState->pin, pinInt);
+    PORT_SetPinInterruptConfig(portList[gpioState->port], gpioState->pin, pinInt);
 #else
-          GPIO_SetPinInterruptConfig(s_GpioPort[gpioState->port], gpioState->pin, pinInt);
+    GPIO_SetPinInterruptConfig(s_GpioPort[gpioState->port], gpioState->pin, pinInt);
 #endif
     NVIC_SetPriority(irqNo[gpioState->port], HAL_GPIO_ISR_PRIORITY);
     NVIC_EnableIRQ(irqNo[gpioState->port]);

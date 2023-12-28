@@ -27,12 +27,12 @@
  * @{
  */
 /*! @brief Flash driver version for SDK*/
-#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(3U, 1U, 2U)) /*!< Version 3.1.2. */
+#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(3U, 1U, 3U)) /*!< Version 3.1.3. */
 
 /*! @brief Flash driver version for ROM*/
 #define FSL_FLASH_DRIVER_VERSION_ROM (MAKE_VERSION(3U, 0U, 0U)) /*!< Version 3.0.0. */
 
-/*@}*/
+/*! @} */
 
 /*!
  * @brief Enumeration for the three possible flash protection levels.
@@ -132,7 +132,7 @@ extern "C" {
  */
 status_t FLASH_Init(flash_config_t *config);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Erasing
@@ -228,7 +228,7 @@ status_t FLASH_EraseAll(flash_config_t *config, uint32_t key);
 status_t FLASH_EraseAllUnsecure(flash_config_t *config, uint32_t key);
 #endif /* FSL_FEATURE_FLASH_HAS_ERASE_ALL_BLOCKS_UNSECURE_CMD */
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Programming
@@ -316,7 +316,7 @@ status_t FLASH_ProgramOnce(flash_config_t *config, uint32_t index, uint8_t *src,
 status_t FLASH_ProgramSection(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
 #endif /* FSL_FEATURE_FLASH_HAS_PROGRAM_SECTION_CMD */
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Reading
@@ -376,7 +376,7 @@ status_t FLASH_ReadResource(
  */
 status_t FLASH_ReadOnce(flash_config_t *config, uint32_t index, uint8_t *dst, uint32_t lengthInBytes);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Verification
@@ -466,7 +466,7 @@ status_t FLASH_VerifyProgram(flash_config_t *config,
                              uint32_t *failedAddress,
                              uint32_t *failedData);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Security
@@ -506,7 +506,7 @@ status_t FLASH_GetSecurityState(flash_config_t *config, ftfx_security_state_t *s
  */
 status_t FLASH_SecurityBypass(flash_config_t *config, const uint8_t *backdoorKey);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name FlexRAM
@@ -531,7 +531,7 @@ status_t FLASH_SecurityBypass(flash_config_t *config, const uint8_t *backdoorKey
 status_t FLASH_SetFlexramFunction(flash_config_t *config, ftfx_flexram_func_opt_t option);
 #endif /* FSL_FEATURE_FLASH_HAS_SET_FLEXRAM_FUNCTION_CMD */
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Swap
@@ -560,7 +560,7 @@ status_t FLASH_SetFlexramFunction(flash_config_t *config, ftfx_flexram_func_opt_
 status_t FLASH_Swap(flash_config_t *config, uint32_t address, bool isSetEnable);
 #endif /* FSL_FEATURE_FLASH_HAS_PFLASH_BLOCK_SWAP */
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Protection
@@ -653,7 +653,7 @@ status_t FLASH_PflashSetProtection(flash_config_t *config, pflash_prot_status_t 
  */
 status_t FLASH_PflashGetProtection(flash_config_t *config, pflash_prot_status_t *protectStatus);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Properties
@@ -674,7 +674,7 @@ status_t FLASH_PflashGetProtection(flash_config_t *config, pflash_prot_status_t 
  */
 status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichProperty, uint32_t *value);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name commantStatus
@@ -694,7 +694,7 @@ status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichPro
  */
 status_t FLASH_GetCommandState(void);
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }

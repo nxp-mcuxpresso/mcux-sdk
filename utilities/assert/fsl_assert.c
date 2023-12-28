@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2022-2023 NXP
  * All rights reserved.
  *
  *
@@ -8,7 +8,18 @@
  */
 
 #include "fsl_common.h"
+#include "fsl_assert.h"
 #include "fsl_debug_console.h"
+
+/* User can implement its own asser handler (dump logs, registers, etc) by reimplementing the function fsl_assert_hook() */
+__attribute__ ((weak)) int fsl_assert_hook(const char *failedExpr, const char *file, int line)
+{
+    (void)failedExpr;
+    (void)file;
+    (void)line;
+
+    return 0;
+}
 
 #ifndef NDEBUG
 #if (defined(__CC_ARM)) || (defined(__ARMCC_VERSION)) || (defined(__ICCARM__))
@@ -20,6 +31,8 @@ void __aeabi_assert(const char *failedExpr, const char *file, int line)
     (void)PRINTF("ASSERT ERROR \" %s \": file \"%s\" Line \"%d\" \n", failedExpr, file, line);
 #endif
 
+    (void)fsl_assert_hook(failedExpr, file, line);
+
     for (;;)
     {
         __BKPT(0);
@@ -29,7 +42,13 @@ void __aeabi_assert(const char *failedExpr, const char *file, int line)
 #if defined(__REDLIB__)
 void __assertion_failed(char *failedExpr)
 {
+    const char *file = NULL;
+    int line = -1;
+
     (void)PRINTF("ASSERT ERROR \" %s \n", failedExpr);
+
+    (void)fsl_assert_hook(failedExpr, file, line);
+
     for (;;)
     {
         __BKPT(0);
@@ -40,6 +59,9 @@ void __assert_func(const char *file, int line, const char *func, const char *fai
 {
     (void)PRINTF("ASSERT ERROR \" %s \": file \"%s\" Line \"%d\" function name \"%s\" \n", failedExpr, file, line,
                  func);
+
+    (void)fsl_assert_hook(failedExpr, file, line);
+
     for (;;)
     {
         __BKPT(0);

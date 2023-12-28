@@ -258,7 +258,7 @@ hal_gpio_status_t HAL_GpioWakeUpSetting(hal_gpio_handle_t gpioHandle, uint8_t en
     assert(0 != gpioStateHandle->gintInitialized);
     assert((uint16_t)kHAL_GpioDirectionOut != gpioStateHandle->pin.direction);
 
-    if (enable)
+    if ((bool)enable)
     {
         EnableDeepSleepIRQ(gintIRQ[gpioStateHandle->gintInstance]);
     }
@@ -639,7 +639,7 @@ hal_gpio_status_t HAL_GpioWakeUpSetting(hal_gpio_handle_t gpioHandle, uint8_t en
     {
         return kStatus_HAL_GpioError;
     }
-    if (enable)
+    if ((bool)enable)
     {
         EnableDeepSleepIRQ(gintIRQ[0]);
     }

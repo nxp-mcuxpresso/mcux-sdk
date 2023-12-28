@@ -1,6 +1,7 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1042DFP6B
+**                          MIMXRT1042DJM6B
 **                          MIMXRT1042XFP5B
 **                          MIMXRT1042XJM5B
 **
@@ -12,7 +13,7 @@
 **
 **     Reference manual:    IMXRT1040RM Rev.1, 09/2022
 **     Version:             rev. 0.1, 2021-07-20
-**     Build:               b221011
+**     Build:               b230821
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -20,9 +21,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2023 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

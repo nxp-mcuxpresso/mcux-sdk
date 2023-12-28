@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_TPM_H_
-#define _FSL_TPM_H_
+#ifndef FSL_TPM_H_
+#define FSL_TPM_H_
 
 #include "fsl_common.h"
 
@@ -28,10 +28,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-/*! @brief TPM driver version 2.2.1. */
-#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
-/*@}*/
+/*! @{ */
+/*! @brief TPM driver version 2.2.3. */
+#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
+/*! @} */
 
 /*! @brief Help macro to get the max counter value */
 #define TPM_MAX_COUNTER_VALUE(x) ((1U != (uint8_t)FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x)) ? 0xFFFFU : 0xFFFFFFFFU)
@@ -920,4 +920,4 @@ static inline void TPM_Reset(TPM_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_TPM_H_ */
+#endif /* FSL_TPM_H_ */

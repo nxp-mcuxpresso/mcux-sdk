@@ -212,6 +212,18 @@
 #define BOARD_LCD_DC_GPIO_PORT 1U
 #define BOARD_LCD_DC_GPIO_PIN  7U
 
+/* @Brief Board Bluetooth HCI UART configuration */
+#define BOARD_BT_UART_INSTANCE 5
+#define BOARD_BT_UART_BAUDRATE 3000000
+#define BOARD_BT_UART_CLK_FREQ CLOCK_GetFlexCommClkFreq(5U)
+#define BOARD_BT_UART_FRG_CLK \
+    (&(const clock_frg_clk_config_t){5, kCLOCK_FrgPllDiv, 255, 5}) /*!< Select FRG0 mux as frg_pll */
+#define BOARD_BT_UART_CLK_ATTACH kFRG_to_FLEXCOMM5
+#define BOARD_BT_UART_RST        kFC5_RST_SHIFT_RSTn
+#define BOARD_BT_UART_CLKSRC     kCLOCK_Flexcomm5
+#define BOARD_BT_IRQ_HANDLER     FLEXCOMM5_IRQHandler
+#define BOARD_BT_IRQ             FLEXCOMM5_IRQn
+
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */

@@ -35,9 +35,9 @@ srtm_peercore_t SRTM_PeerCore_Create(uint32_t id)
 {
     srtm_peercore_t core = (srtm_peercore_t)SRTM_Heap_Malloc(sizeof(struct _srtm_peercore));
 #if defined(SRTM_STATIC_API) && SRTM_STATIC_API
-    srtm_mutex_t mutex   = SRTM_Mutex_Create(&core->mutexStatic);
+    srtm_mutex_t mutex = SRTM_Mutex_Create(&core->mutexStatic);
 #else
-    srtm_mutex_t mutex   = SRTM_Mutex_Create();
+    srtm_mutex_t mutex = SRTM_Mutex_Create();
 #endif
 
     assert((core != NULL) && (mutex != NULL));

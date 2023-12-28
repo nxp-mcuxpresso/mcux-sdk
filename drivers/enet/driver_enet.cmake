@@ -11,6 +11,12 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
+if(${MCUX_DEVICE} STREQUAL "RW612")
+    include(driver_memory)
+endif()
+if(${MCUX_DEVICE} STREQUAL "RW610")
+    include(driver_memory)
+endif()
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1062")
     include(driver_common)
 endif()

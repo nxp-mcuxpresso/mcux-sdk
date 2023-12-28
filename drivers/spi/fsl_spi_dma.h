@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_SPI_DMA_H_
-#define _FSL_SPI_DMA_H_
+#ifndef FSL_SPI_DMA_H_
+#define FSL_SPI_DMA_H_
 
 #include "fsl_spi.h"
 #include "fsl_dma.h"
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SPI DMA driver version. */
 #define FSL_SPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*@}*/
+/*! @} */
 
 typedef struct _spi_dma_handle spi_dma_handle_t;
 

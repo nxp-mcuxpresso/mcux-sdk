@@ -209,7 +209,8 @@
 
 /* ENET_QOS module features */
 
-/* No feature definitions */
+/* @brief ENET QOS Queue Tx checksum offload support bit map.  */
+#define FSL_FEATURE_ENET_QOS_TX_OFFLOAD_QUEUE_SUPPORT_BITMAP (0x0)
 
 /* FLEXCAN module features */
 

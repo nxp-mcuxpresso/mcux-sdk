@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_RIT_H_
-#define _FSL_RIT_H_
+#ifndef FSL_RIT_H_
+#define FSL_RIT_H_
 
 #include "fsl_common.h"
 
@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_RIT_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1 */
-/*@}*/
+/*! @} */
 
 /*! @brief List of RIT status flags */
 typedef enum _rit_status_flags
@@ -272,4 +272,4 @@ static inline void RIT_SetCountAutoClear(RIT_Type *base, bool enable)
 
 /*! @}*/
 
-#endif /* _FSL_RIT_H_ */
+#endif /* FSL_RIT_H_ */

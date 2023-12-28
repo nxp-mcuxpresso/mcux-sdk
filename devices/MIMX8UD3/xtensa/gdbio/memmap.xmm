@@ -1,0 +1,88 @@
+// Customer ID=13270; Build=0x815fe; Copyright (c) 2004-2015 Cadence Design Systems, Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+// CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+// A memory map is a sequence of memory descriptions and
+// optional parameter assignments.
+//
+// Each memory description has the following format:
+//   BEGIN <name>
+//     <addr> [,<paddr>] : <mem-type> : <mem-name> : <size> [,<psize>]
+//                       : [writable] [,executable] [,device] ;
+//     <segment>*
+//   END <name>
+//
+// where each <segment> description has the following format:
+//     <seg-name> : F|C : <start-addr> - <end-addr> [ : STACK ] [ : HEAP ]
+//                : <section-name>* ;
+//
+// Each parameter assignment is a keyword/value pair in the following format:
+//   <keyword> = <value>                (no spaces in <value>)
+// or
+//   <keyword> = "<value>"              (spaces allowed in <value>)
+//
+// The following primitives are also defined:
+//   PLACE SECTIONS( <section-name>* ) { WITH_SECTION(<section-name>)
+//                                       | IN_SEGMENT(<seg-name>) }
+//
+//   NOLOAD <section-name1> [ <section-name2> ... ]
+//
+// Please refer to the Xtensa LSP Reference Manual for more details.
+//
+
+// Additions for -mvecbase option:
+VECBASE = 0x008400
+
+// Additions for -mvecreset option:
+VECRESET = 0x000000
+
+// Additions for -mvecselect option:
+VECSELECT = 0
+
+BEGIN iram0
+0x00000000: instRam : iram0 : 0x400 : executable, writable ;
+ iram0_0 : F : 0x000000 - 0x0003ff : .ResetVector.text .ResetHandler.literal .ResetHandler.text;
+END iram0
+
+BEGIN iram1
+0x008400: instRam : iram1 : 0x17C00 : executable, writable ;
+ iram1_0 : F : 0x008400 - 0x00857b : .WindowVectors.text .Level2InterruptVector.literal;
+ iram1_1 : F : 0x00857c - 0x00859b : .Level2InterruptVector.text .Level3InterruptVector.literal;
+ iram1_2 : F : 0x00859c - 0x0085bb : .Level3InterruptVector.text .DebugExceptionVector.literal;
+ iram1_3 : F : 0x0085bc - 0x0085db : .DebugExceptionVector.text .NMIExceptionVector.literal;
+ iram1_4 : F : 0x0085dc - 0x0085fb : .NMIExceptionVector.text .KernelExceptionVector.literal;
+ iram1_5 : F : 0x0085fc - 0x00861b : .KernelExceptionVector.text .UserExceptionVector.literal;
+ iram1_6 : F : 0x00861c - 0x00863b : .UserExceptionVector.text .DoubleExceptionVector.literal;
+ iram1_7 : F : 0x00863c - 0x008a3b : .DoubleExceptionVector.text;
+ iram1_8 : F : 0x008a3c - 0x01ffff : __llvm_prf_names .text .literal;
+END iram1
+
+BEGIN dram0
+0x880000: dataRam : dram0 : 0x10000 : writable ;
+ dram0_0 : C : 0x880000 - 0x88ffff : .shmem;
+END dram0
+
+BEGIN dram1
+0x820000: dataRam : dram1 : 0x10000 : writable ;
+ dram1_0 : C : 0x820000 - 0x82ffff : STACK : HEAP : .rodata .data .bss;
+END dram1
+
+

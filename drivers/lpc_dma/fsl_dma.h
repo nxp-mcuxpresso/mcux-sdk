@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_DMA_H_
-#define _FSL_DMA_H_
+#ifndef FSL_DMA_H_
+#define FSL_DMA_H_
 
 #include "fsl_common.h"
 
@@ -22,10 +22,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief DMA driver version */
-#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 0)) /*!< Version 2.5.0. */
-/*@}*/
+#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 1)) /*!< Version 2.5.1. */
+/*! @} */
 
 /*! @brief DMA max transfer size */
 #define DMA_MAX_TRANSFER_COUNT 0x400U
@@ -333,7 +333,7 @@ void DMA_Deinit(DMA_Type *base);
  */
 void DMA_InstallDescriptorMemory(DMA_Type *base, void *addr);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name DMA Channel Operation
@@ -638,7 +638,7 @@ void DMA_SetupChannelDescriptor(dma_descriptor_t *desc,
  */
 void DMA_LoadChannelDescriptor(DMA_Type *base, uint32_t channel, dma_descriptor_t *descriptor);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name DMA Transactional Operation
@@ -890,12 +890,12 @@ void DMA_StartTransfer(dma_handle_t *handle);
  */
 void DMA_IRQHandle(DMA_Type *base);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */
 
-/* @} */
+/*! @} */
 
-#endif /*_FSL_DMA_H_*/
+#endif /*FSL_DMA_H_*/

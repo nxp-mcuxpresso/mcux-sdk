@@ -90,7 +90,8 @@ static status_t WM8960_SetInternalPllConfig(
     /* enable PLL power */
     WM8960_CHECK_RET(WM8960_ModifyReg(handle, WM8960_POWER2, 1U, 1U), ret);
 
-    WM8960_CHECK_RET(WM8960_ModifyReg(handle, WM8960_CLOCK1, 7U, (uint16_t)(((sysclkDiv == 1U ? 0U : sysclkDiv) << 1U) | 1U)), ret);
+    WM8960_CHECK_RET(
+        WM8960_ModifyReg(handle, WM8960_CLOCK1, 7U, (uint16_t)(((sysclkDiv == 1U ? 0U : sysclkDiv) << 1U) | 1U)), ret);
 
     return ret;
 }
@@ -274,7 +275,6 @@ status_t WM8960_Deinit(wm8960_handle_t *handle)
     WM8960_CHECK_RET(WM8960_SetModule(handle, kWM8960_ModuleLineIn, false), ret);
     WM8960_CHECK_RET(WM8960_SetModule(handle, kWM8960_ModuleLineOut, false), ret);
     WM8960_CHECK_RET(WM8960_SetModule(handle, kWM8960_ModuleSpeaker, false), ret);
-    WM8960_CHECK_RET(CODEC_I2C_Deinit(handle->i2cHandle), ret);
 
     return ret;
 }

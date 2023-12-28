@@ -1,6 +1,0 @@
-<map id="FXLS896x_I2C_ReadData" name="FXLS896x_I2C_ReadData">
-<area shape="rect" id="node2" href="$a00359.html#acdf865d90b909f831131712d39e6f5e6" title="Function to apply FXLS896x register read operation. " alt="" coords="231,5,365,32"/>
-<area shape="rect" id="node3" href="$a00359.html#a44ad95193e45da22e2bd3b1d0fdb1b89" title="Function to apply FXLS896x register read&#45;all operation. " alt="" coords="224,56,372,83"/>
-<area shape="rect" id="node4" href="$a00932.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is the The main function implementation. " alt="" coords="273,107,323,133"/>
-<area shape="rect" id="node5" href="$a00359.html#ab7a328885ef232a1bba728b4289b8802" title="Function to perform FXLS896x self test. " alt="" coords="241,157,355,184"/>
-</map>

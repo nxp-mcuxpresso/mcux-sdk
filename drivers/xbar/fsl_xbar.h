@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_XBAR_H_
-#define _FSL_XBAR_H_
+#ifndef FSL_XBAR_H_
+#define FSL_XBAR_H_
 
 #include "fsl_common.h"
 
@@ -195,4 +195,4 @@ void XBAR_SetOutputSignalConfig(XBAR_Type *base,
 
 /*! @}*/
 
-#endif /* _FSL_XBAR_H_ */
+#endif /* FSL_XBAR_H_ */

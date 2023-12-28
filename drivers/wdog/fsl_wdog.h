@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_WDOG_H_
-#define _FSL_WDOG_H_
+#ifndef FSL_WDOG_H_
+#define FSL_WDOG_H_
 
 #include "fsl_common.h"
 
@@ -20,22 +20,22 @@
  *******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Defines WDOG driver version 2.0.1. */
 #define FSL_WDOG_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
-/*@}*/
+/*! @} */
 
 /*! @name Unlock sequence */
-/*@{*/
+/*! @{ */
 #define WDOG_FIRST_WORD_OF_UNLOCK  (0xC520U) /*!< First word of unlock sequence */
 #define WDOG_SECOND_WORD_OF_UNLOCK (0xD928U) /*!< Second word of unlock sequence */
-/*@}*/
+/*! @} */
 
 /*! @name Refresh sequence */
-/*@{*/
+/*! @{ */
 #define WDOG_FIRST_WORD_OF_REFRESH  (0xA602U) /*!< First word of refresh sequence */
 #define WDOG_SECOND_WORD_OF_REFRESH (0xB480U) /*!< Second word of refresh sequence */
-/*@}*/
+/*! @} */
 
 /*! @brief Describes WDOG clock source. */
 typedef enum _wdog_clock_source
@@ -211,7 +211,7 @@ void WDOG_Deinit(WDOG_Type *base);
  */
 void WDOG_SetTestModeConfig(WDOG_Type *base, wdog_test_config_t *config);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name WDOG Functional Operation
@@ -401,7 +401,7 @@ static inline void WDOG_ClearResetCount(WDOG_Type *base)
     base->RSTCNT |= (uint16_t)UINT16_MAX;
 }
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -409,4 +409,4 @@ static inline void WDOG_ClearResetCount(WDOG_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_WDOG_H_ */
+#endif /* FSL_WDOG_H_ */

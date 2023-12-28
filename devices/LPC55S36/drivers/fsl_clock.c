@@ -231,7 +231,7 @@ void CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divided_by_value, bool 
     if ((div_name >= kCLOCK_DivFlexFrg0) && (div_name <= kCLOCK_DivFlexFrg7))
     {
         /*!<  Flexcomm Interface function clock = (clock selected via FCCLKSEL) / (1+ MULT /DIV), DIV = 0xFF */
-        ((volatile uint32_t *)pClkDiv)[(uint16_t)div_name] =
+        ((volatile uint32_t *)pClkDiv)[(uint8_t)div_name] =
             SYSCON_FRGCTRL_DIV_MASK | SYSCON_FRGCTRL_MULT(divided_by_value);
     }
     else
@@ -315,15 +315,17 @@ static const WaitStateInterval_t IntervalList[] = {
     {6, 77000000},
     {7, 88000000},
     {8, 100000000},
-    {11, 130000000},
-    {12, 150000000} /* Maximum allowed frequency (150 MHz) */
+    {9, 115000000},
+    {10, 130000000},
+    {11, 150000000} /* Maximum allowed frequency (150 MHz) */
 };
 /* clang-format on */
 
 void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz)
 {
     /* Flash Controller & FMC internal number of Wait States (minus 1) */
-    uint32_t num_wait_states = 15UL; /* Default to the maximum number of wait states */
+    uint32_t num_wait_states      = 15UL; /* Default to the maximum number of wait states */
+    uint32_t prefetch_enable_mask = SYSCON->FMCCR & SYSCON_FMCCR_PREFEN_MASK;
 
     for (size_t cnt = 0; cnt < (sizeof(IntervalList) / sizeof(WaitStateInterval_t)); cnt++)
     {
@@ -333,6 +335,12 @@ void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz)
             break;
         }
     }
+
+    /* Adjust FMC waiting time cycles (num_wait_states) */
+    SYSCON->FMCCR = (SYSCON->FMCCR & 0xFFFF0FFFUL) | ((num_wait_states & 0xFUL) << 12UL);
+
+    /*The prefetch bit must be disabled before any flash commands*/
+    SYSCON->FMCCR &= ~SYSCON_FMCCR_PREFEN_MASK;
 
     FLASH->INTSTAT_CLR = 0xF; /* Clear all status flags */
 
@@ -345,8 +353,8 @@ void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz)
     {
     }
 
-    /* Adjust FMC waiting time cycles (num_wait_states) */
-    SYSCON->FMCCR = (SYSCON->FMCCR & 0xFFFF0FFFUL) | ((num_wait_states & 0xFUL) << 12UL);
+    /* restore prefetch enable */
+    SYSCON->FMCCR |= prefetch_enable_mask;
 }
 
 /* Set EXT OSC Clk */
@@ -366,6 +374,11 @@ status_t CLOCK_SetupExtClocking(uint32_t iFreq)
     POWER_DisablePD(kPDRUNCFG_PD_LDOXTALHF);
     /* Enable clock_in clock for clock module. */
     SYSCON->CLOCK_CTRL |= SYSCON_CLOCK_CTRL_CLKIN_ENA_MASK;
+
+    /* Wait for external osc clock to be valid. */
+    while((ANACTRL->XO32M_STATUS & ANACTRL_XO32M_STATUS_XO_READY_MASK) == 0U)
+    {
+    }
 
     s_Ext_Clk_Freq = iFreq;
     return kStatus_Success;
@@ -472,7 +485,7 @@ uint32_t CLOCK_GetAdcClkFreq(uint32_t id)
     uint32_t freq = 0U;
     uint32_t div  = 0U;
 
-    switch ((id == 0) ? (SYSCON->ADC0CLKSEL) : (SYSCON->ADC1CLKSEL))
+    switch ((id == 0U) ? (SYSCON->ADC0CLKSEL) : (SYSCON->ADC1CLKSEL))
     {
         case 0U:
             freq = CLOCK_GetCoreSysClkFreq();
@@ -488,7 +501,7 @@ uint32_t CLOCK_GetAdcClkFreq(uint32_t id)
             break;
     }
 
-    div = ((id == 0) ? ((SYSCON->ADC0CLKDIV & SYSCON_ADC0CLKDIV_DIV_MASK) + 1U) :
+    div = ((id == 0U) ? ((SYSCON->ADC0CLKDIV & SYSCON_ADC0CLKDIV_DIV_MASK) + 1U) :
                        ((SYSCON->ADC1CLKDIV & SYSCON_ADC1CLKDIV_DIV_MASK) + 1U));
 
     return freq / div;
@@ -1177,7 +1190,7 @@ static void pllFindSel(uint32_t M, uint32_t *pSelP, uint32_t *pSelI, uint32_t *p
 {
     uint32_t seli, selp;
     /* bandwidth: compute selP from Multiplier */
-    if ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_MDIV_EXT_MASK) != 0UL) /* normal mode */
+    if ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_SEL_EXT_MASK) != 0UL) /* normal mode */
     {
         selp = (M >> 2U) + 1U;
         if (selp >= 31U)
@@ -1834,7 +1847,8 @@ pll_error_t CLOCK_SetupPLL0Data(pll_config_t *pControl, pll_setup_t *pSetup)
 pll_error_t CLOCK_SetupPLL0Prec(pll_setup_t *pSetup, uint32_t flagcfg)
 {
     uint32_t inRate, clkRate, prediv;
-
+    uint32_t pll_lock_wait_time     = 0U;
+    uint32_t max_pll_lock_wait_time = 0U;
     /* Power off PLL during setup changes */
     POWER_EnablePD(kPDRUNCFG_PD_PLL0);
     POWER_EnablePD(kPDRUNCFG_PD_PLL0_SSCG);
@@ -1855,26 +1869,31 @@ pll_error_t CLOCK_SetupPLL0Prec(pll_setup_t *pSetup, uint32_t flagcfg)
     POWER_DisablePD(kPDRUNCFG_PD_PLL0);
     POWER_DisablePD(kPDRUNCFG_PD_PLL0_SSCG);
 
-    if ((pSetup->flags & PLL_SETUPFLAG_WAITLOCK) != 0UL)
+    if ((pSetup->flags & PLL_SETUPFLAG_WAITLOCK) != 0U)
     {
-        if ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_MDIV_EXT_MASK) != 0UL) /* normal mode */
+        if ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_SEL_EXT_MASK) != 0UL) /* normal mode */
         {
             inRate = CLOCK_GetPLL0InClockRate();
             prediv = findPll0PreDiv();
             /* Adjust input clock */
             clkRate = inRate / prediv;
-            /* The lock signal is only reliable between fref[2] :100 kHz to 20 MHz. */
-            if ((clkRate >= 100000UL) && (clkRate <= 20000000UL))
+
+            /* Need wait at least (500us + 400/Fref) (Fref in Hz result in s) to ensure the PLL is stable.
+               The lock bit could be used to shorten the wait time when freq<20MHZ */
+            max_pll_lock_wait_time = 500U + (400000000U / clkRate);
+
+            if (clkRate < 20000000UL)
             {
-                while (CLOCK_IsPLL0Locked() == false)
+                pll_lock_wait_time = 0U;
+                while ((CLOCK_IsPLL0Locked() == false) && (pll_lock_wait_time < max_pll_lock_wait_time))
                 {
+                    pll_lock_wait_time += 100U;
+                    SDK_DelayAtLeastUs(100U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
                 }
             }
             else
             {
-                SDK_DelayAtLeastUs(6000U,
-                                   SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY); /* software should use a 6 ms time interval
-                                                                               to insure the PLL will be stable */
+                SDK_DelayAtLeastUs(max_pll_lock_wait_time, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
             }
         }
         else /* spread spectrum mode */
@@ -1911,6 +1930,8 @@ pll_error_t CLOCK_SetupPLL0Prec(pll_setup_t *pSetup, uint32_t flagcfg)
 pll_error_t CLOCK_SetPLL0Freq(const pll_setup_t *pSetup)
 {
     uint32_t inRate, clkRate, prediv;
+    uint32_t pll_lock_wait_time     = 0U;
+    uint32_t max_pll_lock_wait_time = 0U;
     /* Power off PLL during setup changes */
     POWER_EnablePD(kPDRUNCFG_PD_PLL0);
     POWER_EnablePD(kPDRUNCFG_PD_PLL0_SSCG);
@@ -1929,33 +1950,38 @@ pll_error_t CLOCK_SetPLL0Freq(const pll_setup_t *pSetup)
     POWER_DisablePD(kPDRUNCFG_PD_PLL0);
     POWER_DisablePD(kPDRUNCFG_PD_PLL0_SSCG);
 
-    if ((pSetup->flags & PLL_SETUPFLAG_WAITLOCK) != 0UL)
+    if ((pSetup->flags & PLL_SETUPFLAG_WAITLOCK) != 0U)
     {
-        if ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_MDIV_EXT_MASK) != 0UL) /* normal mode */
+        if ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_SEL_EXT_MASK) != 0UL) /* normal mode */
         {
             inRate = CLOCK_GetPLL0InClockRate();
             prediv = findPll0PreDiv();
             /* Adjust input clock */
             clkRate = inRate / prediv;
-            /* The lock signal is only reliable between fref[2] :100 kHz to 20 MHz. */
-            if ((clkRate >= 100000UL) && (clkRate <= 20000000UL))
+
+            /* Need wait at least (500us + 400/Fref) (Fref in Hz result in s) to ensure the PLL is
+               stable. The lock bit could be used to shorten the wait time when freq<20MHZ */
+            max_pll_lock_wait_time = 500U + (400000000U / clkRate);
+
+            if (clkRate < 20000000UL)
             {
-                while (CLOCK_IsPLL0Locked() == false)
+                pll_lock_wait_time = 0U;
+                while ((CLOCK_IsPLL0Locked() == false) && (pll_lock_wait_time < max_pll_lock_wait_time))
                 {
+                    pll_lock_wait_time += 100U;
+                    SDK_DelayAtLeastUs(100U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
                 }
             }
             else
             {
-                SDK_DelayAtLeastUs(6000U,
-                                   SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY); /* software should use a 6 ms time interval
-                                                                               to insure the PLL will be stable */
+                SDK_DelayAtLeastUs(max_pll_lock_wait_time, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
             }
         }
         else /* spread spectrum mode */
         {
             SDK_DelayAtLeastUs(6000U,
-                               SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY); /* software should use a 6 ms time interval to
-                                                                           insure the PLL will be stable */
+                               SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY); /* software should use a 6 ms time interval
+                                                                           to insure the PLL will be stable */
         }
     }
 
@@ -1979,6 +2005,8 @@ pll_error_t CLOCK_SetPLL0Freq(const pll_setup_t *pSetup)
 pll_error_t CLOCK_SetPLL1Freq(const pll_setup_t *pSetup)
 {
     uint32_t inRate, clkRate, prediv;
+    uint32_t pll_lock_wait_time     = 0U;
+    uint32_t max_pll_lock_wait_time = 0U;
     /* Power off PLL during setup changes */
     POWER_EnablePD(kPDRUNCFG_PD_PLL1);
 
@@ -1993,24 +2021,29 @@ pll_error_t CLOCK_SetPLL1Freq(const pll_setup_t *pSetup)
 
     POWER_DisablePD(kPDRUNCFG_PD_PLL1);
 
-    if ((pSetup->flags & PLL_SETUPFLAG_WAITLOCK) != 0UL)
+    if ((pSetup->flags & PLL_SETUPFLAG_WAITLOCK) != 0U)
     {
         inRate = CLOCK_GetPLL1InClockRate();
         prediv = findPll1PreDiv();
         /* Adjust input clock */
         clkRate = inRate / prediv;
-        /* The lock signal is only reliable between fref[2] :100 kHz to 20 MHz. */
-        if ((clkRate >= 100000UL) && (clkRate <= 20000000UL))
+
+        /* Need wait at least (500us + 400/Fref) (Fref in Hz result in s) to ensure the PLL is stable.
+           The lock bit could be used to shorten the wait time when freq<20MHZ */
+        max_pll_lock_wait_time = 500U + (400000000U / clkRate);
+
+        if (clkRate < 20000000UL)
         {
-            while (CLOCK_IsPLL1Locked() == false)
+            pll_lock_wait_time = 0U;
+            while ((CLOCK_IsPLL1Locked() == false) && (pll_lock_wait_time < max_pll_lock_wait_time))
             {
+                pll_lock_wait_time += 100U;
+                SDK_DelayAtLeastUs(100U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
             }
         }
         else
         {
-            SDK_DelayAtLeastUs(6000U,
-                               SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY); /* software should use a 6 ms time interval to
-                                                                           insure the PLL will be stable */
+            SDK_DelayAtLeastUs(max_pll_lock_wait_time, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
         }
     }
 
@@ -2084,10 +2117,10 @@ void CLOCK_SetupPLL0Mult(uint32_t multiply_by, uint32_t input_freq)
     SYSCON->PLL0CTRL = SYSCON_PLL0CTRL_CLKEN_MASK | SYSCON_PLL0CTRL_BYPASSPOSTDIV(0) |
                        SYSCON_PLL0CTRL_BYPASSPOSTDIV2(0) | (selr << SYSCON_PLL0CTRL_SELR_SHIFT) |
                        (seli << SYSCON_PLL0CTRL_SELI_SHIFT) | (selp << SYSCON_PLL0CTRL_SELP_SHIFT);
-    SYSCON->PLL0PDEC = pdec | (1UL << SYSCON_PLL0PDEC_PREQ_SHIFT); /* set Pdec value and assert preq */
-    SYSCON->PLL0NDEC = ndec | (1UL << SYSCON_PLL0NDEC_NREQ_SHIFT); /* set Pdec value and assert preq */
-    SYSCON->PLL0SSCG1 =
-        mdec | (1UL << SYSCON_PLL0SSCG1_MREQ_SHIFT); /* select non sscg MDEC value, assert mreq and select mdec value */
+    SYSCON->PLL0PDEC  = pdec | (1UL << SYSCON_PLL0PDEC_PREQ_SHIFT);  /* set Pdec value and assert preq */
+    SYSCON->PLL0NDEC  = ndec | (1UL << SYSCON_PLL0NDEC_NREQ_SHIFT);  /* set Pdec value and assert preq */
+    SYSCON->PLL0SSCG1 = mdec | (1UL << SYSCON_PLL0SSCG1_MREQ_SHIFT); /* select non sscg MDEC value, assert
+                                                                        mreq and select mdec value */
 }
 
 /* Enable USB DEVICE FULL SPEED clock */
@@ -2221,17 +2254,14 @@ void CLOCK_EnableOstimer32kClock(void)
 
 /* Sets board-specific trim values for High Frequency crystal oscillator */
 /*! brief Sets board-specific trim values for High Frequency crystal oscillator.
- * param pi32_hfXtalIecLoadpF_x100 : Load capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF becomes 120
- * param pi32_hfXtalPPcbParCappF_x100 : PCB +ve parasitic capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF
- * becomes 120
- * param pi32_hfXtalNPcbParCappF_x100 : PCB -ve parasitic capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF
- * becomes 120
- * return   none
- * note     Following default Values can be used:
- *          pi32_32MfXtalIecLoadpF_x100 Load capacitance, pF x 100 : 600
- *          pi32_32MfXtalPPcbParCappF_x100 PCB +ve parasitic capacitance, pF x 100 : 20
- *          pi32_32MfXtalNPcbParCappF_x100 PCB -ve parasitic capacitance, pF x 100 : 40
- * Sets board-specific trim values for High Frequency crystal oscillator.
+ * param pi32_hfXtalIecLoadpF_x100 : Load capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF
+ * becomes 120 param pi32_hfXtalPPcbParCappF_x100 : PCB +ve parasitic capacitance, pF x 100. For
+ * example, 6pF becomes 600, 1.2pF becomes 120 param pi32_hfXtalNPcbParCappF_x100 : PCB -ve parasitic
+ * capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF becomes 120 return   none note Following
+ * default Values can be used: pi32_32MfXtalIecLoadpF_x100 Load capacitance, pF x 100 : 600
+ * pi32_32MfXtalPPcbParCappF_x100 PCB +ve parasitic capacitance, pF x 100 : 20
+ * pi32_32MfXtalNPcbParCappF_x100 PCB -ve parasitic capacitance, pF x 100 : 40 Sets board-specific trim
+ * values for High Frequency crystal oscillator.
  */
 void CLOCK_XtalHfCapabankTrim(int32_t pi32_hfXtalIecLoadpF_x100,
                               int32_t pi32_hfXtalPPcbParCappF_x100,
@@ -2249,15 +2279,15 @@ void CLOCK_XtalHfCapabankTrim(int32_t pi32_hfXtalIecLoadpF_x100,
     /* Get Cal values from Flash */
     u32XOTrimValue = GET_HFXO_TRIM();
     /* Check validity and apply */
-    if ((u32XOTrimValue & 1) && ((u32XOTrimValue >> 15) & 1))
+    if ((0UL != (u32XOTrimValue & 1UL)) && (0UL != ((u32XOTrimValue >> 15) & 1UL)))
     {
         /* These fields are 7 bits, unsigned */
-        u8IECXinCapCal6pF  = (u32XOTrimValue >> 1) & 0x7f;
-        u8IECXinCapCal8pF  = (u32XOTrimValue >> 8) & 0x7f;
-        u8IECXoutCapCal6pF = (u32XOTrimValue >> 16) & 0x7f;
-        u8IECXoutCapCal8pF = (u32XOTrimValue >> 23) & 0x7f;
+        u8IECXinCapCal6pF  = (uint8_t)((u32XOTrimValue >> 1) & 0x7fUL);
+        u8IECXinCapCal8pF  = (uint8_t)((u32XOTrimValue >> 8) & 0x7fUL);
+        u8IECXoutCapCal6pF = (uint8_t)((u32XOTrimValue >> 16) & 0x7fUL);
+        u8IECXoutCapCal8pF = (uint8_t)((u32XOTrimValue >> 23) & 0x7fUL);
         /* This field is 1 bit */
-        u8XOSlave = (u32XOTrimValue >> 30) & 0x1;
+        u8XOSlave = (uint8_t)((u32XOTrimValue >> 30) & 0x1UL);
         /* Linear fit coefficients calculation */
         iaXin_x4  = (int)u8IECXinCapCal8pF - (int)u8IECXinCapCal6pF;
         ibXin     = (int)u8IECXinCapCal6pF - iaXin_x4 * 3;
@@ -2274,11 +2304,11 @@ void CLOCK_XtalHfCapabankTrim(int32_t pi32_hfXtalIecLoadpF_x100,
     }
     /* In & out load cap calculation with derating */
     iXOCapInpF_x100 =
-        2 * pi32_hfXtalIecLoadpF_x100 - pi32_hfXtalNPcbParCappF_x100 + 39 * (XO_SLAVE_EN - u8XOSlave) - 15;
+        (int32_t)(2 * pi32_hfXtalIecLoadpF_x100 - pi32_hfXtalNPcbParCappF_x100 + 39 * (XO_SLAVE_EN - (int8_t)u8XOSlave) - 15);
     iXOCapOutpF_x100 = 2 * pi32_hfXtalIecLoadpF_x100 - pi32_hfXtalPPcbParCappF_x100 - 21;
     /* In & out XO_OSC_CAP_Code_CTRL calculation, with rounding */
-    u8XOCapInCtrl  = (uint8_t)(((iXOCapInpF_x100 * iaXin_x4 + ibXin * 400) + 200) / 400);
-    u8XOCapOutCtrl = (uint8_t)(((iXOCapOutpF_x100 * iaXout_x4 + ibXout * 400) + 200) / 400);
+    u8XOCapInCtrl  = (uint8_t)(int32_t)((((iXOCapInpF_x100 * iaXin_x4 + ibXin * 400) + 200) / 400));
+    u8XOCapOutCtrl = (uint8_t)(int32_t)((((iXOCapOutpF_x100 * iaXout_x4 + ibXout * 400) + 200) / 400));
     /* Read register and clear fields to be written */
     u32RegVal = ANACTRL->XO32M_CTRL;
     u32RegVal &= ~(ANACTRL_XO32M_CTRL_OSC_CAP_IN_MASK | ANACTRL_XO32M_CTRL_OSC_CAP_OUT_MASK);
@@ -2289,25 +2319,22 @@ void CLOCK_XtalHfCapabankTrim(int32_t pi32_hfXtalIecLoadpF_x100,
     u32RegVal |= ANACTRL_XO32M_CTRL_SLAVE_MASK | ANACTRL_XO32M_CTRL_ACBUF_PASS_ENABLE_MASK;
 #endif
     /* XO_OSC_CAP_Code_CTRL to XO_OSC_CAP_Code conversion */
-    u32RegVal |= CLOCK_u8OscCapConvert(u8XOCapInCtrl, 13) << ANACTRL_XO32M_CTRL_OSC_CAP_IN_SHIFT;
-    u32RegVal |= CLOCK_u8OscCapConvert(u8XOCapOutCtrl, 13) << ANACTRL_XO32M_CTRL_OSC_CAP_OUT_SHIFT;
+    u32RegVal |= (uint32_t)CLOCK_u8OscCapConvert(u8XOCapInCtrl, 13) << ANACTRL_XO32M_CTRL_OSC_CAP_IN_SHIFT;
+    u32RegVal |= (uint32_t)CLOCK_u8OscCapConvert(u8XOCapOutCtrl, 13) << ANACTRL_XO32M_CTRL_OSC_CAP_OUT_SHIFT;
     /* Write back to register */
     ANACTRL->XO32M_CTRL = u32RegVal;
 }
 
 /* Sets board-specific trim values for 32kHz XTAL */
 /*! brief Sets board-specific trim values for 32kHz XTAL.
- * param pi32_32kfXtalIecLoadpF_x100 : Load capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF becomes 120
- * param pi32_32kfXtalPPcbParCappF_x100 : PCB +ve parasitic capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF
- * becomes 120
- * param pi32_32kfXtalNPcbParCappF_x100 : PCB -ve parasitic capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF
- * becomes 120
- * return   none
- * note     Following default Values can be used:
- *          pi32_32kfXtalIecLoadpF_x100 Load capacitance, pF x 100 : 600
- *          pi32_32kfXtalPPcbParCappF_x100 PCB +ve parasitic capacitance, pF x 100 : 40
- *          pi32_32kfXtalNPcbParCappF_x100 PCB -ve parasitic capacitance, pF x 100 : 40
- * Sets board-specific trim values for 32kHz XTAL.
+ * param pi32_32kfXtalIecLoadpF_x100 : Load capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF
+ * becomes 120 param pi32_32kfXtalPPcbParCappF_x100 : PCB +ve parasitic capacitance, pF x 100. For
+ * example, 6pF becomes 600, 1.2pF becomes 120 param pi32_32kfXtalNPcbParCappF_x100 : PCB -ve parasitic
+ * capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF becomes 120 return   none note Following
+ * default Values can be used: pi32_32kfXtalIecLoadpF_x100 Load capacitance, pF x 100 : 600
+ * pi32_32kfXtalPPcbParCappF_x100 PCB +ve parasitic capacitance, pF x 100 : 40
+ * pi32_32kfXtalNPcbParCappF_x100 PCB -ve parasitic capacitance, pF x 100 : 40 Sets board-specific trim
+ * values for 32kHz XTAL.
  */
 void CLOCK_Xtal32khzCapabankTrim(int32_t pi32_32kfXtalIecLoadpF_x100,
                                  int32_t pi32_32kfXtalPPcbParCappF_x100,
@@ -2322,13 +2349,13 @@ void CLOCK_Xtal32khzCapabankTrim(int32_t pi32_32kfXtalIecLoadpF_x100,
     /* Get Cal values from Flash */
     u32XOTrimValue = GET_32KXO_TRIM();
     /* check validity and apply */
-    if ((u32XOTrimValue & 1) && ((u32XOTrimValue >> 15) & 1))
+    if ((0UL != (u32XOTrimValue & 1UL)) && (0UL != ((u32XOTrimValue >> 15) & 1UL)))
     {
         /* These fields are 7 bits, unsigned */
-        u8IECXinCapCal6pF  = (u32XOTrimValue >> 1) & 0x7f;
-        u8IECXinCapCal8pF  = (u32XOTrimValue >> 8) & 0x7f;
-        u8IECXoutCapCal6pF = (u32XOTrimValue >> 16) & 0x7f;
-        u8IECXoutCapCal8pF = (u32XOTrimValue >> 23) & 0x7f;
+        u8IECXinCapCal6pF  = (uint8_t)((u32XOTrimValue >> 1) & 0x7fUL);
+        u8IECXinCapCal8pF  = (uint8_t)((u32XOTrimValue >> 8) & 0x7fUL);
+        u8IECXoutCapCal6pF = (uint8_t)((u32XOTrimValue >> 16) & 0x7fUL);
+        u8IECXoutCapCal8pF = (uint8_t)((u32XOTrimValue >> 23) & 0x7fUL);
         /* Linear fit coefficients calculation */
         iaXin_x4  = (int)u8IECXinCapCal8pF - (int)u8IECXinCapCal6pF;
         ibXin     = (int)u8IECXinCapCal6pF - iaXin_x4 * 3;
@@ -2348,16 +2375,16 @@ void CLOCK_Xtal32khzCapabankTrim(int32_t pi32_32kfXtalIecLoadpF_x100,
     iXOCapOutpF_x100 = 2 * pi32_32kfXtalIecLoadpF_x100 - pi32_32kfXtalPPcbParCappF_x100 - 41;
 
     /* In & out XO_OSC_CAP_Code_CTRL calculation, with rounding */
-    u8XOCapInCtrl  = (uint8_t)(((iXOCapInpF_x100 * iaXin_x4 + ibXin * 400) + 200) / 400);
-    u8XOCapOutCtrl = (uint8_t)(((iXOCapOutpF_x100 * iaXout_x4 + ibXout * 400) + 200) / 400);
+    u8XOCapInCtrl  = (uint8_t)(int32_t)((((iXOCapInpF_x100 * iaXin_x4 + ibXin * 400) + 200) / 400));
+    u8XOCapOutCtrl = (uint8_t)(int32_t)((((iXOCapOutpF_x100 * iaXout_x4 + ibXout * 400) + 200) / 400));
 
     /* Read register and clear fields to be written */
     u32RegVal = PMC->XTAL32K;
     u32RegVal &= ~(PMC_XTAL32K_CAPBANKIN_MASK | PMC_XTAL32K_CAPBANKOUT_MASK);
 
     /* XO_OSC_CAP_Code_CTRL to XO_OSC_CAP_Code conversion */
-    u32RegVal |= CLOCK_u8OscCapConvert(u8XOCapInCtrl, 23) << PMC_XTAL32K_CAPBANKIN_SHIFT;
-    u32RegVal |= CLOCK_u8OscCapConvert(u8XOCapOutCtrl, 23) << PMC_XTAL32K_CAPBANKOUT_SHIFT;
+    u32RegVal |= (uint32_t)(CLOCK_u8OscCapConvert(u8XOCapInCtrl, 23)) << PMC_XTAL32K_CAPBANKIN_SHIFT;
+    u32RegVal |= (uint32_t)(CLOCK_u8OscCapConvert(u8XOCapOutCtrl, 23)) << PMC_XTAL32K_CAPBANKOUT_SHIFT;
 
     /* Write back to register */
     PMC->XTAL32K = u32RegVal;
@@ -2368,7 +2395,7 @@ void CLOCK_Xtal32khzCapabankTrim(int32_t pi32_32kfXtalIecLoadpF_x100,
  * return   none
  * Sets Enables and sets LDO for High Frequency crystal oscillator.
  */
-void CLOCK_SetXtalHfLdo(void)
+static void CLOCK_SetXtalHfLdo(void)
 {
     uint32_t temp;
     const uint32_t u32Mask =
@@ -2410,7 +2437,7 @@ void CLOCK_SetXtalHfLdo(void)
 static uint8_t CLOCK_u8OscCapConvert(uint8_t u8OscCap, uint8_t u8CapBankDiscontinuity)
 {
     /* Compensate for discontinuity in the capacitor banks */
-    if (u8OscCap < 64)
+    if (u8OscCap < 64U)
     {
         if (u8OscCap >= u8CapBankDiscontinuity)
         {
@@ -2423,7 +2450,7 @@ static uint8_t CLOCK_u8OscCapConvert(uint8_t u8OscCap, uint8_t u8CapBankDisconti
     }
     else
     {
-        if (u8OscCap <= (127 - u8CapBankDiscontinuity))
+        if (u8OscCap <= (127U - u8CapBankDiscontinuity))
         {
             u8OscCap += u8CapBankDiscontinuity;
         }

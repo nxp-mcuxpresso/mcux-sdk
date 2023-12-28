@@ -23,7 +23,7 @@ typedef struct _srtm_i2c_codec_adapter
     codec_handle_t *driver;
     uint32_t srate;
     uint8_t format;
-} * srtm_i2c_codec_adapter_t;
+} *srtm_i2c_codec_adapter_t;
 
 /*******************************************************************************
  * Prototypes

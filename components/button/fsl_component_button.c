@@ -31,15 +31,9 @@
 
 #if defined(OSA_USED)
 #include "fsl_os_abstraction.h"
-#if (defined(USE_RTOS) && (USE_RTOS > 0U))
 #define BUTTON_SR_ALLOC()       OSA_SR_ALLOC()
 #define BUTTON_ENTER_CRITICAL() OSA_ENTER_CRITICAL();
 #define BUTTON_EXIT_CRITICAL()  OSA_EXIT_CRITICAL()
-#else
-#define BUTTON_SR_ALLOC()
-#define BUTTON_ENTER_CRITICAL()
-#define BUTTON_EXIT_CRITICAL()
-#endif
 #else
 #define BUTTON_SR_ALLOC()       uint32_t buttonPrimask;
 #define BUTTON_ENTER_CRITICAL() buttonPrimask = DisableGlobalIRQ();
@@ -158,7 +152,11 @@ static void BUTTON_Event(void *param)
             {
                 (void)TM_Start(s_buttonList.timerHandle, (uint8_t)kTimerModeIntervalTimer, BUTTON_TIMER_INTERVAL);
             }
-            s_buttonList.activeButtonCount++;
+
+            if (((uint8_t)kStatus_BUTTON_Pressed) == (buttonState->state.pressed))
+            {
+                s_buttonList.activeButtonCount++;
+            }
         }
     }
     else
@@ -515,8 +513,6 @@ button_status_t BUTTON_EnterLowpower(button_handle_t buttonHandle)
         assert(kStatus_HAL_GpioSuccess == status);
         (void)status;
 
-        BUTTON_CloseTimer();
-
         if ((button_handle_t)pLowpowerHandle != buttonHandle)
         {
             break;
@@ -552,8 +548,6 @@ button_status_t BUTTON_ExitLowpower(button_handle_t buttonHandle)
 
         assert(kStatus_HAL_GpioSuccess == status);
         (void)status;
-
-        BUTTON_OpenTimer();
 
         BUTTON_Event(buttonState);
 

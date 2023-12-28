@@ -1,8 +1,0 @@
-<map id="algorithms/sensorfusion/sources/fusion.h" name="algorithms/sensorfusion/sources/fusion.h">
-<area shape="rect" id="node2" href="$a00794.html" title="Command interpreter which interfaces to the Sensor Fusion Toolbox. " alt="" coords="5,102,229,143"/>
-<area shape="rect" id="node3" href="$a00845.html" title="Lower level sensor fusion interface. " alt="" coords="254,102,413,143"/>
-<area shape="rect" id="node4" href="$a00881.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F/FRDM&#45;FXS&#45;AGM02 with smart power&#45;cycl..." alt="" coords="437,95,605,151"/>
-<area shape="rect" id="node5" href="$a00896.html" title="Functions to convert between various orientation representations. " alt="" coords="630,102,789,143"/>
-<area shape="rect" id="node6" href="$a00905.html" title="Implements accelerometer calibration routines. " alt="" coords="813,102,1035,143"/>
-<area shape="rect" id="node7" href="$a00911.html" title="The sensor_fusion.c file implements the top level programming interface. " alt="" coords="1059,102,1226,143"/>
-</map>

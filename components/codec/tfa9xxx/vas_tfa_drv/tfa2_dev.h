@@ -220,10 +220,10 @@ struct tfa2_sequence
 
 struct haptic_data
 {
-    int index;     /* selected object */
-    int frequency; /* frequency, valid if non-0 */
-    int amplitude; /* level, strength of signal 0-100% */
-    int duration;  /* time in milliseconds */
+    int index;              /* selected object */
+    int frequency;          /* frequency, valid if non-0 */
+    int amplitude;          /* level, strength of signal 0-100% */
+    int duration;           /* time in milliseconds */
 
     int recalc_play_object; /* run boot obj in recalculation */
     int use_bck;
@@ -231,7 +231,7 @@ struct haptic_data
     int object_table2_cache[FW_XMEM_NR_OBJECTS2][FW_XMEM_OBJECTSIZE];
     int delay_attack; /* delay in milliseconds  between object trigger and object execution */
 
-    int seq_max; /* total nr of sequencer virtual objects */
+    int seq_max;      /* total nr of sequencer virtual objects */
     struct tfa2_sequence seq;
 };
 
@@ -252,7 +252,7 @@ enum tfa9xxx_DAI
 struct tfa2_device
 {
     struct i2c_client *i2c;
-    int dev_idx; /**< device container index */
+    int dev_idx;                     /**< device container index */
     int in_use;
     int buffer_size;                 /**< lowest level max buffer size */
                                      //	int has_msg; 			/**< support direct dsp messaging */

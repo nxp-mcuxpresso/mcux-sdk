@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_MSMC_H_
-#define _FSL_MSMC_H_
+#ifndef FSL_MSMC_H_
+#define FSL_MSMC_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief MSMC driver version. */
 #define FSL_MSMC_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief Power Modes Protection
@@ -227,7 +227,7 @@ extern "C" {
 #endif /* __cplusplus*/
 
 /*! @name System mode controller APIs*/
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Configures all power mode protection settings.
@@ -723,7 +723,7 @@ static inline void SMC_SRAMEnableDeepSleepMode(SMC_Type *base, uint32_t arrayIdx
 
 #endif /* FSL_FEATURE_SMC_HAS_FM */
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -731,4 +731,4 @@ static inline void SMC_SRAMEnableDeepSleepMode(SMC_Type *base, uint32_t arrayIdx
 
 /*! @}*/
 
-#endif /* _FSL_MSMC_H_ */
+#endif /* FSL_MSMC_H_ */

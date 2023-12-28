@@ -20,12 +20,12 @@ typedef struct _display_common_cfg_t
 {
     uint16_t width;
     uint16_t height;
-    uint16_t hsw; /*!< HSYNC pulse width. */
-    uint16_t hfp; /*!< Horizontal front porch. */
-    uint16_t hbp; /*!< Horizontal back porch. */
-    uint16_t vsw; /*!< VSYNC pulse width. */
-    uint16_t vfp; /*!< Vrtical front porch. */
-    uint16_t vbp; /*!< Vertical back porch. */
+    uint16_t hsw;   /*!< HSYNC pulse width. */
+    uint16_t hfp;   /*!< Horizontal front porch. */
+    uint16_t hbp;   /*!< Horizontal back porch. */
+    uint16_t vsw;   /*!< VSYNC pulse width. */
+    uint16_t vfp;   /*!< Vrtical front porch. */
+    uint16_t vbp;   /*!< Vertical back porch. */
     uint32_t clock; /* !< pixecl clock in kHz>. */
 } display_common_cfg;
 

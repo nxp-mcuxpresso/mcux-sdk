@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_LCDIF_H_
-#define _FSL_LCDIF_H_
+#ifndef FSL_LCDIF_H_
+#define FSL_LCDIF_H_
 
 #include "fsl_common.h"
 
@@ -25,9 +25,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-#define FSL_LCDIF_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*@}*/
+/*! @{ */
+#define FSL_LCDIF_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+/*! @} */
 
 /*! @brief Construct the cursor color, every element should be in the range of 0 ~ 255. */
 #define LCDIF_MAKE_CURSOR_COLOR(r, g, b) (((r) << 16U) | ((g) << 8U) | ((b) << 0U))
@@ -142,7 +142,8 @@ typedef struct _lcdif_cursor_config
  * @brief LCDIF dither configuration.
  *
  * 1. Decide which bit of pixel color to enhance. This is configured by the
- * @ref redSize, @ref greenSize, and @ref blueSize. For example, setting redSize=6
+ * @ref lcdif_dither_config_t::redSize, @ref lcdif_dither_config_t::greenSize,
+ * and @ref lcdif_dither_config_t::blueSize. For example, setting redSize=6
  * means it is the 6th bit starting from the MSB that we want to enhance, in other words,
  * it is the RedColor[2]bit from RedColor[7:0]. greenSize and blueSize function
  * in the same way.
@@ -198,7 +199,7 @@ status_t LCDIF_Init(LCDIF_Type *base);
  */
 void LCDIF_Deinit(LCDIF_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @brief Get the default configuration for to initialize the LCDIF.
@@ -287,7 +288,7 @@ static inline void LCDIF_SetFrameBufferAddr(LCDIF_Type *base, uint8_t fbIndex, u
  */
 void LCDIF_SetFrameBufferStride(LCDIF_Type *base, uint8_t fbIndex, uint32_t strideBytes);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Dither
@@ -303,7 +304,7 @@ void LCDIF_SetFrameBufferStride(LCDIF_Type *base, uint8_t fbIndex, uint32_t stri
  */
 void LCDIF_SetDitherConfig(LCDIF_Type *base, uint8_t displayIndex, const lcdif_dither_config_t *config);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Gamma correction
@@ -322,7 +323,7 @@ void LCDIF_SetDitherConfig(LCDIF_Type *base, uint8_t displayIndex, const lcdif_d
 void LCDIF_SetGammaData(
     LCDIF_Type *base, uint8_t fbIndex, uint16_t startIndex, const uint32_t *gamma, uint16_t gammaLen);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -367,7 +368,7 @@ static inline uint32_t LCDIF_GetAndClearInterruptPendingFlags(LCDIF_Type *base)
     return base->DISPLAYINTR;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Cursor
@@ -475,7 +476,7 @@ static inline void LCDIF_SetCursorBufferAddress(LCDIF_Type *base, uint32_t addre
  */
 void LCDIF_SetCursorColor(LCDIF_Type *base, uint32_t background, uint32_t foreground);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -483,4 +484,4 @@ void LCDIF_SetCursorColor(LCDIF_Type *base, uint32_t background, uint32_t foregr
 
 /*! @}*/
 
-#endif /* _FSL_LCDIF_H_ */
+#endif /* FSL_LCDIF_H_ */

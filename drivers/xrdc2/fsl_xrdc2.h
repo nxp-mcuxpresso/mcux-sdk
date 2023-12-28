@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_XRDC2_H_
-#define _FSL_XRDC2_H_
+#ifndef FSL_XRDC2_H_
+#define FSL_XRDC2_H_
 
 #include "fsl_common.h"
 
@@ -68,9 +68,10 @@ typedef enum _xrdc2_privilege_attr
 /*!
  * @brief Domain assignment for the bus master.
  *
- * XRDC2 compares the bus master @e match @e input with the parameter @ref mask
- * and @ref match in this structure. If hit, the domain ID, privilege attribute,
- * and secure attribute are used for the access.
+ * XRDC2 compares the bus master @e match @e input with the parameter
+ * @ref xrdc2_master_domain_assignment_t::mask and
+ * @ref xrdc2_master_domain_assignment_t::match in this structure.
+ * If hit, the domain ID, privilege attribute, and secure attribute are used for the access.
  */
 typedef struct _xrdc2_master_domain_assignment
 {
@@ -217,7 +218,7 @@ static inline uint8_t XRDC2_GetCurrentGlobalConfigLockOwnerDomainId(XRDC2_Type *
     return (uint8_t)((base->SR & XRDC2_SR_GCLO_MASK) >> XRDC2_SR_GCLO_SHIFT);
 }
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name XRDC2 Master Domain Assignment Controller (XRDC2_MDAC).
@@ -299,7 +300,7 @@ static inline void XRDC2_SetMasterDomainAssignmentValid(XRDC2_Type *base,
     }
 }
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name XRDC2 Memory Slot Access Controller (XRDC2_MSC).
@@ -432,7 +433,7 @@ static inline void XRDC2_ForceMemSlotExclAccessLockRelease(XRDC2_Type *base, xrd
     base->MSCI_MSAC_WK[(uint32_t)memSlot].MSC_MSAC_W1 = XRDC2_EAL_FORCE_RELEASE_MAGIC_1;
 }
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name XRDC2 Memory Region Controller (XRDC2_MRC)
@@ -554,7 +555,7 @@ void XRDC2_UnlockMemExclAccess(XRDC2_Type *base, xrdc2_mem_t mem);
  */
 void XRDC2_ForceMemExclAccessLockRelease(XRDC2_Type *base, xrdc2_mem_t mem);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name XRDC2 Peripheral Access Controller (XRDC2_PAC)
@@ -677,7 +678,7 @@ void XRDC2_UnlockPeriphExclAccess(XRDC2_Type *base, xrdc2_periph_t periph);
  */
 void XRDC2_ForcePeriphExclAccessLockRelease(XRDC2_Type *base, xrdc2_periph_t periph);
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -687,4 +688,4 @@ void XRDC2_ForcePeriphExclAccessLockRelease(XRDC2_Type *base, xrdc2_periph_t per
  * @}
  */
 
-#endif /* _FSL_XRDC2_H_ */
+#endif /* FSL_XRDC2_H_ */

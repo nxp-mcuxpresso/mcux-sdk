@@ -20,10 +20,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief CLOCK driver version 2.3.1. */
 #define FSL_CODEC_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief codec maximum volume range */
 #define CODEC_VOLUME_MAX_VALUE (100U)
@@ -172,14 +172,14 @@ enum
     kCODEC_PlayChannelLineOutLeft    = 16U, /*!< play channel lineout left */
     kCODEC_PlayChannelLineOutRight   = 32U, /*!< play channel lineout right */
 
-    kCODEC_PlayChannelLeft0  = 1U,   /*!< play channel left0 */
-    kCODEC_PlayChannelRight0 = 2U,   /*!< play channel right0 */
-    kCODEC_PlayChannelLeft1  = 4U,   /*!< play channel left1 */
-    kCODEC_PlayChannelRight1 = 8U,   /*!< play channel right1 */
-    kCODEC_PlayChannelLeft2  = 16U,  /*!< play channel left2 */
-    kCODEC_PlayChannelRight2 = 32U,  /*!< play channel right2 */
-    kCODEC_PlayChannelLeft3  = 64U,  /*!< play channel left3 */
-    kCODEC_PlayChannelRight3 = 128U, /*!< play channel right3 */
+    kCODEC_PlayChannelLeft0  = 1U,          /*!< play channel left0 */
+    kCODEC_PlayChannelRight0 = 2U,          /*!< play channel right0 */
+    kCODEC_PlayChannelLeft1  = 4U,          /*!< play channel left1 */
+    kCODEC_PlayChannelRight1 = 8U,          /*!< play channel right1 */
+    kCODEC_PlayChannelLeft2  = 16U,         /*!< play channel left2 */
+    kCODEC_PlayChannelRight2 = 32U,         /*!< play channel right2 */
+    kCODEC_PlayChannelLeft3  = 64U,         /*!< play channel left3 */
+    kCODEC_PlayChannelRight3 = 128U,        /*!< play channel right3 */
 };
 
 /*! @brief codec volume setting
@@ -194,16 +194,16 @@ enum
     kCODEC_VolumeLineOutLeft    = 16U, /*!< lineout left volume */
     kCODEC_VolumeLineOutRight   = 32U, /*!< lineout right volume */
 
-    kCODEC_VolumeLeft0  = 1UL << 0U, /*!< left0 volume */
-    kCODEC_VolumeRight0 = 1UL << 1U, /*!< right0 volume */
-    kCODEC_VolumeLeft1  = 1UL << 2U, /*!< left1 volume */
-    kCODEC_VolumeRight1 = 1UL << 3U, /*!< right1 volume */
-    kCODEC_VolumeLeft2  = 1UL << 4U, /*!< left2 volume */
-    kCODEC_VolumeRight2 = 1UL << 5U, /*!< right2 volume */
-    kCODEC_VolumeLeft3  = 1UL << 6U, /*!< left3 volume */
-    kCODEC_VolumeRight3 = 1UL << 7U, /*!< right3 volume */
+    kCODEC_VolumeLeft0  = 1UL << 0U,   /*!< left0 volume */
+    kCODEC_VolumeRight0 = 1UL << 1U,   /*!< right0 volume */
+    kCODEC_VolumeLeft1  = 1UL << 2U,   /*!< left1 volume */
+    kCODEC_VolumeRight1 = 1UL << 3U,   /*!< right1 volume */
+    kCODEC_VolumeLeft2  = 1UL << 4U,   /*!< left2 volume */
+    kCODEC_VolumeRight2 = 1UL << 5U,   /*!< right2 volume */
+    kCODEC_VolumeLeft3  = 1UL << 6U,   /*!< left3 volume */
+    kCODEC_VolumeRight3 = 1UL << 7U,   /*!< right3 volume */
 
-    kCODEC_VolumeDAC = 1UL << 8U, /*!< dac volume */
+    kCODEC_VolumeDAC = 1UL << 8U,      /*!< dac volume */
 };
 
 /*! @brief audio codec capability
@@ -211,37 +211,37 @@ enum
  */
 enum
 {
-    kCODEC_SupportModuleADC                  = 1U << 0U,  /*!< codec capability of module ADC */
-    kCODEC_SupportModuleDAC                  = 1U << 1U,  /*!< codec capability of module DAC */
-    kCODEC_SupportModulePGA                  = 1U << 2U,  /*!< codec capability of module PGA */
-    kCODEC_SupportModuleHeadphone            = 1U << 3U,  /*!< codec capability of module headphone */
-    kCODEC_SupportModuleSpeaker              = 1U << 4U,  /*!< codec capability of module speaker */
-    kCODEC_SupportModuleLinein               = 1U << 5U,  /*!< codec capability of module linein */
-    kCODEC_SupportModuleLineout              = 1U << 6U,  /*!< codec capability of module lineout */
-    kCODEC_SupportModuleVref                 = 1U << 7U,  /*!< codec capability of module vref */
-    kCODEC_SupportModuleMicbias              = 1U << 8U,  /*!< codec capability of module mic bias */
-    kCODEC_SupportModuleMic                  = 1U << 9U,  /*!< codec capability of module mic bias */
-    kCODEC_SupportModuleI2SIn                = 1U << 10U, /*!< codec capability of module I2S in */
-    kCODEC_SupportModuleI2SOut               = 1U << 11U, /*!< codec capability of module I2S out */
-    kCODEC_SupportModuleMixer                = 1U << 12U, /*!< codec capability of module mixer */
-    kCODEC_SupportModuleI2SInSwitchInterface = 1U << 13U, /*!< codec capability of module I2S in switch interface */
+    kCODEC_SupportModuleADC                  = 1U << 0U,    /*!< codec capability of module ADC */
+    kCODEC_SupportModuleDAC                  = 1U << 1U,    /*!< codec capability of module DAC */
+    kCODEC_SupportModulePGA                  = 1U << 2U,    /*!< codec capability of module PGA */
+    kCODEC_SupportModuleHeadphone            = 1U << 3U,    /*!< codec capability of module headphone */
+    kCODEC_SupportModuleSpeaker              = 1U << 4U,    /*!< codec capability of module speaker */
+    kCODEC_SupportModuleLinein               = 1U << 5U,    /*!< codec capability of module linein */
+    kCODEC_SupportModuleLineout              = 1U << 6U,    /*!< codec capability of module lineout */
+    kCODEC_SupportModuleVref                 = 1U << 7U,    /*!< codec capability of module vref */
+    kCODEC_SupportModuleMicbias              = 1U << 8U,    /*!< codec capability of module mic bias */
+    kCODEC_SupportModuleMic                  = 1U << 9U,    /*!< codec capability of module mic bias */
+    kCODEC_SupportModuleI2SIn                = 1U << 10U,   /*!< codec capability of module I2S in */
+    kCODEC_SupportModuleI2SOut               = 1U << 11U,   /*!< codec capability of module I2S out */
+    kCODEC_SupportModuleMixer                = 1U << 12U,   /*!< codec capability of module mixer */
+    kCODEC_SupportModuleI2SInSwitchInterface = 1U << 13U,   /*!< codec capability of module I2S in switch interface */
 
-    kCODEC_SupportPlayChannelLeft0  = 1U << 0U, /*!< codec capability of play channel left 0 */
-    kCODEC_SupportPlayChannelRight0 = 1U << 1U, /*!< codec capability of play channel right 0 */
-    kCODEC_SupportPlayChannelLeft1  = 1U << 2U, /*!< codec capability of play channel left 1 */
-    kCODEC_SupportPlayChannelRight1 = 1U << 3U, /*!< codec capability of play channel right 1 */
-    kCODEC_SupportPlayChannelLeft2  = 1U << 4U, /*!< codec capability of play channel left 2 */
-    kCODEC_SupportPlayChannelRight2 = 1U << 5U, /*!< codec capability of play channel right 2 */
-    kCODEC_SupportPlayChannelLeft3  = 1U << 6U, /*!< codec capability of play channel left 3 */
-    kCODEC_SupportPlayChannelRight3 = 1U << 7U, /*!< codec capability of play channel right 3 */
+    kCODEC_SupportPlayChannelLeft0  = 1U << 0U,             /*!< codec capability of play channel left 0 */
+    kCODEC_SupportPlayChannelRight0 = 1U << 1U,             /*!< codec capability of play channel right 0 */
+    kCODEC_SupportPlayChannelLeft1  = 1U << 2U,             /*!< codec capability of play channel left 1 */
+    kCODEC_SupportPlayChannelRight1 = 1U << 3U,             /*!< codec capability of play channel right 1 */
+    kCODEC_SupportPlayChannelLeft2  = 1U << 4U,             /*!< codec capability of play channel left 2 */
+    kCODEC_SupportPlayChannelRight2 = 1U << 5U,             /*!< codec capability of play channel right 2 */
+    kCODEC_SupportPlayChannelLeft3  = 1U << 6U,             /*!< codec capability of play channel left 3 */
+    kCODEC_SupportPlayChannelRight3 = 1U << 7U,             /*!< codec capability of play channel right 3 */
 
-    kCODEC_SupportPlaySourcePGA          = 1U << 8U,  /*!< codec capability of set playback source PGA */
-    kCODEC_SupportPlaySourceInput        = 1U << 9U,  /*!< codec capability of set playback source INPUT */
-    kCODEC_SupportPlaySourceDAC          = 1U << 10U, /*!< codec capability of set playback source DAC */
-    kCODEC_SupportPlaySourceMixerIn      = 1U << 11U, /*!< codec capability of set play source Mixer in */
-    kCODEC_SupportPlaySourceMixerInLeft  = 1U << 12U, /*!< codec capability of set play source Mixer in left */
-    kCODEC_SupportPlaySourceMixerInRight = 1U << 13U, /*!< codec capability of set play source Mixer in right */
-    kCODEC_SupportPlaySourceAux          = 1U << 14U, /*!< codec capability of set play source aux */
+    kCODEC_SupportPlaySourcePGA          = 1U << 8U,        /*!< codec capability of set playback source PGA */
+    kCODEC_SupportPlaySourceInput        = 1U << 9U,        /*!< codec capability of set playback source INPUT */
+    kCODEC_SupportPlaySourceDAC          = 1U << 10U,       /*!< codec capability of set playback source DAC */
+    kCODEC_SupportPlaySourceMixerIn      = 1U << 11U,       /*!< codec capability of set play source Mixer in */
+    kCODEC_SupportPlaySourceMixerInLeft  = 1U << 12U,       /*!< codec capability of set play source Mixer in left */
+    kCODEC_SupportPlaySourceMixerInRight = 1U << 13U,       /*!< codec capability of set play source Mixer in right */
+    kCODEC_SupportPlaySourceAux          = 1U << 14U,       /*!< codec capability of set play source aux */
 
     kCODEC_SupportRecordSourceDifferentialLine = 1U << 0U,  /*!< codec capability of record source differential line */
     kCODEC_SupportRecordSourceLineInput        = 1U << 1U,  /*!< codec capability of record source line input */

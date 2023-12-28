@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_PDB_H_
-#define _FSL_PDB_H_
+#ifndef FSL_PDB_H_
+#define FSL_PDB_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief PDB driver version 2.0.4. */
 #define FSL_PDB_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief PDB flags.
@@ -320,7 +320,7 @@ static inline void PDB_Enable(PDB_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Basic Counter
@@ -452,7 +452,7 @@ static inline void PDB_SetCounterDelayValue(PDB_Type *base, uint32_t value)
 {
     base->IDLY = PDB_IDLY_IDLY(value);
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name ADC Pre-trigger
@@ -529,7 +529,7 @@ static inline void PDB_ClearADCPreTriggerStatusFlags(PDB_Type *base, pdb_adc_tri
     base->CH[channel].S &= ~mask;
 }
 
-/* @} */
+/*! @} */
 
 #if defined(FSL_FEATURE_PDB_HAS_DAC) && FSL_FEATURE_PDB_HAS_DAC
 /*!
@@ -563,7 +563,7 @@ static inline void PDB_SetDACTriggerIntervalValue(PDB_Type *base, pdb_dac_trigge
     base->DAC[channel].INT = PDB_INT_INT(value);
 }
 
-/* @} */
+/*! @} */
 #endif /* FSL_FEATURE_PDB_HAS_DAC */
 
 /*!
@@ -615,11 +615,11 @@ static inline void PDB_SetPulseOutTriggerDelayValue(PDB_Type *base,
     base->PODLY[channel] = PDB_PODLY_DLY1(value1) | PDB_PODLY_DLY2(value2);
 }
 
-/* @} */
+/*! @} */
 #if defined(__cplusplus)
 }
 #endif
 /*!
  * @}
  */
-#endif /* _FSL_PDB_H_ */
+#endif /* FSL_PDB_H_ */

@@ -1,5 +1,0 @@
-<map id="FXLS896x_I2C_Configure" name="FXLS896x_I2C_Configure">
-<area shape="rect" id="node2" href="$a00359.html#a7b85fd9df22936b827367b7c812ed9c5" title="Function to apply FXLS896x register write operation. " alt="" coords="221,5,359,32"/>
-<area shape="rect" id="node3" href="$a00932.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is the The main function implementation. " alt="" coords="265,56,315,83"/>
-<area shape="rect" id="node4" href="$a00359.html#ab7a328885ef232a1bba728b4289b8802" title="Function to perform FXLS896x self test. " alt="" coords="233,107,347,133"/>
-</map>

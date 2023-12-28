@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_ASRC_H_
-#define _FSL_ASRC_H_
+#ifndef FSL_ASRC_H_
+#define FSL_ASRC_H_
 
 #include "fsl_common.h"
 
@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-#define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 1, 2)) /*!< Version 2.1.2 */
-/*@}*/
+/*! @{ */
+#define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 1, 3)) /*!< Version 2.1.3 */
+/*! @} */
 
 #ifndef ASRC_XFER_QUEUE_SIZE
 /*!@brief ASRC transfer queue size, user can refine it according to use case. */
@@ -758,4 +758,4 @@ void ASRC_TransferHandleIRQ(ASRC_Type *base, asrc_handle_t *handle);
 
 /*! @} */
 
-#endif /* _FSL_ASRC_H_ */
+#endif /* FSL_ASRC_H_ */

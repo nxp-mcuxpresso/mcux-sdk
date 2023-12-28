@@ -68,7 +68,7 @@ if(CONFIG_TOOLCHAIN STREQUAL armgcc)
   )
 endif()
 
-if(CONFIG_CORE STREQUAL cm33 AND (CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux))
+if((CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux) AND CONFIG_CORE STREQUAL cm33)
   target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
       ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities/fsl_memcpy.S
   )
@@ -125,8 +125,70 @@ message("component_wifi_bt_module_tx_pwr_limits component is included from ${CMA
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/wifi_bt_module/AzureWave/tx_pwr_limits
   ${CMAKE_CURRENT_LIST_DIR}/../../components/wifi_bt_module/Murata/tx_pwr_limits
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/wifi_bt_module/u-blox/tx_pwr_limits
 )
 
+
+endif()
+
+
+if (CONFIG_USE_component_wifi_bt_module_config)
+# Add set(CONFIG_USE_component_wifi_bt_module_config true) in config.cmake to use this component
+
+message("component_wifi_bt_module_config component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/wifi_bt_module/incl
+)
+
+
+endif()
+
+
+if (CONFIG_USE_component_ctimer_time_stamp_adapter)
+# Add set(CONFIG_USE_component_ctimer_time_stamp_adapter true) in config.cmake to use this component
+
+message("component_ctimer_time_stamp_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND CONFIG_USE_driver_ctimer)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/time_stamp/fsl_adapter_ctimer_time_stamp.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/time_stamp/.
+)
+
+else()
+
+message(SEND_ERROR "component_ctimer_time_stamp_adapter.MIMXRT595S dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_ostimer_time_stamp_adapter)
+# Add set(CONFIG_USE_component_ostimer_time_stamp_adapter true) in config.cmake to use this component
+
+message("component_ostimer_time_stamp_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND CONFIG_USE_driver_ostimer)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/time_stamp/fsl_adapter_ostimer_time_stamp.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/time_stamp/.
+)
+
+else()
+
+message(SEND_ERROR "component_ostimer_time_stamp_adapter.MIMXRT595S dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
 
 endif()
 
@@ -165,7 +227,7 @@ if (CONFIG_USE_driver_flash_config_evkmimxrt595)
 
 message("driver_flash_config_evkmimxrt595 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if((CONFIG_BOARD STREQUAL evkmimxrt595) AND CONFIG_USE_driver_iap)
+if(CONFIG_USE_driver_iap)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt595/flash_config/flash_config.c
@@ -251,6 +313,18 @@ if (CONFIG_USE_device_MIMXRT595S_DSP)
 message("device_MIMXRT595S_DSP component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
 if((CONFIG_DEVICE_ID STREQUAL MIMXRT595S))
+
+if(CONFIG_TOOLCHAIN STREQUAL xcc)
+  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+      ${CMAKE_CURRENT_LIST_DIR}/./system_MIMXRT595S_dsp.c
+  )
+endif()
+
+if(CONFIG_TOOLCHAIN STREQUAL xcc)
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+)
+endif()
 
 else()
 
@@ -722,10 +796,14 @@ if (CONFIG_USE_utility_assert)
 
 message("utility_assert component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console)
+if(CONFIG_USE_utility_debug_console AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -742,10 +820,14 @@ if (CONFIG_USE_utility_assert_lite)
 
 message("utility_assert_lite component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console_lite)
+if(CONFIG_USE_utility_debug_console_lite AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -1424,7 +1506,7 @@ if (CONFIG_USE_component_rt_gpio_adapter)
 
 message("component_rt_gpio_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_lpc_gpio AND (CONFIG_BOARD STREQUAL evkmimxrt595))
+if(CONFIG_USE_driver_lpc_gpio AND ((CONFIG_BOARD STREQUAL evkmimxrt595)))
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../components/gpio/fsl_adapter_rt_gpio.c
@@ -1514,6 +1596,15 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c/.
 )
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DSDK_I3C_BASED_COMPONENT_USED=1
+  )
+
+endif()
 
 else()
 
@@ -1931,6 +2022,30 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_mpi_loader.MIMXRT595S dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_nvm_adapter)
+# Add set(CONFIG_USE_component_nvm_adapter true) in config.cmake to use this component
+
+message("component_nvm_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND CONFIG_USE_middleware_wireless_framework_function_lib AND CONFIG_USE_middleware_wireless_framework_NVM AND CONFIG_USE_middleware_wireless_framework_Common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/nvm/nvm_adapter.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/nvm/.
+)
+
+else()
+
+message(SEND_ERROR "component_nvm_adapter.MIMXRT595S dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -3553,6 +3668,8 @@ if((CONFIG_DEVICE_ID STREQUAL MIMXRT595S) AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../drivers/smartdma/fsl_smartdma.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/smartdma/fsl_smartdma_rt500.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/smartdma/fsl_smartdma_mcxn.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
@@ -3706,6 +3823,30 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_wwdt.MIMXRT595S dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_i2s_bridge)
+# Add set(CONFIG_USE_driver_i2s_bridge true) in config.cmake to use this component
+
+message("driver_i2s_bridge component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MIMXRT595S) AND CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_i2s_bridge.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
+)
+
+else()
+
+message(SEND_ERROR "driver_i2s_bridge.MIMXRT595S dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

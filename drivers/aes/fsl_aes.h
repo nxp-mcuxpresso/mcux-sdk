@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_AES_H_
-#define _FSL_AES_H_
+#ifndef FSL_AES_H_
+#define FSL_AES_H_
 
 #include "fsl_common.h"
 
@@ -22,7 +22,7 @@
  *******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Defines LPC AES driver version 2.0.3.
  *
  * Change log:
@@ -36,7 +36,7 @@
  *   - initial version
  */
 #define FSL_AES_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
-/*@}*/
+/*! @} */
 
 /*******************************************************************************
  * API
@@ -265,4 +265,4 @@ status_t AES_DecryptTagGcm(AES_Type *base,
 /*! @}*/
 /*! @}*/ /* end of group aes */
 
-#endif /* _FSL_AES_H_ */
+#endif /* FSL_AES_H_ */

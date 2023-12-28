@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SIM_H_
-#define _FSL_SIM_H_
+#ifndef FSL_SIM_H_
+#define FSL_SIM_H_
 
 #include "fsl_common.h"
 
@@ -19,9 +19,9 @@
  *******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-#define FSL_SIM_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
-/*@}*/
+/*! @{ */
+#define FSL_SIM_DRIVER_VERSION (MAKE_VERSION(2, 1, 3)) /*!< Driver version. */
+/*! @} */
 
 #if (defined(FSL_FEATURE_SIM_OPT_HAS_USB_VOLTAGE_REGULATOR) && FSL_FEATURE_SIM_OPT_HAS_USB_VOLTAGE_REGULATOR)
 /*!@brief USB voltage regulator enable setting. */
@@ -148,4 +148,4 @@ static inline void SIM_EnableSystickClock(bool enable)
 
 /*! @}*/
 
-#endif /* _FSL_SIM_H_ */
+#endif /* FSL_SIM_H_ */

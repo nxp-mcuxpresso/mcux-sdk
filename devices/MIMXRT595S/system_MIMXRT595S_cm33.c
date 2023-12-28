@@ -8,9 +8,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    iMXRT500RM Rev.0, 01/2021
+**     Reference manual:    iMXRT500RM Rev.1, 07/2022
 **     Version:             rev. 5.0, 2020-08-27
-**     Build:               b220711
+**     Build:               b231102
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,9 +18,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2023 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -100,7 +98,7 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
 __attribute__((weak)) void SystemInit(void)
 {
 #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-    SCB->CPACR |= ((3UL << 10 * 2) | (3UL << 11 * 2)); /* set CP10, CP11 Full Access in Secure mode */
+    SCB->CPACR |= ((3UL << 10 * 2) | (3UL << 11 * 2));    /* set CP10, CP11 Full Access in Secure mode */
 #if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
     SCB_NS->CPACR |= ((3UL << 10 * 2) | (3UL << 11 * 2)); /* set CP10, CP11 Full Access in Non-secure mode */
 #endif                                                    /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
@@ -110,12 +108,18 @@ __attribute__((weak)) void SystemInit(void)
 
 #if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
     SCB_NS->CPACR |=
-        ((3UL << 0 * 2) | (3UL << 1 * 2)); /* set CP0, CP1 Full Access in Non-secure mode (enable PowerQuad) */
-#endif                                     /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
+        ((3UL << 0 * 2) | (3UL << 1 * 2));    /* set CP0, CP1 Full Access in Non-secure mode (enable PowerQuad) */
+#endif                                        /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
 
     SCB->NSACR |= ((3UL << 0) | (3UL << 10)); /* enable CP0, CP1, CP10, CP11 Non-secure Access */
 
     SYSCTL0->DSPSTALL = SYSCTL0_DSPSTALL_DSPSTALL_MASK;
+    SYSCTL0->PDSLEEPCFG0 |= SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI0_REF_PD_MASK | SYSCTL0_PDSLEEPCFG0_HSPAD_SDIO0_REF_PD_MASK |
+                            SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI1_REF_PD_MASK;
+    SYSCTL0->PDSLEEPCFG1 |= SYSCTL0_PDSLEEPCFG1_HSPAD_SDIO1_REF_PD_MASK;
+    SYSCTL0->PDRUNCFG0_SET = SYSCTL0_PDRUNCFG0_HSPAD_FSPI0_REF_PD_MASK | SYSCTL0_PDRUNCFG0_HSPAD_SDIO0_REF_PD_MASK |
+                             SYSCTL0_PDRUNCFG0_HSPAD_FSPI1_REF_PD_MASK;
+    SYSCTL0->PDRUNCFG1_SET = SYSCTL0_PDRUNCFG1_HSPAD_SDIO1_REF_PD_MASK;
 
     PMC->CTRL |= PMC_CTRL_CLKDIVEN_MASK; /* enable the internal clock divider for power saving */
 

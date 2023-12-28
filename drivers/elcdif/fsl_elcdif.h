@@ -1,13 +1,13 @@
 /*
- * Copyright 2017-2022 NXP
+ * Copyright 2017-2023 NXP
  * All rights reserved.
  *
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_ELCDIF_H_
-#define _FSL_ELCDIF_H_
+#ifndef FSL_ELCDIF_H_
+#define FSL_ELCDIF_H_
 
 #include "fsl_common.h"
 
@@ -25,10 +25,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief eLCDIF driver version */
-#define FSL_ELCDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
-/*@}*/
+#define FSL_ELCDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
+/*! @} */
 
 /* All IRQ flags in CTRL1 register. */
 #define ELCDIF_CTRL1_IRQ_MASK                                                                         \
@@ -352,7 +352,7 @@ void ELCDIF_RgbModeGetDefaultConfig(elcdif_rgb_mode_config_t *config);
  */
 void ELCDIF_Deinit(LCDIF_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Module operation
@@ -442,7 +442,7 @@ static inline void ELCDIF_EnablePxpHandShake(LCDIF_Type *base, bool enable)
 }
 #endif
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -526,7 +526,7 @@ static inline uint32_t ELCDIF_GetLFifoCount(const LCDIF_Type *base)
     return (base->STAT & LCDIF_STAT_LFIFO_COUNT_MASK) >> LCDIF_STAT_LFIFO_COUNT_SHIFT;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -593,7 +593,7 @@ static inline void ELCDIF_ClearInterruptStatus(LCDIF_Type *base, uint32_t mask)
 #endif
 }
 
-/* @} */
+/*! @} */
 
 #if !(defined(FSL_FEATURE_LCDIF_HAS_NO_AS) && (0 != FSL_FEATURE_LCDIF_HAS_NO_AS))
 /*!
@@ -704,7 +704,7 @@ static inline void ELCDIF_EnableProcessSurface(LCDIF_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 #endif /* FSL_FEATURE_LCDIF_HAS_NO_AS */
 
 #if (defined(FSL_FEATURE_LCDIF_HAS_LUT) && (0 != FSL_FEATURE_LCDIF_HAS_LUT))
@@ -755,13 +755,13 @@ static inline void ELCDIF_EnableLut(LCDIF_Type *base, bool enable)
 status_t ELCDIF_UpdateLut(
     LCDIF_Type *base, elcdif_lut_t lut, uint16_t startIndex, const uint32_t *lutData, uint16_t count);
 
-/* @} */
+/*! @} */
 #endif /* FSL_FEATURE_LCDIF_HAS_LUT */
 
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */
 
-/* @} */
+/*! @} */
 
-#endif /*_FSL_ELCDIF_H_*/
+#endif /*FSL_ELCDIF_H_*/

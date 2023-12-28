@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _FSL_LPUART_CMSIS_H_
-#define _FSL_LPUART_CMSIS_H_
+#ifndef FSL_LPUART_CMSIS_H_
+#define FSL_LPUART_CMSIS_H_
 
 #include "fsl_common.h"
 #include "Driver_USART.h"
@@ -105,4 +105,4 @@ extern ARM_DRIVER_USART Driver_USART5;
 #define USART_FLAG_POWER      (1UL << 1)
 #define USART_FLAG_CONFIGURED (1UL << 2)
 
-#endif /* _FSL_LPUART_CMSIS_H_ */
+#endif /* FSL_LPUART_CMSIS_H_ */

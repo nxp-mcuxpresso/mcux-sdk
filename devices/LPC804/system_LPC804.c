@@ -50,8 +50,7 @@
 #include <stdint.h>
 #include "fsl_device_registers.h"
 
-extern volatile uint32_t g_Fro_Osc_Freq;
-extern volatile uint32_t g_LP_Osc_Freq;
+
 
 
 
@@ -94,7 +93,7 @@ void SystemCoreClockUpdate (void) {
             SystemCoreClock = CLK_OSC_IN;
             break;
         case 2U: /* lower power oscillator */
-            SystemCoreClock = g_LP_Osc_Freq;
+            SystemCoreClock = CLK_OSC_LP;
             break;
         case 3U: /* Free running oscillator ((FRO / 2) / 2) */
             SystemCoreClock = (g_Fro_Osc_Freq >> 2U);

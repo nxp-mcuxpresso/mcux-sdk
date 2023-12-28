@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _FSL_I2C_CMSIS_H_
-#define _FSL_I2C_CMSIS_H_
+#ifndef FSL_I2C_CMSIS_H_
+#define FSL_I2C_CMSIS_H_
 #include "fsl_common.h"
 #include "Driver_I2C.h"
 #include "RTE_Device.h"

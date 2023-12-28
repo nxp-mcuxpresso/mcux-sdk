@@ -1,4 +1,0 @@
-<map id="ksdk_gpio_handle_interrupt" name="ksdk_gpio_handle_interrupt">
-<area shape="rect" id="node2" href="$a00500.html#ae01b365de69142666b470757d24fae84" title="PORTA_IRQHandler" alt="" coords="259,5,398,32"/>
-<area shape="rect" id="node3" href="$a00500.html#ab9c5cb6f9e31ec25f94d4a1b0fc88f7e" title="PORTB_PORTC_IRQHandler" alt="" coords="233,56,424,83"/>
-</map>

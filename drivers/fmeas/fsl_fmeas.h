@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_FMEAS_H_
-#define _FSL_FMEAS_H_
+#ifndef FSL_FMEAS_H_
+#define FSL_FMEAS_H_
 
 #include "fsl_common.h"
 
@@ -22,10 +22,10 @@
  *******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Defines LPC Frequency Measure driver version 2.1.1. */
 #define FSL_FMEAS_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*@}*/
+/*! @} */
 
 #if defined(FSL_FEATURE_FMEAS_INDEX_20) && (FSL_FEATURE_FMEAS_INDEX_20)
 /*! The calibration duration is 2^FMEAS_INDEX times the reference clock period */
@@ -161,7 +161,7 @@ void FMEAS_GetCountWithScale(FMEAS_SYSCON_Type *base,
                              uint32_t *targetClockCount);
 #endif
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -169,4 +169,4 @@ void FMEAS_GetCountWithScale(FMEAS_SYSCON_Type *base,
 
 /*! @}*/
 
-#endif /* _FSL_FMEAS_H_ */
+#endif /* FSL_FMEAS_H_ */

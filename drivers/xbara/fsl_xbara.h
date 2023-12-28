@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_XBARA_H_
-#define _FSL_XBARA_H_
+#ifndef FSL_XBARA_H_
+#define FSL_XBARA_H_
 
 #include "fsl_common.h"
 
@@ -183,4 +183,4 @@ void XBARA_SetOutputSignalConfig(XBARA_Type *base,
 
 /*!* @} */
 
-#endif /* _FSL_XBARA_H_ */
+#endif /* FSL_XBARA_H_ */

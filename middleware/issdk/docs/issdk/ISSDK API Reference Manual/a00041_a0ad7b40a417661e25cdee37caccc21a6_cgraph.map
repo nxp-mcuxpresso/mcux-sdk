@@ -1,4 +1,0 @@
-<map id="FXLC95000_I2C_FlashPayload" name="FXLC95000_I2C_FlashPayload">
-<area shape="rect" id="node2" href="$a00038.html#a871aa55982b73b6f38f5bfa87a3c070e" title="The interface function to write ROM CI Commands. " alt="" coords="253,5,472,32"/>
-<area shape="rect" id="node3" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="520,31,581,57"/>
-</map>

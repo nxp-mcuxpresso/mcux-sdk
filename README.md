@@ -1,28 +1,8 @@
-# MCUXpresso SDK: mcux-sdk
+# Overview
 
-![NXP_logo](docs/nxp_logo_small.png)[EN](./README.md)|[中文](./README_CN.md)
-[![Version](https://img.shields.io/github/v/release/NXPMicro/mcux-sdk)](https://github.com/NXPmicro/mcux-sdk/releases/latest)
-[![Contributors](https://img.shields.io/github/contributors/NXPMicro/mcux-sdk)](https://github.com/NXPmicro/mcux-sdk/graphs/contributors)
-[![Issues](https://img.shields.io/github/issues/NXPMicro/mcux-sdk)](https://github.com/NXPmicro/mcux-sdk/issues)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/NXPmicro/mcux-sdk/pulls)
+MCUXpresso SDK is a comprehensive software enablement package designed to simplify and accelerate application development with Arm® Cortex®-M-based devices from NXP, including its general purpose, crossover and Bluetooth™-enabled MCUs. 
 
-MCUXpresso SDK is a comprehensive software enablement package designed to simplify and accelerate application development with Arm® Cortex®-M-based devices from NXP, including its general purpose, crossover and Bluetooth™-enabled MCUs. This project provides an alternative way for user to achieve the source code of MCUXpresso SDK besides SDK builder and MCUXpresso IDE.
-
-The whole MCUXpresso SDK delivery is composed of separate project deliveries. The idea we split the whole SDK delivery to separate projects is inspired by [Zephyr](https://github.com/zephyrproject-rtos/zephyr), and the projects are planned as below:
-* Fundamental project for device/board enablement with shared drivers and components.
-* RTOS projects
-* Middleware projects
-* Examples project built on above deliveries
-
-In this way we want to benefit user from below aspects:
-1. Avoid huge size in a single repository.
-2. Provide flexibility for user to select needed projects to build their application.
-3. Provide ability for user to fetch needed project version to build their application.
-
-To satisfy the expectation we leveraged [Zephyr west tool](https://docs.zephyrproject.org/latest/guides/west/index.html) which helps do multi-repository management and allow user to self create ```west.yml``` to select needed projects for downstream use. 
-
-## Overview
-This project provides the fundamental support for all NXP hot parts:
+Previously user should get MCUXpresso SDK via mcuxpresso.nxp.com or MCUXpresso IDE. Now NXP MCUXpresso SDK project provides a new way for user to achieve this. You could find all NXP hot parts in this project and get below features:
 
 * Arm® CMSIS-CORE startup and device header files and CMSIS-DSP standard libraries
 * Open-source peripheral drivers that provide stateless, high-performance, easy-to-use APIs
@@ -64,42 +44,26 @@ You need to have both Git and West installed in order to get a new delivery of t
     git checkout ${revision}
     west update
     ```
+Other features like RTOS support and middleware stacks currently are not demonstrated in this project. If you are interest in these features please go mcuxpresso.nxp.com to find full SDK support.
 
-## Releases
+# Releases
 
-There are two types of release in the project. The MCUXpresso SDK release and GitHub Main SDK release. Below description uses **MCUX release** short for MCUXpresso SDK release, use **Main release** short for GitHub Main SDK release.
+There are two types of release in the project. The MCUXpresso SDK release and GitHub SDK release. 
 
-### MCUX Release
-The MCUX release launches once a new release is available on [SDK Builder](http://mcuxpresso.nxp.com/). Users previously using [SDK Builder](http://mcuxpresso.nxp.com/) could easily find the exact same code base MCUX release with same 2.x.y version of SDK archive package, software examples build/run quality are guaranteed in the release. **MCUX releases will be prefixed with 'MCUX_'**, and every release will be merged into main branch to ensure main branch has all released boards/socs support. 
+The MCUXpresso SDK release launches once a new release is available on [SDK Builder](http://mcuxpresso.nxp.com/). In each release, you could find same code base for boards/socs with same version SDK archive you've got from [SDK Builder](http://mcuxpresso.nxp.com/), software examples build/run quality are guaranteed. Releases will be prefixed with 'MCUX_'.
 
-The "MCUX_" releases are categorized into mainline releases and NPI release.
-* For mainline releases, usually it's planned twice a year to do a global feature update for NXP hot parts. The x in 2.x.y version increments each time a mainline release goes out. 
-* For NPI release, it aims to support a new soc product recently launched in the market. It is built with verified features in previous mainline release. The release name is suffixed with NPI name to identify it's an NPI release.
+The GitHub SDK release is a regular release take place in every six months. It releases the latest code base and feature set for SDK on all NXP hot parts. Releases will be prefixed with 'GITHUB_'.
 
-Each MCUX release is made on previous mainline release tag/NPI release tag, thus user could easily check the difference between two releases using ````git diff```` command.
+Below figure takes 2.9.0 and 2.10.0 release as an example to show the relationship between MCUXpresso Release and GitHUB release.
+![Release Introduction](docs/Getting_Started/images/github_release_introduction2.png)
+# Supported boards and socs
+See [Supported development systems](docs/supported_development_systems.md) for the list of boards/socs support in this project.
 
-### Main Release
-The Main release is a regular release made in main branch. It releases the latest code base and feature set on main branch, which is expected to include all the previous 'MCUX_' release content and new enablement on main branch for NXP hot parts. **Main releases will be prefixed with 'MAIN_'**.
-
-Below figure takes 2.9.0 and 2.10.0 release as an example to show the relationship between MCUX release and Main release.
-![Release Introduction](docs/Getting_Started/images/github_release_introduction.png)
-
-## Supported development tools and systems
-* Tools
-    * MCUXpresso IDE
-    * GCC ARM Embedded
-
-    For version of the tool used, please check the release notes in each release.
-* Systems
-
-    See [Supported development systems](docs/supported_development_systems.md) for the list of boards/socs currently support in this project.
-
-## Getting Started
+# Getting Started
 See [Getting Start Guide](docs/Getting_Started.md) to start explore the project.
 
-## License
-All SDK drivers, components, device support files, board support files in this project are under BSD-3-Clause license, license copy please check [COPYING_BSD-3](COPYING-BSD-3). The ARM CMSIS component is under Apache License 2.0, license copy check [Apache License 2.0](CMSIS/LICENSE.txt). License information for all components could be found in [SW-Content-Register.txt](SW-Content-Register.txt)
+# License
+Most of software in the project is open-source and licensed under BSD-3-Clause, see [COPYING_BSD-3](COPYING-BSD-3). Whole license information for the project could be found in [SW-Content-Register.txt](SW-Content-Register.txt)
 
-## Contribution
-Contributions are greatly welcomed! For detail guideline of contribution please check [Contribution Guide](CONTRIBUTING.md).
-
+# Contribution
+Currently we are not ready to accept contribution, you could create an issue to suggest a new idea or track a bug. Contribution will be open soon.

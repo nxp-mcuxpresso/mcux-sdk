@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef __FSL_ACOMP_H__
-#define __FSL_ACOMP_H__
+#ifndef FSL_ACOMP_H__
+#define FSL_ACOMP_H__
 
 #include "fsl_common.h"
 /*! @addtogroup lpc_acomp */
@@ -17,10 +17,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief ACOMP driver version 2.1.0. */
 #define FSL_ACOMP_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief The ACOMP ladder reference voltage.
@@ -178,12 +178,12 @@ static inline void ACOMP_SetInputChannel(ACOMP_Type *base, uint32_t postiveInput
  */
 void ACOMP_SetLadderConfig(ACOMP_Type *base, const acomp_ladder_config_t *config);
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus*/
 
-/*@}*/
+/*! @} */
 
-#endif /* _FSL_ACOMP_H_ */
+#endif /* FSL_ACOMP_H_ */

@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 2.2, 2015-05-25
-**     Build:               b201028
+**     Version:             rev. 2.5, 2015-06-08
+**     Build:               b220803
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
 **         Initial version.
 **     - rev. 1.1 (2014-01-30)
 **         Added single maximum value generation and a constrain to varying feature values that only numbers can have maximum.
-**     - rev. 2.0 (2015-01-06)
+**     - rev. 2.0 (2014-11-26)
 **         update of SystemInit() imlementation
 **         Module access macro module_BASES replaced by module_BASE_PTRS.
 **         Register accessor macros added to the memory map.
@@ -28,8 +28,16 @@
 **         DAC0 registers removed.
 **     - rev. 2.1 (2015-01-21)
 **         Added FSL_FEATURE_SOC_peripheral_COUNT with number of peripheral instances
-**     - rev. 2.2 (2015-05-25)
+**     - rev. 2.2 (2015-05-19)
+**         FSL_FEATURE_SOC_CAU_COUNT remamed to FSL_FEATURE_SOC_MMCAU_COUNT.
+**         Added FSL_FEATURE_SOC_peripheral_COUNT for TRNG and HSADC.
+**         Added features for PORT and PDB.
+**     - rev. 2.3 (2015-05-25)
 **         Added FSL_FEATURE_FLASH_PFLASH_START_ADDRESS
+**     - rev. 2.4 (2015-05-27)
+**         Several USB features added.
+**     - rev. 2.5 (2015-06-08)
+**         FTM features BUS_CLOCK and FAST_CLOCK removed.
 **
 ** ###################################################################
 */
@@ -53,8 +61,6 @@
 #define FSL_FEATURE_SOC_EDMA_COUNT (1)
 /* @brief DMAMUX availability on the SoC. */
 #define FSL_FEATURE_SOC_DMAMUX_COUNT (1)
-/* @brief DRY availability on the SoC. */
-#define FSL_FEATURE_SOC_DRY_COUNT (1)
 /* @brief DSPI availability on the SoC. */
 #define FSL_FEATURE_SOC_DSPI_COUNT (2)
 /* @brief EWM availability on the SoC. */
@@ -190,17 +196,6 @@
 #define FSL_FEATURE_DMAMUX_HAS_TRIG (1)
 /* @brief Register CHCFGn width. */
 #define FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH (8)
-
-/* DRYICE module features */
-
-/* @brief Has file select (register bit CR[SRF]). */
-#define FSL_FEATURE_DRYICE_HAS_SECURE_REGISTER_FILE_SELECT (0)
-/* @brief Has active tamper clock source select (register bit CR[ATCS]). */
-#define FSL_FEATURE_DRYICE_HAS_ACTIVE_TAMPER_CLOCK_SOURCE_SELECT (0)
-/* @brief Has tamper pin sampling (register bits PGFRn[TPSW] and PGFRn[TPSF]). */
-#define FSL_FEATURE_DRYICE_HAS_TAMPER_PIN_SAMPLING (0)
-/* @brief Has tamper pin pull select (register bit PGFRn[TPS]). */
-#define FSL_FEATURE_DRYICE_HAS_TAMPER_PIN_PULL_SELECT (0)
 
 /* EWM module features */
 
@@ -433,6 +428,8 @@
 #define FSL_FEATURE_FTM_HAS_NO_QDCTRL (0)
 /* @brief If instance has only TPM function. */
 #define FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCEn(x) (0)
+/* @brief Has frequency of the reload opportunities, bitfield CONF[LDFQ]. */
+#define FSL_FEATURE_FTM_HAS_CONF_LDFQ_BIT (0)
 
 /* GPIO module features */
 
@@ -466,8 +463,10 @@
 
 /* SAI module features */
 
+/* @brief SAI has FIFO in this soc (register bit fields TCR1[TFW]. */
+#define FSL_FEATURE_SAI_HAS_FIFO (1)
 /* @brief Receive/transmit FIFO size in item count (register bit fields TCSR[FRDE], TCSR[FRIE], TCSR[FRF], TCR1[TFW], RCSR[FRDE], RCSR[FRIE], RCSR[FRF], RCR1[RFW], registers TFRn, RFRn). */
-#define FSL_FEATURE_SAI_FIFO_COUNT (8)
+#define FSL_FEATURE_SAI_FIFO_COUNTn(x) (8)
 /* @brief Receive/transmit channel number (register bit fields TCR3[TCE], RCR3[RCE], registers TDRn and RDRn). */
 #define FSL_FEATURE_SAI_CHANNEL_COUNTn(x) (1)
 /* @brief Maximum words per frame (register bit fields TCR3[WDFL], TCR4[FRSZ], TMR[TWM], RCR3[WDFL], RCR4[FRSZ], RMR[RWM]). */
@@ -718,7 +717,7 @@
 /* @brief Has internal module 5 connected to LLWU device. */
 #define FSL_FEATURE_LLWU_HAS_INTERNAL_MODULE5 (1)
 /* @brief Has internal module 6 connected to LLWU device. */
-#define FSL_FEATURE_LLWU_HAS_INTERNAL_MODULE6 (1)
+#define FSL_FEATURE_LLWU_HAS_INTERNAL_MODULE6 (0)
 /* @brief Has internal module 7 connected to LLWU device. */
 #define FSL_FEATURE_LLWU_HAS_INTERNAL_MODULE7 (1)
 /* @brief Has Version ID Register (LLWU_VERID). */
@@ -976,7 +975,7 @@
 /* @brief Has OSC capacitor setting RTC_CR[SC2P ~ SC16P] */
 #define FSL_FEATURE_RTC_HAS_OSC_SCXP (1)
 /* @brief Has Tamper Interrupt Register (register TIR). */
-#define FSL_FEATURE_RTC_HAS_TIR (1)
+#define FSL_FEATURE_RTC_HAS_TIR (0)
 /* @brief Has Tamper Pin Interrupt Enable (bitfield TIR[TPIE]). */
 #define FSL_FEATURE_RTC_HAS_TIR_TPIE (0)
 /* @brief Has Security Interrupt Enable (bitfield TIR[SIE]). */
@@ -986,7 +985,7 @@
 /* @brief Has Tamper Interrupt Detect Flag (bitfield SR[TIDF]). */
 #define FSL_FEATURE_RTC_HAS_SR_TIDF (0)
 /* @brief Has Tamper Detect Register (register TDR). */
-#define FSL_FEATURE_RTC_HAS_TDR (1)
+#define FSL_FEATURE_RTC_HAS_TDR (0)
 /* @brief Has Tamper Pin Flag (bitfield TDR[TPF]). */
 #define FSL_FEATURE_RTC_HAS_TDR_TPF (0)
 /* @brief Has Security Tamper Flag (bitfield TDR[STF]). */

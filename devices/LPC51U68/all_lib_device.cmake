@@ -406,7 +406,29 @@
 #  # description: FreeRTOS MPU wrappers
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
+#set.middleware.sdmmc
+#  # description: Middleware sdmmc common
+#  set(CONFIG_USE_middleware_sdmmc_common true)
+
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_sdmmc_sdhc_template true)
+
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_sdmmc_sdif_template true)
+
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_sdmmc_usdhc_template true)
+
+#  # description: SDMMC host controller cache dependency
+#  set(CONFIG_USE_middleware_sdmmc_host_usdhc_cache true)
+
 #set.middleware.usb
+#  # description: USB device phydcd config header
+#  set(CONFIG_USE_middleware_usb_phydcd_config_header true)
+
+#  # description: USB device hsdcd config header
+#  set(CONFIG_USE_middleware_usb_hsdcd_config_header true)
+
 #  # description: USB device ip3511fs config header
 #  set(CONFIG_USE_middleware_usb_device_ip3511fs_config_header true)
 
@@ -477,6 +499,7 @@
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
   ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
   ${CMAKE_CURRENT_LIST_DIR}/drivers
@@ -492,4 +515,5 @@ include(set_CMSIS OPTIONAL)
 include(set_device_LPC51U68 OPTIONAL)
 include(set_component_osa OPTIONAL)
 include(set_middleware_freertos-kernel OPTIONAL)
+include(set_middleware_sdmmc OPTIONAL)
 include(set_middleware_usb OPTIONAL)

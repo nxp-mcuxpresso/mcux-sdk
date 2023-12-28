@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_LPSPI_EDMA_H_
-#define _FSL_LPSPI_EDMA_H_
+#ifndef FSL_LPSPI_EDMA_H_
+#define FSL_LPSPI_EDMA_H_
 
 #include "fsl_lpspi.h"
 #include "fsl_edma.h"
@@ -20,10 +20,10 @@
  * Definitions
  **********************************************************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LPSPI EDMA driver version. */
-#define FSL_LPSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
-/*@}*/
+#define FSL_LPSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 2))
+/*! @} */
 
 /*!
  * @brief Forward declaration of the _lpspi_master_edma_handle typedefs.
@@ -336,4 +336,4 @@ status_t LPSPI_SlaveTransferGetCountEDMA(LPSPI_Type *base, lpspi_slave_edma_hand
 
 /*! @}*/
 
-#endif /*_FSL_LPSPI_EDMA_H_*/
+#endif /*FSL_LPSPI_EDMA_H_*/

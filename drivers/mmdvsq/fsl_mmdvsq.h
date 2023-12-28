@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_MMDVSQ_H_
-#define _FSL_MMDVSQ_H_
+#ifndef FSL_MMDVSQ_H_
+#define FSL_MMDVSQ_H_
 
 #include "fsl_common.h"
 
@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_MMSVSQ_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3. */
-/*@}*/
+/*! @} */
 
 /*! @brief MMDVSQ execution status */
 typedef enum _mmdvsq_execution_status
@@ -93,7 +93,7 @@ int32_t MMDVSQ_GetDivideQuotient(MMDVSQ_Type *base, int32_t dividend, int32_t di
  */
 uint16_t MMDVSQ_Sqrt(MMDVSQ_Type *base, uint32_t radicand);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name MMDVSQ status Operation
@@ -168,7 +168,7 @@ static inline void MMDVSQ_SetDivideByZeroConfig(MMDVSQ_Type *base, bool isDivByZ
     }
 }
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -176,4 +176,4 @@ static inline void MMDVSQ_SetDivideByZeroConfig(MMDVSQ_Type *base, bool isDivByZ
 
 /*! @}*/
 
-#endif /* _FSL_MMDVSQ_H_ */
+#endif /* FSL_MMDVSQ_H_ */

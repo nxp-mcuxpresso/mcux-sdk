@@ -76,6 +76,17 @@ void OSA_ProcessTasks(void);
  *
  */
 uint8_t OSA_TaskShouldYield(void);
+
+/*!
+ * @brief Correct OSA tick counter for when exiting sleep
+ *
+ * This function allows the tick counter used by the OSA functions for time
+ * keeping to be corrected with the sleep duration (taken from a low power
+ * timer. This is available only in BM context and only if the systick is used
+ * as a time source for the OSA.
+ */
+void OSA_UpdateSysTickCounter(uint32_t corr);
+
 /*!
  * @name Thread management
  * @{

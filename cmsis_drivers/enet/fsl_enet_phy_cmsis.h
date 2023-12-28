@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _FSL_ENET_PHY_CMSIS_H_
-#define _FSL_ENET_PHY_CMSIS_H_
+#ifndef FSL_ENET_PHY_CMSIS_H_
+#define FSL_ENET_PHY_CMSIS_H_
 #include "Driver_ETH.h"
 #include "Driver_ETH_PHY.h"
 #include "RTE_Device.h"

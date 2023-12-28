@@ -1,5 +1,0 @@
-<map id="ApplyAccelHAL" name="ApplyAccelHAL">
-<area shape="rect" id="node2" href="$sensor__fusion_8c.html#ae748e1330b5a94783c6d4ea2ad9e4f28" title="initializeSensors" alt="" coords="167,5,284,32"/>
-<area shape="rect" id="node3" href="$sensor__fusion_8c.html#ab088da7731ffdf25710a364a7f88b224" title="This function is responsible for initializing the system prior to starting the main fusion loop..." alt="" coords="332,5,480,32"/>
-<area shape="rect" id="node4" href="$sensor__fusion_8h.html#a367d92b99365a8143700b76439915d65" title="utility function to insert default values in the top level structure " alt="" coords="528,5,691,32"/>
-</map>

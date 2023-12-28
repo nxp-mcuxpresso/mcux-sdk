@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_RTC_H_
-#define _FSL_RTC_H_
+#ifndef FSL_RTC_H_
+#define FSL_RTC_H_
 
 #include "fsl_common.h"
 
@@ -19,9 +19,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_RTC_DRIVER_VERSION (MAKE_VERSION(2, 0, 4)) /*!< Version 2.0.4 */
-/*@}*/
+/*! @} */
 
 /*! @brief Structure is used to hold the date and time */
 typedef struct _rtc_datetime
@@ -358,4 +358,4 @@ static inline uint16_t RTC_GetCountValue(RTC_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_RTC_H_ */
+#endif /* FSL_RTC_H_ */

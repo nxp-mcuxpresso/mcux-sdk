@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_I2C_DMA_H_
-#define _FSL_I2C_DMA_H_
+#ifndef FSL_I2C_DMA_H_
+#define FSL_I2C_DMA_H_
 
 #include "fsl_i2c.h"
 #include "fsl_edma.h"
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief I2C EDMA driver version. */
 #define FSL_I2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 9))
-/*@}*/
+/*! @} */
 
 /*! @brief Retry times for waiting flag. */
 #ifndef I2C_RETRY_TIMES
@@ -112,9 +112,9 @@ status_t I2C_MasterTransferGetCountEDMA(I2C_Type *base, i2c_master_edma_handle_t
  */
 void I2C_MasterTransferAbortEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle);
 
-/* @} */
+/*! @} */
 #if defined(__cplusplus)
 }
 #endif /*_cplusplus. */
-/*@}*/
-#endif /*_FSL_I2C_DMA_H_*/
+/*! @} */
+#endif /*FSL_I2C_DMA_H_*/

@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_SCTIMER_H_
-#define _FSL_SCTIMER_H_
+#ifndef FSL_SCTIMER_H_
+#define FSL_SCTIMER_H_
 
 #include "fsl_common.h"
 
@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 4, 9)) /*!< Version */
-/*@}*/
+/*! @} */
 
 #ifndef SCT_EV_STATE_STATEMSKn
 #define SCT_EV_STATE_STATEMSKn(x) ((uint32_t)(x) & (((uint32_t)1UL << FSL_FEATURE_SCT_NUMBER_OF_STATES) - 1UL))
@@ -1254,4 +1254,4 @@ void SCTIMER_EventHandleIRQ(SCT_Type *base);
 
 /*! @}*/
 
-#endif /* _FSL_SCTIMER_H_ */
+#endif /* FSL_SCTIMER_H_ */

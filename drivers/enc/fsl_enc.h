@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_ENC_H_
-#define _FSL_ENC_H_
+#ifndef FSL_ENC_H_
+#define FSL_ENC_H_
 
 #include "fsl_common.h"
 
@@ -18,7 +18,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define FSL_ENC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_ENC_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 
 /*!
  * @brief Interrupt enable/disable mask.
@@ -361,7 +361,7 @@ void ENC_EnableWatchdog(ENC_Type *base, bool enable);
  */
 void ENC_SetInitialPositionValue(ENC_Type *base, uint32_t value);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -395,7 +395,7 @@ static inline uint16_t ENC_GetSignalStatusFlags(ENC_Type *base)
 {
     return base->IMR;
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -427,7 +427,7 @@ void ENC_DisableInterrupts(ENC_Type *base, uint32_t mask);
  */
 uint32_t ENC_GetEnabledInterrupts(ENC_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Value Operation
@@ -575,12 +575,12 @@ static inline uint16_t ENC_GetHoldPositionDifferencePeriodValue(ENC_Type *base)
     return base->POSDPERH;
 }
 #endif
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
-/* @} */
+/*! @} */
 
-#endif /* _FSL_ENC_H_ */
+#endif /* FSL_ENC_H_ */

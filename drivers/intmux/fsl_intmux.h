@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_INTMUX_H_
-#define _FSL_INTMUX_H_
+#ifndef FSL_INTMUX_H_
+#define FSL_INTMUX_H_
 
 #include "fsl_common.h"
 
@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_INTMUX_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
-/*@}*/
+/*! @} */
 
 /*! @brief INTMUX channel logic mode. */
 typedef enum _intmux_channel_logic_mode
@@ -41,7 +41,7 @@ extern "C" {
 #endif
 
 /*! @name Initialization and deinitialization */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Initializes the INTMUX module.
@@ -99,9 +99,9 @@ static inline void INTMUX_SetChannelMode(INTMUX_Type *base, uint32_t channel, in
     base->CHANNEL[channel].CHn_CSR = INTMUX_CHn_CSR_AND(logic);
 }
 
-/*@}*/
+/*! @} */
 /*! @name Sources */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Enables an interrupt source on an INTMUX channel.
@@ -133,9 +133,9 @@ static inline void INTMUX_DisableInterrupt(INTMUX_Type *base, uint32_t channel, 
     base->CHANNEL[channel].CHn_IER_31_0 &= ~(1UL << ((uint32_t)irq - (uint32_t)FSL_FEATURE_INTMUX_IRQ_START_INDEX));
 }
 
-/*@}*/
+/*! @} */
 /*! @name Status */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Gets INTMUX pending interrupt sources for a specific channel.
@@ -151,7 +151,7 @@ static inline uint32_t INTMUX_GetChannelPendingSources(INTMUX_Type *base, uint32
     return base->CHANNEL[channel].CHn_IPR_31_0;
 }
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -159,4 +159,4 @@ static inline uint32_t INTMUX_GetChannelPendingSources(INTMUX_Type *base, uint32
 
 /*! @} */
 
-#endif /* _FSL_INTMUX_H_ */
+#endif /* FSL_INTMUX_H_ */

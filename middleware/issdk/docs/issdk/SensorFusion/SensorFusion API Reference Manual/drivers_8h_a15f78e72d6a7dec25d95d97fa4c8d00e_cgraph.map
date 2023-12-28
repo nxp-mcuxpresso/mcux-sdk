@@ -1,5 +1,0 @@
-<map id="FXOS8700_Read" name="FXOS8700_Read">
-<area shape="rect" id="node2" href="$driver__FXOS8700_8c.html#a426c0f9617cbeffebfeaadd6446c3bc2" title="FXOS8700_ReadMagData" alt="" coords="175,31,348,57"/>
-<area shape="rect" id="node3" href="$sensor__fusion_8c.html#a2686eeb8ae44e588362478db1f757a0e" title="conditionSample ensures that we never encounter the maximum negative two&#39;s complement value for a 16&#45;..." alt="" coords="396,5,515,32"/>
-<area shape="rect" id="node4" href="$sensor__fusion_8c.html#aaed8e08f6d3e766cdf1314193f6b124a" title="addToFifo is called from within sensor driver read functions " alt="" coords="416,56,495,83"/>
-</map>

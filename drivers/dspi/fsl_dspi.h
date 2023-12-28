@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_DSPI_H_
-#define _FSL_DSPI_H_
+#ifndef FSL_DSPI_H_
+#define FSL_DSPI_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  *********************************************************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-/*! @brief DSPI driver version 2.2.5. */
+/*! @{ */
+/*! @brief DSPI driver version 2.2.6. */
 #define FSL_DSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 6))
-/*@}*/
+/*! @} */
 
 #ifndef DSPI_DUMMY_DATA
 /*! @brief DSPI dummy data if there is no Tx data.*/
@@ -1234,4 +1234,4 @@ uint8_t DSPI_GetDummyDataInstance(SPI_Type *base);
  *@}
  */
 
-#endif /*_FSL_DSPI_H_*/
+#endif /*FSL_DSPI_H_*/

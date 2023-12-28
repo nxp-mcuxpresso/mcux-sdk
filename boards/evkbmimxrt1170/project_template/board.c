@@ -268,8 +268,8 @@ void BOARD_ConfigMPU(void)
     extern uint32_t Image$$RW_m_ncache_unused$$ZI$$Limit[];
     uint32_t nonCacheStart = (uint32_t)Image$$RW_m_ncache$$Base;
     uint32_t size          = ((uint32_t)Image$$RW_m_ncache_unused$$Base == nonCacheStart) ?
-                        0 :
-                        ((uint32_t)Image$$RW_m_ncache_unused$$ZI$$Limit - nonCacheStart);
+                                 0 :
+                                 ((uint32_t)Image$$RW_m_ncache_unused$$ZI$$Limit - nonCacheStart);
 #elif defined(__MCUXPRESSO)
 #if defined(__USE_SHMEM)
     extern uint32_t __base_rpmsg_sh_mem;
@@ -468,9 +468,9 @@ void BOARD_ConfigMPU(void)
     extern uint32_t Image$$RW_m_ncache_unused$$Base[];
     extern uint32_t Image$$RW_m_ncache_unused$$ZI$$Limit[];
     uint32_t nonCacheStart = (uint32_t)Image$$RW_m_ncache$$Base;
-    uint32_t nonCacheSize = ((uint32_t)Image$$RW_m_ncache_unused$$Base == nonCacheStart) ?
-                                0 :
-                                ((uint32_t)Image$$RW_m_ncache_unused$$ZI$$Limit - nonCacheStart);
+    uint32_t nonCacheSize  = ((uint32_t)Image$$RW_m_ncache_unused$$Base == nonCacheStart) ?
+                                 0 :
+                                 ((uint32_t)Image$$RW_m_ncache_unused$$ZI$$Limit - nonCacheStart);
 #elif defined(__MCUXPRESSO)
     extern uint32_t __base_NCACHE_REGION;
     extern uint32_t __top_NCACHE_REGION;
@@ -489,7 +489,7 @@ void BOARD_ConfigMPU(void)
     extern uint32_t Image$$RPMSG_SH_MEM_unused$$Base[];
     extern uint32_t Image$$RPMSG_SH_MEM_unused$$ZI$$Limit[];
     uint32_t rpmsgShmemStart = (uint32_t)Image$$RPMSG_SH_MEM$$Base;
-    uint32_t rpmsgShmemSize = (uint32_t)Image$$RPMSG_SH_MEM_unused$$ZI$$Limit - rpmsgShmemStart;
+    uint32_t rpmsgShmemSize  = (uint32_t)Image$$RPMSG_SH_MEM_unused$$ZI$$Limit - rpmsgShmemStart;
 #elif defined(__MCUXPRESSO)
     extern uint32_t __base_rpmsg_sh_mem;
     extern uint32_t __top_rpmsg_sh_mem;
@@ -502,7 +502,7 @@ void BOARD_ConfigMPU(void)
     uint32_t rpmsgShmemSize  = (uint32_t)__RPMSG_SH_MEM_SIZE;
 #endif
 #endif
-    uint32_t i = 0;
+    uint32_t i               = 0;
 
     /* Only config non-cacheable region on system bus */
     assert(nonCacheStart >= 0x20000000);

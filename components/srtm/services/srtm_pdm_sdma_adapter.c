@@ -18,7 +18,7 @@
 #include "srtm_message.h"
 #include "srtm_message_struct.h"
 #include "srtm_service_struct.h"
-#include "fsl_sdma_script.h"
+
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -40,7 +40,7 @@ typedef struct _srtm_pdm_sdma_buf_runtime
     uint32_t remainingPeriods; /* periods to be consumed/filled */
     uint32_t remainingLoadPeriods; /* periods to be preloaded either to DMA transfer or to local buffer. */
     uint32_t offset;               /* period offset, non-zero value means current period is not finished. */
-} * srtm_pdm_sdma_buf_runtime_t;
+} *srtm_pdm_sdma_buf_runtime_t;
 
 struct _srtm_pdm_sdma_local_runtime
 {
@@ -78,7 +78,7 @@ typedef struct _srtm_pdm_sdma_runtime
                                 the period will be splited into multiple transmissions. */
     uint32_t curXferIdx;      /* The current transmission index in countsPerPeriod. */
     srtm_procedure_t proc;    /* proc message to trigger DMA transfer in SRTM context. */
-    struct _srtm_pdm_sdma_buf_runtime bufRtm; /* buffer provided by audio client. */
+    struct _srtm_pdm_sdma_buf_runtime bufRtm;     /* buffer provided by audio client. */
     srtm_pdm_sdma_local_buf_t localBuf;
     struct _srtm_pdm_sdma_local_runtime localRtm; /* buffer set by application. */
 #if SRTM_PDM_SDMA_ADAPTER_USE_EXTRA_BUFFER
@@ -89,15 +89,15 @@ typedef struct _srtm_pdm_sdma_runtime
     bool freeRun; /* flag to indicate that no periodReady will be sent by audio client. */
     bool stoppedOnSuspend;
     bool paramSet;
-    uint32_t finishedBufOffset;                 /* offset from bufAddr where the data transfer has completed. */
-    srtm_pdm_sdma_suspend_state suspendState;   /* service state in client suspend. */
-    srtm_pdm_sdma_data_callback_t dataCallback; /* Callback function to provide data when client is suspend */
-    void *dataCallbackParam;                    /* Callback function argument to be passed back to application */
+    uint32_t finishedBufOffset;                   /* offset from bufAddr where the data transfer has completed. */
+    srtm_pdm_sdma_suspend_state suspendState;     /* service state in client suspend. */
+    srtm_pdm_sdma_data_callback_t dataCallback;   /* Callback function to provide data when client is suspend */
+    void *dataCallbackParam;                      /* Callback function argument to be passed back to application */
 #if SRTM_PDM_SDMA_ADAPTER_USE_HWVAD
     srtm_pdm_sdma_hwvad_callback_t hwvadCallback; /* Callback function which is called when voice detacted by HWVAD. */
     void *hwvadCallbackParam;                     /* Callback function argument to be passed back to application */
 #endif
-} * srtm_pdm_sdma_runtime_t;
+} *srtm_pdm_sdma_runtime_t;
 
 /* SAI SDMA adapter */
 typedef struct _srtm_pdm_sdma_adapter
@@ -116,7 +116,7 @@ typedef struct _srtm_pdm_sdma_adapter
 #if SRTM_PDM_SDMA_ADAPTER_USE_EXTRA_BUFFER
     struct _srtm_pdm_ext_buf_sdma_handle extBufDmaHandle; /* Extra buffer read/write DMA handle. */
 #endif
-} * srtm_pdm_sdma_adapter_t;
+} *srtm_pdm_sdma_adapter_t;
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -134,11 +134,6 @@ static void SRTM_PdmSdmaAdapter_AddNewPeriods(srtm_pdm_sdma_runtime_t rtm, uint3
  ******************************************************************************/
 #ifdef SRTM_DEBUG_MESSAGE_FUNC
 static const char *saiDirection[] = {"Rx", "Tx"};
-#endif
-#ifdef SRTM_SINGLE_SDMA_MULTI_FIFO_SCRIPT
-extern short g_sdma_multi_fifo_script[];
-#else
-static short g_sdma_multi_fifo_script[] = FSL_SDMA_MULTI_FIFO_SCRIPT;
 #endif
 
 /*******************************************************************************
@@ -501,9 +496,9 @@ static void SRTM_PdmSdmaAdapter_LocalBufFullDMACb(sdma_handle_t *dmahandle,
 
     if (transferDone)
     {
-        rtm->extBufRtm.bufRtm.remainingPeriods--; /* A period is filled. */
+        rtm->extBufRtm.bufRtm.remainingPeriods--;                            /* A period is filled. */
         rtm->extBufRtm.bufRtm.chaseIdx =
-            (rtm->extBufRtm.bufRtm.chaseIdx + 1U) % rtm->extBuf.periods; /* Move the write pointer. */
+            (rtm->extBufRtm.bufRtm.chaseIdx + 1U) % rtm->extBuf.periods;     /* Move the write pointer. */
 
         if (rtm->extBufRtm.bufRtm.chaseIdx == rtm->extBufRtm.bufRtm.leadIdx) /* Extra buffer overwrite. */
         {
@@ -601,7 +596,7 @@ static void SRTM_PdmSdmaRxCallback(PDM_Type *sai, pdm_sdma_handle_t *sdmaHandle,
     /* When localBuf is used, the period size should not exceed the max size supported by one DMA tranfer. */
     if (rtm->localBuf.buf != NULL)
     {
-        rtm->localRtm.bufRtm.remainingPeriods--; /* One of the local period is filled */
+        rtm->localRtm.bufRtm.remainingPeriods--;                       /* One of the local period is filled */
 
         chaseIdx                      = rtm->localRtm.bufRtm.chaseIdx; /* For callback */
         rtm->localRtm.bufRtm.chaseIdx = (rtm->localRtm.bufRtm.chaseIdx + 1U) % rtm->localBuf.periods;
@@ -698,8 +693,6 @@ static void SRTM_PdmSdmaAdapter_InitPDM(srtm_pdm_sdma_adapter_t handle)
     SDMA_CreateHandle(&handle->rxDmaHandle, handle->dma, handle->rxConfig.dmaChannel, &handle->rxConfig.rxContext);
     handle->rxDmaHandle.priority =
         handle->rxConfig.channelPriority; /* The priority will be set in SDMA_StartTransfer. */
-    SDMA_LoadScript(handle->dma, FSL_SDMA_SCRIPT_CODE_START_ADDR, (void *)g_sdma_multi_fifo_script,
-                    FSL_SDMA_SCRIPT_CODE_SIZE);
 
     PDM_TransferCreateHandleSDMA(handle->pdm, &handle->rxRtm.pdmHandle, SRTM_PdmSdmaRxCallback, (void *)handle,
                                  &handle->rxDmaHandle, handle->rxConfig.eventSource);

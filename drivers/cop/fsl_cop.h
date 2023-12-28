@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_COP_H_
-#define _FSL_COP_H_
+#ifndef FSL_COP_H_
+#define FSL_COP_H_
 
 #include "fsl_common.h"
 
@@ -20,16 +20,16 @@
  *******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief COP driver version 2.0.1. */
 #define FSL_COP_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
-/*@}*/
+/*! @} */
 
 /*! @name COP refresh sequence. */
-/*@{*/
+/*! @{ */
 #define COP_FIRST_BYTE_OF_REFRESH  (0x55U) /*!< First byte of refresh sequence */
 #define COP_SECOND_BYTE_OF_REFRESH (0xAAU) /*!< Second byte of refresh sequence */
-/*@}*/
+/*! @} */
 
 /*! @brief COP clock source selection. */
 typedef enum _cop_clock_source
@@ -153,7 +153,7 @@ static inline void COP_Disable(SIM_Type *base)
  */
 void COP_Refresh(SIM_Type *base);
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -161,4 +161,4 @@ void COP_Refresh(SIM_Type *base);
 
 /*! @}*/
 
-#endif /* _FSL_COP_H_ */
+#endif /* FSL_COP_H_ */

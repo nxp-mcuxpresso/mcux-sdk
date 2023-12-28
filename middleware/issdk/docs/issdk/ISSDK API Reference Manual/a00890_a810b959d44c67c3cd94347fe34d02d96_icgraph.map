@@ -1,6 +1,0 @@
-<map id="f3x3matrixAeqMinusA" name="f3x3matrixAeqMinusA">
-<area shape="rect" id="node2" href="$a00908.html#a752887e826809837549c391aa3a4cbaf" title="calculate the 10 element calibration from the available measurements " alt="" coords="207,5,393,32"/>
-<area shape="rect" id="node3" href="$a00854.html#aee45330512ed09a377b969fa229a2d45" title="fComputeMagCalibration10" alt="" coords="211,56,389,83"/>
-<area shape="rect" id="node4" href="$a00854.html#a25f3c141e543b477ed0885f38d9beda3" title="fComputeMagCalibration7" alt="" coords="215,107,385,133"/>
-<area shape="rect" id="node5" href="$a00857.html#a51818fe46836eeda49b9da097725b49a" title="fUpdateMagCalibration10Slice" alt="" coords="203,157,397,184"/>
-</map>

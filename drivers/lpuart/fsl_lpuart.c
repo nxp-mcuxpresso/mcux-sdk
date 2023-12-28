@@ -35,6 +35,10 @@ enum
     kLPUART_RxBusy  /*!< RX busy. */
 };
 
+#if defined(LPUART_RSTS)
+#define LPUART_RESETS_ARRAY LPUART_RSTS
+#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -145,6 +149,11 @@ lpuart_isr_t s_lpuartIsr[ARRAY_SIZE(s_lpuartBases)] = {[0 ...(ARRAY_SIZE(s_lpuar
                                                            (lpuart_isr_t)DefaultISR};
 #else
 lpuart_isr_t s_lpuartIsr[ARRAY_SIZE(s_lpuartBases)];
+#endif
+
+#if defined(LPUART_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_lpuartResets[] = LPUART_RESETS_ARRAY;
 #endif
 
 /*******************************************************************************
@@ -371,6 +380,10 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
 #endif
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(LPUART_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_lpuartResets[LPUART_GetInstance(base)]);
+#endif
 
 #if defined(FSL_FEATURE_LPUART_HAS_GLOBAL) && FSL_FEATURE_LPUART_HAS_GLOBAL
         /*Reset all internal logic and registers, except the Global Register */
@@ -788,31 +801,41 @@ void LPUART_SendAddress(LPUART_Type *base, uint8_t address)
  */
 void LPUART_EnableInterrupts(LPUART_Type *base, uint32_t mask)
 {
+    uint32_t s_atomicOldInt;
     /* Only consider the real interrupt enable bits. */
     mask &= (uint32_t)kLPUART_AllInterruptEnable;
 
     /* Check int enable bits in base->BAUD */
-    uint32_t tempReg = base->BAUD;
+    uint32_t baudRegMask = 0UL;
 #if defined(FSL_FEATURE_LPUART_HAS_LIN_BREAK_DETECT) && FSL_FEATURE_LPUART_HAS_LIN_BREAK_DETECT
-    tempReg |= ((mask << 8U) & LPUART_BAUD_LBKDIE_MASK);
+    baudRegMask |= ((mask << 8U) & LPUART_BAUD_LBKDIE_MASK);
     /* Clear bit 7 from mask */
     mask &= ~(uint32_t)kLPUART_LinBreakInterruptEnable;
 #endif
-    tempReg |= ((mask << 8U) & LPUART_BAUD_RXEDGIE_MASK);
+    baudRegMask |= ((mask << 8U) & LPUART_BAUD_RXEDGIE_MASK);
     /* Clear bit 6 from mask */
     mask &= ~(uint32_t)kLPUART_RxActiveEdgeInterruptEnable;
-    base->BAUD = tempReg;
+
+    s_atomicOldInt = DisableGlobalIRQ();
+    base->BAUD |= baudRegMask;
+    EnableGlobalIRQ(s_atomicOldInt);
 
 #if defined(FSL_FEATURE_LPUART_HAS_FIFO) && FSL_FEATURE_LPUART_HAS_FIFO
     /* Check int enable bits in base->FIFO */
+
+    s_atomicOldInt = DisableGlobalIRQ();
     base->FIFO = (base->FIFO & ~(LPUART_FIFO_TXOF_MASK | LPUART_FIFO_RXUF_MASK)) |
                  (mask & (LPUART_FIFO_TXOFE_MASK | LPUART_FIFO_RXUFE_MASK));
+    EnableGlobalIRQ(s_atomicOldInt);
+    
     /* Clear bit 9 and bit 8 from mask */
     mask &= ~((uint32_t)kLPUART_TxFifoOverflowInterruptEnable | (uint32_t)kLPUART_RxFifoUnderflowInterruptEnable);
 #endif
 
-    /* Set int enable bits in base->CTRL */
+    /* Set int enable bits in base->CTRL */  
+    s_atomicOldInt = DisableGlobalIRQ(); 
     base->CTRL |= mask;
+    EnableGlobalIRQ(s_atomicOldInt);
 }
 
 /*!
@@ -830,30 +853,40 @@ void LPUART_EnableInterrupts(LPUART_Type *base, uint32_t mask)
  */
 void LPUART_DisableInterrupts(LPUART_Type *base, uint32_t mask)
 {
+    uint32_t s_atomicOldInt;
     /* Only consider the real interrupt enable bits. */
     mask &= (uint32_t)kLPUART_AllInterruptEnable;
-    /* Check int enable bits in base->BAUD */
-    uint32_t tempReg = base->BAUD;
+
+    /* Clear int enable bits in base->BAUD */
+    uint32_t baudRegMask = 0UL;
 #if defined(FSL_FEATURE_LPUART_HAS_LIN_BREAK_DETECT) && FSL_FEATURE_LPUART_HAS_LIN_BREAK_DETECT
-    tempReg &= ~((mask << 8U) & LPUART_BAUD_LBKDIE_MASK);
+    baudRegMask |= ((mask << 8U) & LPUART_BAUD_LBKDIE_MASK);
     /* Clear bit 7 from mask */
     mask &= ~(uint32_t)kLPUART_LinBreakInterruptEnable;
 #endif
-    tempReg &= ~((mask << 8U) & LPUART_BAUD_RXEDGIE_MASK);
+    baudRegMask |= ((mask << 8U) & LPUART_BAUD_RXEDGIE_MASK);
     /* Clear bit 6 from mask */
     mask &= ~(uint32_t)kLPUART_RxActiveEdgeInterruptEnable;
-    base->BAUD = tempReg;
+    
+    s_atomicOldInt = DisableGlobalIRQ(); 
+    base->BAUD &= ~baudRegMask;
+    EnableGlobalIRQ(s_atomicOldInt);
 
 #if defined(FSL_FEATURE_LPUART_HAS_FIFO) && FSL_FEATURE_LPUART_HAS_FIFO
-    /* Check int enable bits in base->FIFO */
+    /* Clear int enable bits in base->FIFO */
+    
+    s_atomicOldInt = DisableGlobalIRQ();
     base->FIFO = (base->FIFO & ~(LPUART_FIFO_TXOF_MASK | LPUART_FIFO_RXUF_MASK)) &
-                 ~(mask & (LPUART_FIFO_TXOFE_MASK | LPUART_FIFO_RXUFE_MASK));
+                ~(mask & (LPUART_FIFO_TXOFE_MASK | LPUART_FIFO_RXUFE_MASK));
+    EnableGlobalIRQ(s_atomicOldInt);     
     /* Clear bit 9 and bit 8 from mask */
     mask &= ~((uint32_t)kLPUART_TxFifoOverflowInterruptEnable | (uint32_t)kLPUART_RxFifoUnderflowInterruptEnable);
 #endif
 
-    /* Check int enable bits in base->CTRL */
+    /* Clear int enable bits in base->CTRL */
+    s_atomicOldInt = DisableGlobalIRQ(); 
     base->CTRL &= ~mask;
+    EnableGlobalIRQ(s_atomicOldInt);
 }
 
 /*!

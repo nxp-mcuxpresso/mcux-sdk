@@ -1,4 +1,0 @@
-<map id="drivers/host/data_format_hdlc.h" name="drivers/host/data_format_hdlc.h">
-<area shape="rect" id="node2" href="$a00098.html" title="The host_io_uart.c file contains definitions for UART based streaming interface for sending and resei..." alt="" coords="5,102,160,129"/>
-<area shape="rect" id="node3" href="$a00509.html" title="The data_format_hdlc.c file contains definitions for encoding and decoding HDLC messages to and from ..." alt="" coords="184,95,344,136"/>
-</map>

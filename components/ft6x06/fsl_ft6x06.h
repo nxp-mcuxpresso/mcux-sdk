@@ -33,6 +33,7 @@
 /*! @brief FT6X06 raw touch data length. */
 #define FT6X06_TOUCH_DATA_LEN (2 + (FT6X06_MAX_TOUCHES)*6)
 
+/*! @brief Touch event. */
 typedef enum _touch_event
 {
     kTouch_Down     = 0, /*!< The state changed to touched. */
@@ -41,6 +42,7 @@ typedef enum _touch_event
     kTouch_Reserved = 3  /*!< No touch information available. */
 } touch_event_t;
 
+/*! @brief Touch point information. */
 typedef struct _touch_point
 {
     touch_event_t TOUCH_EVENT; /*!< Indicates the state or event of the touch point. */
@@ -49,6 +51,7 @@ typedef struct _touch_point
     uint16_t TOUCH_Y; /*!< Y coordinate of the touch point */
 } touch_point_t;
 
+/*! @brief FT6X06 driver handle. */
 typedef struct _ft6x06_handle
 {
     ARM_DRIVER_I2C *i2c_driver;
@@ -57,14 +60,76 @@ typedef struct _ft6x06_handle
     uint8_t touch_buf[FT6X06_TOUCH_DATA_LEN];
 } ft6x06_handle_t;
 
+/*******************************************************************************
+ * API
+ ******************************************************************************/
+
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
+/*!
+ * @brief Initialize the driver.
+ *
+ * This function power on the touch controller, releases the touch controller
+ * reset. After calling this function, the touch controller is ready to work.
+ *
+ * @param [in] handle Pointer to the driver.
+ * @param [in] i2c_driver Pointer to the CMSIS I2C driver used by FT6X06.
+ * @return Returns @ref kStatus_Success if initialize success, otherwise return error code.
+ */
 status_t FT6X06_Init(ft6x06_handle_t *handle, ARM_DRIVER_I2C *i2c_driver);
 
+/*!
+ * @brief De-initialize the driver.
+ *
+ * After this function, the touch controller is powered off.
+ *
+ * @param [in] handle Pointer to the driver.
+ * @return Returns @ref kStatus_Success if success, otherwise return error code.
+ */
 status_t FT6X06_Denit(ft6x06_handle_t *handle);
 
+/*!
+ * @brief Event Handler
+ *
+ * Called in CMSIS I2C event handler to notify the event.
+ *
+ * @param [in] handle Pointer to the driver.
+ * @param [in] i2c_event The event passed by CMSIS I2C signal function ARM_I2C_SignalEvent_t
+ */
 void FT6X06_EventHandler(ft6x06_handle_t *handle, uint32_t i2c_event);
 
+/*!
+ * @brief Get single touch point coordinate.
+ *
+ * Get one touch point coordinate.
+ *
+ * @param [in] handle Pointer to the driver.
+ * @param [out] touch_event Touch Event.
+ * @param [out] touch_x X coordinate of the touch point.
+ * @param [out] touch_y Y coordinate of the touch point.
+ * @return Returns @ref kStatus_Success if success, otherwise return error code.
+ */
 status_t FT6X06_GetSingleTouch(ft6x06_handle_t *handle, touch_event_t *touch_event, int *touch_x, int *touch_y);
 
+/*!
+ * @brief Get multiple touch points coordinate.
+ *
+ * When this function returns successfully, the @p touch_count shows how
+ * many valid touch points there are in the @p touch_array.
+ *
+ * @param [in] handle Pointer to the driver.
+ * @param [out] touch_count The actual touch point number.
+ * @param [out] touch_array Array of touch points coordinate.
+ * @return Returns @ref kStatus_Success if success, otherwise return error code.
+ */
 status_t FT6X06_GetMultiTouch(ft6x06_handle_t *handle, int *touch_count, touch_point_t touch_array[FT6X06_MAX_TOUCHES]);
+
+#if defined(__cplusplus)
+}
+#endif
+
+/*! @} */
 
 #endif

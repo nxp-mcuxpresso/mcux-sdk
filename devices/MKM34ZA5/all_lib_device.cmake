@@ -301,8 +301,19 @@
 #  # description: FreeRTOS MPU wrappers
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
+#set.middleware.mmcau
+#  # description: MMCAU security function library source files
+#  set(CONFIG_USE_middleware_mmcau_mmcau_files true)
+
+#  # description: MMCAU library for ARM Cortex M0+ core
+#  set(CONFIG_USE_middleware_mmcau_cm0p true)
+
+#  # description: MMCAU common library source files
+#  set(CONFIG_USE_middleware_mmcau_common_files true)
+
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
+  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
   ${CMAKE_CURRENT_LIST_DIR}/drivers
   ${CMAKE_CURRENT_LIST_DIR}/project_template
@@ -316,3 +327,4 @@ include(set_CMSIS_DSP_Lib OPTIONAL)
 include(set_CMSIS OPTIONAL)
 include(set_device_MKM34ZA5 OPTIONAL)
 include(set_middleware_freertos-kernel OPTIONAL)
+include(set_middleware_mmcau OPTIONAL)

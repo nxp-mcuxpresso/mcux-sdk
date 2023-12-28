@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_SAI_SDMA_H_
-#define _FSL_SAI_SDMA_H_
+#ifndef FSL_SAI_SDMA_H_
+#define FSL_SAI_SDMA_H_
 
 #include "fsl_sai.h"
 #include "fsl_sdma.h"
@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-#define FSL_SAI_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 3)) /*!< Version 2.5.3 */
-/*@}*/
+/*! @{ */
+#define FSL_SAI_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 0)) /*!< Version 2.6.0 */
+/*! @} */
 
 typedef struct _sai_sdma_handle sai_sdma_handle_t;
 
@@ -104,48 +104,6 @@ void SAI_TransferRxCreateHandleSDMA(I2S_Type *base,
                                     void *userData,
                                     sdma_handle_t *dmaHandle,
                                     uint32_t eventSource);
-
-/*!
- * @brief Configures the SAI Tx audio format.
- *
- * The audio format can be changed at run-time. This function configures the sample rate and audio data
- * format to be transferred. This function also sets the SDMA parameter according to formatting requirements.
- *
- * @param base SAI base pointer.
- * @param handle SAI SDMA handle pointer.
- * @param format Pointer to SAI audio data format structure.
- * @param mclkSourceClockHz SAI master clock source frequency in Hz.
- * @param bclkSourceClockHz SAI bit clock source frequency in Hz. If bit clock source is master
- * clock, this value should equals to masterClockHz in format.
- * @retval kStatus_Success Audio format set successfully.
- * @retval kStatus_InvalidArgument The input argument is invalid.
- */
-void SAI_TransferTxSetFormatSDMA(I2S_Type *base,
-                                 sai_sdma_handle_t *handle,
-                                 sai_transfer_format_t *format,
-                                 uint32_t mclkSourceClockHz,
-                                 uint32_t bclkSourceClockHz);
-
-/*!
- * @brief Configures the SAI Rx audio format.
- *
- * The audio format can be changed at run-time. This function configures the sample rate and audio data
- * format to be transferred. This function also sets the SDMA parameter according to formatting requirements.
- *
- * @param base SAI base pointer.
- * @param handle SAI SDMA handle pointer.
- * @param format Pointer to SAI audio data format structure.
- * @param mclkSourceClockHz SAI master clock source frequency in Hz.
- * @param bclkSourceClockHz SAI bit clock source frequency in Hz. If a bit clock source is the master
- * clock, this value should equal to masterClockHz in format.
- * @retval kStatus_Success Audio format set successfully.
- * @retval kStatus_InvalidArgument The input argument is invalid.
- */
-void SAI_TransferRxSetFormatSDMA(I2S_Type *base,
-                                 sai_sdma_handle_t *handle,
-                                 sai_transfer_format_t *format,
-                                 uint32_t mclkSourceClockHz,
-                                 uint32_t bclkSourceClockHz);
 
 /*!
  * @brief Performs a non-blocking SAI transfer using DMA.

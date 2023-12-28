@@ -87,9 +87,16 @@ void TSI_InitSelfCapMode(TSI_Type *base, const tsi_selfCap_config_t *config)
     }
 
     /* common settings */
+#if !(defined(FSL_FEATURE_TSI_HAS_SHIELD_REGISTER) && FSL_FEATURE_TSI_HAS_SHIELD_REGISTER)
     temp = (base->MODE) & ~(TSI_MODE_SETCLK_MASK | TSI_MODE_MODE_MASK | TSI_MODE_S_SEN_MASK | TSI_MODE_S_W_SHIELD_MASK);
     base->MODE = temp | (TSI_MODE_S_W_SHIELD(config->enableShield) | TSI_MODE_S_SEN(config->enableSensitivity) |
                          TSI_MODE_SETCLK(config->commonConfig.mainClock) | TSI_MODE_MODE(config->commonConfig.mode));
+#else
+    temp = (base->MODE) & ~(TSI_MODE_SETCLK_MASK | TSI_MODE_MODE_MASK | TSI_MODE_S_SEN_MASK);
+    base->MODE = temp | (TSI_MODE_S_SEN(config->enableSensitivity) |
+                         TSI_MODE_SETCLK(config->commonConfig.mainClock) | TSI_MODE_MODE(config->commonConfig.mode));
+    base->SHIELD |= (uint32_t)config->enableShield;
+#endif
 
     base->GENCS =
         (base->GENCS & (~(ALL_FLAGS_MASK | TSI_GENCS_DVOLT_MASK))) | TSI_GENCS_DVOLT(config->commonConfig.dvolt);
@@ -452,3 +459,24 @@ void TSI_ClearStatusFlags(TSI_Type *base, uint32_t mask)
 
     base->GENCS = regValue; /* write value to register */
 }
+
+#if defined(FSL_FEATURE_TSI_HAS_SHIELD_REGISTER) && FSL_FEATURE_TSI_HAS_SHIELD_REGISTER
+/*!
+ * brief Enable/disable TSI shield channels.
+ *
+ * param base TSI peripheral base address.
+ * param channelsMask Channels mask, 1 means channel 0, 3 means channel 0 and channel 1.
+ * param enable True means enable TSI shield channels, false means disable.
+ */
+void TSI_EnableShieldChannels(TSI_Type *base, uint32_t channelsMask, bool enable)
+{
+    if(enable)
+    {
+        base->SHIELD |= channelsMask;
+    }
+    else
+    {
+        base->SHIELD &= ~channelsMask;
+    }
+}
+#endif

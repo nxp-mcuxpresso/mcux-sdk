@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_CDOG_H_
-#define _FSL_CDOG_H_
+#ifndef FSL_CDOG_H_
+#define FSL_CDOG_H_
 
 #include "fsl_common.h"
 
@@ -21,7 +21,7 @@
  *******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Defines CDOG driver version 2.1.2.
  *
  * Change log:
@@ -40,7 +40,7 @@
  *   - initial version
  */
 #define FSL_CDOG_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
-/*@}*/
+/*! @} */
 
 typedef struct
 {
@@ -334,4 +334,4 @@ uint32_t CDOG_ReadPersistent(CDOG_Type *base);
 
 /*! @}*/ /* end of group cdog */
 
-#endif /* _FSL_CDOG_H_ */
+#endif /* FSL_CDOG_H_ */

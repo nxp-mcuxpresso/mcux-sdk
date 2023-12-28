@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FLEXBUS_H_
-#define _FSL_FLEXBUS_H_
+#ifndef FSL_FLEXBUS_H_
+#define FSL_FLEXBUS_H_
 
 #include "fsl_common.h"
 
@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_FLEXBUS_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1. */
-                                                           /*@}*/
+                                                           /*! @} */
 
 /*!
  * @brief Defines port size for FlexBus peripheral.
@@ -240,4 +240,4 @@ void FLEXBUS_GetDefaultConfig(flexbus_config_t *config);
 
 /*! @}*/
 
-#endif /* _FSL_FLEXBUS_H_ */
+#endif /* FSL_FLEXBUS_H_ */

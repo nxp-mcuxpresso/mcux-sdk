@@ -40,7 +40,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sctimer
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/utick
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
@@ -57,7 +56,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_cdog)
 #    include(driver_ctimer)
 #    include(driver_lpc_gpio)
-#    include(middleware_issdk_sensor_fxos8700)
 #    include(device_system)
 #    include(driver_lpadc)
 #    include(middleware_freertos-kernel_cm33_nonsecure_port)
@@ -70,7 +68,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_inputmux)
 #    include(driver_flexcomm_i2c)
 #    include(component_serial_manager)
-#    include(middleware_issdk_sensor_fxas21002)
 #    include(driver_lpc_dma)
 #    include(component_serial_manager_uart)
 #    include(middleware_mbedtls_port_ksdk)
@@ -81,8 +78,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_sctimer)
 #    include(driver_flexcomm)
 #    include(device_startup)
-#    include(middleware_issdk_drivers_systick_utils)
-#    include(middleware_issdk_sensor_interface_common)
 #    include(driver_rng_1)
 #    include(middleware_freertos-kernel_extension)
 #    include(component_serial_manager_swo)
@@ -111,7 +106,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(CMSIS_Driver_Include_SPI OPTIONAL)
 #    include(driver_cmsis_flexcomm_usart)
 #    include(driver_inputmux_connections)
-#    include(middleware_issdk_drivers_gpio_lpc)
 #    include(driver_mcan)
 #    include(driver_cmp_1)
 #    include(driver_flexcomm_i2c_dma)
@@ -136,8 +130,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_rtt_LPC55S06)
 #    include(driver_flexcomm_usart_freertos)
 #    include(middleware_azure_rtos_lx)
-#    include(middleware_issdk_drivers_cmsis_drivers)
-#    include(CMSIS_Device_API_OSTick OPTIONAL)
+#    include(CMSIS_Device_API_OSTick)
 #    include(driver_casper)
 #    include(driver_reset)
 #    include(driver_ft6x06)

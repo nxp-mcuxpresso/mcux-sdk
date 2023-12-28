@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_ADC16_H_
-#define _FSL_ADC16_H_
+#ifndef FSL_ADC16_H_
+#define FSL_ADC16_H_
 
 #include "fsl_common.h"
 
@@ -21,11 +21,11 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief ADC16 driver version 2.3.0. */
 #define FSL_ADC16_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 
-/*@}*/
+/*! @} */
 
 /*!
  * @brief Channel status flags.
@@ -331,7 +331,7 @@ static inline void ADC16_SetOffsetValue(ADC_Type *base, int16_t value)
 }
 #endif /* FSL_FEATURE_ADC16_HAS_OFFSET_CORRECTION */
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Advanced Features
@@ -465,7 +465,7 @@ static inline void ADC16_EnableAsynchronousClockOutput(ADC_Type *base, bool enab
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Conversion Channel
@@ -526,7 +526,7 @@ static inline uint32_t ADC16_GetChannelConversionValue(ADC_Type *base, uint32_t 
  */
 uint32_t ADC16_GetChannelStatusFlags(ADC_Type *base, uint32_t channelGroup);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -534,4 +534,4 @@ uint32_t ADC16_GetChannelStatusFlags(ADC_Type *base, uint32_t channelGroup);
 /*!
  * @}
  */
-#endif /* _FSL_ADC16_H_ */
+#endif /* FSL_ADC16_H_ */

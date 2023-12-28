@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, NXP
+ * Copyright 2023, NXP
  * All rights reserved.
  *
  *
@@ -27,6 +27,13 @@ struct _srtm_channel
     srtm_status_t (*start)(srtm_channel_t channel);
     srtm_status_t (*stop)(srtm_channel_t channel);
     srtm_status_t (*sendData)(srtm_channel_t channel, void *data, uint32_t len);
+
+    void (*sendDataPreCallback)(srtm_channel_t channel,
+                                void *data,
+                                uint32_t len); /*!< SRTM send data pre call back function */
+    void (*sendDataPostCallback)(srtm_channel_t channel,
+                                 void *data,
+                                 uint32_t len); /*!< SRTM send data post call back function */
 };
 
 /*******************************************************************************

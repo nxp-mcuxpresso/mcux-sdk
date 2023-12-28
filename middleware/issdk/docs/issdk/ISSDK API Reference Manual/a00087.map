@@ -1,7 +1,0 @@
-<map id="sensors/fxos8700_drv.h" name="sensors/fxos8700_drv.h">
-<area shape="rect" id="node3" href="$a00080.html" title="The fxos8700.h file contains the register definitions for FXOS8700 sensor driver. ..." alt="" coords="401,80,486,107"/>
-<area shape="rect" id="node4" href="$a00185.html" title="The sensor_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regist..." alt="" coords="24,80,138,107"/>
-<area shape="rect" id="node5" href="$a00170.html" title="The register_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="145,155,262,181"/>
-<area shape="rect" id="node6" href="$a00191.html" title="The sensor_io_spi.h file declares low&#45;level interface functions for reading and writing sensor regist..." alt="" coords="162,80,275,107"/>
-<area shape="rect" id="node7" href="$a00176.html" title="The register_io_spi.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="298,155,416,181"/>
-</map>

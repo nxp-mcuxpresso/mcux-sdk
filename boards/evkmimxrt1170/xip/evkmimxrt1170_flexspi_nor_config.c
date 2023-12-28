@@ -22,6 +22,9 @@ __attribute__((section(".boot_hdr.conf"), used))
 #pragma location = ".boot_hdr.conf"
 #endif
 
+#define FLASH_DUMMY_CYCLES 0x09
+#define FLASH_DUMMY_VALUE  0x09
+
 const flexspi_nor_config_t qspiflash_config = {
     .memConfig =
         {
@@ -36,11 +39,23 @@ const flexspi_nor_config_t qspiflash_config = {
             .sflashPadType        = kSerialFlash_4Pads,
             .serialClkFreq        = kFlexSpiSerialClk_133MHz,
             .sflashA1Size         = 16u * 1024u * 1024u,
+            /* Enable flash configuration feature */
+            .configCmdEnable   = 1u,
+            .configModeType[0] = kDeviceConfigCmdType_Generic,
+            /* Set configuration command sequences */
+            .configCmdSeqs[0] =
+                {
+                    .seqNum   = 1,
+                    .seqId    = 12,
+                    .reserved = 0,
+                },
+            /* Prepare setting value for Read Register in flash */
+            .configCmdArgs[0] = (FLASH_DUMMY_VALUE << 3),
             .lookupTable =
                 {
                     // Read LUTs
                     [0] = FLEXSPI_LUT_SEQ(CMD_SDR, FLEXSPI_1PAD, 0xEB, RADDR_SDR, FLEXSPI_4PAD, 0x18),
-                    [1] = FLEXSPI_LUT_SEQ(DUMMY_SDR, FLEXSPI_4PAD, 0x06, READ_SDR, FLEXSPI_4PAD, 0x04),
+                    [1] = FLEXSPI_LUT_SEQ(DUMMY_SDR, FLEXSPI_4PAD, FLASH_DUMMY_CYCLES, READ_SDR, FLEXSPI_4PAD, 0x04),
 
                     // Read Status LUTs
                     [4 * 1 + 0] = FLEXSPI_LUT_SEQ(CMD_SDR, FLEXSPI_1PAD, 0x05, READ_SDR, FLEXSPI_1PAD, 0x04),
@@ -60,6 +75,10 @@ const flexspi_nor_config_t qspiflash_config = {
 
                     // Erase Chip LUTs
                     [4 * 11 + 0] = FLEXSPI_LUT_SEQ(CMD_SDR, FLEXSPI_1PAD, 0x60, STOP, FLEXSPI_1PAD, 0x0),
+
+                    // Set Read Register LUTs
+                    [4 * 12 + 0] = FLEXSPI_LUT_SEQ(CMD_SDR, FLEXSPI_1PAD, 0xC0, WRITE_SDR, FLEXSPI_1PAD, 0x01),
+                    [4 * 12 + 1] = FLEXSPI_LUT_SEQ(STOP, FLEXSPI_1PAD, 0x00, 0, 0, 0),
                 },
         },
     .pageSize           = 256u,

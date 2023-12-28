@@ -1,0 +1,25 @@
+---
+set.board.frdmk22f.fmstr:
+  section-type: set
+  belong_to: set.board.frdmk22f.fmstr
+  section_info:
+    fixed_id: fmstr_board_frdmk22f
+    display_name: fmstr_frdmk22f
+    full_name: FreeMASTER frdmk22f
+    description: FreeMASTER examples for frdmk22f
+    type: board
+    version: 1.0.0
+    set_location:
+      repo_base_path: "./boards/frdmk22f/freemaster_examples"
+    product:
+      cmsis_pack:
+        scr:
+        - scr.board.frdmk22f.fmstr-examples
+        vendor: NXP
+        pack_root:
+          pack_type: sBSP
+          pack_name: frdmk22f_FREEMASTER
+          pack_version: 1.0.0
+  dependency:
+    allOf:
+    - set.middleware.fmstr

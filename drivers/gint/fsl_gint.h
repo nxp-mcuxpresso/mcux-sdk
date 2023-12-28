@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_GINT_H_
-#define _FSL_GINT_H_
+#ifndef FSL_GINT_H_
+#define FSL_GINT_H_
 
 #include "fsl_common.h"
 
@@ -23,9 +23,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_GINT_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Driver version. */
-/*@}*/
+/*! @} */
 
 /*! @brief GINT combine inputs type */
 typedef enum _gint_comb
@@ -219,6 +219,6 @@ void GINT_Deinit(GINT_Type *base);
 }
 #endif
 
-/*@}*/
+/*! @} */
 
-#endif /* _FSL_GINT_H_ */
+#endif /* FSL_GINT_H_ */

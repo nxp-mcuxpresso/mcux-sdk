@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_HSCMP_H_
-#define _FSL_HSCMP_H_
+#ifndef FSL_HSCMP_H_
+#define FSL_HSCMP_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-/*! @brief HSCMP driver version 2.0.3. */
-#define FSL_HSCMP_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
-/*@}*/
+/*! @{ */
+/*! @brief HSCMP driver version 2.0.4. */
+#define FSL_HSCMP_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+/*! @} */
 
 /*!
  * @brief HSCMP status falgs mask.
@@ -295,8 +295,8 @@ static inline void HSCMP_ClearStatusFlags(HSCMP_Type *base, uint32_t mask)
     base->CSR = mask;
 }
 
-/*@}*/
+/*! @} */
 
-/*@}*/
+/*! @} */
 
-#endif /* _FSL_HSCMP_H_ */
+#endif /* FSL_HSCMP_H_ */

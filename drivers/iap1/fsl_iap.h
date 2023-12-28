@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef __FSL_IAP_H_
-#define __FSL_IAP_H_
+#ifndef FSL_IAP_H_
+#define FSL_IAP_H_
 
 #include "fsl_common.h"
 /*!
@@ -30,7 +30,7 @@
 #endif
 
 /*! @brief Flash driver version for SDK*/
-#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(2, 1, 4)) /*!< Version 2.1.4. */
+#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(2, 1, 5)) /*!< Version 2.1.5. */
 
 /*! @brief Flash driver version for ROM*/
 enum _flash_driver_version_constants
@@ -41,7 +41,7 @@ enum _flash_driver_version_constants
     kFLASH_DriverVersionBugfix = 3    /*!< Bugfix for flash driver version.*/
 };
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Flash configuration
@@ -131,8 +131,13 @@ enum _flash_status
     kStatus_FLASH_CmpaCfgDirectEraseNotAllowed =
         MAKE_STATUS(kStatusGroupFlashDriver, 0x28), /*!< The CMPA Cfg region is not allowed to be erased directly. */
     kStatus_FLASH_FfrBankIsLocked = MAKE_STATUS(kStatusGroupFlashDriver, 0x29), /*!< The FFR bank region is locked. */
+    kStatus_FLASH_EraseFrequencyError =
+        MAKE_STATUS(kStatusGroupFlashDriver, 0x2A), /*!< Core frequency is over 100MHZ. */
+    kStatus_FLASH_ProgramFrequencyError =
+        MAKE_STATUS(kStatusGroupFlashDriver, 0x2B), /*!< Core frequency is over 100MHZ. */
+
 };
-/*@}*/
+/*! @} */
 
 /*!
  * @name Flash API key
@@ -154,7 +159,7 @@ enum _flash_driver_api_keys
 {
     kFLASH_ApiEraseKey = FOUR_CHAR_CODE('l', 'f', 'e', 'k') /*!< Key value used to validate all flash erase APIs.*/
 };
-/*@}*/
+/*! @} */
 
 /*!
  * @brief Enumeration for various flash properties.
@@ -307,6 +312,35 @@ typedef struct _flash_config
     flash_mode_config_t modeConfig;
 } flash_config_t;
 
+/*   API prototype fields definition.
+| 31 : 24   |    23 : 20        |     19 : 16        |  15 : 12             |  11 : 8     |  7 ： 0  |
+|     Tag   |   Boot mode       | bootloader periphal|  Instance            |  Image Index| Reserved  |
+|           |                   |                    |  Used For Boot mode 0|             |           |
+|           | 0: Passive mode   | 0 - Auto detection |                      |             |           |
+|           | 1: ISP mode       | 1 - USB-HID        |                      |             |           |
+|           |                   | 2 - UART           |                      |             |           |
+|           |                   | 3 - SPI            |                      |             |           |
+|           |                   | 4 - I2C            |                      |             |           |
+|           |                   | 5 - CAN            |                      |             |           |
+*/
+
+typedef struct
+{
+    union
+    {
+        struct
+        {
+            uint32_t reserved : 8;
+            uint32_t boot_image_index : 4;
+            uint32_t instance : 4;
+            uint32_t boot_interface : 4;
+            uint32_t mode : 4;
+            uint32_t tag : 8;
+        } B;
+        uint32_t U;
+    } option;
+} user_app_boot_invoke_option_t;
+
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -335,7 +369,7 @@ extern "C" {
  */
 status_t FLASH_Init(flash_config_t *config);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Erasing
@@ -368,7 +402,7 @@ status_t FLASH_Init(flash_config_t *config);
  */
 status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Programming
@@ -400,9 +434,9 @@ status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBy
  * @retval #kStatus_FLASH_CommandNotSupported Flash API is not supported.
  * @retval #kStatus_FLASH_EccError A correctable or uncorrectable error during command execution.
  */
-status_t FLASH_Program(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
+status_t FLASH_Program(flash_config_t *config, uint32_t start, const uint8_t *src, uint32_t lengthInBytes);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @brief Reads flash at locations passed in through parameters.
@@ -496,7 +530,7 @@ status_t FLASH_VerifyProgram(flash_config_t *config,
                              uint32_t *failedAddress,
                              uint32_t *failedData);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Properties
@@ -517,12 +551,19 @@ status_t FLASH_VerifyProgram(flash_config_t *config,
  */
 status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichProperty, uint32_t *value);
 
-/*@}*/
+/*!
+ * @brief Run the Bootloader API  to force into the ISP mode base on the user arg
+ *
+ * @param arg Indicates API prototype fields definition. Refer to the above user_app_boot_invoke_option_t structure
+ */
+void BOOTLOADER_UserEntry(void *arg);
+
+/*! @} */
 
 #ifdef __cplusplus
 }
 #endif
 
-/*@}*/
+/*! @} */
 
 #endif /* __FLASH_FLASH_H_ */

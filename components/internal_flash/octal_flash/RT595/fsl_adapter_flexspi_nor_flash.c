@@ -44,7 +44,9 @@
  */
 #define NOR_CMD_LUT_SEQ_IDX_WRITE          9
 #define NOR_CMD_LUT_SEQ_IDX_READSTATUS_OPI 10
-
+#define NOR_CMD_LUT_SEQ_IDX_SLEEP_OPI      11
+#define NOR_CMD_LUT_SEQ_IDX_WKUP_OPI       12
+   
 #define CUSTOM_LUT_LENGTH        60
 #define FLASH_BUSY_STATUS_POL    1
 #define FLASH_BUSY_STATUS_OFFSET 0
@@ -169,6 +171,13 @@ static const uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
     [4 * NOR_CMD_LUT_SEQ_IDX_READSTATUS_OPI + 1] = FLEXSPI_LUT_SEQ(
         kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 0x20, kFLEXSPI_Command_READ_DDR, kFLEXSPI_8PAD, 0x04),
 
+    /*  Enter deep power down mode*/
+    [4 * NOR_CMD_LUT_SEQ_IDX_SLEEP_OPI] =
+        FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0xB9, kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0x46),
+
+    /*  Exit deep power down mode */
+    [4 * NOR_CMD_LUT_SEQ_IDX_WKUP_OPI] =
+        FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0xAB, kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0x54),
 };
 
 /*****************************************************************************

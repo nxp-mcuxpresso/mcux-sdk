@@ -84,11 +84,11 @@ typedef enum _pf1550_charger_operation
     kPF1550_ChargerOperation_ChargerOffLinearOff = 0x0U, /* Charger = off, linear = off. The BATFET switch is on
                                                            to allow the battery to support the system. */
     kPF1550_ChargerOperation_ChargerOffLinearOn =
-        0x1U,                                          /* Charger = off, linear = on, When there is a valid input,
-                                                         the linear regulator regulates the system voltage to be VCHGCV. */
-    kPF1550_ChargerOperation_ChargerOnLinearOn = 0x2U, /* Charger = on, linear = on. When there is a valid input,
-                                                         the battery is charging. VSYS is the larger of VMINSYS
-                                                         and ~ VBATT + IBAT * RBATFET. */
+        0x1U,                                            /* Charger = off, linear = on, When there is a valid input,
+                                                           the linear regulator regulates the system voltage to be VCHGCV. */
+    kPF1550_ChargerOperation_ChargerOnLinearOn = 0x2U,   /* Charger = on, linear = on. When there is a valid input,
+                                                           the battery is charging. VSYS is the larger of VMINSYS
+                                                           and ~ VBATT + IBAT * RBATFET. */
 } pf1550_charger_operation_t;
 
 /*! @brief PF1550 Thermaistor Configuration definition. */
@@ -196,7 +196,7 @@ void PF1550_SetThermalAttibute(pf1550_handle_t *handle, const pf1550_thermal_att
 void PF1550_SetledOutput(pf1550_handle_t *handle, bool value);
 void PF1550_SetLedAttibute(pf1550_handle_t *handle, const pf1550_led_attribute_t *attribute);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }

@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_BEE_H_
-#define _FSL_BEE_H_
+#ifndef FSL_BEE_H_
+#define FSL_BEE_H_
 
 #include "fsl_common.h"
 
@@ -21,7 +21,7 @@
  *******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief BEE driver version. Version 2.0.2.
  *
  * Current version: 2.0.2
@@ -48,7 +48,7 @@
  *   - Initial version
  */
 #define FSL_BEE_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
-/*@}*/
+/*! @} */
 
 /*! @brief BEE aes mode. */
 typedef enum _bee_aes_mode
@@ -249,6 +249,6 @@ void BEE_ClearStatusFlags(BEE_Type *base, uint32_t mask);
 }
 #endif
 
-/*@}*/
+/*! @} */
 
-#endif /* _FSL_BEE_H_ */
+#endif /* FSL_BEE_H_ */

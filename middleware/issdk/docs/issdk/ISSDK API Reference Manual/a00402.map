@@ -1,7 +1,0 @@
-<map id="driverexamples/demos/data_logger_demo.c" name="driverexamples/demos/data_logger_demo.c">
-<area shape="rect" id="node9" href="$a00164.html" title="The mpl3115_drv.h file describes the MPL3115 driver interface and structures. " alt="" coords="729,95,835,121"/>
-<area shape="rect" id="node10" href="$a00086.html" title="The fxos8700_drv.h file describes the fxos8700 driver interface and structures. " alt="" coords="859,95,967,121"/>
-<area shape="rect" id="node11" href="$a00032.html" title="The fxas21002_drv.h file describes the fxas21002 driver interface and structures. ..." alt="" coords="991,95,1106,121"/>
-<area shape="rect" id="node12" href="$a00101.html" title="The host_io_uart.h file contains the Host Protocol interface definitions and configuration. " alt="" coords="1130,95,1234,121"/>
-<area shape="rect" id="node13" href="$a00533.html" title="ARM Systick Utilities. " alt="" coords="1258,95,1365,121"/>
-</map>

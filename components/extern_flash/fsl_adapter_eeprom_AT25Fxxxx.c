@@ -35,9 +35,9 @@
 #define EEPROM_BUSY_FLAG_MASK 0x01U
 #define EEPROM_WRITE_ENABLED  0x02U
 
-#define EEPROM_PAGE_SIZE      (256U)
-#define EEPROM_BLOCK_SIZE     (8U * EEPROM_PAGE_SIZE)
-#define EEPROM_PAGE_MASK      (EEPROM_PAGE_SIZE - 1U)
+#define EEPROM_PAGE_SIZE  (256U)
+#define EEPROM_BLOCK_SIZE (8U * EEPROM_PAGE_SIZE)
+#define EEPROM_PAGE_MASK  (EEPROM_PAGE_SIZE - 1U)
 
 /* adress mask */
 #define ADDRESS_MASK 0x000000FFUL
@@ -66,11 +66,8 @@ EEPROM_STATIC eeprom_state_t s_eeState;
 *************************************************************************************
 ********************************************************************************** */
 
-EEPROM_STATIC void EEPROM_SetSpiTransferValue(hal_spi_transfer_t *transferValue,
-                                              uint8_t *txData,
-                                              uint8_t *rxData,
-                                              size_t dataSize,
-                                              uint32_t flags)
+EEPROM_STATIC void EEPROM_SetSpiTransferValue(
+    hal_spi_transfer_t *transferValue, uint8_t *txData, uint8_t *rxData, size_t dataSize, uint32_t flags)
 {
     transferValue->txData   = txData;
     transferValue->rxData   = rxData;
@@ -84,12 +81,10 @@ EEPROM_STATIC uint8_t EEPROM_ReadStatusReq(void)
     hal_spi_transfer_t xfer;
     uint8_t data[1] = {0U};
 
-    EEPROM_SetSpiTransferValue(&xfer, &cmd, NULL, sizeof(cmd),
-                (SPI_FIFOWR_RXIGNORE(1)|SPI_FIFOWR_EOF(1)));
+    EEPROM_SetSpiTransferValue(&xfer, &cmd, NULL, sizeof(cmd), (SPI_FIFOWR_RXIGNORE(1) | SPI_FIFOWR_EOF(1)));
     (void)HAL_SpiMasterTransferBlocking(s_eeState.spiHandle, &xfer);
 
-    EEPROM_SetSpiTransferValue(&xfer, NULL, data, 1,
-                (SPI_FIFOWR_TXIGNORE(1)|SPI_FIFOWR_EOF(1)|SPI_FIFOWR_EOT(1)));
+    EEPROM_SetSpiTransferValue(&xfer, NULL, data, 1, (SPI_FIFOWR_TXIGNORE(1) | SPI_FIFOWR_EOF(1) | SPI_FIFOWR_EOT(1)));
     (void)HAL_SpiMasterTransferBlocking(s_eeState.spiHandle, &xfer);
 
     return *((uint8_t *)((void *)data));
@@ -135,7 +130,7 @@ EEPROM_STATIC eeprom_status_t EEPROM_PrepareForWrite()
     if ((status & EEPROM_WRITE_ENABLED) == 0U)
     {
         EEPROM_SetSpiTransferValue(&xfer, &cmd, NULL, sizeof(cmd),
-                (SPI_FIFOWR_RXIGNORE(1)|SPI_FIFOWR_EOF(1)|SPI_FIFOWR_EOT(1)));
+                                   (SPI_FIFOWR_RXIGNORE(1) | SPI_FIFOWR_EOF(1) | SPI_FIFOWR_EOT(1)));
         (void)HAL_SpiMasterTransferBlocking(s_eeState.spiHandle, &xfer);
     }
     return kStatus_EeSuccess;

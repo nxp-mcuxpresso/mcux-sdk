@@ -712,8 +712,8 @@ static status_t semc_nand_issue_read_status(nand_handle_t *handle, uint8_t *stat
     {
         /* READ STATUS ENHANCED command is accepted by all planes in device even when they are busy (RDY = 0).*/
         commandCode  = SEMC_BuildNandIPCommand(kNandDeviceCmd_ONFI_ReadStatusEnhanced,
-                                              kSEMC_NANDAM_RawRA0RA1RA2,        // 3 Byte-RA0/RA1/RA2
-                                              kSEMC_NANDCM_CommandAddressRead); // Commmand Address Read
+                                               kSEMC_NANDAM_RawRA0RA1RA2,        // 3 Byte-RA0/RA1/RA2
+                                               kSEMC_NANDCM_CommandAddressRead); // Commmand Address Read
         slaveAddress = semcHandle->rowAddressToGetSR;
     }
     else

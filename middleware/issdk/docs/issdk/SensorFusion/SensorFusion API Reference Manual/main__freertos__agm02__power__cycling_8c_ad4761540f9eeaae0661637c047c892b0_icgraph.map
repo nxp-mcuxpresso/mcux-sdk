@@ -1,4 +1,0 @@
-<map id="read_task" name="read_task">
-<area shape="rect" id="node2" href="$main__freertos__agm02__power__cycling_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is a FreeRTOS (dual task) implementation of the NXP sensor fusion demo build. " alt="" coords="179,5,230,32"/>
-<area shape="rect" id="node3" href="$main__freertos__agm02__power__cycling_8c.html#a9ca051aa77e17583aa5a85d5de5c199a" title="vApplicationTickHook" alt="" coords="132,56,277,83"/>
-</map>

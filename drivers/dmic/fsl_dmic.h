@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_DMIC_H_
-#define _FSL_DMIC_H_
+#ifndef FSL_DMIC_H_
+#define FSL_DMIC_H_
 
 #include "fsl_common.h"
 
@@ -27,9 +27,9 @@
  * @{
  */
 
-/*! @brief DMIC driver version 2.3.1. */
-#define FSL_DMIC_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
-/*@}*/
+/*! @brief DMIC driver version 2.3.2. */
+#define FSL_DMIC_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+/*! @} */
 
 /*! @brief _dmic_status DMIC transfer status.*/
 enum
@@ -117,9 +117,11 @@ typedef enum _dmic_channel
 {
     kDMIC_Channel0 = 0U, /*!< DMIC channel 0 */
     kDMIC_Channel1 = 1U, /*!< DMIC channel 1 */
-#if defined(FSL_FEATURE_DMIC_CHANNEL_NUM) && (FSL_FEATURE_DMIC_CHANNEL_NUM == 8U)
+#if defined(FSL_FEATURE_DMIC_CHANNEL_NUM) && (FSL_FEATURE_DMIC_CHANNEL_NUM > 2U)
     kDMIC_Channel2 = 2U, /*!< DMIC channel 2 */
     kDMIC_Channel3 = 3U, /*!< DMIC channel 3 */
+#endif
+#if defined(FSL_FEATURE_DMIC_CHANNEL_NUM) && (FSL_FEATURE_DMIC_CHANNEL_NUM > 4U)
     kDMIC_Channel4 = 4U, /*!< DMIC channel 4 */
     kDMIC_Channel5 = 5U, /*!< DMIC channel 5 */
     kDMIC_Channel6 = 6U, /*!< DMIC channel 6 */
@@ -132,9 +134,11 @@ enum
 {
     kDMIC_EnableChannel0 = 1 << 0U, /*!< DMIC channel 0 mask */
     kDMIC_EnableChannel1 = 1 << 1U, /*!< DMIC channel 1 mask */
-#if defined(FSL_FEATURE_DMIC_CHANNEL_NUM) && (FSL_FEATURE_DMIC_CHANNEL_NUM == 8U)
+#if defined(FSL_FEATURE_DMIC_CHANNEL_NUM) && (FSL_FEATURE_DMIC_CHANNEL_NUM > 2U)
     kDMIC_EnableChannel2 = 1 << 2U, /*!< DMIC channel 2 mask */
     kDMIC_EnableChannel3 = 1 << 3U, /*!< DMIC channel 3 mask */
+#endif
+#if defined(FSL_FEATURE_DMIC_CHANNEL_NUM) && (FSL_FEATURE_DMIC_CHANNEL_NUM > 4U)
     kDMIC_EnableChannel4 = 1 << 4U, /*!< DMIC channel 4 mask */
     kDMIC_EnableChannel5 = 1 << 5U, /*!< DMIC channel 5 mask */
     kDMIC_EnableChannel6 = 1 << 6U, /*!< DMIC channel 6 mask */
@@ -626,4 +630,4 @@ void DMIC_HwvadDisableIntCallback(DMIC_Type *base, dmic_hwvad_callback_t vadcb);
 
 /*! @}*/
 
-#endif /* __FSL_DMIC_H */
+#endif /* FSL_DMIC_H_ */

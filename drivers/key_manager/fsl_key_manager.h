@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_KEYMGR_H_
-#define _FSL_KEYMGR_H_
+#ifndef FSL_KEYMGR_H_
+#define FSL_KEYMGR_H_
 
 #include "fsl_common.h"
 
@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Key Manager driver version. Version 2.0.2.
  *
  * Current version: 2.0.2
@@ -37,7 +37,7 @@
  *   - Initial version
  */
 #define FSL_KEYMGR_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
-/*@}*/
+/*! @} */
 
 typedef enum _keymgr_lock
 {
@@ -178,4 +178,4 @@ status_t KEYMGR_GetDefaultConfig(domain_slot_config_t *config);
  *@}
  */
 
-#endif /* _FSL_IEE_H_ */
+#endif /* FSL_IEE_H_ */

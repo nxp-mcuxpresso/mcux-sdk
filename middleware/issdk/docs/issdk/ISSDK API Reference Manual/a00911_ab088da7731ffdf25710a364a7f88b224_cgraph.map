@@ -1,9 +1,0 @@
-<map id="initializeFusionEngine" name="initializeFusionEngine">
-<area shape="rect" id="node2" href="$a00839.html#a8075e82d5c7ce23802841551a953e170" title="ARM_systick_delay_ms" alt="" coords="203,5,366,32"/>
-<area shape="rect" id="node3" href="$a00839.html#a12342d97ebedd191c344ea0d5e1e7646" title="ARM_systick_enable" alt="" coords="212,56,357,83"/>
-<area shape="rect" id="node4" href="$a00911.html#a9af8710b3e87acd2a33e7988b2d75b6c" title="Function to clear FIFO at the end of each fusion computation. " alt="" coords="241,107,328,133"/>
-<area shape="rect" id="node5" href="$a00905.html#ab8572ce21837538a984e62035db4d89e" title="Initialize the accelerometer calibration functions. " alt="" coords="201,157,368,184"/>
-<area shape="rect" id="node6" href="$a00845.html#ad9cb3659204ae7a30109ceaf4d94ecec" title="fInitializeFusion" alt="" coords="229,208,340,235"/>
-<area shape="rect" id="node7" href="$a00854.html#a0671e3b0a0f73cd25a9880f1e14d5cb0" title="fInitializeMagCalibration" alt="" coords="205,259,364,285"/>
-<area shape="rect" id="node8" href="$a00911.html#ae748e1330b5a94783c6d4ea2ad9e4f28" title="initializeSensors" alt="" coords="226,309,343,336"/>
-</map>

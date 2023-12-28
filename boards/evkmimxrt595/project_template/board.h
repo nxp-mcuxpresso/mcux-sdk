@@ -1,7 +1,5 @@
 /*
- * Copyright 2018-2021 NXP
- * All rights reserved.
- *
+ * Copyright 2018-2021, 2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -32,7 +30,7 @@
 #define BOARD_UART_IRQ_HANDLER      FLEXCOMM0_IRQHandler
 #define BOARD_UART_IRQ              FLEXCOMM0_IRQn
 
-#if BOARD_I3C_CODEC
+#if BOARD_I3C_CODEC && (defined(SDK_I3C_BASED_COMPONENT_USED) && SDK_I3C_BASED_COMPONENT_USED)
 #define BOARD_CODEC_I2C_BASEADDR   I3C0
 #define BOARD_CODEC_I2C_INSTANCE   0
 #define BOARD_CODEC_I2C_CLOCK_FREQ CLOCK_GetI3cClkFreq()
@@ -202,6 +200,7 @@
 #define BOARD_MIPI_PANEL_TOUCH_INT_PIN        19
 
 #define BOARD_BT_UART_INSTANCE 0
+#define BOARD_BT_UART_BASEADDR USART0
 #define BOARD_BT_UART_BAUDRATE 3000000
 #define BOARD_BT_UART_CLK_FREQ CLOCK_GetFlexcommClkFreq(0U)
 #define BOARD_BT_UART_FRG_CLK \
@@ -263,7 +262,7 @@ status_t BOARD_Accel_I2C_Receive(
     uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, uint8_t *rxBuff, uint8_t rxBuffSize);
 #endif /* SDK_I2C_BASED_COMPONENT_USED */
 
-#if defined BOARD_USE_CODEC
+#if defined(SDK_I3C_BASED_COMPONENT_USED) && SDK_I3C_BASED_COMPONENT_USED
 void BOARD_I3C_Init(I3C_Type *base, uint32_t clkSrc_Hz);
 status_t BOARD_I3C_Send(I3C_Type *base,
                         uint8_t deviceAddress,
@@ -277,6 +276,9 @@ status_t BOARD_I3C_Receive(I3C_Type *base,
                            uint8_t subaddressSize,
                            uint8_t *rxBuff,
                            uint8_t rxBuffSize);
+#endif /* SDK_I3C_BASED_COMPONENT_USED */
+
+#if defined BOARD_USE_CODEC
 void BOARD_Codec_I2C_Init(void);
 status_t BOARD_Codec_I2C_Send(
     uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, const uint8_t *txBuff, uint8_t txBuffSize);

@@ -197,7 +197,7 @@ typedef struct _pm_wakeup_source
     bool enabled : 1U;                        /*!< Enable/disable wakeup source. */
     bool active : 1U;                         /*!< Indicate whether the corresponding wakeup event occurs. */
 } pm_wakeup_source_t;
-#endif /* FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER */
+#endif                                        /* FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER */
 
 /*!
  * @brief The definition of Power manager resource constraint group, the group contains the operation mode of each
@@ -205,7 +205,7 @@ typedef struct _pm_wakeup_source
  */
 typedef struct _pm_resc_group
 {
-    uint32_t groupSlice[PM_RESC_GROUP_ARRAY_SIZE];  /*!< The resource constraint group. */
+    uint32_t groupSlice[PM_RESC_GROUP_ARRAY_SIZE]; /*!< The resource constraint group. */
 } pm_resc_group_t;
 
 /*!
@@ -215,6 +215,21 @@ typedef struct _pm_resc_mask
 {
     uint32_t rescMask[PM_RESC_MASK_ARRAY_SIZE]; /*!< The resource constraint mask. */
 } pm_resc_mask_t;
+
+/*!
+ * @brief The counter of resource's power mode.
+ * @note The counter is consist of 3 sub-counter.
+ */
+typedef union _pm_resc_opMode_counter
+{
+    uint8_t u8Count;
+    struct _subCounter
+    {
+        uint8_t partOn1Counter : PM_PARTABLE_ON1_COUNTER_SIZE;
+        uint8_t partOn2Counter : PM_PARTABLE_ON2_COUNTER_SIZE;
+        uint8_t fullOnCounter : PM_FULL_ON_COUNTER_SIZE;
+    } subConter;
+} pm_resc_opMode_counter_t;
 
 /*!
  * @brief The abstraction of MCU power state.
@@ -234,10 +249,12 @@ typedef struct _pm_device_option
 {
     pm_state_t states[PM_LP_STATE_COUNT]; /*!< The array of device's power state, states array must be ordered in
                                             decreasing power consumption. */
-    uint8_t stateCount;                    /*!< The counts of device's power state. */
-    void (*prepare)(void);                 /*!< prepare for power state transition */
-    void (*enter)(uint8_t powerState, pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup);   /*!< enter power state */
-    void (*clean)(void);                  /*!< clean after power state transition */
+    uint8_t stateCount;                   /*!< The counts of device's power state. */
+    void (*prepare)(void);                /*!< prepare for power state transition */
+    void (*enter)(uint8_t powerState,
+                  pm_resc_mask_t *pSoftRescMask,
+                  pm_resc_group_t *pSysRescGroup); /*!< enter power state */
+    void (*clean)(void);                           /*!< clean after power state transition */
 
 #if (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER)
     status_t (*manageWakeupSource)(pm_wakeup_source_t *ws, bool enable); /*!< The function used to enable/disable
@@ -270,12 +287,13 @@ typedef struct _pm_handle
     uint8_t targetState;              /*!< The target power state computed by the policy, actually it is the
                                            index in device states array. */
 
-    pm_resc_mask_t resConstraintMask;                /*!< Current system's resource constraint mask. */
-    pm_resc_mask_t softConstraints;                  /*!< Current system's optional resource constraint mask. */
-    uint8_t resConstraintCount[PM_CONSTRAINT_COUNT]; /*!< The count of each resource constraint, if the constraint's
-                                                    count is 0, it means the system has removed that contraint. */
+    pm_resc_mask_t resConstraintMask; /*!< Current system's resource constraint mask. */
+    pm_resc_mask_t softConstraints;   /*!< Current system's optional resource constraint mask. */
+    pm_resc_opMode_counter_t resConstraintCount[PM_CONSTRAINT_COUNT]; /*!< The count of each resource constraint,
+                                                    if the constraint's count is 0, it means the system has
+                                                    removed that contraint. */
 
-    pm_resc_group_t sysRescGroup; /*!< Current system's resource constraint group. */
+    pm_resc_group_t sysRescGroup;                        /*!< Current system's resource constraint group. */
 
     uint8_t powerModeConstraint;                         /*!< Used to store system allowed lowest power mode. */
     uint8_t powerModeConstraintCount[PM_LP_STATE_COUNT]; /*!< The count of each power mode constraint. */
@@ -293,15 +311,16 @@ typedef struct _pm_handle
                                                    low power mode. */
     pm_low_power_timer_get_timestamp_func_t getTimestamp; /*!< This function is used to get a timestamp before and after
                                                                low power mode to be able to compute the duration */
-    pm_low_power_timer_get_duration_func_t getTimerDuration; /*!< This function can be used to retrun the actual
-                                                                  low power duration based on the entry/exit timestamps */
+    pm_low_power_timer_get_duration_func_t
+        getTimerDuration;                                 /*!< This function can be used to retrun the actual
+                                                               low power duration based on the entry/exit timestamps */
     uint64_t entryTimestamp;
     uint64_t exitTimestamp;
-#endif                                                 /* FSL_PM_SUPPORT_LP_TIMER_CONTROLLER */
+#endif /* FSL_PM_SUPPORT_LP_TIMER_CONTROLLER */
 
 #if (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER)
     list_label_t wakeupSourceList;
-#endif /* FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER */
+#endif                               /* FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER */
 
     pm_enter_critical enterCritical; /* Power manager critical entry function, default set as NULL. */
     pm_exit_critical exitCritical;   /* Power manager critical exit function, default set as NULL. */
@@ -430,7 +449,7 @@ void PM_UpdateNotify(void *notifyElement, pm_notify_callback_func_t callback, vo
  */
 status_t PM_UnregisterNotify(void *notifyElement);
 
-/* @} */
+/*! @} */
 #endif /* FSL_PM_SUPPORT_NOTIFICATION */
 
 #if (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER)
@@ -533,7 +552,7 @@ pm_resc_mask_t PM_GetResourceConstraintsMask(void);
  */
 uint8_t PM_GetAllowedLowestPowerMode(void);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }

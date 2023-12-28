@@ -14,10 +14,20 @@
 #define FSL_COMPONENT_ID "platform.drivers.lpc_adc"
 #endif
 
+#if defined(ADC_RSTS)
+#define ADC_RESETS_ARRAY ADC_RSTS
+#elif defined(ADC_RSTS_N)
+#define ADC_RESETS_ARRAY ADC_RSTS_N
+#endif
+
 static ADC_Type *const s_adcBases[] = ADC_BASE_PTRS;
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 static const clock_ip_name_t s_adcClocks[] = ADC_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+#if defined(ADC_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_adcResets[] = ADC_RESETS_ARRAY;
+#endif
 
 #define FREQUENCY_1MHZ (1000000UL)
 
@@ -55,6 +65,10 @@ void ADC_Init(ADC_Type *base, const adc_config_t *config)
     /* Enable clock. */
     CLOCK_EnableClock(s_adcClocks[ADC_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(ADC_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_adcResets[ADC_GetInstance(base)]);
+#endif
 
     /* Disable the interrupts. */
     base->INTEN = 0U; /* Quickly disable all the interrupts. */

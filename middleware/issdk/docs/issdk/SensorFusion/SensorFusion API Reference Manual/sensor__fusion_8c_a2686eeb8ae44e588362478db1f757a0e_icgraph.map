@@ -1,9 +1,0 @@
-<map id="conditionSample" name="conditionSample">
-<area shape="rect" id="node2" href="$drivers_8h.html#a33189bcbbd5761f2b9b5032fd499e0ea" title="FXLS8471Q_Read" alt="" coords="195,5,323,32"/>
-<area shape="rect" id="node3" href="$drivers_8h.html#a905984cc5f2e42228183217f6d071fb8" title="FXOS8700_Init" alt="" coords="400,56,508,83"/>
-<area shape="rect" id="node5" href="$driver__FXOS8700_8c.html#a426c0f9617cbeffebfeaadd6446c3bc2" title="FXOS8700_ReadMagData" alt="" coords="172,107,345,133"/>
-<area shape="rect" id="node7" href="$drivers_8h.html#a814ed032bb557dfa5bd0349d06b92d26" title="MAG3110_Read" alt="" coords="200,157,317,184"/>
-<area shape="rect" id="node4" href="$main__agm01__freertos__two__tasks_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is a FreeRTOS (dual task) implementation of the NXP sensor fusion demo build. " alt="" coords="563,81,613,108"/>
-<area shape="rect" id="node6" href="$drivers_8h.html#a15f78e72d6a7dec25d95d97fa4c8d00e" title="FXOS8700_Read" alt="" coords="393,107,515,133"/>
-<area shape="rect" id="node8" href="$main__freertos__agm02_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is a FreeRTOS (dual task) implementation of the NXP sensor fusion demo build. " alt="" coords="429,157,479,184"/>
-</map>

@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_LLWU_H_
-#define _FSL_LLWU_H_
+#ifndef FSL_LLWU_H_
+#define FSL_LLWU_H_
 
 #include "fsl_common.h"
 
@@ -18,10 +18,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LLWU driver version. */
 #define FSL_LLWU_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
-/*@}*/
+/*! @} */
 
 #if (defined(FSL_FEATURE_LLWU_REG_BITWIDTH) && (FSL_FEATURE_LLWU_REG_BITWIDTH == 32))
 #define LLWU_REG_VAL(x) ((uint32_t)(x))
@@ -316,11 +316,11 @@ void LLWU_ClearPinFilterFlag(LLWU_Type *base, uint32_t filterIndex);
 void LLWU_SetResetPinMode(LLWU_Type *base, bool pinEnable, bool pinFilterEnable);
 #endif /* FSL_FEATURE_LLWU_HAS_RESET_ENABLE */
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
 /*! @}*/
-#endif /* _FSL_LLWU_H_*/
+#endif /* FSL_LLWU_H_*/

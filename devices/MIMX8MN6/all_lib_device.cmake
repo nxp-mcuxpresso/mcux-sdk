@@ -1,11 +1,11 @@
 # Copy variable into project config.cmake to use software component
-#set.board.evkmimx8mnddr3l
-#  # description: Board_project_template evkmimx8mnddr3l
-#  set(CONFIG_USE_BOARD_Project_Template_evkmimx8mnddr3l true)
-
 #set.board.evkmimx8mn
 #  # description: Board_project_template evkmimx8mn
 #  set(CONFIG_USE_BOARD_Project_Template_evkmimx8mn true)
+
+#set.board.evkmimx8mnddr3l
+#  # description: Board_project_template evkmimx8mnddr3l
+#  set(CONFIG_USE_BOARD_Project_Template_evkmimx8mnddr3l true)
 
 #set.device.MIMX8MN6
 #  # description: Middleware baremetal
@@ -287,6 +287,9 @@
 
 #  # description: RPMsg-Lite XOS environment layer sources
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_xos true)
+
+#  # description: RPMsg-Lite Azure RTOS environment sources
+#  set(CONFIG_USE_middleware_multicore_rpmsg_lite_azurertos true)
 
 #  # description: RPMsg-Lite for evkmimx8mn baremetal application
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_imx8mn_m7_bm true)

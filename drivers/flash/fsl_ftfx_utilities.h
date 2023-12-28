@@ -34,7 +34,7 @@
 #endif
 
 //! @name Alignment macros
-//@{
+//! @{
 /*! @brief Alignment(down) utility. */
 #if !defined(ALIGN_DOWN)
 #define ALIGN_DOWN(x, a) (((uint32_t)(x)) & ~((uint32_t)(a)-1u))
@@ -44,7 +44,7 @@
 #if !defined(ALIGN_UP)
 #define ALIGN_UP(x, a) ALIGN_DOWN((uint32_t)(x) + (uint32_t)(a)-1u, a)
 #endif
-//@}
+//! @}
 
 /*! @brief bytes2word utility. */
 #define B1P4(b) (((uint32_t)(b)&0xFFU) << 24U)

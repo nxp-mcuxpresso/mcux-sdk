@@ -1011,14 +1011,14 @@ static inline void IOMUXC_SetPinMux(uint32_t muxRegister,
                                     uint32_t configRegister,
                                     uint32_t inputInv)
 {
-    if (muxRegister)
+    if (muxRegister != 0U)
     {
         *((volatile uint32_t *)muxRegister) =
             (*((volatile uint32_t *)muxRegister) & ~IOMUXC0_SW_MUX_CTL_PAD_MUX_MODE_MASK) |
             IOMUXC0_SW_MUX_CTL_PAD_MUX_MODE(muxMode);
     }
 
-    if (inputRegister)
+    if (inputRegister != 0U)
     {
         *((volatile uint32_t *)inputRegister) =
             IOMUXC0_SELECT_INPUT_DAISY(inputDaisy) | IOMUXC0_SELECT_INPUT_INVERSION(inputInv);
@@ -1050,9 +1050,9 @@ static inline void IOMUXC_SetPinConfig(uint32_t muxRegister,
                                        uint32_t configRegister,
                                        uint32_t configValue)
 {
-    if (muxRegister)
+    if (muxRegister != 0U)
     {
-        if (configRegister)
+        if (configRegister != 0U)
         {
             *((volatile uint32_t *)configRegister) =
                 (*((volatile uint32_t *)configRegister) & IOMUXC0_SW_MUX_CTL_PAD_MUX_MODE_MASK) | configValue;
@@ -1060,7 +1060,7 @@ static inline void IOMUXC_SetPinConfig(uint32_t muxRegister,
     }
     else
     {
-        if (configRegister)
+        if (configRegister != 0U)
         {
             *((volatile uint32_t *)configRegister) = configValue;
         }

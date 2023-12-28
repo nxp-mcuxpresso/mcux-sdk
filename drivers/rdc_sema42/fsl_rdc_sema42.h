@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_RDC_SEMA42_H_
-#define _FSL_RDC_SEMA42_H_
+#ifndef FSL_RDC_SEMA42_H_
+#define FSL_RDC_SEMA42_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief RDC_SEMA42 driver version */
 #define FSL_RDC_SEMA42_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
-/*@}*/
+/*! @} */
 
 /*! @brief The number to reset all RDC_SEMA42 gates. */
 #define RDC_SEMA42_GATE_NUM_RESET_ALL (64U)
@@ -191,4 +191,4 @@ static inline status_t RDC_SEMA42_ResetAllGates(RDC_SEMAPHORE_Type *base)
  * @}
  */
 
-#endif /* _FSL_RDC_SEMA42_H_ */
+#endif /* FSL_RDC_SEMA42_H_ */

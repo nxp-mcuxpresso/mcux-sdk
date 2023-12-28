@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef __FSL_DAC_H__
-#define __FSL_DAC_H__
+#ifndef FSL_DAC_H__
+#define FSL_DAC_H__
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief DAC driver version 2.0.2. */
 #define LPC_DAC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief The DAC settling time.
@@ -179,6 +179,6 @@ static inline bool DAC_GetDMAInterruptRequestFlag(DAC_Type *base)
 }
 #endif
 
-/* @} */
+/*! @} */
 
-#endif /* __FSL_DAC_H__ */
+#endif /* FSL_DAC_H__ */

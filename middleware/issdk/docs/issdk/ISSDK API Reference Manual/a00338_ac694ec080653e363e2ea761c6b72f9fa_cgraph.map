@@ -1,4 +1,0 @@
-<map id="apply_register_read" name="apply_register_read">
-<area shape="rect" id="node2" href="$a00056.html#a14a2159c85255ee4d333dd103740e87d" title="The interface function to read the sensor data. " alt="" coords="188,5,359,32"/>
-<area shape="rect" id="node3" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="407,31,468,57"/>
-</map>

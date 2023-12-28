@@ -218,11 +218,11 @@ status_t AK4497_ConfigDataFormat(ak4497_handle_t *handle, uint32_t mclk, uint32_
         }
 
         ret = AK4497_ModifyReg(handle, AK4497_DSD1, AK4497_DSD1_DSDSEL0_MASK,
-                               ((uint8_t)dsdsel & 0x1U) << AK4497_DSD1_DSDSEL0_SHIFT); /* Set DSDSEL0 */
+                               ((uint8_t)dsdsel & 0x1U) << AK4497_DSD1_DSDSEL0_SHIFT);         /* Set DSDSEL0 */
         ret = AK4497_ModifyReg(handle, AK4497_DSD2, AK4497_DSD2_DSDSEL1_MASK,
                                (((uint8_t)dsdsel & 0x2U) >> 1U) << AK4497_DSD2_DSDSEL1_SHIFT); /* Set DSDSEL1 */
     }
-    else /* PCM mode */
+    else                                                                                       /* PCM mode */
     {
         switch (sampleRate)
         {
@@ -282,7 +282,7 @@ status_t AK4497_ConfigDataFormat(ak4497_handle_t *handle, uint32_t mclk, uint32_
         }
 
         ret = AK4497_ModifyReg(handle, AK4497_CONTROL2, AK4497_CONTROL2_DFS0_MASK | AK4497_CONTROL2_DFS1_MASK,
-                               ((uint8_t)samplefreq & 0x3U) << AK4497_CONTROL2_DFS0_SHIFT); /* Set DFS[1:0] */
+                               ((uint8_t)samplefreq & 0x3U) << AK4497_CONTROL2_DFS0_SHIFT);         /* Set DFS[1:0] */
         ret = AK4497_ModifyReg(handle, AK4497_CONTROL4, AK4497_CONTROL4_DFS2_MASK | AK4497_CONTROL4_DFS2_MASK,
                                (((uint8_t)samplefreq & 0x4U) >> 2U) << AK4497_CONTROL4_DFS2_SHIFT); /* Set DFS[2] */
         ret = AK4497_ModifyReg(handle, AK4497_CONTROL1,

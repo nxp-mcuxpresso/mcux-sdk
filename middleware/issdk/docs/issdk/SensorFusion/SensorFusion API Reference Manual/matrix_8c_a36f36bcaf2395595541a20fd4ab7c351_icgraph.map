@@ -1,7 +1,0 @@
-<map id="f3x3matrixAeqAxScalar" name="f3x3matrixAeqAxScalar">
-<area shape="rect" id="node2" href="$magnetic_8c.html#a0c8d40902766e8a8d295d97948552cd7" title="fComputeMagCalibration10" alt="" coords="221,5,398,32"/>
-<area shape="rect" id="node3" href="$magnetic_8c.html#a5f40de5d6a5452756e4408a6eefbb9dc" title="fComputeMagCalibration7" alt="" coords="224,56,395,83"/>
-<area shape="rect" id="node4" href="$magnetic_8h.html#a51818fe46836eeda49b9da097725b49a" title="fUpdateMagCalibration10Slice" alt="" coords="212,107,407,133"/>
-<area shape="rect" id="node5" href="$magnetic_8h.html#a0cce4289e5bceba2b1a6cd59641f9fda" title="fRunMagCalibration" alt="" coords="455,107,589,133"/>
-<area shape="rect" id="node6" href="$sensor__fusion_8c.html#aaf8b47198fa614f0b50265addf44a8b0" title="processMagData" alt="" coords="637,107,757,133"/>
-</map>

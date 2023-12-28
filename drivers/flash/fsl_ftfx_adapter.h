@@ -80,7 +80,7 @@
 #else
 #error "Unknown flash controller"
 #endif
-/*@}*/
+/*! @} */
 
 /*!
  * @name Common flash register access info defines
@@ -148,7 +148,7 @@
 #else
 #define FTFx_FLASH0_HAS_INT_XACC_REG (0)
 #endif
-/*@}*/
+/*! @} */
 
 /*!
  * @brief MCM cache register access info defines.
@@ -391,6 +391,6 @@
 #define MAX_FLASH_PROT_REGION_COUNT FLASH1_FEATURE_PFLASH_PROTECTION_REGION_COUNT
 #endif
 
-/*@}*/
+/*! @} */
 
 #endif /* FSL_FTFX_ADAPTER_H */

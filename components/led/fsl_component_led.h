@@ -111,8 +111,8 @@ typedef enum _led_flash_type
 {
     kLED_FlashOneColor = 0x00U, /*!< Fast with one color */
 #if (defined(LED_COLOR_WHEEL_ENABLEMENT) && (LED_COLOR_WHEEL_ENABLEMENT > 0U))
-    kLED_FlashColorWheel, /*!< Fast with color wheel */
-#endif                    /* (defined(LED_COLOR_WHEEL_ENABLEMENT) && (LED_COLOR_WHEEL_ENABLEMENT > 0U)) */
+    kLED_FlashColorWheel,       /*!< Fast with color wheel */
+#endif                          /* (defined(LED_COLOR_WHEEL_ENABLEMENT) && (LED_COLOR_WHEEL_ENABLEMENT > 0U)) */
 } led_flash_type_t;
 
 /*! @brief The color struct of LED */

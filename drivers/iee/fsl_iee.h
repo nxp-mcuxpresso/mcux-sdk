@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_IEE_H_
-#define _FSL_IEE_H_
+#ifndef FSL_IEE_H_
+#define FSL_IEE_H_
 
 #include "fsl_common.h"
 
@@ -21,7 +21,7 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief IEE driver version. Version 2.1.1.
  *
  * Current version: 2.1.1
@@ -35,7 +35,7 @@
  *   - Fixed MISRA issues.
  */
 #define FSL_IEE_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief IEE region. */
 typedef enum _iee_region
@@ -178,4 +178,4 @@ void IEE_LockRegionConfig(IEE_Type *base, iee_region_t region);
  *@}
  */
 
-#endif /* _FSL_IEE_H_ */
+#endif /* FSL_IEE_H_ */

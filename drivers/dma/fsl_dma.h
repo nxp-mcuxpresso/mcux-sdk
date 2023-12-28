@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_DMA_H_
-#define _FSL_DMA_H_
+#ifndef FSL_DMA_H_
+#define FSL_DMA_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief DMA driver version 2.1.2. */
 #define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
-/*@}*/
+/*! @} */
 
 /*! @brief _dma_channel_status_flags status flag for the DMA driver. */
 enum
@@ -169,7 +169,7 @@ void DMA_Init(DMA_Type *base);
  */
 void DMA_Deinit(DMA_Type *base);
 
-/* @} */
+/*! @} */
 /*!
  * @name DMA Channel Operation
  * @{
@@ -362,7 +362,7 @@ static inline void DMA_DisableInterrupts(DMA_Type *base, uint32_t channel)
     base->DMA[channel].DCR &= ~DMA_DCR_EINT_MASK;
 }
 
-/* @} */
+/*! @} */
 /*!
  * @name DMA Channel Transfer Operation
  * @{
@@ -430,7 +430,7 @@ static inline void DMA_EnableAutoStopRequest(DMA_Type *base, uint32_t channel, b
     }
 }
 
-/* @} */
+/*! @} */
 /*!
  * @name DMA Channel Status Operation
  * @{
@@ -483,7 +483,7 @@ static inline void DMA_ClearChannelStatusFlags(DMA_Type *base, uint32_t channel,
     }
 }
 
-/* @} */
+/*! @} */
 /*!
  * @name DMA Channel Transactional Operation
  * @{
@@ -628,12 +628,12 @@ void DMA_AbortTransfer(dma_handle_t *handle);
  */
 void DMA_HandleIRQ(dma_handle_t *handle);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */
 
-/* @}*/
+/*! @} */
 
-#endif /* _FSL_DMA_H_ */
+#endif /* FSL_DMA_H_ */

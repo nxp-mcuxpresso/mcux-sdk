@@ -1,7 +1,0 @@
-<map id="processMagData" name="processMagData">
-<area shape="rect" id="node2" href="$a00851.html#a9ef1a7ef89f75f9436eb6a121a1a1a66" title="Apply the gyroscope Hardware Abstraction Layer. " alt="" coords="187,5,295,32"/>
-<area shape="rect" id="node3" href="$a00851.html#a706bba14747c3d73c6f2bb2e95b7d558" title="Apply the magnetometer Hardware Abstraction Layer. " alt="" coords="188,56,293,83"/>
-<area shape="rect" id="node4" href="$a00854.html#abacd9fe3cfe05856161328f5287d85b3" title="fInvertMagCal" alt="" coords="191,107,290,133"/>
-<area shape="rect" id="node5" href="$a00854.html#a743805eb2d7ae760f4f8b400c54433f1" title="fRunMagCalibration" alt="" coords="173,157,308,184"/>
-<area shape="rect" id="node6" href="$a00854.html#aac82602dcfcd55bfc84365b49fefedf0" title="iUpdateMagBuffer" alt="" coords="179,208,303,235"/>
-</map>

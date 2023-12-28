@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_LPUART_H_
-#define _FSL_LPUART_H_
+#ifndef FSL_LPUART_H_
+#define FSL_LPUART_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LPUART driver version. */
-#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 7, 3))
-/*@}*/
+#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 7, 6))
+/*! @} */
 
 /*! @brief Retry times for waiting flag. */
 #ifndef UART_RETRY_TIMES
@@ -357,7 +357,7 @@ static inline void LPUART_SoftwareReset(LPUART_Type *base)
     base->GLOBAL |= LPUART_GLOBAL_RST_MASK;
     base->GLOBAL &= ~LPUART_GLOBAL_RST_MASK;
 }
-/* @} */
+/*! @} */
 #endif /*FSL_FEATURE_LPUART_HAS_GLOBAL*/
 
 /*!
@@ -420,7 +420,7 @@ void LPUART_Deinit(LPUART_Type *base);
  * @param config Pointer to a configuration structure.
  */
 void LPUART_GetDefaultConfig(lpuart_config_t *config);
-/* @} */
+/*! @} */
 
 /*!
  * @name Module configuration
@@ -531,7 +531,7 @@ static inline void LPUART_SetTxFifoWatermark(LPUART_Type *base, uint8_t water)
     base->WATER = (base->WATER & ~LPUART_WATER_TXWATER_MASK) | LPUART_WATER_TXWATER(water);
 }
 #endif
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -577,7 +577,7 @@ uint32_t LPUART_GetStatusFlags(LPUART_Type *base);
  * @retval kStatus_Success Status in the mask are cleared.
  */
 status_t LPUART_ClearStatusFlags(LPUART_Type *base, uint32_t mask);
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -635,7 +635,7 @@ void LPUART_DisableInterrupts(LPUART_Type *base, uint32_t mask);
  * @return LPUART interrupt flags which are logical OR of the enumerators in @ref _lpuart_interrupt_enable.
  */
 uint32_t LPUART_GetEnabledInterrupts(LPUART_Type *base);
-/* @} */
+/*! @} */
 
 #if defined(FSL_FEATURE_LPUART_HAS_DMA_ENABLE) && FSL_FEATURE_LPUART_HAS_DMA_ENABLE
 /*!
@@ -694,7 +694,7 @@ static inline void LPUART_EnableRxDMA(LPUART_Type *base, bool enable)
         base->BAUD &= ~LPUART_BAUD_RDMAE_MASK;
     }
 }
-/* @} */
+/*! @} */
 #endif /* FSL_FEATURE_LPUART_HAS_DMA_ENABLE */
 
 /*!
@@ -866,7 +866,7 @@ status_t LPUART_WriteBlocking(LPUART_Type *base, const uint8_t *data, size_t len
  */
 status_t LPUART_ReadBlocking(LPUART_Type *base, uint8_t *data, size_t length);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Transactional
@@ -1058,7 +1058,7 @@ void LPUART_TransferHandleIRQ(LPUART_Type *base, void *irqHandle);
  */
 void LPUART_TransferHandleErrorIRQ(LPUART_Type *base, void *irqHandle);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -1066,4 +1066,4 @@ void LPUART_TransferHandleErrorIRQ(LPUART_Type *base, void *irqHandle);
 
 /*! @}*/
 
-#endif /* _FSL_LPUART_H_ */
+#endif /* FSL_LPUART_H_ */

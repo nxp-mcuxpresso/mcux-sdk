@@ -463,3 +463,52 @@ status_t Nor_Flash_Is_Busy(nor_handle_t *handle, bool *isBusy)
 
     return status;
 }
+
+status_t Nor_Flash_Enter_Lowpower(nor_handle_t *handle)
+{
+    status_t status = kStatus_Fail;
+    bool busy;
+
+    assert(handle);
+
+    do
+    {
+        /* Make sure the flash is not busy */
+        (void)Nor_Flash_Is_Busy(handle, &busy);
+    } while (busy == true);
+
+    status = Nor_Flash_DeInit(handle);
+
+    return status;
+}
+
+status_t Nor_Flash_Exit_Lowpower(nor_handle_t *handle)
+{
+    assert(handle);
+
+    uint32_t baudRate   = BOARD_GetNorFlashBaudrate();
+    status_t initStatus = kStatus_Fail;
+
+    handle->bytesInSectorSize = 256U;
+    handle->bytesInPageSize   = 256U;
+    handle->driverBaseAddr    = BOARD_GetLpspiForNorFlash();
+
+    do
+    {
+        uint32_t spiClock_Hz = BOARD_GetLpspiClock();
+
+        spi_master_config_t spiMasterCfg;
+        spiMasterCfg.baudRate  = baudRate;
+        spiMasterCfg.clockFreq = spiClock_Hz;
+        spiMasterCfg.whichPcs  = 0;
+        status_t status        = LPSPI_MemInit(&spiMasterCfg, handle->driverBaseAddr);
+        if (status != kStatus_Success)
+        {
+            break;
+        }
+
+        initStatus = kStatus_Success;
+    } while (false);
+
+    return initStatus;
+}

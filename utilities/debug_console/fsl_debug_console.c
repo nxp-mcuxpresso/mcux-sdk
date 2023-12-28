@@ -328,7 +328,7 @@ static status_t DbgConsole_SerialManagerPerformTransfer(debug_console_state_stru
 
 static void DbgConsole_SerialManagerTxCallback(void *callbackParam,
                                                serial_manager_callback_message_t *message,
-                                               serial_manager_status_t status)
+                                               serial_manager_status_t serialManagerStatus)
 {
     debug_console_state_struct_t *ioState;
 
@@ -345,11 +345,11 @@ static void DbgConsole_SerialManagerTxCallback(void *callbackParam,
         ioState->writeRingBuffer.ringTail = 0U;
     }
 
-    if (kStatus_SerialManager_Success == status)
+    if (kStatus_SerialManager_Success == serialManagerStatus)
     {
         (void)DbgConsole_SerialManagerPerformTransfer(ioState);
     }
-    else if (kStatus_SerialManager_Canceled == status)
+    else if (kStatus_SerialManager_Canceled == serialManagerStatus)
     {
         ioState->writeRingBuffer.ringTail = 0U;
         ioState->writeRingBuffer.ringHead = 0U;
@@ -362,7 +362,7 @@ static void DbgConsole_SerialManagerTxCallback(void *callbackParam,
 
 static void DbgConsole_SerialManagerTx2Callback(void *callbackParam,
                                                 serial_manager_callback_message_t *message,
-                                                serial_manager_status_t status)
+                                                serial_manager_status_t serialManagerStatus)
 {
     debug_console_state_struct_t *ioState;
 
@@ -379,11 +379,11 @@ static void DbgConsole_SerialManagerTx2Callback(void *callbackParam,
         ioState->writeRingBuffer.ringTail = 0U;
     }
 
-    if (kStatus_SerialManager_Success == status)
+    if (kStatus_SerialManager_Success == serialManagerStatus)
     {
         /* Empty block*/
     }
-    else if (kStatus_SerialManager_Canceled == status)
+    else if (kStatus_SerialManager_Canceled == serialManagerStatus)
     {
         /* Empty block*/
     }
@@ -397,17 +397,17 @@ static void DbgConsole_SerialManagerTx2Callback(void *callbackParam,
 
 static void DbgConsole_SerialManagerRxCallback(void *callbackParam,
                                                serial_manager_callback_message_t *message,
-                                               serial_manager_status_t status)
+                                               serial_manager_status_t serialManagerStatus)
 {
     if ((NULL == callbackParam) || (NULL == message))
     {
         return;
     }
 
-    if (kStatus_SerialManager_Notify == status)
+    if (kStatus_SerialManager_Notify == serialManagerStatus)
     {
     }
-    else if (kStatus_SerialManager_Success == status)
+    else if (kStatus_SerialManager_Success == serialManagerStatus)
     {
         /* release s_debugConsoleReadWaitSemaphore from RX callback */
         DEBUG_CONSOLE_GIVE_BINARY_SEMAPHORE_FROM_ISR(s_debugConsoleReadWaitSemaphore);
@@ -430,26 +430,26 @@ status_t DbgConsole_ReadOneCharacter(uint8_t *ch)
     return (status_t)kStatus_Fail;
 #else /*defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING) && (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == \
          DEBUG_CONSOLE_SYNCHRONIZATION_BM) && defined(OSA_USED)*/
-    serial_manager_status_t status = kStatus_SerialManager_Error;
+    serial_manager_status_t serialManagerStatus = kStatus_SerialManager_Error;
 
 /* recieve one char every time */
 #if defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING)
-    status =
+    serialManagerStatus =
         SerialManager_ReadNonBlocking(((serial_read_handle_t)&s_debugConsoleState.serialReadHandleBuffer[0]), ch, 1);
 #else  /*defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING)*/
-    status = SerialManager_ReadBlocking(((serial_read_handle_t)&s_debugConsoleState.serialReadHandleBuffer[0]), ch, 1);
+    serialManagerStatus = SerialManager_ReadBlocking(((serial_read_handle_t)&s_debugConsoleState.serialReadHandleBuffer[0]), ch, 1);
 #endif /*defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING)*/
-    if (kStatus_SerialManager_Success != status)
+    if (kStatus_SerialManager_Success != serialManagerStatus)
     {
-        status = (serial_manager_status_t)kStatus_Fail;
+        serialManagerStatus = (serial_manager_status_t)kStatus_Fail;
     }
     else
     {
         /* wait s_debugConsoleReadWaitSemaphore from RX callback */
         DEBUG_CONSOLE_TAKE_BINARY_SEMAPHORE_BLOCKING(s_debugConsoleReadWaitSemaphore);
-        status = (serial_manager_status_t)kStatus_Success;
+        serialManagerStatus = (serial_manager_status_t)kStatus_Success;
     }
-    return (status_t)status;
+    return (status_t)serialManagerStatus;
 #endif /*defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING) && (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == \
           DEBUG_CONSOLE_SYNCHRONIZATION_BM) && defined(OSA_USED)*/
 
@@ -494,7 +494,7 @@ static status_t DbgConsole_EchoCharacter(uint8_t *ch, bool isGetChar, int *index
 
 int DbgConsole_SendData(uint8_t *ch, size_t size)
 {
-    status_t status;
+    status_t dbgConsoleStatus;
 #if defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING)
     uint32_t sendDataLength;
     int txBusy = 0;
@@ -531,31 +531,31 @@ int DbgConsole_SendData(uint8_t *ch, size_t size)
         }
     }
 
-    status = (status_t)kStatus_SerialManager_Success;
+    dbgConsoleStatus = (status_t)kStatus_SerialManager_Success;
 
     if (txBusy == 0)
     {
-        status = DbgConsole_SerialManagerPerformTransfer(&s_debugConsoleState);
+        dbgConsoleStatus = DbgConsole_SerialManagerPerformTransfer(&s_debugConsoleState);
     }
     EnableGlobalIRQ(regPrimask);
 #else
-    status = (status_t)SerialManager_WriteBlocking(
+    dbgConsoleStatus = (status_t)SerialManager_WriteBlocking(
         ((serial_write_handle_t)&s_debugConsoleState.serialWriteHandleBuffer[0]), ch, size);
 #endif
-    return (((status_t)kStatus_Success == status) ? (int)size : -1);
+    return (((status_t)kStatus_Success == dbgConsoleStatus) ? (int)size : -1);
 }
 
 int DbgConsole_SendDataReliable(uint8_t *ch, size_t size)
 {
 #if defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING)
 #if (defined(DEBUG_CONSOLE_TX_RELIABLE_ENABLE) && (DEBUG_CONSOLE_TX_RELIABLE_ENABLE > 0U))
-    serial_manager_status_t status = kStatus_SerialManager_Error;
+    serial_manager_status_t serialManagerStatus = kStatus_SerialManager_Error;
     uint32_t sendDataLength;
     uint32_t totalLength = size;
     int sentLength;
 #endif /* DEBUG_CONSOLE_TX_RELIABLE_ENABLE */
 #else  /* DEBUG_CONSOLE_TRANSFER_NON_BLOCKING */
-    serial_manager_status_t status;
+    serial_manager_status_t serialManagerStatus;
 #endif /* DEBUG_CONSOLE_TRANSFER_NON_BLOCKING */
 
     assert(NULL != ch);
@@ -607,8 +607,8 @@ int DbgConsole_SendDataReliable(uint8_t *ch, size_t size)
 
         if (totalLength != 0U)
         {
-            status = (serial_manager_status_t)DbgConsole_Flush();
-            if (kStatus_SerialManager_Success != status)
+            serialManagerStatus = (serial_manager_status_t)DbgConsole_Flush();
+            if (kStatus_SerialManager_Success != serialManagerStatus)
             {
                 break;
             }
@@ -620,9 +620,9 @@ int DbgConsole_SendDataReliable(uint8_t *ch, size_t size)
 #endif /* DEBUG_CONSOLE_TX_RELIABLE_ENABLE */
 
 #else  /* DEBUG_CONSOLE_TRANSFER_NON_BLOCKING */
-    status =
+    serialManagerStatus =
         SerialManager_WriteBlocking(((serial_write_handle_t)&s_debugConsoleState.serialWriteHandleBuffer[0]), ch, size);
-    return ((kStatus_SerialManager_Success == status) ? (int)size : -1);
+    return ((kStatus_SerialManager_Success == serialManagerStatus) ? (int)size : -1);
 #endif /* DEBUG_CONSOLE_TRANSFER_NON_BLOCKING */
 }
 
@@ -772,7 +772,7 @@ static const serial_port_uart_config_t uartConfig = {.instance     = BOARD_DEBUG
 status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t device, uint32_t clkSrcFreq)
 {
     serial_manager_config_t serialConfig = {0};
-    serial_manager_status_t status       = kStatus_SerialManager_Success;
+    serial_manager_status_t serialManagerStatus       = kStatus_SerialManager_Success;
 
 #if (defined(SERIAL_USE_CONFIGURE_STRUCTURE) && (SERIAL_USE_CONFIGURE_STRUCTURE == 0U))
 #if (defined(SERIAL_PORT_TYPE_UART) && (SERIAL_PORT_TYPE_UART > 0U))
@@ -833,7 +833,7 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
         serialConfig.portConfig = &uartConfig;
 #endif
 #else
-        status = kStatus_SerialManager_Error;
+        serialManagerStatus = kStatus_SerialManager_Error;
 #endif
     }
     else if (kSerialPort_UsbCdc == device)
@@ -841,7 +841,7 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
 #if (defined(SERIAL_PORT_TYPE_USBCDC) && (SERIAL_PORT_TYPE_USBCDC > 0U))
         serialConfig.portConfig = &usbCdcConfig;
 #else
-        status = kStatus_SerialManager_Error;
+        serialManagerStatus = kStatus_SerialManager_Error;
 #endif
     }
     else if (kSerialPort_Swo == device)
@@ -849,7 +849,7 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
 #if (defined(SERIAL_PORT_TYPE_SWO) && (SERIAL_PORT_TYPE_SWO > 0U))
         serialConfig.portConfig = &swoConfig;
 #else
-        status = kStatus_SerialManager_Error;
+        serialManagerStatus = kStatus_SerialManager_Error;
 #endif
     }
     else if (kSerialPort_Virtual == device)
@@ -857,7 +857,7 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
 #if (defined(SERIAL_PORT_TYPE_VIRTUAL) && (SERIAL_PORT_TYPE_VIRTUAL > 0U))
         serialConfig.portConfig = &serialPortVirtualConfig;
 #else
-        status = kStatus_SerialManager_Error;
+        serialManagerStatus = kStatus_SerialManager_Error;
 #endif
     }
     else if (kSerialPort_BleWu == device)
@@ -865,15 +865,15 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
 #if (defined(SERIAL_PORT_TYPE_BLE_WU) && (SERIAL_PORT_TYPE_BLE_WU > 0U))
         serialConfig.portConfig = NULL;
 #else
-        status = kStatus_SerialManager_Error;
+        serialManagerStatus = kStatus_SerialManager_Error;
 #endif
     }
     else
     {
-        status = kStatus_SerialManager_Error;
+        serialManagerStatus = kStatus_SerialManager_Error;
     }
 
-    if (kStatus_SerialManager_Error != status)
+    if (kStatus_SerialManager_Error != serialManagerStatus)
     {
         (void)memset(&s_debugConsoleState, 0, sizeof(s_debugConsoleState));
 
@@ -882,9 +882,9 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
 #endif
 
         s_debugConsoleState.serialHandle = (serial_handle_t)&s_debugConsoleState.serialHandleBuffer[0];
-        status                           = SerialManager_Init(s_debugConsoleState.serialHandle, &serialConfig);
+        serialManagerStatus                           = SerialManager_Init(s_debugConsoleState.serialHandle, &serialConfig);
 
-        assert(kStatus_SerialManager_Success == status);
+        assert(kStatus_SerialManager_Success == serialManagerStatus);
 
 #if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
 #if configSUPPORT_STATIC_ALLOCATION
@@ -902,18 +902,18 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
 #endif
 
         {
-            status =
+            serialManagerStatus =
                 SerialManager_OpenWriteHandle(s_debugConsoleState.serialHandle,
                                               ((serial_write_handle_t)&s_debugConsoleState.serialWriteHandleBuffer[0]));
-            assert(kStatus_SerialManager_Success == status);
+            assert(kStatus_SerialManager_Success == serialManagerStatus);
 #if defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING)
             (void)SerialManager_InstallTxCallback(
                 ((serial_write_handle_t)&s_debugConsoleState.serialWriteHandleBuffer[0]),
                 DbgConsole_SerialManagerTxCallback, &s_debugConsoleState);
-            status = SerialManager_OpenWriteHandle(
+            serialManagerStatus = SerialManager_OpenWriteHandle(
                 s_debugConsoleState.serialHandle,
                 ((serial_write_handle_t)&s_debugConsoleState.serialWriteHandleBuffer2[0]));
-            assert(kStatus_SerialManager_Success == status);
+            assert(kStatus_SerialManager_Success == serialManagerStatus);
             (void)SerialManager_InstallTxCallback(
                 ((serial_write_handle_t)&s_debugConsoleState.serialWriteHandleBuffer2[0]),
                 DbgConsole_SerialManagerTx2Callback, &s_debugConsoleState);
@@ -922,10 +922,10 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
 
 #if (defined(DEBUG_CONSOLE_RX_ENABLE) && (DEBUG_CONSOLE_RX_ENABLE > 0U))
         {
-            status =
+            serialManagerStatus =
                 SerialManager_OpenReadHandle(s_debugConsoleState.serialHandle,
                                              ((serial_read_handle_t)&s_debugConsoleState.serialReadHandleBuffer[0]));
-            assert(kStatus_SerialManager_Success == status);
+            assert(kStatus_SerialManager_Success == serialManagerStatus);
 #if defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING)
             (void)SerialManager_InstallRxCallback(
                 ((serial_read_handle_t)&s_debugConsoleState.serialReadHandleBuffer[0]),
@@ -936,30 +936,30 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
 
         g_serialHandle = s_debugConsoleState.serialHandle;
     }
-    return (status_t)status;
+    return (status_t)serialManagerStatus;
 }
 
 /* See fsl_debug_console.h for documentation of this function. */
 status_t DbgConsole_EnterLowpower(void)
 {
-    serial_manager_status_t status = kStatus_SerialManager_Error;
+    serial_manager_status_t serialManagerStatus = kStatus_SerialManager_Error;
     if (s_debugConsoleState.serialHandle != NULL)
     {
-        status = SerialManager_EnterLowpower(s_debugConsoleState.serialHandle);
+        serialManagerStatus = SerialManager_EnterLowpower(s_debugConsoleState.serialHandle);
     }
-    return (status_t)status;
+    return (status_t)serialManagerStatus;
 }
 
 /* See fsl_debug_console.h for documentation of this function. */
 status_t DbgConsole_ExitLowpower(void)
 {
-    serial_manager_status_t status = kStatus_SerialManager_Error;
+    serial_manager_status_t serialManagerStatus = kStatus_SerialManager_Error;
 
     if (s_debugConsoleState.serialHandle != NULL)
     {
-        status = SerialManager_ExitLowpower(s_debugConsoleState.serialHandle);
+        serialManagerStatus = SerialManager_ExitLowpower(s_debugConsoleState.serialHandle);
     }
-    return (status_t)status;
+    return (status_t)serialManagerStatus;
 }
 /* See fsl_debug_console.h for documentation of this function. */
 status_t DbgConsole_Deinit(void)
@@ -1002,8 +1002,8 @@ status_t DbgConsole_Deinit(void)
 }
 #endif /* ((SDK_DEBUGCONSOLE == DEBUGCONSOLE_REDIRECT_TO_SDK) || defined(SDK_DEBUGCONSOLE_UART)) */
 
-#if (((defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE > DEBUGCONSOLE_REDIRECT_TO_TOOLCHAIN))) || \
-     ((SDK_DEBUGCONSOLE == 0U) && defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING) &&                \
+#if (((defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE == DEBUGCONSOLE_REDIRECT_TO_SDK))) || \
+     ((SDK_DEBUGCONSOLE != DEBUGCONSOLE_REDIRECT_TO_SDK) && defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING) && \
       (defined(DEBUG_CONSOLE_TX_RELIABLE_ENABLE) && (DEBUG_CONSOLE_TX_RELIABLE_ENABLE > 0U))))
 DEBUG_CONSOLE_FUNCTION_PREFIX status_t DbgConsole_Flush(void)
 {
@@ -1114,7 +1114,7 @@ int DbgConsole_BlockingPrintf(const char *fmt_s, ...)
 /* See fsl_debug_console.h for documentation of this function. */
 int DbgConsole_BlockingVprintf(const char *fmt_s, va_list formatStringArg)
 {
-    status_t status;
+    status_t dbgConsoleStatus;
     int logLength = 0, result = 0;
     char printBuf[DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN] = {'\0'};
 
@@ -1130,10 +1130,10 @@ int DbgConsole_BlockingVprintf(const char *fmt_s, va_list formatStringArg)
     (void)SerialManager_CancelWriting(((serial_write_handle_t)&s_debugConsoleState.serialWriteHandleBuffer[0]));
 #endif
     /* print log */
-    status =
+    dbgConsoleStatus =
         (status_t)SerialManager_WriteBlocking(((serial_write_handle_t)&s_debugConsoleState.serialWriteHandleBuffer[0]),
                                               (uint8_t *)printBuf, (size_t)logLength);
-    result = (((status_t)kStatus_Success == status) ? (int)logLength : -1);
+    result = (((status_t)kStatus_Success == dbgConsoleStatus) ? (int)logLength : -1);
 
     return result;
 }
@@ -1143,7 +1143,7 @@ status_t DbgConsole_TryGetchar(char *ch)
 {
 #if (defined(DEBUG_CONSOLE_RX_ENABLE) && (DEBUG_CONSOLE_RX_ENABLE > 0U))
     uint32_t length = 0;
-    status_t status = (status_t)kStatus_Fail;
+    status_t dbgConsoleStatus = (status_t)kStatus_Fail;
 
     assert(ch);
 
@@ -1166,14 +1166,14 @@ status_t DbgConsole_TryGetchar(char *ch)
 #if DEBUG_CONSOLE_ENABLE_ECHO_FUNCTION
             (void)DbgConsole_EchoCharacter((uint8_t *)ch, true, NULL);
 #endif
-            status = (status_t)kStatus_Success;
+            dbgConsoleStatus = (status_t)kStatus_Success;
         }
     }
     /* release mutex lock function */
 #if (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_FREERTOS)
     DEBUG_CONSOLE_GIVE_MUTEX_SEMAPHORE(s_debugConsoleReadSemaphore);
 #endif
-    return status;
+    return dbgConsoleStatus;
 #else
     return (status_t)kStatus_Fail;
 #endif

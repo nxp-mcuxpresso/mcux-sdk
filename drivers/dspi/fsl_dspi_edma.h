@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_DSPI_EDMA_H_
-#define _FSL_DSPI_EDMA_H_
+#ifndef FSL_DSPI_EDMA_H_
+#define FSL_DSPI_EDMA_H_
 
 #include "fsl_dspi.h"
 #include "fsl_edma.h"
@@ -20,10 +20,10 @@
  **********************************************************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief DSPI EDMA driver version 2.2.5 */
 #define FSL_DSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 5))
-/*@}*/
+/*! @} */
 
 /*! @brief DSPI EDMA max transfer data size calculate
  * @param base DSPI peripheral base address.
@@ -297,4 +297,4 @@ status_t DSPI_SlaveTransferGetCountEDMA(SPI_Type *base, dspi_slave_edma_handle_t
  *@}
  */
 
-#endif /*_FSL_DSPI_EDMA_H_*/
+#endif /*FSL_DSPI_EDMA_H_*/

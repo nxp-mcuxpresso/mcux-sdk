@@ -37,8 +37,8 @@ typedef enum _serial_port_virtual_controller_index
 
     kSerialManager_UsbVirtualControllerLpcIp3511Hs0 = 6U, /*!< LPC USB IP3511 HS controller 0 */
     kSerialManager_UsbVirtualControllerLpcIp3511Hs1 =
-        7U, /*!< LPC USB IP3511 HS controller 1, there are no platforms which
-       have two IP3511 IPs, this is reserved to be used in the future. */
+        7U,                                        /*!< LPC USB IP3511 HS controller 1, there are no platforms which
+                                              have two IP3511 IPs, this is reserved to be used in the future. */
 
     kSerialManager_UsbVirtualControllerOhci0 = 8U, /*!< OHCI 0U */
     kSerialManager_UsbVirtualControllerOhci1 = 9U, /*!< OHCI 1U, Currently, there are no platforms which have two OHCI
@@ -55,6 +55,6 @@ typedef struct _serial_port_virtual_config
     serial_port_virtual_controller_index_t controllerIndex; /*!< controller index */
 } serial_port_virtual_config_t;
 
-/*@}*/
+/*! @} */
 
 #endif /* __SERIAL_PORT_VIRTUAL_H__ */

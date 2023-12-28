@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef __FSL_ADC_H__
-#define __FSL_ADC_H__
+#ifndef FSL_ADC_H__
+#define FSL_ADC_H__
 
 #include "fsl_common.h"
 
@@ -23,10 +23,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-/*! @brief ADC driver version 2.5.2. */
-#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 5, 2))
-/*@}*/
+/*! @{ */
+/*! @brief ADC driver version 2.5.3. */
+#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 5,3))
+/*! @} */
 
 /*!
  * @brief Flags
@@ -436,7 +436,7 @@ static inline void ADC_EnableTemperatureSensor(ADC_Type *base, bool enable)
 }
 #endif /* FSL_FEATURE_ADC_ASYNC_SYSCON_TEMP. */
 #endif /* FSL_FEATURE_ADC_HAS_NO_INSEL. */
-       /* @} */
+       /*! @} */
 
 /*!
  * @name Control conversion sequence A.
@@ -518,7 +518,7 @@ static inline void ADC_SetConvSeqAHighPriority(ADC_Type *base)
 }
 #endif /* FSL_FEATURE_ADC_HAS_SINGLE_SEQ */
 
-/* @} */
+/*! @} */
 
 #if !(defined(FSL_FEATURE_ADC_HAS_SINGLE_SEQ) && FSL_FEATURE_ADC_HAS_SINGLE_SEQ)
 /*!
@@ -599,7 +599,7 @@ static inline void ADC_SetConvSeqBHighPriority(ADC_Type *base)
     base->SEQ_CTRL[0] |= ADC_SEQ_CTRL_LOWPRIO_MASK;
 }
 
-/* @} */
+/*! @} */
 #endif /* FSL_FEATURE_ADC_HAS_SINGLE_SEQ */
 
 /*!
@@ -640,7 +640,7 @@ bool ADC_GetConvSeqBGlobalConversionResult(ADC_Type *base, adc_result_info_t *in
  */
 bool ADC_GetChannelConversionResult(ADC_Type *base, uint32_t channel, adc_result_info_t *info);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Threshold function.
@@ -695,7 +695,7 @@ static inline void ADC_SetChannelWithThresholdPair1(ADC_Type *base, uint32_t cha
     base->CHAN_THRSEL |= channelMask;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts.
@@ -738,7 +738,7 @@ static inline void ADC_EnableThresholdCompareInterrupt(ADC_Type *base,
     base->INTEN = (base->INTEN & ~(0x3UL << ((channel << 1UL) + 3UL))) | ((uint32_t)(mode) << ((channel << 1UL) + 3UL));
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status.
@@ -767,12 +767,12 @@ static inline void ADC_ClearStatusFlags(ADC_Type *base, uint32_t mask)
     base->FLAGS = mask; /* Write 1 to clear. */
 }
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
-/* @} */
+/*! @} */
 
-#endif /* __FSL_ADC_H__ */
+#endif /* FSL_ADC_H__ */

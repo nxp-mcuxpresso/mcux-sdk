@@ -1,9 +1,0 @@
-<map id="vApplicationTickHook" name="vApplicationTickHook">
-<area shape="rect" id="node2" href="$main__freertos__agm02__power__cycling_8c.html#ad4761540f9eeaae0661637c047c892b0" title="read_task" alt="" coords="203,5,282,32"/>
-<area shape="rect" id="node3" href="$main__freertos__agm02__power__cycling_8c.html#a022f0b0afee40ef57a0ac6e6db65cab6" title="fusion_task" alt="" coords="199,132,287,159"/>
-<area shape="rect" id="node4" href="$main__freertos__agm02__power__cycling_8c.html#a9bc3ff19e01b5212420dbe5bd004b40a" title="The motionCheck() function is not a sensor fusion function. It is a function that simply monitors an ..." alt="" coords="344,43,443,69"/>
-<area shape="rect" id="node5" href="$drivers_8h.html#ae77f08324a00fd69eaffa1e1c10bafb9" title="FXAS21002_Idle" alt="" coords="335,93,452,120"/>
-<area shape="rect" id="node6" href="$driver__MAG3110_8c.html#a708eb59e48e61ea04dce5a3d07884933" title="MAG3110_Idle" alt="" coords="340,144,447,171"/>
-<area shape="rect" id="node7" href="$drivers_8h.html#aba7e2b11087e48b339ecd8c2b1f4ae09" title="FXAS21002_Init" alt="" coords="336,195,451,221"/>
-<area shape="rect" id="node8" href="$driver__MAG3110_8c.html#ab25e9152fa726f2bcd148b9a0dbde157" title="MAG3110_Init" alt="" coords="341,245,445,272"/>
-</map>

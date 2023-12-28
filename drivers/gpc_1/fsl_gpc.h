@@ -7,8 +7,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_GPC_H_
-#define _FSL_GPC_H_
+#ifndef FSL_GPC_H_
+#define FSL_GPC_H_
 
 #include "fsl_common.h"
 
@@ -22,10 +22,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief GPC driver version 2.1.1. */
 #define FSL_GPC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 extern "C" {
@@ -228,4 +228,4 @@ static inline void GPC_RequestMEGAPowerOn(GPC_Type *base, bool enable)
 /*!
  * @}
  */
-#endif /* _FSL_GPC_H_ */
+#endif /* FSL_GPC_H_ */

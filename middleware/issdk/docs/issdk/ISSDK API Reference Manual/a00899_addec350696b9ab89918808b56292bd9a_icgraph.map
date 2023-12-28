@@ -1,6 +1,0 @@
-<map id="f3DOFTiltNED" name="f3DOFTiltNED">
-<area shape="rect" id="node2" href="$a00848.html#a41f2c6419c8e0c019e08618283338d21" title="fInit_3DOF_G_BASIC" alt="" coords="168,5,315,32"/>
-<area shape="rect" id="node3" href="$a00848.html#a7b5db1923cfa0dc160016e7d9b45b1c2" title="fRun_3DOF_G_BASIC" alt="" coords="375,31,527,57"/>
-<area shape="rect" id="node4" href="$a00848.html#adb837744c0801f50a0890f1385ca5c75" title="fInit_6DOF_GY_KALMAN" alt="" coords="156,107,327,133"/>
-<area shape="rect" id="node5" href="$a00908.html#a2670a39e8be35e9bad5a75d0ec8ca821" title="function runs the precision accelerometer calibration " alt="" coords="170,157,313,184"/>
-</map>

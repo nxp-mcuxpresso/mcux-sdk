@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_QSPI_EDMA_H_
-#define _FSL_QSPI_EDMA_H_
+#ifndef FSL_QSPI_EDMA_H_
+#define FSL_QSPI_EDMA_H_
 
 #include "fsl_qspi.h"
 #include "fsl_edma.h"
@@ -22,10 +22,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief QSPI EDMA driver version 2.2.2. */
 #define FSL_QSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
-/*@}*/
+/*! @} */
 
 typedef struct _qspi_edma_handle qspi_edma_handle_t;
 
@@ -151,12 +151,12 @@ status_t QSPI_TransferGetSendCountEDMA(QuadSPI_Type *base, qspi_edma_handle_t *h
  */
 status_t QSPI_TransferGetReceiveCountEDMA(QuadSPI_Type *base, qspi_edma_handle_t *handle, size_t *count);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
-/* @} */
+/*! @} */
 
-#endif /* _FSL_QSPI_EDMA_H_ */
+#endif /* FSL_QSPI_EDMA_H_ */

@@ -4,13 +4,11 @@
 /*            MIMXRT1173_cm7                                                 */
 /*  @version: 1.0                                                            */
 /*  @date:    2020-12-29                                                     */
-/*  @build:   b220909                                                        */
+/*  @build:   b231019                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2022 NXP                                                   */
-/* All rights reserved.                                                      */
-/*                                                                           */
+/* Copyright 2016-2023 NXP                                                   */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
 /*****************************************************************************/
 /* Version: GCC for ARM Embedded Processors                                  */
@@ -256,8 +254,8 @@ __isr_vector:
     .long   XECC_FLEXSPI2_FATAL_INT_IRQHandler              /* XECC fatal int*/
     .long   XECC_SEMC_INT_IRQHandler                        /* XECC int*/
     .long   XECC_SEMC_FATAL_INT_IRQHandler                  /* XECC fatal int*/
-    .long   ENET_QOS_IRQHandler                             /* ENET_QOS interrupt*/
-    .long   ENET_QOS_PMT_IRQHandler                         /* ENET_QOS_PMT interrupt*/
+    .long   Reserved232_IRQHandler                          /* Reserved interrupt*/
+    .long   Reserved233_IRQHandler                          /* Reserved interrupt*/
     .long   DefaultISR                                      /* 234*/
     .long   DefaultISR                                      /* 235*/
     .long   DefaultISR                                      /* 236*/
@@ -286,6 +284,11 @@ __isr_vector:
     .text
     .thumb
 
+#if defined (__cplusplus)
+#ifdef __REDLIB__
+#error Redlib does not support C++
+#endif
+#endif
 /* Reset Handler */
 
     .thumb_func
@@ -417,7 +420,11 @@ Reset_Handler:
 
     cpsie   i               /* Unmask interrupts */
 #ifndef __START
+#ifdef __REDLIB__
+#define __START __main
+#else
 #define __START _start
+#endif
 #endif
 #ifndef __ATOLLIC__
     ldr   r0,=__START
@@ -1186,24 +1193,6 @@ XECC_FLEXSPI2_FATAL_INT_IRQHandler:
     bx    r0
     .size XECC_FLEXSPI2_FATAL_INT_IRQHandler, . - XECC_FLEXSPI2_FATAL_INT_IRQHandler
 
-    .align 1
-    .thumb_func
-    .weak ENET_QOS_IRQHandler
-    .type ENET_QOS_IRQHandler, %function
-ENET_QOS_IRQHandler:
-    ldr   r0,=ENET_QOS_DriverIRQHandler
-    bx    r0
-    .size ENET_QOS_IRQHandler, . - ENET_QOS_IRQHandler
-
-    .align 1
-    .thumb_func
-    .weak ENET_QOS_PMT_IRQHandler
-    .type ENET_QOS_PMT_IRQHandler, %function
-ENET_QOS_PMT_IRQHandler:
-    ldr   r0,=ENET_QOS_PMT_DriverIRQHandler
-    bx    r0
-    .size ENET_QOS_PMT_IRQHandler, . - ENET_QOS_PMT_IRQHandler
-
 
 /*    Macro to define default handlers. Default handler
  *    will be weak symbol and just dead loops. They can be
@@ -1433,7 +1422,7 @@ ENET_QOS_PMT_IRQHandler:
     def_irq_handler    XECC_FLEXSPI2_FATAL_INT_DriverIRQHandler
     def_irq_handler    XECC_SEMC_INT_IRQHandler
     def_irq_handler    XECC_SEMC_FATAL_INT_IRQHandler
-    def_irq_handler    ENET_QOS_DriverIRQHandler
-    def_irq_handler    ENET_QOS_PMT_DriverIRQHandler
+    def_irq_handler    Reserved232_IRQHandler
+    def_irq_handler    Reserved233_IRQHandler
 
     .end

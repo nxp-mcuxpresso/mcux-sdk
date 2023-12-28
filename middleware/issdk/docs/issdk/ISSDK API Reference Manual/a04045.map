@@ -1,8 +1,0 @@
-<map id="SensorFusionGlobals" name="SensorFusionGlobals">
-<area shape="rect" id="node2" href="$a04051.html" title="StatusSubsystem() provides an object&#45;like interface for communicating status to the user..." alt="" coords="5,35,132,215"/>
-<area shape="rect" id="node3" href="$a03991.html" title="An instance of PhysicalSensor structure type should be allocated for each physical sensors (combo dev..." alt="" coords="156,49,269,200"/>
-<area shape="rect" id="node4" href="$a03975.html" title="Magnetic Calibration Structure. " alt="" coords="355,13,465,237"/>
-<area shape="rect" id="node5" href="$a03971.html" title="{MagBuffer\n|+ iBs\l+ index\l+ tanarray\l+ iMagBufferCount\l|}" alt="" coords="489,64,619,185"/>
-<area shape="rect" id="node6" href="$a04003.html" title="The MagSensor structure stores raw and processed measurements for a 3&#45;axis magnetic sensor..." alt="" coords="643,5,767,244"/>
-<area shape="rect" id="node7" href="$a03967.html" title="he ControlSubsystem encapsulates command and data streaming functions. " alt="" coords="791,27,997,222"/>
-</map>

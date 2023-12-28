@@ -1,4 +1,0 @@
-<map id="DBAP_I2C_ReadData" name="DBAP_I2C_ReadData">
-<area shape="rect" id="node2" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="376,5,437,32"/>
-<area shape="rect" id="node3" href="$a00182.html#aa75349faed7c77807cb88d9224aa2636" title="Read register data from a sensor. " alt="" coords="201,31,328,57"/>
-</map>

@@ -1,6 +1,0 @@
-<map id="sensors/fxlc95000_drv.h" name="sensors/fxlc95000_drv.h">
-<area shape="rect" id="node2" href="$a00038.html" title="The fxlc95000_drv.c file implements the FXLC95000 sensor driver interface. " alt="" coords="5,87,167,114"/>
-<area shape="rect" id="node3" href="$a00206.html" title="The fxlc95000_accel_i2c.c file implements the ISSDK FXLC95000 sensor driver example demonstration as ..." alt="" coords="191,80,357,121"/>
-<area shape="rect" id="node4" href="$a00209.html" title="The fxlc95000_accel_spi.c file implements the ISSDK FXLC95000 sensor driver example demonstration as ..." alt="" coords="381,80,548,121"/>
-<area shape="rect" id="node5" href="$a00419.html" title="The fxlc95000_flash_demo.c file implements the ISSDK FXLC95000L sensor driver example demonstration f..." alt="" coords="573,80,738,121"/>
-</map>

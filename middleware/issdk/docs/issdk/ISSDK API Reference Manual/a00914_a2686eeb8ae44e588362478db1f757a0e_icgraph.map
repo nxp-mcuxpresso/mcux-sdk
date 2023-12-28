@@ -1,6 +1,0 @@
-<map id="conditionSample" name="conditionSample">
-<area shape="rect" id="node2" href="$a00842.html#ac818465f3f2f5bd60e71c5c7d8a8a261" title="FXLS8471Q_Read" alt="" coords="195,5,323,32"/>
-<area shape="rect" id="node3" href="$a00842.html#ac61bf451efc3a4eab179dbc59268b3e7" title="FXOS8700_Init" alt="" coords="205,56,313,83"/>
-<area shape="rect" id="node4" href="$a00812.html#a16645c35980d715e5252f30beebecaa2" title="FXOS8700_ReadMagData" alt="" coords="172,107,345,133"/>
-<area shape="rect" id="node5" href="$a00842.html#a2592117f3e2fed5f61ff029cb18fa556" title="MAG3110_Read" alt="" coords="200,157,317,184"/>
-</map>

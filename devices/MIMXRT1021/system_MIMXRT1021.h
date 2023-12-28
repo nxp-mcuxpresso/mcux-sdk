@@ -1,9 +1,13 @@
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1021CAF4A
+**                          MIMXRT1021CAF4B
 **                          MIMXRT1021CAG4A
+**                          MIMXRT1021CAG4B
 **                          MIMXRT1021DAF5A
+**                          MIMXRT1021DAF5B
 **                          MIMXRT1021DAG5A
+**                          MIMXRT1021DAG5B
 **
 **     Compilers:           Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler
@@ -13,7 +17,7 @@
 **
 **     Reference manual:    IMXRT1020RM Rev.2, 01/2021 | IMXRT102XSRM Rev.0
 **     Version:             rev. 1.2, 2021-08-10
-**     Build:               b220124
+**     Build:               b230821
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,9 +25,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2023 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

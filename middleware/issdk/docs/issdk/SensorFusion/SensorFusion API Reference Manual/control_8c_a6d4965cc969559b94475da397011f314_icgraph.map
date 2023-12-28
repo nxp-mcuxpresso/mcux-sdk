@@ -1,4 +1,0 @@
-<map id="writeControlPort" name="writeControlPort">
-<area shape="rect" id="node2" href="$control_8h.html#a67029acf1be9712c5d30c625132ad958" title="Call this once to initialize structures, ports, etc. " alt="" coords="168,5,303,32"/>
-<area shape="rect" id="node3" href="$main__agm01__freertos__two__tasks_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is a FreeRTOS (dual task) implementation of the NXP sensor fusion demo build. " alt="" coords="351,5,401,32"/>
-</map>

@@ -6,7 +6,7 @@ if (CONFIG_USE_BOARD_Project_Template_evkmimxrt1064)
 
 message("BOARD_Project_Template_evkmimxrt1064 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if((CONFIG_BOARD STREQUAL evkmimxrt1064) AND CONFIG_USE_component_lpuart_adapter AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1064xxxxA) AND CONFIG_USE_device_MIMXRT1064_startup AND CONFIG_USE_driver_clock AND CONFIG_USE_driver_common AND CONFIG_USE_driver_igpio AND CONFIG_USE_driver_iomuxc AND CONFIG_USE_driver_lpuart AND CONFIG_USE_driver_nic301 AND CONFIG_USE_driver_xip_board_evkmimxrt1064 AND CONFIG_USE_driver_xip_device AND ((CONFIG_USE_component_serial_manager AND CONFIG_USE_utility_assert AND CONFIG_USE_utility_debug_console) OR (CONFIG_USE_utility_assert_lite AND CONFIG_USE_utility_debug_console_lite)))
+if((CONFIG_BOARD STREQUAL evkmimxrt1064) AND CONFIG_USE_component_lpuart_adapter AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1064xxxxA OR CONFIG_DEVICE_ID STREQUAL MIMXRT1064xxxxB) AND CONFIG_USE_device_MIMXRT1064_startup AND CONFIG_USE_driver_clock AND CONFIG_USE_driver_common AND CONFIG_USE_driver_igpio AND CONFIG_USE_driver_iomuxc AND CONFIG_USE_driver_lpuart AND CONFIG_USE_driver_nic301 AND CONFIG_USE_driver_xip_board_evkmimxrt1064 AND CONFIG_USE_driver_xip_device AND ((CONFIG_USE_component_serial_manager AND CONFIG_USE_utility_assert AND CONFIG_USE_utility_debug_console) OR (CONFIG_USE_utility_assert_lite AND CONFIG_USE_utility_debug_console_lite)))
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/project_template/dcd.c
@@ -49,7 +49,7 @@ if (CONFIG_USE_driver_xip_board_evkmimxrt1064)
 
 message("driver_xip_board_evkmimxrt1064 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_common AND (CONFIG_BOARD STREQUAL evkmimxrt1064))
+if(CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/xip/evkmimxrt1064_flexspi_nor_config.c

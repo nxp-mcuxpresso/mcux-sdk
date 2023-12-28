@@ -1,7 +1,5 @@
 /*
- * Copyright  2021 NXP
- * All rights reserved.
- *
+ * Copyright  2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -31,37 +29,27 @@
      kCODEC_SupportPlayChannelRight0 | kCODEC_SupportPlayChannelRight1 | kCODEC_SupportPlayChannelRight2)
 
 /*! @brief wm8960 map protocol */
-#define HAL_WM8960_MAP_PROTOCOL(protocol)                 \
-    ((protocol) == kCODEC_BusI2S ?                        \
-         kWM8960_BusI2S :                                 \
-         (protocol) == kCODEC_BusLeftJustified ?          \
-         kWM8960_BusLeftJustified :                       \
-         (protocol) == kCODEC_BusRightJustified ?         \
-         kWM8960_BusRightJustified :                      \
-         (protocol) == kCODEC_BusPCMA ? kWM8960_BusPCMA : \
-                                        (protocol) == kCODEC_BusPCMB ? kWM8960_BusPCMB : kWM8960_BusI2S)
+#define HAL_WM8960_MAP_PROTOCOL(protocol)                                 \
+    ((protocol) == kCODEC_BusI2S            ? kWM8960_BusI2S :            \
+     (protocol) == kCODEC_BusLeftJustified  ? kWM8960_BusLeftJustified :  \
+     (protocol) == kCODEC_BusRightJustified ? kWM8960_BusRightJustified : \
+     (protocol) == kCODEC_BusPCMA           ? kWM8960_BusPCMA :           \
+     (protocol) == kCODEC_BusPCMB           ? kWM8960_BusPCMB :           \
+                                              kWM8960_BusI2S)
 
 /*! @brief wm8960 map module */
-#define HAL_WM8960_MAP_MODULE(module)                   \
-    ((module) == (uint32_t)kCODEC_ModuleADC ?           \
-         kWM8960_ModuleADC :                            \
-         (module) == (uint32_t)kCODEC_ModuleDAC ?       \
-         kWM8960_ModuleDAC :                            \
-         (module) == (uint32_t)kCODEC_ModuleVref ?      \
-         kWM8960_ModuleVREF :                           \
-         (module) == (uint32_t)kCODEC_ModuleHeadphone ? \
-         kWM8960_ModuleHP :                             \
-         (module) == (uint32_t)kCODEC_ModuleMicbias ?   \
-         kWM8960_ModuleMICB :                           \
-         (module) == (uint32_t)kCODEC_ModuleMic ?       \
-         kWM8960_ModuleMIC :                            \
-         (module) == (uint32_t)kCODEC_ModuleLinein ?    \
-         kWM8960_ModuleLineIn :                         \
-         (module) == (uint32_t)kCODEC_ModuleSpeaker ?   \
-         kWM8960_ModuleSpeaker :                        \
-         (module) == (uint32_t)kCODEC_ModuleMixer ?     \
-         kWM8960_ModuleOMIX :                           \
-         (module) == (uint32_t)kCODEC_ModuleLineout ? kWM8960_ModuleLineOut : kWM8960_ModuleADC)
+#define HAL_WM8960_MAP_MODULE(module)                                       \
+    ((module) == (uint32_t)kCODEC_ModuleADC       ? kWM8960_ModuleADC :     \
+     (module) == (uint32_t)kCODEC_ModuleDAC       ? kWM8960_ModuleDAC :     \
+     (module) == (uint32_t)kCODEC_ModuleVref      ? kWM8960_ModuleVREF :    \
+     (module) == (uint32_t)kCODEC_ModuleHeadphone ? kWM8960_ModuleHP :      \
+     (module) == (uint32_t)kCODEC_ModuleMicbias   ? kWM8960_ModuleMICB :    \
+     (module) == (uint32_t)kCODEC_ModuleMic       ? kWM8960_ModuleMIC :     \
+     (module) == (uint32_t)kCODEC_ModuleLinein    ? kWM8960_ModuleLineIn :  \
+     (module) == (uint32_t)kCODEC_ModuleSpeaker   ? kWM8960_ModuleSpeaker : \
+     (module) == (uint32_t)kCODEC_ModuleMixer     ? kWM8960_ModuleOMIX :    \
+     (module) == (uint32_t)kCODEC_ModuleLineout   ? kWM8960_ModuleLineOut : \
+                                                    kWM8960_ModuleADC)
 
 /*******************************************************************************
  * Prototypes

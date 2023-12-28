@@ -1,6 +1,6 @@
 /*
  * Copyright 2013-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -124,7 +124,7 @@ static const uint16_t kPFlashDensities[] = {
     0u,    /* 0x8 - undefined */
     0u,    /* 0x9 - undefined */
     256u,  /* 0xa - 262144, 256KB */
-    0u,    /* 0xb - undefined */
+    512u,  /* 0xb - 524288, 512KB */
     1024u, /* 0xc - 1048576, 1MB */
     0u,    /* 0xd - undefined */
     0u,    /* 0xe - undefined */

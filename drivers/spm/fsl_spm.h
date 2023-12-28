@@ -7,8 +7,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SPM_H_
-#define _FSL_SPM_H_
+#ifndef FSL_SPM_H_
+#define FSL_SPM_H_
 
 #include "fsl_common.h"
 
@@ -20,11 +20,11 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SPM driver version */
 #define FSL_SPM_DRIVER_VERSION (MAKE_VERSION(2, 3, 0)) /*!< Version 2.3.0. */
 
-/*@}*/
+/*! @} */
 
 /*!
  * @brief IP version ID definition.
@@ -313,7 +313,7 @@ extern "C" {
 #endif /* __cplusplus*/
 
 /*! @name System Power Manager. */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Gets the SPM version ID.
@@ -472,10 +472,10 @@ static inline void SPM_ClearPeriphIOIsolationFlag(SPM_Type *base)
     base->CORESC |= SPM_CORESC_ACKISO_MASK;
 }
 
-/*@}*/
+/*! @} */
 
 /*! @name VDD Low voltage detection APIs*/
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Configures the low-voltage detect setting.
@@ -513,10 +513,10 @@ static inline void SPM_ClearVddLowVoltDetectFlag(SPM_Type *base)
     base->LVDSC1 |= SPM_LVDSC1_VDD_LVDACK_MASK; /* W1C. */
 }
 
-/*@}*/
+/*! @} */
 
 /*! @name CORE LDO Low voltage detection APIs */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Gets the COREVdds Low-voltage Detect Flag status.
@@ -586,10 +586,10 @@ static inline void SPM_ClearLowVoltWarningFlag(SPM_Type *base)
     base->LVDSC2 |= SPM_LVDSC2_VDD_LVWACK_MASK; /* W1C. */
 }
 
-/*@}*/
+/*! @} */
 
 /*! @name VDD high voltage detection APIs. */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Configures the high-voltage detect setting.
@@ -631,10 +631,10 @@ static inline void SPM_ClearHighVoltDetectFlag(SPM_Type *base)
     base->HVDSC1 |= SPM_HVDSC1_VDD_HVDACK_MASK; /* W1C. */
 }
 
-/*@}*/
+/*! @} */
 
 /*! @name AUX LDO Low voltage detection APIs */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Configures the AUX LDO.
@@ -667,7 +667,7 @@ static inline void SPM_ForceAuxLdoOffset(SPM_Type *base, bool enable)
 }
 
 /*! @name DCDC Control APIs*/
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Sets DCDC battery monitor with its ADC value.
@@ -888,10 +888,10 @@ static inline void SPM_SetDcdcVdd1p8Value(SPM_Type *base, uint32_t trimCode)
     base->DCDCC6 = (base->DCDCC6 & ~SPM_DCDCC6_DCDC_VDD1P8CTRL_TRG_MASK) | SPM_DCDCC6_DCDC_VDD1P8CTRL_TRG(trimCode);
 }
 
-/*@}*/
+/*! @} */
 
 /*! @name Misc */
-/*@{*/
+/*! @{ */
 
 /*!
  * brief Configures the low power requeset output pin.
@@ -914,9 +914,9 @@ static inline void SPM_SetLowPowerReqOutPinConfig(SPM_Type *base, const spm_low_
     }
 }
 
-/*@}*/
+/*! @} */
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -924,4 +924,4 @@ static inline void SPM_SetLowPowerReqOutPinConfig(SPM_Type *base, const spm_low_
 
 /*! @}*/
 
-#endif /* _FSL_SPM_H_*/
+#endif /* FSL_SPM_H_*/

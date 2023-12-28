@@ -1,6 +1,0 @@
-<map id="sBufAppendItem" name="sBufAppendItem">
-<area shape="rect" id="node2" href="$output__stream_8c.html#adbb4129e795ca534e4bb1649bb81b559" title="Called once per fusion cycle to stream information required by the NXP Sensor Fusion Toolbox..." alt="" coords="343,5,504,32"/>
-<area shape="rect" id="node5" href="$output__stream_8c.html#a93db92e775dee51c4dbf2dca2aed05b3" title="sBufAppendZeros" alt="" coords="171,31,295,57"/>
-<area shape="rect" id="node3" href="$control_8h.html#a67029acf1be9712c5d30c625132ad958" title="Call this once to initialize structures, ports, etc. " alt="" coords="552,5,687,32"/>
-<area shape="rect" id="node4" href="$main__agm01__freertos__two__tasks_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is a FreeRTOS (dual task) implementation of the NXP sensor fusion demo build. " alt="" coords="735,5,785,32"/>
-</map>

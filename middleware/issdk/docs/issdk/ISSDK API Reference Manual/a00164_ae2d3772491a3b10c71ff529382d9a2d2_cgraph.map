@@ -1,4 +1,0 @@
-<map id="MPL3115_I2C_Initialize" name="MPL3115_I2C_Initialize">
-<area shape="rect" id="node2" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="392,5,453,32"/>
-<area shape="rect" id="node3" href="$a00167.html#ac8a60c799d9dbc84531b4680762eb8dc" title="The interface function to read a sensor register. " alt="" coords="211,31,344,57"/>
-</map>

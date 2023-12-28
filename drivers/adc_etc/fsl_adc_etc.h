@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_ADC_ETC_H_
-#define _FSL_ADC_ETC_H_
+#ifndef FSL_ADC_ETC_H_
+#define FSL_ADC_ETC_H_
 
 #include "fsl_common.h"
 
@@ -341,12 +341,12 @@ static inline void ADC_ETC_DoSoftwareTrigger(ADC_ETC_Type *base, uint32_t trigge
  */
 uint32_t ADC_ETC_GetADCConversionValue(ADC_ETC_Type *base, uint32_t triggerGroup, uint32_t chainGroup);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
-/* @} */
+/*! @} */
 
-#endif /* _FSL_ADC_ETC_H_ */
+#endif /* FSL_ADC_ETC_H_ */

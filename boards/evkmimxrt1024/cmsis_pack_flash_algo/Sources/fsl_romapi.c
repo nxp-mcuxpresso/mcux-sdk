@@ -38,9 +38,9 @@ typedef struct
  */
 typedef struct
 {
-    void (*runBootloader)(void *arg); /*!< Function to start the bootloader executing */
-    const uint32_t version;           /*!< Bootloader version number */
-    const uint8_t *copyright;         /*!< Bootloader Copyright */
+    void (*runBootloader)(void *arg);                 /*!< Function to start the bootloader executing */
+    const uint32_t version;                           /*!< Bootloader version number */
+    const uint8_t *copyright;                         /*!< Bootloader Copyright */
     const uint32_t reserved0;
     flexspi_nor_driver_interface_t *flexSpiNorDriver; /*!< FLEXSPI NOR flash api */
 } bootloader_api_entry_t;

@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_FTM_H_
-#define _FSL_FTM_H_
+#ifndef FSL_FTM_H_
+#define FSL_FTM_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-/*! @brief FTM driver version 2.6.0. */
-#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
-/*@}*/
+/*! @{ */
+/*! @brief FTM driver version 2.6.1. */
+#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 6, 1))
+/*! @} */
 
 /*!
  * @brief List of FTM channels
@@ -1159,4 +1159,4 @@ static inline void FTM_SetLoadFreq(FTM_Type *base, uint32_t loadfreq)
 
 /*! @}*/
 
-#endif /* _FSL_FTM_H_*/
+#endif /* FSL_FTM_H_*/

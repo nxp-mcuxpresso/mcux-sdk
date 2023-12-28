@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_CACHE_H_
-#define _FSL_CACHE_H_
+#ifndef FSL_CACHE_H_
+#define FSL_CACHE_H_
 
 #include "fsl_common.h"
 
@@ -19,10 +19,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief cache driver version 2.1.1. */
 #define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*@}*/
+/*! @} */
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -63,7 +63,7 @@ static inline void L1CACHE_InvalidateCodeCache(void)
     MCM->CPCR2 |= MCM_CPCR2_CCBC_MASK;
 }
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name The unified L1 cache controller
@@ -116,7 +116,7 @@ static inline void L1CACHE_CleanInvalidateDCacheByRange(uint32_t address, uint32
     L1CACHE_InvalidateDCacheByRange(address, size_byte);
 }
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Unified Cache Control for caches in all levels
@@ -167,7 +167,7 @@ static inline void DCACHE_CleanInvalidateByRange(uint32_t address, uint32_t size
     L1CACHE_CleanInvalidateDCacheByRange(address, size_byte);
 }
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -175,4 +175,4 @@ static inline void DCACHE_CleanInvalidateByRange(uint32_t address, uint32_t size
 
 /*! @}*/
 
-#endif /* _FSL_CACHE_H_*/
+#endif /* FSL_CACHE_H_*/

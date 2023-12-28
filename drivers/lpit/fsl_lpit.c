@@ -8,9 +8,16 @@
 
 #include "fsl_lpit.h"
 
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.lpit"
+#endif
+
+#if defined(LPIT_RSTS)
+#define LPIT_RESETS_ARRAY LPIT_RSTS
 #endif
 
 /*******************************************************************************
@@ -30,6 +37,11 @@ static const clock_ip_name_t s_lpitPeriphClocks[] = LPIT_PERIPH_CLOCKS;
 #endif
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(LPIT_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_lpitResets[] = LPIT_RESETS_ARRAY;
+#endif
 
 /*******************************************************************************
  * Prototypes
@@ -100,6 +112,10 @@ void LPIT_Init(LPIT_Type *base, const lpit_config_t *config)
 #endif
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(LPIT_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_lpitResets[LPIT_GetInstance(base)]);
+#endif
 
     /* Reset the timer channels and registers except the MCR register */
     LPIT_Reset(base);

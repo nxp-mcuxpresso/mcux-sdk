@@ -102,7 +102,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/tensorflow-lite
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/tensorflow-lite/third_party/cmsis
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/littlefs
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/lwip
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/maestro
@@ -141,7 +140,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_nor_flash-controller-flexspi)
 #    include(driver_cmsis_lpuart)
 #    include(middleware_azure_rtos_nxd)
-#    include(middleware_issdk_sensor_fxos8700)
 #    include(device_system)
 #    include(driver_snvs_lp)
 #    include(middleware_maestro_framework)
@@ -178,7 +176,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_eiq_deepviewrt_deps_stb)
 #    include(middleware_lwip_apps_httpd)
 #    include(component_serial_manager)
-#    include(middleware_issdk_sensor_fxas21002)
 #    include(driver_camera-device-ov7725)
 #    include(driver_pit)
 #    include(middleware_eiq_tensorflow_lite_micro_third_party_cmsis_nn)
@@ -186,7 +183,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpspi_freertos)
 #    include(middleware_mbedtls_port_ksdk)
 #    include(utility_debug_console_lite)
-#    include(middleware_issdk_drivers_gpio_imx)
 #    include(component_log_backend_debugconsole)
 #    include(CMSIS_Driver_Include_Ethernet_MAC OPTIONAL)
 #    include(middleware_wifi_common_files)
@@ -212,7 +208,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_gpt)
 #    include(utility_assert)
 #    include(driver_enet)
-#    include(middleware_issdk_sensor_interface_common)
 #    include(middleware_wifi)
 #    include(middleware_wifi_wifidriver)
 #    include(driver_rtwdog)
@@ -371,7 +366,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_maestro_framework_streamer)
 #    include(middleware_azure_rtos_lx)
 #    include(driver_elcdif)
-#    include(middleware_issdk_drivers_cmsis_drivers)
 #    include(driver_igpio)
 #    include(driver_pwm)
 #    include(middleware_sdmmc_host_usdhc_azurertos)

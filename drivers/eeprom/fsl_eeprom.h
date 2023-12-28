@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_EEPROM_H_
-#define _FSL_EEPROM_H_
+#ifndef FSL_EEPROM_H_
+#define FSL_EEPROM_H_
 
 #include "fsl_common.h"
 #include "fsl_power.h"
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief EEPROM driver version 2.1.3. */
 #define FSL_EEPROM_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
-/*@}*/
+/*! @} */
 
 /*! @brief EEPROM automatic program option */
 typedef enum _eeprom_auto_program
@@ -92,7 +92,7 @@ void EEPROM_GetDefaultConfig(eeprom_config_t *config);
  */
 void EEPROM_Deinit(EEPROM_Type *base);
 
-/* @}*/
+/*! @} */
 
 /*!
  * @name Basic Control Operations
@@ -342,11 +342,11 @@ status_t EEPROM_WriteRow(EEPROM_Type *base, uint32_t rowNum, uint32_t *data);
 status_t EEPROM_WritePage(EEPROM_Type *base, uint32_t pageNum, uint32_t *data);
 #endif /* FSL_FEATURE_EEPROM_PAGE_COUNT */
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
 /*! @}*/
-#endif /*_FSL_EEPROM_H_*/
+#endif /*FSL_EEPROM_H_*/

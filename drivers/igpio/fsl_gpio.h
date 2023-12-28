@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_GPIO_H_
-#define _FSL_GPIO_H_
+#ifndef FSL_GPIO_H_
+#define FSL_GPIO_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief GPIO driver version. */
 #define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
-/*@}*/
+/*! @} */
 
 /*! @brief GPIO direction definition. */
 typedef enum _gpio_pin_direction
@@ -76,7 +76,7 @@ extern "C" {
  *        contains the configuration information.
  */
 void GPIO_PinInit(GPIO_Type *base, uint32_t pin, const gpio_pin_config_t *Config);
-/*@}*/
+/*! @} */
 
 /*!
  * @name GPIO Reads and Write Functions
@@ -188,7 +188,7 @@ static inline uint32_t GPIO_ReadPinInput(GPIO_Type *base, uint32_t pin)
 {
     return GPIO_PinRead(base, pin);
 }
-/*@}*/
+/*! @} */
 
 /*!
  * @name GPIO Reads Pad Status Functions
@@ -218,7 +218,7 @@ static inline uint8_t GPIO_ReadPadStatus(GPIO_Type *base, uint32_t pin)
     return GPIO_PinReadPadStatus(base, pin);
 }
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Interrupts and flags management functions
@@ -331,7 +331,7 @@ static inline void GPIO_ClearPinsInterruptFlags(GPIO_Type *base, uint32_t mask)
 {
     GPIO_PortClearInterruptFlags(base, mask);
 }
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -341,4 +341,4 @@ static inline void GPIO_ClearPinsInterruptFlags(GPIO_Type *base, uint32_t mask)
  * @}
  */
 
-#endif /* _FSL_GPIO_H_*/
+#endif /* FSL_GPIO_H_*/

@@ -1,5 +1,0 @@
-<map id="fVeq3x3AxV" name="fVeq3x3AxV">
-<area shape="rect" id="node2" href="$precisionAccelerometer_8h.html#a2670a39e8be35e9bad5a75d0ec8ca821" title="function runs the precision accelerometer calibration " alt="" coords="148,5,291,32"/>
-<area shape="rect" id="node3" href="$precisionAccelerometer_8h.html#a29cd1109b0584bd00d43c219f411437f" title="Update the buffer used to store samples used for accelerometer calibration. " alt="" coords="339,5,471,32"/>
-<area shape="rect" id="node4" href="$sensor__fusion_8c.html#ae748e1330b5a94783c6d4ea2ad9e4f28" title="initializeSensors" alt="" coords="519,5,636,32"/>
-</map>

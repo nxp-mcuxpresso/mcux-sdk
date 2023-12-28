@@ -1,6 +1,30 @@
 include_guard(GLOBAL)
 
 
+if (CONFIG_USE_driver_xip_board_evkmimxrt1170)
+# Add set(CONFIG_USE_driver_xip_board_evkmimxrt1170 true) in config.cmake to use this component
+
+message("driver_xip_board_evkmimxrt1170 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/xip/evkmimxrt1170_flexspi_nor_config.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/xip/.
+)
+
+else()
+
+message(SEND_ERROR "driver_xip_board_evkmimxrt1170 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_driver_xmcd_evkmimxrt1170)
 # Add set(CONFIG_USE_driver_xmcd_evkmimxrt1170 true) in config.cmake to use this component
 
@@ -71,30 +95,6 @@ endif()
 else()
 
 message(SEND_ERROR "BOARD_Project_Template_evkmimxrt1170 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_xip_board_evkmimxrt1170)
-# Add set(CONFIG_USE_driver_xip_board_evkmimxrt1170 true) in config.cmake to use this component
-
-message("driver_xip_board_evkmimxrt1170 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_common AND (CONFIG_BOARD STREQUAL evkmimxrt1170))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/xip/evkmimxrt1170_flexspi_nor_config.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/xip/.
-)
-
-else()
-
-message(SEND_ERROR "driver_xip_board_evkmimxrt1170 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

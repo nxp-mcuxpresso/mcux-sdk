@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FLEXSPI_DMA_H_
-#define _FSL_FLEXSPI_DMA_H_
+#ifndef FSL_FLEXSPI_DMA_H_
+#define FSL_FLEXSPI_DMA_H_
 
 #include "fsl_flexspi.h"
 #include "fsl_dma.h"
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief FLEXSPI DMA driver version 2.2.1. */
 #define FSL_FLEXSPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
-/*@}*/
+/*! @} */
 
 typedef struct _flexspi_dma_handle flexspi_dma_handle_t;
 
@@ -133,12 +133,12 @@ void FLEXSPI_TransferAbortDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *handle);
  */
 status_t FLEXSPI_TransferGetTransferCountDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *handle, size_t *count);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
-/* @} */
+/*! @} */
 
-#endif /* _FSL_FLEXSPI_DMA_H_ */
+#endif /* FSL_FLEXSPI_DMA_H_ */

@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 /*! @name I3C BUS management definitions*/
-/*@{*/
+/*! @{ */
 #define I3C_BUS_MAX_DEVS                          11U   /*!< Bus maximum device count. */
 #define I3C_BUS_HOT_JOIN_ADDR                     0x2U  /*!< Hot join event device address. */
 #define I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR1 0x3EU /*!< Broadcast address single bit error detect address. */
@@ -36,10 +36,10 @@
 #define I3C_BUS_ADDR_SLOTDEPTH                    32U /*!< Address slot depth used in address management in bus pool. */
 #define I3C_BUS_ADDR_SLOTMASK                     3U  /*!< Address slot mask used in address management in bus pool. */
 
-/*@}*/
+/*! @} */
 
 /*! @name I3C BUS CCC (Common Command Codes) definitions*/
-/*@{*/
+/*! @{ */
 #define I3C_BUS_CCC_DIRECT_PREFIX 0x80U /*!< Prefix used for direct access CCC. */
 
 #define I3C_BUS_CCC(cmdID, isDirect) \
@@ -54,7 +54,7 @@
 #define I3C_BUS_CCC_SETMRL(isDirect)    I3C_BUS_CCC(0xaU, isDirect) /*!< Set Max Read Length Command. */
 #define I3C_BUS_CCC_SETXTIME(isDirect)  (isDirect) ? 0x98U : 0x28U  /*!< Set Exchange Timing Information Command. */
 #define I3C_BUS_CCC_VENDOR_EXT(cmdID, isDirect) \
-    ((cmdID) + ((isDirect) ? 0xe0U : 0x61U)) /*!< Vendor Extension Command. */
+    ((cmdID) + ((isDirect) ? 0xe0U : 0x61U))                        /*!< Vendor Extension Command. */
 
 /* CCC available only for broadcast access */
 #define I3C_BUS_CCC_ENTDAA    0x7U        /*!< Enter Dynamic Address Assignment Command. */
@@ -77,10 +77,10 @@
 #define I3C_BUS_CCC_GETHDRCAP 0x95U /*!< Get HDR Capability Command. */
 #define I3C_BUS_CCC_GETXTIME  0x99U /*!< Get Exchange Timing Support Command. */
 
-/*@}*/
+/*! @} */
 
 /*! @name I3C device BCR register bit masks*/
-/*@{*/
+/*! @{ */
 
 /* @brief I3C device bus characteristics */
 #define I3C_BUS_DEV_BCR_DEV_MASTER     0x01U
@@ -104,7 +104,7 @@
 #define I3C_BUS_DEV_BCR_SPEED_LIMIT_MASK  0x01U
 #define I3C_BUS_DEV_BCR_SPEED_LIMIT(x)    (((x) << I3C_BUS_DEV_BCR_SPEED_LIMIT_SHIFT) & I3C_BUS_DEV_BCR_SPEED_LIMIT_MASK)
 
-/*@}*/
+/*! @} */
 
 /*! @brief I3C Bus status. */
 enum
@@ -112,7 +112,7 @@ enum
     kStatus_I3CBus_Success         = kStatus_Success,                      /*!< I3C Bus operation succeed*/
     kStatus_I3CBus_AddrSlotInvalid = MAKE_STATUS(kStatusGroup_I3CBUS, 0U), /*!< I3C Bus address slot invalid */
     kStatus_I3CBus_MasterOpsUnsupport =
-        MAKE_STATUS(kStatusGroup_I3CBUS, 1U), /*!< I3C Bus master operation unsupported */
+        MAKE_STATUS(kStatusGroup_I3CBUS, 1U),                              /*!< I3C Bus master operation unsupported */
     kStatus_I3CBus_NotCurrentMaster = MAKE_STATUS(
         kStatusGroup_I3CBUS, 2U), /*!< The Bus operation should be made on master but current device is not master */
     kStatus_I3CBus_MasterOpsFailure   = MAKE_STATUS(kStatusGroup_I3CBUS, 3U), /*!< Bus operation failure */
@@ -210,7 +210,7 @@ typedef struct i3c_device_hw_ops
     bool (*CheckSupportCCC)(i3c_device_t *master, i3c_ccc_cmd_t *cmd); /*!< CheckSupportCCC function, optional for I3C
                                                                           master device, not require for slave device.*/
     status_t (*TransmitCCC)(i3c_device_t *master,
-                            i3c_ccc_cmd_t *cmd); /*!< TransmitCCC function, only require for I3C master device.*/
+                            i3c_ccc_cmd_t *cmd);      /*!< TransmitCCC function, only require for I3C master device.*/
     status_t (*DoI3CTransfer)(
         i3c_device_t *dev, i3c_bus_transfer_t *xfer); /*!< DoI3CTransfer function, only require for I3C master device.*/
     status_t (*DoI2CTransfer)(
@@ -284,7 +284,7 @@ typedef struct _i3c_bus_config
 /*! @brief I3C bus structure, contains bus mandatory informations.*/
 struct _i3c_bus
 {
-    i3c_device_t *volatile currentMaster; /*!< Pointer to current I3C master on bus. */
+    i3c_device_t *volatile currentMaster;       /*!< Pointer to current I3C master on bus. */
     uint32_t addrSlots[((I3C_BUS_MAX_ADDR + 1U) * I3C_BUS_ADDR_SLOTWIDTH) /
                        I3C_BUS_ADDR_SLOTDEPTH]; /*!< I3C bus address pool. */
     i3c_bus_mode_t busMode;                     /*!< I3C bus mode. */
@@ -301,8 +301,8 @@ typedef struct _i3c_ccc_dev
     uint8_t dynamicAddr; /*!< Dynamic address for I3C device. */
     union
     {
-        uint8_t dcr; /*!< Device Characteristics register value for I3C device. */
-        uint8_t lvr; /*!< Legacy Virtual Register value for I2C device */
+        uint8_t dcr;    /*!< Device Characteristics register value for I3C device. */
+        uint8_t lvr;    /*!< Legacy Virtual Register value for I2C device */
     };
     uint8_t bcr;        /*!< Bus characteristics register value. */
     uint8_t staticAddr; /*!< Static address for I3C/I2C device. */
@@ -390,7 +390,7 @@ void I3C_BusAddI3CDev(i3c_bus_t *bus, i3c_device_t *dev);
  */
 void I3C_BusAddI2CDev(i3c_bus_t *bus, i2c_device_t *dev);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name I3C bus master operation
@@ -544,7 +544,7 @@ status_t I3C_BusMasterDisableEvents(i3c_device_t *masterDev, uint8_t slaveAddr, 
  */
 status_t I3C_BusMasterGetDeviceInfo(i3c_device_t *masterDev, uint8_t slaveAddr, i3c_device_information_t *devInfo);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name I3C bus slave operation
@@ -606,7 +606,7 @@ status_t I3C_BusSlaveRequestMasterShip(i3c_device_t *i3cDev);
  */
 status_t I3C_BusSlaveRequestIBI(i3c_device_t *i3cDev, void *data, size_t dataSize);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }

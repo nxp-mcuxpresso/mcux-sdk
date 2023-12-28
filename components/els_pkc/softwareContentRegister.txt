@@ -1,0 +1,14 @@
+--------------------------------------------
+NXP Software Content Register
+
+Package:                   clns-SDK_v1.7.0.zip
+Outgoing License:          LA_OPT_NXP_Software_License - No distribution permitted, license in Section 2.2 applies.
+License Files:             LICENSE.htm
+Type of content:           Static library, headers, sources
+Description and comments:  Cryptographic library running on NXP ELS and PKC Crypto Hardware IP
+Release Location:          Nexus
+Origin:                    Crypto Library (LA_OPT_NXP_Software_License)
+                           Mbed TLS header files (Apache License 2.0; https://github.com/Mbed-TLS/mbedtls)
+                           CMSIS header files (Apache License 2.0; https://github.com/ARM-software/CMSIS_5)
+                           
+--------------------------------------------

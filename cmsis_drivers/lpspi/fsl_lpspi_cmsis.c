@@ -29,7 +29,7 @@
      (defined(RTE_SPI2) && RTE_SPI2 && defined(LPSPI2)) || (defined(RTE_SPI3) && RTE_SPI3 && defined(LPSPI3)) || \
      (defined(RTE_SPI4) && RTE_SPI4 && defined(LPSPI4)) || (defined(RTE_SPI5) && RTE_SPI5 && defined(LPSPI5)))
 
-#define ARM_LPSPI_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (6)) /* driver version */
+#define ARM_LPSPI_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (9)) /* driver version */
 
 /*
  * ARMCC does not support split the data section automatically, so the driver
@@ -66,11 +66,11 @@ typedef struct _cmsis_lpspi_interrupt_driver_state
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
 typedef const struct _cmsis_lpspi_edma_resource
 {
-    DMA_Type *txEdmaBase;
+    void *txEdmaBase;
     uint32_t txEdmaChannel;
     uint16_t txDmaRequest;
 
-    DMA_Type *rxEdmaBase;
+    void *rxEdmaBase;
     uint32_t rxEdmaChannel;
     uint16_t rxDmaRequest;
 
@@ -565,8 +565,8 @@ static int32_t LPSPI_EdmaPowerControl(ARM_POWER_STATE state, cmsis_lpspi_edma_dr
             EDMA_CreateHandle(lpspi->edmaRxRegToRxDataHandle, dmaResource->rxEdmaBase, dmaResource->rxEdmaChannel);
             EDMA_CreateHandle(lpspi->edmaTxDataToTxRegHandle, dmaResource->txEdmaBase, dmaResource->txEdmaChannel);
 #if defined(FSL_FEATURE_EDMA_HAS_CHANNEL_MUX) && FSL_FEATURE_EDMA_HAS_CHANNEL_MUX
-            EDMA_SetChannelMux(dmaResource->txEdmaBase, dmaResource->txEdmaChannel, dmaResource->txDmaRequest);
-            EDMA_SetChannelMux(dmaResource->rxEdmaBase, dmaResource->rxEdmaChannel, dmaResource->rxDmaRequest);
+            EDMA_SetChannelMux(dmaResource->txEdmaBase, dmaResource->txEdmaChannel, (int32_t)dmaResource->txDmaRequest);
+            EDMA_SetChannelMux(dmaResource->rxEdmaBase, dmaResource->rxEdmaChannel, (int32_t)dmaResource->rxDmaRequest);
 #endif
 
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
@@ -1450,8 +1450,8 @@ static cmsis_lpspi_resource_t LPSPI1_Resource = {LPSPI1, 1, LPSPI1_GetFreq};
 
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
 static cmsis_lpspi_edma_resource_t LPSPI1_EdmaResource = {
-    RTE_SPI1_DMA_TX_DMA_BASE,    RTE_SPI1_DMA_TX_CH,          RTE_SPI1_DMA_TX_PERI_SEL,
-    RTE_SPI1_DMA_RX_DMA_BASE,    RTE_SPI1_DMA_RX_CH,          RTE_SPI1_DMA_RX_PERI_SEL,
+    RTE_SPI1_DMA_TX_DMA_BASE,    RTE_SPI1_DMA_TX_CH,          (uint16_t)RTE_SPI1_DMA_TX_PERI_SEL,
+    RTE_SPI1_DMA_RX_DMA_BASE,    RTE_SPI1_DMA_RX_CH,          (uint16_t)RTE_SPI1_DMA_RX_PERI_SEL,
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
     RTE_SPI1_DMA_TX_DMAMUX_BASE, RTE_SPI1_DMA_RX_DMAMUX_BASE,
 #endif
@@ -1620,8 +1620,8 @@ static cmsis_lpspi_resource_t LPSPI2_Resource = {LPSPI2, 2, LPSPI2_GetFreq};
 
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
 static cmsis_lpspi_edma_resource_t LPSPI2_EdmaResource = {
-    RTE_SPI2_DMA_TX_DMA_BASE,    RTE_SPI2_DMA_TX_CH,          RTE_SPI2_DMA_TX_PERI_SEL,
-    RTE_SPI2_DMA_RX_DMA_BASE,    RTE_SPI2_DMA_RX_CH,          RTE_SPI2_DMA_RX_PERI_SEL,
+    RTE_SPI2_DMA_TX_DMA_BASE,    RTE_SPI2_DMA_TX_CH,          (uint16_t)RTE_SPI2_DMA_TX_PERI_SEL,
+    RTE_SPI2_DMA_RX_DMA_BASE,    RTE_SPI2_DMA_RX_CH,          (uint16_t)RTE_SPI2_DMA_RX_PERI_SEL,
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
     RTE_SPI2_DMA_TX_DMAMUX_BASE, RTE_SPI2_DMA_RX_DMAMUX_BASE,
 #endif
@@ -1790,8 +1790,8 @@ static cmsis_lpspi_resource_t LPSPI3_Resource = {LPSPI3, 3, LPSPI3_GetFreq};
 
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
 static cmsis_lpspi_edma_resource_t LPSPI3_EdmaResource = {
-    RTE_SPI3_DMA_TX_DMA_BASE,    RTE_SPI3_DMA_TX_CH,          RTE_SPI3_DMA_TX_PERI_SEL,
-    RTE_SPI3_DMA_RX_DMA_BASE,    RTE_SPI3_DMA_RX_CH,          RTE_SPI3_DMA_RX_PERI_SEL,
+    RTE_SPI3_DMA_TX_DMA_BASE,    RTE_SPI3_DMA_TX_CH,          (uint16_t)RTE_SPI3_DMA_TX_PERI_SEL,
+    RTE_SPI3_DMA_RX_DMA_BASE,    RTE_SPI3_DMA_RX_CH,          (uint16_t)RTE_SPI3_DMA_RX_PERI_SEL,
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
     RTE_SPI3_DMA_TX_DMAMUX_BASE, RTE_SPI3_DMA_RX_DMAMUX_BASE,
 #endif
@@ -1960,8 +1960,8 @@ static cmsis_lpspi_resource_t LPSPI4_Resource = {LPSPI4, 4, LPSPI4_GetFreq};
 
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
 static cmsis_lpspi_edma_resource_t LPSPI4_EdmaResource = {
-    RTE_SPI4_DMA_TX_DMA_BASE,    RTE_SPI4_DMA_TX_CH,          RTE_SPI4_DMA_TX_PERI_SEL,
-    RTE_SPI4_DMA_RX_DMA_BASE,    RTE_SPI4_DMA_RX_CH,          RTE_SPI4_DMA_RX_PERI_SEL,
+    RTE_SPI4_DMA_TX_DMA_BASE,    RTE_SPI4_DMA_TX_CH,          (uint16_t)RTE_SPI4_DMA_TX_PERI_SEL,
+    RTE_SPI4_DMA_RX_DMA_BASE,    RTE_SPI4_DMA_RX_CH,          (uint16_t)RTE_SPI4_DMA_RX_PERI_SEL,
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
     RTE_SPI4_DMA_TX_DMAMUX_BASE, RTE_SPI4_DMA_RX_DMAMUX_BASE,
 #endif
@@ -2130,8 +2130,8 @@ static cmsis_lpspi_resource_t LPSPI5_Resource = {LPSPI5, 5, LPSPI5_GetFreq};
 
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
 static cmsis_lpspi_edma_resource_t LPSPI5_EdmaResource = {
-    RTE_SPI5_DMA_TX_DMA_BASE,    RTE_SPI5_DMA_TX_CH,          RTE_SPI5_DMA_TX_PERI_SEL,
-    RTE_SPI5_DMA_RX_DMA_BASE,    RTE_SPI5_DMA_RX_CH,          RTE_SPI5_DMA_RX_PERI_SEL,
+    RTE_SPI5_DMA_TX_DMA_BASE,    RTE_SPI5_DMA_TX_CH,          (uint16_t)RTE_SPI5_DMA_TX_PERI_SEL,
+    RTE_SPI5_DMA_RX_DMA_BASE,    RTE_SPI5_DMA_RX_CH,          (uint16_t)RTE_SPI5_DMA_RX_PERI_SEL,
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
     RTE_SPI5_DMA_TX_DMAMUX_BASE, RTE_SPI5_DMA_RX_DMAMUX_BASE,
 #endif
@@ -2300,8 +2300,8 @@ static cmsis_lpspi_resource_t LPSPI6_Resource = {LPSPI6, 6, LPSPI6_GetFreq};
 
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
 static cmsis_lpspi_edma_resource_t LPSPI6_EdmaResource = {
-    RTE_SPI6_DMA_TX_DMA_BASE,    RTE_SPI6_DMA_TX_CH,          RTE_SPI6_DMA_TX_PERI_SEL,
-    RTE_SPI6_DMA_RX_DMA_BASE,    RTE_SPI6_DMA_RX_CH,          RTE_SPI6_DMA_RX_PERI_SEL,
+    RTE_SPI6_DMA_TX_DMA_BASE,    RTE_SPI6_DMA_TX_CH,          (uint16_t)RTE_SPI6_DMA_TX_PERI_SEL,
+    RTE_SPI6_DMA_RX_DMA_BASE,    RTE_SPI6_DMA_RX_CH,          (uint16_t)RTE_SPI6_DMA_RX_PERI_SEL,
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
     RTE_SPI6_DMA_TX_DMAMUX_BASE, RTE_SPI6_DMA_RX_DMAMUX_BASE,
 #endif

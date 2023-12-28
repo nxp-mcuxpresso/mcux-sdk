@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_USART_H_
-#define _FSL_USART_H_
+#ifndef FSL_USART_H_
+#define FSL_USART_H_
 
 #include "fsl_common.h"
 
@@ -19,10 +19,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief USART driver version. */
-#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
-/*@}*/
+#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
+/*! @} */
 
 /*! @brief Macro gate for enable transaction API.  1 for enable, 0 for disable. */
 #ifndef FSL_SDK_ENABLE_USART_DRIVER_TRANSACTIONAL_APIS
@@ -274,7 +274,7 @@ extern "C" {
 
 /*! @brief Returns instance number for USART peripheral base address. */
 uint32_t USART_GetInstance(USART_Type *base);
-/* @} */
+/*! @} */
 
 /*!
  * @name Initialization and deinitialization
@@ -347,7 +347,7 @@ void USART_GetDefaultConfig(usart_config_t *config);
  * @retval kStatus_InvalidArgument One or more arguments are invalid.
  */
 status_t USART_SetBaudRate(USART_Type *base, uint32_t baudrate_Bps, uint32_t srcClock_Hz);
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -392,7 +392,7 @@ static inline void USART_ClearStatusFlags(USART_Type *base, uint32_t mask)
 {
     base->STAT = mask;
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -439,7 +439,6 @@ static inline void USART_DisableInterrupts(USART_Type *base, uint32_t mask)
  *
  * This function configures the number idle character of USART rx idle.
  * For 115200,8n1, 1 character timing is 86.81uS = 1/ (115200/(1start+8data+0parity+1stop))
- * @ref USART_CTL_RXIDLETOCFG
  * @code
  *    USART_SetRxIdleTimeout(USART1, 1);
  * @endcode
@@ -463,7 +462,7 @@ static inline uint32_t USART_GetEnabledInterrupts(USART_Type *base)
 {
     return base->INTENSET;
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name Bus Operations
@@ -635,7 +634,7 @@ status_t USART_WriteBlocking(USART_Type *base, const uint8_t *data, size_t lengt
  */
 status_t USART_ReadBlocking(USART_Type *base, uint8_t *data, size_t length);
 
-/* @} */
+/*! @} */
 
 #if defined(FSL_SDK_ENABLE_USART_DRIVER_TRANSACTIONAL_APIS) && (FSL_SDK_ENABLE_USART_DRIVER_TRANSACTIONAL_APIS)
 /*!
@@ -813,7 +812,7 @@ status_t USART_TransferGetReceiveCount(USART_Type *base, usart_handle_t *handle,
  */
 void USART_TransferHandleIRQ(USART_Type *base, usart_handle_t *handle);
 
-/* @} */
+/*! @} */
 #endif
 
 #if defined(__cplusplus)
@@ -822,4 +821,4 @@ void USART_TransferHandleIRQ(USART_Type *base, usart_handle_t *handle);
 
 /*! @}*/
 
-#endif /* _FSL_USART_H_ */
+#endif /* FSL_USART_H_ */

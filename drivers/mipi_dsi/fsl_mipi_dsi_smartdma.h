@@ -1,12 +1,12 @@
 /*
- * Copyright 2019-2022 NXP
+ * Copyright 2019-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_MIPI_DSI_SMARTDMA_H_
-#define _FSL_MIPI_DSI_SMARTDMA_H_
+#ifndef FSL_MIPI_DSI_SMARTDMA_H_
+#define FSL_MIPI_DSI_SMARTDMA_H_
 
 #include "fsl_mipi_dsi.h"
 #include "fsl_smartdma.h"
@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-#define FSL_MIPI_DSI_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
-/*@}*/
+/*! @{ */
+#define FSL_MIPI_DSI_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+/*! @} */
 
 /* Forward declaration of the handle typedef. */
 typedef struct _dsi_smartdma_handle dsi_smartdma_handle_t;
@@ -158,4 +158,4 @@ void DSI_TransferAbortSMARTDMA(MIPI_DSI_HOST_Type *base, dsi_smartdma_handle_t *
 
 /*! @} */
 
-#endif /* _FSL_MIPI_DSI_SMARTDMA_H_ */
+#endif /* FSL_MIPI_DSI_SMARTDMA_H_ */

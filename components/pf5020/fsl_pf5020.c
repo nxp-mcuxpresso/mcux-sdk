@@ -1294,13 +1294,14 @@ status_t PF5020_SWND1_SetOperateMode(pf5020_handle_t *handle,
 
     if (swnd1RunMode != (uint8_t)runOperateMode)
     {
-        tmp8 = ((tmp8 & (uint8_t)(~PF5020_BUCK_REGULATOR_RUN_MODE_MASK)) | PF5020_BUCK_REGULATOR_RUN_MODE(runOperateMode));
+        tmp8 =
+            ((tmp8 & (uint8_t)(~PF5020_BUCK_REGULATOR_RUN_MODE_MASK)) | PF5020_BUCK_REGULATOR_RUN_MODE(runOperateMode));
     }
 
     if (swnd1StandbyMode != (uint8_t)standbyOperateMode)
     {
         tmp8 = ((tmp8 & (uint8_t)(~PF5020_BUCK_REGULATOR_STANDBY_MODE_MASK)) |
-               PF5020_BUCK_REGULATOR_STANDBY_MODE(standbyOperateMode));
+                PF5020_BUCK_REGULATOR_STANDBY_MODE(standbyOperateMode));
     }
 
     status = PF5020_WriteReg(handle, PF5020_SWND1_MODE1, tmp8);

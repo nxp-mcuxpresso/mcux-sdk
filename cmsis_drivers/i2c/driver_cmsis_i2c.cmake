@@ -97,4 +97,3 @@ if(${MCUX_DEVICE} STREQUAL "MKE04Z1284")
 endif()
 
 include(CMSIS_Driver_Include_I2C)
-include(driver_i2c_edma)

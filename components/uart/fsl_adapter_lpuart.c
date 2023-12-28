@@ -681,7 +681,7 @@ static hal_uart_status_t HAL_UartInitCommon(hal_uart_handle_t handle, const hal_
     lpuartConfig.rxIdleConfig = kLPUART_IdleCharacter2;
 #endif /* HAL_UART_DMA_USE_SOFTWARE_IDLELINE_DETECTION */
 
-    status = LPUART_Init(s_LpuartAdapterBase[uart_config->instance], (const void *)&lpuartConfig, uart_config->srcClock_Hz);
+    status = LPUART_Init(s_LpuartAdapterBase[uart_config->instance], (const lpuart_config_t *)&lpuartConfig, uart_config->srcClock_Hz);
 
     if ((int32_t)kStatus_Success != status)
     {
@@ -848,7 +848,7 @@ hal_uart_status_t HAL_UartExitLowpower(hal_uart_handle_t handle)
 
 #endif
 #else
-    HAL_UartInit(handle, &uartHandle->config);
+    (void)HAL_UartInit(handle, &uartHandle->config);
 #endif
 #if (defined(HAL_UART_DMA_ENABLE) && (HAL_UART_DMA_ENABLE > 0U))
 #if (defined(HAL_UART_DMA_USE_SOFTWARE_IDLELINE_DETECTION) && (HAL_UART_DMA_USE_SOFTWARE_IDLELINE_DETECTION > 0U))
@@ -1859,9 +1859,9 @@ hal_uart_dma_status_t HAL_UartDMAInit(hal_uart_handle_t handle,
     DMAMUX_Type *dmaMuxBases[] = DMAMUX_BASE_PTRS;
     DMAMUX_Init(dmaMuxBases[dmaMux->dma_dmamux_configure.dma_mux_instance]);
     DMAMUX_SetSource(dmaMuxBases[dmaMux->dma_dmamux_configure.dma_mux_instance], dmaConfig->tx_channel,
-                     dmaMux->dma_dmamux_configure.tx_request);
+                     (int32_t)dmaMux->dma_dmamux_configure.tx_request);
     DMAMUX_SetSource(dmaMuxBases[dmaMux->dma_dmamux_configure.dma_mux_instance], dmaConfig->rx_channel,
-                     dmaMux->dma_dmamux_configure.rx_request);
+                     (int32_t)dmaMux->dma_dmamux_configure.rx_request);
     DMAMUX_EnableChannel(dmaMuxBases[dmaMux->dma_dmamux_configure.dma_mux_instance], dmaConfig->tx_channel);
     DMAMUX_EnableChannel(dmaMuxBases[dmaMux->dma_dmamux_configure.dma_mux_instance], dmaConfig->rx_channel);
 #if (defined(HAL_UART_ADAPTER_LOWPOWER) && (HAL_UART_ADAPTER_LOWPOWER > 0U))
@@ -1871,10 +1871,10 @@ hal_uart_dma_status_t HAL_UartDMAInit(hal_uart_handle_t handle,
     /* Init the EDMA module */
 #if defined(EDMA_BASE_PTRS)
     EDMA_Type *dmaBases[]                                             = EDMA_BASE_PTRS;
-    IRQn_Type s_edmaIRQNumbers[][FSL_FEATURE_EDMA_MODULE_MAX_CHANNEL] = EDMA_CHN_IRQS;
+    IRQn_Type s_edmaIRQNumbers[][FSL_FEATURE_EDMA_MODULE_CHANNEL] = EDMA_CHN_IRQS;
 #elif (defined(FSL_FEATURE_LPUART_IS_LPFLEXCOMM) && (FSL_FEATURE_LPUART_IS_LPFLEXCOMM > 0U))
     DMA_Type *dmaBases[]                                              = DMA_BASE_PTRS;
-    IRQn_Type s_edmaIRQNumbers[][FSL_FEATURE_EDMA_MODULE_MAX_CHANNEL] = DMA_CHN_IRQS;
+    IRQn_Type s_edmaIRQNumbers[][FSL_FEATURE_EDMA_MODULE_CHANNEL] = DMA_CHN_IRQS;
 #else
     DMA_Type *dmaBases[]                                          = DMA_BASE_PTRS;
     IRQn_Type s_edmaIRQNumbers[][FSL_FEATURE_EDMA_MODULE_CHANNEL] = DMA_CHN_IRQS;
@@ -1885,7 +1885,9 @@ hal_uart_dma_status_t HAL_UartDMAInit(hal_uart_handle_t handle,
 #if defined FSL_FEATURE_EDMA_HAS_CHANNEL_CONFIG && FSL_FEATURE_EDMA_HAS_CHANNEL_CONFIG
     edma_channel_config_t channelConfig = {
         .enableMasterIDReplication = true,
+#if !(defined(FSL_FEATURE_EDMA_HAS_NO_CH_SBR_SEC) && FSL_FEATURE_EDMA_HAS_NO_CH_SBR_SEC)
         .securityLevel             = kEDMA_ChannelSecurityLevelSecure,
+#endif
         .protectionLevel           = kEDMA_ChannelProtectionLevelPrivileged,
     };
 
@@ -1900,9 +1902,9 @@ hal_uart_dma_status_t HAL_UartDMAInit(hal_uart_handle_t handle,
 #if (defined(FSL_FEATURE_EDMA_HAS_CHANNEL_MUX) && (FSL_FEATURE_EDMA_HAS_CHANNEL_MUX > 0U))
     dma_channel_mux_configure_t *dmaChannelMux = dmaConfig->dma_channel_mux_configure;
     EDMA_SetChannelMux(dmaBases[dmaConfig->dma_instance], dmaConfig->tx_channel,
-                       (dma_request_source_t)dmaChannelMux->dma_dmamux_configure.dma_tx_channel_mux);
+                       (int32_t)dmaChannelMux->dma_dmamux_configure.dma_tx_channel_mux);
     EDMA_SetChannelMux(dmaBases[dmaConfig->dma_instance], dmaConfig->rx_channel,
-                       (dma_request_source_t)dmaChannelMux->dma_dmamux_configure.dma_rx_channel_mux);
+                       (int32_t)dmaChannelMux->dma_dmamux_configure.dma_rx_channel_mux);
 #if (defined(HAL_UART_ADAPTER_LOWPOWER) && (HAL_UART_ADAPTER_LOWPOWER > 0U))
     (void)memcpy(&uartDmaHandle->dma_channel_mux_configure, dmaConfig->dma_channel_mux_configure,
                  sizeof(dma_channel_mux_configure_t));

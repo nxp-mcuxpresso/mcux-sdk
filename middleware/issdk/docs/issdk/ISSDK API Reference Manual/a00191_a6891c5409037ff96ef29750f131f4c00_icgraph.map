@@ -1,7 +1,0 @@
-<map id="Sensor_SPI_BlockWrite" name="Sensor_SPI_BlockWrite">
-<area shape="rect" id="node2" href="$a00041.html#ac1215eeedc9ffa5b5d3ee5b133d7ee2a" title="The interface function to read the sensor data. " alt="" coords="216,5,456,32"/>
-<area shape="rect" id="node3" href="$a00155.html#a429c90eecb38e688d08310a3d3be3c81" title="The interface function to read the sensor data. " alt="" coords="219,56,453,83"/>
-<area shape="rect" id="node4" href="$a00155.html#a7aa85a35ea5947bf6ebd459911596bab" title="The interface function to configure he sensor. " alt="" coords="251,107,421,133"/>
-<area shape="rect" id="node5" href="$a00155.html#a87a98b09b82843fdb3e5f55ab2af5fca" title="The interface function to De Initialize sensor.. " alt="" coords="261,157,411,184"/>
-<area shape="rect" id="node6" href="$a00155.html#aa9e0baf731b01815b94c95276e6be639" title="The interface function to initialize the sensor. " alt="" coords="255,208,417,235"/>
-</map>
