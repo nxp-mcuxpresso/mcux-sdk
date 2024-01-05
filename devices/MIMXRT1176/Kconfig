@@ -172,6 +172,10 @@ config MCUX_USE_SOC_MIMXRT1176
     select MCUX_HAS_utility_str
 
 #### SOC specific dependency ####
+config MCUX_USE_driver_mipi_csi2rx
+    bool
+    select MCUX_USE_driver_soc_mipi_csi2rx
+
 config MCUX_USE_RTE_Device
     bool
     select MCUX_USE_driver_edma
