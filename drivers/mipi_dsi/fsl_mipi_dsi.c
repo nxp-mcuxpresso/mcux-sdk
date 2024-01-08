@@ -656,7 +656,9 @@ uint32_t DSI_InitDphy(MIPI_DSI_HOST_Type *base, const dsi_dphy_config_t *config,
     /* Auto power down the inactive lanes. */
     base->AUTO_PD_EN = 0x1U;
 
+#if defined(MIPI_DSI_HOST_TST_TST_MASK)
     base->TST = 0x25U;
+#endif
 
 #if !((defined(FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL) && (FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL)))
     /* Power up the PLL. */
