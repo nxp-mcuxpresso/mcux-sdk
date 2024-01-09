@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013-2016 ARM Limited. All rights reserved.
  * Copyright (c) 2016, Freescale Semiconductor, Inc. Not a Contribution.
- * Copyright 2016-2017, 2020 NXP. Not a Contribution.
+ * Copyright 2016-2017, 2020, 2023 NXP. Not a Contribution.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -33,7 +33,7 @@
      (defined(RTE_USART10) && RTE_USART10) || (defined(RTE_USART11) && RTE_USART11) || \
      (defined(RTE_USART12) && RTE_USART12) || (defined(RTE_USART13) && RTE_USART13))
 
-#define ARM_USART_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (3))
+#define ARM_USART_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (4))
 
 /*
  * ARMCC does not support split the data section automatically, so the driver
@@ -126,47 +126,20 @@ static int32_t USART_CommonControl(uint32_t control,
 
     USART_GetDefaultConfig(&config);
     int32_t result  = ARM_DRIVER_OK;
-    bool isContinue = false;
 
     switch (control & ARM_USART_CONTROL_Msk)
     {
         case ARM_USART_MODE_ASYNCHRONOUS:
             /* USART Baudrate */
             config.baudRate_Bps = arg;
-            isContinue          = true;
-            break;
-
-        /* TX/RX IO is controlled in application layer. */
-        case ARM_USART_CONTROL_TX:
-            if (arg != 0U)
-            {
-                config.enableTx = true;
-            }
-            else
-            {
-                config.enableTx = false;
-            }
-            result = ARM_DRIVER_OK;
-            break;
-
-        case ARM_USART_CONTROL_RX:
-            if (arg != 0U)
-            {
-                config.enableRx = true;
-            }
-            else
-            {
-                config.enableRx = false;
-            }
-
-            result = ARM_DRIVER_OK;
             break;
 
         default:
             result = ARM_DRIVER_ERROR_UNSUPPORTED;
             break;
     }
-    if (!isContinue)
+
+    if (result != ARM_DRIVER_OK)
     {
         return result;
     }

@@ -272,8 +272,8 @@ serial_handle_t g_serialHandle; /*!< serial manager handle */
  * @param[in] len length of the character
  *
  */
-#if SDK_DEBUGCONSOLE
-static void DbgConsole_PrintCallback(char *buf, int32_t *indicator, char dbgVal, int len);
+#if (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE == DEBUGCONSOLE_REDIRECT_TO_SDK))
+static void DbgConsole_PrintCallback(char *buffer, int32_t *indicator, char dbgVal, int len);
 #endif
 
 status_t DbgConsole_ReadOneCharacter(uint8_t *ch);
@@ -728,8 +728,8 @@ int DbgConsole_ReadCharacter(uint8_t *ch)
     return ret;
 }
 
-#if SDK_DEBUGCONSOLE
-static void DbgConsole_PrintCallback(char *buf, int32_t *indicator, char dbgVal, int len)
+#if (defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE == DEBUGCONSOLE_REDIRECT_TO_SDK))
+static void DbgConsole_PrintCallback(char *buffer, int32_t *indicator, char dbgVal, int len)
 {
     int i = 0;
 
@@ -737,11 +737,11 @@ static void DbgConsole_PrintCallback(char *buf, int32_t *indicator, char dbgVal,
     {
         if (((uint32_t)*indicator + 1UL) >= (uint32_t)DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN)
         {
-            (void)DbgConsole_SendDataReliable((uint8_t *)buf, (size_t)(*indicator));
+            (void)DbgConsole_SendDataReliable((uint8_t *)buffer, (size_t)(*indicator));
             *indicator = 0;
         }
 
-        buf[*indicator] = dbgVal;
+        buffer[*indicator] = dbgVal;
         (*indicator)++;
     }
 }

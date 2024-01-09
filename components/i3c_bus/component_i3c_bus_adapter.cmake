@@ -11,5 +11,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(component_i3c_bus)
 include(driver_i3c)
+include(component_i3c_bus)

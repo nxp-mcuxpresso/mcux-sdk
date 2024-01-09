@@ -16,5 +16,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(middleware_issdk_drivers_cmsis_drivers)
 include(driver_common)
+include(middleware_issdk_drivers_cmsis_drivers)

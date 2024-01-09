@@ -11,5 +11,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(component_silicon_id_imx8)
 include(driver_common)
+include(component_silicon_id_imx8)

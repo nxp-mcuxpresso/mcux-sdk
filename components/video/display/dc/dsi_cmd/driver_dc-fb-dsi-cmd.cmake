@@ -11,6 +11,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
+include(driver_dc-fb-common)
 include(driver_display-common)
 include(driver_display-mipi-dsi-cmd)
-include(driver_dc-fb-common)

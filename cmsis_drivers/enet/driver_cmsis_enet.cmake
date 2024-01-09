@@ -97,6 +97,6 @@ if(${MCUX_DEVICE} STREQUAL "MK66F18")
     include(driver_phy-common_MK66F18)
 endif()
 
-include(CMSIS_Driver_Include_Ethernet_PHY)
 include(driver_enet)
 include(CMSIS_Driver_Include_Ethernet_MAC)
+include(CMSIS_Driver_Include_Ethernet_PHY)

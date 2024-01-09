@@ -11,10 +11,10 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
-if(CONFIG_USE_component_i3c_adapter) 
-    include(component_i3c_adapter)
-endif()
 if(CONFIG_USE_component_flexcomm_i2c_adapter) 
     include(component_flexcomm_i2c_adapter)
+endif()
+if(CONFIG_USE_component_i3c_adapter) 
+    include(component_i3c_adapter)
 endif()
 

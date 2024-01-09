@@ -11,5 +11,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(driver_camera-device-sccb)
 include(driver_camera-device-common)
+include(driver_camera-device-sccb)

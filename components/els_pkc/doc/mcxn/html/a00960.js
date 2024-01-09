@@ -1,0 +1,4 @@
+var a00960 =
+[
+    [ "MCUXCLECC_STATUS_ERROR_SMALL_SUBGROUP", "a00960.html#gaf70d3732e96746a174562deb076669f6", null ]
+];

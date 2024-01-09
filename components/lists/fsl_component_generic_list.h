@@ -115,7 +115,7 @@ void LIST_Init(list_handle_t list, uint32_t max);
  * @param element - Handle of the element.
  * @retval NULL if element is orphan, Handle of the list the element is inserted into.
  */
-list_handle_t LIST_GetList(list_element_handle_t element);
+list_handle_t LIST_GetList(list_element_handle_t listElement);
 
 /*!
  * @brief Links element to the head of the list.
@@ -124,7 +124,7 @@ list_handle_t LIST_GetList(list_element_handle_t element);
  * @param element - Handle of the element.
  * @retval kLIST_Full if list is full, kLIST_Ok if insertion was successful.
  */
-list_status_t LIST_AddHead(list_handle_t list, list_element_handle_t element);
+list_status_t LIST_AddHead(list_handle_t list, list_element_handle_t listElement);
 
 /*!
  * @brief Links element to the tail of the list.
@@ -133,7 +133,7 @@ list_status_t LIST_AddHead(list_handle_t list, list_element_handle_t element);
  * @param element - Handle of the element.
  * @retval kLIST_Full if list is full, kLIST_Ok if insertion was successful.
  */
-list_status_t LIST_AddTail(list_handle_t list, list_element_handle_t element);
+list_status_t LIST_AddTail(list_handle_t list, list_element_handle_t listElement);
 
 /*!
  * @brief Unlinks element from the head of the list.
@@ -160,7 +160,7 @@ list_element_handle_t LIST_GetHead(list_handle_t list);
  *
  * @retval NULL if list is empty, handle of removed element(pointer) if removal was successful.
  */
-list_element_handle_t LIST_GetNext(list_element_handle_t element);
+list_element_handle_t LIST_GetNext(list_element_handle_t listElement);
 
 /*!
  * @brief Gets previous element handle for given element handle.
@@ -169,7 +169,7 @@ list_element_handle_t LIST_GetNext(list_element_handle_t element);
  *
  * @retval NULL if list is empty, handle of removed element(pointer) if removal was successful.
  */
-list_element_handle_t LIST_GetPrev(list_element_handle_t element);
+list_element_handle_t LIST_GetPrev(list_element_handle_t listElement);
 
 /*!
  * @brief Unlinks an element from its list.
@@ -179,7 +179,7 @@ list_element_handle_t LIST_GetPrev(list_element_handle_t element);
  * @retval kLIST_OrphanElement if element is not part of any list.
  * @retval kLIST_Ok if removal was successful.
  */
-list_status_t LIST_RemoveElement(list_element_handle_t element);
+list_status_t LIST_RemoveElement(list_element_handle_t listElement);
 
 /*!
  * @brief Links an element in the previous position relative to a given member of a list.
@@ -190,7 +190,7 @@ list_status_t LIST_RemoveElement(list_element_handle_t element);
  * @retval kLIST_OrphanElement if element is not part of any list.
  * @retval kLIST_Ok if removal was successful.
  */
-list_status_t LIST_AddPrevElement(list_element_handle_t element, list_element_handle_t newElement);
+list_status_t LIST_AddPrevElement(list_element_handle_t listElement, list_element_handle_t newElement);
 
 /*!
  * @brief Gets the current size of a list.

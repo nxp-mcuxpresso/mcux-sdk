@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020,2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -25,15 +25,19 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SPI driver version. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*@}*/
+/*! @brief SPI default SSEL COUNT*/
+#if !(defined(FSL_FEATURE_SPI_SSEL_COUNT) || defined(FSL_FEATURE_SPI_IS_SSEL_PIN_COUNT_EQUAL_TO_THREE))
+#define FSL_FEATURE_SPI_SSEL_COUNT (4U)
+#endif
 
 /*! @brief Global variable for dummy data value setting. */
 extern volatile uint8_t s_dummyData[];
 
 #ifndef SPI_DUMMYDATA
 /*! @brief SPI dummy transfer data, the data is sent while txBuff is NULL. */
-#define SPI_DUMMYDATA (0xFFU)
+#define SPI_DUMMYDATA (0x00U)
 #endif
 
 /*! @brief Retry times for waiting flag. */
@@ -141,14 +145,22 @@ typedef enum _spi_spol
 {
     kSPI_Spol0ActiveHigh = SPI_CFG_SPOL0(1),
     kSPI_Spol1ActiveHigh = SPI_CFG_SPOL1(1),
+#if ((defined(FSL_FEATURE_SPI_SSEL_COUNT) && (FSL_FEATURE_SPI_SSEL_COUNT > 2)) || \
+     (defined(FSL_FEATURE_SPI_IS_SSEL_PIN_COUNT_EQUAL_TO_THREE) &&                \
+      (FSL_FEATURE_SPI_IS_SSEL_PIN_COUNT_EQUAL_TO_THREE)))
     kSPI_Spol2ActiveHigh = SPI_CFG_SPOL2(1),
+#endif
 #if defined(FSL_FEATURE_SPI_IS_SSEL_PIN_COUNT_EQUAL_TO_THREE) && (FSL_FEATURE_SPI_IS_SSEL_PIN_COUNT_EQUAL_TO_THREE)
     kSPI_SpolActiveAllHigh = (kSPI_Spol0ActiveHigh | kSPI_Spol1ActiveHigh | kSPI_Spol2ActiveHigh),
+#else
+#if (defined(FSL_FEATURE_SPI_SSEL_COUNT) && (FSL_FEATURE_SPI_SSEL_COUNT == 2))
+    kSPI_SpolActiveAllHigh = (kSPI_Spol0ActiveHigh | kSPI_Spol1ActiveHigh),
 #else
     kSPI_Spol3ActiveHigh = SPI_CFG_SPOL3(1),
     kSPI_SpolActiveAllHigh =
         (kSPI_Spol0ActiveHigh | kSPI_Spol1ActiveHigh | kSPI_Spol2ActiveHigh | kSPI_Spol3ActiveHigh),
-#endif
+#endif /* FSL_FEATURE_SPI_SSEL_COUNT == 2 */
+#endif /* FSL_FEATURE_SPI_IS_SSEL_PIN_COUNT_EQUAL_TO_THREE */
     kSPI_SpolActiveAllLow = 0,
 } spi_spol_t;
 

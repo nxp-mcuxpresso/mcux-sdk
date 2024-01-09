@@ -282,9 +282,9 @@ void DMA_SetupDescriptor(
     assert((((uint32_t)(uint32_t *)nextDesc) & ((uint32_t)FSL_FEATURE_DMA_LINK_DESCRIPTOR_ALIGN_SIZE - 1UL)) == 0UL);
 
 #if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET)
-    srcStartAddr = (void *)MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)srcStartAddr, kMEMORY_Local2DMA);
-    dstStartAddr = (void *)MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)dstStartAddr, kMEMORY_Local2DMA);
-    nextDesc     = (void *)MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)nextDesc, kMEMORY_Local2DMA);
+    srcStartAddr = (void *)(uint8_t *)MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)srcStartAddr, kMEMORY_Local2DMA);
+    dstStartAddr = (void *)(uint8_t *)MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)dstStartAddr, kMEMORY_Local2DMA);
+    nextDesc     = (void *)(uint8_t *)MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)nextDesc, kMEMORY_Local2DMA);
 #endif
 
     uint32_t width = 0, srcInc = 0, dstInc = 0, transferCount = 0;
@@ -358,9 +358,9 @@ void DMA_SetupChannelDescriptor(dma_descriptor_t *desc,
     assert((((uint32_t)(uint32_t *)nextDesc) & ((uint32_t)FSL_FEATURE_DMA_LINK_DESCRIPTOR_ALIGN_SIZE - 1UL)) == 0UL);
 
 #if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET)
-    srcStartAddr = (void *)MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)srcStartAddr, kMEMORY_Local2DMA);
-    dstStartAddr = (void *)MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)dstStartAddr, kMEMORY_Local2DMA);
-    nextDesc     = (void *)MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)nextDesc, kMEMORY_Local2DMA);
+    srcStartAddr = (void *)(uint8_t *)MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)srcStartAddr, kMEMORY_Local2DMA);
+    dstStartAddr = (void *)(uint8_t *)MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)dstStartAddr, kMEMORY_Local2DMA);
+    nextDesc     = (void *)(uint8_t *)MEMORY_ConvertMemoryMapAddress((uint32_t)(uint32_t *)nextDesc, kMEMORY_Local2DMA);
 #endif
 
     uint32_t width = 0, srcInc = 0, dstInc = 0, transferCount = 0;

@@ -48,16 +48,21 @@
 #define gMemManagerLightGuardsCheckEnable 0
 #endif
 
-/*! Extend Heap usage beyond the size defined by MinimalHeapSize_c up to __HEAP_end__ symbol address.
- *   __HEAP_end__ shall be defined in linker script
- *   If __HEAP_end__ is defined to upper RAM address, this allows to make full use of the
- *   remaining available SRAM.
- *   @Warning, no data shall be placed after memHeap symbol address up to __HEAP_end__ .
- *   For this, memHeap symbol is located in .heap section after the bss and data sections
- *   in linker script
+/*! Extend Heap usage beyond the size defined by MinimalHeapSize_c up to __HEAP_end__ symbol address
+ *   to make full use of the remaining available SRAM for the dynamic allocator. Also, only the data up to the
+ *   highest allocated block will be retained by calling the @function MEM_GetHeapUpperLimit() from the power
+ *   manager.
+ *   When this flag is turned to 1 :
+ *     -  __HEAP_end__ linker symbol shall be defined in linker script to be the highest allowed address
+ *   used by the fsl_component_memory_manager_light
+ *     - .heap section shall be defined and placed after bss and zi sections to make sure no data is located
+ *   up to __HEAP_end__ symbol.
+ *   @Warning, no data shall be placed after memHeap symbol address up to __HEAP_end__ . If an other
+ *   memory allocator uses a memory area between __HEAP_start__ and __HEAP_end__, area may overlap
+ *   with fsl_component_memory_manager_light, so this flag shall be kept to 0
  */
 #ifndef gMemManagerLightExtendHeapAreaUsage
-#define gMemManagerLightExtendHeapAreaUsage   1
+#define gMemManagerLightExtendHeapAreaUsage   0
 #endif
 
 /*! *********************************************************************************
@@ -155,19 +160,24 @@ typedef union void_ptr_tag
 #if defined(__IAR_SYSTEMS_ICC__)
 #pragma location = ".heap"
 static uint32_t memHeap[MinimalHeapSize_c / sizeof(uint32_t)];
+#elif defined(__CC_ARM) || defined(__ARMCC_VERSION)
+static uint32_t memHeap[MinimalHeapSize_c / sizeof(uint32_t)] __attribute__((section(".heap")));
 #elif defined(__GNUC__)
-static uint32_t memHeap[MinimalHeapSize_c / sizeof(uint32_t)] __attribute__((section(".heap")));
-#elif defined(__CC_ARM)
-static uint32_t memHeap[MinimalHeapSize_c / sizeof(uint32_t)] __attribute__((section(".heap")));
+static uint32_t memHeap[MinimalHeapSize_c / sizeof(uint32_t)] __attribute__((section(".heap, \"aw\", %nobits @")));
 #else
 #error "Compiler unknown!"
 #endif
 
 #if defined(gMemManagerLightExtendHeapAreaUsage) && (gMemManagerLightExtendHeapAreaUsage == 1)
+#if defined(__ARMCC_VERSION)
+extern uint32_t Image$$ARM_LIB_STACK$$Base[];
+static const uint32_t memHeapEnd = (uint32_t)&Image$$ARM_LIB_STACK$$Base;
+#else
 extern uint32_t __HEAP_end__[];
 static const uint32_t memHeapEnd = (uint32_t)&__HEAP_end__;
+#endif
 #else
-static const uint32_t memHeapEnd = (uint32_t)(memHeap + MinimalHeapSize_c/ sizeof(uint32_t));
+static const uint32_t memHeapEnd = (uint32_t)(memHeap + MinimalHeapSize_c / sizeof(uint32_t));
 #endif
 
 #else
@@ -259,7 +269,7 @@ static void MEM_BufferAllocates_memStatis(void *buffer, uint32_t time, uint32_t 
         s_memStatis.nb_alloc--;
     }
 #else
-    NOT_USED(time);
+    (void)time;
 #endif /* MEM_MANAGER_BENCH */
 }
 
@@ -444,7 +454,7 @@ static void *MEM_BufferAllocate(uint32_t numBytes, uint8_t poolId)
 {
     if (initialized == false)
     {
-        MEM_Init();
+        (void)MEM_Init();
     }
 
     uint32_t regPrimask = DisableGlobalIRQ();
@@ -485,9 +495,10 @@ static void *MEM_BufferAllocate(uint32_t numBytes, uint8_t poolId)
                 {
                     UsableBlockHdr = FreeBlockHdr;
                 }
-                /* to avoid waste of large blocks with small blocks, make sure the required size is big enough for the
-                  available block otherwise, try an other block ! */
-                if ((available_size - numBytes) < (available_size >> cMemManagerLightReuseFreeBlocks))
+                /* To avoid waste of large blocks with small blocks, make sure the required size is big enough for the
+                  available block otherwise, try an other block !
+                  Do not check if available block size is 4 bytes, take the block anyway ! */
+                if ( (available_size <= 4u) || ((available_size - numBytes) < (available_size >> cMemManagerLightReuseFreeBlocks)))
 #endif
                 {
                     /* Found a matching free block */
@@ -533,6 +544,10 @@ static void *MEM_BufferAllocate(uint32_t numBytes, uint8_t poolId)
 
             if (available_size >= (numBytes + BLOCK_HDR_SIZE)) /* need to keep the room for the next BlockHeader */
             {
+                /* Depending on the platform, some RAM banks could need some reinitialization after a low power
+                 * period, such as ECC RAM banks */
+                MEM_ReinitRamBank((uint32_t)FreeBlockHdr + BLOCK_HDR_SIZE, ROUNDUP_WORD(((uint32_t)FreeBlockHdr + BLOCK_HDR_SIZE + numBytes)));
+
                 FreeBlockHdr->used = MEMMANAGER_BLOCK_USED;
 #if defined(MEM_STATISTICS_INTERNAL)
                 FreeBlockHdr->buff_size = (uint16_t)numBytes;
@@ -875,6 +890,13 @@ uint32_t MEM_GetFreeHeapSize(void)
     free_size += memHeapEnd - (uint32_t)FreeBlockHdrList.tail - BLOCK_HDR_SIZE;
 
     return free_size;
+}
+
+__attribute__((weak)) void MEM_ReinitRamBank(uint32_t startAddress, uint32_t endAddress)
+{
+    /* To be implemented by the platform */
+    (void)startAddress;
+    (void)endAddress;
 }
 
 #if 0 /* MISRA C-2012 Rule 8.4 */

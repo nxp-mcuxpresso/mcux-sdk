@@ -27,8 +27,8 @@
  * @{
  */
 
-/*! @brief DMIC driver version 2.3.0. */
-#define FSL_DMIC_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief DMIC driver version 2.3.2. */
+#define FSL_DMIC_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
 /*! @brief _dmic_status DMIC transfer status.*/
@@ -117,9 +117,11 @@ typedef enum _dmic_channel
 {
     kDMIC_Channel0 = 0U, /*!< DMIC channel 0 */
     kDMIC_Channel1 = 1U, /*!< DMIC channel 1 */
-#if defined(FSL_FEATURE_DMIC_CHANNEL_NUM) && (FSL_FEATURE_DMIC_CHANNEL_NUM == 8U)
+#if defined(FSL_FEATURE_DMIC_CHANNEL_NUM) && (FSL_FEATURE_DMIC_CHANNEL_NUM > 2U)
     kDMIC_Channel2 = 2U, /*!< DMIC channel 2 */
     kDMIC_Channel3 = 3U, /*!< DMIC channel 3 */
+#endif
+#if defined(FSL_FEATURE_DMIC_CHANNEL_NUM) && (FSL_FEATURE_DMIC_CHANNEL_NUM > 4U)
     kDMIC_Channel4 = 4U, /*!< DMIC channel 4 */
     kDMIC_Channel5 = 5U, /*!< DMIC channel 5 */
     kDMIC_Channel6 = 6U, /*!< DMIC channel 6 */
@@ -132,9 +134,11 @@ enum
 {
     kDMIC_EnableChannel0 = 1 << 0U, /*!< DMIC channel 0 mask */
     kDMIC_EnableChannel1 = 1 << 1U, /*!< DMIC channel 1 mask */
-#if defined(FSL_FEATURE_DMIC_CHANNEL_NUM) && (FSL_FEATURE_DMIC_CHANNEL_NUM == 8U)
+#if defined(FSL_FEATURE_DMIC_CHANNEL_NUM) && (FSL_FEATURE_DMIC_CHANNEL_NUM > 2U)
     kDMIC_EnableChannel2 = 1 << 2U, /*!< DMIC channel 2 mask */
     kDMIC_EnableChannel3 = 1 << 3U, /*!< DMIC channel 3 mask */
+#endif
+#if defined(FSL_FEATURE_DMIC_CHANNEL_NUM) && (FSL_FEATURE_DMIC_CHANNEL_NUM > 4U)
     kDMIC_EnableChannel4 = 1 << 4U, /*!< DMIC channel 4 mask */
     kDMIC_EnableChannel5 = 1 << 5U, /*!< DMIC channel 5 mask */
     kDMIC_EnableChannel6 = 1 << 6U, /*!< DMIC channel 6 mask */
@@ -354,7 +358,7 @@ static inline void DMIC_EnableChannelDma(DMIC_Type *base, dmic_channel_t channel
     }
     else
     {
-        base->CHANNEL[channel].FIFO_CTRL &= DMIC_CHANNEL_FIFO_CTRL_DMAEN_MASK;
+        base->CHANNEL[channel].FIFO_CTRL &= ~DMIC_CHANNEL_FIFO_CTRL_DMAEN_MASK;
     }
 }
 
@@ -372,7 +376,7 @@ static inline void DMIC_EnableChannelFifo(DMIC_Type *base, dmic_channel_t channe
     }
     else
     {
-        base->CHANNEL[channel].FIFO_CTRL &= DMIC_CHANNEL_FIFO_CTRL_ENABLE_MASK;
+        base->CHANNEL[channel].FIFO_CTRL &= ~DMIC_CHANNEL_FIFO_CTRL_ENABLE_MASK;
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 NXP
+ * Copyright 2018-2023 NXP
  * All rights reserved.
  *
  *
@@ -36,6 +36,7 @@
 #ifndef SERIAL_MANAGER_RING_BUFFER_FLOWCONTROL
 #define SERIAL_MANAGER_RING_BUFFER_FLOWCONTROL (0U)
 #endif
+
 /*! @brief Enable or disable uart port (1 - enable, 0 - disable) */
 #ifndef SERIAL_PORT_TYPE_UART
 #define SERIAL_PORT_TYPE_UART (0U)
@@ -73,6 +74,11 @@
 /*! @brief Enable or disable SPI Slave port (1 - enable, 0 - disable) */
 #ifndef SERIAL_PORT_TYPE_SPI_SLAVE
 #define SERIAL_PORT_TYPE_SPI_SLAVE (0U)
+#endif
+
+/*! @brief Enable or disable BLE WU port (1 - enable, 0 - disable) */
+#ifndef SERIAL_PORT_TYPE_BLE_WU
+#define SERIAL_PORT_TYPE_BLE_WU (0U)
 #endif
 
 #if (defined(SERIAL_PORT_TYPE_SPI_SLAVE) && (SERIAL_PORT_TYPE_SPI_SLAVE == 1U))
@@ -164,6 +170,14 @@
 
 #include "fsl_component_serial_port_virtual.h"
 #endif
+#if (defined(SERIAL_PORT_TYPE_BLE_WU) && (SERIAL_PORT_TYPE_BLE_WU > 0U))
+
+#if !(defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
+#error The serial manager blocking mode cannot be supported for BLE WU.
+#endif /* SERIAL_MANAGER_NON_BLOCKING_MODE */
+
+#include "fsl_component_serial_port_ble_wu.h"
+#endif /* SERIAL_PORT_TYPE_BLE_WU */
 
 #define SERIAL_MANAGER_HANDLE_SIZE_TEMP 0U
 #if (defined(SERIAL_PORT_TYPE_UART) && (SERIAL_PORT_TYPE_UART > 0U))
@@ -232,10 +246,19 @@
 
 #endif
 
+#if (defined(SERIAL_PORT_TYPE_BLE_WU) && (SERIAL_PORT_TYPE_BLE_WU > 0U))
+
+#if (SERIAL_PORT_BLE_WU_HANDLE_SIZE > SERIAL_MANAGER_HANDLE_SIZE_TEMP)
+#undef SERIAL_MANAGER_HANDLE_SIZE_TEMP
+#define SERIAL_MANAGER_HANDLE_SIZE_TEMP SERIAL_PORT_BLE_WU_HANDLE_SIZE
+#endif
+
+#endif
+
 /*! @brief SERIAL_PORT_UART_HANDLE_SIZE/SERIAL_PORT_USB_CDC_HANDLE_SIZE + serial manager dedicated size */
 #if ((defined(SERIAL_MANAGER_HANDLE_SIZE_TEMP) && (SERIAL_MANAGER_HANDLE_SIZE_TEMP > 0U)))
 #else
-#error SERIAL_PORT_TYPE_UART, SERIAL_PORT_TYPE_USBCDC, SERIAL_PORT_TYPE_SWO and SERIAL_PORT_TYPE_VIRTUAL should not be cleared at same time.
+#error SERIAL_PORT_TYPE_UART, SERIAL_PORT_TYPE_USBCDC, SERIAL_PORT_TYPE_SWO, SERIAL_PORT_TYPE_VIRTUAL, and SERIAL_PORT_TYPE_BLE_WU should not be cleared at same time.
 #endif
 
 /*! @brief Macro to determine whether use common task. */
@@ -360,6 +383,7 @@ typedef enum _serial_port_type
     kSerialPort_UartDma,   /*!< Serial port UART DMA*/
     kSerialPort_SpiMaster, /*!< Serial port SPIMASTER*/
     kSerialPort_SpiSlave,  /*!< Serial port SPISLAVE*/
+    kSerialPort_BleWu,     /*!< Serial port BLE WU */
 } serial_port_type_t;
 #endif
 
@@ -411,7 +435,7 @@ typedef void (*serial_manager_callback_t)(void *callbackParam,
                                           serial_manager_status_t status);
 
 /*! @brief serial manager Lowpower Critical callback function */
-typedef void (*serial_manager_lowpower_critical_callback_t)(void);
+typedef int32_t (*serial_manager_lowpower_critical_callback_t)(int32_t power_mode);
 typedef struct _serial_manager_lowpower_critical_CBs_t
 {
     serial_manager_lowpower_critical_callback_t serialEnterLowpowerCriticalFunc;
@@ -487,7 +511,7 @@ extern "C" {
  * @retval kStatus_SerialManager_Error An error occurred.
  * @retval kStatus_SerialManager_Success The Serial Manager module initialization succeed.
  */
-serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const serial_manager_config_t *config);
+serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const serial_manager_config_t *serialConfig);
 
 /*!
  * @brief De-initializes the serial manager module instance.

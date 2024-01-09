@@ -16,7 +16,7 @@
 static void I2C_RTOS_Callback(I2C_Type *base, i2c_master_handle_t *drv_handle, status_t status, void *userData)
 {
     i2c_rtos_handle_t *handle = (i2c_rtos_handle_t *)userData;
-    BaseType_t reschedule;
+    BaseType_t reschedule = pdFALSE;
     handle->async_status = status;
     (void)xSemaphoreGiveFromISR(handle->semaphore, &reschedule);
     portYIELD_FROM_ISR(reschedule);

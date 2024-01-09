@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,9 +22,12 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Defines CDOG driver version 2.1.1.
+/*! @brief Defines CDOG driver version 2.1.2.
  *
  * Change log:
+ * - Version 2.1.2
+ *   - Support multiple IRQs
+ *   - Fix default CONTROL values
  * - Version 2.1.1
  *   - Remove bit CONTROL[CONTROL_CTRL]
  * - Version 2.1.0
@@ -36,7 +39,7 @@
  * - Version 2.0.0
  *   - initial version
  */
-#define FSL_CDOG_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_CDOG_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 typedef struct
@@ -136,8 +139,17 @@ typedef uint32_t secure_counter_t;
 /*******************************************************************************
  * API
  *******************************************************************************/
-
+#if defined(CDOG)
 extern void CDOG_DriverIRQHandler(void);
+#endif
+
+#if defined(CDOG0)
+extern void CDOG0_DriverIRQHandler(void);
+#endif
+
+#if defined(CDOG1)
+extern void CDOG1_DriverIRQHandler(void);
+#endif
 
 #if defined(__cplusplus)
 extern "C" {

@@ -12,5 +12,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 
 
 include(CMSIS_Driver_Include_GPIO)
-include(driver_lpc_gpio)
 include(driver_pint)
+include(driver_lpc_gpio)

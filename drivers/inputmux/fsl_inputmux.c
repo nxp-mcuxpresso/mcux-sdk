@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -47,11 +47,17 @@ void INPUTMUX_Init(INPUTMUX_Type *base)
 /*!
  * brief Attaches a signal
  *
- * This function gates the INPUTPMUX clock.
+ * This function attaches multiplexed signals from INPUTMUX to target signals.
+ * For example, to attach GPIO PORT0 Pin 5 to PINT peripheral, do the following:
+ * code
+ *      INPUTMUX_AttachSignal(INPUTMUX, 2, kINPUTMUX_GpioPort0Pin5ToPintsel);
+ * endcode
+ * In this example, INTMUX has 8 registers for PINT, PINT_SEL0~PINT_SEL7.
+ * With parameter p index specified as 2, this function configures register PINT_SEL2.
  *
  * param base Base address of the INPUTMUX peripheral.
- * param index Destination peripheral to attach the signal to.
- * param connection Selects connection.
+ * param index The serial number of destination register in the group of INPUTMUX registers with same name.
+ * param connection Applies signal from source signals collection to target signal.
  *
  * retval None.
  */

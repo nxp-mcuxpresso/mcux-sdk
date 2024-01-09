@@ -131,25 +131,6 @@
 /*********************************************************************/
 
 /***************Debug console other configuration*********************/
-/*! @brief Definition to printf the float number. */
-#ifndef PRINTF_FLOAT_ENABLE
-#define PRINTF_FLOAT_ENABLE 0U
-#endif /* PRINTF_FLOAT_ENABLE */
-
-/*! @brief Definition to scanf the float number. */
-#ifndef SCANF_FLOAT_ENABLE
-#define SCANF_FLOAT_ENABLE 0U
-#endif /* SCANF_FLOAT_ENABLE */
-
-/*! @brief Definition to support advanced format specifier for printf. */
-#ifndef PRINTF_ADVANCED_ENABLE
-#define PRINTF_ADVANCED_ENABLE 0U
-#endif /* PRINTF_ADVANCED_ENABLE */
-
-/*! @brief Definition to support advanced format specifier for scanf. */
-#ifndef SCANF_ADVANCED_ENABLE
-#define SCANF_ADVANCED_ENABLE 0U
-#endif /* SCANF_ADVANCED_ENABLE */
 
 /*! @brief Definition to select virtual com(USB CDC) as the debug console. */
 #ifndef BOARD_USE_VIRTUALCOM

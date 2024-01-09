@@ -1,0 +1,10 @@
+var a00877 =
+[
+    [ "MCUXCLECC_STATUS_OK", "a00877.html#gafed6866e44c300e1946713be81aefb9c", null ],
+    [ "MCUXCLECC_STATUS_INVALID_PARAMS", "a00877.html#ga7eec856d4a1438ff6e603ee42aaa9aae", null ],
+    [ "MCUXCLECC_STATUS_RNG_ERROR", "a00877.html#ga80ff10536e9cd063f733449d74b1c878", null ],
+    [ "MCUXCLECC_STATUS_INVALID_SIGNATURE", "a00877.html#gae739e1f3f62d1a66e2a862e40d5a0f37", null ],
+    [ "MCUXCLECC_STATUS_NEUTRAL_POINT", "a00877.html#gaad0d3ea3572cc175fe1608bca3ddac35", null ],
+    [ "MCUXCLECC_STATUS_FAULT_ATTACK", "a00877.html#ga9d53aaec17a413449e5cb6b73702c2c3", null ],
+    [ "MCUXCLECC_STATUS_NOT_SUPPORTED", "a00877.html#ga7f2a86f80fcda4760372af6cdbc11c1b", null ]
+];

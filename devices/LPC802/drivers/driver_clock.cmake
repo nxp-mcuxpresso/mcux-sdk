@@ -11,5 +11,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(driver_rom_api)
 include(driver_power_no_lib)
+include(driver_rom_api)

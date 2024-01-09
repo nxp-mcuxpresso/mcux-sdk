@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -230,7 +230,7 @@ status_t USART_Init(USART_Type *base, const usart_config_t *config, uint32_t src
         base->FIFOTRIG |= USART_FIFOTRIG_RXLVLENA_MASK;
     }
 #if defined(FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG) && FSL_FEATURE_USART_HAS_FIFORXTIMEOUTCFG
-    USART_SetRxTimeoutConfig(base, (usart_rx_timeout_config *)&(config->rxTimeout));
+    USART_SetRxTimeoutConfig(base, &(config->rxTimeout));
 #endif
     /* setup configuration and enable USART */
     base->CFG = USART_CFG_PARITYSEL(config->parityMode) | USART_CFG_STOPLEN(config->stopBitCount) |
@@ -244,7 +244,7 @@ status_t USART_Init(USART_Type *base, const usart_config_t *config, uint32_t src
     {
         if ((9600U % config->baudRate_Bps) == 0U)
         {
-            base->BRG = 9600U / config->baudRate_Bps;
+            base->BRG = 9600U / config->baudRate_Bps - 1U;
         }
         else
         {
@@ -361,17 +361,17 @@ void USART_CalcTimeoutConfig(uint32_t target_us,
                              uint32_t *rxTimeoutcounter,
                              uint32_t srcClock_Hz)
 {
-    uint16_t counter   = 0U;
+    uint32_t counter   = 0U;
     uint32_t perscalar = 0U, calculate_us = 0U, us_diff = 0U, min_diff = 0xffffffffUL;
     /* find the suitable value */
     for (perscalar = 0U; perscalar < 256U; perscalar++)
     {
-        counter      = target_us * (srcClock_Hz / 1000000UL) / (16U * (perscalar + 1U));
+        counter      =  target_us * (srcClock_Hz / 1000000UL) / (16U * (perscalar + 1U));
         calculate_us = 16U * (perscalar + 1U) * counter / (srcClock_Hz / 1000000UL);
         us_diff      = (calculate_us > target_us) ? (calculate_us - target_us) : (target_us - calculate_us);
         if (us_diff == 0U)
         {
-            *rxTimeoutPrescaler = perscalar;
+            *rxTimeoutPrescaler = (uint8_t)perscalar;
             *rxTimeoutcounter   = counter;
             break;
         }
@@ -380,7 +380,7 @@ void USART_CalcTimeoutConfig(uint32_t target_us,
             if (min_diff > us_diff)
             {
                 min_diff            = us_diff;
-                *rxTimeoutPrescaler = perscalar;
+                *rxTimeoutPrescaler = (uint8_t)perscalar;
                 *rxTimeoutcounter   = counter;
             }
         }
@@ -395,11 +395,11 @@ void USART_CalcTimeoutConfig(uint32_t target_us,
  * param base USART peripheral base address.
  * param config pointer to receive timeout configuration structure.
  */
-void USART_SetRxTimeoutConfig(USART_Type *base, usart_rx_timeout_config *config)
+void USART_SetRxTimeoutConfig(USART_Type *base, const usart_rx_timeout_config *config)
 {
     base->FIFORXTIMEOUTCFG = 0U;
-    base->FIFORXTIMEOUTCFG = USART_FIFORXTIMEOUTCFG_RXTIMEOUT_COW(~config->resetCounterOnReceive) |
-                             USART_FIFORXTIMEOUTCFG_RXTIMEOUT_COE(~config->resetCounterOnEmpty) |
+    base->FIFORXTIMEOUTCFG = USART_FIFORXTIMEOUTCFG_RXTIMEOUT_COW((config->resetCounterOnReceive) ? 0U : 1U) |
+                             USART_FIFORXTIMEOUTCFG_RXTIMEOUT_COE((config->resetCounterOnEmpty) ? 0U : 1U) |
                              USART_FIFORXTIMEOUTCFG_RXTIMEOUT_EN(config->enable) |
                              USART_FIFORXTIMEOUTCFG_RXTIMEOUT_VALUE(config->counter) |
                              USART_FIFORXTIMEOUTCFG_RXTIMEOUT_PRESCALER(config->prescaler);
@@ -447,14 +447,14 @@ status_t USART_SetBaudRate(USART_Type *base, uint32_t baudrate_Bps, uint32_t src
     {
         /* Actual baud rate must be within 3% of desired baud rate based on the calculated OSR and BRG value */
         allowed_error = ((baudrate_Bps / 100U) * 3U);
-        /*
-         * Smaller values of OSR can make the sampling position within a data bit less accurate and may
-         * potentially cause more noise errors or incorrect data.
-         */
-        for (osrval = best_osrval; (osrval >= 4U); osrval--)
+
+        for (osrval = best_osrval; osrval >= 4U; osrval--)
         {
-            /* Break if the best baudrate's diff is in the allowed error range and the osrval is below 8,
-               only use lower osrval if the baudrate cannot be obtained with an osrval of 8 or above. */
+            /* 
+             * Smaller values of OSR can make the sampling position within a data bit less accurate and may
+             * potentially cause more noise errors or incorrect data.
+             * Break if the best baudrate's diff is in the allowed error range and the osrval is below 8,
+             * only use lower osrval if the baudrate cannot be obtained with an osrval of 8 or above. */
             if ((osrval <= 8U) && (best_diff <= allowed_error))
             {
                 break;

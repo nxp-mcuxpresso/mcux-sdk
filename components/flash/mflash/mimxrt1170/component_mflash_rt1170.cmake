@@ -11,12 +11,12 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
-if(CONFIG_USE_driver_cache_lmem) 
-    include(driver_cache_lmem)
-endif()
 if(CONFIG_USE_driver_cache_armv7_m7) 
     include(driver_cache_armv7_m7)
 endif()
+if(CONFIG_USE_driver_cache_lmem) 
+    include(driver_cache_lmem)
+endif()
 
-include(driver_flexspi)
 include(component_mflash_common)
+include(driver_flexspi)

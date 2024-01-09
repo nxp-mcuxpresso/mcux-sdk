@@ -1,5 +1,23 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.10.0)
 # OR Logic component
+if(${MCUX_DEVICE} STREQUAL "RW612")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/RW612
+    )
+
+    include(all_lib_device_RW612)
+
+endif()
+
+if(${MCUX_DEVICE} STREQUAL "RW610")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/RW610
+    )
+
+    include(all_lib_device_RW610)
+
+endif()
+
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1166_cm7")
     list(APPEND CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/devices/MIMXRT1166

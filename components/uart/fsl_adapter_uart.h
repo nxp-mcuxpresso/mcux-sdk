@@ -63,6 +63,12 @@
 #define HAL_UART_ADAPTER_FIFO (1U)
 #endif /* HAL_UART_ADAPTER_FIFO */
 
+#if (defined(SERIAL_PORT_TYPE_UART_DMA) && (SERIAL_PORT_TYPE_UART_DMA > 0U))
+#ifndef HAL_UART_DMA_ENABLE
+#define HAL_UART_DMA_ENABLE (1U)
+#endif
+#endif
+
 #ifndef HAL_UART_DMA_ENABLE
 #define HAL_UART_DMA_ENABLE (0U)
 #endif /* HAL_UART_DMA_ENABLE */
@@ -88,9 +94,9 @@
 /*! @brief Definition of uart dma adapter handle size. */
 #if (defined(HAL_UART_DMA_ENABLE) && (HAL_UART_DMA_ENABLE > 0U))
 #if (defined(FSL_FEATURE_SOC_DMA_COUNT) && (FSL_FEATURE_SOC_DMA_COUNT > 0U))
-#define HAL_UART_DMA_HANDLE_SIZE (124U)
+#define HAL_UART_DMA_HANDLE_SIZE (124U + HAL_UART_ADAPTER_LOWPOWER * 36U)
 #elif (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U))
-#define HAL_UART_DMA_HANDLE_SIZE (140U)
+#define HAL_UART_DMA_HANDLE_SIZE (140U + HAL_UART_ADAPTER_LOWPOWER * 36U)
 #else
 #error This SOC does not have DMA or EDMA available!
 #endif
@@ -297,7 +303,7 @@ extern "C" {
  * @retval kStatus_HAL_UartBaudrateNotSupport Baudrate is not support in current clock source.
  * @retval kStatus_HAL_UartSuccess UART initialization succeed
  */
-hal_uart_status_t HAL_UartInit(hal_uart_handle_t handle, const hal_uart_config_t *config);
+hal_uart_status_t HAL_UartInit(hal_uart_handle_t handle, const hal_uart_config_t *uart_config);
 
 /*!
  * @brief Deinitializes a UART instance.

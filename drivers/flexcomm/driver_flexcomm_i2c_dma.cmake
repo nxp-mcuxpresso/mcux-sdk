@@ -11,5 +11,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(driver_lpc_dma)
 include(driver_flexcomm_i2c)
+include(driver_lpc_dma)

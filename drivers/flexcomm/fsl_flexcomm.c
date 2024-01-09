@@ -18,15 +18,6 @@
 #define FSL_COMPONENT_ID "platform.drivers.flexcomm"
 #endif
 
-/*!
- * @brief Used for conversion between `void*` and `uint32_t`.
- */
-typedef union pvoid_to_u32
-{
-    void *pvoid;
-    uint32_t u32;
-} pvoid_to_u32_t;
-
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -92,12 +83,10 @@ static bool FLEXCOMM_PeripheralIsPresent(FLEXCOMM_Type *base, FLEXCOMM_PERIPH_T 
 uint32_t FLEXCOMM_GetInstance(void *base)
 {
     uint32_t i;
-    pvoid_to_u32_t BaseAddr;
-    BaseAddr.pvoid = base;
 
     for (i = 0U; i < (uint32_t)FSL_FEATURE_SOC_FLEXCOMM_COUNT; i++)
     {
-        if (BaseAddr.u32 == s_flexcommBaseAddrs[i])
+        if ((uintptr_t)(uint8_t*)base == s_flexcommBaseAddrs[i])
         {
             break;
         }

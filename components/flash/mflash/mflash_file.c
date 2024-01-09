@@ -374,7 +374,7 @@ static status_t mflash_format_internal(mflash_fs_t *fs,
     }
 
     /* Erase the whole FLASH area to be occupied by the filesystem */
-    for (int i = 0; i < total_sectors; i++)
+    for (uint32_t i = 0; i < total_sectors; i++)
     {
         status = mflash_fs_sector_erase(fs, i * MFLASH_SECTOR_SIZE);
         if (status != kStatus_Success)
@@ -582,7 +582,7 @@ static status_t mflash_file_save_internal(
 
     /* Program the file data page by page, skipping the first page containing meta that is going to be programmed in the
      * last step */
-    for (int data_offset = MFLASH_PAGE_SIZE - sizeof(mflash_file_meta_t); data_offset < size;
+    for (uint32_t data_offset = MFLASH_PAGE_SIZE - sizeof(mflash_file_meta_t); data_offset < size;
          data_offset += MFLASH_PAGE_SIZE)
     {
         /* Pointer and size of the data portion to be programmed */

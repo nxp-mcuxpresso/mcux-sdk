@@ -169,6 +169,23 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
  * @return Indicates whether de-initialization was successful or not.
  */
 status_t DbgConsole_Deinit(void);
+/*!
+ * @brief Prepares to enter low power consumption.
+ *
+ * This function is used to prepare to enter low power consumption.
+ *
+ * @return Indicates whether de-initialization was successful or not.
+ */
+status_t DbgConsole_EnterLowpower(void);
+
+/*!
+ * @brief Restores from low power consumption.
+ *
+ * This function is used to restore from low power consumption.
+ *
+ * @return Indicates whether de-initialization was successful or not.
+ */
+status_t DbgConsole_ExitLowpower(void);
 
 #else
 /*!
@@ -191,6 +208,24 @@ static inline status_t DbgConsole_Init(uint8_t instance,
  * SDK_DEBUGCONSOLE_UART is not defined.
  */
 static inline status_t DbgConsole_Deinit(void)
+{
+    return (status_t)kStatus_Fail;
+}
+
+/*!
+ * Use an error to replace the DbgConsole_EnterLowpower when SDK_DEBUGCONSOLE is not DEBUGCONSOLE_REDIRECT_TO_SDK and
+ * SDK_DEBUGCONSOLE_UART is not defined.
+ */
+static inline status_t DbgConsole_EnterLowpower(void)
+{
+    return (status_t)kStatus_Fail;
+}
+
+/*!
+ * Use an error to replace the DbgConsole_ExitLowpower when SDK_DEBUGCONSOLE is not DEBUGCONSOLE_REDIRECT_TO_SDK and
+ * SDK_DEBUGCONSOLE_UART is not defined.
+ */
+static inline status_t DbgConsole_ExitLowpower(void)
 {
     return (status_t)kStatus_Fail;
 }

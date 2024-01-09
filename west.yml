@@ -1,15 +1,3 @@
-# The west manifest file (west.yml) for MCUXpresso SDK overall delivery.
-#
-# The per-workspace west configuration file, ${workspace_path}/.west/config,
-# specifies the path of the project containing this manifest file, the
-# path is relative to the workspace location ${workspace_path}.
-#
-#     [manifest]
-#     path = core
-#
-# See the west documentation for more information:
-#
-# https://docs.zephyrproject.org/latest/guides/west/index.html
 manifest:
   remotes:
   - name: nxpmicro
@@ -24,10 +12,10 @@ manifest:
     remote: nxpmicro
   projects:
   - name: mcux-sdk-examples
-    revision: MCUX_2.13.0
+    revision: MCUX_2.13.3_RW610
     path: examples
   - name: FreeRTOS-Kernel
-    revision: MCUX_2.13.0
+    revision: MCUX_2.13.3_RW610
     path: rtos/freertos/freertos-kernel
   - name: mcux-sdk-middleware-sdmmc
     revision: MCUX_2.13.0
@@ -44,11 +32,11 @@ manifest:
     url: https://github.com/EmbeddedRPC/erpc
     revision: c4dadeab4a60dc9c302d85eceedb81b85a5f991d
   - name: mcux-soc-svd
-    revision: 8e9c5f1e851c8a9cded1f3ced26b69f5510c76e4
+    revision: MCUX_2.13.3_RW610
     path: svd
   - name: fatfs
     path: middleware/fatfs
-    revision: MCUX_2.13.0
+    revision: MCUX_2.13.3_RW610
   - name: mcux-sdk-middleware-eiq
     revision: MCUX_2.13.0
     path: middleware/eiq
@@ -63,13 +51,13 @@ manifest:
     path: middleware/eiq/tensorflow-lite
   - name: mcux-sdk-middleware-usb
     path: middleware/usb
-    revision: MCUX_2.13.0
+    revision: MCUX_2.13.3_RW610
   - name: mcux-sdk-middleware-edgefast-bluetooth
     path: middleware/edgefast_bluetooth
-    revision: MCUX_2.13.0
+    revision: MCUX_2.13.3_RW610
   - name: mcux-sdk-middleware-ethermind
     path: middleware/wireless/ethermind
-    revision: MCUX_2.13.0
+    revision: MCUX_2.13.3_RW610
     remote: nxp
   - name: azure-rtos
     path: rtos/azure-rtos
@@ -101,24 +89,24 @@ manifest:
     remote: nxp
   - name: mbedtls
     path: middleware/mbedtls
-    revision: MCUX_2.13.0
+    revision: MCUX_2.13.3_RW610
   - name: wifi_nxp
     path: middleware/wifi_nxp
-    revision: MCUX_2.13.0
+    revision: MCUX_2.13.3_RW610
     remote: nxp
   - name: lwip
     path: middleware/lwip
-    revision: 4192f6c2989a139c7de7071563bfad095be01ff2
+    revision: MCUX_2.13.3_RW610
   - name: littlefs
     path: middleware/littlefs
-    revision: MCUX_2.13.0
+    revision: MCUX_2.13.3_RW610
   - name: maestro
     path: middleware/maestro
-    revision: adb7bbe88238facc7cc8c16922a8de28b63f3148
+    revision: MCUX_2.13.3_RW610
     remote: nxp-mcuxpresso
   - name: mcuboot
     path: middleware/mcuboot_opensource
-    revision: 39468301d620d9b152fa01c422b25c6387627559
+    revision: MCUX_2.13.3_RW610
     remote: nxp_zephyr
   - name: CMSIS_5
     path: core/CMSIS
@@ -130,11 +118,19 @@ manifest:
     remote: nxp-mcuxpresso
   - name: VIT
     path: middleware/vit
-    revision: 1c2ef5dc34b0891cac0633d824740006951b52c7
+    revision: MCUX_2.13.3_RW610
     remote: nxp-mcuxpresso
   - name: VoiceSeeker
     path: middleware/voice_seeker
-    revision: 3ab8288afb3d1c227c138e95ff6ee7a35613110a
+    revision: MCUX_2.13.3_RW610
     remote: nxp-mcuxpresso
+  - name: wpa_supplicant-rtos
+    revision: MCUX_2.13.3_RW610
+    path: middleware/wireless/wpa_supplicant-rtos
+    remote: nxp-mcuxpresso
+  - name: mcux-sdk-middleware-connectivity-framework
+    revision: MCUX_2.13.3_RW610
+    path: middleware/wireless/framework
+    remote: nxp
   self:
     path: core

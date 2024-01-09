@@ -11,5 +11,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(driver_flexspi)
 include(component_flexspi_nor_flash_adapter)
+include(driver_flexspi)

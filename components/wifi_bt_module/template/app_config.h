@@ -21,6 +21,8 @@
  *     WIFI_IW416_BOARD_MURATA_1XK_M2
  *     WIFI_88W8987_BOARD_MURATA_1ZM_USD
  *     WIFI_88W8987_BOARD_MURATA_1ZM_M2
+ *     WIFI_BOARD_RW610
+ *     WIFI_IW61x_BOARD_RD_USD
  */
 #ifndef NOT_DEFINE_DEFAULT_WIFI_MODULE
 #define WIFI_IW416_BOARD_AW_AM510_USD
@@ -215,7 +217,22 @@
     {                                                                                  \
         .ed_ctrl_2g = 0x1, .ed_offset_2g = 0x6, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0x6 \
     }
+#elif defined(WIFI_BOARD_RW610)
+#define RW610
+#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW_rw610.h"
 
+/* USD Firecrest module */
+#elif defined(WIFI_IW61x_BOARD_RD_USD)
+#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW.h"
+#define IW61x
+#define SDMMCHOST_OPERATION_VOLTAGE_3V3
+#define CONFIG_WIFI_FEATURES 1
+#define ENABLE_HOST_SLEEP    1
+#define ENABLE_OFFLOAD       1
+#define WLAN_ED_MAC_CTRL                                                               \
+    {                                                                                  \
+        .ed_ctrl_2g = 0x1, .ed_offset_2g = 0x6, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0x6 \
+    }
 #else
 #error "Please define macro related to wifi board"
 #endif

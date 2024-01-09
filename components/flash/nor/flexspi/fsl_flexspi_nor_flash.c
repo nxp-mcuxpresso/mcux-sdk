@@ -1066,7 +1066,7 @@ static void FLEXSPI_NOR_Memset(void *src, uint8_t value, size_t length)
     assert(src != NULL);
 
     uint32_t i;
-    uint8_t *p = src;
+    volatile uint8_t *p = src;
 
     for (i = 0U; i < length; i++)
     {

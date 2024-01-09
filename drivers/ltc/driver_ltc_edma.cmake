@@ -11,5 +11,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(driver_ltc)
 include(driver_edma_MCIMX7U5)
+include(driver_ltc)

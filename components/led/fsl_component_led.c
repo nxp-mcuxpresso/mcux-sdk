@@ -98,7 +98,7 @@ typedef struct _led_state
     led_color_t currentColor;
     led_color_t nextColor;
 #if (defined(LED_USE_CONFIGURE_STRUCTURE) && (LED_USE_CONFIGURE_STRUCTURE > 0U))
-    led_config_t *pinsConfig;
+    const led_config_t *pinsConfig;
 #else
     led_pin_t pins[sizeof(led_config_t) / sizeof(led_pin_config_t)];
 #endif
@@ -157,7 +157,7 @@ static led_status_t LED_SetStatus(led_state_t *ledState, led_color_t color, uint
     ledState->expiryPeriodCount = s_ledList.periodCount + threshold;
 
 #if (defined(LED_USE_CONFIGURE_STRUCTURE) && (LED_USE_CONFIGURE_STRUCTURE > 0U))
-    ledRgbPin = (led_pin_config_t *)(void *)&ledState->pinsConfig->ledRgb;
+    ledRgbPin = (led_pin_config_t *)(const void *)&ledState->pinsConfig->ledRgb;
 #else
     ledRgbPin = (led_pin_t *)ledState->pins;
 #endif
@@ -338,7 +338,7 @@ static void LED_TimerEvent(void *param)
     }
 }
 
-led_status_t LED_Init(led_handle_t ledHandle, led_config_t *ledConfig)
+led_status_t LED_Init(led_handle_t ledHandle, const led_config_t *ledConfig)
 {
     led_state_t *ledState;
     led_pin_config_t *ledRgbConfigPin;
@@ -398,7 +398,7 @@ led_status_t LED_Init(led_handle_t ledHandle, led_config_t *ledConfig)
 
     assert(s_ledList.ledState);
     ledState->settingColor = (led_color_t)kLED_White;
-    ledRgbConfigPin        = (led_pin_config_t *)(void *)&ledConfig->ledRgb;
+    ledRgbConfigPin        = (led_pin_config_t *)(const void *)&ledConfig->ledRgb;
 
 #if (defined(LED_USE_CONFIGURE_STRUCTURE) && (LED_USE_CONFIGURE_STRUCTURE > 0U))
     ledState->pinsConfig = ledConfig;

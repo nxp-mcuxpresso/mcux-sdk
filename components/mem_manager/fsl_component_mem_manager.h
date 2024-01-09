@@ -331,6 +331,18 @@ uint32_t MEM_GetHeapUpperLimit(void);
  */
 uint32_t MEM_GetFreeHeapSize(void);
 
+#if defined(gMemManagerLight) && (gMemManagerLight > 0)
+/*!
+ * @brief Selective RAM bank reinit after low power, based on a requested address range
+ *        Useful for ECC RAM banks
+ *        Defined as weak and empty in fsl_component_mem_manager_light.c to be overloaded by user
+ *
+ * @param[in] startAddress Start address of the requested range
+ * @param[in] endAddress End address of the requested range
+ */
+void MEM_ReinitRamBank(uint32_t startAddress, uint32_t endAddress);
+#endif /* gMemManagerLight */
+
 #if !defined(gMemManagerLight) || (gMemManagerLight == 0)
 #if (defined(MEM_MANAGER_ENABLE_TRACE) && (MEM_MANAGER_ENABLE_TRACE > 0U))
 /*!
