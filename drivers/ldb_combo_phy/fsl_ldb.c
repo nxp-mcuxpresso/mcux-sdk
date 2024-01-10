@@ -242,9 +242,9 @@ status_t LDB_InitChannel(LDB_Type *base, uint8_t channel, const ldb_channel_conf
     }
 
     base->LVDS_PHY_CTRL = reg;
-    phy->DPHY_PD_PLL    = 0U;
-    phy->DPHY_PD_TX     = 0U;
-    phy->DPHY_CO        = reg_m;
+    phy->PD_PLL         = 0U;
+    phy->PD_TX          = 0U;
+    phy->CO             = reg_m;
     base->ULPS_CTRL     = 0U;
     base->LVDS_PHY_CTRL = reg | MIPI_DSI_LVDS_COMBO_CSR_LVDS_PHY_CTRL_LVDS_EN_MASK;
 
@@ -265,6 +265,6 @@ void LDB_DeinitChannel(LDB_Type *base, uint8_t channel)
 
     base->LVDS_PHY_CTRL &= ~MIPI_DSI_LVDS_COMBO_CSR_LVDS_PHY_CTRL_LVDS_EN_MASK;
     base->ULPS_CTRL  = MIPI_DSI_LVDS_COMBO_CSR_ULPS_CTRL_TX_ULPS_MASK;
-    phy->DPHY_PD_TX  = MIPI_DSI_HOST_DPHY_PD_TX_dphy_pd_tx_MASK;
-    phy->DPHY_PD_PLL = MIPI_DSI_HOST_DPHY_PD_PLL_dphy_pd_pll_MASK;
+    phy->PD_TX       = MIPI_DSI_HOST_PD_TX_PD_TX_MASK;
+    phy->PD_PLL      = MIPI_DSI_HOST_PD_PLL_PD_PLL_MASK;
 }

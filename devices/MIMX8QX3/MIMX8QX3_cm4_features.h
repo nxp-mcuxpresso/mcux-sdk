@@ -266,7 +266,7 @@
 /* @brief If dma has common clock gate */
 #define FSL_FEATURE_EDMA_HAS_COMMON_CLOCK_GATE (0)
 /* @brief Has channel mux */
-#define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (1)
+#define FSL_FEATURE_EDMA_HAS_CHANNEL_MUX (0)
 /* @brief If dma channel IRQ support parameter */
 #define FSL_FEATURE_EDMA_MODULE_CHANNEL_IRQ_ENTRY_SUPPORT_PARAMETER (0)
 /* @brief Instance has channel mux */
