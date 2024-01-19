@@ -1,7 +1,5 @@
 /*
- * Copyright 2018-2020, 2022 NXP
- * All rights reserved.
- *
+ * Copyright 2018-2020, 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -17,9 +15,9 @@
 #if defined(SDK_I2C_BASED_COMPONENT_USED) && SDK_I2C_BASED_COMPONENT_USED
 #include "fsl_i2c.h"
 #endif /* SDK_I2C_BASED_COMPONENT_USED */
-#if defined BOARD_USE_CODEC
+#if defined(SDK_I3C_BASED_COMPONENT_USED) && SDK_I3C_BASED_COMPONENT_USED
 #include "fsl_i3c.h"
-#endif
+#endif /* SDK_I3C_BASED_COMPONENT_USED */
 
 /*******************************************************************************
  * Definitions
@@ -132,7 +130,7 @@ status_t BOARD_InitPsRam(void)
     flexspi_device_config_t deviceconfig = {
         .flexspiRootClk       = 396000000, /* 396MHZ SPI serial clock, DDR serial clock 198M */
         .isSck2Enabled        = false,
-        .flashSize            = 0x2000, /* 64Mb/KByte */
+        .flashSize            = 0x2000,    /* 64Mb/KByte */
         .CSIntervalUnit       = kFLEXSPI_CsIntervalUnit1SckCycle,
         .CSInterval           = 5,
         .CSHoldTime           = 3,
@@ -532,7 +530,7 @@ status_t BOARD_I2C_Receive(I2C_Type *base,
 }
 #endif
 
-#if defined BOARD_USE_CODEC
+#if defined(SDK_I3C_BASED_COMPONENT_USED) && SDK_I3C_BASED_COMPONENT_USED
 void BOARD_I3C_Init(I3C_Type *base, uint32_t clkSrc_Hz)
 {
     i3c_master_config_t i3cConfig;
@@ -584,10 +582,12 @@ status_t BOARD_I3C_Receive(I3C_Type *base,
 
     return I3C_MasterTransferBlocking(base, &masterXfer);
 }
+#endif /* SDK_I3C_BASED_COMPONENT_USED */
 
+#if defined BOARD_USE_CODEC
 void BOARD_Codec_I2C_Init(void)
 {
-#if BOARD_I3C_CODEC
+#if BOARD_I3C_CODEC && (defined(SDK_I3C_BASED_COMPONENT_USED) && SDK_I3C_BASED_COMPONENT_USED)
     BOARD_I3C_Init(BOARD_CODEC_I2C_BASEADDR, BOARD_CODEC_I2C_CLOCK_FREQ);
 #else
     BOARD_I2C_Init(BOARD_CODEC_I2C_BASEADDR, BOARD_CODEC_I2C_CLOCK_FREQ);
@@ -597,7 +597,7 @@ void BOARD_Codec_I2C_Init(void)
 status_t BOARD_Codec_I2C_Send(
     uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, const uint8_t *txBuff, uint8_t txBuffSize)
 {
-#if BOARD_I3C_CODEC
+#if BOARD_I3C_CODEC && (defined(SDK_I3C_BASED_COMPONENT_USED) && SDK_I3C_BASED_COMPONENT_USED)
     return BOARD_I3C_Send(BOARD_CODEC_I2C_BASEADDR, deviceAddress, subAddress, subAddressSize, (uint8_t *)txBuff,
 #else
     return BOARD_I2C_Send(BOARD_CODEC_I2C_BASEADDR, deviceAddress, subAddress, subAddressSize, (uint8_t *)txBuff,
@@ -608,7 +608,7 @@ status_t BOARD_Codec_I2C_Send(
 status_t BOARD_Codec_I2C_Receive(
     uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, uint8_t *rxBuff, uint8_t rxBuffSize)
 {
-#if BOARD_I3C_CODEC
+#if BOARD_I3C_CODEC && (defined(SDK_I3C_BASED_COMPONENT_USED) && SDK_I3C_BASED_COMPONENT_USED)
     return BOARD_I3C_Receive(BOARD_CODEC_I2C_BASEADDR, deviceAddress, subAddress, subAddressSize, rxBuff, rxBuffSize);
 #else
     return BOARD_I2C_Receive(BOARD_CODEC_I2C_BASEADDR, deviceAddress, subAddress, subAddressSize, rxBuff, rxBuffSize);

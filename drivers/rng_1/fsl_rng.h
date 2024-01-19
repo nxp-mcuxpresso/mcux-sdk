@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_RNG_DRIVER_H_
-#define _FSL_RNG_DRIVER_H_
+#ifndef FSL_RNG_DRIVER_H_
+#define FSL_RNG_DRIVER_H_
 
 #include "fsl_common.h"
 
@@ -20,7 +20,7 @@
  *******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief RNG driver version. Version 2.0.3.
  *
  * Current version: 2.0.3
@@ -40,7 +40,7 @@
  *   - These changes are reflecting recommended usage of RNG according to device UM.
  */
 #define FSL_RNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
-/*@}*/
+/*! @} */
 
 /*******************************************************************************
  * API
@@ -101,4 +101,4 @@ static inline uint32_t RNG_GetRandomWord(RNG_Type *base)
 
 /*! @}*/
 
-#endif /*_FSL_RNG_H_*/
+#endif /*FSL_RNG_H_*/

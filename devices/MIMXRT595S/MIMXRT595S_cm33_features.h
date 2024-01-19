@@ -1,15 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 4.0, 2020-05-18
-**     Build:               b230407
+**     Build:               b231016
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
 **     Copyright 2016-2023 NXP
-**     All rights reserved.
-**
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -150,6 +148,8 @@
 #define FSL_FEATURE_ACMP_HAS_C0_LINKEN_BIT (1)
 /* @brief Has C0 OFFSET Bit */
 #define FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT (0)
+/* @brief Has C0 HYSTCTR Bit */
+#define FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT (1)
 /* @brief Has C1 INPSEL Bit */
 #define FSL_FEATURE_ACMP_HAS_C1_INPSEL_BIT (0)
 /* @brief Has C1 INNSEL Bit */
@@ -177,6 +177,8 @@
 #define FSL_FEATURE_LPADC_HAS_CMDL_CTYPE (0)
 /* @brief Has conversion resolution select  (bitfield CMDLn[MODE]). */
 #define FSL_FEATURE_LPADC_HAS_CMDL_MODE (0)
+/* @brief Has compare function enable (bitfield CMDHn[CMPEN]). */
+#define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has Wait for trigger assertion before execution (bitfield CMDHn[WAIT_TRIG]). */
 #define FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG (1)
 /* @brief Has offset calibration (bitfield CTRL[CALOFS]). */
@@ -193,6 +195,8 @@
 #define FSL_FEATURE_LPADC_HAS_CFG_CALOFS (0)
 /* @brief Has offset trim (register OFSTRIM). */
 #define FSL_FEATURE_LPADC_HAS_OFSTRIM (0)
+/* @brief Has Trigger status register. */
+#define FSL_FEATURE_LPADC_HAS_TSTAT (1)
 /* @brief Has power select (bitfield CFG[PWRSEL]). */
 #define FSL_FEATURE_LPADC_HAS_CFG_PWRSEL (1)
 /* @brief Has alternate channel B scale (bitfield CMDLn[ALTB_CSCALE]). */
@@ -205,6 +209,28 @@
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALOFSMODE (0)
 /* @brief Conversion averaged bitfiled width. */
 #define FSL_FEATURE_LPADC_CONVERSIONS_AVERAGED_BITFIELD_WIDTH (3)
+/* @brief Has B side channels. */
+#define FSL_FEATURE_LPADC_HAS_B_SIDE_CHANNELS (1)
+/* @brief Indicate whether the LPADC STAT register has trigger exception interrupt function (bitfield STAT[TEXC_INT]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_TEXC_INT (1)
+/* @brief Indicate whether the LPADC STAT register has trigger completion interrupt function (bitfield STAT[TCOMP_INT]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_TCOMP_INT (1)
+/* @brief Indicate whether the LPADC STAT register has calibration ready function (bitfield STAT[CAL_RDY]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_CAL_RDY (0)
+/* @brief Indicate whether the LPADC STAT register has ADC active function (bitfield STAT[ADC_ACTIVE]). */
+#define FSL_FEATURE_LPADC_HAS_STAT_ADC_ACTIVE (1)
+/* @brief Indicate whether the LPADC IE register has trigger exception interrupt enable function (bitfield IE[TEXC_IE]). */
+#define FSL_FEATURE_LPADC_HAS_IE_TEXC_IE (1)
+/* @brief Indicate whether the LPADC IE register has trigger completion interrupt enable function (bitfield IE[TCOMP_IE]). */
+#define FSL_FEATURE_LPADC_HAS_IE_TCOMP_IE (1)
+/* @brief Indicate whether the LPADC CFG register has trigger resume/restart enable function (bitfield CFG[TRES]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_TRES (1)
+/* @brief Indicate whether the LPADC CFG register has trigger command resume/restart enable function (bitfield CFG[TCMDRES]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_TCMDRES (1)
+/* @brief Indicate whether the LPADC CFG register has high priority trigger exception disable function (bitfield CFG[HPT_EXDI]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_HPT_EXDI (1)
+/* @brief Indicate LPADC CFG register TPRICTRL bitfield width. */
+#define FSL_FEATURE_LPADC_CFG_TPRICTRL_BITFIELD_WIDTH (2)
 
 /* CACHE64_CTRL module features */
 
@@ -418,6 +444,8 @@
 #define FSL_FEATURE_FLEXIO_HAS_SHIFTER_STATUS (1)
 /* @brief Has Pin Data Input Register (FLEXIO_PIN) */
 #define FSL_FEATURE_FLEXIO_HAS_PIN_STATUS (1)
+/* @brief Has pin input output related registers */
+#define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (1)
 /* @brief Has Shifter Buffer N Nibble Byte Swapped Register (FLEXIO_SHIFTBUFNBSn) */
 #define FSL_FEATURE_FLEXIO_HAS_SHFT_BUFFER_NIBBLE_BYTE_SWAP (1)
 /* @brief Has Shifter Buffer N Half Word Swapped Register (FLEXIO_SHIFTBUFHWSn) */
@@ -499,12 +527,14 @@
 #define FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND (0)
 /* @brief Register SCONFIG has HDROK bitfield. */
 #define FSL_FEATURE_I3C_HAS_HDROK (0)
+/* @brief SOC doesn't support slave IBI/MR/HJ. */
+#define FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ (0)
 /* @brief Has ERRATA_051617. */
 #define FSL_FEATURE_I3C_HAS_ERRATA_051617 (1)
 
 /* INPUTMUX module features */
 
-/* @brief Number of channels */
+/* @brief Inputmux has DMA Request Enable */
 #define FSL_FEATURE_INPUTMUX_HAS_SIGNAL_ENA (1)
 /* @brief Inputmux has channel mux control */
 #define FSL_FEATURE_INPUTMUX_HAS_CHANNEL_MUX (1)
@@ -591,8 +621,10 @@
 
 /* RTC module features */
 
-/* @brief RTC does not support reset from RSTCTL. */
+/* @brief RTC has no reset control */
 #define FSL_FEATURE_RTC_HAS_NO_RESET (1)
+/* @brief Has SUBSEC Register (register SUBSEC) */
+#define FSL_FEATURE_RTC_HAS_SUBSEC (1)
 
 /* SCT module features */
 

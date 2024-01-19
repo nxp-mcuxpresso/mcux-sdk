@@ -1,5 +1,0 @@
-<map id="BOARD_DELAY_ms" name="BOARD_DELAY_ms">
-<area shape="rect" id="node2" href="$a00530.html#a5526698540030255f601fc77e6e80bda" title="Function to compute the Elapsed systicks. " alt="" coords="196,5,393,32"/>
-<area shape="rect" id="node3" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="441,31,503,57"/>
-<area shape="rect" id="node4" href="$a00530.html#ac4471deeef0c2a93b7d4263259b0ed63" title="Function to Record the Start systick. " alt="" coords="221,107,368,133"/>
-</map>

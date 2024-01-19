@@ -22,6 +22,10 @@
 /* The second number write to RSTGDP when reset SEMA42 gate. */
 #define SEMA42_GATE_RESET_PATTERN_2 (0x1DU)
 
+#if defined(SEMA42_RSTS)
+#define SEMA42_RESETS_ARRAY SEMA42_RSTS
+#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -44,6 +48,11 @@ static SEMA42_Type *const s_sema42Bases[] = SEMA42_BASE_PTRS;
 /*! @brief Pointers to sema42 clocks for each instance. */
 static const clock_ip_name_t s_sema42Clocks[] = SEMA42_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(SEMA42_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_sema42Resets[] = SEMA42_RESETS_ARRAY;
+#endif
 
 /******************************************************************************
  * CODE
@@ -92,6 +101,10 @@ void SEMA42_Init(SEMA42_Type *base)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     (void)CLOCK_EnableClock(s_sema42Clocks[SEMA42_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(SEMA42_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_sema42Resets[SEMA42_GetInstance(base)]);
+#endif
 }
 
 /*!

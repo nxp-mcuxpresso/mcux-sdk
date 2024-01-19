@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,12 +9,19 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-
 /*! @brief Defines the PHY RTL8201 device ID information. */
 #define PHY_OUI                 0x732U /*!< The PHY organizationally unique identifier. */
 #define PHY_MODEL_NUM           0x1U   /*!< The PHY organizationally unique identifier. */
 #define PHY_DEVICE_REVISION_NUM 0x6U   /*!< The PHY organizationally unique identifier. */
 #define PHY_DEVICE_ID           ((PHY_OUI << 10U) | (PHY_MODEL_NUM << 4U) | (PHY_DEVICE_REVISION_NUM))
+
+/*! @brief Defines the PHY RTL8201 registers. */
+#define PHY_INSR_REG        (30U)
+#define PHY_PAGE_SELECT_REG (31U)
+#define PHY_PAGE_INTR_ADDR  (7U)
+#define PHY_INER_REG        (19U)
+
+#define PHY_INER_LINKSTATUS_CHANGE_MASK (1U << 13)
 
 /*! @brief Defines the timeout macro. */
 #define PHY_READID_TIMEOUT_COUNT 1000U
@@ -44,14 +51,16 @@ static status_t PHY_RTL8201_MMD_Write(phy_handle_t *handle, uint8_t device, uint
  * Variables
  ******************************************************************************/
 
-const phy_operations_t phyrtl8201_ops = {.phyInit            = PHY_RTL8201_Init,
-                                         .phyWrite           = PHY_RTL8201_Write,
-                                         .phyRead            = PHY_RTL8201_Read,
-                                         .getAutoNegoStatus  = PHY_RTL8201_GetAutoNegotiationStatus,
-                                         .getLinkStatus      = PHY_RTL8201_GetLinkStatus,
-                                         .getLinkSpeedDuplex = PHY_RTL8201_GetLinkSpeedDuplex,
-                                         .setLinkSpeedDuplex = PHY_RTL8201_SetLinkSpeedDuplex,
-                                         .enableLoopback     = PHY_RTL8201_EnableLoopback};
+const phy_operations_t phyrtl8201_ops = {.phyInit             = PHY_RTL8201_Init,
+                                         .phyWrite            = PHY_RTL8201_Write,
+                                         .phyRead             = PHY_RTL8201_Read,
+                                         .getAutoNegoStatus   = PHY_RTL8201_GetAutoNegotiationStatus,
+                                         .getLinkStatus       = PHY_RTL8201_GetLinkStatus,
+                                         .getLinkSpeedDuplex  = PHY_RTL8201_GetLinkSpeedDuplex,
+                                         .setLinkSpeedDuplex  = PHY_RTL8201_SetLinkSpeedDuplex,
+                                         .enableLoopback      = PHY_RTL8201_EnableLoopback,
+                                         .enableLinkInterrupt = PHY_RTL8201_EnableLinkInterrupt,
+                                         .clearInterrupt      = PHY_RTL8201_ClearInterrupt};
 
 /*******************************************************************************
  * Code
@@ -107,6 +116,12 @@ status_t PHY_RTL8201_Init(phy_handle_t *handle, const phy_config_t *config)
             return result;
         }
     } while ((regValue & PHY_BCTL_RESET_MASK) != 0U);
+
+    result = PHY_RTL8201_EnableLinkInterrupt(handle, config->intrType);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
 
     if (config->autoNeg)
     {
@@ -188,7 +203,13 @@ status_t PHY_RTL8201_GetLinkStatus(phy_handle_t *handle, bool *status)
     status_t result;
     uint16_t regValue;
 
-    /* Read the basic status register. */
+    /* Datasheet: This bit indicates whether the link was lost since the last read.
+     * For the current link status, read this register twice. */
+    result = PHY_RTL8201_READ(handle, PHY_BASICSTATUS_REG, &regValue);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
     result = PHY_RTL8201_READ(handle, PHY_BASICSTATUS_REG, &regValue);
     if (result == kStatus_Success)
     {
@@ -311,6 +332,58 @@ status_t PHY_RTL8201_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_s
         }
     }
     return result;
+}
+
+status_t PHY_RTL8201_EnableLinkInterrupt(phy_handle_t *handle, phy_interrupt_type_t type)
+{
+    assert(type != kPHY_IntrActiveHigh);
+
+    status_t result;
+    uint16_t regValue;
+
+    result = PHY_Write(handle, PHY_PAGE_SELECT_REG, PHY_PAGE_INTR_ADDR);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
+
+    /* Read operation will clear pending interrupt before enable interrupt. */
+    result = PHY_RTL8201_READ(handle, PHY_INER_REG, &regValue);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
+
+    /* Enable/Disable link up+down interrupt. */
+    if (type != kPHY_IntrDisable)
+    {
+        regValue |= PHY_INER_LINKSTATUS_CHANGE_MASK;
+    }
+    else
+    {
+        regValue &= ~PHY_INER_LINKSTATUS_CHANGE_MASK;
+    }
+    result = PHY_RTL8201_WRITE(handle, PHY_INER_REG, regValue);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
+
+    /* Restore to default page 0 */
+    result = PHY_Write(handle, PHY_PAGE_SELECT_REG, 0);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
+
+    return result;
+}
+
+status_t PHY_RTL8201_ClearInterrupt(phy_handle_t *handle)
+{
+    uint16_t regValue;
+
+    return PHY_RTL8201_READ(handle, PHY_INSR_REG, &regValue);
 }
 
 #if 0

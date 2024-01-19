@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 1.0.0. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(1, 0, 0))
+/*! @brief power driver version 2.0.1. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /**
@@ -111,17 +111,11 @@ typedef enum _power_pd_bit
     kPDRUNCFG_PD_PLL0       = (1UL << 9),
     kPDRUNCFG_PD_PLL1       = (1UL << 10),
     kPDRUNCFG_PD_USBFSPHY   = (1UL << 11),
-    // kPDRUNCFG_PD_          = (1UL << 12), /*!< RESERVED */
     kPDRUNCFG_PD_COMP = (1UL << 13),
-    // kPDRUNCFG_PD_          = (1UL << 14), /*!< RESERVED */
-    // kPDRUNCFG_PD_          = (1UL << 15), /*!< RESERVED */
     kPDRUNCFG_PD_LDOMEM = (1UL << 16),
-    // kPDRUNCFG_PD_          = (1UL << 17), /*!< RESERVED */
     kPDRUNCFG_PD_LDOEFUSEPROG = (1UL << 18),
-    // kPDRUNCFG_PD_          = (1UL << 19), /*!< RESERVED */
     kPDRUNCFG_PD_LDOXTALHF  = (1UL << 20),
     kPDRUNCFG_PD_LDOFLASHNV = (1UL << 21),
-    // kPDRUNCFG_PD_          = (1UL << 22), /*!< RESERVED */
     kPDRUNCFG_PD_PLL0_SSCG = (1UL << 23),
     kPDRUNCFG_PD_ROM       = (1UL << 24),
     kPDRUNCFG_PD_HSCMP0    = (1UL << 25),
@@ -211,7 +205,9 @@ typedef enum _power_sram_index
     kPOWER_SRAM_IDX_FLEXSPIH2PREG = 14UL, /*!< Reserved. FlexSPI Dual Port Register Files instances */
 } power_sram_index_t;
 
-/*@brief SRAM Power Mode */
+/**
+ * @brief SRAM Power Mode
+ */
 typedef enum _power_sram_pwr_mode
 {
     kPOWER_SRAMPwrActive     = 0U, /*!< Active */
@@ -220,7 +216,9 @@ typedef enum _power_sram_pwr_mode
     kPOWER_SRAMPwrShutDown   = 3U, /*!< Shutdown: SRAM content lost */
 } power_sram_pwr_mode_t;
 
-/*@brief BOD VDDMAIN level */
+/**
+ * @brief BOD VDDMAIN level
+ */
 typedef enum _power_bod_vddmain_level
 {
     kPOWER_BodVddmainLevel1000mv = 0,  /*!< VDDMAIN Brown out detector level 1V */
@@ -251,20 +249,27 @@ typedef enum _power_bod_vddmain_level
     kPOWER_BodVddmainLevel3300mv = 25, /*!< VDDMAIN Brown out detector level 3.3V */
 } power_bod_vddmain_level_t;
 
-/*@brief BOD core level */
+/**
+ * @brief BOD core level
+ */
 typedef enum _power_bod_core_level
 {
-    kPOWER_BodCoreLevel600mv = 0, /*!< core Brown out detector level 600mV */
-    kPOWER_BodCoreLevel650mv = 1, /*!< core Brown out detector level 650mV */
-    kPOWER_BodCoreLevel700mv = 2, /*!< core Brown out detector level 700mV */
-    kPOWER_BodCoreLevel750mv = 3, /*!< core Brown out detector level 750mV */
-    kPOWER_BodCoreLevel800mv = 4, /*!< core Brown out detector level 800mV */
-    kPOWER_BodCoreLevel850mv = 5, /*!< core Brown out detector level 850mV */
-    kPOWER_BodCoreLevel900mv = 6, /*!< core Brown out detector level 900mV */
-    kPOWER_BodCoreLevel950mv = 7, /*!< core Brown out detector level 950mV */
+    kPOWER_BodCoreLevel0A600mv  = 0, /*!< core Brown out detector level 600mV for 0A */
+    kPOWER_BodCoreLevel0A650mv  = 1, /*!< core Brown out detector level 650mV for 0A */
+    kPOWER_BodCoreLevel0A700mv  = 2, /*!< core Brown out detector level 700mV for 0A */
+    kPOWER_BodCoreLevel0A750mv  = 3, /*!< core Brown out detector level 750mV for 0A */
+    kPOWER_BodCoreLevel0A800mv  = 4, /*!< core Brown out detector level 800mV for 0A */
+    kPOWER_BodCoreLevel0A850mv  = 5, /*!< core Brown out detector level 850mV for 0A */
+    kPOWER_BodCoreLevel0A900mv  = 6, /*!< core Brown out detector level 900mV for 0A */
+    kPOWER_BodCoreLevel0A950mv  = 7, /*!< core Brown out detector level 950mV for 0A */
+    kPOWER_BodCoreLevel1B929mv  = 5, /*!< core Brown out detector level 929mV for 1B */
+    kPOWER_BodCoreLevel1B984mv  = 6, /*!< core Brown out detector level 984mV for 1B */
+    kPOWER_BodCoreLevel1B1038mv = 7, /*!< core Brown out detector level 1038mV for 1B */
 } power_bod_core_level_t;
 
-/*@brief BODs (VDDMAIN & Core) Hysteresis control */
+/**
+ * @brief BODs (VDDMAIN & Core) Hysteresis control
+ */
 typedef enum _power_bod_hyst
 {
     kPOWER_BodHystLevel25mv  = 0U, /*!< BOD Hysteresis control level 25mv */
@@ -273,7 +278,9 @@ typedef enum _power_bod_hyst
     kPOWER_BodHystLevel100mv = 3U, /*!< BOD Hysteresis control level 100mv */
 } power_bod_hyst_t;
 
-/*@brief Core Power Source */
+/**
+ * @brief Core Power Source
+ */
 typedef enum _power_core_pwr_source
 {
     kPOWER_CoreSrcDCDC      = 0U, /*!< DCDC */
@@ -282,14 +289,18 @@ typedef enum _power_core_pwr_source
     kPOWER_CoreSrcExternal  = 3U, /*!< External (DO NOT USE : Reserved for test purposes) */
 } power_core_pwr_source_t;
 
-/*@brief Core Regulators Power State */
+/**
+ * @brief Core Regulators Power State
+ */
 typedef enum _power_core_pwr_state
 {
     kPOWER_CorePwrDisable = 0U, /*!< Disable */
     kPOWER_CorePwrEnable  = 1U, /*!< Enable */
 } power_core_pwr_state_t;
 
-/*@brief Generic Power Library APIs Status codes */
+/**
+ * @brief Generic Power Library APIs Status codes
+ */
 typedef enum _power_status
 {
     kPOWER_Status_Success = 0U, /*!< OK */
@@ -475,10 +486,10 @@ typedef enum _power_status
 #define LOWPOWER_WAKEUPIOSRC_PIO3_INDEX 6 /*!< Pin P1(30) */
 #define LOWPOWER_WAKEUPIOSRC_PIO4_INDEX 8 /*!< Pin P0(26) */
 
-#define LOWPOWER_WAKEUPIOSRC_DISABLE        0 /*!< Wake up is disable                      */
-#define LOWPOWER_WAKEUPIOSRC_RISING         1 /*!< Wake up on rising edge                  */
-#define LOWPOWER_WAKEUPIOSRC_FALLING        2 /*!< Wake up on falling edge                 */
-#define LOWPOWER_WAKEUPIOSRC_RISING_FALLING 3 /*!< Wake up on both rising or falling edges */
+#define LOWPOWER_WAKEUPIOSRC_DISABLE        0UL /*!< Wake up is disable                      */
+#define LOWPOWER_WAKEUPIOSRC_RISING         1UL /*!< Wake up on rising edge                  */
+#define LOWPOWER_WAKEUPIOSRC_FALLING        2UL /*!< Wake up on falling edge                 */
+#define LOWPOWER_WAKEUPIOSRC_RISING_FALLING 3UL /*!< Wake up on both rising or falling edges */
 
 #define LOWPOWER_WAKEUPIOSRC_PIO0MODE_INDEX 10 /*!< Pin P1( 1) */
 #define LOWPOWER_WAKEUPIOSRC_PIO1MODE_INDEX 12 /*!< Pin P0(28) */
@@ -555,10 +566,10 @@ extern "C" {
  */
 static inline void POWER_EnablePD(pd_bit_t en)
 {
-    if (((en & (1UL << 31)) != 0UL) && (en != (1UL << 31)))
+    if ((((uint32_t)en & (1UL << 31)) != 0UL) && ((uint32_t)en != (1UL << 31)))
     {
         /* PDRUNCFGSET1 */
-        PMC->PDRUNCFGSET1 = (uint32_t)(en & ~(1UL << 31));
+        PMC->PDRUNCFGSET1 = (uint32_t)((uint32_t)en & ~(1UL << 31));
     }
     else
     {
@@ -575,10 +586,10 @@ static inline void POWER_EnablePD(pd_bit_t en)
  */
 static inline void POWER_DisablePD(pd_bit_t en)
 {
-    if (((en & (1UL << 31)) != 0UL) && (en != (1UL << 31)))
+    if ((((uint32_t)en & (1UL << 31)) != 0UL) && ((uint32_t)en != (1UL << 31)))
     {
         /* PDRUNCFGCLR1 */
-        PMC->PDRUNCFGCLR1 = (uint32_t)(en & ~(1UL << 31));
+        PMC->PDRUNCFGCLR1 = (uint32_t)((uint32_t)en & ~(1UL << 31));
     }
     else
     {
@@ -624,7 +635,7 @@ power_status_t POWER_SRAMPowerModeControl(power_sram_bit_t sram_inst, power_sram
 
 /**
  * @brief
- * @param   p_sram_index :
+ * @param   sram_index : SRAM instances indexes
  * @return  power_sram_pwr_mode_t
  */
 power_sram_pwr_mode_t POWER_GetSRAMPowerMode(power_sram_index_t sram_index);
@@ -637,14 +648,14 @@ void POWER_EnterSleep(void);
 
 /**
  * @brief   Configures and enters in DEEP-SLEEP low power mode
- * @param   exclude_from_pd: defines which analog peripherals shall NOT be powered down (it is a 2 x 32-bit vectors,
+ * @param   exclude_from_pd: Defines which analog peripherals shall NOT be powered down (it is a 2 x 32-bit vectors,
  aligned with "pd_bit_t" definition)
- * @param   sram_retention_ctrl:defines which SRAM instances will be put in "retention" mode during deep-sleep (aligned
+ * @param   sram_retention_ctrl: Defines which SRAM instances will be put in "retention" mode during deep-sleep (aligned
  with "power_sram_bit_t" definition)
- * @param   wakeup_interrupts: defines which peripheral interrupts can be a wake-up source during deep-sleep (it is a 4
- x 32-bit vectors, aligned with "WAKEUP_" #defines)
+ * @param   wakeup_interrupts: Defines which peripheral interrupts can be a wake-up source during deep-sleep (it is a 4
+ x 32-bit vectors, aligned with "WAKEUP_" definition)
  * @param   hardware_wake_ctrl: configure DMA services during deep-sleep without waking up entire device (see
- "LOWPOWER_HWWAKE_*" #defines).
+ "LOWPOWER_HWWAKE_*" definition).
 
  * @return  Nothing
  *
@@ -658,12 +669,12 @@ void POWER_EnterDeepSleep(uint32_t exclude_from_pd[2],
 
 /**
  * @brief   Configures and enters in POWERDOWN low power mode
- * @param   exclude_from_pd: defines which analog peripherals shall NOT be powered down (it is a 1 x 32-bit vector,
+ * @param   exclude_from_pd: Defines which analog peripherals shall NOT be powered down (it is a 1 x 32-bit vector,
  aligned with "pd_bit_t" definition)
- * @param   sram_retention_ctrl:defines which SRAM instances will be put in "retention" mode during power-down (aligned
+ * @param   sram_retention_ctrl: Defines which SRAM instances will be put in "retention" mode during power-down (aligned
  with "power_sram_bit_t" definition)
- * @param   wakeup_interrupts: defines which peripheral interrupts can be a wake-up source during power-down (it is a 2
- x 32-bit vectors, aligned with "WAKEUP_" #defines)
+ * @param   wakeup_interrupts: Defines which peripheral interrupts can be a wake-up source during power-down (it is a 2
+ x 32-bit vectors, aligned with "WAKEUP_" definition)
  * @param   cpu_retention_addr: Must be:
              - Word aligned (address ending by 0x0, 0x4, 0x8 and 0xC).
              - Between 0x2000_0000 and 0x2000_09FC (inside RAM_00) or
@@ -687,14 +698,14 @@ void POWER_EnterPowerDown(uint32_t exclude_from_pd[1],
 
 /**
  * @brief   Configures and enters in DEEPPOWERDOWN low power mode
- * @param   exclude_from_pd: defines which analog peripherals shall NOT be powered down (it is a 1 x 32-bit vector,
+ * @param   exclude_from_pd: Defines which analog peripherals shall NOT be powered down (it is a 1 x 32-bit vector,
  aligned with "pd_bit_t" definition)
- * @param   sram_retention_ctrl: defines which SRAM instances will be put in "retention" mode during deep power-down
+ * @param   sram_retention_ctrl: Defines which SRAM instances will be put in "retention" mode during deep power-down
  (aligned with "power_sram_bit_t" definition)
- * @param   wakeup_interrupts: defines which peripheral interrupts can be a wake-up source during deep power-down (it is
- a 2 x 32-bit vectors, aligned with "WAKEUP_" #defines)
+ * @param   wakeup_interrupts: Defines which peripheral interrupts can be a wake-up source during deep power-down (it is
+ a 2 x 32-bit vectors, aligned with "WAKEUP_" definition)
  * @param   wakeup_io_ctrl: configure the 5 wake-up pins that can wake-up the part from deep power-down mode (see
- "LOWPOWER_WAKEUPIOSRC_*" #defines)
+ "LOWPOWER_WAKEUPIOSRC_*" definition)
 
  * @return  Nothing
  *
@@ -711,7 +722,7 @@ void POWER_EnterDeepPowerDown(uint32_t exclude_from_pd[1],
 /**
  * @brief   Configures the 5 wake-up pins to wake up the part in DEEP-SLEEP and POWER-DOWN low power modes.
  * @param   wakeup_io_cfg_src : for all wake-up pins : indicates if the config is from IOCON (0) or from PMC (1).
- * @param   wakeup_io_ctrl: the 5 wake-up pins configurations (see "LOWPOWER_WAKEUPIOSRC_*" #defines)
+ * @param   wakeup_io_ctrl: the 5 wake-up pins configurations (see "LOWPOWER_WAKEUPIOSRC_*" definition)
 
  * @return  Nothing
  *
@@ -747,5 +758,7 @@ void POWER_SetVoltageForFreq(uint32_t system_freq_hz);
 #ifdef __cplusplus
 }
 #endif
+
+/*! @} */
 
 #endif /* _FSL_POWER_H_ */

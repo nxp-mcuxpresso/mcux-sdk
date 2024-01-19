@@ -166,7 +166,7 @@ static uint32_t SEMC_GetInstance(SEMC_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_semcBases); instance++)
+    for (instance = 0UL; instance < ARRAY_SIZE(s_semcBases); instance++)
     {
         if (s_semcBases[instance] == base)
         {
@@ -426,6 +426,7 @@ status_t SEMC_ConfigureSDRAM(SEMC_Type *base, semc_sdram_cs_t cs, semc_sdram_con
     assert(config->refreshBurstLen > 0x00U);
 
     uint8_t memsize;
+    uint8_t times;
     status_t result   = kStatus_Success;
     uint16_t prescale = (uint16_t)(config->tPrescalePeriod_Ns / 16U / (1000000000U / clkSrc_Hz));
     uint32_t refresh;
@@ -522,18 +523,20 @@ status_t SEMC_ConfigureSDRAM(SEMC_Type *base, semc_sdram_cs_t cs, semc_sdram_con
     {
         return result;
     }
-    result =
-        SEMC_SendIPCommand(base, kSEMC_MemType_SDRAM, config->address, (uint32_t)kSEMC_SDRAMCM_AutoRefresh, 0, NULL);
-    if (result != kStatus_Success)
+
+    /* Generally, SDRAM requires 2 refresh cycles before and after setting the mode register. If the SDRAM used has special requirements, 
+    *  please add autofreshTimes configuration in the initialization block of SDRAM */
+    times = ((config->autofreshTimes != 0U) ? config->autofreshTimes : 2U);
+    for(uint8_t count = 0U; count < times; count++)
     {
-        return result;
+        result =
+            SEMC_SendIPCommand(base, kSEMC_MemType_SDRAM, config->address, (uint32_t)kSEMC_SDRAMCM_AutoRefresh, 0, NULL);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
     }
-    result =
-        SEMC_SendIPCommand(base, kSEMC_MemType_SDRAM, config->address, (uint32_t)kSEMC_SDRAMCM_AutoRefresh, 0, NULL);
-    if (result != kStatus_Success)
-    {
-        return result;
-    }
+
     /* Mode setting value. */
     mode = (uint32_t)config->burstLen | (((uint32_t)config->casLatency) << SEMC_SDRAM_MODESETCAL_OFFSET);
     result =
@@ -1275,7 +1278,7 @@ status_t SEMC_IPCommandNandWrite(SEMC_Type *base, uint32_t address, uint8_t *dat
 
     status_t result = kStatus_Success;
     uint16_t ipCmd;
-    uint32_t tempData = 0;
+    uint32_t tempData = 0UL;
 
     /* Write command built */
     ipCmd = SEMC_BuildNandIPCommand(0, kSEMC_NANDAM_ColumnRow, kSEMC_NANDCM_Write);
@@ -1293,11 +1296,11 @@ status_t SEMC_IPCommandNandWrite(SEMC_Type *base, uint32_t address, uint8_t *dat
         size_bytes -= SEMC_IPCOMMANDDATASIZEBYTEMAX;
     }
 
-    if ((result == kStatus_Success) && (size_bytes != 0x00U))
+    if ((result == kStatus_Success) && (size_bytes != 0x00UL))
     {
         (void)SEMC_ConfigureIPCommand(base, (uint8_t)size_bytes);
 
-        while (size_bytes != 0x00U)
+        while (size_bytes != 0x00UL)
         {
             size_bytes--;
             tempData <<= SEMC_BYTE_NUMBIT;

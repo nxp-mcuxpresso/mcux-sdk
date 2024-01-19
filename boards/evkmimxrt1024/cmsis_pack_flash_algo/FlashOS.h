@@ -8,14 +8,14 @@
 /*                                                                     */
 /***********************************************************************/
 
-#define VERS 1 // Interface Version 1.01
+#define VERS 1           // Interface Version 1.01
 
-#define UNKNOWN  0 // Unknown
-#define ONCHIP   1 // On-chip Flash Memory
-#define EXT8BIT  2 // External Flash Device on 8-bit  Bus
-#define EXT16BIT 3 // External Flash Device on 16-bit Bus
-#define EXT32BIT 4 // External Flash Device on 32-bit Bus
-#define EXTSPI   5 // External Flash Device on SPI
+#define UNKNOWN  0       // Unknown
+#define ONCHIP   1       // On-chip Flash Memory
+#define EXT8BIT  2       // External Flash Device on 8-bit  Bus
+#define EXT16BIT 3       // External Flash Device on 16-bit Bus
+#define EXT32BIT 4       // External Flash Device on 32-bit Bus
+#define EXTSPI   5       // External Flash Device on SPI
 
 #define SECTOR_NUM 512   // Max Number of Sector Items
 #define PAGE_MAX   65536 // Max Page Size for Programming
@@ -39,8 +39,8 @@ struct FlashDevice
     unsigned long Res;      // Reserved for future Extension
     unsigned char valEmpty; // Content of Erased Memory
 
-    unsigned long toProg;  // Time Out of Program Page Function
-    unsigned long toErase; // Time Out of Erase Sector Function
+    unsigned long toProg;   // Time Out of Program Page Function
+    unsigned long toErase;  // Time Out of Erase Sector Function
 
     struct FlashSectors sectors[SECTOR_NUM];
 };

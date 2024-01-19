@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_SEMC_H_
-#define _FSL_SEMC_H_
+#ifndef FSL_SEMC_H_
+#define FSL_SEMC_H_
 
 #include "fsl_common.h"
 
@@ -19,10 +19,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SEMC driver version. */
-#define FSL_SEMC_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
-/*@}*/
+#define FSL_SEMC_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
+/*! @} */
 
 /*! @brief SEMC status, _semc_status. */
 enum
@@ -407,6 +407,7 @@ typedef struct _semc_sdram_config
     uint8_t delayChain; /*!< Delay chain, which adds delays on DQS clock to compensate timings while DQS is faster than
                            read data. */
 #endif                  /* FSL_FEATURE_SEMC_HAS_DELAY_CHAIN_CONTROL */
+    uint8_t autofreshTimes;          /*!< Auto Refresh cycles times. */  
 } semc_sdram_config_t;
 
 /*! @brief SEMC NAND device timing configuration structure. */
@@ -671,7 +672,7 @@ void SEMC_Init(SEMC_Type *base, semc_config_t *configure);
  */
 void SEMC_Deinit(SEMC_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name SEMC Configuration Operation For Each Memory Type
@@ -737,7 +738,7 @@ status_t SEMC_ConfigureSRAM(SEMC_Type *base, semc_sram_config_t *config, uint32_
  */
 status_t SEMC_ConfigureDBI(SEMC_Type *base, semc_dbi_config_t *config, uint32_t clkSrc_Hz);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name SEMC Interrupt Operation
@@ -810,7 +811,7 @@ static inline void SEMC_ClearStatusFlags(SEMC_Type *base, uint32_t mask)
     base->INTR |= mask;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name SEMC Memory Access Operation
@@ -913,7 +914,7 @@ status_t SEMC_IPCommandNorWrite(SEMC_Type *base, uint32_t address, uint8_t *data
  */
 status_t SEMC_IPCommandNorRead(SEMC_Type *base, uint32_t address, uint8_t *data, uint32_t size_bytes);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -921,4 +922,4 @@ status_t SEMC_IPCommandNorRead(SEMC_Type *base, uint32_t address, uint8_t *data,
 
 /*! @}*/
 
-#endif /* _FSL_SEMC_H_*/
+#endif /* FSL_SEMC_H_*/

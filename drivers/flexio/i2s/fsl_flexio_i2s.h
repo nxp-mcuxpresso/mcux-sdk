@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_FLEXIO_I2S_H_
-#define _FSL_FLEXIO_I2S_H_
+#ifndef FSL_FLEXIO_I2S_H_
+#define FSL_FLEXIO_I2S_H_
 
 #include "fsl_common.h"
 #include "fsl_flexio.h"
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief FlexIO I2S driver version 2.2.0. */
 #define FSL_FLEXIO_I2S_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
-/*@}*/
+/*! @} */
 
 /*! @brief Retry times for waiting flag. */
 #ifndef I2S_RETRY_TIMES
@@ -557,4 +557,4 @@ void FLEXIO_I2S_TransferRxHandleIRQ(void *i2sBase, void *i2sHandle);
 
 /*! @} */
 
-#endif /* _FSL_FLEXIO_I2S_H_ */
+#endif /* FSL_FLEXIO_I2S_H_ */

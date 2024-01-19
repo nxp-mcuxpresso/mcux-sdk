@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_SHA_H_
-#define _FSL_SHA_H_
+#ifndef FSL_SHA_H_
+#define FSL_SHA_H_
 
 #include "fsl_common.h"
 /*!
@@ -21,7 +21,7 @@
  *******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Defines LPC SHA driver version 2.3.2.
  *
  * Current version: 2.3.2
@@ -54,7 +54,7 @@
  *conditions.
  */
 #define FSL_SHA_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
-/*@}*/
+/*! @} */
 
 /*! Supported cryptographic block cipher functions for HASH creation */
 typedef enum _sha_algo_t
@@ -203,4 +203,4 @@ void SHA_ClkDeinit(SHA_Type *base);
 /*! @}*/
 /*! @}*/ /* end of group sha */
 
-#endif   /* _FSL_SHA_H_ */
+#endif   /* FSL_SHA_H_ */

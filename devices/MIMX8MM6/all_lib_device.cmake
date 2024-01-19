@@ -314,6 +314,9 @@
 #  # description: RPMsg-Lite XOS environment layer sources
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_xos true)
 
+#  # description: RPMsg-Lite Azure RTOS environment sources
+#  set(CONFIG_USE_middleware_multicore_rpmsg_lite_azurertos true)
+
 #  # description: RPMsg-Lite for evkmimx8mm baremetal application
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_imx8mm_m4_bm true)
 
@@ -330,26 +333,22 @@
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite true)
 
 #set.middleware.voice_seeker
-#  # description: Voice seeker memory utilities
-#  set(CONFIG_USE_middleware_voice_seeker_rdsp_utilities_public true)
-
 #  # description: Voice seeker library for Cortex M4
 #  set(CONFIG_USE_middleware_voice_seeker_cm4 true)
+
+#  # description: Voice seeker memory utilities for Cortex M4
+#  set(CONFIG_USE_middleware_voice_seeker_rdsp_utilities_public_cm4 true)
 
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
-  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/voice_seeker
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
   ${CMAKE_CURRENT_LIST_DIR}/drivers
   ${CMAKE_CURRENT_LIST_DIR}/project_template
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimx8mm
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MQ6
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MM6
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC54628
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/voice_seeker
 )
 
 include(set_board_evkmimx8mm OPTIONAL)

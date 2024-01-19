@@ -34,10 +34,6 @@
 #define DSI_DPHY_PLL_CM_MIN 16U
 #define DSI_DPHY_PLL_CM_MAX 255U
 
-/* PLL VCO output frequency max value is 1.5GHz, VCO output is (refClk / CN ) * CM. */
-#define DSI_DPHY_PLL_VCO_MAX 1500000000U
-#define DSI_DPHY_PLL_VCO_MIN (DSI_DPHY_PLL_REFCLK_CN_MIN * DSI_DPHY_PLL_CM_MIN)
-
 #define DSI_HOST_PKT_CONTROL_WORD_COUNT(wc)  ((uint32_t)(wc) << 0U)
 #define DSI_HOST_PKT_CONTROL_VC(vc)          ((uint32_t)(vc) << 16U)
 #define DSI_HOST_PKT_CONTROL_HEADER_TYPE(ht) ((uint32_t)(ht) << 18U)
@@ -78,6 +74,10 @@
 #define DPHY_PD_REG PD_DPHY
 #endif
 
+#if defined(DSI_RSTS)
+#define DSI_RESETS_ARRAY MIPI_DSI_RSTS
+#endif
+
 /*! @brief Typedef for MIPI DSI interrupt handler. */
 typedef void (*dsi_isr_t)(MIPI_DSI_HOST_Type *base, dsi_handle_t *handle);
 
@@ -99,6 +99,11 @@ static dsi_isr_t s_dsiIsr;
 /*! @brief Pointers to MIPI DSI clocks for each instance. */
 static const clock_ip_name_t s_dsiClocks[] = MIPI_DSI_HOST_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(DSI_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_dsiResets[] = DSI_RESETS_ARRAY;
+#endif
 
 /*******************************************************************************
  * Prototypes
@@ -415,6 +420,10 @@ void DSI_Init(MIPI_DSI_HOST_Type *base, const dsi_config_t *config)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     (void)CLOCK_EnableClock(s_dsiClocks[DSI_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(DSI_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_dsiResets[DSI_GetInstance(base)]);
+#endif
 
 #if (defined(FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS_CTRL) && FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS_CTRL)
     SOC_MIPI_DSI_EnableUlps(base, config->enableTxUlps);
@@ -929,6 +938,14 @@ static status_t DSI_PrepareApbTransfer(MIPI_DSI_HOST_Type *base, dsi_transfer_t 
         if (xfer->rxDataSize != 0U)
         {
             xfer->flags |= (uint8_t)kDSI_TransferPerformBTA;
+        }
+
+        /* Errata ERR011439. Checksum is incorrect for DCS long packet command writes with zero-length data payload in
+         * low-power mode. */
+        if ((xfer->txDataType == kDSI_TxDataDcsLongWr) && (0U == (xfer->flags & (uint8_t)kDSI_TransferUseHighSpeed)) &&
+            (xfer->txDataSize == 0U))
+        {
+            return kStatus_DSI_NotSupported;
         }
 
         /* ========================== Prepare TX. ========================== */

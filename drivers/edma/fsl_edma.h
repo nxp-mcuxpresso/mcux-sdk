@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_EDMA_H_
-#define _FSL_EDMA_H_
+#ifndef FSL_EDMA_H_
+#define FSL_EDMA_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief eDMA driver version */
 #define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 3)) /*!< Version 2.4.3. */
-/*@}*/
+/*! @} */
 
 /*! @brief Compute the offset unit from DCHPRI3 */
 #define DMA_DCHPRI_INDEX(channel) (((channel) & ~0x03U) | (3U - ((channel)&0x03U)))
@@ -357,7 +357,7 @@ static inline void EDMA_EnableMinorLoopMapping(DMA_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 /*!
  * @name eDMA Channel Operation
  * @{
@@ -543,7 +543,7 @@ void EDMA_DisableChannelInterrupts(DMA_Type *base, uint32_t channel, uint32_t ma
  */
 void EDMA_SetMajorOffsetConfig(DMA_Type *base, uint32_t channel, int32_t sourceOffset, int32_t destOffset);
 
-/* @} */
+/*! @} */
 /*!
  * @name eDMA TCD Operation
  * @{
@@ -1007,12 +1007,12 @@ static inline uint32_t EDMA_GetNextTCDAddress(edma_handle_t *handle)
  */
 void EDMA_HandleIRQ(edma_handle_t *handle);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */
 
-/* @} */
+/*! @} */
 
-#endif /*_FSL_EDMA_H_*/
+#endif /*FSL_EDMA_H_*/

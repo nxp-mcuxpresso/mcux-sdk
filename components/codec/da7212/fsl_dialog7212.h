@@ -19,10 +19,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*@{*/
-/*! @brief CLOCK driver version 2.2.3. */
-#define FSL_DA7212_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
-/*@}*/
+/*! @{ */
+/*! @brief CLOCK driver version 2.3.0. */
+#define FSL_DA7212_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @} */
 
 /*! @brief da7212 handle size */
 #ifndef DA7212_I2C_HANDLER_SIZE
@@ -156,7 +156,7 @@
 #define DIALOG7212_DAC_NG_OFF_THRESH   0xB0
 #define DIALOG7212_DAC_NG_ON_THRESH    0xB1
 #define DIALOG7212_DAC_NG_CTRL         0xB2
-//#define DIALOG7212_DAC_NG_SPARE                       0xB3
+// #define DIALOG7212_DAC_NG_SPARE                       0xB3
 /************Tone Generation & Beep Registers************/
 #define DIALOG7212_TONE_GEN_CFG1    0xB4
 #define DIALOG7212_TONE_GEN_CFG2    0xB5
@@ -1100,15 +1100,16 @@ typedef struct _da7212_audio_format
 /*! @brief DA7212 configure structure */
 typedef struct da7212_config
 {
-    bool isMaster;                 /*!< If DA7212 is master, true means master, false means slave. */
-    da7212_protocol_t protocol;    /*!< Audio bus format, can be I2S, LJ, RJ or DSP mode. */
-    da7212_dac_source_t dacSource; /*!< DA7212 data source. */
-    da7212_audio_format_t format;  /*!< audio format */
-    uint8_t slaveAddress;          /*!< device address */
-    codec_i2c_config_t i2cConfig;  /*!< i2c configuration */
+    bool isMaster;                        /*!< If DA7212 is master, true means master, false means slave. */
+    da7212_protocol_t protocol;           /*!< Audio bus format, can be I2S, LJ, RJ or DSP mode. */
+    da7212_dac_source_t dacSource;        /*!< DA7212 data source. */
+    da7212_audio_format_t format;         /*!< audio format */
+    uint8_t slaveAddress;                 /*!< device address */
+    codec_i2c_config_t i2cConfig;         /*!< i2c configuration */
 
     da7212_sys_clk_source_t sysClkSource; /*!< system clock source */
     da7212_pll_config_t *pll;             /*!< pll configuration */
+    da7212_Input_t inputSource;           /*!< AD212 input source*/
 } da7212_config_t;
 
 /*! @brief da7212 codec handler

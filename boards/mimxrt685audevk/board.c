@@ -1,7 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
- * All rights reserved.
- *
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -17,9 +15,6 @@
 #if defined(SDK_I2C_BASED_COMPONENT_USED) && SDK_I2C_BASED_COMPONENT_USED
 #include "fsl_i2c.h"
 #endif /* SDK_I2C_BASED_COMPONENT_USED */
-#if defined BOARD_USE_CODEC
-#include "fsl_i3c.h"
-#endif
 
 /*******************************************************************************
  * Definitions
@@ -128,7 +123,7 @@ status_t BOARD_InitPsRam(void)
     flexspi_device_config_t deviceconfig = {
         .flexspiRootClk       = 396000000, /* 396MHZ SPI serial clock, DDR serial clock 198M */
         .isSck2Enabled        = false,
-        .flashSize            = 0x2000, /* 64Mb/KByte */
+        .flashSize            = 0x2000,    /* 64Mb/KByte */
         .CSIntervalUnit       = kFLEXSPI_CsIntervalUnit1SckCycle,
         .CSInterval           = 5,
         .CSHoldTime           = 3,

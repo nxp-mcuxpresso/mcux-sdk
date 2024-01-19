@@ -412,6 +412,11 @@ status_t CLOCK_SetupExtClocking(uint32_t iFreq)
     /* Enable clock_in clock for clock module. */
     SYSCON->CLOCK_CTRL |= SYSCON_CLOCK_CTRL_CLKIN_ENA_MASK;
 
+    /* Wait for external osc clock to be valid. */
+    while((ANACTRL->XO32M_STATUS & ANACTRL_XO32M_STATUS_XO_READY_MASK) == 0U)
+    {
+    }
+
     s_Ext_Clk_Freq = iFreq;
     return kStatus_Success;
 }
@@ -2026,15 +2031,15 @@ bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
     POWER_DisablePD(kPDRUNCFG_PD_USB1_PHY); /*!< Ensure xtal32k is on  */
     POWER_DisablePD(kPDRUNCFG_PD_LDOUSBHS); /*!< Ensure xtal32k is on  */
 
+    SYSCON->AHBCLKCTRLSET[2] = SYSCON_AHBCLKCTRL2_ANALOG_CTRL(1);
+    SYSCON->AHBCLKCTRLSET[2] = SYSCON_AHBCLKCTRL2_USB1_PHY(1);
+
     /* wait to make sure PHY power is fully up */
     i = 100000U;
     while ((i--) != 0U)
     {
         __ASM("nop");
     }
-
-    SYSCON->AHBCLKCTRLSET[2] = SYSCON_AHBCLKCTRL2_ANALOG_CTRL(1);
-    SYSCON->AHBCLKCTRLSET[2] = SYSCON_AHBCLKCTRL2_USB1_PHY(1);
 
     USBPHY->CTRL_CLR = USBPHY_CTRL_SFTRST_MASK;
 

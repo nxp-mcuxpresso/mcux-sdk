@@ -89,16 +89,12 @@ message("device_LPC51U68_startup component is included from ${CMAKE_CURRENT_LIST
 if(CONFIG_USE_device_LPC51U68_system)
 
 if(CONFIG_TOOLCHAIN STREQUAL armgcc)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_LPC51U68.S
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_LPC51U68.S "" device_LPC51U68_startup.LPC51U68)
 endif()
 
 if(CONFIG_TOOLCHAIN STREQUAL mcux)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_lpc51u68.c
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_lpc51u68.cpp
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_lpc51u68.c "" device_LPC51U68_startup.LPC51U68)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_lpc51u68.cpp "" device_LPC51U68_startup.LPC51U68)
 endif()
 
 else()
@@ -510,10 +506,14 @@ if (CONFIG_USE_utility_assert)
 
 message("utility_assert component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console)
+if(CONFIG_USE_utility_debug_console AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -530,10 +530,14 @@ if (CONFIG_USE_utility_assert_lite)
 
 message("utility_assert_lite component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console_lite)
+if(CONFIG_USE_utility_debug_console_lite AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()

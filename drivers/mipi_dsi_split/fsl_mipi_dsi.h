@@ -5,10 +5,11 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_MIPI_DSI_H_
-#define _FSL_MIPI_DSI_H_
+#ifndef FSL_MIPI_DSI_H_
+#define FSL_MIPI_DSI_H_
 
 #include "fsl_common.h"
+#include "fsl_soc_mipi_dsi.h"
 
 /*!
  * @addtogroup mipi_dsi
@@ -20,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
-/*@}*/
+/*! @} */
 
 /* The max APB transfer size. */
 #define FSL_DSI_TX_MAX_PAYLOAD_BYTE (64U * 4U)
@@ -821,4 +822,4 @@ void DSI_TransferHandleIRQ(const MIPI_DSI_Type *base, dsi_handle_t *handle);
 
 /*! @} */
 
-#endif /* _FSL_MIPI_DSI_H_ */
+#endif /* FSL_MIPI_DSI_H_ */

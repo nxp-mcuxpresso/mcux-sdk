@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_I2S_H_
-#define _FSL_I2S_H_
+#ifndef FSL_I2S_H_
+#define FSL_I2S_H_
 
 #include "fsl_device_registers.h"
 #include "fsl_common.h"
@@ -24,11 +24,11 @@
 /*! @file */
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 
 /*! @brief I2S driver version 2.3.2. */
 #define FSL_I2S_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
-/*@}*/
+/*! @} */
 
 #ifndef I2S_NUM_BUFFERS
 
@@ -510,4 +510,4 @@ void I2S_RxHandleIRQ(I2S_Type *base, i2s_handle_t *handle);
 }
 #endif
 
-#endif /* _FSL_I2S_H_ */
+#endif /* FSL_I2S_H_ */

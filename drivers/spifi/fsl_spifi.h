@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_SPIFI_H_
-#define _FSL_SPIFI_H_
+#ifndef FSL_SPIFI_H_
+#define FSL_SPIFI_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SPIFI driver version 2.0.3. */
 #define FSL_SPIFI_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
-/*@}*/
+/*! @} */
 
 /*! @brief Status structure of SPIFI.*/
 enum
@@ -168,7 +168,7 @@ void SPIFI_GetDefaultConfig(spifi_config_t *config);
  */
 void SPIFI_Deinit(SPIFI_Type *base);
 
-/* @}*/
+/*! @} */
 
 /*!
  * @name Basic Control Operations
@@ -294,7 +294,7 @@ static inline uint32_t SPIFI_GetStatusFlag(SPIFI_Type *base)
     return base->STAT;
 }
 
-/* @}*/
+/*! @} */
 
 /*!
  * @brief Enable or disable DMA request for SPIFI.
@@ -396,7 +396,7 @@ static inline uint8_t SPIFI_ReadDataByte(SPIFI_Type *base)
  */
 uint16_t SPIFI_ReadDataHalfword(SPIFI_Type *base);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -404,4 +404,4 @@ uint16_t SPIFI_ReadDataHalfword(SPIFI_Type *base);
 
 /*! @}*/
 
-#endif /* _FSL_SPIFI_H_ */
+#endif /* FSL_SPIFI_H_ */

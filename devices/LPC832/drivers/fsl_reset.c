@@ -24,26 +24,6 @@
  * Prototypes
  ******************************************************************************/
 
-/*!
-* @brief Assert reset to peripheral.
-*
-* Asserts reset signal to specified peripheral module.
-*
-* @param peripheral Assert reset to this peripheral. The enum argument contains encoding of reset register
-*                   and reset bit position in the reset register.
-*/
-static void RESET_SetPeripheralReset(reset_ip_name_t peripheral);
-
-/*!
- * @brief Clear reset to peripheral.
- *
- * Clears reset signal to specified peripheral module, allows it to operate.
- *
- * @param peripheral Clear reset to this peripheral. The enum argument contains encoding of reset register
- *                   and reset bit position in the reset register.
- */
-static void RESET_ClearPeripheralReset(reset_ip_name_t peripheral);
-
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -51,7 +31,7 @@ static void RESET_ClearPeripheralReset(reset_ip_name_t peripheral);
 #if ((defined(FSL_FEATURE_SOC_SYSCON_COUNT) && (FSL_FEATURE_SOC_SYSCON_COUNT > 0)) || \
      (defined(FSL_FEATURE_SOC_ASYNC_SYSCON_COUNT) && (FSL_FEATURE_SOC_ASYNC_SYSCON_COUNT > 0)))
 
-static void RESET_SetPeripheralReset(reset_ip_name_t peripheral)
+void RESET_SetPeripheralReset(reset_ip_name_t peripheral)
 {
     const uint32_t bitPos = ((uint32_t)peripheral & 0x0000FFFFu);
     const uint32_t bitMask = 1UL << bitPos;
@@ -63,7 +43,7 @@ static void RESET_SetPeripheralReset(reset_ip_name_t peripheral)
     SYSCON->PRESETCTRL &= ~bitMask;
 }
 
-static void RESET_ClearPeripheralReset(reset_ip_name_t peripheral)
+void RESET_ClearPeripheralReset(reset_ip_name_t peripheral)
 {
     const uint32_t bitPos = ((uint32_t)peripheral & 0x0000FFFFu);
     const uint32_t bitMask = 1UL << bitPos;

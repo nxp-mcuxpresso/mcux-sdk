@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_ECSPI_H_
-#define _FSL_ECSPI_H_
+#ifndef FSL_ECSPI_H_
+#define FSL_ECSPI_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief ECSPI driver version. */
 #define FSL_ECSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
-/*@}*/
+/*! @} */
 
 #ifndef ECSPI_DUMMYDATA
 /*! @brief ECSPI dummy transfer data, the data is sent while txBuff is NULL. */
@@ -737,4 +737,4 @@ void ECSPI_SlaveTransferHandleIRQ(ECSPI_Type *base, ecspi_slave_handle_t *handle
 
 /*! @} */
 
-#endif /* _FSL_ECSPI_H_*/
+#endif /* FSL_ECSPI_H_*/

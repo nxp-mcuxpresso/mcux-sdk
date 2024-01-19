@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_RNGA_DRIVER_H_
-#define _FSL_RNGA_DRIVER_H_
+#ifndef FSL_RNGA_DRIVER_H_
+#define FSL_RNGA_DRIVER_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  *******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief RNGA driver version 2.0.2. */
 #define FSL_RNGA_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
-/*@}*/
+/*! @} */
 
 /*! @brief RNGA working mode */
 typedef enum _rnga_mode
@@ -111,4 +111,4 @@ rnga_mode_t RNGA_GetMode(RNG_Type *base);
 /*! @}*/
 
 #endif /* FSL_FEATURE_SOC_RNG_COUNT */
-#endif /* _FSL_RNGA_H_*/
+#endif /* FSL_RNGA_H_*/

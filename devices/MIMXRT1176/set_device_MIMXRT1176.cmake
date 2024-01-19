@@ -46,7 +46,7 @@ if(CONFIG_TOOLCHAIN STREQUAL armgcc)
   )
 endif()
 
-if((CONFIG_CORE STREQUAL cm4f OR CONFIG_CORE STREQUAL cm7f) AND (CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux))
+if((CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux) AND (CONFIG_CORE STREQUAL cm4f OR CONFIG_CORE STREQUAL cm7f))
   target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
       ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities/fsl_memcpy.S
   )
@@ -185,6 +185,20 @@ message("component_wifi_bt_module_tx_pwr_limits component is included from ${CMA
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/wifi_bt_module/AzureWave/tx_pwr_limits
   ${CMAKE_CURRENT_LIST_DIR}/../../components/wifi_bt_module/Murata/tx_pwr_limits
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/wifi_bt_module/u-blox/tx_pwr_limits
+)
+
+
+endif()
+
+
+if (CONFIG_USE_component_wifi_bt_module_config)
+# Add set(CONFIG_USE_component_wifi_bt_module_config true) in config.cmake to use this component
+
+message("component_wifi_bt_module_config component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/wifi_bt_module/incl
 )
 
 
@@ -816,7 +830,7 @@ if (CONFIG_USE_driver_caam)
 
 message("driver_caam component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_memory AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx) AND CONFIG_USE_driver_common)
+if(CONFIG_USE_driver_memory AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx) AND CONFIG_USE_driver_common AND ((CONFIG_USE_driver_cache_lmem AND (CONFIG_CORE STREQUAL cm4f)) OR (CONFIG_USE_driver_cache_armv7_m7 AND (CONFIG_CORE STREQUAL cm7f))))
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../drivers/caam/fsl_caam.c
@@ -830,8 +844,8 @@ if(CONFIG_USE_COMPONENT_CONFIGURATION)
   message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
 
   target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
-    -DCACHE_MODE_WRITE_THROUGH=1
     -DCRYPTO_USE_DRIVER_CAAM
+    -DCACHE_MODE_WRITE_THROUGH=1
   )
 
 endif()
@@ -1138,10 +1152,14 @@ if (CONFIG_USE_utility_assert)
 
 message("utility_assert component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console)
+if(CONFIG_USE_utility_debug_console AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -1158,10 +1176,14 @@ if (CONFIG_USE_utility_assert_lite)
 
 message("utility_assert_lite component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console_lite)
+if(CONFIG_USE_utility_debug_console_lite AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -2085,7 +2107,7 @@ message("component_flexspi_nor_flash_adapter_rt1170 component is included from $
 if((CONFIG_BOARD STREQUAL evkmimxrt1170) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_flexspi)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/internal_flash/fsl_adapter_flexspi_nor_flash.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/internal_flash/mimxrt1170/fsl_adapter_flexspi_nor_flash.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
@@ -2469,6 +2491,30 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_mma8451q.MIMXRT1176 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_nvm_adapter)
+# Add set(CONFIG_USE_component_nvm_adapter true) in config.cmake to use this component
+
+message("component_nvm_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND CONFIG_USE_middleware_wireless_framework_function_lib AND CONFIG_USE_middleware_wireless_framework_NVM AND CONFIG_USE_middleware_wireless_framework_Common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/nvm/nvm_adapter.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/nvm/.
+)
+
+else()
+
+message(SEND_ERROR "component_nvm_adapter.MIMXRT1176 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -2917,6 +2963,54 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "component_lpspi_adapter.MIMXRT1176 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_pit_time_stamp_adapter)
+# Add set(CONFIG_USE_component_pit_time_stamp_adapter true) in config.cmake to use this component
+
+message("component_pit_time_stamp_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND CONFIG_USE_driver_pit)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/time_stamp/fsl_adapter_pit_time_stamp.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/time_stamp/.
+)
+
+else()
+
+message(SEND_ERROR "component_pit_time_stamp_adapter.MIMXRT1176 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_gpt_time_stamp_adapter)
+# Add set(CONFIG_USE_component_gpt_time_stamp_adapter true) in config.cmake to use this component
+
+message("component_gpt_time_stamp_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_BOARD STREQUAL evkbmimxrt1170 OR CONFIG_BOARD STREQUAL evkmimxrt1170) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_gpt)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/time_stamp/fsl_adapter_gpt_time_stamp.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/time_stamp/.
+)
+
+else()
+
+message(SEND_ERROR "component_gpt_time_stamp_adapter.MIMXRT1176 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -4021,7 +4115,7 @@ if (CONFIG_USE_driver_mipi_dsi_split)
 
 message("driver_mipi_dsi_split component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if((CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_soc_mipi_csi2rx)
+if((CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_soc_mipi_dsi AND CONFIG_USE_driver_soc_mipi_csi2rx)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../drivers/mipi_dsi_split/fsl_mipi_dsi.c
@@ -4643,6 +4737,26 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_xrdc2.MIMXRT1176 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_soc_mipi_dsi)
+# Add set(CONFIG_USE_driver_soc_mipi_dsi true) in config.cmake to use this component
+
+message("driver_soc_mipi_dsi component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx))
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
+)
+
+else()
+
+message(SEND_ERROR "driver_soc_mipi_dsi.MIMXRT1176 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef _FSL_IAP_SKBOOT_AUTHENTICATE_H_
-#define _FSL_IAP_SKBOOT_AUTHENTICATE_H_
+#ifndef FSL_IAP_SKBOOT_AUTHENTICATE_H_
+#define FSL_IAP_SKBOOT_AUTHENTICATE_H_
 
 #include "fsl_common.h"
 
@@ -74,4 +74,4 @@ void HASH_IRQHandler(void);
  *@}
  */
 
-#endif /* _FSL_IAP_SKBOOT_AUTHENTICATE_H_ */
+#endif /* FSL_IAP_SKBOOT_AUTHENTICATE_H_ */

@@ -1,5 +1,0 @@
-<map id="FXLS8962_SPI_Configure" name="FXLS8962_SPI_Configure">
-<area shape="rect" id="node2" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="585,29,647,55"/>
-<area shape="rect" id="node3" href="$a00173.html#ac4eb16e5a939fce81270bab7f6707754" title="The interface function to write a sensor register. " alt="" coords="401,29,537,55"/>
-<area shape="rect" id="node4" href="$a00188.html#aaadd5fc1d790e7922e5303b4d61b67b4" title="Write register data to a sensor. " alt="" coords="224,79,353,106"/>
-</map>

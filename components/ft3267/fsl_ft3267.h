@@ -123,6 +123,7 @@ status_t FT3267_Deinit(ft3267_handle_t *handle);
  * Get one touch point coordinate.
  *
  * @param [in] handle Pointer to the driver.
+ * @param [out] touch_event Touch event.
  * @param [out] touch_x X coordinate of the touch point.
  * @param [out] touch_y Y coordinate of the touch point.
  * @return Returns @ref kStatus_Success if success, otherwise return error code.

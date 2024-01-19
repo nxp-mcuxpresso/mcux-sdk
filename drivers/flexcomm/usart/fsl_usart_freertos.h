@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef __FSL_USART_FREERTOS_H__
-#define __FSL_USART_FREERTOS_H__
+#ifndef FSL_USART_FREERTOS_H__
+#define FSL_USART_FREERTOS_H__
 
 #include "fsl_usart.h"
 #include <FreeRTOS.h>
@@ -25,10 +25,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief USART FreeRTOS driver version. */
 #define FSL_USART_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
-/*@}*/
+/*! @} */
 
 /*! @brief FLEX USART configuration structure */
 struct rtos_usart_config
@@ -121,7 +121,7 @@ int USART_RTOS_Send(usart_rtos_handle_t *handle, uint8_t *buffer, uint32_t lengt
  */
 int USART_RTOS_Receive(usart_rtos_handle_t *handle, uint8_t *buffer, uint32_t length, size_t *received);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -129,4 +129,4 @@ int USART_RTOS_Receive(usart_rtos_handle_t *handle, uint8_t *buffer, uint32_t le
 
 /*! @}*/
 
-#endif /* __FSL_USART_FREERTOS_H__ */
+#endif /* FSL_USART_FREERTOS_H__ */

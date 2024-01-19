@@ -1,5 +1,0 @@
-<map id="FXLS8962_SPI_Deinit" name="FXLS8962_SPI_Deinit">
-<area shape="rect" id="node2" href="$a00530.html#ab052b802081fd87e1bda8d56e2c0db42" title="Function to insert delays. " alt="" coords="203,5,345,32"/>
-<area shape="rect" id="node3" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="393,56,455,83"/>
-<area shape="rect" id="node4" href="$a00173.html#ac4eb16e5a939fce81270bab7f6707754" title="The interface function to write a sensor register. " alt="" coords="206,107,342,133"/>
-</map>

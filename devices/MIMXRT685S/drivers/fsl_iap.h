@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef __FSL_IAP_H_
-#define __FSL_IAP_H_
+#ifndef FSL_IAP_H_
+#define FSL_IAP_H_
 
 #include "fsl_common.h"
 /*!
@@ -20,10 +20,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief IAP driver version 2.1.2. */
 #define FSL_IAP_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
-/*@}*/
+/*! @} */
 
 /*!
  * @addtogroup iap_flexspi_driver
@@ -724,4 +724,4 @@ status_t IAP_OtpCrcCalc(uint32_t *src, uint32_t numberOfWords, uint32_t *crcChec
 
 /*! @}*/
 
-#endif /* __FSL_IAP_H_ */
+#endif /* FSL_IAP_H_ */

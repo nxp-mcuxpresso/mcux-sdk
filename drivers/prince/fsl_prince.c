@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 - 2021 NXP
+ * Copyright 2018 - 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -747,11 +747,11 @@ status_t PRINCE_FlashProgramWithChecker(flash_config_t *config, uint32_t start, 
 #endif /* !defined(FSL_PRINCE_DRIVER_LPC55S3x) */
 
 #if defined(FSL_PRINCE_DRIVER_LPC55S3x)
-static status_t PRINCE_CSS_generate_random(uint8_t *output, size_t outputByteLen);
-static status_t PRINCE_CSS_check_key(uint8_t keyIdx, mcuxClCss_KeyProp_t *pKeyProp);
-static status_t PRINCE_CSS_gen_iv_key(void);
-static status_t PRINCE_CSS_enable(void);
-static status_t PRINCE_CSS_calculate_iv(uint32_t *IvReg);
+static status_t PRINCE_ELS_generate_random(uint8_t *output, size_t outputByteLen);
+static status_t PRINCE_ELS_check_key(uint8_t keyIdx, mcuxClEls_KeyProp_t *pKeyProp);
+static status_t PRINCE_ELS_gen_iv_key(void);
+static status_t PRINCE_ELS_enable(void);
+static status_t PRINCE_ELS_calculate_iv(uint32_t *IvReg);
 
 /*!
  * @brief Configures PRINCE setting.
@@ -777,8 +777,8 @@ static status_t PRINCE_CSS_calculate_iv(uint32_t *IvReg);
  */
 status_t PRINCE_Configure(api_core_context_t *coreCtx, prince_prot_region_arg_t *config)
 {
-    /* Enable CSS and check keys */
-    if (kStatus_Success != PRINCE_CSS_enable())
+    /* Enable ELS and check keys */
+    if (kStatus_Success != PRINCE_ELS_enable())
     {
         return kStatus_Fail;
     }
@@ -791,7 +791,7 @@ status_t PRINCE_Configure(api_core_context_t *coreCtx, prince_prot_region_arg_t 
  *
  * This function is used to re-configure PRINCE IP based on configuration stored in FFR.
  * This function also needs to be called after wake up from power-down mode to regenerate IV
- * encryption key in CSS key store whose presence is necessary for correct PRINCE operation
+ * encryption key in ELS key store whose presence is necessary for correct PRINCE operation
  * during erase and write operations to encrypted regions of internal flash memory
  * (dependency for correct operation of MEM_Erase() and MEM_Write() after wake up from power-down mode).
  *
@@ -812,15 +812,15 @@ status_t PRINCE_Reconfigure(api_core_context_t *coreCtx)
     uint32_t lockWord;
     uint8_t lock[3];
 
-    /* Enable CSS and check keys */
-    status = PRINCE_CSS_enable();
+    /* Enable ELS and check keys */
+    status = PRINCE_ELS_enable();
     if (kStatus_Success != status)
     {
         return kStatus_Fail;
     }
 
     /* Set PRINCE mask value. */
-    status = PRINCE_CSS_generate_random((uint8_t *)&princeMask, sizeof(princeMask));
+    status = PRINCE_ELS_generate_random((uint8_t *)&princeMask, sizeof(princeMask));
     if (kStatus_Success != status)
     {
         return kStatus_Fail;
@@ -919,7 +919,7 @@ status_t PRINCE_Reconfigure(api_core_context_t *coreCtx)
         IvReg[3] = ivEraseCounter[region];
 
         /* Calculate IV as IvReg = AES_ECB_ENC(DUK_derived_key, {ctx_erase_counter, ctx_id}) */
-        status = PRINCE_CSS_calculate_iv(IvReg);
+        status = PRINCE_ELS_calculate_iv(IvReg);
         if (status != kStatus_Success)
         {
             return kStatus_Fail;
@@ -951,29 +951,29 @@ status_t PRINCE_Reconfigure(api_core_context_t *coreCtx)
     return status;
 }
 
-static status_t PRINCE_CSS_generate_random(uint8_t *output, size_t outputByteLen)
+static status_t PRINCE_ELS_generate_random(uint8_t *output, size_t outputByteLen)
 {
     status_t status = kStatus_Fail;
 
-    // PRNG needs to be initialized; this can be done by calling mcuxClCss_KeyDelete_Async
+    // PRNG needs to be initialized; this can be done by calling mcuxClEls_KeyDelete_Async
     // (delete any key slot, can be empty)
-    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClCss_KeyDelete_Async(18));
-    // mcuxClCss_KeyDelete_Async is a flow-protected function: Check the protection token and the return value
-    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_KeyDelete_Async) != token) || (MCUXCLCSS_STATUS_OK_WAIT != result))
-        return kStatus_Fail; // Expect that no error occurred, meaning that the mcuxClCss_KeyDelete_Async operation was
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClEls_KeyDelete_Async(18));
+    // mcuxClEls_KeyDelete_Async is a flow-protected function: Check the protection token and the return value
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_KeyDelete_Async) != token) || (MCUXCLELS_STATUS_OK_WAIT != result))
+        return kStatus_Fail; // Expect that no error occurred, meaning that the mcuxClEls_KeyDelete_Async operation was
                              // started.
     MCUX_CSSL_FP_FUNCTION_CALL_END();
 
     // Wait for operation to finish
-    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClCss_WaitForOperation(MCUXCLCSS_ERROR_FLAGS_CLEAR));
-    // mcuxClCss_WaitForOperation is a flow-protected function: Check the protection token and the return value
-    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_WaitForOperation) != token) || (MCUXCLCSS_STATUS_OK != result))
-        return kStatus_Fail; // Expect that no error occurred, meaning that the mcuxClCss_WaitForOperation operation was
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClEls_WaitForOperation(MCUXCLELS_ERROR_FLAGS_CLEAR));
+    // mcuxClEls_WaitForOperation is a flow-protected function: Check the protection token and the return value
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation) != token) || (MCUXCLELS_STATUS_OK != result))
+        return kStatus_Fail; // Expect that no error occurred, meaning that the mcuxClEls_WaitForOperation operation was
                              // started.
     MCUX_CSSL_FP_FUNCTION_CALL_END();
 
-    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClCss_Prng_GetRandom(output, outputByteLen));
-    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_Prng_GetRandom) != token) || (MCUXCLCSS_STATUS_OK != result))
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClEls_Prng_GetRandom(output, outputByteLen));
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_Prng_GetRandom) != token) || (MCUXCLELS_STATUS_OK != result))
         return kStatus_Fail;
     MCUX_CSSL_FP_FUNCTION_CALL_END();
 
@@ -981,44 +981,45 @@ static status_t PRINCE_CSS_generate_random(uint8_t *output, size_t outputByteLen
     return status;
 }
 
-static status_t PRINCE_CSS_check_key(uint8_t keyIdx, mcuxClCss_KeyProp_t *pKeyProp)
+static status_t PRINCE_ELS_check_key(uint8_t keyIdx, mcuxClEls_KeyProp_t *pKeyProp)
 {
-    /* Check if CSS required keys are available in CSS keystore */
+    /* Check if ELS required keys are available in ELS keystore */
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token,
-                                     mcuxClCss_GetKeyProperties(keyIdx, pKeyProp)); // Get key propertis from the CSS.
-    // mcuxClCss_GetKeyProperties is a flow-protected function: Check the protection token and the return value
-    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_GetKeyProperties) != token) || (MCUXCLCSS_STATUS_OK != result))
+                                     mcuxClEls_GetKeyProperties(keyIdx, pKeyProp)); // Get key properties from the ELS.
+    // mcuxClEls_GetKeyProperties is a flow-protected function: Check the protection token and the return value
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_GetKeyProperties) != token) || (MCUXCLELS_STATUS_OK != result))
         return kStatus_Fail;
     MCUX_CSSL_FP_FUNCTION_CALL_END();
 
     return kStatus_Success;
 }
 
-static status_t PRINCE_CSS_gen_iv_key(void)
+static status_t PRINCE_ELS_gen_iv_key(void)
 {
     /* The NXP_DIE_MEM_IV_ENC_SK is not loaded and needs to be regenerated (power-down wakeup) */
     /* Set KDF mask and key properties for NXP_DIE_MEM_IV_ENC_SK */
-    SYSCON->CSS_KDF_MASK            = SYSCON_CSS_KDF_MASK;
+    SYSCON->ELS_KDF_MASK            = SYSCON_ELS_KDF_MASK;
     static const uint32_t ddata2[3] = {0x62032504, 0x72f04280, 0x87a2bbae};
-    mcuxClCss_KeyProp_t keyProp;
+    mcuxClEls_KeyProp_t keyProp;
     /* Set key properties in structure */
-    keyProp.word.value = CSS_CSS_KS2_ks2_uaes_MASK | CSS_CSS_KS2_ks2_fgp_MASK | CSS_CSS_KS2_ks2_kact_MASK;
-    status_t status    = kStatus_Fail;
+    keyProp.word.value = MCUXCLELS_KEYPROPERTY_VALUE_AES | MCUXCLELS_KEYPROPERTY_VALUE_GENERAL_PURPOSE_SLOT |
+                         MCUXCLELS_KEYPROPERTY_VALUE_ACTIVE;
+    status_t status = kStatus_Fail;
 
     /* Generate the key using CKDF */
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(
         result, token,
-        mcuxClCss_Ckdf_Sp800108_Async((mcuxClCss_KeyIndex_t)0, (mcuxClCss_KeyIndex_t)NXP_DIE_MEM_IV_ENC_SK, keyProp,
+        mcuxClEls_Ckdf_Sp800108_Async((mcuxClEls_KeyIndex_t)0, (mcuxClEls_KeyIndex_t)NXP_DIE_MEM_IV_ENC_SK, keyProp,
                                       (uint8_t const *)ddata2));
-    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_Ckdf_Sp800108_Async) != token) && (MCUXCLCSS_STATUS_OK != result))
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_Ckdf_Sp800108_Async) != token) && (MCUXCLELS_STATUS_OK != result))
     {
         return kStatus_Fail;
     }
     MCUX_CSSL_FP_FUNCTION_CALL_END();
 
     /* Wait for CKDF to finish */
-    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClCss_WaitForOperation(MCUXCLCSS_ERROR_FLAGS_CLEAR));
-    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_WaitForOperation) == token) && (MCUXCLCSS_STATUS_OK == result))
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClEls_WaitForOperation(MCUXCLELS_ERROR_FLAGS_CLEAR));
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation) == token) && (MCUXCLELS_STATUS_OK == result))
     {
         status = kStatus_Success;
     }
@@ -1027,44 +1028,44 @@ static status_t PRINCE_CSS_gen_iv_key(void)
     return status;
 }
 
-static status_t PRINCE_CSS_enable(void)
+static status_t PRINCE_ELS_enable(void)
 {
-    mcuxClCss_KeyProp_t key_properties;
+    mcuxClEls_KeyProp_t key_properties;
     status_t status = kStatus_Fail;
 
-    /* Enable CSS and related clocks */
-    status = CSS_PowerDownWakeupInit(CSS);
+    /* Enable ELS and related clocks */
+    status = ELS_PowerDownWakeupInit(ELS);
     if (status != kStatus_Success)
     {
         return kStatus_Fail;
     }
 
-    /* Check if MEM_ENC_SK key is available in CSS keystore */
-    status = PRINCE_CSS_check_key(NXP_DIE_MEM_ENC_SK, &key_properties);
+    /* Check if MEM_ENC_SK key is available in ELS keystore */
+    status = PRINCE_ELS_check_key(NXP_DIE_MEM_ENC_SK, &key_properties);
     if (status != kStatus_Success || key_properties.bits.kactv != 1u)
     {
         return kStatus_Fail;
     }
 
-    /* Check if MEM_IV_ENC_SK key is available in CSS keystore */
-    status = PRINCE_CSS_check_key(NXP_DIE_MEM_IV_ENC_SK, &key_properties);
+    /* Check if MEM_IV_ENC_SK key is available in ELS keystore */
+    status = PRINCE_ELS_check_key(NXP_DIE_MEM_IV_ENC_SK, &key_properties);
     if (status != kStatus_Success || key_properties.bits.kactv != 1u)
     {
-        return PRINCE_CSS_gen_iv_key();
+        return PRINCE_ELS_gen_iv_key();
     }
 
     return kStatus_Success;
 }
 
-static status_t PRINCE_CSS_calculate_iv(uint32_t *IvReg)
+static status_t PRINCE_ELS_calculate_iv(uint32_t *IvReg)
 {
-    mcuxClCss_CipherOption_t cipherOptions = {0};
+    mcuxClEls_CipherOption_t cipherOptions = {0};
     status_t status                        = kStatus_Fail;
 
-    /* Configure CSS for AES ECB-128, using NXP_DIE_MEM_IV_ENC_SK key */
-    cipherOptions.bits.cphmde = MCUXCLCSS_CIPHERPARAM_ALGORITHM_AES_ECB;
-    cipherOptions.bits.dcrpt  = MCUXCLCSS_CIPHER_ENCRYPT;
-    cipherOptions.bits.extkey = MCUXCLCSS_CIPHER_INTERNAL_KEY;
+    /* Configure ELS for AES ECB-128, using NXP_DIE_MEM_IV_ENC_SK key */
+    cipherOptions.bits.cphmde = MCUXCLELS_CIPHERPARAM_ALGORITHM_AES_ECB;
+    cipherOptions.bits.dcrpt  = MCUXCLELS_CIPHER_ENCRYPT;
+    cipherOptions.bits.extkey = MCUXCLELS_CIPHER_INTERNAL_KEY;
 
     do
     {
@@ -1072,19 +1073,19 @@ static status_t PRINCE_CSS_calculate_iv(uint32_t *IvReg)
         /* ivSeed[127:0] = {UUID[96:0] ^ regionNumber[1:0], ivEraseCounter[31:0]} */
         MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(
             result, token,
-            mcuxClCss_Cipher_Async(cipherOptions, (mcuxClCss_KeyIndex_t)NXP_DIE_MEM_IV_ENC_SK, NULL,
-                                   MCUXCLCSS_CIPHER_KEY_SIZE_AES_128, (uint8_t *)IvReg, MCUXCLCSS_CIPHER_BLOCK_SIZE_AES,
+            mcuxClEls_Cipher_Async(cipherOptions, (mcuxClEls_KeyIndex_t)NXP_DIE_MEM_IV_ENC_SK, NULL,
+                                   MCUXCLELS_CIPHER_KEY_SIZE_AES_128, (uint8_t *)IvReg, MCUXCLELS_CIPHER_BLOCK_SIZE_AES,
                                    NULL, (uint8_t *)IvReg));
-        if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_Cipher_Async) != token) || (MCUXCLCSS_STATUS_OK_WAIT != result))
+        if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_Cipher_Async) != token) || (MCUXCLELS_STATUS_OK_WAIT != result))
             break;
         MCUX_CSSL_FP_FUNCTION_CALL_END();
 
         MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(
             result, token,
-            mcuxClCss_WaitForOperation(
-                MCUXCLCSS_ERROR_FLAGS_CLEAR)); // Wait for the mcuxClCss_Enable_Async operation to complete.
-        // mcuxClCss_WaitForOperation is a flow-protected function: Check the protection token and the return value
-        if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClCss_WaitForOperation) == token) && (MCUXCLCSS_STATUS_OK == result))
+            mcuxClEls_WaitForOperation(
+                MCUXCLELS_ERROR_FLAGS_CLEAR)); // Wait for the mcuxClEls_Enable_Async operation to complete.
+        // mcuxClEls_WaitForOperation is a flow-protected function: Check the protection token and the return value
+        if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation) == token) && (MCUXCLELS_STATUS_OK == result))
         {
             status = kStatus_Success;
         }

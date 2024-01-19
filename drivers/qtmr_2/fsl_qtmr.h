@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_QTMR_H_
-#define _FSL_QTMR_H_
+#ifndef FSL_QTMR_H_
+#define FSL_QTMR_H_
 
 #include "fsl_common.h"
 
@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version. */
-/*@}*/
+/*! @} */
 
 /*! @brief Quad Timer primary clock source selection*/
 typedef enum _qtmr_primary_count_source
@@ -374,4 +374,4 @@ static inline void QTMR_StopTimer(TMR_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_QTMR_H_ */
+#endif /* FSL_QTMR_H_ */

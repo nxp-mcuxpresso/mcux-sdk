@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_TSC_H_
-#define _FSL_TSC_H_
+#ifndef FSL_TSC_H_
+#define FSL_TSC_H_
 
 #include "fsl_common.h"
 
@@ -519,6 +519,6 @@ void TSC_DebugSetPortMode(TSC_Type *base, tsc_port_source_t port, tsc_port_mode_
 }
 #endif
 
-/* @} */
+/*! @} */
 
-#endif /* _FSL_TSC_H_ */
+#endif /* FSL_TSC_H_ */

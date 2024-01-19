@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_ADC12_H_
-#define _FSL_ADC12_H_
+#ifndef FSL_ADC12_H_
+#define FSL_ADC12_H_
 
 #include "fsl_common.h"
 
@@ -184,7 +184,7 @@ void ADC12_Deinit(ADC_Type *base);
  * @param config Pointer to "adc12_config_t" structure.
  */
 void ADC12_GetDefaultConfig(adc12_config_t *config);
-/* @} */
+/*! @} */
 
 /*!
  * @name Basic Operations
@@ -242,7 +242,7 @@ static inline uint32_t ADC12_GetChannelConversionValue(ADC_Type *base, uint32_t 
  */
 uint32_t ADC12_GetChannelStatusFlags(ADC_Type *base, uint32_t channelGroup);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Advanced Operations
@@ -359,7 +359,7 @@ void ADC12_SetHardwareAverage(ADC_Type *base, adc12_hardware_average_mode_t mode
  */
 uint32_t ADC12_GetStatusFlags(ADC_Type *base);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -367,4 +367,4 @@ uint32_t ADC12_GetStatusFlags(ADC_Type *base);
 
 /*! @}*/
 
-#endif /* _FSL_ADC12_H_ */
+#endif /* FSL_ADC12_H_ */

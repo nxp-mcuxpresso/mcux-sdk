@@ -39,7 +39,7 @@ struct _ldr_buf
 typedef struct _ldr_Context_v3 ldr_Context_v3_t;
 
 /*! @brief Function pointer definition for all loader action functions. */
-typedef status_t (*pLdrFnc_v3_t)(ldr_Context_v3_t *);
+typedef status_t (*pLdrFnc_v3_t)(ldr_Context_v3_t *content);
 
 /*! @brief sb3 section definitions */
 /*! @brief section type */
@@ -218,14 +218,14 @@ typedef struct
 
 typedef struct
 {
-    uint32_t version; /*!< Should be set to #kKbootApiVersion. */
+    uint32_t version; /*!< Should be set to KbootApiVersion. */
     uint8_t *buffer;  /*!< Caller-provided buffer used by Kboot. */
     uint32_t bufferLength;
     kb_operation_t op;
     union
     {
-        kb_authenticate_t authenticate; /*!< Settings for #kKbootAuthenticate operation.*/
-        kb_load_sb_t loadSB;            /*!< Settings for #kKbootLoadSB operation.*/
+        kb_authenticate_t authenticate; /*!< Settings for kb_authenticate_t operation.*/
+        kb_load_sb_t loadSB;            /*!< Settings for kb_load_sb_t operation.*/
     };
 } kb_options_t;
 
@@ -263,7 +263,7 @@ struct _ldr_Context_v3
     uint32_t data_position;
     uint8_t data_buffer[SB3_DATA_BUFFER_SIZE_IN_BYTE]; /*!< temporary data buffer */
 
-    kb_options_t fromAPI; /*!< options from ROM API */
+    kb_options_t fromAPI;                              /*!< options from ROM API */
 };
 
 /*! @} */

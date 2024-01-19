@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_LTC_EDMA_H_
-#define _FSL_LTC_EDMA_H_
+#ifndef FSL_LTC_EDMA_H_
+#define FSL_LTC_EDMA_H_
 
 #include "fsl_common.h"
 
@@ -23,10 +23,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LTC EDMA driver version. Version 2.0.15. */
 #define FSL_LTC_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 15))
-/*@}*/
+/*! @} */
 
 /* @brief The LTC eDMA handle type. */
 typedef struct _ltc_edma_handle ltc_edma_handle_t;
@@ -831,4 +831,4 @@ status_t LTC_DES3_DecryptOfbEDMA(LTC_Type *base,
 }
 #endif
 
-#endif /* _FSL_LTC_EDMA_H_ */
+#endif /* FSL_LTC_EDMA_H_ */

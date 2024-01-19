@@ -4,7 +4,7 @@
 /*            K32L2A31A                                                      */
 /*  @version: 1.0                                                            */
 /*  @date:    2019-10-30                                                     */
-/*  @build:   b230525                                                        */
+/*  @build:   b231018                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
@@ -115,6 +115,11 @@ __isr_vector:
     .text
     .thumb
 
+#if defined (__cplusplus)
+#ifdef __REDLIB__
+#error Redlib does not support C++
+#endif
+#endif
 /* Reset Handler */
 
     .thumb_func
@@ -179,7 +184,11 @@ Reset_Handler:
 #endif
     cpsie   i               /* Unmask interrupts */
 #ifndef __START
+#ifdef __REDLIB__
+#define __START __main
+#else
 #define __START _start
+#endif
 #endif
 #ifndef __ATOLLIC__
     ldr   r0,=__START

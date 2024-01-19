@@ -20,8 +20,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.6.0. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
+/*! @brief power driver version 2.6.1. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 6, 1))
 /*@}*/
 
 #define MAKE_PD_BITS(reg, slot)  (((reg) << 8) | (slot))
@@ -78,7 +78,7 @@ enum _pmc_event_flags
 {
     kPMC_FLAGS_PORCORE = PMC_FLAGS_PORCOREF_MASK, /*!< POR triggered by the vddcore POR monitor (0 = no, 1 = yes). */
     kPMC_FLAGS_POR1V8 =
-        PMC_FLAGS_POR1V8F_MASK, /*!< vdd1v8 power on event detected since last cleared(0 = no, 1 = yes). */
+        PMC_FLAGS_POR1V8F_MASK,  /*!< vdd1v8 power on event detected since last cleared(0 = no, 1 = yes). */
     kPMC_FLAGS_PORAO18 =
         PMC_FLAGS_PORAO18F_MASK, /*!< vdd_ao18 power on event detected since last cleared (0 = no, 1 = yes). */
     kPMC_FLAGS_LVDCORE =
@@ -86,11 +86,11 @@ enum _pmc_event_flags
     kPMC_FLAGS_HVDCORE =
         PMC_FLAGS_HVDCOREF_MASK, /*!< HVD tripped since last time this bit was cleared (0 = no, 1 = yes). */
     kPMC_FLAGS_HVD1V8 =
-        PMC_FLAGS_HVD1V8F_MASK, /*!< vdd1v8 HVD tripped since last time this bit was cleared (0 = no, 1 = yes). */
+        PMC_FLAGS_HVD1V8F_MASK,  /*!< vdd1v8 HVD tripped since last time this bit was cleared (0 = no, 1 = yes). */
     kPMC_FLAGS_RTC =
-        PMC_FLAGS_RTCF_MASK, /*!< RTC wakeup detected since last time flag was cleared (0 = no, 1 = yes). */
+        PMC_FLAGS_RTCF_MASK,     /*!< RTC wakeup detected since last time flag was cleared (0 = no, 1 = yes). */
     kPMC_FLAGS_AUTOWK =
-        PMC_FLAGS_AUTOWKF_MASK, /*!< PMC Auto wakeup caused a deep sleep wakeup and interrupt (0 = no, 1 = yes). */
+        PMC_FLAGS_AUTOWKF_MASK,  /*!< PMC Auto wakeup caused a deep sleep wakeup and interrupt (0 = no, 1 = yes). */
     kPMC_FLAGS_INTNPADF = PMC_FLAGS_INTNPADF_MASK, /*!< Pad interrupt caused a wakeup or interrupt event since the last
                                                       time this flag was cleared (0 = no, 1 = yes). */
     kPMC_FLAGS_RESETNPAD = PMC_FLAGS_RESETNPADF_MASK, /*!< Reset pad wakeup caused a wakeup or reset event since the

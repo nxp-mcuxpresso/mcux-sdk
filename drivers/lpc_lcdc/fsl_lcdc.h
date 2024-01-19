@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef __FSL_LCDC_H__
-#define __FSL_LCDC_H__
+#ifndef FSL_LCDC_H__
+#define FSL_LCDC_H__
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LCDC driver version. */
 #define FSL_LCDC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
-/*@}*/
+/*! @} */
 
 /*!@brief How many hardware cursors supports. */
 #define LCDC_CURSOR_COUNT 4U
@@ -255,7 +255,7 @@ void LCDC_Deinit(LCD_Type *base);
  */
 void LCDC_GetDefaultConfig(lcdc_config_t *config);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Start and stop
@@ -314,7 +314,7 @@ static inline void LCDC_PowerDown(LCD_Type *base)
     base->CTRL &= ~LCD_CTRL_LCDPWR_MASK;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name LCD control
@@ -340,7 +340,7 @@ void LCDC_SetPanelAddr(LCD_Type *base, lcdc_panel_t panel, uint32_t addr);
  */
 void LCDC_SetPalette(LCD_Type *base, const uint32_t *palette, uint8_t count_words);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -441,7 +441,7 @@ uint32_t LCDC_GetEnabledInterruptsPendingStatus(LCD_Type *base);
  */
 void LCDC_ClearInterruptsStatus(LCD_Type *base, uint32_t mask);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Hardware cursor
@@ -577,12 +577,12 @@ void LCDC_SetCursorPosition(LCD_Type *base, int32_t positionX, int32_t positionY
  */
 void LCDC_SetCursorImage(LCD_Type *base, lcdc_cursor_size_t size, uint8_t index, const uint32_t *image);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
-/* @} */
+/*! @} */
 
-#endif /* __FSL_LCDC_H__ */
+#endif /* FSL_LCDC_H__ */

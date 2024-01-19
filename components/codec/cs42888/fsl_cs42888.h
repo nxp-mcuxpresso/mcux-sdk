@@ -21,10 +21,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief cs42888 driver version 2.1.3. */
 #define FSL_CS42888_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
-/*@}*/
+/*! @} */
 
 /*! @brief CS42888 handle size */
 #ifndef CS42888_I2C_HANDLER_SIZE

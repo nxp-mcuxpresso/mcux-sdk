@@ -1,4 +1,0 @@
-<map id="fUpdateMagCalibration4Slice" name="fUpdateMagCalibration4Slice">
-<area shape="rect" id="node2" href="$a00887.html#a54f510d9d257d6063412a9ed5adddd6f" title="function sets the 3x3 matrix A to the identity matrix " alt="" coords="241,5,349,32"/>
-<area shape="rect" id="node3" href="$a00887.html#a64363bfcc2226e12d1bc28e7382591cc" title="fmatrixAeqInvA" alt="" coords="241,56,349,83"/>
-</map>

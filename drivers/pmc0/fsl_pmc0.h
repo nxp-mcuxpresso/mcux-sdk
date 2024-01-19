@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_PMC0_H_
-#define _FSL_PMC0_H_
+#ifndef FSL_PMC0_H_
+#define FSL_PMC0_H_
 
 #include "fsl_common.h"
 
@@ -25,10 +25,10 @@
 #endif
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief PMC 0 driver version */
 #define FSL_PMC0_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief MAX valid values of Core Regulator Voltage Level
@@ -315,7 +315,7 @@ extern "C" {
 #endif /* __cplusplus*/
 
 /*! @name Power Management Controller Control APIs*/
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Configure the HSRUN power mode.
@@ -904,7 +904,7 @@ static inline void PMC0_SetTemperatureSensorMode(uint8_t mode)
     PMC0->ACTRL = (PMC0->ACTRL & ~PMC0_ACTRL_TSENSM_MASK) | PMC0_ACTRL_TSENSM(mode);
 }
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -912,4 +912,4 @@ static inline void PMC0_SetTemperatureSensorMode(uint8_t mode)
 
 /*! @}*/
 
-#endif /* _FSL_PMC_H_*/
+#endif /* FSL_PMC_H_*/

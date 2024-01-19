@@ -20,10 +20,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief CLOCK driver version 2.1.2 */
 #define FSL_AK4497_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
-/*@}*/
+/*! @} */
 
 /*! @brief ak4497 handle size */
 #ifndef AK4497_I2C_HANDLER_SIZE

@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_ASRC_P2P_EDMA_H_
-#define _FSL_ASRC_P2P_EDMA_H_
+#ifndef FSL_ASRC_P2P_EDMA_H_
+#define FSL_ASRC_P2P_EDMA_H_
 
 #include "fsl_edma.h"
 #include "fsl_asrc.h"
@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-#define FSL_ASRC_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0 */
-/*@}*/
+/*! @{ */
+#define FSL_ASRC_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 0)) /*!< Version 2.2.0 */
+/*! @} */
 /*!< @brief ASRC IN edma QUEUE size */
 #define ASRC_XFER_IN_QUEUE_SIZE  4U
 #define ASRC_XFER_OUT_QUEUE_SIZE (ASRC_XFER_QUEUE_SIZE * 2U)
@@ -37,8 +37,6 @@ typedef void (*asrc_start_peripheral_t)(bool start);
 /*! @brief destination peripheral configuration */
 typedef struct _asrc_p2p_edma_config
 {
-    uint8_t watermark;                       /*!< peripheral watermark */
-    uint8_t channel;                         /*!< peripheral channel number */
     asrc_start_peripheral_t startPeripheral; /*!< trigger peripheral start */
 } asrc_p2p_edma_config_t;
 

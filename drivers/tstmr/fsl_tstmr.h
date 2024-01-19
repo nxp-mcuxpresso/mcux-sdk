@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_TSTMR_H_
-#define _FSL_TSTMR_H_
+#ifndef FSL_TSTMR_H_
+#define FSL_TSTMR_H_
 
 #include "fsl_common.h"
 
@@ -25,9 +25,9 @@
 #endif
 
 /*! @name Driver version */
-/*@{*/
-#define FSL_TSTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0 */
-                                                         /*@}*/
+/*! @{ */
+#define FSL_TSTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
+                                                         /*! @} */
 
 /*******************************************************************************
  * API
@@ -42,6 +42,8 @@ extern "C" {
  *
  * This function reads the low and high registers and returns the 56-bit free running
  * counter value. This can be read by software at any time to determine the software ticks.
+ * TSTMR registers can be read with 32-bit accesses only. The TSTMR LOW read should occur first, 
+ * followed by the TSTMR HIGH read.
  *
  * @param base TSTMR peripheral base address.
  *
@@ -49,7 +51,14 @@ extern "C" {
  */
 static inline uint64_t TSTMR_ReadTimeStamp(TSTMR_Type *base)
 {
-    return *(volatile uint64_t *)(base);
+    uint32_t reg_l;
+    uint32_t reg_h;
+    
+    reg_l = base->L;
+    __DMB();
+    reg_h = base->H;
+
+    return (uint64_t)reg_l | (((uint64_t)reg_h) << 32U);
 }
 
 /*!
@@ -81,4 +90,4 @@ static inline void TSTMR_DelayUs(TSTMR_Type *base, uint32_t delayInUs)
 
 /*! @}*/
 
-#endif /* _FSL_TSTMR_H_ */
+#endif /* FSL_TSTMR_H_ */

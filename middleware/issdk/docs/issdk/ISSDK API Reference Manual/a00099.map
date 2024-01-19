@@ -1,7 +1,0 @@
-<map id="sensors/host_io_uart.c" name="sensors/host_io_uart.c">
-<area shape="rect" id="node4" href="$a00101.html" title="The host_io_uart.h file contains the Host Protocol interface definitions and configuration. " alt="" coords="569,155,673,181"/>
-<area shape="rect" id="node5" href="$a00170.html" title="The register_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="272,80,389,107"/>
-<area shape="rect" id="node6" href="$a00176.html" title="The register_io_spi.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="413,80,531,107"/>
-<area shape="rect" id="node7" href="$a00512.html" title="The data_format_hdlc.h file contains the Host interface definitions and configuration. " alt="" coords="555,80,687,107"/>
-<area shape="rect" id="node8" href="$a00518.html" title="The format_json.h file describes the structures and definitions for the data&#45;format standard JSON..." alt="" coords="711,80,843,107"/>
-</map>

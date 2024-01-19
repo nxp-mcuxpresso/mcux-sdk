@@ -94,7 +94,7 @@ void HAL_TimeStampInit(hal_time_stamp_handle_t halTimeStampHandle, hal_time_stam
 /*!
  * @brief Get the absolute time at the moment of the call.
  *
- * @param halTimerHandle     HAL timer adapter handle
+ * @param halTimeStampHandle     HAL timer adapter handle
  * @retval the absolute time(microsecond) at the moment of the call
  */
 uint64_t HAL_GetTimeStamp(hal_time_stamp_handle_t halTimeStampHandle);
@@ -104,7 +104,7 @@ uint64_t HAL_GetTimeStamp(hal_time_stamp_handle_t halTimeStampHandle);
  *
  * @note This API should be called by low power module when system exit from sleep mode.
  *
- * @param halTimerHandle     HAL timer adapter handle
+ * @param halTimeStampHandle     HAL timer adapter handle
  */
 void HAL_TimeStampExitLowpower(hal_time_stamp_handle_t halTimeStampHandle);
 
@@ -113,7 +113,7 @@ void HAL_TimeStampExitLowpower(hal_time_stamp_handle_t halTimeStampHandle);
  *
  * @note This API should be called by low power module before system enter into sleep mode.
  *
- * @param halTimerHandle     HAL timer adapter handle
+ * @param halTimeStampHandle     HAL timer adapter handle
  */
 void HAL_TimeStampEnterLowpower(hal_time_stamp_handle_t halTimeStampHandle);
 #if defined(__cplusplus)

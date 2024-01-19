@@ -16,6 +16,10 @@
 #define FSL_COMPONENT_ID "platform.drivers.ostimer"
 #endif
 
+#if defined(OSTIMER_RSTS)
+#define OSTIMER_RESETS_ARRAY OSTIMER_RSTS
+#endif
+
 /* Typedef for interrupt handler. */
 typedef void (*ostimer_isr_t)(OSTIMER_Type *base, ostimer_callback_t cb);
 
@@ -60,6 +64,11 @@ static const clock_ip_name_t s_ostimerClock[] = OSTIMER_CLOCKS;
 static ostimer_isr_t s_ostimerIsr = (ostimer_isr_t)DefaultISR;
 #else
 static ostimer_isr_t s_ostimerIsr;
+#endif
+
+#if defined(OSTIMER_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_ostimerResets[] = OSTIMER_RESETS_ARRAY;
 #endif
 
 /*******************************************************************************
@@ -177,6 +186,10 @@ void OSTIMER_Init(OSTIMER_Type *base)
     CLOCK_EnableClock(kCLOCK_Sysctl);
 #endif /* FSL_FEATURE_SYSCTRL_HAS_CODE_GRAY. */
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(OSTIMER_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_ostimerResets[OSTIMER_GetInstance(base)]);
+#endif
 }
 
 /*!

@@ -1,5 +1,0 @@
-<map id="fRunMagCalibration" name="fRunMagCalibration">
-<area shape="rect" id="node2" href="$sensor__fusion_8c.html#aaf8b47198fa614f0b50265addf44a8b0" title="processMagData" alt="" coords="188,5,308,32"/>
-<area shape="rect" id="node3" href="$sensor__fusion_8h.html#aef2b1f23f820d2b513bc827f8baffd0d" title="conditionSensorReadings() transforms raw software FIFO readings into forms that can be consumed by th..." alt="" coords="356,5,525,32"/>
-<area shape="rect" id="node4" href="$sensor__fusion_8h.html#a367d92b99365a8143700b76439915d65" title="utility function to insert default values in the top level structure " alt="" coords="573,5,736,32"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="main" name="main">
-<area shape="rect" id="node2" href="$a04109.html#a4c84ccb952cb083367d7040cf9de3db8" title="BOARD_InitDebugConsole" alt="" coords="104,5,280,32"/>
-<area shape="rect" id="node3" href="$a00959.html#ga2c9fe54b6b84723fbaa590a6f4576966" title="Configures pin routing and optionally pin electrical features. " alt="" coords="133,56,251,83"/>
-<area shape="rect" id="node4" href="$a00530.html#ad43629969994e92bd3620e630bda24c8" title="Function to enable systicks framework. " alt="" coords="113,107,271,133"/>
-<area shape="rect" id="node5" href="$a00338.html#ab4c148858207e08ce9fc7b1f7cdf7a5e" title="ISR for FXLS896x interrupt source event. " alt="" coords="119,157,265,184"/>
-<area shape="rect" id="node6" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="161,208,223,235"/>
-</map>

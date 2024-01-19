@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_FLEXCAN_EDMA_H_
-#define _FSL_FLEXCAN_EDMA_H_
+#ifndef FSL_FLEXCAN_EDMA_H_
+#define FSL_FLEXCAN_EDMA_H_
 
 #include "fsl_flexcan.h"
 #include "fsl_edma.h"
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief FlexCAN EDMA driver version. */
-#define FSL_FLEXCAN_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 11, 0))
-/*@}*/
+#define FSL_FLEXCAN_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 11, 3))
+/*! @} */
 
 /* Forward declaration of the handle typedef. */
 typedef struct _flexcan_edma_handle flexcan_edma_handle_t;
@@ -177,7 +177,7 @@ static inline status_t FLEXCAN_TransferGetReceiveEnhancedFifoCountEMDA(CAN_Type 
 }
 #endif
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -185,4 +185,4 @@ static inline status_t FLEXCAN_TransferGetReceiveEnhancedFifoCountEMDA(CAN_Type 
 
 /*! @}*/
 
-#endif /* _FSL_FLEXCAN_EDMA_H_ */
+#endif /* FSL_FLEXCAN_EDMA_H_ */

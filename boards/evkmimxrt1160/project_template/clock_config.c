@@ -1,6 +1,5 @@
 /*
- * Copyright 2022 NXP
- * All rights reserved.
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -18,11 +17,11 @@
 
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Clocks v10.0
+product: Clocks v11.0
 processor: MIMXRT1166xxxxx
 package_id: MIMXRT1166DVM6A
 mcu_data: ksdk2_0
-processor_version: 0.12.10
+processor_version: 0.0.0
 board: MIMXRT1160-EVK
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
@@ -198,7 +197,8 @@ settings:
 - {id: ANADIG_OSC_OSC_24M_CTRL_LP_EN_CFG, value: Low}
 - {id: ANADIG_OSC_OSC_24M_CTRL_OSC_EN_CFG, value: Enabled}
 - {id: ANADIG_PLL.ARM_PLL_POST_DIV.scale, value: '4'}
-- {id: ANADIG_PLL.ARM_PLL_VDIV.scale, value: '100'}
+- {id: ANADIG_PLL.ARM_PLL_PREDIV.scale, value: '1', locked: true}
+- {id: ANADIG_PLL.ARM_PLL_VDIV.scale, value: '200', locked: true}
 - {id: ANADIG_PLL.PLL_AUDIO_BYPASS.sel, value: ANADIG_OSC.OSC_24M}
 - {id: ANADIG_PLL.PLL_VIDEO.denom, value: '960000'}
 - {id: ANADIG_PLL.PLL_VIDEO.div, value: '41'}
@@ -293,7 +293,7 @@ void BOARD_BootClockRUN(void)
 
     /* Init OSC RC 400M */
     CLOCK_OSC_EnableOscRc400M();
-    CLOCK_OSC_GateOscRc400M(true);
+    CLOCK_OSC_GateOscRc400M(false);
 
     /* Init OSC RC 48M */
     CLOCK_OSC_EnableOsc48M(true);
@@ -948,7 +948,7 @@ settings:
 - {id: ANADIG_OSC_OSC_24M_CTRL_OSC_EN_CFG, value: Enabled}
 - {id: ANADIG_PLL.ARM_PLL_POST_DIV.scale, value: '4'}
 - {id: ANADIG_PLL.ARM_PLL_PREDIV.scale, value: '1', locked: true}
-- {id: ANADIG_PLL.ARM_PLL_VDIV.scale, value: '83', locked: true}
+- {id: ANADIG_PLL.ARM_PLL_VDIV.scale, value: '166', locked: true}
 - {id: ANADIG_PLL.PLL_AUDIO_BYPASS.sel, value: ANADIG_OSC.OSC_24M}
 - {id: ANADIG_PLL.PLL_VIDEO.denom, value: '960000'}
 - {id: ANADIG_PLL.PLL_VIDEO.div, value: '41'}
@@ -1043,7 +1043,7 @@ void BOARD_BootClockRUN_500M(void)
 
     /* Init OSC RC 400M */
     CLOCK_OSC_EnableOscRc400M();
-    CLOCK_OSC_GateOscRc400M(true);
+    CLOCK_OSC_GateOscRc400M(false);
 
     /* Init OSC RC 48M */
     CLOCK_OSC_EnableOsc48M(true);

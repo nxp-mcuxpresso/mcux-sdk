@@ -248,7 +248,6 @@ status_t LPSPI_MasterTransferPrepareEDMALite(LPSPI_Type *base, lpspi_master_edma
      * hard to controlled by software. */
     base->TCR = (base->TCR & ~(LPSPI_TCR_CONT_MASK | LPSPI_TCR_CONTC_MASK | LPSPI_TCR_BYSW_MASK | LPSPI_TCR_PCS_MASK)) |
                 LPSPI_TCR_CONT(isPcsContinuous) | LPSPI_TCR_BYSW(isByteSwap) | LPSPI_TCR_PCS(whichPcs);
-
     /*Calculate the bytes for write/read the TX/RX register each time*/
     if (bytesPerFrame <= 4U)
     {
@@ -618,7 +617,8 @@ static void EDMA_LpspiMasterCallback(edma_handle_t *edmaHandle,
     assert(g_lpspiEdmaPrivateHandle != NULL);
 
     uint32_t readData;
-
+    status_t callbackStatus = kStatus_Success;
+    
     lpspi_master_edma_private_handle_t *lpspiEdmaPrivateHandle;
 
     lpspiEdmaPrivateHandle = (lpspi_master_edma_private_handle_t *)g_lpspiEdmaPrivateHandle;
@@ -628,7 +628,12 @@ static void EDMA_LpspiMasterCallback(edma_handle_t *edmaHandle,
     bool isByteSwap             = lpspiEdmaPrivateHandle->handle->isByteSwap;
 
     LPSPI_DisableDMA(lpspiEdmaPrivateHandle->base, (uint32_t)kLPSPI_TxDmaEnable | (uint32_t)kLPSPI_RxDmaEnable);
-
+    
+    if(!transferDone)
+    {
+        callbackStatus = kStatus_LPSPI_Error;
+    }
+    
     if (lpspiEdmaPrivateHandle->handle->isThereExtraRxBytes)
     {
         while (LPSPI_GetRxFifoCount(lpspiEdmaPrivateHandle->base) == 0U)
@@ -648,7 +653,7 @@ static void EDMA_LpspiMasterCallback(edma_handle_t *edmaHandle,
     if (lpspiEdmaPrivateHandle->handle->callback != NULL)
     {
         lpspiEdmaPrivateHandle->handle->callback(lpspiEdmaPrivateHandle->base, lpspiEdmaPrivateHandle->handle,
-                                                 kStatus_Success, lpspiEdmaPrivateHandle->handle->userData);
+                                                 callbackStatus, lpspiEdmaPrivateHandle->handle->userData);
     }
 }
 
@@ -840,7 +845,15 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
     base->TCR =
         (base->TCR & ~(LPSPI_TCR_CONT_MASK | LPSPI_TCR_CONTC_MASK | LPSPI_TCR_BYSW_MASK | LPSPI_TCR_TXMSK_MASK)) |
         LPSPI_TCR_TXMSK(transfer->txData == NULL) | LPSPI_TCR_BYSW(isByteSwap) | LPSPI_TCR_PCS(whichPcs);
-
+    
+    if(transfer->txData == NULL)
+    {
+        if (!LPSPI_WaitTxFifoEmpty(base))
+        {
+            return kStatus_LPSPI_Error;
+        }
+    }
+    
     /*Calculate the bytes for write/read the TX/RX register each time*/
     if (bytesPerFrame <= 4U)
     {
@@ -1067,7 +1080,8 @@ static void EDMA_LpspiSlaveCallback(edma_handle_t *edmaHandle,
     assert(g_lpspiEdmaPrivateHandle != NULL);
 
     uint32_t readData;
-
+    status_t callbackStatus = kStatus_Success;
+    
     lpspi_slave_edma_private_handle_t *lpspiEdmaPrivateHandle;
 
     lpspiEdmaPrivateHandle = (lpspi_slave_edma_private_handle_t *)g_lpspiEdmaPrivateHandle;
@@ -1078,6 +1092,11 @@ static void EDMA_LpspiSlaveCallback(edma_handle_t *edmaHandle,
 
     LPSPI_DisableDMA(lpspiEdmaPrivateHandle->base, (uint32_t)kLPSPI_TxDmaEnable | (uint32_t)kLPSPI_RxDmaEnable);
 
+    if(!transferDone)
+    {
+        callbackStatus = kStatus_LPSPI_Error;
+    }
+    
     /*
      * $Branch Coverage Justification$
      * When there are extra bytes, the slave will not receive the extra bytes,The while here will not stop.(will
@@ -1102,7 +1121,7 @@ static void EDMA_LpspiSlaveCallback(edma_handle_t *edmaHandle,
     if (lpspiEdmaPrivateHandle->handle->callback != NULL)
     {
         lpspiEdmaPrivateHandle->handle->callback(lpspiEdmaPrivateHandle->base, lpspiEdmaPrivateHandle->handle,
-                                                 kStatus_Success, lpspiEdmaPrivateHandle->handle->userData);
+                                                 callbackStatus, lpspiEdmaPrivateHandle->handle->userData);
     }
 }
 

@@ -37,7 +37,7 @@ typedef struct _srtm_i2c_service
 {
     struct _srtm_service service;
     srtm_i2c_adapter_t adapter;
-} * srtm_i2c_service_t;
+} *srtm_i2c_service_t;
 
 static srtm_status_t SRTM_I2CService_Request(srtm_service_t service, srtm_request_t request);
 static srtm_status_t SRTM_I2CService_Notify(srtm_service_t service, srtm_notification_t notif);
@@ -288,7 +288,7 @@ srtm_status_t SRTM_I2C_RequestBusRead(
      * Allocate an SRTM message and copy necessary information
      */
     request           = SRTM_Request_Create(NULL, SRTM_I2C_CATEGORY, SRTM_I2C_VERSION, (uint8_t)SRTM_I2C_CMD_READ,
-                                  (uint16_t)((sizeof(struct _srtm_i2c_payload) - sizeof(uint8_t)) + len));
+                                            (uint16_t)((sizeof(struct _srtm_i2c_payload) - sizeof(uint8_t)) + len));
     i2cReq            = (struct _srtm_i2c_payload *)(void *)SRTM_CommMessage_GetPayload(request);
     i2cReq->busID     = busID;
     i2cReq->slaveAddr = slaveAddr;
@@ -324,7 +324,7 @@ srtm_status_t SRTM_I2C_RequestBusWrite(
      * Allocate an SRTM message and copy necessary information
      */
     request           = SRTM_Request_Create(NULL, SRTM_I2C_CATEGORY, SRTM_I2C_VERSION, (uint8_t)SRTM_I2C_CMD_WRITE,
-                                  (uint16_t)((sizeof(struct _srtm_i2c_payload) - sizeof(uint8_t)) + len));
+                                            (uint16_t)((sizeof(struct _srtm_i2c_payload) - sizeof(uint8_t)) + len));
     i2cReq            = (struct _srtm_i2c_payload *)(void *)SRTM_CommMessage_GetPayload(request);
     i2cReq->busID     = busID;
     i2cReq->slaveAddr = slaveAddr;

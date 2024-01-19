@@ -1,7 +1,0 @@
-<map id="sensors/fxls8974_drv.h" name="sensors/fxls8974_drv.h">
-<area shape="rect" id="node3" href="$a00071.html" title="This file contains the FXLS8974CF Accelerometer register definitions, access macros, and device access functions. " alt="" coords="24,80,105,107"/>
-<area shape="rect" id="node4" href="$a00185.html" title="The sensor_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regist..." alt="" coords="129,80,243,107"/>
-<area shape="rect" id="node5" href="$a00170.html" title="The register_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="162,155,279,181"/>
-<area shape="rect" id="node6" href="$a00191.html" title="The sensor_io_spi.h file declares low&#45;level interface functions for reading and writing sensor regist..." alt="" coords="267,80,380,107"/>
-<area shape="rect" id="node7" href="$a00176.html" title="The register_io_spi.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="374,155,491,181"/>
-</map>

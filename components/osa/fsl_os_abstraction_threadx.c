@@ -117,7 +117,7 @@ static TX_INTERRUPT_SAVE_AREA
  * Description   : Reserves the requested amount of memory in bytes.
  *
  *END**************************************************************************/
-void *OSA_MemoryAllocate(uint32_t length)
+void *OSA_MemoryAllocate(uint32_t memLength)
 {
     return NULL;
 }
@@ -140,6 +140,7 @@ void OSA_MemoryFree(void *p)
  *END**************************************************************************/
 void OSA_EnterCritical(uint32_t *sr)
 {
+    *sr = tx_interrupt_control(TX_INT_DISABLE);
 }
 
 /*FUNCTION**********************************************************************
@@ -150,6 +151,7 @@ void OSA_EnterCritical(uint32_t *sr)
  *END**************************************************************************/
 void OSA_ExitCritical(uint32_t sr)
 {
+    tx_interrupt_control(sr);
 }
 
 /*FUNCTION**********************************************************************
@@ -195,6 +197,19 @@ void OSA_Start(void)
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
 osa_task_handle_t OSA_TaskGetCurrentHandle(void)
 {
+    list_element_handle_t list_element;
+    osa_freertos_task_t *ptask;
+
+    list_element = LIST_GetHead(&s_osaState.taskList);
+    while (NULL != list_element)
+    {
+        ptask = (osa_freertos_task_t *)(void *)list_element;
+        if (ptask->taskHandle == tx_thread_identify())
+        {
+            return (osa_task_handle_t)ptask;
+        }
+        list_element = LIST_GetNext(list_element);
+    }
     return NULL;
 }
 #endif
@@ -209,6 +224,7 @@ osa_task_handle_t OSA_TaskGetCurrentHandle(void)
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
 void OSA_TaskYield(void)
 {
+    tx_thread_relinquish();
 }
 #endif
 
@@ -221,7 +237,29 @@ void OSA_TaskYield(void)
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
 osa_task_priority_t OSA_TaskGetPriority(osa_task_handle_t taskHandle)
 {
-    return 0U;
+    assert(taskHandle);
+    osa_thread_task_t *ptask = (osa_thread_task_t *)taskHandle;
+    osa_status_t status      = KOSA_StatusSuccess;
+    CHAR *task_name;
+    UINT task_status;
+    ULONG scheduled_count;
+    UINT priority_tmp;
+    UINT preempt;
+    ULONG time_slice;
+    TX_THREAD *next_thread;
+    TX_THREAD *suspended_thread;
+
+    OSA_ASSERT(task != NULL);
+
+    status = tx_thread_info_get((TX_THREAD *)&ptask->taskHandle, &task_name, &task_status, &scheduled_count,
+                                &priority_tmp, &preempt, &time_slice, &next_thread, &suspended_thread);
+
+    if (status != TX_SUCCESS)
+    {
+        return 0U;
+    }
+
+    return (UINT16)(priority_tmp);
 }
 #endif
 
@@ -234,6 +272,18 @@ osa_task_priority_t OSA_TaskGetPriority(osa_task_handle_t taskHandle)
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
 osa_status_t OSA_TaskSetPriority(osa_task_handle_t taskHandle, osa_task_priority_t taskPriority)
 {
+    assert(taskHandle);
+    osa_thread_task_t *ptask = (osa_thread_task_t *)taskHandle;
+    osa_status_t status      = KOSA_StatusSuccess;
+    UINT priority;
+
+    status = tx_thread_priority_change((TX_THREAD *)&ptask->taskHandle, (UINT)taskPriority, &priority);
+
+    if (status != TX_SUCCESS)
+    {
+        KOSA_StatusError;
+    }
+
     return KOSA_StatusSuccess;
 }
 #endif
@@ -254,17 +304,19 @@ osa_status_t OSA_TaskCreate(osa_task_handle_t taskHandle, const osa_task_def_t *
     osa_status_t status      = KOSA_StatusError;
     osa_thread_task_t *ptask = (osa_thread_task_t *)taskHandle;
 
-    if (tx_thread_create(&ptask->taskHandle,                            /* task handle, allocated by application */
-                         (char *)thread_def->tname,                     /* thread name */
-                         (void (*)(ULONG))thread_def->pthread,          /* entry function */
-                         (ULONG)((ULONG *)task_param),                  /* entry input */
-                         (void *)thread_def->tstack,                    /* stack start */
-                         (ULONG)thread_def->stacksize,                  /* stack size */
-                         PRIORITY_OSA_TO_THREAD(thread_def->tpriority), /* initial priority */
-                         PRIORITY_OSA_TO_THREAD(thread_def->tpriority), /* preempt threshold (same value than the priority means disabled) */
-                         0U,                                            /* time slice */
-                         true                                           /* auto start */
-                         ) == TX_SUCCESS)
+    if (tx_thread_create(
+            &ptask->taskHandle,                            /* task handle, allocated by application */
+            (char *)thread_def->tname,                     /* thread name */
+            (void (*)(ULONG))thread_def->pthread,          /* entry function */
+            (ULONG)((ULONG *)task_param),                  /* entry input */
+            (void *)thread_def->tstack,                    /* stack start */
+            (ULONG)thread_def->stacksize,                  /* stack size */
+            PRIORITY_OSA_TO_THREAD(thread_def->tpriority), /* initial priority */
+            PRIORITY_OSA_TO_THREAD(
+                thread_def->tpriority), /* preempt threshold (same value than the priority means disabled) */
+            0U,                         /* time slice */
+            true                        /* auto start */
+            ) == TX_SUCCESS)
     {
         OSA_InterruptDisable();
         (void)LIST_AddTail(&s_osaState.taskList, (list_element_handle_t) & (ptask->link));
@@ -793,24 +845,7 @@ osa_status_t OSA_EventDestroy(osa_event_handle_t eventHandle)
  *END**************************************************************************/
 void OSA_InterruptEnable(void)
 {
-#if 0
-    if (0U != __get_IPSR())
-    {
-        if (1 == s_osaState.basePriorityNesting)
-        {
-            portCLEAR_INTERRUPT_MASK_FROM_ISR(s_osaState.basePriority);
-        }
-
-        if (s_osaState.basePriorityNesting > 0)
-        {
-            s_osaState.basePriorityNesting--;
-        }
-    }
-    else
-    {
-        portEXIT_CRITICAL();
-    }
-#endif
+    tx_interrupt_control(TX_INT_ENABLE);
 }
 
 /*FUNCTION**********************************************************************
@@ -821,20 +856,7 @@ void OSA_InterruptEnable(void)
  *END**************************************************************************/
 void OSA_InterruptDisable(void)
 {
-#if 0
-    if (0U != __get_IPSR())
-    {
-        if (0 == s_osaState.basePriorityNesting)
-        {
-            s_osaState.basePriority = portSET_INTERRUPT_MASK_FROM_ISR();
-        }
-        s_osaState.basePriorityNesting++;
-    }
-    else
-    {
-        portENTER_CRITICAL();
-    }
-#endif
+    tx_interrupt_control(TX_INT_DISABLE);
 }
 
 /*FUNCTION**********************************************************************

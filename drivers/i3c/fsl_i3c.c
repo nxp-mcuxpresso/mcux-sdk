@@ -1391,6 +1391,7 @@ status_t I3C_MasterReceive(I3C_Type *base, void *rxBuff, size_t rxSize, uint32_t
                     if (I3C_MasterGetState(base) == kI3C_MasterStateDdr)
                     {
                         I3C_MasterEmitRequest(base, kI3C_RequestForceExit);
+                        result = I3C_MasterWaitForCtrlDone(base, false);
                     }
                     else
                     {
@@ -1409,9 +1410,12 @@ status_t I3C_MasterReceive(I3C_Type *base, void *rxBuff, size_t rxSize, uint32_t
         {
             *buf++ = (uint8_t)(base->MRDATAB & I3C_MRDATAB_VALUE_MASK);
             rxSize--;
-            if ((!isRxAutoTerm) && (rxSize == 1U))
+            if ((flags & (uint32_t)kI3C_TransferDisableRxTermFlag) == 0UL)
             {
-                base->MCTRL |= I3C_MCTRL_RDTERM(1U);
+                if ((!isRxAutoTerm) && (rxSize == 1U))
+                {
+                    base->MCTRL |= I3C_MCTRL_RDTERM(1U);
+                }
             }
         }
     }
@@ -1506,6 +1510,7 @@ status_t I3C_MasterSend(I3C_Type *base, const void *txBuff, size_t txSize, uint3
         if (I3C_MasterGetState(base) == kI3C_MasterStateDdr)
         {
             I3C_MasterEmitRequest(base, kI3C_RequestForceExit);
+            result = I3C_MasterWaitForCtrlDone(base, false);
         }
         else
         {
@@ -1746,7 +1751,7 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
     i3c_direction_t direction      = transfer->direction;
     i3c_master_state_t masterState = I3C_MasterGetState(base);
     bool checkDdrState             = false;
-    bool isRxAutoTerm;
+    i3c_rx_term_ops_t rxTermOps;
 
     /* Return an error if the bus is already in use not by us. */
     checkDdrState = (transfer->busType == kI3C_TypeI3CDdr) ? (masterState != kI3C_MasterStateDdr) : true;
@@ -1770,11 +1775,22 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
     }
 
     /* True: Set Rx termination bytes at start point, False: Set Rx termination one bytes in advance. */
-    isRxAutoTerm = (transfer->dataSize <= 255U) ? true : false;
+    if ((transfer->flags & (uint32_t)kI3C_TransferDisableRxTermFlag) != 0U)
+    {
+        rxTermOps = kI3C_RxTermDisable;
+    }
+    else if (transfer->dataSize <= 255U)
+    {
+        rxTermOps = kI3C_RxAutoTerm;
+    }
+    else
+    {
+        rxTermOps = kI3C_RxTermLastByte;
+    }
 
     if (0UL == (transfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
     {
-        if ((direction == kI3C_Read) && isRxAutoTerm)
+        if ((direction == kI3C_Read) && (rxTermOps == kI3C_RxAutoTerm))
         {
             result = I3C_MasterStartWithRxSize(base, transfer->busType, transfer->slaveAddress, direction,
                                                (uint8_t)transfer->dataSize);
@@ -1782,6 +1798,16 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
         else
         {
             result = I3C_MasterStart(base, transfer->busType, transfer->slaveAddress, direction);
+        }
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+
+        result = I3C_MasterWaitForCtrlDone(base, false);
+        if (result != kStatus_Success)
+        {
+            return result;
         }
 
         if (true == I3C_MasterTransferNoStartFlag(base, transfer))
@@ -1791,10 +1817,10 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
     }
     else
     {
-        if (direction == kI3C_Read)
+        if ((direction == kI3C_Read) && (rxTermOps != kI3C_RxTermDisable))
         {
             /* Can't set Rx termination more than one bytes in advance without START. */
-            isRxAutoTerm = false;
+            rxTermOps = kI3C_RxTermLastByte;
         }
     }
 
@@ -1831,7 +1857,7 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
         /* Need to send repeated start if switching directions to read. */
         if ((transfer->busType != kI3C_TypeI3CDdr) && (0UL != transfer->dataSize) && (transfer->direction == kI3C_Read))
         {
-            if (isRxAutoTerm)
+            if (rxTermOps == kI3C_RxAutoTerm)
             {
                 result = I3C_MasterRepeatedStartWithRxSize(base, transfer->busType, transfer->slaveAddress, kI3C_Read,
                                                            (uint8_t)transfer->dataSize);
@@ -1846,10 +1872,16 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
                 I3C_MasterClearFlagsAndEnableIRQ(base);
                 return result;
             }
+
+            result = I3C_MasterWaitForCtrlDone(base, false);
+            if (result != kStatus_Success)
+            {
+                return result;
+            }
         }
     }
 
-    if (isRxAutoTerm)
+    if (rxTermOps == kI3C_RxAutoTerm)
     {
         transfer->flags |= (uint32_t)kI3C_TransferRxAutoTermFlag;
     }
@@ -2015,14 +2047,21 @@ static void I3C_TransferStateMachineSendCommandState(I3C_Type *base,
         {
             base->MWDATABE = (uint8_t)((handle->transfer.subaddress) >> (8U * handle->transfer.subaddressSize));
 
-            if (0UL == handle->transfer.dataSize)
+            if (handle->transfer.busType != kI3C_TypeI3CDdr)
             {
-                handle->state = (uint8_t)kWaitForCompletionState;
+                if (0UL == handle->transfer.dataSize)
+                {
+                    handle->state = (uint8_t)kWaitForCompletionState;
+                }
+                else
+                {
+                    /* xfer->dataSize != 0U, xfer->direction = kI3C_Read */
+                    handle->state = (uint8_t)kWaitRepeatedStartCompleteState;
+                }
             }
             else
             {
-                /* xfer->dataSize != 0U, xfer->direction = kI3C_Read */
-                handle->state = (uint8_t)kWaitRepeatedStartCompleteState;
+                handle->state = (uint8_t)kTransferDataState;
             }
         }
         else
@@ -2051,7 +2090,7 @@ static void I3C_TransferStateMachineWaitRepeatedStartCompleteState(I3C_Type *bas
 
         if (handle->remainingBytes < 256U)
         {
-            handle->isRxAutoTerm = true;
+            handle->rxTermOps = (handle->rxTermOps == kI3C_RxTermDisable) ? handle->rxTermOps : kI3C_RxAutoTerm;
             stateParams->result =
                 I3C_MasterRepeatedStartWithRxSize(base, handle->transfer.busType, handle->transfer.slaveAddress,
                                                   kI3C_Read, (uint8_t)handle->remainingBytes);
@@ -2120,11 +2159,10 @@ static void I3C_TransferStateMachineTransferDataState(I3C_Type *base,
         /* Move to stop when the transfer is done. */
         if (--handle->remainingBytes == 0UL)
         {
-            handle->isRxAutoTerm = false;
-            handle->state        = (uint8_t)kWaitForCompletionState;
+            handle->state = (uint8_t)kWaitForCompletionState;
         }
 
-        if (!handle->isRxAutoTerm && (handle->remainingBytes == 1UL))
+        if ((handle->rxTermOps == kI3C_RxTermLastByte) && (handle->remainingBytes == 1UL))
         {
             base->MCTRL |= I3C_MCTRL_RDTERM(1UL);
         }
@@ -2326,7 +2364,7 @@ static status_t I3C_InitTransferStateMachine(I3C_Type *base, i3c_master_handle_t
 
     if ((handle->remainingBytes < 256U) && (direction == kI3C_Read))
     {
-        handle->isRxAutoTerm = true;
+        handle->rxTermOps = (handle->rxTermOps == kI3C_RxTermDisable) ? handle->rxTermOps : kI3C_RxAutoTerm;
         base->MCTRL |= I3C_MCTRL_RDTERM(handle->remainingBytes);
     }
 
@@ -2380,6 +2418,19 @@ status_t I3C_MasterTransferNonBlocking(I3C_Type *base, i3c_master_handle_t *hand
     I3C_MasterClearStatusFlags(base, (uint32_t)kMasterClearFlags);
     /* Reset fifos. These flags clear automatically. */
     base->MDATACTRL |= I3C_MDATACTRL_FLUSHTB_MASK | I3C_MDATACTRL_FLUSHFB_MASK;
+
+    if ((transfer->flags & (uint32_t)kI3C_TransferDisableRxTermFlag) != 0U)
+    {
+        handle->rxTermOps = kI3C_RxTermDisable;
+    }
+    else if (transfer->dataSize <= 255U)
+    {
+        handle->rxTermOps = kI3C_RxAutoTerm;
+    }
+    else
+    {
+        handle->rxTermOps = kI3C_RxTermLastByte;
+    }
 
     /* Generate commands to send. */
     (void)I3C_InitTransferStateMachine(base, handle);
@@ -2488,7 +2539,7 @@ void I3C_MasterTransferAbort(I3C_Type *base, i3c_master_handle_t *handle)
  * note This function does not need to be called unless you are reimplementing the
  *  nonblocking API's interrupt handler routines to add special functionality.
  * param base The I3C peripheral base address.
- * param handle Pointer to the I3C master driver handle.
+ * param intHandle Pointer to the I3C master driver handle.
  */
 void I3C_MasterTransferHandleIRQ(I3C_Type *base, void *intHandle)
 {
@@ -3146,7 +3197,7 @@ static void I3C_SlaveTransferHandleBusStop(I3C_Type *base,
     I3C_SlaveDisableInterrupts(base, (uint32_t)kI3C_SlaveTxReadyFlag);
     stateParams->pendingInts &= ~(uint32_t)kI3C_SlaveTxReadyFlag;
     base->SDATACTRL |= I3C_SDATACTRL_FLUSHTB_MASK | I3C_SDATACTRL_FLUSHFB_MASK;
-    if (handle->isBusy == true)
+    if (handle->isBusy)
     {
         handle->transfer.event            = (uint32_t)kI3C_SlaveCompletionEvent;
         handle->transfer.completionStatus = kStatus_Success;
@@ -3197,6 +3248,7 @@ static void I3C_SlaveTransferHandleTxReady(I3C_Type *base,
         if (0UL != (stateParams->flags & (uint32_t)kI3C_SlaveBusHDRModeFlag))
         {
             handle->transfer.event |= (uint32_t)kI3C_SlaveHDRCommandMatchEvent;
+            handle->isBusy = true;
         }
         if (NULL != handle->callback)
         {
@@ -3243,6 +3295,7 @@ static void I3C_SlaveTransferHandleRxReady(I3C_Type *base,
         if (0UL != (stateParams->flags & (uint32_t)kI3C_SlaveBusHDRModeFlag))
         {
             handle->transfer.event |= (uint32_t)kI3C_SlaveHDRCommandMatchEvent;
+            handle->isBusy = true;
         }
         if (NULL != handle->callback)
         {
@@ -3265,7 +3318,7 @@ static void I3C_SlaveTransferHandleRxReady(I3C_Type *base,
  * note This function does not need to be called unless you are reimplementing the
  *  non blocking API's interrupt handler routines to add special functionality.
  * param base The I3C peripheral base address.
- * param handle Pointer to #i3c_slave_handle_t structure which stores the transfer state.
+ * param intHandle Pointer to #i3c_slave_handle_t structure which stores the transfer state.
  */
 void I3C_SlaveTransferHandleIRQ(I3C_Type *base, void *intHandle)
 {

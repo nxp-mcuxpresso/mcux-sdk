@@ -36,6 +36,9 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
+
+#define WLAN_REGION_CODE "EU"
+
 static wlan_chanlist_t chanlist_2g_cfg = {.num_chans = 13,
                                           .chan_info = {
                                               [0] =

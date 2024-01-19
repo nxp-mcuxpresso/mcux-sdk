@@ -49,8 +49,10 @@ enum _flash_driver_version_constants
 /*! @brief IAP driver support non-block erase function */
 #define FSL_SUPPORT_ERASE_SECTOR_NON_BLOCKING 1U
 
+/*! @brief IAP driver support flash hiding */
 #define FSL_FEATURE_SYSCON_HAS_FLASH_HIDING 1U
 
+/*! @brief IAP driver support CDPA */
 #define FSL_FEATURE_SYSCON_HAS_CDPA 1U
 /*@}*/
 
@@ -72,7 +74,7 @@ enum _flash_driver_version_constants
 
 /*! @brief Constructs a status code value from a group and a code number. */
 #if !defined(MAKE_STATUS)
-#define MAKE_STATUS(group, code) ((((group)*100) + (code)))
+#define MAKE_STATUS(group, code) ((((group) * 100) + (code)))
 #endif
 
 /*!
@@ -95,7 +97,7 @@ enum
     kStatus_FLASH_UnknownProperty = MAKE_STATUS(kStatusGroupFlashDriver, 6), /*!< Unknown property.*/
     kStatus_FLASH_EraseKeyError   = MAKE_STATUS(kStatusGroupFlashDriver, 7), /*!< API erase key is invalid.*/
     kStatus_FLASH_RegionExecuteOnly =
-        MAKE_STATUS(kStatusGroupFlashDriver, 8), /*!< The current region is execute-only.*/
+        MAKE_STATUS(kStatusGroupFlashDriver, 8),                             /*!< The current region is execute-only.*/
     kStatus_FLASH_ExecuteInRamFunctionNotReady =
         MAKE_STATUS(kStatusGroupFlashDriver, 9), /*!< Execute-in-RAM function is not available.*/
 
@@ -106,7 +108,7 @@ enum
     kStatus_FLASH_InvalidSpeculationOption =
         MAKE_STATUS(kStatusGroupFlashDriver, 14), /*!< The option of flash prefetch speculation is invalid.*/
     kStatus_FLASH_EccError = MAKE_STATUS(kStatusGroupFlashDriver,
-                                         0x10), /*!< A correctable or uncorrectable error during command execution. */
+                                         0x10),   /*!< A correctable or uncorrectable error during command execution. */
     kStatus_FLASH_CompareError =
         MAKE_STATUS(kStatusGroupFlashDriver, 0x11), /*!< Destination and source memory contents do not match. */
     kStatus_FLASH_RegulationLoss = MAKE_STATUS(kStatusGroupFlashDriver, 0x12), /*!< A loss of regulation during read. */
@@ -131,7 +133,7 @@ enum
         MAKE_STATUS(kStatusGroupFlashDriver, 0x28), /*!< The CMPA Cfg region is not allowed to be erased directly. */
     kStatus_FLASH_FfrBankIsLocked = MAKE_STATUS(kStatusGroupFlashDriver, 0x29), /*!< The FFR bank region is locked. */
     kStatus_FLASH_CfpaScratchPageInvalid =
-        MAKE_STATUS(kStatusGroupFlashDriver, 0x30), /*!< CFPA Scratch Page is invalid*/
+        MAKE_STATUS(kStatusGroupFlashDriver, 0x30),                             /*!< CFPA Scratch Page is invalid*/
     kStatus_FLASH_CfpaVersionRollbackDisallowed =
         MAKE_STATUS(kStatusGroupFlashDriver, 0x31), /*!< CFPA version rollback is not allowed */
     kStatus_FLASH_ReadHidingAreaDisallowed =
@@ -176,13 +178,13 @@ typedef enum _flash_property_tag
     kFLASH_PropertyPflashBlockCount    = 0x03U, /*!< Pflash block count property.*/
     kFLASH_PropertyPflashBlockBaseAddr = 0x04U, /*!< Pflash block base address property.*/
 
-    kFLASH_PropertyPflashPageSize   = 0x30U, /*!< Pflash page size property.*/
-    kFLASH_PropertyPflashSystemFreq = 0x31U, /*!< System Frequency System Frequency.*/
+    kFLASH_PropertyPflashPageSize   = 0x30U,    /*!< Pflash page size property.*/
+    kFLASH_PropertyPflashSystemFreq = 0x31U,    /*!< System Frequency System Frequency.*/
 
-    kFLASH_PropertyFfrSectorSize    = 0x40U, /*!< FFR sector size property.*/
-    kFLASH_PropertyFfrTotalSize     = 0x41U, /*!< FFR total size property.*/
-    kFLASH_PropertyFfrBlockBaseAddr = 0x42U, /*!< FFR block base address property.*/
-    kFLASH_PropertyFfrPageSize      = 0x43U, /*!< FFR page size property.*/
+    kFLASH_PropertyFfrSectorSize    = 0x40U,    /*!< FFR sector size property.*/
+    kFLASH_PropertyFfrTotalSize     = 0x41U,    /*!< FFR total size property.*/
+    kFLASH_PropertyFfrBlockBaseAddr = 0x42U,    /*!< FFR block base address property.*/
+    kFLASH_PropertyFfrPageSize      = 0x43U,    /*!< FFR page size property.*/
 } flash_property_tag_t;
 
 /*!
@@ -432,6 +434,8 @@ status_t FLASH_EraseNonBlocking(flash_config_t *config, uint32_t start, uint32_t
  */
 status_t FLASH_Program(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
 
+/*@}*/
+
 /*!
  * @name Reading
  * @{
@@ -481,13 +485,11 @@ status_t FLASH_Read(flash_config_t *config, uint32_t start, uint8_t *dest, uint3
  *        The start address does not need to be sector-aligned but must be word-aligned.
  * @param lengthInBytes The length, given in bytes (not words or long-words),
  *        to be verified. Must be word-aligned.
- * @param margin Read margin choice.
  *
  * @retval #kStatus_FLASH_Success API was executed successfully.
  * @retval #kStatus_FLASH_InvalidArgument An invalid argument is provided.
  * @retval #kStatus_FLASH_AlignmentError Parameter is not aligned with specified baseline.
  * @retval #kStatus_FLASH_AddressError Address is out of range.
- * @retval #kStatus_FLASH_CommandFailure Run-time error during the command execution.
  * @retval #kStatus_FLASH_CommandFailure Run-time error during the command execution.
  * @retval #kStatus_FLASH_CommandNotSupported Flash API is not supported.
  * @retval #kStatus_FLASH_RegulationLoss A loss of regulation during read.
@@ -508,7 +510,6 @@ status_t FLASH_VerifyErase(flash_config_t *config, uint32_t start, uint32_t leng
  *        to be verified. Must be word-aligned.
  * @param expectedData A pointer to the expected data that is to be
  *        verified against.
- * @param margin Read margin choice.
  * @param failedAddress A pointer to the returned failing address.
  * @param failedData A pointer to the returned failing data.  Some derivatives do
  *        not include failed data as part of the FCCOBx registers.  In this

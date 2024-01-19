@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_IOCON_H_
-#define _FSL_IOCON_H_
+#ifndef FSL_IOCON_H_
+#define FSL_IOCON_H_
 
 #include "fsl_common.h"
 
@@ -28,10 +28,10 @@
 #endif
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief IOCON driver version 2.0.2. */
 #define LPC_IOCON_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
-/*@}*/
+/*! @} */
 
 /**
  * @brief Array of IOCON pin definitions passed to IOCON_SetPinMuxing() must be in this format
@@ -121,10 +121,10 @@ __STATIC_INLINE void IOCON_SetPinMuxing(IOCON_Type *base, const iocon_group_t *p
     }
 }
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
-#endif /* _FSL_IOCON_H_ */
+#endif /* FSL_IOCON_H_ */

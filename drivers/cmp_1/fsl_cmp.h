@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef __FSL_CMP_H_
-#define __FSL_CMP_H_
+#ifndef FSL_CMP_H_
+#define FSL_CMP_H_
 
 #include "fsl_common.h"
 
@@ -19,10 +19,10 @@
  * Definitions.
  *****************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Driver version 2.2.1. */
 #define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2U, 2U, 1U))
-/*@}*/
+/*! @} */
 
 /*! @brief CMP input mux for positive and negative sides. */
 enum _cmp_input_mux
@@ -135,7 +135,7 @@ void CMP_Deinit(void);
  */
 void CMP_GetDefaultConfig(cmp_config_t *config);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Compare Interface
@@ -172,7 +172,7 @@ static inline bool CMP_GetOutput(void)
     return SYSCON_COMP_INT_STATUS_VAL_MASK == (SYSCON->COMP_INT_STATUS & SYSCON_COMP_INT_STATUS_VAL_MASK);
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupt Interface
@@ -227,7 +227,7 @@ static inline void CMP_EnableFilteredInterruptSource(bool enable)
         SYSCON->COMP_INT_CTRL |= SYSCON_COMP_INT_CTRL_INT_SOURCE_MASK;
     }
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name Status Interface
@@ -255,7 +255,7 @@ static inline bool CMP_GetInterruptStatus(void)
 {
     return SYSCON_COMP_INT_STATUS_INT_STATUS_MASK == (SYSCON->COMP_INT_STATUS & SYSCON_COMP_INT_STATUS_INT_STATUS_MASK);
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name Filter Interface
@@ -281,11 +281,11 @@ static inline void CMP_FilterSampleConfig(cmp_filtercgf_samplemode_t filterSampl
 
     PMC->COMP = comp;
 }
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
 /*! @} */
-#endif /* __FSL_CMP_H_ */
+#endif /* FSL_CMP_H_ */

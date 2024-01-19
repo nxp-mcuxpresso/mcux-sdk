@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef __FSL_TMU_H__
-#define __FSL_TMU_H__
+#ifndef FSL_TMU_H__
+#define FSL_TMU_H__
 
 #include "fsl_common.h"
 
@@ -324,6 +324,6 @@ void TMU_SetHighTemperatureThresold(TMU_Type *base, const tmu_thresold_config_t 
 }
 #endif
 
-/* @} */
+/*! @} */
 
-#endif /* __FSL_TMU_H__ */
+#endif /* FSL_TMU_H__ */

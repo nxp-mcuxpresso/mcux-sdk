@@ -31,11 +31,22 @@ if(CONFIG_TOOLCHAIN STREQUAL armgcc)
   )
 endif()
 
-if(CONFIG_CORE STREQUAL cm7f AND (CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux))
+if((CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux) AND CONFIG_CORE STREQUAL cm7f)
   target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
       ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities/fsl_memcpy.S
   )
 endif()
+
+
+endif()
+
+
+if (CONFIG_USE_driver_rtt_template)
+# Add set(CONFIG_USE_driver_rtt_template true) in config.cmake to use this component
+
+message("driver_rtt_template component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+add_config_file(${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/template/SEGGER_RTT_Conf.h ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/template driver_rtt_template.MIMXRT1015)
 
 
 endif()
@@ -119,17 +130,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 endif()
 
 
-if (CONFIG_USE_driver_rtt_template)
-# Add set(CONFIG_USE_driver_rtt_template true) in config.cmake to use this component
-
-message("driver_rtt_template component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/template/SEGGER_RTT_Conf.h ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/template driver_rtt_template.MIMXRT1015)
-
-
-endif()
-
-
 if (CONFIG_USE_DEVICES_Project_Template_MIMXRT1015)
 # Add set(CONFIG_USE_DEVICES_Project_Template_MIMXRT1015 true) in config.cmake to use this component
 
@@ -167,16 +167,12 @@ message("device_MIMXRT1015_startup component is included from ${CMAKE_CURRENT_LI
 if(CONFIG_USE_device_MIMXRT1015_system)
 
 if(CONFIG_TOOLCHAIN STREQUAL armgcc)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_MIMXRT1015.S
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_MIMXRT1015.S "" device_MIMXRT1015_startup.MIMXRT1015)
 endif()
 
 if(CONFIG_TOOLCHAIN STREQUAL mcux)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mimxrt1015.c
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mimxrt1015.cpp
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mimxrt1015.c "" device_MIMXRT1015_startup.MIMXRT1015)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mimxrt1015.cpp "" device_MIMXRT1015_startup.MIMXRT1015)
 endif()
 
 else()
@@ -746,10 +742,14 @@ if (CONFIG_USE_utility_assert)
 
 message("utility_assert component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console)
+if(CONFIG_USE_utility_debug_console AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -766,10 +766,14 @@ if (CONFIG_USE_utility_assert_lite)
 
 message("utility_assert_lite component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console_lite)
+if(CONFIG_USE_utility_debug_console_lite AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -825,6 +829,43 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "utility_debug_console.MIMXRT1015 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_rtt)
+# Add set(CONFIG_USE_driver_rtt true) in config.cmake to use this component
+
+message("driver_rtt component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_rtt_template)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT_printf.c
+)
+
+if(CONFIG_CORE STREQUAL cm7f)
+  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+      ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT_ASM_ARMv7M.S
+  )
+endif()
+
+if((CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux))
+  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+      ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/Syscalls/SEGGER_RTT_Syscalls_GCC.c
+  )
+endif()
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT
+)
+
+else()
+
+message(SEND_ERROR "driver_rtt.MIMXRT1015 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -3474,43 +3515,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_xip_device.MIMXRT1015 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_rtt)
-# Add set(CONFIG_USE_driver_rtt true) in config.cmake to use this component
-
-message("driver_rtt component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_rtt_template)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT_printf.c
-)
-
-if(CONFIG_CORE STREQUAL cm7f)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT_ASM_ARMv7M.S
-  )
-endif()
-
-if((CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux))
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/Syscalls/SEGGER_RTT_Syscalls_GCC.c
-  )
-endif()
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT
-)
-
-else()
-
-message(SEND_ERROR "driver_rtt.MIMXRT1015 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

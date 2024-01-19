@@ -1,7 +1,0 @@
-<map id="sensors/mma9553_drv.h" name="sensors/mma9553_drv.h">
-<area shape="rect" id="node3" href="$a00149.html" title="mma9553.h" alt="" coords="23,80,114,107"/>
-<area shape="rect" id="node4" href="$a00185.html" title="The sensor_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regist..." alt="" coords="139,80,252,107"/>
-<area shape="rect" id="node5" href="$a00170.html" title="The register_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="171,155,289,181"/>
-<area shape="rect" id="node6" href="$a00191.html" title="The sensor_io_spi.h file declares low&#45;level interface functions for reading and writing sensor regist..." alt="" coords="276,80,389,107"/>
-<area shape="rect" id="node7" href="$a00176.html" title="The register_io_spi.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="383,155,501,181"/>
-</map>

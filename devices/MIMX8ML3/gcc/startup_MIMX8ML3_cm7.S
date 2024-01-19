@@ -4,13 +4,11 @@
 /*            MIMX8ML3_cm7                                                   */
 /*  @version: 5.0                                                            */
 /*  @date:    2021-3-1                                                       */
-/*  @build:   b220621                                                        */
+/*  @build:   b231019                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2022 NXP                                                   */
-/* All rights reserved.                                                      */
-/*                                                                           */
+/* Copyright 2016-2023 NXP                                                   */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
 /*****************************************************************************/
 /* Version: GCC for ARM Embedded Processors                                  */
@@ -200,6 +198,11 @@ __isr_vector:
     .text
     .thumb
 
+#if defined (__cplusplus)
+#ifdef __REDLIB__
+#error Redlib does not support C++
+#endif
+#endif
 /* Reset Handler */
 
     .thumb_func
@@ -306,7 +309,11 @@ Reset_Handler:
 
     cpsie   i               /* Unmask interrupts */
 #ifndef __START
+#ifdef __REDLIB__
+#define __START __main
+#else
 #define __START _start
+#endif
 #endif
 #ifndef __ATOLLIC__
     ldr   r0,=__START

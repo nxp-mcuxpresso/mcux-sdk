@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef __FSL_CAPT_H__
-#define __FSL_CAPT_H__
+#ifndef FSL_CAPT_H__
+#define FSL_CAPT_H__
 
 #include "fsl_common.h"
 
@@ -19,10 +19,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief CAPT driver version. */
 #define FSL_CAPT_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
-/*@}*/
+/*! @} */
 
 #define CAPT_GET_XMAX_NUMBER(mask) (((CAPT_STATUS_XMAX_MASK & (mask)) >> CAPT_STATUS_XMAX_SHIFT) + 1)
 
@@ -370,12 +370,12 @@ bool CAPT_GetTouchData(CAPT_Type *base, capt_touch_data_t *data);
  */
 void CAPT_PollNow(CAPT_Type *base, uint16_t enableXpins);
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus*/
 
-/*@}*/
+/*! @} */
 
-#endif /* _FSL_CAPT_H_ */
+#endif /* FSL_CAPT_H_ */

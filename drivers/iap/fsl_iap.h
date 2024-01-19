@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_IAP_H_
-#define _FSL_IAP_H_
+#ifndef FSL_IAP_H_
+#define FSL_IAP_H_
 
 #include "fsl_common.h"
 
@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_IAP_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief iap status codes.
@@ -176,7 +176,7 @@ status_t IAP_ReadUniqueID(uint32_t *uniqueID);
 status_t IAP_ReadFactorySettings(uint32_t dstRegAddr, uint32_t *factoryValue);
 #endif /* FSL_FEATURE_IAP_HAS_READ_FACTORY_SETTINGS_FUNCTION */
 
-/*@}*/
+/*! @} */
 
 #if defined(FSL_FEATURE_IAP_HAS_FLASH_FUNCTION) && FSL_FEATURE_IAP_HAS_FLASH_FUNCTION
 /*!
@@ -346,7 +346,7 @@ status_t IAP_ExtendedFlashSignatureRead(uint32_t startPage,
 status_t IAP_ReadFlashSignature(uint32_t *signature);
 #endif /* FSL_FEATURE_IAP_HAS_FLASH_SIGNATURE_READ */
 
-/*@}*/
+/*! @} */
 #endif /* FSL_FEATURE_IAP_HAS_FLASH_FUNCTION */
 
 #if (defined(FSL_FEATURE_IAP_HAS_EEPROM_FUNCTION) && (FSL_FEATURE_IAP_HAS_EEPROM_FUNCTION == 1))
@@ -389,7 +389,7 @@ status_t IAP_ReadEEPROMPage(uint32_t pageNumber, uint32_t *dstAddr, uint32_t sys
  */
 status_t IAP_WriteEEPROMPage(uint32_t pageNumber, uint32_t *srcAddr, uint32_t systemCoreClock);
 
-/*@}*/
+/*! @} */
 #endif /* FSL_FEATURE_IAP_HAS_EEPROM_FUNCTION */
 
 #if defined(FSL_FEATURE_IAP_HAS_FAIM_FUNCTION) && FSL_FEATURE_IAP_HAS_FAIM_FUNCTION
@@ -425,12 +425,12 @@ status_t IAP_ReadFAIMPage(uint32_t pageNumber, uint32_t *dstAddr);
 status_t IAP_WriteFAIMPage(uint32_t pageNumber, uint32_t *srcAddr);
 #endif /* FSL_FEATURE_IAP_HAS_FAIM_FUNCTION */
 
-/*@}*/
+/*! @} */
 
 #ifdef __cplusplus
 }
 #endif
 
-/*@}*/
+/*! @} */
 
-#endif /* _FSL_IAP_H_ */
+#endif /* FSL_IAP_H_ */

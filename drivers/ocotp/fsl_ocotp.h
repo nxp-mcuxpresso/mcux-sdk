@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_OCOTP_H_
-#define _FSL_OCOTP_H_
+#ifndef FSL_OCOTP_H_
+#define FSL_OCOTP_H_
 
 #include "fsl_common.h"
 
@@ -18,10 +18,10 @@
  * Definitions
  *******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief OCOTP driver version. */
 #define FSL_OCOTP_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
-/*@}*/
+/*! @} */
 
 #ifndef OCOTP_READ_FUSE_DATA_COUNT
 #define OCOTP_READ_FUSE_DATA_COUNT (1U)
@@ -208,4 +208,4 @@ static inline uint32_t OCOTP_GetVersion(OCOTP_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_OCOTP_H_ */
+#endif /* FSL_OCOTP_H_ */

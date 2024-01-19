@@ -102,7 +102,7 @@ enum _resc_name
     /* Controlled by GPC_SBC. */
     kResc_STBY_REQ = 41U, /*!< Standby request. */
 
-    kResc_PLL_LDO = 42U, /*!< Power supply: PLL LDO. */
+    kResc_PLL_LDO = 42U,  /*!< Power supply: PLL LDO. */
 };
 
 /*!
@@ -113,16 +113,18 @@ enum _resc_name
 /*!
  * @brief Resource constraints definition of CPU platform (suitable for CM7 and CM4 processors), with support for four
  * modes:
- *   1. The CPU domain is in run mode, core is active and cache, TCM, and peripherals inside the CPU platform can be accessed when needed,
- *       as specified in @ref PM_CORE_DOMAIN_RUN;
- *   2. The CPU domain is in wait mode, clocks to the CPU core and cache are gated off, as specified in @ref PM_CORE_DOMAIN_WAIT;
- *   3. The CPU domain is in stop mode, clocks to the CPU core, cache, and TCM are gated off, as specified in @ref PM_CORE_DOMAIN_STOP;
+ *   1. The CPU domain is in run mode, core is active and cache, TCM, and peripherals inside the CPU platform can be
+ * accessed when needed, as specified in @ref PM_CORE_DOMAIN_RUN;
+ *   2. The CPU domain is in wait mode, clocks to the CPU core and cache are gated off, as specified in @ref
+ * PM_CORE_DOMAIN_WAIT;
+ *   3. The CPU domain is in stop mode, clocks to the CPU core, cache, and TCM are gated off, as specified in @ref
+ * PM_CORE_DOMAIN_STOP;
  *   4. The CPU platform is powered off, as specified in @ref PM_CORE_DOMAIN_SUSPEND.
  */
 #define PM_RESC_CORE_DOMAIN_RUN     PM_ENCODE_RESC(PM_RESOURCE_FULL_ON, kResc_CPU_PLATFORM)
-#define PM_RESC_CORE_DOMAIN_WAIT     PM_ENCODE_RESC(PM_RESOURCE_PARTABLE_ON1, kResc_CPU_PLATFORM)
-#define PM_RESC_CORE_DOMAIN_STOP PM_ENCODE_RESC(PM_RESOURCE_PARTABLE_ON2, kResc_CPU_PLATFORM)
-#define PM_RESC_CORE_DOMAIN_SUSPEND        PM_ENCODE_RESC(PM_RESOURCE_OFF, kResc_CPU_PLATFORM)
+#define PM_RESC_CORE_DOMAIN_WAIT    PM_ENCODE_RESC(PM_RESOURCE_PARTABLE_ON1, kResc_CPU_PLATFORM)
+#define PM_RESC_CORE_DOMAIN_STOP    PM_ENCODE_RESC(PM_RESOURCE_PARTABLE_ON2, kResc_CPU_PLATFORM)
+#define PM_RESC_CORE_DOMAIN_SUSPEND PM_ENCODE_RESC(PM_RESOURCE_OFF, kResc_CPU_PLATFORM)
 
 /*!
  * @brief Resource constraints definition of OSC_RC_16M, with support for 2 modes:

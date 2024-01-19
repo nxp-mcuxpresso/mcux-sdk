@@ -4,9 +4,9 @@
 **                          MIMXRT595SFFOC_dsp
 **
 **     Compiler:            Xtensa Compiler
-**     Reference manual:    iMXRT500RM Rev.0, 01/2021
+**     Reference manual:    iMXRT500RM Rev.1, 07/2022
 **     Version:             rev. 5.0, 2020-08-27
-**     Build:               b220711
+**     Build:               b231102
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -14,9 +14,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2023 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -40,7 +38,7 @@
 /*!
  * @file MIMXRT595S
  * @version 1.0
- * @date 110722
+ * @date 021123
  * @brief Device specific configuration file for MIMXRT595S (implementation file)
  *
  * Provides a system configuration function and a global variable that contains

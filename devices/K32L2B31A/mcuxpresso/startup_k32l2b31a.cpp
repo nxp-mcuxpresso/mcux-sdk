@@ -1,10 +1,10 @@
 //*****************************************************************************
 // K32L2B31A startup code for use with MCUXpresso IDE
 //
-// Version : 160420
+// Version : 220823
 //*****************************************************************************
 //
-// Copyright 2016-2020 NXP
+// Copyright 2016-2023 NXP
 // All rights reserved.
 //
 // SPDX-License-Identifier: BSD-3-Clause
@@ -175,8 +175,6 @@ extern void _vStackTop(void);
 // This relies on the linker script to place at correct location in memory.
 //*****************************************************************************
 
-
-
 extern void (* const g_pfnVectors[])(void);
 extern void * __Vectors __attribute__ ((alias ("g_pfnVectors")));
 
@@ -185,8 +183,8 @@ void (* const g_pfnVectors[])(void) = {
     // Core Level - CM0P
     &_vStackTop,                       // The initial stack pointer
     ResetISR,                          // The reset handler
-    NMI_Handler,                       // The NMI handler
-    HardFault_Handler,                 // The hard fault handler
+    NMI_Handler,                       // NMI Handler
+    HardFault_Handler,                 // Hard Fault Handler
     0,                                 // Reserved
     0,                                 // Reserved
     0,                                 // Reserved
@@ -194,11 +192,11 @@ void (* const g_pfnVectors[])(void) = {
     0,                                 // Reserved
     0,                                 // Reserved
     0,                                 // Reserved
-    SVC_Handler,                       // SVCall handler
+    SVC_Handler,                       // SVCall Handler
     0,                                 // Reserved
     0,                                 // Reserved
-    PendSV_Handler,                    // The PendSV handler
-    SysTick_Handler,                   // The SysTick handler
+    PendSV_Handler,                    // PendSV Handler
+    SysTick_Handler,                   // SysTick Handler
 
     // Chip Level - K32L2B31A
     DMA0_IRQHandler,          // 16: DMA channel 0 transfer complete
@@ -233,8 +231,6 @@ void (* const g_pfnVectors[])(void) = {
     LCD_IRQHandler,           // 45: LCD interrupt
     PORTA_IRQHandler,         // 46: PORTA Pin detect
     PORTC_PORTD_IRQHandler,   // 47: Single interrupt vector for PORTC; PORTD Pin detect
-
-
 }; /* End of g_pfnVectors */
 
 //*****************************************************************************
@@ -279,19 +275,19 @@ extern unsigned int __bss_section_table_end;
 //*****************************************************************************
 __attribute__ ((naked, section(".after_vectors.reset")))
 void ResetISR(void) {
-
     // Disable interrupts
     __asm volatile ("cpsid i");
-
 
 #if defined (__USE_CMSIS)
 // If __USE_CMSIS defined, then call CMSIS SystemInit code
     SystemInit();
 
 #else
+#if (DISABLE_WDOG)
     // Disable Watchdog
     // SIM->COPC register: COPT=0,COPCLKS=0,COPW=0
     *((volatile unsigned int *)0x40048100) = 0x00u;
+#endif // (DISABLE_WDOG)
 #endif // (__USE_CMSIS)
 
     //
@@ -318,7 +314,6 @@ void ResetISR(void) {
         SectionLen = *SectionTableAddr++;
         bss_init(ExeAddr, SectionLen);
     }
-
 
 #if !defined (__USE_CMSIS)
 // Assume that if __USE_CMSIS defined, then CMSIS SystemInit code

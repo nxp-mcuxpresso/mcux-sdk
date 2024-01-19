@@ -1,7 +1,0 @@
-<map id="sensors/mma9553_drv.h" name="sensors/mma9553_drv.h">
-<area shape="rect" id="node2" href="$a00152.html" title="The mma9553_drv.c file implements the MMA9553L sensor driver interface. " alt="" coords="5,87,168,114"/>
-<area shape="rect" id="node3" href="$a00284.html" title="The mma9553_pedometer_i2c.c file implements the ISSDK MMA9553L sensor driver example demonstration as..." alt="" coords="192,80,379,121"/>
-<area shape="rect" id="node4" href="$a00287.html" title="The mma9553_pedometer_interrupt.c file implements the ISSDK MMA9553L sensor driver example demonstrat..." alt="" coords="403,80,619,121"/>
-<area shape="rect" id="node5" href="$a00290.html" title="The mma9553_pedometer_spi.c file implements the ISSDK MMA9553L sensor driver example demonstration as..." alt="" coords="643,80,829,121"/>
-<area shape="rect" id="node6" href="$a00458.html" title="The mma9553_demo.c file implements the ISSDK MMA9553L sensor driver example demonstration as a Accele..." alt="" coords="854,80,1005,121"/>
-</map>

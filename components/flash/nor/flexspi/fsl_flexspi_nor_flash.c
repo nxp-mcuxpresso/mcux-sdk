@@ -3736,13 +3736,22 @@ status_t Nor_Flash_Init(nor_config_t *config, nor_handle_t *handle)
     flexspiMemHandle.port                = memConfig->devicePort;
     flexspi_config_t flexspiConfig;
 
+#if defined(__ICACHE_PRESENT) && (__ICACHE_PRESENT == 1U)
+    bool ICacheEnableFlag = false;
+    /* Disable I cache. */
+    if (SCB_CCR_IC_Msk == (SCB_CCR_IC_Msk & SCB->CCR))
+    {
+        SCB_DisableICache();
+        ICacheEnableFlag = true;
+    }
+#endif /* __ICACHE_PRESENT */
+
 #if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
     bool DCacheEnableFlag = false;
     /* Disable D cache. */
     if (SCB_CCR_DC_Msk == (SCB_CCR_DC_Msk & SCB->CCR))
     {
         SCB_DisableDCache();
-        SCB_CleanInvalidateDCache();
         DCacheEnableFlag = true;
     }
 #endif /* __DCACHE_PRESENT */
@@ -3779,12 +3788,19 @@ status_t Nor_Flash_Init(nor_config_t *config, nor_handle_t *handle)
         FLEXSPI_SoftwareReset((FLEXSPI_Type *)handle->driverBaseAddr);
     }
 
+#if defined(__ICACHE_PRESENT) && (__ICACHE_PRESENT == 1U)
+    if (ICacheEnableFlag)
+    {
+        /* Enable I cache. */
+        SCB_EnableICache();
+    }
+#endif /* __ICACHE_PRESENT */
+
 #if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
     if (DCacheEnableFlag)
     {
         /* Enable D cache. */
         SCB_EnableDCache();
-        SCB_CleanInvalidateDCache();
     }
 #endif /* __DCACHE_PRESENT */
 

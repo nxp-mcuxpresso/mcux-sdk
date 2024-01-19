@@ -154,30 +154,30 @@
 
 #define LED1_INIT(output)                                                    \
     GPIO_PinInit(BOARD_LED1_GPIO, BOARD_LED1_GPIO_PORT, BOARD_LED1_GPIO_PIN, \
-                 &(gpio_pin_config_t){kGPIO_DigitalOutput, (output)}) /*!< Enable target LED1 */
+                 &(gpio_pin_config_t){kGPIO_DigitalOutput, (output)})                 /*!< Enable target LED1 */
 #define LED1_ON() \
-    GPIO_PortClear(BOARD_LED1_GPIO, BOARD_LED1_GPIO_PORT, 1U << BOARD_LED1_GPIO_PIN) /*!< Turn on target LED1 */
+    GPIO_PortClear(BOARD_LED1_GPIO, BOARD_LED1_GPIO_PORT, 1U << BOARD_LED1_GPIO_PIN)  /*!< Turn on target LED1 */
 #define LED1_OFF() \
-    GPIO_PortSet(BOARD_LED1_GPIO, BOARD_LED1_GPIO_PORT, 1U << BOARD_LED1_GPIO_PIN) /*!< Turn off target LED1 */
+    GPIO_PortSet(BOARD_LED1_GPIO, BOARD_LED1_GPIO_PORT, 1U << BOARD_LED1_GPIO_PIN)    /*!< Turn off target LED1 */
 #define LED1_TOGGLE() \
     GPIO_PortToggle(BOARD_LED1_GPIO, BOARD_LED1_GPIO_PORT, 1U << BOARD_LED1_GPIO_PIN) /*!< Toggle on target LED1 */
 #define LED2_INIT(output)                                                    \
     GPIO_PinInit(BOARD_LED2_GPIO, BOARD_LED2_GPIO_PORT, BOARD_LED2_GPIO_PIN, \
-                 &(gpio_pin_config_t){kGPIO_DigitalOutput, (output)}) /*!< Enable target LED2 */
+                 &(gpio_pin_config_t){kGPIO_DigitalOutput, (output)})                 /*!< Enable target LED2 */
 #define LED2_ON() \
-    GPIO_PortClear(BOARD_LED2_GPIO, BOARD_LED2_GPIO_PORT, 1U << BOARD_LED2_GPIO_PIN) /*!< Turn on target LED2 */
+    GPIO_PortClear(BOARD_LED2_GPIO, BOARD_LED2_GPIO_PORT, 1U << BOARD_LED2_GPIO_PIN)  /*!< Turn on target LED2 */
 #define LED2_OFF() \
-    GPIO_PortSet(BOARD_LED2_GPIO, BOARD_LED2_GPIO_PORT, 1U << BOARD_LED2_GPIO_PIN) /*!< Turn off target LED2 */
+    GPIO_PortSet(BOARD_LED2_GPIO, BOARD_LED2_GPIO_PORT, 1U << BOARD_LED2_GPIO_PIN)    /*!< Turn off target LED2 */
 #define LED2_TOGGLE() \
     GPIO_PortToggle(BOARD_LED2_GPIO, BOARD_LED2_GPIO_PORT, 1U << BOARD_LED2_GPIO_PIN) /*!< Toggle on target LED2 */
 
 #define LED3_INIT(output)                                                    \
     GPIO_PinInit(BOARD_LED3_GPIO, BOARD_LED3_GPIO_PORT, BOARD_LED3_GPIO_PIN, \
-                 &(gpio_pin_config_t){kGPIO_DigitalOutput, (output)}) /*!< Enable target LED3 */
+                 &(gpio_pin_config_t){kGPIO_DigitalOutput, (output)})                 /*!< Enable target LED3 */
 #define LED3_ON() \
-    GPIO_PortClear(BOARD_LED3_GPIO, BOARD_LED3_GPIO_PORT, 1U << BOARD_LED3_GPIO_PIN) /*!< Turn on target LED3 */
+    GPIO_PortClear(BOARD_LED3_GPIO, BOARD_LED3_GPIO_PORT, 1U << BOARD_LED3_GPIO_PIN)  /*!< Turn on target LED3 */
 #define LED3_OFF() \
-    GPIO_PortSet(BOARD_LED3_GPIO, BOARD_LED3_GPIO_PORT, 1U << BOARD_LED3_GPIO_PIN) /*!< Turn off target LED3 */
+    GPIO_PortSet(BOARD_LED3_GPIO, BOARD_LED3_GPIO_PORT, 1U << BOARD_LED3_GPIO_PIN)    /*!< Turn off target LED3 */
 #define LED3_TOGGLE() \
     GPIO_PortToggle(BOARD_LED3_GPIO, BOARD_LED3_GPIO_PORT, 1U << BOARD_LED3_GPIO_PIN) /*!< Toggle on target LED3 */
 

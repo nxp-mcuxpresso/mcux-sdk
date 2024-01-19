@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_IOPCTL_H_
-#define _FSL_IOPCTL_H_
+#ifndef FSL_IOPCTL_H_
+#define FSL_IOPCTL_H_
 
 #include "fsl_common.h"
 
@@ -28,10 +28,10 @@
 #endif
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief IOPCTL driver version 2.0.0. */
 #define LPC_IOPCTL_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
-/*@}*/
+/*! @} */
 
 /**
  * @brief Array of IOPCTL pin definitions passed to IOPCTL_SetPinMuxing() must be in this format
@@ -107,10 +107,10 @@ __STATIC_INLINE void IOPCTL_SetPinMuxing(IOPCTL_Type *base, const iopctl_group_t
     }
 }
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
-#endif /* _FSL_IOPCTL_H_ */
+#endif /* FSL_IOPCTL_H_ */

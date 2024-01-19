@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_COMMON_H_
-#define _FSL_COMMON_H_
+#ifndef FSL_COMMON_H_
+#define FSL_COMMON_H_
 
 #include <assert.h>
 #include <stdbool.h>
@@ -57,12 +57,13 @@
 #define MAKE_VERSION(major, minor, bugfix) (((major)*65536L) + ((minor)*256L) + (bugfix))
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief common driver version. */
 #define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
-/*@}*/
+/*! @} */
 
-/* Debug console type definition. */
+/*! @name Debug console type definition. */
+/*! @{ */
 #define DEBUG_CONSOLE_DEVICE_TYPE_NONE       0U  /*!< No debug console.             */
 #define DEBUG_CONSOLE_DEVICE_TYPE_UART       1U  /*!< Debug console based on UART.   */
 #define DEBUG_CONSOLE_DEVICE_TYPE_LPUART     2U  /*!< Debug console based on LPUART. */
@@ -74,6 +75,7 @@
 #define DEBUG_CONSOLE_DEVICE_TYPE_MINI_USART 8U  /*!< Debug console based on LPC_USART. */
 #define DEBUG_CONSOLE_DEVICE_TYPE_SWO        9U  /*!< Debug console based on SWO. */
 #define DEBUG_CONSOLE_DEVICE_TYPE_QSCI       10U /*!< Debug console based on QSCI. */
+/*! @} */
 
 /*! @brief Status group numbers. */
 enum _status_groups
@@ -189,7 +191,7 @@ enum _status_groups
     kStatusGroup_LOG            = 154, /*!< Group number for LOG status codes. */
     kStatusGroup_I3CBUS         = 155, /*!< Group number for I3CBUS status codes. */
     kStatusGroup_QSCI           = 156, /*!< Group number for QSCI status codes. */
-    kStatusGroup_SNT            = 157, /*!< Group number for SNT status codes. */
+    kStatusGroup_ELEMU          = 157, /*!< Group number for ELEMU status codes. */
     kStatusGroup_QUEUEDSPI      = 158, /*!< Group number for QSPI status codes. */
     kStatusGroup_POWER_MANAGER  = 159, /*!< Group number for POWER_MANAGER status codes. */
     kStatusGroup_IPED           = 160, /*!< Group number for IPED status codes. */
@@ -199,6 +201,7 @@ enum _status_groups
     kStatusGroup_CLIF           = 164, /*!< Group number for CLIF status codes. */
     kStatusGroup_BMA            = 165, /*!< Group number for BMA status codes. */
     kStatusGroup_NETC           = 166, /*!< Group number for NETC status codes. */
+    kStatusGroup_ELE            = 167, /*!< Group number for ELE status codes. */
 };
 
 /*! \public
@@ -227,13 +230,15 @@ typedef int32_t status_t;
  * @{
  */
 #if !defined(MIN)
+/*! Computes the minimum of \a a and \a b. */
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
 #if !defined(MAX)
+/*! Computes the maximum of \a a and \a b. */
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #endif
-/* @} */
+/*! @} */
 
 /*! @brief Computes the number of elements in an array. */
 #if !defined(ARRAY_SIZE)
@@ -241,29 +246,31 @@ typedef int32_t status_t;
 #endif
 
 /*! @name UINT16_MAX/UINT32_MAX value */
-/* @{ */
+/*! @{ */
 #if !defined(UINT16_MAX)
+/*! Max value of uint16_t type. */
 #define UINT16_MAX ((uint16_t)-1)
 #endif
 
 #if !defined(UINT32_MAX)
+/*! Max value of uint32_t type. */
 #define UINT32_MAX ((uint32_t)-1)
 #endif
-/* @} */
+/*! @} */
 
-/*! @name Suppress fallthrough warning macro */
-/* For switch case code block, if case section ends without "break;" statement, there wil be
- fallthrough warning with compiler flag -Wextra or -Wimplicit-fallthrough=n when using armgcc.
- To suppress this warning, "SUPPRESS_FALL_THROUGH_WARNING();" need to be added at the end of each
- case section which misses "break;"statement.
+/*!
+ * @def SUPPRESS_FALL_THROUGH_WARNING()
+ *
+ * For switch case code block, if case section ends without "break;" statement, there wil be
+ * fallthrough warning with compiler flag -Wextra or -Wimplicit-fallthrough=n when using armgcc.
+ * To suppress this warning, "SUPPRESS_FALL_THROUGH_WARNING();" need to be added at the end of each
+ * case section which misses "break;"statement.
  */
-/* @{ */
 #if defined(__GNUC__) && !defined(__ARMCC_VERSION)
 #define SUPPRESS_FALL_THROUGH_WARNING() __attribute__((fallthrough))
 #else
 #define SUPPRESS_FALL_THROUGH_WARNING()
 #endif
-/* @} */
 
 /*******************************************************************************
  * API
@@ -317,4 +324,4 @@ void SDK_DelayAtLeastUs(uint32_t delayTime_us, uint32_t coreClock_Hz);
 #include "fsl_common_arm.h"
 #endif
 
-#endif /* _FSL_COMMON_H_ */
+#endif /* FSL_COMMON_H_ */

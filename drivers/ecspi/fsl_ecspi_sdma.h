@@ -3,8 +3,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_SPI_DMA_H_
-#define _FSL_SPI_DMA_H_
+#ifndef FSL_SPI_DMA_H_
+#define FSL_SPI_DMA_H_
 
 #include "fsl_ecspi.h"
 #include "fsl_sdma.h"
@@ -18,10 +18,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief ECSPI FreeRTOS driver version. */
 #define FSL_ECSPI_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
-/*@}*/
+/*! @} */
 
 typedef struct _ecspi_sdma_handle ecspi_sdma_handle_t;
 

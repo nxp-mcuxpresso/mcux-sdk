@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_LPUART_DMA_H_
-#define _FSL_LPUART_DMA_H_
+#ifndef FSL_LPUART_DMA_H_
+#define FSL_LPUART_DMA_H_
 
 #include "fsl_lpuart.h"
 #include "fsl_dma.h"
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LPUART DMA driver version. */
 #define FSL_LPUART_DMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
-/*@}*/
+/*! @} */
 
 /* Forward declaration of the handle typedef. */
 typedef struct _lpuart_dma_handle lpuart_dma_handle_t;
@@ -175,7 +175,7 @@ status_t LPUART_TransferGetReceiveCountDMA(LPUART_Type *base, lpuart_dma_handle_
  */
 void LPUART_TransferDMAHandleIRQ(LPUART_Type *base, void *lpuartDmaHandle);
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -183,4 +183,4 @@ void LPUART_TransferDMAHandleIRQ(LPUART_Type *base, void *lpuartDmaHandle);
 
 /*! @}*/
 
-#endif /* _FSL_LPUART_DMA_H_ */
+#endif /* FSL_LPUART_DMA_H_ */

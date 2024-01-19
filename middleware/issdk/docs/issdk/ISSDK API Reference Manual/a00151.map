@@ -1,7 +1,0 @@
-<map id="sensors/mma9553.h" name="sensors/mma9553.h">
-<area shape="rect" id="node2" href="$a00155.html" title="The mma9553_drv.h file describes the MMA9553L driver interface and structures. " alt="" coords="5,95,168,121"/>
-<area shape="rect" id="node3" href="$a04823.html" title="drivers/ads/lpc/auto\l_detection_service.c" alt="" coords="193,87,333,129"/>
-<area shape="rect" id="node4" href="$a04826.html" title="drivers/ads/kinetis\l/auto_detection_service.c" alt="" coords="357,87,526,129"/>
-<area shape="rect" id="node5" href="$a00542.html" title="The auto detection service file implements auto detection sequence for discovery of FRDM&#45;KL25Z Board ..." alt="" coords="550,80,709,136"/>
-<area shape="rect" id="node6" href="$a04829.html" title="drivers/ads/qn/auto\l_detection_service.c" alt="" coords="733,87,873,129"/>
-</map>

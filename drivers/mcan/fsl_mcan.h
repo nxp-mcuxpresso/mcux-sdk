@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_MCAN_H_
-#define _FSL_MCAN_H_
+#ifndef FSL_MCAN_H_
+#define FSL_MCAN_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief MCAN driver version. */
 #define FSL_MCAN_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
-/*@}*/
+/*! @} */
 
 #ifndef MCAN_RETRY_TIMES
 /* Define to 0 by default means to retry infinitely until the flag is assert/de-assert.
@@ -804,7 +804,7 @@ static inline void MCAN_ClearRxBufferStatusFlag(CAN_Type *base, uint8_t idx)
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -875,7 +875,7 @@ static inline void MCAN_DisableInterrupts(CAN_Type *base, uint32_t mask)
     base->IE &= ~mask;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Bus Operations
@@ -939,7 +939,7 @@ status_t MCAN_ReadRxBuffer(CAN_Type *base, uint8_t idx, mcan_rx_buffer_frame_t *
  */
 status_t MCAN_ReadRxFifo(CAN_Type *base, uint8_t fifoBlock, mcan_rx_buffer_frame_t *pRxFrame);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Transactional
@@ -1094,7 +1094,7 @@ void MCAN_TransferAbortReceiveFifo(CAN_Type *base, uint8_t fifoBlock, mcan_handl
  */
 void MCAN_TransferHandleIRQ(CAN_Type *base, mcan_handle_t *handle);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -1102,4 +1102,4 @@ void MCAN_TransferHandleIRQ(CAN_Type *base, mcan_handle_t *handle);
 
 /*! @}*/
 
-#endif /* _FSL_MCAN_H_ */
+#endif /* FSL_MCAN_H_ */

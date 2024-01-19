@@ -26,10 +26,12 @@ typedef struct _ft5406_rt_touch_data
     ft5406_rt_touch_point_t TOUCH[FT5406_RT_MAX_TOUCHES];
 } ft5406_rt_touch_data_t;
 
-#define TOUCH_POINT_GET_EVENT(T) ((touch_event_t)((T).XH >> 6))
-#define TOUCH_POINT_GET_ID(T)    ((T).YH >> 4)
-#define TOUCH_POINT_GET_X(T)     ((((T).XH & 0x0f) << 8) | (T).XL)
-#define TOUCH_POINT_GET_Y(T)     ((((T).YH & 0x0f) << 8) | (T).YL)
+#define TOUCH_POINT_GET_EVENT(T) ((T).XH >> 6U)
+#define TOUCH_POINT_GET_ID(T)    ((T).YH >> 4U)
+#define TOUCH_POINT_GET_X(T)     ((((uint16_t)(T).XH & 0x0fU) << 8U) | (T).XL)
+#define TOUCH_POINT_GET_Y(T)     ((((uint16_t)(T).YH & 0x0fU) << 8U) | (T).YL)
+
+static status_t FT5406_RT_ReadTouchData(ft5406_rt_handle_t *handle);
 
 status_t FT5406_RT_Init(ft5406_rt_handle_t *handle, LPI2C_Type *base)
 {
@@ -37,10 +39,7 @@ status_t FT5406_RT_Init(ft5406_rt_handle_t *handle, LPI2C_Type *base)
     status_t status;
     uint8_t mode;
 
-    assert(handle);
-    assert(base);
-
-    if (!handle || !base)
+    if ((NULL == handle) || (NULL == base))
     {
         return kStatus_InvalidArgument;
     }
@@ -48,8 +47,8 @@ status_t FT5406_RT_Init(ft5406_rt_handle_t *handle, LPI2C_Type *base)
     handle->base = base;
 
     /* clear transfer structure and buffer */
-    memset(xfer, 0, sizeof(*xfer));
-    memset(handle->touch_buf, 0, FT5406_RT_TOUCH_DATA_LEN);
+    (void)memset(xfer, 0, sizeof(*xfer));
+    (void)memset(handle->touch_buf, 0, FT5406_RT_TOUCH_DATA_LEN);
 
     /* set device mode to normal operation */
     mode                 = 0;
@@ -59,7 +58,7 @@ status_t FT5406_RT_Init(ft5406_rt_handle_t *handle, LPI2C_Type *base)
     xfer->subaddressSize = 1;
     xfer->data           = &mode;
     xfer->dataSize       = 1;
-    xfer->flags          = kLPI2C_TransferDefaultFlag;
+    xfer->flags          = (uint32_t)kLPI2C_TransferDefaultFlag;
 
     status = LPI2C_MasterTransferBlocking(handle->base, &handle->xfer);
 
@@ -70,16 +69,14 @@ status_t FT5406_RT_Init(ft5406_rt_handle_t *handle, LPI2C_Type *base)
     xfer->subaddressSize = 1;
     xfer->data           = handle->touch_buf;
     xfer->dataSize       = FT5406_RT_TOUCH_DATA_LEN;
-    xfer->flags          = kLPI2C_TransferDefaultFlag;
+    xfer->flags          = (uint32_t)kLPI2C_TransferDefaultFlag;
 
     return status;
 }
 
 status_t FT5406_RT_Denit(ft5406_rt_handle_t *handle)
 {
-    assert(handle);
-
-    if (!handle)
+    if (NULL == handle)
     {
         return kStatus_InvalidArgument;
     }
@@ -88,11 +85,9 @@ status_t FT5406_RT_Denit(ft5406_rt_handle_t *handle)
     return kStatus_Success;
 }
 
-status_t FT5406_RT_ReadTouchData(ft5406_rt_handle_t *handle)
+static status_t FT5406_RT_ReadTouchData(ft5406_rt_handle_t *handle)
 {
-    assert(handle);
-
-    if (!handle)
+    if (NULL == handle)
     {
         return kStatus_InvalidArgument;
     }
@@ -111,22 +106,23 @@ status_t FT5406_RT_GetSingleTouch(ft5406_rt_handle_t *handle, touch_event_t *tou
     {
         ft5406_rt_touch_data_t *touch_data = (ft5406_rt_touch_data_t *)(void *)(handle->touch_buf);
 
-        if (touch_event == NULL)
+        touch_event_local = (touch_event_t)(uint8_t)TOUCH_POINT_GET_EVENT(touch_data->TOUCH[0]);
+
+        if (touch_event != NULL)
         {
-            touch_event = &touch_event_local;
+            *touch_event = touch_event_local;
         }
-        *touch_event = TOUCH_POINT_GET_EVENT(touch_data->TOUCH[0]);
 
         /* Update coordinates only if there is touch detected */
-        if ((*touch_event == kTouch_Down) || (*touch_event == kTouch_Contact))
+        if ((touch_event_local == kTouch_Down) || (touch_event_local == kTouch_Contact))
         {
-            if (touch_x)
+            if (NULL != touch_x)
             {
-                *touch_x = TOUCH_POINT_GET_X(touch_data->TOUCH[0]);
+                *touch_x = (int)(uint16_t)TOUCH_POINT_GET_X(touch_data->TOUCH[0]);
             }
-            if (touch_y)
+            if (NULL != touch_y)
             {
-                *touch_y = TOUCH_POINT_GET_Y(touch_data->TOUCH[0]);
+                *touch_y = (int)(uint16_t)TOUCH_POINT_GET_Y(touch_data->TOUCH[0]);
             }
         }
     }
@@ -145,25 +141,25 @@ status_t FT5406_RT_GetMultiTouch(ft5406_rt_handle_t *handle,
     if (status == kStatus_Success)
     {
         ft5406_rt_touch_data_t *touch_data = (ft5406_rt_touch_data_t *)(void *)(handle->touch_buf);
-        int i;
+        unsigned int i;
 
         /* Check for valid number of touches - otherwise ignore touch information */
         if (touch_data->TD_STATUS > FT5406_RT_MAX_TOUCHES)
         {
-            touch_data->TD_STATUS = 0;
+            touch_data->TD_STATUS = 0U;
         }
 
         /* Decode number of touches */
-        if (touch_count)
+        if (NULL != touch_count)
         {
-            *touch_count = touch_data->TD_STATUS;
+            *touch_count = (int)touch_data->TD_STATUS;
         }
 
         /* Decode valid touch points */
         for (i = 0; i < touch_data->TD_STATUS; i++)
         {
             touch_array[i].TOUCH_ID    = TOUCH_POINT_GET_ID(touch_data->TOUCH[i]);
-            touch_array[i].TOUCH_EVENT = TOUCH_POINT_GET_EVENT(touch_data->TOUCH[i]);
+            touch_array[i].TOUCH_EVENT = (touch_event_t)(uint8_t)TOUCH_POINT_GET_EVENT(touch_data->TOUCH[i]);
             touch_array[i].TOUCH_X     = TOUCH_POINT_GET_X(touch_data->TOUCH[i]);
             touch_array[i].TOUCH_Y     = TOUCH_POINT_GET_Y(touch_data->TOUCH[i]);
         }

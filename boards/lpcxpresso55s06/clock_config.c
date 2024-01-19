@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 NXP
+ * Copyright 2017-2018, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,11 +24,11 @@
 /* clang-format off */
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Clocks v7.0
+product: Clocks v12.0
 processor: LPC55S06
 package_id: LPC55S06JBD64
 mcu_data: ksdk2_0
-processor_version: 0.0.0
+processor_version: 0.14.4
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
 
@@ -43,8 +43,6 @@ processor_version: 0.0.0
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-/* System clock frequency. */
-extern uint32_t SystemCoreClock;
 
 /*******************************************************************************
  ************************ BOARD_InitBootClocks function ************************
@@ -53,6 +51,7 @@ void BOARD_InitBootClocks(void)
 {
     BOARD_BootClockFROHF96M();
 }
+
 /*******************************************************************************
  ******************** Configuration BOARD_BootClockFRO12M **********************
  ******************************************************************************/
@@ -96,7 +95,7 @@ void BOARD_BootClockFRO12M(void)
     /*!< Set up clock selectors - Attach clocks to the peripheries */
     CLOCK_AttachClk(kFRO12M_to_MAIN_CLK);                 /*!< Switch MAIN_CLK to FRO12M */
 
-    /*< Set SystemCoreClock variable. */
+    /*!< Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKFRO12M_CORE_CLOCK;
 #endif
 }
@@ -108,6 +107,7 @@ void BOARD_BootClockFRO12M(void)
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!Configuration
 name: BOARD_BootClockFROHF96M
+called_from_default_init: true
 outputs:
 - {id: FRO_12MHz_clock.outFreq, value: 12 MHz}
 - {id: System_clock.outFreq, value: 96 MHz}
@@ -145,7 +145,7 @@ void BOARD_BootClockFROHF96M(void)
     /*!< Set up clock selectors - Attach clocks to the peripheries */
     CLOCK_AttachClk(kFRO_HF_to_MAIN_CLK);                 /*!< Switch MAIN_CLK to FRO_HF */
 
-    /*< Set SystemCoreClock variable. */
+    /*!< Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKFROHF96M_CORE_CLOCK;
 #endif
 }
@@ -158,7 +158,6 @@ void BOARD_BootClockFROHF96M(void)
 !!Configuration
 name: BOARD_BootClockPLL96M
 outputs:
-- {id: CLKOUT_clock.outFreq, value: 16 MHz}
 - {id: FRO_12MHz_clock.outFreq, value: 12 MHz}
 - {id: System_clock.outFreq, value: 96 MHz}
 settings:
@@ -195,7 +194,7 @@ void BOARD_BootClockPLL96M(void)
     POWER_DisablePD(kPDRUNCFG_PD_LDOXO32M);                       /* Ensure XTAL32M is powered */
     CLOCK_SetupExtClocking(16000000U);                            /* Enable clk_in clock */
     SYSCON->CLOCK_CTRL |= SYSCON_CLOCK_CTRL_CLKIN_ENA_MASK;       /* Enable clk_in from XTAL32M clock  */
-    ANACTRL->XO32M_CTRL |= ANACTRL_XO32M_CTRL_ENABLE_SYSTEM_CLK_OUT_MASK;    /* Enable clk_in to system  */
+    ANACTRL->XO32M_CTRL |= ANACTRL_XO32M_CTRL_ENABLE_SYSTEM_CLK_OUT_MASK;    /* Enable High speed Crystal oscillator output to system  */
 
     POWER_SetVoltageForFreq(96000000U);                  /*!< Set voltage for the one of the fastest clock outputs: System clock output */
     CLOCK_SetFLASHAccessCyclesForFreq(96000000U);          /*!< Set FLASH wait states for core */
@@ -220,7 +219,7 @@ void BOARD_BootClockPLL96M(void)
     /*!< Set up clock selectors - Attach clocks to the peripheries */
     CLOCK_AttachClk(kPLL0_to_MAIN_CLK);                 /*!< Switch MAIN_CLK to PLL0 */
 
-    /*< Set SystemCoreClock variable. */
+    /*!< Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKPLL96M_CORE_CLOCK;
 #endif
 }

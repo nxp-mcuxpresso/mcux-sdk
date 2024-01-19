@@ -42,8 +42,6 @@ message("DEVICES_Project_Template_LPC804 component is included from ${CMAKE_CURR
 
 if(CONFIG_USE_component_miniusart_adapter AND (CONFIG_DEVICE_ID STREQUAL LPC804) AND CONFIG_USE_device_LPC804_startup AND CONFIG_USE_driver_clock AND CONFIG_USE_driver_common AND CONFIG_USE_driver_lpc_gpio AND CONFIG_USE_driver_lpc_iocon_lite AND CONFIG_USE_driver_lpc_miniusart AND CONFIG_USE_driver_power_no_lib AND CONFIG_USE_driver_rom_api AND CONFIG_USE_driver_swm AND CONFIG_USE_utility_assert_lite AND CONFIG_USE_utility_debug_console_lite)
 
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/board.h "" DEVICES_Project_Template_LPC804.LPC804)
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/board.c "" DEVICES_Project_Template_LPC804.LPC804)
 add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/clock_config.h "" DEVICES_Project_Template_LPC804.LPC804)
 add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/clock_config.c "" DEVICES_Project_Template_LPC804.LPC804)
 add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/pin_mux.h "" DEVICES_Project_Template_LPC804.LPC804)
@@ -72,16 +70,12 @@ message("device_LPC804_startup component is included from ${CMAKE_CURRENT_LIST_F
 if(CONFIG_USE_device_LPC804_system)
 
 if(CONFIG_TOOLCHAIN STREQUAL armgcc)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_LPC804.S
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_LPC804.S "" device_LPC804_startup.LPC804)
 endif()
 
 if(CONFIG_TOOLCHAIN STREQUAL mcux)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_lpc804.c
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_lpc804.cpp
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_lpc804.c "" device_LPC804_startup.LPC804)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_lpc804.cpp "" device_LPC804_startup.LPC804)
 endif()
 
 else()
@@ -306,10 +300,14 @@ if (CONFIG_USE_utility_assert_lite)
 
 message("utility_assert_lite component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console_lite)
+if(CONFIG_USE_utility_debug_console_lite AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()

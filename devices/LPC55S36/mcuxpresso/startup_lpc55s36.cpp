@@ -1,10 +1,10 @@
 //*****************************************************************************
 // LPC55S36 startup code for use with MCUXpresso IDE
 //
-// Version : 170921
+// Version : 010623
 //*****************************************************************************
 //
-// Copyright 2016-2021 NXP
+// Copyright 2016-2023 NXP
 // All rights reserved.
 //
 // SPDX-License-Identifier: BSD-3-Clause
@@ -132,7 +132,7 @@ WEAK void SEC_GPIO_INT0_IRQ0_IRQHandler(void);
 WEAK void SEC_GPIO_INT0_IRQ1_IRQHandler(void);
 WEAK void Freqme_IRQHandler(void);
 WEAK void SEC_VIO_IRQHandler(void);
-WEAK void SHA_IRQHandler(void);
+WEAK void ELS_IRQHandler(void);
 WEAK void PKC_IRQHandler(void);
 WEAK void PUF_IRQHandler(void);
 WEAK void POWERQUAD_IRQHandler(void);
@@ -143,9 +143,9 @@ WEAK void Reserved77_IRQHandler(void);
 WEAK void I3C0_IRQHandler(void);
 WEAK void Reserved79_IRQHandler(void);
 WEAK void Reserved80_IRQHandler(void);
-WEAK void CSS_IRQ1_IRQHandler(void);
+WEAK void ELS_IRQ1_IRQHandler(void);
 WEAK void Tamper_IRQHandler(void);
-WEAK void Analog_Glitch_IRQHandler(void);
+WEAK void Reserved83_IRQHandler(void);
 WEAK void Reserved84_IRQHandler(void);
 WEAK void Reserved85_IRQHandler(void);
 WEAK void Reserved86_IRQHandler(void);
@@ -190,7 +190,7 @@ WEAK void ENC1_WDG_IRQHandler(void);
 WEAK void ENC1_IDX_IRQHandler(void);
 WEAK void ITRC0_IRQHandler(void);
 WEAK void Reserved127_IRQHandler(void);
-WEAK void CSSV2_ERR_IRQHandler(void);
+WEAK void ELS_ERR_IRQHandler(void);
 WEAK void PKC_ERR_IRQHandler(void);
 WEAK void Reserved130_IRQHandler(void);
 WEAK void Reserved131_IRQHandler(void);
@@ -259,7 +259,7 @@ void SEC_GPIO_INT0_IRQ0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void SEC_GPIO_INT0_IRQ1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Freqme_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void SEC_VIO_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void SHA_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void ELS_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PKC_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PUF_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void POWERQUAD_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
@@ -270,9 +270,9 @@ void Reserved77_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void I3C0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved79_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved80_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void CSS_IRQ1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void ELS_IRQ1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Tamper_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void Analog_Glitch_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void Reserved83_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved84_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved85_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved86_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
@@ -317,7 +317,7 @@ void ENC1_WDG_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void ENC1_IDX_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void ITRC0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved127_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void CSSV2_ERR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void ELS_ERR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PKC_ERR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved130_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved131_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
@@ -364,20 +364,20 @@ void (* const g_pfnVectors[])(void) = {
     // Core Level - CM33
     &_vStackTop,                       // The initial stack pointer
     ResetISR,                          // The reset handler
-    NMI_Handler,                       // The NMI handler
-    HardFault_Handler,                 // The hard fault handler
-    MemManage_Handler,                 // The MPU fault handler
-    BusFault_Handler,                  // The bus fault handler
-    UsageFault_Handler,                // The usage fault handler
-    SecureFault_Handler,               // The secure fault handler
+    NMI_Handler,                       // NMI Handler
+    HardFault_Handler,                 // Hard Fault Handler
+    MemManage_Handler,                 // MPU Fault Handler
+    BusFault_Handler,                  // Bus Fault Handler
+    UsageFault_Handler,                // Usage Fault Handler
+    SecureFault_Handler,               // Secure Fault Handler
     0,                                 // ECRP
     0,                                 // Reserved
     0,                                 // Reserved
-    SVC_Handler,                       // SVCall handler
-    DebugMon_Handler,                  // Debug monitor handler
+    SVC_Handler,                       // SVCall Handler
+    DebugMon_Handler,                  // Debug Monitor Handler
     0,                                 // Reserved
-    PendSV_Handler,                    // The PendSV handler
-    SysTick_Handler,                   // The SysTick handler
+    PendSV_Handler,                    // PendSV Handler
+    SysTick_Handler,                   // SysTick Handler
 
     // Chip Level - LPC55S36
     WDT_BOD_IRQHandler,                // 16 : Windowed watchdog timer, Brownout detect, Flash interrupt
@@ -434,8 +434,8 @@ void (* const g_pfnVectors[])(void) = {
     SEC_GPIO_INT0_IRQ1_IRQHandler,     // 67 : SEC_GPIO_INT01 interrupt
     Freqme_IRQHandler,                 // 68 : frequency measure interrupt
     SEC_VIO_IRQHandler,                // 69 : SEC_VIO interrupt
-    SHA_IRQHandler,                    // 70 : SHA interrupt
-    PKC_IRQHandler,                    // 71 : CASPER interrupt
+    ELS_IRQHandler,                    // 70 : ELS and ELS error interrupts
+    PKC_IRQHandler,                    // 71 : Public Key Cryptography interrupt
     PUF_IRQHandler,                    // 72 : PUF interrupt
     POWERQUAD_IRQHandler,              // 73 : PowerQuad interrupt
     DMA1_IRQHandler,                   // 74 : DMA1 interrupt
@@ -445,9 +445,9 @@ void (* const g_pfnVectors[])(void) = {
     I3C0_IRQHandler,                   // 78 : I3C interrupt
     Reserved79_IRQHandler,             // 79 : Reserved interrupt
     Reserved80_IRQHandler,             // 80 : Reserved interrupt
-    CSS_IRQ1_IRQHandler,               // 81 : CSS_IRQ1
+    ELS_IRQ1_IRQHandler,               // 81 : ELS_IRQ1
     Tamper_IRQHandler,                 // 82 : Tamper
-    Analog_Glitch_IRQHandler,          // 83 : Analog_Glitch
+    Reserved83_IRQHandler,             // 83 : Reserved interrupt
     Reserved84_IRQHandler,             // 84 : Reserved interrupt
     Reserved85_IRQHandler,             // 85 : Reserved interrupt
     Reserved86_IRQHandler,             // 86 : Reserved interrupt
@@ -492,8 +492,8 @@ void (* const g_pfnVectors[])(void) = {
     ENC1_IDX_IRQHandler,               // 125: enc1_idx interrupt
     ITRC0_IRQHandler,                  // 126: itrc0 interrupt
     Reserved127_IRQHandler,            // 127: Reserved interrupt
-    CSSV2_ERR_IRQHandler,              // 128: cssv2_err interrupt
-    PKC_ERR_IRQHandler,                // 129: pkc_err interrupt
+    ELS_ERR_IRQHandler,                // 128: ELS error interrupt
+    PKC_ERR_IRQHandler,                // 129: PKC error interrupt
     Reserved130_IRQHandler,            // 130: Reserved interrupt
     Reserved131_IRQHandler,            // 131: Reserved interrupt
     Reserved132_IRQHandler,            // 132: Reserved interrupt
@@ -900,8 +900,8 @@ WEAK void SEC_VIO_IRQHandler(void)
 {   SEC_VIO_DriverIRQHandler();
 }
 
-WEAK void SHA_IRQHandler(void)
-{   SHA_DriverIRQHandler();
+WEAK void ELS_IRQHandler(void)
+{   ELS_DriverIRQHandler();
 }
 
 WEAK void PKC_IRQHandler(void)
@@ -944,16 +944,16 @@ WEAK void Reserved80_IRQHandler(void)
 {   Reserved80_DriverIRQHandler();
 }
 
-WEAK void CSS_IRQ1_IRQHandler(void)
-{   CSS_IRQ1_DriverIRQHandler();
+WEAK void ELS_IRQ1_IRQHandler(void)
+{   ELS_IRQ1_DriverIRQHandler();
 }
 
 WEAK void Tamper_IRQHandler(void)
 {   Tamper_DriverIRQHandler();
 }
 
-WEAK void Analog_Glitch_IRQHandler(void)
-{   Analog_Glitch_DriverIRQHandler();
+WEAK void Reserved83_IRQHandler(void)
+{   Reserved83_DriverIRQHandler();
 }
 
 WEAK void Reserved84_IRQHandler(void)
@@ -1132,8 +1132,8 @@ WEAK void Reserved127_IRQHandler(void)
 {   Reserved127_DriverIRQHandler();
 }
 
-WEAK void CSSV2_ERR_IRQHandler(void)
-{   CSSV2_ERR_DriverIRQHandler();
+WEAK void ELS_ERR_IRQHandler(void)
+{   ELS_ERR_DriverIRQHandler();
 }
 
 WEAK void PKC_ERR_IRQHandler(void)

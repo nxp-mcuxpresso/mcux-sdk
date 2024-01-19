@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_UART_H_
-#define _FSL_UART_H_
+#ifndef FSL_UART_H_
+#define FSL_UART_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief UART driver version. */
 #define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
-/*@}*/
+/*! @} */
 
 /*! @brief Retry times for waiting flag. */
 #ifndef UART_RETRY_TIMES
@@ -279,7 +279,7 @@ static inline void UART_SoftwareReset(UART_Type *base)
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Initialization and deinitialization
@@ -389,7 +389,7 @@ static inline void UART_Disable(UART_Type *base)
     base->UCR1 &= ~UART_UCR1_UARTEN_MASK;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -417,7 +417,7 @@ bool UART_GetStatusFlag(UART_Type *base, uint32_t flag);
  */
 void UART_ClearStatusFlag(UART_Type *base, uint32_t flag);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -476,7 +476,7 @@ void UART_DisableInterrupts(UART_Type *base, uint32_t mask);
  */
 uint32_t UART_GetEnabledInterrupts(UART_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Bus Operations
@@ -585,7 +585,7 @@ status_t UART_WriteBlocking(UART_Type *base, const uint8_t *data, size_t length)
  */
 status_t UART_ReadBlocking(UART_Type *base, uint8_t *data, size_t length);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Transactional
@@ -759,7 +759,7 @@ status_t UART_TransferGetReceiveCount(UART_Type *base, uart_handle_t *handle, ui
  */
 void UART_TransferHandleIRQ(UART_Type *base, void *irqHandle);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name DMA control functions.
@@ -814,7 +814,7 @@ static inline void UART_EnableRxDMA(UART_Type *base, bool enable)
     }
 }
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name FIFO control functions.
@@ -864,7 +864,7 @@ static inline void UART_SetRxFifoWatermark(UART_Type *base, uint8_t watermark)
     base->UFCR = (base->UFCR & ~UART_UFCR_RXTL_MASK) | UART_UFCR_RXTL(watermark);
 }
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Auto baud rate detection.
@@ -921,7 +921,7 @@ static inline bool UART_IsAutoBaudRateComplete(UART_Type *base)
 }
 #endif
 
-/*@}*/
+/*! @} */
 /*! @}*/
 
-#endif /* _FSL_UART_H_ */
+#endif /* FSL_UART_H_ */

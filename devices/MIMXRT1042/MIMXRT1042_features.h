@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 0.1, 2021-07-20
-**     Build:               b230419
+**     Build:               b230919
 **
 **     Abstract:
 **         Chip specific module features.
@@ -398,6 +398,12 @@
 #define FSL_FEATURE_FLEXSPI_HAS_NO_AHB_PARALLEL_MODE (0)
 /* @brief FLEXSPI support address shift. */
 #define FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT (0)
+/* @brief FlexSPI has no MCR0 ARDFEN bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ARDFEN (0)
+/* @brief FlexSPI has no MCR0 ATDFEN bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ATDFEN (0)
+/* @brief FlexSPI has no STS0 DATALEARNPHASEB bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_STS0_DATALEARNPHASEB (1)
 
 /* GPC module features */
 
@@ -568,11 +574,21 @@
 /* @brief If (e)FlexPWM has mux trigger source select bit field. */
 #define FSL_FEATURE_PWM_HAS_MUX_TRIGGER_SOURCE_SEL (1)
 /* @brief Number of submodules in each (e)FlexPWM module. */
-#define FSL_FEATURE_PWM_SUBMODULE_COUNT (4U)
+#define FSL_FEATURE_PWM_SUBMODULE_COUNT (4)
 /* @brief Number of fault channel in each (e)FlexPWM module. */
 #define FSL_FEATURE_PWM_FAULT_CH_COUNT (1)
 /* @brief (e)FlexPWM has no WAITEN Bitfield In CTRL2 Register. */
 #define FSL_FEATURE_PWM_HAS_NO_WAITEN (1)
+/* @brief If (e)FlexPWM has phase delay feature. */
+#define FSL_FEATURE_PWM_HAS_PHASE_DELAY (0)
+/* @brief If (e)FlexPWM has input filter capture feature. */
+#define FSL_FEATURE_PWM_HAS_INPUT_FILTER_CAPTURE (0)
+/* @brief If (e)FlexPWM has module capture functionality on A channels (inputs). */
+#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELA (1)
+/* @brief If (e)FlexPWM has module capture functionality on B channels (inputs). */
+#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELB (1)
+/* @brief If (e)FlexPWM has module capture functionality on X channels (inputs). */
+#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
 
 /* PXP module features */
 
@@ -584,6 +600,12 @@
 #define FSL_FEATURE_PXP_HAS_NO_CSC2 (1)
 /* @brief PXP doesn't have LUT */
 #define FSL_FEATURE_PXP_HAS_NO_LUT (1)
+/* @brief PXP doesn't have PORTER_DUFF_CTR */
+#define FSL_FEATURE_PXP_HAS_NO_PORTER_DUFF_CTRL (0)
+/* @brief PXP 3.0 version */
+#define FSL_FEATURE_PXP_V3 (0)
+/* @brief PXP doesn't have ROT_POS */
+#define FSL_FEATURE_PXP_HAS_NO_ROT_POS (1)
 
 /* RTWDOG module features */
 
@@ -631,6 +653,8 @@
 #define FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV (0)
 /* @brief Support Channel Mode (register bit fields TCR4[CHMOD]). */
 #define FSL_FEATURE_SAI_HAS_CHANNEL_MODE (1)
+/* @brief Support synchronous with another SAI. */
+#define FSL_FEATURE_SAI_HAS_SYNC_WITH_ANOTHER_SAI (0)
 
 /* SEMC module features */
 

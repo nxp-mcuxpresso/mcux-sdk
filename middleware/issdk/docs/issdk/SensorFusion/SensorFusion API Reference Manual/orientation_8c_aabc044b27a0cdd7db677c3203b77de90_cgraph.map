@@ -1,6 +1,0 @@
-<map id="feCompassWin8" name="feCompassWin8">
-<area shape="rect" id="node2" href="$matrix_8c.html#a54f510d9d257d6063412a9ed5adddd6f" title="function sets the 3x3 matrix A to the identity matrix " alt="" coords="171,5,279,32"/>
-<area shape="rect" id="node3" href="$approximations_8c.html#a956336cb9e7270c6cfbf667b1075c063" title="fasin_deg" alt="" coords="186,56,263,83"/>
-<area shape="rect" id="node4" href="$approximations_8c.html#a09d50b3d2c3d4d24e447a9b960eb5267" title="fatan_deg" alt="" coords="327,56,405,83"/>
-<area shape="rect" id="node5" href="$approximations_8c.html#aab17a1fee362e4247f1636fb8fa984a3" title="fatan_15deg" alt="" coords="453,56,545,83"/>
-</map>

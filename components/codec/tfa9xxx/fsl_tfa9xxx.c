@@ -674,7 +674,7 @@ status_t TFA9XXX_SetPlayChannel(tfa9xxx_handle_t *handle, uint32_t playChannel)
     }
 
     char SetInputSelector_msg[]      = {0x00U, 0x80U, 0x06U, 0xffU, 0xffU, channelCode,
-                                   0xffU, 0xffU, 0x32U, 0x00U, 0x0fU, 0xffU};
+                                        0xffU, 0xffU, 0x32U, 0x00U, 0x0fU, 0xffU};
     uint8_t SetInputSelector_msg_len = 12U;
 
     rc = tfa2_cnt_write_msg(tfa, SetInputSelector_msg_len, SetInputSelector_msg);

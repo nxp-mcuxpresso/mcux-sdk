@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_WDOG32_H_
-#define _FSL_WDOG32_H_
+#ifndef FSL_WDOG32_H_
+#define FSL_WDOG32_H_
 
 #include "fsl_common.h"
 
@@ -19,21 +19,21 @@
  * Definitions
  *******************************************************************************/
 /*! @name Unlock sequence */
-/*@{*/
+/*! @{ */
 #define WDOG_FIRST_WORD_OF_UNLOCK  (WDOG_UPDATE_KEY & 0xFFFFU)          /*!< First word of unlock sequence */
 #define WDOG_SECOND_WORD_OF_UNLOCK ((WDOG_UPDATE_KEY >> 16U) & 0xFFFFU) /*!< Second word of unlock sequence */
-/*@}*/
+/*! @} */
 
 /*! @name Refresh sequence */
-/*@{*/
+/*! @{ */
 #define WDOG_FIRST_WORD_OF_REFRESH  (WDOG_REFRESH_KEY & 0xFFFFU)          /*!< First word of refresh sequence */
 #define WDOG_SECOND_WORD_OF_REFRESH ((WDOG_REFRESH_KEY >> 16U) & 0xFFFFU) /*!< Second word of refresh sequence */
-/*@}*/
+/*! @} */
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief WDOG32 driver version. */
-#define FSL_WDOG32_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
-/*@}*/
+#define FSL_WDOG32_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @} */
 
 /*! @brief Describes WDOG32 clock source. */
 typedef enum _wdog32_clock_source
@@ -158,6 +158,10 @@ void WDOG32_GetDefaultConfig(wdog32_config_t *config);
  *   WDOG32_Init(wdog_base,&config);
  * @endcode
  *
+ * @note If there is errata ERR010536 (FSL_FEATURE_WDOG_HAS_ERRATA_010536 defined as 1),
+ * then after calling this function, user need delay at least 4 LPO clock cycles before
+ * accessing other WDOG32 registers.
+ *
  * @param base   WDOG32 peripheral base address.
  * @param config The configuration of the WDOG32.
  */
@@ -177,7 +181,7 @@ AT_QUICKACCESS_SECTION_CODE(void WDOG32_Init(WDOG_Type *base, const wdog32_confi
  */
 void WDOG32_Deinit(WDOG_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name WDOG32 functional Operation
@@ -389,7 +393,7 @@ static inline uint16_t WDOG32_GetCounterValue(WDOG_Type *base)
     return (uint16_t)base->CNT;
 }
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -397,4 +401,4 @@ static inline uint16_t WDOG32_GetCounterValue(WDOG_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_WDOG32_H_ */
+#endif /* FSL_WDOG32_H_ */

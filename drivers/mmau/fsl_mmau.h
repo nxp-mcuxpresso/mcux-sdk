@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_MMAU_H_
-#define _FSL_MMAU_H_
+#ifndef FSL_MMAU_H_
+#define FSL_MMAU_H_
 
 #include "fsl_common.h"
 
@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_MMAU_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
-/*@}*/
+/*! @} */
 
 /*******************************************************************************
  * MMAU memory map                                                             *
@@ -1913,4 +1913,4 @@ static inline frac32_t MMAU_l_sqra(void)
 
 /*! @} */
 
-#endif /* _FSL_MMAU_H_ */
+#endif /* FSL_MMAU_H_ */

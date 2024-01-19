@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -352,6 +352,102 @@ static void SHELL_hisOperation(uint8_t ch, shell_context_handle_t *shellContextH
             break;
     }
 }
+
+static void SHELL_SerialManagerHandle(shell_context_handle_t *shellContextHandle)
+{
+    if (shellContextHandle->serialReadHandle != NULL)
+    {
+        (void)SerialManager_CloseReadHandle(shellContextHandle->serialReadHandle);
+        shellContextHandle->serialReadHandle = NULL;
+    }
+    if (shellContextHandle->serialWriteHandle != NULL)
+    {
+        (void)SerialManager_CloseWriteHandle(shellContextHandle->serialWriteHandle);
+        shellContextHandle->serialWriteHandle = NULL;
+    }
+}
+
+#if SHELL_AUTO_COMPLETE
+/* Move the cursor to the beginning of line */
+static void SHELL_MoveCursorToBeginningLine(shell_context_handle_t *shellContextHandle)
+{
+    uint32_t i;
+    for (i = 0; i < (uint32_t)shellContextHandle->c_pos; i++)
+    {
+        (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
+    }
+    /* Do auto complete */
+    SHELL_AutoComplete(shellContextHandle);
+    /* Move position to end */
+    shellContextHandle->l_pos = (uint8_t)strlen(shellContextHandle->line);
+    shellContextHandle->c_pos = shellContextHandle->l_pos;
+}
+#endif
+
+/* There must be at last one char */
+static void SHELL_HandleBackspaceKey(shell_context_handle_t *shellContextHandle)
+{
+    shellContextHandle->l_pos--;
+    shellContextHandle->c_pos--;
+
+    if (shellContextHandle->l_pos > shellContextHandle->c_pos)
+    {
+        (void)memmove(&shellContextHandle->line[shellContextHandle->c_pos],
+                      &shellContextHandle->line[shellContextHandle->c_pos + 1U],
+                      (uint32_t)shellContextHandle->l_pos - (uint32_t)shellContextHandle->c_pos);
+        shellContextHandle->line[shellContextHandle->l_pos] = '\0';
+        (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
+        (void)SHELL_WRITEX(shellContextHandle, &shellContextHandle->line[shellContextHandle->c_pos],
+                           strlen(&shellContextHandle->line[shellContextHandle->c_pos]));
+        (void)SHELL_WRITEX(shellContextHandle, "  \b", 3);
+
+        /* Reset position */
+        uint32_t i;
+        for (i = (uint32_t)shellContextHandle->c_pos; i <= (uint32_t)shellContextHandle->l_pos; i++)
+        {
+            (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
+        }
+    }
+    else /* Normal backspace operation */
+    {
+        (void)SHELL_WRITEX(shellContextHandle, "\b \b", 3);
+        shellContextHandle->line[shellContextHandle->l_pos] = '\0';
+    }
+}
+/* Normal character */
+static void SHELL_HandleNormalChar(shell_context_handle_t *shellContextHandle, uint8_t ch)
+{
+    if (shellContextHandle->c_pos < shellContextHandle->l_pos)
+    {
+        uint32_t i;
+        (void)memmove(&shellContextHandle->line[shellContextHandle->c_pos + 1U],
+                      &shellContextHandle->line[shellContextHandle->c_pos],
+                      (uint32_t)shellContextHandle->l_pos - (uint32_t)shellContextHandle->c_pos);
+        shellContextHandle->line[shellContextHandle->c_pos] = (char)ch;
+        (void)SHELL_WRITEX(shellContextHandle, &shellContextHandle->line[shellContextHandle->c_pos],
+                           strlen(&shellContextHandle->line[shellContextHandle->c_pos]));
+
+        for (i = (uint32_t)shellContextHandle->c_pos; i < (uint32_t)shellContextHandle->l_pos; i++)
+        {
+            (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
+        }
+    }
+    else
+    {
+        shellContextHandle->line[shellContextHandle->l_pos] = (char)ch;
+        (void)SHELL_WRITEX(shellContextHandle, &shellContextHandle->line[shellContextHandle->l_pos], 1);
+    }
+}
+
+/* Case of Input too long */
+static void SHELL_HandleInputTooLong(shell_context_handle_t *shellContextHandle)
+{
+    if (shellContextHandle->l_pos >= (SHELL_BUFFER_SIZE - 1U))
+    {
+        shellContextHandle->l_pos = 0U;
+    }
+}
+
 #if (defined(SHELL_NON_BLOCKING_MODE) && (SHELL_NON_BLOCKING_MODE > 0U))
 SHELL_STATIC void SHELL_Task(void *param)
 #else
@@ -403,16 +499,7 @@ void SHELL_Task(shell_handle_t shellHandle)
             {
                 if ((bool)shellContextHandle->exit)
                 {
-                    if (shellContextHandle->serialReadHandle != NULL)
-                    {
-                        (void)SerialManager_CloseReadHandle(shellContextHandle->serialReadHandle);
-                        shellContextHandle->serialReadHandle = NULL;
-                    }
-                    if (shellContextHandle->serialWriteHandle != NULL)
-                    {
-                        (void)SerialManager_CloseWriteHandle(shellContextHandle->serialWriteHandle);
-                        shellContextHandle->serialWriteHandle = NULL;
-                    }
+                    SHELL_SerialManagerHandle(shellContextHandle);
                     break;
                 }
                 if (kStatus_SHELL_Success != (shell_status_t)SHELL_GetChar(shellContextHandle, &ch))
@@ -447,17 +534,8 @@ void SHELL_Task(shell_handle_t shellHandle)
                 else if ((char)ch == '\t')
                 {
 #if SHELL_AUTO_COMPLETE
-                    /* Move the cursor to the beginning of line */
-                    uint32_t i;
-                    for (i = 0; i < (uint32_t)shellContextHandle->c_pos; i++)
-                    {
-                        (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
-                    }
-                    /* Do auto complete */
-                    SHELL_AutoComplete(shellContextHandle);
-                    /* Move position to end */
-                    shellContextHandle->l_pos = (uint8_t)strlen(shellContextHandle->line);
-                    shellContextHandle->c_pos = shellContextHandle->l_pos;
+
+                    SHELL_MoveCursorToBeginningLine(shellContextHandle);
 #endif
                     continue;
                 }
@@ -469,33 +547,7 @@ void SHELL_Task(shell_handle_t shellHandle)
                     {
                         continue;
                     }
-
-                    shellContextHandle->l_pos--;
-                    shellContextHandle->c_pos--;
-
-                    if (shellContextHandle->l_pos > shellContextHandle->c_pos)
-                    {
-                        (void)memmove(&shellContextHandle->line[shellContextHandle->c_pos],
-                                      &shellContextHandle->line[shellContextHandle->c_pos + 1U],
-                                      (uint32_t)shellContextHandle->l_pos - (uint32_t)shellContextHandle->c_pos);
-                        shellContextHandle->line[shellContextHandle->l_pos] = '\0';
-                        (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
-                        (void)SHELL_WRITEX(shellContextHandle, &shellContextHandle->line[shellContextHandle->c_pos],
-                                           strlen(&shellContextHandle->line[shellContextHandle->c_pos]));
-                        (void)SHELL_WRITEX(shellContextHandle, "  \b", 3);
-
-                        /* Reset position */
-                        uint32_t i;
-                        for (i = (uint32_t)shellContextHandle->c_pos; i <= (uint32_t)shellContextHandle->l_pos; i++)
-                        {
-                            (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
-                        }
-                    }
-                    else /* Normal backspace operation */
-                    {
-                        (void)SHELL_WRITEX(shellContextHandle, "\b \b", 3);
-                        shellContextHandle->line[shellContextHandle->l_pos] = '\0';
-                    }
+                    SHELL_HandleBackspaceKey(shellContextHandle);
                     continue;
                 }
                 else
@@ -504,10 +556,7 @@ void SHELL_Task(shell_handle_t shellHandle)
                 }
 
                 /* Input too long */
-                if (shellContextHandle->l_pos >= (SHELL_BUFFER_SIZE - 1U))
-                {
-                    shellContextHandle->l_pos = 0U;
-                }
+                SHELL_HandleInputTooLong(shellContextHandle);
 
                 /* Handle end of line, break */
                 if (((char)ch == '\r') || ((char)ch == '\n'))
@@ -540,26 +589,7 @@ void SHELL_Task(shell_handle_t shellHandle)
                 }
 
                 /* Normal character */
-                if (shellContextHandle->c_pos < shellContextHandle->l_pos)
-                {
-                    (void)memmove(&shellContextHandle->line[shellContextHandle->c_pos + 1U],
-                                  &shellContextHandle->line[shellContextHandle->c_pos],
-                                  (uint32_t)shellContextHandle->l_pos - (uint32_t)shellContextHandle->c_pos);
-                    shellContextHandle->line[shellContextHandle->c_pos] = (char)ch;
-                    (void)SHELL_WRITEX(shellContextHandle, &shellContextHandle->line[shellContextHandle->c_pos],
-                                       strlen(&shellContextHandle->line[shellContextHandle->c_pos]));
-                    /* Move the cursor to new position */
-                    uint32_t i;
-                    for (i = (uint32_t)shellContextHandle->c_pos; i < (uint32_t)shellContextHandle->l_pos; i++)
-                    {
-                        (void)SHELL_WRITEX(shellContextHandle, "\b", 1);
-                    }
-                }
-                else
-                {
-                    shellContextHandle->line[shellContextHandle->l_pos] = (char)ch;
-                    (void)SHELL_WRITEX(shellContextHandle, &shellContextHandle->line[shellContextHandle->l_pos], 1);
-                }
+                SHELL_HandleNormalChar(shellContextHandle, ch);
 
                 ch = 0;
                 shellContextHandle->l_pos++;

@@ -133,9 +133,9 @@ eeprom_status_t EEPROM_Init(eeprom_config_t *eepromConfig)
     HAL_FlashGetProperty(kHAL_Flash_PropertyPflashTotalSize, &pflashTotalSize);
     HAL_FlashGetProperty(kHAL_Flash_PropertyPflashSectorSize, &s_eeState.eepromParams_SectorSize);
     eepromTotalSize = pflashTotalSize / 2 - ((pflashTotalSize / 2) & (s_eeState.eepromParams_SectorSize - 1));
-    s_eeState.eepromParams_TotalSize = (eepromTotalSize > 32 * 8 * s_eeState.eepromParams_SectorSize) ?
-                                           32 * 8 * s_eeState.eepromParams_SectorSize :
-                                           eepromTotalSize;
+    s_eeState.eepromParams_TotalSize   = (eepromTotalSize > 32 * 8 * s_eeState.eepromParams_SectorSize) ?
+                                             32 * 8 * s_eeState.eepromParams_SectorSize :
+                                             eepromTotalSize;
     s_eeState.eepromParams_StartOffset = pflashBlockBase + pflashTotalSize - s_eeState.eepromParams_TotalSize;
     return kStatus_EeSuccess;
 }

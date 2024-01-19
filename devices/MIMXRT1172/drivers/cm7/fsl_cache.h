@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_CACHE_H_
-#define _FSL_CACHE_H_
+#ifndef FSL_CACHE_H_
+#define FSL_CACHE_H_
 
 #include "fsl_common.h"
 
@@ -19,10 +19,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief cache driver version 2.0.4. */
 #define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
-/*@}*/
+/*! @} */
 
 #if defined(FSL_FEATURE_SOC_L2CACHEC_COUNT) && FSL_FEATURE_SOC_L2CACHEC_COUNT
 #ifndef FSL_SDK_DISBLE_L2CACHE_PRESENT
@@ -258,7 +258,7 @@ static inline void L1CACHE_CleanInvalidateDCacheByRange(uint32_t address, uint32
 {
     SCB_CleanInvalidateDCache_by_Addr((uint32_t *)address, (int32_t)size_byte);
 }
-/*@}*/
+/*! @} */
 
 #if defined(FSL_FEATURE_SOC_L2CACHEC_COUNT) && FSL_FEATURE_SOC_L2CACHEC_COUNT
 /*!
@@ -387,7 +387,7 @@ void L2CACHE_CleanInvalidateByRange(uint32_t address, uint32_t size_byte);
  */
 void L2CACHE_LockdownByWayEnable(uint32_t masterId, uint32_t mask, bool enable);
 
-/*@}*/
+/*! @} */
 #endif /* FSL_FEATURE_SOC_L2CACHEC_COUNT */
 
 /*!
@@ -452,7 +452,7 @@ void DCACHE_CleanByRange(uint32_t address, uint32_t size_byte);
  */
 void DCACHE_CleanInvalidateByRange(uint32_t address, uint32_t size_byte);
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -460,4 +460,4 @@ void DCACHE_CleanInvalidateByRange(uint32_t address, uint32_t size_byte);
 
 /*! @}*/
 
-#endif /* _FSL_CACHE_H_*/
+#endif /* FSL_CACHE_H_*/

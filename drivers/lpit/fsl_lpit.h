@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_LPIT_H_
-#define _FSL_LPIT_H_
+#ifndef FSL_LPIT_H_
+#define FSL_LPIT_H_
 
 #include "fsl_common.h"
 
@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-#define FSL_LPIT_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0 */
-                                                        /*@{*/
+/*! @{ */
+#define FSL_LPIT_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1 */
+                                                        /*! @{ */
 
 /*!
  * @brief List of LPIT channels
@@ -394,4 +394,4 @@ static inline void LPIT_Reset(LPIT_Type *base)
 
 /*! @}*/
 
-#endif /* __FSL_LPIT_H__ */
+#endif /* FSL_LPIT_H__ */

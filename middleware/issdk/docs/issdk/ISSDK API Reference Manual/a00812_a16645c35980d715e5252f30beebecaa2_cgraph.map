@@ -1,6 +1,0 @@
-<map id="FXOS8700_ReadMagData" name="FXOS8700_ReadMagData">
-<area shape="rect" id="node2" href="$a00911.html#ae7d2343e9a63bd3879ae477ec4536f6a" title="addToFifo is called from within sensor driver read functions " alt="" coords="251,5,329,32"/>
-<area shape="rect" id="node3" href="$a00911.html#a2686eeb8ae44e588362478db1f757a0e" title="conditionSample ensures that we never encounter the maximum negative two&#39;s complement value for a 16&#45;..." alt="" coords="231,56,349,83"/>
-<area shape="rect" id="node4" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="401,132,463,159"/>
-<area shape="rect" id="node5" href="$a00182.html#aa75349faed7c77807cb88d9224aa2636" title="Read register data from a sensor. " alt="" coords="227,157,353,184"/>
-</map>

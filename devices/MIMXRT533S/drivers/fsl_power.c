@@ -63,7 +63,8 @@ static const uint32_t powerLdoVoltLevel[POWER_FREQ_LEVELS_NUM] = {
      SYSCTL0_PDSLEEPCFG0_SYSPLLANA_PD_MASK | SYSCTL0_PDSLEEPCFG0_AUDPLLLDO_PD_MASK |                                  \
      SYSCTL0_PDSLEEPCFG0_AUDPLLANA_PD_MASK | SYSCTL0_PDSLEEPCFG0_ADC_PD_MASK | SYSCTL0_PDSLEEPCFG0_ADC_LP_MASK |      \
      SYSCTL0_PDSLEEPCFG0_ADC_TEMPSNS_PD_MASK | SYSCTL0_PDSLEEPCFG0_PMC_TEMPSNS_PD_MASK |                              \
-     SYSCTL0_PDSLEEPCFG0_ACMP_PD_MASK)
+     SYSCTL0_PDSLEEPCFG0_ACMP_PD_MASK | SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI0_REF_PD_MASK |                                 \
+     SYSCTL0_PDSLEEPCFG0_HSPAD_SDIO0_REF_PD_MASK | SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI1_REF_PD_MASK)
 
 /* DeepSleep PDSLEEP1 */
 #define PCFG1_DEEP_SLEEP                                                                                       \
@@ -78,7 +79,8 @@ static const uint32_t powerLdoVoltLevel[POWER_FREQ_LEVELS_NUM] = {
      SYSCTL0_PDSLEEPCFG1_MIPIDSI_SRAM_APD_MASK | SYSCTL0_PDSLEEPCFG1_MIPIDSI_SRAM_PPD_MASK |                   \
      SYSCTL0_PDSLEEPCFG1_LCDIF_SRAM_APD_MASK | SYSCTL0_PDSLEEPCFG1_LCDIF_SRAM_PPD_MASK |                       \
      SYSCTL0_PDSLEEPCFG1_DSP_PD_MASK | SYSCTL0_PDSLEEPCFG1_MIPIDSI_PD_MASK | SYSCTL0_PDSLEEPCFG1_OTP_PD_MASK | \
-     SYSCTL0_PDSLEEPCFG1_ROM_PD_MASK | SYSCTL0_PDSLEEPCFG1_SRAM_SLEEP_MASK)
+     SYSCTL0_PDSLEEPCFG1_ROM_PD_MASK | SYSCTL0_PDSLEEPCFG1_SRAM_SLEEP_MASK |                                   \
+     SYSCTL0_PDSLEEPCFG1_HSPAD_SDIO1_REF_PD_MASK)
 
 /* DeepSleep PDSLEEP2 */
 #define PCFG2_DEEP_SLEEP 0xFFFFFFFFU
@@ -1025,9 +1027,9 @@ AT_QUICKACCESS_SECTION_CODE(void POWER_EnterDeepSleep(const uint32_t exclude_fro
                    SYSCTL0_PDRUNCFG0_AUDPLLLDO_PD_MASK | SYSCTL0_PDRUNCFG0_AUDPLLANA_PD_MASK);
     pll_need_rst[0] =
         IS_SYSPLL_ON(pll_need_pd) ? 0U : (CLKCTL0_SYSPLL0CTL0_RESET_MASK | CLKCTL0_SYSPLL0CTL0_HOLDRINGOFF_ENA_MASK);
-    pll_need_rst[1] = IS_AUDPLL_ON(pll_need_pd) ?
-                          0U :
-                          (CLKCTL1_AUDIOPLL0CTL0_RESET_MASK | CLKCTL1_AUDIOPLL0CTL0_HOLDRINGOFF_ENA_MASK);
+    pll_need_rst[1]  = IS_AUDPLL_ON(pll_need_pd) ?
+                           0U :
+                           (CLKCTL1_AUDIOPLL0CTL0_RESET_MASK | CLKCTL1_AUDIOPLL0CTL0_HOLDRINGOFF_ENA_MASK);
     pfd_need_gate[0] = IS_SYSPLL_ON(pll_need_pd) ? 0U : ((~CLKCTL0->SYSPLL0PFD) & SYSPLL0PFD_PFD_CLKGATE_MASK);
     pfd_need_gate[1] = IS_AUDPLL_ON(pll_need_pd) ? 0U : ((~CLKCTL1->AUDIOPLL0PFD) & AUDIOPLL0PFD_PFD_CLKGATE_MASK);
     /* Disable the PFD clock output first. */
@@ -1302,7 +1304,12 @@ void EnableDeepSleepIRQ(IRQn_Type interrupt)
 {
     uint32_t intNumber = (uint32_t)interrupt;
 
-    if (intNumber >= 32U)
+    if (intNumber >= 64U)
+    {
+        /* enable interrupt wake up in the STARTEN2 register */
+        SYSCTL0->STARTEN2_SET = 1UL << (intNumber - 64U);
+    }
+    else if (intNumber >= 32U)
     {
         /* enable interrupt wake up in the STARTEN1 register */
         SYSCTL0->STARTEN1_SET = 1UL << (intNumber - 32U);
@@ -1323,7 +1330,12 @@ void DisableDeepSleepIRQ(IRQn_Type interrupt)
     /* also disable interrupt at NVIC */
     (void)DisableIRQ(interrupt);
 
-    if (intNumber >= 32U)
+    if (intNumber >= 64U)
+    {
+        /* disable interrupt wake up in the STARTEN2 register */
+        SYSCTL0->STARTEN2_CLR = 1UL << (intNumber - 64U);
+    }
+    else if (intNumber >= 32U)
     {
         /* disable interrupt wake up in the STARTEN1 register */
         SYSCTL0->STARTEN1_CLR = 1UL << (intNumber - 32U);

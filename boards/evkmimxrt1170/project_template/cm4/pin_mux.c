@@ -37,7 +37,7 @@ void BOARD_InitBootPins(void) {
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 BOARD_InitPins:
-- options: {callFromInitBoot: 'true', coreID: cm7, enableClock: 'true'}
+- options: {callFromInitBoot: 'true', coreID: cm4, enableClock: 'true'}
 - pin_list:
   - {pin_num: M15, peripheral: LPUART1, signal: RXD, pin_signal: GPIO_AD_25, software_input_on: Disable, pull_up_down_config: Pull_Down, pull_keeper_select: Keeper,
     open_drain: Disable, drive_strength: High, slew_rate: Slow}

@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_PWM_H_
-#define _FSL_PWM_H_
+#ifndef FSL_PWM_H_
+#define FSL_PWM_H_
 
 #include "fsl_common.h"
 
@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0 */
-/*@}*/
+/*! @} */
 
 /*! @brief PWM clock source select. */
 typedef enum _pwm_clock_source
@@ -399,4 +399,4 @@ static inline uint32_t PWM_GetCounterValue(PWM_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_PWM_H_ */
+#endif /* FSL_PWM_H_ */

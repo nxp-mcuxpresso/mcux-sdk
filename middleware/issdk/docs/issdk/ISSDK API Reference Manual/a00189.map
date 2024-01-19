@@ -1,5 +1,0 @@
-<map id="sensors/sensor_io_spi.c" name="sensors/sensor_io_spi.c">
-<area shape="rect" id="node3" href="$a00179.html" title="The sensor_drv.h file contains sensor state and error definitions. " alt="" coords="24,80,119,107"/>
-<area shape="rect" id="node4" href="$a00533.html" title="ARM Systick Utilities. " alt="" coords="143,80,250,107"/>
-<area shape="rect" id="node5" href="$a00191.html" title="The sensor_io_spi.h file declares low&#45;level interface functions for reading and writing sensor regist..." alt="" coords="275,80,388,107"/>
-</map>

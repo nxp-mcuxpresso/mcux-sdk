@@ -3,8 +3,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_ENET_QOS_H_
-#define _FSL_ENET_QOS_H_
+#ifndef FSL_ENET_QOS_H_
+#define FSL_ENET_QOS_H_
 
 #include "fsl_common.h"
 #if defined(FSL_ETH_ENABLE_CACHE_CONTROL)
@@ -30,13 +30,13 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Defines the driver version. */
-#define FSL_ENET_QOS_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
-/*@}*/
+#define FSL_ENET_QOS_DRIVER_VERSION (MAKE_VERSION(2, 6, 2))
+/*! @} */
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */
-/*@{*/
+/*! @{ */
 /*! @brief Defines for read format. */
 #define ENET_QOS_RXDESCRIP_RD_BUFF1VALID_MASK (1UL << 24U) /*!< Buffer1 address valid. */
 #define ENET_QOS_RXDESCRIP_RD_BUFF2VALID_MASK (1UL << 25U) /*!< Buffer2 address valid. */
@@ -69,10 +69,10 @@
 
 #define ENET_QOS_RXDESCRIP_WR_SA_FAILURE_MASK (1UL << 16U)
 #define ENET_QOS_RXDESCRIP_WR_DA_FAILURE_MASK (1UL << 17U)
-/*@}*/
+/*! @} */
 
 /*! @name Control and status bit masks of the transmit buffer descriptor. */
-/*@{*/
+/*! @{ */
 /*! @brief Defines for read format. */
 #define ENET_QOS_TXDESCRIP_RD_BL1_MASK  (0x3fffUL)
 #define ENET_QOS_TXDESCRIP_RD_BL2_MASK  (ENET_QOS_TXDESCRIP_RD_BL1_MASK << 16U)
@@ -96,20 +96,20 @@
 
 /*! @brief Defines for write back format. */
 #define ENET_QOS_TXDESCRIP_WB_TTSS_MASK (1UL << 17U)
-/*@}*/
+/*! @} */
 
 /*! @name Bit mask for interrupt enable type. */
-/*@{*/
+/*! @{ */
 #define ENET_QOS_ABNORM_INT_MASK                                                                                \
     (ENET_QOS_DMA_CHX_INT_EN_TXSE_MASK | ENET_QOS_DMA_CHX_INT_EN_RBUE_MASK | ENET_QOS_DMA_CHX_INT_EN_RSE_MASK | \
      ENET_QOS_DMA_CHX_INT_EN_RWTE_MASK | ENET_QOS_DMA_CHX_INT_EN_FBEE_MASK | ENET_QOS_DMA_CHX_INT_EN_ETIE_MASK)
 #define ENET_QOS_NORM_INT_MASK                                                                                 \
     (ENET_QOS_DMA_CHX_INT_EN_TIE_MASK | ENET_QOS_DMA_CHX_INT_EN_TBUE_MASK | ENET_QOS_DMA_CHX_INT_EN_RIE_MASK | \
      ENET_QOS_DMA_CHX_INT_EN_ERIE_MASK)
-/*@}*/
+/*! @} */
 
 /*! @name Defines some Ethernet parameters. */
-/*@{*/
+/*! @{ */
 #ifndef ENET_QOS_RING_NUM_MAX
 #define ENET_QOS_RING_NUM_MAX (5U) /*!< The Maximum number of tx/rx descriptor rings. */
 #endif
@@ -124,7 +124,7 @@
 #define ENET_QOS_RXP_BUFFER_SIZE    (256U)  /*!< RXP Buffer size, implied by FRPBS in MAC_HW_FEATURE3 */
 #define ENET_QOS_EST_WID            (24U)   /*!< Width of the time interval in Gate Control List */
 #define ENET_QOS_EST_DEP            (512U)  /*!< Maxmimum depth of Gate Control List */
-/*@}*/
+/*! @} */
 
 /*! @brief Defines the status return codes for transaction. */
 enum
@@ -900,7 +900,7 @@ void ENET_QOS_RxBufferFreeAll(ENET_QOS_Type *base, enet_qos_handle_t *handle);
  */
 void ENET_QOS_StartRxTx(ENET_QOS_Type *base, uint8_t txRingNum, uint8_t rxRingNum);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name MII interface operation
@@ -1055,7 +1055,7 @@ status_t ENET_QOS_MDIOC45Write(ENET_QOS_Type *base, uint8_t portAddr, uint8_t de
 status_t ENET_QOS_MDIOC45Read(
     ENET_QOS_Type *base, uint8_t portAddr, uint8_t devAddr, uint16_t regAddr, uint16_t *pData);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Other basic operation
@@ -1177,7 +1177,7 @@ static inline void ENET_QOS_ExitPowerDown(ENET_QOS_Type *base)
  * @retval kStatus_ENET_QOS_Timeout Poll status flag timeout.
  */
 status_t ENET_QOS_EnableRxParser(ENET_QOS_Type *base, bool enable);
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts.
@@ -1273,7 +1273,7 @@ static inline uint32_t ENET_QOS_GetMacInterruptStatus(ENET_QOS_Type *base)
  */
 void ENET_QOS_ClearMacInterruptStatus(ENET_QOS_Type *base, uint32_t mask);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Functional operation.
@@ -1505,7 +1505,7 @@ void ENET_QOS_AVBConfigure(ENET_QOS_Type *base, const enet_qos_cbs_config_t *con
  */
 void ENET_QOS_GetStatistics(ENET_QOS_Type *base, enet_qos_transfer_stats_t *statistics);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Transactional operation
@@ -1661,7 +1661,7 @@ void ENET_QOS_CommonIRQHandler(ENET_QOS_Type *base, enet_qos_handle_t *handle);
  */
 void ENET_QOS_SetISRHandler(ENET_QOS_Type *base, enet_qos_isr_t ISRHandler);
 
-/* @} */
+/*! @} */
 /*!
  * @name ENET Enhanced function operation
  * @{
@@ -1847,7 +1847,7 @@ status_t ENET_QOS_GetRxFrame(ENET_QOS_Type *base,
                              enet_qos_rx_frame_struct_t *rxFrame,
                              uint8_t channel);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -1855,4 +1855,4 @@ status_t ENET_QOS_GetRxFrame(ENET_QOS_Type *base,
 
 /*! @}*/
 
-#endif /* _FSL_ENET_QOS_H_ */
+#endif /* FSL_ENET_QOS_H_ */

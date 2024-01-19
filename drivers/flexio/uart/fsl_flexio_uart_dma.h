@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_FLEXIO_UART_DMA_H_
-#define _FSL_FLEXIO_UART_DMA_H_
+#ifndef FSL_FLEXIO_UART_DMA_H_
+#define FSL_FLEXIO_UART_DMA_H_
 
 #include "fsl_flexio_uart.h"
 #include "fsl_dma.h"
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief FlexIO UART DMA driver version. */
 #define FSL_FLEXIO_UART_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
-/*@}*/
+/*! @} */
 
 /* Forward declaration of the handle typedef. */
 typedef struct _flexio_uart_dma_handle flexio_uart_dma_handle_t;
@@ -165,7 +165,7 @@ status_t FLEXIO_UART_TransferGetReceiveCountDMA(FLEXIO_UART_Type *base,
                                                 flexio_uart_dma_handle_t *handle,
                                                 size_t *count);
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -173,4 +173,4 @@ status_t FLEXIO_UART_TransferGetReceiveCountDMA(FLEXIO_UART_Type *base,
 
 /*! @}*/
 
-#endif /* _FSL_UART_DMA_H_ */
+#endif /* FSL_UART_DMA_H_ */

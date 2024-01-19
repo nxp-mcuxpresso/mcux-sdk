@@ -10,6 +10,9 @@
 #  # description: Utilities which is needed for particular toolchain like the SBRK function required to address limitation between HEAP and STACK in GCC toolchain library.
 #  set(CONFIG_USE_utilities_misc_utilities true)
 
+#  # description: RTT template configuration
+#  set(CONFIG_USE_driver_rtt_template true)
+
 #  # description: mflash common
 #  set(CONFIG_USE_component_mflash_common true)
 
@@ -24,9 +27,6 @@
 
 #  # description: Driver phy-common
 #  set(CONFIG_USE_driver_phy-common true)
-
-#  # description: RTT template configuration
-#  set(CONFIG_USE_driver_rtt_template true)
 
 #  # description: Devices_project_template LPC54628
 #  set(CONFIG_USE_DEVICES_Project_Template_LPC54628 true)
@@ -96,6 +96,9 @@
 
 #  # description: Utility debug_console
 #  set(CONFIG_USE_utility_debug_console true)
+
+#  # description: SEGGER Real Time Transfer(RTT)
+#  set(CONFIG_USE_driver_rtt true)
 
 #  # description: I2C CMSIS Driver
 #  set(CONFIG_USE_driver_cmsis_flexcomm_i2c true)
@@ -403,9 +406,6 @@
 #  # description: WWDT Driver
 #  set(CONFIG_USE_driver_wwdt true)
 
-#  # description: SEGGER Real Time Transfer(RTT)
-#  set(CONFIG_USE_driver_rtt true)
-
 #set.CMSIS
 #  # description: CMSIS-CORE for Cortex-M, ARMv8-M, ARMv8.1-M
 #  set(CONFIG_USE_CMSIS_Include_core_cm true)
@@ -645,6 +645,12 @@
 #  set(CONFIG_USE_middleware_sdmmc_host_usdhc_cache true)
 
 #set.middleware.usb
+#  # description: USB device phydcd config header
+#  set(CONFIG_USE_middleware_usb_phydcd_config_header true)
+
+#  # description: USB device hsdcd config header
+#  set(CONFIG_USE_middleware_usb_hsdcd_config_header true)
+
 #  # description: USB device ip3511fs config header
 #  set(CONFIG_USE_middleware_usb_device_ip3511fs_config_header true)
 
@@ -771,9 +777,6 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/lpcxpresso54628
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC54628
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MQ6
 )
 
 include(set_board_lpcxpresso54628 OPTIONAL)

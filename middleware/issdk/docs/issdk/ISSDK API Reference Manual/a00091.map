@@ -1,7 +1,0 @@
-<map id="sensors/fxpq3115.h" name="sensors/fxpq3115.h">
-<area shape="rect" id="node2" href="$a00095.html" title="The fxpq3115_drv.h file describes the fxpq3115 driver interface and structures. " alt="" coords="5,95,164,121"/>
-<area shape="rect" id="node3" href="$a04823.html" title="drivers/ads/lpc/auto\l_detection_service.c" alt="" coords="188,87,328,129"/>
-<area shape="rect" id="node4" href="$a04826.html" title="drivers/ads/kinetis\l/auto_detection_service.c" alt="" coords="352,87,521,129"/>
-<area shape="rect" id="node5" href="$a00542.html" title="The auto detection service file implements auto detection sequence for discovery of FRDM&#45;KL25Z Board ..." alt="" coords="545,80,704,136"/>
-<area shape="rect" id="node6" href="$a04829.html" title="drivers/ads/qn/auto\l_detection_service.c" alt="" coords="728,87,868,129"/>
-</map>

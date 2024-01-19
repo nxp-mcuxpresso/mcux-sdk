@@ -7,15 +7,13 @@
 **     Compiler:            GNU C Compiler
 **     Reference manual:    LPC55S3x Reference Manual Rev. DraftG, 07/2021
 **     Version:             rev. 1.1, 2021-08-04
-**     Build:               b210913
+**     Build:               b230601
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2023 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -35,11 +33,14 @@ STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x0800;
 /* __pkc__ : SRAM A(16K) reserved for; pkc __power_down__ : The first 0x604 bytes reserved to CPU retention for power down mode */
 RETENTION_RAMSIZE = DEFINED(__pkc__) ? 0x00004000 : (DEFINED(__power_down__) ? 0x00000604 : 0x00000000);
 
+TEXT_START = DEFINED(__qspi_xip__)  ? 0x08001000 : 0x00000000; /* flexspi boot image start with 0x08000000 */
+TEXT_SIZE = DEFINED(__qspi_xip__)  ? 0x07FFF000 : 0x00020000; /* flexspi boot image offset at 0x08001000 */
+
 /* Specify the memory areas */
 MEMORY
 {
-  m_interrupts          (RX)  : ORIGIN = 0x00000000, LENGTH = 0x00000400
-  m_text                (RX)  : ORIGIN = 0x00000400, LENGTH = 0x0001FC00
+  m_interrupts          (RX)  : ORIGIN = TEXT_START, LENGTH = 0x00000400
+  m_text                (RX)  : ORIGIN = TEXT_START + 0x00000400, LENGTH = TEXT_SIZE - 0x00000400
   m_data                (RW)  : ORIGIN = 0x20000000 + RETENTION_RAMSIZE, LENGTH = 0x00010000 - RETENTION_RAMSIZE
   m_data_4              (RW)  : ORIGIN = 0x20018000, LENGTH = 0x00004000
   m_sramx               (RW)  : ORIGIN = 0x04000000, LENGTH = 0x00004000

@@ -1,7 +1,0 @@
-<map id="boardkit/frdm&#45;k64f/frdm_k64f.h" name="boardkit/frdm&#45;k64f/frdm_k64f.h">
-<area shape="rect" id="node2" href="$a04343.html" title="boardkit/frdm&#45;k64f\l/frdm&#45;fxs&#45;mult2&#45;b/issdk_hal.h" alt="" coords="5,95,195,136"/>
-<area shape="rect" id="node3" href="$a04346.html" title="boardkit/frdm&#45;k64f\l/frdm&#45;stbc&#45;agm01/issdk_hal.h" alt="" coords="219,95,413,136"/>
-<area shape="rect" id="node4" href="$a04349.html" title="boardkit/frdm&#45;k64f\l/frdm&#45;stbc&#45;agm02/issdk_hal.h" alt="" coords="437,95,630,136"/>
-<area shape="rect" id="node5" href="$a04352.html" title="boardkit/frdm&#45;k64f\l/frdm&#45;stbc&#45;agm04/issdk_hal.h" alt="" coords="654,95,847,136"/>
-<area shape="rect" id="node6" href="$a00575.html" title="The frdm_k64f.c file defines GPIO pins and I2C CMSIS utilities for FRDM&#45;K64F board. " alt="" coords="872,95,997,136"/>
-</map>

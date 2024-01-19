@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_SPIFI_DMA_H_
-#define _FSL_SPIFI_DMA_H_
+#ifndef FSL_SPIFI_DMA_H_
+#define FSL_SPIFI_DMA_H_
 
 #include "fsl_dma.h"
 #include "fsl_spifi.h"
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SPIFI DMA driver version 2.0.3. */
 #define FSL_SPIFI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
-/*@}*/
+/*! @} */
 
 typedef struct _spifi_dma_handle spifi_dma_handle_t;
 
@@ -145,12 +145,12 @@ status_t SPIFI_TransferGetSendCountDMA(SPIFI_Type *base, spifi_dma_handle_t *han
  */
 status_t SPIFI_TransferGetReceiveCountDMA(SPIFI_Type *base, spifi_dma_handle_t *handle, size_t *count);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
-/* @} */
+/*! @} */
 
-#endif /* _FSL_SPIFI_DMA_H_ */
+#endif /* FSL_SPIFI_DMA_H_ */

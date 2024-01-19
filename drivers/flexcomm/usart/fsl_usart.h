@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_USART_H_
-#define _FSL_USART_H_
+#ifndef FSL_USART_H_
+#define FSL_USART_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief USART driver version. */
-#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 8, 2))
-/*@}*/
+#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 8, 3))
+/*! @} */
 
 #define USART_FIFOTRIG_TXLVL_GET(base) (((base)->FIFOTRIG & USART_FIFOTRIG_TXLVL_MASK) >> USART_FIFOTRIG_TXLVL_SHIFT)
 #define USART_FIFOTRIG_RXLVL_GET(base) (((base)->FIFOTRIG & USART_FIFOTRIG_RXLVL_MASK) >> USART_FIFOTRIG_RXLVL_SHIFT)
@@ -349,7 +349,7 @@ void USART_CalcTimeoutConfig(uint32_t target_us,
  * @param base USART peripheral base address.
  * @param config pointer to receive timeout configuration structure.
  */
-void USART_SetRxTimeoutConfig(USART_Type *base, usart_rx_timeout_config *config);
+void USART_SetRxTimeoutConfig(USART_Type *base, const usart_rx_timeout_config *config);
 #endif
 /*!
  * @brief Deinitializes a USART instance.
@@ -466,7 +466,7 @@ static inline void USART_EnableMatchAddress(USART_Type *base, bool match)
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -519,7 +519,7 @@ static inline void USART_ClearStatusFlags(USART_Type *base, uint32_t mask)
     base->FIFOSTAT = mask & (USART_FIFOSTAT_TXERR_MASK | USART_FIFOSTAT_RXERR_MASK);
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -690,7 +690,7 @@ static inline void USART_SetTxFifoWatermark(USART_Type *base, uint8_t water)
     assert(water <= (USART_FIFOTRIG_TXLVL_MASK >> USART_FIFOTRIG_TXLVL_SHIFT));
     base->FIFOTRIG = (base->FIFOTRIG & ~USART_FIFOTRIG_TXLVL_MASK) | USART_FIFOTRIG_TXLVL(water);
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name Bus Operations
@@ -788,7 +788,7 @@ status_t USART_WriteBlocking(USART_Type *base, const uint8_t *data, size_t lengt
  */
 status_t USART_ReadBlocking(USART_Type *base, uint8_t *data, size_t length);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Transactional
@@ -960,7 +960,7 @@ status_t USART_TransferGetReceiveCount(USART_Type *base, usart_handle_t *handle,
  */
 void USART_TransferHandleIRQ(USART_Type *base, usart_handle_t *handle);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -968,4 +968,4 @@ void USART_TransferHandleIRQ(USART_Type *base, usart_handle_t *handle);
 
 /*! @}*/
 
-#endif /* _FSL_USART_H_ */
+#endif /* FSL_USART_H_ */

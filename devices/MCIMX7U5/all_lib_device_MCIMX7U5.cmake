@@ -49,7 +49,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tstmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xrdc
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../middleware/mmcau
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
@@ -119,7 +118,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_port)
 #    include(driver_lpspi)
 #    include(driver_gpio)
-#    include(middleware_issdk_sensor_allregdefs)
 #    include(driver_flexio_i2c_master)
 #    include(middleware_mbedtls_kinetis5)
 #    include(middleware_multicore_erpc_eRPC_server)
@@ -136,14 +134,12 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_crc)
 #    include(component_wm8960_adapter)
 #    include(driver_lptmr)
-#    include(middleware_issdk_algorithms_pedometer_lib_cm4)
 #    include(middleware_multicore_erpc_eRPC_port_freertos)
 #    include(driver_flexio_spi_edma)
 #    include(component_codec_i2c_MCIMX7U5)
 #    include(middleware_multicore_rpmsg_lite_MCIMX7U5)
 #    include(driver_sai_edma)
 #    include(component_lists)
-#    include(middleware_issdk_algorithms_pedometer_common)
 #    include(driver_tpm)
 #    include(driver_acmp)
 #    include(driver_lpit)

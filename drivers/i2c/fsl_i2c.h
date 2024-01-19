@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_I2C_H_
-#define _FSL_I2C_H_
+#ifndef FSL_I2C_H_
+#define FSL_I2C_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief I2C driver version. */
 #define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 9))
-/*@}*/
+/*! @} */
 
 /*! @brief Retry times for waiting flag. */
 #ifndef I2C_RETRY_TIMES
@@ -394,7 +394,7 @@ static inline void I2C_Enable(I2C_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -473,7 +473,7 @@ static inline void I2C_SlaveClearStatusFlags(I2C_Type *base, uint32_t statusMask
     I2C_MasterClearStatusFlags(base, statusMask);
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -503,6 +503,7 @@ void I2C_EnableInterrupts(I2C_Type *base, uint32_t mask);
  *     @arg kI2C_SdaTimeoutInterruptEnable
  */
 void I2C_DisableInterrupts(I2C_Type *base, uint32_t mask);
+/*! @} */
 
 /*!
  * @name DMA Control
@@ -541,7 +542,8 @@ static inline uint32_t I2C_GetDataRegAddr(I2C_Type *base)
     return (uint32_t)(&(base->D));
 }
 
-/* @} */
+/*! @} */
+
 /*!
  * @name Bus Operations
  * @{
@@ -659,7 +661,7 @@ status_t I2C_SlaveReadBlocking(I2C_Type *base, uint8_t *rxBuff, size_t rxSize);
  */
 status_t I2C_MasterTransferBlocking(I2C_Type *base, i2c_master_transfer_t *xfer);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Transactional
@@ -796,10 +798,10 @@ status_t I2C_SlaveTransferGetCount(I2C_Type *base, i2c_slave_handle_t *handle, s
  */
 void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle);
 
-/* @} */
+/*! @} */
 #if defined(__cplusplus)
 }
 #endif /*_cplusplus. */
-/*@}*/
+/*! @} */
 
-#endif /* _FSL_I2C_H_*/
+#endif /* FSL_I2C_H_*/

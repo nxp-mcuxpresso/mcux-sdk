@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_SWM_H_
-#define _FSL_SWM_H_
+#ifndef FSL_SWM_H_
+#define FSL_SWM_H_
 
 #include "fsl_swm_connections.h"
 
@@ -22,10 +22,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LPC SWM driver version. */
 #define FSL_SWM_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
-/*@}*/
+/*! @} */
 
 /*******************************************************************************
  * API
@@ -94,4 +94,4 @@ void SWM_SetFlextimerPinSelect(SWM_Type *base, swm_flextimer_pin_func_t func, sw
 
 /*! @}*/
 
-#endif /* _FSL_SWM_H_ */
+#endif /* FSL_SWM_H_ */

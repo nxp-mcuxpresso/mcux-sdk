@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_RDC_H_
-#define _FSL_RDC_H_
+#ifndef FSL_RDC_H_
+#define FSL_RDC_H_
 
 #include "fsl_common.h"
 
@@ -88,7 +88,8 @@ typedef struct _rdc_periph_access_config
 /*!
  * @brief Memory region domain access control configuration.
  *
- * Note that when setting the @ref baseAddress and @ref endAddress,
+ * Note that when setting the @ref rdc_mem_access_config_t::baseAddress
+ * and @ref rdc_mem_access_config_t::endAddress,
  * should be aligned to the region resolution, see rdc_mem_t
  * definitions.
  */
@@ -444,4 +445,4 @@ static inline uint8_t RDC_GetCurrentMasterDomainId(RDC_Type *base)
  * @}
  */
 
-#endif /* _FSL_RDC_H_ */
+#endif /* FSL_RDC_H_ */

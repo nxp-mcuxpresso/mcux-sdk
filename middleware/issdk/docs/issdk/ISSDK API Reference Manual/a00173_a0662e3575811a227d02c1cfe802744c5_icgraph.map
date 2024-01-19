@@ -1,6 +1,0 @@
-<map id="Register_SPI_BlockWrite" name="Register_SPI_BlockWrite">
-<area shape="rect" id="node2" href="$a00041.html#aec67caf020c27066c2918ca5ba6807ac" title="The interface function to initialize the sensor. " alt="" coords="223,5,393,32"/>
-<area shape="rect" id="node3" href="$a00101.html#a3924d21a0703878695ebdb68f720fff9" title="Host_IO_Receive" alt="" coords="247,56,369,83"/>
-<area shape="rect" id="node4" href="$a00155.html#aa9e0baf731b01815b94c95276e6be639" title="The interface function to initialize the sensor. " alt="" coords="441,132,604,159"/>
-<area shape="rect" id="node5" href="$a00191.html#a6891c5409037ff96ef29750f131f4c00" title="Write commands to a sensor. " alt="" coords="227,157,389,184"/>
-</map>

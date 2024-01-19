@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021, NXP
+ * Copyright 2017-2023, NXP
  * All rights reserved.
  *
  *
@@ -34,7 +34,7 @@ typedef struct _srtm_rpmsg_endpoint
     srtm_rpmsg_endpoint_rx_cb_t rxCallback;
     void *rxCallbackParam;
     bool started;
-} * srtm_rpmsg_endpoint_t;
+} *srtm_rpmsg_endpoint_t;
 
 /*******************************************************************************
  * Prototypes
@@ -115,6 +115,22 @@ static srtm_status_t SRTM_RPMsgEndpoint_Stop(srtm_channel_t channel)
     return status;
 }
 
+static void SRTM_RPMsgEndpoint_RpmsgLiteSendPre(srtm_channel_t channel, void *data, uint32_t len)
+{
+    if (channel->sendDataPreCallback != NULL)
+    {
+        channel->sendDataPreCallback(channel, data, len);
+    }
+}
+
+static void SRTM_RPMsgEndpoint_RpmsgLiteSendPost(srtm_channel_t channel, void *data, uint32_t len)
+{
+    if (channel->sendDataPostCallback != NULL)
+    {
+        channel->sendDataPostCallback(channel, data, len);
+    }
+}
+
 static srtm_status_t SRTM_RPMsgEndpoint_SendData(srtm_channel_t channel, void *data, uint32_t len)
 {
     srtm_rpmsg_endpoint_t handle = (srtm_rpmsg_endpoint_t)(void *)channel;
@@ -136,6 +152,7 @@ static srtm_status_t SRTM_RPMsgEndpoint_SendData(srtm_channel_t channel, void *d
         }
         SRTM_DEBUG_MESSAGE(SRTM_DEBUG_VERBOSE_ERROR, "\r\n");
 #endif
+        SRTM_RPMsgEndpoint_RpmsgLiteSendPre(channel, data, len);
         if (rpmsg_lite_send(handle->config.rpmsgHandle, handle->rpmsgEndpoint, handle->config.peerAddr, (char *)data,
                             len, RL_BLOCK) == RL_SUCCESS)
         {
@@ -146,6 +163,7 @@ static srtm_status_t SRTM_RPMsgEndpoint_SendData(srtm_channel_t channel, void *d
             SRTM_DEBUG_MESSAGE(SRTM_DEBUG_VERBOSE_ERROR, "%s: RPMsg send failed\r\n", __func__);
             status = SRTM_Status_TransferFailed;
         }
+        SRTM_RPMsgEndpoint_RpmsgLiteSendPost(channel, data, len);
     }
     else
     {
@@ -186,6 +204,8 @@ srtm_channel_t SRTM_RPMsgEndpoint_Create(srtm_rpmsg_endpoint_config_t *config)
     handle->channel.start    = SRTM_RPMsgEndpoint_Start;
     handle->channel.stop     = SRTM_RPMsgEndpoint_Stop;
     handle->channel.sendData = SRTM_RPMsgEndpoint_SendData;
+    handle->channel.sendDataPreCallback = NULL;
+    handle->channel.sendDataPostCallback = NULL;
 
     if (config->epName != NULL)
     {

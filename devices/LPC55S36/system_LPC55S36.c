@@ -10,7 +10,7 @@
 **
 **     Reference manual:    LPC55S3x Reference Manual Rev. DraftG, 07/2021
 **     Version:             rev. 1.1, 2021-08-04
-**     Build:               b210806
+**     Build:               b230705
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,9 +18,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2023 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -89,9 +87,14 @@ __attribute__ ((weak)) void SystemInit (void) {
     SYSCON->AHBCLKCTRLSET[0] = SYSCON_AHBCLKCTRL0_SRAM_CTRL1_MASK | SYSCON_AHBCLKCTRL0_SRAM_CTRL2_MASK
                           | SYSCON_AHBCLKCTRL0_SRAM_CTRL3_MASK | SYSCON_AHBCLKCTRL0_SRAM_CTRL4_MASK;
 #endif
-/* enable the flash cache LPCAC */
-  SYSCON->LPCAC_CTRL &= ~SYSCON_LPCAC_CTRL_DIS_LPCAC_MASK;
+    /* enable the flash cache LPCAC */
+    SYSCON->LPCAC_CTRL &= ~SYSCON_LPCAC_CTRL_DIS_LPCAC_MASK;
 
+    /* De-select GDET as source for CHIP_RESET */
+    ITRC0->OUT_SEL[4][0] = 0xAAAAAAAAUL;
+    ITRC0->OUT_SEL[4][1] = 0xAAAAAAAAUL;
+    /* Disable GDET_IRQ (bit 1) in ELS_INT_ENABLE */
+    ELS->ELS_INT_ENABLE &= ~S50_ELS_INT_ENABLE_GDET_INT_EN_MASK;
   SystemInitHook();
 }
 

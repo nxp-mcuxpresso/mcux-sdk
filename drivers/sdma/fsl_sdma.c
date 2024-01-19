@@ -105,10 +105,14 @@ AT_NONCACHEABLE_SECTION_ALIGN(
 /*! @brief channel 0 buffer descriptor */
 AT_NONCACHEABLE_SECTION_ALIGN(
     static sdma_buffer_descriptor_t s_SDMABD[FSL_FEATURE_SOC_SDMA_COUNT][FSL_FEATURE_SDMA_MODULE_CHANNEL], 4);
+
 #if SDMA_DRIVER_LOAD_RAM_SCRIPT
 /*! @sdma driver ram script*/
 static short s_sdma_multi_fifo_script[] = FSL_SDMA_MULTI_FIFO_SCRIPT;
 #endif
+
+/*! @brief sdma ram script loaded status */
+static volatile bool s_ramScriptLoaded = false;
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -301,6 +305,7 @@ void SDMA_LoadScript(SDMAARM_Type *base, uint32_t destAddr, void *srcAddr, size_
     s_SDMABD[instance][0].bufferAddr       = bufferAddr;
     s_SDMABD[instance][0].extendBufferAddr = destAddr;
 
+    s_ramScriptLoaded = true;
     /* Run channel0 scripts */
     SDMA_RunChannel0(base);
 }
@@ -421,6 +426,9 @@ void SDMA_Deinit(SDMAARM_Type *base)
     /* Gate SDMA periphral clock */
     CLOCK_DisableClock(s_sdmaClockName[SDMA_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+    /* reset script loaded status */
+    s_ramScriptLoaded = false;
 }
 
 void SDMA_GetDefaultConfig(sdma_config_t *config)
@@ -879,15 +887,11 @@ void SDMA_SubmitTransfer(sdma_handle_t *handle, const sdma_transfer_config_t *co
 
 #if SDMA_DRIVER_LOAD_RAM_SCRIPT
     /* make sure ram script is loaded for the multi fifo case */
-    if ((config->scriptAddr == (uint32_t)FSL_SDMA_MULTI_FIFO_SAI_TX_ADDR) ||
-        ((uint32_t)FSL_SDMA_MULTI_FIFO_SAI_RX_ADDR == config->scriptAddr))
+    if ((!s_ramScriptLoaded) && ((config->scriptAddr == (uint32_t)FSL_SDMA_MULTI_FIFO_SAI_TX_ADDR) ||
+        ((uint32_t)FSL_SDMA_MULTI_FIFO_SAI_RX_ADDR == config->scriptAddr)))
     {
-        if (!handle->isRamscriptLoaded)
-        {
-            SDMA_LoadScript(handle->base, FSL_SDMA_SCRIPT_CODE_START_ADDR, (void *)s_sdma_multi_fifo_script,
-                            (uint32_t)FSL_SDMA_SCRIPT_CODE_SIZE);
-            handle->isRamscriptLoaded = true;
-        }
+        SDMA_LoadScript(handle->base, FSL_SDMA_SCRIPT_CODE_START_ADDR, (void *)s_sdma_multi_fifo_script,
+                        (uint32_t)FSL_SDMA_SCRIPT_CODE_SIZE);
     }
 #endif
 

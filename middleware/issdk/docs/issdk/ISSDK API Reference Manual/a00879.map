@@ -1,8 +1,0 @@
-<map id="algorithms/sensorfusion/sources/main_freertos_agm02.c" name="algorithms/sensorfusion/sources/main_freertos_agm02.c">
-<area shape="rect" id="node8" href="$a00170.html" title="The register_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="691,109,809,136"/>
-<area shape="rect" id="node10" href="$a00914.html" title="The sensor_fusion.h file implements the top level programming interface. " alt="" coords="969,109,1083,136"/>
-<area shape="rect" id="node11" href="$a00779.html" title="Defines control sub&#45;system. " alt="" coords="1107,109,1179,136"/>
-<area shape="rect" id="node12" href="$a00923.html" title="Application&#45;specific status subsystem. " alt="" coords="1203,109,1273,136"/>
-<area shape="rect" id="node13" href="$a00842.html" title="Provides function prototypes for driver level interfaces. " alt="" coords="1297,109,1368,136"/>
-<area shape="rect" id="node14" href="$a00836.html" title="Provides a simple abstraction for a periodic interval timer. " alt="" coords="1392,109,1476,136"/>
-</map>

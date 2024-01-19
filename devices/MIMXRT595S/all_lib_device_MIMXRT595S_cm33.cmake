@@ -97,7 +97,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/tensorflow-lite
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/tensorflow-lite/third_party/cmsis
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/littlefs
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/lwip
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
@@ -158,7 +157,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_iap)
 #    include(component_serial_manager)
 #    include(middleware_multicore_rpmsg_lite)
-#    include(middleware_issdk_sensor_fxas21002)
 #    include(middleware_edgefast_wifi_nxp)
 #    include(middleware_usb_device_cdc_external)
 #    include(component_i3c_bus_adapter)
@@ -247,7 +245,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(utility_debug_console_lite)
 #    include(driver_powerquad)
 #    include(component_log)
-#    include(middleware_issdk_sensor_interface_common)
 #    include(CMSIS_Driver_Include_USART)
 #    include(CMSIS_Driver_Include_SPI)
 #    include(driver_cmsis_flexcomm_usart)
@@ -275,7 +272,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_cmsis_flexcomm_spi)
 #    include(CMSIS_RTOS2_Common)
 #    include(driver_puf)
-#    include(middleware_issdk_sensor_fxos8700)
 #    include(driver_dbi_flexio_smartdma)
 #    include(driver_casper)
 #    include(middleware_usb_phy)

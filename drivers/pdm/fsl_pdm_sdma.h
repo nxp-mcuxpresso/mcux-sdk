@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_PDM_SDMA_H_
-#define _FSL_PDM_SDMA_H_
+#ifndef FSL_PDM_SDMA_H_
+#define FSL_PDM_SDMA_H_
 
 #include "fsl_pdm.h"
 #include "fsl_sdma.h"
@@ -23,9 +23,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_PDM_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 7, 0)) /*!< Version 2.7.0 */
-/*@}*/
+/*! @} */
 
 typedef struct _pdm_sdma_handle pdm_sdma_handle_t;
 

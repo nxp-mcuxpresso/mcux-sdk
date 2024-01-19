@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SYSMPU_H_
-#define _FSL_SYSMPU_H_
+#ifndef FSL_SYSMPU_H_
+#define FSL_SYSMPU_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SYSMPU driver version 2.2.3. */
 #define FSL_SYSMPU_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
-/*@}*/
+/*! @} */
 
 /*! @brief define the start master port with read and write attributes. */
 #define SYSMPU_MASTER_RWATTRIBUTE_START_PORT (4U)
@@ -250,7 +250,7 @@ void SYSMPU_Init(SYSMPU_Type *base, const sysmpu_config_t *config);
  */
 void SYSMPU_Deinit(SYSMPU_Type *base);
 
-/* @}*/
+/*! @} */
 
 /*!
  * @name Basic Control Operations
@@ -405,7 +405,7 @@ bool SYSMPU_GetSlavePortErrorStatus(SYSMPU_Type *base, sysmpu_slave_t slaveNum);
  */
 void SYSMPU_GetDetailErrorAccessInfo(SYSMPU_Type *base, sysmpu_slave_t slaveNum, sysmpu_access_err_info_t *errInform);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -413,4 +413,4 @@ void SYSMPU_GetDetailErrorAccessInfo(SYSMPU_Type *base, sysmpu_slave_t slaveNum,
 
 /*! @}*/
 
-#endif /* _FSL_SYSMPU_H_ */
+#endif /* FSL_SYSMPU_H_ */

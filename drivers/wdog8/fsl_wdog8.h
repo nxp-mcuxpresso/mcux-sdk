@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_WDOG8_H_
-#define _FSL_WDOG8_H_
+#ifndef FSL_WDOG8_H_
+#define FSL_WDOG8_H_
 
 #include "fsl_common.h"
 
@@ -17,12 +17,12 @@
 /*******************************************************************************
  * Definitions
  *******************************************************************************/
-/*@}*/
+/*! @} */
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief WDOG8 driver version 2.0.1. */
 #define FSL_WDOG8_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief Describes WDOG8 clock source. */
 typedef enum _wdog8_clock_source
@@ -169,7 +169,7 @@ void WDOG8_Init(WDOG_Type *base, const wdog8_config_t *config);
  */
 void WDOG8_Deinit(WDOG_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name WDOG8 functional Operation
@@ -355,7 +355,7 @@ static inline uint16_t WDOG8_GetCounterValue(WDOG_Type *base)
     return ((uint16_t)(base->CNT8B.CNTH) << 8U) + (uint16_t)(base->CNT8B.CNTL);
 }
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -363,4 +363,4 @@ static inline uint16_t WDOG8_GetCounterValue(WDOG_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_WDOG8_H_ */
+#endif /* FSL_WDOG8_H_ */

@@ -198,9 +198,9 @@ typedef struct _ssd1963_config
 /*! @brief SSD1963 flip mode. */
 typedef enum _ssd1963_flip_mode
 {
-    kSSD1963_FlipNone       = 0U,                          /*!< No flip. */
-    kSSD1963_FlipVertical   = SSD1963_ADDR_MODE_FLIP_VERT, /*!< Flip vertical, set_address_mode A[0] */
-    kSSD1963_FlipHorizontal = SSD1963_ADDR_MODE_FLIP_HORZ, /*!< Flip horizontal, set_address_mode A[1] */
+    kSSD1963_FlipNone       = 0U,                                  /*!< No flip. */
+    kSSD1963_FlipVertical   = SSD1963_ADDR_MODE_FLIP_VERT,         /*!< Flip vertical, set_address_mode A[0] */
+    kSSD1963_FlipHorizontal = SSD1963_ADDR_MODE_FLIP_HORZ,         /*!< Flip horizontal, set_address_mode A[1] */
     kSSD1963_FlipBoth =
         SSD1963_ADDR_MODE_FLIP_VERT | SSD1963_ADDR_MODE_FLIP_HORZ, /*!< Flip both vertical and horizontal. */
 } ssd1963_flip_mode_t;
@@ -212,13 +212,13 @@ typedef enum _ssd1963_flip_mode
  */
 typedef enum _ssd1963_orientation_mode_t
 {
-    kSSD1963_Orientation0 = 0U, /*!< Rotate 0 degree. */
+    kSSD1963_Orientation0 = 0U,                                                   /*!< Rotate 0 degree. */
     kSSD1963_Orientation90 =
         SSD1963_ADDR_MODE_PAGE_ADDR_ORDER | SSD1963_ADDR_MODE_PAG_COL_ADDR_ORDER, /*!< Rotate 90 degree. */
     kSSD1963_Orientation180 =
-        SSD1963_ADDR_MODE_PAGE_ADDR_ORDER | SSD1963_ADDR_MODE_COL_ADDR_ORDER, /*!< Rotate 180 degree. */
+        SSD1963_ADDR_MODE_PAGE_ADDR_ORDER | SSD1963_ADDR_MODE_COL_ADDR_ORDER,     /*!< Rotate 180 degree. */
     kSSD1963_Orientation270 =
-        SSD1963_ADDR_MODE_COL_ADDR_ORDER | SSD1963_ADDR_MODE_PAG_COL_ADDR_ORDER, /*!< Rotate 270 degree. */
+        SSD1963_ADDR_MODE_COL_ADDR_ORDER | SSD1963_ADDR_MODE_PAG_COL_ADDR_ORDER,  /*!< Rotate 270 degree. */
 } ssd1963_orientation_mode_t;
 
 /*******************************************************************************

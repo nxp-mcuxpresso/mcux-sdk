@@ -540,6 +540,15 @@
 #  # description: eRPC
 #  set(CONFIG_USE_middleware_multicore_erpc true)
 
+#  # description: erpc multiprocessor examples common files
+#  set(CONFIG_USE_middleware_multicore_erpc_common_multiprocessor true)
+
+#  # description: erpc multiprocessor matrix_multiply_client examples common files
+#  set(CONFIG_USE_middleware_multicore_erpc_common_multiprocessor_matrix_multiply_client true)
+
+#  # description: erpc multiprocessor matrix_multiply_server examples common files
+#  set(CONFIG_USE_middleware_multicore_erpc_common_multiprocessor_matrix_multiply_server true)
+
 #set.middleware.sdmmc
 #  # description: Middleware sdmmc common
 #  set(CONFIG_USE_middleware_sdmmc_common true)
@@ -560,6 +569,12 @@
 #  set(CONFIG_USE_middleware_sdmmc_host_usdhc_cache true)
 
 #set.middleware.usb
+#  # description: USB device phydcd config header
+#  set(CONFIG_USE_middleware_usb_phydcd_config_header true)
+
+#  # description: USB device hsdcd config header
+#  set(CONFIG_USE_middleware_usb_hsdcd_config_header true)
+
 #  # description: USB device khci config header
 #  set(CONFIG_USE_middleware_usb_device_khci_config_header true)
 
@@ -640,8 +655,6 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/frdmk32l2b
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/K32L2B31A
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
 )
 
 include(set_board_frdmk32l2b OPTIONAL)

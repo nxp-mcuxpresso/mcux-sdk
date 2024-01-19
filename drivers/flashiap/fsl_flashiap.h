@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FLASHIAP_H_
-#define _FSL_FLASHIAP_H_
+#ifndef FSL_FLASHIAP_H_
+#define FSL_FLASHIAP_H_
 
 #include "fsl_common.h"
 
@@ -23,9 +23,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_FLASHIAP_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief Flashiap status codes.
@@ -249,6 +249,6 @@ status_t FLASHIAP_Compare(uint32_t dstAddr, uint32_t *srcAddr, uint32_t numOfByt
 }
 #endif
 
-/*@}*/
+/*! @} */
 
-#endif /* _FSL_FLASHIAP_H_ */
+#endif /* FSL_FLASHIAP_H_ */

@@ -21,10 +21,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief CLOCK driver version 2.1.1. */
 #define FSL_SGTL5000_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief Define the register address of sgtl5000. */
 #define CHIP_ID                            0x0000U
@@ -847,10 +847,10 @@ typedef struct _sgtl_audio_format
 /*! @brief Initailize structure of sgtl5000 */
 typedef struct _sgtl_config
 {
-    sgtl_route_t route;         /*!< Audio data route.*/
-    sgtl_protocol_t bus;        /*!< Audio transfer protocol */
-    bool master_slave;          /*!< Master or slave. True means master, false means slave. */
-    sgtl_audio_format_t format; /*!< audio format */
+    sgtl_route_t route;           /*!< Audio data route.*/
+    sgtl_protocol_t bus;          /*!< Audio transfer protocol */
+    bool master_slave;            /*!< Master or slave. True means master, false means slave. */
+    sgtl_audio_format_t format;   /*!< audio format */
 
     uint8_t slaveAddress;         /*!< code device slave address */
     codec_i2c_config_t i2cConfig; /*!< i2c bus configuration */

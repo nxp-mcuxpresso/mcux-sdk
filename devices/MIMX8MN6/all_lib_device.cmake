@@ -1,11 +1,11 @@
 # Copy variable into project config.cmake to use software component
-#set.board.evkmimx8mnddr3l
-#  # description: Board_project_template evkmimx8mnddr3l
-#  set(CONFIG_USE_BOARD_Project_Template_evkmimx8mnddr3l true)
-
 #set.board.evkmimx8mn
 #  # description: Board_project_template evkmimx8mn
 #  set(CONFIG_USE_BOARD_Project_Template_evkmimx8mn true)
+
+#set.board.evkmimx8mnddr3l
+#  # description: Board_project_template evkmimx8mnddr3l
+#  set(CONFIG_USE_BOARD_Project_Template_evkmimx8mnddr3l true)
 
 #set.device.MIMX8MN6
 #  # description: Middleware baremetal
@@ -288,6 +288,9 @@
 #  # description: RPMsg-Lite XOS environment layer sources
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_xos true)
 
+#  # description: RPMsg-Lite Azure RTOS environment sources
+#  set(CONFIG_USE_middleware_multicore_rpmsg_lite_azurertos true)
+
 #  # description: RPMsg-Lite for evkmimx8mn baremetal application
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_imx8mn_m7_bm true)
 
@@ -313,10 +316,6 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimx8mn
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimx8mnddr3l
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MQ6
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MM6
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MN6
 )
 
 include(set_board_evkmimx8mn OPTIONAL)

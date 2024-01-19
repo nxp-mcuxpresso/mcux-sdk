@@ -2335,7 +2335,7 @@ status_t ENET_GetRxFrame(ENET_Type *base, enet_handle_t *handle, enet_rx_frame_s
             /* Free the incomplete frame buffers. */
             while (index-- != 0U)
             {
-                handle->rxBuffFree(base, &rxFrame->rxBuffArray[index].buffer, handle->userData, ringId);
+                handle->rxBuffFree(base, rxFrame->rxBuffArray[index].buffer, handle->userData, ringId);
             }
 
             /* Update left buffers as ready for next coming frame */

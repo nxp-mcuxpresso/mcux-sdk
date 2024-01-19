@@ -637,6 +637,12 @@
 #  set(CONFIG_USE_middleware_sdmmc_host_usdhc_cache true)
 
 #set.middleware.usb
+#  # description: USB device phydcd config header
+#  set(CONFIG_USE_middleware_usb_phydcd_config_header true)
+
+#  # description: USB device hsdcd config header
+#  set(CONFIG_USE_middleware_usb_hsdcd_config_header true)
+
 #  # description: USB device ip3511fs config header
 #  set(CONFIG_USE_middleware_usb_device_ip3511fs_config_header true)
 
@@ -764,11 +770,6 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/lpcxpresso54s018
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC54628
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MQ6
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC54S018
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S16
 )
 
 include(set_board_lpcxpresso54s018 OPTIONAL)

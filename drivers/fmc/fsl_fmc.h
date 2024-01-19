@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FMC_H_
-#define _FSL_FMC_H_
+#ifndef FSL_FMC_H_
+#define FSL_FMC_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Driver version 2.0.2. */
 #define FSL_FMC_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 2U))
-/*@}*/
+/*! @} */
 
 /*!
  * @addtogroup fmc_driver

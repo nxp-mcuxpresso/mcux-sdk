@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_ASRC_SDMA_H_
-#define _FSL_ASRC_SDMA_H_
+#ifndef FSL_ASRC_SDMA_H_
+#define FSL_ASRC_SDMA_H_
 
 #include "fsl_asrc.h"
 #include "fsl_sdma.h"
@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_ASRC_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3 */
-/*@}*/
+/*! @} */
 /*! @brief ASRC xfer queue size */
 #ifndef ASRC_XFER_IN_QUEUE_SIZE
 #define ASRC_XFER_IN_QUEUE_SIZE 4U
@@ -210,4 +210,4 @@ void ASRC_TransferAbortOutSDMA(ASRC_Type *base, asrc_sdma_handle_t *handle);
 /*!
  * @}
  */
-#endif /*_FSL_ASRC_SDMA_H_*/
+#endif /*FSL_ASRC_SDMA_H_*/

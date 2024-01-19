@@ -31,10 +31,10 @@
 #define MAKE_MEMORYID(group, device) \
     ((((group) << GROUP_ID_SHIFT) & GROUP_ID_MASK) | (((device) << DEVICE_ID_SHIFT) & DEVICE_ID_MASK))
 /*! @brief Get group ID from a given memory ID. */
-#define GROUPID(memoryId) (((memoryId)&GROUP_ID_MASK) >> GROUP_ID_SHIFT)
+#define GROUPID(memoryId) (((memoryId) & GROUP_ID_MASK) >> GROUP_ID_SHIFT)
 
 /*! @brief Get device ID from a given memory ID. */
-#define DEVICEID(memoryId) (((memoryId)&DEVICE_ID_MASK) >> DEVICE_ID_SHIFT)
+#define DEVICEID(memoryId) (((memoryId) & DEVICE_ID_MASK) >> DEVICE_ID_SHIFT)
 
 /*! @brief Memory group definition. */
 enum
@@ -90,12 +90,12 @@ enum
     kMemorySpifiNor         = MAKE_MEMORYID(kMemoryGroup_Internal, 0xAU),  /*!< SPIFI Nor memory */
     kMemoryFlashExecuteOnly = MAKE_MEMORYID(kMemoryGroup_Internal, 0x10U), /*!< Execute-only region on internal Flash */
 
-    kMemorySemcNand     = MAKE_MEMORYID(kMemoryGroup_External, 0U),    /*!< SEMC NAND memory */
-    kMemorySpiNand      = MAKE_MEMORYID(kMemoryGroup_External, 1U),    /*!< SPI NAND memory */
-    kMemorySpiNorEeprom = MAKE_MEMORYID(kMemoryGroup_External, 0x10U), /*!< SPI NOR/EEPROM memory */
-    kMemoryI2cNorEeprom = MAKE_MEMORYID(kMemoryGroup_External, 0x11U), /*!< I2C NOR/EEPROM memory */
-    kMemorySDCard       = MAKE_MEMORYID(kMemoryGroup_External, 0x20U), /*!< eSD, SD, SDHC, SDXC memory Card */
-    kMemoryMMCCard      = MAKE_MEMORYID(kMemoryGroup_External, 0x21U), /*!< MMC, eMMC memory Card */
+    kMemorySemcNand     = MAKE_MEMORYID(kMemoryGroup_External, 0U),        /*!< SEMC NAND memory */
+    kMemorySpiNand      = MAKE_MEMORYID(kMemoryGroup_External, 1U),        /*!< SPI NAND memory */
+    kMemorySpiNorEeprom = MAKE_MEMORYID(kMemoryGroup_External, 0x10U),     /*!< SPI NOR/EEPROM memory */
+    kMemoryI2cNorEeprom = MAKE_MEMORYID(kMemoryGroup_External, 0x11U),     /*!< I2C NOR/EEPROM memory */
+    kMemorySDCard       = MAKE_MEMORYID(kMemoryGroup_External, 0x20U),     /*!< eSD, SD, SDHC, SDXC memory Card */
+    kMemoryMMCCard      = MAKE_MEMORYID(kMemoryGroup_External, 0x21U),     /*!< MMC, eMMC memory Card */
 };
 
 /*! @brief Bootloader status group numbers.
@@ -111,33 +111,39 @@ enum
 /*! @brief Memory interface status codes. */
 enum
 {
-    kStatusMemoryRangeInvalid                    = MAKE_STATUS(kStatusGroup_MemoryInterface, 0),
-    kStatusMemoryReadFailed                      = MAKE_STATUS(kStatusGroup_MemoryInterface, 1),
-    kStatusMemoryWriteFailed                     = MAKE_STATUS(kStatusGroup_MemoryInterface, 2),
-    kStatusMemoryCumulativeWrite                 = MAKE_STATUS(kStatusGroup_MemoryInterface, 3),
-    kStatusMemoryAppOverlapWithExecuteOnlyRegion = MAKE_STATUS(kStatusGroup_MemoryInterface, 4),
-    kStatusMemoryNotConfigured                   = MAKE_STATUS(kStatusGroup_MemoryInterface, 5),
-    kStatusMemoryAlignmentError                  = MAKE_STATUS(kStatusGroup_MemoryInterface, 6),
-    kStatusMemoryVerifyFailed                    = MAKE_STATUS(kStatusGroup_MemoryInterface, 7),
-    kStatusMemoryWriteProtected                  = MAKE_STATUS(kStatusGroup_MemoryInterface, 8),
-    kStatusMemoryAddressError                    = MAKE_STATUS(kStatusGroup_MemoryInterface, 9),
-    kStatusMemoryBlankCheckFailed                = MAKE_STATUS(kStatusGroup_MemoryInterface, 10),
-    kStatusMemoryBlankPageReadDisallowed         = MAKE_STATUS(kStatusGroup_MemoryInterface, 11),
-    kStatusMemoryProtectedPageReadDisallowed     = MAKE_STATUS(kStatusGroup_MemoryInterface, 12),
-    kStatusMemoryFfrSpecRegionWriteBroken        = MAKE_STATUS(kStatusGroup_MemoryInterface, 13),
-    kStatusMemoryUnsupportedCommand              = MAKE_STATUS(kStatusGroup_MemoryInterface, 14),
+    kStatusMemoryRangeInvalid    = MAKE_STATUS(kStatusGroup_MemoryInterface, 0), /*!< Status: Memory Range Invalid    */
+    kStatusMemoryReadFailed      = MAKE_STATUS(kStatusGroup_MemoryInterface, 1), /*!< Status: Memory Read Failed    */
+    kStatusMemoryWriteFailed     = MAKE_STATUS(kStatusGroup_MemoryInterface, 2), /*!< Status: Memory Write Failed    */
+    kStatusMemoryCumulativeWrite = MAKE_STATUS(kStatusGroup_MemoryInterface, 3), /*!< Status: Memory Cumulative Write */
+    kStatusMemoryAppOverlapWithExecuteOnlyRegion =
+        MAKE_STATUS(kStatusGroup_MemoryInterface, 4), /*!< Status: Memory AppOverlapWithExecuteOnlyRegion */
+    kStatusMemoryNotConfigured  = MAKE_STATUS(kStatusGroup_MemoryInterface, 5), /*!< Status: Memory Not Configured */
+    kStatusMemoryAlignmentError = MAKE_STATUS(kStatusGroup_MemoryInterface, 6), /*!< Status: Memory Alignment Error */
+    kStatusMemoryVerifyFailed   = MAKE_STATUS(kStatusGroup_MemoryInterface, 7), /*!< Status: Memory Verify Failed */
+    kStatusMemoryWriteProtected = MAKE_STATUS(kStatusGroup_MemoryInterface, 8), /*!< Status: Memory Write Protected */
+    kStatusMemoryAddressError   = MAKE_STATUS(kStatusGroup_MemoryInterface, 9), /*!< Status: Memory Address Error */
+    kStatusMemoryBlankCheckFailed =
+        MAKE_STATUS(kStatusGroup_MemoryInterface, 10), /*!< Status: Memory Blank Check Failed              */
+    kStatusMemoryBlankPageReadDisallowed =
+        MAKE_STATUS(kStatusGroup_MemoryInterface, 11), /*!< Status: Memory Blank Page Read Disallowed      */
+    kStatusMemoryProtectedPageReadDisallowed =
+        MAKE_STATUS(kStatusGroup_MemoryInterface, 12), /*!< Status: Memory Protected Page Read Disallowed  */
+    kStatusMemoryFfrSpecRegionWriteBroken =
+        MAKE_STATUS(kStatusGroup_MemoryInterface, 13), /*!< Status: Memory Ffr Spec Region Write Broken    */
+    kStatusMemoryUnsupportedCommand =
+        MAKE_STATUS(kStatusGroup_MemoryInterface, 14), /*!< Status: Memory Unsupported Command             */
 };
 
 /*! @brief Bootloader status codes. */
 enum
 {
-    kStatus_UnknownCommand     = MAKE_STATUS(kStatusGroup_Bootloader, 0),
-    kStatus_SecurityViolation  = MAKE_STATUS(kStatusGroup_Bootloader, 1),
-    kStatus_AbortDataPhase     = MAKE_STATUS(kStatusGroup_Bootloader, 2),
-    kStatus_Ping               = MAKE_STATUS(kStatusGroup_Bootloader, 3),
-    kStatus_NoResponse         = MAKE_STATUS(kStatusGroup_Bootloader, 4),
-    kStatus_NoResponseExpected = MAKE_STATUS(kStatusGroup_Bootloader, 5),
-    kStatus_CommandUnsupported = MAKE_STATUS(kStatusGroup_Bootloader, 6),
+    kStatus_UnknownCommand     = MAKE_STATUS(kStatusGroup_Bootloader, 0), /*!< Status: Unknown Command */
+    kStatus_SecurityViolation  = MAKE_STATUS(kStatusGroup_Bootloader, 1), /*!< Status: Security Violation*/
+    kStatus_AbortDataPhase     = MAKE_STATUS(kStatusGroup_Bootloader, 2), /*!< Status: Abort Data Phase */
+    kStatus_Ping               = MAKE_STATUS(kStatusGroup_Bootloader, 3), /*!< Status: Ping */
+    kStatus_NoResponse         = MAKE_STATUS(kStatusGroup_Bootloader, 4), /*!< Status: No Response */
+    kStatus_NoResponseExpected = MAKE_STATUS(kStatusGroup_Bootloader, 5), /*!< Status: No Response Expected */
+    kStatus_CommandUnsupported = MAKE_STATUS(kStatusGroup_Bootloader, 6), /*!< Status: Command Unsupported */
 };
 
 /*!
@@ -189,7 +195,7 @@ typedef union StandardVersion
         uint8_t major;  /*!< major version [23:16] */
         char name;      /*!< name [31:24] */
     };
-    uint32_t version; /*!< combined version numbers */
+    uint32_t version;   /*!< combined version numbers */
 } standard_version_t;
 
 /*! @brief API initialization data structure */
@@ -226,7 +232,8 @@ status_t MEM_Init(api_core_context_t *coreCtx);
 /*!
  * @brief Configure memory interface
  *
- * @param config A pointer to the storage for the driver runtime state.
+ * @param coreCtx A pointer to the storage for the driver runtime state.
+ * @param config memory configure struct.
  * @param memoryId Indicates the index of the memory type. Please refer to "Memory group definition"
 
  * @retval #kStatus_Success
@@ -236,17 +243,17 @@ status_t MEM_Init(api_core_context_t *coreCtx);
  * @retval #kStatusMemoryRangeInvalid
  * @retval #kStatus_Fail
  * @retval #kStatus_OutOfRange
- * @retval #kStatus_SPI_BaudrateNotSupport
 */
 status_t MEM_Config(api_core_context_t *coreCtx, uint32_t *config, uint32_t memoryId);
 
 /*!
  * @brief Write memory.
  *
- * @param address The start address of the desired flash memory to be programmed.
+ * @param coreCtx A pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be programmed.
                   For internal flash the address need to be 512bytes-aligned.
- * @param length Number of bytes to be programmed.
- * @param buffer A pointer to the source buffer of data that is to be programmed into the flash.
+ * @param lengthInBytes Number of bytes to be programmed.
+ * @param buf A pointer to the source buffer of data that is to be programmed into the flash.
  * @param memoryId Indicates the index of the memory type. Please refer to "Memory group definition"
  *
  * @retval #kStatus_Success
@@ -274,10 +281,12 @@ status_t MEM_Write(
 /*!
  * @brief Fill memory with a word pattern.
  *
- * @param address The start address of the desired flash memory to be programmed.
+ * @param coreCtx A pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be programmed.
  *                For internal flash the address need to be 512bytes-aligned.
- * @param length  Number of bytes to be programmed.
+ * @param lengthInBytes  Number of bytes to be programmed.
  * @param pattern The data to be written into the specified memory area.
+ * @param memoryId Indicates the index of the memory type. Please refer to "Memory group definition"
  *
  * @retval #kStatus_CommandUnsupported
  * @retval #kStatus_Success
@@ -320,8 +329,9 @@ status_t MEM_Flush(api_core_context_t *coreCtx);
 /*!
  * @brief Erase memory.
  *
- * @param address The start address of the desired flash memory to be erased.
- * @param length Number of bytes to be read.
+ * @param coreCtx A pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be erased.
+ * @param lengthInBytes Number of bytes to be read.
  * @param memoryId Indicates the index of the memory type. Please refer to "Memory group definition"
  *
  * @retval #kStatus_Success
@@ -347,6 +357,7 @@ status_t MEM_Erase(api_core_context_t *coreCtx, uint32_t start, uint32_t lengthI
 /*!
  * @brief Erase entire memory based on memoryId
  *
+ * @param coreCtx A pointer to the storage for the driver runtime state.
  * @param memoryId Indicates the index of the memory type. Please refer to "Memory group definition"
  *
  * @retval #kStatus_Success

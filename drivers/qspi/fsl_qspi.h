@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_QSPI_H_
-#define _FSL_QSPI_H_
+#ifndef FSL_QSPI_H_
+#define FSL_QSPI_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief QSPI driver version 2.2.3. */
 #define FSL_QSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
-/*@}*/
+/*! @} */
 
 /*! @brief Macro functions for LUT table */
 #define QSPI_LUT_SEQ(cmd0, pad0, op0, cmd1, pad1, op1)                                                        \
@@ -514,7 +514,7 @@ static inline uint32_t QSPI_GetTxDataRegisterAddress(QuadSPI_Type *base)
  */
 uint32_t QSPI_GetRxDataRegisterAddress(QuadSPI_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Bus Operations
@@ -746,6 +746,6 @@ static inline void QSPI_TransferReceiveBlocking(QuadSPI_Type *base, qspi_transfe
 }
 #endif
 
-/* @}*/
+/*! @} */
 
-#endif /* _FSL_QSPI_H_*/
+#endif /* FSL_QSPI_H_*/

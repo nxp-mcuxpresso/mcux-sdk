@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_OTP_H_
-#define _FSL_OTP_H_
+#ifndef FSL_OTP_H_
+#define FSL_OTP_H_
 
 #include "fsl_common.h"
 
@@ -25,7 +25,7 @@
 #endif
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief OTP driver version 2.0.1.
  *
  * Current version: 2.0.1
@@ -39,7 +39,7 @@
  *   - Initial version.
  */
 #define FSL_OTP_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief Bank bit flags. */
 typedef enum _otp_bank
@@ -204,4 +204,4 @@ static inline uint32_t OTP_GetDriverVersion(void)
 
 /*! @}*/
 
-#endif /* _FSL_OTP_H_ */
+#endif /* FSL_OTP_H_ */

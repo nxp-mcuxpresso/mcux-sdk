@@ -78,7 +78,7 @@ typedef struct _srtm_audio_service
 {
     struct _srtm_service service;
     srtm_list_t ifaces;
-} * srtm_audio_service_t;
+} *srtm_audio_service_t;
 
 /* Audio interface */
 typedef struct _srtm_audio_iface
@@ -91,7 +91,7 @@ typedef struct _srtm_audio_iface
     srtm_channel_t channel;
     srtm_list_t freeProcs;
     uint32_t useCount;
-} * srtm_audio_iface_t;
+} *srtm_audio_iface_t;
 
 srtm_audio_format_map_t saiFormatMap[6] = {{SRTM_Audio_Stereo16Bits, 16U}, {SRTM_Audio_Stereo24Bits, 24U},
                                            {SRTM_Audio_Stereo32Bits, 32U}, {SRTM_Audio_DSD8bits, 8U},

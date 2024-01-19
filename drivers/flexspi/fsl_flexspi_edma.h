@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FLEXSPI_EDMA_H_
-#define _FSL_FLEXSPI_EDMA_H_
+#ifndef FSL_FLEXSPI_EDMA_H_
+#define FSL_FLEXSPI_EDMA_H_
 
 #include "fsl_flexspi.h"
 #if defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT
@@ -25,10 +25,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief FLEXSPI EDMA driver version. */
 #define FSL_FLEXSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
-/*@}*/
+/*! @} */
 
 typedef struct _flexspi_edma_handle flexspi_edma_handle_t;
 
@@ -139,12 +139,12 @@ void FLEXSPI_TransferAbortEDMA(FLEXSPI_Type *base, flexspi_edma_handle_t *handle
  */
 status_t FLEXSPI_TransferGetTransferCountEDMA(FLEXSPI_Type *base, flexspi_edma_handle_t *handle, size_t *count);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
-/* @} */
+/*! @} */
 
-#endif /* _FSL_FLEXSPI_EDMA_H_ */
+#endif /* FSL_FLEXSPI_EDMA_H_ */

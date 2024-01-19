@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FLASH_H_
-#define _FSL_FLASH_H_
+#ifndef FSL_FLASH_H_
+#define FSL_FLASH_H_
 
 #if (defined(BL_TARGET_FLASH) || defined(BL_TARGET_ROM) || defined(BL_TARGET_RAM))
 #include <assert.h>
@@ -47,7 +47,7 @@ enum _flash_driver_version_constants
     kFLASH_DriverVersionMinor  = 1,   /*!< Minor flash driver version.*/
     kFLASH_DriverVersionBugfix = 1    /*!< Bugfix for flash driver version.*/
 };
-/*@}*/
+/*! @} */
 
 /*!
  * @name Flash configuration
@@ -95,7 +95,7 @@ enum _flash_driver_version_constants
 
 /*! @brief Enable flash stalling controller */
 #define FLASH_ENABLE_STALLING_FLASH_CONTROLLER 1
-/*@}*/
+/*! @} */
 
 /*!
  * @name Flash status
@@ -169,7 +169,7 @@ enum
 
 };
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Flash API key
@@ -191,7 +191,7 @@ enum _flash_driver_api_keys
 {
     kFLASH_ApiEraseKey = FOUR_CHAR_CODE('k', 'f', 'e', 'k') /*!< Key value used to validate all flash erase APIs.*/
 };
-/*@}*/
+/*! @} */
 
 /*!
  * @brief Enumeration for supported flash user margin levels.
@@ -469,7 +469,7 @@ status_t FLASH_SetCallback(flash_config_t *config, flash_callback_t callback);
 status_t FLASH_PrepareExecuteInRamFunctions(flash_config_t *config);
 #endif /* FLASH_DRIVER_IS_FLASH_RESIDENT */
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Erasing
@@ -566,7 +566,7 @@ status_t FLASH_EraseEEprom(flash_config_t *config, uint32_t start, uint32_t leng
 status_t FLASH_EraseAllUnsecure(flash_config_t *config, uint32_t key);
 #endif /* FSL_FEATURE_FLASH_HAS_UNSECURE_FLASH_CMD */
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Programming
@@ -645,7 +645,7 @@ status_t FLASH_ProgramOnce(flash_config_t *config, uint32_t index, uint32_t *src
 status_t FLASH_EepromWrite(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
 #endif /* FLASH_SSD_IS_EEPROM_ENABLED */
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Reading
@@ -673,7 +673,7 @@ status_t FLASH_EepromWrite(flash_config_t *config, uint32_t start, uint8_t *src,
  */
 status_t FLASH_ReadOnce(flash_config_t *config, uint32_t index, uint32_t *dst, uint32_t lengthInBytes);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Security
@@ -713,7 +713,7 @@ status_t FLASH_GetSecurityState(flash_config_t *config, flash_security_state_t *
  */
 status_t FLASH_SecurityBypass(flash_config_t *config, const uint8_t *backdoorKey);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Verification
@@ -765,7 +765,7 @@ status_t FLASH_VerifyEraseAll(flash_config_t *config, flash_margin_value_t margi
  */
 status_t FLASH_VerifyErase(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, flash_margin_value_t margin);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Protection
@@ -795,7 +795,7 @@ status_t FLASH_IsProtected(flash_config_t *config,
                            uint32_t lengthInBytes,
                            flash_protection_state_t *protection_state);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Properties
@@ -832,7 +832,7 @@ status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichPro
  */
 status_t FLASH_SetProperty(flash_config_t *config, flash_property_tag_t whichProperty, uint32_t value);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Flash Protection Utilities
@@ -891,7 +891,7 @@ status_t FLASH_EepromSetProtection(flash_config_t *config, uint8_t protectStatus
 status_t FLASH_EepromGetProtection(flash_config_t *config, uint8_t *protectStatus);
 #endif /* FLASH_SSD_IS_EEPROM_ENABLED */
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Flash Speculation Utilities
@@ -915,7 +915,7 @@ status_t FLASH_PflashSetPrefetchSpeculation(flash_prefetch_speculation_status_t 
  */
 status_t FLASH_PflashGetPrefetchSpeculation(flash_prefetch_speculation_status_t *speculationStatus);
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -923,4 +923,4 @@ status_t FLASH_PflashGetPrefetchSpeculation(flash_prefetch_speculation_status_t 
 
 /*! @}*/
 
-#endif /* _FSL_FLASH_H_ */
+#endif /* FSL_FLASH_H_ */

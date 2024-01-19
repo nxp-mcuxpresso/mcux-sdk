@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_SPI_DMA_H_
-#define _FSL_SPI_DMA_H_
+#ifndef FSL_SPI_DMA_H_
+#define FSL_SPI_DMA_H_
 
 #include "fsl_dma.h"
 #include "fsl_spi.h"
@@ -23,10 +23,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SPI DMA driver version 2.1.1. */
-#define FSL_SPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
-/*@}*/
+#define FSL_SPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @} */
 
 typedef struct _spi_dma_handle spi_dma_handle_t;
 
@@ -38,13 +38,20 @@ struct _spi_dma_handle
 {
     volatile bool txInProgress;  /*!< Send transfer finished */
     volatile bool rxInProgress;  /*!< Receive transfer finished */
+    uint8_t bytesPerFrame;       /*!< Bytes in a frame for SPI transfer */
+    uint8_t lastwordBytes;       /*!< The Bytes of lastword for master*/
     dma_handle_t *txHandle;      /*!< DMA handler for SPI send */
     dma_handle_t *rxHandle;      /*!< DMA handler for SPI receive */
-    uint8_t bytesPerFrame;       /*!< Bytes in a frame for SPI transfer */
     spi_dma_callback_t callback; /*!< Callback for SPI DMA transfer */
     void *userData;              /*!< User Data for SPI DMA callback */
     uint32_t state;              /*!< Internal state of SPI DMA transfer */
     size_t transferSize;         /*!< Bytes need to be transfer */
+    uint32_t instance;           /*!< Index of SPI instance*/
+    uint8_t *txNextData;         /*!< The pointer of next time tx data*/
+    uint8_t *txEndData;          /*!< The pointer of end of data*/
+    uint8_t *rxNextData;         /*!< The pointer of next time rx data*/
+    uint8_t *rxEndData;          /*!< The pointer of end of rx data*/
+    uint32_t dataBytesEveryTime; /*!< Bytes in a time for DMA transfer, default is DMA_MAX_TRANSFER_COUNT */
 };
 
 /*******************************************************************************
@@ -205,4 +212,4 @@ static inline status_t SPI_SlaveTransferGetCountDMA(SPI_Type *base, spi_dma_hand
 
 /*! @} */
 
-#endif /* _FSL_SPI_DMA_H_*/
+#endif /* FSL_SPI_DMA_H_*/

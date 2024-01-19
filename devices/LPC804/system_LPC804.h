@@ -60,7 +60,9 @@ extern "C" {
 #define CLK_RTC_32K_CLK                   32768u           /* RTC oscillator 32 kHz output (32k_clk */
 #define CLK_FRO_12MHZ                  12000000u           /* FRO 12 MHz (fro_12m) */
 #define CLK_OSC_IN                     12000000u           /* Oscillator input */
+#define CLK_OSC_LP                     1000000u            /* Low power oscillator */
 
+volatile extern uint32_t g_Fro_Osc_Freq;
 
 /**
  * @brief System clock frequency (core clock)

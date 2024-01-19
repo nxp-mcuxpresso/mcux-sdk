@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2019, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -79,7 +79,7 @@ bool CLOCK_SetFRGClkFreq(uint32_t freq)
 {
     assert(freq);
 
-    uint32_t *base = (uint32_t *)(&SYSCON->FRG);
+    uint32_t *base = (uint32_t *)(uint32_t)(&SYSCON->FRG);
     uint32_t input = CLOCK_GetFRGInputClkFreq(base);
     uint32_t mul;
 
@@ -114,7 +114,7 @@ uint32_t CLOCK_GetFRGClkFreq(void)
 {
     uint32_t temp;
 
-    temp = CLOCK_GetFRGInputClkFreq((uint32_t *)(&SYSCON->FRG)) << 8U;
+    temp = CLOCK_GetFRGInputClkFreq((uint32_t *)(uint32_t)(&SYSCON->FRG)) << 8U;
     return (uint32_t)(((uint64_t)(temp)) / (((uint64_t)SYSCON->FRG->FRGMULT & SYSCON_FRG_FRGMULT_MULT_MASK) + 256ULL));
 }
 

@@ -1,6 +1,0 @@
-<map id="fqAeqNormqA" name="fqAeqNormqA">
-<area shape="rect" id="node2" href="$a00899.html#ad60a32e44f24a4b8fa5bddfb23721bc8" title="function low pass filters an orientation quaternion and computes virtual gyro rotation rate ..." alt="" coords="170,5,345,32"/>
-<area shape="rect" id="node3" href="$a00899.html#a04da5468213c1687c5b3485f15af288e" title="compute the orientation quaternion from a 3x3 rotation matrix " alt="" coords="156,56,359,83"/>
-<area shape="rect" id="node4" href="$a00848.html#a942d619f897d6820d5c148bdc910f962" title="fRun_6DOF_GY_KALMAN" alt="" coords="407,81,583,108"/>
-<area shape="rect" id="node5" href="$a00848.html#a288f51cd39aeb8ace643d844e219e9d3" title="fRun_3DOF_Y_BASIC" alt="" coords="182,157,333,184"/>
-</map>

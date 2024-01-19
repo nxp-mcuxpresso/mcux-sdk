@@ -21,11 +21,11 @@ typedef struct tfa_msg
     int data[9];
 } tfa_msg_t;
 
-//#if (defined(WIN32) || defined(_X64))
+// #if (defined(WIN32) || defined(_X64))
 ///* These warnings are disabled because it is only given by Windows and there is no easy fix */
-//#pragma warning(disable:4200)
-//#pragma warning(disable:4214)
-//#endif
+// #pragma warning(disable:4200)
+// #pragma warning(disable:4214)
+// #endif
 
 /*
  * profiles & volumesteps
@@ -190,10 +190,10 @@ typedef struct nxpTfaAntiAliasFilter
 {
     nxpTfaBiquad_t biquad; /**< Output results fixed point coeffs */
     uint8_t enabled;
-    float cutOffFreq;   // cut off frequency
-    float samplingFreq; // sampling frequency
-    float rippleDb;     // range: [0.1 3.0]
-    float rolloff;      // range: [-1.0 1.0]
+    float cutOffFreq;      // cut off frequency
+    float samplingFreq;    // sampling frequency
+    float rippleDb;        // range: [0.1 3.0]
+    float rolloff;         // range: [-1.0 1.0]
 } nxpTfaAntiAliasFilter_t;
 
 /**
@@ -221,22 +221,22 @@ typedef struct nxpTfaEqFilter
 
 typedef struct nxpTfaContAntiAlias
 {
-    int8_t index; /**< index determines destination type; anti-alias, integrator,eq */
+    int8_t index;         /**< index determines destination type; anti-alias, integrator,eq */
     uint8_t type;
-    float cutOffFreq; // cut off frequency
+    float cutOffFreq;     // cut off frequency
     float samplingFreq;
-    float rippleDb; // integrator leakage
+    float rippleDb;       // integrator leakage
     float rolloff;
     uint8_t bytes[5 * 3]; // payload 5*24buts coeffs
 } nxpTfaContAntiAlias_t;
 
 typedef struct nxpTfaContIntegrator
 {
-    int8_t index; /**< index determines destination type; anti-alias, integrator,eq */
+    int8_t index;         /**< index determines destination type; anti-alias, integrator,eq */
     uint8_t type;
-    float cutOffFreq; // cut off frequency
+    float cutOffFreq;     // cut off frequency
     float samplingFreq;
-    float leakage; // integrator leakage
+    float leakage;        // integrator leakage
     float reserved;
     uint8_t bytes[5 * 3]; // payload 5*24buts coeffs
 } nxpTfaContIntegrator_t;

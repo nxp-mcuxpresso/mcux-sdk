@@ -27,10 +27,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief TFA9XXX driver version 8.1.2. */
 #define FSL_TFA9XXX_DRIVER_VERSION (MAKE_VERSION(8, 1, 2))
-/*@}*/
+/*! @} */
 
 /*! @brief tfa9xxx handle size */
 #ifndef TFA9XXX_I2C_HANDLER_SIZE

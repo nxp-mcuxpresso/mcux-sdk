@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_LCDIFV2_H_
-#define _FSL_LCDIFV2_H_
+#ifndef FSL_LCDIFV2_H_
+#define FSL_LCDIFV2_H_
 
 #include "fsl_common.h"
 
@@ -25,10 +25,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LCDIF v2 driver version */
 #define FSL_LCDIFV2_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
-/*@}*/
+/*! @} */
 
 #if defined(FSL_FEATURE_LCDIFV2_LAYER_COUNT) && (!defined(LCDIFV2_LAYER_COUNT))
 #define LCDIFV2_LAYER_COUNT FSL_FEATURE_LCDIFV2_LAYER_COUNT
@@ -305,7 +305,7 @@ void LCDIFV2_Deinit(LCDIFV2_Type *base);
  */
 void LCDIFV2_Reset(LCDIFV2_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Display
@@ -361,7 +361,7 @@ static inline void LCDIFV2_EnableDisplay(LCDIFV2_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -416,7 +416,7 @@ static inline void LCDIFV2_ClearInterruptStatus(LCDIFV2_Type *base, uint8_t doma
     base->INT[domain].INT_STATUS = mask;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name LUT
@@ -442,7 +442,7 @@ static inline void LCDIFV2_ClearInterruptStatus(LCDIFV2_Type *base, uint8_t doma
 status_t LCDIFV2_SetLut(
     LCDIFV2_Type *base, uint8_t layerIndex, const uint32_t *lutData, uint16_t count, bool useShadowLoad);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Layer operation
@@ -571,7 +571,7 @@ void LCDIFV2_SetLayerBlendConfig(LCDIFV2_Type *base, uint8_t layerIndex, const l
  */
 void LCDIFV2_SetCscMode(LCDIFV2_Type *base, uint8_t layerIndex, lcdifv2_csc_mode_t mode);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Porter Duff
@@ -605,7 +605,7 @@ status_t LCDIFV2_GetPorterDuffConfig(lcdifv2_pd_blend_mode_t mode,
                                      lcdifv2_pd_layer_t layer,
                                      lcdifv2_blend_config_t *config);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Misc
@@ -644,12 +644,12 @@ status_t LCDIFV2_GetPorterDuffConfig(lcdifv2_pd_blend_mode_t mode,
  */
 status_t LCDIFV2_GetMultiLayerGlobalAlpha(const uint8_t blendedAlpha[], uint8_t globalAlpha[], uint8_t layerCount);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */
 
-/* @} */
+/*! @} */
 
-#endif /*_FSL_LCDIFV2_H_*/
+#endif /*FSL_LCDIFV2_H_*/

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 NXP
+ * Copyright 2017-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -324,7 +324,7 @@ static status_t hashcrypt_check_need_key(HASHCRYPT_Type *base, hashcrypt_handle_
  * @param Number of bytes to copy.
  * @return kStatus_Success if no hashing error, kStatus_Fail otherwise.
  */
-static status_t hashcrypt_get_data(HASHCRYPT_Type *base, uint32_t *output, size_t outputSize)
+static status_t hashcrypt_get_data(HASHCRYPT_Type *base, uint8_t *output, size_t outputSize)
 {
     status_t status = kStatus_Fail;
     uint32_t digest[8];
@@ -351,7 +351,7 @@ static status_t hashcrypt_get_data(HASHCRYPT_Type *base, uint32_t *output, size_
     {
         outputSize = sizeof(digest);
     }
-    (void)hashcrypt_memcpy(output, digest, outputSize);
+    (void)hashcrypt_memcpy(output, (const uint8_t *)(uintptr_t)digest, outputSize);
 
     return status;
 }
@@ -490,7 +490,8 @@ static status_t hashcrypt_aes_one_block_unaligned(HASHCRYPT_Type *base,
     {
         size_t actSz     = size >= 256u ? 256u : size;
         size_t actSzOrig = actSz;
-        (void)memcpy(temp, (const uint32_t *)(uintptr_t)(input + 256 * cnt), actSz);
+        /* Memcpy input not typecast; see memcpy *important* note in hashcrypt_sha_one_block() */
+        (void)hashcrypt_memcpy(temp, (input + 256 * cnt), actSz);
         size -= actSz;
         base->MEMADDR   = HASHCRYPT_MEMADDR_BASE(temp);
         base->MEMCTRL   = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(actSz / 16U);
@@ -508,7 +509,7 @@ static status_t hashcrypt_aes_one_block_unaligned(HASHCRYPT_Type *base,
             outidx += HASHCRYPT_AES_BLOCK_SIZE / 4U;
             actSz -= HASHCRYPT_AES_BLOCK_SIZE;
         }
-        (void)memcpy(output + 256 * cnt, (const uint8_t *)(uintptr_t)temp, actSzOrig);
+        (void)hashcrypt_memcpy(output + 256 * cnt, (const uint8_t *)(uintptr_t)temp, actSzOrig);
         cnt++;
     }
 
@@ -663,7 +664,10 @@ static void hashcrypt_sha_one_block(HASHCRYPT_Type *base, const uint8_t *blk)
     /* make sure the 512-bit block is word aligned */
     if (0U != ((uintptr_t)blk & 0x3u))
     {
-        (void)hashcrypt_memcpy(temp, (const uint32_t *)(uintptr_t)blk, SHA_BLOCK_SIZE);
+        (void)hashcrypt_memcpy(temp, blk, SHA_BLOCK_SIZE);
+        /* Important: do not cast blk to any other type then uint8_t. Depending on the compiler and optimization level,
+         * compiler might decide to use a mempy implementation that does not work on non aligned addresses, resulting in
+         * a hard fault */
         actBlk = (const uint32_t *)(uintptr_t)temp;
     }
     else
@@ -898,6 +902,23 @@ static void hashcrypt_restore_running_hash(HASHCRYPT_Type *base, hashcrypt_sha_c
 #endif
 }
 
+/* Load random number into PRNG_SEED register */
+/* Used in AES operations for SCA protection */
+static void hashcrypt_seed_prng(HASHCRYPT_Type *base)
+{
+#if defined(FSL_FEATURE_HASHCRYPT_HAS_RELOAD_FEATURE) && (FSL_FEATURE_HASHCRYPT_HAS_RELOAD_FEATURE > 0)
+
+#if defined(FSL_FEATURE_SOC_LPC_RNG1_COUNT) && (FSL_FEATURE_SOC_LPC_RNG1_COUNT > 0)
+    base->PRNG_SEED = RNG->RANDOM_NUMBER;
+#endif /* defined(FSL_FEATURE_SOC_LPC_RNG1_COUNT) && (FSL_FEATURE_SOC_LPC_RNG1_COUNT > 0) */
+
+#if defined(FSL_FEATURE_SOC_TRNG_COUNT) && (FSL_FEATURE_SOC_TRNG_COUNT > 0)
+    base->PRNG_SEED = TRNG->ENT[15];
+#endif /* defined(FSL_FEATURE_SOC_TRNG_COUNT) && (FSL_FEATURE_SOC_TRNG_COUNT > 0) */
+
+#endif /* defined(FSL_FEATURE_HASHCRYPT_HAS_RELOAD_FEATURE) && (FSL_FEATURE_HASHCRYPT_HAS_RELOAD_FEATURE > 0) */
+}
+
 status_t HASHCRYPT_SHA(HASHCRYPT_Type *base,
                        hashcrypt_algo_t algo,
                        const uint8_t *input,
@@ -1082,7 +1103,7 @@ status_t HASHCRYPT_SHA_Finish(HASHCRYPT_Type *base, hashcrypt_hash_ctx_t *ctx, u
         }
     }
 
-    status = hashcrypt_get_data(base, (uint32_t *)(uintptr_t)output, algOutSize);
+    status = hashcrypt_get_data(base, output, algOutSize);
     if (kStatus_Success != status)
     {
         return status;
@@ -1233,6 +1254,8 @@ status_t HASHCRYPT_AES_EncryptEcb(
         return kStatus_InvalidArgument;
     }
 
+    hashcrypt_seed_prng(base);
+
     uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0U : 1u;
     base->CRYPTCFG   = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesEcb) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
                      HASHCRYPT_CRYPTCFG_AESSECRET(keyType) | HASHCRYPT_CRYPTCFG_AESKEYSZ(handle->keySize) |
@@ -1271,6 +1294,8 @@ status_t HASHCRYPT_AES_DecryptEcb(
     {
         return kStatus_InvalidArgument;
     }
+
+    hashcrypt_seed_prng(base);
 
     uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0U : 1u;
     base->CRYPTCFG   = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesEcb) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_DECRYPT) |
@@ -1314,6 +1339,8 @@ status_t HASHCRYPT_AES_EncryptCbc(HASHCRYPT_Type *base,
     {
         return kStatus_InvalidArgument;
     }
+
+    hashcrypt_seed_prng(base);
 
     uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0U : 1u;
     base->CRYPTCFG   = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCbc) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
@@ -1360,6 +1387,8 @@ status_t HASHCRYPT_AES_DecryptCbc(HASHCRYPT_Type *base,
     {
         return kStatus_InvalidArgument;
     }
+
+    hashcrypt_seed_prng(base);
 
     uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0U : 1u;
     base->CRYPTCFG   = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCbc) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_DECRYPT) |
@@ -1411,6 +1440,8 @@ status_t HASHCRYPT_AES_CryptCtr(HASHCRYPT_Type *base,
     {
         return kStatus_InvalidArgument;
     }
+
+    hashcrypt_seed_prng(base);
 
     uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0U : 1u;
     base->CRYPTCFG   = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCtr) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
@@ -1519,6 +1550,8 @@ status_t HASHCRYPT_AES_CryptOfb(HASHCRYPT_Type *base,
 
     uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0U : 1u;
 
+    hashcrypt_seed_prng(base);
+
     base->CRYPTCFG = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCbc) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
                      HASHCRYPT_CRYPTCFG_AESSECRET(keyType) | HASHCRYPT_CRYPTCFG_AESKEYSZ(handle->keySize) |
                      HASHCRYPT_CRYPTCFG_MSW1ST_OUT(1) | HASHCRYPT_CRYPTCFG_SWAPKEY(1) | HASHCRYPT_CRYPTCFG_SWAPDAT(1) |
@@ -1604,6 +1637,8 @@ status_t HASHCRYPT_AES_EncryptCfb(HASHCRYPT_Type *base,
 
     uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0U : 1u;
 
+    hashcrypt_seed_prng(base);
+
     base->CRYPTCFG = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCbc) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
                      HASHCRYPT_CRYPTCFG_AESSECRET(keyType) | HASHCRYPT_CRYPTCFG_AESKEYSZ(handle->keySize) |
                      HASHCRYPT_CRYPTCFG_MSW1ST_OUT(1) | HASHCRYPT_CRYPTCFG_SWAPKEY(1) | HASHCRYPT_CRYPTCFG_SWAPDAT(1) |
@@ -1686,6 +1721,8 @@ status_t HASHCRYPT_AES_DecryptCfb(HASHCRYPT_Type *base,
     }
 
     uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0U : 1u;
+
+    hashcrypt_seed_prng(base);
 
     base->CRYPTCFG = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCbc) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
                      HASHCRYPT_CRYPTCFG_AESSECRET(keyType) | HASHCRYPT_CRYPTCFG_AESKEYSZ(handle->keySize) |

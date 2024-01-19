@@ -1,8 +1,0 @@
-<map id="algorithms/sensorfusion/sources/main_freertos_agm02_power_cycling.c" name="algorithms/sensorfusion/sources/main_freertos_agm02_power_cycling.c">
-<area shape="rect" id="node14" href="$a00170.html" title="The register_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="1333,109,1450,136"/>
-<area shape="rect" id="node17" href="$a00914.html" title="The sensor_fusion.h file implements the top level programming interface. " alt="" coords="1888,184,2001,211"/>
-<area shape="rect" id="node18" href="$a00779.html" title="Defines control sub&#45;system. " alt="" coords="1805,109,1877,136"/>
-<area shape="rect" id="node19" href="$a00923.html" title="Application&#45;specific status subsystem. " alt="" coords="1901,109,1970,136"/>
-<area shape="rect" id="node20" href="$a00842.html" title="Provides function prototypes for driver level interfaces. " alt="" coords="1995,109,2065,136"/>
-<area shape="rect" id="node21" href="$a00848.html" title="Lower level sensor fusion interface. " alt="" coords="2090,109,2157,136"/>
-</map>

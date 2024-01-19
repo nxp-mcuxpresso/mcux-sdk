@@ -40,11 +40,11 @@
 #endif
 
 #ifndef PM_RESC_GROUP_ARRAY_SIZE
-#define PM_RESC_GROUP_ARRAY_SIZE (1U)
+#define PM_RESC_GROUP_ARRAY_SIZE ((PM_CONSTRAINT_COUNT) / 8U + 1U)
 #endif /* PM_RESC_GROUP_ARRAY_SIZE */
 
 #ifndef PM_RESC_MASK_ARRAY_SIZE
-#define PM_RESC_MASK_ARRAY_SIZE (1U)
+#define PM_RESC_MASK_ARRAY_SIZE ((PM_CONSTRAINT_COUNT) / 32 + 1)
 #endif /* PM_RESC_MASK_ARRAY_SIZE */
 
 #define PM_RESOURCE_OFF          (0U)
@@ -52,12 +52,20 @@
 #define PM_RESOURCE_PARTABLE_ON2 (2U)
 #define PM_RESOURCE_FULL_ON      (4U)
 
+/* The whole counter for constraint is allocated as 8-bits width. */
+#define PM_PARTABLE_ON1_COUNTER_SIZE (3U)
+#define PM_PARTABLE_ON1_COUNTER_MASK (0x7U)
+#define PM_PARTABLE_ON2_COUNTER_SIZE (3U)
+#define PM_PARTABLE_ON2_COUNTER_MASK (0x38U)
+#define PM_FULL_ON_COUNTER_SIZE      (2U)
+#define PM_FULL_ON_COUNTER_MASK      (0xC0U)
+
 #ifndef PM_ENCODE_RESC
 #define PM_ENCODE_RESC(opMode, rescShift) ((((uint32_t)(opMode)) << 8UL) | (rescShift))
 #endif /* PM_ENCODE_RESC */
 
 #ifndef PM_DECODE_RESC
-#define PM_DECODE_RESC(resConstraint)               \
+#define PM_DECODE_RESC(resConstraint)                         \
     opMode    = (uint32_t)(((uint32_t)resConstraint) >> 8UL); \
     rescShift = (uint32_t)(((uint32_t)resConstraint) & 0xFFUL)
 #endif /* PM_DECODE_RESC */

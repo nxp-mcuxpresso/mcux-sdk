@@ -84,13 +84,13 @@ typedef struct _i2c_bus
     srtm_i2c_type_t type;
     uint8_t switch_idx;
     srtm_i2c_switch_channel switch_channel;
-} * i2c_bus_t;
+} *i2c_bus_t;
 
 typedef struct _i2c_switch
 {
     uint16_t slaveAddr;
     srtm_i2c_switch_channel cur_channel;
-} * i2c_switch_t;
+} *i2c_switch_t;
 
 typedef struct _i2c_bus_structure
 {

@@ -50,8 +50,7 @@ srtm_status_t SRTM_Sem_Post(srtm_sem_t sem)
 {
     srtm_status_t status     = SRTM_Status_Error;
     portBASE_TYPE taskToWake = pdFALSE;
-
-    if (__get_IPSR() != 0U)
+    if (xPortIsInsideInterrupt() == pdTRUE)
     {
         if (xSemaphoreGiveFromISR(sem, &taskToWake) == pdPASS)
         {

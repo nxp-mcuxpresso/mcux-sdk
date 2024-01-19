@@ -1,5 +1,0 @@
-<map id="Host_IO_Send" name="Host_IO_Send">
-<area shape="rect" id="node2" href="$a00509.html#a1b0cdde224e0adf381d431058d2de34a" title="HDLC_Process_Tx_Msg" alt="" coords="160,5,324,32"/>
-<area shape="rect" id="node3" href="$a00524.html#ad708231312ecd814cb70c710fcdea37d" title="The function to Send the data to the host. " alt="" coords="195,56,289,83"/>
-<area shape="rect" id="node4" href="$a00515.html#abab3c54ca70a6f8384cd4aab3e475c19" title="JSON_Process_Tx_Msg" alt="" coords="160,107,324,133"/>
-</map>

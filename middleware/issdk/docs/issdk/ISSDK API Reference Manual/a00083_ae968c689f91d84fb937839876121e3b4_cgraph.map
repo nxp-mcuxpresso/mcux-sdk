@@ -1,6 +1,0 @@
-<map id="FXOS8700_SPI_Initialize" name="FXOS8700_SPI_Initialize">
-<area shape="rect" id="node2" href="$a00083.html#a66e23fbf473046ad3ab470ac28ea3b2e" title="The SPI Read Pre&#45;Process function to generate Sensor specific SPI Message Header. ..." alt="" coords="221,5,435,32"/>
-<area shape="rect" id="node3" href="$a00083.html#af9f15acfddc188a8153c476862b380a0" title="The SPI Write Pre&#45;Process function to generate Sensor specific SPI Message Header. " alt="" coords="220,56,436,83"/>
-<area shape="rect" id="node4" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="484,132,545,159"/>
-<area shape="rect" id="node5" href="$a00173.html#a76a3aee498397854509b81ae2da2f85e" title="The interface function to read a sensor register. " alt="" coords="261,157,395,184"/>
-</map>

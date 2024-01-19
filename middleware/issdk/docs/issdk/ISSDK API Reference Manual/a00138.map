@@ -1,5 +1,0 @@
-<map id="sensors/mma8491q_drv.h" name="sensors/mma8491q_drv.h">
-<area shape="rect" id="node3" href="$a00131.html" title="mma8491q.h" alt="" coords="27,80,124,107"/>
-<area shape="rect" id="node4" href="$a00185.html" title="The sensor_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regist..." alt="" coords="148,80,261,107"/>
-<area shape="rect" id="node5" href="$a00170.html" title="The register_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="193,155,310,181"/>
-</map>

@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_LPSPI_H_
-#define _FSL_LPSPI_H_
+#ifndef FSL_LPSPI_H_
+#define FSL_LPSPI_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  *********************************************************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LPSPI driver version. */
-#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 4, 5))
-/*@}*/
+#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 6, 6))
+/*! @} */
 
 #ifndef LPSPI_DUMMY_DATA
 /*! @brief LPSPI dummy data if no Tx data.*/
@@ -179,6 +179,15 @@ typedef enum _lpspi_data_out_config
     kLpspiDataOutTristate = 1U  /*!< Data out is tristated when chip select is de-asserted */
 } lpspi_data_out_config_t;
 
+#if !(defined(FSL_FEATURE_LPSPI_HAS_NO_PCSCFG) && FSL_FEATURE_LPSPI_HAS_NO_PCSCFG)
+/*! @brief LPSPI cs function configuration. */
+typedef enum _lpspi_pcs_function_config
+{
+    kLPSPI_PcsAsCs = 0U,        /*!< PCS pin select as cs function */
+    kLPSPI_PcsAsData = 1U,      /*!< PCS pin select as date function */
+} lpspi_pcs_function_config_t;
+#endif
+
 /*! @brief LPSPI transfer width configuration. */
 typedef enum _lpspi_transfer_width
 {
@@ -197,6 +206,10 @@ typedef enum _lpspi_delay_type
 
 #define LPSPI_MASTER_PCS_SHIFT (4U)    /*!< LPSPI master PCS shift macro , internal used. */
 #define LPSPI_MASTER_PCS_MASK  (0xF0U) /*!< LPSPI master PCS shift macro , internal used. */
+#if !(defined(FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH) && FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH)
+#define LPSPI_MASTER_WIDTH_SHIFT (16U)      /*!< LPSPI master width shift macro, internal used */
+#define LPSPI_MASTER_WIDTH_MASK  (0x30000U) /*!< LPSPI master width shift mask, internal used */
+#endif
 
 /*! @brief Use this enumeration for LPSPI master transfer configFlags. */
 enum _lpspi_transfer_config_flag_for_master
@@ -205,6 +218,11 @@ enum _lpspi_transfer_config_flag_for_master
     kLPSPI_MasterPcs1 = 1U << LPSPI_MASTER_PCS_SHIFT, /*!< LPSPI master transfer use PCS1 signal */
     kLPSPI_MasterPcs2 = 2U << LPSPI_MASTER_PCS_SHIFT, /*!< LPSPI master transfer use PCS2 signal */
     kLPSPI_MasterPcs3 = 3U << LPSPI_MASTER_PCS_SHIFT, /*!< LPSPI master transfer use PCS3 signal */
+#if !(defined(FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH) && FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH)
+    kLPSPI_MasterWidth1 = 0U << LPSPI_MASTER_WIDTH_SHIFT, /*!< LPSPI master transfer 1bit */
+    kLPSPI_MasterWidth2 = 1U << LPSPI_MASTER_WIDTH_SHIFT, /*!< LPSPI master transfer 2bit */
+    kLPSPI_MasterWidth4 = 2U << LPSPI_MASTER_WIDTH_SHIFT, /*!< LPSPI master transfer 4bit */
+#endif
 
     kLPSPI_MasterPcsContinuous = 1U << 20, /*!< Is PCS signal continuous */
 
@@ -278,7 +296,10 @@ typedef struct _lpspi_master_config
 
     lpspi_pin_config_t pinCfg; /*!< Configures which pins are used for input and output data
                                 *during single bit transfers.*/
-
+    
+#if !(defined(FSL_FEATURE_LPSPI_HAS_NO_PCSCFG) && FSL_FEATURE_LPSPI_HAS_NO_PCSCFG)
+    lpspi_pcs_function_config_t pcsFunc; /*!< Configures cs pins function.*/
+#endif
     lpspi_data_out_config_t dataOutConfig; /*!< Configures if the output data is tristated
                                             * between accesses (LPSPI_PCS is negated). */
     bool enableInputDelay; /*!< Enable master to sample the input data on a delayed SCK. This can help improve slave
@@ -514,6 +535,7 @@ static inline void LPSPI_Enable(LPSPI_Type *base, bool enable)
     {
         base->CR &= ~LPSPI_CR_MEN_MASK;
     }
+#if defined(FSL_FEATURE_LPSPI_HAS_ERRATA_051472) && FSL_FEATURE_LPSPI_HAS_ERRATA_051472
     /* ERRATA051472: The SR[REF] would assert if software disables the LPSPI module 
        after receiving some data and then enabled the LPSPI again without performing a software reset.
        Clear SR[REF] flag after LPSPI module enabled*/
@@ -521,6 +543,7 @@ static inline void LPSPI_Enable(LPSPI_Type *base, bool enable)
     {
         base->SR = (uint32_t)kLPSPI_ReceiveErrorFlag;
     }
+#endif
 }
 
 /*!
@@ -799,7 +822,40 @@ static inline bool LPSPI_IsMaster(LPSPI_Type *base)
  */
 static inline void LPSPI_FlushFifo(LPSPI_Type *base, bool flushTxFifo, bool flushRxFifo)
 {
+#if defined(FSL_FEATURE_LPSPI_HAS_ERRATA_050456) && FSL_FEATURE_LPSPI_HAS_ERRATA_050456
+    /*
+     * Resetting the FIFO using CR[RTF] and CR[RRF] does not clear the FIFO pointers completely.
+     * Workaround by reseting the entire module using CR[RST] bit.
+     */
+
+    (void)flushTxFifo;
+    (void)flushRxFifo;
+
+    /* Save current state before resetting */
+    bool enabled = base->CR & LPSPI_CR_MEN_MASK;
+    uint32_t cfgr1 = base->CFGR1;
+    uint32_t ccr = base->CCR;
+    uint32_t ccr1 = base->CCR1;
+
+    /* To read the current state of the existing command word, LPSPI must be enabled */
+    LPSPI_Enable(base, true);
+    uint32_t tcr = base->TCR;
+
+    /* Reset all internal logic and registers. Bit remains set until cleared by software */
+    LPSPI_Enable(base, false);
+    base->CR |= LPSPI_CR_RST_MASK;
+    base->CR &= ~LPSPI_CR_RST_MASK;
+
+    /* Restore saved registers */
+    base->CFGR1 = cfgr1;
+    base->CCR = ccr;
+    base->CCR1 = ccr1;
+    base->TCR = tcr;
+
+    LPSPI_Enable(base, enabled);
+#else
     base->CR |= ((uint32_t)flushTxFifo << LPSPI_CR_RTF_SHIFT) | ((uint32_t)flushRxFifo << LPSPI_CR_RRF_SHIFT);
+#endif
 }
 
 /*!
@@ -1153,6 +1209,16 @@ void LPSPI_SlaveTransferAbort(LPSPI_Type *base, lpspi_slave_handle_t *handle);
 void LPSPI_SlaveTransferHandleIRQ(LPSPI_Type *base, lpspi_slave_handle_t *handle);
 
 /*!
+ * @brief Wait for tx FIFO to be empty.
+ *
+ * This function wait the tx fifo empty
+ *
+ * @param base LPSPI peripheral address.
+ * @return true for the tx FIFO is ready, false is not.
+ */
+bool LPSPI_WaitTxFifoEmpty(LPSPI_Type *base);
+
+/*!
  *@}
  */
 
@@ -1162,4 +1228,4 @@ void LPSPI_SlaveTransferHandleIRQ(LPSPI_Type *base, lpspi_slave_handle_t *handle
 
 /*! @}*/
 
-#endif /*_FSL_LPSPI_H_*/
+#endif /*FSL_LPSPI_H_*/

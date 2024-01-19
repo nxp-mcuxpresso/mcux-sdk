@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef __FSL_IAP_FFR_H_
-#define __FSL_IAP_FFR_H_
+#ifndef FSL_IAP_FFR_H_
+#define FSL_IAP_FFR_H_
 
 #include "fsl_iap.h"
 
@@ -27,7 +27,7 @@
  */
 /*! @brief Flash IFR driver version for SDK*/
 #define FSL_FLASH_IFR_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0. */
-/*@}*/
+/*! @} */
 
 /*! @brief Alignment(down) utility. */
 #if !defined(ALIGN_DOWN)
@@ -377,12 +377,12 @@ status_t FFR_KeystoreGetAC(flash_config_t *config, uint8_t *pActivationCode);
  */
 status_t FFR_KeystoreGetKC(flash_config_t *config, uint8_t *pKeyCode, ffr_key_type_t keyIndex);
 
-/*@}*/
+/*! @} */
 
 #ifdef __cplusplus
 }
 #endif
 
-/*@}*/
+/*! @} */
 
-#endif /*! __FSL_FLASH_FFR_H_ */
+#endif /*! FSL_FLASH_FFR_H_ */

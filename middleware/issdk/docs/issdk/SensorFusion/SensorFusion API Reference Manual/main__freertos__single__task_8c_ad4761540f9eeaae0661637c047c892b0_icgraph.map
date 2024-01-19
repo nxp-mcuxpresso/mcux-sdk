@@ -1,4 +1,0 @@
-<map id="read_task" name="read_task">
-<area shape="rect" id="node2" href="$main__freertos__single__task_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="This is a FreeRTOS (single task) implementation of the NXP sensor fusion demo build. " alt="" coords="295,5,345,32"/>
-<area shape="rect" id="node3" href="$main__freertos__single__task_8c.html#a74c29746b187d40824203a7cbfa27b6e" title="Dummy callback function for the I2C driver. " alt="" coords="132,31,247,57"/>
-</map>

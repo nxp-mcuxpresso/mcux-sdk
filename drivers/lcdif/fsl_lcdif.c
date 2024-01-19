@@ -19,6 +19,12 @@
 
 #define LCDIF_ALIGN_ADDR(addr, align) (((addr) + (align)-1U) & ~((align)-1U))
 
+#if defined(LCDIF_RSTS)
+#define LCDIF_RESETS_ARRAY LCDIF_RSTS
+#elif defined(DCNANO_RSTS)
+#define LCDIF_RESETS_ARRAY DCNANO_RSTS
+#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -42,6 +48,11 @@ static LCDIF_Type *const s_lcdifBases[] = LCDIF_BASE_PTRS;
 /*! brief Pointers to LCDIF clocks for each LCDIF submodule. */
 static const clock_ip_name_t s_lcdifClocks[] = LCDIF_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(LCDIF_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_lcdifResets[] = LCDIF_RESETS_ARRAY;
+#endif
 
 /*******************************************************************************
  * Code
@@ -78,6 +89,10 @@ status_t LCDIF_Init(LCDIF_Type *base)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     uint32_t instance = LCDIF_GetInstance(base);
     CLOCK_EnableClock(s_lcdifClocks[instance]);
+#endif
+
+#if defined(LCDIF_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_lcdifResets[LCDIF_GetInstance(base)]);
 #endif
 
     base->FRAMEBUFFERCONFIG0 = 0;

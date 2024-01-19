@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_MSCAN_H_
-#define _FSL_MSCAN_H_
+#ifndef FSL_MSCAN_H_
+#define FSL_MSCAN_H_
 
 #include "fsl_common.h"
 
@@ -19,10 +19,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief MsCAN driver version. */
 #define FSL_MSCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
-/*@}*/
+/*! @} */
 
 /*! @brief MsCAN Rx Message Buffer Mask helper macro. */
 #define MSCAN_RX_MB_STD_MASK(id)               \
@@ -336,7 +336,7 @@ void MSCAN_Deinit(MSCAN_Type *base);
  */
 void MSCAN_GetDefaultConfig(mscan_config_t *config);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Configuration.
@@ -528,7 +528,7 @@ static inline void MSCAN_WriteIDMR1(MSCAN_Type *base, uint8_t *pID)
  */
 void MSCAN_SetTimingConfig(MSCAN_Type *base, const mscan_timing_config_t *config);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -549,7 +549,7 @@ static inline uint8_t MSCAN_GetTxBufEmptyFlags(MSCAN_Type *base)
     return base->CANTFLG & MSCAN_CANTFLG_TXE_MASK;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -623,7 +623,7 @@ static inline void MSCAN_AbortTxRequest(MSCAN_Type *base, uint8_t mask)
     base->CANTARQ |= mask;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Bus Operations
@@ -681,7 +681,7 @@ status_t MSCAN_WriteTxMb(MSCAN_Type *base, mscan_frame_t *pTxFrame);
  */
 status_t MSCAN_ReadRxMb(MSCAN_Type *base, mscan_frame_t *pRxFrame);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Transactional
@@ -792,7 +792,7 @@ void MSCAN_TransferAbortReceive(MSCAN_Type *base, mscan_handle_t *handle, uint8_
  */
 void MSCAN_TransferHandleIRQ(MSCAN_Type *base, mscan_handle_t *handle);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -800,4 +800,4 @@ void MSCAN_TransferHandleIRQ(MSCAN_Type *base, mscan_handle_t *handle);
 
 /*! @}*/
 
-#endif /* _FSL_MSCAN_H_ */
+#endif /* FSL_MSCAN_H_ */

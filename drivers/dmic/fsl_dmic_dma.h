@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_DMIC_DMA_H_
-#define _FSL_DMIC_DMA_H_
+#ifndef FSL_DMIC_DMA_H_
+#define FSL_DMIC_DMA_H_
 
 #include "fsl_common.h"
 #include "fsl_dma.h"
@@ -29,7 +29,7 @@
 
 /*! @brief DMIC DMA driver version 2.4.0 */
 #define FSL_DMIC_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
-/*@}*/
+/*! @} */
 
 /*! @brief DMIC transfer structure. */
 typedef struct _dmic_transfer
@@ -148,7 +148,7 @@ status_t DMIC_TransferGetReceiveCountDMA(DMIC_Type *base, dmic_dma_handle_t *han
  */
 void DMIC_InstallDMADescriptorMemory(dmic_dma_handle_t *handle, void *linkAddr, size_t linkNum);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -156,4 +156,4 @@ void DMIC_InstallDMADescriptorMemory(dmic_dma_handle_t *handle, void *linkAddr, 
 
 /*! @}*/
 
-#endif /* _FSL_DMIC_DMA_H_ */
+#endif /* FSL_DMIC_DMA_H_ */

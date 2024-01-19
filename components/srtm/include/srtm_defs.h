@@ -144,20 +144,20 @@ extern int SRTM_DEBUG_MESSAGE_FUNC(const char *fmt_s, ...);
 /*! @brief SRTM error code */
 typedef enum _srtm_status
 {
-    SRTM_Status_Success = 0x00U, /*!< Success */
-    SRTM_Status_Error,           /*!< Failed */
+    SRTM_Status_Success = 0x00U,    /*!< Success */
+    SRTM_Status_Error,              /*!< Failed */
 
-    SRTM_Status_InvalidParameter, /*!< Invalid parameter */
-    SRTM_Status_InvalidMessage,   /*!< Invalid message */
-    SRTM_Status_InvalidState,     /*!< Operate in invalid state */
-    SRTM_Status_OutOfMemory,      /*!< Memory allocation failed */
-    SRTM_Status_Timeout,          /*!< Timeout when waiting for an event */
-    SRTM_Status_ListAddFailed,    /*!< Cannot add to list as node already in another list */
-    SRTM_Status_ListRemoveFailed, /*!< Cannot remove from list as node not in list */
+    SRTM_Status_InvalidParameter,   /*!< Invalid parameter */
+    SRTM_Status_InvalidMessage,     /*!< Invalid message */
+    SRTM_Status_InvalidState,       /*!< Operate in invalid state */
+    SRTM_Status_OutOfMemory,        /*!< Memory allocation failed */
+    SRTM_Status_Timeout,            /*!< Timeout when waiting for an event */
+    SRTM_Status_ListAddFailed,      /*!< Cannot add to list as node already in another list */
+    SRTM_Status_ListRemoveFailed,   /*!< Cannot remove from list as node not in list */
 
-    SRTM_Status_TransferTimeout,  /*!< Transfer timeout */
-    SRTM_Status_TransferNotAvail, /*!< Transfer failed due to peer core not ready */
-    SRTM_Status_TransferFailed,   /*!< Transfer failed due to communication failure */
+    SRTM_Status_TransferTimeout,    /*!< Transfer timeout */
+    SRTM_Status_TransferNotAvail,   /*!< Transfer failed due to peer core not ready */
+    SRTM_Status_TransferFailed,     /*!< Transfer failed due to communication failure */
 
     SRTM_Status_ServiceNotFound,    /*!< Cannot find service for a request/notification */
     SRTM_Status_ServiceVerMismatch, /*!< Service version cannot support the request/notification */

@@ -1,6 +1,5 @@
 /*
- * Copyright 2021 NXP
- * All rights reserved.
+ * Copyright 2021, 2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -45,7 +44,7 @@
 
 #define USER_LED_INIT(output)                                            \
     GPIO_PinWrite(BOARD_USER_LED_GPIO, BOARD_USER_LED_GPIO_PIN, output); \
-    BOARD_USER_LED_GPIO->GDIR |= (1U << BOARD_USER_LED_GPIO_PIN) /*!< Enable target USER_LED */
+    BOARD_USER_LED_GPIO->GDIR |= (1U << BOARD_USER_LED_GPIO_PIN)                       /*!< Enable target USER_LED */
 #define USER_LED_OFF() \
     GPIO_PortClear(BOARD_USER_LED_GPIO, 1U << BOARD_USER_LED_GPIO_PIN)                 /*!< Turn off target USER_LED */
 #define USER_LED_ON() GPIO_PortSet(BOARD_USER_LED_GPIO, 1U << BOARD_USER_LED_GPIO_PIN) /*!<Turn on target USER_LED*/
@@ -69,6 +68,20 @@
 
 /*! @brief The ENET PHY address. */
 #define BOARD_ENET0_PHY_ADDRESS (0x02U) /* Phy address of enet port 0. */
+
+/*! @brief The ENET PHY used for board. */
+#ifndef BOARD_ENET_PHY_RESET_GPIO
+#define BOARD_ENET_PHY_RESET_GPIO GPIO3
+#endif
+#ifndef BOARD_ENET_PHY_RESET_GPIO_PIN
+#define BOARD_ENET_PHY_RESET_GPIO_PIN (4U)
+#endif
+
+#define BOARD_ENET_PHY_RESET                                                          \
+    GPIO_WritePinOutput(BOARD_ENET_PHY_RESET_GPIO, BOARD_ENET_PHY_RESET_GPIO_PIN, 0); \
+    SDK_DelayAtLeastUs(10000, CLOCK_GetFreq(kCLOCK_CpuClk));                          \
+    GPIO_WritePinOutput(BOARD_ENET_PHY_RESET_GPIO, BOARD_ENET_PHY_RESET_GPIO_PIN, 1); \
+    SDK_DelayAtLeastUs(100, CLOCK_GetFreq(kCLOCK_CpuClk))
 
 /* USB PHY condfiguration */
 #define BOARD_USB_PHY_D_CAL     (0x0CU)

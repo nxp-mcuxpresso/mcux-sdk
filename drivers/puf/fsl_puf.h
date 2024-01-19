@@ -23,7 +23,7 @@
  * @{
  */
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief PUF driver version. Version 2.1.6.
  *
  * Current version: 2.1.6
@@ -58,7 +58,7 @@
  * this shorter time will also fail, initialization will be tried with worst case time as before.
  */
 #define FSL_PUF_DRIVER_VERSION (MAKE_VERSION(2, 1, 6))
-/*@}*/
+/*! @} */
 
 typedef enum _puf_key_index_register
 {

@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef __FSL_ANACTRL_H__
-#define __FSL_ANACTRL_H__
+#ifndef FSL_ANACTRL_H__
+#define FSL_ANACTRL_H__
 
 #include "fsl_common.h"
 
@@ -156,7 +156,7 @@ void ANACTRL_Init(ANACTRL_Type *base);
  * @param base ANACTRL peripheral base address.
  */
 void ANACTRL_Deinit(ANACTRL_Type *base);
-/* @} */
+/*! @} */
 
 /*!
  * @name Set oscillators
@@ -203,7 +203,7 @@ void ANACTRL_SetXo32M(ANACTRL_Type *base, const anactrl_xo32M_config_t *config);
  */
 void ANACTRL_GetDefaultXo32MConfig(anactrl_xo32M_config_t *config);
 
-/* @} */
+/*! @} */
 
 #if !(defined(FSL_FEATURE_ANACTRL_HAS_NO_FREQ_ME_CTRL) && FSL_FEATURE_ANACTRL_HAS_NO_FREQ_ME_CTRL)
 /*!
@@ -227,7 +227,7 @@ void ANACTRL_GetDefaultXo32MConfig(anactrl_xo32M_config_t *config);
  * @return frequency of the target clock.
  */
 uint32_t ANACTRL_MeasureFrequency(ANACTRL_Type *base, uint8_t scale, uint32_t refClkFreq);
-/* @} */
+/*! @} */
 #endif /* FSL_FEATURE_ANACTRL_HAS_NO_FREQ_ME_CTRL */
 
 /*!
@@ -267,7 +267,7 @@ static inline void ANACTRL_ClearInterrupts(ANACTRL_Type *base, uint32_t mask)
 {
     base->BOD_DCDC_INT_CTRL |= (uint32_t)(mask << 1UL);
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name Status Interface
@@ -339,7 +339,7 @@ static inline uint32_t ANACTRL_GetInterruptStatusFlags(ANACTRL_Type *base)
 {
     return base->BOD_DCDC_INT_STATUS & 0x1FFU;
 }
-/* @} */
+/*! @} */
 
 #if (defined(FSL_FEATURE_ANACTRL_HAS_AUX_BIAS_REG) && (FSL_FEATURE_ANACTRL_HAS_AUX_BIAS_REG == 1U))
 /*!
@@ -365,13 +365,13 @@ static inline void ANACTRL_EnableVref1V(ANACTRL_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 #endif /* defined(FSL_FEATURE_ANACTRL_HAS_AUX_BIAS_REG) */
 
 #if defined(__cplusplus)
 }
 #endif
 
-/* @}*/
+/*! @} */
 
-#endif /* __FSL_ANACTRL_H__ */
+#endif /* FSL_ANACTRL_H__ */

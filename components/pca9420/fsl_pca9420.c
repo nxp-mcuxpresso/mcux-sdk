@@ -456,7 +456,7 @@ void PCA9420_EnableInterrupts(pca9420_handle_t *handle, uint32_t source)
         assert(false);
     }
 
-    regValues[0] = regValues[2] = regValues[4] = 0U; /* Don't clear int status */
+    regValues[0] = regValues[2] = regValues[4] = 0U;      /* Don't clear int status */
 
     regValues[1] &= (uint8_t)(~(source & 0xFFU));         /* SUB_INT0_MASK */
     regValues[3] &= (uint8_t)(~((source >> 8) & 0xFFU));  /* SUB_INT1_MASK */
@@ -483,7 +483,7 @@ void PCA9420_DisableInterrupts(pca9420_handle_t *handle, uint32_t source)
         assert(false);
     }
 
-    regValues[0] = regValues[2] = regValues[4] = 0U; /* Don't clear int status */
+    regValues[0] = regValues[2] = regValues[4] = 0U;   /* Don't clear int status */
 
     regValues[1] |= (uint8_t)(source & 0xFFU);         /* SUB_INT0_MASK */
     regValues[3] |= (uint8_t)((source >> 8) & 0xFFU);  /* SUB_INT1_MASK */

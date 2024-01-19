@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_I2C_DMA_H_
-#define _FSL_I2C_DMA_H_
+#ifndef FSL_I2C_DMA_H_
+#define FSL_I2C_DMA_H_
 
 #include "fsl_i2c.h"
 #include "fsl_dma.h"
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief I2C DMA driver version. */
 #define FSL_I2C_DMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief Maximum lenght of single DMA transfer (determined by capability of the DMA engine) */
 #define I2C_MAX_DMA_TRANSFER_COUNT 1024
@@ -116,9 +116,9 @@ status_t I2C_MasterTransferGetCountDMA(I2C_Type *base, i2c_master_dma_handle_t *
  */
 void I2C_MasterTransferAbortDMA(I2C_Type *base, i2c_master_dma_handle_t *handle);
 
-/* @} */
+/*! @} */
 #if defined(__cplusplus)
 }
 #endif /*_cplusplus. */
-/*@}*/
-#endif /*_FSL_I2C_DMA_H_*/
+/*! @} */
+#endif /*FSL_I2C_DMA_H_*/

@@ -1,11 +1,11 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2021-2022 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FREQME_
-#define _FSL_FREQME_
+#ifndef FSL_FREQME_H_
+#define FSL_FREQME_H_
 
 #include "fsl_common.h"
 
@@ -19,10 +19,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-/*! @brief FREQME driver version 2.0.0. */
-#define FSL_FREQME_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
-/*@}*/
+/*! @{ */
+/*! @brief FREQME driver version 2.1.2. */
+#define FSL_FREQME_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+/*! @} */
 
 /*!
  * @brief The enumeration of interrupt status flags.
@@ -30,17 +30,17 @@
  */
 enum _freqme_interrupt_status_flags
 {
-    kFREQME_UnderflowInterruptStatusFlag = FREQME_FREQMECTRLSTAT_LT_MIN_STAT_MASK,   /*!< Indicate the measurement is
+    kFREQME_UnderflowInterruptStatusFlag = FREQME_CTRLSTAT_LT_MIN_STAT_MASK,   /*!< Indicate the measurement is
                                                                                      just done and the result is less
                                                                                      than minimun value. */
-    kFREQME_OverflowInterruptStatusFlag = FREQME_FREQMECTRLSTAT_GT_MAX_STAT_MASK,    /*!< Indicate the measurement is
+    kFREQME_OverflowInterruptStatusFlag = FREQME_CTRLSTAT_GT_MAX_STAT_MASK,    /*!< Indicate the measurement is
                                                                                      just done and the result is greater
                                                                                      than maximum value. */
-    kFREQME_ReadyInterruptStatusFlag = FREQME_FREQMECTRLSTAT_RESULT_READY_STAT_MASK, /*!< Indicate the measurement is
+    kFREQME_ReadyInterruptStatusFlag = FREQME_CTRLSTAT_RESULT_READY_STAT_MASK, /*!< Indicate the measurement is
                                                                                  just done and the result is ready to
                                                                                  read. */
-    kFREQME_AllInterruptStatusFlags = FREQME_FREQMECTRLSTAT_LT_MIN_STAT_MASK | FREQME_FREQMECTRLSTAT_GT_MAX_STAT_MASK |
-                                      FREQME_FREQMECTRLSTAT_RESULT_READY_STAT_MASK, /*!< All interrupt
+    kFREQME_AllInterruptStatusFlags = FREQME_CTRLSTAT_LT_MIN_STAT_MASK | FREQME_CTRLSTAT_GT_MAX_STAT_MASK |
+                                      FREQME_CTRLSTAT_RESULT_READY_STAT_MASK, /*!< All interrupt
                                                                                         status flags. */
 };
 
@@ -51,11 +51,11 @@ enum _freqme_interrupt_status_flags
  */
 enum _freqme_interrupt_enable
 {
-    kFREQME_UnderflowInterruptEnable = FREQME_FREQMECTRL_W_LT_MIN_INT_EN_MASK, /*!< Enable interrupt when the result is
+    kFREQME_UnderflowInterruptEnable = FREQME_CTRL_W_LT_MIN_INT_EN_MASK, /*!< Enable interrupt when the result is
                                                                                    less than minimum value. */
-    kFREQME_OverflowInterruptEnable = FREQME_FREQMECTRL_W_GT_MAX_INT_EN_MASK,  /*!< Enable interrupt when the result is
+    kFREQME_OverflowInterruptEnable = FREQME_CTRL_W_GT_MAX_INT_EN_MASK,  /*!< Enable interrupt when the result is
                                                                                    greater than maximum value. */
-    kFREQME_ReadyInterruptEnable = FREQME_FREQMECTRL_W_RESULT_READY_INT_EN_MASK, /*!< Enable interrupt when a
+    kFREQME_ReadyInterruptEnable = FREQME_CTRL_W_RESULT_READY_INT_EN_MASK, /*!< Enable interrupt when a
                                                                                  measurement completes and the result
                                                                                  is ready. */
 };
@@ -154,11 +154,11 @@ static inline void FREQME_StartMeasurementCycle(FREQME_Type *base)
 {
     uint32_t tmp32;
 
-    tmp32 = base->FREQMECTRLSTAT;
-    tmp32 &= ~(FREQME_FREQMECTRLSTAT_LT_MIN_STAT_MASK | FREQME_FREQMECTRLSTAT_MEASURE_IN_PROGRESS_MASK |
-               FREQME_FREQMECTRLSTAT_GT_MAX_STAT_MASK | FREQME_FREQMECTRLSTAT_RESULT_READY_STAT_MASK);
-    tmp32 |= FREQME_FREQMECTRL_W_MEASURE_IN_PROGRESS_MASK;
-    base->FREQMECTRL_W = tmp32;
+    tmp32 = base->CTRLSTAT;
+    tmp32 &= ~(FREQME_CTRLSTAT_LT_MIN_STAT_MASK | FREQME_CTRLSTAT_MEASURE_IN_PROGRESS_MASK |
+               FREQME_CTRLSTAT_GT_MAX_STAT_MASK | FREQME_CTRLSTAT_RESULT_READY_STAT_MASK);
+    tmp32 |= FREQME_CTRL_W_MEASURE_IN_PROGRESS_MASK;
+    base->CTRL_W = tmp32;
 }
 
 /*!
@@ -171,10 +171,10 @@ static inline void FREQME_TerminateMeasurementCycle(FREQME_Type *base)
 {
     uint32_t tmp32;
 
-    tmp32 = base->FREQMECTRLSTAT;
-    tmp32 &= ~(FREQME_FREQMECTRLSTAT_LT_MIN_STAT_MASK | FREQME_FREQMECTRLSTAT_MEASURE_IN_PROGRESS_MASK |
-               FREQME_FREQMECTRLSTAT_GT_MAX_STAT_MASK | FREQME_FREQMECTRLSTAT_RESULT_READY_STAT_MASK);
-    base->FREQMECTRL_W = tmp32;
+    tmp32 = base->CTRLSTAT;
+    tmp32 &= ~(FREQME_CTRLSTAT_LT_MIN_STAT_MASK | FREQME_CTRLSTAT_MEASURE_IN_PROGRESS_MASK |
+               FREQME_CTRLSTAT_GT_MAX_STAT_MASK | FREQME_CTRLSTAT_RESULT_READY_STAT_MASK);
+    base->CTRL_W = tmp32;
 }
 
 /*!
@@ -189,15 +189,15 @@ static inline void FREQME_EnableContinuousMode(FREQME_Type *base, bool enable)
 {
     uint32_t tmp32;
 
-    tmp32 = base->FREQMECTRLSTAT;
-    tmp32 &= ~(FREQME_FREQMECTRLSTAT_LT_MIN_STAT_MASK | FREQME_FREQMECTRLSTAT_CONTINUOUS_MODE_EN_MASK |
-               FREQME_FREQMECTRLSTAT_GT_MAX_STAT_MASK | FREQME_FREQMECTRLSTAT_RESULT_READY_STAT_MASK);
+    tmp32 = base->CTRLSTAT;
+    tmp32 &= ~(FREQME_CTRLSTAT_LT_MIN_STAT_MASK | FREQME_CTRLSTAT_CONTINUOUS_MODE_EN_MASK |
+               FREQME_CTRLSTAT_GT_MAX_STAT_MASK | FREQME_CTRLSTAT_RESULT_READY_STAT_MASK);
     if (enable)
     {
-        tmp32 |= FREQME_FREQMECTRL_W_CONTINUOUS_MODE_EN_MASK;
+        tmp32 |= FREQME_CTRL_W_CONTINUOUS_MODE_EN_MASK;
     }
 
-    base->FREQMECTRL_W = tmp32;
+    base->CTRL_W = tmp32;
 }
 
 /*!
@@ -209,7 +209,7 @@ static inline void FREQME_EnableContinuousMode(FREQME_Type *base, bool enable)
  */
 static inline bool FREQME_CheckContinuousMode(FREQME_Type *base)
 {
-    return (bool)((base->FREQMECTRLSTAT & FREQME_FREQMECTRLSTAT_CONTINUOUS_MODE_EN_MASK) != 0UL);
+    return (bool)((base->CTRLSTAT & FREQME_CTRLSTAT_CONTINUOUS_MODE_EN_MASK) != 0UL);
 }
 
 /*!
@@ -222,15 +222,15 @@ static inline void FREQME_SetOperateMode(FREQME_Type *base, freqme_operate_mode_
 {
     uint32_t tmp32;
 
-    tmp32 = base->FREQMECTRLSTAT;
-    tmp32 &= ~(FREQME_FREQMECTRLSTAT_LT_MIN_STAT_MASK | FREQME_FREQMECTRLSTAT_PULSE_MODE_MASK |
-               FREQME_FREQMECTRLSTAT_GT_MAX_STAT_MASK | FREQME_FREQMECTRLSTAT_RESULT_READY_STAT_MASK);
+    tmp32 = base->CTRLSTAT;
+    tmp32 &= ~(FREQME_CTRLSTAT_LT_MIN_STAT_MASK | FREQME_CTRLSTAT_PULSE_MODE_MASK |
+               FREQME_CTRLSTAT_GT_MAX_STAT_MASK | FREQME_CTRLSTAT_RESULT_READY_STAT_MASK);
     if (operateMode == kFREOME_PulseWidthMeasurementMode)
     {
-        tmp32 |= FREQME_FREQMECTRL_W_PULSE_MODE_MASK;
+        tmp32 |= FREQME_CTRL_W_PULSE_MODE_MASK;
     }
 
-    base->FREQMECTRL_W = tmp32;
+    base->CTRL_W = tmp32;
 }
 
 /*!
@@ -242,7 +242,8 @@ static inline void FREQME_SetOperateMode(FREQME_Type *base, freqme_operate_mode_
  */
 static inline bool FREQME_CheckOperateMode(FREQME_Type *base)
 {
-    return (bool)((base->FREQMECTRLSTAT & FREQME_FREQMECTRLSTAT_PULSE_MODE_MASK) != 0UL);
+    return (bool)((base->CTRLSTAT & FREQME_CTRLSTAT_PULSE_MODE_MASK) != 0UL);
+
 }
 
 /*!
@@ -253,7 +254,7 @@ static inline bool FREQME_CheckOperateMode(FREQME_Type *base)
  */
 static inline void FREQME_SetMinExpectedValue(FREQME_Type *base, uint32_t minValue)
 {
-    base->FREQMEMIN = minValue;
+    base->MIN = minValue;
 }
 
 /*!
@@ -264,7 +265,7 @@ static inline void FREQME_SetMinExpectedValue(FREQME_Type *base, uint32_t minVal
  */
 static inline void FREQME_SetMaxExpectedValue(FREQME_Type *base, uint32_t maxValue)
 {
-    base->FREQMEMAX = maxValue;
+    base->MAX = maxValue;
 }
 
 /*! @} */
@@ -296,7 +297,7 @@ uint32_t FREQME_CalculateTargetClkFreq(FREQME_Type *base, uint32_t refClkFrequen
  */
 static inline uint8_t FREQME_GetReferenceClkScaleValue(FREQME_Type *base)
 {
-    return (uint8_t)(base->FREQMECTRLSTAT & FREQME_FREQMECTRLSTAT_REF_SCALE_MASK);
+    return (uint8_t)(base->CTRLSTAT & FREQME_CTRLSTAT_REF_SCALE_MASK);
 }
 
 /*! @} */
@@ -316,16 +317,16 @@ static inline void FREQME_SetPulsePolarity(FREQME_Type *base, freqme_pulse_polar
 {
     uint32_t tmp32;
 
-    tmp32 = base->FREQMECTRLSTAT;
-    tmp32 &= ~(FREQME_FREQMECTRLSTAT_LT_MIN_STAT_MASK | FREQME_FREQMECTRLSTAT_PULSE_POL_MASK |
-               FREQME_FREQMECTRLSTAT_GT_MAX_STAT_MASK | FREQME_FREQMECTRLSTAT_RESULT_READY_STAT_MASK);
+    tmp32 = base->CTRLSTAT;
+    tmp32 &= ~(FREQME_CTRLSTAT_LT_MIN_STAT_MASK | FREQME_CTRLSTAT_PULSE_POL_MASK |
+               FREQME_CTRLSTAT_GT_MAX_STAT_MASK | FREQME_CTRLSTAT_RESULT_READY_STAT_MASK);
 
     if (pulsePolarity != kFREQME_PulseHighPeriod)
     {
-        tmp32 |= FREQME_FREQMECTRL_W_PULSE_POL_MASK;
+        tmp32 |= FREQME_CTRL_W_PULSE_POL_MASK;
     }
 
-    base->FREQMECTRL_W = tmp32;
+    base->CTRL_W = tmp32;
 }
 
 /*!
@@ -337,7 +338,7 @@ static inline void FREQME_SetPulsePolarity(FREQME_Type *base, freqme_pulse_polar
  */
 static inline bool FREQME_CheckPulsePolarity(FREQME_Type *base)
 {
-    return (bool)((base->FREQMECTRLSTAT & FREQME_FREQMECTRLSTAT_PULSE_POL_MASK) != 0UL);
+    return (bool)((base->CTRLSTAT & FREQME_CTRLSTAT_PULSE_POL_MASK) != 0UL);
 }
 
 /*!
@@ -351,7 +352,7 @@ static inline bool FREQME_CheckPulsePolarity(FREQME_Type *base)
  */
 static inline uint32_t FREQME_GetMeasurementResult(FREQME_Type *base)
 {
-    return base->FREQMECTRL_R & FREQME_FREQMECTRL_R_RESULT_MASK;
+    return base->CTRL_R & FREQME_CTRL_R_RESULT_MASK;
 }
 
 /*! @} */
@@ -370,7 +371,7 @@ static inline uint32_t FREQME_GetMeasurementResult(FREQME_Type *base)
  */
 static inline uint32_t FREQME_GetInterruptStatusFlags(FREQME_Type *base)
 {
-    return (base->FREQMECTRLSTAT & kFREQME_AllInterruptStatusFlags);
+    return (base->CTRLSTAT & (uint32_t)kFREQME_AllInterruptStatusFlags);
 }
 
 /*!
@@ -382,7 +383,7 @@ static inline uint32_t FREQME_GetInterruptStatusFlags(FREQME_Type *base)
  */
 static inline void FREQME_ClearInterruptStatusFlags(FREQME_Type *base, uint32_t statusFlags)
 {
-    base->FREQMECTRLSTAT |= statusFlags;
+    base->CTRLSTAT |= statusFlags;
 }
 
 /*! @} */
@@ -402,13 +403,13 @@ static inline void FREQME_EnableInterrupts(FREQME_Type *base, uint32_t masks)
 {
     uint32_t tmp32;
 
-    tmp32 = base->FREQMECTRLSTAT;
-    tmp32 &= ~(FREQME_FREQMECTRLSTAT_LT_MIN_STAT_MASK | FREQME_FREQMECTRLSTAT_LT_MIN_INT_EN_MASK |
-               FREQME_FREQMECTRLSTAT_GT_MAX_STAT_MASK | FREQME_FREQMECTRLSTAT_GT_MAX_INT_EN_MASK |
-               FREQME_FREQMECTRLSTAT_RESULT_READY_INT_EN_MASK | FREQME_FREQMECTRLSTAT_RESULT_READY_STAT_MASK);
+    tmp32 = base->CTRLSTAT;
+    tmp32 &= ~(FREQME_CTRLSTAT_LT_MIN_STAT_MASK | FREQME_CTRLSTAT_LT_MIN_INT_EN_MASK |
+               FREQME_CTRLSTAT_GT_MAX_STAT_MASK | FREQME_CTRLSTAT_GT_MAX_INT_EN_MASK |
+               FREQME_CTRLSTAT_RESULT_READY_INT_EN_MASK | FREQME_CTRLSTAT_RESULT_READY_STAT_MASK);
 
     tmp32 |= masks;
-    base->FREQMECTRL_W = tmp32;
+    base->CTRL_W = tmp32;
 }
 
 /*!
@@ -421,11 +422,11 @@ static inline void FREQME_DisableInterrupts(FREQME_Type *base, uint32_t masks)
 {
     uint32_t tmp32;
 
-    tmp32 = base->FREQMECTRLSTAT;
-    tmp32 &= ~(FREQME_FREQMECTRLSTAT_LT_MIN_STAT_MASK | FREQME_FREQMECTRLSTAT_GT_MAX_STAT_MASK |
-               FREQME_FREQMECTRLSTAT_RESULT_READY_STAT_MASK | masks);
+    tmp32 = base->CTRLSTAT;
+    tmp32 &= ~(FREQME_CTRLSTAT_LT_MIN_STAT_MASK | FREQME_CTRLSTAT_GT_MAX_STAT_MASK |
+               FREQME_CTRLSTAT_RESULT_READY_STAT_MASK | masks);
 
-    base->FREQMECTRL_W = tmp32;
+    base->CTRL_W = tmp32;
 }
 
 /*! @} */
@@ -437,4 +438,4 @@ static inline void FREQME_DisableInterrupts(FREQME_Type *base, uint32_t masks)
 /*!
  * @}
  */
-#endif /* __FSL_FREQME_H__ */
+#endif /* FSL_FREQME_H_ */

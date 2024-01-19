@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_PWT_H_
-#define _FSL_PWT_H_
+#ifndef FSL_PWT_H_
+#define FSL_PWT_H_
 
 #include "fsl_common.h"
 
@@ -291,4 +291,4 @@ static inline void PWT_Reset(PWT_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_PWT_H_*/
+#endif /* FSL_PWT_H_*/

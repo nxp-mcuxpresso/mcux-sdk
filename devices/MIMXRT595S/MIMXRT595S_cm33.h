@@ -10,15 +10,13 @@
 **
 **     Reference manual:    iMXRT500RM Rev.1, 07/2022
 **     Version:             rev. 5.0, 2020-08-27
-**     Build:               b230313
+**     Build:               b231101
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT595S_cm33
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
 **     Copyright 2016-2023 NXP
-**     All rights reserved.
-**
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -48,8 +46,8 @@
  * CMSIS Peripheral Access Layer for MIMXRT595S_cm33
  */
 
-#ifndef _MIMXRT595S_CM33_H_
-#define _MIMXRT595S_CM33_H_                      /**< Symbol preventing repeated inclusion */
+#if !defined(MIMXRT595S_CM33_H_)
+#define MIMXRT595S_CM33_H_                       /**< Symbol preventing repeated inclusion */
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
@@ -28122,8 +28120,8 @@ typedef struct {
 /*! FLUSHFB - Flush from-bus buffer/FIFO */
 #define I3C_MDATACTRL_FLUSHFB(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_MDATACTRL_FLUSHFB_SHIFT)) & I3C_MDATACTRL_FLUSHFB_MASK)
 
-#define I3C_MDATACTRL_UNLOCK_MASK                (0x4U)
-#define I3C_MDATACTRL_UNLOCK_SHIFT               (2U)
+#define I3C_MDATACTRL_UNLOCK_MASK                (0x8U)
+#define I3C_MDATACTRL_UNLOCK_SHIFT               (3U)
 /*! UNLOCK - Unlock */
 #define I3C_MDATACTRL_UNLOCK(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_MDATACTRL_UNLOCK_SHIFT)) & I3C_MDATACTRL_UNLOCK_MASK)
 
@@ -46127,6 +46125,30 @@ typedef struct {
  *  0b1..Powerdown
  */
 #define SYSCTL0_PDSLEEPCFG0_ACMP_PD(x)           (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDSLEEPCFG0_ACMP_PD_SHIFT)) & SYSCTL0_PDSLEEPCFG0_ACMP_PD_MASK)
+
+#define SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI0_REF_PD_MASK (0x8000000U)
+#define SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI0_REF_PD_SHIFT (27U)
+/*! HSPAD_FSPI0_REF_PD - High speed pad sleep mode
+ *  0b0..High speed pad refs in normal mode
+ *  0b1..High speed pad refs in sleep mode
+ */
+#define SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI0_REF_PD(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI0_REF_PD_SHIFT)) & SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI0_REF_PD_MASK)
+
+#define SYSCTL0_PDSLEEPCFG0_HSPAD_SDIO0_REF_PD_MASK (0x20000000U)
+#define SYSCTL0_PDSLEEPCFG0_HSPAD_SDIO0_REF_PD_SHIFT (29U)
+/*! HSPAD_SDIO0_REF_PD - High Speed Pad VREF
+ *  0b0..Normal mode
+ *  0b1..Sleep mode
+ */
+#define SYSCTL0_PDSLEEPCFG0_HSPAD_SDIO0_REF_PD(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDSLEEPCFG0_HSPAD_SDIO0_REF_PD_SHIFT)) & SYSCTL0_PDSLEEPCFG0_HSPAD_SDIO0_REF_PD_MASK)
+
+#define SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI1_REF_PD_MASK (0x80000000U)
+#define SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI1_REF_PD_SHIFT (31U)
+/*! HSPAD_FSPI1_REF_PD - Hi speed pad sleep mode
+ *  0b0..High speed pad refs in normal mode
+ *  0b1..High speed pad refs in sleep mode
+ */
+#define SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI1_REF_PD(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI1_REF_PD_SHIFT)) & SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI1_REF_PD_MASK)
 /*! @} */
 
 /*! @name PDSLEEPCFG1 - Sleep configuration 1 */
@@ -46323,6 +46345,14 @@ typedef struct {
  *  0b1..ROM not Powered
  */
 #define SYSCTL0_PDSLEEPCFG1_ROM_PD(x)            (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDSLEEPCFG1_ROM_PD_SHIFT)) & SYSCTL0_PDSLEEPCFG1_ROM_PD_MASK)
+
+#define SYSCTL0_PDSLEEPCFG1_HSPAD_SDIO1_REF_PD_MASK (0x40000000U)
+#define SYSCTL0_PDSLEEPCFG1_HSPAD_SDIO1_REF_PD_SHIFT (30U)
+/*! HSPAD_SDIO1_REF_PD - High speed pad SDIO1 sleep mode
+ *  0b0..Enabled
+ *  0b1..Powerdown
+ */
+#define SYSCTL0_PDSLEEPCFG1_HSPAD_SDIO1_REF_PD(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDSLEEPCFG1_HSPAD_SDIO1_REF_PD_SHIFT)) & SYSCTL0_PDSLEEPCFG1_HSPAD_SDIO1_REF_PD_MASK)
 
 #define SYSCTL0_PDSLEEPCFG1_SRAM_SLEEP_MASK      (0x80000000U)
 #define SYSCTL0_PDSLEEPCFG1_SRAM_SLEEP_SHIFT     (31U)
@@ -47063,6 +47093,30 @@ typedef struct {
  *  0b1..Powerdown
  */
 #define SYSCTL0_PDRUNCFG0_ACMP_PD(x)             (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_ACMP_PD_SHIFT)) & SYSCTL0_PDRUNCFG0_ACMP_PD_MASK)
+
+#define SYSCTL0_PDRUNCFG0_HSPAD_FSPI0_REF_PD_MASK (0x8000000U)
+#define SYSCTL0_PDRUNCFG0_HSPAD_FSPI0_REF_PD_SHIFT (27U)
+/*! HSPAD_FSPI0_REF_PD - Hi-speed pad sleep mode
+ *  0b0..High speed pad refs in normal mode
+ *  0b1..High speed pad refs in sleep mode
+ */
+#define SYSCTL0_PDRUNCFG0_HSPAD_FSPI0_REF_PD(x)  (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_HSPAD_FSPI0_REF_PD_SHIFT)) & SYSCTL0_PDRUNCFG0_HSPAD_FSPI0_REF_PD_MASK)
+
+#define SYSCTL0_PDRUNCFG0_HSPAD_SDIO0_REF_PD_MASK (0x20000000U)
+#define SYSCTL0_PDRUNCFG0_HSPAD_SDIO0_REF_PD_SHIFT (29U)
+/*! HSPAD_SDIO0_REF_PD - High Speed Pad VREF
+ *  0b0..Normal mode
+ *  0b1..Sleep mode
+ */
+#define SYSCTL0_PDRUNCFG0_HSPAD_SDIO0_REF_PD(x)  (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_HSPAD_SDIO0_REF_PD_SHIFT)) & SYSCTL0_PDRUNCFG0_HSPAD_SDIO0_REF_PD_MASK)
+
+#define SYSCTL0_PDRUNCFG0_HSPAD_FSPI1_REF_PD_MASK (0x80000000U)
+#define SYSCTL0_PDRUNCFG0_HSPAD_FSPI1_REF_PD_SHIFT (31U)
+/*! HSPAD_FSPI1_REF_PD - Hi speed pad sleep mode
+ *  0b0..High speed pad refs in normal mode
+ *  0b1..High speed pad refs in sleep mode
+ */
+#define SYSCTL0_PDRUNCFG0_HSPAD_FSPI1_REF_PD(x)  (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_HSPAD_FSPI1_REF_PD_SHIFT)) & SYSCTL0_PDRUNCFG0_HSPAD_FSPI1_REF_PD_MASK)
 /*! @} */
 
 /*! @name PDRUNCFG1 - Run configuration 1 */
@@ -47259,6 +47313,14 @@ typedef struct {
  *  0b1..ROM not Powered
  */
 #define SYSCTL0_PDRUNCFG1_ROM_PD(x)              (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG1_ROM_PD_SHIFT)) & SYSCTL0_PDRUNCFG1_ROM_PD_MASK)
+
+#define SYSCTL0_PDRUNCFG1_HSPAD_SDIO1_REF_PD_MASK (0x40000000U)
+#define SYSCTL0_PDRUNCFG1_HSPAD_SDIO1_REF_PD_SHIFT (30U)
+/*! HSPAD_SDIO1_REF_PD - High speed pad SDIO1 sleep mode
+ *  0b0..Enabled
+ *  0b1..Powerdown
+ */
+#define SYSCTL0_PDRUNCFG1_HSPAD_SDIO1_REF_PD(x)  (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG1_HSPAD_SDIO1_REF_PD_SHIFT)) & SYSCTL0_PDRUNCFG1_HSPAD_SDIO1_REF_PD_MASK)
 
 #define SYSCTL0_PDRUNCFG1_SRAM_SLEEP_MASK        (0x80000000U)
 #define SYSCTL0_PDRUNCFG1_SRAM_SLEEP_SHIFT       (31U)
@@ -47999,6 +48061,30 @@ typedef struct {
  *  0b1..Sets the PDRUNCFG0 Bit
  */
 #define SYSCTL0_PDRUNCFG0_SET_ACMP_PD(x)         (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_SET_ACMP_PD_SHIFT)) & SYSCTL0_PDRUNCFG0_SET_ACMP_PD_MASK)
+
+#define SYSCTL0_PDRUNCFG0_SET_HSPAD_FSPI0_REF_PD_MASK (0x8000000U)
+#define SYSCTL0_PDRUNCFG0_SET_HSPAD_FSPI0_REF_PD_SHIFT (27U)
+/*! HSPAD_FSPI0_REF_PD - High speed pad FSPI0 voltage detect sleep mode
+ *  0b0..No effect
+ *  0b1..Sets the PDRUNCFG0 Bit
+ */
+#define SYSCTL0_PDRUNCFG0_SET_HSPAD_FSPI0_REF_PD(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_SET_HSPAD_FSPI0_REF_PD_SHIFT)) & SYSCTL0_PDRUNCFG0_SET_HSPAD_FSPI0_REF_PD_MASK)
+
+#define SYSCTL0_PDRUNCFG0_SET_HSPAD_SDIO0_REF_PD_MASK (0x20000000U)
+#define SYSCTL0_PDRUNCFG0_SET_HSPAD_SDIO0_REF_PD_SHIFT (29U)
+/*! HSPAD_SDIO0_REF_PD - High speed pad sleep mode
+ *  0b0..No effect
+ *  0b1..Sets the PDRUNCFG0 Bit
+ */
+#define SYSCTL0_PDRUNCFG0_SET_HSPAD_SDIO0_REF_PD(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_SET_HSPAD_SDIO0_REF_PD_SHIFT)) & SYSCTL0_PDRUNCFG0_SET_HSPAD_SDIO0_REF_PD_MASK)
+
+#define SYSCTL0_PDRUNCFG0_SET_HSPAD_FSPI1_REF_PD_MASK (0x80000000U)
+#define SYSCTL0_PDRUNCFG0_SET_HSPAD_FSPI1_REF_PD_SHIFT (31U)
+/*! HSPAD_FSPI1_REF_PD - High speed pad FSPI1 sleep mode
+ *  0b0..No effect
+ *  0b1..Sets the PDRUNCFG0 Bit
+ */
+#define SYSCTL0_PDRUNCFG0_SET_HSPAD_FSPI1_REF_PD(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_SET_HSPAD_FSPI1_REF_PD_SHIFT)) & SYSCTL0_PDRUNCFG0_SET_HSPAD_FSPI1_REF_PD_MASK)
 /*! @} */
 
 /*! @name PDRUNCFG1_SET - Run configuration 1 set */
@@ -48203,6 +48289,14 @@ typedef struct {
  *  0b1..Sets the PDRUNCFG1 Bit
  */
 #define SYSCTL0_PDRUNCFG1_SET_ROM_PD(x)          (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG1_SET_ROM_PD_SHIFT)) & SYSCTL0_PDRUNCFG1_SET_ROM_PD_MASK)
+
+#define SYSCTL0_PDRUNCFG1_SET_HSPAD_SDIO1_REF_PD_MASK (0x40000000U)
+#define SYSCTL0_PDRUNCFG1_SET_HSPAD_SDIO1_REF_PD_SHIFT (30U)
+/*! HSPAD_SDIO1_REF_PD - High speed pad sleep mode
+ *  0b0..No effect
+ *  0b1..Sets the PDRUNCFG1 Bit
+ */
+#define SYSCTL0_PDRUNCFG1_SET_HSPAD_SDIO1_REF_PD(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG1_SET_HSPAD_SDIO1_REF_PD_SHIFT)) & SYSCTL0_PDRUNCFG1_SET_HSPAD_SDIO1_REF_PD_MASK)
 
 #define SYSCTL0_PDRUNCFG1_SET_SRAM_SLEEP_MASK    (0x80000000U)
 #define SYSCTL0_PDRUNCFG1_SET_SRAM_SLEEP_SHIFT   (31U)
@@ -48943,6 +49037,30 @@ typedef struct {
  *  0b1..Clears the PDRUNCFG0 Bit
  */
 #define SYSCTL0_PDRUNCFG0_CLR_ACMP_PD(x)         (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_CLR_ACMP_PD_SHIFT)) & SYSCTL0_PDRUNCFG0_CLR_ACMP_PD_MASK)
+
+#define SYSCTL0_PDRUNCFG0_CLR_HSPAD_FSPI0_REF_PD_MASK (0x8000000U)
+#define SYSCTL0_PDRUNCFG0_CLR_HSPAD_FSPI0_REF_PD_SHIFT (27U)
+/*! HSPAD_FSPI0_REF_PD - High speed pad FSPIO0 sleep mode
+ *  0b0..No effect
+ *  0b1..Clears the PDRUNCFG0 Bit
+ */
+#define SYSCTL0_PDRUNCFG0_CLR_HSPAD_FSPI0_REF_PD(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_CLR_HSPAD_FSPI0_REF_PD_SHIFT)) & SYSCTL0_PDRUNCFG0_CLR_HSPAD_FSPI0_REF_PD_MASK)
+
+#define SYSCTL0_PDRUNCFG0_CLR_HSPAD_SDIO0_REF_PD_MASK (0x20000000U)
+#define SYSCTL0_PDRUNCFG0_CLR_HSPAD_SDIO0_REF_PD_SHIFT (29U)
+/*! HSPAD_SDIO0_REF_PD - High speed pad sleep mode
+ *  0b0..No effect
+ *  0b1..Clears the PDRUNCFG0 Bit
+ */
+#define SYSCTL0_PDRUNCFG0_CLR_HSPAD_SDIO0_REF_PD(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_CLR_HSPAD_SDIO0_REF_PD_SHIFT)) & SYSCTL0_PDRUNCFG0_CLR_HSPAD_SDIO0_REF_PD_MASK)
+
+#define SYSCTL0_PDRUNCFG0_CLR_HSPAD_FSPI1_REF_PD_MASK (0x80000000U)
+#define SYSCTL0_PDRUNCFG0_CLR_HSPAD_FSPI1_REF_PD_SHIFT (31U)
+/*! HSPAD_FSPI1_REF_PD - High speed pad FSPIO1 sleep mode
+ *  0b0..No effect
+ *  0b1..Clears the PDRUNCFG0 Bit
+ */
+#define SYSCTL0_PDRUNCFG0_CLR_HSPAD_FSPI1_REF_PD(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG0_CLR_HSPAD_FSPI1_REF_PD_SHIFT)) & SYSCTL0_PDRUNCFG0_CLR_HSPAD_FSPI1_REF_PD_MASK)
 /*! @} */
 
 /*! @name PDRUNCFG1_CLR - Run configuration 1 clear */
@@ -49147,6 +49265,14 @@ typedef struct {
  *  0b1..Clears the PDRUNCFG1 Bit
  */
 #define SYSCTL0_PDRUNCFG1_CLR_ROM_PD(x)          (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG1_CLR_ROM_PD_SHIFT)) & SYSCTL0_PDRUNCFG1_CLR_ROM_PD_MASK)
+
+#define SYSCTL0_PDRUNCFG1_CLR_HSPAD_SDIO1_REF_PD_MASK (0x40000000U)
+#define SYSCTL0_PDRUNCFG1_CLR_HSPAD_SDIO1_REF_PD_SHIFT (30U)
+/*! HSPAD_SDIO1_REF_PD - High speed pad sleep mode
+ *  0b0..No effect
+ *  0b1..Clears the PDRUNCFG1 Bit
+ */
+#define SYSCTL0_PDRUNCFG1_CLR_HSPAD_SDIO1_REF_PD(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG1_CLR_HSPAD_SDIO1_REF_PD_SHIFT)) & SYSCTL0_PDRUNCFG1_CLR_HSPAD_SDIO1_REF_PD_MASK)
 
 #define SYSCTL0_PDRUNCFG1_CLR_SRAM_SLEEP_MASK    (0x80000000U)
 #define SYSCTL0_PDRUNCFG1_CLR_SRAM_SLEEP_SHIFT   (31U)
@@ -60842,5 +60968,5 @@ typedef struct {
  */ /* end of group SDK_Compatibility_Symbols */
 
 
-#endif  /* _MIMXRT595S_CM33_H_ */
+#endif  /* MIMXRT595S_CM33_H_ */
 

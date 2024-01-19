@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SPI_H_
-#define _FSL_SPI_H_
+#ifndef FSL_SPI_H_
+#define FSL_SPI_H_
 
 #include "fsl_common.h"
 
@@ -23,10 +23,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SPI driver version. */
 #define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
-/*@}*/
+/*! @} */
 
 #ifndef SPI_DUMMYDATA
 /*! @brief SPI dummy transfer data, the data is sent while txBuff is NULL. */
@@ -680,4 +680,4 @@ void SPI_SlaveTransferHandleIRQ(SPI_Type *base, spi_slave_handle_t *handle);
 
 /*! @} */
 
-#endif /* _FSL_SPI_H_*/
+#endif /* FSL_SPI_H_*/

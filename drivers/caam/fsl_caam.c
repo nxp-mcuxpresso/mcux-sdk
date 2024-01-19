@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -88,6 +88,13 @@ typedef enum _caam_aai_symmetric_alg
     kCAAM_ModeGCM     = 0x90U << 4,
 } caam_aai_symmetric_alg_t;
 
+typedef enum _caam_aai_hmac_alg
+{
+    kCAAM_HmacModeNonDerivedKey = 0x01U << 4,
+    kCAAM_HmacModeDerivedKey    = 0x04U << 4,
+    kCAAM_SmacMode              = 0x02U << 4,
+} caam_aai_hmac_alg_t;
+
 typedef enum _caam_algorithm_state
 {
     kCAAM_AlgStateUpdate    = 0u,
@@ -132,8 +139,9 @@ typedef union _caam_hash_block
 typedef enum _caam_hash_ctx_indexes
 {
     kCAAM_HashCtxKeyStartIdx = 12, /*!< context word array index where key is stored */
-    kCAAM_HashCtxKeySize     = 20, /*!< context word array index where key size is stored */
-    kCAAM_HashCtxNumWords    = 21, /*!< number of context array 32-bit words  */
+    kCAAM_HashCtxKeySize     = 45, /*!< context word array index where key size is stored */
+    kCAAM_HashCtxNumWords = 46, /*!< number of context array 32-bit words /!\ Modification by WA: try to add HMAC with
+                                   derived key that is 64 byte long */
 } caam_hash_ctx_indexes;
 
 typedef struct _caam_hash_ctx_internal
@@ -422,6 +430,83 @@ bool caam_check_key_size(const uint32_t keySize)
     return ((keySize == 16u) || ((keySize == 24u)) || ((keySize == 32u)));
 }
 
+/*!
+ * @brief Maps HMAC algo to its underlying hashing algorithm.
+ *
+ * @param algo The algorithm to be mapped.
+ * @return The underlying hashing algorithm for HMAC algo. Non-HMAC algo
+ * will return the same algorithm as the input.
+ */
+static caam_hash_algo_t hmac2hash_algo(caam_hash_algo_t algo)
+{
+    caam_hash_algo_t mappedAlgo;
+
+    switch (algo)
+    {
+        case kCAAM_HmacSha1:
+            mappedAlgo = kCAAM_Sha1;
+            break;
+        case kCAAM_HmacSha224:
+            mappedAlgo = kCAAM_Sha224;
+            break;
+        case kCAAM_HmacSha256:
+            mappedAlgo = kCAAM_Sha256;
+            break;
+        case kCAAM_HmacSha384:
+            mappedAlgo = kCAAM_Sha384;
+            break;
+        case kCAAM_HmacSha512:
+            mappedAlgo = kCAAM_Sha512;
+            break;
+        default:
+            /* Other algorithms stay the same. */
+            mappedAlgo = algo;
+            break;
+    }
+
+    return mappedAlgo;
+}
+
+/*!
+ * @brief Checks if an HMAC key is not oversized, and if it is, it gets hashed.
+ *
+ * @param base CAAM peripheral base address
+ * @param handle Handle used for this request.
+ * @param algo Underlaying algorithm to use for MAC computation.
+ * @param inputKey The key to be checked
+ * @param inputKeySize Size of input key in bytes
+ * @param[out] outputKey Output buffer for the key which can hold a digest of specified algo
+ * @param[out] outputKeySize Output parameter storing the size of the output key in bytes
+ * @return Status of the one call hash operation.
+ */
+static status_t hmac_prehash_key(CAAM_Type *base,
+                                 caam_handle_t *handle,
+                                 caam_hash_algo_t algo,
+                                 const uint8_t *inputKey,
+                                 size_t inputKeySize,
+                                 uint8_t *outputKey,
+                                 size_t *outputKeySize)
+{
+    status_t status = kStatus_Success;
+
+    if ((((algo == kCAAM_HmacSha256) || (algo == kCAAM_HmacSha1) || (algo == kCAAM_HmacSha224)) &&
+         inputKeySize > 64u) ||
+        (((algo == kCAAM_HmacSha384) || (algo == kCAAM_HmacSha512)) && inputKeySize > 128u))
+    {
+        /* Key is too large - as per FIPS 198-1, hash it down first with the selected hash */
+        const caam_hash_algo_t mappedAlgo = hmac2hash_algo(algo);
+        status = CAAM_HASH(base, handle, mappedAlgo, inputKey, inputKeySize, NULL, 0, outputKey, outputKeySize);
+    }
+    else
+    {
+        /* Key size is within limits */
+        (void)caam_memcpy(outputKey, inputKey, inputKeySize);
+        *outputKeySize = inputKeySize;
+    }
+
+    return status;
+}
+
 static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, uint32_t *descaddr)
 {
     /* adding new job to the s_inJobRing[] must be atomic
@@ -694,7 +779,7 @@ static const uint32_t templateAesGcm[] = {
 
     /* 16 */ 0xA3001201u, /* JMP always to next command. Load/store checkpoint. Class 1 done checkpoint. */
 
-    /* For encryption, write the computed and encrypted MAC to user buffer */
+                          /* For encryption, write the computed and encrypted MAC to user buffer */
     /* For decryption, compare the computed tag with the received tag, CICV-only job. */
     /* 17 */ 0x10880004u, /* LOAD Immediate to Clear Written Register. */
     /* 18 */ 0x08000004u, /* value for Clear Written Register: C1D and C1DS bits are set */
@@ -809,7 +894,7 @@ status_t caam_aes_gcm_non_blocking(CAAM_Type *base,
             descriptor[16] = 0x52200000u | (tagSize & DESC_TAG_SIZE_MASK); /* STORE from Class 1 context to tag */
             descriptor[17] = ADD_OFFSET((uint32_t)tag);                    /* place: tag address */
             ;
-            descriptor[18] = DESC_HALT; /* always halt with status 0x0 (normal) */
+            descriptor[18] = DESC_HALT;                                    /* always halt with status 0x0 (normal) */
         }
     }
     else
@@ -827,6 +912,7 @@ static status_t caam_aes_ccm_check_input_args(CAAM_Type *base,
                                               const uint8_t *iv,
                                               const uint8_t *key,
                                               uint8_t *dst,
+                                              size_t size,
                                               size_t ivSize,
                                               size_t aadSize,
                                               size_t keySize,
@@ -838,7 +924,9 @@ static status_t caam_aes_ccm_check_input_args(CAAM_Type *base,
     }
 
     /* tag can be NULL to skip tag processing */
-    if ((src == NULL) || (iv == NULL) || (key == NULL) || (dst == NULL))
+    /* payload may also be empty, in which case the specification degenerates to an authentication mode on the
+     * associated data. */
+    if (((src == NULL) && (0u != size)) || (iv == NULL) || (key == NULL) || ((dst == NULL) && (0u != size)))
     {
         return kStatus_InvalidArgument;
     }
@@ -886,7 +974,7 @@ static void caam_aes_ccm_context_init(
     flags_field = (uint8_t)(8U * ((tagSize - 2U) / 2U) + q - 1U); /* 8*M' + L' */
     if (aadSize != 0U)
     {
-        flags_field |= 0x40U; /* Adata */
+        flags_field |= 0x40U;                 /* Adata */
     }
     blk.b[0] = flags_field;                   /* flags field */
     blk.w[3] = swap_bytes(inputSize);         /* message size, most significant byte first */
@@ -936,7 +1024,7 @@ static const uint32_t templateAesCcm[] = {
     /* 22 */ 0x00000000u, /* place: destination address */
     /* 23 */ 0x00000000u, /* place: destination size */
 
-    /* For encryption, write the computed and encrypted MAC to user buffer */
+                          /* For encryption, write the computed and encrypted MAC to user buffer */
     /* 24 */ 0x52202000u, /* STORE from Class 1 context to tag */
     /* 25 */ 0x00000000u, /* place: tag address */
 
@@ -983,7 +1071,7 @@ status_t caam_aes_ccm_non_blocking(CAAM_Type *base,
     uint32_t descriptorSize = ARRAY_SIZE(templateAesCcm);
     (void)caam_memcpy(descriptor, templateAesCcm, sizeof(templateAesCcm));
 
-    status = caam_aes_ccm_check_input_args(base, input, iv, key, output, ivSize, aadSize, keySize, tagSize);
+    status = caam_aes_ccm_check_input_args(base, input, iv, key, output, size, ivSize, aadSize, keySize, tagSize);
     if (status != kStatus_Success)
     {
         return status;
@@ -2452,7 +2540,9 @@ status_t CAAM_AES_DecryptTagGcm(CAAM_Type *base,
 static status_t caam_hash_check_input_alg(caam_hash_algo_t algo)
 {
     if ((algo != kCAAM_XcbcMac) && (algo != kCAAM_Cmac) && (algo != kCAAM_Sha1) && (algo != kCAAM_Sha224) &&
-        (algo != kCAAM_Sha256) && (algo != kCAAM_Sha384) && (algo != kCAAM_Sha512))
+        (algo != kCAAM_Sha256) && (algo != kCAAM_Sha384) && (algo != kCAAM_Sha512) && (algo != kCAAM_HmacSha1) &&
+        (algo != kCAAM_HmacSha224) && (algo != kCAAM_HmacSha256) && (algo != kCAAM_HmacSha384) &&
+        (algo != kCAAM_HmacSha512))
     {
         return kStatus_InvalidArgument;
     }
@@ -2462,6 +2552,12 @@ static status_t caam_hash_check_input_alg(caam_hash_algo_t algo)
 static inline bool caam_hash_alg_is_cmac(caam_hash_algo_t algo)
 {
     return ((algo == kCAAM_XcbcMac) || (algo == kCAAM_Cmac));
+}
+
+static inline bool caam_hash_alg_is_hmac(caam_hash_algo_t algo)
+{
+    return ((algo == kCAAM_HmacSha1) || (algo == kCAAM_HmacSha224) || (algo == kCAAM_HmacSha256) ||
+            (algo == kCAAM_HmacSha384) || (algo == kCAAM_HmacSha512));
 }
 
 static inline bool caam_hash_alg_is_sha(caam_hash_algo_t algo)
@@ -2492,6 +2588,14 @@ static status_t caam_hash_check_input_args(
         }
     }
 
+    if (caam_hash_alg_is_hmac(algo))
+    {
+        if (NULL == key)
+        {
+            return kStatus_InvalidArgument;
+        }
+    }
+
     return kStatus_Success;
 }
 
@@ -2507,8 +2611,18 @@ static status_t caam_hash_check_context(caam_hash_ctx_internal_t *ctxInternal, c
 
 static uint32_t caam_hash_algo2mode(caam_hash_algo_t algo, uint32_t algState, uint32_t *algOutSize)
 {
-    uint32_t modeReg = 0u;
-    uint32_t outSize = 0u;
+    uint32_t modeReg  = 0u;
+    uint32_t outSize  = 0u;
+    uint32_t HmacMode = 0u;
+
+    if (((algState >> 2u) == (uint32_t)kCAAM_AlgStateInit) || ((algState >> 2u) == (uint32_t)kCAAM_AlgStateInitFinal))
+    {
+        HmacMode = (uint32_t)kCAAM_HmacModeNonDerivedKey;
+    }
+    else
+    {
+        HmacMode = (uint32_t)kCAAM_HmacModeDerivedKey;
+    }
 
     /* Set CAAM algorithm */
     switch (algo)
@@ -2539,6 +2653,26 @@ static uint32_t caam_hash_algo2mode(caam_hash_algo_t algo, uint32_t algState, ui
             break;
         case kCAAM_Sha512:
             modeReg = (uint32_t)kCAAM_AlgorithmSHA512;
+            outSize = (uint32_t)kCAAM_OutLenSha512;
+            break;
+        case kCAAM_HmacSha1:
+            modeReg = (uint32_t)kCAAM_AlgorithmSHA1 | (uint32_t)HmacMode;
+            outSize = (uint32_t)kCAAM_OutLenSha1;
+            break;
+        case kCAAM_HmacSha224:
+            modeReg = (uint32_t)kCAAM_AlgorithmSHA224 | (uint32_t)HmacMode;
+            outSize = (uint32_t)kCAAM_OutLenSha224;
+            break;
+        case kCAAM_HmacSha256:
+            modeReg = (uint32_t)kCAAM_AlgorithmSHA256 | (uint32_t)HmacMode;
+            outSize = (uint32_t)kCAAM_OutLenSha256;
+            break;
+        case kCAAM_HmacSha384:
+            modeReg = (uint32_t)kCAAM_AlgorithmSHA384 | (uint32_t)HmacMode;
+            outSize = (uint32_t)kCAAM_OutLenSha384;
+            break;
+        case kCAAM_HmacSha512:
+            modeReg = (uint32_t)kCAAM_AlgorithmSHA512 | (uint32_t)HmacMode;
             outSize = (uint32_t)kCAAM_OutLenSha512;
             break;
         default:
@@ -2602,6 +2736,40 @@ static uint32_t caam_hash_algo2ctx_size(caam_hash_algo_t algo, uint32_t how)
         case kCAAM_Sha384:
         case kCAAM_Sha512:
             ctxSize = 72u; /* 8 + 64 */
+            break;
+        /* Add the context of HMAC: in Init mode the HMAC context includes the derived key
+        in other cases HMAC_SHA_XXX contex's size is the same as the SHA_XXX context's size */
+        case kCAAM_HmacSha1:
+            if (how == 0u)
+            {
+                ctxSize = 76u; /* 8 + 20 + (sizeof(derivedKey) = 48)*/
+            }
+            else
+            {
+                ctxSize = 28u; /* 8 + 20 */
+            }
+            break;
+        case kCAAM_HmacSha224:
+        case kCAAM_HmacSha256:
+            if (how == 0u)
+            {
+                ctxSize = 104u; /* 8 + 32 + (sizeof(derivedKey) = 64)*/
+            }
+            else
+            {
+                ctxSize = 40u; /* 8 + 32 */
+            }
+            break;
+        case kCAAM_HmacSha384:
+        case kCAAM_HmacSha512:
+            if (how == 0u)
+            {
+                ctxSize = 200u; /* 8 + 64 + (sizeof(derivedKey) = 128)*/
+            }
+            else
+            {
+                ctxSize = 72u; /* 8 + 64 */
+            }
             break;
         default:
             /* All the cases have been listed above, the default clause should not be reached. */
@@ -2748,12 +2916,13 @@ static status_t caam_hash_schedule_input_data(CAAM_Type *base,
                                               * we need caam_hash_algo2ctx_size() to return
                                               * full context size (to be used for context restore in descriptor[3])
                                               */
+    bool isHmac = caam_hash_alg_is_hmac(algo);
+
     uint32_t caamCtxSz = caam_hash_algo2ctx_size(algo, 0 /* full context */);
 
     (void)caam_memcpy(descriptor, templateHash, sizeof(templateHash));
 
-    /* MDHA is always Class 2 CHA, AESA configured at build time as Class 1 CHA */
-    uint32_t hashClass = isSha ? 0x04000000u : CAAM_AES_MAC_CLASS;
+    uint32_t hashClass = (isSha || isHmac) ? 0x04000000u : CAAM_AES_MAC_CLASS;
 
     /* add class to all commands that need it */
     descriptor[1] |= hashClass;
@@ -2776,6 +2945,12 @@ static status_t caam_hash_schedule_input_data(CAAM_Type *base,
         }
         else
         {
+            if (isHmac)
+            {
+                // Key can be stored in plaintext
+                descriptor[1] |= 1UL << 14;
+            }
+
             /* load KEY, then directly to AESA MAC operation */
             descriptor[1] |= (keySize & DESC_KEY_SIZE_MASK);
             descriptor[2] = ADD_OFFSET(keyAddr);
@@ -2866,6 +3041,14 @@ static status_t caam_hash_schedule_input_data(CAAM_Type *base,
         descriptor[11] |= (keySize & DESC_KEY_SIZE_MASK);
         descriptor[12] = ADD_OFFSET((uint32_t)&keyAddr);
     }
+    else if ((kCAAM_AlgStateInit == algState) && (kCAAM_HmacSha256 == algo))
+    {
+        /* save the HMAC derived key. Only if context switch */
+        /* Derived key is 64 byte long */
+
+        descriptor[11] = 0x60260000u | (64u & DESC_KEY_SIZE_MASK);
+        descriptor[12] = ADD_OFFSET((uint32_t)&keyAddr);
+    }
     else
     {
         descriptor[11] = ADD_OFFSET(descriptor[13]); /* always halt with status 0x0 (normal) */
@@ -2953,8 +3136,8 @@ status_t CAAM_HASH_Init(CAAM_Type *base,
         ctxInternal->word[i] = 0u;
     }
 
-    /* Steps required only using AES engine */
-    if (caam_hash_alg_is_cmac(algo))
+    /* Steps required only when using AESA for CMAC or MDHA for HMAC */
+    if (caam_hash_alg_is_cmac(algo) || caam_hash_alg_is_hmac(algo))
     {
         /* store input key and key length in context struct for later use */
         ctxInternal->word[kCAAM_HashCtxKeySize] = keySize;
@@ -3368,6 +3551,179 @@ status_t CAAM_HASH_NonBlocking(CAAM_Type *base,
                                            outputSize, output, NULL, (uint32_t)key, keySize);
     return status;
 }
+
+/*******************************************************************************
+ * HMAC
+ ******************************************************************************/
+
+/*!
+ * brief Initialize HMAC context
+ *
+ * This function initializes the HMAC.
+ *
+ * For XCBC-MAC, the key length must be 16. For CMAC, the key length can be
+ * the AES key lengths supported by AES engine. For MDHA the key length argument
+ * is ignored.
+ *
+ * This functions is used to initialize the context for both blocking and non-blocking
+ * CAAM_HMAC API.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request.
+ * param[out] ctx Output HMAC context
+ * param algo Underlaying algorithm to use for HMAC computation.
+ * param key Input key
+ * param keySize Size of input key in bytes
+ * return Status of initialization
+ */
+status_t CAAM_HMAC_Init(CAAM_Type *base,
+                        caam_handle_t *handle,
+                        caam_hash_ctx_t *ctx,
+                        caam_hash_algo_t algo,
+                        const uint8_t *key,
+                        size_t keySize)
+{
+    return CAAM_HASH_Init(base, handle, ctx, algo, key, keySize);
+}
+
+/*!
+ * brief Create Message Authentication Code (MAC) on given data
+ *
+ * Perform the full keyed XCBC-MAC/CMAC, or HMAC-SHA in one function call.
+ *
+ * Key shall be supplied if the underlaying algoritm is AES XCBC-MAC, CMAC, or SHA HMAC.
+ *
+ * For XCBC-MAC, the key length must be 16. For CMAC, the key length can be
+ * the AES key lengths supported by AES engine. For HMAC, the key can have
+ * any size.
+ *
+ * The function is blocking.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request.
+ * param algo Underlaying algorithm to use for MAC computation.
+ * param input Input data
+ * param inputSize Size of input data in bytes
+ * param key Input key
+ * param keySize Size of input key in bytes
+ * param[out] output Output MAC data
+ * param[out] outputSize Output parameter storing the size of the output MAC in bytes
+ * return Status of the one call hash operation.
+ */
+status_t CAAM_HMAC(CAAM_Type *base,
+                   caam_handle_t *handle,
+                   caam_hash_algo_t algo,
+                   const uint8_t *input,
+                   size_t inputSize,
+                   const uint8_t *key,
+                   size_t keySize,
+                   uint8_t *output,
+                   size_t *outputSize)
+{
+    status_t status;
+    /* Dummy HASH context for input checking */
+    caam_hash_ctx_t ctxDummy;
+
+    if (!caam_hash_alg_is_hmac(algo))
+    {
+        /* Not an HMAC algorithm */
+        return kStatus_InvalidArgument;
+    }
+
+    status = caam_hash_check_input_args(base, &ctxDummy, algo, key, keySize);
+    if (kStatus_Success != status)
+    {
+        return status;
+    }
+
+    /* Make space for the largest possible key size */
+    uint8_t updatedKey[CAAM_SHA_BLOCK_SIZE] = {0};
+    size_t updatedKeySize                   = 0;
+
+    (void)memset(updatedKey, 0, sizeof(updatedKey));
+
+    status = hmac_prehash_key(base, handle, algo, key, keySize, updatedKey, &updatedKeySize);
+    if (kStatus_Success != status)
+    {
+        return status;
+    }
+
+    status = CAAM_HASH(base, handle, algo, input, inputSize, updatedKey, updatedKeySize, output, outputSize);
+    return status;
+}
+
+/*!
+ * brief Create Message Authentication Code (MAC) on given data
+ *
+ * Perform the full keyed XCBC-MAC/CMAC, or HMAC-SHA in one function call.
+ *
+ * Key shall be supplied if the underlaying algoritm is AES XCBC-MAC, CMAC, or SHA HMAC.
+ *
+ * For XCBC-MAC, the key length must be 16. For CMAC, the key length can be
+ * the AES key lengths supported by AES engine. For HMAC, the key can have
+ * any size, however the function will block if the supplied key is bigger than
+ * the block size of the underlying hashing algorithm (e.g. >64 bytes for SHA256).
+ *
+ * The function is not blocking with the exception of supplying large key sizes.
+ * In that case the function will block until the large key is hashed down with the
+ * supplied hashing algorithm (as per FIPS 198-1), after which operation is resumed
+ * to calling non-blocking HMAC.
+ *
+ * param base CAAM peripheral base address
+ * param handle Handle used for this request.
+ * param algo Underlaying algorithm to use for MAC computation.
+ * param input Input data
+ * param inputSize Size of input data in bytes
+ * param key Input key
+ * param keySize Size of input key in bytes
+ * param[out] output Output MAC data
+ * param[out] outputSize Output parameter storing the size of the output MAC in bytes
+ * return Status of the one call hash operation.
+ */
+status_t CAAM_HMAC_NonBlocking(CAAM_Type *base,
+                               caam_handle_t *handle,
+                               caam_desc_hash_t descriptor,
+                               caam_hash_algo_t algo,
+                               const uint8_t *input,
+                               size_t inputSize,
+                               const uint8_t *key,
+                               size_t keySize,
+                               uint8_t *output,
+                               size_t *outputSize)
+{
+    status_t status;
+    /* Dummy HASH context for input checking */
+    caam_hash_ctx_t ctxDummy;
+
+    if (!caam_hash_alg_is_hmac(algo))
+    {
+        /* Not an HMAC algorithm */
+        return kStatus_InvalidArgument;
+    }
+
+    status = caam_hash_check_input_args(base, &ctxDummy, algo, key, keySize);
+    if (kStatus_Success != status)
+    {
+        return status;
+    }
+
+    /* Make space for the largest possible key size */
+    uint8_t updatedKey[CAAM_SHA_BLOCK_SIZE] = {0};
+    size_t updatedKeySize                   = 0;
+
+    (void)memset(updatedKey, 0, sizeof(updatedKey));
+
+    status = hmac_prehash_key(base, handle, algo, key, keySize, updatedKey, &updatedKeySize);
+    if (kStatus_Success != status)
+    {
+        return status;
+    }
+
+    status = CAAM_HASH_NonBlocking(base, handle, descriptor, algo, input, inputSize, updatedKey, updatedKeySize, output,
+                                   outputSize);
+    return status;
+}
+
 /*******************************************************************************
  * CRC Code static
  ******************************************************************************/
@@ -3547,7 +3903,6 @@ static status_t caam_crc_schedule_input_data(CAAM_Type *base,
                                              uint32_t polynomialAddr,
                                              uint32_t polynomialSize)
 {
-    BUILD_ASSURE(sizeof(templateHash) <= sizeof(caam_desc_hash_t), caam_desc_hash_t_size);
     uint32_t descriptorSize = ARRAY_SIZE(templateHash);
     uint32_t algOutSize     = 4u;
 
@@ -4522,9 +4877,9 @@ status_t CAAM_RedBlob_Encapsule(CAAM_Type *base,
     (void)caam_memcpy(descriptor, templateBlob, sizeof(templateBlob));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
 #if defined(KEYBLOB_USE_SECURE_MEMORY)
-    descriptor[1] |= 8u; // KEY command to Class 2 Context Register,  64bits RNG KEY.
+    descriptor[1] |= 8u;                               // KEY command to Class 2 Context Register,  64bits RNG KEY.
 #else
-    descriptor[1] |= 16u;         // KEY command to Class 2 Context Register, 128bits RNG KEY.
+    descriptor[1] |= 16u;                  // KEY command to Class 2 Context Register, 128bits RNG KEY.
 #endif                                                 /* (KEYBLOB_USE_SECURE_MEMORY) */
     descriptor[2] = ADD_OFFSET((uint32_t)keyModifier); // Key modifier adress
     descriptor[3] |= dataSize;                         // SEQ IN PTR command to load plain data
@@ -4532,10 +4887,10 @@ status_t CAAM_RedBlob_Encapsule(CAAM_Type *base,
     descriptor[5] |= blob_size;                        // SEQ OUT PTR Set outputing key blob
     descriptor[6] = ADD_OFFSET((uint32_t)blob_data);   // Key blob adress
 #if defined(KEYBLOB_USE_SECURE_MEMORY)
-    descriptor[7] |= (7UL << 24) | SEC_MEM; // OPERATION:Encrypt Red Blob in secure memory
+    descriptor[7] |= (7UL << 24) | SEC_MEM;            // OPERATION:Encrypt Red Blob in secure memory
 #else
-    descriptor[7] |= (7UL << 24); // OPERATION:Encrypt Red Blob in normal memory
-#endif /* (KEYBLOB_USE_SECURE_MEMORY) */
+    descriptor[7] |= (7UL << 24);          // OPERATION:Encrypt Red Blob in normal memory
+#endif                                                 /* (KEYBLOB_USE_SECURE_MEMORY) */
 
     // schedule the job and block wait for result
     do
@@ -4596,15 +4951,14 @@ status_t CAAM_RedBlob_Decapsule(CAAM_Type *base,
 
     /* create job descriptor */
 
-    BUILD_ASSURE(sizeof(templateBlob) <= sizeof(caam_desc_gen_dep_blob_t), caam_desc_gen_dep_blob_t_size);
     uint32_t descriptorSize = ARRAY_SIZE(templateBlob);
 
     (void)caam_memcpy(descriptor, templateBlob, sizeof(templateBlob));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
 #if defined(KEYBLOB_USE_SECURE_MEMORY)
-    descriptor[1] |= 8u; // KEY command to Class 2 Context Register, 64bits RNG KEY.
+    descriptor[1] |= 8u;                               // KEY command to Class 2 Context Register, 64bits RNG KEY.
 #else
-    descriptor[1] |= 16u;         // KEY command to Class 2 Context Register, 128bits RNG KEY.
+    descriptor[1] |= 16u;                  // KEY command to Class 2 Context Register, 128bits RNG KEY.
 #endif                                                 /* (KEYBLOB_USE_SECURE_MEMORY) */
     descriptor[2] = ADD_OFFSET((uint32_t)keyModifier); // Key modifier adress
     descriptor[3] |= blob_size;                        // SEQ IN PTR command to load blob data
@@ -4612,10 +4966,10 @@ status_t CAAM_RedBlob_Decapsule(CAAM_Type *base,
     descriptor[5] |= dataSize;                         // SEQ OUT PTR command to load plain data
     descriptor[6] = ADD_OFFSET((uint32_t)data);        // Plain data adress
 #if defined(KEYBLOB_USE_SECURE_MEMORY)
-    descriptor[7] |= (6UL << 24) | SEC_MEM; // OPERATION:Decrypt red blob in secure memory
+    descriptor[7] |= (6UL << 24) | SEC_MEM;            // OPERATION:Decrypt red blob in secure memory
 #else
-    descriptor[7] |= (6UL << 24); // OPERATION:Decrypt red blob in normal memory
-#endif /* (KEYBLOB_USE_SECURE_MEMORY) */
+    descriptor[7] |= (6UL << 24);          // OPERATION:Decrypt red blob in normal memory
+#endif                                                 /* (KEYBLOB_USE_SECURE_MEMORY) */
     // schedule the job and block wait for result
     do
     {
@@ -4676,15 +5030,14 @@ status_t CAAM_BlackBlob_Encapsule(CAAM_Type *base,
     }
 
     /* create job descriptor */
-    BUILD_ASSURE(sizeof(templateBlob) <= sizeof(caam_desc_gen_enc_blob_t), caam_desc_gen_enc_blob_t);
     uint32_t descriptorSize = ARRAY_SIZE(templateBlob);
 
     (void)caam_memcpy(descriptor, templateBlob, sizeof(templateBlob));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
 #if defined(KEYBLOB_USE_SECURE_MEMORY)
-    descriptor[1] |= 8u; // KEY command to Class 2 Context Register, 64bits RNG KEY.
+    descriptor[1] |= 8u;                               // KEY command to Class 2 Context Register, 64bits RNG KEY.
 #else
-    descriptor[1] |= 16u;         // KEY command to Class 2 Context Register, 128bits RNG KEY.
+    descriptor[1] |= 16u;                  // KEY command to Class 2 Context Register, 128bits RNG KEY.
 #endif                                                 /* (KEYBLOB_USE_SECURE_MEMORY) */
     descriptor[2] = ADD_OFFSET((uint32_t)keyModifier); // Key modifier adress
     descriptor[3] |= dataSize;                         // SEQ IN PTR command to load plain data
@@ -4697,7 +5050,7 @@ status_t CAAM_BlackBlob_Encapsule(CAAM_Type *base,
 #else
     descriptor[7] |= (7UL << 24) | ((uint32_t)blackKeyType << 8) |
                      DESC_BLACKKEY_NOMMEN; // OPERATION:Encrypt black blob in normal memory
-#endif /* (KEYBLOB_USE_SECURE_MEMORY) */
+#endif                        /* (KEYBLOB_USE_SECURE_MEMORY) */
 
     // schedule the job and block wait for result
     do
@@ -4765,7 +5118,7 @@ status_t CAAM_BlackBlob_Decapsule(CAAM_Type *base,
     (void)caam_memcpy(descriptor, templateBlob, sizeof(templateBlob));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
 #if defined(KEYBLOB_USE_SECURE_MEMORY)
-    descriptor[1] |= 8u; // KEY command to Class 2 Context Register, 64bits RNG KEY.
+    descriptor[1] |= 8u;                               // KEY command to Class 2 Context Register, 64bits RNG KEY.
 #else
     descriptor[1] |= 16u;                  // KEY command to Class 2 Context Register, 128bits RNG KEY.
 #endif                                                 /* (KEYBLOB_USE_SECURE_MEMORY) */
@@ -4773,14 +5126,14 @@ status_t CAAM_BlackBlob_Decapsule(CAAM_Type *base,
     descriptor[3] |= blob_size;                        // SEQ IN PTR command to load blob data
     descriptor[4] = ADD_OFFSET((uint32_t)blob_data);   // Key blob adress
     descriptor[5] |= dataSize;
-    descriptor[6] = ADD_OFFSET((uint32_t)data); // Plain data adress
+    descriptor[6] = ADD_OFFSET((uint32_t)data);        // Plain data adress
 #if defined(KEYBLOB_USE_SECURE_MEMORY)
     descriptor[7] |= (6UL << 24) | ((uint32_t)blackKeyType << 8) | DESC_BLACKKEY_NOMMEN |
                      SEC_MEM; // OPERATION:Decrypt black blob in secure memory
 #else
     descriptor[7] |= (6UL << 24) | ((uint32_t)blackKeyType << 8) |
                      DESC_BLACKKEY_NOMMEN; // OPERATION:Decrypt black blob in normal memory
-#endif /* (KEYBLOB_USE_SECURE_MEMORY) */
+#endif                        /* (KEYBLOB_USE_SECURE_MEMORY) */
     // schedule the job and block wait for result
     do
     {

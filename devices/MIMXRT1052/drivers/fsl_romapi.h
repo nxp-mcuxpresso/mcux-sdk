@@ -332,6 +332,7 @@ enum _flexspi_nor_status
         MAKE_STATUS(kROM_StatusGroup_FLEXSPINOR, 9), /*!< Status for Flash detection failure */
 };
 
+/*! @brief FLEXSPI Operation Context */
 typedef enum _flexspi_operation
 {
     kFLEXSPIOperation_Command, /*!< FLEXSPI operation: Only command, both TX and RX buffer are ignored. */

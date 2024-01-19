@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -53,8 +53,8 @@ static uint32_t WDOG_GetInstance(WDOG_Type *base)
  * code
  *   wdogConfig->enableWdog = true;
  *   wdogConfig->workMode.enableWait = true;
- *   wdogConfig->workMode.enableStop = false;
- *   wdogConfig->workMode.enableDebug = false;
+ *   wdogConfig->workMode.enableStop = true;
+ *   wdogConfig->workMode.enableDebug = true;
  *   wdogConfig->enableInterrupt = false;
  *   wdogConfig->enablePowerdown = false;
  *   wdogConfig->resetExtension = flase;
@@ -73,9 +73,9 @@ void WDOG_GetDefaultConfig(wdog_config_t *config)
     (void)memset(config, 0, sizeof(*config));
 
     config->enableWdog             = true;
-    config->workMode.enableWait    = false;
-    config->workMode.enableStop    = false;
-    config->workMode.enableDebug   = false;
+    config->workMode.enableWait    = true;
+    config->workMode.enableStop    = true;
+    config->workMode.enableDebug   = true;
     config->enableInterrupt        = false;
     config->softwareResetExtension = false;
     config->enablePowerDown        = false;
@@ -108,8 +108,8 @@ void WDOG_Init(WDOG_Type *base, const wdog_config_t *config)
     uint16_t value        = 0u;
     uint32_t primaskValue = 0U;
 
-    value = WDOG_WCR_WDE(config->enableWdog) | WDOG_WCR_WDW(config->workMode.enableWait) |
-            WDOG_WCR_WDZST(config->workMode.enableStop) | WDOG_WCR_WDBG(config->workMode.enableDebug) |
+    value = WDOG_WCR_WDE(config->enableWdog) | WDOG_WCR_WDW(!config->workMode.enableWait) |
+            WDOG_WCR_WDZST(!config->workMode.enableStop) | WDOG_WCR_WDBG(!config->workMode.enableDebug) |
             WDOG_WCR_SRE(config->softwareResetExtension) | WDOG_WCR_WT(config->timeoutValue) |
             WDOG_WCR_WDT(config->enableTimeOutAssert) | WDOG_WCR_SRS_MASK | WDOG_WCR_WDA_MASK;
 

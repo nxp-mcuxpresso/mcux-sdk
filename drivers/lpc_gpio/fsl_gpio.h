@@ -23,10 +23,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LPC GPIO driver version. */
 #define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 1, 7))
-/*@}*/
+/*! @} */
 
 /*! @brief LPC GPIO direction definition */
 typedef enum _gpio_pin_direction
@@ -94,7 +94,7 @@ extern "C" {
 #endif
 
 /*! @name GPIO Configuration */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Initializes the GPIO peripheral.
@@ -135,10 +135,10 @@ void GPIO_PortInit(GPIO_Type *base, uint32_t port);
  */
 void GPIO_PinInit(GPIO_Type *base, uint32_t port, uint32_t pin, const gpio_pin_config_t *config);
 
-/*@}*/
+/*! @} */
 
 /*! @name GPIO Output Operations */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Sets the output level of the one GPIO pin to the logic 1 or 0.
@@ -155,9 +155,9 @@ static inline void GPIO_PinWrite(GPIO_Type *base, uint32_t port, uint32_t pin, u
     base->B[port][pin] = output;
 }
 
-/*@}*/
+/*! @} */
 /*! @name GPIO Input Operations */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Reads the current input value of the GPIO PIN.
@@ -174,7 +174,7 @@ static inline uint32_t GPIO_PinRead(GPIO_Type *base, uint32_t port, uint32_t pin
     return (uint32_t)base->B[port][pin];
 }
 
-/*@}*/
+/*! @} */
 
 /*!
  * @brief Sets the output level of the multiple GPIO pins to the logic 1.
@@ -212,7 +212,7 @@ static inline void GPIO_PortToggle(GPIO_Type *base, uint32_t port, uint32_t mask
     base->NOT[port] = mask;
 }
 
-/*@}*/
+/*! @} */
 
 /*!
  * @brief Reads the current input value of the whole GPIO port.
@@ -225,9 +225,9 @@ static inline uint32_t GPIO_PortRead(GPIO_Type *base, uint32_t port)
     return (uint32_t)base->PIN[port];
 }
 
-/*@}*/
+/*! @} */
 /*! @name GPIO Mask Operations */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Sets port mask, 0 - enable pin, 1 - disable pin.
@@ -351,7 +351,7 @@ void GPIO_PinClearInterruptFlag(GPIO_Type *base, uint32_t port, uint32_t pin, ui
 
 #endif /* FSL_FEATURE_GPIO_HAS_INTERRUPT */
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }

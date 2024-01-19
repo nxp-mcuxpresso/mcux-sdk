@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_IRQ_H_
-#define _FSL_IRQ_H_
+#ifndef FSL_IRQ_H_
+#define FSL_IRQ_H_
 
 #include "fsl_common.h"
 
@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_IRQ_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2. */
-/*@}*/
+/*! @} */
 
 /*! @brief Interrupt Request (IRQ) Edge Select */
 typedef enum _irq_edge
@@ -67,7 +67,7 @@ extern "C" {
  */
 
 /*! @name IRQ Configuration */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Get irq instance.
@@ -129,10 +129,10 @@ static inline void IRQ_Enable(IRQ_Type *base, bool enable)
     }
 }
 
-/*@}*/
+/*! @} */
 
 /*! @name IRQ interrupt Operations */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief   Enable/disable IRQ pin interrupt.
@@ -183,11 +183,11 @@ static inline uint32_t IRQ_GetIRQFlag(IRQ_Type *base)
     return ((uint32_t)base->SC & IRQ_SC_IRQF_MASK);
 }
 
-/*@}*/
+/*! @} */
 #ifdef __cplusplus
 }
 #endif
 
-/*@}*/
+/*! @} */
 
-#endif /* _FSL_IRQ_H_ */
+#endif /* FSL_IRQ_H_ */

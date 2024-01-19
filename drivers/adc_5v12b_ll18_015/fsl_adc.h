@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_ADC_H_
-#define _FSL_ADC_H_
+#ifndef FSL_ADC_H_
+#define FSL_ADC_H_
 
 #include "fsl_common.h"
 
@@ -317,12 +317,12 @@ static inline void ADC_SetHardwareTriggerMaskMode(ADC_Type *base, adc_hardware_t
 }
 #endif /* FSL_FEATURE_ADC_HAS_SC5_REG */
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
-/*@}*/
+/*! @} */
 
-#endif /* _FSL_ADC_H_ */
+#endif /* FSL_ADC_H_ */

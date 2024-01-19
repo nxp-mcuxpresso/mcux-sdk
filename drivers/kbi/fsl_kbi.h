@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_KBI_H_
-#define _FSL_KBI_H_
+#ifndef FSL_KBI_H_
+#define FSL_KBI_H_
 
 #include "fsl_common.h"
 
@@ -19,10 +19,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief KBI driver version. */
 #define FSL_KBI_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
-/*@}*/
+/*! @} */
 
 #if (defined(FSL_FEATURE_KBI_REG_WIDTH) && (FSL_FEATURE_KBI_REG_WIDTH == 8))
 typedef uint8_t kbi_reg_t;
@@ -77,7 +77,7 @@ void KBI_Init(KBI_Type *base, kbi_config_t *configure);
  */
 void KBI_Deinit(KBI_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name KBI Basic Operation
@@ -139,7 +139,7 @@ static inline uint32_t KBI_GetSourcePinStatus(KBI_Type *base)
 }
 #endif /* FSL_FEATURE_KBI_HAS_SOURCE_PIN */
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -147,4 +147,4 @@ static inline uint32_t KBI_GetSourcePinStatus(KBI_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_KBI_H_*/
+#endif /* FSL_KBI_H_*/

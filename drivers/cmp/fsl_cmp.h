@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_CMP_H_
-#define _FSL_CMP_H_
+#ifndef FSL_CMP_H_
+#define FSL_CMP_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief CMP driver version 2.0.3. */
 #define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief Interrupt enable/disable mask.
@@ -193,7 +193,7 @@ void CMP_GetDefaultConfig(cmp_config_t *config);
  */
 void CMP_SetInputChannels(CMP_Type *base, uint8_t positiveChannel, uint8_t negativeChannel);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Advanced Features
@@ -287,7 +287,7 @@ void CMP_EnableInterrupts(CMP_Type *base, uint32_t mask);
  */
 void CMP_DisableInterrupts(CMP_Type *base, uint32_t mask);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Results
@@ -311,11 +311,11 @@ uint32_t CMP_GetStatusFlags(CMP_Type *base);
  */
 void CMP_ClearStatusFlags(CMP_Type *base, uint32_t mask);
 
-/* @} */
+/*! @} */
 #if defined(__cplusplus)
 }
 #endif
 /*!
  * @}
  */
-#endif /* _FSL_CMP_H_ */
+#endif /* FSL_CMP_H_ */

@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_ACMP_H_
-#define _FSL_ACMP_H_
+#ifndef FSL_ACMP_H_
+#define FSL_ACMP_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief ACMP driver version 2.0.2. */
 #define FSL_ACMP_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 2U))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief Analog Comparator Hysterisis Selection.
@@ -223,12 +223,12 @@ static inline void ACMP_ClearInterruptFlags(ACMP_Type *base)
     base->CS &= ~(uint8_t)ACMP_CS_ACF_MASK;
 }
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
-/*@}*/
+/*! @} */
 
-#endif /* _FSL_ACMP_H_ */
+#endif /* FSL_ACMP_H_ */

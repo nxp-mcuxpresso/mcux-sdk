@@ -9,6 +9,7 @@
 
 #include "mflash_drv.h"
 #include "fsl_flash.h"
+#include "fsl_flash_ffr.h"
 #include "pin_mux.h"
 
 static flash_config_t g_flash_instance = {0};
@@ -24,6 +25,10 @@ int32_t mflash_drv_init(void)
     status_t result;
 
     result = FLASH_Init(&g_flash_instance);
+    if (result != kStatus_Success)
+        return result;
+
+    result = FFR_Init(&g_flash_instance);
     if (result != kStatus_Success)
         return result;
 
@@ -86,13 +91,13 @@ int32_t mflash_drv_is_readable(uint32_t addr)
                       FLASH_READMODE_MARGIN(g_flash_instance.modeConfig.readSingleWord.readMarginLevel) |
                       FLASH_READMODE_DMACC(g_flash_instance.modeConfig.readSingleWord.readDmaccWord);
     FLASH->CMD = 3;
-    while (!(FLASH->INTSTAT & FLASH_INTSTAT_DONE_MASK))
+    while ((FLASH->INTSTAT & FLASH_INTSTAT_DONE_MASK) == 0U)
         ;
     result = FLASH->INTSTAT;
 
     /* Report failure in case of errors */
     result_mask = FLASH_INTSTAT_FAIL_MASK | FLASH_INTSTAT_ERR_MASK | FLASH_INTSTAT_ECC_ERR_MASK;
-    if (result_mask & result)
+    if ((result_mask & result) != 0U)
         return kStatus_Fail;
 
     return kStatus_Success;

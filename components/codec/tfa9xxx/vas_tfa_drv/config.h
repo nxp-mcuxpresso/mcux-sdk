@@ -55,7 +55,7 @@
 #define kfree(ptr)          (void)0
 
 void TFA9XXX_NOP(const char *format, ...);
-//#define TFA9XXX_DEBUG
+// #define TFA9XXX_DEBUG
 #ifdef TFA9XXX_DEBUG
 #include "fsl_debug_console.h"
 #if defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE < 1)

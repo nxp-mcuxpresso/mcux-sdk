@@ -31,11 +31,22 @@ if(CONFIG_TOOLCHAIN STREQUAL armgcc)
   )
 endif()
 
-if(CONFIG_CORE STREQUAL cm7f AND (CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux))
+if((CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux) AND CONFIG_CORE STREQUAL cm7f)
   target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
       ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities/fsl_memcpy.S
   )
 endif()
+
+
+endif()
+
+
+if (CONFIG_USE_driver_rtt_template)
+# Add set(CONFIG_USE_driver_rtt_template true) in config.cmake to use this component
+
+message("driver_rtt_template component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+add_config_file(${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/template/SEGGER_RTT_Conf.h ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/template driver_rtt_template.MIMXRT1062)
 
 
 endif()
@@ -153,18 +164,21 @@ message("component_wifi_bt_module_tx_pwr_limits component is included from ${CMA
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/wifi_bt_module/AzureWave/tx_pwr_limits
   ${CMAKE_CURRENT_LIST_DIR}/../../components/wifi_bt_module/Murata/tx_pwr_limits
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/wifi_bt_module/u-blox/tx_pwr_limits
 )
 
 
 endif()
 
 
-if (CONFIG_USE_driver_rtt_template)
-# Add set(CONFIG_USE_driver_rtt_template true) in config.cmake to use this component
+if (CONFIG_USE_component_wifi_bt_module_config)
+# Add set(CONFIG_USE_component_wifi_bt_module_config true) in config.cmake to use this component
 
-message("driver_rtt_template component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+message("component_wifi_bt_module_config component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/template/SEGGER_RTT_Conf.h ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/template driver_rtt_template.MIMXRT1062)
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/wifi_bt_module/incl
+)
 
 
 endif()
@@ -179,16 +193,40 @@ if(CONFIG_USE_component_lpuart_adapter AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1062
 
 add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/board.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
 add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/board.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/clock_config.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/clock_config.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/pin_mux.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/pin_mux.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/peripherals.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/peripherals.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+
+if(CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxA)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxA/clock_config.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxA/clock_config.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxA/pin_mux.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxA/pin_mux.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxA/peripherals.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxA/peripherals.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+endif()
+
+if(CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxB)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxB/clock_config.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxB/clock_config.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxB/pin_mux.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxB/pin_mux.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxB/peripherals.h "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxB/peripherals.c "" DEVICES_Project_Template_MIMXRT1062.MIMXRT1062)
+endif()
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/project_template/.
 )
+
+if(CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxA)
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxA
+)
+endif()
+
+if(CONFIG_DEVICE_ID STREQUAL MIMXRT1062xxxxB)
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/project_template/MIMXRT1062xxxxB
+)
+endif()
 
 else()
 
@@ -207,16 +245,12 @@ message("device_MIMXRT1062_startup component is included from ${CMAKE_CURRENT_LI
 if(CONFIG_USE_device_MIMXRT1062_system)
 
 if(CONFIG_TOOLCHAIN STREQUAL armgcc)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_MIMXRT1062.S
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_MIMXRT1062.S "" device_MIMXRT1062_startup.MIMXRT1062)
 endif()
 
 if(CONFIG_TOOLCHAIN STREQUAL mcux)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mimxrt1062.c
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mimxrt1062.cpp
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mimxrt1062.c "" device_MIMXRT1062_startup.MIMXRT1062)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mimxrt1062.cpp "" device_MIMXRT1062_startup.MIMXRT1062)
 endif()
 
 else()
@@ -810,10 +844,14 @@ if (CONFIG_USE_utility_assert)
 
 message("utility_assert component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console)
+if(CONFIG_USE_utility_debug_console AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -830,10 +868,14 @@ if (CONFIG_USE_utility_assert_lite)
 
 message("utility_assert_lite component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console_lite)
+if(CONFIG_USE_utility_debug_console_lite AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -889,6 +931,43 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "utility_debug_console.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_rtt)
+# Add set(CONFIG_USE_driver_rtt true) in config.cmake to use this component
+
+message("driver_rtt component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_rtt_template)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT_printf.c
+)
+
+if(CONFIG_CORE STREQUAL cm7f)
+  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+      ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT_ASM_ARMv7M.S
+  )
+endif()
+
+if((CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux))
+  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+      ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/Syscalls/SEGGER_RTT_Syscalls_GCC.c
+  )
+endif()
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT
+)
+
+else()
+
+message(SEND_ERROR "driver_rtt.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -1986,7 +2065,7 @@ if (CONFIG_USE_component_mflash_file)
 
 message("component_mflash_file component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_mflash_rt1060)
+if(CONFIG_USE_component_mflash_rt1060 OR CONFIG_USE_component_mflash_evkcmimxrt1060)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mflash_file.c
@@ -2058,6 +2137,39 @@ endif()
 endif()
 
 
+if (CONFIG_USE_component_mflash_evkcmimxrt1060)
+# Add set(CONFIG_USE_component_mflash_evkcmimxrt1060 true) in config.cmake to use this component
+
+message("component_mflash_evkcmimxrt1060 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_mflash_common AND (CONFIG_BOARD STREQUAL evkcmimxrt1060) AND CONFIG_USE_driver_flexspi AND CONFIG_USE_driver_cache_armv7_m7)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/evkcmimxrt1060/mflash_drv.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/evkcmimxrt1060/.
+)
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DMFLASH_FILE_BASEADDR=7340032
+  )
+
+endif()
+
+else()
+
+message(SEND_ERROR "component_mflash_evkcmimxrt1060.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_driver_mma8451q)
 # Add set(CONFIG_USE_driver_mma8451q true) in config.cmake to use this component
 
@@ -2076,6 +2188,30 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_mma8451q.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_nvm_adapter)
+# Add set(CONFIG_USE_component_nvm_adapter true) in config.cmake to use this component
+
+message("component_nvm_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND CONFIG_USE_middleware_wireless_framework_function_lib AND CONFIG_USE_middleware_wireless_framework_NVM AND CONFIG_USE_middleware_wireless_framework_Common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/nvm/nvm_adapter.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/nvm/.
+)
+
+else()
+
+message(SEND_ERROR "component_nvm_adapter.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -2524,6 +2660,30 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "component_pit_time_stamp_adapter.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_gpt_time_stamp_adapter)
+# Add set(CONFIG_USE_component_gpt_time_stamp_adapter true) in config.cmake to use this component
+
+message("component_gpt_time_stamp_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_BOARD STREQUAL evkmimxrt1060 OR CONFIG_BOARD STREQUAL evkbmimxrt1060 OR CONFIG_BOARD STREQUAL evkcmimxrt1060) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_gpt)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/time_stamp/fsl_adapter_gpt_time_stamp.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/time_stamp/.
+)
+
+else()
+
+message(SEND_ERROR "component_gpt_time_stamp_adapter.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -4510,43 +4670,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_fbdev.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_rtt)
-# Add set(CONFIG_USE_driver_rtt true) in config.cmake to use this component
-
-message("driver_rtt component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_rtt_template)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT_printf.c
-)
-
-if(CONFIG_CORE STREQUAL cm7f)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT_ASM_ARMv7M.S
-  )
-endif()
-
-if((CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux))
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/Syscalls/SEGGER_RTT_Syscalls_GCC.c
-  )
-endif()
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT
-)
-
-else()
-
-message(SEND_ERROR "driver_rtt.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

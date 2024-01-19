@@ -1,7 +1,0 @@
-<map id="ARM_systick_start_ticks" name="ARM_systick_start_ticks">
-<area shape="rect" id="node2" href="$drivers_8h.html#a52c4ad21a29460539f43e8781d9fcfbf" title="ARM_systick_delay_ms" alt="" coords="221,5,384,32"/>
-<area shape="rect" id="node5" href="$fusion_8h.html#aeb60375528d75ee9fec67a96916141ca" title="fFuseSensors" alt="" coords="251,56,354,83"/>
-<area shape="rect" id="node3" href="$sensor__fusion_8c.html#ab088da7731ffdf25710a364a7f88b224" title="This function is responsible for initializing the system prior to starting the main fusion loop..." alt="" coords="432,5,580,32"/>
-<area shape="rect" id="node4" href="$sensor__fusion_8h.html#a367d92b99365a8143700b76439915d65" title="utility function to insert default values in the top level structure " alt="" coords="628,31,791,57"/>
-<area shape="rect" id="node6" href="$sensor__fusion_8c.html#a8b90119fee979d0309cc923bf1fad543" title="runFusion the top level call that actually runs the sensor fusion. This is a utility function which m..." alt="" coords="467,56,545,83"/>
-</map>

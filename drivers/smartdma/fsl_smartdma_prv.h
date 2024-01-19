@@ -29,8 +29,8 @@
  * this code.
  */
 
-#ifndef _FSL_SMARTDMA_PRV_H_
-#define _FSL_SMARTDMA_PRV_H_
+#ifndef FSL_SMARTDMA_PRV_H_
+#define FSL_SMARTDMA_PRV_H_
 
 #include "fsl_common.h"
 

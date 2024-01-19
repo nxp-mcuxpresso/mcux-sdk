@@ -204,7 +204,7 @@
      (defined(RTE_USART5) && RTE_USART5 && defined(LPUART5)) || \
      (defined(RTE_USART6) && RTE_USART6 && defined(LPUART6)))
 
-#define ARM_LPUART_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (4))
+#define ARM_LPUART_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (5))
 
 /*
  * ARMCC does not support split the data section automatically, so the driver
@@ -265,11 +265,11 @@ typedef struct _cmsis_lpuart_dma_driver_state
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
 typedef struct _cmsis_lpuart_edma_resource
 {
-    DMA_Type *txEdmaBase;   /*!< EDMA peripheral base address for TX.    */
+    void *txEdmaBase;   /*!< EDMA peripheral base address for TX.    */
     uint32_t txEdmaChannel; /*!< EDMA channel for LPUART TX.             */
     uint32_t txDmaRequest;  /*!< TX EDMA request source.                 */
 
-    DMA_Type *rxEdmaBase;   /*!< EDMA peripheral base address for RX.    */
+    void *rxEdmaBase;   /*!< EDMA peripheral base address for RX.    */
     uint32_t rxEdmaChannel; /*!< EDMA channel for LPUART RX.             */
     uint32_t rxDmaRequest;  /*!< RX EDMA request source.                 */
 

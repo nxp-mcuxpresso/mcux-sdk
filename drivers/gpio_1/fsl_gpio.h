@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_GPIO_H_
-#define _FSL_GPIO_H_
+#ifndef FSL_GPIO_H_
+#define FSL_GPIO_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief GPIO driver version. */
 #define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief PORT definition */
 typedef enum _gpio_port_num
@@ -79,7 +79,7 @@ extern "C" {
  */
 
 /*! @name GPIO Configuration */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Initializes a GPIO pin used by the board.
@@ -113,10 +113,10 @@ extern "C" {
  */
 void GPIO_PinInit(gpio_port_num_t port, uint8_t pin, const gpio_pin_config_t *config);
 
-/*@}*/
+/*! @} */
 
 /*! @name GPIO Output Operations */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Sets the output level of the multiple GPIO pins to the logic 1 or 0.
@@ -168,10 +168,10 @@ void GPIO_PortClear(gpio_port_num_t port, uint8_t mask);
  * @param mask GPIO pin number macro
  */
 void GPIO_PortToggle(gpio_port_num_t port, uint8_t mask);
-/*@}*/
+/*! @} */
 
 /*! @name GPIO Input Operations */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Reads the current input value of the GPIO port.
@@ -188,9 +188,9 @@ void GPIO_PortToggle(gpio_port_num_t port, uint8_t mask);
  */
 uint32_t GPIO_PinRead(gpio_port_num_t port, uint8_t pin);
 
-/*@}*/
+/*! @} */
 
-/*@}*/
+/*! @} */
 
 /*!
  * @addtogroup fgpio_driver
@@ -208,7 +208,7 @@ uint32_t GPIO_PinRead(gpio_port_num_t port, uint8_t pin);
 #if defined(FSL_FEATURE_SOC_FGPIO_COUNT) && FSL_FEATURE_SOC_FGPIO_COUNT
 
 /*! @name FGPIO Configuration */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Initializes the FGPIO peripheral.
@@ -255,10 +255,10 @@ void FGPIO_PortInit(gpio_port_num_t port);
  */
 void FGPIO_PinInit(gpio_port_num_t port, uint8_t pin, const gpio_pin_config_t *config);
 
-/*@}*/
+/*! @} */
 
 /*! @name FGPIO Output Operations */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Sets the output level of the multiple FGPIO pins to the logic 1 or 0.
@@ -311,10 +311,10 @@ void FGPIO_PortClear(gpio_port_num_t port, uint8_t mask);
  */
 void FGPIO_PortToggle(gpio_port_num_t port, uint8_t mask);
 
-/*@}*/
+/*! @} */
 
 /*! @name FGPIO Input Operations */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Reads the current input value of the FGPIO port.
@@ -331,11 +331,11 @@ void FGPIO_PortToggle(gpio_port_num_t port, uint8_t mask);
  */
 uint32_t FGPIO_PinRead(gpio_port_num_t port, uint8_t pin);
 
-/*@}*/
+/*! @} */
 
 #endif /* FSL_FEATURE_SOC_FGPIO_COUNT */
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -345,4 +345,4 @@ uint32_t FGPIO_PinRead(gpio_port_num_t port, uint8_t pin);
  * @}
  */
 
-#endif /* _FSL_GPIO_H_*/
+#endif /* FSL_GPIO_H_*/

@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_DAC12_H_
-#define _FSL_DAC12_H_
+#ifndef FSL_DAC12_H_
+#define FSL_DAC12_H_
 
 #include "fsl_common.h"
 
@@ -23,10 +23,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-/*! @brief DAC12 driver version 2.1.0. */
-#define FSL_DAC12_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
-/*@}*/
+/*! @{ */
+/*! @brief DAC12 driver version 2.1.1. */
+#define FSL_DAC12_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @} */
 
 /*! @brief Define "write 1 to clear" flags. */
 #define DAC12_CR_W1C_FLAGS_MASK (DAC_CR_OVFF_MASK | DAC_CR_UDFF_MASK)
@@ -260,7 +260,7 @@ static inline void DAC12_ResetFIFO(DAC_Type *base)
     base->CR = (base->CR & ~DAC12_CR_W1C_FLAGS_MASK) | DAC_CR_FIFORST_MASK;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -292,7 +292,7 @@ static inline void DAC12_ClearStatusFlags(DAC_Type *base, uint32_t flags)
     base->CR |= (flags & DAC12_CR_W1C_FLAGS_MASK);
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -321,7 +321,7 @@ static inline void DAC12_DisableInterrupts(DAC_Type *base, uint32_t mask)
     base->CR &= ~mask;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name DMA control
@@ -346,7 +346,7 @@ static inline void DAC12_EnableDMA(DAC_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Functional feature
@@ -407,7 +407,7 @@ static inline uint32_t DAC12_GetFIFOWritePointer(DAC_Type *base)
     return (DAC_PTR_DACWFP_MASK & base->PTR) >> DAC_PTR_DACWFP_SHIFT;
 }
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -415,4 +415,4 @@ static inline uint32_t DAC12_GetFIFOWritePointer(DAC_Type *base)
 /*!
  * @}
  */
-#endif /* _FSL_DAC12_H_ */
+#endif /* FSL_DAC12_H_ */

@@ -216,9 +216,9 @@ static inline nic_qos_t NIC_GetWriteQos(nic_reg_t base)
  * @param base Base address of GPV address
  * @param value Target value
  */
-static inline void NIC_SetFnModAhb(nic_reg_t base, nic_fn_mod_ahb_t v)
+static inline void NIC_SetFnModAhb(nic_reg_t base, nic_fn_mod_ahb_t value)
 {
-    *(volatile uint32_t *)(base) = v;
+    *(volatile uint32_t *)(base) = value;
     __DSB();
 }
 
@@ -305,4 +305,7 @@ static inline nic_fn_mod2_t NIC_GetFnMod2(nic_reg_t base)
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */
+/*!
+ * @}
+ */
 #endif /* _FSL_NIC301_H_ */

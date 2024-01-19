@@ -10,6 +10,9 @@
 #  # description: Utilities which is needed for particular toolchain like the SBRK function required to address limitation between HEAP and STACK in GCC toolchain library.
 #  set(CONFIG_USE_utilities_misc_utilities true)
 
+#  # description: RTT template configuration
+#  set(CONFIG_USE_driver_rtt_template true)
+
 #  # description: Driver nand_flash-common
 #  set(CONFIG_USE_driver_nand_flash-common true)
 
@@ -24,9 +27,6 @@
 
 #  # description: Driver pf3000
 #  set(CONFIG_USE_driver_pf3000 true)
-
-#  # description: RTT template configuration
-#  set(CONFIG_USE_driver_rtt_template true)
 
 #  # description: Devices_project_template LPC55S06
 #  set(CONFIG_USE_DEVICES_Project_Template_LPC55S06 true)
@@ -90,6 +90,9 @@
 
 #  # description: Utility debug_console
 #  set(CONFIG_USE_utility_debug_console true)
+
+#  # description: SEGGER Real Time Transfer(RTT)
+#  set(CONFIG_USE_driver_rtt true)
 
 #  # description: I2C CMSIS Driver
 #  set(CONFIG_USE_driver_cmsis_flexcomm_i2c true)
@@ -346,9 +349,6 @@
 #  # description: WWDT Driver
 #  set(CONFIG_USE_driver_wwdt true)
 
-#  # description: SEGGER Real Time Transfer(RTT)
-#  set(CONFIG_USE_driver_rtt true)
-
 #set.CMSIS
 #  # description: CMSIS-CORE for Cortex-M, ARMv8-M, ARMv8.1-M
 #  set(CONFIG_USE_CMSIS_Include_core_cm true)
@@ -482,6 +482,10 @@
 #  # description: FreeRTOS Secure Context
 #  set(CONFIG_USE_middleware_freertos-kernel_cm33_trustzone_secure true)
 
+#set.middleware.lwip
+#  # description: lwIP Template
+#  set(CONFIG_USE_middleware_lwip_template true)
+
 #set.middleware.mbedtls
 #  # description: mbedTLS Template
 #  set(CONFIG_USE_middleware_mbedtls_template true)
@@ -495,87 +499,37 @@
 #  # description: mbedTLS library
 #  set(CONFIG_USE_middleware_mbedtls true)
 
-#set.middleware.issdk
-#  # description: ISSDK Utils
-#  set(CONFIG_USE_middleware_issdk_drivers_systick_utils true)
+#set.middleware.sdmmc
+#  # description: Middleware sdmmc common
+#  set(CONFIG_USE_middleware_sdmmc_common true)
 
-#  # description: ISSDK Serial to MQTT bridge application
-#  set(CONFIG_USE_middleware_issdk_sensor_tools true)
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_sdmmc_sdhc_template true)
 
-#  # description: ISSDK Sensors RegDefs
-#  set(CONFIG_USE_middleware_issdk_sensor_allregdefs true)
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_sdmmc_sdif_template true)
 
-#  # description: ISSDK FXAS21002 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxas21002 true)
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_sdmmc_usdhc_template true)
 
-#  # description: ISSDK FXOS8700 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxos8700 true)
+#  # description: SDMMC host controller cache dependency
+#  set(CONFIG_USE_middleware_sdmmc_host_usdhc_cache true)
 
-#  # description: ISSDK MPL3115 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mpl3115 true)
+#set.middleware.usb
+#  # description: USB device phydcd config header
+#  set(CONFIG_USE_middleware_usb_phydcd_config_header true)
 
-#  # description: ISSDK FXLC95000 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxlc95000 true)
+#  # description: USB device hsdcd config header
+#  set(CONFIG_USE_middleware_usb_hsdcd_config_header true)
 
-#  # description: ISSDK MMA8491 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma8491q true)
+#  # description: Middleware usb common_header
+#  set(CONFIG_USE_middleware_usb_common_header true)
 
-#  # description: ISSDK FXLS8471 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8471q true)
+#  # description: Middleware usb device common_header
+#  set(CONFIG_USE_middleware_usb_device_common_header true)
 
-#  # description: ISSDK MAG3110 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mag3110 true)
-
-#  # description: ISSDK MMA845x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma845x true)
-
-#  # description: ISSDK MMA865x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma865x true)
-
-#  # description: ISSDK FXPQ3115 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxpq3115 true)
-
-#  # description: ISSDK FXLS8962 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8962 true)
-
-#  # description: ISSDK MMA9553 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_mma9553 true)
-
-#  # description: ISSDK nps300x Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_nps300x true)
-
-#  # description: ISSDK ISL29023 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_isl29023 true)
-
-#  # description: ISSDK fxps7250d4 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxps7250d4 true)
-
-#  # description: ISSDK FXLS896xAF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls896xaf true)
-
-#  # description: ISSDK FXLS8974CF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8974cf true)
-
-#  # description: ISSDK FXLS8961AF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8961af true)
-
-#  # description: ISSDK FXLS8971CF Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_fxls8971cf true)
-
-#  # description: ISSDK NMH1000 Sensor Driver Files
-#  set(CONFIG_USE_middleware_issdk_sensor_nmh1000 true)
-
-#  # description: ISSDK Sensor Interface Common
-#  set(CONFIG_USE_middleware_issdk_sensor_interface_common true)
-
-#  # description: ISSDK GPIO Driver for LPC
-#  set(CONFIG_USE_middleware_issdk_drivers_gpio_lpc true)
-
-#  # description: ISSDK Auto Detection Service for LPC Kits
-#  set(CONFIG_USE_middleware_issdk_drivers_ads_lpc true)
-
-#  # description: ISSDK Host Interface Service
-#  set(CONFIG_USE_middleware_issdk_drivers_host true)
+#  # description: Middleware usb host common_header
+#  set(CONFIG_USE_middleware_usb_host_common_header true)
 
 #set.middleware.azure_rtos
 #  # description: Azure RTOS Core
@@ -668,16 +622,6 @@
 #  # description: A software package that connects to the IoT Hub through Azure RTOS
 #  set(CONFIG_USE_middleware_azure_rtos_azure_iot true)
 
-#set.middleware.usb
-#  # description: Middleware usb common_header
-#  set(CONFIG_USE_middleware_usb_common_header true)
-
-#  # description: Middleware usb device common_header
-#  set(CONFIG_USE_middleware_usb_device_common_header true)
-
-#  # description: Middleware usb host common_header
-#  set(CONFIG_USE_middleware_usb_host_common_header true)
-
 #set.component.osa
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)
@@ -701,8 +645,9 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
   ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/lwip
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
@@ -711,10 +656,6 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/lpcxpresso55s06
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC54628
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MKE15Z7
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMX8MQ6
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S16
 )
 
 include(set_board_lpcxpresso55s06 OPTIONAL)
@@ -725,6 +666,7 @@ include(set_component_osa OPTIONAL)
 include(set_middleware_azure_rtos OPTIONAL)
 include(set_middleware_fatfs OPTIONAL)
 include(set_middleware_freertos-kernel OPTIONAL)
-include(set_middleware_issdk OPTIONAL)
+include(set_middleware_lwip OPTIONAL)
 include(set_middleware_mbedtls OPTIONAL)
+include(set_middleware_sdmmc OPTIONAL)
 include(set_middleware_usb OPTIONAL)

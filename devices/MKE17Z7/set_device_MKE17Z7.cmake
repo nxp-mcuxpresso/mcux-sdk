@@ -72,16 +72,12 @@ message("device_MKE17Z7_startup component is included from ${CMAKE_CURRENT_LIST_
 if(CONFIG_USE_device_MKE17Z7_system)
 
 if(CONFIG_TOOLCHAIN STREQUAL armgcc)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_MKE17Z7.S
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_MKE17Z7.S "" device_MKE17Z7_startup.MKE17Z7)
 endif()
 
 if(CONFIG_TOOLCHAIN STREQUAL mcux)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mke17z7.c
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mke17z7.cpp
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mke17z7.c "" device_MKE17Z7_startup.MKE17Z7)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mke17z7.cpp "" device_MKE17Z7_startup.MKE17Z7)
 endif()
 
 else()
@@ -463,10 +459,14 @@ if (CONFIG_USE_utility_assert)
 
 message("utility_assert component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console)
+if(CONFIG_USE_utility_debug_console AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -483,10 +483,14 @@ if (CONFIG_USE_utility_assert_lite)
 
 message("utility_assert_lite component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console_lite)
+if(CONFIG_USE_utility_debug_console_lite AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()

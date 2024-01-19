@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FLEXRAM_H_
-#define _FSL_FLEXRAM_H_
+#ifndef FSL_FLEXRAM_H_
+#define FSL_FLEXRAM_H_
 
 #include "fsl_common.h"
 #include "fsl_flexram_allocate.h"
@@ -22,10 +22,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Driver version. */
 #define FSL_FLEXRAM_DRIVER_VERSION (MAKE_VERSION(2U, 3U, 0U))
-/*@}*/
+/*! @} */
 
 /*! @brief Get ECC error detailed information. */
 #ifndef FLEXRAM_ECC_ERROR_DETAILED_INFO
@@ -274,7 +274,7 @@ void FLEXRAM_Init(FLEXRAM_Type *base);
  */
 void FLEXRAM_Deinit(FLEXRAM_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -323,7 +323,7 @@ static inline void FLEXRAM_DisableInterruptStatus(FLEXRAM_Type *base, uint32_t s
     base->INT_STAT_EN &= ~status;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -351,7 +351,7 @@ static inline void FLEXRAM_DisableInterruptSignal(FLEXRAM_Type *base, uint32_t s
 {
     base->INT_SIG_EN &= ~status;
 }
-/* @} */
+/*! @} */
 
 /*!
  * @brief FLEXRAM module sets TCM read access mode

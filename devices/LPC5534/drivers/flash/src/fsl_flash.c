@@ -9,7 +9,7 @@
 #include "fsl_flash.h"
 #include "fsl_flash_ffr.h"
 #include "fsl_flexspi_nor_flash.h"
-
+#include "fsl_efuse.h"
 /*! @brief Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.niobe4analog_iap"
@@ -110,6 +110,16 @@ typedef struct
     void (*config_clock)(uint32_t instance, uint32_t freqOption, uint32_t sampleClkMode);
 } flexspi_nor_flash_driver_t;
 
+/* !@brief EFUSE driver API Interface */
+typedef struct
+{
+    standard_version_t version;
+    status_t (*init)(void);
+    status_t (*deinit)(void);
+    status_t (*read)(uint32_t addr, uint32_t *data);
+    status_t (*program)(uint32_t addr, uint32_t data);
+} efuse_driver_t;
+
 /*! @}*/
 
 /*!
@@ -122,16 +132,16 @@ typedef struct
  */
 typedef struct BootloaderTree
 {
-    void (*runBootloader)(void *arg);            /*!< Function to start the bootloader executing.*/
-    standard_version_t version;                  /*!< Bootloader version number.*/
-    const char *copyright;                       /*!< Copyright string.*/
-    const uint32_t reserved0;                    /*!< reserved*/
-    const flash_driver_interface_t *flashDriver; /*!< Internal Flash driver API.*/
-    const uint32_t reserved1[5];                  /*!< reserved*/
-    const uint32_t nbootDriver;                   /*!< Please refer to "fsl_nboot.h" */
+    void (*runBootloader)(void *arg);                   /*!< Function to start the bootloader executing.*/
+    standard_version_t version;                         /*!< Bootloader version number.*/
+    const char *copyright;                              /*!< Copyright string.*/
+    const uint32_t reserved0;                           /*!< reserved*/
+    const flash_driver_interface_t *flashDriver;        /*!< Internal Flash driver API.*/
+    const uint32_t reserved1[5];                        /*!< reserved*/
+    const uint32_t nbootDriver;                         /*!< Please refer to "fsl_nboot.h" */
     const flexspi_nor_flash_driver_t *flexspiNorDriver; /*!< FlexSPI NOR FLASH Driver API.*/
-    const uint32_t reserved2;                        /*!< reserved*/
-    const uint32_t memoryInterface;                   /*!< Please refer to "fsl_mem_interface.h" */
+    const efuse_driver_t *efuseDriver;                  /*!< eFuse driver API */
+    const uint32_t memoryInterface;                     /*!< Please refer to "fsl_mem_interface.h" */
 } bootloader_tree_t;
 
 /*******************************************************************************
@@ -149,7 +159,18 @@ typedef struct BootloaderTree
 status_t FLASH_Init(flash_config_t *config)
 {
     assert(BOOTLOADER_API_TREE_POINTER);
-    return BOOTLOADER_API_TREE_POINTER->flashDriver->flash_init(config);
+    status_t ret = kStatus_FLASH_Success;
+
+    ret = BOOTLOADER_API_TREE_POINTER->flashDriver->flash_init(config);
+    if (kStatus_FLASH_Success == ret)
+    {
+        /* Call ffr_init is required for A1 */
+        return BOOTLOADER_API_TREE_POINTER->flashDriver->ffr_init(config);
+    }
+    else
+    {
+        return ret;
+    }
 }
 
 /*!
@@ -168,7 +189,6 @@ status_t FLASH_EraseNonBlocking(flash_config_t *config, uint32_t start, uint32_t
 {
     assert(BOOTLOADER_API_TREE_POINTER);
     return BOOTLOADER_API_TREE_POINTER->flashDriver->flash_erase_non_blocking(config, start, lengthInBytes, key);
-
 }
 
 /*!
@@ -386,7 +406,7 @@ status_t FFR_SecLibInit(flash_config_t *config, uint32_t *context)
 }
 
 /*!
- * @brief The API is used for getting the customer key store data from the customer key store region(0x3e400 ¨C 0x3e600),
+ * @brief The API is used for getting the customer key store data from the customer key store region(0x3e400 - 0x3e600),
  * and the API should be called after the FLASH_Init and FFR_Init.
  */
 status_t FFR_GetCustKeystoreData(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len)
@@ -508,4 +528,44 @@ void FLEXSPI_NorFlash_ConfigClock(uint32_t instance, uint32_t freqOption, uint32
 {
     assert(BOOTLOADER_API_TREE_POINTER);
     BOOTLOADER_API_TREE_POINTER->flexspiNorDriver->config_clock(instance, freqOption, sampleClkMode);
+}
+
+/********************************************************************************
+ * EFUSE driver API
+ *******************************************************************************/
+
+/*!
+ * @brief Initialize EFUSE controller.
+ */
+status_t EFUSE_Init(void)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    return BOOTLOADER_API_TREE_POINTER->efuseDriver->init();
+}
+
+/*!
+ * @brief De-Initialize EFUSE controller.
+ */
+status_t EFUSE_Deinit(void)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    return BOOTLOADER_API_TREE_POINTER->efuseDriver->deinit();
+}
+
+/*!
+ * @brief Read Fuse value from eFuse word.
+ */
+status_t EFUSE_Read(uint32_t addr, uint32_t *data)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    return BOOTLOADER_API_TREE_POINTER->efuseDriver->read(addr, data);
+}
+
+/*!
+ * @brief Program value to eFuse block.
+ */
+status_t EFUSE_Program(uint32_t addr, uint32_t data)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    return BOOTLOADER_API_TREE_POINTER->efuseDriver->program(addr, data);
 }

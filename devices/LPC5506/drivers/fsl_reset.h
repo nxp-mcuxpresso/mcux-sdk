@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.3.3. */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
+/*! @brief reset driver version 2.4.0 */
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*@}*/
 
 /*!
@@ -227,6 +227,19 @@ void RESET_ClearPeripheralReset(reset_ip_name_t peripheral);
  *                   and reset bit position in the reset register.
  */
 void RESET_PeripheralReset(reset_ip_name_t peripheral);
+
+/*!
+ * @brief Release peripheral module.
+ *
+ * Release peripheral module.
+ *
+ * @param peripheral Peripheral to release. The enum argument contains encoding of reset register
+ *                   and reset bit position in the reset register.
+ */
+static inline void RESET_ReleasePeripheralReset(reset_ip_name_t peripheral)
+{
+    RESET_ClearPeripheralReset(peripheral);
+}
 
 #if defined(__cplusplus)
 }

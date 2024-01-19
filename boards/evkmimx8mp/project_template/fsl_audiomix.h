@@ -36,23 +36,23 @@
 typedef enum _audiomix_attch_clk
 {
     kAUDIOMIX_Attach_SAI1_MCLK2_To_SAI1_ROOT =
-        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 0U << 1U), /*!< attach SAI1 MCLK2 to SAI1 root */
+        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 0U << 1U),  /*!< attach SAI1 MCLK2 to SAI1 root */
     kAUDIOMIX_Attach_SAI1_MCLK2_To_SAI2_ROOT =
-        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 1U << 1U), /*!< attach SAI1 MCLK2 to SAI2 root */
+        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 1U << 1U),  /*!< attach SAI1 MCLK2 to SAI2 root */
     kAUDIOMIX_Attach_SAI1_MCLK2_To_SAI3_ROOT =
-        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 2U << 1U), /*!< attach SAI1 MCLK2 to SAI3 root */
+        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 2U << 1U),  /*!< attach SAI1 MCLK2 to SAI3 root */
     kAUDIOMIX_Attach_SAI1_MCLK2_To_SAI5_ROOT =
-        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 4U << 1U), /*!< attach SAI1 MCLK2 to SAI5 root */
+        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 4U << 1U),  /*!< attach SAI1 MCLK2 to SAI5 root */
     kAUDIOMIX_Attach_SAI1_MCLK2_To_SAI6_ROOT =
-        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 5U << 1U), /*!< attach SAI1 MCLK2 to SAI6 root */
+        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 5U << 1U),  /*!< attach SAI1 MCLK2 to SAI6 root */
     kAUDIOMIX_Attach_SAI1_MCLK2_To_SAI7_ROOT =
-        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 6U << 1U), /*!< attach SAI1 MCLK2 to SAI7 root */
+        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 6U << 1U),  /*!< attach SAI1 MCLK2 to SAI7 root */
     kAUDIOMIX_Attach_SAI1_MCLK2_To_SAI1_MCLK =
-        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 7U << 1U), /*!< attach SAI1 MCLK2 to SAI1 MCLK */
+        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 7U << 1U),  /*!< attach SAI1 MCLK2 to SAI1 MCLK */
     kAUDIOMIX_Attach_SAI1_MCLK2_To_SAI2_MCLK =
-        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 8U << 1U), /*!< attach SAI1 MCLK2 to SAI2 MCLK */
+        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 8U << 1U),  /*!< attach SAI1 MCLK2 to SAI2 MCLK */
     kAUDIOMIX_Attach_SAI1_MCLK2_To_SAI3_MCLK =
-        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 9U << 1U), /*!< attach SAI1 MCLK2 to SAI3 MCLK */
+        AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 9U << 1U),  /*!< attach SAI1 MCLK2 to SAI3 MCLK */
     kAUDIOMIX_Attach_SAI1_MCLK2_To_SAI5_MCLK =
         AUDIOMIX_ATTACH_ID(0X300U, 0x1EU, 11U << 1U), /*!< attach SAI1 MCLK2 to SAI5 MCLK */
     kAUDIOMIX_Attach_SAI1_MCLK2_To_SAI6_MCLK =
@@ -66,23 +66,23 @@ typedef enum _audiomix_attch_clk
         AUDIOMIX_ATTACH_ID(0X300U, 0x1U, 1U), /*!< attach SAI1 MCLK1 to SAI1 MCLK */
 
     kAUDIOMIX_Attach_SAI2_MCLK2_To_SAI1_ROOT =
-        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 0U << 1U), /*!< attach SAI2 MCLK2 to SAI1 root */
+        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 0U << 1U),  /*!< attach SAI2 MCLK2 to SAI1 root */
     kAUDIOMIX_Attach_SAI2_MCLK2_To_SAI2_ROOT =
-        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 1U << 1U), /*!< attach SAI2 MCLK2 to SAI2 root */
+        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 1U << 1U),  /*!< attach SAI2 MCLK2 to SAI2 root */
     kAUDIOMIX_Attach_SAI2_MCLK2_To_SAI3_ROOT =
-        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 2U << 1U), /*!< attach SAI2 MCLK2 to SAI3 root */
+        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 2U << 1U),  /*!< attach SAI2 MCLK2 to SAI3 root */
     kAUDIOMIX_Attach_SAI2_MCLK2_To_SAI5_ROOT =
-        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 4U << 1U), /*!< attach SAI2 MCLK2 to SAI5 root */
+        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 4U << 1U),  /*!< attach SAI2 MCLK2 to SAI5 root */
     kAUDIOMIX_Attach_SAI2_MCLK2_To_SAI6_ROOT =
-        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 5U << 1U), /*!< attach SAI2 MCLK2 to SAI6 root */
+        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 5U << 1U),  /*!< attach SAI2 MCLK2 to SAI6 root */
     kAUDIOMIX_Attach_SAI2_MCLK2_To_SAI7_ROOT =
-        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 6U << 1U), /*!< attach SAI2 MCLK2 to SAI7 root */
+        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 6U << 1U),  /*!< attach SAI2 MCLK2 to SAI7 root */
     kAUDIOMIX_Attach_SAI2_MCLK2_To_SAI1_MCLK =
-        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 7U << 1U), /*!< attach SAI2 MCLK2 to SAI1 MCLK */
+        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 7U << 1U),  /*!< attach SAI2 MCLK2 to SAI1 MCLK */
     kAUDIOMIX_Attach_SAI2_MCLK2_To_SAI2_MCLK =
-        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 8U << 1U), /*!< attach SAI2 MCLK2 to SAI2 MCLK */
+        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 8U << 1U),  /*!< attach SAI2 MCLK2 to SAI2 MCLK */
     kAUDIOMIX_Attach_SAI2_MCLK2_To_SAI3_MCLK =
-        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 9U << 1U), /*!< attach SAI2 MCLK2 to SAI3 MCLK */
+        AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 9U << 1U),  /*!< attach SAI2 MCLK2 to SAI3 MCLK */
     kAUDIOMIX_Attach_SAI2_MCLK2_To_SAI5_MCLK =
         AUDIOMIX_ATTACH_ID(0X304U, 0x1EU, 11U << 1U), /*!< attach SAI2 MCLK2 to SAI5 MCLK */
     kAUDIOMIX_Attach_SAI2_MCLK2_To_SAI6_MCLK =
@@ -98,23 +98,23 @@ typedef enum _audiomix_attch_clk
         AUDIOMIX_ATTACH_ID(0X304U, 0x1U, 1U), /*!< attach SAI2 MCLK1 to SAI2 MCLK */
 
     kAUDIOMIX_Attach_SAI3_MCLK2_To_SAI1_ROOT =
-        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 0U << 1U), /*!< attach SAI3 MCLK2 to SAI1 root */
+        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 0U << 1U),  /*!< attach SAI3 MCLK2 to SAI1 root */
     kAUDIOMIX_Attach_SAI3_MCLK2_To_SAI2_ROOT =
-        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 1U << 1U), /*!< attach SAI3 MCLK2 to SAI2 root */
+        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 1U << 1U),  /*!< attach SAI3 MCLK2 to SAI2 root */
     kAUDIOMIX_Attach_SAI3_MCLK2_To_SAI3_ROOT =
-        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 2U << 1U), /*!< attach SAI3 MCLK2 to SAI3 root */
+        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 2U << 1U),  /*!< attach SAI3 MCLK2 to SAI3 root */
     kAUDIOMIX_Attach_SAI3_MCLK2_To_SAI5_ROOT =
-        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 4U << 1U), /*!< attach SAI3 MCLK2 to SAI5 root */
+        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 4U << 1U),  /*!< attach SAI3 MCLK2 to SAI5 root */
     kAUDIOMIX_Attach_SAI3_MCLK2_To_SAI6_ROOT =
-        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 5U << 1U), /*!< attach SAI3 MCLK2 to SAI6 root */
+        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 5U << 1U),  /*!< attach SAI3 MCLK2 to SAI6 root */
     kAUDIOMIX_Attach_SAI3_MCLK2_To_SAI7_ROOT =
-        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 6U << 1U), /*!< attach SAI3 MCLK2 to SAI7 root */
+        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 6U << 1U),  /*!< attach SAI3 MCLK2 to SAI7 root */
     kAUDIOMIX_Attach_SAI3_MCLK2_To_SAI1_MCLK =
-        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 7U << 1U), /*!< attach SAI3 MCLK2 to SAI1 MCLK */
+        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 7U << 1U),  /*!< attach SAI3 MCLK2 to SAI1 MCLK */
     kAUDIOMIX_Attach_SAI3_MCLK2_To_SAI2_MCLK =
-        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 8U << 1U), /*!< attach SAI3 MCLK2 to SAI2 MCLK */
+        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 8U << 1U),  /*!< attach SAI3 MCLK2 to SAI2 MCLK */
     kAUDIOMIX_Attach_SAI3_MCLK2_To_SAI3_MCLK =
-        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 9U << 1U), /*!< attach SAI3 MCLK2 to SAI3 MCLK */
+        AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 9U << 1U),  /*!< attach SAI3 MCLK2 to SAI3 MCLK */
     kAUDIOMIX_Attach_SAI3_MCLK2_To_SAI5_MCLK =
         AUDIOMIX_ATTACH_ID(0X308U, 0x1EU, 11U << 1U), /*!< attach SAI3 MCLK2 to SAI5 MCLK */
     kAUDIOMIX_Attach_SAI3_MCLK2_To_SAI6_MCLK =
@@ -130,23 +130,23 @@ typedef enum _audiomix_attch_clk
         AUDIOMIX_ATTACH_ID(0X308U, 0x1U, 1U), /*!< attach SAI3 MCLK1 to SAI3 MCLK */
 
     kAUDIOMIX_Attach_SAI5_MCLK2_To_SAI1_ROOT =
-        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 0U << 1U), /*!< attach SAI5 MCLK2 to SAI1 root */
+        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 0U << 1U),  /*!< attach SAI5 MCLK2 to SAI1 root */
     kAUDIOMIX_Attach_SAI5_MCLK2_To_SAI2_ROOT =
-        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 1U << 1U), /*!< attach SAI5 MCLK2 to SAI2 root */
+        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 1U << 1U),  /*!< attach SAI5 MCLK2 to SAI2 root */
     kAUDIOMIX_Attach_SAI5_MCLK2_To_SAI3_ROOT =
-        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 2U << 1U), /*!< attach SAI5 MCLK2 to SAI3 root */
+        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 2U << 1U),  /*!< attach SAI5 MCLK2 to SAI3 root */
     kAUDIOMIX_Attach_SAI5_MCLK2_To_SAI5_ROOT =
-        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 4U << 1U), /*!< attach SAI5 MCLK2 to SAI5 root */
+        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 4U << 1U),  /*!< attach SAI5 MCLK2 to SAI5 root */
     kAUDIOMIX_Attach_SAI5_MCLK2_To_SAI6_ROOT =
-        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 5U << 1U), /*!< attach SAI5 MCLK2 to SAI6 root */
+        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 5U << 1U),  /*!< attach SAI5 MCLK2 to SAI6 root */
     kAUDIOMIX_Attach_SAI5_MCLK2_To_SAI7_ROOT =
-        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 6U << 1U), /*!< attach SAI5 MCLK2 to SAI7 root */
+        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 6U << 1U),  /*!< attach SAI5 MCLK2 to SAI7 root */
     kAUDIOMIX_Attach_SAI5_MCLK2_To_SAI1_MCLK =
-        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 7U << 1U), /*!< attach SAI5 MCLK2 to SAI1 MCLK */
+        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 7U << 1U),  /*!< attach SAI5 MCLK2 to SAI1 MCLK */
     kAUDIOMIX_Attach_SAI5_MCLK2_To_SAI2_MCLK =
-        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 8U << 1U), /*!< attach SAI5 MCLK2 to SAI2 MCLK */
+        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 8U << 1U),  /*!< attach SAI5 MCLK2 to SAI2 MCLK */
     kAUDIOMIX_Attach_SAI5_MCLK2_To_SAI3_MCLK =
-        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 9U << 1U), /*!< attach SAI5 MCLK2 to SAI3 MCLK */
+        AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 9U << 1U),  /*!< attach SAI5 MCLK2 to SAI3 MCLK */
     kAUDIOMIX_Attach_SAI5_MCLK2_To_SAI5_MCLK =
         AUDIOMIX_ATTACH_ID(0X30CU, 0x1EU, 11U << 1U), /*!< attach SAI5 MCLK2 to SAI5 MCLK */
     kAUDIOMIX_Attach_SAI5_MCLK2_To_SAI6_MCLK =
@@ -162,23 +162,23 @@ typedef enum _audiomix_attch_clk
         AUDIOMIX_ATTACH_ID(0X30CU, 0x1U, 1U), /*!< attach SAI5 MCLK1 to SAI5 MCLK */
 
     kAUDIOMIX_Attach_SAI6_MCLK2_To_SAI1_ROOT =
-        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 0U << 1U), /*!< attach SAI6 MCLK2 to SAI1 root */
+        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 0U << 1U),  /*!< attach SAI6 MCLK2 to SAI1 root */
     kAUDIOMIX_Attach_SAI6_MCLK2_To_SAI2_ROOT =
-        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 1U << 1U), /*!< attach SAI6 MCLK2 to SAI2 root */
+        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 1U << 1U),  /*!< attach SAI6 MCLK2 to SAI2 root */
     kAUDIOMIX_Attach_SAI6_MCLK2_To_SAI3_ROOT =
-        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 2U << 1U), /*!< attach SAI6 MCLK2 to SAI3 root */
+        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 2U << 1U),  /*!< attach SAI6 MCLK2 to SAI3 root */
     kAUDIOMIX_Attach_SAI6_MCLK2_To_SAI5_ROOT =
-        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 4U << 1U), /*!< attach SAI6 MCLK2 to SAI5 root */
+        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 4U << 1U),  /*!< attach SAI6 MCLK2 to SAI5 root */
     kAUDIOMIX_Attach_SAI6_MCLK2_To_SAI6_ROOT =
-        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 5U << 1U), /*!< attach SAI6 MCLK2 to SAI6 root */
+        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 5U << 1U),  /*!< attach SAI6 MCLK2 to SAI6 root */
     kAUDIOMIX_Attach_SAI6_MCLK2_To_SAI7_ROOT =
-        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 6U << 1U), /*!< attach SAI6 MCLK2 to SAI7 root */
+        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 6U << 1U),  /*!< attach SAI6 MCLK2 to SAI7 root */
     kAUDIOMIX_Attach_SAI6_MCLK2_To_SAI1_MCLK =
-        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 7U << 1U), /*!< attach SAI6 MCLK2 to SAI1 MCLK */
+        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 7U << 1U),  /*!< attach SAI6 MCLK2 to SAI1 MCLK */
     kAUDIOMIX_Attach_SAI6_MCLK2_To_SAI2_MCLK =
-        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 8U << 1U), /*!< attach SAI6 MCLK2 to SAI2 MCLK */
+        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 8U << 1U),  /*!< attach SAI6 MCLK2 to SAI2 MCLK */
     kAUDIOMIX_Attach_SAI6_MCLK2_To_SAI3_MCLK =
-        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 9U << 1U), /*!< attach SAI6 MCLK2 to SAI3 MCLK */
+        AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 9U << 1U),  /*!< attach SAI6 MCLK2 to SAI3 MCLK */
     kAUDIOMIX_Attach_SAI6_MCLK2_To_SAI5_MCLK =
         AUDIOMIX_ATTACH_ID(0X310U, 0x1EU, 11U << 1U), /*!< attach SAI6 MCLK2 to SAI5 MCLK */
     kAUDIOMIX_Attach_SAI6_MCLK2_To_SAI6_MCLK =
@@ -194,23 +194,23 @@ typedef enum _audiomix_attch_clk
         AUDIOMIX_ATTACH_ID(0X310U, 0x1U, 1U), /*!< attach SAI6 MCLK2 to SAI6 MCLK */
 
     kAUDIOMIX_Attach_SAI7_MCLK2_To_SAI1_ROOT =
-        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 0U << 1U), /*!< attach SAI7 MCLK2 to SAI1 root */
+        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 0U << 1U),  /*!< attach SAI7 MCLK2 to SAI1 root */
     kAUDIOMIX_Attach_SAI7_MCLK2_To_SAI2_ROOT =
-        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 1U << 1U), /*!< attach SAI7 MCLK2 to SAI2 root */
+        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 1U << 1U),  /*!< attach SAI7 MCLK2 to SAI2 root */
     kAUDIOMIX_Attach_SAI7_MCLK2_To_SAI3_ROOT =
-        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 2U << 1U), /*!< attach SAI7 MCLK2 to SAI3 root */
+        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 2U << 1U),  /*!< attach SAI7 MCLK2 to SAI3 root */
     kAUDIOMIX_Attach_SAI7_MCLK2_To_SAI5_ROOT =
-        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 4U << 1U), /*!< attach SAI7 MCLK2 to SAI5 root */
+        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 4U << 1U),  /*!< attach SAI7 MCLK2 to SAI5 root */
     kAUDIOMIX_Attach_SAI7_MCLK2_To_SAI6_ROOT =
-        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 5U << 1U), /*!< attach SAI7 MCLK2 to SAI6 root */
+        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 5U << 1U),  /*!< attach SAI7 MCLK2 to SAI6 root */
     kAUDIOMIX_Attach_SAI7_MCLK2_To_SAI7_ROOT =
-        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 6U << 1U), /*!< attach SAI7 MCLK2 to SAI7 root */
+        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 6U << 1U),  /*!< attach SAI7 MCLK2 to SAI7 root */
     kAUDIOMIX_Attach_SAI7_MCLK2_To_SAI1_MCLK =
-        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 7U << 1U), /*!< attach SAI7 MCLK2 to SAI1 MCLK */
+        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 7U << 1U),  /*!< attach SAI7 MCLK2 to SAI1 MCLK */
     kAUDIOMIX_Attach_SAI7_MCLK2_To_SAI2_MCLK =
-        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 8U << 1U), /*!< attach SAI7 MCLK2 to SAI2 MCLK */
+        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 8U << 1U),  /*!< attach SAI7 MCLK2 to SAI2 MCLK */
     kAUDIOMIX_Attach_SAI7_MCLK2_To_SAI3_MCLK =
-        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 9U << 1U), /*!< attach SAI7 MCLK2 to SAI3 MCLK */
+        AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 9U << 1U),  /*!< attach SAI7 MCLK2 to SAI3 MCLK */
     kAUDIOMIX_Attach_SAI7_MCLK2_To_SAI5_MCLK =
         AUDIOMIX_ATTACH_ID(0X314U, 0x1EU, 11U << 1U), /*!< attach SAI7 MCLK2 to SAI5 MCLK */
     kAUDIOMIX_Attach_SAI7_MCLK2_To_SAI6_MCLK =

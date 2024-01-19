@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef __FSL_LPUART_RTOS_H__
-#define __FSL_LPUART_RTOS_H__
+#ifndef FSL_LPUART_RTOS_H__
+#define FSL_LPUART_RTOS_H__
 
 #include "fsl_lpuart.h"
 #include <FreeRTOS.h>
@@ -23,10 +23,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LPUART FreeRTOS driver version. */
 #define FSL_LPUART_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
-/*@}*/
+/*! @} */
 
 /*! @brief LPUART RTOS configuration structure. */
 typedef struct _lpuart_rtos_config
@@ -57,7 +57,7 @@ typedef struct _lpuart_rtos_config
  *
  * This are only valid states for txEvent and rxEvent (lpuart_rtos_handle_t).
  */
-/*@{*/
+/*! @{ */
 /*! @brief Event flag - uart transmit complete. */
 #define RTOS_LPUART_TX_COMPLETE 0x1U
 /*! @brief Event flag - uart receive complete. */
@@ -66,7 +66,7 @@ typedef struct _lpuart_rtos_config
 #define RTOS_LPUART_RING_BUFFER_OVERRUN 0x4U
 /*! @brief Event flag - hardware buffer overrun. */
 #define RTOS_LPUART_HARDWARE_BUFFER_OVERRUN 0x8U
-/*@}*/
+/*! @} */
 
 /*! @brief LPUART FreeRTOS transfer structure. */
 typedef struct _lpuart_rtos_handle
@@ -181,7 +181,7 @@ int LPUART_RTOS_SetTxTimeout(lpuart_rtos_handle_t *handle,
                              uint32_t tx_timeout_constant_ms,
                              uint32_t tx_timeout_multiplier_ms);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -189,4 +189,4 @@ int LPUART_RTOS_SetTxTimeout(lpuart_rtos_handle_t *handle,
 
 /*! @}*/
 
-#endif /* __FSL_LPUART_RTOS_H__ */
+#endif /* FSL_LPUART_RTOS_H__ */

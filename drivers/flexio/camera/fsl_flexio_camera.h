@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FLEXIO_CAMERA_H_
-#define _FSL_FLEXIO_CAMERA_H_
+#ifndef FSL_FLEXIO_CAMERA_H_
+#define FSL_FLEXIO_CAMERA_H_
 
 #include "fsl_common.h"
 #include "fsl_flexio.h"
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief FlexIO Camera driver version 2.1.3. */
 #define FSL_FLEXIO_CAMERA_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
-/*@}*/
+/*! @} */
 
 /*! @brief Define the Camera CPI interface is constantly 8-bit width. */
 #define FLEXIO_CAMERA_PARALLEL_DATA_WIDTH (8U)
@@ -162,7 +162,7 @@ uint32_t FLEXIO_CAMERA_GetStatusFlags(FLEXIO_CAMERA_Type *base);
  */
 void FLEXIO_CAMERA_ClearStatusFlags(FLEXIO_CAMERA_Type *base, uint32_t mask);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -225,6 +225,6 @@ static inline uint32_t FLEXIO_CAMERA_GetRxBufferAddress(FLEXIO_CAMERA_Type *base
 }
 #endif /*_cplusplus*/
 
-/*@}*/
+/*! @} */
 
-#endif /*_FSL_FLEXIO_CAMERA_H_*/
+#endif /*FSL_FLEXIO_CAMERA_H_*/

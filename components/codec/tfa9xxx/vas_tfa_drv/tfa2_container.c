@@ -599,7 +599,7 @@ int tfa2_cnt_write_patch(struct tfa2_device *tfa, nxpTfaPatch_t *patchfile)
 
     size = patchfile->hdr.size - sizeof(nxpTfaPatch_t); // size is total length
     rc   = tfa2_check_patch((const uint8_t *)patchfile, patchfile->hdr.size,
-                          tfa->rev); // TODO fix for single patch header type
+                            tfa->rev);                  // TODO fix for single patch header type
     if (rc < 0)
         return rc;
 
@@ -838,7 +838,7 @@ int tfa2_cnt_write_file(struct tfa2_device *tfa, nxpTfaFileDsc_t *file)
             /* Remove header and xml_id */
             size = hdr->size - sizeof(struct nxpTfaSpkHeader) - sizeof(struct nxpTfaFWVer);
             rc   = tfa2_cnt_write_msg(tfa, size,
-                                    (char *)(((nxpTfaSpeakerFile_t *)hdr)->data + (sizeof(struct nxpTfaFWVer))));
+                                      (char *)(((nxpTfaSpeakerFile_t *)hdr)->data + (sizeof(struct nxpTfaFWVer))));
             break;
         case infoHdr:
             /* Ignore */

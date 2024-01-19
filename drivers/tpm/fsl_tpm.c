@@ -39,6 +39,10 @@
 
 #define TPM_COMBINE_SHIFT (8U)
 
+#if defined(TPM_RSTS)
+#define TPM_RESETS_ARRAY TPM_RSTS
+#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -65,6 +69,11 @@ static TPM_Type *const s_tpmBases[] = TPM_BASE_PTRS;
 /*! @brief Pointers to TPM clocks for each instance. */
 static const clock_ip_name_t s_tpmClocks[] = TPM_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(TPM_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_tpmResets[] = TPM_RESETS_ARRAY;
+#endif
 
 /*******************************************************************************
  * Code
@@ -111,6 +120,10 @@ void TPM_Init(TPM_Type *base, const tpm_config_t *config)
     /* Enable the module clock */
     (void)CLOCK_EnableClock(s_tpmClocks[TPM_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(TPM_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_tpmResets[TPM_GetInstance(base)]);
+#endif
 
 #if defined(FSL_FEATURE_TPM_HAS_GLOBAL) && FSL_FEATURE_TPM_HAS_GLOBAL
     /* TPM reset is available on certain SoC's */

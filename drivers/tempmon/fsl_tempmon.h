@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_TEMPMON_H_
-#define _FSL_TEMPMON_H_
+#ifndef FSL_TEMPMON_H_
+#define FSL_TEMPMON_H_
 
 #include "fsl_common.h"
 
@@ -22,10 +22,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief TEMPMON driver version. */
 #define FSL_TEMPMON_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief TEMPMON temperature structure. */
 typedef struct _tempmon_config
@@ -124,4 +124,4 @@ void TEMPMON_SetTempAlarm(TEMPMON_Type *base, int8_t tempVal, tempmon_alarm_mode
 
 /*! @}*/
 
-#endif /* _FSL_TEMPMON_H_ */
+#endif /* FSL_TEMPMON_H_ */

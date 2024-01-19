@@ -992,7 +992,10 @@ void FLEXIO_MCULCD_TransferBlocking(FLEXIO_MCULCD_Type *base, flexio_mculcd_tran
 {
     FLEXIO_MCULCD_StartTransfer(base);
 
-    FLEXIO_MCULCD_WriteCommandBlocking(base, xfer->command);
+    if (!xfer->dataOnly)
+    {
+        FLEXIO_MCULCD_WriteCommandBlocking(base, xfer->command);
+    }
 
     if (xfer->dataSize > 0U)
     {
@@ -1093,8 +1096,11 @@ status_t FLEXIO_MCULCD_TransferNonBlocking(FLEXIO_MCULCD_Type *base,
     /* Assert the nCS. */
     FLEXIO_MCULCD_StartTransfer(base);
 
-    /* Send the command. */
-    FLEXIO_MCULCD_WriteCommandBlocking(base, xfer->command);
+    if (!xfer->dataOnly)
+    {
+        /* Send the command. */
+        FLEXIO_MCULCD_WriteCommandBlocking(base, xfer->command);
+    }
 
     /* If transfer count is 0 (only to send command), return directly. */
     if (0U == xfer->dataSize)

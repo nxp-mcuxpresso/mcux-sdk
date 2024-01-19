@@ -111,14 +111,26 @@ static const uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
     /* Fast read mode - SDR */
     [4 * NOR_CMD_LUT_SEQ_IDX_READ_FAST] =
         FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, 0x0C, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 0x20),
+    /* In XIP, the speed of external flash is set to 133MHz, and the external flash require to match 8 corresponding dummy cycles. 
+     * However, cm4 core cases or other non XIP boot targets are not suitable for XIP boot flow, uses flash default configuration */
+#if defined(XIP_BOOT_HEADER_ENABLE) && XIP_BOOT_HEADER_ENABLE
+    [4 * NOR_CMD_LUT_SEQ_IDX_READ_FAST + 1] = FLEXSPI_LUT_SEQ(
+        kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_1PAD, 0x0A, kFLEXSPI_Command_READ_SDR, kFLEXSPI_1PAD, 0x04),
+#else
     [4 * NOR_CMD_LUT_SEQ_IDX_READ_FAST + 1] = FLEXSPI_LUT_SEQ(
         kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_1PAD, 0x08, kFLEXSPI_Command_READ_SDR, kFLEXSPI_1PAD, 0x04),
+#endif
 
     /* Fast read quad mode - SDR */
     [4 * NOR_CMD_LUT_SEQ_IDX_READ_FAST_QUAD] =
         FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, 0xEC, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 0x20),
+#if defined(XIP_BOOT_HEADER_ENABLE) && XIP_BOOT_HEADER_ENABLE
+    [4 * NOR_CMD_LUT_SEQ_IDX_READ_FAST_QUAD + 1] = FLEXSPI_LUT_SEQ(
+        kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_4PAD, 0x08, kFLEXSPI_Command_READ_SDR, kFLEXSPI_4PAD, 0x04),
+#else
     [4 * NOR_CMD_LUT_SEQ_IDX_READ_FAST_QUAD + 1] = FLEXSPI_LUT_SEQ(
         kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_4PAD, 0x06, kFLEXSPI_Command_READ_SDR, kFLEXSPI_4PAD, 0x04),
+#endif
 
     /* Write Enable */
     [4 * NOR_CMD_LUT_SEQ_IDX_WRITEENABLE] =
@@ -308,7 +320,7 @@ hal_flash_status_t HAL_FlashInit(void)
 #endif /* __DCACHE_PRESENT */
 
 #if defined(FSL_FEATURE_SOC_LMEM_COUNT) && (FSL_FEATURE_SOC_LMEM_COUNT == 1U)
-	/* Disable Code cache. */
+    /* Disable Code cache. */
     if (LMEM_PCCCR_ENCACHE_MASK == (LMEM->PCCCR & LMEM_PCCCR_ENCACHE_MASK))
     {
         L1CACHE_DisableCodeCache();
@@ -476,7 +488,7 @@ hal_flash_status_t HAL_FlashProgram(uint32_t dest, uint32_t size, uint8_t *pData
 #endif /* __DCACHE_PRESENT */
 
 #if defined(FSL_FEATURE_SOC_LMEM_COUNT) && (FSL_FEATURE_SOC_LMEM_COUNT == 1U)
-	/* Disable Code cache. */
+    /* Disable Code cache. */
     if (LMEM_PCCCR_ENCACHE_MASK == (LMEM->PCCCR & LMEM_PCCCR_ENCACHE_MASK))
     {
         L1CACHE_DisableCodeCache();
@@ -643,7 +655,7 @@ hal_flash_status_t HAL_FlashEraseSector(uint32_t dest, uint32_t size)
 #endif /* __ICACHE_PRESENT */
 
 #if defined(FSL_FEATURE_SOC_LMEM_COUNT) && (FSL_FEATURE_SOC_LMEM_COUNT == 1U)
-	/* Disable Code cache. */
+    /* Disable Code cache. */
     if (LMEM_PCCCR_ENCACHE_MASK == (LMEM->PCCCR & LMEM_PCCCR_ENCACHE_MASK))
     {
         L1CACHE_DisableCodeCache();
@@ -795,7 +807,7 @@ hal_flash_status_t HAL_FlashRead(uint32_t src, uint32_t size, uint8_t *pData)
 #endif /* __DCACHE_PRESENT */
 
 #if defined(FSL_FEATURE_SOC_LMEM_COUNT) && (FSL_FEATURE_SOC_LMEM_COUNT == 1U)
-            /* Disable Code cache. */
+        /* Disable Code cache. */
         if (LMEM_PCCCR_ENCACHE_MASK == (LMEM->PCCCR & LMEM_PCCCR_ENCACHE_MASK))
         {
             L1CACHE_DisableCodeCache();

@@ -138,7 +138,7 @@ typedef struct _serial_nor_config_option
             uint32_t query_pads : 4;        /*!< SFDP read pads */
             uint32_t device_type : 4;       /*!< Device type */
             uint32_t option_size : 4;       /*!< Option size, in terms of uint32_t, size = (option_size + 1) * 4 */
-            uint32_t tag : 4;               /*!< Tag, must be 0x0E */
+            uint32_t tag : 4;               /*!< Tag, must be 0x0C */
         } B;
         uint32_t U;
     } option0;
@@ -356,6 +356,7 @@ typedef struct _flexspi_nor_config
 
 /*@}*/
 
+/*! @brief FLEXSPI Operation Context */
 typedef enum _flexspi_operation
 {
     kFLEXSPIOperation_Command, /*!< FLEXSPI operation: Only command, both TX and RX buffer are ignored. */

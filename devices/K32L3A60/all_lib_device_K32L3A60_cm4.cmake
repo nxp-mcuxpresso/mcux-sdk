@@ -47,7 +47,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xrdc
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
@@ -71,7 +70,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_dmamux)
 #    include(utility_shell)
 #    include(driver_cmsis_lpuart)
-#    include(middleware_issdk_sensor_fxos8700)
 #    include(middleware_sdmmc_host_usdhc_freertos_K32L3A60_cm4)
 #    include(driver_lpadc)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_rtos_transport)
@@ -93,11 +91,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpspi_edma)
 #    include(driver_lpcmp)
 #    include(driver_flexio_uart_edma)
-#    include(middleware_issdk_drivers_gpio_kinetis)
 #    include(driver_wdog32)
 #    include(component_gpio_adapter)
 #    include(component_serial_manager)
-#    include(middleware_issdk_sensor_fxas21002)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
 #    include(middleware_mbedtls_port_ksdk)
@@ -114,7 +110,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_erpc_eRPC_mu_c_wrapper)
 #    include(driver_usdhc)
 #    include(utility_assert)
-#    include(middleware_issdk_sensor_interface_common)
 #    include(middleware_freertos-kernel_extension)
 #    include(CMSIS_Driver_Include_I2C)
 #    include(middleware_usb_common_header)
@@ -157,7 +152,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_multicore_erpc_eRPC_port_stdlib)
 #    include(utilities_misc_utilities_K32L3A60_cm4)
 #    include(driver_lptmr)
-#    include(middleware_issdk_drivers_systick_utils)
 #    include(middleware_multicore_erpc_eRPC_port_freertos)
 #    include(driver_dac_1)
 #    include(middleware_multicore_mcmgr_k32l3a6)
@@ -182,7 +176,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_sim)
 #    include(driver_lpi2c)
 #    include(middleware_multicore_erpc_eRPC_rpmsg_lite_transport)
-#    include(middleware_issdk_drivers_cmsis_drivers)
 #    include(driver_trng)
 #    include(middleware_multicore_erpc_eRPC_mu_rtos_transport)
 #    include(driver_mu)

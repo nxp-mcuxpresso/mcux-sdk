@@ -760,7 +760,7 @@ uint8_t PCA9420_GetRegulatorStatus(pca9420_handle_t *handle);
  */
 void PCA9420_FeedWatchDog(pca9420_handle_t *handle);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Basic register access functions
@@ -799,7 +799,7 @@ bool PCA9420_ReadRegs(pca9420_handle_t *handle, uint8_t regBase, uint8_t *val, u
  */
 bool PCA9420_ModifyReg(pca9420_handle_t *handle, uint8_t reg, uint8_t mask, uint8_t val);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -853,14 +853,14 @@ uint32_t PCA9420_GetInterruptStatus(pca9420_handle_t *handle);
  * @param source Logic ORed interrupt sources of selected interrupt source to clear.
  */
 void PCA9420_ClearInterruptStatus(pca9420_handle_t *handle, uint32_t source);
-/* @} */
+/*! @} */
 
 /*!
  * @name mode control functions
  * @{
  */
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }

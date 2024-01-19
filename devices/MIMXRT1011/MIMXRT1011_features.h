@@ -1,15 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2019-08-01
-**     Build:               b220718
+**     Build:               b231018
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2023 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -210,6 +208,8 @@
 #define FSL_FEATURE_FLEXIO_HAS_SHIFTER_STATUS (1)
 /* @brief Has Pin Data Input Register (FLEXIO_PIN) */
 #define FSL_FEATURE_FLEXIO_HAS_PIN_STATUS (1)
+/* @brief Has pin input output related registers */
+#define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (0)
 /* @brief Has Shifter Buffer N Nibble Byte Swapped Register (FLEXIO_SHIFTBUFNBSn) */
 #define FSL_FEATURE_FLEXIO_HAS_SHFT_BUFFER_NIBBLE_BYTE_SWAP (1)
 /* @brief Has Shifter Buffer N Half Word Swapped Register (FLEXIO_SHIFTBUFHWSn) */
@@ -226,6 +226,8 @@
 #define FSL_FEATURE_FLEXIO_VERID_RESET_VALUE (0x1010001)
 /* @brief Reset value of the FLEXIO_PARAM register */
 #define FSL_FEATURE_FLEXIO_PARAM_RESET_VALUE (0x2200808)
+/* @brief Represent the bit width of the TIMDCE field (FLEXIO_TIMCFGLn[TIMDEC]) */
+#define FSL_FEATURE_FLEXIO_TIMCFG_TIMDCE_FIELD_WIDTH (2)
 /* @brief Flexio DMA request base channel */
 #define FSL_FEATURE_FLEXIO_DMA_REQUEST_BASE_CHANNEL (0)
 
@@ -239,6 +241,8 @@
 #define FSL_FEATURE_FLEXRAM_HAS_MAGIC_ADDR (1)
 /* @brief If FLEXRAM has ECC function. */
 #define FSL_FEATURE_FLEXRAM_HAS_ECC (0)
+/* @brief If FLEXRAM has ECC Error Injection function. */
+#define FSL_FEATURE_FLEXRAM_HAS_ECC_ERROR_INJECTION (0)
 
 /* FLEXSPI module features */
 
@@ -256,6 +260,12 @@
 #define FSL_FEATURE_FLEXSPI_HAS_NO_AHB_PARALLEL_MODE (0)
 /* @brief FLEXSPI support address shift. */
 #define FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT (0)
+/* @brief FlexSPI has no MCR0 ARDFEN bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ARDFEN (0)
+/* @brief FlexSPI has no MCR0 ATDFEN bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ATDFEN (0)
+/* @brief FlexSPI has no STS0 DATALEARNPHASEB bit */
+#define FSL_FEATURE_FLEXSPI_HAS_NO_STS0_DATALEARNPHASEB (1)
 
 /* GPC module features */
 
@@ -298,6 +308,10 @@
 #define FSL_FEATURE_LPSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
 /* @brief Has CCR1 (related to existence of registers CCR1). */
 #define FSL_FEATURE_LPSPI_HAS_CCR1 (0)
+/* @brief Has no PCSCFG bit in CFGR1 register */
+#define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
+/* @brief Has no WIDTH bits in TCR register */
+#define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
 
 /* LPUART module features */
 
@@ -365,6 +379,12 @@
 #define FSL_FEATURE_LPUART_HAS_GLOBAL (1)
 /* @brief Has LPUART_PINCFG. */
 #define FSL_FEATURE_LPUART_HAS_PINCFG (1)
+/* @brief Has register MODEM Control. */
+#define FSL_FEATURE_LPUART_HAS_MCR (0)
+/* @brief Has register Half Duplex Control. */
+#define FSL_FEATURE_LPUART_HAS_HDCR (0)
+/* @brief Has register Timeout. */
+#define FSL_FEATURE_LPUART_HAS_TIMEOUT (0)
 
 /* interrupt module features */
 
@@ -417,9 +437,21 @@
 /* @brief If (e)FlexPWM has mux trigger source select bit field. */
 #define FSL_FEATURE_PWM_HAS_MUX_TRIGGER_SOURCE_SEL (1)
 /* @brief Number of submodules in each (e)FlexPWM module. */
-#define FSL_FEATURE_PWM_SUBMODULE_COUNT (4U)
+#define FSL_FEATURE_PWM_SUBMODULE_COUNT (4)
 /* @brief Number of fault channel in each (e)FlexPWM module. */
 #define FSL_FEATURE_PWM_FAULT_CH_COUNT (1)
+/* @brief (e)FlexPWM has no WAITEN Bitfield In CTRL2 Register. */
+#define FSL_FEATURE_PWM_HAS_NO_WAITEN (1)
+/* @brief If (e)FlexPWM has phase delay feature. */
+#define FSL_FEATURE_PWM_HAS_PHASE_DELAY (0)
+/* @brief If (e)FlexPWM has input filter capture feature. */
+#define FSL_FEATURE_PWM_HAS_INPUT_FILTER_CAPTURE (0)
+/* @brief If (e)FlexPWM has module capture functionality on A channels (inputs). */
+#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELA (1)
+/* @brief If (e)FlexPWM has module capture functionality on B channels (inputs). */
+#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELB (1)
+/* @brief If (e)FlexPWM has module capture functionality on X channels (inputs). */
+#define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
 
 /* RTWDOG module features */
 
@@ -466,6 +498,8 @@
 #define FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV (0)
 /* @brief Support Channel Mode (register bit fields TCR4[CHMOD]). */
 #define FSL_FEATURE_SAI_HAS_CHANNEL_MODE (1)
+/* @brief Support synchronous with another SAI. */
+#define FSL_FEATURE_SAI_HAS_SYNC_WITH_ANOTHER_SAI (0)
 
 /* SNVS module features */
 

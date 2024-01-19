@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_FLEXIO_I2S_DMA_H_
-#define _FSL_FLEXIO_I2S_DMA_H_
+#ifndef FSL_FLEXIO_I2S_DMA_H_
+#define FSL_FLEXIO_I2S_DMA_H_
 
 #include "fsl_flexio_i2s.h"
 #include "fsl_dma.h"
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief FlexIO I2S DMA driver version 2.1.7. */
 #define FSL_FLEXIO_I2S_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 7))
-/*@}*/
+/*! @} */
 
 typedef struct _flexio_i2s_dma_handle flexio_i2s_dma_handle_t;
 

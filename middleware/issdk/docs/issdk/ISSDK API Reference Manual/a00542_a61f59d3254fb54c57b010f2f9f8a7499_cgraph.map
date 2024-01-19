@@ -1,6 +1,0 @@
-<map id="ADS_MMA9553Query" name="ADS_MMA9553Query">
-<area shape="rect" id="node2" href="$a00530.html#ab052b802081fd87e1bda8d56e2c0db42" title="Function to insert delays. " alt="" coords="216,5,359,32"/>
-<area shape="rect" id="node3" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="419,81,480,108"/>
-<area shape="rect" id="node4" href="$a00167.html#ac5a66aa1b8d95d267c9d68cb475c9e01" title="The interface function to write a sensor register. " alt="" coords="204,107,371,133"/>
-<area shape="rect" id="node5" href="$a00167.html#ac8a60c799d9dbc84531b4680762eb8dc" title="The interface function to read a sensor register. " alt="" coords="221,157,354,184"/>
-</map>

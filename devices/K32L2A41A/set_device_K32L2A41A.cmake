@@ -124,16 +124,12 @@ message("device_K32L2A41A_startup component is included from ${CMAKE_CURRENT_LIS
 if(CONFIG_USE_device_K32L2A41A_system)
 
 if(CONFIG_TOOLCHAIN STREQUAL armgcc)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_K32L2A41A.S
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_K32L2A41A.S "" device_K32L2A41A_startup.K32L2A41A)
 endif()
 
 if(CONFIG_TOOLCHAIN STREQUAL mcux)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_k32l2a41a.c
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_k32l2a41a.cpp
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_k32l2a41a.c "" device_K32L2A41A_startup.K32L2A41A)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_k32l2a41a.cpp "" device_K32L2A41A_startup.K32L2A41A)
 endif()
 
 else()
@@ -587,10 +583,14 @@ if (CONFIG_USE_utility_assert)
 
 message("utility_assert component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console)
+if(CONFIG_USE_utility_debug_console AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -607,10 +607,14 @@ if (CONFIG_USE_utility_assert_lite)
 
 message("utility_assert_lite component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console_lite)
+if(CONFIG_USE_utility_debug_console_lite AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -845,7 +849,7 @@ if (CONFIG_USE_component_gpio_adapter)
 
 message("component_gpio_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_gpio AND CONFIG_USE_driver_port)
+if(CONFIG_USE_driver_gpio AND (CONFIG_USE_driver_port))
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../components/gpio/fsl_adapter_gpio.c

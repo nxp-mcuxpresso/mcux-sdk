@@ -156,7 +156,7 @@ status_t PHY_LAN8720A_SetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t speed
  */
 status_t PHY_LAN8720A_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_speed_t speed, bool enable);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }

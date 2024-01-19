@@ -1,12 +1,12 @@
 /*
- * Copyright 2018 - 2021 NXP
+ * Copyright 2018 - 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_PRINCE_H_
-#define _FSL_PRINCE_H_
+#ifndef FSL_PRINCE_H_
+#define FSL_PRINCE_H_
 
 #include "fsl_common.h"
 
@@ -22,10 +22,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-/*! @brief PRINCE driver version 2.5.0.
+/*! @{ */
+/*! @brief PRINCE driver version 2.6.0.
  *
- * Current version: 2.5.0
+ * Current version: 2.6.0
  *
  * Change log:
  * - Version 2.0.0
@@ -47,9 +47,13 @@
  *   - Add support for LPC55S3x series
  * - Version 2.5.0
  *   - Add PRINCE_Config() and PRINCE_Reconfig() features.
+ * - Version 2.5.1
+ *   - Fix build error due to renamed symbols
+ * - Version 2.6.0
+ *   - Renamed CSS to ELS
  */
-#define FSL_PRINCE_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
-/*@}*/
+#define FSL_PRINCE_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
+/*! @} */
 
 #if (defined(LPC55S04_SERIES) || defined(LPC55S06_SERIES))
 /* LPC55S0x series*/
@@ -77,8 +81,8 @@
 #define FSL_PRINCE_DRIVER_LPC55S3x
 #define PRINCE PRINCE0
 #include "fsl_mem_interface.h"
-#include "fsl_css.h"                // Power Down Wake-up Init
-#include <mcuxClCss.h>              // Interface to the entire nxpClCss component
+#include "mcux_els.h"                // Power Down Wake-up Init
+#include <mcuxClEls.h>              // Interface to the entire nxpClEls component
 #include <mcuxCsslFlowProtection.h> // Code flow protection
 #else
 #error "No valid CPU defined!"
@@ -152,11 +156,11 @@ typedef struct
 #define PRINCE_TAG_SHIFT 24u
 /*! @brief Prince region count */
 #define PRINCE_REGION_COUNT 3u
-/*! @brief Define for CSS key store indexes */
+/*! @brief Define for ELS key store indexes */
 #define NXP_DIE_MEM_ENC_SK    2u
 #define NXP_DIE_MEM_IV_ENC_SK 4u
 /*! @brief KDF mask and key properties for NXP_DIE_MEM_IV_ENC_SK (see SYSCON documentation)*/
-#define SYSCON_CSS_KDF_MASK 0x07000FCF
+#define SYSCON_ELS_KDF_MASK 0x07000FCF
 /*! @brief CFPA version and IV indexes (see Protected Flash Region table) */
 #define CFPA_VER_OFFSET       0x04
 #define CFPA_PRINCE_IV_OFFSET 0x14u
@@ -468,7 +472,7 @@ status_t PRINCE_Configure(api_core_context_t *coreCtx, prince_prot_region_arg_t 
  *
  * This function is used to re-configure PRINCE IP based on configuration stored in FFR.
  * This function also needs to be called after wake up from power-down mode to regenerate IV
- * encryption key in CSS key store whose presence is necessary for correct PRINCE operation
+ * encryption key in ELS key store whose presence is necessary for correct PRINCE operation
  * during erase and write operations to encrypted regions of internal flash memory
  * (dependency for correct operation of MEM_Erase() and MEM_Write() after wake up from power-down mode).
  *
@@ -519,4 +523,4 @@ static inline void PRINCE_ClearErrorStatus(PRINCE_Type *base)
  *@}
  */
 
-#endif /* _FSL_PRINCE_H_ */
+#endif /* FSL_PRINCE_H_ */

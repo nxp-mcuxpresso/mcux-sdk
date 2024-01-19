@@ -93,7 +93,10 @@ static hal_i2c_status_t HAL_I2cGetStatus(status_t status)
     return returnStatus;
 }
 
-static void HAL_I2cMasterCallback(LPI2C_Type *base, lpi2c_master_handle_t *handle, status_t status, void *callbackParam)
+static void HAL_I2cMasterCallback(LPI2C_Type *lpi2cBase,
+                                  lpi2c_master_handle_t *handle,
+                                  status_t status,
+                                  void *callbackParam)
 {
     hal_i2c_master_t *i2cMasterHandle;
     assert(NULL != callbackParam);
@@ -106,7 +109,7 @@ static void HAL_I2cMasterCallback(LPI2C_Type *base, lpi2c_master_handle_t *handl
     }
 }
 
-static void HAL_I2cSlaveCallback(LPI2C_Type *base, lpi2c_slave_transfer_t *xfer, void *callbackParam)
+static void HAL_I2cSlaveCallback(LPI2C_Type *lpi2cBase, lpi2c_slave_transfer_t *xfer, void *callbackParam)
 {
     hal_i2c_slave_t *i2cSlaveHandle;
     assert(NULL != callbackParam);
@@ -126,44 +129,44 @@ static void HAL_I2cSlaveCallback(LPI2C_Type *base, lpi2c_slave_transfer_t *xfer,
     }
 }
 
-hal_i2c_status_t HAL_I2cMasterInit(hal_i2c_master_handle_t handle, const hal_i2c_master_config_t *config)
+hal_i2c_status_t HAL_I2cMasterInit(hal_i2c_master_handle_t handle, const hal_i2c_master_config_t *halI2cConfig)
 {
     hal_i2c_master_t *i2cMasterHandle;
     lpi2c_master_config_t i2cConfig;
 
     assert(NULL != handle);
-    assert(NULL != config);
+    assert(NULL != halI2cConfig);
     assert(HAL_I2C_MASTER_HANDLE_SIZE >= sizeof(hal_i2c_master_t));
 
     i2cMasterHandle = (hal_i2c_master_t *)handle;
 
     LPI2C_MasterGetDefaultConfig(&i2cConfig);
-    i2cConfig.enableMaster    = config->enableMaster;
-    i2cConfig.baudRate_Hz     = config->baudRate_Bps;
-    i2cMasterHandle->instance = config->instance;
+    i2cConfig.enableMaster    = halI2cConfig->enableMaster;
+    i2cConfig.baudRate_Hz     = halI2cConfig->baudRate_Bps;
+    i2cMasterHandle->instance = halI2cConfig->instance;
 
-    LPI2C_MasterInit(s_i2cBases[i2cMasterHandle->instance], &i2cConfig, config->srcClock_Hz);
+    LPI2C_MasterInit(s_i2cBases[i2cMasterHandle->instance], &i2cConfig, halI2cConfig->srcClock_Hz);
 
     return kStatus_HAL_I2cSuccess;
 }
 
-hal_i2c_status_t HAL_I2cSlaveInit(hal_i2c_slave_handle_t handle, const hal_i2c_slave_config_t *config)
+hal_i2c_status_t HAL_I2cSlaveInit(hal_i2c_slave_handle_t handle, const hal_i2c_slave_config_t *halI2cConfig)
 {
     hal_i2c_slave_t *i2cSlaveHandle;
     lpi2c_slave_config_t i2cConfig;
 
     assert(NULL != handle);
-    assert(NULL != config);
+    assert(NULL != halI2cConfig);
     assert(HAL_I2C_SLAVE_HANDLE_SIZE >= sizeof(hal_i2c_slave_t));
 
     i2cSlaveHandle = (hal_i2c_slave_t *)handle;
 
     LPI2C_SlaveGetDefaultConfig(&i2cConfig);
-    i2cConfig.enableSlave    = config->enableSlave;
-    i2cConfig.address0       = (uint8_t)config->slaveAddress;
-    i2cSlaveHandle->instance = config->instance;
+    i2cConfig.enableSlave    = halI2cConfig->enableSlave;
+    i2cConfig.address0       = (uint8_t)halI2cConfig->slaveAddress;
+    i2cSlaveHandle->instance = halI2cConfig->instance;
 
-    LPI2C_SlaveInit(s_i2cBases[i2cSlaveHandle->instance], &i2cConfig, config->srcClock_Hz);
+    LPI2C_SlaveInit(s_i2cBases[i2cSlaveHandle->instance], &i2cConfig, halI2cConfig->srcClock_Hz);
 
     return kStatus_HAL_I2cSuccess;
 }

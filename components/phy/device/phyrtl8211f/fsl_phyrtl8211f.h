@@ -176,7 +176,7 @@ status_t PHY_RTL8211F_EnableLinkInterrupt(phy_handle_t *handle, phy_interrupt_ty
  */
 status_t PHY_RTL8211F_ClearInterrupt(phy_handle_t *handle);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }

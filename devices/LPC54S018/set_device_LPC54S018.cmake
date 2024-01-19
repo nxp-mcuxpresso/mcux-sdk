@@ -31,7 +31,7 @@ if(CONFIG_TOOLCHAIN STREQUAL armgcc)
   )
 endif()
 
-if(CONFIG_CORE STREQUAL cm4f AND (CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux))
+if((CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux) AND CONFIG_CORE STREQUAL cm4f)
   target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
       ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities/fsl_memcpy.S
   )
@@ -138,16 +138,12 @@ message("device_LPC54S018_startup component is included from ${CMAKE_CURRENT_LIS
 if(CONFIG_USE_device_LPC54S018_system)
 
 if(CONFIG_TOOLCHAIN STREQUAL armgcc)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_LPC54S018.S
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_LPC54S018.S "" device_LPC54S018_startup.LPC54S018)
 endif()
 
 if(CONFIG_TOOLCHAIN STREQUAL mcux)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_lpc54s018.c
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_lpc54s018.cpp
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_lpc54s018.c "" device_LPC54S018_startup.LPC54S018)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_lpc54s018.cpp "" device_LPC54S018_startup.LPC54S018)
 endif()
 
 else()
@@ -611,10 +607,14 @@ if (CONFIG_USE_utility_assert)
 
 message("utility_assert component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console)
+if(CONFIG_USE_utility_debug_console AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -631,10 +631,14 @@ if (CONFIG_USE_utility_assert_lite)
 
 message("utility_assert_lite component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_utility_debug_console_lite)
+if(CONFIG_USE_utility_debug_console_lite AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -3096,7 +3100,7 @@ if (CONFIG_USE_driver_sha)
 
 message("driver_sha component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(((CONFIG_DEVICE_ID STREQUAL LPC54S018)) AND CONFIG_USE_driver_common)
+if((CONFIG_DEVICE_ID STREQUAL LPC54S018) AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sha/fsl_sha.c

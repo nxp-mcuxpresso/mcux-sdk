@@ -22,13 +22,12 @@
         kCODEC_SupportRecordSourceSingleEndMic | kCODEC_SupportRecordSourceLineInput
 
 /*! @brief DA7212 map module */
-#define HAL_DA7212_MAP_PROTOCOL(protocol)                                   \
-    (protocol == kCODEC_BusI2S ?                                            \
-         kDA7212_BusI2S :                                                   \
-         protocol == kCODEC_BusLeftJustified ?                              \
-         kDA7212_BusLeftJustified :                                         \
-         protocol == kCODEC_BusRightJustified ? kDA7212_BusRightJustified : \
-                                                protocol == kCODEC_BusPCMA ? kDA7212_BusDSPMode : kDA7212_BusI2S)
+#define HAL_DA7212_MAP_PROTOCOL(protocol)                               \
+    (protocol == kCODEC_BusI2S            ? kDA7212_BusI2S :            \
+     protocol == kCODEC_BusLeftJustified  ? kDA7212_BusLeftJustified :  \
+     protocol == kCODEC_BusRightJustified ? kDA7212_BusRightJustified : \
+     protocol == kCODEC_BusPCMA           ? kDA7212_BusDSPMode :        \
+                                            kDA7212_BusI2S)
 #define HAL_DA7212_VOLUME_CAPABILITY                                                                    \
     kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelRight0 | kCODEC_SupportPlayChannelLeft1 | \
         kCODEC_SupportPlayChannelRight1

@@ -1,0 +1,25 @@
+---
+set.board.evkbimxrt1050.fmstr:
+  section-type: set
+  belong_to: set.board.evkbimxrt1050.fmstr
+  section_info:
+    fixed_id: fmstr_board_evkbimxrt1050
+    display_name: fmstr_evkbimxrt1050
+    full_name: FreeMASTER evkbimxrt1050
+    description: FreeMASTER examples for evkbimxrt1050
+    type: board
+    version: 1.0.0
+    set_location:
+      repo_base_path: "./boards/evkbimxrt1050/freemaster_examples"
+    product:
+      cmsis_pack:
+        scr:
+        - scr.board.evkbimxrt1050.fmstr-examples
+        vendor: NXP
+        pack_root:
+          pack_type: sBSP
+          pack_name: evkbimxrt1050_FREEMASTER
+          pack_version: 1.0.0
+  dependency:
+    allOf:
+    - set.middleware.fmstr

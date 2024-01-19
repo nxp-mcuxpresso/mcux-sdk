@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_CASPER_H_
-#define _FSL_CASPER_H_
+#ifndef FSL_CASPER_H_
+#define FSL_CASPER_H_
 
 #include "fsl_common.h"
 
@@ -22,7 +22,7 @@
  * @{
  */
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief CASPER driver version. Version 2.2.4.
  *
  * Current version: 2.2.4
@@ -67,7 +67,7 @@
  *   - Fix MISRA-C 2012 issue.
  */
 #define FSL_CASPER_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
-/*@}*/
+/*! @} */
 
 /*! @brief CASPER operation
  *
@@ -385,4 +385,4 @@ void CASPER_ECC_equal_to_zero(int *res, uint32_t *op1);
 }
 #endif
 
-#endif /* _FSL_CASPER_H_ */
+#endif /* FSL_CASPER_H_ */

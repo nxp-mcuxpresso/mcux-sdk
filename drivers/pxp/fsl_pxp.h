@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_PXP_H_
-#define _FSL_PXP_H_
+#ifndef FSL_PXP_H_
+#define FSL_PXP_H_
 
 #include "fsl_common.h"
 
@@ -47,9 +47,9 @@
 #define PXP_INTERNAL_RAM_LUT_BYTE (256)
 
 /*! @name Driver version */
-/*@{*/
-#define FSL_PXP_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
-/*@}*/
+/*! @{ */
+#define FSL_PXP_DRIVER_VERSION (MAKE_VERSION(2, 6, 1))
+/*! @} */
 
 /* This macto indicates whether the rotate sub module is shared by process surface and output buffer. */
 #if defined(PXP_CTRL_ROT_POS_MASK)
@@ -72,8 +72,8 @@
 #endif /* PXP_USE_PATH */
 
 #define PXP_COMBINE_BYTE_TO_WORD(dataAddr)                                                                           \
-    ((*(uint8_t *)(dataAddr)) | ((*(uint8_t *)((dataAddr) + 1U)) << 8U) | ((*(uint8_t *)((dataAddr) + 2U)) << 16U) | \
-     ((*(uint8_t *)((dataAddr) + 3U)) << 24U));
+    (((uint32_t)(*(uint8_t *)(dataAddr))) | (((uint32_t)(*(uint8_t *)((dataAddr) + 1U))) << 8U) | (((uint32_t)(*(uint8_t *)((dataAddr) + 2U))) << 16U) | \
+     (((uint32_t)(*(uint8_t *)((dataAddr) + 3U))) << 24U));
 
 /*! @brief PXP interrupts to enable. */
 enum _pxp_interrupt_enable
@@ -1140,7 +1140,7 @@ void PXP_Reset(PXP_Type *base);
  * @param base PXP peripheral base address.
  */
 void PXP_ResetControl(PXP_Type *base);
-/* @} */
+/*! @} */
 
 /*!
  * @name Global operations
@@ -1262,7 +1262,7 @@ static inline void PXP_EnableProcessEngine(PXP_Type *base, uint32_t mask, bool e
 }
 #endif /* FSL_FEATURE_PXP_V3 */
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -1344,7 +1344,7 @@ static inline uint8_t PXP_GetAxiErrorId(PXP_Type *base, uint8_t axiIndex)
 #endif
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -1392,7 +1392,7 @@ static inline void PXP_DisableInterrupts(PXP_Type *base, uint32_t mask)
 #endif /* FSL_FEATURE_PXP_V3 */
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Alpha surface
@@ -1515,7 +1515,7 @@ static inline void PXP_EnableAlphaSurfaceOverlayColorKey(PXP_Type *base, bool en
  */
 void PXP_SetAlphaSurfacePosition(
     PXP_Type *base, uint16_t upperLeftX, uint16_t upperLeftY, uint16_t lowerRightX, uint16_t lowerRightY);
-/* @} */
+/*! @} */
 
 /*!
  * @name Process surface
@@ -1647,7 +1647,7 @@ static inline void PXP_SetProcessSurfaceYUVFormat(PXP_Type *base, pxp_ps_yuv_for
         base->CSC1_COEF0 |= PXP_CSC1_COEF0_YCBCR_MODE_MASK;
     }
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name Output buffer
@@ -1766,7 +1766,7 @@ void PXP_BuildRect(PXP_Type *base,
                    uint16_t height,
                    uint16_t pitch,
                    uint32_t outAddr);
-/* @} */
+/*! @} */
 
 /*!
  * @name Command queue
@@ -1843,7 +1843,7 @@ static inline void PXP_CancelNextCommand(PXP_Type *base)
     *(uint32_t *)regAddr = PXP_NEXT_ENABLED_MASK;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Color space conversion
@@ -1911,7 +1911,7 @@ static inline void PXP_EnableCsc1(PXP_Type *base, bool enable)
         base->CSC1_COEF0 |= PXP_CSC1_COEF0_BYPASS_MASK;
     }
 }
-/* @} */
+/*! @} */
 
 #if !(defined(FSL_FEATURE_PXP_HAS_NO_LUT) && FSL_FEATURE_PXP_HAS_NO_LUT)
 /*!
@@ -1987,7 +1987,7 @@ static inline void PXP_Select8kLutBank(PXP_Type *base, pxp_lut_8k_bank_t bank)
 {
     base->LUT_CTRL = (base->LUT_CTRL & ~PXP_LUT_CTRL_SEL_8KB_MASK) | PXP_LUT_CTRL_SEL_8KB(bank);
 }
-/* @} */
+/*! @} */
 #endif /* FSL_FEATURE_PXP_HAS_NO_LUT */
 
 #if (defined(FSL_FEATURE_PXP_HAS_DITHER) && FSL_FEATURE_PXP_HAS_DITHER)
@@ -2063,7 +2063,7 @@ static inline void PXP_SetDitherConfig(PXP_Type *base, const pxp_dither_config_t
  */
 void PXP_EnableDither(PXP_Type *base, bool enable);
 
-/* @} */
+/*! @} */
 
 #endif /* FSL_FEATURE_PXP_HAS_DITHER */
 
@@ -2155,10 +2155,10 @@ static inline status_t PXP_GetPorterDuffConfig(pxp_porter_duff_blend_mode_t mode
     );
 }
 
-/* @} */
+/*! @} */
 #endif /* FSL_FEATURE_PXP_V3 || FSL_FEATURE_PXP_HAS_NO_PORTER_DUFF_CTRL  */
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Buffer copy
@@ -2255,7 +2255,7 @@ status_t PXP_StartMemCopy(PXP_Type *base, uint32_t srcAddr, uint32_t destAddr, u
  */
 status_t PXP_MemCopy(PXP_Type *base, uint32_t srcAddr, uint32_t destAddr, uint32_t size);
 
-/* @} */
+/*! @} */
 
 #if defined(FSL_FEATURE_PXP_V3) && FSL_FEATURE_PXP_V3
 
@@ -2369,7 +2369,7 @@ static inline void PXP_EnableFetchEngine(PXP_Type *base, pxp_fetch_engine_name_t
         }
     }
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name Store engine
@@ -2519,7 +2519,7 @@ static inline void PXP_CombineStoreEngineChannel(PXP_Type *base, pxp_store_engin
         }
     }
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name Pre-dither CFA engine
@@ -2552,7 +2552,7 @@ static inline void PXP_EnableCfa(PXP_Type *base, bool enable)
         base->CFA_CTRL_SET = PXP_CFA_CTRL_CFA_BYPASS_MASK;
     }
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name Histogram engine
@@ -2689,7 +2689,7 @@ static inline void PXP_SetHistogramSize(PXP_Type *base, uint8_t num, uint16_t wi
             break;
     }
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name WFE engine
@@ -2771,7 +2771,7 @@ static inline uint64_t PXP_GetLutUsage(PXP_Type *base)
     return ((uint64_t)base->WFE_A_STG1_8X1_OUT0_0 | (uint64_t)base->WFE_A_STG1_8X1_OUT0_1 << 32U);
 }
 
-/* @} */
+/*! @} */
 
 #endif /* FSL_FEATURE_PXP_V3 */
 
@@ -2781,4 +2781,4 @@ static inline uint64_t PXP_GetLutUsage(PXP_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_PXP_H_ */
+#endif /* FSL_PXP_H_ */

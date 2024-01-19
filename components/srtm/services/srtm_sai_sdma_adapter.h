@@ -33,6 +33,10 @@
 #define SRTM_SAI_SDMA_MAX_LOCAL_PERIOD_ALIGNMENT      (4U)
 #define SRTM_SAI_SDMA_MAX_LOCAL_PERIOD_ALIGNMENT_MASK (SRTM_SAI_SDMA_MAX_LOCAL_PERIOD_ALIGNMENT - 1U)
 
+#ifndef SRTM_SINGLE_SDMA_MULTI_FIFO_SCRIPT
+#define SRTM_SINGLE_SDMA_MULTI_FIFO_SCRIPT (0U)
+#endif
+
 /*!< init audio device */
 typedef void (*aud_init_dev)(bool enable);
 /*!< config audio device based on format and sample rate, return mclk HZ */

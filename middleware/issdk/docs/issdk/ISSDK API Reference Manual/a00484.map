@@ -1,9 +1,0 @@
-<map id="drivers/gpio/Driver_GPIO.h" name="drivers/gpio/Driver_GPIO.h">
-<area shape="rect" id="node2" href="$a04862.html" title="drivers/gpio/i.mx/gpio\l_driver.h" alt="" coords="5,95,149,136"/>
-<area shape="rect" id="node3" href="$a04865.html" title="drivers/gpio/i.mx/i.mxrt1180\l/gpio_driver.h" alt="" coords="173,95,355,136"/>
-<area shape="rect" id="node4" href="$a04868.html" title="drivers/gpio/i.mx/i.mxrt600\l/gpio_driver.h" alt="" coords="379,95,554,136"/>
-<area shape="rect" id="node5" href="$a04871.html" title="drivers/gpio/kinetis\l/gpio_driver.h" alt="" coords="578,95,707,136"/>
-<area shape="rect" id="node6" href="$a04874.html" title="drivers/gpio/kinetis\l/kw45b41z&#45;evk/gpio_driver.h" alt="" coords="731,95,914,136"/>
-<area shape="rect" id="node7" href="$a04877.html" title="drivers/gpio/lpc/gpio\l_driver.h" alt="" coords="939,95,1075,136"/>
-<area shape="rect" id="node8" href="$a04880.html" title="drivers/gpio/qn/gpio\l_driver.h" alt="" coords="1099,95,1232,136"/>
-</map>

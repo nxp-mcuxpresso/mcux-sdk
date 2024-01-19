@@ -326,8 +326,8 @@ typedef struct _hal_audio_config
                                             points to an entity defined by hal_audio_ip_config_t.
                                             If there is no specific feature configuration, it should be set to NULL. */
 
-    uint32_t srcClock_Hz;   /*!< Source clock  */
-    uint32_t sampleRate_Hz; /*!< Sample rate */
+    uint32_t srcClock_Hz;              /*!< Source clock  */
+    uint32_t sampleRate_Hz;            /*!< Sample rate */
     uint16_t frameLength;   /*!< Only flexcomm_i2s uses this field. In most cases, frameLength is equal to bitWidth
                                  times lineChannels. In some cases, frameLength needs to be set to other value.
                                  For example, when the number of bit clock on the bus between two neighboring WS
@@ -359,10 +359,10 @@ typedef struct _hal_audio_config
                                                             on different mode. For example, for I2S classic mode,
                                                             frameSyncWidth is equal to kHAL_AudioBeginAtFallingEdge. */
 
-    hal_audio_channel_t lineChannels;   /*!< Configure the number of channel on the data line. */
-    hal_audio_data_format_t dataFormat; /*!< data format on bus */
+    hal_audio_channel_t lineChannels;                  /*!< Configure the number of channel on the data line. */
+    hal_audio_data_format_t dataFormat;                /*!< data format on bus */
 
-    uint8_t bitWidth; /*!< Bit Width */
+    uint8_t bitWidth;                                  /*!< Bit Width */
     uint8_t instance; /*!< Instance (0 - I2S0/SAI0, 1 - I2S1/SAI1, ...), for detailed information please refer to the
                            SOC corresponding RM. Invalid instance value will cause initialization failure. */
 } hal_audio_config_t;

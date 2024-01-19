@@ -1,5 +1,0 @@
-<map id="MMA9553_I2C_Configure" name="MMA9553_I2C_Configure">
-<area shape="rect" id="node2" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="611,30,672,56"/>
-<area shape="rect" id="node3" href="$a00167.html#ac8a60c799d9dbc84531b4680762eb8dc" title="The interface function to read a sensor register. " alt="" coords="429,30,563,56"/>
-<area shape="rect" id="node4" href="$a00182.html#ad6c175b9a45aa936aa74abda223eeafe" title="Write commands to a sensor. " alt="" coords="221,80,381,107"/>
-</map>

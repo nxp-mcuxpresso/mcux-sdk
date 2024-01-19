@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_TSI_V4_H_
-#define _FSL_TSI_V4_H_
+#ifndef FSL_TSI_V4_H_
+#define FSL_TSI_V4_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief TSI driver version */
 #define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 3)) /*!< Version 2.1.3 */
-/*@}*/
+/*! @} */
 
 /*! @brief TSI status flags macro collection */
 #define ALL_FLAGS_MASK (TSI_GENCS_EOSF_MASK | TSI_GENCS_OUTRGF_MASK)
@@ -685,4 +685,4 @@ static inline void TSI_SetFilterBits(TSI_Type *base, tsi_filter_bits_t filter)
 
 /*! @}*/
 
-#endif /* _FSL_TSI_V4_H_ */
+#endif /* FSL_TSI_V4_H_ */

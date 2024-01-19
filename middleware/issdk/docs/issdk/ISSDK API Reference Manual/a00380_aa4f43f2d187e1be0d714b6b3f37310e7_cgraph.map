@@ -1,8 +1,0 @@
-<map id="perform_selftest" name="perform_selftest">
-<area shape="rect" id="node2" href="$a00530.html#ab052b802081fd87e1bda8d56e2c0db42" title="Function to insert delays. " alt="" coords="398,5,541,32"/>
-<area shape="rect" id="node3" href="$a00521.html#a5d7069350a7d7e65686c77a8038f462f" title="The interface function to append the data on the formated stream. " alt="" coords="603,107,664,133"/>
-<area shape="rect" id="node4" href="$a00074.html#a2b3b8d1e5ee7b6431002c387999ed8b9" title="The interface function to configure he sensor. " alt="" coords="168,107,336,133"/>
-<area shape="rect" id="node5" href="$a00167.html#ad08d2c7880bc5f09fd27eee247311448" title="The interface function to write a sensor register. " alt="" coords="402,157,537,184"/>
-<area shape="rect" id="node6" href="$a00074.html#a697dfea0eda1e41dae55a8794ad4fe7d" title="The interface function to read the sensor data. " alt="" coords="384,208,555,235"/>
-<area shape="rect" id="node7" href="$a00380.html#a9d63421469ebf4e811470cf5999db989" title="Function to initialize FXLS8974 self test metadata. " alt="" coords="208,259,296,285"/>
-</map>

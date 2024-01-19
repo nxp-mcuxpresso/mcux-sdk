@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_XBARB_H_
-#define _FSL_XBARB_H_
+#ifndef FSL_XBARB_H_
+#define FSL_XBARB_H_
 
 #include "fsl_common.h"
 
@@ -79,4 +79,4 @@ void XBARB_SetSignalsConnection(XBARB_Type *base, xbar_input_signal_t input, xba
 
 /*!* @} */
 
-#endif /* _FSL_XBARB_H_ */
+#endif /* FSL_XBARB_H_ */

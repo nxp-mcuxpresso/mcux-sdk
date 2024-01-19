@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _FSL_SPI_CMSIS_H_
-#define _FSL_SPI_CMSIS_H_
+#ifndef FSL_SPI_CMSIS_H_
+#define FSL_SPI_CMSIS_H_
 
 #include "fsl_spi.h"
 #include "RTE_Device.h"

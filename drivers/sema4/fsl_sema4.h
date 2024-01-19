@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SEMA4_H_
-#define _FSL_SEMA4_H_
+#ifndef FSL_SEMA4_H_
+#define FSL_SEMA4_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SEMA4 driver version */
 #define FSL_SEMA4_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
-/*@}*/
+/*! @} */
 
 /*! @brief The number to reset all SEMA4 gates. */
 #define SEMA4_GATE_NUM_RESET_ALL (64U)
@@ -257,4 +257,4 @@ static inline status_t SEMA4_ResetAllGateNotify(SEMA4_Type *base)
  * @}
  */
 
-#endif /* _FSL_SEMA4_H_ */
+#endif /* FSL_SEMA4_H_ */

@@ -394,6 +394,11 @@ status_t CLOCK_SetupExtClocking(uint32_t iFreq)
     /* Enable clock_in clock for clock module. */
     SYSCON->CLOCK_CTRL |= SYSCON_CLOCK_CTRL_CLKIN_ENA_MASK;
 
+    /* Wait for external osc clock to be valid. */
+    while((ANACTRL->XO32M_STATUS & ANACTRL_XO32M_STATUS_XO_READY_MASK) == 0U)
+    {
+    }
+
     s_Ext_Clk_Freq = iFreq;
     return kStatus_Success;
 }

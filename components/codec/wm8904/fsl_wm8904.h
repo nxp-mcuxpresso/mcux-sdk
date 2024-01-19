@@ -21,10 +21,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief WM8904 driver version 2.5.1. */
 #define FSL_WM8904_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief wm8904 handle size */
 #ifndef WM8904_I2C_HANDLER_SIZE
@@ -268,13 +268,13 @@ typedef struct _wm8904_config
     wm8904_audio_format_t format;         /*!< Audio format */
     uint32_t mclk_HZ;                     /*!< MCLK frequency value */
 
-    uint16_t recordSource;       /*!< record source */
-    uint16_t recordChannelLeft;  /*!< record channel */
-    uint16_t recordChannelRight; /*!< record channel */
-    uint16_t playSource;         /*!< play source */
+    uint16_t recordSource;                /*!< record source */
+    uint16_t recordChannelLeft;           /*!< record channel */
+    uint16_t recordChannelRight;          /*!< record channel */
+    uint16_t playSource;                  /*!< play source */
 
-    uint8_t slaveAddress;         /*!< code device slave address */
-    codec_i2c_config_t i2cConfig; /*!< i2c bus configuration */
+    uint8_t slaveAddress;                 /*!< code device slave address */
+    codec_i2c_config_t i2cConfig;         /*!< i2c bus configuration */
 } wm8904_config_t;
 
 /*! @brief wm8904 codec handler
@@ -502,7 +502,7 @@ status_t WM8904_PrintRegisters(wm8904_handle_t *handle);
  *
  * @param handle WM8904 handle structure.
  * @param module wm8904 module.
- * @param isEnabled, true is power on, false is power down.
+ * @param isEnabled true is power on, false is power down.
  *
  * @return kStatus_WM8904_Success if successful, different code otherwise..
  */

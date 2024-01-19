@@ -433,7 +433,7 @@ void tfa9896_convert_data2bytes(int num_data, const int data[], unsigned char by
         }
         bytes[k]     = (d >> 16) & 0xFF; /* MSB */
         bytes[k + 1] = (d >> 8) & 0xFF;
-        bytes[k + 2] = (d)&0xFF; /* LSB */
+        bytes[k + 2] = (d)&0xFF;         /* LSB */
     }
 }
 
@@ -702,14 +702,14 @@ static uint16_t tfa9890_dsp_system_stable(tfa9896_handle_t *handle, int *ready)
      *   no need to check further
      */
     *ready = (tfa_get_bf_value(TFA1_BF_AMPS, status) == 1);
-    if (*ready) /* if  ready go back */
+    if (*ready)   /* if  ready go back */
     {
         return 0; /* will be kStatus_TFA9896_Ok */
     }
 
     /* check AREFS and CLKS: not ready if either is clear */
     *ready = !((tfa_get_bf_value(TFA1_BF_AREFS, status) == 0) || (tfa_get_bf_value(TFA1_BF_CLKS, status) == 0));
-    if (!*ready) /* if not ready go back */
+    if (!*ready)  /* if not ready go back */
     {
         return 0; /* will be kStatus_TFA9896_Ok */
     }
@@ -840,7 +840,7 @@ status_t TFA9896_DspReadMem(tfa9896_handle_t *handle, unsigned short start_offse
     status_t error = kStatus_TFA9896_Ok;
     unsigned short cf_ctrl; /* the value to sent to the CF_CONTROLS register */
     unsigned char bytes[MAX_PARAM_SIZE /*MAX_I2C_LENGTH*/];
-    int burst_size; /* number of words per burst size */
+    int burst_size;         /* number of words per burst size */
     int bytes_per_word = 3;
     int num_bytes;
     int *p;
@@ -1222,9 +1222,9 @@ status_t TFA9896_DspGetStateInfo(tfa9896_handle_t *handle, tfa9896_StateInfoLive
     pInfo->sMax       = (float)data[2] / (1 << (23 - SPKRBST_HEADROOM));    /* /2^23*2^(SPKRBST_HEADROOM)    */
     pInfo->T          = data[3] / (1 << (23 - SPKRBST_TEMPERATURE_EXP));    /* /2^23*2^(def.SPKRBST_TEMPERATURE_EXP) */
     pInfo->statusFlag = data[4];
-    pInfo->X1         = (float)data[5] / (1 << (23 - SPKRBST_HEADROOM)); /* /2^23*2^(SPKRBST_HEADROOM)        */
+    pInfo->X1         = (float)data[5] / (1 << (23 - SPKRBST_HEADROOM));    /* /2^23*2^(SPKRBST_HEADROOM)        */
 
-    pInfo->X2          = 0;                                                      /* /2^23*2^(SPKRBST_HEADROOM)        */
+    pInfo->X2          = 0;                                                 /* /2^23*2^(SPKRBST_HEADROOM)        */
     pInfo->Re          = (float)data[6] / (1 << (23 - SPKRBST_TEMPERATURE_EXP)); /* /2^23*2^(SPKRBST_TEMPERATURE_EXP) */
     pInfo->shortOnMips = data[7];
     return error;
@@ -1255,7 +1255,7 @@ status_t TFA9896_WaitCalibrateDone(tfa9896_handle_t *handle, int *calibrateDone)
     if (mtp & 0x1)
     {
         while ((*calibrateDone == 0) && (tries < TFA9896_API_WAITRESULT_NTRIES))
-        { /* TODO optimise with wait estimation */
+        {                                 /* TODO optimise with wait estimation */
             err            = TFA9896_ReadRegister(handle, 0x80, &mtp);
             *calibrateDone = (mtp & 0x2); /* check MTP bit1 (MTPEX) */
             tries++;

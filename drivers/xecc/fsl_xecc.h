@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_XECC_H_
-#define _FSL_XECC_H_
+#ifndef FSL_XECC_H_
+#define FSL_XECC_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Driver version 2.0.0. */
 #define FSL_XECC_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 0U))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief XECC interrupt configuration structure, , xecc_interrupt_enable_t.
@@ -147,7 +147,7 @@ void XECC_Deinit(XECC_Type *base);
  */
 void XECC_GetDefaultConfig(xecc_config_t *config);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -197,7 +197,7 @@ static inline void XECC_DisableInterruptStatus(XECC_Type *base, uint32_t mask)
     base->ERR_STAT_EN &= ~mask;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -225,7 +225,7 @@ static inline void XECC_DisableInterrupts(XECC_Type *base, uint32_t mask)
 {
     base->ERR_SIG_EN &= ~mask;
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name functional

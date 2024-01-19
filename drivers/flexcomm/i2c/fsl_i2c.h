@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_I2C_H_
-#define _FSL_I2C_H_
+#ifndef FSL_I2C_H_
+#define FSL_I2C_H_
 
 #include <stddef.h>
 #include "fsl_device_registers.h"
@@ -26,10 +26,10 @@
 /*! @file */
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief I2C driver version. */
 #define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
-/*@}*/
+/*! @} */
 
 /*! @brief Retry times for waiting flag. */
 #ifndef I2C_RETRY_TIMES
@@ -452,7 +452,7 @@ extern "C" {
  */
 
 /*! @name Initialization and deinitialization */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Provides a default configuration for the I2C master peripheral.
@@ -536,10 +536,10 @@ static inline void I2C_MasterEnable(I2C_Type *base, bool enable)
     }
 }
 
-/*@}*/
+/*! @} */
 
 /*! @name Status */
-/*@{*/
+/*! @{ */
 /*!
  * @brief Gets the I2C status flags.
  *
@@ -595,10 +595,10 @@ static inline void I2C_MasterClearStatusFlags(I2C_Type *base, uint32_t statusMas
     base->STAT = statusMask & (I2C_STAT_MSTARBLOSS_MASK | I2C_STAT_MSTSTSTPERR_MASK);
 }
 
-/*@}*/
+/*! @} */
 
 /*! @name Interrupts */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Enables the I2C interrupt requests.
@@ -636,10 +636,10 @@ static inline uint32_t I2C_GetEnabledInterrupts(I2C_Type *base)
     return base->INTSTAT;
 }
 
-/*@}*/
+/*! @} */
 
 /*! @name Bus operations */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Sets the I2C bus frequency for master transactions.
@@ -767,10 +767,10 @@ status_t I2C_MasterReadBlocking(I2C_Type *base, void *rxBuff, size_t rxSize, uin
  */
 status_t I2C_MasterTransferBlocking(I2C_Type *base, i2c_master_transfer_t *xfer);
 
-/*@}*/
+/*! @} */
 
 /*! @name Non-blocking */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Creates a new handle for the I2C master non-blocking APIs.
@@ -824,10 +824,10 @@ status_t I2C_MasterTransferGetCount(I2C_Type *base, i2c_master_handle_t *handle,
  */
 status_t I2C_MasterTransferAbort(I2C_Type *base, i2c_master_handle_t *handle);
 
-/*@}*/
+/*! @} */
 
 /*! @name IRQ handler */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Reusable routine to handle master interrupts.
@@ -838,7 +838,7 @@ status_t I2C_MasterTransferAbort(I2C_Type *base, i2c_master_handle_t *handle);
  */
 void I2C_MasterTransferHandleIRQ(I2C_Type *base, i2c_master_handle_t *handle);
 
-/*@}*/
+/*! @} */
 
 /*! @} */ /* end of i2c_master_driver */
 
@@ -848,7 +848,7 @@ void I2C_MasterTransferHandleIRQ(I2C_Type *base, i2c_master_handle_t *handle);
  */
 
 /*! @name Slave initialization and deinitialization */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Provides a default configuration for the I2C slave peripheral.
@@ -933,10 +933,10 @@ static inline void I2C_SlaveEnable(I2C_Type *base, bool enable)
     }
 }
 
-/*@}*/ /* end of Slave initialization and deinitialization */
+/*! @} */ /* end of Slave initialization and deinitialization */
 
 /*! @name Slave status */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Clears the I2C status flag state.
@@ -958,10 +958,10 @@ static inline void I2C_SlaveClearStatusFlags(I2C_Type *base, uint32_t statusMask
     base->STAT = statusMask & I2C_STAT_SLVDESEL_MASK;
 }
 
-/*@}*/ /* end of Slave status */
+/*! @} */ /* end of Slave status */
 
 /*! @name Slave bus operations */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Performs a polling send transfer on the I2C bus.
@@ -989,10 +989,10 @@ status_t I2C_SlaveWriteBlocking(I2C_Type *base, const uint8_t *txBuff, size_t tx
  */
 status_t I2C_SlaveReadBlocking(I2C_Type *base, uint8_t *rxBuff, size_t rxSize);
 
-/*@}*/ /* end of Slave bus operations */
+/*! @} */ /* end of Slave bus operations */
 
 /*! @name Slave non-blocking */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Creates a new handle for the I2C slave non-blocking APIs.
@@ -1130,10 +1130,10 @@ void I2C_SlaveTransferAbort(I2C_Type *base, i2c_slave_handle_t *handle);
  */
 status_t I2C_SlaveTransferGetCount(I2C_Type *base, i2c_slave_handle_t *handle, size_t *count);
 
-/*@}*/ /* end of Slave non-blocking */
+/*! @} */ /* end of Slave non-blocking */
 
 /*! @name Slave IRQ handler */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Reusable routine to handle slave interrupts.
@@ -1144,7 +1144,7 @@ status_t I2C_SlaveTransferGetCount(I2C_Type *base, i2c_slave_handle_t *handle, s
  */
 void I2C_SlaveTransferHandleIRQ(I2C_Type *base, i2c_slave_handle_t *handle);
 
-/*@}*/ /* end of Slave IRQ handler */
+/*! @} */ /* end of Slave IRQ handler */
 
 /*! @} */ /* end of i2c_slave_driver */
 
@@ -1152,4 +1152,4 @@ void I2C_SlaveTransferHandleIRQ(I2C_Type *base, i2c_slave_handle_t *handle);
 }
 #endif
 
-#endif /* _FSL_I2C_H_ */
+#endif /* FSL_I2C_H_ */

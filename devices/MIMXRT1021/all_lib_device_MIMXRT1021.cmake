@@ -78,7 +78,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbarb
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/lwip
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
@@ -108,7 +107,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_nor_flash-controller-flexspi)
 #    include(driver_cmsis_lpuart)
 #    include(middleware_azure_rtos_nxd)
-#    include(middleware_issdk_sensor_fxos8700)
 #    include(device_system)
 #    include(driver_snvs_lp)
 #    include(middleware_lwip_enet_ethernetif_MIMXRT1021)
@@ -136,7 +134,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_xip_device)
 #    include(component_serial_manager)
 #    include(middleware_freertos-kernel_MIMXRT1021)
-#    include(middleware_issdk_sensor_fxas21002)
 #    include(driver_phy-common_MIMXRT1021)
 #    include(middleware_lwip_apps_lwiperf)
 #    include(driver_pit)
@@ -145,7 +142,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
 #    include(middleware_mbedtls_port_ksdk)
-#    include(middleware_issdk_drivers_gpio_imx)
 #    include(component_log_backend_debugconsole)
 #    include(CMSIS_Driver_Include_Ethernet_MAC)
 #    include(middleware_wifi_common_files)
@@ -167,7 +163,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_gpt)
 #    include(utility_assert)
 #    include(driver_enet)
-#    include(middleware_issdk_sensor_interface_common)
 #    include(middleware_wifi)
 #    include(middleware_wifi_wifidriver)
 #    include(driver_rtwdog)
@@ -282,7 +277,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_usb_host_audio)
 #    include(middleware_azure_rtos_lx)
 #    include(middleware_azure_rtos_tx)
-#    include(middleware_issdk_drivers_cmsis_drivers)
 #    include(driver_igpio)
 #    include(driver_pwm)
 #    include(middleware_sdmmc_host_usdhc_azurertos)

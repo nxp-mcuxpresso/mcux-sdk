@@ -1,5 +1,0 @@
-<map id="Host_IO_Init" name="Host_IO_Init">
-<area shape="rect" id="node2" href="$a00524.html#aaa19dab07f472f4f64938a4902ef6eed" title="The function to Initialize the Host. " alt="" coords="163,5,273,32"/>
-<area shape="rect" id="node3" href="$a00524.html#aeb19f7f23fe9119b1a678cf7434a91dc" title="The function to receive data from the host. " alt="" coords="163,56,273,83"/>
-<area shape="rect" id="node4" href="$a00098.html#a5f7481a79b18cfdeb27562acebca6ba0" title="Defines the HOST UART signal event handler. " alt="" coords="147,107,289,133"/>
-</map>

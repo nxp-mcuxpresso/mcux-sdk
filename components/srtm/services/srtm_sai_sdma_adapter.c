@@ -19,7 +19,10 @@
 #include "srtm_message.h"
 #include "srtm_message_struct.h"
 #include "srtm_service_struct.h"
+#if (defined(SRTM_SINGLE_SDMA_MULTI_FIFO_SCRIPT) && SRTM_SINGLE_SDMA_MULTI_FIFO_SCRIPT)
 #include "fsl_sdma_script.h"
+#endif
+
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -40,7 +43,7 @@ typedef struct _srtm_sai_sdma_buf_runtime
     uint32_t remainingPeriods; /* periods to be consumed/filled */
     uint32_t remainingLoadPeriods; /* periods to be preloaded either to DMA transfer or to local buffer. */
     uint32_t offset;               /* period offset to copy */
-} * srtm_sai_sdma_buf_runtime_t;
+} *srtm_sai_sdma_buf_runtime_t;
 
 #if SRTM_SAI_CONFIG_SupportLocalBuf
 struct _srtm_sai_sdma_local_period
@@ -87,13 +90,13 @@ typedef struct _srtm_sai_sdma_runtime
     bool freeRun; /* flag to indicate that no periodReady will be sent by audio client. */
     bool stoppedOnSuspend;
     bool paramSet;
-    uint32_t finishedBufOffset;               /* offset from bufAddr where the data transfer has completed. */
-    srtm_sai_sdma_suspend_state suspendState; /* service state in client suspend. */
+    uint32_t finishedBufOffset;                 /* offset from bufAddr where the data transfer has completed. */
+    srtm_sai_sdma_suspend_state suspendState;   /* service state in client suspend. */
 #if SRTM_SAI_CONFIG_Rx_Enabled
     srtm_sai_sdma_data_callback_t dataCallback; /* Callback function to provide data */
     void *dataCallbackParam;                    /* Callback function argument to be passed back to application */
 #endif
-} * srtm_sai_sdma_runtime_t;
+} *srtm_sai_sdma_runtime_t;
 
 /* SAI SDMA adapter */
 typedef struct _srtm_sai_sdma_adapter
@@ -111,7 +114,7 @@ typedef struct _srtm_sai_sdma_adapter
     sdma_handle_t rxDmaHandle;
     struct _srtm_sai_sdma_runtime rxRtm;
 #endif
-} * srtm_sai_sdma_adapter_t;
+} *srtm_sai_sdma_adapter_t;
 
 /*******************************************************************************
  * Prototypes
@@ -128,9 +131,8 @@ static const sai_mono_stereo_t saiChannelMap[] = {kSAI_MonoLeft, kSAI_MonoRight,
 #ifdef SRTM_DEBUG_MESSAGE_FUNC
 static const char *saiDirection[] = {"Rx", "Tx"};
 #endif
-#ifdef SRTM_SINGLE_SDMA_MULTI_FIFO_SCRIPT
-short g_sdma_multi_fifo_script[] = FSL_SDMA_MULTI_FIFO_SCRIPT;
-#else
+
+#if (defined(SRTM_SINGLE_SDMA_MULTI_FIFO_SCRIPT) && SRTM_SINGLE_SDMA_MULTI_FIFO_SCRIPT)
 static short g_sdma_multi_fifo_script[] = FSL_SDMA_MULTI_FIFO_SCRIPT;
 #endif
 
@@ -713,7 +715,7 @@ static void SRTM_SaiSdmaRxCallback(I2S_Type *sai, sai_sdma_handle_t *sdmaHandle,
     /* When localBuf is used, the period size should not exceed the max size supported by one DMA tranfer. */
     if (rtm->localBuf.buf != NULL)
     {
-        rtm->localRtm.bufRtm.remainingPeriods--; /* One of the local period is filled */
+        rtm->localRtm.bufRtm.remainingPeriods--;                       /* One of the local period is filled */
 
         chaseIdx                      = rtm->localRtm.bufRtm.chaseIdx; /* For callback */
         rtm->localRtm.bufRtm.chaseIdx = (rtm->localRtm.bufRtm.chaseIdx + 1U) % rtm->localBuf.periods;
@@ -797,12 +799,15 @@ static void SRTM_SaiSdmaAdapter_InitSAI(srtm_sai_sdma_adapter_t handle, srtm_aud
     if (dir == SRTM_AudioDirTx)
     {
         SDMA_CreateHandle(&handle->txDmaHandle, handle->dma, handle->txConfig.dmaChannel, &handle->txConfig.txcontext);
-        handle->txDmaHandle.priority = handle->txConfig.ChannelPriority;
+
+#if (defined(SRTM_SINGLE_SDMA_MULTI_FIFO_SCRIPT) && SRTM_SINGLE_SDMA_MULTI_FIFO_SCRIPT)
         if (rtm->format >= (uint8_t)SRTM_Audio_DSD8bits) /* DSD mode, need enable SDMA multi fifo */
         {
             SDMA_LoadScript(handle->dma, FSL_SDMA_SCRIPT_CODE_START_ADDR, (void *)g_sdma_multi_fifo_script,
                             FSL_SDMA_SCRIPT_CODE_SIZE);
         }
+#endif
+        handle->txDmaHandle.priority = handle->txConfig.ChannelPriority;
         SAI_TransferTxCreateHandleSDMA(handle->sai, &handle->txRtm.saiHandle, SRTM_SaiSdmaTxCallback, (void *)handle,
                                        &handle->txDmaHandle, handle->txConfig.eventSource);
     }
@@ -957,7 +962,7 @@ static srtm_status_t SRTM_SaiSdmaAdapter_Open(srtm_sai_adapter_t adapter, srtm_a
 {
     srtm_sai_sdma_adapter_t handle = (srtm_sai_sdma_adapter_t)(void *)adapter;
 #if SRTM_SAI_CONFIG_Rx_Enabled
-    srtm_sai_sdma_runtime_t rtm = dir == SRTM_AudioDirTx ? &handle->txRtm : &handle->rxRtm;
+    srtm_sai_sdma_runtime_t rtm     = dir == SRTM_AudioDirTx ? &handle->txRtm : &handle->rxRtm;
     srtm_sai_sdma_config_t *thisCfg = dir == SRTM_AudioDirTx ? &handle->txConfig : &handle->rxConfig;
 #else
     srtm_sai_sdma_runtime_t rtm        = &handle->txRtm;

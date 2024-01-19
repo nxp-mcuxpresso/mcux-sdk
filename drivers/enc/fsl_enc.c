@@ -24,6 +24,10 @@
 #define ENC_CTRL2_W1C_FLAGS (ENC_CTRL2_SABIRQ_MASK | ENC_CTRL2_ROIRQ_MASK | ENC_CTRL2_RUIRQ_MASK)
 #endif
 
+#if defined(ENC_RSTS)
+#define ENC_RESETS_ARRAY ENC_RSTS
+#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -44,6 +48,11 @@ static ENC_Type *const s_encBases[] = ENC_BASE_PTRS;
 /*! @brief Pointers to ENC clocks for each instance. */
 static const clock_ip_name_t s_encClocks[] = ENC_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(ENC_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_encResets[] = ENC_RESETS_ARRAY;
+#endif
 
 /*******************************************************************************
  * Code
@@ -87,6 +96,10 @@ void ENC_Init(ENC_Type *base, const enc_config_t *config)
     /* Enable the clock. */
     CLOCK_EnableClock(s_encClocks[ENC_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(ENC_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_encResets[ENC_GetInstance(base)]);
+#endif
 
     /* ENC_CTRL. */
     tmp16 = base->CTRL & (uint16_t)(~(ENC_CTRL_W1C_FLAGS | ENC_CTRL_HIP_MASK | ENC_CTRL_HNE_MASK | ENC_CTRL_REV_MASK |

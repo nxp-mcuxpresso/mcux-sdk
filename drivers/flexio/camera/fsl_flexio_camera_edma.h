@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_FLEXIO_CAMERA_EDMA_H_
-#define _FSL_FLEXIO_CAMERA_EDMA_H_
+#ifndef FSL_FLEXIO_CAMERA_EDMA_H_
+#define FSL_FLEXIO_CAMERA_EDMA_H_
 
 #include "fsl_flexio_camera.h"
 #include "fsl_edma.h"
@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief FlexIO Camera EDMA driver version 2.1.3. */
 #define FSL_FLEXIO_CAMERA_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
-/*@}*/
+/*! @} */
 
 /*! @brief Forward declaration of the handle typedef. */
 typedef struct _flexio_camera_edma_handle flexio_camera_edma_handle_t;
@@ -119,7 +119,7 @@ status_t FLEXIO_CAMERA_TransferGetReceiveCountEDMA(FLEXIO_CAMERA_Type *base,
                                                    flexio_camera_edma_handle_t *handle,
                                                    size_t *count);
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -127,4 +127,4 @@ status_t FLEXIO_CAMERA_TransferGetReceiveCountEDMA(FLEXIO_CAMERA_Type *base,
 
 /*! @}*/
 
-#endif /* _FSL_CAMERA_EDMA_H_ */
+#endif /* FSL_CAMERA_EDMA_H_ */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -145,7 +145,7 @@ status_t PHY_RTL8201_GetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t *speed
 status_t PHY_RTL8201_SetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t speed, phy_duplex_t duplex);
 
 /*!
- * @brief Enables/disables PHY loopback.
+ * @brief Enables/Disables PHY loopback.
  *
  * @param handle   PHY device handle.
  * @param mode     The loopback mode to be enabled, please see "phy_loop_t".
@@ -158,7 +158,28 @@ status_t PHY_RTL8201_SetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t speed,
  */
 status_t PHY_RTL8201_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_speed_t speed, bool enable);
 
-/* @} */
+/*!
+ * @brief Enables/Disables PHY link management interrupt.
+ *
+ * This function controls link status change interrupt.
+ *
+ * @param handle  PHY device handle.
+ * @param type    PHY interrupt type.
+ * @retval kStatus_Success  PHY enables/disables interrupt success
+ * @retval kStatus_Timeout  PHY MDIO visit time out
+ */
+status_t PHY_RTL8201_EnableLinkInterrupt(phy_handle_t *handle, phy_interrupt_type_t type);
+
+/*!
+ * @brief Clears PHY interrupt status.
+ *
+ * @param handle  PHY device handle.
+ * @retval kStatus_Success  PHY read and clear interrupt success
+ * @retval kStatus_Timeout  PHY MDIO visit time out
+ */
+status_t PHY_RTL8201_ClearInterrupt(phy_handle_t *handle);
+
+/*! @} */
 
 #if defined(__cplusplus)
 }

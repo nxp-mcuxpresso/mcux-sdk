@@ -1,5 +1,0 @@
-<map id="sensors/mma845x_drv.h" name="sensors/mma845x_drv.h">
-<area shape="rect" id="node3" href="$a00122.html" title="The mma845x.h contains the MMA845x sensor register definitions and its bit mask. " alt="" coords="29,80,119,107"/>
-<area shape="rect" id="node4" href="$a00185.html" title="The sensor_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regist..." alt="" coords="144,80,257,107"/>
-<area shape="rect" id="node5" href="$a00170.html" title="The register_io_i2c.h file declares low&#45;level interface functions for reading and writing sensor regi..." alt="" coords="189,155,306,181"/>
-</map>

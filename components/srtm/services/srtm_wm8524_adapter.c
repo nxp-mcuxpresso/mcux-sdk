@@ -20,7 +20,7 @@ typedef struct _srtm_wm8524_adapter
     struct _srtm_codec_adapter adapter;
     srtm_wm8524_config_t config;
     codec_handle_t *driver;
-} * srtm_wm8524_adapter_t;
+} *srtm_wm8524_adapter_t;
 
 /*******************************************************************************
  * Prototypes

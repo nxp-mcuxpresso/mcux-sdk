@@ -702,7 +702,7 @@ hal_flash_status_t HAL_FlashRead(uint32_t src, uint32_t size, uint8_t *pData)
 
     if (kStatus_HAL_Flash_Success == status)
     {
-        if ((0U != (size % 4U)) || (0U != (((uint32_t)pData) % 4U)))
+        if ((0UL != ((uint32_t)((uint32_t)size % 4UL))) || (0UL != ((uint32_t)(((uint32_t)pData) % 4UL))))
         {
             status = kStatus_HAL_Flash_InvalidArgument;
         }
@@ -763,7 +763,7 @@ hal_flash_status_t HAL_FlashRead(uint32_t src, uint32_t size, uint8_t *pData)
         }
 #endif /* __DCACHE_PRESENT */
     }
-    return status;
+    return (hal_flash_status_t)status;
 }
 
 /*!

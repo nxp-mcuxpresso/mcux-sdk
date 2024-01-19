@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_PMU_H_
-#define _FSL_PMU_H_
+#ifndef FSL_PMU_H_
+#define FSL_PMU_H_
 
 #include "fsl_common.h"
 
@@ -18,10 +18,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief PMU driver version */
 #define FSL_PMU_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1. */
-                                                       /*@}*/
+                                                       /*! @} */
 
 /*!
  * @brief PMU Status flags.
@@ -116,7 +116,7 @@ extern "C" {
  */
 uint32_t PMU_GetStatusFlags(PMU_Type *base);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name 1P1 Regular
@@ -261,7 +261,7 @@ static inline void PMU_1P1EnableOutput(PMU_Type *base, bool enable)
     }
 }
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name 3P0 Regular
@@ -370,7 +370,7 @@ static inline void PMU_3P0EnableOutput(PMU_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name 2P5 Regulator
@@ -521,7 +521,7 @@ static inline void PMU_2P5EnableOutput(PMU_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Core Regulator
@@ -611,7 +611,7 @@ static inline void PMU_CoreSetARMCoreDomainVoltage(PMU_Type *base, uint32_t valu
     base->REG_CORE = (base->REG_CORE & ~PMU_REG_CORE_REG0_TARG_MASK) | PMU_REG_CORE_REG0_TARG(value);
 }
 
-/* @} */
+/*! @} */
 
 #if defined(FSL_FEATURE_PMU_HAS_LOWPWR_CTRL) && FSL_FEATURE_PMU_HAS_LOWPWR_CTRL
 /*!
@@ -660,7 +660,7 @@ static inline void PMU_EnableLowPowerBandgap(PMU_Type *base, bool enable)
     }
 }
 #endif /* FSL_FEATURE_PMU_HAS_LOWPWR_CTRL. */
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -668,4 +668,4 @@ static inline void PMU_EnableLowPowerBandgap(PMU_Type *base, bool enable)
 
 /*! @}*/
 
-#endif /* _FSL_PMU_H_*/
+#endif /* FSL_PMU_H_*/

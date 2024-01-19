@@ -371,9 +371,9 @@ static int32_t mflash_drv_init_internal(void)
     /* Do software reset. */
     // FLEXSPI_SoftwareReset(MFLASH_FLEXSPI);
 
-    //#if defined(EXAMPLE_INVALIDATE_FLEXSPI_CACHE)
-    //    EXAMPLE_INVALIDATE_FLEXSPI_CACHE();
-    //#endif
+    // #if defined(EXAMPLE_INVALIDATE_FLEXSPI_CACHE)
+    //     EXAMPLE_INVALIDATE_FLEXSPI_CACHE();
+    // #endif
 
     if (primask == 0)
     {

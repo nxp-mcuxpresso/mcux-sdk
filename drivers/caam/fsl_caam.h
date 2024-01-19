@@ -1,13 +1,13 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_CAAM_H_
-#define _FSL_CAAM_H_
+#ifndef FSL_CAAM_H_
+#define FSL_CAAM_H_
 
 #include "fsl_common.h"
 
@@ -29,10 +29,10 @@ enum
  *******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-/*! @brief CAAM driver version. Version 2.2.4.
+/*! @{ */
+/*! @brief CAAM driver version. Version 2.3.2.
  *
- * Current version: 2.2.4
+ * Current version: 2.3.2
  *
  * Change log:
  * - Version 2.0.0
@@ -70,9 +70,16 @@ enum
  *   - Fix DCACHE invalidation in CAAM_HASH_Finish().
  * - Version 2.2.4
  *   - Fix issue where the outputSize parameter of CAAM_HASH_Finish() has impact on hash calculation.
+ * - Version 2.3.0
+ *   - Add support for SHA HMAC.
+ * - Version 2.3.1
+ *   - Modified function caam_aes_ccm_check_input_args() to allow payload be empty as is specified in NIST800-38C
+ * Section 5.3.
+ * - Version 2.3.2
+ *   - Fix MISRA-2012 issues.
  */
-#define FSL_CAAM_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
-/*@}*/
+#define FSL_CAAM_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+/*! @} */
 
 /*! @brief CAAM callback function. */
 typedef struct _caam_job_callback
@@ -201,7 +208,7 @@ typedef enum _caam_ext_key_xfr_source
     kCAAM_ExtKeyXfr_KeyRegisterClass2 = 2U, /*!< The Class 2 Key Register is the source. */
     kCAAM_ExtKeyXfr_PkhaRamE          = 3U, /*!< The PKHA E RAM is the source. */
 } caam_ext_key_xfr_source_t;
-/*! @} */ /* end of caam_driver */
+/*! @} */                                   /* end of caam_driver */
 
 /*******************************************************************************
  * AES Definitions
@@ -255,6 +262,11 @@ typedef enum _caam_hash_algo_t
     kCAAM_Sha256,      /*!< SHA_256 (MDHA engine)  */
     kCAAM_Sha384,      /*!< SHA_384 (MDHA engine)  */
     kCAAM_Sha512,      /*!< SHA_512 (MDHA engine)  */
+    kCAAM_HmacSha1,    /*!< HMAC_SHA_1   (MDHA engine)  */
+    kCAAM_HmacSha224,  /*!< HMAC_SHA_224 (MDHA engine)  */
+    kCAAM_HmacSha256,  /*!< HMAC_SHA_256 (MDHA engine)  */
+    kCAAM_HmacSha384,  /*!< HMAC_SHA_384 (MDHA engine)  */
+    kCAAM_HmacSha512,  /*!< HMAC_SHA_512 (MDHA engine)  */
 } caam_hash_algo_t;
 
 /*! @brief CAAM HASH Context size. */
@@ -262,7 +274,7 @@ typedef enum _caam_hash_algo_t
 #define CAAM_HASH_BLOCK_SIZE CAAM_SHA_BLOCK_SIZE /*!< CAAM hash block size  */
 
 /*! @brief CAAM HASH Context size. */
-#define CAAM_HASH_CTX_SIZE 58
+#define CAAM_HASH_CTX_SIZE 83
 
 /*! @brief Storage type used to save hash context. */
 typedef uint32_t caam_hash_ctx_t[CAAM_HASH_CTX_SIZE];
@@ -282,6 +294,7 @@ typedef enum _caam_crc_algo_t
     kCAAM_CrcCUSTPOLY, /*!< Custom polynomial mode (CRCA engine)  */
 } caam_crc_algo_t;
 
+/*! @brief CAAM AAI CRC modes*/
 typedef enum _caam_aai_crc_alg
 {
     kCAAM_CRC_ModeIEEE802  = 0x01U << 4, /* IEE 802 mode */
@@ -345,6 +358,7 @@ typedef struct _caam_rng_user_config
  * @{
  */
 
+/*! @brief CAAM FIFOST types. */
 typedef enum _caam_fifost_type
 {
     kCAAM_FIFOST_Type_Kek_Kek = 0x24,      /*!< Key Register, encrypted using AES-ECB with the job
@@ -357,6 +371,7 @@ job descriptor key encryption key. */
 trusted descriptor key encryption key. */
 } caam_fifost_type_t;
 
+/*! @brief CAAM descriptor types. */
 typedef enum _caam_desc_type
 {
     kCAAM_Descriptor_Type_Kek_Kek = 0x0,      /*!< Key Register, encrypted using AES-ECB with the job
@@ -369,7 +384,7 @@ job descriptor key encryption key. */
 trusted descriptor key encryption key. */
 } caam_desc_type_t;
 
-//#define KEYBLOB_USE_SECURE_MEMORY 1  // Define when secure memory mode is used
+// #define KEYBLOB_USE_SECURE_MEMORY 1  // Define when secure memory mode is used
 
 /*!
  *@}
@@ -1283,6 +1298,123 @@ status_t CAAM_HASH_NonBlocking(CAAM_Type *base,
  */ /* end of caam_nonblocking_driver_hash */
 
 /*******************************************************************************
+ * HMAC API
+ ******************************************************************************/
+
+/*!
+ * @addtogroup caam_driver_hmac
+ * @{
+ */
+/*!
+ * @brief Initialize HMAC context
+ *
+ * This function initializes the HMAC.
+ *
+ * For XCBC-MAC, the key length must be 16. For CMAC, the key length can be
+ * the AES key lengths supported by AES engine. For MDHA the key length argument
+ * is ignored.
+ *
+ * This functions is used to initialize the context for both blocking and non-blocking
+ * CAAM_HMAC API.
+ *
+ * @param base CAAM peripheral base address
+ * @param handle Handle used for this request.
+ * @param[out] ctx Output HMAC context
+ * @param algo Underlaying algorithm to use for HMAC computation.
+ * @param key Input key
+ * @param keySize Size of input key in bytes
+ * @return Status of initialization
+ */
+status_t CAAM_HMAC_Init(CAAM_Type *base,
+                        caam_handle_t *handle,
+                        caam_hash_ctx_t *ctx,
+                        caam_hash_algo_t algo,
+                        const uint8_t *key,
+                        size_t keySize);
+
+/*!
+ * @brief Create Message Authentication Code (MAC) on given data
+ *
+ * Perform the full keyed XCBC-MAC/CMAC, or HMAC-SHA in one function call.
+ *
+ * Key shall be supplied if the underlaying algoritm is AES XCBC-MAC, CMAC, or SHA HMAC.
+ *
+ * For XCBC-MAC, the key length must be 16. For CMAC, the key length can be
+ * the AES key lengths supported by AES engine. For HMAC, the key can have
+ * any size.
+ *
+ * \param base CAAM peripheral base address
+ * \param handle Handle used for this request.
+ * \param algo Underlaying algorithm to use for MAC computation.
+ * \param input Input data
+ * \param inputSize Size of input data in bytes
+ * \param key Input key
+ * \param keySize Size of input key in bytes
+ * \param[out] output Output MAC data
+ * \param[out] outputSize Output parameter storing the size of the output MAC in bytes
+ * \return Status of the one call hash operation.
+ */
+status_t CAAM_HMAC(CAAM_Type *base,
+                   caam_handle_t *handle,
+                   caam_hash_algo_t algo,
+                   const uint8_t *input,
+                   size_t inputSize,
+                   const uint8_t *key,
+                   size_t keySize,
+                   uint8_t *output,
+                   size_t *outputSize);
+/*!
+ *@}
+ */ /* end of caam_driver_hmac */
+
+/*!
+ * @addtogroup caam_nonblocking_driver_hmac
+ * @{
+ */
+/*!
+ * @brief Create Message Authentication Code (MAC) on given data
+ *
+ * Perform the full keyed XCBC-MAC/CMAC, or HMAC-SHA in one function call.
+ *
+ * Key shall be supplied if the underlaying algoritm is AES XCBC-MAC, CMAC, or SHA HMAC.
+ *
+ * For XCBC-MAC, the key length must be 16. For CMAC, the key length can be
+ * the AES key lengths supported by AES engine. For HMAC, the key can have
+ * any size, however the function will block if the supplied key is bigger than
+ * the block size of the underlying hashing algorithm (e.g. >64 bytes for SHA256).
+ *
+ * The function is not blocking with the exception of supplying large key sizes.
+ * In that case the function will block until the large key is hashed down with the
+ * supplied hashing algorithm (as per FIPS 198-1), after which operation is resumed
+ * to calling non-blocking HMAC.
+ *
+ * \param base CAAM peripheral base address
+ * \param handle Handle used for this request.
+ * @param[out] descriptor Memory for the CAAM descriptor.
+ * \param algo Underlaying algorithm to use for MAC computation.
+ * \param input Input data
+ * \param inputSize Size of input data in bytes
+ * \param key Input key
+ * \param keySize Size of input key in bytes
+ * \param[out] output Output MAC data
+ * \param[out] outputSize Output parameter storing the size of the output MAC in bytes
+ * \return Status of the one call hash operation.
+ */
+status_t CAAM_HMAC_NonBlocking(CAAM_Type *base,
+                               caam_handle_t *handle,
+                               caam_desc_hash_t descriptor,
+                               caam_hash_algo_t algo,
+                               const uint8_t *input,
+                               size_t inputSize,
+                               const uint8_t *key,
+                               size_t keySize,
+                               uint8_t *output,
+                               size_t *outputSize);
+/*!
+ *@}
+ */ /* end of caam_nonblocking_driver_hmac */
+
+/*******************************************************************************
  * CRC API
  ******************************************************************************/
 
@@ -1588,7 +1720,6 @@ status_t CAAM_RNG_GetRandomDataNonBlocking(CAAM_Type *base,
  * @param data Pointer address uses to pointed the plaintext.
  * @param dataSize Size of the buffer pointed by the data parameter
  * @param fifostType Type of AES-CBC or AEC-CCM to encrypt plaintext
- * @param keyregType Type uses to be stored
  * @param[out] blackdata Pointer address uses to pointed the black key
  * @return Status of the request
  */
@@ -3399,4 +3530,4 @@ status_t CAAM_PKHA_ECC_PointMul(CAAM_Type *base,
 }
 #endif
 
-#endif /* _FSL_CAAM_H_ */
+#endif /* FSL_CAAM_H_ */

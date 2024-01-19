@@ -48,7 +48,7 @@ struct _srtm_dispatcher
     srtm_list_t cores;    /*!< SRTM peer core list head */
     srtm_list_t services; /*!< SRTM service list head */
 
-    srtm_mutex_t mutex; /*!< Mutex for multi-task protection */
+    srtm_mutex_t mutex;   /*!< Mutex for multi-task protection */
 #if defined(SRTM_STATIC_API) && SRTM_STATIC_API
     srtm_mutex_buf_t mutexStatic;
 #endif
@@ -57,17 +57,17 @@ struct _srtm_dispatcher
     srtm_list_t messageQ;    /*!< Message queue to hold the messages to process */
     srtm_list_t waitingReqs; /*!< Message queue to hold the request waiting for the response */
 
-    volatile bool stopReq; /*!< SRTM dispatcher stop request flag */
-    bool started;          /*!< SRTM dispatcher started flag */
-    srtm_sem_t startSig;   /*!< SRTM dispatcher start signal */
+    volatile bool stopReq;   /*!< SRTM dispatcher stop request flag */
+    bool started;            /*!< SRTM dispatcher started flag */
+    srtm_sem_t startSig;     /*!< SRTM dispatcher start signal */
 #if defined(SRTM_STATIC_API) && SRTM_STATIC_API
     srtm_sem_buf_t startSigStatic;
 #endif
-    srtm_sem_t stopSig;    /*!< SRTM dispatcher stop signal */
+    srtm_sem_t stopSig; /*!< SRTM dispatcher stop signal */
 #if defined(SRTM_STATIC_API) && SRTM_STATIC_API
     srtm_sem_buf_t stopSigStatic;
 #endif
-    srtm_sem_t queueSig;   /*!< SRTM dispatcher messageQ signal */
+    srtm_sem_t queueSig; /*!< SRTM dispatcher messageQ signal */
 #if defined(SRTM_STATIC_API) && SRTM_STATIC_API
     srtm_sem_buf_t queueSigStatic;
 #endif

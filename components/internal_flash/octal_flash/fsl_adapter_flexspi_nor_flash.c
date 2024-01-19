@@ -52,12 +52,10 @@
 #define FLASH_ENABLE_OCTAL_CMD   0x02
 #define CACHE_MAINTAIN           1
 
-
-
-#define FLASH_SIZE      0x10000 /* 512Mb/KByte */
-#define FLASH_PAGE_SIZE 256U
-#define SECTOR_SIZE     0x1000U /* 4K */
-#define FLASH_PORT       kFLEXSPI_PortB1
+#define FLASH_SIZE                      0x10000 /* 512Mb/KByte */
+#define FLASH_PAGE_SIZE                 256U
+#define SECTOR_SIZE                     0x1000U /* 4K */
+#define FLASH_PORT                      kFLEXSPI_PortB1
 #define EXAMPLE_FLEXSPI_RX_SAMPLE_CLOCK kFLEXSPI_ReadSampleClkLoopbackInternally
 #ifdef FlexSPI1_AMBA_BASE
 #define FLEXSPI_AMBA_BASE FlexSPI1_AMBA_BASE
@@ -113,7 +111,6 @@ flexspi_device_config_t deviceconfig = {
     .AHBWriteWaitUnit     = kFLEXSPI_AhbWriteWaitUnit2AhbCycle,
     .AHBWriteWaitInterval = 0,
 };
-
 
 static const uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
 
@@ -268,7 +265,6 @@ static status_t flexspi_nor_wait_bus_busy(FLEXSPI_Type *base, bool enableOctal)
     } while (isBusy);
 
     return status;
-
 }
 status_t flexspi_nor_enable_octal_mode(FLEXSPI_Type *base)
 {
@@ -305,16 +301,16 @@ status_t flexspi_nor_enable_octal_mode(FLEXSPI_Type *base)
 }
 void flash_reset_config(void)
 {
-    do                                                                    
-    {                                                                     
+    do
+    {
         GPIO->B[2][12] = 0;
         /*make sure at least 20us delay*/
-        for (uint32_t i = 0; i < 5000; i++) 
-        {                                                                 
-            __NOP();                                                      
-        }                                                                 
-        GPIO->B[2][12] = 1;                                               
-                                    
+        for (uint32_t i = 0; i < 5000; i++)
+        {
+            __NOP();
+        }
+        GPIO->B[2][12] = 1;
+
     } while (0);
 }
 
@@ -337,7 +333,6 @@ void flash_reset_config(void)
  */
 hal_flash_status_t HAL_FlashInit(void)
 {
-
     FLEXSPI_Type *base;
     /* As cache depends on FlexSPI power and clock, cache must be initialized after FlexSPI power/clock is set */
     cache64_config_t cacheCfg;
@@ -348,24 +343,24 @@ hal_flash_status_t HAL_FlashInit(void)
     uint32_t localLUT[CUSTOM_LUT_LENGTH];
 
     memcpy(localLUT, customLUT, sizeof(customLUT));
-    
+
     base = NULL;
-    for(uint8_t i= 0; i < (sizeof(s_flexspiBase)/ sizeof(FLEXSPI_Type *)); i++)
+    for (uint8_t i = 0; i < (sizeof(s_flexspiBase) / sizeof(FLEXSPI_Type *)); i++)
     {
-        if(NULL != s_flexspiBase[i])
+        if (NULL != s_flexspiBase[i])
         {
             base = s_flexspiBase[i];
             break;
         }
     }
-    if(NULL == base)
+    if (NULL == base)
     {
         return kStatus_HAL_Flash_Fail;
-    } 
+    }
     key = DisableGlobalIRQ();
 #if defined(FSL_FEATURE_SOC_CACHE64_CTRL_COUNT) && (FSL_FEATURE_SOC_CACHE64_CTRL_COUNT == 1U)
     bool CacheEnableFlag = false;
-    if(CACHE64_CTRL_CCR_ENCACHE_MASK == (CACHE64->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK))
+    if (CACHE64_CTRL_CCR_ENCACHE_MASK == (CACHE64->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK))
     {
         CACHE64_DisableCache(CACHE64);
         CacheEnableFlag = true;
@@ -394,7 +389,6 @@ hal_flash_status_t HAL_FlashInit(void)
     /* Do software reset. */
     FLEXSPI_SoftwareReset(base);
 
-
 #if defined(EXAMPLE_INVALIDATE_FLEXSPI_CACHE)
     EXAMPLE_INVALIDATE_FLEXSPI_CACHE();
 #endif
@@ -420,7 +414,6 @@ hal_flash_status_t HAL_FlashInit(void)
  */
 hal_flash_status_t HAL_FlashVerifyErase(uint32_t start, uint32_t lengthInBytes, hal_flash_margin_value_t margin)
 {
-
     hal_flash_status_t state;
     uint32_t address;
     uint32_t value;
@@ -477,7 +470,6 @@ hal_flash_status_t HAL_FlashVerifyErase(uint32_t start, uint32_t lengthInBytes, 
  */
 hal_flash_status_t HAL_FlashProgram(uint32_t dest, uint32_t size, uint8_t *pData)
 {
-
     FLEXSPI_Type *base;
     uint32_t address;
     uint32_t writeLength;
@@ -485,10 +477,9 @@ hal_flash_status_t HAL_FlashProgram(uint32_t dest, uint32_t size, uint8_t *pData
     flexspi_transfer_t flashXfer;
     uint32_t key;
 
-
 #if defined(FSL_FEATURE_SOC_CACHE64_CTRL_COUNT) && (FSL_FEATURE_SOC_CACHE64_CTRL_COUNT == 1U)
     bool CacheEnableFlag = false;
-    if(CACHE64_CTRL_CCR_ENCACHE_MASK == (CACHE64->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK))
+    if (CACHE64_CTRL_CCR_ENCACHE_MASK == (CACHE64->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK))
     {
         CACHE64_DisableCache(CACHE64);
         CacheEnableFlag = true;
@@ -562,10 +553,10 @@ hal_flash_status_t HAL_FlashProgram(uint32_t dest, uint32_t size, uint8_t *pData
 
         FLEXSPI_SoftwareReset(base);
         /*SDK_DelayAtLeastUs(2U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);*/
-        for (uint32_t i = 0; i < 500; i++) 
-        {                                                                 
-            __NOP();                                                      
-        }  
+        for (uint32_t i = 0; i < 500; i++)
+        {
+            __NOP();
+        }
         EnableGlobalIRQ(key);
     }
     __DSB();
@@ -606,7 +597,6 @@ hal_flash_status_t HAL_FlashProgramUnaligned(uint32_t dest, uint32_t size, uint8
  */
 hal_flash_status_t HAL_FlashEraseSector(uint32_t dest, uint32_t size)
 {
-
     FLEXSPI_Type *base;
     uint32_t address;
     status_t status = (status_t)kStatus_HAL_Flash_Error;
@@ -619,7 +609,7 @@ hal_flash_status_t HAL_FlashEraseSector(uint32_t dest, uint32_t size)
     }
 #if defined(FSL_FEATURE_SOC_CACHE64_CTRL_COUNT) && (FSL_FEATURE_SOC_CACHE64_CTRL_COUNT == 1U)
     bool CacheEnableFlag = false;
-    if(CACHE64_CTRL_CCR_ENCACHE_MASK == (CACHE64->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK))
+    if (CACHE64_CTRL_CCR_ENCACHE_MASK == (CACHE64->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK))
     {
         CACHE64_DisableCache(CACHE64);
         CacheEnableFlag = true;
@@ -661,10 +651,10 @@ hal_flash_status_t HAL_FlashEraseSector(uint32_t dest, uint32_t size)
         /* Do software reset. */
         FLEXSPI_SoftwareReset(base);
         /*SDK_DelayAtLeastUs(2U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);*/
-        for (uint32_t i = 0; i < 500; i++) 
-        {                                                                 
-            __NOP();                                                      
-        }  
+        for (uint32_t i = 0; i < 500; i++)
+        {
+            __NOP();
+        }
         EnableGlobalIRQ(key);
     }
     if (status != kStatus_Success)
@@ -673,10 +663,10 @@ hal_flash_status_t HAL_FlashEraseSector(uint32_t dest, uint32_t size)
         /* Do software reset. */
         FLEXSPI_SoftwareReset(base);
         /*SDK_DelayAtLeastUs(2U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);*/
-        for (uint32_t i = 0; i < 500; i++) 
-        {                                                                 
-            __NOP();                                                      
-        }  
+        for (uint32_t i = 0; i < 500; i++)
+        {
+            __NOP();
+        }
         EnableGlobalIRQ(key);
     }
 #if defined(FSL_FEATURE_SOC_CACHE64_CTRL_COUNT) && (FSL_FEATURE_SOC_CACHE64_CTRL_COUNT == 1U)
@@ -702,10 +692,9 @@ hal_flash_status_t HAL_FlashEraseSector(uint32_t dest, uint32_t size)
  */
 hal_flash_status_t HAL_FlashRead(uint32_t src, uint32_t size, uint8_t *pData)
 {
-
 #if defined(FSL_FEATURE_SOC_CACHE64_CTRL_COUNT) && (FSL_FEATURE_SOC_CACHE64_CTRL_COUNT == 1U)
     bool CacheEnableFlag = false;
-    if(CACHE64_CTRL_CCR_ENCACHE_MASK == (CACHE64->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK))
+    if (CACHE64_CTRL_CCR_ENCACHE_MASK == (CACHE64->CCR & CACHE64_CTRL_CCR_ENCACHE_MASK))
     {
         CACHE64_DisableCache(CACHE64);
         CacheEnableFlag = true;

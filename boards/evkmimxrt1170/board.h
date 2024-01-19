@@ -1,6 +1,5 @@
 /*
- * Copyright 2020 NXP
- * All rights reserved.
+ * Copyright 2020, 2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -79,7 +78,7 @@
 
 #define USER_LED_INIT(output)                                            \
     GPIO_PinWrite(BOARD_USER_LED_GPIO, BOARD_USER_LED_GPIO_PIN, output); \
-    BOARD_USER_LED_GPIO->GDIR |= (1U << BOARD_USER_LED_GPIO_PIN) /*!< Enable target USER_LED */
+    BOARD_USER_LED_GPIO->GDIR |= (1U << BOARD_USER_LED_GPIO_PIN)                       /*!< Enable target USER_LED */
 #define USER_LED_OFF() \
     GPIO_PortClear(BOARD_USER_LED_GPIO, 1U << BOARD_USER_LED_GPIO_PIN)                 /*!< Turn off target USER_LED */
 #define USER_LED_ON() GPIO_PortSet(BOARD_USER_LED_GPIO, 1U << BOARD_USER_LED_GPIO_PIN) /*!<Turn on target USER_LED*/
@@ -129,11 +128,40 @@ extern button_config_t g_buttonConfig[];
 /*! @brief The ENET1 PHY address. */
 #define BOARD_ENET1_PHY_ADDRESS (0x01U) /* Phy address of enet port 1. */
 
+/*! @brief The ENET PHY used for board. */
+#ifndef BOARD_ENET_PHY0_RESET_GPIO
+#define BOARD_ENET_PHY0_RESET_GPIO GPIO12
+#endif
+#ifndef BOARD_ENET_PHY0_RESET_GPIO_PIN
+#define BOARD_ENET_PHY0_RESET_GPIO_PIN (12U)
+#endif
+
+#define BOARD_ENET_PHY0_RESET                                                           \
+    GPIO_WritePinOutput(BOARD_ENET_PHY0_RESET_GPIO, BOARD_ENET_PHY0_RESET_GPIO_PIN, 0); \
+    SDK_DelayAtLeastUs(10000, CLOCK_GetFreq(kCLOCK_CpuClk));                            \
+    GPIO_WritePinOutput(BOARD_ENET_PHY0_RESET_GPIO, BOARD_ENET_PHY0_RESET_GPIO_PIN, 1); \
+    SDK_DelayAtLeastUs(100, CLOCK_GetFreq(kCLOCK_CpuClk))
+
+#ifndef BOARD_ENET_PHY1_RESET_GPIO
+#define BOARD_ENET_PHY1_RESET_GPIO GPIO11
+#endif
+#ifndef BOARD_ENET_PHY1_RESET_GPIO_PIN
+#define BOARD_ENET_PHY1_RESET_GPIO_PIN (14U)
+#endif
+
+/* For a complete PHY reset of RTL8211FDI-CG, this pin must be asserted low for at least 10ms. And
+ * wait for a further 30ms(for internal circuits settling time) before accessing the PHY register */
+#define BOARD_ENET_PHY1_RESET                                                           \
+    GPIO_WritePinOutput(BOARD_ENET_PHY1_RESET_GPIO, BOARD_ENET_PHY1_RESET_GPIO_PIN, 0); \
+    SDK_DelayAtLeastUs(10000, CLOCK_GetFreq(kCLOCK_CpuClk));                            \
+    GPIO_WritePinOutput(BOARD_ENET_PHY1_RESET_GPIO, BOARD_ENET_PHY1_RESET_GPIO_PIN, 1); \
+    SDK_DelayAtLeastUs(30000, CLOCK_GetFreq(kCLOCK_CpuClk))
+
 /*! @brief The EMVSIM SMARTCARD PHY configuration. */
 #define BOARD_SMARTCARD_MODULE                (EMVSIM1)      /*!< SMARTCARD communicational module instance */
 #define BOARD_SMARTCARD_MODULE_IRQ            (EMVSIM1_IRQn) /*!< SMARTCARD communicational module IRQ handler */
 #define BOARD_SMARTCARD_CLOCK_MODULE_CLK_FREQ (CLOCK_GetRootClockFreq(kCLOCK_Root_Emv1))
-#define BOARD_SMARTCARD_CLOCK_VALUE           (4000000U) /*!< SMARTCARD clock frequency */
+#define BOARD_SMARTCARD_CLOCK_VALUE           (4000000U)     /*!< SMARTCARD clock frequency */
 
 /* USB PHY condfiguration */
 #define BOARD_USB_PHY_D_CAL     (0x07U)

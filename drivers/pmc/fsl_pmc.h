@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_PMC_H_
-#define _FSL_PMC_H_
+#ifndef FSL_PMC_H_
+#define FSL_PMC_H_
 
 #include "fsl_common.h"
 
@@ -18,10 +18,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief PMC driver version */
 #define FSL_PMC_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3. */
-/*@}*/
+/*! @} */
 
 #if (defined(FSL_FEATURE_PMC_HAS_LVDV) && FSL_FEATURE_PMC_HAS_LVDV)
 /*!
@@ -165,7 +165,7 @@ extern "C" {
 #endif /* __cplusplus*/
 
 /*! @name Power Management Controller Control APIs*/
-/*@{*/
+/*! @{ */
 
 #if (defined(FSL_FEATURE_PMC_HAS_VERID) && FSL_FEATURE_PMC_HAS_VERID)
 /*!
@@ -415,7 +415,7 @@ static inline bool PMC_IsRegulatorInRunRegulation(PMC_Type *base)
 }
 #endif /* FSL_FEATURE_PMC_HAS_REGONS */
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -423,4 +423,4 @@ static inline bool PMC_IsRegulatorInRunRegulation(PMC_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_PMC_H_*/
+#endif /* FSL_PMC_H_*/

@@ -2712,7 +2712,7 @@ void CLOCK_DeinitSysPll1(void);
 /*!
  * @brief Set System PLL1 output frequency in GPC mode.
  *
- * @param config Pointer to @ref clock_sys_pll1_gpc_config_t.
+ * @param config Pointer to System PLL1 configure structure.
  */
 void CLOCK_GPC_SetSysPll1OutputFreq(const clock_sys_pll1_gpc_config_t *config);
 
@@ -2853,7 +2853,7 @@ void CLOCK_DeinitVideoPll(void);
 /*!
  * @brief Set Video PLL output frequency in GPC mode.
  *
- * @param config Pointer to clock_audio_pll_gpc_config_t structure.
+ * @param config Pointer to Vidoe PLL configure structure.
  */
 void CLOCK_GPC_SetVideoPllOutputFreq(const clock_video_pll_gpc_config_t *config);
 /*!

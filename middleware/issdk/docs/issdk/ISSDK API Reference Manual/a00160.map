@@ -1,9 +1,0 @@
-<map id="sensors/mpl3115.h" name="sensors/mpl3115.h">
-<area shape="rect" id="node2" href="$a00164.html" title="The mpl3115_drv.h file describes the MPL3115 driver interface and structures. " alt="" coords="5,95,160,121"/>
-<area shape="rect" id="node3" href="$a04823.html" title="drivers/ads/lpc/auto\l_detection_service.c" alt="" coords="185,87,325,129"/>
-<area shape="rect" id="node4" href="$a04826.html" title="drivers/ads/kinetis\l/auto_detection_service.c" alt="" coords="349,87,518,129"/>
-<area shape="rect" id="node5" href="$a00542.html" title="The auto detection service file implements auto detection sequence for discovery of FRDM&#45;KL25Z Board ..." alt="" coords="542,80,701,136"/>
-<area shape="rect" id="node6" href="$a04829.html" title="drivers/ads/qn/auto\l_detection_service.c" alt="" coords="725,87,865,129"/>
-<area shape="rect" id="node7" href="$a00869.html" title="Bare metal implementation of sensor fusion on FRDM&#45;K64F. " alt="" coords="889,87,1068,129"/>
-<area shape="rect" id="node8" href="$a00884.html" title="FreeRTOS (two task) implementation of sensor fusion on FRDM&#45;K64F. " alt="" coords="1093,80,1251,136"/>
-</map>

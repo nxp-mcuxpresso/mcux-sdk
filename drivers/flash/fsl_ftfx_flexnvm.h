@@ -73,7 +73,7 @@ extern "C" {
  */
 status_t FLEXNVM_Init(flexnvm_config_t *config);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Erasing
@@ -143,7 +143,7 @@ status_t FLEXNVM_EraseAll(flexnvm_config_t *config, uint32_t key);
 status_t FLEXNVM_EraseAllUnsecure(flexnvm_config_t *config, uint32_t key);
 #endif /* FSL_FEATURE_FLASH_HAS_ERASE_ALL_BLOCKS_UNSECURE_CMD */
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Programming
@@ -232,7 +232,7 @@ status_t FLEXNVM_ProgramPartition(flexnvm_config_t *config,
                                   uint32_t eepromDataSizeCode,
                                   uint32_t flexnvmPartitionCode);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Reading
@@ -269,7 +269,7 @@ status_t FLEXNVM_ReadResource(
     flexnvm_config_t *config, uint32_t start, uint8_t *dst, uint32_t lengthInBytes, ftfx_read_resource_opt_t option);
 #endif /* FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD */
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Verification
@@ -360,7 +360,7 @@ status_t FLEXNVM_DflashVerifyProgram(flexnvm_config_t *config,
                                      uint32_t *failedAddress,
                                      uint32_t *failedData);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Security
@@ -402,7 +402,7 @@ status_t FLEXNVM_GetSecurityState(flexnvm_config_t *config, ftfx_security_state_
  */
 status_t FLEXNVM_SecurityBypass(flexnvm_config_t *config, const uint8_t *backdoorKey);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name FlexRAM
@@ -428,7 +428,7 @@ status_t FLEXNVM_SecurityBypass(flexnvm_config_t *config, const uint8_t *backdoo
 status_t FLEXNVM_SetFlexramFunction(flexnvm_config_t *config, ftfx_flexram_func_opt_t option);
 #endif /* FSL_FEATURE_FLASH_HAS_SET_FLEXRAM_FUNCTION_CMD */
 
-/*@}*/
+/*! @} */
 
 /*!
  * @brief Programs the EEPROM with data at locations passed in through parameters.
@@ -532,7 +532,7 @@ status_t FLEXNVM_EepromSetProtection(flexnvm_config_t *config, uint8_t protectSt
  */
 status_t FLEXNVM_EepromGetProtection(flexnvm_config_t *config, uint8_t *protectStatus);
 
-/*@}*/
+/*! @} */
 
 /*!
  * @name Properties
@@ -553,7 +553,7 @@ status_t FLEXNVM_EepromGetProtection(flexnvm_config_t *config, uint8_t *protectS
  */
 status_t FLEXNVM_GetProperty(flexnvm_config_t *config, flexnvm_property_tag_t whichProperty, uint32_t *value);
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }

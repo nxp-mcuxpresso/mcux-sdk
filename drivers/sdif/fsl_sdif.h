@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_SDIF_H_
-#define _FSL_SDIF_H_
+#ifndef FSL_SDIF_H_
+#define FSL_SDIF_H_
 
 #include "fsl_common.h"
 
@@ -20,10 +20,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Driver version 2.0.15. */
 #define FSL_SDIF_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 0U))
-/*@}*/
+/*! @} */
 
 /*! @brief  SDIOCLKCTRL setting
  * Below clock delay setting should depend on specific platform, so
@@ -1025,11 +1025,11 @@ static inline void SDIF_SendCCSD(SDIF_Type *base, bool withAutoStop)
  */
 void SDIF_ConfigClockDelay(uint32_t target_HZ, uint32_t divider);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif
 /*! @} */
 
-#endif /* _FSL_sdif_H_*/
+#endif /* FSL_SDIF_H_*/

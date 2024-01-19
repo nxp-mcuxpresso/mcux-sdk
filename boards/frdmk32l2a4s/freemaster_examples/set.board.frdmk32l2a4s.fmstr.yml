@@ -1,0 +1,25 @@
+---
+set.board.frdmk32l2a4s.fmstr:
+  section-type: set
+  belong_to: set.board.frdmk32l2a4s.fmstr
+  section_info:
+    fixed_id: fmstr_board_frdmk32l2a4s
+    display_name: fmstr_frdmk32l2a4s
+    full_name: FreeMASTER frdmk32l2a4s
+    description: FreeMASTER examples for frdmk32l2a4s
+    type: board
+    version: 1.0.0
+    set_location:
+      repo_base_path: "./boards/frdmk32l2a4s/freemaster_examples"
+    product:
+      cmsis_pack:
+        scr:
+        - scr.board.frdmk32l2a4s.fmstr-examples
+        vendor: NXP
+        pack_root:
+          pack_type: sBSP
+          pack_name: frdmk32l2a4s_FREEMASTER
+          pack_version: 1.0.0
+  dependency:
+    allOf:
+    - set.middleware.fmstr

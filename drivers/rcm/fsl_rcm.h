@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_RCM_H_
-#define _FSL_RCM_H_
+#ifndef FSL_RCM_H_
+#define FSL_RCM_H_
 
 #include "fsl_common.h"
 
@@ -18,10 +18,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief RCM driver version 2.0.4. */
 #define FSL_RCM_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief System Reset Source Name definitions
@@ -178,7 +178,7 @@ extern "C" {
 #endif /* __cplusplus*/
 
 /*! @name Reset Control Module APIs*/
-/*@{*/
+/*! @{ */
 
 #if (defined(FSL_FEATURE_RCM_HAS_VERID) && FSL_FEATURE_RCM_HAS_VERID)
 /*!
@@ -401,7 +401,7 @@ static inline void RCM_SetSystemResetInterruptConfig(RCM_Type *base, uint32_t in
     base->SRIE = (intMask | (uint32_t)delay);
 }
 #endif /* FSL_FEATURE_RCM_HAS_SRIE */
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -409,4 +409,4 @@ static inline void RCM_SetSystemResetInterruptConfig(RCM_Type *base, uint32_t in
 
 /*! @}*/
 
-#endif /* _FSL_RCM_H_ */
+#endif /* FSL_RCM_H_ */

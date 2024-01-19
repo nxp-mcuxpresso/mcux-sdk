@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_OTFAD_H_
-#define _FSL_OTFAD_H_
+#ifndef FSL_OTFAD_H_
+#define FSL_OTFAD_H_
 
 #include "fsl_common.h"
 
@@ -21,10 +21,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Driver version. */
 #define FSL_OTFAD_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 3U))
-/*@}*/
+/*! @} */
 
 /*! @brief Status codes for the OTFAD driver. */
 enum
@@ -133,7 +133,7 @@ void OTFAD_Deinit(OTFAD_Type *base);
 AT_QUICKACCESS_SECTION_CODE(void OTFAD_Deinit(OTFAD_Type *base));
 #endif
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -159,7 +159,7 @@ static inline uint32_t OTFAD_GetStatus(OTFAD_Type *base)
     return base->SR;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name functional
@@ -198,7 +198,7 @@ status_t OTFAD_GetEncryptionConfig(OTFAD_Type *base, otfad_encryption_config_t *
  */
 status_t OTFAD_HitDetermination(OTFAD_Type *base, uint32_t address, uint8_t *contextIndex);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
