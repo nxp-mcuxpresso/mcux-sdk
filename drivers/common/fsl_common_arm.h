@@ -287,6 +287,15 @@ static inline void _SDK_AtomicLocalClearAndSet4Byte(volatile uint32_t *addr, uin
         EnableGlobalIRQ(s_atomicOldInt);     \
     } while (false)
 
+#define SDK_ATOMIC_LOCAL_SUB(addr, val)      \
+    do                                       \
+    {                                        \
+        uint32_t s_atomicOldInt;             \
+        s_atomicOldInt = DisableGlobalIRQ(); \
+        *(addr) -= (val);                    \
+        EnableGlobalIRQ(s_atomicOldInt);     \
+    } while (0)
+
 #define SDK_ATOMIC_LOCAL_SET(addr, bits)     \
     do                                       \
     {                                        \

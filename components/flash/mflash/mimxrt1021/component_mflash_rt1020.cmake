@@ -11,6 +11,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(driver_flexspi)
 include(component_mflash_common)
 include(driver_cache_armv7_m7)
+include(driver_flexspi)

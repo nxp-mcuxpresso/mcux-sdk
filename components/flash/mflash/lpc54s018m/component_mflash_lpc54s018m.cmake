@@ -11,5 +11,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(driver_spifi)
 include(component_mflash_common)
+include(driver_spifi)

@@ -1,0 +1,6 @@
+var a00659 =
+[
+    [ "MCUXCLELS_ECC_PUBLICKEY_SIZE", "a00659.html#ga7298491d4e2d679496d0bacab6f351f8", null ],
+    [ "MCUXCLELS_ECC_SIGNATURE_SIZE", "a00659.html#ga922fa06cbacda443d50f2b3c29fdea8c", null ],
+    [ "MCUXCLELS_ECC_SIGNATURE_R_SIZE", "a00659.html#ga18a35b4e98dac7862895339b720d667a", null ]
+];

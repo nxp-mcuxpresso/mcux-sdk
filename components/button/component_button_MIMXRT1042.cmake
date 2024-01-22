@@ -11,5 +11,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(component_igpio_adapter)
 include(component_timer_manager)
+include(component_igpio_adapter)

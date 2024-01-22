@@ -11,5 +11,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(CMSIS_Driver_Include_I2C)
 include(driver_ii2c)
+include(CMSIS_Driver_Include_I2C)

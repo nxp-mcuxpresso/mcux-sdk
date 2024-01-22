@@ -11,5 +11,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(CMSIS_Driver_Include_USART)
 include(driver_flexcomm_usart_dma)
+include(CMSIS_Driver_Include_USART)
