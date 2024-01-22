@@ -38,7 +38,7 @@
 #  set(CONFIG_USE_middleware_wireless_framework_init_config_MIMXRT595S true)
 
 #  # description: Middleware wireless framework_rpmsg_config
-#  set(CONFIG_USE_middleware_wireless_framework_rpmsg_config_MIMXRT595S true)
+#  set(CONFIG_USE_middleware_wireless_framework_rpmsg_config true)
 
 #  # description: Middleware wireless framework platform ot coex
 #  set(CONFIG_USE_middleware_wireless_framework_platform_rt_ot_coex true)
@@ -186,6 +186,9 @@
 
 #  # description: Middleware wireless framework_lpm_systicks
 #  set(CONFIG_USE_middleware_wireless_framework_LPM_systicks_MIMXRT595S true)
+
+#  # description: Middleware wireless framework_lpm_cli
+#  set(CONFIG_USE_middleware_wireless_framework_LPM_cli_MIMXRT595S true)
 
 #  # description: Middleware wireless fsabstraction
 #  set(CONFIG_USE_middleware_wireless_framework_fsabstraction true)
@@ -1348,36 +1351,6 @@
 
 #  # description: BLE libraries for bt_ble Host stack
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_ble_ethermind_lib_lc3_cm33 true)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #set.middleware.eiq
 #  # description: Flatbuffers library

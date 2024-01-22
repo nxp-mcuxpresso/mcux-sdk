@@ -1271,36 +1271,6 @@
 #  # description: DeepViewRT modelrunner server library
 #  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_stb true)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #set.middleware.azure_rtos
 #  # description: Azure RTOS Core
 #  set(CONFIG_USE_middleware_azure_rtos_tx_template true)

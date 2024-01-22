@@ -789,7 +789,7 @@ if (CONFIG_USE_driver_caam)
 
 message("driver_caam component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_memory AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1166xxxxx) AND CONFIG_USE_driver_common)
+if(CONFIG_USE_driver_memory AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1166xxxxx) AND CONFIG_USE_driver_common AND ((CONFIG_USE_driver_cache_lmem AND (CONFIG_CORE STREQUAL cm4f)) OR (CONFIG_USE_driver_cache_armv7_m7 AND (CONFIG_CORE STREQUAL cm7f))))
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../drivers/caam/fsl_caam.c

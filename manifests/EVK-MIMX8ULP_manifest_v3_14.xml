@@ -5440,7 +5440,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpadc.MIMX8UD7" name="lpadc" brief="LPADC Driver" version="2.8.3" full_name="LPADC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpadc" project_base_path="drivers">
+    <component id="platform.drivers.lpadc.MIMX8UD7" name="lpadc" brief="LPADC Driver" version="2.8.4" full_name="LPADC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpadc" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMX8UD7"/>

@@ -144,39 +144,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 endif()
 
 
-if (CONFIG_USE_driver_flash_config_mimxrt685audevk)
-# Add set(CONFIG_USE_driver_flash_config_mimxrt685audevk true) in config.cmake to use this component
-
-message("driver_flash_config_mimxrt685audevk component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_common)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../boards/mimxrt685audevk/flash_config/flash_config.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../boards/mimxrt685audevk/flash_config/.
-)
-
-if(CONFIG_USE_COMPONENT_CONFIGURATION)
-  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
-
-  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
-    -DBOOT_HEADER_ENABLE=1
-  )
-
-endif()
-
-else()
-
-message(SEND_ERROR "driver_flash_config_mimxrt685audevk.MIMXRT685S dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_DEVICES_Project_Template_MIMXRT685S)
 # Add set(CONFIG_USE_DEVICES_Project_Template_MIMXRT685S true) in config.cmake to use this component
 
@@ -3481,6 +3448,39 @@ endif()
 else()
 
 message(SEND_ERROR "driver_flash_config_evkmimxrt685.MIMXRT685S dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_flash_config_mimxrt685audevk)
+# Add set(CONFIG_USE_driver_flash_config_mimxrt685audevk true) in config.cmake to use this component
+
+message("driver_flash_config_mimxrt685audevk component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../boards/mimxrt685audevk/flash_config/flash_config.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../boards/mimxrt685audevk/flash_config/.
+)
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DBOOT_HEADER_ENABLE=1
+  )
+
+endif()
+
+else()
+
+message(SEND_ERROR "driver_flash_config_mimxrt685audevk.MIMXRT685S dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

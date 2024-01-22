@@ -965,36 +965,6 @@
 #  # description: Voice intelligent technology library for Cortex M7
 #  set(CONFIG_USE_middleware_vit_cm7 true)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #set.middleware.eiq
 #  # description: Flatbuffers library
 #  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_flatbuffers true)

@@ -10,7 +10,7 @@
 #  # description: Utilities which is needed for particular toolchain like the SBRK function required to address limitation between HEAP and STACK in GCC toolchain library.
 #  set(CONFIG_USE_utilities_misc_utilities true)
 
-#  # description: Utilities unity
+#  # description: Simple Unit Testing for C
 #  set(CONFIG_USE_utilities_unity true)
 
 #  # description: RTT template configuration

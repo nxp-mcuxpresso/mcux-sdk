@@ -1891,7 +1891,7 @@ ${load}</script>
         <files mask="utilities_misc_utilities.LPC55S36.cmake" hidden="true"/>
       </source>
     </component>
-    <component id="utilities.unity.LPC55S36" name="unity" brief="Utilities unity" version="2.0.0" full_name="Utilities unity" category="Device/SDK Utilities" user_visible="true" type="utilities" package_base_path="../utilities/unity" project_base_path="utilities/unity">
+    <component id="utilities.unity.LPC55S36" name="unity" brief="Simple Unit Testing for C" version="2.1.0" full_name="Utilities unity" category="Device/SDK Utilities" user_visible="true" type="utilities" package_base_path="../utilities/unity" project_base_path="utilities/unity">
       <defines>
         <define name="UNITY_DUMP_RESULT" value=""/>
         <define name="NDEBUG" value=""/>
@@ -5745,7 +5745,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpadc.LPC55S36" name="lpadc" brief="LPADC Driver" version="2.8.3" full_name="LPADC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpadc" project_base_path="drivers">
+    <component id="platform.drivers.lpadc.LPC55S36" name="lpadc" brief="LPADC Driver" version="2.8.4" full_name="LPADC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpadc" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.LPC55S36"/>

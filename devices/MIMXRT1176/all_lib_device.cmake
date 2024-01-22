@@ -1341,36 +1341,6 @@
 #  # description: DeepViewRT modelrunner server library
 #  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_stb true)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #set.middleware.azure_rtos
 #  # description: Azure RTOS Core
 #  set(CONFIG_USE_middleware_azure_rtos_tx_template true)
@@ -1720,7 +1690,7 @@
 #  set(CONFIG_USE_middleware_wireless_framework_init_config_MIMXRT1176 true)
 
 #  # description: Middleware wireless framework_rpmsg_config
-#  set(CONFIG_USE_middleware_wireless_framework_rpmsg_config_rt1170 true)
+#  set(CONFIG_USE_middleware_wireless_framework_rpmsg_config true)
 
 #  # description: Middleware wireless framework platform ot coex
 #  set(CONFIG_USE_middleware_wireless_framework_platform_rt_ot_coex true)
@@ -1868,6 +1838,9 @@
 
 #  # description: Middleware wireless framework_lpm_systicks
 #  set(CONFIG_USE_middleware_wireless_framework_LPM_systicks_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_lpm_cli
+#  set(CONFIG_USE_middleware_wireless_framework_LPM_cli_MIMXRT1176 true)
 
 #  # description: Middleware wireless fsabstraction
 #  set(CONFIG_USE_middleware_wireless_framework_fsabstraction true)

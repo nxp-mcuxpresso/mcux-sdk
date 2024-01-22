@@ -435,34 +435,6 @@
 #  # description: SDMMC host controller cache dependency
 #  set(CONFIG_USE_middleware_sdmmc_host_usdhc_cache true)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #set.component.osa
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)

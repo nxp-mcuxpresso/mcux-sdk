@@ -531,33 +531,6 @@
 #  # description: Middleware usb host common_header
 #  set(CONFIG_USE_middleware_usb_host_common_header true)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #set.middleware.azure_rtos
 #  # description: Azure RTOS Core
 #  set(CONFIG_USE_middleware_azure_rtos_tx_template true)

@@ -959,36 +959,6 @@
 #  # description: Voice intelligent technology library for Cortex M7
 #  set(CONFIG_USE_middleware_vit_cm7 true)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #set.middleware.eiq
 #  # description: Utilities for Glow NN compiler.
 #  set(CONFIG_USE_middleware_eiq_glow true)
