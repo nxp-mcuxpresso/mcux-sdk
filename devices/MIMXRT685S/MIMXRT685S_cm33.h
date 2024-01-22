@@ -18964,8 +18964,8 @@ typedef struct {
  */
 #define I3C_MDATACTRL_FLUSHFB(x)                 (((uint32_t)(((uint32_t)(x)) << I3C_MDATACTRL_FLUSHFB_SHIFT)) & I3C_MDATACTRL_FLUSHFB_MASK)
 
-#define I3C_MDATACTRL_UNLOCK_MASK                (0x4U)
-#define I3C_MDATACTRL_UNLOCK_SHIFT               (2U)
+#define I3C_MDATACTRL_UNLOCK_MASK                (0x8U)
+#define I3C_MDATACTRL_UNLOCK_SHIFT               (3U)
 /*! UNLOCK - Unlock
  */
 #define I3C_MDATACTRL_UNLOCK(x)                  (((uint32_t)(((uint32_t)(x)) << I3C_MDATACTRL_UNLOCK_SHIFT)) & I3C_MDATACTRL_UNLOCK_MASK)
