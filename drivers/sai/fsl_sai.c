@@ -269,7 +269,12 @@ static uint32_t SAI_GetInstance(I2S_Type *base)
         }
     }
 
+#ifdef NDEBUG
+   if (instance == ARRAY_SIZE(s_saiBases))
+       while(1);
+#else
     assert(instance < ARRAY_SIZE(s_saiBases));
+#endif
 
     return instance;
 }
