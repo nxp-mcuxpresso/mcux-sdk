@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022, NXP
+ * Copyright 2020-2024, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -98,6 +98,9 @@ static const uint32_t s_avpllPostDiv0p5[] = {
 /*******************************************************************************
  * Code
  ******************************************************************************/
+#if (defined(__GNUC__)) /* Workaround armgcc optimization issue */
+__attribute__((__noinline__))
+#endif
 static void CLOCK_Delay(uint32_t loop)
 {
     if (loop > 0U)
