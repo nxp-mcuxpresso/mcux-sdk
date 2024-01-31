@@ -29,7 +29,7 @@ do{  \
     uint8_t dat_lhs, dat_rhs;  \
     __asm volatile (  \
         "EOR    %[_retval], %[_result], %[_notValid]\n" /* retval should now be 0xFFFFFFFF */\
-        "loop:\n" /* Comparison; in case of equality retval should remain 0xFFFFFFFF throughout the loop. */\
+        "loop%=:\n" /* Comparison; in case of equality retval should remain 0xFFFFFFFF throughout the loop. */\
         "LDRB   %[_dat_lhs], [%[_cur_lhs]], #+1\n"        \
         "LDRB   %[_dat_rhs], [%[_cur_rhs]], #+1\n"        \
         "EORS   %[_dat_lhs], %[_dat_lhs], %[_dat_rhs]\n"  \
@@ -37,7 +37,7 @@ do{  \
         "SUBS   %[_cnt], %[_cnt], #+1\n"                  \
         "MVN    %[_dat_rhs], %[_dat_lhs]\n"               \
         "AND    %[_retval], %[_retval], %[_dat_rhs]\n"    \
-        "BNE    loop\n"  \
+        "BNE    loop%=\n"  \
         : [_retval] "=r" (retval_),    \
           [_cur_lhs] "+r" (cur_lhs_),  \
           [_cur_rhs] "+r" (cur_rhs_),  \
