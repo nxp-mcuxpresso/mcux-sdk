@@ -26,6 +26,9 @@
 typedef struct _srtm_rpmsg_endpoint_config
 {
     struct rpmsg_lite_instance *rpmsgHandle; /*!< RPMsg handle initialized by app */
+#if defined(SRTM_STATIC_API) && SRTM_STATIC_API
+    struct rpmsg_lite_ept_static_context *ept_context; /*!< RPMsg endpoint context */
+#endif
     unsigned long localAddr;                 /*!< RPMsg local endpoint address */
     unsigned long peerAddr;                  /*!< RPMsg peer endpoint address */
     const char *epName;                      /*!< RPMsg endpoint name for name service announcement */

@@ -188,8 +188,13 @@ srtm_channel_t SRTM_RPMsgEndpoint_Create(srtm_rpmsg_endpoint_config_t *config)
     handle->started         = false;
     handle->rxCallback      = NULL;
     handle->rxCallbackParam = NULL;
+#if defined(SRTM_STATIC_API) && SRTM_STATIC_API
+    handle->rpmsgEndpoint =
+        rpmsg_lite_create_ept(config->rpmsgHandle, config->localAddr, SRTM_RPMsgEndpoint_RxHandler, handle, config->ept_context);
+#else
     handle->rpmsgEndpoint =
         rpmsg_lite_create_ept(config->rpmsgHandle, config->localAddr, SRTM_RPMsgEndpoint_RxHandler, handle);
+#endif
     assert(handle->rpmsgEndpoint != NULL);
 
     (void)memcpy(&handle->config, config, sizeof(struct _srtm_rpmsg_endpoint_config));
