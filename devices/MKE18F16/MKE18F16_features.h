@@ -1,15 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 4.0, 2016-09-20
-**     Build:               b200925
+**     Build:               b231109
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2023 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -146,6 +144,8 @@
 #define FSL_FEATURE_ACMP_HAS_C0_LINKEN_BIT (0)
 /* @brief Has C0 OFFSET Bit */
 #define FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT (1)
+/* @brief Has C0 HYSTCTR Bit */
+#define FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT (1)
 /* @brief Has C1 INPSEL Bit */
 #define FSL_FEATURE_ACMP_HAS_C1_INPSEL_BIT (1)
 /* @brief Has C1 INNSEL Bit */
@@ -225,6 +225,8 @@
 #define FSL_FEATURE_FLEXIO_VERID_RESET_VALUE (0x1010000)
 /* @brief Reset value of the FLEXIO_PARAM register */
 #define FSL_FEATURE_FLEXIO_PARAM_RESET_VALUE (0x4080404)
+/* @brief Represent the bit width of the TIMDCE field (FLEXIO_TIMCFGLn[TIMDEC]) */
+#define FSL_FEATURE_FLEXIO_TIMCFG_TIMDCE_FIELD_WIDTH (2)
 /* @brief Flexio DMA request base channel */
 #define FSL_FEATURE_FLEXIO_DMA_REQUEST_BASE_CHANNEL (0)
 
@@ -642,6 +644,8 @@
 #define FSL_FEATURE_FTM_HAS_CHANNEL7_TRIGGER (1)
 /* @brief If instance has only TPM function. */
 #define FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCEn(x) (0)
+/* @brief Has frequency of the reload opportunities, bitfield CONF[LDFQ]. */
+#define FSL_FEATURE_FTM_HAS_CONF_LDFQ_BIT (1)
 
 /* GPIO module features */
 
@@ -1081,4 +1085,3 @@
 #define FSL_FEATURE_WDOG_HAS_32BIT_ACCESS (1)
 
 #endif /* _MKE18F16_FEATURES_H_ */
-
