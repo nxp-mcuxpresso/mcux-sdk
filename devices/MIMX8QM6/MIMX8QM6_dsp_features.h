@@ -665,5 +665,12 @@
 /* @brief Offset between MIPI DSI controller and CSR in the MIPI DSI subsystem. */
 #define FSL_FEATURE_DSI_CSR_OFFSET (0x7000)
 
+/* IRQSTEER module features */
+
+/* @brief Number of IRQSTEER CHn_MASK registers */
+#define FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT (16)
+/* @brief The start IRQ index of first IRQSTEER source IRQ */
+#define FSL_FEATURE_IRQSTEER_IRQ_START_INDEX (0)
+
 #endif /* _MIMX8QM6_dsp_FEATURES_H_ */
 
