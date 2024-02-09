@@ -168,6 +168,11 @@ uint32_t IRQSTEER_GetMasterIrqCount(IRQSTEER_Type *base, irqsteer_int_master_t i
     return count;
 }
 
+static uint32_t IRQSTEER_GetRegIndex(irqsteer_int_master_t intMasterIndex, uint32_t slice)
+{
+    return FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT - 1 - intMasterIndex * 2 + slice;
+}
+
 /*!
  * brief Gets the next interrupt source (currently set) of one specific master.
  *
@@ -214,7 +219,7 @@ IRQn_Type IRQSTEER_GetMasterNextInterrupt(IRQSTEER_Type *base, irqsteer_int_mast
         bitOffset = 0;
 
         /* compute the index of the register to be queried */
-        regIndex = FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT - 1 - intMasterIndex * 2 + i;
+        regIndex = IRQSTEER_GetRegIndex(intMasterIndex, i);
 
         /* get register's value */
         chanStatus = base->CHn_STATUS[regIndex];
@@ -244,7 +249,7 @@ uint64_t IRQSTEER_GetMasterInterruptsStatus(IRQSTEER_Type *base, irqsteer_int_ma
     sliceNum = IRQSTEER_GetMasterIrqCount(base, intMasterIndex) / 32 - 1;
 
     for (i = 0; i <= sliceNum; i++) {
-        regIndex = FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT - 1 - intMasterIndex * 2 + i;
+        regIndex = IRQSTEER_GetRegIndex(intMasterIndex, i);
 
         chanStatus = base->CHn_STATUS[regIndex];
 
