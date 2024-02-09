@@ -165,6 +165,11 @@
     {                         \
         kCLOCK_M4_1_Irqsteer, \
     }
+#else
+#define IRQSTEER_CLOCKS        \
+    {                          \
+        kCLOCK_AUDIO_Irqsteer, \
+    }
 #endif
 
 /*! @brief Clock ip name array for EDMA. */
@@ -261,6 +266,7 @@ typedef enum _clock_ip_name
 {
     kCLOCK_M4_0_Irqsteer      = LPCG_TUPLE(SC_R_IRQSTR_M4_0, NV),
     kCLOCK_M4_1_Irqsteer      = LPCG_TUPLE(SC_R_IRQSTR_M4_1, NV),
+    kCLOCK_AUDIO_Irqsteer     = LPCG_TUPLE(SC_R_IRQSTR_DSP, NV),
     kCLOCK_DMA_Lpspi0         = LPCG_TUPLE(SC_R_SPI_0, DMA__LPCG_LPSPI0_BASE),
     kCLOCK_DMA_Lpspi1         = LPCG_TUPLE(SC_R_SPI_1, DMA__LPCG_LPSPI1_BASE),
     kCLOCK_DMA_Lpspi2         = LPCG_TUPLE(SC_R_SPI_2, DMA__LPCG_LPSPI2_BASE),
