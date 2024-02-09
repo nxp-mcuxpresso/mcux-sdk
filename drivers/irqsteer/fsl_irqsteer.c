@@ -170,7 +170,13 @@ uint32_t IRQSTEER_GetMasterIrqCount(IRQSTEER_Type *base, irqsteer_int_master_t i
 
 static uint32_t IRQSTEER_GetRegIndex(irqsteer_int_master_t intMasterIndex, uint32_t slice)
 {
-    return FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT - 1 - intMasterIndex * 2 + slice;
+    uint32_t base = FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT - 1 - intMasterIndex * 2;
+
+    if (FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT % 2) {
+        return base + slice;
+    } else {
+        return base - slice;
+    }
 }
 
 /*!
