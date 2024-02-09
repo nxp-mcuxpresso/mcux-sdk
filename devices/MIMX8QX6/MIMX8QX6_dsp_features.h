@@ -672,7 +672,7 @@
 /* @brief Number of IRQSTEER CHn_MASK register. */
 #define FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT (16)
 /* @brief The start IRQ index of first IRQSTEER source IRQ. */
-#define FSL_FEATURE_IRQSTEER_IRQ_START_INDEX (51)
+#define FSL_FEATURE_IRQSTEER_IRQ_START_INDEX (0)
 /* @brief Number of IRQSTEER master. */
 #define FSL_FEATURE_IRQSTEER_MASTER_COUNT (8)
 
