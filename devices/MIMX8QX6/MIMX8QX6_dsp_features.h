@@ -457,6 +457,31 @@
 /* @brief Support synchronous with another SAI. */
 #define FSL_FEATURE_SAI_HAS_SYNC_WITH_ANOTHER_SAI (0)
 
+/* @brief Used to retrieve the physical base address of a transmit FIFO.
+ * The index of the transmit FIFO is specified through the fifo_index argument.
+ * The sai_base argument needs to be the physical base address of the SAI.
+ * If there's any SAI instances with only 1 channel then the fifo_index argument
+ * will be ignored and the macro will return the address of the only transmit
+ * FIFO.
+ */
+#define FSL_FEATURE_SAI_TX_FIFO_BASEn(sai_base, fifo_index)\
+    (((sai_base) == ADMA__SAI0) ? ((uintptr_t)ADMA__SAI0 + 0x20) :\
+    (((sai_base) == ADMA__SAI1) ? ((uintptr_t)ADMA__SAI1 + 0x20) :\
+    (((sai_base) == ADMA__SAI2) ? ((uintptr_t)ADMA__SAI2 + 0x20) : (0))))
+
+/* @brief Used to retrieve the physical base address of a receive FIFO.
+ * The index of the receive FIFO is specified through the fifo_index argument.
+ * The sai_base argument needs to be the physical base address of the SAI.
+ * If there's any SAI instances with only 1 channel then the fifo_index argument
+ * will be ignored and the macro will return the address of the only receive
+ * FIFO.
+ */
+#define FSL_FEATURE_SAI_RX_FIFO_BASEn(sai_base, fifo_index)\
+    (((sai_base) == ADMA__SAI0) ? ((uintptr_t)ADMA__SAI0 + 0xa0) :\
+    (((sai_base) == ADMA__SAI1) ? ((uintptr_t)ADMA__SAI1 + 0xa0) :\
+    (((sai_base) == ADMA__SAI2) ? ((uintptr_t)ADMA__SAI2 + 0xa0) : (0))))
+
+
 /* ASMC module features */
 
 /* @brief Has high speed run mode. */
