@@ -481,7 +481,7 @@ void DMA_AbortTransfer(dma_handle_t *handle)
             (1UL << DMA_CHANNEL_INDEX(handle->base, handle->channel))) != 0UL)
     {
     }
-    DMA_COMMON_REG_GET(handle->base, handle->channel, ABORT) |= 1UL << DMA_CHANNEL_INDEX(handle->base, handle->channel);
+    DMA_COMMON_REG_SET(handle->base, handle->channel, ABORT, 1UL << DMA_CHANNEL_INDEX(handle->base, handle->channel));
     DMA_EnableChannel(handle->base, handle->channel);
 }
 

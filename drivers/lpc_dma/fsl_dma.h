@@ -380,7 +380,7 @@ static inline void DMA_EnableChannelInterrupts(DMA_Type *base, uint32_t channel)
 {
     assert((FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base) != -1) &&
            (channel < (uint32_t)FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base)));
-    DMA_COMMON_REG_GET(base, channel, INTENSET) |= 1UL << DMA_CHANNEL_INDEX(base, channel);
+    DMA_COMMON_REG_SET(base, channel, INTENSET, 1UL << DMA_CHANNEL_INDEX(base, channel));
 }
 
 /*!
@@ -393,7 +393,7 @@ static inline void DMA_DisableChannelInterrupts(DMA_Type *base, uint32_t channel
 {
     assert((FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base) != -1) &&
            (channel < (uint32_t)FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base)));
-    DMA_COMMON_REG_GET(base, channel, INTENCLR) |= 1UL << DMA_CHANNEL_INDEX(base, channel);
+    DMA_COMMON_REG_SET(base, channel, INTENCLR, 1UL << DMA_CHANNEL_INDEX(base, channel));
 }
 
 /*!
@@ -406,7 +406,7 @@ static inline void DMA_EnableChannel(DMA_Type *base, uint32_t channel)
 {
     assert((FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base) != -1) &&
            (channel < (uint32_t)FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base)));
-    DMA_COMMON_REG_GET(base, channel, ENABLESET) |= 1UL << DMA_CHANNEL_INDEX(base, channel);
+    DMA_COMMON_REG_SET(base, channel, ENABLESET, 1UL << DMA_CHANNEL_INDEX(base, channel));
 }
 
 /*!
@@ -419,7 +419,7 @@ static inline void DMA_DisableChannel(DMA_Type *base, uint32_t channel)
 {
     assert((FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base) != -1) &&
            (channel < (uint32_t)FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base)));
-    DMA_COMMON_REG_GET(base, channel, ENABLECLR) |= 1UL << DMA_CHANNEL_INDEX(base, channel);
+    DMA_COMMON_REG_SET(base, channel, ENABLECLR, 1UL << DMA_CHANNEL_INDEX(base, channel));
 }
 
 /*!
