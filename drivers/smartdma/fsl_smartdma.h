@@ -15,7 +15,7 @@
 #elif defined(MCXN546_cm33_core0_SERIES) || defined(MCXN546_cm33_core1_SERIES) ||                                     \
     defined(MCXN547_cm33_core0_SERIES) || defined(MCXN547_cm33_core1_SERIES) || defined(MCXN946_cm33_core0_SERIES) || \
     defined(MCXN946_cm33_core1_SERIES) || defined(MCXN947_cm33_core0_SERIES) || defined(MCXN947_cm33_core1_SERIES) || \
-    defined(MCXN236_SERIES)
+    defined(MCXN236_SERIES) || defined(MCXN235_SERIES)
 #include "fsl_smartdma_mcxn.h"
 #else
 #error "Device not supported"
@@ -31,10 +31,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief SMARTDMA driver version */
-#define FSL_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 9, 0))
-/*! @} */
+#define FSL_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 9, 1))
+/*@}*/
 
 /*! @brief Callback function prototype for the smartdma driver. */
 typedef void (*smartdma_callback_t)(void *param);
@@ -90,11 +90,27 @@ void SMARTDMA_InstallCallback(smartdma_callback_t callback, void *param);
  * @brief Boot the SMARTDMA to run program.
  *
  * @param apiIndex Index of the API to call.
- * @param pParam Pointer to the parameter.
+ * @param pParam Pointer to the parameter allocated by caller.
  * @param mask Value set to register SMARTDMA->ARM2EZH[0:1].
  * @note Only call this function when SMARTDMA is not busy.
+ * @note The memory *pParam shall not be freed before the SMARTDMA function finished.
  */
 void SMARTDMA_Boot(uint32_t apiIndex, void *pParam, uint8_t mask);
+
+/*!
+ * @brief Copy SMARTDMA params and Boot to run program.
+ *
+ * This function is similar with @ref SMARTDMA_Boot, the only difference
+ * is, this function copies the *pParam to a local variable, upper layer
+ * can free the pParam's memory before the SMARTDMA execution finished,
+ * for example, upper layer can define the param as a local variable.
+ *
+ * @param apiIndex Index of the API to call.
+ * @param pParam Pointer to the parameter.
+ * @param mask Value set to SMARTDMA_ARM2SMARTDMA[0:1].
+ * @note Only call this function when SMARTDMA is not busy.
+ */
+void SMARTDMA_Boot1(uint32_t apiIndex, const smartdma_param_t *pParam, uint8_t mask);
 
 /*!
  * @brief Deinitialize the SMARTDMA.
@@ -115,6 +131,6 @@ void SMARTDMA_HandleIRQ(void);
 }
 #endif
 
-/*! @} */
+/* @} */
 
 #endif /* FSL_SMARTDMA_H_ */

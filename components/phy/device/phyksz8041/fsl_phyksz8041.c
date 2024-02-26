@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -16,7 +16,7 @@
 #define PHY_CONTROL2_REG 0x1FU /*!< The PHY control two register. */
 
 /*! @brief Defines the PHY KSZ8041 ID number. */
-#define PHY_CONTROL_ID1 0x22U /*!< The PHY ID1*/
+#define PHY_CONTROL_ID1 0x22U /*!< The PHY ID1. */
 
 /*! @brief Defines the mask flag of operation mode in control two register*/
 #define PHY_CTL1_REMOTELOOP_MASK    0x0008U /*!< The PHY remote loopback mask. */
@@ -27,6 +27,12 @@
 
 /*! @brief Defines the timeout macro. */
 #define PHY_READID_TIMEOUT_COUNT 1000U
+
+/*! @brief Defines the PHY resource interface. */
+#define PHY_KSZ8041_WRITE(handle, regAddr, data) \
+    ((phy_ksz8041_resource_t *)(handle)->resource)->write((handle)->phyAddr, regAddr, data)
+#define PHY_KSZ8041_READ(handle, regAddr, pData) \
+    ((phy_ksz8041_resource_t *)(handle)->resource)->read((handle)->phyAddr, regAddr, pData)
 
 /*******************************************************************************
  * Prototypes
@@ -53,18 +59,16 @@ status_t PHY_KSZ8041_Init(phy_handle_t *handle, const phy_config_t *config)
 {
     uint32_t counter  = PHY_READID_TIMEOUT_COUNT;
     status_t result   = kStatus_Success;
-    uint32_t regValue = 0;
+    uint16_t regValue = 0;
 
-    /* Init MDIO interface. */
-    MDIO_Init(handle->mdioHandle);
-
-    /* Assign phy address. */
-    handle->phyAddr = config->phyAddr;
+    /* Assign PHY address and operation resource. */
+    handle->phyAddr  = config->phyAddr;
+    handle->resource = config->resource;
 
     /* Check PHY ID. */
     do
     {
-        result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_ID1_REG, &regValue);
+        result = PHY_KSZ8041_READ(handle, PHY_ID1_REG, &regValue);
         if (result != kStatus_Success)
         {
             return result;
@@ -78,20 +82,20 @@ status_t PHY_KSZ8041_Init(phy_handle_t *handle, const phy_config_t *config)
     }
 
     /* Reset PHY. */
-    result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, PHY_BCTL_RESET_MASK);
+    result = PHY_KSZ8041_WRITE(handle, PHY_BASICCONTROL_REG, PHY_BCTL_RESET_MASK);
     if (result == kStatus_Success)
     {
         if (config->autoNeg)
         {
             /* Set the negotiation. */
-            result =
-                MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_AUTONEG_ADVERTISE_REG,
-                           (PHY_100BASETX_FULLDUPLEX_MASK | PHY_100BASETX_HALFDUPLEX_MASK |
-                            PHY_10BASETX_FULLDUPLEX_MASK | PHY_10BASETX_HALFDUPLEX_MASK | PHY_IEEE802_3_SELECTOR_MASK));
+            result = PHY_KSZ8041_WRITE(handle, PHY_AUTONEG_ADVERTISE_REG,
+                                       PHY_100BASETX_FULLDUPLEX_MASK | PHY_100BASETX_HALFDUPLEX_MASK |
+                                           PHY_10BASETX_FULLDUPLEX_MASK | PHY_10BASETX_HALFDUPLEX_MASK |
+                                           PHY_IEEE802_3_SELECTOR_MASK);
             if (result == kStatus_Success)
             {
-                result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG,
-                                    (PHY_BCTL_AUTONEG_MASK | PHY_BCTL_RESTART_AUTONEG_MASK));
+                result = PHY_KSZ8041_WRITE(handle, PHY_BASICCONTROL_REG,
+                                           PHY_BCTL_AUTONEG_MASK | PHY_BCTL_RESTART_AUTONEG_MASK);
             }
         }
         else
@@ -100,13 +104,13 @@ status_t PHY_KSZ8041_Init(phy_handle_t *handle, const phy_config_t *config)
             assert(config->speed <= kPHY_Speed100M);
 
             /* Disable isolate mode */
-            result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, &regValue);
+            result = PHY_KSZ8041_READ(handle, PHY_BASICCONTROL_REG, &regValue);
             if (result != kStatus_Success)
             {
                 return result;
             }
             regValue &= ~PHY_BCTL_ISOLATE_MASK;
-            result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, regValue);
+            result = PHY_KSZ8041_WRITE(handle, PHY_BASICCONTROL_REG, regValue);
             if (result != kStatus_Success)
             {
                 return result;
@@ -120,14 +124,14 @@ status_t PHY_KSZ8041_Init(phy_handle_t *handle, const phy_config_t *config)
     return result;
 }
 
-status_t PHY_KSZ8041_Write(phy_handle_t *handle, uint32_t phyReg, uint32_t data)
+status_t PHY_KSZ8041_Write(phy_handle_t *handle, uint8_t phyReg, uint16_t data)
 {
-    return MDIO_Write(handle->mdioHandle, handle->phyAddr, phyReg, data);
+    return PHY_KSZ8041_WRITE(handle, phyReg, data);
 }
 
-status_t PHY_KSZ8041_Read(phy_handle_t *handle, uint32_t phyReg, uint32_t *dataPtr)
+status_t PHY_KSZ8041_Read(phy_handle_t *handle, uint8_t phyReg, uint16_t *pData)
 {
-    return MDIO_Read(handle->mdioHandle, handle->phyAddr, phyReg, dataPtr);
+    return PHY_KSZ8041_READ(handle, phyReg, pData);
 }
 
 status_t PHY_KSZ8041_GetAutoNegotiationStatus(phy_handle_t *handle, bool *status)
@@ -135,12 +139,12 @@ status_t PHY_KSZ8041_GetAutoNegotiationStatus(phy_handle_t *handle, bool *status
     assert(status);
 
     status_t result;
-    uint32_t regValue;
+    uint16_t regValue;
 
     *status = false;
 
     /* Check auto negotiation complete. */
-    result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICSTATUS_REG, &regValue);
+    result = PHY_KSZ8041_READ(handle, PHY_BASICSTATUS_REG, &regValue);
     if (result == kStatus_Success)
     {
         if ((regValue & PHY_BSTATUS_AUTONEGCOMP_MASK) != 0U)
@@ -156,10 +160,10 @@ status_t PHY_KSZ8041_GetLinkStatus(phy_handle_t *handle, bool *status)
     assert(status);
 
     status_t result;
-    uint32_t regValue;
+    uint16_t regValue;
 
     /* Read the basic status register. */
-    result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICSTATUS_REG, &regValue);
+    result = PHY_KSZ8041_READ(handle, PHY_BASICSTATUS_REG, &regValue);
     if (result == kStatus_Success)
     {
         if ((PHY_BSTATUS_LINKSTATUS_MASK & regValue) != 0U)
@@ -181,11 +185,11 @@ status_t PHY_KSZ8041_GetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t *speed
     assert(!((speed == NULL) && (duplex == NULL)));
 
     status_t result = kStatus_Success;
-    uint32_t regValue;
-    uint32_t flag;
+    uint16_t regValue;
+    uint16_t flag;
 
     /* Read the real time speed/duplex. */
-    result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_CONTROL2_REG, &regValue);
+    result = PHY_KSZ8041_READ(handle, PHY_CONTROL2_REG, &regValue);
     if (result == kStatus_Success)
     {
         if (speed != NULL)
@@ -224,9 +228,9 @@ status_t PHY_KSZ8041_SetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t speed,
     assert(speed <= kPHY_Speed100M);
 
     status_t result;
-    uint32_t regValue;
+    uint16_t regValue;
 
-    result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, &regValue);
+    result = PHY_KSZ8041_READ(handle, PHY_BASICCONTROL_REG, &regValue);
     if (result == kStatus_Success)
     {
         /* Disable the auto-negotiation and set according to user-defined configuration. */
@@ -247,7 +251,7 @@ status_t PHY_KSZ8041_SetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t speed,
         {
             regValue &= ~PHY_BCTL_DUPLEX_MASK;
         }
-        result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, regValue);
+        result = PHY_KSZ8041_WRITE(handle, PHY_BASICCONTROL_REG, regValue);
     }
     return result;
 }
@@ -259,7 +263,7 @@ status_t PHY_KSZ8041_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_s
     assert(speed <= kPHY_Speed100M);
 
     status_t result;
-    uint32_t regValue;
+    uint16_t regValue;
 
     /* Set the loop mode. */
     if (enable)
@@ -274,16 +278,15 @@ status_t PHY_KSZ8041_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_s
             {
                 regValue = PHY_BCTL_DUPLEX_MASK | PHY_BCTL_LOOP_MASK;
             }
-            result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, regValue);
+            result = PHY_KSZ8041_WRITE(handle, PHY_BASICCONTROL_REG, regValue);
         }
         else
         {
             /* First read the current status in control register. */
-            result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_CONTROL1_REG, &regValue);
+            result = PHY_KSZ8041_READ(handle, PHY_CONTROL1_REG, &regValue);
             if (result == kStatus_Success)
             {
-                result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_CONTROL1_REG,
-                                    (regValue | PHY_CTL1_REMOTELOOP_MASK));
+                result = PHY_KSZ8041_WRITE(handle, PHY_CONTROL1_REG, regValue | PHY_CTL1_REMOTELOOP_MASK);
             }
         }
     }
@@ -293,22 +296,20 @@ status_t PHY_KSZ8041_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_s
         if (mode == kPHY_LocalLoop)
         {
             /* First read the current status in control register. */
-            result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG, &regValue);
+            result = PHY_KSZ8041_READ(handle, PHY_BASICCONTROL_REG, &regValue);
             if (result == kStatus_Success)
             {
                 regValue &= ~PHY_BCTL_LOOP_MASK;
-                result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_BASICCONTROL_REG,
-                                    (regValue | PHY_BCTL_RESTART_AUTONEG_MASK));
+                result = PHY_KSZ8041_WRITE(handle, PHY_BASICCONTROL_REG, regValue | PHY_BCTL_RESTART_AUTONEG_MASK);
             }
         }
         else
         {
             /* First read the current status in control one register. */
-            result = MDIO_Read(handle->mdioHandle, handle->phyAddr, PHY_CONTROL1_REG, &regValue);
+            result = PHY_KSZ8041_READ(handle, PHY_CONTROL1_REG, &regValue);
             if (result == kStatus_Success)
             {
-                result = MDIO_Write(handle->mdioHandle, handle->phyAddr, PHY_CONTROL1_REG,
-                                    (regValue & ~PHY_CTL1_REMOTELOOP_MASK));
+                result = PHY_KSZ8041_WRITE(handle, PHY_CONTROL1_REG, regValue & ~PHY_CTL1_REMOTELOOP_MASK);
             }
         }
     }
