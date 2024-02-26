@@ -8,9 +8,16 @@
 
 #include "fsl_gpio.h"
 
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.gpio"
+#endif
+
+#if defined(GPIO_RSTS)
+#define GPIO_RESETS_ARRAY GPIO_RSTS
 #endif
 
 /*******************************************************************************
@@ -36,6 +43,11 @@ static const clock_ip_name_t s_fgpioClockName[] = FGPIO_CLOCKS;
 
 #endif /* FSL_FEATURE_SOC_FGPIO_COUNT */
 
+#if defined(GPIO_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_gpioResets[] = GPIO_RESETS_ARRAY;
+#endif
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -53,7 +65,7 @@ static uint32_t GPIO_GetInstance(GPIO_Type *base);
  * Code
  ******************************************************************************/
 #if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && \
-    defined(FSL_FEATURE_SOC_PORT_COUNT)
+    defined(FSL_FEATURE_SOC_PORT_COUNT) || defined(GPIO_RESETS_ARRAY)
 static uint32_t GPIO_GetInstance(GPIO_Type *base)
 {
     uint32_t instance;
@@ -101,6 +113,10 @@ static uint32_t GPIO_GetInstance(GPIO_Type *base)
 void GPIO_PinInit(GPIO_Type *base, uint32_t pin, const gpio_pin_config_t *config)
 {
     assert(NULL != config);
+
+#if defined(GPIO_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_gpioResets[GPIO_GetInstance(base)]);
+#endif
 
     if (config->pinDirection == kGPIO_DigitalInput)
     {

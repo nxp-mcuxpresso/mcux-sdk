@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FLEXIO_MCULCD_H_
-#define _FSL_FLEXIO_MCULCD_H_
+#ifndef FSL_FLEXIO_MCULCD_H_
+#define FSL_FLEXIO_MCULCD_H_
 
 #include "fsl_common.h"
 #include "fsl_flexio.h"
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FlexIO MCULCD driver version. */
-#define FSL_FLEXIO_MCULCD_DRIVER_VERSION (MAKE_VERSION(2, 0, 8))
+#define FSL_FLEXIO_MCULCD_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 #ifndef FLEXIO_MCULCD_WAIT_COMPLETE_TIME
@@ -144,11 +144,12 @@ typedef enum _flexio_mculcd_transfer_mode
 typedef struct _flexio_mculcd_transfer
 {
     uint32_t command;                   /*!< Command to send. */
-    flexio_mculcd_transfer_mode_t mode; /*!< Transfer mode. */
     uint32_t dataAddrOrSameValue;       /*!< When sending the same value for many times,
                                            this is the value to send. When writing or reading array,
                                            this is the address of the data array. */
     size_t dataSize;                    /*!< How many bytes to transfer. */
+    flexio_mculcd_transfer_mode_t mode; /*!< Transfer mode. */
+    bool dataOnly;                      /*!< Send data only when tx without the command. */
 } flexio_mculcd_transfer_t;
 
 /*! @brief typedef for flexio_mculcd_handle_t in advance. */
@@ -682,4 +683,4 @@ void FLEXIO_MCULCD_TransferHandleIRQ(void *base, void *handle);
 #endif /*_cplusplus*/
 /*@}*/
 
-#endif /*_FSL_FLEXIO_MCULCD_H_*/
+#endif /*FSL_FLEXIO_MCULCD_H_*/

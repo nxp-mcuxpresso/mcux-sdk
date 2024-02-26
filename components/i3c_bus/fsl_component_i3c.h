@@ -54,7 +54,7 @@
 #define I3C_BUS_CCC_SETMRL(isDirect)    I3C_BUS_CCC(0xaU, isDirect) /*!< Set Max Read Length Command. */
 #define I3C_BUS_CCC_SETXTIME(isDirect)  (isDirect) ? 0x98U : 0x28U  /*!< Set Exchange Timing Information Command. */
 #define I3C_BUS_CCC_VENDOR_EXT(cmdID, isDirect) \
-    ((cmdID) + ((isDirect) ? 0xe0U : 0x61U)) /*!< Vendor Extension Command. */
+    ((cmdID) + ((isDirect) ? 0xe0U : 0x61U))                        /*!< Vendor Extension Command. */
 
 /* CCC available only for broadcast access */
 #define I3C_BUS_CCC_ENTDAA    0x7U        /*!< Enter Dynamic Address Assignment Command. */
@@ -112,7 +112,7 @@ enum
     kStatus_I3CBus_Success         = kStatus_Success,                      /*!< I3C Bus operation succeed*/
     kStatus_I3CBus_AddrSlotInvalid = MAKE_STATUS(kStatusGroup_I3CBUS, 0U), /*!< I3C Bus address slot invalid */
     kStatus_I3CBus_MasterOpsUnsupport =
-        MAKE_STATUS(kStatusGroup_I3CBUS, 1U), /*!< I3C Bus master operation unsupported */
+        MAKE_STATUS(kStatusGroup_I3CBUS, 1U),                              /*!< I3C Bus master operation unsupported */
     kStatus_I3CBus_NotCurrentMaster = MAKE_STATUS(
         kStatusGroup_I3CBUS, 2U), /*!< The Bus operation should be made on master but current device is not master */
     kStatus_I3CBus_MasterOpsFailure   = MAKE_STATUS(kStatusGroup_I3CBUS, 3U), /*!< Bus operation failure */
@@ -210,7 +210,7 @@ typedef struct i3c_device_hw_ops
     bool (*CheckSupportCCC)(i3c_device_t *master, i3c_ccc_cmd_t *cmd); /*!< CheckSupportCCC function, optional for I3C
                                                                           master device, not require for slave device.*/
     status_t (*TransmitCCC)(i3c_device_t *master,
-                            i3c_ccc_cmd_t *cmd); /*!< TransmitCCC function, only require for I3C master device.*/
+                            i3c_ccc_cmd_t *cmd);      /*!< TransmitCCC function, only require for I3C master device.*/
     status_t (*DoI3CTransfer)(
         i3c_device_t *dev, i3c_bus_transfer_t *xfer); /*!< DoI3CTransfer function, only require for I3C master device.*/
     status_t (*DoI2CTransfer)(
@@ -284,7 +284,7 @@ typedef struct _i3c_bus_config
 /*! @brief I3C bus structure, contains bus mandatory informations.*/
 struct _i3c_bus
 {
-    i3c_device_t *volatile currentMaster; /*!< Pointer to current I3C master on bus. */
+    i3c_device_t *volatile currentMaster;       /*!< Pointer to current I3C master on bus. */
     uint32_t addrSlots[((I3C_BUS_MAX_ADDR + 1U) * I3C_BUS_ADDR_SLOTWIDTH) /
                        I3C_BUS_ADDR_SLOTDEPTH]; /*!< I3C bus address pool. */
     i3c_bus_mode_t busMode;                     /*!< I3C bus mode. */
@@ -301,8 +301,8 @@ typedef struct _i3c_ccc_dev
     uint8_t dynamicAddr; /*!< Dynamic address for I3C device. */
     union
     {
-        uint8_t dcr; /*!< Device Characteristics register value for I3C device. */
-        uint8_t lvr; /*!< Legacy Virtual Register value for I2C device */
+        uint8_t dcr;    /*!< Device Characteristics register value for I3C device. */
+        uint8_t lvr;    /*!< Legacy Virtual Register value for I2C device */
     };
     uint8_t bcr;        /*!< Bus characteristics register value. */
     uint8_t staticAddr; /*!< Static address for I3C/I2C device. */

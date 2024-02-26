@@ -10,33 +10,33 @@ manifest:
     remote: nxp-mcuxpresso
   projects:
   - name: mcux-sdk-examples
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
     path: examples
   - name: FreeRTOS-Kernel
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
     path: rtos/freertos/freertos-kernel
   - name: mcux-sdk-middleware-sdmmc
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
     path: middleware/sdmmc
   - name: mcux-sdk-middleware-multicore
     path: middleware/multicore
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
   - name: rpmsg-lite
     path: middleware/multicore/rpmsg_lite
     url: https://github.com/nxp-mcuxpresso/rpmsg-lite
-    revision: v5.1.0
+    revision: 064a9659b9d602eba337af4b7bc6465cd00127a7
   - name: erpc
     path: middleware/multicore/erpc
     url: https://github.com/EmbeddedRPC/erpc
-    revision: 1.11.0
+    revision: 1.12.0
   - name: mcux-soc-svd
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
     path: svd
   - name: fatfs
     path: middleware/fatfs
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
   - name: mcux-sdk-middleware-eiq
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
     path: middleware/eiq
   - name: mcux-sdk-middleware-deepviewrt
     revision: MCUX_2.13.1
@@ -45,21 +45,21 @@ manifest:
     revision: MCUX_2.14.0
     path: middleware/eiq/glow
   - name: mcux-sdk-middleware-tensorflow
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
     path: middleware/eiq/tensorflow-lite
   - name: mcux-sdk-middleware-usb
     path: middleware/usb
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
   - name: mcux-sdk-middleware-edgefast-bluetooth
     path: middleware/edgefast_bluetooth
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
   - name: mcux-sdk-middleware-ethermind
     path: middleware/wireless/ethermind
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
     remote: nxp
   - name: azure-rtos
     path: rtos/azure-rtos
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
     remote: nxp
   - name: threadx
     path: rtos/azure-rtos/threadx
@@ -67,43 +67,43 @@ manifest:
     remote: nxp
   - name: filex
     path: rtos/azure-rtos/filex
-    revision: MCUX_2.13.0
+    revision: MCUX_2.14.0_MCXNx4x
     remote: nxp
   - name: levelx
     path: rtos/azure-rtos/levelx
-    revision: MCUX_2.13.0
+    revision: MCUX_2.14.0_MCXNx4x
     remote: nxp
   - name: netxduo
     path: rtos/azure-rtos/netxduo
-    revision: MCUX_2.13.0
+    revision: MCUX_2.14.0_MCXNx4x
     remote: nxp
   - name: usbx
     path: rtos/azure-rtos/usbx
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
     remote: nxp
   - name: guix
     path: rtos/azure-rtos/guix
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
     remote: nxp
   - name: mbedtls
     path: middleware/mbedtls
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
   - name: wifi_nxp
     path: middleware/wifi_nxp
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
     remote: nxp
   - name: lwip
     path: middleware/lwip
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
   - name: littlefs
     path: middleware/littlefs
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
   - name: maestro
     path: middleware/maestro
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
   - name: mcuboot
     path: middleware/mcuboot_opensource
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MCXNx4x
     remote: nxp_zephyr
   - name: CMSIS_5
     path: core/CMSIS

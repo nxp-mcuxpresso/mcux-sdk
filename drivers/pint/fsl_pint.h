@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_PINT_H_
-#define _FSL_PINT_H_
+#ifndef FSL_PINT_H_
+#define FSL_PINT_H_
 
 #include "fsl_common.h"
 
@@ -24,7 +24,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 1, 11))
+#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 1, 12))
 /*@}*/
 
 /* Number of interrupt line supported by PINT */
@@ -578,4 +578,4 @@ void PINT_DisableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx);
 
 /*@}*/
 
-#endif /* _FSL_PINT_H_ */
+#endif /* FSL_PINT_H_ */

@@ -30,6 +30,12 @@
 /*! @brief OSA mutex handle size. */
 #define OSA_MUTEX_HANDLE_SIZE sizeof(TX_MUTEX)
 
+/*! @brief OSA queue handle size. */
+#define OSA_MSGQ_HANDLE_SIZE sizeof(TX_QUEUE)
+
+/*! @brief OSA timer handle size. */
+#define OSA_TIMER_HANDLE_SIZE sizeof(TX_TIMER)
+
 /*!
  * @brief To provide unified task priority for upper layer, OSA layer makes conversion.
  */

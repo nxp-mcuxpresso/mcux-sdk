@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FLEXIO_SPI_H_
-#define _FSL_FLEXIO_SPI_H_
+#ifndef FSL_FLEXIO_SPI_H_
+#define FSL_FLEXIO_SPI_H_
 
 #include "fsl_common.h"
 #include "fsl_flexio.h"
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FlexIO SPI driver version. */
-#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
 /*@}*/
 
 #ifndef FLEXIO_SPI_DUMMYDATA
@@ -716,4 +716,4 @@ void FLEXIO_SPI_SlaveTransferHandleIRQ(void *spiType, void *spiHandle);
 #endif /*_cplusplus*/
 /*@}*/
 
-#endif /*_FSL_FLEXIO_SPI_H_*/
+#endif /*FSL_FLEXIO_SPI_H_*/

@@ -37,6 +37,8 @@
  *  SOFTWARE.
  */
 
+#define WLAN_REGION_CODE "JP"
+
 static wlan_chanlist_t chanlist_2g_cfg = {.num_chans = 13,
                                           .chan_info = {
                                               [0] =

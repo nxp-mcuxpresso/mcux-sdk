@@ -14,21 +14,17 @@
  * Definitions
  ******************************************************************************/
 /*! @brief wm8904 volume mapping */
-#define WM8904_SWAP_UINT16_BYTE_SEQUENCE(x) ((((x) & 0x00ffU) << 8U) | (((x) & 0xff00U) >> 8U))
-#define WM8904_MAP_SAMPLERATE(x)          \
-    ((x) == kWM8904_SampleRate8kHz ?      \
-         8000U :                          \
-         (x) == kWM8904_SampleRate12kHz ? \
-         12000U :                         \
-         (x) == kWM8904_SampleRate16kHz ? \
-         16000U :                         \
-         (x) == kWM8904_SampleRate24kHz ? \
-         24000U :                         \
-         (x) == kWM8904_SampleRate32kHz ? \
-         32000U :                         \
-         (x) == kWM8904_SampleRate48kHz ? \
-         48000U :                         \
-         (x) == kWM8904_SampleRate11025Hz ? 11025U : (x) == kWM8904_SampleRate22050Hz ? 22050U : 44100U)
+#define WM8904_SWAP_UINT16_BYTE_SEQUENCE(x) ((((x)&0x00ffU) << 8U) | (((x)&0xff00U) >> 8U))
+#define WM8904_MAP_SAMPLERATE(x)                 \
+    ((x) == kWM8904_SampleRate8kHz    ? 8000U :  \
+     (x) == kWM8904_SampleRate12kHz   ? 12000U : \
+     (x) == kWM8904_SampleRate16kHz   ? 16000U : \
+     (x) == kWM8904_SampleRate24kHz   ? 24000U : \
+     (x) == kWM8904_SampleRate32kHz   ? 32000U : \
+     (x) == kWM8904_SampleRate48kHz   ? 48000U : \
+     (x) == kWM8904_SampleRate11025Hz ? 11025U : \
+     (x) == kWM8904_SampleRate22050Hz ? 22050U : \
+                                        44100U)
 #define WM8904_MAP_BITWIDTH(x) \
     ((x) == kWM8904_BitWidth16 ? 16 : (x) == kWM8904_BitWidth20 ? 20 : (x) == kWM8904_BitWidth24 ? 24 : 32)
 /*******************************************************************************

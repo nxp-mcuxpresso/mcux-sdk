@@ -37,7 +37,9 @@
  *  SOFTWARE.
  */
 
-static wlan_chanlist_t chanlist_2g_cfg = {.num_chans = 14,
+#define WLAN_REGION_CODE "WW"
+
+static wlan_chanlist_t chanlist_2g_cfg = {.num_chans = 13,
                                           .chan_info = {
                                               [0] =
                                                   {
@@ -117,12 +119,7 @@ static wlan_chanlist_t chanlist_2g_cfg = {.num_chans = 14,
                                                       .chan_freq                    = 2472,
                                                       .passive_scan_or_radar_detect = true,
                                                   },
-                                              [13] =
-                                                  {
-                                                      .chan_num                     = 14,
-                                                      .chan_freq                    = 2484,
-                                                      .passive_scan_or_radar_detect = true,
-                                                  },
+                                              [13] = {0},
                                               [14] = {0},
                                               [15] = {0},
                                               [16] = {0},

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020-2021 NXP
+ *  Copyright 2020-2022 NXP
  *  All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-3-Clause
@@ -12,11 +12,13 @@
 
 #ifndef RW610
 #define CONFIG_MAX_AP_ENTRIES 10
-#else
-#define CONFIG_MAX_AP_ENTRIES 30
 #endif
 
 #if defined(SD8978) || defined(SD8987) || defined(RW610)
+#define CONFIG_MAX_AP_ENTRIES 30
+#endif
+
+#if defined(SD8977) || defined(SD8978) || defined(SD8987) || defined(IW61x) || defined(RW610)
 #define CONFIG_5GHz_SUPPORT 1
 #endif
 
@@ -24,7 +26,7 @@
 #define CONFIG_SDIO_MULTI_PORT_RX_AGGR 1
 #endif
 
-#if defined(SD8987) || defined(RW610)
+#if defined(SD8987) || defined(RW610) || defined(IW61x)
 #define CONFIG_11AC
 #undef CONFIG_WMM
 #endif
@@ -78,10 +80,19 @@
 #define CONFIG_11AX_TWT
 #define CONFIG_IPS
 #define CONFIG_MBO
+#define WIFI_ADD_ON 1
 #endif
 
-//#define CONFIG_IPV6               1
-//#define CONFIG_MAX_IPV6_ADDRESSES 5
+// #define CONFIG_IPV6               1
+// #define CONFIG_MAX_IPV6_ADDRESSES 5
+
+#if defined(IW61x)
+#define CONFIG_11AX             1
+#define CONFIG_EXT_SCAN_SUPPORT 1
+#define CONFIG_OWE              1
+#undef CONFIG_WIFI_CAPA
+#undef CONFIG_UNII4_BAND_SUPPORT
+#endif
 
 /* Logs */
 #define CONFIG_ENABLE_ERROR_LOGS   1
@@ -107,6 +118,12 @@
 #undef CONFIG_WIFI_SDIO_DEBUG
 #undef CONFIG_WIFI_FW_DEBUG
 #undef CONFIG_WPS_DEBUG
+
+/*
+ * Heap debug options
+ */
+#undef CONFIG_HEAP_DEBUG
+#undef CONFIG_HEAP_STAT
 
 /*
  * Heap debug options

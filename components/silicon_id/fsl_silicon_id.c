@@ -65,7 +65,7 @@ status_t SILICONID_GetID(uint8_t *siliconId, uint32_t *idLen)
         }
     }
 #else
-    extern status_t SILICONID_ReadUniqueID(uint8_t *siliconId, uint32_t *idLen);
+    extern status_t SILICONID_ReadUniqueID(uint8_t * siliconId, uint32_t * idLen);
     result = SILICONID_ReadUniqueID(&siliconId[0], idLen);
 #endif
 

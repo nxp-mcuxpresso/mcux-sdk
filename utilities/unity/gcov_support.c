@@ -65,7 +65,7 @@ void gcov_write(void)
 {
 #if GCOV_USE_TCOV
     tcov_print_all(); /* print coverage information */
-#elif GCOV_USE_GCOV_EMBEDDED
+#elif 0 && GCOV_USE_GCOV_EMBEDDED
     void gcov_exit(void);
 
     gcov_exit();

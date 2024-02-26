@@ -24,9 +24,9 @@
 #define NOR_CMD_INDEX_DUMMY       6                     /*!< 6*/
 
 #define NOR_CMD_LUT_SEQ_IDX_READSTATUS_XPI \
-    2 /*!< 2  Read status DPI/QPI/OPI sequence id in lookupTable stored in config block*/
+    2  /*!< 2  Read status DPI/QPI/OPI sequence id in lookupTable stored in config block*/
 #define NOR_CMD_LUT_SEQ_IDX_WRITEENABLE_XPI \
-    4 /*!< 4  Write Enable DPI/QPI/OPI sequence id in lookupTable stored in config block*/
+    4  /*!< 4  Write Enable DPI/QPI/OPI sequence id in lookupTable stored in config block*/
 #define NOR_CMD_LUT_SEQ_IDX_RESTORE_NOCMD \
     14 /*!< 14 Restore 0-4-4/0-8-8 mode sequence id in lookupTable stored in config block*/
 
@@ -61,14 +61,14 @@ enum
     kStatus_FLEXSPINOR_WaitTimeout  = MAKE_STATUS(kStatusGroup_SDK_FLEXSPINOR, 3), /*!< Status for timeout*/
     kStatus_FlexSPINOR_NotSupported = MAKE_STATUS(kStatusGroup_SDK_FLEXSPINOR, 4), /*!< Not support*/
     kStatus_FlexSPINOR_WriteAlignmentError =
-        MAKE_STATUS(kStatusGroup_SDK_FLEXSPINOR, 5), /*!< Status for Alignement error*/
+        MAKE_STATUS(kStatusGroup_SDK_FLEXSPINOR, 5),                               /*!< Status for Alignement error*/
     kStatus_FlexSPINOR_CommandFailure =
         MAKE_STATUS(kStatusGroup_SDK_FLEXSPINOR, 6), /*!< Status for Erase/Program Verify Error*/
     kStatus_FlexSPINOR_SFDP_NotFound = MAKE_STATUS(kStatusGroup_SDK_FLEXSPINOR, 7), /*!< Status for SFDP read failure*/
     kStatus_FLEXSPINOR_Unsupported_SFDP_Version =
-        MAKE_STATUS(kStatusGroup_SDK_FLEXSPINOR, 8), /*!< Status for Unrecognized SFDP version*/
+        MAKE_STATUS(kStatusGroup_SDK_FLEXSPINOR, 8),  /*!< Status for Unrecognized SFDP version*/
     kStatus_FLEXSPINOR_Flash_NotFound =
-        MAKE_STATUS(kStatusGroup_SDK_FLEXSPINOR, 9), /*!< Status for Flash detection failure*/
+        MAKE_STATUS(kStatusGroup_SDK_FLEXSPINOR, 9),  /*!< Status for Flash detection failure*/
     kStatus_FLEXSPINOR_DTRRead_DummyProbeFailed =
         MAKE_STATUS(kStatusGroup_SDK_FLEXSPINOR, 10), /*!< Status for DDR Read dummy probe failure*/
     kStatus_FLEXSPINOR_UnsupportedFunctionParameterType =

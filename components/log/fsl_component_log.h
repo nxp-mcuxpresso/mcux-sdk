@@ -79,10 +79,10 @@ typedef enum _log_status
 #define LOG_FILE_NAME_RECURSIVE(f, s, n) \
     f(s, n) : f(s, n + 1) : f(s, n + 2) : f(s, n + 3) : f(s, n + 4) : f(s, n + 5) : f(s, n + 6) : f(s, n + 7)
 #define LOG_FILE_NAME_SET(f, f1, s, n) \
-    f(f1, s, n)                        \
-        : f(f1, s, n + 8)              \
-        : f(f1, s, n + 16)             \
-        : f(f1, s, n + 24) : f(f1, s, n + 32) : f(f1, s, n + 40) : f(f1, s, n + 48) : f(f1, s, n + 56)
+    f(f1, s, n) :                      \
+        f(f1, s, n + 8) :              \
+        f(f1, s, n + 16) :             \
+        f(f1, s, n + 24) : f(f1, s, n + 32) : f(f1, s, n + 40) : f(f1, s, n + 48) : f(f1, s, n + 56)
 /*!
  * @brief Source file name definition
  * @details There is a macro \__BASE_FILE\__ could be used to get the current source file name in GCC. While

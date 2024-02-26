@@ -23,8 +23,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.2 */
-#define FSL_WM8960_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+/*! @brief CLOCK driver version 2.2.4 */
+#define FSL_WM8960_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
 /*@}*/
 
 /*! @brief wm8960 handle size */

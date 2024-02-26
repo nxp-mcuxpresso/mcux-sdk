@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020,2023 NXP
  * All rights reserved.
  *
  *
@@ -33,7 +33,7 @@
 #define kPUF_Zeroize             (0x2fu)
 typedef uint32_t puf_last_operation_t;
 
-#define PUF_KEY_OPERATION_CONTEXT_TYPE (0x10 << 16)
+#define PUF_KEY_OPERATION_CONTEXT_TYPE (0x10UL << 16UL)
 #define PUF_CONTEXT_GENERIC_KEY_TYPE   (0x0u)
 #define PUF_CONTEXT_KEY_LEN_MASK       (0x1fffu)
 
@@ -56,7 +56,7 @@ static status_t puf_waitForInit(PUF_Type *base)
     }
 
     /* return status */
-    if (base->SR & (PUF_SR_OK_MASK | PUF_SR_ERROR_MASK))
+    if (0U != (base->SR & (PUF_SR_OK_MASK | PUF_SR_ERROR_MASK)))
     {
         status = kStatus_Success;
     }
@@ -99,7 +99,7 @@ static status_t puf_makeStatus(PUF_Type *base, puf_last_operation_t operation)
         }
         else
         {
-            status = MAKE_STATUS(kStatusGroup_PUF, result);
+            status = MAKE_STATUS((int32_t)kStatusGroup_PUF, (int32_t)result);
         }
     }
 
@@ -134,8 +134,14 @@ status_t PUF_Init(PUF_Type *base, puf_config_t *conf)
 
     /* Enable PUF clock */
     CLOCK_EnableClock(kCLOCK_Puf);
+
+    /* Clear the PUF peripheral reset */
+    RESET_ClearPeripheralReset(kPUF_RST_SHIFT_RSTn);
+
     /* Reset PUF */
+#if defined(FSL_FEATURE_PUF_HAS_RESET) && FSL_FEATURE_PUF_HAS_RESET
     RESET_PeripheralReset(kPUF_RST_SHIFT_RSTn);
+#endif /* FSL_FEATURE_PUF_HAS_RESET */
 
     /* Set configuration from SRAM */
     base->SRAM_CFG |= PUF_SRAM_CFG_CKGATING(conf->CKGATING);
@@ -150,7 +156,7 @@ status_t PUF_Init(PUF_Type *base, puf_config_t *conf)
     if ((status != kStatus_Success) || ((PUF_AR_ALLOW_ENROLL_MASK | PUF_AR_ALLOW_START_MASK) !=
                                         (base->AR & (PUF_AR_ALLOW_ENROLL_MASK | PUF_AR_ALLOW_START_MASK))))
     {
-        puf_powerCycle(base, conf);
+        (void)puf_powerCycle(base, conf);
         status = puf_waitForInit(base);
     }
 
@@ -178,7 +184,7 @@ void PUF_Deinit(PUF_Type *base, puf_config_t *conf)
 {
     base->SRAM_CFG = 0x0u;
 
-    RESET_SetPeripheralReset(kPUF_RST_SHIFT_RSTn);
+    RESET_PeripheralReset(kPUF_RST_SHIFT_RSTn);
     CLOCK_DisableClock(kCLOCK_Puf);
 }
 
@@ -191,7 +197,7 @@ void PUF_Deinit(PUF_Type *base, puf_config_t *conf)
  *
  * @param base PUF peripheral base address
  * @param[out] activationCode Word aligned address of the resulting activation code.
- * @param activationCodeSize Size of the activationCode buffer in bytes. Shall be 996 bytes.
+ * @param activationCodeSize Size of the activationCode buffer in bytes. Shall be FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE bytes.
  * @param score Value of the PUF Score that was obtained during the enroll operation.
  * @return Status of enroll operation.
  */
@@ -201,14 +207,14 @@ status_t PUF_Enroll(PUF_Type *base, uint8_t *activationCode, size_t activationCo
     uint32_t *activationCodeAligned = NULL;
     register uint32_t temp32        = 0;
 
-    /* check that activation code buffer size is at least 996 bytes */
+    /* check that activation code buffer size is at least FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE bytes */
     if (activationCodeSize < PUF_ACTIVATION_CODE_SIZE)
     {
         return kStatus_InvalidArgument;
     }
 
     /* only work with aligned and valid activationCode */
-    if ((0x3u & (uintptr_t)activationCode) || (activationCode == NULL))
+    if ((0U != (0x3u & (uintptr_t)activationCode)) || (activationCode == NULL))
     {
         return kStatus_InvalidArgument;
     }
@@ -265,7 +271,7 @@ status_t PUF_Enroll(PUF_Type *base, uint8_t *activationCode, size_t activationCo
  *
  * @param base PUF peripheral base address
  * @param[in] activationCode Word aligned address of the input activation code.
- * @param activationCodeSize Size of the activationCode buffer in bytes. Shall be 996 bytes.
+ * @param activationCodeSize Size of the activationCode buffer in bytes. Shall be FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE bytes.
  * @param score Value of the PUF Score that was obtained during the start operation.
  * return Status of start operation.
  */
@@ -275,17 +281,17 @@ status_t PUF_Start(PUF_Type *base, const uint8_t *activationCode, size_t activat
     const uint32_t *activationCodeAligned = NULL;
     register uint32_t temp32              = 0;
 
-    /* check that activation code size is at least 996 bytes */
+    /* check that activation code size is at least FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE bytes */
     if (activationCodeSize < PUF_ACTIVATION_CODE_SIZE)
     {
         return kStatus_InvalidArgument;
     }
 
-    /* Set activationCodeSize to 996 bytes */
+    /* Set activationCodeSize to FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE bytes */
     activationCodeSize = PUF_ACTIVATION_CODE_SIZE;
 
     /* only work with aligned activationCode */
-    if (0x3u & (uintptr_t)activationCode)
+    if ((0U != (0x3u & (uintptr_t)activationCode)) || (activationCode == NULL))
     {
         return kStatus_InvalidArgument;
     }
@@ -418,18 +424,18 @@ status_t PUF_GetKey(PUF_Type *base, puf_key_ctx_t *keyCtx, puf_key_dest_t keyDes
 
     /* check for valid key size. */
     /* must be 8byte multiple */
-    if (keySize & 0x7u)
+    if (0U != (keySize & 0x7u))
     {
         return kStatus_InvalidArgument;
     }
     /* if keySize > 128bytes, it must be equal to 256bytes or 384bytes or 512bytes */
-    else if ((keySize > 128u) && !((keySize == 256u) || (keySize == 384u) || (keySize == 512u)))
+    if ((keySize > 128u) && !((keySize == 256u) || (keySize == 384u) || (keySize == 512u)))
     {
         return kStatus_InvalidArgument;
     }
 
     /* only work with aligned key */
-    if (0x3u & (uintptr_t)key)
+    if (0U != (0x3u & (uintptr_t)key))
     {
         return kStatus_InvalidArgument;
     }
@@ -443,7 +449,7 @@ status_t PUF_GetKey(PUF_Type *base, puf_key_ctx_t *keyCtx, puf_key_dest_t keyDes
     context[3] = keyCtx->userCtx1;
 
     /* set key destination */
-    base->KEY_DEST = keyDest;
+    base->DATA_DEST = keyDest;
 
     /* begin */
     base->CR = PUF_CR_GET_KEY_MASK;
@@ -454,15 +460,15 @@ status_t PUF_GetKey(PUF_Type *base, puf_key_ctx_t *keyCtx, puf_key_dest_t keyDes
     }
 
     /* send context and read output data while busy */
-    while (0 != (base->SR & PUF_SR_BUSY_MASK))
+    while (0U != (base->SR & PUF_SR_BUSY_MASK))
     {
-        if ((0 != (PUF_SR_DI_REQUEST_MASK & base->SR)) && (idx < 4u))
+        if ((0U != (PUF_SR_DI_REQUEST_MASK & base->SR)) && (idx < 4u))
         {
             base->DIR = context[idx];
             idx++;
         }
 
-        if ((0 != (PUF_SR_DO_REQUEST_MASK & base->SR)) && (kPUF_KeyDestRegister == keyDest))
+        if ((0U != (PUF_SR_DO_REQUEST_MASK & base->SR)) && (kPUF_KeyDestRegister == keyDest))
         {
             if (keySize >= sizeof(uint32_t))
             {
@@ -513,12 +519,12 @@ status_t PUF_WrapGeneratedRandom(
 
     /* check for valid key size. */
     /* must be 8byte multiple */
-    if (keySize & 0x7u)
+    if (0U != (keySize & 0x7u))
     {
         return kStatus_InvalidArgument;
     }
     /* if keySize > 128bytes, it must be equal to 256bytes or 384bytes or 512bytes */
-    else if ((keySize > 128u) && !((keySize == 256u) || (keySize == 384u) || (keySize == 512u)))
+    if ((keySize > 128u) && !((keySize == 256u) || (keySize == 384u) || (keySize == 512u)))
     {
         return kStatus_InvalidArgument;
     }
@@ -530,7 +536,7 @@ status_t PUF_WrapGeneratedRandom(
     }
 
     /* only work with aligned key code */
-    if (0x3u & (uintptr_t)keyCode)
+    if (0U != (0x3u & (uintptr_t)keyCode))
     {
         return kStatus_InvalidArgument;
     }
@@ -538,7 +544,7 @@ status_t PUF_WrapGeneratedRandom(
     keyCodeAligned = (uint32_t *)(uintptr_t)keyCode;
 
     /* fill in key context */
-    context[0] = PUF_KEY_OPERATION_CONTEXT_TYPE | ((keySize * 8u) & 0x1FFF);
+    context[0] = PUF_KEY_OPERATION_CONTEXT_TYPE | ((keySize * 8u) & 0x1FFFu);
     context[1] = PUF_CONTEXT_GENERIC_KEY_TYPE | (keyCtx->keyScopeStarted << 8u) | keyCtx->keyScopeEnrolled;
     context[2] = keyCtx->userCtx0;
     context[3] = keyCtx->userCtx1;
@@ -613,12 +619,12 @@ status_t PUF_Wrap(
 
     /* check for valid userKey size. */
     /* must be 8byte multiple */
-    if (userKeySize & 0x7u)
+    if (0U != (userKeySize & 0x7u))
     {
         return kStatus_InvalidArgument;
     }
     /* if userKeySize > 128bytes, it must be equal to 256bytes or 384bytes or 512bytes */
-    else if ((userKeySize > 128u) && !((userKeySize == 256u) || (userKeySize == 384u) || (userKeySize == 512u)))
+    if ((userKeySize > 128u) && !((userKeySize == 256u) || (userKeySize == 384u) || (userKeySize == 512u)))
     {
         return kStatus_InvalidArgument;
     }
@@ -630,7 +636,7 @@ status_t PUF_Wrap(
     }
 
     /* only work with aligned userKey and key code */
-    if ((0x3u & (uintptr_t)userKey) || (0x3u & (uintptr_t)keyCode))
+    if (0U != ((0x3u & (uintptr_t)userKey)) || (0U != (0x3u & (uintptr_t)keyCode)))
     {
         return kStatus_InvalidArgument;
     }
@@ -639,7 +645,7 @@ status_t PUF_Wrap(
     keyCodeAligned = (uint32_t *)(uintptr_t)keyCode;
 
     /* fill in key context */
-    context[0] = PUF_KEY_OPERATION_CONTEXT_TYPE | ((userKeySize * 8u) & 0x1FFF);
+    context[0] = PUF_KEY_OPERATION_CONTEXT_TYPE | ((userKeySize * 8u) & 0x1FFFu);
     context[1] = PUF_CONTEXT_GENERIC_KEY_TYPE | (keyCtx->keyScopeStarted << 8u) | keyCtx->keyScopeEnrolled;
     context[2] = keyCtx->userCtx0;
     context[3] = keyCtx->userCtx1;
@@ -721,7 +727,7 @@ status_t PUF_Unwrap(
     }
 
     /* only work with aligned key and key code */
-    if ((0x3u & (uintptr_t)key) || (0x3u & (uintptr_t)keyCode))
+    if ((0U != (0x3u & (uintptr_t)key)) || (0U != (0x3u & (uintptr_t)keyCode)) || (keyCode == NULL))
     {
         return kStatus_InvalidArgument;
     }
@@ -730,7 +736,7 @@ status_t PUF_Unwrap(
     keyCodeAligned = (uint32_t *)(uintptr_t)keyCode;
 
     /* set key destination */
-    base->KEY_DEST = keyDest;
+    base->DATA_DEST = keyDest;
 
     /* begin */
     base->CR = PUF_CR_UNWRAP_MASK;
@@ -799,18 +805,18 @@ status_t PUF_GenerateRandom(PUF_Type *base, uint8_t *data, size_t size)
 
     /* check for valid size. */
     /* must be 8byte multiple */
-    if (size & 0x7u)
+    if (0U != (size & 0x7u))
     {
         return kStatus_InvalidArgument;
     }
     /* if size > 128bytes, it must be equal to 256bytes or 384bytes or 512bytes */
-    else if ((size > 128u) && !((size == 256u) || (size == 384u) || (size == 512u)))
+    if ((size > 128u) && !((size == 256u) || (size == 384u) || (size == 512u)))
     {
         return kStatus_InvalidArgument;
     }
 
     /* only work with aligned data buffer */
-    if (0x3u & (uintptr_t)data)
+    if (0U != (0x3u & (uintptr_t)data))
     {
         return kStatus_InvalidArgument;
     }
@@ -821,6 +827,8 @@ status_t PUF_GenerateRandom(PUF_Type *base, uint8_t *data, size_t size)
     dataAligned = (uint32_t *)(uintptr_t)data;
 
     /* begin */
+    base->DATA_DEST = PUF_DATA_DEST_DEST_DOR_MASK;
+
     base->CR = PUF_CR_GENERATE_RANDOM_MASK;
 
     /* wait till command is accepted */
@@ -926,4 +934,67 @@ status_t PUF_Test(PUF_Type *base, uint8_t *score)
     status = puf_makeStatus(base, kPUF_Test);
 
     return status;
+}
+
+/*!
+ * brief Set lock of PUF operation
+ *
+ * Lock the security level of PUF block until key generate, wrap or unwrap operation is completed.
+ * Note: Only secure-privilege code can change the security level.
+ *
+ * @param base PUF peripheral base address
+ * @param securityLevel Security level of PUF block.
+ * @return Status of the test operation.
+ */
+status_t PUF_SetLock(PUF_Type *base, puf_sec_level_t securityLevel)
+{
+    uint32_t sec_lock_option = 0u;
+
+    if ((securityLevel != kPUF_NonsecureUser) && (securityLevel != kPUF_NonsecurePrivilege) &&
+        (securityLevel != kPUF_SecureUser) && (securityLevel != kPUF_SecurePrivilege))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    /* Wait until PUF is in IDLE */
+    while ((base->SR & PUF_SR_BUSY_MASK) != 0u)
+    {
+    }
+
+    /* Prepare SEC_LOCK option word */
+    /* [1:0] - Security level */
+    /* [3:2] - anti-pole of security level [1:0] */
+    /* [15:4] - PATTERN: This field must be written as 0xAC5 */
+    sec_lock_option = SEC_LOCK_PATTERN | securityLevel;
+
+    /* Apply setings */
+    base->SEC_LOCK = sec_lock_option;
+
+    /* Check if the security level is same as the level written */
+    if (securityLevel != base->SEC_LOCK)
+    {
+        return kStatus_Fail;
+    }
+
+    return kStatus_Success;
+}
+
+/*!
+ * brief Set App Context mask
+ *
+ * This function sets Application defined context mask used in conjunction with key user context 2.
+ * Whenever bit in this register is 1, corresponding bit in user context 2 provided
+ * during key code creation should be zero only.
+ *
+ * This register is only modifiable by task running at secure-privilege level.
+ *
+ * @param base PUF peripheral base address
+ * @param appCtxMask Value of the Application defined context mask.
+ * @return Status of the test operation.
+ */
+status_t PUF_SetCtxMask(PUF_Type *base, uint32_t appCtxMask)
+{
+    base->APP_CTX_MASK = appCtxMask;
+
+    return kStatus_Success;
 }

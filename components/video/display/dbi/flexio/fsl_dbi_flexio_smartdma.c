@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2020,2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -113,6 +113,7 @@ status_t DBI_FLEXIO_SMARTDMA_WriteMemory(void *dbiXferHandle, uint32_t command, 
     xfer.mode                = kFLEXIO_MCULCD_WriteArray;
     xfer.dataAddrOrSameValue = (uint32_t)(const uint8_t *)data;
     xfer.dataSize            = len_byte;
+    xfer.dataOnly            = false;
 
     return FLEXIO_MCULCD_TransferSMARTDMA(flexioLCD, &xferHandle->flexioHandle, &xfer);
 }

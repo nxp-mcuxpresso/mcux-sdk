@@ -1,12 +1,12 @@
 /*
- * Copyright 2019, 2021 NXP
+ * Copyright 2019,2021,2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FLEXIO_MCULCD_SMARTDMA_H_
-#define _FSL_FLEXIO_MCULCD_SMARTDMA_H_
+#ifndef FSL_FLEXIO_MCULCD_SMARTDMA_H_
+#define FSL_FLEXIO_MCULCD_SMARTDMA_H_
 
 #include "fsl_smartdma.h"
 #include "fsl_flexio_mculcd.h"
@@ -22,7 +22,7 @@
 
 /*@{*/
 /*! @brief FlexIO MCULCD SMARTDMA driver version. */
-#define FSL_FLEXIO_MCULCD_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_FLEXIO_MCULCD_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
 
 /*! @brief SMARTDMA transfer size should be multiple of 64 bytes. */
@@ -155,4 +155,4 @@ status_t FLEXIO_MCULCD_TransferGetCountSMARTDMA(FLEXIO_MCULCD_Type *base,
 /*!
  * @}
  */
-#endif /* _FSL_FLEXIO_MCULCD_SMARTDMA_H_ */
+#endif /* FSL_FLEXIO_MCULCD_SMARTDMA_H_ */

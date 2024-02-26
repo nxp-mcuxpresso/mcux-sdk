@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_OSTIMER_H_
-#define _FSL_OSTIMER_H_
+#ifndef FSL_OSTIMER_H_
+#define FSL_OSTIMER_H_
 
 #include "fsl_common.h"
 
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief OSTIMER driver version. */
-#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 /*!
@@ -270,4 +270,4 @@ void OSTIMER_HandleIRQ(OSTIMER_Type *base, ostimer_callback_t cb);
 
 /*! @}*/
 
-#endif /* _FSL_OSTIMER_H_ */
+#endif /* FSL_OSTIMER_H_ */

@@ -179,6 +179,16 @@ enum _unity_module
     k_unity_dsp                = 164,
     k_unity_common             = 165,
     k_unity_dcic               = 166,
+    k_unity_imu                = 167,
+    k_unity_maestro            = 168,
+    k_unity_clock              = 169,
+    k_unity_spc                = 170,
+    k_unity_cmc                = 171,
+    k_unity_ccm32k             = 172,
+    k_unity_wuu                = 173,
+    k_unity_sfa                = 174,
+    k_unity_pm                 = 175,
+    k_unity_dac14              = 176,
 };
 
 #define MAKE_UNITY_NUM(unity_module, caseID) (((uint32_t)(unity_module)*10000) + (uint32_t)(caseID))
@@ -226,16 +236,13 @@ enum _unity_module
 //-------------------------------------------------------
 // Test Running Macros
 //-------------------------------------------------------
-#ifndef TEST_PROTECT_NOT_IMPLEMENTED
+
 #define TEST_PROTECT() (setjmp(Unity.AbortFrame) == 0)
 
 #define TEST_ABORT()                  \
     {                                 \
         longjmp(Unity.AbortFrame, 1); \
     }
-#else
-#define TEST_PROTECT() (1)
-#endif
 
 #ifndef RUN_EXAMPLE
 #ifdef UNITY_SHOW_TEST_FILE_PATH

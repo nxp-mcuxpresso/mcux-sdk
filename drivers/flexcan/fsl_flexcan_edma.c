@@ -324,6 +324,7 @@ status_t FLEXCAN_TransferReceiveEnhancedFifoEDMA(CAN_Type *base,
     assert(NULL != pFifoXfer->framefd);
 
     edma_transfer_config_t dmaXferConfig;
+    edma_minor_offset_config_t dmaMinorOffsetConfig;
     status_t status;
     flexcan_fd_frame_t *fifoAddr = (flexcan_fd_frame_t *)E_RX_FIFO(base);
     uint32_t perReadWords        = ((base->ERFCR & CAN_ERFCR_DMALW_MASK) >> CAN_ERFCR_DMALW_SHIFT) + 1U;
@@ -355,13 +356,16 @@ status_t FLEXCAN_TransferReceiveEnhancedFifoEDMA(CAN_Type *base,
             kEDMA_MemoryToMemory);
         /* Submit configuration. */
         (void)EDMA_SubmitTransfer(handle->rxFifoEdmaHandle, &dmaXferConfig);
-        handle->rxFifoEdmaHandle->base->CH[handle->rxFifoEdmaHandle->channel].TCD_NBYTES_MLOFFYES &=
-            ~DMA_TCD_NBYTES_MLOFFYES_MLOFF_MASK;
-        handle->rxFifoEdmaHandle->base->CH[handle->rxFifoEdmaHandle->channel].TCD_NBYTES_MLOFFYES |=
-            DMA_TCD_NBYTES_MLOFFYES_MLOFF(128U - sizeof(uint32_t) * perReadWords) | DMA_TCD_NBYTES_MLOFFYES_SMLOE_MASK;
-        handle->rxFifoEdmaHandle->base->CH[handle->rxFifoEdmaHandle->channel].TCD_ATTR &=
-            ~(uint16_t)DMA_TCD_ATTR_SMOD_MASK;
-        handle->rxFifoEdmaHandle->base->CH[handle->rxFifoEdmaHandle->channel].TCD_ATTR |= DMA_TCD_ATTR_SMOD(7U);
+
+        dmaMinorOffsetConfig.enableDestMinorOffset = false;
+        dmaMinorOffsetConfig.enableSrcMinorOffset  = true;
+        dmaMinorOffsetConfig.minorOffset           = 128U - sizeof(uint32_t) * perReadWords;
+        EDMA_SetMinorOffsetConfig(handle->rxFifoEdmaHandle->base, handle->rxFifoEdmaHandle->channel,
+                                  &dmaMinorOffsetConfig);
+
+        EDMA_SetModulo(handle->rxFifoEdmaHandle->base, handle->rxFifoEdmaHandle->channel, kEDMA_Modulo128bytes,
+                       kEDMA_ModuloDisable);
+
         handle->rxFifoState = (uint8_t)KFLEXCAN_RxFifoBusy;
 
         /* Enable FlexCAN Rx FIFO EDMA. */

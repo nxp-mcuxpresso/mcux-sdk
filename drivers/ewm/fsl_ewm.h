@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_EWM_H_
-#define _FSL_EWM_H_
+#ifndef FSL_EWM_H_
+#define FSL_EWM_H_
 
 #include "fsl_common.h"
 
@@ -215,4 +215,4 @@ void EWM_Refresh(EWM_Type *base);
 
 /*! @}*/
 
-#endif /* _FSL_EWM_H_ */
+#endif /* FSL_EWM_H_ */

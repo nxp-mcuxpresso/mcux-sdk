@@ -12,6 +12,117 @@
 #include "gcov_support.h"
 #endif
 
+/* This is SquishCoco code coverage tool related code */
+#ifdef __COVERAGESCANNER__
+
+extern void __coveragescanner_set_custom_io(char *(*csfgets)(char *s, int size, void *stream),
+                                            int (*csfputs)(const char *s, void *stream),
+                                            void *(*csfopenappend)(const char *path),
+                                            void *(*csfopenread)(const char *path),
+                                            void *(*csfopenwrite)(const char *path),
+                                            int (*csfclose)(void *fp),
+                                            int (*csremove)(const char *filename));
+extern void __coveragescanner_save(void);
+extern void __coveragescanner_testname(const char *name);
+extern void __coveragescanner_teststate(const char *state);
+
+/* Use preprocessor macro from the following list to chose the way results are stored:
+   SQUISHCOCO_RESULT_DATA_SAVE_TO_FILE
+   SQUISHCOCO_RESULT_DATA_SAVE_TO_MEMORY
+   SQUISHCOCO_RESULT_DATA_SAVE_TO_CONSOLE
+*/
+#if ((!defined(SQUISHCOCO_RESULT_DATA_SAVE_TO_FILE)) && (!defined(SQUISHCOCO_RESULT_DATA_SAVE_TO_MEMORY)) && \
+     (!defined(SQUISHCOCO_RESULT_DATA_SAVE_TO_CONSOLE)) && (!defined(SQUISHCOCO_RESULT_DATA_SAVE_CUSTOM)))
+#define SQUISHCOCO_RESULT_DATA_SAVE_TO_CONSOLE
+
+/* Squish Coco I/O functions set implementation */
+int csfputs(const char *s, void *stream);
+void *csfopenappend(const char *path);
+int csfclose(void *fp);
+void *csfopenwrite(const char *path);
+
+#else
+
+/* Squish Coco I/O functions implemented externally */
+extern int csfputs(const char *s, void *stream);
+extern void *csfopenappend(const char *path);
+extern int csfclose(void *fp);
+extern void *csfopenwrite(const char *path);
+
+#endif
+
+#if defined(SQUISHCOCO_RESULT_DATA_SAVE_TO_FILE)
+void *csfopenwrite(const char *path)
+{
+    return (void *)fopen("../measurements.csexe", "w");
+}
+
+int csfputs(const char *s, void *stream)
+{
+    return fputs(s, (FILE *)stream);
+}
+
+void *csfopenappend(const char *path)
+{
+    return (void *)fopen(path, "a+");
+}
+
+int csfclose(void *fp)
+{
+    return fclose((FILE *)fp);
+}
+#elif defined(SQUISHCOCO_RESULT_DATA_SAVE_TO_MEMORY)
+uint32_t mem_offset = 0x10U;
+#define SH_MEM_TOTAL_SIZE (6144U)
+#if defined(__ICCARM__) /* IAR Workbench */
+#pragma location = "rpmsg_sh_mem_section"
+static uint8_t mem_to_store_coverage_results[SH_MEM_TOTAL_SIZE];
+#elif defined(__CC_ARM) || defined(__ARMCC_VERSION) /* Keil MDK */
+static char mem_to_store_coverage_results[SH_MEM_TOTAL_SIZE] __attribute__((section("rpmsg_sh_mem_section")));
+#elif defined(__GNUC__)
+static char mem_to_store_coverage_results[SH_MEM_TOTAL_SIZE] __attribute__((section(".noinit.$rpmsg_sh_mem")));
+#endif
+int csfputs(const char *s, void *stream)
+{
+    int return_value = 0;
+    uint32_t len     = strlen(s);
+    memcpy((void *)(char *)(mem_to_store_coverage_results + mem_offset), s, len);
+    mem_offset += len;
+    return return_value;
+}
+
+static uint32_t stream = 0;
+void *csfopenappend(const char *path)
+{
+    return &stream;
+}
+
+int csfclose(void *fp)
+{
+    return 0;
+}
+#elif defined(SQUISHCOCO_RESULT_DATA_SAVE_TO_CONSOLE)
+int csfputs(const char *s, void *stream)
+{
+    int return_value = 0;
+    uint16_t len     = strlen(s);
+    uint16_t status  = PRINTF("%s", (char *)s);
+    return return_value;
+}
+
+static uint32_t stream = 0;
+void *csfopenappend(const char *path)
+{
+    return &stream;
+}
+
+int csfclose(void *fp)
+{
+    return 0;
+}
+#endif /* SQUISHCOCO_RESULT_DATA_SAVE_TO_x */
+#endif /*__COVERAGESCANNER__*/
+
 #ifdef UNITY_DUMP_RESULT
 #if defined(UNITY_DUMP_RESULT_ARRAY_SMALL)
 #define DUMP_RESULT_ARRAY_SIZE 20U
@@ -1432,6 +1543,15 @@ void UnityBegin(void)
     Unity.CurrentTestFailed  = 0;
     Unity.CurrentTestIgnored = 0;
 
+#ifdef __COVERAGESCANNER__
+    /* Define the Squish Coco set of I/O functions */
+#ifdef SQUISHCOCO_RESULT_DATA_SAVE_TO_FILE
+    __coveragescanner_set_custom_io(NULL, csfputs, csfopenappend, NULL, csfopenwrite, csfclose, NULL);
+#else
+    __coveragescanner_set_custom_io(NULL, csfputs, csfopenappend, NULL, NULL, csfclose, NULL);
+#endif /* SQUISHCOCO_RESULT_DATA_SAVE_TO_FILE */
+#endif /*__COVERAGESCANNER__*/
+
 #if GCOV_DO_COVERAGE
 /* Currently, only MCUXPresso support this function. */
 #if (defined(__GNUC__) && defined(__MCUXPRESSO))
@@ -1463,10 +1583,18 @@ int UnityEnd(void)
     if (Unity.TestFailures == 0U)
     {
         UnityPrintOk();
+#ifdef __COVERAGESCANNER__
+        /* Set the state of the current test */
+        __coveragescanner_teststate("PASSED");
+#endif /*__COVERAGESCANNER__*/
     }
     else
     {
         UnityPrintFail();
+#ifdef __COVERAGESCANNER__
+        /* Set the state of the current test */
+        __coveragescanner_teststate("FAILED");
+#endif /*__COVERAGESCANNER__*/
     }
     UNITY_PRINT_EOL;
 
@@ -1496,6 +1624,16 @@ int UnityEnd(void)
 #ifdef UNITY_DUMP_RESULT
     UnityMemDumpEntry();
 #endif
+
+#ifdef __COVERAGESCANNER__
+    //__coveragescanner_testname(Unity.CurrentTestName);
+    /* Save the execution report and reset the status of all instrumentations */
+    __coveragescanner_save();
+#if defined(SQUISHCOCO_RESULT_DATA_SAVE_TO_MEMORY)
+    ((uint32_t *)mem_to_store_coverage_results)[0] = mem_offset - 0x10;
+#endif
+#endif /*__COVERAGESCANNER__*/
+
     /*do not return for MCU*/
     // while(1);
     return Unity.TestFailures;

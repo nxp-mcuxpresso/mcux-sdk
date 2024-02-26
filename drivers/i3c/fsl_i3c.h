@@ -3,8 +3,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_I3C_H_
-#define _FSL_I3C_H_
+#ifndef FSL_I3C_H_
+#define FSL_I3C_H_
 
 #include "fsl_common.h"
 
@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 10, 3))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 10, 6))
 /*@}*/
 
 /*! @brief Timeout times for waiting flag. */
@@ -254,6 +254,14 @@ typedef enum _i3c_rx_trigger_level
     kI3C_RxTriggerUntilThreeQuarterOrMore = 3U, /*!< Trigger on 3/4 full or more. */
 } i3c_rx_trigger_level_t;
 
+/*! @brief I3C master read termination operations. */
+typedef enum _i3c_rx_term_ops
+{
+    kI3C_RxTermDisable = 0U, /*!< Master doesn't terminate read, used for CCC transfer. */
+    kI3C_RxAutoTerm = 1U,  /*!< Master auto terminate read after receiving specified bytes(<=255). */
+    kI3C_RxTermLastByte = 2U,  /*!< Master terminates read at any time after START, no length limitation. */
+} i3c_rx_term_ops_t;
+
 /*! @brief Structure with setting master IBI rules and slave registry. */
 typedef struct _i3c_register_ibi_addr
 {
@@ -326,8 +334,10 @@ enum _i3c_master_transfer_flags
     kI3C_TransferRepeatedStartFlag = 0x02U, /*!< Send a repeated start condition */
     kI3C_TransferNoStopFlag        = 0x04U, /*!< Don't send a stop condition. */
     kI3C_TransferWordsFlag         = 0x08U, /*!< Transfer in words, else transfer in bytes. */
+    kI3C_TransferDisableRxTermFlag = 0x10U, /*!< Disable Rx termination. Note: It's for I3C CCC transfer. */
     kI3C_TransferRxAutoTermFlag =
-        0x10U, /*!< Set Rx auto-termination. Note: It's adaptive based on Rx size except in I3C_MasterReceive. */
+        0x20U, /*!< Set Rx auto-termination. Note: It's adaptive based on Rx size(<=255 bytes) except in I3C_MasterReceive. */
+    kI3C_TransferStartWithBroadcastAddr = 0x40U, /*!< Start transfer with 0x7E, then read/write data with device address. */
 };
 
 /*!
@@ -357,7 +367,7 @@ struct _i3c_master_handle
 {
     uint8_t state;                           /*!< Transfer state machine current state. */
     uint32_t remainingBytes;                 /*!< Remaining byte count in current state. */
-    bool isRxAutoTerm;                       /*!< Is read auto-termination configured. */
+    i3c_rx_term_ops_t rxTermOps;             /*!< Read termination operation. */
     i3c_master_transfer_t transfer;          /*!< Copy of the current transfer info. */
     uint8_t ibiAddress;                      /*!< Slave address which request IBI. */
     uint8_t *ibiBuff;                        /*!< Pointer to IBI buffer to keep ibi bytes. */
@@ -775,6 +785,9 @@ void I3C_MasterDeinit(I3C_Type *base);
 
 /* Not static so it can be used from fsl_i3c_dma.c. */
 status_t I3C_MasterCheckAndClearError(I3C_Type *base, uint32_t status);
+
+/* Not static so it can be used from fsl_i3c_dma.c. */
+status_t I3C_MasterWaitForCtrlDone(I3C_Type *base, bool waitIdle);
 
 /* Not static so it can be used from fsl_i3c_dma.c. */
 status_t I3C_CheckForBusyBus(I3C_Type *base);
@@ -1860,4 +1873,4 @@ void I3C_SlaveRequestIBIWithSingleData(I3C_Type *base, uint8_t data, size_t data
 }
 #endif
 
-#endif /* _FSL_I3C_H_ */
+#endif /* FSL_I3C_H_ */

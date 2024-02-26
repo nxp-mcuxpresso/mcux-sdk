@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SMARTCARD_H_
-#define _FSL_SMARTCARD_H_
+#ifndef FSL_SMARTCARD_H_
+#define FSL_SMARTCARD_H_
 
 #include "fsl_common.h"
 
@@ -271,4 +271,4 @@ typedef struct _smartcard_context
 } smartcard_context_t;
 
 /*! @}*/
-#endif /* _FSL_SMARTCARD_H_*/
+#endif /* FSL_SMARTCARD_H_*/

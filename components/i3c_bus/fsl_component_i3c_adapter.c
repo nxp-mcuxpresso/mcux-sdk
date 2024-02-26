@@ -62,16 +62,16 @@ const i3c_device_hw_ops_t master_ops = {.Init              = I3C_MasterAdapterIn
                                         .RequestIBI        = I3C_SlaveAdapterRequestIBI};
 
 const i3c_device_hw_ops_t slave_ops                        = {.Init              = I3C_SlaveAdapterInit,
-                                       .Deinit            = NULL,
-                                       .ProceedDAA        = NULL,
-                                       .CheckSupportCCC   = NULL,
-                                       .TransmitCCC       = NULL,
-                                       .DoI3CTransfer     = NULL,
-                                       .DoI2CTransfer     = NULL,
-                                       .RegisterIBI       = NULL,
-                                       .HotJoin           = I3C_SlaveAdapterRequestHotJoin,
-                                       .RequestMastership = I3C_SlaveAdapterRequestMastership,
-                                       .RequestIBI        = I3C_SlaveAdapterRequestIBI};
+                                                              .Deinit            = NULL,
+                                                              .ProceedDAA        = NULL,
+                                                              .CheckSupportCCC   = NULL,
+                                                              .TransmitCCC       = NULL,
+                                                              .DoI3CTransfer     = NULL,
+                                                              .DoI2CTransfer     = NULL,
+                                                              .RegisterIBI       = NULL,
+                                                              .HotJoin           = I3C_SlaveAdapterRequestHotJoin,
+                                                              .RequestMastership = I3C_SlaveAdapterRequestMastership,
+                                                              .RequestIBI        = I3C_SlaveAdapterRequestIBI};
 static const i3c_master_transfer_callback_t masterCallback = {.slave2Master     = i3c_slave2master_callback,
                                                               .ibiCallback      = i3c_master_ibi_callback,
                                                               .transferComplete = i3c_master_callback};
@@ -264,16 +264,17 @@ static status_t I3C_MasterAdapterInit(i3c_device_t *master)
 static status_t I3C_MasterAdapterProcessDAA(i3c_device_t *master)
 {
     assert(master != NULL);
+    status_t result                               = kStatus_Success;
     i3c_device_control_info_t *masterControlInfo  = master->devControlInfo;
     i3c_master_adapter_resource_t *masterResource = (i3c_master_adapter_resource_t *)masterControlInfo->resource;
     I3C_Type *base                                = masterResource->base;
-    status_t result                               = kStatus_Success;
-    uint32_t status;
-    uint32_t errStatus;
-    size_t rxCount;
     uint8_t rxBuffer[8] = {0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU};
-    uint8_t rxSize      = 0;
     i3c_bus_t *i3cBus   = master->bus;
+    bool mctrlDone      = false;
+    uint8_t rxSize      = 0;
+    uint32_t errStatus;
+    uint32_t status;
+    size_t rxCount;
 
     /* Return an error if the bus is already in use not by us. */
     result = I3C_CheckForBusyBus(base);
@@ -295,54 +296,63 @@ static status_t I3C_MasterAdapterProcessDAA(i3c_device_t *master)
 
     do
     {
-        do
+        status = I3C_MasterGetStatusFlags(base);
+
+        /* Check for error flags. */
+        errStatus = I3C_MasterGetErrorStatusFlags(base);
+        result    = I3C_MasterCheckAndClearError(base, errStatus);
+        if (kStatus_Success != result)
         {
-            status = I3C_MasterGetStatusFlags(base);
+            return result;
+        }
+
+        if ((!mctrlDone) || (rxSize < 8U))
+        {
             I3C_MasterGetFifoCounts(base, &rxCount, NULL);
-
-            /* Check for error flags. */
-            errStatus = I3C_MasterGetErrorStatusFlags(base);
-            result    = I3C_MasterCheckAndClearError(base, errStatus);
-            if (kStatus_Success != result)
-            {
-                return result;
-            }
-
-            if ((0UL != (status & (uint32_t)kI3C_MasterRxReadyFlag)) && (rxCount != 0U))
+            while (rxCount-- != 0U)
             {
                 rxBuffer[rxSize++] = (uint8_t)(base->MRDATAB & I3C_MRDATAB_VALUE_MASK);
             }
-        } while ((status & (uint32_t)kI3C_MasterControlDoneFlag) != (uint32_t)kI3C_MasterControlDoneFlag);
 
-        I3C_MasterClearStatusFlags(base, (uint32_t)kI3C_MasterControlDoneFlag);
-
-        if ((I3C_MasterGetState(base) == kI3C_MasterStateDaa) &&
+            if ((status & (uint32_t)kI3C_MasterControlDoneFlag) != 0U)
+            {
+                I3C_MasterClearStatusFlags(base, (uint32_t)kI3C_MasterControlDoneFlag);
+                mctrlDone = true;
+            }
+        }
+        else if ((I3C_MasterGetState(base) == kI3C_MasterStateDaa) &&
             (0UL != (I3C_MasterGetStatusFlags(base) & (uint32_t)kI3C_MasterBetweenFlag)))
         {
-            rxSize = 0;
-
             uint8_t validAddr = I3C_BusGetValidAddrSlot(i3cBus, 0x0);
             if (validAddr < I3C_BUS_MAX_ADDR)
             {
+                /* Assign the dynamic address. */
+                base->MWDATAB = validAddr;
+                /* Emit process DAA again. */
+                I3C_MasterEmitRequest(base, kI3C_RequestProcessDAA);
+              
                 i3c_device_t *newI3CDev = malloc(sizeof(i3c_device_t));
                 (void)memset(newI3CDev, 0, sizeof(i3c_device_t));
-
                 newI3CDev->info.dynamicAddr = validAddr;
                 newI3CDev->info.vendorID    = (((uint16_t)rxBuffer[0] << 8U | (uint16_t)rxBuffer[1]) & 0xFFFEU) >> 1U;
                 newI3CDev->info.partNumber  = ((uint32_t)rxBuffer[2] << 24U | (uint32_t)rxBuffer[3] << 16U |
                                               (uint32_t)rxBuffer[4] << 8U | (uint32_t)rxBuffer[5]);
                 newI3CDev->info.bcr         = rxBuffer[6];
                 newI3CDev->info.dcr         = rxBuffer[7];
-                base->MWDATAB               = validAddr;
-
                 I3C_BusAddI3CDev(i3cBus, newI3CDev);
-                /* Emit process DAA again. */
-                I3C_MasterEmitRequest(base, kI3C_RequestProcessDAA);
+
+                /* Ready to handle next device. */
+                mctrlDone = false;
+                rxSize    = 0;
             }
             else
             {
                 return kStatus_I3CBus_AddrSlotInvalid;
             }
+        }
+        else
+        {
+            /* Intentional empty */
         }
     } while ((status & (uint32_t)kI3C_MasterCompleteFlag) != (uint32_t)kI3C_MasterCompleteFlag);
 
@@ -432,7 +442,7 @@ static status_t I3C_MasterAdapterTransmitCCC(i3c_device_t *master, i3c_ccc_cmd_t
         xfer.dataSize       = cmd->dataSize;
         xfer.direction      = cmd->isRead ? kI3C_Read : kI3C_Write;
         xfer.busType        = kI3C_TypeI3CSdr;
-        xfer.flags          = (uint32_t)kI3C_TransferDefaultFlag;
+        xfer.flags          = (uint32_t)kI3C_TransferDisableRxTermFlag;
         result              = I3CMasterAdapterTransfer(base, &xfer, transMode);
         if (result != kStatus_Success)
         {
@@ -458,7 +468,7 @@ static status_t I3C_MasterAdapterTransmitCCC(i3c_device_t *master, i3c_ccc_cmd_t
         xfer.dataSize     = cmd->dataSize;
         xfer.direction    = cmd->isRead ? kI3C_Read : kI3C_Write;
         xfer.busType      = kI3C_TypeI3CSdr;
-        xfer.flags        = (uint32_t)kI3C_TransferRepeatedStartFlag;
+        xfer.flags        = (uint32_t)kI3C_TransferRepeatedStartFlag | kI3C_TransferDisableRxTermFlag;
         result            = I3CMasterAdapterTransfer(base, &xfer, transMode);
         if (result != kStatus_Success)
         {

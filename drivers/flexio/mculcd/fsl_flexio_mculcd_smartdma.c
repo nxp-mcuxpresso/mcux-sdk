@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2021,2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -195,6 +195,10 @@ status_t FLEXIO_MCULCD_TransferCreateHandleSMARTDMA(FLEXIO_MCULCD_Type *base,
     /* The shifter interrupt is used by the SMARTDMA. */
     FLEXIO_EnableShifterStatusInterrupts(base->flexioBase, (1UL << FLEXIO_MCULCD_SMARTDMA_TX_END_SHIFTER));
 
+#if (defined(SMARTDMA_USE_FLEXIO_SHIFTER_DMA) && SMARTDMA_USE_FLEXIO_SHIFTER_DMA)
+    FLEXIO_EnableShifterStatusDMA(base->flexioBase, 1UL, true);
+#endif
+
     return kStatus_Success;
 }
 
@@ -245,8 +249,12 @@ status_t FLEXIO_MCULCD_TransferSMARTDMA(FLEXIO_MCULCD_Type *base,
 
     /* Assert the nCS. */
     FLEXIO_MCULCD_StartTransfer(base);
-    /* Send the command. */
-    FLEXIO_MCULCD_WriteCommandBlocking(base, xfer->command);
+
+    if (!xfer->dataOnly)
+    {
+        /* Send the command. */
+        FLEXIO_MCULCD_WriteCommandBlocking(base, xfer->command);
+    }
 
     if (part1Len > 0U)
     {

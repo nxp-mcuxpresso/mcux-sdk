@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef _FSL_LPI2C_CMSIS_H_
-#define _FSL_LPI2C_CMSIS_H_
+#ifndef FSL_LPI2C_CMSIS_H_
+#define FSL_LPI2C_CMSIS_H_
 
 #include "fsl_common.h"
 #include "Driver_I2C.h"
@@ -68,4 +68,4 @@ extern ARM_DRIVER_I2C Driver_I2C6;
 #define I2C_FLAG_INIT   (1UL << 0)
 #define I2C_FLAG_POWER  (1UL << 1)
 
-#endif /* _FSL_LPI2C_CMSIS_H_ */
+#endif /* FSL_LPI2C_CMSIS_H_ */

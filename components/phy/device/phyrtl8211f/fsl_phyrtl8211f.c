@@ -37,9 +37,9 @@
 #define PHY_PAGE_INTR_PIN_REG  (0x16U)             /*!< The PHY interrupt pin setting register. */
 #define PHY_PAGE_INTR_PIN_MASK ((uint16_t)0x0020U) /*!< The PHY interrupt pin setting mask. */
 
-#define PHY_PAGE_INTR_ADDR (0xA42U) /*!< The register page including interrupt control setting. */
-#define PHY_INER_REG       (0x12U)  /*!< The PHY interrupt enable register. */
-#define PHY_INSR_REG       (0x1DU)  /*!< The PHY interrupt status register. */
+#define PHY_PAGE_INTR_ADDR (0xA42U)                /*!< The register page including interrupt control setting. */
+#define PHY_INER_REG       (0x12U)                 /*!< The PHY interrupt enable register. */
+#define PHY_INSR_REG       (0x1DU)                 /*!< The PHY interrupt status register. */
 
 /*! @brief MDIO MMD Devices .*/
 #define PHY_MDIO_MMD_PCS 3U

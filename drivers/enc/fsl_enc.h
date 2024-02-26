@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_ENC_H_
-#define _FSL_ENC_H_
+#ifndef FSL_ENC_H_
+#define FSL_ENC_H_
 
 #include "fsl_common.h"
 
@@ -18,7 +18,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define FSL_ENC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_ENC_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 
 /*!
  * @brief Interrupt enable/disable mask.
@@ -583,4 +583,4 @@ static inline uint16_t ENC_GetHoldPositionDifferencePeriodValue(ENC_Type *base)
 
 /* @} */
 
-#endif /* _FSL_ENC_H_ */
+#endif /* FSL_ENC_H_ */

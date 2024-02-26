@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_FLEXIO_SPI_EDMA_H_
-#define _FSL_FLEXIO_SPI_EDMA_H_
+#ifndef FSL_FLEXIO_SPI_EDMA_H_
+#define FSL_FLEXIO_SPI_EDMA_H_
 
 #include "fsl_flexio_spi.h"
 #include "fsl_edma.h"

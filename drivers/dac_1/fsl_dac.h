@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_DAC_H_
-#define _FSL_DAC_H_
+#ifndef FSL_DAC_H_
+#define FSL_DAC_H_
 
 #include "fsl_common.h"
 
@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief DAC driver version 2.1.1. */
-#define FSL_DAC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief DAC driver version 2.1.2. */
+#define FSL_DAC_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 /*!
@@ -439,4 +439,4 @@ static inline void DAC_DoSoftwareTriggerFIFO(LPDAC_Type *base)
 /*!
  * @}
  */
-#endif /* _FSL_DAC12_H_ */
+#endif /* FSL_DAC12_H_ */

@@ -29,8 +29,8 @@
 #define TRNG_USER_CONFIG_DEFAULT_OSC_DIV kTRNG_RingOscDiv4
 #elif (                                                                                                               \
     defined(K81F25615_SERIES) || defined(K32L3A60_cm4_SERIES) || defined(K32L3A60_cm0plus_SERIES) ||                  \
-    defined(MCXN546_cm33_core0_SERIES) || defined(MCXN546_cm33_core1_SERIES) || defined(MCXN548_cm33_core0_SERIES) || \
-    defined(MCXN548_cm33_core1_SERIES) || defined(MCXN945_cm33_core0_SERIES) || defined(MCXN945_cm33_core1_SERIES) || \
+    defined(MCXN546_cm33_core0_SERIES) || defined(MCXN546_cm33_core1_SERIES) || defined(MCXN547_cm33_core0_SERIES) || \
+    defined(MCXN547_cm33_core1_SERIES) || defined(MCXN945_cm33_core0_SERIES) || defined(MCXN945_cm33_core1_SERIES) || \
     defined(MCXN946_cm33_core0_SERIES) || defined(MCXN946_cm33_core1_SERIES) || defined(MCXN947_cm33_core0_SERIES) || \
     defined(MCXN947_cm33_core1_SERIES) || defined(MCXN948_cm33_core0_SERIES) || defined(MCXN948_cm33_core1_SERIES))
 #define TRNG_USER_CONFIG_DEFAULT_OSC_DIV kTRNG_RingOscDiv2
@@ -49,29 +49,38 @@
 
 /* RW610 specific settings for the TRNG */
 #define TRNG_USER_CONFIG_DEFAULT_LOCK             0
-#define TRNG_USER_CONFIG_DEFAULT_ENTROPY_DELAY    3200
-#define TRNG_USER_CONFIG_DEFAULT_SAMPLE_SIZE      256
-#define TRNG_USER_CONFIG_DEFAULT_SPARSE_BIT_LIMIT 63
+#define TRNG_USER_CONFIG_DEFAULT_ENTROPY_DELAY    20000
+#define TRNG_USER_CONFIG_DEFAULT_SAMPLE_SIZE      1024
+#define TRNG_USER_CONFIG_DEFAULT_SPARSE_BIT_LIMIT 0 // unused!
 #define TRNG_USER_CONFIG_DEFAULT_RETRY_COUNT      1
-#define TRNG_USER_CONFIG_DEFAULT_RUN_MAX_LIMIT    34
+#define TRNG_USER_CONFIG_DEFAULT_RUN_MAX_LIMIT    32
 
-#define TRNG_USER_CONFIG_DEFAULT_MONOBIT_MAXIMUM     171
-#define TRNG_USER_CONFIG_DEFAULT_MONOBIT_MINIMUM     (TRNG_USER_CONFIG_DEFAULT_MONOBIT_MAXIMUM - 86)
-#define TRNG_USER_CONFIG_DEFAULT_RUNBIT1_MAXIMUM     63
-#define TRNG_USER_CONFIG_DEFAULT_RUNBIT1_MINIMUM     (TRNG_USER_CONFIG_DEFAULT_RUNBIT1_MAXIMUM - 56)
-#define TRNG_USER_CONFIG_DEFAULT_RUNBIT2_MAXIMUM     38
-#define TRNG_USER_CONFIG_DEFAULT_RUNBIT2_MINIMUM     (TRNG_USER_CONFIG_DEFAULT_RUNBIT2_MAXIMUM - 38)
-#define TRNG_USER_CONFIG_DEFAULT_RUNBIT3_MAXIMUM     26
-#define TRNG_USER_CONFIG_DEFAULT_RUNBIT3_MINIMUM     (TRNG_USER_CONFIG_DEFAULT_RUNBIT3_MAXIMUM - 26)
-#define TRNG_USER_CONFIG_DEFAULT_RUNBIT4_MAXIMUM     75
-#define TRNG_USER_CONFIG_DEFAULT_RUNBIT4_MINIMUM     (TRNG_USER_CONFIG_DEFAULT_RUNBIT4_MAXIMUM - 64)
-#define TRNG_USER_CONFIG_DEFAULT_RUNBIT5_MAXIMUM     47
-#define TRNG_USER_CONFIG_DEFAULT_RUNBIT5_MINIMUM     (TRNG_USER_CONFIG_DEFAULT_RUNBIT5_MAXIMUM - 46)
-#define TRNG_USER_CONFIG_DEFAULT_RUNBIT6PLUS_MAXIMUM 47
-#define TRNG_USER_CONFIG_DEFAULT_RUNBIT6PLUS_MINIMUM (TRNG_USER_CONFIG_DEFAULT_RUNBIT6PLUS_MAXIMUM - 46)
-#define TRNG_USER_CONFIG_DEFAULT_POKER_MAXIMUM       26912
-#define TRNG_USER_CONFIG_DEFAULT_POKER_MINIMUM       (TRNG_USER_CONFIG_DEFAULT_POKER_MAXIMUM - 2467)
+#define TRNG_USER_CONFIG_DEFAULT_MONOBIT_MAXIMUM     596
+#define TRNG_USER_CONFIG_DEFAULT_MONOBIT_MINIMUM     (TRNG_USER_CONFIG_DEFAULT_MONOBIT_MAXIMUM - 169)
+#define TRNG_USER_CONFIG_DEFAULT_RUNBIT1_MAXIMUM     187
+#define TRNG_USER_CONFIG_DEFAULT_RUNBIT1_MINIMUM     (TRNG_USER_CONFIG_DEFAULT_RUNBIT1_MAXIMUM - 112)
+#define TRNG_USER_CONFIG_DEFAULT_RUNBIT2_MAXIMUM     105
+#define TRNG_USER_CONFIG_DEFAULT_RUNBIT2_MINIMUM     (TRNG_USER_CONFIG_DEFAULT_RUNBIT2_MAXIMUM - 77)
+#define TRNG_USER_CONFIG_DEFAULT_RUNBIT3_MAXIMUM     97
+#define TRNG_USER_CONFIG_DEFAULT_RUNBIT3_MINIMUM     (TRNG_USER_CONFIG_DEFAULT_RUNBIT3_MAXIMUM - 64)
+// The following ones are unused, RW61x RNG does not support those.
+#define TRNG_USER_CONFIG_DEFAULT_RUNBIT4_MAXIMUM     0
+#define TRNG_USER_CONFIG_DEFAULT_RUNBIT4_MINIMUM     0
+#define TRNG_USER_CONFIG_DEFAULT_RUNBIT5_MAXIMUM     0
+#define TRNG_USER_CONFIG_DEFAULT_RUNBIT5_MINIMUM     0
+#define TRNG_USER_CONFIG_DEFAULT_RUNBIT6PLUS_MAXIMUM 0
+#define TRNG_USER_CONFIG_DEFAULT_RUNBIT6PLUS_MINIMUM 0
+#define TRNG_USER_CONFIG_DEFAULT_POKER_MAXIMUM       0
+#define TRNG_USER_CONFIG_DEFAULT_POKER_MINIMUM       0
+      
+#define TRNG_USER_CONFIG_DEFAULT_OSCILLATOR_MODE  kTRNG_DualOscillatorMode
+#define TRNG_USER_CONFIG_DEFAULT_OSC2_DIV         kTRNG_RingOscDiv0
 
+#define FSL_FEATURE_TRNG_FORCE_USER_CONFIG_DEFAULT_FREQUENCY_MINIMUM 1
+#define FSL_FEATURE_TRNG_USER_CONFIG_DEFAULT_FREQUENCY_MINIMUM_VALUE 20008
+#define FSL_FEATURE_TRNG_FORCE_USER_CONFIG_DEFAULT_FREQUENCY_MAXIMUM 1
+#define FSL_FEATURE_TRNG_USER_CONFIG_DEFAULT_FREQUENCY_MAXIMUM_VALUE 31952
+      
 #else
 
 #ifndef TRNG_ENT_COUNT
@@ -101,6 +110,12 @@
 #define TRNG_USER_CONFIG_DEFAULT_RUNBIT6PLUS_MINIMUM (TRNG_USER_CONFIG_DEFAULT_RUNBIT6PLUS_MAXIMUM - 17)
 #define TRNG_USER_CONFIG_DEFAULT_POKER_MAXIMUM       1600
 #define TRNG_USER_CONFIG_DEFAULT_POKER_MINIMUM       (TRNG_USER_CONFIG_DEFAULT_POKER_MAXIMUM - 570)
+
+// Only applicable for TRNG implementations that have two oscillators.
+#if defined(FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS) && (FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS > 0)
+#define TRNG_USER_CONFIG_DEFAULT_OSCILLATOR_MODE  kTRNG_SingleOscillatorModeOsc1
+#define TRNG_USER_CONFIG_DEFAULT_OSC2_DIV         kTRNG_RingOscDiv4
+#endif
 
 #endif
 
@@ -1312,36 +1327,7 @@ static uint32_t trng_GetInstance(TRNG_Type *base)
  * brief Initializes the user configuration structure to default values.
  *
  * This function initializes the configuration structure to default values. The default
- * values are as follows.
- * code
- *     userConfig->lock = 0;
- *     userConfig->clockMode = kTRNG_ClockModeRingOscillator;
- *     userConfig->ringOscDiv = kTRNG_RingOscDiv0;  Or  to other kTRNG_RingOscDiv[2|8] depending on the platform.
- *     userConfig->sampleMode = kTRNG_SampleModeRaw;
- *     userConfig->entropyDelay = 3200;
- *     userConfig->sampleSize = 2500;
- *     userConfig->sparseBitLimit = TRNG_USER_CONFIG_DEFAULT_SPARSE_BIT_LIMIT;
- *     userConfig->retryCount = 63;
- *     userConfig->longRunMaxLimit = 34;
- *     userConfig->monobitLimit.maximum = 1384;
- *     userConfig->monobitLimit.minimum = 1116;
- *     userConfig->runBit1Limit.maximum = 405;
- *     userConfig->runBit1Limit.minimum = 227;
- *     userConfig->runBit2Limit.maximum = 220;
- *     userConfig->runBit2Limit.minimum = 98;
- *     userConfig->runBit3Limit.maximum = 125;
- *     userConfig->runBit3Limit.minimum = 37;
- *     userConfig->runBit4Limit.maximum = 75;
- *     userConfig->runBit4Limit.minimum = 11;
- *     userConfig->runBit5Limit.maximum = 47;
- *     userConfig->runBit5Limit.minimum = 1;
- *     userConfig->runBit6PlusLimit.maximum = 47;
- *     userConfig->runBit6PlusLimit.minimum = 1;
- *     userConfig->pokerLimit.maximum = 26912;
- *     userConfig->pokerLimit.minimum = 24445;
- *     userConfig->frequencyCountLimit.maximum = 25600;
- *     userConfig->frequencyCountLimit.minimum = 1600;
- * endcode
+ * values are platform dependent.
  *
  * param userConfig   User configuration structure.
  * return If successful, returns the kStatus_TRNG_Success. Otherwise, it returns an error.
@@ -1361,8 +1347,8 @@ status_t TRNG_GetDefaultConfig(trng_config_t *userConfig)
         userConfig->ringOscDiv = TRNG_USER_CONFIG_DEFAULT_OSC_DIV;
         userConfig->sampleMode = kTRNG_SampleModeRaw;
 #if defined(FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS) && (FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS > 0)
-        userConfig->oscillatorMode = kTRNG_SingleOscillatorModeOsc1;
-        userConfig->ringOsc2Div    = kTRNG_RingOscDiv4;
+        userConfig->oscillatorMode = TRNG_USER_CONFIG_DEFAULT_OSCILLATOR_MODE;
+        userConfig->ringOsc2Div    = TRNG_USER_CONFIG_DEFAULT_OSC2_DIV;
 #endif /* FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS */
         /* Seed control*/
         userConfig->entropyDelay   = TRNG_USER_CONFIG_DEFAULT_ENTROPY_DELAY;

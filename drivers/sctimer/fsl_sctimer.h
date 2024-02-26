@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_SCTIMER_H_
-#define _FSL_SCTIMER_H_
+#ifndef FSL_SCTIMER_H_
+#define FSL_SCTIMER_H_
 
 #include "fsl_common.h"
 
@@ -1254,4 +1254,4 @@ void SCTIMER_EventHandleIRQ(SCT_Type *base);
 
 /*! @}*/
 
-#endif /* _FSL_SCTIMER_H_ */
+#endif /* FSL_SCTIMER_H_ */

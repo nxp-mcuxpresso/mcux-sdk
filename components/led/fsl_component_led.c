@@ -19,15 +19,10 @@
  ******************************************************************************/
 #if defined(OSA_USED)
 #include "fsl_os_abstraction.h"
-#if (defined(USE_RTOS) && (USE_RTOS > 0U))
 #define LED_ENTER_CRITICAL() \
     OSA_SR_ALLOC();          \
     OSA_ENTER_CRITICAL()
 #define LED_EXIT_CRITICAL() OSA_EXIT_CRITICAL()
-#else
-#define LED_ENTER_CRITICAL()
-#define LED_EXIT_CRITICAL()
-#endif
 #else
 #define LED_ENTER_CRITICAL() uint32_t regPrimask = DisableGlobalIRQ();
 #define LED_EXIT_CRITICAL()  EnableGlobalIRQ(regPrimask);
@@ -36,8 +31,8 @@
 /* LED control type enumeration */
 typedef enum _led_control_type
 {
-    kLED_TurnOffOn = 0x01U, /*!< Turn Off or on*/
-    kLED_Flash,             /*!< Flash */
+    kLED_TurnOffOn = 0x01U,  /*!< Turn Off or on*/
+    kLED_Flash,              /*!< Flash */
 #if (defined(LED_COLOR_WHEEL_ENABLEMENT) && (LED_COLOR_WHEEL_ENABLEMENT > 0U))
     kLED_TricolorCycleFlash, /*!< Tricolor Cycle Flash */
     kLED_CycleFlash,         /*!< Cycle Flash */
@@ -220,7 +215,7 @@ static void LED_TimerEvent(void *param)
         {
             switch (ledState->controlType)
             {
-                case (uint16_t)kLED_Flash: /*!< Flash */
+                case (uint16_t)kLED_Flash:              /*!< Flash */
 #if (defined(LED_COLOR_WHEEL_ENABLEMENT) && (LED_COLOR_WHEEL_ENABLEMENT > 0U))
                 case (uint16_t)kLED_TricolorCycleFlash: /*!< Tricolor Cycle Flash */
                 case (uint16_t)kLED_CycleFlash:         /*!< Cycle Flash */
@@ -353,7 +348,7 @@ led_status_t LED_Init(led_handle_t ledHandle, const led_config_t *ledConfig)
     /* The configure parameters check only work on debug mode in order to reduce code size. */
 #ifdef NDEBUG
 #else  /* NDEBUG */
-    uint8_t rgbFlag = 0;
+    uint8_t rgbFlag        = 0;
     uint8_t rgbDimmingFlag = 0;
 #endif /* NDEBUG */
 #endif
@@ -435,19 +430,19 @@ led_status_t LED_Init(led_handle_t ledHandle, const led_config_t *ledConfig)
             hal_pwm_setup_config_t setupConfig;
 #if (defined(LED_USE_CONFIGURE_STRUCTURE) && (LED_USE_CONFIGURE_STRUCTURE > 0U))
 #else
-            ledState->pins[i].config.dimmingEnable = ledRgbConfigPin[i].dimmingEnable;
-            ledState->pins[i].dimming.instance = ledRgbConfigPin[i].dimming.instance;
-            ledState->pins[i].dimming.channel = ledRgbConfigPin[i].dimming.channel;
+            ledState->pins[i].config.dimmingEnable    = ledRgbConfigPin[i].dimmingEnable;
+            ledState->pins[i].dimming.instance        = ledRgbConfigPin[i].dimming.instance;
+            ledState->pins[i].dimming.channel         = ledRgbConfigPin[i].dimming.channel;
             ledState->pins[i].dimming.pinStateDefault = ledRgbConfigPin[i].dimming.pinStateDefault;
 #endif
             (void)HAL_PwmInit((hal_pwm_handle_t)ledState->pwmHandle[i], ledRgbConfigPin[i].dimming.instance,
                               ledRgbConfigPin[i].dimming.sourceClock);
             setupConfig.dutyCyclePercent = 0;
             setupConfig.level            = (0U != ledRgbConfigPin[i].dimming.pinStateDefault) ?
-                                    (hal_pwm_level_select_t)kHAL_PwmLowTrue :
-                                    (hal_pwm_level_select_t)kHAL_PwmHighTrue;
-            setupConfig.mode       = kHAL_EdgeAlignedPwm;
-            setupConfig.pwmFreq_Hz = 1000U;
+                                               (hal_pwm_level_select_t)kHAL_PwmLowTrue :
+                                               (hal_pwm_level_select_t)kHAL_PwmHighTrue;
+            setupConfig.mode             = kHAL_EdgeAlignedPwm;
+            setupConfig.pwmFreq_Hz       = 1000U;
             (void)HAL_PwmSetupPwm(ledState->pwmHandle[i], ledRgbConfigPin[i].dimming.channel, &setupConfig);
         }
         else

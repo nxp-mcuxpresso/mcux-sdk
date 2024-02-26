@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_PDM_EDMA_H_
-#define _FSL_PDM_EDMA_H_
+#ifndef FSL_PDM_EDMA_H_
+#define FSL_PDM_EDMA_H_
 
 #include "fsl_edma.h"
 #include "fsl_pdm.h"

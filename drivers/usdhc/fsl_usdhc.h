@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_USDHC_H_
-#define _FSL_USDHC_H_
+#ifndef FSL_USDHC_H_
+#define FSL_USDHC_H_
 
 #include "fsl_common.h"
 
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Driver version 2.8.2. */
-#define FSL_USDHC_DRIVER_VERSION (MAKE_VERSION(2U, 8U, 2U))
+/*! @brief Driver version 2.8.4. */
+#define FSL_USDHC_DRIVER_VERSION (MAKE_VERSION(2U, 8U, 4U))
 /*@}*/
 
 /*! @brief Maximum block count can be set one time */
@@ -60,7 +60,9 @@ enum
     kUSDHC_SupportSuspendResumeFlag = USDHC_HOST_CTRL_CAP_SRS_MASK,   /*!< Support suspend/resume. */
     kUSDHC_SupportV330Flag          = USDHC_HOST_CTRL_CAP_VS33_MASK,  /*!< Support voltage 3.3V. */
     kUSDHC_SupportV300Flag          = USDHC_HOST_CTRL_CAP_VS30_MASK,  /*!< Support voltage 3.0V. */
+#if !(defined(FSL_FEATURE_USDHC_HAS_NO_VS18) && FSL_FEATURE_USDHC_HAS_NO_VS18)
     kUSDHC_SupportV180Flag          = USDHC_HOST_CTRL_CAP_VS18_MASK,  /*!< Support voltage 1.8V. */
+#endif
     kUSDHC_Support4BitFlag          = (USDHC_HOST_CTRL_CAP_MBL_SHIFT << 0U),
     /*!< Flag in HTCAPBLT_MBL's position, supporting 4-bit mode. */
     kUSDHC_Support8BitFlag = (USDHC_HOST_CTRL_CAP_MBL_SHIFT << 1U),
@@ -1700,4 +1702,4 @@ void USDHC_TransferHandleIRQ(USDHC_Type *base, usdhc_handle_t *handle);
 #endif
 /*! @} */
 
-#endif /* _FSL_USDHC_H_*/
+#endif /* FSL_USDHC_H_*/

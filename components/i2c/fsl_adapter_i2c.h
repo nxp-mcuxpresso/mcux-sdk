@@ -232,7 +232,7 @@ extern "C" {
  * #HAL_I2C_MASTER_HANDLE_DEFINE(handle);
  * or
  * uint32_t handle[((HAL_I2C_MASTER_HANDLE_SIZE + sizeof(uint32_t) - 1U) / sizeof(uint32_t))];
- * @param config A pointer to the master configuration structure
+ * @param halI2cConfig A pointer to the master configuration structure
  * @retval kStatus_HAL_I2cError An error occurred.
  * @retval kStatus_HAL_I2cSuccess i2c master initialization succeed
  */
@@ -265,7 +265,7 @@ hal_i2c_status_t HAL_I2cMasterInit(hal_i2c_master_handle_t handle, const hal_i2c
  * #HAL_I2C_SLAVE_HANDLE_DEFINE(handle);
  * or
  * uint32_t handle[((HAL_I2C_SLAVE_HANDLE_SIZE + sizeof(uint32_t) - 1U) / sizeof(uint32_t))];
- * @param config A pointer to the slave configuration structure
+ * @param halI2cConfig A pointer to the slave configuration structure
  * @retval kStatus_HAL_I2cError An error occurred.
  * @retval kStatus_HAL_I2cSuccess i2c slave initialization succeed
  */

@@ -847,10 +847,10 @@ typedef struct _sgtl_audio_format
 /*! @brief Initailize structure of sgtl5000 */
 typedef struct _sgtl_config
 {
-    sgtl_route_t route;         /*!< Audio data route.*/
-    sgtl_protocol_t bus;        /*!< Audio transfer protocol */
-    bool master_slave;          /*!< Master or slave. True means master, false means slave. */
-    sgtl_audio_format_t format; /*!< audio format */
+    sgtl_route_t route;           /*!< Audio data route.*/
+    sgtl_protocol_t bus;          /*!< Audio transfer protocol */
+    bool master_slave;            /*!< Master or slave. True means master, false means slave. */
+    sgtl_audio_format_t format;   /*!< audio format */
 
     uint8_t slaveAddress;         /*!< code device slave address */
     codec_i2c_config_t i2cConfig; /*!< i2c bus configuration */

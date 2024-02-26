@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_FLEXCAN_H_
-#define _FSL_FLEXCAN_H_
+#ifndef FSL_FLEXCAN_H_
+#define FSL_FLEXCAN_H_
 
 #include "fsl_common.h"
 
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FlexCAN driver version. */
-#define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 11, 1))
+#define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 11, 4))
 /*@}*/
 
 #if !(defined(FLEXCAN_WAIT_TIMEOUT) && FLEXCAN_WAIT_TIMEOUT)
@@ -231,7 +231,7 @@
 #endif
 /*! @brief FlexCAN Enhanced Rx FIFO base address helper macro. */
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
-#define E_RX_FIFO(base) ((uint32_t)(base) + 0x2000U)
+#define E_RX_FIFO(base) ((uintptr_t)(base) + 0x2000U)
 #else
 #define FLEXCAN_MEMORY_ENHANCED_RX_FIFO_INIT_FLAG (0U)
 #endif
@@ -2357,4 +2357,4 @@ void FLEXCAN_TransferHandleIRQ(CAN_Type *base, flexcan_handle_t *handle);
 
 /*! @}*/
 
-#endif /* _FSL_FLEXCAN_H_ */
+#endif /* FSL_FLEXCAN_H_ */

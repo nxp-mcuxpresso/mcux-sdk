@@ -80,8 +80,8 @@ typedef struct _serial_spi_master_config
     bool enableMaster;                      /*!< Enable spi at initialization time */
     uint32_t configFlags;                   /*!< Transfer config Flags */
 #if (defined(HAL_SPI_MASTER_DMA_ENABLE) && (HAL_SPI_MASTER_DMA_ENABLE > 0U))
-    bool enableDMA;  /*!< Enable DMA at initialization time */
-    void *dmaConfig; /*!< DMA configure pointer */
+    bool enableDMA;                         /*!< Enable DMA at initialization time */
+    void *dmaConfig;                        /*!< DMA configure pointer */
 #endif
 } serial_spi_master_config_t;
 
@@ -95,8 +95,8 @@ typedef struct _serial_spi_slave_config
     bool enableSlave;                    /*!< Enable spi at initialization time */
     uint32_t configFlags;                /*!< Transfer config Flags */
 #if (defined(HAL_SPI_SLAVE_DMA_ENABLE) && (HAL_SPI_SLAVE_DMA_ENABLE > 0U))
-    bool enableDMA;  /*!< Enable DMA at initialization time */
-    void *dmaConfig; /*!< DMA configure pointer */
+    bool enableDMA;                      /*!< Enable DMA at initialization time */
+    void *dmaConfig;                     /*!< DMA configure pointer */
 #endif
 } serial_spi_slave_config_t;
 
