@@ -266,6 +266,25 @@ typedef struct _smartdma_rgb565_rgb888_param
     uint32_t *smartdma_stack;
 } smartdma_rgb565_rgb888_param_t;
 
+/*!
+ * @brief Parameter for all supported APIs.
+ */
+typedef union
+{
+    /*! Parameter for flexio MCULCD. */
+    smartdma_flexio_mculcd_param_t flexioMcuLcdParam;
+    /*! Parameter for flexio MCULCD with one shift buffer. */
+    smartdma_flexio_onelane_mculcd_param_t flexioOneLineMcuLcdParam;
+    /*! Parameter for MIPI DSI functions. */
+    smartdma_dsi_param_t dsiParam;
+    /*! Parameter for MIPI DSI 2D functions. */
+    smartdma_dsi_2d_param_t dsi2DParam;
+    /*! Parameter for MIPI DSI checker board functions. */
+    smartdma_dsi_checkerboard_param_t dsiCheckerBoardParam;
+    /*! Parameter for RGB565_RGB888 convertion. */
+    smartdma_rgb565_rgb888_param_t rgb565_rgb888Param;
+} smartdma_param_t;
+
 typedef struct
 {
     uint8_t RESERVED_0[32];
