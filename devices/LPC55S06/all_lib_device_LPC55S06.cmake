@@ -130,7 +130,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_rtt_LPC55S06)
 #    include(driver_flexcomm_usart_freertos)
 #    include(middleware_azure_rtos_lx)
-#    include(CMSIS_Device_API_OSTick)
+#    include(CMSIS_Device_API_OSTick OPTIONAL)
 #    include(driver_casper)
 #    include(driver_reset)
 #    include(driver_ft6x06)
