@@ -31,7 +31,6 @@
 #include <mcuxClEls_Types.h> // Common types
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
-#include <platform_specific_headers.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,32 +48,6 @@ extern "C" {
 /**********************************************
  * CONSTANTS
  **********************************************/
-
-/**
- * @def MCUXCLELS_HW_VERSION
- * @brief Compatible ELS hardware IP version for the CLNS release that this header is part of.
- */
-#ifndef MCUXCL_FEATURE_ELS_GET_FW_VERSION
-#define MCUXCLELS_HW_VERSION ((mcuxClEls_HwVersion_t) { \
-        .bits = { \
-            .revision = (uint32_t) ELS_HW_VERSION_REVISION, \
-            .minor = (uint32_t) ELS_HW_VERSION_MINOR, \
-            .major = (uint32_t) ELS_HW_VERSION_MAJOR, \
-            .level = (uint32_t) ELS_HW_VERSION_LEVEL \
-        } \
-    })
-#else /* MCUXCL_FEATURE_ELS_GET_FW_VERSION */
-#define MCUXCLELS_HW_VERSION ((mcuxClEls_HwVersion_t) { \
-        .bits = { \
-            .revision = (uint32_t) ELS_HW_VERSION_REVISION, \
-            .minor = (uint32_t) ELS_HW_VERSION_MINOR, \
-            .major = (uint32_t) ELS_HW_VERSION_MAJOR, \
-            .fw_revision = (uint32_t) ELS_HW_VERSION_FW_REVISION, \
-            .fw_minor = (uint32_t) ELS_HW_VERSION_FW_MINOR, \
-            .fw_major = (uint32_t) ELS_HW_VERSION_FW_MAJOR \
-        } \
-    })
-#endif /* MCUXCL_FEATURE_ELS_GET_FW_VERSION */
 
 #ifdef MCUXCL_FEATURE_ELS_DMA_FINAL_ADDRESS_READBACK
   #define MCUXCLELS_DMA_READBACK_PROTECTION_TOKEN MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_CompareDmaFinalOutputAddress)
@@ -415,8 +388,7 @@ typedef union
 /**
  * @brief Determines the version of the underlying ELS hardware IP.
  *
- * @attention This header was delivered as part of a CLNS release which is compatible with a specific ELS hardware IP version,
- *            which is defined by the macro #MCUXCLELS_HW_VERSION.
+ * @attention This header was delivered as part of a CLNS release which is compatible with a specific ELS hardware IP version.
  *
  * @param[out] result Pointer which will be filled with the ELS hardware version
  * @if (MCUXCL_FEATURE_CSSL_FP_USE_SECURE_COUNTER && MCUXCL_FEATURE_CSSL_SC_USE_SW_LOCAL)
@@ -693,7 +665,7 @@ MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_GetError
 /**
  * @brief Set the random start delay for AES based operations. This impacts mcuxClEls_Aead_*, mcuxClEls_Cipher_*, mcuxClEls_Cmac_*, ncpClEls_Ckdf_*, mcuxClEls_KeyImport_Async, mcuxClEls_KeyExport_Async
  *
- * @param[in] delay Define the max random start delay. Acceptable values are a power of 2 minus one, starting from 0 to 1023 (0, 1, 3, 7, ..., 1023).
+ * @param[in] startDelay Define the max random start delay. Acceptable values are a power of 2 minus one, starting from 0 to 1023 (0, 1, 3, 7, ..., 1023).
  *
  * @retval #MCUXCLELS_STATUS_OK if the operation was successful
  *
@@ -705,13 +677,13 @@ MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_GetError
  */
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEls_SetRandomStartDelay)
 MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_SetRandomStartDelay(
-    uint32_t delay
+    uint32_t startDelay
     );
 
 /**
  * @brief Get the random start delay for AES based operations.
  *
- * @param[out] delay Pointer to store random start delay configuration.
+ * @param[out] startDelay Pointer to store random start delay configuration.
  *
  * @retval #MCUXCLELS_STATUS_OK if the operation was successful
  *
@@ -723,7 +695,7 @@ MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_SetRando
  */
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEls_GetRandomStartDelay)
 MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_GetRandomStartDelay(
-    uint32_t * delay
+    uint32_t * startDelay
     );
 
 #ifdef MCUXCL_FEATURE_ELS_LOCKING

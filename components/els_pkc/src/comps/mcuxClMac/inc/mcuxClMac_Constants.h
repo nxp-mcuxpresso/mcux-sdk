@@ -28,12 +28,15 @@
  * @{
  */
 /* TODO CLNS-8684: Unionize and describe return codes */
-#define MCUXCLMAC_STATUS_ERROR           ((mcuxClMac_Status_t) 0x08885330u)
-#define MCUXCLMAC_STATUS_FAILURE         ((mcuxClMac_Status_t) 0x08885334u)
-#define MCUXCLMAC_STATUS_INVALID_PARAM   ((mcuxClMac_Status_t) 0x088853F8u)
-#define MCUXCLMAC_STATUS_FAULT_ATTACK    ((mcuxClMac_Status_t) 0x0888F0F0u)
-#define MCUXCLMAC_STATUS_OK              ((mcuxClMac_Status_t) 0x08882E03u)
-#define MCUXCLMAC_STATUS_COMPARE_NOK     ((mcuxClMac_Status_t) 0x088853FCu)
+#define MCUXCLMAC_STATUS_ERROR                     ((mcuxClMac_Status_t) 0x08885330u)
+#define MCUXCLMAC_STATUS_FAILURE                   ((mcuxClMac_Status_t) 0x08885334u)
+#define MCUXCLMAC_STATUS_INVALID_PARAM             ((mcuxClMac_Status_t) 0x088853F8u)
+#define MCUXCLMAC_STATUS_FAULT_ATTACK              ((mcuxClMac_Status_t) 0x0888F0F0u)
+#define MCUXCLMAC_STATUS_OK                        ((mcuxClMac_Status_t) 0x08882E03u)
+#define MCUXCLMAC_STATUS_COMPARE_NOK               ((mcuxClMac_Status_t) 0x088853FCu)
+#define MCUXCLMAC_STATUS_JOB_STARTED               ((mcuxClMac_Status_t) 0x08882E47u)
+#define MCUXCLMAC_STATUS_JOB_COMPLETED             ((mcuxClMac_Status_t) 0x08882E8Bu)
+#define MCUXCLMAC_STATUS_JOB_COMPLETED_COMPARE_NOK ((mcuxClMac_Status_t) 0x088853F4u)
 /** @}*/
 
 #endif /* MCUXCLMAC_CONSTANTS_H_ */

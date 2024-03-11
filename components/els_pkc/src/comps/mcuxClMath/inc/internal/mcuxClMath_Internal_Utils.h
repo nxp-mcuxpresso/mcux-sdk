@@ -12,7 +12,7 @@
 /*--------------------------------------------------------------------------*/
 
 /**
- * @file  mcuxClMath_Utils_Math.h
+ * @file  mcuxClMath_Internal_Utils.h
  * @brief platform independent abstraction over math related builtin functions
  */
 
@@ -20,6 +20,7 @@
 #define MCUXCLMATH_INTERNAL_UTILS_H_
 
 #include <mcuxClCore_Platform.h>
+#include <platform_specific_headers.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,7 +34,7 @@ MCUX_CSSL_FP_FUNCTION_DEF(mcuxClMath_CountLeadingZerosWord)
 static inline uint32_t mcuxClMath_CountLeadingZerosWord(uint32_t value)
 {
 #ifdef __CLZ
-	return __CLZ(value);
+    return __CLZ(value);
 #else
     return (uint32_t)__builtin_clz(value);
 #endif
@@ -41,24 +42,36 @@ static inline uint32_t mcuxClMath_CountLeadingZerosWord(uint32_t value)
 
 /*
  * Count trailing zeros of non-zero value.
- * If the value is 0, the result is undefined.
+ * In case the value is 0,
+ * the result might be undefined if using compiler built-in function;
+ * or 32 if using the software implementation.
+ */
+/**
+ * [DESIGN]
+ * The software implementation counts the trailing 1 in inverse of input,
+ * by checking the LSBit and right-shifting the inverse in a loop, until
+ * any 0 bit is right-shifted to LSBit. Since the right-shifting will set
+ * MSBit 0, the loop will execute not more than 32 iterations.
  */
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClMath_CountTrailingZeroesWord)
 static inline uint32_t mcuxClMath_CountTrailingZeroesWord(uint32_t value)
 {
 #if defined(__CLZ) && defined(__RBIT)
-  return  __CLZ(__RBIT(value));
+    return  __CLZ(__RBIT(value));
 #else
-  uint32_t zeroes = 0u;
-  uint32_t valueShifted = value;
-  uint32_t lsb = valueShifted & 0x01u;
-  while((lsb == 0u) && (zeroes < 32u) )
-  {
-    zeroes++;
-    valueShifted >>= 1u;
-    lsb = valueShifted & 0x01u;
-  }
-  return zeroes;
+    uint32_t zeroes = 0u;
+    uint32_t inverseValue = ~value;
+
+    while (1u == (1u & inverseValue))
+    {
+        MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_OVERFLOW("This loop executes up to 32 iterations, \
+                because MSBit is cleared when right-shifting unsigned inverseValue.")
+        zeroes++;
+        MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_OVERFLOW()
+        inverseValue >>= 1u;
+    }
+
+    return zeroes;
 #endif
 }
 

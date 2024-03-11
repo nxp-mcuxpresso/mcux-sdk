@@ -39,6 +39,17 @@ MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 
 
 
+/**
+ * @brief Sha-1 algorithm descriptor
+ *        Sha-1 hash calculation using an underlying software implementation of SHA-1
+ */
+extern const mcuxClHash_AlgorithmDescriptor_t mcuxClHash_AlgorithmDescriptor_C_Sha1;
+
+/**
+ * @brief Sha-1 algorithm
+ *        Sha-1 hash calculation using an underlying software implementation of SHA-1
+ */
+static mcuxClHash_Algo_t mcuxClHash_Algorithm_Sha1 = &mcuxClHash_AlgorithmDescriptor_C_Sha1;
 
 
 
@@ -46,6 +57,23 @@ MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 
 
 
+
+#ifdef MCUXCL_FEATURE_ELS_SHA_DIRECT
+
+/**
+ * @brief Sha-224 direct algorithm descriptor
+ *        Sha-224 hash calculation using the SHA-direct feature of ELS, it does not support RTF.
+ *        SHA-direct mode has to be enabled prior to using this algorithm
+ */
+extern const mcuxClHash_AlgorithmDescriptor_t mcuxClHash_AlgorithmDescriptor_Sha224_direct;
+
+/**
+ * @brief Sha-224 direct algorithm
+ *        Sha-224 hash calculation using the SHA-direct feature of ELS, it does not support RTF.
+ *        SHA-direct mode has to be enabled prior to using this algorithm
+ */
+static mcuxClHash_Algo_t mcuxClHash_Algorithm_Sha224_direct = &mcuxClHash_AlgorithmDescriptor_Sha224_direct;
+#endif /* MCUXCL_FEATURE_ELS_SHA_DIRECT */
 
 /**
  * @brief Sha-224 algorithm descriptor
@@ -61,6 +89,22 @@ extern const mcuxClHash_AlgorithmDescriptor_t mcuxClHash_AlgorithmDescriptor_Sha
  */
 static mcuxClHash_Algo_t mcuxClHash_Algorithm_Sha224 = &mcuxClHash_AlgorithmDescriptor_Sha224;
 
+#ifdef MCUXCL_FEATURE_ELS_SHA_DIRECT
+
+/**
+ * @brief Sha-256 direct algorithm descriptor
+ *        Sha-256 hash calculation using the SHA-direct feature of ELS, it does not support RTF.
+ *        SHA-direct mode has to be enabled prior to using this algorithm
+ */
+extern const mcuxClHash_AlgorithmDescriptor_t mcuxClHash_AlgorithmDescriptor_Sha256_direct;
+
+/**
+ * @brief Sha-256 direct algorithm
+ *        Sha-256 hash calculation using the SHA-direct feature of ELS, it does not support RTF.
+ *        SHA-direct mode has to be enabled prior to using this algorithm
+ */
+static mcuxClHash_Algo_t mcuxClHash_Algorithm_Sha256_direct = &mcuxClHash_AlgorithmDescriptor_Sha256_direct;
+#endif /* MCUXCL_FEATURE_ELS_SHA_DIRECT */
 
 /**
  * @brief Sha-256 algorithm descriptor
@@ -76,6 +120,22 @@ extern const mcuxClHash_AlgorithmDescriptor_t mcuxClHash_AlgorithmDescriptor_Sha
  */
 static mcuxClHash_Algo_t mcuxClHash_Algorithm_Sha256 = &mcuxClHash_AlgorithmDescriptor_Sha256;
 
+#ifdef MCUXCL_FEATURE_ELS_SHA_DIRECT
+
+/**
+ * @brief Sha-384 direct algorithm descriptor
+ *        Sha-384 hash calculation using the SHA-direct feature of ELS, it does not support RTF.
+ *        SHA-direct mode has to be enabled prior to using this algorithm
+ */
+extern const mcuxClHash_AlgorithmDescriptor_t mcuxClHash_AlgorithmDescriptor_Sha384_direct;
+
+/**
+ * @brief Sha-384 direct algorithm
+ *        Sha-384 hash calculation using the SHA-direct feature of ELS, it does not support RTF.
+ *        SHA-direct mode has to be enabled prior to using this algorithm
+ */
+static mcuxClHash_Algo_t mcuxClHash_Algorithm_Sha384_direct = &mcuxClHash_AlgorithmDescriptor_Sha384_direct;
+#endif /* MCUXCL_FEATURE_ELS_SHA_DIRECT */
 
 /**
  * @brief Sha-384 algorithm descriptor
@@ -91,6 +151,22 @@ extern const mcuxClHash_AlgorithmDescriptor_t mcuxClHash_AlgorithmDescriptor_Sha
  */
 static mcuxClHash_Algo_t mcuxClHash_Algorithm_Sha384 = &mcuxClHash_AlgorithmDescriptor_Sha384;
 
+#ifdef MCUXCL_FEATURE_ELS_SHA_DIRECT
+
+/**
+ * @brief Sha-512 direct algorithm descriptor
+ *        Sha-512 hash calculation using the SHA-direct feature of ELS, it does not support RTF.
+ *        SHA-direct mode has to be enabled prior to using this algorithm
+ */
+extern const mcuxClHash_AlgorithmDescriptor_t mcuxClHash_AlgorithmDescriptor_Sha512_direct;
+
+/**
+ * @brief Sha-512 direct algorithm
+ *        Sha-512 hash calculation using the SHA-direct feature of ELS, it does not support RTF.
+ *        SHA-direct mode has to be enabled prior to using this algorithm
+ */
+static mcuxClHash_Algo_t mcuxClHash_Algorithm_Sha512_direct = &mcuxClHash_AlgorithmDescriptor_Sha512_direct;
+#endif /* MCUXCL_FEATURE_ELS_SHA_DIRECT */
 
 /**
  * @brief Sha-512 algorithm descriptor
@@ -105,6 +181,66 @@ extern const mcuxClHash_AlgorithmDescriptor_t mcuxClHash_AlgorithmDescriptor_Sha
  *        SHA-direct mode has to be disabled prior to using this algorithm
  */
 static mcuxClHash_Algo_t mcuxClHash_Algorithm_Sha512 = &mcuxClHash_AlgorithmDescriptor_Sha512;
+#ifdef MCUXCL_FEATURE_ELS_SHA_DIRECT
+
+/**
+ * @brief Sha-512/224 direct algorithm descriptor
+ *        Sha-512/224 hash calculation using the SHA-direct feature of ELS, it does not support RTF.
+ *        SHA-direct mode has to be enabled prior to using this algorithm
+ */
+extern const mcuxClHash_AlgorithmDescriptor_t mcuxClHash_AlgorithmDescriptor_Sha512_224_direct;
+
+/**
+ * @brief Sha-512/224 direct algorithm
+ *        Sha-512/224 hash calculation using the SHA-direct feature of ELS, it does not support RTF.
+ *        SHA-direct mode has to be enabled prior to using this algorithm
+ */
+static mcuxClHash_Algo_t mcuxClHash_Algorithm_Sha512_224_direct = &mcuxClHash_AlgorithmDescriptor_Sha512_224_direct;
+#endif /* MCUXCL_FEATURE_ELS_SHA_DIRECT */
+
+/**
+ * @brief Sha-512/224 algorithm descriptor
+ *        Sha-512/224 hash calculation using the Hash functionality of ELS, it supports RTF.
+ *        SHA-direct mode has to be disabled prior to using this algorithm
+ */
+extern const mcuxClHash_AlgorithmDescriptor_t mcuxClHash_AlgorithmDescriptor_Sha512_224;
+
+/**
+ * @brief Sha-512/224 algorithm
+ *        Sha-512/224 hash calculation using the Hash functionality of ELS, it supports RTF.
+ *        SHA-direct mode has to be disabled prior to using this algorithm
+ */
+static mcuxClHash_Algo_t mcuxClHash_Algorithm_Sha512_224 = &mcuxClHash_AlgorithmDescriptor_Sha512_224;
+#ifdef MCUXCL_FEATURE_ELS_SHA_DIRECT
+
+/**
+ * @brief Sha-512/256 direct algorithm descriptor
+ *        Sha-512/256 hash calculation using the SHA-direct feature of ELS, it does not support RTF.
+ *        SHA-direct mode has to be enabled prior to using this algorithm
+ */
+extern const mcuxClHash_AlgorithmDescriptor_t mcuxClHash_AlgorithmDescriptor_Sha512_256_direct;
+
+/**
+ * @brief Sha-512/256 direct algorithm
+ *        Sha-512/256 hash calculation using the SHA-direct feature of ELS, it does not support RTF.
+ *        SHA-direct mode has to be enabled prior to using this algorithm
+ */
+static mcuxClHash_Algo_t mcuxClHash_Algorithm_Sha512_256_direct = &mcuxClHash_AlgorithmDescriptor_Sha512_256_direct;
+#endif /* MCUXCL_FEATURE_ELS_SHA_DIRECT */
+
+/**
+ * @brief Sha-512/256 algorithm descriptor
+ *        Sha-512/256 hash calculation using the Hash functionality of ELS, it supports RTF.
+ *        SHA-direct mode has to be disabled prior to using this algorithm
+ */
+extern const mcuxClHash_AlgorithmDescriptor_t mcuxClHash_AlgorithmDescriptor_Sha512_256;
+
+/**
+ * @brief Sha-512/256 algorithm
+ *        Sha-512/256 hash calculation using the Hash functionality of ELS, it supports RTF.
+ *        SHA-direct mode has to be disabled prior to using this algorithm
+ */
+static mcuxClHash_Algo_t mcuxClHash_Algorithm_Sha512_256 = &mcuxClHash_AlgorithmDescriptor_Sha512_256;
 
 
 

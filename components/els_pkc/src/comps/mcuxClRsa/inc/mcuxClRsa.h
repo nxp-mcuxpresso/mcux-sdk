@@ -63,4 +63,8 @@
 #include <mcuxClRsa_MemoryConsumption.h>
 #include <mcuxClRsa_Constants.h>
 #include <mcuxClRsa_Types.h>
+#if defined(MCUXCL_FEATURE_CIPHER_RSA_ENCRYPT) || defined(MCUXCL_FEATURE_CIPHER_RSA_DECRYPT)
+#include <mcuxClRsa_ModeConstructors.h>
+#include <mcuxClRsa_KeyTypes.h>
+#endif /* defined(MCUXCL_FEATURE_CIPHER_RSA_ENCRYPT) || defined(MCUXCL_FEATURE_CIPHER_RSA_DECRYPT) || defined(MCUXCL_FEATURE_SIGNATURE_RSA_SIGN) || defined(MCUXCL_FEATURE_SIGNATURE_RSA_VERIFY) || defined(MCUXCL_FEATURE_KEY_GENERATION_RSA) */
 #endif /* MCUXCLRSA_H_ */

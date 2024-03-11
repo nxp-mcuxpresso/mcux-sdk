@@ -69,15 +69,4 @@ static inline bool mcuxClExample_Els_KeyDeleteAll(void)
 }
 
 
-/*
- * Check only if the mcuxClEls_KeyDelete_Async is defined "because mcuxClEls_KeyProvision_Async will be always defined"
- * via CL library or via the TEST OS
- * Function that loads a known key into the ELS key store
- * [in]    helperKeyIdx:              The index of the helper key
- * [in]    targetKeyIdx:              The key index at which the target key shall be loaded
- * [in]    targetKeyProperties:       The target properties of the key
- * [in]    pKey:                      Pointer to the key to be loaded
-*/
-#define ELS_RFC_PADDING_LENGTH 16U
-
 #endif /* MCUXCLEXAMPLE_ELS_KEY_HELPER_H_ */

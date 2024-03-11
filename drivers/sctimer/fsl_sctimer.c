@@ -462,7 +462,7 @@ void SCTIMER_UpdatePwmDutycycle(SCT_Type *base, sctimer_out_t output, uint8_t du
  * done when this event is triggered.
  *
  * param base         SCTimer peripheral base address
- * param howToMonitor Event type; options are available in the enumeration ::sctimer_interrupt_enable_t
+ * param howToMonitor Event type; options are available in the enumeration ::sctimer_event_t
  * param matchValue   The match value that will be programmed to a match register
  * param whichIO      The input or output that will be involved in event triggering. This field
  *                     is ignored if the event type is "match only"

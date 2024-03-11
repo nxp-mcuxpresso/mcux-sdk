@@ -23,6 +23,7 @@
 
 #include <mcuxClSession.h>
 #include <mcuxClRandom_Types.h>
+#include <mcuxClBuffer.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,7 +35,9 @@ extern "C" {
  */
 MCUX_CSSL_FP_FUNCTION_POINTER(mcuxClRandom_initFunction_t,
 typedef MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) (* mcuxClRandom_initFunction_t)(
-        mcuxClSession_Handle_t session
+        mcuxClSession_Handle_t session,
+        mcuxClRandom_Mode_t mode,
+        mcuxClRandom_Context_t context
 ));
 
 /**
@@ -42,7 +45,9 @@ typedef MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) (* mcuxClRandom_initF
  */
 MCUX_CSSL_FP_FUNCTION_POINTER(mcuxClRandom_reseedFunction_t,
 typedef MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) (*mcuxClRandom_reseedFunction_t)(
-        mcuxClSession_Handle_t session
+        mcuxClSession_Handle_t session,
+        mcuxClRandom_Mode_t mode,
+        mcuxClRandom_Context_t context
 ));
 
 /**
@@ -51,7 +56,9 @@ typedef MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) (*mcuxClRandom_reseed
 MCUX_CSSL_FP_FUNCTION_POINTER(mcuxClRandom_generateFunction_t,
 typedef MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) (*mcuxClRandom_generateFunction_t)(
         mcuxClSession_Handle_t session,
-        uint8_t * pOut,
+        mcuxClRandom_Mode_t mode,
+        mcuxClRandom_Context_t context,
+        mcuxCl_Buffer_t pOut,
         uint32_t outLength
 ));
 
@@ -98,7 +105,7 @@ struct mcuxClRandom_ModeDescriptor
 {
     const mcuxClRandom_OperationModeDescriptor_t *pOperationMode;       ///< pointer to top level information about the DRBG mode operated in (NORMALMODE, TESTMODE, ELSMODE, PATCHMODE)
     const void *pDrbgMode;                                             ///< pointer to DRBG specific information depending on the chosen mode
-    uint32_t auxParam;                                                 ///< auxiliary parameter depending on the chosen mode
+    uint32_t *auxParam;                                                ///< auxiliary parameter depending on the chosen mode
     uint32_t contextSize;                                              ///< size of context
     uint16_t securityStrength;                                         ///< supported security strength of DRBG
 };

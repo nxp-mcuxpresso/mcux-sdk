@@ -13,6 +13,7 @@
 
 #include "common.h"
 
+#include <mcuxClToolchain.h>
 #include <mcuxClEls.h> // Interface to the entire mcuxClEls component
 #include <mcuxClSession.h> // Interface to the entire mcuxClSession component
 #include <mcuxClKey.h> // Interface to the entire mcuxClKey component
@@ -28,10 +29,10 @@
 #define LIFETIME_INTERNAL PSA_KEY_LIFETIME_FROM_PERSISTENCE_AND_LOCATION(PSA_KEY_LIFETIME_VOLATILE, PSA_KEY_LOCATION_EXTERNAL_STORAGE)
 #define LIFETIME_EXTERNAL PSA_KEY_LIFETIME_FROM_PERSISTENCE_AND_LOCATION(PSA_KEY_LIFETIME_VOLATILE, PSA_KEY_LOCATION_LOCAL_STORAGE)
 
-bool mcuxClPsaDriver_cipher_multipart_ECB(void)
+MCUXCLEXAMPLE_FUNCTION(mcuxClPsaDriver_cipher_multipart_ECB)
 {
     /* Input for the AES operation */
-    const uint8_t aes128_input[MCUXCLAES_BLOCK_SIZE] = {
+    const ALIGNED uint8_t aes128_input[MCUXCLAES_BLOCK_SIZE] = {
         0x6Bu, 0xC1u, 0xBEu, 0xE2u,
         0x2Eu, 0x40u, 0x9Fu, 0x96u,
         0xE9u, 0x3Du, 0x7Eu, 0x11u,
@@ -39,7 +40,7 @@ bool mcuxClPsaDriver_cipher_multipart_ECB(void)
     };
 
     /* Expected output for the AES operation */
-    const uint8_t aes128_result[MCUXCLAES_BLOCK_SIZE] = {
+    const ALIGNED uint8_t aes128_result[MCUXCLAES_BLOCK_SIZE] = {
         0x3Au, 0xD7u, 0x7Bu, 0xB4u,
         0x0Du, 0x7Au, 0x36u, 0x60u,
         0xA8u, 0x9Eu, 0xCAu, 0xF3u,
@@ -47,7 +48,7 @@ bool mcuxClPsaDriver_cipher_multipart_ECB(void)
     };
 
     /* AES key */
-    const uint8_t aes128_key[MCUXCLELS_CIPHER_KEY_SIZE_AES_128] = {
+    const ALIGNED uint8_t aes128_key[MCUXCLELS_CIPHER_KEY_SIZE_AES_128] = {
         0x2Bu, 0x7Eu, 0x15u, 0x16u,
         0x28u, 0xAEu, 0xD2u, 0xA6u,
         0xABu, 0xF7u, 0x15u, 0x88u,
@@ -55,7 +56,7 @@ bool mcuxClPsaDriver_cipher_multipart_ECB(void)
     };
 
     /* Output buffer for the AES operation */
-    uint8_t aes128_output[sizeof(aes128_result)];
+    ALIGNED uint8_t aes128_output[sizeof(aes128_result)];
 
     /** Initialize ELS, Enable the ELS **/
     if(!mcuxClExample_Els_Init(MCUXCLELS_RESET_DO_NOT_CANCEL))
@@ -144,9 +145,4 @@ bool mcuxClPsaDriver_cipher_multipart_ECB(void)
 
     /* Return */
     return MCUXCLEXAMPLE_STATUS_OK;
-}
-bool nxpClPsaDriver_cipher_multipart_ECB(void)
-{
-    bool result = mcuxClPsaDriver_cipher_multipart_ECB();
-    return result;
 }

@@ -17,20 +17,18 @@
  */
 
 
-#include <mcuxClSession.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
-#include <mcuxClHash.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClMath.h>
+#include <mcuxClEcc.h>
 
-#include <internal/mcuxClKey_Types_Internal.h>
 #include <internal/mcuxClPkc_Macros.h>
 #include <internal/mcuxClPkc_ImportExport.h>
 #include <internal/mcuxClPkc_Operations.h>
 #include <internal/mcuxClEcc_EdDSA_Internal.h>
 #include <internal/mcuxClEcc_EdDSA_Internal_Hash.h>
-#include <internal/mcuxClEcc_EdDSA_Internal_DecodePoint_FUP.h>
-#include <internal/mcuxClEcc_EdDSA_Internal_Ed25519.h>
+#include <internal/mcuxClEcc_EdDSA_Internal_FUP.h>
 
 
 /**
@@ -39,12 +37,13 @@
  *
  * Input:
  *  - pDomainParams Pointer to ECC common domain parameters for Ed25519
- *  - pEncPoint Pointer to encoded point
+ *  - pEncPoint Buffer for encoded point
  *
  * Prerequisites:
  * - ps1Len = (operandSize, operandSize)
  * - Buffers ECC_CP0 and ECC_CP1 contain the curve parameters a and d in MR
  * - Buffer ECC_PFULL contains p'||p
+ * - Buffer ECC_P contains modulus p in NR
  * - Buffer ECC_PS contains the shifted modulus associated to p
  *
  * Result:
@@ -57,14 +56,15 @@
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClEcc_EdDSA_DecodePoint_Ed25519, mcuxClEcc_EdDSA_DecodePointFunction_t)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_DecodePoint_Ed25519(
     mcuxClEcc_EdDSA_DomainParams_t *pDomainParams,
-    const uint8_t *pEncPoint
+    mcuxCl_InputBuffer_t pEncPoint
 )
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClEcc_EdDSA_DecodePoint_Ed25519);
 
     /* Step 1: Copy the encoded point to buffer ECC_T0. */
     const uint32_t encodedLen = (uint32_t) pDomainParams->b / 8u;
-    MCUXCLPKC_FP_IMPORTLITTLEENDIANTOPKC(ECC_T0, pEncPoint, encodedLen);
+    MCUXCLPKC_FP_IMPORTLITTLEENDIANTOPKC_BUFFER(mcuxClEcc_EdDSA_DecodePoint_Ed25519,
+                                               ECC_T0, pEncPoint, encodedLen);
 
     /* Step 2: Read and backup the LSBit x0 from buffer ECC_T0 and clear it in buffer ECC_T0. */
     uint16_t *pOperands = MCUXCLPKC_GETUPTRT();
@@ -78,8 +78,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_DecodePoint_Ed25
     if (MCUXCLPKC_FLAG_CARRY != MCUXCLPKC_WAITFORFINISH_GETCARRY())
     {
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_EdDSA_DecodePoint_Ed25519, MCUXCLECC_STATUS_INVALID_PARAMS,
-            MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportLittleEndianToPkc),  /* Step 1 */
-            MCUXCLPKC_FP_CALLED_CALC_OP1_CMP);                               /* Step 3 */
+            MCUXCLPKC_FP_CALLED_IMPORTLITTLEENDIANTOPKC_BUFFER,  /* Step 1 */
+            MCUXCLPKC_FP_CALLED_CALC_OP1_CMP);                   /* Step 3 */
     }
 
     /* Step 4: Import pDomainParams->pSqrtMinusOne to buffer ECC_COORD04. */
@@ -92,17 +92,16 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_DecodePoint_Ed25
      *  - If v * x~^2 != +/- u mod p, the decoding failed. */
 
     /* Compute (u * v^7)^((p-5)/8) mod p and the Y-, and Z-coordinate for the point decoding result (X:Y:Z) */
-    uint8_t *pC3 = MCUXCLPKC_OFFSET2PTR(pOperands[ECC_COORD03]);
+    uint32_t *pC3 = MCUXCLPKC_OFFSET2PTRWORD(pOperands[ECC_COORD03]);
     pOperands[ECC_V0] = (uint16_t) 3u;
     MCUXCLPKC_FP_CALCFUP(mcuxClEcc_FUP_EdDSA_Internal_DecodePoint_PrepareExp_Common,
                         mcuxClEcc_FUP_EdDSA_Internal_DecodePoint_PrepareExp_Common_LEN);
     MCUXCLPKC_FP_CALCFUP(mcuxClEcc_FUP_EdDSA_Internal_DecodePoint_PrepareExp_Ed25519,
                         mcuxClEcc_FUP_EdDSA_Internal_DecodePoint_PrepareExp_Ed25519_LEN);
-    MCUXCLPKC_WAITFORFINISH();
-    MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES("pC3 is 32-bit aligned.")
-    MCUXCLPKC_FP_SWITCHENDIANNESS((uint32_t*)pC3, pDomainParams->common.byteLenP); // the exponent should be in big endian format for MCUXCLMATH_FP_MODEXP_SQRMULTL2R
-    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES()
-    MCUXCLMATH_FP_MODEXP_SQRMULTL2R(pC3, (uint32_t) pDomainParams->common.byteLenP, ECC_COORD00, ECC_T3, ECC_P, TWED_PP_Y0); // ECC_COORD00 = (u * v^7)^((p-5)/8) mod p; use TWED_PP_Y0 as temp buffer
+    MCUXCLPKC_WAITFORFINISH(); // Needed to ensure that the first of the two FUP programs is finished before the subsequent endianness switch
+
+    MCUXCLPKC_FP_SWITCHENDIANNESS(pC3, pDomainParams->common.byteLenP); // the exponent should be in big endian format for MCUXCLMATH_FP_MODEXP_SQRMULTL2R
+    MCUXCLMATH_FP_MODEXP_SQRMULTL2R((const uint8_t*)pC3, (uint32_t) pDomainParams->common.byteLenP, ECC_COORD00, ECC_T3, ECC_P, TWED_PP_Y0); // ECC_COORD00 = (u * v^7)^((p-5)/8) mod p; use TWED_PP_Y0 as temp buffer
 
     /* Compute the x~ candidate, x~^2 * v + u, and the square root of -1 mod p */
     MCUXCLPKC_FP_CALCFUP(mcuxClEcc_FUP_EdDSA_Internal_DecodePoint_ComputeXCandidate_Ed25519,
@@ -130,7 +129,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_DecodePoint_Ed25
         {
             /* If x~^2 * v != +/- u, decoding fails */
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_EdDSA_DecodePoint_Ed25519, MCUXCLECC_STATUS_INVALID_PARAMS,
-                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportLittleEndianToPkc),  /* Step 1 */
+                MCUXCLPKC_FP_CALLED_IMPORTLITTLEENDIANTOPKC_BUFFER,              /* Step 1 */
                 MCUXCLPKC_FP_CALLED_CALC_OP1_CMP,                                /* Step 3 */
                 MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportLittleEndianToPkc),  /* Step 4 */
                 MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_CalcFup),                  /* Step 5 */
@@ -156,10 +155,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_DecodePoint_Ed25
     if ((MCUXCLPKC_FLAG_ZERO == MCUXCLPKC_WAITFORFINISH_GETZERO()) && (1u == x0))
     {
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_EdDSA_DecodePoint_Ed25519, MCUXCLECC_STATUS_INVALID_PARAMS,
-            MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportLittleEndianToPkc),  /* Step 1 */
+            MCUXCLPKC_FP_CALLED_IMPORTLITTLEENDIANTOPKC_BUFFER,              /* Step 1 */
             MCUXCLPKC_FP_CALLED_CALC_OP1_CMP,                                /* Step 3 */
             MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportLittleEndianToPkc),  /* Step 4 */
-            MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_CalcFup),             /* Step 5 */
+            MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_CalcFup),                  /* Step 5 */
             MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_CalcFup),
             MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_SwitchEndianness),
             MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_ModExp_SqrMultL2R),
@@ -186,7 +185,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_DecodePoint_Ed25
 
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_EdDSA_DecodePoint_Ed25519, MCUXCLECC_STATUS_OK,
         /* Step 1 */
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportLittleEndianToPkc),
+        MCUXCLPKC_FP_CALLED_IMPORTLITTLEENDIANTOPKC_BUFFER,
         /* Step 3 */
         MCUXCLPKC_FP_CALLED_CALC_OP1_CMP,
         /* Step 4 */

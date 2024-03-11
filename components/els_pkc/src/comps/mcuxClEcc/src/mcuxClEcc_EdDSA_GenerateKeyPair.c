@@ -17,11 +17,12 @@
  */
 
 
-#include <stdint.h>
+#include <mcuxClCore_Platform.h>
 
 #include <mcuxClSession.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClCore_Macros.h>
 #include <mcuxClKey.h>
 #include <mcuxClPkc.h>
 #include <mcuxClMemory.h>
@@ -34,11 +35,10 @@
 #include <internal/mcuxClKey_Types_Internal.h>
 #include <internal/mcuxClKey_Functions_Internal.h>
 #include <internal/mcuxClSession_Internal.h>
-#include <internal/mcuxClEcc_Internal.h>
 #include <internal/mcuxClEcc_Internal_Random.h>
 #include <internal/mcuxClEcc_EdDSA_Internal.h>
 #include <internal/mcuxClEcc_EdDSA_Internal_Hash.h>
-#include <internal/mcuxClEcc_EdDSA_GenerateKeyPair_FUP.h>
+#include <internal/mcuxClEcc_EdDSA_Internal_FUP.h>
 
 
 #ifdef MCUXCL_FEATURE_ECC_STRENGTH_CHECK
@@ -97,7 +97,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_GenerateKeyPair_
     /* private and public key length = M = 32-byte for Ed25519 (b = 256 = 32*8) */
     /*                                  or 57-byte for Ed448 (b = 456 = 57*8).  */
     const uint32_t keyLength = (uint32_t) pDomainParams->b / 8u;
-    uint8_t * pPrivKey = NULL;
+    const uint8_t * pPrivKey = NULL;
 
 
     /*
@@ -108,8 +108,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_GenerateKeyPair_
     MCUX_CSSL_FP_BRANCH_DECL(privKeyOption);
     if (MCUXCLECC_EDDSA_PRIVKEY_GENERATE == options)
     {
-        /* Derive the security strength required for the RNG from (keyLength * 8) / 2 and check whether it can be provided. */
 #ifdef MCUXCL_FEATURE_ECC_STRENGTH_CHECK
+        /* Derive the security strength required for the RNG from (keyLength * 8) / 2 and check whether it can be provided. */
         MCUX_CSSL_FP_FUNCTION_CALL(ret_checkSecurityStrength, mcuxClRandom_checkSecurityStrength(pSession, (keyLength * 8u) / 2u));
         if (MCUXCLRANDOM_STATUS_OK != ret_checkSecurityStrength)
         {
@@ -117,16 +117,23 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_GenerateKeyPair_
         }
 #endif
         /* Reserve space on CPU workarea for the private key. */
-        const uint32_t privKeyWords = MCUXCLECC_ALIGNED_SIZE(keyLength) / (sizeof(uint32_t));
-        pPrivKey = (uint8_t *) mcuxClSession_allocateWords_cpuWa(pSession, privKeyWords);
+        const uint32_t privKeyWords = MCUXCLCORE_NUM_OF_CPUWORDS_CEIL(keyLength);
+        uint8_t *pPrivKeyTemp = (uint8_t *) mcuxClSession_allocateWords_cpuWa(pSession, privKeyWords);
+        if (NULL == pPrivKeyTemp)
+        {
+            MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_EdDSA_GenerateKeyPair_Core, MCUXCLECC_STATUS_FAULT_ATTACK);
+        }
         pCpuWorkarea->wordNumCpuWa += privKeyWords;
 
-        MCUX_CSSL_FP_FUNCTION_CALL(retRandom, mcuxClRandom_generate(pSession, pPrivKey, keyLength) );
+        MCUXCLBUFFER_INIT(buffPrivKeyTemp, NULL, pPrivKeyTemp, keyLength);
+        MCUX_CSSL_FP_FUNCTION_CALL(retRandom, mcuxClRandom_generate(pSession, buffPrivKeyTemp, keyLength) );
 
         if (MCUXCLRANDOM_STATUS_OK != retRandom)
         {
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_EdDSA_GenerateKeyPair_Core, MCUXCLECC_STATUS_RNG_ERROR);
         }
+
+        pPrivKey = pPrivKeyTemp;
 
         MCUX_CSSL_FP_BRANCH_POSITIVE(privKeyOption,
                                                    MCUXCLECC_FP_GENKEYPAIR_SECSTRENGTH,
@@ -157,11 +164,13 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_GenerateKeyPair_
     uint16_t *pOperands = MCUXCLPKC_GETUPTRT();
     uint8_t *pS3 = MCUXCLPKC_OFFSET2PTR(pOperands[ECC_S3]);
     uint8_t *pPrivKeyHashPkc = pS3 - keyLength;
+    MCUXCLBUFFER_INIT_RO(buffPrivKey, NULL, pPrivKey, keyLength);
+    MCUXCLBUFFER_INIT(buffPrivKeyHashPkc, NULL, pPrivKeyHashPkc, 2u * keyLength);
 
     /* Calculate 2b-bit hash of private key. */
     MCUXCLECC_FP_EDDSA_KEYGEN_HASH_PRIVKEY(pSession,
                                           pDomainParams->algoHash,
-                                          pPrivKey, pPrivKeyHashPkc,
+                                          buffPrivKey, buffPrivKeyHashPkc,
                                           keyLength);
 
 
@@ -188,7 +197,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_GenerateKeyPair_
     pOperands[ECC_V2] = (uint16_t) (b - t);
     pOperands[ECC_V3] = (uint16_t) (c - 1u - t);
     pOperands[ECC_V4] = (uint16_t) c;
-    uint32_t keyLengthPkc = MCUXCLPKC_ROUNDUP_SIZE(keyLength);
+    uint32_t keyLengthPkc = MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(keyLength);
     MCUXCLPKC_PS2_SETLENGTH(0u, keyLengthPkc);
     MCUXCLPKC_FP_CALCFUP(mcuxClEcc_FUP_EdDSA_GenerateKeyPair_Prepare_S,
                         mcuxClEcc_FUP_EdDSA_GenerateKeyPair_Prepare_S_LEN);
@@ -320,3 +329,4 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_GenerateKeyPair(
     MCUX_CSSL_FP_FUNCTION_EXIT_WITH_CHECK(mcuxClEcc_EdDSA_GenerateKeyPair, keygen_result, MCUXCLECC_STATUS_FAULT_ATTACK,
                                          MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEcc_EdDSA_GenerateKeyPair_Core));
 }
+

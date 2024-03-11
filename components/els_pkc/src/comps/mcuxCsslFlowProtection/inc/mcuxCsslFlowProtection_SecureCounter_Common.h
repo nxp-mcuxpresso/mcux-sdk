@@ -292,14 +292,36 @@
   (((uint64_t)(result) & MCUX_CSSL_FP_RESULT_MASK) << MCUX_CSSL_FP_RESULT_OFFSET)
 
 /**
- * \def MCUX_CSSL_FP_RESULT_IMPL
+ * \def MCUX_CSSL_FP_RESULT_IMPL2
+ * \brief Extract the result value from a protected \p return value.
+ * \ingroup csslFpCntFunction
+ *
+ * \param type   Type of the result.
+ * \param return The protected return value which contains the result.
+ */
+#define MCUX_CSSL_FP_RESULT_IMPL2(type, return) \
+  ((type)(((return) >> MCUX_CSSL_FP_RESULT_OFFSET) & MCUX_CSSL_FP_RESULT_MASK))
+
+/**
+ * \def MCUX_CSSL_FP_RESULT_IMPL1
  * \brief Extract the result value from a protected \p return value.
  * \ingroup csslFpCntFunction
  *
  * \param return The protected return value which contains the result.
  */
-#define MCUX_CSSL_FP_RESULT_IMPL(return) \
-  (uint32_t)(((return) >> MCUX_CSSL_FP_RESULT_OFFSET) & MCUX_CSSL_FP_RESULT_MASK)
+#define MCUX_CSSL_FP_RESULT_IMPL1(return) \
+  MCUX_CSSL_FP_RESULT_IMPL2(uint32_t,return)
+
+/**
+ * \def MCUX_CSSL_FP_RESULT_IMPL
+ * \brief Extract the result value from a protected \p return value.
+ * \ingroup csslFpCntFunction
+ *
+ * \param type   Optional, type of the result.
+ * \param return The protected return value which contains the result.
+ */
+#define MCUX_CSSL_FP_RESULT_IMPL(...) \
+  MCUX_CSSL_CPP_OVERLOADED2(MCUX_CSSL_FP_RESULT_IMPL, __VA_ARGS__)
 
 /**
  * \def MCUX_CSSL_FP_PROTECTION_OFFSET
@@ -716,7 +738,9 @@
 #define MCUX_CSSL_FP_BRANCH_TAKEN_POSITIVE_IMPL1(id) \
   MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(MISRA_C_2012_Rule_10_8, "The macro does not contain a composite expression.") \
   MCUX_CSSL_ANALYSIS_COVERITY_START_DEVIATE(MISRA_C_2012_Rule_14_3, "The usage of an invariant condition here is intended to keep the macro structures more clear.") \
+  MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(MISRA_C_2012_Rule_10_1, "True is of boolean type.") \
     MCUX_CSSL_FP_BRANCH_TAKEN_IMPL(id, MCUX_CSSL_FP_BRANCH_POSITIVE_VALUE, true) \
+  MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(MISRA_C_2012_Rule_10_1) \
   MCUX_CSSL_ANALYSIS_COVERITY_STOP_DEVIATE(MISRA_C_2012_Rule_14_3) \
   MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(MISRA_C_2012_Rule_10_8)
 
@@ -765,7 +789,9 @@
 #define MCUX_CSSL_FP_BRANCH_TAKEN_NEGATIVE_IMPL1(id) \
   MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(MISRA_C_2012_Rule_10_8, "The macro does not contain a composite expression.") \
   MCUX_CSSL_ANALYSIS_COVERITY_START_DEVIATE(MISRA_C_2012_Rule_14_3, "The usage of an invariant condition here is intended to keep the macro structures more clear.") \
+  MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(MISRA_C_2012_Rule_10_1, "True is of boolean type.") \
     MCUX_CSSL_FP_BRANCH_TAKEN_IMPL(id, MCUX_CSSL_FP_BRANCH_NEGATIVE_VALUE, true) \
+  MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(MISRA_C_2012_Rule_10_1) \
   MCUX_CSSL_ANALYSIS_COVERITY_STOP_DEVIATE(MISRA_C_2012_Rule_14_3) \
   MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(MISRA_C_2012_Rule_10_8)
 
@@ -967,7 +993,9 @@
 #define MCUX_CSSL_FP_SWITCH_TAKEN_IMPL2(id, case) \
   MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(MISRA_C_2012_Rule_10_8, "The macro does not contain a composite expression.") \
   MCUX_CSSL_ANALYSIS_COVERITY_START_DEVIATE(MISRA_C_2012_Rule_14_3, "The usage of an invariant condition here is intended to keep the macro structures more clear.") \
+  MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(MISRA_C_2012_Rule_10_1, "True is of boolean type.") \
     MCUX_CSSL_FP_SWITCH_TAKEN_IMPL3(id, case, true) \
+  MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(MISRA_C_2012_Rule_10_1) \
   MCUX_CSSL_ANALYSIS_COVERITY_STOP_DEVIATE(MISRA_C_2012_Rule_14_3) \
   MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(MISRA_C_2012_Rule_10_8)
 
@@ -1016,7 +1044,9 @@
 #define MCUX_CSSL_FP_SWITCH_TAKEN_DEFAULT_IMPL1(id) \
   MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(MISRA_C_2012_Rule_10_8, "The macro does not contain a composite expression.") \
   MCUX_CSSL_ANALYSIS_COVERITY_START_DEVIATE(MISRA_C_2012_Rule_14_3, "The usage of an invariant condition here is intended to keep the macro structures more clear.") \
+  MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(MISRA_C_2012_Rule_10_1, "True is of boolean type.") \
     MCUX_CSSL_FP_SWITCH_TAKEN_DEFAULT_IMPL2(id, true) \
+  MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(MISRA_C_2012_Rule_10_1) \
   MCUX_CSSL_ANALYSIS_COVERITY_STOP_DEVIATE(MISRA_C_2012_Rule_14_3) \
   MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(MISRA_C_2012_Rule_10_8)
 

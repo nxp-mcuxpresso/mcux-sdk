@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2022-2023 NXP                                                  */
+/* Copyright 2022-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -13,6 +13,7 @@
 
 #include <mcuxClEls.h>              // Interface to the entire mcuxClEls component
 #include <mcuxClExample_ELS_Helper.h>
+#include <mcuxClToolchain.h>
 #include <mcuxClSession.h>          // Interface to the entire mcuxClSession component
 #include <mcuxClHash.h>             // Interface to the entire mcuxClHash component
 #include <mcuxClHashModes.h>
@@ -23,11 +24,11 @@
 #include <mcuxClCore_Examples.h>
 #include <mcuxClExample_RNG_Helper.h>
 
-static const uint8_t data[3] CSS_CONST_SEGMENT = {
+static const ALIGNED uint8_t data[3] CSS_CONST_SEGMENT = {
     0x61u, 0x62u, 0x63u
 };
 
-static const uint8_t hashExpected[28] CSS_CONST_SEGMENT = {
+static const ALIGNED uint8_t hashExpected[28] CSS_CONST_SEGMENT = {
     0x23u, 0x09u, 0x7Du, 0x22u, 0x34u, 0x05u, 0xD8u, 0x22u,
     0x86u, 0x42u, 0xA4u, 0x77u, 0xBDu, 0xA2u, 0x55u, 0xB3u,
     0x2Au, 0xADu, 0xBCu, 0xE4u, 0xBDu, 0xA0u, 0xB3u, 0xF7u,
@@ -53,7 +54,7 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClHashModes_sha224_oneshot_example)
     mcuxClSession_Handle_t session = &sessionDesc;
 
     /* Allocate and initialize session */
-    MCUXCLEXAMPLE_ALLOCATE_AND_INITIALIZE_SESSION(session, MCUXCLHASH_MAX_CPU_WA_BUFFER_SIZE + MCUXCLRANDOMMODES_NCINIT_WACPU_SIZE, 0u);
+    MCUXCLEXAMPLE_ALLOCATE_AND_INITIALIZE_SESSION(session, MCUXCLEXAMPLE_MAX_WA(MCUXCLHASH_MAX_CPU_WA_BUFFER_SIZE, MCUXCLRANDOMMODES_NCINIT_WACPU_SIZE), 0u);
 
     /* Initialize the PRNG */
     MCUXCLEXAMPLE_INITIALIZE_PRNG(session);
@@ -62,15 +63,18 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClHashModes_sha224_oneshot_example)
     /* Hash computation                                                       */
     /**************************************************************************/
 
-    uint8_t hash[MCUXCLHASH_OUTPUT_SIZE_SHA_224];
+    ALIGNED uint8_t hash[MCUXCLHASH_OUTPUT_SIZE_SHA_224];
+    MCUXCLBUFFER_INIT_RW(hashBuf, session, hash, sizeof(hash));
+    MCUXCLBUFFER_INIT_RO(dataBuf, session, data, sizeof(data));
+
     uint32_t hashOutputSize = 0u;
 
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token2, mcuxClHash_compute(
     /* mcuxClSession_Handle_t session: */ session,
     /* mcuxClHash_Algo_t algorithm:    */ mcuxClHash_Algorithm_Sha224,
-    /* mcuxCl_InputBuffer_t pIn:       */ data,
+    /* mcuxCl_InputBuffer_t pIn:       */ dataBuf,
     /* uint32_t inSize:               */ sizeof(data),
-    /* mcuxCl_Buffer_t pOut            */ hash,
+    /* mcuxCl_Buffer_t pOut            */ hashBuf,
     /* uint32_t *const pOutSize,      */ &hashOutputSize
     ));
 

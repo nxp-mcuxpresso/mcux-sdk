@@ -37,7 +37,7 @@
 #elif defined(MCUX_CSSL_FP_USE_NONE) && (1 == MCUX_CSSL_FP_USE_NONE)
 #  include <mcuxCsslFlowProtection_None.h>
 #else
-#  error "No flow protection implementation found/configured."
+  #error "No flow protection implementation found/configured."
 #endif
 
 #endif /* MCUX_CSSL_FLOW_PROTECTION_IMPL_H_ */

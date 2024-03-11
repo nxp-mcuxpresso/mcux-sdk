@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2022 NXP                                                       */
+/* Copyright 2022-2023 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -14,12 +14,15 @@
 /** @file  mcuxClMac.c
  *  @brief Implementation of mcuxClMac component public API */
 
+#include <mcuxClSession.h>
 #include <mcuxClMac.h>
 #include <internal/mcuxClMac_Ctx.h>
 #include <internal/mcuxClMac_Internal_Types.h>
 #include <mcuxClKey.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+
+#include <internal/mcuxClSession_Internal_EntryExit.h>
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClMac_compute)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMac_compute(
@@ -31,7 +34,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMac_compute(
   mcuxCl_Buffer_t pMac,
   uint32_t * const pMacLength)
 {
-  MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClMac_compute, mode->common.protectionToken_compute);
+  MCUXCLSESSION_ENTRY(session, mcuxClMac_compute, diRefValue, MCUXCLMAC_STATUS_FAULT_ATTACK, mode->common.protectionToken_compute)
 
   MCUX_CSSL_FP_FUNCTION_CALL(result, mode->common.compute(
                                       session,
@@ -43,7 +46,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMac_compute(
                                       pMacLength
   ));
 
-  MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClMac_compute, result);
+  MCUXCLSESSION_EXIT(session, mcuxClMac_compute, diRefValue, result, MCUXCLMAC_STATUS_FAULT_ATTACK)
 }
 
 
@@ -55,7 +58,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMac_init(
   mcuxClKey_Handle_t key,
   mcuxClMac_Mode_t mode)
 {
-  MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClMac_init, mode->common.protectionToken_init);
+  MCUXCLSESSION_ENTRY(session, mcuxClMac_init, diRefValue, MCUXCLMAC_STATUS_FAULT_ATTACK, mode->common.protectionToken_init)
 
   pContext->pMode = mode;
   MCUX_CSSL_FP_FUNCTION_CALL(result, mode->common.init(
@@ -64,7 +67,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMac_init(
                                       key
   ));
 
-  MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClMac_init, result);
+  MCUXCLSESSION_EXIT(session, mcuxClMac_init, diRefValue, result, MCUXCLMAC_STATUS_FAULT_ATTACK)
 }
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClMac_process)
@@ -74,7 +77,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMac_process(
   mcuxCl_InputBuffer_t pIn,
   uint32_t inLength)
 {
-  MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClMac_process, pContext->pMode->common.protectionToken_process);
+  MCUXCLSESSION_ENTRY(session, mcuxClMac_process, diRefValue, MCUXCLMAC_STATUS_FAULT_ATTACK, pContext->pMode->common.protectionToken_process)
 
   MCUX_CSSL_FP_FUNCTION_CALL(result, pContext->pMode->common.process(
                                       session,
@@ -83,7 +86,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMac_process(
                                       inLength
   ));
 
-  MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClMac_process, result);
+  MCUXCLSESSION_EXIT(session, mcuxClMac_process, diRefValue, result, MCUXCLMAC_STATUS_FAULT_ATTACK)
 }
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClMac_finish)
@@ -93,7 +96,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMac_finish(
   mcuxCl_Buffer_t pMac,
   uint32_t * const pMacLength)
 {
-  MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClMac_finish, pContext->pMode->common.protectionToken_finish);
+  MCUXCLSESSION_ENTRY(session, mcuxClMac_finish, diRefValue, MCUXCLMAC_STATUS_FAULT_ATTACK, pContext->pMode->common.protectionToken_finish)
 
   MCUX_CSSL_FP_FUNCTION_CALL(result, pContext->pMode->common.finish(
                                       session,
@@ -102,6 +105,6 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMac_finish(
                                       pMacLength
   ));
 
-  MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClMac_finish, result);
+  MCUXCLSESSION_EXIT(session, mcuxClMac_finish, diRefValue, result, MCUXCLMAC_STATUS_FAULT_ATTACK)
 }
 

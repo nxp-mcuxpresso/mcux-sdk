@@ -11,12 +11,14 @@
 /* software.                                                                */
 /*--------------------------------------------------------------------------*/
 
+#include <mcuxCsslAnalysis.h>
+
 #include <internal/mcuxClRsa_Internal_PkcDefs.h>
 #include <internal/mcuxClPkc_FupMacros.h>
 #include <internal/mcuxClRsa_ComputeD_FUP.h>
 
 MCUXCLPKC_FUP_EXT_ROM(mcuxClRsa_ComputeD_Steps123_FUP,
-    PH_CLNS_UTILS_FAME_CRC_ENTRY,
+    FUP_CRC_PLACEHOLDER,
     /* Compute p' = p-1 */
     FUP_OP1_SUB_CONST(MCUXCLRSA_INTERNAL_UPTRTINDEX_COMPD_PSUB1, MCUXCLRSA_INTERNAL_UPTRTINDEX_COMPD_P,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_COMPD_CONSTANT),

@@ -192,6 +192,9 @@ typedef struct _fc_flexspi_mem_config
  */
 typedef struct _fc_flexspi_nor_config
 {
+#if defined(__ARMCC_VERSION) || defined(__ICCARM__)
+    uint8_t padding[0x400];            /* !< Padding for MDK and IAR */
+#endif
     fc_flexspi_mem_config_t memConfig; /* !< Common memory configuration info via FlexSPI */
     uint32_t pageSize;                 /* !< Page size of Serial NOR */
     uint32_t sectorSize;               /* !< Sector size of Serial NOR */

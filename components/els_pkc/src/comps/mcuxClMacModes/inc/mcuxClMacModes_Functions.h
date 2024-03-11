@@ -24,7 +24,7 @@
 #include <mcuxClKey_Types.h>
 #include <mcuxClMac_Types.h>
 #include <mcuxClCore_Platform.h>
-#include <mcuxClCore_Buffer.h>
+#include <mcuxClBuffer.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -13,6 +13,7 @@
 
 #include "common.h"
 
+#include <mcuxClToolchain.h>
 #include <mcuxClSession.h> // Interface to the entire mcuxClSession component
 #include <mcuxCsslFlowProtection.h> // Code flow protection
 #include <mcuxClPsaDriver.h>
@@ -22,7 +23,7 @@
 /**
  * @brief Example value for RSA key pairs (non-encrypted DER encoding format).
  */
-static const uint8_t keyBuffer[PSA_KEY_EXPORT_RSA_KEY_PAIR_MAX_SIZE(2048u)] __attribute__ ((aligned (4))) = {
+static const ALIGNED uint8_t keyBuffer[] = {
   //SEQUENCE{
   0x30,
   0x82, 0x04, 0xA4,
@@ -137,7 +138,7 @@ static const uint8_t keyBuffer[PSA_KEY_EXPORT_RSA_KEY_PAIR_MAX_SIZE(2048u)] __at
 /**
  * @brief Hash of message to be signed
  */
-static const uint8_t hash[PSA_HASH_LENGTH(PSA_ALG_SHA_256)] __attribute__ ((aligned (4))) = {
+static const ALIGNED uint8_t hash[PSA_HASH_LENGTH(PSA_ALG_SHA_256)] = {
   0x89, 0x01, 0x41, 0x9f, 0x26, 0x14, 0xc9, 0x42, 0xc9, 0xee, 0x5e, 0xfb, 0xdf, 0xba, 0x0c, 0xca,
   0x70, 0x6b, 0x3a, 0x4e, 0xd1, 0xa8, 0x5f, 0x69, 0x28, 0xb7, 0x60, 0xff, 0x1b, 0xba, 0xb0, 0xe7
 };
@@ -145,10 +146,12 @@ static const uint8_t hash[PSA_HASH_LENGTH(PSA_ALG_SHA_256)] __attribute__ ((alig
 /**
  * @brief Signature
  */
-static uint8_t signature[PSA_SIGN_OUTPUT_SIZE(PSA_KEY_TYPE_RSA_KEY_PAIR, 2048u, PSA_ALG_RSA_PSS_BASE)] __attribute__ ((aligned (4)));
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT("External macro")
+static ALIGNED uint8_t signature[PSA_SIGN_OUTPUT_SIZE(PSA_KEY_TYPE_RSA_KEY_PAIR, 2048u, PSA_ALG_RSA_PSS_BASE)];
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT()
 
 /* Example of RSA PSS signature generation and verification for 2048-bit key and SHA-256 */
-bool mcuxClPsaDriver_rsa_PSS_sign_verify_hash_example(void)
+MCUXCLEXAMPLE_FUNCTION(mcuxClPsaDriver_rsa_PSS_sign_verify_hash_example)
 {
   /** Initialize ELS, Enable the ELS **/
   if(!mcuxClExample_Els_Init(MCUXCLELS_RESET_DO_NOT_CANCEL))
@@ -196,7 +199,9 @@ bool mcuxClPsaDriver_rsa_PSS_sign_verify_hash_example(void)
   }
 
   /* Check the signature length */
+  MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_MACRO()
   if(signature_length != PSA_SIGN_OUTPUT_SIZE(PSA_KEY_TYPE_RSA_KEY_PAIR, 2048u, PSA_ALG_RSA_PSS_BASE))
+  MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_MACRO()
   {
     return MCUXCLEXAMPLE_STATUS_ERROR;
   }
@@ -241,8 +246,3 @@ bool mcuxClPsaDriver_rsa_PSS_sign_verify_hash_example(void)
   return MCUXCLEXAMPLE_STATUS_OK;
 }
 
-bool nxpClPsaDriver_rsa_PSS_sign_verify_hash_example(void)
-{
-    bool result = mcuxClPsaDriver_rsa_PSS_sign_verify_hash_example();
-    return result;
-}

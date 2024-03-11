@@ -21,9 +21,10 @@
 
 #include <mcuxClCipher_Types.h>
 #include <internal/mcuxClCipher_Internal_Constants.h>
-#include <mcuxClCore_Buffer.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClSession.h>
 #include <mcuxClKey_Types.h>
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -62,7 +63,7 @@ typedef MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClCipher_Status_t) (*mcuxClCipher_CryptF
 
 /**
  * @brief Cipher mode function structure
- * 
+ *
  * This structure captures all the information related to the functions
  * of the Cipher interfaces.
  */

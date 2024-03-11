@@ -43,22 +43,6 @@
 #define MCUXCLMEMORY_API extern  ///< Marks a function as a public API function of the mcuxClMemory component
 
 /**
- * @defgroup MCUXCLMEMORY_STATUS_ MCUXCLMEMORY_STATUS_
- * @brief Defines valid mcuxClMemory function return codes
- * @ingroup mcuxClMemory_Types_Macros
- * @{
- */
-
-#define MCUXCLMEMORY_STATUS_OK ((mcuxClMemory_Status_t) 0x09992E03u) ///< Memory operation successful
-
-/**
- * @}
- */
-
-#define MCUXCLMEMORY_ERRORCODE_OK MCUXCLMEMORY_STATUS_OK ///< Memory operation successful
-                                                       ///< @deprecated Please use #MCUXCLMEMORY_STATUS_OK instead
-
-/**
  * @}
  */
 

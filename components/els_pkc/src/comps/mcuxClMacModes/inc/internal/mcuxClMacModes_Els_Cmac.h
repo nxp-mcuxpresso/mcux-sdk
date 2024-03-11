@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2022 NXP                                                  */
+/* Copyright 2020-2022,2024 NXP                                             */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -16,7 +16,7 @@
 
 #include <mcuxClConfig.h> // Exported features flags header
 #include <mcuxClCore_Platform.h>
-#include <mcuxClCore_Buffer.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClKey_Types.h>
 #include <mcuxClSession_Types.h>
 
@@ -27,9 +27,26 @@
 extern "C" {
 #endif
 
-/*
- * Engine functions
+/**
+ * @brief Internal function which processes complete CMAC blocks.
+ *
+ * @Pre: @p pContext->cmac_options.bits must be configured to match the desired CMAC step
+ *
+ * @param[in]  pContext       CMAC context
+ * @param[in]  pIn            CMAC input padded to full blocks if necessary
+ * @param[in]  inputLen       Input length, length before padding if padding is applied
+ * @param[in/out]  pOut       CMAC output
+ *
+ * @return mcuxClMac_Status_t  Status of the operation
+ * @retval MCUXCLMAC_STATUS_FAILURE Operation failed
+ * @retval MCUXCLMAC_STATUS_OK      Operation succeeded
  */
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClMacModes_Engine_CMAC_ProcessBlocks)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMacModes_Engine_CMAC_ProcessBlocks(
+    mcuxClMacModes_Context_t * const pContext, /*! CMAC context */
+    const uint8_t *const pIn,                 /*! CMAC input */
+    uint32_t inputLen,                        /*! Input size must be full blocks */
+    uint8_t *const pOut);                     /*! CMAC output */
 
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClMacModes_Engine_CMAC_Oneshot)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMacModes_Engine_CMAC_Oneshot(
@@ -51,7 +68,7 @@ MCUX_CSSL_FP_FUNCTION_DECL(mcuxClMacModes_Engine_CMAC_Update)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMacModes_Engine_CMAC_Update(
   mcuxClSession_Handle_t session,           /*! CMAC session handle */
   mcuxClMacModes_Context_t * const pContext,/*! CMAC context */
-  const uint8_t *const pIn,                /*! CMAC input */
+  mcuxCl_InputBuffer_t pIn,                 /*! CMAC input */
   uint32_t inLength                        /*! Input size */
 );
 
@@ -59,7 +76,7 @@ MCUX_CSSL_FP_FUNCTION_DECL(mcuxClMacModes_Engine_CMAC_Finalize)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMacModes_Engine_CMAC_Finalize(
   mcuxClSession_Handle_t session,           /*! CMAC session handle */
   mcuxClMacModes_Context_t * const pContext,/*! CMAC context */
-  uint8_t *const pOut,                     /*! CMAC output */
+  mcuxCl_Buffer_t pOut,                     /*! CMAC output */
   uint32_t *const pOutLength               /*! Output size */
 );
 

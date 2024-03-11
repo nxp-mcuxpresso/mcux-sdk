@@ -24,7 +24,7 @@
 #include <mcuxClKey_Types.h>
 #include <mcuxClMac_Types.h>
 #include <mcuxClCore_Platform.h>
-#include <mcuxClCore_Buffer.h>
+#include <mcuxClBuffer.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -62,7 +62,7 @@ extern "C" {
  *  - Output data buffer, at least the size of a single AES block
  *
  * @attention In some cases restrictions may apply, e.g. the input buffer must
- * be prepared for padding. Please refer to mcuxClMac_Modes.h to find further
+ * be prepared for padding. Please refer to mcuxClMacModes_Modes.h to find further
  * details and restrictions for each specific mode.
  *
  * @param[in]  session     Handle for the current CL session.

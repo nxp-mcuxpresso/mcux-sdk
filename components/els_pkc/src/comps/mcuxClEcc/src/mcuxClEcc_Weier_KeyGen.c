@@ -34,8 +34,7 @@
 #include <internal/mcuxClPkc_Resource.h>
 #include <internal/mcuxClEcc_Weier_Internal.h>
 #include <internal/mcuxClEcc_Weier_Internal_FP.h>
-#include <internal/mcuxClEcc_Weier_Internal_ConvertPoint_FUP.h>
-#include <internal/mcuxClEcc_Weier_KeyGen_FUP.h>
+#include <internal/mcuxClEcc_Weier_Internal_FUP.h>
 
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClEcc_KeyGen)
@@ -98,8 +97,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_KeyGen(
     /**********************************************************/
 
     /* Import G to (X1,Y1). */
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(WEIER_X1, pParam->curveParam.pG, byteLenP);
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(WEIER_Y1, pParam->curveParam.pG + byteLenP, byteLenP);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_KeyGen, WEIER_X1, pParam->curveParam.pG, byteLenP);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFEROFFSET(mcuxClEcc_KeyGen, WEIER_Y1, pParam->curveParam.pG, byteLenP, byteLenP);
 
     /* Check G in (X1,Y1) affine NR. */
 //  MCUXCLPKC_WAITFORREADY();  <== there is WaitForFinish in import function.
@@ -132,7 +131,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_KeyGen(
     /* d = d0 * d1 mod n, where d0 is a 64-bit odd number.    */
     /**********************************************************/
 
-    MCUX_CSSL_FP_FUNCTION_CALL(ret_CoreKeyGen, mcuxClEcc_Int_CoreKeyGen(pSession, byteLenN));
+    MCUX_CSSL_FP_FUNCTION_CALL(ret_CoreKeyGen, mcuxClEcc_WeierECC_BlindedSecretKeyGen_RandomWithExtraBits(pSession, byteLenN));
     if (MCUXCLECC_STATUS_OK != ret_CoreKeyGen)
     {
         if (MCUXCLECC_STATUS_RNG_ERROR == ret_CoreKeyGen)
@@ -155,7 +154,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_KeyGen(
     /* Derive the plain private key d = d0 * d1 mod n < n.    */
     /**********************************************************/
 
-    /* Compute d in S2 using a blinded multiplication utilizing the random still stored in S3 after mcuxClEcc_Int_CoreKeyGen. */
+    /* Compute d in S2 using a blinded multiplication utilizing the random still stored in S3 after mcuxClEcc_WeierECC_BlindedSecretKeyGen_RandomWithExtraBits. */
     MCUXCLPKC_FP_CALCFUP(mcuxClEcc_FUP_Weier_KeyGen_DerivePlainPrivKey,
                         mcuxClEcc_FUP_Weier_KeyGen_DerivePlainPrivKey_LEN);
 
@@ -242,8 +241,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_KeyGen(
     /**********************************************************/
 
     /* Import prime p and order n again, and check (compare with) existing one. */
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_T0, pParam->curveParam.pP, byteLenP);
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_T1, pParam->curveParam.pN, byteLenN);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_KeyGen, ECC_T0, pParam->curveParam.pP, byteLenP);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_KeyGen, ECC_T1, pParam->curveParam.pN, byteLenN);
 
     MCUXCLPKC_FP_CALC_OP1_CMP(ECC_T0, ECC_P);
     uint32_t zeroFlag_checkP = MCUXCLPKC_WAITFORFINISH_GETZERO();
@@ -264,8 +263,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_KeyGen(
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_KeyGen, MCUXCLECC_STATUS_FAULT_ATTACK);
         }
 
-        MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC(pParam->pPublicKey, WEIER_XA, byteLenP);
-        MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC(pParam->pPublicKey + byteLenP, WEIER_YA, byteLenP);
+        MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC(pParam->pPublicKey, WEIER_XA, byteLenP); // CLNS-TODO-10884: looks like keyData
+        MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC(pParam->pPublicKey + byteLenP, WEIER_YA, byteLenP); // CLNS-TODO-10884: looks like keyData
 
         /* Clear PKC workarea. */
         MCUXCLPKC_PS1_SETLENGTH(0u, bufferSize * ECC_KEYGEN_NO_OF_BUFFERS);

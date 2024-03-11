@@ -1,8 +1,6 @@
 /*
  * Copyright 2014-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
- * All rights reserved.
- *
+ * Copyright 2016-2023 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  *
  */
@@ -15,7 +13,7 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_RW610ETA1I) || defined(CPU_RW610HNA1I) || defined(CPU_RW610UKA1I))
+#if (defined(CPU_RW610ETA2I) || defined(CPU_RW610HNA2I) || defined(CPU_RW610UKA2I))
 
 #define RW610_SERIES
 

@@ -78,7 +78,9 @@
         );  \
         (ofsP0_) = temp0;  \
         (ofsP1_) = temp1;  \
-    } while (false)
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_BOOLEAN_TYPE_FOR_CONDITIONAL_EXPRESSION() \
+    } while (false) \
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_BOOLEAN_TYPE_FOR_CONDITIONAL_EXPRESSION()
 
 #elif defined(ICCARM_ARMCC_GNUC)
 
@@ -113,7 +115,9 @@
         );  \
         (ofsP0_) = temp0;  \
         (ofsP1_) = temp1;  \
-    } while (false)
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_BOOLEAN_TYPE_FOR_CONDITIONAL_EXPRESSION() \
+    } while (false) \
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_BOOLEAN_TYPE_FOR_CONDITIONAL_EXPRESSION()
 
 #else
     #error Unsupported compiler. The above section must be manually adapted to support the inline assembly syntax.

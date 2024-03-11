@@ -23,8 +23,8 @@
 #define MCUXCSSLMEMORY_EX_OK    true
 #define MCUXCSSLMEMORY_EX_ERROR false
 
-bool data_invariant_memory_compare(void);
-bool data_invariant_memory_copy(void);
+MCUXCSSL_MEMORY_EX_FUNCTION(mcuxCsslMemory_Compare_example);
+MCUXCSSL_MEMORY_EX_FUNCTION(mcuxCsslMemory_Copy_example);
 MCUXCSSL_MEMORY_EX_FUNCTION(mcuxCsslMemory_Clear_example);
 MCUXCSSL_MEMORY_EX_FUNCTION(mcuxCsslMemory_Set_example);
 

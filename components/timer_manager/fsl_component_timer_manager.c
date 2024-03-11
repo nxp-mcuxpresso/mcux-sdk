@@ -441,6 +441,7 @@ static void TimersCheckAndUpdate(uint32_t remainingUs)
 static void TimersUpdateSyncTask(uint32_t remainingUs)
 {
     TimersCheckAndUpdate(remainingUs);
+    s_timermanager.previousTimeInUs = remainingUs;
     NotifyTimersTask();
 }
 
@@ -451,6 +452,7 @@ static void TimersUpdateSyncTask(uint32_t remainingUs)
 static void TimersUpdateDirectSync(uint32_t remainingUs)
 {
     TimersCheckAndUpdate(remainingUs);
+    s_timermanager.previousTimeInUs = remainingUs;
     TimerManagerTaskProcess(false);
 }
 
@@ -557,7 +559,6 @@ TIMER_MANAGER_STATIC void TimerEnable(timer_handle_t timerHandle)
         TimerSetTimerStatus(timerHandle, (uint8_t)kTimerStateReady_c);
         currentTimerCount = HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
         TimersUpdateSyncTask(currentTimerCount);
-        s_timermanager.previousTimeInUs = currentTimerCount;
     }
     EnableGlobalIRQ(regPrimask);
 }
@@ -663,7 +664,6 @@ void TM_ExitLowpower(void)
 
     remainingUs = HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
     TimersUpdateSyncTask(remainingUs);
-    s_timermanager.previousTimeInUs = remainingUs;
 }
 
 /*!
@@ -679,7 +679,6 @@ void TM_EnterLowpower(void)
      * and make sure all timers are processed correctly */
     remainingUs = HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
     TimersUpdateDirectSync(remainingUs);
-    s_timermanager.previousTimeInUs = remainingUs;
 
 #if (defined(TM_ENABLE_LOW_POWER_TIMER) && (TM_ENABLE_LOW_POWER_TIMER > 0U))
     HAL_TimerEnterLowpower((hal_timer_handle_t)s_timermanager.halTimerHandle);
@@ -724,7 +723,6 @@ void TM_EnterTickless(timer_handle_t timerHandle, uint64_t timerTimeout)
      * timerTimeout usec */
     remainingUs = HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
     TimersUpdateDirectSync(remainingUs);
-    s_timermanager.previousTimeInUs = remainingUs;
 
     EnableGlobalIRQ(regPrimask);
 }
@@ -748,7 +746,6 @@ void TM_ExitTickless(timer_handle_t timerHandle)
 
     remainingUs = HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
     TimersUpdateSyncTask(remainingUs);
-    s_timermanager.previousTimeInUs = remainingUs;
 
     EnableGlobalIRQ(regPrimask);
 }
@@ -977,7 +974,6 @@ timer_status_t TM_Stop(timer_handle_t timerHandle)
     status            = TimerStop(timerHandle);
     currentTimerCount = HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
     TimersUpdateSyncTask(currentTimerCount);
-    s_timermanager.previousTimeInUs = currentTimerCount;
     EnableGlobalIRQ(regPrimask);
     return status;
 }

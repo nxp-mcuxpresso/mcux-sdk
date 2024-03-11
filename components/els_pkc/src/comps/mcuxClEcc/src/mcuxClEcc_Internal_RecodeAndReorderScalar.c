@@ -28,9 +28,8 @@
 #include <internal/mcuxClPkc_Operations.h>
 #include <internal/mcuxClEcc_Internal.h>
 #include <internal/mcuxClEcc_Internal_UPTRT_access.h>
-#include <internal/mcuxClEcc_Internal_Interleave_FUP.h>
+#include <internal/mcuxClEcc_Internal_FUP.h>
 #include <internal/mcuxClMath_Internal_Utils.h>
-
 
 /**
  * This function recodes an odd, potentially secret, scalar lambda = (lambda_{f*K-1},...,lambda_0)_2 of (not necessarily exact) bit length f*K,
@@ -88,7 +87,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_RecodeAndReorderScalar
 
     /* Step 4:
      * Successively ( log_2(f) times ) do the following:
-     *   - Shift upper half of the f*K bit value in ECC_V0 to the next FAME word boundary
+     *   - Shift upper half of the f*K bit value in ECC_V0 to the next PKC word boundary
      *   - Use PKC to square lower and upper half of the value in ECC_V0 and store the results in ECC_T0 and ECC_T1, respectively
      *   - Left shift ECC_T1 by one bit
      *   - Set ECC_V0 = ECC_T0 | ECC_T1

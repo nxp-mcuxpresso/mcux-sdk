@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -24,6 +24,7 @@
 
 #include <mcuxClRsa.h>
 
+#include <internal/mcuxClBuffer_Internal.h>
 #include <internal/mcuxClSession_Internal.h>
 #include <internal/mcuxClPkc_Macros.h>
 #include <internal/mcuxClPkc_Operations.h>
@@ -34,7 +35,6 @@
 #include <internal/mcuxClRsa_Internal_Macros.h>
 #include <internal/mcuxClRsa_Internal_MemoryConsumption.h>
 #include <internal/mcuxClRsa_Internal_PkcTypes.h>
-#include <internal/mcuxClRsa_Public_FUP.h>
 
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRsa_public, mcuxClRsa_PublicExpEngine_t)
@@ -42,7 +42,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_public(
   mcuxClSession_Handle_t      pSession,
   const mcuxClRsa_Key * const pKey,
   mcuxCl_InputBuffer_t        pInput,
-  mcuxCl_Buffer_t             pOutput)
+  uint8_t *                  pOutput)
 {
   MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClRsa_public);
 
@@ -88,16 +88,20 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_public(
   /************************************************************************************************/
 
   /* Prepare buffers in PKC workarea and clear PKC workarea */
-  const uint32_t operandSize = MCUXCLRSA_PKC_ROUNDUP_SIZE(byteLenN);
-  const uint16_t bufferSizeX = (uint16_t)operandSize;
-  const uint16_t bufferSizeR = (uint16_t)operandSize + MCUXCLRSA_PKC_WORDSIZE;
-  const uint16_t bufferSizeN = (uint16_t)operandSize + MCUXCLRSA_PKC_WORDSIZE; // PKC word in front of the modulus buffer for NDash
-  const uint16_t bufferSizeT1 = (uint16_t)operandSize + MCUXCLRSA_PKC_WORDSIZE;
-  const uint16_t bufferSizeT2 = (uint16_t)operandSize + MCUXCLRSA_PKC_WORDSIZE;
+  const uint32_t blindLen = MCUXCLRSA_INTERNAL_MOD_BLINDING_SIZE;  // length in bytes of the random value used for blinding
+  const uint32_t blindAlignLen = MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(blindLen);
+  const uint32_t operandSize = MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(byteLenN);
+  const uint32_t blindOperandSize = operandSize + blindAlignLen;
+  const uint32_t bufferSizeX = blindOperandSize;
+  const uint32_t bufferSizeN = blindOperandSize + MCUXCLRSA_PKC_WORDSIZE; // PKC word in front of the modulus buffer for NDash
+  const uint32_t bufferSizeT1 = blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;
+  const uint32_t bufferSizeT2 = blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;
+  const uint32_t bufferSizeT3 = blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;
+  const uint32_t bufferSizeRand = blindAlignLen;  // size of buffer for random multiplicative blinding
 
   /* Setup session. */
-  const uint16_t bufferSizeTotal = bufferSizeX + bufferSizeN + bufferSizeR + bufferSizeT1 + bufferSizeT2;
-  const uint32_t pkcWaSizeWord = (uint32_t) bufferSizeTotal / (sizeof(uint32_t));
+  const uint32_t bufferSizeTotal = bufferSizeX + bufferSizeN + bufferSizeT3 + bufferSizeT1 + bufferSizeT2 + bufferSizeRand;
+  const uint32_t pkcWaSizeWord = bufferSizeTotal / (sizeof(uint32_t));
   uint8_t *pPkcWorkarea = (uint8_t *) mcuxClSession_allocateWords_pkcWa(pSession, pkcWaSizeWord);
   if (NULL == pPkcWorkarea)
   {
@@ -115,11 +119,15 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_public(
   }
 
   pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_X] = MCUXCLPKC_PTR2OFFSET(pPkcWorkarea);
-  pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_R] = MCUXCLPKC_PTR2OFFSET(pPkcWorkarea + bufferSizeX);
-  pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_N] = MCUXCLPKC_PTR2OFFSET(pPkcWorkarea + bufferSizeX + bufferSizeR + MCUXCLRSA_PKC_WORDSIZE /* for NDash stored in the PKC word in front of the modulus */);
-  pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T1] = MCUXCLPKC_PTR2OFFSET(pPkcWorkarea + bufferSizeX + bufferSizeR + bufferSizeN);
-  pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T2] = MCUXCLPKC_PTR2OFFSET(pPkcWorkarea + bufferSizeX + bufferSizeR + bufferSizeN + bufferSizeT1);
+  pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_N] = MCUXCLPKC_PTR2OFFSET(pPkcWorkarea + bufferSizeX + MCUXCLRSA_PKC_WORDSIZE /* for NDash stored in the PKC word in front of the modulus */);
+  pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T1] = MCUXCLPKC_PTR2OFFSET(pPkcWorkarea + bufferSizeX + bufferSizeN);
+  pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T2] = MCUXCLPKC_PTR2OFFSET(pPkcWorkarea + bufferSizeX + bufferSizeN + bufferSizeT1);
+  pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T3] = MCUXCLPKC_PTR2OFFSET(pPkcWorkarea + bufferSizeX + bufferSizeN + bufferSizeT1 + bufferSizeT2);
   pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_OUTPUT] = MCUXCLPKC_PTR2OFFSET(pOutput);
+  MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("pPkcWorkarea is word aligned in PKC workarea.")
+  uint32_t *pBlind = ((uint32_t *)pPkcWorkarea + (bufferSizeX + bufferSizeT3 + bufferSizeN + bufferSizeT1 + bufferSizeT2)/sizeof(uint32_t));
+  MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
+  pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_RAND] = MCUXCLPKC_PTR2OFFSET((uint8_t *) pBlind);
 
   /* Set UPTRT table */
   MCUXCLPKC_SETUPTRT(pOperands);
@@ -135,7 +143,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_public(
   MCUXCLPKC_PS1_SETLENGTH(0u, operandSize);
   MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_N, pKey->pMod1->pKeyEntryData, byteLenN);
   /* Import input. */
-  MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_X, pInput, byteLenN);
+  MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClRsa_public, MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_X, pInput, byteLenN);
 
   /************************************************************************************************/
   /* Check that pInput < pKey->pMod1;  otherwise return MCUXCLRSA_STATUS_INVALID_INPUT             */
@@ -157,7 +165,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_public(
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_public, MCUXCLRSA_STATUS_INVALID_INPUT,
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_set),
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
+        MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
         MCUXCLPKC_FP_CALLED_CALC_OP1_CMP,
         MCUXCLPKC_FP_CALLED_CALC_OP1_CONST);
   }
@@ -180,47 +188,34 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_public(
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_public, MCUXCLRSA_STATUS_INTERNAL_KEYOP_OK,
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_set),
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
+        MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
         MCUXCLPKC_FP_CALLED_CALC_OP1_CMP,
         MCUXCLPKC_FP_CALLED_CALC_OP1_SUB_CONST,
         MCUXCLPKC_FP_CALLED_CALC_OP1_CONST);
   }
 
-  /************************************************************************************************/
-  /* Prepare Montgomery parameters and convert parameters to Montgomery representation.           */
-  /************************************************************************************************/
 
-  /* Calculate Ndash of N */
-  MCUXCLMATH_FP_NDASH(MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_N, MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T1);
+  MCUX_CSSL_FP_FUNCTION_CALL(retPublicExp, mcuxClRsa_publicExp(pSession,
+    MCUXCLPKC_PACKARGS4(MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_OUTPUT,
+                       MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_X,
+                       MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_N,
+                       MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T1),
+    MCUXCLPKC_PACKARGS4(0, MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T3,
+                       MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T2,
+                       MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_RAND),
+    pKey->pExp1->keyEntryLength,
+    pExp));
+  if (MCUXCLRSA_STATUS_INTERNAL_KEYOP_OK != retPublicExp)
+  {
+    MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_public, MCUXCLRSA_STATUS_ERROR,
+        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_set),
+        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
+        MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
+        MCUXCLPKC_FP_CALLED_CALC_OP1_CMP,
+        MCUXCLPKC_FP_CALLED_CALC_OP1_SUB_CONST,
+        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_publicExp));
 
-  /* Calculate QSquared */
-  MCUXCLPKC_PS1_SETLENGTH(operandSize, operandSize);
-  MCUXCLMATH_FP_SHIFTMODULUS(MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T1, MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_N); //shift modulus
-  MCUXCLMATH_FP_QSQUARED(MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_R /* QSquared */, MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T1,
-      MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_N, MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T2);
-
-  /* Convert input to Montgomery representation i.e. M*QSquared mod N */
-  MCUXCLPKC_FP_CALC_MC1_MM(MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T1 /* Mm */, MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_X /* M */,
-      MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_R /* QSquared */, MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_N);
-
-  /************************************************************************************************/
-  /* Call mcuxClMath_ModExp_SqrMultL2R                                                             */
-  /* Return checking is unnecessary, because it always returns OK.                                */
-  /************************************************************************************************/
-
-  //mcuxClMath_ModExp_SqrMultL2R(pExp, byteLenExp, iR_iX_iN_iT);
-  //R -> size lenN + PKC wordsize
-  //X -> size lenX
-  //N -> size lenN + PKC word in front of the modulus buffer for NDash
-  //T -> size lenN + PKC wordsize
-  uint32_t byteLenExp = pKey->pExp1->keyEntryLength;
-  MCUXCLMATH_FP_MODEXP_SQRMULTL2R(pExp, byteLenExp, MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T2, MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T1,
-      MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_N, MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_R);
-
-  /* Montgomery reduction and normalize the result */ 
-  MCUXCLPKC_FP_CALCFUP(mcuxClRsa_Public_ReductionME_FUP,
-          mcuxClRsa_Public_ReductionME_FUP_LEN);
-  MCUXCLPKC_WAITFORFINISH();
+  }
 
   /************************************************************************************************/
   /* Function exit                                                                                */
@@ -232,14 +227,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_public(
   MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_public, MCUXCLRSA_STATUS_INTERNAL_KEYOP_OK,
       MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_set),
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
+        MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
         MCUXCLPKC_FP_CALLED_CALC_OP1_CMP,
         MCUXCLPKC_FP_CALLED_CALC_OP1_SUB_CONST,
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_NDash),
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_ShiftModulus),
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_QSquared),
-        MCUXCLPKC_FP_CALLED_CALC_MC1_MM,
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_ModExp_SqrMultL2R),
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_CalcFup)
+        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_publicExp)
         );
 }

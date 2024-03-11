@@ -43,13 +43,14 @@
  * @param[in]       value           pointer to the 32-bit integer to be encoded.
  *
  */
-#define mcuxClMemory_StoreLittleEndian32( destination, value )       \
-do                                                                  \
-{                                                                   \
-    (destination)[0] = (uint8_t) (((value) & 0x000000FFU) >>  0u);  \
-    (destination)[1] = (uint8_t) (((value) & 0x0000FF00U) >>  8u);  \
-    (destination)[2] = (uint8_t) (((value) & 0x00FF0000U) >> 16u);  \
-    (destination)[3] = (uint8_t) (((value) & 0xFF000000U) >> 24u);  \
+#define mcuxClMemory_StoreLittleEndian32( destination, value )                       \
+do                                                                                  \
+{                                                                                   \
+    uint32_t local_value = (uint32_t)(value);                                       \
+    ((uint8_t*)(destination))[0] = (uint8_t) (((local_value) & 0x000000FFU) >>  0u);\
+    ((uint8_t*)(destination))[1] = (uint8_t) (((local_value) & 0x0000FF00U) >>  8u);\
+    ((uint8_t*)(destination))[2] = (uint8_t) (((local_value) & 0x00FF0000U) >> 16u);\
+    ((uint8_t*)(destination))[3] = (uint8_t) (((local_value) & 0xFF000000U) >> 24u);\
 } while (false)
 
 /**
@@ -60,13 +61,14 @@ do                                                                  \
  * @param[in]       source          pointer to a 4 byte big-endian order @c uint8_t buffer that will be converted to an unsigned integer
  *
  */
-#define mcuxClMemory_StoreBigEndian32( destination, value )          \
-do                                                                  \
-{                                                                   \
-    (destination)[0] = (uint8_t) (((value) & 0xFF000000U) >> 24u);  \
-    (destination)[1] = (uint8_t) (((value) & 0x00FF0000U) >> 16u);  \
-    (destination)[2] = (uint8_t) (((value) & 0x0000FF00U) >>  8u);  \
-    (destination)[3] = (uint8_t) (((value) & 0x000000FFU) >>  0u);  \
+#define mcuxClMemory_StoreBigEndian32( destination, value )                          \
+do                                                                                  \
+{                                                                                   \
+    uint32_t local_value = (uint32_t)(value);                                       \
+    ((uint8_t*)(destination))[0] = (uint8_t) (((local_value) & 0xFF000000U) >> 24u);\
+    ((uint8_t*)(destination))[1] = (uint8_t) (((local_value) & 0x00FF0000U) >> 16u);\
+    ((uint8_t*)(destination))[2] = (uint8_t) (((local_value) & 0x0000FF00U) >>  8u);\
+    ((uint8_t*)(destination))[3] = (uint8_t) (((local_value) & 0x000000FFU) >>  0u);\
 } while (false)
 
 /**
@@ -77,11 +79,11 @@ do                                                                  \
  * @param[in]       source          pointer to a 4 byte little-endian order @c uint8_t buffer that will be converted to an unsigned integer
  *
  */
-#define mcuxClMemory_LoadLittleEndian32( source )                            \
-    ( (((uint32_t) (source)[0]) <<  0u) |                                   \
-      (((uint32_t) (source)[1]) <<  8u) |                                   \
-      (((uint32_t) (source)[2]) << 16u) |                                   \
-      (((uint32_t) (source)[3]) << 24u) )
+#define mcuxClMemory_LoadLittleEndian32( source )        \
+    ( (((uint32_t) ((const uint8_t*)(source))[0]) <<  0u) |   \
+      (((uint32_t) ((const uint8_t*)(source))[1]) <<  8u) |   \
+      (((uint32_t) ((const uint8_t*)(source))[2]) << 16u) |   \
+      (((uint32_t) ((const uint8_t*)(source))[3]) << 24u) )
 
 
 /**
@@ -91,11 +93,11 @@ do                                                                  \
  *
  * @return a 32-bit unsigned integer
  */
-#define mcuxClMemory_LoadBigEndian32( source )                               \
-    ( (((uint32_t) (source)[0]) << 24u) |                                   \
-      (((uint32_t) (source)[1]) << 16u) |                                   \
-      (((uint32_t) (source)[2]) <<  8u) |                                   \
-      (((uint32_t) (source)[3]) <<  0u) )
+#define mcuxClMemory_LoadBigEndian32( source )           \
+    ( (((uint32_t) ((const uint8_t*)(source))[0]) << 24u) |   \
+      (((uint32_t) ((const uint8_t*)(source))[1]) << 16u) |   \
+      (((uint32_t) ((const uint8_t*)(source))[2]) <<  8u) |   \
+      (((uint32_t) ((const uint8_t*)(source))[3]) <<  0u) )
 
 /**
  * @brief MACRO that switches byte endianness of given CPU word.

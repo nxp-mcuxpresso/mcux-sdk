@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2021-03-16
-**     Build:               b230908
+**     Build:               b231201
 **
 **     Abstract:
 **         Chip specific module features.
@@ -416,6 +416,8 @@
 #define FSL_FEATURE_TRNG_HAS_RSTCTL (1)
 /* @brief TRNG supports dual oscillator mode. */
 #define FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS (1)
+/* @brief TRNG supports control pin */
+#define FSL_FEATURE_TRNG_HAS_CTRL_PIN (1)
 
 /* USB module features */
 

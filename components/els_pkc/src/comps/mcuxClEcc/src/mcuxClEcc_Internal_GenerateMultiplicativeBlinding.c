@@ -24,6 +24,7 @@
 #include <mcuxClPkc.h>
 #include <mcuxClMath.h>
 #include <mcuxClSession.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClRandom.h>
 
 #include <mcuxClEcc.h>
@@ -70,7 +71,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_GenerateMultiplicative
     volatile uint32_t *p32S0 = (volatile uint32_t *) pS0;
     MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES()
 
-    MCUX_CSSL_FP_FUNCTION_CALL(retGetRandom, mcuxClRandom_ncGenerate(pSession, pS0, MCUXCLECC_SCALARBLINDING_BYTELEN));
+    MCUXCLBUFFER_INIT(buffS0, NULL, pS0, MCUXCLECC_SCALARBLINDING_BYTELEN);
+    MCUX_CSSL_FP_FUNCTION_CALL(retGetRandom, mcuxClRandom_ncGenerate(pSession, buffS0, MCUXCLECC_SCALARBLINDING_BYTELEN));
     if (MCUXCLRANDOM_STATUS_OK != retGetRandom)
     {
         /* if it fails, error code is related to RNG issue, so translated to generic return code */

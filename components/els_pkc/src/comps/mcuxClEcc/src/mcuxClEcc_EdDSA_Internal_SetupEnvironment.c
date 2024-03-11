@@ -20,6 +20,7 @@
 #include <mcuxClSession.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClEcc.h>
 
 #include <internal/mcuxClPkc_ImportExport.h>
 #include <internal/mcuxClPkc_Operations.h>

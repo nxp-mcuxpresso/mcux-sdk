@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2022-2023 NXP                                                  */
+/* Copyright 2022-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -25,12 +25,14 @@
 #include <internal/mcuxClTrng_Internal.h>
 #include <internal/mcuxClMemory_Copy_Internal.h>
 #include <internal/mcuxClEls_Internal.h>
+#include <internal/mcuxClBuffer_Internal.h>
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRandomModes_DRBG_AES_Internal_blockcipher)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_DRBG_AES_Internal_blockcipher(
+    mcuxClSession_Handle_t pSession UNUSED_PARAM,
     uint32_t const *pV,
     uint32_t const *pKey,
-    uint8_t *pOut,
+    mcuxCl_Buffer_t pOut,
     uint32_t keyLength
 )
 {
@@ -42,6 +44,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_DRBG_AES_In
     cipher_options.bits.cphmde = MCUXCLELS_CIPHERPARAM_ALGORITHM_AES_ECB;
     cipher_options.bits.dcrpt = MCUXCLELS_CIPHER_ENCRYPT;
     cipher_options.bits.extkey = MCUXCLELS_CIPHER_EXTERNAL_KEY;
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_NULL_POINTER_CONSTANT("NULL is used in code")
     MCUX_CSSL_ANALYSIS_START_PATTERN_ADDRESS_IN_SFR_IS_NOT_REUSED_OUTSIDE()
     MCUX_CSSL_FP_FUNCTION_CALL(result_cipher, mcuxClEls_Cipher_Async(
                 cipher_options,
@@ -52,7 +55,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_DRBG_AES_In
                 MCUXCLAES_BLOCK_SIZE,
                 NULL,
                 elsOut));
-    MCUX_CSSL_ANALYSIS_STOP_PATTERN_ADDRESS_IN_SFR_IS_NOT_REUSED_OUTSIDE()    
+    MCUX_CSSL_ANALYSIS_STOP_PATTERN_ADDRESS_IN_SFR_IS_NOT_REUSED_OUTSIDE()
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_NULL_POINTER_CONSTANT()
     if (MCUXCLELS_STATUS_SW_CANNOT_INTERRUPT == result_cipher)
     {
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRandomModes_DRBG_AES_Internal_blockcipher, MCUXCLRANDOM_STATUS_ERROR,
@@ -84,10 +88,11 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_DRBG_AES_In
     }
 
     /* Copy the bytes from the buffer to output. */
-    MCUXCLMEMORY_FP_MEMORY_COPY(pOut, elsOut, MCUXCLAES_BLOCK_SIZE);
+    MCUX_CSSL_FP_FUNCTION_CALL(writeStatus, mcuxClBuffer_write(pOut, 0u, elsOut, MCUXCLAES_BLOCK_SIZE));
+    (void)writeStatus;
 
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRandomModes_DRBG_AES_Internal_blockcipher, MCUXCLRANDOM_STATUS_OK,
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation),
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_copy),
+        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClBuffer_write),
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_Cipher_Async));
 }

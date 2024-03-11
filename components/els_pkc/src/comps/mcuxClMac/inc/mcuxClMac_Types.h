@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -74,28 +74,6 @@ typedef const mcuxClMac_ModeDescriptor_t * const mcuxClMac_Mode_t;
  */
 typedef mcuxClMac_ModeDescriptor_t * const mcuxClMac_CustomMode_t;
 
-/**
- * @brief Mac selftest mode/algorithm descriptor structure
- *
- * This structure captures all the information that the Mac selftest interfaces need
- * to know about a particular Mac selftest mode/algorithm.
- */
-struct mcuxClMac_TestDescriptor;
-
-/**
- * @brief Mac selftest mode/algorithm descriptor type
- *
- * This type captures all the information that the Mac selftest interfaces need
- * to know about a particular Mac selftest mode/algorithm.
- */
-typedef struct mcuxClMac_TestDescriptor mcuxClMac_TestDescriptor_t;
-
-/**
- * @brief Mac selftest mode/algorithm type
- *
- * This type is used to refer to a Mac selftest mode/algorithm.
- */
-typedef const mcuxClMac_TestDescriptor_t * const mcuxClMac_Test_t;
 
 /**
  * @brief Mac context structure
@@ -113,6 +91,8 @@ struct mcuxClMac_Context;
  *
  * The size of the context depends on the mode used
  * (see @ref mcuxClMac_MemoryConsumption).
+ * 
+ * Note: A copy of the Mac context to another memory location is only supported if both source and destination addresses have the same 64 bit alignment.
  *
  */
 typedef struct mcuxClMac_Context mcuxClMac_Context_t;

@@ -22,7 +22,7 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
-
+#ifndef WIFI_BT_USE_IMU_INTERFACE
 void BOARD_WIFI_BT_Enable(bool enable)
 {
     if (enable)
@@ -63,3 +63,4 @@ void BOARD_WIFI_BT_Config(void *card, sdio_int_t cardInt)
 #endif
     BOARD_WIFI_BT_Enable(false);
 }
+#endif

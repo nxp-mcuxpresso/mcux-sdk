@@ -11,14 +11,14 @@
 /* software.                                                                */
 /*--------------------------------------------------------------------------*/
 
+#include <mcuxCsslAnalysis.h>
+
 #include <internal/mcuxClRsa_Internal_PkcDefs.h>
 #include <internal/mcuxClPkc_FupMacros.h>
 #include <internal/mcuxClRsa_TestPrimeCandidate_FUP.h>
 
-#include <mcuxCsslAnalysis.h>
-
 MCUXCLPKC_FUP_EXT_ROM(mcuxClRsa_TestPrimeCandidate_Steps2_FUP,
-    PH_CLNS_UTILS_FAME_CRC_ENTRY,
+    FUP_CRC_PLACEHOLDER,
     FUP_OP1_OR_CONST(MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_GCD1,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_CANDIDATE,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_CONSTANT0),
@@ -34,7 +34,7 @@ MCUXCLPKC_FUP_EXT_ROM(mcuxClRsa_TestPrimeCandidate_Steps2_FUP,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_CONSTANT2)
 );
 MCUXCLPKC_FUP_EXT_ROM(mcuxClRsa_TestPrimeCandidate_Steps3_FUP,
-    PH_CLNS_UTILS_FAME_CRC_ENTRY,
+    FUP_CRC_PLACEHOLDER,
     FUP_OP1_SUB_CONST(MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_GCD1,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_CANDIDATE,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_CONSTANT1),

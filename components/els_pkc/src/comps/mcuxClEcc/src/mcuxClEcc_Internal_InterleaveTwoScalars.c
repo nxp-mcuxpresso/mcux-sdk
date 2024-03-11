@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -26,7 +26,7 @@
 
 #include <mcuxClEcc.h>
 #include <internal/mcuxClEcc_Internal.h>
-#include <internal/mcuxClEcc_Internal_Interleave_FUP.h>
+#include <internal/mcuxClEcc_Internal_FUP.h>
 
 
 /**
@@ -67,16 +67,20 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_InterleaveTwoScalars(u
     uint8_t iScalar0 = (uint8_t) (iScalar0_iScalar1 >> 8);
     uint8_t iScalar1 = (uint8_t) (iScalar0_iScalar1 & 0xFFu);
 
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("scalarBitLength is in the range of [1, MCUXCLPKC_RAM_SIZE * 8u], this is false positive. ")
     uint32_t bitLenHalfScalar = scalarBitLength - (scalarBitLength >> 1);  /* ceil(bitLen / 2) */
     uint32_t byteLenHalfScalar_PKCWord = ((bitLenHalfScalar + (MCUXCLPKC_WORDSIZE * 8u) - 1u) / (MCUXCLPKC_WORDSIZE * 8u)) * MCUXCLPKC_WORDSIZE;
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
 
     uint32_t offsets_V1_V0 = /* ECC_V0 */ (uint32_t) pOperands[iScalar0]
                              /* ECC_V1 */ + (((uint32_t) pOperands[ECC_T0] + byteLenHalfScalar_PKCWord) << 16);
 
     MCUXCLPKC_WAITFORREADY();
-    /* MISRA Ex. 9 to Rule 11.3 - pOperands32 is pointer to 16-bit offset table */
+    /* MISRA Ex. 9 to Rule 11.3 - pOperands32 is pointer to 16-bit offset table */
     MCUXCLECC_STORE_2OFFSETS(pOperands32, ECC_V0, ECC_V1, offsets_V1_V0);
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("modular arithmetic.")
     pOperands[ECC_V3] = (uint16_t) (0u - bitLenHalfScalar);  /* PKC will ignore higher bits of shifting amount. */
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
 
     MCUXCLPKC_ENABLEGF2();
     MCUXCLPKC_PS1_SETLENGTH(0u, 2u * byteLenHalfScalar_PKCWord);

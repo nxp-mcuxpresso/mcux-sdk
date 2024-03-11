@@ -18,6 +18,7 @@
 
 #include <mcuxClSession.h>
 #include <mcuxClRandom_Types.h>
+#include <mcuxClBuffer.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,7 +42,7 @@ extern "C" {
 typedef mcuxClRandom_Status_t (* mcuxClRandomModes_CustomGenerateAlgorithm_t)(
     mcuxClSession_Handle_t session,
     mcuxClRandom_Context_t pCustomCtx,
-    uint8_t *pOut,
+    mcuxCl_Buffer_t pOut,
     uint32_t outLength
 );
 
@@ -58,7 +59,7 @@ typedef mcuxClRandom_Status_t (* mcuxClRandomModes_CustomGenerateAlgorithm_t)(
  *
  * \param  patchMode[out]               Pointer to PATCH_MODE descriptor to be initialized
  * \param  customGenerateAlgorithm[in]  Pointer to the custom generate function
- * \param  pEntropyInput[in]            Pointer to a custom context which shall be used by the passed custom generate function
+ * \param  pCustomCtx[in]               Pointer to a custom context which shall be used by the passed custom generate function
  * \param  securityStrength[in]         Security level for which the patch DRBG shall be used
  *
  * \return status

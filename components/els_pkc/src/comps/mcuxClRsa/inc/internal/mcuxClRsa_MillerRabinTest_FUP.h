@@ -16,7 +16,9 @@
 */
 #ifndef MCUXCLRSA_MILLERRABINTEST_FUP_H_
 #define MCUXCLRSA_MILLERRABINTEST_FUP_H_
-#include <mcuxClConfig.h> // Exported features flags header
+#include <mcuxClCore_Platform.h>
+#include <mcuxCsslAnalysis.h>
+
 #include <internal/mcuxClPkc_FupMacros.h>
 
 #ifdef __cplusplus
@@ -25,10 +27,12 @@ extern "C" {
 
 #define mcuxClRsa_MillerRabinTest_ReducAndCheck_FUP_LEN  4u
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_LINKAGE_FUP()
 extern const mcuxClPkc_FUPEntry_t mcuxClRsa_MillerRabinTest_ReducAndCheck_FUP[mcuxClRsa_MillerRabinTest_ReducAndCheck_FUP_LEN];
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_LINKAGE_FUP()
 
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
 
-#endif /* MCUXCLRSA_MILLERRABINTEST_FUP_H_ */ 
+#endif /* MCUXCLRSA_MILLERRABINTEST_FUP_H_ */

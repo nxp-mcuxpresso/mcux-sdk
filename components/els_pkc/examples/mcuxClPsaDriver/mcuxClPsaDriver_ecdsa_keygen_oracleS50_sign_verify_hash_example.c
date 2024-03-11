@@ -13,6 +13,7 @@
 
 #include "common.h"
 
+#include <mcuxClToolchain.h>
 #include <mcuxClSession.h> // Interface to the entire mcuxClSession component
 #include <mcuxCsslFlowProtection.h> // Code flow protection
 #include <mcuxClPsaDriver.h>
@@ -23,7 +24,7 @@
 /**
  * @brief Hash of message to be signed
  */
-static const uint8_t hash[PSA_HASH_LENGTH(PSA_ALG_SHA_256)] __attribute__ ((aligned (4))) = {
+static const ALIGNED uint8_t hash[PSA_HASH_LENGTH(PSA_ALG_SHA_256)] = {
   0x89, 0x01, 0x41, 0x9f, 0x26, 0x14, 0xc9, 0x42, 0xc9, 0xee, 0x5e, 0xfb, 0xdf, 0xba, 0x0c, 0xca,
   0x70, 0x6b, 0x3a, 0x4e, 0xd1, 0xa8, 0x5f, 0x69, 0x28, 0xb7, 0x60, 0xff, 0x1b, 0xba, 0xb0, 0xe7
 };
@@ -31,7 +32,9 @@ static const uint8_t hash[PSA_HASH_LENGTH(PSA_ALG_SHA_256)] __attribute__ ((alig
 /**
  * @brief Signature
  */
-static uint8_t signature[PSA_SIGN_OUTPUT_SIZE(PSA_KEY_TYPE_ECC_KEY_PAIR_BASE, 256u, PSA_ALG_ECDSA_ANY)] __attribute__ ((aligned (4))) = {0u};
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT("External macro")
+static ALIGNED uint8_t signature[PSA_SIGN_OUTPUT_SIZE(PSA_KEY_TYPE_ECC_KEY_PAIR_BASE, 256u, PSA_ALG_ECDSA_ANY)] = {0u};
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT()
 
 /* Oracle-internal location defines, needed here to verify/show Oracle behaviour for generate key */
 #ifndef PSA_KEY_LOCATION_ORACLE_S50_STORAGE
@@ -48,7 +51,7 @@ static uint8_t signature[PSA_SIGN_OUTPUT_SIZE(PSA_KEY_TYPE_ECC_KEY_PAIR_BASE, 25
  * - SHA-256
  * - signature scheme PSA_ALG_ECDSA_ANY
  */
-bool mcuxClPsaDriver_ecdsa_keygen_oracleS50_sign_verify_hash_example(void)
+MCUXCLEXAMPLE_FUNCTION(mcuxClPsaDriver_ecdsa_keygen_oracleS50_sign_verify_hash_example)
 {
   /** Initialize ELS, Enable the ELS **/
   if(!mcuxClExample_Els_Init(MCUXCLELS_RESET_DO_NOT_CANCEL))
@@ -76,8 +79,8 @@ bool mcuxClPsaDriver_ecdsa_keygen_oracleS50_sign_verify_hash_example(void)
     .domain_parameters_size = 0U
   };
 
-  size_t private_key_buffer_size = PSA_BITS_TO_BYTES(256u);
-  uint32_t private_key_buffer[PSA_BITS_TO_BYTES(256u) / sizeof(uint32_t)] = {0u};
+  size_t private_key_buffer_size = 256u / 8u;
+  uint32_t private_key_buffer[256u / 8u] = {0u};
   size_t private_key_buffer_length = 0U;
 
   psa_status_t status = psa_driver_wrapper_generate_key(
@@ -91,7 +94,7 @@ bool mcuxClPsaDriver_ecdsa_keygen_oracleS50_sign_verify_hash_example(void)
   }
 
   /* Check the output length */
-  if(private_key_buffer_length != PSA_BITS_TO_BYTES(256u))
+  if(private_key_buffer_length != (256u / 8u))
   {
       return MCUXCLEXAMPLE_STATUS_ERROR;
   }
@@ -138,11 +141,12 @@ bool mcuxClPsaDriver_ecdsa_keygen_oracleS50_sign_verify_hash_example(void)
   }
 
   /* Check the signature length */
+  MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_MACRO()
   if(signature_length != PSA_SIGN_OUTPUT_SIZE(PSA_KEY_TYPE_ECC_KEY_PAIR_BASE, 256u, PSA_ALG_ECDSA_ANY))
+  MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_MACRO()
   {
     return MCUXCLEXAMPLE_STATUS_ERROR;
   }
-
 
   /*
    * Export the public key to verify the signature
@@ -165,8 +169,8 @@ bool mcuxClPsaDriver_ecdsa_keygen_oracleS50_sign_verify_hash_example(void)
   };
 
   /* Call export_public_key operation */
-  size_t public_key_buffer_size = 2u * PSA_BITS_TO_BYTES(256u) + 1u;
-  uint8_t public_key_buffer[2u * PSA_BITS_TO_BYTES(256u) + 1u] = {0U};
+  size_t public_key_buffer_size = 2u * 256u / 8u + 1u;
+  ALIGNED uint8_t public_key_buffer[2u * 256u / 8u + 1u] = {0U};
   size_t public_key_buffer_length = 0U;
 
   status = psa_driver_wrapper_export_public_key(
@@ -225,9 +229,4 @@ bool mcuxClPsaDriver_ecdsa_keygen_oracleS50_sign_verify_hash_example(void)
 
   /* Return */
   return MCUXCLEXAMPLE_STATUS_OK;
-}
-bool nxpClPsaDriver_ecdsa_keygen_oracleS50_sign_verify_hash_example(void)
-{
-    bool result = mcuxClPsaDriver_ecdsa_keygen_oracleS50_sign_verify_hash_example();
-    return result;
 }

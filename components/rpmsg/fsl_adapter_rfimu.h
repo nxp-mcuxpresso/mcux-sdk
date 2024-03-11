@@ -22,11 +22,14 @@
  ******************************************************************************/
 
 #ifndef IMU_TASK_PRIORITY
-#if defined(CPU2)
+#if defined(CONFIG_ZEPHYR)
+#define IMU_TASK_PRIORITY (3U)
+#elif defined(CPU2)
 #define IMU_TASK_PRIORITY (2U)
 #else
-#define IMU_TASK_PRIORITY (6U)  /* makesure the calculated priority of HAL_ImuMainCpu13 task is the same with tcp/ip task(priority 2), 
-                                   otherwise the throughput of udp rx will be very low */
+#define IMU_TASK_PRIORITY                                                                                       \
+    (6U) /* makesure the calculated priority of HAL_ImuMainCpu13 task is the same with tcp/ip task(priority 2), \
+            otherwise the throughput of udp rx will be very low */
 #endif
 #endif
 
@@ -191,21 +194,21 @@ typedef void (*imu_irq_callback_t)(void);
 #define IS_WLAN_TXBQ_EMPTY(q) ((q)->writeIndex == (q)->readIndex)
 
 /*! @brief Checks whether a tx buffer queue is full */
-#define IS_WLAN_TXBQ_FULL(q)                                                \
+#define IS_WLAN_TXBQ_FULL(q)                                                  \
     ((((q)->writeIndex & (1UL << 31U)) != ((q)->readIndex & (1UL << 31U))) && \
      (((q)->writeIndex & IMU_TXQ_ENTRY_MASK) == ((q)->readIndex & IMU_TXQ_ENTRY_MASK)))
 
 /*! @brief Increments write pointer*/
 #define INCR_WLAN_TXBQ_WR_INDEX(q, n)                                \
     {                                                                \
-        unsigned int wrapBit = (q)->writeIndex & (1UL << 31U);        \
+        unsigned int wrapBit = (q)->writeIndex & (1UL << 31U);       \
         unsigned int val     = (q)->writeIndex & IMU_TXQ_ENTRY_MASK; \
         unsigned int newVal  = (val + (n)) & IMU_TXQ_ENTRY_MASK;     \
         if ((n) > 0U)                                                \
         {                                                            \
             if (newVal <= val)                                       \
             {                                                        \
-                (q)->writeIndex = newVal | (wrapBit ^ (1UL << 31U));  \
+                (q)->writeIndex = newVal | (wrapBit ^ (1UL << 31U)); \
             }                                                        \
             else                                                     \
             {                                                        \
@@ -217,14 +220,14 @@ typedef void (*imu_irq_callback_t)(void);
 /*! @brief Increments read pointer */
 #define INCR_WLAN_TXBQ_RD_INDEX(q, n)                               \
     {                                                               \
-        unsigned int wrapBit = (q)->readIndex & (1UL << 31U);        \
+        unsigned int wrapBit = (q)->readIndex & (1UL << 31U);       \
         unsigned int val     = (q)->readIndex & IMU_TXQ_ENTRY_MASK; \
         unsigned int newVal  = (val + (n)) & IMU_TXQ_ENTRY_MASK;    \
         if ((n) > 0U)                                               \
         {                                                           \
             if (newVal <= val)                                      \
             {                                                       \
-                (q)->readIndex = newVal | (wrapBit ^ (1UL << 31U));  \
+                (q)->readIndex = newVal | (wrapBit ^ (1UL << 31U)); \
             }                                                       \
             else                                                    \
             {                                                       \
@@ -238,24 +241,24 @@ typedef void (*imu_irq_callback_t)(void);
 #define IS_RPMSG_TXBQ23_EMPTY(q) ((q)->writeIndex == (q)->readIndex)
 
 /*! @brief Checks whether a tx buffer queue is full */
-#define IS_RPMSG_TXBQ13_FULL(q)                                             \
+#define IS_RPMSG_TXBQ13_FULL(q)                                               \
     ((((q)->writeIndex & (1UL << 31U)) != ((q)->readIndex & (1UL << 31U))) && \
      (((q)->writeIndex & RPMSG_TXQ13_ENTRY_MASK) == ((q)->readIndex & RPMSG_TXQ13_ENTRY_MASK)))
-#define IS_RPMSG_TXBQ23_FULL(q)                                             \
+#define IS_RPMSG_TXBQ23_FULL(q)                                               \
     ((((q)->writeIndex & (1UL << 31U)) != ((q)->readIndex & (1UL << 31U))) && \
      (((q)->writeIndex & RPMSG_TXQ23_ENTRY_MASK) == ((q)->readIndex & RPMSG_TXQ23_ENTRY_MASK)))
 
 /*! @brief Increments write pointer*/
 #define INCR_RPMSG_TXBQ13_WR_INDEX(q, n)                                 \
     {                                                                    \
-        unsigned int wrapBit = (q)->writeIndex & (1UL << 31U);            \
+        unsigned int wrapBit = (q)->writeIndex & (1UL << 31U);           \
         unsigned int val     = (q)->writeIndex & RPMSG_TXQ13_ENTRY_MASK; \
         unsigned int newVal  = (val + (n)) & RPMSG_TXQ13_ENTRY_MASK;     \
         if ((n) > 0U)                                                    \
         {                                                                \
             if (newVal <= val)                                           \
             {                                                            \
-                (q)->writeIndex = newVal | (wrapBit ^ (1UL << 31U));      \
+                (q)->writeIndex = newVal | (wrapBit ^ (1UL << 31U));     \
             }                                                            \
             else                                                         \
             {                                                            \
@@ -266,14 +269,14 @@ typedef void (*imu_irq_callback_t)(void);
 
 #define INCR_RPMSG_TXBQ23_WR_INDEX(q, n)                                 \
     {                                                                    \
-        unsigned int wrapBit = (q)->writeIndex & (1UL << 31U);            \
+        unsigned int wrapBit = (q)->writeIndex & (1UL << 31U);           \
         unsigned int val     = (q)->writeIndex & RPMSG_TXQ23_ENTRY_MASK; \
         unsigned int newVal  = (val + (n)) & RPMSG_TXQ23_ENTRY_MASK;     \
         if ((n) > 0U)                                                    \
         {                                                                \
             if (newVal <= val)                                           \
             {                                                            \
-                (q)->writeIndex = newVal | (wrapBit ^ (1UL << 31U));      \
+                (q)->writeIndex = newVal | (wrapBit ^ (1UL << 31U));     \
             }                                                            \
             else                                                         \
             {                                                            \
@@ -285,14 +288,14 @@ typedef void (*imu_irq_callback_t)(void);
 /*! @brief Increments read pointer */
 #define INCR_RPMSG_TXBQ13_RD_INDEX(q, n)                                \
     {                                                                   \
-        unsigned int wrapBit = (q)->readIndex & (1UL << 31U);            \
+        unsigned int wrapBit = (q)->readIndex & (1UL << 31U);           \
         unsigned int val     = (q)->readIndex & RPMSG_TXQ13_ENTRY_MASK; \
         unsigned int newVal  = (val + (n)) & RPMSG_TXQ13_ENTRY_MASK;    \
         if ((n) > 0U)                                                   \
         {                                                               \
             if (newVal <= val)                                          \
             {                                                           \
-                (q)->readIndex = newVal | (wrapBit ^ (1UL << 31U));      \
+                (q)->readIndex = newVal | (wrapBit ^ (1UL << 31U));     \
             }                                                           \
             else                                                        \
             {                                                           \
@@ -303,14 +306,14 @@ typedef void (*imu_irq_callback_t)(void);
 
 #define INCR_RPMSG_TXBQ23_RD_INDEX(q, n)                                \
     {                                                                   \
-        unsigned int wrapBit = (q)->readIndex & (1UL << 31U);            \
+        unsigned int wrapBit = (q)->readIndex & (1UL << 31U);           \
         unsigned int val     = (q)->readIndex & RPMSG_TXQ23_ENTRY_MASK; \
         unsigned int newVal  = (val + (n)) & RPMSG_TXQ23_ENTRY_MASK;    \
         if ((n) > 0U)                                                   \
         {                                                               \
             if (newVal <= val)                                          \
             {                                                           \
-                (q)->readIndex = newVal | (wrapBit ^ (1UL << 31U));      \
+                (q)->readIndex = newVal | (wrapBit ^ (1UL << 31U));     \
             }                                                           \
             else                                                        \
             {                                                           \
@@ -417,8 +420,10 @@ hal_rpmsg_status_t HAL_ImuAddWlanTxPacket(uint8_t imuLink, uint8_t *txBuf, uint3
  * @param cb                Callback function to add packet.
  * @retval kStatus_HAL_RpmsgSuccess or kStatus_HAL_RpmsgError.
  */
-hal_rpmsg_status_t HAL_ImuAddWlanTxPacketExt(uint8_t imuLink, uint8_t *txBuf, uint32_t length,
-    void (*cb)(void *destAddr, void *srcAddr, uint32_t len));
+hal_rpmsg_status_t HAL_ImuAddWlanTxPacketExt(uint8_t imuLink,
+                                             uint8_t *txBuf,
+                                             uint32_t length,
+                                             void (*cb)(void *destAddr, void *srcAddr, uint32_t len));
 
 /*!
  * @brief Install wlan callback.
@@ -604,6 +609,13 @@ hal_rpmsg_status_t HAL_ImuGetTaskLock(void);
  * @retval kStatus_HAL_RpmsgSuccess or kStatus_HAL_RpmsgError.
  */
 hal_rpmsg_status_t HAL_ImuPutTaskLock(void);
+
+/*!
+ * @brief Reset imu readIndex and writeIndex to 0.
+ *
+ * This function reset the imu txq.
+ */
+void HAL_ImuResetWlanTxq(uint8_t imuLink);
 
 #if defined(__cplusplus)
 }

@@ -13,6 +13,7 @@
 
 #include "common.h"
 
+#include <mcuxClToolchain.h>
 #include <mcuxClEls.h> // Interface to the entire mcuxClEls component
 #include <mcuxClSession.h> // Interface to the entire mcuxClSession component
 #include <mcuxClKey.h> // Interface to the entire mcuxClKey component
@@ -28,10 +29,10 @@
 #define LIFETIME_INTERNAL PSA_KEY_LIFETIME_FROM_PERSISTENCE_AND_LOCATION(PSA_KEY_LIFETIME_VOLATILE, PSA_KEY_LOCATION_EXTERNAL_STORAGE)
 #define LIFETIME_EXTERNAL PSA_KEY_LIFETIME_FROM_PERSISTENCE_AND_LOCATION(PSA_KEY_LIFETIME_VOLATILE, PSA_KEY_LOCATION_LOCAL_STORAGE)
 
-bool mcuxClPsaDriver_mac_oneshot_example(void)
+MCUXCLEXAMPLE_FUNCTION(mcuxClPsaDriver_mac_oneshot_example)
 {
     /* Example AES-128 key. */
-    const uint8_t aes128_key[MCUXCLAES_AES128_KEY_SIZE] = {
+    const ALIGNED uint8_t aes128_key[MCUXCLAES_AES128_KEY_SIZE] = {
                                         0x7c, 0x0b, 0x7d, 0xb9,
                                         0x81, 0x1f, 0x10, 0xd0,
                                         0x0e, 0x47, 0x6c, 0x7a,
@@ -42,7 +43,7 @@ bool mcuxClPsaDriver_mac_oneshot_example(void)
     const size_t cmac_input_size_16 = 32u;
 
     /* Example input to the CMAC function. */
-    const uint8_t cmac_input16_in[] = {
+    const ALIGNED uint8_t cmac_input16_in[] = {
                                         0x1e, 0xe0, 0xec, 0x46,
                                         0x6d, 0x46, 0xfd, 0x84,
                                         0x9b, 0x40, 0xc0, 0x66,
@@ -54,7 +55,7 @@ bool mcuxClPsaDriver_mac_oneshot_example(void)
     };
 
     /* Example reference CMAC. */
-    const uint8_t cmac_output_reference16[MCUXCLELS_CMAC_OUT_SIZE] = {
+    const ALIGNED uint8_t cmac_output_reference16[MCUXCLELS_CMAC_OUT_SIZE] = {
                                         0xba, 0xec, 0xdc, 0x91,
                                         0xe9, 0xa1, 0xfc, 0x35,
                                         0x72, 0xad, 0xf1, 0xe4,
@@ -62,7 +63,7 @@ bool mcuxClPsaDriver_mac_oneshot_example(void)
     };
 
     /* Output buffer for the AES operation */
-    uint8_t cmac_input16_out[MCUXCLAES_BLOCK_SIZE];
+    ALIGNED uint8_t cmac_input16_out[MCUXCLAES_BLOCK_SIZE];
 
     /** Initialize ELS, Enable the ELS **/
     if(!mcuxClExample_Els_Init(MCUXCLELS_RESET_DO_NOT_CANCEL))
@@ -111,9 +112,4 @@ bool mcuxClPsaDriver_mac_oneshot_example(void)
 
     /* Return */
     return MCUXCLEXAMPLE_STATUS_OK;
-}
-bool nxpClPsaDriver_mac_oneshot_example(void)
-{
-    bool result = mcuxClPsaDriver_mac_oneshot_example();
-    return result;
 }

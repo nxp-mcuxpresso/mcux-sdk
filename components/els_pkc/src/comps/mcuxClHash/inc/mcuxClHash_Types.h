@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -57,6 +57,9 @@ typedef const mcuxClHash_AlgorithmDescriptor_t * const mcuxClHash_Algo_t;
  * This type is used in the streaming interfaces to store the information
  * about the current operation and the relevant internal state.
  *
+ * Note: A copy of the Hash context to another memory location is only supported if both source and destination addresses have the same 64 bit alignment.
+ * This requirement can be ignored when using mcuxClHash_export_state and mcuxClHash_import_state to move a Hash context.
+ *
  */
 typedef struct mcuxClHash_ContextDescriptor mcuxClHash_ContextDescriptor_t;
 
@@ -64,7 +67,6 @@ typedef struct mcuxClHash_ContextDescriptor mcuxClHash_ContextDescriptor_t;
  * @brief Hash Context type
  *
  * This type is used to refer to the Hash context.
- * It needs to be placed at a 64 Bit-aligned address.
  *
  */
 typedef mcuxClHash_ContextDescriptor_t * const mcuxClHash_Context_t;

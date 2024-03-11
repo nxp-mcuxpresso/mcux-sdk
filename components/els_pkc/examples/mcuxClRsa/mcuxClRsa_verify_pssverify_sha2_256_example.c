@@ -21,11 +21,13 @@
  * EMSA-PSS-VERIFY padding scheme according to PKCS #1 v2.2.
  */
 
+#include <mcuxClToolchain.h>
 #include <mcuxClSession.h>          // Interface to the entire mcuxClSession component
 #include <mcuxClExample_Session_Helper.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h> // Code flow protection
 #include <mcuxClRandom.h>           // Interface to the entire mcuxClRandom component
+#include <mcuxClBuffer.h>
 #include <mcuxClRsa.h>              // Interface to the entire mcuxClRsa component
 #include <mcuxClToolchain.h>             // Memory segment definitions
 #include <mcuxClCore_Examples.h>
@@ -45,7 +47,7 @@
 /**
  * @brief Example value for public RSA modulus N.
  */
-static const uint8_t modulus[RSA_KEY_BYTE_LENGTH] __attribute__ ((aligned (4))) = {
+static const ALIGNED uint8_t modulus[RSA_KEY_BYTE_LENGTH] = {
   0xb4u, 0xbfu, 0xc5u, 0xdeu, 0x4au, 0x63u, 0xe3u, 0xe2u, 0x58u, 0x1cu, 0x43u, 0x91u, 0xeau, 0x42u, 0x31u, 0x1au,
   0x86u, 0xc3u, 0xddu, 0x71u, 0x8au, 0xa2u, 0x56u, 0xd2u, 0xdcu, 0xedu, 0xecu, 0x81u, 0x1cu, 0xebu, 0x6cu, 0xeeu,
   0x54u, 0xe1u, 0x39u, 0xb2u, 0x53u, 0x34u, 0x5du, 0x4bu, 0xc5u, 0x37u, 0x0eu, 0xe9u, 0xcfu, 0xe3u, 0x93u, 0x47u,
@@ -67,14 +69,14 @@ static const uint8_t modulus[RSA_KEY_BYTE_LENGTH] __attribute__ ((aligned (4))) 
 /**
  * @brief Example value for public RSA exponent e.
  */
-static const uint8_t exponent[RSA_PUBLIC_EXP_BYTE_LENGTH] __attribute__ ((aligned (4))) = {
+static const ALIGNED uint8_t exponent[RSA_PUBLIC_EXP_BYTE_LENGTH] = {
   0x01u, 0x00u, 0x01u
 };
 
 /**
  * @brief Example value for Sha2-256 message digest.
  */
-static const uint8_t message[RSA_MESSAGE_DIGEST_LENGTH] __attribute__ ((aligned (4))) = {
+static const ALIGNED uint8_t message[RSA_MESSAGE_DIGEST_LENGTH] = {
   0x9fu, 0x86u, 0xd0u, 0x81u, 0x88u, 0x4cu, 0x7du, 0x65u, 0x9au, 0x2fu, 0xeau, 0xa0u, 0xc5u, 0x5au, 0xd0u, 0x15u,
   0xa3u, 0xbfu, 0x4fu, 0x1bu, 0x2bu, 0x0bu, 0x82u, 0x2cu, 0xd1u, 0x5du, 0x6cu, 0x15u, 0xb0u, 0xf0u, 0x0au, 0x08u,
 };
@@ -82,7 +84,7 @@ static const uint8_t message[RSA_MESSAGE_DIGEST_LENGTH] __attribute__ ((aligned 
 /**
  * @brief Example value for RSA signature s.
  */
-static const uint8_t signature[RSA_KEY_BYTE_LENGTH] __attribute__ ((aligned (4))) = {
+static const ALIGNED uint8_t signature[RSA_KEY_BYTE_LENGTH] = {
   0x5eu, 0xa5u, 0x03u, 0x94u, 0x3cu, 0x28u, 0xbcu, 0x90u, 0x66u, 0xb6u, 0xedu, 0x45u, 0x00u, 0x79u, 0x0fu, 0x85u,
   0x23u, 0xf5u, 0x6bu, 0x20u, 0x7du, 0x55u, 0x6fu, 0x0fu, 0x28u, 0x5fu, 0x2du, 0xdbu, 0x85u, 0xe7u, 0x8eu, 0x7bu,
   0x42u, 0xbau, 0x10u, 0x79u, 0xc0u, 0x16u, 0xd2u, 0x01u, 0x21u, 0x6bu, 0xc6u, 0x4cu, 0x57u, 0x0au, 0x4eu, 0x85u,
@@ -126,9 +128,10 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClRsa_verify_pssverify_sha2_256_example)
                                                  MCUXCLRSA_VERIFY_PSSVERIFY_WACPU_SIZE,
                                                  MCUXCLRSA_VERIFY_2048_WAPKC_SIZE);
 
+
     /* Initialize the PRNG */
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(prngInit_result, prngInit_token, mcuxClRandom_ncInit(session));
-    if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_ncInit) != prngInit_token) || (MCUXCLRANDOM_STATUS_OK != prngInit_result)) 
+    if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_ncInit) != prngInit_token) || (MCUXCLRANDOM_STATUS_OK != prngInit_result))
     {
         return MCUXCLEXAMPLE_STATUS_ERROR;
     }
@@ -136,19 +139,27 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClRsa_verify_pssverify_sha2_256_example)
 
     /* Create key struct of type MCUXCLRSA_KEY_PUBLIC */
     const mcuxClRsa_KeyEntry_t Mod1 = {
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST("Required by API function")
                        .pKeyEntryData = (uint8_t *)modulus,
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
                        .keyEntryLength = RSA_KEY_BYTE_LENGTH };
 
     const mcuxClRsa_KeyEntry_t Exp1 = {
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST("Required by API function")
                        .pKeyEntryData = (uint8_t *)exponent,
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
                        .keyEntryLength = RSA_PUBLIC_EXP_BYTE_LENGTH };
 
     const mcuxClRsa_Key public_key = {
                        .keytype = MCUXCLRSA_KEY_PUBLIC,
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST("Required by API function")
                        .pMod1 = (mcuxClRsa_KeyEntry_t *)&Mod1,
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
                        .pMod2 = NULL,
                        .pQInv = NULL,
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST("Required by API function")
                        .pExp1 = (mcuxClRsa_KeyEntry_t *)&Exp1,
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
                        .pExp2 = NULL,
                        .pExp3 = NULL };
 
@@ -156,13 +167,19 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClRsa_verify_pssverify_sha2_256_example)
     /* RSA verification call                                                  */
     /**************************************************************************/
 
+    MCUXCLBUFFER_INIT_RO(messageBuf, session, message, RSA_MESSAGE_DIGEST_LENGTH);
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST("Required by API function")
+    MCUXCLBUFFER_INIT(signatureBuf, session, signature, RSA_KEY_BYTE_LENGTH);
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(verify_result, verify_token, mcuxClRsa_verify(
                 /* mcuxClSession_Handle_t           pSession: */           session,
                 /* const mcuxClRsa_Key * const      pKey: */               &public_key,
-                /* mcuxCl_InputBuffer_t             pMessageOrDigest: */   (uint8_t *)message,
+                /* mcuxCl_InputBuffer_t             pMessageOrDigest: */   messageBuf,
                 /* const uint32_t                  messageLength: */      0u,
-                /* mcuxCl_Buffer_t                  pSignature: */         (uint8_t *)signature,
+                /* mcuxCl_Buffer_t                  pSignature: */         signatureBuf,
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST("Required by API function")
                 /* const mcuxClRsa_SignVerifyMode   pVerifyMode: */        (mcuxClRsa_SignVerifyMode_t *)&mcuxClRsa_Mode_Verify_Pss_Sha2_256,
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
                 /* const uint32_t                  saltLength: */         RSA_PSS_SALT_LENGTH,
                 /* uint32_t                        options: */            MCUXCLRSA_OPTION_MESSAGE_DIGEST,
                 /* mcuxCl_Buffer_t                  pOutput: */            NULL));

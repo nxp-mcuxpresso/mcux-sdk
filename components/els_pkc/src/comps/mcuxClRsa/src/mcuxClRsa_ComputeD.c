@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2021-2023 NXP                                                  */
+/* Copyright 2021-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -20,6 +20,7 @@
 #include <stdbool.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClCore_Macros.h>
 #include <mcuxCsslParamIntegrity.h>
 #include <mcuxClMemory.h>
 #include <mcuxClPkc.h>
@@ -56,10 +57,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_ComputeD(
      */
     /* Size definitions */
     const uint32_t byteLenPQ = pP->keyEntryLength;  // P and Q have the same byte length
-    const uint32_t primePQAlignLen = MCUXCLRSA_PKC_ROUNDUP_SIZE(byteLenPQ);
+    const uint32_t primePQAlignLen = MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(byteLenPQ);
 
     const uint32_t keyLen = byteLenPQ * 2u;  // LCM have 2 times length of PQ
-    const uint32_t keyAlignLen = MCUXCLRSA_PKC_ROUNDUP_SIZE(keyLen);
+    const uint32_t keyAlignLen = MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(keyLen);
 
     /* Memory layout: | PSub1 (primePQAlignLen) | QSub1 (primePQAlignLen) | nDash (FW) | Lcm (keyAlignLen) | Phi (keyAlignLen) | T (keyAlignLen+FW) */
     uint32_t bufferSizeTotal = (primePQAlignLen * 2u) /* PSub1, QSub1 */ +
@@ -77,7 +78,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_ComputeD(
     uint8_t *pT = pPhi + keyAlignLen;
 
     /* Setup UPTR table */
-    const uint32_t cpuWaSizeWord = MCUXCLRSA_ROUND_UP_TO_CPU_WORDSIZE(MCUXCLRSA_INTERNAL_COMPD_UPTRT_SIZE * (sizeof(uint16_t))) / (sizeof(uint32_t));
+    const uint32_t cpuWaSizeWord = MCUXCLCORE_NUM_OF_CPUWORDS_CEIL(MCUXCLRSA_INTERNAL_COMPD_UPTRT_SIZE * (sizeof(uint16_t)));
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES("16-bit UPTRT table is assigned in CPU workarea")
     uint16_t * pOperands = (uint16_t *) mcuxClSession_allocateWords_cpuWa(pSession, cpuWaSizeWord);
     MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES()
@@ -116,8 +117,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_ComputeD(
     MCUXCLPKC_FP_CALCFUP(mcuxClRsa_ComputeD_Steps123_FUP,
         mcuxClRsa_ComputeD_Steps123_FUP_LEN);
     MCUXCLPKC_WAITFORFINISH();
-    uint32_t leadingZeroN;
-    MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClMath_LeadingZeros(MCUXCLRSA_INTERNAL_UPTRTINDEX_COMPD_QSUB1, &leadingZeroN));
+    MCUX_CSSL_FP_FUNCTION_CALL(leadingZeroN, mcuxClMath_LeadingZeros(MCUXCLRSA_INTERNAL_UPTRTINDEX_COMPD_QSUB1));
     uint32_t realGcdByteLen = primePQAlignLen - (leadingZeroN >> 3u);
 
     /*
@@ -132,8 +132,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_ComputeD(
                         MCUXCLRSA_INTERNAL_UPTRTINDEX_COMPD_PHI,
                         MCUXCLRSA_INTERNAL_UPTRTINDEX_COMPD_QSUB1,
                         MCUXCLRSA_INTERNAL_UPTRTINDEX_COMPD_T,
-                        MCUXCLRSA_PKC_ROUNDUP_SIZE(keyLen),
-                        MCUXCLRSA_PKC_ROUNDUP_SIZE(realGcdByteLen));
+                        MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(keyLen),
+                        MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(realGcdByteLen));
 
     /*
      * 4. Compute d := e^(-1) mod lcm(p-1, q-1)
@@ -142,7 +142,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_ComputeD(
      */
 
     MCUXCLPKC_PS1_SETLENGTH(keyAlignLen, keyAlignLen);
-    const uint32_t eAlignLen = MCUXCLRSA_PKC_ROUNDUP_SIZE(pE->keyEntryLength);
+    const uint32_t eAlignLen = MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(pE->keyEntryLength);
     MCUXCLPKC_PS2_SETLENGTH(0, eAlignLen);
     /* Clear the PHI buffer */
     MCUXCLPKC_FP_CALC_OP1_CONST(MCUXCLRSA_INTERNAL_UPTRTINDEX_COMPD_PHI, 0u);
@@ -156,14 +156,14 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_ComputeD(
      * 5. Determine the length of d without leading zeros
      */
     MCUXCLPKC_WAITFORFINISH();
-    MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClMath_LeadingZeros(MCUXCLRSA_INTERNAL_UPTRTINDEX_COMPD_D, &leadingZeroN));
-    pD->keyEntryLength = keyAlignLen - (leadingZeroN >> 3u);
+    MCUX_CSSL_FP_FUNCTION_CALL(leadingZeroD, mcuxClMath_LeadingZeros(MCUXCLRSA_INTERNAL_UPTRTINDEX_COMPD_D));
+    pD->keyEntryLength = keyAlignLen - (leadingZeroD >> 3u);
 
     /*
      * 6. Verify FIPS 186-4 condition on lower bound of d
      *    If d <= 2^(nlen/2), then function returns MCUXCLRSA_STATUS_INVALID_INPUT error.
      *
-     * Used functions: FAME operation.
+     * Used functions: PKC operation.
      */
     /* Clear buffers phi, its length is nlen */
     MCUXCLPKC_PS1_SETLENGTH(0u, keyAlignLen);

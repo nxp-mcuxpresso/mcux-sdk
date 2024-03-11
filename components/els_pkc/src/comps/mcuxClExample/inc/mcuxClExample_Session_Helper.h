@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2022-2023 NXP                                                  */
+/* Copyright 2022-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -30,12 +30,31 @@
 
 /* TODO: CLNS-5886 [DEV][Session][Example] enable size checking when allocating buffers and update example macros */
 #if 0
-#define MCUXCLEXAMPLE_ALLOCATE_CPUWA(cpuWaLength) ((cpuWaLength?cpuWaLength:(sizeof(uint32_t))) / (sizeof(uint32_t))) // always allocate a minimum size buffer to avoid issues
-#define MCUXCLEXAMPLE_ALLOCATE_PKCWA(pkcWaLength) ((pkcWaLength?pkcWaLength:(sizeof(uint32_t))) / (sizeof(uint32_t))) // always allocate a minimum size buffer to avoid issues
+/* Macros to make sure some memory is always allocated to avoid issues */
+#define MCUXCLEXAMPLE_ALLOCATE_CPUWA(cpuWaLength) \
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT("Constant values are allowed as an argument to macro function") \
+        (((cpuWaLength > 0u)?(cpuWaLength):(sizeof(uint32_t))) / (sizeof(uint32_t))) \
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT()
+#define MCUXCLEXAMPLE_ALLOCATE_PKCWA(pkcWaLength) \
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT("Constant values are allowed as an argument to macro function") \
+        (((pkcWaLength > 0u)?(pkcWaLength):(sizeof(uint32_t))) / (sizeof(uint32_t))) \
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT()
 #else
-#define MCUXCLEXAMPLE_ALLOCATE_CPUWA(cpuWaLength) (cpuWaLength?cpuWaLength:1u)  // always allocate a minimum size buffer to avoid issues
-#define MCUXCLEXAMPLE_ALLOCATE_PKCWA(pkcWaLength) (pkcWaLength?pkcWaLength:1u)  // always allocate a minimum size buffer to avoid issues
+/* Macros to make sure some memory is always allocated to avoid issues */
+#define MCUXCLEXAMPLE_ALLOCATE_CPUWA(cpuWaLength) \
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT("Constant values are allowed as an argument to macro function") \
+        ((cpuWaLength > 0u)?(cpuWaLength):1u) \
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT()
+#define MCUXCLEXAMPLE_ALLOCATE_PKCWA(pkcWaLength) \
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT("Constant values are allowed as an argument to macro function") \
+        ((pkcWaLength > 0u )?(pkcWaLength):1u) \
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT()
 #endif
+
+#define MCUXCLEXAMPLE_MAX_WA(a, b) \
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT("Constant values are allowed as an argument to macro function") \
+        (((a) > (b)) ? (a) : (b)) \
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT()
 
 #define MCUXCLEXAMPLE_ALLOCATE_AND_INITIALIZE_SESSION(pSession, cpuWaLength, pkcWaLength)                              \
         uint32_t cpuWaBuffer[MCUXCLEXAMPLE_ALLOCATE_CPUWA(cpuWaLength)];                                               \

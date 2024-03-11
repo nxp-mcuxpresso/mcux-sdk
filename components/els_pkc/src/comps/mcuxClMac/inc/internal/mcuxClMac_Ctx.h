@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2022 NXP                                                       */
+/* Copyright 2022-2023 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -12,14 +12,14 @@
 /*--------------------------------------------------------------------------*/
 
 /** @file  mcuxClMac_Ctx.h
- *  @brief Internal header for MAC types
+ *  @brief Internal header for the MAC context
  */
 
 #ifndef MCUXCLMAC_CTX_H_
 #define MCUXCLMAC_CTX_H_
 
 #include <mcuxClConfig.h> // Exported features flags header
-#include <mcuxClMac_Types.h>
+#include <internal/mcuxClMac_Internal_Types.h>
 
 #ifdef __cplusplus
 extern "C" {

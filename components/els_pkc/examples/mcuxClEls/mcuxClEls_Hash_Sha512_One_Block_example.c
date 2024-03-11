@@ -19,6 +19,7 @@
  * @brief   Example of SHA2-512 hashing using the ELS (CLNS component mcuxClEls)
  */
 
+#include <mcuxClToolchain.h>
 #include <mcuxClEls.h> // Interface to the entire mcuxClEls component
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h> // Code flow protection
@@ -26,59 +27,59 @@
 #include <mcuxClExample_ELS_Helper.h>
 
 /** Data input for SHA2-512 hashing. */
-static uint8_t const sha512_padded_input[MCUXCLELS_HASH_BLOCK_SIZE_SHA_512] = {0x61U, 0x62U, 0x63U, 0x80U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00u, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00u, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x18U};
+static ALIGNED uint8_t const sha512_padded_input[MCUXCLELS_HASH_BLOCK_SIZE_SHA_512] = {0x61U, 0x62U, 0x63U, 0x80U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00u, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00u, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x18U};
 
 /** Expected hash value. */
-static uint8_t sha512_reference_digest[MCUXCLELS_HASH_OUTPUT_SIZE_SHA_512] = {0xddU, 0xafU, 0x35U, 0xa1U,
-                                                                             0x93U, 0x61U, 0x7aU, 0xbaU,
-                                                                             0xccU, 0x41U, 0x73U, 0x49U,
-                                                                             0xaeU, 0x20U, 0x41U, 0x31U,
-                                                                             0x12U, 0xe6U, 0xfaU, 0x4eU,
-                                                                             0x89U, 0xa9U, 0x7eU, 0xa2U,
-                                                                             0x0aU, 0x9eU, 0xeeU, 0xe6U,
-                                                                             0x4bU, 0x55U, 0xd3U, 0x9aU,
-                                                                             0x21U, 0x92U, 0x99U, 0x2aU,
-                                                                             0x27U, 0x4fU, 0xc1U, 0xa8U,
-                                                                             0x36U, 0xbaU, 0x3cU, 0x23U,
-                                                                             0xa3U, 0xfeU, 0xebU, 0xbdU,
-                                                                             0x45U, 0x4dU, 0x44U, 0x23U,
-                                                                             0x64U, 0x3cU, 0xe8U, 0x0eU,
-                                                                             0x2aU, 0x9aU, 0xc9U, 0x4fU,
-                                                                             0xa5U, 0x4cU, 0xa4U, 0x9fU};
+static ALIGNED uint8_t sha512_reference_digest[MCUXCLELS_HASH_OUTPUT_SIZE_SHA_512] = {0xddU, 0xafU, 0x35U, 0xa1U,
+                                                                                     0x93U, 0x61U, 0x7aU, 0xbaU,
+                                                                                     0xccU, 0x41U, 0x73U, 0x49U,
+                                                                                     0xaeU, 0x20U, 0x41U, 0x31U,
+                                                                                     0x12U, 0xe6U, 0xfaU, 0x4eU,
+                                                                                     0x89U, 0xa9U, 0x7eU, 0xa2U,
+                                                                                     0x0aU, 0x9eU, 0xeeU, 0xe6U,
+                                                                                     0x4bU, 0x55U, 0xd3U, 0x9aU,
+                                                                                     0x21U, 0x92U, 0x99U, 0x2aU,
+                                                                                     0x27U, 0x4fU, 0xc1U, 0xa8U,
+                                                                                     0x36U, 0xbaU, 0x3cU, 0x23U,
+                                                                                     0xa3U, 0xfeU, 0xebU, 0xbdU,
+                                                                                     0x45U, 0x4dU, 0x44U, 0x23U,
+                                                                                     0x64U, 0x3cU, 0xe8U, 0x0eU,
+                                                                                     0x2aU, 0x9aU, 0xc9U, 0x4fU,
+                                                                                     0xa5U, 0x4cU, 0xa4U, 0x9fU};
 
 /** Destination buffer to receive the hash output of the SHA2-512 hashing. */
-static uint8_t sha2_512_digest[MCUXCLELS_HASH_STATE_SIZE_SHA_512]; // MCUXCLELS_HASH_STATE_SIZE_SHA_512 has to be used as the mcuxClEls_Hash_Async do not perform the truncation of the hash state.
+static ALIGNED uint8_t sha2_512_digest[MCUXCLELS_HASH_STATE_SIZE_SHA_512]; // MCUXCLELS_HASH_STATE_SIZE_SHA_512 has to be used as the mcuxClEls_Hash_Async do not perform the truncation of the hash state.
 
 
 /** Performs SHA2-512 hashing using mcuxClEls functions.

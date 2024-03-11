@@ -20,6 +20,7 @@
 #include <stdbool.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClCore_Macros.h>
 #include <mcuxClMemory.h>
 
 #include <mcuxClPkc.h>
@@ -110,10 +111,15 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_GenerateProbablePrime(
 
     MCUXCLMEMORY_FP_MEMORY_COPY(pA0, a0, sizeof(a0));
 
-
 #ifdef MCUXCL_FEATURE_ELS_ACCESS_PKCRAM_WORKAROUND
-    uint8_t * pPrimeKeyDataCpu = (uint8_t*) pOperands + MCUXCLRSA_ROUND_UP_TO_CPU_WORDSIZE((MCUXCLRSA_INTERNAL_GENPRIME_UPTRT_SIZE * sizeof(uint16_t)));
+    uint8_t * pPrimeKeyDataCpu = (uint8_t*) pOperands + MCUXCLCORE_ALIGN_TO_CPU_WORDSIZE((MCUXCLRSA_INTERNAL_GENPRIME_UPTRT_SIZE * sizeof(uint16_t)));
+    MCUXCLBUFFER_INIT(pBufKeyEntryData, NULL, pPrimeKeyDataCpu, pPrimeCandidate->keyEntryLength);
+#else
+    MCUXCLBUFFER_INIT(pBufKeyEntryData, NULL, pPrimeCandidate->pKeyEntryData, pPrimeCandidate->keyEntryLength);
 #endif
+
+    /* Get number of Miller-Rabin test iterations */
+    MCUX_CSSL_FP_FUNCTION_CALL(numberMillerRabinTestIterations, mcuxClRsa_getMillerRabinTestIterations(keyBitLength / 2u));
 
     do
     {
@@ -128,27 +134,19 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_GenerateProbablePrime(
         * Used functions: RNG provided through the pSession
         */
         cntRandomGen++;
-#ifdef MCUXCL_FEATURE_ELS_ACCESS_PKCRAM_WORKAROUND
-        MCUX_CSSL_FP_FUNCTION_CALL(retRandomGen, mcuxClRandom_generate(pSession, pPrimeKeyDataCpu, pPrimeCandidate->keyEntryLength));
-        if(MCUXCLRANDOM_STATUS_OK != retRandomGen)
-        {
-            status = MCUXCLRSA_STATUS_RNG_ERROR;
-            break;
-        }
-        MCUXCLMEMORY_FP_MEMORY_COPY(pPrimeCandidate->pKeyEntryData, pPrimeKeyDataCpu, pPrimeCandidate->keyEntryLength);
-
-#else
-        MCUX_CSSL_FP_FUNCTION_CALL(retRandomGen, mcuxClRandom_generate(pSession, pPrimeCandidate->pKeyEntryData, pPrimeCandidate->keyEntryLength));
+        MCUX_CSSL_FP_FUNCTION_CALL(retRandomGen, mcuxClRandom_generate(pSession, pBufKeyEntryData, pPrimeCandidate->keyEntryLength));
         if (MCUXCLRANDOM_STATUS_OK != retRandomGen)
         {
             status = MCUXCLRSA_STATUS_RNG_ERROR;
             break;
         }
+#ifdef MCUXCL_FEATURE_ELS_ACCESS_PKCRAM_WORKAROUND
+        MCUXCLMEMORY_FP_MEMORY_COPY(pPrimeCandidate->pKeyEntryData, pPrimeKeyDataCpu, pPrimeCandidate->keyEntryLength);
 #endif
         pPrimeCandidate->pKeyEntryData[0] |= 0x03u;
 
         cntTestPrime++;
-        MCUX_CSSL_FP_FUNCTION_CALL(retTest, mcuxClRsa_TestPrimeCandidate(pSession, pE, pPrimeCandidate, keyBitLength, iNumToCmp_iA0));
+        MCUX_CSSL_FP_FUNCTION_CALL(retTest, mcuxClRsa_TestPrimeCandidate(pSession, pE, pPrimeCandidate, keyBitLength, iNumToCmp_iA0, numberMillerRabinTestIterations));
 #ifdef MCUXCL_FEATURE_ELS_ACCESS_PKCRAM_WORKAROUND
         if ((MCUXCLRSA_STATUS_KEYGENERATION_OK == retTest) || (MCUXCLRSA_STATUS_RNG_ERROR == retTest) || (MCUXCLRSA_STATUS_ERROR == retTest))
 #else
@@ -178,11 +176,13 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_GenerateProbablePrime(
 /* Check define outside of macro so the MISRA rule 20.6 does not get violated */
 #ifdef MCUXCL_FEATURE_ELS_ACCESS_PKCRAM_WORKAROUND
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_GenerateProbablePrime, status,
+        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_getMillerRabinTestIterations),
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_generate) * cntRandomGen,
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_copy) * cntRandomGen,
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_TestPrimeCandidate) * cntTestPrime);
 #else
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_GenerateProbablePrime, status,
+        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_getMillerRabinTestIterations),
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_generate) * cntRandomGen,
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_TestPrimeCandidate) * cntTestPrime);
 #endif

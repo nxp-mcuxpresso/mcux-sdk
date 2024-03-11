@@ -13,6 +13,7 @@
 
 #include "common.h"
 
+#include <mcuxClToolchain.h>
 #include <mcuxClEls.h> // Interface to the entire mcuxClEls component
 #include <mcuxClSession.h> // Interface to the entire mcuxClSession component
 #include <mcuxClKey.h> // Interface to the entire mcuxClKey component
@@ -28,10 +29,10 @@
 #define LIFETIME_INTERNAL PSA_KEY_LIFETIME_FROM_PERSISTENCE_AND_LOCATION(PSA_KEY_LIFETIME_VOLATILE, PSA_KEY_LOCATION_EXTERNAL_STORAGE)
 #define LIFETIME_EXTERNAL PSA_KEY_LIFETIME_FROM_PERSISTENCE_AND_LOCATION(PSA_KEY_LIFETIME_VOLATILE, PSA_KEY_LOCATION_LOCAL_STORAGE)
 
-bool mcuxClPsaDriver_aes_example(void)
+MCUXCLEXAMPLE_FUNCTION(mcuxClPsaDriver_aes_example)
 {
     /* Input for the AES operation */
-    const uint8_t aes128_input[MCUXCLAES_BLOCK_SIZE] = {
+    const ALIGNED uint8_t aes128_input[MCUXCLAES_BLOCK_SIZE] = {
         0x6b, 0xc1, 0xbe, 0xe2,
         0x2e, 0x40, 0x9f, 0x96,
         0xe9, 0x3d, 0x7e, 0x11,
@@ -39,7 +40,7 @@ bool mcuxClPsaDriver_aes_example(void)
     };
 
     /* Expected output for the AES operation */
-    const uint8_t aes128_result[MCUXCLAES_BLOCK_SIZE] = {
+    const ALIGNED uint8_t aes128_result[MCUXCLAES_BLOCK_SIZE] = {
         0x3a, 0xd7, 0x7b, 0xb4,
         0x0d, 0x7a, 0x36, 0x60,
         0xa8, 0x9e, 0xca, 0xf3,
@@ -47,7 +48,7 @@ bool mcuxClPsaDriver_aes_example(void)
     };
 
     /* AES key */
-    const uint8_t aes128_key[MCUXCLELS_CIPHER_KEY_SIZE_AES_128] = {
+    const ALIGNED uint8_t aes128_key[MCUXCLELS_CIPHER_KEY_SIZE_AES_128] = {
         0x2b, 0x7e, 0x15, 0x16,
         0x28, 0xae, 0xd2, 0xa6,
         0xab, 0xf7, 0x15, 0x88,
@@ -55,7 +56,7 @@ bool mcuxClPsaDriver_aes_example(void)
     };
 
     /* Output buffer for the AES operation */
-    uint8_t aes128_output[MCUXCLAES_BLOCK_SIZE];
+    ALIGNED uint8_t aes128_output[MCUXCLAES_BLOCK_SIZE];
 
     /** Initialize ELS, Enable the ELS **/
     if(!mcuxClExample_Els_Init(MCUXCLELS_RESET_DO_NOT_CANCEL))
@@ -116,9 +117,4 @@ bool mcuxClPsaDriver_aes_example(void)
 
     /* Return */
     return MCUXCLEXAMPLE_STATUS_OK;
-}
-bool nxpClPsaDriver_aes_example(void)
-{
-    bool result = mcuxClPsaDriver_aes_example();
-    return result;
 }

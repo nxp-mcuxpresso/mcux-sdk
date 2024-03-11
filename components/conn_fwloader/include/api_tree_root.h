@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2019, 2021 NXP
+ * Copyright 2016-2019, 2021,2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -8,7 +8,7 @@
 #ifndef __API_TREE_ROOT_H__
 #define __API_TREE_ROOT_H__
 
-#include "fsl_loader.h"
+#include "fsl_loader_utils.h"
 #include "nboot_rom_api_table.h"
 
 ////////////////////////////////////////////////////////////////////////////////

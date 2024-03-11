@@ -13,6 +13,7 @@
 
 #include "common.h"
 
+#include <mcuxClToolchain.h>
 #include <mcuxClSession.h> // Interface to the entire mcuxClSession component
 #include <mcuxCsslFlowProtection.h> // Code flow protection
 #include <mcuxClPsaDriver.h>
@@ -22,7 +23,7 @@
 /**
  * @brief Example value for RSA key pairs (non-encrypted DER encoding format).
  */
-static const uint8_t keyBuffer[PSA_KEY_EXPORT_RSA_KEY_PAIR_MAX_SIZE(2048u)] __attribute__ ((aligned (4))) = {
+static const ALIGNED uint8_t keyBuffer[] = {
   //SEQUENCE{
   0x30,
   0x82, 0x04, 0xA4,
@@ -137,17 +138,19 @@ static const uint8_t keyBuffer[PSA_KEY_EXPORT_RSA_KEY_PAIR_MAX_SIZE(2048u)] __at
 /**
  * @brief Input message to be signed
  */
-static const uint8_t message[3] __attribute__ ((aligned (4))) = {
+static const ALIGNED uint8_t message[3] = {
   0x61, 0x62, 0x63
 };
 
 /**
  * @brief Signature
  */
-static uint8_t signature[PSA_SIGN_OUTPUT_SIZE(PSA_KEY_TYPE_RSA_KEY_PAIR, 2048u, PSA_ALG_RSA_PKCS1V15_SIGN_BASE)] __attribute__ ((aligned (4)));
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_MACRO()
+static ALIGNED uint8_t signature[PSA_SIGN_OUTPUT_SIZE(PSA_KEY_TYPE_RSA_KEY_PAIR, 2048u, PSA_ALG_RSA_PKCS1V15_SIGN_BASE)];
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_MACRO()
 
 /* Example of RSA PKCS1V15 signature generation and verification for 2048-bit key and SHA-256 */
-bool mcuxClPsaDriver_rsa_PKCS1V15_sign_verify_message_example(void)
+MCUXCLEXAMPLE_FUNCTION(mcuxClPsaDriver_rsa_PKCS1V15_sign_verify_message_example)
 {
 
   /** Initialize ELS, Enable the ELS **/
@@ -196,7 +199,9 @@ bool mcuxClPsaDriver_rsa_PKCS1V15_sign_verify_message_example(void)
   }
 
   /* Check the signature length */
+  MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_MACRO()
   if(signature_length != PSA_SIGN_OUTPUT_SIZE(PSA_KEY_TYPE_RSA_KEY_PAIR, 2048u, PSA_ALG_RSA_PKCS1V15_SIGN_BASE))
+  MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_MACRO()
   {
     return MCUXCLEXAMPLE_STATUS_ERROR;
   }
@@ -241,8 +246,3 @@ bool mcuxClPsaDriver_rsa_PKCS1V15_sign_verify_message_example(void)
   return MCUXCLEXAMPLE_STATUS_OK;
 }
 
-bool nxpClPsaDriver_rsa_PKCS1V15_sign_verify_message_example(void)
-{
-    bool result = mcuxClPsaDriver_rsa_PKCS1V15_sign_verify_message_example();
-    return result;
-}

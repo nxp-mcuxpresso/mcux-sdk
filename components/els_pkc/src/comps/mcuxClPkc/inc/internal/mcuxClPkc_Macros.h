@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -37,6 +37,9 @@
 #define MCUXCLPKC_RAM_OFFSET_MASK    0x00000FFFu  ///< Mask to extract PKC offset from CPU pointer
 #define MCUXCLPKC_LOG2_WORDSIZE  3u  ///< log2(PKC wordsize in byte)
 
+#define MCUXCLPKC_RAM_OFFSET_MIN     0u                 ///< Minimum (included) of PKC operand offset
+#define MCUXCLPKC_RAM_OFFSET_MAX     MCUXCLPKC_RAM_SIZE  ///< Maximum (not included) of PKC operand offset
+#define MCUXCLPKC_RAM_START_ADDRESS  PKC_RAM_ADDR       ///< PKC workarea address
 
 /* Included intentionally after the above PKC definitions. */
 #include <internal/mcuxClPkc_Inline_Functions.h>
@@ -142,22 +145,23 @@
 /**********************************************************/
 /* Other macros                                           */
 /**********************************************************/
-/** Sets the SFR Data Mask. */
-#define MCUXCLPKC_SETSFRMASK(sfrMask)  MCUXCLPKC_SFR_WRITE(SFR_MASK, (uint32_t) (sfrMask))
-/** Wait until PKC finishes both on-going and pending calculations (if there is any). */
+/** Waits until PKC finishes both on-going and pending calculations (if there is any). */
 #define MCUXCLPKC_WAITFORFINISH()  \
     MCUX_CSSL_ANALYSIS_COVERITY_START_DEVIATE(MISRA_C_2012_Rule_2_2, "this function checks PKC SFR.")  \
     mcuxClPkc_inline_waitForFinish()  \
     MCUX_CSSL_ANALYSIS_COVERITY_STOP_DEVIATE(MISRA_C_2012_Rule_2_2)
 
-/** Wait until PKC is ready to accept next calculation (i.e., no pending calculation). */
+/** Waits until PKC is ready to accept next calculation (i.e., no pending calculation). */
 #define MCUXCLPKC_WAITFORREADY()  \
     MCUX_CSSL_ANALYSIS_COVERITY_START_DEVIATE(MISRA_C_2012_Rule_2_2, "this function checks PKC SFR.")  \
     mcuxClPkc_inline_waitForReady()  \
     MCUX_CSSL_ANALYSIS_COVERITY_STOP_DEVIATE(MISRA_C_2012_Rule_2_2)
 
-/** Wait PKC calculation and then get PKC status. */
-#define MCUXCLPKC_WAITFORFINISH_GETSTATUS()  mcuxClPkc_inline_waitForFinishGetStatus()
+/** Waits PKC calculation and then gets PKC status. */
+#define MCUXCLPKC_WAITFORFINISH_GETSTATUS()  \
+    MCUX_CSSL_ANALYSIS_COVERITY_START_DEVIATE(MISRA_C_2012_Rule_13_5, "this function read and checks PKC SFR.")  \
+    mcuxClPkc_inline_waitForFinishGetStatus() \
+    MCUX_CSSL_ANALYSIS_COVERITY_STOP_DEVIATE(MISRA_C_2012_Rule_13_5)
 
 /* Macros to enable and disable GF2 calculation mode. */
 #define MCUXCLPKC_ENABLEGF2()   MCUXCLPKC_SFR_BITSET(CTRL, GF2CONV)    ///< Enable GF2 calculation mode.
@@ -181,10 +185,13 @@
 
 
 /**********************************************************/
-/* Other macros                                           */
+/* Platform-dependent macros                              */
 /**********************************************************/
 /** PW_READY check is not required. */
 #define MCUXCLPKC_PKC_WAIT_PW_READY()  do{} while(false)
+
+/** SFR Mask is not supported. */
+#define MCUXCLPKC_CLEARSFRMASK()  do{} while(false)
 
 /** Workaround disabled. */
 #define MCUXCLPKC_PKC_CPU_ARBITRATION_WORKAROUND()  do{} while(false)

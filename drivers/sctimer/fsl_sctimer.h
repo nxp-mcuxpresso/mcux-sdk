@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 4, 9)) /*!< Version */
+#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 5, 0)) /*!< Version */
 /*! @} */
 
 #ifndef SCT_EV_STATE_STATEMSKn
@@ -1237,6 +1237,51 @@ static inline bool SCTIMER_GetEventInState(SCT_Type *base, uint32_t event, uint3
     assert(event < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS);
 
     return (0U != (base->EV[event].STATE & SCT_EV_STATE_STATEMSKn((uint32_t)1U << state)));
+}
+
+/*!
+ * @brief Get the value of capture register.
+ *
+ * This function returns the captured value upon occurrence of the events selected by the corresponding
+ * Capture Control registers occurred.
+ *
+ * @param base         SCTimer peripheral base address
+ * @param whichCounter SCTimer counter to use. In 16-bit mode, we can select Counter_L and Counter_H,
+ *                      In 32-bit mode, we can select Counter_U.
+ * @param capChannel   SCTimer capture register of capture channel.
+ *
+ * @return The SCTimer counter value at which this register was last captured.
+ */
+static inline uint32_t SCTIMER_GetCaptureValue(SCT_Type *base, sctimer_counter_t whichCounter, uint8_t capChannel)
+{
+    uint32_t value = 0;
+
+    switch (whichCounter)
+    {
+        case kSCTIMER_Counter_L:
+            assert(capChannel < SCT_CAPL_COUNT);
+            /* Use Counter_L bits when user wants to setup the Low counter */
+            value = base->CAP_ACCESS16BIT[capChannel].CAPL;
+            break;
+
+        case kSCTIMER_Counter_H:
+            assert(capChannel < SCT_CAPH_COUNT);
+            /* Use Counter_H bits when user wants to start the High counter */
+            value = base->CAP_ACCESS16BIT[capChannel].CAPH;
+            break;
+
+        case kSCTIMER_Counter_U:
+            assert(capChannel < SCT_CAP_COUNT);
+            /* Use Counter_L bits when counter is operating in 32-bit mode (unify counter). */
+            value = base->CAP[capChannel];
+            break;
+
+        default:
+            /* Fix the MISRA C-2012 issue rule 16.4. */
+            break;
+    }
+
+    return value;
 }
 
 /*!

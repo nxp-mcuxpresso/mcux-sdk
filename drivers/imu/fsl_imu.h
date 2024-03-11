@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_IMU_H_
-#define _FSL_IMU_H_
+#ifndef FSL_IMU_H_
+#define FSL_IMU_H_
 
 #include "fsl_common.h"
 
@@ -19,10 +19,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief IMU driver version. */
 #define FSL_IMU_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*@}*/
+/*! @} */
 
 #define IMU_MSG_FIFO_STATUS_MSG_FIFO_LOCKED_MASK      (1UL)
 #define IMU_MSG_FIFO_STATUS_MSG_FIFO_ALMOST_FULL_MASK (1UL << 1U)
@@ -195,7 +195,7 @@ status_t IMU_Init(imu_link_t link);
  */
 void IMU_Deinit(imu_link_t link);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name IMU Message
@@ -411,7 +411,7 @@ static inline uint32_t IMU_GetSendFifoEmptySpace(imu_link_t link)
     return IMU_MSG_FIFO_MAX_COUNT - IMU_TX_FIFO_MSG_COUNT(link) - 1U;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status and Interrupt.
@@ -437,11 +437,11 @@ static inline void IMU_ClearPendingInterrupts(imu_link_t link, uint32_t mask)
     ((IMU_Type *)(uintptr_t)IMU_CUR_CPU_BASE(link))->MSG_FIFO_CNTL |= mask;
 }
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif /*_cplusplus*/
-/*@}*/
+/*! @} */
 
-#endif /* _FSL_IMU_H_*/
+#endif /* FSL_IMU_H_*/

@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2021 NXP                                                  */
+/* Copyright 2020-2021, 2023 NXP                                            */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -17,9 +17,9 @@
  *
  * @defgroup mcuxClMemory mcuxClMemory
  * @brief Basic memory operations
- * 
+ *
  * This component provides memory functions similar to the ones found in the C standard library.
- * 
+ *
  * @{
  */
 
@@ -29,12 +29,14 @@
 #include <mcuxClConfig.h> // Exported features flags header
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClMemory_Constants.h>
 #include <mcuxClMemory_Types.h>
 #include <mcuxClMemory_Endianness.h>
 #include <mcuxClMemory_Clear.h>
 #include <mcuxClMemory_Copy.h>
 #include <mcuxClMemory_Copy_Reversed.h>
 #include <mcuxClMemory_Set.h>
+#include <mcuxClMemory_Xor.h>
 
 /**
  * @}

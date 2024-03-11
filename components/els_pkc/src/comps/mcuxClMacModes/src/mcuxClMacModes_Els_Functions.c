@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -22,7 +22,7 @@
 #include <mcuxClCore_FunctionIdentifiers.h>
 #include <internal/mcuxClKey_Internal.h>
 #include <internal/mcuxClMac_Internal_Types.h>
-#include <internal/mcuxClMacModes_Internal_Functions.h>
+#include <internal/mcuxClMacModes_Common_Functions.h>
 #include <internal/mcuxClMacModes_Els_Ctx.h>
 #include <internal/mcuxClMacModes_Els_Types.h>
 
@@ -56,7 +56,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMacModes_init(
   MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY("Reinterpret structure for different MacModes Algorithm types")
   mcuxClMacModes_Context_t * const pCtx = (mcuxClMacModes_Context_t *) pContext;
   MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY()
+  MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_INCOMPATIBLE("pCtx is mcuxClMacModes_Context_t * const type")
   mcuxClMacModes_Algorithm_t pAlgo = (mcuxClMacModes_Algorithm_t) pCtx->common.pMode->common.pAlgorithm;
+  MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_INCOMPATIBLE()
   MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClMacModes_init, pAlgo->protectionToken_engineInit);
   pCtx->key = (mcuxClKey_Descriptor_t *) key;
   MCUX_CSSL_FP_FUNCTION_CALL(result, pAlgo->engineInit(session, pCtx));
@@ -73,7 +75,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMacModes_process(
   MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY("Reinterpret structure for different MacModes Algorithm types")
   mcuxClMacModes_Context_t * const pCtx = (mcuxClMacModes_Context_t *) pContext;
   MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY()
+  MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_INCOMPATIBLE("pCtx is mcuxClMacModes_Context_t * const type")
   mcuxClMacModes_Algorithm_t pAlgo = (mcuxClMacModes_Algorithm_t) pCtx->common.pMode->common.pAlgorithm;
+  MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_INCOMPATIBLE()
   MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClMacModes_process, pAlgo->protectionToken_engineUpdate);
   MCUX_CSSL_FP_FUNCTION_CALL(result, pAlgo->engineUpdate(session, pCtx, pIn, inLength));
   MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClMacModes_process, result);
@@ -89,7 +93,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMacModes_finish(
   MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY("Reinterpret structure for different MacModes Algorithm types")
   mcuxClMacModes_Context_t * const pCtx = (mcuxClMacModes_Context_t *) pContext;
   MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY()
+  MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_INCOMPATIBLE("pCtx is mcuxClMacModes_Context_t * const type")
   mcuxClMacModes_Algorithm_t pAlgo = (mcuxClMacModes_Algorithm_t) pCtx->common.pMode->common.pAlgorithm;
+  MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_INCOMPATIBLE()
   MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClMacModes_finish, pAlgo->protectionToken_engineFinalize);
   MCUX_CSSL_FP_FUNCTION_CALL(result, pAlgo->engineFinalize(session, pCtx, pMac, pMacLength));
   MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClMacModes_finish, result);

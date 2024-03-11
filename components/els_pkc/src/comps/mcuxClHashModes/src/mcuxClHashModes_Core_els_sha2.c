@@ -26,8 +26,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClHash_Status_t) mcuxClHashModes_els_core_sha2(
                         mcuxCl_Buffer_t pOut)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClHashModes_els_core_sha2,
-                               MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_Hash_Async),
-                               MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation));
+                               MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_Hash_Async));
 
     mcuxClEls_HashOption_t hash_options;
     hash_options.word.value = options;
@@ -46,9 +45,45 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClHash_Status_t) mcuxClHashModes_els_core_sha2(
 
     if (MCUXCLELS_STATUS_OK != result)
     {
-        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClHashModes_els_core_sha2, MCUXCLHASH_STATUS_FAILURE);
+        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClHashModes_els_core_sha2, MCUXCLHASH_STATUS_FAILURE,
+                                  MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation));
     }
 
-    MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClHashModes_els_core_sha2, MCUXCLHASH_STATUS_OK);
+    MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClHashModes_els_core_sha2, MCUXCLHASH_STATUS_OK,
+                              MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation));
 }
 
+#ifdef MCUXCL_FEATURE_ELS_SHA_DIRECT
+MCUX_CSSL_FP_FUNCTION_DEF(mcuxClHashModes_els_core_sha2_direct, mcuxClHashModes_els_AlgoCore_t)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClHash_Status_t) mcuxClHashModes_els_core_sha2_direct(
+                        uint32_t options,
+                        mcuxCl_InputBuffer_t pIn,
+                        uint32_t inSize,
+                        mcuxCl_Buffer_t pOut)
+{
+    MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClHashModes_els_core_sha2_direct, MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_Hash_ShaDirect));
+
+    mcuxClEls_HashOption_t hash_options;
+    hash_options.word.value = options;
+
+    MCUX_CSSL_FP_FUNCTION_CALL(result, mcuxClEls_Hash_ShaDirect(hash_options,
+                                                              pIn,
+                                                              inSize,
+                                                              pOut,
+                                                              NULL,
+                                                              NULL));
+
+    if(MCUXCLELS_STATUS_SW_INVALID_PARAM == result)
+    {
+        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClHashModes_els_core_sha2_direct, MCUXCLHASH_STATUS_INVALID_PARAMS);
+    }
+    else if (MCUXCLELS_STATUS_OK != result)
+    {
+        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClHashModes_els_core_sha2_direct, MCUXCLHASH_STATUS_FAILURE);
+    }
+    else
+    {
+        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClHashModes_els_core_sha2_direct, MCUXCLHASH_STATUS_OK);
+    }
+}
+#endif

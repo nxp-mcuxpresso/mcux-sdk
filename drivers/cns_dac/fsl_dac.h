@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_DAC_H_
-#define _FSL_DAC_H_
+#ifndef FSL_DAC_H_
+#define FSL_DAC_H_
 
 #include "fsl_common.h"
 
@@ -300,7 +300,7 @@ void DAC_GetDefaultConfig(dac_config_t *config);
  */
 void DAC_Deinit(DAC_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Channels Control Interfaces
@@ -676,4 +676,4 @@ static inline void DAC_ClearStatusFlags(DAC_Type *base, uint32_t statusFlagsMask
 
 /*! @} */
 
-#endif /* _FSL_DAC_H_ */
+#endif /* FSL_DAC_H_ */

@@ -22,7 +22,7 @@
 #include <mcuxClCore_Platform.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
-#include <mcuxClCore_Buffer.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClHash_Types.h>
 
 #ifdef __cplusplus
@@ -53,7 +53,7 @@ typedef MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClHash_Status_t) (*mcuxClHashModes_els_A
 /**
  * @brief ELS hash processing
  *
- * This function calls mcuxClEls_Hash_Async to call ELS to process a input data. Note
+ * This function calls mcuxClEls_Hash_Async to call ELS to process input data. Note
  * it does not perform padding. This has to be done before calling the function.
  *
  * @param options   ELS options
@@ -71,6 +71,31 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClHash_Status_t) mcuxClHashModes_els_core_sha2(
                         uint32_t inSize,
                         mcuxCl_Buffer_t pOut);
 
+#ifdef MCUXCL_FEATURE_ELS_SHA_DIRECT
+/**
+ * @brief ELS hash processing in direct mode
+ *
+ * This function calls mcuxClEls_Hash_ShaDirect to call ELS in direct mode to process input
+ * data. Note it does not perform padding. This has to be done before calling the function.
+ *
+ * Precondition: SHA-direct mode has been enabled
+ *
+ * @param options   ELS options
+ * @param in        Pointer to the input message
+ * @param out       Result of processed input data
+ *
+ * @return A code-flow protected error code (see @ref mcuxCsslFlowProtection)
+ * @retval MCUXCLHASH_STATUS_OK               Hash operation successful
+ * @retval MCUXCLHASH_STATUS_INVALID_PARAMS   The provided function parameters do not fulfill requirements
+ * @retval MCUXCLHASH_STATUS_FAILURE          Error occured during Hash operation
+ */
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClHashModes_els_core_sha2_direct, mcuxClHashModes_els_AlgoCore_t)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClHash_Status_t) mcuxClHashModes_els_core_sha2_direct(
+                        uint32_t options,
+                        mcuxCl_InputBuffer_t pIn,
+                        uint32_t inSize,
+                        mcuxCl_Buffer_t pOut);
+#endif /* MCUXCL_FEATURE_ELS_SHA_DIRECT */
 
 #ifdef __cplusplus
 } /* extern "C" */

@@ -52,6 +52,8 @@ extern "C" {
  * @retval #MCUXCLTRNG_STATUS_OK             The operation was successful
  * @retval #MCUXCLTRNG_STATUS_ERROR          The operation failed
  * @retval #MCUXCLTRNG_STATUS_FAULT_ATTACK   A fault attack is detected
+ *
+ * Data Integrity: Record(entropyInputLength)
  */
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClTrng_getEntropyInput)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClTrng_Status_t) mcuxClTrng_getEntropyInput(

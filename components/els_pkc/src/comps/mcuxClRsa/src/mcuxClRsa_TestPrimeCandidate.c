@@ -36,13 +36,15 @@
 #include <internal/mcuxClRsa_Internal_PkcTypes.h>
 #include <internal/mcuxClRsa_TestPrimeCandidate_FUP.h>
 
+
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRsa_TestPrimeCandidate)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_TestPrimeCandidate(
   mcuxClSession_Handle_t           pSession,
   mcuxClRsa_KeyEntry_t *           pE,
   mcuxClRsa_KeyEntry_t *           pPrimeCandidate,
   const uint32_t                  keyBitLength,
-  const uint32_t                  iNumToCmp_iA0)
+  const uint32_t                  iNumToCmp_iA0,
+  const uint32_t                  numberTestIterations)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClRsa_TestPrimeCandidate,
         MCUXCLPKC_FP_CALLED_CALC_OP2_CMP);
@@ -50,7 +52,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_TestPrimeCandidate(
     mcuxClRsa_Status_t status = MCUXCLRSA_STATUS_INTERNAL_TESTPRIME_CMP_FAILED;
 
     const uint32_t primeByteLength = keyBitLength/8u/2u;
-    const uint32_t pkcOperandSize = MCUXCLRSA_PKC_ROUNDUP_SIZE(primeByteLength);
+    const uint32_t pkcOperandSize = MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(primeByteLength);
 
     /* Backup Ps1 length and UPTRT, resore them when returning */
     uint16_t *bakUPTRT = MCUXCLPKC_GETUPTRT();
@@ -97,8 +99,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_TestPrimeCandidate(
     MCUXCLPKC_WAITFORREADY();
     MCUXCLPKC_SETUPTRT(pOperands);
 
-	MCUXCLPKC_PS1_SETLENGTH(pkcOperandSize, pkcOperandSize);
-	MCUXCLPKC_PS2_SETLENGTH(0u, MCUXCLRSA_PKC_WORDSIZE);
+    MCUXCLPKC_PS1_SETLENGTH(pkcOperandSize, pkcOperandSize);
+    MCUXCLPKC_PS2_SETLENGTH(0u, MCUXCLRSA_PKC_WORDSIZE);
 
     do
     {
@@ -108,7 +110,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_TestPrimeCandidate(
         *    rounded up, this is 0xb504f333f9de6485u.
         *    This deviation from FIPS 186-4 has been approved.
         *
-        * Used functions: FAME operations (MCUXCLPKC_OP_CMP)
+        * Used functions: PKC operations (MCUXCLPKC_OP_CMP)
         */
         MCUXCLPKC_FP_CALC_OP2_CMP(MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_CANDIDATE_64MOST, MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_NUMTOCOMPARE);
         if (MCUXCLPKC_FLAG_CARRY == MCUXCLPKC_WAITFORFINISH_GETCARRY())
@@ -150,7 +152,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_TestPrimeCandidate(
         * Used functions: mcuxClRsa_MillerRabinTest
         */
         uint32_t  iP_iT = (MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_CANDIDATE << 8u) | MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_GCD1;
-        MCUX_CSSL_FP_FUNCTION_CALL(retTest, mcuxClRsa_MillerRabinTest(pSession, iP_iT, keyBitLength));
+        MCUX_CSSL_FP_FUNCTION_CALL(retTest, mcuxClRsa_MillerRabinTest(pSession, iP_iT, keyBitLength, numberTestIterations));
         status = (mcuxClRsa_Status_t) retTest;
     }while (false);
 

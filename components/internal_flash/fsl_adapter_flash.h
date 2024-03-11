@@ -234,6 +234,16 @@ hal_flash_status_t HAL_FlashSetProperty(hal_flash_property_tag_t property, uint3
  */
 hal_flash_status_t HAL_FlashGetSecurityState(hal_flash_security_state_t *state);
 
+/*!
+ * \brief  Return whether ECC error is currently raised in the the flash controller.
+ *
+ *  Note : Used in BusFault handler so as to determine whether ECC correction action is required.
+ *
+ * @retval #true if flash controller is reporting an ECC fault.
+ *
+ */
+bool HAL_FlashEccStatusRaised(void);
+
 #if defined(__cplusplus)
 }
 #endif

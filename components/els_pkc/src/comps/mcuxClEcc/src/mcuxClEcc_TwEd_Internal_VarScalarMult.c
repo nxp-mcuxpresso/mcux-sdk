@@ -29,10 +29,9 @@
 
 #include <mcuxClEcc.h>
 #include <internal/mcuxClEcc_Internal.h>
+#include <internal/mcuxClEcc_Internal_FUP.h>
 #include <internal/mcuxClEcc_TwEd_Internal.h>
-#include <internal/mcuxClEcc_EdDSA_Internal_PkcWaLayout.h>
-#include <internal/mcuxClEcc_Internal_Convert_FUP.h>
-#include <internal/mcuxClEcc_TwEd_Internal_VarScalarMult_FUP.h>
+#include <internal/mcuxClEcc_TwEd_Internal_FUP.h>
 
 /**
  * Function that performs a scalar multiplication with a variable point P on a twisted Edwards curve
@@ -60,9 +59,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_TwEd_VarScalarMult(
     /* Determine pointer table pointer */
     uint16_t *pOperands = MCUXCLPKC_GETUPTRT();
     MCUXCLPKC_PKC_CPU_ARBITRATION_WORKAROUND();  // avoid CPU accessing to PKC workarea when PKC is busy - TODO CLNS-6410: check if this is necessary
-    MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("MISRA Ex. 9 to Rule 11.3 - PKC word is CPU word aligned.");
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("MISRA Ex. 9 to Rule 11.3 - PKC word is CPU word aligned.")
     const uint32_t *pScalar = (const uint32_t *) MCUXCLPKC_OFFSET2PTR(pOperands[iScalar]);
-    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING();
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
 
     /* Step 1: Initialize the accumulated points in YZ-coordinates */
     MCUXCLPKC_FP_CALC_OP1_OR_CONST(TWED_ML_Y1, TWED_Z, 0u);
@@ -129,6 +128,14 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_TwEd_VarScalarMult(
     {
         MCUXCLMATH_FP_MODINV(ECC_T0, TWED_Z, ECC_P, ECC_T1);         /* T0 = Z^(-1)*R^(-1) mod p    */
         MCUXCLPKC_FP_CALCFUP(mcuxClEcc_FUP_ConvertHomToAffine, mcuxClEcc_FUP_ConvertHomToAffine_LEN);
+    }
+    else if(MCUXCLECC_SCALARMULT_OPTION_PROJECTIVE_OUTPUT != (MCUXCLECC_SCALARMULT_OPTION_OUTPUT_MASK & options))
+    {
+        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_TwEd_VarScalarMult, MCUXCLECC_STATUS_FAULT_ATTACK);
+    }
+    else
+    {
+        /* Do nothing */
     }
 
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_TwEd_VarScalarMult, MCUXCLECC_STATUS_OK,

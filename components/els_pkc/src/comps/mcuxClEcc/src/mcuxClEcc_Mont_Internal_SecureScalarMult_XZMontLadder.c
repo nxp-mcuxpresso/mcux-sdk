@@ -28,7 +28,8 @@
 #include <internal/mcuxClPkc_Operations.h>
 #include <internal/mcuxClEcc_Mont_Internal.h>
 #include <internal/mcuxClEcc_Internal_SecurePointSelect.h>
-#include <internal/mcuxClEcc_Mont_Internal_SecureScalarMult_XZMontLadder_FUP.h>
+#include <internal/mcuxClEcc_Mont_Internal_FUP.h>
+
 
 
 /**
@@ -68,7 +69,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Mont_SecureScalarMult_
     /* Determine pointer table pointer */
     uint16_t *pOperands = MCUXCLPKC_GETUPTRT();
     MCUXCLPKC_PKC_CPU_ARBITRATION_WORKAROUND();  // avoid CPU accessing to PKC workarea when PKC is busy - TODO CLNS-6410: check if this is necessary
-    const uint32_t *pScalar = (const uint32_t *) MCUXCLPKC_OFFSET2PTR(pOperands[iScalar]);  /* MISRA Ex. 9 to Rule 11.3 - PKC word is CPU word aligned. */
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("MISRA Ex. 9 to Rule 11.3 - PKC word is CPU word aligned.")
+    const uint32_t *pScalar = (const uint32_t *) MCUXCLPKC_OFFSET2PTR(pOperands[iScalar]);
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
 
     /* Initialize accumulated coordinate buffers for the ladder iteration depending on optionAffineOrProjective
      * NOTE: As discussed with SA, no coordinate or pointer table randomization/re-randomization is needed for the moment. It can easily be added at a later point in time.
@@ -102,6 +105,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Mont_SecureScalarMult_
     uint32_t maskedCurrentScalarWord = 0u;
     MCUX_CSSL_FP_LOOP_DECL(whileLoop);
     MCUX_CSSL_FP_BRANCH_DECL(ifInWhile);
+
+    uint32_t currentScalarWordMask;
+    MCUXCLBUFFER_INIT(buffCurrentScalarWordMask, NULL, (uint8_t *) &currentScalarWordMask, sizeof(uint32_t));
+    uint32_t randomMask;
+    MCUXCLBUFFER_INIT(buffRandomMask, NULL, (uint8_t *) &randomMask, sizeof(uint32_t));
+
     while(0u < i)
     {
 
@@ -110,11 +119,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Mont_SecureScalarMult_
         /* Set pointers pOperands(MONT_VX1),...,pOperands(MONT_VZ2) according to the bit to be processed */
         MCUXCLPKC_WAITFORFINISH();
         uint32_t currentScalarBitInWord = i % 32u;
-        uint32_t currentScalarWordMask;
 
         if((i == (scalarBitLength - 1u)) || ((i % 32u) == 31u))
         {
-            MCUX_CSSL_FP_FUNCTION_CALL(ret_Prng_GetRandom0, mcuxClRandom_ncGenerate(pSession, (uint8_t*)&currentScalarWordMask, sizeof(uint32_t)));
+            MCUX_CSSL_FP_FUNCTION_CALL(ret_Prng_GetRandom0, mcuxClRandom_ncGenerate(pSession, buffCurrentScalarWordMask, sizeof(uint32_t)));
             if (MCUXCLRANDOM_STATUS_OK != ret_Prng_GetRandom0)
             {
                 MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_SecurePointMult, MCUXCLECC_STATUS_FAULT_ATTACK);
@@ -127,9 +135,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Mont_SecureScalarMult_
         }
         uint32_t offsetsP0 = 0xFFFFFFFFu;
         uint32_t offsetsP1 = 0xFFFFFFFFu;
-        uint32_t randomMask;
 
-        MCUX_CSSL_FP_FUNCTION_CALL(ret_Prng_GetRandom1, mcuxClRandom_ncGenerate(pSession, (uint8_t*)&randomMask, sizeof(uint32_t)));
+        MCUX_CSSL_FP_FUNCTION_CALL(ret_Prng_GetRandom1, mcuxClRandom_ncGenerate(pSession, buffRandomMask, sizeof(uint32_t)));
         if (MCUXCLRANDOM_STATUS_OK != ret_Prng_GetRandom1)
         {
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_SecurePointMult, MCUXCLECC_STATUS_FAULT_ATTACK);
@@ -145,7 +152,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Mont_SecureScalarMult_
                                    maskedCurrentScalarWord, currentScalarWordMask, randomMask, currentScalarBitInWord);
 
         MCUXCLPKC_WAITFORREADY();
+        MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("UPTR table is 32-bit aligned in ECC.")
         uint32_t *pOperands32 = (uint32_t *) pOperands;
+        MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
         MCUXCLECC_STORE_2OFFSETS(pOperands32, MONT_VX1, MONT_VZ1, offsetsP0);
         MCUXCLECC_STORE_2OFFSETS(pOperands32, MONT_VX2, MONT_VZ2, offsetsP1);
 

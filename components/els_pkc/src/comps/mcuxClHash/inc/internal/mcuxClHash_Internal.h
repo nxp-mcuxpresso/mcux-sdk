@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2021-2023 NXP                                                  */
+/* Copyright 2021-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -21,8 +21,9 @@
 
 #include <mcuxClHash_Types.h>
 #include <mcuxClCore_Platform.h>
-#include <mcuxClCore_Buffer.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClCore_Macros.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClSession_Types.h>
 #include <mcuxCsslAnalysis.h>
@@ -30,7 +31,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 /**********************************************
  * Type declarations
@@ -46,19 +46,20 @@ extern "C" {
  * @brief Hash Context structure
  *
  * Maintains the state of a hash computation when using the streaming API.
- * 
+ *
  * This structure only holds metadata, and the actual hash algorithm's state is part of the context but stored behind this structure.
  *
  * See #mcuxClHash_init for information about the streaming API.
  */
 struct mcuxClHash_ContextDescriptor
 {
-  uint64_t processedLength[2];
+  uint32_t processedLength[4];
   uint32_t unprocessedLength;
   const mcuxClHash_AlgorithmDescriptor_t * algo;
 };
 
 #define MCUXCLHASH_CONTEXT_DATA_OFFSET             (sizeof(mcuxClHash_ContextDescriptor_t)) ///< Offset of data buffers from the start of the context
+#define MCUXCLHASH_CONTEXT_MAX_ALIGNMENT_OFFSET    (7u) ///< Start of data buffers is moved at most 7 Bytes back to ensure 64 Bit alignment of pState.
 
 
 /**
@@ -115,6 +116,7 @@ struct mcuxClHash_AlgorithmDescriptor
   uint32_t protection_token_processSkeleton;               ///< Protection token value for the used process skeleton
   mcuxClHash_AlgoSkeleton_Finish_t finishSkeleton;          ///< Multi-part hash skeleton function
   uint32_t protection_token_finishSkeleton;                ///< Protection token value for the used multi-part skeleton
+  uint8_t processedLengthCheckMask;                        ///< Mask of the highest byte of the processed length that cannot be set
   size_t blockSize;                                        ///< Size of the block used by the hash algorithm
   size_t hashSize;                                         ///< Size of the output of the hash algorithm
   size_t stateSize;                                        ///< Size of the state used by the hash algorithm
@@ -128,54 +130,92 @@ struct mcuxClHash_AlgorithmDescriptor
  * Function declarations
  **********************************************/
 /**
- * @brief support bigger input length up to 2^128 bits
+ * @brief Adds a 32 Bit constant to an 128 Bit counter
+ * 
+ * This function is used to support bigger input length up to 2^128 Bit
+ * 
+ * @param[in out] pLen128 128 Bit counter to increment
+ * @param[in] addLen 32 Bit constant to increment counter with
  */
-static inline void mcuxClHash_processedLength_add(uint64_t *pLen128, uint32_t addLen)
-{
-    if (pLen128[0] > (0xffffffffffffffffu - addLen))
-    {
-        pLen128[1] += 1u;
-    }
-    pLen128[0] += addLen;
-}
+void mcuxClHash_processedLength_add(uint32_t *pLen128, uint32_t addLen);
+
 
 /**
- * @brief support 128bit number compare
+ * @brief Compares an 128 Bit counter value against a 32 Bit constant.
+ * 
+ * @param[in] pLen128 128 Bit counter
+ * @param[in] cmpLenLow32 32 Bit constant
+ * 
+ * @return ternary value indicating greater, equal, smaller relationship
+ * @retval 1    Counter value is bigger than constant
+ * @retval 0    Counter and constant have equal value
+ * @retval -1   Counter value is smaller than constant
  */
-static inline int mcuxClHash_processedLength_cmp(uint64_t *pLen128, uint64_t cmpLenHigh64, uint64_t cmpLenLow64)
+int mcuxClHash_processedLength_cmp(uint32_t *pLen128, uint32_t cmpLenLow32);
+
+/**
+ * @brief convert 128 bit number of bytes to number of bits
+ * 
+ * @param pLen128[in out] 128 Bit number represented as uint32_t array. Upper 3 bits need to be zero to avoid overflow.
+ */
+static inline void mcuxClHash_processedLength_toBits(uint32_t *pLen128)
 {
-  return pLen128[1] > cmpLenHigh64 ? 1 : (cmpLenHigh64 > pLen128[1] ? -1 : ((pLen128[0] > cmpLenLow64 ? 1 : (pLen128[0] == cmpLenLow64 ? 0 : -1))));
+  pLen128[3] = (pLen128[3] << 3u) | (pLen128[2] >> 29u);
+  pLen128[2] = (pLen128[2] << 3u) | (pLen128[1] >> 29u);
+  pLen128[1] = (pLen128[1] << 3u) | (pLen128[0] >> 29u);
+  pLen128[0] = pLen128[0] << 3u;
 }
 
+
+/**
+ * @brief Computes an upper bound of the context size for a given hash algorithm.
+ * 
+ * This allows usage of smaller context buffers and should be preferred over MCUXCLHASH_CONTEXT_SIZE 
+ * if the Hash algorithm is chosen by the user but the hash context is allocated within the CL.
+ *
+ * @param[in] algo Hash algorithm, SecSha is currently not supported 
+ * 
+ * @return Byte size of a Hash context
+ */
 static inline uint32_t mcuxClHash_getContextWordSize(mcuxClHash_Algo_t algo)
 {
   MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_OVERFLOW("Context size will never overflow.")
-  return (sizeof(mcuxClHash_ContextDescriptor_t) + algo->stateSize + algo->blockSize) / sizeof(uint32_t);
+  return MCUXCLCORE_NUM_OF_CPUWORDS_CEIL(sizeof(mcuxClHash_ContextDescriptor_t) + MCUXCLHASH_CONTEXT_MAX_ALIGNMENT_OFFSET + algo->stateSize + algo->blockSize);
   MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_OVERFLOW()
 }
 
 /**
  * @brief Returns the address of the state within the given context
  * 
+ * @param[in] pContext The given context
+ *
 */
 static inline uint32_t *mcuxClHash_getStatePtr(mcuxClHash_Context_t pContext)
 {
-  MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY("Context and offset are word-aligned")
-  return (uint32_t *)((uint8_t *)pContext + MCUXCLHASH_CONTEXT_DATA_OFFSET);
-  MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY()
+  uint8_t *pState = (uint8_t *)pContext + MCUXCLHASH_CONTEXT_DATA_OFFSET;
+  /* Align state to 64 Bit */
+  size_t stateOffset = ((uint32_t)pState % sizeof(uint64_t));
+  if(0u != stateOffset)
+  {
+    pState += (sizeof(uint64_t) - stateOffset);
+  }
+  MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("pState is now 64 Bit aligned")
+  return (uint32_t *)pState;
+  MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
 }
 
 /**
  * @brief Returns the address of the unprocessed buffer within the given context
- * 
- * @param[in] stateSize Byte size of the state includidng a potential mask
- * 
+ *
+ * @param[in] pContext The given context
+ *
 */
 static inline uint32_t *mcuxClHash_getUnprocessedPtr(mcuxClHash_Context_t pContext)
 {
-  MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY("Context, offset and all state sizes are word-aligned")
-  return (uint32_t *)((uint8_t *)pContext + MCUXCLHASH_CONTEXT_DATA_OFFSET + pContext->algo->stateSize);
-  MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY()
+  uint8_t *pUnprocessed = (uint8_t *)mcuxClHash_getStatePtr(pContext) + pContext->algo->stateSize;
+  MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("pUnprocessed is 32 Bit aligned since the state pointer is 64 Bit aligned and the state size is at least 32 Bit aligned.")
+  return (uint32_t *)pUnprocessed;
+  MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
 }
 
 

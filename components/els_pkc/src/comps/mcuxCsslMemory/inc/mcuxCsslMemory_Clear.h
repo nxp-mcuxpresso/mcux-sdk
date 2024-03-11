@@ -53,7 +53,7 @@
  * @param[in]  chk       The parameter checksum, generated with #mcuxCsslParamIntegrity_Protect.
  * @param[in]  pDst      The destination pointer to buffer to be cleared. Must not be NULL.
  * @param[in]  dstLength The size of the destination data buffer in bytes.
- * @param[in]  length    The number of bytes to clear. Must be different from zero.
+ * @param[in]  length    The number of bytes to clear.
  *
  * @return A status code encapsulated in a flow-protection type.
  * @retval #MCUXCSSLMEMORY_STATUS_OK                If the contents in buffer at @p pDst is cleared.

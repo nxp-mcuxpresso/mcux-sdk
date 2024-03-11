@@ -1,21 +1,19 @@
 /*
 ** ###################################################################
-**     Processors:          RW610ETA1I
-**                          RW610HNA1I
-**                          RW610UKA1I
+**     Processors:          RW610ETA2I
+**                          RW610HNA2I
+**                          RW610UKA2I
 **
 **     Compiler:            GNU C Compiler
 **     Reference manual:    RW61X User manual Rev. 0.95, June 2022
 **     Version:             rev. 1.0, 2021-03-16
-**     Build:               b221116
+**     Build:               b231201
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2023 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

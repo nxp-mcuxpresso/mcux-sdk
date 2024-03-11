@@ -319,28 +319,51 @@
   MCUX_CSSL_CPP_OVERLOADED1(MCUX_CSSL_FP_FUNCTION_EXIT_VOID_IMPL, __VA_ARGS__)
 
 /**
- * \def MCUX_CSSL_FP_FUNCTION_CALL_IMPL
+ * \def MCUX_CSSL_FP_FUNCTION_CALL_IMPL3
  * \brief Event implementation of a flow protected function call.
  * \ingroup csslFpCntFunction
  *
- *
- * \declaration{MCUX_CSSL_FP_FUNCTION_DECL_IMPL}
- * \expectation{MCUX_CSSL_FP_FUNCTION_CALLED_IMPL}
+ * \param type   Type of the \p result variable.
+ * \param result Fresh variable name to store the result of \p call.
+ * \param call   The (protected) function call that must be performed.
+ */
+#define MCUX_CSSL_FP_FUNCTION_CALL_IMPL3(type, result, call) \
+  const uint64_t MCUX_CSSL_CPP_CAT(result, _protected) = (call); \
+  MCUX_CSSL_SC_ADD_ON_CALL( \
+    MCUX_CSSL_FP_PROTECTION_TOKEN(MCUX_CSSL_CPP_CAT(result, _protected))); \
+  type const result = MCUX_CSSL_FP_RESULT(type, \
+    MCUX_CSSL_CPP_CAT(result, _protected))
+
+/**
+ * \def MCUX_CSSL_FP_FUNCTION_CALL_IMPL2
+ * \brief Event implementation of a flow protected function call.
+ * \ingroup csslFpCntFunction
  *
  * \param result Fresh variable name to store the result of \p call.
  * \param call   The (protected) function call that must be performed.
  */
-#define MCUX_CSSL_FP_FUNCTION_CALL_IMPL(result, call) \
-  const uint64_t MCUX_CSSL_CPP_CAT(result, _protected) = (call); \
-  MCUX_CSSL_SC_ADD_ON_CALL( \
-    MCUX_CSSL_FP_PROTECTION_TOKEN(MCUX_CSSL_CPP_CAT(result, _protected))); \
-  const uint32_t result = MCUX_CSSL_FP_RESULT( \
-    MCUX_CSSL_CPP_CAT(result, _protected))
+#define MCUX_CSSL_FP_FUNCTION_CALL_IMPL2(result, call) \
+  MCUX_CSSL_FP_FUNCTION_CALL_IMPL3(uint32_t, result, call)
+
+/**
+ * \def MCUX_CSSL_FP_FUNCTION_CALL_IMPL
+ * \brief Event implementation of a flow protected function call.
+ * \ingroup csslFpCntFunction
+ *
+ * \declaration{MCUX_CSSL_FP_FUNCTION_DECL_IMPL}
+ * \expectation{MCUX_CSSL_FP_FUNCTION_CALLED_IMPL}
+ *
+ * \param type   Optional, type of the \p result variable.
+ * \param result Fresh variable name to store the result of \p call.
+ * \param call   The (protected) function call that must be performed.
+ */
+#define MCUX_CSSL_FP_FUNCTION_CALL_IMPL(...) \
+  MCUX_CSSL_CPP_OVERLOADED3(MCUX_CSSL_FP_FUNCTION_CALL_IMPL, __VA_ARGS__)
 
 /**
  * \def MCUX_CSSL_FP_FUNCTION_CALL_VOID_IMPL
  * \brief Event implementation of a flow protected void function call.
- * \ingroup csslFpNoneFunction
+ * \ingroup csslFpCntFunction
  *
  * \declaration{MCUX_CSSL_FP_FUNCTION_DECL_IMPL}
  * \expectation{MCUX_CSSL_FP_FUNCTION_CALLED_IMPL}

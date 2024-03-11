@@ -13,7 +13,7 @@
 
 /**
  * @file  mcuxClEcc_Mont_Internal_PkcWaLayout.h
- * @brief internal header of mcuxClEcc MontDh PKC workarea layout
+ * @brief internal header of mcuxClEcc MontDH PKC workarea layout
  */
 
 
@@ -21,11 +21,11 @@
 #define MCUXCLECC_MONT_INTERNAL_PKCWALAYOUT_H_
 
 #include <mcuxClConfig.h> // Exported features flags header
-#include <internal/mcuxClEcc_Internal.h>
+#include <internal/mcuxClEcc_Internal_PkcWaLayout.h>
 
 
 /**********************************************************/
-/** PKC workarea memory layout used for MontDh functions. */
+/** PKC workarea memory layout used for MontDH functions. */
 /**********************************************************/
 #define MONT_V0   ECC_V0
 #define MONT_V1   ECC_V1

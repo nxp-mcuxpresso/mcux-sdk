@@ -19,6 +19,7 @@
  * @brief   Example for the mcuxClRandomModes component
  */
 
+#include <mcuxClToolchain.h>
 #include <mcuxClRandom.h>
 #include <mcuxClRandomModes.h>
 #include <mcuxClSession.h>
@@ -48,9 +49,12 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClRandomModes_Different_Sessions_example)
     mcuxClRandom_Mode_t mcuxClRandomModes_Mode = mcuxClRandomModes_Mode_CtrDrbg_AES256_DRG3 ;
 
     /* Buffers to store the generated random values in. */
-    uint8_t drbg_buffer1[3u];
-    uint8_t drbg_buffer2[16u];
-    uint8_t drbg_buffer3[31u];
+    ALIGNED uint8_t drbg_data1[3u];
+    MCUXCLBUFFER_INIT(drbgBuf1, NULL, &drbg_data1[0], 3u);
+    ALIGNED uint8_t drbg_data2[16u];
+    MCUXCLBUFFER_INIT(drbgBuf2, NULL, &drbg_data2[0], 16u);
+    ALIGNED uint8_t drbg_data3[31u];
+    MCUXCLBUFFER_INIT(drbgBuf3, NULL, &drbg_data3[0], 31u);
 
     { /* session_0 Scope */
         mcuxClSession_Descriptor_t sessionDesc_0;
@@ -95,8 +99,8 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClRandomModes_Different_Sessions_example)
         /* Generate random values of smaller amount than one word size. */
         MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(rg1_status, generate1_token, mcuxClRandom_generate(
                                             session_0,
-                                            drbg_buffer1,
-                                            sizeof(drbg_buffer1)));
+                                            drbgBuf1,
+                                            sizeof(drbg_data1)));
 
         if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_generate) != generate1_token) || (MCUXCLRANDOM_STATUS_OK != rg1_status))
         {
@@ -133,8 +137,8 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClRandomModes_Different_Sessions_example)
         /* Generate random values of multiple of word size. */
         MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(rg2_status, generate2_token, mcuxClRandom_generate(
                                             session_1,
-                                            drbg_buffer2,
-                                            sizeof(drbg_buffer2)));
+                                            drbgBuf2,
+                                            sizeof(drbg_data2)));
 
         if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_generate) != generate2_token) || (MCUXCLRANDOM_STATUS_OK != rg2_status))
         {
@@ -154,8 +158,8 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClRandomModes_Different_Sessions_example)
         /* Generate random values of larger amount than but not multiple of one word size. */
         MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(rg3_status, generate3_token, mcuxClRandom_generate(
                                             session_1,
-                                            drbg_buffer3,
-                                            sizeof(drbg_buffer3)));
+                                            drbgBuf3,
+                                            sizeof(drbg_data3)));
 
         if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_generate) != generate3_token) || (MCUXCLRANDOM_STATUS_OK != rg3_status))
         {

@@ -25,6 +25,7 @@
  *
  * @ingroup mcuxCsslAPI
  */
+#include <mcuxCsslMemory_Constants.h>
 #include <mcuxCsslMemory_Types.h>
 
 

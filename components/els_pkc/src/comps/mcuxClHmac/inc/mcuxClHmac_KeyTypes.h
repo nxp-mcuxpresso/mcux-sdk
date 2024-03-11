@@ -52,7 +52,7 @@ static const mcuxClKey_Type_t mcuxClKey_Type_HmacSha256 = &mcuxClKey_TypeDescrip
 extern const mcuxClKey_TypeDescriptor_t mcuxClKey_TypeDescriptor_Hmac_variableLength;
 
 /**
- * \brief Key type pointer for HMAC-SHA256 based keys with variable length.
+ * \brief Key type pointer for HMAC keys with variable length.
  */
 static const mcuxClKey_Type_t mcuxClKey_Type_Hmac_variableLength = &mcuxClKey_TypeDescriptor_Hmac_variableLength;
 MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DECLARED_BUT_NEVER_REFERENCED()

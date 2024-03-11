@@ -24,10 +24,13 @@
 #include <mcuxClKey.h>
 #include <internal/mcuxClAes_Wa.h>
 #include <internal/mcuxClAes_Ctx.h>
+#include <mcuxClAes_Types.h>
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 
 
 #ifdef __cplusplus

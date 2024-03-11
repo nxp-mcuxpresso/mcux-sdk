@@ -24,6 +24,8 @@ extern "C" {
 #define MCUXCLAES_MASKED_KEY_SIZE_IN_WORDS      (MCUXCLAES_MASKED_KEY_SIZE / sizeof(uint32_t))
 
 #define MCUXCLAES_GCM_H_KEY_SIZE                (16u)
+#define MCUXCLAES_MAC_SUB_KEY_SIZE              (16u)
+
 
 
 #ifdef __cplusplus

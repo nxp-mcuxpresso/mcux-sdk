@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -20,12 +20,14 @@
 #include <mcuxClCore_Platform.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
 #include <mcuxCsslFlowProtection.h>
+#include <mcuxCsslAnalysis.h>
 
 #include <mcuxClMath.h>
 
 #include <internal/mcuxClPkc_Macros.h>
 #include <internal/mcuxClPkc_Operations.h>
 #include <internal/mcuxClMath_Internal_Utils.h>
+
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClMath_InitLocalUptrt)
 MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_InitLocalUptrt(uint32_t i3_i2_i1_i0, uint32_t i7_i6_i5_i4, uint16_t *localPtrUptrt, uint8_t noOfIndices, const uint16_t **oldPtrUptrt)
@@ -64,7 +66,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_InitLocalUptrt(uint32_t i3_i2_i1_i0
 
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClMath_LeadingZeros)
-MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_LeadingZeros(uint8_t iX, uint32_t *pNumLeadingZeros)
+MCUX_CSSL_FP_PROTECTED_TYPE(uint32_t) mcuxClMath_LeadingZeros(uint8_t iX)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClMath_LeadingZeros);
 
@@ -72,24 +74,35 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_LeadingZeros(uint8_t iX, uint32_t *
     /* Assume pUptrt[iX] is exactly a multiple of MCUXCLPKC_WORDSIZE. */
     const uint32_t *pX = MCUXCLPKC_OFFSET2PTRWORD(pUptrt[iX]);
 
-    uint32_t len = (uint32_t) MCUXCLPKC_PS1_GETOPLEN() / (sizeof(uint32_t));  /* Assume PS1 OPLEN is exactly a multiple of MCUXCLPKC_WORDSIZE. */
+    const uint32_t ps1Len = (uint32_t) MCUXCLPKC_PS1_GETOPLEN();
+    /* ASSERT: PS1 LEN is valid. */
+    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(ps1Len, MCUXCLPKC_WORDSIZE, MCUXCLPKC_RAM_SIZE, 0u)
+
+    uint32_t index = ps1Len / (sizeof(uint32_t));  /* Assume PS1 OPLEN is exactly a multiple of MCUXCLPKC_WORDSIZE. */
     uint32_t numLeadingZeros = 0u;
 
     do
     {
-        len--;
-        uint32_t xi = pX[len];
+        index--;
+        uint32_t xi = pX[index];
         if (0u != xi)
         {
-            *pNumLeadingZeros = numLeadingZeros + mcuxClMath_CountLeadingZerosWord(xi);
-            MCUX_CSSL_FP_FUNCTION_EXIT_VOID(mcuxClMath_LeadingZeros);
+            const uint32_t leadingZerosInWord = mcuxClMath_CountLeadingZerosWord(xi);
+            /* ASSERT: number of leading zeros of nonzero xi (of type u32) is in the range [0,31]. */
+            MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(leadingZerosInWord, 0u, 31u, 0u)
+
+            MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("numLeadingZeros will not exceed 8*MCUXCLPKC_RAM_SIZE, which is < 2^19.")
+            numLeadingZeros += leadingZerosInWord;
+            MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
+            MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClMath_LeadingZeros, numLeadingZeros);
         }
 
+        MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("numLeadingZeros will not exceed 8*MCUXCLPKC_RAM_SIZE, which is < 2^19.")
         numLeadingZeros += ((sizeof(uint32_t)) * 8u);
-    } while (0u < len);
+        MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
+    } while (0u < index);
 
-    *pNumLeadingZeros = numLeadingZeros;
-    MCUX_CSSL_FP_FUNCTION_EXIT_VOID(mcuxClMath_LeadingZeros);
+    MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClMath_LeadingZeros, numLeadingZeros);
 }
 
 
@@ -141,18 +154,20 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ShiftModulus(uint16_t iNShifted_iN)
 
     /* Unpack indices. */
     uint8_t iN  = (uint8_t) (iNShifted_iN & 0xFFu);
-    uint8_t iNS = (uint8_t) ((iNShifted_iN >> 8) & 0xFFu);
+    uint8_t iNS = (uint8_t) ((iNShifted_iN >> 8u) & 0xFFu);
 
     /* Count the number of leading zeros of modulus n. */
     MCUXCLPKC_WAITFORFINISH();
-    uint32_t leadingZeroBits;
-    MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClMath_LeadingZeros(iN, &leadingZeroBits));
+    MCUX_CSSL_FP_FUNCTION_CALL(leadingZeroBits, mcuxClMath_LeadingZeros(iN));
     uint32_t leadingZeroPkcWords_InBytes = leadingZeroBits / (MCUXCLPKC_WORDSIZE * 8u) * MCUXCLPKC_WORDSIZE;
 
     /* Set PS2 LEN, to exclude leading zero PKC word(s). */
-    uint32_t ps1LenReg = MCUXCLPKC_PS1_GETLENGTH_REG();
+    const uint32_t ps1LenReg = MCUXCLPKC_PS1_GETLENGTH_REG();
     /* MCLEN on higher 16 bits is not used. */
-    MCUXCLPKC_PS2_SETLENGTH_REG(ps1LenReg - leadingZeroPkcWords_InBytes);
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("ps1LenReg >= ps1Len (oplen) >= byteLen of leading zero PKC word(s) of an operand.")
+    const uint32_t ps2LenReg = ps1LenReg - leadingZeroPkcWords_InBytes;
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
+    MCUXCLPKC_PS2_SETLENGTH_REG(ps2LenReg);
 
     const uint16_t * pUptrt = MCUXCLPKC_GETUPTRT();
     uint16_t offsetN  = pUptrt[iN];

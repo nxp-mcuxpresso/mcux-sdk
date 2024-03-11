@@ -25,6 +25,7 @@
 #include <mcuxClCore_FunctionIdentifiers.h>
 #include <mcuxClToolchain.h>
 #include <mcuxClEls.h>
+
 #include <internal/mcuxClEls_Internal.h>
 #include <internal/mcuxClMemory_Copy_Internal.h>
 
@@ -59,7 +60,7 @@ MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_Rng_Drbg
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClEls_Rng_DrbgRequest_Async);
 
-    MCUXCLELS_INPUT_PARAM_CHECK_PROTECTED(mcuxClEls_Rng_DrbgRequest_Async, (MCUXCLELS_RNG_DRBG_TEST_EXTRACT_OUTPUT_MIN_SIZE > outputLength) || 
+    MCUXCLELS_INPUT_PARAM_CHECK_PROTECTED(mcuxClEls_Rng_DrbgRequest_Async, (MCUXCLELS_RNG_DRBG_TEST_EXTRACT_OUTPUT_MIN_SIZE > outputLength) ||
                                                                          (MCUXCLELS_RNG_DRBG_TEST_EXTRACT_OUTPUT_MAX_SIZE < outputLength) ||
                                                                          (0U != outputLength % 4U));
 
@@ -133,7 +134,7 @@ MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_Rng_Drbg
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClEls_Rng_DrbgTestExtract_Async);
 
-    MCUXCLELS_INPUT_PARAM_CHECK_PROTECTED(mcuxClEls_Rng_DrbgTestExtract_Async, (MCUXCLELS_RNG_DRBG_TEST_EXTRACT_OUTPUT_MIN_SIZE > outputLength) || 
+    MCUXCLELS_INPUT_PARAM_CHECK_PROTECTED(mcuxClEls_Rng_DrbgTestExtract_Async, (MCUXCLELS_RNG_DRBG_TEST_EXTRACT_OUTPUT_MIN_SIZE > outputLength) ||
                                                                              (MCUXCLELS_RNG_DRBG_TEST_EXTRACT_OUTPUT_MAX_SIZE < outputLength) ||
                                                                              (0U != outputLength % 4U));
 
@@ -303,7 +304,8 @@ MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_Prng_Get
     }
 
     /* Fill the specified buffer wordwise */
-    uint8_t * const pOutputWordEnd = (uint8_t*) ((uint32_t) pOutputEnd & 0xFFFFFFFCu);
+    size_t unalignedBytes = ((size_t) pOutputEnd & 3u);
+    uint8_t * const pOutputWordEnd = pOutputEnd - unalignedBytes;
     while (pOutputWordEnd > bytePtr)
     {
         mcuxClMemory_StoreLittleEndian32(bytePtr, els_getPRNGWord());

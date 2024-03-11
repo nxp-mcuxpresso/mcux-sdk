@@ -1,8 +1,8 @@
 --------------------------------------------
 NXP Software Content Register
 
-Package:                   clns-SDK_v1.7.0.zip
-Outgoing License:          LA_OPT_NXP_Software_License - No distribution permitted, license in Section 2.2 applies.
+Package:                   clns-SDK_1.9.0.zip
+Outgoing License:          LA_OPT_NXP_Software_License - Additional distribution license granted, license in Section 2.3 applies
 License Files:             LICENSE.htm
 Type of content:           Static library, headers, sources
 Description and comments:  Cryptographic library running on NXP ELS and PKC Crypto Hardware IP

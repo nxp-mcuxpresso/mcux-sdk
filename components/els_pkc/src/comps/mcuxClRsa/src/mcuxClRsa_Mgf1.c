@@ -23,6 +23,7 @@
 #include <mcuxClHash.h>
 #include <internal/mcuxClHash_Internal.h>
 #include <mcuxClSession.h>
+#include <mcuxClBuffer.h>
 
 #include <mcuxClRsa.h>
 
@@ -81,11 +82,13 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_mgf1(
     /* Compute Hash */
     uint32_t hashOutputSize = 0u;
 
+    MCUXCLBUFFER_INIT(pHashInputBuf, pSession, pHashInput, inputLength);
+    MCUXCLBUFFER_INIT(pHashOutputBuf, pSession, pHashOutput, hLen);
     MCUX_CSSL_FP_FUNCTION_CALL(hash_result, mcuxClHash_compute(pSession,
                                                              pHashAlgo,
-                                                             pHashInput,
+                                                             pHashInputBuf,
                                                              inputLength + 4U,
-                                                             pHashOutput,
+                                                             pHashOutputBuf,
                                                              &hashOutputSize) );
     if(MCUXCLHASH_STATUS_OK != hash_result)
     {

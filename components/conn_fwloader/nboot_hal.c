@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - 2021 NXP
+ * Copyright 2020 - 2021,2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -8,7 +8,7 @@
 
 #include <limits.h>
 #include "fusemap.h"
-#include "fsl_loader.h"
+#include "fsl_loader_utils.h"
 #include "life_cycle.h"
 #include "fsl_ocotp.h"
 

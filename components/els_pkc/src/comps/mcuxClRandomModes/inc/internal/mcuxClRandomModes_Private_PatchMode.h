@@ -18,6 +18,7 @@
 
 #include <mcuxClSession.h>
 #include <mcuxClRandom_Types.h>
+#include <mcuxClBuffer.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,13 +26,29 @@ extern "C" {
 
 /* Internal function prototypes */
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_PatchMode_initFunction, mcuxClRandom_initFunction_t)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_initFunction(mcuxClSession_Handle_t session);
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_initFunction(
+        mcuxClSession_Handle_t session,
+        mcuxClRandom_Mode_t mode,
+        mcuxClRandom_Context_t context);
+
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_PatchMode_reseedFunction, mcuxClRandom_reseedFunction_t)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_reseedFunction(mcuxClSession_Handle_t session);
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_reseedFunction(
+        mcuxClSession_Handle_t session,
+        mcuxClRandom_Mode_t mode,
+        mcuxClRandom_Context_t context);
+
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_PatchMode_generateFunction, mcuxClRandom_generateFunction_t)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_generateFunction(mcuxClSession_Handle_t session, uint8_t *pOut, uint32_t outLength);
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_generateFunction(
+        mcuxClSession_Handle_t session,
+        mcuxClRandom_Mode_t mode,
+        mcuxClRandom_Context_t context,
+        mcuxCl_Buffer_t pOut,
+        uint32_t outLength);
+
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_PatchMode_selftestFunction, mcuxClRandom_selftestFunction_t)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_selftestFunction(mcuxClSession_Handle_t session, mcuxClRandom_Mode_t mode);
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_selftestFunction(
+        mcuxClSession_Handle_t session,
+        mcuxClRandom_Mode_t mode);
 
 #ifdef __cplusplus
 } /* extern "C" */

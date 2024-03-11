@@ -25,14 +25,19 @@
 #include <internal/mcuxClRandomModes_Private_Drbg.h>
 #include <internal/mcuxClEls_Internal.h>
 
+
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_ElsMode_init)
 static MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_ElsMode_init(
-    mcuxClSession_Handle_t pSession
+    mcuxClSession_Handle_t pSession,
+    mcuxClRandom_Mode_t mode,
+    mcuxClRandom_Context_t context
 );
 
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_ElsMode_reseed)
 static MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_ElsMode_reseed(
-    mcuxClSession_Handle_t pSession
+    mcuxClSession_Handle_t pSession,
+    mcuxClRandom_Mode_t mode,
+    mcuxClRandom_Context_t context
 );
 
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_ElsMode_selftest)
@@ -44,13 +49,17 @@ static MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_ElsM
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_ElsMode_generate)
 static MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_ElsMode_generate(
     mcuxClSession_Handle_t pSession,
+    mcuxClRandom_Mode_t mode,
+    mcuxClRandom_Context_t context,
     uint8_t *             pOut,
     uint32_t              outLength
 );
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRandomModes_ElsMode_init)
 static MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_ElsMode_init(
-    mcuxClSession_Handle_t pSession UNUSED_PARAM
+    mcuxClSession_Handle_t pSession UNUSED_PARAM,
+    mcuxClRandom_Mode_t mode UNUSED_PARAM,
+    mcuxClRandom_Context_t context UNUSED_PARAM
 )
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClRandomModes_ElsMode_init);
@@ -60,7 +69,9 @@ static MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_ElsM
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRandomModes_ElsMode_reseed)
 static MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_ElsMode_reseed(
-    mcuxClSession_Handle_t pSession UNUSED_PARAM
+    mcuxClSession_Handle_t pSession UNUSED_PARAM,
+    mcuxClRandom_Mode_t mode UNUSED_PARAM,
+    mcuxClRandom_Context_t context UNUSED_PARAM
 )
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClRandomModes_ElsMode_reseed);
@@ -82,6 +93,8 @@ static MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_ElsM
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRandomModes_ElsMode_generate)
 static MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_ElsMode_generate(
     mcuxClSession_Handle_t pSession UNUSED_PARAM,
+    mcuxClRandom_Mode_t mode UNUSED_PARAM,
+    mcuxClRandom_Context_t context UNUSED_PARAM,
     uint8_t *             pOut,
     uint32_t              outLength
 )
@@ -145,11 +158,11 @@ static MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_ElsM
     if (requestSizeRemainingBytes > 0u)
     {
         uint8_t requestRemainingBuffer[MCUXCLELS_RNG_DRBG_TEST_EXTRACT_OUTPUT_MIN_SIZE] = {0u};
-        
+
         MCUX_CSSL_ANALYSIS_START_PATTERN_ADDRESS_IN_SFR_IS_NOT_REUSED_OUTSIDE()
         MCUX_CSSL_FP_FUNCTION_CALL(ret_DRBG_GetRandom2, mcuxClEls_Rng_DrbgRequest_Async(requestRemainingBuffer,
                                                                                      requestSizeMin));
-        MCUX_CSSL_ANALYSIS_STOP_PATTERN_ADDRESS_IN_SFR_IS_NOT_REUSED_OUTSIDE()   
+        MCUX_CSSL_ANALYSIS_STOP_PATTERN_ADDRESS_IN_SFR_IS_NOT_REUSED_OUTSIDE()
         if (MCUXCLELS_STATUS_SW_CANNOT_INTERRUPT == ret_DRBG_GetRandom2)
         {
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRandomModes_ElsMode_generate, MCUXCLRANDOM_STATUS_ERROR,
@@ -186,7 +199,6 @@ static MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_ElsM
         {
             pOut[requestSizeFullWordsBytes + i] = requestRemainingBuffer[i];
         }
-
     }
 
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRandomModes_ElsMode_generate, MCUXCLRANDOM_STATUS_OK,
@@ -216,6 +228,6 @@ const mcuxClRandom_ModeDescriptor_t mcuxClRandomModes_mdELS_Drbg = {
     .pOperationMode   = &mcuxClRandomModes_OperationModeDescriptor_ELS_Drbg,
     .pDrbgMode        = NULL,
     .contextSize      = 0u,
-    .auxParam         = 0u,
+    .auxParam         = NULL,
     .securityStrength = 128u
 };

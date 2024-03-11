@@ -24,25 +24,29 @@
 
 /* Include the selected implementation of the secure counter mechanism. */
 #if defined(MCUX_CSSL_SC_USE_HW_CDOG) && (1 == MCUX_CSSL_SC_USE_HW_CDOG)
-#  include <mcuxCsslSecureCounter_HW_CDOG.h>
+  #include <mcuxCsslSecureCounter_HardwareAddresses.h>
+  #include <mcuxCsslSecureCounter_HW_CDOG.h>
 #elif defined(MCUX_CSSL_SC_USE_HYBRID_LOCAL_CDOG) && (1 == MCUX_CSSL_SC_USE_HYBRID_LOCAL_CDOG)
-#  include <mcuxCsslSecureCounter_Hybrid_LocalCDOG.h>
+  #include <mcuxCsslSecureCounter_HardwareAddresses.h>
+  #include <mcuxCsslSecureCounter_Hybrid_LocalCDOG.h>
 #elif defined(MCUX_CSSL_SC_USE_HW_S3SCM) && (1 == MCUX_CSSL_SC_USE_HW_S3SCM)
-#  include <mcuxCsslSecureCounter_HW_S3SCM.h>
+  #include <mcuxCsslSecureCounter_HardwareAddresses.h>
+  #include <mcuxCsslSecureCounter_HW_S3SCM.h>
 #elif defined(MCUX_CSSL_SC_USE_HW_SCM) && (1 == MCUX_CSSL_SC_USE_HW_SCM)
-#  include <mcuxCsslSecureCounter_HW_SCM.h>
+  #include <mcuxCsslSecureCounter_HardwareAddresses.h>
+  #include <mcuxCsslSecureCounter_HW_SCM.h>
 #elif defined(MCUX_CSSL_SC_USE_SW_LOCAL) && (1 == MCUX_CSSL_SC_USE_SW_LOCAL)
-#  include <mcuxCsslSecureCounter_SW_Local.h>
+  #include <mcuxCsslSecureCounter_SW_Local.h>
 #elif defined(MCUX_CSSL_SC_USE_SW_CONTEXT) && (1 == MCUX_CSSL_SC_USE_SW_CONTEXT)
-#  include <mcuxCsslSecureCounter_SW_Context.h>
+  #include <mcuxCsslSecureCounter_SW_Context.h>
 #elif defined(MCUX_CSSL_SC_USE_SW_CALLBACK) && (1 == MCUX_CSSL_SC_USE_SW_CALLBACK)
-#  include <mcuxCsslSecureCounter_SW_Callback.h>
+  #include <mcuxCsslSecureCounter_SW_Callback.h>
 #elif defined(MCUX_CSSL_SC_USE_SW_GLOBAL) && (1 == MCUX_CSSL_SC_USE_SW_GLOBAL)
-#  include <mcuxCsslSecureCounter_SW_Global.h>
+  #include <mcuxCsslSecureCounter_SW_Global.h>
 #elif defined(MCUX_CSSL_SC_USE_NONE) && (1 == MCUX_CSSL_SC_USE_NONE)
-#  include <mcuxCsslSecureCounter_None.h>
+  #include <mcuxCsslSecureCounter_None.h>
 #else
-#  error "No secure counter implementation found/configured."
+  #error "No secure counter implementation found/configured."
 #endif
 
 #endif /* MCUXCSSLSECURECOUNTER_IMPL_H_ */

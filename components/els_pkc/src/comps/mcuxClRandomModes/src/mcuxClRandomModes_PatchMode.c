@@ -16,6 +16,7 @@
 #include <mcuxClRandomModes.h>
 #include <mcuxClSession.h>
 #include <mcuxCsslAnalysis.h>
+#include <mcuxCsslDataIntegrity.h>
 
 #include <internal/mcuxClRandom_Internal_Types.h>
 #include <internal/mcuxClRandomModes_Private_Drbg.h>
@@ -63,8 +64,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_createPatch
     patchMode->pDrbgMode = (void*)customGenerateAlgorithm;
     MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_STRUCT()
     patchMode->contextSize = 0u;
-    patchMode->auxParam = (uint32_t) pCustomCtx;
-    patchMode->securityStrength = (uint16_t) securityStrength;
+    patchMode->auxParam = (uint32_t *) pCustomCtx;
+    patchMode->securityStrength = (uint16_t) (securityStrength & 0xFFFFu);
 
     MCUX_CSSL_FP_FUNCTION_EXIT_WITH_CHECK(mcuxClRandomModes_createPatchMode, MCUXCLRANDOM_STATUS_OK, MCUXCLRANDOM_STATUS_FAULT_ATTACK);
 }
@@ -74,7 +75,11 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_createPatch
  * \brief Empty function called during mcuxClRandom_init when PATCH_MODE is activated
  */
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRandomModes_PatchMode_initFunction, mcuxClRandom_initFunction_t)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_initFunction(mcuxClSession_Handle_t session UNUSED_PARAM)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_initFunction(
+                    mcuxClSession_Handle_t session UNUSED_PARAM,
+                    mcuxClRandom_Mode_t mode UNUSED_PARAM,
+                    mcuxClRandom_Context_t context UNUSED_PARAM
+)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClRandomModes_PatchMode_initFunction);
 
@@ -85,7 +90,11 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_i
  * \brief Empty function called during mcuxClRandom_reseed when PATCH_MODE is activated
  */
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRandomModes_PatchMode_reseedFunction, mcuxClRandom_reseedFunction_t)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_reseedFunction(mcuxClSession_Handle_t session UNUSED_PARAM)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_reseedFunction(
+                    mcuxClSession_Handle_t session UNUSED_PARAM,
+                    mcuxClRandom_Mode_t mode UNUSED_PARAM,
+                    mcuxClRandom_Context_t context UNUSED_PARAM
+)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClRandomModes_PatchMode_reseedFunction);
 
@@ -94,13 +103,19 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_r
 
 /**
  * \brief Function called during mcuxClRandom_generate when PATCH_MODE is activated in order to call the custom generate function
+ * Data Integrity: Expunge(pSession + pOut + outLength)
  */
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRandomModes_PatchMode_generateFunction, mcuxClRandom_generateFunction_t)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_generateFunction(mcuxClSession_Handle_t session, uint8_t *pOut, uint32_t outLength)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_generateFunction(
+                    mcuxClSession_Handle_t session,
+                    mcuxClRandom_Mode_t mode,
+                    mcuxClRandom_Context_t context UNUSED_PARAM,
+                    mcuxCl_Buffer_t pOut,
+                    uint32_t outLength
+)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClRandomModes_PatchMode_generateFunction);
 
-    mcuxClRandom_Mode_t mode = (mcuxClRandom_Mode_t) session->randomCfg.mode;
     mcuxClRandom_Context_t pCustomCtx = (mcuxClRandom_Context_t) mode->auxParam;
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_STRUCT("As pDrbgMode is used for multiple purposes due to memory saving it must be a void pointer.")
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST("Type is a function pointer. const qualifier is meaningless on cast type")
@@ -114,6 +129,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PatchMode_g
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRandomModes_PatchMode_generateFunction, MCUXCLRANDOM_STATUS_FAULT_ATTACK);
     }
 
+    MCUX_CSSL_DI_EXPUNGE(sumOfRandomGenerateParams, (uint32_t)session + (uint32_t)pOut + outLength);
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRandomModes_PatchMode_generateFunction, MCUXCLRANDOM_STATUS_OK);
 }
 

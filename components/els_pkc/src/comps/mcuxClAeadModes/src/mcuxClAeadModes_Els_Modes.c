@@ -16,7 +16,7 @@
  */
 
 #include <internal/mcuxClAeadModes_Els_Algorithms.h>
-#include <internal/mcuxClAead_Internal_Descriptor.h>
+#include <internal/mcuxClAead_Descriptor.h>
 #include <internal/mcuxClAeadModes_Els_Types.h>
 #include <internal/mcuxClAeadModes_Common_Functions.h>
 #include <mcuxClCore_FunctionIdentifiers.h>

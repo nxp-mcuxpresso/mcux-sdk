@@ -19,6 +19,7 @@
  * @brief   Example of ECC for key generation, signing and verification using the ELS (CLNS component mcuxClEls)
  */
 
+#include <mcuxClToolchain.h>
 #include <mcuxClEls.h> // Interface to the entire mcuxClEls component
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h> // Code flow protection
@@ -28,14 +29,14 @@
 
 
 /** Pre-hashed data to be signed */
-static uint32_t const ecc_digest[MCUXCLELS_HASH_OUTPUT_SIZE_SHA_256 / sizeof(uint32_t)] = {0x11111111,
-                                                                                           0x22222222,
-                                                                                           0x33333333,
-                                                                                           0x44444444,
-                                                                                           0x55555555,
-                                                                                           0x66666666,
-                                                                                           0x77777777,
-                                                                                           0x88888888};
+static uint32_t const ecc_digest[MCUXCLELS_HASH_OUTPUT_SIZE_SHA_256 / sizeof(uint32_t)] = {0x11111111u,
+                                                                                          0x22222222u,
+                                                                                          0x33333333u,
+                                                                                          0x44444444u,
+                                                                                          0x55555555u,
+                                                                                          0x66666666u,
+                                                                                          0x77777777u,
+                                                                                          0x88888888u};
 
 /** Destination buffer to receive the public key of the mcuxClEls_EccKeyGen_Async operation. */
 static uint32_t ecc_public_key[MCUXCLELS_ECC_PUBLICKEY_SIZE / sizeof(uint32_t)];

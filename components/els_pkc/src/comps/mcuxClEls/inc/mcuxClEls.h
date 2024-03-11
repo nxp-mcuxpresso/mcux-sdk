@@ -234,7 +234,6 @@
 #define MCUXCLELS_H_
 
 #include <mcuxClConfig.h> // Exported features flags header
-#include <platform_specific_headers.h>
 
 #include <mcuxClEls_Types.h>
 #include <mcuxClEls_Common.h>

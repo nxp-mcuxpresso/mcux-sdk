@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2021, 2023 NXP                                            */
+/* Copyright 2020-2021, 2023-2024 NXP                                       */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -28,7 +28,11 @@
 
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClPkc_GenerateUPTRT)
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DECLARED_BUT_NEVER_DEFINED("It is indeed defined.")
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DEFINED_MORE_THAN_ONCE("It defined only once.")
 MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClPkc_GenerateUPTRT(
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DEFINED_MORE_THAN_ONCE()
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DECLARED_BUT_NEVER_DEFINED()
     uint16_t *pUPTRT,
     const uint8_t *pBaseBuffer,
     uint16_t bufferLength,
@@ -38,10 +42,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClPkc_GenerateUPTRT(
 
     uint32_t offset = MCUXCLPKC_PTR2OFFSET(pBaseBuffer);
 
-    for (uint32_t idx = 0; idx < noOfBuffer; idx++)
+    for (uint32_t idx = 0; idx < (uint32_t) noOfBuffer; idx++)
     {
         pUPTRT[idx] = (uint16_t) offset;
-        offset += bufferLength; // TODO-9364: Open violaation to INT30-C for rt700 and s540
+        offset += bufferLength;
     }
 
     MCUX_CSSL_FP_FUNCTION_EXIT_VOID(mcuxClPkc_GenerateUPTRT);
@@ -59,16 +63,18 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPkc_Status_t) mcuxClPkc_RandomizeUPTRT(
     MCUX_CSSL_FP_LOOP_DECL(Loop);
     MCUX_CSSL_FP_EXPECT(MCUX_CSSL_FP_LOOP_ITERATIONS(Loop, ((uint32_t)noOfBuffer - 1U)));
 
+    /* Allocate one word on stack for random numbers */
+    uint32_t random32;
+    MCUXCLBUFFER_INIT(pBuffRandom32, NULL, (uint8_t *) &random32, sizeof(uint32_t));
+
     /* Randomize entries in UPTRT by Knuth shuffle. */
     for (uint32_t idx = noOfBuffer; idx > 1u; idx--)
     {
         MCUX_CSSL_FP_LOOP_ITERATION(Loop,
             MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_ncGenerate));
 
-
         /* Generate a random number in the range [0, idx-1], where idx <= noOfBuffer <= 255. */
-        uint32_t random32;
-        MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate, mcuxClRandom_ncGenerate(pSession, (uint8_t *) &random32, sizeof(uint32_t)));
+        MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate, mcuxClRandom_ncGenerate(pSession, pBuffRandom32, sizeof(uint32_t)));
         if (MCUXCLRANDOM_STATUS_OK != ret_Random_ncGenerate)
         {
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClPkc_RandomizeUPTRT, MCUXCLPKC_STATUS_NOK);
@@ -100,14 +106,17 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPkc_Status_t) mcuxClPkc_ReRandomizeUPTRT(
     MCUX_CSSL_FP_LOOP_DECL(Loop);
     MCUX_CSSL_FP_EXPECT(MCUX_CSSL_FP_LOOP_ITERATIONS(Loop, ((uint32_t)noOfBuffer - 1U)));
 
+    /* Allocate one word on stack for random numbers */
+    uint32_t random32;
+    MCUXCLBUFFER_INIT(pBuffRandom32, NULL, (uint8_t *) &random32, sizeof(uint32_t));
+
     /* Randomize entries in UPTRT by Knuth shuffle. */
     for (uint32_t idx = noOfBuffer; idx > 1u; idx--)
     {
         MCUX_CSSL_FP_LOOP_ITERATION(Loop,
                     MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_ncGenerate));
         /* Generate a random number in the range [0, idx-1], where idx <= noOfBuffer <= 255. */
-        uint32_t random32;
-        MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate, mcuxClRandom_ncGenerate(pSession, (uint8_t *) &random32, sizeof(uint32_t)));
+        MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate, mcuxClRandom_ncGenerate(pSession, pBuffRandom32, sizeof(uint32_t)));
         if (MCUXCLRANDOM_STATUS_OK != ret_Random_ncGenerate)
         {
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClPkc_ReRandomizeUPTRT, MCUXCLPKC_STATUS_NOK);

@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2022-2023 NXP                                                  */
+/* Copyright 2022-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -20,6 +20,8 @@
  *          from "TEST SHA(abc)" from Section 7.1 of IRTF rfc 8032
  */
 
+#include <mcuxClToolchain.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClEcc.h>
 #include <mcuxClKey.h>
 #include <mcuxClPkc_Types.h>
@@ -30,12 +32,11 @@
 
 #include <mcuxClExample_ELS_Helper.h>
 
-#define RAM_START_ADDRESS MCUXCLPKC_RAM_START_ADDRESS
 #define MAX_CPUWA_SIZE MCUXCLECC_EDDSA_VERIFYSIGNATURE_ED25519_WACPU_SIZE
 #define MAX_PKCWA_SIZE MCUXCLECC_EDDSA_VERIFYSIGNATURE_ED25519_WAPKC_SIZE
 
 /* Input taken from "TEST SHA(abc)" from Section 7.1 of IRTF rfc 8032 */
-static const uint8_t pIn[] __attribute__ ((aligned (4))) =
+static const ALIGNED uint8_t pIn[] =
 {
     0xddu, 0xafu, 0x35u, 0xa1u, 0x93u, 0x61u, 0x7au, 0xbau,
     0xccu, 0x41u, 0x73u, 0x49u, 0xaeu, 0x20u, 0x41u, 0x31u,
@@ -48,7 +49,7 @@ static const uint8_t pIn[] __attribute__ ((aligned (4))) =
 };
 
 /* Signature taken from "TEST SHA(abc)" from Section 7.1 of IRTF rfc 8032 */
-static const uint8_t pSignature[MCUXCLECC_EDDSA_ED25519_SIZE_SIGNATURE] __attribute__ ((aligned (4))) =
+static const ALIGNED uint8_t pSignature[MCUXCLECC_EDDSA_ED25519_SIZE_SIGNATURE] =
 {
     0xdcu, 0x2au, 0x44u, 0x59u, 0xe7u, 0x36u, 0x96u, 0x33u,
     0xa5u, 0x2bu, 0x1bu, 0xf2u, 0x77u, 0x83u, 0x9au, 0x00u,
@@ -61,7 +62,7 @@ static const uint8_t pSignature[MCUXCLECC_EDDSA_ED25519_SIZE_SIGNATURE] __attrib
 };
 
 /* Public key taken from "TEST SHA(abc)" from Section 7.1 of IRTF rfc 8032 */
-static const uint8_t pPublicKey[MCUXCLECC_EDDSA_ED25519_SIZE_PUBLICKEY] __attribute__ ((aligned (4))) =
+static const ALIGNED uint8_t pPublicKey[MCUXCLECC_EDDSA_ED25519_SIZE_PUBLICKEY] =
 {
     0xecu, 0x17u, 0x2bu, 0x93u, 0xadu, 0x5eu, 0x56u, 0x3bu,
     0xf4u, 0x93u, 0x2cu, 0x70u, 0xe1u, 0x24u, 0x50u, 0x34u,
@@ -92,14 +93,14 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEcc_EdDSA_VerifySignature_Ed25519_example)
     /******************************************/
 
     /* Initialize public key */
-    uint8_t pubKeyDesc[MCUXCLKEY_DESCRIPTOR_SIZE];
+    ALIGNED uint8_t pubKeyDesc[MCUXCLKEY_DESCRIPTOR_SIZE];
     mcuxClKey_Handle_t pubKeyHandler = (mcuxClKey_Handle_t) &pubKeyDesc;
 
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(keyInit_status, keyInit_token, mcuxClKey_init(
         /* mcuxClSession_Handle_t session         */ &session,
         /* mcuxClKey_Handle_t key                 */ pubKeyHandler,
         /* mcuxClKey_Type_t type                  */ mcuxClKey_Type_EdDSA_Ed25519_Pub,
-        /* mcuxCl_Buffer_t pKeyData               */ (mcuxCl_Buffer_t) pPublicKey,
+        /* const uint8_t * pKeyData              */ pPublicKey,
         /* uint32_t keyDataLength                */ sizeof(pPublicKey))
     );
 
@@ -114,14 +115,17 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEcc_EdDSA_VerifySignature_Ed25519_example)
     /* Ed25519 signature verification                                         */
     /**************************************************************************/
 
+    MCUXCLBUFFER_INIT_RO(buffIn, NULL, pIn, sizeof(pIn));
+    MCUXCLBUFFER_INIT_RO(buffSignature, NULL, pSignature, sizeof(pSignature));
+
     /* Call mcuxClEcc_EdDSA_VerifySignature to verify the signature */
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(verify_result, verify_token, mcuxClEcc_EdDSA_VerifySignature(
     /* mcuxClSession_Handle_t pSession                        */ &session,
     /* mcuxClKey_Handle_t pubKey                              */ pubKeyHandler,
     /* const mcuxClEcc_EdDSA_SignatureProtocolDescriptor_t*   */ &mcuxClEcc_EdDsa_Ed25519ProtocolDescriptor,
-    /* const uint8_t *pIn                                    */ pIn,
+    /* mcuxCl_InputBuffer_t pIn                               */ buffIn,
     /* uint32_t inSize                                       */ sizeof(pIn),
-    /* const uint8_t *pSignature                             */ pSignature,
+    /* mcuxCl_InputBuffer_t pSignature                        */ buffSignature,
     /* uint32_t signatureSize                                */ sizeof(pSignature)
     ));
 

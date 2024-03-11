@@ -23,6 +23,7 @@
 
 #include <mcuxClCore_Platform.h>
 #include <mcuxCsslFlowProtection.h>
+#include <mcuxClCore_Macros.h>
 
 
 #ifdef __cplusplus
@@ -35,8 +36,8 @@ extern "C"
 /** @brief PKC wordsize in byte */
 #define MCUXCLRSA_PKC_WORDSIZE MCUXCLPKC_WORDSIZE
 /** @brief Round-up a length to a multiple of PKC wordsize. */
-#define MCUXCLRSA_PKC_ROUNDUP_SIZE(byteLen) MCUXCLPKC_ROUNDUP_SIZE(byteLen)
-
+#define MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(byteLen)  \
+        MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(byteLen)
 
 #ifdef __cplusplus
 } /* extern "C" */

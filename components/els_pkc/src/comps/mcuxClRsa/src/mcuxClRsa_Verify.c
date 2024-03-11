@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -30,6 +30,7 @@
 #include <internal/mcuxClRsa_Internal_Macros.h>
 #include <internal/mcuxClRsa_Internal_PkcTypes.h>
 #include <internal/mcuxClKey_Internal.h>
+#include <internal/mcuxClRsa_Internal_MemoryConsumption.h>
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRsa_verify)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_verify(
@@ -52,7 +53,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_verify(
 
   /* Locate paddedMessage buffer at beginning of PKC WA and update session info */
   const uint32_t modulusByteLength = pKey->pMod1->keyEntryLength;
-  const uint32_t pkcWaSizeWord = MCUXCLRSA_PKC_ROUNDUP_SIZE(modulusByteLength) / (sizeof(uint32_t));
+  const uint32_t pkcWaSizeWord = MCUXCLRSA_INTERNAL_PUBLIC_OUTPUT_SIZE(modulusByteLength) / (sizeof(uint32_t));
 
   uint8_t * pPaddedMessage = (uint8_t *) mcuxClSession_allocateWords_pkcWa(pSession, pkcWaSizeWord);
   if (NULL == pPaddedMessage)
@@ -62,7 +63,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_verify(
 
   /* Initialize PKC */
   const uint32_t cpuWaSizeWord = (sizeof(mcuxClPkc_State_t)) / (sizeof(uint32_t));
+  MCUX_CSSL_ANALYSIS_START_PATTERN_REINTERPRET_MEMORY_OF_OPAQUE_TYPES()
   mcuxClPkc_State_t * pkcStateBackup = (mcuxClPkc_State_t *) mcuxClSession_allocateWords_cpuWa(pSession, cpuWaSizeWord);
+  MCUX_CSSL_ANALYSIS_STOP_PATTERN_REINTERPRET_MEMORY()
   if (NULL == pkcStateBackup)
   {
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_verify, MCUXCLRSA_STATUS_FAULT_ATTACK);
@@ -109,7 +112,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_verify(
 
     const uint32_t keyBitLength = 8u * modulusByteLength;
 
-
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_NULL_POINTER_CONSTANT("NULL is used in code")
     MCUX_CSSL_FP_FUNCTION_CALL(retVal_PaddingOperation, pVerifyMode->pPaddingFunction(pSession,
                                                                                      pMessageOrDigest,
                                                                                      messageLength,
@@ -121,6 +124,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_verify(
                                                                                      options,
                                                                                      pOutput,
                                                                                      NULL));
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_NULL_POINTER_CONSTANT() 
 
     /*****************************************************/
     /* Exit                                              */

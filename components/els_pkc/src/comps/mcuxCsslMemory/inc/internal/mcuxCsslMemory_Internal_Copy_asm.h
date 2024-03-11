@@ -164,8 +164,10 @@ do{  \
     uint32_t nwords_cnt = (nwords);  \
     (word) = (retval);  \
     (datareg) = (cnt);    \
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_TYPECAST_BETWEEN_INTEGER_AND_POINTER("Typecast needed for specialized assembly routine") \
     (xorword) = (uint32_t)(src);  \
     (byte) = (uint32_t)(dst);    \
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_TYPECAST_BETWEEN_INTEGER_AND_POINTER() \
     __asm (  \
         /* [DESIGN] store retval, success, src, dst on stack. */  \
         "SUB    sp, #16\n"  \

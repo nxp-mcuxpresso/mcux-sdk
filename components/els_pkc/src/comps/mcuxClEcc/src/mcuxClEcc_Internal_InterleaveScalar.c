@@ -26,7 +26,7 @@
 
 #include <mcuxClEcc.h>
 #include <internal/mcuxClEcc_Internal.h>
-#include <internal/mcuxClEcc_Internal_Interleave_FUP.h>
+#include <internal/mcuxClEcc_Internal_FUP.h>
 
 
 /**
@@ -61,7 +61,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_InterleaveScalar(uint1
 
     uint32_t ps1LenRegBackup = MCUXCLPKC_PS1_GETLENGTH_REG();
     uint16_t *pOperands = MCUXCLPKC_GETUPTRT();
-    MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("MISRA Ex. 9 to Rule 11.3 - UPTR table is 32-bit aligned in ECC component.");
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("MISRA Ex. 9 to Rule 11.3 - UPTR table is 32-bit aligned in ECC component.");
     uint32_t *pOperands32 = (uint32_t *) pOperands;
     MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING();
     uint32_t bitLenHalfScalar = scalarBitLength - (scalarBitLength >> 1);  /* ceil(bitLen / 2) */
@@ -71,7 +71,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_InterleaveScalar(uint1
                              /* ECC_V1 */ + (((uint32_t) pOperands[ECC_T0] + byteLenHalfScalar_PKCWord) << 16);
 
     MCUXCLPKC_WAITFORREADY();
-    /* MISRA Ex. 9 to Rule 11.3 - pOperands32 is pointer to 16-bit offset table */
+    /* MISRA Ex. 9 to Rule 11.3 - pOperands32 is pointer to 16-bit offset table */
     MCUXCLECC_STORE_2OFFSETS(pOperands32, ECC_V0, ECC_V1, offsets_V1_V0);
     pOperands[ECC_V3] = (uint16_t) (0u - bitLenHalfScalar);  /* PKC will ignore higher bits of shifting amount. */
 

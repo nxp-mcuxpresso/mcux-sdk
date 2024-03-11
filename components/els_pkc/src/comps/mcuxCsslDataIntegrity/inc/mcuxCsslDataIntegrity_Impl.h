@@ -28,7 +28,7 @@
 #elif defined(MCUX_CSSL_DI_USE_NONE) && (1 == MCUX_CSSL_DI_USE_NONE)
 #  include <mcuxCsslDataIntegrity_None.h>
 #else
-#  error "No data integrity implementation found/configured."
+  #error "No data integrity implementation found/configured."
 #endif
 
 #endif /* MCUXCSSLDATAINTEGRITY_IMPL_H_ */

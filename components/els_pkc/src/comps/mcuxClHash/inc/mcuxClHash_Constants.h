@@ -44,6 +44,9 @@
 #define MCUXCLHASH_COMPARE_NOT_EQUAL                          ((mcuxClHash_Status_t) 0x06668930u)                   ///< \deprecated Replaced by MCUXCLHASH_STATUS_COMPARE_NOT_EQUAL
 #define MCUXCLHASH_STATUS_FULL                                ((mcuxClHash_Status_t) 0x0666538Eu)                   ///< Hash operation failed because the total input size exceeds the upper limit
 #define MCUXCLHASH_STATUS_FAULT_ATTACK                        ((mcuxClHash_Status_t) 0x0666F0F0u)                   ///< Fault attack (unexpected behavior) detected
+#define MCUXCLHASH_STATUS_JOB_STARTED                         ((mcuxClHash_Status_t) 0x06662E47u)                   ///< There is ongoing job in coprocessor which will trigger user callback on exit
+#define MCUXCLHASH_STATUS_JOB_COMPLETED                       ((mcuxClHash_Status_t) 0x06662E8Bu)                   ///< Job started in coprocessor has completed successfully
+#define MCUXCLHASH_STATUS_JOB_UNAVAILABLE                     ((mcuxClHash_Status_t) 0x066689BCu)                   ///< Job started in coprocessor is not available
 /**@}*/
 
 /**@}*/

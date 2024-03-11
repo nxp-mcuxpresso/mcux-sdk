@@ -22,6 +22,7 @@
 #include <mcuxClCore_Platform.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClCore_Macros.h>
 #include <mcuxClHash_Types.h>
 #include <internal/mcuxClHash_Internal.h>
 
@@ -56,7 +57,7 @@ extern "C" {
 #define MCUXCLHASH_STATE_SIZE_SHA_384            (64U) ///< SHA-384 state size: 512 bit (64 bytes)
 #define MCUXCLHASH_STATE_SIZE_SHA_512            (64U) ///< SHA-512 state size: 512 bit (64 bytes)
 #define MCUXCLHASH_STATE_SIZE_SHA3               (200U) ///< SHA3 all variants state size: 1600 bits (200 bytes)
-#define MCUXCLHASH_STATE_SIZE_SECSHA_1           (2U * MCUXCLHASH_STATE_SIZE_SHA_1) ///< SECSHA-1 state size: 160 bit (2*20 bytes)
+#define MCUXCLHASH_STATE_SIZE_SECSHA_1           (2U * MCUXCLHASH_STATE_SIZE_SHA_1) ///< SECSHA-1 state size: 2*160 bit (2*20 bytes). Includes the mask.
 #define MCUXCLHASH_STATE_SIZE_SECSHA_224         (2U * MCUXCLHASH_STATE_SIZE_SHA_224) ///< SECSHA-224 state size: 2*256 bit (2*32 bytes). Includes the mask.
 #define MCUXCLHASH_STATE_SIZE_SECSHA_256         (2U * MCUXCLHASH_STATE_SIZE_SHA_256) ///< SECSHA-256 state size: 2*256 bit (2*32 bytes). Includes the mask.
 #define MCUXCLHASH_STATE_SIZE_SECSHA_384         (2U * MCUXCLHASH_STATE_SIZE_SHA_384) ///< SECSHA-384 state size: 2*512 bit (2*64 bytes). Includes the mask.
@@ -76,6 +77,24 @@ extern "C" {
 
 
 /**********************************************
+ * Checked input sizes
+ **********************************************/
+
+/**
+ * @brief Check processed length mask is used to detect when the maximum input size to a hash function has been exceeded.
+ * Specifically, SHA-1 and SHA-2 cannot exceed processing 2^64 and 2^128 _bits_ of input.
+ * Therefore, a mask of the 3 highest bits of the highest byte of the counter is sufficient to check if this has occurred.
+ * Checks are performed only in the multipart variants, in mcuxClHash_process/mcuxClHash_finish and mcuxClHash_import_state.
+ */
+
+#define MCUXCLHASH_PROCESSED_LENGTH_NO_LIMIT                        (0x0u)  ///< Mask of the highest bits in the processed counter when a hash function has no limit regarding the input size.
+#define MCUXCLHASH_PROCESSED_LENGTH_CHECK_MASK_SHA1                 (0xE0u) ///< Mask of the highest bits in the processed counter that should not be set for SHA-1.
+#define MCUXCLHASH_PROCESSED_LENGTH_CHECK_MASK_SHA2                 (0xE0u) ///< Mask of the highest bits in the processed counter that should not be set for SHA-2.
+#define MCUXCLHASH_PROCESSED_LENGTH_CHECK_MASK_MD5                  (MCUXCLHASH_PROCESSED_LENGTH_NO_LIMIT) ///< Mask of the highest bits in the processed counter that should not be set for MD5.
+#define MCUXCLHASH_PROCESSED_LENGTH_CHECK_MASK_SHA3                 (MCUXCLHASH_PROCESSED_LENGTH_NO_LIMIT) ///< Mask of the highest bits in the processed counter that should not be set for SHA-3.
+#define MCUXCLHASH_PROCESSED_LENGTH_CHECK_MASK_MIYAGUCHI_PRENEEL    (MCUXCLHASH_PROCESSED_LENGTH_NO_LIMIT) ///< Mask of the highest bits in the processed counter that should not be set for Miyaguchi-Preneel.
+
+/**********************************************
  * Workarea sizes
  **********************************************/
 
@@ -88,34 +107,89 @@ extern "C" {
  */
 #define MCUXCLHASH_INTERNAL_WACPU_SIZE_MIYAGUCHI_PRENEEL (4u)
 #define MCUXCLHASH_INTERNAL_WACPU_SIZE_MD5 (4u)
-#define MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA1 (4u)
+#define MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA1 (MCUXCLHASH_BLOCK_SIZE_SHA_1 + MCUXCLHASH_STATE_SIZE_SHA_1 * 2u)   ///< CPU workarea consumption of SHA-1
 #define MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_224 (MCUXCLHASH_BLOCK_SIZE_SHA_224 + MCUXCLHASH_STATE_SIZE_SHA_224)      ///< CPU workarea consumption of SHA2-224
+#define MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_224_NONBLOCKING (4u)      ///< CPU workarea consumption of SHA2-224
 #define MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_256 (MCUXCLHASH_BLOCK_SIZE_SHA_256 + MCUXCLHASH_STATE_SIZE_SHA_256)      ///< CPU workarea consumption of SHA2-256
+#define MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_256_NONBLOCKING (4u)      ///< CPU workarea consumption of SHA2-256
 #define MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_384 (MCUXCLHASH_BLOCK_SIZE_SHA_384 + MCUXCLHASH_STATE_SIZE_SHA_384)     ///< CPU workarea consumption of SHA2-384
+#define MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_384_NONBLOCKING (4u)     ///< CPU workarea consumption of SHA2-384
 #define MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_512 (MCUXCLHASH_BLOCK_SIZE_SHA_512 + MCUXCLHASH_STATE_SIZE_SHA_512)     ///< CPU workarea consumption of SHA2-512
-#define MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA3 (4u)
+#define MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_512_NONBLOCKING (4u)     ///< CPU workarea consumption of SHA2-512
+
+/* Work area size for the C implementation of SHA-3 */
+#define MCUXCLHASH_INTERNAL_WACPU_SIZE_C_SHA3 (4u)
+
+/* Work area sizes for SHA-3 non-blocking with the LTC coprocessor */
+#define MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA3_NONBLOCKING (4u)
+
+/* Work area sizes for SHA-3 blocking with the LTC coprocessor */
+#define MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA3_BLOCKING (4u) /* Sha3 blocking with LTC does not need the CPU WA*/
+
+/* Work area sizes for SHA-3 with the LTC coprocessor (without DMA) */
+#define MCUXCLHASH_INTERNAL_WACPU_SIZE_LTC_SHA3 (4u) /* Sha3 with LTC does not need the CPU WA*/
+
+/* Work area size for the C implementation of Shake */
+#define MCUXCLHASH_INTERNAL_WACPU_SIZE_C_SHAKE (4u)
+
+/* Work area size for Shake with the LTC coprocessor */
+#define MCUXCLHASH_INTERNAL_WACPU_SIZE_LTC_SHAKE (4u) /* Shake with LTC does not need the CPU WA*/
+
+/* Work area size for CShake with the LTC coprocessor */
+#define MCUXCLHASH_INTERNAL_WACPU_SIZE_LTC_CSHAKE (4u)
+typedef union
+{
+    uint8_t mcuxClHash_Internal_WaCpu_Size_C_Sha3[MCUXCLHASH_INTERNAL_WACPU_SIZE_C_SHA3];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_LTC_Sha3[MCUXCLHASH_INTERNAL_WACPU_SIZE_LTC_SHA3];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Sha3_Nonblocking[MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA3_NONBLOCKING];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Sha3_Blocking[MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA3_BLOCKING];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_C_Shake[MCUXCLHASH_INTERNAL_WACPU_SIZE_C_SHAKE];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_LTC_Shake[MCUXCLHASH_INTERNAL_WACPU_SIZE_LTC_SHAKE];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_LTC_CShake[MCUXCLHASH_INTERNAL_WACPU_SIZE_LTC_CSHAKE];
+} mcuxClHashModes_Internal_MaxUnion_Sha3Shake_CpuWa_t;
+
+#define MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA3 (sizeof(mcuxClHashModes_Internal_MaxUnion_Sha3Shake_CpuWa_t))
+
+
+/* Work area size for SecSha-1 */
 #define MCUXCLHASH_INTERNAL_WACPU_SIZE_SECSHA_1 (4u)
+
+/* Work area sizes for SecSha-2 */
 #define MCUXCLHASH_INTERNAL_WACPU_SIZE_SECSHA2_224 (4u)
 #define MCUXCLHASH_INTERNAL_WACPU_SIZE_SECSHA2_256 (4u)
 #define MCUXCLHASH_INTERNAL_WACPU_SIZE_SECSHA2_384 (4u)
 #define MCUXCLHASH_INTERNAL_WACPU_SIZE_SECSHA2_512 (4u)
 
-#define MCUXCLHASHMODES_MAX(a,b) ((a) > (b) ? (a) : (b))
+/* Work area size for SecSha-3 */
+#define MCUXCLHASH_INTERNAL_WACPU_SIZE_SECSHA3 (4u)
 
-#define MCUXCLHASHMODES_INTERNAL_WACPU_MAX (MCUXCLHASHMODES_MAX(MCUXCLHASH_INTERNAL_WACPU_SIZE_MIYAGUCHI_PRENEEL, \
-                                      MCUXCLHASHMODES_MAX(MCUXCLHASH_INTERNAL_WACPU_SIZE_MD5,         \
-                                      MCUXCLHASHMODES_MAX(MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA1,        \
-                                      MCUXCLHASHMODES_MAX(MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_224,    \
-                                      MCUXCLHASHMODES_MAX(MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_256,    \
-                                      MCUXCLHASHMODES_MAX(MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_384,    \
-                                      MCUXCLHASHMODES_MAX(MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_512,    \
-                                      MCUXCLHASHMODES_MAX(MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA3,        \
-                                      MCUXCLHASHMODES_MAX(MCUXCLHASH_INTERNAL_WACPU_SIZE_SECSHA2_256, \
-                                      MCUXCLHASH_INTERNAL_WACPU_SIZE_SECSHA2_512))))))))))
+/*
+ * A union is used here to determine the maximum size of the cpu wa. This type is NOT intended to be used in the code.
+ * Usage of nested MAX is not possible here as the evaluated lines getting too long for the build system.
+ */
+typedef union
+{
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Miyaguchi_Preneel[MCUXCLHASH_INTERNAL_WACPU_SIZE_MIYAGUCHI_PRENEEL];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Md5[MCUXCLHASH_INTERNAL_WACPU_SIZE_MD5];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Sha1[MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA1];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Sha2_224[MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_224];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Sha2_256[MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_256];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Sha2_384[MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_384];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Sha2_512[MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_512];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Sha3[MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA3];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_SecSha2_256[MCUXCLHASH_INTERNAL_WACPU_SIZE_SECSHA2_256];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_SecSha2_512[MCUXCLHASH_INTERNAL_WACPU_SIZE_SECSHA2_512];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Sha2_224_Nonblocking[MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_224_NONBLOCKING];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Sha2_256_Nonblocking[MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_256_NONBLOCKING];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Sha2_384_Nonblocking[MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_384_NONBLOCKING];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Sha2_512_Nonblocking[MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA2_512_NONBLOCKING];
+    uint8_t mcuxClHash_Internal_WaCpu_Size_Sha3_Nonblocking[MCUXCLHASH_INTERNAL_WACPU_SIZE_SHA3_NONBLOCKING];
+} mcuxClHashModes_Internal_MaxUnion_WaCpu_t;
+#define MCUXCLHASHMODES_INTERNAL_WACPU_MAX (sizeof(mcuxClHashModes_Internal_MaxUnion_WaCpu_t))
 
-#define MCUXCLHASHMODES_CONTEXT_MAX_SIZE_INTERNAL       (sizeof(mcuxClHash_ContextDescriptor_t) + MCUXCLHASH_BLOCK_SIZE_MAX + MCUXCLHASH_STATE_SIZE_MAX)
+#define MCUXCLHASHMODES_CONTEXT_MAX_SIZE_INTERNAL       (MCUXCLCORE_ALIGN_TO_WORDSIZE(sizeof(uint32_t), sizeof(mcuxClHash_ContextDescriptor_t) + MCUXCLHASH_CONTEXT_MAX_ALIGNMENT_OFFSET + MCUXCLHASH_BLOCK_SIZE_MAX + MCUXCLHASH_STATE_SIZE_MAX))
 /* TODO: CLNS-10242*/
-#define MCUXCLHASHMODES_CONTEXT_MAX_SIZE_INTERNAL_NO_SECSHA       (sizeof(mcuxClHash_ContextDescriptor_t) + MCUXCLHASH_BLOCK_SIZE_SHA3_SHAKE_128 + MCUXCLHASH_STATE_SIZE_SHA3)
+#define MCUXCLHASHMODES_CONTEXT_MAX_SIZE_INTERNAL_NO_SECSHA       (MCUXCLCORE_ALIGN_TO_WORDSIZE(sizeof(uint32_t), sizeof(mcuxClHash_ContextDescriptor_t) + MCUXCLHASH_CONTEXT_MAX_ALIGNMENT_OFFSET + MCUXCLHASH_BLOCK_SIZE_SHA3_SHAKE_128 + MCUXCLHASH_STATE_SIZE_SHA3))
 
 #ifdef __cplusplus
 } /* extern "C" */

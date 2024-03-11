@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2018-2022 NXP                                                  */
+/* Copyright 2018-2023 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -30,11 +30,25 @@
 #include <mcuxClOsccaPkc_Types.h>
 #include <internal/mcuxClOsccaPkc_SfrAccess.h>
 
+
+/**********************************************************/
+/* Macros for PKC sizes                                   */
+/**********************************************************/
+#define MCUXCLOSCCAPKC_PKC_RAM_BASEADDR              ((uint32_t)PKC_RAM_ADDR)
+#define MCUXCLOSCCAPKC_WORD_SIZE                     (PKC_WORD_SIZE)
+
 /**********************************************************/
 /* Macros for UPTR table and offsets                      */
 /**********************************************************/
-#define MCUXCLOSCCAPKC_PKCOFFSETTOPTR(offset)        (uint8_t *)(MCUXCLOSCCAPKC_PKC_RAM_BASEADDR + (offset))
-#define MCUXCLOSCCAPKC_PTRTOPKCOFFSET(ptr)           (uint16_t)((uint32_t)(ptr) - MCUXCLOSCCAPKC_PKC_RAM_BASEADDR)
+#define MCUXCLOSCCAPKC_PKCOFFSETTOPTR(offset)                                \
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_TYPECAST_BETWEEN_INTEGER_AND_POINTER("Type cast pointer to integer to calculate the offset.") \
+    ((uint8_t *)(MCUXCLOSCCAPKC_PKC_RAM_BASEADDR + (offset))) \
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_TYPECAST_BETWEEN_INTEGER_AND_POINTER()
+
+#define MCUXCLOSCCAPKC_PTRTOPKCOFFSET(ptr) \
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_TYPECAST_BETWEEN_INTEGER_AND_POINTER("Type cast pointer to integer to calculate the offset.") \
+    ((uint16_t)((uint32_t)(ptr) - MCUXCLOSCCAPKC_PKC_RAM_BASEADDR)) \
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_TYPECAST_BETWEEN_INTEGER_AND_POINTER()
 
 /**********************************************************/
 /* Macros for parameter set                               */
@@ -227,5 +241,11 @@
 #define MCUXCLOSCCAPKC_PS1_GETMCLEN()              (MCUXCLOSCCAPKC_SFR_BITREAD(LEN1, MCLEN))
 #define MCUXCLOSCCAPKC_PS2_GETOPLEN()              (MCUXCLOSCCAPKC_SFR_BITREAD(LEN2, LEN))
 #define MCUXCLOSCCAPKC_PS2_GETMCLEN()              (MCUXCLOSCCAPKC_SFR_BITREAD(LEN2, MCLEN))
+
+/**********************************************************/
+/* Other macros                                           */
+/**********************************************************/
+/** Workaround disabled. */
+#define MCUXCLOSCCAPKC_PKC_CPU_ARBITRATION_WORKAROUND()  do{} while(false)
 
 #endif /*MCUXCLOSCCAPKC_MACROS_H_*/

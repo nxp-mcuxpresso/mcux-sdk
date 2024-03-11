@@ -20,60 +20,64 @@
 #define MCUXCLMATH_SECMODEXP_FUP_H_
 
 #include <mcuxClCore_Platform.h>
+#include <mcuxCsslAnalysis.h>
+
 #include <internal/mcuxClPkc_FupMacros.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_LINKAGE_FUP()
 /*
- * FUP program declaration mcuxClMath_Fup_Aws_Init
+ * FUP program declaration mcuxClMath_SecModExp_Fup_Init
  */
-#define mcuxClMath_Fup_Aws_Init_LEN  3u
+#define mcuxClMath_SecModExp_Fup_Init_LEN  3u
 
-extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_Aws_Init[mcuxClMath_Fup_Aws_Init_LEN];
-
-/*
- * FUP program declaration mcuxClMath_Fup_Aws_Rerand
- */
-#define mcuxClMath_Fup_Aws_Rerand_LEN  5u
-
-extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_Aws_Rerand[mcuxClMath_Fup_Aws_Rerand_LEN];
+extern const mcuxClPkc_FUPEntry_t mcuxClMath_SecModExp_Fup_Init[mcuxClMath_SecModExp_Fup_Init_LEN];
 
 /*
- * FUP program declaration mcuxClMath_Fup_EuclideanSplit_1
+ * FUP program declaration mcuxClMath_SecModExp_Fup_Rerandomize
  */
-#define mcuxClMath_Fup_EuclideanSplit_1_LEN  8u
+#define mcuxClMath_SecModExp_Fup_Rerandomize_LEN  5u
 
-extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_EuclideanSplit_1[mcuxClMath_Fup_EuclideanSplit_1_LEN];
+extern const mcuxClPkc_FUPEntry_t mcuxClMath_SecModExp_Fup_Rerandomize[mcuxClMath_SecModExp_Fup_Rerandomize_LEN];
 
 /*
- * FUP program declaration mcuxClMath_Fup_EuclideanSplit_2
+ * FUP program declaration mcuxClMath_SecModExp_Fup_EuclideanSplit_1
  */
-#define mcuxClMath_Fup_EuclideanSplit_2_LEN  7u
+#define mcuxClMath_SecModExp_Fup_EuclideanSplit_1_LEN  8u
 
-extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_EuclideanSplit_2[mcuxClMath_Fup_EuclideanSplit_2_LEN];
+extern const mcuxClPkc_FUPEntry_t mcuxClMath_SecModExp_Fup_EuclideanSplit_1[mcuxClMath_SecModExp_Fup_EuclideanSplit_1_LEN];
 
 /*
- * FUP program declaration mcuxClMath_Fup_ExactDivideLoop
+ * FUP program declaration mcuxClMath_SecModExp_Fup_EuclideanSplit_2
  */
-#define mcuxClMath_Fup_ExactDivideLoop_LEN  9u
+#define mcuxClMath_SecModExp_Fup_EuclideanSplit_2_LEN  7u
 
-extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_ExactDivideLoop[mcuxClMath_Fup_ExactDivideLoop_LEN];
+extern const mcuxClPkc_FUPEntry_t mcuxClMath_SecModExp_Fup_EuclideanSplit_2[mcuxClMath_SecModExp_Fup_EuclideanSplit_2_LEN];
 
 /*
- * FUP program declaration mcuxClMath_Fup_CalcQAndInterleave
+ * FUP program declaration mcuxClMath_SecModExp_Fup_ExactDivideLoop
  */
-#define mcuxClMath_Fup_CalcQAndInterleave_LEN  6u
+#define mcuxClMath_SecModExp_Fup_ExactDivideLoop_LEN  9u
 
-extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_CalcQAndInterleave[mcuxClMath_Fup_CalcQAndInterleave_LEN];
+extern const mcuxClPkc_FUPEntry_t mcuxClMath_SecModExp_Fup_ExactDivideLoop[mcuxClMath_SecModExp_Fup_ExactDivideLoop_LEN];
 
 /*
- * FUP program declaration mcuxClMath_Fup_PrepareFirstExp
+ * FUP program declaration mcuxClMath_SecModExp_Fup_CalcQAndInterleave
  */
-#define mcuxClMath_Fup_PrepareFirstExp_LEN  5u
+#define mcuxClMath_SecModExp_Fup_CalcQAndInterleave_LEN  6u
 
-extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_PrepareFirstExp[mcuxClMath_Fup_PrepareFirstExp_LEN];
+extern const mcuxClPkc_FUPEntry_t mcuxClMath_SecModExp_Fup_CalcQAndInterleave[mcuxClMath_SecModExp_Fup_CalcQAndInterleave_LEN];
+
+/*
+ * FUP program declaration mcuxClMath_SecModExp_Fup_PrepareFirstExp
+ */
+#define mcuxClMath_SecModExp_Fup_PrepareFirstExp_LEN  5u
+
+extern const mcuxClPkc_FUPEntry_t mcuxClMath_SecModExp_Fup_PrepareFirstExp[mcuxClMath_SecModExp_Fup_PrepareFirstExp_LEN];
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_LINKAGE_FUP()
 
 #ifdef __cplusplus
 } /* extern "C" */

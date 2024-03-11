@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2021-2023 NXP                                                  */
+/* Copyright 2021-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -31,7 +31,7 @@
 #include <internal/mcuxClPkc_Operations.h>
 #include <internal/mcuxClPkc_ImportExport.h>
 #include <internal/mcuxClEcc_Mont_Internal.h>
-#include <internal/mcuxClEcc_Mont_Internal_MontDhX_FUP.h>
+#include <internal/mcuxClEcc_Mont_Internal_FUP.h>
 
 
 /**
@@ -97,8 +97,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_MontDH_DecodeCoordinat
     MCUXCLPKC_FP_IMPORTLITTLEENDIANTOPKC(ECC_T0, pCoordinateEnc, byteLenP);
 
     /* If leadingZerosP != 0 (X25519), mask MSByte according to rfc7748, Ch5. */
-    uint32_t leadingZerosP;
-    MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClMath_LeadingZeros(ECC_P, &leadingZerosP));
+    MCUX_CSSL_FP_FUNCTION_CALL(leadingZerosP, mcuxClMath_LeadingZeros(ECC_P));
     if (0u != leadingZerosP)
     {
         uint32_t operandSize = MCUXCLPKC_PS1_GETOPLEN();
@@ -107,7 +106,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_MontDH_DecodeCoordinat
 
         const uint16_t *pOperands = MCUXCLPKC_GETUPTRT();
         uint8_t *pT0 = MCUXCLPKC_OFFSET2PTR(pOperands[ECC_T0]);
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("MISRA Ex. 9 to Rule 11.3 - PKC word is CPU word aligned.")
         uint32_t *p32T0 = (uint32_t *) pT0;  /* PKC word is CPU word aligned. */
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
         p32T0[bitLenP / 32u] &= mask;
     }
 
@@ -176,9 +177,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_MontDH_X(
     /* Securely calculate, R' = sigma * (u, 1), stored result in buffers (X0, Z0). */
     MCUXCLPKC_PKC_CPU_ARBITRATION_WORKAROUND();  // avoid CPU accessing to PKC workarea when PKC is busy
     uint32_t operandSize = MCUXCLPKC_PS1_GETOPLEN();
-    uint32_t leadingZeroN;
-    MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClMath_LeadingZeros(ECC_N, &leadingZeroN));
-    uint32_t bitLenN = (operandSize * 8u) - leadingZeroN;
+    MCUX_CSSL_FP_FUNCTION_CALL(leadingZerosN, mcuxClMath_LeadingZeros(ECC_N));
+    uint32_t bitLenN = (operandSize * 8u) - leadingZerosN;
     MCUX_CSSL_FP_FUNCTION_CALL(retSecScalarMult0,
         mcuxClEcc_Mont_SecureScalarMult_XZMontLadder(pSession, ECC_S1, bitLenN, MCUXCLECC_SCALARMULT_OPTION_AFFINE_INPUT));
     if (MCUXCLECC_STATUS_OK != retSecScalarMult0)

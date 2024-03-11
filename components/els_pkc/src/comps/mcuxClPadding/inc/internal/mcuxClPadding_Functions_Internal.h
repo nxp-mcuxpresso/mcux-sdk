@@ -62,6 +62,59 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPadding_Status_t) mcuxClPadding_addPadding_Non
   uint32_t * const pOutLength
 );
 
+/**
+ * @brief No-padding removal function, which removes no padding
+ * @api
+ *
+ * This function copies @p blockLength bytes to the output buffer.
+ *
+ * @param[in]  blockLength      The block length of the used block cipher.
+ *
+ * @param[in]  pIn              Pointer to the input buffer of the block which needs
+ *                              the padding removed.
+ * @param[in]  lastBlockLength  Number of bytes in the last block, i.e. the number of bytes
+ *                              in @p pIn. Must be equal to @p blockLength.
+ * @param[out] pOut             Pointer to the output buffer where the data
+ *                              needs to be written.
+ * @param[out] pOutLength       Length of the data written to @p pOut.
+ *
+ * @return status
+ */
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClPadding_removePadding_None, mcuxClPadding_removePaddingMode_t)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPadding_Status_t) mcuxClPadding_removePadding_None(
+  uint32_t blockLength,
+  uint8_t * const pIn,
+  uint32_t lastBlockLength,
+  uint8_t * const pOut,
+  uint32_t * const pOutLength
+);
+
+/**
+ * @brief Default adding removal function.
+ * @api
+ *
+ * This function copies @p lastBlockLength bytes to @p pOut.
+ *
+ * @param[in]  blockLength      The block length of the used block cipher.
+ *
+ * @param[in]  pIn              Pointer to the input buffer of the block which needs
+ *                              the padding removed.
+ * @param[in]  lastBlockLength  Number of bytes in the last block, i.e. the number of bytes in
+ *                              @p pIn. Must be greater than 0 and less than or equal to @p blockLength.
+ * @param[out] pOut             Pointer to the output buffer where the data
+ *                              needs to be written.
+ * @param[out] pOutLength       Length of the data written to @p pOut.
+ *
+ * @return status
+ */
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClPadding_removePadding_Default)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPadding_Status_t) mcuxClPadding_removePadding_Default(
+  uint32_t blockLength,
+  uint8_t * const pIn,
+  uint32_t lastBlockLength,
+  uint8_t * const pOut,
+  uint32_t * const pOutLength
+);
 
 /**
  * @brief Zero-padding function, which pads a block with zeroes in the end.
@@ -219,6 +272,33 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPadding_Status_t) mcuxClPadding_addPadding_Ran
   uint32_t * const pOutLength
 );
 
+/**
+ * @brief Padding removal function for block ciphers in streaming mode.
+ * @api
+ *
+ * This function copies @p lastBlockLength bytes to @p pOut, as streaming
+ * modes do not have any padding to remove.
+ *
+ * @param[in]  blockLength      The block length of the used block cipher.
+ *
+ * @param[in]  pIn              Pointer to the input buffer of the block which needs
+ *                              the padding removed.
+ * @param[in]  lastBlockLength  Number of bytes in the last block, i.e. the number of bytes in
+ *                              @p pIn. Must be greater than 0 and less than or equal to @p blockLength.
+ * @param[out] pOut             Pointer to the output buffer where the data
+ *                              needs to be written.
+ * @param[out] pOutLength       Length of the data written to @p pOut.
+ *
+ * @return status
+ */
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClPadding_removePadding_Stream, mcuxClPadding_removePaddingMode_t)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPadding_Status_t) mcuxClPadding_removePadding_Stream(
+  uint32_t blockLength,
+  uint8_t * const pIn,
+  uint32_t lastBlockLength,
+  uint8_t * const pOut,
+  uint32_t * const pOutLength
+);
 
 #ifdef __cplusplus
 } /* extern "C" */

@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2021-2023 NXP                                                  */
+/* Copyright 2021-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -19,6 +19,7 @@
 #ifndef MCUXCLECC_MEMORYCONSUMPTION_H_
 #define MCUXCLECC_MEMORYCONSUMPTION_H_
 
+#include <mcuxClCore_Macros.h>
 
 /**
  * @defgroup mcuxClEcc_MemoryConsumption mcuxClEcc_MemoryConsumption
@@ -32,68 +33,46 @@
  * @brief Define the CPU workarea size required by mcuxClEcc APIs.
  * @{
  */
-#define MCUXCLECC_ALIGN_SIZE_CPU(byteLen)  ((((byteLen) + (sizeof(uint32_t)) - 1u) / (sizeof(uint32_t))) * (sizeof(uint32_t)))
 
-#ifdef MCUXCL_FEATURE_PROJECT_NIOBE4ANALOG
+#if defined(MCUXCL_FEATURE_PLATFORM_RW61X) || defined(MCUXCL_FEATURE_PLATFORM_MCXN)
 
-#ifdef MCUXCL_FEATURE_ELS_ACCESS_PKCRAM_WORKAROUND
-#define MCUXCLECC_KEYGEN_WACPU_SIZE(byteLenN)  (96u + MCUXCLECC_ALIGN_SIZE_CPU(byteLenN + 8u))  ///< CPU workarea size (in bytes) for #mcuxClEcc_KeyGen.
-#define MCUXCLECC_SIGN_WACPU_SIZE(byteLenN)    (96u + MCUXCLECC_ALIGN_SIZE_CPU(byteLenN + 8u))  ///< CPU workarea size (in bytes) for #mcuxClEcc_Sign.
-#else /* ! MCUXCL_FEATURE_ELS_ACCESS_PKCRAM_WORKAROUND */
-#define MCUXCLECC_KEYGEN_WACPU_SIZE(byteLenN)        96u  ///< CPU workarea size (in bytes) for #mcuxClEcc_KeyGen. Parameter byteLenN is just to keep the API consistent.
-#define MCUXCLECC_SIGN_WACPU_SIZE(byteLenN)          96u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Sign. Parameter byteLenN is just to keep the API consistent.
-#endif /* MCUXCL_FEATURE_ELS_ACCESS_PKCRAM_WORKAROUND */
+#define MCUXCLECC_KEYGEN_WACPU_SIZE                      504u  ///< CPU workarea size (in bytes) for #mcuxClEcc_KeyGen.
 
-#define MCUXCLECC_VERIFY_WACPU_SIZE     104u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Verify.
-#define MCUXCLECC_POINTMULT_WACPU_SIZE  96u  ///< CPU workarea size (in bytes) for #mcuxClEcc_PointMult.
-#define MCUXCLECC_WEIERECC_GENERATEDOMAINPARAMS_WACPU_SIZE  88u  ///< CPU workarea size (in bytes) for #mcuxClEcc_WeierECC_GenerateDomainParams.
+#define MCUXCLECC_SIGN_WACPU_SIZE                        504u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Sign.
 
+#elif defined(MCUXCL_FEATURE_PLATFORM_MIMXRT)
 
-/**
- * @}
- */  /* MCUXCLECC_WACPU_ */
+#define MCUXCLECC_KEYGEN_WACPU_SIZE                      416u  ///< CPU workarea size (in bytes) for #mcuxClEcc_KeyGen.
 
-/**
- * @addtogroup MCUXCLECC_MONTDH_WACPU_
- * @brief Define the CPU workarea size required by mcuxClEcc MontDH APIs.
- * @{
- */
-#define MCUXCLECC_MONT_DHKEYGENERATION_CURVE25519_WACPU_SIZE    92u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Mont_DhKeyGeneration.
-#define MCUXCLECC_MONT_DHKEYGENERATION_CURVE448_WACPU_SIZE      92u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Mont_DhKeyGeneration.
-
-#define MCUXCLECC_MONT_DHKEYAGREEMENT_CURVE25519_WACPU_SIZE     88u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Mont_DhKeyAgreement.
-#define MCUXCLECC_MONT_DHKEYAGREEMENT_CURVE448_WACPU_SIZE       88u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Mont_DhKeyAgreement.
-/**
- * @}
- */  /* MCUXCLECC_MONTDH_WACPU_ */
-
- /**
- * @addtogroup MCUXCLECC_EDDSA_WACPU_
- * @brief Define the CPU workarea size required by mcuxClEcc EdDSA APIs.
- * @{
- */
-#define MCUXCLECC_EDDSA_GENERATEKEYPAIR_ED25519_WACPU_SIZE    360u  ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateKeyPair for Ed25519.
-#define MCUXCLECC_EDDSA_GENERATEKEYPAIR_ED448_WACPU_SIZE      196u    ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateKeyPair for Ed448.
-
-#define MCUXCLECC_EDDSA_GENERATESIGNATURE_ED25519_WACPU_SIZE  540u  ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateSignature for Ed25519.
-#define MCUXCLECC_EDDSA_GENERATESIGNATURE_ED448_WACPU_SIZE    132u    ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateSignature for Ed448.
-
-#define MCUXCLECC_EDDSA_VERIFYSIGNATURE_ED25519_WACPU_SIZE    540u  ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_VerifySignature for Ed25519.
-#define MCUXCLECC_EDDSA_VERIFYSIGNATURE_ED448_WACPU_SIZE      132u    ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_VerifySignature for Ed448.
+#define MCUXCLECC_SIGN_WACPU_SIZE                        416u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Sign.
 
 #else
 
-#ifdef MCUXCL_FEATURE_ELS_ACCESS_PKCRAM_WORKAROUND
-#define MCUXCLECC_KEYGEN_WACPU_SIZE(byteLenN)  (416u + MCUXCLECC_ALIGN_SIZE_CPU(byteLenN + 8u))  ///< CPU workarea size (in bytes) for #mcuxClEcc_KeyGen.
-#define MCUXCLECC_SIGN_WACPU_SIZE(byteLenN)    (416u + MCUXCLECC_ALIGN_SIZE_CPU(byteLenN + 8u))  ///< CPU workarea size (in bytes) for #mcuxClEcc_Sign.
-#else /* ! MCUXCL_FEATURE_ELS_ACCESS_PKCRAM_WORKAROUND */
-#define MCUXCLECC_KEYGEN_WACPU_SIZE(byteLenN)        416u  ///< CPU workarea size (in bytes) for #mcuxClEcc_KeyGen. Parameter byteLenN is just to keep the API consistent.
-#define MCUXCLECC_SIGN_WACPU_SIZE(byteLenN)          416u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Sign. Parameter byteLenN is just to keep the API consistent.
-#endif /* MCUXCL_FEATURE_ELS_ACCESS_PKCRAM_WORKAROUND */
+#define MCUXCLECC_KEYGEN_WACPU_SIZE                      96u  ///< CPU workarea size (in bytes) for #mcuxClEcc_KeyGen.
 
-#define MCUXCLECC_VERIFY_WACPU_SIZE     424u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Verify.
-#define MCUXCLECC_POINTMULT_WACPU_SIZE  416u  ///< CPU workarea size (in bytes) for #mcuxClEcc_PointMult.
-#define MCUXCLECC_WEIERECC_GENERATEDOMAINPARAMS_WACPU_SIZE  88u  ///< CPU workarea size (in bytes) for #mcuxClEcc_WeierECC_GenerateDomainParams.
+#define MCUXCLECC_SIGN_WACPU_SIZE                        96u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Sign.
+
+#endif
+
+#ifdef MCUXCL_FEATURE_ECC_ECDSA_DETERMINISTIC
+#define MCUXCLECC_SIGN_DETERMINISTIC_ECDSA_WACPU_SIZE    2168u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Sign.
+#endif /* MCUXCL_FEATURE_ECC_ECDSA_DETERMINISTIC */
+
+#ifdef MCUXCL_FEATURE_PLATFORM_LPC
+
+#define MCUXCLECC_VERIFY_WACPU_SIZE                      104u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Verify.
+
+#define MCUXCLECC_POINTMULT_WACPU_SIZE                    96u  ///< CPU workarea size (in bytes) for #mcuxClEcc_PointMult.
+
+#else
+
+#define MCUXCLECC_VERIFY_WACPU_SIZE                      424u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Verify.
+
+#define MCUXCLECC_POINTMULT_WACPU_SIZE                    416u  ///< CPU workarea size (in bytes) for #mcuxClEcc_PointMult.
+
+#endif
+
+
 
 
 /**
@@ -105,11 +84,27 @@
  * @brief Define the CPU workarea size required by mcuxClEcc MontDH APIs.
  * @{
  */
-#define MCUXCLECC_MONT_DHKEYGENERATION_CURVE25519_WACPU_SIZE    444u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Mont_DhKeyGeneration.
-#define MCUXCLECC_MONT_DHKEYGENERATION_CURVE448_WACPU_SIZE      468u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Mont_DhKeyGeneration.
 
-#define MCUXCLECC_MONT_DHKEYAGREEMENT_CURVE25519_WACPU_SIZE     88u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Mont_DhKeyAgreement.
-#define MCUXCLECC_MONT_DHKEYAGREEMENT_CURVE448_WACPU_SIZE       88u  ///< CPU workarea size (in bytes) for #mcuxClEcc_Mont_DhKeyAgreement.
+#if defined(MCUXCL_FEATURE_PLATFORM_RW61X) || defined(MCUXCL_FEATURE_PLATFORM_MCXN)
+
+#define MCUXCLECC_MONTDH_GENERATEKEYPAIR_CURVE25519_WACPU_SIZE    444u  ///< CPU workarea size (in bytes) for #mcuxClEcc_MontDH_GenerateKeyPair.
+#define MCUXCLECC_MONTDH_GENERATEKEYPAIR_CURVE448_WACPU_SIZE      468u  ///< CPU workarea size (in bytes) for #mcuxClEcc_MontDH_GenerateKeyPair.
+
+#elif defined(MCUXCL_FEATURE_PLATFORM_MIMXRT)
+
+#define MCUXCLECC_MONTDH_GENERATEKEYPAIR_CURVE25519_WACPU_SIZE    412u  ///< CPU workarea size (in bytes) for #mcuxClEcc_MontDH_GenerateKeyPair.
+#define MCUXCLECC_MONTDH_GENERATEKEYPAIR_CURVE448_WACPU_SIZE      412u  ///< CPU workarea size (in bytes) for #mcuxClEcc_MontDH_GenerateKeyPair.
+
+#else
+
+#define MCUXCLECC_MONTDH_GENERATEKEYPAIR_CURVE25519_WACPU_SIZE    92u  ///< CPU workarea size (in bytes) for #mcuxClEcc_MontDH_GenerateKeyPair.
+#define MCUXCLECC_MONTDH_GENERATEKEYPAIR_CURVE448_WACPU_SIZE      92u  ///< CPU workarea size (in bytes) for #mcuxClEcc_MontDH_GenerateKeyPair.
+
+#endif
+
+#define MCUXCLECC_MONTDH_KEYAGREEMENT_CURVE25519_WACPU_SIZE     88u  ///< CPU workarea size (in bytes) for #mcuxClEcc_MontDH_KeyAgreement.
+#define MCUXCLECC_MONTDH_KEYAGREEMENT_CURVE448_WACPU_SIZE       88u  ///< CPU workarea size (in bytes) for #mcuxClEcc_MontDH_KeyAgreement.
+
 /**
  * @}
  */  /* MCUXCLECC_MONTDH_WACPU_ */
@@ -119,20 +114,23 @@
  * @brief Define the CPU workarea size required by mcuxClEcc EdDSA APIs.
  * @{
  */
+
+#ifdef MCUXCL_FEATURE_PLATFORM_LPC
+
+#define MCUXCLECC_EDDSA_GENERATEKEYPAIR_ED25519_WACPU_SIZE    360u  ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateKeyPair for Ed25519.
+
+#else
+
 #define MCUXCLECC_EDDSA_GENERATEKEYPAIR_ED25519_WACPU_SIZE    680u  ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateKeyPair for Ed25519.
-#define MCUXCLECC_EDDSA_GENERATEKEYPAIR_ED448_WACPU_SIZE      516u    ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateKeyPair for Ed448.
-
-#define MCUXCLECC_EDDSA_GENERATESIGNATURE_ED25519_WACPU_SIZE  540u  ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateSignature for Ed25519.
-#define MCUXCLECC_EDDSA_GENERATESIGNATURE_ED448_WACPU_SIZE    132u    ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateSignature for Ed448.
-
-#define MCUXCLECC_EDDSA_VERIFYSIGNATURE_ED25519_WACPU_SIZE    540u  ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_VerifySignature for Ed25519.
-#define MCUXCLECC_EDDSA_VERIFYSIGNATURE_ED448_WACPU_SIZE      132u    ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_VerifySignature for Ed448.
 
 #endif
+#define MCUXCLECC_EDDSA_GENERATESIGNATURE_ED25519_WACPU_SIZE  540u  ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateSignature for Ed25519.
+#define MCUXCLECC_EDDSA_VERIFYSIGNATURE_ED25519_WACPU_SIZE    540u  ///< CPU workarea size (in bytes) for #mcuxClEcc_EdDSA_VerifySignature for Ed25519.
+
+
 /**
  * @}
  */  /* MCUXCLECC_EDDSA_WACPU_ */
-
 
 /**
  * @addtogroup MCUXCLECC_WAPKC_
@@ -146,64 +144,54 @@
 #define MCUXCLECC_PKC_WORDSIZE  8u
 
 /**
- * @brief Helper macro to get the maximum of two given constants.
- */
-#define MCUXCLECC_MAX(value0, value1)  (((value0) > (value1)) ? (value0) : (value1))
-
-/**
- * @brief Helper macro to calculate size aligned to PKC word.
- */
-#define MCUXCLECC_ALIGN_SIZE_PKC(size)  ((((size) + MCUXCLECC_PKC_WORDSIZE - 1u) / MCUXCLECC_PKC_WORDSIZE) * MCUXCLECC_PKC_WORDSIZE)
-
-/**
  * PKC workarea size (in bytes) for #mcuxClEcc_KeyGen for arbitrary lengths of p and n.
  */
 #define MCUXCLECC_KEYGEN_WAPKC_SIZE(pByteLen,nByteLen)  \
-    (24u * (MCUXCLECC_ALIGN_SIZE_PKC(MCUXCLECC_MAX(pByteLen,nByteLen)) + MCUXCLECC_PKC_WORDSIZE))
+    (24u * (MCUXCLCORE_ALIGN_TO_WORDSIZE(MCUXCLECC_PKC_WORDSIZE, MCUXCLCORE_MAX(pByteLen,nByteLen)) + MCUXCLECC_PKC_WORDSIZE))
 
+#define MCUXCLECC_KEYGEN_WAPKC_SIZE_128 (576u)
+#define MCUXCLECC_KEYGEN_WAPKC_SIZE_256 (960u)
+#define MCUXCLECC_KEYGEN_WAPKC_SIZE_384 (1344u)
+#define MCUXCLECC_KEYGEN_WAPKC_SIZE_512 (1728u)
+#define MCUXCLECC_KEYGEN_WAPKC_SIZE_640 (2112u)
 
 /**
  * PKC workarea size (in bytes) for #mcuxClEcc_Sign for arbitrary lengths of p and n.
  */
 #define MCUXCLECC_SIGN_WAPKC_SIZE(pByteLen,nByteLen)  \
-    (24u * (MCUXCLECC_ALIGN_SIZE_PKC(MCUXCLECC_MAX(pByteLen,nByteLen)) + MCUXCLECC_PKC_WORDSIZE))
+    (24u * (MCUXCLCORE_ALIGN_TO_WORDSIZE(MCUXCLECC_PKC_WORDSIZE, MCUXCLCORE_MAX(pByteLen,nByteLen)) + MCUXCLECC_PKC_WORDSIZE))
 
+#define MCUXCLECC_SIGN_WAPKC_SIZE_128 (576u )
+#define MCUXCLECC_SIGN_WAPKC_SIZE_256 (960u )
+#define MCUXCLECC_SIGN_WAPKC_SIZE_384 (1344u )
+#define MCUXCLECC_SIGN_WAPKC_SIZE_512 (1728u )
+#define MCUXCLECC_SIGN_WAPKC_SIZE_640 (2112u )
 
 /**
  * PKC workarea size (in bytes) for #mcuxClEcc_Verify for arbitrary lengths of p and n.
  */
 
 #define MCUXCLECC_VERIFY_WAPKC_SIZE(pByteLen,nByteLen)  \
-    (28u * (MCUXCLECC_ALIGN_SIZE_PKC(MCUXCLECC_MAX(pByteLen,nByteLen)) + MCUXCLECC_PKC_WORDSIZE))
+    (28u * (MCUXCLCORE_ALIGN_TO_WORDSIZE(MCUXCLECC_PKC_WORDSIZE, MCUXCLCORE_MAX(pByteLen,nByteLen)) + MCUXCLECC_PKC_WORDSIZE))
 
+#define MCUXCLECC_VERIFY_WAPKC_SIZE_128 (672u)
+#define MCUXCLECC_VERIFY_WAPKC_SIZE_256 (1120u)
+#define MCUXCLECC_VERIFY_WAPKC_SIZE_384 (1568u)
+#define MCUXCLECC_VERIFY_WAPKC_SIZE_512 (2016u)
+#define MCUXCLECC_VERIFY_WAPKC_SIZE_640 (2464u)
 
 /**
  * PKC workarea size (in bytes) for #mcuxClEcc_PointMult for arbitrary lengths of p and n.
  */
 #define MCUXCLECC_POINTMULT_WAPKC_SIZE(pByteLen,nByteLen)  \
-    (24u * (MCUXCLECC_ALIGN_SIZE_PKC(MCUXCLECC_MAX(pByteLen,nByteLen)) + MCUXCLECC_PKC_WORDSIZE))
+    (24u * (MCUXCLCORE_ALIGN_TO_WORDSIZE(MCUXCLECC_PKC_WORDSIZE, MCUXCLCORE_MAX(pByteLen,nByteLen)) + MCUXCLECC_PKC_WORDSIZE))
 
+#define MCUXCLECC_POINTMULT_WAPKC_SIZE_128 (576u)
+#define MCUXCLECC_POINTMULT_WAPKC_SIZE_256 (960u)
+#define MCUXCLECC_POINTMULT_WAPKC_SIZE_384 (1344u)
+#define MCUXCLECC_POINTMULT_WAPKC_SIZE_512 (1728u)
+#define MCUXCLECC_POINTMULT_WAPKC_SIZE_640 (2112u)
 
-/**
- * PKC workarea size (in bytes) for #mcuxClEcc_WeierECC_GenerateDomainParams for arbitrary lengths of p and n.
- */
-#ifdef MCUXCL_FEATURE_PLATFORM_RW61X
-
-#define MCUXCLECC_WEIERECC_GENERATEDOMAINPARAMS_WAPKC_SIZE(pByteLen,nByteLen)  \
-    (22u * (MCUXCLECC_ALIGN_SIZE_PKC(MCUXCLECC_MAX(pByteLen,nByteLen)) + MCUXCLECC_PKC_WORDSIZE))
-
-#else
-
-#define MCUXCLECC_WEIERECC_GENERATEDOMAINPARAMS_WAPKC_SIZE(pByteLen,nByteLen)  \
-    (24u * (MCUXCLECC_ALIGN_SIZE_PKC(MCUXCLECC_MAX(pByteLen,nByteLen)) + MCUXCLECC_PKC_WORDSIZE))
-
-#endif
-
-#define MCUXCLECC_WEIERECC_GENERATEDOMAINPARAMS_WAPKC_SIZE_128 (528u )
-#define MCUXCLECC_WEIERECC_GENERATEDOMAINPARAMS_WAPKC_SIZE_256 (880u )
-#define MCUXCLECC_WEIERECC_GENERATEDOMAINPARAMS_WAPKC_SIZE_384 (1232u )
-#define MCUXCLECC_WEIERECC_GENERATEDOMAINPARAMS_WAPKC_SIZE_512 (1584u )
-#define MCUXCLECC_WEIERECC_GENERATEDOMAINPARAMS_WAPKC_SIZE_640 (1936u )
 
 
 
@@ -220,24 +208,16 @@
  */
 
 /**
- * PKC workarea size (in bytes) for #mcuxClEcc_Mont_DhKeyGeneration for Curve25519.
+ * PKC workarea size (in bytes) for #mcuxClEcc_MontDH_KeyGeneration.
  */
-#define MCUXCLECC_MONT_DHKEYGENERATION_CURVE25519_WAPKC_SIZE  880u
+#define MCUXCLECC_MONTDH_GENERATEKEYPAIR_CURVE25519_WAPKC_SIZE  880u
+#define MCUXCLECC_MONTDH_GENERATEKEYPAIR_CURVE448_WAPKC_SIZE  1408u
 
 /**
- * PKC workarea size (in bytes) for #mcuxClEcc_Mont_DhKeyAgreement for Curve25519.
+ * PKC workarea size (in bytes) for #mcuxClEcc_MontDH_KeyAgreement.
  */
-#define MCUXCLECC_MONT_DHKEYAGREEMENT_CURVE25519_WAPKC_SIZE  880u
-
-/**
- * PKC workarea size (in bytes) for #mcuxClEcc_Mont_DhKeyGeneration for Curve448.
- */
-#define MCUXCLECC_MONT_DHKEYGENERATION_CURVE448_WAPKC_SIZE  1408u
-
-/**
- * PKC workarea size (in bytes) for #mcuxClEcc_Mont_DhKeyAgreement for Curve448.
- */
-#define MCUXCLECC_MONT_DHKEYAGREEMENT_CURVE448_WAPKC_SIZE  1408u
+#define MCUXCLECC_MONTDH_KEYAGREEMENT_CURVE25519_WAPKC_SIZE  880u
+#define MCUXCLECC_MONTDH_KEYAGREEMENT_CURVE448_WAPKC_SIZE  1408u
 
 /**
  * @}
@@ -253,31 +233,21 @@
  * PKC workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateKeyPair.
  */
 #define MCUXCLECC_EDDSA_GENERATEKEYPAIR_ED25519_WAPKC_SIZE    1760u  ///< PKC workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateKeyPair for Ed25519.
-#define MCUXCLECC_EDDSA_GENERATEKEYPAIR_ED448_WAPKC_SIZE    2816u  ///< PKC workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateKeyPair for Ed448.
 
 /**
  * PKC workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateSignature.
  */
 #define MCUXCLECC_EDDSA_GENERATESIGNATURE_ED25519_WAPKC_SIZE  1760u  ///< PKC workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateSignature for Ed25519.
-#define MCUXCLECC_EDDSA_GENERATESIGNATURE_ED448_WAPKC_SIZE  2816u  ///< PKC workarea size (in bytes) for #mcuxClEcc_EdDSA_GenerateSignature for Ed448.
 
 /**
  * PKC workarea size (in bytes) for #mcuxClEcc_EdDSA_VerifySignature.
  */
 #define MCUXCLECC_EDDSA_VERIFYSIGNATURE_ED25519_WAPKC_SIZE    1760u  ///< PKC workarea size (in bytes) for #mcuxClEcc_EdDSA_VerifySignature for Ed25519.
-#define MCUXCLECC_EDDSA_VERIFYSIGNATURE_ED448_WAPKC_SIZE    2816u  ///< PKC workarea size (in bytes) for #mcuxClEcc_EdDSA_VerifySignature for Ed448.
 
 /**
  * @}
  */  /* MCUXCLECC_EDDSA_WAPKC_ */
 
-/**
- * @brief Define for the buffer size (in bytes) for optimized custom ECC Weierstrass domain parameters
- */
-#define MCUXCLECC_CUSTOMWEIERECCDOMAINPARAMS_SIZE(byteLenP, byteLenN)  \
-    MCUXCLECC_ALIGN_SIZE_CPU(76u  \
-                            + 8u * (byteLenP)  \
-                            + 2u * (byteLenN) )
 
 /**
  * @addtogroup MCUXCLECC_EDDSA_GENKEYPAIR_DESC_SIZE_
@@ -295,10 +265,28 @@
  * @{
  */
 #define MCUXCLECC_EDDSA_SIGNATURE_PROTOCOL_DESCRIPTOR_SIZE 20u  ///< EdDSA signature generation descriptor size.
+
+#define MCUXCLECC_EDDSA_ED25519_SIZE_SIGNATURE_PROTOCOL_DESCRIPTOR(contextLen) \
+    (MCUXCLECC_EDDSA_SIGNATURE_PROTOCOL_DESCRIPTOR_SIZE + MCUXCLECC_EDDSA_SIZE_HASH_PREFIX(MCUXCLECC_EDDSA_ED25519_DOMPREFIXLEN, (contextLen)))  ///< Byte length of an Ed25519 signature protocol descriptor.
+
+
 /**
  * @}
  */  /* MCUXCLECC_EDDSA_SIGNATURE_PROTOCOL_DESC_SIZE_ */
 
+
+
+#ifdef MCUXCL_FEATURE_ECC_ECDSA_DETERMINISTIC
+/**
+ * @addtogroup MCUXCLECC_ECDSA_SIGNATURE_PROTOCOL_DESC_SIZE_
+ * @brief Define for the ECDSA signature protocol descriptor size.
+ * @{
+ */
+#define MCUXCLECC_ECDSA_SIGNATURE_PROTOCOL_DESCRIPTOR_SIZE 12u  ///< ECDSA signature generation descriptor size.
+/**
+ * @}
+ */  /* MCUXCLECC_EDDSA_SIGNATURE_PROTOCOL_DESC_SIZE_ */
+ #endif /* MCUXCL_FEATURE_ECC_ECDSA_DETERMINISTIC */
 
 
 /**

@@ -28,5 +28,8 @@
 #include <mcuxClKey_Constants.h>
 #include <mcuxClKey_MemoryConsumption.h>
 #include <mcuxClKey_ProtectionMechanisms.h>
+#ifdef MCUXCL_FEATURE_KEY_DERIVATION
+#include <mcuxClKey_DerivationAlgorithms.h>
+#endif /* MCUXCL_FEATURE_KEY_DERIVATION */
 
 #endif /* MCUXCLKEY_H_ */

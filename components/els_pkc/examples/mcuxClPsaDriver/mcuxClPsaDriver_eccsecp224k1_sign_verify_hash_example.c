@@ -13,6 +13,7 @@
 
 #include "common.h"
 
+#include <mcuxClToolchain.h>
 #include <mcuxClEls.h> // Interface to the entire mcuxClEls component
 #include <mcuxClSession.h> // Interface to the entire mcuxClSession component
 #include <mcuxCsslFlowProtection.h> // Code flow protection
@@ -28,7 +29,7 @@
 #define BYTELEN_P (PSA_BITS_TO_BYTES(BITLEN_P))
 #define BYTELEN_N (PSA_BITS_TO_BYTES(BITLEN_N))
 
-static const uint8_t privateKeyBuffer[BYTELEN_N] __attribute__ ((aligned (4))) = {
+static const ALIGNED uint8_t privateKeyBuffer[BYTELEN_N] = {
   0x00, 0x1au, 0xf2u, 0xc6u, 0xedu, 0x73u, 0x82u, 0x32u,
   0xaau, 0x5du, 0x1fu, 0x9cu, 0x06u, 0xe3u, 0xf2u, 0x06u,
   0xb3u, 0xc2u, 0xaeu, 0xc0u, 0x11u, 0x65u, 0xe5u, 0x65u,
@@ -38,7 +39,7 @@ static const uint8_t privateKeyBuffer[BYTELEN_N] __attribute__ ((aligned (4))) =
 /**
  * @brief ECC public key used in verification.
  */
-static const uint8_t publicKeyBuffer[2u * BYTELEN_P + 1u] __attribute__ ((aligned (4))) = {
+static const ALIGNED uint8_t publicKeyBuffer[2u * BYTELEN_P + 1u] = {
   0x04u,
   0x37u, 0x52u, 0x4du, 0xa5u, 0xf5u, 0xd0u, 0xc9u, 0x91u,
   0x3du, 0xbcu, 0xfdu, 0x1eu, 0x6cu, 0x5fu, 0xa0u, 0x49u,
@@ -53,7 +54,7 @@ static const uint8_t publicKeyBuffer[2u * BYTELEN_P + 1u] __attribute__ ((aligne
 /**
  * @brief Hash of message to be signed
  */
-static const uint8_t hash[PSA_HASH_LENGTH(PSA_ALG_SHA_224)] __attribute__ ((aligned (4))) = {
+static const ALIGNED uint8_t hash[PSA_HASH_LENGTH(PSA_ALG_SHA_224)] = {
   0x89, 0x01, 0x41, 0x9f, 0x26, 0x14, 0xc9, 0x42,
   0xc9, 0xee, 0x5e, 0xfb, 0xdf, 0xba, 0x0c, 0xca,
   0x70, 0x6b, 0x3a, 0x4e, 0xd1, 0xa8, 0x5f, 0x69,
@@ -63,7 +64,9 @@ static const uint8_t hash[PSA_HASH_LENGTH(PSA_ALG_SHA_224)] __attribute__ ((alig
 /**
  * @brief Signature
  */
-static uint8_t signature[PSA_SIGN_OUTPUT_SIZE(PSA_KEY_TYPE_ECC_KEY_PAIR_BASE, BITLEN_N, PSA_ALG_ECDSA_ANY)] __attribute__ ((aligned (4))) = {0};
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT("External macro")
+static ALIGNED uint8_t signature[PSA_SIGN_OUTPUT_SIZE(PSA_KEY_TYPE_ECC_KEY_PAIR_BASE, BITLEN_N, PSA_ALG_ECDSA_ANY)] = {0};
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT()
 
 /*
  *Example of ECDSA signature generation and verification for:
@@ -71,7 +74,7 @@ static uint8_t signature[PSA_SIGN_OUTPUT_SIZE(PSA_KEY_TYPE_ECC_KEY_PAIR_BASE, BI
  * - SHA-224
  * - signature scheme PSA_ALG_ECDSA_ANY
  */
-bool mcuxClPsaDriver_eccsecp224k1_sign_verify_hash_example(void)
+MCUXCLEXAMPLE_FUNCTION(mcuxClPsaDriver_eccsecp224k1_sign_verify_hash_example)
 {
   /* Enable ELS */
   MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClEls_Enable_Async()); // Enable the ELS.
@@ -132,10 +135,13 @@ bool mcuxClPsaDriver_eccsecp224k1_sign_verify_hash_example(void)
   }
 
   /* Check the signature length */
+  MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_MACRO()
   if(signature_length != PSA_SIGN_OUTPUT_SIZE(PSA_KEY_TYPE_ECC_KEY_PAIR_BASE, BITLEN_N, PSA_ALG_ECDSA_ANY))
+  MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_MACRO()
   {
     return MCUXCLEXAMPLE_STATUS_ERROR;
   }
+  MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CONTROLLING_EXPRESSION_IS_INVARIANT()
 
   /*
    * Verify hash: PSA_ALG_ECDSA_ANY, SHA_224
@@ -177,9 +183,4 @@ bool mcuxClPsaDriver_eccsecp224k1_sign_verify_hash_example(void)
 
   /* Return */
   return MCUXCLEXAMPLE_STATUS_OK;
-}
-bool nxpClPsaDriver_eccsecp224k1_sign_verify_hash_example(void)
-{
-    bool result = mcuxClPsaDriver_eccsecp224k1_sign_verify_hash_example();
-    return result;
 }

@@ -19,6 +19,7 @@
  * @brief   Example of SHA2-224 hashing using the ELS (CLNS component mcuxClEls)
  */
 
+#include <mcuxClToolchain.h>
 #include <mcuxClEls.h> // Interface to the entire mcuxClEls component
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h> // Code flow protection
@@ -26,34 +27,34 @@
 #include <mcuxClExample_ELS_Helper.h>
 
 /** Data input for SHA2-224 hashing. */
-static uint8_t const sha224_padded_input[MCUXCLELS_HASH_BLOCK_SIZE_SHA_224] = {0x61U, 0x62U, 0x63U, 0x80U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00u, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x18U};
+static ALIGNED uint8_t const sha224_padded_input[MCUXCLELS_HASH_BLOCK_SIZE_SHA_224] = {0x61U, 0x62U, 0x63U, 0x80U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00u, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x18U};
 
 /** Expected hash value. */
-static uint8_t sha224_reference_digest[MCUXCLELS_HASH_OUTPUT_SIZE_SHA_224] = {0x23U, 0x09U, 0x7dU, 0x22U,
-                                                                             0x34U, 0x05U, 0xd8U, 0x22U,
-                                                                             0x86U, 0x42U, 0xa4U, 0x77U,
-                                                                             0xbdU, 0xa2U, 0x55U, 0xb3U,
-                                                                             0x2aU, 0xadU, 0xbcU, 0xe4U,
-                                                                             0xbdU, 0xa0U, 0xb3U, 0xf7U,
-                                                                             0xe3U, 0x6cU, 0x9dU, 0xa7U};
+static ALIGNED uint8_t sha224_reference_digest[MCUXCLELS_HASH_OUTPUT_SIZE_SHA_224] = {0x23U, 0x09U, 0x7dU, 0x22U,
+                                                                                     0x34U, 0x05U, 0xd8U, 0x22U,
+                                                                                     0x86U, 0x42U, 0xa4U, 0x77U,
+                                                                                     0xbdU, 0xa2U, 0x55U, 0xb3U,
+                                                                                     0x2aU, 0xadU, 0xbcU, 0xe4U,
+                                                                                     0xbdU, 0xa0U, 0xb3U, 0xf7U,
+                                                                                     0xe3U, 0x6cU, 0x9dU, 0xa7U};
 
 /** Destination buffer to receive the hash output of the SHA2-224 hashing. */
-static uint8_t sha2_224_digest[MCUXCLELS_HASH_STATE_SIZE_SHA_224]; // MCUXCLELS_HASH_STATE_SIZE_SHA_224 has to be used as the mcuxClEls_Hash_Async do not perform the truncation of the hash state.
+static ALIGNED uint8_t sha2_224_digest[MCUXCLELS_HASH_STATE_SIZE_SHA_224]; // MCUXCLELS_HASH_STATE_SIZE_SHA_224 has to be used as the mcuxClEls_Hash_Async do not perform the truncation of the hash state.
 
 
 /** Performs SHA2-224 hashing using mcuxClEls functions.

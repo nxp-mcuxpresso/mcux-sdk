@@ -35,40 +35,6 @@ extern "C" {
  **********************************************/
 
 /**
- * @brief Allocate a CPU buffer in the CPU workarea of a session.
- *
- * This function allocates a new CPU buffer in the given \p session,
- * and sets the given \p buffer accordingly.
- *
- * @param  pSession        Session handle.
- * @param  buffer          A pointer to the buffer that we want to allocate.
- * @param  bufferLength    The size of the buffer.
- *
- * @return status
- */
-MCUX_CSSL_FP_FUNCTION_DECL(mcuxClSession_allocateCpuBuffer)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClSession_Status_t) mcuxClSession_allocateCpuBuffer(
-    mcuxClSession_Handle_t pSession,
-    uint32_t **buffer,
-    uint32_t bufferLength
-);
-
-/**
- * @brief Free all CPU buffers of a session.
- *
- * This function will free all allocated CPU buffers of the given \p session.
- *
- * @param  pSession Session handle.
- *
- * @return status
- */
-MCUX_CSSL_FP_FUNCTION_DECL(mcuxClSession_freeAllCpuBuffers)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClSession_Status_t) mcuxClSession_freeAllCpuBuffers(
-    mcuxClSession_Handle_t pSession
-);
-
-
-/**
  * @brief (inline) function to allocate CPU buffer.
  *
  * This function allocates a buffer in CPU workarea specified in @p pSession.
@@ -86,7 +52,11 @@ static inline uint32_t* mcuxClSession_allocateWords_cpuWa(
 {
     uint32_t * pCpuBuffer = NULL;
     const uint32_t usedWords = pSession->cpuWa.used;
+
+    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(usedWords, 0u, (UINT32_MAX >> 2u), NULL)
+    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(wordsToAllocate, 0u, (UINT32_MAX >> 2u) - usedWords, NULL)
     const uint32_t expectedUsed = usedWords + wordsToAllocate;
+
     /* TODO: CLNS-5886 [DEV][Session] enable size checking when allocating buffers */
 #if 0  /* checking disabled before all components/tests allocate workarea properly */
     if (expectedUsed <= pSession->cpuWa.size)
@@ -131,7 +101,11 @@ static inline uint32_t* mcuxClSession_allocateWords_pkcWa(
 {
     uint32_t * pPkcBuffer = NULL;
     const uint32_t usedWords = pSession->pkcWa.used;
+
+    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(usedWords, 0u, MCUXCLPKC_RAM_SIZE, NULL)
+    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(wordsToAllocate, 0u, MCUXCLPKC_RAM_SIZE - usedWords, NULL)
     const uint32_t expectedUsed = usedWords + wordsToAllocate;
+
     /* TODO: CLNS-5886 [DEV][Session] enable size checking when allocating buffers */
 #if 0  /* checking disabled before all components/tests allocate workarea properly */
     if (expectedUsed <= pSession->pkcWa.size)
@@ -198,89 +172,6 @@ static inline void mcuxClSession_freeWords_pkcWa(
         pSession->pkcWa.used -= wordsToFree;
     }
 }
-
-/**
- * @brief (inline) function to get number of used words in CPU workarea
- *
- * This function returns the number of used words in CPU workarea.
- *
- * @param[in] pSession  Session handle.
- *
- * @return The number of CPU words (uint32_t) of used part of CPU workarea.
- */
-MCUX_CSSL_FP_FUNCTION_DEF(mcuxClSession_getUsage_cpuWa)
-static inline uint32_t mcuxClSession_getUsage_cpuWa(
-    mcuxClSession_Handle_t pSession)
-{
-    return pSession->cpuWa.used;
-}
-
-/**
- * @brief (inline) function to get number of used words in PKC workarea
- *
- * This function returns the number of used words in PKC workarea.
- *
- * @param[in] pSession  Session handle.
- *
- * @return The number of CPU words (uint32_t) of used part of PKC workarea.
- */
-MCUX_CSSL_FP_FUNCTION_DEF(mcuxClSession_getUsage_pkcWa)
-static inline uint32_t mcuxClSession_getUsage_pkcWa(
-    mcuxClSession_Handle_t pSession)
-{
-    return pSession->pkcWa.used;
-}
-
-/**
- * @brief (inline) function to set number of used words in CPU workarea
- *
- * This function sets (restores) the number of used word(s) in CPU workarea.
- * It frees all space allocated after the corresponding call to #mcuxClSession_getUsage_cpuWa.
- * The space is freed but **not** erased (zeroed).
- *
- * @param[in] pSession         Session handle.
- * @param[in] backupUsedCpuWa  backup of the number of used word(s).
- */
-MCUX_CSSL_FP_FUNCTION_DEF(mcuxClSession_setUsage_cpuWa)
-static inline void mcuxClSession_setUsage_cpuWa(
-    mcuxClSession_Handle_t pSession,
-    uint32_t backupUsedCpuWa)
-{
-    if(backupUsedCpuWa > pSession->cpuWa.size)
-    {
-        pSession->cpuWa.used = pSession->cpuWa.size;
-    }
-    else
-    {
-        pSession->cpuWa.used = backupUsedCpuWa;
-    }
-}
-
-/**
- * @brief (inline) function to set number of used words in PKC workarea
- *
- * This function sets (restores) the number of used word(s) in PKC workarea.
- * It frees all space allocated after the corresponding call to #mcuxClSession_getUsage_pkcWa.
- * The space is freed but **not** erased (zeroed).
- *
- * @param[in] pSession         Session handle.
- * @param[in] backupUsedPkcWa  backup of the number of used word(s).
- */
-MCUX_CSSL_FP_FUNCTION_DEF(mcuxClSession_setUsage_pkcWa)
-static inline void mcuxClSession_setUsage_pkcWa(
-    mcuxClSession_Handle_t pSession,
-    uint32_t backupUsedPkcWa)
-{
-    if(backupUsedPkcWa > pSession->pkcWa.size)
-    {
-        pSession->pkcWa.used = pSession->pkcWa.size;
-    }
-    else
-    {
-        pSession->pkcWa.used = backupUsedPkcWa;
-    }
-}
-
 
 /**
  * @brief Set the Security options in a Crypto Library session.

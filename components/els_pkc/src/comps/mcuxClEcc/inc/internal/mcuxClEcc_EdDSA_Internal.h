@@ -21,20 +21,17 @@
 #define MCUXCLECC_EDDSA_INTERNAL_H_
 
 
-#include <stdint.h>
-
-#include <mcuxClConfig.h> // Exported features flags header
+#include <mcuxClCore_Platform.h>
 #include <mcuxClSession.h>
-#include <mcuxClEcc_Types.h>
+#include <mcuxClKey_Types.h>
+#include <mcuxClBuffer.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
-#include <mcuxClCore_Buffer.h>
-#include <mcuxClMemory.h>
-#include <mcuxClPkc.h>
 #include <mcuxClHash_Types.h>
 
+#include <mcuxClEcc_Types.h>
 #include <internal/mcuxClEcc_Internal.h>
-#include <internal/mcuxClEcc_EdDSA_Internal_PkcWaLayout.h>
+#include <internal/mcuxClEcc_TwEd_Internal_PkcWaLayout.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,70 +44,6 @@ extern "C" {
 
 
 /**********************************************************/
-/* Internal EdDSA defines                                 */
-/**********************************************************/
-
-/**
- * Options for EdDSA key pair generation descriptors
- */
-#define MCUXCLECC_EDDSA_PRIVKEY_INPUT     (0xA5A5A5A5U)  ///< the private key d is passed as input
-#define MCUXCLECC_EDDSA_PRIVKEY_GENERATE  (0X5A5A5A5AU)  ///< the private key is generated internally
-
-/**
- * Length for EdDSA Domain prefix
- */
-#define MCUXCLECC_EDDSA_ED25519_DOMPREFIXLEN     (32u)  ///< the length of ED25519 domain prefix
-#define MCUXCLECC_EDDSA_ED448_DOMPREFIXLEN       (8u)  ///< the length of ED448 domain prefix
-
-/**********************************************************/
-/* Declarations for internal EdDSA functions              */
-/**********************************************************/
-
-
-
-
-MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEcc_EdDSA_SetupEnvironment)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_SetupEnvironment(
-    mcuxClSession_Handle_t pSession,
-    mcuxClEcc_EdDSA_DomainParams_t *pDomainParams,
-    uint8_t noOfBuffers
-    );
-
-MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEcc_EdDSA_CalcHashModN)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_CalcHashModN(
-    mcuxClSession_Handle_t pSession,
-    mcuxClHash_Context_t pCtx,
-    mcuxClEcc_EdDSA_DomainParams_t *pDomainParams,
-    const uint8_t *pHashPrefix,
-    uint32_t hashPrefixLen,
-    const uint8_t *pSignatureR,
-    const uint8_t *pPubKey,
-    const uint8_t *pIn,
-    uint32_t inSize
-    );
-
-MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEcc_EdDSA_GenerateHashPrefix)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_GenerateHashPrefix(
-    const mcuxClEcc_EdDSA_DomainParams_t *pDomainParams,
-    uint32_t phflag,
-    mcuxCl_InputBuffer_t pContext,
-    uint32_t contextLen,
-    mcuxCl_Buffer_t pHashPrefix
-    );
-
-MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEcc_EdDSA_PreHashMessage)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_PreHashMessage(
-    mcuxClSession_Handle_t pSession,
-    mcuxClEcc_EdDSA_DomainParams_t *pDomainParams,
-    uint32_t phflag,
-    const uint8_t *pIn,
-    uint32_t inSize,
-    const uint8_t **pMessage,
-    uint32_t *messageSize
-    );
-
-
-/**********************************************************/
 /* Internal EdDSA types                                   */
 /**********************************************************/
 
@@ -119,7 +52,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_PreHashMessage(
  */
 MCUX_CSSL_FP_FUNCTION_POINTER(mcuxClEcc_EdDSA_DecodePointFunction_t,
 typedef MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) (*mcuxClEcc_EdDSA_DecodePointFunction_t)(mcuxClEcc_EdDSA_DomainParams_t *pDomainParams,
-                                                                                              const uint8_t *pEncPoint));
+                                                                                              mcuxCl_InputBuffer_t pEncPoint));
 
 /**
  * Domain parameter structure for EdDSA functions.
@@ -145,7 +78,7 @@ struct mcuxClEcc_EdDSA_DomainParams
 struct mcuxClEcc_EdDSA_GenerateKeyPairDescriptor
 {
     uint32_t options;              ///< option of GenerateKeyPair, see @ref MCUXCLECC_EDDSA_GENERATEKEYPAIR_OPTION_
-    uint8_t *pPrivKeyInput;        ///< Pointer to private key input; set to NULL, if MCUXCLECC_EDDSA_GENERATEKEYPAIR_OPTION_GENERATE is chosen
+    const uint8_t *pPrivKeyInput;  ///< Pointer to private key input; set to NULL, if MCUXCLECC_EDDSA_GENERATEKEYPAIR_OPTION_GENERATE is chosen
 };
 
 /**
@@ -160,6 +93,81 @@ struct mcuxClEcc_EdDSA_SignatureProtocolDescriptor
     uint32_t hashPrefixLen;       ///< size of hash prefix
 };
 
+
+/**********************************************************/
+/* Internal EdDSA defines                                 */
+/**********************************************************/
+
+/**
+ * Size of message digest for EdDSA 
+ */
+#define MCUXCLECC_EDDSA_MESSAGE_DIGEST_SIZE       (64u)
+
+/**
+ * Options for EdDSA key pair generation descriptors
+ */
+#define MCUXCLECC_EDDSA_PRIVKEY_INPUT     (0xA5A5A5A5U)  ///< the private key d is passed as input
+#define MCUXCLECC_EDDSA_PRIVKEY_GENERATE  (0X5A5A5A5AU)  ///< the private key is generated internally
+
+
+/* Virtual and real buffer amounts definition for EdDSA functions */
+#define ECC_EDDSA_NO_OF_VIRTUALS  (ECC_NO_OF_VIRTUALS)
+#define ECC_EDDSA_NO_OF_BUFFERS   (TWED_PP_T7 + 1u - ECC_EDDSA_NO_OF_VIRTUALS)
+
+
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEcc_EdDSA_SetupEnvironment)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_SetupEnvironment(
+    mcuxClSession_Handle_t pSession,
+    mcuxClEcc_EdDSA_DomainParams_t *pDomainParams,
+    uint8_t noOfBuffers
+    );
+
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEcc_EdDSA_CalcHashModN)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_CalcHashModN(
+    mcuxClSession_Handle_t pSession,
+    mcuxClHash_Context_t pCtx,
+    mcuxClEcc_EdDSA_DomainParams_t *pDomainParams,
+    const uint8_t *pHashPrefix,
+    uint32_t hashPrefixLen,
+    mcuxCl_InputBuffer_t pSignatureR,
+    const uint8_t *pPubKey,
+    mcuxCl_InputBuffer_t pIn,
+    uint32_t inSize
+    );
+
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEcc_EdDSA_GenerateHashPrefix)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_GenerateHashPrefix(
+    const mcuxClEcc_EdDSA_DomainParams_t *pDomainParams,
+    uint32_t phflag,
+    mcuxCl_InputBuffer_t pContext,
+    uint32_t contextLen,
+    uint8_t *pHashPrefix
+    );
+
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEcc_EdDSA_PreHashMessage)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_PreHashMessage(
+    mcuxClSession_Handle_t pSession,
+    mcuxClEcc_EdDSA_DomainParams_t *pDomainParams,
+    uint32_t phflag,
+    mcuxCl_InputBuffer_t pIn,
+    uint32_t inSize,
+    const uint8_t **pMessage,
+    uint32_t *messageSize
+    );
+
+
+/**********************************************************/
+/* Declarations for internal Ed25519 EdDSA functions      */
+/**********************************************************/
+
+/**
+ * Declaration of the point decoding function on Ed25519
+ */
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEcc_EdDSA_DecodePoint_Ed25519, mcuxClEcc_EdDSA_DecodePointFunction_t)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_DecodePoint_Ed25519(
+    mcuxClEcc_EdDSA_DomainParams_t *pDomainParams,
+    mcuxCl_InputBuffer_t pEncPoint
+    );
 
 
 #ifdef __cplusplus

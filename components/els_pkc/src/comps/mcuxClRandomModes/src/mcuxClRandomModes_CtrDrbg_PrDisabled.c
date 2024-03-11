@@ -129,19 +129,17 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 
 
 #ifdef MCUXCL_FEATURE_RANDOMMODES_SECSTRENGTH_256
-MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST_QUALIFIER("Const must be discarded to initialize the generic structure member.")
+MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 const mcuxClRandom_ModeDescriptor_t mcuxClRandomModes_mdCtrDrbg_AES256_DRG3 = {
 MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     .pOperationMode   = &mcuxClRandomModes_OperationModeDescriptor_NormalMode_PrDisabled,
-    MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST("Casts to void* are allowed")
     .pDrbgMode        = (void *) &mcuxClRandomModes_DrbgModeDescriptor_CtrDrbg_AES256_PrDisabled,
-    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
     .contextSize      = MCUXCLRANDOMMODES_CTR_DRBG_AES256_CONTEXT_SIZE,
 #ifdef MCUXCL_FEATURE_RANDOMMODES_TESTMODE
-    .auxParam         = (uint32_t) &mcuxClRandomModes_OperationModeDescriptor_TestMode_PrDisabled,
+    .auxParam         = (uint32_t *) &mcuxClRandomModes_OperationModeDescriptor_TestMode_PrDisabled,
 #else
-    .auxParam         = 0u,
+    .auxParam         = NULL,
 #endif /* MCUXCL_FEATURE_RANDOMMODES_TESTMODE */
     .securityStrength = MCUXCLRANDOMMODES_SECURITYSTRENGTH_CTR_DRBG_AES256
 };

@@ -19,6 +19,7 @@
  * @brief   Example for the mcuxClRandomModes component
  */
 
+#include <mcuxClToolchain.h>
 #include <mcuxClRandom.h>
 #include <mcuxClRandomModes.h>
 #include <mcuxClSession.h>
@@ -45,11 +46,11 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClRandomModes_ELS_example)
     }
 
     /* Buffers to store the generated random values in. */
-    uint8_t prng_buffer[10u];
+    ALIGNED uint8_t prng_buffer[10u];
 
-    uint8_t drbg_buffer1[3u];
-    uint8_t drbg_buffer2[4u];
-    uint8_t drbg_buffer3[5u];
+    ALIGNED uint8_t drbg_buffer1[3u];
+    ALIGNED uint8_t drbg_buffer2[4u];
+    ALIGNED uint8_t drbg_buffer3[5u];
 
     mcuxClSession_Descriptor_t sessionDesc;
     mcuxClSession_Handle_t session = &sessionDesc;

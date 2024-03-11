@@ -17,17 +17,15 @@
  */
 
 
-#include <stdint.h>
+#include <mcuxClCore_Platform.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
 
-#include <mcuxClPkc.h>
-#include <mcuxClMath.h>
 #include <mcuxClEcc.h>
 
 #include <internal/mcuxClPkc_Operations.h>
-#include <internal/mcuxClEcc_TwEd_Internal_Ed25519.h>
-#include <internal/mcuxClEcc_TwEd_Internal_Ed25519_FUP.h>
+#include <internal/mcuxClEcc_TwEd_Internal.h>
+#include <internal/mcuxClEcc_TwEd_Internal_FUP.h>
 
 
 MCUX_CSSL_ANALYSIS_START_SUPPRESS_TEXT_IN_COMMENTS("Links are allowed in comments.")
@@ -79,6 +77,8 @@ MCUX_CSSL_ANALYSIS_START_SUPPRESS_TEXT_IN_COMMENTS("Links are allowed in comment
  * Prerequisites:
  *  - Buffers TWED_X, TWED_Y, TWED_Z and TWED_T contain the homogeneous coordinates (X1:Y1:Z1:T1) of P1 in MR
  *  - Pointers TWED_PP_VX0, TWED_PP_VY0 and TWED_PP_VT0 point to the coordinates X2, Y2 and T2 in MR.
+ *  - Depending on currentDigitBitIndex in mcuxClEcc_TwEd_FixScalarMult() it may be that
+ *      TWED_PP_VY0 points to ECC_T2 and TWED_PP_VT0 to ECC_T3
  *  - ps1Len = (operandSize, operandSize)
  *  - Buffer ECC_PFULL contains p'||p
  *  - Buffer ECC_PS contains the shifted modulus associated to p

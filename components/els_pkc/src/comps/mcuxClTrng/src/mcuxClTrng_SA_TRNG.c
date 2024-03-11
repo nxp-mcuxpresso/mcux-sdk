@@ -19,6 +19,7 @@
 #include <mcuxClToolchain.h>
 #include <mcuxClSession.h>
 #include <mcuxClMemory.h>
+#include <mcuxCsslDataIntegrity.h>
 #include <internal/mcuxClTrng_SfrAccess.h>
 #include <internal/mcuxClTrng_Internal.h>
 #include <internal/mcuxClTrng_Internal_SA_TRNG.h>
@@ -118,10 +119,14 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClTrng_Status_t) mcuxClTrng_getEntropyInput(
             MCUXCLTRNG_SA_TRNG_WAITFORREADY(noOfTrngErrors);
         }
         /* Copy word of entropy into destination buffer. */
+        MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_OVERFLOW("pDest can't be larger than max(uint32_t)")
         *pDest = MCUXCLTRNG_SFR_READ(ENT)[i % MCUXCLTRNG_SA_TRNG_NUMBEROFENTREGISTERS];
         /* Increment pDest to point to the next word. */
-        ++pDest;
+        pDest++;
+        MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_OVERFLOW()
     }
+
+    MCUX_CSSL_DI_RECORD(trngOutputSize, entropyInputLength);
 
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClTrng_getEntropyInput, MCUXCLTRNG_STATUS_OK,
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClTrng_checkConfig));

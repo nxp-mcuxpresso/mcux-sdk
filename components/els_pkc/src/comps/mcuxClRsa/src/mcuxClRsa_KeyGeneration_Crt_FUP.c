@@ -11,31 +11,27 @@
 /* software.                                                                */
 /*--------------------------------------------------------------------------*/
 
+#include <mcuxCsslAnalysis.h>
+
 #include <internal/mcuxClRsa_Internal_PkcDefs.h>
 #include <internal/mcuxClPkc_FupMacros.h>
 #include <internal/mcuxClRsa_KeyGeneration_Crt_FUP.h>
 
-#include <mcuxCsslAnalysis.h>
-
-const mcuxClPkc_FUPEntry_t mcuxClRsa_KeyGeneration_Crt_Steps10_FUP[3] MCUX_FUP_ATTRIBUTE = {{0x10u,0x00u,0xc4u,0xd2u,0x1du,0xf3u},{0x00u,0x1bu,0x00u,0x01u,0x0bu,0x09u},{0x00u,0x1eu,0x00u,0x00u,0x0au,0x08u}};
-const mcuxClPkc_FUPEntry_t mcuxClRsa_KeyGeneration_Crt_Steps11_FUP[3] MCUX_FUP_ATTRIBUTE = {{0x10u,0x00u,0xc4u,0xd2u,0x1du,0xf0u},{0x00u,0x1bu,0x00u,0x02u,0x0bu,0x09u},{0x00u,0x1eu,0x00u,0x00u,0x0au,0x08u}};
-const mcuxClPkc_FUPEntry_t mcuxClRsa_KeyGeneration_Crt_Steps12_FUP[3] MCUX_FUP_ATTRIBUTE = {{0x10u,0x00u,0xfbu,0xe7u,0x09u,0x32u},{0x00u,0x1eu,0x00u,0x01u,0x0au,0x09u},{0x00u,0x1eu,0x00u,0x02u,0x0au,0x08u}};
+MCUX_CSSL_ANALYSIS_START_PATTERN_FUP_PROGRAM()
+const mcuxClPkc_FUPEntry_t mcuxClRsa_KeyGeneration_Crt_Steps10_FUP[3] MCUX_FUP_ATTRIBUTE = {{0x10u,0x00u,0xc4u,0xd2u,0x1cu,0xf3u},{0x00u,0x1bu,0x01u,0x01u,0x0bu,0x09u},{0x00u,0x1eu,0x00u,0x00u,0x0au,0x08u}};
+const mcuxClPkc_FUPEntry_t mcuxClRsa_KeyGeneration_Crt_Steps11_FUP[3] MCUX_FUP_ATTRIBUTE = {{0x10u,0x00u,0xc4u,0xd2u,0x1fu,0xf0u},{0x00u,0x1bu,0x02u,0x02u,0x0bu,0x09u},{0x00u,0x1eu,0x00u,0x00u,0x0au,0x08u}};
+const mcuxClPkc_FUPEntry_t mcuxClRsa_KeyGeneration_Crt_Steps12_FUP[3] MCUX_FUP_ATTRIBUTE = {{0x10u,0x00u,0xf6u,0xdeu,0xafu,0x85u},{0x00u,0x1eu,0x01u,0x01u,0x0au,0x09u},{0x00u,0x1eu,0x02u,0x02u,0x0au,0x08u}};
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_FUP_PROGRAM()
 
 
 /*
  * FUP to compute p - 1 and copy E
  */
-MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
-MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 
 /*
  * FUP to compute q - 1 and copy E
  */
-MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
-MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 
 /*
  * FUP to copy p and q
  */
-MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
-MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()

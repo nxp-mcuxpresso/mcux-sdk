@@ -33,8 +33,8 @@ uint32_t get_lifecycle_state(void)
     {
         while (1)
         {
-        	; /* No necessary actions. */
-        }   
+            ; /* No necessary actions. */
+        }
     }
 
     return ((lifeCycleStateOtpShadow & OTP_LCS_FUSE_MASK) >> OTP_LCS_FUSE_SHIFT);

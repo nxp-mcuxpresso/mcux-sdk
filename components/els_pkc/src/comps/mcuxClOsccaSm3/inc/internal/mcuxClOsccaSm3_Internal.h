@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2021-2023 NXP                                                  */
+/* Copyright 2021-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -46,7 +46,21 @@
 
 #define MCUXCLOSCCASM3_COUNTER_SIZE_SM3     (8U)  ///< Counter size for SM3 padding
 
-#define MCUXCLOSCCASM3_CONTEXT_SIZE_SM3     (sizeof(mcuxClHash_ContextDescriptor_t) + MCUXCLOSCCASM3_BLOCK_SIZE_SM3 + MCUXCLOSCCASM3_STATE_SIZE_SM3)    ///< Context size for SM3 mulit-part
+#define MCUXCLOSCCASM3_CONTEXT_SIZE_SM3     (sizeof(mcuxClHash_ContextDescriptor_t) + MCUXCLHASH_CONTEXT_MAX_ALIGNMENT_OFFSET + MCUXCLOSCCASM3_BLOCK_SIZE_SM3 + MCUXCLOSCCASM3_STATE_SIZE_SM3)    ///< Context size for SM3 mulit-part
+
+
+/**********************************************
+ * Checked input sizes
+ **********************************************/
+
+/**
+ * @brief Check processed length mask is used to detect when the maximum input size to a hash function has been exceeded.
+ * Specifically.
+ * Therefore, a mask of the 3 highest bits of the highest byte of the counter is sufficient to check if this has occurred.
+ * Checks are performed only in the multipart variants, in mcuxClHash_process/mcuxClHash_finish and mcuxClHash_import_state.
+ */
+
+#define MCUXCLOSCCASM3_PROCESSED_LENGTH_CHECK_MASK                 (0xE0u) ///< Mask of the highest bits in the processed counter that should not be set for SM3.
 
 /**********************************************************/
 /* Internal APIs of mcuxClOsccaSm3                         */

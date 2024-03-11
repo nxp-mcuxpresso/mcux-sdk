@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -20,6 +20,7 @@
 #include <mcuxClCore_Platform.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
 #include <mcuxCsslFlowProtection.h>
+#include <mcuxCsslAnalysis.h>
 
 #include <mcuxClPkc.h>
 #include <mcuxClMath_Functions.h>
@@ -46,8 +47,13 @@
  *     Calculating MA in step (2) and (3) with shifted modulus ns can avoid
  *     too many iterations of subtraction loop.
  */
+
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DECLARED_BUT_NEVER_DEFINED("It is indeed defined.")
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DEFINED_MORE_THAN_ONCE("It defined only once.")
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClMath_QDash)
 MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_QDash(uint32_t iQDash_iNShifted_iN_iT, uint16_t length)
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DEFINED_MORE_THAN_ONCE()
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DECLARED_BUT_NEVER_DEFINED()
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClMath_QDash);
 
@@ -76,7 +82,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_QDash(uint32_t iQDash_iNShifted_iN_
     do
     {
         MCUX_CSSL_FP_LOOP_ITERATION(QDash_SquareMultiply,
-            MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_CalcFup));
+            MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_CalcFup) );
 
         if (0u == (exponent & bitMask))
         {
@@ -96,12 +102,18 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_QDash(uint32_t iQDash_iNShifted_iN_
     MCUXCLPKC_WAITFORREADY();
     MCUXCLPKC_SETUPTRT(backupPtrUptrt);
 
-    MCUX_CSSL_FP_COUNTER_STMT(uint32_t leadingZeroExponent = (uint32_t) mcuxClMath_CountLeadingZerosWord((uint32_t) length) - 3u);
-    MCUX_CSSL_FP_COUNTER_STMT(uint32_t lterationsSquareMultiply = ((sizeof(uint32_t)) * 8u) - leadingZeroExponent - 1u);  /* "-1" to skip the first nonzero bit. */
+    MCUX_CSSL_FP_COUNTER_STMT(
+        const uint32_t leadingZeroLength = mcuxClMath_CountLeadingZerosWord((uint32_t) length);            \
+        /* ASSERT: number of leading zeros of nonzero length (u16 casted to u32) is in range [16,31]. */  \
+        MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(leadingZeroExponent, 16u, 31u, /* void */)                     \
+        const uint32_t leadingZeroExponent = leadingZeroLength - 3u;  /* exponent = length * 8. */        \
+        /* "-1" to skip the first nonzero bit. */                                                         \
+        const uint32_t lterationsSquareMultiply = ((sizeof(uint32_t)) * 8u) - leadingZeroExponent - 1u; )
+
     MCUX_CSSL_FP_FUNCTION_EXIT_VOID(mcuxClMath_QDash,
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_InitLocalUptrt),
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_CalcFup),
-        MCUX_CSSL_FP_LOOP_ITERATIONS(QDash_SquareMultiply, lterationsSquareMultiply));
+        MCUX_CSSL_FP_LOOP_ITERATIONS(QDash_SquareMultiply, lterationsSquareMultiply) );
 }
 
 

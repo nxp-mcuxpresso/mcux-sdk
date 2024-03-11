@@ -13,13 +13,83 @@
 
 /**
  * @file  mcuxClRsa_MemoryConsumption.h
- * @brief Defines the memory consumption for the mcuxClRsa component 
+ * @brief Defines the memory consumption for the mcuxClRsa component
  */
 
 #ifndef MCUXCLRSA_MEMORYCONSUMPTION_H_
 #define MCUXCLRSA_MEMORYCONSUMPTION_H_
 
+#if defined(MCUXCL_FEATURE_CIPHER_RSA_ENCRYPT) || defined(MCUXCL_FEATURE_CIPHER_RSA_DECRYPT)
+#define MCUXCLRSA_CIPHER_MODE_SIZE       (20u)
+#endif /* defined(MCUXCL_FEATURE_CIPHER_RSA_ENCRYPT) || defined(MCUXCL_FEATURE_CIPHER_RSA_DECRYPT) */
 
+
+#ifdef MCUXCL_FEATURE_CIPHER_RSA_ENCRYPT
+/****************************************************************************/
+/* Definitions of workarea sizes for the RSA encryption.                    */
+/****************************************************************************/
+
+/**
+ * @defgroup MCUXCLRSA_ENCRYPT_WA MCUXCLRSA_ENCRYPT_WA
+ * @brief Definitions of workarea sizes for the RSA encryption.
+ * @ingroup mcuxClRsa_Macros
+ * @{
+ */
+#define MCUXCLRSA_ENCRYPT_1024_WACPU_SIZE    (324u) ///< Definition of CPU workarea size for the mcuxClRsa_Util_encrypt function for 1024-bit keys.
+#define MCUXCLRSA_ENCRYPT_2048_WACPU_SIZE    (452u) ///< Definition of CPU workarea size for the mcuxClRsa_Util_encrypt function for 2048-bit keys.
+#define MCUXCLRSA_ENCRYPT_3072_WACPU_SIZE    (580u) ///< Definition of CPU workarea size for the mcuxClRsa_Util_encrypt function for 3072-bit keys.
+#define MCUXCLRSA_ENCRYPT_4096_WACPU_SIZE    (708u) ///< Definition of CPU workarea size for the mcuxClRsa_Util_encrypt function for 4096-bit keys.
+#define MCUXCLRSA_ENCRYPT_WACPU_SIZE(keyBitLength) \
+    ((3072u < (keyBitLength)) ? MCUXCLRSA_ENCRYPT_4096_WACPU_SIZE : \
+    ((2048u < (keyBitLength)) ? MCUXCLRSA_ENCRYPT_3072_WACPU_SIZE : \
+    ((1024u < (keyBitLength)) ? MCUXCLRSA_ENCRYPT_2048_WACPU_SIZE : \
+                                MCUXCLRSA_ENCRYPT_1024_WACPU_SIZE)))  ///< Macro to extract CPU workarea size to be used with a non-standard key length.
+
+#define MCUXCLRSA_ENCRYPT_1024_WAPKC_SIZE     (864u) ///< Definition of PKC workarea size for the mcuxClRsa_Util_encrypt function for 1024-bit keys.
+#define MCUXCLRSA_ENCRYPT_2048_WAPKC_SIZE     (1632u) ///< Definition of PKC workarea size for the mcuxClRsa_Util_encrypt function for 2048-bit keys.
+#define MCUXCLRSA_ENCRYPT_3072_WAPKC_SIZE     (2400u) ///< Definition of PKC workarea size for the mcuxClRsa_Util_encrypt function for 3072-bit keys.
+#define MCUXCLRSA_ENCRYPT_4096_WAPKC_SIZE     (3168u) ///< Definition of PKC workarea size for the mcuxClRsa_Util_encrypt function for 4096-bit keys.
+#define MCUXCLRSA_ENCRYPT_WAPKC_SIZE(keyBitLength) \
+        ((3072u < (keyBitLength)) ? MCUXCLRSA_ENCRYPT_4096_WAPKC_SIZE : \
+        ((2048u < (keyBitLength)) ? MCUXCLRSA_ENCRYPT_3072_WAPKC_SIZE : \
+        ((1024u < (keyBitLength)) ? MCUXCLRSA_ENCRYPT_2048_WAPKC_SIZE : \
+                                    MCUXCLRSA_ENCRYPT_1024_WAPKC_SIZE)))  ///< Macro to extract PKC workarea size to be used with a non-standard key length.
+
+/** @} */
+#endif /* MCUXCL_FEATURE_CIPHER_RSA_ENCRYPT */
+#ifdef MCUXCL_FEATURE_CIPHER_RSA_DECRYPT
+/****************************************************************************/
+/* Definitions of workarea sizes for the RSA decryption.                    */
+/****************************************************************************/
+
+/**
+ * @defgroup MCUXCLRSA_DECRYPT_WA MCUXCLRSA_DECRYPT_WA
+ * @brief Definitions of workarea sizes for the RSA decryption.
+ * @ingroup mcuxClRsa_Macros
+ * @{
+ */
+#define MCUXCLRSA_DECRYPT_1024_WACPU_SIZE    (324u) ///< Definition of CPU workarea size for the mcuxClRsa_Util_decrypt function for 1024-bit keys.
+#define MCUXCLRSA_DECRYPT_2048_WACPU_SIZE    (536u) ///< Definition of CPU workarea size for the mcuxClRsa_Util_decrypt function for 2048-bit keys.
+#define MCUXCLRSA_DECRYPT_3072_WACPU_SIZE    (792u) ///< Definition of CPU workarea size for the mcuxClRsa_Util_decrypt function for 3072-bit keys.
+#define MCUXCLRSA_DECRYPT_4096_WACPU_SIZE    (1048u) ///< Definition of CPU workarea size for the mcuxClRsa_Util_decrypt function for 4096-bit keys.
+#define MCUXCLRSA_DECRYPT_WACPU_SIZE(keyBitLength) \
+    ((3072u < (keyBitLength)) ? MCUXCLRSA_DECRYPT_4096_WACPU_SIZE : \
+    ((2048u < (keyBitLength)) ? MCUXCLRSA_DECRYPT_3072_WACPU_SIZE : \
+    ((1024u < (keyBitLength)) ? MCUXCLRSA_DECRYPT_2048_WACPU_SIZE : \
+                                MCUXCLRSA_DECRYPT_1024_WACPU_SIZE)))  ///< Macro to extract CPU workarea size to be used with a non-standard key length.
+
+#define MCUXCLRSA_DECRYPT_1024_WAPKC_SIZE     (1064u) ///< Definition of PKC workarea size for the mcuxClRsa_Util_decrypt function for 1024-bit keys.
+#define MCUXCLRSA_DECRYPT_2048_WAPKC_SIZE     (1960u) ///< Definition of PKC workarea size for the mcuxClRsa_Util_decrypt function for 2048-bit keys.
+#define MCUXCLRSA_DECRYPT_3072_WAPKC_SIZE     (2856u) ///< Definition of PKC workarea size for the mcuxClRsa_Util_decrypt function for 3072-bit keys.
+#define MCUXCLRSA_DECRYPT_4096_WAPKC_SIZE     (3752u) ///< Definition of PKC workarea size for the mcuxClRsa_Util_decrypt function for 4096-bit keys.
+#define MCUXCLRSA_DECRYPT_WAPKC_SIZE(keyBitLength) \
+        ((3072u < (keyBitLength)) ? MCUXCLRSA_DECRYPT_4096_WAPKC_SIZE : \
+        ((2048u < (keyBitLength)) ? MCUXCLRSA_DECRYPT_3072_WAPKC_SIZE : \
+        ((1024u < (keyBitLength)) ? MCUXCLRSA_DECRYPT_2048_WAPKC_SIZE : \
+                                    MCUXCLRSA_DECRYPT_1024_WAPKC_SIZE)))  ///< Macro to extract PKC workarea size to be used with a non-standard key length.
+
+/** @} */
+#endif /* MCUXCL_FEATURE_CIPHER_RSA_DECRYPT */
 /****************************************************************************/
 /* Definitions of workarea sizes for the mcuxClRsa Sign                      */
 /****************************************************************************/
@@ -102,10 +172,10 @@
     ((1024u < (keyBitLength)) ? MCUXCLRSA_SIGN_CRT_PKCS1V15ENCODE_2048_WACPU_SIZE : \
                                  MCUXCLRSA_SIGN_CRT_PKCS1V15ENCODE_1024_WACPU_SIZE)))  ///< Macro to extract CPU workarea size to be used with a non-standard key length, with a key of type MCUXCLRSA_KEY_PRIVATECRT or MCUXCLRSA_KEY_PRIVATECRT_DFA.
 
-#define MCUXCLRSA_SIGN_CRT_1024_WAPKC_SIZE     (968u) ///< Definition of PKC workarea size for the mcuxClRsa_sign function for 1024-bit private CRT keys.
-#define MCUXCLRSA_SIGN_CRT_2048_WAPKC_SIZE     (1864u) ///< Definition of PKC workarea size for the mcuxClRsa_sign function for 2048-bit private CRT keys.
-#define MCUXCLRSA_SIGN_CRT_3072_WAPKC_SIZE     (2760u) ///< Definition of PKC workarea size for the mcuxClRsa_sign function for 3072-bit private CRT keys.
-#define MCUXCLRSA_SIGN_CRT_4096_WAPKC_SIZE     (3656u) ///< Definition of PKC workarea size for the mcuxClRsa_sign function for 4096-bit private CRT keys.
+#define MCUXCLRSA_SIGN_CRT_1024_WAPKC_SIZE     (1000u) ///< Definition of PKC workarea size for the mcuxClRsa_sign function for 1024-bit private CRT keys.
+#define MCUXCLRSA_SIGN_CRT_2048_WAPKC_SIZE     (1896u) ///< Definition of PKC workarea size for the mcuxClRsa_sign function for 2048-bit private CRT keys.
+#define MCUXCLRSA_SIGN_CRT_3072_WAPKC_SIZE     (2792u) ///< Definition of PKC workarea size for the mcuxClRsa_sign function for 3072-bit private CRT keys.
+#define MCUXCLRSA_SIGN_CRT_4096_WAPKC_SIZE     (3688u) ///< Definition of PKC workarea size for the mcuxClRsa_sign function for 4096-bit private CRT keys.
 #define MCUXCLRSA_SIGN_CRT_WAPKC_SIZE(keyBitLength) \
     ((3072u < (keyBitLength)) ? MCUXCLRSA_SIGN_CRT_4096_WAPKC_SIZE : \
     ((2048u < (keyBitLength)) ? MCUXCLRSA_SIGN_CRT_3072_WAPKC_SIZE : \
@@ -125,14 +195,14 @@
  */
 
 
-#define MCUXCLRSA_VERIFY_NOVERIFY_WACPU_SIZE          (16u) ///< Definition of CPU workarea size for the mcuxClRsa_verify function using mode mcuxClRsa_Mode_Verify_NoVerify.
+#define MCUXCLRSA_VERIFY_NOVERIFY_WACPU_SIZE          (20u) ///< Definition of CPU workarea size for the mcuxClRsa_verify function using mode mcuxClRsa_Mode_Verify_NoVerify.
 #define MCUXCLRSA_VERIFY_PSSVERIFY_WACPU_SIZE         (196u) ///< Definition of CPU workarea size for the mcuxClRsa_verify function using mode mcuxClRsa_Mode_Verify_PssVerify.
 #define MCUXCLRSA_VERIFY_PKCS1V15VERIFY_WACPU_SIZE    (196u) ///< Definition of CPU workarea size for the mcuxClRsa_verify function using mode mcuxClRsa_Mode_Verify_PKCS1v15_Sha2_*.
 
-#define MCUXCLRSA_VERIFY_1024_WAPKC_SIZE     (800u) ///< Definition of PKC workarea size for the mcuxClRsa_verify function for 1024-bit keys.
-#define MCUXCLRSA_VERIFY_2048_WAPKC_SIZE     (1568u) ///< Definition of PKC workarea size for the mcuxClRsa_verify function for 2048-bit keys.
-#define MCUXCLRSA_VERIFY_3072_WAPKC_SIZE     (2336u) ///< Definition of PKC workarea size for the mcuxClRsa_verify function for 3072-bit keys.
-#define MCUXCLRSA_VERIFY_4096_WAPKC_SIZE     (3104u) ///< Definition of PKC workarea size for the mcuxClRsa_verify function for 4096-bit keys.
+#define MCUXCLRSA_VERIFY_1024_WAPKC_SIZE     (864u) ///< Definition of PKC workarea size for the mcuxClRsa_verify function for 1024-bit keys.
+#define MCUXCLRSA_VERIFY_2048_WAPKC_SIZE     (1632u) ///< Definition of PKC workarea size for the mcuxClRsa_verify function for 2048-bit keys.
+#define MCUXCLRSA_VERIFY_3072_WAPKC_SIZE     (2400u) ///< Definition of PKC workarea size for the mcuxClRsa_verify function for 3072-bit keys.
+#define MCUXCLRSA_VERIFY_4096_WAPKC_SIZE     (3168u) ///< Definition of PKC workarea size for the mcuxClRsa_verify function for 4096-bit keys.
 #define MCUXCLRSA_VERIFY_WAPKC_SIZE(keyBitLength) \
     ((3072u < (keyBitLength)) ? MCUXCLRSA_VERIFY_4096_WAPKC_SIZE : \
     ((2048u < (keyBitLength)) ? MCUXCLRSA_VERIFY_3072_WAPKC_SIZE : \
@@ -154,17 +224,23 @@
  * @{
  */
 
-#ifdef MCUXCL_FEATURE_PROJECT_NIOBE4ANALOG
-
-#define MCUXCLRSA_KEYGENERATION_CRT_2048_WACPU_SIZE    (56u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 2048-bit keys
-#define MCUXCLRSA_KEYGENERATION_CRT_3072_WACPU_SIZE    (56u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 3072-bit keys
-#define MCUXCLRSA_KEYGENERATION_CRT_4096_WACPU_SIZE    (56u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 4096-bit keys
-
-#else 
+#if defined(MCUXCL_FEATURE_PLATFORM_RW61X) || defined(MCUXCL_FEATURE_PLATFORM_MCXN)
 
 #define MCUXCLRSA_KEYGENERATION_CRT_2048_WACPU_SIZE    (632u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 2048-bit keys
 #define MCUXCLRSA_KEYGENERATION_CRT_3072_WACPU_SIZE    (760u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 3072-bit keys
 #define MCUXCLRSA_KEYGENERATION_CRT_4096_WACPU_SIZE    (888u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 4096-bit keys
+
+#elif defined(MCUXCL_FEATURE_PLATFORM_MIMXRT)
+ 
+#define MCUXCLRSA_KEYGENERATION_CRT_2048_WACPU_SIZE    (376u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 2048-bit keys
+#define MCUXCLRSA_KEYGENERATION_CRT_3072_WACPU_SIZE    (376u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 3072-bit keys
+#define MCUXCLRSA_KEYGENERATION_CRT_4096_WACPU_SIZE    (376u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 4096-bit keys
+
+#else
+
+#define MCUXCLRSA_KEYGENERATION_CRT_2048_WACPU_SIZE    (56u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 2048-bit keys
+#define MCUXCLRSA_KEYGENERATION_CRT_3072_WACPU_SIZE    (56u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 3072-bit keys
+#define MCUXCLRSA_KEYGENERATION_CRT_4096_WACPU_SIZE    (56u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 4096-bit keys
 
 #endif
 
@@ -173,9 +249,9 @@
     ((2048u < (keyBitLength)) ? MCUXCLRSA_KEYGENERATION_CRT_3072_WACPU_SIZE : \
                                 MCUXCLRSA_KEYGENERATION_CRT_2048_WACPU_SIZE))  ///< Macro to extract CPU workarea size (in bytes) for the given key length.
 
-#define MCUXCLRSA_KEYGENERATION_CRT_2048_WAPKC_SIZE    (1656u) ///< Definition of PKC workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 2048-bit keys
-#define MCUXCLRSA_KEYGENERATION_CRT_3072_WAPKC_SIZE    (2424u) ///< Definition of PKC workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 3072-bit keys
-#define MCUXCLRSA_KEYGENERATION_CRT_4096_WAPKC_SIZE    (3192u) ///< Definition of PKC workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 4096-bit keys
+#define MCUXCLRSA_KEYGENERATION_CRT_2048_WAPKC_SIZE    (1864u) ///< Definition of PKC workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 2048-bit keys
+#define MCUXCLRSA_KEYGENERATION_CRT_3072_WAPKC_SIZE    (2696u) ///< Definition of PKC workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 3072-bit keys
+#define MCUXCLRSA_KEYGENERATION_CRT_4096_WAPKC_SIZE    (3528u) ///< Definition of PKC workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Crt function for 4096-bit keys
 #define MCUXCLRSA_KEYGENERATION_CRT_WAPKC_SIZE(keyBitLength) \
     ((3072u < (keyBitLength)) ? MCUXCLRSA_KEYGENERATION_CRT_4096_WAPKC_SIZE : \
     ((2048u < (keyBitLength)) ? MCUXCLRSA_KEYGENERATION_CRT_3072_WAPKC_SIZE : \
@@ -193,17 +269,23 @@
  * @{
  */
 
-#ifdef MCUXCL_FEATURE_PROJECT_NIOBE4ANALOG
-
-#define MCUXCLRSA_KEYGENERATION_PLAIN_2048_WACPU_SIZE    (44u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 2048-bit keys
-#define MCUXCLRSA_KEYGENERATION_PLAIN_3072_WACPU_SIZE    (44u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 3072-bit keys
-#define MCUXCLRSA_KEYGENERATION_PLAIN_4096_WACPU_SIZE    (44u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 4096-bit keys
-
-#else
+#if defined(MCUXCL_FEATURE_PLATFORM_RW61X) || defined(MCUXCL_FEATURE_PLATFORM_MCXN)
 
 #define MCUXCLRSA_KEYGENERATION_PLAIN_2048_WACPU_SIZE    (620u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 2048-bit keys
 #define MCUXCLRSA_KEYGENERATION_PLAIN_3072_WACPU_SIZE    (748u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 3072-bit keys
 #define MCUXCLRSA_KEYGENERATION_PLAIN_4096_WACPU_SIZE    (876u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 4096-bit keys
+
+#elif defined(MCUXCL_FEATURE_PLATFORM_MIMXRT)
+
+#define MCUXCLRSA_KEYGENERATION_PLAIN_2048_WACPU_SIZE    (364u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 2048-bit keys
+#define MCUXCLRSA_KEYGENERATION_PLAIN_3072_WACPU_SIZE    (364u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 3072-bit keys
+#define MCUXCLRSA_KEYGENERATION_PLAIN_4096_WACPU_SIZE    (364u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 4096-bit keys
+
+#else
+
+#define MCUXCLRSA_KEYGENERATION_PLAIN_2048_WACPU_SIZE    (44u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 2048-bit keys
+#define MCUXCLRSA_KEYGENERATION_PLAIN_3072_WACPU_SIZE    (44u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 3072-bit keys
+#define MCUXCLRSA_KEYGENERATION_PLAIN_4096_WACPU_SIZE    (44u) ///< Definition of CPU workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 4096-bit keys
 
 #endif
 
@@ -212,9 +294,9 @@
     ((2048u < (keyBitLength)) ? MCUXCLRSA_KEYGENERATION_PLAIN_3072_WACPU_SIZE : \
                                 MCUXCLRSA_KEYGENERATION_PLAIN_2048_WACPU_SIZE))  ///< Macro to extract CPU workarea size for the given key length.
 
-#define MCUXCLRSA_KEYGENERATION_PLAIN_2048_WAPKC_SIZE    (1832u) ///< Definition of PKC workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 2048-bit keys
-#define MCUXCLRSA_KEYGENERATION_PLAIN_3072_WAPKC_SIZE    (2728u) ///< Definition of PKC workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 3072-bit keys
-#define MCUXCLRSA_KEYGENERATION_PLAIN_4096_WAPKC_SIZE    (3624u) ///< Definition of PKC workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 4096-bit keys
+#define MCUXCLRSA_KEYGENERATION_PLAIN_2048_WAPKC_SIZE    (1992u) ///< Definition of PKC workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 2048-bit keys
+#define MCUXCLRSA_KEYGENERATION_PLAIN_3072_WAPKC_SIZE    (2888u) ///< Definition of PKC workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 3072-bit keys
+#define MCUXCLRSA_KEYGENERATION_PLAIN_4096_WAPKC_SIZE    (3784u) ///< Definition of PKC workarea size (in bytes) for the mcuxClRsa_KeyGeneration_Plain function for 4096-bit keys
 #define MCUXCLRSA_KEYGENERATION_PLAIN_WAPKC_SIZE(keyBitLength) \
     ((3072u < (keyBitLength)) ? MCUXCLRSA_KEYGENERATION_PLAIN_4096_WAPKC_SIZE : \
     ((2048u < (keyBitLength)) ? MCUXCLRSA_KEYGENERATION_PLAIN_3072_WAPKC_SIZE : \

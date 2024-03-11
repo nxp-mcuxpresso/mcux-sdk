@@ -63,7 +63,7 @@ typedef struct osa_freertos_task
 
 typedef struct _osa_event_struct
 {
-    EventGroupHandle_t handle; /* The event handle */
+    EventGroupHandle_t eventHandle; /* The event handle */
     uint8_t autoClear;         /*!< Auto clear or manual clear   */
 } osa_event_struct_t;
 
@@ -717,11 +717,11 @@ osa_status_t OSA_EventCreate(osa_event_handle_t eventHandle, uint8_t autoClear)
     
 #if (defined(configSUPPORT_STATIC_ALLOCATION) && (configSUPPORT_STATIC_ALLOCATION > 0U)) && \
     !((defined(configSUPPORT_DYNAMIC_ALLOCATION) && (configSUPPORT_DYNAMIC_ALLOCATION > 0U)))
-    pEventStruct->handle = xEventGroupCreateStatic((StaticEventGroup_t *)(void *)((uint8_t *)(eventHandle) + sizeof(osa_event_struct_t)));
+    pEventStruct->eventHandle = xEventGroupCreateStatic((StaticEventGroup_t *)(void *)((uint8_t *)(eventHandle) + sizeof(osa_event_struct_t)));
 #else    
-    pEventStruct->handle = xEventGroupCreate();
+    pEventStruct->eventHandle = xEventGroupCreate();
 #endif
-    if (NULL != pEventStruct->handle)
+    if (NULL != pEventStruct->eventHandle)
     {
         pEventStruct->autoClear = autoClear;
     }
@@ -746,16 +746,16 @@ osa_status_t OSA_EventSet(osa_event_handle_t eventHandle, osa_event_flags_t flag
     assert(NULL != eventHandle);
     osa_event_struct_t *pEventStruct = (osa_event_struct_t *)eventHandle;
 
-    if (NULL == pEventStruct->handle)
+    if (NULL == pEventStruct->eventHandle)
     {
         return KOSA_StatusError;
     }
     if (0U != __get_IPSR())
     {
 #if (configUSE_TRACE_FACILITY == 1)
-        result = xEventGroupSetBitsFromISR(pEventStruct->handle, (event_flags_t)flagsToSet, &taskToWake);
+        result = xEventGroupSetBitsFromISR(pEventStruct->eventHandle, (event_flags_t)flagsToSet, &taskToWake);
 #else
-        result = xEventGroupSetBitsFromISR((void *)pEventStruct->handle, (event_flags_t)flagsToSet, &taskToWake);
+        result = xEventGroupSetBitsFromISR((void *)pEventStruct->eventHandle, (event_flags_t)flagsToSet, &taskToWake);
 #endif
         assert(pdPASS == result);
         (void)result;
@@ -763,7 +763,7 @@ osa_status_t OSA_EventSet(osa_event_handle_t eventHandle, osa_event_flags_t flag
     }
     else
     {
-        (void)xEventGroupSetBits(pEventStruct->handle, (event_flags_t)flagsToSet);
+        (void)xEventGroupSetBits(pEventStruct->eventHandle, (event_flags_t)flagsToSet);
     }
 
     (void)result;
@@ -782,7 +782,7 @@ osa_status_t OSA_EventClear(osa_event_handle_t eventHandle, osa_event_flags_t fl
     assert(NULL != eventHandle);
     osa_event_struct_t *pEventStruct = (osa_event_struct_t *)eventHandle;
 
-    if (NULL == pEventStruct->handle)
+    if (NULL == pEventStruct->eventHandle)
     {
         return KOSA_StatusError;
     }
@@ -790,14 +790,14 @@ osa_status_t OSA_EventClear(osa_event_handle_t eventHandle, osa_event_flags_t fl
     if (0U != __get_IPSR())
     {
 #if (configUSE_TRACE_FACILITY == 1)
-        (void)xEventGroupClearBitsFromISR(pEventStruct->handle, (event_flags_t)flagsToClear);
+        (void)xEventGroupClearBitsFromISR(pEventStruct->eventHandle, (event_flags_t)flagsToClear);
 #else
-        (void)xEventGroupClearBitsFromISR((void *)pEventStruct->handle, (event_flags_t)flagsToClear);
+        (void)xEventGroupClearBitsFromISR((void *)pEventStruct->eventHandle, (event_flags_t)flagsToClear);
 #endif
     }
     else
     {
-        (void)xEventGroupClearBits(pEventStruct->handle, (event_flags_t)flagsToClear);
+        (void)xEventGroupClearBits(pEventStruct->eventHandle, (event_flags_t)flagsToClear);
     }
     return KOSA_StatusSuccess;
 }
@@ -817,7 +817,7 @@ osa_status_t OSA_EventGet(osa_event_handle_t eventHandle, osa_event_flags_t flag
     osa_event_struct_t *pEventStruct = (osa_event_struct_t *)eventHandle;
     EventBits_t eventFlags;
 
-    if (NULL == pEventStruct->handle)
+    if (NULL == pEventStruct->eventHandle)
     {
         return KOSA_StatusError;
     }
@@ -829,11 +829,11 @@ osa_status_t OSA_EventGet(osa_event_handle_t eventHandle, osa_event_flags_t flag
 
     if (0U != __get_IPSR())
     {
-        eventFlags = xEventGroupGetBitsFromISR(pEventStruct->handle);
+        eventFlags = xEventGroupGetBitsFromISR(pEventStruct->eventHandle);
     }
     else
     {
-        eventFlags = xEventGroupGetBits(pEventStruct->handle);
+        eventFlags = xEventGroupGetBits(pEventStruct->eventHandle);
     }
 
     *pFlagsOfEvent = (osa_event_flags_t)eventFlags & flagsMask;
@@ -870,7 +870,7 @@ osa_status_t OSA_EventWait(osa_event_handle_t eventHandle,
 
     /* Clean FreeRTOS cotrol flags */
     flagsToWait = flagsToWait & 0x00FFFFFFU;
-    if (NULL == pEventStruct->handle)
+    if (NULL == pEventStruct->eventHandle)
     {
         return KOSA_StatusError;
     }
@@ -887,7 +887,7 @@ osa_status_t OSA_EventWait(osa_event_handle_t eventHandle,
 
     clearMode = (pEventStruct->autoClear != 0U) ? pdTRUE : pdFALSE;
 
-    flagsSave = xEventGroupWaitBits(pEventStruct->handle, (event_flags_t)flagsToWait, clearMode, (BaseType_t)waitAll,
+    flagsSave = xEventGroupWaitBits(pEventStruct->eventHandle, (event_flags_t)flagsToWait, clearMode, (BaseType_t)waitAll,
                                     timeoutTicks);
 
     flagsSave &= (event_flags_t)flagsToWait;
@@ -919,11 +919,11 @@ osa_status_t OSA_EventDestroy(osa_event_handle_t eventHandle)
     assert(NULL != eventHandle);
     osa_event_struct_t *pEventStruct = (osa_event_struct_t *)eventHandle;
 
-    if (NULL == pEventStruct->handle)
+    if (NULL == pEventStruct->eventHandle)
     {
         return KOSA_StatusError;
     }
-    vEventGroupDelete(pEventStruct->handle);
+    vEventGroupDelete(pEventStruct->eventHandle);
     return KOSA_StatusSuccess;
 }
 

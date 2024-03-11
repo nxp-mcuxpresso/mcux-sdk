@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_ACOMP_H_
-#define _FSL_ACOMP_H_
+#ifndef FSL_ACOMP_H_
+#define FSL_ACOMP_H_
 
 #include "fsl_common.h"
 
@@ -469,7 +469,7 @@ static inline void ACOMP_ClearStatusFlags(ACOMP_Type *base, uint32_t statusFlagM
         (statusFlagMask & ((uint32_t)kACOMP_Acomp1OutInterruptFlag | (uint32_t)kACOMP_Acomp1OutAInterruptFlag)) >> 6UL;
 }
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -477,4 +477,4 @@ static inline void ACOMP_ClearStatusFlags(ACOMP_Type *base, uint32_t statusFlagM
 
 /*! @} */
 
-#endif /* _FSL_ACOMP_H_ */
+#endif /* FSL_ACOMP_H_ */

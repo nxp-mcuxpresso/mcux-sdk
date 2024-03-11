@@ -25,6 +25,7 @@
 #include <mcuxCsslAnalysis.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
 #include <mcuxClHash_Types.h>
+#include <mcuxClToolchain.h>
 #include <internal/mcuxClHash_Internal.h>
 #include <internal/mcuxClHashModes_Internal_Memory.h>
 #include <mcuxClEls_Hash.h>
@@ -39,9 +40,9 @@ extern "C" {
  * CONSTANTS
  **********************************************/
 
-#define MCUXCLHASHMODES_SHAKE_PHASE_INIT       (0UL) /* Initialization phase of Shake: buffer will be cleared */
-#define MCUXCLHASHMODES_SHAKE_PHASE_ABSORB     (1UL) /* Absorb phase of Shake: don't clear any more, but also don't add padding yet */
-#define MCUXCLHASHMODES_SHAKE_PHASE_SQUEEZE    (2UL) /* Squeeze phase of Shake: padding has been added, from now on only permute on the state */
+#define MCUXCLHASHMODES_SHAKE_PHASE_INIT       (0u) /* Initialization phase of Shake: buffer will be cleared */
+#define MCUXCLHASHMODES_SHAKE_PHASE_ABSORB     (1u) /* Absorb phase of Shake: don't clear any more, but also don't add padding yet */
+#define MCUXCLHASHMODES_SHAKE_PHASE_SQUEEZE    (2u) /* Squeeze phase of Shake: padding has been added, from now on only permute on the state */
 
 /**********************************************
  * Type declarations
@@ -61,6 +62,7 @@ typedef struct mcuxClHashModes_Internal_AlgorithmDescriptor
   mcuxClHashModes_AlgoDmaProtection_t dmaProtection;             ///< DMA protection function
   uint32_t protection_token_dma_protection;                     ///< Protection token value for the used DMA protection function
 #endif /* MCUXCL_FEATURE_ELS_DMA_FINAL_ADDRESS_READBACK */
+  const uint32_t *standardIV;                                   ///< standard IV to be used to initialize Sha state
   uint32_t dummyValue;                                          ///< needed in the absense of any algorithm using internal algorithm properties
 } mcuxClHashModes_Internal_AlgorithmDescriptor_t;
 /**@}*/
@@ -85,6 +87,24 @@ typedef struct mcuxClHashModes_Internal_AlgorithmDescriptor
           (((val) >> 40u) & 0x000000000000FF00u) |  \
           (((val) >> 56u) & 0x00000000000000FFu))
 
+/**
+ * @brief Function to switch endianness of 32-bit words in buffer
+ *
+ * This function switches the endianness of 32-bit words of a buffer
+ * pointed to by ptr of given byte length byteLen
+ *
+ * @param[in/out] ptr      Pointer to the buffer
+ * @param[in]     byteLen  Byte length of buffer pointed to by ptr
+ *
+ * @return void
+ */
+static inline void mcuxClHashModes_internal_c_switchEndiannessOfBufferWords(uint32_t *ptr, uint32_t byteLen)
+{
+    for(uint32_t i = 0u; i < (byteLen / sizeof(uint32_t)); i++)
+    {
+        ptr[i] = MCUXCLHASHMODES_SWITCH_4BYTE_ENDIANNESS(ptr[i]);
+    }
+}
 
 /**
  * @brief Function to switch endianness of arbitrary size words in a buffer
@@ -123,14 +143,6 @@ static inline void mcuxClHashModes_internal_c_genericSwitchEndiannessOfBufferWor
   }
 }
 
-/**
- * @brief convert 128 bit number of bytes to number of bits
- */
-static inline void mcuxClHashModes_processedLength_toBits(uint64_t *pLen128)
-{
-  pLen128[1] = (pLen128[1] << 3u) | (pLen128[0] >> 61u);
-  pLen128[0] = pLen128[0] << 3u;
-}
 
 
 

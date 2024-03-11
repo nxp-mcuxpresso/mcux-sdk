@@ -16,10 +16,13 @@
 
 #include <mcuxClConfig.h> // Exported features flags header
 #include <mcuxClCore_Platform.h>
+#include <mcuxClAes_Constants.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+
 
 
 #ifdef __cplusplus

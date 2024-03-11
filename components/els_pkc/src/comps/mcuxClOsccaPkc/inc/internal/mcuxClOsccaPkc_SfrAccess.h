@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2022 NXP                                                       */
+/* Copyright 2022-2023 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -58,23 +58,23 @@
 /**********************************************************/
 
 /** Read from PKC SFR */
-#define MCUXCLOSCCAPKC_SFR_READ(sfr)  (PKC_SFR_BASE->PKC_SFR_NAME(sfr))
+#define MCUXCLOSCCAPKC_SFR_READ(sfr)    (PKC_SFR_BASE->PKC_SFR_NAME(sfr))
 
 /** Write to PKC SFR */
+/** Type cast false to bool to avoid mirsa violation */
 #define MCUXCLOSCCAPKC_SFR_WRITE(sfr, value)  \
-    do{ PKC_SFR_BASE->PKC_SFR_NAME(sfr) = (value); } while(false)
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_BOOLEAN_TYPE_FOR_CONDITIONAL_EXPRESSION() \
+    do{ PKC_SFR_BASE->PKC_SFR_NAME(sfr) = (value); } while(false) \
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_BOOLEAN_TYPE_FOR_CONDITIONAL_EXPRESSION()
 
 /** Read from PKC SFR bit field */
-#define MCUXCLOSCCAPKC_SFR_BITREAD(sfr, bit)  \
-    ((PKC_SFR_BASE->PKC_SFR_NAME(sfr) & MCUXCLOSCCAPKC_SFR_BITMSK(sfr, bit)) >> MCUXCLOSCCAPKC_SFR_BITPOS(sfr, bit))
+#define MCUXCLOSCCAPKC_SFR_BITREAD(sfr, bit)    ((PKC_SFR_BASE->PKC_SFR_NAME(sfr) & MCUXCLOSCCAPKC_SFR_BITMSK(sfr, bit)) >> MCUXCLOSCCAPKC_SFR_BITPOS(sfr, bit))
 
 /** Set bit field of PKC SFR (read-modify-write) */
-#define MCUXCLOSCCAPKC_SFR_BITSET(sfr, bit)  \
-    do{ PKC_SFR_BASE->PKC_SFR_NAME(sfr) |= MCUXCLOSCCAPKC_SFR_BITMSK(sfr, bit); } while(false)
+#define MCUXCLOSCCAPKC_SFR_BITSET(sfr, bit)    do{ PKC_SFR_BASE->PKC_SFR_NAME(sfr) |= MCUXCLOSCCAPKC_SFR_BITMSK(sfr, bit); } while(false)
 
 /** Clear bit field of PKC SFR (read-modify-write) */
-#define MCUXCLOSCCAPKC_SFR_BITCLEAR(sfr, bit)  \
-    do{ PKC_SFR_BASE->PKC_SFR_NAME(sfr) &= (~ (uint32_t) MCUXCLOSCCAPKC_SFR_BITMSK(sfr, bit)); } while(false)
+#define MCUXCLOSCCAPKC_SFR_BITCLEAR(sfr, bit)    do{ PKC_SFR_BASE->PKC_SFR_NAME(sfr) &= (~ (uint32_t) MCUXCLOSCCAPKC_SFR_BITMSK(sfr, bit)); } while(false)
 
 /** Set value of multi-bit field of PKC SFR (read-modify-write) */
 #define MCUXCLOSCCAPKC_SFR_BITVALSET(sfr, bit, val)  \

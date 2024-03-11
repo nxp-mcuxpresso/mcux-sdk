@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2023 NXP
+ * Copyright 2018-2024 NXP
  * All rights reserved.
  *
  *
@@ -266,6 +266,12 @@
 #endif
 #endif
 
+#if (defined(SERIAL_MANAGER_TASK_HANDLE_TX) && (SERIAL_MANAGER_TASK_HANDLE_TX > 0U))
+#ifndef OSA_USED
+#error When SERIAL_MANAGER_TASK_HANDLE_TX=1, OSA_USED must be set.
+#endif
+#endif
+
 #if (defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
 #if (defined(OSA_USED) && !(defined(SERIAL_MANAGER_USE_COMMON_TASK) && (SERIAL_MANAGER_USE_COMMON_TASK > 0U)))
 #include "fsl_os_abstraction.h"
@@ -390,11 +396,16 @@ typedef enum _serial_manager_type
 /*! @brief serial manager config structure*/
 typedef struct _serial_manager_config
 {
-#if defined(SERIAL_MANAGER_NON_BLOCKING_MODE)
+#if (defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
     uint8_t *ringBuffer;             /*!< Ring buffer address, it is used to buffer data received by the hardware.
                                           Besides, the memory space cannot be free during the lifetime of the serial
                                           manager module. */
     uint32_t ringBufferSize;         /*!< The size of the ring buffer */
+#if (defined(OSA_USED) && !(defined(SERIAL_MANAGER_USE_COMMON_TASK) && (SERIAL_MANAGER_USE_COMMON_TASK > 0U)))
+    osa_task_def_t *serialTaskConfig;  /*!< Serial manager task configuration, can be defined the serial manager 
+                                            task configuration for this instance, if serialTaskConfig is NULL, will use the 
+                                            default serial manager configure provided by serial manger module.*/
+#endif
 #endif
     serial_port_type_t type;         /*!< Serial port type */
     serial_manager_type_t blockType; /*!< Serial manager port type */
@@ -495,6 +506,36 @@ extern "C" {
  *   SerialManager_Init((serial_handle_t)s_serialHandle, &config);
  *  @endcode
  *
+ * Example below shows how to use this API to configure the Serial Manager task configuration.
+ * For example if user need do specfical configuration(s_os_thread_def_serialmanager)for the
+ * serial mananger task,
+ *  @code
+ *   #define SERIAL_MANAGER_RING_BUFFER_SIZE (256U)
+ *   static SERIAL_MANAGER_HANDLE_DEFINE(s_serialHandle);
+ *   static uint8_t s_ringBuffer[SERIAL_MANAGER_RING_BUFFER_SIZE];
+ *   const osa_task_def_t s_os_thread_def_serialmanager = {
+ *       .tpriority = 4,
+ *       .instances = 1,
+ *       .stacksize = 2048,
+ *   };
+ *   serial_manager_config_t config;
+ *   serial_port_uart_config_t uartConfig;
+ *   config.type = kSerialPort_Uart;
+ *   config.ringBuffer = &s_ringBuffer[0];
+ *   config.ringBufferSize = SERIAL_MANAGER_RING_BUFFER_SIZE;
+ *   config.serialTaskConfig = (osa_task_def_t *)&s_os_thread_def_serialmanager,
+ *   uartConfig.instance = 0;
+ *   uartConfig.clockRate = 24000000;
+ *   uartConfig.baudRate = 115200;
+ *   uartConfig.parityMode = kSerialManager_UartParityDisabled;
+ *   uartConfig.stopBitCount = kSerialManager_UartOneStopBit;
+ *   uartConfig.enableRx = 1;
+ *   uartConfig.enableTx = 1;
+ *   uartConfig.enableRxRTS = 0;
+ *   uartConfig.enableTxCTS = 0;
+ *   config.portConfig = &uartConfig;
+ *   SerialManager_Init((serial_handle_t)s_serialHandle, &config);
+ *  @endcode
  * @param serialHandle Pointer to point to a memory space of size #SERIAL_MANAGER_HANDLE_SIZE allocated by the caller.
  * The handle should be 4 byte aligned, because unaligned access doesn't be supported on some devices.
  * You can define the handle in the following two ways:

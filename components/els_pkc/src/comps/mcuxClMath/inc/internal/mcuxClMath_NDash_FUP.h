@@ -20,18 +20,21 @@
 #define MCUXCLMATH_NDASH_FUP_H_
 
 #include <mcuxClCore_Platform.h>
+#include <mcuxCsslAnalysis.h>
 #include <internal/mcuxClPkc_FupMacros.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_LINKAGE_FUP()
 /*
  * FUP program declaration mcuxClMath_NDash_Fup
  */
 #define mcuxClMath_NDash_Fup_LEN  5u
 
 extern const mcuxClPkc_FUPEntry_t mcuxClMath_NDash_Fup[mcuxClMath_NDash_Fup_LEN];
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_LINKAGE_FUP()
 
 #ifdef __cplusplus
 } /* extern "C" */

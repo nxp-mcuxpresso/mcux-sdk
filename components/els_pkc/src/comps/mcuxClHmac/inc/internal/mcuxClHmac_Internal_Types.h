@@ -19,7 +19,7 @@
 #define MCUXCLHMAC_INTERNAL_TYPES_H_
 
 #include <mcuxClConfig.h> // Exported features flags header
-#include <mcuxClCore_Buffer.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClCore_Platform.h>
 #include <mcuxClSession_Types.h>
 #include <mcuxCsslFlowProtection.h>
@@ -30,7 +30,7 @@
 #include <internal/mcuxClPadding_Types_Internal.h> /* for mcuxClHash_ContextBuffer_t */
 #include <mcuxClHash_Types.h>
 #include <internal/mcuxClHash_Internal.h>
-#include <internal/mcuxClHashModes_Internal.h>
+#include <internal/mcuxClHashModes_Internal_Memory.h>
 #include <mcuxClEls_Hmac.h>
 
 #ifdef __cplusplus
@@ -101,9 +101,9 @@ MCUX_CSSL_FP_FUNCTION_POINTER(mcuxClHmac_ComputeEngine_t,
 typedef MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) (*mcuxClHmac_ComputeEngine_t)(
     mcuxClSession_Handle_t session,
     mcuxClHmac_Context_Generic_t * const pContext,
-    const uint8_t *const pIn,
+    mcuxCl_InputBuffer_t pIn,
     uint32_t inLength,
-    uint8_t *const pOut,
+    mcuxCl_Buffer_t pOut,
     uint32_t *const outLength
 ));
 

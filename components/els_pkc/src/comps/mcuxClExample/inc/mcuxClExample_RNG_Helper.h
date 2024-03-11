@@ -23,7 +23,7 @@
 
 // always allocate a minimum size buffer to avoid issues
 // The size is given in bytes and allocated in words
-#define MCUXCLEXAMPLE_ALLOCATE_RNG_CTXT(rngCtxLength) (rngCtxLength?((rngCtxLength + sizeof(uint32_t) - 1u) / sizeof(uint32_t)):1u)  
+#define MCUXCLEXAMPLE_ALLOCATE_RNG_CTXT(rngCtxLength) ((rngCtxLength > 0u)?(((rngCtxLength) + sizeof(uint32_t) - 1u) / sizeof(uint32_t)) : 1u)
 
 
 /**

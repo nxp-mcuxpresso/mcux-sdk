@@ -25,11 +25,10 @@
 
 #include <mcuxClConfig.h> // Exported features flags header
 #include <mcuxClEcc_Types.h>
+#include <mcuxClEcc_Constants.h>
 #include <mcuxClEcc_Functions.h>
 #include <mcuxClEcc_MemoryConsumption.h>
-#include <mcuxClEcc_Constants.h>
-#include <mcuxClEcc_ParameterSizes.h>
-#include <mcuxClEcc_KeyMechanisms.h>
+#include <mcuxClEcc_KeyTypes.h>
 
 
 

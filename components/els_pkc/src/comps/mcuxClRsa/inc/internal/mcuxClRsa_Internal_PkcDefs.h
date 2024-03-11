@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2021, 2023 NXP                                                 */
+/* Copyright 2021, 2023-2024 NXP                                            */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -36,12 +36,14 @@ extern "C" {
  * @{
  */
 #define MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_X         (0u) ///< UPTR table index for buffer x
-#define MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_R         (1u) ///< UPTR table index for buffer r
-#define MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_N         (2u) ///< UPTR table index for buffer n
-#define MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T1        (3u) ///< UPTR table index for buffer t1
-#define MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T2        (4u) ///< UPTR table index for buffer t2
+#define MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_N         (1u) ///< UPTR table index for buffer n
+#define MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T1        (2u) ///< UPTR table index for buffer t1
+#define MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T2        (3u) ///< UPTR table index for buffer t2
+#define MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_T3        (4u) ///< UPTR table index for buffer t3
 #define MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_OUTPUT    (5u) ///< UPTR table index for buffer output
-#define MCUXCLRSA_INTERNAL_PUBLIC_UPTRT_SIZE           (6u) ///< UPTR table size of function mcuxClRsa_public
+#define MCUXCLRSA_INTERNAL_UPTRTINDEX_PUBLIC_RAND      (6u) ///< UPTR table index for blinding random number
+#define MCUXCLRSA_INTERNAL_PUBLIC_UPTRT_SIZE           (7u) ///< UPTR table size of function mcuxClRsa_public
+
 /** @} */
 
 /****************************************************************************/
@@ -100,31 +102,31 @@ extern "C" {
 
 /****************************************************************************/
 /* Indices of operands in PKC workarea and UPTR table for                   */
-/* the mcuxClRsa_noEncode                                                    */
+/* the mcuxClRsa_Sign_NoEMSA                                                 */
 /****************************************************************************/
 /**
- * @defgroup MCUXCLRSA_INTERNAL_UPTRTINDEX_NOENCODE_ MCUXCLRSA_INTERNAL_UPTRTINDEX_NOENCODE_
- * @brief UPTR table defines for function mcuxClRsa_noEncode.
+ * @defgroup MCUXCLRSA_INTERNAL_UPTRTINDEX_SIGN_NOEMSA_ MCUXCLRSA_INTERNAL_UPTRTINDEX_SIGN_NOEMSA_
+ * @brief UPTR table defines for function mcuxClRsa_Sign_NoEMSA.
  * @ingroup mcuxClRsa_Internal_Macros
  * @{
  */
-#define MCUXCLRSA_INTERNAL_UPTRTINDEX_NOENCODE_OUT          (0u) ///< UPTR table index for buffer input
-#define MCUXCLRSA_INTERNAL_NOENCODE_UPTRT_SIZE              (1u) ///< UPTR table size of function mcuxClRsa_noEncode
+#define MCUXCLRSA_INTERNAL_UPTRTINDEX_SIGN_NOEMSA_OUT          (0u) ///< UPTR table index for buffer input
+#define MCUXCLRSA_INTERNAL_SIGN_NOEMSA_UPTRT_SIZE              (1u) ///< UPTR table size of function mcuxClRsa_Sign_NoEMSA
 /** @} */
 
 /****************************************************************************/
 /* Indices of operands in PKC workarea and UPTR table for                   */
-/* the mcuxClRsa_noVerify                                                    */
+/* the mcuxClRsa_Verify_NoEMSA                                               */
 /****************************************************************************/
 /**
- * @defgroup MCUXCLRSA_INTERNAL_UPTRTINDEX_NOVERIFY_ MCUXCLRSA_INTERNAL_UPTRTINDEX_NOVERIFY_
- * @brief UPTR table defines for function mcuxClRsa_noVerify.
+ * @defgroup MCUXCLRSA_INTERNAL_UPTRTINDEX_VERIFY_NOEMSA_ MCUXCLRSA_INTERNAL_UPTRTINDEX_VERIFY_NOEMSA_
+ * @brief UPTR table defines for function mcuxClRsa_Verify_NoEMSA.
  * @ingroup mcuxClRsa_Internal_Macros
  * @{
  */
-#define MCUXCLRSA_INTERNAL_UPTRTINDEX_NOVERIFY_IN           (0u) ///< UPTR table index for buffer input
-#define MCUXCLRSA_INTERNAL_UPTRTINDEX_NOVERIFY_TMP          (1u) ///< UPTR table index for buffer tmp
-#define MCUXCLRSA_INTERNAL_NOVERIFY_UPTRT_SIZE              (2u) ///< UPTR table size of function mcuxClRsa_noVerify
+#define MCUXCLRSA_INTERNAL_UPTRTINDEX_VERIFY_NOEMSA_IN           (0u) ///< UPTR table index for buffer input
+#define MCUXCLRSA_INTERNAL_UPTRTINDEX_VERIFY_NOEMSA_TMP          (1u) ///< UPTR table index for buffer tmp
+#define MCUXCLRSA_INTERNAL_VERIFY_NOEMSA_UPTRT_SIZE              (2u) ///< UPTR table size of function mcuxClRsa_Verify_NoEMSA
 /** @} */
 
 
@@ -189,7 +191,7 @@ extern "C" {
 #define MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_A0                (4u) ///< UPTR table index for buffer A0
 #define MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_GCD1              (5u) ///< UPTR table index for the first gcd operand
 #define MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_GCD2              (6u) ///< UPTR table index for the second gcd operand
-#define MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_CONSTANT0         (7u) ///< UPTR table index for the constant 0 
+#define MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_CONSTANT0         (7u) ///< UPTR table index for the constant 0
 #define MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_CONSTANT1         (8u) ///< UPTR table index for the constant 1
 #define MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPRIME_CONSTANT2         (9u) ///< UPTR table index for the constant 2
 #define MCUXCLRSA_INTERNAL_TESTPRIME_UPTRT_SIZE                   (10u) ///< UPTR table size of function mcuxClRsa_TestPrimeCandidate
@@ -230,12 +232,14 @@ extern "C" {
 #define MCUXCLRSA_INTERNAL_UPTRTINDEX_MILLERRABIN_T3               (7u)
 #define MCUXCLRSA_INTERNAL_UPTRTINDEX_MILLERRABIN_TE               (8u)
 #define MCUXCLRSA_INTERNAL_UPTRTINDEX_MILLERRABIN_CONSTANT         (9u)
-#define MCUXCLRSA_INTERNAL_UPTRTINDEX_MILLERRABIN_UPTRT_SIZE       (10u)
+#define MCUXCLRSA_INTERNAL_UPTRTINDEX_MILLERRABIN_NB               (10u)
+#define MCUXCLRSA_INTERNAL_UPTRTINDEX_MILLERRABIN_R32              (11u)
+#define MCUXCLRSA_INTERNAL_UPTRTINDEX_MILLERRABIN_UPTRT_SIZE       (12u)
 /** @} */
 
 /****************************************************************************/
 /* Indices of operands in PKC workarea and UPTR table for                   */
-/* the mcuxClRsa_ComputeD                                                    */ 
+/* the mcuxClRsa_ComputeD                                                    */
 /****************************************************************************/
 /**
  * @defgroup MCUXCLRSA_INTERNAL_UPTRTINDEX_COMPD_ MCUXCLRSA_INTERNAL_UPTRTINDEX_COMPD_
@@ -258,7 +262,7 @@ extern "C" {
 
 /****************************************************************************/
 /* Indices of operands in PKC workarea and UPTR table for                   */
-/* the mcuxClRsa_TestPQDistance                                              */ 
+/* the mcuxClRsa_TestPQDistance                                              */
 /****************************************************************************/
 /**
  * @defgroup MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPQDISTANCE_ MCUXCLRSA_INTERNAL_UPTRTINDEX_TESTPQDISTANCE_
@@ -292,6 +296,7 @@ extern "C" {
 #define MCUXCLRSA_INTERNAL_UPTRTINDEX_REMOVEBLINDING_T2            (5u)
 #define MCUXCLRSA_INTERNAL_UPTRTINDEX_REMOVEBLINDING_ZERO          (6u)
 #define MCUXCLRSA_INTERNAL_UPTRTINDEX_REMOVEBLINDING_UPTRT_SIZE    (7u)
+
 
 
 #ifdef __cplusplus

@@ -29,28 +29,6 @@
  */
 
 /**********************************************
- * CONSTANTS
- **********************************************/
-/**
- * @defgroup mcuxCsslMemory_Types_Macros mcuxCsslMemory_Types_Macros
- * @brief Defines all macros of @ref mcuxCsslMemory_Types
- * @ingroup mcuxCsslMemory_Types
- * @{
- */
-#define MCUXCSSLMEMORY_STATUS_OK                 ((mcuxCsslMemory_Status_t) 0xE1E11E1Eu) ///< The operation was successful
-#define MCUXCSSLMEMORY_STATUS_EQUAL              ((mcuxCsslMemory_Status_t) 0xE1E1E1E1u) ///< The two contents of the Memory Compare are equal
-#define MCUXCSSLMEMORY_STATUS_NOT_EQUAL          ((mcuxCsslMemory_Status_t) 0x1E1E1E1Eu) ///< The two contents of the Memory Compare are not equal
-#define MCUXCSSLMEMORY_STATUS_INVALID_PARAMETER  ((mcuxCsslMemory_Status_t) 0x69696969u) ///< A parameter was invalid
-#define MCUXCSSLMEMORY_STATUS_FAULT              ((mcuxCsslMemory_Status_t) 0x96969696u) ///< A fault occurred in the execution
-
-#define MCUXCSSLMEMORY_KEEP_ORDER     ((uint32_t) 0xE1E139A5u)  ///< Data storing in destination buffer in original order.
-#define MCUXCSSLMEMORY_REVERSE_ORDER  ((uint32_t) 0xE1E1395Au)  ///< Data storing in destination buffer with reversed order.
-/**
- * @}
- */
-
-
-/**********************************************
  * TYPEDEFS
  **********************************************/
 

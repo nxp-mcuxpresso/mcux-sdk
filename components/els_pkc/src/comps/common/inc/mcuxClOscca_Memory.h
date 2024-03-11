@@ -34,7 +34,7 @@ extern "C" {
 #define MCUXCLOSCCA_SIZE_ALIGN_OFFSET  (sizeof(size_t) - 1U)
 
 #define mcuxClOscca_alignAddress(address) \
-  ((void*)( (((size_t)(address)) + (sizeof(size_t) - 1U)) \
+  ((uint8_t *)( (((size_t)(address)) + (sizeof(size_t) - 1U)) \
       & ((size_t)(~(sizeof(size_t) - 1U))) ))
 
 #define mcuxClOscca_alignSize(size) \
@@ -42,11 +42,11 @@ extern "C" {
         & ((size_t)(~(sizeof(size_t) - 1U))) )
 
 #define mcuxClOscca_alignAddressWithOffset(address, offset) \
-  ((void*)( (((size_t)(address) + (size_t)(offset)) + (sizeof(size_t) - 1U)) \
+  ((uint8_t *)( (((size_t)(address) + (size_t)(offset)) + (sizeof(size_t) - 1U)) \
       & ((size_t)(~(sizeof(size_t) - 1U))) ))
 
 #define mcuxClOscca_alignAddressToBoundary(address, boundary) \
-  ((void*)( (((size_t)(address)) + (boundary - 1U)) \
+  ((uint8_t *)( (((size_t)(address)) + (boundary - 1U)) \
       & ((size_t)(~(boundary - 1U))) ))
 
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClOscca_FastSecureXor)

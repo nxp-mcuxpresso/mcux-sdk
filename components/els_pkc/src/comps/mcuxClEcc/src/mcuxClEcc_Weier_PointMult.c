@@ -25,7 +25,8 @@
 #include <mcuxClSession.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
-
+#include <mcuxClBuffer.h>
+#include <mcuxClRandom.h>
 #include <mcuxClEcc.h>
 
 #include <internal/mcuxClSession_Internal.h>
@@ -36,9 +37,7 @@
 #include <internal/mcuxClEcc_Internal_Random.h>
 #include <internal/mcuxClEcc_Weier_Internal.h>
 #include <internal/mcuxClEcc_Weier_Internal_FP.h>
-#include <internal/mcuxClEcc_Weier_PointMult_FUP.h>
-#include <internal/mcuxClEcc_Weier_Internal_ConvertPoint_FUP.h>
-
+#include <internal/mcuxClEcc_Weier_Internal_FUP.h>
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClEcc_PointMult)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_PointMult(
@@ -100,8 +99,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_PointMult(
     /**********************************************************/
 
     /* Import P to (X1,Y1). */
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(WEIER_X1, pParam->pPoint, byteLenP);
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(WEIER_Y1, pParam->pPoint + byteLenP, byteLenP);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_PointMult, WEIER_X1, pParam->pPoint, byteLenP);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFEROFFSET(mcuxClEcc_PointMult, WEIER_Y1, pParam->pPoint, byteLenP, byteLenP);
 
     /* Check P in (X1,Y1) affine NR. */
 //  MCUXCLPKC_WAITFORREADY();  <== there is WaitForFinish in import function.
@@ -139,13 +138,16 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_PointMult(
     /* Generate 64-bit random number d0 in buffer S0 of size = operandSize. */
     MCUXCLPKC_FP_CALC_OP1_CONST(ECC_S0, 0u);
     MCUXCLPKC_FP_CALC_OP1_CONST(ECC_S3, 0u);
-    uint8_t *ptrS0 = MCUXCLPKC_OFFSET2PTR(pOperands[ECC_S0]);
-    MCUXCLPKC_WAITFORFINISH();
-    MCUX_CSSL_FP_FUNCTION_CALL(ret_PRNG_randWord1, mcuxClRandom_ncGenerate(pSession, ptrS0, 8u));
-    if (MCUXCLRANDOM_STATUS_OK != ret_PRNG_randWord1)
     {
-        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_PointMult, MCUXCLECC_STATUS_RNG_ERROR);
-    }
+        uint8_t * const ptrS0 = MCUXCLPKC_OFFSET2PTR(pOperands[ECC_S0]);
+        MCUXCLBUFFER_INIT(buffS0, NULL, ptrS0, 8u);
+        MCUXCLPKC_WAITFORFINISH();
+        MCUX_CSSL_FP_FUNCTION_CALL(ret_PRNG_randWord1, mcuxClRandom_ncGenerate(pSession, buffS0, 8u));
+        if (MCUXCLRANDOM_STATUS_OK != ret_PRNG_randWord1)
+        {
+            MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_PointMult, MCUXCLECC_STATUS_RNG_ERROR);
+        }
+    }  /* buffS0 scope. */
 
     /* Set MSBit of d0 (to ensure d0 != 0) using the PKC
      *
@@ -163,21 +165,22 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_PointMult(
 
     /* Securely import scalar d to buffer S1 of size = bufferSize, with temp T1. */
     MCUXCLPKC_PS1_SETLENGTH(0u, bufferSize);
-    MCUX_CSSL_FP_FUNCTION_CALL(ret_SecImport,
-        mcuxClPkc_SecureImportBigEndianToPkc(pSession, MCUXCLPKC_PACKARGS2(ECC_S1, ECC_T1),
-                                            pParam->pScalar, byteLenN) );
+    MCUXCLPKC_FP_SECUREIMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_PointMult, ret_SecImport, pSession, ECC_S1, ECC_T1, pParam->pScalar, byteLenN);
     if (MCUXCLPKC_STATUS_OK != ret_SecImport)
     {
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_PointMult, MCUXCLECC_STATUS_FAULT_ATTACK);
     }
 
     /* Generate (buffer size minus 1 bit) random number d' in buffer S2. */
-    uint8_t *ptrS2 = MCUXCLPKC_OFFSET2PTR(pOperands[ECC_S2]);  /* PKC word is CPU word aligned. */
-    MCUX_CSSL_FP_FUNCTION_CALL(ret_PRNG_GetRandom, mcuxClRandom_ncGenerate(pSession, ptrS2, bufferSize));
-    if (MCUXCLRANDOM_STATUS_OK != ret_PRNG_GetRandom)
     {
-        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_PointMult, MCUXCLECC_STATUS_RNG_ERROR);
-    }
+        uint8_t * const ptrS2 = MCUXCLPKC_OFFSET2PTR(pOperands[ECC_S2]);
+        MCUXCLBUFFER_INIT(buffS2, NULL, ptrS2, bufferSize);
+        MCUX_CSSL_FP_FUNCTION_CALL(ret_PRNG_GetRandom, mcuxClRandom_ncGenerate(pSession, buffS2, bufferSize));
+        if (MCUXCLRANDOM_STATUS_OK != ret_PRNG_GetRandom)
+        {
+            MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_PointMult, MCUXCLECC_STATUS_RNG_ERROR);
+        }
+    }  /* buffS2 scope. */
 
     MCUXCLPKC_FP_CALC_OP1_SHR(ECC_S2, ECC_S2, 1u);
 
@@ -288,12 +291,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_PointMult(
 
 
     /**********************************************************/
-    /* Check n and p and export private and public key.       */
+    /* Check n and p and export the resulting point.          */
     /**********************************************************/
 
     /* Import prime p and order n again, and check (compare with) existing one. */
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_T0, pParam->curveParam.pP, byteLenP);
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_T1, pParam->curveParam.pN, byteLenN);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_PointMult, ECC_T0, pParam->curveParam.pP, byteLenP);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_PointMult, ECC_T1, pParam->curveParam.pN, byteLenN);
 
     MCUXCLPKC_FP_CALC_OP1_CMP(ECC_T0, ECC_P);
     uint32_t zeroFlag_checkP = MCUXCLPKC_WAITFORFINISH_GETZERO();
@@ -304,20 +307,13 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_PointMult(
     if (   (zeroFlag_checkP == MCUXCLPKC_FLAG_ZERO)
         && (zeroFlag_checkN == MCUXCLPKC_FLAG_ZERO) )
     {
-        MCUX_CSSL_FP_FUNCTION_CALL(ret_SecExportXa,
-            mcuxClPkc_SecureExportBigEndianFromPkc(pSession,
-                                                  pParam->pResult,
-                                                  MCUXCLPKC_PACKARGS2(WEIER_XA, ECC_T0),
-                                                  byteLenP) );
+        MCUXCLPKC_FP_SECUREEXPORTBIGENDIANFROMPKC_BUFFER(mcuxClEcc_PointMult, ret_SecExportXa, pSession, pParam->pResult, WEIER_XA, ECC_T0, byteLenP);
         if (MCUXCLPKC_STATUS_OK != ret_SecExportXa)
         {
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_PointMult, MCUXCLECC_STATUS_FAULT_ATTACK);
         }
-        MCUX_CSSL_FP_FUNCTION_CALL(ret_SecExportYa,
-            mcuxClPkc_SecureExportBigEndianFromPkc(pSession,
-                                                  pParam->pResult + byteLenP,
-                                                  MCUXCLPKC_PACKARGS2(WEIER_YA, ECC_T1),
-                                                  byteLenP) );
+
+        MCUXCLPKC_FP_SECUREEXPORTBIGENDIANFROMPKC_BUFFEROFFSET(mcuxClEcc_PointMult, ret_SecExportYa, pSession, pParam->pResult, WEIER_YA, ECC_T1, byteLenP, byteLenP);
         if (MCUXCLPKC_STATUS_OK != ret_SecExportYa)
         {
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_PointMult, MCUXCLECC_STATUS_FAULT_ATTACK);

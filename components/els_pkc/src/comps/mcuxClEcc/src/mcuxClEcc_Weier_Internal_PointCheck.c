@@ -26,7 +26,7 @@
 
 #include <internal/mcuxClPkc_Operations.h>
 #include <internal/mcuxClEcc_Weier_Internal.h>
-#include <internal/mcuxClEcc_Weier_Internal_PointCheck_FUP.h>
+#include <internal/mcuxClEcc_Weier_Internal_FUP.h>
 
 
 /**

@@ -33,6 +33,7 @@
 /**
  * [Design]
  * This function initializes PKC hardware in the following steps:
+ * (0) clear SFR Mask on supported platforms;
  * (1) if PKC is in STOP, clear STOP bit according to PKC specification;
  * (2) backup PKC state (except STOP bit) if required (pState != NULL);
  * (3) if PKC is not in RESET, wait any on-going calculation;
@@ -42,6 +43,9 @@ MCUX_CSSL_FP_FUNCTION_DEF(mcuxClPkc_Initialize, mcuxClPkc_PkcInitializeEngine_t)
 MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClPkc_Initialize(mcuxClPkc_State_t *pState)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClPkc_Initialize);
+
+    /* Clear SFR Mask, on supported platforms. */
+    MCUXCLPKC_CLEARSFRMASK();
 
     /* Clear STOP bit if it has been set. */
     uint32_t pkc_ctrl = MCUXCLPKC_SFR_READ(CTRL);
@@ -59,8 +63,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClPkc_Initialize(mcuxClPkc_State_t *pState
     /* Backup PKC settings except STOP bit. */
     if (NULL != pState)
     {
-        pState->ctrl = (uint16_t) pkc_ctrl;
-        pState->cfg = (uint16_t) MCUXCLPKC_SFR_READ(CFG);
+        /* Only lower 16 bits of PKC CTRL and CFG are used. */
+        pState->ctrl = (uint16_t) (pkc_ctrl & (uint32_t) UINT16_MAX);
+        const uint32_t pkc_cfg = MCUXCLPKC_SFR_READ(CFG);
+        pState->cfg = (uint16_t) (pkc_cfg & (uint32_t) UINT16_MAX);
     }
 
     /* Wait any on-going calculation and then set RESET bit, if RESET bit is not set. */
@@ -86,9 +92,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClPkc_Initialize(mcuxClPkc_State_t *pState
 
 
     /* Configure PKC and clear RESET bit. */
-    MCUXCLPKC_SFR_WRITE(CTRL,   MCUXCLPKC_SFR_BITMSK(CTRL, CLRCACHE)
+    const uint32_t pkcCtrl = MCUXCLPKC_SFR_BITMSK(CTRL, CLRCACHE)
                              | MCUXCLPKC_SFR_BITMSK(CTRL, CACHE_EN)
-                             | MCUXCLPKC_SFR_CTRL_REDMUL_FULLSZ );
+                             | MCUXCLPKC_SFR_CTRL_REDMUL_FULLSZ;
+    MCUXCLPKC_SFR_WRITE(CTRL, pkcCtrl);
 
     /* Poll the RESET bit until it is cleared. */
     while (0u != (MCUXCLPKC_SFR_BITREAD(CTRL, RESET)))
@@ -104,6 +111,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClPkc_Initialize(mcuxClPkc_State_t *pState
 /**
  * [Design]
  * This function deinitializes PKC hardware in the following steps:
+ * (0) clear SFR Mask on supported platforms;
  * (1) if PKC is in STOP, clear STOP bit according to PKC specification;
  * (2) if PKC is not in RESET, wait any on-going calculation, and then set PKC RESET bit;
  * (3) clear PKC SFRs;
@@ -113,6 +121,9 @@ MCUX_CSSL_FP_FUNCTION_DEF(mcuxClPkc_Deinitialize, mcuxClPkc_PkcDeInitializeEngin
 MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClPkc_Deinitialize(const mcuxClPkc_State_t *pState)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClPkc_Deinitialize);
+
+    /* Clear SFR Mask, on supported platforms. */
+    MCUXCLPKC_CLEARSFRMASK();
 
     /* Clear STOP bit if it has been set. */
     uint32_t pkc_ctrl = MCUXCLPKC_SFR_READ(CTRL);

@@ -13,7 +13,7 @@
 
 /**
  * @file  mcuxClEcc_Mont_Internal.h
- * @brief internal header of mcuxClEcc MontDh functionalities
+ * @brief internal header of mcuxClEcc MontDH functionalities
  */
 
 
@@ -26,8 +26,8 @@
 #include <mcuxClSession.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClEcc_Types.h>
 #include <mcuxClPkc.h>
-#include <mcuxClEcc.h>
 
 #include <internal/mcuxClEcc_Internal.h>
 #include <internal/mcuxClEcc_Mont_Internal_PkcWaLayout.h>
@@ -46,7 +46,7 @@ extern "C" {
 /* Internal MontDH defines                                */
 /**********************************************************/
 
-/** Use 4-byte (32-bit) multiplicative blinding in MontDh. */
+/** Use 4-byte (32-bit) multiplicative blinding in MontDH. */
 #define MCUXCLECC_MONTDH_SCALAR_BLINDING_BYTELEN  4u
 
 
@@ -55,7 +55,7 @@ extern "C" {
 /**********************************************************/
 
 /**
- * Domain parameter structure for MontDh functions.
+ * Domain parameter structure for MontDH functions.
  */
 struct mcuxClEcc_MontDH_DomainParams
 {
@@ -64,6 +64,12 @@ struct mcuxClEcc_MontDH_DomainParams
     uint16_t t;     ///< bit position of MSBit of decoded scalar
 };
 
+
+/* Curve25519 domain parameters */
+extern const mcuxClEcc_MontDH_DomainParams_t mcuxClEcc_MontDH_DomainParams_Curve25519;
+
+/* Curve448 domain parameters */
+extern const mcuxClEcc_MontDH_DomainParams_t mcuxClEcc_MontDH_DomainParams_Curve448;
 
 
 /**********************************************************/
@@ -102,6 +108,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_MontDH_X(
     mcuxClEcc_MontDH_DomainParams_t *pDomainParameters,
     const uint8_t *pCoordinateUEnc
     );
+
 
 #ifdef __cplusplus
 } /* extern "C" */

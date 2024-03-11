@@ -14,20 +14,24 @@
 #include "common.h"
 
 #include <mcuxCsslAnalysis.h>
+#include <mcuxClToolchain.h>
 #include <mcuxClKey.h>
 #include <mcuxClMemory_Copy.h>
 #include <mcuxClPsaDriver.h>
 #include <mcuxClPkc_Types.h>
+#include <internal/mcuxClPkc_Macros.h>
 #include <mcuxClRandom.h>
 #include <mcuxClRandomModes.h>
 #include <mcuxClRsa.h>
 #include <mcuxClSession.h>
 #include <mcuxCsslFlowProtection.h>
+#include <mcuxClCore_Macros.h>
 
 #include <mcuxClPsaDriver_MemoryConsumption.h>
 #include <internal/mcuxClRsa_Internal_Functions.h>
 #include <internal/mcuxClPsaDriver_Internal.h>
 #include <internal/mcuxClPsaDriver_Functions.h>
+#include <internal/mcuxClPsaDriver_ExternalMacroWrappers.h>
 
 static const uint8_t defaultExponent[] = {0x01u, 0x00u, 0x01u};
 
@@ -67,8 +71,8 @@ static psa_status_t mcuxClPsaDriver_psa_driver_wrapper_computeRsa_D(
     //Allocate buffers in PKC RAM
     const uint32_t byteLenPrime = pRsaCrtKey->pMod1->keyEntryLength;
     const uint32_t byteLenKey = byteLenPrime * 2u;
-    const uint32_t pkcByteLenKey = MCUXCLPKC_ROUNDUP_SIZE(byteLenKey);
-    const uint32_t pkcByteLenPrime = MCUXCLPKC_ROUNDUP_SIZE(byteLenPrime);
+    const uint32_t pkcByteLenKey = MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(byteLenKey);
+    const uint32_t pkcByteLenPrime = MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(byteLenPrime);
     uint8_t * pPkcWorkarea = (uint8_t *) (& pSession->pkcWa.buffer[pSession->pkcWa.used]);
     uint8_t * pPkcBufferP = pPkcWorkarea + MCUXCLPKC_WORDSIZE;
     uint8_t * pPkcBufferQ = pPkcBufferP + pkcByteLenPrime + MCUXCLPKC_WORDSIZE;
@@ -151,7 +155,9 @@ static psa_status_t mcuxClPsaDriver_psa_driver_wrapper_computeRsa_D(
     {
         return PSA_ERROR_GENERIC_ERROR;
     }
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_API_DECLARATIONS()
     dKey.keyEntryLength = d.keyEntryLength;
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_API_DECLARATIONS()
 
     MCUX_CSSL_FP_FUNCTION_CALL_VOID_END();
     /* De-initialize PKC */
@@ -225,7 +231,7 @@ static psa_status_t mcuxClPsaDriver_psa_driver_wrapper_rsa_key_der(
     {
         return status;
     }
-    
+
     /*
      * Get parameter D
      */
@@ -434,9 +440,9 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 
     /* Key handle for RSA key type private CRT */
     mcuxClKey_Descriptor_t privKey, pubKey;
-    uint8_t pubKeyBuf[MCUXCLRSA_KEYGENERATION_PUBLIC_KEY_DATA_4096_SIZE] = {0U};
+    ALIGNED uint8_t pubKeyBuf[MCUXCLRSA_KEYGENERATION_PUBLIC_KEY_DATA_4096_SIZE] = {0U};
     uint32_t pubKeySize = 0u;
-    uint8_t priCrtKeyBuf[MCUXCLRSA_KEYGENERATION_CRT_KEY_DATA_4096_SIZE] = {0U};
+    ALIGNED uint8_t priCrtKeyBuf[MCUXCLRSA_KEYGENERATION_CRT_KEY_DATA_4096_SIZE] = {0U};
     uint32_t priCrtKeySize = 0u;
 
     /* Call key generation and check FP and return code */

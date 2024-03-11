@@ -11,6 +11,7 @@
 /* software.                                                                */
 /*--------------------------------------------------------------------------*/
 
+#include <mcuxClToolchain.h>
 #include <mcuxClEls.h> // Interface to the entire mcuxClEls component
 #include <mcuxClSession.h> // Interface to the entire mcuxClSession component
 #include <mcuxClHash.h>             // Interface to the entire mcuxClHash component
@@ -23,15 +24,15 @@
 #include <stdbool.h>  // bool type for the example's return code
 #include <mcuxClPsaDriver.h>
 
-bool mcuxClPsaDriver_sha512_oneshot_example(void)
+MCUXCLEXAMPLE_FUNCTION(mcuxClPsaDriver_sha512_oneshot_example)
 {
     /* Input for the SHA-384 operation */
-    const uint8_t data[] = {
+    const ALIGNED uint8_t data[] = {
         0x61u, 0x62u, 0x63u
     };
 
     /* Expected output for the SHA-384 operation */
-    const uint8_t hashExpected[MCUXCLHASH_OUTPUT_SIZE_SHA_512] = {
+    const ALIGNED uint8_t hashExpected[MCUXCLHASH_OUTPUT_SIZE_SHA_512] = {
         0xDDu, 0xAFu, 0x35u, 0xA1u, 0x93u, 0x61u, 0x7Au, 0xBAu,
         0xCCu, 0x41u, 0x73u, 0x49u, 0xAEu, 0x20u, 0x41u, 0x31u,
         0x12u, 0xE6u, 0xFAu, 0x4Eu, 0x89u, 0xA9u, 0x7Eu, 0xA2u,
@@ -43,7 +44,7 @@ bool mcuxClPsaDriver_sha512_oneshot_example(void)
     };
 
     /* Output buffer for the SHA-384 operation */
-    uint8_t hashOutput[MCUXCLHASH_OUTPUT_SIZE_SHA_512];
+    ALIGNED uint8_t hashOutput[MCUXCLHASH_OUTPUT_SIZE_SHA_512];
 
     /** Initialize ELS, Enable the ELS **/
     if(!mcuxClExample_Els_Init(MCUXCLELS_RESET_DO_NOT_CANCEL))
@@ -84,9 +85,4 @@ bool mcuxClPsaDriver_sha512_oneshot_example(void)
 
     /* Return */
     return MCUXCLEXAMPLE_STATUS_OK;
-}
-bool nxpClPsaDriver_sha512_oneshot_example(void)
-{
-    bool result = mcuxClPsaDriver_sha512_oneshot_example();
-    return result;
 }

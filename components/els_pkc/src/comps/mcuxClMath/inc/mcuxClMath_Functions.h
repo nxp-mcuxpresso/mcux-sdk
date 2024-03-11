@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -130,9 +130,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_InitLocalUptrt(
  * </dl>
  */
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClMath_LeadingZeros)
-MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_LeadingZeros(
-    uint8_t iX,
-    uint32_t *pNumLeadingZeros
+MCUX_CSSL_FP_PROTECTED_TYPE(uint32_t) mcuxClMath_LeadingZeros(
+    uint8_t iX
     );
 
 
@@ -458,6 +457,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ModInv(
  *   <dd><dl>
  *     <dt>PS1 lengths</dt>
  *       <dd>PS1 OPLEN defines lenN (length of modulus n), and MCLEN defines lenX (length of X).
+ *       <br>lenX (PS1 MCLEN) >= lenN (PS1 OPLEN).
  *       <br>Both OPLEN and MCLEN shall be exactly a multiple of MCUXCLPKC_WORDSIZE.</dd>
  *     <dt>PS2 lengths</dt>
  *       <dd>PS2 OPLEN and MCLEN will be modified, and original values will not be restored.</dd>
@@ -551,7 +551,6 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ModExp_SqrMultL2R(
  * @param[in] expByteLength   byte length of exponent
  * @param[in] iT3_iX_iT2_iT1  indices of PKC operands
  * @param[in] iN_iTE_iT0_iR   indices of PKC operands
- * @param[in] secOption       option to disable the operand re-randomization
  *
  * <dl>
  *   <dt>Parameter properties</dt>
@@ -566,7 +565,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ModExp_SqrMultL2R(
  *       <br>It can share the space with exponent (i.e., pExpTemp = pExp), but the exponent will be overwritten.</dd>
  *     <dt>@p iT3_iX_iT2_iT1</dt>
  *       <dd><code>iT1</code> (bits 0~7): index of temp1 (PKC operand).
- *       <br>Its size shall be at least max(MCUXCLPKC_ROUNDUP_SIZE(@p expByteLength + 1), lenN + MCUXCLPKC_WORDSIZE, 2 * MCUXCLPKC_WORDSIZE).
+ *       <br>Its size shall be at least max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(@p expByteLength + 1), lenN + MCUXCLPKC_WORDSIZE, 2 * MCUXCLPKC_WORDSIZE).
  *       <br><code>iT2</code> (bits 8~15): index of temp2 (PKC operand).
  *       <br>Its size shall be at least max(lenN + MCUXCLPKC_WORDSIZE, 2 * MCUXCLPKC_WORDSIZE).
  *       <br><code>iX</code> (bits 16~23): index of base number (PKC operand), size = operandSize + MCUXCLPKC_WORDSIZE (= lenN + MCUXCLPKC_WORDSIZE).
@@ -575,9 +574,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ModExp_SqrMultL2R(
  *       <br>Its size shall be at least max(lenN + MCUXCLPKC_WORDSIZE, 2 * MCUXCLPKC_WORDSIZE).</dd>
  *     <dt>@p iN_iTE_iT0_iR</dt>
  *       <dd><code>iR</code> (bits 0~7): index of result (PKC operand).
- *       <br>The size shall be at least max(MCUXCLPKC_ROUNDUP_SIZE(@p expByteLength + 1), lenN + MCUXCLPKC_WORDSIZE).
+ *       <br>The size shall be at least max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(@p expByteLength + 1), lenN + MCUXCLPKC_WORDSIZE).
  *       <br><code>iT0</code> (bits 8~15): index of temp0 (PKC operand).
- *       <br>The size shall be at least max(MCUXCLPKC_ROUNDUP_SIZE(@p expByteLength + 1), lenN + MCUXCLPKC_WORDSIZE).
+ *       <br>The size shall be at least max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(@p expByteLength + 1), lenN + MCUXCLPKC_WORDSIZE).
  *       <br><code>iTE</code> (bits 16~23): index of temp4 (PKC operand).
  *       <br>The size shall be at least (6 * MCUXCLPKC_WORDSIZE).
  *       <br><code>iN</code> (bits 24~31): index of modulus (PKC operand), size = operandSize (= lenN).
@@ -591,7 +590,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ModExp_SqrMultL2R(
  *   <dt>PKC properties</dt>
  *   <dd><dl>
  *     <dt>PS1 lengths</dt>
- *       <dd>PS1 OPLEN = MCLEN defines operandSize = MCUXCLPKC_ROUNDUP_SIZE(lenN), where lenN is the length of modulus n.</dd>
+ *       <dd>PS1 OPLEN = MCLEN defines operandSize = MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(lenN), where lenN is the length of modulus n.</dd>
  *       <dd>As the upper 32 bits of N should be null, operandSize >= lenN + 4 bytes.</dd>
  *     <dt>PS2 lengths</dt>
  *       <dd>PS2 OPLEN and MCLEN will be modified, and original values will not be restored.</dd>
@@ -615,17 +614,11 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMath_Status_t) mcuxClMath_SecModExp(
     uint32_t *pExpTemp,
     uint32_t expByteLength,
     uint32_t iT3_iX_iT2_iT1,
-    uint32_t iN_iTE_iT0_iR,
-    uint32_t secOption
+    uint32_t iN_iTE_iT0_iR
     );
 /** Helper macro for #mcuxClMath_SecModExp. */
 #define MCUXCLMATH_SECMODEXP(session, pExp, pExpTemp, byteLenExp, iR, iX, iN, iTE, iT0, iT1, iT2, iT3)  \
-    mcuxClMath_SecModExp(session, pExp, pExpTemp, byteLenExp, MCUXCLPKC_PACKARGS4(iT3, iX, iT2, iT1), MCUXCLPKC_PACKARGS4(iN, iTE, iT0, iR), 0u)
-/** Helper macro for #mcuxClMath_SecModExp with disabled operand re-randomization.
- * TODO CLNS-7824: analyze how to use the SecModExp in RsaKg MillerRabinTest, and remove secOption to always re-randomize */
-#define MCUXCLMATH_SECMODEXP_WITHOUT_RERANDOMIZATION(session, pExp, pExpTemp, byteLenExp, iR, iX, iN, iTE, iT0, iT1, iT2, iT3)  \
-    mcuxClMath_SecModExp(session, pExp, pExpTemp, byteLenExp, MCUXCLPKC_PACKARGS4(iT3, iX, iT2, iT1), MCUXCLPKC_PACKARGS4(iN, iTE, iT0, iR), MCUXCLMATH_SECMODEXP_OPTION_DIS_RERAND)
-
+    mcuxClMath_SecModExp(session, pExp, pExpTemp, byteLenExp, MCUXCLPKC_PACKARGS4(iT3, iX, iT2, iT1), MCUXCLPKC_PACKARGS4(iN, iTE, iT0, iR))
 
 /**
  * @brief Calculates exact division with odd divisor.
@@ -657,7 +650,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMath_Status_t) mcuxClMath_SecModExp(
  *       <br><code>iR</code> (bits 24~31): index of result R (PKC operand),
  *           size = (xPkcByteLength - yPkcByteLength + MCUXCLPKC_WORDSIZE).</dd>
  *     <dt>@p xPkcByteLength</dt>
- *       <dd>It shall be a multiple of MCUXCLPKC_WORDSIZE.</dd>
+ *       <dd>It shall be a multiple of MCUXCLPKC_WORDSIZE, and >= @p yPkcByteLength.</dd>
  *     <dt>@p yPkcByteLength</dt>
  *       <dd>It shall be a multiple of MCUXCLPKC_WORDSIZE.</dd>
  *   </dl></dd>
@@ -755,6 +748,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ExactDivide(uint32_t iR_iX_iY_iT, u
 /** Helper macro for #mcuxClMath_ExactDivide with flow protection. */
 #define MCUXCLMATH_FP_EXACTDIVIDE(iR, iX, iN, iT, xPkcByteLen, yPkcByteLen)  \
     MCUX_CSSL_FP_FUNCTION_CALL_VOID(MCUXCLMATH_EXACTDIVIDE(iR, iX, iN, iT, xPkcByteLen, yPkcByteLen))
+
 
 
 /**

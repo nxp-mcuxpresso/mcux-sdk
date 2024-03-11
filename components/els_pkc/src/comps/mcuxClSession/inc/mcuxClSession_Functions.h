@@ -119,7 +119,6 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClSession_Status_t) mcuxClSession_destroy(
   mcuxClSession_Handle_t pSession
 );
 
-#ifdef MCUXCL_FEATURE_SESSION_HAS_RANDOM
 /**
  * @brief Function to switch to another random configuration.
  *
@@ -135,7 +134,6 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClSession_Status_t) mcuxClSession_setRandom(
     mcuxClRandom_Mode_t randomMode,
     mcuxClRandom_Context_t randomCtx
 );
-#endif // MCUXCL_FEATURE_SESSION_HAS_RANDOM
 
 /**
  * @}

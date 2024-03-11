@@ -32,16 +32,17 @@
 #include <internal/mcuxClHmac_Core_Functions_Els.h>
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClHmac_Engine_Oneshot_Els, mcuxClHmac_ComputeEngine_t)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClHmac_Engine_Oneshot_Els(
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t)
+mcuxClHmac_Engine_Oneshot_Els(
     mcuxClSession_Handle_t session,
-    mcuxClHmac_Context_Generic_t * const pContext,
-    const uint8_t *const pIn,
+    mcuxClHmac_Context_Generic_t *const pContext,
+    mcuxCl_InputBuffer_t pIn,
     uint32_t inLength,
-    uint8_t * const pOut,
-    uint32_t * const pOutLength)
+    mcuxCl_Buffer_t pOut,
+    uint32_t *const pOutLength)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClHmac_Engine_Oneshot_Els,
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_set));
+        2u * MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_set));
 
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY("Reinterpret structure for different HMAC context types")
     mcuxClHmac_Context_Els_t * const pCtxEls = (mcuxClHmac_Context_Els_t *) pContext;
@@ -52,7 +53,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClHmac_Engine_Oneshot_Els(
     size_t totalPaddingLength = 0u;
 
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST_QUALIFIER("Const is discarded to perform byte-wise padding")
-    uint8_t *pDataIn = (uint8_t*) pIn;
+    uint8_t *pDataIn = (uint8_t *)MCUXCLBUFFER_GET(pIn);
     MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST_QUALIFIER()
 
     /* Apply padding to the input buffer */
@@ -100,8 +101,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClHmac_Engine_Oneshot_Els(
         if(MCUXCLMAC_STATUS_OK != prepareKeyResult)
         {
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClHmac_Engine_Oneshot_Els, MCUXCLMAC_STATUS_ERROR,
-                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClHmac_prepareHMACKey),
-                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_set));
+                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClHmac_prepareHMACKey));
         }
     }
     else if(MCUXCLKEY_LOADSTATUS_COPRO == mcuxClKey_getLoadStatus(pCtxEls->key))
@@ -118,14 +118,13 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClHmac_Engine_Oneshot_Els(
                           hmac_options,
                           (mcuxClEls_KeyIndex_t) (mcuxClKey_getLoadedKeySlot(pCtxEls->key)),
                           (uint8_t const *) pCtxEls->preparedHmacKey,
-                          pIn,
+                          MCUXCLBUFFER_GET(pIn),
                           inLength + totalPaddingLength,
                           pOut));
 
     if (MCUXCLELS_STATUS_OK_WAIT != result)
     {
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClHmac_Engine_Oneshot_Els, MCUXCLMAC_STATUS_ERROR,
-            MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_set),
             MCUX_CSSL_FP_CONDITIONAL((MCUXCLKEY_LOADSTATUS_MEMORY == mcuxClKey_getLoadStatus(pCtxEls->key)),
                 MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClHmac_prepareHMACKey)
             ),
@@ -137,7 +136,6 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClHmac_Engine_Oneshot_Els(
     if ((MCUXCLELS_STATUS_OK != resultWait))
     {
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClHmac_Engine_Oneshot_Els, MCUXCLMAC_STATUS_ERROR,
-            MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_set),
             MCUX_CSSL_FP_CONDITIONAL((MCUXCLKEY_LOADSTATUS_MEMORY == mcuxClKey_getLoadStatus(pCtxEls->key)),
                 MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClHmac_prepareHMACKey)
             ),
@@ -148,7 +146,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClHmac_Engine_Oneshot_Els(
 #ifdef MCUXCL_FEATURE_ELS_DMA_FINAL_ADDRESS_READBACK
     if(NULL != pOut)
     {
-        MCUX_CSSL_FP_FUNCTION_CALL(addressComparisonResult, mcuxClEls_CompareDmaFinalOutputAddress(pOut, MCUXCLELS_HMAC_OUTPUT_SIZE));
+        MCUX_CSSL_FP_FUNCTION_CALL(addressComparisonResult, mcuxClEls_CompareDmaFinalOutputAddress(MCUXCLBUFFER_GET(pOut), MCUXCLELS_HMAC_OUTPUT_SIZE));
 
         if (MCUXCLELS_STATUS_OK != addressComparisonResult)
         {
@@ -160,7 +158,6 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClHmac_Engine_Oneshot_Els(
     *pOutLength = MCUXCLELS_HMAC_OUTPUT_SIZE;
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_NULL_POINTER_CONSTANT("NULL is used in code")
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClHmac_Engine_Oneshot_Els, MCUXCLMAC_STATUS_OK,
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_set),
         MCUX_CSSL_FP_CONDITIONAL((MCUXCLKEY_LOADSTATUS_MEMORY == mcuxClKey_getLoadStatus(pCtxEls->key)),
             MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClHmac_prepareHMACKey)
         ),
@@ -186,7 +183,7 @@ MCUX_CSSL_FP_FUNCTION_DEF(mcuxClHmac_Engine_Update_Els, mcuxClHmac_UpdateEngine_
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClHmac_Engine_Update_Els(
     mcuxClSession_Handle_t session UNUSED_PARAM,
     mcuxClHmac_Context_Generic_t * const pContext UNUSED_PARAM,
-    const uint8_t *const pIn UNUSED_PARAM,
+    mcuxCl_InputBuffer_t pIn UNUSED_PARAM,
     uint32_t inLength UNUSED_PARAM)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClHmac_Engine_Update_Els);
@@ -198,7 +195,7 @@ MCUX_CSSL_FP_FUNCTION_DEF(mcuxClHmac_Engine_Finalize_Els, mcuxClHmac_FinalizeEng
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClHmac_Engine_Finalize_Els(
     mcuxClSession_Handle_t session UNUSED_PARAM,
     mcuxClHmac_Context_Generic_t * const pContext UNUSED_PARAM,
-    uint8_t *const pOut UNUSED_PARAM,
+    mcuxCl_Buffer_t pOut UNUSED_PARAM,
     uint32_t *const pOutLength)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClHmac_Engine_Finalize_Els);

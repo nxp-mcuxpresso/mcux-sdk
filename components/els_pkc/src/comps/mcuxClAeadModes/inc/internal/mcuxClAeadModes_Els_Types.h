@@ -20,7 +20,7 @@
 
 #include <mcuxClConfig.h> // Exported features flags header
 #include <mcuxClAead_Types.h>
-#include <internal/mcuxClAead_Internal_Ctx.h>
+#include <internal/mcuxClAead_Ctx.h>
 #include <mcuxClEls_Aead.h>
 
 #ifdef __cplusplus

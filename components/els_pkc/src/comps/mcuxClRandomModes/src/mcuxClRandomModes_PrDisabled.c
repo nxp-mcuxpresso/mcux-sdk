@@ -24,7 +24,7 @@
 #include <internal/mcuxClRandomModes_Private_PrDisabled.h>
 #include <internal/mcuxClRandomModes_Private_NormalMode.h>
 
-
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_TEXT_IN_COMMENTS("Hyperlinks in comments are allowed for documentation purposes")
 /**
  * \brief This function performs a selftest of a DRBG if prediction resistance is disabled
  *
@@ -51,6 +51,7 @@
  *   - MCUXCLRANDOM_STATUS_OK              if the selftest finished successfully
  *   - MCUXCLRANDOM_STATUS_FAULT_ATTACK    if the selftest failed
  */
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_TEXT_IN_COMMENTS()
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRandomModes_PrDisabled_selftestAlgorithm, mcuxClRandomModes_selftestAlgorithm_t)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PrDisabled_selftestAlgorithm(mcuxClSession_Handle_t pSession, mcuxClRandom_Context_t pTestCtx, mcuxClRandom_ModeDescriptor_t *pTestMode)
 {
@@ -58,8 +59,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PrDisabled_
 
     /* Set entropy input pointer in pTestMode */
     MCUX_CSSL_ANALYSIS_START_CAST_TO_MORE_SPECIFIC_TYPE()
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_CAST_VOID()
     const mcuxClRandomModes_DrbgModeDescriptor_t *pDrbgMode = (const mcuxClRandomModes_DrbgModeDescriptor_t *) pTestMode->pDrbgMode;
     MCUX_CSSL_ANALYSIS_STOP_CAST_TO_MORE_SPECIFIC_TYPE()
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CAST_VOID()
 
     const uint32_t *const * testVectors = pDrbgMode->pDrbgTestVectors;
     MCUX_CSSL_FP_FUNCTION_CALL(ret_updateIn, mcuxClRandomModes_updateEntropyInput(pTestMode,
@@ -103,9 +106,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PrDisabled_
      ***********************************************/
 
     uint32_t randomBytes[MCUXCLRANDOMMODES_SELFTEST_RANDOMDATALENGTH/sizeof(uint32_t)];
+    MCUXCLBUFFER_INIT(pBufRandomBytes, NULL, (uint8_t*)randomBytes, MCUXCLRANDOMMODES_SELFTEST_RANDOMDATALENGTH);
     MCUX_CSSL_ANALYSIS_START_PATTERN_ADDRESS_IN_SFR_IS_NOT_REUSED_OUTSIDE()
     MCUX_CSSL_FP_FUNCTION_CALL(ret_generate,
-            mcuxClRandom_generate(pSession, (uint8_t*)randomBytes, MCUXCLRANDOMMODES_SELFTEST_RANDOMDATALENGTH));
+            mcuxClRandom_generate(pSession, pBufRandomBytes, MCUXCLRANDOMMODES_SELFTEST_RANDOMDATALENGTH));
     MCUX_CSSL_ANALYSIS_STOP_PATTERN_ADDRESS_IN_SFR_IS_NOT_REUSED_OUTSIDE()    
     if(MCUXCLRANDOM_STATUS_OK != ret_generate)
     {
@@ -119,7 +123,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PrDisabled_
      ***********************************************/
     MCUX_CSSL_ANALYSIS_START_PATTERN_ADDRESS_IN_SFR_IS_NOT_REUSED_OUTSIDE()
     MCUX_CSSL_FP_FUNCTION_CALL(ret_generate2,
-            mcuxClRandom_generate(pSession, (uint8_t*)randomBytes, MCUXCLRANDOMMODES_SELFTEST_RANDOMDATALENGTH));
+            mcuxClRandom_generate(pSession, pBufRandomBytes, MCUXCLRANDOMMODES_SELFTEST_RANDOMDATALENGTH));
     MCUX_CSSL_ANALYSIS_STOP_PATTERN_ADDRESS_IN_SFR_IS_NOT_REUSED_OUTSIDE()    
     if(MCUXCLRANDOM_STATUS_OK != ret_generate2)
     {
@@ -149,7 +153,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_PrDisabled_
     /* Verify whether context is clear */
     for (uint32_t i = 0u; i < contextSizeInWords; i++)
     {
+        MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY("pTestCtx contains an integer array of size contextSizeInWords")
         if(((uint32_t *) pTestCtx)[i] != 0u)
+        MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY()
         {
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRandomModes_PrDisabled_selftestAlgorithm, MCUXCLRANDOM_STATUS_FAULT_ATTACK);
         }

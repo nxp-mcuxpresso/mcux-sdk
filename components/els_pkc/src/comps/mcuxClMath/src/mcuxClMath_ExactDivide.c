@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2021-2023 NXP                                                  */
+/* Copyright 2021-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -26,6 +26,7 @@
 #include <mcuxClMath_Types.h>
 
 #include <internal/mcuxClPkc_Operations.h>
+#include <internal/mcuxClPkc_Macros.h>
 
 
 /**
@@ -42,10 +43,17 @@
  * this function counts the number of leading zeros of Y' and updates the length
  * of Y' if the number of leading zeros of Y' exceeds a PKC word.
  */
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DECLARED_BUT_NEVER_DEFINED("It is indeed defined.")
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DEFINED_MORE_THAN_ONCE("It defined only once.")
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClMath_ExactDivide)
 MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ExactDivide(uint32_t iR_iX_iY_iT, uint32_t xPkcByteLength, uint32_t yPkcByteLength)
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DECLARED_BUT_NEVER_DEFINED()
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DEFINED_MORE_THAN_ONCE()
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClMath_ExactDivide);
+
+    /* ASSERT: length of X >= length of Y. */
+    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(xPkcByteLength, yPkcByteLength, MCUXCLPKC_RAM_SIZE, /* void */)
 
     /* Backup PS1 length to restore in the end. */
     uint32_t backupPs1LenReg = MCUXCLPKC_PS1_GETLENGTH_REG();
@@ -66,27 +74,36 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ExactDivide(uint32_t iR_iX_iY_iT, u
     uint32_t noOfShiftBytes = noOfTrailingZeroPkcWords * MCUXCLPKC_WORDSIZE;
 
     uint16_t *pOperands = MCUXCLPKC_GETUPTRT();
-    pOperands[uptrtIndexY] = (uint16_t) (pOperands[uptrtIndexY] + noOfShiftBytes);
-
     uint32_t uptrtIndexX = (iR_iX_iY_iT >> 16) & 0xFFu;
-    pOperands[uptrtIndexX] = (uint16_t) (pOperands[uptrtIndexX] + noOfShiftBytes);
+
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("X > Y > 0, trailing zeros of Y will not exceed bit lengths of X and Y. \
+            Offsets of X and Y after trimming trailing zero PKC word(s) will be still in the valid range.")
+    const uint32_t offsetYTrimmed = (uint32_t) pOperands[uptrtIndexY] + noOfShiftBytes;
+    const uint32_t offsetXTrimmed = (uint32_t) pOperands[uptrtIndexX] + noOfShiftBytes;
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
+
+    pOperands[uptrtIndexY] = (uint16_t) (offsetYTrimmed & 0xFFFFu);
+    pOperands[uptrtIndexX] = (uint16_t) (offsetXTrimmed & 0xFFFFu);
 
     /* Shift number of bits, which are less than one PKC word. */
     uint32_t noOfShiftBits = noOfTrailingZeroBits % (8u * MCUXCLPKC_WORDSIZE);
 
-    uint32_t pkcByteLenYtmp = yPkcByteLength - noOfShiftBytes;
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("Y > 0, length of Y after trimming trailing zeros is > 0.")
+    uint32_t trimYPkcByteLen = yPkcByteLength - noOfShiftBytes;
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
 
-    MCUXCLPKC_PS1_SETLENGTH(0u, pkcByteLenYtmp);  /* MCLEN on higher 16 bits is not used. */
+    MCUXCLPKC_PS1_SETLENGTH(0u, trimYPkcByteLen);  /* MCLEN on higher 16 bits is not used. */
     MCUXCLPKC_FP_CALC_OP1_SHR(uptrtIndexY, uptrtIndexY, noOfShiftBits);
 
     /* If number of leading zero bits after shift exceeds a PKC word, reduce length of Y. */
     MCUXCLPKC_WAITFORFINISH();
-    uint32_t leadingZeroBits;
-    MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClMath_LeadingZeros((uint8_t)uptrtIndexY, &leadingZeroBits));
+    MCUX_CSSL_FP_FUNCTION_CALL(leadingZeroBits, mcuxClMath_LeadingZeros((uint8_t)uptrtIndexY));
 
     if((8u * MCUXCLPKC_WORDSIZE) <= leadingZeroBits)
     {
-        pkcByteLenYtmp -= MCUXCLPKC_WORDSIZE;
+        MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("Y > 0, length of Y after trimming leading and trailing zeros is > 0.")
+        trimYPkcByteLen -= MCUXCLPKC_WORDSIZE;
+        MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
     }
 
     /***************************************************************************************/
@@ -96,12 +113,15 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ExactDivide(uint32_t iR_iX_iY_iT, u
     uint32_t uptrtIndexT = iR_iX_iY_iT & 0xFFu;
     uint32_t uptrtIndexR = (iR_iX_iY_iT >> 24) & 0xFFu;
 
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("X > Y > 0, length of X after trimming (some) trailing zeros is > 0.")
+    const uint32_t trimXPkcByteLen = xPkcByteLength - noOfShiftBytes;
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
     MCUXCLMATH_FP_EXACTDIVIDEODD(uptrtIndexR,
                                 uptrtIndexX,
                                 uptrtIndexY,
                                 uptrtIndexT,
-                                xPkcByteLength - noOfShiftBytes,
-                                pkcByteLenYtmp);
+                                trimXPkcByteLen,
+                                trimYPkcByteLen);
 
     /***************************************************************************************/
     /* Step 3: Recover y and shift result to account for trailing zero bits of y           */
@@ -117,18 +137,29 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ExactDivide(uint32_t iR_iX_iY_iT, u
     {
         MCUXCLPKC_PS2_SETLENGTH_REG(MCUXCLPKC_WORDSIZE);  /* MCLEN on higher 16 bits is not used. */
         MCUXCLPKC_PS2_SETMODE(MCUXCLPKC_OP_CONST);
-        MCUXCLPKC_PS2_SETZR(0u, (uint32_t) pOperands[uptrtIndexR] + xPkcByteLength - yPkcByteLength + MCUXCLPKC_WORDSIZE);
+        MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("Length of X >= length of Y, and caller shall reserve enough space for R.")
+        const uint32_t offsetExtraPkcWord = (uint32_t) pOperands[uptrtIndexR] + xPkcByteLength - yPkcByteLength + MCUXCLPKC_WORDSIZE;
+        MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
+        MCUXCLPKC_PS2_SETZR(0u, offsetExtraPkcWord);
         MCUXCLPKC_WAITFORREADY();
         MCUXCLPKC_PS2_START_L0();
         MCUXCLPKC_WAITFORREADY();
     }
 
-    MCUXCLPKC_PS2_SETLENGTH(0u, xPkcByteLength - yPkcByteLength + (2u * MCUXCLPKC_WORDSIZE));  /* MCLEN on higher 16 bits is not used. */
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("Length of X >= length of Y, and caller shall reserve enough space for R.")
+    const uint32_t pkcLengthToShift = xPkcByteLength - yPkcByteLength + (2u * MCUXCLPKC_WORDSIZE);
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
+    MCUXCLPKC_PS2_SETLENGTH(0u, pkcLengthToShift);  /* MCLEN on higher 16 bits is not used. */
     MCUXCLPKC_FP_CALC_OP2_SHR(uptrtIndexR, uptrtIndexR, noOfShiftBits);
 
     /* Restore UPTR table and PKC settings. */
-    pOperands[uptrtIndexY] = (uint16_t) (pOperands[uptrtIndexY] - noOfShiftBytes);
-    pOperands[uptrtIndexX] = (uint16_t) (pOperands[uptrtIndexX] - noOfShiftBytes);
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("Restore offsets of X and Y.")
+    const uint32_t offsetY = (uint32_t) pOperands[uptrtIndexY] - noOfShiftBytes;
+    const uint32_t offsetX = (uint32_t) pOperands[uptrtIndexX] - noOfShiftBytes;
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
+
+    pOperands[uptrtIndexY] = (uint16_t) (offsetY & 0xFFFFu);
+    pOperands[uptrtIndexX] = (uint16_t) (offsetX & 0xFFFFu);
 
     MCUXCLPKC_WAITFORREADY();
     MCUXCLPKC_PS1_SETLENGTH_REG(backupPs1LenReg);

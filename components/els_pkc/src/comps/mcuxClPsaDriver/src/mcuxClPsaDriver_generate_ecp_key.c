@@ -15,8 +15,10 @@
 
 #include <mcuxClEcc.h>
 #include <mcuxClKey.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClMemory_Copy.h>
 #include <mcuxClPkc_Types.h>
+#include <internal/mcuxClPkc_Macros.h>
 #include <mcuxClPsaDriver.h>
 #include <mcuxClRandom.h>
 #include <mcuxClRandomModes.h>
@@ -34,7 +36,7 @@ psa_status_t mcuxClPsaDriver_psa_driver_wrapper_generate_ecp_key(
 MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 {
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_CAST_OF_COMPOSITE_EXPRESSION("PSA_KEY_TYPE_ECC_GET_FAMILY macro comes from external library outside our control")
-    psa_ecc_family_t curve = PSA_KEY_TYPE_ECC_GET_FAMILY(psa_get_key_type(attributes));
+    psa_ecc_family_t curve = MCUXCLPSADRIVER_PSA_KEY_TYPE_ECC_GET_FAMILY(psa_get_key_type(attributes));
     MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CAST_OF_COMPOSITE_EXPRESSION()
     size_t bytes = MCUXCLPSADRIVER_BITS_TO_BYTES(psa_get_key_bits(attributes));
 
@@ -53,12 +55,12 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
         /* Setup one session to be used by all functions called */
         mcuxClSession_Descriptor_t session;
         //Byte length of a Curve448
-        if(bytes == MCUXCLECC_MONT_CURVE448_SIZE_PRIVATEKEY)
+        if(bytes == MCUXCLECC_MONTDH_CURVE448_SIZE_PRIVATEKEY)
         {
-            uint32_t pCpuWa[MCUXCLECC_MONT_DHKEYGENERATION_CURVE448_WACPU_SIZE / (sizeof(uint32_t))];
+            uint32_t pCpuWa[MCUXCLECC_MONTDH_GENERATEKEYPAIR_CURVE448_WACPU_SIZE / (sizeof(uint32_t))];
             /* Initialize session with pkcWA on the beginning of PKC RAM */
-            MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(si_status, si_token, mcuxClSession_init(&session, pCpuWa, MCUXCLECC_MONT_DHKEYGENERATION_CURVE448_WACPU_SIZE,
-                                     (uint32_t *) MCUXCLPKC_RAM_START_ADDRESS, MCUXCLECC_MONT_DHKEYGENERATION_CURVE448_WAPKC_SIZE));
+            MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(si_status, si_token, mcuxClSession_init(&session, pCpuWa, MCUXCLECC_MONTDH_GENERATEKEYPAIR_CURVE448_WACPU_SIZE,
+                                     (uint32_t *) MCUXCLPKC_RAM_START_ADDRESS, MCUXCLECC_MONTDH_GENERATEKEYPAIR_CURVE448_WAPKC_SIZE));
 
 
             if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClSession_init) != si_token) || (MCUXCLSESSION_STATUS_OK != si_status))
@@ -74,44 +76,64 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
             MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(rngInit_result, rngInit_token, mcuxClRandom_init(&session, pRng_ctx, mcuxClRandomModes_Mode_CtrDrbg_AES256_DRG3));
 
             if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_init) != rngInit_token) || (MCUXCLRANDOM_STATUS_OK != rngInit_result))
-            {                                                                   
-                return PSA_ERROR_GENERIC_ERROR;                                                   
-            }                                                                   
+            {
+                return PSA_ERROR_GENERIC_ERROR;
+            }
 
-            MCUX_CSSL_FP_FUNCTION_CALL_END();                                    
-
-            /* Initialize the PRNG */                                           
-            MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(prngInit_result, prngInit_token, mcuxClRandom_ncInit(&session));                        
-            if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_ncInit) != prngInit_token) || (MCUXCLRANDOM_STATUS_OK != prngInit_result))    \
-            {                                                                   
-                return PSA_ERROR_GENERIC_ERROR;                                                   
-            }                                                                   
             MCUX_CSSL_FP_FUNCTION_CALL_END();
 
-            /* Prepare input for key generation */
-            MCUX_CSSL_ANALYSIS_START_PATTERN_REINTERPRET_MEMORY_OF_OPAQUE_TYPES()
-            uint32_t privKeyDesc[MCUXCLKEY_DESCRIPTOR_SIZE / (sizeof(uint32_t))];
-            mcuxClKey_Handle_t privKeyHandler = (mcuxClKey_Handle_t) &privKeyDesc;
-            uint8_t pubKeyDesc[MCUXCLKEY_DESCRIPTOR_SIZE];
-            mcuxClKey_Handle_t pubKeyHandler = (mcuxClKey_Handle_t) &pubKeyDesc;
-            MCUX_CSSL_ANALYSIS_STOP_PATTERN_REINTERPRET_MEMORY()
-            uint8_t pubKeyBuffer[MCUXCLECC_MONT_CURVE448_SIZE_PUBLICKEY]={0};
-            uint32_t privKeyLength = 0u;
-            uint32_t pubKeyLength = 0u;
-
-            /* Call Dh KeyGeneration for keys generation and check FP and return code */
-            MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(keygeneration_result, keygeneration_token, mcuxClEcc_Mont_DhKeyGeneration(&session,
-                                                                 mcuxClKey_Type_Ecc_MontDH_Curve448_KeyPair,
-                                                                 mcuxClKey_Protection_None,
-                                                                 privKeyHandler, key_buffer, &privKeyLength,
-                                                                 pubKeyHandler, pubKeyBuffer, &pubKeyLength));
-            if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEcc_Mont_DhKeyGeneration) != keygeneration_token) || (MCUXCLECC_STATUS_OK != keygeneration_result))
+            /* Initialize the PRNG */
+            MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(prngInit_result, prngInit_token, mcuxClRandom_ncInit(&session));
+            if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_ncInit) != prngInit_token) || (MCUXCLRANDOM_STATUS_OK != prngInit_result))
             {
                 return PSA_ERROR_GENERIC_ERROR;
             }
             MCUX_CSSL_FP_FUNCTION_CALL_END();
-            
-            *key_buffer_length = (size_t) privKeyLength;
+
+            /* Prepare input for key generation */
+            MCUX_CSSL_ANALYSIS_START_PATTERN_REINTERPRET_MEMORY_OF_OPAQUE_TYPES()
+            uint32_t privKeyDesc[MCUXCLKEY_DESCRIPTOR_SIZE_IN_WORDS];
+            mcuxClKey_Handle_t privKeyHandler = (mcuxClKey_Handle_t) &privKeyDesc;
+            uint8_t pubKeyDesc[MCUXCLKEY_DESCRIPTOR_SIZE];
+            mcuxClKey_Handle_t pubKeyHandler = (mcuxClKey_Handle_t) &pubKeyDesc;
+            MCUX_CSSL_ANALYSIS_STOP_PATTERN_REINTERPRET_MEMORY()
+            uint8_t pubKeyBuffer[MCUXCLECC_MONTDH_CURVE448_SIZE_PUBLICKEY]={0};
+
+            MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(privkeyinit_result, privkeyinit_token, mcuxClKey_init(
+            /* mcuxClSession_Handle_t session         */ &session,
+            /* mcuxClKey_Handle_t key                 */ privKeyHandler,
+            /* mcuxClKey_Type_t type                  */ mcuxClKey_Type_Ecc_MontDH_Curve448_PrivateKey,
+            /* mcuxCl_Buffer_t pKeyData               */ (mcuxCl_Buffer_t) key_buffer,
+            /* uint32_t keyDataLength                */ MCUXCLECC_MONTDH_CURVE448_SIZE_PRIVATEKEY));
+            if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClKey_init) != privkeyinit_token) || (MCUXCLKEY_STATUS_OK != privkeyinit_result))
+            {
+                return PSA_ERROR_GENERIC_ERROR;
+            }
+            MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+            MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(pubkeyinit_result, pubkeyinit_token, mcuxClKey_init(
+            /* mcuxClSession_Handle_t session         */ &session,
+            /* mcuxClKey_Handle_t key                 */ pubKeyHandler,
+            /* mcuxClKey_Type_t type                  */ mcuxClKey_Type_Ecc_MontDH_Curve448_PublicKey,
+            /* mcuxCl_Buffer_t pKeyData               */ (mcuxCl_Buffer_t) pubKeyBuffer,
+            /* uint32_t keyDataLength                */ MCUXCLECC_MONTDH_CURVE448_SIZE_PUBLICKEY));
+            if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClKey_init) != pubkeyinit_token) || (MCUXCLKEY_STATUS_OK != pubkeyinit_result))
+            {
+                return PSA_ERROR_GENERIC_ERROR;
+            }
+            MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+            /* Call Dh KeyGeneration for keys generation and check FP and return code */
+            MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(keygeneration_result, keygeneration_token, mcuxClEcc_MontDH_GenerateKeyPair(&session,
+                                                                  privKeyHandler,
+                                                                  pubKeyHandler));
+            if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEcc_MontDH_GenerateKeyPair) != keygeneration_token) || (MCUXCLECC_STATUS_OK != keygeneration_result))
+            {
+                return PSA_ERROR_GENERIC_ERROR;
+            }
+            MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+            *key_buffer_length = (size_t) MCUXCLECC_MONTDH_CURVE448_SIZE_PRIVATEKEY;
 
             MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(cleanup_result, cleanup_token, mcuxClSession_cleanup(&session));
             if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClSession_cleanup) != cleanup_token) || (MCUXCLSESSION_STATUS_OK != cleanup_result))
@@ -131,12 +153,12 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
         }
 
         //Byte length of a Curve25519
-        else if(bytes == MCUXCLECC_MONT_CURVE25519_SIZE_PRIVATEKEY)
+        else if(bytes == MCUXCLECC_MONTDH_CURVE25519_SIZE_PRIVATEKEY)
         {
-            uint32_t pCpuWa[MCUXCLECC_MONT_DHKEYGENERATION_CURVE25519_WACPU_SIZE / (sizeof(uint32_t))];
+            uint32_t pCpuWa[MCUXCLECC_MONTDH_GENERATEKEYPAIR_CURVE25519_WACPU_SIZE / (sizeof(uint32_t))];
             /* Initialize session with pkcWA on the beginning of PKC RAM */
-            MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(si_status, si_token, mcuxClSession_init(&session, pCpuWa, MCUXCLECC_MONT_DHKEYGENERATION_CURVE25519_WACPU_SIZE,
-                                     (uint32_t *) MCUXCLPKC_RAM_START_ADDRESS, MCUXCLECC_MONT_DHKEYGENERATION_CURVE25519_WAPKC_SIZE));
+            MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(si_status, si_token, mcuxClSession_init(&session, pCpuWa, MCUXCLECC_MONTDH_GENERATEKEYPAIR_CURVE25519_WACPU_SIZE,
+                                     (uint32_t *) MCUXCLPKC_RAM_START_ADDRESS, MCUXCLECC_MONTDH_GENERATEKEYPAIR_CURVE25519_WAPKC_SIZE));
 
 
             if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClSession_init) != si_token) || (MCUXCLSESSION_STATUS_OK != si_status))
@@ -165,28 +187,48 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 
             MCUX_CSSL_ANALYSIS_START_PATTERN_REINTERPRET_MEMORY_OF_OPAQUE_TYPES()
             /* Prepare input for key generation */
-            uint32_t privKeyDesc[MCUXCLKEY_DESCRIPTOR_SIZE / (sizeof(uint32_t))];
+            uint32_t privKeyDesc[MCUXCLKEY_DESCRIPTOR_SIZE_IN_WORDS];
             mcuxClKey_Handle_t privKeyHandler = (mcuxClKey_Handle_t) &privKeyDesc;
             uint8_t pubKeyDesc[MCUXCLKEY_DESCRIPTOR_SIZE];
             mcuxClKey_Handle_t pubKeyHandler = (mcuxClKey_Handle_t) &pubKeyDesc;
             MCUX_CSSL_ANALYSIS_STOP_PATTERN_REINTERPRET_MEMORY()
-            uint8_t pubKeyBuffer[MCUXCLECC_MONT_CURVE25519_SIZE_PUBLICKEY]={0};
-            uint32_t privKeyLength = 0u;
-            uint32_t pubKeyLength = 0u;
+            uint8_t pubKeyBuffer[MCUXCLECC_MONTDH_CURVE25519_SIZE_PUBLICKEY]={0};
 
-            /* Call Dh KeyGeneration for keys generation and check FP and return code */
-            MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(keygeneration_result, keygeneration_token, mcuxClEcc_Mont_DhKeyGeneration(&session,
-                                                                  mcuxClKey_Type_Ecc_MontDH_Curve25519_KeyPair,
-                                                                  mcuxClKey_Protection_None,
-                                                                  privKeyHandler, key_buffer, &privKeyLength,
-                                                                  pubKeyHandler, pubKeyBuffer, &pubKeyLength));
-            if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEcc_Mont_DhKeyGeneration) != keygeneration_token) || (MCUXCLECC_STATUS_OK != keygeneration_result))
+            MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(privkeyinit_result, privkeyinit_token, mcuxClKey_init(
+            /* mcuxClSession_Handle_t session         */ &session,
+            /* mcuxClKey_Handle_t key                 */ privKeyHandler,
+            /* mcuxClKey_Type_t type                  */ mcuxClKey_Type_Ecc_MontDH_Curve25519_PrivateKey,
+            /* mcuxCl_Buffer_t pKeyData               */ (mcuxCl_Buffer_t) key_buffer,
+            /* uint32_t keyDataLength                */ MCUXCLECC_MONTDH_CURVE25519_SIZE_PRIVATEKEY));
+            if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClKey_init) != privkeyinit_token) || (MCUXCLKEY_STATUS_OK != privkeyinit_result))
             {
                 return PSA_ERROR_GENERIC_ERROR;
             }
             MCUX_CSSL_FP_FUNCTION_CALL_END();
 
-            *key_buffer_length = (size_t) privKeyLength;
+            MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(pubkeyinit_result, pubkeyinit_token, mcuxClKey_init(
+            /* mcuxClSession_Handle_t session         */ &session,
+            /* mcuxClKey_Handle_t key                 */ pubKeyHandler,
+            /* mcuxClKey_Type_t type                  */ mcuxClKey_Type_Ecc_MontDH_Curve25519_PublicKey,
+            /* mcuxCl_Buffer_t pKeyData               */ (mcuxCl_Buffer_t) pubKeyBuffer,
+            /* uint32_t keyDataLength                */ MCUXCLECC_MONTDH_CURVE25519_SIZE_PUBLICKEY));
+            if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClKey_init) != pubkeyinit_token) || (MCUXCLKEY_STATUS_OK != pubkeyinit_result))
+            {
+                return PSA_ERROR_GENERIC_ERROR;
+            }
+            MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+            /* Call Dh KeyGeneration for keys generation and check FP and return code */
+            MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(keygeneration_result, keygeneration_token, mcuxClEcc_MontDH_GenerateKeyPair(&session,
+                                                                  privKeyHandler,
+                                                                  pubKeyHandler));
+            if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEcc_MontDH_GenerateKeyPair) != keygeneration_token) || (MCUXCLECC_STATUS_OK != keygeneration_result))
+            {
+                return PSA_ERROR_GENERIC_ERROR;
+            }
+            MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+            *key_buffer_length = (size_t) MCUXCLECC_MONTDH_CURVE25519_SIZE_PRIVATEKEY;
 
             MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(cleanup_result, cleanup_token, mcuxClSession_cleanup(&session));
             if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClSession_cleanup) != cleanup_token) || (MCUXCLSESSION_STATUS_OK != cleanup_result))
@@ -209,7 +251,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
             return PSA_ERROR_NOT_SUPPORTED;
         }
     }
-    //For Weierstrass curves, curve_parameters have defined in mcuxClEcc_Constants.c
+    //For Weierstrass curves, curve_parameters have defined in mcuxClEcc_Types.c
     else if((curve == PSA_ECC_FAMILY_SECP_R1) || (curve == PSA_ECC_FAMILY_SECP_K1) || (curve == PSA_ECC_FAMILY_BRAINPOOL_P_R1))
     {
         if(attributes->domain_parameters_size != 0u)
@@ -230,7 +272,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
         /* Setup one session to be used by all functions called */
         mcuxClSession_Descriptor_t session;
 
-        uint32_t pCpuWa[MCUXCLECC_KEYGEN_WACPU_SIZE(MCUXCLECC_WEIERECC_MAX_SIZE_BASEPOINTORDER) / (sizeof(uint32_t))];
+        uint32_t pCpuWa[MCUXCLECC_KEYGEN_WACPU_SIZE / (sizeof(uint32_t))];
         /* Initialize session with pkcWA on the beginning of PKC RAM */
         MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(si_status, si_token, mcuxClSession_init(&session, pCpuWa, sizeof(pCpuWa),
                                  (uint32_t *) MCUXCLPKC_RAM_START_ADDRESS, MCUXCLECC_KEYGEN_WAPKC_SIZE(byteLenP,byteLenN)));
@@ -245,7 +287,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
         /* Initialize the RNG context, with maximum size */
         uint32_t context[MCUXCLRANDOMMODES_CTR_DRBG_AES256_CONTEXT_SIZE_IN_WORDS] = {0u};
         mcuxClRandom_Context_t pRng_ctx = (mcuxClRandom_Context_t)context;
-        
+
         mcuxClRandom_Mode_t randomMode = NULL;
         if(byteLenN <= 32u)  /* 128-bit security strength */
         {
@@ -259,18 +301,18 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
         MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(rngInit_result, rngInit_token, mcuxClRandom_init(&session, pRng_ctx, randomMode));
 
         if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_init) != rngInit_token) || (MCUXCLRANDOM_STATUS_OK != rngInit_result))
-        {                                                                   
-            return PSA_ERROR_GENERIC_ERROR;                                                   
-        }                                                                   
+        {
+            return PSA_ERROR_GENERIC_ERROR;
+        }
 
-        MCUX_CSSL_FP_FUNCTION_CALL_END();                                    
+        MCUX_CSSL_FP_FUNCTION_CALL_END();
 
-        /* Initialize the PRNG */                                           
-        MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(prngInit_result, prngInit_token, mcuxClRandom_ncInit(&session));                        
-        if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_ncInit) != prngInit_token) || (MCUXCLRANDOM_STATUS_OK != prngInit_result))    \
-        {                                                                   
-            return PSA_ERROR_GENERIC_ERROR;                                                   
-        }                                                                   
+        /* Initialize the PRNG */
+        MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(prngInit_result, prngInit_token, mcuxClRandom_ncInit(&session));
+        if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_ncInit) != prngInit_token) || (MCUXCLRANDOM_STATUS_OK != prngInit_result))
+        {
+            return PSA_ERROR_GENERIC_ERROR;
+        }
         MCUX_CSSL_FP_FUNCTION_CALL_END();
 
         uint8_t pubKeyBuffer[2u*MCUXCLECC_WEIERECC_MAX_SIZE_PRIMEP];
@@ -294,15 +336,21 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
             pN[i] = curveParamData->common.pFullModulusN[byteLenN + MCUXCLPKC_WORDSIZE - i - 1u];
         }
 
+        MCUXCLBUFFER_INIT_RO(buffA, NULL, pA, byteLenP);
+        MCUXCLBUFFER_INIT_RO(buffB, NULL, pB, byteLenP);
+        MCUXCLBUFFER_INIT_RO(buffP, NULL, pP, byteLenP);
+        MCUXCLBUFFER_INIT_RO(buffG, NULL, pG, byteLenP * 2u);
+        MCUXCLBUFFER_INIT_RO(buffN, NULL, pN, byteLenN);
+
         mcuxClEcc_KeyGen_Param_t paramKeyGen =
         {
             .curveParam = (mcuxClEcc_DomainParam_t)
             {
-                .pA = pA,
-                .pB = pB,
-                .pP = pP,
-                .pG = pG,
-                .pN = pN,
+                .pA = buffA,
+                .pB = buffB,
+                .pP = buffP,
+                .pG = buffG,
+                .pN = buffN,
                 .misc = mcuxClEcc_DomainParam_misc_Pack(byteLenN, byteLenP)
             },
             .pPrivateKey = key_buffer,

@@ -35,7 +35,7 @@
 #define LIFETIME_INTERNAL PSA_KEY_LIFETIME_FROM_PERSISTENCE_AND_LOCATION(PSA_KEY_LIFETIME_VOLATILE, PSA_KEY_LOCATION_EXTERNAL_STORAGE)
 #define LIFETIME_EXTERNAL PSA_KEY_LIFETIME_FROM_PERSISTENCE_AND_LOCATION(PSA_KEY_LIFETIME_VOLATILE, PSA_KEY_LOCATION_LOCAL_STORAGE)
 
-bool mcuxClPsaDriver_keygen_export_public_key_brainpoolpr1_example(void)
+MCUXCLEXAMPLE_FUNCTION(mcuxClPsaDriver_keygen_export_public_key_brainpoolpr1_example)
 {
     /* Enable ELS */
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClEls_Enable_Async()); // Enable the ELS.
@@ -73,7 +73,7 @@ bool mcuxClPsaDriver_keygen_export_public_key_brainpoolpr1_example(void)
       .domain_parameters_size = 0U};
 
     /* Call generate_key operation */
-    uint8_t key_buffer[MCUXCLKEY_SIZE_384] = {0U};
+    ALIGNED uint8_t key_buffer[MCUXCLKEY_SIZE_384] = {0U};
     size_t key_buffer_size = MCUXCLKEY_SIZE_384;
     size_t key_buffer_length = 0U;
 
@@ -114,8 +114,10 @@ bool mcuxClPsaDriver_keygen_export_public_key_brainpoolpr1_example(void)
     };
 
     /* Call export_public_key operation */
-    uint8_t data[PSA_EXPORT_PUBLIC_KEY_OUTPUT_SIZE(PSA_KEY_TYPE_ECC_PUBLIC_KEY(PSA_ECC_FAMILY_BRAINPOOL_P_R1), MCUXCLKEY_SIZE_384 * 8u)] = {0U}; //2u * sizeof(prime_p)
+    MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_MACRO()
+    ALIGNED uint8_t data[PSA_EXPORT_PUBLIC_KEY_OUTPUT_SIZE(PSA_KEY_TYPE_ECC_PUBLIC_KEY(PSA_ECC_FAMILY_BRAINPOOL_P_R1), MCUXCLKEY_SIZE_384 * 8u)] = {0U}; //2u * sizeof(prime_p)
     size_t data_size = PSA_EXPORT_PUBLIC_KEY_OUTPUT_SIZE(PSA_KEY_TYPE_ECC_PUBLIC_KEY(PSA_ECC_FAMILY_BRAINPOOL_P_R1), MCUXCLKEY_SIZE_384 * 8u);   //byteLenP =32U
+    MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_MACRO()
     size_t data_length = 0U;
 
     status = psa_driver_wrapper_export_public_key(
@@ -154,9 +156,4 @@ bool mcuxClPsaDriver_keygen_export_public_key_brainpoolpr1_example(void)
 
     /* Return */
     return MCUXCLEXAMPLE_STATUS_OK;
-}
-bool nxpClPsaDriver_keygen_export_public_key_brainpoolpr1_example(void)
-{
-    bool result = mcuxClPsaDriver_keygen_export_public_key_brainpoolpr1_example();
-    return result;
 }

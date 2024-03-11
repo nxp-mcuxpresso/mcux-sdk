@@ -42,6 +42,7 @@ extern "C" {
  * @{
  */
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_API_DECLARATIONS()
 
 /**
  * @brief Mode for a DRBG implemented by the ELS
@@ -103,6 +104,7 @@ static const mcuxClRandom_Mode_t mcuxClRandomModes_Mode_CtrDrbg_AES256_DRG3 =
 
 
 #endif /* defined(MCUXCL_FEATURE_RANDOMMODES_NORMALMODE) && defined(MCUXCL_FEATURE_RANDOMMODES_CTRDRBG) */
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_API_DECLARATIONS()
 
 /**
  * @}

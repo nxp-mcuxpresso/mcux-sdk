@@ -23,10 +23,11 @@
 
 #include <mcuxClPkc.h>
 #include <mcuxClMath.h>
+#include <mcuxClEcc.h>
 
 #include <internal/mcuxClPkc_Operations.h>
 #include <internal/mcuxClEcc_Weier_Internal.h>
-#include <internal/mcuxClEcc_Weier_Internal_PointArithmetic_FUP.h>
+#include <internal/mcuxClEcc_Weier_Internal_FUP.h>
 
 
 /**
@@ -66,9 +67,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClEcc_Int_PointMult(uint8_t iScalar, uint3
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES("32-bit aligned UPTRT table is assigned in CPU workarea")
     uint32_t *pOperands32 = (uint32_t *) pOperands;
     MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES()
-    MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("MISRA Ex. 9 to Rule 11.3 - PKC word is CPU word aligned.");
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("MISRA Ex. 9 to Rule 11.3 - PKC word is CPU word aligned.")
     const uint32_t *pScalar = (const uint32_t *) MCUXCLPKC_OFFSET2PTR(pOperands[iScalar]);
-    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING();
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
 
     uint32_t scalarWord;
     uint32_t scalarBits;
@@ -89,7 +90,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClEcc_Int_PointMult(uint8_t iScalar, uint3
     /* Prepare offsets to coordinates of Prec_i. */
     uint32_t offsets_VY_VX = pOperands32[(WEIER_X1 / 2u) - 1u + scalarBits];
     /* Prepare offsets to coordinates of R. */
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("Access 32-bit aligned UPTR table 16-bit-wisely according to PKC spec")
     uint32_t offsets_VYA_VXA = MCUXCLECC_LOAD_2OFFSETS(pOperands32, WEIER_XA, WEIER_YA);
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
 
     /* Initialize z' = 1 in MR. */
     MCUXCLPKC_FP_CALC_OP1_NEG(WEIER_ZA, ECC_P);

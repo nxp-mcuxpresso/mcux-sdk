@@ -22,7 +22,7 @@
 #include <mcuxClHash_Types.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
-#include <mcuxClCore_Buffer.h>
+#include <mcuxClBuffer.h>
 
 #ifdef __cplusplus
 extern "C" {

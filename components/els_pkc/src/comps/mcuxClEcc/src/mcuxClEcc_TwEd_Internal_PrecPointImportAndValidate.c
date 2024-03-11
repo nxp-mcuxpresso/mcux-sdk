@@ -20,12 +20,13 @@
 #include <mcuxClSession.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClEcc.h>
 
 #include <internal/mcuxClMemory_Copy_Internal.h>
 #include <internal/mcuxClPkc_ImportExport.h>
 #include <internal/mcuxClPkc_Operations.h>
 #include <internal/mcuxClEcc_TwEd_Internal.h>
-#include <internal/mcuxClEcc_TwEd_Internal_PointValidation_FUP.h>
+#include <internal/mcuxClEcc_TwEd_Internal_FUP.h>
 
 
 /**

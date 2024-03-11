@@ -20,7 +20,7 @@
 #include <mcuxCsslFlowProtection_FunctionIdentifiers.h>
 
 /* Example global SC */
-static volatile uint32_t testVariable = 0u; 
+static volatile uint32_t testVariable = 0u;
 
 /* Protected function pointer type */
 MCUX_CSSL_FP_FUNCTION_POINTER(functionPointerType_t,
@@ -79,7 +79,7 @@ uint32_t functionOnly(void)
 
 void assertCallback(void)
 {
-  testVariable += 1UL;
+  testVariable = 0xFFU;
 }
 
 /****************************************************************************/
@@ -339,7 +339,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) functionAssert(void)
   MCUX_CSSL_FP_FUNCTION_ENTRY(functionAssert,
     MCUX_CSSL_FP_FUNCTION_CALLED(functionOnly0)
   );
- 
+
   MCUX_CSSL_FP_FUNCTION_CALL_VOID(functionOnly0());
 
   /* The ASSERT macro allows the currently recorded code flow to be checked.
@@ -366,7 +366,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) functionAssert(void)
     MCUX_CSSL_FP_FUNCTION_ENTERED(functionAssert)
   );
 
-  /* At this point MCUX_CSSL_FP_ASSERT_CALLBACK should be already executed 
+  /* At this point MCUX_CSSL_FP_ASSERT_CALLBACK should be already executed
   testVariable should be set to 0xFF*/
 
   /* FUNCTION_EXIT can be used with and without providing expectations. */
@@ -379,11 +379,12 @@ MCUX_CSSL_EX_FUNCTION(mcuxCsslFlowProtection_example)
 {
   const uint32_t rOnly = functionOnly();
   (void) rOnly;
-  functionCall();
+  /* Return value from FP token is not used */
+  (void) functionCall();
 
   MCUX_CSSL_FP_FUNCTION_CALL_PROTECTED(returnCode, token, functionCalls());
 
-  if (0xC0E4u != returnCode)  
+  if (0xC0E4u != returnCode)
   {
     return MCUX_CSSL_EX_ERROR;
   }
@@ -396,7 +397,7 @@ MCUX_CSSL_EX_FUNCTION(mcuxCsslFlowProtection_example)
 #else
   (void) token;
 #endif
-    
+
   MCUX_CSSL_FP_FUNCTION_CALL_PROTECTED(returnCode1, token1, functionLoop(10));
 
   if (0xC0DEu != returnCode1)
@@ -466,8 +467,8 @@ MCUX_CSSL_EX_FUNCTION(mcuxCsslFlowProtection_example)
 #else
   (void) token4;
 #endif
-
-  functionAssert();
+  /* Return value from FP token is not used */
+  (void) functionAssert();
 
   return MCUX_CSSL_EX_OK;
 }

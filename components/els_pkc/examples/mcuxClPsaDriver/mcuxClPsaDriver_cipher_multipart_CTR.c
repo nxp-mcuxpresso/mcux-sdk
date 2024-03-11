@@ -13,6 +13,7 @@
 
 #include "common.h"
 
+#include <mcuxClToolchain.h>
 #include <mcuxClEls.h> // Interface to the entire mcuxClEls component
 #include <mcuxClSession.h> // Interface to the entire mcuxClSession component
 #include <mcuxClKey.h> // Interface to the entire mcuxClKey component
@@ -27,43 +28,43 @@
 #define LIFETIME_INTERNAL PSA_KEY_LIFETIME_FROM_PERSISTENCE_AND_LOCATION(PSA_KEY_LIFETIME_VOLATILE, PSA_KEY_LOCATION_EXTERNAL_STORAGE)
 #define LIFETIME_EXTERNAL PSA_KEY_LIFETIME_FROM_PERSISTENCE_AND_LOCATION(PSA_KEY_LIFETIME_VOLATILE, PSA_KEY_LOCATION_LOCAL_STORAGE)
 
-bool mcuxClPsaDriver_cipher_multipart_CTR(void)
+MCUXCLEXAMPLE_FUNCTION(mcuxClPsaDriver_cipher_multipart_CTR)
 {
     /** Values from NIST Special Publication 800-38A 2001 - F.5.1 CTR-AES128.Encrypt */
     /** Key for the AES encryption. */
-    uint8_t const aes128_key[16u] = {   0x2Bu, 0x7Eu, 0x15u, 0x16u,
-                                        0x28u, 0xAEu, 0xD2u, 0xA6u,
-                                        0xABu, 0xF7u, 0x15u, 0x88u,
-                                        0x09u, 0xCFu, 0x4Fu, 0x3Cu};
+    ALIGNED uint8_t const aes128_key[16u] = {   0x2Bu, 0x7Eu, 0x15u, 0x16u,
+                                                0x28u, 0xAEu, 0xD2u, 0xA6u,
+                                                0xABu, 0xF7u, 0x15u, 0x88u,
+                                                0x09u, 0xCFu, 0x4Fu, 0x3Cu};
 
     /** IV of the AES encryption. */
-    uint8_t const aes128_iv[16u] = {    0xF0u, 0xF1u, 0xF2u, 0xF3u,
-                                        0xF4u, 0xF5u, 0xF6u, 0xF7u,
-                                        0xF8u, 0xF9u, 0xFAu, 0xFBu,
-                                        0xFCu, 0xFDu, 0xFEu, 0xFFu};
+    ALIGNED uint8_t const aes128_iv[16u] = {    0xF0u, 0xF1u, 0xF2u, 0xF3u,
+                                                0xF4u, 0xF5u, 0xF6u, 0xF7u,
+                                                0xF8u, 0xF9u, 0xFAu, 0xFBu,
+                                                0xFCu, 0xFDu, 0xFEu, 0xFFu};
 
     /** Plaintext input for the AES encryption. */
-    uint8_t const aes128_input[32u] = { 0x6Bu, 0xC1u, 0xBEu, 0xE2u,
-                                        0x2Eu, 0x40u, 0x9Fu, 0x96u,
-                                        0xE9u, 0x3Du, 0x7Eu, 0x11u,
-                                        0x73u, 0x93u, 0x17u, 0x2Au,
-                                        0xAEu, 0x2Du, 0x8Au, 0x57u,
-                                        0x1Eu, 0x03u, 0xACu, 0x9Cu,
-                                        0x9Eu, 0xB7u, 0x6Fu, 0xaCu,
-                                        0x45u, 0xAFu, 0x8Eu, 0x51u};
+    ALIGNED uint8_t const aes128_input[32u] = { 0x6Bu, 0xC1u, 0xBEu, 0xE2u,
+                                                0x2Eu, 0x40u, 0x9Fu, 0x96u,
+                                                0xE9u, 0x3Du, 0x7Eu, 0x11u,
+                                                0x73u, 0x93u, 0x17u, 0x2Au,
+                                                0xAEu, 0x2Du, 0x8Au, 0x57u,
+                                                0x1Eu, 0x03u, 0xACu, 0x9Cu,
+                                                0x9Eu, 0xB7u, 0x6Fu, 0xaCu,
+                                                0x45u, 0xAFu, 0x8Eu, 0x51u};
 
     /** Expected ciphertext output of the AES encryption. */
-    uint8_t const aes128_result[32u] = {0x87u, 0x4Du, 0x61u, 0x91u,
-                                        0xB6u, 0x20u, 0xE3u, 0x26u,
-                                        0x1Bu, 0xEFu, 0x68u, 0x64u,
-                                        0x99u, 0x0Du, 0xB6u, 0xCEu,
-                                        0x98u, 0x06u, 0xF6u, 0x6Bu,
-                                        0x79u, 0x70u, 0xFDu, 0xFFu,
-                                        0x86u, 0x17u, 0x18u, 0x7Bu,
-                                        0xB9u, 0xFFu, 0xFDu, 0xFFu};
+    ALIGNED uint8_t const aes128_result[32u] = {0x87u, 0x4Du, 0x61u, 0x91u,
+                                                0xB6u, 0x20u, 0xE3u, 0x26u,
+                                                0x1Bu, 0xEFu, 0x68u, 0x64u,
+                                                0x99u, 0x0Du, 0xB6u, 0xCEu,
+                                                0x98u, 0x06u, 0xF6u, 0x6Bu,
+                                                0x79u, 0x70u, 0xFDu, 0xFFu,
+                                                0x86u, 0x17u, 0x18u, 0x7Bu,
+                                                0xB9u, 0xFFu, 0xFDu, 0xFFu};
 
     /* Output buffer for the AES operation */
-    uint8_t aes128_output[sizeof(aes128_result)];
+    ALIGNED uint8_t aes128_output[sizeof(aes128_result)];
 
     /** Initialize ELS, Enable the ELS **/
     if(!mcuxClExample_Els_Init(MCUXCLELS_RESET_DO_NOT_CANCEL))
@@ -231,9 +232,4 @@ bool mcuxClPsaDriver_cipher_multipart_CTR(void)
 
     /* Return */
     return MCUXCLEXAMPLE_STATUS_OK;
-}
-bool nxpClPsaDriver_cipher_multipart_CTR(void)
-{
-    bool result = mcuxClPsaDriver_cipher_multipart_CTR();
-    return result;
 }

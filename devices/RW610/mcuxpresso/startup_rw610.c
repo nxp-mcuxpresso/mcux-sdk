@@ -1,10 +1,10 @@
 //*****************************************************************************
 // RW610 startup code for use with MCUXpresso IDE
 //
-// Version : 161122
+// Version : 011223
 //*****************************************************************************
 //
-// Copyright 2016-2022 NXP
+// Copyright 2016-2023 NXP
 // All rights reserved.
 //
 // SPDX-License-Identifier: BSD-3-Clause
@@ -536,12 +536,6 @@ void (* const g_pfnVectors[])(void) = {
     BLE_ACC_INT_IRQHandler,                       // 143: Cpu access wlan when ble is powered off
     GDMA_IRQHandler,                          // 144: GDMA
 }; /* End of g_pfnVectors */
-
-#if defined(ENABLE_RAM_VECTOR_TABLE)
-extern void * __VECTOR_TABLE __attribute__ ((alias ("g_pfnVectors")));
-void (* __VECTOR_RAM[sizeof(g_pfnVectors) / 4])(void) __attribute__((aligned(128)));
-unsigned int __RAM_VECTOR_TABLE_SIZE_BYTES = sizeof(g_pfnVectors);
-#endif
 
 //*****************************************************************************
 // Functions to carry out the initialization of RW and BSS data sections. These

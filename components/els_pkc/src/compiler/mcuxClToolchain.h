@@ -35,6 +35,8 @@
     */
     #define UNALIGNED __unaligned
     #define MCUX_CSSL_UNUSED(p) ((void) (p))
+    /* Macro for alligning buffers to cpu word */
+    #define ALIGNED __attribute__((aligned(4))) 
 
 /* using the gcc toolchain file for both gcc and armgcc */
 #elif defined ( __GNUC__ )
@@ -43,6 +45,8 @@
     #define MCUX_FUP_ATTRIBUTE __attribute__((aligned(4)))
     #define UNUSED_PARAM __attribute__((unused))
     #define UNALIGNED
+    /* Macro for alligning buffers to cpu word */
+    #define ALIGNED __attribute__((aligned(4))) 
 
 /* for armcc compiler */
 #elif defined ( __CC_ARM )
@@ -51,6 +55,8 @@
     #define MCUX_FUP_ATTRIBUTE __attribute__((aligned(4))) __attribute__((section("MCUX_OBFUSCATED_FUP_SEGMENT")))
     #define UNUSED_PARAM __attribute__((unused))
     #define UNALIGNED __packed
+    /* Macro for alligning buffers to cpu word */
+    #define ALIGNED __attribute__((aligned(4))) 
 
 /* for ghs compiler */
 #elif defined ( __ghs__ )
@@ -59,6 +65,8 @@
     #define MCUX_FUP_ATTRIBUTE __attribute__((aligned(4)))
     #define UNUSED_PARAM __attribute__((unused))
     #define UNALIGNED
+    /* Macro for alligning buffers to cpu word */
+    #define ALIGNED __attribute__((aligned(4))) 
 
 /* for iar compiler */
 #elif defined ( __ICCARM__ )
@@ -67,6 +75,8 @@
     #define MCUX_FUP_ATTRIBUTE __attribute__((aligned(4))) __attribute__((section(".mcux_obfuscated_fup_segment")))
     #define UNUSED_PARAM __attribute__((unused))
     #define UNALIGNED __packed
+    /* Macro for alligning buffers to cpu word */
+    #define ALIGNED __attribute__((aligned(4))) 
 
 /* for llvm */
 #elif defined ( __clang__ )
@@ -75,6 +85,8 @@
     #define MCUX_FUP_ATTRIBUTE __attribute__((aligned(4)))
     #define UNUSED_PARAM __attribute__((unused))
     #define UNALIGNED
+    /* Macro for alligning buffers to cpu word */
+    #define ALIGNED __attribute__((aligned(4))) 
     
 
 #endif

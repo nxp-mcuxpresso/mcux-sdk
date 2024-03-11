@@ -24,11 +24,13 @@
 #include <mcuxClHash.h>
 #include <mcuxClHashModes.h>
 #include <mcuxClRandom.h>
+#include <mcuxClBuffer.h>
 
 #include <internal/mcuxClHash_Internal.h>
 #include <internal/mcuxClSession_Internal.h>
 #include <internal/mcuxClPkc_ImportExport.h>
 #include <internal/mcuxClMemory_Copy_Internal.h>
+#include <internal/mcuxClBuffer_Internal.h>
 
 #include <mcuxClRsa.h>
 #include <internal/mcuxClRsa_Internal_Functions.h>
@@ -74,9 +76,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssEncode(
   mcuxClSession_Handle_t       pSession,
   mcuxCl_InputBuffer_t         pInput,
   const uint32_t              inputLength,
-  mcuxCl_Buffer_t              pVerificationInput UNUSED_PARAM,
+  uint8_t *                   pVerificationInput UNUSED_PARAM,
   mcuxClHash_Algo_t            pHashAlgo,
-  const uint8_t *             pLabel UNUSED_PARAM,
+  mcuxCl_InputBuffer_t         pLabel UNUSED_PARAM,
   const uint32_t              saltlabelLength,
   const uint32_t              keyBitLength,
   const uint32_t              options,
@@ -107,20 +109,21 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssEncode(
    * M' = | M'= (padding | mHash | salt) |
    */
   const uint32_t wordSizePkcWa = MCUXCLRSA_INTERNAL_PSSENCODE_MAX_WAPKC_SIZE_WO_MGF1(emLen) / sizeof(uint32_t);
-  mcuxCl_Buffer_t pMprim = (mcuxCl_Buffer_t) mcuxClSession_allocateWords_pkcWa(pSession, wordSizePkcWa);
+  uint8_t *pMprim = (uint8_t *) mcuxClSession_allocateWords_pkcWa(pSession, wordSizePkcWa);
   if (NULL == pMprim)
   {
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_pssEncode, MCUXCLRSA_STATUS_FAULT_ATTACK);
   }
   /* Pointer to the buffer for the mHash in the M'*/
-  mcuxCl_Buffer_t pMHash = pMprim + padding1Length;
+  uint8_t *pMHash = pMprim + padding1Length;
   /* Pointer to the buffer for the salt in the M'*/
-  mcuxCl_Buffer_t pSalt = pMHash + hLen;
+  uint8_t *pSalt = pMHash + hLen;
 
   /* Pointer to the encoded message */
-  mcuxCl_Buffer_t pEm = pOutput;
+  /* Extract plain pointer from buffer type (this buffer has been created in internal memory by the calling function, for compatibility purposes) */
+  uint8_t *pEm = MCUXCLBUFFER_GET(pOutput);
   /* Pointer to the hash */
-  mcuxCl_Buffer_t pH = pEm + dbLen;
+  uint8_t *pH = pEm + dbLen;
 
   /* Note: Step 1 from EMSA-PSS-VERIFY in PKCS #1 v2.2 can be avoided because messageLength
    * of function mcuxClRsa_sign is of type uint32_t and thus limited to 32 bits.
@@ -150,11 +153,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssEncode(
     /* Call hash function on pInput (Hash(pInput)) and store result in buffer mHash */
     uint32_t hashOutputSize = 0u;
 
+    MCUXCLBUFFER_INIT(pMHashBuf, NULL, pMHash, hLen);
     MCUX_CSSL_FP_FUNCTION_CALL(hash_result1, mcuxClHash_compute(pSession,
                                                               pHashAlgo,
                                                               pInput,
                                                               inputLength,
-                                                              pMHash,
+                                                              pMHashBuf,
                                                               &hashOutputSize
     ));
 
@@ -167,7 +171,13 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssEncode(
   else if (MCUXCLRSA_OPTION_MESSAGE_DIGEST == (options & MCUXCLRSA_OPTION_MESSAGE_MASK))
   {
     /* Copy pInput to buffer mHash */
-    MCUXCLMEMORY_FP_MEMORY_COPY(pMHash, pInput, hLen);
+    MCUX_CSSL_FP_FUNCTION_CALL(read_result, mcuxClBuffer_read(pInput, 0u, pMHash, hLen));
+    if(MCUXCLBUFFER_STATUS_OK != read_result)
+    {
+        mcuxClSession_freeWords_pkcWa(pSession, wordSizePkcWa);
+        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_pssEncode, read_result,
+          MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClBuffer_read));
+    }
   }
   else
   {
@@ -176,7 +186,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssEncode(
   }
 
   /* Step 4: Generate a random octet string salt of length sLen; if sLen = 0, then salt is the empty string. */
-  MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate, mcuxClRandom_ncGenerate(pSession, pSalt, sLen));
+  MCUXCLBUFFER_INIT(pSaltBuf, NULL, pSalt, sLen);
+  MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate, mcuxClRandom_ncGenerate(pSession, pSaltBuf, sLen));
   if (MCUXCLRANDOM_STATUS_OK != ret_Random_ncGenerate)
   {
     mcuxClSession_freeWords_pkcWa(pSession, wordSizePkcWa);
@@ -191,11 +202,13 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssEncode(
   /* Step 6: Let H = Hash(M'), an octet string of length hLen. */
   uint32_t hashOutputSize = 0u;
 
+  MCUXCLBUFFER_INIT_RO(pMprimBuf, NULL, pMprim, padding1Length);
+  MCUXCLBUFFER_INIT(pHBuf, NULL, pH, hLen);
   MCUX_CSSL_FP_FUNCTION_CALL(hash_result_2, mcuxClHash_compute(pSession,
                                                              pHashAlgo,
-                                                             pMprim,
+                                                             pMprimBuf,
                                                              mprimLen,
-                                                             pH,
+                                                             pHBuf,
                                                              &hashOutputSize
                                                              ));
 
@@ -269,7 +282,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssEncode(
     MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_OPTION_MESSAGE_PLAIN == (options & MCUXCLRSA_OPTION_MESSAGE_MASK)),
       MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClHash_compute)),
     MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_OPTION_MESSAGE_DIGEST == (options & MCUXCLRSA_OPTION_MESSAGE_MASK)),
-      MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_copy)),
+      MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClBuffer_read)),
     TMP_FEATURE_ELS_RNG,
     MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClHash_compute),
     MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_mgf1),

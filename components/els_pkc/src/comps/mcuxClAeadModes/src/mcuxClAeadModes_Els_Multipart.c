@@ -50,8 +50,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t)  mcuxClAeadModes_init(
             - all other arguments
             - unused arguments = NULL/0
     */
-    /* MISRA Ex. 9 to Rule 11.3 */
+    MCUX_CSSL_ANALYSIS_START_PATTERN_REINTERPRET_MEMORY_OF_OPAQUE_TYPES()
     mcuxClAeadModes_Context_t * pCtx = (mcuxClAeadModes_Context_t * ) pContext;
+    MCUX_CSSL_ANALYSIS_STOP_PATTERN_REINTERPRET_MEMORY()
     pCtx->common.mode = mode;
     pCtx->key = key;
     pCtx->dataLength = inLength;
@@ -108,8 +109,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t)  mcuxClAeadModes_process(
             - all other arguments
             - unused arguments = NULL/0
     */
-    /* MISRA Ex. 9 to Rule 11.3 */
+    MCUX_CSSL_ANALYSIS_START_PATTERN_REINTERPRET_MEMORY_OF_OPAQUE_TYPES()
     mcuxClAeadModes_Context_t * pCtx = (mcuxClAeadModes_Context_t * ) pContext;
+    MCUX_CSSL_ANALYSIS_STOP_PATTERN_REINTERPRET_MEMORY()
     if((pCtx->processedDataLength < pCtx->aadLength) ||
        ((pCtx->processedDataLength + inLength) > (pCtx->aadLength + pCtx->dataLength)))
     {
@@ -162,8 +164,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t)  mcuxClAeadModes_process_adata(
             - all other arguments
             - unused arguments = NULL/0
     */
-    /* MISRA Ex. 9 to Rule 11.3 */
+    MCUX_CSSL_ANALYSIS_START_PATTERN_REINTERPRET_MEMORY_OF_OPAQUE_TYPES()
     mcuxClAeadModes_Context_t * pCtx = (mcuxClAeadModes_Context_t * ) pContext;
+    MCUX_CSSL_ANALYSIS_STOP_PATTERN_REINTERPRET_MEMORY()
     if((pCtx->processedDataLength + adataLength) > pCtx->aadLength)
     {
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClAeadModes_process_adata, MCUXCLAEAD_STATUS_ERROR);
@@ -216,8 +219,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t)  mcuxClAeadModes_finish(
             - all other arguments
             - unused arguments = NULL/0
     */
-    /* MISRA Ex. 9 to Rule 11.3 */
+    MCUX_CSSL_ANALYSIS_START_PATTERN_REINTERPRET_MEMORY_OF_OPAQUE_TYPES()
     mcuxClAeadModes_Context_t * pCtx = (mcuxClAeadModes_Context_t * ) pContext;
+    MCUX_CSSL_ANALYSIS_STOP_PATTERN_REINTERPRET_MEMORY()
     if(pCtx->processedDataLength != (pCtx->dataLength + pCtx->aadLength))
     {
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClAeadModes_finish, MCUXCLAEAD_STATUS_ERROR);
@@ -271,8 +275,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t) mcuxClAeadModes_verify(
             - all other arguments
             - unused arguments = NULL/0
     */
-    /* MISRA Ex. 9 to Rule 11.3 */
+    MCUX_CSSL_ANALYSIS_START_PATTERN_REINTERPRET_MEMORY_OF_OPAQUE_TYPES()
     mcuxClAeadModes_Context_t * pCtx = (mcuxClAeadModes_Context_t * ) pContext;
+    MCUX_CSSL_ANALYSIS_STOP_PATTERN_REINTERPRET_MEMORY()
     if(pCtx->processedDataLength != pCtx->dataLength + pCtx->aadLength)
     {
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClAeadModes_verify, MCUXCLAEAD_STATUS_ERROR);
@@ -290,7 +295,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t) mcuxClAeadModes_verify(
       /* uint32_t adataLength,                 */ 0u,
       /* mcuxCl_Buffer_t pOut,                  */ pOut,
       /* uint32_t * const pOutLength,          */ pOutLength,
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST("Multipurpose function argument is not modified when MCUXCLAEADMODES_OPTION_VERIFY option is used")
       /* mcuxCl_Buffer_t pTag,                  */ (mcuxCl_Buffer_t) pTag,
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
       /* uint32_t tagLength,                   */ pCtx->tagLength,
       /* uint32_t options                      */ MCUXCLAEADMODES_OPTION_VERIFY
     ));

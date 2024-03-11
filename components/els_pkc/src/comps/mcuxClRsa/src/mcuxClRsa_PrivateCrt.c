@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -18,6 +18,7 @@
 #include <stdint.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClCore_Macros.h>
 #include <mcuxCsslParamIntegrity.h>
 #include <mcuxCsslMemory.h>
 #include <mcuxClMemory.h>
@@ -44,7 +45,7 @@ MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRsa_privateCRT)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
   mcuxClSession_Handle_t      pSession,
   const mcuxClRsa_Key * const pKey,
-  mcuxCl_InputBuffer_t        pInput,
+  uint8_t                   *pInput,
   mcuxCl_Buffer_t             pOutput)
 {
   MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClRsa_privateCRT);
@@ -119,39 +120,39 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
   const uint32_t byteLenPQ = pKey->pMod1->keyEntryLength;  // P and Q have the same byte length
   const uint32_t byteLenQInv = pKey->pQInv->keyEntryLength;
   const uint32_t byteLenCeilN = 2u * byteLenPQ;  // rounded up byte length of N, necessary for calculations as N is obtained by multiplying P and Q
-  const uint32_t blindLen = MCUXCLRSA_INTERNAL_PRIVATECRT_BLINDING_SIZE;  // length in bytes of the random value used for blinding
-  const uint32_t blindAlignLen = MCUXCLRSA_PKC_ROUNDUP_SIZE(blindLen);
-  const uint32_t blindSquaredAlignLen = MCUXCLRSA_PKC_ROUNDUP_SIZE(blindLen * 2u);
-  const uint32_t primeAlignLen = MCUXCLRSA_PKC_ROUNDUP_SIZE(byteLenPQ);
-  const uint32_t modAlignLen = MCUXCLRSA_PKC_ROUNDUP_SIZE(byteLenCeilN);
-  const uint32_t qInvAlignLen = MCUXCLRSA_PKC_ROUNDUP_SIZE(byteLenQInv);
+  const uint32_t blindLen = MCUXCLRSA_INTERNAL_MOD_BLINDING_SIZE;  // length in bytes of the random value used for blinding
+  const uint32_t blindAlignLen = MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(blindLen);
+  const uint32_t blindSquaredAlignLen = MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(blindLen * 2u);
+  const uint32_t primeAlignLen = MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(byteLenPQ);
+  const uint32_t modAlignLen = MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(byteLenCeilN);
+  const uint32_t qInvAlignLen = MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(byteLenQInv);
   const uint32_t blindedPrimeAlignLen = primeAlignLen + blindAlignLen;
   const uint32_t blindedMessageAlignLen = modAlignLen + blindAlignLen;
   const uint32_t blindedModAlignLen = 2u * blindedPrimeAlignLen;
 
   /* PKC buffer sizes */
-  const uint16_t bufferSizePrimeRand = (uint16_t)blindAlignLen;  // size of buffer for random multiplicative blinding
-  const uint16_t bufferSizePrimePQb = (uint16_t)blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of buffer for blinded P or Q, including PKW word for NDash
-  const uint16_t bufferSizePrimeT0 = (uint16_t)blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer primeT0
-  const uint16_t bufferSizePrimeT1 = (uint16_t)blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer primeT1
-  const uint16_t bufferSizePrimeT2 = (uint16_t)blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer primeT2
-  const uint16_t bufferSizePrimeT3 = (uint16_t)blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer primeT3
-  const uint16_t bufferSizePrimeT4 = (uint16_t)blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer primeT4
-  const uint16_t bufferSizePrimeTE = (uint16_t)6u*MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer primeTE
-  const uint16_t bufferSizePrimeR = (uint16_t)blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer R (result of the internal exponentiation)
-  const uint16_t bufferSizePrimeT5 =  (uint16_t)blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE; // size of temporary buffer primeT5
-  const uint16_t bufferSizeModM = (uint16_t)modAlignLen;  // size of buffer for result M
-  const uint16_t bufferSizeModT1 = (uint16_t)modAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer modT1
-  const uint16_t bufferSizeModT2 = (uint16_t)modAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer modT2
-  const uint16_t bufferSizeModT3 = (uint16_t)blindedMessageAlignLen;  // size of blinded message modT3: blindedMessageAlignLen=modAlignLen + MCUXCLRSA_PKC_WORDSIZE
-  const uint16_t bufferSizeModT4 = (uint16_t)blindedModAlignLen;  // size of temporary buffer modT4: blindedModAlignLen = 2*blindedPrimeAlignLen = modAlignLen + 2*MCUXCLRSA_PKC_WORDSIZE
-  const uint16_t bufferSizeModN = (uint16_t)blindedModAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of buffer for modulus N: blindedModAlignLen for the division, and one extra PKW word for NDash
+  const uint32_t bufferSizePrimeRand = blindAlignLen;  // size of buffer for random multiplicative blinding
+  const uint32_t bufferSizePrimePQb = blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of buffer for blinded P or Q, including PKW word for NDash
+  const uint32_t bufferSizePrimeT0 = blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer primeT0
+  const uint32_t bufferSizePrimeT1 = blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer primeT1
+  const uint32_t bufferSizePrimeT2 = blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer primeT2
+  const uint32_t bufferSizePrimeT3 = blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer primeT3
+  const uint32_t bufferSizePrimeT4 = blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer primeT4
+  const uint32_t bufferSizePrimeTE = 6u*MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer primeTE
+  const uint32_t bufferSizePrimeR = blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer R (result of the internal exponentiation)
+  const uint32_t bufferSizePrimeT5 =  blindedPrimeAlignLen + MCUXCLRSA_PKC_WORDSIZE; // size of temporary buffer primeT5
+  const uint32_t bufferSizeModM = blindedMessageAlignLen;  // size of buffer for result M
+  const uint32_t bufferSizeModT1 = blindedMessageAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer modT1
+  const uint32_t bufferSizeModT2 = modAlignLen + 2u * MCUXCLRSA_PKC_WORDSIZE;  // size of temporary buffer modT2
+  const uint32_t bufferSizeModT3 = blindedMessageAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of blinded message modT3: blindedMessageAlignLen=modAlignLen + MCUXCLRSA_PKC_WORDSIZE
+  const uint32_t bufferSizeModT4 = blindedModAlignLen;  // size of temporary buffer modT4: blindedModAlignLen = 2*blindedPrimeAlignLen = modAlignLen + 2*MCUXCLRSA_PKC_WORDSIZE
+  const uint32_t bufferSizeModN = blindedModAlignLen + MCUXCLRSA_PKC_WORDSIZE;  // size of buffer for modulus N: blindedModAlignLen for the division, and one extra PKW word for NDash
 
   /* Setup session. */
-  const uint16_t bufferSizeTotal = bufferSizePrimeRand +
-          MCUXCLRSA_MAX(bufferSizePrimePQb + bufferSizePrimeT0 + bufferSizePrimeT1 + bufferSizePrimeT2 + bufferSizePrimeT3 + bufferSizePrimeT4 + bufferSizePrimeTE + bufferSizePrimeR + bufferSizePrimeT5,
+  const uint32_t bufferSizeTotal = bufferSizePrimeRand +
+          MCUXCLCORE_MAX(bufferSizePrimePQb + bufferSizePrimeT0 + bufferSizePrimeT1 + bufferSizePrimeT2 + bufferSizePrimeT3 + bufferSizePrimeT4 + bufferSizePrimeTE + bufferSizePrimeR + bufferSizePrimeT5,
                        bufferSizeModM + bufferSizeModT1 + bufferSizeModT2 + bufferSizeModT3 + bufferSizeModT4 + bufferSizeModN);
-  const uint32_t pkcWaSizeWord = (uint32_t) bufferSizeTotal / (sizeof(uint32_t));
+  const uint32_t pkcWaSizeWord = bufferSizeTotal / (sizeof(uint32_t));
   uint32_t *pPkcWorkarea = mcuxClSession_allocateWords_pkcWa(pSession, pkcWaSizeWord);
   if (NULL == pPkcWorkarea)
   {
@@ -186,8 +187,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
   MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES("16-bit UPTRT table is assigned in CPU workarea")
   uint16_t * pOperands = (uint16_t *) pOperands32;
   MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES()
-  
-  
+
+
   if (NULL == pOperands)
   {
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_privateCRT, MCUXCLRSA_STATUS_FAULT_ATTACK);
@@ -222,8 +223,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
   MCUXCLPKC_PS1_SETLENGTH(0u, primeAlignLen);
   MCUXCLPKC_FP_CALC_OP2_CONST(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_RAND, 0u);
 
-  /* Prepare expTemp buffer in CPU workarea - aligned to CPU word, length=MCUXCLRSA_ROUND_UP_TO_CPU_WORDSIZE(byteLenExp) */
-  uint32_t * pExpTemp = pOperands32 + MCUXCLRSA_ROUND_UP_TO_CPU_WORDSIZE((MCUXCLRSA_INTERNAL_PRIVCRT_UPTRT_SIZE * sizeof(uint16_t)))/sizeof(uint32_t);
+  /* Prepare expTemp buffer in CPU workarea - aligned to CPU word, length=MCUXCLCORE_NUM_OF_CPUWORDS_CEIL(byteLenExp) */
+  uint32_t * pExpTemp = pOperands32 + MCUXCLCORE_NUM_OF_CPUWORDS_CEIL((MCUXCLRSA_INTERNAL_PRIVCRT_UPTRT_SIZE * sizeof(uint16_t)));
 
   /************************************************************************************************/
   /* Securely import and blind q                                                                  */
@@ -241,7 +242,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
   }
 
   /* Generate random number used for blinding and set LSB to 1, to ensure it is odd and non-null */
-  MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate1, mcuxClRandom_ncGenerate(pSession, (uint8_t *) pBlind, blindLen));
+  MCUXCLBUFFER_INIT(pBufBlind, NULL, (uint8_t *) pBlind, blindLen);
+  MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate1, mcuxClRandom_ncGenerate(pSession, pBufBlind, blindLen));
   if (MCUXCLRANDOM_STATUS_OK != ret_Random_ncGenerate1)
   {
       MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_privateCRT, MCUXCLRSA_STATUS_ERROR);
@@ -310,7 +312,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
   /* Clear PKC buffer before the import */
   MCUXCLPKC_WAITFORREADY();
   MCUXCLPKC_PS1_SETLENGTH(0u, primeAlignLen);
-  MCUXCLPKC_PS2_SETLENGTH(0u, (uint32_t) bufferSizePrimeT0);
+  MCUXCLPKC_PS2_SETLENGTH(0u, bufferSizePrimeT0);
   MCUXCLPKC_FP_CALC_OP2_CONST(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PRIMET0, 0u);
 
   /* Securely import p */
@@ -326,7 +328,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
 
   /* Generate random number used for blinding and set LSB to 1, to ensure it is odd and non-null */
   MCUXCLPKC_PKC_CPU_ARBITRATION_WORKAROUND();  // avoid CPU accessing to PKC workarea when PKC is busy
-  MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate2, mcuxClRandom_ncGenerate(pSession, (uint8_t *) pBlind, blindLen));
+  MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate2, mcuxClRandom_ncGenerate(pSession, pBufBlind, blindLen));
   if (MCUXCLRANDOM_STATUS_OK != ret_Random_ncGenerate2)
   {
       MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_privateCRT, MCUXCLRSA_STATUS_ERROR);
@@ -384,7 +386,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
   /* Calculate QDash for p_b                                                                      */
   /************************************************************************************************/
 
-  const uint32_t qDashAlignLen = MCUXCLRSA_MAX(blindedPrimeAlignLen, qInvAlignLen + MCUXCLRSA_PKC_WORDSIZE);
+  const uint32_t qDashAlignLen = MCUXCLCORE_MAX(blindedPrimeAlignLen, qInvAlignLen + MCUXCLRSA_PKC_WORDSIZE);
   MCUXCLMATH_FP_SHIFTMODULUS(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PRIMET5 /* shifted modulus */, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PQ_B /* p_b */);
   MCUXCLMATH_FP_QDASH(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PRIMET4 /* QDash */, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PRIMET5 /* shifted modulus */,
       MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PQ_B /* p_b */, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PRIMET2 /* temp */, (uint16_t)qDashAlignLen);
@@ -406,7 +408,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
   /* Clear buffers T0, T1 and T2 */
   MCUXCLPKC_WAITFORREADY();
   MCUXCLPKC_PS1_SETLENGTH(0u, qInvAlignLen);
-  MCUXCLPKC_PS2_SETLENGTH(0u, (uint32_t) bufferSizePrimeT0 + bufferSizePrimeT1 + bufferSizePrimeT2);
+  MCUXCLPKC_PS2_SETLENGTH(0u, bufferSizePrimeT0 + bufferSizePrimeT1 + bufferSizePrimeT2);
   MCUXCLPKC_FP_CALC_OP2_CONST(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PRIMET0, 0u);
 
   /* Securely import qInv */
@@ -422,7 +424,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
 
   /* Generate random number R_qInv */
   MCUXCLPKC_PKC_CPU_ARBITRATION_WORKAROUND();  // avoid CPU accessing to PKC workarea when PKC is busy
-  MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate3, mcuxClRandom_ncGenerate(pSession, pPrimeT1, qInvAlignLen));
+  MCUXCLBUFFER_INIT(pBufPrimeT1, NULL, pPrimeT1, qInvAlignLen);
+  MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate3, mcuxClRandom_ncGenerate(pSession, pBufPrimeT1, qInvAlignLen));
   if (MCUXCLRANDOM_STATUS_OK != ret_Random_ncGenerate3)
   {
       MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_privateCRT, MCUXCLRSA_STATUS_ERROR);
@@ -451,7 +454,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
   /* Clear PKC buffer before the import of q */
   MCUXCLPKC_WAITFORREADY();
   MCUXCLPKC_PS1_SETLENGTH(0u, primeAlignLen);
-  MCUXCLPKC_PS2_SETLENGTH(0u, (uint32_t) bufferSizePrimeT0);
+  MCUXCLPKC_PS2_SETLENGTH(0u, bufferSizePrimeT0);
   MCUXCLPKC_FP_CALC_OP2_CONST(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PRIMET0, 0u);
 
   /* Securely import q */
@@ -557,6 +560,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
   /* Calculate message M from M_b                                                                 */
   /************************************************************************************************/
 
+  /* Clear the M first to drop the garbage data following M */
+  MCUXCLPKC_PS2_SETLENGTH(0u, blindedMessageAlignLen /* size of M */);
+  MCUXCLPKC_FP_CALC_OP2_CONST(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_M, 0u);
+
   /* Calculate Ndash of N */
   MCUXCLMATH_FP_NDASH(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_N /* N */, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT2 /* temp */);
 
@@ -580,44 +587,31 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
   /* Protection against FA: in case of key type MCUXCLRSA_KEY_PRIVATECRT_DFA,                      */
   /* use obtained message M and public exponent to calculate C', and compare with input C         */
   /************************************************************************************************/
-
   if(MCUXCLRSA_KEY_PRIVATECRT != pKey->keytype)
   {
-      /************************************************************************************************/
-      /* Prepare Montgomery parameters and convert parameters to Montgomery representation.           */
-      /************************************************************************************************/
+    MCUX_CSSL_FP_FUNCTION_CALL(retPublicExp, mcuxClRsa_publicExp(pSession,
+                                                               MCUXCLPKC_PACKARGS4(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT2,
+                                                                                  MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_M,
+                                                                                  MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_N,
+                                                                                  MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT1),
+                                                               MCUXCLPKC_PACKARGS4(0, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT3,
+                                                                                  MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT4,
+                                                                                  MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_RAND),
+                                                               pKey->pExp3->keyEntryLength,
+                                                               pKey->pExp3->pKeyEntryData));
+    if (MCUXCLRSA_STATUS_INTERNAL_KEYOP_OK != retPublicExp)
+    {
+      MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_privateCRT, MCUXCLRSA_STATUS_ERROR);
+    }
+    MCUX_CSSL_FP_FUNCTION_CALL(compare_result, mcuxCsslMemory_Compare(mcuxCsslParamIntegrity_Protect(3u, pInput, pModT2, exactModByteLength),
+                                                                    pInput /* input C */,
+                                                                    pModT2 /* calculated C' */,
+                                                                    exactModByteLength));
 
-      /* Calculate QSquared */
-      MCUXCLMATH_FP_QSQUARED(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT1 /* QSquared */, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT2 /* shifted modulus */,
-          MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_N /* N */, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT4 /* temp */);
-
-      /* Convert input to Montgomery representation i.e. M*QSquared mod N */
-      MCUXCLPKC_FP_CALC_MC1_MM(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT2 /* M*QSquared mod N */, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_M /* M */,
-          MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT1 /* QSquared */, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_N /* N */);
-
-      /************************************************************************************************/
-      /* Calculate (M^e) mod N in Montgomery representation: call mcuxClMath_ModExp_SqrMultL2R         */
-      /* Return checking is unnecessary, because it always returns OK.                                */
-      /************************************************************************************************/
-
-      /* mcuxClMath_ModExp_SqrMultL2R(pExp, byteLenExp, iR_iX_iN_iT); */
-      MCUXCLMATH_FP_MODEXP_SQRMULTL2R(pKey->pExp3->pKeyEntryData, pKey->pExp3->keyEntryLength, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT1 /* result: (M^e) mod N in MR */,
-          MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT2 /* M*QSquared mod N */, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_N /* N */, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT4 /* temp */);
-
-      /* Convert from Montgomery to normal representation */
-      /* Normalize the result (case if R > N) and copy to the temp buffer for C' */
-      MCUXCLPKC_FP_CALCFUP(mcuxClRsa_PrivateCrt_ReductionME_FUP,
-          mcuxClRsa_PrivateCrt_ReductionME_FUP_LEN);
-      MCUXCLPKC_WAITFORFINISH();
-      MCUX_CSSL_FP_FUNCTION_CALL(compare_result, mcuxCsslMemory_Compare(mcuxCsslParamIntegrity_Protect(3u, pInput, pModT2, exactModByteLength),
-                                                                      pInput /* input C */,
-                                                                      pModT2 /* calculated C' */,
-                                                                      exactModByteLength));
-
-      if(compare_result != MCUXCSSLMEMORY_STATUS_EQUAL)
-      {
-          MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_privateCRT, MCUXCLRSA_STATUS_ERROR);
-      }
+    if (compare_result != MCUXCSSLMEMORY_STATUS_EQUAL)
+    {
+      MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_privateCRT, MCUXCLRSA_STATUS_FAULT_ATTACK);
+    }
   }
 
   /************************************************************************************************/
@@ -625,11 +619,13 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
   /************************************************************************************************/
 
   /* Copy result to the output buffer */
-  MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC(pOutput, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_M /* M */, exactModByteLength);
+  MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC_BUFFER(mcuxClRsa_privateCRT, pOutput, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_M /* M */, exactModByteLength);
 
   /************************************************************************************************/
   /* Function exit                                                                                */
   /************************************************************************************************/
+  mcuxClSession_freeWords_pkcWa(pSession, pkcWaSizeWord);
+  mcuxClSession_freeWords_cpuWa(pSession, cpuWaSizeWord);
 
   MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_privateCRT, MCUXCLRSA_STATUS_INTERNAL_KEYOP_OK,
           4u * MCUXCLPKC_FP_CALLED_CALC_OP1_CONST,
@@ -647,12 +643,11 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privateCRT(
           MCUXCLPKC_FP_CALLED_CALC_MC1_PM,
           MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_ExactDivideOdd),
           MCUXCLPKC_FP_CALLED_CALC_OP1_CMP,
+          MCUXCLPKC_FP_CALLED_CALC_OP2_CONST,
           MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_KEY_PRIVATECRT != pKey->keytype),
-                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_QSquared),
-                MCUXCLPKC_FP_CALLED_CALC_MC1_MM,
-                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_CalcFup),
-                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_ModExp_SqrMultL2R),
+                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_publicExp),
+
                 MCUX_CSSL_FP_FUNCTION_CALLED(mcuxCsslMemory_Compare)
           ),
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ExportBigEndianFromPkc));
+        MCUXCLPKC_FP_CALLED_EXPORTBIGENDIANFROMPKC_BUFFER);
 }

@@ -70,6 +70,7 @@ static mcuxClMac_Mode_t mcuxClMac_Mode_CBCMAC_NoPadding =
   &mcuxClMac_ModeDescriptor_CBCMAC_NoPadding;
 MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DECLARED_BUT_NEVER_REFERENCED()
 
+
 /**
  * @brief CBC-MAC mode descriptor with ISO/IEC 9797-1 padding method 1
  * @ingroup mcuxClMacModes_Modes
@@ -99,6 +100,7 @@ MCUX_CSSL_ANALYSIS_START_SUPPRESS_DECLARED_BUT_NEVER_REFERENCED("Declaration pro
 static mcuxClMac_Mode_t mcuxClMac_Mode_CBCMAC_PaddingISO9797_1_Method2 =
   &mcuxClMac_ModeDescriptor_CBCMAC_PaddingISO9797_1_Method2;
 MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DECLARED_BUT_NEVER_REFERENCED()
+
 
 /**
  * @brief CBC-MAC mode descriptor with PKCS7 padding padding

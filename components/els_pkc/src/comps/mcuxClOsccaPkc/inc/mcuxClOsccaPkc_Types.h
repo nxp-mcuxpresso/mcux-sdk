@@ -23,7 +23,6 @@
 
 #include <stdint.h>
 #include <mcuxClConfig.h> // Exported features flags header
-#include <platform_specific_headers.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClOscca_FunctionIdentifiers.h>
 
@@ -38,8 +37,7 @@
 /**********************************************************/
 /* PKC information                                        */
 /**********************************************************/
-#define MCUXCLOSCCAPKC_PKC_RAM_BASEADDR              ((uint32_t)PKC_RAM_ADDR)
-#define MCUXCLOSCCAPKC_WORD_SIZE                     (PKC_WORD_SIZE)
+#define MCUXCLOSCCAPKC_RAM_SIZE           0x00001000u  ///< PKC workarea size = 4 KByte
 
 /**
  * @}

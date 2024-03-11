@@ -23,10 +23,9 @@
 
 #include <internal/mcuxClPkc_Macros.h>
 
-#include <mcuxClEcc_Types.h>
+#include <mcuxClEcc.h>
 #include <internal/mcuxClEcc_Internal.h>
 #include <internal/mcuxClEcc_TwEd_Internal.h>
-#include <internal/mcuxClEcc_EdDSA_Internal_PkcWaLayout.h>
 
 /**
  * Plain pointer selection function

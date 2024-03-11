@@ -27,14 +27,14 @@
 
 #include <internal/mcuxClPkc_Operations.h>
 #include <internal/mcuxClEcc_Weier_Internal.h>
-#include <internal/mcuxClEcc_Weier_Internal_PointArithmetic_FUP.h>
+#include <internal/mcuxClEcc_Weier_Internal_FUP.h>
 
 
 /**
  * This function implements repeated point doubling, R = 2^(iteration) * P.
  *
  * Input:
- *   iteration: the iteration number of doubling.
+ *   iteration: the number of iterations of doublings, it has to be >= 2.
  *
  * Inputs in pOperands[] and PKC workarea:
  *   buffers (VX2,VY2, VZ2) contain input P, relative-z;
@@ -59,15 +59,6 @@ MCUX_CSSL_FP_FUNCTION_DEF(mcuxClEcc_RepeatPointDouble)
 MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClEcc_RepeatPointDouble(uint32_t iteration)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClEcc_RepeatPointDouble);
-
-    if (1u == iteration)
-    {
-        /* Only 1 iteration: init/double. */
-        MCUXCLECC_FP_CALCFUP_ONE_DOUBLE();
-
-        MCUX_CSSL_FP_FUNCTION_EXIT_VOID(mcuxClEcc_RepeatPointDouble,
-            MCUXCLECC_FP_CALLED_CALCFUP_ONE_DOUBLE );
-    }
 
     /* The 1st iteration: init/double/update. */
     MCUXCLPKC_FP_CALCFUP(mcuxClEcc_FUP_Weier_RepeatDouble,

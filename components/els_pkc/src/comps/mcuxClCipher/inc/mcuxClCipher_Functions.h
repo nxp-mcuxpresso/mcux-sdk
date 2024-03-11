@@ -22,7 +22,7 @@
 #include <mcuxClKey_Types.h>
 #include <mcuxClCipher_Types.h>
 #include <mcuxClCore_Platform.h>
-#include <mcuxClCore_Buffer.h>
+#include <mcuxClBuffer.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,8 +48,8 @@ extern "C" {
  * @brief One-shot encryption/decryption function
  * @api
  *
- * This function performs an encryption/decryption operation in one shot. The
- * algorithm to be used will be determined based on the mode that is provided.
+ * This function performs an encryption/decryption operation in one shot. The algorithm
+ * to be used will be determined based on the key and mode that are provided.
  *
  * For example, to perform an AES encryption/decryption operation with a 128-bit key in
  * CBC mode on padded data, the following needs to be provided:
@@ -64,8 +64,8 @@ extern "C" {
  * @param      key        Key to be used to encrypt the data.
  * @param      mode       Cipher mode that should be used during the encryption/decryption
  *                        operation.
- * @param[in]  pIv        Pointer to the buffer that contains the IV, if needed
- *                        for the chosen @p mode, otherwise ignored.
+ * @param[in]  pIv        Pointer to the buffer that contains the IV or salt,
+ *                        if needed for the chosen @p mode, otherwise ignored.
  * @param      ivLength   Number of bytes of data in the @p pIv buffer.
  * @param[in]  pIn        Pointer to the input buffer that contains the plain
  *                        data that needs to be encrypted.
@@ -75,6 +75,8 @@ extern "C" {
  * @param[out] pOutLength Will be incremented by the number of bytes of encrypted
  *                        data that have been written to the @p pOut buffer.
  * @return status
+ *
+ * @attention When used with RSA modes, the function uses PRNG, which has to be initialized prior to calling the function.
  */
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClCipher_crypt)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClCipher_Status_t) mcuxClCipher_crypt(

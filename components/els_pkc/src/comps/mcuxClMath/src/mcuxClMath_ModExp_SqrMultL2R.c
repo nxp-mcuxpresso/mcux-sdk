@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -21,13 +21,16 @@
 #include <mcuxClCore_Platform.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
 #include <mcuxCsslFlowProtection.h>
+#include <mcuxCsslAnalysis.h>
 
 #include <mcuxClPkc.h>
 #include <mcuxClMath_Functions.h>
 #include <mcuxClMath_Types.h>
 
+#include <internal/mcuxClPkc_Macros.h>
 #include <internal/mcuxClPkc_Operations.h>
 #include <internal/mcuxClMath_Internal_Utils.h>
+
 
 /**
  * [DESIGN]
@@ -45,26 +48,29 @@
  * When a bit is 0, only a modular squaring is performed (state = 0b01 or 0b11),
  * and then the loop moves to the next bit.
  */
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DECLARED_BUT_NEVER_DEFINED("It is indeed defined.")
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DEFINED_MORE_THAN_ONCE("It defined only once.")
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClMath_ModExp_SqrMultL2R)
 MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ModExp_SqrMultL2R(const uint8_t *pExp, uint32_t expByteLength, uint32_t iR_iX_iN_iT)
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DECLARED_BUT_NEVER_DEFINED()
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DEFINED_MORE_THAN_ONCE()
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClMath_ModExp_SqrMultL2R);
+
+    /* ASSERT: exponent length is reasonable (exponent fits in PKC workarea). */
+    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(expByteLength, 1u, MCUXCLPKC_RAM_SIZE, /* void */)
 
     MCUXCLPKC_PKC_CPU_ARBITRATION_WORKAROUND();  // avoid CPU accessing to PKC workarea when PKC is busy
 
     /* Count Hamming weight of exponent. */
-    MCUX_CSSL_FP_COUNTER_STMT(uint32_t hwExp = 0u);
+    MCUX_CSSL_FP_COUNTER_STMT(uint32_t hwExp = 0u;)
     uint32_t byteIndex_MSNZByte = 0u;
+    uint32_t idx = expByteLength;
 
-    MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(CERT_INT31_C, "expByteLength is bounded by memory size (and smaller than 2^16).")
-    MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(CERT_INT02_C, "expByteLength is bounded by memory size (and smaller than 2^16).")
-    for (int32_t idx = (int32_t) expByteLength - 1; idx >= 0; idx--)
-    MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(CERT_INT02_C)
-    MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(CERT_INT31_C)
+    do
     {
-        MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(INTEGER_OVERFLOW, "idx < expByteLength, which is bounded by memory size (and smaller than 2^16).")
+        idx -= 1u;
         uint32_t expByte = (uint32_t) pExp[idx];
-        MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(INTEGER_OVERFLOW)
 
         /* Find the most significant nonzero byte (= the last nonzero byte when scanning from LSByte to MSByte). */
         if (0u != expByte)
@@ -72,25 +78,29 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ModExp_SqrMultL2R(const uint8_t *pE
             byteIndex_MSNZByte = (uint32_t) idx;
         }
 
-        /* Count Hamming weight of a byte. */
-        expByte = expByte - ((expByte >> 1) & 0x55u);
-        expByte = (expByte & 0x33u) + ((expByte & 0xCCu) >> 2);
-        expByte = (expByte & 0x07u) + ((expByte & 0x70u) >> 4);
-        MCUX_CSSL_FP_COUNTER_STMT(hwExp += expByte);
-    }
+        /* Count Hamming weight of a byte, shall in in the range [0,8]. */
+        MCUX_CSSL_FP_COUNTER_STMT(
+            expByte = expByte - ((expByte >> 1u) & 0x55u);  \
+            expByte = (expByte & 0x33u) + ((expByte & 0xCCu) >> 2u);  \
+            expByte = (expByte & 0x07u) + ((expByte & 0x70u) >> 4u);  \
+            MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(expByte, 0u, 8u, /* void */)  \
+            MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("hwExp will not exceed 8*expByteLength.") \
+            hwExp += expByte;
+            MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP() )
+    } while (0u < idx);
 
-    MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(INTEGER_OVERFLOW, "byteIndex_MSNZByte < expByteLength, which is bounded by memory size (and smaller than 2^16).")
-    uint32_t byteExp = (uint32_t) pExp[byteIndex_MSNZByte];
-    MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(INTEGER_OVERFLOW)
+    const uint32_t expMSByte = (uint32_t) pExp[byteIndex_MSNZByte];  /* nonzero byte */
+    const uint32_t leadingZeros = mcuxClMath_CountLeadingZerosWord(expMSByte);
+    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(leadingZeros, 24u, 31u, /* void */)
 
-    /* Calculate bit index of starting bit (skip the most significant nonzero bit). */
-    const uint32_t bitIndex_MSBitNext = (8u * (expByteLength - byteIndex_MSNZByte)) - (mcuxClMath_CountLeadingZerosWord(byteExp) - 24u) - 2u;
-    int32_t bitIndex = (int32_t) bitIndex_MSBitNext;
+    /* Calculate bit index of most significant nonzero bit. */
+    const uint32_t bitIndex_MSBit = (8u * (expByteLength - byteIndex_MSNZByte)) - (leadingZeros - 24u) - 1u;
+    int32_t bitIndex = (int32_t) bitIndex_MSBit - 1;  /* Skip the most significant nonzero bit. */
 
     /* Calculate the number of loop iteration for FP. */
-    MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_OVERFLOW("bitIndex is capped at exponent bit length, and Hamming weight hwExp > 0 because exponent is non-zero.")
-    MCUX_CSSL_FP_COUNTER_STMT(const uint32_t loopIteration = (bitIndex_MSBitNext + 1u) + (hwExp - 1u));
-    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_OVERFLOW()
+    MCUX_CSSL_FP_COUNTER_STMT(
+        MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(hwExp, 1u, 8u * expByteLength, /* void */)  /* exponent is nonzero. */ \
+        const uint32_t loopIteration = bitIndex_MSBit + (hwExp - 1u); )
 
     const uint32_t iR = (iR_iX_iN_iT >> 24) & 0xFFu;  /* Also used as T1. */
     const uint32_t iX = (iR_iX_iN_iT >> 16) & 0xFFu;
@@ -115,18 +125,15 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ModExp_SqrMultL2R(const uint8_t *pE
             MCUXCLPKC_FP_CALLED_CALC_MC1_MM);
 
         MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClPkc_Calc(MCUXCLPKC_PARAMMODE_MC1(MM), args[state]));
-        /* mcuxClPkc_Calc always returns OK. */
 
         /* Swap the two temp operands. */
         state = 3u ^ state;
         MCUXCLPKC_PKC_CPU_ARBITRATION_WORKAROUND();  // avoid CPU accessing to PKC workarea when PKC is busy
 
         /* Calculate byte index of exponent in BE. */
-        MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(CERT_INT30_C, "expByteLength > 0, and bitIndex in range [0, 8*expByteLength - 2].")
-        MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(INTEGER_OVERFLOW, "expByteLength > 0, and bitIndex in range [0, 8*expByteLength - 2].")
-        uint32_t expBit = ((uint32_t) pExp[expByteLength - 1u - ((uint32_t) bitIndex / 8u)] >> ((uint32_t) bitIndex & 7u)) & 1u;
-        MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(INTEGER_OVERFLOW)
-        MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(CERT_INT30_C)
+        const uint32_t byteIndex = expByteLength - 1u - ((uint32_t) bitIndex / 8u);
+        const uint32_t expByte = (uint32_t) pExp[byteIndex];
+        const uint32_t expBit = (expByte >> ((uint32_t) bitIndex & 7u)) & 1u;
 
         /* If expBit = 1, the while-loop will stay in this bit for one more iteration. */
         shift ^= expBit;
@@ -138,7 +145,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClMath_ModExp_SqrMultL2R(const uint8_t *pE
 
     /* The result is in T1 (R) if state.bit1 = 0; */
     /*                  T0 (T) if state.bit1 = 1. */
-    if (0u != (state >> 1))
+    if (0u != (state >> 1u))
     {
         MCUXCLPKC_FP_CALC_OP1_OR_CONST(iR, iT, 0u);  /* Copy result to R. */
     }

@@ -22,9 +22,15 @@
 #include <mcuxClConfig.h> // Exported features flags header
 #include <mcuxClRsa_Types.h>
 #include <mcuxClHash_Types.h>
-#include <mcuxClCore_Buffer.h>
+#include <mcuxClBuffer.h>
 
+#if defined(MCUXCL_FEATURE_CIPHER_RSA_ENCRYPT) || defined(MCUXCL_FEATURE_CIPHER_RSA_DECRYPT)
+#include <mcuxClRsa_ModeConstructors.h>
+#endif /* defined(MCUXCL_FEATURE_CIPHER_RSA_ENCRYPT) || defined(MCUXCL_FEATURE_CIPHER_RSA_DECRYPT) || defined(MCUXCL_FEATURE_SIGNATURE_RSA_SIGN) || defined(MCUXCL_FEATURE_SIGNATURE_RSA_VERIFY) || defined(MCUXCL_FEATURE_KEY_GENERATION_RSA) */
 
+#if defined(MCUXCL_FEATURE_CIPHER_RSA_ENCRYPT) || defined(MCUXCL_FEATURE_CIPHER_RSA_DECRYPT)
+#include <internal/mcuxClCipher_Internal_Types.h>
+#endif /* MCUXCL_FEATURE_CIPHER_RSA_ENCRYPT || MCUXCL_FEATURE_CIPHER_RSA_DECRYPT */
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,6 +56,7 @@ extern "C" {
 #define MCUXCLRSA_STATUS_INTERNAL_TESTPRIME_GCDA0_FAILED    ((mcuxClRsa_Status_t) 0xB2B2ADADu )  ///< RSA key generation test failed at the stage of GCD with A0
 #define MCUXCLRSA_STATUS_INTERNAL_TESTPRIME_GCDE_FAILED     ((mcuxClRsa_Status_t) 0xB2B2AEAEu )  ///< RSA key generation test failed at the stage of GCD with E
 #define MCUXCLRSA_STATUS_INTERNAL_TESTPRIME_MRT_FAILED      ((mcuxClRsa_Status_t) 0xB2B2AFAFu )  ///< RSA key generation test failed at the stage of Miller Rabin Test
+
 /** @} */
 
 /**
@@ -66,15 +73,15 @@ extern "C" {
  * Generic function pointer to padding function declarations
  *
  * @param[in]  pSession                Pointer to session.
- * @param[in]  pInput                  Pointer to input message or message digest to padding function.
+ * @param[in]  pInput                  Buffer that contains the input data.
  * @param[in]  inputLength             Length of input in bytes.
  * @param[in]  pVerificationInput      Pointer to encoded message that is verified.
  * @param[in]  pHashAlgo               Pointer to hash algorithm used in padding function.
- * @param[in]  pLabel                  Pointer to label in case of OAEP padding.
+ * @param[in]  pLabel                  Buffer that contains the label in case of OAEP padding.
  * @param[in]  saltlabelLength         Length of salt in case of PSS padding, or label in case of OAEP padding.
  * @param[in]  keyBitLength            Bitlength of public modulus n.
  * @param[in]  options                 Options.
- * @param[out] pOutput                 Output of padding or verification function.
+ * @param[out] pOutput                 Buffer that contains the output of the padding function.
  * @param[out] pOutLength              Length of output in bytes.
  *
  * @return Status of the padding operation
@@ -84,9 +91,9 @@ typedef MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) (* mcuxClRsa_PadVerModeE
   mcuxClSession_Handle_t       pSession,
   mcuxCl_InputBuffer_t         pInput,
   const uint32_t              inputLength,
-  mcuxCl_Buffer_t              pVerificationInput,
+  uint8_t *                   pVerificationInput,
   mcuxClHash_Algo_t            pHashAlgo,
-  const uint8_t *             pLabel,
+  mcuxCl_InputBuffer_t         pLabel,
   const uint32_t              saltlabelLength,
   const uint32_t              keyBitLength,
   const uint32_t              options,
@@ -104,6 +111,39 @@ struct mcuxClRsa_SignVerifyMode_t
   mcuxClHash_Algo_t              pHashAlgo2;         ///< RFU
   mcuxClRsa_PadVerModeEngine_t   pPaddingFunction;   ///< Pointer to padding functionality.
 };
+
+#if defined(MCUXCL_FEATURE_CIPHER_RSA_ENCRYPT) || defined(MCUXCL_FEATURE_CIPHER_RSA_DECRYPT)
+/**
+ * @brief RSA-specific key types
+ */
+#define MCUXCLRSA_KEYTYPE_INTERNAL_PUBLIC         (MCUXCLKEY_ALGO_ID_RSA + MCUXCLKEY_ALGO_ID_PUBLIC_KEY)
+#define MCUXCLRSA_KEYTYPE_INTERNAL_PRIVATEPLAIN   (MCUXCLKEY_ALGO_ID_RSA + MCUXCLKEY_ALGO_ID_PRIVATE_KEY)
+#define MCUXCLRSA_KEYTYPE_INTERNAL_PRIVATECRT     (MCUXCLKEY_ALGO_ID_RSA + MCUXCLKEY_ALGO_ID_PRIVATE_KEY_CRT)
+#define MCUXCLRSA_KEYTYPE_INTERNAL_PRIVATECRTDFA  (MCUXCLKEY_ALGO_ID_RSA + MCUXCLKEY_ALGO_ID_PRIVATE_KEY_CRT_DFA)
+#endif /*  defined(MCUXCL_FEATURE_CIPHER_RSA_ENCRYPT) || defined(MCUXCL_FEATURE_CIPHER_RSA_DECRYPT) || defined(MCUXCL_FEATURE_SIGNATURE_RSA_SIGN) || defined(MCUXCL_FEATURE_SIGNATURE_RSA_VERIFY) || defined(MCUXCL_FEATURE_KEY_GENERATION_RSA) */
+
+
+#if defined(MCUXCL_FEATURE_CIPHER_RSA_ENCRYPT) || defined(MCUXCL_FEATURE_CIPHER_RSA_DECRYPT)
+/**
+ * @brief RSA-specific algorithm descriptor structure for encryption/decryption with @ref mcuxClCipher
+ */
+typedef struct
+{
+  mcuxClHash_AlgorithmDescriptor_t *  pHashAlgo;   ///< Pointer to hashing functionality.
+  mcuxClRsa_PadVerModeEngine_t   pCryptMode;       ///< Pointer to padding functionality for the crypt mode.
+  uint32_t                      crypt_FunId;      ///< Flow protection function identifier of padding.
+} mcuxClRsa_Cipher_AlgorithmDescriptor_t;
+
+/**
+ * @brief This structure captures all the information related to the functions
+ * of the Cipher interfaces.
+ */
+typedef struct mcuxClRsa_Cipher_ModeFunctions
+{
+  MCUXCLCIPHER_ENCRYPT_DECRYPT_ONESHOT_MODEFUNCTIONS // used with MCUXCL_FEATURE_CIPHER_ENCRYPT_DECRYPT
+  MCUXCLCIPHER_CRYPT_MODEFUNCTIONS                   // used with MCUXCL_FEATURE_CIPHER_CRYPT
+} mcuxClRsa_Cipher_ModeFunctions_t;
+#endif /* MCUXCL_FEATURE_CIPHER_RSA_ENCRYPT || MCUXCL_FEATURE_CIPHER_RSA_DECRYPT */
 
 
 #ifdef __cplusplus

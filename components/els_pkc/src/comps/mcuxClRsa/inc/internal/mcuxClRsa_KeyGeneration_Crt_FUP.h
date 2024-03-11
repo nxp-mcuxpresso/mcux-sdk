@@ -16,15 +16,19 @@
 */
 #ifndef MCUXCLRSA_KEYGENERATION_CRT_FUP_H_
 #define MCUXCLRSA_KEYGENERATION_CRT_FUP_H_
-#include <mcuxClConfig.h> // Exported features flags header
+#include <mcuxClCore_Platform.h>
+#include <mcuxCsslAnalysis.h>
+
 #include <internal/mcuxClPkc_FupMacros.h>
 
 #define mcuxClRsa_KeyGeneration_Crt_Steps10_FUP_LEN  3u
 #define mcuxClRsa_KeyGeneration_Crt_Steps11_FUP_LEN  3u
 #define mcuxClRsa_KeyGeneration_Crt_Steps12_FUP_LEN  3u
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_LINKAGE_FUP()
 extern const mcuxClPkc_FUPEntry_t mcuxClRsa_KeyGeneration_Crt_Steps10_FUP[mcuxClRsa_KeyGeneration_Crt_Steps10_FUP_LEN];
 extern const mcuxClPkc_FUPEntry_t mcuxClRsa_KeyGeneration_Crt_Steps11_FUP[mcuxClRsa_KeyGeneration_Crt_Steps11_FUP_LEN];
 extern const mcuxClPkc_FUPEntry_t mcuxClRsa_KeyGeneration_Crt_Steps12_FUP[mcuxClRsa_KeyGeneration_Crt_Steps12_FUP_LEN];
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_LINKAGE_FUP()
 
-#endif /* MCUXCLRSA_KEYGENERATION_CRT_FUP_H_ */ 
+#endif /* MCUXCLRSA_KEYGENERATION_CRT_FUP_H_ */

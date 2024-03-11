@@ -20,12 +20,14 @@
 #define MCUXCLMATH_MODINV_FUP_H_
 
 #include <mcuxClCore_Platform.h>
+#include <mcuxCsslAnalysis.h>
 #include <internal/mcuxClPkc_FupMacros.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_LINKAGE_FUP()
 /*
  * FUP program declaration mcuxClMath_ModInv_Fup1
  */
@@ -40,6 +42,7 @@ extern const mcuxClPkc_FUPEntry_t mcuxClMath_ModInv_Fup1[7];
 
 extern const mcuxClPkc_FUPEntry_t mcuxClMath_ModInv_Fup3a[mcuxClMath_ModInv_Fup3_LEN];
 extern const mcuxClPkc_FUPEntry_t mcuxClMath_ModInv_Fup3b[mcuxClMath_ModInv_Fup3_LEN];
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_LINKAGE_FUP()
 
 #ifdef __cplusplus
 } /* extern "C" */

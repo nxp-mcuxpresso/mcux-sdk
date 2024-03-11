@@ -143,7 +143,8 @@ MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_KeyImpor
 }
 #endif /* MCUXCL_FEATURE_ELS_PUK_INTERNAL */
 
-static MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_handleKeyExportError(uint8_t *pOutput, size_t keyLength, mcuxClEls_InterruptOptionEn_t interrupt_state_old)
+MCUX_CSSL_FP_FUNCTION_DEF(mcuxClEls_handleKeyExportError)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_handleKeyExportError(uint8_t *pOutput, size_t keyLength, mcuxClEls_InterruptOptionEn_t interrupt_state_old)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClEls_handleKeyExportError,
                                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_ResetIntFlags),

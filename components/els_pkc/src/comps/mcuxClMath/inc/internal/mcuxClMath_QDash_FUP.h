@@ -20,12 +20,14 @@
 #define MCUXCLMATH_QDASH_FUP_H_
 
 #include <mcuxClCore_Platform.h>
+#include <mcuxCsslAnalysis.h>
 #include <internal/mcuxClPkc_FupMacros.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_LINKAGE_FUP()
 /*
  * FUP program declaration mcuxClMath_QDash_Fup_Init
  */
@@ -46,6 +48,7 @@ extern const mcuxClPkc_FUPEntry_t mcuxClMath_QDash_Fup_Loop0[mcuxClMath_QDash_Fu
 #define mcuxClMath_QDash_Fup_Loop1_LEN  3u
 
 extern const mcuxClPkc_FUPEntry_t mcuxClMath_QDash_Fup_Loop1[mcuxClMath_QDash_Fup_Loop1_LEN];
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_LINKAGE_FUP()
 
 #ifdef __cplusplus
 } /* extern "C" */

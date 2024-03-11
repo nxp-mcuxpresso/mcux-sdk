@@ -36,7 +36,6 @@
 #define MCUXCLCIPHER_STATUS_OK                           ((mcuxClCipher_Status_t) 0x02222E03u)
 #define MCUXCLCIPHER_STATUS_JOB_STARTED                  ((mcuxClCipher_Status_t) 0x02222E47u)
 #define MCUXCLCIPHER_STATUS_JOB_COMPLETED                ((mcuxClCipher_Status_t) 0x02222E8Bu)
-#define MCUXCLCIPHER_STATUS_JOB_UNAVAILABLE              ((mcuxClCipher_Status_t) 0x022289BCu)
 
 /** @}*/
 #endif /* MCUXCLCIPHER_CONSTANTS_H_ */

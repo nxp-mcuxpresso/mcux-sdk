@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2022-2023 NXP                                                  */
+/* Copyright 2022-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -19,6 +19,8 @@
 #ifndef MCUXCLRANDOMMODES_MEMORYCONSUMPTION_H_
 #define MCUXCLRANDOMMODES_MEMORYCONSUMPTION_H_
 
+#include <mcuxClCore_Macros.h>
+
 /**
  * @defgroup mcuxClRandomModes_MemoryConsumption mcuxClRandomModes_MemoryConsumption
  * @brief Defines the memory consumption for the @ref mcuxClRandom component
@@ -26,13 +28,15 @@
  * @{
  */
 
-#define MCUXCLRANDOMMODES_PATCHMODE_DESCRIPTOR_SIZE     (20u)
+#define MCUXCLRANDOMMODES_PATCHMODE_DESCRIPTOR_SIZE          (20u)
+#define MCUXCLRANDOMMODES_PATCHMODE_DESCRIPTOR_SIZE_IN_WORDS (MCUXCLCORE_NUM_OF_CPUWORDS_CEIL(MCUXCLRANDOMMODES_PATCHMODE_DESCRIPTOR_SIZE))
 
 #ifdef MCUXCL_FEATURE_RANDOMMODES_TESTMODE
-#define MCUXCLRANDOMMODES_TESTMODE_DESCRIPTOR_SIZE     (20u)
+#define MCUXCLRANDOMMODES_TESTMODE_DESCRIPTOR_SIZE          (20u)
+#define MCUXCLRANDOMMODES_TESTMODE_DESCRIPTOR_SIZE_IN_WORDS (MCUXCLCORE_NUM_OF_CPUWORDS_CEIL(MCUXCLRANDOMMODES_TESTMODE_DESCRIPTOR_SIZE))
 #endif
 
-#ifdef MCUXCL_FEATURE_PROJECT_NIOBE4ANALOG
+#ifdef MCUXCL_FEATURE_PLATFORM_LPC
 
 #define MCUXCLRANDOMMODES_MAX_CPU_WA_BUFFER_SIZE                      (4u)
 
@@ -76,13 +80,8 @@
 
 
 #ifdef MCUXCL_FEATURE_RANDOMMODES_SECSTRENGTH_256
-#ifdef MCUXCL_FEATURE_PLATFORM_RW61X
 #define MCUXCLRANDOMMODES_TESTMODE_CTR_DRBG_AES256_INIT_ENTROPY_SIZE     (71u)
 #define MCUXCLRANDOMMODES_TESTMODE_CTR_DRBG_AES256_RESEED_ENTROPY_SIZE   (55u)
-#else
-#define MCUXCLRANDOMMODES_TESTMODE_CTR_DRBG_AES256_INIT_ENTROPY_SIZE     (72u)
-#define MCUXCLRANDOMMODES_TESTMODE_CTR_DRBG_AES256_RESEED_ENTROPY_SIZE   (56u)
-#endif
 #endif // MCUXCL_FEATURE_RANDOMMODES_SECSTRENGTH_256
 
 #endif /* MCUXCL_FEATURE_RANDOMMODES_CTRDRBG */

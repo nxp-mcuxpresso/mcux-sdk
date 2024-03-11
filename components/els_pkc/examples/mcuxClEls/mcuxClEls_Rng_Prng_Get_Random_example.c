@@ -54,10 +54,10 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEls_Rng_Prng_Get_Random_example)
     }
     MCUX_CSSL_FP_FUNCTION_CALL_END();
 
-    uint32_t random[16];  // buffers of 16 CPU words to be filled with random numbers from PRNG.
+    uint32_t prng_random[16];  // buffers of 16 CPU words to be filled with random numbers from PRNG.
 
     // fill the buffer with random numbers from PRNG.
-    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClEls_Prng_GetRandom((uint8_t*) random, sizeof(random)));
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClEls_Prng_GetRandom((uint8_t*) prng_random, sizeof(prng_random)));
     // mcuxClEls_Prng_GetRandom is a flow-protected function: Check the protection token and the return value
     if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_Prng_GetRandom) != token) || (MCUXCLELS_STATUS_OK != result))
     {

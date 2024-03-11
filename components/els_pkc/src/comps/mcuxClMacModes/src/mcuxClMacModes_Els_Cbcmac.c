@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2022-2023 NXP                                                  */
+/* Copyright 2022-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -32,10 +32,10 @@
 #include <internal/mcuxClMac_Internal_Types.h>
 #include <mcuxClMacModes_MemoryConsumption.h>
 #include <internal/mcuxClMacModes_Els_Ctx.h>
-#include <internal/mcuxClMacModes_Wa.h>
+#include <internal/mcuxClMacModes_Common_Wa.h>
 #include <internal/mcuxClMacModes_Els_Types.h>
 #include <internal/mcuxClMacModes_Els_Cbcmac.h>
-#include <internal/mcuxClMacModes_Algorithms.h>
+#include <internal/mcuxClMacModes_Common_Algorithms.h>
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClMacModes_Engine_CBCMAC_Oneshot)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMacModes_Engine_CBCMAC_Oneshot(
@@ -164,7 +164,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMacModes_Engine_CBCMAC_One
 
         if (MCUXCLELS_STATUS_OK != addressComparisonResult)
         {
-            MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClMacModes_Engine_CBCMAC_Update, MCUXCLMAC_STATUS_ERROR);
+            MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClMacModes_Engine_CBCMAC_Oneshot, MCUXCLMAC_STATUS_ERROR);
         }
 #endif /* MCUXCL_FEATURE_ELS_DMA_FINAL_ADDRESS_READBACK */
     }
@@ -228,7 +228,7 @@ MCUX_CSSL_FP_FUNCTION_DEF(mcuxClMacModes_Engine_CBCMAC_Update)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMacModes_Engine_CBCMAC_Update(
     mcuxClSession_Handle_t session UNUSED_PARAM,
     mcuxClMacModes_Context_t * const pContext,
-    const uint8_t *const pIn,
+    mcuxCl_InputBuffer_t pIn,
     uint32_t inLength)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClMacModes_Engine_CBCMAC_Update);
@@ -351,7 +351,7 @@ MCUX_CSSL_FP_FUNCTION_DEF(mcuxClMacModes_Engine_CBCMAC_Finalize)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMacModes_Engine_CBCMAC_Finalize(
     mcuxClSession_Handle_t session UNUSED_PARAM,
     mcuxClMacModes_Context_t * const pContext,
-    uint8_t *const pOut,
+    mcuxCl_Buffer_t pOut,
     uint32_t *const pOutLength)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClMacModes_Engine_CBCMAC_Finalize);

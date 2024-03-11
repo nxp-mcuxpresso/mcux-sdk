@@ -146,10 +146,11 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClOscca_FastSecureXor(void *pTgt,
     uint32_t wordSize = sizeof(uint32_t);
 
     /* xor by word if aligned */
-    /* MISRA Ex.2 - Rule 11.6 */
+    MCUX_CSSL_ANALYSIS_START_PATTERN_DI_CAST_POINTERS()
     if ((length >= wordSize) && (0U == ((uint32_t)pTgt & (wordSize - 1U)))
                 && (0U == ((uint32_t)pSrc1 & (wordSize - 1U)))
                 && (0U == ((uint32_t)pSrc2 & (wordSize - 1U))))
+    MCUX_CSSL_ANALYSIS_STOP_PATTERN_DI_CAST_POINTERS()
     {
         i = 0U;
         while (length >= wordSize)

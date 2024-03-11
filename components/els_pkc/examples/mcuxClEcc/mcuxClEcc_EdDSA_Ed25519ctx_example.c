@@ -20,45 +20,44 @@
  */
 
 
+#include <mcuxClToolchain.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClRandomModes.h>
 #include <mcuxClEcc.h>
 #include <mcuxClKey.h>
 #include <mcuxClPkc_Types.h>
 #include <mcuxClExample_Session_Helper.h>
 #include <mcuxClCore_Examples.h>
+#include <mcuxClCore_Macros.h>
 #include <mcuxClExample_RNG_Helper.h>
 
 #include <mcuxClExample_ELS_Helper.h>
 
-#define RAM_START_ADDRESS MCUXCLPKC_RAM_START_ADDRESS
-#define MAX_CPUWA_SIZE MCUXCLEXAMPLE_MAX(MCUXCLEXAMPLE_MAX(\
+#define MAX_CPUWA_SIZE MCUXCLCORE_MAX(MCUXCLCORE_MAX(\
                                         MCUXCLECC_EDDSA_GENERATEKEYPAIR_ED25519_WACPU_SIZE,\
                                         MCUXCLECC_EDDSA_GENERATESIGNATURE_ED25519_WACPU_SIZE),\
                                         MCUXCLECC_EDDSA_VERIFYSIGNATURE_ED25519_WACPU_SIZE)
 
-#define MAX_PKCWA_SIZE MCUXCLEXAMPLE_MAX(MCUXCLEXAMPLE_MAX(\
+#define MAX_PKCWA_SIZE MCUXCLCORE_MAX(MCUXCLCORE_MAX(\
                                         MCUXCLECC_EDDSA_GENERATEKEYPAIR_ED25519_WAPKC_SIZE,\
                                         MCUXCLECC_EDDSA_GENERATESIGNATURE_ED25519_WAPKC_SIZE),\
                                         MCUXCLECC_EDDSA_VERIFYSIGNATURE_ED25519_WAPKC_SIZE)
 
-#define CPUALIGN_FROM_BYTES_TO_WORDSIZE(bytesize) \
-    (((bytesize) + sizeof(uint32_t) - 1U ) / (sizeof(uint32_t)))
-
 /* Input taken from "foo" from Section 7.2 of IRTF rfc 8032 */
-static const uint8_t pMessage[] __attribute__ ((aligned (4))) =
+static const ALIGNED uint8_t pMessage[] =
 {
     0xf7u, 0x26u, 0x93u, 0x6du, 0x19u, 0xc8u, 0x00u, 0x49u,
     0x4eu, 0x3fu, 0xdau, 0xffu, 0x20u, 0xb2u, 0x76u, 0xa8u,
 };
 
 /* Context taken from "foo" from Section 7.2 of IRTF rfc 8032 */
-static const uint8_t pContext[] __attribute__ ((aligned (4))) =
+static const ALIGNED uint8_t pContext[] =
 {
     0x66u, 0x6fu, 0x6fu
 };
 
 /* Signature taken from "foo" from Section 7.2 of IRTF rfc 8032 */
-static const uint8_t pRefSignature[MCUXCLECC_EDDSA_ED25519_SIZE_SIGNATURE] __attribute__ ((aligned (4))) =
+static const ALIGNED uint8_t pRefSignature[MCUXCLECC_EDDSA_ED25519_SIZE_SIGNATURE] =
 {
     0x55u, 0xa4u, 0xccu, 0x2fu, 0x70u, 0xa5u, 0x4eu, 0x04u,
     0x28u, 0x8cu, 0x5fu, 0x4cu, 0xd1u, 0xe4u, 0x5au, 0x7bu,
@@ -71,7 +70,7 @@ static const uint8_t pRefSignature[MCUXCLECC_EDDSA_ED25519_SIZE_SIGNATURE] __att
 };
 
 /* Private key taken from "foo" from Section 7.2 of IRTF rfc 8032 */
-static const uint8_t pPrivateKey[MCUXCLECC_EDDSA_ED25519_SIZE_PRIVATEKEY] __attribute__ ((aligned (4))) =
+static const ALIGNED uint8_t pPrivateKey[MCUXCLECC_EDDSA_ED25519_SIZE_PRIVATEKEY] =
 {
     0x03u, 0x05u, 0x33u, 0x4eu, 0x38u, 0x1au, 0xf7u, 0x8fu,
     0x14u, 0x1cu, 0xb6u, 0x66u, 0xf6u, 0x19u, 0x9fu, 0x57u,
@@ -101,15 +100,15 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEcc_EdDSA_Ed25519ctx_example)
   MCUXCLEXAMPLE_ALLOCATE_AND_INITIALIZE_RNG(&session, 0u, mcuxClRandomModes_Mode_ELS_Drbg);
 
   /* Allocate space for and initialize private key handle for an Ed25519 private key */
-  uint32_t privKeyDesc[CPUALIGN_FROM_BYTES_TO_WORDSIZE(MCUXCLKEY_DESCRIPTOR_SIZE)];
+  ALIGNED uint8_t privKeyDesc[MCUXCLKEY_DESCRIPTOR_SIZE];
   mcuxClKey_Handle_t privKey = (mcuxClKey_Handle_t) &privKeyDesc;
-  uint32_t pPrivKeyData[CPUALIGN_FROM_BYTES_TO_WORDSIZE(MCUXCLECC_EDDSA_ED25519_SIZE_PRIVATEKEYDATA)];
+  ALIGNED uint8_t pPrivKeyData[MCUXCLECC_EDDSA_ED25519_SIZE_PRIVATEKEYDATA];
 
   MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(privkeyinit_result, privkeyinit_token, mcuxClKey_init(
   /* mcuxClSession_Handle_t session         */ &session,
   /* mcuxClKey_Handle_t key                 */ privKey,
   /* mcuxClKey_Type_t type                  */ mcuxClKey_Type_EdDSA_Ed25519_Priv,
-  /* mcuxCl_InputBuffer_t pKeyData          */ (mcuxCl_InputBuffer_t) pPrivKeyData,
+  /* uint8_t * pKeyData                    */ pPrivKeyData,
   /* uint32_t keyDataLength                */ sizeof(pPrivKeyData)));
 
   if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClKey_init) != privkeyinit_token) || (MCUXCLKEY_STATUS_OK != privkeyinit_result))
@@ -119,15 +118,15 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEcc_EdDSA_Ed25519ctx_example)
   MCUX_CSSL_FP_FUNCTION_CALL_END();
 
   /* Allocate space for and initialize public key handle for an Ed25519 public key */
-  uint32_t pubKeyDesc[CPUALIGN_FROM_BYTES_TO_WORDSIZE(MCUXCLKEY_DESCRIPTOR_SIZE)];
+  ALIGNED uint8_t pubKeyDesc[MCUXCLKEY_DESCRIPTOR_SIZE];
   mcuxClKey_Handle_t pubKey = (mcuxClKey_Handle_t) &pubKeyDesc;
-  uint32_t pPubKeyData[CPUALIGN_FROM_BYTES_TO_WORDSIZE(MCUXCLECC_EDDSA_ED25519_SIZE_PUBLICKEY)];
+  ALIGNED uint8_t pPubKeyData[MCUXCLECC_EDDSA_ED25519_SIZE_PUBLICKEY];
 
   MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(pubkeyinit_result, pubkeyinit_token, mcuxClKey_init(
   /* mcuxClSession_Handle_t session         */ &session,
   /* mcuxClKey_Handle_t key                 */ pubKey,
   /* mcuxClKey_Type_t type                  */ mcuxClKey_Type_EdDSA_Ed25519_Pub,
-  /* mcuxCl_Buffer_t pKeyData               */ (mcuxCl_Buffer_t) pPubKeyData,
+  /* uint8_t * pKeyData                    */ pPubKeyData,
   /* uint32_t keyDataLength                */ sizeof(pPubKeyData)));
 
   if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClKey_init) != pubkeyinit_token) || (MCUXCLKEY_STATUS_OK != pubkeyinit_result))
@@ -137,7 +136,7 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEcc_EdDSA_Ed25519ctx_example)
   MCUX_CSSL_FP_FUNCTION_CALL_END();
 
   /* Allocate space for and initialize EdDSA key pair generation descriptor for private key input */
-  uint32_t privKeyInputDescriptor[CPUALIGN_FROM_BYTES_TO_WORDSIZE(MCUXCLECC_EDDSA_GENERATEKEYPAIR_DESCRIPTOR_SIZE)];
+  ALIGNED uint8_t privKeyInputDescriptor[MCUXCLECC_EDDSA_GENERATEKEYPAIR_DESCRIPTOR_SIZE];
   MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(initmode_result, initmode_token, mcuxClEcc_EdDSA_InitPrivKeyInputMode(
   /* mcuxClSession_Handle_t pSession                   */ &session,
   /* mcuxClEcc_EdDSA_GenerateKeyPairDescriptor_t *mode */ (mcuxClEcc_EdDSA_GenerateKeyPairDescriptor_t *) &privKeyInputDescriptor,
@@ -150,7 +149,7 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEcc_EdDSA_Ed25519ctx_example)
   MCUX_CSSL_FP_FUNCTION_CALL_END();
 
   /**************************************************************************/
-  /* Key pair generation for EdDSA on Ed25519ctx                            */
+  /* Key pair generation for EdDSA on Ed25519                               */
   /**************************************************************************/
 
   /* Call mcuxClEcc_EdDSA_GenerateKeyPair to derive the public key from the private one. */
@@ -170,8 +169,10 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEcc_EdDSA_Ed25519ctx_example)
   /* Generate the mode and protocol descriptor                              */
   /**************************************************************************/
 
+  MCUXCLBUFFER_INIT_RO(buffContext, NULL, pContext, sizeof(pContext));
+
   /* Allocate space for the hash prefix and a protocol descriptor for Ed25519ctx. */
-  uint32_t protocolDescBytes[CPUALIGN_FROM_BYTES_TO_WORDSIZE(MCUXCLECC_EDDSA_ED25519_SIZE_SIGNATURE_PROTOCOL_DESCRIPTOR(sizeof(pContext)))];
+  ALIGNED uint8_t protocolDescBytes[MCUXCLECC_EDDSA_ED25519_SIZE_SIGNATURE_PROTOCOL_DESCRIPTOR(sizeof(pContext))];
   mcuxClEcc_EdDSA_SignatureProtocolDescriptor_t *pProtocolDesc = (mcuxClEcc_EdDSA_SignatureProtocolDescriptor_t *) protocolDescBytes;
 
   /* Generate Ed25519ctx protocol descriptor */
@@ -180,7 +181,7 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEcc_EdDSA_Ed25519ctx_example)
   /* const mcuxClEcc_EdDSA_DomainParams_t *pDomainParams   */ &mcuxClEcc_EdDSA_DomainParams_Ed25519,
   /* mcuxClEcc_EdDSA_SignatureProtocolDescriptor_t *pProtocolDescriptor */ pProtocolDesc,
   /* uint32_t phflag                                      */ MCUXCLECC_EDDSA_PHFLAG_ZERO,
-  /* mcuxCl_InputBuffer_t pContext                         */ (mcuxCl_InputBuffer_t) pContext,
+  /* mcuxCl_InputBuffer_t pContext                         */ buffContext,
   /* uint32_t contextLen                                  */ sizeof(pContext)));
 
   if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEcc_EdDSA_GenerateProtocolDescriptor) != protocolDescr_token)
@@ -193,17 +194,19 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEcc_EdDSA_Ed25519ctx_example)
   /**************************************************************************/
   /* Ed25519ctx signature generation                                        */
   /**************************************************************************/
+  ALIGNED uint8_t signature[MCUXCLECC_EDDSA_ED25519_SIZE_SIGNATURE] = {0u};
+  uint32_t signatureSize = 0u;
+  MCUXCLBUFFER_INIT_RO(buffIn, NULL, pMessage, sizeof(pMessage));
+  MCUXCLBUFFER_INIT(buffSignature, NULL, signature, MCUXCLECC_EDDSA_ED25519_SIZE_SIGNATURE);
 
   /* Call mcuxClEcc_EdDSA_GenerateSignature to generate the signature. */
-  uint32_t signature[CPUALIGN_FROM_BYTES_TO_WORDSIZE(MCUXCLECC_EDDSA_ED25519_SIZE_SIGNATURE)] = {0u};
-  uint32_t signatureSize = 0u;
   MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(sign_result, sign_token, mcuxClEcc_EdDSA_GenerateSignature(
   /* mcuxClSession_Handle_t pSession                           */ &session,
   /* mcuxClKey_Handle_t key                                    */ privKey,
   /* const mcuxClEcc_EdDSA_SignatureProtocolDescriptor_t *mode */ pProtocolDesc,
-  /* const uint8_t *pIn                                       */ pMessage,
+  /* mcuxCl_InputBuffer_t pIn                                  */ buffIn,
   /* uint32_t inSize                                          */ sizeof(pMessage),
-  /* uint8_t *pSignature                                      */ (uint8_t*)signature,
+  /* mcuxCl_Buffer_t pSignature                                */ buffSignature,
   /* uint32_t *const pSignatureSize                           */ &signatureSize));
 
   if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEcc_EdDSA_GenerateSignature) != sign_token)
@@ -224,9 +227,9 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEcc_EdDSA_Ed25519ctx_example)
   /* mcuxClSession_Handle_t pSession */ &session,
   /* mcuxClKey_Handle_t key          */ pubKey,
   /* const mcuxClEcc_EdDSA_SignatureProtocolDescriptor_t * */ pProtocolDesc,
-  /* const uint8_t *pIn             */ pMessage,
+  /* mcuxCl_InputBuffer_t pIn        */ buffIn,
   /* uint32_t inSize                */ sizeof(pMessage),
-  /* const uint8_t *pSignature      */ (const uint8_t*) signature,
+  /* mcuxCl_InputBuffer_t pSignature */ buffSignature,
   /* uint32_t signatureSize         */ signatureSize
   ));
 

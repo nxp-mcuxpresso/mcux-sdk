@@ -53,7 +53,7 @@
  * @param[in]  chk          The parameter checksum, generated with #mcuxCsslParamIntegrity_Protect.
  * @param[in]  pDst         The destination pointer to buffer to be set. Must not be NULL.
  * @param[in]  val          The byte value to be set. 
- * @param[in]  length       The size in bytes to set. Must be different from zero.
+ * @param[in]  length       The size in bytes to set.
  * @param[in]  bufLength    The buffer size (if bufLength < length, only bufLength bytes are set).
  *
  * @return A status code encapsulated in a flow-protection type.

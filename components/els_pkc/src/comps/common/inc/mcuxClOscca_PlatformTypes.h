@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2016, 2021 NXP                                                 */
+/* Copyright 2016, 2021, 2023 NXP                                           */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -25,7 +25,6 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
-#include <platform_specific_headers.h>
 
 typedef uint32_t mcuxClOscca_Size_t;
 typedef uint32_t mcuxClOscca_Uint_t;

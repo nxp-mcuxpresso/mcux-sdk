@@ -50,7 +50,7 @@
  * @param[in]     pSrc       The data to be copied. Must not be NULL. Must not overlap with @p pDst.
  * @param[out]    pDst       The destination pointer. Must not be NULL. Must not overlap with @p pSrc.
  * @param[in]     dstLength  The size of the destination data buffer in bytes.
- * @param[in]     length     The number of bytes to copy. Must be different from zero.
+ * @param[in]     length     The number of bytes to copy.
  * @return A status code encapsulated in a flow-protection type.
  * @retval #MCUXCSSLMEMORY_STATUS_OK If the operation was successful.
  * @retval #MCUXCSSLMEMORY_STATUS_INVALID_PARAMETER If one of the parameters was invalid (i.e. @p pSrc or @p pDst was NULL or @p length was zero).

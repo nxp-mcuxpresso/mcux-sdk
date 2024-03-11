@@ -20,19 +20,14 @@
 #ifndef MCUXCLECC_TWED_INTERNAL_H_
 #define MCUXCLECC_TWED_INTERNAL_H_
 
-#include <stdint.h>
+#include <mcuxClCore_Platform.h>
 
-#include <mcuxClConfig.h> // Exported features flags header
 #include <mcuxClSession.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
-#include <mcuxClCore_Buffer.h>
-#include <mcuxClMemory.h>
-#include <mcuxClPkc.h>
-#include <mcuxClHash_Types.h>
 
 #include <internal/mcuxClEcc_Internal.h>
-#include <internal/mcuxClEcc_EdDSA_Internal_PkcWaLayout.h>
+#include <internal/mcuxClEcc_TwEd_Internal_PkcWaLayout.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -168,6 +163,36 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_TwEd_VarScalarMult(
     uint32_t options,                                              ///<  [in]  options            Parameter to pass options
     const mcuxClEcc_TwEd_PtrSelectFunction_FP_t *pPtrSelectFctFP    ///<  [in]  pPtrSelectFct      Function to select accumulated ladder points
  );
+
+
+/**********************************************************/
+/* Internal mcuxClEcc_TwEd functions for Ed25519           */
+/**********************************************************/
+
+/**
+ * Declaration of the point doubling function on Ed25519
+ */
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEcc_TwEd_PointDoubleEd25519, mcuxClEcc_TwEd_PointDoubleFunction_t)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_TwEd_PointDoubleEd25519(void);
+
+/**
+ * Declaration of the mixed point addition function on Ed25519
+ */
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEcc_TwEd_MixedPointAddEd25519, mcuxClEcc_TwEd_MixedPointAddFunction_t)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_TwEd_MixedPointAddEd25519(void);
+
+/**
+ * Declaration of function to perform plain (not protected against side-channel attacks) scalar multiplication with the base point on Ed25519
+ */
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEcc_TwEd_PlainFixScalarMult25519, mcuxClEcc_ScalarMultFunction_t)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_TwEd_PlainFixScalarMult25519(
+    mcuxClSession_Handle_t pSession,                 ///<  [in]  pSession            Handle for the current CL session
+    mcuxClEcc_CommonDomainParams_t *pDomainParams,   ///<  [in]  pDomainParams       Pointer to ECC common domain parameters structure
+    uint8_t iScalar,                                ///<  [in]  iScalar             Pointer table index of secret scalar lambda
+    uint32_t scalarBitLength,                       ///<  [in]  scalarBitLength     Bit length of the scalar; must be a multiple of 4
+    uint32_t options                                ///<  [in]  options             Parameter to pass options
+);
+
 
 #ifdef __cplusplus
 } /* extern "C" */

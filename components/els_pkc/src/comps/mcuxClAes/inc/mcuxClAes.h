@@ -23,4 +23,5 @@
 
 #include <mcuxClAes_Constants.h>
 #include <mcuxClAes_KeyTypes.h>
+#include <mcuxClAes_Types.h>
 #endif /* MCUXCLAES_H_ */

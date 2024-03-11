@@ -51,25 +51,25 @@ extern "C" {
  * @ingroup mcuxClEls_Aead_Macros
  * @{
  */
-#define MCUXCLELS_AEAD_ENCRYPT (0x00U) ///< Set #mcuxClEls_AeadOption_t.dcrpt to this value to encrypt data
-#define MCUXCLELS_AEAD_DECRYPT (0x01U) ///< Set #mcuxClEls_AeadOption_t.dcrpt to this value to decrypt data
+#define MCUXCLELS_AEAD_ENCRYPT ((uint8_t)0x00U) ///< Set #mcuxClEls_AeadOption_t.dcrpt to this value to encrypt data
+#define MCUXCLELS_AEAD_DECRYPT ((uint8_t)0x01U) ///< Set #mcuxClEls_AeadOption_t.dcrpt to this value to decrypt data
 
-#define MCUXCLELS_AEAD_STATE_IN_DISABLE (0x00U) ///< Set #mcuxClEls_AeadOption_t.acpsie to this value to load the GCM state from ELS
-#define MCUXCLELS_AEAD_STATE_IN_ENABLE  (0x01U) ///< Set #mcuxClEls_AeadOption_t.acpsie to this value to load the GCM state from the context
+#define MCUXCLELS_AEAD_STATE_IN_DISABLE ((uint8_t)0x00U) ///< Set #mcuxClEls_AeadOption_t.acpsie to this value to load the GCM state from ELS
+#define MCUXCLELS_AEAD_STATE_IN_ENABLE  ((uint8_t)0x01U) ///< Set #mcuxClEls_AeadOption_t.acpsie to this value to load the GCM state from the context
 
-#define MCUXCLELS_AEAD_LASTINIT_TRUE  (0x01U)  ///< Set #mcuxClEls_AeadOption_t.lastinit to this value if this is the last call to init
-#define MCUXCLELS_AEAD_LASTINIT_FALSE (0x00U)  ///< Set #mcuxClEls_AeadOption_t.lastinit to this value if this is not the last call to init
+#define MCUXCLELS_AEAD_LASTINIT_TRUE  ((uint8_t)0x01U)  ///< Set #mcuxClEls_AeadOption_t.lastinit to this value if this is the last call to init
+#define MCUXCLELS_AEAD_LASTINIT_FALSE ((uint8_t)0x00U)  ///< Set #mcuxClEls_AeadOption_t.lastinit to this value if this is not the last call to init
 
-#define MCUXCLELS_AEAD_EXTERN_KEY (0x01U)  ///< Set #mcuxClEls_AeadOption_t.extkey to this value to use an external key
-#define MCUXCLELS_AEAD_INTERN_KEY (0x00U)  ///< Set #mcuxClEls_AeadOption_t.extkey to this value to use a key from the ELS keystore
+#define MCUXCLELS_AEAD_EXTERN_KEY ((uint8_t)0x01U)  ///< Set #mcuxClEls_AeadOption_t.extkey to this value to use an external key
+#define MCUXCLELS_AEAD_INTERN_KEY ((uint8_t)0x00U)  ///< Set #mcuxClEls_AeadOption_t.extkey to this value to use a key from the ELS keystore
 
-#define MCUXCLELS_AEAD_ACPMOD_INIT    (0x00U) ///< Set #mcuxClEls_AeadOption_t.acpmod to this value for Init mode. For internal use
-#define MCUXCLELS_AEAD_ACPMOD_AADPROC (0x01U) ///< Set #mcuxClEls_AeadOption_t.acpmod to this value for Process Additional Authenticated Data mode. For internal use
-#define MCUXCLELS_AEAD_ACPMOD_MSGPROC (0x02U) ///< Set #mcuxClEls_AeadOption_t.acpmod to this value for Process Message mode. For internal use
-#define MCUXCLELS_AEAD_ACPMOD_FINAL   (0x03U) ///< Set #mcuxClEls_AeadOption_t.acpmod to this value for Finalize mode. For internal use
+#define MCUXCLELS_AEAD_ACPMOD_INIT    ((uint8_t)0x00U) ///< Set #mcuxClEls_AeadOption_t.acpmod to this value for Init mode. For internal use
+#define MCUXCLELS_AEAD_ACPMOD_AADPROC ((uint8_t)0x01U) ///< Set #mcuxClEls_AeadOption_t.acpmod to this value for Process Additional Authenticated Data mode. For internal use
+#define MCUXCLELS_AEAD_ACPMOD_MSGPROC ((uint8_t)0x02U) ///< Set #mcuxClEls_AeadOption_t.acpmod to this value for Process Message mode. For internal use
+#define MCUXCLELS_AEAD_ACPMOD_FINAL   ((uint8_t)0x03U) ///< Set #mcuxClEls_AeadOption_t.acpmod to this value for Finalize mode. For internal use
 
 #ifndef MCUXCL_FEATURE_ELS_NO_INTERNAL_STATE_FLAGS
-#define MCUXCLELS_AEAD_STATE_OUT_ENABLE  (0x01U) ///< Set #mcuxClEls_AeadOption_t.acpsoe to this value to save the state to the context. For internal use
+#define MCUXCLELS_AEAD_STATE_OUT_ENABLE  ((uint8_t)0x01U) ///< Set #mcuxClEls_AeadOption_t.acpsoe to this value to save the state to the context. For internal use
 #endif /* MCUXCL_FEATURE_ELS_NO_INTERNAL_STATE_FLAGS */
 /**
  * @}

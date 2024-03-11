@@ -67,21 +67,28 @@ typedef struct
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_CtrDrbg_instantiateAlgorithm, mcuxClRandomModes_instantiateAlgorithm_t)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_CtrDrbg_instantiateAlgorithm(
     mcuxClSession_Handle_t pSession,
-    uint8_t *pEntropyInput);
+    mcuxClRandom_Mode_t mode,
+    mcuxClRandom_Context_t context,
+    uint8_t *pEntropyInputAndNonce);
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_CtrDrbg_reseedAlgorithm, mcuxClRandomModes_reseedAlgorithm_t)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_CtrDrbg_reseedAlgorithm(
     mcuxClSession_Handle_t pSession,
+    mcuxClRandom_Mode_t mode,
+    mcuxClRandom_Context_t context,
     uint8_t *pEntropyInput);
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_CtrDrbg_generateAlgorithm, mcuxClRandomModes_generateAlgorithm_t)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_CtrDrbg_generateAlgorithm(
     mcuxClSession_Handle_t pSession,
-    uint8_t *pOut,
+    mcuxClRandom_Mode_t mode,
+    mcuxClRandom_Context_t context,
+    mcuxCl_Buffer_t pOut,
     uint32_t outLength);
 
 /* Refer to the NIST SP 800-90A 10.3.2 Derivation function using a block cipher algorithm */
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_CtrDrbg_df)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_CtrDrbg_df(
     mcuxClSession_Handle_t pSession,
+    mcuxClRandom_Mode_t mode,
     uint8_t *pInputString,
     uint32_t inputStringLen,
     uint32_t outputLen);
@@ -90,6 +97,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_CtrDrbg_df(
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_CtrDrbg_bcc)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_CtrDrbg_bcc(
     mcuxClSession_Handle_t pSession,
+    mcuxClRandom_Mode_t mode,
     uint32_t const *pKey,
     uint32_t * const pData,
     uint32_t dataLen,
@@ -98,13 +106,17 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_CtrDrbg_bcc
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_CtrDrbg_UpdateState)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_CtrDrbg_UpdateState(
     mcuxClSession_Handle_t pSession,
+    mcuxClRandom_Mode_t mode,
+    mcuxClRandom_Context_t context,
     uint32_t *pProvidedData
 );
 
-MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRandomModes_CtrDrbg_generateOutput)
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_CtrDrbg_generateOutput)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_CtrDrbg_generateOutput(
     mcuxClSession_Handle_t pSession,
-    uint8_t *pOut,
+    mcuxClRandom_Mode_t mode,
+    mcuxClRandom_Context_t context,
+    mcuxCl_Buffer_t pOut,
     uint32_t outLength);
 
 

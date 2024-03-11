@@ -13,39 +13,34 @@
 
 /**
  * @file  mcuxClEcc_TwEd_Internal_PlainFixScalarMult25519.c
- * @brief Edwards curve plain scalar point multiplication for curve 25519
+ * @brief Plain scalar multiplication with (fixed) base point for twisted Edwards curve Ed25519
  */
 
 
-#include <stdint.h>
+#include <mcuxClCore_Platform.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
 
-#include <mcuxClPkc.h>
-#include <mcuxClMath.h>
 #include <mcuxClEcc.h>
 
-#include <internal/mcuxClPkc_Operations.h>
 #include <internal/mcuxClEcc_TwEd_Internal.h>
-#include <internal/mcuxClEcc_TwEd_Internal_Ed25519.h>
 
-/* MISRA Ex. 20 - Rule 5.1 */
+MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 static const mcuxClEcc_TwEd_PointDoubleFunction_FP_t mcuxClEcc_TwEd_PointDoubleEd25519_FP = {
     .pPointDoubleFct = mcuxClEcc_TwEd_PointDoubleEd25519,
     .pointDoubleFct_FP_FuncId = MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEcc_TwEd_PointDoubleEd25519),
 };
 
-/* MISRA Ex. 20 - Rule 5.1 */
 static const mcuxClEcc_TwEd_MixedPointAddFunction_FP_t mcuxClEcc_TwEd_MixedPointAddEd25519_FP = {
     .pMixedPointAddFct = mcuxClEcc_TwEd_MixedPointAddEd25519,
     .mixedPointAddFct_FP_FuncId = MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEcc_TwEd_MixedPointAddEd25519),
 };
 
-/* MISRA Ex. 20 - Rule 5.1 */
 static const mcuxClEcc_TwEd_PtrSelectFunction_FP_t mcuxClEcc_TwEd_PlainPtrSelectComb_FP = {
     .pPtrSelectFct = mcuxClEcc_TwEd_PlainPtrSelectComb,
     .ptrSelectFct_FP_FuncId = MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEcc_TwEd_PlainPtrSelectComb),
 };
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEcc_TwEd_PlainFixScalarMult25519, mcuxClEcc_ScalarMultFunction_t)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_TwEd_PlainFixScalarMult25519(

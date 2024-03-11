@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_ITRC_H_
-#define _FSL_ITRC_H_
+#ifndef FSL_ITRC_H_
+#define FSL_ITRC_H_
 
 #include "fsl_common.h"
 
@@ -21,7 +21,7 @@
  *******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Defines ITRC driver version 2.0.0.
  *
  * Change log:
@@ -29,7 +29,7 @@
  *   - Initial version.
  */
 #define FSL_ITRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
-/*@}*/
+/*! @} */
 
 #define ITRC_INPUT_SIGNALS_NUM (22u)
 
@@ -227,4 +227,4 @@ void ITRC_Deinit(ITRC_Type *base);
 
 /*! @}*/ /* end of group itrc */
 
-#endif /* _FSL_ITRC_H_ */
+#endif /* FSL_ITRC_H_ */

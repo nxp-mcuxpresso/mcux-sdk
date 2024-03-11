@@ -21,15 +21,18 @@
 #include <mcuxClCore_FunctionIdentifiers.h>
 
 #include <mcuxClMemory.h>
-
+#include <mcuxClBuffer.h>
 #include <mcuxClHash.h>
 #include <mcuxClHashModes.h>
+
 #include <internal/mcuxClHash_Internal.h>
 #include <internal/mcuxClSession_Internal.h>
 #include <internal/mcuxClPkc_ImportExport.h>
 #include <internal/mcuxClMemory_Copy_Internal.h>
+#include <internal/mcuxClBuffer_Internal.h>
 
 #include <mcuxClRsa.h>
+#include <internal/mcuxClRsa_Internal_PkcTypes.h>
 #include <internal/mcuxClRsa_Internal_PkcDefs.h>
 #include <internal/mcuxClRsa_Internal_Types.h>
 #include <internal/mcuxClRsa_Internal_Functions.h>
@@ -73,28 +76,36 @@ static const struct mcuxClRsa_oid_t mcuxClRsa_oidTable[] = {
 /**********************************************************/
 /* Specifications of PKCS#1 v1.5 mode structures          */
 /**********************************************************/
+MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 const mcuxClRsa_SignVerifyMode_t mcuxClRsa_Mode_Sign_PKCS1v15_Sha2_224 = {
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     .EncodeVerify_FunId = MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_pkcs1v15Encode_sign),
     .pHashAlgo1         = &mcuxClHash_AlgorithmDescriptor_Sha224,
     .pHashAlgo2         = NULL,
     .pPaddingFunction   = mcuxClRsa_pkcs1v15Encode_sign
 };
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 const mcuxClRsa_SignVerifyMode_t mcuxClRsa_Mode_Sign_PKCS1v15_Sha2_256 = {
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     .EncodeVerify_FunId = MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_pkcs1v15Encode_sign),
     .pHashAlgo1         = &mcuxClHash_AlgorithmDescriptor_Sha256,
     .pHashAlgo2         = NULL,
     .pPaddingFunction   = mcuxClRsa_pkcs1v15Encode_sign
 };
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 const mcuxClRsa_SignVerifyMode_t mcuxClRsa_Mode_Sign_PKCS1v15_Sha2_384 = {
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     .EncodeVerify_FunId = MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_pkcs1v15Encode_sign),
     .pHashAlgo1         = &mcuxClHash_AlgorithmDescriptor_Sha384,
     .pHashAlgo2         = NULL,
     .pPaddingFunction   = mcuxClRsa_pkcs1v15Encode_sign
 };
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 const mcuxClRsa_SignVerifyMode_t mcuxClRsa_Mode_Sign_PKCS1v15_Sha2_512 = {
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     .EncodeVerify_FunId = MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_pkcs1v15Encode_sign),
     .pHashAlgo1         = &mcuxClHash_AlgorithmDescriptor_Sha512,
     .pHashAlgo2         = NULL,
@@ -107,9 +118,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pkcs1v15Encode_sign(
   mcuxClSession_Handle_t       pSession,
   mcuxCl_InputBuffer_t         pInput,
   const uint32_t              inputLength,
-  mcuxCl_Buffer_t              pVerificationInput UNUSED_PARAM,
+  uint8_t *                   pVerificationInput UNUSED_PARAM,
   mcuxClHash_Algo_t            pHashAlgo,
-  const uint8_t *             pLabel UNUSED_PARAM,
+  mcuxCl_InputBuffer_t         pLabel UNUSED_PARAM,
   const uint32_t              saltlabelLength UNUSED_PARAM,
   const uint32_t              keyBitLength,
   const uint32_t              options,
@@ -146,7 +157,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pkcs1v15Encode_sign(
   /* Prepare the padding                               */
   /*****************************************************/
   /* Setup session. */
-  const uint32_t wordSizePkcWa = (emLen + (sizeof(uint32_t)) - 1u) / (sizeof(uint32_t));
+  const uint32_t wordSizePkcWa = MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(emLen) / (sizeof(uint32_t));
   uint8_t *pPkcWorkarea = (uint8_t *) mcuxClSession_allocateWords_pkcWa(pSession, wordSizePkcWa);
   if (NULL == pPkcWorkarea)
   {
@@ -158,14 +169,14 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pkcs1v15Encode_sign(
    * PKC = | 0x00 || 0x01 || PS || 0x00 | T || H |
    */
   /* General pointer to encoded message at the beginning of the buffer */
-  mcuxCl_Buffer_t pEm = pPkcWorkarea;
+  uint8_t *pEm = pPkcWorkarea;
   /* Pointer to the buffer for the padding bytes PS */
-  mcuxCl_Buffer_t pPs = pEm + 2u;
+  uint8_t *pPs = pEm + 2u;
   /* Pointer to the buffer for the algorithm identifier T */
-  mcuxCl_Buffer_t pT = pPs + paddingLength + 1u;
+  uint8_t *pT = pPs + paddingLength + 1u;
 
   /* Pointer to the buffer for the hash H */
-  mcuxCl_Buffer_t pH = pT + hashAlgorithmIdentifierLength;
+  uint8_t *pH = pT + hashAlgorithmIdentifierLength;
 
 
   /* Write 0x00 0x01 prefix */
@@ -192,11 +203,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pkcs1v15Encode_sign(
     /* Call hash function on pInput and store the result in the buffer at pH */
     uint32_t hashOutputSize = 0u;
 
+    MCUXCLBUFFER_INIT(pHBuf, NULL, pH, hLength);
     MCUX_CSSL_FP_FUNCTION_CALL(hash_result, mcuxClHash_compute(pSession,
                                                              pHashAlgo,
                                                              pInput,
                                                              inputLength,
-                                                             pH,
+                                                             pHBuf,
                                                              &hashOutputSize
 
     ));
@@ -208,7 +220,15 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pkcs1v15Encode_sign(
   else if (MCUXCLRSA_OPTION_MESSAGE_DIGEST == (options & MCUXCLRSA_OPTION_MESSAGE_MASK))
   {
     /* Copy pInput to buffer at pH (located at the end of the buffer) */
-    MCUXCLMEMORY_FP_MEMORY_COPY(pH, pInput, hLength);
+    MCUX_CSSL_FP_FUNCTION_CALL(read_result, mcuxClBuffer_read(pInput, 0u, pH, hLength));
+    if(MCUXCLBUFFER_STATUS_OK != read_result)
+    {
+        mcuxClSession_freeWords_pkcWa(pSession, wordSizePkcWa);
+        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_pkcs1v15Encode_sign, read_result,
+          MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_set),
+          MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_copy),
+          MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClBuffer_read));
+    }
   }
   else
   {
@@ -219,14 +239,22 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pkcs1v15Encode_sign(
   /* Prepare the encoded message for output            */
   /*****************************************************/
 
-  /* Copy encoded message to beginning of PKC workarea and switch the endianness */
-  MCUXCLMEMORY_FP_MEMORY_COPY(pOutput, pPkcWorkarea, emLen);
+  /* Copy encoded message to pOutput and switch the endianness */
+  MCUX_CSSL_FP_FUNCTION_CALL(writeStatus, mcuxClBuffer_write_reverse(pOutput, 0u, pPkcWorkarea, emLen));
 
   mcuxClSession_freeWords_pkcWa(pSession, wordSizePkcWa);
 
-  MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES("the pOutput PKC buffer is CPU word aligned.")
-  MCUXCLPKC_FP_SWITCHENDIANNESS((uint32_t *) pOutput, emLen);
-  MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES()
+  if(MCUXCLBUFFER_STATUS_OK != writeStatus)
+  {
+    MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_pkcs1v15Encode_sign, MCUXCLRSA_STATUS_INTERNAL_ENCODE_OK,
+      MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_set),
+      MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_copy),
+      MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_OPTION_MESSAGE_PLAIN == (options & MCUXCLRSA_OPTION_MESSAGE_MASK)),
+        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClHash_compute)),
+      MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_OPTION_MESSAGE_DIGEST == (options & MCUXCLRSA_OPTION_MESSAGE_MASK)),
+        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClBuffer_read)),
+      MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClBuffer_write_reverse));
+  }
 
   /************************************************************************************************/
   /* Function exit                                                                                */
@@ -237,7 +265,6 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pkcs1v15Encode_sign(
     MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_OPTION_MESSAGE_PLAIN == (options & MCUXCLRSA_OPTION_MESSAGE_MASK)),
       MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClHash_compute)),
     MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_OPTION_MESSAGE_DIGEST == (options & MCUXCLRSA_OPTION_MESSAGE_MASK)),
-      MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_copy)),
-    MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_copy),
-    MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_SwitchEndianness));
+      MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClBuffer_read)),
+    MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClBuffer_write_reverse));
 }

@@ -14,6 +14,7 @@
 #include "common.h"
 
 #include <mcuxCsslAnalysis.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClEls.h>
 #include <mcuxClEcc.h>
 #include <mcuxClHash.h>
@@ -24,13 +25,16 @@
 #include <mcuxClRandomModes.h>
 #include <mcuxClRsa.h>
 #include <mcuxClSession.h>
+#include <mcuxClCore_Macros.h>
 
 #include <internal/mcuxClKey_Internal.h>
+#include <internal/mcuxClPkc_Macros.h>
 #include <internal/mcuxClPsaDriver_Functions.h>
 #include <mcuxClPsaDriver_MemoryConsumption.h>
 #include <internal/mcuxClPsaDriver_Internal.h>
 #include <internal/mcuxClRsa_Internal_Types.h>
 #include <internal/mcuxClEcc_Internal.h>
+#include <internal/mcuxClPsaDriver_ExternalMacroWrappers.h>
 
 
 static psa_status_t mcuxClPsaDriver_psa_driver_wrapper_verify_internal(
@@ -162,7 +166,7 @@ static psa_status_t mcuxClPsaDriver_psa_driver_wrapper_verify_internal(
       }
 
       /* Create key struct of type MCUXCLRSA_KEY_PUBLIC */
-      const mcuxClRsa_Key public_key =
+      const mcuxClRsa_Key public_key_other =
       {
         .keytype = MCUXCLRSA_KEY_PUBLIC,
         .pMod1 = &mod1,
@@ -189,7 +193,7 @@ static psa_status_t mcuxClPsaDriver_psa_driver_wrapper_verify_internal(
 
       /* Set the verification mode (in case of PSA_ALG_RSA_PSS the salt length should be equal to the length of the hash) */
       const mcuxClRsa_SignVerifyMode_t * pVerifyMode;
-      psa_algorithm_t hash_alg = PSA_ALG_SIGN_GET_HASH(alg);
+      psa_algorithm_t hash_alg = MCUXCLPSADRIVER_PSA_ALG_SIGN_GET_HASH(alg);
       uint32_t saltLength = 0u;
 
       if(PSA_ALG_IS_RSA_PSS(alg))
@@ -255,13 +259,13 @@ static psa_status_t mcuxClPsaDriver_psa_driver_wrapper_verify_internal(
 
       MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(verify_result, verify_token, mcuxClRsa_verify(
         /* mcuxClSession_Handle_t           pSession: */           &session,
-        /* const mcuxClRsa_Key * const      pKey: */               &public_key,
+        /* const mcuxClRsa_Key * const      pKey: */               &public_key_other,
         /* mcuxCl_InputBuffer_t             pMessageOrDigest: */   input,
         /* const uint32_t                  messageLength: */      messageLength,
-MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST("Const must be discarded due to fixed function API. nxpClRsa_verify does not modify those arguments.")
+        MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST_QUALIFIER("Const must be discarded due to fixed function API. mcuxClRsa_verify does not modify those arguments.")
         /* mcuxCl_Buffer_t                  pSignature: */         (uint8_t *)signature,
-        /* const mcuxClRsa_SignVerifyMode   pVerifyMode: */        (mcuxClRsa_SignVerifyMode) pVerifyMode,
-MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
+        /* const mcuxClRsa_SignVerifyMode   pVerifyMode: */        (mcuxClRsa_SignVerifyMode)pVerifyMode,
+        MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST_QUALIFIER()
         /* const uint32_t                  saltLength: */         saltLength,
         /* uint32_t                        options: */            options,
         /* mcuxCl_Buffer_t                  pOutput: */            NULL));
@@ -284,13 +288,13 @@ MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
       uint8_t pOutputR[MCUXCLECC_WEIERECC_MAX_SIZE_BASEPOINTORDER];
 
       /* buffer for hash */
-      uint8_t hash[64] = {0};
+      uint8_t hash_buffer[64] = {0};
       const uint8_t * pHash = NULL;
       uint32_t hashSize = 0u;
       if(true != isHash)
       {
         /* Select algorithm descriptor */
-        psa_algorithm_t hash_alg = PSA_ALG_SIGN_GET_HASH( alg );
+        psa_algorithm_t hash_alg = MCUXCLPSADRIVER_PSA_ALG_SIGN_GET_HASH( alg );
         const mcuxClHash_AlgorithmDescriptor_t *hashAlgo = mcuxClPsaDriver_psa_driver_wrapper_hash_set_algorithmDescriptor(hash_alg);
 
         /* Perform the hashing operation */
@@ -299,20 +303,20 @@ MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
                                                               hashAlgo,
                                                               input,
                                                               input_length,
-                                                              hash,
+                                                              hash_buffer,
                                                               &hashSize));
         if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClHash_compute) != token) || (MCUXCLHASH_STATUS_OK != result))
         {
           return PSA_ERROR_CORRUPTION_DETECTED;
         }
         MCUX_CSSL_FP_FUNCTION_CALL_END();
-        pHash = hash;
+        pHash = hash_buffer;
       }
       else
       {
         /* Needs to be truncated before calling ECC in case input_length value is too large to be represented
            using optLen bits in verify function  */
-        hashSize = MCUXCLECC_TRUNCATED_HASH_LEN(input_length, nLen);
+        hashSize = MCUXCLCORE_MIN(input_length, nLen);
         pHash = input;
       }
 
@@ -341,6 +345,12 @@ MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
       uint8_t publicKey[2u * MCUXCLECC_WEIERECC_MAX_SIZE_PRIMEP];
 
       uint8_t * pKeyData = mcuxClKey_getLoadedKeyData(pKey);
+
+      MCUXCLBUFFER_INIT_RO(buffA, NULL, a, pLen);
+      MCUXCLBUFFER_INIT_RO(buffB, NULL, b, pLen);
+      MCUXCLBUFFER_INIT_RO(buffP, NULL, p, pLen);
+      MCUXCLBUFFER_INIT_RO(buffG, NULL, G, pLen * 2u);
+      MCUXCLBUFFER_INIT_RO(buffN, NULL, n, nLen);
 
       /* Decode as described in ANSI X9.62
          Octet String to Elliptic Curve Point Conversion */
@@ -373,7 +383,7 @@ MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
             sizeof(publicKey),
             &pubKeyLen,
             true);
-          
+
           if((2u * pLen != pubKeyLen)
              || (PSA_SUCCESS != exportPublicKeyStatus))
           {
@@ -387,17 +397,20 @@ MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
             return PSA_ERROR_GENERIC_ERROR;
           }
 
+          MCUXCLBUFFER_INIT_RO(buffScalar, NULL, pKeyData,  nLen);
+          MCUXCLBUFFER_INIT(buffResult,    NULL, publicKey, pLen * 2u);
+
           /* Calculate public point */
           mcuxClEcc_PointMult_Param_t params = {
-              .curveParam = (mcuxClEcc_DomainParam_t){.pA   = a,
-              .pB   = b,
-              .pP   = p,
-              .pG   = G,
-              .pN   = n,
+              .curveParam = (mcuxClEcc_DomainParam_t){.pA   = buffA,
+              .pB   = buffB,
+              .pP   = buffP,
+              .pG   = buffG,
+              .pN   = buffN,
               .misc = mcuxClEcc_DomainParam_misc_Pack(nLen, pLen)},
-              .pScalar    = pKeyData,
-              .pPoint     = G,
-              .pResult    = publicKey,
+              .pScalar    = buffScalar,
+              .pPoint     = buffG,
+              .pResult    = buffResult,
               .optLen     = 0u};
 
           /* Call PointMult for public keys calculation and check FP and return code */
@@ -411,22 +424,27 @@ MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
         }
       }
 
+      MCUXCLBUFFER_INIT_RO(buffPrecP,     NULL, precP,     pLen * 2u);
+      MCUXCLBUFFER_INIT_RO(buffHash,      NULL, pHash,     hashSize);
+      MCUXCLBUFFER_INIT_RO(buffSignature, NULL, signature, signature_length);
+      MCUXCLBUFFER_INIT(buffOutputR,      NULL, pOutputR,  nLen);
+
       mcuxClEcc_Verify_Param_t paramVerify =
       {
         .curveParam = (mcuxClEcc_DomainParam_t)
         {
-            .pA = a,
-            .pB = b,
-            .pP = p,
-            .pG = G,
-            .pN = n,
+            .pA = buffA,
+            .pB = buffB,
+            .pP = buffP,
+            .pG = buffG,
+            .pN = buffN,
             .misc = mcuxClEcc_DomainParam_misc_Pack(nLen, pLen)
         },
-        .pPrecG = precP,
-        .pHash = (const uint8_t *) pHash,
-        .pSignature = signature,
+        .pPrecG = buffPrecP,
+        .pHash = buffHash,
+        .pSignature = buffSignature,
         .pPublicKey = publicKey,
-        .pOutputR = pOutputR,
+        .pOutputR = buffOutputR,
         .optLen = mcuxClEcc_Verify_Param_optLen_Pack(hashSize)
       };
       MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(verify_result, verify_token, mcuxClEcc_Verify(&session, &paramVerify));

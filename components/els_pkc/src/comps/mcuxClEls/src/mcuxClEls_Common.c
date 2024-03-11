@@ -21,6 +21,7 @@
 #include <mcuxClCore_FunctionIdentifiers.h>
 #include <mcuxClEls.h>
 #include <internal/mcuxClEls_Internal.h>
+#include <internal/mcuxClEls_Internal_Common.h>
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClEls_GetHwVersion)
 MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_GetHwVersion(
@@ -56,7 +57,8 @@ MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_Enable_A
     void)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClEls_Enable_Async);
-    MCUXCLELS_SFR_WRITE(ELS_CTRL, MCUXCLELS_SFR_FIELD_FORMAT(ELS_CTRL, ELS_EN, 1u));
+    const uint32_t sfrVal =  MCUXCLELS_SFR_FIELD_FORMAT(ELS_CTRL, ELS_EN, 1u);
+    MCUXCLELS_SFR_WRITE(ELS_CTRL, sfrVal);
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEls_Enable_Async, MCUXCLELS_STATUS_OK_WAIT);
 }
 
@@ -195,8 +197,8 @@ MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_ResetErr
     void)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClEls_ResetErrorFlags);
-
-    MCUXCLELS_SFR_WRITE(ELS_ERR_STATUS_CLR, MCUXCLELS_SFR_FIELD_FORMAT(ELS_ERR_STATUS, CLR_ERR_CLR, MCUXCLELS_ERROR_FLAGS_CLEAR));
+    const uint32_t sfrVal = MCUXCLELS_SFR_FIELD_FORMAT(ELS_ERR_STATUS, CLR_ERR_CLR, MCUXCLELS_ERROR_FLAGS_CLEAR);
+    MCUXCLELS_SFR_WRITE(ELS_ERR_STATUS_CLR, sfrVal);
     // Poll error bit to be sure that error bits has been cleared. Required by HW spec.
     while(0u != MCUXCLELS_GET_STATUS_FIELD(MCUXCLELS_SFR_STATUS_ELS_ERR))
     {
@@ -264,28 +266,28 @@ MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_SetIntFl
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClEls_SetRandomStartDelay)
 MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_SetRandomStartDelay(
-    uint32_t delay)
+    uint32_t startDelay)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClEls_SetRandomStartDelay);
-    MCUXCLELS_INPUT_PARAM_CHECK_PROTECTED(mcuxClEls_SetRandomStartDelay, 1024u < delay);
+    MCUXCLELS_INPUT_PARAM_CHECK_PROTECTED(mcuxClEls_SetRandomStartDelay, 1024u < startDelay);
 
     if (mcuxClEls_isBusy())
     {
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEls_SetRandomStartDelay, MCUXCLELS_STATUS_SW_CANNOT_INTERRUPT);
     }
 
-    MCUXCLELS_SET_CFG_FIELD(MCUXCLELS_SFR_CFG_ADCTRL, delay);
+    MCUXCLELS_SET_CFG_FIELD(MCUXCLELS_SFR_CFG_ADCTRL, startDelay);
 
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEls_SetRandomStartDelay, MCUXCLELS_STATUS_OK);
 }
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClEls_GetRandomStartDelay)
 MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_GetRandomStartDelay(
-    uint32_t *delay)
+    uint32_t *startDelay)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClEls_GetRandomStartDelay);
 
-    *delay = MCUXCLELS_GET_CFG_FIELD(MCUXCLELS_SFR_CFG_ADCTRL);
+    *startDelay = MCUXCLELS_GET_CFG_FIELD(MCUXCLELS_SFR_CFG_ADCTRL);
 
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEls_GetRandomStartDelay, MCUXCLELS_STATUS_OK);
 }

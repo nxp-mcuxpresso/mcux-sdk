@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2023 NXP                                                       */
+/* Copyright 2023-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -35,11 +35,11 @@
  * * Random order memory access: an attacker shall not be able to distinguish the position of the difference between the two compared buffers.
  * * Blinded word compare: SPA protection.
  * * Integrity of the result is ensured. The accumulator of differences is checked twice when generating the return status (EQUAL or NOT_EQUAL).
- * * Data Integrity: Record(pLhs + pRhs + length)
+ * * Data Integrity: Expunge(pLhs + pRhs + length)
  *
  * @param pLhs   The left-hand side data to compare. Must not be NULL.
  * @param pRhs   The right-hand side data to compare. Must not be NULL.
- * @param length The number of bytes to compare. Must be different from zero.
+ * @param length The number of bytes to compare.
  * @return A status code encapsulated in a flow-protection type.
  * @retval #MCUXCSSLMEMORY_STATUS_EQUAL If the contents of @p lhs and @p rhs are equal.
  * @retval #MCUXCSSLMEMORY_STATUS_NOT_EQUAL If the contents of @p lhs and @p rhs are not equal.

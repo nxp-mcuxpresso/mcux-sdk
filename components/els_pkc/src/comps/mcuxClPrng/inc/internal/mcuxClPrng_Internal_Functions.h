@@ -22,6 +22,7 @@
 #include <internal/mcuxClPrng_Internal_Types.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClBuffer.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,7 +58,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPrng_Status_t) mcuxClPrng_init(
  */
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClPrng_generate)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPrng_Status_t) mcuxClPrng_generate(
-  uint8_t *             pOut,
+  mcuxCl_Buffer_t        pOut,
   uint32_t              outLength
 );
 

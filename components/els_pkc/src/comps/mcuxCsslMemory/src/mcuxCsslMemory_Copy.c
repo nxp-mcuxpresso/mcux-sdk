@@ -15,6 +15,7 @@
 #include <mcuxCsslSecureCounter.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxCsslFlowProtection_FunctionIdentifiers.h>
+#include <mcuxCsslAnalysis.h>
 #include <internal/mcuxCsslMemory_Internal_Copy_asm.h>
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxCsslMemory_Copy)
@@ -37,7 +38,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxCsslMemory_Status_t) mcuxCsslMemory_Copy
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxCsslMemory_Copy, MCUXCSSLMEMORY_STATUS_FAULT);
     }
 
-    if((NULL == pSrc) || (NULL == pDst) || (length > dstLength) || (0u == length)) {
+    if((NULL == pSrc) || (NULL == pDst) || (length > dstLength)) {
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxCsslMemory_Copy, MCUXCSSLMEMORY_STATUS_INVALID_PARAMETER);
     }
 

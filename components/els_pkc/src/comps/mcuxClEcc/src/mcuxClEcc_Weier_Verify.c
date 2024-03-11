@@ -26,7 +26,9 @@
 #include <mcuxCsslMemory.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClCore_Macros.h>
 #include <mcuxCsslParamIntegrity.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClEcc.h>
 
 #include <internal/mcuxClSession_Internal.h>
@@ -35,9 +37,8 @@
 #include <internal/mcuxClPkc_ImportExport.h>
 #include <internal/mcuxClPkc_Resource.h>
 #include <internal/mcuxClEcc_Weier_Internal.h>
-#include <internal/mcuxClEcc_Weier_Verify_FUP.h>
-#include <internal/mcuxClEcc_Weier_Internal_PointArithmetic_FUP.h>
 #include <internal/mcuxClEcc_Weier_Internal_FP.h>
+#include <internal/mcuxClEcc_Weier_Internal_FUP.h>
 
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClEcc_Verify)
@@ -89,8 +90,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Verify(
     /**********************************************************/
 
     /* Import r to S3 and s to T1. */
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_S3, pParam->pSignature, byteLenN);
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_T1, pParam->pSignature + byteLenN, byteLenN);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_Verify, ECC_S3, pParam->pSignature, byteLenN);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFEROFFSET(mcuxClEcc_Verify, ECC_T1, pParam->pSignature, byteLenN, byteLenN);
 
     /* If r < n, then t2 = r; otherwise t2 = r - n. */
     MCUXCLPKC_FP_CALC_MC1_MS(ECC_T2, ECC_S3, ECC_N, ECC_N);
@@ -173,8 +174,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Verify(
 
     /* Import message hash (up to byteLenN bytes). */
     uint32_t byteLenHash = (pParam->optLen & mcuxClEcc_Verify_Param_optLen_byteLenHash_mask) >> mcuxClEcc_Verify_Param_optLen_byteLenHash_offset;
-    uint32_t byteLenHashImport = MCUXCLECC_TRUNCATED_HASH_LEN(byteLenHash, byteLenN);
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_S2, pParam->pHash, byteLenHashImport);
+    uint32_t byteLenHashImport = MCUXCLCORE_MIN(byteLenHash, byteLenN);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_Verify, ECC_S2, pParam->pHash, byteLenHashImport);
 
     /* Truncate message hash if its bit length is longer than that of n. */
     if (byteLenHash >= byteLenN)
@@ -224,11 +225,11 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Verify(
     if (MCUXCLPKC_FLAG_ZERO != checkHashZero)
     {
         /* Import G to (X1,Y1). */
-        MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(WEIER_X1, pParam->curveParam.pG, byteLenP);
-        MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(WEIER_Y1, pParam->curveParam.pG + byteLenP, byteLenP);
+        MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_Verify, WEIER_X1, pParam->curveParam.pG, byteLenP);
+        MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFEROFFSET(mcuxClEcc_Verify, WEIER_Y1, pParam->curveParam.pG, byteLenP, byteLenP);
         /* Import PrecG to (X2, Y2). */
-        MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(WEIER_X2, pParam->pPrecG, byteLenP);
-        MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(WEIER_Y2, pParam->pPrecG + byteLenP, byteLenP);
+        MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_Verify, WEIER_X2, pParam->pPrecG, byteLenP);
+        MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFEROFFSET(mcuxClEcc_Verify, WEIER_Y2, pParam->pPrecG, byteLenP, byteLenP);
 
         /* Check G in (X1,Y1) affine NR. */
 //      MCUXCLPKC_WAITFORREADY();  <== there is WaitForFinish in import function.
@@ -245,10 +246,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Verify(
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_Verify, MCUXCLECC_STATUS_INVALID_PARAMS,
                 MCUXCLECC_FP_VERIFY_INIT,
                 MCUXCLECC_FP_VERIFY_PREPARE_AND_CHECK,
-                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
-                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
-                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
-                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
+                MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
+                MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFEROFFSET,
+                MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
+                MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFEROFFSET,
                 MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEcc_PointCheckAffineNR),
                 MCUXCLPKC_FP_CALLED_DEINITIALIZE_RELEASE);
         }
@@ -276,10 +277,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Verify(
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_Verify, MCUXCLECC_STATUS_INVALID_PARAMS,
                 MCUXCLECC_FP_VERIFY_INIT,
                 MCUXCLECC_FP_VERIFY_PREPARE_AND_CHECK,
-                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
-                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
-                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
-                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
+                MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
+                MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFEROFFSET,
+                MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
+                MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFEROFFSET,
                 MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEcc_PointCheckAffineNR),
                 MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEcc_PointCheckAffineNR),
                 MCUXCLPKC_FP_CALLED_DEINITIALIZE_RELEASE);
@@ -489,8 +490,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Verify(
     }
 
     /* Import prime p and order n again, and check (compare with) existing one. */
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_T0, pParam->curveParam.pP, byteLenP);
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_T1, pParam->curveParam.pN, byteLenN);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_Verify, ECC_T0, pParam->curveParam.pP, byteLenP);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_Verify, ECC_T1, pParam->curveParam.pN, byteLenN);
 
     MCUXCLPKC_FP_CALC_OP1_CMP(ECC_T0, ECC_P);
     uint32_t zeroFlag_checkP = MCUXCLPKC_WAITFORFINISH_GETZERO();
@@ -514,7 +515,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Verify(
         /**********************************************************/
 
         /* Export the calculated r. */
-        MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC(pParam->pOutputR, WEIER_X1, byteLenN);
+        MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC_BUFFER(mcuxClEcc_Verify, pParam->pOutputR, WEIER_X1, byteLenN);
 
         mcuxClSession_freeWords_pkcWa(pSession, pCpuWorkarea->wordNumPkcWa);
         MCUXCLPKC_FP_DEINITIALIZE_RELEASE(pSession, &pCpuWorkarea->pkcStateBackup,
@@ -528,13 +529,13 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Verify(
             MCUXCLECC_FP_VERIFY_CALC_P1,
             MCUXCLECC_FP_VERIFY_CALC_P2,
             MCUXCLECC_FP_VERIFY_CALC_P1_ADD_P2,
-            MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
-            MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
+            MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
+            MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
             MCUXCLPKC_FP_CALLED_CALC_OP1_CMP,
             MCUXCLPKC_FP_CALLED_CALC_OP1_CMP,
             MCUX_CSSL_FP_FUNCTION_CALLED(mcuxCsslMemory_Compare),
             /* Clean up and exit */
-            MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ExportBigEndianFromPkc),
+            MCUXCLPKC_FP_CALLED_EXPORTBIGENDIANFROMPKC_BUFFER,
             MCUXCLPKC_FP_CALLED_DEINITIALIZE_RELEASE);
     }
 

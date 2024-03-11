@@ -108,7 +108,7 @@ status_t BOARD_InitPsRam(void)
     flexspi_device_config_t psramConfig = {
         .flexspiRootClk       = 320000000, /* 320MHZ SPI serial clock, DDR serial clock 160M */
         .isSck2Enabled        = false,
-        .flashSize            = 0x1000, /* 32Mb/KByte */
+        .flashSize            = 0x1000,    /* 32Mb/KByte */
         .addressShift         = true,
         .CSIntervalUnit       = kFLEXSPI_CsIntervalUnit1SckCycle,
         .CSInterval           = 5,
@@ -144,7 +144,7 @@ status_t BOARD_InitPsRam(void)
         /* Read Register */
         [8]  = FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DDR, kFLEXSPI_4PAD, 0xCC, kFLEXSPI_Command_DDR, kFLEXSPI_4PAD, 0x00),
         [9]  = FLEXSPI_LUT_SEQ(kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_4PAD, 16, kFLEXSPI_Command_CADDR_DDR, kFLEXSPI_4PAD,
-                              16),
+                               16),
         [10] = FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DUMMY_DDR, kFLEXSPI_4PAD, 12, kFLEXSPI_Command_READ_DDR, kFLEXSPI_4PAD,
                                0x01),
 

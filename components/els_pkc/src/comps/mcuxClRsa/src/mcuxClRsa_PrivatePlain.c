@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -18,6 +18,7 @@
 #include <stdint.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClCore_Macros.h>
 
 #include <mcuxClPkc.h>
 #include <mcuxClMath.h>
@@ -40,7 +41,7 @@ MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRsa_privatePlain)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privatePlain(
   mcuxClSession_Handle_t      pSession,
   const mcuxClRsa_Key * const pKey,
-  mcuxCl_Buffer_t             pInput,
+  uint8_t                   *pInput,
   mcuxCl_Buffer_t             pOutput)
 {
   MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClRsa_privatePlain);
@@ -89,23 +90,23 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privatePlain(
   /************************************************************************************************/
 
   /* Prepare buffers in PKC workarea and clear PKC workarea */
-  const uint32_t blindLen = MCUXCLRSA_INTERNAL_PRIVATEPLAIN_BLINDING_SIZE;  // length in bytes of the random value used for blinding
-  const uint32_t operandSize = MCUXCLRSA_PKC_ROUNDUP_SIZE(byteLenN);
-  const uint32_t blindAlignLen = MCUXCLRSA_PKC_ROUNDUP_SIZE(blindLen);
+  const uint32_t blindLen = MCUXCLRSA_INTERNAL_MOD_BLINDING_SIZE;  // length in bytes of the random value used for blinding
+  const uint32_t operandSize = MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(byteLenN);
+  const uint32_t blindAlignLen = MCUXCLRSA_ALIGN_TO_PKC_WORDSIZE(blindLen);
   const uint32_t blindOperandSize = operandSize + blindAlignLen;
 
-  const uint16_t bufferSizeR = (uint16_t)blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;  // size of the result of the exponentiation
-  const uint16_t bufferSizeN = (uint16_t)blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;  // size of N + PKC word in front of the modulus buffer for NDash
-  const uint16_t bufferSizeT0 = (uint16_t)blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;  // size of temp buffer T0
-  const uint16_t bufferSizeT1 = (uint16_t)blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;  // size of temp buffer T1
-  const uint16_t bufferSizeT2 = (uint16_t)blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;  // size of temp buffer T2
-  const uint16_t bufferSizeT3 = (uint16_t)blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;  // size of temp buffer T3
-  const uint16_t bufferSizeTE = (uint16_t)6u*MCUXCLRSA_PKC_WORDSIZE;                  // size of temp buffer TE
-  const uint16_t bufferSizeRand = (uint16_t)blindAlignLen;  // size of buffer for random multiplicative blinding
+  const uint32_t bufferSizeR = blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;  // size of the result of the exponentiation
+  const uint32_t bufferSizeN = blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;  // size of N + PKC word in front of the modulus buffer for NDash
+  const uint32_t bufferSizeT0 = blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;  // size of temp buffer T0
+  const uint32_t bufferSizeT1 = blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;  // size of temp buffer T1
+  const uint32_t bufferSizeT2 = blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;  // size of temp buffer T2
+  const uint32_t bufferSizeT3 = blindOperandSize + MCUXCLRSA_PKC_WORDSIZE;  // size of temp buffer T3
+  const uint32_t bufferSizeTE = 6u*MCUXCLRSA_PKC_WORDSIZE;                  // size of temp buffer TE
+  const uint32_t bufferSizeRand = blindAlignLen;  // size of buffer for random multiplicative blinding
 
   /* Setup session. */
-  const uint16_t bufferSizeTotal = bufferSizeR + bufferSizeN + bufferSizeT0 + bufferSizeT1 + bufferSizeT2 + bufferSizeT3 + bufferSizeTE + bufferSizeRand;
-  const uint32_t pkcWaSizeWord = (uint32_t) bufferSizeTotal / (sizeof(uint32_t));
+  const uint32_t bufferSizeTotal = bufferSizeR + bufferSizeN + bufferSizeT0 + bufferSizeT1 + bufferSizeT2 + bufferSizeT3 + bufferSizeTE + bufferSizeRand;
+  const uint32_t pkcWaSizeWord = bufferSizeTotal / (sizeof(uint32_t));
   uint32_t *pPkcWorkarea = mcuxClSession_allocateWords_pkcWa(pSession, pkcWaSizeWord);
   if (NULL == pPkcWorkarea)
   {
@@ -132,7 +133,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privatePlain(
   pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVPLAIN_T2] = MCUXCLPKC_PTR2OFFSET(pPkcWorkarea8 + bufferSizeR + bufferSizeN + bufferSizeT0 + bufferSizeT1);
   pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVPLAIN_T3] = MCUXCLPKC_PTR2OFFSET(pPkcWorkarea8 + bufferSizeR + bufferSizeN + bufferSizeT0 + bufferSizeT1 + bufferSizeT2);
   pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVPLAIN_TE] = MCUXCLPKC_PTR2OFFSET(pPkcWorkarea8 + bufferSizeR + bufferSizeN + bufferSizeT0 + bufferSizeT1 + bufferSizeT2 + bufferSizeT3);
-  uint32_t *pBlind = (pPkcWorkarea + ((size_t)bufferSizeR + bufferSizeN + bufferSizeT0 + bufferSizeT1 + bufferSizeT2 + bufferSizeT3 + bufferSizeTE)/sizeof(uint32_t));
+  uint32_t *pBlind = (pPkcWorkarea + (bufferSizeR + bufferSizeN + bufferSizeT0 + bufferSizeT1 + bufferSizeT2 + bufferSizeT3 + bufferSizeTE)/sizeof(uint32_t));
   pOperands[MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVPLAIN_RAND] = MCUXCLPKC_PTR2OFFSET((uint8_t *) pBlind);
 
   /* Set UPTRT table */
@@ -147,8 +148,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privatePlain(
   MCUXCLPKC_FP_CALC_OP1_CONST(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVPLAIN_R, 0u);
   MCUXCLPKC_WAITFORREADY();
 
-  /* Prepare expTemp buffer in CPU workarea - aligned to CPU word, length=MCUXCLRSA_ROUND_UP_TO_CPU_WORDSIZE(byteLenExp) */
-  uint32_t * pExpTemp = pOperands32 + MCUXCLRSA_ROUND_UP_TO_CPU_WORDSIZE((MCUXCLRSA_INTERNAL_PRIVPLAIN_UPTRT_SIZE * sizeof(uint16_t)))/sizeof(uint32_t); /* Cast to CPU word aligned. */
+  /* Prepare expTemp buffer in CPU workarea - aligned to CPU word, length=MCUXCLCORE_NUM_OF_CPUWORDS_CEIL(byteLenExp) */
+  uint32_t * pExpTemp = pOperands32 + MCUXCLCORE_NUM_OF_CPUWORDS_CEIL((MCUXCLRSA_INTERNAL_PRIVPLAIN_UPTRT_SIZE * sizeof(uint16_t))); /* Cast to CPU word aligned. */
   /************************************************************************************************/
   /* Copy (with reverse order) key material to target buffer in PKC workarea                     */
   /************************************************************************************************/
@@ -186,7 +187,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privatePlain(
   /* CARRY=1 ==> input=0, and ZERO=1 ==> input=1. In both cases, return input */
   if((MCUXCLPKC_FLAG_CARRY == carryFlag) || (MCUXCLPKC_FLAG_ZERO == zeroFlag))
   {
-    MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC(pOutput, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVPLAIN_X, byteLenN);
+    MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC_BUFFER(mcuxClRsa_privatePlain, pOutput, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVPLAIN_X, byteLenN);
 
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_privatePlain, MCUXCLRSA_STATUS_INTERNAL_KEYOP_OK,
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_clear),
@@ -194,11 +195,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privatePlain(
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
         MCUXCLPKC_FP_CALLED_CALC_OP1_CMP,
         MCUXCLPKC_FP_CALLED_CALC_OP1_SUB_CONST,
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ExportBigEndianFromPkc));
+        MCUXCLPKC_FP_CALLED_EXPORTBIGENDIANFROMPKC_BUFFER);
   }
 
   /* Generate random number used for blinding */
-  MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate1, mcuxClRandom_ncGenerate(pSession, (uint8_t *) pBlind, blindLen));
+  MCUXCLBUFFER_INIT(pBufBlind, NULL, (uint8_t *) pBlind, blindLen);
+  MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate1, mcuxClRandom_ncGenerate(pSession, pBufBlind, blindLen));
   if (MCUXCLRANDOM_STATUS_OK != ret_Random_ncGenerate1)
   {
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_privatePlain, MCUXCLRSA_STATUS_ERROR);
@@ -267,11 +269,13 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privatePlain(
   /* Copy result to the output buffer */
   MCUXCLPKC_WAITFORREADY();
   MCUXCLPKC_PS1_SETLENGTH(0u, operandSize);
-  MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC(pOutput, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVPLAIN_X, byteLenN);
+  MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC_BUFFER(mcuxClRsa_privatePlain, pOutput, MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVPLAIN_X, byteLenN);
 
   /************************************************************************************************/
   /* Function exit                                                                                */
   /************************************************************************************************/
+  mcuxClSession_freeWords_pkcWa(pSession, pkcWaSizeWord);
+  mcuxClSession_freeWords_cpuWa(pSession, cpuWaSizeWord);
 
   MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_privatePlain, MCUXCLRSA_STATUS_INTERNAL_KEYOP_OK,
       MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_clear),
@@ -287,7 +291,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_privatePlain(
       MCUXCLPKC_FP_CALLED_CALC_MC1_MM,
       MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_SecModExp),
       MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_RemoveBlinding),
-      MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ExportBigEndianFromPkc));
+      MCUXCLPKC_FP_CALLED_EXPORTBIGENDIANFROMPKC_BUFFER);
 
 }
 

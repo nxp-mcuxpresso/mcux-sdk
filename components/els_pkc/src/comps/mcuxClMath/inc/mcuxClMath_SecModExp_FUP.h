@@ -18,12 +18,12 @@
 #define MCUXCLMATH_SECMODEXP_FUP_H_
 #include <internal/mcuxClPkc_FupMacros.h>
 
-extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_Aws_Init[3];
-extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_Aws_Rerand[5];
-extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_CalcQAndInterleave[6];
-extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_EuclideanSplit_1[8];
-extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_EuclideanSplit_2[7];
-extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_ExactDivideLoop[9];
-extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_PrepareFirstExp[5];
+extern const mcuxClPkc_FUPEntry_t mcuxClMath_SecModExp_Fup_CalcQAndInterleave[6];
+extern const mcuxClPkc_FUPEntry_t mcuxClMath_SecModExp_Fup_EuclideanSplit_1[8];
+extern const mcuxClPkc_FUPEntry_t mcuxClMath_SecModExp_Fup_EuclideanSplit_2[7];
+extern const mcuxClPkc_FUPEntry_t mcuxClMath_SecModExp_Fup_ExactDivideLoop[9];
+extern const mcuxClPkc_FUPEntry_t mcuxClMath_SecModExp_Fup_Init[3];
+extern const mcuxClPkc_FUPEntry_t mcuxClMath_SecModExp_Fup_PrepareFirstExp[5];
+extern const mcuxClPkc_FUPEntry_t mcuxClMath_SecModExp_Fup_Rerandomize[5];
 
 #endif /* MCUXCLMATH_SECMODEXP_FUP*/ 

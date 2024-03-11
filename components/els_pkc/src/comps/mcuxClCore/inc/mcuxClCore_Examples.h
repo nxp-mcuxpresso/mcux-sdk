@@ -15,14 +15,19 @@
 #define MCUXCLCORE_EXAMPLES_H_
 
 #include <mcuxClCore_Platform.h>
+#include <mcuxClCore_Macros.h>
 #include <mcuxCsslFlowProtection.h>
+
 
 /**
  * \def MCUXCLEXAMPLE_FUNCTION
  * \brief Macro to indicate that the symbol is an example function.
  */
 // TODO CLNS-3599: #define MCUXCLEXAMPLE_FUNCTION(_name) uint32_t _name(void)
-#define MCUXCLEXAMPLE_FUNCTION(_name) bool _name(void)
+#define MCUXCLEXAMPLE_FUNCTION(_name) \
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXAMPLE_FUNCTION() \
+bool _name(void) \
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXAMPLE_FUNCTION()
 
 /**
  * \def MCUXCLEXAMPLE_STATUS_OK
@@ -63,16 +68,6 @@
  * \deprecated{Replaced by MCUXCLEXAMPLE_STATUS_FAILURE}
  */
 #define MCUXCLEXAMPLE_FAILURE  MCUXCLEXAMPLE_STATUS_FAILURE
-
-/**
- * \brief Macro to calculate the maximum of two values.
- */
-#define MCUXCLEXAMPLE_MAX( x, y ) ( ( x ) > ( y ) ? ( x ) : ( y ) )
-
-/**
- * \brief Macro to calculate the ceiling of x/y.
- */
-#define MCUXCLEXAMPLE_CEILING(x,y)  (((x) + (y) - 1U) / (y))
 
 /**
  * \brief Assert whether two buffers are equal.

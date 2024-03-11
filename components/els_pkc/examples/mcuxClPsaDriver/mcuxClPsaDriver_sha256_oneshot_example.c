@@ -11,6 +11,7 @@
 /* software.                                                                */
 /*--------------------------------------------------------------------------*/
 
+#include <mcuxClToolchain.h>
 #include <mcuxClEls.h> // Interface to the entire mcuxClEls component
 #include <mcuxClSession.h> // Interface to the entire mcuxClSession component
 #include <mcuxClHash.h>             // Interface to the entire mcuxClHash component
@@ -23,10 +24,10 @@
 #include <stdbool.h>  // bool type for the example's return code
 #include <mcuxClPsaDriver.h>
 
-bool mcuxClPsaDriver_sha256_oneshot_example(void)
+MCUXCLEXAMPLE_FUNCTION(mcuxClPsaDriver_sha256_oneshot_example)
 {
     /* Input for the SHA-256 operation */
-    const uint8_t data[163] = {
+    const ALIGNED uint8_t data[163] = {
         0x45u, 0x11u, 0x01u, 0x25u, 0x0eu, 0xc6u, 0xf2u, 0x66u,
         0x52u, 0x24u, 0x9du, 0x59u, 0xdcu, 0x97u, 0x4bu, 0x73u,
         0x61u, 0xd5u, 0x71u, 0xa8u, 0x10u, 0x1cu, 0xdfu, 0xd3u,
@@ -51,7 +52,7 @@ bool mcuxClPsaDriver_sha256_oneshot_example(void)
     };
 
     /* Expected output for the SHA-256 operation */
-    const uint8_t hashExpected[MCUXCLHASH_OUTPUT_SIZE_SHA_256] = {
+    const ALIGNED uint8_t hashExpected[MCUXCLHASH_OUTPUT_SIZE_SHA_256] = {
         0x3cu, 0x59u, 0x3au, 0xa5u, 0x39u, 0xfdu, 0xcdu, 0xaeu,
         0x51u, 0x6cu, 0xdfu, 0x2fu, 0x15u, 0x00u, 0x0fu, 0x66u,
         0x34u, 0x18u, 0x5cu, 0x88u, 0xf5u, 0x05u, 0xb3u, 0x97u,
@@ -59,7 +60,7 @@ bool mcuxClPsaDriver_sha256_oneshot_example(void)
     };
 
     /* Output buffer for the SHA-256 operation */
-    uint8_t hashOutput[MCUXCLHASH_OUTPUT_SIZE_SHA_256];
+    ALIGNED uint8_t hashOutput[MCUXCLHASH_OUTPUT_SIZE_SHA_256];
 
     /** Initialize ELS, Enable the ELS **/
     if(!mcuxClExample_Els_Init(MCUXCLELS_RESET_DO_NOT_CANCEL))
@@ -100,9 +101,4 @@ bool mcuxClPsaDriver_sha256_oneshot_example(void)
 
     /* Return */
     return MCUXCLEXAMPLE_STATUS_OK;
-}
-bool nxpClPsaDriver_sha256_oneshot_example(void)
-{
-    bool result = mcuxClPsaDriver_sha256_oneshot_example();
-    return result;
 }

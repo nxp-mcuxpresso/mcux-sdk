@@ -20,6 +20,7 @@
 #include <mcuxClSession.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClCore_Macros.h>
 #include <mcuxClPkc.h>
 #include <mcuxClMath.h>
 #include <mcuxClMemory.h>
@@ -48,12 +49,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Weier_SetupEnvironment
     const uint32_t byteLenP = (pWeierDomainParams->misc & mcuxClEcc_DomainParam_misc_byteLenP_mask) >> mcuxClEcc_DomainParam_misc_byteLenP_offset;
     const uint32_t byteLenN = (pWeierDomainParams->misc & mcuxClEcc_DomainParam_misc_byteLenN_mask) >> mcuxClEcc_DomainParam_misc_byteLenN_offset;
     const uint32_t byteLenMax = ((byteLenP > byteLenN) ? byteLenP : byteLenN);
-    const uint32_t operandSize = MCUXCLPKC_ROUNDUP_SIZE(byteLenMax);
+    const uint32_t operandSize = MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(byteLenMax);
     const uint32_t bufferSize = operandSize + MCUXCLPKC_WORDSIZE;
 
     /* Setup CPU workarea and PKC buffer. */
     const uint32_t byteLenOperandsTable = (sizeof(uint16_t)) * (ECC_NO_OF_VIRTUALS + (uint32_t) noOfBuffers);
-    const uint32_t alignedByteLenCpuWa = (sizeof(mcuxClEcc_CpuWa_t)) + MCUXCLECC_ALIGNED_SIZE(byteLenOperandsTable);
+    const uint32_t alignedByteLenCpuWa = (sizeof(mcuxClEcc_CpuWa_t)) + MCUXCLCORE_ALIGN_TO_CPU_WORDSIZE(byteLenOperandsTable);
     const uint32_t wordNumCpuWa = alignedByteLenCpuWa / (sizeof(uint32_t));
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES("MISRA Ex. 9 to Rule 11.3 - mcuxClEcc_CpuWa_t is 32 bit aligned")
     mcuxClEcc_CpuWa_t *pCpuWorkarea = (mcuxClEcc_CpuWa_t *) mcuxClSession_allocateWords_cpuWa(pSession, wordNumCpuWa);
@@ -97,10 +98,11 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Weier_SetupEnvironment
     /**********************************************************/
 
     /* Import prime p and order n. */
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_P, pWeierDomainParams->pP, byteLenP);
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_N, pWeierDomainParams->pN, byteLenN);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_Weier_SetupEnvironment, ECC_P, pWeierDomainParams->pP, byteLenP);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_Weier_SetupEnvironment, ECC_N, pWeierDomainParams->pN, byteLenN);
 
     /* Check p and n are odd (Math functions assume modulus is odd). */
+    /* TODO (CLNS-5401) Once this function gets removed it must be ensured that the check if p and n are odd is still executed by mcuxClEcc_WeierECC_GenerateDomainParams as this is a requirement for this function. */
     const volatile uint8_t * ptrP = MCUXCLPKC_OFFSET2PTR(pOperands[ECC_P]);
     const volatile uint8_t * ptrN = MCUXCLPKC_OFFSET2PTR(pOperands[ECC_N]);
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES("PKC buffer is CPU word aligned")
@@ -118,8 +120,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Weier_SetupEnvironment
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_Weier_SetupEnvironment, MCUXCLECC_STATUS_INVALID_PARAMS,
             MCUXCLPKC_FP_CALLED_REQUEST_INITIALIZE,
             MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_GenerateUPTRT),
-            MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
-            MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
+            MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
+            MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
             MCUXCLPKC_FP_CALLED_DEINITIALIZE_RELEASE);
     }
 
@@ -131,21 +133,21 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Weier_SetupEnvironment
     MCUXCLMATH_FP_QSQUARED(ECC_PQSQR, ECC_PS, ECC_P, ECC_T0);
 
     /* Import coefficients a and b, and convert a to MR. */
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_T0, pWeierDomainParams->pA, byteLenP);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_Weier_SetupEnvironment, ECC_T0, pWeierDomainParams->pA, byteLenP);
     MCUXCLPKC_FP_CALC_MC1_MM(WEIER_A, ECC_T0, ECC_PQSQR, ECC_P);
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(WEIER_B, pWeierDomainParams->pB, byteLenP);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_Weier_SetupEnvironment, WEIER_B, pWeierDomainParams->pB, byteLenP);
 
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_Weier_SetupEnvironment, MCUXCLECC_STATUS_OK,
         MCUXCLPKC_FP_CALLED_REQUEST_INITIALIZE,
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_GenerateUPTRT),
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
+        MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
+        MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_NDash),
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_NDash),
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_ShiftModulus),
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_ShiftModulus),
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMath_QSquared),
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc),
+        MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER,
         MCUXCLPKC_FP_CALLED_CALC_MC1_MM,
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc));
+        MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER );
 }

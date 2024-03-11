@@ -19,20 +19,25 @@
 #include <mcuxClToolchain.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClCore_Macros.h>
 
 #include <mcuxClMemory.h>
-
+#include <mcuxClBuffer.h>
 #include <mcuxClHash.h>
 #include <mcuxClHashModes.h>
+
 #include <internal/mcuxClHash_Internal.h>
 #include <mcuxCsslParamIntegrity.h>
 #include <mcuxCsslMemory.h>
 
 #include <internal/mcuxClSession_Internal.h>
 #include <internal/mcuxClPkc_ImportExport.h>
+
 #include <internal/mcuxClMemory_Copy_Internal.h>
+#include <internal/mcuxClBuffer_Internal.h>
 
 #include <mcuxClRsa.h>
+#include <internal/mcuxClRsa_Internal_PkcDefs.h>
 #include <internal/mcuxClRsa_Internal_Functions.h>
 #include <internal/mcuxClRsa_Internal_Types.h>
 #include <internal/mcuxClRsa_Internal_Macros.h>
@@ -42,7 +47,9 @@
 /**********************************************************/
 /* Specification of PSS-verify mode structures            */
 /**********************************************************/
+MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 const mcuxClRsa_SignVerifyMode_t mcuxClRsa_Mode_Verify_Pss_Sha2_224 =
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 {
   .EncodeVerify_FunId = MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_pssVerify),
   .pHashAlgo1 = &mcuxClHash_AlgorithmDescriptor_Sha224,
@@ -50,21 +57,27 @@ const mcuxClRsa_SignVerifyMode_t mcuxClRsa_Mode_Verify_Pss_Sha2_224 =
   .pPaddingFunction = mcuxClRsa_pssVerify
 };
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 const mcuxClRsa_SignVerifyMode_t mcuxClRsa_Mode_Verify_Pss_Sha2_256 =
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 {
   .EncodeVerify_FunId = MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_pssVerify),
   .pHashAlgo1 = &mcuxClHash_AlgorithmDescriptor_Sha256,
   .pHashAlgo2 = NULL,
   .pPaddingFunction = mcuxClRsa_pssVerify
 };
+MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 const mcuxClRsa_SignVerifyMode_t mcuxClRsa_Mode_Verify_Pss_Sha2_384 =
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 {
   .EncodeVerify_FunId = MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_pssVerify),
   .pHashAlgo1 = &mcuxClHash_AlgorithmDescriptor_Sha384,
   .pHashAlgo2 = NULL,
   .pPaddingFunction = mcuxClRsa_pssVerify
 };
+MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 const mcuxClRsa_SignVerifyMode_t mcuxClRsa_Mode_Verify_Pss_Sha2_512 =
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 {
   .EncodeVerify_FunId = MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_pssVerify),
   .pHashAlgo1 = &mcuxClHash_AlgorithmDescriptor_Sha512,
@@ -80,15 +93,14 @@ const mcuxClRsa_SignVerifyMode_t mcuxClRsa_Mode_Verify_Pss_Sha2_512 =
 /* Macros to switch endianness */
 #define MCUXCLRSA_INTERNAL_SWITCHENDIANNESS(ptr, length)  MCUXCLPKC_FP_SWITCHENDIANNESS(ptr, length)
 
-
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRsa_pssVerify, mcuxClRsa_PadVerModeEngine_t)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssVerify(
   mcuxClSession_Handle_t       pSession,
   mcuxCl_InputBuffer_t         pInput,
   const uint32_t              inputLength,
-  mcuxCl_Buffer_t              pVerificationInput,
+  uint8_t *                   pVerificationInput,
   mcuxClHash_Algo_t            pHashAlgo,
-  const uint8_t *             pLabel UNUSED_PARAM,
+  mcuxCl_InputBuffer_t         pLabel UNUSED_PARAM,
   const uint32_t              saltlabelLength,
   const uint32_t              keyBitLength,
   const uint32_t              options,
@@ -123,18 +135,18 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssVerify(
    * PKC = | M'= (padding | mHash | salt) || dbMask (and DB) || H' |
    */
   /* Pointer to the encoded message */
-  mcuxCl_Buffer_t pEm = pVerificationInput;
+  uint8_t *pEm = pVerificationInput;
   /* Pointer to the buffer for the M' = | padding_1 | mHash | salt | */
-  mcuxCl_Buffer_t pMprim = pPkcWorkarea;
+  uint8_t *pMprim = pPkcWorkarea;
   /* Pointer to the buffer for the mHash in the M'*/
-  mcuxCl_Buffer_t pMHash = pMprim + padding1Length;
+  uint8_t *pMHash = pMprim + padding1Length;
   /* Pointer to the buffer for the salt in the M'*/
-  mcuxCl_Buffer_t pSalt = pMHash + hLen;
+  uint8_t *pSalt = pMHash + hLen;
 
-  /* Pointer to the buffer for the dbMask'*/
-  mcuxCl_Buffer_t pDbMask = pSalt + MCUXCLRSA_ROUND_UP_TO_CPU_WORDSIZE(sLen);
+  /* Pointer to the buffer for the dbMask' (must be aligned to CPU word size)*/
+  uint8_t *pDbMask = pSalt + MCUXCLCORE_ALIGN_TO_CPU_WORDSIZE(sLen);
   /* Pointer to the buffer for the H' */
-  mcuxCl_Buffer_t pHprim = pDbMask + dbLen;
+  uint8_t *pHprim = pDbMask + dbLen;
 
   const uint32_t mprimLen = padding1Length + hLen + sLen;
 
@@ -144,11 +156,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssVerify(
     /* Call hash function on pInput (Hash(pInput)) and store result in buffer mHash */
     uint32_t hashOutputSize = 0u;
 
+    MCUXCLBUFFER_INIT(pMHashBuf, NULL, pMHash, hLen);
     MCUX_CSSL_FP_FUNCTION_CALL(hash_result1, mcuxClHash_compute(pSession,
                                                               pHashAlgo,
                                                               pInput,
                                                               inputLength,
-                                                              pMHash,
+                                                              pMHashBuf,
                                                               &hashOutputSize
     ));
 
@@ -161,7 +174,13 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssVerify(
   else if (MCUXCLRSA_OPTION_MESSAGE_DIGEST == (options & MCUXCLRSA_OPTION_MESSAGE_MASK))
   {
     /* Copy pInput to buffer mHash */
-    MCUXCLMEMORY_FP_MEMORY_COPY(pMHash, pInput, hLen);
+    MCUX_CSSL_FP_FUNCTION_CALL(read_result, mcuxClBuffer_read(pInput, 0u, pMHash, hLen));
+    if(MCUXCLBUFFER_STATUS_OK != read_result)
+    {
+        mcuxClSession_freeWords_pkcWa(pSession, wordSizePkcWa);
+        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_pssVerify, read_result,
+          MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClBuffer_read));
+    }
   }
   else
   {
@@ -183,7 +202,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssVerify(
       MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_OPTION_MESSAGE_PLAIN == (options & MCUXCLRSA_OPTION_MESSAGE_MASK)),
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClHash_compute)),
       MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_OPTION_MESSAGE_DIGEST == (options & MCUXCLRSA_OPTION_MESSAGE_MASK)),
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_copy)));
+        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClBuffer_read)));
   }
 
   /* Switch endianess of EM buffer to big-endian byte order in place */
@@ -192,8 +211,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssVerify(
   MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES()
 
   /* Step 5: Let maskedDB be the leftmost emLen-hLen-1 octets of EM and let H be the next hLen octets. */
-  mcuxCl_Buffer_t maskedDB = pEm;
-  mcuxCl_Buffer_t pH = pEm + dbLen;
+  uint8_t *maskedDB = pEm;
+  uint8_t *pH = pEm + dbLen;
 
   /* Step 6: Check if 8*emLen-emBits leftmost bits equal to zero. Note that, as keyBitLength is a multiple of 8, 8 * emLen - emBits = 1 bit.*/
   if(0U != ((*maskedDB) & 0x80u))
@@ -204,7 +223,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssVerify(
       MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_OPTION_MESSAGE_PLAIN == (options & MCUXCLRSA_OPTION_MESSAGE_MASK)),
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClHash_compute)),
       MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_OPTION_MESSAGE_DIGEST == (options & MCUXCLRSA_OPTION_MESSAGE_MASK)),
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_copy)),
+        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClBuffer_read)),
           FP_RSA_PSSVERIFY_SWITCHENDIANNESS);
   }
 
@@ -220,7 +239,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssVerify(
   }
 
   /* Step 8: DB = pOutput(0 : BYTE_LENGTH(keyBitLength) - pHashAlgo->hashSize - 1) XOR dbMask.*/
-  mcuxCl_Buffer_t pDB = pDbMask; // reuse the space of DbMask
+  uint8_t *pDB = pDbMask; // reuse the space of DbMask
 
   MCUX_CSSL_FP_LOOP_DECL(loop1);
   for(uint32_t i = 0u; i < dbLen; ++i)
@@ -255,7 +274,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssVerify(
       MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_OPTION_MESSAGE_PLAIN == (options & MCUXCLRSA_OPTION_MESSAGE_MASK)),
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClHash_compute)),
       MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_OPTION_MESSAGE_DIGEST == (options & MCUXCLRSA_OPTION_MESSAGE_MASK)),
-        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_copy)),
+        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClBuffer_read)),
           FP_RSA_PSSVERIFY_SWITCHENDIANNESS,
           MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_mgf1),
           MCUX_CSSL_FP_LOOP_ITERATIONS(loop1, dbLen),
@@ -271,11 +290,13 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssVerify(
 
   /* Step 13: HPrime = Hash(mPrime) */
   uint32_t hashOutputSize = 0u;
+  MCUXCLBUFFER_INIT_RO(pMprimBuf, NULL, pMprim, padding1Length);
+  MCUXCLBUFFER_INIT(pHprimBuf, NULL, pHprim, hLen);
   MCUX_CSSL_FP_FUNCTION_CALL(hash_result_2, mcuxClHash_compute(pSession,
                                                              pHashAlgo,
-                                                             pMprim,
+                                                             pMprimBuf,
                                                              mprimLen,
-                                                             pHprim,
+                                                             pHprimBuf,
                                                              &hashOutputSize
     ));
 
@@ -292,10 +313,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssVerify(
                                                                   pHprim,
                                                                   hLen));
 
-  mcuxClRsa_Status_t pssVerifyStatus = MCUXCLRSA_STATUS_VERIFY_FAILED;
+  mcuxClRsa_Status_t pssVerifyStatus1 = MCUXCLRSA_STATUS_VERIFY_FAILED;
   if(compare_result == MCUXCSSLMEMORY_STATUS_EQUAL)
   {
-    pssVerifyStatus = MCUXCLRSA_STATUS_VERIFY_OK;
+    pssVerifyStatus1 = MCUXCLRSA_STATUS_VERIFY_OK;
   }
 #else
   /* Becasue pH and pHprim are unaligned and taking into account the properties:
@@ -315,10 +336,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssVerify(
                                                                   pHprim,
                                                                   unalignedBytes));
 
-  mcuxClRsa_Status_t pssVerifyStatus = MCUXCLRSA_STATUS_VERIFY_FAILED;
+  mcuxClRsa_Status_t pssVerifyStatus1 = MCUXCLRSA_STATUS_VERIFY_FAILED;
   if(compare_result1 == MCUXCSSLMEMORY_STATUS_EQUAL)
   {
-    pssVerifyStatus = MCUXCLRSA_STATUS_VERIFY_OK;
+    pssVerifyStatus1 = MCUXCLRSA_STATUS_VERIFY_OK;
   }
 
   MCUX_CSSL_FP_FUNCTION_CALL(compare_result2, mcuxCsslMemory_Compare(mcuxCsslParamIntegrity_Protect(3u, pH + unalignedBytes,
@@ -329,9 +350,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssVerify(
 
   if(compare_result2 == MCUXCSSLMEMORY_STATUS_EQUAL)
   {
-    pssVerifyStatus = MCUXCLRSA_STATUS_VERIFY_OK;
+    pssVerifyStatus1 = MCUXCLRSA_STATUS_VERIFY_OK;
   }
 #endif
+
 
   /************************************************************************************************/
   /* Function exit                                                                                */
@@ -341,21 +363,24 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRsa_Status_t) mcuxClRsa_pssVerify(
 /* Use temporary defines to avoid preprocessor directives inside the function exit macro below,
    as this would violate the MISRA rule 20.6 otherwise. */
 #if defined(MCUXCL_FEATURE_PKC_PKCRAM_NO_UNALIGNED_ACCESS)
-  #define FP_RSA_PSSVERIFY_COMPARISON \
+  #define FP_RSA_PSSVERIFY_COMPARISON_1 \
     MCUX_CSSL_FP_FUNCTION_CALLED(mcuxCsslMemory_Compare), \
     MCUX_CSSL_FP_FUNCTION_CALLED(mcuxCsslMemory_Compare), \
     MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_clear)
 #else
-  #define FP_RSA_PSSVERIFY_COMPARISON \
+  #define FP_RSA_PSSVERIFY_COMPARISON_1 \
     MCUX_CSSL_FP_FUNCTION_CALLED(mcuxCsslMemory_Compare), \
     MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_clear)
 #endif
 
-  MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_pssVerify, pssVerifyStatus,
+  #define FP_RSA_PSSVERIFY_COMPARISON FP_RSA_PSSVERIFY_COMPARISON_1
+
+
+  MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRsa_pssVerify, pssVerifyStatus1,
     MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_OPTION_MESSAGE_PLAIN == (options & MCUXCLRSA_OPTION_MESSAGE_MASK)),
       MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClHash_compute)),
     MCUX_CSSL_FP_CONDITIONAL((MCUXCLRSA_OPTION_MESSAGE_DIGEST == (options & MCUXCLRSA_OPTION_MESSAGE_MASK)),
-      MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_copy)),
+      MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClBuffer_read)),
     FP_RSA_PSSVERIFY_SWITCHENDIANNESS,
     MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRsa_mgf1),
     MCUX_CSSL_FP_LOOP_ITERATIONS(loop1, dbLen),

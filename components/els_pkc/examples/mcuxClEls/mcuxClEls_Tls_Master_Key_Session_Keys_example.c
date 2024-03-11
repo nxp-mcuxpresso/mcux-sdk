@@ -19,6 +19,7 @@
  * @brief   TLS key derivation example
  */
 
+#include <mcuxClToolchain.h>
 #include <mcuxClEls.h> // Interface to the entire mcuxClEls component
 #include <mcuxClMemory.h>
 #include <mcuxCsslFlowProtection.h>
@@ -29,15 +30,15 @@
 
 
 /** Destination buffer to receive the public key of the mcuxClEls_EccKeyGen_Async operation. */
-static uint32_t ecc_public_key_client[MCUXCLELS_ECC_PUBLICKEY_SIZE / sizeof(uint32_t)];
-static uint32_t ecc_public_key_server[MCUXCLELS_ECC_PUBLICKEY_SIZE / sizeof(uint32_t)];
+static mcuxClEls_EccByte_t ecc_public_key_client[MCUXCLELS_ECC_PUBLICKEY_SIZE] ALIGNED;
+static mcuxClEls_EccByte_t ecc_public_key_server[MCUXCLELS_ECC_PUBLICKEY_SIZE] ALIGNED;
 
-static uint8_t derivation_data[MCUXCLELS_TLS_DERIVATIONDATA_SIZE];
-static uint8_t client_random[MCUXCLELS_TLS_RANDOM_SIZE];
-static uint8_t server_random[MCUXCLELS_TLS_RANDOM_SIZE];
+static ALIGNED uint8_t derivation_data[MCUXCLELS_TLS_DERIVATIONDATA_SIZE];
+static ALIGNED uint8_t client_random[MCUXCLELS_TLS_RANDOM_SIZE];
+static ALIGNED uint8_t server_random[MCUXCLELS_TLS_RANDOM_SIZE];
 
-static uint8_t master_key_string[] = "master secret";
-static uint8_t key_expansion_string[] = "key expansion";
+static ALIGNED uint8_t master_key_string[] = "master secret";
+static ALIGNED uint8_t key_expansion_string[] = "key expansion";
 
 
 /** Performs key derivation for TLS protocol.
@@ -68,7 +69,7 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEls_Tls_Master_Key_Session_Keys_example)
             keyIdxPrivClient,                               // Keystore index at which the generated private key is stored.
             GenKeyProp,                                     // Set the generated key properties.
             NULL,
-			(uint8_t *)ecc_public_key_client                           // Output buffer, which the operation will write the public key to.
+            ecc_public_key_client                           // Output buffer, which the operation will write the public key to.
             ));
     // mcuxClEls_EccKeyGen_Async is a flow-protected function: Check the protection token and the return value
     if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_EccKeyGen_Async) != token) || (MCUXCLELS_STATUS_OK_WAIT != result))
@@ -94,7 +95,7 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEls_Tls_Master_Key_Session_Keys_example)
             keyIdxPrivServer,                               // Keystore index at which the generated private key is stored.
             GenKeyProp,                                     // Set the generated key properties.
             NULL,
-			(uint8_t *)ecc_public_key_server                           // Output buffer, which the operation will write the public key to.
+            ecc_public_key_server                           // Output buffer, which the operation will write the public key to.
             ));
     // mcuxClEls_EccKeyGen_Async is a flow-protected function: Check the protection token and the return value
     if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_EccKeyGen_Async) != token) || (MCUXCLELS_STATUS_OK_WAIT != result))
@@ -121,7 +122,7 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEls_Tls_Master_Key_Session_Keys_example)
 
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClEls_EccKeyExchange_Async(
                                     keyIdxPrivClient,
-									(uint8_t *)ecc_public_key_server,
+                                    ecc_public_key_server,
                                     sharedSecretIdx,
                                     SharedSecretProp));
 
@@ -326,7 +327,12 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEls_Tls_Master_Key_Session_Keys_example)
     MCUX_CSSL_FP_FUNCTION_CALL_END();
 
     mcuxClEls_KeyProp_t KeyProp = {0};
-    mcuxClEls_GetKeyProperties(sharedSecretIdx, &KeyProp);
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result_keyprop, token, mcuxClEls_GetKeyProperties(sharedSecretIdx, &KeyProp));
+    if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_GetKeyProperties) != token) || (MCUXCLELS_STATUS_OK != result_keyprop))
+    {
+        return MCUXCLEXAMPLE_STATUS_ERROR;
+    }
+    MCUX_CSSL_FP_FUNCTION_CALL_END();
 
     //Generate TLS session keys
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClEls_TlsGenerateSessionKeysFromMasterKey_Async(
@@ -362,7 +368,7 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClEls_Tls_Master_Key_Session_Keys_example)
         return MCUXCLEXAMPLE_STATUS_ERROR;
     }
 
-    for(uint8_t i = sharedSecretIdx;i<sharedSecretIdx + 6;i++)
+    for(mcuxClEls_KeyIndex_t i = sharedSecretIdx; i < sharedSecretIdx + 6u; i++)
     {
         /** deleted i keySlot **/
         if(!mcuxClExample_Els_KeyDelete(i))

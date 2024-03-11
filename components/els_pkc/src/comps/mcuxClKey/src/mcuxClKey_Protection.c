@@ -42,7 +42,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClKey_Status_t) mcuxClKey_protect_fct_none(mcuxC
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClKey_protect_fct_ckdf, mcuxClKey_LoadFuncPtr_t)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClKey_Status_t) mcuxClKey_protect_fct_ckdf(mcuxClKey_Handle_t key)
 {
-    MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClKey_protect_fct_ckdf, MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_Ckdf_Sp800108_Async));
+    MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClKey_protect_fct_ckdf);
 
     if(NULL == key->container.parentKey)
     {
@@ -64,17 +64,22 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClKey_Status_t) mcuxClKey_protect_fct_ckdf(mcuxC
     // mcuxClEls_Ckdf_Sp800108_Async is a flow-protected function: Check the protection token and the return value
     if (MCUXCLELS_STATUS_OK_WAIT != resultCkdf)
     {
-        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClKey_protect_fct_ckdf, MCUXCLKEY_STATUS_ERROR); // Expect that no error occurred, meaning that the mcuxClEls_Ckdf_Sp800108_Async operation was started.
+        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClKey_protect_fct_ckdf, MCUXCLKEY_STATUS_ERROR,
+                               MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_Ckdf_Sp800108_Async)); // Expect that no error occurred, meaning that the mcuxClEls_Ckdf_Sp800108_Async operation was started.
     }
 
     MCUX_CSSL_FP_FUNCTION_CALL(resultWait, mcuxClEls_WaitForOperation(MCUXCLELS_ERROR_FLAGS_CLEAR));
 
     if (MCUXCLELS_STATUS_OK != resultWait)
     {
-        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClKey_protect_fct_ckdf, MCUXCLKEY_STATUS_ERROR, MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation));
+        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClKey_protect_fct_ckdf, MCUXCLKEY_STATUS_ERROR,
+                               MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_Ckdf_Sp800108_Async),
+                                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation));
     }
 
-    MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClKey_protect_fct_ckdf, MCUXCLKEY_STATUS_OK, MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation));
+    MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClKey_protect_fct_ckdf, MCUXCLKEY_STATUS_OK,
+                               MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_Ckdf_Sp800108_Async),
+                                MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation));
 }
 
 

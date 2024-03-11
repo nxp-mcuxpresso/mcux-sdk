@@ -23,13 +23,14 @@
 
 #include <mcuxClSession.h>
 #include <mcuxClRandom_Types.h>
+#include <mcuxClBuffer.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**********************************************************/
-/* Public APIs of mcuxClRandom                                */
+/* Public APIs of mcuxClRandom                             */
 /**********************************************************/
 /**
  * @defgroup mcuxClRandom_Functions mcuxClRandom_Functions
@@ -91,7 +92,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandom_reseed(
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandom_generate)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandom_generate(
     mcuxClSession_Handle_t pSession,
-    uint8_t *             pOut,
+    mcuxCl_Buffer_t        pOut,
     uint32_t              outLength
 ); /* generate */
 
@@ -144,11 +145,33 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandom_checkSecurityStr
     uint32_t              securityStrength
 ); /* security strength check */
 
+
+/**
+ * @brief Function to enable the PRNG patch mode. 
+ * In PRNG patch mode all calls to mcuxClRandom_ncGenerate are mapped to prngPatchFunction.
+ * pCustomPrngState can be used to allow a stateful prngPatchFunction.
+ * mcuxClRandom_ncInit does not need to be called before this.
+ * A subsequent call to mcuxClRandom_ncInit will deactivate patch mode.
+ *
+ * @param [in]      pSession             Session of the PRNG to be patched.
+ * @param [in]      prngPatchFunction    Function pointer of the custom PRNG patch function.
+ * @param [in]      pCustomPrngState     Pointer to a custom prng state to be maintained by prngPatchFunction
+ * @return status
+ */
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandom_ncPatch)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandom_ncPatch(
+    mcuxClSession_Handle_t pSession,
+    mcuxClRandom_CustomNcGenerateAlgorithm_t prngPatchFunction,
+    void *pCustomPrngState
+);
+
 /**
  * @brief Non-cryptographic PRNG initialization function.
  *
  * This function performs the initialization of the non-cryptographic random number
- * generator.
+ * generator. If PRNG patching is active, this will also deactivate PRNG patch mode and
+ * reset to normal PRNG operation mode. A potential custom prng state is removed from pSession,
+ * but not cleared.
  *
  * @param [in]     pSession    Handle for the current CL session.
  *
@@ -175,7 +198,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandom_ncInit(
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandom_ncGenerate)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandom_ncGenerate(
     mcuxClSession_Handle_t pSession,
-    uint8_t *             pOut,
+    mcuxCl_Buffer_t        pOut,
     uint32_t              outLength
 ); /* LE generate */
 

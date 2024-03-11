@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SMARTCARD_USIM_H_
-#define _FSL_SMARTCARD_USIM_H_
+#ifndef FSL_SMARTCARD_USIM_H_
+#define FSL_SMARTCARD_USIM_H_
 
 #include "fsl_smartcard.h"
 
@@ -192,7 +192,7 @@ void SMARTCARD_USIM_TSExpiryCallback(USIM_Type *base, smartcard_context_t *conte
 void SMARTCARD_USIM_TimerStart(uint32_t time);
 #endif /* FSL_FEATURE_SOC_CTIMER_COUNT */
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -200,4 +200,4 @@ void SMARTCARD_USIM_TimerStart(uint32_t time);
 
 /*! @}*/
 
-#endif /* _FSL_SMARTCARD_USIM_H_*/
+#endif /* FSL_SMARTCARD_USIM_H_*/

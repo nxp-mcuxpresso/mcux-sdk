@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_GDMA_H_
-#define _FSL_GDMA_H_
+#ifndef FSL_GDMA_H_
+#define FSL_GDMA_H_
 
 #include "fsl_common.h"
 
@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_GDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief Macro for GDMA link list descriptor LLI.
@@ -262,7 +262,7 @@ void GDMA_Init(GDMA_Type *base);
  */
 void GDMA_Deinit(GDMA_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name GDMA Channel Operation
@@ -444,7 +444,7 @@ static inline void GDMA_SetChannelPriority(GDMA_Type *base, uint8_t channel, gdm
  */
 status_t GDMA_SetChannelTransferConfig(GDMA_Type *base, uint8_t channel, const gdma_channel_xfer_config_t *config);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name GDMA Transactional Operation
@@ -524,12 +524,12 @@ void GDMA_AbortTransfer(gdma_handle_t *handle);
  */
 void GDMA_IRQHandle(GDMA_Type *base);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */
 
-/* @} */
+/*! @} */
 
-#endif /*_FSL_GDMA_H_*/
+#endif /*FSL_GDMA_H_*/

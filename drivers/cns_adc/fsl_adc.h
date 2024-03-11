@@ -4,8 +4,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_ADC_H_
-#define _FSL_ADC_H_
+#ifndef FSL_ADC_H_
+#define FSL_ADC_H_
 
 #include "fsl_common.h"
 
@@ -802,4 +802,4 @@ static inline void ADC_ClearStatusFlags(ADC_Type *base, uint32_t statusFlagsMask
 
 /*! @} */
 
-#endif /* _FSL_ADC_H_ */
+#endif /* FSL_ADC_H_ */

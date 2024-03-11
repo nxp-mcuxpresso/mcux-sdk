@@ -19,6 +19,8 @@
 #ifndef MCUX_CSSL_FLOW_PROTECTION_H_
 #define MCUX_CSSL_FLOW_PROTECTION_H_
 
+#include <mcuxCsslAnalysis.h>
+
 /* Include the actual implementation of the flow protection mechanism. */
 #include <mcuxCsslFlowProtection_Impl.h>
 
@@ -55,9 +57,7 @@
  */
 
 
-#ifdef __COVERITY__
-#pragma coverity compliance block deviate MISRA_C_2012_Rule_3_1 "Comments outline example sequences. For more readability, additional inner comments might be added."
-#endif
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_TEXT_IN_COMMENTS("Comments outline example sequences. For more readability, additional inner comments might be added.")
 /**
  * @def MCUX_CSSL_FP_PROTECTED_TYPE
  * @brief Based on a given base type, builds a return type with flow
@@ -69,7 +69,7 @@
  * MCUX_CSSL_FP_FUNCTION_DECL(someFunction)
  * MCUX_CSSL_FP_PROTECTED_TYPE(uint32_t) someFunction(void);
  * @endcode
- * 
+ *
  * Note that depending on the selected flow protection mechanism, the width of
  * the result type may be limited to 32 bits or less to allow encoding a
  * protection token in the other half of a 64-bit return value.
@@ -90,7 +90,7 @@
  * This macro can be used to create counting variables that are only present if
  * the active configuration uses a secure counter, to avoid warnings about
  * unused variables.
- * 
+ *
  * @param statement The statement to be conditionally included.
  */
 #define MCUX_CSSL_FP_COUNTER_STMT(statement) \
@@ -370,10 +370,15 @@
  * @brief Extract the result value from a protected \p return value.
  * @ingroup csslFpFunction
  *
- * @param return The protected return value which contains the result.
+ * This macro should mainly be used internally to extract the original return value
+ * from a protected value, e.g., in MCUX_CSSL_FP_FUNCTION_CALL_IMPL.
+ *
+ * @param ...       The following parameters need to be passed (comma seperated):
+ *        - type:   Optional, type of the result (default: uint32_t).
+ *        - return: The protected return value which contains the result.
  */
-#define MCUX_CSSL_FP_RESULT(return) \
-  MCUX_CSSL_FP_RESULT_IMPL(return)
+#define MCUX_CSSL_FP_RESULT(...) \
+  MCUX_CSSL_FP_RESULT_IMPL(__VA_ARGS__)
 
 /**
  * @def MCUX_CSSL_FP_PROTECTION_TOKEN
@@ -413,7 +418,7 @@
  *   );
  * }
  * @endcode
- * 
+ *
  * For functions returning void, the macro #MCUX_CSSL_FP_FUNCTION_CALL_VOID
  * exists.
  *
@@ -1400,9 +1405,7 @@
 #define MCUX_CSSL_FP_CONDITIONAL(condition, ...) \
   MCUX_CSSL_FP_CONDITIONAL_IMPL((condition), __VA_ARGS__, MCUX_CSSL_FP_VOID_EXPECTATION_IMPL())
 
-#ifdef __COVERITY__
-#pragma coverity compliance end_block MISRA_C_2012_Rule_3_1
-#endif
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_TEXT_IN_COMMENTS()
 
 /**
  * @def MCUX_CSSL_FP_ASSERT

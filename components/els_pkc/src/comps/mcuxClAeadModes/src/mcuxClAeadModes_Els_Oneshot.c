@@ -18,11 +18,13 @@
 #include <internal/mcuxClAeadModes_Els_Types.h>
 #include <internal/mcuxClAeadModes_Els_Functions.h>
 #include <internal/mcuxClAeadModes_Common_Functions.h>
-#include <internal/mcuxClAeadModes_Internal.h>
+#include <internal/mcuxClAeadModes_Common.h>
 #include <mcuxClSession.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClCore_Macros.h>
 #include <internal/mcuxClSession_Internal.h>
+#include <internal/mcuxClBuffer_Internal.h>
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClAeadModes_crypt)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t)  mcuxClAeadModes_crypt(
@@ -60,7 +62,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t)  mcuxClAeadModes_crypt(
     */
 
     /* Allocate context */
-    const uint32_t cpuCtxSizeInWords = MCUXCLAEADMODES_INTERNAL_COMPUTE_CPUWORDS(sizeof(mcuxClAeadModes_Context_t));
+    const uint32_t cpuCtxSizeInWords = MCUXCLCORE_NUM_OF_CPUWORDS_CEIL(sizeof(mcuxClAeadModes_Context_t));
     MCUX_CSSL_ANALYSIS_START_PATTERN_REINTERPRET_MEMORY_OF_OPAQUE_TYPES()
     mcuxClAeadModes_Context_t *pCtx = (mcuxClAeadModes_Context_t *) mcuxClSession_allocateWords_cpuWa(session, cpuCtxSizeInWords);
     MCUX_CSSL_ANALYSIS_STOP_PATTERN_REINTERPRET_MEMORY()

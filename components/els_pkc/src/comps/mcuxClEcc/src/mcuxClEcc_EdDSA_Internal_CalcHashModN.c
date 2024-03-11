@@ -21,12 +21,14 @@
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
 #include <mcuxClHash.h>
+#include <mcuxClMemory_Clear.h>
+#include <mcuxClEcc.h>
 
 #include <internal/mcuxClPkc_Macros.h>
 #include <internal/mcuxClPkc_Operations.h>
 #include <internal/mcuxClEcc_EdDSA_Internal.h>
 #include <internal/mcuxClEcc_EdDSA_Internal_Hash.h>
-#include <internal/mcuxClEcc_EdDSA_Internal_CalcHashModN_FUP.h>
+#include <internal/mcuxClEcc_EdDSA_Internal_FUP.h>
 
 
 /**
@@ -39,9 +41,9 @@
  *  - pDomainParams     Pointer to ECC common domain parameters structure
  *  - pHashPrefix       Pointer to prefix
  *  - hashPrefixLen     Byte length of prefix
- *  - pSignatureR       Pointer to Renc
+ *  - pSignatureR       Buffer for Renc
  *  - pPubKey           Pointer to Qenc
- *  - pIn               Pointer to input for hash algorithm
+ *  - pIn               Buffer for input for hash algorithm
  *  - inSize            Size of pIn
  *
  * Prerequisites:
@@ -63,9 +65,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_CalcHashModN(
     mcuxClEcc_EdDSA_DomainParams_t *pDomainParams,
     const uint8_t *pHashPrefix,
     uint32_t hashPrefixLen,
-    const uint8_t *pSignatureR,
+    mcuxCl_InputBuffer_t pSignatureR,
     const uint8_t *pPubKey,
-    const uint8_t *pIn,
+    mcuxCl_InputBuffer_t pIn,
     uint32_t inSize
 )
 {
@@ -78,22 +80,31 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_CalcHashModN(
     uint16_t *pOperands = MCUXCLPKC_GETUPTRT();
     uint8_t *pS0 = MCUXCLPKC_OFFSET2PTR(pOperands[ECC_S0]);
 
-    /* Clear T0 with 0's, so ECC_S0 and ECC_T0 will only contain h and thereafter modular reduction can be done */
+    /* Calculate 2b-bit hash of (prefix||Renc||Qenc||m'). */
+    {
+        MCUXCLBUFFER_INIT(buffS0, NULL, pS0, 2u * encodedLen);
+        MCUXCLECC_FP_EDDSA_SIGN_VERIFY_CALC_HASH(pSession,
+                                    pCtx,
+                                    pDomainParams->algoHash,
+                                    pHashPrefix, hashPrefixLen,
+                                    pSignatureR, encodedLen,
+                                    pPubKey, encodedLen,
+                                    pIn, inSize,
+                                    buffS0);
+    }
+
+    /* Clear after byteLen(h) counting from ECC_S0 with 0's, so ECC_S0 and ECC_T0 will only contain h and afterwards
+     * modular reduction can be done.
+     *
+     * NOTE: This will clear potential data in memory after the hash,
+     *       but for Ed448 it is needed because SHAKE256 returns a hash larger than 114 bytes. */
     uint32_t operandSize = MCUXCLPKC_PS1_GETOPLEN();
     const uint32_t bufferSize = operandSize + MCUXCLPKC_WORDSIZE;
-    MCUXCLPKC_WAITFORREADY();
-    MCUXCLPKC_PS2_SETLENGTH(0u, bufferSize);
-    MCUXCLPKC_FP_CALC_OP2_CONST(ECC_T0, 0u);
-
-    /* Calculate 2b-bit hash of (prefix||Renc||Qenc||m'). */
-    MCUXCLECC_FP_EDDSA_SIGN_VERIFY_CALC_HASH(pSession,
-                                pCtx,
-                                pDomainParams->algoHash,
-                                pHashPrefix, hashPrefixLen,
-                                pSignatureR, encodedLen,
-                                pPubKey, encodedLen,
-                                pIn, inSize,
-                                pS0);
+    uint32_t byteLenH = (uint32_t) pDomainParams->b/4u;
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_OVERFLOW("bytesToClear will be in the range [0 ~ bufferSize].")
+    const uint32_t bytesToClear = bufferSize - (byteLenH % bufferSize);
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_OVERFLOW()
+    MCUXCLMEMORY_FP_MEMORY_CLEAR(&pS0[byteLenH],bytesToClear);
 
     /* Step 2: Use the PKC to calculate H(prefix||Renc||Qenc||m') mod n, and store the result in ECC_S0. */
     /* Calculate the Montgomery parameter Q' = 2 ^ (8*(operandSize + bufferSize)) mod n and store it in ECC_T1
@@ -117,7 +128,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_CalcHashModN(
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_EdDSA_CalcHashModN, MCUXCLECC_STATUS_OK,
         /* Step 1 */
         MCUXCLECC_FP_CALLED_EDDSA_SIGN_VERIFY_CALC_HASH,
-        MCUXCLPKC_FP_CALLED_CALC_OP2_CONST,
+        MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClMemory_clear),
         /* Step 2 */
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_CalcFup) );
 }

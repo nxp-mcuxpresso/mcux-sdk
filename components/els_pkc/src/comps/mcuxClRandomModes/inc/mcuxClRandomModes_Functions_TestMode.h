@@ -43,28 +43,28 @@ extern "C" {
  * \ingroup clRandom
  *
  * This function creates a TEST_MODE descriptor from an existing NORMAL_MODE one.
- * The function expects as input a pointer to a buffer to which the user of the CL shall write entropy input to be used for (re)seeding the DRBG.
+ * The function expects as input a pointer to a buffer to which the user of the CL shall write a custom seed to be used for (re)seeding the DRBG.
  * The function shall be called prior to an mcuxClRandom_init call.
  *
- * \param  testMode[out]        Pointer to TEST_MODE descriptor to be initialized
- * \param  normalMode[in]       Pointer to NORMAL_MODE descriptor to be used as basis for the initialization
- * \param  pEntropyInput[in]    Pointer to memory buffer containing entropy input for DRBG (re)seeding
+ * \param  testMode[out]                Pointer to TEST_MODE descriptor to be initialized
+ * \param  normalMode[in]               Pointer to NORMAL_MODE descriptor to be used as basis for the initialization
+ * \param  pCustomSeed[in]              Pointer to memory buffer containing a custom seed for DRBG (re)seeding
  *
  * \return status
  */
-// TODO: Create defines for entropy input sizes using object size filler
+// TODO: Create defines for custom seed sizes using object size filler
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_createTestFromNormalMode)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_createTestFromNormalMode(
     mcuxClRandom_ModeDescriptor_t *pTestMode,
     mcuxClRandom_Mode_t normalMode,
-    const uint32_t * const pEntropyInput
+    const uint32_t * const pCustomSeed
 );
 
 /**
- * \brief This function updates the entropy input pointer in a TEST_MODE descriptor
+ * \brief This function updates the custom seed pointer in a TEST_MODE descriptor
  *
  * \param  testMode[in]         Pointer to TEST_MODE descriptor
- * \param  pEntropyInput[in]    Pointer to memory buffer containing entropy input for DRBG (re)seeding
+ * \param  pCustomSeed[in]      Pointer to memory buffer containing custom seed for DRBG (re)seeding
  *
  * \return
  *   - MCUXCLRANDOM_STATUS_OK         if the TEST_MODE descriptor generation was successful
@@ -72,7 +72,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_createTestF
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_updateEntropyInput)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_updateEntropyInput(
     mcuxClRandom_ModeDescriptor_t *pTestMode,
-    const uint32_t * const pEntropyInput
+    const uint32_t * const pCustomSeed
 );
 
 #ifdef __cplusplus

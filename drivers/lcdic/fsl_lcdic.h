@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_LCDIC_H_
-#define _FSL_LCDIC_H_
+#ifndef FSL_LCDIC_H_
+#define FSL_LCDIC_H_
 
 #include "fsl_common.h"
 
@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_LCDIC_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
-/*@}*/
+/*! @} */
 
 /*! @brief Delay used in LCDIC_ResetState
  *
@@ -447,7 +447,7 @@ void LCDIC_GetDefaultConfig(lcdic_config_t *config);
  */
 void LCDIC_ResetState(LCDIC_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -541,7 +541,7 @@ static inline uint32_t LCDIC_GetProcessingTrxCmd(LCDIC_Type *base)
 {
     return base->STATUS1;
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name FIFO
@@ -596,7 +596,7 @@ status_t LCDIC_WriteTxFifoBlocking(LCDIC_Type *base, const uint32_t *data, uint3
  */
 status_t LCDIC_ReadRxFifoBlocking(LCDIC_Type *base, uint32_t *data, uint32_t dataLen_Word);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Misc Operations
@@ -641,7 +641,7 @@ static inline void LCDIC_EnableDMA(LCDIC_Type *base, bool enable)
     }
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Blocking transfer
@@ -716,7 +716,7 @@ status_t LCDIC_ReadDataArrayBlocking(LCDIC_Type *base, const lcdic_rx_xfer_t *xf
  */
 status_t LCDC_TransferBlocking(LCDIC_Type *base, const lcdic_xfer_t *xfer);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Transactional APIs
@@ -775,7 +775,7 @@ void LCDIC_TransferHandleIRQ(LCDIC_Type *base, void *handle);
  */
 void LCDIC_TransferInstallIRQHandler(uint32_t instance, void *handle, lcdic_transfer_irq_handler_t handler);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Helper functions
@@ -888,7 +888,7 @@ status_t LCDIC_PrepareReadDataArray(LCDIC_Type *base,
                                     uint32_t *xferSizeWordAligned,
                                     uint8_t *xferSizeWordUnaligned);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }
@@ -896,4 +896,4 @@ status_t LCDIC_PrepareReadDataArray(LCDIC_Type *base,
 
 /*! @}*/
 
-#endif /* _FSL_LCDIC_H_ */
+#endif /* FSL_LCDIC_H_ */

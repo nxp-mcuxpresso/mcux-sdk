@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2021-2023 NXP                                                  */
+/* Copyright 2021-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -18,6 +18,7 @@
 
 #include <mcuxClSession.h>
 #include <mcuxClRandom_Types.h>
+#include <mcuxClBuffer.h>
 
 
 #ifdef __cplusplus
@@ -26,9 +27,10 @@ extern "C" {
 
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClRandomModes_DRBG_AES_Internal_blockcipher)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_DRBG_AES_Internal_blockcipher(
+    mcuxClSession_Handle_t pSession,
     uint32_t const *pV,
     uint32_t const *pKey,
-    uint8_t *pOut,
+    mcuxCl_Buffer_t pOut,
     uint32_t keyLength
 );
 

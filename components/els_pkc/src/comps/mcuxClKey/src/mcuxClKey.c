@@ -27,7 +27,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClKey_Status_t) mcuxClKey_init(
     mcuxClSession_Handle_t pSession UNUSED_PARAM,
     mcuxClKey_Handle_t key,
     mcuxClKey_Type_t type,
-    mcuxCl_InputBuffer_t pKeyData,
+    const uint8_t * pKeyData,
     uint32_t keyDataLength
 )
 {
@@ -37,13 +37,14 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClKey_Status_t) mcuxClKey_init(
     mcuxClKey_setTypeDescriptor(key, *type);
     mcuxClKey_setProtectionType(key, mcuxClKey_Protection_None);
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST_QUALIFIER("pKeyData can not made const inside of key component as it is possible that the data changes after init due to generation/agreement/derivation of keys.");
-    mcuxClKey_setKeyData(key, (mcuxCl_Buffer_t)pKeyData);
+    mcuxClKey_setKeyData(key, (uint8_t *)pKeyData);
     MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST_QUALIFIER();
     mcuxClKey_setKeyContainerSize(key, keyDataLength);
     mcuxClKey_setKeyContainerUsedSize(key, keyDataLength);
     mcuxClKey_setLoadedKeySlot(key, MCUXCLKEY_INVALID_KEYSLOT);
     mcuxClKey_setLoadStatus(key, MCUXCLKEY_LOADSTATUS_NOTLOADED);
     mcuxClKey_setLinkedData(key, NULL);
+    mcuxClKey_setParentKey(key, NULL);
 
     /* Check if this is a variable-length external HMAC key */
     if(0u == type->size)
@@ -83,7 +84,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClKey_Status_t) mcuxClKey_setProtection(
     mcuxClSession_Handle_t pSession UNUSED_PARAM,
     mcuxClKey_Handle_t key,
     mcuxClKey_Protection_t protection,
-    mcuxCl_Buffer_t pAuxData,
+    uint8_t * pAuxData,
     mcuxClKey_Handle_t parentKey
 )
 {
@@ -91,7 +92,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClKey_Status_t) mcuxClKey_setProtection(
 
     /* Fill key structure */
     mcuxClKey_setProtectionType(key, protection);
-    mcuxClKey_setAuxData(key, (uint8_t *) pAuxData);
+    mcuxClKey_setAuxData(key, pAuxData);
     mcuxClKey_setParentKey(key, parentKey);
 
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClKey_setProtection, MCUXCLKEY_STATUS_OK);

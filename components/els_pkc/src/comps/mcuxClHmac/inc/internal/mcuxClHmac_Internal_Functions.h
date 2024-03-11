@@ -19,7 +19,7 @@
 #define MCUXCLHMAC_INTERNAL_FUNCTIONS_H_
 
 #include <mcuxCsslFlowProtection.h>
-#include <mcuxClCore_Buffer.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClMac_Types.h>
 #include <mcuxClKey_Types.h>
 #include <mcuxClSession_Types.h>

@@ -14,7 +14,7 @@
 /**
  * @file  mcuxClEls_Hash.h
  * @brief ELS header for hashing.
- * 
+ *
  * This header exposes functions that enable using the ELS for hashing.
  * There are two modes to hash a message: The asynchronous way as an ELS command, and the SHA-Direct mode which feeds
  * data to the internal registers of the ELS and is synchronous (blocking).
@@ -154,7 +154,7 @@ extern "C" {
 
 /**
  * @brief Command option bit field for #mcuxClEls_Hash_Async and #mcuxClEls_Hash_ShaDirect.
- * 
+ *
  * Bit field to configure #mcuxClEls_Hash_Async and #mcuxClEls_Hash_ShaDirect. See @ref MCUXCLELS_HASH_ for possible options.
  */
 typedef union
@@ -193,19 +193,19 @@ typedef union
 
 /**
  * @brief Computes the hash of a message.
- * 
+ *
  * Call #mcuxClEls_WaitForOperation to complete the operation.
  * @if MCUXCL_FEATURE_ELS_SHA_DIRECT
  * It must be ensured that SHA-Direct mode is disabled when calling this function (see #mcuxClEls_ShaDirect_Disable).
  * @endif
- * 
+ *
  * @param[in]       options     The command options. For more information, see #mcuxClEls_HashOption_t.
  * @param[in]       pInput      Padded input data to be hashed
  * @param[in]       inputLength Size of @p pInput in bytes. Since the input is padded, the length must be a multiple of the block size, see @ref MCUXCLELS_HASH_BLOCK_SIZE_.
  * @param[in, out]  pDigest     Pointer to the memory area that contains/receives the (intermediate) hash digest, allocated by the caller, see @ref MCUXCLELS_HASH_STATE_SIZE_.
- * 
+ *
  * The properties of some parameters change with respect to selected options.
- * 
+ *
  * <dl>
  *  <dt>Parameter properties</dt>
  *
@@ -224,7 +224,7 @@ typedef union
  *
  *  </dl></dd>
  * </dl>
- * 
+ *
  * @if (MCUXCL_FEATURE_CSSL_FP_USE_SECURE_COUNTER && MCUXCL_FEATURE_CSSL_SC_USE_SW_LOCAL)
  *  @return A code-flow protected error code (see @ref mcuxCsslFlowProtection). The error code can be any error code in @ref MCUXCLELS_STATUS_, see individual documentation for more information
  * @else
@@ -242,6 +242,101 @@ MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_Hash_Asy
     uint8_t * pDigest
     );
 
+#ifdef MCUXCL_FEATURE_ELS_SHA_DIRECT
+/**
+ * @brief Enables SHA-direct mode.
+ *
+ * If this mode is enabled, it allows the application processor to access the ELS hash
+ * engine, but at the same time it stops ELS operations from using the hash engine.
+ *
+ * Therefore, in SHA-direct mode, hashing can only be done with #mcuxClEls_Hash_ShaDirect.
+ * When SHA-direct mode is active, ELS operations which internally use the ELS hash engine
+ * will result in an operational error (see #MCUXCLELS_STATUS_HW_OPERATIONAL). To use those
+ * operations, disable SHA-direct mode. Please consult function descriptions to check
+ * whether and under which circumstances they internally use the ELS hash engine.
+ *
+ * ELS operations which do not internally use the ELS hash engine can be performed in
+ * parallel with a SHA-direct hash operation.
+ *
+ * @return A code-flow protected error code (see @ref mcuxCsslFlowProtection)
+ * @retval #MCUXCLELS_STATUS_SW_CANNOT_INTERRUPT if a running operation prevented the request
+ * @retval #MCUXCLELS_STATUS_OK                  on success
+ */
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEls_ShaDirect_Enable)
+MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_ShaDirect_Enable(
+    void);
+
+/**
+ * @brief Disables SHA-direct mode.
+ *
+ * @if (MCUXCL_FEATURE_CSSL_FP_USE_SECURE_COUNTER && MCUXCL_FEATURE_CSSL_SC_USE_SW_LOCAL)
+ *  @return A code-flow protected error code (see @ref mcuxCsslFlowProtection). The error code can be any error code in @ref MCUXCLELS_STATUS_, see individual documentation for more information
+ * @else
+ *  @return An error code that can be any error code in @ref MCUXCLELS_STATUS_, see individual documentation for more information
+ * @endif
+ * @retval #MCUXCLELS_STATUS_SW_CANNOT_INTERRUPT if a running operation prevented the request
+ * @retval #MCUXCLELS_STATUS_OK                  on success
+ */
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEls_ShaDirect_Disable)
+MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_ShaDirect_Disable(
+    void);
+
+/**
+ * @brief Calculates the hash of a message using SHA-Direct mode.
+ *
+ * SHA-Direct mode must be enabled before calling this function. For more information, see #mcuxClEls_ShaDirect_Enable.
+ *
+ * In order to perform a hash calculation in SHA-Direct mode, the CPU must feed the input data to a register in ELS's SHA core, or configure a DMA to copy the input data to that register. A DMA can be used because feeding input data to the SHA core while the SHA core is busy results in an AHB bus stall, and there is no need to check any further flags before copying further data.
+ * If a DMA shall be used to perform this copy, a callback function must be provided by the caller that will configure and start the DMA.
+ * If no callback function is specified, this function will resort to using the CPU.
+ *
+ * @param[in]       options     The command options. For more information, see #mcuxClEls_HashOption_t.
+ * @param[in]       pInput      Padded input data to be hashed.
+ * @param[in]       inputLength Size of @p pInput in bytes. Since the input is padded, the length must be a multiple of the block size, see @ref MCUXCLELS_HASH_BLOCK_SIZE_.
+ * @param[in, out]  pDigest     Pointer to the memory area that contains/receives the (intermediate) hash digest, allocated by the caller, see @ref MCUXCLELS_HASH_STATE_SIZE_.
+ * @param[in]       pCallback   Callback function to load data into Sha core.
+ * @param[in, out]  pCallerData Pointer forwarded by the operation to the callback function.
+ *
+ * The properties of some parameters change with respect to selected options.
+ *
+ * <dl>
+ *  <dt>Parameter properties</dt>
+ *
+ *  <dd><dl>
+ *      <dt>@p options.hashini == #MCUXCLELS_HASH_INIT_ENABLE</dt>
+ *          <dd>@p options.hashld has no effect and shall be #MCUXCLELS_HASH_LOAD_DISABLE. No data is read from @p pDigest. </dd>
+ *
+ *      <dt>@p options.hashld == #MCUXCLELS_HASH_LOAD_DISABLE</dt>
+ *          <dd>@p pDigest is not expected to contain an initial state. No data is read from @p pDigest. </dd>
+ *
+ *      <dt>@p options.hashoe == #MCUXCLELS_HASH_OUTPUT_ENABLE</dt>
+ *          <dd>The hash state is written to @p pDigest. The size varies depending on the choice of @p options.hashmd, for more information see @ref MCUXCLELS_HASH_STATE_SIZE_ . In cases where the state size and output size differ - see @ref MCUXCLELS_HASH_OUTPUT_SIZE_ -, the state must be truncated by the caller to obtain the final hash value.</dd>
+ *
+ *      <dt>@p pCallback != @c NULL </dt>
+ *          <dd>The callback function referenced by @p pCallback is called. Otherwise, the function uses a default implementation for the copy.</dd>
+ *  </dl></dd>
+ * </dl>
+ *
+ * @if (MCUXCL_FEATURE_CSSL_FP_USE_SECURE_COUNTER && MCUXCL_FEATURE_CSSL_SC_USE_SW_LOCAL)
+ *  @return A code-flow protected error code (see @ref mcuxCsslFlowProtection). The error code can be any error code in @ref MCUXCLELS_STATUS_, see individual documentation for more information
+ * @else
+ *  @return An error code that can be any error code in @ref MCUXCLELS_STATUS_, see individual documentation for more information
+ * @endif
+ * @retval #MCUXCLELS_STATUS_SW_INVALID_PARAM    if invalid parameters were specified
+ * @retval #MCUXCLELS_STATUS_SW_CANNOT_INTERRUPT if a running operation prevented the request
+ * @retval #MCUXCLELS_STATUS_SW_FAULT            if the callback returned an error
+ * @retval #MCUXCLELS_STATUS_OK                  on success
+ */
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEls_Hash_ShaDirect)
+MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_Hash_ShaDirect(
+    mcuxClEls_HashOption_t options,
+    uint8_t const * pInput,
+    size_t inputLength,
+    uint8_t * pDigest,
+    mcuxClEls_TransferToRegisterFunction_t pCallback,
+    void * pCallerData
+    );
+#endif /* MCUXCL_FEATURE_ELS_SHA_DIRECT */
 
 #ifdef __cplusplus
 } /* extern "C" */

@@ -16,19 +16,21 @@
 */
 #ifndef MCUXCLRSA_PRIVATECRT_FUP_H_
 #define MCUXCLRSA_PRIVATECRT_FUP_H_
-#include <mcuxClConfig.h> // Exported features flags header
+#include <mcuxClCore_Platform.h>
+#include <mcuxCsslAnalysis.h>
+
 #include <internal/mcuxClPkc_FupMacros.h>
 
 #define mcuxClRsa_PrivateCrt_T1mb_FUP_LEN            3u
 #define mcuxClRsa_PrivateCrt_T2T3T4mb_FUP_LEN        6u
 #define mcuxClRsa_PrivateCrt_CalcM_b_FUP_LEN         5u
 #define mcuxClRsa_PrivateCrt_CalcM1_FUP_LEN          4u
-#define mcuxClRsa_PrivateCrt_ReductionME_FUP_LEN     3u
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_LINKAGE_FUP()
 extern const mcuxClPkc_FUPEntry_t mcuxClRsa_PrivateCrt_T2T3T4mb_FUP[mcuxClRsa_PrivateCrt_T2T3T4mb_FUP_LEN];
 extern const mcuxClPkc_FUPEntry_t mcuxClRsa_PrivateCrt_T1mb_FUP[mcuxClRsa_PrivateCrt_T1mb_FUP_LEN];
 extern const mcuxClPkc_FUPEntry_t mcuxClRsa_PrivateCrt_CalcM1_FUP[mcuxClRsa_PrivateCrt_CalcM1_FUP_LEN];
 extern const mcuxClPkc_FUPEntry_t mcuxClRsa_PrivateCrt_CalcM_b_FUP[mcuxClRsa_PrivateCrt_CalcM_b_FUP_LEN];
-extern const mcuxClPkc_FUPEntry_t mcuxClRsa_PrivateCrt_ReductionME_FUP[mcuxClRsa_PrivateCrt_ReductionME_FUP_LEN];
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_LINKAGE_FUP()
 
-#endif /* MCUXCLRSA_PRIVATECRT_FUP_H_ */ 
+#endif /* MCUXCLRSA_PRIVATECRT_FUP_H_ */

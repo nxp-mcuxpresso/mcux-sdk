@@ -16,11 +16,15 @@
 */
 #ifndef MCUXCLRSA_COMPUTED_FUP_H_
 #define MCUXCLRSA_COMPUTED_FUP_H_
-#include <mcuxClConfig.h> // Exported features flags header
+#include <mcuxClCore_Platform.h>
+#include <mcuxCsslAnalysis.h>
+
 #include <internal/mcuxClPkc_FupMacros.h>
 
 #define mcuxClRsa_ComputeD_Steps123_FUP_LEN  6u
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_LINKAGE_FUP()
 extern const mcuxClPkc_FUPEntry_t mcuxClRsa_ComputeD_Steps123_FUP[mcuxClRsa_ComputeD_Steps123_FUP_LEN];
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_LINKAGE_FUP()
 
-#endif /* MCUXCLRSA_COMPUTED_FUP_H_ */ 
+#endif /* MCUXCLRSA_COMPUTED_FUP_H_ */

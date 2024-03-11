@@ -28,6 +28,7 @@
 #include <mcuxCsslFlowProtection.h>
 
 #include <mcuxClPkc_Types.h>
+#include <internal/mcuxClPkc_Macros.h>
 #include <internal/mcuxClPkc_SfrAccess.h>
 
 
@@ -77,8 +78,8 @@ static inline uint8_t * mcuxClPkc_inline_offset2Ptr(uint16_t pkcOffset)
 {
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_TYPECAST_INTEGER_TO_POINTER("convert PKC operand offset to pointer.")
 
-    uint32_t address = (uint32_t) pkcOffset | (uint32_t) MCUXCLPKC_RAM_START_ADDRESS;
-    uint8_t * ptr = (uint8_t *) address;
+    uint32_t ptrAddress = (uint32_t) pkcOffset | (uint32_t) MCUXCLPKC_RAM_START_ADDRESS;
+    uint8_t * ptr = (uint8_t *) ptrAddress;
 
     MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_TYPECAST_INTEGER_TO_POINTER()
 
@@ -91,8 +92,8 @@ static inline uint32_t * mcuxClPkc_inline_offset2PtrWord(uint16_t pkcOffset)
 {
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_TYPECAST_INTEGER_TO_POINTER("convert PKC operand offset (PKC-word aligned) to pointer.")
 
-    uint32_t address = (uint32_t) pkcOffset | (uint32_t) MCUXCLPKC_RAM_START_ADDRESS;
-    uint32_t * ptrWord = (uint32_t *) address;
+    uint32_t ptrAddress = (uint32_t) pkcOffset | (uint32_t) MCUXCLPKC_RAM_START_ADDRESS;
+    uint32_t * ptrWord = (uint32_t *) ptrAddress;
 
     MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_TYPECAST_INTEGER_TO_POINTER()
 

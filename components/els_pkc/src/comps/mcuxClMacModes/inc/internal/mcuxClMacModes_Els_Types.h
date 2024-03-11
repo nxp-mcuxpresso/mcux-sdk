@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -25,9 +25,9 @@
 #include <mcuxClMac_Constants.h>
 #include <mcuxClMac_Types.h>
 #include <mcuxClMacModes_MemoryConsumption.h>
-#include <internal/mcuxClMacModes_Internal_Constants.h>
+#include <internal/mcuxClMacModes_Common_Constants.h>
 #include <internal/mcuxClMacModes_Els_Ctx.h>
-#include <internal/mcuxClMacModes_Wa.h>
+#include <internal/mcuxClMacModes_Common_Wa.h>
 
 #ifdef __cplusplus
 extern "C" {

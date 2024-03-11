@@ -57,22 +57,14 @@
 /****************************************************************************/
 
 /**
- * \def MCUX_CSSL_DI_ALLOC_IMPL
- * \brief Allocation operation implementation for the data integrity.
- * \ingroup diNoneCore
- */
-#define MCUX_CSSL_DI_ALLOC_IMPL() \
-  /* intentionally empty */
-
-/**
  * \def MCUX_CSSL_DI_INIT_IMPL
- * \brief Initialization operation implementation for the data integrity.
+ * \brief Initialize the backup of the data integrity value to zero.
  * \ingroup diNoneCore
  *
- * \param value Value with which the data integrity must be initialized.
+ * @param backupValue Fresh variable name to store the current DI value.
  */
-#define MCUX_CSSL_DI_INIT_IMPL(value) \
-  /* intentionally empty */
+#define MCUX_CSSL_DI_INIT_IMPL(backupValue) \
+  uint32_t backupValue = 0u
 
 /****************************************************************************/
 /* Check                                                                    */
@@ -88,6 +80,19 @@
  */
 #define MCUX_CSSL_DI_CHECK_IMPL(reference) \
   (MCUX_CSSL_DI_CHECK_PASSED_IMPL)
+
+/**
+ * \def MCUX_CSSL_DI_CHECK_EXIT_IMPL
+ * \brief Comparison operation implementation for the data integrity.
+ *        It has no impact on the normal execution of the calling function.
+ * \ingroup diNoneCore
+ *
+ * \param id        Identifier of the function from which we will exit (ignored).
+ * \param reference Reference value to compare the data integrity value against.
+ * \param fail      Result that should be returned if the data integrity check failed (ignored).
+ */
+#define MCUX_CSSL_DI_CHECK_EXIT_IMPL(id, reference, fail) \
+  (void)(reference)
 
 /****************************************************************************/
 /* Updates                                                                  */

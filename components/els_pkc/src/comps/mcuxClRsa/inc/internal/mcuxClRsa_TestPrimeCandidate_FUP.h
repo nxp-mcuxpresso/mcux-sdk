@@ -16,7 +16,9 @@
 */
 #ifndef MCUXCLRSA_TESTPRIMECANDIDATE_FUP_H_
 #define MCUXCLRSA_TESTPRIMECANDIDATE_FUP_H_
-#include <mcuxClConfig.h> // Exported features flags header
+#include <mcuxClCore_Platform.h>
+#include <mcuxCsslAnalysis.h>
+
 #include <internal/mcuxClPkc_FupMacros.h>
 
 #ifdef __cplusplus
@@ -26,11 +28,13 @@ extern "C" {
 #define mcuxClRsa_TestPrimeCandidate_Steps2_FUP_LEN  6u
 #define mcuxClRsa_TestPrimeCandidate_Steps3_FUP_LEN  5u
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_LINKAGE_FUP()
 extern const mcuxClPkc_FUPEntry_t mcuxClRsa_TestPrimeCandidate_Steps2_FUP[mcuxClRsa_TestPrimeCandidate_Steps2_FUP_LEN];
 extern const mcuxClPkc_FUPEntry_t mcuxClRsa_TestPrimeCandidate_Steps3_FUP[mcuxClRsa_TestPrimeCandidate_Steps3_FUP_LEN];
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_LINKAGE_FUP()
 
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
 
-#endif /* MCUXCLRSA_TESTPRIMECANDIDATE_FUP_H_ */ 
+#endif /* MCUXCLRSA_TESTPRIMECANDIDATE_FUP_H_ */

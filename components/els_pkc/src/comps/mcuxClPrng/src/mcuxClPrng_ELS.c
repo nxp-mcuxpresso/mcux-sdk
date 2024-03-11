@@ -158,7 +158,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPrng_Status_t) mcuxClPrng_init(
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClPrng_generate)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPrng_Status_t) mcuxClPrng_generate(
-    uint8_t *             pOut,
+    mcuxCl_Buffer_t        pOut,
     uint32_t              outLength
 )
 {

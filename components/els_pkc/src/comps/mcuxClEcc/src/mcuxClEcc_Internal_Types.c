@@ -16,12 +16,14 @@
  * @brief Instantiation of the type descriptors supported by the mcuxClEcc component.
  */
 
+#include <mcuxClEcc_Constants.h>
+
 #include <internal/mcuxClEcc_EdDSA_Internal.h>
+#include <internal/mcuxClEcc_ECDSA_Internal.h>
 
 /**********************************************************/
 /* Key pair generation descriptors                        */
 /**********************************************************/
-
 const mcuxClEcc_EdDSA_GenerateKeyPairDescriptor_t mcuxClEcc_EdDsa_GeneratePrivKeyDescriptor =
 {
     .options       = MCUXCLECC_EDDSA_PRIVKEY_GENERATE,
@@ -32,11 +34,21 @@ const mcuxClEcc_EdDSA_GenerateKeyPairDescriptor_t mcuxClEcc_EdDsa_GeneratePrivKe
 /**********************************************************/
 /* Signature protocol descriptors                         */
 /**********************************************************/
+
 const mcuxClEcc_EdDSA_SignatureProtocolDescriptor_t mcuxClEcc_EdDsa_Ed25519ProtocolDescriptor =
 {
-    .generateOption     = 0u,
-    .verifyOption       = 0u,
-    .pHashPrefix        = NULL,
-    .hashPrefixLen  = 0u
+    .generateOption = 0u,
+    .verifyOption   = 0u,
+    .phflag             = MCUXCLECC_EDDSA_PHFLAG_ZERO,
+    .pHashPrefix    = NULL,
+    .hashPrefixLen      = 0u
+};
+
+
+const mcuxClEcc_ECDSA_SignatureProtocolDescriptor_t mcuxClEcc_ECDSA_ProtocolDescriptor =
+{
+    .generateOption = MCUXCLECC_ECDSA_SIGNATURE_GENERATE_RANDOMIZED,
+    .verifyOption   = 0u,
+    .pHmacModeDesc  = NULL
 };
 

@@ -33,7 +33,7 @@ static status_t ELS_check_key(uint8_t keyIdx, mcuxClEls_KeyProp_t *pKeyProp);
  */
 status_t ELS_PowerDownWakeupInit(ELS_Type *base)
 {
-    status_t status = kStatus_Fail;
+    status_t status = kStatus_InvalidArgument;
 
     /* De-assert reset */
     RESET_ClearPeripheralReset(kELS_RST_SHIFT_RSTn);
@@ -68,34 +68,34 @@ status_t ELS_PowerDownWakeupInit(ELS_Type *base)
     }
     MCUX_CSSL_FP_FUNCTION_CALL_END();
 
-    /* Kick-off ELS PRNG */
-    status = ELS_PRNG_KickOff();
-    if (status != kStatus_Success)
+    if (status != kStatus_Fail)
     {
-        return status;
+        /* Kick-off ELS PRNG */
+        status = ELS_PRNG_KickOff();
     }
 
-    return kStatus_Success;
+    return status;
 }
 
 static status_t ELS_check_key(uint8_t keyIdx, mcuxClEls_KeyProp_t *pKeyProp)
 {
+    status_t status = kStatus_Success;
     /* Check if ELS required keys are available in ELS keystore, get the key properties from the ELS*/
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token,
                                      mcuxClEls_GetKeyProperties(keyIdx, pKeyProp));
 
     /* mcuxClCss_GetKeyProperties is a flow-protected function: Check the protection token and the return value */
     if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_GetKeyProperties) != token) || (MCUXCLELS_STATUS_OK != result))
-        return kStatus_Fail;
+        status = kStatus_Fail;
     MCUX_CSSL_FP_FUNCTION_CALL_END();
 
-    return kStatus_Success;
+    return status;
 }
 
 static status_t ELS_PRNG_KickOff(void)
 {
     mcuxClEls_KeyProp_t key_properties;
-    status_t status = kStatus_Fail;
+    status_t status = kStatus_InvalidArgument;
     mcuxClEls_KeyIndex_t keyIdx = 0;
 
     /* Check if PRNG already ready */
@@ -108,7 +108,8 @@ static status_t ELS_PRNG_KickOff(void)
             status = ELS_check_key((uint8_t)keyIdx, &key_properties);
             if (status != kStatus_Success)
             {
-                return kStatus_SlotUnavailable;
+                status = kStatus_SlotUnavailable;
+                goto cleanup;
             }   
             
             /* Found free key slot */
@@ -128,19 +129,24 @@ static status_t ELS_PRNG_KickOff(void)
             if ((token0 != MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_KeyDelete_Async)) ||
                 (result0 != MCUXCLELS_STATUS_OK_WAIT))
             {
-                return kStatus_Fail;
+                status = kStatus_Fail;
+                goto cleanup;
             }
             /* mcuxClCss_WaitForOperation is a flow-protected function: Check the protection token and the return value */
             MCUX_CSSL_FP_FUNCTION_CALL_PROTECTED(result1, token1, mcuxClEls_WaitForOperation(MCUXCLELS_ERROR_FLAGS_CLEAR));
             if ((token1 != MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation)) || (result1 != MCUXCLELS_STATUS_OK))
             {
-                return kStatus_Fail;
+                status = kStatus_Fail;
+                goto cleanup;
             }
         }
         else
         {
-          return kStatus_SlotUnavailable;
+          status = kStatus_SlotUnavailable;
+          goto cleanup;
         }
     }
-    return kStatus_Success;
+    status = kStatus_Success;
+cleanup:
+    return status; 
 }

@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -41,7 +41,7 @@ MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_Cipher_A
 #ifndef MCUXCL_FEATURE_ELS_NO_INTERNAL_STATE_FLAGS
     #define TMP_NO_INTERNAL_STATE_FLAGS (MCUXCLELS_CIPHER_STATE_IN_ENABLE == options.bits.cphsie)
 #else
-    #define TMP_NO_INTERNAL_STATE_FLAGS (false)
+    #define TMP_NO_INTERNAL_STATE_FLAGS ((bool)false)
 #endif /* MCUXCL_FEATURE_ELS_NO_INTERNAL_STATE_FLAGS */
 
     MCUXCLELS_INPUT_PARAM_CHECK_PROTECTED(mcuxClEls_Cipher_Async,
@@ -51,7 +51,7 @@ MCUXCLELS_API MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_Cipher_A
                                           || ((MCUXCLELS_CIPHER_EXTERNAL_KEY == options.bits.extkey) && ((MCUXCLELS_CIPHER_KEY_SIZE_AES_128 != keyLength) && (MCUXCLELS_CIPHER_KEY_SIZE_AES_192 != keyLength) && (MCUXCLELS_CIPHER_KEY_SIZE_AES_256 != keyLength)))
                                           || (MCUXCLELS_CIPHERPARAM_ALGORITHM_AES_CTR < options.bits.cphmde)
             /* ECB doesn't support importing or exporting an IV */
-                                          || ((MCUXCLELS_CIPHERPARAM_ALGORITHM_AES_ECB == options.bits.cphmde) && ((MCUXCLELS_CIPHER_STATE_OUT_ENABLE == options.bits.cphsoe) || (TMP_NO_INTERNAL_STATE_FLAGS == true))));
+                                          || ((MCUXCLELS_CIPHERPARAM_ALGORITHM_AES_ECB == options.bits.cphmde) && ((MCUXCLELS_CIPHER_STATE_OUT_ENABLE == options.bits.cphsoe) || TMP_NO_INTERNAL_STATE_FLAGS)));
     
 #undef TMP_NO_INTERNAL_STATE_FLAGS
 

@@ -19,6 +19,7 @@
  * @brief   Example of SHA2-256 hashing using the ELS (CLNS component mcuxClEls)
  * */
 
+#include <mcuxClToolchain.h>
 #include <mcuxClEls.h> // Interface to the entire mcuxClEls component
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h> // Code flow protection
@@ -26,35 +27,35 @@
 #include <mcuxClExample_ELS_Helper.h>
 
 /** Data input for SHA2-256 hashing. */
-static uint8_t const sha256_padded_input[MCUXCLELS_HASH_BLOCK_SIZE_SHA_256] = {0x61U, 0x62U, 0x63U, 0x80U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00u, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x00U,
-                                                                              0x00U, 0x00U, 0x00U, 0x18U};
+static ALIGNED uint8_t const sha256_padded_input[MCUXCLELS_HASH_BLOCK_SIZE_SHA_256] = {0x61U, 0x62U, 0x63U, 0x80U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00u, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x00U,
+                                                                                      0x00U, 0x00U, 0x00U, 0x18U};
 
 /** Expected hash value. */
-static uint8_t sha256_reference_digest[MCUXCLELS_HASH_OUTPUT_SIZE_SHA_256] = {0xBAU, 0x78U, 0x16U, 0xBFU,
-                                                                             0x8FU, 0x01U, 0xCFU, 0xEAU,
-                                                                             0x41U, 0x41U, 0x40U, 0xDEU,
-                                                                             0x5DU, 0xAEU, 0x22U, 0x23U,
-                                                                             0xB0U, 0x03U, 0x61U, 0xA3U,
-                                                                             0x96U, 0x17U, 0x7AU, 0x9CU,
-                                                                             0xB4U, 0x10U, 0xFFU, 0x61U,
-                                                                             0xF2U, 0x00U, 0x15U, 0xADU};
+static ALIGNED uint8_t sha256_reference_digest[MCUXCLELS_HASH_OUTPUT_SIZE_SHA_256] = {0xBAU, 0x78U, 0x16U, 0xBFU,
+                                                                                     0x8FU, 0x01U, 0xCFU, 0xEAU,
+                                                                                     0x41U, 0x41U, 0x40U, 0xDEU,
+                                                                                     0x5DU, 0xAEU, 0x22U, 0x23U,
+                                                                                     0xB0U, 0x03U, 0x61U, 0xA3U,
+                                                                                     0x96U, 0x17U, 0x7AU, 0x9CU,
+                                                                                     0xB4U, 0x10U, 0xFFU, 0x61U,
+                                                                                     0xF2U, 0x00U, 0x15U, 0xADU};
 
 /** Destination buffer to receive the hash output of the SHA2-256 hashing. */
-static uint8_t sha2_256_digest[MCUXCLELS_HASH_STATE_SIZE_SHA_256]; // MCUXCLELS_HASH_STATE_SIZE_SHA_256 has to be used as the mcuxClEls_Hash_Async do not perform the truncation of the hash state.
+static ALIGNED uint8_t sha2_256_digest[MCUXCLELS_HASH_STATE_SIZE_SHA_256]; // MCUXCLELS_HASH_STATE_SIZE_SHA_256 has to be used as the mcuxClEls_Hash_Async do not perform the truncation of the hash state.
 
 
 

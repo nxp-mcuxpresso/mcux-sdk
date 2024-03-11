@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2021-2023 NXP                                                  */
+/* Copyright 2021-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -17,6 +17,7 @@
 #include <mcuxClConfig.h> // Exported features flags header
 
 #include <mcuxClSession.h>
+#include <mcuxClCore_Macros.h>
 #include <mcuxClRandom_Types.h>
 
 
@@ -27,16 +28,10 @@ extern "C" {
 #define MCUXCLRANDOMMODES_SELFTEST_RANDOMDATALENGTH (64u)
 
 /*
- * Takes a byte size and returns a number of words
- */
-#define MCUXCLRANDOMMODES_ROUNDED_UP_CPU_WORDSIZE(bytesize) \
-    (((bytesize) + sizeof(uint32_t) - 1U ) / (sizeof(uint32_t)))
-
-/*
  * Takes a byte size and returns the next largest multiple of MCUXCLAES_BLOCK_SIZE
  */
-#define MCUXCLRANDOMMODES_ROUND_UP_TO_AES_BLOCKSIZE(bytesize) \
-    ((((bytesize) + MCUXCLAES_BLOCK_SIZE - 1U) / MCUXCLAES_BLOCK_SIZE) * MCUXCLAES_BLOCK_SIZE)
+#define MCUXCLRANDOMMODES_ALIGN_TO_AES_BLOCKSIZE(size) \
+    MCUXCLCORE_ALIGN_TO_WORDSIZE(MCUXCLAES_BLOCK_SIZE, size)
 
 /**
  * @brief Defines to specify which mode a DRBG is operated in
@@ -65,19 +60,25 @@ typedef struct
 MCUX_CSSL_FP_FUNCTION_POINTER(mcuxClRandomModes_instantiateAlgorithm_t,
 typedef MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) (* mcuxClRandomModes_instantiateAlgorithm_t)(
         mcuxClSession_Handle_t pSession,
-        uint8_t *pEntropyInput
+        mcuxClRandom_Mode_t mode,
+        mcuxClRandom_Context_t context,
+        uint8_t *pEntropyInputAndNonce
 ));
 
 MCUX_CSSL_FP_FUNCTION_POINTER(mcuxClRandomModes_reseedAlgorithm_t,
 typedef MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) (* mcuxClRandomModes_reseedAlgorithm_t)(
         mcuxClSession_Handle_t pSession,
+        mcuxClRandom_Mode_t mode,
+        mcuxClRandom_Context_t context,
         uint8_t *pEntropyInput
 ));
 
 MCUX_CSSL_FP_FUNCTION_POINTER(mcuxClRandomModes_generateAlgorithm_t,
 typedef MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) (* mcuxClRandomModes_generateAlgorithm_t)(
         mcuxClSession_Handle_t pSession,
-        uint8_t *pOut,
+        mcuxClRandom_Mode_t mode,
+        mcuxClRandom_Context_t context,
+        mcuxCl_Buffer_t pOut,
         uint32_t outLength
 ));
 
@@ -110,6 +111,7 @@ typedef struct
 typedef struct
 {
     uint64_t reseedInterval;           ///< reseed interval of chosen DRBG variant
+    void *drbgVariantSpecifier;        ///< Additional variant-specific information
     uint16_t seedLen;                  ///< seedLen parameter defined in NIST SP 800-90A
     uint16_t initSeedSize;             ///< Size of entropy input used for instantiating the DRBG
     uint16_t reseedSeedSize;           ///< Size of entropy input used for reseeding the DRBG

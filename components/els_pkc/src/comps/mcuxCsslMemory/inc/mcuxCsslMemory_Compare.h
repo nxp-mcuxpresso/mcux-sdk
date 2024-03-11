@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2022 NXP                                                  */
+/* Copyright 2020-2023 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -53,7 +53,7 @@
  * @param chk    The parameter checksum, generated with #mcuxCsslParamIntegrity_Protect.
  * @param pLhs   The left-hand side data to compare. Must not be NULL.
  * @param pRhs   The right-hand side data to compare. Must not be NULL.
- * @param length The number of bytes to compare. Must be different from zero.
+ * @param length The number of bytes to compare.
  * @return A status code encapsulated in a flow-protection type.
  * @retval #MCUXCSSLMEMORY_STATUS_EQUAL If the contents of @p lhs and @p rhs are equal.
  * @retval #MCUXCSSLMEMORY_STATUS_NOT_EQUAL If the contents of @p lhs and @p rhs are not equal.

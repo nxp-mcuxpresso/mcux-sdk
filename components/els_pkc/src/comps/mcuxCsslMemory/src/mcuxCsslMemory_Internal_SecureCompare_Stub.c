@@ -20,6 +20,7 @@
 #include <stddef.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxCsslFlowProtection_FunctionIdentifiers.h>
+#include <mcuxCsslMemory_Constants.h>
 #include <mcuxCsslMemory_Types.h>
 #ifdef CSSL_MEMORY_ENABLE_COMPARE
 #include <mcuxCsslMemory_Compare.h>

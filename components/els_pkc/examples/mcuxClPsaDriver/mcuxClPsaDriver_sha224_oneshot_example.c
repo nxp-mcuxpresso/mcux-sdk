@@ -11,6 +11,7 @@
 /* software.                                                                */
 /*--------------------------------------------------------------------------*/
 
+#include <mcuxClToolchain.h>
 #include <mcuxClEls.h> // Interface to the entire mcuxClEls component
 #include <mcuxClSession.h> // Interface to the entire mcuxClSession component
 #include <mcuxClHash.h>             // Interface to the entire mcuxClHash component
@@ -23,15 +24,15 @@
 #include <stdbool.h>  // bool type for the example's return code
 #include <mcuxClPsaDriver.h>
 
-bool mcuxClPsaDriver_sha224_oneshot_example(void)
+MCUXCLEXAMPLE_FUNCTION(mcuxClPsaDriver_sha224_oneshot_example)
 {
 	/* Input for the SHA-224 operation */
-    const uint8_t data[3] = {
+    const ALIGNED uint8_t data[3] = {
         0x61u, 0x62u, 0x63u
     };
 
 	/* Expected output for the SHA-224 operation */
-    const uint8_t hashExpected[MCUXCLHASH_OUTPUT_SIZE_SHA_224] = {
+    const ALIGNED uint8_t hashExpected[MCUXCLHASH_OUTPUT_SIZE_SHA_224] = {
         0x23u, 0x09u, 0x7Du, 0x22u, 0x34u, 0x05u, 0xD8u, 0x22u,
         0x86u, 0x42u, 0xA4u, 0x77u, 0xBDu, 0xA2u, 0x55u, 0xB3u,
         0x2Au, 0xADu, 0xBCu, 0xE4u, 0xBDu, 0xA0u, 0xB3u, 0xF7u,
@@ -39,7 +40,7 @@ bool mcuxClPsaDriver_sha224_oneshot_example(void)
     };
 
 	/* Output buffer for the SHA-224 operation */
-    uint8_t hashOutput[MCUXCLHASH_OUTPUT_SIZE_SHA_224];
+    ALIGNED uint8_t hashOutput[MCUXCLHASH_OUTPUT_SIZE_SHA_224];
 
     /** Initialize ELS, Enable the ELS **/
     if(!mcuxClExample_Els_Init(MCUXCLELS_RESET_DO_NOT_CANCEL))
@@ -80,9 +81,4 @@ bool mcuxClPsaDriver_sha224_oneshot_example(void)
 
 	/* Return */
 	return MCUXCLEXAMPLE_STATUS_OK;
-}
-bool nxpClPsaDriver_sha224_oneshot_example(void)
-{
-    bool result = mcuxClPsaDriver_sha224_oneshot_example();
-    return result;
 }

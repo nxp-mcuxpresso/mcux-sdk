@@ -29,8 +29,12 @@ extern "C" {
  * @{
  */
 
+/* Error codes */
+#define MCUXCLAES_STATUS_ERROR              ((mcuxClAes_Status_t) 0x0FF95330u)
+#define MCUXCLAES_STATUS_OK                 ((mcuxClAes_Status_t) 0x0FF92E03u)
+
 /* Block size */
-#define MCUXCLAES_BLOCK_SIZE                (16u)                                      ///< AES block size in bytes
+#define MCUXCLAES_BLOCK_SIZE                (16u)                                    ///< AES block size in bytes
 #define MCUXCLAES_BLOCK_SIZE_IN_WORDS       (MCUXCLAES_BLOCK_SIZE / sizeof(uint32_t)) ///< AES block size in words
 
 /* Key sizes */

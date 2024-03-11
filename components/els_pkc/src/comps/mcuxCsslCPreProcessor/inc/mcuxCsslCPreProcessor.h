@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2019-2020 NXP                                                  */
+/* Copyright 2019-2020, 2023 NXP                                            */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -45,6 +45,14 @@
   32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, \
   16, 15, 14, 13, 12, 11, 10,  9,  8,  7,  6,  5,  4,  3,  2,  1, 0
 
+#define MCUX_CSSL_CPP_SEQUENCE_N_UNTIL_5TO0() \
+  n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, \
+  n, n, n, n, n, n, n, n, n, n, n, 5, 4, 3, 2, 1, 0
+
+#define MCUX_CSSL_CPP_SEQUENCE_N_UNTIL_4TO0() \
+  n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, \
+  n, n, n, n, n, n, n, n, n, n, n, n, 4, 3, 2, 1, 0
+
 #define MCUX_CSSL_CPP_SEQUENCE_N_UNTIL_3TO0() \
   n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, \
   n, n, n, n, n, n, n, n, n, n, n, n, n, 3, 2, 1, 0
@@ -71,6 +79,12 @@
 #define MCUX_CSSL_CPP_ARGCOUNT_3N(...) \
   MCUX_CSSL_CPP_ARGCOUNT_IMPL(__VA_ARGS__,MCUX_CSSL_CPP_SEQUENCE_N_UNTIL_3TO0())
 
+#define MCUX_CSSL_CPP_ARGCOUNT_4N(...) \
+  MCUX_CSSL_CPP_ARGCOUNT_IMPL(__VA_ARGS__,MCUX_CSSL_CPP_SEQUENCE_N_UNTIL_4TO0())
+
+#define MCUX_CSSL_CPP_ARGCOUNT_5N(...) \
+  MCUX_CSSL_CPP_ARGCOUNT_IMPL(__VA_ARGS__,MCUX_CSSL_CPP_SEQUENCE_N_UNTIL_5TO0())
+
 #define MCUX_CSSL_CPP_OVERLOADED_IMPL(name, n) MCUX_CSSL_CPP_CAT_IMPL(name, n)
 
 #define MCUX_CSSL_CPP_OVERLOADED(name, ...) \
@@ -91,7 +105,11 @@
 #define MCUX_CSSL_CPP_OVERLOADED3(name, ...) \
   MCUX_CSSL_CPP_OVERLOADED_IMPL(name, MCUX_CSSL_CPP_ARGCOUNT_3N(__VA_ARGS__))(__VA_ARGS__)
 
+#define MCUX_CSSL_CPP_OVERLOADED4(name, ...) \
+  MCUX_CSSL_CPP_OVERLOADED_IMPL(name, MCUX_CSSL_CPP_ARGCOUNT_4N(__VA_ARGS__))(__VA_ARGS__)
 
+#define MCUX_CSSL_CPP_OVERLOADED5(name, ...) \
+  MCUX_CSSL_CPP_OVERLOADED_IMPL(name, MCUX_CSSL_CPP_ARGCOUNT_5N(__VA_ARGS__))(__VA_ARGS__)
 
 /*****************************************************************************
  * Helper macros                                                             *
@@ -131,9 +149,9 @@
 #define MCUX_CSSL_CPP_FIRST(a, ...) a
 /* Extract second argument (requires at least three arguments to be present) */
 #define MCUX_CSSL_CPP_SECOND(a, b, ...) b
-/* Extract second argument (requires at least four arguments to be present) */
+/* Extract third argument (requires at least four arguments to be present) */
 #define MCUX_CSSL_CPP_THIRD(a, b, c, ...) c
-/* Extract second argument (requires at least five arguments to be present) */
+/* Extract fourth argument (requires at least five arguments to be present) */
 #define MCUX_CSSL_CPP_FOURTH(a, b, c, d, ...) d
 /* Remove the first argument from the list (requires at least two arguments to be present) */
 #define MCUX_CSSL_CPP_NEXT(...) MCUX_CSSL_CPP_NEXT_()(__VA_ARGS__)

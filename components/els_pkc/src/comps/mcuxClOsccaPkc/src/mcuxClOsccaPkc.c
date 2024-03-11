@@ -38,10 +38,10 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClOsccaPkc_Init(
         ( (uint32_t)0U << MCUXCLOSCCAPKC_SFR_BITPOS(CTRL, REDMUL))    \
         )
 #define PKC_CFG_DEFAULT_SETUP (  \
-        ( 1U << MCUXCLOSCCAPKC_SFR_BITPOS(CFG, IDLEOP) ) | \
-        ( 1U << MCUXCLOSCCAPKC_SFR_BITPOS(CFG, CLKRND) ) | \
-        ( 1U << MCUXCLOSCCAPKC_SFR_BITPOS(CFG, REDMULNOISE) ) | \
-        ( 0U << MCUXCLOSCCAPKC_SFR_BITPOS(CFG, RNDDLY) )            /* no delay */ \
+        ( (uint32_t)1U << MCUXCLOSCCAPKC_SFR_BITPOS(CFG, IDLEOP) ) | \
+        ( (uint32_t)1U << MCUXCLOSCCAPKC_SFR_BITPOS(CFG, CLKRND) ) | \
+        ( (uint32_t)1U << MCUXCLOSCCAPKC_SFR_BITPOS(CFG, REDMULNOISE) ) | \
+        ( (uint32_t)0U << MCUXCLOSCCAPKC_SFR_BITPOS(CFG, RNDDLY) )            /* no delay */ \
         )
 
     /* clear STOP bit */
@@ -68,12 +68,11 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClOsccaPkc_Init(
     /* clear the error */
     MCUXCLOSCCAPKC_SFR_WRITE(ACCESS_ERR_CLR, 1U);
     /* configure Pkc */
-    /* MISRA Ex. 22, while(0) is allowed */
     MCUXCLOSCCAPKC_SFR_WRITE(CTRL,
-        ( (uint32_t)1U << MCUXCLOSCCAPKC_SFR_BITPOS(CTRL, RESET) ) |
+        (uint32_t)(( (uint32_t)1U << MCUXCLOSCCAPKC_SFR_BITPOS(CTRL, RESET) ) |
         ( (uint32_t)1U << MCUXCLOSCCAPKC_SFR_BITPOS(CTRL, CACHE_EN) ) |
         ( (uint32_t)1U << MCUXCLOSCCAPKC_SFR_BITPOS(CTRL, CLRCACHE) ) |
-        PKC_CTRL_DEFAULT_SETUP );
+        PKC_CTRL_DEFAULT_SETUP) );
 
     MCUXCLOSCCAPKC_SFR_WRITE(CFG, PKC_CFG_DEFAULT_SETUP);
 
@@ -167,8 +166,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClOsccaPkc_SetFupTable(void *pUPTRT)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClOsccaPkc_SetFupTable);
     MCUXCLOSCCAPKC_WAITFORGOANY();
-    /* MISRA Ex.2 - Rule 11.6 */
+    MCUX_CSSL_ANALYSIS_START_PATTERN_DI_CAST_POINTERS()
     MCUXCLOSCCAPKC_SETUPTRT(pUPTRT);
+    MCUX_CSSL_ANALYSIS_STOP_PATTERN_DI_CAST_POINTERS()
     MCUX_CSSL_FP_FUNCTION_EXIT_VOID(mcuxClOsccaPkc_SetFupTable);
 }
 
@@ -238,6 +238,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClOsccaPkc_Op(uint32_t mode, uint32_t iRiX
         }
     }
 
+    MCUXCLOSCCAPKC_PKC_CPU_ARBITRATION_WORKAROUND();
     /* update SC and return */
     MCUX_CSSL_FP_FUNCTION_EXIT_VOID(mcuxClOsccaPkc_Op);
 }
@@ -251,11 +252,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClOsccaPkc_GeneratePointerTable(uint16_t *
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClOsccaPkc_GeneratePointerTable);
     uint32_t i;
 
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("Caller should set bufferNums and bufferSize properly to make sure not wrap")
     for (i = 0U; i < bufferNums; i++)
     {
-        pOperandsBase[i] =
-        MCUXCLOSCCAPKC_PTRTOPKCOFFSET(pBufferBase + i * bufferSize);
+        pOperandsBase[i] = MCUXCLOSCCAPKC_PTRTOPKCOFFSET(pBufferBase + i * bufferSize);
     }
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
 
     /* update SC and return */
     MCUX_CSSL_FP_FUNCTION_EXIT_VOID(mcuxClOsccaPkc_GeneratePointerTable);
@@ -356,8 +358,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(uint32_t) mcuxClOsccaPkc_LeadingZeros(uint8_t *pNum,
     uint32_t zeros = 0U;
     uint32_t temp;
     uint32_t numLenByWord = numLen / (sizeof(uint32_t)) ;
-    /* MISRA Ex.24 - Rule 11.3 */
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("Cast to correct pointer type")
     uint32_t *pBigNum = (uint32_t *)pNum;
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
     uint32_t loopTimes = 0U;
 
     while(numLenByWord > 0U)
@@ -365,13 +368,17 @@ MCUX_CSSL_FP_PROTECTED_TYPE(uint32_t) mcuxClOsccaPkc_LeadingZeros(uint8_t *pNum,
         temp = pBigNum[numLenByWord - 1U];
         if (0U == temp)
         {
+            MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("zeros + sizeof(uint32_t) * 8U can't exceed UINT32_MAX.")
             zeros += sizeof(uint32_t) * 8U;
+            MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
         }
         else
         {
             loopTimes++;
             MCUX_CSSL_FP_FUNCTION_CALL(zeroWords, mcuxClOsccaPkc_CountLeadingZerosWord(temp));
+            MCUX_CSSL_ANALYSIS_START_SUPPRESS_INTEGER_WRAP("zeros + zeroWords can't exceed UINT32_MAX.")
             zeros += zeroWords;
+            MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_INTEGER_WRAP()
             break;
         }
         numLenByWord--;
@@ -510,9 +517,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClOsccaPkc_ComputeModInv(uint32_t iRiIiNiT
     iT = iRiIiNiT & 0xffU;
 
     pOperands = MCUXCLOSCCAPKC_GETUPTRT();
-    MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY("Reinterpret pointer type to uint16_t* types.")
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("Pkc operand is word aligned after initialized properly.")
     pExp = (uint16_t *)MCUXCLOSCCAPKC_PKCOFFSETTOPTR(pOperands[iT2]);
-    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY()
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
 
     /* the initial value is 1 in MR */
     MCUXCLOSCCAPKC_FXIOP1_NEG(iT, iN);
@@ -538,6 +545,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClOsccaPkc_ComputeModInv(uint32_t iRiIiNiT
             /* square */
             MCUXCLOSCCAPKC_FXIMC1_MMUL(iI, iT, iT, iN);
             MCUXCLOSCCAPKC_FXIOP1_OR_YC(iT, iI, 0);
+            /* avoid pExp[i] and Previous PKC operation concurrently accessing to PKC workarea */
+            MCUXCLOSCCAPKC_PKC_CPU_ARBITRATION_WORKAROUND();
 
             if(0U != (pExp[i] & ((uint16_t)1U << j)))
             {
@@ -590,11 +599,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClOsccaPkc_CalcMontInverse(uint32_t iIiRiN
     MCUXCLOSCCAPKC_WAITFORGOANY();
     MCUXCLOSCCAPKC_PS1_SETLENGTH(31, len);
 
-    if(pkcWordSize > 16u)
-    {
-        MCUX_CSSL_FP_FUNCTION_EXIT_VOID(mcuxClOsccaPkc_CalcMontInverse);
-    }
-    if((pOperands[iT] + pkcWordSize) > ((uint16_t) - 1))
+    MCUX_CSSL_ANALYSIS_COVERITY_ASSERT(pkcWordSize, 8u, 16u,)
+    MCUX_CSSL_ANALYSIS_COVERITY_ASSERT(pOperands[iT], 0u, MCUXCLOSCCAPKC_RAM_SIZE,)
+    if((pOperands[iT] + pkcWordSize) > (uint32_t)UINT16_MAX)
     {
         MCUX_CSSL_FP_FUNCTION_EXIT_VOID(mcuxClOsccaPkc_CalcMontInverse);
     }
@@ -651,7 +658,6 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClOsccaPkc_StartFupProgram(mcuxClOsccaPkc_
     MCUXCLOSCCAPKC_WAITFORFINISH();
     uint32_t pkc_ctrl = MCUXCLOSCCAPKC_SFR_READ(CTRL) | MCUXCLOSCCAPKC_SFR_BITMSK(CTRL, GOU) | MCUXCLOSCCAPKC_SFR_BITMSK(CTRL, CLRCACHE);
     MCUXCLOSCCAPKC_SFR_WRITE(ULEN, fupProgramSize);
-    /* MISRA Ex.2 - Rule 11.6 */
     MCUXCLOSCCAPKC_SFR_WRITE(UPTR, (uint32_t)fupProgram);
     /* Clear PKC UPTRT cache and start calculation of the FUP program. */
     MCUXCLOSCCAPKC_SFR_WRITE(CTRL, pkc_ctrl);

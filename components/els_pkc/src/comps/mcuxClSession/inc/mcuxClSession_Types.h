@@ -23,9 +23,7 @@
 #include <mcuxClCore_FunctionIdentifiers.h>
 #include <mcuxCsslFlowProtection.h>
 
-#ifdef MCUXCL_FEATURE_SESSION_HAS_RANDOM
 #include <mcuxClRandom_Types.h>
-#endif /* MCUXCL_FEATURE_SESSION_HAS_RANDOM */
 
 /**********************************************
  * CONSTANTS
@@ -99,38 +97,34 @@ typedef struct mcuxClSession_WorkArea
 } mcuxClSession_WorkArea_t;
 
 /**
- * @brief Type for mcuxClSession security context
- */
-typedef struct mcuxClSession_SecurityContext
-{
-  uint32_t securityCounter;     ///< Security counter
-} mcuxClSession_SecurityContext_t;
-
-/**
  * @brief Type for Session security options
  */
 typedef uint32_t mcuxClSession_SecurityOptions_t;
 
-
-
 /**
  * @brief Type for mcuxClSession Descriptor
  */
-typedef struct mcuxClSession_Descriptor
-{
-  mcuxClSession_WorkArea_t cpuWa;    ///< Workarea for the CPU
-  mcuxClSession_WorkArea_t pkcWa;    ///< Workarea for the PKC
-#ifdef MCUXCL_FEATURE_SESSION_HAS_RANDOM
-  mcuxClRandom_Config_t randomCfg;   ///< Configuration of the Rng (contexts and mode)
-#endif /* MCUXCL_FEATURE_SESSION_HAS_RANDOM */
-  mcuxClSession_Rtf_t rtf;           ///< Configuration of the RTF
-  uint8_t *pRtf;
-} mcuxClSession_Descriptor_t;
+struct mcuxClSession_Descriptor;  /* forward declaration */
+typedef struct mcuxClSession_Descriptor mcuxClSession_Descriptor_t;
 
 /**
  * @brief Type for mcuxClSession Handle
  */
 typedef mcuxClSession_Descriptor_t * const mcuxClSession_Handle_t;
+
+
+
+/**
+ * @brief Structure for mcuxClSession Descriptor
+ */
+struct mcuxClSession_Descriptor
+{
+  mcuxClSession_WorkArea_t cpuWa;    ///< Workarea for the CPU
+  mcuxClSession_WorkArea_t pkcWa;    ///< Workarea for the PKC
+  mcuxClRandom_Config_t randomCfg;   ///< Configuration of the Rng (contexts and mode)
+  mcuxClSession_Rtf_t rtf;           ///< Configuration of the RTF
+  uint8_t *pRtf;
+};
 
 
 /**

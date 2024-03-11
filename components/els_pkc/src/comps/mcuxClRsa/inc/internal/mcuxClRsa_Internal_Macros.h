@@ -21,6 +21,7 @@
 
 #include <mcuxClConfig.h> // Exported features flags header
 #include <stdint.h>
+#include <mcuxClCore_Macros.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,13 +49,6 @@ extern "C" {
  * @ingroup mcuxClRsa_Internal_Macros
  * @{
  */
-#define MCUXCLRSA_MAX(value0, value1) \
-    ((value0) > (value1) ? (value0) : (value1))
-    ///< Macro computing the maximum value of value0 and value1.
-
-#define MCUXCLRSA_ROUND_UP_TO_CPU_WORDSIZE(size) \
-    ((((size) + sizeof(uint32_t) - 1U ) / (sizeof(uint32_t))) * (sizeof(uint32_t)))
-    ///< Round up a size (in bytes) to a multiple of the CPU wordsize (4 bytes).
 
 #define MCUXCLRSA_CALC_MODLEN_FROM_CRTKEY(pKey, keyBitLength) \
     do {  \

@@ -21,7 +21,6 @@
 #include <mcuxClCore_FunctionIdentifiers.h>
 
 #include <mcuxClEcc.h>
-#include <internal/mcuxClEcc_Internal.h>
 #include <internal/mcuxClEcc_TwEd_Internal.h>
 
 static const mcuxClEcc_TwEd_PtrSelectFunction_FP_t mcuxClEcc_TwEd_PlainPtrSelectML_FP = {

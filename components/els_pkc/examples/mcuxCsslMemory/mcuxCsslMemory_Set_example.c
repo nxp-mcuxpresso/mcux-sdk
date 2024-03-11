@@ -14,6 +14,7 @@
 /** @file  csslMemory_Set_example.c
  *  @brief Example constant-time memory set (CSSL component mcuxCsslMemory) */
 
+#include <mcuxClToolchain.h>
 #include <mcuxCsslMemory.h>
 #include <mcuxCsslMemory_Examples.h>
 #include <mcuxCsslFlowProtection.h>
@@ -23,9 +24,9 @@
 MCUXCSSL_MEMORY_EX_FUNCTION(mcuxCsslMemory_Set_example)
 {
   /* Define data array */
-  uint8_t arr[33] = { 0u };
+  ALIGNED uint8_t arr[33] = { 0u };
 
-  /* Try to set nothing (length = 0 bytes) => should return invalid parameter error */
+  /* Try to set nothing (length = 0 bytes) => should return success */
   MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(setResult, setToken, mcuxCsslMemory_Set(
   /*  mcuxCsslParamIntegrity_Checksum_t chk */ mcuxCsslParamIntegrity_Protect(4u, arr, 42u, 0u, sizeof(arr)),
   /*  void * pDst                          */ arr,
@@ -35,7 +36,7 @@ MCUXCSSL_MEMORY_EX_FUNCTION(mcuxCsslMemory_Set_example)
   ));
 
   /* Check the return code of mcuxCsslMemory_Set */
-  if(((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxCsslMemory_Set) != setToken)) || (MCUXCSSLMEMORY_STATUS_INVALID_PARAMETER != setResult))
+  if(((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxCsslMemory_Set) != setToken)) || (MCUXCSSLMEMORY_STATUS_OK != setResult))
   {
     return MCUXCSSLMEMORY_EX_ERROR;
   }
@@ -43,6 +44,7 @@ MCUXCSSL_MEMORY_EX_FUNCTION(mcuxCsslMemory_Set_example)
   MCUX_CSSL_FP_FUNCTION_CALL_END();
 
   /* Try to call the function with NULL as destination => should return invalid parameter error */
+  MCUX_CSSL_ANALYSIS_START_SUPPRESS_NULL_POINTER_CONSTANT("NULL is used in code")
   MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(setResult1, setToken1, mcuxCsslMemory_Set(
   /*  mcuxCsslParamIntegrity_Checksum_t chk */ mcuxCsslParamIntegrity_Protect(4u, NULL, 42u, sizeof(arr), sizeof(arr)),
   /*  void * pDst                          */ NULL,
@@ -50,6 +52,7 @@ MCUXCSSL_MEMORY_EX_FUNCTION(mcuxCsslMemory_Set_example)
   /*  size_t length                        */ sizeof(arr),
   /*  size_t bufLength                     */ sizeof(arr)
   ));
+  MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_NULL_POINTER_CONSTANT()
 
   /* Check the return code of mcuxCsslMemory_Set */
   if(((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxCsslMemory_Set) != setToken1)) || (MCUXCSSLMEMORY_STATUS_INVALID_PARAMETER != setResult1))

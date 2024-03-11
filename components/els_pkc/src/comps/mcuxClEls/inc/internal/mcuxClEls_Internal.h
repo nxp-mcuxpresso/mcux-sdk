@@ -27,6 +27,7 @@
 #include <internal/mcuxClEls_Internal_mapping.h>
 #include <internal/mcuxClEls_SfrAccess.h>
 #include <mcuxCsslAnalysis.h>
+#include <mcuxClEls_Common.h>
 #include <mcuxClEls_Types.h>
 
 #ifdef __cplusplus
@@ -39,15 +40,17 @@ extern "C" {
 
 
 /** Asserts the correctness of the supplied parameters*/
-#define MCUXCLELS_INPUT_PARAM_CHECK(x) if((x)) { return MCUXCLELS_STATUS_SW_INVALID_PARAM; }
-#define MCUXCLELS_INPUT_PARAM_CHECK_PROTECTED(funcid, x)                         \
+#define MCUXCLELS_INPUT_PARAM_CHECK(x_) if((x_)) { return MCUXCLELS_STATUS_SW_INVALID_PARAM; }
+#define MCUXCLELS_INPUT_PARAM_CHECK_PROTECTED(funcid, x_)                         \
 do                                                                              \
 {                                                                               \
-    if ((x))                                                                    \
+    if ((x_))                                                                    \
     {                                                                           \
         MCUX_CSSL_FP_FUNCTION_EXIT(funcid, MCUXCLELS_STATUS_SW_INVALID_PARAM);    \
     }                                                                           \
-} while (false)
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_BOOLEAN_TYPE_FOR_CONDITIONAL_EXPRESSION()      \
+} while (false)                                                                 \
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_BOOLEAN_TYPE_FOR_CONDITIONAL_EXPRESSION()
 
 #define ELS_CMD_BIG_ENDIAN ((uint8_t) 0x01U)    ///< ELS command option specifying big-endian byte order
 #define ELS_CMD_LITTLE_ENDIAN ((uint8_t) 0x00U) ///< ELS command option specifying little-endian byte order
@@ -332,6 +335,18 @@ MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEls_Dtrng_IterativeReseeding_Reseed)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_Dtrng_IterativeReseeding_Reseed(const uint8_t *pDtrngConfig);
 MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 #endif /* MCUXCL_FEATURE_ELS_ITERATIVE_SEEDING */
+
+
+/**
+ * @brief This function provides error handling for mcuxClEls_KeyExport_Async function
+ *
+ * @param[in]   pOutput              The memory address of the exported key which will be cleared
+ * @param[in]   keyLength            The key length which will be cleared
+ * @param[in]   interrupt_state_old  The interrupts state which will be restored
+ *
+ */
+MCUX_CSSL_FP_FUNCTION_DECL(mcuxClEls_handleKeyExportError)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEls_Status_t) mcuxClEls_handleKeyExportError(uint8_t *pOutput, size_t keyLength, mcuxClEls_InterruptOptionEn_t interrupt_state_old);
 
 /* Functional macro to check for ELS Level 1 errors */
 #define MCUXCLELS_LEVEL1_ERROR(returnCode) (MCUXCLELS_STATUS_HW_OPERATIONAL == (returnCode)) || (MCUXCLELS_STATUS_HW_ALGORITHM == (returnCode)) || (MCUXCLELS_STATUS_HW_BUS == (returnCode))

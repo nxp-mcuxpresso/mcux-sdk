@@ -17,9 +17,9 @@
  * Public macro
  ******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_ADC_SENSOR_ADAPTER_VERSION (MAKE_VERSION(1, 0, 0)) /*!< Version 1.0.0. */
-/*@}*/
+/*! @} */
 
 /*! @brief Definition of ADC_SENSOR adapter handle size. */
 #define HAL_ADC_SENSOR_HANDLE_SIZE (64U)

@@ -34,6 +34,7 @@
 extern "C" {
 #endif
 
+
 /**********************************************************/
 /* Import/export function declaration                     */
 /**********************************************************/
@@ -63,8 +64,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClPkc_SwitchEndianness(uint32_t *ptr, uint
 
 /** Helper macro to call #mcuxClPkc_SwitchEndianness with flow protection. */
 #define MCUXCLPKC_FP_SWITCHENDIANNESS(ptr, length) \
-        MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClPkc_SwitchEndianness(ptr, length))
-
+    MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClPkc_SwitchEndianness(ptr, length))
 
 /**
  * \brief Function to import an operand, which is provided in big-endian order
@@ -91,8 +91,16 @@ MCUX_CSSL_FP_FUNCTION_DECL(mcuxClPkc_ImportBigEndianToPkc)
 MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClPkc_ImportBigEndianToPkc(uint8_t iTarget, const uint8_t * pSource, uint32_t length);
 
 /** Helper macro to call #mcuxClPkc_ImportBigEndianToPkc with flow protection. */
-#define MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(indexTarget, ptrSource, length) \
-    MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClPkc_ImportBigEndianToPkc(indexTarget, ptrSource, length))
+#define MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(iTarget, pSource, length) \
+    MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClPkc_ImportBigEndianToPkc(iTarget, pSource, length))
+
+/** Helper macros to use the correct buffer implementation */
+#define MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFEROFFSET  MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportBigEndianToPkc)
+#define MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFEROFFSET(functionID, iTarget, pBufSource, offset, length) \
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(iTarget, & ((const uint8_t *) (pBufSource))[offset], length)
+#define MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFER  MCUXCLPKC_FP_CALLED_IMPORTBIGENDIANTOPKC_BUFFEROFFSET
+#define MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(functionID, iTarget, pBufSource, length) \
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFEROFFSET(functionID, iTarget, pBufSource, 0u, length)
 
 
 /**
@@ -119,8 +127,16 @@ MCUX_CSSL_FP_FUNCTION_DEF(mcuxClPkc_ImportLittleEndianToPkc)
 MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClPkc_ImportLittleEndianToPkc(uint8_t iTarget, const uint8_t * pSource, uint32_t length);
 
 /** Helper macro to call #mcuxClPkc_ImportLittleEndianToPkc with flow protection. */
-#define MCUXCLPKC_FP_IMPORTLITTLEENDIANTOPKC(indexTarget, pSource, length)  \
-    MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClPkc_ImportLittleEndianToPkc(indexTarget, pSource, length))
+#define MCUXCLPKC_FP_IMPORTLITTLEENDIANTOPKC(iTarget, pSource, length)  \
+    MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClPkc_ImportLittleEndianToPkc(iTarget, pSource, length))
+
+/** Helper macros to use the correct buffer implementation */
+#define MCUXCLPKC_FP_CALLED_IMPORTLITTLEENDIANTOPKC_BUFFEROFFSET  MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ImportLittleEndianToPkc)
+#define MCUXCLPKC_FP_IMPORTLITTLEENDIANTOPKC_BUFFEROFFSET(functionID, iTarget, pBufSource, offset, length) \
+    MCUXCLPKC_FP_IMPORTLITTLEENDIANTOPKC(iTarget, & ((const uint8_t *) (pBufSource))[offset], length)
+#define MCUXCLPKC_FP_CALLED_IMPORTLITTLEENDIANTOPKC_BUFFER  MCUXCLPKC_FP_CALLED_IMPORTLITTLEENDIANTOPKC_BUFFEROFFSET
+#define MCUXCLPKC_FP_IMPORTLITTLEENDIANTOPKC_BUFFER(functionID, iTarget, pBufSource, length) \
+    MCUXCLPKC_FP_IMPORTLITTLEENDIANTOPKC_BUFFEROFFSET(functionID, iTarget, pBufSource, 0u, length)
 
 
 /**
@@ -149,8 +165,16 @@ MCUX_CSSL_FP_FUNCTION_DECL(mcuxClPkc_ExportBigEndianFromPkc)
 MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClPkc_ExportBigEndianFromPkc(uint8_t * pTarget, uint8_t iSource, uint32_t length);
 
 /** Helper macro to call #mcuxClPkc_ExportBigEndianFromPkc with flow protection. */
-#define MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC(ptrTarget, indexSource, length)  \
-        MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClPkc_ExportBigEndianFromPkc(ptrTarget, indexSource, length))
+#define MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC(pTarget, iSource, length)  \
+    MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClPkc_ExportBigEndianFromPkc(pTarget, iSource, length))
+
+/** Helper macros to use the correct buffer implementation */
+#define MCUXCLPKC_FP_CALLED_EXPORTBIGENDIANFROMPKC_BUFFEROFFSET  MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ExportBigEndianFromPkc)
+#define MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC_BUFFEROFFSET(functionID, pBufTarget, iSource, offset, length) \
+    MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC(& ((uint8_t *) (pBufTarget))[offset], iSource, length)
+#define MCUXCLPKC_FP_CALLED_EXPORTBIGENDIANFROMPKC_BUFFER  MCUXCLPKC_FP_CALLED_EXPORTBIGENDIANFROMPKC_BUFFEROFFSET
+#define MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC_BUFFER(functionID, pBufTarget, iSource, length) \
+    MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC_BUFFEROFFSET(functionID, pBufTarget, iSource, 0u, length)
 
 
 /**
@@ -177,8 +201,16 @@ MCUX_CSSL_FP_FUNCTION_DECL(mcuxClPkc_ExportLittleEndianFromPkc)
 MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClPkc_ExportLittleEndianFromPkc(uint8_t * pTarget, uint8_t iSource, uint32_t length);
 
 /** Helper macro to call #mcuxClPkc_ExportLittleEndianFromPkc with flow protection. */
-#define MCUXCLPKC_FP_EXPORTLITTLEENDIANFROMPKC(ptrTarget, indexSource, length)  \
-    MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClPkc_ExportLittleEndianFromPkc(ptrTarget, indexSource, length))
+#define MCUXCLPKC_FP_EXPORTLITTLEENDIANFROMPKC(pTarget, iSource, length)  \
+    MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClPkc_ExportLittleEndianFromPkc(pTarget, iSource, length))
+
+/** Helper macros to use the correct buffer implementation */
+#define MCUXCLPKC_FP_CALLED_EXPORTLITTLEENDIANFROMPKC_BUFFEROFFSET  MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_ExportLittleEndianFromPkc)
+#define MCUXCLPKC_FP_EXPORTLITTLEENDIANFROMPKC_BUFFEROFFSET(functionID, pBufTarget, iSource, offset, length) \
+    MCUXCLPKC_FP_EXPORTLITTLEENDIANFROMPKC(& ((uint8_t *) (pBufTarget))[offset], iSource, length)
+#define MCUXCLPKC_FP_CALLED_EXPORTLITTLEENDIANFROMPKC_BUFFER  MCUXCLPKC_FP_CALLED_EXPORTLITTLEENDIANFROMPKC_BUFFEROFFSET
+#define MCUXCLPKC_FP_EXPORTLITTLEENDIANFROMPKC_BUFFER(functionID, pBufTarget, iSource, length) \
+    MCUXCLPKC_FP_EXPORTLITTLEENDIANFROMPKC_BUFFEROFFSET(functionID, pBufTarget, iSource, 0u, length)
 
 
 /**
@@ -217,6 +249,15 @@ MCUX_CSSL_FP_PROTECTED_TYPE(void) mcuxClPkc_ExportLittleEndianFromPkc(uint8_t * 
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClPkc_SecureImportBigEndianToPkc)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPkc_Status_t) mcuxClPkc_SecureImportBigEndianToPkc(mcuxClSession_Handle_t pSession, uint16_t iTarget_iTemp, const uint8_t * pSource, uint32_t length);
 
+/** Helper macro to call #mcuxClPkc_SecureImportBigEndianToPkc with flow protection. */
+#define MCUXCLPKC_FP_SECUREIMPORTBIGENDIANTOPKC(status, pSession, iTarget, iTemp, pSource, length)  \
+    MCUX_CSSL_FP_FUNCTION_CALL(status, mcuxClPkc_SecureImportBigEndianToPkc(pSession, MCUXCLPKC_PACKARGS2(iTarget, iTemp), pSource, length))
+
+/** Helper macros to use the correct buffer implementation */
+#define MCUXCLPKC_FP_CALLED_SECUREIMPORTBIGENDIANTOPKC_BUFFER  MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_SecureImportBigEndianToPkc)
+#define MCUXCLPKC_FP_SECUREIMPORTBIGENDIANTOPKC_BUFFER(functionID, status, pSession, iTarget, iTemp, pBufSource, length) \
+    MCUXCLPKC_FP_SECUREIMPORTBIGENDIANTOPKC(status, pSession, iTarget, iTemp, pBufSource, length)
+
 
 /**
  * \brief Function to securely import an operand, which is provided in little-endian order
@@ -242,6 +283,15 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPkc_Status_t) mcuxClPkc_SecureImportBigEndianT
  */
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClPkc_SecureImportLittleEndianToPkc)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPkc_Status_t) mcuxClPkc_SecureImportLittleEndianToPkc(uint8_t iTarget, const uint8_t * pSource, uint32_t length);
+
+/** Helper macro to call #mcuxClPkc_SecureImportLittleEndianToPkc with flow protection. */
+#define MCUXCLPKC_FP_SECUREIMPORTLITTLEENDIANTOPKC(status, iTarget,  pSource, length)  \
+    MCUX_CSSL_FP_FUNCTION_CALL(status, mcuxClPkc_SecureImportLittleEndianToPkc(iTarget,  pSource, length))
+
+/** Helper macros to use the correct buffer implementation */
+#define MCUXCLPKC_FP_CALLED_SECUREIMPORTLITTLEENDIANTOPKC_BUFFER  MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_SecureImportLittleEndianToPkc)
+#define MCUXCLPKC_FP_SECUREIMPORTLITTLEENDIANTOPKC_BUFFER(functionID, status, iTarget,  pBufSource, length) \
+    MCUXCLPKC_FP_SECUREIMPORTLITTLEENDIANTOPKC(status, iTarget,  pBufSource, length)
 
 
 /**
@@ -281,6 +331,18 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPkc_Status_t) mcuxClPkc_SecureImportLittleEndi
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClPkc_SecureExportBigEndianFromPkc)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPkc_Status_t) mcuxClPkc_SecureExportBigEndianFromPkc(mcuxClSession_Handle_t pSession, uint8_t * pTarget, uint16_t iSource_iTemp, uint32_t length);
 
+/** Helper macro to call #mcuxClPkc_SecureExportBigEndianFromPkc with flow protection. */
+#define MCUXCLPKC_FP_SECUREEXPORTBIGENDIANFROMPKC(status, pSession, pTarget, iSource, iTemp, length)  \
+    MCUX_CSSL_FP_FUNCTION_CALL(status, mcuxClPkc_SecureExportBigEndianFromPkc(pSession, pTarget, MCUXCLPKC_PACKARGS2(iSource, iTemp), length))
+
+/** Helper macros to use the correct buffer implementation */
+#define MCUXCLPKC_FP_CALLED_SECUREEXPORTBIGENDIANFROMPKC_BUFFEROFFSET  MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_SecureExportBigEndianFromPkc)
+#define MCUXCLPKC_FP_SECUREEXPORTBIGENDIANFROMPKC_BUFFEROFFSET(functionID, status, pSession, pBufTarget, iSource, iTemp, offset, length) \
+    MCUXCLPKC_FP_SECUREEXPORTBIGENDIANFROMPKC(status, pSession, & ((uint8_t *) (pBufTarget))[offset], iSource, iTemp, length)
+#define MCUXCLPKC_FP_CALLED_SECUREEXPORTBIGENDIANFROMPKC_BUFFER  MCUXCLPKC_FP_CALLED_SECUREEXPORTBIGENDIANFROMPKC_BUFFEROFFSET
+#define MCUXCLPKC_FP_SECUREEXPORTBIGENDIANFROMPKC_BUFFER(functionID, status, pSession, pBufTarget, iSource, iTemp, length) \
+    MCUXCLPKC_FP_SECUREEXPORTBIGENDIANFROMPKC_BUFFEROFFSET(functionID, status, pSession, pBufTarget, iSource, iTemp, 0u, length)
+
 
 /**
  * \brief Function to securely export an operand to a little-endian integer
@@ -306,6 +368,15 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPkc_Status_t) mcuxClPkc_SecureExportBigEndianF
  */
 MCUX_CSSL_FP_FUNCTION_DECL(mcuxClPkc_SecureExportLittleEndianFromPkc)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPkc_Status_t) mcuxClPkc_SecureExportLittleEndianFromPkc(uint8_t * pTarget, uint8_t iSource, uint32_t length);
+
+/** Helper macro to call #mcuxClPkc_SecureExportLittleEndianFromPkc with flow protection. */
+#define MCUXCLPKC_FP_SECUREEXPORTLITTLEENDIANFROMPKC(status, pTarget, iSource, length)  \
+    MCUX_CSSL_FP_FUNCTION_CALL(status, mcuxClPkc_SecureExportLittleEndianFromPkc(pTarget, iSource, length))
+
+/** Helper macros to use the correct buffer implementation */
+#define MCUXCLPKC_FP_CALLED_SECUREEXPORTLITTLEENDIANFROMPKC_BUFFER  MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPkc_SecureExportLittleEndianFromPkc)
+#define MCUXCLPKC_FP_SECUREEXPORTLITTLEENDIANFROMPKC_BUFFER(functionID, status, pBufTarget, iSource, length) \
+    MCUXCLPKC_FP_SECUREEXPORTLITTLEENDIANFROMPKC(status, pBufTarget, iSource, length)
 
 
 #ifdef __cplusplus

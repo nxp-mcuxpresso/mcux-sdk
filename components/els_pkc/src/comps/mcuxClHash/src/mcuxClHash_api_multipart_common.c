@@ -19,6 +19,8 @@
 #include <mcuxClCore_FunctionIdentifiers.h>
 #include <mcuxCsslSecureCounter_Cfg.h>
 
+#include <internal/mcuxClSession_Internal_EntryExit.h>
+
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClHash_init)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClHash_Status_t) mcuxClHash_init(
@@ -27,14 +29,16 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClHash_Status_t) mcuxClHash_init(
     mcuxClHash_Algo_t algorithm
 )
 {
-    MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClHash_init);
+    MCUXCLSESSION_ENTRY(session, mcuxClHash_init, diRefValue, MCUXCLHASH_STATUS_FAULT_ATTACK)
 
     pContext->unprocessedLength = 0u;
     pContext->processedLength[0] = 0u;
     pContext->processedLength[1] = 0u;
+    pContext->processedLength[2] = 0u;
+    pContext->processedLength[3] = 0u;
     pContext->algo = algorithm;
 
-    MCUX_CSSL_FP_FUNCTION_EXIT_WITH_CHECK(mcuxClHash_init, MCUXCLHASH_STATUS_OK, MCUXCLHASH_STATUS_FAULT_ATTACK);
+    MCUXCLSESSION_EXIT(session, mcuxClHash_init, diRefValue, MCUXCLHASH_STATUS_OK, MCUXCLHASH_STATUS_FAULT_ATTACK)
 }
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClHash_process)
@@ -45,7 +49,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClHash_Status_t) mcuxClHash_process(
     uint32_t inSize
 )
 {
-    MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClHash_process);
+    MCUXCLSESSION_ENTRY(session, mcuxClHash_process, diRefValue, MCUXCLHASH_STATUS_FAULT_ATTACK)
 
     if((NULL == pContext->algo) || (NULL == pContext->algo->processSkeleton)
 #if(1 == MCUX_CSSL_SC_USE_SW_LOCAL)
@@ -53,13 +57,15 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClHash_Status_t) mcuxClHash_process(
 #endif /* (1 == MCUX_CSSL_SC_USE_SW_LOCAL) */
             )
     {
-        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClHash_process, MCUXCLHASH_STATUS_INVALID_PARAMS);
+        MCUXCLSESSION_EXIT(session, mcuxClHash_process, diRefValue, MCUXCLHASH_STATUS_INVALID_PARAMS, MCUXCLHASH_STATUS_FAULT_ATTACK)
     }
 
     MCUX_CSSL_FP_FUNCTION_CALL(result, pContext->algo->processSkeleton(session, pContext, pIn, inSize));
 
-    MCUX_CSSL_FP_FUNCTION_EXIT_WITH_CHECK(mcuxClHash_process,
-                                         result,
-                                         MCUXCLHASH_STATUS_FAULT_ATTACK,
-                                         pContext->algo->protection_token_processSkeleton);
+    MCUXCLSESSION_EXIT(session,
+        mcuxClHash_process,
+        diRefValue,
+        result,
+        MCUXCLHASH_STATUS_FAULT_ATTACK,
+        pContext->algo->protection_token_processSkeleton)
 }

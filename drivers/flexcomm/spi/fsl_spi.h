@@ -239,7 +239,7 @@ enum _spi_statusflags
 /*! @brief SPI transfer structure */
 typedef struct _spi_transfer
 {
-    const uint8_t *txData;/*!< Send buffer */
+    const uint8_t *txData; /*!< Send buffer */
     uint8_t *rxData;      /*!< Receive buffer */
     uint32_t configFlags; /*!< Additional option to control transfer, @ref spi_xfer_option_t. */
     size_t dataSize;      /*!< Transfer bytes */
@@ -248,7 +248,7 @@ typedef struct _spi_transfer
 /*! @brief SPI half-duplex(master only) transfer structure */
 typedef struct _spi_half_duplex_transfer
 {
-    const uint8_t *txData;            /*!< Send buffer */
+    const uint8_t *txData;      /*!< Send buffer */
     uint8_t *rxData;            /*!< Receive buffer */
     size_t txDataSize;          /*!< Transfer bytes for transmit */
     size_t rxDataSize;          /*!< Transfer bytes */

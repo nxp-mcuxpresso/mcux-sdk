@@ -47,15 +47,17 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRandomModes_createTestFromNormalMode)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_createTestFromNormalMode(mcuxClRandom_ModeDescriptor_t *pTestMode, mcuxClRandom_Mode_t normalMode, const uint32_t * const pEntropyInput)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_createTestFromNormalMode(mcuxClRandom_ModeDescriptor_t *pTestMode, mcuxClRandom_Mode_t normalMode, const uint32_t * const pCustomSeed)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClRandomModes_createTestFromNormalMode);
 
-    MCUX_CSSL_ANALYSIS_START_SUPPRESS_TYPECAST_INTEGER_TO_POINTER("For a normal mode, auxParam contains a pointer to mcuxClRandom_OperationModeDescriptor_t")
+    MCUX_CSSL_ANALYSIS_START_CAST_TO_MORE_SPECIFIC_TYPE() /*For a normal mode, auxParam contains a pointer to mcuxClRandom_OperationModeDescriptor_t */
     pTestMode->pOperationMode   = (mcuxClRandom_OperationModeDescriptor_t *) normalMode->auxParam;
-    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_TYPECAST_INTEGER_TO_POINTER()
+    MCUX_CSSL_ANALYSIS_STOP_CAST_TO_MORE_SPECIFIC_TYPE()
     pTestMode->pDrbgMode        = normalMode->pDrbgMode;
-    pTestMode->auxParam         = (uint32_t) pEntropyInput;
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST_QUALIFIER("Const must be discarded because TestMode needs to update the custom seed hold in auxParam.")
+    pTestMode->auxParam         = (uint32_t *) pCustomSeed;
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST_QUALIFIER()
     pTestMode->contextSize      = normalMode->contextSize;
     pTestMode->securityStrength = normalMode->securityStrength;
 
@@ -63,11 +65,13 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_createTestF
 }
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRandomModes_updateEntropyInput)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_updateEntropyInput(mcuxClRandom_ModeDescriptor_t *pTestMode, const uint32_t * const pEntropyInput)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_updateEntropyInput(mcuxClRandom_ModeDescriptor_t *pTestMode, const uint32_t * const pCustomSeed)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClRandomModes_updateEntropyInput);
-
-    pTestMode->auxParam         = (uint32_t) pEntropyInput;
+    
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST_QUALIFIER("Const must be discarded because TestMode needs to update the custom seed hold in auxParam.")
+    pTestMode->auxParam         = (uint32_t *) pCustomSeed;
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST_QUALIFIER()
 
     MCUX_CSSL_FP_FUNCTION_EXIT_WITH_CHECK(mcuxClRandomModes_updateEntropyInput, MCUXCLRANDOM_STATUS_OK, MCUXCLRANDOM_STATUS_FAULT_ATTACK);
 }
@@ -77,37 +81,50 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_updateEntro
  * \brief This function instantiates a DRBG in TEST_MODE following the lines of the function Instantiate_function specified in NIST SP800-90A
  *
  * This function instantiates a DRBG in TEST_MODE following the lines of the function Instantiate_function specified in NIST SP800-90A.
- * The function reads entropy input for the DRBG seed from a buffer provided by the user of the CL.
+ * The function reads entropy input and nonce for the DRBG seed from a buffer provided by the user of the CL.
  *
  * \param  session[in]          Handle for the current CL session
+ * \param  mode[in]             Handle for the current Random Mode
+ * \param  context[in]          Handle for the current Random Context
  *
  * \return
  *   - MCUXCLRANDOM_STATUS_OK         if the DRBG instantiation finished successfully
  *   - MCUXCLRANDOM_STATUS_FAULT_ATTACK    if the DRBG instantiation failed due to other unexpected reasons
  */
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRandomModes_TestMode_initFunction, mcuxClRandom_initFunction_t)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_TestMode_initFunction(mcuxClSession_Handle_t pSession)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_TestMode_initFunction(
+                    mcuxClSession_Handle_t pSession,
+                    mcuxClRandom_Mode_t mode,
+                    mcuxClRandom_Context_t context
+)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClRandomModes_TestMode_initFunction);
 
-    MCUX_CSSL_ANALYSIS_START_CAST_TO_MORE_SPECIFIC_TYPE()
-    mcuxClRandomModes_Context_Generic_t *pRngCtxGeneric = (mcuxClRandomModes_Context_Generic_t *) pSession->randomCfg.ctx;
-    MCUX_CSSL_ANALYSIS_STOP_CAST_TO_MORE_SPECIFIC_TYPE()
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("Cast to a more specific type is allowed")
+    mcuxClRandomModes_Context_Generic_t *pRngCtxGeneric = (mcuxClRandomModes_Context_Generic_t *) context;
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
 
-    mcuxClRandom_Mode_t mode = pSession->randomCfg.mode;
     MCUX_CSSL_ANALYSIS_START_CAST_TO_MORE_SPECIFIC_TYPE()
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_CAST_VOID()
     const mcuxClRandomModes_DrbgModeDescriptor_t *pDrbgMode = (const mcuxClRandomModes_DrbgModeDescriptor_t *) mode->pDrbgMode;
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CAST_VOID()
     MCUX_CSSL_ANALYSIS_STOP_CAST_TO_MORE_SPECIFIC_TYPE()
 
     /* Derive the initial DRBG state from the generated entropy input */
-    MCUX_CSSL_FP_FUNCTION_CALL(result_instantiate, pDrbgMode->pDrbgAlgorithms->instantiateAlgorithm(pSession, (uint8_t *) mode->auxParam));
+    MCUX_CSSL_FP_FUNCTION_CALL(result_instantiate, pDrbgMode->pDrbgAlgorithms->instantiateAlgorithm(
+                pSession,
+                mode,
+                context,
+                (uint8_t *) mode->auxParam));
     if (MCUXCLRANDOM_STATUS_OK != result_instantiate)
     {
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRandomModes_TestMode_initFunction, MCUXCLRANDOM_STATUS_FAULT_ATTACK);
     }
 
     /* Initialize the reseedSeedOffset field of the context */
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("pRngCtxGeneric is casted to the type mcuxClRandomModes_Context_Generic_t")
     pRngCtxGeneric->reseedSeedOffset = 0u;
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
 
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRandomModes_TestMode_initFunction, MCUXCLRANDOM_STATUS_OK,
         pDrbgMode->pDrbgAlgorithms->protectionTokenInstantiateAlgorithm);
@@ -121,27 +138,38 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_TestMode_in
  * The function reads entropy input for the DRBG seed from a buffer provided by the user of the CL.
  *
  * \param  session[in]          Handle for the current CL session
+ * \param  mode[in]             Handle for the current Random Mode
+ * \param  context[in]          Handle for the current Random Context
  *
  * \return
  *   - MCUXCLRANDOM_STATUS_OK            if the DRBG reseeding finished successfully
  *   - MCUXCLRANDOM_STATUS_FAULT_ATTACK  if the DRBG reseeding failed due to other unexpected reasons
  */
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClRandomModes_TestMode_reseedFunction, mcuxClRandom_reseedFunction_t)
-MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_TestMode_reseedFunction(mcuxClSession_Handle_t pSession)
+MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClRandom_Status_t) mcuxClRandomModes_TestMode_reseedFunction(
+                    mcuxClSession_Handle_t pSession,
+                    mcuxClRandom_Mode_t mode,
+                    mcuxClRandom_Context_t context
+)
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClRandomModes_TestMode_reseedFunction);
 
-    MCUX_CSSL_ANALYSIS_START_CAST_TO_MORE_SPECIFIC_TYPE()
-    const mcuxClRandomModes_Context_Generic_t *pRngCtxGeneric = (mcuxClRandomModes_Context_Generic_t *) pSession->randomCfg.ctx;
-    MCUX_CSSL_ANALYSIS_STOP_CAST_TO_MORE_SPECIFIC_TYPE()
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("Cast to a more specific type is allowed")
+    const mcuxClRandomModes_Context_Generic_t *pRngCtxGeneric = (mcuxClRandomModes_Context_Generic_t *) context;
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
 
-    mcuxClRandom_Mode_t mode = pSession->randomCfg.mode;
     MCUX_CSSL_ANALYSIS_START_CAST_TO_MORE_SPECIFIC_TYPE()
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_CAST_VOID()
     const mcuxClRandomModes_DrbgModeDescriptor_t *pDrbgMode = (const mcuxClRandomModes_DrbgModeDescriptor_t *) mode->pDrbgMode;
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CAST_VOID()
     MCUX_CSSL_ANALYSIS_STOP_CAST_TO_MORE_SPECIFIC_TYPE()
 
     /* Derive the initial DRBG state from the user-defined entropy input */
-    MCUX_CSSL_FP_FUNCTION_CALL(result_reseed, pDrbgMode->pDrbgAlgorithms->reseedAlgorithm(pSession, (((uint8_t *) mode->auxParam) + pRngCtxGeneric->reseedSeedOffset)));
+    MCUX_CSSL_FP_FUNCTION_CALL(result_reseed, pDrbgMode->pDrbgAlgorithms->reseedAlgorithm(
+                pSession,
+                mode,
+                context,
+                (((uint8_t *) mode->auxParam) + pRngCtxGeneric->reseedSeedOffset)));
     if (MCUXCLRANDOM_STATUS_OK != result_reseed)
     {
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClRandomModes_TestMode_reseedFunction, MCUXCLRANDOM_STATUS_FAULT_ATTACK);

@@ -16,7 +16,6 @@
 
 #include <mcuxClConfig.h> // Exported features flags header
 #include <mcuxClCore_Platform.h>
-#include <mcuxClCore_Buffer.h>
 #include <mcuxClKey.h>
 #include <mcuxClSession.h>
 #include <mcuxCsslFlowProtection.h>
@@ -28,7 +27,7 @@
  * [in,out]  pKey:             Pointer to the key handle.
  * [in]      type:             Define which key type shall be initialized
  * [in]      pData:            Provide pointer to source data of the key
- * [in]      keyDataLength:    Number of bytes available in the pData buffer.
+ * [in]      keyDataLength:    Number of bytes available in the pData array.
  * [in]      key_properties:   Pointer to the requested key properties of the destination key. Will be set in key->container.pAuxData
  * [in]      dst:              if MCUXCLEXAMPLE_CONST_EXTERNAL_KEY, Pointer to dstData, if MCUXCLEXAMPLE_CONST_INTERNAL_KEY, Pointer to dstSlot value
  * [in]      key_loading_option:0 = external key, 1 = internal key
@@ -39,18 +38,20 @@ MCUX_CSSL_FP_FUNCTION_DEF(mcuxClExample_Key_Init_And_Load)
 static inline bool mcuxClExample_Key_Init_And_Load(mcuxClSession_Handle_t pSession,
                                                   mcuxClKey_Handle_t pKey,
                                                   mcuxClKey_Type_t type,
-                                                  mcuxCl_Buffer_t pData,
+                                                  uint8_t * pData,
                                                   uint32_t keyDataLength,
                                                   mcuxClEls_KeyProp_t * key_properties,
                                                   uint32_t * dst,
                                                   uint8_t key_loading_option)
 {
     /* Init the key. */
-    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClKey_init(pSession,
-                                                                 pKey,
-                                                                 type,
-                                                                 pData,
-                                                                 keyDataLength));
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClKey_init(
+        /* mcuxClSession_Handle_t session         */ pSession,
+        /* mcuxClKey_Handle_t key                 */ pKey,
+        /* mcuxClKey_Type_t type                  */ type,
+        /* uint8_t * pKeyData                    */ pData,
+        /* uint32_t keyDataLength                */ keyDataLength)
+    );
 
     if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClKey_init) != token) || (MCUXCLKEY_STATUS_OK != result))
     {

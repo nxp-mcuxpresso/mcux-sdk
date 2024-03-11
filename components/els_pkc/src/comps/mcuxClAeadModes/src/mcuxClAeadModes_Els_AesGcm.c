@@ -549,6 +549,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t) mcuxClAeadModes_SkeletonAesGcm(
 
         - exit
 */
+    mcuxClAead_Status_t status = MCUXCLAEAD_STATUS_OK;
+
     if (options == MCUXCLAEADMODES_OPTION_VERIFY)
     {
         MCUX_CSSL_FP_FUNCTION_CALL(compare_result, mcuxCsslMemory_Compare(mcuxCsslParamIntegrity_Protect(3u, pTag, pContext->partialData, tagLength),
@@ -558,13 +560,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t) mcuxClAeadModes_SkeletonAesGcm(
 
         if(compare_result != MCUXCSSLMEMORY_STATUS_EQUAL)
         {
-            MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClAeadModes_SkeletonAesGcm, MCUXCLAEAD_STATUS_ERROR);
+            status = MCUXCLAEAD_STATUS_ERROR;
         }
-
     }
 
     /* Exit and balance the flow protection. */
-    MCUX_CSSL_FP_FUNCTION_EXIT_WITH_CHECK(mcuxClAeadModes_SkeletonAesGcm, MCUXCLAEAD_STATUS_OK, MCUXCLAEAD_STATUS_FAULT_ATTACK,
+    MCUX_CSSL_FP_FUNCTION_EXIT_WITH_CHECK(mcuxClAeadModes_SkeletonAesGcm, status, MCUXCLAEAD_STATUS_FAULT_ATTACK,
         MCUX_CSSL_FP_CONDITIONAL(((options == MCUXCLAEADMODES_OPTION_ONESHOT) || (options == MCUXCLAEADMODES_OPTION_INIT)),
             MCUX_CSSL_FP_CONDITIONAL((nonceLength != 12u), MCUX_CSSL_FP_CONDITIONAL((0u != bytesFullIvBlocks), pAlgo->protection_token_engine),
                                                         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClPadding_addPadding_ISO9797_1_Method1),

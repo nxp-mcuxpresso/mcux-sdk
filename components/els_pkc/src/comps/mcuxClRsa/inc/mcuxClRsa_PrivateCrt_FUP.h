@@ -11,12 +11,14 @@
 /* software.                                                                */
 /*--------------------------------------------------------------------------*/
 
+#include <mcuxCsslAnalysis.h>
+
 #include <internal/mcuxClRsa_Internal_PkcDefs.h>
 #include <internal/mcuxClPkc_FupMacros.h>
 #include <internal/mcuxClRsa_PrivateCrt_FUP.h>
 
 MCUXCLPKC_FUP_EXT_ROM(mcuxClRsa_PrivateCrt_T1mb_FUP,
-    PH_CLNS_UTILS_FAME_CRC_ENTRY,
+    FUP_CRC_PLACEHOLDER,
     /* Calculate Mq_bm = Mq_b * QDash mod p_b */
     FUP_MC1_MM(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PRIMET0 /* Mq_bm */,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PRIMET4 /* QDash */,
@@ -29,7 +31,7 @@ MCUXCLPKC_FUP_EXT_ROM(mcuxClRsa_PrivateCrt_T1mb_FUP,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PQ_B /* p_b */)
 );
 MCUXCLPKC_FUP_EXT_ROM(mcuxClRsa_PrivateCrt_T2T3T4mb_FUP,
-    PH_CLNS_UTILS_FAME_CRC_ENTRY,
+    FUP_CRC_PLACEHOLDER,
     /* Calculate T2_mb = QDash*qInv_b mod p_b */
     FUP_MC1_MM(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PRIMET0 /* T2_mb */,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PRIMET4 /* QDash */,
@@ -56,7 +58,7 @@ MCUXCLPKC_FUP_EXT_ROM(mcuxClRsa_PrivateCrt_T2T3T4mb_FUP,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_PQ_B /* p_b */)
 );
 MCUXCLPKC_FUP_EXT_ROM(mcuxClRsa_PrivateCrt_CalcM_b_FUP,
-    PH_CLNS_UTILS_FAME_CRC_ENTRY,
+    FUP_CRC_PLACEHOLDER,
     /* Calculate T5_b = T4_b*q in MODT4 which has a size of
      * (primeAlignLen + blindedPrimeAlignLen = blindedMessageAlignLen)
      */
@@ -77,7 +79,7 @@ MCUXCLPKC_FUP_EXT_ROM(mcuxClRsa_PrivateCrt_CalcM_b_FUP,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_N /* Mq_b */)
 );
 MCUXCLPKC_FUP_EXT_ROM(mcuxClRsa_PrivateCrt_CalcM1_FUP,
-    PH_CLNS_UTILS_FAME_CRC_ENTRY,
+    FUP_CRC_PLACEHOLDER,
     /* Calculate reduction M_br of M_b mod N */
     FUP_MC2_MR(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT4 /* M_br */,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT3 /* M_b */,
@@ -90,18 +92,6 @@ MCUXCLPKC_FUP_EXT_ROM(mcuxClRsa_PrivateCrt_CalcM1_FUP,
     /* Normalize result (case if M1 > N) */
     FUP_MC1_MS(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_M /* M */,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT3 /* M1 */,
-        MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_N /* N */,
-        MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_N /* N */)
-);
-MCUXCLPKC_FUP_EXT_ROM(mcuxClRsa_PrivateCrt_ReductionME_FUP,
-    PH_CLNS_UTILS_FAME_CRC_ENTRY,
-    /* Convert from Montgomery to normal representation */
-    FUP_MC1_MR(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT4,
-        MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT1,
-        MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_N /* N */),
-    /* Normalize the result (case if R > N) and copy to the temp buffer for C' */
-    FUP_MC1_MS(MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT2 /* C' */,
-        MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_MODT4,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_N /* N */,
         MCUXCLRSA_INTERNAL_UPTRTINDEX_PRIVCRT_N /* N */)
 );

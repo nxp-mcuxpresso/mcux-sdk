@@ -16,7 +16,9 @@
 */
 #ifndef MCUXCLRSA_REMOVEBLINDING_FUP_H_
 #define MCUXCLRSA_REMOVEBLINDING_FUP_H_
-#include <mcuxClConfig.h> // Exported features flags header
+#include <mcuxClCore_Platform.h>
+#include <mcuxCsslAnalysis.h>
+
 #include <internal/mcuxClPkc_FupMacros.h>
 
 #ifdef __cplusplus
@@ -25,7 +27,9 @@ extern "C" {
 
 #define mcuxClRsa_RemoveBlinding_FUP_LEN  5u
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_LINKAGE_FUP()
 extern const mcuxClPkc_FUPEntry_t mcuxClRsa_RemoveBlinding_FUP[mcuxClRsa_RemoveBlinding_FUP_LEN];
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_LINKAGE_FUP()
 
 #ifdef __cplusplus
 } /* extern "C" */

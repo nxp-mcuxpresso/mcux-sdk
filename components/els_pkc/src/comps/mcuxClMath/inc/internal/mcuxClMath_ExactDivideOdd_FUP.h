@@ -20,12 +20,14 @@
 #define MCUXCLMATH_EXACTDIVIDEODD_FUP_H_
 
 #include <mcuxClCore_Platform.h>
+#include <mcuxCsslAnalysis.h>
 #include <internal/mcuxClPkc_FupMacros.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_LINKAGE_FUP()
 /*
  * FUP program declaration mcuxClMath_Fup_ExactDivideOdd_DivideLoop
  */
@@ -39,6 +41,7 @@ extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_ExactDivideOdd_DivideLoop[mcuxC
 #define mcuxClMath_Fup_ExactDivideOdd_NDashY_LEN  4u
 
 extern const mcuxClPkc_FUPEntry_t mcuxClMath_Fup_ExactDivideOdd_NDashY[mcuxClMath_Fup_ExactDivideOdd_NDashY_LEN];
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_LINKAGE_FUP()
 
 #ifdef __cplusplus
 } /* extern "C" */

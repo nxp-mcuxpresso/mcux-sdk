@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2022 NXP                                                       */
+/* Copyright 2022-2023 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -16,12 +16,15 @@
  * @brief FUP programs for EdDSA Key Generation
  */
 
+#include <mcuxCsslAnalysis.h>
 
 #include <internal/mcuxClPkc_FupMacros.h>
-#include <internal/mcuxClEcc_EdDSA_Internal_PkcWaLayout.h>
-#include <internal/mcuxClEcc_EdDSA_GenerateKeyPair_FUP.h>
+#include <internal/mcuxClEcc_TwEd_Internal_PkcWaLayout.h>
+#include <internal/mcuxClEcc_EdDSA_Internal_FUP.h>
 
-const mcuxClPkc_FUPEntry_t mcuxClEcc_FUP_EdDSA_GenerateKeyPair_Prepare_S[6] MCUX_FUP_ATTRIBUTE = {{0x10u,0x00u,0x95u,0x8du,0x40u,0xc9u},{0x40u,0x14u,0x00u,0x04u,0x06u,0x18u},{0x00u,0x1au,0x00u,0x18u,0x02u,0x18u},{0x40u,0x17u,0x00u,0x18u,0x02u,0x04u},{0x00u,0x15u,0x00u,0x05u,0x07u,0x18u},{0x00u,0x14u,0x00u,0x18u,0x08u,0x1cu}};
+MCUX_CSSL_ANALYSIS_START_PATTERN_FUP_PROGRAM()
+const mcuxClPkc_FUPEntry_t mcuxClEcc_FUP_EdDSA_GenerateKeyPair_Prepare_S[6] MCUX_FUP_ATTRIBUTE = {{0x10u,0x00u,0x03u,0xf1u,0xdfu,0xf4u},{0x40u,0x14u,0x04u,0x04u,0x06u,0x18u},{0x00u,0x1au,0x18u,0x18u,0x02u,0x18u},{0x40u,0x17u,0x18u,0x18u,0x02u,0x04u},{0x00u,0x15u,0x05u,0x05u,0x07u,0x18u},{0x00u,0x14u,0x18u,0x18u,0x08u,0x1cu}};
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_FUP_PROGRAM()
 
 
 

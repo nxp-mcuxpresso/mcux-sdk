@@ -23,7 +23,7 @@
  *  - PKC wordsize is not greater than 128 bits
  *
  *  NOTE: This function will require adaptation if need to support primeByteLength
- *  that is not multiple of FAME word.
+ *  that is not multiple of PKC word.
  *
  */
 

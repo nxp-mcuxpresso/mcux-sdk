@@ -11,12 +11,14 @@
 /* software.                                                                */
 /*--------------------------------------------------------------------------*/
 
+#include <mcuxCsslAnalysis.h>
+
 #include <internal/mcuxClPkc_FupMacros.h>
 #include <internal/mcuxClRsa_Internal_PkcDefs.h>
 #include <internal/mcuxClRsa_RemoveBlinding_FUP.h>
 
 MCUXCLPKC_FUP_EXT_ROM(mcuxClRsa_RemoveBlinding_FUP,
-    PH_CLNS_UTILS_FAME_CRC_ENTRY,
+    FUP_CRC_PLACEHOLDER,
     /* Set T2 = 0 */
     FUP_OP1_CONST(MCUXCLRSA_INTERNAL_UPTRTINDEX_REMOVEBLINDING_T2, MCUXCLRSA_INTERNAL_UPTRTINDEX_REMOVEBLINDING_ZERO),
     /* Compute T1 = T2 + B */

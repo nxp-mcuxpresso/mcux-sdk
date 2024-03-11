@@ -98,65 +98,66 @@ extern "C" {
  * @ingroup mcuxClEls_Types_Macros
  * @{
  */
-#define MCUXCLELS_KEYPROPERTY_KEY_SIZE_128               0U ///< This value of #mcuxClEls_KeyProp_t.ksize indicates a 128 bit key
-#define MCUXCLELS_KEYPROPERTY_KEY_SIZE_256               1U ///< This value of #mcuxClEls_KeyProp_t.ksize indicates a 256 bit key
+#define MCUXCLELS_KEYPROPERTY_KEY_SIZE_128               (0U) ///< This value of #mcuxClEls_KeyProp_t.ksize indicates a 128 bit key
+#define MCUXCLELS_KEYPROPERTY_KEY_SIZE_256               (1U) ///< This value of #mcuxClEls_KeyProp_t.ksize indicates a 256 bit key
 #ifdef MCUXCL_FEATURE_ELS_PUK_INTERNAL
-#define MCUXCLELS_KEYPROPERTY_KEY_SIZE_512               3U ///< This value of #mcuxClEls_KeyProp_t.ksize indicates a 512 bit key
+#define MCUXCLELS_KEYPROPERTY_KEY_SIZE_512               (3U) ///< This value of #mcuxClEls_KeyProp_t.ksize indicates a 512 bit key
 #endif /* MCUXCL_FEATURE_ELS_PUK_INTERNAL */
-#define MCUXCLELS_KEYPROPERTY_ACTIVE_TRUE                1U ///< This value of #mcuxClEls_KeyProp_t.kactv indicates that the slot contains an active key
-#define MCUXCLELS_KEYPROPERTY_ACTIVE_FALSE               0U ///< This value of #mcuxClEls_KeyProp_t.kactv indicates that the slot does not contain active key
-#define MCUXCLELS_KEYPROPERTY_BASE_SLOT                  1U ///< This value of #mcuxClEls_KeyProp_t.kbase indicates that the slot is the base slot of a 2-slot key
-#define MCUXCLELS_KEYPROPERTY_SECOND_SLOT                0U ///< This value of #mcuxClEls_KeyProp_t.kbase indicates that the slot is the second slot of a 2-slot key
-#define MCUXCLELS_KEYPROPERTY_GENERAL_PURPOSE_SLOT_TRUE  1U ///< This value of #mcuxClEls_KeyProp_t.fgp indicates that the slot is a retention key slot or a hardware out key slot
-#define MCUXCLELS_KEYPROPERTY_GENERAL_PURPOSE_SLOT_FALSE 0U ///< This value of #mcuxClEls_KeyProp_t.fgp indicates that the slot is a neither retention key slot nor hardware out key slot
-#define MCUXCLELS_KEYPROPERTY_RETENTION_SLOT_TRUE        1U ///< This value of #mcuxClEls_KeyProp_t.frtn indicates that the slot is a retention key slot
-#define MCUXCLELS_KEYPROPERTY_RETENTION_SLOT_FALSE       0U ///< This value of #mcuxClEls_KeyProp_t.frtn indicates that the slot is not a retention key slot
-#define MCUXCLELS_KEYPROPERTY_HW_OUT_SLOT_TRUE           1U ///< This value of #mcuxClEls_KeyProp_t.fhwo indicates that the slot is a hardware out key slot
-#define MCUXCLELS_KEYPROPERTY_HW_OUT_SLOT_FALSE          0U ///< This value of #mcuxClEls_KeyProp_t.fhwo indicates that the slot is not a hardware out key slot
+#define MCUXCLELS_KEYPROPERTY_ACTIVE_TRUE                (1U) ///< This value of #mcuxClEls_KeyProp_t.kactv indicates that the slot contains an active key
+#define MCUXCLELS_KEYPROPERTY_ACTIVE_FALSE               (0U) ///< This value of #mcuxClEls_KeyProp_t.kactv indicates that the slot does not contain active key
+#define MCUXCLELS_KEYPROPERTY_BASE_SLOT                  (1U) ///< This value of #mcuxClEls_KeyProp_t.kbase indicates that the slot is the base slot of a 2-slot key
+#define MCUXCLELS_KEYPROPERTY_SECOND_SLOT                (0U) ///< This value of #mcuxClEls_KeyProp_t.kbase indicates that the slot is the second slot of a 2-slot key
+#define MCUXCLELS_KEYPROPERTY_GENERAL_PURPOSE_SLOT_TRUE  (1U) ///< This value of #mcuxClEls_KeyProp_t.fgp indicates that the slot is a retention key slot or a hardware out key slot
+#define MCUXCLELS_KEYPROPERTY_GENERAL_PURPOSE_SLOT_FALSE (0U) ///< This value of #mcuxClEls_KeyProp_t.fgp indicates that the slot is a neither retention key slot nor hardware out key slot
+#define MCUXCLELS_KEYPROPERTY_RETENTION_SLOT_TRUE        (1U) ///< This value of #mcuxClEls_KeyProp_t.frtn indicates that the slot is a retention key slot
+#define MCUXCLELS_KEYPROPERTY_RETENTION_SLOT_FALSE       (0U) ///< This value of #mcuxClEls_KeyProp_t.frtn indicates that the slot is not a retention key slot
+#define MCUXCLELS_KEYPROPERTY_HW_OUT_SLOT_TRUE           (1U) ///< This value of #mcuxClEls_KeyProp_t.fhwo indicates that the slot is a hardware out key slot
+#define MCUXCLELS_KEYPROPERTY_HW_OUT_SLOT_FALSE          (0U) ///< This value of #mcuxClEls_KeyProp_t.fhwo indicates that the slot is not a hardware out key slot
 #ifdef MCUXCL_FEATURE_ELS_PUK_INTERNAL
-#define MCUXCLELS_KEYPROPERTY_PUK_TRUE                   1U ///< This value of #mcuxClEls_KeyProp_t.upuk indicates that the slot is a Trusted Public Key
-#define MCUXCLELS_KEYPROPERTY_PUK_FALSE                  0U ///< This value of #mcuxClEls_KeyProp_t.upuk indicates that the slot is not a Trusted Public Key
-#define MCUXCLELS_KEYPROPERTY_TECDH_TRUE                 1U ///< This value of #mcuxClEls_KeyProp_t.utecdh indicates that the slot is a Private key that can only be used in ECDH with Trusted Public Key
-#define MCUXCLELS_KEYPROPERTY_TECDH_FALSE                0U ///< This value of #mcuxClEls_KeyProp_t.utecdh indicates that the slot is not a Private key that can only be used in ECDH with Trusted Public Key
+#define MCUXCLELS_KEYPROPERTY_PUK_TRUE                   (1U) ///< This value of #mcuxClEls_KeyProp_t.upuk indicates that the slot is a Trusted Public Key
+#define MCUXCLELS_KEYPROPERTY_PUK_FALSE                  (0U) ///< This value of #mcuxClEls_KeyProp_t.upuk indicates that the slot is not a Trusted Public Key
+#define MCUXCLELS_KEYPROPERTY_TECDH_TRUE                 (1U) ///< This value of #mcuxClEls_KeyProp_t.utecdh indicates that the slot is a Private key that can only be used in ECDH with Trusted Public Key
+#define MCUXCLELS_KEYPROPERTY_TECDH_FALSE                (0U) ///< This value of #mcuxClEls_KeyProp_t.utecdh indicates that the slot is not a Private key that can only be used in ECDH with Trusted Public Key
 #endif /* MCUXCL_FEATURE_ELS_PUK_INTERNAL */
-#define MCUXCLELS_KEYPROPERTY_CMAC_TRUE                  1U ///< This value of #mcuxClEls_KeyProp_t.ucmac indicates that the key can be used for CMAC
-#define MCUXCLELS_KEYPROPERTY_CMAC_FALSE                 0U ///< This value of #mcuxClEls_KeyProp_t.ucmac indicates that the key cannot be used for CMAC
-#define MCUXCLELS_KEYPROPERTY_KSK_TRUE                   1U ///< This value of #mcuxClEls_KeyProp_t.uksk indicates that the key can be used for key signing
-#define MCUXCLELS_KEYPROPERTY_KSK_FALSE                  0U ///< This value of #mcuxClEls_KeyProp_t.uksk indicates that the key cannot be used for key signing
-#define MCUXCLELS_KEYPROPERTY_RTF_TRUE                   1U ///< This value of #mcuxClEls_KeyProp_t.urtf indicates that the key can be used for RTF signing
-#define MCUXCLELS_KEYPROPERTY_RTF_FALSE                  0U ///< This value of #mcuxClEls_KeyProp_t.urtf indicates that the key cannot be used for RTF signing
-#define MCUXCLELS_KEYPROPERTY_CKDF_TRUE                  1U ///< This value of #mcuxClEls_KeyProp_t.uckdf indicates that the key can be used for CKDF
-#define MCUXCLELS_KEYPROPERTY_CKDF_FALSE                 0U ///< This value of #mcuxClEls_KeyProp_t.uckdf indicates that the key cannot be used for CKDF
-#define MCUXCLELS_KEYPROPERTY_HKDF_TRUE                  1U ///< This value of #mcuxClEls_KeyProp_t.uhkdf indicates that the key can be used for HKDF
-#define MCUXCLELS_KEYPROPERTY_HKDF_FALSE                 0U ///< This value of #mcuxClEls_KeyProp_t.uhkdf indicates that the key cannot be used for HKDF
-#define MCUXCLELS_KEYPROPERTY_ECC_TRUE                   1U ///< This value of #mcuxClEls_KeyProp_t.uecsg indicates that the key can be used for ECC signing
-#define MCUXCLELS_KEYPROPERTY_ECC_FALSE                  0U ///< This value of #mcuxClEls_KeyProp_t.uecsg indicates that the key cannot be used for ECC signing
-#define MCUXCLELS_KEYPROPERTY_ECC_DH_PRIVATE_TRUE        1U ///< This value of #mcuxClEls_KeyProp_t.uecdh indicates that the key is a ECC Diffie Hellman private key
-#define MCUXCLELS_KEYPROPERTY_ECC_DH_PRIVATE_FALSE       0U ///< This value of #mcuxClEls_KeyProp_t.uecdh indicates that the key is not an ECC Diffie Hellman private key
-#define MCUXCLELS_KEYPROPERTY_AES_TRUE                   1U ///< This value of #mcuxClEls_KeyProp_t.uaes indicates that the key is an AES key
-#define MCUXCLELS_KEYPROPERTY_AES_FALSE                  0U ///< This value of #mcuxClEls_KeyProp_t.uaes indicates that the key is not an AES key
-#define MCUXCLELS_KEYPROPERTY_HMAC_TRUE                  1U ///< This value of #mcuxClEls_KeyProp_t.uhmac indicates that the key is an HMAC key
-#define MCUXCLELS_KEYPROPERTY_HMAC_FALSE                 0U ///< This value of #mcuxClEls_KeyProp_t.uhmac indicates that the key is not an HMAC key
-#define MCUXCLELS_KEYPROPERTY_KWK_TRUE                   1U ///< This value of #mcuxClEls_KeyProp_t.ukwk indicates that the key is a Key Wrapping Key
-#define MCUXCLELS_KEYPROPERTY_KWK_FALSE                  0U ///< This value of #mcuxClEls_KeyProp_t.ukwk indicates that the key is not a Key Wrapping Key
-#define MCUXCLELS_KEYPROPERTY_KUOK_TRUE                  1U ///< This value of #mcuxClEls_KeyProp_t.ukuok indicates that the key is a Key Unwrapping Only Key
-#define MCUXCLELS_KEYPROPERTY_KUOK_FALSE                 0U ///< This value of #mcuxClEls_KeyProp_t.ukuok indicates that the key is not a Key Unwrapping Only Key
-#define MCUXCLELS_KEYPROPERTY_TLS_PREMASTER_SECRET_TRUE  1U ///< This value of #mcuxClEls_KeyProp_t.utlspms indicates that the key is a TLS Premaster Secret
-#define MCUXCLELS_KEYPROPERTY_TLS_PREMASTER_SECRET_FALSE 0U ///< This value of #mcuxClEls_KeyProp_t.utlspms indicates that the key is not a TLS Premaster Secret
-#define MCUXCLELS_KEYPROPERTY_TLS_MASTER_SECRET_TRUE     1U ///< This value of #mcuxClEls_KeyProp_t.utlsms indicates that the key is a TLS Master Secret
-#define MCUXCLELS_KEYPROPERTY_TLS_MASTER_SECRET_FALSE    0U ///< This value of #mcuxClEls_KeyProp_t.utlsms indicates that the key is not a TLS Master Secret
-#define MCUXCLELS_KEYPROPERTY_INPUT_FOR_ECC_TRUE         1U ///< This value of #mcuxClEls_KeyProp_t.ukgsrc indicates that the key can be used as key material input for ECC key generation
-#define MCUXCLELS_KEYPROPERTY_INPUT_FOR_ECC_FALSE        0U ///< This value of #mcuxClEls_KeyProp_t.ukgsrc indicates that the key cannot be used as key material input for ECC key generation
-#define MCUXCLELS_KEYPROPERTY_HW_OUT_TRUE                1U ///< This value of #mcuxClEls_KeyProp_t.uhwo indicates that the key can be used in a hardware out key slot
-#define MCUXCLELS_KEYPROPERTY_HW_OUT_FALSE               0U ///< This value of #mcuxClEls_KeyProp_t.uhwo indicates that the key cannot be used in a hardware out key slot
-#define MCUXCLELS_KEYPROPERTY_WRAP_TRUE                  1U ///< This value of #mcuxClEls_KeyProp_t.wrpok indicates that the key can be wrapped
-#define MCUXCLELS_KEYPROPERTY_WRAP_FALSE                 0U ///< This value of #mcuxClEls_KeyProp_t.wrpok indicates that the key cannot be wrapped
-#define MCUXCLELS_KEYPROPERTY_DEVICE_UNIQUE_TRUE         1U ///< This value of #mcuxClEls_KeyProp_t.duk indicates that the key is a Device Unique Key
-#define MCUXCLELS_KEYPROPERTY_DEVICE_UNIQUE_FALSE        0U ///< This value of #mcuxClEls_KeyProp_t.duk indicates that the key is not a Device Unique Key
-#define MCUXCLELS_KEYPROPERTY_PRIVILEGED_TRUE            1U ///< This value of #mcuxClEls_KeyProp_t.upprot_priv indicates that the caller must be in privileged mode to use the key
-#define MCUXCLELS_KEYPROPERTY_PRIVILEGED_FALSE           0U ///< This value of #mcuxClEls_KeyProp_t.upprot_priv indicates that the caller does not need to be in privileged mode to use the key
-#define MCUXCLELS_KEYPROPERTY_SECURE_TRUE                0U ///< This value of #mcuxClEls_KeyProp_t.upprot_sec indicates that the caller must be in secure mode to use the key
-#define MCUXCLELS_KEYPROPERTY_SECURE_FALSE               1U ///< This value of #mcuxClEls_KeyProp_t.upprot_sec indicates that the caller does not need to be in secure mode to use the key
+#define MCUXCLELS_KEYPROPERTY_CMAC_TRUE                  (1U) ///< This value of #mcuxClEls_KeyProp_t.ucmac indicates that the key can be used for CMAC
+#define MCUXCLELS_KEYPROPERTY_CMAC_FALSE                 (0U) ///< This value of #mcuxClEls_KeyProp_t.ucmac indicates that the key cannot be used for CMAC
+#define MCUXCLELS_KEYPROPERTY_KSK_TRUE                   (1U) ///< This value of #mcuxClEls_KeyProp_t.uksk indicates that the key can be used for key signing
+#define MCUXCLELS_KEYPROPERTY_KSK_FALSE                  (0U) ///< This value of #mcuxClEls_KeyProp_t.uksk indicates that the key cannot be used for key signing
+#define MCUXCLELS_KEYPROPERTY_RTF_TRUE                   (1U) ///< This value of #mcuxClEls_KeyProp_t.urtf indicates that the key can be used for RTF signing
+#define MCUXCLELS_KEYPROPERTY_RTF_FALSE                  (0U) ///< This value of #mcuxClEls_KeyProp_t.urtf indicates that the key cannot be used for RTF signing
+#define MCUXCLELS_KEYPROPERTY_CKDF_TRUE                  (1U) ///< This value of #mcuxClEls_KeyProp_t.uckdf indicates that the key can be used for CKDF
+#define MCUXCLELS_KEYPROPERTY_CKDF_FALSE                 (0U) ///< This value of #mcuxClEls_KeyProp_t.uckdf indicates that the key cannot be used for CKDF
+#define MCUXCLELS_KEYPROPERTY_HKDF_TRUE                  (1U) ///< This value of #mcuxClEls_KeyProp_t.uhkdf indicates that the key can be used for HKDF
+#define MCUXCLELS_KEYPROPERTY_HKDF_FALSE                 (0U) ///< This value of #mcuxClEls_KeyProp_t.uhkdf indicates that the key cannot be used for HKDF
+#define MCUXCLELS_KEYPROPERTY_ECC_TRUE                   (1U) ///< This value of #mcuxClEls_KeyProp_t.uecsg indicates that the key can be used for ECC signing
+#define MCUXCLELS_KEYPROPERTY_ECC_FALSE                  (0U) ///< This value of #mcuxClEls_KeyProp_t.uecsg indicates that the key cannot be used for ECC signing
+#define MCUXCLELS_KEYPROPERTY_ECC_DH_PRIVATE_TRUE        (1U) ///< This value of #mcuxClEls_KeyProp_t.uecdh indicates that the key is a ECC Diffie Hellman private key
+#define MCUXCLELS_KEYPROPERTY_ECC_DH_PRIVATE_FALSE       (0U) ///< This value of #mcuxClEls_KeyProp_t.uecdh indicates that the key is not an ECC Diffie Hellman private key
+#define MCUXCLELS_KEYPROPERTY_AES_TRUE                   (1U) ///< This value of #mcuxClEls_KeyProp_t.uaes indicates that the key is an AES key
+#define MCUXCLELS_KEYPROPERTY_AES_FALSE                  (0U) ///< This value of #mcuxClEls_KeyProp_t.uaes indicates that the key is not an AES key
+#define MCUXCLELS_KEYPROPERTY_HMAC_TRUE                  (1U) ///< This value of #mcuxClEls_KeyProp_t.uhmac indicates that the key is an HMAC key
+#define MCUXCLELS_KEYPROPERTY_HMAC_FALSE                 (0U) ///< This value of #mcuxClEls_KeyProp_t.uhmac indicates that the key is not an HMAC key
+#define MCUXCLELS_KEYPROPERTY_KWK_TRUE                   (1U) ///< This value of #mcuxClEls_KeyProp_t.ukwk indicates that the key is a Key Wrapping Key
+#define MCUXCLELS_KEYPROPERTY_KWK_FALSE                  (0U) ///< This value of #mcuxClEls_KeyProp_t.ukwk indicates that the key is not a Key Wrapping Key
+#define MCUXCLELS_KEYPROPERTY_KUOK_TRUE                  (1U) ///< This value of #mcuxClEls_KeyProp_t.ukuok indicates that the key is a Key Unwrapping Only Key
+#define MCUXCLELS_KEYPROPERTY_KUOK_FALSE                 (0U) ///< This value of #mcuxClEls_KeyProp_t.ukuok indicates that the key is not a Key Unwrapping Only Key
+#define MCUXCLELS_KEYPROPERTY_TLS_PREMASTER_SECRET_TRUE  (1U) ///< This value of #mcuxClEls_KeyProp_t.utlspms indicates that the key is a TLS Premaster Secret
+#define MCUXCLELS_KEYPROPERTY_TLS_PREMASTER_SECRET_FALSE (0U) ///< This value of #mcuxClEls_KeyProp_t.utlspms indicates that the key is not a TLS Premaster Secret
+#define MCUXCLELS_KEYPROPERTY_TLS_MASTER_SECRET_TRUE     (1U) ///< This value of #mcuxClEls_KeyProp_t.utlsms indicates that the key is a TLS Master Secret
+#define MCUXCLELS_KEYPROPERTY_TLS_MASTER_SECRET_FALSE    (0U) ///< This value of #mcuxClEls_KeyProp_t.utlsms indicates that the key is not a TLS Master Secret
+#define MCUXCLELS_KEYPROPERTY_INPUT_FOR_ECC_TRUE         (1U) ///< This value of #mcuxClEls_KeyProp_t.ukgsrc indicates that the key can be used as key material input for ECC key generation
+#define MCUXCLELS_KEYPROPERTY_INPUT_FOR_ECC_FALSE        (0U) ///< This value of #mcuxClEls_KeyProp_t.ukgsrc indicates that the key cannot be used as key material input for ECC key generation
+#define MCUXCLELS_KEYPROPERTY_HW_OUT_TRUE                (1U) ///< This value of #mcuxClEls_KeyProp_t.uhwo indicates that the key can be used in a hardware out key slot
+#define MCUXCLELS_KEYPROPERTY_HW_OUT_FALSE               (0U) ///< This value of #mcuxClEls_KeyProp_t.uhwo indicates that the key cannot be used in a hardware out key slot
+#define MCUXCLELS_KEYPROPERTY_WRAP_TRUE                  (1U) ///< This value of #mcuxClEls_KeyProp_t.wrpok indicates that the key can be wrapped
+#define MCUXCLELS_KEYPROPERTY_WRAP_FALSE                 (0U) ///< This value of #mcuxClEls_KeyProp_t.wrpok indicates that the key cannot be wrapped
+#define MCUXCLELS_KEYPROPERTY_DEVICE_UNIQUE_TRUE         (1U) ///< This value of #mcuxClEls_KeyProp_t.duk indicates that the key is a Device Unique Key
+#define MCUXCLELS_KEYPROPERTY_DEVICE_UNIQUE_FALSE        (0U) ///< This value of #mcuxClEls_KeyProp_t.duk indicates that the key is not a Device Unique Key
+#define MCUXCLELS_KEYPROPERTY_PRIVILEGED_TRUE            (1U) ///< This value of #mcuxClEls_KeyProp_t.upprot_priv indicates that the caller must be in privileged mode to use the key
+#define MCUXCLELS_KEYPROPERTY_PRIVILEGED_FALSE           (0U) ///< This value of #mcuxClEls_KeyProp_t.upprot_priv indicates that the caller does not need to be in privileged mode to use the key
+#define MCUXCLELS_KEYPROPERTY_SECURE_TRUE                (0U) ///< This value of #mcuxClEls_KeyProp_t.upprot_sec indicates that the caller must be in secure mode to use the key
+#define MCUXCLELS_KEYPROPERTY_SECURE_FALSE               (1U) ///< This value of #mcuxClEls_KeyProp_t.upprot_sec indicates that the caller does not need to be in secure mode to use the key
+
 /**
  * @}
  */
@@ -188,9 +189,9 @@ extern "C" {
 #endif /* MCUXCL_FEATURE_ELS_LOCKING */
 /** @} */
 
-#define MCUXCLELS_STATUS_IS_HW_ERROR(x) ((((mcuxClEls_Status_t) (x)) & 0x0000FF00U) == 0x0000E100U) ///< Checks whether an error code is a hardware error. Indicates that an error was reported by ELS hardware.
+#define MCUXCLELS_STATUS_IS_HW_ERROR(x_) ((((mcuxClEls_Status_t) (x_)) & 0x0000FF00U) == 0x0000E100U) ///< Checks whether an error code is a hardware error. Indicates that an error was reported by ELS hardware.
 
-#define MCUXCLELS_STATUS_IS_SW_ERROR(x) ((((mcuxClEls_Status_t) (x)) & 0x0000FF00U) == 0x0000F000U) ///< Checks whether an error code is a software error. Indicates that the error was detected by the driver software and not by ELS hardware.
+#define MCUXCLELS_STATUS_IS_SW_ERROR(x_) ((((mcuxClEls_Status_t) (x_)) & 0x0000FF00U) == 0x0000F000U) ///< Checks whether an error code is a software error. Indicates that the error was detected by the driver software and not by ELS hardware.
 
 /**
  * @}

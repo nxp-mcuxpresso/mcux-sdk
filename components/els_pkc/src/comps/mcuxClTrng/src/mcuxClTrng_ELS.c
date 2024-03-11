@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2022-2023 NXP                                                  */
+/* Copyright 2022-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -20,6 +20,7 @@
 #include <mcuxClSession.h>
 #include <mcuxClEls.h>
 #include <mcuxCsslMemory.h>
+#include <mcuxCsslDataIntegrity.h>
 #include <internal/mcuxClTrng_Internal.h>
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClTrng_Init)
@@ -155,6 +156,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClTrng_Status_t) mcuxClTrng_getEntropyInput(
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClTrng_getEntropyInput, MCUXCLTRNG_STATUS_FAULT_ATTACK);
         }
     }
+
+    MCUX_CSSL_DI_RECORD(trngOutputSize, entropyInputLength);
 
     MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClTrng_getEntropyInput, MCUXCLTRNG_STATUS_OK,
             MCUX_CSSL_FP_CONDITIONAL((fullELSblocksBytes > 0u),

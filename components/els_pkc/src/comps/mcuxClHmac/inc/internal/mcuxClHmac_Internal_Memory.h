@@ -24,13 +24,13 @@
 #include <internal/mcuxClHash_Internal.h>
 #include <internal/mcuxClHash_Internal_Memory.h>
 #include <internal/mcuxClHashModes_Internal_Memory.h>
-#include <internal/mcuxClHmac_Internal_Macros.h>
+#include <mcuxClCore_Macros.h>
 #include <internal/mcuxClHmac_Internal_Types.h>
 
 #define MCUXCLHMAC_INTERNAL_WACPU_INIT      MCUXCLHASH_BLOCK_SIZE_MAX + MCUXCLHASH_INTERNAL_WACPU_MAX
 #define MCUXCLHMAC_INTERNAL_WACPU_FINISH    MCUXCLHASH_MAX_OUTPUT_SIZE
 
-#define MCUXCLHMAC_INTERNAL_MAX_WACPU       MCUXCLHMAC_MAX(MCUXCLHMAC_INTERNAL_WACPU_INIT, MCUXCLHMAC_INTERNAL_WACPU_FINISH)
+#define MCUXCLHMAC_INTERNAL_MAX_WACPU       MCUXCLCORE_MAX(MCUXCLHMAC_INTERNAL_WACPU_INIT, MCUXCLHMAC_INTERNAL_WACPU_FINISH)
 
 #define MCUXCLHMAC_INTERNAL_MAX_CONTEXT_SIZE     (sizeof(mcuxClHmac_Context_Sw_t))
 

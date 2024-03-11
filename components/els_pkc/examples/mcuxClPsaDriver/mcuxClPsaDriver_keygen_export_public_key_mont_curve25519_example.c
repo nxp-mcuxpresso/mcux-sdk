@@ -35,7 +35,7 @@
 #define LIFETIME_INTERNAL PSA_KEY_LIFETIME_FROM_PERSISTENCE_AND_LOCATION(PSA_KEY_LIFETIME_VOLATILE, PSA_KEY_LOCATION_EXTERNAL_STORAGE)
 #define LIFETIME_EXTERNAL PSA_KEY_LIFETIME_FROM_PERSISTENCE_AND_LOCATION(PSA_KEY_LIFETIME_VOLATILE, PSA_KEY_LOCATION_LOCAL_STORAGE)
 
-bool mcuxClPsaDriver_keygen_export_public_key_mont_curve25519_example(void)
+MCUXCLEXAMPLE_FUNCTION(mcuxClPsaDriver_keygen_export_public_key_mont_curve25519_example)
 {
     /* Enable ELS */
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClEls_Enable_Async()); // Enable the ELS.
@@ -75,8 +75,8 @@ bool mcuxClPsaDriver_keygen_export_public_key_mont_curve25519_example(void)
       .domain_parameters_size = 0U};
 
     /* Call generate_key operation */
-    uint8_t key_buffer[MCUXCLECC_MONT_CURVE25519_SIZE_PRIVATEKEY] = {0U};
-    size_t key_buffer_size = MCUXCLECC_MONT_CURVE25519_SIZE_PRIVATEKEY;
+    ALIGNED uint8_t key_buffer[MCUXCLECC_MONTDH_CURVE25519_SIZE_PRIVATEKEY] = {0U};
+    size_t key_buffer_size = MCUXCLECC_MONTDH_CURVE25519_SIZE_PRIVATEKEY;
     size_t key_buffer_length = 0U;
 
     psa_status_t status = psa_driver_wrapper_generate_key(
@@ -90,7 +90,7 @@ bool mcuxClPsaDriver_keygen_export_public_key_mont_curve25519_example(void)
     }
 
     /* Check the output length */
-    if(key_buffer_length != MCUXCLECC_MONT_CURVE25519_SIZE_PRIVATEKEY)
+    if(key_buffer_length != MCUXCLECC_MONTDH_CURVE25519_SIZE_PRIVATEKEY)
     {
         return MCUXCLEXAMPLE_STATUS_ERROR;
     }
@@ -115,13 +115,15 @@ bool mcuxClPsaDriver_keygen_export_public_key_mont_curve25519_example(void)
       .domain_parameters_size = 0U};
 
     /* Call export_public_key operation */
-    uint8_t data[PSA_EXPORT_PUBLIC_KEY_OUTPUT_SIZE(PSA_KEY_TYPE_ECC_PUBLIC_KEY(PSA_ECC_FAMILY_MONTGOMERY), 256u)] = {0U};
+    MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_MACRO()
+    ALIGNED uint8_t data[PSA_EXPORT_PUBLIC_KEY_OUTPUT_SIZE(PSA_KEY_TYPE_ECC_PUBLIC_KEY(PSA_ECC_FAMILY_MONTGOMERY), 256u)] = {0U};
     size_t data_size = PSA_EXPORT_PUBLIC_KEY_OUTPUT_SIZE(PSA_KEY_TYPE_ECC_PUBLIC_KEY(PSA_ECC_FAMILY_MONTGOMERY), 256u);
+    MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_MACRO()
     size_t data_length = 0U;
 
     status = psa_driver_wrapper_export_public_key(
                 &exportAttr,
-                key_buffer, MCUXCLECC_MONT_CURVE25519_SIZE_PRIVATEKEY,
+                key_buffer, MCUXCLECC_MONTDH_CURVE25519_SIZE_PRIVATEKEY,
                 data, data_size, &data_length );
 
     /* Check the return value */
@@ -155,9 +157,4 @@ bool mcuxClPsaDriver_keygen_export_public_key_mont_curve25519_example(void)
 
     /* Return */
     return MCUXCLEXAMPLE_STATUS_OK;
-}
-bool nxpClPsaDriver_keygen_export_public_key_mont_curve25519_example(void)
-{
-    bool result = mcuxClPsaDriver_keygen_export_public_key_mont_curve25519_example();
-    return result;
 }

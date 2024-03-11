@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2022-2023 NXP                                                  */
+/* Copyright 2022-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -11,6 +11,7 @@
 /* software.                                                                */
 /*--------------------------------------------------------------------------*/
 
+#include <mcuxClToolchain.h>
 #include <mcuxClCore_Examples.h> // Defines and assertions for examples
 #include <mcuxClExample_Session_Helper.h>
 
@@ -31,7 +32,7 @@
 MCUXCLEXAMPLE_FUNCTION(mcuxClHmac_Els_Oneshot_External_Key_example)
 {
     /* Example (unpadded) key. */
-    const uint8_t hmac_key[] = {
+    const ALIGNED uint8_t hmac_key[] = {
         0x00u, 0x11u, 0x22u, 0x33u, 0x44u, 0x55u, 0x66u, 0x77u,
         0x88u, 0x99u, 0xaau, 0xbbu, 0xccu, 0xddu, 0xeeu, 0xffu,
         0x00u, 0x11u, 0x22u, 0x33u, 0x44u, 0x55u, 0x66u, 0x77u,
@@ -39,7 +40,7 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClHmac_Els_Oneshot_External_Key_example)
     };
 
     /* Example input to the HMAC function. */
-    const uint8_t hmac_input[MCUXCLELS_HASH_BLOCK_SIZE_SHA_256] = {
+    const ALIGNED uint8_t hmac_input[MCUXCLELS_HASH_BLOCK_SIZE_SHA_256] = {
         0x00u, 0x9fu, 0x5eu, 0x39u, 0x94u, 0x30u, 0x03u, 0x82u,
         0x50u, 0x72u, 0x1bu, 0xe1u, 0x79u, 0x65u, 0x35u, 0xffu,
         0x21u, 0xa6u, 0x09u, 0xfdu, 0xf9u, 0xf0u, 0xf6u, 0x12u,
@@ -51,7 +52,7 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClHmac_Els_Oneshot_External_Key_example)
     };
 
     /* Example reference HMAC. */
-    const uint8_t hmac_output_reference[MCUXCLHMAC_ELS_OUTPUT_SIZE] = {
+    const ALIGNED uint8_t hmac_output_reference[MCUXCLHMAC_ELS_OUTPUT_SIZE] = {
         0x06u, 0xb8u, 0xb8u, 0xc3u, 0x21u, 0x79u, 0x15u, 0xbeu,
         0x0bu, 0x0fu, 0x86u, 0x90u, 0x4fu, 0x76u, 0x74u, 0x1bu,
         0x1bu, 0xe2u, 0x86u, 0x79u, 0x38u, 0xf4u, 0xf0u, 0x5du,
@@ -90,7 +91,7 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClHmac_Els_Oneshot_External_Key_example)
     mcuxClSession_Descriptor_t sessionDesc;
     mcuxClSession_Handle_t session = &sessionDesc;
 
-    MCUXCLEXAMPLE_ALLOCATE_AND_INITIALIZE_SESSION(session, MCUXCLHMAC_MAX_CPU_WA_BUFFER_SIZE + MCUXCLRANDOMMODES_NCINIT_WACPU_SIZE, 0u);
+    MCUXCLEXAMPLE_ALLOCATE_AND_INITIALIZE_SESSION(session, MCUXCLEXAMPLE_MAX_WA(MCUXCLHMAC_MAX_CPU_WA_BUFFER_SIZE, MCUXCLRANDOMMODES_NCINIT_WACPU_SIZE), 0u);
     /* Initialize the PRNG */
     MCUXCLEXAMPLE_INITIALIZE_PRNG(session);
 
@@ -106,7 +107,9 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClHmac_Els_Oneshot_External_Key_example)
         /* mcuxClSession_Handle_t pSession:                */  session,
         /* mcuxClKey_Handle_t key:                         */  key,
         /* const mcuxClKey_Type* type:                     */  mcuxClKey_Type_Hmac_variableLength,
-        /* mcuxCl_Buffer_t pKeyData:                       */  (uint8_t *) hmac_key,
+MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST("Required by API function")
+        /* uint8_t * pKeyData:                            */  (uint8_t *) hmac_key,
+MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST()
         /* uint32_t keyDataLength:                        */  sizeof(hmac_key)));
 
     if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClKey_init) != token) || (MCUXCLKEY_STATUS_OK != result))
@@ -130,9 +133,9 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClHmac_Els_Oneshot_External_Key_example)
     /* HMAC computation                                                       */
     /**************************************************************************/
     /* Copy the input data to temp buffer with proper size */
-    uint8_t tempIn [MCUXCLHMAC_ELS_INPUTBUFFER_LENGTH(sizeof(hmac_input))];
+    ALIGNED uint8_t tempIn [MCUXCLHMAC_ELS_INPUTBUFFER_LENGTH(sizeof(hmac_input))];
 
-    for(int i=0 ; i < MCUXCLELS_HASH_BLOCK_SIZE_SHA_256; i++)
+    for(uint32_t i = 0u ; i < MCUXCLELS_HASH_BLOCK_SIZE_SHA_256; i++)
     {
        tempIn[i] =  hmac_input[i];
     }

@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_LCDIC_DMA_H_
-#define _FSL_LCDIC_DMA_H_
+#ifndef FSL_LCDIC_DMA_H_
+#define FSL_LCDIC_DMA_H_
 
 #include "fsl_lcdic.h"
 #include "fsl_dma.h"
@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_LCDIC_DMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
-/*@}*/
+/*! @} */
 
 /* Forward declaration of the handle typedef. */
 typedef struct _lcdic_dma_handle lcdic_dma_handle_t;
@@ -121,4 +121,4 @@ void LCDIC_TransferHandleIRQDMA(LCDIC_Type *base, void *handle);
 
 /*! @} */
 
-#endif /* _FSL_LCDIC_DMA_H_ */
+#endif /* FSL_LCDIC_DMA_H_ */

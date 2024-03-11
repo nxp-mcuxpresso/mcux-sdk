@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2022 NXP                                                  */
+/* Copyright 2020-2023 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -38,7 +38,7 @@ extern "C" {
  * @ingroup mcuxClAead
  */
 
-
+MCUX_CSSL_ANALYSIS_START_PATTERN_EXTERNAL_API_DECLARATIONS()
 
 /**
  * @brief AES CCM encrypt mode descriptor
@@ -83,8 +83,9 @@ extern const mcuxClAead_ModeDescriptor_t mcuxClAead_ModeDescriptor_AES_GCM_DEC;
  */
 static mcuxClAead_Mode_t mcuxClAead_Mode_AES_GCM_DEC =
   &mcuxClAead_ModeDescriptor_AES_GCM_DEC;
-/** @} */
 
+
+MCUX_CSSL_ANALYSIS_STOP_PATTERN_EXTERNAL_API_DECLARATIONS()
 
 #ifdef __cplusplus
 } /* extern "C" */

@@ -17,6 +17,7 @@
  */
 
 #include <mcuxClCore_Platform.h>
+#include <mcuxClBuffer.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
 #include <mcuxClSession.h>
@@ -38,23 +39,23 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_EdDSA_GenerateProtocol
     (void) pSession;
 
     /* Create pHashPrefix buffer after the protocol descriptor. */
-    /* It is assumed that sufficient space was allocated by users, with the macro MCUXCLECC_EDDSA_ED25519_SIZE_HASH_PREFIX() */
+    /* It is assumed that sufficient space was allocated by users with the macro MCUXCLECC_EDDSA_SIZE_HASH_PREFIX */
     MCUX_CSSL_ANALYSIS_START_PATTERN_REINTERPRET_MEMORY_OF_OPAQUE_TYPES()
-    mcuxCl_Buffer_t pHashPrefix = (mcuxCl_Buffer_t) ((uint8_t*)pProtocolDescriptor + sizeof(mcuxClEcc_EdDSA_SignatureProtocolDescriptor_t));
+    uint8_t *pHashPrefix = (uint8_t*)pProtocolDescriptor + sizeof(mcuxClEcc_EdDSA_SignatureProtocolDescriptor_t);
     MCUX_CSSL_ANALYSIS_STOP_PATTERN_REINTERPRET_MEMORY()
 
     /* Generate the hash prefix */
     MCUX_CSSL_FP_FUNCTION_CALL(retVal_GenHashPrefix, mcuxClEcc_EdDSA_GenerateHashPrefix(pDomainParams, phflag, pContext, contextLen, pHashPrefix));
     if (MCUXCLECC_STATUS_OK != retVal_GenHashPrefix)
     {
-        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_EdDSA_GenerateHashPrefix, MCUXCLECC_STATUS_FAULT_ATTACK);
+        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_EdDSA_GenerateProtocolDescriptor, MCUXCLECC_STATUS_FAULT_ATTACK);
     }
 
     pProtocolDescriptor->generateOption = 0u;
     pProtocolDescriptor->verifyOption = 0u;
     pProtocolDescriptor->phflag = phflag;
-    pProtocolDescriptor->pHashPrefix = (const uint8_t*)pHashPrefix;
-    pProtocolDescriptor->hashPrefixLen = MCUXCLECC_EDDSA_ED25519_SIZE_HASH_PREFIX(contextLen);
+    pProtocolDescriptor->pHashPrefix = pHashPrefix;
+    pProtocolDescriptor->hashPrefixLen = MCUXCLECC_EDDSA_SIZE_HASH_PREFIX(pDomainParams->domPrefixLen, contextLen);
 
     MCUX_CSSL_FP_FUNCTION_EXIT_WITH_CHECK(mcuxClEcc_EdDSA_GenerateProtocolDescriptor, MCUXCLECC_STATUS_OK, MCUXCLECC_STATUS_FAULT_ATTACK,
         MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEcc_EdDSA_GenerateHashPrefix) );

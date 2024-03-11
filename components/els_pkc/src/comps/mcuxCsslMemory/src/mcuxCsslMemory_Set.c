@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2021-2022 NXP                                                  */
+/* Copyright 2021-2023 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -46,7 +46,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxCsslMemory_Status_t) mcuxCsslMemory_Set
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxCsslMemory_Set, MCUXCSSLMEMORY_STATUS_FAULT);
     }
 
-    if ((NULL == pDst) || (0u == length))
+    if (NULL == pDst)
     {
         MCUX_CSSL_FP_FUNCTION_EXIT(mcuxCsslMemory_Set, MCUXCSSLMEMORY_STATUS_INVALID_PARAMETER);
     }
@@ -56,23 +56,24 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxCsslMemory_Status_t) mcuxCsslMemory_Set
     uint32_t wordVal = ((uint32_t)val << 24) | ((uint32_t)val << 16) | ((uint32_t)val << 8) | (uint32_t)val;
     const uint32_t cpuWordSize = sizeof(uint32_t);
 
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_CAST_VOID()
     volatile uint8_t *p8Dst = (volatile uint8_t *) pDst; // needs to be aligned
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CAST_VOID()
 
-#ifdef __COVERITY__
-#pragma coverity compliance block deviate MISRA_C_2012_Rule_11_6 "Exception 6: casting void pointer to security counter type"
-#endif
-   MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(INTEGER_OVERFLOW, "pDst will be in the valid range pDst[0 ~ copyLen].")
-   MCUX_CSSL_SC_ADD((uint32_t) pDst + copyLen);
-   MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(INTEGER_OVERFLOW)
-#ifdef __COVERITY__
-#pragma coverity compliance end_block MISRA_C_2012_Rule_11_6
-#endif
+
+    MCUX_CSSL_ANALYSIS_START_PATTERN_SC_CAST_POINTERS()
+    MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(INTEGER_OVERFLOW, "pDst will be in the valid range pDst[0 ~ copyLen].")
+    MCUX_CSSL_SC_ADD((uint32_t) pDst + copyLen);
+    MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(INTEGER_OVERFLOW)
+    MCUX_CSSL_ANALYSIS_STOP_PATTERN_SC_CAST_POINTERS()
 
     MCUX_CSSL_FP_LOOP_DECL(FirstByteLoop);
     MCUX_CSSL_FP_LOOP_DECL(SecondByteLoop);
     MCUX_CSSL_FP_LOOP_DECL(WordLoop);
 
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_TYPECAST_BETWEEN_INTEGER_AND_POINTER("Typecast pointer to integer to check address for alignment")
     while ((0u != ((uint32_t) p8Dst & (cpuWordSize - 1u))) && (0u != remainLength))
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_TYPECAST_BETWEEN_INTEGER_AND_POINTER()
     {
         MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(INTEGER_OVERFLOW, "p8Dst will be in the valid range pDst[0 ~ copyLen].")
         MCUX_CSSL_FP_LOOP_ITERATION(FirstByteLoop);
@@ -83,18 +84,16 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxCsslMemory_Status_t) mcuxCsslMemory_Set
     }
 
 
-#ifdef __COVERITY__
-#pragma coverity compliance block deviate MISRA_C_2012_Rule_11_3 "Exception 9: re-interpreting the memory"
-#endif
+    MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("p8Dst is CPU word-aligned after the previous loop")
     volatile uint32_t *p32Dst = (volatile uint32_t *) p8Dst;  /* p8Dst is CPU word-aligned after the previous loop. */
-#ifdef __COVERITY__
-#pragma coverity compliance end_block MISRA_C_2012_Rule_11_3
-#endif
+    MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
     while (cpuWordSize <= remainLength)
     {
         MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(INTEGER_OVERFLOW, "p32Dst will be in the valid range pDst[0 ~ copyLen].")
         MCUX_CSSL_FP_LOOP_ITERATION(WordLoop);
+        MCUX_CSSL_ANALYSIS_START_SUPPRESS_POINTER_CASTING("p8Dst is CPU word-aligned after the previous loop")
         *p32Dst = wordVal;
+        MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_POINTER_CASTING()
         p32Dst++;
         remainLength -= cpuWordSize;
         MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(INTEGER_OVERFLOW)
@@ -112,15 +111,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxCsslMemory_Status_t) mcuxCsslMemory_Set
     }
 
     MCUX_CSSL_SC_SUB((uint32_t) p8Dst);
-#ifdef __COVERITY__
-#pragma coverity compliance block deviate MISRA_C_2012_Rule_11_6 "Exception 6: casting void pointer to security counter type"
-#endif
+    MCUX_CSSL_ANALYSIS_START_PATTERN_SC_CAST_POINTERS()
     MCUX_CSSL_ANALYSIS_COVERITY_START_FALSE_POSITIVE(INTEGER_OVERFLOW, "modular arithmetic, mod 4")
     MCUX_CSSL_FP_COUNTER_STMT(uint32_t noOfBytesToAlignment = ((0u - ((uint32_t) pDst)) % cpuWordSize));
     MCUX_CSSL_ANALYSIS_COVERITY_STOP_FALSE_POSITIVE(INTEGER_OVERFLOW)
-#ifdef __COVERITY__
-#pragma coverity compliance end_block MISRA_C_2012_Rule_11_6
-#endif
+    MCUX_CSSL_ANALYSIS_STOP_PATTERN_SC_CAST_POINTERS()
+
     MCUX_CSSL_FP_COUNTER_STMT(uint32_t firstByteIteration = (copyLen > noOfBytesToAlignment)
                              ? noOfBytesToAlignment
                              : copyLen);

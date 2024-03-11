@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -8,7 +8,6 @@
 #ifndef _BOARD_H_
 #define _BOARD_H_
 
-#include "clock_config.h"
 #include "fsl_common.h"
 #include "fsl_gpio.h"
 
@@ -120,7 +119,7 @@
 #define BOARD_SMARTCARD_MODULE                (USIM)      /*!< SMARTCARD communicational module instance */
 #define BOARD_SMARTCARD_MODULE_IRQ            (USIM_IRQn) /*!< SMARTCARD communicational module IRQ handler */
 #define BOARD_SMARTCARD_CLOCK_MODULE_CLK_FREQ (CLOCK_GetUsimClkFreq())
-#define BOARD_SMARTCARD_CLOCK_VALUE           (4000000U) /*!< SMARTCARD clock frequency (4Mhz) */
+#define BOARD_SMARTCARD_CLOCK_VALUE           (4000000U)  /*!< SMARTCARD clock frequency (4Mhz) */
 #define BOARD_SMARTCARD_IRQ_PORT              (0)
 #define BOARD_SMARTCARD_IRQ_PIN               (19)
 #define BOARD_SMARTCARD_TS_TIMER_IRQ          (CTIMER0_IRQn)

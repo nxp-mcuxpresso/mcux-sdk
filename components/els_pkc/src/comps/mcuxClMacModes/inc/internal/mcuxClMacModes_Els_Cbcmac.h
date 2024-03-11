@@ -16,7 +16,7 @@
 
 #include <mcuxClConfig.h> // Exported features flags header
 #include <mcuxClCore_Platform.h>
-#include <mcuxClCore_Buffer.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClKey_Types.h>
 #include <mcuxClSession_Types.h>
 #include <mcuxClMac_Types.h>
@@ -50,7 +50,7 @@ MCUX_CSSL_FP_FUNCTION_DECL(mcuxClMacModes_Engine_CBCMAC_Update)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMacModes_Engine_CBCMAC_Update(
   mcuxClSession_Handle_t session,           /*! CBC-MAC session handle */
   mcuxClMacModes_Context_t * const pContext,/*! CBC-MAC context */
-  const uint8_t * const pIn,               /*! CBC-MAC input */
+  mcuxCl_InputBuffer_t pIn,                 /*! CBC-MAC input */
   uint32_t inLength                        /*! Input size */
 );
 
@@ -58,7 +58,7 @@ MCUX_CSSL_FP_FUNCTION_DECL(mcuxClMacModes_Engine_CBCMAC_Finalize)
 MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClMac_Status_t) mcuxClMacModes_Engine_CBCMAC_Finalize(
   mcuxClSession_Handle_t session,           /*! CBC-MAC session handle */
   mcuxClMacModes_Context_t * const pContext,/*! CBC-MAC context */
-  uint8_t * const pOut,                    /*! CBC-MAC output */
+  mcuxCl_Buffer_t pOut,                     /*! CBC-MAC output */
   uint32_t * const pOutLength              /*! Output size */
 );
 

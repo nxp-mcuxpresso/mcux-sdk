@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2022-2023 NXP                                                  */
+/* Copyright 2022-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -19,6 +19,7 @@
  * @brief   Example for the mcuxClRandomModes component
  */
 
+#include <mcuxClToolchain.h>
 #include <mcuxClRandom.h>
 #include <mcuxClRandomModes.h>
 #include <mcuxClSession.h>
@@ -26,8 +27,13 @@
 #include <mcuxClCore_FunctionIdentifiers.h> // Code flow protection
 #include <mcuxClExample_Session_Helper.h>
 #include <mcuxClCore_Examples.h>
-#include <mcuxClEls.h> // Interface to the entire mcuxClEls component
-#include <mcuxClExample_ELS_Helper.h>
+
+#include <mcuxClBuffer.h>
+
+static const ALIGNED uint8_t randomData[] = { 0x8au,0x76u,0x90u,0xd2u,0xd9u,0x55u,0x3cu,0x93u,
+                                              0x03u,0x52u,0x3au,0x3cu,0xbeu,0xe1u,0x39u,0xa4u,
+                                              0xefu,0xf1u,0xc4u,0xbbu,0xa3u,0xc7u,0x09u,0xf3u,
+                                              0xb7u,0x14u,0x07u,0xb2u,0xd8u,0x98u,0xa0u,0xaeu };
 
 /******************************************************************************
  * Local and global function declarations
@@ -35,73 +41,24 @@
 static mcuxClRandom_Status_t RNG_Patch_function(
     mcuxClSession_Handle_t session,
     mcuxClRandom_Context_t pCustomCtx,
-    uint8_t *pOut,
+    mcuxCl_Buffer_t pOut,
     uint32_t outLength
 )
 {
-    mcuxClSession_Descriptor_t sessionDesc;
-    mcuxClSession_Handle_t sessionCustom = &sessionDesc;
-    uint32_t cpuWa[MCUXCLRANDOMMODES_MAX_CPU_WA_BUFFER_SIZE / sizeof(uint32_t)];
+    (void)session;
+    (void)pCustomCtx;
+    uint32_t indexRandomData = 0u;
 
-    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(si_status, token, mcuxClSession_init(
-    /* mcuxClSession_Handle_t session:      */ sessionCustom,
-    /* uint32_t * const cpuWaBuffer:       */ cpuWa,
-    /* uint32_t cpuWaSize:                 */ MCUXCLRANDOMMODES_MAX_CPU_WA_BUFFER_SIZE,
-    /* uint32_t * const pkcWaBuffer:       */ NULL,
-    /* uint32_t pkcWaSize:                 */ 0U
-    ));
-    /* mcuxClSession_init is a flow-protected function: Check the protection token and the return value */
-    if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClSession_init) != token) || (MCUXCLSESSION_STATUS_OK != si_status))
+    for (uint32_t i = 0u; i < outLength; i++)
     {
-        return MCUXCLRANDOM_STATUS_ERROR;
-    }
-    MCUX_CSSL_FP_FUNCTION_CALL_END();
+        MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(be_status, be_token, mcuxClBuffer_export(pOut, i, (uint8_t const *)&randomData[indexRandomData], 1u));
+        if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClBuffer_export) != be_token) || (MCUXCLBUFFER_STATUS_OK != be_status))
+        {
+          return MCUXCLRANDOM_STATUS_FAULT_ATTACK;
+        }
+        MCUX_CSSL_FP_FUNCTION_CALL_END();
 
-    /**************************************************************************/
-    /* DRBG initialization                                                    */
-    /**************************************************************************/
-
-    /* Initialize an AES-256 CTR_DRBG DRG.3 */
-    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(ri_status, init_token, mcuxClRandom_init(
-                                        sessionCustom,
-                                        (mcuxClRandom_Context_t)pCustomCtx,
-                                        mcuxClRandomModes_Mode_CtrDrbg_AES256_DRG3
-                                   ));
-
-    if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_init) != init_token) || (MCUXCLRANDOM_STATUS_OK != ri_status))
-    {
-      return MCUXCLRANDOM_STATUS_ERROR;
-    }
-    MCUX_CSSL_FP_FUNCTION_CALL_END();
-
-    /**************************************************************************/
-    /* Generate random byte strings                                           */
-    /**************************************************************************/
-    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(rg_status, generate_token, mcuxClRandom_generate(
-                                        sessionCustom,
-                                        pOut,
-                                        outLength
-                                   ));
-
-    if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_generate) != generate_token) || (MCUXCLRANDOM_STATUS_OK != rg_status))
-    {
-      return MCUXCLRANDOM_STATUS_ERROR;
-    }
-    MCUX_CSSL_FP_FUNCTION_CALL_END();
-
-    /* Random uninit. */
-    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(ru_status, uninit_token, mcuxClRandom_uninit(sessionCustom));
-
-    if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_uninit) != uninit_token) || (MCUXCLRANDOM_STATUS_OK != ru_status))
-    {
-      return MCUXCLRANDOM_STATUS_ERROR;
-    }
-    MCUX_CSSL_FP_FUNCTION_CALL_END();    
-
-    /** Destroy Session and cleanup Session **/
-    if(!mcuxClExample_Session_Clean(sessionCustom))
-    {
-        return MCUXCLRANDOM_STATUS_ERROR;
+        indexRandomData = (indexRandomData + 1u) % sizeof(randomData);
     }
 
     return MCUXCLRANDOM_STATUS_OK;
@@ -116,29 +73,21 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClRandomModes_PatchMode_CtrDrbg_AES256_DRG3_example)
     /* Preparation                                                            */
     /**************************************************************************/
 
-    /** Initialize ELS, Enable the ELS **/
-    if(!mcuxClExample_Els_Init(MCUXCLELS_RESET_DO_NOT_CANCEL))
-    {
-        return MCUXCLEXAMPLE_STATUS_ERROR;
-    }
-
     mcuxClSession_Descriptor_t sessionDesc;
     mcuxClSession_Handle_t session = &sessionDesc;
-    MCUXCLEXAMPLE_ALLOCATE_AND_INITIALIZE_SESSION(session, MCUXCLRANDOMMODES_MAX_CPU_WA_BUFFER_SIZE + sizeof(mcuxClSession_Descriptor_t), 0u);
+    MCUXCLEXAMPLE_ALLOCATE_AND_INITIALIZE_SESSION(session, MCUXCLRANDOMMODES_MAX_CPU_WA_BUFFER_SIZE, 0u);
 
     /* Fill mode descriptor with the relevant data */
-    uint32_t customModeDescBytes[(MCUXCLRANDOMMODES_PATCHMODE_DESCRIPTOR_SIZE + sizeof(uint32_t) - 1U)/sizeof(uint32_t)];
+    uint32_t customModeDescBytes[MCUXCLRANDOMMODES_PATCHMODE_DESCRIPTOR_SIZE_IN_WORDS];
     mcuxClRandom_ModeDescriptor_t *mcuxClRandomModes_Mode_Custom = (mcuxClRandom_ModeDescriptor_t *) customModeDescBytes;
 
-    uint32_t rngContext[MCUXCLRANDOMMODES_CTR_DRBG_AES256_CONTEXT_SIZE_IN_WORDS] = {0};
     /**************************************************************************/
-    /* RANDOM Patch Mode creation, use                                        */
-    /* mcuxClRandomModes_Mode_CtrDrbg_AES256_DRG3 as customer generate Algo    */
+    /* RANDOM Patch Mode creation, use custom function RNG_Patch_function     */
     /**************************************************************************/
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(cp_status, cp_token, mcuxClRandomModes_createPatchMode(
                                         mcuxClRandomModes_Mode_Custom,
                                         (mcuxClRandomModes_CustomGenerateAlgorithm_t)RNG_Patch_function,
-                                        (mcuxClRandom_Context_t)rngContext,
+                                        NULL,
                                         256U
                                    ));
 
@@ -168,16 +117,16 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClRandomModes_PatchMode_CtrDrbg_AES256_DRG3_example)
     /* Generate several random byte strings                                   */
     /**************************************************************************/
     /* Buffers to store the generated random values in. */
-    uint8_t drbg_buffer1[3u];
-    uint8_t drbg_buffer2[16u];
-    uint8_t drbg_buffer3[31u];
+    ALIGNED uint8_t drbg_data1[3u];
+    MCUXCLBUFFER_INIT(drbgBuf1, NULL, &drbg_data1[0], 3u);
+    ALIGNED uint8_t drbg_data2[sizeof(randomData) + 16u];
+    MCUXCLBUFFER_INIT(drbgBuf2, NULL, &drbg_data2[0], sizeof(randomData) + 16u);
 
-
-    /* Generate random values of smaller amount than one word size. */
+    /* Generate random values of smaller amount than the size of prepared random data array. */
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(rg1_status, generate1_token, mcuxClRandom_generate(
                                         session,
-                                        drbg_buffer1,
-                                        sizeof(drbg_buffer1)));
+                                        drbgBuf1,
+                                        sizeof(drbg_data1)));
 
     if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_generate) != generate1_token) || (MCUXCLRANDOM_STATUS_OK != rg1_status))
     {
@@ -185,11 +134,17 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClRandomModes_PatchMode_CtrDrbg_AES256_DRG3_example)
     }
     MCUX_CSSL_FP_FUNCTION_CALL_END();
 
-    /* Generate random values of multiple of word size. */
+    /* Check if the generated data meets expectation */
+    if(!mcuxClCore_assertEqual(drbg_data1, randomData, sizeof(drbg_data1)))
+    {
+        return MCUXCLEXAMPLE_STATUS_ERROR;
+    }
+
+    /* Generate random values of larger amount than the size of prepared random data array. */
     MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(rg2_status, generate2_token, mcuxClRandom_generate(
                                         session,
-                                        drbg_buffer2,
-                                        sizeof(drbg_buffer2)));
+                                        drbgBuf2,
+                                        sizeof(drbg_data2)));
 
     if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_generate) != generate2_token) || (MCUXCLRANDOM_STATUS_OK != rg2_status))
     {
@@ -197,17 +152,15 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClRandomModes_PatchMode_CtrDrbg_AES256_DRG3_example)
     }
     MCUX_CSSL_FP_FUNCTION_CALL_END();
 
-    /* Generate random values of larger amount than but not multiple of one word size. */
-    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(rg3_status, generate3_token, mcuxClRandom_generate(
-                                        session,
-                                        drbg_buffer3,
-                                        sizeof(drbg_buffer3)));
-
-    if((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClRandom_generate) != generate3_token) || (MCUXCLRANDOM_STATUS_OK != rg3_status))
+    /* Check if the generated data meets expectation */
+    if(!mcuxClCore_assertEqual(drbg_data2, randomData, sizeof(randomData)))
     {
-      return MCUXCLEXAMPLE_STATUS_ERROR;
+        return MCUXCLEXAMPLE_STATUS_ERROR;
     }
-    MCUX_CSSL_FP_FUNCTION_CALL_END();
+    if(!mcuxClCore_assertEqual(drbg_data2 + sizeof(randomData), randomData, 16u))
+    {
+        return MCUXCLEXAMPLE_STATUS_ERROR;
+    }
 
     /**************************************************************************/
     /* Cleanup                                                                */
@@ -224,12 +177,6 @@ MCUXCLEXAMPLE_FUNCTION(mcuxClRandomModes_PatchMode_CtrDrbg_AES256_DRG3_example)
 
     /** Destroy Session and cleanup Session **/
     if(!mcuxClExample_Session_Clean(session))
-    {
-        return MCUXCLEXAMPLE_STATUS_ERROR;
-    }
-
-    /** Disable the ELS **/
-    if(!mcuxClExample_Els_Disable())
     {
         return MCUXCLEXAMPLE_STATUS_ERROR;
     }

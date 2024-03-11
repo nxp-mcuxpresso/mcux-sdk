@@ -15,11 +15,13 @@
  *  @brief Implementation of the multipart and one shot functions of the mcuxClAead component */
 
 #include <mcuxClAead.h>
-#include <internal/mcuxClAead_Internal_Ctx.h>
-#include <internal/mcuxClAead_Internal_Descriptor.h>
+#include <internal/mcuxClAead_Ctx.h>
+#include <internal/mcuxClAead_Descriptor.h>
 #include <mcuxClSession.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+
+#include <internal/mcuxClSession_Internal_EntryExit.h>
 
 
 
@@ -124,7 +126,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t)  mcuxClAead_process(
   uint32_t * const pOutLength
 )
 {
-    MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClAead_process);
+    MCUXCLSESSION_ENTRY(session, mcuxClAead_process, diRefValue, MCUXCLAEAD_STATUS_FAULT_ATTACK,
+                                pContext->mode->protection_token_process)
 
     MCUX_CSSL_FP_FUNCTION_CALL(status, pContext->mode->process(
       /* mcuxClSession_Handle_t session,        */ session,
@@ -137,12 +140,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t)  mcuxClAead_process(
 
     if(MCUXCLAEAD_STATUS_OK != status)
     {
-       MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClAead_process, MCUXCLAEAD_STATUS_ERROR,
-                                 pContext->mode->protection_token_process);
+      // TODO CLNS-11341: fix FP balancing, remove MCUX_CSSL_FP_FUNCTION_EXIT, uncomment MCUXCLSESSION_EXIT
+      MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClAead_process, MCUXCLAEAD_STATUS_ERROR);
+      // MCUXCLSESSION_EXIT(session, mcuxClAead_process, diRefValue, MCUXCLAEAD_STATUS_ERROR, MCUXCLAEAD_STATUS_FAULT_ATTACK)
     }
 
-    MCUX_CSSL_FP_FUNCTION_EXIT_WITH_CHECK(mcuxClAead_process, MCUXCLAEAD_STATUS_OK, MCUXCLAEAD_STATUS_FAULT_ATTACK,
-                                         pContext->mode->protection_token_process);
+    MCUXCLSESSION_EXIT(session, mcuxClAead_process, diRefValue, MCUXCLAEAD_STATUS_OK, MCUXCLAEAD_STATUS_FAULT_ATTACK)
 }
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClAead_process_adata)
@@ -153,7 +156,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t)  mcuxClAead_process_adata(
   uint32_t adataLength
 )
 {
-    MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClAead_process_adata);
+    MCUXCLSESSION_ENTRY(session, mcuxClAead_process_adata, diRefValue, MCUXCLAEAD_STATUS_FAULT_ATTACK,
+                                pContext->mode->protection_token_processAad)
 
     MCUX_CSSL_FP_FUNCTION_CALL(status, pContext->mode->processAad(
       /* mcuxClSession_Handle_t session,        */ session,
@@ -164,12 +168,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t)  mcuxClAead_process_adata(
 
     if(MCUXCLAEAD_STATUS_OK != status)
     {
-       MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClAead_process_adata, MCUXCLAEAD_STATUS_ERROR,
-                                 pContext->mode->protection_token_processAad);
+      // TODO CLNS-11341: fix FP balancing, remove MCUX_CSSL_FP_FUNCTION_EXIT, uncomment MCUXCLSESSION_EXIT
+      MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClAead_process_adata, MCUXCLAEAD_STATUS_ERROR);
+      // MCUXCLSESSION_EXIT(session, mcuxClAead_process_adata, diRefValue, MCUXCLAEAD_STATUS_ERROR, MCUXCLAEAD_STATUS_FAULT_ATTACK)
     }
 
-    MCUX_CSSL_FP_FUNCTION_EXIT_WITH_CHECK(mcuxClAead_process_adata, MCUXCLAEAD_STATUS_OK, MCUXCLAEAD_STATUS_FAULT_ATTACK,
-                                         pContext->mode->protection_token_processAad);
+    MCUXCLSESSION_EXIT(session, mcuxClAead_process_adata, diRefValue, MCUXCLAEAD_STATUS_OK, MCUXCLAEAD_STATUS_FAULT_ATTACK)
 }
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClAead_finish)
@@ -181,7 +185,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t)  mcuxClAead_finish(
   mcuxCl_Buffer_t pTag
 )
 {
-    MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClAead_finish);
+    MCUXCLSESSION_ENTRY(session, mcuxClAead_finish, diRefValue, MCUXCLAEAD_STATUS_FAULT_ATTACK,
+                                pContext->mode->protection_token_finish)
 
 
     MCUX_CSSL_FP_FUNCTION_CALL(status, pContext->mode->finish(
@@ -194,12 +199,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t)  mcuxClAead_finish(
 
     if(MCUXCLAEAD_STATUS_OK != status)
     {
-       MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClAead_finish, MCUXCLAEAD_STATUS_ERROR,
-                                 pContext->mode->protection_token_finish);
+      // TODO CLNS-11341: fix FP balancing, remove MCUX_CSSL_FP_FUNCTION_EXIT, uncomment MCUXCLSESSION_EXIT
+      MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClAead_finish, MCUXCLAEAD_STATUS_ERROR);
+      // MCUXCLSESSION_EXIT(session, mcuxClAead_finish, diRefValue, MCUXCLAEAD_STATUS_ERROR, MCUXCLAEAD_STATUS_FAULT_ATTACK)
     }
 
-    MCUX_CSSL_FP_FUNCTION_EXIT_WITH_CHECK(mcuxClAead_finish, MCUXCLAEAD_STATUS_OK, MCUXCLAEAD_STATUS_FAULT_ATTACK,
-                                         pContext->mode->protection_token_finish);
+    MCUXCLSESSION_EXIT(session, mcuxClAead_finish, diRefValue, MCUXCLAEAD_STATUS_OK, MCUXCLAEAD_STATUS_FAULT_ATTACK)
 }
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClAead_verify)
@@ -211,7 +216,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t) mcuxClAead_verify(
   uint32_t * const pOutLength
 )
 {
-    MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClAead_verify);
+    MCUXCLSESSION_ENTRY(session, mcuxClAead_verify, diRefValue, MCUXCLAEAD_STATUS_FAULT_ATTACK,
+                                pContext->mode->protection_token_verify)
 
     MCUX_CSSL_FP_FUNCTION_CALL(status, pContext->mode->verify(
       /* mcuxClSession_Handle_t session,        */ session,
@@ -223,11 +229,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClAead_Status_t) mcuxClAead_verify(
 
     if(MCUXCLAEAD_STATUS_OK != status)
     {
-       MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClAead_verify, MCUXCLAEAD_STATUS_ERROR,
-                                 pContext->mode->protection_token_verify);
+      // TODO CLNS-11341: fix FP balancing, remove MCUX_CSSL_FP_FUNCTION_EXIT, uncomment MCUXCLSESSION_EXIT
+      MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClAead_verify, MCUXCLAEAD_STATUS_ERROR);
+      // MCUXCLSESSION_EXIT(session, mcuxClAead_verify, diRefValue, MCUXCLAEAD_STATUS_ERROR, MCUXCLAEAD_STATUS_FAULT_ATTACK)
+
     }
 
-    MCUX_CSSL_FP_FUNCTION_EXIT_WITH_CHECK(mcuxClAead_verify, MCUXCLAEAD_STATUS_OK, MCUXCLAEAD_STATUS_FAULT_ATTACK,
-                                         pContext->mode->protection_token_verify);
+    MCUXCLSESSION_EXIT(session, mcuxClAead_verify, diRefValue, MCUXCLAEAD_STATUS_OK, MCUXCLAEAD_STATUS_FAULT_ATTACK)
 }
 

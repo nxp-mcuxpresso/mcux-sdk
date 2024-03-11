@@ -20,6 +20,7 @@
 #include <mcuxClSession.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClCore_Macros.h>
 #include <mcuxClPkc.h>
 #include <mcuxClMath.h>
 #include <mcuxClMemory.h>
@@ -30,8 +31,7 @@
 #include <internal/mcuxClSession_Internal.h>
 #include <internal/mcuxClMemory_Copy_Internal.h>
 #include <internal/mcuxClEcc_Internal.h>
-#include <internal/mcuxClEcc_Internal_SetupEnvironment_FUP.h>
-
+#include <internal/mcuxClEcc_Internal_FUP.h>
 
 /**
  * This function sets up the general environment used by ECC functions.
@@ -63,12 +63,12 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_SetupEnvironment(mcuxC
     const uint32_t byteLenP = (uint32_t) pCommonDomainParams->byteLenP;
     const uint32_t byteLenN = (uint32_t) pCommonDomainParams->byteLenN;
     const uint32_t byteLenMax = ((byteLenP > byteLenN) ? byteLenP : byteLenN);
-    const uint32_t operandSize = MCUXCLPKC_ROUNDUP_SIZE(byteLenMax);
+    const uint32_t operandSize = MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(byteLenMax);
     const uint32_t bufferSize = operandSize + MCUXCLPKC_WORDSIZE;
 
     /* Setup CPU workarea and PKC buffer. */
     const uint32_t byteLenOperandsTable = (sizeof(uint16_t)) * (ECC_NO_OF_VIRTUALS + (uint32_t) noOfBuffers);
-    const uint32_t alignedByteLenCpuWa = (sizeof(mcuxClEcc_CpuWa_t)) + MCUXCLECC_ALIGNED_SIZE(byteLenOperandsTable);
+    const uint32_t alignedByteLenCpuWa = (sizeof(mcuxClEcc_CpuWa_t)) + MCUXCLCORE_ALIGN_TO_CPU_WORDSIZE(byteLenOperandsTable);
     const uint32_t wordNumCpuWa = alignedByteLenCpuWa / (sizeof(uint32_t));
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES("MISRA Ex. 9 to Rule 11.3 - mcuxClEcc_CpuWa_t is 32 bit aligned")
     mcuxClEcc_CpuWa_t *pCpuWorkarea = (mcuxClEcc_CpuWa_t *) mcuxClSession_allocateWords_cpuWa(pSession, wordNumCpuWa);

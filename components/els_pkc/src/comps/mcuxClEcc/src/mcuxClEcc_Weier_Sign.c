@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -25,6 +25,8 @@
 #include <mcuxClSession.h>
 #include <mcuxCsslFlowProtection.h>
 #include <mcuxClCore_FunctionIdentifiers.h>
+#include <mcuxClCore_Macros.h>
+#include <mcuxClBuffer.h>
 #include <mcuxClEcc.h>
 #include <mcuxCsslAnalysis.h>
 
@@ -37,8 +39,8 @@
 #include <internal/mcuxClEcc_Internal_Random.h>
 #include <internal/mcuxClEcc_Weier_Internal.h>
 #include <internal/mcuxClEcc_Weier_Internal_FP.h>
-#include <internal/mcuxClEcc_Weier_Sign_FUP.h>
-#include <internal/mcuxClEcc_Weier_Internal_ConvertPoint_FUP.h>
+#include <internal/mcuxClEcc_Weier_Internal_FUP.h>
+#include <internal/mcuxClEcc_ECDSA_Internal.h>
 
 
 MCUX_CSSL_FP_FUNCTION_DEF(mcuxClEcc_Sign)
@@ -53,7 +55,7 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Sign(
     /**********************************************************/
 
     /* mcuxClEcc_CpuWa_t will be allocated and placed in the beginning of CPU workarea free space by SetupEnvironment. */
-    /* MISRA Ex. 9 to Rule 11.3 - mcuxClEcc_CpuWa_t is 32 bit aligned */
+    /* MISRA Ex. 9 to Rule 11.3 - mcuxClEcc_CpuWa_t is 32 bit aligned */
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES("MISRA Ex. 9 to Rule 11.3 - mcuxClEcc_CpuWa_t is 32 bit aligned")
     mcuxClEcc_CpuWa_t *pCpuWorkarea = (mcuxClEcc_CpuWa_t *) mcuxClSession_allocateWords_cpuWa(pSession, 0u);
     MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY_BETWEEN_INAPT_ESSENTIAL_TYPES()
@@ -109,8 +111,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Sign(
         /**********************************************************/
 
         /* Import G to (X1,Y1). */  /* TODO: create a function to import and check point. */
-        MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(WEIER_X1, pParam->curveParam.pG, byteLenP);
-        MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(WEIER_Y1, pParam->curveParam.pG + byteLenP, byteLenP);
+        MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_Sign, WEIER_X1, pParam->curveParam.pG, byteLenP);
+        MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFEROFFSET(mcuxClEcc_Sign, WEIER_Y1, pParam->curveParam.pG, byteLenP, byteLenP);
 
         /* Check G in (X1,Y1) affine NR. */
 //      MCUXCLPKC_WAITFORREADY();  <== there is WaitForFinish in import function.
@@ -149,30 +151,63 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Sign(
         /* k = k0 * k1 mod n, where k0 is a 64-bit odd number     */
         /**********************************************************/
 
-        MCUX_CSSL_FP_FUNCTION_CALL(ret_CoreKeyGen, mcuxClEcc_Int_CoreKeyGen(pSession, byteLenN));
-        if (MCUXCLECC_STATUS_OK != ret_CoreKeyGen)
+        if(MCUXCLECC_ECDSA_SIGNATURE_GENERATE_RANDOMIZED == pParam->pMode->generateOption)
         {
-            if ( (MCUXCLECC_STATUS_RNG_ERROR == ret_CoreKeyGen)
-                 && (0u == fail_r) && (0u == fail_s) )
+            MCUX_CSSL_FP_FUNCTION_CALL(ret_BlindedSecretKeyGen_Random, mcuxClEcc_WeierECC_BlindedSecretKeyGen_RandomWithExtraBits(pSession, byteLenN));
+            if (MCUXCLECC_STATUS_OK != ret_BlindedSecretKeyGen_Random)
             {
-                mcuxClSession_freeWords_pkcWa(pSession, pCpuWorkarea->wordNumPkcWa);
-                MCUXCLPKC_FP_DEINITIALIZE_RELEASE(pSession, &pCpuWorkarea->pkcStateBackup,
-                    mcuxClEcc_Sign, MCUXCLECC_STATUS_FAULT_ATTACK);
+                if ( (MCUXCLECC_STATUS_RNG_ERROR == ret_BlindedSecretKeyGen_Random)
+                    && (0u == fail_r) && (0u == fail_s) )
+                {
+                    mcuxClSession_freeWords_pkcWa(pSession, pCpuWorkarea->wordNumPkcWa);
+                    MCUXCLPKC_FP_DEINITIALIZE_RELEASE(pSession, &pCpuWorkarea->pkcStateBackup,
+                        mcuxClEcc_Sign, MCUXCLECC_STATUS_FAULT_ATTACK);
 
-                mcuxClSession_freeWords_cpuWa(pSession, pCpuWorkarea->wordNumCpuWa);
+                    mcuxClSession_freeWords_cpuWa(pSession, pCpuWorkarea->wordNumCpuWa);
 
-                MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_Sign, MCUXCLECC_STATUS_RNG_ERROR,
-                    MCUXCLECC_FP_SIGN_BEFORE_LOOP,
-                    MCUXCLECC_FP_SIGN_LOOP_R_1,
-                    MCUXCLPKC_FP_CALLED_DEINITIALIZE_RELEASE);
+                    MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_Sign, MCUXCLECC_STATUS_RNG_ERROR,
+                        MCUXCLECC_FP_SIGN_BEFORE_LOOP,
+                        MCUXCLECC_FP_SIGN_LOOP_R_1_RANDOMIZED,
+                        MCUXCLPKC_FP_CALLED_DEINITIALIZE_RELEASE);
+                }
+
+                MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_Sign, MCUXCLECC_STATUS_FAULT_ATTACK);
             }
+            MCUX_CSSL_FP_LOOP_ITERATION(MainLoop_R,
+            MCUXCLECC_FP_SIGN_LOOP_R_RANDOMIZED );
+        }
+#ifdef MCUXCL_FEATURE_ECC_ECDSA_DETERMINISTIC
+        else if(MCUXCLECC_ECDSA_SIGNATURE_GENERATE_DETERMINISTIC == pParam->pMode->generateOption)
+        {
+            MCUX_CSSL_FP_FUNCTION_CALL(ret_BlindedSecretKeyGen_Deterministic, mcuxClEcc_DeterministicECDSA_BlindedSecretKeyGen(pSession, byteLenN, pParam));
+            if (MCUXCLECC_STATUS_OK != ret_BlindedSecretKeyGen_Deterministic)
+            {
+                if ( (MCUXCLECC_STATUS_RNG_ERROR == ret_BlindedSecretKeyGen_Deterministic)
+                    && (0u == fail_r) && (0u == fail_s) )
+                {
+                    mcuxClSession_freeWords_pkcWa(pSession, pCpuWorkarea->wordNumPkcWa);
+                    MCUXCLPKC_FP_DEINITIALIZE_RELEASE(pSession, &pCpuWorkarea->pkcStateBackup,
+                        mcuxClEcc_Sign, MCUXCLECC_STATUS_FAULT_ATTACK);
 
+                    mcuxClSession_freeWords_cpuWa(pSession, pCpuWorkarea->wordNumCpuWa);
+
+                    MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_Sign, MCUXCLECC_STATUS_RNG_ERROR,
+                        MCUXCLECC_FP_SIGN_BEFORE_LOOP,
+                        MCUXCLECC_FP_SIGN_LOOP_R_1_DETERMINISTIC,
+                        MCUXCLPKC_FP_CALLED_DEINITIALIZE_RELEASE);
+                }
+
+                MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_Sign, MCUXCLECC_STATUS_FAULT_ATTACK);
+            }
+            MCUX_CSSL_FP_LOOP_ITERATION(MainLoop_R,
+            MCUXCLECC_FP_SIGN_LOOP_R_DETERMINISTIC );
+
+        }
+#endif /* MCUXCL_FEATURE_ECC_ECDSA_DETERMINISTIC */
+        else
+        {
             MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_Sign, MCUXCLECC_STATUS_FAULT_ATTACK);
         }
-
-        MCUX_CSSL_FP_LOOP_ITERATION(MainLoop_R,
-            MCUXCLECC_FP_SIGN_LOOP_R );
-
 
         /**********************************************************/
         /* Calculate Q = k1 * (k0 * G)                            */
@@ -241,7 +276,6 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Sign(
         /* T0 = z^(-1) * 256^(-LEN) \equiv z^(-1) * 256^(-2LEN) in MR. */
 
         /* Convert Q to affine coordinates. */
-        /* MISRA Ex. 22, while(0) is allowed */
         MCUXCLPKC_FP_CALCFUP(mcuxClEcc_FUP_Weier_ConvertPoint_ToAffine,
                             mcuxClEcc_FUP_Weier_ConvertPoint_ToAffine_LEN);
 
@@ -279,13 +313,16 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Sign(
         }
 
         /* Generate random number d1 (to blind the private key). */
-        MCUXCLPKC_PKC_CPU_ARBITRATION_WORKAROUND();  // avoid CPU accessing to PKC workarea when PKC is busy
-        uint8_t * ptrZ = MCUXCLPKC_OFFSET2PTR(pOperands[WEIER_Z]);
-        MCUX_CSSL_FP_FUNCTION_CALL(ret_PRNG_GetRandom, mcuxClRandom_ncGenerate(pSession, ptrZ, operandSize));
-        if (MCUXCLRANDOM_STATUS_OK != ret_PRNG_GetRandom)
         {
-            MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_Sign, MCUXCLECC_STATUS_RNG_ERROR);
-        }
+            uint8_t * const ptrZ = MCUXCLPKC_OFFSET2PTR(pOperands[WEIER_Z]);
+            MCUXCLBUFFER_INIT(buffZ, NULL, ptrZ, operandSize);
+            MCUXCLPKC_PKC_CPU_ARBITRATION_WORKAROUND();  // avoid CPU accessing to PKC workarea when PKC is busy
+            MCUX_CSSL_FP_FUNCTION_CALL(ret_PRNG_GetRandom, mcuxClRandom_ncGenerate(pSession, buffZ, operandSize));
+            if (MCUXCLRANDOM_STATUS_OK != ret_PRNG_GetRandom)
+            {
+                MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClEcc_Sign, MCUXCLECC_STATUS_RNG_ERROR);
+            }
+        }  /* buffZ scope */
 
 
         /**********************************************************/
@@ -293,9 +330,9 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Sign(
         /**********************************************************/
 
         /* Import message hash (up to byteLenN bytes). */
-        uint32_t byteLenHash = (pParam->optLen & mcuxClEcc_Verify_Param_optLen_byteLenHash_mask) >> mcuxClEcc_Verify_Param_optLen_byteLenHash_offset;
-        uint32_t byteLenHashImport = MCUXCLECC_TRUNCATED_HASH_LEN(byteLenHash, byteLenN);
-        MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_S2, pParam->pHash, byteLenHashImport);
+        uint32_t byteLenHash = (pParam->optLen & mcuxClEcc_Sign_Param_optLen_byteLenHash_mask) >> mcuxClEcc_Sign_Param_optLen_byteLenHash_offset;
+        uint32_t byteLenHashImport = MCUXCLCORE_MIN(byteLenHash, byteLenN);
+        MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_Sign, ECC_S2, pParam->pHash, byteLenHashImport);
 
         /* Truncate message hash if its bit length is longer than that of n. */
         if (byteLenHash >= byteLenN)
@@ -352,8 +389,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Sign(
     /**********************************************************/
 
     /* Import prime p and order n again, and check (compare with) existing one. */
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_T0, pParam->curveParam.pP, byteLenP);
-    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC(ECC_T1, pParam->curveParam.pN, byteLenN);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_Sign, ECC_T0, pParam->curveParam.pP, byteLenP);
+    MCUXCLPKC_FP_IMPORTBIGENDIANTOPKC_BUFFER(mcuxClEcc_Sign, ECC_T1, pParam->curveParam.pN, byteLenN);
 
     MCUXCLPKC_FP_CALC_OP1_CMP(ECC_T0, ECC_P);
     uint32_t zeroFlag_checkP = MCUXCLPKC_WAITFORFINISH_GETZERO();
@@ -364,8 +401,8 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClEcc_Status_t) mcuxClEcc_Sign(
     if (   (zeroFlag_checkP == MCUXCLPKC_FLAG_ZERO)
         && (zeroFlag_checkN == MCUXCLPKC_FLAG_ZERO) )
     {
-        MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC(pParam->pSignature, WEIER_XA, byteLenN);
-        MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC(pParam->pSignature + byteLenN, WEIER_YA, byteLenN);
+        MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC_BUFFER(mcuxClEcc_Sign, pParam->pSignature, WEIER_XA, byteLenN);
+        MCUXCLPKC_FP_EXPORTBIGENDIANFROMPKC_BUFFEROFFSET(mcuxClEcc_Sign, pParam->pSignature, WEIER_YA, byteLenN, byteLenN);
 
         /* Clear PKC workarea. */
         MCUXCLPKC_PS1_SETLENGTH(0u, bufferSize * ECC_SIGN_NO_OF_BUFFERS);

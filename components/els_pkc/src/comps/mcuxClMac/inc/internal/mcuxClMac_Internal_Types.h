@@ -22,7 +22,8 @@
 #include <mcuxClMac_Types.h>
 #include <mcuxClMac_Constants.h>
 #include <mcuxClKey_Types.h>
-#include <mcuxClCore_Buffer.h>
+#include <mcuxClBuffer.h>
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -114,6 +115,8 @@ typedef struct mcuxClMac_CommonModeDescriptor
   uint32_t                   protectionToken_finish;
   uint32_t                   macByteSize; /* output size of the MAC computation in bytes */
   void *                     pAlgorithm;  /* pointer to algorithm specifics, individual structures can be assigned here */
+
+
 } mcuxClMac_CommonModeDescriptor_t;
 
 /**

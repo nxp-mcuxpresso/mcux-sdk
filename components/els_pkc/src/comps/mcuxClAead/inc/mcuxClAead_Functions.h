@@ -21,7 +21,7 @@
 #include <mcuxClSession_Types.h>
 #include <mcuxClKey.h>
 #include <mcuxClAead_Types.h>
-#include <mcuxClCore_Buffer.h>
+#include <mcuxClBuffer.h>
 
 #ifdef __cplusplus
 extern "C" {

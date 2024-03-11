@@ -23,6 +23,7 @@
 #include <mcuxClCore_FunctionIdentifiers.h>
 #include <mcuxCsslFlowProtection.h>
 
+#include <mcuxClBuffer.h>
 #include <mcuxClRandom.h>
 #include <mcuxCsslMemory.h>
 #include <mcuxClMemory.h>
@@ -342,12 +343,14 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPkc_Status_t) mcuxClPkc_SecureImportBigEndianT
 
     /* Caution: the whole temp buffer needs to be initialized before PKC XOR */
     /*          if the platform requests an explicit memory initialization.  */
-    MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate, mcuxClRandom_ncGenerate(pSession, (uint8_t *) p32Temp, operandSize));
-    if (MCUXCLRANDOM_STATUS_OK != ret_Random_ncGenerate)
     {
-        MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClPkc_SecureImportBigEndianToPkc, MCUXCLPKC_STATUS_NOK);
-    }
-
+        MCUXCLBUFFER_INIT(buffTemp, NULL, (uint8_t *) p32Temp, operandSize);
+        MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate, mcuxClRandom_ncGenerate(pSession, buffTemp, operandSize));
+        if (MCUXCLRANDOM_STATUS_OK != ret_Random_ncGenerate)
+        {
+            MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClPkc_SecureImportBigEndianToPkc, MCUXCLPKC_STATUS_NOK);
+        }
+    } /* Scope for buffTemp */
     MCUXCLPKC_FP_CALC_OP1_XOR(iTarget, iTarget, iTemp);
 
 #ifdef MCUXCL_FEATURE_PKC_PKCRAM_NO_UNALIGNED_ACCESS
@@ -462,12 +465,14 @@ MCUX_CSSL_FP_PROTECTED_TYPE(mcuxClPkc_Status_t) mcuxClPkc_SecureExportBigEndianF
 
     /* Caution: the whole temp buffer needs to be initialized before PKC XOR */
     /*          if the platform requests an explicit memory initialization.  */
-    MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate, mcuxClRandom_ncGenerate(pSession, (uint8_t *) p32Temp, operandSize));
-    if (MCUXCLRANDOM_STATUS_OK != ret_Random_ncGenerate)
     {
-       MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClPkc_SecureExportBigEndianFromPkc, MCUXCLPKC_STATUS_NOK);
-    }
-
+        MCUXCLBUFFER_INIT(buffTemp, NULL, (uint8_t *) p32Temp, operandSize);
+        MCUX_CSSL_FP_FUNCTION_CALL(ret_Random_ncGenerate, mcuxClRandom_ncGenerate(pSession, buffTemp, operandSize));
+        if (MCUXCLRANDOM_STATUS_OK != ret_Random_ncGenerate)
+        {
+            MCUX_CSSL_FP_FUNCTION_EXIT(mcuxClPkc_SecureExportBigEndianFromPkc, MCUXCLPKC_STATUS_NOK);
+        }
+    } /* Scope for buffTemp */
     MCUXCLPKC_FP_CALC_OP1_XOR(iSource, iSource, iTemp);
 
 #ifdef MCUXCL_FEATURE_PKC_PKCRAM_NO_UNALIGNED_ACCESS

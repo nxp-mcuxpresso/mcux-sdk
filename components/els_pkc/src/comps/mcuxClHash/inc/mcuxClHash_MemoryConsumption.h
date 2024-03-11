@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------*/
-/* Copyright 2020-2023 NXP                                                  */
+/* Copyright 2020-2024 NXP                                                  */
 /*                                                                          */
 /* NXP Confidential. This software is owned or controlled by NXP and may    */
 /* only be used strictly in accordance with the applicable license terms.   */
@@ -18,11 +18,11 @@
 #define MCUXCLHASH_MEMORYCONSUMPTION_H_
 
 #define MCUXCLHASH_COMPUTE_CPU_WA_BUFFER_SIZE_MAX                (192u)                            ///< Defines the max workarea size required for mcuxClHash_compute
-#define MCUXCLHASH_COMPARE_CPU_WA_BUFFER_SIZE_MAX                MCUXCLHASH_COMPUTE_CPU_WA_BUFFER_SIZE_MAX                    ///< Defines the max workarea size required for mcuxClHash_compare
-#define MCUXCLHASH_INIT_CPU_WA_BUFFER_SIZE                       (4u)                                                        ///< Defines the max workarea size required for mcuxClHash_init
-#define MCUXCLHASH_PROCESS_CPU_WA_BUFFER_SIZE_MAX                (4u)                                                        ///< Defines the max workarea size required for mcuxClHash_process
-#define MCUXCLHASH_FINISH_CPU_WA_BUFFER_SIZE_MAX                 (192u)                             ///< Defines the max workarea size required for mcuxClHash_finish
-#define MCUXCLHASH_VERIFY_CPU_WA_BUFFER_SIZE_MAX                 MCUXCLHASH_FINISH_CPU_WA_BUFFER_SIZE_MAX                     ///< Defines the max workarea size required for mcuxClHash_verify
+#define MCUXCLHASH_COMPARE_CPU_WA_BUFFER_SIZE_MAX                (192u)                            ///< Defines the max workarea size required for mcuxClHash_compare
+#define MCUXCLHASH_INIT_CPU_WA_BUFFER_SIZE                       (4u)                                                ///< Defines the max workarea size required for mcuxClHash_init
+#define MCUXCLHASH_PROCESS_CPU_WA_BUFFER_SIZE_MAX                (192u)                            ///< Defines the max workarea size required for mcuxClHash_process
+#define MCUXCLHASH_FINISH_CPU_WA_BUFFER_SIZE_MAX                 (192u)                            ///< Defines the max workarea size required for mcuxClHash_finish
+#define MCUXCLHASH_VERIFY_CPU_WA_BUFFER_SIZE_MAX                 (192u)                            ///< Defines the max workarea size required for mcuxClHash_verify
 
 #define MCUXCLHASH_MAX_CPU_WA_BUFFER_SIZE                        (192u)  ///< Defines the max workarea size required for this component
 
@@ -31,8 +31,8 @@
 /* Definitions of context sizes for the mcuxClHash multi-part functions.     */
 /****************************************************************************/
 
-#define MCUXCLHASH_CONTEXT_SIZE                                  (392u)    ///< Defines the maximum size a context might need.
-#define MCUXCLHASH_CONTEXT_SIZE_IN_WORDS                         (392u / sizeof(uint32_t))
+#define MCUXCLHASH_CONTEXT_SIZE                                  (400u)    ///< Defines the maximum size a context might need.
+#define MCUXCLHASH_CONTEXT_SIZE_IN_WORDS                         (400u / sizeof(uint32_t))
 
 
 #endif /* MCUXCLHASH_MEMORYCONSUMPTION_H_ */
