@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2023 NXP
+ * Copyright 2016 - 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -46,27 +46,27 @@
  */
 typedef enum _RSTCTL_RSTn
 {
-    kDSP_RST_SHIFT_RSTn          = (RST_CTL0_PSCCTL0 << 8) | 1U,  /**< DSP reset control */
-    kPOWERQUAD_RST_SHIFT_RSTn    = (RST_CTL0_PSCCTL0 << 8) | 8U,  /**< POWERQUAD reset control */
-    kCASPER_RST_SHIFT_RSTn       = (RST_CTL0_PSCCTL0 << 8) | 9U,  /**< CASPER reset control */
-    kHASHCRYPT_RST_SHIFT_RSTn    = (RST_CTL0_PSCCTL0 << 8) | 10U, /**< HASHCRYPT reset control */
-    kPUF_RST_SHIFT_RSTn          = (RST_CTL0_PSCCTL0 << 8) | 11U, /**< Physical unclonable function reset control */
-    kRNG_RST_SHIFT_RSTn          = (RST_CTL0_PSCCTL0 << 8) | 12U, /**< Random number generator (RNG) reset control */
-    kFLEXSPI_RST_SHIFT_RSTn      = (RST_CTL0_PSCCTL0 << 8) | 16U, /**< FLEXSPI reset control */
-    kUSBHS_PHY_RST_SHIFT_RSTn    = (RST_CTL0_PSCCTL0 << 8) | 20U, /**< High speed USB PHY reset control */
-    kUSBHS_DEVICE_RST_SHIFT_RSTn = (RST_CTL0_PSCCTL0 << 8) | 21U, /**< High speed USB Device reset control */
-    kUSBHS_HOST_RST_SHIFT_RSTn   = (RST_CTL0_PSCCTL0 << 8) | 22U, /**< High speed USB Host reset control */
-    kUSBHS_SRAM_RST_SHIFT_RSTn   = (RST_CTL0_PSCCTL0 << 8) | 23U, /**< High speed USB SRAM reset control */
-    kSCT_RST_SHIFT_RSTn          = (RST_CTL0_PSCCTL0 << 8) | 24U, /**< Standard ctimers reset control */
+    kDSP_RST_SHIFT_RSTn          = (RST_CTL0_PSCCTL0 << 8) | 1U,   /**< DSP reset control */
+    kPOWERQUAD_RST_SHIFT_RSTn    = (RST_CTL0_PSCCTL0 << 8) | 8U,   /**< POWERQUAD reset control */
+    kCASPER_RST_SHIFT_RSTn       = (RST_CTL0_PSCCTL0 << 8) | 9U,   /**< CASPER reset control */
+    kHASHCRYPT_RST_SHIFT_RSTn    = (RST_CTL0_PSCCTL0 << 8) | 10U,  /**< HASHCRYPT reset control */
+    kPUF_RST_SHIFT_RSTn          = (RST_CTL0_PSCCTL0 << 8) | 11U,  /**< Physical unclonable function reset control */
+    kRNG_RST_SHIFT_RSTn          = (RST_CTL0_PSCCTL0 << 8) | 12U,  /**< Random number generator (RNG) reset control */
+    kFLEXSPI_RST_SHIFT_RSTn      = (RST_CTL0_PSCCTL0 << 8) | 16U,  /**< FLEXSPI reset control */
+    kUSBHS_PHY_RST_SHIFT_RSTn    = (RST_CTL0_PSCCTL0 << 8) | 20U,  /**< High speed USB PHY reset control */
+    kUSBHS_DEVICE_RST_SHIFT_RSTn = (RST_CTL0_PSCCTL0 << 8) | 21U,  /**< High speed USB Device reset control */
+    kUSBHS_HOST_RST_SHIFT_RSTn   = (RST_CTL0_PSCCTL0 << 8) | 22U,  /**< High speed USB Host reset control */
+    kUSBHS_SRAM_RST_SHIFT_RSTn   = (RST_CTL0_PSCCTL0 << 8) | 23U,  /**< High speed USB SRAM reset control */
+    kSCT_RST_SHIFT_RSTn          = (RST_CTL0_PSCCTL0 << 8) | 24U,  /**< Standard ctimers reset control */
 
-    kSDIO0_RST_SHIFT_RSTn    = (RST_CTL0_PSCCTL1 << 8) | 2U,  /**< SDIO0 reset control */
-    kSDIO1_RST_SHIFT_RSTn    = (RST_CTL0_PSCCTL1 << 8) | 3U,  /**< SDIO1 reset control */
-    kACMP0_RST_SHIFT_RSTn    = (RST_CTL0_PSCCTL1 << 8) | 15U, /**< Grouped interrupt (PINT) reset control. */
-    kADC0_RST_SHIFT_RSTn     = (RST_CTL0_PSCCTL1 << 8) | 16U, /**< ADC0 reset control */
-    kSHSGPIO0_RST_SHIFT_RSTn = (RST_CTL0_PSCCTL1 << 8) | 24U, /**< Security HSGPIO 0 reset control */
+    kSDIO0_RST_SHIFT_RSTn    = (RST_CTL0_PSCCTL1 << 8) | 2U,       /**< SDIO0 reset control */
+    kSDIO1_RST_SHIFT_RSTn    = (RST_CTL0_PSCCTL1 << 8) | 3U,       /**< SDIO1 reset control */
+    kACMP0_RST_SHIFT_RSTn    = (RST_CTL0_PSCCTL1 << 8) | 15U,      /**< Grouped interrupt (PINT) reset control. */
+    kADC0_RST_SHIFT_RSTn     = (RST_CTL0_PSCCTL1 << 8) | 16U,      /**< ADC0 reset control */
+    kSHSGPIO0_RST_SHIFT_RSTn = (RST_CTL0_PSCCTL1 << 8) | 24U,      /**< Security HSGPIO 0 reset control */
 
-    kUTICK0_RST_SHIFT_RSTn = (RST_CTL0_PSCCTL2 << 8) | 0U, /**< Micro-tick timer reset control */
-    kWWDT0_RST_SHIFT_RSTn  = (RST_CTL0_PSCCTL2 << 8) | 1U, /**< Windowed Watchdog timer 0 reset control */
+    kUTICK0_RST_SHIFT_RSTn = (RST_CTL0_PSCCTL2 << 8) | 0U,         /**< Micro-tick timer reset control */
+    kWWDT0_RST_SHIFT_RSTn  = (RST_CTL0_PSCCTL2 << 8) | 1U,         /**< Windowed Watchdog timer 0 reset control */
 
     kFC0_RST_SHIFT_RSTn           = (RST_CTL1_PSCCTL0 << 8) | 8U,  /**< Flexcomm Interface 0 reset control */
     kFC1_RST_SHIFT_RSTn           = (RST_CTL1_PSCCTL0 << 8) | 9U,  /**< Flexcomm Interface 1 reset control */
@@ -81,31 +81,31 @@ typedef enum _RSTCTL_RSTn
     kDMIC_RST_SHIFT_RSTn          = (RST_CTL1_PSCCTL0 << 8) | 24U, /**< Digital microphone interface reset control */
     kOSEVENT_TIMER_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL0 << 8) | 27U, /**< Osevent Timer reset control */
 
-    kHSGPIO0_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 0U,  /**< HSGPIO 0 reset control */
-    kHSGPIO1_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 1U,  /**< HSGPIO 1 reset control */
-    kHSGPIO2_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 2U,  /**< HSGPIO 2 reset control */
-    kHSGPIO3_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 3U,  /**< HSGPIO 3 reset control */
-    kHSGPIO4_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 4U,  /**< HSGPIO 4 reset control */
-    kHSGPIO5_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 5U,  /**< HSGPIO 5 reset control */
-    kHSGPIO6_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 6U,  /**< HSGPIO 6 reset control */
-    kHSGPIO7_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 7U,  /**< HSGPIO 7 reset control */
-    kCRC_RST_SHIFT_RSTn     = (RST_CTL1_PSCCTL1 << 8) | 16U, /**< CRC reset control */
-    kDMAC0_RST_SHIFT_RSTn   = (RST_CTL1_PSCCTL1 << 8) | 23U, /**< DMA Controller 0 reset control */
-    kDMAC1_RST_SHIFT_RSTn   = (RST_CTL1_PSCCTL1 << 8) | 24U, /**< DMA Controller 1  reset control */
-    kMU_RST_SHIFT_RSTn      = (RST_CTL1_PSCCTL1 << 8) | 28U, /**< Message Unit reset control */
-    kSEMA_RST_SHIFT_RSTn    = (RST_CTL1_PSCCTL1 << 8) | 29U, /**< Semaphore reset control */
-    kFREQME_RST_SHIFT_RSTn  = (RST_CTL1_PSCCTL1 << 8) | 31U, /**< Frequency Measure reset control */
+    kHSGPIO0_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 0U,        /**< HSGPIO 0 reset control */
+    kHSGPIO1_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 1U,        /**< HSGPIO 1 reset control */
+    kHSGPIO2_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 2U,        /**< HSGPIO 2 reset control */
+    kHSGPIO3_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 3U,        /**< HSGPIO 3 reset control */
+    kHSGPIO4_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 4U,        /**< HSGPIO 4 reset control */
+    kHSGPIO5_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 5U,        /**< HSGPIO 5 reset control */
+    kHSGPIO6_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 6U,        /**< HSGPIO 6 reset control */
+    kHSGPIO7_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL1 << 8) | 7U,        /**< HSGPIO 7 reset control */
+    kCRC_RST_SHIFT_RSTn     = (RST_CTL1_PSCCTL1 << 8) | 16U,       /**< CRC reset control */
+    kDMAC0_RST_SHIFT_RSTn   = (RST_CTL1_PSCCTL1 << 8) | 23U,       /**< DMA Controller 0 reset control */
+    kDMAC1_RST_SHIFT_RSTn   = (RST_CTL1_PSCCTL1 << 8) | 24U,       /**< DMA Controller 1  reset control */
+    kMU_RST_SHIFT_RSTn      = (RST_CTL1_PSCCTL1 << 8) | 28U,       /**< Message Unit reset control */
+    kSEMA_RST_SHIFT_RSTn    = (RST_CTL1_PSCCTL1 << 8) | 29U,       /**< Semaphore reset control */
+    kFREQME_RST_SHIFT_RSTn  = (RST_CTL1_PSCCTL1 << 8) | 31U,       /**< Frequency Measure reset control */
 
-    kCT32B0_RST_SHIFT_RSTn   = (RST_CTL1_PSCCTL2 << 8) | 0U,  /**< CT32B0 reset control */
-    kCT32B1_RST_SHIFT_RSTn   = (RST_CTL1_PSCCTL2 << 8) | 1U,  /**< CT32B1 reset control */
-    kCT32B2_RST_SHIFT_RSTn   = (RST_CTL1_PSCCTL2 << 8) | 2U,  /**< CT32B3 reset control */
-    kCT32B3_RST_SHIFT_RSTn   = (RST_CTL1_PSCCTL2 << 8) | 3U,  /**< CT32B4 reset control */
-    kCT32B4_RST_SHIFT_RSTn   = (RST_CTL1_PSCCTL2 << 8) | 4U,  /**< CT32B4 reset control */
-    kMRT0_RST_SHIFT_RSTn     = (RST_CTL1_PSCCTL2 << 8) | 8U,  /**< Multi-rate timer (MRT) reset control */
-    kWWDT1_RST_SHIFT_RSTn    = (RST_CTL1_PSCCTL2 << 8) | 10U, /**< Windowed Watchdog timer 1 reset control */
-    kI3C0_RST_SHIFT_RSTn     = (RST_CTL1_PSCCTL2 << 8) | 16U, /**< I3C reset control */
-    kPINT_RST_SHIFT_RSTn     = (RST_CTL1_PSCCTL2 << 8) | 30U, /**< GPIO Pin interrupt reset control */
-    kINPUTMUX_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL2 << 8) | 31U, /**< Peripheral input muxes reset control */
+    kCT32B0_RST_SHIFT_RSTn   = (RST_CTL1_PSCCTL2 << 8) | 0U,       /**< CT32B0 reset control */
+    kCT32B1_RST_SHIFT_RSTn   = (RST_CTL1_PSCCTL2 << 8) | 1U,       /**< CT32B1 reset control */
+    kCT32B2_RST_SHIFT_RSTn   = (RST_CTL1_PSCCTL2 << 8) | 2U,       /**< CT32B3 reset control */
+    kCT32B3_RST_SHIFT_RSTn   = (RST_CTL1_PSCCTL2 << 8) | 3U,       /**< CT32B4 reset control */
+    kCT32B4_RST_SHIFT_RSTn   = (RST_CTL1_PSCCTL2 << 8) | 4U,       /**< CT32B4 reset control */
+    kMRT0_RST_SHIFT_RSTn     = (RST_CTL1_PSCCTL2 << 8) | 8U,       /**< Multi-rate timer (MRT) reset control */
+    kWWDT1_RST_SHIFT_RSTn    = (RST_CTL1_PSCCTL2 << 8) | 10U,      /**< Windowed Watchdog timer 1 reset control */
+    kI3C0_RST_SHIFT_RSTn     = (RST_CTL1_PSCCTL2 << 8) | 16U,      /**< I3C reset control */
+    kPINT_RST_SHIFT_RSTn     = (RST_CTL1_PSCCTL2 << 8) | 30U,      /**< GPIO Pin interrupt reset control */
+    kINPUTMUX_RST_SHIFT_RSTn = (RST_CTL1_PSCCTL2 << 8) | 31U,      /**< Peripheral input muxes reset control */
 } RSTCTL_RSTn_t;
 
 /** Array initializers with peripheral reset bits **/
@@ -155,9 +155,9 @@ typedef enum _RSTCTL_RSTn
     {                        \
         kMRT0_RST_SHIFT_RSTn \
     } /* Reset bits for MRT peripheral */
-#define PINT_RSTS                  \
-    {                              \
-        kGPIOINTCTL_RST_SHIFT_RSTn \
+#define PINT_RSTS            \
+    {                        \
+        kPINT_RST_SHIFT_RSTn \
     } /* Reset bits for PINT peripheral */
 #define SCT_RSTS            \
     {                       \
