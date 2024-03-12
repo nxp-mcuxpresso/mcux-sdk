@@ -157,7 +157,7 @@ void *MSG_Alloc(uint32_t length)
     {
         ((list_element_t *)buffer)->list = NULL;
         buffer                           = (list_element_t *)buffer + 1;
-        memset(buffer, 0u, length);
+        (void)memset(buffer, 0, length);
     }
     return buffer;
 }

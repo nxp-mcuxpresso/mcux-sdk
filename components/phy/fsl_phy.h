@@ -60,6 +60,24 @@
 #define PHY_1000BASET_FULLDUPLEX_MASK ((uint16_t)0x200U) /*!< The PHY has the 1000M full duplex ability.*/
 #define PHY_1000BASET_HALFDUPLEX_MASK ((uint16_t)0x100U) /*!< The PHY has the 1000M half duplex ability.*/
 
+/*! @brief Defines the IEEE802.3 standard MDIO Manageable Device addresses. */
+#define PHY_MMD_PMAPMD       (1U)
+#define PHY_MMD_WIS          (2U)
+#define PHY_MMD_PCS          (3U)
+#define PHY_MMD_PHY_XS       (4U)
+#define PHY_MMD_DTE_XS       (5U)
+#define PHY_MMD_TC           (6U)
+#define PHY_MMD_AN           (7U)
+#define PHY_MMD_PMA1         (8U)
+#define PHY_MMD_PMA2         (9U)
+#define PHY_MMD_PMA3         (10U)
+#define PHY_MMD_PMA4         (11U)
+#define PHY_MMD_OFDM_PMAPMD  (12U)
+#define PHY_MMD_POWER_UNIT   (13U)
+#define PHY_MMD_C22EXT       (29U)
+#define PHY_MMD_VEND1        (30U)
+#define PHY_MMD_VEND2        (31U)
+
 typedef struct _phy_handle phy_handle_t;
 typedef struct _phy_config phy_config_t;
 
@@ -80,7 +98,10 @@ typedef enum _phy_speed
 {
     kPHY_Speed10M = 0U, /*!< ENET PHY 10M speed. */
     kPHY_Speed100M,     /*!< ENET PHY 100M speed. */
-    kPHY_Speed1000M     /*!< ENET PHY 1000M speed. */
+    kPHY_Speed1000M,    /*!< ENET PHY 1000M speed. */
+    kPHY_Speed2500M,    /*!< ENET PHY 2.5G speed. */
+    kPHY_Speed5G,       /*!< ENET PHY 5G speed. */
+    kPHY_Speed10G       /*!< ENET PHY 10G speed. */
 } phy_speed_t;
 
 /*! @brief Defines the PHY link duplex. */
@@ -121,6 +142,8 @@ typedef struct _phy_operations
     status_t (*phyInit)(phy_handle_t *handle, const phy_config_t *config);
     status_t (*phyWrite)(phy_handle_t *handle, uint8_t phyReg, uint16_t data);
     status_t (*phyRead)(phy_handle_t *handle, uint8_t phyReg, uint16_t *pData);
+    status_t (*phyWriteC45)(phy_handle_t *handle, uint8_t devAddr, uint16_t regAddr, uint16_t data);
+    status_t (*phyReadC45)(phy_handle_t *handle, uint8_t devAddr, uint16_t regAddr, uint16_t *pdata);
     status_t (*getAutoNegoStatus)(phy_handle_t *handle, bool *status);
     status_t (*getLinkStatus)(phy_handle_t *handle, bool *status);
     status_t (*getLinkSpeedDuplex)(phy_handle_t *handle, phy_speed_t *speed, phy_duplex_t *duplex);
@@ -207,6 +230,38 @@ static inline status_t PHY_Write(phy_handle_t *handle, uint8_t phyReg, uint16_t 
 static inline status_t PHY_Read(phy_handle_t *handle, uint8_t phyReg, uint16_t *pData)
 {
     return handle->ops->phyRead(handle, phyReg, pData);
+}
+
+/*!
+ * @brief PHY Write C45 function.
+ * This function writes data over the MDIO to the specified PHY register.
+ *
+ * @param handle  PHY device handle.
+ * @param devAddr  The device address.
+ * @param phyReg  The PHY register.
+ * @param data    The data written to the PHY register.
+ * @retval kStatus_Success  PHY write success
+ * @retval kStatus_Timeout  PHY MDIO visit time out
+ */
+static inline status_t PHY_WriteC45(phy_handle_t *handle, uint8_t devAddr, uint8_t phyReg, uint16_t data)
+{
+    return handle->ops->phyWriteC45(handle, devAddr, phyReg, data);
+}
+
+/*!
+ * @brief PHY Read C45 function.
+ * This interface reads data over the MDIO from the specified PHY register.
+ *
+ * @param handle  PHY device handle.
+ * @param devAddr  The device address.
+ * @param phyReg  The PHY register address.
+ * @param pData  The address to store the data read from the PHY register.
+ * @retval kStatus_Success  PHY read success
+ * @retval kStatus_Timeout  PHY MDIO visit time out
+ */
+static inline status_t PHY_ReadC45(phy_handle_t *handle, uint8_t devAddr, uint8_t phyReg, uint16_t *pData)
+{
+    return handle->ops->phyReadC45(handle, devAddr, phyReg, pData);
 }
 
 /*!

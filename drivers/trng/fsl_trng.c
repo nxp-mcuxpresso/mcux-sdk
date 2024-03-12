@@ -1843,9 +1843,9 @@ status_t TRNG_Init(TRNG_Type *base, const trng_config_t *userConfig)
     {
 #if defined(FSL_FEATURE_TRNG_HAS_RSTCTL) && (FSL_FEATURE_TRNG_HAS_RSTCTL > 0)
         /* Reset TRNG peripheral */
-#if (defined(RW610_SERIES) || defined(RW612_SERIES))
+#if defined(FSL_FEATURE_TRNG_HAS_CTRL_PIN) && (FSL_FEATURE_TRNG_HAS_CTRL_PIN > 0)
         SYSCTL2->TRNG_PIN_CTRL |= SYSCTL2_TRNG_PIN_CTRL_ENABLE_MASK;
-#endif /* RW610_SERIES  RW612_SERIES */
+#endif /* FSL_FEATURE_TRNG_HAS_CTRL_PIN */
         RESET_PeripheralReset(trng_reset);
 #endif /* FSL_FEATURE_TRNG_HAS_RSTCTL */
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)

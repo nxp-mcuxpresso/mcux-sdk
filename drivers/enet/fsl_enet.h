@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 7, 1))
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 8, 0))
 /*! @} */
 
 /*! @name ENET DESCRIPTOR QUEUE */
@@ -919,6 +919,15 @@ static inline void ENET_Reset(ENET_Type *base)
 {
     base->ECR |= ENET_ECR_RESET_MASK;
 }
+
+#if defined(ENET_RSTS)
+/*!
+ * @brief Resets the ENET hardware.
+ *
+ * This function resets ENET related resources in the hardware.
+ */
+void ENET_ResetHareware(void);
+#endif
 
 /*! @} */
 

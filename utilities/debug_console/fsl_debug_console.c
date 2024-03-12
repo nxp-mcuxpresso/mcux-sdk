@@ -428,8 +428,8 @@ status_t DbgConsole_ReadOneCharacter(uint8_t *ch)
 #if defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING) && \
     (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == DEBUG_CONSOLE_SYNCHRONIZATION_BM) && defined(OSA_USED)
     return (status_t)kStatus_Fail;
-#else /*defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING) && (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == \
-         DEBUG_CONSOLE_SYNCHRONIZATION_BM) && defined(OSA_USED)*/
+#else  /*defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING) && (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == \
+          DEBUG_CONSOLE_SYNCHRONIZATION_BM) && defined(OSA_USED)*/
     serial_manager_status_t serialManagerStatus = kStatus_SerialManager_Error;
 
 /* recieve one char every time */
@@ -437,7 +437,8 @@ status_t DbgConsole_ReadOneCharacter(uint8_t *ch)
     serialManagerStatus =
         SerialManager_ReadNonBlocking(((serial_read_handle_t)&s_debugConsoleState.serialReadHandleBuffer[0]), ch, 1);
 #else  /*defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING)*/
-    serialManagerStatus = SerialManager_ReadBlocking(((serial_read_handle_t)&s_debugConsoleState.serialReadHandleBuffer[0]), ch, 1);
+    serialManagerStatus =
+        SerialManager_ReadBlocking(((serial_read_handle_t)&s_debugConsoleState.serialReadHandleBuffer[0]), ch, 1);
 #endif /*defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING)*/
     if (kStatus_SerialManager_Success != serialManagerStatus)
     {
@@ -453,7 +454,7 @@ status_t DbgConsole_ReadOneCharacter(uint8_t *ch)
 #endif /*defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING) && (DEBUG_CONSOLE_SYNCHRONIZATION_MODE == \
           DEBUG_CONSOLE_SYNCHRONIZATION_BM) && defined(OSA_USED)*/
 
-#else /*(defined(DEBUG_CONSOLE_RX_ENABLE) && (DEBUG_CONSOLE_RX_ENABLE > 0U))*/
+#else  /*(defined(DEBUG_CONSOLE_RX_ENABLE) && (DEBUG_CONSOLE_RX_ENABLE > 0U))*/
 
     return (status_t)kStatus_Fail;
 
@@ -771,8 +772,8 @@ static const serial_port_uart_config_t uartConfig = {.instance     = BOARD_DEBUG
 /* See fsl_debug_console.h for documentation of this function. */
 status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t device, uint32_t clkSrcFreq)
 {
-    serial_manager_config_t serialConfig = {0};
-    serial_manager_status_t serialManagerStatus       = kStatus_SerialManager_Success;
+    serial_manager_config_t serialConfig;
+    serial_manager_status_t serialManagerStatus = kStatus_SerialManager_Success;
 
 #if (defined(SERIAL_USE_CONFIGURE_STRUCTURE) && (SERIAL_USE_CONFIGURE_STRUCTURE == 0U))
 #if (defined(SERIAL_PORT_TYPE_UART) && (SERIAL_PORT_TYPE_UART > 0U))
@@ -793,7 +794,7 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
     };
 #endif
 #endif
-
+    (void)memset(&serialConfig, 0x0, sizeof(serial_manager_config_t));
 #if (defined(SERIAL_PORT_TYPE_USBCDC) && (SERIAL_PORT_TYPE_USBCDC > 0U))
     serial_port_usb_cdc_config_t usbCdcConfig = {
         .controllerIndex = (serial_port_usb_cdc_controller_index_t)instance,
@@ -882,7 +883,7 @@ status_t DbgConsole_Init(uint8_t instance, uint32_t baudRate, serial_port_type_t
 #endif
 
         s_debugConsoleState.serialHandle = (serial_handle_t)&s_debugConsoleState.serialHandleBuffer[0];
-        serialManagerStatus                           = SerialManager_Init(s_debugConsoleState.serialHandle, &serialConfig);
+        serialManagerStatus              = SerialManager_Init(s_debugConsoleState.serialHandle, &serialConfig);
 
         assert(kStatus_SerialManager_Success == serialManagerStatus);
 
@@ -1002,7 +1003,7 @@ status_t DbgConsole_Deinit(void)
 }
 #endif /* ((SDK_DEBUGCONSOLE == DEBUGCONSOLE_REDIRECT_TO_SDK) || defined(SDK_DEBUGCONSOLE_UART)) */
 
-#if (((defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE == DEBUGCONSOLE_REDIRECT_TO_SDK))) || \
+#if (((defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE == DEBUGCONSOLE_REDIRECT_TO_SDK))) ||                 \
      ((SDK_DEBUGCONSOLE != DEBUGCONSOLE_REDIRECT_TO_SDK) && defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING) && \
       (defined(DEBUG_CONSOLE_TX_RELIABLE_ENABLE) && (DEBUG_CONSOLE_TX_RELIABLE_ENABLE > 0U))))
 DEBUG_CONSOLE_FUNCTION_PREFIX status_t DbgConsole_Flush(void)
@@ -1142,7 +1143,7 @@ int DbgConsole_BlockingVprintf(const char *fmt_s, va_list formatStringArg)
 status_t DbgConsole_TryGetchar(char *ch)
 {
 #if (defined(DEBUG_CONSOLE_RX_ENABLE) && (DEBUG_CONSOLE_RX_ENABLE > 0U))
-    uint32_t length = 0;
+    uint32_t length           = 0;
     status_t dbgConsoleStatus = (status_t)kStatus_Fail;
 
     assert(ch);

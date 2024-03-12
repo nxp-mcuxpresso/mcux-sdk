@@ -1,0 +1,91 @@
+CLNS SDK (1.9.0) Release Notes
+
+- Release: RedfinchSDK_PRC
+- Version: CLNS_SDK_1.9.0
+- Date:    2024-02-19
+- Link to Nexus RepositoryManager: https://nl-nxrm.sw.nxp.com/service/rest/repository/browse/cccs-releases-raw/
+- Compiler: ARMCLANG keilmdk 533
+--- Test Target:   
+   - RW610 A0 Sample
+--- CLNS memory consumption: static_library/rw61x/libclns.a
+      TEXT RO RW ZI TOTAL_CONSUMPTION
+      90268 22195 0 0 112463
+
+--- New Features 
+   - MISRA C-2012 mandatory and required violations resolved
+   - PSA driver SHA1 support moved under pre-processor PSA_WANT_ALG_SHA_1
+   - PSA driver key agreement and key export bugfixes
+   - PSA driver HMAC one-shot support integrated
+
+
+--- Known Issues Limitations:
+   - platform_specific_headers.h: 
+      #include "fsl_device_registers.h" 
+      // #include "RW610.h" 
+      // #include "RW610_features.h" 
+      // #include "system_RW610.h"
+   - Cert-C / Coverity static analysis violations to be cleaned up 
+   - When MCUXCLECC_STATUS_RNG_ERROR or MCUXCLRSA_STATUS_RNG_ERROR is returned the security counter is not guaranteed to be balanced properly
+
+- Release: RT700SDK_EAR
+- Version: CLNS_SDK_1.9.0
+- Date:    2024-02-19
+- Link to Nexus RepositoryManager: https://nl-nxrm.sw.nxp.com/service/rest/repository/browse/cccs-releases-raw/
+- Compiler: IAR Compiler v.8.40.1
+--- Test Target:   
+   - CoSim: CSSV2 RT700 v11
+--- CLNS memory consumption: static_library/mimxrt/libclns.a
+      TEXT RO RW ZI TOTAL_CONSUMPTION
+      121902 24072 0 0 145974
+      
+      static_library/rt700Sdk_cosim/libclns.a
+      TEXT RO RW ZI TOTAL_CONSUMPTION
+      122324 24072 0 0 146396
+
+--- New Features 
+   - Deterministic ECDSA
+   - RSA encrypt/decrypt
+   - OSCCA CL examples corrected to include proper ELS init/uninit
+   
+--- Known Issues Limitations:
+   - MISRA C-2012 violations to be resolved in future releases
+   - Cert-C / Coverity static analysis violations to be cleaned up 
+   - When MCUXCLECC_STATUS_RNG_ERROR or MCUXCLRSA_STATUS_RNG_ERROR is returned the security counter is not guaranteed to be balanced properly
+
+- Release: NirvanaSDK_PRC
+- Version: CLNS_SDK_1.9.0
+- Date:    2024-02-19
+- Link to Nexus RepositoryManager: https://nl-nxrm.sw.nxp.com/service/rest/repository/browse/cccs-releases-raw/
+- Compiler: IAR Compiler v.8.40.1
+--- Test Target:   
+   - Nirvana sample
+--- CLNS memory consumption: static_library/mcxn/libclns.a
+   TEXT RO RW ZI TOTAL_CONSUMPTION
+   76284 18556 0 0 94840
+
+--- New Features: 
+   - Maintenance release
+   
+--- Known Issues Limitations: 
+   - par_els_semaphore_master tests failed due to test issues (reading MASTER ID SFR from ELS "secure" BASE in non-secure mode, missing exception/fault handling when exceptions/faults occur in non-secure)
+   - Cert-C / Coverity static analysis violations to be cleaned up 
+   - When MCUXCLECC_STATUS_RNG_ERROR or MCUXCLRSA_STATUS_RNG_ERROR is returned the security counter is not guaranteed to be balanced
+
+- Release: Niobe4aSDK_2020_PRC
+- Version: CLNS_SDK_1.9.0
+- Date:    2024-02-19
+- Link to Nexus RepositoryManager: https://nl-nxrm.sw.nxp.com/service/rest/repository/browse/cccs-releases-raw/
+- Compiler: IAR Compiler v.8.40.1
+--- Test Target:   
+   - niobe4_analog_sample
+--- CLNS memory consumption: static_library/lpc/libclns.a
+      TEXT RO RW ZI TOTAL_CONSUMPTION
+      65278 17912 0 4 83194
+
+ --- New Features: 
+   - Maintenance release
+   
+--- Known Issues Limitations:
+   - Negative tests which try to provoke an uninitialized PRNG error had to be disabled since ELS_ITERATIVE_SEEDING inherently always initalizes the PRNG (sim_random_ncGenerate_negative, par_ecc_pkc_keygen_rng_error, par_ecc_pkc_sign_rng_error)
+   - Cert-C / Coverity static analysis violations to be cleaned up 
+   - When MCUXCLECC_STATUS_RNG_ERROR or MCUXCLRSA_STATUS_RNG_ERROR is returned the security counter is not guaranteed to be balanced

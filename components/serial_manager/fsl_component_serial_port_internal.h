@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020, 2023 NXP
+ * Copyright 2019-2020, 2023-2024 NXP
  * All rights reserved.
  *
  *
@@ -93,6 +93,7 @@ serial_manager_status_t Serial_UsbCdcInstallRxCallback(serial_handle_t serialHan
                                                        serial_manager_callback_t callback,
                                                        void *callbackParam);
 void Serial_UsbCdcIsrFunction(serial_handle_t serialHandle);
+serial_manager_status_t Serial_UsbCdcGetConnectedStatus(serial_handle_t serialHandle);
 #endif
 
 #if (defined(SERIAL_PORT_TYPE_SWO) && (SERIAL_PORT_TYPE_SWO > 0U))

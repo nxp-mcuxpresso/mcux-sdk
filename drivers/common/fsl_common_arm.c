@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -232,13 +232,21 @@ void SDK_DelayAtLeastUs(uint32_t delayTime_us, uint32_t coreClock_Hz)
         {
         }
 #else
+#if (__CORTEX_Axx == 53) || (__CORTEX_Axx == 55)
+        /*
+         * Cortex-A53/A55 execution throughput:
+         *  - SUB/CMP: 2 instructions per cycle
+         *  - BNE:     1 instruction per cycle
+         * So, each loop takes 2 CPU cycles.
+         */
+        count = count / 2U;
+#elif (__CORTEX_M == 7)
         /* Divide value may be different in various environment to ensure delay is precise.
          * Every loop count includes three instructions, due to Cortex-M7 sometimes executes
          * two instructions in one period, through test here set divide 1.5. Other M cores use
          * divide 4. By the way, divide 1.5 or 4 could let the count lose precision, but it does
          * not matter because other instructions outside while loop is enough to fill the time.
          */
-#if (__CORTEX_M == 7)
         count = count / 3U * 2U;
 #else
         count = count / 4U;

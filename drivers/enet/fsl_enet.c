@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -377,6 +377,14 @@ void ENET_Deinit(ENET_Type *base)
 #endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
+
+#if defined(ENET_RSTS)
+void ENET_ResetHareware(void)
+{
+    RESET_PeripheralReset(kENET_IPG_RST_SHIFT_RSTn);
+    RESET_PeripheralReset(kENET_IPG_S_RST_SHIFT_RSTn);
+}
+#endif /* ENET_RSTS */
 
 #if FSL_FEATURE_ENET_QUEUE > 1
 void ENET_SetRxISRHandler(ENET_Type *base, enet_isr_ring_t ISRHandler)

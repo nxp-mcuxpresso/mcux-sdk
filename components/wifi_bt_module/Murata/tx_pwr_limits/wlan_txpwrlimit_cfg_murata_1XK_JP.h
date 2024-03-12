@@ -37,6 +37,8 @@
  *  SOFTWARE.
  */
 
+#ifndef _WLAN_TXPWRLIMIT_CFG_MURATA_1XK_JP_H_
+#define _WLAN_TXPWRLIMIT_CFG_MURATA_1XK_JP_H_
 #define WLAN_REGION_CODE "JP"
 
 static wlan_chanlist_t chanlist_2g_cfg = {.num_chans = 13,
@@ -782,3 +784,5 @@ static wifi_txpwrlimit_t tx_pwrlimit_5g_cfg =
                 [39] = {0},
             }};
 #endif /* CONFIG_5GHz_SUPPORT */
+
+#endif /* _WLAN_TXPWRLIMIT_CFG_MURATA_1XK_JP_H_ */

@@ -437,7 +437,7 @@ static memAreaPrivDesc_t *MEM_GetAreaByAreaId(uint8_t area_id)
     memAreaPrivDesc_t *p_area = &heap_area_list;
     for (uint8_t i = 0u; i < area_id; i++)
     {
-        p_area = (memAreaPrivDesc_t *)p_area->next;
+        p_area = (memAreaPrivDesc_t *)(void *)p_area->next;
     }
     return p_area;
 }
@@ -516,7 +516,7 @@ mem_status_t MEM_RegisterExtendedArea(memAreaCfg_t *area_desc, uint8_t *p_area_i
         {
             uint32_t area_sz;
 
-            memAreaPrivDesc_t *new_area_desc = (memAreaPrivDesc_t *)area_desc;
+            memAreaPrivDesc_t *new_area_desc = (memAreaPrivDesc_t *)(void *)area_desc;
             assert((flags & AREA_FLAGS_RFFU) == 0U);
             /* Registering an additional area : memHeap nust have been registered beforehand */
             uint8_t id = 0;
@@ -532,14 +532,15 @@ mem_status_t MEM_RegisterExtendedArea(memAreaCfg_t *area_desc, uint8_t *p_area_i
                 break;
             }
             area_sz = new_area_desc->end_address.raw_address - new_area_desc->start_address.raw_address;
-            if (area_sz <= KB(1))
+            if (area_sz <= (uint32_t)KB((uint32_t)1U))
             {
                 /* doesn't make sense to register an area smaller than 1024 bytes */
                 st = kStatus_MemInitError;
                 break;
             }
 
-            for (p_area = &heap_area_list, id = 1; p_area->next != NULL; p_area = (memAreaPrivDesc_t *)p_area->next)
+            id = 1;
+            for (p_area = &heap_area_list; p_area->next != NULL; p_area = (memAreaPrivDesc_t *)(void *)p_area->next)
             {
                 if (p_area == new_area_desc)
                 {
@@ -631,14 +632,14 @@ mem_status_t MEM_UnRegisterExtendedArea(uint8_t area_id)
             st = kStatus_MemFreeError;
             break;
         }
-        prev_area = MEM_GetAreaByAreaId(area_id - 1); /* Get previous area in list */
+        prev_area = MEM_GetAreaByAreaId(area_id - 1U); /* Get previous area in list */
         if (prev_area == NULL)
         {
             st = kStatus_MemFreeError;
             break;
         }
 
-        p_area_to_remove = (memAreaPrivDesc_t *)prev_area->next;
+        p_area_to_remove = (memAreaPrivDesc_t *)(void *)prev_area->next;
         if (p_area_to_remove == NULL)
         {
             st = kStatus_MemFreeError;
@@ -759,17 +760,17 @@ static void *MEM_BufferAllocateFromArea(memAreaPrivDesc_t *p_area, uint8_t area_
             int32_t remaining_bytes;
 
             /* Current allocation should never be greater than heap end */
-            available_size = p_area->end_address.raw_address - current_footprint;
+            available_size = (int32_t)p_area->end_address.raw_address - (int32_t)current_footprint;
             assert(available_size >= 0);
 
             assert(FreeBlockHdr == p_area->ctx.FreeBlockHdrList.tail);
             total_size      = (numBytes + BLOCK_HDR_SIZE);
-            remaining_bytes = (available_size - total_size);
+            remaining_bytes = available_size - (int32_t)total_size;
             if (remaining_bytes >= 0) /* need to keep the room for the next BlockHeader */
             {
-                if (p_area->low_watermark > remaining_bytes)
+                if (p_area->low_watermark > (uint32_t)remaining_bytes)
                 {
-                    p_area->low_watermark = remaining_bytes;
+                    p_area->low_watermark = (uint32_t)remaining_bytes;
                 }
                 /* Depending on the platform, some RAM banks could need some reinitialization after a low power
                  * period, such as ECC RAM banks */
@@ -917,7 +918,7 @@ static void *MEM_BufferAllocate(uint32_t numBytes, uint8_t poolId)
     if (poolId == 0U)
     {
         area_id = 0U;
-        for (p_area = &heap_area_list; p_area != NULL; p_area = (memAreaPrivDesc_t *)p_area->next)
+        for (p_area = &heap_area_list; p_area != NULL; p_area = (memAreaPrivDesc_t *)(void *)p_area->next)
         {
             if ((p_area->flags & AREA_FLAGS_POOL_NOT_SHARED) == 0U)
             {
@@ -985,7 +986,7 @@ static mem_status_t MEM_BufferFreeBackToArea(memAreaPrivDesc_t *p_area, void *bu
     /* when allocating a buffer, we always create a FreeBlockHdr at
        the end of the buffer, so the FreeBlockHdrList.tail should always
        be at a higher address than current BlockHdr */
-    assert(BlockHdr < p_area->ctx.FreeBlockHdrList.tail);
+    assert((uint32_t)BlockHdr < (uint32_t)p_area->ctx.FreeBlockHdrList.tail);
 
 #if defined(gMemManagerLightGuardsCheckEnable) && (gMemManagerLightGuardsCheckEnable == 1)
     MEM_BlockHeaderCheck(BlockHdr->next);
@@ -997,7 +998,7 @@ static mem_status_t MEM_BufferFreeBackToArea(memAreaPrivDesc_t *p_area, void *bu
     MEM_BufferFrees_memStatis(buffer);
 #endif /* MEM_STATISTICS_INTERNAL */
 
-    if (BlockHdr < p_area->ctx.FreeBlockHdrList.head)
+    if ((uint32_t)BlockHdr < (uint32_t)p_area->ctx.FreeBlockHdrList.head)
     {
         /* BlockHdr is placed before FreeBlockHdrList.head so we can set it as
            the new head of the list */
@@ -1063,7 +1064,7 @@ mem_status_t MEM_BufferFree(void *buffer /* IN: Block of memory to free*/)
         }
         else
         {
-            assert(p_area != NULL);
+            assert(false);
             ret = kStatus_MemFreeError;
         }
 
@@ -1250,7 +1251,7 @@ static uint32_t MEM_GetFreeHeapSpaceInArea(memAreaPrivDesc_t *p_area)
     }
 
     /* Add remaining free space in the heap */
-    free_sz += p_area->end_address.raw_address - (uint32_t)p_area->ctx.FreeBlockHdrList.tail - BLOCK_HDR_SIZE + 1;
+    free_sz += p_area->end_address.raw_address - (uint32_t)p_area->ctx.FreeBlockHdrList.tail - BLOCK_HDR_SIZE + (uint32_t)1U;
     return free_sz;
 }
 
@@ -1262,7 +1263,7 @@ uint32_t MEM_GetFreeHeapSizeByAreaId(uint8_t area_id)
     if (area_id == 0U)
     {
         /* Iterate through all registered areas */
-        for (p_area = &heap_area_list; p_area != NULL; p_area = (memAreaPrivDesc_t *)p_area->next)
+        for (p_area = &heap_area_list; p_area != NULL; p_area = (memAreaPrivDesc_t *)(void *)p_area->next)
         {
             if ((p_area->flags & AREA_FLAGS_POOL_NOT_SHARED) == 0U)
             {
@@ -1312,7 +1313,7 @@ void *MEM_CallocAlt(size_t len, size_t val)
     void *pData = MEM_BufferAllocate(blk_size, 0U);
     if (NULL != pData)
     {
-        (void)memset(pData, 0U, blk_size);
+        (void)memset(pData, 0, blk_size);
     }
 
     return pData;

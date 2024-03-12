@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, 2022 NXP
+ * Copyright 2020, 2022-2023 NXP
  * All rights reserved.
  *
  *
@@ -38,6 +38,8 @@
 #define MAX_EP_COUNT (5U)
 #endif
 
+#define RPMSG_WAITFOREVER (0xFFFFFFFFU)
+
 /*!
  * @brief Defines the rpmsg handle
  *
@@ -67,6 +69,7 @@ typedef enum _hal_rpmsg_status
     kStatus_HAL_RpmsgTxBusy,
     kStatus_HAL_RpmsgTxIdle,
     kStatus_HAL_RpmsgRxIdle,
+    kStatus_HAL_RpmsgTimeout,
 } hal_rpmsg_status_t;
 
 /*! @brief RPMSG return status */
@@ -139,6 +142,21 @@ hal_rpmsg_status_t HAL_RpmsgInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *
 hal_rpmsg_status_t HAL_RpmsgDeinit(hal_rpmsg_handle_t handle);
 
 /*!
+ * @brief Send data to another RPMSG module with timeout.
+ *
+ * This function will send a specified length of data to another core by RPMSG.
+ *
+ * @note This API should be called to send data.
+ *
+ * @param handle           RPMSG handle pointer.
+ * @param data             Pointer to where the send data from.
+ * @param length           The send data length.
+ * @param timeout          Timeout in ms, 0 if nonblocking, RPMSG_WAITFOREVER for wait for forever.
+ * @retval kStatus_HAL_RpmsgSuccess RPMSG send data succeed.
+ */
+hal_rpmsg_status_t HAL_RpmsgSendTimeout(hal_rpmsg_handle_t handle, uint8_t *data, uint32_t length, uint32_t timeout);
+
+/*!
  * @brief Send data to another RPMSG module.
  *
  * This function will send a specified length of data to another core by RPMSG.
@@ -151,6 +169,22 @@ hal_rpmsg_status_t HAL_RpmsgDeinit(hal_rpmsg_handle_t handle);
  * @retval kStatus_HAL_RpmsgSuccess RPMSG send data succeed.
  */
 hal_rpmsg_status_t HAL_RpmsgSend(hal_rpmsg_handle_t handle, uint8_t *data, uint32_t length);
+
+/*!
+ * @brief Allocates the tx buffer for message payload with timeout.
+ *
+ * This API can only be called at process context to get the tx buffer in vring. By this way, the
+ * application can directly put its message into the vring tx buffer without copy from an application buffer.
+ * It is the application responsibility to correctly fill the allocated tx buffer by data and passing correct
+ * parameters to the rpmsg_lite_send_nocopy() function to perform data no-copy-send mechanism.
+ *
+ *
+ * @param handle           RPMSG handle pointer.
+ * @param size             The send data length.
+ * @param timeout          Timeout in ms, 0 if nonblocking, RPMSG_WAITFOREVER for wait for forever.
+ * @retval The tx buffer address on success and RL_NULL on failure.
+ */
+void *HAL_RpmsgAllocTxBufferTimeout(hal_rpmsg_handle_t handle, uint32_t size, uint32_t timeout);
 
 /*!
  * @brief Allocates the tx buffer for message payload.

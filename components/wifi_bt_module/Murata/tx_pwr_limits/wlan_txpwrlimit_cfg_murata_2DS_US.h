@@ -37,6 +37,8 @@
  *  SOFTWARE.
  */
 
+#ifndef _WLAN_TXPWRLIMIT_CFG_MURATA_2DS_US_H_
+#define _WLAN_TXPWRLIMIT_CFG_MURATA_2DS_US_H_
 #define WLAN_REGION_CODE "US"
 
 static wlan_chanlist_t chanlist_2g_cfg = {.num_chans = 11,
@@ -320,3 +322,5 @@ static wifi_txpwrlimit_t
                  [38] = {0},
                  [39] = {0},
              }};
+
+#endif /* _WLAN_TXPWRLIMIT_CFG_MURATA_2DS_US_H_ */
