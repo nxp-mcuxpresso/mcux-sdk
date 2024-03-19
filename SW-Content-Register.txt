@@ -283,6 +283,17 @@ conn_fwloader              Name: RW61X Firmware Binary
                            Location: components/conn_fwloader/fw_bin         
                            Origin: NXP (Proprietary)                         
 
+psa_crypto_driver          Name: PSA CRYPTO DRIVER                           
+                           Version: 1.0.0                                    
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code                               
+                           Description: PSA crypto driver interface to use   
+                           cryptographic library running on NXP crypto       
+                           Hardware IP                                       
+                           Origin: NXP (BSD-3-Clause)                        
+                           Location: components/psa_crypto_driver            
+
 els_pkc                    Name: ELS PKC                                     
                            Version: 1.9.0                                    
                            Outgoing License: LA_OPT_NXP_Software_License v49 

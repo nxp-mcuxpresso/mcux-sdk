@@ -3239,6 +3239,124 @@ ${load}</script>
         <include_path relative_path="include" type="c_include"/>
       </include_paths>
     </component>
+    <component id="component.psa_crypto_driver.osal.RW612" name="psa_crypto_driver osal" brief="OS Abstraction Layer for PSA crypto driver" version="1.0.0" full_name="PSA crypto driver osal layer" category="psa_crypto_driver/psa_crypto_driver_osal" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="osal" type="c_include">
+        <files mask="osal_mutex.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_osal.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="osal" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.oracle.RW612" name="psa_crypto_driver els_pkc_oracle" brief="Oracle of PSA crypto driver for els_pkc" version="1.0.0" full_name="Oracle of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="els_pkc/oracle/inc" type="c_include">
+        <files mask="mcuxClPsaDriver_Oracle_Interface_builtin_key_ids.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Interface_key_locations.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Macros.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Utils.h"/>
+      </source>
+      <source relative_path="els_pkc/oracle/src" type="src">
+        <files mask="mcuxClPsaDriver_Oracle.c"/>
+        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.c"/>
+        <files mask="mcuxClPsaDriver_Oracle_Utils.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_oracle.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/oracle/inc" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.common.RW612" name="psa_crypto_driver els_pkc_common" brief="Common files of PSA crypto driver for els_pkc" version="1.0.0" full_name="Common files of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_common" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="els_pkc/include/common" type="c_include">
+        <files mask="mcux_psa_els_pkc_common_init.h"/>
+        <files mask="mcux_psa_els_pkc_entropy.h"/>
+      </source>
+      <source relative_path="els_pkc/src/common" type="src">
+        <files mask="mcux_psa_els_pkc_common_init.c"/>
+        <files mask="mcux_psa_els_pkc_entropy.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_common.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/include/common" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.transparent.RW612" name="psa_crypto_driver els_pkc_transparent" brief="Transparent part of PSA crypto driver for els_pkc" version="1.0.0" full_name="Transparent part of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypt_dri_els_pkc_trans" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="els_pkc/include/transparent" type="c_include">
+        <files mask="mcux_psa_els_pkc_aead.h"/>
+        <files mask="mcux_psa_els_pkc_asymmetric_signature.h"/>
+        <files mask="mcux_psa_els_pkc_cipher.h"/>
+        <files mask="mcux_psa_els_pkc_hash.h"/>
+        <files mask="mcux_psa_els_pkc_init.h"/>
+        <files mask="mcux_psa_els_pkc_key_generation.h"/>
+        <files mask="mcux_psa_els_pkc_mac.h"/>
+      </source>
+      <source relative_path="els_pkc/src/transparent" type="src">
+        <files mask="mcux_psa_els_pkc_aead.c"/>
+        <files mask="mcux_psa_els_pkc_asymmetric_signature.c"/>
+        <files mask="mcux_psa_els_pkc_cipher.c"/>
+        <files mask="mcux_psa_els_pkc_hash.c"/>
+        <files mask="mcux_psa_els_pkc_init.c"/>
+        <files mask="mcux_psa_els_pkc_key_generation.c"/>
+        <files mask="mcux_psa_els_pkc_mac.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_transparent.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/include/transparent" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.opaque.RW612" name="psa_crypto_driver els_pkc_opaque" brief="Opaque part of PSA crypto driver for els_pkc" version="1.0.0" full_name="Opaque part of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_dri_els_pkc_opaque" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="els_pkc/include/opaque" type="c_include">
+        <files mask="mcux_psa_els_pkc_opaque_aead.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_asymmetric_signature.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_cipher.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_init.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_key_generation.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_mac.h"/>
+      </source>
+      <source relative_path="els_pkc/src/opaque" type="src">
+        <files mask="mcux_psa_els_pkc_opaque_aead.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_asymmetric_signature.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_cipher.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_init.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_key_generation.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_mac.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_opaque.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/include/opaque" type="c_include"/>
+      </include_paths>
+    </component>
+    <!--<component id="container.component.psa_crypto_driver.unused_files.RW612" name="unused_files" version="1.0.0" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+  <source exclude="true" relative_path="./" type="doc">
+    <files mask="CMakeLists.txt" hidden="true"/>
+    <files mask="CMakeLists.txt" hidden="true"/>
+  </source>
+</component>-->
     <component id="component.els_pkc.core.RW612" name="els_pkc.core" brief="Component els_pkc.core" version="1.9.0" full_name="Component els_pkc.core" category="els_pkc/els_pkc_core" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
       <dependencies>
         <device_dependency value="RW612"/>
@@ -5427,6 +5545,46 @@ ${load}</script>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.osal.frtos.RW612" name="psa_crypto_driver osal_frtos" brief="OS Abstraction Layer for PSA crypto driver on FreeRTOS" version="1.0.0" full_name="PSA crypto driver osal layer for FreeRTOS" category="psa_crypto_driver/psa_crypto_driver_osal_frtos" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <all>
+          <component_dependency value="component.psa_crypto_driver.osal.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="osal/frtos" type="src">
+        <files mask="osal_mutex.c"/>
+      </source>
+      <source relative_path="osal/frtos" type="c_include">
+        <files mask="osal_mutex_platform.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_osal_frtos.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="osal/frtos" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.osal.baremetal.RW612" name="psa_crypto_driver osal_baremetal" brief="OS Abstraction Layer for PSA crypto driver on bare metal" version="1.0.0" full_name="PSA crypto driver osal layer for bare metal implementations" category="psa_crypto_driver/psa_crypto_driver_osal_baremetal" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <all>
+          <component_dependency value="component.psa_crypto_driver.osal.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="osal/baremetal" type="src">
+        <files mask="osal_mutex.c"/>
+      </source>
+      <source relative_path="osal/baremetal" type="c_include">
+        <files mask="osal_mutex_platform.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_osal_baremetal.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="osal/baremetal" type="c_include"/>
       </include_paths>
     </component>
     <component id="component.els_pkc.doc.rw61x.RW612" name="els_pkc.doc.rw61x" brief="Component els_pkc.doc.rw61x" version="1.9.0" full_name="Component els_pkc.doc.rw61x" category="els_pkc/doc" user_visible="true" type="software_component" package_base_path="../components/els_pkc/" project_base_path="component/els_pkc/">
