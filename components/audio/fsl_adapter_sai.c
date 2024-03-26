@@ -359,7 +359,7 @@ static hal_audio_status_t HAL_AudioCommonInit(hal_audio_handle_t handle,
         saiConfig.syncMode = kSAI_ModeSync;
     }
 
-    switch (config->msaterSlave)
+    switch (config->masterSlave)
     {
         case kHAL_AudioMaster:
             saiConfig.masterSlave = kSAI_Master;

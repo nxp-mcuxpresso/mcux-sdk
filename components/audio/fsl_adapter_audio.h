@@ -346,7 +346,7 @@ typedef struct _hal_audio_config
                                  but the watermark is set to 64 by application, the real value that is written to
                                  register will be 31. */
 
-    hal_audio_master_slave_t msaterSlave;   /*!< master or slave, configure where the bclk and frame sync come from. */
+    hal_audio_master_slave_t masterSlave;   /*!< master or slave, configure where the bclk and frame sync come from. */
     hal_audio_bclk_polarity_t bclkPolarity; /*!< bclk polarity, data sample on rising edge or falling edge. */
 
     hal_audio_frame_sync_width_t frameSyncWidth; /*!< Only DSP mode uses this field. For other data format, this field
@@ -460,7 +460,7 @@ extern "C" {
  *   audioConfig.srcClock_Hz                    = 24576000;
  *   audioConfig.sampleRate_Hz                  = (uint32_t)kHAL_AudioSampleRate48KHz;
  *   audioConfig.fifoWatermark                  = 16;
- *   audioConfig.msaterSlave                    = kHAL_AudioMaster;
+ *   audioConfig.masterSlave                    = kHAL_AudioMaster;
  *   audioConfig.bclkPolarity                   = kHAL_AudioSampleOnRisingEdge;
  *   audioConfig.frameSyncWidth                 = kHAL_AudioFrameSyncWidthHalfFrame;
  *   audioConfig.frameSyncPolarity              = kHAL_AudioBeginAtFallingEdge;
@@ -487,7 +487,7 @@ extern "C" {
  *   audioConfig.srcClock_Hz        = 24576000;
  *   audioConfig.sampleRate_Hz      = (uint32_t)kHAL_AudioSampleRate48KHz;
  *   audioConfig.fifoWatermark      = 0;
- *   audioConfig.msaterSlave        = kHAL_AudioMaster;
+ *   audioConfig.masterSlave        = kHAL_AudioMaster;
  *   audioConfig.bclkPolarity       = kHAL_AudioSampleOnRisingEdge;
  *   audioConfig.frameSyncWidth     = kHAL_AudioFrameSyncWidthHalfFrame;
  *   audioConfig.frameSyncPolarity  = kHAL_AudioBeginAtFallingEdge;
@@ -548,7 +548,7 @@ hal_audio_status_t HAL_AudioTxInit(hal_audio_handle_t handle, const hal_audio_co
  *   audioConfig.srcClock_Hz                    = 24576000;
  *   audioConfig.sampleRate_Hz                  = (uint32_t)kHAL_AudioSampleRate48KHz;
  *   audioConfig.fifoWatermark                  = 16;
- *   audioConfig.msaterSlave                    = kHAL_AudioMaster;
+ *   audioConfig.masterSlave                    = kHAL_AudioMaster;
  *   audioConfig.bclkPolarity                   = kHAL_AudioSampleOnRisingEdge;
  *   audioConfig.frameSyncWidth                 = kHAL_AudioFrameSyncWidthHalfFrame;
  *   audioConfig.frameSyncPolarity              = kHAL_AudioBeginAtFallingEdge;
@@ -575,7 +575,7 @@ hal_audio_status_t HAL_AudioTxInit(hal_audio_handle_t handle, const hal_audio_co
  *   audioConfig.srcClock_Hz        = 24576000;
  *   audioConfig.sampleRate_Hz      = (uint32_t)kHAL_AudioSampleRate48KHz;
  *   audioConfig.fifoWatermark      = 0;
- *   audioConfig.msaterSlave        = kHAL_AudioMaster;
+ *   audioConfig.masterSlave        = kHAL_AudioMaster;
  *   audioConfig.bclkPolarity       = kHAL_AudioSampleOnRisingEdge;
  *   audioConfig.frameSyncWidth     = kHAL_AudioFrameSyncWidthHalfFrame;
  *   audioConfig.frameSyncPolarity  = kHAL_AudioBeginAtFallingEdge;
