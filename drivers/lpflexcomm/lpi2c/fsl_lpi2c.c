@@ -483,13 +483,15 @@ void LPI2C_MasterInit(LPI2C_Type *base, const lpi2c_master_config_t *masterConfi
  */
 void LPI2C_MasterDeinit(LPI2C_Type *base)
 {
-    uint32_t instance = LPI2C_GetInstance(base); 
-    
+    uint32_t instance = LPI2C_GetInstance(base);
+
     /* Restore to reset state. */
     LPI2C_MasterReset(base);
     if(LP_FLEXCOMM_GetBaseAddress(instance) != 0U)
     {
+#if !(defined(LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER) && LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER)
         LP_FLEXCOMM_Deinit(instance);
+#endif /* LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER */
     }
     else
     {
@@ -503,9 +505,6 @@ void LPI2C_MasterDeinit(LPI2C_Type *base)
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
     }
-#if !(defined(LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER) && LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER)
-    LP_FLEXCOMM_Deinit(LPI2C_GetInstance(base));
-#endif
 }
 
 /*!
@@ -1776,7 +1775,9 @@ void LPI2C_SlaveDeinit(LPI2C_Type *base)
     LPI2C_SlaveReset(base);
     if(LP_FLEXCOMM_GetBaseAddress(instance) != 0U)
     {
+#if !(defined(LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER) && LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER)
         LP_FLEXCOMM_Deinit(instance);
+#endif /* LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER */
     }
     else
     {
@@ -1790,9 +1791,6 @@ void LPI2C_SlaveDeinit(LPI2C_Type *base)
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
     }
-#if !(defined(LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER) && LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER)
-    LP_FLEXCOMM_Deinit(LPI2C_GetInstance(base));
-#endif
 }
 
 /*!
