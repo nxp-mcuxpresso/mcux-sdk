@@ -13,7 +13,17 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MIMX9596AVTXN_cm7) || defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596DVTXQ_cm7) || \
+#if (defined(CPU_MIMX9596AVTXN_ca55) || defined(CPU_MIMX9596AVZXN_ca55) || defined(CPU_MIMX9596DVTXQ_ca55) || \
+    defined(CPU_MIMX9596DVYXQ_ca55) || defined(CPU_MIMX9596DVZXQ_ca55) || defined(CPU_MIMX9596XVTXL_ca55))
+
+#define MIMX9596_ca55_SERIES
+
+/* CMSIS-style register definitions */
+#include "MIMX9596_ca55.h"
+/* CPU specific feature definitions */
+#include "MIMX9596_ca55_features.h"
+
+#elif (defined(CPU_MIMX9596AVTXN_cm7) || defined(CPU_MIMX9596AVZXN_cm7) || defined(CPU_MIMX9596DVTXQ_cm7) || \
     defined(CPU_MIMX9596DVYXQ_cm7) || defined(CPU_MIMX9596DVZXQ_cm7) || defined(CPU_MIMX9596XVTXL_cm7))
 
 #define MIMX9596_cm7_SERIES
