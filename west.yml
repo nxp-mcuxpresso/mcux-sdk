@@ -128,3 +128,4 @@ manifest:
     remote: nxp
   self:
     path: core
+    import: submanifests
