@@ -1,0 +1,110 @@
+/*
+** ###################################################################
+**     Processors:          MIMX9352AVTXM_cm33
+**                          MIMX9352CVUXK_cm33
+**                          MIMX9352DVUXM_cm33
+**
+**     Compiler:            IAR ANSI C/C++ Compiler for ARM
+**     Reference manual:    IMX93RM, Internal, November. 2021
+**     Version:             rev. 1.0, 2021-11-16
+**     Build:               b230103
+**
+**     Abstract:
+**         Linker file for the IAR ANSI C/C++ Compiler for ARM
+**
+**     Copyright 2016 Freescale Semiconductor, Inc.
+**     Copyright 2016-2023 NXP
+**     All rights reserved.
+**
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+** ###################################################################
+*/
+
+
+define symbol __ram_vector_table_size__ =  isdefinedsymbol(__ram_vector_table__) ? 0x00000800 : 0;
+define symbol __ram_vector_table_offset__ =  isdefinedsymbol(__ram_vector_table__) ? 0x000007FF : 0;
+
+define symbol m_interrupts_start       = 0x00000000;
+define symbol m_interrupts_end         = 0x000007FF;
+
+define symbol m_text_start             = 0x00000800;
+define symbol m_text_end               = 0x0003FFFF;
+
+define symbol m_m33_suspend_ram_start  = 0x20000000;
+define symbol m_m33_suspend_ram_end    = 0x20001FFF;
+
+define symbol m_a55_suspend_ram_start  = 0x20002000;
+define symbol m_a55_suspend_ram_end    = 0x20003FFF;
+
+define symbol m_data_start             = 0x20004000;
+define symbol m_data_end               = 0x2001DFFF;
+
+define symbol m_ncache_start           = 0x2001E000;
+define symbol m_ncache_end             = 0x2002DFFF;
+
+define symbol m_reserved_start         = 0x2002E000;
+define symbol m_reserved_end           = 0x2003BFFF;
+
+define symbol m_rsc_tbl_start          = 0x2003C000;
+define symbol m_rsc_tbl_end            = 0x2003FFFF;
+
+define symbol m_rsc_tbl_in_dram_start  = 0x88220000;
+define symbol m_rsc_tbl_in_dram_end    = 0x88223FFF;
+
+define exported symbol __NCACHE_REGION_START   = m_ncache_start;
+define exported symbol __NCACHE_REGION_SIZE    = m_ncache_end - m_ncache_start + 1;
+/* Sizes */
+if (isdefinedsymbol(__stack_size__)) {
+  define symbol __size_cstack__        = __stack_size__;
+} else {
+  define symbol __size_cstack__        = 0x0400;
+}
+
+if (isdefinedsymbol(__heap_size__)) {
+  define symbol __size_heap__          = __heap_size__;
+} else {
+  define symbol __size_heap__          = 0x0400;
+}
+
+define exported symbol __VECTOR_TABLE  = m_interrupts_start;
+define exported symbol __RAM_VECTOR_TABLE_SIZE = __ram_vector_table_size__;
+
+define exported symbol __RscTblStart = m_rsc_tbl_start;
+define exported symbol __RscTblInDramStart = m_rsc_tbl_in_dram_start;
+
+define memory mem with size = 4G;
+define region TEXT_region = mem:[from m_interrupts_start to m_interrupts_end]
+                          | mem:[from m_text_start to m_text_end];
+define region DATA_region = mem:[from m_data_start to m_data_end-__size_cstack__];
+define region RSC_TBL_region = mem:[from m_rsc_tbl_start to m_rsc_tbl_end];
+define region CSTACK_region = mem:[from m_data_end-__size_cstack__+1 to m_data_end];
+define region M33_SUSPEND_region = mem:[from m_m33_suspend_ram_start to m_m33_suspend_ram_end];
+define region A55_SUSPEND_region = mem:[from m_a55_suspend_ram_start to m_a55_suspend_ram_end];
+define region NCACHE_region = mem:[from m_ncache_start to m_ncache_end];
+
+define block CSTACK    with alignment = 8, size = __size_cstack__   { };
+define block HEAP      with alignment = 8, size = __size_heap__     { };
+define block RW        { readwrite };
+define block ZI        { zi };
+define block NCACHE_VAR    { section NonCacheable , section NonCacheable.init };
+
+initialize by copy { readwrite, section .textrw };
+do not initialize  { section .noinit, section M33SuspendRam, section A55SuspendRam };
+
+keep{section .resource_table};
+
+place at address mem: m_interrupts_start    { readonly section .intvec };
+".resource_table": place at address mem: m_text_start {section .resource_table};
+place in TEXT_region                        { readonly };
+place in DATA_region                        { block RW };
+place in DATA_region                        { block ZI };
+place in DATA_region                        { last block HEAP };
+place in CSTACK_region                      { block CSTACK };
+place in RSC_TBL_region                     { section m_rsc_tbl };
+place in M33_SUSPEND_region                 { section M33SuspendRam };
+place in A55_SUSPEND_region                 { section A55SuspendRam };
+place in NCACHE_region                      { block NCACHE_VAR };
