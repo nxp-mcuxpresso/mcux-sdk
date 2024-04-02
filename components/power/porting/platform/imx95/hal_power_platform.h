@@ -1,0 +1,193 @@
+/*
+ * Copyright 2023-2024 NXP
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+#ifndef HAL_POWER_PLATFORM_H_
+#define HAL_POWER_PLATFORM_H_
+
+#include "fsl_common.h"
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+#define HAL_POWER_PLATFORM_NUM_MIX_SLICE               23U
+
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_ANA           0U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_AON           1U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_BBSM          2U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_CAMERA        3U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_CCMSRCGPC     4U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_A55C0         5U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_A55C1         6U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_A55C2         7U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_A55C3         8U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_A55C4         9U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_A55C5         10U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_A55P          11U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_DDR           12U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_DISPLAY       13U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_GPU           14U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_HSIO_TOP      15U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_HSIO_WAON     16U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_M7            17U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_NETC          18U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_NOC           19U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_NPU           20U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_VPU           21U
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_WAKEUP        22U
+
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_AON           0U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_CAMERA        1U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_A55C0         2U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_A55C1         3U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_A55C2         4U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_A55C3         5U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_A55C4         6U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_A55C5         7U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_A55P          8U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_A55L3         9U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_DDR           10U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_DISPLAY       11U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_GPU           12U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_HSIO          13U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_M7            14U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_NETC          15U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_NOC1          16U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_NOC2          17U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_NPU           18U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_VPU           19U
+#define HAL_POWER_PLATFORM_MEM_SLICE_IDX_WAKEUP        20U
+
+#define HAL_POWER_PLATFORM_MIX_SLICE_IDX_A55C_LAST     PWR_MIX_SLICE_IDX_A55C5
+
+#define HAL_POWER_PLATFORM_MIX_PSW_STAT_MASK           SRC_XSPR_FUNC_STAT_PSW_STAT_MASK
+#define HAL_POWER_PLATFORM_MIX_PSW_STAT_PUP            SRC_XSPR_FUNC_STAT_PSW_STAT(0U)
+#define HAL_POWER_PLATFORM_MIX_PSW_STAT_PDN            SRC_XSPR_FUNC_STAT_PSW_STAT(1U)
+
+#define HAL_POWER_PLATFORM_MIX_FUNC_STAT_MASK                  \
+    (SRC_XSPR_FUNC_STAT_SYSMAN_STAT_MASK |      \
+     SRC_XSPR_FUNC_STAT_MEM_STAT_MASK |         \
+     SRC_XSPR_FUNC_STAT_A55_HDSK_STAT_MASK |    \
+     SRC_XSPR_FUNC_STAT_SSAR_STAT_MASK |        \
+     SRC_XSPR_FUNC_STAT_ISO_STAT_MASK |         \
+     SRC_XSPR_FUNC_STAT_RST_STAT_MASK |         \
+     SRC_XSPR_FUNC_STAT_PSW_STAT_MASK)
+
+#define HAL_POWER_PLATFORM_MIX_FUNC_STAT_PUP                   \
+    (SRC_XSPR_FUNC_STAT_SYSMAN_STAT(0U) |       \
+     SRC_XSPR_FUNC_STAT_MEM_STAT(0U) |          \
+     SRC_XSPR_FUNC_STAT_A55_HDSK_STAT(0U) |     \
+     SRC_XSPR_FUNC_STAT_SSAR_STAT(0U) |         \
+     SRC_XSPR_FUNC_STAT_ISO_STAT(0U) |          \
+     SRC_XSPR_FUNC_STAT_RST_STAT(1U) |          \
+     SRC_XSPR_FUNC_STAT_PSW_STAT(0U))
+
+#define HAL_POWER_PLATFORM_MIX_FUNC_STAT_PDN                   \
+    (SRC_XSPR_FUNC_STAT_SYSMAN_STAT(1U) |       \
+     SRC_XSPR_FUNC_STAT_MEM_STAT(1U) |          \
+     SRC_XSPR_FUNC_STAT_A55_HDSK_STAT(1U) |     \
+     SRC_XSPR_FUNC_STAT_SSAR_STAT(1U) |         \
+     SRC_XSPR_FUNC_STAT_ISO_STAT(1U) |          \
+     SRC_XSPR_FUNC_STAT_RST_STAT(0U) |          \
+     SRC_XSPR_FUNC_STAT_PSW_STAT(1U))
+
+/* Macro to convert CPU ID to GPC domain ID
+ * Note:  AUTHEN_CTRL.WHITE_LIST assignments use macro
+ *        to define LPM voting logic mappings.  Offset
+ *        mapping to GPC domain by TRDC ID assigned to M33
+ *        to avoid collisions between WHITE_LIST access control
+ *        and LPM voting logic.
+ */
+#define CM33_TRDC_ID                2U
+#define CPU2GPC(cpuId)              ((cpuId) + CM33_TRDC_ID)
+
+#define LPMSETTING_MASK(cpuId)          (0x7ULL << ((CPU2GPC(cpuId) << 2U)))
+#define LPMSETTING_DOM(cpuId, lpmVal)   (((uint64_t) lpmVal) << ((CPU2GPC(cpuId) << 2U)))
+#define LPMSETTING_VAL(cpuId, lpmReg)   ((((uint64_t) lpmReg) & LPMSETTING_MASK(cpuId)) >> ((CPU2GPC(cpuId) << 2U)))
+
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_M7           0U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_S500         1U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_NPU          2U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_A55          3U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_M33          4U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_AON          5U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_DDR          6U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_WAKEUP       7U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_NOC          8U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_CAMERA       9U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_HSIO         10U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_RSVD         11U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_NETC         12U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_DISPLAY      13U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_VPU          14U
+#define HAL_POWER_PLATFORM_GPC_REQ_MIX_ID_GPU          15U
+
+#define HAL_POWER_PLATFORM_GPC_REQ_STATE_CLK_GATE      1U
+#define HAL_POWER_PLATFORM_GPC_REQ_STATE_CLK_CHANGE    2U
+#define HAL_POWER_PLATFORM_GPC_REQ_STATE_RESET         3U
+#define HAL_POWER_PLATFORM_GPC_REQ_STATE_POWER         4U
+#define HAL_POWER_PLATFORM_GPC_REQ_STATE_RETENTION     5U
+
+#define HAL_POWER_PLATFORM_GPC_HS_RST_AON              1U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_M33P             2U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_ELE              3U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_CAMERA           5U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_A55C0            7U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_A55C1            8U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_A55C2            9U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_A55C3            10U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_A55C4            11U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_A55C5            12U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_A55P             13U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_DDR              14U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_DDRPHY           15U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_DISPLAY          16U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_GPU              17U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_HSIO             18U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_HSIOAON          19U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_M7               20U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_NETC             21U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_NOC              22U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_NPU              23U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_VPU              24U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_WAKEUP           25U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_JTAG             26U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_WDOG_3_4         27U
+#define HAL_POWER_PLATFORM_GPC_HS_RST_WDOG5            28U
+
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_CAMERA           0U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_A55C0            2U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_A55C1            3U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_A55C2            4U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_A55C3            5U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_A55C4            6U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_A55C5            7U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_A55P             8U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_DDR              9U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_DISPLAY          10U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_GPU              11U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_HSIO             12U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_HSIOAON          13U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_M7               14U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_NETC             15U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_NOC              16U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_NPU              17U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_VPU              18U
+#define HAL_POWER_PLATFORM_GPC_HS_PWR_WAKEUP           19U
+
+/*******************************************************************************
+ * API
+ ******************************************************************************/
+#if defined(__cplusplus)
+extern "C" {
+#endif /*__cplusplus */
+
+#if defined(__cplusplus)
+}
+#endif /*__cplusplus */
+
+/*! @} */
+
+#endif /* HAL_POWER_PLATFORM_H_ */
