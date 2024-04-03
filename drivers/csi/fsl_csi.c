@@ -65,56 +65,6 @@ typedef union pvoid_to_u32
 static uint32_t CSI_GetInstance(CSI_Type *base);
 
 #if !CSI_DRIVER_FRAG_MODE
-/*!
- * @brief Get the delta value of two index in queue.
- *
- * @param startIdx Start index.
- * @param endIdx End index.
- *
- * @return The delta between startIdx and endIdx in queue.
- */
-static uint8_t CSI_TransferGetQueueDelta(uint8_t startIdx, uint8_t endIdx);
-
-/*!
- * @brief Increase a index value in queue.
- *
- * This function increases the index value in the queue, if the index is out of
- * the queue range, it is reset to 0.
- *
- * @param idx The index value to increase.
- *
- * @return The index value after increase.
- */
-static uint8_t CSI_TransferIncreaseQueueIdx(uint8_t idx);
-
-/*!
- * @brief Get the empty frame buffer count in queue.
- *
- * @param base CSI peripheral base address
- * @param handle Pointer to CSI driver handle.
- *
- * @return Number of the empty frame buffer count in queue.
- */
-static uint32_t CSI_TransferGetEmptyBufferCount(csi_handle_t *handle);
-
-/*!
- * @brief Get the empty frame buffer.
- *
- * This function should only be called when frame buffer count larger than 0.
- *
- * @param handle Pointer to CSI driver handle.
- *
- * @return Empty buffer
- */
-static uint32_t CSI_TransferGetEmptyBuffer(csi_handle_t *handle);
-
-/*!
- * @brief Put the empty frame buffer.
- *
- * @param handle Pointer to CSI driver handle.
- * @param buffer The empty buffer to put.
- */
-static void CSI_TransferPutEmptyBuffer(csi_handle_t *handle, uint32_t buffer);
 
 /*!
  * @brief Get the RX frame buffer address.
@@ -184,67 +134,69 @@ static uint32_t CSI_GetInstance(CSI_Type *base)
 }
 
 #if !CSI_DRIVER_FRAG_MODE
-static uint8_t CSI_TransferGetQueueDelta(uint8_t startIdx, uint8_t endIdx)
+static void CSI_InitBufferQueue(buf_queue_t *bq)
 {
-    uint8_t ret;
+    bq->head = -1;
+    bq->tail = -1;
+}
 
-    if (endIdx >= startIdx)
+static bool CSI_IsBufferQueueEmpty(buf_queue_t *bq)
+{
+    return bq->head == -1;
+}
+
+static bool CSI_IsBufferQueueFull(buf_queue_t *bq)
+{
+    return bq->tail == (CSI_DRIVER_QUEUE_SIZE - 1);
+}
+
+static uint32_t CSI_BufferQueueCount(buf_queue_t *bq)
+{
+    if (CSI_IsBufferQueueEmpty(bq))
     {
-        ret = endIdx - startIdx;
+        return 0;
+    }
+    return bq->tail - bq->head + 1;
+}
+
+static status_t CSI_EnqueueBuffer(buf_queue_t *bq, uint32_t addr)
+{
+    if (CSI_IsBufferQueueFull(bq))
+    {
+        return kStatus_CSI_QueueFull;
+    }
+
+    if (CSI_IsBufferQueueEmpty(bq))
+    {
+        bq->head = 0;
+    }
+
+    bq->tail++;
+    bq->addr[bq->tail] = addr;
+
+    return kStatus_Success;
+}
+
+static uint32_t CSI_DequeueBuffer(buf_queue_t *bq)
+{
+    if (CSI_IsBufferQueueEmpty(bq))
+    {
+        return 0;
+    }
+
+    uint32_t addr = bq->addr[bq->head];
+
+    if (bq->head == bq->tail)
+    {
+        bq->head = -1;
+        bq->tail = -1;
     }
     else
     {
-        ret = (uint8_t)(endIdx + CSI_DRIVER_ACTUAL_QUEUE_SIZE - startIdx);
+        bq->head++;
     }
 
-    return ret;
-}
-
-static uint8_t CSI_TransferIncreaseQueueIdx(uint8_t idx)
-{
-    uint8_t ret;
-
-    /*
-     * Here not use the method:
-     * ret = (idx+1) % CSI_DRIVER_ACTUAL_QUEUE_SIZE;
-     *
-     * Because the mod function might be slow.
-     */
-
-    ret = idx + 1U;
-
-    if (ret >= CSI_DRIVER_ACTUAL_QUEUE_SIZE)
-    {
-        ret = 0U;
-    }
-
-    return ret;
-}
-
-static uint32_t CSI_TransferGetEmptyBufferCount(csi_handle_t *handle)
-{
-    return handle->emptyBufferCnt;
-}
-
-static uint32_t CSI_TransferGetEmptyBuffer(csi_handle_t *handle)
-{
-    pvoid_to_u32_t buf;
-
-    buf.pvoid = handle->emptyBuffer;
-    handle->emptyBufferCnt--;
-    handle->emptyBuffer = *(void **)(buf.pvoid);
-
-    return buf.u32;
-}
-
-static void CSI_TransferPutEmptyBuffer(csi_handle_t *handle, uint32_t buffer)
-{
-    pvoid_to_u32_t buf;
-    buf.u32 = buffer;
-
-    *(void **)(buf.pvoid) = handle->emptyBuffer;
-    handle->emptyBuffer   = buf.pvoid;
-    handle->emptyBufferCnt++;
+    return addr;
 }
 
 static uint32_t CSI_GetRxBufferAddr(CSI_Type *base, uint8_t index)
@@ -647,6 +599,10 @@ status_t CSI_TransferCreateHandle(CSI_Type *base,
     handle->callback = callback;
     handle->userData = userData;
 
+    /* Initialize buffer queues. */
+    CSI_InitBufferQueue(&handle->emptyBufferQueue);
+    CSI_InitBufferQueue(&handle->fullBufferQueue);
+
     /* Get instance from peripheral base address. */
     instance = CSI_GetInstance(base);
 
@@ -679,11 +635,7 @@ status_t CSI_TransferStart(CSI_Type *base, csi_handle_t *handle)
 {
     assert(NULL != handle);
 
-    uint32_t emptyBufferCount;
-
-    emptyBufferCount = CSI_TransferGetEmptyBufferCount(handle);
-
-    if (emptyBufferCount < 2U)
+    if (CSI_BufferQueueCount(&handle->emptyBufferQueue) < CSI_MAX_ACTIVE_FRAME_NUM)
     {
         return kStatus_CSI_NoEmptyBuffer;
     }
@@ -697,8 +649,8 @@ status_t CSI_TransferStart(CSI_Type *base, csi_handle_t *handle)
                          CSI_CR18_BASEADDR_SWITCH_SEL_MASK | CSI_CR18_BASEADDR_SWITCH_EN_MASK;
 
     /* Load the frame buffer to CSI register, there are at least two empty buffers. */
-    CSI_REG_DMASA_FB1(base) = CSI_ADDR_CPU_2_IP(CSI_TransferGetEmptyBuffer(handle));
-    CSI_REG_DMASA_FB2(base) = CSI_ADDR_CPU_2_IP(CSI_TransferGetEmptyBuffer(handle));
+    CSI_REG_DMASA_FB1(base) = CSI_ADDR_CPU_2_IP(CSI_DequeueBuffer(&handle->emptyBufferQueue));
+    CSI_REG_DMASA_FB2(base) = CSI_ADDR_CPU_2_IP(CSI_DequeueBuffer(&handle->emptyBufferQueue));
 
     handle->activeBufferNum = CSI_MAX_ACTIVE_FRAME_NUM;
 
@@ -750,7 +702,7 @@ status_t CSI_TransferStop(CSI_Type *base, csi_handle_t *handle)
      */
     for (bufIdx = 0; bufIdx < activeBufferNum; bufIdx++)
     {
-        CSI_TransferPutEmptyBuffer(handle, CSI_GetRxBufferAddr(base, bufIdx));
+        CSI_EnqueueBuffer(&handle->emptyBufferQueue, CSI_GetRxBufferAddr(base, bufIdx));
     }
 
     return kStatus_Success;
@@ -767,24 +719,33 @@ status_t CSI_TransferStop(CSI_Type *base, csi_handle_t *handle)
  * param handle Pointer to the handle structure.
  * param frameBuffer Empty frame buffer to submit.
  *
- * retval kStatus_Success Started successfully.
+ * retval kStatus_Success Submitted successfully.
  * retval kStatus_CSI_QueueFull Could not submit because there is no room in queue.
  */
 status_t CSI_TransferSubmitEmptyBuffer(CSI_Type *base, csi_handle_t *handle, uint32_t frameBuffer)
 {
     uint32_t csicr1;
+    status_t status = kStatus_Success;
 
     /* Disable the interrupt to protect the index information in handle. */
     csicr1 = CSI_REG_CR1(base);
 
     CSI_REG_CR1(base) = (csicr1 & ~(CSI_CR1_FB2_DMA_DONE_INTEN_MASK | CSI_CR1_FB1_DMA_DONE_INTEN_MASK));
 
-    /* Save the empty frame buffer address to queue. */
-    CSI_TransferPutEmptyBuffer(handle, frameBuffer);
+    if (handle->activeBufferNum == 1U)
+    {
+        /* Only 1 active framebuffer left, set the newly submitted buffer as active framebuffer */
+        CSI_SetRxBufferAddr(base, handle->dmaDoneBufferIdx, frameBuffer);
+        handle->activeBufferNum++;
+    }
+    else
+    {
+        status = CSI_EnqueueBuffer(&handle->emptyBufferQueue, frameBuffer);
+    }
 
     CSI_REG_CR1(base) = csicr1;
 
-    return kStatus_Success;
+    return status;
 }
 
 /*!
@@ -799,39 +760,30 @@ status_t CSI_TransferSubmitEmptyBuffer(CSI_Type *base, csi_handle_t *handle, uin
  * param handle Pointer to the handle structure.
  * param frameBuffer Full frame buffer.
  *
- * retval kStatus_Success Started successfully.
+ * retval kStatus_Success Got full framebuffer successfully.
  * retval kStatus_CSI_NoFullBuffer There is no full frame buffer in queue.
  */
 status_t CSI_TransferGetFullBuffer(CSI_Type *base, csi_handle_t *handle, uint32_t *frameBuffer)
 {
     uint32_t csicr1;
-    status_t status;
-    uint8_t queueReadIdx;
-    uint8_t queueWriteIdx;
+    status_t status = kStatus_Success;
 
-    queueReadIdx  = handle->queueReadIdx;
-    queueWriteIdx = handle->queueWriteIdx;
+    /* Disable the interrupt to protect the index information in handle. */
+    csicr1 = CSI_REG_CR1(base);
 
-    /* No full frame buffer. */
-    if (queueReadIdx == queueWriteIdx)
+    CSI_REG_CR1(base) = (csicr1 & ~(CSI_CR1_FB2_DMA_DONE_INTEN_MASK | CSI_CR1_FB1_DMA_DONE_INTEN_MASK));
+
+    if (CSI_IsBufferQueueEmpty(&handle->fullBufferQueue))
     {
+        frameBuffer = NULL;
         status = kStatus_CSI_NoFullBuffer;
     }
     else
     {
-        /* Disable the interrupt to protect the index information in handle. */
-        csicr1 = CSI_REG_CR1(base);
-
-        CSI_REG_CR1(base) = (csicr1 & ~(CSI_CR1_FB2_DMA_DONE_INTEN_MASK | CSI_CR1_FB1_DMA_DONE_INTEN_MASK));
-
-        *frameBuffer = handle->frameBufferQueue[handle->queueReadIdx];
-
-        handle->queueReadIdx = CSI_TransferIncreaseQueueIdx(handle->queueReadIdx);
-
-        CSI_REG_CR1(base) = csicr1;
-
-        status = kStatus_Success;
+        *frameBuffer = CSI_DequeueBuffer(&handle->fullBufferQueue);
     }
+
+    CSI_REG_CR1(base) = csicr1;
 
     return status;
 }
@@ -847,81 +799,79 @@ status_t CSI_TransferGetFullBuffer(CSI_Type *base, csi_handle_t *handle, uint32_
  */
 void CSI_TransferHandleIRQ(CSI_Type *base, csi_handle_t *handle)
 {
-    uint8_t queueWriteIdx;
-    uint8_t queueReadIdx;
-    uint8_t dmaDoneBufferIdx;
-    uint32_t frameBuffer;
     uint32_t csisr = CSI_REG_SR(base);
+    uint32_t full_fb;
+    uint32_t fb;
+    bool isFullBufferEnqueued = true;
 
     /* Clear the error flags. */
     CSI_REG_SR(base) = csisr;
 
-    /*
-     * If both frame buffer 0 and frame buffer 1 flags assert, driver does not
-     * know which frame buffer ready just now, so skip them.
-     */
     if ((csisr & (CSI_SR_DMA_TSF_DONE_FB2_MASK | CSI_SR_DMA_TSF_DONE_FB1_MASK)) ==
         (CSI_SR_DMA_TSF_DONE_FB2_MASK | CSI_SR_DMA_TSF_DONE_FB1_MASK))
     {
-        ; /* Skip the frames. */
+        /* Both FB1 and FB2 flags assert, we don't know which framebuffer is done, so skip them. */
+        ;
     }
     else if (0U != (csisr & (CSI_SR_DMA_TSF_DONE_FB2_MASK | CSI_SR_DMA_TSF_DONE_FB1_MASK)))
     {
         if (0U != (csisr & CSI_SR_DMA_TSF_DONE_FB2_MASK))
         {
-            dmaDoneBufferIdx = 1;
+            handle->dmaDoneBufferIdx = 1;
         }
         else
         {
-            dmaDoneBufferIdx = 0;
+            handle->dmaDoneBufferIdx = 0;
         }
 
-        if (handle->activeBufferNum == CSI_MAX_ACTIVE_FRAME_NUM)
+        full_fb = CSI_GetRxBufferAddr(base, handle->dmaDoneBufferIdx);
+
+        if (CSI_BufferQueueCount(&handle->emptyBufferQueue) > 0U)
         {
-            queueWriteIdx = handle->queueWriteIdx;
-            queueReadIdx  = handle->queueReadIdx;
-
-            if (CSI_TransferGetQueueDelta(queueReadIdx, queueWriteIdx) < CSI_DRIVER_QUEUE_SIZE)
+            if (CSI_IsBufferQueueFull(&handle->fullBufferQueue))
             {
-                /* Put the full frame buffer to full buffer queue. */
-                frameBuffer                             = CSI_GetRxBufferAddr(base, dmaDoneBufferIdx);
-                handle->frameBufferQueue[queueWriteIdx] = frameBuffer;
-
-                handle->queueWriteIdx = CSI_TransferIncreaseQueueIdx(queueWriteIdx);
-
-                handle->activeBufferNum--;
-
-                if (NULL != handle->callback)
-                {
-                    handle->callback(base, handle, kStatus_CSI_FrameDone, handle->userData);
-                }
+                /* Drop the oldest buffer */
+                CSI_DequeueBuffer(&handle->fullBufferQueue);
             }
-            else
+            CSI_EnqueueBuffer(&handle->fullBufferQueue, full_fb);
+
+            /*
+             * Get an empty buffer from the queue to use as an active
+             * framebuffer to replace the full-filled framebuffer
+             */
+            fb = CSI_DequeueBuffer(&handle->emptyBufferQueue);
+            CSI_SetRxBufferAddr(base, handle->dmaDoneBufferIdx, fb);
+        }
+        else if (handle->activeBufferNum > 1U)
+        {
+            if (CSI_IsBufferQueueFull(&handle->fullBufferQueue))
             {
+                /* Drop the oldest buffer */
+                CSI_DequeueBuffer(&handle->fullBufferQueue);
             }
+            CSI_EnqueueBuffer(&handle->fullBufferQueue, full_fb);
+
+            handle->activeBufferNum--;
+
+            /*
+             * After putting the full-filled framebuffer to the queue, only one
+             * active framebuffer left, both FB1 and FB2 need to be set to this
+             * active buffer address.
+             */
+            fb = CSI_GetRxBufferAddr(base, handle->dmaDoneBufferIdx ^ 1U);
+            CSI_SetRxBufferAddr(base, handle->dmaDoneBufferIdx, fb);
+        }
+        else if (handle->activeBufferNum == 1U)
+        {
+            isFullBufferEnqueued = false;
+        }
+        else
+        {
         }
 
-        /*
-         * User may submit new frame buffer in callback, so recheck activeBufferNum here,
-         * if there is only one active buffer in CSI device, the two buffer registers
-         * are both set to the frame buffer address.
-         */
-        if (handle->activeBufferNum < CSI_MAX_ACTIVE_FRAME_NUM)
+        if (NULL != handle->callback && isFullBufferEnqueued)
         {
-            if (CSI_TransferGetEmptyBufferCount(handle) > 0U)
-            {
-                /* Get the empty frameBuffer, and submit to CSI device. */
-                CSI_SetRxBufferAddr(base, dmaDoneBufferIdx, CSI_TransferGetEmptyBuffer(handle));
-                handle->activeBufferNum++;
-            }
-            else
-            {
-                /* If there is only one active frame buffer, then the two CSI
-                 * output buffer address are all set to this frame buffer.
-                 */
-                frameBuffer = CSI_GetRxBufferAddr(base, dmaDoneBufferIdx ^ 1U);
-                CSI_SetRxBufferAddr(base, dmaDoneBufferIdx, frameBuffer);
-            }
+            handle->callback(base, handle, kStatus_CSI_FrameDone, handle->userData);
         }
     }
     else
