@@ -46,20 +46,6 @@
 #endif
 
 /*
- * There is one empty room in queue, used to distinguish whether the queue
- * is full or empty. When header equals tail, the queue is empty; when header
- * equals tail + 1, the queue is full.
- */
-#define CSI_DRIVER_ACTUAL_QUEUE_SIZE (CSI_DRIVER_QUEUE_SIZE + 1U)
-
-/*
- * The queue max size is 254, so that the queue element index could use `uint8_t`.
- */
-#if (CSI_DRIVER_ACTUAL_QUEUE_SIZE > 254)
-#error Required queue size is too large
-#endif
-
-/*
  * The interrupt enable bits are in registers CSICR1[16:31], CSICR3[0:7],
  * and CSICR18[2:9]. So merge them into an uint32_t value, place CSICR18 control
  * bits to [8:15].
@@ -228,6 +214,13 @@ typedef struct _csi_handle csi_handle_t;
  */
 typedef void (*csi_transfer_callback_t)(CSI_Type *base, csi_handle_t *handle, status_t status, void *userData);
 
+typedef struct
+{
+    uint32_t addr[CSI_DRIVER_QUEUE_SIZE];
+    int head;
+    int tail;
+} buf_queue_t;
+
 /*!
  * @brief CSI handle structure.
  *
@@ -235,14 +228,11 @@ typedef void (*csi_transfer_callback_t)(CSI_Type *base, csi_handle_t *handle, st
  */
 struct _csi_handle
 {
-    uint32_t frameBufferQueue[CSI_DRIVER_ACTUAL_QUEUE_SIZE]; /*!< Frame buffer queue. */
+    buf_queue_t emptyBufferQueue;
+    buf_queue_t fullBufferQueue;
 
-    volatile uint8_t queueWriteIdx;  /*!< Pointer to save incoming item. */
-    volatile uint8_t queueReadIdx;   /*!< Pointer to read out the item. */
-    void *volatile emptyBuffer;      /*!< Pointer to maintain the empty frame buffers. */
-    volatile uint8_t emptyBufferCnt; /*!< Empty frame buffers count. */
-
-    volatile uint8_t activeBufferNum; /*!< How many frame buffers are in progres currently. */
+    volatile uint8_t activeBufferNum; /*!< How many frame buffers are in progress currently. */
+    volatile uint8_t dmaDoneBufferIdx; /*!< Index of the current full-filled framebuffer. */
 
     volatile bool transferStarted; /*!< User has called @ref CSI_TransferStart to start frame receiving. */
 
