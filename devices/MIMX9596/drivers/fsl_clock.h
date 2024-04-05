@@ -19,7 +19,7 @@
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
 #define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY \
-    (2500000000UL) /* When using Overdrive Voltage, the maximum frequency of cm33 is 250 MHz */
+    (250000000UL) /* When using Overdrive Voltage, the maximum frequency of cm33 is 250 MHz */
 #endif
 
 /*******************************************************************************
