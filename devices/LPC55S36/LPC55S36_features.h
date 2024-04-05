@@ -639,7 +639,7 @@
 /* @brief Number of fault channel in each (e)FlexPWM module. */
 #define FSL_FEATURE_PWM_FAULT_CH_COUNT (1)
 /* @brief (e)FlexPWM has no WAITEN Bitfield In CTRL2 Register. */
-#define FSL_FEATURE_PWM_HAS_NO_WAITEN (1)
+#define FSL_FEATURE_PWM_HAS_NO_WAITEN (0)
 /* @brief If (e)FlexPWM has phase delay feature. */
 #define FSL_FEATURE_PWM_HAS_PHASE_DELAY (1)
 /* @brief If (e)FlexPWM has input filter capture feature. */
