@@ -120,9 +120,12 @@
 /* CACHEC module features */
 
 /* @brief L1 ICACHE line size in byte. */
-#define FSL_FEATURE_L1ICACHE_LINESIZE_BYTE (32)
+#define FSL_FEATURE_L1ICACHE_LINESIZE_BYTE (64)
 /* @brief L1 DCACHE line size in byte. */
-#define FSL_FEATURE_L1DCACHE_LINESIZE_BYTE (32)
+#define FSL_FEATURE_L1DCACHE_LINESIZE_BYTE (64)
+/* @brief Has NONCACHEABLE section. */
+#define FSL_FEATURE_HAS_NO_NONCACHEABLE_SECTION (0)
+
 
 /* MU module features */
 
