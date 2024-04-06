@@ -581,8 +581,8 @@
 
 /* MEMORY module features */
 
-/* @brief Memory map has offset between subsystems. */
-#define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (1)
+/* @brief Memory map doesn't have offset between subsystems. */
+#define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (0)
 
 /* NETC module features */
 
