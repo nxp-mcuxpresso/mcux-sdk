@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexIO MCULCD driver version. */
-#define FSL_FLEXIO_MCULCD_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_FLEXIO_MCULCD_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*! @} */
 
 #ifndef FLEXIO_MCULCD_WAIT_COMPLETE_TIME
@@ -97,8 +97,17 @@ enum _flexio_mculcd_dma_enable
     kFLEXIO_MCULCD_RxDmaEnable = 0x2U, /*!< Rx DMA request source */
 };
 
+#ifndef FLEXIO_MCULCD_LEGACY_GPIO_FUNC
+#define FLEXIO_MCULCD_LEGACY_GPIO_FUNC 1
+#endif
+
+#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
 /*! @brief Function to set or clear the CS and RS pin. */
 typedef void (*flexio_mculcd_pin_func_t)(bool set);
+#else
+/*! @brief Function to set or clear the CS and RS pin. */
+typedef void (*flexio_mculcd_pin_func_t)(bool set, void *userData);
+#endif
 
 /*! @brief Define FlexIO MCULCD access structure typedef. */
 typedef struct _flexio_mculcd_type
@@ -118,6 +127,9 @@ typedef struct _flexio_mculcd_type
     flexio_mculcd_pin_func_t setCSPin;   /*!< Function to set or clear the CS pin. */
     flexio_mculcd_pin_func_t setRSPin;   /*!< Function to set or clear the RS pin. */
     flexio_mculcd_pin_func_t setRDWRPin; /*!< Function to set or clear the RD/WR pin, only used in 6800 mode. */
+#if !FLEXIO_MCULCD_LEGACY_GPIO_FUNC
+    void *userData;                      /*!< Function parameter.*/
+#endif
 } FLEXIO_MCULCD_Type;
 
 /*! @brief Define FlexIO MCULCD configuration structure. */
@@ -523,7 +535,11 @@ static inline void FLEXIO_MCULCD_WriteData(FLEXIO_MCULCD_Type *base, uint32_t da
  */
 static inline void FLEXIO_MCULCD_StartTransfer(FLEXIO_MCULCD_Type *base)
 {
+#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
     base->setCSPin(false);
+#else
+    base->setCSPin(false, base->userData);
+#endif
 }
 
 /*!
@@ -533,7 +549,11 @@ static inline void FLEXIO_MCULCD_StartTransfer(FLEXIO_MCULCD_Type *base)
  */
 static inline void FLEXIO_MCULCD_StopTransfer(FLEXIO_MCULCD_Type *base)
 {
+#if FLEXIO_MCULCD_LEGACY_GPIO_FUNC
     base->setCSPin(true);
+#else
+    base->setCSPin(true, base->userData);
+#endif
 }
 
 /*!
