@@ -64,7 +64,7 @@ typedef struct osa_task_def_tag
     uint32_t tpriority;     /*!< initial thread priority*/
     uint32_t instances;     /*!< maximum number of instances of that thread function*/
     uint32_t stacksize;     /*!< stack size requirements in bytes; 0 is default stack size*/
-    uint32_t *tstack;       /*!< stack pointer*/
+    uint32_t *tstack;       /*!< stack pointer, which can be used on freertos static allocation*/
     void *tlink;            /*!< link pointer*/
     uint8_t *tname;         /*!< name pointer*/
     uint8_t useFloat;       /*!< is use float*/
@@ -118,20 +118,51 @@ typedef enum _osa_status
 #undef USE_RTOS
 #endif
 
+#if defined(SDK_OS_FREE_RTOS)
+#include "fsl_os_abstraction_free_rtos.h"
+#elif defined(FSL_RTOS_THREADX)
+#include "fsl_os_abstraction_threadx.h"
+#else
+#include "fsl_os_abstraction_bm.h"
+#endif
+
+extern const uint8_t gUseRtos_c;
+
 #if defined(SDK_OS_MQX)
 #define USE_RTOS (1)
 #elif defined(SDK_OS_FREE_RTOS)
 #define USE_RTOS (1)
 #if (defined(GENERIC_LIST_LIGHT) && (GENERIC_LIST_LIGHT > 0U))
+#if (defined(configSUPPORT_STATIC_ALLOCATION) && (configSUPPORT_STATIC_ALLOCATION > 0U))
+#define OSA_TASK_HANDLE_SIZE (132U)
+#else
 #define OSA_TASK_HANDLE_SIZE (12U)
+#endif
 #else
 #define OSA_TASK_HANDLE_SIZE (16U)
 #endif
+#if (defined(configSUPPORT_STATIC_ALLOCATION) && (configSUPPORT_STATIC_ALLOCATION > 0U))
+#define OSA_EVENT_HANDLE_SIZE (36U)
+#else
 #define OSA_EVENT_HANDLE_SIZE (8U)
+#endif
+#if (defined(configSUPPORT_STATIC_ALLOCATION) && (configSUPPORT_STATIC_ALLOCATION > 0U))
+#define OSA_SEM_HANDLE_SIZE   (84U)
+#else
 #define OSA_SEM_HANDLE_SIZE   (4U)
+#endif
+#if (defined(configSUPPORT_STATIC_ALLOCATION) && (configSUPPORT_STATIC_ALLOCATION > 0U))
+#define OSA_MUTEX_HANDLE_SIZE (84U)
+#else
 #define OSA_MUTEX_HANDLE_SIZE (4U)
+#endif
+#if (defined(configSUPPORT_STATIC_ALLOCATION) && (configSUPPORT_STATIC_ALLOCATION > 0U))
+#define OSA_MSGQ_HANDLE_SIZE  (84U)
+#else
 #define OSA_MSGQ_HANDLE_SIZE  (4U)
+#endif
 #define OSA_MSG_HANDLE_SIZE   (0U)
+#define OSA_TIMER_HANDLE_SIZE (4U)
 #elif defined(SDK_OS_UCOSII)
 #define USE_RTOS (1)
 #elif defined(SDK_OS_UCOSIII)
@@ -251,9 +282,16 @@ typedef enum _osa_status
     static const osa_task_def_t os_thread_def_##name = {                                \
         (name), (priority), (instances), (stackSz), s_stackBuffer##name, NULL, (uint8_t *)#name, (useFloat)}
 #else
+#if (defined(configSUPPORT_STATIC_ALLOCATION) && (configSUPPORT_STATIC_ALLOCATION > 0U))
+#define OSA_TASK_DEFINE(name, priority, instances, stackSz, useFloat)                             \
+    uint32_t s_stackBuffer##name[(stackSz + sizeof(uint32_t) - 1U) / sizeof(uint32_t)]; \
+    static const osa_task_def_t os_thread_def_##name = {                                \
+        (name), (priority), (instances), (stackSz), s_stackBuffer##name, NULL, (uint8_t *)#name, (useFloat)}
+#else
 #define OSA_TASK_DEFINE(name, priority, instances, stackSz, useFloat)                             \
     const osa_task_def_t os_thread_def_##name = {(name), (priority), (instances),      (stackSz), \
                                                  NULL,   NULL,       (uint8_t *)#name, (useFloat)}
+#endif
 #endif
 /* Access a Thread defintion.
  * \param         name          name of the thread definition object.
@@ -346,15 +384,33 @@ typedef enum _osa_status
  * @param msgSize Message size.
  *
  */
-#if defined(SDK_OS_FREE_RTOS)
-/*< Macro For FREE_RTOS*/
+#if defined(SDK_OS_FREE_RTOS) && (defined(configSUPPORT_DYNAMIC_ALLOCATION) && (configSUPPORT_DYNAMIC_ALLOCATION > 0))
+/*< Macro For FREE_RTOS dynamic allocation*/
 #define OSA_MSGQ_HANDLE_DEFINE(name, numberOfMsgs, msgSize) \
     uint32_t name[(OSA_MSGQ_HANDLE_SIZE + sizeof(uint32_t) - 1U) / sizeof(uint32_t)]
 #else
-/*< Macro For BARE_MATEL*/
+/*< Macro For BARE_MATEL and FREE_RTOS static allocation*/
 #define OSA_MSGQ_HANDLE_DEFINE(name, numberOfMsgs, msgSize) \
     uint32_t name[((OSA_MSGQ_HANDLE_SIZE + numberOfMsgs * msgSize) + sizeof(uint32_t) - 1U) / sizeof(uint32_t)]
 #endif
+
+/*!
+ * @brief Defines the timer handle
+ *
+ * This macro is used to define a 4 byte aligned timer handle.
+ * Then use "(osa_timer_handle_t)name" to get the timer handle.
+ *
+ * The macro should be global and could be optional. You could also define timer handle by yourself.
+ *
+ * This is an example,
+ * @code
+ *   OSA_TIMER_HANDLE_DEFINE(timerHandle);
+ * @endcode
+ *
+ * @param name The name string of the timer handle.
+ */
+#define OSA_TIMER_HANDLE_DEFINE(name) \
+    uint32_t name[(OSA_TIMER_HANDLE_SIZE + sizeof(uint32_t) - 1U) / sizeof(uint32_t)]
 
 /*!
  * @brief Defines the TASK handle
@@ -372,16 +428,6 @@ typedef enum _osa_status
  * @param name The name string of the TASK handle.
  */
 #define OSA_TASK_HANDLE_DEFINE(name) uint32_t name[(OSA_TASK_HANDLE_SIZE + sizeof(uint32_t) - 1U) / sizeof(uint32_t)]
-
-#if defined(SDK_OS_FREE_RTOS)
-#include "fsl_os_abstraction_free_rtos.h"
-#elif defined(FSL_RTOS_THREADX)
-#include "fsl_os_abstraction_threadx.h"
-#else
-#include "fsl_os_abstraction_bm.h"
-#endif
-
-extern const uint8_t gUseRtos_c;
 
 #ifndef __DSB
 #define __DSB()
@@ -884,14 +930,14 @@ osa_status_t OSA_EventDestroy(osa_event_handle_t eventHandle);
  *   OSA_MsgQCreate((osa_msgq_handle_t)msgqHandle, 5U, sizeof(msg));
  * @endcode
  *
- * @param msgqHandle    Pointer to a memory space of size #(OSA_MSGQ_HANDLE_SIZE + msgNo*msgSize) on bare-matel
- * and #(OSA_MSGQ_HANDLE_SIZE) on FreeRTOS allocated by the caller, message queue handle.
+ * @param msgqHandle    Pointer to a memory space of size #(OSA_MSGQ_HANDLE_SIZE + msgNo*msgSize) on bare-matel, FreeRTOS static allocation
+ * allocated by the caller and #(OSA_MSGQ_HANDLE_SIZE) on FreeRTOS dynamic allocation, message queue handle.
  * The handle should be 4 byte aligned, because unaligned access doesn't be supported on some devices.
  * You can define the handle in the following two ways:
  * #OSA_MSGQ_HANDLE_DEFINE(msgqHandle);
  * or
- * For bm: uint32_t msgqHandle[((OSA_MSGQ_HANDLE_SIZE + msgNo*msgSize + sizeof(uint32_t) - 1U) / sizeof(uint32_t))];
- * For freertos: uint32_t msgqHandle[((OSA_MSGQ_HANDLE_SIZE + sizeof(uint32_t) - 1U) / sizeof(uint32_t))];
+ * For bm and freertos static: uint32_t msgqHandle[((OSA_MSGQ_HANDLE_SIZE + msgNo*msgSize + sizeof(uint32_t) - 1U) / sizeof(uint32_t))];
+ * For freertos dynamic: uint32_t msgqHandle[((OSA_MSGQ_HANDLE_SIZE + sizeof(uint32_t) - 1U) / sizeof(uint32_t))];
  * @param msgNo :number of messages the message queue should accommodate.
  * @param msgSize :size of a single message structure.
  *

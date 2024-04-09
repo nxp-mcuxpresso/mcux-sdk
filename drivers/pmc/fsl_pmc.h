@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_PMC_H_
-#define _FSL_PMC_H_
+#ifndef FSL_PMC_H_
+#define FSL_PMC_H_
 
 #include "fsl_common.h"
 
@@ -423,4 +423,4 @@ static inline bool PMC_IsRegulatorInRunRegulation(PMC_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_PMC_H_*/
+#endif /* FSL_PMC_H_*/

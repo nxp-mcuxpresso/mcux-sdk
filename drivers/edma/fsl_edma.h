@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_EDMA_H_
-#define _FSL_EDMA_H_
+#ifndef FSL_EDMA_H_
+#define FSL_EDMA_H_
 
 #include "fsl_common.h"
 
@@ -1015,4 +1015,4 @@ void EDMA_HandleIRQ(edma_handle_t *handle);
 
 /* @} */
 
-#endif /*_FSL_EDMA_H_*/
+#endif /*FSL_EDMA_H_*/

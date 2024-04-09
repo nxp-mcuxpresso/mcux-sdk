@@ -299,7 +299,7 @@ extern "C" {
  * #UART_HANDLE_DEFINE(handle);
  * or
  * uint32_t handle[((HAL_UART_HANDLE_SIZE + sizeof(uint32_t) - 1U) / sizeof(uint32_t))];
- * @param config Pointer to user-defined configuration structure.
+ * @param uart_config Pointer to user-defined configuration structure.
  * @retval kStatus_HAL_UartBaudrateNotSupport Baudrate is not support in current clock source.
  * @retval kStatus_HAL_UartSuccess UART initialization succeed
  */
@@ -556,7 +556,7 @@ hal_uart_status_t HAL_UartSendNonBlocking(hal_uart_handle_t handle, uint8_t *dat
  * This function gets the number of bytes that have been received.
  *
  * @param handle UART handle pointer.
- * @param count Receive bytes count.
+ * @param reCount Receive bytes count.
  * @retval kStatus_HAL_UartError An error occurred.
  * @retval kStatus_Success Get successfully through the parameter \p count.
  */
@@ -569,7 +569,7 @@ hal_uart_status_t HAL_UartGetReceiveCount(hal_uart_handle_t handle, uint32_t *re
  * register by using the interrupt method.
  *
  * @param handle UART handle pointer.
- * @param count Send bytes count.
+ * @param seCount Send bytes count.
  * @retval kStatus_HAL_UartError An error occurred.
  * @retval kStatus_Success Get successfully through the parameter \p count.
  */
@@ -762,7 +762,7 @@ hal_uart_dma_status_t HAL_UartDMAGetReceiveCount(hal_uart_handle_t handle, uint3
  * register by using the DMA method.
  *
  * @param handle UART handle pointer.
- * @param count Send bytes count.
+ * @param seCount Send bytes count.
  * @retval kStatus_HAL_UartDmaError An error occurred.
  * @retval kStatus_HAL_UartDmaSuccess Get successfully through the parameter \p seCount.
  */

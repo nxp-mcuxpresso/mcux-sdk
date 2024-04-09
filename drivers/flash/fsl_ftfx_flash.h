@@ -27,7 +27,7 @@
  * @{
  */
 /*! @brief Flash driver version for SDK*/
-#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(3U, 1U, 2U)) /*!< Version 3.1.2. */
+#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(3U, 1U, 3U)) /*!< Version 3.1.3. */
 
 /*! @brief Flash driver version for ROM*/
 #define FSL_FLASH_DRIVER_VERSION_ROM (MAKE_VERSION(3U, 0U, 0U)) /*!< Version 3.0.0. */

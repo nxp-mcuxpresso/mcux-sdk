@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef __FSL_UART_RTOS_H__
-#define __FSL_UART_RTOS_H__
+#ifndef FSL_UART_RTOS_H__
+#define FSL_UART_RTOS_H__
 
 #include "fsl_uart.h"
 #include <FreeRTOS.h>
@@ -146,4 +146,4 @@ int UART_RTOS_Receive(uart_rtos_handle_t *handle, uint8_t *buffer, uint32_t leng
 
 /*! @}*/
 
-#endif /* __FSL_UART_RTOS_H__ */
+#endif /* FSL_UART_RTOS_H__ */

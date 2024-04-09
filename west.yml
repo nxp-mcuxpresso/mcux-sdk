@@ -10,10 +10,10 @@ manifest:
     remote: nxp-mcuxpresso
   projects:
   - name: mcux-sdk-examples
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MKE1XZ9
     path: examples
   - name: FreeRTOS-Kernel
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MKE1XZ9
     path: rtos/freertos/freertos-kernel
   - name: mcux-sdk-middleware-sdmmc
     revision: MCUX_2.14.0
@@ -30,7 +30,7 @@ manifest:
     url: https://github.com/EmbeddedRPC/erpc
     revision: 1.11.0
   - name: mcux-soc-svd
-    revision: MCUX_2.14.0
+    revision: MCUX_2.14.0_MKE1XZ9
     path: svd
   - name: fatfs
     path: middleware/fatfs

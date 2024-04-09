@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_LPI2C_H_
-#define _FSL_LPI2C_H_
+#ifndef FSL_LPI2C_H_
+#define FSL_LPI2C_H_
 
 #include <stddef.h>
 #include "fsl_device_registers.h"
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPI2C driver version. */
-#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
@@ -678,7 +678,7 @@ static inline void LPI2C_MasterEnableDMA(LPI2C_Type *base, bool enableTx, bool e
  */
 static inline uint32_t LPI2C_MasterGetTxFifoAddress(LPI2C_Type *base)
 {
-    return (uint32_t)&base->MTDR;
+    return (uint32_t)(uintptr_t)&base->MTDR;
 }
 
 /*!
@@ -689,7 +689,7 @@ static inline uint32_t LPI2C_MasterGetTxFifoAddress(LPI2C_Type *base)
  */
 static inline uint32_t LPI2C_MasterGetRxFifoAddress(LPI2C_Type *base)
 {
-    return (uint32_t)&base->MRDR;
+    return (uint32_t)(uintptr_t)&base->MRDR;
 }
 
 /*@}*/
@@ -1338,4 +1338,4 @@ void LPI2C_SlaveTransferHandleIRQ(LPI2C_Type *base, lpi2c_slave_handle_t *handle
 }
 #endif
 
-#endif /* _FSL_LPI2C_H_ */
+#endif /* FSL_LPI2C_H_ */

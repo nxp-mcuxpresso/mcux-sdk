@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_DMAMUX_H_
-#define _FSL_DMAMUX_H_
+#ifndef FSL_DMAMUX_H_
+#define FSL_DMAMUX_H_
 
 #include "fsl_common.h"
 
@@ -187,4 +187,4 @@ static inline void DMAMUX_EnableAlwaysOn(DMAMUX_Type *base, uint32_t channel, bo
 
 /* @} */
 
-#endif /* _FSL_DMAMUX_H_ */
+#endif /* FSL_DMAMUX_H_ */

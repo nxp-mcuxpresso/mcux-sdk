@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_LPUART_H_
-#define _FSL_LPUART_H_
+#ifndef FSL_LPUART_H_
+#define FSL_LPUART_H_
 
 #include "fsl_common.h"
 
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPUART driver version. */
-#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 7, 3))
+#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 7, 5))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
@@ -1066,4 +1066,4 @@ void LPUART_TransferHandleErrorIRQ(LPUART_Type *base, void *irqHandle);
 
 /*! @}*/
 
-#endif /* _FSL_LPUART_H_ */
+#endif /* FSL_LPUART_H_ */

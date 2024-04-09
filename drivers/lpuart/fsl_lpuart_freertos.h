@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef __FSL_LPUART_RTOS_H__
-#define __FSL_LPUART_RTOS_H__
+#ifndef FSL_LPUART_RTOS_H__
+#define FSL_LPUART_RTOS_H__
 
 #include "fsl_lpuart.h"
 #include <FreeRTOS.h>
@@ -189,4 +189,4 @@ int LPUART_RTOS_SetTxTimeout(lpuart_rtos_handle_t *handle,
 
 /*! @}*/
 
-#endif /* __FSL_LPUART_RTOS_H__ */
+#endif /* FSL_LPUART_RTOS_H__ */

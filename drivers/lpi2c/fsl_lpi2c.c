@@ -35,6 +35,10 @@
 #define FSL_COMPONENT_ID "platform.drivers.lpi2c"
 #endif
 
+#if defined(LPI2C_RSTS)
+#define LPI2C_RESETS_ARRAY LPI2C_RSTS
+#endif
+
 /* ! @brief LPI2C master fifo commands. */
 enum
 {
@@ -196,6 +200,11 @@ static lpi2c_slave_isr_t s_lpi2cSlaveIsr;
 
 /*! @brief Pointers to slave handles for each instance. */
 static lpi2c_slave_handle_t *s_lpi2cSlaveHandle[ARRAY_SIZE(kLpi2cBases)];
+
+#if defined(LPI2C_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_lpi2cResets[] = LPI2C_RESETS_ARRAY;
+#endif
 
 /*******************************************************************************
  * Code
@@ -475,6 +484,10 @@ void LPI2C_MasterInit(LPI2C_Type *base, const lpi2c_master_config_t *masterConfi
 #endif
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(LPI2C_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_lpi2cResets[LPI2C_GetInstance(base)]);
+#endif
 
     /* Reset peripheral before configuring it. */
     LPI2C_MasterReset(base);
@@ -1001,6 +1014,7 @@ status_t LPI2C_MasterTransferBlocking(LPI2C_Type *base, lpi2c_master_transfer_t 
     assert(transfer->subaddressSize <= sizeof(transfer->subaddress));
 
     status_t result = kStatus_Success;
+    status_t ret = kStatus_Success;
     uint16_t commandBuffer[7];
     uint32_t cmdCount = 0U;
 
@@ -1099,6 +1113,19 @@ status_t LPI2C_MasterTransferBlocking(LPI2C_Type *base, lpi2c_master_transfer_t 
                 if ((transfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U)
                 {
                     result = LPI2C_MasterStop(base);
+                }
+            }
+        }
+
+        /* Transmit fail */
+        if (kStatus_Success != result)
+        {
+            if ((transfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U)
+            {
+                ret = LPI2C_MasterStop(base);
+                if(kStatus_Success != ret)
+                {
+                    result = ret;
                 }
             }
         }
@@ -1811,6 +1838,10 @@ void LPI2C_SlaveInit(LPI2C_Type *base, const lpi2c_slave_config_t *slaveConfig, 
 #endif
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(LPI2C_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_lpi2cResets[LPI2C_GetInstance(base)]);
+#endif
 
     /* Restore to reset conditions. */
     LPI2C_SlaveReset(base);

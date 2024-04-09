@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_ADC12_H_
-#define _FSL_ADC12_H_
+#ifndef FSL_ADC12_H_
+#define FSL_ADC12_H_
 
 #include "fsl_common.h"
 
@@ -367,4 +367,4 @@ uint32_t ADC12_GetStatusFlags(ADC_Type *base);
 
 /*! @}*/
 
-#endif /* _FSL_ADC12_H_ */
+#endif /* FSL_ADC12_H_ */

@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SIM_H_
-#define _FSL_SIM_H_
+#ifndef FSL_SIM_H_
+#define FSL_SIM_H_
 
 #include "fsl_common.h"
 
@@ -148,4 +148,4 @@ static inline void SIM_EnableSystickClock(bool enable)
 
 /*! @}*/
 
-#endif /* _FSL_SIM_H_ */
+#endif /* FSL_SIM_H_ */

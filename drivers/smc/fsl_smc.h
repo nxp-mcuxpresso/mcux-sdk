@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SMC_H_
-#define _FSL_SMC_H_
+#ifndef FSL_SMC_H_
+#define FSL_SMC_H_
 
 #include "fsl_common.h"
 
@@ -418,4 +418,4 @@ status_t SMC_SetPowerModeVlls(SMC_Type *base, const smc_power_mode_vlls_config_t
 
 /*! @}*/
 
-#endif /* _FSL_SMC_H_ */
+#endif /* FSL_SMC_H_ */

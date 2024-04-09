@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_FLEXIO_UART_H_
-#define _FSL_FLEXIO_UART_H_
+#ifndef FSL_FLEXIO_UART_H_
+#define FSL_FLEXIO_UART_H_
 
 #include "fsl_common.h"
 #include "fsl_flexio.h"
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FlexIO UART driver version. */
-#define FSL_FLEXIO_UART_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+#define FSL_FLEXIO_UART_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
@@ -571,6 +571,13 @@ status_t FLEXIO_UART_TransferGetReceiveCount(FLEXIO_UART_Type *base, flexio_uart
  */
 void FLEXIO_UART_TransferHandleIRQ(void *uartType, void *uartHandle);
 
+/*!
+ * @brief Flush tx/rx shifters.
+ *
+ * @param base Pointer to the FLEXIO_UART_Type structure.
+ */
+void FLEXIO_UART_FlushShifters(FLEXIO_UART_Type *base);
+
 /*@}*/
 
 #if defined(__cplusplus)
@@ -578,4 +585,4 @@ void FLEXIO_UART_TransferHandleIRQ(void *uartType, void *uartHandle);
 #endif /*_cplusplus*/
 /*@}*/
 
-#endif /*_FSL_FLEXIO_UART_H_*/
+#endif /*FSL_FLEXIO_UART_H_*/

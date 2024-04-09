@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_RCM_H_
-#define _FSL_RCM_H_
+#ifndef FSL_RCM_H_
+#define FSL_RCM_H_
 
 #include "fsl_common.h"
 
@@ -409,4 +409,4 @@ static inline void RCM_SetSystemResetInterruptConfig(RCM_Type *base, uint32_t in
 
 /*! @}*/
 
-#endif /* _FSL_RCM_H_ */
+#endif /* FSL_RCM_H_ */

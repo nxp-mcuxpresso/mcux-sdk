@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_UART_EDMA_H_
-#define _FSL_UART_EDMA_H_
+#ifndef FSL_UART_EDMA_H_
+#define FSL_UART_EDMA_H_
 
 #include "fsl_uart.h"
 #include "fsl_edma.h"
@@ -180,4 +180,4 @@ void UART_TransferEdmaHandleIRQ(UART_Type *base, void *uartEdmaHandle);
 
 /*! @}*/
 
-#endif /* _FSL_UART_EDMA_H_ */
+#endif /* FSL_UART_EDMA_H_ */

@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_TRGMUX_H_
-#define _FSL_TRGMUX_H_
+#ifndef FSL_TRGMUX_H_
+#define FSL_TRGMUX_H_
 
 #include "fsl_common.h"
 
@@ -99,4 +99,4 @@ status_t TRGMUX_SetTriggerSource(TRGMUX_Type *base, uint32_t index, trgmux_trigg
 
 /*! @}*/
 
-#endif /* _FSL_TRGMUX_H_*/
+#endif /* FSL_TRGMUX_H_*/

@@ -1,13 +1,13 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_ACMP_H_
-#define _FSL_ACMP_H_
+#ifndef FSL_ACMP_H_
+#define FSL_ACMP_H_
 
 #include "fsl_common.h"
 
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief ACMP driver version 2.0.6. */
-#define FSL_ACMP_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 6U))
+/*! @brief ACMP driver version 2.1.0. */
+#define FSL_ACMP_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 0U))
 /*@}*/
 
 /*! @brief The mask of status flags cleared by writing 1. */
@@ -114,7 +114,9 @@ typedef struct _acmp_config
 #if defined(FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT) && (FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT == 1U)
     acmp_offset_mode_t offsetMode;         /*!< Offset mode. */
 #endif                                     /* FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT */
+#if defined(FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT) && (FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT == 1U)
     acmp_hysteresis_mode_t hysteresisMode; /*!< Hysteresis mode. */
+#endif                                     /* FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT */
     bool enableHighSpeed;                  /*!< Enable High Speed (HS) comparison mode. */
     bool enableInvertOutput;               /*!< Enable inverted comparator output. */
     bool useUnfilteredOutput;              /*!< Set compare output(COUT) to equal COUTA(true) or COUT(false). */
@@ -533,4 +535,4 @@ void ACMP_GetDefaultDiscreteModeConfig(acmp_discrete_mode_config_t *config);
 
 /*! @}*/
 
-#endif /* _FSL_ACMP_H_ */
+#endif /* FSL_ACMP_H_ */

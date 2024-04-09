@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_LPI2C_EDMA_H_
-#define _FSL_LPI2C_EDMA_H_
+#ifndef FSL_LPI2C_EDMA_H_
+#define FSL_LPI2C_EDMA_H_
 
 #include "fsl_lpi2c.h"
 #include "fsl_edma.h"
@@ -155,4 +155,4 @@ status_t LPI2C_MasterTransferAbortEDMA(LPI2C_Type *base, lpi2c_master_edma_handl
 }
 #endif
 
-#endif /* _FSL_LPI2C_EDMA_H_ */
+#endif /* FSL_LPI2C_EDMA_H_ */

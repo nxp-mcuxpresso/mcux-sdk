@@ -89,16 +89,6 @@
 #endif
 #endif
 
-/*! @brief Enable or disable SerialManager_Task() handle TX to prevent recursive calling */
-#ifndef SERIAL_MANAGER_TASK_HANDLE_TX
-#define SERIAL_MANAGER_TASK_HANDLE_TX (0U)
-#endif
-#if (defined(SERIAL_MANAGER_TASK_HANDLE_TX) && (SERIAL_MANAGER_TASK_HANDLE_TX > 0U))
-#ifndef OSA_USED
-#error When SERIAL_MANAGER_TASK_HANDLE_TX=1, OSA_USED must be set.
-#endif
-#endif
-
 /*! @brief Set the default delay time in ms used by SerialManager_WriteTimeDelay(). */
 #ifndef SERIAL_MANAGER_WRITE_TIME_DELAY_DEFAULT_VALUE
 #define SERIAL_MANAGER_WRITE_TIME_DELAY_DEFAULT_VALUE (1U)
@@ -269,6 +259,10 @@
 #if defined(OSA_USED)
 #if (defined(SERIAL_MANAGER_USE_COMMON_TASK) && (SERIAL_MANAGER_USE_COMMON_TASK > 0U))
 #include "fsl_component_common_task.h"
+#endif
+/*! @brief Enable or disable SerialManager_Task() handle TX to prevent recursive calling */
+#ifndef SERIAL_MANAGER_TASK_HANDLE_TX
+#define SERIAL_MANAGER_TASK_HANDLE_TX (1U)
 #endif
 #endif
 
@@ -507,11 +501,11 @@ extern "C" {
  * #SERIAL_MANAGER_HANDLE_DEFINE(serialHandle);
  * or
  * uint32_t serialHandle[((SERIAL_MANAGER_HANDLE_SIZE + sizeof(uint32_t) - 1U) / sizeof(uint32_t))];
- * @param config Pointer to user-defined configuration structure.
+ * @param serialConfig Pointer to user-defined configuration structure.
  * @retval kStatus_SerialManager_Error An error occurred.
  * @retval kStatus_SerialManager_Success The Serial Manager module initialization succeed.
  */
-serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const serial_manager_config_t *config);
+serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const serial_manager_config_t *serialConfig);
 
 /*!
  * @brief De-initializes the serial manager module instance.

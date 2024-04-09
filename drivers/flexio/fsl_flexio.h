@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_FLEXIO_H_
-#define _FSL_FLEXIO_H_
+#ifndef FSL_FLEXIO_H_
+#define FSL_FLEXIO_H_
 
 #include "fsl_common.h"
 
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FlexIO driver version. */
-#define FSL_FLEXIO_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_FLEXIO_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 /*! @brief Calculate FlexIO timer trigger.*/
@@ -522,6 +522,7 @@ void FLEXIO_SetTimerConfig(FLEXIO_Type *base, uint8_t index, const flexio_timer_
  * @brief This function set the value of the prescaler on flexio channels
  *
  * @param base       Pointer to the FlexIO simulated peripheral type.
+ * @param index      Timer index
  * @param clocksource  Set clock value
  */
 static inline void FLEXIO_SetClockMode(FLEXIO_Type *base, uint8_t index, flexio_timer_decrement_source_t clocksource)
@@ -913,4 +914,4 @@ static inline void FLEXIO_ClearPortStatus(FLEXIO_Type *base, uint32_t mask)
 #endif /*_cplusplus*/
 /*@}*/
 
-#endif /*_FSL_FLEXIO_H_*/
+#endif /*FSL_FLEXIO_H_*/

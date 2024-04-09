@@ -34,6 +34,10 @@
 #define FSL_COMPONENT_ID "platform.drivers.lpspi"
 #endif
 
+#if defined(LPSPI_RSTS)
+#define LPSPI_RESETS_ARRAY LPSPI_RSTS
+#endif
+
 /*!
  * @brief Default watermark values.
  *
@@ -97,14 +101,6 @@ static uint32_t LPSPI_CombineWriteData(uint8_t *txData, uint8_t bytesEachWrite, 
  * This is not a public API.
  */
 static void LPSPI_SeparateReadData(uint8_t *rxData, uint32_t readData, uint8_t bytesEachRead, bool isByteSwap);
-
-/*!
- * @brief Wait for tx FIFO to be empty.
- * This is not a public API.
- * @param base LPSPI peripheral address.
- * @return true for the tx FIFO is ready, false is not.
- */
-static bool LPSPI_TxFifoReady(LPSPI_Type *base);
 
 /*!
  * @brief Master fill up the TX FIFO with data.
@@ -214,6 +210,11 @@ static const clock_ip_name_t s_LpspiPeriphClocks[] = LPSPI_PERIPH_CLOCKS;
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if defined(LPSPI_RESETS_ARRAY)
+/* Reset array */
+static const reset_ip_name_t s_lpspiResets[] = LPSPI_RESETS_ARRAY;
+#endif
+
 /*! @brief Pointers to lpspi handles for each instance. */
 static void *s_lpspiHandle[ARRAY_SIZE(s_lpspiBases)];
 
@@ -293,6 +294,13 @@ void LPSPI_MasterInit(LPSPI_Type *base, const lpspi_master_config_t *masterConfi
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if defined(LPSPI_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_lpspiResets[LPSPI_GetInstance(base)]);
+#endif
+
+    /* Disable LPSPI first */
+    LPSPI_Enable(base, false);
+
     /* Set LPSPI to master */
     LPSPI_SetMasterSlaveMode(base, kLPSPI_Master);
 
@@ -303,7 +311,11 @@ void LPSPI_MasterInit(LPSPI_Type *base, const lpspi_master_config_t *masterConfi
     base->CFGR1 = (base->CFGR1 & ~(LPSPI_CFGR1_OUTCFG_MASK | LPSPI_CFGR1_PINCFG_MASK | LPSPI_CFGR1_NOSTALL_MASK |
                                    LPSPI_CFGR1_SAMPLE_MASK)) |
                   LPSPI_CFGR1_OUTCFG(masterConfig->dataOutConfig) | LPSPI_CFGR1_PINCFG(masterConfig->pinCfg) |
+#if !(defined(FSL_FEATURE_LPSPI_HAS_NO_PCSCFG) && FSL_FEATURE_LPSPI_HAS_NO_PCSCFG)
+                  LPSPI_CFGR1_PCSCFG(masterConfig->pcsFunc) |
+#endif
                   LPSPI_CFGR1_NOSTALL(0) | LPSPI_CFGR1_SAMPLE((uint32_t)masterConfig->enableInputDelay);
+
     if ((masterConfig->pinCfg == kLPSPI_SdiInSdiOut) || (masterConfig->pinCfg == kLPSPI_SdoInSdoOut))
     {
         base->CFGR1 |= LPSPI_CFGR1_OUTCFG_MASK;
@@ -354,6 +366,9 @@ void LPSPI_MasterGetDefaultConfig(lpspi_master_config_t *masterConfig)
     masterConfig->cpol         = kLPSPI_ClockPolarityActiveHigh;
     masterConfig->cpha         = kLPSPI_ClockPhaseFirstEdge;
     masterConfig->direction    = kLPSPI_MsbFirst;
+#if !(defined(FSL_FEATURE_LPSPI_HAS_NO_PCSCFG) && FSL_FEATURE_LPSPI_HAS_NO_PCSCFG)
+    masterConfig->pcsFunc            = kLPSPI_PcsAsCs; 
+#endif
 
     masterConfig->pcsToSckDelayInNanoSec        = (1000000000U / masterConfig->baudRate) / 2U;
     masterConfig->lastSckToPcsDelayInNanoSec    = (1000000000U / masterConfig->baudRate) / 2U;
@@ -389,6 +404,10 @@ void LPSPI_SlaveInit(LPSPI_Type *base, const lpspi_slave_config_t *slaveConfig)
 #endif
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(LPSPI_RESETS_ARRAY)
+    RESET_ReleasePeripheralReset(s_lpspiResets[LPSPI_GetInstance(base)]);
+#endif
 
     LPSPI_SetMasterSlaveMode(base, kLPSPI_Slave);
 
@@ -975,6 +994,13 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
                      * of data will be received. */
                     base->TCR &= ~(LPSPI_TCR_CONTC_MASK | LPSPI_TCR_CONT_MASK | LPSPI_TCR_TXMSK_MASK);
                 }
+                else
+                {
+                    if (!LPSPI_WaitTxFifoEmpty(base))
+                    {
+                        return false;
+                    }
+                }
                 txRemainingByteCount -= bytesPerFrame;
             }
             else
@@ -1062,6 +1088,7 @@ static bool LPSPI_MasterTransferClearTCR(LPSPI_Type *base, lpspi_transfer_blocki
     }
 #endif
     base->TCR = (base->TCR & ~(LPSPI_TCR_CONTC_MASK | LPSPI_TCR_CONT_MASK));
+
     return true;
 }
 
@@ -1163,6 +1190,9 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
 
     /* Variables */
     uint32_t whichPcs = (transfer->configFlags & LPSPI_MASTER_PCS_MASK) >> LPSPI_MASTER_PCS_SHIFT;
+#if !(defined(FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH) && FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH)
+    uint32_t width    = (transfer->configFlags & LPSPI_MASTER_WIDTH_MASK) >> LPSPI_MASTER_WIDTH_SHIFT;
+#endif
     uint32_t temp     = (base->CFGR1 & LPSPI_CFGR1_PINCFG_MASK);
     lpspi_transfer_blocking_param_t stateParams;
     (void)memset(&stateParams, 0, sizeof(stateParams));
@@ -1190,14 +1220,16 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
     /* Configure transfer control register. */
     base->TCR = (base->TCR & ~(LPSPI_TCR_CONT_MASK | LPSPI_TCR_CONTC_MASK | LPSPI_TCR_RXMSK_MASK |
                                LPSPI_TCR_TXMSK_MASK | LPSPI_TCR_PCS_MASK)) |
+#if !(defined(FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH) && FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH)
+                LPSPI_TCR_WIDTH(width) |
+#endif
                 LPSPI_TCR_PCS(whichPcs);
-
     /*TCR is also shared the FIFO, so wait for TCR written.*/
     /*
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_2$
      */
-    if (!LPSPI_TxFifoReady(base))
+    if (!LPSPI_WaitTxFifoEmpty(base))
     {
         return kStatus_LPSPI_Timeout;
     }
@@ -1211,7 +1243,7 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_2$
      */
-    if (!LPSPI_TxFifoReady(base))
+    if (!LPSPI_WaitTxFifoEmpty(base))
     {
         return kStatus_LPSPI_Timeout;
     }
@@ -1321,6 +1353,7 @@ status_t LPSPI_MasterTransferNonBlocking(LPSPI_Type *base, lpspi_master_handle_t
 
     /* Variables */
     bool isRxMask = false;
+    handle->isTxMask = false;
     uint8_t txWatermark;
     uint8_t dummyData = g_lpspiDummyData[LPSPI_GetInstance(base)];
     uint32_t tmpTimes;
@@ -1408,7 +1441,7 @@ status_t LPSPI_MasterTransferNonBlocking(LPSPI_Type *base, lpspi_master_handle_t
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_2$
      */
-    if (!LPSPI_TxFifoReady(base))
+    if (!LPSPI_WaitTxFifoEmpty(base))
     {
         return kStatus_LPSPI_Timeout;
     }
@@ -1426,7 +1459,7 @@ status_t LPSPI_MasterTransferNonBlocking(LPSPI_Type *base, lpspi_master_handle_t
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_2$
      */
-    if (!LPSPI_TxFifoReady(base))
+    if (!LPSPI_WaitTxFifoEmpty(base))
     {
         return kStatus_LPSPI_Timeout;
     }
@@ -1439,6 +1472,10 @@ status_t LPSPI_MasterTransferNonBlocking(LPSPI_Type *base, lpspi_master_handle_t
 
         base->TCR |= LPSPI_TCR_TXMSK_MASK;
         handle->txRemainingByteCount -= (uint32_t)handle->bytesPerFrame;
+        if (!LPSPI_WaitTxFifoEmpty(base))
+        {
+            return kStatus_LPSPI_Timeout;
+        }
     }
     else
     {
@@ -1721,6 +1758,13 @@ void LPSPI_MasterTransferHandleIRQ(LPSPI_Type *base, lpspi_master_handle_t *hand
                  * of data will be received. */
                 base->TCR &= ~(LPSPI_TCR_CONTC_MASK | LPSPI_TCR_CONT_MASK | LPSPI_TCR_TXMSK_MASK);
             }
+            else
+            {
+                if (!LPSPI_WaitTxFifoEmpty(base))
+                {
+                    return;
+                }
+            }
             handle->txRemainingByteCount -= (uint32_t)handle->bytesPerFrame;
         }
         else
@@ -1914,7 +1958,7 @@ status_t LPSPI_SlaveTransferNonBlocking(LPSPI_Type *base, lpspi_slave_handle_t *
      * $Branch Coverage Justification$
      * $ref fsl_lpspi_c_ref_3$
      */
-    if (!LPSPI_TxFifoReady(base))
+    if (!LPSPI_WaitTxFifoEmpty(base))
     {
         return kStatus_LPSPI_Timeout;
     }
@@ -2187,6 +2231,8 @@ void LPSPI_SlaveTransferHandleIRQ(LPSPI_Type *base, lpspi_slave_handle_t *handle
             handle->state = (uint8_t)kLPSPI_Error;
         }
         handle->errorCount++;
+        /* ERR051588: Clear FIFO after underrun occurs */   
+        LPSPI_FlushFifo(base, true, false);
     }
     /* Catch rx fifo overflow conditions, service only if rx over flow interrupt enabled */
     /*
@@ -2382,7 +2428,13 @@ static void LPSPI_SeparateReadData(uint8_t *rxData, uint32_t readData, uint8_t b
     }
 }
 
-static bool LPSPI_TxFifoReady(LPSPI_Type *base)
+/*!
+ * brief Wait for tx FIFO to be empty.
+ * Wait the tx fifo empty when set TCR register
+ * param base LPSPI peripheral address.
+ * return true for the tx FIFO is ready, false is not.
+ */
+bool LPSPI_WaitTxFifoEmpty(LPSPI_Type *base)
 {
 #if SPI_RETRY_TIMES
     uint32_t waitTimes = SPI_RETRY_TIMES;
@@ -2465,6 +2517,15 @@ void LPSPI5_DriverIRQHandler(void)
 {
     assert(s_lpspiHandle[5] != NULL);
     LPSPI_CommonIRQHandler(LPSPI5, s_lpspiHandle[5]);
+}
+#endif
+
+#if defined(LPSPI6)
+void LPSPI6_DriverIRQHandler(void);
+void LPSPI6_DriverIRQHandler(void)
+{
+    assert(s_lpspiHandle[6] != NULL);
+    LPSPI_CommonIRQHandler(LPSPI6, s_lpspiHandle[6]);
 }
 #endif
 

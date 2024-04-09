@@ -542,12 +542,12 @@ static int32_t ConvertRadixNumToString(char *numstr, void *nump, unsigned int ne
     uc       = 0ULL;
     uc_param = 0ULL;
 #else
-    a = 0;
-    b = 0;
-    c = 0;
-    ua = 0U;
-    ub = 0U;
-    uc = 0U;
+    a        = 0;
+    b        = 0;
+    c        = 0;
+    ua       = 0U;
+    ub       = 0U;
+    uc       = 0U;
     uc_param = 0U;
 #endif /* PRINTF_ADVANCED_ENABLE */
 
@@ -1300,71 +1300,71 @@ static uint8_t StrFormatScanfStringHandling(char **str, uint32_t *flag, uint32_t
         else
 #endif /* SCANF_FLOAT_ENABLE */
             if (((*c) >= '0') && ((*c) <= '9'))
-        {
             {
-                char *p;
-                errno          = 0;
-                (*field_width) = strtoul(c, &p, 10);
-                if (0 != errno)
                 {
-                    *field_width = 0U;
+                    char *p;
+                    errno          = 0;
+                    (*field_width) = strtoul(c, &p, 10);
+                    if (0 != errno)
+                    {
+                        *field_width = 0U;
+                    }
+                    c = p - 1;
                 }
-                c = p - 1;
             }
-        }
-        else if ('d' == (*c))
-        {
-            (*base) = 10U;
-            (*flag) |= (uint32_t)kSCANF_TypeSinged;
-            (*flag) |= (uint32_t)kSCANF_DestInt;
-        }
-        else if ('u' == (*c))
-        {
-            (*base) = 10U;
-            (*flag) |= (uint32_t)kSCANF_DestInt;
-        }
-        else if ('o' == (*c))
-        {
-            (*base) = 8U;
-            (*flag) |= (uint32_t)kSCANF_DestInt;
-        }
-        else if (('x' == (*c)))
-        {
-            (*base) = 16U;
-            (*flag) |= (uint32_t)kSCANF_DestInt;
-        }
-        else if ('X' == (*c))
-        {
-            (*base) = 16U;
-            (*flag) |= (uint32_t)kSCANF_DestInt;
-        }
-        else if ('i' == (*c))
-        {
-            (*base) = 0U;
-            (*flag) |= (uint32_t)kSCANF_DestInt;
-        }
-#if (defined(SCANF_FLOAT_ENABLE) && (SCANF_FLOAT_ENABLE > 0U))
-        else if (1U == StrFormatScanIsFloat(c))
-        {
-            (*flag) |= (uint32_t)kSCANF_DestFloat;
-        }
-#endif /* SCANF_FLOAT_ENABLE */
-        else if ('c' == (*c))
-        {
-            (*flag) |= (uint32_t)kSCANF_DestChar;
-            if (MAX_FIELD_WIDTH == (*field_width))
+            else if ('d' == (*c))
             {
-                (*field_width) = 1;
+                (*base) = 10U;
+                (*flag) |= (uint32_t)kSCANF_TypeSinged;
+                (*flag) |= (uint32_t)kSCANF_DestInt;
             }
-        }
-        else if ('s' == (*c))
-        {
-            (*flag) |= (uint32_t)kSCANF_DestString;
-        }
-        else
-        {
-            exitPending = 1U;
-        }
+            else if ('u' == (*c))
+            {
+                (*base) = 10U;
+                (*flag) |= (uint32_t)kSCANF_DestInt;
+            }
+            else if ('o' == (*c))
+            {
+                (*base) = 8U;
+                (*flag) |= (uint32_t)kSCANF_DestInt;
+            }
+            else if (('x' == (*c)))
+            {
+                (*base) = 16U;
+                (*flag) |= (uint32_t)kSCANF_DestInt;
+            }
+            else if ('X' == (*c))
+            {
+                (*base) = 16U;
+                (*flag) |= (uint32_t)kSCANF_DestInt;
+            }
+            else if ('i' == (*c))
+            {
+                (*base) = 0U;
+                (*flag) |= (uint32_t)kSCANF_DestInt;
+            }
+#if (defined(SCANF_FLOAT_ENABLE) && (SCANF_FLOAT_ENABLE > 0U))
+            else if (1U == StrFormatScanIsFloat(c))
+            {
+                (*flag) |= (uint32_t)kSCANF_DestFloat;
+            }
+#endif /* SCANF_FLOAT_ENABLE */
+            else if ('c' == (*c))
+            {
+                (*flag) |= (uint32_t)kSCANF_DestChar;
+                if (MAX_FIELD_WIDTH == (*field_width))
+                {
+                    (*field_width) = 1;
+                }
+            }
+            else if ('s' == (*c))
+            {
+                (*flag) |= (uint32_t)kSCANF_DestString;
+            }
+            else
+            {
+                exitPending = 1U;
+            }
 
         if (1U == exitPending)
         {
@@ -1408,7 +1408,7 @@ int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
 
     int32_t val;
 
-    uint8_t added;
+    uint8_t added = 0U;
 
     uint8_t exitPending = 0;
 
@@ -1462,7 +1462,6 @@ int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
             flag        = 0;
             field_width = MAX_FIELD_WIDTH;
             base        = 0;
-            added       = 0U;
 
             exitPending = StrFormatScanfStringHandling(&c, &flag, &field_width, &base);
 
@@ -1568,7 +1567,6 @@ int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
                 else
                 {
                     char *tempEnd;
-                    val   = 0;
                     errno = 0;
                     val   = (int32_t)strtoul(p, &tempEnd, (int)base);
                     if (0 != errno)
@@ -1587,7 +1585,6 @@ int StrFormatScanf(const char *line_ptr, char *format, va_list args_ptr)
             else if ((flag & (uint32_t)kSCANF_DestMask) == (uint32_t)kSCANF_DestFloat)
             {
                 n_decode += ScanIgnoreWhiteSpace(&p);
-                fnum  = 0.0;
                 errno = 0;
 
                 fnum = strtod(p, (char **)&s_temp);

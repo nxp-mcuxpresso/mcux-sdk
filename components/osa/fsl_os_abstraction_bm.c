@@ -651,9 +651,10 @@ osa_status_t OSA_SemaphoreWait(osa_semaphore_handle_t semaphoreHandle, uint32_t 
     pSemStruct->waitingTask = OSA_TaskGetCurrentHandle();
 #endif
 #endif
+
+    OSA_EnterCritical(&regPrimask);
     if (0U != pSemStruct->semCount)
     {
-        OSA_EnterCritical(&regPrimask);
         pSemStruct->semCount--;
         pSemStruct->isWaiting = 0U;
         OSA_ExitCritical(regPrimask);
@@ -664,6 +665,7 @@ osa_status_t OSA_SemaphoreWait(osa_semaphore_handle_t semaphoreHandle, uint32_t 
         if (0U == millisec)
         {
             /* If timeout is 0 and semaphore is not available, return kStatus_OSA_Timeout. */
+            OSA_ExitCritical(regPrimask);
             return KOSA_StatusTimeout;
         }
 #if (defined(FSL_OSA_BM_TIMEOUT_ENABLE) && (FSL_OSA_BM_TIMEOUT_ENABLE > 0U))
@@ -674,7 +676,6 @@ osa_status_t OSA_SemaphoreWait(osa_semaphore_handle_t semaphoreHandle, uint32_t 
             currentTime = OSA_TimeGetMsec();
             if (pSemStruct->timeout < OSA_TimeDiff(pSemStruct->time_start, currentTime))
             {
-                OSA_EnterCritical(&regPrimask);
                 pSemStruct->isWaiting = 0U;
                 OSA_ExitCritical(regPrimask);
                 return KOSA_StatusTimeout;
@@ -683,9 +684,7 @@ osa_status_t OSA_SemaphoreWait(osa_semaphore_handle_t semaphoreHandle, uint32_t 
         else if (millisec != osaWaitForever_c) /* If don't wait forever, start the timer */
         {
             /* Start the timeout counter */
-            OSA_EnterCritical(&regPrimask);
-            pSemStruct->isWaiting = 1U;
-            OSA_ExitCritical(regPrimask);
+            pSemStruct->isWaiting  = 1U;
             pSemStruct->time_start = OSA_TimeGetMsec();
             pSemStruct->timeout    = millisec;
         }
@@ -698,7 +697,7 @@ osa_status_t OSA_SemaphoreWait(osa_semaphore_handle_t semaphoreHandle, uint32_t 
 #endif
         }
     }
-
+    OSA_ExitCritical(regPrimask);
     return KOSA_StatusIdle;
 }
 /*FUNCTION**********************************************************************

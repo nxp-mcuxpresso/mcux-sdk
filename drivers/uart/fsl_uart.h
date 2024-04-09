@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_UART_H_
-#define _FSL_UART_H_
+#ifndef FSL_UART_H_
+#define FSL_UART_H_
 
 #include "fsl_common.h"
 
@@ -976,4 +976,4 @@ void UART_TransferHandleErrorIRQ(UART_Type *base, void *irqHandle);
 
 /*! @}*/
 
-#endif /* _FSL_UART_H_ */
+#endif /* FSL_UART_H_ */
