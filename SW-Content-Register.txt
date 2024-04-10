@@ -2,6 +2,17 @@ Release Name: MCUXpresso Software Development Kit (SDK)
 Release Version: 2.15.000
 Package License: LA_OPT_NXP_Software_License v49 September 2023 - Additional Distribution License granted, license in Section 2.3 applies
 
+osa                        Name: OSA                                         
+                           Version: 1.0.0                                    
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code                               
+                           Description: NXP USB stack. This is a version of  
+                           the USB stack that has been integrated with the   
+                           MCUXpresso SDK.                                   
+                           Origin: NXP (BSD-3-Clause)                        
+                           Location: components/osa  
+
 IEEE_802_15_4              Name: IEEE 802.15.4 MACPHY Software               
                            Version: 1.0.19                                   
                            Outgoing License: BSD-3-Clause                    

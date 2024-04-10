@@ -28,7 +28,7 @@ extern TSI_Type *const s_tsiBases[];
  ******************************************************************************/
 
 /*! @brief TSI driver version */
-#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
+#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
 
 /*! @brief TSI status flags macro collection */
 #define ALL_FLAGS_MASK (TSI_GENCS_EOSF_MASK | TSI_GENCS_OUTRGF_MASK)
@@ -107,7 +107,7 @@ typedef enum _tsi_shield
     kTSI_ShieldSel4   = 0x00000010U, /*!< TSI channel  4 is configured as shield channel */
     kTSI_ShieldSel5   = 0x00000020U, /*!< TSI channel  5 is configured as shield channel */
     kTSI_ShieldSel6   = 0x00000040U, /*!< TSI channel  6 is configured as shield channel */
-    kTSI_ShieldSel7   = 0x00000080U, /*!< TSI channel  7 is configured as shield channel */ 
+    kTSI_ShieldSel7   = 0x00000080U, /*!< TSI channel  7 is configured as shield channel */
     kTSI_ShieldSel8   = 0x00000100U, /*!< TSI channel  8 is configured as shield channel */
     kTSI_ShieldSel9   = 0x00000200U, /*!< TSI channel  9 is configured as shield channel */
     kTSI_ShieldSel10  = 0x00000400U, /*!< TSI channel 10 is configured as shield channel */
@@ -117,14 +117,14 @@ typedef enum _tsi_shield
     kTSI_ShieldSel14  = 0x00004000U, /*!< TSI channel 14 is configured as shield channel */
     kTSI_ShieldSel15  = 0x00008000U, /*!< TSI channel 15 is configured as shield channel */
     kTSI_ShieldSel16  = 0x00010000U, /*!< TSI channel 16 is configured as shield channel */
-    kTSI_ShieldSel17  = 0x00020000U, /*!< TSI channel 17 is configured as shield channel */    
-    kTSI_ShieldSel18  = 0x00040000U, /*!< TSI channel 18 is configured as shield channel */    
-    kTSI_ShieldSel19  = 0x00080000U, /*!< TSI channel 19 is configured as shield channel */    
-    kTSI_ShieldSel20  = 0x00100000U, /*!< TSI channel 20 is configured as shield channel */    
-    kTSI_ShieldSel21  = 0x00200000U, /*!< TSI channel 21 is configured as shield channel */    
-    kTSI_ShieldSel22  = 0x00400000U, /*!< TSI channel 22 is configured as shield channel */    
-    kTSI_ShieldSel23  = 0x00800000U, /*!< TSI channel 23 is configured as shield channel */     
-    kTSI_ShieldSel24  = 0x01000000U, /*!< TSI channel 24 is configured as shield channel */    
+    kTSI_ShieldSel17  = 0x00020000U, /*!< TSI channel 17 is configured as shield channel */
+    kTSI_ShieldSel18  = 0x00040000U, /*!< TSI channel 18 is configured as shield channel */
+    kTSI_ShieldSel19  = 0x00080000U, /*!< TSI channel 19 is configured as shield channel */
+    kTSI_ShieldSel20  = 0x00100000U, /*!< TSI channel 20 is configured as shield channel */
+    kTSI_ShieldSel21  = 0x00200000U, /*!< TSI channel 21 is configured as shield channel */
+    kTSI_ShieldSel22  = 0x00400000U, /*!< TSI channel 22 is configured as shield channel */
+    kTSI_ShieldSel23  = 0x00800000U, /*!< TSI channel 23 is configured as shield channel */
+    kTSI_ShieldSel24  = 0x01000000U, /*!< TSI channel 24 is configured as shield channel */
 } tsi_shield_t;
 #else
 /*!
@@ -487,19 +487,19 @@ typedef enum _tsi_ssc_nocharge_num
     kTSI_SscNoChargeNumValue_8 = 7U, /*!< The SSC output bit 1's basic period will be 8  clock cycle of system clock. */
     kTSI_SscNoChargeNumValue_9 = 8U, /*!< The SSC output bit 1's basic period will be 9  clock cycle of system clock. */
     kTSI_SscNoChargeNumValue_10 =
-        9U, /*!< The SSC output bit 1's basic period will be 10 clock cycle of system clock. */
+        9U,                          /*!< The SSC output bit 1's basic period will be 10 clock cycle of system clock. */
     kTSI_SscNoChargeNumValue_11 =
-        10U, /*!< The SSC output bit 1's basic period will be 11 clock cycle of system clock. */
+        10U,                         /*!< The SSC output bit 1's basic period will be 11 clock cycle of system clock. */
     kTSI_SscNoChargeNumValue_12 =
-        11U, /*!< The SSC output bit 1's basic period will be 12 clock cycle of system clock. */
+        11U,                         /*!< The SSC output bit 1's basic period will be 12 clock cycle of system clock. */
     kTSI_SscNoChargeNumValue_13 =
-        12U, /*!< The SSC output bit 1's basic period will be 13 clock cycle of system clock. */
+        12U,                         /*!< The SSC output bit 1's basic period will be 13 clock cycle of system clock. */
     kTSI_SscNoChargeNumValue_14 =
-        13U, /*!< The SSC output bit 1's basic period will be 14 clock cycle of system clock. */
+        13U,                         /*!< The SSC output bit 1's basic period will be 14 clock cycle of system clock. */
     kTSI_SscNoChargeNumValue_15 =
-        14U, /*!< The SSC output bit 1's basic period will be 15 clock cycle of system clock. */
+        14U,                         /*!< The SSC output bit 1's basic period will be 15 clock cycle of system clock. */
     kTSI_SscNoChargeNumValue_16 =
-        15U, /*!< The SSC output bit 1's basic period will be 16 clock cycle of system clock. */
+        15U,                         /*!< The SSC output bit 1's basic period will be 16 clock cycle of system clock. */
 } tsi_ssc_nocharge_num_t;
 
 /*!
@@ -795,6 +795,14 @@ void TSI_DisableInterrupts(TSI_Type *base, uint32_t mask);
  * @param enable True means enable TSI shield channels, false means disable.
  */
 void TSI_EnableShieldChannels(TSI_Type *base, uint32_t channelsMask, bool enable);
+
+/*!
+ * @brief Set TSI shield channels.
+ * @param base TSI peripheral base address.
+ * @param channelsMask Channels mask, 0 means disable all channels, 3 means enable channel 1 and channel 2, disable other
+ * channels.
+ */
+void TSI_ShieldChannelConfig(TSI_Type *base, uint32_t channelsMask);
 #endif
 
 /*!

@@ -92,9 +92,9 @@ void TSI_InitSelfCapMode(TSI_Type *base, const tsi_selfCap_config_t *config)
     base->MODE = temp | (TSI_MODE_S_W_SHIELD(config->enableShield) | TSI_MODE_S_SEN(config->enableSensitivity) |
                          TSI_MODE_SETCLK(config->commonConfig.mainClock) | TSI_MODE_MODE(config->commonConfig.mode));
 #else
-    temp = (base->MODE) & ~(TSI_MODE_SETCLK_MASK | TSI_MODE_MODE_MASK | TSI_MODE_S_SEN_MASK);
-    base->MODE = temp | (TSI_MODE_S_SEN(config->enableSensitivity) |
-                         TSI_MODE_SETCLK(config->commonConfig.mainClock) | TSI_MODE_MODE(config->commonConfig.mode));
+    temp       = (base->MODE) & ~(TSI_MODE_SETCLK_MASK | TSI_MODE_MODE_MASK | TSI_MODE_S_SEN_MASK);
+    base->MODE = temp | (TSI_MODE_S_SEN(config->enableSensitivity) | TSI_MODE_SETCLK(config->commonConfig.mainClock) |
+                         TSI_MODE_MODE(config->commonConfig.mode));
     base->SHIELD |= (uint32_t)config->enableShield;
 #endif
 
@@ -464,13 +464,15 @@ void TSI_ClearStatusFlags(TSI_Type *base, uint32_t mask)
 /*!
  * brief Enable/disable TSI shield channels.
  *
+ * Configure relevant channels according to the channelsMask value
+ *
  * param base TSI peripheral base address.
  * param channelsMask Channels mask, 1 means channel 0, 3 means channel 0 and channel 1.
  * param enable True means enable TSI shield channels, false means disable.
  */
 void TSI_EnableShieldChannels(TSI_Type *base, uint32_t channelsMask, bool enable)
 {
-    if(enable)
+    if (enable)
     {
         base->SHIELD |= channelsMask;
     }
@@ -478,5 +480,19 @@ void TSI_EnableShieldChannels(TSI_Type *base, uint32_t channelsMask, bool enable
     {
         base->SHIELD &= ~channelsMask;
     }
+}
+
+/*!
+ * brief Set TSI shield channels.
+ *
+ * Configure all channels according to the channelsMask value
+ *
+ * param base TSI peripheral base address.
+ * param channelsMask Channels mask, 0 means disable all channels, 3 means enable channel 1 and channel 2, disable other
+ * channels.
+ */
+void TSI_ShieldChannelConfig(TSI_Type *base, uint32_t channelsMask)
+{
+    base->SHIELD = (base->SHIELD & (uint32_t)kTSI_shieldAllOff) | channelsMask;
 }
 #endif

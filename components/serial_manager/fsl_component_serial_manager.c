@@ -1333,7 +1333,6 @@ serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const s
 #endif
 
 #endif
-
     switch (serialConfig->type)
     {
 #if (defined(SERIAL_PORT_TYPE_UART) && (SERIAL_PORT_TYPE_UART > 0U))
