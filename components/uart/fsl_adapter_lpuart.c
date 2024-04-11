@@ -1924,6 +1924,7 @@ hal_uart_dma_status_t HAL_UartDMAInit(hal_uart_handle_t handle,
                        (int32_t)dmaChannelMux->dma_dmamux_configure.dma_tx_channel_mux);
     EDMA_SetChannelMux(dmaBases[dmaConfig->dma_instance], dmaConfig->rx_channel,
                        (int32_t)dmaChannelMux->dma_dmamux_configure.dma_rx_channel_mux);
+#endif
 #if (defined(HAL_UART_ADAPTER_LOWPOWER) && (HAL_UART_ADAPTER_LOWPOWER > 0U))
     (void)memcpy(&uartDmaHandle->dma_channel_mux_configure, dmaConfig->dma_channel_mux_configure,
                  sizeof(dma_channel_mux_configure_t));
