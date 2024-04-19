@@ -210,7 +210,8 @@ void ELCDIF_RgbModeSetPixelFormat(LCDIF_Type *base, elcdif_pixel_format_t pixelF
                                  LCDIF_CTRL_DATA_FORMAT_18_BIT_MASK | LCDIF_CTRL_DATA_FORMAT_16_BIT_MASK)) |
                  s_pixelFormatReg[(uint32_t)pixelFormat].regCtrl;
 
-    base->CTRL1 = s_pixelFormatReg[(uint32_t)pixelFormat].regCtrl1;
+    base->CTRL1 = (base->CTRL1 & ~(LCDIF_CTRL1_BYTE_PACKING_FORMAT_MASK)) |
+                  s_pixelFormatReg[(uint32_t)pixelFormat].regCtrl1;
 }
 
 /*!
