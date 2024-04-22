@@ -10,9 +10,9 @@
 
 #include "stdbool.h"
 
-#define WPL_WIFI_SSID_LENGTH      32
-#define WPL_WIFI_PASSWORD_MIN_LEN 8
-#define WPL_WIFI_PASSWORD_LENGTH  63
+#define WPL_WIFI_SSID_LENGTH      32U
+#define WPL_WIFI_PASSWORD_MIN_LEN 8U
+#define WPL_WIFI_PASSWORD_LENGTH  63U
 
 /* IP Address of Wi-Fi interface in AP (Access Point) mode */
 #ifndef WPL_WIFI_AP_IP_ADDR
@@ -88,7 +88,7 @@ wpl_ret_t WPL_Stop(void);
  *
  * @return WPLRET_SUCCESS Network profile created, Wi-Fi AP interface up, DHCP server running.
  */
-wpl_ret_t WPL_Start_AP(char *ssid, char *password, int chan);
+wpl_ret_t WPL_Start_AP(const char *ssid, const char *password, int chan);
 
 /**
  * @brief  Stop DHCP server, stop Wi-Fi AP (Access Point) interface and delete AP network profile.
@@ -120,7 +120,7 @@ char *WPL_Scan(void);
  *
  * @return WPLRET_SUCCESS New STA network profile was successfully saved.
  */
-wpl_ret_t WPL_AddNetworkWithSecurity(char *ssid, char *password, char *label, wpl_security_t security);
+wpl_ret_t WPL_AddNetworkWithSecurity(const char *ssid, const char *password, const char *label, wpl_security_t security);
 
 /**
  * @brief  Create and save a new STA (Station) network profile.
@@ -133,7 +133,7 @@ wpl_ret_t WPL_AddNetworkWithSecurity(char *ssid, char *password, char *label, wp
  *
  * @return WPLRET_SUCCESS New STA network profile was successfully saved.
  */
-wpl_ret_t WPL_AddNetwork(char *ssid, char *password, char *label);
+wpl_ret_t WPL_AddNetwork(const char *ssid, const char *password, const char *label);
 
 /**
  * @brief  Delete a previously added STA (Station) network profile.
@@ -145,7 +145,7 @@ wpl_ret_t WPL_AddNetwork(char *ssid, char *password, char *label);
  *
  * @return WPLRET_SUCCESS The profile network is deleted.
  */
-wpl_ret_t WPL_RemoveNetwork(char *label);
+wpl_ret_t WPL_RemoveNetwork(const char *label);
 
 /**
  * @brief  Connect to a Wi-Fi network.

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1170-EVK_manifest_v3_14" name="2.15.0 GitHub SDK" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1170-EVK_manifest_v3_14" name="2.15.100 GitHub SDK" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
 
   <externalDefinitions>
     <definition extID="isi_qmc_dgc"/>
     <definition extID="evkbmimxrt1170"/>
     <definition extID="middleware.usb.host.stack.MIMXRT1176"/>
+    <definition extID="middleware.maestro_framework.MIMXRT1176"/>
     <definition extID="middleware.wifi.MIMXRT1176"/>
     <definition extID="middleware.freertos-kernel.MIMXRT1176"/>
-    <definition extID="middleware.maestro_framework.MIMXRT1176"/>
     <definition extID="middleware.multicore.erpc.MIMXRT1176"/>
     <definition extID="middleware.multicore.MIMXRT1176"/>
     <definition extID="middleware.wireless.framework.function_lib.MIMXRT1176"/>
@@ -17,15 +17,15 @@
     <definition extID="middleware.azure_rtos.tx.sp.MIMXRT1176"/>
     <definition extID="middleware.usb.device.cdc.external.MIMXRT1176"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2150" name="MCUXpresso SDK2150" version="2.15.0" revision="2.15.0"/>
+  <ksdk id="MCUXpressoSDK215100" name="MCUXpresso SDK215100" version="2.15.100" revision="2.15.100"/>
   <manifest_includes>
     <manifest_include path="../../examples/evkmimxrt1170/evkmimxrt1170_example_manifest_v3_14.xml"/>
+    <manifest_include path="../../middleware/maestro/manifests/middleware_nxp_maestro_audio_framework_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wifi_nxp/manifests/middleware_nxp_wifi_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/fatfs/manifests/middleware_elm_chan_fatfs_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../rtos/freertos/freertos-kernel/manifests/middleware_amazon_freertos_kernel_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/littlefs/manifests/middleware_christopher_haster_littlefs_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/lwip/manifests/middleware_adam_dunkels_lwip_MIMXRT1176_manifest_v3_14.xml"/>
-    <manifest_include path="../../middleware/maestro/manifests/middleware_nxp_maestro_audio_framework_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/mcuboot_opensource/manifests/middleware_mcuboot_opensource_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../middleware/mmcau/manifests/middleware_nxp_mmcau_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/multicore/manifests/middleware_nxp_multicore_MIMXRT1176_manifest_v3_14.xml"/>
@@ -33,10 +33,10 @@
     <manifest_include path="../../middleware/sdmmc/manifests/middleware_nxp_sd_mmc_sdio_card_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/usb/manifests/middleware_nxp_usb_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/vit/manifests/middleware_nxp_voice_intelligent_technology_MIMXRT1176_manifest_v3_14.xml"/>
-    <manifest_include path="../../middleware/eiq/manifests/middleware_nxp_eiq_machine_learning_MIMXRT1176_manifest_v3_14.xml"/>
-    <manifest_include path="../../rtos/azure-rtos/manifests/middleware_microsoft_azure_rtos_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/edgefast_bluetooth/manifests/middleware_nxp_edgefast_bluetooth_pal_MIMXRT1176_manifest_v3_14.xml"/>
+    <manifest_include path="../../middleware/eiq/manifests/middleware_nxp_eiq_machine_learning_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wireless/framework/manifests/middleware_nxp_conn_fwk_MIMXRT1176_manifest_v3_14.xml"/>
+    <manifest_include path="../../rtos/azure-rtos/manifests/middleware_microsoft_azure_rtos_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wireless/wpa_supplicant-rtos/manifests/middleware_nxp_wifi_wpa_supplicant_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/voice_seeker/manifests/middleware_nxp_voiceseeker_no_aec_MIMXRT1176_manifest_v3_14.xml"/>
   </manifest_includes>
@@ -2717,6 +2717,17 @@ ${load}</script>
         <include_path relative_path="incl" type="c_include"/>
       </include_paths>
     </component>
+    <component id="docs.Edgefast.MIMXRT1176" name="Edgefast" brief="Docs edgefast bluetooth" version="1.0.0" full_name="Docs edgefast bluetooth" category="docs/Edgefast" user_visible="true" type="documentation" package_base_path="../docs/wireless/bluetooth/edgefast_bluetooth" project_base_path="wireless/Edgefast">
+      <dependencies>
+        <device_dependency value="MIMXRT1176xxxxx"/>
+      </dependencies>
+      <source relative_path="./" type="doc">
+        <files mask="Hardware Rework Guide for EdgeFast BT PAL.pdf"/>
+        <files mask="EFBTPALAPIRM.pdf"/>
+        <files mask="Enabling Additional Edgefast BT PAL Examples on M4 core for RT1170.pdf"/>
+        <files mask="Enabling Additional Edgefast BT PAL Examples on M4 core for RT1170.pdf"/>
+      </source>
+    </component>
     <component id="docs.eiq.MIMXRT1176" name="eiq" brief="Docs eiq" version="1.0.0" full_name="Docs eiq" category="docs/eiq" user_visible="true" type="documentation" package_base_path="../middleware/eiq/doc" project_base_path="EIQ">
       <dependencies>
         <device_dependency value="MIMXRT1176xxxxx"/>
@@ -2738,15 +2749,15 @@ ${load}</script>
         <files mask="MCUXpresso SDK Azure RTOS Release Notes.pdf"/>
       </source>
     </component>
-    <component id="docs.Edgefast.MIMXRT1176" name="Edgefast" brief="Docs edgefast bluetooth" version="1.0.0" full_name="Docs edgefast bluetooth" category="docs/Edgefast" user_visible="true" type="documentation" package_base_path="../docs/wireless/bluetooth/edgefast_bluetooth" project_base_path="wireless/Edgefast">
+    <component id="docs.maestro.MIMXRT1176" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.7.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
       <dependencies>
-        <device_dependency value="MIMXRT1176xxxxx"/>
+        <all>
+          <component_dependency value="middleware.maestro_framework.MIMXRT1176"/>
+          <device_dependency value="MIMXRT1176xxxxx"/>
+        </all>
       </dependencies>
       <source relative_path="./" type="doc">
-        <files mask="Hardware Rework Guide for EdgeFast BT PAL.pdf"/>
-        <files mask="EFBTPALAPIRM.pdf"/>
-        <files mask="Enabling Additional Edgefast BT PAL Examples on M4 core for RT1170.pdf"/>
-        <files mask="Enabling Additional Edgefast BT PAL Examples on M4 core for RT1170.pdf"/>
+        <files mask="Maestro_Release_Notes.pdf"/>
       </source>
     </component>
     <component id="project_template.MIMXRT1176.MIMXRT1176" name="MIMXRT1176" brief="Devices_project_template MIMXRT1176" version="1.0.0" full_name="Devices_project_template MIMXRT1176" category="Board Support/SDK Project Template" user_visible="true" type="project_template" package_base_path="../devices/MIMXRT1176/project_template" project_base_path="board">
@@ -4719,17 +4730,6 @@ ${load}</script>
       </dependencies>
       <source relative_path="./" type="doc">
         <files mask="Getting Started with MCUXpressoSDK and FreeRTOS OS.pdf"/>
-      </source>
-    </component>
-    <component id="docs.maestro.MIMXRT1176" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.7.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
-      <dependencies>
-        <all>
-          <component_dependency value="middleware.maestro_framework.MIMXRT1176"/>
-          <device_dependency value="MIMXRT1176xxxxx"/>
-        </all>
-      </dependencies>
-      <source relative_path="./" type="doc">
-        <files mask="Maestro_Release_Notes.pdf"/>
       </source>
     </component>
     <component id="docs.multicore.erpc.MIMXRT1176" name="docs_multicore_erpc" brief="embedded Remote Procedure (eRPC) documentation" version="1.11.0" full_name="embedded Remote Procedure (eRPC) documentation" category="docs/erpc" user_visible="true" type="documentation" package_base_path="../middleware/multicore/docs" project_base_path="docs">

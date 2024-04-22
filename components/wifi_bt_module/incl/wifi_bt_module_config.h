@@ -5,6 +5,9 @@
  *  SPDX-License-Identifier: BSD-3-Clause
  */
 
+#ifndef _WIFI_BT_MODULE_CONFIG_H_
+#define _WIFI_BT_MODULE_CONFIG_H_
+
 /* Wi-Fi boards configuration list */
 
 /* AzureWave AW-NM191-uSD */
@@ -354,3 +357,5 @@
 #else
 #error "Please define macro related to wifi board"
 #endif
+
+#endif /* _WIFI_BT_MODULE_CONFIG_H_ */
