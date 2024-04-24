@@ -362,14 +362,14 @@ static smt_buf_t *SMT_SmaGet(uint32_t smtChannel)
         /* Allow use of internal MU SRAM */
         if (sma == 0U)
         {
-            sma = ((uint32_t) s_muBases[inst]) + 0x1000U;
+            sma = ((uint32_t)(uintptr_t) s_muBases[inst]) + 0x1000U;
         }
 
         /* Apply channel spacing */
         sma += ((uint32_t) db) * SMT_BUFFER_SIZE;
 
         /* Set return */
-        rtn = (smt_buf_t*) sma;
+        rtn = (smt_buf_t*)(uintptr_t) sma;
 #else
         /* Set return */
         rtn = (smt_buf_t*) MB_LOOPBACK_SmaGet(inst, db);
