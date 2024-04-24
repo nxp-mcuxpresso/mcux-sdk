@@ -11,6 +11,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 
 else()
 
-message(SEND_ERROR "driver_iomuxc.MIMX9596 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+message(SEND_ERROR "driver_iomuxc dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()

@@ -1,4 +1,4 @@
-# Add set(CONFIG_USE_driver_memory true) in config.cmake to use this component
+# Add set(CONFIG_USE_driver_trdc_soc true) in config.cmake to use this component
 
 include_guard(GLOBAL)
 message("${CMAKE_CURRENT_LIST_FILE} component is included.")
@@ -11,6 +11,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 
 else()
 
-message(SEND_ERROR "driver_memory.MIMX9596 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+message(SEND_ERROR "driver_trdc_soc dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
