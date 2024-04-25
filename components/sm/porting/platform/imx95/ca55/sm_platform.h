@@ -11,12 +11,16 @@
 #include "scmi.h"
 #include "scmi_internal.h"
 #include "smt.h"
+#if __has_include("sm_config.h")
+#include "sm_config.h"
+#endif
 
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-/* MU3_MUA */
-#define SM_PLATFORM_MU_INST 7
+#ifndef SM_PLATFORM_MU_INST
+#define SM_PLATFORM_MU_INST 7 /* default MU3_MUA */
+#endif
 
 #define SM_PLATFORM_A2P      0 /* SCMI Agent -> SCMI Platform */
 #define SM_PLATFORM_NOTIFY   1 /* SCMI Platform -> SCMI Agent */
