@@ -202,13 +202,13 @@ def HandleExtFlashSection(elf_file_name, extflash_section, sect_name):
                                                                         extflash_section.size))
 
     try:
-        elf_file_extension = elf_file_name.split(".")[1]
+        elf_file_extension = os.path.splitext(elf_file_name)[1]
     except IndexError:
         print("Compiled file has no extension, adding default extension")
-        elf_file_extension = 'elf'
+        elf_file_extension = '.elf'
 
-    extflash_elf_name = elf_file_name.split(".")[0] + '_extflash.' + elf_file_extension
-    extflash_bin_name = extflash_elf_name.split(".")[0] + '.bin'
+    extflash_elf_name = os.path.splitext(elf_file_name)[0] + '_extflash' + elf_file_extension
+    extflash_bin_name = os.path.splitext(extflash_elf_name)[0] + '.bin'
 
     extract_section = subprocess.check_output(['arm-none-eabi-objcopy',
                                                '--only-section=' + sect_name,
@@ -885,20 +885,20 @@ def BuildImageElf(args, elf_bin_file, bin_file_name, verbose):
             is_ext_flash_section = True
 
             try:
-                elf_file_extension = elf_file_name.split(".")[1]
+                elf_file_extension = os.path.splitext(elf_file_name)[1]
             except IndexError:
                 print("Compiled file has no extension, adding default extension")
-                elf_file_extension = 'elf'
+                elf_file_extension = '.elf'
 
-            concatenated_elf_file_name = elf_file_name.split(".")[0] + '_concatenated.' + \
+            concatenated_elf_file_name = os.path.splitext(elf_file_name)[0] + '_concatenated' + \
                                          elf_file_extension
-            concatenated_bin_file_name = elf_file_name.split(".")[0] + '_concatenated.bin'
+            concatenated_bin_file_name = os.path.splitext(elf_file_name)[0] + '_concatenated.bin'
             ext_flash_section_descriptor_concat, ext_flash_section_descriptor, ext_flash_hash, extra_section_desc_size = HandleExtFlashSection(
                 elf_file_name, extflash_section, '.ext_flash_text')
             # need to reload sections as .ext_flash_text is removed from sections
             sections = parse_sections(elf_file_name)
             # Do a copy of the .elf file used later for concatenated binary
-            concatenated_elf_file_name = elf_file_name.split(".")[0] + '_concatenated.' + elf_file_extension
+            concatenated_elf_file_name = os.path.splitext(elf_file_name)[0] + '_concatenated' + elf_file_extension
             shutil.copy(elf_file_name, concatenated_elf_file_name)
             # Update last section of both files
             error, boot_block_offset, img_total_len = UpdateLastSection(elf_file_name, sections, args, image_addr,
@@ -1035,6 +1035,25 @@ def BuildImageElf(args, elf_bin_file, bin_file_name, verbose):
             print("Error while signing image")
             return -10
         delete_file('postbuild_process_ongoing')
+    else:
+        if args.SimpleHashVerification:
+            from Crypto.Hash import SHA256
+            print("Using simple hash verification")
+            # read again the whole file and compute the hash
+            bin_output = subprocess.check_output(['arm-none-eabi-objcopy', '-O', 'binary', elf_file_name, bin_file_name])
+            with open(bin_file_name, 'rb') as in_file:
+                message = in_file.read()
+            hash = SHA256.new(message)
+            # append hash to last section. Note that signing parameter is set to True, but the signature
+            # is just the hash of the image. This just leverages the mechanism that adds the signature at
+            # the end of the image.
+            error, boot_block_offset, img_total_len = UpdateLastSection(elf_file_name, sections, args,
+                                                                        image_addr, stated_size,
+                                                                        cert_file_path, True, hash.digest(), 0, b'', b'')
+            if error != 0:
+                print("Error while adding hash of image")
+                return -11
+            delete_file('postbuild_process_ongoing')
 
     bin_output = subprocess.check_output(['arm-none-eabi-objcopy',
                                           '-O',
@@ -1050,7 +1069,7 @@ def BuildImageElf(args, elf_bin_file, bin_file_name, verbose):
                                               concatenated_elf_file_name,
                                               concatenated_bin_file_name])
 
-        extflash_bin_name = elf_file_name.split(".")[0] + '_extflash.bin'
+        extflash_bin_name = os.path.splitext(elf_file_name)[0] + '_extflash.bin'
         if (os.path.exists(extflash_bin_name) != 0):
             os.system("cat " + extflash_bin_name + " >> " + concatenated_bin_file_name);
 
@@ -1118,10 +1137,13 @@ parser.add_argument('-OtaHwMin', '--OtaHwVersionMin', type=int,
 parser.add_argument('-OtaHwMax', '--OtaHwVersionMax', type=int,
                     help="define max of Hw versions compatible with OTA file. Implies inclusion in OTA header")
 
+parser.add_argument('-SimpleHashVerification', '--SimpleHashVerification', action='store_true',
+                    help="When option is selected, the hash of the image is appended at the end. Should be used without secure boot.")
+
 args = parser.parse_args()
 
 elf_file_name = os.path.abspath(args.in_file)
-bin_file_name = elf_file_name.split(".")[0] + '_temp.bin'
+bin_file_name = os.path.splitext(elf_file_name)[0] + '_temp.bin'
 
 if args.out_file is None:
     args.out_file = elf_file_name

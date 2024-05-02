@@ -24,7 +24,9 @@
 
 /* The UART to use for debug messages. */
 #define BOARD_DEBUG_UART_TYPE kSerialPort_Uart
+#ifndef BOARD_DEBUG_UART_BAUDRATE
 #define BOARD_DEBUG_UART_BAUDRATE 115200U
+#endif
 #define BOARD_DEBUG_UART_BASEADDR (uint32_t) USART0
 #define BOARD_DEBUG_UART_INSTANCE 0U
 #define BOARD_DEBUG_UART_CLK_FREQ CLOCK_GetFreq(kCLOCK_Fro32M)

@@ -1,15 +1,13 @@
-NXP Software Content Register
-Outgoing License: LA_OPT_NXP_SOFTWARE_License v46 - Additional distribution license granted, license in Section 2.3 applies
-License in File: LICENSE.htm
-Release Version: 2.6.13
+Release Name: MCUXpresso Software Development Kit (SDK)
+Release Version: 2.6.14
+Package License: LA_OPT_NXP_Software_License.htm - Additional Distribution License, Section 2.3 applies
 
 KSDK_Peripheral_Driver     Description: Peripheral drivers are designed for  
                            the most common use cases identified for the      
                            underlying hardware block.                        
                            Author: Freescale                                 
                            Version: 2.x.x                                    
-                           Outgoing License: BSD-3-Clause       
-                           License File: COPYING-BSD-3                       						   
+                           License: Open Source - BSD-3-Clause               
                            Format: source code                               
                            name: KSDK Peripheral Driver                      
                            Location: devices/<device>/drivers                
@@ -18,8 +16,7 @@ Amazon_FreeRTOS            Author: Real Time Engineers, Ltd.
                            Description: IoT operating system for             
                            microcontrollers                                  
                            Format: source code                               
-                           Outgoing License: MIT                             
-                           License File:                                 
+                           License: MIT. See                                 
                            ,<rootfolder>/rtos/amazon-freertos/License.       
                            Location: rtos/amazon-freertos                    
                            name: Amazon FreeRTOS                             
@@ -30,8 +27,7 @@ FreeRTOS_heap_newlib       Author: Dave Nadler, Nadler & Associates
                            Consulting                                        
                            Description: Newlib allocator for FreeRTOS        
                            Format: source code                               
-                           Outgoing License: BSD-3-Clause       
-                           License File: COPYING-BSD-3  
+                           License: Open Source - BSD-3-Clause               
                            Location:                                         
                            rtos/amazon-freertos/lib/FreeRTOS/portable/MemMang
                            /                                                 
@@ -41,22 +37,17 @@ FreeRTOS_heap_newlib       Author: Dave Nadler, Nadler & Associates
                            tml                                               
                            version: 1.0.0                                    
 
-mbedtls                    Author: ARM                                       
-                           Description: Cryptographic and SSL/TLS Library    
+ntag_i2c_plus              Author: NXP                                       
+                           Description: NTAG I2C plus communication library  
                            Format: source code                               
-                           Outgoing License: Apache-2.0                      
-                           License File:      
-                           middleware/mbedtls/apache-2.0.txt                 
-                           Location: middleware/mbedtls                      
-                           name: MBED TLS stack                              
-                           URL: https://tls.mbed.org/                        
-                           version: 2.13.1                                   
+                           License: Open Source - BSD-3-Clause               
+                           Location: middleware/ntag_i2c_plus                
+                           name: NTAG I2C plus                               
+                           version: 1.0.0                                    
 
 cmsisdsp                   name: CMSIS DSP Library                           
                            Format: source code                               
-                           Outgoing License: Apache-2.0                      
-                           License File:  
-						   See CMSIS/LICENSE.txt
+                           License: Apache License 2.0, See CMSIS/LICENSE.txt
                            parentversion: 1.5.2                              
                            Author: ARM                                       
                            version: 1.5.2 (CMSIS download 5.3.0)             
@@ -74,19 +65,137 @@ cmsiscore                  Author: ARM
                            ag/5.3.0                                          
                            name: CMSIS Core header files                     
                            Format: source code                               
-                           Outgoing License: Apache-2.0                      
-                           License File: 
-						   See CMSIS/LICENSE.txt
+                           License: Apache License 2.0, See CMSIS/LICENSE.txt
                            Location: CMSIS/Include                           
                            version: 5.1.1 (CMSIS Download 5.3.0)             
                            Description: Industry-standard header files       
-                           distributes by ARM for cortex-M cores                                       
+                           distributes by ARM for cortex-M cores             
 
-ntag_i2c_plus              Author: NXP                                       
-                           Description: NTAG I2C plus communication library  
+HostSDK                    version: 1.8.0.2                                  
+                           Location: tools/wireless/hsdk                     
+                           Description: Network Protocol stack serial bus    
+                           drivers and application code                      
+                           License: Open Source - BSD-3-Clause               
+                           Author: NXP                                       
+                           name: HostSDK                                     
+                           Format: Binaries, Source code and header files    
+
+FWK                        version: 5.7.12                                   
+                           Location: middleware/wireless/framework           
+                           Description: Connectivity Framework middleware for
+                           Connectivity stacks                               
+                           License: Open Source - BSD-3-Clause               
+                           Author: NXP                                       
+                           name: Connectivity Framework                      
+                           Format: source code and header Files              
+
+SecLib                     version: 5.7.12                                   
+                           Location:                                         
+                           middleware/wireless/framework/SecLib/lib_crypto_*.
+                           a                                                 
+                           Description: Connectivity Security Library        
+                           License: Proprietary, See EULA                    
+                           LA_OPT_NXP_Software_License.htm                   
+                           Author: NXP                                       
+                           name: Connectivity SecLib                         
+                           Format: Binary libraries                          
+
+BLE                        version: 1.7.4                                    
+                           Location: middleware/wireless/bluetooth           
+                           Description: Bluetooth Low Energy Software        
+                           License: Open Source - BSD-3-Clause               
+                           Author: NXP                                       
+                           name: Bluetooth Low Energy Application Source     
+                           Format: Source code and header Files              
+
+BLE_HostLib                version: 1.7.4                                    
+                           Location: middleware/wireless/bluetooth/host/lib  
+                           Description: Bluetooth Low Energy Stack (HCI,     
+                           L2CAP, ATT, GATT, GAP and SM)                     
+                           License: Proprietary, See EULA                    
+                           LA_OPT_NXP_Software_License.htm                   
+                           Author: NXP                                       
+                           name: Bluetooth Low Energy Host Firmware          
+                           Format: Binary libraries                          
+
+BLE_ControllerLib          version: 9.4.21.4                                 
+                           Location: middleware/wireless/ble_controller/lib  
+                           Description: Bluetooth Low Energy Controller      
+                           Firmware. Host Command Interface (HCI).           
+                           License: Proprietary, See EULA                    
+                           LA_OPT_NXP_Software_License.htm                   
+                           Author: RivieraWaves/CEVA                         
+                           name: Bluetooth Low Energy Controller Firmware    
+                           Format: Binary libraries                          
+
+ieee_802_15_4              version: 5.3.12                                   
+                           Location: middleware/wireless/ieee-802.15.4       
+                           Description: NXP Wireless IEEE 802.15.4           
+                           License: Proprietary, See EULA                    
+                           LA_OPT_NXP_Software_License.htm                   
+                           Author: NXP                                       
+                           name: Wireless 802.15.4                           
+                           Format: Binary libraries & header files           
+
+mbedtls                    Author: ARM                                       
+                           Description: Cryptographic and SSL/TLS Library    
                            Format: source code                               
-                           Outgoing License: BSD-3-Clause       
-                           License File: COPYING-BSD-3 
-                           Location: middleware/ntag_i2c_plus                
-                           name: NTAG I2C plus                               
-                           version: 1.0.0        
+                           License: Apache-2.0,                              
+                           middleware/mbedtls/apache-2.0.txt                 
+                           Location: middleware/mbedtls                      
+                           name: MBED TLS stack                              
+                           URL: https://tls.mbed.org/                        
+                           version: 2.13.1                                   
+
+ZigBee 3.0                 Author: NXP                                       
+                           Name: JN518x ZigBee 3.0 Stack                     
+                           Version: 1.0.12                                   
+                           Location: middleware/wireless/zigbee              
+                           Description: ZigBee 3.0 protocol stack for JN518x 
+                           License: Proprietary, See EULA                    
+                           LA_OPT_NXP_Software_License.htm                   
+                           Format: object and source code                    
+
+ZigBee 3.0 ECB decrypt     Author: Niyaz PK                                  
+                           Name: ECB decryption                              
+                           Version: 1.0.12                                   
+                           Location:                                         
+                           middleware/wireless/zigbee/BDB/Source/TouchLink   
+                           Description: ECB decryption implementation        
+                           License: Public domain                            
+                           URL:                                              
+                           http://comp.ist.utl.pt/ec-csc/Code/Ciphers/AES_Enc
+                           rypt.cpp                                          
+                           Format: source code                               
+
+ZigBee 3.0 Eclipse Plugins Author: NXP                                       
+                           Name: ZigBee 3.0 Eclipse Plugins                  
+                           Version: 1.0.12                                   
+                           Location: middleware/wireless/zigbee/tools        
+                           Description: ZigBee 3.0 plugins for Eclipse for   
+                           configuration of stack parameters                 
+                           License: Eclipse Public License 1.0               
+                           URL: http://www.eclipse.org/emf                   
+                           Format: object code                               
+
+ZigBee 3.0 PDUMConfig tool Author: NXP                                       
+                           Name: ZigBee 3.0 PDU Manager Configuration Tool   
+                           Version: 1.0.12                                   
+                           Location: middleware/wireless/zigbee/tools        
+                           Description: Converts configuration data file into
+                           C source and header files. Built with MS .NET     
+                           framework and py2exe components                   
+                           License: MIT License                              
+                           URL: http://www.py2exe.org                        
+                           Format: object code                               
+
+ZigBee 3.0 ZPSConfig tool  Author: NXP                                       
+                           Name: ZigBee 3.0 ZPS Configuration Tool           
+                           Version: 1.0.12                                   
+                           Location: middleware/wireless/zigbee/tools        
+                           Description: Converts configuration data file into
+                           C source and header files. Built with MS .NET     
+                           framework and py2exe components                   
+                           License: MIT License                              
+                           URL: http://www.py2exe.org                        
+                           Format: object code                               

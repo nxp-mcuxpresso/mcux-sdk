@@ -64,9 +64,14 @@ is_python_package_installed "pycrypto"
 is_python_package_installed "pycryptodome"
 
 CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+ADDITIONAL_ARGS=""
 
-if [ $# -eq 2 ]; then
-    SIGNING_TOOL=$2/dk6_image_tool.py
+if [ $# -ge 2 ]; then
+    ADDITIONAL_ARGS=$2
+fi
+
+if [ $# -eq 3 ]; then
+    SIGNING_TOOL=$3/dk6_image_tool.py
 else
     SIGNING_TOOL=$CURR_DIR/dk6_image_tool.py
 fi
@@ -77,7 +82,7 @@ if [ "$#" -gt 0 ]; then
 	DIR_WITH_ELFS=$1
 
 	for FILENAME in $DIR_WITH_ELFS/*; do
-		MIME_SET="$(file -ib $FILENAME)"
+		MIME_SET="$(file -b --mime $FILENAME)"
 
 		if [[ $MIME_SET == *"$MIME_PATTERN"* ]]; then
 			OTA_ENABLED=0
@@ -88,7 +93,7 @@ if [ "$#" -gt 0 ]; then
 				OTA_ENABLED=1
 			fi
 
-			python3 $SIGNING_TOOL -i="$OTA_ENABLED" $FILENAME
+			python3 $SIGNING_TOOL -i="$OTA_ENABLED" $ADDITIONAL_ARGS $FILENAME
 			arm-none-eabi-objcopy -O binary $FILENAME $FILENAME.bin
 		fi
 	done
