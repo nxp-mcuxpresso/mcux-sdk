@@ -104,17 +104,14 @@
 #  # description: Middleware wireless framework_PDUM
 #  set(CONFIG_USE_middleware_wireless_framework_PDUM true)
 
+#  # description: Middleware wireless framework_PDUM rw61x
+#  set(CONFIG_USE_middleware_wireless_framework_PDUM_rw61x true)
+
 #  # description: Middleware wireless framework_markdown
 #  set(CONFIG_USE_middleware_wireless_framework_markdown true)
 
 #  # description: Middleware wireless framework_SFC
 #  set(CONFIG_USE_middleware_wireless_framework_SFC true)
-
-#  # description: Middleware wireless framework_RF_SFC
-#  set(CONFIG_USE_middleware_wireless_framework_RF_SFC true)
-
-#  # description: Middleware wireless framework_OTW
-#  set(CONFIG_USE_middleware_wireless_framework_OTW true)
 
 #  # description: Middleware wireless framework_FactoryDataProvider
 #  set(CONFIG_USE_middleware_wireless_framework_FactoryDataProvider true)
@@ -136,6 +133,9 @@
 
 #  # description: Middleware wireless framework_sec_lib
 #  set(CONFIG_USE_middleware_wireless_framework_sec_lib true)
+
+#  # description: Middleware wireless framework board base
+#  set(CONFIG_USE_middleware_wireless_framework_board_base_rdrw612bga true)
 
 #  # description: Middleware wireless framework_platform_common
 #  set(CONFIG_USE_middleware_wireless_framework_platform_common_rw61x true)
@@ -491,6 +491,9 @@
 
 #  # description: Component mem_manager_light
 #  set(CONFIG_USE_component_mem_manager_light true)
+
+#  # description: Component mem_manager_freertos
+#  set(CONFIG_USE_component_mem_manager_freertos true)
 
 #  # description: Component messaging
 #  set(CONFIG_USE_component_messaging true)
@@ -1095,6 +1098,28 @@
 #  # description: Middleware usb host stack
 #  set(CONFIG_USE_middleware_usb_host_stack true)
 
+#set.component.psa_crypto_driver
+#  # description: OS Abstraction Layer for PSA crypto driver
+#  set(CONFIG_USE_component_psa_crypto_driver_osal true)
+
+#  # description: Oracle of PSA crypto driver for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_oracle true)
+
+#  # description: Common files of PSA crypto driver for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_common true)
+
+#  # description: Transparent part of PSA crypto driver for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_transparent true)
+
+#  # description: Opaque part of PSA crypto driver for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_opaque true)
+
+#  # description: OS Abstraction Layer for PSA crypto driver on FreeRTOS
+#  set(CONFIG_USE_component_psa_crypto_driver_osal_frtos true)
+
+#  # description: OS Abstraction Layer for PSA crypto driver on bare metal
+#  set(CONFIG_USE_component_psa_crypto_driver_osal_baremetal true)
+
 #set.component.els_pkc
 #  # description: Component els_pkc.core
 #  set(CONFIG_USE_component_els_pkc_core true)
@@ -1191,6 +1216,9 @@
 
 #  # description: Component els_pkc.memory
 #  set(CONFIG_USE_component_els_pkc_memory true)
+
+#  # description: Component els_pkc.oscca
+#  set(CONFIG_USE_component_els_pkc_oscca true)
 
 #  # description: Component els_pkc.oscca_aeadmodes
 #  set(CONFIG_USE_component_els_pkc_oscca_aeadmodes true)
@@ -1516,6 +1544,7 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../components/els_pkc
   ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
   ${CMAKE_CURRENT_LIST_DIR}/../../components/power_manager/devices/RW612
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/psa_crypto_driver
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/edgefast_bluetooth
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/littlefs
@@ -1545,6 +1574,7 @@ include(set_CMSIS OPTIONAL)
 include(set_device_RW612 OPTIONAL)
 include(set_component_osa OPTIONAL)
 include(set_component_els_pkc OPTIONAL)
+include(set_component_psa_crypto_driver OPTIONAL)
 include(set_middleware_edgefast_bluetooth OPTIONAL)
 include(set_middleware_wifi OPTIONAL)
 include(set_middleware_fatfs OPTIONAL)

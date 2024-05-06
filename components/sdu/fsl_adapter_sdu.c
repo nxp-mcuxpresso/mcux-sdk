@@ -26,9 +26,9 @@
 #define SDU_BUFF_ALIGN (32U)
 #define SDU_SIZE_ALIGN (32U)
 
-#define SDU_SDIO_HDR_EXTRA (sizeof(sdio_header_t) + 4)
+#define SDU_SDIO_HDR_EXTRA (sizeof(sdio_header_t) + 4U)
 
-#define SDU_ACTUAL_USE_PORT_NUM 1
+#define SDU_ACTUAL_USE_PORT_NUM (1U)
 
 #define SDU_MAX_CMD_BUFFER  (2U)
 #define SDU_CMD_BUFFER_SIZE  (SDU_DEFAULT_BLOCK_SIZE * SDU_CMD_EVENT_BLOCK_COUNT)//(4096U + SDU_SDIO_HDR_EXTRA)
@@ -40,26 +40,29 @@
 #define SDU_DATA_BUFFER_SIZE  (SDU_DEFAULT_BLOCK_SIZE * SDU_DATA_BLOCK_COUNT)//(4096U + SDU_SDIO_HDR_EXTRA)
 
 /*! @brief Constants for transfer direction */
-#define SDU_PORT_FOR_READ     0 /*!< For command/data upload */
-#define SDU_PORT_FOR_WRITE    1 /*!< For command/data download */
-#define SDU_PORT_MAX_TRANSFER 2 /*!< Maximum transfer direction */
+#define SDU_PORT_FOR_READ     (0U) /*!< For command/data upload */
+#define SDU_PORT_FOR_WRITE    (1U) /*!< For command/data download */
+#define SDU_PORT_MAX_TRANSFER (2U) /*!< Maximum transfer direction */
 
 
-#define ROM_SDIO_VID  0x0471ul
-#define ROM_SDIO_PID0 0x0208ul
-#define ROM_SDIO_PID1 0x0209ul
+#define ROM_SDIO_VID  0x0471UL
+#define ROM_SDIO_PID0 0x0208UL
+#define ROM_SDIO_PID1 0x0209UL
 
+const uint32_t SD_CIS_DATA0_FN0;
 const uint32_t SD_CIS_DATA0_FN0 = 0x800u;
+
+const uint32_t SD_CIS_DATA0_FN1;
 const uint32_t SD_CIS_DATA0_FN1 = 0x880u;
 
 /** Type command */
-#define SDU_TYPE_CMD 1
+#define SDU_TYPE_CMD (1U)
 /** Type data */
-#define SDU_TYPE_DATA 0
+#define SDU_TYPE_DATA (0U)
 /** Type event */
-#define SDU_TYPE_EVENT 3
+#define SDU_TYPE_EVENT (3U)
 
-#define CRC_LEN 4
+#define CRC_LEN (4U)
 
 /*! @brief Buffer structure used for transfer */
 typedef struct _transfer_buffer
@@ -167,7 +170,7 @@ typedef struct _sdu_ctrl
     list_label_t event_free_buffer;
     list_label_t data_q[SDU_PORT_MAX_TRANSFER];
     list_label_t data_free_buffer;
-    sdu_callback_t cb_fn[SDU_TYPE_FOR_WRITE_MAX];
+    sdu_callback_t sdu_cb_fn[SDU_TYPE_FOR_WRITE_MAX];
     sdu_stat_t stat;
     OSA_TASK_HANDLE_DEFINE(recvTaskId);
     OSA_EVENT_HANDLE_DEFINE(event);
@@ -211,20 +214,21 @@ static sdioslv_sdu_ctrl_t sdu_ctrl;
 #define SDU_DBG_LEVEL_DEBUG BIT(1)
 #define SDU_DBG_LEVEL_DUMP BIT(0)
 
+uint32_t sdu_dbg_level;
 uint32_t sdu_dbg_level = SDU_DBG_LEVEL_WARN | SDU_DBG_LEVEL_ERROR;
 
 #define sdu_e(_fmt_, ...) \
-    if (sdu_dbg_level & SDU_DBG_LEVEL_ERROR) \
-        (void)PRINTF("[SDU]Error: " _fmt_ "\n\r", ##__VA_ARGS__)
+    if ((sdu_dbg_level & (uint32_t)(SDU_DBG_LEVEL_ERROR)) != 0U) \
+        {(void)PRINTF("[SDU]Error: " _fmt_ "\n\r", ##__VA_ARGS__);}
 #define sdu_w(_fmt_, ...) \
-    if (sdu_dbg_level & SDU_DBG_LEVEL_WARN) \
-        (void)PRINTF("[SDU]Warn: " _fmt_ "\n\r", ##__VA_ARGS__)
+    if ((sdu_dbg_level & (uint32_t)(SDU_DBG_LEVEL_WARN)) != 0U) \
+        {(void)PRINTF("[SDU]Warn: " _fmt_ "\n\r", ##__VA_ARGS__);}
 
 #define CONFIG_ADAPTER_SDU_DEBUG
 #ifdef CONFIG_ADAPTER_SDU_DEBUG
 #define sdu_d(_fmt_, ...) \
-    if (sdu_dbg_level & SDU_DBG_LEVEL_DEBUG) \
-        (void)PRINTF("[SDU]Debug: " _fmt_ "\n\r", ##__VA_ARGS__)
+    if ((sdu_dbg_level & (uint32_t)(SDU_DBG_LEVEL_DEBUG)) != 0U) \
+        {(void)PRINTF("[SDU]Debug: " _fmt_ "\n\r", ##__VA_ARGS__);}
 #else
 #define sdu_d(_fmt_, ...)
 #endif
@@ -240,6 +244,7 @@ uint32_t sdu_dbg_level = SDU_DBG_LEVEL_WARN | SDU_DBG_LEVEL_ERROR;
  ******************************************************************************/
 static status_t SDU_InnerInit(void);
 static void SDU_InnerDeinit(void);
+static bool SDU_IsLinkUp(void);
 
 static void SDU_CmdCallback(
     status_t status, sdioslv_func_t func, sdioslv_port_t port, transfer_buffer_t *buffer, void *user_data);
@@ -252,8 +257,8 @@ static status_t SDU_SendDataNonBlocking(sdioslv_handle_t handle, transfer_buffer
 static status_t SDU_RefillDataBuffer(sdu_ctrl_t *ctrl, sdioslv_port_t port);
 static status_t SDU_RefillFreePortsDataBuffer(sdu_ctrl_t *ctrl);
 
-static status_t SDU_RecvCmdProcess();
-static status_t SDU_RecvDataProcess();
+static status_t SDU_RecvCmdProcess(void);
+static status_t SDU_RecvDataProcess(void);
 
 #define DUMP_WRAPAROUND 16U
 /** Dump buffer in hex format on console
@@ -268,14 +273,16 @@ static inline void SDU_dump_hex(uint32_t level, const void *data, unsigned len)
     unsigned int i    = 0;
     const char *data8 = (const char *)data;
 
-    if (!(level & SDU_DBG_LEVEL_DUMP))
+    if ((level & SDU_DBG_LEVEL_DUMP) == 0U)
+	{
         return;
-
+	}
+	
     (void)PRINTF("**** Dump @ %p Len: %d ****\n\r", data, len);
     while (i < len)
     {
         (void)PRINTF("%02x ", data8[i++]);
-        if (!(i % DUMP_WRAPAROUND))
+        if ((i % DUMP_WRAPAROUND) == 0U)
         {
             (void)PRINTF("\n\r");
         }
@@ -296,39 +303,48 @@ static inline void SDU_dump_hex(uint32_t level, const void *data, unsigned len)
  */
 static status_t SDU_InitData(uint32_t used_fun_num, sdioslv_int_cpu_num_t cpu_num)
 {
-    int fun_num;
+    uint32_t fun_num = 0U;
     sdioslv_fun_ctrl_t *fun_ctrl;
     OSA_SR_ALLOC();
 
     if (used_fun_num > SDU_MAX_FUNCTION_NUM)
+    {
         return kStatus_InvalidArgument;
-
-    if (sdu_ctrl.initialized)
+    }
+	
+    if (sdu_ctrl.initialized != 0U)
+    {
         return kStatus_Success;
-
+    }
+	
     OSA_ENTER_CRITICAL();
     for (fun_num = 0; fun_num < used_fun_num; fun_num++)
     {
         fun_ctrl = (sdioslv_fun_ctrl_t *)OSA_MemoryAllocate(sizeof(sdioslv_fun_ctrl_t));
-        if (!fun_ctrl)
+        if (fun_ctrl == NULL)
+        {
             break;
+        }
         /* OSA_MemoryAllocate() sets contents of allocated memory to be zero */
-        fun_ctrl->regmap = (sdioslv_sdu_regmap_t *)(SDU_SDIO_CFG_BASE + SDIO_CCR_FUNC_OFFSET * (fun_num + 1));
+        fun_ctrl->regmap = (sdioslv_sdu_regmap_t *)(SDU_SDIO_CFG_BASE + (uint32_t)(SDIO_CCR_FUNC_OFFSET * (fun_num + 1U)));
         sdu_ctrl.func_ctrl[fun_num] = fun_ctrl;
     }
 
     if (fun_num < used_fun_num)
     {
-        for (; fun_num >= 0; fun_num--)
-            OSA_MemoryFree(sdu_ctrl.func_ctrl[fun_num]);
+        while(fun_num > 0)
+        {
+            OSA_MemoryFree(sdu_ctrl.func_ctrl[fun_num - 1]);
+            fun_num--;
+        }
         OSA_EXIT_CRITICAL();
         return kStatus_Fail;
     }
 
     SDU_REGS8_SETBITS(SDIO_CCR_FUNC0_CARD_INT_MSK, cpu_num);
 
-    sdu_ctrl.used_fun_num = used_fun_num;
-    sdu_ctrl.cpu_num      = cpu_num;
+    sdu_ctrl.used_fun_num = (uint8_t)used_fun_num;
+    sdu_ctrl.cpu_num      = (uint8_t)cpu_num;
     sdu_ctrl.initialized  = 1;
     OSA_EXIT_CRITICAL();
     return kStatus_Success;
@@ -341,17 +357,20 @@ static status_t SDU_InitData(uint32_t used_fun_num, sdioslv_int_cpu_num_t cpu_nu
  */
 static void SDU_DeinitData(void)
 {
-    int fun_num;
+    uint8_t fun_num;
     OSA_SR_ALLOC();
 
-    if (!sdu_ctrl.initialized)
-        return;
-
-    OSA_ENTER_CRITICAL();
-    for (fun_num = 0; fun_num < sdu_ctrl.used_fun_num; fun_num++)
+    if (sdu_ctrl.initialized == 0U)
     {
-        if (sdu_ctrl.func_ctrl[fun_num])
+        return;
+    }
+    OSA_ENTER_CRITICAL();
+    for (fun_num = 0U; fun_num < sdu_ctrl.used_fun_num; fun_num++)
+    {
+        if (sdu_ctrl.func_ctrl[fun_num] != NULL)
+        {
             OSA_MemoryFree(sdu_ctrl.func_ctrl[fun_num]);
+        }
     }
     sdu_ctrl.used_fun_num = 0;
     sdu_ctrl.cpu_num      = 0;
@@ -371,34 +390,48 @@ static sdioslv_handle_t SDU_CreateHandle(sdioslv_handle_config_t *config)
     uint8_t fun_num;
     sdioslv_fun_ctrl_t *fun_ctrl;
     sdioslv_sdu_regmap_t *sdu_fsr;
-    int i, j;
+    uint8_t i, j;
     OSA_SR_ALLOC();
 
     fun_num = config->fun_num;
-    if ((fun_num < 1) || (fun_num > sdu_ctrl.used_fun_num))
+    if ((fun_num < 1U) || (fun_num > sdu_ctrl.used_fun_num))
+    {
         return NULL;
+    }
 
-    if (config->used_port_num > SDU_MAX_PORT_NUM)
+    if (config->used_port_num > (uint8_t)(SDU_MAX_PORT_NUM))
+    {
         return NULL;
-
+    }
+	
     if ((config->cpu_num != kSDIOSLV_INT_CPUNum1) && (config->cpu_num != kSDIOSLV_INT_CPUNum2) &&
         (config->cpu_num != kSDIOSLV_INT_CPUNum3))
+    {
         return NULL;
+    }
 
-    if ((config->cmd_tx_format > 2) || (config->cmd_rd_format > 1))
+    if ((config->cmd_tx_format > 2U) || (config->cmd_rd_format > 1U))
+    {
         return NULL;
-
-    if ((config->data_tx_format > 2) || (config->data_rd_format > 2))
+    }
+	
+    if ((config->data_tx_format > 2U) || (config->data_rd_format > 2U))
+    {
         return NULL;
-
-    if (!(config->cmd_callback) || !(config->data_callback))
+    }
+	
+    if ((config->cmd_callback == NULL) || (config->data_callback == NULL))
+    {
         return NULL;
-
+    }
+	
     OSA_ENTER_CRITICAL();
-    fun_ctrl = sdu_ctrl.func_ctrl[fun_num - 1];
-    if (!fun_ctrl)
+    fun_ctrl = sdu_ctrl.func_ctrl[fun_num - 1U];
+    if (fun_ctrl == NULL)
+    {
         goto create_err;
-
+    }
+	
     sdu_fsr = fun_ctrl->regmap;
     sdu_fsr->RdBitMap			= 0;
     sdu_fsr->WrBitMap			= 0;
@@ -409,18 +442,20 @@ static sdioslv_handle_t SDU_CreateHandle(sdioslv_handle_config_t *config)
     sdu_fsr->CardIntStatus = 0;
     sdu_fsr->CardIntMode   = 0;//0x00000C02;//CARD_INT_MODE_MSK;
     sdu_fsr->CmdPortConfig =
-        (config->cmd_tx_format << CMD_TX_LEN_BIT_OFFSET) | (config->cmd_rd_format << CMD_RD_LEN_BIT_OFFSET);
-    sdu_fsr->Config2 = CONFIG2_DEFAULT_SETTING | (config->data_tx_format << CONFIG2_TX_LEN_BIT_OFFSET) |
-        (config->data_rd_format << CONFIG2_RD_LEN_BIT_OFFSET);
+        (uint32_t)((config->cmd_tx_format << (uint8_t)CMD_TX_LEN_BIT_OFFSET) | (config->cmd_rd_format << (uint8_t)CMD_RD_LEN_BIT_OFFSET));
+    sdu_fsr->Config2 = (uint32_t)((uint8_t)CONFIG2_DEFAULT_SETTING | (config->data_tx_format << (uint8_t)(CONFIG2_TX_LEN_BIT_OFFSET)) |
+        (config->data_rd_format << (uint8_t)(CONFIG2_RD_LEN_BIT_OFFSET)));
 
     for (i = 0; i < SDU_PORT_MAX_TRANSFER; i++)
     {
         fun_ctrl->cmd_port[i].valid = 1;
         for (j = 0; j < config->used_port_num; j++)
+        {
             fun_ctrl->data_port[i][j].valid = 1;
+        }
     }
 
-    memcpy(&fun_ctrl->config, config, sizeof(*config));
+    (void)memcpy(&fun_ctrl->config, config, sizeof(*config));
     fun_ctrl->initialized = 1;
     fun_ctrl->enable      = 1;
     OSA_EXIT_CRITICAL();
@@ -477,13 +512,13 @@ static status_t SDU_InnerInit(void)
             if (direction == SDU_PORT_FOR_WRITE)
             {
                 trans_buf->data_addr = (uint8_t *)cmd_trans_buffer[i];
-                trans_buf->data_size = sizeof(cmd_trans_buffer[i]);
+                trans_buf->data_size = (uint16_t)sizeof(cmd_trans_buffer[i]);
                 sdu_d("%s: cmd_trans_buffer[%u]=%p sizeof=%lu\r\n", __FUNCTION__, i, cmd_trans_buffer[i], sizeof(cmd_trans_buffer[i]));
             }
             else
             {
                 trans_buf->data_addr = (uint8_t *)cmdrsp_trans_buffer[i];
-                trans_buf->data_size = sizeof(cmdrsp_trans_buffer[i]);
+                trans_buf->data_size = (uint16_t)sizeof(cmdrsp_trans_buffer[i]);
                 sdu_d("%s: cmdrsp_trans_buffer[%u]=%p sizeof=%lu\r\n", __FUNCTION__, i, cmdrsp_trans_buffer[i], sizeof(cmdrsp_trans_buffer[i]));
             }
             if (trans_buf->data_addr == NULL)
@@ -509,7 +544,7 @@ static status_t SDU_InnerInit(void)
             rc = kStatus_Fail;
             goto done;
         }
-        trans_buf->data_size = sizeof(event_trans_buffer[i]);
+        trans_buf->data_size = (uint16_t)sizeof(event_trans_buffer[i]);
         trans_buf->data_len  = 0;
         trans_buf->user_data = 0;
         (void)LIST_AddTail(&ctrl_sdu.event_free_buffer, &event_buffer[i].link);
@@ -517,7 +552,7 @@ static status_t SDU_InnerInit(void)
         sdu_d("%s: trans_buf: data_addr=%p data_size=%u\r\n", __FUNCTION__, trans_buf->data_addr, trans_buf->data_size);
     }
 
-    for (i = 0; i < SDU_MAX_DATA_BUFFER; i++)
+    for (i = 0; i < (uint32_t)SDU_MAX_DATA_BUFFER; i++)
     {
         trans_buf            = &data_buffer[i].buffer;
         trans_buf->data_addr = (uint8_t *)data_trans_buffer[i];
@@ -527,7 +562,7 @@ static status_t SDU_InnerInit(void)
             rc = kStatus_Fail;
             goto done;
         }
-        trans_buf->data_size = sizeof(data_trans_buffer[i]);
+        trans_buf->data_size = (uint16_t)sizeof(data_trans_buffer[i]);
         trans_buf->data_len  = 0;
         trans_buf->user_data = 0;
         (void)LIST_AddTail(&ctrl_sdu.data_free_buffer, &data_buffer[i].link);
@@ -536,7 +571,7 @@ static status_t SDU_InnerInit(void)
     }
 
     ctrl_sdu.handle = SDU_CreateHandle(&config);
-    if (!ctrl_sdu.handle)
+    if (ctrl_sdu.handle == NULL)
     {
         sdu_e("Fail to create handle for function %d: %d\r\n", config.fun_num);
         rc = kStatus_Fail;
@@ -549,12 +584,16 @@ static status_t SDU_InnerInit(void)
 
     /* request for data buffer */
     for (i = 0; i < config.used_port_num; i++)
+    {
         config.data_callback(kStatus_SDIOSLV_FuncRequestBuffer, (sdioslv_func_t)(config.fun_num), (sdioslv_port_t)i, NULL,
                               config.data_user_data);
-
+    }
 done:
     if (rc != kStatus_Success)
+    {
         SDU_DeinitData();
+    }
+	
     return rc;
 }
 
@@ -573,15 +612,15 @@ static void SDU_CmdCallback(
 
     switch (status)
     {
-        case kStatus_SDIOSLV_FuncRequestBuffer:
+        case (status_t)kStatus_SDIOSLV_FuncRequestBuffer:
             SDU_RefillCmdBuffer(ctrl);
             break;
-        case kStatus_SDIOSLV_FuncReadComplete:
+        case (status_t)kStatus_SDIOSLV_FuncReadComplete:
             cmd_event_buf = (sdu_buffer_t *)buffer->user_data;
             (void)LIST_AddTail(&ctrl_sdu.cmd_q[SDU_PORT_FOR_WRITE], &cmd_event_buf->link);
-            OSA_EventSet(ctrl->event, SDU_CMD_RECEIVED);
+            (void)OSA_EventSet(ctrl->event, SDU_CMD_RECEIVED);
             break;
-        case kStatus_SDIOSLV_FuncSendComplete:
+        case (status_t)kStatus_SDIOSLV_FuncSendComplete:
             cmd_event_buf = (sdu_buffer_t *)buffer->user_data;
             if (&(cmd_event_buf->link) == LIST_GetHead(&ctrl_sdu.cmd_q[SDU_PORT_FOR_READ]))
             {
@@ -600,8 +639,10 @@ static void SDU_CmdCallback(
             break;
         default:
             sdu_e("%s: Unknown callback status %d.\n\r", __func__, status);
-            return;
+            break;
     }
+
+	return;
 }
 
 static void SDU_DataCallback(
@@ -613,30 +654,31 @@ static void SDU_DataCallback(
 
     switch (status)
     {
-        case kStatus_SDIOSLV_FuncRequestBuffer:
-            SDU_RefillDataBuffer(ctrl, port);
+        case (status_t)kStatus_SDIOSLV_FuncRequestBuffer:
+            (void)SDU_RefillDataBuffer(ctrl, port);
             break;
 #if 0
         case kStatus_SDIOSLV_FuncRequestFreePortsBuffer:
             SDU_RefillFreePortsDataBuffer(ctrl);
             break;
 #endif
-        case kStatus_SDIOSLV_FuncReadComplete:
+        case (status_t)kStatus_SDIOSLV_FuncReadComplete:
             sdu_d("Dump %p %p len=%u\n\r", buffer, buffer->data_addr, MIN(sdio_hdr->len, buffer->data_size));
             SDU_dump_hex(sdu_dbg_level, buffer->data_addr, sdio_hdr->len);
             data_buf = (sdu_buffer_t *)buffer->user_data;
             (void)LIST_AddTail(&ctrl_sdu.data_q[SDU_PORT_FOR_WRITE], &data_buf->link);
-            OSA_EventSet(ctrl->event, SDU_DATA_RECEIVED);
+            (void)OSA_EventSet(ctrl->event, SDU_DATA_RECEIVED);
             break;
-        case kStatus_SDIOSLV_FuncSendComplete:
+        case (status_t)kStatus_SDIOSLV_FuncSendComplete:
             data_buf = (sdu_buffer_t *)buffer->user_data;
             (void)LIST_RemoveElement(&data_buf->link);
             (void)LIST_AddTail(&ctrl_sdu.data_free_buffer, &data_buf->link);
             break;
         default:
             sdu_e("Unknown callback status %d (%s).\n\r", status, __func__);
-            return;
+            break;
     }
+	return;
 }
 
 
@@ -770,11 +812,15 @@ static void SDU_RecvTask(void *param)
         if (KOSA_StatusSuccess ==
                 OSA_EventWait((osa_event_handle_t)ctrl->event, osaEventFlagsAll_c, 0U, osaWaitForever_c, &ev))
         {
-            if (ev & SDU_CMD_RECEIVED)
-                SDU_RecvCmdProcess();
-
-            if (ev & SDU_DATA_RECEIVED)
-                SDU_RecvDataProcess();
+            if ((ev & SDU_CMD_RECEIVED) != 0U)
+            {
+                (void)SDU_RecvCmdProcess();
+            }
+			
+            if ((ev & SDU_DATA_RECEIVED) != 0U)
+            {
+			    (void)SDU_RecvDataProcess();
+            }
         }
     } while (0U != gUseRtos_c);
 
@@ -789,15 +835,17 @@ static void SDU_RecvTask(void *param)
  * @retval TRUE SDU Link is UP.
  * @retval FALSE SDU Link is not UP.
  */
-bool SDU_IsLinkUp(void)
+static bool SDU_IsLinkUp(void)
 {
     if (SDU_INITIALIZED == ctrl_sdu.sdu_state)
+    {
         return true;
-
+    }
+	
     return false;
 }
 
-
+#if 0
 /*!
  * @brief SDU send data transfer checking.
  *
@@ -824,7 +872,6 @@ bool SDU_IsSendDataFull(void)
     return data_full;
 }
 
-#if 0
 /*!
  * @brief SDU check and move available data port pointer.
  *
@@ -869,8 +916,10 @@ static inline void SDU_ProcessCmdUpLdOvr(sdioslv_fun_ctrl_t *fun_ctrl)
 
     port_ctrl = &fun_ctrl->cmd_port[SDU_PORT_FOR_READ];
 
-    if (!port_ctrl->valid || !port_ctrl->occupied)
-        return;
+    if ((port_ctrl->valid == 0U) || (port_ctrl->occupied == 0U))
+    {
+        return;    
+    }
 
     fun_ctrl->config.cmd_callback(kStatus_SDIOSLV_FuncSendComplete, (sdioslv_func_t)fun_ctrl->config.fun_num,
                                   kSDIOSLV_CmdPortNum0, port_ctrl->buffer, fun_ctrl->config.cmd_user_data);
@@ -901,6 +950,10 @@ static inline void SDU_ProcessCmdUpLdOvr(sdioslv_fun_ctrl_t *fun_ctrl)
             sdu_e("%s: event SendCmdNonBlocking fail 0x%x!\r\n", __FUNCTION__, status);
         }
     }
+	else
+	{
+        ;
+	}
 }
 
 /*!
@@ -915,9 +968,11 @@ static inline void SDU_ProcessCmdDnLdOvr(sdioslv_fun_ctrl_t *fun_ctrl)
 
     port_ctrl = &fun_ctrl->cmd_port[SDU_PORT_FOR_WRITE];
 
-    if (!port_ctrl->valid || !port_ctrl->occupied)
-        return;
-
+    if ((port_ctrl->valid == 0U) || (port_ctrl->occupied == 0U))
+    {
+    	return;
+    }
+       
     fun_ctrl->config.cmd_callback(kStatus_SDIOSLV_FuncReadComplete, (sdioslv_func_t)fun_ctrl->config.fun_num,
                                   kSDIOSLV_CmdPortNum0, port_ctrl->buffer, fun_ctrl->config.cmd_user_data);
 
@@ -941,7 +996,7 @@ static inline void SDU_ProcessDataUpLdOvr(sdioslv_fun_ctrl_t *fun_ctrl)
     sdioslv_port_ctrl_t *port_ctrl;
     sdioslv_sdu_regmap_t *sdu_fsr;
     uint32_t rd_bit_map;
-    int i = 0;
+    uint32_t i = 0;
     sdu_buffer_t *send_buffer = NULL;
     status_t status = kStatus_Success;
 
@@ -950,11 +1005,13 @@ static inline void SDU_ProcessDataUpLdOvr(sdioslv_fun_ctrl_t *fun_ctrl)
 
     for (i = 0; i < fun_ctrl->config.used_port_num; i++)
     {
-        if (!(rd_bit_map & (1 << i)))
+        if ((rd_bit_map & (1U << i)) == 0U)
         {
             port_ctrl = &fun_ctrl->data_port[SDU_PORT_FOR_READ][i];
-            if (!port_ctrl->valid || !port_ctrl->occupied)
-                continue;
+            if ((port_ctrl->valid == 0U) || (port_ctrl->occupied == 0U))
+            {
+            	continue;
+            }
 
             fun_ctrl->config.data_callback(kStatus_SDIOSLV_FuncSendComplete, (sdioslv_func_t)fun_ctrl->config.fun_num,
                                           (sdioslv_port_t)i, port_ctrl->buffer, fun_ctrl->config.cmd_user_data);
@@ -991,18 +1048,20 @@ static inline void SDU_ProcessDataDnLdOvr(sdioslv_fun_ctrl_t *fun_ctrl)
     sdioslv_port_ctrl_t *port_ctrl;
     sdioslv_sdu_regmap_t *sdu_fsr;
     uint32_t wr_bit_map;
-    int i;
+    uint32_t i;
 
     sdu_fsr    = fun_ctrl->regmap;
     wr_bit_map = sdu_fsr->WrBitMap;
 
-    for (i = 0; i < fun_ctrl->config.used_port_num; i++)
+    for (i = 0; i < (uint32_t)fun_ctrl->config.used_port_num; i++)
     {
-        if (!(wr_bit_map & (1 << i)))
+        if ((wr_bit_map & (1U << i)) == 0U)
         {
             port_ctrl = &fun_ctrl->data_port[SDU_PORT_FOR_WRITE][i];
-            if (!port_ctrl->valid || !port_ctrl->occupied)
-                continue;
+            if ((port_ctrl->valid == 0U) || (port_ctrl->occupied == 0U))
+            {
+            	continue;
+            }
 
             fun_ctrl->config.data_callback(kStatus_SDIOSLV_FuncReadComplete, (sdioslv_func_t)fun_ctrl->config.fun_num,
                                           (sdioslv_port_t)i, port_ctrl->buffer, fun_ctrl->config.cmd_user_data);
@@ -1038,20 +1097,22 @@ static status_t SDU_SendCmdNonBlocking(sdioslv_handle_t handle, transfer_buffer_
     sdioslv_port_ctrl_t *port_ctrl;
     OSA_SR_ALLOC();
 
-    if (!handle || !buffer)
-        return kStatus_InvalidArgument;
+    if ((handle == NULL) || (buffer == NULL))
+    {
+        return kStatus_InvalidArgument;    	
+    }
 
     OSA_ENTER_CRITICAL();
     fun_ctrl  = (sdioslv_fun_ctrl_t *)handle;
     port_ctrl = &fun_ctrl->cmd_port[SDU_PORT_FOR_READ];
 
-    if (!port_ctrl->valid)
+    if (port_ctrl->valid == 0U)
     {
         OSA_EXIT_CRITICAL();
         return kStatus_Fail;
     }
 
-    if (port_ctrl->occupied)
+    if (port_ctrl->occupied != 0U )
     {
         OSA_EXIT_CRITICAL();
         return kStatus_SDIOSLV_CmdPending;
@@ -1086,32 +1147,38 @@ static status_t SDU_RefillCmdBuffer(sdu_ctrl_t *ctrl)
 {
     sdioslv_fun_ctrl_t *fun_ctrl = NULL;
     sdioslv_port_ctrl_t *port_ctrl = NULL;
-    sdu_buffer_t *cmd_buf = NULL;
+    sdu_buffer_t *sdu_node_buf = NULL;
     OSA_SR_ALLOC();
 
-    if (!ctrl || !(ctrl->handle))
+    if ((ctrl == NULL) || (ctrl->handle == NULL))
+    {
         return kStatus_InvalidArgument;
-
-    cmd_buf = (sdu_buffer_t *)LIST_RemoveHead(&ctrl->cmd_free_buffer[SDU_PORT_FOR_WRITE]);
-    if (!cmd_buf)
+    }
+	
+    sdu_node_buf = (sdu_buffer_t *)LIST_RemoveHead(&ctrl->cmd_free_buffer[SDU_PORT_FOR_WRITE]);
+    if (sdu_node_buf == NULL)
     {
         sdu_e("%s: No cmd free buffer for cmd_buf!\r\n", __FUNCTION__);
         return kStatus_NoData;
     }
-    cmd_buf->buffer.data_len  = 0;
-    cmd_buf->buffer.user_data = (uint32_t)cmd_buf;
+    sdu_node_buf->buffer.data_len  = 0;
+    sdu_node_buf->buffer.user_data = (uint32_t)sdu_node_buf;
 
     OSA_ENTER_CRITICAL();
     fun_ctrl  = (sdioslv_fun_ctrl_t *)(ctrl->handle);
     port_ctrl = &fun_ctrl->cmd_port[SDU_PORT_FOR_WRITE];
 
-    if (!port_ctrl->valid)
+    if (port_ctrl->valid == 0U)
+    {
         goto refill_cmd_err;
+    }
 
-    if (port_ctrl->occupied)
+    if (port_ctrl->occupied != 0U)
+    {
         goto refill_cmd_err;
-
-    port_ctrl->buffer           = &(cmd_buf->buffer);
+    }
+	
+    port_ctrl->buffer           = &(sdu_node_buf->buffer);
     port_ctrl->occupied         = 1;
     if (SDIOSLV_RefillCmdBuffer(fun_ctrl->regmap, port_ctrl->buffer->data_addr) != kStatus_Success)
     {
@@ -1126,7 +1193,7 @@ static status_t SDU_RefillCmdBuffer(sdu_ctrl_t *ctrl)
 
 refill_cmd_err:
     OSA_EXIT_CRITICAL();
-    (void)LIST_AddTail(&ctrl->cmd_free_buffer[SDU_PORT_FOR_WRITE], &cmd_buf->link);
+    (void)LIST_AddTail(&ctrl->cmd_free_buffer[SDU_PORT_FOR_WRITE], &sdu_node_buf->link);
     return kStatus_Fail;
 }
 
@@ -1149,12 +1216,14 @@ static status_t SDU_SendDataNonBlocking(sdioslv_handle_t handle, transfer_buffer
 {
     sdioslv_fun_ctrl_t *fun_ctrl;
     sdioslv_port_ctrl_t *port_ctrl;
-    int tx_port;
+    uint8_t tx_port;
     OSA_SR_ALLOC();
 
-    if (!handle || !buffer)
+    if ((handle == NULL) || (buffer == NULL))
+    {
         return kStatus_InvalidArgument;
-
+    }
+	
     OSA_ENTER_CRITICAL();
     fun_ctrl = (sdioslv_fun_ctrl_t *)handle;
     tx_port  = fun_ctrl->curr_data_tx_port;
@@ -1201,18 +1270,23 @@ static status_t SDU_RefillDataBuffer(sdu_ctrl_t *ctrl, sdioslv_port_t port)
     sdu_buffer_t *data_buf = NULL;
     OSA_SR_ALLOC();
 
-    if (!ctrl || !(ctrl->handle))
+    if ((ctrl == NULL) || (ctrl->handle == NULL))
+    {
         return kStatus_InvalidArgument;
-
+    }
+	
     if (port >= SDU_MAX_PORT_NUM)
+    {
         return kStatus_InvalidArgument;
-
+    }
+	
     data_buf = (sdu_buffer_t *)LIST_RemoveHead(&ctrl->data_free_buffer);
-    if (!data_buf)
+    if (data_buf == NULL)
     {
         sdu_e("%s: No free buffer for data_buf!\r\n", __FUNCTION__);
         return kStatus_NoData;
     }
+	
     data_buf->buffer.data_len  = 0;
     data_buf->buffer.user_data = (uint32_t)data_buf;
 
@@ -1220,12 +1294,16 @@ static status_t SDU_RefillDataBuffer(sdu_ctrl_t *ctrl, sdioslv_port_t port)
     fun_ctrl  = (sdioslv_fun_ctrl_t *)(ctrl->handle);
     port_ctrl = &fun_ctrl->data_port[SDU_PORT_FOR_WRITE][port];
 
-    if (!port_ctrl->valid)
+    if (port_ctrl->valid == 0U)
+    {
         goto refill_data_err;
-
-    if (port_ctrl->occupied)
+    }
+	
+    if (port_ctrl->occupied != 0U)
+    {
         goto refill_data_err;
-
+    }
+	
     port_ctrl->buffer        = &(data_buf->buffer);
     port_ctrl->occupied      = 1;
     if (SDIOSLV_RefillDataBuffer(fun_ctrl->regmap, port, port_ctrl->buffer->data_addr) != kStatus_Success)
@@ -1257,7 +1335,7 @@ static status_t SDU_RefillFreePortsDataBuffer(sdu_ctrl_t *ctrl)
     sdioslv_fun_ctrl_t *fun_ctrl = NULL;
     sdioslv_sdu_regmap_t *sdu_fsr = NULL;
     uint32_t wr_bit_map = 0;
-    int i = 0;
+    uint32_t i = 0;
     OSA_SR_ALLOC();
 
     if (ctrl_sdu.sdu_state != SDU_INITIALIZED)
@@ -1270,11 +1348,11 @@ static status_t SDU_RefillFreePortsDataBuffer(sdu_ctrl_t *ctrl)
     fun_ctrl = (sdioslv_fun_ctrl_t *)(ctrl_sdu.handle);
     sdu_fsr    = fun_ctrl->regmap;
     wr_bit_map = sdu_fsr->WrBitMap;
-    for (i = 0; i < fun_ctrl->config.used_port_num; i++)
+    for (i = 0; i < (uint32_t)fun_ctrl->config.used_port_num; i++)
     {
-        if (!(wr_bit_map & (1 << i)))
+        if ((wr_bit_map & (1U << i)) == 0U)
         {
-            SDU_RefillDataBuffer(&ctrl_sdu, (sdioslv_port_t)i);
+            (void)SDU_RefillDataBuffer(&ctrl_sdu, (sdioslv_port_t)i);
         }
     }
 
@@ -1282,14 +1360,14 @@ static status_t SDU_RefillFreePortsDataBuffer(sdu_ctrl_t *ctrl)
     return kStatus_Success;
 }
 
-static status_t SDU_RecvCmdProcess()
+static status_t SDU_RecvCmdProcess(void)
 {
     sdu_buffer_t *cmd_rcv = NULL;
     sdio_header_t *sdio_hdr = NULL;
     status_t ret = kStatus_Fail;
 
     cmd_rcv = (sdu_buffer_t *)LIST_RemoveHead(&ctrl_sdu.cmd_q[SDU_PORT_FOR_WRITE]);
-    if (!cmd_rcv)
+    if (cmd_rcv == NULL)
     {
         sdu_e("%s: NO buffer on cmd_rcv list!\r\n", __FUNCTION__);
         return ret;
@@ -1305,10 +1383,10 @@ static status_t SDU_RecvCmdProcess()
     else
     {
         sdu_d("%s: SDIO hdr: len=%d type=%d!\r\n", __FUNCTION__, sdio_hdr->len, sdio_hdr->type);
-        if (ctrl_sdu.cb_fn[SDU_TYPE_FOR_WRITE_CMD])
+        if (ctrl_sdu.sdu_cb_fn[SDU_TYPE_FOR_WRITE_CMD] != 0U)
         {
             //memcpy(data_addr, cmd_rcv->buffer.data_addr + sizeof(sdio_header_t), MIN(sdio_hdr->len, data_size));
-            ctrl_sdu.cb_fn[SDU_TYPE_FOR_WRITE_CMD](cmd_rcv->buffer.data_addr + sizeof(sdio_header_t), sdio_hdr->len - sizeof(sdio_header_t) - CRC_LEN);
+            ctrl_sdu.sdu_cb_fn[SDU_TYPE_FOR_WRITE_CMD](cmd_rcv->buffer.data_addr + sizeof(sdio_header_t), sdio_hdr->len - sizeof(sdio_header_t) - CRC_LEN);
             ret = kStatus_Success;
         }
         if (kStatus_Success == ret)
@@ -1321,7 +1399,7 @@ static status_t SDU_RecvCmdProcess()
         }
     }
     (void)LIST_AddTail(&ctrl_sdu.cmd_free_buffer[SDU_PORT_FOR_WRITE], &cmd_rcv->link);
-    SDU_RefillCmdBuffer(&ctrl_sdu);
+    (void)SDU_RefillCmdBuffer(&ctrl_sdu);
 
     return ret;
 }
@@ -1332,38 +1410,41 @@ status_t SDU_RecvCmd()
     osa_status_t status = KOSA_StatusSuccess;
     status_t ret = kStatus_Fail;
 
-wait_cmd:
-    status = OSA_EventWait((osa_event_handle_t)(ctrl_sdu.event), SDU_CMD_RECEIVED, 0U, osaWaitForever_c, &ev);
-
-    if (KOSA_StatusSuccess == status)
+    while(1)
     {
-        if (ev & SDU_CMD_RECEIVED)
-        {
-            ret = SDU_RecvCmdProcess();
+        status = OSA_EventWait((osa_event_handle_t)(ctrl_sdu.event), SDU_CMD_RECEIVED, 0U, osaWaitForever_c, &ev);
 
-            if (kStatus_Success == ret)
-                return ret;
-        }
-        else
+        if (KOSA_StatusSuccess == status)
         {
-            sdu_e("%s: wrong ev 0x%x!\r\n", __FUNCTION__, ev);
-        }
-    }
-    else
-    {
-        sdu_e("%s: OSA_EventWait fail status=0x%x!\r\n", __FUNCTION__, status);
-    }
-    goto wait_cmd;
+            if ((ev & SDU_CMD_RECEIVED) != 0U)
+   			{
+   	            ret = SDU_RecvCmdProcess();
+
+   	            if (kStatus_Success == ret)
+   	            {
+   	                return ret;
+   	            }
+   	        }
+   	        else
+   	        {
+   	            sdu_e("%s: wrong ev 0x%x!\r\n", __FUNCTION__, ev);
+   	        }
+   	    }
+   	    else
+   	    {
+   	        sdu_e("%s: OSA_EventWait fail status=0x%x!\r\n", __FUNCTION__, status);
+   	    }
+   	}
 }
 
-static status_t SDU_RecvDataProcess()
+static status_t SDU_RecvDataProcess(void)
 {
     sdu_buffer_t *data_rcv = NULL;
     sdio_header_t *sdio_hdr = NULL;
     status_t ret = kStatus_Fail;
 
     data_rcv = (sdu_buffer_t *)LIST_RemoveHead(&ctrl_sdu.data_q[SDU_PORT_FOR_WRITE]);
-    if (!data_rcv)
+    if (data_rcv == NULL)
     {
         sdu_e("%s: NO buffer on data_rcv list!\r\n", __FUNCTION__);
         return ret;
@@ -1379,16 +1460,16 @@ static status_t SDU_RecvDataProcess()
     else
     {
         sdu_d("%s: SDIO hdr: len=%d type=%d!\r\n", __FUNCTION__, sdio_hdr->len, sdio_hdr->type);
-        if (ctrl_sdu.cb_fn[SDU_TYPE_FOR_WRITE_DATA])
+        if (ctrl_sdu.sdu_cb_fn[SDU_TYPE_FOR_WRITE_DATA] != NULL)
         {
             //memcpy(data_addr, data_rcv->buffer.data_addr + sizeof(sdio_header_t), MIN(sdio_hdr->len, data_size));
-            ctrl_sdu.cb_fn[SDU_TYPE_FOR_WRITE_DATA](data_rcv->buffer.data_addr + sizeof(sdio_header_t), sdio_hdr->len - sizeof(sdio_header_t) - CRC_LEN);
+            ctrl_sdu.sdu_cb_fn[SDU_TYPE_FOR_WRITE_DATA](data_rcv->buffer.data_addr + sizeof(sdio_header_t), sdio_hdr->len - sizeof(sdio_header_t) - CRC_LEN);
             ret = kStatus_Success;
         }
     }
     (void)LIST_AddTail(&ctrl_sdu.data_free_buffer, &data_rcv->link);
     //SDU_RefillDataBuffer(&ctrl_sdu);
-    SDU_RefillFreePortsDataBuffer(&ctrl_sdu);
+    (void)SDU_RefillFreePortsDataBuffer(&ctrl_sdu);
 
     return ret;
 }
@@ -1400,39 +1481,44 @@ status_t SDU_RecvData()
     status_t ret = kStatus_Fail;
     uint32_t succ_count = 0;
 
-wait_data:
-    status = OSA_EventWait((osa_event_handle_t)(ctrl_sdu.event), SDU_DATA_RECEIVED, 0U, osaWaitForever_c, &ev);
+	while(1)
+	{
+	    status = OSA_EventWait((osa_event_handle_t)(ctrl_sdu.event), SDU_DATA_RECEIVED, 0U, osaWaitForever_c, &ev);
 
-    if (KOSA_StatusSuccess == status)
-    {
-        if (ev & SDU_DATA_RECEIVED)
-        {
-            while (LIST_GetHead(&ctrl_sdu.data_q[SDU_PORT_FOR_WRITE]) != NULL)
-            {
-                ret = SDU_RecvDataProcess();
-                if (kStatus_Success == ret)
-                {
-                    succ_count++;
-                    ctrl_sdu.stat.succ_tx_data++;
-                }
-                else
-                {
-                    ctrl_sdu.stat.err_tx_data_call_cb++;
-                }
-            }
-            if (succ_count)
-                return ret;
-        }
-        else
-        {
-            sdu_e("%s: wrong ev 0x%x!\r\n", __FUNCTION__, ev);
-        }
-    }
-    else
-    {
-        sdu_e("%s: OSA_EventWait fail status=0x%x!\r\n", __FUNCTION__, status);
-    }
-    goto wait_data;
+	    if (KOSA_StatusSuccess == status)
+	    {
+	        if ((ev & SDU_DATA_RECEIVED) != 0U)
+	        {
+	            while (LIST_GetHead(&ctrl_sdu.data_q[SDU_PORT_FOR_WRITE]) != NULL)
+	            {
+	                ret = SDU_RecvDataProcess();
+	                if (kStatus_Success == ret)
+	                {
+	                    succ_count++;
+	                    ctrl_sdu.stat.succ_tx_data++;
+	                }
+	                else
+	                {
+	                    ctrl_sdu.stat.err_tx_data_call_cb++;
+	                }
+	            }
+				
+	            if (succ_count != 0U)
+	            {
+	                return ret;
+	            }
+	        }
+	        else
+	        {
+	            sdu_e("%s: wrong ev 0x%x!\r\n", __FUNCTION__, ev);
+	        }
+	    }
+	    else
+	    {
+	        sdu_e("%s: OSA_EventWait fail status=0x%x!\r\n", __FUNCTION__, status);
+	    }
+	}
+
 }
 
 /*!
@@ -1452,15 +1538,21 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
     status_t status = kStatus_Fail;
     sdio_header_t *sdio_hdr = NULL;
 
-    if (!data_addr || !data_len)
+    if ((data_addr == NULL) || (data_len == 0))
+    {
         return kStatus_InvalidArgument;
+    }
 
     if (type >= SDU_TYPE_FOR_READ_MAX)
-        return kStatus_InvalidArgument;
+    {
+	    return kStatus_InvalidArgument;
+    }
 
     if (SDU_IsLinkUp() != true)
+    {
         return kStatus_Fail;
-
+    }
+	
     switch (type)
     {
         case SDU_TYPE_FOR_READ_CMD:
@@ -1474,15 +1566,20 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
             break;
         default:
             sdu_e("%s: Unknown type %d.\n\r", __func__, type);
-            return kStatus_InvalidArgument;
+            break;
     }
 
-    if (!send_buffer)
+    if (send_buffer == NULL)
     {
         if (type == SDU_TYPE_FOR_READ_DATA)
+        {
             ctrl_sdu.stat.drop_tx_data++;
+        }
         else
+        {
             ctrl_sdu.stat.drop_tx_cmd++;
+        }
+		
         sdu_d("%s: NO free_buffer for type %d!\r\n", __FUNCTION__, type);
         return kStatus_NoData;
     }
@@ -1508,13 +1605,13 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
             break;
         default:
             sdu_e("%s: Unknown type %d.\n\r", __func__, type);
-            return kStatus_InvalidArgument;
+            break;
     }
-    sdio_hdr->len = MIN(data_len + sizeof(sdio_header_t), send_buffer->buffer.data_size);
+    sdio_hdr->len = (uint16_t)MIN(data_len + sizeof(sdio_header_t), send_buffer->buffer.data_size);
 
     sdu_d("%s: buffer.data_size=%u data_len=%u sdio_hdr->len=%u\r\n", __FUNCTION__,
         send_buffer->buffer.data_size, data_len, sdio_hdr->len);
-    memcpy(send_buffer->buffer.data_addr + sizeof(sdio_header_t), data_addr, sdio_hdr->len - sizeof(sdio_header_t));
+    (void)memcpy(send_buffer->buffer.data_addr + sizeof(sdio_header_t), data_addr, sdio_hdr->len - sizeof(sdio_header_t));
     send_buffer->buffer.data_len = sdio_hdr->len;
     send_buffer->buffer.user_data = (uint32_t)send_buffer;
 
@@ -1523,14 +1620,14 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
         case SDU_TYPE_FOR_READ_CMD:
             (void)LIST_AddTail(&ctrl_sdu.cmd_q[SDU_PORT_FOR_READ], &send_buffer->link);
             status = SDU_SendCmdNonBlocking(ctrl_sdu.handle, &send_buffer->buffer);
-            if ((status == kStatus_Success) || (status == kStatus_SDIOSLV_CmdPending))
+            if ((status == kStatus_Success) || (status == (status_t)kStatus_SDIOSLV_CmdPending))
             {
                 sdu_d("%s: %d SendCmdNonBlocking ok 0x%x!\r\n", __FUNCTION__, type, status);
             }
             else
             {
                 sdu_e("%s: %d SendCmdNonBlocking fail 0x%x!\r\n", __FUNCTION__, type, status);
-                LIST_RemoveElement(&send_buffer->link);
+                (void)LIST_RemoveElement(&send_buffer->link);
                 (void)LIST_AddTail(&ctrl_sdu.cmd_free_buffer[SDU_PORT_FOR_READ], &send_buffer->link);
                 return kStatus_Fail;
             }
@@ -1538,14 +1635,14 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
         case SDU_TYPE_FOR_READ_EVENT:
             (void)LIST_AddTail(&ctrl_sdu.event_q, &send_buffer->link);
             status = SDU_SendCmdNonBlocking(ctrl_sdu.handle, &send_buffer->buffer);
-            if ((status == kStatus_Success) || (status == kStatus_SDIOSLV_CmdPending))
+            if ((status == kStatus_Success) || (status == (status_t)kStatus_SDIOSLV_CmdPending))
             {
                 sdu_d("%s: %d SendCmdNonBlocking ok 0x%x!\r\n", __FUNCTION__, type, status);
             }
             else
             {
                 sdu_e("%s: %d SendCmdNonBlocking fail 0x%x!\r\n", __FUNCTION__, type, status);
-                LIST_RemoveElement(&send_buffer->link);
+                (void)LIST_RemoveElement(&send_buffer->link);
                 (void)LIST_AddTail(&ctrl_sdu.event_free_buffer, &send_buffer->link);
                 return kStatus_Fail;
             }
@@ -1553,21 +1650,21 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
         case SDU_TYPE_FOR_READ_DATA:
             (void)LIST_AddTail(&ctrl_sdu.data_q[SDU_PORT_FOR_READ], &send_buffer->link);
             status = SDU_SendDataNonBlocking(ctrl_sdu.handle, &send_buffer->buffer);
-            if ((status == kStatus_Success) || (status == kStatus_SDIOSLV_SendFull))
+            if ((status == kStatus_Success) || (status == (status_t)kStatus_SDIOSLV_SendFull))
             {
                 sdu_d("%s: SendDataNonBlocking ok 0x%x!\r\n", __FUNCTION__, status);
             }
             else
             {
                 sdu_e("%s: SendDataNonBlocking fail 0x%x!\r\n", __FUNCTION__, status);
-                LIST_RemoveElement(&send_buffer->link);
+                (void)LIST_RemoveElement(&send_buffer->link);
                 (void)LIST_AddTail(&ctrl_sdu.data_free_buffer, &send_buffer->link);
                 return kStatus_Fail;
             }
             break;
         default:
             sdu_e("%s: Unknown type %d.\n\r", __func__, type);
-            return kStatus_InvalidArgument;
+            break;
     }
 
     return kStatus_Success;
@@ -1579,7 +1676,9 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
  *
  * @param void None.
  */
- uint32_t g_SDU_IRQHandler_cnt = 0;
+uint32_t g_SDU_IRQHandler_cnt;
+uint32_t g_SDU_IRQHandler_cnt = 0;
+
 void SDU_SLV_IRQHandler(void)
 {
     sdioslv_fun_ctrl_t *fun_ctrl;
@@ -1592,34 +1691,39 @@ void SDU_SLV_IRQHandler(void)
     for (i = 0; i < sdu_ctrl.used_fun_num; i++)
     {
         fun_ctrl = sdu_ctrl.func_ctrl[i];
-        if (fun_ctrl->initialized && fun_ctrl->enable)
+        if ((fun_ctrl->initialized != 0U) && (fun_ctrl->enable != 0U))
         {
             sdu_fsr    = fun_ctrl->regmap;
             int_status = sdu_fsr->CardIntStatus;
             crc_err    = sdu_fsr->HostTransferStatus;
 
-            if (int_status & SDIO_CCR_CIC_CmdUpLdOvr)
+            if ((int_status & (uint32_t)SDIO_CCR_CIC_CmdUpLdOvr) != 0U)
             {
                 SDU_ProcessCmdUpLdOvr(fun_ctrl);
                 sdu_fsr->CardIntStatus &= ~(SDIO_CCR_CIC_CmdUpLdOvr);
             }
 
-            if ((int_status & SDIO_CCR_CIC_CmdDnLdOvr) && !(crc_err & SDIO_CCR_HOST_DnLdCRC_err))
+            if (((int_status & (uint32_t)SDIO_CCR_CIC_CmdDnLdOvr) != 0U) && ((crc_err & (uint32_t)SDIO_CCR_HOST_DnLdCRC_err) == 0U))
             {
                 SDU_ProcessCmdDnLdOvr(fun_ctrl);
                 sdu_fsr->CardIntStatus &= ~(SDIO_CCR_CIC_CmdDnLdOvr);
             }
 
-            if (int_status & SDIO_CCR_CIC_UpLdOvr)
+            if ((int_status & (uint32_t)SDIO_CCR_CIC_UpLdOvr) != 0U)
             {
                 SDU_ProcessDataUpLdOvr(fun_ctrl);
                 sdu_fsr->CardIntStatus &= ~(SDIO_CCR_CIC_UpLdOvr);
             }
 
-            if ((int_status & SDIO_CCR_CIC_DnLdOvr) && !(crc_err & SDIO_CCR_HOST_DnLdCRC_err))
+            if (((int_status & (uint32_t)SDIO_CCR_CIC_DnLdOvr) != 0U) && ((crc_err & (uint32_t)SDIO_CCR_HOST_DnLdCRC_err) == 0U))
             {
                 SDU_ProcessDataDnLdOvr(fun_ctrl);
                 sdu_fsr->CardIntStatus &= ~(SDIO_CCR_CIC_DnLdOvr);
+            }
+
+            if (int_status & SDIO_CCR_CIC_PwrUp)
+            {
+                sdu_fsr->CardIntStatus &= ~(SDIO_CCR_CIC_PwrUp);
             }
         }
     }
@@ -1639,16 +1743,16 @@ static void SDU_GetDefaultCISTable(const uint32_t SDU_BASE)
     uint32_t curr_offset;
     uint32_t cis_addr;
 
-    const char *vers[4] = {"NXP\000Wireless Device ID: XX\000\000\377", "NXP WiFi Device\000\000\377",
+    char *vers[4] = {"NXP\000Wireless Device ID: XX\000\000\377", "NXP WiFi Device\000\000\377",
                            "NXP Bluetooth Device\000\000\377", "NXP 802.15.4 Device\000\000\377"};
 
     curr_offset = SDU_BASE + SD_CIS_DATA0_FN0;
 
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < 4U; i++)
     {
-        memset((uint8_t *)curr_offset, 0, 0x80);
-        REG8(curr_offset + 0) = 0xff;
-        curr_offset += 0x80;
+        (void)memset((uint8_t *)curr_offset, 0, 0x80);
+        REG8(curr_offset + 0U) = 0xffU;
+        curr_offset += 0x80U;
     }
 
     // FN0
@@ -1793,7 +1897,7 @@ status_t SDU_Init(void)
     if (KOSA_StatusSuccess != OSA_EventCreate((osa_event_handle_t)ctrl_sdu.event, 1U))
     {
         sdu_e("Can't create SDU event.\r\n");
-        OSA_TaskDestroy((osa_task_handle_t)ctrl_sdu.recvTaskId);
+        (void)OSA_TaskDestroy((osa_task_handle_t)ctrl_sdu.recvTaskId);
         rc = kStatus_Fail;
         goto done;
     }
@@ -1819,7 +1923,10 @@ status_t SDU_Init(void)
 
 done:
     if (kStatus_Success != rc)
+    {
         SDU_InnerDeinit();
+    }
+
     sdu_d("Leave %s: sdu_state=%d rc=0x%x.\r\n", __FUNCTION__, ctrl_sdu.sdu_state, rc);
     OSA_EXIT_CRITICAL();
     return rc;
@@ -1838,10 +1945,10 @@ void SDU_Deinit(void)
         goto done;
     }
 
-    SDU_ClrFwReady();
+    (void)SDU_ClrFwReady();
 
-    OSA_TaskDestroy((osa_task_handle_t)ctrl_sdu.recvTaskId);
-    OSA_EventDestroy((osa_event_handle_t)ctrl_sdu.event);
+    (void)OSA_TaskDestroy((osa_task_handle_t)ctrl_sdu.recvTaskId);
+    (void)OSA_EventDestroy((osa_event_handle_t)ctrl_sdu.event);
 
     SDU_InnerDeinit();
 
@@ -1854,7 +1961,7 @@ status_t SDU_InstallCallback(sdu_for_write_type_t type, sdu_callback_t callback)
 {
     assert(SDU_TYPE_FOR_WRITE_MAX > type);
 
-    ctrl_sdu.cb_fn[type] = callback;
+    ctrl_sdu.sdu_cb_fn[type] = callback;
 
     return kStatus_Success;
 }

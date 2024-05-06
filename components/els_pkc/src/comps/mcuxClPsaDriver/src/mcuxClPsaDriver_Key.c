@@ -848,28 +848,28 @@ static size_t calc_bitlen_be(const uint8_t *n, size_t len)
     size_t zeros = 0;
     for (size_t i = 0; i < len; i++)
     {
-        if (n[i] == 0)
+        if (n[i] == 0u)
         {
-            zeros += 8;
+            zeros += 8u;
         }
         else
         {
-            uint8_t mask = 0x80;
-            for (size_t j = 0; j < 8; j++)
+            uint8_t mask = 0x80u;
+            for (size_t j = 0u; j < 8u; j++)
             {
-                if ((n[i] & mask) == 0)
+                if ((n[i] & mask) == 0u)
                 {
-                    zeros += 1;
+                    zeros += 1u;
                 }
                 else
                 {
-                    return len * 8 - zeros;
+                    return len * 8u - zeros;
                 }
                 mask >>= 1;
             }
         }
     }
-    return len * 8 - zeros;
+    return len * 8u - zeros;
 }
 
 static size_t sz_max(size_t a, size_t b)
@@ -890,7 +890,7 @@ static void reverse_and_copy(uint8_t *dst, size_t dst_len, const uint8_t *src, s
     }
     if (dst_len > copy_len)
     {
-        memset(dst, 0, dst_len - copy_len);
+        (void)memset(dst, 0, dst_len - copy_len);
     }
 }
 
@@ -1300,21 +1300,21 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
         const uint8_t *modulus = NULL;
         switch (bitlen_n)
         {
-            case 2048:
+            case 2048u:
                 modulus = dhm_P_2048;
                 break;
-            case 3072:
+            case 3072u:
                 modulus = dhm_P_3072;
                 break;
-            case 4096:
+            case 4096u:
                 modulus = dhm_P_4096;
                 break;
             // For the groups with more bits, there is not
             // enough PKC ram
-            // case 6144:
+            // case 6144u:
             //     modulus = dhm_P_6144;
             //     break;
-            // case 8192:
+            // case 8192u:
             //     modulus = dhm_P_8192;
             //     break;
             default:
@@ -1325,13 +1325,13 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
         size_t bitlen_a = calc_bitlen_be(peer_key, peer_key_length);
 
         // If the exponent is 0, fall back to SW implementation.
-        if (bitlen_e == 0)
+        if (bitlen_e == 0u)
         {
             return PSA_ERROR_NOT_SUPPORTED;
         }
 
         // If the modulus or the exponent is too small, fall back to SW implementation.
-        if ((bitlen_n < (MCUXCLPKC_WORDSIZE * 8)) || (bitlen_e < (MCUXCLPKC_WORDSIZE * 8)))
+        if ((bitlen_n < (MCUXCLPKC_WORDSIZE * 8u)) || (bitlen_e < (MCUXCLPKC_WORDSIZE * 8u)))
         {
             return PSA_ERROR_NOT_SUPPORTED;
         }
@@ -1350,45 +1350,45 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
         // The most significant 32 bits / 4 bytes of the modulus need to be 0 because
         // of PKC requirements. We achieve that by artificially increasing the operand size
         // by 4 bytes.
-        size_t pkc_operand_size = MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(bytelen_n + 4);
+        size_t pkc_operand_size = MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(bytelen_n + 4u);
 
         // iX (bits 16~23): index of base number (PKC operand),
         const size_t bufferSizeX = pkc_operand_size + MCUXCLPKC_WORDSIZE; // size of the base
 
         // size of the result of the exponentiation
         // iR (bits 0~7): index of result (PKC operand).
-        // The size shall be at least max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(expByteLength + 1), lenN +
+        // The size shall be at least max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(expByteLength + 1u), lenN +
         // MCUXCLPKC_WORDSIZE).
         const size_t bufferSizeR =
-            sz_max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(bytelen_e + 1), pkc_operand_size + MCUXCLPKC_WORDSIZE);
+            sz_max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(bytelen_e + 1u), pkc_operand_size + MCUXCLPKC_WORDSIZE);
 
         // iN (bits 24~31): index of modulus (PKC operand), size = operandSize (= lenN).
         const size_t bufferSizeN =
             pkc_operand_size + MCUXCLPKC_WORDSIZE; // size of N + PKC word in front of the modulus buffer for NDash
 
         // iT0 (bits 8~15): index of temp0 (PKC operand).
-        // The size shall be at least max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(expByteLength + 1), lenN +
+        // The size shall be at least max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(expByteLength + 1u), lenN +
         // MCUXCLPKC_WORDSIZE).
         const size_t bufferSizeT0 =
-            sz_max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(bytelen_e + 1), pkc_operand_size + MCUXCLPKC_WORDSIZE);
+            sz_max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(bytelen_e + 1u), pkc_operand_size + MCUXCLPKC_WORDSIZE);
 
         // iT1 (bits 0~7): index of temp1 (PKC operand).
-        // Its size shall be at least max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(expByteLength + 1), lenN + MCUXCLPKC_WORDSIZE,
+        // Its size shall be at least max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(expByteLength + 1u), lenN + MCUXCLPKC_WORDSIZE,
         // 2 * MCUXCLPKC_WORDSIZE).
         const size_t bufferSizeT1 =
-            sz_max(sz_max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(bytelen_e + 1), pkc_operand_size + MCUXCLPKC_WORDSIZE),
-                   2 * MCUXCLPKC_WORDSIZE);
+            sz_max(sz_max(MCUXCLPKC_ALIGN_TO_PKC_WORDSIZE(bytelen_e + 1u), pkc_operand_size + MCUXCLPKC_WORDSIZE),
+                   2u * MCUXCLPKC_WORDSIZE);
 
         // iT2 (bits 8~15): index of temp2 (PKC operand).
-        // Its size shall be at least max(lenN + MCUXCLPKC_WORDSIZE, 2 * MCUXCLPKC_WORDSIZE).
-        const size_t bufferSizeT2 = sz_max(pkc_operand_size + MCUXCLPKC_WORDSIZE, 2 * MCUXCLPKC_WORDSIZE);
+        // Its size shall be at least max(lenN + MCUXCLPKC_WORDSIZE, 2u * MCUXCLPKC_WORDSIZE).
+        const size_t bufferSizeT2 = sz_max(pkc_operand_size + MCUXCLPKC_WORDSIZE, 2u * MCUXCLPKC_WORDSIZE);
 
         // iT3 (bits 24~31): index of temp3 (PKC operand).
-        // Its size shall be at least max(lenN + MCUXCLPKC_WORDSIZE, 2 * MCUXCLPKC_WORDSIZE).
-        const size_t bufferSizeT3 = sz_max(pkc_operand_size + MCUXCLPKC_WORDSIZE, 2 * MCUXCLPKC_WORDSIZE);
+        // Its size shall be at least max(lenN + MCUXCLPKC_WORDSIZE, 2u * MCUXCLPKC_WORDSIZE).
+        const size_t bufferSizeT3 = sz_max(pkc_operand_size + MCUXCLPKC_WORDSIZE, 2u * MCUXCLPKC_WORDSIZE);
 
         // iTE (bits 16~23): index of temp4 (PKC operand).
-        // The size shall be at least (6 * MCUXCLPKC_WORDSIZE).
+        // The size shall be at least (6u * MCUXCLPKC_WORDSIZE).
         const size_t bufferSizeTE = 6u * MCUXCLPKC_WORDSIZE;
 
         // ### NDash calculation:
@@ -1526,7 +1526,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
                                    mcuxClPkc_Calc);
 
         const uint8_t *exp_buffer = key_buffer + key_buffer_size - bytelen_e;
-        uint32_t *tmp_buffer      = mcuxClSession_allocateWords_cpuWa(&session, (bytelen_e / sizeof(uint32_t)) + 1);
+        uint32_t *tmp_buffer      = mcuxClSession_allocateWords_cpuWa(&session, (bytelen_e / sizeof(uint32_t)) + 1u);
         if (tmp_buffer == NULL)
         {
             ret = PSA_ERROR_CORRUPTION_DETECTED;

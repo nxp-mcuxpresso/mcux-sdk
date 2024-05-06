@@ -1,5 +1,5 @@
 /*
- * Copyright  2022 NXP
+ * Copyright  2022, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -139,7 +139,11 @@ static hal_adc_sensor_status_t HAL_AdcSensorTriggerTemp(hal_adc_sensor_state_t *
     }
     if (config->channel == HAL_ADC_SENSOR_CHANNEL_AUTO)
     {
+#if !(defined(FSL_FEATURE_ADC_HAS_NO_SINGLEEND_TEMP_CHANNEL) && FSL_FEATURE_ADC_HAS_NO_SINGLEEND_TEMP_CHANNEL)
         channel = kADC_TEMPP;
+#else
+        channel = HAL_ADC_SENSOR_CHANNEL_AUTO; /* Invalid channel */
+#endif
     }
     else
     {
@@ -168,7 +172,15 @@ static hal_adc_sensor_status_t HAL_AdcSensorTriggerTemp(hal_adc_sensor_state_t *
             if (state->curConvType != kHAL_AdcSensorConvTypeTemperature)
             {
                 ADC_EnableTemperatureSensor(state->adc, true);
-                ADC_SetTemperatureSensorMode(state->adc, kADC_TSensorInternal);
+                ADC_SetTemperatureSensorMode(state->adc,
+#if ((!(defined(FSL_FEATURE_ADC_HAS_NO_SINGLEEND_TEMP_CHANNEL) && FSL_FEATURE_ADC_HAS_NO_SINGLEEND_TEMP_CHANNEL)) || \
+     (!(defined(FSL_FEATURE_ADC_HAS_NO_DIFFERENTIAL_TEMP_CHANNEL) &&                                                 \
+        FSL_FEATURE_ADC_HAS_NO_DIFFERENTIAL_TEMP_CHANNEL)))
+                                kADC_TSensorInternal
+#else
+                                kADC_TSensorExternal
+                                );
+#endif
                 state->curConvType = kHAL_AdcSensorConvTypeTemperature;
             }
 

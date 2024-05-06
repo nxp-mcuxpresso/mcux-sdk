@@ -104,8 +104,6 @@ MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DECLARED_BUT_NEVER_DEFINED()
 
     MCUX_CSSL_FP_COUNTER_STMT(
         const uint32_t leadingZeroLength = mcuxClMath_CountLeadingZerosWord((uint32_t) length);            \
-        /* ASSERT: number of leading zeros of nonzero length (u16 casted to u32) is in range [16,31]. */  \
-        MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(leadingZeroExponent, 16u, 31u, /* void */)                     \
         const uint32_t leadingZeroExponent = leadingZeroLength - 3u;  /* exponent = length * 8. */        \
         /* "-1" to skip the first nonzero bit. */                                                         \
         const uint32_t lterationsSquareMultiply = ((sizeof(uint32_t)) * 8u) - leadingZeroExponent - 1u; )

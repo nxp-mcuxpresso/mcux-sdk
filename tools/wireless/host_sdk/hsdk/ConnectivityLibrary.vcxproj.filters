@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{7f185b2a-3020-4e6b-bedc-b5786b4be4de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sys">
+      <UniqueIdentifier>{852e0316-4818-4685-81a3-99f28e7810d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="protocol">
+      <UniqueIdentifier>{a8648b63-afd5-445d-a3bb-57313172d3c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="protocol\FSCI">
+      <UniqueIdentifier>{747c5aac-cbb0-48c3-b9c3-bb587190d4cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\protocol">
+      <UniqueIdentifier>{e25a84ba-4218-42a9-819e-b3feff45b46c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\protocol\FSCI">
+      <UniqueIdentifier>{4fb50db1-9562-43fe-a697-22011b993293}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="physical">
+      <UniqueIdentifier>{9cfbb25e-35e6-41f9-ad6a-ccd0ca36df04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="physical\UART">
+      <UniqueIdentifier>{ca84a452-dcda-45e2-9c3f-a0e0fe8acd5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\physical">
+      <UniqueIdentifier>{d0662055-0339-49d1-bd28-33d00a5070f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\physical\UART">
+      <UniqueIdentifier>{ceceb63c-21f8-4e98-9678-43fe1ca40f84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\sys">
+      <UniqueIdentifier>{efac2aa7-c13c-4023-a015-2aebeb8771c2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sys\hsdkEvent.c">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\hsdkFile.c">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\hsdkLock.c">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\hsdkSemaphore.c">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\hsdkThread.c">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\MessageQueue.c">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\RawFrame.c">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\utils.c">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\Framer.c">
+      <Filter>protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\FSCI\FSCIFrame.c">
+      <Filter>protocol\FSCI</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\FSCI\FSCIFramer.c">
+      <Filter>protocol\FSCI</Filter>
+    </ClCompile>
+    <ClCompile Include="physical\UART\UARTConfiguration.c">
+      <Filter>physical\UART</Filter>
+    </ClCompile>
+    <ClCompile Include="physical\UART\UARTDevice.c">
+      <Filter>physical\UART</Filter>
+    </ClCompile>
+    <ClCompile Include="physical\UART\UARTDiscovery.c">
+      <Filter>physical\UART</Filter>
+    </ClCompile>
+    <ClCompile Include="physical\PhysicalDevice.c">
+      <Filter>physical</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\EventManager.c">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\hsdkLogger.c">
+      <Filter>sys</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\sys\hsdkOSCommon.h">
+      <Filter>include\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sys\MessageQueue.h">
+      <Filter>include\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sys\RawFrame.h">
+      <Filter>include\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sys\utils.h">
+      <Filter>include\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\physical\PhysicalDevice.h">
+      <Filter>include\physical</Filter>
+    </ClInclude>
+    <ClInclude Include="include\physical\UART\UARTConfiguration.h">
+      <Filter>include\physical\UART</Filter>
+    </ClInclude>
+    <ClInclude Include="include\physical\UART\UARTDevice.h">
+      <Filter>include\physical\UART</Filter>
+    </ClInclude>
+    <ClInclude Include="include\physical\UART\UARTDiscovery.h">
+      <Filter>include\physical\UART</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol\Framer.h">
+      <Filter>include\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol\FSCI\FSCIFrame.h">
+      <Filter>include\protocol\FSCI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol\FSCI\FSCIFramer.h">
+      <Filter>include\protocol\FSCI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sys\EventManager.h">
+      <Filter>include\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sys\hsdkLogger.h">
+      <Filter>include\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sys\hsdkError.h">
+      <Filter>include\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="HSDK.rc" />
+  </ItemGroup>
+</Project>

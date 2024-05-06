@@ -875,6 +875,22 @@ endif()
 endif()
 
 
+if (CONFIG_USE_component_els_pkc_oscca)
+# Add set(CONFIG_USE_component_els_pkc_oscca true) in config.cmake to use this component
+
+message("component_els_pkc_oscca component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_els_pkc_oscca_aeadmodes AND CONFIG_USE_component_els_pkc_oscca_ciphermodes AND CONFIG_USE_component_els_pkc_oscca_macmodes AND CONFIG_USE_component_els_pkc_oscca_randommodes AND CONFIG_USE_component_els_pkc_oscca_sm2 AND CONFIG_USE_component_els_pkc_oscca_sm3 AND CONFIG_USE_component_els_pkc_oscca_sm4 AND CONFIG_USE_component_els_pkc_oscca_pkc AND CONFIG_USE_component_els_pkc_oscca_safo AND CONFIG_USE_component_els_pkc_signature AND CONFIG_USE_component_els_pkc_crc)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_oscca dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_component_els_pkc_oscca_aeadmodes)
 # Add set(CONFIG_USE_component_els_pkc_oscca_aeadmodes true) in config.cmake to use this component
 
@@ -1048,7 +1064,7 @@ if (CONFIG_USE_component_els_pkc_oscca_sm2)
 
 message("component_els_pkc_oscca_sm2 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_els_pkc_common)
+if(CONFIG_USE_component_els_pkc_common AND CONFIG_USE_component_els_pkc_signature)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClOsccaSm2/src/mcuxClOsccaSm2_Cipher_Crypt.c
@@ -1412,7 +1428,7 @@ if (CONFIG_USE_component_els_pkc_rsa_oaep)
 
 message("component_els_pkc_rsa_oaep component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_els_pkc_rsa_oaep)
+if(CONFIG_USE_component_els_pkc_rsa)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClRsa/src/mcuxClRsa_KeyTypes.c

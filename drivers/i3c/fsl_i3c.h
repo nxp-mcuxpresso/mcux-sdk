@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2023 NXP
+ * Copyright 2018-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 10, 5))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 10, 9))
 /*! @} */
 
 /*! @brief Timeout times for waiting flag. */
@@ -262,6 +262,15 @@ typedef enum _i3c_rx_term_ops
     kI3C_RxTermLastByte = 2U,  /*!< Master terminates read at any time after START, no length limitation. */
 } i3c_rx_term_ops_t;
 
+/*! @brief I3C start SCL delay options. */
+typedef enum _i3c_start_scl_delay
+{
+    kI3C_NoDelay = 0U, /*!< No delay. */
+    kI3C_IncreaseSclHalfPeriod = 1U, /*!< Increases SCL clock period by 1/2. */
+    kI3C_IncreaseSclOnePeriod = 2U, /*!< Increases SCL clock period by 1. */
+    kI3C_IncreaseSclOneAndHalfPeriod = 3U, /*!< Increases SCL clock period by 1 1/2 */
+} i3c_start_scl_delay_t;
+
 /*! @brief Structure with setting master IBI rules and slave registry. */
 typedef struct _i3c_register_ibi_addr
 {
@@ -302,6 +311,10 @@ typedef struct _i3c_master_config
     bool enableOpenDrainStop;         /*!< Whether to emit open-drain speed STOP. */
     bool enableOpenDrainHigh;         /*!< Enable Open-Drain High to be 1 PPBAUD count for i3c messages, or 1 ODBAUD. */
     i3c_baudrate_hz_t baudRate_Hz;    /*!< Desired baud rate settings. */
+#ifdef I3C_MCONFIG_EXT_I3C_CAS_DEL_MASK
+    i3c_start_scl_delay_t startSclDelay; /*!< I3C SCL delay after START. */
+    i3c_start_scl_delay_t restartSclDelay; /*!< I3C SCL delay after Repeated START. */
+#endif
 } i3c_master_config_t;
 
 /* Forward declaration of the transfer descriptor and handle typedefs. */
@@ -337,6 +350,7 @@ enum _i3c_master_transfer_flags
     kI3C_TransferDisableRxTermFlag = 0x10U, /*!< Disable Rx termination. Note: It's for I3C CCC transfer. */
     kI3C_TransferRxAutoTermFlag =
         0x20U, /*!< Set Rx auto-termination. Note: It's adaptive based on Rx size(<=255 bytes) except in I3C_MasterReceive. */
+    kI3C_TransferStartWithBroadcastAddr = 0x40U, /*!< Start transfer with 0x7E, then read/write data with device address. */
 };
 
 /*!
@@ -619,6 +633,10 @@ typedef struct _i3c_config
     bool enableOpenDrainStop;         /*!< Whether to emit open-drain speed STOP. */
     bool enableOpenDrainHigh;         /*!< Enable Open-Drain High to be 1 PPBAUD count for i3c messages, or 1 ODBAUD. */
     i3c_baudrate_hz_t baudRate_Hz;    /*!< Desired baud rate settings. */
+#ifdef I3C_MCONFIG_EXT_I3C_CAS_DEL_MASK
+    i3c_start_scl_delay_t startSclDelay; /*!< I3C SCL delay after START. */
+    i3c_start_scl_delay_t restartSclDelay; /*!< I3C SCL delay after Repeated START. */
+#endif
     uint8_t masterDynamicAddress;     /*!< Main master dynamic address configuration. */
     uint32_t slowClock_Hz;            /*!< Slow clock frequency for time control. */
     uint32_t maxWriteLength;          /*!< Maximum write length. */
@@ -784,6 +802,9 @@ void I3C_MasterDeinit(I3C_Type *base);
 
 /* Not static so it can be used from fsl_i3c_dma.c. */
 status_t I3C_MasterCheckAndClearError(I3C_Type *base, uint32_t status);
+
+/* Not static so it can be used from fsl_i3c_dma.c. */
+status_t I3C_MasterWaitForCtrlDone(I3C_Type *base, bool waitIdle);
 
 /* Not static so it can be used from fsl_i3c_dma.c. */
 status_t I3C_CheckForBusyBus(I3C_Type *base);

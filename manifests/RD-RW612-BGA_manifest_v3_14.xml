@@ -113,6 +113,20 @@ ${load}</script>
       <image path="../boards/rdrw612bga" type="image">
         <files mask="rdrw612bga.png"/>
       </image>
+      <memory>
+        <memoryBlock id="QSPI_FLASH_rdrw612bga" name="QSPI_FLASH" addr="08000000" size="00800000" type="ExtFlash" access="RO"/>
+      </memory>
+      <debug_configurations>
+        <debug_configuration id_refs="com.crt.advproject.config.exe.debug com.crt.advproject.config.exe.release">
+          <drivers>
+            <driver id_refs="QSPI_FLASH_rdrw612bga">
+              <driverBinary path="../devices/RW612/mcuxpresso" type="binary">
+                <files mask="RW61X_FlexSPI_A_SFDP_QSPI.cfx"/>
+              </driverBinary>
+            </driver>
+          </drivers>
+        </debug_configuration>
+      </debug_configurations>
     </board>
   </boards>
   <devices>
@@ -222,367 +236,6 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
-    </component>
-    <component id="docs.Bluetooth.RW612" name="Bluetooth" brief="Docs bluetooth" version="1.0.0" full_name="Docs bluetooth" category="docs/Bluetooth" user_visible="true" type="documentation" package_base_path="../docs/wireless/Bluetooth" project_base_path="wireless/Bluetooth">
-      <dependencies>
-        <device_dependency value="RW612"/>
-      </dependencies>
-      <source relative_path="./" type="doc">
-        <files mask="Bluetooth Low Energy Application Developer's Guide.pdf"/>
-        <files mask="Bluetooth Low Energy Demo Applications User's Guide.pdf"/>
-        <files mask="Bluetooth Low Energy Host Stack API Reference Manual.pdf"/>
-        <files mask="Bluetooth Low Energy Host Stack FSCI Reference Manual.pdf"/>
-        <files mask="Bluetooth Low Energy Host Stack FSCI Application Programming.pdf"/>
-        <files mask="Bluetooth Low Energy Quick Start Guide.pdf"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Application Developer's Guide" type="doc">
-        <files mask="index.html"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide" type="doc">
-        <files mask="index.html"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Host Stack API Reference Manual" type="image">
-        <files mask="NXP_logo.bmp"/>
-        <files mask="arrowdown.png"/>
-        <files mask="arrowright.png"/>
-        <files mask="bc_s.png"/>
-        <files mask="bdwn.png"/>
-        <files mask="closed.png"/>
-        <files mask="doc.png"/>
-        <files mask="doxygen.png"/>
-        <files mask="folderclosed.png"/>
-        <files mask="folderopen.png"/>
-        <files mask="nav_f.png"/>
-        <files mask="nav_g.png"/>
-        <files mask="nav_h.png"/>
-        <files mask="open.png"/>
-        <files mask="splitbar.png"/>
-        <files mask="sync_off.png"/>
-        <files mask="sync_on.png"/>
-        <files mask="tab_a.png"/>
-        <files mask="tab_b.png"/>
-        <files mask="tab_h.png"/>
-        <files mask="tab_s.png"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Host Stack API Reference Manual" type="doc">
-        <files mask="dir_261769698c37bd582f26d63faa900608.html"/>
-        <files mask="dir_4bc42c1fd4ebed4eeb3854f99603b73a.html"/>
-        <files mask="dir_6fcf0e77b3735a6a225c35e3763e28d9.html"/>
-        <files mask="dir_934f46a345653ef2b3014a1b37a162c1.html"/>
-        <files mask="dir_95f3c0fbc92a8bbf19b5a8765f1b35ab.html"/>
-        <files mask="dir_a71253c0d6d6d4e8129719a236bfe9f8.html"/>
-        <files mask="dir_aafc37776c43ac653e35793fd0c05443.html"/>
-        <files mask="dir_bdc75601c422cb4149c39c69fd7dfada.html"/>
-        <files mask="dir_f5e3c02c8e520b84a16824ae79a22dc2.html"/>
-        <files mask="dir_f6eb99cf621b04b69a662c1e69f044d3.html"/>
-        <files mask="doxygen.css"/>
-        <files mask="group___b_l_e.html"/>
-        <files mask="group___b_l_e___c_o_n_f_i_g.html"/>
-        <files mask="group___e_a_t_t.html"/>
-        <files mask="group___g_a_p.html"/>
-        <files mask="group___g_a_t_t.html"/>
-        <files mask="group___g_a_t_t___c_l_i_e_n_t.html"/>
-        <files mask="group___g_a_t_t___d_b.html"/>
-        <files mask="group___g_a_t_t___s_e_r_v_e_r.html"/>
-        <files mask="group___l2_c_a.html"/>
-        <files mask="html_custom.css"/>
-        <files mask="index.html"/>
-        <files mask="modules.html"/>
-        <files mask="navtree.css"/>
-        <files mask="tabs.css"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Host Stack API Reference Manual" type="script">
-        <files mask="dynsections.js"/>
-        <files mask="group___b_l_e.js"/>
-        <files mask="group___b_l_e___c_o_n_f_i_g.js"/>
-        <files mask="group___g_a_p.js"/>
-        <files mask="group___g_a_t_t.js"/>
-        <files mask="group___g_a_t_t___c_l_i_e_n_t.js"/>
-        <files mask="group___g_a_t_t___d_b.js"/>
-        <files mask="group___g_a_t_t___s_e_r_v_e_r.js"/>
-        <files mask="group___l2_c_a.js"/>
-        <files mask="jquery.js"/>
-        <files mask="modules.js"/>
-        <files mask="navtree.js"/>
-        <files mask="navtreedata.js"/>
-        <files mask="navtreeindex0.js"/>
-        <files mask="navtreeindex1.js"/>
-        <files mask="navtreeindex2.js"/>
-        <files mask="navtreeindex3.js"/>
-        <files mask="navtreeindex4.js"/>
-        <files mask="navtreeindex5.js"/>
-        <files mask="navtreeindex6.js"/>
-        <files mask="navtreeindex7.js"/>
-        <files mask="resize.js"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Host Stack API Reference Manual/search" type="doc">
-        <files mask="all_0.html"/>
-        <files mask="all_1.html"/>
-        <files mask="all_10.html"/>
-        <files mask="all_11.html"/>
-        <files mask="all_12.html"/>
-        <files mask="all_13.html"/>
-        <files mask="all_14.html"/>
-        <files mask="all_15.html"/>
-        <files mask="all_16.html"/>
-        <files mask="all_2.html"/>
-        <files mask="all_3.html"/>
-        <files mask="all_4.html"/>
-        <files mask="all_5.html"/>
-        <files mask="all_6.html"/>
-        <files mask="all_7.html"/>
-        <files mask="all_8.html"/>
-        <files mask="all_9.html"/>
-        <files mask="all_a.html"/>
-        <files mask="all_b.html"/>
-        <files mask="all_c.html"/>
-        <files mask="all_d.html"/>
-        <files mask="all_e.html"/>
-        <files mask="all_f.html"/>
-        <files mask="classes_0.html"/>
-        <files mask="classes_1.html"/>
-        <files mask="classes_2.html"/>
-        <files mask="classes_3.html"/>
-        <files mask="classes_4.html"/>
-        <files mask="enums_0.html"/>
-        <files mask="enums_1.html"/>
-        <files mask="enums_2.html"/>
-        <files mask="enums_3.html"/>
-        <files mask="enumvalues_0.html"/>
-        <files mask="enumvalues_1.html"/>
-        <files mask="functions_0.html"/>
-        <files mask="functions_1.html"/>
-        <files mask="functions_2.html"/>
-        <files mask="functions_3.html"/>
-        <files mask="functions_4.html"/>
-        <files mask="groups_0.html"/>
-        <files mask="groups_1.html"/>
-        <files mask="groups_2.html"/>
-        <files mask="groups_3.html"/>
-        <files mask="nomatches.html"/>
-        <files mask="search.css"/>
-        <files mask="typedefs_0.html"/>
-        <files mask="typedefs_1.html"/>
-        <files mask="typedefs_2.html"/>
-        <files mask="typedefs_3.html"/>
-        <files mask="variables_0.html"/>
-        <files mask="variables_1.html"/>
-        <files mask="variables_10.html"/>
-        <files mask="variables_11.html"/>
-        <files mask="variables_12.html"/>
-        <files mask="variables_13.html"/>
-        <files mask="variables_14.html"/>
-        <files mask="variables_15.html"/>
-        <files mask="variables_2.html"/>
-        <files mask="variables_3.html"/>
-        <files mask="variables_4.html"/>
-        <files mask="variables_5.html"/>
-        <files mask="variables_6.html"/>
-        <files mask="variables_7.html"/>
-        <files mask="variables_8.html"/>
-        <files mask="variables_9.html"/>
-        <files mask="variables_a.html"/>
-        <files mask="variables_b.html"/>
-        <files mask="variables_c.html"/>
-        <files mask="variables_d.html"/>
-        <files mask="variables_e.html"/>
-        <files mask="variables_f.html"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Host Stack API Reference Manual/search" type="script">
-        <files mask="all_0.js"/>
-        <files mask="all_1.js"/>
-        <files mask="all_10.js"/>
-        <files mask="all_11.js"/>
-        <files mask="all_12.js"/>
-        <files mask="all_13.js"/>
-        <files mask="all_14.js"/>
-        <files mask="all_15.js"/>
-        <files mask="all_16.js"/>
-        <files mask="all_2.js"/>
-        <files mask="all_3.js"/>
-        <files mask="all_4.js"/>
-        <files mask="all_5.js"/>
-        <files mask="all_6.js"/>
-        <files mask="all_7.js"/>
-        <files mask="all_8.js"/>
-        <files mask="all_9.js"/>
-        <files mask="all_a.js"/>
-        <files mask="all_b.js"/>
-        <files mask="all_c.js"/>
-        <files mask="all_d.js"/>
-        <files mask="all_e.js"/>
-        <files mask="all_f.js"/>
-        <files mask="classes_0.js"/>
-        <files mask="classes_1.js"/>
-        <files mask="classes_2.js"/>
-        <files mask="classes_3.js"/>
-        <files mask="classes_4.js"/>
-        <files mask="enums_0.js"/>
-        <files mask="enums_1.js"/>
-        <files mask="enums_2.js"/>
-        <files mask="enums_3.js"/>
-        <files mask="enumvalues_0.js"/>
-        <files mask="enumvalues_1.js"/>
-        <files mask="functions_0.js"/>
-        <files mask="functions_1.js"/>
-        <files mask="functions_2.js"/>
-        <files mask="functions_3.js"/>
-        <files mask="functions_4.js"/>
-        <files mask="groups_0.js"/>
-        <files mask="groups_1.js"/>
-        <files mask="groups_2.js"/>
-        <files mask="groups_3.js"/>
-        <files mask="search.js"/>
-        <files mask="searchdata.js"/>
-        <files mask="typedefs_0.js"/>
-        <files mask="typedefs_1.js"/>
-        <files mask="typedefs_2.js"/>
-        <files mask="typedefs_3.js"/>
-        <files mask="variables_0.js"/>
-        <files mask="variables_1.js"/>
-        <files mask="variables_10.js"/>
-        <files mask="variables_11.js"/>
-        <files mask="variables_12.js"/>
-        <files mask="variables_13.js"/>
-        <files mask="variables_14.js"/>
-        <files mask="variables_15.js"/>
-        <files mask="variables_2.js"/>
-        <files mask="variables_3.js"/>
-        <files mask="variables_4.js"/>
-        <files mask="variables_5.js"/>
-        <files mask="variables_6.js"/>
-        <files mask="variables_7.js"/>
-        <files mask="variables_8.js"/>
-        <files mask="variables_9.js"/>
-        <files mask="variables_a.js"/>
-        <files mask="variables_b.js"/>
-        <files mask="variables_c.js"/>
-        <files mask="variables_d.js"/>
-        <files mask="variables_e.js"/>
-        <files mask="variables_f.js"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Host Stack API Reference Manual/search" type="image">
-        <files mask="close.png"/>
-        <files mask="mag_sel.png"/>
-        <files mask="search_l.png"/>
-        <files mask="search_m.png"/>
-        <files mask="search_r.png"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Host Stack FSCI Reference Manual" type="doc">
-        <files mask="index.html"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Host Stack FSCI Application Programming" type="doc">
-        <files mask="index.html"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Host Stack FSCI Application Programming/KFSCIHAPIUG_files" type="doc">
-        <files mask="GUID-0274BFE1-2BA9-4729-A328-BED1A516E502.html"/>
-        <files mask="GUID-03A89AFE-C261-4BA6-8B70-5F1BF627EAE5.html"/>
-        <files mask="GUID-0510D80F-487A-4BAA-9B21-E01F720D3935.html"/>
-        <files mask="GUID-0E181655-DDC2-4F82-90F0-89B19BCC7739.html"/>
-        <files mask="GUID-1064B1C2-EAE1-4943-AD78-CA937C7BEB6B.html"/>
-        <files mask="GUID-13ADA45E-106F-41F9-A56A-B09B996D592A.html"/>
-        <files mask="GUID-14E717AE-57C5-466C-BA50-B5055BF65BCC.html"/>
-        <files mask="GUID-18F50F0C-67FB-41D4-8D8C-5B2522FD294E.html"/>
-        <files mask="GUID-1E9255AF-23FB-4DE5-A317-FDBE4BF97F6B.html"/>
-        <files mask="GUID-2017C1BF-DB26-434A-B3E7-B3D497E850EC.html"/>
-        <files mask="GUID-2036C925-CAA5-4A1C-8D49-0EFAF242D9F2.html"/>
-        <files mask="GUID-2C6811B8-3D24-4219-A7B7-FF99E1D5F2FC.html"/>
-        <files mask="GUID-2FA6FFA3-DF0D-4418-87A8-929CE1CF50A6.html"/>
-        <files mask="GUID-311FDFE5-CF7F-46BC-8A80-4EF3A080BA90.html"/>
-        <files mask="GUID-35A47A53-F204-4C86-AC59-8E30FF4BB6EC.html"/>
-        <files mask="GUID-361DEC71-8A42-4F9A-95B5-8AB13BD2787B.html"/>
-        <files mask="GUID-3A7289DF-649E-4813-9A78-BC02A9101323.html"/>
-        <files mask="GUID-40B16767-3117-4896-A097-C422AD17566F.html"/>
-        <files mask="GUID-495A800C-7E22-40C3-A80F-46ED1C918E86.html"/>
-        <files mask="GUID-498551A8-E0BC-4293-A0B0-5254238858DC.html"/>
-        <files mask="GUID-4D4F22F2-41B5-4694-88AD-BB28F94E104C.html"/>
-        <files mask="GUID-4EBEC8C4-9634-46BD-939D-4B24A726A6C2.html"/>
-        <files mask="GUID-54D7CC01-C789-4F13-8EDE-7BB61691849E.html"/>
-        <files mask="GUID-57F155C5-08F3-4DA9-803E-4ACF1013796F.html"/>
-        <files mask="GUID-58561D14-5D40-44F6-9B87-A7176830531B.html"/>
-        <files mask="GUID-602470F0-4B95-405F-BD75-11C17B465A16.html"/>
-        <files mask="GUID-63987A0A-9DBD-4AB7-A046-6AE38C019A75.html"/>
-        <files mask="GUID-6F852477-6BB3-4D85-B5D9-3DD470CE8EA7.html"/>
-        <files mask="GUID-76ED9F66-DEDB-4AB9-9FC7-4B354DDE09D1.html"/>
-        <files mask="GUID-77B2FA72-C996-431C-8E1B-1C691AF2F471.html"/>
-        <files mask="GUID-7E7A2EA2-66BC-40F0-BE27-A2ABDAC8B039.html"/>
-        <files mask="GUID-81E79280-D23E-4CED-8FBC-C73BEB58D205.html"/>
-        <files mask="GUID-892CFA21-923F-4D19-8A99-0747C18F7F07.html"/>
-        <files mask="GUID-8A49EDBB-052F-4B51-B88E-874549CD4E1E.html"/>
-        <files mask="GUID-8AD05E12-8447-4212-969D-D21877AB5BA9.html"/>
-        <files mask="GUID-8BCC8673-261D-4956-A4B6-007A0443F89F.html"/>
-        <files mask="GUID-8D6B06FE-212F-43C9-AAE5-316E4E49A65F.html"/>
-        <files mask="GUID-8F82AD3B-3809-4DD1-A114-36E3A9C1C27C.html"/>
-        <files mask="GUID-8F917B45-16D3-43F5-874B-F1CF0148C7F2.html"/>
-        <files mask="GUID-A7B2B4DB-4C44-4F0F-8677-6D9DC0E65D12.html"/>
-        <files mask="GUID-AA958846-27BB-440A-8E3C-AC695CB7D663.html"/>
-        <files mask="GUID-ABEB0839-144B-4254-9E9F-48E47B3BF59A.html"/>
-        <files mask="GUID-AF33C70F-A90D-4029-B67A-7D589F962036.html"/>
-        <files mask="GUID-BEF02339-D353-4522-9B43-63B930BB12F1.html"/>
-        <files mask="GUID-C0371EF9-53CE-4600-8009-3655D4BF4C56.html"/>
-        <files mask="GUID-C2D88B72-43BF-45E7-A3B6-3D06CBDF4B7B.html"/>
-        <files mask="GUID-C3CFCF65-5085-4A79-8E7E-0F048AE29059.html"/>
-        <files mask="GUID-C5DBBB77-376A-4351-95E7-29ED156A7ADE.html"/>
-        <files mask="GUID-C71D6592-CE8A-4B6B-A5FE-FF32C9FE4939.html"/>
-        <files mask="GUID-CA9AB6EE-21E2-4E6D-A7D7-502D5EB66548.html"/>
-        <files mask="GUID-CE002D9A-B163-43D3-B53B-0A9A32F5F83B.html"/>
-        <files mask="GUID-D107C1D7-9078-4B7A-977D-6075866560BA.html"/>
-        <files mask="GUID-D249C01A-0ACC-4A23-95A6-9466398CC530.html"/>
-        <files mask="GUID-D339C6AB-48DA-4C28-989B-D31141259B78.html"/>
-        <files mask="GUID-E12016ED-7E6C-4A91-A3D5-F4490268DE29.html"/>
-        <files mask="GUID-E48AB458-9A0D-4186-BD5E-708F96401B4D.html"/>
-        <files mask="GUID-E945F8A9-00C9-4104-9E01-64A80AD1845A.html"/>
-        <files mask="GUID-E9479D37-DA8F-434D-A454-73253B25E213.html"/>
-        <files mask="GUID-EBC9AC32-0879-4E33-84F6-046C0D83A260.html"/>
-        <files mask="GUID-ECF845E7-3CB5-45E6-AFA7-0064B3DB2AE6.html"/>
-        <files mask="GUID-EE829D2A-25DF-4025-B7E4-E8113A9646E0.html"/>
-        <files mask="GUID-F0F38321-2D17-4CE9-8F75-ED1A4AAFBBCD.html"/>
-        <files mask="GUID-F209AA1D-1D18-43D9-8678-7AD41CDEC1FC.html"/>
-        <files mask="GUID-F4A08E69-92DE-40E9-9153-CEE849440C08.html"/>
-        <files mask="GUID-FC1E6AB4-8511-4018-BB46-6FE946CA0CA2.html"/>
-        <files mask="GUID-FD6C7E83-A989-4040-B627-7E2E593E6C7C.html"/>
-        <files mask="commonltr.css"/>
-        <files mask="commonrtl.css"/>
-        <files mask="header.html"/>
-        <files mask="indexlist.css"/>
-        <files mask="indexpage.html"/>
-        <files mask="search.html"/>
-        <files mask="start.html"/>
-        <files mask="stylesheet.css"/>
-        <files mask="toc.html"/>
-        <files mask="webhelplayout.css"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Host Stack FSCI Application Programming/KFSCIHAPIUG_files" type="image">
-        <files mask="GUID-0C68BFCA-F330-47C3-AE84-7ADFC0913E87-high.png"/>
-        <files mask="GUID-0F9D6585-AD32-45EA-8BCA-1A31EA66946E-high.png"/>
-        <files mask="GUID-1A604794-D4B9-4E0F-8166-49C1292845EB-high.png"/>
-        <files mask="GUID-2FF50D59-C938-42EB-80E1-4BDDA12CAD53-high.png"/>
-        <files mask="GUID-3382465F-E47C-4D21-B9C2-57F45FE0AF9B-high.png"/>
-        <files mask="GUID-53534FD7-364A-4833-8234-93AECA734CAB-high.png"/>
-        <files mask="GUID-58F02A65-BBF4-45E9-B531-8DA689C1E47B-high.png"/>
-        <files mask="book.png"/>
-        <files mask="email.png"/>
-        <files mask="minus.png"/>
-        <files mask="next.png"/>
-        <files mask="plus.png"/>
-        <files mask="previous.png"/>
-        <files mask="print.png"/>
-        <files mask="space.png"/>
-        <files mask="tab_active.png"/>
-        <files mask="topic.png"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Host Stack FSCI Application Programming/KFSCIHAPIUG_files" type="script">
-        <files mask="WebhelpMenu.js"/>
-        <files mask="docnavigation.js"/>
-        <files mask="index.js"/>
-        <files mask="search.js"/>
-        <files mask="searchdata.js"/>
-        <files mask="searchlabels.js"/>
-        <files mask="toc.js"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Host Stack FSCI Application Programming/KFSCIHAPIUG_files" type="other">
-        <files mask="favicon.ico"/>
-      </source>
     </component>
     <component id="docs.Common.RW612" name="Common" brief="Docs common" version="1.0.0" full_name="Docs common" category="docs/Common" user_visible="true" type="documentation" package_base_path="../docs/wireless/Common" project_base_path="wireless/Common">
       <dependencies>
@@ -846,151 +499,6 @@ ${load}</script>
       </source>
       <source relative_path="html/Connectivity Framework Reference Manual/CONNFWKRM_files" type="other">
         <files mask="favicon.ico"/>
-      </source>
-    </component>
-    <component id="docs.GENFSK.RW612" name="GENFSK" brief="Docs genfsk" version="1.0.0" full_name="Docs genfsk" category="docs/GENFSK" user_visible="true" type="documentation" package_base_path="../docs/wireless/GENFSK" project_base_path="wireless/GENFSK">
-      <dependencies>
-        <device_dependency value="RW612"/>
-      </dependencies>
-      <source relative_path="./" type="doc">
-        <files mask="Generic FSK Link Layer API Reference Manual.pdf"/>
-        <files mask="Generic FSK Link Layer Quick Start Guide.pdf"/>
-        <files mask="Generic FSK Localization Software.pdf"/>
-      </source>
-      <source relative_path="html/Generic FSK Link Layer API Reference Manual" type="image">
-        <files mask="NXP_logo.bmp"/>
-        <files mask="arrowdown.png"/>
-        <files mask="arrowright.png"/>
-        <files mask="bc_s.png"/>
-        <files mask="bdwn.png"/>
-        <files mask="closed.png"/>
-        <files mask="doc.png"/>
-        <files mask="doxygen.png"/>
-        <files mask="folderclosed.png"/>
-        <files mask="folderopen.png"/>
-        <files mask="nav_f.png"/>
-        <files mask="nav_g.png"/>
-        <files mask="nav_h.png"/>
-        <files mask="open.png"/>
-        <files mask="splitbar.png"/>
-        <files mask="sync_off.png"/>
-        <files mask="sync_on.png"/>
-        <files mask="tab_a.png"/>
-        <files mask="tab_b.png"/>
-        <files mask="tab_h.png"/>
-        <files mask="tab_s.png"/>
-      </source>
-      <source relative_path="html/Generic FSK Link Layer API Reference Manual" type="doc">
-        <files mask="dir_01bac00001b182f30ba72d61a4762d02.html"/>
-        <files mask="dir_4bc42c1fd4ebed4eeb3854f99603b73a.html"/>
-        <files mask="dir_934f46a345653ef2b3014a1b37a162c1.html"/>
-        <files mask="dir_95f3c0fbc92a8bbf19b5a8765f1b35ab.html"/>
-        <files mask="dir_bad7e93c52cde1c5ed38cc86299f02aa.html"/>
-        <files mask="dir_bdc75601c422cb4149c39c69fd7dfada.html"/>
-        <files mask="dir_dc5494d44fb0e135fa2852894bcf17ae.html"/>
-        <files mask="doxygen.css"/>
-        <files mask="group__genfsk.html"/>
-        <files mask="html_custom.css"/>
-        <files mask="index.html"/>
-        <files mask="modules.html"/>
-        <files mask="navtree.css"/>
-        <files mask="tabs.css"/>
-      </source>
-      <source relative_path="html/Generic FSK Link Layer API Reference Manual" type="script">
-        <files mask="dynsections.js"/>
-        <files mask="group__genfsk.js"/>
-        <files mask="jquery.js"/>
-        <files mask="modules.js"/>
-        <files mask="navtree.js"/>
-        <files mask="navtreedata.js"/>
-        <files mask="navtreeindex0.js"/>
-        <files mask="navtreeindex1.js"/>
-        <files mask="resize.js"/>
-      </source>
-      <source relative_path="html/Generic FSK Link Layer API Reference Manual/search" type="doc">
-        <files mask="all_0.html"/>
-        <files mask="all_1.html"/>
-        <files mask="all_2.html"/>
-        <files mask="all_3.html"/>
-        <files mask="all_4.html"/>
-        <files mask="all_5.html"/>
-        <files mask="all_6.html"/>
-        <files mask="all_7.html"/>
-        <files mask="all_8.html"/>
-        <files mask="all_9.html"/>
-        <files mask="all_a.html"/>
-        <files mask="all_b.html"/>
-        <files mask="all_c.html"/>
-        <files mask="classes_0.html"/>
-        <files mask="enums_0.html"/>
-        <files mask="enumvalues_0.html"/>
-        <files mask="functions_0.html"/>
-        <files mask="groups_0.html"/>
-        <files mask="nomatches.html"/>
-        <files mask="search.css"/>
-        <files mask="typedefs_0.html"/>
-        <files mask="variables_0.html"/>
-        <files mask="variables_1.html"/>
-        <files mask="variables_2.html"/>
-        <files mask="variables_3.html"/>
-        <files mask="variables_4.html"/>
-        <files mask="variables_5.html"/>
-        <files mask="variables_6.html"/>
-        <files mask="variables_7.html"/>
-        <files mask="variables_8.html"/>
-        <files mask="variables_9.html"/>
-        <files mask="variables_a.html"/>
-        <files mask="variables_b.html"/>
-      </source>
-      <source relative_path="html/Generic FSK Link Layer API Reference Manual/search" type="script">
-        <files mask="all_0.js"/>
-        <files mask="all_1.js"/>
-        <files mask="all_2.js"/>
-        <files mask="all_3.js"/>
-        <files mask="all_4.js"/>
-        <files mask="all_5.js"/>
-        <files mask="all_6.js"/>
-        <files mask="all_7.js"/>
-        <files mask="all_8.js"/>
-        <files mask="all_9.js"/>
-        <files mask="all_a.js"/>
-        <files mask="all_b.js"/>
-        <files mask="all_c.js"/>
-        <files mask="classes_0.js"/>
-        <files mask="enums_0.js"/>
-        <files mask="enumvalues_0.js"/>
-        <files mask="functions_0.js"/>
-        <files mask="groups_0.js"/>
-        <files mask="search.js"/>
-        <files mask="searchdata.js"/>
-        <files mask="typedefs_0.js"/>
-        <files mask="variables_0.js"/>
-        <files mask="variables_1.js"/>
-        <files mask="variables_2.js"/>
-        <files mask="variables_3.js"/>
-        <files mask="variables_4.js"/>
-        <files mask="variables_5.js"/>
-        <files mask="variables_6.js"/>
-        <files mask="variables_7.js"/>
-        <files mask="variables_8.js"/>
-        <files mask="variables_9.js"/>
-        <files mask="variables_a.js"/>
-        <files mask="variables_b.js"/>
-      </source>
-      <source relative_path="html/Generic FSK Link Layer API Reference Manual/search" type="image">
-        <files mask="close.png"/>
-        <files mask="mag_sel.png"/>
-        <files mask="search_l.png"/>
-        <files mask="search_m.png"/>
-        <files mask="search_r.png"/>
-      </source>
-    </component>
-    <component id="docs.reference_design.RW612" name="reference_design" brief="Docs reference_design" version="1.0.0" full_name="Docs reference_design" category="docs/reference_design" user_visible="true" type="documentation" package_base_path="../docs/wireless/reference_design" project_base_path="wireless/reference_design">
-      <dependencies>
-        <device_dependency value="RW612"/>
-      </dependencies>
-      <source relative_path="./" type="doc">
-        <files mask="Low Power Connectivity Design User's Guide.pdf"/>
       </source>
     </component>
     <component id="device.RW612_startup_wireless.RW612" name="Wireless start up code" brief="Wireless start up code" version="1.0.0" full_name="Wireless exmple start up" category="Device/Startup" user_visible="false" type="middleware" package_base_path="../devices/RW612" project_base_path="startup">
@@ -3239,6 +2747,124 @@ ${load}</script>
         <include_path relative_path="include" type="c_include"/>
       </include_paths>
     </component>
+    <component id="component.psa_crypto_driver.osal.RW612" name="psa_crypto_driver osal" brief="OS Abstraction Layer for PSA crypto driver" version="1.0.0" full_name="PSA crypto driver osal layer" category="psa_crypto_driver/psa_crypto_driver_osal" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="osal" type="c_include">
+        <files mask="osal_mutex.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_osal.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="osal" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.oracle.RW612" name="psa_crypto_driver els_pkc_oracle" brief="Oracle of PSA crypto driver for els_pkc" version="1.0.0" full_name="Oracle of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="els_pkc/oracle/inc" type="c_include">
+        <files mask="mcuxClPsaDriver_Oracle_Interface_builtin_key_ids.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Interface_key_locations.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Macros.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Utils.h"/>
+      </source>
+      <source relative_path="els_pkc/oracle/src" type="src">
+        <files mask="mcuxClPsaDriver_Oracle.c"/>
+        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.c"/>
+        <files mask="mcuxClPsaDriver_Oracle_Utils.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_oracle.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/oracle/inc" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.common.RW612" name="psa_crypto_driver els_pkc_common" brief="Common files of PSA crypto driver for els_pkc" version="1.0.0" full_name="Common files of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_common" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="els_pkc/include/common" type="c_include">
+        <files mask="mcux_psa_els_pkc_common_init.h"/>
+        <files mask="mcux_psa_els_pkc_entropy.h"/>
+      </source>
+      <source relative_path="els_pkc/src/common" type="src">
+        <files mask="mcux_psa_els_pkc_common_init.c"/>
+        <files mask="mcux_psa_els_pkc_entropy.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_common.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/include/common" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.transparent.RW612" name="psa_crypto_driver els_pkc_transparent" brief="Transparent part of PSA crypto driver for els_pkc" version="1.0.0" full_name="Transparent part of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypt_dri_els_pkc_trans" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="els_pkc/include/transparent" type="c_include">
+        <files mask="mcux_psa_els_pkc_aead.h"/>
+        <files mask="mcux_psa_els_pkc_asymmetric_signature.h"/>
+        <files mask="mcux_psa_els_pkc_cipher.h"/>
+        <files mask="mcux_psa_els_pkc_hash.h"/>
+        <files mask="mcux_psa_els_pkc_init.h"/>
+        <files mask="mcux_psa_els_pkc_key_generation.h"/>
+        <files mask="mcux_psa_els_pkc_mac.h"/>
+      </source>
+      <source relative_path="els_pkc/src/transparent" type="src">
+        <files mask="mcux_psa_els_pkc_aead.c"/>
+        <files mask="mcux_psa_els_pkc_asymmetric_signature.c"/>
+        <files mask="mcux_psa_els_pkc_cipher.c"/>
+        <files mask="mcux_psa_els_pkc_hash.c"/>
+        <files mask="mcux_psa_els_pkc_init.c"/>
+        <files mask="mcux_psa_els_pkc_key_generation.c"/>
+        <files mask="mcux_psa_els_pkc_mac.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_transparent.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/include/transparent" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.opaque.RW612" name="psa_crypto_driver els_pkc_opaque" brief="Opaque part of PSA crypto driver for els_pkc" version="1.0.0" full_name="Opaque part of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_dri_els_pkc_opaque" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="els_pkc/include/opaque" type="c_include">
+        <files mask="mcux_psa_els_pkc_opaque_aead.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_asymmetric_signature.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_cipher.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_init.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_key_generation.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_mac.h"/>
+      </source>
+      <source relative_path="els_pkc/src/opaque" type="src">
+        <files mask="mcux_psa_els_pkc_opaque_aead.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_asymmetric_signature.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_cipher.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_init.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_key_generation.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_mac.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_opaque.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/include/opaque" type="c_include"/>
+      </include_paths>
+    </component>
+    <!--<component id="container.component.psa_crypto_driver.unused_files.RW612" name="unused_files" version="1.0.0" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+  <source exclude="true" relative_path="./" type="doc">
+    <files mask="CMakeLists.txt" hidden="true"/>
+    <files mask="CMakeLists.txt" hidden="true"/>
+  </source>
+</component>-->
     <component id="component.els_pkc.core.RW612" name="els_pkc.core" brief="Component els_pkc.core" version="1.9.0" full_name="Component els_pkc.core" category="els_pkc/els_pkc_core" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
       <dependencies>
         <device_dependency value="RW612"/>
@@ -3514,6 +3140,7 @@ ${load}</script>
         <device_dependency value="RW612"/>
       </dependencies>
       <source relative_path="./" type="doc">
+        <files mask="MCUXSDKEFBP_Abstraction Layer User Guide.pdf"/>
         <files mask="Hardware Rework Guide for EdgeFast BT PAL.pdf"/>
         <files mask="EFBTPALAPIRM.pdf"/>
       </source>
@@ -4991,6 +4618,17 @@ ${load}</script>
         <files mask="UM11797-NXP-Wi-Fi-and-Bluetooth-Debug-Feature-Configuration-for-RW61x-Evaluation-Board.pdf"/>
         <files mask="UM11798-Getting-Started-with-Wireless-on-RW61x-Evaluation-Board-Running-RTOS.pdf"/>
         <files mask="UM11799-NXP-Wi-Fi-and-Bluetooth-Demo-Applications-for-RW61x.pdf"/>
+        <files mask="UM11861-NXP-802.15.4-demo-applications-for-RW612.pdf"/>
+      </source>
+      <source relative_path="Release Notes" type="doc">
+        <files mask="RW61x-Wi-Fi-and-Bluetooth-802.15.4-Release-Notes-for-FreeRTOS.pdf"/>
+        <files mask="RW61x-Wi-Fi-and-Bluetooth-802.15.4-Software-Features-for-FreeRTOS.pdf"/>
+      </source>
+      <source relative_path="Wi-Fi" type="doc">
+        <files mask="AN13680-Tx-Power-Table-and-Channel-Scan-Management-for-RW61x.pdf"/>
+        <files mask="AN13681-Wi-Fi-Alliance-Derivative-Certification-Process-for-RW61x.pdf"/>
+        <files mask="RM00282-Wi-Fi-Driver-API-Reference-Manual-for-RW61x.pdf"/>
+        <files mask="UM11822-Wi-Fi-Alliance-Certification-Guide-for-RW61x-Running-RTOS.pdf"/>
       </source>
     </component>
     <component id="docs.FreeRTOS.RW612" name="FreeRTOS documentation" brief="FreeRTOS documentation" version="1.0.0" full_name="FreeRTOS documentation" category="docs/FreeRTOS" user_visible="true" type="documentation" package_base_path="../docs/FreeRTOS" project_base_path="FreeRTOS">
@@ -5427,6 +5065,46 @@ ${load}</script>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.osal.frtos.RW612" name="psa_crypto_driver osal_frtos" brief="OS Abstraction Layer for PSA crypto driver on FreeRTOS" version="1.0.0" full_name="PSA crypto driver osal layer for FreeRTOS" category="psa_crypto_driver/psa_crypto_driver_osal_frtos" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <all>
+          <component_dependency value="component.psa_crypto_driver.osal.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="osal/frtos" type="src">
+        <files mask="osal_mutex.c"/>
+      </source>
+      <source relative_path="osal/frtos" type="c_include">
+        <files mask="osal_mutex_platform.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_osal_frtos.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="osal/frtos" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.osal.baremetal.RW612" name="psa_crypto_driver osal_baremetal" brief="OS Abstraction Layer for PSA crypto driver on bare metal" version="1.0.0" full_name="PSA crypto driver osal layer for bare metal implementations" category="psa_crypto_driver/psa_crypto_driver_osal_baremetal" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <all>
+          <component_dependency value="component.psa_crypto_driver.osal.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="osal/baremetal" type="src">
+        <files mask="osal_mutex.c"/>
+      </source>
+      <source relative_path="osal/baremetal" type="c_include">
+        <files mask="osal_mutex_platform.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_osal_baremetal.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="osal/baremetal" type="c_include"/>
       </include_paths>
     </component>
     <component id="component.els_pkc.doc.rw61x.RW612" name="els_pkc.doc.rw61x" brief="Component els_pkc.doc.rw61x" version="1.9.0" full_name="Component els_pkc.doc.rw61x" category="els_pkc/doc" user_visible="true" type="software_component" package_base_path="../components/els_pkc/" project_base_path="component/els_pkc/">
@@ -7790,6 +7468,27 @@ ${load}</script>
         <include_path relative_path="src/comps/mcuxCsslMemory/inc/internal" type="c_include"/>
       </include_paths>
     </component>
+    <component id="component.els_pkc.oscca.RW612" name="els_pkc.oscca" brief="Component els_pkc.oscca" version="1.9.0" full_name="Component els_pkc.oscca" category="els_pkc/els_pkc_oscca" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+      <dependencies>
+        <all>
+          <component_dependency value="component.els_pkc.oscca_aeadmodes.RW612"/>
+          <component_dependency value="component.els_pkc.oscca_ciphermodes.RW612"/>
+          <component_dependency value="component.els_pkc.oscca_macmodes.RW612"/>
+          <component_dependency value="component.els_pkc.oscca_randommodes.RW612"/>
+          <component_dependency value="component.els_pkc.oscca_sm2.RW612"/>
+          <component_dependency value="component.els_pkc.oscca_sm3.RW612"/>
+          <component_dependency value="component.els_pkc.oscca_sm4.RW612"/>
+          <component_dependency value="component.els_pkc.oscca_pkc.RW612"/>
+          <component_dependency value="component.els_pkc.oscca_safo.RW612"/>
+          <component_dependency value="component.els_pkc.signature.RW612"/>
+          <component_dependency value="component.els_pkc.crc.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_els_pkc_oscca.cmake" hidden="true"/>
+      </source>
+    </component>
     <component id="component.els_pkc.oscca_aeadmodes.RW612" name="els_pkc.oscca_aeadmodes" brief="Component els_pkc.oscca_aeadmodes" version="1.9.0" full_name="Component els_pkc.oscca_aeadmodes" category="els_pkc/els_pkc_oscca_aeadmodes" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
       <dependencies>
         <all>
@@ -7986,6 +7685,7 @@ ${load}</script>
       <dependencies>
         <all>
           <component_dependency value="component.els_pkc.common.RW612"/>
+          <component_dependency value="component.els_pkc.signature.RW612"/>
           <device_dependency value="RW612"/>
         </all>
       </dependencies>
@@ -8380,7 +8080,7 @@ ${load}</script>
     <component id="component.els_pkc.rsa_oaep.RW612" name="els_pkc.rsa_oaep" brief="Component els_pkc.rsa_oaep" version="1.9.0" full_name="Component els_pkc.rsa_oaep" category="els_pkc/els_pkc_rsa_oaep" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
       <dependencies>
         <all>
-          <component_dependency value="component.els_pkc.rsa_oaep.RW612"/>
+          <component_dependency value="component.els_pkc.rsa.RW612"/>
           <device_dependency value="RW612"/>
         </all>
       </dependencies>
@@ -9276,12 +8976,36 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="component.messaging.RW612" name="messaging" brief="Component messaging" version="1.0.0" full_name="Component messaging" category="Device/SDK Drivers" user_visible="true" type="other" package_base_path="../components/messaging" project_base_path="component/messaging">
+    <component id="component.mem_manager_freertos.RW612" name="mem_manager_freertos" brief="Component mem_manager_freertos" version="1.0.0" full_name="Component mem_manager_freertos" category="Device/SDK Drivers" user_visible="true" type="software_component" package_base_path="../components/mem_manager" project_base_path="component/mem_manager">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
+          <component_dependency value="middleware.freertos-kernel.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_component_mem_manager.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_component_mem_manager_freertos.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_mem_manager_freertos.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.messaging.RW612" name="messaging" brief="Component messaging" version="1.0.0" full_name="Component messaging" category="Device/SDK Drivers" user_visible="true" type="other" package_base_path="../components/messaging" project_base_path="component/messaging">
+      <dependencies>
+        <all>
+          <any_of>
+            <component_dependency value="component.mem_manager_light.RW612"/>
+            <component_dependency value="component.mem_manager_freertos.RW612"/>
+          </any_of>
+          <component_dependency value="platform.drivers.common.RW612"/>
           <component_dependency value="component.lists.RW612"/>
-          <component_dependency value="component.mem_manager_light.RW612"/>
           <device_dependency value="RW612"/>
         </all>
       </dependencies>
@@ -10186,7 +9910,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.cns_adc.RW612" name="adc" brief="ADC Driver" version="2.1.0" full_name="CNS_ADC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/cns_adc" project_base_path="drivers">
+    <component id="platform.drivers.cns_adc.RW612" name="adc" brief="ADC Driver" version="2.2.0" full_name="CNS_ADC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/cns_adc" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
@@ -10206,7 +9930,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.cns_dac.RW612" name="dac" brief="DAC Driver" version="2.0.1" full_name="CNS_DAC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/cns_dac" project_base_path="drivers">
+    <component id="platform.drivers.cns_dac.RW612" name="dac" brief="DAC Driver" version="2.1.0" full_name="CNS_DAC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/cns_dac" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
