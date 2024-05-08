@@ -128,7 +128,9 @@ static bool dir_path_match(mflash_dir_record_t *dr, char *path)
 
     /* Check whether the whole given path string was processed */
     if (*path != '\0')
+    {
         return false;
+    }
 
     return true;
 }
@@ -313,7 +315,7 @@ static status_t mflash_dir_lookup(mflash_fs_t *fs, char *path, mflash_dir_record
     uint32_t file_count     = fs->header.file_count;
     mflash_dir_record_t *dr = fs->records;
 
-    for (int i = 0; i < file_count; i++)
+    for (uint32_t i = 0; i < file_count; i++)
     {
         if (dir_path_match(dr, path))
         {
@@ -368,7 +370,7 @@ static status_t mflash_format_internal(mflash_fs_t *fs,
     total_sectors += dir_sectors;
 
     /* Check whether the filestytem fits into the given FLASH area */
-    if ((0 != fs_size_limit) && (fs_size_limit < total_sectors * MFLASH_SECTOR_SIZE))
+    if ((0U != fs_size_limit) && (fs_size_limit < total_sectors * MFLASH_SECTOR_SIZE))
     {
         return kStatus_OutOfRange;
     }
@@ -474,7 +476,7 @@ static status_t mflash_template_match(mflash_fs_t *fs, const mflash_file_t *dir_
 {
     status_t status;
 
-    for (const mflash_file_t *dt = dir_template; (NULL != dt->path) && ('\0' != dt->path[0]) && (0 != dt->max_size);
+    for (const mflash_file_t *dt = dir_template; (NULL != dt->path) && ('\0' != dt->path[0]) && (0U != dt->max_size);
          dt++)
     {
         mflash_dir_record_t dr;
@@ -639,7 +641,7 @@ status_t mflash_file_save(char *path, uint8_t *data, uint32_t size)
         return kStatus_InvalidArgument;
     }
 
-    if (data == NULL && size != 0)
+    if ((data == NULL) && (size != 0U))
     {
         return kStatus_InvalidArgument;
     }

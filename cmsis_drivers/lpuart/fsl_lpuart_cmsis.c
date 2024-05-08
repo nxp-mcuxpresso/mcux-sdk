@@ -202,9 +202,16 @@
      (defined(RTE_USART3) && RTE_USART3 && defined(LPUART3)) || \
      (defined(RTE_USART4) && RTE_USART4 && defined(LPUART4)) || \
      (defined(RTE_USART5) && RTE_USART5 && defined(LPUART5)) || \
-     (defined(RTE_USART6) && RTE_USART6 && defined(LPUART6)))
+     (defined(RTE_USART6) && RTE_USART6 && defined(LPUART6)) || \
+     (defined(RTE_USART7) && RTE_USART7 && defined(LPUART7)) || \
+     (defined(RTE_USART8) && RTE_USART8 && defined(LPUART8)) || \
+     (defined(RTE_USART9) && RTE_USART9 && defined(LPUART9)) || \
+     (defined(RTE_USART10) && RTE_USART10 && defined(LPUART10))|| \
+     (defined(RTE_USART11) && RTE_USART11 && defined(LPUART11))|| \
+     (defined(RTE_USART12) && RTE_USART12 && defined(LPUART12)))
 
-#define ARM_LPUART_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (5))
+
+#define ARM_LPUART_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (6))
 
 /*
  * ARMCC does not support split the data section automatically, so the driver

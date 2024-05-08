@@ -17,7 +17,7 @@
 /* for armclang */
 #if defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
     #define CSS_IDATA_SEGMENT __attribute__((section("CSS_IDATA_SEGMENT")))
-    #define CSS_CONST_SEGMENT __attribute__((section("CSS_CONST_SEGMENT")))
+    #define CSS_CONST_SEGMENT __attribute__((section("CSS_CONST_SEGMENT_SECTION")))
     #define MCUX_FUP_ATTRIBUTE __attribute__((aligned(4))) __attribute__((section("MCUX_OBFUSCATED_FUP_SEGMENT")))
     #define UNUSED_PARAM __attribute__((unused))
     /*  

@@ -53,10 +53,16 @@ static inline uint64_t TSTMR_ReadTimeStamp(TSTMR_Type *base)
 {
     uint32_t reg_l;
     uint32_t reg_h;
-    
+    uint32_t regPrimask = DisableGlobalIRQ();
+    /* A complete read operation should include both TSTMR LOW and HIGH reads. If a HIGH read does not follow a LOW
+     * read, then any other Time Stamp value read will be locked at a fixed value. The TSTMR LOW read should occur
+     * first, followed by the TSTMR HIGH read.
+     * */
     reg_l = base->L;
     __DMB();
     reg_h = base->H;
+
+    EnableGlobalIRQ(regPrimask);
 
     return (uint64_t)reg_l | (((uint64_t)reg_h) << 32U);
 }

@@ -15,7 +15,7 @@ static bool mcuxClPsaDriver_Oracle_ElsUtils_IsActiveKeyslot(mcuxClEls_KeyIndex_t
 {
     mcuxClEls_KeyProp_t key_properties;
     key_properties.word.value = ((const volatile uint32_t *)(&ELS->ELS_KS0))[keyIdx];
-    return key_properties.bits.kactv;
+    return (bool) key_properties.bits.kactv;
 }
 
 psa_status_t mcuxClPsaDriver_Oracle_ElsUtils_GetKeyProperties(mcuxClEls_KeyIndex_t keyIdx,
@@ -32,11 +32,11 @@ psa_status_t mcuxClPsaDriver_Oracle_ElsUtils_GetKeyProperties(mcuxClEls_KeyIndex
     return PSA_SUCCESS;
 }
 
-bool mcuxClPsaDriver_Oracle_ElsUtils_IsFreeKeySlot(mcuxClEls_KeyIndex_t key_slot, uint32_t requiredKeyslots)
+bool mcuxClPsaDriver_Oracle_ElsUtils_IsFreeKeySlot(mcuxClEls_KeyIndex_t keyIdx, uint32_t requiredKeyslots)
 {
     for (uint32_t i = 0; i < requiredKeyslots; i++)
     {
-        if (mcuxClPsaDriver_Oracle_ElsUtils_IsActiveKeyslot(key_slot + i))
+        if (mcuxClPsaDriver_Oracle_ElsUtils_IsActiveKeyslot(keyIdx + i))
         {
             return false;
         }

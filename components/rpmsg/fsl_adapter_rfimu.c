@@ -62,7 +62,7 @@
 /*******************************************************************************
  * Declaration
  ******************************************************************************/
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
 const uint8_t gUseRtos_c = 1;
 #endif
 
@@ -100,7 +100,7 @@ static uint8_t imu_task_flag = 0;
 /*! wait imu task lock
  */
 #if (defined(USE_RTOS) && (USE_RTOS > 0U))
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
 struct k_mutex imu_task_lock;
 #else
 static OSA_MUTEX_HANDLE_DEFINE(imu_task_lock);
@@ -134,7 +134,7 @@ __attribute__((section(".smu_cpu32_txq"))) static volatile uint8_t __attribute__
 rpmsgTxBuf23[RPMSG_TXQ23_BUFSIZE][RPMSG_TXQ23_BUFLENGTH];
 
 /* seperate CPU2 to CPU3 and CPU1 to CPU3 IMU RX tasks */
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
 static void HAL_ImuMainCpu13(void *argv1, void *argv2, void *argv3);
 static void HAL_ImuMainCpu23(void *argv1, void *argv2, void *argv3);
 
@@ -159,14 +159,14 @@ static OSA_TASK_DEFINE(HAL_ImuMainCpu13, IMU_TASK_PRIORITY, 1, IMU_TASK_STACK_SI
 static OSA_TASK_DEFINE(HAL_ImuMainCpu23, IMU_TASK_PRIORITY, 1, IMU_TASK_STACK_SIZE, 0);
 OSA_EVENT_HANDLE_DEFINE(ImuQ13FlagsRef);
 OSA_EVENT_HANDLE_DEFINE(ImuQ23FlagsRef);
-#endif /* CONFIG_ZEPHYR */
+#endif /* __ZEPHYR__ */
 #endif
 
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
 struct k_event rpmsgQFlagsRef;
 #else
 OSA_EVENT_HANDLE_DEFINE(rpmsgQFlagsRef);
-#endif /* CONFIG_ZEPHYR */
+#endif /* __ZEPHYR__ */
 
 #if defined(IMU_GDMA_ENABLE) && (IMU_GDMA_ENABLE == 1)
 static gdma_handle_t gdmaHandle;
@@ -1161,7 +1161,7 @@ static hal_rpmsg_status_t HAL_ImuCtrlHandler(hal_imu_handle_t *imuHandle, IMU_Ms
                 /* Confirm the local endpoint is ready too */
                 rpmsgStatus = HAL_ImuSendRpmsgEptQuiryRsp(imuHandle, pImuMsg->PayloadPtr[0], TRUE);
                 /* Make sure to unblock the task calling HAL_RpmsgInit */
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
                 k_event_set(&rpmsgQFlagsRef, RPMSG_EVENT_ENDPOINT_QUERY_RSP << imuHandle->imuLink);
 #else
                 (void)OSA_EventSet((osa_event_handle_t)rpmsgQFlagsRef,
@@ -1198,7 +1198,7 @@ static hal_rpmsg_status_t HAL_ImuCtrlHandler(hal_imu_handle_t *imuHandle, IMU_Ms
             if (eptQuiryRspAck != 0U)
             {
                 /* Make sure to unblock the task calling HAL_RpmsgInit */
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
                 k_event_set(&rpmsgQFlagsRef, RPMSG_EVENT_ENDPOINT_QUERY_RSP << imuHandle->imuLink);
 #else
                 (void)OSA_EventSet((osa_event_handle_t)rpmsgQFlagsRef,
@@ -1389,7 +1389,7 @@ static void HAL_ImuMain(void *argv)
 #else
 
 static void HAL_ImuMainCpu13(void *argv
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
                              ,
                              void *argv2,
                              void *argv3
@@ -1404,7 +1404,7 @@ static void HAL_ImuMainCpu13(void *argv
         (void)HAL_ImuPutTaskLock();
 #endif
 
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
         Events = k_event_wait(&ImuQ13FlagsRef, IMU_EVENT_TRIGGERS, 0, K_FOREVER);
         k_event_clear(&ImuQ13FlagsRef, (1U << kIMU_LinkCpu1Cpu3));
 #else
@@ -1438,7 +1438,7 @@ static void HAL_ImuMainCpu13(void *argv
 }
 
 static void HAL_ImuMainCpu23(void *argv
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
                              ,
                              void *argv2,
                              void *argv3
@@ -1453,7 +1453,7 @@ static void HAL_ImuMainCpu23(void *argv
         HAL_ImuPutTaskLock();
 #endif
 
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
         Events = k_event_wait(&ImuQ23FlagsRef, IMU_EVENT_TRIGGERS, 0, K_FOREVER);
         k_event_clear(&ImuQ23FlagsRef, (1U << kIMU_LinkCpu2Cpu3));
 #else
@@ -1502,7 +1502,7 @@ static void HAL_ImuTaskInit(uint8_t link)
 #else
     if (link == kIMU_LinkCpu1Cpu3 && (imu_task_flag & (1U << link)) == 0)
     {
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
         ImuTaskCpu13 = k_thread_create(&ImuTaskHandleCpu13, ImuTaskStackCpu13, K_THREAD_STACK_SIZEOF(ImuTaskStackCpu13),
                                        HAL_ImuMainCpu13, NULL, NULL, NULL, IMU_TASK_PRIORITY, 0, K_NO_WAIT);
         k_thread_name_set(ImuTaskCpu13, "HAL_ImuMainCpu13");
@@ -1514,7 +1514,7 @@ static void HAL_ImuTaskInit(uint8_t link)
     }
     else if (link == kIMU_LinkCpu2Cpu3 && (imu_task_flag & (1U << link)) == 0)
     {
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
         ImuTaskCpu23 = k_thread_create(&ImuTaskHandleCpu23, ImuTaskStackCpu23, K_THREAD_STACK_SIZEOF(ImuTaskStackCpu23),
                                        HAL_ImuMainCpu23, NULL, NULL, NULL, IMU_TASK_PRIORITY, 0, K_NO_WAIT);
         k_thread_name_set(ImuTaskCpu23, "HAL_ImuMainCpu23");
@@ -1545,7 +1545,7 @@ static void HAL_ImuTaskDeinit(uint8_t link)
 #else
     if (link == kIMU_LinkCpu1Cpu3 && (imu_task_flag & (1U << link)) != 0)
     {
-#ifndef CONFIG_ZEPHYR
+#ifndef __ZEPHYR__
         (void)OSA_EventDestroy((osa_event_handle_t)ImuQ13FlagsRef);
         (void)OSA_TaskDestroy(ImuTaskHandleCpu13);
 #endif
@@ -1553,7 +1553,7 @@ static void HAL_ImuTaskDeinit(uint8_t link)
     }
     else if (link == kIMU_LinkCpu2Cpu3 && (imu_task_flag & (1U << link)) != 0)
     {
-#ifndef CONFIG_ZEPHYR
+#ifndef __ZEPHYR__
         (void)OSA_EventDestroy((osa_event_handle_t)ImuQ23FlagsRef);
         (void)OSA_TaskDestroy(ImuTaskHandleCpu23);
 #endif
@@ -1721,7 +1721,7 @@ hal_rpmsg_status_t HAL_RpmsgInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *
 
     if (rpmsg_init_flag == 0U)
     {
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
         k_event_init(&rpmsgQFlagsRef);
 #else
         (void)OSA_EventCreate((osa_event_handle_t)rpmsgQFlagsRef, 1U);
@@ -1772,7 +1772,7 @@ hal_rpmsg_status_t HAL_RpmsgInit(hal_rpmsg_handle_t handle, hal_rpmsg_config_t *
         OSA_EXIT_CRITICAL();
 
 #if defined(USE_RTOS) && (USE_RTOS == 1U)
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
         Events = k_event_wait(&rpmsgQFlagsRef, RPMSG_EVENT_ENDPOINT_QUERY_RSP << imuHandle->imuLink, 0, K_FOREVER);
         k_event_clear(&rpmsgQFlagsRef, RPMSG_EVENT_ENDPOINT_QUERY_RSP << imuHandle->imuLink);
 #else
@@ -1972,7 +1972,7 @@ void HAL_RpmsgSetEvent(uint32_t Event)
 #else
     if ((Event & (1U << kIMU_LinkCpu1Cpu3)) != 0U)
     {
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
         k_event_post(&ImuQ13FlagsRef, Event);
 #else
         (void)OSA_EventSet((osa_event_handle_t)ImuQ13FlagsRef, Event);
@@ -1980,7 +1980,7 @@ void HAL_RpmsgSetEvent(uint32_t Event)
     }
     else
     {
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
         k_event_post(&ImuQ23FlagsRef, Event);
 #else
         (void)OSA_EventSet((osa_event_handle_t)ImuQ23FlagsRef, Event);
@@ -2143,7 +2143,7 @@ bool HAL_ImuIsTxBufQueueEmpty(uint8_t imuLink)
 #if (defined(USE_RTOS) && (USE_RTOS > 0U))
 hal_rpmsg_status_t HAL_ImuCreateTaskLock(void)
 {
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
     k_mutex_init(&imu_task_lock);
 #else
     osa_status_t status;
@@ -2162,7 +2162,7 @@ hal_rpmsg_status_t HAL_ImuCreateTaskLock(void)
 
 void HAL_ImuDeleteTaskLock(void)
 {
-#ifndef CONFIG_ZEPHYR
+#ifndef __ZEPHYR__
     if ((*(uint32_t *)(osa_mutex_handle_t)imu_task_lock) != 0)
     {
         (void)OSA_MutexDestroy((osa_mutex_handle_t)imu_task_lock);
@@ -2173,7 +2173,7 @@ void HAL_ImuDeleteTaskLock(void)
 
 hal_rpmsg_status_t HAL_ImuGetTaskLock(void)
 {
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
     int ret = k_mutex_lock(&imu_task_lock, K_FOREVER);
 
     return (ret == 0) ? kStatus_HAL_RpmsgSuccess : kStatus_HAL_RpmsgError;
@@ -2192,7 +2192,7 @@ hal_rpmsg_status_t HAL_ImuGetTaskLock(void)
 
 hal_rpmsg_status_t HAL_ImuPutTaskLock(void)
 {
-#ifdef CONFIG_ZEPHYR
+#ifdef __ZEPHYR__
     int ret = k_mutex_unlock(&imu_task_lock);
 
     return (ret == 0) ? kStatus_HAL_RpmsgSuccess : kStatus_HAL_RpmsgError;

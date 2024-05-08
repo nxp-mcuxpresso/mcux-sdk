@@ -67,12 +67,6 @@ MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DEFINED_MORE_THAN_ONCE()
     const uint32_t pkcByteLenN = MCUXCLPKC_PS1_UNPACK_OPLEN(backupPs1LenReg);
     const uint32_t pkcByteLenX = MCUXCLPKC_PS1_UNPACK_MCLEN(backupPs1LenReg);
 
-    /* ASSERT: operand T0 (length = pkcByteLenN + MCUXCLPKC_WORDSIZE) fits in PKC workarea. */
-    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(pkcByteLenN, MCUXCLPKC_WORDSIZE, MCUXCLPKC_RAM_SIZE - MCUXCLPKC_WORDSIZE, /* void */)
-    /* ASSERT: pkcByteLenX (PS1 MCLEN) >= pkcByteLenN (PS1 OPLEN), and                    */
-    /*         operand X (length = pkcByteLenX + MCUXCLPKC_WORDSIZE) fits in PKC workarea. */
-    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(pkcByteLenX, pkcByteLenN, MCUXCLPKC_RAM_SIZE - MCUXCLPKC_WORDSIZE, /* void */)
-
     /* Prepare local UPTRT. */
     MCUX_CSSL_ANALYSIS_START_SUPPRESS_REINTERPRET_MEMORY("Create 16-bit UPTR table at CPU word (32-bit) aligned address.")
     uint32_t pOperands32[(REDUCEMODEVEN_UPTRT_SIZE + 1u) / 2u];
@@ -82,8 +76,6 @@ MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DEFINED_MORE_THAN_ONCE()
     MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_REINTERPRET_MEMORY()
 
     const uint16_t offsetT0 = pOperands[REDUCEMODEVEN_T0];
-    /* ASSERT: operand T0 (length = lenN + MCUXCLPKC_WORDSIZE) is within PKC workarea. */
-    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(offsetT0, MCUXCLPKC_RAM_OFFSET_MIN, MCUXCLPKC_RAM_OFFSET_MAX - (2u*MCUXCLPKC_WORDSIZE), /* void */)
 
     pOperands[REDUCEMODEVEN_T0H] = (uint16_t) (offsetT0 + MCUXCLPKC_WORDSIZE);
 
@@ -94,8 +86,6 @@ MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DEFINED_MORE_THAN_ONCE()
 
     MCUXCLPKC_WAITFORFINISH();  /* Avoid any ongoing computation of N. */
     MCUX_CSSL_FP_FUNCTION_CALL(numTrailZeroBits, mcuxClMath_TrailingZeros(REDUCEMODEVEN_N));
-    /* ASSERT: number of trailing zeros of nonzero even N is in the range [1, bitLength-1]. */
-    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(numTrailZeroBits, 1u, (8u * pkcByteLenN) - 1u, /* void */)
 
 
     /****************************************************************/
@@ -140,7 +130,6 @@ MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DEFINED_MORE_THAN_ONCE()
     /* Length of trailing zero pkcWord(s) of nonzero N, shall be < length of N. */
     /* **Caution** This length might be 0 if the trailing zeros are less than a PKC word. */
     const uint32_t pkcByteLenTZWords = numTrailZeroBits / (MCUXCLPKC_WORDSIZE * 8u) * MCUXCLPKC_WORDSIZE;
-    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(pkcByteLenTZWords, 0u, pkcByteLenN - MCUXCLPKC_WORDSIZE, /* void */)
 
     /* pkcLenN' */
     const uint32_t pkcByteLenNPrime = pkcByteLenN - pkcByteLenTZWords;
@@ -199,13 +188,8 @@ MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DEFINED_MORE_THAN_ONCE()
     /*                       = (pkcByteLenTZWords + pkcWordSize), otherwise    **Caution**   */
     /*                       <= pkcByteLenN.                                                 */
     const uint32_t pkcByteLenXL = (numTrailZeroBits + (MCUXCLPKC_WORDSIZE * 8u) - 1u) / (MCUXCLPKC_WORDSIZE * 8u) * MCUXCLPKC_WORDSIZE;
-    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(pkcByteLenXL, MCUXCLPKC_WORDSIZE, pkcByteLenN, /* void */)
 
     const uint32_t offsetR_offsetX = pOperands32[REDUCEMODEVEN_X / 2u];
-    /* ASSERT: operands R (length = lenN + MCUXCLPKC_WORDSIZE) and X (length = lenX + MCUXCLPKC_WORDSIZE) are within PKC workarea. */
-    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(offsetR_offsetX, ((uint32_t) MCUXCLPKC_RAM_OFFSET_MIN << 16u) + MCUXCLPKC_RAM_OFFSET_MIN,
-        (((uint32_t) MCUXCLPKC_RAM_OFFSET_MAX - ((uint32_t) MCUXCLPKC_WORDSIZE * 2u)) << 16u)
-        + (uint32_t) MCUXCLPKC_RAM_OFFSET_MAX - ((uint32_t) MCUXCLPKC_WORDSIZE * 2u), /* void */)
 
     /* Set offsetXH = offsetX + pkcSize(k) and offsetRH = offsetR + pkcSize(k). */
     pOperands32[REDUCEMODEVEN_XH / 2u] = offsetR_offsetX + ((pkcByteLenXL << 16u) + pkcByteLenXL);

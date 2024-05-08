@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef MCUX_PSA_OPAQUE_AEAD_H
-#define MCUX_PSA_OPAQUE_AEAD_H
+#ifndef MCUX_PSA_ELS_PKC_OPAQUE_AEAD_H
+#define MCUX_PSA_ELS_PKC_OPAQUE_AEAD_H
 
 /** \file mcux_psa_els_pkc_aead.h
  *
@@ -265,4 +265,4 @@ psa_status_t els_pkc_opaque_aead_abort(els_pkc_opaque_aead_operation_t *operatio
 #ifdef __cplusplus
 }
 #endif
-#endif /* MCUX_PSA_OPAQUE_AEAD_H */
+#endif /* MCUX_PSA_ELS_PKC_OPAQUE_AEAD_H */

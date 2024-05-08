@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef MCUX_PSA_AEAD_H
-#define MCUX_PSA_AEAD_H
+#ifndef MCUX_PSA_ELS_PKC_AEAD_H
+#define MCUX_PSA_ELS_PKC_AEAD_H
 
 /** \file mcux_psa_els_pkc_aead.h
  *
@@ -43,8 +43,7 @@ extern "C" {
  * \retval  PSA_SUCCESS on success. Error code from \ref psa_status_t on
  *          failure
  */
-psa_status_t
-els_pkc_transparent_aead_encrypt(const psa_key_attributes_t *attributes,
+psa_status_t els_pkc_transparent_aead_encrypt(const psa_key_attributes_t *attributes,
                                   const uint8_t *key_buffer, size_t key_buffer_size,
                                   psa_algorithm_t alg, const uint8_t *nonce,
                                   size_t nonce_length, const uint8_t *additional_data,
@@ -263,4 +262,4 @@ psa_status_t els_pkc_transparent_aead_abort(els_pkc_transparent_aead_operation_t
 #ifdef __cplusplus
 }
 #endif
-#endif /* MCUX_PSA_AEAD_H */
+#endif /* MCUX_PSA_ELS_PKC_AEAD_H */

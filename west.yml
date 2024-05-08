@@ -126,6 +126,30 @@ manifest:
     path: middleware/wireless/framework
     revision: MCUX_2.15.000
     remote: nxp
+  - name: mcux-sdk-middleware-zigbee
+    revision: MCUX_2.15.000_RW610_K32W1
+    path: middleware/wireless/zigbee
+    remote: nxp-mcuxpresso
+  - name: mcux-secure-subsystem
+    revision: MCUX_2.15.000_RW610_K32W1
+    path: middleware/secure-subsystem
+    remote: nxp-mcuxpresso
+  - name: mcux-sdk-middleware-xcvr
+    revision: MCUX_2.15.000_RW610_K32W1
+    path: middleware/wireless/XCVR
+    remote: nxp-mcuxpresso
+  - name: mcux-sdk-middleware-bluetooth-controller
+    revision: MCUX_2.15.000_RW610_K32W1
+    path: middleware/wireless/ble_controller
+    remote: nxp
+  - name: mcux-sdk-middleware-bluetooth-host
+    revision: MCUX_2.15.000_RW610_K32W1
+    path: middleware/wireless/bluetooth
+    remote: nxp
+  - name: mcux-sdk-middleware-ieee_802.15.4
+    revision: MCUX_2.15.000_RW610_K32W1
+    path: middleware/wireless/ieee-802.15.4
+    remote: nxp
   self:
     path: core
     import: submanifests

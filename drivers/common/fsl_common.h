@@ -266,19 +266,6 @@ typedef int32_t status_t;
 #endif
 /*! @} */
 
-/*! @name UINTPTR_SIZE value */
-/* @{ */
-#if !defined(UINTPTR_SIZE)
-#if UINTPTR_MAX > UINT32_MAX
-  #define UINTPTR_SIZE 8 /* 64-bit processor */
-#elif UINTPTR_MAX > UINT16_MAX
-  #define UINTPTR_SIZE 4 /* 32-bit processor */
-#else
-  #error "UINTPTR_SIZE is unknown!"
-#endif
-#endif
-/* @} */
-
 /*! Macro to get upper 32 bits of a 64-bit value */
 #if !defined(UINT64_H)
 #define UINT64_H(X)        ((uint32_t)((((uint64_t) (X)) >> 32U) & 0x0FFFFFFFFULL))

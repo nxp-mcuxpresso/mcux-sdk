@@ -62,7 +62,7 @@ static const mbedtls_svc_key_id_t el2goimport_auth_sk_id = MBEDTLS_NXP_DIE_EL2GO
         .ckdf = {                                                                                                  \
             .source_key_slot           = NXP_DIE_EL2GOOEM_MK_SK_SLOT,                                              \
             .target_key_id             = MBEDTLS_NXP_DIE_EL2GOIMPORT_KEK_SK_ID,                                    \
-            .key_properties.word.value = 0x40800021,                                                               \
+            .key_properties.word.value = 0x40800021U,                                                               \
             .derivation_data           = {0x00, 0x65, 0x32, 0x67, 0x69, 0x6b, 0x65, 0x6b, 0x5f, 0x73, 0x6b, 0x00}, \
         },                                                                                                         \
     }
@@ -81,7 +81,7 @@ const key_recipe_t recipe_el2goimport_kek_sk = {
         .ckdf = {                                                                                                  \
             .source_key_slot           = NXP_DIE_EL2GOOEM_MK_SK_SLOT,                                              \
             .target_key_id             = MBEDTLS_NXP_DIE_EL2GOIMPORTTFM_KEK_SK_ID,                                 \
-            .key_properties.word.value = 0x40100021,                                                               \
+            .key_properties.word.value = 0x40100021U,                                                               \
             .derivation_data           = {0x00, 0x65, 0x32, 0x67, 0x69, 0x74, 0x66, 0x6d, 0x5f, 0x73, 0x6b, 0x00}, \
         },                                                                                                         \
     }
@@ -100,7 +100,7 @@ const key_recipe_t recipe_el2goimporttfm_kek_sk = {
         .ckdf = {                                                                                                  \
             .source_key_slot           = NXP_DIE_EL2GOOEM_MK_SK_SLOT,                                              \
             .target_key_id             = MBEDTLS_NXP_DIE_EL2GOIMPORT_AUTH_SK_ID,                                   \
-            .key_properties.word.value = 0x40002021,                                                               \
+            .key_properties.word.value = 0x40002021U,                                                               \
             .derivation_data           = {0x00, 0x65, 0x32, 0x67, 0x69, 0x61, 0x75, 0x74, 0x5f, 0x73, 0x6b, 0x00}, \
         },                                                                                                         \
     }
@@ -119,7 +119,7 @@ const key_recipe_t recipe_el2goimport_auth_sk = {
         .ckdf = {                                                                                                  \
             .source_key_slot           = NXP_DIE_EL2GOPUBLIC_MK_SK_SLOT,                                           \
             .target_key_id             = MBEDTLS_NXP_DIE_EL2GOCONN_AUTH_PRK_ID,                                    \
-            .key_properties.word.value = 0x84000021,                                                               \
+            .key_properties.word.value = 0x84000021U,                                                               \
             .derivation_data           = {0x00, 0x65, 0x32, 0x67, 0x63, 0x6f, 0x6e, 0x5f, 0x73, 0x65, 0x00, 0x00}, \
         },                                                                                                         \
     }
@@ -129,7 +129,7 @@ const key_recipe_t recipe_el2goimport_auth_sk = {
         .operation = OP_KEYGEN, .storage = STORAGE_FINAL_KEY,                   \
         .keygen = {                                                             \
             .target_key_id             = MBEDTLS_NXP_DIE_EL2GOCONN_AUTH_PRK_ID, \
-            .key_properties.word.value = 0x80040001,                            \
+            .key_properties.word.value = 0x80040001U,                            \
         },                                                                      \
     }
 
@@ -148,7 +148,7 @@ const key_recipe_t recipe_el2goconn_auth_prk = {
         .ckdf = {                                                                                                  \
             .source_key_slot           = NXP_DIE_EL2GOPUBLIC_MK_SK_SLOT,                                           \
             .target_key_id             = MBEDTLS_NXP_DIE_EL2GOATTEST_AUTH_PRK_ID,                                  \
-            .key_properties.word.value = 0x84000021,                                                               \
+            .key_properties.word.value = 0x84000021U,                                                               \
             .derivation_data           = {0x00, 0x65, 0x32, 0x67, 0x61, 0x74, 0x74, 0x5f, 0x73, 0x65, 0x00, 0x00}, \
         },                                                                                                         \
     }
@@ -158,7 +158,7 @@ const key_recipe_t recipe_el2goconn_auth_prk = {
         .operation = OP_KEYGEN, .storage = STORAGE_FINAL_KEY,                     \
         .keygen = {                                                               \
             .target_key_id             = MBEDTLS_NXP_DIE_EL2GOATTEST_AUTH_PRK_ID, \
-            .key_properties.word.value = 0x80040001,                              \
+            .key_properties.word.value = 0x80040001U,                              \
         },                                                                        \
     }
 
@@ -179,6 +179,7 @@ const key_recipe_t recipe_el2goattest_auth_prk = {
 */
 psa_status_t mcuxClPsaDriver_Oracle_GetBuiltinKeyBufferSize(mbedtls_svc_key_id_t key_id, size_t *key_buffer_size)
 {
+    psa_status_t status;
     switch (MBEDTLS_SVC_KEY_ID_GET_KEY_ID(key_id))
     {
 /* If TF-M Builtin keys are being used in project,
@@ -186,16 +187,20 @@ psa_status_t mcuxClPsaDriver_Oracle_GetBuiltinKeyBufferSize(mbedtls_svc_key_id_t
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
         case TFM_BUILTIN_KEY_ID_EL2GO_CONN_AUTH:
             *key_buffer_size = mcuxClPsaDriver_Oracle_Utils_GetRecipeSize(&recipe_el2goconn_auth_prk);
-            return PSA_SUCCESS;
+            status = PSA_SUCCESS;
+            break;
 #endif /*PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER*/
 #ifdef TFM_PARTITION_INITIAL_ATTESTATION
         case TFM_BUILTIN_KEY_ID_IAK:
             *key_buffer_size = mcuxClPsaDriver_Oracle_Utils_GetRecipeSize(&recipe_el2goattest_auth_prk);
-            return PSA_SUCCESS;
+            status = PSA_SUCCESS;
+            break;
 #endif // TFM_PARTITION_INITIAL_ATTESTATION
         default:
-            return PSA_ERROR_INVALID_ARGUMENT;
+            status = PSA_ERROR_INVALID_ARGUMENT;
+            break;
     }
+    return status;
 }
 
 psa_status_t mcuxClPsaDriver_Oracle_GetBuiltinKeyBuffer(psa_key_attributes_t *attributes,
@@ -236,7 +241,7 @@ psa_status_t mcuxClPsaDriver_Oracle_GetBuiltinKeyBuffer(psa_key_attributes_t *at
 
     for (size_t idx = 0; idx < number_of_keys; idx++) {
         if (policy_table[idx].key_id == MBEDTLS_SVC_KEY_ID_GET_KEY_ID(key_id)) {
-            if (policy_table[idx].per_user_policy == 0) {
+            if (policy_table[idx].per_user_policy == 0u) {
                 usage = policy_table[idx].usage;
             } else {
                 /* The policy depedends also on the user of the key */
@@ -255,35 +260,39 @@ psa_status_t mcuxClPsaDriver_Oracle_GetBuiltinKeyBuffer(psa_key_attributes_t *at
     }
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
     psa_set_key_usage_flags(attributes, usage);
-
+    psa_status_t psa_status;
     switch (MBEDTLS_SVC_KEY_ID_GET_KEY_ID(key_id))
     {
 /* If TF-M Builtin keys are being used in project,
  then use rw61x specific plat builtin keys */
 #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
         case TFM_BUILTIN_KEY_ID_EL2GO_CONN_AUTH:
-            memcpy(key_buffer, &recipe_el2goconn_auth_prk, required_key_buffer_size);
+            (void)memcpy(key_buffer, (uint8_t*)&recipe_el2goconn_auth_prk, required_key_buffer_size);
             *key_buffer_length = required_key_buffer_size;
             psa_set_key_algorithm(attributes, PSA_ALG_ECDSA(PSA_ALG_SHA_256));
             psa_set_key_type(attributes, PSA_KEY_TYPE_ECC_KEY_PAIR(PSA_ECC_FAMILY_SECP_R1));
             psa_set_key_bits(attributes, 256);
-            return PSA_SUCCESS;
+            psa_status = PSA_SUCCESS;
+            break;
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
 #ifdef TFM_PARTITION_INITIAL_ATTESTATION
         case TFM_BUILTIN_KEY_ID_IAK:
-            memcpy(key_buffer, &recipe_el2goattest_auth_prk, required_key_buffer_size);
+            (void)memcpy(key_buffer, &recipe_el2goattest_auth_prk, required_key_buffer_size);
             *key_buffer_length = required_key_buffer_size;
             psa_set_key_algorithm(attributes, PSA_ALG_ECDSA(PSA_ALG_SHA_256));
             psa_set_key_type(attributes, PSA_KEY_TYPE_ECC_KEY_PAIR(PSA_ECC_FAMILY_SECP_R1));
             psa_set_key_bits(attributes, 256);
-            return PSA_SUCCESS;
+            psa_status = PSA_SUCCESS;
+            break;
 #endif // TFM_PARTITION_INITIAL_ATTESTATION
         default:
-            return PSA_ERROR_INVALID_ARGUMENT;
+            psa_status = PSA_ERROR_INVALID_ARGUMENT;
+            break;
     }
+    return psa_status;
 }
 
-psa_status_t mcuxClPsaDriver_Oracle_FillKeyDescriptorFromKeySlot(mcuxClEls_KeyIndex_t key_slot,
+static psa_status_t mcuxClPsaDriver_Oracle_FillKeyDescriptorFromKeySlot(mcuxClEls_KeyIndex_t key_slot,
                                                                  mcuxClKey_Descriptor_t *out_key_descriptor)
 {
     psa_status_t psa_status = PSA_SUCCESS;
@@ -418,7 +427,7 @@ psa_status_t mcuxClPsaDriver_Oracle_ImportKey(
 {
     psa_status_t psa_status = PSA_ERROR_INVALID_ARGUMENT;
 
-    uint16_t key_buffer_size               = pKey->container.length;
+    uint32_t key_buffer_size               = pKey->container.length;
     const psa_key_attributes_t *attributes = (psa_key_attributes_t *)pKey->container.pAuxData;
     uint8_t *key_buffer                    = pKey->container.pData;
 
@@ -448,7 +457,7 @@ psa_status_t mcuxClPsaDriver_Oracle_ImportKey(
             return PSA_ERROR_INVALID_ARGUMENT;
         }
 
-        memcpy(key_buffer, data, data_length);
+        (void)memcpy(key_buffer, data, data_length);
         *key_buffer_length = data_length;
 
         return PSA_SUCCESS;
@@ -463,7 +472,7 @@ psa_status_t mcuxClPsaDriver_Oracle_ImportKey(
             return PSA_ERROR_INVALID_ARGUMENT;
         }
 
-        memcpy(key_buffer, data, data_length);
+        (void)memcpy(key_buffer, data, data_length);
         *key_buffer_length = data_length;
 
         return PSA_SUCCESS;
@@ -499,7 +508,7 @@ psa_status_t mcuxClPsaDriver_Oracle_ExportPublicKey(mcuxClKey_Descriptor_t *pKey
             {
                 return PSA_ERROR_DATA_INVALID;
             }
-            if (data_size < (public_key_size + 1))
+            if (data_size < (public_key_size + 1U))
             {
                 return PSA_ERROR_INSUFFICIENT_MEMORY;
             }
@@ -509,15 +518,15 @@ psa_status_t mcuxClPsaDriver_Oracle_ExportPublicKey(mcuxClKey_Descriptor_t *pKey
                     return PSA_ERROR_BUFFER_TOO_SMALL;
                 }
                 *data_length = public_key_size;
-                memcpy(data, public_key, public_key_size);
+                (void)memcpy(data, public_key, public_key_size);
             } else {
-                if (data_size < (public_key_size + 1))
+                if (data_size < (public_key_size + 1U))
                 {
                     return PSA_ERROR_BUFFER_TOO_SMALL;
                 }
-                *data_length = public_key_size + 1;
-                *data        = 0x04;
-                memcpy(data + 1, public_key, public_key_size);
+                *data_length = public_key_size + 1U;
+                *data        = 0x04u;
+                (void)memcpy(data + 1, public_key, public_key_size);
              }
         }
     }

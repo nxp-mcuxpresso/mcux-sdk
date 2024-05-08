@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef MCUX_PSA_COMMON_INIT_H
-#define MCUX_PSA_COMMON_INIT_H
+#ifndef MCUX_PSA_ELS_PKC_COMMON_INIT_H
+#define MCUX_PSA_ELS_PKC_COMMON_INIT_H
 
 /** \file els_pkc_transparent_psa_init.h
  *
@@ -33,6 +33,8 @@ extern mcux_mutex_t els_pkc_hwcrypto_mutex;
 extern "C" {
 #endif
 
+extern bool g_isCryptoHWInitialized;
+
 /*!
  * @brief Application init for Crypto blocks.
  *
@@ -57,8 +59,33 @@ status_t CRYPTO_DeinitHardware(void);
  */
 psa_status_t els_pkc_to_psa_status(status_t els_pkc_status);
 
+/*!
+ * @brief  Mutex un/lock APIS
+ *
+ * @return PSA_SUCCESS on success. PSA_ERROR_GENERIC_ERROR on
+ *          failure
+ */
+
+#if defined(PSA_CRYPTO_DRIVER_THREAD_EN)
+static inline int mcux_els_mutex_lock(void)
+{
+    if (mcux_mutex_lock(&els_pkc_hwcrypto_mutex)) {
+        return PSA_ERROR_GENERIC_ERROR;
+    }
+    return PSA_SUCCESS;
+}
+
+static inline int mcux_els_mutex_unlock(void)
+{
+    if (mcux_mutex_unlock(&els_pkc_hwcrypto_mutex)) {
+        return PSA_ERROR_GENERIC_ERROR;
+    }
+    return PSA_SUCCESS;
+}
+#endif /* defined(PSA_CRYPTO_DRIVER_THREAD_EN) */
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* MCUX_PSA_COMMON_INIT_H */
+#endif /* MCUX_PSA_ELS_PKC_COMMON_INIT_H */

@@ -42,7 +42,7 @@
 #define MCUXCLHMAC_ELS_SIZE_OF_LENGTH_FIELD      (8u)
 #define MCUXCLHMAC_ELS_MIN_PADDING_LENGTH        (MCUXCLHMAC_ELS_SIZE_OF_LENGTH_FIELD + 1u) ///< Size of minimum HMAC padding length
 #define MCUXCLHMAC_ELS_INPUTBUFFER_LENGTH(dataLength) \
-  ((((dataLength) + MCUXCLHMAC_ELS_MIN_PADDING_LENGTH) + (MCUXCLHMAC_ELS_BLOCK_SIZE) - 1) / (MCUXCLHMAC_ELS_BLOCK_SIZE)) * MCUXCLHMAC_ELS_BLOCK_SIZE ///< Formula to calculate input buffer size for HMAC with SHA-256
+  ((((dataLength) + MCUXCLHMAC_ELS_MIN_PADDING_LENGTH) + (MCUXCLHMAC_ELS_BLOCK_SIZE) - 1u) / (MCUXCLHMAC_ELS_BLOCK_SIZE)) * MCUXCLHMAC_ELS_BLOCK_SIZE ///< Formula to calculate input buffer size for HMAC with SHA-256
 
 /** @}*/
 

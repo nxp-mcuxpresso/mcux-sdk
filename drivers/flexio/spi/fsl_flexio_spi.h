@@ -179,7 +179,7 @@ typedef void (*flexio_spi_slave_transfer_callback_t)(FLEXIO_SPI_Type *base,
 /*! @brief Define FlexIO SPI handle structure. */
 struct _flexio_spi_master_handle
 {
-    const uint8_t *txData;                                /*!< Transfer buffer. */
+    const uint8_t *txData;                          /*!< Transfer buffer. */
     uint8_t *rxData;                                /*!< Receive buffer. */
     size_t transferSize;                            /*!< Total bytes to be transferred. */
     volatile size_t txRemainingBytes;               /*!< Send data remaining in bytes. */

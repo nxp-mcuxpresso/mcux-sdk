@@ -43,10 +43,10 @@ psa_status_t els_pkc_transparent_mac_compute(const psa_key_attributes_t *attribu
     uint8_t *padded_input = NULL;
     if (PSA_ALG_IS_HMAC(alg)) {
         padded_input = mbedtls_calloc(1, MCUXCLHMAC_ELS_INPUTBUFFER_LENGTH(input_length));
-        if (!padded_input) {
+        if (padded_input == NULL) {
             return PSA_ERROR_INSUFFICIENT_MEMORY;
         }
-        memcpy(padded_input, input, input_length);
+        (void)memcpy(padded_input, input, input_length);
     }
 
     status = mcuxClPsaDriver_psa_driver_wrapper_mac_computeLayer(
@@ -209,10 +209,13 @@ psa_status_t els_pkc_transparent_mac_verify_finish(els_pkc_transparent_mac_opera
                                                                                NULL);
     if (status == PSA_SUCCESS)
     {
-        mcuxCsslMemory_Status_t compare_result = mcuxCsslMemory_Compare(mcuxCsslParamIntegrity_Protect(3u, mac, macCalc, mac_length),
+        MCUX_CSSL_FP_FUNCTION_CALL_PROTECTED(compare_result, token, mcuxCsslMemory_Compare(mcuxCsslParamIntegrity_Protect(3u, mac, macCalc, mac_length),
                                                               mac,
                                                               macCalc,
-                                                              mac_length);
+                                                              mac_length));
+        if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxCsslMemory_Compare) != token)){
+            return PSA_ERROR_GENERIC_ERROR;
+        }
 
         if(compare_result != MCUXCSSLMEMORY_STATUS_EQUAL)
         {

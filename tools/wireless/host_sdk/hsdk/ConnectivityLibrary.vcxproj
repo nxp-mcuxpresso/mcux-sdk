@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="physical\PhysicalDevice.c" />
+    <ClCompile Include="physical\UART\UARTConfiguration.c" />
+    <ClCompile Include="physical\UART\UARTDevice.c" />
+    <ClCompile Include="physical\UART\UARTDiscovery.c" />
+    <ClCompile Include="protocol\Framer.c" />
+    <ClCompile Include="protocol\FSCI\FSCIFrame.c" />
+    <ClCompile Include="protocol\FSCI\FSCIFramer.c" />
+    <ClCompile Include="sys\EventManager.c" />
+    <ClCompile Include="sys\hsdkEvent.c" />
+    <ClCompile Include="sys\hsdkFile.c" />
+    <ClCompile Include="sys\hsdkLock.c" />
+    <ClCompile Include="sys\hsdkLogger.c" />
+    <ClCompile Include="sys\hsdkSemaphore.c" />
+    <ClCompile Include="sys\hsdkThread.c" />
+    <ClCompile Include="sys\MessageQueue.c" />
+    <ClCompile Include="sys\RawFrame.c" />
+    <ClCompile Include="sys\utils.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\physical\PhysicalDevice.h" />
+    <ClInclude Include="include\physical\UART\UARTConfiguration.h" />
+    <ClInclude Include="include\physical\UART\UARTDevice.h" />
+    <ClInclude Include="include\physical\UART\UARTDiscovery.h" />
+    <ClInclude Include="include\protocol\Framer.h" />
+    <ClInclude Include="include\protocol\FSCI\FSCIFrame.h" />
+    <ClInclude Include="include\protocol\FSCI\FSCIFramer.h" />
+    <ClInclude Include="include\sys\EventManager.h" />
+    <ClInclude Include="include\sys\hsdkError.h" />
+    <ClInclude Include="include\sys\hsdkLogger.h" />
+    <ClInclude Include="include\sys\hsdkOSCommon.h" />
+    <ClInclude Include="include\sys\MessageQueue.h" />
+    <ClInclude Include="include\sys\RawFrame.h" />
+    <ClInclude Include="include\sys\utils.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="HSDK.rc" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C2559196-DC2E-44C5-8144-FD0DC38E92BC}</ProjectGuid>
+    <RootNamespace>LogicLevel</RootNamespace>
+    <ProjectName>HSDK</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='DebugWrapper|Win32'">
+    <PlatformToolset>v110</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugWrapper|x64'" Label="Configuration">
+    <PlatformToolset>v110</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IncludePath>$(ProjDir)include;$(ProjDir)include\sys;$(ProjDir)include\protocol;$(ProjDir)include\physical;$(ProjDir)include\physical\UART;$(ProjDir)include\protocol\FSCI;$(ProjDir)include\protocol\HCI;$(ProjDir)include\protocol\ASCII;$(IncludePath)</IncludePath>
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjDir)include;$(ProjDir)include\sys;$(ProjDir)include\protocol;$(ProjDir)include\physical;$(ProjDir)include\physical\UART;$(ProjDir)include\protocol\FSCI;$(ProjDir)include\protocol\HCI;$(ProjDir)include\protocol\ASCII;$(IncludePath)</IncludePath>
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(ProjDir)include;$(ProjDir)include/sys;$(ProjDir)include/protocol;$(ProjDir)include/physical;$(ProjDir)include/protocol/FSCI;$(ProjDir)include/protocol/HCI;$(ProjDir)include/physical/UART;$(ProjDir)include/physical/TCP;$(ProjDir)include\protocol\ASCII;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjDir)include;$(ProjDir)include/sys;$(ProjDir)include/protocol;$(ProjDir)include/physical;$(ProjDir)include/protocol/FSCI;$(ProjDir)include/protocol/HCI;$(ProjDir)include/physical/UART;$(ProjDir)include/physical/TCP;$(ProjDir)include\protocol\ASCII;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugWrapper|Win32'">
+    <IncludePath>$(ProjDir)include;$(ProjDir)include\sys;$(ProjDir)include\protocol;$(ProjDir)include\physical;$(ProjDir)include\protocol\FSCI;$(ProjDir)include\protocol\HCI;$(ProjDir)include\physical\UART;$(IncludePath)</IncludePath>
+    <OutDir>.\wrappers\Output</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugWrapper|x64'">
+    <IncludePath>$(ProjDir)include;$(ProjDir)include\sys;$(ProjDir)include\protocol;$(ProjDir)include\physical;$(ProjDir)include\protocol\FSCI;$(ProjDir)include\protocol\HCI;$(ProjDir)include\physical\UART;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <EnablePREfast>false</EnablePREfast>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <PreprocessorDefinitions>USE_LOGGER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <EnablePREfast>false</EnablePREfast>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <PreprocessorDefinitions>USE_LOGGER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugWrapper|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugWrapper|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

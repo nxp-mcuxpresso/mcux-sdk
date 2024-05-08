@@ -17,7 +17,7 @@
  ******************************************************************************/
 
 #ifndef FSL_FEATURE_PINT_NUMBER_OF_INSTANCE
-#define FSL_FEATURE_PINT_NUMBER_OF_INSTANCE (1)
+#define FSL_FEATURE_PINT_NUMBER_OF_INSTANCE (1U)
 #endif
 
 #if defined(GPIOINT_RSTS_N)

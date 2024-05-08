@@ -27,7 +27,7 @@
 #include <mcuxClExample_ELS_Helper.h>
 
 /** Plaintext input for the AES encryption. */
-static ALIGNED uint8_t const aes128_input[MCUXCLELS_CIPHER_BLOCK_SIZE_AES] = {0x6BU, 0xC1U, 0xBEU, 0xE2U,
+static ALIGNED uint8_t const aes128_input[MCUXCLELS_CIPHER_BLOCK_SIZE_AES] CSS_CONST_SEGMENT = {0x6BU, 0xC1U, 0xBEU, 0xE2U,
                                                                              0x2EU, 0x40U, 0x9FU, 0x96U,
                                                                              0xE9U, 0x3DU, 0x7EU, 0x11U,
                                                                              0x73U, 0x93U, 0x17U, 0x2AU};
@@ -39,13 +39,13 @@ static ALIGNED uint8_t aes128_iv[MCUXCLELS_CIPHER_BLOCK_SIZE_AES] = {0xF8U, 0xD2
                                                                     0x2DU, 0x04U, 0x67U, 0xC3U};
 
 /** Expected ciphertext output of the AES encryption. */
-static ALIGNED uint8_t const aes128_expected_output[MCUXCLELS_CIPHER_BLOCK_SIZE_AES] = {0xCAU, 0xEAU, 0x07U, 0x26U,
+static ALIGNED uint8_t const aes128_expected_output[MCUXCLELS_CIPHER_BLOCK_SIZE_AES] CSS_CONST_SEGMENT = {0xCAU, 0xEAU, 0x07U, 0x26U,
                                                                                        0x62U, 0xE2U, 0x20U, 0x06U,
                                                                                        0x2DU, 0x45U, 0x46U, 0x41U,
                                                                                        0x5EU, 0xFFU, 0xFAU, 0xD2U};
 
 /** Key for the AES encryption. */
-static uint32_t const aes128_key[MCUXCLELS_CIPHER_KEY_SIZE_AES_128 / sizeof(uint32_t)] = {0x16157E2BU, 0xA6D2AE28U, 0x8815F7ABU, 0x3C4FCF09U};
+static uint32_t const aes128_key[MCUXCLELS_CIPHER_KEY_SIZE_AES_128 / sizeof(uint32_t)] CSS_CONST_SEGMENT = {0x16157E2BU, 0xA6D2AE28U, 0x8815F7ABU, 0x3C4FCF09U};
 
 /** Destination buffer to receive the ciphertext output of the AES encryption. */
 static ALIGNED uint8_t aes128_output[MCUXCLELS_CIPHER_BLOCK_SIZE_AES];

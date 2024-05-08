@@ -17,25 +17,25 @@
 #include "stdlib.h"
 
 // Tags used in PSA commands
-#define PSA_CMD_TAG_MAGIC               0x40
-#define PSA_CMD_TAG_KEY_ID              0x41
-#define PSA_CMD_TAG_PERMITTED_ALGORITHM 0x42
-#define PSA_CMD_TAG_KEY_USAGE_FLAGS     0x43
-#define PSA_CMD_TAG_KEY_TYPE            0x44
-#define PSA_CMD_TAG_KEY_BITS            0x45
-#define PSA_CMD_TAG_KEY_LIFETIME        0x46
-#define PSA_CMD_TAG_WRAPPING_KEY_ID     0x50
-#define PSA_CMD_TAG_WRAPPING_ALGORITHM  0x51
-#define PSA_CMD_TAG_IV                  0x52
-#define PSA_CMD_TAG_SIGNATURE_KEY_ID    0x53
-#define PSA_CMD_TAG_SIGNATURE_ALGORITHM 0x54
-#define PSA_CMD_TAG_KEYIN_CMD           0x55
-#define PSA_CMD_TAG_SIGNATURE           0x5E
+#define PSA_CMD_TAG_MAGIC               0x40U
+#define PSA_CMD_TAG_KEY_ID              0x41U
+#define PSA_CMD_TAG_PERMITTED_ALGORITHM 0x42U
+#define PSA_CMD_TAG_KEY_USAGE_FLAGS     0x43U
+#define PSA_CMD_TAG_KEY_TYPE            0x44U
+#define PSA_CMD_TAG_KEY_BITS            0x45U
+#define PSA_CMD_TAG_KEY_LIFETIME        0x46U
+#define PSA_CMD_TAG_WRAPPING_KEY_ID     0x50U
+#define PSA_CMD_TAG_WRAPPING_ALGORITHM  0x51U
+#define PSA_CMD_TAG_IV                  0x52U
+#define PSA_CMD_TAG_SIGNATURE_KEY_ID    0x53U
+#define PSA_CMD_TAG_SIGNATURE_ALGORITHM 0x54U
+#define PSA_CMD_TAG_KEYIN_CMD           0x55U
+#define PSA_CMD_TAG_SIGNATURE           0x5EU
 
 // Algorithms used in EL2GO blobs
-#define BLOB_SIGN_ALGORITHM_CMAC        0x01
-#define BLOB_WRAP_ALGORITHM_RFC3394     0x01
-#define BLOB_WRAP_ALGORITHM_AES_CBC     0x02
+#define BLOB_SIGN_ALGORITHM_CMAC        0x01U
+#define BLOB_WRAP_ALGORITHM_RFC3394     0x01U
+#define BLOB_WRAP_ALGORITHM_AES_CBC     0x02U
 
 // PSA command context
 typedef struct psa_cmd_s
@@ -56,24 +56,15 @@ typedef struct psa_cmd_s
 } psa_cmd_t;
 
 // We only support NISTP-256 in S50
-#define PUBLIC_KEY_SIZE 64
+#define PUBLIC_KEY_SIZE 64U
 
-#define CMAC_BLOCK_SIZE 16
-
-typedef struct css_key_slot_handler_s
-{
-    uint32_t busy;
-    mbedtls_svc_key_id_t key_id;
-    uint8_t storage;
-    uint8_t *public_key;
-    size_t public_key_size;
-} css_key_slot_handler_t;
+#define CMAC_BLOCK_SIZE 16U
 
 css_key_slot_handler_t slot_handler_array[MCUXCLELS_KEY_SLOTS] = {0};
 
 static size_t ceil_to_blocksize(size_t len, size_t blocksize)
 {
-    return ((len + (blocksize - 1)) / blocksize) * blocksize;
+    return ((len + (blocksize - 1u)) / blocksize) * blocksize;
 }
 
 /** @brief Pads the data following iso7816
@@ -83,9 +74,9 @@ static psa_status_t pad_iso7816d4(uint8_t *data, size_t unpadded_length, size_t 
 {
     psa_status_t psa_status = PSA_SUCCESS;
 
-    *padded_length        = ceil_to_blocksize(unpadded_length + 1 /* always inserted padding 0x80 */, blocksize);
-    data[unpadded_length] = 0x80;
-    memset(&data[unpadded_length + 1], 0, *padded_length - (unpadded_length + 1));
+    *padded_length        = ceil_to_blocksize(unpadded_length + 1u /* always inserted padding 0x80 */, blocksize);
+    data[unpadded_length] = 0x80u;
+    (void)memset(&data[unpadded_length + 1u], 0, *padded_length - (unpadded_length + 1u));
     return psa_status;
 }
 
@@ -96,13 +87,16 @@ static psa_status_t unpad_iso7816d4(uint8_t *data, size_t *data_size)
 {
     psa_status_t psa_status = PSA_SUCCESS;
 
-    int count = *data_size - 1;
-    while (count > 0 && data[count] == 0)
+    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(data_size != NULL && *data_size > 0, PSA_ERROR_INVALID_ARGUMENT,
+                                         "iso_7816_unpad failed, null data");
+
+    uint32_t count = *data_size - 1u;
+    while (count > 0u && data[count] == 0u)
     {
         count--;
     }
 
-    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(data[count] == 0x80, PSA_ERROR_INVALID_ARGUMENT,
+    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(data[count] == 0x80u, PSA_ERROR_INVALID_ARGUMENT,
                                          "iso_7816_unpad failed, pad block corrupted");
 
     *data_size -= *data_size - count;
@@ -118,11 +112,11 @@ static uint32_t get_uint32_val(const uint8_t *input)
     uint32_t output = 0U;
     output          = *(input);
     output <<= 8;
-    output |= *(input + 1);
+    output |= *(input + 1u);
     output <<= 8;
-    output |= *(input + 2);
+    output |= *(input + 2u);
     output <<= 8;
-    output |= *(input + 3);
+    output |= *(input + 3u);
     return output;
 }
 
@@ -134,7 +128,7 @@ static uint16_t get_uint16_val(const uint8_t *input)
     uint16_t output = 0U;
     output          = *input;
     output <<= 8;
-    output |= *(input + 1);
+    output |= *(input + 1u);
     return output;
 }
 
@@ -142,17 +136,23 @@ static uint16_t get_uint16_val(const uint8_t *input)
 static int get_len(const unsigned char **p, const unsigned char *end, size_t *len)
 {
     if ((end - *p) < 1)
+    {
         return (PSA_ERROR_INVALID_ARGUMENT);
+    }
 
-    if ((**p & 0x80) == 0)
+    if ((**p & 0x80u) == 0u)
+    {
         *len = *(*p)++;
+    }
     else
     {
-        switch (**p & 0x7F)
+        switch (**p & 0x7Fu)
         {
             case 1:
                 if ((end - *p) < 2)
+                {
                     return (PSA_ERROR_INVALID_ARGUMENT);
+                }
 
                 *len = (*p)[1];
                 (*p) += 2;
@@ -160,7 +160,9 @@ static int get_len(const unsigned char **p, const unsigned char *end, size_t *le
 
             case 2:
                 if ((end - *p) < 3)
+                {
                     return (PSA_ERROR_INVALID_ARGUMENT);
+                }
 
                 *len = ((size_t)(*p)[1] << 8) | (*p)[2];
                 (*p) += 3;
@@ -168,7 +170,9 @@ static int get_len(const unsigned char **p, const unsigned char *end, size_t *le
 
             case 3:
                 if ((end - *p) < 4)
+                {
                     return (PSA_ERROR_INVALID_ARGUMENT);
+                }
 
                 *len = ((size_t)(*p)[1] << 16) | ((size_t)(*p)[2] << 8) | (*p)[3];
                 (*p) += 4;
@@ -176,7 +180,9 @@ static int get_len(const unsigned char **p, const unsigned char *end, size_t *le
 
             case 4:
                 if ((end - *p) < 5)
-                    return (PSA_ERROR_INVALID_ARGUMENT);
+                {
+                  return (PSA_ERROR_INVALID_ARGUMENT);
+                }
 
                 *len = ((size_t)(*p)[1] << 24) | ((size_t)(*p)[2] << 16) | ((size_t)(*p)[3] << 8) | (*p)[4];
                 (*p) += 5;
@@ -187,18 +193,23 @@ static int get_len(const unsigned char **p, const unsigned char *end, size_t *le
         }
     }
     if (*len > (size_t)(end - *p))
+    {
         return (PSA_ERROR_INVALID_ARGUMENT);
-
+    }
     return (0);
 }
 // Function taken from MbedTLS
-static int get_tag(const unsigned char **p, const unsigned char *end, size_t *len, int tag)
+static int get_tag(const unsigned char **p, const unsigned char *end, size_t *len, uint8_t tag)
 {
     if ((end - *p) < 1)
+    {
         return (PSA_ERROR_INVALID_ARGUMENT);
+    }
 
     if (**p != tag)
+    {
         return (PSA_ERROR_INVALID_ARGUMENT);
+    }
 
     (*p)++;
 
@@ -219,7 +230,7 @@ static psa_status_t parse_psa_import_command(const uint8_t *data, size_t data_si
     PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(psa_cmd != NULL, PSA_ERROR_INVALID_ARGUMENT,
                                          "The key attributes context is null");
 
-    memset(psa_cmd, 0, sizeof(psa_cmd_t));
+    (void)memset(psa_cmd, 0, sizeof(psa_cmd_t));
     psa_cmd->attributes = psa_key_attributes_init();
 
     cmd_ptr = data;
@@ -280,6 +291,7 @@ static psa_status_t parse_psa_import_command(const uint8_t *data, size_t data_si
                 psa_cmd->signature_size = cmd_len;
                 break;
             default:
+                PSA_DRIVER_ERROR("Unknown tag: 0x%x", tag);
                 break;
         }
         cmd_ptr += cmd_len;
@@ -303,7 +315,7 @@ static mcuxClEls_KeyIndex_t get_usable_key_slot(size_t key_bits)
 
 static psa_status_t free_key_in_slot_handler(mcuxClEls_KeyIndex_t slot_id)
 {
-    if (slot_handler_array[slot_id].busy)
+    if (slot_handler_array[slot_id].busy != 0u)
     {
         slot_handler_array[slot_id].key_id          = MBEDTLS_SVC_KEY_ID_INIT;
         slot_handler_array[slot_id].storage         = STORAGE_TEMP_KEY;
@@ -320,7 +332,7 @@ static psa_status_t free_key_in_slot_handler(mcuxClEls_KeyIndex_t slot_id)
 static void save_key_in_slot_handler(
     mcuxClEls_KeyIndex_t slot_id, mbedtls_svc_key_id_t key_id, uint8_t storage, uint8_t *public_key, size_t public_key_size)
 {
-    free_key_in_slot_handler(slot_id);
+    (void)free_key_in_slot_handler(slot_id);
 
     slot_handler_array[slot_id].key_id  = key_id;
     slot_handler_array[slot_id].storage = storage;
@@ -337,7 +349,7 @@ static psa_status_t get_slot_from_key_id(mbedtls_svc_key_id_t key_id, mcuxClEls_
     *slot_id = 0U;
     for (mcuxClEls_KeyIndex_t slot_id_i = 0U; slot_id_i < MCUXCLELS_KEY_SLOTS; slot_id_i++)
     {
-        if ((slot_handler_array[slot_id_i].busy) && (mbedtls_svc_key_id_equal(slot_handler_array[slot_id_i].key_id, key_id)) &&
+        if ((slot_handler_array[slot_id_i].busy != 0u) && (mbedtls_svc_key_id_equal(slot_handler_array[slot_id_i].key_id, key_id) != 0) &&
             (all_keys || (slot_handler_array[slot_id_i].storage == STORAGE_FINAL_KEY)))
         {
             *slot_id = slot_id_i;
@@ -362,7 +374,7 @@ psa_status_t mcuxClPsaDriver_Oracle_Utils_GetPublicKeyFromHandler(mbedtls_svc_ke
     psa_status = mcuxClPsaDriver_Oracle_Utils_GetSlotFromKeyId(key_id, &slot_id);
     PSA_DRIVER_SUCCESS_OR_EXIT_MSG("Error in getting the slot from the key ID");
 
-    if ((slot_handler_array[slot_id].public_key != NULL) && (slot_handler_array[slot_id].public_key_size != 0))
+    if ((slot_handler_array[slot_id].public_key != NULL) && (slot_handler_array[slot_id].public_key_size != 0u))
     {
         *public_key      = slot_handler_array[slot_id].public_key;
         *public_key_size = slot_handler_array[slot_id].public_key_size;
@@ -389,7 +401,7 @@ static psa_status_t execute_ckdf_step(mbedtls_svc_key_id_t key_id,
     PSA_DRIVER_SUCCESS_OR_EXIT_MSG("Error in ELS CKDF function execution");
 
     mbedtls_svc_key_id_t target_key_id = (step->storage == STORAGE_TEMP_KEY) ? step->ckdf.target_key_id : key_id;
-    save_key_in_slot_handler(*target_key_slot, target_key_id, step->storage, NULL, 0U);
+    save_key_in_slot_handler(*target_key_slot, target_key_id, (uint8_t)step->storage, NULL, 0U);
 
 exit:
     return psa_status;
@@ -428,7 +440,7 @@ static psa_status_t execute_keygen_step(mbedtls_svc_key_id_t key_id,
 
     // Hand over ownership of the public key
     mbedtls_svc_key_id_t target_key_id = (step->storage == STORAGE_TEMP_KEY) ? step->keygen.target_key_id : key_id;
-    save_key_in_slot_handler(*target_key_slot, target_key_id, step->storage, public_key, PUBLIC_KEY_SIZE);
+    save_key_in_slot_handler(*target_key_slot, target_key_id, (uint8_t)step->storage, public_key, PUBLIC_KEY_SIZE);
     public_key = NULL;
 
 exit:
@@ -451,7 +463,8 @@ static psa_status_t execute_kdelete_step(mbedtls_svc_key_id_t key_id, const key_
 
     psa_status = mcuxClPsaDriver_Oracle_ElsUtils_KeyDelete(target_key_slot);
     PSA_DRIVER_SUCCESS_OR_EXIT_MSG("Error in key deletion");
-    free_key_in_slot_handler(target_key_slot);
+    psa_status = free_key_in_slot_handler(target_key_slot);
+    PSA_DRIVER_SUCCESS_OR_EXIT_MSG("Error in free_key_in_slot_handler");
 exit:
     return psa_status;
 }
@@ -504,7 +517,8 @@ psa_status_t mcuxClPsaDriver_Oracle_Utils_RemoveKeyFromEls(mbedtls_svc_key_id_t 
 
     psa_status = mcuxClPsaDriver_Oracle_ElsUtils_KeyDelete(slot_id);
     PSA_DRIVER_SUCCESS_OR_EXIT_MSG("Error in key deletion");
-    free_key_in_slot_handler(slot_id);
+    psa_status = free_key_in_slot_handler(slot_id);
+    PSA_DRIVER_SUCCESS_OR_EXIT_MSG("Error in free_key_in_slot_handler");
 exit:
     return psa_status;
 }
@@ -621,7 +635,7 @@ psa_status_t mcuxClPsaDriver_Oracle_Utils_ValidateBlobAttributes(const psa_key_a
     PSA_DRIVER_SUCCESS_OR_EXIT_MSG("Error while parsing import blob");
 
     // Validate input PSA attributes
-    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(!mbedtls_svc_key_id_is_null(psa_get_key_id(attributes)),
+    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(0 == mbedtls_svc_key_id_is_null(psa_get_key_id(attributes)),
                                          PSA_ERROR_INVALID_ARGUMENT, "Invalid input key_id");
 
     // Attention: Permitted algorithm can be 0 (PSA_ALG_NONE for X.509/Binary)
@@ -698,7 +712,7 @@ psa_status_t mcuxClPsaDriver_Oracle_Utils_ValidateBlobAttributes(const psa_key_a
 
     // remove cmac value (last 16 bytes) from the copy
     psa_import_blob_size = psa_import_blob_size - CMAC_BLOCK_SIZE;
-    memcpy(psa_import_blob_tbs, psa_import_blob, psa_import_blob_size);
+    (void)memcpy(psa_import_blob_tbs, psa_import_blob, psa_import_blob_size);
 
     // pad data
     size_t psa_import_blob_tbs_padded_length = 0;

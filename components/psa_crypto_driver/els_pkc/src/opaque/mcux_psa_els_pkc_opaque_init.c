@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#include "mcux_psa_els_pkc_common_init.h" /* ELS_PKC Crypto port layer */
+#include "mcux_psa_els_pkc_opaque_init.h" /* ELS_PKC Crypto port layer */
 
 psa_status_t els_pkc_opaque_init(void)
 {

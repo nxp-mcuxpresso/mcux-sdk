@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2021-03-16
-**     Build:               b231201
+**     Build:               b240314
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -256,6 +256,8 @@
 #define FSL_FEATURE_ENET_HAS_RGMII_RXC_DELAY (0)
 /* @brief ENET Has Extra Clock Gate.(RW610). */
 #define FSL_FEATURE_ENET_HAS_EXTRA_CLOCK_GATE (1)
+/* @brief ENET support reset. */
+#define FSL_FEATURE_ENET_HAS_RSTCTL (1)
 
 /* FLEXCOMM module features */
 
@@ -325,6 +327,15 @@
 #define FSL_FEATURE_FLEXSPI_SUPPORT_SEPERATE_RXCLKSRC_PORTB (1)
 /* @brief FlexSPI support sample clock source or source_b selection */
 #define FSL_FEATURE_FLEXSPI_SUPPORT_RXCLKSRC_DIFF (1)
+
+/* ADC module features */
+
+/* @brief Whether ADC has the single-end mode temp channel */
+#define FSL_FEATURE_ADC_HAS_NO_SINGLEEND_TEMP_CHANNEL (1)
+/* @brief Whether ADC has the differential mode voice channel */
+#define FSL_FEATURE_ADC_HAS_NO_DIFFERENTIAL_VOICE_CHANNEL (1)
+/* @brief Whether ADC has the differential mode temp channel */
+#define FSL_FEATURE_ADC_HAS_NO_DIFFERENTIAL_TEMP_CHANNEL (1)
 
 /* GDMA module features */
 
@@ -416,7 +427,7 @@
 #define FSL_FEATURE_TRNG_HAS_RSTCTL (1)
 /* @brief TRNG supports dual oscillator mode. */
 #define FSL_FEATURE_TRNG_HAS_DUAL_OSCILATORS (1)
-/* @brief TRNG supports control pin */
+/* @brief TRNG supports control pin. */
 #define FSL_FEATURE_TRNG_HAS_CTRL_PIN (1)
 
 /* USB module features */

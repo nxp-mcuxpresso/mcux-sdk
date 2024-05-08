@@ -220,9 +220,9 @@ littlefs                   Name: LittleFS
                            Url: https://github.com/littlefs-project/littlefs 
 
 lwip                       Name: lwIP TCP/IP Stack                           
-                           Version: lwIP git repository (2023-01-03, branch: 
+                           Version: lwIP git repository (2024-02-19, branch: 
                            master, SHA-1:                                    
-                           3fe8d2fc43a9b69f7ed28c63d44a7744f9c0def9)         
+                           d0efd9ef7ba08e54b46b1060e2b4629a4907391b)         
                            Outgoing License: BSD-3-Clause                    
                            License File: middleware/lwip/COPYING             
                            Format: source code                               
@@ -361,3 +361,76 @@ SDK_Examples               Name: SDK examples
                            middleware.                                       
                            Location: boards/<board>/                         
                            Origin: NXP (BSD-3-Clause)                        
+
+BLE                        Name: Bluetooth Low Energy Application Source     
+                           Version: 1.8.18                                   
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: Source code & header files                
+                           Description: Bluetooth Low Energy Software        
+                           Location: middleware/wireless/bluetooth           
+                           Origin: NXP (BSD-3-Clause)                        
+
+BLE_Controller             Name: Bluetooth Low Energy Controller             
+                           Version: 1.9.13.0                                 
+                           Outgoing License: LA_OPT_NXP_Software_License v49 
+                           September 2023 - Additional distribution license  
+                           granted, license in Section 2.3 applies           
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: Source code and binary                    
+                           Description: Bluetooth Low Energy Controller      
+                           Firmware. Host Command Interface (HCI).           
+                           Location: middleware/wireless/ble_controller      
+                           Origin: NXP                                       
+
+multicore_mcmgr            Name: MCMGR                                       
+                           Version: 4.1.4                                    
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code                               
+                           Description: Multicore manager                    
+                           Location: middleware/multicore/mcmgr              
+                           Origin: NXP (BSD-3-Clause)                        
+
+multicore                  Name: Multicore SDK                               
+                           Version: 2.15.0                                   
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code                               
+                           Description: NXP Multicore Software Development   
+                           Kit.                                              
+                           Location: middleware/multicore                    
+                           Origin: NXP (BSD-3-Clause)                        
+
+multicore_rpmsg_lite       Name: RPMsg-Lite                                  
+                           Version: 5.1.0                                    
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code                               
+                           Description: Open Asymmetric Multi Processing     
+                           (OpenAMP) framework project                       
+                           Location: middleware/multicore/rpmsg_lite         
+                           Origin: Mentor Graphics Corporation & community   
+                           contributors                                      
+                           Url: https://github.com/NXPmicro/rpmsg-lite       
+
+secure-subsystem           Name: secure subsystem                            
+                           Version: 1.0                                      
+                           Outgoing License: BSD-3-Clause                    
+                           License File: COPYING-BSD-3                       
+                           Format: source code                               
+                           Description: Add secure peripherals control.      
+                           Location: middleware/secure-subsystem             
+                           Origin: NXP (BSD-3-Clause)                        
+
+Zigbee                     Name: K32W1 ZigBee 3.0 stack                      
+                           Version: 1.0.13                                   
+                           Outgoing License: LA_OPT_NXP_Software_License v49 
+                           September 2023 - Additional distribution license  
+                           granted, license in Section 2.3 applies           
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: object code, source code, header files    
+                           Description: ZigBee 3.0 protocol stack for K32W148
+                           platform                                          
+                           Location: middleware/wireless/zigbee              
+                           Origin: NXP                                       

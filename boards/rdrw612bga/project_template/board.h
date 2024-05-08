@@ -64,7 +64,7 @@
 #endif
 #define BOARD_LED_BLUE_GPIO_PORT 0U
 #ifndef BOARD_LED_BLUE_GPIO_PIN
-#define BOARD_LED_BLUE_GPIO_PIN 2U
+#define BOARD_LED_BLUE_GPIO_PIN 1U
 #endif
 
 #define LED_BLUE_INIT(output)                                                            \

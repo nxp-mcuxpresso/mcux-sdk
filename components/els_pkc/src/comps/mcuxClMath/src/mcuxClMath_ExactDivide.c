@@ -52,9 +52,6 @@ MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DEFINED_MORE_THAN_ONCE()
 {
     MCUX_CSSL_FP_FUNCTION_ENTRY(mcuxClMath_ExactDivide);
 
-    /* ASSERT: length of X >= length of Y. */
-    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(xPkcByteLength, yPkcByteLength, MCUXCLPKC_RAM_SIZE, /* void */)
-
     /* Backup PS1 length to restore in the end. */
     uint32_t backupPs1LenReg = MCUXCLPKC_PS1_GETLENGTH_REG();
 

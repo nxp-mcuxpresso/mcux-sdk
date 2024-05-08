@@ -24,9 +24,7 @@ mcux_mutex_t els_pkc_hwcrypto_mutex;
 /******************** CRYPTO_InitHardware *************************************/
 /******************************************************************************/
 
-//els_pkc_ctx_t g_els_pkc_ctx = { 0u }; /* Global context */ do we need it for RW61x?
-
-uint32_t g_isCryptoHWInitialized = false;
+bool g_isCryptoHWInitialized = false;
 
 psa_status_t els_pkc_to_psa_status(status_t els_pkc_status)
 {
@@ -95,7 +93,7 @@ status_t CRYPTO_InitHardware(void)
     status_t result = kStatus_Fail;
 
     if (g_isCryptoHWInitialized == true) {
-        return 0;
+        return kStatus_Success;
     }
 
 #if defined(PSA_CRYPTO_DRIVER_THREAD_EN)
@@ -137,7 +135,7 @@ status_t CRYPTO_DeinitHardware(void)
     status_t result = kStatus_Fail;
 
     if (g_isCryptoHWInitialized == false) {
-        return 0;
+        return kStatus_Success;
     }
 
 #if defined(PSA_CRYPTO_DRIVER_THREAD_EN)

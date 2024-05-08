@@ -9,7 +9,7 @@
 #ifndef _FSL_OS_ABSTRACTION_H_
 #define _FSL_OS_ABSTRACTION_H_
 
-#ifndef CONFIG_ZEPHYR
+#ifndef __ZEPHYR__
 #ifndef SDK_COMPONENT_DEPENDENCY_FSL_COMMON
 #define SDK_COMPONENT_DEPENDENCY_FSL_COMMON (1U)
 #endif
@@ -1064,5 +1064,5 @@ void OSA_InstallIntHandler(uint32_t IRQNumber, void (*handler)(void));
 /*! @}*/
 #else
 #include "fsl_os_abstraction_zephyr.h"
-#endif /* ! CONFIG_ZEPHYR */
+#endif /* ! __ZEPHYR__ */
 #endif

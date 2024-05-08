@@ -1079,7 +1079,7 @@ static serial_manager_status_t SerialManager_Write(serial_write_handle_t writeHa
 #if (defined(SERIAL_MANAGER_USE_COMMON_TASK) && (SERIAL_MANAGER_USE_COMMON_TASK > 0U))
         /* Need to support common_task. */
 #else  /* SERIAL_MANAGER_USE_COMMON_TASK */
-        if (kSerialManager_TransmissionBlocking == mode)
+        if ((kSerialManager_TransmissionBlocking == mode) && (0U == gUseRtos_c))
         {
             (void)SerialManager_StartWriting(serHandle);
         }
@@ -1333,6 +1333,7 @@ serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const s
 #endif
 
 #endif
+
     switch (serialConfig->type)
     {
 #if (defined(SERIAL_PORT_TYPE_UART) && (SERIAL_PORT_TYPE_UART > 0U))

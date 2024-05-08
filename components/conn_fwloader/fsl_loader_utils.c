@@ -12,7 +12,7 @@
 #include "fsl_loader_utils.h"
 #include "api_tree_root.h"
 #include "fsl_power.h"
-#ifndef CONFIG_ZEPHYR
+#ifndef __ZEPHYR__
 #include "board.h"
 #include "fsl_debug_console.h"
 #else
@@ -1084,7 +1084,7 @@ status_t load_service(LOAD_Target_Type loadTarget, uint32_t sourceAddr)
     fsl_nboot_sb3_header_t *active_pt_ptr;
     uint32_t firmwareVersion = 0xFFFFFFFFU;
     bool otpFlag             = false;
-#ifndef CONFIG_ZEPHYR
+#ifndef __ZEPHYR__
     bool flexspiFlag         = false;
 
     if (((CLKCTL0->PSCCTL0 & CLKCTL0_PSCCTL0_FLEXSPI0_MASK) == 0U) ||
@@ -1285,7 +1285,7 @@ status_t load_service(LOAD_Target_Type loadTarget, uint32_t sourceAddr)
     {
         reset_device(loadTarget);
     }
-#ifndef CONFIG_ZEPHYR
+#ifndef __ZEPHYR__
     if (flexspiFlag)
     {
         flexspiFlag = false;

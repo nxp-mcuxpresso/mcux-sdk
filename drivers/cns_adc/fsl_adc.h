@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 NXP
+ * Copyright 2020-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,7 +19,7 @@
  ******************************************************************************/
 
 /*! @brief ADC driver version */
-#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0. */
+#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0)) /*!< Version 2.2.0. */
 
 /*!
  * @brief The enumeration of interrupts, this enumeration can be used to enable/disable interrupts.
@@ -240,18 +240,6 @@ typedef enum _adc_average_length
 } adc_average_length_t;
 
 /*!
- * @brief ADC trigger source, including software trigger and multiple hardware trigger sources.
- */
-typedef enum _adc_trigger_source
-{
-    kADC_TriggerSourceGpt      = 0U, /*!< Hardware trigger, trigger source 0: GPT0 for ADC0 */
-    kADC_TriggerSourceAcomp    = 1U, /*!< Hardware trigger, trigger source 1: ACOMP0 for ADC0 */
-    kADC_TriggerSourceGpio40   = 2U, /*!< Hardware trigger, trigger source 2: GPIO40 */
-    kADC_TriggerSourceGpio41   = 3U, /*!< Hardware trigger, trigger source 3: GPIO41 */
-    kADC_TriggerSourceSoftware = 4U, /*!< Software trigger. */
-} adc_trigger_source_t;
-
-/*!
  *  @brief ADC input buffer gain type
  */
 typedef enum _adc_input_gain
@@ -318,28 +306,37 @@ typedef enum _adc_scan_channel
  */
 typedef enum _adc_channel_source
 {
-    kADC_CH0   = 0U,          /*!< Single-ended mode, channel[0] and vssa */
-    kADC_CH1   = 1U,          /*!< Single-ended mode, channel[1] and vssa */
-    kADC_CH2   = 2U,          /*!< Single-ended mode, channel[2] and vssa */
-    kADC_CH3   = 3U,          /*!< Single-ended mode, channel[3] and vssa */
-    kADC_CH4   = 4U,          /*!< Single-ended mode, channel[4] and vssa */
-    kADC_CH5   = 5U,          /*!< Single-ended mode, channel[5] and vssa */
-    kADC_CH6   = 6U,          /*!< Single-ended mode, channel[6] and vssa */
-    kADC_CH7   = 7U,          /*!< Single-ended mode, channel[7] and vssa */
-    kADC_VBATS = 8U,          /*!< Single-ended mode, vbat_s and vssa */
-    kADC_VREF  = 9U,          /*!< Single-ended mode, vref_12 and vssa */
-    kADC_DACA  = 10U,         /*!< Single-ended mode, daca and vssa */
-    kADC_DACB  = 11U,         /*!< Single-ended mode, dacb and vssa */
-    kADC_VSSA  = 12U,         /*!< Single-ended mode, vssa and vssa */
-    kADC_TEMPP = 15U,         /*!< Single-ended mode, temp_p and vssa */
+    kADC_CH0   = 0U,  /*!< Single-ended mode, channel[0] and vssa */
+    kADC_CH1   = 1U,  /*!< Single-ended mode, channel[1] and vssa */
+    kADC_CH2   = 2U,  /*!< Single-ended mode, channel[2] and vssa */
+    kADC_CH3   = 3U,  /*!< Single-ended mode, channel[3] and vssa */
+    kADC_CH4   = 4U,  /*!< Single-ended mode, channel[4] and vssa */
+    kADC_CH5   = 5U,  /*!< Single-ended mode, channel[5] and vssa */
+    kADC_CH6   = 6U,  /*!< Single-ended mode, channel[6] and vssa */
+    kADC_CH7   = 7U,  /*!< Single-ended mode, channel[7] and vssa */
+    kADC_VBATS = 8U,  /*!< Single-ended mode, vbat_s and vssa */
+    kADC_VREF  = 9U,  /*!< Single-ended mode, vref_12 and vssa */
+    kADC_DACA  = 10U, /*!< Single-ended mode, daca and vssa */
+    kADC_DACB  = 11U, /*!< Single-ended mode, dacb and vssa */
+    kADC_VSSA  = 12U, /*!< Single-ended mode, vssa and vssa */
 
-    kADC_CH0_CH1       = 0U,  /*!< Differential mode, channel[0] and channel[1] */
-    kADC_CH2_CH3       = 1U,  /*!< Differential mode, channel[2] and channel[3] */
-    kADC_CH4_CH5       = 2U,  /*!< Differential mode, channel[4] and channel[5] */
-    kADC_CH6_CH7       = 3U,  /*!< Differential mode, channel[6] and channel[7] */
-    kADC_DACA_DACB     = 4U,  /*!< Differential mode, daca and dacb */
-    kADC_VOICEP_VOICEN = 5U,  /*!< Differential mode, voice_p and voice_n */
-    kADC_TEMPP_TEMPN   = 15U, /*!< Differential mode, temp_p and temp_n */
+#if !(defined(FSL_FEATURE_ADC_HAS_NO_SINGLEEND_TEMP_CHANNEL) && FSL_FEATURE_ADC_HAS_NO_SINGLEEND_TEMP_CHANNEL)
+    kADC_TEMPP = 15U,    /*!< Single-ended mode, temp_p and vssa */
+#endif                   /* FSL_FEATURE_ADC_HAS_NO_SINGLEEND_TEMP_CHANNEL */
+
+    kADC_CH0_CH1   = 0U, /*!< Differential mode, channel[0] and channel[1] */
+    kADC_CH2_CH3   = 1U, /*!< Differential mode, channel[2] and channel[3] */
+    kADC_CH4_CH5   = 2U, /*!< Differential mode, channel[4] and channel[5] */
+    kADC_CH6_CH7   = 3U, /*!< Differential mode, channel[6] and channel[7] */
+    kADC_DACA_DACB = 4U, /*!< Differential mode, daca and dacb */
+
+#if !(defined(FSL_FEATURE_ADC_HAS_NO_DIFFERENTIAL_VOICE_CHANNEL) && FSL_FEATURE_ADC_HAS_NO_DIFFERENTIAL_VOICE_CHANNEL)
+    kADC_VOICEP_VOICEN = 5U, /*!< Differential mode, voice_p and voice_n */
+#endif                       /* FSL_FEATURE_ADC_HAS_NO_DIFFERENTIAL_VOICE_CHANNEL */
+
+#if !(defined(FSL_FEATURE_ADC_HAS_NO_DIFFERENTIAL_TEMP_CHANNEL) && FSL_FEATURE_ADC_HAS_NO_DIFFERENTIAL_TEMP_CHANNEL)
+    kADC_TEMPP_TEMPN = 15U, /*!< Differential mode, temp_p and temp_n */
+#endif                      /* FSL_FEATURE_ADC_HAS_NO_DIFFERENTIAL_TEMP_CHANNEL */
 } adc_channel_source_t;
 
 /*!
@@ -347,7 +344,11 @@ typedef enum _adc_channel_source
  */
 typedef enum _adc_temperature_sensor_mode
 {
+#if ((!(defined(FSL_FEATURE_ADC_HAS_NO_SINGLEEND_TEMP_CHANNEL) && FSL_FEATURE_ADC_HAS_NO_SINGLEEND_TEMP_CHANNEL)) || \
+     (!(defined(FSL_FEATURE_ADC_HAS_NO_DIFFERENTIAL_TEMP_CHANNEL) &&                                                 \
+        FSL_FEATURE_ADC_HAS_NO_DIFFERENTIAL_TEMP_CHANNEL)))
     kADC_TSensorInternal = 0U, /*!< Internal diode mode. */
+#endif                         /* No temperature measurement channel available. */
     kADC_TSensorExternal,      /*!< External diode mode. */
 } adc_temperature_sensor_mode_t;
 

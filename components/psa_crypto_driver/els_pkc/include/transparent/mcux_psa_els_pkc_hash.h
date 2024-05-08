@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef MCUX_PSA_HASH_H
-#define MCUX_PSA_HASH_H
+#ifndef MCUX_PSA_ELS_PKC_HASH_H
+#define MCUX_PSA_ELS_PKC_HASH_H
 
 /** \file mcux_psa_els_pkc_hash.h
  *
@@ -99,4 +99,4 @@ psa_status_t els_pkc_transparent_hash_compute(psa_algorithm_t alg, const uint8_t
 #ifdef __cplusplus
 }
 #endif
-#endif /* MCUX_PSA_HASH_H */
+#endif /* MCUX_PSA_ELS_PKC_HASH_H */

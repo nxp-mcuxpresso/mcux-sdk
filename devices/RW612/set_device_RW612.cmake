@@ -1752,12 +1752,36 @@ endif()
 endif()
 
 
+if (CONFIG_USE_component_mem_manager_freertos)
+# Add set(CONFIG_USE_component_mem_manager_freertos true) in config.cmake to use this component
+
+message("component_mem_manager_freertos component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND CONFIG_USE_middleware_freertos-kernel)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/mem_manager/fsl_component_mem_manager_freertos.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/mem_manager/.
+)
+
+else()
+
+message(SEND_ERROR "component_mem_manager_freertos.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_component_messaging)
 # Add set(CONFIG_USE_component_messaging true) in config.cmake to use this component
 
 message("component_messaging component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_common AND CONFIG_USE_component_lists AND CONFIG_USE_component_mem_manager_light)
+if(CONFIG_USE_driver_common AND CONFIG_USE_component_lists AND (CONFIG_USE_component_mem_manager_light OR CONFIG_USE_component_mem_manager_freertos))
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../components/messaging/fsl_component_messaging.c
