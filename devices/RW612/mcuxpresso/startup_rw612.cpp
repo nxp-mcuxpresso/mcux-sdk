@@ -1,10 +1,10 @@
 //*****************************************************************************
 // RW612 startup code for use with MCUXpresso IDE
 //
-// Version : 011223
+// Version : 120324
 //*****************************************************************************
 //
-// Copyright 2016-2023 NXP
+// Copyright 2016-2024 NXP
 // All rights reserved.
 //
 // SPDX-License-Identifier: BSD-3-Clause
@@ -87,7 +87,7 @@ WEAK void PIN_INT1_IRQHandler(void);
 WEAK void PIN_INT2_IRQHandler(void);
 WEAK void PIN_INT3_IRQHandler(void);
 WEAK void UTICK_IRQHandler(void);
-WEAK void MRT0_IRQHandler(void);
+WEAK void MRT_IRQHandler(void);
 WEAK void CTIMER0_IRQHandler(void);
 WEAK void CTIMER1_IRQHandler(void);
 WEAK void SCT0_IRQHandler(void);
@@ -101,13 +101,13 @@ WEAK void Reserved35_IRQHandler(void);
 WEAK void FLEXCOMM14_IRQHandler(void);
 WEAK void Reserved37_IRQHandler(void);
 WEAK void Reserved38_IRQHandler(void);
-WEAK void MRT1_IRQHandler(void);
+WEAK void GFMRT_IRQHandler(void);
 WEAK void Reserved40_IRQHandler(void);
-WEAK void DMIC0_IRQHandler(void);
-WEAK void WFD_IRQHandler(void);
+WEAK void DMIC_IRQHandler(void);
+WEAK void WKDEEPSLEEP_IRQHandler(void);
 WEAK void HYPERVISOR_IRQHandler(void);
 WEAK void SECUREVIOLATION_IRQHandler(void);
-WEAK void HWVAD0_IRQHandler(void);
+WEAK void HWVAD_IRQHandler(void);
 WEAK void Reserved46_IRQHandler(void);
 WEAK void Reserved47_IRQHandler(void);
 WEAK void RTC_IRQHandler(void);
@@ -119,12 +119,12 @@ WEAK void PIN_INT6_IRQHandler(void);
 WEAK void PIN_INT7_IRQHandler(void);
 WEAK void CTIMER2_IRQHandler(void);
 WEAK void CTIMER4_IRQHandler(void);
-WEAK void OS_EVENT_IRQHandler(void);
+WEAK void OS_EVENT_TIMER_IRQHandler(void);
 WEAK void FLEXSPI_IRQHandler(void);
 WEAK void Reserved59_IRQHandler(void);
 WEAK void Reserved60_IRQHandler(void);
 WEAK void Reserved61_IRQHandler(void);
-WEAK void SDU_IRQHandler(void);
+WEAK void SDIO_IRQHandler(void);
 WEAK void SGPIO_INTA_IRQHandler(void);
 WEAK void SGPIO_INTB_IRQHandler(void);
 WEAK void Reserved65_IRQHandler(void);
@@ -139,19 +139,19 @@ WEAK void Reserved73_IRQHandler(void);
 WEAK void Reserved74_IRQHandler(void);
 WEAK void Reserved75_IRQHandler(void);
 WEAK void Reserved76_IRQHandler(void);
-WEAK void LCDIC_IRQHandler(void);
-WEAK void CAPT_PULSE_IRQHandler(void);
+WEAK void LCD_IRQHandler(void);
+WEAK void CAPTIMER_IRQHandler(void);
 WEAK void Reserved79_IRQHandler(void);
-WEAK void WL_MCI_WAKEUP_DONE0_IRQHandler(void);
-WEAK void WL_MCI_WAKEUP_DONE1_IRQHandler(void);
-WEAK void WL_MCI_WAKEUP_DONE2_IRQHandler(void);
-WEAK void WL_MCI_WAKEUP_DONE3_IRQHandler(void);
-WEAK void WL_MCI_WAKEUP_DONE4_IRQHandler(void);
-WEAK void WL_MCI_WAKEUP_DONE5_IRQHandler(void);
-WEAK void WL_MCI_WAKEUP_DONE6_IRQHandler(void);
-WEAK void WL_MCI_WAKEUP_DONE7_IRQHandler(void);
-WEAK void WL_MCI_WAKEUP0_IRQHandler(void);
-WEAK void WL_MCI_WAKEUP1_IRQHandler(void);
+WEAK void W2MWKUP_DONE0_IRQHandler(void);
+WEAK void W2MWKUP_DONE1_IRQHandler(void);
+WEAK void W2MWKUP_DONE2_IRQHandler(void);
+WEAK void W2MWKUP_DONE3_IRQHandler(void);
+WEAK void W2MWKUP_DONE4_IRQHandler(void);
+WEAK void W2MWKUP_DONE5_IRQHandler(void);
+WEAK void W2MWKUP_DONE6_IRQHandler(void);
+WEAK void W2MWKUP_DONE7_IRQHandler(void);
+WEAK void W2MWKUP0_IRQHandler(void);
+WEAK void W2MWKUP1_IRQHandler(void);
 WEAK void WL_MCI_INT0_IRQHandler(void);
 WEAK void WL_MCI_INT1_IRQHandler(void);
 WEAK void WL_MCI_INT2_IRQHandler(void);
@@ -160,16 +160,16 @@ WEAK void WL_MCI_INT4_IRQHandler(void);
 WEAK void WL_MCI_INT5_IRQHandler(void);
 WEAK void WL_MCI_INT6_IRQHandler(void);
 WEAK void WL_MCI_INT7_IRQHandler(void);
-WEAK void BLE_MCI_WAKEUP_DONE0_IRQHandler(void);
-WEAK void BLE_MCI_WAKEUP_DONE1_IRQHandler(void);
-WEAK void BLE_MCI_WAKEUP_DONE2_IRQHandler(void);
-WEAK void BLE_MCI_WAKEUP_DONE3_IRQHandler(void);
-WEAK void BLE_MCI_WAKEUP_DONE4_IRQHandler(void);
-WEAK void BLE_MCI_WAKEUP_DONE5_IRQHandler(void);
-WEAK void BLE_MCI_WAKEUP_DONE6_IRQHandler(void);
-WEAK void BLE_MCI_WAKEUP_DONE7_IRQHandler(void);
-WEAK void BLE_MCI_WAKEUP0_IRQHandler(void);
-WEAK void BLE_MCI_WAKEUP1_IRQHandler(void);
+WEAK void B2MWKUP_DONE0_IRQHandler(void);
+WEAK void B2MWKUP_DONE1_IRQHandler(void);
+WEAK void B2MWKUP_DONE2_IRQHandler(void);
+WEAK void B2MWKUP_DONE3_IRQHandler(void);
+WEAK void B2MWKUP_DONE4_IRQHandler(void);
+WEAK void B2MWKUP_DONE5_IRQHandler(void);
+WEAK void B2MWKUP_DONE6_IRQHandler(void);
+WEAK void B2MWKUP_DONE7_IRQHandler(void);
+WEAK void B2MWKUP0_IRQHandler(void);
+WEAK void B2MWKUP1_IRQHandler(void);
 WEAK void BLE_MCI_INT0_IRQHandler(void);
 WEAK void BLE_MCI_INT1_IRQHandler(void);
 WEAK void BLE_MCI_INT2_IRQHandler(void);
@@ -181,31 +181,31 @@ WEAK void BLE_MCI_INT7_IRQHandler(void);
 WEAK void PIN0_INT_IRQHandler(void);
 WEAK void PIN1_INT_IRQHandler(void);
 WEAK void ELS_IRQHandler(void);
-WEAK void ELS_GDET_IRQ_IRQHandler(void);
-WEAK void ELS_GDET_ERR_IRQHandler(void);
-WEAK void PKC_IRQHandler(void);
+WEAK void ELS_GDET_IRQHandler(void);
+WEAK void ELS_GDET_UM_IRQHandler(void);
+WEAK void PKC_INT_IRQHandler(void);
 WEAK void PKC_ERR_IRQHandler(void);
-WEAK void CDOG_IRQHandler(void);
-WEAK void GAU_GPDAC_INT_FUNC11_IRQHandler(void);
-WEAK void GAU_ACOMP_INT_WKUP11_IRQHandler(void);
-WEAK void GAU_ACOMP_INT_FUNC11_IRQHandler(void);
-WEAK void GAU_GPADC1_INT_FUNC11_IRQHandler(void);
-WEAK void GAU_GPADC0_INT_FUNC11_IRQHandler(void);
+WEAK void CDOG_INT_IRQHandler(void);
+WEAK void GAU_DAC_IRQHandler(void);
+WEAK void GAU_ACOMP_WKUP_IRQHandler(void);
+WEAK void GAU_ACOMP_IRQHandler(void);
+WEAK void GAU_ADC1_IRQHandler(void);
+WEAK void GAU_ADC0_IRQHandler(void);
 WEAK void USIM_IRQHandler(void);
-WEAK void OCOTP_IRQHandler(void);
+WEAK void OTP_IRQHandler(void);
 WEAK void ENET_IRQHandler(void);
 WEAK void ENET_TIMER_IRQHandler(void);
-WEAK void BOD_1_85_INT_IRQHandler(void);
-WEAK void BOD_1_85_NEG_IRQHandler(void);
+WEAK void PMIP_IRQHandler(void);
+WEAK void PMIP_CHANGE_IRQHandler(void);
 WEAK void ITRC_IRQHandler(void);
-WEAK void BTU_HOST_TRIGGER0_IRQHandler(void);
-WEAK void BTU_HOST_TRIGGER1_IRQHandler(void);
-WEAK void BTU_HOST_TRIGGER2_IRQHandler(void);
+WEAK void Reserved136_IRQHandler(void);
+WEAK void Reserved137_IRQHandler(void);
+WEAK void Reserved138_IRQHandler(void);
 WEAK void TRNG_IRQHandler(void);
-WEAK void AHB_MEM_ACC_CHECKER_VIO_INT_C_OR_IRQHandler(void);
-WEAK void AHB_MEM_ACC_CHECKER_VIO_INT_S_OR_IRQHandler(void);
-WEAK void WL_ACC_INT_IRQHandler(void);
-WEAK void BLE_ACC_INT_IRQHandler(void);
+WEAK void ACC_C_INT_IRQHandler(void);
+WEAK void ACC_S_INT_IRQHandler(void);
+WEAK void WACC_IRQHandler(void);
+WEAK void BACC_IRQHandler(void);
 WEAK void GDMA_IRQHandler(void);
 
 //*****************************************************************************
@@ -223,7 +223,7 @@ void PIN_INT1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PIN_INT2_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PIN_INT3_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void UTICK_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void MRT0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void MRT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void CTIMER0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void CTIMER1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void SCT0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
@@ -237,13 +237,13 @@ void Reserved35_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void FLEXCOMM14_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved37_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved38_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void MRT1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void GFMRT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved40_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void DMIC0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void WFD_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void DMIC_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void WKDEEPSLEEP_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void HYPERVISOR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void SECUREVIOLATION_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void HWVAD0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void HWVAD_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved46_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved47_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void RTC_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
@@ -255,12 +255,12 @@ void PIN_INT6_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PIN_INT7_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void CTIMER2_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void CTIMER4_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void OS_EVENT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void OS_EVENT_TIMER_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void FLEXSPI_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved59_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved60_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved61_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void SDU_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void SDIO_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void SGPIO_INTA_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void SGPIO_INTB_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved65_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
@@ -275,19 +275,19 @@ void Reserved73_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved74_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved75_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved76_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void LCDIC_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void CAPT_PULSE_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void LCD_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void CAPTIMER_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved79_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void WL_MCI_WAKEUP_DONE0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void WL_MCI_WAKEUP_DONE1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void WL_MCI_WAKEUP_DONE2_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void WL_MCI_WAKEUP_DONE3_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void WL_MCI_WAKEUP_DONE4_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void WL_MCI_WAKEUP_DONE5_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void WL_MCI_WAKEUP_DONE6_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void WL_MCI_WAKEUP_DONE7_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void WL_MCI_WAKEUP0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void WL_MCI_WAKEUP1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void W2MWKUP_DONE0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void W2MWKUP_DONE1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void W2MWKUP_DONE2_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void W2MWKUP_DONE3_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void W2MWKUP_DONE4_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void W2MWKUP_DONE5_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void W2MWKUP_DONE6_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void W2MWKUP_DONE7_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void W2MWKUP0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void W2MWKUP1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void WL_MCI_INT0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void WL_MCI_INT1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void WL_MCI_INT2_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
@@ -296,16 +296,16 @@ void WL_MCI_INT4_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void WL_MCI_INT5_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void WL_MCI_INT6_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void WL_MCI_INT7_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BLE_MCI_WAKEUP_DONE0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BLE_MCI_WAKEUP_DONE1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BLE_MCI_WAKEUP_DONE2_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BLE_MCI_WAKEUP_DONE3_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BLE_MCI_WAKEUP_DONE4_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BLE_MCI_WAKEUP_DONE5_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BLE_MCI_WAKEUP_DONE6_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BLE_MCI_WAKEUP_DONE7_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BLE_MCI_WAKEUP0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BLE_MCI_WAKEUP1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void B2MWKUP_DONE0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void B2MWKUP_DONE1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void B2MWKUP_DONE2_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void B2MWKUP_DONE3_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void B2MWKUP_DONE4_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void B2MWKUP_DONE5_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void B2MWKUP_DONE6_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void B2MWKUP_DONE7_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void B2MWKUP0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void B2MWKUP1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void BLE_MCI_INT0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void BLE_MCI_INT1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void BLE_MCI_INT2_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
@@ -317,31 +317,31 @@ void BLE_MCI_INT7_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PIN0_INT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PIN1_INT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void ELS_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void ELS_GDET_IRQ_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void ELS_GDET_ERR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void PKC_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void ELS_GDET_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void ELS_GDET_UM_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void PKC_INT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PKC_ERR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void CDOG_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void GAU_GPDAC_INT_FUNC11_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void GAU_ACOMP_INT_WKUP11_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void GAU_ACOMP_INT_FUNC11_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void GAU_GPADC1_INT_FUNC11_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void GAU_GPADC0_INT_FUNC11_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void CDOG_INT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void GAU_DAC_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void GAU_ACOMP_WKUP_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void GAU_ACOMP_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void GAU_ADC1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void GAU_ADC0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void USIM_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void OCOTP_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void OTP_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void ENET_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void ENET_TIMER_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BOD_1_85_INT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BOD_1_85_NEG_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void PMIP_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void PMIP_CHANGE_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void ITRC_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BTU_HOST_TRIGGER0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BTU_HOST_TRIGGER1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BTU_HOST_TRIGGER2_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void Reserved136_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void Reserved137_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void Reserved138_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void TRNG_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void AHB_MEM_ACC_CHECKER_VIO_INT_C_OR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void AHB_MEM_ACC_CHECKER_VIO_INT_S_OR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void WL_ACC_INT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void BLE_ACC_INT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void ACC_C_INT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void ACC_S_INT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void WACC_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void BACC_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void GDMA_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 
 //*****************************************************************************
@@ -406,142 +406,136 @@ void (* const g_pfnVectors[])(void) = {
     SysTick_Handler,                   // SysTick Handler
 
     // Chip Level - RW612
-    WDT0_IRQHandler,                          // 16 : Windowed watchdog timer 0 (CM33 watchdog)
-    DMA0_IRQHandler,                          // 17 : DMA controller 0 (secure or CM33 DMA)
-    GPIO_INTA_IRQHandler,                         // 18 : GPIO interrupt A
-    GPIO_INTB_IRQHandler,                         // 19 : GPIO interrupt B
-    PIN_INT0_IRQHandler,                          // 20 : Pin interrupt 0 or pattern match engine slice 0 int
-    PIN_INT1_IRQHandler,                          // 21 : Pin interrupt 1 or pattern match engine slice 1 int
-    PIN_INT2_IRQHandler,                          // 22 : Pin interrupt 2 or pattern match engine slice 2 int
-    PIN_INT3_IRQHandler,                          // 23 : Pin interrupt 3 or pattern match engine slice 3 int
-    UTICK_IRQHandler,                          // 24 : Micro-tick Timer
-    MRT0_IRQHandler,                          // 25 : Multi-Rate Timer. Global MRT interrupts
-    CTIMER0_IRQHandler,                          // 26 : Standard counter/timer CTIMER0
-    CTIMER1_IRQHandler,                          // 27 : Standard counter/timer CTIMER1
-    SCT0_IRQHandler,                          // 28 : SCTimer/PWM
-    CTIMER3_IRQHandler,                          // 29 : Standard counter/timer CTIMER3
-    FLEXCOMM0_IRQHandler,                         // 30 : Flexcomm Interface 0 (USART, SPI, I2C, I2S)
-    FLEXCOMM1_IRQHandler,                         // 31 : Flexcomm Interface 1 (USART, SPI, I2C, I2S)
-    FLEXCOMM2_IRQHandler,                         // 32 : Flexcomm Interface 2 (USART, SPI, I2C, I2S)
-    FLEXCOMM3_IRQHandler,                         // 33 : Flexcomm Interface 3 (USART, SPI, I2C, I2S)
-    Reserved34_IRQHandler,                        // 34 : Reserved interrupt
-    Reserved35_IRQHandler,                        // 35 : Reserved interrupt
-    FLEXCOMM14_IRQHandler,                        // 36 : Flexcomm Interface 14 (USART, SPI, I2C, I2S)
-    Reserved37_IRQHandler,                        // 37 : Reserved interrupt
-    Reserved38_IRQHandler,                        // 38 : Reserved interrupt
-    MRT1_IRQHandler,                          // 39 : Free Multi-rate timer. Global MRT interrupts
-    Reserved40_IRQHandler,                        // 40 : Reserved interrupt
-    DMIC0_IRQHandler,                          // 41 : Digital microphone and DMIC subsystem
-    WFD_IRQHandler,                          // 42 : Wakeup From Deepsleep
-    HYPERVISOR_IRQHandler,                        // 43 : Hypervisor service software interrupt
-    SECUREVIOLATION_IRQHandler,                   // 44 : Secure violation
-    HWVAD0_IRQHandler,                          // 45 : Hardware Voice Activity Detector
-    Reserved46_IRQHandler,                        // 46 : Reserved interrupt
-    Reserved47_IRQHandler,                        // 47 : Reserved interrupt
-    RTC_IRQHandler,                          // 48 : RTC alarm and wake-up
-    Reserved49_IRQHandler,                        // 49 : Reserved interrupt
-    Reserved50_IRQHandler,                        // 50 : Reserved interrupt
-    PIN_INT4_IRQHandler,                          // 51 : Pin interrupt 4 or pattern match engine slice 4 int
-    PIN_INT5_IRQHandler,                          // 52 : Pin interrupt 5 or pattern match engine slice 5 int
-    PIN_INT6_IRQHandler,                          // 53 : Pin interrupt 6 or pattern match engine slice 6 int
-    PIN_INT7_IRQHandler,                          // 54 : Pin interrupt 7 or pattern match engine slice 7 int
-    CTIMER2_IRQHandler,                          // 55 : Standard counter/timer CTIMER2
-    CTIMER4_IRQHandler,                          // 56 : Standard counter/timer CTIMER4
-    OS_EVENT_IRQHandler,                          // 57 : OS event timer
-    FLEXSPI_IRQHandler,                          // 58 : FLEXSPI interface
-    Reserved59_IRQHandler,                        // 59 : Reserved interrupt
-    Reserved60_IRQHandler,                        // 60 : Reserved interrupt
-    Reserved61_IRQHandler,                        // 61 : Reserved interrupt
-    SDU_IRQHandler,                          // 62 : SDIO
-    SGPIO_INTA_IRQHandler,                        // 63 : Secure GPIO interrupt A
-    SGPIO_INTB_IRQHandler,                        // 64 : Secure GPIO interrupt B
-    Reserved65_IRQHandler,                        // 65 : Reserved interrupt
-    USB_IRQHandler,                          // 66 : High-speed USB device/host
-    Reserved67_IRQHandler,                        // 67 : Reserved interrupt
-    Reserved68_IRQHandler,                        // 68 : Reserved interrupt
-    Reserved69_IRQHandler,                        // 69 : Reserved interrupt
-    DMA1_IRQHandler,                          // 70 : DMA controller 1 (non-secure or HiFi 4 DMA)
-    PUF_IRQHandler,                          // 71 : Physical Unclonable Function
-    POWERQUAD_IRQHandler,                         // 72 : PowerQuad math coprocessor
-    Reserved73_IRQHandler,                        // 73 : Reserved interrupt
-    Reserved74_IRQHandler,                        // 74 : Reserved interrupt
-    Reserved75_IRQHandler,                        // 75 : Reserved interrupt
-    Reserved76_IRQHandler,                        // 76 : Reserved interrupt
-    LCDIC_IRQHandler,                          // 77 : LCDIC
-    CAPT_PULSE_IRQHandler,                        // 78 : Capture timer
-    Reserved79_IRQHandler,                        // 79 : Reserved interrupt
-    WL_MCI_WAKEUP_DONE0_IRQHandler,               // 80 : WL to MCI, Wakeup done 0
-    WL_MCI_WAKEUP_DONE1_IRQHandler,               // 81 : WL to MCI, Wakeup done 1
-    WL_MCI_WAKEUP_DONE2_IRQHandler,               // 82 : WL to MCI, Wakeup done 2
-    WL_MCI_WAKEUP_DONE3_IRQHandler,               // 83 : WL to MCI, Wakeup done 3
-    WL_MCI_WAKEUP_DONE4_IRQHandler,               // 84 : WL to MCI, Wakeup done 4
-    WL_MCI_WAKEUP_DONE5_IRQHandler,               // 85 : WL to MCI, Wakeup done 5
-    WL_MCI_WAKEUP_DONE6_IRQHandler,               // 86 : WL to MCI, Wakeup done 6
-    WL_MCI_WAKEUP_DONE7_IRQHandler,               // 87 : WL to MCI, Wakeup done 7
-    WL_MCI_WAKEUP0_IRQHandler,                    // 88 : IMU_INT0: Cpu1_to_cpu3_msg_rdy_imu wl_mci_wakeup[0]
-    WL_MCI_WAKEUP1_IRQHandler,                    // 89 : GP_INT from WL
-    WL_MCI_INT0_IRQHandler,                       // 90 : IMU_INT: Imu13_cpu3_msg_space_avail
-    WL_MCI_INT1_IRQHandler,                       // 91 : reserved
-    WL_MCI_INT2_IRQHandler,                       // 92 : reserved
-    WL_MCI_INT3_IRQHandler,                       // 93 : reserved
-    WL_MCI_INT4_IRQHandler,                       // 94 : reserved
-    WL_MCI_INT5_IRQHandler,                       // 95 : reserved
-    WL_MCI_INT6_IRQHandler,                       // 96 : reserved
-    WL_MCI_INT7_IRQHandler,                       // 97 : reserved
-    BLE_MCI_WAKEUP_DONE0_IRQHandler,              // 98 : BLE to MCI, Wakeup done 0
-    BLE_MCI_WAKEUP_DONE1_IRQHandler,              // 99 : BLE to MCI, Wakeup done 1
-    BLE_MCI_WAKEUP_DONE2_IRQHandler,              // 100: BLE to MCI, Wakeup done 2
-    BLE_MCI_WAKEUP_DONE3_IRQHandler,              // 101: BLE to MCI, Wakeup done 3
-    BLE_MCI_WAKEUP_DONE4_IRQHandler,              // 102: BLE to MCI, Wakeup done 4
-    BLE_MCI_WAKEUP_DONE5_IRQHandler,              // 103: BLE to MCI, Wakeup done 5
-    BLE_MCI_WAKEUP_DONE6_IRQHandler,              // 104: BLE to MCI, Wakeup done 6
-    BLE_MCI_WAKEUP_DONE7_IRQHandler,              // 105: BLE to MCI, Wakeup done 7
-    BLE_MCI_WAKEUP0_IRQHandler,                   // 106: IMU_INT0: Cpu2_to_cpu3_msg_rdy_imu wl_mci_wakeup[0]
-    BLE_MCI_WAKEUP1_IRQHandler,                   // 107: GP_INT from BLE
-    BLE_MCI_INT0_IRQHandler,                      // 108: IMU_INT: Imu13_cpu3_msg_space_avail
-    BLE_MCI_INT1_IRQHandler,                      // 109: reserved
-    BLE_MCI_INT2_IRQHandler,                      // 110: reserved
-    BLE_MCI_INT3_IRQHandler,                      // 111: reserved
-    BLE_MCI_INT4_IRQHandler,                      // 112: reserved
-    BLE_MCI_INT5_IRQHandler,                      // 113: reserved
-    BLE_MCI_INT6_IRQHandler,                      // 114: reserved
-    BLE_MCI_INT7_IRQHandler,                      // 115: reserved
-    PIN0_INT_IRQHandler,                          // 116: From AON GPIO
-    PIN1_INT_IRQHandler,                          // 117: From AON GPIO
-    ELS_IRQHandler,                          // 118: ELS
-    ELS_GDET_IRQ_IRQHandler,                      // 119: ELS IRQ line for GDET error
-    ELS_GDET_ERR_IRQHandler,                      // 120: ELS Ungated latched error
-    PKC_IRQHandler,                          // 121: PKC interrupt
-    PKC_ERR_IRQHandler,                          // 122: PKC error
-    CDOG_IRQHandler,                          // 123: Code watch dog timmer
-    GAU_GPDAC_INT_FUNC11_IRQHandler,              // 124: GAU
-    GAU_ACOMP_INT_WKUP11_IRQHandler,              // 125: GAU
-    GAU_ACOMP_INT_FUNC11_IRQHandler,              // 126: GAU
-    GAU_GPADC1_INT_FUNC11_IRQHandler,             // 127: GAU
-    GAU_GPADC0_INT_FUNC11_IRQHandler,             // 128: GAU
-    USIM_IRQHandler,                          // 129: USIM
-    OCOTP_IRQHandler,                          // 130: OTP
-    ENET_IRQHandler,                          // 131: ENET
-    ENET_TIMER_IRQHandler,                        // 132: ENET
-    BOD_1_85_INT_IRQHandler,                      // 133: PMIP
-    BOD_1_85_NEG_IRQHandler,                      // 134: Bod_1_85_int negedge
-    ITRC_IRQHandler,                          // 135: ITRC
-    BTU_HOST_TRIGGER0_IRQHandler,                 // 136: Btu host trigger0
-    BTU_HOST_TRIGGER1_IRQHandler,                 // 137: Btu host trigger1
-    BTU_HOST_TRIGGER2_IRQHandler,                 // 138: Btu host trigger2
-    TRNG_IRQHandler,                          // 139: TRNG
-    AHB_MEM_ACC_CHECKER_VIO_INT_C_OR_IRQHandler,  // 140: ahb memory access checker - CM33 code bus
-    AHB_MEM_ACC_CHECKER_VIO_INT_S_OR_IRQHandler,  // 141: ahb memory access checker - CM33 sys bus
-    WL_ACC_INT_IRQHandler,                        // 142: Cpu access wlan when wlan is powered off
-    BLE_ACC_INT_IRQHandler,                       // 143: Cpu access wlan when ble is powered off
-    GDMA_IRQHandler,                          // 144: GDMA
+    WDT0_IRQHandler,             // 16 : Windowed watchdog timer 0 (WDT0)(Cortex-M33 watchdog)
+    DMA0_IRQHandler,             // 17 : Direct memory access (DMA) controller 0 (secure or Cortex-M33 DMA)
+    GPIO_INTA_IRQHandler,        // 18 : GPIO interrupt A
+    GPIO_INTB_IRQHandler,        // 19 : GPIO interrupt B
+    PIN_INT0_IRQHandler,         // 20 : Pin interrupt 0 or pattern match engine slice 0
+    PIN_INT1_IRQHandler,         // 21 : Pin interrupt 1 or pattern match engine slice 1
+    PIN_INT2_IRQHandler,         // 22 : Pin interrupt 2 or pattern match engine slice 2
+    PIN_INT3_IRQHandler,         // 23 : Pin interrupt 3 or pattern match engine slice 3
+    UTICK_IRQHandler,            // 24 : Micro-tick Timer (UTICK)
+    MRT_IRQHandler,              // 25 : Multi-Rate Timer (MRT). Global MRT interrupts
+    CTIMER0_IRQHandler,          // 26 : Standard counter/timer CTIMER0
+    CTIMER1_IRQHandler,          // 27 : Standard counter/timer CTIMER1
+    SCT0_IRQHandler,             // 28 : SCTimer/PWM
+    CTIMER3_IRQHandler,          // 29 : Standard counter/timer CTIMER3
+    FLEXCOMM0_IRQHandler,        // 30 : Flexcomm Interface 0 (USART, SPI, I2C, I2S)
+    FLEXCOMM1_IRQHandler,        // 31 : Flexcomm Interface 1 (USART, SPI, I2C, I2S)
+    FLEXCOMM2_IRQHandler,        // 32 : Flexcomm Interface 2 (USART, SPI, I2C, I2S)
+    FLEXCOMM3_IRQHandler,        // 33 : Flexcomm Interface 3 (USART, SPI, I2C, I2S)
+    Reserved34_IRQHandler,       // 34 : Reserved interrupt
+    Reserved35_IRQHandler,       // 35 : Reserved interrupt
+    FLEXCOMM14_IRQHandler,       // 36 : Flexcomm Interface 14 (USART, SPI, I2C, I2S)
+    Reserved37_IRQHandler,       // 37 : Reserved interrupt
+    Reserved38_IRQHandler,       // 38 : Reserved interrupt
+    GFMRT_IRQHandler,            // 39 : Free Multi-rate timer (GFMRT). Global MRT interrupts
+    Reserved40_IRQHandler,       // 40 : Reserved interrupt
+    DMIC_IRQHandler,             // 41 : Digital microphone (DMIC) and DMIC subsystem
+    WKDEEPSLEEP_IRQHandler,      // 42 : Wake-up from deep sleep
+    HYPERVISOR_IRQHandler,       // 43 : Hypervisor service software interrupt
+    SECUREVIOLATION_IRQHandler,  // 44 : Secure violation
+    HWVAD_IRQHandler,            // 45 : Hardware Voice Activity Detector
+    Reserved46_IRQHandler,       // 46 : Reserved interrupt
+    Reserved47_IRQHandler,       // 47 : Reserved interrupt
+    RTC_IRQHandler,              // 48 : RTC alarm and wake-up
+    Reserved49_IRQHandler,       // 49 : Reserved interrupt
+    Reserved50_IRQHandler,       // 50 : Reserved interrupt
+    PIN_INT4_IRQHandler,         // 51 : Pin interrupt 4 or pattern match engine slice 4
+    PIN_INT5_IRQHandler,         // 52 : Pin interrupt 5 or pattern match engine slice 5
+    PIN_INT6_IRQHandler,         // 53 : Pin interrupt 6 or pattern match engine slice 6
+    PIN_INT7_IRQHandler,         // 54 : Pin interrupt 7 or pattern match engine slice 7
+    CTIMER2_IRQHandler,          // 55 : Standard counter/timer CTIMER2
+    CTIMER4_IRQHandler,          // 56 : Standard counter/timer CTIMER4
+    OS_EVENT_TIMER_IRQHandler,   // 57 : OS event timer 0
+    FLEXSPI_IRQHandler,          // 58 : FLEXSPI interface
+    Reserved59_IRQHandler,       // 59 : Reserved interrupt
+    Reserved60_IRQHandler,       // 60 : Reserved interrupt
+    Reserved61_IRQHandler,       // 61 : Reserved interrupt
+    SDIO_IRQHandler,             // 62 : The secure digital interface
+    SGPIO_INTA_IRQHandler,       // 63 : Secure GPIO interrupt A
+    SGPIO_INTB_IRQHandler,       // 64 : Secure GPIO interrupt B
+    Reserved65_IRQHandler,       // 65 : Reserved interrupt
+    USB_IRQHandler,              // 66 : High-speed USB device/host
+    Reserved67_IRQHandler,       // 67 : Reserved interrupt
+    Reserved68_IRQHandler,       // 68 : Reserved interrupt
+    Reserved69_IRQHandler,       // 69 : Reserved interrupt
+    DMA1_IRQHandler,             // 70 : DMA controller 1 (non-secure or HiFi 4 DMA)
+    PUF_IRQHandler,              // 71 : Physical Unclonable Function
+    POWERQUAD_IRQHandler,        // 72 : PowerQuad math coprocessor
+    Reserved73_IRQHandler,       // 73 : Reserved interrupt
+    Reserved74_IRQHandler,       // 74 : Reserved interrupt
+    Reserved75_IRQHandler,       // 75 : Reserved interrupt
+    Reserved76_IRQHandler,       // 76 : Reserved interrupt
+    LCD_IRQHandler,              // 77 : LCDIC
+    CAPTIMER_IRQHandler,         // 78 : Capture timer
+    Reserved79_IRQHandler,       // 79 : Reserved interrupt
+    W2MWKUP_DONE0_IRQHandler,    // 80 : Wi-Fi to MCU, wakeup done 0
+    W2MWKUP_DONE1_IRQHandler,    // 81 : Wi-Fi to MCU, wakeup done 1
+    W2MWKUP_DONE2_IRQHandler,    // 82 : Wi-Fi to MCU, wakeup done 2
+    W2MWKUP_DONE3_IRQHandler,    // 83 : Wi-Fi to MCU, wakeup done 3
+    W2MWKUP_DONE4_IRQHandler,    // 84 : Wi-Fi to MCU, wakeup done 4
+    W2MWKUP_DONE5_IRQHandler,    // 85 : Wi-Fi to MCU, wakeup done 5
+    W2MWKUP_DONE6_IRQHandler,    // 86 : Wi-Fi to MCU, wakeup done 6
+    W2MWKUP_DONE7_IRQHandler,    // 87 : Wi-Fi to MCU, wakeup done 7
+    W2MWKUP0_IRQHandler,         // 88 : Wi-Fi to MCU, wakeup signal 0
+    W2MWKUP1_IRQHandler,         // 89 : Wi-Fi to MCU, wakueup signal 1
+    WL_MCI_INT0_IRQHandler,      // 90 : Wi-Fi to MCU interrupt 0
+    WL_MCI_INT1_IRQHandler,      // 91 : Reserved for Wi-Fi to MCU
+    WL_MCI_INT2_IRQHandler,      // 92 : Reserved for Wi-Fi to MCU
+    WL_MCI_INT3_IRQHandler,      // 93 : Reserved for Wi-Fi to MCU
+    WL_MCI_INT4_IRQHandler,      // 94 : Reserved for Wi-Fi to MCU
+    WL_MCI_INT5_IRQHandler,      // 95 : Reserved for Wi-Fi to MCU
+    WL_MCI_INT6_IRQHandler,      // 96 : Reserved for Wi-Fi to MCU
+    WL_MCI_INT7_IRQHandler,      // 97 : Reserved for Wi-Fi to MCU
+    B2MWKUP_DONE0_IRQHandler,    // 98 : Bluetooth LE/802.15.4 radio to MCU, wakeup done 0
+    B2MWKUP_DONE1_IRQHandler,    // 99 : Bluetooth LE/802.15.4 radio to MCU, wakeup done 1
+    B2MWKUP_DONE2_IRQHandler,    // 100: Bluetooth LE/802.15.4 radio to MCU, wakeup done 2
+    B2MWKUP_DONE3_IRQHandler,    // 101: Bluetooth LE/802.15.4 radio to MCU, wakeup done 3
+    B2MWKUP_DONE4_IRQHandler,    // 102: Bluetooth LE/802.15.4 radio to MCU, wakeup done 4
+    B2MWKUP_DONE5_IRQHandler,    // 103: Bluetooth LE/802.15.4 radio to MCU, wakeup done 5
+    B2MWKUP_DONE6_IRQHandler,    // 104: Bluetooth LE/802.15.4 radio to MCU, wakeup done 6
+    B2MWKUP_DONE7_IRQHandler,    // 105: Bluetooth LE/802.15.4 radio to MCU, wakeup done 7
+    B2MWKUP0_IRQHandler,         // 106: Bluetooth LE/802.15.4 radio to MCU, wakeup signal 0
+    B2MWKUP1_IRQHandler,         // 107: Bluetooth LE/802.15.4 radio to MCU, wakeup signal 1
+    BLE_MCI_INT0_IRQHandler,     // 108: Bluetooth LE/802.15.4 radio to MCU interrupt 0
+    BLE_MCI_INT1_IRQHandler,     // 109: Reserved for Bluetooth LE/802.15.4 radio to MCU
+    BLE_MCI_INT2_IRQHandler,     // 110: Reserved for Bluetooth LE/802.15.4 radio to MCU
+    BLE_MCI_INT3_IRQHandler,     // 111: Reserved for Bluetooth LE/802.15.4 radio to MCU
+    BLE_MCI_INT4_IRQHandler,     // 112: Reserved for Bluetooth LE/802.15.4 radio to MCU
+    BLE_MCI_INT5_IRQHandler,     // 113: Reserved for Bluetooth LE/802.15.4 radio to MCU
+    BLE_MCI_INT6_IRQHandler,     // 114: Reserved for Bluetooth LE/802.15.4 radio to MCU
+    BLE_MCI_INT7_IRQHandler,     // 115: Reserved for Bluetooth LE/802.15.4 radio to MCU
+    PIN0_INT_IRQHandler,         // 116: From AON GPIO
+    PIN1_INT_IRQHandler,         // 117: From AON GPIO
+    ELS_IRQHandler,              // 118: EdgeLock subsystem (ELS)
+    ELS_GDET_IRQHandler,         // 119: ELS IRQ line for GDET error
+    ELS_GDET_UM_IRQHandler,      // 120: ELS un-gated latched error
+    PKC_INT_IRQHandler,          // 121: Public key crypto-processor (PKC) interrupt
+    PKC_ERR_IRQHandler,          // 122: PKC error
+    CDOG_INT_IRQHandler,         // 123: Code watch dog timmer interrupt
+    GAU_DAC_IRQHandler,          // 124: General analog unit (GAU) digital to analog converter (DAC)
+    GAU_ACOMP_WKUP_IRQHandler,   // 125: GAU analog comparator (ACOMP) wake-up
+    GAU_ACOMP_IRQHandler,        // 126: GAU analog comparator
+    GAU_ADC1_IRQHandler,         // 127: GAU analog to digital converter 1 (ADC1)
+    GAU_ADC0_IRQHandler,         // 128: GAU analog to digital converter 0 (ADC0)
+    USIM_IRQHandler,             // 129: Universal subscriber identity module (USIM) interface
+    OTP_IRQHandler,              // 130: One time programmable (OTP) memory interrupt
+    ENET_IRQHandler,             // 131: Etheret interrupt
+    ENET_TIMER_IRQHandler,       // 132: Ethernet timer interrupt
+    PMIP_IRQHandler,             // 133: Power management IP (PMIP)
+    PMIP_CHANGE_IRQHandler,      // 134: PMIP change from 1 to 0
+    ITRC_IRQHandler,             // 135: Intrusion and tamper response controller (ITRC) interrupt request
+    Reserved136_IRQHandler,      // 136: Reserved interrupt
+    Reserved137_IRQHandler,      // 137: Reserved interrupt
+    Reserved138_IRQHandler,      // 138: Reserved interrupt
+    TRNG_IRQHandler,             // 139: TRNG interrupt request
+    ACC_C_INT_IRQHandler,        // 140: AHB memory access checker - Cortex-M33 code bus
+    ACC_S_INT_IRQHandler,        // 141: AHB memory access checker - Cortex-M33 sys bus
+    WACC_IRQHandler,             // 142: Wi-Fi accessed during power off
+    BACC_IRQHandler,             // 143: Bluetooth LE/802.15.4 radio accessed during power off
+    GDMA_IRQHandler,             // 144: General purpose direct memory access (GDMA) interrupt
 }; /* End of g_pfnVectors */
-
-#if defined(ENABLE_RAM_VECTOR_TABLE)
-extern void * __VECTOR_TABLE __attribute__ ((alias ("g_pfnVectors")));
-void (* __VECTOR_RAM[sizeof(g_pfnVectors) / 4])(void) __attribute__((aligned(128)));
-unsigned int __RAM_VECTOR_TABLE_SIZE_BYTES = sizeof(g_pfnVectors);
-#endif
 
 //*****************************************************************************
 // Functions to carry out the initialization of RW and BSS data sections. These
@@ -747,8 +741,8 @@ WEAK void UTICK_IRQHandler(void)
 {   UTICK_DriverIRQHandler();
 }
 
-WEAK void MRT0_IRQHandler(void)
-{   MRT0_DriverIRQHandler();
+WEAK void MRT_IRQHandler(void)
+{   MRT_DriverIRQHandler();
 }
 
 WEAK void CTIMER0_IRQHandler(void)
@@ -803,20 +797,20 @@ WEAK void Reserved38_IRQHandler(void)
 {   Reserved38_DriverIRQHandler();
 }
 
-WEAK void MRT1_IRQHandler(void)
-{   MRT1_DriverIRQHandler();
+WEAK void GFMRT_IRQHandler(void)
+{   GFMRT_DriverIRQHandler();
 }
 
 WEAK void Reserved40_IRQHandler(void)
 {   Reserved40_DriverIRQHandler();
 }
 
-WEAK void DMIC0_IRQHandler(void)
-{   DMIC0_DriverIRQHandler();
+WEAK void DMIC_IRQHandler(void)
+{   DMIC_DriverIRQHandler();
 }
 
-WEAK void WFD_IRQHandler(void)
-{   WFD_DriverIRQHandler();
+WEAK void WKDEEPSLEEP_IRQHandler(void)
+{   WKDEEPSLEEP_DriverIRQHandler();
 }
 
 WEAK void HYPERVISOR_IRQHandler(void)
@@ -827,8 +821,8 @@ WEAK void SECUREVIOLATION_IRQHandler(void)
 {   SECUREVIOLATION_DriverIRQHandler();
 }
 
-WEAK void HWVAD0_IRQHandler(void)
-{   HWVAD0_DriverIRQHandler();
+WEAK void HWVAD_IRQHandler(void)
+{   HWVAD_DriverIRQHandler();
 }
 
 WEAK void Reserved46_IRQHandler(void)
@@ -875,8 +869,8 @@ WEAK void CTIMER4_IRQHandler(void)
 {   CTIMER4_DriverIRQHandler();
 }
 
-WEAK void OS_EVENT_IRQHandler(void)
-{   OS_EVENT_DriverIRQHandler();
+WEAK void OS_EVENT_TIMER_IRQHandler(void)
+{   OS_EVENT_TIMER_DriverIRQHandler();
 }
 
 WEAK void FLEXSPI_IRQHandler(void)
@@ -895,8 +889,8 @@ WEAK void Reserved61_IRQHandler(void)
 {   Reserved61_DriverIRQHandler();
 }
 
-WEAK void SDU_IRQHandler(void)
-{   SDU_DriverIRQHandler();
+WEAK void SDIO_IRQHandler(void)
+{   SDIO_DriverIRQHandler();
 }
 
 WEAK void SGPIO_INTA_IRQHandler(void)
@@ -955,56 +949,56 @@ WEAK void Reserved76_IRQHandler(void)
 {   Reserved76_DriverIRQHandler();
 }
 
-WEAK void LCDIC_IRQHandler(void)
-{   LCDIC_DriverIRQHandler();
+WEAK void LCD_IRQHandler(void)
+{   LCD_DriverIRQHandler();
 }
 
-WEAK void CAPT_PULSE_IRQHandler(void)
-{   CAPT_PULSE_DriverIRQHandler();
+WEAK void CAPTIMER_IRQHandler(void)
+{   CAPTIMER_DriverIRQHandler();
 }
 
 WEAK void Reserved79_IRQHandler(void)
 {   Reserved79_DriverIRQHandler();
 }
 
-WEAK void WL_MCI_WAKEUP_DONE0_IRQHandler(void)
-{   WL_MCI_WAKEUP_DONE0_DriverIRQHandler();
+WEAK void W2MWKUP_DONE0_IRQHandler(void)
+{   W2MWKUP_DONE0_DriverIRQHandler();
 }
 
-WEAK void WL_MCI_WAKEUP_DONE1_IRQHandler(void)
-{   WL_MCI_WAKEUP_DONE1_DriverIRQHandler();
+WEAK void W2MWKUP_DONE1_IRQHandler(void)
+{   W2MWKUP_DONE1_DriverIRQHandler();
 }
 
-WEAK void WL_MCI_WAKEUP_DONE2_IRQHandler(void)
-{   WL_MCI_WAKEUP_DONE2_DriverIRQHandler();
+WEAK void W2MWKUP_DONE2_IRQHandler(void)
+{   W2MWKUP_DONE2_DriverIRQHandler();
 }
 
-WEAK void WL_MCI_WAKEUP_DONE3_IRQHandler(void)
-{   WL_MCI_WAKEUP_DONE3_DriverIRQHandler();
+WEAK void W2MWKUP_DONE3_IRQHandler(void)
+{   W2MWKUP_DONE3_DriverIRQHandler();
 }
 
-WEAK void WL_MCI_WAKEUP_DONE4_IRQHandler(void)
-{   WL_MCI_WAKEUP_DONE4_DriverIRQHandler();
+WEAK void W2MWKUP_DONE4_IRQHandler(void)
+{   W2MWKUP_DONE4_DriverIRQHandler();
 }
 
-WEAK void WL_MCI_WAKEUP_DONE5_IRQHandler(void)
-{   WL_MCI_WAKEUP_DONE5_DriverIRQHandler();
+WEAK void W2MWKUP_DONE5_IRQHandler(void)
+{   W2MWKUP_DONE5_DriverIRQHandler();
 }
 
-WEAK void WL_MCI_WAKEUP_DONE6_IRQHandler(void)
-{   WL_MCI_WAKEUP_DONE6_DriverIRQHandler();
+WEAK void W2MWKUP_DONE6_IRQHandler(void)
+{   W2MWKUP_DONE6_DriverIRQHandler();
 }
 
-WEAK void WL_MCI_WAKEUP_DONE7_IRQHandler(void)
-{   WL_MCI_WAKEUP_DONE7_DriverIRQHandler();
+WEAK void W2MWKUP_DONE7_IRQHandler(void)
+{   W2MWKUP_DONE7_DriverIRQHandler();
 }
 
-WEAK void WL_MCI_WAKEUP0_IRQHandler(void)
-{   WL_MCI_WAKEUP0_DriverIRQHandler();
+WEAK void W2MWKUP0_IRQHandler(void)
+{   W2MWKUP0_DriverIRQHandler();
 }
 
-WEAK void WL_MCI_WAKEUP1_IRQHandler(void)
-{   WL_MCI_WAKEUP1_DriverIRQHandler();
+WEAK void W2MWKUP1_IRQHandler(void)
+{   W2MWKUP1_DriverIRQHandler();
 }
 
 WEAK void WL_MCI_INT0_IRQHandler(void)
@@ -1039,44 +1033,44 @@ WEAK void WL_MCI_INT7_IRQHandler(void)
 {   WL_MCI_INT7_DriverIRQHandler();
 }
 
-WEAK void BLE_MCI_WAKEUP_DONE0_IRQHandler(void)
-{   BLE_MCI_WAKEUP_DONE0_DriverIRQHandler();
+WEAK void B2MWKUP_DONE0_IRQHandler(void)
+{   B2MWKUP_DONE0_DriverIRQHandler();
 }
 
-WEAK void BLE_MCI_WAKEUP_DONE1_IRQHandler(void)
-{   BLE_MCI_WAKEUP_DONE1_DriverIRQHandler();
+WEAK void B2MWKUP_DONE1_IRQHandler(void)
+{   B2MWKUP_DONE1_DriverIRQHandler();
 }
 
-WEAK void BLE_MCI_WAKEUP_DONE2_IRQHandler(void)
-{   BLE_MCI_WAKEUP_DONE2_DriverIRQHandler();
+WEAK void B2MWKUP_DONE2_IRQHandler(void)
+{   B2MWKUP_DONE2_DriverIRQHandler();
 }
 
-WEAK void BLE_MCI_WAKEUP_DONE3_IRQHandler(void)
-{   BLE_MCI_WAKEUP_DONE3_DriverIRQHandler();
+WEAK void B2MWKUP_DONE3_IRQHandler(void)
+{   B2MWKUP_DONE3_DriverIRQHandler();
 }
 
-WEAK void BLE_MCI_WAKEUP_DONE4_IRQHandler(void)
-{   BLE_MCI_WAKEUP_DONE4_DriverIRQHandler();
+WEAK void B2MWKUP_DONE4_IRQHandler(void)
+{   B2MWKUP_DONE4_DriverIRQHandler();
 }
 
-WEAK void BLE_MCI_WAKEUP_DONE5_IRQHandler(void)
-{   BLE_MCI_WAKEUP_DONE5_DriverIRQHandler();
+WEAK void B2MWKUP_DONE5_IRQHandler(void)
+{   B2MWKUP_DONE5_DriverIRQHandler();
 }
 
-WEAK void BLE_MCI_WAKEUP_DONE6_IRQHandler(void)
-{   BLE_MCI_WAKEUP_DONE6_DriverIRQHandler();
+WEAK void B2MWKUP_DONE6_IRQHandler(void)
+{   B2MWKUP_DONE6_DriverIRQHandler();
 }
 
-WEAK void BLE_MCI_WAKEUP_DONE7_IRQHandler(void)
-{   BLE_MCI_WAKEUP_DONE7_DriverIRQHandler();
+WEAK void B2MWKUP_DONE7_IRQHandler(void)
+{   B2MWKUP_DONE7_DriverIRQHandler();
 }
 
-WEAK void BLE_MCI_WAKEUP0_IRQHandler(void)
-{   BLE_MCI_WAKEUP0_DriverIRQHandler();
+WEAK void B2MWKUP0_IRQHandler(void)
+{   B2MWKUP0_DriverIRQHandler();
 }
 
-WEAK void BLE_MCI_WAKEUP1_IRQHandler(void)
-{   BLE_MCI_WAKEUP1_DriverIRQHandler();
+WEAK void B2MWKUP1_IRQHandler(void)
+{   B2MWKUP1_DriverIRQHandler();
 }
 
 WEAK void BLE_MCI_INT0_IRQHandler(void)
@@ -1123,52 +1117,52 @@ WEAK void ELS_IRQHandler(void)
 {   ELS_DriverIRQHandler();
 }
 
-WEAK void ELS_GDET_IRQ_IRQHandler(void)
-{   ELS_GDET_IRQ_DriverIRQHandler();
+WEAK void ELS_GDET_IRQHandler(void)
+{   ELS_GDET_DriverIRQHandler();
 }
 
-WEAK void ELS_GDET_ERR_IRQHandler(void)
-{   ELS_GDET_ERR_DriverIRQHandler();
+WEAK void ELS_GDET_UM_IRQHandler(void)
+{   ELS_GDET_UM_DriverIRQHandler();
 }
 
-WEAK void PKC_IRQHandler(void)
-{   PKC_DriverIRQHandler();
+WEAK void PKC_INT_IRQHandler(void)
+{   PKC_INT_DriverIRQHandler();
 }
 
 WEAK void PKC_ERR_IRQHandler(void)
 {   PKC_ERR_DriverIRQHandler();
 }
 
-WEAK void CDOG_IRQHandler(void)
-{   CDOG_DriverIRQHandler();
+WEAK void CDOG_INT_IRQHandler(void)
+{   CDOG_INT_DriverIRQHandler();
 }
 
-WEAK void GAU_GPDAC_INT_FUNC11_IRQHandler(void)
-{   GAU_GPDAC_INT_FUNC11_DriverIRQHandler();
+WEAK void GAU_DAC_IRQHandler(void)
+{   GAU_DAC_DriverIRQHandler();
 }
 
-WEAK void GAU_ACOMP_INT_WKUP11_IRQHandler(void)
-{   GAU_ACOMP_INT_WKUP11_DriverIRQHandler();
+WEAK void GAU_ACOMP_WKUP_IRQHandler(void)
+{   GAU_ACOMP_WKUP_DriverIRQHandler();
 }
 
-WEAK void GAU_ACOMP_INT_FUNC11_IRQHandler(void)
-{   GAU_ACOMP_INT_FUNC11_DriverIRQHandler();
+WEAK void GAU_ACOMP_IRQHandler(void)
+{   GAU_ACOMP_DriverIRQHandler();
 }
 
-WEAK void GAU_GPADC1_INT_FUNC11_IRQHandler(void)
-{   GAU_GPADC1_INT_FUNC11_DriverIRQHandler();
+WEAK void GAU_ADC1_IRQHandler(void)
+{   GAU_ADC1_DriverIRQHandler();
 }
 
-WEAK void GAU_GPADC0_INT_FUNC11_IRQHandler(void)
-{   GAU_GPADC0_INT_FUNC11_DriverIRQHandler();
+WEAK void GAU_ADC0_IRQHandler(void)
+{   GAU_ADC0_DriverIRQHandler();
 }
 
 WEAK void USIM_IRQHandler(void)
 {   USIM_DriverIRQHandler();
 }
 
-WEAK void OCOTP_IRQHandler(void)
-{   OCOTP_DriverIRQHandler();
+WEAK void OTP_IRQHandler(void)
+{   OTP_DriverIRQHandler();
 }
 
 WEAK void ENET_IRQHandler(void)
@@ -1179,48 +1173,48 @@ WEAK void ENET_TIMER_IRQHandler(void)
 {   ENET_TIMER_DriverIRQHandler();
 }
 
-WEAK void BOD_1_85_INT_IRQHandler(void)
-{   BOD_1_85_INT_DriverIRQHandler();
+WEAK void PMIP_IRQHandler(void)
+{   PMIP_DriverIRQHandler();
 }
 
-WEAK void BOD_1_85_NEG_IRQHandler(void)
-{   BOD_1_85_NEG_DriverIRQHandler();
+WEAK void PMIP_CHANGE_IRQHandler(void)
+{   PMIP_CHANGE_DriverIRQHandler();
 }
 
 WEAK void ITRC_IRQHandler(void)
 {   ITRC_DriverIRQHandler();
 }
 
-WEAK void BTU_HOST_TRIGGER0_IRQHandler(void)
-{   BTU_HOST_TRIGGER0_DriverIRQHandler();
+WEAK void Reserved136_IRQHandler(void)
+{   Reserved136_DriverIRQHandler();
 }
 
-WEAK void BTU_HOST_TRIGGER1_IRQHandler(void)
-{   BTU_HOST_TRIGGER1_DriverIRQHandler();
+WEAK void Reserved137_IRQHandler(void)
+{   Reserved137_DriverIRQHandler();
 }
 
-WEAK void BTU_HOST_TRIGGER2_IRQHandler(void)
-{   BTU_HOST_TRIGGER2_DriverIRQHandler();
+WEAK void Reserved138_IRQHandler(void)
+{   Reserved138_DriverIRQHandler();
 }
 
 WEAK void TRNG_IRQHandler(void)
 {   TRNG_DriverIRQHandler();
 }
 
-WEAK void AHB_MEM_ACC_CHECKER_VIO_INT_C_OR_IRQHandler(void)
-{   AHB_MEM_ACC_CHECKER_VIO_INT_C_OR_DriverIRQHandler();
+WEAK void ACC_C_INT_IRQHandler(void)
+{   ACC_C_INT_DriverIRQHandler();
 }
 
-WEAK void AHB_MEM_ACC_CHECKER_VIO_INT_S_OR_IRQHandler(void)
-{   AHB_MEM_ACC_CHECKER_VIO_INT_S_OR_DriverIRQHandler();
+WEAK void ACC_S_INT_IRQHandler(void)
+{   ACC_S_INT_DriverIRQHandler();
 }
 
-WEAK void WL_ACC_INT_IRQHandler(void)
-{   WL_ACC_INT_DriverIRQHandler();
+WEAK void WACC_IRQHandler(void)
+{   WACC_DriverIRQHandler();
 }
 
-WEAK void BLE_ACC_INT_IRQHandler(void)
-{   BLE_ACC_INT_DriverIRQHandler();
+WEAK void BACC_IRQHandler(void)
+{   BACC_DriverIRQHandler();
 }
 
 WEAK void GDMA_IRQHandler(void)

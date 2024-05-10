@@ -19,11 +19,11 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SYSPM driver version */
 #define FSL_SYSPM_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 
-/*@}*/
+/*! @} */
 /*! @brief syspm select control monitor */
 typedef enum _syspm_monitor
 {

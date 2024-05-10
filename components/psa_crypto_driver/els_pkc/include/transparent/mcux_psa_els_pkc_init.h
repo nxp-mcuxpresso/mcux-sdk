@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef MCUX_PSA_INIT_H
-#define MCUX_PSA_INIT_H
+#ifndef MCUX_PSA_ELS_PKC_INIT_H
+#define MCUX_PSA_ELS_PKC_INIT_H
 
 /** \file mcux_psa_els_pkc_init.h
  *
@@ -44,4 +44,4 @@ psa_status_t els_pkc_transparent_free(void);
 }
 #endif
 
-#endif /* MCUX_PSA_INIT_H */
+#endif /* MCUX_PSA_ELS_PKC_INIT_H */

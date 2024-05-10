@@ -18,8 +18,8 @@
  ******************************************************************************/
 #define FSL_FEATURE_SOC_SDIO_COUNT (3)
 
-#define SDU_CMD_RECEIVED  (1U << 0)
-#define SDU_DATA_RECEIVED (1U << 1)
+#define SDU_CMD_RECEIVED  (1U << 0U)
+#define SDU_DATA_RECEIVED (1U << 1U)
 
 typedef enum _sdu_for_read_type
 {

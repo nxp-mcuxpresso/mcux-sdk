@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2023 NXP
+ * Copyright 2018-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -795,7 +795,10 @@ void I3C_GetDefaultConfig(i3c_config_t *config)
  */
 void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_Hz)
 {
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || \
+    !(defined(FSL_FEATURE_I3C_HAS_NO_RESET) && FSL_FEATURE_I3C_HAS_NO_RESET)
     uint32_t instance = I3C_GetInstance(base);
+#endif
     uint32_t configValue;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -817,6 +820,10 @@ void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_H
     base->MCONFIG = I3C_MCONFIG_MSTENA(config->enableMaster) | I3C_MCONFIG_DISTO(config->disableTimeout) |
                     I3C_MCONFIG_HKEEP(config->hKeep) | I3C_MCONFIG_ODSTOP(config->enableOpenDrainStop) |
                     I3C_MCONFIG_ODHPP(config->enableOpenDrainHigh);
+
+#ifdef I3C_MCONFIG_EXT_I3C_CAS_DEL_MASK
+    base->MCONFIG_EXT = I3C_MCONFIG_EXT_I3C_CAS_DEL(config->startSclDelay) | I3C_MCONFIG_EXT_I3C_CASR_DEL(config->restartSclDelay);
+#endif
 
     I3C_MasterSetWatermarks(base, kI3C_TxTriggerUntilOneLessThanFull, kI3C_RxTriggerOnNotEmpty, true, true);
 
@@ -904,6 +911,8 @@ void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_H
  */
 void I3C_MasterGetDefaultConfig(i3c_master_config_t *masterConfig)
 {
+    (void)memset(masterConfig, 0, sizeof(*masterConfig));
+
     masterConfig->enableMaster                 = kI3C_MasterOn;
     masterConfig->disableTimeout               = false;
     masterConfig->hKeep                        = kI3C_MasterHighKeeperNone;
@@ -928,7 +937,11 @@ void I3C_MasterGetDefaultConfig(i3c_master_config_t *masterConfig)
  */
 void I3C_MasterInit(I3C_Type *base, const i3c_master_config_t *masterConfig, uint32_t sourceClock_Hz)
 {
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || \
+    !(defined(FSL_FEATURE_I3C_HAS_NO_RESET) && FSL_FEATURE_I3C_HAS_NO_RESET)
     uint32_t instance = I3C_GetInstance(base);
+#endif
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate the clock. */
     CLOCK_EnableClock(kI3cClocks[instance]);
@@ -941,6 +954,10 @@ void I3C_MasterInit(I3C_Type *base, const i3c_master_config_t *masterConfig, uin
     base->MCONFIG = I3C_MCONFIG_MSTENA(masterConfig->enableMaster) | I3C_MCONFIG_DISTO(masterConfig->disableTimeout) |
                     I3C_MCONFIG_HKEEP(masterConfig->hKeep) | I3C_MCONFIG_ODSTOP(masterConfig->enableOpenDrainStop) |
                     I3C_MCONFIG_ODHPP(masterConfig->enableOpenDrainHigh);
+
+#ifdef I3C_MCONFIG_EXT_I3C_CAS_DEL_MASK
+    base->MCONFIG_EXT = I3C_MCONFIG_EXT_I3C_CAS_DEL(masterConfig->startSclDelay) | I3C_MCONFIG_EXT_I3C_CASR_DEL(masterConfig->restartSclDelay);
+#endif
 
     I3C_MasterSetWatermarks(base, kI3C_TxTriggerUntilOneLessThanFull, kI3C_RxTriggerOnNotEmpty, true, true);
 
@@ -2704,7 +2721,11 @@ void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32
     assert(0UL != slowClock_Hz);
 
     uint32_t configValue;
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || \
+    !(defined(FSL_FEATURE_I3C_HAS_NO_RESET) && FSL_FEATURE_I3C_HAS_NO_RESET)
     uint32_t instance = I3C_GetInstance(base);
+#endif
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate the clock. */
     CLOCK_EnableClock(kI3cClocks[instance]);
@@ -3489,5 +3510,14 @@ void I3C2_DriverIRQHandler(void);
 void I3C2_DriverIRQHandler(void)
 {
     I3C_CommonIRQHandler(I3C2, 2);
+}
+#endif
+
+#if defined(I3C3)
+/* Implementation of I3C3 handler named in startup code. */
+void I3C3_DriverIRQHandler(void);
+void I3C3_DriverIRQHandler(void)
+{
+    I3C_CommonIRQHandler(I3C3, 3);
 }
 #endif

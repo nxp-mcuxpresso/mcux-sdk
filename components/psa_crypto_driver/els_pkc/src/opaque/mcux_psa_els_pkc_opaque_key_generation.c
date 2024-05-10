@@ -27,7 +27,7 @@ size_t els_pkc_opaque_size_function_key_buff_size(mbedtls_svc_key_id_t key_id)
     size_t key_buffer_size=0;
 
 #if defined(MBEDTLS_PSA_CRYPTO_BUILTIN_KEYS)
-    if (psa_key_id_is_builtin(MBEDTLS_SVC_KEY_ID_GET_KEY_ID(key_id)))
+    if ((bool)psa_key_id_is_builtin(MBEDTLS_SVC_KEY_ID_GET_KEY_ID(key_id)))
     {
 
 #if defined(PSA_CRYPTO_DRIVER_THREAD_EN)

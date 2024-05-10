@@ -7,8 +7,8 @@
  */
 
 
-#ifndef MCUX_PSA_OPAQUE_KEY_GENERATION_H
-#define MCUX_PSA_OPAQUE_KEY_GENERATION_H
+#ifndef MCUX_PSA_ELS_PKC_OPAQUE_KEY_GENERATION_H
+#define MCUX_PSA_ELS_PKC_OPAQUE_KEY_GENERATION_H
 
 /** \file mcux_psa_opaque_els_pkc_key_generation.h
  *
@@ -166,4 +166,4 @@ psa_status_t els_pkc_opaque_get_builtin_key(psa_drv_slot_number_t slot_number,
 #ifdef __cplusplus
 }
 #endif
-#endif /* MCUX_PSA_OPAQUE_KEY_GENERATION_H */
+#endif /* MCUX_PSA_ELS_PKC_OPAQUE_KEY_GENERATION_H */

@@ -616,7 +616,7 @@ static void SPI_TxDMACallback(dma_handle_t *handle, void *userData, bool transfe
         dma_transfer_config_t xferConfig = {0};
         DMA_PrepareTransfer(&xferConfig, (uint8_t *)spiHandle->txNextData, (uint32_t *)(writeAddress), bytesPerFrame,
                             nextDataSize, kDMA_MemoryToPeripheral, nextDesc);
-        spiHandle->txNextData   = (uint8_t *)(spiHandle->txNextData + nextDataSize);
+        spiHandle->txNextData   = (spiHandle->txNextData + nextDataSize);
         xferConfig.xfercfg.intA = thisTimeIntFlag;
         xferConfig.xfercfg.intB = false;
         result                  = DMA_SubmitTransfer(spiHandle->txHandle, &xferConfig);

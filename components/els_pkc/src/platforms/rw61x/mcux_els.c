@@ -86,7 +86,9 @@ static status_t ELS_check_key(uint8_t keyIdx, mcuxClEls_KeyProp_t *pKeyProp)
 
     /* mcuxClCss_GetKeyProperties is a flow-protected function: Check the protection token and the return value */
     if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_GetKeyProperties) != token) || (MCUXCLELS_STATUS_OK != result))
+    {
         status = kStatus_Fail;
+    }
     MCUX_CSSL_FP_FUNCTION_CALL_END();
 
     return status;
@@ -109,9 +111,8 @@ static status_t ELS_PRNG_KickOff(void)
             if (status != kStatus_Success)
             {
                 status = kStatus_SlotUnavailable;
-                goto cleanup;
+                break;
             }   
-            
             /* Found free key slot */
             if(key_properties.bits.kactv == 0u)
             {
@@ -120,7 +121,7 @@ static status_t ELS_PRNG_KickOff(void)
         }
 
         /* Free key slot found */
-        if(keyIdx < MCUXCLELS_KEY_SLOTS) 
+        if(status == kStatus_Success && keyIdx < MCUXCLELS_KEY_SLOTS) 
         {        
             /* delete empty temp keyslot; */
             /* Even if KDELETE is requested to delete an inactive key, the els entropy level will be raised to low and the
@@ -130,23 +131,29 @@ static status_t ELS_PRNG_KickOff(void)
                 (result0 != MCUXCLELS_STATUS_OK_WAIT))
             {
                 status = kStatus_Fail;
-                goto cleanup;
             }
-            /* mcuxClCss_WaitForOperation is a flow-protected function: Check the protection token and the return value */
-            MCUX_CSSL_FP_FUNCTION_CALL_PROTECTED(result1, token1, mcuxClEls_WaitForOperation(MCUXCLELS_ERROR_FLAGS_CLEAR));
-            if ((token1 != MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation)) || (result1 != MCUXCLELS_STATUS_OK))
+            else
             {
-                status = kStatus_Fail;
-                goto cleanup;
+                /* mcuxClCss_WaitForOperation is a flow-protected function: Check the protection token and the return value */
+                MCUX_CSSL_FP_FUNCTION_CALL_PROTECTED(result1, token1, mcuxClEls_WaitForOperation(MCUXCLELS_ERROR_FLAGS_CLEAR));
+                if ((token1 != MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation)) || (result1 != MCUXCLELS_STATUS_OK))
+                {
+                    status = kStatus_Fail;
+                }
+                else
+                {
+                    status = kStatus_Success;
+                }
             }
         }
         else
         {
           status = kStatus_SlotUnavailable;
-          goto cleanup;
         }
     }
-    status = kStatus_Success;
-cleanup:
+    else
+    {
+      status = kStatus_Success;
+    }
     return status; 
 }

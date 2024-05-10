@@ -23,8 +23,8 @@
 // in case the key is derived as a process including several key derivation execution,
 // the intermediate keys will have a temporary storage assigned to them and they will
 // be deleted at the end of the derivation command
-#define STORAGE_TEMP_KEY  0x00
-#define STORAGE_FINAL_KEY 0x01
+#define STORAGE_TEMP_KEY  0x00U
+#define STORAGE_FINAL_KEY 0x01U
 
 // ELS slot numbers and PSA key IDs for deriving builtin keys & blob import keys
 #define NXP_DIE_EL2GOOEM_MK_SK_SLOT      0x04U
@@ -81,6 +81,24 @@ typedef struct _key_recipe_t
     key_recipe_step_t steps[];
 } key_recipe_t;
 
+extern const key_recipe_t recipe_el2goimport_kek_sk;
+extern const key_recipe_t recipe_el2goimporttfm_kek_sk;
+extern const key_recipe_t recipe_el2goimport_auth_sk;
+extern const key_recipe_t recipe_el2goconn_auth_prk;
+extern const key_recipe_t recipe_el2goattest_auth_prk;
+
+typedef struct css_key_slot_handler_s
+{
+    uint32_t busy;
+    mbedtls_svc_key_id_t key_id;
+    uint8_t storage;
+    uint8_t *public_key;
+    size_t public_key_size;
+} css_key_slot_handler_t;
+
+extern css_key_slot_handler_t slot_handler_array[MCUXCLELS_KEY_SLOTS];
+
+
 /**
  * @brief Calculate the size of a key recipe.
  * @param[in] recipe the recipe to determine the size of
@@ -129,7 +147,7 @@ psa_status_t mcuxClPsaDriver_Oracle_Utils_GetPublicKeyFromHandler(mbedtls_svc_ke
  * @retval PSA_ERROR_HARDWARE_FAILURE  The ELS operation failed
  */
 psa_status_t mcuxClPsaDriver_Oracle_Utils_ExecuteKeyRecipe(mbedtls_svc_key_id_t key_id,
-                                                           const key_recipe_t *recipes,
+                                                           const key_recipe_t *recipe,
                                                            mcuxClEls_KeyIndex_t *target_key_slot);
 
 /**

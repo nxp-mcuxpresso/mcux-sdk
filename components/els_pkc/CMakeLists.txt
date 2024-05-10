@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Copyright (c) 2023 NXP.
+# Copyright (c) 2023-2024 NXP.
 # SPDX-License-Identifier: BSD-3-Clause
 #
 #-------------------------------------------------------------------------------
@@ -22,12 +22,12 @@ target_link_options(
 target_include_directories(McuxElsPkc
     PRIVATE
         # SDK driver header files
-        ../../drivers/common
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../drivers/common
         # psa/crypto.h and psa/crypto_types.h
-        ../../../../../../crypto/mbedtls/include
-        ../../../../../../crypto/mbedtls/include/psa
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../crypto/mbedtls/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../crypto/mbedtls/include/psa
         # for psa driver wrapper
-        ../../../../../../crypto/mbedtls/library
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../crypto/mbedtls/library
 )
 
 if(CONFIG_BUILD_WITH_TFM)
@@ -44,26 +44,27 @@ if(CONFIG_SOC_SERIES_RW6XX)
         McuxElsPkc 
         PUBLIC
             CPU_RW612ETA1I
+            CPU_RW612ETA2I
     ) 
 
     target_include_directories(McuxElsPkc
         PRIVATE
             # cmsis required to build els_pkc
-            src/platforms/rw61x/cmsis_cortex_m_5_5_1/inc
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/platforms/rw61x/cmsis_cortex_m_5_5_1/inc
     )
 
     target_include_directories(McuxElsPkc
         PUBLIC
-            src/platforms/rw61x/
-            src/platforms/rw61x/inc
-            ../../devices/RW612
-            ../../devices/RW612/drivers
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/platforms/rw61x/
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/platforms/rw61x/inc
+            ${CMAKE_CURRENT_SOURCE_DIR}/../../devices/RW612
+            ${CMAKE_CURRENT_SOURCE_DIR}/../../devices/RW612/drivers
     )
 
     target_sources(McuxElsPkc
         PRIVATE
-            src/platforms/rw61x/mcux_els.c
-            src/platforms/rw61x/mcux_pkc.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/platforms/rw61x/mcux_els.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/platforms/rw61x/mcux_pkc.c
     )
 endif()
 

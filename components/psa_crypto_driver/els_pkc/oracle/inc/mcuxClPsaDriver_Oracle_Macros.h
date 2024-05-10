@@ -31,9 +31,9 @@
 #define PSA_DRIVER_ERROR(...)                          \
     for (;;)                                           \
     {                                                  \
-        PRINTF("ERROR: %s L#%d ", __func__, __LINE__); \
-        PRINTF(__VA_ARGS__);                           \
-        PRINTF("\r\n");                                \
+        (void)PRINTF("ERROR: %s L#%d ", __func__, __LINE__); \
+        (void)PRINTF(__VA_ARGS__);                           \
+        (void)PRINTF("\r\n");                                \
         break;                                         \
     }
 #endif /* PSA_DRIVER_ERROR */

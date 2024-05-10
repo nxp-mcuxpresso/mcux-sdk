@@ -104,17 +104,14 @@
 #  # description: Middleware wireless framework_PDUM
 #  set(CONFIG_USE_middleware_wireless_framework_PDUM true)
 
+#  # description: Middleware wireless framework_PDUM rw61x
+#  set(CONFIG_USE_middleware_wireless_framework_PDUM_rw61x true)
+
 #  # description: Middleware wireless framework_markdown
 #  set(CONFIG_USE_middleware_wireless_framework_markdown true)
 
 #  # description: Middleware wireless framework_SFC
 #  set(CONFIG_USE_middleware_wireless_framework_SFC true)
-
-#  # description: Middleware wireless framework_RF_SFC
-#  set(CONFIG_USE_middleware_wireless_framework_RF_SFC true)
-
-#  # description: Middleware wireless framework_OTW
-#  set(CONFIG_USE_middleware_wireless_framework_OTW true)
 
 #  # description: Middleware wireless framework_FactoryDataProvider
 #  set(CONFIG_USE_middleware_wireless_framework_FactoryDataProvider true)
@@ -136,6 +133,9 @@
 
 #  # description: Middleware wireless framework_sec_lib
 #  set(CONFIG_USE_middleware_wireless_framework_sec_lib true)
+
+#  # description: Middleware wireless framework board base
+#  set(CONFIG_USE_middleware_wireless_framework_board_base_rdrw612bga true)
 
 #  # description: Middleware wireless framework_platform_common
 #  set(CONFIG_USE_middleware_wireless_framework_platform_common_rw61x true)
@@ -491,6 +491,9 @@
 
 #  # description: Component mem_manager_light
 #  set(CONFIG_USE_component_mem_manager_light true)
+
+#  # description: Component mem_manager_freertos
+#  set(CONFIG_USE_component_mem_manager_freertos true)
 
 #  # description: Component messaging
 #  set(CONFIG_USE_component_messaging true)
@@ -1213,6 +1216,9 @@
 
 #  # description: Component els_pkc.memory
 #  set(CONFIG_USE_component_els_pkc_memory true)
+
+#  # description: Component els_pkc.oscca
+#  set(CONFIG_USE_component_els_pkc_oscca true)
 
 #  # description: Component els_pkc.oscca_aeadmodes
 #  set(CONFIG_USE_component_els_pkc_oscca_aeadmodes true)

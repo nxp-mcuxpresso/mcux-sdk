@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef MCUX_PSA_CIPHER_H
-#define MCUX_PSA_CIPHER_H
+#ifndef MCUX_PSA_ELS_PKC_CIPHER_H
+#define MCUX_PSA_ELS_PKC_CIPHER_H
 
 /** \file mcux_psa_els_pkc_psa_generic_cipher.h
  *
@@ -106,17 +106,6 @@ psa_status_t els_pkc_transparent_cipher_finish(
     size_t output_size,
     size_t *output_length);
 
-psa_status_t els_pkc_transparent_cipher_decrypt(
-    const psa_key_attributes_t * attributes,
-    const uint8_t * key_buffer,
-    size_t key_buffer_size,
-    psa_algorithm_t alg,
-    const uint8_t *input,
-    size_t input_length,
-    uint8_t *output,
-    size_t output_size,
-    size_t *output_length);
-
 psa_status_t els_pkc_transparent_cipher_set_iv(
     els_pkc_transparent_cipher_operation_t *operation,
     const uint8_t *iv,
@@ -133,4 +122,4 @@ psa_status_t els_pkc_transparent_cipher_update(
 #ifdef __cplusplus
 }
 #endif
-#endif /* MCUX_PSA_CIPHER_H */
+#endif /* MCUX_PSA_ELS_PKC_CIPHER_H */

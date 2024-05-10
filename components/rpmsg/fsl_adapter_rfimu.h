@@ -22,7 +22,7 @@
  ******************************************************************************/
 
 #ifndef IMU_TASK_PRIORITY
-#if defined(CONFIG_ZEPHYR)
+#if defined(__ZEPHYR__)
 #define IMU_TASK_PRIORITY (3U)
 #elif defined(CPU2)
 #define IMU_TASK_PRIORITY (2U)

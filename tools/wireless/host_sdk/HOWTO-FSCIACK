@@ -1,0 +1,68 @@
+
+In the following, the word `device` refers to the SPI slave, while `host` refers to the SPI master.
+
+Embedded Device Settings
+========================
+Thread\framework\FSCI\Interface\FsciInterface.h
+
+    #define gFsciTxAck_c              1
+        -> the device will send ACKs for every valid packet received from the host
+
+    #define gFsciRxAck_c              1
+        -> the device will expect ACKs from the host for every sent packet
+        -> waiting for ACKs is performed on mFsciRxAckTimeoutMs_c intervals
+        -> if ACK is not received for mFsciRxAckTimeoutMs_c milliseconds,
+           the device will resend the packet, while decrementing mFsciTxRetryCnt_c
+        -> mFsciRxAckTimeoutMs_c, mFsciTxRetryCnt_c can be modified in Thread\framework\FSCI\Source\FsciCommunication.c
+        -> default settings: mFsciRxAckTimeoutMs_c = 100, mFsciTxRetryCnt_c = 4
+
+FSCI Protocol
+=============
+The FSCI (Framework Serial Connectivity Interface) frame format is:
+    ---------------------------------------------------------------------
+    | SYNC | OPERATION GROUP | OPERATION CODE | LENGTH |   DATA   | FCS |
+    ---------------------------------------------------------------------
+    |   1  |        1        |        1       |    2   |  LENGTH  |  1  |
+    ---------------------------------------------------------------------
+
+where SYNC value is 0x02 and FCS is computed with a XOR over all bytes except the SYNC one.
+Both THCI commands / events and ACK frames are transported over FSCI.
+
+ACK Frames
+==========
+ACK Frames are defined by the following:
+OPERATION GROUP     0xA4
+OPERATION CODE      0xFD
+LENGTH              0x01 -> little endian on two bytes
+DATA                0x00
+FCS                 0x58
+
+resulting in the frame { 0x02, 0xA4, 0xFD, 0x01, 0x00, 0x00, 0x58 } sent over the wire.
+The ACK frame on transmission is identical with the ACK frame on reception.
+
+Host Settings
+=============
+
+1. The host MUST send ACKs for every valid packet received from the device.
+
+2. The host, upon every sent packet, SHOULD check for an ACK and SHOULD perform
+retransmissions when the ACK is not received. Both the waiting interval and number of
+retransmissions can be solely configured by the host. host_sdk is configured by default
+with TimeoutAckMs=200 and NumberOfRetries=3.
+
+3. ACKs are not cascaded, meaning ACKs must not be sent for ACKs.
+
+The following embedded settings have correspondents in
+/usr/local/etc/hsdk/hsdk.conf (file created on `make install`). Always make sure
+that paired settings are simultaneous 0 or 1 (disabled/enabled).
+	- gFsciTxAck_c -> FsciTxAck
+	- gFsciRxAck_c -> FsciRxAck
+
+When FsciTxAck is 1 (enabled), if the board, for some reason, does not send
+back an ACK for a given frame in at most TimeoutAckMs, the host will resend
+that frame a number of NumberOfRetries.
+
+ACKs (both on RX and TX paths) are validated directly from the C libraries.
+TX ACKs can alternatively be validated from Python, by enabling FSCI_TX_ACK
+in com.nxp.wireless_connectivity.hsdk.config. When using Python validation, FsciTxAck
+must be set on 0 in hsdk.conf.

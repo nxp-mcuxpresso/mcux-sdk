@@ -10,7 +10,7 @@ manifest:
     remote: nxp-mcuxpresso
   projects:
   - name: mcux-sdk-examples
-    revision: c8c4d16d7b191e75cb0e72109327d56e46b68cd5
+    revision: abffe85db228cd1b0aa3c77e91f3fc455928b92f
     path: examples
   - name: FreeRTOS-Kernel
     revision: MCUX_2.15.000
@@ -125,6 +125,30 @@ manifest:
   - name: mcux-sdk-middleware-connectivity-framework
     path: middleware/wireless/framework
     revision: MCUX_2.15.000
+    remote: nxp
+  - name: mcux-sdk-middleware-zigbee
+    revision: MCUX_2.15.000_RW610_K32W1
+    path: middleware/wireless/zigbee
+    remote: nxp-mcuxpresso
+  - name: mcux-secure-subsystem
+    revision: MCUX_2.15.000_RW610_K32W1
+    path: middleware/secure-subsystem
+    remote: nxp-mcuxpresso
+  - name: mcux-sdk-middleware-xcvr
+    revision: MCUX_2.15.000_RW610_K32W1
+    path: middleware/wireless/XCVR
+    remote: nxp-mcuxpresso
+  - name: mcux-sdk-middleware-bluetooth-controller
+    revision: MCUX_2.15.000_RW610_K32W1
+    path: middleware/wireless/ble_controller
+    remote: nxp
+  - name: mcux-sdk-middleware-bluetooth-host
+    revision: MCUX_2.15.000_RW610_K32W1
+    path: middleware/wireless/bluetooth
+    remote: nxp
+  - name: mcux-sdk-middleware-ieee_802.15.4
+    revision: MCUX_2.15.000_RW610_K32W1
+    path: middleware/wireless/ieee-802.15.4
     remote: nxp
   self:
     path: core

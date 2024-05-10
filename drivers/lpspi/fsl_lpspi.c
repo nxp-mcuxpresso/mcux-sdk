@@ -294,7 +294,6 @@ void LPSPI_MasterInit(LPSPI_Type *base, const lpspi_master_config_t *masterConfi
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
-
 #if defined(LPSPI_RESETS_ARRAY)
     RESET_ReleasePeripheralReset(s_lpspiResets[LPSPI_GetInstance(base)]);
 #endif

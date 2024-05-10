@@ -1,0 +1,408 @@
+1.0.5
+================================================================================
+First release to include a software version.
+
+1.0.6
+================================================================================
+Thread_KW_Tun
+    - Can also open SPI devices for Serial TUN operation.
+Framer
+    - Add CRC field size parameter to InitializeFramer().
+    - Add SetCrcFieldSize() function.
+    - Implement sending of ACKs from host_sdk on every received frame from the
+      board
+    - Minor optimizations for Linux on Read* functions.
+RawFrame
+    - Add GetAckFrame() function which generates FSCI-ACK frames.
+utils
+    - Add ParseConfig() function which reads host_sdk's configuration parameters
+      from /usr/share/hsdk/hsdk.conf
+SPIDevice
+    - Rename and refactor SPIFirstRead() to SPIInitialize().
+    - Add more logic to SPIReadFSCIData().
+UARTDiscovery
+    - Identify J-Link CDC UART (VID, PID) = (1366, 1015) as NXP device.
+PhysicalDevice
+    - Implement reception of ACKs from the embedded device in the
+      DeviceThreadRoutine().
+77-mm-usb-device-blacklist.rules
+    - Also ignore J-Link CDC UART. Bump to latest version from ModemManager
+      official tree.
+hsdk.conf
+    - First version of the configuration file. Only available on Linux.
+
+Python
+    •   Updated THCI bindings
+        o   MESHCOP_MgmtSetRequest: Added TimestampEnable boolean parameter. If
+        True, also provide Seconds (6 bytes) and Ticks (2 bytes) parameters.
+        See test/meshcop_mgmtset.py for example of usage.
+        o   THR_SetAttrRequest - Add DoNotGeneratePartitionId attributeId.
+        o   Other commands added
+    •   Framework updates
+        o   commands/comm.py - change in send() method
+        o   hsdk/sniffer.py - add callback parameter on each received packet -
+            defaults to print_pkt()
+        o   hsdk/utils.py - change in notifyObservers() to prevent memory leaks
+        o   hsdk/framing/fsci_framer.py - minor update on send() method
+
+1.0.7
+================================================================================
+Add/update Freescale copyrights.
+
+UARTDiscovery
+    - Remove OS X UART discovery as not working
+    - Rewrite Windows CheckRegistry function
+
+PhysicalDevice
+    - Add FSCI ACK policy parameter to InitPhysicalDevice(). Available values:
+      NONE, TX, RX, TX_RX, GLOBAL. If GLOBAL, use settings in hsdk.conf.
+
+Python
+    - add support for setting the FSCI ACK policy per device
+    - deprecate MONITOR_MODE per device, make it global and configurable from
+      config.py.
+
+Documentation
+    - add more information to HOWTO-FSCIACK
+
+1.0.8
+================================================================================
+C
+    - FSCI-ACK: prevent other TXs until the ACK for RX packet is sent back to
+      the board
+    - Fix lock acquire bug on Linux
+    - Make file descriptors blocking on Linux
+
+Python
+    - Add coap_thci.py example script
+    - Add shebangs on all test/commissioning scripts
+    - Fix SIGSEGV on amd64 systems
+    - Minor other improvements
+
+1.0.9
+================================================================================
+
+C
+    - Minor cppcheck fixes
+
+Python
+    - Remove Thread bindings
+    - Add Bluetooth LE bindings
+
+1.1.0
+================================================================================
+This is the first unified package with Python bindings for both the Bluetooth LE and
+Thread stacks!
+
+C
+    - Fixes regarding virtual interface and CRC manipulation
+
+Python
+    - subsystem updates for virtual interface selection
+    - subsystem updates to allow different protocol (e.g. Thread and Bluetooth LE)
+      commands to be sent to the same physical device
+    - fsci_bootloader.py: do not transfer useless 0xFFs from the end of the
+      binary image, which results in better time transfers
+    - add hrs.py script which demonstrates a Heart Rate Sensor Bluetooth LE profile
+    - add multimode.py script which demonstrates a basic Thread network
+      formation with continuous ping and Heart Rate sensor at the same time
+    - update copyrights on txThings based examples (rgb_led.py, temp.py)
+    - reworks of some scripts in the wireless_connectivity.test package
+
+1.1.1
+================================================================================
+C
+    - Fix destination MAC address in the PCAP submodule.
+
+1.2.0
+================================================================================
+
+hsdk/demo/thread-multicast-routing
+    - Add configuration files to exercise Thread multicast capabilities.
+
+1.3.0
+================================================================================
+Rename ZTC -> FSCI.
+Rename Freescale -> NXP, except for copyrights.
+Using NXP OUI in the PCAP submodule.
+Fixed some issues reported by a static code analysis tool.
+Python bindings regenerated from the latest ThreadIP.xml.
+
+1.3.1
+================================================================================
+OTA Python example scripts:
+- updated README
+- removed firmware binaries
+- removed CoAP test script as plain UDP is now used
+- minor changes to test_dongle_mode and test_standalone_mode
+
+1.3.2
+================================================================================
+Changes to Makefiles, to allow disabling SPI/RNDIS/UDEV support from a single
+switch. That is:
+    `make SPI=n UDEV=n RNDIS=n` will disable support for all three, while
+    `make RNDIS=n` will only disable support for RNDIS
+
+Shared libraries are now installed by default under /usr/local/lib. Path may be
+changed using variable PREFIX in the Makefile.
+Configuration file hsdk.conf _must_ now be placed under /usr/local/etc/hsdk/.
+
+Fix CPU reset on Windows for USB-KW24.
+
+1.3.3
+================================================================================
+Regenerate Python THCI bindings and fix THR_DiagTestGet.
+relay.py: Change mDNS settings for Thread 1.1
+
+1.4.0
+================================================================================
+Python:
+    - Stop Framer threads that are no longer needed.
+    - Fix possible bug with disabling colored output.
+    - On Linux, sniffers can inject packets into a TAP device to be opened by
+      Wireshark.
+C:
+    - Updates to allow for the new VCP NXP VID.
+
+1.4.1
+================================================================================
+Fixed some issues for Python:
+    - Serial TUN RX callback
+    - OTA commands
+    - Sniffer over TAP in Linux
+
+1.4.2
+================================================================================
+Fix some issues for Python:
+    - get_neigh_ula.py script
+    - RPCAP sniffer thread on Windows consuming 100% of a core
+Device discovery:
+    - add support for OM15028-1 / JN5179 VID/PID pair
+
+1.4.3
+================================================================================
+Updates for the Thread Harness.
+
+1.4.4
+================================================================================
+Add basic support for a TAP device.
+
+Python
+    - Fix memory leak on TX
+    - Allow channel 26 for some scripts
+    - Regression fix for hrs.py
+    - txThings does not support Twisted v17, some scrips ask the user to install
+      v16.6.0 instead
+
+1.4.5
+================================================================================
+Update copyright headers.
+Python
+    - add a new device Hybrid device type to allow for both Bluetooth LE and Hybrid
+      devices in the same script
+    - change PSKd from `kinetis` to `THREAD` in commissioning scripts
+    - do not serve already opened ports in Python
+    - add new THR_Identify command and new parameter FutureTlv to some MESHCOP_
+      commands
+
+1.4.6
+================================================================================
+Minor updates.
+
+1.4.7
+================================================================================
+Python
+    - fix bug in commands.thread.frames where parameter FutureTlv should have
+      been named FutureTlvValue
+
+1.5.0
+================================================================================
+Python
+    - Add bindings for ZigBee 3.0
+    - sync_requests.py: replace bytearray(1) with False where needed
+
+1.5.1
+================================================================================
+Python
+    - Update bindings for Thread
+    - Update bindings for ZigBee 3.0
+
+1.5.2
+================================================================================
+DLL
+    - Make VID/PID available for non Kinetis-W devices on Windows
+
+Python
+    - Update bindings for Bluetooth LE 4.2
+    - Disable ULA prefix add in serial TUN Python demo
+
+1.6.0
+================================================================================
+Bash
+    - Rename TUN/TAP interface name from fslthr0 to threadtun0/threadtap0
+
+C
+    - Add Thread_Shell demo, which implements shell-like Thread commands and
+      uses TAP for IPv6 communication with the board
+
+Python
+    - Improved version of getaddr.py - it can retrieve the IPv6 addresses of
+      every node in the Thread network
+
+1.6.1
+================================================================================
+C
+    - Fix FSCI desynchronizations faster
+        When using serial TAP, the RX FSCI packets are usually fragmented when
+        Thread_Shell or Thread_KW_Tun is restarted. Therefore we may end up
+        considering the start of a new packet at an invalid index. This commit
+        considers FSCI packets larger than 500 bytes, that are not IPv6, junk data.
+    - Implement add joiners command in Thread_Shell
+    - Add netlink notifications for link down/up events on the uplink interface
+      (bridged together with TAP) - Thread_Shell
+
+Python
+    - Improve border_router.py demo
+    - Improve multimode.py demo - do not reset hybrid board when starting Bluetooth LE
+    - Improve relay.py - add external commissioning over TAP support
+    - Fix OTA scripts - add TransferType parameter to FSCIFirmware_SetOperationMode
+
+1.7.0
+================================================================================
+C
+    - Add SPI support for the Qualcomm DK07 host. As of now there are two SPI
+      master platforms supported, controlled by the symbols DK07_HOST and
+      IMX6ULEVK_HOST. Only one master can be enabled at a time.
+    - Add binaries for the Qualcomm DK07 platform under hsdk/demo/bin/dk07
+    - Added properties information to compiled DLLs in Windows.
+Python
+    - Remove relay.py and associated artifacts from
+      hsdk-python/misc/commissioning/linux
+
+1.7.1
+================================================================================
+Update copyrights to BSD-3-Clause-Clear.
+
+C
+    - Remove obsolete thread-multicast-routing demo.
+
+Python
+    - Add Zigbee bindings.
+
+1.7.2
+================================================================================
+Python
+    - Change Bluetooth LE bindings to support KW35.
+
+1.8.0
+================================================================================
+Add hsdk-c/ directory containing C bindings generated from the Bluetooth LE_1.3.2 FSCI XML.
+Add HeartRateSensor.c source file to demonstrate usage of the C bindings.
+
+1.8.1
+================================================================================
+C
+    - Fix segfault when running PCAPTest
+
+C bindings
+    - Add Thread C bindings generated from the ThreadIP_1.3.1.xml FSCI XML.
+    - Add ThreadLeader.c source file to demonstrate basic usage of the C bindings.
+
+Python bindings
+    - Regenerate the command set
+
+1.8.2
+================================================================================
+C bindings
+    - Add C bindings for the KW41Z Maintenance Release 1
+    - Add ZigBeeCoordinator sample program that makes use of the C bindings
+
+Python bindings
+    - Update Python bindings for the KW41Z Maintenance Release 1
+    - Remove warnings throughout the Python scripts and bindings
+
+1.8.3
+================================================================================
+BSD-3-Clause-Clear to BSD-3-Clause license roll-back
+
+C
+    - Add support for serial baudrate value 1000000
+    - Fix disable flow control functionality to also disable DSR
+    - Fix detection of QN9080 DK boards
+
+Python bindings
+    - Disable flow control for EEB-KW35
+    - Update Bluetooth LE bindings
+
+1.8.4
+================================================================================
+C
+    - Remove IPv6 threshold defines for the length data field
+    - Convert sAnnounceData from semaphore to event for Windows, for a unified
+      Windows/Linux approach
+
+Python bindings
+    - Add 4.2 Pairing Failed Reason Codes
+    - Update Python bindings for ThreadIP
+    - Update Python fsci_bootloader.py script K32W042 secured image
+    - Update Python bindings for Bluetooth LE
+        - New Initiating_PHYs parameter to GAPConnect
+        - New Duration and Period parameters to GAPStartScanning
+
+1.9.0.5
+================================================================================
+
+HSDK DLL version 1.9.0
+C
+    -  Update C bindings for Bluetooth LE
+    -  Update HeartRateSensor.c adding GAPSetAdvertisingParameters command before GAPSetAdvertisingData command
+    -  Added FSCIGetNumberOfFreeBuffers commands, addded connectionRole parameter to GAPConnectionEventConnectedIndication,  addded Mtu parameter to GATTClientExchangeMtu
+
+Python
+    -  Update Python bindings
+    -  Update hrs.py adding GAPSetAdvertisingParameters command before GAPSetAdvertisingData command
+    -  Added FSCIGetNumberOfFreeBuffers commands, addded connectionRole parameter to GAPConnectionEventConnectedIndication,  addded Mtu parameter to GATTClientExchangeMtu
+
+1.9.0.6
+================================================================================
+
+Python
+    -  Update utils.py function to_bytes for GATTClientReadCharacteristicValue
+
+1.9.0.7
+================================================================================
+
+C
+    -  Update C bindings for Bluetooth LE 
+    -  Fix High CPU Utilization
+
+Python
+    -  Update Python bindings for Bluetooth LE
+
+1.9.0.9
+================================================================================
+
+C
+    -  Update C bindings for Bluetooth LE 
+
+Python
+    -  Update Python bindings for Bluetooth LE
+
+1.11.0.0
+================================================================================
+
+C
+    -  Update C bindings for Bluetooth LE based on BLE.1.8.2.xml
+
+Python
+    -  Update Python bindings for Bluetooth LE based on BLE.1.8.2.xml
+    
+1.12.0.0
+================================================================================
+
+C
+    -  Update C bindings for Bluetooth LE based on BLE.1.8.9.xml
+
+Python
+    -  Update Python bindings for Bluetooth LE based on BLE.1.8.9.xml
+    -  Update scripts to Python3.

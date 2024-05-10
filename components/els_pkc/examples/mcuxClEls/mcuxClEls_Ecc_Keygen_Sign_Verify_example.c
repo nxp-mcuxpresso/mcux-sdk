@@ -29,7 +29,7 @@
 
 
 /** Pre-hashed data to be signed */
-static uint32_t const ecc_digest[MCUXCLELS_HASH_OUTPUT_SIZE_SHA_256 / sizeof(uint32_t)] = {0x11111111u,
+static uint32_t const ecc_digest[MCUXCLELS_HASH_OUTPUT_SIZE_SHA_256 / sizeof(uint32_t)] CSS_CONST_SEGMENT = {0x11111111u,
                                                                                           0x22222222u,
                                                                                           0x33333333u,
                                                                                           0x44444444u,

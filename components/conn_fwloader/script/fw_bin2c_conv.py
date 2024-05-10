@@ -34,7 +34,7 @@ def bin2c_convert(binfile_name, array_name, padding_len=0):
 
 def bin2c_file(bin_file_name, out_src_file_name, dest_path):
 
-    bin_file_name=dest_path+'/../fw_bin/'+bin_file_name
+    bin_file_name=dest_path+'/../'+bin_file_name
     if not os.path.isfile(bin_file_name):
         print('File "%s" is not found!' % bin_file_name)
         return ''
@@ -64,6 +64,7 @@ def generate_sb_src(conn_fwloader_dir, chip_revision):
         binlist = a1_sb_list
     else:
         return
+    print ("Directory=" + conn_fwloader_dir)
     dest_dir=conn_fwloader_dir+'/'+chip_revision
     if not os.path.exists(dest_dir):
         os.makedirs(dest_dir)

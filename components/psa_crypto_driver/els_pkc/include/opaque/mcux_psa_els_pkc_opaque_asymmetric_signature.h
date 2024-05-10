@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef MCUX_PSA_OPAQUE_ASYMMETRIC_SIGNATURE_H
-#define MCUX_PSA_OPAQUE_ASYMMETRIC_SIGNATURE_H
+#ifndef MCUX_PSA_ELS_PKC_OPAQUE_ASYMMETRIC_SIGNATURE_H
+#define MCUX_PSA_ELS_PKC_OPAQUE_ASYMMETRIC_SIGNATURE_H
 
 /** \file mcux_psa_els_pkc_opaque_asymmetric_signature.h
  *
@@ -115,4 +115,4 @@ psa_status_t els_pkc_opaque_verify_hash(const psa_key_attributes_t *attributes,
 #ifdef __cplusplus
 }
 #endif
-#endif /* MCUX_PSA_OPAQUE_ASYMMETRIC_SIGNATURE_H */
+#endif /* MCUX_PSA_ELS_PKC_OPAQUE_ASYMMETRIC_SIGNATURE_H */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 NXP
+ * Copyright 2020-2022, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 /*! @brief DAC driver version */
-#define FSL_DAC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1. */
+#define FSL_DAC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0. */
 
 /*!
  *  @brief DAC channel A wave mode check
@@ -130,17 +130,6 @@ typedef enum _dac_channel_trigger_type
 } dac_channel_trigger_type_t;
 
 /*!
- * @brief The enumeration of dac channel trigger source.
- */
-typedef enum _dac_channel_trigger_source
-{
-    kDAC_GPT2Trigger   = 0U, /*!< GPT2 trigger source */
-    kDAC_GPT3Trigger   = 1U, /*!< GPT3 trigger source */
-    kDAC_GPIO45Trigger = 2U, /*!< GPIO45 trigger source */
-    kDAC_GPIO44Trigger = 3U  /*!< GPIO44 trigger source */
-} dac_channel_trigger_source_t;
-
-/*!
  * @brief The enumeration of dac channel timing mode.
  */
 typedef enum _dac_channel_timing_mode
@@ -231,20 +220,20 @@ typedef struct _dac_channel_config
                                       - \b false Disable selected channel's conversion. */
     dac_channel_output_t outMode; /*!< Configure channel output mode, please refer to @ref dac_channel_output_t */
 
-    bool enableDMA;                             /*!< Enable/Disable channel DAM data transfer.
-                                                    - \b true DMA data transfer enabled.
-                                                    - \b false DMA data transfer disabled. */
-    bool enableTrigger;                         /*!< Enable/Disable external event trigger. */
+    bool enableDMA;               /*!< Enable/Disable channel DAM data transfer.
+                                      - \b true DMA data transfer enabled.
+                                      - \b false DMA data transfer disabled. */
+    bool enableTrigger;           /*!< Enable/Disable external event trigger. */
     dac_channel_trigger_type_t triggerType;     /*!< Configure the channel trigger type,
                                                         please refer to @ref dac_channel_trigger_type_t. */
     dac_channel_trigger_source_t triggerSource; /*!< Configure DAC channel trigger source,
                                                     please refer to @ref dac_channel_trigger_source_t. */
 
-    dac_channel_timing_mode_t timingMode; /*!< Configure channel timing mode,
-                                              please refer to @ref dac_channel_timing_mode_t. */
+    dac_channel_timing_mode_t timingMode;       /*!< Configure channel timing mode,
+                                                    please refer to @ref dac_channel_timing_mode_t. */
 
-    dac_channel_wave_type_t waveType; /*!< Configure wave type for the selected channel,
-                                          please refer to @ref dac_channel_wave_type_t. */
+    dac_channel_wave_type_t waveType;           /*!< Configure wave type for the selected channel,
+                                                    please refer to @ref dac_channel_wave_type_t. */
 } dac_channel_config_t;
 
 /*!

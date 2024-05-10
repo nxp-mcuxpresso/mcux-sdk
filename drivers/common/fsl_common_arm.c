@@ -232,7 +232,7 @@ void SDK_DelayAtLeastUs(uint32_t delayTime_us, uint32_t coreClock_Hz)
         {
         }
 #else
-#if (__CORTEX_Axx == 53) || (__CORTEX_Axx == 55)
+#if defined(__CORTEX_Axx) && ((__CORTEX_Axx == 53) || (__CORTEX_Axx == 55))
         /*
          * Cortex-A53/A55 execution throughput:
          *  - SUB/CMP: 2 instructions per cycle

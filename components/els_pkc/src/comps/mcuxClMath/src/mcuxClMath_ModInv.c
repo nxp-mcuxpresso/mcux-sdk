@@ -44,17 +44,12 @@ MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DEFINED_MORE_THAN_ONCE()
     uint32_t operandSize = MCUXCLPKC_PS1_UNPACK_OPLEN(backupPs1LenReg);
     operandSize &= ~((uint32_t) MCUXCLPKC_WORDSIZE - 1u);  /* round down to a multiple of MCUXCLPKC_WORDSIZE, to calculate exponent correctly. */
 
-    /* ASSERT: operandSize (PS1 LEN) is valid, and operands (of length = operandSize + MCUXCLPKC_WORDSIZE) are within PKC workarea. */
-    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(operandSize, MCUXCLPKC_WORDSIZE, MCUXCLPKC_RAM_SIZE - MCUXCLPKC_WORDSIZE, /* void */)
-
     /* Prepare local UPTRT. */
     uint16_t pOperands[MODINV_UPTRT_SIZE];
     const uint16_t *backupPtrUptrt;
     MCUX_CSSL_FP_FUNCTION_CALL_VOID(mcuxClMath_InitLocalUptrt(iR_iX_iN_iT, 0u, pOperands, 4u, &backupPtrUptrt));
 
     const uint16_t offsetT = pOperands[MODINV_T];
-    /* ASSERT: operand T (length >= operandSize + MCUXCLPKC_WORDSIZE) is within PKC workarea. */
-    MCUX_CSSL_ANALYSIS_ASSERT_PARAMETER(offsetT, MCUXCLPKC_RAM_OFFSET_MIN, MCUXCLPKC_RAM_OFFSET_MAX - (2u * MCUXCLPKC_WORDSIZE), /* void */)
 
     pOperands[MODINV_T1] = (uint16_t) (offsetT + MCUXCLPKC_WORDSIZE);
     pOperands[MODINV_CONST1] = 0x0001u;
