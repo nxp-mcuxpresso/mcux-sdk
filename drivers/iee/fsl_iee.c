@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017-2021 NXP
+ * Copyright 2017-2021,2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -38,8 +38,10 @@ void IEE_Init(IEE_Type *base)
     CLOCK_EnableClock(kCLOCK_Iee);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if !(defined(FSL_FEATURE_IEE_ELE_PROVISIONED_KEY) && (FSL_FEATURE_IEE_ELE_PROVISIONED_KEY > 0u))
     /* Reset IEE module and wait the reset operation done. */
     base->GCFG |= IEE_GCFG_RST_MASK;
+#endif /* !FSL_FEATURE_IEE_ELE_PROVISIONED_KEY */
 }
 
 /*!
@@ -71,17 +73,21 @@ void IEE_GetDefaultConfig(iee_config_t *config)
  *
  * This function configures IEE region according to configuration structure.
  *
+ * Note: if key is provisioned by ELE, the attributes are set by ELE
+ *
  * param base IEE peripheral address.
  * param region Selection of the IEE region to be configured.
  * param config Configuration for the selected IEE region.
  */
 void IEE_SetRegionConfig(IEE_Type *base, iee_region_t region, iee_config_t *config)
 {
+#if !(defined(FSL_FEATURE_IEE_ELE_PROVISIONED_KEY) && (FSL_FEATURE_IEE_ELE_PROVISIONED_KEY > 0u))
     base->REGX[region].REGATTR =
         IEE_REGATTR_BYP(config->bypass) | IEE_REGATTR_MD(config->mode) | IEE_REGATTR_KS(config->keySize);
 #if (defined(FSL_IEE_USE_PAGE_OFFSET) && (FSL_IEE_USE_PAGE_OFFSET > 0U))
     base->REGX[region].REGPO = IEE_REGPO_PGOFF(config->pageOffset);
 #endif /* FSL_IEE_USE_PAGE_OFFSET */
+#endif /* !FSL_FEATURE_IEE_ELE_PROVISIONED_KEY */
 }
 
 /*!
@@ -98,6 +104,7 @@ void IEE_SetRegionConfig(IEE_Type *base, iee_region_t region, iee_config_t *conf
 status_t IEE_SetRegionKey(
     IEE_Type *base, iee_region_t region, iee_aes_key_num_t keyNum, const uint8_t *key, size_t keySize)
 {
+#if !(defined(FSL_FEATURE_IEE_ELE_PROVISIONED_KEY) && (FSL_FEATURE_IEE_ELE_PROVISIONED_KEY > 0u))
     register const uint32_t *from32  = (const uint32_t *)(uintptr_t)key;
     register volatile uint32_t *to32 = NULL;
 
@@ -124,6 +131,9 @@ status_t IEE_SetRegionKey(
     }
 
     return kStatus_Success;
+#else
+    return kStatus_Fail;
+#endif /* !defined(FSL_FEATURE_IEE_ELE_PROVISIONED_KEY) */
 }
 
 /*!

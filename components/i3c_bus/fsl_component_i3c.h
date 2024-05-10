@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 /*! @name I3C BUS management definitions*/
-/*! @{ */
+/*@{*/
 #define I3C_BUS_MAX_DEVS                          11U   /*!< Bus maximum device count. */
 #define I3C_BUS_HOT_JOIN_ADDR                     0x2U  /*!< Hot join event device address. */
 #define I3C_BOARDCAST_SINGLE_BIT_ERR_DETECT_ADDR1 0x3EU /*!< Broadcast address single bit error detect address. */
@@ -36,10 +36,10 @@
 #define I3C_BUS_ADDR_SLOTDEPTH                    32U /*!< Address slot depth used in address management in bus pool. */
 #define I3C_BUS_ADDR_SLOTMASK                     3U  /*!< Address slot mask used in address management in bus pool. */
 
-/*! @} */
+/*@}*/
 
 /*! @name I3C BUS CCC (Common Command Codes) definitions*/
-/*! @{ */
+/*@{*/
 #define I3C_BUS_CCC_DIRECT_PREFIX 0x80U /*!< Prefix used for direct access CCC. */
 
 #define I3C_BUS_CCC(cmdID, isDirect) \
@@ -77,10 +77,10 @@
 #define I3C_BUS_CCC_GETHDRCAP 0x95U /*!< Get HDR Capability Command. */
 #define I3C_BUS_CCC_GETXTIME  0x99U /*!< Get Exchange Timing Support Command. */
 
-/*! @} */
+/*@}*/
 
 /*! @name I3C device BCR register bit masks*/
-/*! @{ */
+/*@{*/
 
 /* @brief I3C device bus characteristics */
 #define I3C_BUS_DEV_BCR_DEV_MASTER     0x01U
@@ -104,7 +104,7 @@
 #define I3C_BUS_DEV_BCR_SPEED_LIMIT_MASK  0x01U
 #define I3C_BUS_DEV_BCR_SPEED_LIMIT(x)    (((x) << I3C_BUS_DEV_BCR_SPEED_LIMIT_SHIFT) & I3C_BUS_DEV_BCR_SPEED_LIMIT_MASK)
 
-/*! @} */
+/*@}*/
 
 /*! @brief I3C Bus status. */
 enum
@@ -390,7 +390,7 @@ void I3C_BusAddI3CDev(i3c_bus_t *bus, i3c_device_t *dev);
  */
 void I3C_BusAddI2CDev(i3c_bus_t *bus, i2c_device_t *dev);
 
-/*! @} */
+/* @} */
 
 /*!
  * @name I3C bus master operation
@@ -544,7 +544,7 @@ status_t I3C_BusMasterDisableEvents(i3c_device_t *masterDev, uint8_t slaveAddr, 
  */
 status_t I3C_BusMasterGetDeviceInfo(i3c_device_t *masterDev, uint8_t slaveAddr, i3c_device_information_t *devInfo);
 
-/*! @} */
+/* @} */
 
 /*!
  * @name I3C bus slave operation
@@ -606,7 +606,7 @@ status_t I3C_BusSlaveRequestMasterShip(i3c_device_t *i3cDev);
  */
 status_t I3C_BusSlaveRequestIBI(i3c_device_t *i3cDev, void *data, size_t dataSize);
 
-/*! @} */
+/* @} */
 
 #if defined(__cplusplus)
 }

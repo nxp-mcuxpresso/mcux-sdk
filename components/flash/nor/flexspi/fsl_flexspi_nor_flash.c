@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 NXP
+ * Copyright 2019-2023we NXP
  * All rights reserved.
  *
  *
@@ -3211,19 +3211,36 @@ static status_t FLEXSPI_NOR_ProbeCommandMode(nor_handle_t *handle, flexspi_mem_c
      * The Read SFDP command can be used with devices supporting modes of (1-1-1), (2-2-2), (4-4-4), or (4S-4D-4D),
      * but the instruction (5Ah), address (24 bits), eight wait states, and 50 MHz requirements remain the same.
      */
-    const lut_seq_t k_sdfp_lut[1] = {
+    static lut_seq_t k_sdfp_lut[6] = {
         /* Read SFDP LUT sequence for 1 pad instruction. */
         {{FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, kSerialFlash_ReadSFDP, kFLEXSPI_Command_RADDR_SDR,
                           kFLEXSPI_1PAD, 24),
           FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_1PAD, 8, kFLEXSPI_Command_READ_SDR, kFLEXSPI_1PAD, 0xFF),
-          0, 0}}};
+          0, 0}},
+        /* Read SFDP LUT sequence in 2-2-2 mode. */
+        {{FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_2PAD, kSerialFlash_ReadSFDP, kFLEXSPI_Command_RADDR_SDR,
+                          kFLEXSPI_2PAD, 24),
+          FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_2PAD, 8, kFLEXSPI_Command_READ_SDR, kFLEXSPI_2PAD, 0xFF),
+          0, 0}},
+        /* Read SFDP LUT sequence in 4s-4s-4s mode. */
+        {{FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_4PAD, kSerialFlash_ReadSFDP, kFLEXSPI_Command_RADDR_SDR,
+                          kFLEXSPI_4PAD, 24),
+          FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_4PAD, 8, kFLEXSPI_Command_READ_SDR, kFLEXSPI_4PAD, 0xFF),
+          0, 0}},
+        /* Read SFDP LUT sequence in 8d-8d-8d mode. */
+        {{FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, kSerialFlash_ReadSFDP, kFLEXSPI_Command_RADDR_DDR,
+                          kFLEXSPI_8PAD, 21),
+            FLEXSPI_LUT_SEQ(
+        kFLEXSPI_Command_READ_DDR, kFLEXSPI_8PAD, 0xFF, kFLEXSPI_Command_STOP, kFLEXSPI_1PAD, 0),
+          0, 0}}
+    };
     /* Zero initialization */
     FLEXSPI_NOR_Memset(&sfdp_header, 0, sizeof(sfdp_header));
 
     for (i = 0U; i < (uint8_t)kSerialNorCommandMode_max; i++)
     {
         FLEXSPI_UpdateLUT((FLEXSPI_Type *)handle->driverBaseAddr, NOR_CMD_LUT_SEQ_IDX_READ_SFDP * 4U,
-                          (const uint32_t *)(const void *)&k_sdfp_lut[0], 4);
+                          (const uint32_t *)(const void *)&k_sdfp_lut[i], 4);
 
         status = FLEXSPI_NOR_ReadSFDP((FLEXSPI_Type *)handle->driverBaseAddr, 0, (uint32_t *)(void *)&sfdp_header,
                                       sizeof(sfdp_header));
@@ -3764,10 +3781,12 @@ status_t Nor_Flash_Init(nor_config_t *config, nor_handle_t *handle)
     flexspiConfig.ahbConfig.enableAHBBufferable  = true;
     flexspiConfig.ahbConfig.enableReadAddressOpt = true;
     flexspiConfig.ahbConfig.enableAHBCachable    = true;
+#if defined(EXAMPLE_FLEXSPI_RX_SAMPLE_CLOCK)
+    flexspiConfig.rxSampleClock   = EXAMPLE_FLEXSPI_RX_SAMPLE_CLOCK;
+#else
     flexspiConfig.rxSampleClock                  = kFLEXSPI_ReadSampleClkLoopbackFromDqsPad;
+#endif /* EXAMPLE_FLEXSPI_RX_SAMPLE_CLOCK */
     FLEXSPI_Init((FLEXSPI_Type *)handle->driverBaseAddr, &flexspiConfig);
-
-    FLEXSPI_NOR_Memset(memConfig->lookupTable, 0U, sizeof(memConfig->lookupTable));
 
     /* Configure flash settings according to serial flash feature. */
     FLEXSPI_SetFlashConfig((FLEXSPI_Type *)handle->driverBaseAddr, &(memConfig->deviceConfig), memConfig->devicePort);

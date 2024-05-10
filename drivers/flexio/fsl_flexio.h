@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief FlexIO driver version. */
 #define FSL_FLEXIO_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
-/*! @} */
+/*@}*/
 
 /*! @brief Calculate FlexIO timer trigger.*/
 #define FLEXIO_TIMER_TRIGGER_SEL_PININPUT(x)   ((uint32_t)(x) << 1U)
@@ -402,7 +402,7 @@ void FLEXIO_Deinit(FLEXIO_Type *base);
  */
 uint32_t FLEXIO_GetInstance(FLEXIO_Type *base);
 
-/*! @} */
+/* @} */
 
 /*!
  * @name FlexIO Basic Operation
@@ -536,7 +536,7 @@ static inline void FLEXIO_SetClockMode(FLEXIO_Type *base, uint8_t index, flexio_
     base->TIMCFG[index] = reg;
 }
 
-/*! @} */
+/* @} */
 
 /*!
  * @name FlexIO Interrupt Operation
@@ -621,7 +621,7 @@ static inline void FLEXIO_DisableTimerStatusInterrupts(FLEXIO_Type *base, uint32
     base->TIMIEN &= ~mask;
 }
 
-/*! @} */
+/* @} */
 
 /*!
  * @name FlexIO Status Operation
@@ -700,7 +700,7 @@ static inline void FLEXIO_ClearTimerStatusFlags(FLEXIO_Type *base, uint32_t mask
     base->TIMSTAT = mask;
 }
 
-/*! @} */
+/* @} */
 
 /*!
  * @name FlexIO DMA Operation
@@ -758,7 +758,7 @@ status_t FLEXIO_RegisterHandleIRQ(void *base, void *handle, flexio_isr_t isr);
  * @retval kStatus_OutOfRange The FlexIO type/handle/ISR table out of range.
  */
 status_t FLEXIO_UnregisterHandleIRQ(void *base);
-/*! @} */
+/* @} */
 
 #if defined(FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER) && FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER
 
@@ -860,7 +860,7 @@ static inline void FLEXIO_EnablePinOutput(FLEXIO_Type *base, uint32_t pin)
 {
     base->PINOUTE |= (1UL << pin);
 }
-/*! @} */
+/*@}*/
 
 /*!
  * @name FLEXIO PIN Input Operations
@@ -905,13 +905,13 @@ static inline void FLEXIO_ClearPortStatus(FLEXIO_Type *base, uint32_t mask)
 {
     base->PINSTAT = mask;
 }
-/*! @} */
+/*@}*/
 
 #endif /*FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER*/
 
 #if defined(__cplusplus)
 }
 #endif /*_cplusplus*/
-/*! @} */
+/*@}*/
 
 #endif /*FSL_FLEXIO_H_*/

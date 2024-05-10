@@ -210,7 +210,7 @@ uint32_t LIST_GetSize(list_handle_t list);
  */
 uint32_t LIST_GetAvailableSize(list_handle_t list);
 
-/*! @} */
+/* @} */
 
 #if defined(__cplusplus)
 }

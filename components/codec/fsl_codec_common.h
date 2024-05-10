@@ -20,10 +20,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief CLOCK driver version 2.3.1. */
 #define FSL_CODEC_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
-/*! @} */
+/*@}*/
 
 /*! @brief codec maximum volume range */
 #define CODEC_VOLUME_MAX_VALUE (100U)

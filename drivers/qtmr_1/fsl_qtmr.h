@@ -26,9 +26,9 @@
 #endif
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 #define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 2, 2)) /*!< Version */
-/*! @} */
+/*@}*/
 
 /*! @brief Quad Timer primary clock source selection*/
 typedef enum _qtmr_primary_count_source

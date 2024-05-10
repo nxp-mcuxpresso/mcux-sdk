@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021, NXP
+ * Copyright 2020-2021,2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -31,9 +31,16 @@
  */
 void IEE_APC_GlobalEnable(IEE_APC_Type *base)
 {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
     /* APC_x bits in GPR2 to GPR25 only take effect when this bit is set high */
     IOMUXC_LPSR_GPR->GPR25 |= IOMUXC_LPSR_GPR_GPR25_APC_VALID_MASK;
     __DSB();
+#else
+    for(uint32_t i = (uint32_t)kIEE_APC_Region0; i <= (uint32_t)kIEE_APC_Region7; i++)
+    {
+      IEE_APC_RegionEnable(base, (iee_apc_region_t)i);
+    }
+#endif
     return;
 }
 
@@ -46,10 +53,17 @@ void IEE_APC_GlobalEnable(IEE_APC_Type *base)
  */
 void IEE_APC_GlobalDisable(IEE_APC_Type *base)
 {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
     /* APC_x bits in GPR2 to GPR25 only take effect when this bit is set high */
     IOMUXC_LPSR_GPR->GPR25 &= ~IOMUXC_LPSR_GPR_GPR25_APC_VALID_MASK;
     __DSB();
     return;
+#else
+    for(uint32_t i = (uint32_t)kIEE_APC_Region0; i <= (uint32_t)kIEE_APC_Region7; i++)
+    {
+      IEE_APC_RegionDisable(base, (iee_apc_region_t)i);
+    }
+#endif
 }
 
 /*!
@@ -64,6 +78,7 @@ void IEE_APC_GlobalDisable(IEE_APC_Type *base)
  */
 status_t IEE_APC_SetRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, uint32_t startAddr, uint32_t endAddr)
 {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
     /* bit[2:0] of adress must be zero
      *
      * Note: For i.MXRT1170, region is [bot:top), the end is open interval. So the bit[2:0] of the end address must
@@ -76,67 +91,110 @@ status_t IEE_APC_SetRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, ui
     {
         return kStatus_InvalidArgument;
     }
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) */
 
     if (region == kIEE_APC_Region0)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR2 |= startAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
         IOMUXC_LPSR_GPR->GPR3 |= endAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
-        IEE_APC->REGION0_BOT_ADDR = startAddr >> 3;
-        IEE_APC->REGION0_TOP_ADDR = endAddr >> 3;
+
+        base->REGION0_BOT_ADDR = startAddr >> 3u;
+        base->REGION0_TOP_ADDR = endAddr >> 3u;
+#else
+        base->REGION0_BOT_ADDR = startAddr;
+        base->REGION0_TOP_ADDR = endAddr;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) */
     }
     if (region == kIEE_APC_Region1)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR4 |= startAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
         IOMUXC_LPSR_GPR->GPR5 |= endAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
-        IEE_APC->REGION1_BOT_ADDR = startAddr >> 3;
-        IEE_APC->REGION1_TOP_ADDR = endAddr >> 3;
+        base->REGION1_BOT_ADDR = startAddr >> 3u;
+        base->REGION1_TOP_ADDR = endAddr >> 3u;
+#else
+        base->REGION1_BOT_ADDR = startAddr;
+        base->REGION1_TOP_ADDR = endAddr;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) */
     }
     if (region == kIEE_APC_Region2)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR6 |= startAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
         IOMUXC_LPSR_GPR->GPR7 |= endAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
-        IEE_APC->REGION2_BOT_ADDR = startAddr >> 3;
-        IEE_APC->REGION2_TOP_ADDR = endAddr >> 3;
+        base->REGION2_BOT_ADDR = startAddr >> 3;
+        base->REGION2_TOP_ADDR = endAddr >> 3;
+#else
+        base->REGION2_BOT_ADDR = startAddr;
+        base->REGION2_TOP_ADDR = endAddr;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) */
     }
     if (region == kIEE_APC_Region3)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR8 |= startAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
         IOMUXC_LPSR_GPR->GPR9 |= endAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
-        IEE_APC->REGION3_BOT_ADDR = startAddr >> 3;
-        IEE_APC->REGION3_TOP_ADDR = endAddr >> 3;
+        base->REGION3_BOT_ADDR = startAddr >> 3;
+        base->REGION3_TOP_ADDR = endAddr >> 3;
+#else
+        base->REGION3_BOT_ADDR = startAddr;
+        base->REGION3_TOP_ADDR = endAddr;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) */
     }
     if (region == kIEE_APC_Region4)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR10 |= startAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
         IOMUXC_LPSR_GPR->GPR11 |= endAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
-        IEE_APC->REGION4_BOT_ADDR = startAddr >> 3;
-        IEE_APC->REGION4_TOP_ADDR = endAddr >> 3;
+        base->REGION4_BOT_ADDR = startAddr >> 3;
+        base->REGION4_TOP_ADDR = endAddr >> 3;
+#else
+        base->REGION4_BOT_ADDR = startAddr;
+        base->REGION4_TOP_ADDR = endAddr;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) */
     }
     if (region == kIEE_APC_Region5)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR12 |= startAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
         IOMUXC_LPSR_GPR->GPR13 |= endAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
-        IEE_APC->REGION5_BOT_ADDR = startAddr >> 3;
-        IEE_APC->REGION5_TOP_ADDR = endAddr >> 3;
+        base->REGION5_BOT_ADDR = startAddr >> 3;
+        base->REGION5_TOP_ADDR = endAddr >> 3;
+#else
+        base->REGION5_BOT_ADDR = startAddr;
+        base->REGION5_TOP_ADDR = endAddr;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) */
     }
     if (region == kIEE_APC_Region6)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR14 |= startAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
         IOMUXC_LPSR_GPR->GPR15 |= endAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
-        IEE_APC->REGION6_BOT_ADDR = startAddr >> 3;
-        IEE_APC->REGION6_TOP_ADDR = endAddr >> 3;
+        base->REGION6_BOT_ADDR = startAddr >> 3;
+        base->REGION6_TOP_ADDR = endAddr >> 3;
+#else
+        base->REGION6_BOT_ADDR = startAddr;
+        base->REGION6_TOP_ADDR = endAddr;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) */
     }
     if (region == kIEE_APC_Region7)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR16 |= startAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
         IOMUXC_LPSR_GPR->GPR17 |= endAddr & IOMUXC_LPSR_GPR_APC_ADDR_MASK;
-        IEE_APC->REGION7_BOT_ADDR = startAddr >> 3;
-        IEE_APC->REGION7_TOP_ADDR = endAddr >> 3;
+        base->REGION7_BOT_ADDR = startAddr >> 3;
+        base->REGION7_TOP_ADDR = endAddr >> 3;
+#else
+        base->REGION7_BOT_ADDR = startAddr;
+        base->REGION7_TOP_ADDR = endAddr;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) */
     }
 
     return kStatus_Success;
 }
 
+#if !(defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u))
 /*!
  * brief Lock the LPSR GPR and APC IEE configuration.
  *
@@ -145,6 +203,113 @@ status_t IEE_APC_SetRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, ui
  *
  * param base APC IEE peripheral address.
  * param region Selection of the APC IEE region to be locked.
+ * param domain Domain ID to access the IEE APC registers of this region. The ID is drivn by TRDC.
+ */
+status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, uint8_t domain)
+{
+    uint32_t didVal = 0u;
+  
+    if (region == kIEE_APC_Region0)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        didVal = base->REGION0_ACC_CTL ;
+        /* Clear ALLOW_DID */
+        didVal = didVal & (~IEE_APC_REGION0_ACC_CTL_ALLOW_DID_MASK);
+        /* Set new acces control value */
+        base->REGION0_ACC_CTL = didVal | IEE_APC_REGION0_ACC_CTL_ALLOW_DID(domain);
+        
+        /* Once this bit is set, the value of the lower half word can't be changed 
+         * until next system reset. The access check against domain ID will only 
+         * take effect once this bit is set. */
+        base->REGION0_ACC_CTL |= IEE_APC_REGION0_ACC_CTL_LOCK_L_MASK;
+        base->REGION0_ACC_CTL |= IEE_APC_REGION0_ACC_CTL_LOCK_H_MASK;
+    }
+    if (region == kIEE_APC_Region1)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        didVal = base->REGION1_ACC_CTL ;
+        didVal = didVal & (~IEE_APC_REGION1_ACC_CTL_ALLOW_DID_MASK);
+        base->REGION1_ACC_CTL = didVal | IEE_APC_REGION1_ACC_CTL_ALLOW_DID(domain);
+
+        base->REGION1_ACC_CTL |= IEE_APC_REGION1_ACC_CTL_LOCK_L_MASK;
+        base->REGION1_ACC_CTL |= IEE_APC_REGION1_ACC_CTL_LOCK_H_MASK;
+    }
+    if (region == kIEE_APC_Region2)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        didVal = base->REGION2_ACC_CTL ;
+        didVal = didVal & (~IEE_APC_REGION2_ACC_CTL_ALLOW_DID_MASK);
+        base->REGION2_ACC_CTL = didVal | IEE_APC_REGION2_ACC_CTL_ALLOW_DID(domain);
+        
+        base->REGION2_ACC_CTL |= IEE_APC_REGION2_ACC_CTL_LOCK_L_MASK;
+        base->REGION2_ACC_CTL |= IEE_APC_REGION2_ACC_CTL_LOCK_H_MASK;
+    }
+    if (region == kIEE_APC_Region3)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        didVal = base->REGION3_ACC_CTL ;
+        didVal = didVal & (~IEE_APC_REGION3_ACC_CTL_ALLOW_DID_MASK);
+        base->REGION3_ACC_CTL = didVal | IEE_APC_REGION3_ACC_CTL_ALLOW_DID(domain);
+
+        base->REGION3_ACC_CTL |= IEE_APC_REGION3_ACC_CTL_LOCK_L_MASK;
+        base->REGION3_ACC_CTL |= IEE_APC_REGION3_ACC_CTL_LOCK_H_MASK;
+    }
+    if (region == kIEE_APC_Region4)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        didVal = base->REGION4_ACC_CTL ;
+        didVal = didVal & (~IEE_APC_REGION4_ACC_CTL_ALLOW_DID_MASK);
+        base->REGION4_ACC_CTL = didVal | IEE_APC_REGION4_ACC_CTL_ALLOW_DID(domain);
+
+        
+        base->REGION4_ACC_CTL |= IEE_APC_REGION4_ACC_CTL_LOCK_L_MASK;
+        base->REGION4_ACC_CTL |= IEE_APC_REGION4_ACC_CTL_LOCK_H_MASK;
+    }
+    if (region == kIEE_APC_Region5)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        didVal = base->REGION5_ACC_CTL ;
+        didVal = didVal & (~IEE_APC_REGION5_ACC_CTL_ALLOW_DID_MASK);
+        base->REGION5_ACC_CTL = didVal | IEE_APC_REGION5_ACC_CTL_ALLOW_DID(domain);
+        
+        base->REGION5_ACC_CTL |= IEE_APC_REGION5_ACC_CTL_LOCK_L_MASK;
+        base->REGION5_ACC_CTL |= IEE_APC_REGION5_ACC_CTL_LOCK_H_MASK;
+    }
+    if (region == kIEE_APC_Region6)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        didVal = base->REGION6_ACC_CTL ;
+        didVal = didVal & (~IEE_APC_REGION6_ACC_CTL_ALLOW_DID_MASK);
+        base->REGION6_ACC_CTL = didVal | IEE_APC_REGION6_ACC_CTL_ALLOW_DID(domain);
+        
+        base->REGION6_ACC_CTL |= IEE_APC_REGION6_ACC_CTL_LOCK_L_MASK;
+        base->REGION6_ACC_CTL |= IEE_APC_REGION6_ACC_CTL_LOCK_H_MASK;
+    }
+    if (region == kIEE_APC_Region7)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        didVal = base->REGION7_ACC_CTL ;
+        didVal = didVal & (~IEE_APC_REGION7_ACC_CTL_ALLOW_DID_MASK);
+        base->REGION7_ACC_CTL = didVal | IEE_APC_REGION7_ACC_CTL_ALLOW_DID(domain);
+        
+        base->REGION7_ACC_CTL |= IEE_APC_REGION7_ACC_CTL_LOCK_L_MASK;
+        base->REGION7_ACC_CTL |= IEE_APC_REGION7_ACC_CTL_LOCK_H_MASK;
+    }
+
+    return kStatus_Success;
+}
+#endif /* !(defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)) */
+
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
+/*!
+ * brief Lock the LPSR GPR and APC IEE configuration.
+ *
+ * This function locks writting to IOMUXC LPSR GPR and APC IEE encryption region setting registers.
+ * Only system reset can clear the LPSR GPR and APC IEE-RDC_D0/1 Lock bit
+ *
+ * param base APC IEE peripheral address.
+ * param region Selection of the APC IEE region to be locked.
+ * param domain Core domain ID
  */
 status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, iee_apc_domain_t domain)
 {
@@ -159,13 +324,13 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
 
         if (domain == kIEE_APC_Domain0)
         {
-            IEE_APC->REGION0_RDC_D0 |= IEE_APC_REGION0_RDC_D0_RDC_D0_WRITE_DIS_MASK;
-            IEE_APC->REGION0_RDC_D0 |= IEE_APC_REGION0_RDC_D0_RDC_D0_LOCK_MASK;
+            base->REGION0_RDC_D0 |= IEE_APC_REGION0_RDC_D0_RDC_D0_WRITE_DIS_MASK;
+            base->REGION0_RDC_D0 |= IEE_APC_REGION0_RDC_D0_RDC_D0_LOCK_MASK;
         }
         else if (domain == kIEE_APC_Domain1)
         {
-            IEE_APC->REGION0_RDC_D1 |= IEE_APC_REGION0_RDC_D1_RDC_D1_WRITE_DIS_MASK;
-            IEE_APC->REGION0_RDC_D1 |= IEE_APC_REGION0_RDC_D1_RDC_D1_LOCK_MASK;
+            base->REGION0_RDC_D1 |= IEE_APC_REGION0_RDC_D1_RDC_D1_WRITE_DIS_MASK;
+            base->REGION0_RDC_D1 |= IEE_APC_REGION0_RDC_D1_RDC_D1_LOCK_MASK;
         }
         else
         {
@@ -183,13 +348,13 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
 
         if (domain == kIEE_APC_Domain0)
         {
-            IEE_APC->REGION1_RDC_D0 |= IEE_APC_REGION1_RDC_D0_RDC_D0_WRITE_DIS_MASK;
-            IEE_APC->REGION1_RDC_D0 |= IEE_APC_REGION1_RDC_D0_RDC_D0_LOCK_MASK;
+            base->REGION1_RDC_D0 |= IEE_APC_REGION1_RDC_D0_RDC_D0_WRITE_DIS_MASK;
+            base->REGION1_RDC_D0 |= IEE_APC_REGION1_RDC_D0_RDC_D0_LOCK_MASK;
         }
         else if (domain == kIEE_APC_Domain1)
         {
-            IEE_APC->REGION1_RDC_D1 |= IEE_APC_REGION1_RDC_D1_RDC_D1_WRITE_DIS_MASK;
-            IEE_APC->REGION1_RDC_D1 |= IEE_APC_REGION1_RDC_D1_RDC_D1_LOCK_MASK;
+            base->REGION1_RDC_D1 |= IEE_APC_REGION1_RDC_D1_RDC_D1_WRITE_DIS_MASK;
+            base->REGION1_RDC_D1 |= IEE_APC_REGION1_RDC_D1_RDC_D1_LOCK_MASK;
         }
         else
         {
@@ -207,13 +372,13 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
 
         if (domain == kIEE_APC_Domain0)
         {
-            IEE_APC->REGION2_RDC_D0 |= IEE_APC_REGION2_RDC_D0_RDC_D0_WRITE_DIS_MASK;
-            IEE_APC->REGION2_RDC_D0 |= IEE_APC_REGION2_RDC_D0_RDC_D0_LOCK_MASK;
+            base->REGION2_RDC_D0 |= IEE_APC_REGION2_RDC_D0_RDC_D0_WRITE_DIS_MASK;
+            base->REGION2_RDC_D0 |= IEE_APC_REGION2_RDC_D0_RDC_D0_LOCK_MASK;
         }
         else if (domain == kIEE_APC_Domain1)
         {
-            IEE_APC->REGION2_RDC_D1 |= IEE_APC_REGION2_RDC_D1_RDC_D1_WRITE_DIS_MASK;
-            IEE_APC->REGION2_RDC_D1 |= IEE_APC_REGION2_RDC_D1_RDC_D1_LOCK_MASK;
+            base->REGION2_RDC_D1 |= IEE_APC_REGION2_RDC_D1_RDC_D1_WRITE_DIS_MASK;
+            base->REGION2_RDC_D1 |= IEE_APC_REGION2_RDC_D1_RDC_D1_LOCK_MASK;
         }
         else
         {
@@ -231,13 +396,13 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
 
         if (domain == kIEE_APC_Domain0)
         {
-            IEE_APC->REGION3_RDC_D0 |= IEE_APC_REGION3_RDC_D0_RDC_D0_WRITE_DIS_MASK;
-            IEE_APC->REGION3_RDC_D0 |= IEE_APC_REGION3_RDC_D0_RDC_D0_LOCK_MASK;
+            base->REGION3_RDC_D0 |= IEE_APC_REGION3_RDC_D0_RDC_D0_WRITE_DIS_MASK;
+            base->REGION3_RDC_D0 |= IEE_APC_REGION3_RDC_D0_RDC_D0_LOCK_MASK;
         }
         else if (domain == kIEE_APC_Domain1)
         {
-            IEE_APC->REGION3_RDC_D1 |= IEE_APC_REGION3_RDC_D1_RDC_D1_WRITE_DIS_MASK;
-            IEE_APC->REGION3_RDC_D1 |= IEE_APC_REGION3_RDC_D1_RDC_D1_LOCK_MASK;
+            base->REGION3_RDC_D1 |= IEE_APC_REGION3_RDC_D1_RDC_D1_WRITE_DIS_MASK;
+            base->REGION3_RDC_D1 |= IEE_APC_REGION3_RDC_D1_RDC_D1_LOCK_MASK;
         }
         else
         {
@@ -255,13 +420,13 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
 
         if (domain == kIEE_APC_Domain0)
         {
-            IEE_APC->REGION4_RDC_D0 |= IEE_APC_REGION4_RDC_D0_RDC_D0_WRITE_DIS_MASK;
-            IEE_APC->REGION4_RDC_D0 |= IEE_APC_REGION4_RDC_D0_RDC_D0_LOCK_MASK;
+            base->REGION4_RDC_D0 |= IEE_APC_REGION4_RDC_D0_RDC_D0_WRITE_DIS_MASK;
+            base->REGION4_RDC_D0 |= IEE_APC_REGION4_RDC_D0_RDC_D0_LOCK_MASK;
         }
         else if (domain == kIEE_APC_Domain1)
         {
-            IEE_APC->REGION4_RDC_D1 |= IEE_APC_REGION4_RDC_D1_RDC_D1_WRITE_DIS_MASK;
-            IEE_APC->REGION4_RDC_D1 |= IEE_APC_REGION4_RDC_D1_RDC_D1_LOCK_MASK;
+            base->REGION4_RDC_D1 |= IEE_APC_REGION4_RDC_D1_RDC_D1_WRITE_DIS_MASK;
+            base->REGION4_RDC_D1 |= IEE_APC_REGION4_RDC_D1_RDC_D1_LOCK_MASK;
         }
         else
         {
@@ -279,13 +444,13 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
 
         if (domain == kIEE_APC_Domain0)
         {
-            IEE_APC->REGION5_RDC_D0 |= IEE_APC_REGION5_RDC_D0_RDC_D0_WRITE_DIS_MASK;
-            IEE_APC->REGION5_RDC_D0 |= IEE_APC_REGION5_RDC_D0_RDC_D0_LOCK_MASK;
+            base->REGION5_RDC_D0 |= IEE_APC_REGION5_RDC_D0_RDC_D0_WRITE_DIS_MASK;
+            base->REGION5_RDC_D0 |= IEE_APC_REGION5_RDC_D0_RDC_D0_LOCK_MASK;
         }
         else if (domain == kIEE_APC_Domain1)
         {
-            IEE_APC->REGION5_RDC_D1 |= IEE_APC_REGION5_RDC_D1_RDC_D1_WRITE_DIS_MASK;
-            IEE_APC->REGION5_RDC_D1 |= IEE_APC_REGION5_RDC_D1_RDC_D1_LOCK_MASK;
+            base->REGION5_RDC_D1 |= IEE_APC_REGION5_RDC_D1_RDC_D1_WRITE_DIS_MASK;
+            base->REGION5_RDC_D1 |= IEE_APC_REGION5_RDC_D1_RDC_D1_LOCK_MASK;
         }
         else
         {
@@ -303,13 +468,13 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
 
         if (domain == kIEE_APC_Domain0)
         {
-            IEE_APC->REGION6_RDC_D0 |= IEE_APC_REGION6_RDC_D0_RDC_D0_WRITE_DIS_MASK;
-            IEE_APC->REGION6_RDC_D0 |= IEE_APC_REGION6_RDC_D0_RDC_D0_LOCK_MASK;
+            base->REGION6_RDC_D0 |= IEE_APC_REGION6_RDC_D0_RDC_D0_WRITE_DIS_MASK;
+            base->REGION6_RDC_D0 |= IEE_APC_REGION6_RDC_D0_RDC_D0_LOCK_MASK;
         }
         else if (domain == kIEE_APC_Domain1)
         {
-            IEE_APC->REGION6_RDC_D1 |= IEE_APC_REGION6_RDC_D1_RDC_D1_WRITE_DIS_MASK;
-            IEE_APC->REGION6_RDC_D1 |= IEE_APC_REGION6_RDC_D1_RDC_D1_LOCK_MASK;
+            base->REGION6_RDC_D1 |= IEE_APC_REGION6_RDC_D1_RDC_D1_WRITE_DIS_MASK;
+            base->REGION6_RDC_D1 |= IEE_APC_REGION6_RDC_D1_RDC_D1_LOCK_MASK;
         }
         else
         {
@@ -327,13 +492,13 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
 
         if (domain == kIEE_APC_Domain0)
         {
-            IEE_APC->REGION7_RDC_D0 |= IEE_APC_REGION7_RDC_D0_RDC_D0_WRITE_DIS_MASK;
-            IEE_APC->REGION7_RDC_D0 |= IEE_APC_REGION7_RDC_D0_RDC_D0_LOCK_MASK;
+            base->REGION7_RDC_D0 |= IEE_APC_REGION7_RDC_D0_RDC_D0_WRITE_DIS_MASK;
+            base->REGION7_RDC_D0 |= IEE_APC_REGION7_RDC_D0_RDC_D0_LOCK_MASK;
         }
         else if (domain == kIEE_APC_Domain1)
         {
-            IEE_APC->REGION7_RDC_D1 |= IEE_APC_REGION7_RDC_D1_RDC_D1_WRITE_DIS_MASK;
-            IEE_APC->REGION7_RDC_D1 |= IEE_APC_REGION7_RDC_D1_RDC_D1_LOCK_MASK;
+            base->REGION7_RDC_D1 |= IEE_APC_REGION7_RDC_D1_RDC_D1_WRITE_DIS_MASK;
+            base->REGION7_RDC_D1 |= IEE_APC_REGION7_RDC_D1_RDC_D1_LOCK_MASK;
         }
         else
         {
@@ -343,6 +508,115 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
 
     return kStatus_Success;
 }
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u) */
+
+#if !(defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u))
+/*!
+ * brief Set access control of the APC IEE.
+ *
+ * This function configure APC IEE encryption region access control settings.
+ *
+ * param base APC IEE peripheral address.
+ * param region Selection of the APC IEE region to be locked.
+ * param allowNonSecure Allow nonsecure mode access
+ * param allowUser Allow user mode access
+ */
+status_t IEE_APC_SetAccessControl(IEE_APC_Type *base, iee_apc_region_t region, bool allowNonSecure, bool allowUser)
+{
+    uint32_t allowCltVal = 0u;
+  
+    if (region == kIEE_APC_Region0)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        allowCltVal = base->REGION0_ACC_CTL;
+        /* Clear allow user and ns */
+        allowCltVal = allowCltVal & (~IEE_APC_REGION0_ACC_CTL_ALLOW_NS_MASK);
+        allowCltVal = allowCltVal & (~IEE_APC_REGION0_ACC_CTL_ALLOW_USER_MASK);
+        /* Set new acces control value */
+        base->REGION0_ACC_CTL = allowCltVal | IEE_APC_REGION0_ACC_CTL_ALLOW_NS(allowNonSecure) | 
+                                IEE_APC_REGION0_ACC_CTL_ALLOW_USER(allowUser);
+
+    }
+    if (region == kIEE_APC_Region1)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        allowCltVal = base->REGION1_ACC_CTL;
+        /* Clear allow user and ns */
+        allowCltVal = allowCltVal & (~IEE_APC_REGION1_ACC_CTL_ALLOW_NS_MASK);
+        allowCltVal = allowCltVal & (~IEE_APC_REGION1_ACC_CTL_ALLOW_USER_MASK);
+        /* Set new acces control value */
+        base->REGION1_ACC_CTL = allowCltVal | IEE_APC_REGION1_ACC_CTL_ALLOW_NS(allowNonSecure) | 
+                                IEE_APC_REGION1_ACC_CTL_ALLOW_USER(allowUser);
+    }
+    if (region == kIEE_APC_Region2)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        allowCltVal = base->REGION2_ACC_CTL;
+        /* Clear allow user and ns */
+        allowCltVal = allowCltVal & (~IEE_APC_REGION2_ACC_CTL_ALLOW_NS_MASK);
+        allowCltVal = allowCltVal & (~IEE_APC_REGION2_ACC_CTL_ALLOW_USER_MASK);
+        /* Set new acces control value */
+        base->REGION2_ACC_CTL = allowCltVal | IEE_APC_REGION2_ACC_CTL_ALLOW_NS(allowNonSecure) | 
+                                IEE_APC_REGION2_ACC_CTL_ALLOW_USER(allowUser);
+    }
+    if (region == kIEE_APC_Region3)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        allowCltVal = base->REGION3_ACC_CTL;
+        /* Clear allow user and ns */
+        allowCltVal = allowCltVal & (~IEE_APC_REGION3_ACC_CTL_ALLOW_NS_MASK);
+        allowCltVal = allowCltVal & (~IEE_APC_REGION3_ACC_CTL_ALLOW_USER_MASK);
+        /* Set new acces control value */
+        base->REGION3_ACC_CTL = allowCltVal | IEE_APC_REGION3_ACC_CTL_ALLOW_NS(allowNonSecure) | 
+                                IEE_APC_REGION3_ACC_CTL_ALLOW_USER(allowUser);
+    }
+    if (region == kIEE_APC_Region4)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        allowCltVal = base->REGION4_ACC_CTL;
+        /* Clear allow user and ns */
+        allowCltVal = allowCltVal & (~IEE_APC_REGION4_ACC_CTL_ALLOW_NS_MASK);
+        allowCltVal = allowCltVal & (~IEE_APC_REGION4_ACC_CTL_ALLOW_USER_MASK);
+        /* Set new acces control value */
+        base->REGION4_ACC_CTL = allowCltVal | IEE_APC_REGION4_ACC_CTL_ALLOW_NS(allowNonSecure) | 
+                                IEE_APC_REGION4_ACC_CTL_ALLOW_USER(allowUser);
+    }
+    if (region == kIEE_APC_Region5)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        allowCltVal = base->REGION5_ACC_CTL;
+        /* Clear allow user and ns */
+        allowCltVal = allowCltVal & (~IEE_APC_REGION5_ACC_CTL_ALLOW_NS_MASK);
+        allowCltVal = allowCltVal & (~IEE_APC_REGION5_ACC_CTL_ALLOW_USER_MASK);
+        /* Set new acces control value */
+        base->REGION5_ACC_CTL = allowCltVal | IEE_APC_REGION5_ACC_CTL_ALLOW_NS(allowNonSecure) | 
+                                IEE_APC_REGION5_ACC_CTL_ALLOW_USER(allowUser);
+    }
+    if (region == kIEE_APC_Region6)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        allowCltVal = base->REGION6_ACC_CTL;
+        /* Clear allow user and ns */
+        allowCltVal = allowCltVal & (~IEE_APC_REGION6_ACC_CTL_ALLOW_NS_MASK);
+        allowCltVal = allowCltVal & (~IEE_APC_REGION6_ACC_CTL_ALLOW_USER_MASK);
+        /* Set new acces control value */
+        base->REGION6_ACC_CTL = allowCltVal | IEE_APC_REGION6_ACC_CTL_ALLOW_NS(allowNonSecure) | 
+                                IEE_APC_REGION6_ACC_CTL_ALLOW_USER(allowUser);
+    }
+    if (region == kIEE_APC_Region7)
+    {
+        /* Set allowed domain ID to access the IEE APC registers of this region. */
+        allowCltVal = base->REGION6_ACC_CTL;
+        /* Clear allow user and ns */
+        allowCltVal = allowCltVal & (~IEE_APC_REGION6_ACC_CTL_ALLOW_NS_MASK);
+        allowCltVal = allowCltVal & (~IEE_APC_REGION6_ACC_CTL_ALLOW_USER_MASK);
+        /* Set new acces control value */
+        base->REGION6_ACC_CTL = allowCltVal | IEE_APC_REGION6_ACC_CTL_ALLOW_NS(allowNonSecure) | 
+                                IEE_APC_REGION6_ACC_CTL_ALLOW_USER(allowUser);
+    }
+    return kStatus_Success;
+}
+#endif /* !(defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)) */
 
 /*!
  * brief Enable the IEE encryption/decryption for specific region.
@@ -354,38 +628,120 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
  */
 void IEE_APC_RegionEnable(IEE_APC_Type *base, iee_apc_region_t region)
 {
+
     if (region == kIEE_APC_Region0)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR18 |= IOMUXC_LPSR_GPR_GPR18_APC_R0_ENCRYPT_ENABLE_MASK;
+#else
+        base->REGION0_ENA |= IEE_APC_REGION0_ENA_ENCRYPT_ENABLE_MASK;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u) */
     }
     if (region == kIEE_APC_Region1)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR19 |= IOMUXC_LPSR_GPR_GPR19_APC_R1_ENCRYPT_ENABLE_MASK;
+#else
+        base->REGION1_ENA |= IEE_APC_REGION1_ENA_ENCRYPT_ENABLE_MASK;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u) */
     }
     if (region == kIEE_APC_Region2)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR20 |= IOMUXC_LPSR_GPR_GPR20_APC_R2_ENCRYPT_ENABLE_MASK;
+#else
+        base->REGION2_ENA |= IEE_APC_REGION2_ENA_ENCRYPT_ENABLE_MASK;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u) */
     }
     if (region == kIEE_APC_Region3)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
+
         IOMUXC_LPSR_GPR->GPR21 |= IOMUXC_LPSR_GPR_GPR21_APC_R3_ENCRYPT_ENABLE_MASK;
+#else
+        base->REGION3_ENA |= IEE_APC_REGION3_ENA_ENCRYPT_ENABLE_MASK;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u) */
     }
     if (region == kIEE_APC_Region4)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR22 |= IOMUXC_LPSR_GPR_GPR22_APC_R4_ENCRYPT_ENABLE_MASK;
+#else
+        base->REGION4_ENA |= IEE_APC_REGION4_ENA_ENCRYPT_ENABLE_MASK;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u) */
     }
     if (region == kIEE_APC_Region5)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR23 |= IOMUXC_LPSR_GPR_GPR23_APC_R5_ENCRYPT_ENABLE_MASK;
+#else
+        base->REGION5_ENA |= IEE_APC_REGION5_ENA_ENCRYPT_ENABLE_MASK;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u) */
     }
     if (region == kIEE_APC_Region6)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR24 |= IOMUXC_LPSR_GPR_GPR24_APC_R6_ENCRYPT_ENABLE_MASK;
+#else
+        base->REGION6_ENA |= IEE_APC_REGION6_ENA_ENCRYPT_ENABLE_MASK;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u) */
     }
     if (region == kIEE_APC_Region7)
     {
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
         IOMUXC_LPSR_GPR->GPR25 |= IOMUXC_LPSR_GPR_GPR25_APC_R7_ENCRYPT_ENABLE_MASK;
+#else
+        base->REGION7_ENA |= IEE_APC_REGION7_ENA_ENCRYPT_ENABLE_MASK;
+#endif /* defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u) */
     }
 
     return;
 }
+
+#if !(defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u))
+/*!
+ * brief Disable the IEE encryption/decryption for specific region.
+ *
+ * This function disables encryption/decryption by writting to IOMUXC LPSR GPR.
+ *
+ * param base APC IEE peripheral address.
+ * param region Selection of the APC IEE region to be enabled.
+ */
+void IEE_APC_RegionDisable(IEE_APC_Type *base, iee_apc_region_t region)
+{
+    if (region == kIEE_APC_Region0)
+    {
+        base->REGION0_ENA = 0u;
+    }
+    if (region == kIEE_APC_Region1)
+    {
+        base->REGION1_ENA = 0u;
+    }
+    if (region == kIEE_APC_Region2)
+    {
+        base->REGION2_ENA = 0u;
+    }
+    if (region == kIEE_APC_Region3)
+    {
+        base->REGION3_ENA = 0u;
+    }
+    if (region == kIEE_APC_Region4)
+    {
+        base->REGION4_ENA = 0u;
+    }
+    if (region == kIEE_APC_Region5)
+    {
+        base->REGION5_ENA = 0u;
+    }
+    if (region == kIEE_APC_Region6)
+    {
+        base->REGION6_ENA = 0u;
+    }
+    if (region == kIEE_APC_Region7)
+    {
+        base->REGION7_ENA = 0u;
+    }
+
+    return;
+}
+#endif /* !(defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)) */

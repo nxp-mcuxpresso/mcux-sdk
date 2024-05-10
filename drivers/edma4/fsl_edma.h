@@ -22,8 +22,13 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 9, 0)) /*!< Version 2.9.0. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 9, 0)) /*!< Version 2.9.1. */
 /*@}*/
+
+/*! @brief eDMA driver name */
+#ifndef FSL_EDMA_DRIVER_EDMA4 
+#define FSL_EDMA_DRIVER_EDMA4 (1)
+#endif
 
 /*!@brief Macro used for allocate edma TCD */
 #define EDMA_ALLOCATE_TCD(name, number) AT_NONCACHEABLE_SECTION_ALIGN(edma_tcd_t name[number], EDMA_TCD_ALIGN_SIZE)
@@ -681,6 +686,9 @@ static inline void EDMA_SetChannelMux(EDMA_Type *base, uint32_t channel, int32_t
 
     if ((uint32_t)FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_MUXn(base) == 1U)
     {
+        /* Reset channel mux */
+        EDMA_CHANNEL_BASE(base, channel)->CH_MUX = DMA_CH_MUX_SOURCE(0U);
+
         EDMA_CHANNEL_BASE(base, channel)->CH_MUX = DMA_CH_MUX_SOURCE(channelRequestSource);
     }
 }

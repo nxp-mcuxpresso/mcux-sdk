@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief FlexIO I2S driver version 2.2.0. */
 #define FSL_FLEXIO_I2S_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
-/*! @} */
+/*@}*/
 
 /*! @brief Retry times for waiting flag. */
 #ifndef I2S_RETRY_TIMES

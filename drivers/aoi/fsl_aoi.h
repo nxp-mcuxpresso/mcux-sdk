@@ -23,9 +23,9 @@
 #endif
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 #define FSL_AOI_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2. */
-/*! @} */
+/*@}*/
 
 /*!
  * @brief AOI input configurations.
@@ -109,7 +109,7 @@ void AOI_Init(AOI_Type *base);
  */
 void AOI_Deinit(AOI_Type *base);
 
-/*! @} */
+/*@}*/
 
 /*!
  * @name  AOI Get Set Operation
@@ -179,7 +179,7 @@ void AOI_SetEventLogicConfig(AOI_Type *base, aoi_event_t event, const aoi_event_
 }
 #endif /* __cplusplus*/
 
-/*! @} */
+/*@}*/
 
 /*!* @} */
 

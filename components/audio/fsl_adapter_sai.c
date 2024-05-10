@@ -134,8 +134,13 @@ void SAI2_IRQHandler(void)
 
 /* IRQHandler for SAI3 */
 #if defined(SAI3) && (FSL_FEATURE_SOC_I2S_COUNT > 0U)
+void SAI3_IRQHandler(void);
 void SAI3_TX_IRQHandler(void);
 void SAI3_RX_IRQHandler(void);
+void SAI3_IRQHandler(void)
+{
+    HAL_AudioFifoErrorIsr(SAI3);
+}
 void SAI3_TX_IRQHandler(void)
 {
     HAL_AudioFifoErrorIsr(SAI3);
@@ -148,8 +153,13 @@ void SAI3_RX_IRQHandler(void)
 
 /* IRQHandler for SAI4 */
 #if defined(SAI4) && (FSL_FEATURE_SOC_I2S_COUNT > 0U)
+void SAI4_IRQHandler(void);
 void SAI4_TX_IRQHandler(void);
 void SAI4_RX_IRQHandler(void);
+void SAI4_IRQHandler(void)
+{
+    HAL_AudioFifoErrorIsr(SAI4);
+}
 void SAI4_TX_IRQHandler(void)
 {
     HAL_AudioFifoErrorIsr(SAI4);

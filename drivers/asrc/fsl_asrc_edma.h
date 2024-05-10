@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 #define FSL_ASRC_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 0)) /*!< Version 2.2.0 */
-/*! @} */
+/*@}*/
 /*!< @brief ASRC IN edma QUEUE size */
 #define ASRC_XFER_IN_QUEUE_SIZE  4U
 #define ASRC_XFER_OUT_QUEUE_SIZE (ASRC_XFER_QUEUE_SIZE * 2U)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2021, 2023 NXP
  * All rights reserved.
  *
  *
@@ -27,32 +27,14 @@
  *
  * @return The MECC instance
  */
-static uint32_t MECC_GetInstance(MECC_Type *base);
+
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-/*! @brief Pointers to MECC bases for each instance. */
-static MECC_Type *const s_meccBases[] = MECC_BASE_PTRS;
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
-static uint32_t MECC_GetInstance(MECC_Type *base)
-{
-    uint32_t instance;
-
-    /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_meccBases); instance++)
-    {
-        if (s_meccBases[instance] == base)
-        {
-            break;
-        }
-    }
-
-    assert(instance < ARRAY_SIZE(s_meccBases));
-
-    return instance;
-}
 
 /*!
  * brief MECC module initialization function.
@@ -61,8 +43,12 @@ static uint32_t MECC_GetInstance(MECC_Type *base)
  */
 void MECC_Init(MECC_Type *base, mecc_config_t *config)
 {
-    uint32_t instance                 = MECC_GetInstance(base);
+    /* Check selected memory region is valid. */
+    assert(config->startAddress < config->endAddress);
+
     volatile uint64_t *ocramStartAddr = NULL;
+
+    base->PIPE_ECC_EN = 0UL;
 
     /* enable all the interrupt status */
     base->ERR_STAT_EN = kMECC_AllInterruptsStatusEnable;
@@ -70,38 +56,24 @@ void MECC_Init(MECC_Type *base, mecc_config_t *config)
     base->ERR_STATUS = kMECC_AllInterruptsFlag;
     /* disable all the interrpt */
     base->ERR_SIG_EN = 0U;
-
     /* enable ECC function */
-    base->PIPE_ECC_EN = MECC_PIPE_ECC_EN_ECC_EN(config->enableMecc);
+    base->PIPE_ECC_EN = MECC_PIPE_ECC_EN_ECC_EN(config->enableMecc) | \
+                        MECC_PENDING_STAT_READ_DATA_WAIT_PENDING(config->enableReadDataWait) | \
+                        MECC_PENDING_STAT_READ_ADDR_PIPE_PENDING(config->enableReadAddrPipeline) | \
+                        MECC_PENDING_STAT_WRITE_DATA_PIPE_PENDING(config->enableWriteDataPipeline) | \
+                        MECC_PENDING_STAT_WRITE_ADDR_PIPE_PENDING(config->enableWriteAddrPipeline);
 
     __DSB();
 
-    if (instance == (uint32_t)kMECC_Instance0)
-    {
-        /* Need to be initialized for ECC function operation, note that do not use memset() to initialize,
-             because it will use STR instruction and STR is byte access and MECC is 64 bits access operation. */
-        ocramStartAddr = (uint64_t *)config->Ocram1StartAddress;
-        while (ocramStartAddr < (uint64_t *)config->Ocram1EndAddress)
-        {
-            *ocramStartAddr = 0x00;
-            ocramStartAddr++;
-        }
-    }
-    else if (instance == (uint32_t)kMECC_Instance1)
-    {
-        /* Need to be initialized for ECC function operation, note that do not use memset() to initialize,
-             because it will use STR instruction and STR is byte access and MECC is 64 bits access operation. */
-        ocramStartAddr = (uint64_t *)config->Ocram2StartAddress;
-        while (ocramStartAddr < (uint64_t *)config->Ocram2EndAddress)
-        {
-            *ocramStartAddr = 0x00;
-            ocramStartAddr++;
-        }
-    }
-    else
-    {
-        ; /* Intentional empty for MISRA rule 15.7 */
-    }
+      /* Need to be initialized for ECC function operation, note that do not use memset() to initialize,
+           because it will use STR instruction and STR is byte access and MECC is 64 bits access operation. */
+      ocramStartAddr = (uint64_t *)config->startAddress;
+      while (ocramStartAddr < (uint64_t *)config->endAddress)
+      {
+          *ocramStartAddr = 0x00;
+          ocramStartAddr++;
+      }
+
 }
 
 /*!
@@ -123,14 +95,12 @@ void MECC_GetDefaultConfig(mecc_config_t *config)
 
     /* Default MECC function. */
     config->enableMecc = false;
-    /* Ocram 1 start address */
-    config->Ocram1StartAddress = 0x20240000;
-    /* Ocram 1 end address */
-    config->Ocram1EndAddress = 0x202BFFFF;
-    /* Ocram 2 address */
-    config->Ocram1StartAddress = 0x202C0000;
-    /* Ocram 2 address */
-    config->Ocram1EndAddress = 0x2033FFFF;
+    config->startAddress = 0UL;
+    config->endAddress = 0UL;
+    config->enableReadDataWait = false;
+    config->enableReadAddrPipeline = false;
+    config->enableWriteDataPipeline = false;
+    config->enableWriteAddrPipeline = false;
 }
 
 /* Initialize OCRAM */

@@ -16,7 +16,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief I3C EDMA driver version. */
-#define FSL_I3C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 8))
+#define FSL_I3C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 9))
 /*@}*/
 
 /*!
@@ -193,7 +193,7 @@ void I3C_MasterTransferAbortEDMA(I3C_Type *base, i3c_master_edma_handle_t *handl
  * @note This function does not need to be called unless you are reimplementing the
  *  nonblocking API's interrupt handler routines to add special functionality.
  * @param base The I3C peripheral base address.
- * @param handle Pointer to the I3C master DMA driver handle.
+ * @param i3cHandle Pointer to the I3C master DMA driver handle.
  */
 void I3C_MasterTransferEDMAHandleIRQ(I3C_Type *base, void *i3cHandle);
 /*@}*/
@@ -266,7 +266,7 @@ void I3C_SlaveTransferAbortEDMA(I3C_Type *base, i3c_slave_edma_handle_t *handle)
  * @note This function does not need to be called unless you are reimplementing the
  *  nonblocking API's interrupt handler routines to add special functionality.
  * @param base The I3C peripheral base address.
- * @param handle Pointer to the I3C slave DMA driver handle.
+ * @param i3cHandle Pointer to the I3C slave DMA driver handle.
  */
 void I3C_SlaveTransferEDMAHandleIRQ(I3C_Type *base, void *i3cHandle);
 /*@}*/

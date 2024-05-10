@@ -754,7 +754,7 @@ void TRDC_MbcWordNseClear(TRDC_Type *base, uint8_t mbcIdx, uint32_t bitMask)
  * param domainMask Mask of the domains whose NSE bits to clear, 0b110 means clear domain 1&2.
  * param slaveMask Mask of the slaves whose NSE bits to clear, 0x11 means clear all slave 0&1's NSE bits.
  */
-void TRDC_MbcNseClearAll(TRDC_Type *base, uint8_t mbcIdx, uint16_t domainMask, uint8_t slave)
+void TRDC_MbcNseClearAll(TRDC_Type *base, uint8_t mbcIdx, uint16_t domainMask, uint8_t slaveMask)
 {
     assert(NULL != base);
 
@@ -774,7 +774,7 @@ void TRDC_MbcNseClearAll(TRDC_Type *base, uint8_t mbcIdx, uint16_t domainMask, u
     }
 
     base->MBC_INDEX[mbcIdx].MBC_NSE_BLK_CLR_ALL =
-        TRDC_MBC_NSE_BLK_CLR_ALL_DID_SEL(domainMask) | TRDC_MBC_NSE_BLK_CLR_ALL_MEMSEL(slave);
+        TRDC_MBC_NSE_BLK_CLR_ALL_DID_SEL(domainMask) | TRDC_MBC_NSE_BLK_CLR_ALL_MEMSEL(slaveMask);
 }
 
 /*!

@@ -23,10 +23,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief FLEXSPI driver version. */
 #define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
-/*! @} */
+/*@}*/
 
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(0)
 
@@ -454,7 +454,7 @@ static inline void FLEXSPI_Enable(FLEXSPI_Type *base, bool enable)
     }
 }
 
-/*! @} */
+/* @} */
 
 /*!
  * @name Interrupts
@@ -482,10 +482,10 @@ static inline void FLEXSPI_DisableInterrupts(FLEXSPI_Type *base, uint32_t mask)
     base->INTEN &= ~mask;
 }
 
-/*! @} */
+/* @} */
 
 /*! @name DMA control */
-/*! @{ */
+/*@{*/
 
 /*!
  * @brief Enables or disables FLEXSPI IP Tx FIFO DMA requests.
@@ -545,10 +545,10 @@ static inline uint32_t FLEXSPI_GetRxFifoAddress(FLEXSPI_Type *base)
     return (uint32_t)&base->RFDR[0];
 }
 
-/*! @} */
+/*@}*/
 
 /*! @name FIFO control */
-/*! @{ */
+/*@{*/
 
 /*! @brief Clears the FLEXSPI IP FIFO logic.
  *
@@ -589,7 +589,7 @@ static inline void FLEXSPI_GetFifoCounts(FLEXSPI_Type *base, size_t *txCount, si
     }
 }
 
-/*! @} */
+/*@}*/
 
 /*!
  * @name Status
@@ -687,7 +687,7 @@ static inline bool FLEXSPI_GetBusIdleStatus(FLEXSPI_Type *base)
 {
     return (0U != (base->STS0 & FLEXSPI_STS0_ARBIDLE_MASK)) && (0U != (base->STS0 & FLEXSPI_STS0_SEQIDLE_MASK));
 }
-/*! @} */
+/*@}*/
 
 /*!
  * @name Bus Operations
@@ -897,6 +897,6 @@ void FLEXSPI_TransferHandleIRQ(FLEXSPI_Type *base, flexspi_handle_t *handle);
 #if defined(__cplusplus)
 }
 #endif /*_cplusplus. */
-/*! @} */
+/*@}*/
 
 #endif /* FSL_FLEXSPI_H_ */

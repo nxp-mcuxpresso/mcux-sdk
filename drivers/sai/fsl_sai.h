@@ -45,9 +45,9 @@
 #endif /* MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG */
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 #define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 4, 2)) /*!< Version 2.4.2 */
-/*! @} */
+/*@}*/
 
 /*! @brief _sai_status_t, SAI return status.*/
 enum

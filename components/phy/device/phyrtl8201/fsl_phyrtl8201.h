@@ -179,7 +179,7 @@ status_t PHY_RTL8201_EnableLinkInterrupt(phy_handle_t *handle, phy_interrupt_typ
  */
 status_t PHY_RTL8201_ClearInterrupt(phy_handle_t *handle);
 
-/*! @} */
+/* @} */
 
 #if defined(__cplusplus)
 }

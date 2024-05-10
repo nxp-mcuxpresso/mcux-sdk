@@ -23,7 +23,7 @@
  * @{
  */
 /*! @brief MU driver version. */
-#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
+#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*! @} */
 
 #define MU_CORE_INTR(intr) ((uint32_t)(intr) << 0U)
@@ -227,7 +227,7 @@ typedef enum _mu_msg_reg_index
     kMU_MsgReg3,     /*!< Message register 3. */
 } mu_msg_reg_index_t;
 
-#if (defined(FSL_FEATURE_MU_NO_BOOT) && (0 != FSL_FEATURE_MU_NO_BOOT))
+#if (defined(FSL_FEATURE_MU_HAS_BOOT) && (0 == FSL_FEATURE_MU_HAS_BOOT))
 /*!
  * @brief The other core boot mode.
  */
@@ -288,7 +288,7 @@ void MU_Deinit(MU_Type *base);
  * @endcode
  *
  * @param base MU peripheral base address.
- * @param regIndex  TX register index, see @ref mu_msg_reg_index_t.
+ * @param regIndex  TX register index, see @ref _mu_msg_reg_index.
  * @param msg      Message to send.
  */
 static inline void MU_SendMsgNonBlocking(MU_Type *base, uint32_t regIndex, uint32_t msg)
@@ -304,7 +304,7 @@ static inline void MU_SendMsgNonBlocking(MU_Type *base, uint32_t regIndex, uint3
  * This function waits until the TX register is empty and sends the message.
  *
  * @param base MU peripheral base address.
- * @param regIndex  MU message register, see @ref mu_msg_reg_index_t.
+ * @param regIndex  MU message register, see @ref _mu_msg_reg_index.
  * @param msg      Message to send.
  */
 void MU_SendMsg(MU_Type *base, uint32_t regIndex, uint32_t msg);
@@ -327,7 +327,7 @@ void MU_SendMsg(MU_Type *base, uint32_t regIndex, uint32_t msg);
  * @endcode
  *
  * @param base MU peripheral base address.
- * @param regIndex  RX register index, see @ref mu_msg_reg_index_t.
+ * @param regIndex  RX register index, see @ref _mu_msg_reg_index.
  * @return The received message.
  */
 static inline uint32_t MU_ReceiveMsgNonBlocking(MU_Type *base, uint32_t regIndex)
@@ -343,7 +343,7 @@ static inline uint32_t MU_ReceiveMsgNonBlocking(MU_Type *base, uint32_t regIndex
  * This function waits until the RX register is full and receives the message.
  *
  * @param base MU peripheral base address.
- * @param regIndex  MU message register, see @ref mu_msg_reg_index_t
+ * @param regIndex  MU message register, see @ref _mu_msg_reg_index
  * @return The received message.
  */
 uint32_t MU_ReceiveMsg(MU_Type *base, uint32_t regIndex);
@@ -677,7 +677,7 @@ static inline void MU_ClearNmi(MU_Type *base)
  * @{
  */
 
-#if !(defined(FSL_FEATURE_MU_NO_BOOT) && (0 != FSL_FEATURE_MU_NO_BOOT))
+#if !(defined(FSL_FEATURE_MU_HAS_BOOT) && (0 == FSL_FEATURE_MU_HAS_BOOT))
 /*!
  * @brief Boots the other core.
  *
@@ -687,9 +687,9 @@ static inline void MU_ClearNmi(MU_Type *base)
  * @param mode The other core boot mode.
  */
 void MU_BootOtherCore(MU_Type *base, mu_core_boot_mode_t mode);
-#endif /* FSL_FEATURE_MU_NO_BOOT */
+#endif /* FSL_FEATURE_MU_HAS_BOOT */
 
-#if !(defined(FSL_FEATURE_MU_NO_RSTH) && (0 != FSL_FEATURE_MU_NO_RSTH))
+#if !(defined(FSL_FEATURE_MU_HAS_RSTH) && (0 == FSL_FEATURE_MU_HAS_RSTH))
 /*!
  * @brief Holds the other core reset.
  *
@@ -698,7 +698,7 @@ void MU_BootOtherCore(MU_Type *base, mu_core_boot_mode_t mode);
  * @param base MU peripheral base address.
  */
 void MU_HoldOtherCoreReset(MU_Type *base);
-#endif /* FSL_FEATURE_MU_NO_RSTH */
+#endif /* FSL_FEATURE_MU_HAS_RSTH */
 
 /*!
  * @brief Resets the MU for both A side and B side.
@@ -744,7 +744,7 @@ static inline void MU_SetClockOnOtherCoreEnable(MU_Type *base, bool enable)
 }
 #endif
 
-#if !(defined(FSL_FEATURE_MU_NO_HR) && FSL_FEATURE_MU_NO_HR)
+#if !(defined(FSL_FEATURE_MU_HAS_HR) && (FSL_FEATURE_MU_HAS_HR == 0))
 /*!
  * @brief Hardware reset the other core.
  *
@@ -772,9 +772,9 @@ static inline void MU_SetClockOnOtherCoreEnable(MU_Type *base, bool enable)
  * for some platforms. waitReset is only available for platforms that
  * FSL_FEATURE_MU_NO_CORE_STATUS not defined as 1 and
  * FSL_FEATURE_MU_HAS_RESET_ASSERT_INT not defined as 0. holdReset is only available
- * for platforms that FSL_FEATURE_MU_NO_RSTH not defined as 1.
- * bootMode is only available for platforms that FSL_FEATURE_MU_NO_BOOT not
- * defined as 1.
+ * for platforms that FSL_FEATURE_MU_HAS_RSTH not defined as 0.
+ * bootMode is only available for platforms that FSL_FEATURE_MU_HAS_BOOT not
+ * defined as 0.
  *
  * @param base MU peripheral base address.
  * @param waitReset Wait the other core enters reset. Only work when there is CSSR0[RAIP]
@@ -791,7 +791,7 @@ static inline void MU_SetClockOnOtherCoreEnable(MU_Type *base, bool enable)
  *                 parameter is useless.
  */
 void MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset, mu_core_boot_mode_t bootMode);
-#endif /* FSL_FEATURE_MU_NO_HR */
+#endif /* FSL_FEATURE_MU_HAS_HR */
 
 #if (defined(FSL_FEATURE_MU_HAS_HRM) && FSL_FEATURE_MU_HAS_HRM)
 /*!

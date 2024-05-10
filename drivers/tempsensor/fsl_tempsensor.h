@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 NXP
+ * Copyright 2020-2023 NXP
  * All rights reserved.
  *
  *
@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
-#define FSL_TMPSNS_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*! @} */
+/*@{*/
+#define FSL_TMPSNS_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+/*@}*/
 
 /*! @brief TMPSNS interrupt status enable type, tmpsns_interrupt_status_enable_t. */
 enum

@@ -498,7 +498,7 @@ void PF1550_GetDefaultConfig(pf1550_config_t *config);
  * @param config Pointer to the user-defined configuration structure.
  */
 void PF1550_Init(pf1550_handle_t *handle, const pf1550_config_t *config);
-/*! @} */
+/* @} */
 
 /*!
  * @name Basic register access functions
@@ -545,7 +545,7 @@ bool PF1550_ModifyReg(pf1550_handle_t *handle, uint8_t reg, uint8_t mask, uint8_
  */
 bool PF1550_DumpReg(pf1550_handle_t *handle, uint8_t reg, uint8_t *buffer, uint8_t size);
 
-/*! @} */
+/* @} */
 
 /*!
  * @name Interrupts
@@ -638,7 +638,7 @@ uint32_t PF1550_GetInterruptStatus(pf1550_handle_t *handle, pf1550_interrupt_cat
  * @param source Logic ORed interrupt sources of selected interrupt category to clear.
  */
 void PF1550_ClearInterruptStatus(pf1550_handle_t *handle, pf1550_interrupt_category_t category, uint32_t source);
-/*! @} */
+/* @} */
 
 /*!
  * @name Regulator control functions
@@ -772,7 +772,7 @@ void PF1550_SetVrefDdrAttribute(pf1550_handle_t *handle, const pf1550_vrefddr_at
  * @param attribute Pointer to the Vsnvs Attribute structure to set.
  */
 void PF1550_SetVsnvsAttribute(pf1550_handle_t *handle, const pf1550_vsnvs_attribute_t *attribute);
-/*! @} */
+/* @} */
 
 /*!
  * @name I/O Pad control functions
@@ -817,7 +817,7 @@ void PF1550_SetPwrOnPadAttibute(pf1550_handle_t *handle, const pf1550_power_on_a
  * @param attribute Pointer to the Standby Pad Attribute structure to set.
  */
 void PF1550_SetStandbyPadAttibute(pf1550_handle_t *handle, const pf1550_standby_attribute_t *attribute);
-/*! @} */
+/* @} */
 
 /*!
  * @name Misc. functions
@@ -849,7 +849,7 @@ pf1550_operating_status_t PF1550_GetOperatingStatus(pf1550_handle_t *handle);
  * @return true: regulator support DVS feature, false: regulator does not support DVS.
  */
 bool PF1550_IsRegulatorSupportDvs(pf1550_handle_t *handle, pf1550_module_t module);
-/*! @} */
+/* @} */
 
 #if defined(__cplusplus)
 }

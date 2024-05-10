@@ -396,7 +396,7 @@ void PF3000_GetDefaultConfig(pf3000_config_t *config);
  * @param config Pointer to the user-defined configuration structure.
  */
 void PF3000_Init(pf3000_handle_t *handle, const pf3000_config_t *config);
-/*! @} */
+/* @} */
 
 /*!
  * @name Basic register access functions
@@ -444,7 +444,7 @@ bool PF3000_ModifyReg(pf3000_handle_t *handle, uint8_t reg, uint8_t mask, uint8_
  */
 bool PF3000_DumpReg(pf3000_handle_t *handle, uint8_t page, uint8_t reg, uint8_t *buffer, uint8_t size);
 
-/*! @} */
+/* @} */
 
 /*!
  * @name Interrupts
@@ -498,7 +498,7 @@ uint32_t PF3000_GetInterruptStatus(pf3000_handle_t *handle);
  * @param source Logic ORed interrupt sources of selected interrupt category to clear.
  */
 void PF3000_ClearInterruptStatus(pf3000_handle_t *handle, uint32_t source);
-/*! @} */
+/* @} */
 
 /*!
  * @name Regulator control functions
@@ -641,7 +641,7 @@ void PF3000_SetStandbyPadAttribute(pf3000_handle_t *handle, const pf3000_standby
  * @param attribute Pointer to the PowerOn Pad Attribute structure to set.
  */
 void PF3000_SetPwrOnPadAttibute(pf3000_handle_t *handle, const pf3000_power_on_attribute_t *attribute);
-/*! @} */
+/* @} */
 
 #if defined(__cplusplus)
 }
