@@ -19,10 +19,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief KPP driver version 2.0.0. */
 #define FSL_KPP_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
-/*! @} */
+/*@}*/
 
 #define KPP_KEYPAD_COLUMNNUM_MAX (8U)
 #define KPP_KEYPAD_ROWNUM_MAX    (8U)
@@ -85,7 +85,7 @@ void KPP_Init(KPP_Type *base, kpp_config_t *configure);
  */
 void KPP_Deinit(KPP_Type *base);
 
-/*! @} */
+/* @} */
 
 /*!
  * @name KPP Basic Operation
@@ -169,7 +169,7 @@ static inline void KPP_SetSynchronizeChain(KPP_Type *base, uint16_t mask)
  */
 void KPP_keyPressScanning(KPP_Type *base, uint8_t *data, uint32_t clockSrc_Hz);
 
-/*! @} */
+/* @} */
 
 #if defined(__cplusplus)
 }

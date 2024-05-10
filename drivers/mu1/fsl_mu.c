@@ -269,7 +269,11 @@ status_t MU_TriggerNmi(MU_Type *base)
     }
     else
     {
-        base->CCR0 = (ccr0 & ~MU_CCR0_HR_MASK) | MU_CCR0_NMI_MASK;
+#if !(defined(FSL_FEATURE_MU_HAS_HR) && (FSL_FEATURE_MU_HAS_HR == 0))
+        ccr0 &= ~MU_CCR0_HR_MASK;
+#endif
+
+        base->CCR0 = ccr0 | MU_CCR0_NMI_MASK;
         status     = kStatus_Success;
     }
 
@@ -277,7 +281,7 @@ status_t MU_TriggerNmi(MU_Type *base)
 }
 #endif /* FSL_FEATURE_MU_NO_NMI */
 
-#if !(defined(FSL_FEATURE_MU_NO_BOOT) && (0 != FSL_FEATURE_MU_NO_BOOT))
+#if !(defined(FSL_FEATURE_MU_HAS_BOOT) && (0 == FSL_FEATURE_MU_HAS_BOOT))
 /*!
  * brief Boots the other core.
  *
@@ -288,17 +292,25 @@ status_t MU_TriggerNmi(MU_Type *base)
  */
 void MU_BootOtherCore(MU_Type *base, mu_core_boot_mode_t mode)
 {
-    uint32_t ccr0 = base->CCR0;
+    uint32_t ccr0;
+
+#if defined(FSL_FEATURE_MU_HAS_BOOT_BY_INSTANCEn)
+    assert(FSL_FEATURE_MU_HAS_BOOT_BY_INSTANCEn(base) != 0);
+#endif
+
+    ccr0 = base->CCR0;
 
 #if !(defined(FSL_FEATURE_MU_NO_NMI) && (0 != FSL_FEATURE_MU_NO_NMI))
     ccr0 &= ~MU_CCR0_NMI_MASK;
 #endif
 
-#if !(defined(FSL_FEATURE_MU_NO_HR) && (0 != FSL_FEATURE_MU_NO_HR))
+#if !(defined(FSL_FEATURE_MU_HAS_HR) && (0 == FSL_FEATURE_MU_HAS_HR))
+    /* Don't need to check whether the instance support it, always clear it. */
     ccr0 &= ~MU_CCR0_HR_MASK;
 #endif
 
-#if !(defined(FSL_FEATURE_MU_NO_RSTH) && (0 != FSL_FEATURE_MU_NO_RSTH))
+#if !(defined(FSL_FEATURE_MU_HAS_RSTH) && (0 == FSL_FEATURE_MU_HAS_RSTH))
+    /* Don't need to check whether the MU instance support RSTH, always clear the bit. */
     ccr0 &= ~MU_CCR0_RSTH_MASK;
 #endif
 
@@ -306,9 +318,9 @@ void MU_BootOtherCore(MU_Type *base, mu_core_boot_mode_t mode)
 
     base->CCR0 = ccr0;
 }
-#endif /* FSL_FEATURE_MU_NO_BOOT */
+#endif /* FSL_FEATURE_MU_HAS_BOOT */
 
-#if !(defined(FSL_FEATURE_MU_NO_RSTH) && (0 != FSL_FEATURE_MU_NO_RSTH))
+#if !(defined(FSL_FEATURE_MU_HAS_RSTH) && (0 == FSL_FEATURE_MU_HAS_RSTH))
 /*
  * brief Holds the other core reset.
  *
@@ -318,7 +330,14 @@ void MU_BootOtherCore(MU_Type *base, mu_core_boot_mode_t mode)
  */
 void MU_HoldOtherCoreReset(MU_Type *base)
 {
-    uint32_t ccr0 = base->CCR0;
+    uint32_t ccr0;
+
+#if defined(FSL_FEATURE_MU_HAS_RSTH_BY_INSTANCEn)
+    /* The MU instance must support the feature. */
+    assert(FSL_FEATURE_MU_HAS_RSTH_BY_INSTANCEn(base) != 0);
+#endif
+
+    ccr0 = base->CCR0;
 
 #if !(defined(FSL_FEATURE_MU_NO_NMI) && (0 != FSL_FEATURE_MU_NO_NMI))
     ccr0 &= ~MU_CCR0_NMI_MASK;
@@ -328,9 +347,9 @@ void MU_HoldOtherCoreReset(MU_Type *base)
 
     base->CCR0 = ccr0;
 }
-#endif /* FSL_FEATURE_MU_NO_RSTH */
+#endif /* FSL_FEATURE_MU_HAS_RSTH */
 
-#if !(defined(FSL_FEATURE_MU_NO_HR) && FSL_FEATURE_MU_NO_HR)
+#if !(defined(FSL_FEATURE_MU_HAS_HR) && (FSL_FEATURE_MU_HAS_HR == 0))
 /*!
  * brief Hardware reset the other core.
  *
@@ -370,12 +389,23 @@ void MU_HoldOtherCoreReset(MU_Type *base)
  */
 void MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset, mu_core_boot_mode_t bootMode)
 {
-#if (defined(FSL_FEATURE_MU_NO_BOOT) && (0 != FSL_FEATURE_MU_NO_BOOT))
+#if defined(FSL_FEATURE_MU_HAS_HR_BY_INSTANCEn)
+    assert(FSL_FEATURE_MU_HAS_HR_BY_INSTANCEn(base) != 0);
+#endif
+
+#if (defined(FSL_FEATURE_MU_HAS_BOOT) && (0 == FSL_FEATURE_MU_HAS_BOOT))
     assert(bootMode == kMU_CoreBootModeDummy);
 #endif
 
-#if (defined(FSL_FEATURE_MU_NO_RSTH) && (0 != FSL_FEATURE_MU_NO_RSTH))
+#if (defined(FSL_FEATURE_MU_HAS_RSTH) && (0 == FSL_FEATURE_MU_HAS_RSTH))
     assert(holdReset == false);
+#endif
+
+#if defined(FSL_FEATURE_MU_HAS_RSTH_BY_INSTANCEn)
+    if (FSL_FEATURE_MU_HAS_RSTH_BY_INSTANCEn(base) == 0)
+    {
+        assert(holdReset == false);
+    }
 #endif
 
 #if (defined(FSL_FEATURE_MU_NO_CORE_STATUS) && (0 != FSL_FEATURE_MU_NO_CORE_STATUS))
@@ -390,18 +420,26 @@ void MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset, mu
     ccr0 &= ~MU_CCR0_NMI_MASK;
 #endif /* FSL_FEATURE_MU_NO_NMI */
 
-#if !(defined(FSL_FEATURE_MU_NO_BOOT) && (0 != FSL_FEATURE_MU_NO_BOOT))
-    ccr0 &= ~MU_CCR0_BOOT_MASK;
-    ccr0 |= MU_CCR0_BOOT(bootMode);
-#endif /* FSL_FEATURE_MU_NO_BOOT */
+#if !(defined(FSL_FEATURE_MU_HAS_BOOT) && (0 == FSL_FEATURE_MU_HAS_BOOT))
+#if defined(FSL_FEATURE_MU_HAS_BOOT_BY_INSTANCEn)
+    if (FSL_FEATURE_MU_HAS_BOOT_BY_INSTANCEn(base) != 0)
+#endif
+    {
+        ccr0 &= ~MU_CCR0_BOOT_MASK;
+        ccr0 |= MU_CCR0_BOOT(bootMode);
+    }
+#endif /* FSL_FEATURE_MU_HAS_BOOT */
 
-#if !(defined(FSL_FEATURE_MU_NO_RSTH) && (0 != FSL_FEATURE_MU_NO_RSTH))
+#if !(defined(FSL_FEATURE_MU_HAS_RSTH) && (0 == FSL_FEATURE_MU_HAS_RSTH))
     ccr0 &= ~MU_CCR0_RSTH_MASK;
+    /* Don't need check whether the instance support hold reset, it is already
+     * checked at the begining of this function.
+     */
     if (holdReset)
     {
         ccr0 |= MU_CCR0_RSTH_MASK;
     }
-#endif /* FSL_FEATURE_MU_NO_RSTH */
+#endif /* FSL_FEATURE_MU_HAS_RSTH */
 
 #if !(defined(FSL_FEATURE_MU_NO_CORE_STATUS) && (0 != FSL_FEATURE_MU_NO_CORE_STATUS))
 #if !(defined(FSL_FEATURE_MU_HAS_RESET_ASSERT_INT) && (FSL_FEATURE_MU_HAS_RESET_ASSERT_INT == 0))
@@ -426,13 +464,13 @@ void MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset, mu
 #endif /* FSL_FEATURE_MU_HAS_RESET_ASSERT_INT */
 #endif /* FSL_FEATURE_MU_NO_CORE_STATUS */
 
-#if !(defined(FSL_FEATURE_MU_NO_RSTH) && (0 != FSL_FEATURE_MU_NO_RSTH))
+#if !(defined(FSL_FEATURE_MU_HAS_RSTH) && (0 == FSL_FEATURE_MU_HAS_RSTH))
         if (!holdReset)
         {
             /* Clear CCR[HR]. */
             base->CCR0 = ccr0;
         }
-#endif /* FSL_FEATURE_MU_NO_RSTH */
+#endif /* FSL_FEATURE_MU_HAS_RSTH */
     }
 }
-#endif /* FSL_FEATURE_MU_NO_HR */
+#endif /* FSL_FEATURE_MU_HAS_HR */

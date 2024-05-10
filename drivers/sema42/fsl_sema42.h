@@ -21,10 +21,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief SEMA42 driver version */
 #define FSL_SEMA42_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
-/*! @} */
+/*@}*/
 
 /*!
  * @brief SEMA42 status return codes.

@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief RGPIO driver version 2.1.0. */
 #define FSL_RGPIO_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
-/*! @} */
+/*@}*/
 
 /*! @brief RGPIO direction definition */
 typedef enum _rgpio_pin_direction
@@ -118,7 +118,7 @@ extern "C" {
  */
 
 /*! @name RGPIO Configuration */
-/*! @{ */
+/*@{*/
 
 /*!
  * @brief Initializes a RGPIO pin used by the board.
@@ -155,10 +155,10 @@ void RGPIO_PinInit(RGPIO_Type *base, uint32_t pin, const rgpio_pin_config_t *con
  * @retval RGPIO instance
  */
 uint32_t RGPIO_GetInstance(RGPIO_Type *base);
-/*! @} */
+/*@}*/
 
 /*! @name RGPIO Output Operations */
-/*! @{ */
+/*@{*/
 
 /*!
  * @brief Sets the output level of the multiple RGPIO pins to the logic 1 or 0.
@@ -252,10 +252,10 @@ static inline void RGPIO_TogglePinsOutput(RGPIO_Type *base, uint32_t mask)
 {
     RGPIO_PortToggle(base, mask);
 }
-/*! @} */
+/*@}*/
 
 /*! @name RGPIO Input Operations */
-/*! @{ */
+/*@{*/
 
 /*!
  * @brief Reads the current input value of the RGPIO port.
@@ -299,11 +299,11 @@ static inline void RGPIO_EnablePortInput(RGPIO_Type *base, uint32_t mask, bool e
 }
 #endif
 
-/*! @} */
+/*@}*/
 
 #if defined(FSL_FEATURE_SOC_PORT_COUNT) && FSL_FEATURE_SOC_PORT_COUNT
 /*! @name RGPIO Interrupt */
-/*! @{ */
+/*@{*/
 
 /*!
  * @brief Reads the RGPIO port interrupt status flag.
@@ -436,7 +436,7 @@ static inline void RGPIO_ClearPinsInterruptFlags(RGPIO_Type *base, rgpio_interru
 }
 #endif
 
-/*! @} */
+/*@}*/
 /*! @} */
 
 /*!
@@ -455,7 +455,7 @@ static inline void RGPIO_ClearPinsInterruptFlags(RGPIO_Type *base, rgpio_interru
 #if defined(FSL_FEATURE_SOC_FGPIO_COUNT) && FSL_FEATURE_SOC_FGPIO_COUNT
 
 /*! @name FGPIO Configuration */
-/*! @{ */
+/*@{*/
 
 #if defined(FSL_FEATURE_PCC_HAS_FGPIO_CLOCK_GATE_CONTROL) && FSL_FEATURE_PCC_HAS_FGPIO_CLOCK_GATE_CONTROL
 /*!
@@ -511,10 +511,10 @@ void FGPIO_PinInit(FGPIO_Type *base, uint32_t pin, const rgpio_pin_config_t *con
  * @retval FGPIO instance
  */
 uint32_t FGPIO_GetInstance(FGPIO_Type *base);
-/*! @} */
+/*@}*/
 
 /*! @name FGPIO Output Operations */
-/*! @{ */
+/*@{*/
 
 /*!
  * @brief Sets the output level of the multiple FGPIO pins to the logic 1 or 0.
@@ -605,10 +605,10 @@ static inline void FGPIO_TogglePinsOutput(FGPIO_Type *base, uint32_t mask)
 {
     FGPIO_PortToggle(base, mask);
 }
-/*! @} */
+/*@}*/
 
 /*! @name FGPIO Input Operations */
-/*! @{ */
+/*@{*/
 
 /*!
  * @brief Reads the current input value of the FGPIO port.
@@ -632,11 +632,11 @@ static inline uint32_t FGPIO_ReadPinInput(FGPIO_Type *base, uint32_t pin)
 {
     return FGPIO_PinRead(base, pin);
 }
-/*! @} */
+/*@}*/
 
 #if defined(FSL_FEATURE_SOC_PORT_COUNT) && FSL_FEATURE_SOC_PORT_COUNT
 /*! @name FGPIO Interrupt */
-/*! @{ */
+/*@{*/
 
 /*!
  * @brief Reads the FGPIO port interrupt status flag.
@@ -693,7 +693,7 @@ static inline void FGPIO_ClearPinsInterruptFlags(FGPIO_Type *base, uint32_t mask
 void FGPIO_CheckAttributeBytes(FGPIO_Type *base, rgpio_checker_attribute_t attribute);
 #endif
 
-/*! @} */
+/*@}*/
 
 #endif /* FSL_FEATURE_SOC_FGPIO_COUNT */
 

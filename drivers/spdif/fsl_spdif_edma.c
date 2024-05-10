@@ -128,7 +128,11 @@ static void SPDIF_RxEDMACallback(edma_handle_t *handle, void *userData, bool don
 
 static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_config_t *config, uint32_t rightChannel)
 {
+#if defined(FSL_EDMA_DRIVER_EDMA4) && FSL_EDMA_DRIVER_EDMA4
+    edma_tcd_t *tcdRegs = handle->tcdBase;
+#else
     edma_tcd_t *tcdRegs = (edma_tcd_t *)(uint32_t)&handle->base->TCD[handle->channel];
+#endif
     uint32_t primask;
     uint16_t csr;
     int8_t currentTcd;
@@ -242,14 +246,17 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
     /* There is no live chain, TCD block need to be installed in TCD registers. */
     EDMA_InstallTCD(handle->base, handle->channel, &handle->tcdPool[currentTcd]);
     /* Enable channel request again. */
-    if ((handle->flags & 0x80U) != 0x00U)
+#if defined EDMA_TRANSFER_ENABLED_MASK && EDMA_TRANSFER_ENABLED_MASK
+    if ((handle->flags & EDMA_TRANSFER_ENABLED_MASK) != 0x00U)
+
     {
-        handle->base->SERQ = DMA_SERQ_SERQ(handle->channel);
+        EDMA_EnableChannelRequest(handle->base,handle->channel);
     }
     else
     {
         ; /* Intentional empty */
     }
+#endif
 
     return kStatus_Success;
 }
@@ -417,7 +424,6 @@ status_t SPDIF_TransferSendEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle, s
 
     /* Start DMA transfer */
     EDMA_StartTransfer(handle->dmaLeftHandle);
-    EDMA_StartTransfer(handle->dmaRightHandle);
 
     /* Enable DMA enable bit */
     SPDIF_EnableDMA(base, kSPDIF_TxDMAEnable, true);
@@ -489,7 +495,6 @@ status_t SPDIF_TransferReceiveEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle
 
     /* Start DMA transfer */
     EDMA_StartTransfer(handle->dmaLeftHandle);
-    EDMA_StartTransfer(handle->dmaRightHandle);
 
     /* Enable DMA enable bit */
     SPDIF_EnableDMA(base, kSPDIF_RxDMAEnable, true);

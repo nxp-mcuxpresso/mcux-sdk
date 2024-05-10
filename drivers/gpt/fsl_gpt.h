@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 #define FSL_GPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
-/*! @} */
+/*@}*/
 
 /*!
  * @brief List of clock sources
@@ -298,7 +298,7 @@ static inline uint32_t GPT_GetCurrentTimerCount(GPT_Type *base)
     return base->CNT;
 }
 
-/*! @} */
+/*@}*/
 
 /*!
  * @name GPT Input/Output Signal Control
@@ -425,7 +425,7 @@ static inline void GPT_ForceOutput(GPT_Type *base, gpt_output_compare_channel_t 
     base->CR |= (GPT_CR_FO1_MASK << (uint32_t)channel);
 }
 
-/*! @} */
+/*@}*/
 
 /*!
  * @name GPT Interrupt and Status Interface
@@ -498,7 +498,7 @@ static inline void GPT_ClearStatusFlags(GPT_Type *base, gpt_status_flag_t flags)
     base->SR = (uint32_t)flags;
 }
 
-/*! @} */
+/*@}*/
 
 #if defined(__cplusplus)
 }

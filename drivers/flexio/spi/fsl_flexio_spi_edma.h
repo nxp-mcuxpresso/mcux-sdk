@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief FlexIO SPI EDMA driver version. */
 #define FSL_FLEXIO_SPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
-/*! @} */
+/*@}*/
 
 /*! @brief  typedef for flexio_spi_master_edma_handle_t in advance. */
 typedef struct _flexio_spi_master_edma_handle flexio_spi_master_edma_handle_t;

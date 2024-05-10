@@ -374,7 +374,7 @@ static status_t mflash_format_internal(mflash_fs_t *fs,
     }
 
     /* Erase the whole FLASH area to be occupied by the filesystem */
-    for (int i = 0; i < total_sectors; i++)
+    for (uint32_t i = 0; i < total_sectors; i++)
     {
         status = mflash_fs_sector_erase(fs, i * MFLASH_SECTOR_SIZE);
         if (status != kStatus_Success)
@@ -474,7 +474,7 @@ static status_t mflash_template_match(mflash_fs_t *fs, const mflash_file_t *dir_
 {
     status_t status;
 
-    for (const mflash_file_t *dt = dir_template; (NULL != dt->path) && ('\0' != dt->path[0]) && (0 != dt->max_size);
+    for (const mflash_file_t *dt = dir_template; (NULL != dt->path) && ('\0' != dt->path[0]) && (0U != dt->max_size);
          dt++)
     {
         mflash_dir_record_t dr;
@@ -582,7 +582,7 @@ static status_t mflash_file_save_internal(
 
     /* Program the file data page by page, skipping the first page containing meta that is going to be programmed in the
      * last step */
-    for (int data_offset = MFLASH_PAGE_SIZE - sizeof(mflash_file_meta_t); data_offset < size;
+    for (uint32_t data_offset = MFLASH_PAGE_SIZE - sizeof(mflash_file_meta_t); data_offset < size;
          data_offset += MFLASH_PAGE_SIZE)
     {
         /* Pointer and size of the data portion to be programmed */
@@ -593,8 +593,8 @@ static status_t mflash_file_save_internal(
             copy_size = MFLASH_PAGE_SIZE;
         }
 
-        memset(page_buf, MFLASH_BLANK_PATTERN, MFLASH_PAGE_SIZE);
-        memcpy(page_buf, copy_ptr, copy_size);
+        (void)memset(page_buf, (int)MFLASH_BLANK_PATTERN, MFLASH_PAGE_SIZE);
+        (void)memcpy(page_buf, copy_ptr, copy_size);
 
         /* Data offset is off by sizeof(mflash_file_meta_t) as this structure occupies the very beginning of the first
          * page */
@@ -612,8 +612,8 @@ static status_t mflash_file_save_internal(
         copy_size = MFLASH_PAGE_SIZE - sizeof(mflash_file_meta_t);
     }
 
-    memset(page_buf, MFLASH_BLANK_PATTERN, MFLASH_PAGE_SIZE);
-    memcpy((uint8_t *)page_buf + sizeof(mflash_file_meta_t), data, copy_size);
+    (void)memset(page_buf, (int)MFLASH_BLANK_PATTERN, MFLASH_PAGE_SIZE);
+    (void)memcpy((uint8_t *)page_buf + sizeof(mflash_file_meta_t), data, copy_size);
 
     /* Set file metadata */
     mflash_file_meta_t *meta = (mflash_file_meta_t *)page_buf;
@@ -639,7 +639,7 @@ status_t mflash_file_save(char *path, uint8_t *data, uint32_t size)
         return kStatus_InvalidArgument;
     }
 
-    if (data == NULL && size != 0)
+    if (data == NULL && size != 0u)
     {
         return kStatus_InvalidArgument;
     }

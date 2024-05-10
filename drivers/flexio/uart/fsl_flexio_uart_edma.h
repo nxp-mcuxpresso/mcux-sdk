@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief FlexIO UART EDMA driver version. */
 #define FSL_FLEXIO_UART_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
-/*! @} */
+/*@}*/
 
 /* Forward declaration of the handle typedef. */
 typedef struct _flexio_uart_edma_handle flexio_uart_edma_handle_t;
@@ -167,7 +167,7 @@ status_t FLEXIO_UART_TransferGetReceiveCountEDMA(FLEXIO_UART_Type *base,
                                                  flexio_uart_edma_handle_t *handle,
                                                  size_t *count);
 
-/*! @} */
+/*@}*/
 
 #if defined(__cplusplus)
 }

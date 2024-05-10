@@ -431,7 +431,7 @@ status_t I3C_MasterCheckAndClearError(I3C_Type *base, uint32_t status)
     return result;
 }
 
-static status_t I3C_MasterWaitForCtrlDone(I3C_Type *base, bool waitIdle)
+status_t I3C_MasterWaitForCtrlDone(I3C_Type *base, bool waitIdle)
 {
     status_t result = kStatus_Success;
     uint32_t status, errStatus;
@@ -795,7 +795,10 @@ void I3C_GetDefaultConfig(i3c_config_t *config)
  */
 void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_Hz)
 {
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || \
+    !(defined(FSL_FEATURE_I3C_HAS_NO_RESET) && FSL_FEATURE_I3C_HAS_NO_RESET)
     uint32_t instance = I3C_GetInstance(base);
+#endif
     uint32_t configValue;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -928,7 +931,11 @@ void I3C_MasterGetDefaultConfig(i3c_master_config_t *masterConfig)
  */
 void I3C_MasterInit(I3C_Type *base, const i3c_master_config_t *masterConfig, uint32_t sourceClock_Hz)
 {
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || \
+    !(defined(FSL_FEATURE_I3C_HAS_NO_RESET) && FSL_FEATURE_I3C_HAS_NO_RESET)
     uint32_t instance = I3C_GetInstance(base);
+#endif
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate the clock. */
     CLOCK_EnableClock(kI3cClocks[instance]);
@@ -1788,6 +1795,32 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
         rxTermOps = kI3C_RxTermLastByte;
     }
 
+    if (0UL != (transfer->flags & (uint32_t)kI3C_TransferStartWithBroadcastAddr))
+    {
+        if (0UL != (transfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
+        {
+            return kStatus_InvalidArgument;
+        }
+
+        if (0UL != (transfer->flags & (uint32_t)kI3C_TransferRepeatedStartFlag))
+        {
+            return kStatus_InvalidArgument;
+        }
+
+        /* Issue 0x7E as start. */
+        result = I3C_MasterStart(base, transfer->busType, 0x7E, kI3C_Write);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+
+        result = I3C_MasterWaitForCtrlDone(base, false);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+    }
+
     if (0UL == (transfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
     {
         if ((direction == kI3C_Read) && (rxTermOps == kI3C_RxAutoTerm))
@@ -2319,6 +2352,32 @@ static status_t I3C_InitTransferStateMachine(I3C_Type *base, i3c_master_handle_t
         direction = (0UL != xfer->subaddressSize) ? kI3C_Write : xfer->direction;
     }
 
+    if (0UL != (xfer->flags & (uint32_t)kI3C_TransferStartWithBroadcastAddr))
+    {
+        if (0UL != (xfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
+        {
+            return kStatus_InvalidArgument;
+        }
+
+        if (0UL != (xfer->flags & (uint32_t)kI3C_TransferRepeatedStartFlag))
+        {
+            return kStatus_InvalidArgument;
+        }
+
+        /* Issue 0x7E as start. */
+        result = I3C_MasterStart(base, xfer->busType, 0x7E, kI3C_Write);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+
+        result = I3C_MasterWaitForCtrlDone(base, false);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+    }
+
     /* Handle no start option. */
     if (0U != (xfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
     {
@@ -2652,7 +2711,11 @@ void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32
     assert(0UL != slowClock_Hz);
 
     uint32_t configValue;
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || \
+    !(defined(FSL_FEATURE_I3C_HAS_NO_RESET) && FSL_FEATURE_I3C_HAS_NO_RESET)
     uint32_t instance = I3C_GetInstance(base);
+#endif
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate the clock. */
     CLOCK_EnableClock(kI3cClocks[instance]);

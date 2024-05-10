@@ -1,0 +1,11 @@
+	    *(EXCLUDE_FILE(
+	        *bt_db_gen.o*
+	        *sdio.o*
+	        *mlan_sdio.o*
+	    ).bss)
+	    *(EXCLUDE_FILE(
+	        *bt_db_gen.o*
+	        *sdio.o*
+	        *mlan_sdio.o*
+	    ).bss*)
+	    . = ALIGN(4);

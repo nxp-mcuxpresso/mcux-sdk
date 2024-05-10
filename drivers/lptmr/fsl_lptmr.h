@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! Driver Version */
 #define FSL_LPTMR_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
-/*! @} */
+/*@}*/
 
 /*! @brief LPTMR pin selection used in pulse counter mode.*/
 typedef enum _lptmr_pin_select

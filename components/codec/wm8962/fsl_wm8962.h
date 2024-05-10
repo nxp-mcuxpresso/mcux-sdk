@@ -21,10 +21,10 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief CLOCK driver version 2.1.3 */
 #define FSL_WM8962_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
-/*! @} */
+/*@}*/
 
 /*! @brief wm8962 handle size */
 #ifndef WM8962_I2C_HANDLER_SIZE

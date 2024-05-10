@@ -119,7 +119,11 @@ void SPDIF_Init(SPDIF_Type *base, const spdif_config_t *config)
     base->STC = val;
 
     /* clear and diable all the interrupt */
+#if defined FSL_FEATURE_SPDIF_HAS_NO_SIC_REGISTER && FSL_FEATURE_SPDIF_HAS_NO_SIC_REGISTER
+    base->SIS = (uint32_t)kSPDIF_AllInterrupt;
+#else
     base->SIC = (uint32_t)kSPDIF_AllInterrupt;
+#endif
     base->SIE &= ~(uint32_t)kSPDIF_AllInterrupt;
 }
 

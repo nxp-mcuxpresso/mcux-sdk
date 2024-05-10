@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 #define FSL_PDM_DRIVER_VERSION (MAKE_VERSION(2, 9, 1)) /*!< Version 2.9.1 */
-/*! @} */
+/*@}*/
 
 /*! @brief PDM XFER QUEUE SIZE */
 #define PDM_XFER_QUEUE_SIZE (4U)

@@ -5,6 +5,9 @@
  *  SPDX-License-Identifier: BSD-3-Clause
  */
 
+#ifndef _WIFI_BT_MODULE_CONFIG_H_
+#define _WIFI_BT_MODULE_CONFIG_H_
+
 /* Wi-Fi boards configuration list */
 
 /* AzureWave AW-NM191-uSD */
@@ -209,22 +212,6 @@
         .ed_ctrl_2g = 0x1, .ed_offset_2g = 0xA, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0xA \
     }
 
-/* RD Firecrest module with M2 interface */
-#elif defined(WIFI_IW612_BOARD_RD_M2)
-// #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2EL_CA_RU_Tx_power.h"
-// #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2EL_EU_RU_Tx_power.h"
-// #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2EL_JP_RU_Tx_power.h"
-// #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2EL_US_RU_Tx_power.h"
-#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2EL_WW.h"
-#define SD9177
-#define SDMMCHOST_OPERATION_VOLTAGE_1V8
-#define SD_TIMING_MAX kSD_TimingDDR50Mode
-#define WIFI_BT_USE_M2_INTERFACE
-#define WLAN_ED_MAC_CTRL                                                               \
-    {                                                                                  \
-        .ed_ctrl_2g = 0x1, .ed_offset_2g = 0xA, .ed_ctrl_5g = 0x1, .ed_offset_5g = 0xA \
-    }
-
 /* 2EL Firecrest module with uSD adapter */
 #elif defined(WIFI_IW612_BOARD_MURATA_2EL_USD)
 // #define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_murata_2EL_CA_RU_Tx_power.h"
@@ -347,10 +334,8 @@
  */
 #define SD8987
 
-#elif defined(WIFI_BOARD_RW610)
-#define RW610
-#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW_rw610.h"
-
 #else
 #error "Please define macro related to wifi board"
 #endif
+
+#endif /* _WIFI_BT_MODULE_CONFIG_H_ */

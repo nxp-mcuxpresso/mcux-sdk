@@ -57,13 +57,12 @@
 #define MAKE_VERSION(major, minor, bugfix) (((major)*65536L) + ((minor)*256L) + (bugfix))
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief common driver version. */
 #define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
-/*! @} */
+/*@}*/
 
-/*! @name Debug console type definition. */
-/*! @{ */
+/* Debug console type definition. */
 #define DEBUG_CONSOLE_DEVICE_TYPE_NONE       0U  /*!< No debug console.             */
 #define DEBUG_CONSOLE_DEVICE_TYPE_UART       1U  /*!< Debug console based on UART.   */
 #define DEBUG_CONSOLE_DEVICE_TYPE_LPUART     2U  /*!< Debug console based on LPUART. */
@@ -75,7 +74,6 @@
 #define DEBUG_CONSOLE_DEVICE_TYPE_MINI_USART 8U  /*!< Debug console based on LPC_USART. */
 #define DEBUG_CONSOLE_DEVICE_TYPE_SWO        9U  /*!< Debug console based on SWO. */
 #define DEBUG_CONSOLE_DEVICE_TYPE_QSCI       10U /*!< Debug console based on QSCI. */
-/*! @} */
 
 /*! @brief Status group numbers. */
 enum _status_groups
@@ -158,6 +156,7 @@ enum _status_groups
     kStatusGroup_PUF                   = 105, /*!< Group number for PUF status codes. */
     kStatusGroup_TOUCH_PANEL           = 106, /*!< Group number for touch panel status codes */
     kStatusGroup_VBAT                  = 107, /*!< Group number for VBAT status codes */
+    kStatusGroup_XSPI                  = 108, /*!< Group number for XSPI status codes */
 
     kStatusGroup_HAL_GPIO       = 121, /*!< Group number for HAL GPIO status codes. */
     kStatusGroup_HAL_UART       = 122, /*!< Group number for HAL UART status codes. */
@@ -230,15 +229,13 @@ typedef int32_t status_t;
  * @{
  */
 #if !defined(MIN)
-/*! Computes the minimum of \a a and \a b. */
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
 #if !defined(MAX)
-/*! Computes the maximum of \a a and \a b. */
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #endif
-/*! @} */
+/* @} */
 
 /*! @brief Computes the number of elements in an array. */
 #if !defined(ARRAY_SIZE)
@@ -246,31 +243,29 @@ typedef int32_t status_t;
 #endif
 
 /*! @name UINT16_MAX/UINT32_MAX value */
-/*! @{ */
+/* @{ */
 #if !defined(UINT16_MAX)
-/*! Max value of uint16_t type. */
 #define UINT16_MAX ((uint16_t)-1)
 #endif
 
 #if !defined(UINT32_MAX)
-/*! Max value of uint32_t type. */
 #define UINT32_MAX ((uint32_t)-1)
 #endif
-/*! @} */
+/* @} */
 
-/*!
- * @def SUPPRESS_FALL_THROUGH_WARNING()
- *
- * For switch case code block, if case section ends without "break;" statement, there wil be
- * fallthrough warning with compiler flag -Wextra or -Wimplicit-fallthrough=n when using armgcc.
- * To suppress this warning, "SUPPRESS_FALL_THROUGH_WARNING();" need to be added at the end of each
- * case section which misses "break;"statement.
+/*! @name Suppress fallthrough warning macro */
+/* For switch case code block, if case section ends without "break;" statement, there wil be
+ fallthrough warning with compiler flag -Wextra or -Wimplicit-fallthrough=n when using armgcc.
+ To suppress this warning, "SUPPRESS_FALL_THROUGH_WARNING();" need to be added at the end of each
+ case section which misses "break;"statement.
  */
+/* @{ */
 #if defined(__GNUC__) && !defined(__ARMCC_VERSION)
 #define SUPPRESS_FALL_THROUGH_WARNING() __attribute__((fallthrough))
 #else
 #define SUPPRESS_FALL_THROUGH_WARNING()
 #endif
+/* @} */
 
 /*******************************************************************************
  * API

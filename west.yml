@@ -10,32 +10,32 @@ manifest:
     remote: nxp-mcuxpresso
   projects:
   - name: mcux-sdk-examples
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
     path: examples
   - name: FreeRTOS-Kernel
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
     path: rtos/freertos/freertos-kernel
   - name: mcux-sdk-middleware-sdmmc
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
     path: middleware/sdmmc
   - name: mcux-sdk-middleware-multicore
     path: middleware/multicore
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
   - name: rpmsg-lite
     path: middleware/multicore/rpmsg_lite
-    revision: v5.1.1
+    revision: 2ff49bfdd6996aae2d4d6ea57a1da67f8c697d75
   - name: erpc
     path: middleware/multicore/erpc
     url: https://github.com/EmbeddedRPC/erpc
     revision: 1.12.0
   - name: mcux-soc-svd
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
     path: svd
   - name: fatfs
     path: middleware/fatfs
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
   - name: mcux-sdk-middleware-eiq
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
     path: middleware/eiq
   - name: mcux-sdk-middleware-deepviewrt
     revision: MCUX_2.13.1
@@ -48,13 +48,13 @@ manifest:
     path: middleware/eiq/tensorflow-lite
   - name: mcux-sdk-middleware-usb
     path: middleware/usb
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
   - name: mcux-sdk-middleware-edgefast-bluetooth
     path: middleware/edgefast_bluetooth
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
   - name: mcux-sdk-middleware-ethermind
     path: middleware/wireless/ethermind
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
     remote: nxp
   - name: azure-rtos
     path: rtos/azure-rtos
@@ -86,23 +86,23 @@ manifest:
     remote: nxp
   - name: mbedtls
     path: middleware/mbedtls
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
   - name: wifi_nxp
     path: middleware/wifi_nxp
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
     remote: nxp
   - name: lwip
     path: middleware/lwip
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
   - name: littlefs
     path: middleware/littlefs
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
   - name: maestro
     path: middleware/maestro
     revision: MCUX_2.15.000
   - name: mcuboot
     path: middleware/mcuboot_opensource
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
     remote: nxp_zephyr
   - name: CMSIS_5
     path: core/CMSIS
@@ -121,7 +121,7 @@ manifest:
     revision: MCUX_2.15.000
   - name: wpa_supplicant-rtos
     path: middleware/wireless/wpa_supplicant-rtos
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.001_RT1180EVK
   - name: mcux-sdk-middleware-connectivity-framework
     path: middleware/wireless/framework
     revision: MCUX_2.15.000

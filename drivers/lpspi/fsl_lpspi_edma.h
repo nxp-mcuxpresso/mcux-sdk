@@ -20,10 +20,10 @@
  * Definitions
  **********************************************************************************************************************/
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief LPSPI EDMA driver version. */
 #define FSL_LPSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 2))
-/*! @} */
+/*@}*/
 
 /*!
  * @brief Forward declaration of the _lpspi_master_edma_handle typedefs.

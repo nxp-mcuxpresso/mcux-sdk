@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 #define FSL_LPIT_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1 */
-                                                        /*! @{ */
+                                                        /*@{*/
 
 /*!
  * @brief List of LPIT channels

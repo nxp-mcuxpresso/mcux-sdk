@@ -24,10 +24,10 @@
  *********************************************************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief LPSPI FreeRTOS driver version 2.3.1. */
 #define FSL_LPSPI_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
-/*! @} */
+/*@}*/
 
 /*!
  * @cond RTOS_PRIVATE
