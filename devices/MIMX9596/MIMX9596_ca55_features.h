@@ -445,17 +445,6 @@
 /* @brief SOC doesn't support slave IBI/MR/HJ. */
 #define FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ (0)
 
-/* IRQSTEER module features */
-
-/* @brief Number of IRQSTEER CHn_MASK register. */
-#define FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT (20)
-/* @brief The start IRQ index of first IRQSTEER source IRQ. */
-#define FSL_FEATURE_IRQSTEER_IRQ_START_INDEX (234)
-/* @brief Number of IRQSTEER master. */
-#define FSL_FEATURE_IRQSTEER_MASTER_COUNT (10)
-/* @brief The total number of level1 interrupt vectors. */
-#define FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS (234)
-
 /* LPI2C module features */
 
 /* @brief Has separate DMA RX and TX requests. */
