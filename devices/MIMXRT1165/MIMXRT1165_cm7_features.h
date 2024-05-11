@@ -447,6 +447,13 @@
 
 /* No feature definitions */
 
+/* IEE module features */
+
+/* @brief SOC support ele provided. */
+#define FSL_FEATURE_IEE_ELE_PROVISIONED_KEY (0)
+/* @brief iee apc use GPR. */
+#define FSL_FEATURE_IEE_APC_USE_GPR (1)
+    
 /* KEY_MANAGER module features */
 
 /* No feature definitions */
