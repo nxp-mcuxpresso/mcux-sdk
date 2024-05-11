@@ -1179,7 +1179,7 @@ typedef enum _clock_gate_value
 #define LPUART_CLOCKS                                                                                     \
     {                                                                                                     \
         hal_clock_invalid, hal_clock_lpuart1, hal_clock_lpuart2, hal_clock_lpuart3, hal_clock_lpuart4, hal_clock_lpuart5, \
-            hal_clock_lpuart6, hal_clock_lpuart7, hal_clock_lpuart8, \                                                \
+            hal_clock_lpuart6, hal_clock_lpuart7, hal_clock_lpuart8, \
     }
 
 /*! @brief Clock ip name array for SAI. */
