@@ -55,6 +55,6 @@ typedef struct _serial_port_virtual_config
     serial_port_virtual_controller_index_t controllerIndex; /*!< controller index */
 } serial_port_virtual_config_t;
 
-/*! @} */
+/*@}*/
 
 #endif /* __SERIAL_PORT_VIRTUAL_H__ */

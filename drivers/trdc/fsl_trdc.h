@@ -478,7 +478,7 @@ void TRDC_Init(TRDC_Type *base);
  * @param base TRDC peripheral base address.
  */
 void TRDC_Deinit(TRDC_Type *base);
-/*! @} */
+/* @} */
 
 /*!
  * @name Hardware configuration
@@ -505,7 +505,7 @@ static inline uint8_t TRDC_GetCurrentMasterDomainId(TRDC_Type *base)
  * @param config Pointer to the structure to get the configuration.
  */
 void TRDC_GetHardwareConfig(TRDC_Type *base, trdc_hardware_config_t *config);
-/*! @} */
+/* @} */
 
 /*!
  * @name Master domain assignment
@@ -534,7 +534,6 @@ static inline void TRDC_SetDacGlobalValid(TRDC_Type *base)
  * @param master Which master to configure, refer to trdcx_master_t in processor header file, x is trdc instance.
  * @param regNum Which register to configure, processor master can have more than one register for the MDAC
  * configuration.
- * @param assignIndex Which assignment register to lock.
  */
 static inline void TRDC_LockMasterDomainAssignment(TRDC_Type *base, uint8_t master, uint8_t regNum)
 #else
@@ -546,7 +545,6 @@ static inline void TRDC_LockMasterDomainAssignment(TRDC_Type *base, uint8_t mast
  *
  * @param base TRDC peripheral base address.
  * @param master Which master to configure.
- * @param assignIndex Which assignment register to lock.
  */
 static inline void TRDC_LockMasterDomainAssignment(TRDC_Type *base, uint8_t master)
 #endif
@@ -586,7 +584,6 @@ static inline void TRDC_LockMasterDomainAssignment(TRDC_Type *base, uint8_t mast
  * @param master Which master to configure.
  * @param regNum Which register to configure, processor master can have more than one register for the MDAC
  * configuration.
- * @param assignIndex Index for the domain assignment register.
  * @param valid True to set valid, false to set invalid.
  */
 static inline void TRDC_SetMasterDomainAssignmentValid(TRDC_Type *base, uint8_t master, uint8_t regNum, bool valid)
@@ -598,7 +595,6 @@ static inline void TRDC_SetMasterDomainAssignmentValid(TRDC_Type *base, uint8_t 
  *
  * @param base TRDC peripheral base address.
  * @param master Which master to configure.
- * @param assignIndex Index for the domain assignment register.
  * @param valid True to set valid, false to set invalid.
  */
 static inline void TRDC_SetMasterDomainAssignmentValid(TRDC_Type *base, uint8_t master, bool valid)
@@ -845,7 +841,7 @@ void TRDC_SetNonProcessorDomainAssignment(TRDC_Type *base,
                                           uint8_t master,
                                           const trdc_non_processor_domain_assignment_t *domainAssignment);
 
-/*! @} */
+/* @} */
 
 /*!
  * @name TZ-M congiguration
@@ -862,7 +858,7 @@ void TRDC_SetNonProcessorDomainAssignment(TRDC_Type *base,
  * config->lockSAU           = false;
  * @endcode
  *
- * @param domainAssignment Pointer to the configuration structure.
+ * @param idauConfiguration Pointer to the configuration structure.
  */
 void TRDC_GetDefaultIDAUConfig(trdc_idau_config_t *idauConfiguration);
 
@@ -882,10 +878,10 @@ void TRDC_GetDefaultIDAUConfig(trdc_idau_config_t *idauConfiguration);
  * @endcode
  *
  * @param base TRDC peripheral base address.
- * @param domainAssignment Pointer to the configuration structure.
+ * @param idauConfiguration Pointer to the configuration structure.
  */
 void TRDC_SetIDAU(TRDC_Type *base, const trdc_idau_config_t *idauConfiguration);
-/*! @} */
+/* @} */
 
 /*!
  * @name FLW(Flash Logical Window) configuration
@@ -972,7 +968,7 @@ void TRDC_GetDefaultFlashLogicalWindowConfig(trdc_flw_config_t *flwConfiguration
  * @param flwConfiguration Pointer to the configuration structure.
  */
 void TRDC_SetFlashLogicalWindow(TRDC_Type *base, const trdc_flw_config_t *flwConfiguration);
-/*! @} */
+/* @} */
 
 /*!
  * @name Domain error check and clear
@@ -1008,7 +1004,7 @@ status_t TRDC_GetAndClearFirstDomainError(TRDC_Type *base, trdc_domain_error_t *
  *         access violation is captured, this function returns the kStatus_NoData.
  */
 status_t TRDC_GetAndClearFirstSpecificDomainError(TRDC_Type *base, trdc_domain_error_t *error, uint8_t domainId);
-/*! @} */
+/* @} */
 
 /*!
  * @name MRC configuration
@@ -1030,6 +1026,7 @@ static inline void TRDC_SetMrcGlobalValid(TRDC_Type *base)
  * @brief Gets the TRDC MRC(Memory Region Checkers) region number valid.
  *
  * @param base TRDC peripheral base address.
+ * @param mrcIdx MRC index.
  * @return the region number of the given MRC instance
  */
 static inline uint8_t TRDC_GetMrcRegionNumber(TRDC_Type *base, uint8_t mrcIdx)
@@ -1117,7 +1114,7 @@ void TRDC_MrcDomainNseClear(TRDC_Type *base, uint8_t mrcIdx, uint16_t domainMask
  * @param config Pointer to region descriptor configuration structure.
  */
 void TRDC_MrcSetRegionDescriptorConfig(TRDC_Type *base, const trdc_mrc_region_descriptor_config_t *config);
-/*! @} */
+/* @} */
 
 /*!
  * @name MBC configuration
@@ -1189,7 +1186,7 @@ void TRDC_MbcWordNseClear(TRDC_Type *base, uint8_t mbcIdx, uint32_t bitMask);
  * @param domainMask Mask of the domains whose NSE bits to clear, 0b110 means clear domain 1&2.
  * @param slaveMask Mask of the slaves whose NSE bits to clear, 0x11 means clear all slave 0&1's NSE bits.
  */
-void TRDC_MbcNseClearAll(TRDC_Type *base, uint8_t mbcIdx, uint16_t domainMask, uint8_t slave);
+void TRDC_MbcNseClearAll(TRDC_Type *base, uint8_t mbcIdx, uint16_t domainMask, uint8_t slaveMask);
 
 /*!
  * @brief Sets the memory access configuration for one of the region descriptor of one MBC.
@@ -1226,7 +1223,7 @@ void TRDC_MbcSetMemoryAccessConfig(TRDC_Type *base,
  * @param config Pointer to memory block configuration structure.
  */
 void TRDC_MbcSetMemoryBlockConfig(TRDC_Type *base, const trdc_mbc_memory_block_config_t *config);
-/*! @} */
+/* @} */
 
 #if defined(__cplusplus)
 }

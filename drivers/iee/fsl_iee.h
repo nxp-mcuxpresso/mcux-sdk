@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017-2021 NXP
+ * Copyright 2017-2021,2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief IEE driver version. Version 2.1.1.
  *
  * Current version: 2.1.1
@@ -33,9 +33,11 @@
  *   - Add region lock function IEE_LockRegionConfig() and driver clock control
  * - Version 2.1.1
  *   - Fixed MISRA issues.
+ * - Version 2.2.0
+ *   - Add ELE (EdgeLock Enclave) key provisioning feature.
  */
 #define FSL_IEE_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
-/*! @} */
+/*@}*/
 
 /*! @brief IEE region. */
 typedef enum _iee_region
@@ -62,7 +64,7 @@ typedef enum _iee_aes_mode
 {
     kIEE_ModeNone            = 0U, /*!< AES NONE mode */
     kIEE_ModeAesXTS          = 1U, /*!< AES XTS mode */
-    kIEE_ModeAesCTRWAddress  = 2U, /*!< CTR w address binding mode */
+    kIEE_ModeAesCTRWAddress  = 2U, /*!< AES CTR w address binding mode */
     kIEE_ModeAesCTRWOAddress = 3U, /*!< AES CTR w/o address binding mode */
     kIEE_ModeAesCTRkeystream = 4U  /*!< AES CTR keystream only */
 } iee_aes_mode_t;
@@ -74,7 +76,7 @@ typedef enum _iee_aes_key_size
     kIEE_AesCTR256XTS512 = 1U  /*!< AES 256 bits (CTR), 512 bits (XTS) */
 } iee_aes_key_size_t;
 
-/*! @brief IEE AES ke number. */
+/*! @brief IEE AES key number. */
 typedef enum _iee_aes_key_num
 {
     kIEE_AesKey1 = 1U, /*!< AES Key 1 */

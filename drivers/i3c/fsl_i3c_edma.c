@@ -496,6 +496,7 @@ static status_t I3C_MasterRunTransferStateMachineEDMA(I3C_Type *base, i3c_master
                     else
                     {
                         I3C_MasterEmitRequest(base, kI3C_RequestEmitStop);
+                        result = I3C_MasterWaitForCtrlDone(base, false);
                     }
                 }
                 *isDone        = true;
@@ -647,6 +648,7 @@ void I3C_MasterTransferEDMAHandleIRQ(I3C_Type *base, void *i3cHandle)
         if ((result == kStatus_I3C_Nak) || (result == kStatus_I3C_IBIWon))
         {
             I3C_MasterEmitRequest(base, kI3C_RequestEmitStop);
+            (void)I3C_MasterWaitForCtrlDone(base, false);
         }
 
         /* Set handle to idle state. */
@@ -765,7 +767,7 @@ static void I3C_SlaveTransferEDMACallback(edma_handle_t *dmaHandle, void *param,
                 {
                     I3C_SlaveGetFifoCounts(i3cHandle->base, &rxCount, NULL);
                 } while (rxCount == 0U);
-                *(uint8_t *)((uint32_t)(uint32_t *)i3cHandle->transfer.rxData + i3cHandle->transfer.rxDataSize - 1U) =
+                *(uint8_t *)((uintptr_t)i3cHandle->transfer.rxData + i3cHandle->transfer.rxDataSize - 1U) =
                     (uint8_t)i3cHandle->base->SRDATAB;
             }
 #endif

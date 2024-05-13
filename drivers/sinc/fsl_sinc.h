@@ -21,11 +21,11 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief lower_component_name driver version 2.1.1. */
-#define FSL_SINC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief lower_component_name driver version 2.1.3. */
+#define FSL_SINC_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*@}*/
 #if defined(FSL_FEATURE_SINC_CHANNEL_COUNT)
-#define SINC_CHANNEL_COUNT         (FSL_FEATURE_SINC_CHANNEL_COUNT)
+#define SINC_CHANNEL_COUNT (FSL_FEATURE_SINC_CHANNEL_COUNT)
 #else
 #error "The definition of FSL_FEATURE_SINC_CHANNEL_COUNT is missing!"
 #endif
@@ -49,16 +49,20 @@
 #define SINC_ENCODE_INTERRUPT(regId, name, channelId)                                           \
     ((((1ULL << (uint64_t)(channelId))) << ((uint64_t)(name) * (uint64_t)(SINC_CHANNEL_COUNT))) \
      << (uint64_t)(regId)*20ULL)
+
 #define SINC_DECODE_INTERRUPT(interruptMask)                               \
     normalIntMask  = ((uint32_t)(interruptMask) & (0xFFFFFUL));            \
     errorIntMask   = ((uint32_t)((interruptMask) >> 20ULL) & (0xFFFFFUL)); \
     fifoCadIntMask = ((uint32_t)((interruptMask) >> 40ULL) & (0xFFFFFUL))
 
-#define SINC_FIND_INT_FIELD_VALUE(mask, name)                                                                  \
-    ((((uint32_t)(mask) >> ((uint32_t)(name) * (SINC_CHANNEL_COUNT))) & ((1UL << (SINC_CHANNEL_COUNT)) - 1UL)) \
+#define SINC_FIND_INT_FIELD_VALUE(mask, name)                                     \
+    ((((uint32_t)(mask) >> ((uint32_t)(name) * ((uint32_t)SINC_CHANNEL_COUNT))) & \
+      ((1UL << ((uint32_t)SINC_CHANNEL_COUNT)) - 1UL))                            \
      << (8UL * (uint32_t)(name)))
-#define SINC_FIND_STATUS_FIELD_VALUE(statusValue, name) \
-    ((uint32_t)(statusValue) & (0xFFUL << ((uint32_t)(name)*8UL))) >> ((uint32_t)(name) * (8UL - (SINC_CHANNEL_COUNT)))
+
+#define SINC_FIND_STATUS_FIELD_VALUE(statusValue, name)                \
+    (((uint64_t)(statusValue) & (0xFFUL << ((uint64_t)(name)*8UL))) >> \
+     ((uint64_t)(name) * (8UL - ((uint64_t)SINC_CHANNEL_COUNT))))
 /*!
  * @brief The enumeration of SINC module's interrupts.
  * @anchor sinc_interrupt_enable_t
@@ -758,19 +762,19 @@ typedef struct _sinc_channel_conv_option
     sinc_conv_trigger_source_t convTriggerSource; /*!< Specify conversion trigger source, please
                                                         refer to @ref sinc_conv_trigger_source_t. */
 
-    bool enableChPrimaryFilter;          /*!< Enable/disable channel's primary filter. */
-    sinc_primary_filter_order_t pfOrder; /*!< Specify the order of primary filter, please
-                                             refer to @ref sinc_primary_filter_order_t.  */
-    uint16_t u16pfOverSampleRatio;       /*!< Control primary filter's OSR, the minimum permissible value is 3,
-                                             low value produce unpredictable result, the maximum permissible value depend on
-                                             PF order and the desired data format, if PF order is third order and data format
-                                             is signed, the maximum OSR value is 1289, if PF order is third order and data
-                                             format is unsigned, the maximum OSR value is 1624, otherwise the maximum OSR
-                                             value is 2047. Please note that the OSR for equation is
-                                             u16pfOverSampleRatio + 1*/
+    bool enableChPrimaryFilter;                   /*!< Enable/disable channel's primary filter. */
+    sinc_primary_filter_order_t pfOrder;          /*!< Specify the order of primary filter, please
+                                                      refer to @ref sinc_primary_filter_order_t.  */
+    uint16_t u16pfOverSampleRatio;                /*!< Control primary filter's OSR, the minimum permissible value is 3,
+                                                      low value produce unpredictable result, the maximum permissible value depend on
+                                                      PF order and the desired data format, if PF order is third order and data format
+                                                      is signed, the maximum OSR value is 1289, if PF order is third order and data
+                                                      format is unsigned, the maximum OSR value is 1624, otherwise the maximum OSR
+                                                      value is 2047. Please note that the OSR for equation is
+                                                      u16pfOverSampleRatio + 1*/
 
-    sin_primary_filter_hpf_alpha_coeff_t pfHpfAlphaCoeff; /*!< Specify HPF's alpha coeff, please
-                                                              refer to @ref sin_primary_filter_hpf_alpha_coeff_t.  */
+    sin_primary_filter_hpf_alpha_coeff_t pfHpfAlphaCoeff;   /*!< Specify HPF's alpha coeff, please
+                                                                refer to @ref sin_primary_filter_hpf_alpha_coeff_t.  */
 
     sinc_primary_filter_shift_direction_t pfShiftDirection; /*!< Select shift direction, right or left. */
     uint8_t u8pfShiftBitsNum; /*!< Specify the number of bits to shift the data, ranges from 0 to 15. */
@@ -790,8 +794,8 @@ typedef struct _sinc_channel_protection_option
                                                       refer to @ref sinc_limit_detector_mode_t. */
     bool bEnableLmtBreakSignal;                   /*!< Enable/disable limit break signal,
                                                       the details of break signal is depended on detector mode. */
-    uint32_t u32LowLimitThreshold;  /*!< Specify the low-limit threshold value, range from 0 to 0xFFFFFFUL. */
-    uint32_t u32HighLimitThreshold; /*!< Specify the high-limit threshold value, range from 0 to 0xFFFFFFUL. */
+    uint32_t u32LowLimitThreshold;          /*!< Specify the low-limit threshold value, range from 0 to 0xFFFFFFUL. */
+    uint32_t u32HighLimitThreshold;         /*!< Specify the high-limit threshold value, range from 0 to 0xFFFFFFUL. */
 
     sinc_scd_operate_mode_t scdOperateMode; /*!< Enable/disable scd, and set SCD operate timming.  */
     uint8_t u8ScdLimitThreshold;            /*!< Range from 2 to 255, 0 and 1 are prohibited. */
@@ -810,16 +814,16 @@ typedef struct _sinc_channel_protection_option
  */
 typedef struct _sinc_channel_config
 {
-    bool bEnableChannel;     /*!< Enable/disable channel. */
-    bool bEnableFifo;        /*!< Enable/disable channel's FIFO. */
-    uint8_t u8FifoWaterMark; /*!< Specify the fifo watermark, range from 0 to 15. */
-    bool bEnablePrimaryDma;  /*!< Used to enable/disable primary DMA. */
+    bool bEnableChannel;                      /*!< Enable/disable channel. */
+    bool bEnableFifo;                         /*!< Enable/disable channel's FIFO. */
+    uint8_t u8FifoWaterMark;                  /*!< Specify the fifo watermark, range from 0 to 15. */
+    bool bEnablePrimaryDma;                   /*!< Used to enable/disable primary DMA. */
 #if (defined(FSL_FEATURE_SINC_CACFR_HAS_ADMASEL) && FSL_FEATURE_SINC_CACFR_HAS_ADMASEL)
     sinc_alternate_dma_source_t altDmaSource; /*!< Set channel's alternate DMA source, please refer
                                                   to @ref sinc_alternate_dma_source_t. */
 #endif /* (defined(FSL_FEATURE_SINC_CACFR_HAS_ADMASEL) && FSL_FEATURE_SINC_CACFR_HAS_ADMASEL) */
-    sinc_result_data_format_t dataFormat; /*!< Set channel's result data format, please refer
-                                              to @ref sinc_result_data_format_t. */
+    sinc_result_data_format_t dataFormat;       /*!< Set channel's result data format, please refer
+                                                    to @ref sinc_result_data_format_t. */
 
     sinc_channel_input_option_t *chInputOption; /*!< The pointer to @ref sinc_channel_input_option_t that contains
                                                    channel input options. */
@@ -1187,7 +1191,7 @@ static inline void SINC_SetChannelAltDmaSource(SINC_Type *base,
                                                sinc_alternate_dma_source_t altDmaSource)
 {
     base->CHANNEL[(uint8_t)chId].CACFR =
-        (base->CHANNEL[(uint8_t)chId].CACFR & ~SINC_CACFR_ADMASEL_MASK) | SINC_CACFR_ADMASEL(altDmaSource);
+        base->CHANNEL[(uint8_t)chId].CACFR & ~SINC_CACFR_ADMASEL_MASK | SINC_CACFR_ADMASEL(altDmaSource);
 }
 #endif /* (defined(FSL_FEATURE_SINC_CACFR_HAS_ADMASEL) && FSL_FEATURE_SINC_CACFR_HAS_ADMASEL) */
 
@@ -1926,6 +1930,7 @@ static inline void SINC_EnableInterrupts(SINC_Type *base, uint64_t interruptMask
                  SINC_FIND_INT_FIELD_VALUE(errorIntMask, SINC_ERROR_INT_NAME_WLMTIE) |
                  SINC_FIND_INT_FIELD_VALUE(errorIntMask, SINC_ERROR_INT_NAME_LLMTIE) |
                  SINC_FIND_INT_FIELD_VALUE(errorIntMask, SINC_ERROR_INT_NAME_HLMTIE);
+
     base->FIFOIE |= SINC_FIND_INT_FIELD_VALUE(fifoCadIntMask, SINC_FIFO_CAD_INT_FUNFIE) |
                     SINC_FIND_INT_FIELD_VALUE(fifoCadIntMask, SINC_FIFO_CAD_INT_FOVFIE) |
                     SINC_FIND_INT_FIELD_VALUE(fifoCadIntMask, SINC_FIFO_CAD_INT_CADIE) |
@@ -1955,10 +1960,12 @@ static inline void SINC_DisableInterrupts(SINC_Type *base, uint64_t interruptMas
     base->NIE &= ~(SINC_FIND_INT_FIELD_VALUE(normalIntMask, SINC_NORMAL_INT_NAME_COCIE) |
                    SINC_FIND_INT_FIELD_VALUE(normalIntMask, SINC_NORMAL_INT_NAME_CHFIE) |
                    SINC_FIND_INT_FIELD_VALUE(normalIntMask, SINC_NORMAL_INT_NAME_ZCDIE));
+
     base->EIE &= ~(SINC_FIND_INT_FIELD_VALUE(errorIntMask, SINC_ERROR_INT_NAME_SCDIE) |
                    SINC_FIND_INT_FIELD_VALUE(errorIntMask, SINC_ERROR_INT_NAME_WLMTIE) |
                    SINC_FIND_INT_FIELD_VALUE(errorIntMask, SINC_ERROR_INT_NAME_LLMTIE) |
                    SINC_FIND_INT_FIELD_VALUE(errorIntMask, SINC_ERROR_INT_NAME_HLMTIE));
+
     base->FIFOIE &= ~(SINC_FIND_INT_FIELD_VALUE(fifoCadIntMask, SINC_FIFO_CAD_INT_FUNFIE) |
                       SINC_FIND_INT_FIELD_VALUE(fifoCadIntMask, SINC_FIFO_CAD_INT_FOVFIE) |
                       SINC_FIND_INT_FIELD_VALUE(fifoCadIntMask, SINC_FIFO_CAD_INT_CADIE) |
@@ -1980,19 +1987,21 @@ static inline uint64_t SINC_GetInterruptStatus(SINC_Type *base)
     uint32_t fifoCadIntStatusValue = base->FIFOIS;
 
     allIntStatusValue |= ((uint64_t)SINC_FIND_STATUS_FIELD_VALUE(normalIntStatusValue, SINC_NORMAL_INT_NAME_COCIE) |
-                          SINC_FIND_STATUS_FIELD_VALUE(normalIntStatusValue, SINC_NORMAL_INT_NAME_CHFIE) |
-                          SINC_FIND_STATUS_FIELD_VALUE(normalIntStatusValue, SINC_NORMAL_INT_NAME_ZCDIE));
+                          (uint64_t)SINC_FIND_STATUS_FIELD_VALUE(normalIntStatusValue, SINC_NORMAL_INT_NAME_CHFIE) |
+                          (uint64_t)SINC_FIND_STATUS_FIELD_VALUE(normalIntStatusValue, SINC_NORMAL_INT_NAME_ZCDIE));
 
-    allIntStatusValue |= ((uint64_t)SINC_FIND_STATUS_FIELD_VALUE(errorIntStatusValue, SINC_ERROR_INT_NAME_SCDIE) |
-                          SINC_FIND_STATUS_FIELD_VALUE(errorIntStatusValue, SINC_ERROR_INT_NAME_WLMTIE) |
-                          SINC_FIND_STATUS_FIELD_VALUE(errorIntStatusValue, SINC_ERROR_INT_NAME_LLMTIE) |
-                          SINC_FIND_STATUS_FIELD_VALUE(errorIntStatusValue, SINC_ERROR_INT_NAME_HLMTIE))
-                         << 20ULL;
-    allIntStatusValue |= ((uint64_t)SINC_FIND_STATUS_FIELD_VALUE(fifoCadIntStatusValue, SINC_FIFO_CAD_INT_FUNFIE) |
-                          SINC_FIND_STATUS_FIELD_VALUE(fifoCadIntStatusValue, SINC_FIFO_CAD_INT_FOVFIE) |
-                          SINC_FIND_STATUS_FIELD_VALUE(fifoCadIntStatusValue, SINC_FIFO_CAD_INT_CADIE) |
-                          SINC_FIND_STATUS_FIELD_VALUE(fifoCadIntStatusValue, SINC_FIFO_CAD_INT_SATIE))
-                         << 40ULL;
+    allIntStatusValue |= (((uint64_t)SINC_FIND_STATUS_FIELD_VALUE(errorIntStatusValue, SINC_ERROR_INT_NAME_SCDIE) |
+                           (uint64_t)SINC_FIND_STATUS_FIELD_VALUE(errorIntStatusValue, SINC_ERROR_INT_NAME_WLMTIE) |
+                           (uint64_t)SINC_FIND_STATUS_FIELD_VALUE(errorIntStatusValue, SINC_ERROR_INT_NAME_LLMTIE) |
+                           (uint64_t)SINC_FIND_STATUS_FIELD_VALUE(errorIntStatusValue, SINC_ERROR_INT_NAME_HLMTIE))
+                          << 20ULL);
+
+    allIntStatusValue |= (((uint64_t)SINC_FIND_STATUS_FIELD_VALUE(fifoCadIntStatusValue, SINC_FIFO_CAD_INT_FUNFIE) |
+                           (uint64_t)SINC_FIND_STATUS_FIELD_VALUE(fifoCadIntStatusValue, SINC_FIFO_CAD_INT_FOVFIE) |
+                           (uint64_t)SINC_FIND_STATUS_FIELD_VALUE(fifoCadIntStatusValue, SINC_FIFO_CAD_INT_CADIE) |
+                           (uint64_t)SINC_FIND_STATUS_FIELD_VALUE(fifoCadIntStatusValue, SINC_FIFO_CAD_INT_SATIE))
+                          << 40ULL);
+
     return (uint64_t)allIntStatusValue;
 }
 

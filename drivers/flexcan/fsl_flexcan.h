@@ -20,10 +20,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief FlexCAN driver version. */
 #define FSL_FLEXCAN_DRIVER_VERSION (MAKE_VERSION(2, 11, 4))
-/*! @} */
+/*@}*/
 
 #if !(defined(FLEXCAN_WAIT_TIMEOUT) && FLEXCAN_WAIT_TIMEOUT)
 /* Define to 1000 means keep waiting 1000 times until the flag is assert/deassert.  */
@@ -1201,7 +1201,7 @@ void FLEXCAN_Deinit(CAN_Type *base);
  */
 void FLEXCAN_GetDefaultConfig(flexcan_config_t *pConfig);
 
-/*! @} */
+/* @} */
 
 /*!
  * @name Configuration.
@@ -1410,7 +1410,7 @@ void FLEXCAN_SetEnhancedRxFifoConfig(CAN_Type *base, const flexcan_enhanced_rx_f
  */
 void FLEXCAN_SetPNConfig(CAN_Type *base, const flexcan_pn_config_t *pConfig);
 #endif
-/*! @} */
+/* @} */
 
 /*!
  * @name Status
@@ -1641,7 +1641,7 @@ static inline uint32_t FLEXCAN_GetEnhancedFifoDataCount(CAN_Type *base)
     return (base->ERFSR & CAN_ERFSR_ERFEL_MASK);
 }
 #endif
-/*! @} */
+/* @} */
 
 /*!
  * @name Interrupts
@@ -1849,7 +1849,7 @@ static inline void FLEXCAN_DisableHigh64MbInterrupts(CAN_Type *base, uint64_t ma
 }
 #endif
 
-/*! @} */
+/* @} */
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_RX_FIFO_DMA) && FSL_FEATURE_FLEXCAN_HAS_RX_FIFO_DMA)
 /*!
@@ -1880,7 +1880,7 @@ static inline uintptr_t FLEXCAN_GetRxFifoHeadAddr(CAN_Type *base)
     return (uintptr_t) & (base->MB[0].CS);
 }
 
-/*! @} */
+/* @} */
 #endif /* FSL_FEATURE_FLEXCAN_HAS_RX_FIFO_DMA */
 
 /*!
@@ -2026,7 +2026,7 @@ status_t FLEXCAN_ReadEnhancedRxFifo(CAN_Type *base, flexcan_fd_frame_t *pRxFrame
  */
 status_t FLEXCAN_ReadPNWakeUpMB(CAN_Type *base, uint8_t mbIdx, flexcan_frame_t *pRxFrame);
 #endif
-/*! @} */
+/* @} */
 
 /*!
  * @name Transactional
@@ -2349,7 +2349,7 @@ void FLEXCAN_TransferAbortReceiveEnhancedFifo(CAN_Type *base, flexcan_handle_t *
  */
 void FLEXCAN_TransferHandleIRQ(CAN_Type *base, flexcan_handle_t *handle);
 
-/*! @} */
+/* @} */
 
 #if defined(__cplusplus)
 }

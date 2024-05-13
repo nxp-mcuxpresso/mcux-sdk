@@ -25,9 +25,9 @@
 #endif
 
 /*! @name Driver version */
-/*! @{ */
-#define FSL_TSTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
-                                                         /*! @} */
+/*@{*/
+#define FSL_TSTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
+                                                         /*@}*/
 
 /*******************************************************************************
  * API
@@ -76,13 +76,15 @@ static inline uint64_t TSTMR_ReadTimeStamp(TSTMR_Type *base)
  * @param base      TSTMR peripheral base address.
  * @param delayInUs Delay value in microseconds.
  */
-static inline void TSTMR_DelayUs(TSTMR_Type *base, uint32_t delayInUs)
+static inline void TSTMR_DelayUs(TSTMR_Type *base, uint64_t delayInUs)
 {
     uint64_t startTime = TSTMR_ReadTimeStamp(base);
 #if defined(FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_1MHZ) && FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_1MHZ
     while (TSTMR_ReadTimeStamp(base) - startTime < delayInUs)
 #elif defined(FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_8MHZ) && FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_8MHZ
-    while (TSTMR_ReadTimeStamp(base) - startTime < 8 * delayInUs)
+    while (TSTMR_ReadTimeStamp(base) - startTime < 8U * delayInUs)
+#elif defined(FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_24MHZ) && FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_24MHZ
+    while (TSTMR_ReadTimeStamp(base) - startTime < 24U * delayInUs)
 #else
     assert(0);
 #endif

@@ -21,7 +21,7 @@
 #define PHY_PAGE_INTR_ADDR  (7U)
 #define PHY_INER_REG        (19U)
 
-#define PHY_INER_LINKSTATUS_CHANGE_MASK (1U << 13)
+#define PHY_INER_LINKSTATUS_CHANGE_MASK ((uint16_t)1U << 13)
 
 /*! @brief Defines the timeout macro. */
 #define PHY_READID_TIMEOUT_COUNT 1000U

@@ -19,9 +19,9 @@
  * Definitions
  ******************************************************************************/
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 #define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 8, 3)) /*!< Version 2.8.3 */
-/*! @} */
+/*@}*/
 
 /*! Number of bits per submodule for software output control */
 #define PWM_SUBMODULE_SWCONTROL_WIDTH 2
@@ -523,14 +523,14 @@ status_t PWM_SetupPwm(PWM_Type *base,
                       uint32_t srcClock_Hz);
 
 /*!
- * @brief Set PWM phase shift for PWM channel running on channel PWM_A, PWM_B which with 50% duty cycle.
+ * @brief Set PWM phase shift for PWM channel running on channel PWM_A, PWM_B which with 50% duty cycle..
  *
  * @param base        PWM peripheral base address
  * @param subModule   PWM submodule to configure
  * @param pwmChannel  PWM channel to configure
  * @param pwmFreq_Hz  PWM signal frequency in Hz
  * @param srcClock_Hz PWM main counter clock in Hz.
- * @param shiftvalue  Phase shift value, range in 0 ~ 50
+ * @param shiftvalue  Phase shift value
  * @param doSync      true: Set LDOK bit for the submodule list;
  *                    false: LDOK bit don't set, need to call PWM_SetPwmLdok to sync update.
  *

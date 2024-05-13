@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 #define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 1, 3)) /*!< Version 2.1.3 */
-/*! @} */
+/*@}*/
 
 #ifndef ASRC_XFER_QUEUE_SIZE
 /*!@brief ASRC transfer queue size, user can refine it according to use case. */

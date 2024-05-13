@@ -816,7 +816,7 @@ static inline void LPADC_DoResetConfig(ADC_Type *base)
     base->CTRL &= ~ADC_CTRL_RST_MASK;
 }
 
-/*! @} */
+/* @} */
 
 /*!
  * @name Status
@@ -876,7 +876,7 @@ static inline void LPADC_ClearTriggerStatusFlags(ADC_Type *base, uint32_t mask)
 }
 #endif /* (defined(FSL_FEATURE_LPADC_HAS_TSTAT) && FSL_FEATURE_LPADC_HAS_TSTAT) */
 
-/*! @} */
+/* @} */
 
 /*!
  * @name Interrupts
@@ -976,7 +976,7 @@ static inline void LPADC_EnableFIFOWatermarkDMA(ADC_Type *base, bool enable)
     }
 }
 #endif /* (defined(FSL_FEATURE_LPADC_FIFO_COUNT) && (FSL_FEATURE_LPADC_FIFO_COUNT == 2)) */
-/*! @} */
+/* @} */
 
 /*!
  * @name Trigger and conversion with FIFO.
@@ -1518,7 +1518,7 @@ static inline void LPADC_EnableJustifiedLeft(ADC_Type *base, bool enable)
 }
 #endif /* (defined(FSL_FEATURE_LPADC_HAS_CFG2_JLEFT) && FSL_FEATURE_LPADC_HAS_CFG2_JLEFT) */
 
-/*! @} */
+/* @} */
 
 #if defined(__cplusplus)
 }

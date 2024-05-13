@@ -20,13 +20,13 @@
  * Definitions
  **********************************************************************************************************************/
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief LPSPI EDMA driver version. */
 #define FSL_LPSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 3))
 
 /*! @brief DMA max transfer size */
 #define DMA_MAX_TRANSFER_COUNT 0x7FFFU
-/*! @} */
+/*@}*/
 
 /*!
  * @brief Forward declaration of the _lpspi_master_edma_handle typedefs.

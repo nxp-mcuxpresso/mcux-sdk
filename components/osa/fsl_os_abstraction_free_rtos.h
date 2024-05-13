@@ -110,7 +110,7 @@ extern void DefaultISR(void);
     (OSA_TASK_PRIORITY_MIN * (((UBaseType_t)configMAX_PRIORITIES - 1U) - rtos_prio) / \
      ((UBaseType_t)configMAX_PRIORITIES - 1U))
 
-/*! @} */
+/* @}*/
 
 /*!
  * @name Message queues
@@ -126,7 +126,7 @@ extern void DefaultISR(void);
  */
 #define MSG_QUEUE_DECLARE(name, number, size) msg_queue_t *name = NULL
 
-/*! @} */
+/* @}*/
 
 /*! @}*/
 /*! @}*/

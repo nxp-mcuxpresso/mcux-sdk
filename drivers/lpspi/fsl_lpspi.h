@@ -20,10 +20,10 @@
  *********************************************************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief LPSPI driver version. */
 #define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 6, 7))
-/*! @} */
+/*@}*/
 
 #ifndef LPSPI_DUMMY_DATA
 /*! @brief LPSPI dummy data if no Tx data.*/

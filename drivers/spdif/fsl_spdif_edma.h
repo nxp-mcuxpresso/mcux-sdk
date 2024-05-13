@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
-#define FSL_SPDIF_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 6)) /*!< Version 2.0.6 */
-/*! @} */
+/*@{*/
+#define FSL_SPDIF_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 7)) /*!< Version 2.0.7 */
+/*@}*/
 
 typedef struct _spdif_edma_handle spdif_edma_handle_t;
 
@@ -78,6 +78,7 @@ extern "C" {
  *
  * @param base SPDIF base pointer.
  * @param handle SPDIF eDMA handle pointer.
+ * @param base SPDIF peripheral base address.
  * @param callback Pointer to user callback function.
  * @param userData User parameter passed to the callback function.
  * @param dmaLeftHandle eDMA handle pointer for left channel, this handle shall be static allocated by users.
@@ -98,6 +99,7 @@ void SPDIF_TransferTxCreateHandleEDMA(SPDIF_Type *base,
  *
  * @param base SPDIF base pointer.
  * @param handle SPDIF eDMA handle pointer.
+ * @param base SPDIF peripheral base address.
  * @param callback Pointer to user callback function.
  * @param userData User parameter passed to the callback function.
  * @param dmaLeftHandle eDMA handle pointer for left channel, this handle shall be static allocated by users.

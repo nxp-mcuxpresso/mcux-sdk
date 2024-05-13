@@ -463,7 +463,7 @@ extern const uint8_t gUseRtos_c;
  *
  * The function is used to reserve the requested amount of memory in bytes and initializes it to 0.
  *
- * @param memLength Amount of bytes to reserve.
+ * @param length Amount of bytes to reserve.
  *
  * @return Pointer to the reserved memory. NULL if memory can't be allocated.
  */
@@ -526,7 +526,6 @@ void OSA_Init(void);
 void OSA_Start(void);
 #endif
 
-#if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
 /*!
  * @brief Creates a task.
  *
@@ -551,21 +550,21 @@ void OSA_Start(void);
  * @retval KOSA_StatusSuccess The task is successfully created.
  * @retval KOSA_StatusError   The task can not be created.
  */
+#if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
 osa_status_t OSA_TaskCreate(osa_task_handle_t taskHandle,
                             const osa_task_def_t *thread_def,
                             osa_task_param_t task_param);
 #endif /* FSL_OSA_TASK_ENABLE */
 
-#if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
 /*!
  * @brief Gets the handler of active task.
  *
  * @return Handler to current active task.
  */
+#if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
 osa_task_handle_t OSA_TaskGetCurrentHandle(void);
 #endif /* FSL_OSA_TASK_ENABLE */
 
-#if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
 /*!
  * @brief Puts the active task to the end of scheduler's queue.
  *
@@ -574,10 +573,10 @@ osa_task_handle_t OSA_TaskGetCurrentHandle(void);
  *
  * @retval NULL
  */
+#if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
 void OSA_TaskYield(void);
 #endif /* FSL_OSA_TASK_ENABLE */
 
-#if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
 /*!
  * @brief Gets the priority of a task.
  *
@@ -585,10 +584,10 @@ void OSA_TaskYield(void);
  *
  * @return Task's priority.
  */
+#if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
 osa_task_priority_t OSA_TaskGetPriority(osa_task_handle_t taskHandle);
 #endif /* FSL_OSA_TASK_ENABLE */
 
-#if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
 /*!
  * @brief Sets the priority of a task.
  *
@@ -598,10 +597,10 @@ osa_task_priority_t OSA_TaskGetPriority(osa_task_handle_t taskHandle);
  * @retval KOSA_StatusSuccess Task's priority is set successfully.
  * @retval KOSA_StatusError   Task's priority can not be set.
  */
+#if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
 osa_status_t OSA_TaskSetPriority(osa_task_handle_t taskHandle, osa_task_priority_t taskPriority);
 #endif /* FSL_OSA_TASK_ENABLE */
 
-#if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
 /*!
  * @brief Destroys a previously created task.
  *
@@ -610,6 +609,7 @@ osa_status_t OSA_TaskSetPriority(osa_task_handle_t taskHandle, osa_task_priority
  * @retval KOSA_StatusSuccess The task was successfully destroyed.
  * @retval KOSA_StatusError   Task destruction failed or invalid parameter.
  */
+#if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
 osa_status_t OSA_TaskDestroy(osa_task_handle_t taskHandle);
 #endif /* FSL_OSA_TASK_ENABLE */
 
@@ -630,7 +630,7 @@ osa_status_t OSA_TaskDestroy(osa_task_handle_t taskHandle);
  * #OSA_SEMAPHORE_HANDLE_DEFINE(semaphoreHandle);
  * or
  * uint32_t semaphoreHandle[((OSA_SEM_HANDLE_SIZE + sizeof(uint32_t) - 1U) / sizeof(uint32_t))];
- * @param taskHandler  The task handler this semaphore is used by.
+ * @param taskHandler taskHandler The task handler this event is used by.
  *
  * @retval KOSA_StatusSuccess  the new semaphore if the semaphore is created successfully.
  */

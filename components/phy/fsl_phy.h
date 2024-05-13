@@ -378,7 +378,7 @@ static inline status_t PHY_ClearInterrupt(phy_handle_t *handle)
     return handle->ops->clearInterrupt(handle);
 }
 
-/*! @} */
+/* @} */
 
 #if defined(__cplusplus)
 }

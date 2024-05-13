@@ -21,9 +21,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 #define FSL_PDM_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 1)) /*!< Version 2.6.1 */
-/*! @} */
+/*@}*/
 
 /*! @brief PDM edma handler */
 typedef struct _pdm_edma_handle pdm_edma_handle_t;

@@ -196,7 +196,7 @@ void PF1550_SetThermalAttibute(pf1550_handle_t *handle, const pf1550_thermal_att
 void PF1550_SetledOutput(pf1550_handle_t *handle, bool value);
 void PF1550_SetLedAttibute(pf1550_handle_t *handle, const pf1550_led_attribute_t *attribute);
 
-/*! @} */
+/* @} */
 
 #if defined(__cplusplus)
 }

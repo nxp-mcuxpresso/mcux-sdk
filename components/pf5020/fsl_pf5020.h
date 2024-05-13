@@ -834,7 +834,7 @@ void PF5020_GetDefaultConfig(pf5020_config_t *config);
  */
 void PF5020_CreateHandle(pf5020_handle_t *handle, const pf5020_config_t *config);
 
-/*! @} */
+/* @} */
 
 /*! @name Power Up/Down Sequence Control API
  *@{
@@ -921,7 +921,7 @@ status_t PF5020_SetPowerDownGroupDelay(pf5020_handle_t *handle,
  */
 status_t PF5020_SetResetBMcuPinDelay(pf5020_handle_t *handle, pf5020_resetBMCU_delay_t delay);
 
-/*! @} */
+/* @} */
 
 /*! @name Clock Management
  *@{
@@ -949,7 +949,7 @@ status_t PF5020_CLK_ConfigHighSpeedClock(pf5020_handle_t *handle, const pf5020_h
  */
 status_t PF5020_CLK_EnableSyncOut(pf5020_handle_t *handle, bool enable);
 
-/*! @} */
+/* @} */
 
 /*! @name Converters Management
  * @{
@@ -1356,7 +1356,7 @@ status_t PF5020_LDO1_EnablePGMonitor(pf5020_handle_t *handle, bool enable);
  */
 status_t PF5020_LDO1_EnableWatchDogBypass(pf5020_handle_t *handle, bool enable);
 
-/*! @} */
+/* @} */
 
 /*! @name Fault Detection
  * @{
@@ -1421,7 +1421,7 @@ uint8_t PF5020_GetFaultCounterCurrentValue(pf5020_handle_t *handle);
  */
 status_t PF5020_SetFaultTimerExpireValue(pf5020_handle_t *handle, uint8_t expireValue);
 
-/*! @} */
+/* @} */
 
 /*! @name Watchdog Management
  * @{
@@ -1497,7 +1497,7 @@ status_t PF5020_WDOG_SetWDEventCounterMaxValue(pf5020_handle_t *handle, uint8_t 
  */
 uint8_t PF5020_WDOG_GetWDEventCounterCurrentValue(pf5020_handle_t *handle);
 
-/*! @} */
+/* @} */
 
 /*! @name Temperature Sensor
  * @{
@@ -1517,7 +1517,7 @@ status_t PF5020_TMP_SetThermalMonitorConfig(pf5020_handle_t *handle,
                                             bool enable,
                                             pf5020_temp_sensor_operate_mode_t mode);
 
-/*! @} */
+/* @} */
 
 /*! @name Analog Multiplexer Control APIs
  * @{
@@ -1535,7 +1535,7 @@ status_t PF5020_TMP_SetThermalMonitorConfig(pf5020_handle_t *handle,
  */
 status_t PF5020_AMUX_SetAnalogMuxConfig(pf5020_handle_t *handle, bool enable, pf5020_amux_selection_t amuxSel);
 
-/*! @} */
+/* @} */
 
 /*! @name Interrupt Control
  * @{
@@ -1585,6 +1585,6 @@ status_t PF5020_GetInterruptLatchStatus(pf5020_handle_t *handle, uint64_t *inter
  */
 status_t PF5020_ClearInterruptStatus(pf5020_handle_t *handle, uint64_t interruptMask);
 
-/*! @} */
+/* @} */
 
 #endif /* _FSL_PF5020_H_ */
