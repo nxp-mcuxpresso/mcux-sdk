@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023~2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -98,23 +98,23 @@
 #define PM_RT1170_LPSR_ANA_LDO_LP_MODE_SETPOINT_MAP \
     (0xFFFFU)                                            // LPSR_ANA_LDO lowpower mode is disabled for all setpoints.
 #define PM_RT1170_LPSR_ANA_LDO_TRACKING_EN_SETPOINT_MAP \
-    (~PM_RT1170_LPSR_ANA_LDO_EN_SETPOINT_MAP)            // LPSR_ANA_DO tracking is enabled
+    ((uint32_t)(~PM_RT1170_LPSR_ANA_LDO_EN_SETPOINT_MAP))            // LPSR_ANA_DO tracking is enabled
                                                          // from setpoint 0 to setpoint 10.
 #define PM_RT1170_LPSR_ANA_LDO_BYPASS_EN_SETPOINT_MAP \
-    (~PM_RT1170_LPSR_ANA_LDO_EN_SETPOINT_MAP)            // LPSR_ANA_DO bypass is enabled from
+    ((uint32_t)(~PM_RT1170_LPSR_ANA_LDO_EN_SETPOINT_MAP))            // LPSR_ANA_DO bypass is enabled from
                                                          // setpoint 0 to setpoint 10.
 #define PM_RT1170_LPSR_DIG_LDO_EN_SETPOINT_MAP \
-    (0xF81C)                                             // LPSR_DIG_DO is enabled from setpoint 2 to setpoint 4,
+    (0xF81CU)                                             // LPSR_DIG_DO is enabled from setpoint 2 to setpoint 4,
                                                          // and setpoint 11 to setpoint 15.
 #define PM_RT1170_LPSR_DIG_LDO_STANDBY_SETPOINT_MAP (0xFFFFU) // LPSR_DIG_DO standby mode is disabled for all setpoints.
 #define PM_RT1170_LPSR_DIG_LDO_LP_MODE_SETPOINT_MAP \
     (0xFFFFU)                                 // LPSR_DIG_DO lowpower mode is disabled for all setpoints.
 #define PM_RT1170_LPSR_DIG_LDO_TRACKING_EN_SETPOINT_MAP \
-    (~PM_RT1170_LPSR_DIG_LDO_EN_SETPOINT_MAP) // LPSR_DIG_DO tracking is enabled
+    ((uint32_t)(~PM_RT1170_LPSR_DIG_LDO_EN_SETPOINT_MAP)) // LPSR_DIG_DO tracking is enabled
                                               // from setpoint 0 to setpoint 1,
                                               // and setpoint 5 to setpoint 10.
 #define PM_RT1170_LPSR_DIG_LDO_BYPASS_EN_SETPOINT_MAP \
-    (~PM_RT1170_LPSR_DIG_LDO_EN_SETPOINT_MAP) // LPSR_DIG_DO bypass is enabled from
+    ((uint32_t)(~PM_RT1170_LPSR_DIG_LDO_EN_SETPOINT_MAP)) // LPSR_DIG_DO bypass is enabled from
                                               // setpoint 0 to setpoint 1,
                                               // and setpoint 5 to setpoint 10.
 
@@ -212,6 +212,7 @@ static bool RT1170_IsWakeupSource(pm_wakeup_source_t *ws);
  ******************************************************************************/
 
 #if __CORTEX_M == 7
+extern const uint16_t g_clockSourceSpMapping[29U];
 const uint16_t g_clockSourceSpMapping[29U] = {
     0xFFFFU, /*!< Clock Source OSCPLL0: 16MHz RC OSC output, turn on in all setpoints. */
     0x0000U, /*!< Clock Source OSCPLL1: 48MHz RC OSC output, turn off in all setpoints. */
@@ -831,17 +832,18 @@ const pm_device_option_t g_devicePMOption = {
  */
 static inline uint8_t RT1170_FindOperateMode(uint32_t rescIndex, pm_resc_group_t *pSysRescGroup)
 {
-    uint8_t u8Tmp = (pSysRescGroup->groupSlice[rescIndex / 8UL] >> (4UL * (rescIndex % 8UL))) & 0xFUL;
+    uint32_t u32Tmp = (pSysRescGroup->groupSlice[rescIndex / 8UL] >> (4UL * (rescIndex % 8UL))) & 0xFUL;
 
     // Find first set, that is the operate mode to set.
-    u8Tmp |= (u8Tmp >> 1U);
-    u8Tmp |= (u8Tmp >> 2U);
+    u32Tmp |= (u32Tmp >> 1U);
+    u32Tmp |= (u32Tmp >> 2U);
 
-    return ((u8Tmp + 1U) >> 1U);
+    return (uint8_t)(uint32_t)((u32Tmp + 1UL) >> 1UL);
 }
 
 #if __CORTEX_M == 7
 /*!
+
  * @brief Configure setpoint mapping for CM7.
  */
 static inline void RT1170_SetCore0PlatformSetpointMap(GPC_CPU_MODE_CTRL_Type *base)
@@ -849,7 +851,7 @@ static inline void RT1170_SetCore0PlatformSetpointMap(GPC_CPU_MODE_CTRL_Type *ba
     uint8_t i, j;
     uint32_t u32Tmp;
 
-    uint8_t coreSetpointMap[17U][17U] = PM_RT1170_CM7_COMPATIBLE_SETPOINT_MAP;
+    uint32_t coreSetpointMap[17U][17U] = PM_RT1170_CM7_COMPATIBLE_SETPOINT_MAP;
 
     // Enable CPU sleep hold.
     GPC_CM_EnableCpuSleepHold(base, true);
@@ -893,15 +895,15 @@ static inline void RT1170_SetClockSourcesControlBySetpoint(void)
     ANADIG_PLL->PLL_AUDIO_CTRL &= ~ANADIG_PLL_PLL_AUDIO_CTRL_PLL_AUDIO_CONTROL_MODE_MASK;
     ANADIG_PLL->PLL_VIDEO_CTRL &= ~ANADIG_PLL_PLL_VIDEO_CTRL_PLL_VIDEO_CONTROL_MODE_MASK;
 
-    clock_name_t clockSourceName = kCLOCK_OscRc16M;
-    for (clockSourceName = kCLOCK_OscRc16M; clockSourceName <= kCLOCK_VideoPllOut; clockSourceName++)
+    uint8_t clockSourceName = (uint8_t)kCLOCK_OscRc16M;
+    for (clockSourceName = (uint8_t)kCLOCK_OscRc16M; clockSourceName <= (uint8_t)kCLOCK_VideoPllOut; clockSourceName++)
     {
         if (!CLOCK_OSCPLL_IsSetPointImplemented((clock_name_t)clockSourceName))
         {
             assert(0);
         }
         // keep clock source init state aligned with set point 0 state.
-        if ((g_clockSourceSpMapping[(uint8_t)clockSourceName] & 0x1) == 0)
+        if ((g_clockSourceSpMapping[(uint8_t)clockSourceName] & (uint16_t)0x1U) == (uint16_t)0U)
         {
             CCM->OSCPLL[(uint8_t)clockSourceName].DIRECT = 0;
         }
@@ -910,12 +912,12 @@ static inline void RT1170_SetClockSourcesControlBySetpoint(void)
             CCM->OSCPLL[(uint8_t)clockSourceName].DIRECT = 1;
         }
         // All clock sources except OSC_RC 16M are turned off in standby mode.
-        uint32_t standbyValue = 0UL;
-        if (clockSourceName == kCLOCK_OscRc16M)
+        uint16_t standbyValue = 0U;
+        if ((clock_name_t)clockSourceName == kCLOCK_OscRc16M)
         {
             standbyValue = 0xFFFFU;
         }
-        CLOCK_OSCPLL_ControlBySetPointMode(clockSourceName, g_clockSourceSpMapping[(uint8_t)clockSourceName],
+        CLOCK_OSCPLL_ControlBySetPointMode((clock_name_t)clockSourceName, g_clockSourceSpMapping[(uint8_t)clockSourceName],
                                            standbyValue);
     }
 
@@ -1000,7 +1002,7 @@ static inline void RT1170_SetPowerSupplyControlBySetpoint(void)
     PMU_GPCEnableLdoBypassMode(kPMU_LpsrDigLdo, PM_RT1170_LPSR_DIG_LDO_BYPASS_EN_SETPOINT_MAP);
     for (uint8_t i = 0U; i < 16U; i++)
     {
-        PMU_GPCSetLpsrDigLdoTargetVoltage(1U << i, g_lpsrDigLdoTargetVoltage[i]);
+        PMU_GPCSetLpsrDigLdoTargetVoltage(1UL << i, g_lpsrDigLdoTargetVoltage[i]);
     }
     PMU_SetLpsrDigLdoControlMode(ANADIG_LDO_SNVS, kPMU_GPCMode);
 
@@ -1032,20 +1034,20 @@ static inline void RT1170_SetSRCControlMode(void)
     SRC_EnableSetPointTransferReset(SRC, kSRC_LpsrSlice, true);
     SRC_SetSliceSetPointConfig(SRC, kSRC_LpsrSlice, PM_RT1170_LPSRMIX_SETPOINT_MAP);
     //    e. Reset slice corresponding to Cortex-M4 platform is controlled by entering of suspend mode.
-    SRC_SetAssignList(SRC, kSRC_M4CoreSlice, kSRC_CM4Core);
-    SRC_SetSliceDomainModeConfig(SRC, kSRC_M4CoreSlice, kSRC_Cpu1SuspendModeAssertReset);
+    SRC_SetAssignList(SRC, kSRC_M4CoreSlice, (uint32_t)kSRC_CM4Core);
+    SRC_SetSliceDomainModeConfig(SRC, kSRC_M4CoreSlice, (uint32_t)kSRC_Cpu1SuspendModeAssertReset);
     SRC_EnableDomainModeTransferReset(SRC, kSRC_M4CoreSlice, true);
     //    f. Reset slice corresponding to Cortex-M7 platform is controlled by entering of suspend mode.
-    SRC_SetAssignList(SRC, kSRC_M7CoreSlice, kSRC_CM7Core);
-    SRC_SetSliceDomainModeConfig(SRC, kSRC_M7CoreSlice, kSRC_Cpu0SuspendModeAssertReset);
+    SRC_SetAssignList(SRC, kSRC_M7CoreSlice, (uint32_t)kSRC_CM7Core);
+    SRC_SetSliceDomainModeConfig(SRC, kSRC_M7CoreSlice, (uint32_t)kSRC_Cpu0SuspendModeAssertReset);
     SRC_EnableDomainModeTransferReset(SRC, kSRC_M7CoreSlice, true);
     //    g. Reset slice corresponding to CM4 Debug is controlled by entering of suspend mode.
-    SRC_SetAssignList(SRC, kSRC_M4DebugSlice, kSRC_CM4Core);
-    SRC_SetSliceDomainModeConfig(SRC, kSRC_M4DebugSlice, kSRC_Cpu1SuspendModeAssertReset);
+    SRC_SetAssignList(SRC, kSRC_M4DebugSlice, (uint32_t)kSRC_CM4Core);
+    SRC_SetSliceDomainModeConfig(SRC, kSRC_M4DebugSlice, (uint32_t)kSRC_Cpu1SuspendModeAssertReset);
     SRC_EnableDomainModeTransferReset(SRC, kSRC_M4DebugSlice, true);
     //    h. Reset slice corresponding to CM7 Debug is controlled by entering of suspend mode.
-    SRC_SetAssignList(SRC, kSRC_M7DebugSlice, kSRC_CM7Core);
-    SRC_SetSliceDomainModeConfig(SRC, kSRC_M7DebugSlice, kSRC_Cpu0SuspendModeAssertReset);
+    SRC_SetAssignList(SRC, kSRC_M7DebugSlice, (uint32_t)kSRC_CM7Core);
+    SRC_SetSliceDomainModeConfig(SRC, kSRC_M7DebugSlice, (uint32_t)kSRC_Cpu0SuspendModeAssertReset);
     SRC_EnableDomainModeTransferReset(SRC, kSRC_M7DebugSlice, true);
     //    i. Reset slice corresponding to USBPHY1 and USBPHY2 is controlled by WAKEUP domain's setpoint request.
     SRC_EnableSetPointTransferReset(SRC, kSRC_Usbphy1Slice, true);
@@ -1209,7 +1211,7 @@ static inline void RT1170_SetCore1PlatformSetpointMap(GPC_CPU_MODE_CTRL_Type *ba
     uint8_t i, j;
     uint32_t u32Tmp;
 
-    uint8_t coreSetpointMap[17U][17U] = PM_RT1170_CM4_COMPATIBLE_SETPOINT_MAP;
+    uint32_t coreSetpointMap[17U][17U] = PM_RT1170_CM4_COMPATIBLE_SETPOINT_MAP;
 
     // Enable CPU sleep hold.
     GPC_CM_EnableCpuSleepHold(base, true);
@@ -1344,7 +1346,7 @@ static void RT1170_PreparePowerSetting(void)
     // 5. Control body bias via GPC, CM7 is responsible for this.
     /* Check if FBB need to be enabled in OverDrive(OD) mode.
        Note: FUSE could not be read out if OTP memory is powered off.*/
-    if (((OCOTP->FUSEN[7].FUSE & 0x10U) >> 4U) != 1)
+    if (((OCOTP->FUSEN[7].FUSE & 0x10UL) >> 4UL) != 1UL)
     {
         PMU_GPCEnableBodyBias(kPMU_FBB_CM7, PM_RT1170_FBB_EN_SETPOINT_MAP);
     }
@@ -1435,9 +1437,9 @@ static void RT1170_EnterPowerState(uint8_t stateIndex, pm_resc_mask_t *pSoftResc
     else
     {
         // 1. Get CPU mode to transit based on application request.
-        if (pSoftRescMask->rescMask[0] & (1UL << kResc_CPU_PLATFORM))
+        if ((pSoftRescMask->rescMask[0] & (1UL << kResc_CPU_PLATFORM)) != 0UL)
         {
-            switch (RT1170_FindOperateMode(kResc_CPU_PLATFORM, pSysRescGroup))
+            switch (RT1170_FindOperateMode((uint32_t)kResc_CPU_PLATFORM, pSysRescGroup))
             {
                 case PM_RESOURCE_FULL_ON:
                     // In case of application request PM_RESC_CORE_DOMAIN_RUN.
@@ -1495,7 +1497,7 @@ static void RT1170_EnterPowerState(uint8_t stateIndex, pm_resc_mask_t *pSoftResc
             GPC_CM_ClearStandbyModeRequest(CURRENT_GPC_INSTANCE, kGPC_StopMode);
             GPC_CM_ClearStandbyModeRequest(CURRENT_GPC_INSTANCE, kGPC_SuspendMode);
 
-            if (RT1170_FindOperateMode(kResc_STBY_REQ, pSysRescGroup) != PM_RESOURCE_FULL_ON)
+            if (RT1170_FindOperateMode((uint32_t)kResc_STBY_REQ, pSysRescGroup) != PM_RESOURCE_FULL_ON)
             {
                 // If not request to de-assert standby request, assert standby request when CPU entering selected CPU
                 // mode.
@@ -1527,13 +1529,13 @@ static status_t RT1170_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable)
     if (enable)
     {
         // Enabled selected wakeup source, including enable it in NVIC and GPC.
-        EnableIRQ((IRQn_Type)irqId);
+        (void)EnableIRQ((IRQn_Type)irqId);
         GPC_CM_EnableIrqWakeup(CURRENT_GPC_INSTANCE, irqId, true);
     }
     else
     {
         // Disable selected wakeup source, including disable it in NVIC and GPC.
-        DisableIRQ((IRQn_Type)irqId);
+        (void)DisableIRQ((IRQn_Type)irqId);
         GPC_CM_EnableIrqWakeup(CURRENT_GPC_INSTANCE, irqId, false);
     }
 

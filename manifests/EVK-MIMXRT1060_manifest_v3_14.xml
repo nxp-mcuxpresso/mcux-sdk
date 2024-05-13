@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_EVK-MIMXRT1060_manifest_v3_14" name="2.15.0 GitHub SDK" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_EVK-MIMXRT1060_manifest_v3_14" name="2.15.100 GitHub SDK" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
 
   <externalDefinitions>
     <definition extID="evkbmimxrt1060"/>
@@ -17,7 +17,7 @@
     <definition extID="middleware.azure_rtos.tx.sp.MIMXRT1062"/>
     <definition extID="middleware.usb.device.cdc.external.MIMXRT1062"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2150" name="MCUXpresso SDK2150" version="2.15.0" revision="2.15.0"/>
+  <ksdk id="MCUXpressoSDK215100" name="MCUXpresso SDK215100" version="2.15.100" revision="2.15.100"/>
   <manifest_includes>
     <manifest_include path="../../examples/evkmimxrt1060/evkmimxrt1060_example_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wireless/framework/manifests/middleware_nxp_conn_fwk_MIMXRT1062_manifest_v3_14.xml"/>
@@ -33,9 +33,9 @@
     <manifest_include path="../../middleware/sdmmc/manifests/middleware_nxp_sd_mmc_sdio_card_MIMXRT1062_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/usb/manifests/middleware_nxp_usb_MIMXRT1062_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/vit/manifests/middleware_nxp_voice_intelligent_technology_MIMXRT1062_manifest_v3_14.xml"/>
+    <manifest_include path="../../middleware/edgefast_bluetooth/manifests/middleware_nxp_edgefast_bluetooth_pal_MIMXRT1062_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/eiq/manifests/middleware_nxp_eiq_machine_learning_MIMXRT1062_manifest_v3_14.xml"/>
     <manifest_include path="../../rtos/azure-rtos/manifests/middleware_microsoft_azure_rtos_MIMXRT1062_manifest_v3_14.xml"/>
-    <manifest_include path="../../middleware/edgefast_bluetooth/manifests/middleware_nxp_edgefast_bluetooth_pal_MIMXRT1062_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wireless/wpa_supplicant-rtos/manifests/middleware_nxp_wifi_wpa_supplicant_MIMXRT1062_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/voice_seeker/manifests/middleware_nxp_voiceseeker_no_aec_MIMXRT1062_manifest_v3_14.xml"/>
   </manifest_includes>
@@ -2773,6 +2773,18 @@ ${load}</script>
         <include_path relative_path="incl" type="c_include"/>
       </include_paths>
     </component>
+    <component id="docs.Edgefast.MIMXRT1062" name="Edgefast" brief="Docs edgefast bluetooth" version="1.0.0" full_name="Docs edgefast bluetooth" category="docs/Edgefast" user_visible="true" type="documentation" package_base_path="../docs/wireless/bluetooth/edgefast_bluetooth" project_base_path="wireless/Edgefast">
+      <dependencies>
+        <any_of>
+          <device_dependency value="MIMXRT1062xxxxA"/>
+          <device_dependency value="MIMXRT1062xxxxB"/>
+        </any_of>
+      </dependencies>
+      <source relative_path="./" type="doc">
+        <files mask="Hardware Rework Guide for EdgeFast BT PAL.pdf"/>
+        <files mask="EFBTPALAPIRM.pdf"/>
+      </source>
+    </component>
     <component id="docs.eiq.MIMXRT1062" name="eiq" brief="Docs eiq" version="1.0.0" full_name="Docs eiq" category="docs/eiq" user_visible="true" type="documentation" package_base_path="../middleware/eiq/doc" project_base_path="EIQ">
       <dependencies>
         <any_of>
@@ -2798,20 +2810,6 @@ ${load}</script>
       <source relative_path="./" type="doc">
         <files mask="Getting Started with MCUXpresso SDK for Azure RTOS.pdf"/>
         <files mask="MCUXpresso SDK Azure RTOS Release Notes.pdf"/>
-      </source>
-    </component>
-    <component id="docs.Edgefast.MIMXRT1062" name="Edgefast" brief="Docs edgefast bluetooth" version="1.0.0" full_name="Docs edgefast bluetooth" category="docs/Edgefast" user_visible="true" type="documentation" package_base_path="../docs/wireless/bluetooth/edgefast_bluetooth" project_base_path="wireless/Edgefast">
-      <dependencies>
-        <any_of>
-          <device_dependency value="MIMXRT1062xxxxA"/>
-          <device_dependency value="MIMXRT1062xxxxB"/>
-        </any_of>
-      </dependencies>
-      <source relative_path="./" type="doc">
-        <files mask="Hardware Rework Guide for EdgeFast BT PAL.pdf"/>
-        <files mask="EFBTPALAPIRM.pdf"/>
-        <files mask="Enabling_Additional_Edgefast_BT_PAL_Examples_on_RT1064.pdf"/>
-        <files mask="Enabling_Additional_Edgefast_BT_PAL_Examples_on_RT1064.pdf"/>
       </source>
     </component>
     <component id="project_template.MIMXRT1062.MIMXRT1062" name="MIMXRT1062" brief="Devices_project_template MIMXRT1062" version="1.0.0" full_name="Devices_project_template MIMXRT1062" category="Board Support/SDK Project Template" user_visible="true" type="project_template" package_base_path="../devices/MIMXRT1062/project_template" project_base_path="board">

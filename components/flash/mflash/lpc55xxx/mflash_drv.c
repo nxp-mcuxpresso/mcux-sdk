@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2020, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -50,7 +50,7 @@ int32_t mflash_drv_sector_erase(uint32_t sector_addr)
     if (0 == mflash_drv_is_sector_aligned(sector_addr))
         return kStatus_InvalidArgument;
 
-    return FLASH_Erase(&g_flash_instance, sector_addr, MFLASH_SECTOR_SIZE, kFLASH_ApiEraseKey);
+    return FLASH_Erase(&g_flash_instance, sector_addr, MFLASH_SECTOR_SIZE, (uint32_t)kFLASH_ApiEraseKey);
 }
 
 /* API - Page program */
@@ -86,13 +86,13 @@ int32_t mflash_drv_is_readable(uint32_t addr)
                       FLASH_READMODE_MARGIN(g_flash_instance.modeConfig.readSingleWord.readMarginLevel) |
                       FLASH_READMODE_DMACC(g_flash_instance.modeConfig.readSingleWord.readDmaccWord);
     FLASH->CMD = 3;
-    while (!(FLASH->INT_STATUS & FLASH_INT_STATUS_DONE_MASK))
+    while ((FLASH->INT_STATUS & FLASH_INT_STATUS_DONE_MASK) == 0UL)
         ;
     result = FLASH->INT_STATUS;
 
     /* Report failure in case of errors */
     result_mask = FLASH_INT_STATUS_FAIL_MASK | FLASH_INT_STATUS_ERR_MASK | FLASH_INT_STATUS_ECC_ERR_MASK;
-    if (result_mask & result)
+    if ((result_mask & result) != 0UL)
         return kStatus_Fail;
 
     return kStatus_Success;
@@ -104,7 +104,7 @@ int32_t mflash_drv_read(uint32_t addr, uint32_t *buffer, uint32_t len)
     if (mflash_drv_is_readable(addr) != 0)
         return kStatus_Fail;
 
-    memcpy(buffer, (void *)addr, len);
+    (void)memcpy((void *)buffer, (void *)addr, len);
 
     return kStatus_Success;
 }

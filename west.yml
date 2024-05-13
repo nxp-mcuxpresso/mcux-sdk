@@ -10,7 +10,7 @@ manifest:
     remote: nxp-mcuxpresso
   projects:
   - name: mcux-sdk-examples
-    revision: 517f3bde7719f7edf73ef35d7b7e0b30864fd52d
+    revision: 83f49eb1c6a995b2dfda430f3b3d0830d6074c25
     path: examples
   - name: FreeRTOS-Kernel
     revision: MCUX_2.15.000
@@ -35,7 +35,7 @@ manifest:
     path: middleware/fatfs
     revision: MCUX_2.15.000
   - name: mcux-sdk-middleware-eiq
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
     path: middleware/eiq
   - name: mcux-sdk-middleware-deepviewrt
     revision: MCUX_2.13.1
@@ -44,56 +44,56 @@ manifest:
     revision: MCUX_2.15.000
     path: middleware/eiq/glow
   - name: mcux-sdk-middleware-tensorflow
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
     path: middleware/eiq/tensorflow-lite
   - name: mcux-sdk-middleware-usb
     path: middleware/usb
     revision: MCUX_2.15.000
   - name: mcux-sdk-middleware-edgefast-bluetooth
     path: middleware/edgefast_bluetooth
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
   - name: mcux-sdk-middleware-ethermind
     path: middleware/wireless/ethermind
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
     remote: nxp
   - name: azure-rtos
     path: rtos/azure-rtos
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
     remote: nxp
   - name: threadx
     path: rtos/azure-rtos/threadx
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
     remote: nxp
   - name: filex
     path: rtos/azure-rtos/filex
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
     remote: nxp
   - name: levelx
     path: rtos/azure-rtos/levelx
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
     remote: nxp
   - name: netxduo
     path: rtos/azure-rtos/netxduo
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
     remote: nxp
   - name: usbx
     path: rtos/azure-rtos/usbx
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
     remote: nxp
   - name: guix
     path: rtos/azure-rtos/guix
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
     remote: nxp
   - name: mbedtls
     path: middleware/mbedtls
     revision: MCUX_2.15.000
   - name: wifi_nxp
     path: middleware/wifi_nxp
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
     remote: nxp
   - name: lwip
     path: middleware/lwip
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
   - name: littlefs
     path: middleware/littlefs
     revision: MCUX_2.15.000
@@ -121,10 +121,10 @@ manifest:
     revision: MCUX_2.15.000
   - name: wpa_supplicant-rtos
     path: middleware/wireless/wpa_supplicant-rtos
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
   - name: mcux-sdk-middleware-connectivity-framework
     path: middleware/wireless/framework
-    revision: MCUX_2.15.000
+    revision: MCUX_2.15.100
     remote: nxp
   - name: mcux-sdk-middleware-zigbee
     revision: MCUX_2.15.000_RW610_K32W1

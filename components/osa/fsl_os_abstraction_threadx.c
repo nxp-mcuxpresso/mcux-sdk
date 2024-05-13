@@ -66,7 +66,7 @@ typedef struct osa_thread_task
 
 typedef struct _osa_event_struct
 {
-    TX_EVENT_FLAGS_GROUP handle; /* The event handle */
+    TX_EVENT_FLAGS_GROUP eventHandle; /* The event handle */
     uint8_t autoClear;           /*!< Auto clear or manual clear   */
 } osa_event_struct_t;
 
@@ -151,7 +151,7 @@ void OSA_EnterCritical(uint32_t *sr)
  *END**************************************************************************/
 void OSA_ExitCritical(uint32_t sr)
 {
-    tx_interrupt_control(sr);
+    (void)tx_interrupt_control(sr);
 }
 
 /*FUNCTION**********************************************************************
@@ -649,7 +649,7 @@ osa_status_t OSA_EventCreate(osa_event_handle_t eventHandle, uint8_t autoClear)
 
     pEventStruct->autoClear = autoClear;
 
-    if (TX_SUCCESS != tx_event_flags_create(&pEventStruct->handle, NULL))
+    if (TX_SUCCESS != tx_event_flags_create(&pEventStruct->eventHandle, NULL))
     {
         status = KOSA_StatusError;
     }
@@ -671,7 +671,7 @@ osa_status_t OSA_EventSet(osa_event_handle_t eventHandle, osa_event_flags_t flag
 
     assert(eventHandle != NULL);
 
-    if (TX_SUCCESS != tx_event_flags_set(&pEventStruct->handle, (ULONG)flagsToSet, TX_OR))
+    if (TX_SUCCESS != tx_event_flags_set(&pEventStruct->eventHandle, (ULONG)flagsToSet, TX_OR))
     {
         status = KOSA_StatusError;
     }
@@ -693,7 +693,7 @@ osa_status_t OSA_EventClear(osa_event_handle_t eventHandle, osa_event_flags_t fl
 
     assert(eventHandle != NULL);
 
-    if (TX_SUCCESS != tx_event_flags_set(&pEventStruct->handle, (ULONG)~flagsToClear, TX_AND))
+    if (TX_SUCCESS != tx_event_flags_set(&pEventStruct->eventHandle, (ULONG)~flagsToClear, TX_AND))
     {
         status = KOSA_StatusError;
     }
@@ -723,7 +723,7 @@ osa_status_t OSA_EventGet(osa_event_handle_t eventHandle, osa_event_flags_t flag
         return KOSA_StatusError;
     }
 
-    if (TX_SUCCESS != tx_event_flags_info_get(&pEventStruct->handle, NULL, &flags, NULL, NULL, NULL))
+    if (TX_SUCCESS != tx_event_flags_info_get(&pEventStruct->eventHandle, NULL, &flags, NULL, NULL, NULL))
     {
         status = KOSA_StatusError;
     }
@@ -791,7 +791,7 @@ osa_status_t OSA_EventWait(osa_event_handle_t eventHandle,
         options |= TX_EVENT_FLAGS_AND_MASK;
     }
 
-    status = tx_event_flags_get(&pEventStruct->handle, flagsToWait, options, (ULONG *)&flagsSave, timeoutTicks);
+    status = tx_event_flags_get(&pEventStruct->eventHandle, flagsToWait, options, (ULONG *)&flagsSave, timeoutTicks);
     if (status != TX_SUCCESS && status != TX_NO_EVENTS)
     {
         return KOSA_StatusError;
@@ -829,7 +829,7 @@ osa_status_t OSA_EventDestroy(osa_event_handle_t eventHandle)
 
     assert(eventHandle != NULL);
 
-    if (TX_SUCCESS != tx_event_flags_delete(&pEventStruct->handle))
+    if (TX_SUCCESS != tx_event_flags_delete(&pEventStruct->eventHandle))
     {
         status = KOSA_StatusError;
     }
@@ -845,7 +845,7 @@ osa_status_t OSA_EventDestroy(osa_event_handle_t eventHandle)
  *END**************************************************************************/
 void OSA_InterruptEnable(void)
 {
-    tx_interrupt_control(TX_INT_ENABLE);
+    (void)tx_interrupt_control(TX_INT_ENABLE);
 }
 
 /*FUNCTION**********************************************************************
@@ -856,7 +856,7 @@ void OSA_InterruptEnable(void)
  *END**************************************************************************/
 void OSA_InterruptDisable(void)
 {
-    tx_interrupt_control(TX_INT_DISABLE);
+    (void)tx_interrupt_control(TX_INT_DISABLE);
 }
 
 /*FUNCTION**********************************************************************

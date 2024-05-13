@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_LPCXpresso55S28_manifest_v3_14" name="2.15.0 GitHub SDK" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_LPCXpresso55S28_manifest_v3_14" name="2.15.100 GitHub SDK" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
 
   <externalDefinitions>
     <definition extID="middleware.usb.host.stack.LPC55S28"/>
@@ -8,7 +8,7 @@
     <definition extID="middleware.azure_rtos.tx.sp.LPC55S28"/>
     <definition extID="middleware.usb.device.cdc.external.LPC55S28"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2150" name="MCUXpresso SDK2150" version="2.15.0" revision="2.15.0"/>
+  <ksdk id="MCUXpressoSDK215100" name="MCUXpresso SDK215100" version="2.15.100" revision="2.15.100"/>
   <manifest_includes>
     <manifest_include path="../../examples/lpcxpresso55s28/lpcxpresso55s28_example_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/fatfs/manifests/middleware_elm_chan_fatfs_LPC55S28_manifest_v3_14.xml"/>
@@ -2944,8 +2944,6 @@ ${load}</script>
         <files mask="a00069.js"/>
         <files mask="a00070.html"/>
         <files mask="a00070.js"/>
-        <files mask="a00234.html"/>
-        <files mask="a00234.js"/>
         <files mask="a00235.html"/>
         <files mask="a00235.js"/>
         <files mask="a00236.html"/>
@@ -2965,16 +2963,16 @@ ${load}</script>
         <files mask="a00243.html"/>
         <files mask="a00243.js"/>
         <files mask="a00244.html"/>
+        <files mask="a00244.js"/>
         <files mask="a00245.html"/>
-        <files mask="a00245.js"/>
         <files mask="a00246.html"/>
         <files mask="a00246.js"/>
         <files mask="a00247.html"/>
+        <files mask="a00247.js"/>
         <files mask="a00248.html"/>
-        <files mask="a00248.js"/>
         <files mask="a00249.html"/>
+        <files mask="a00249.js"/>
         <files mask="a00250.html"/>
-        <files mask="a00250.js"/>
         <files mask="a00251.html"/>
         <files mask="a00251.js"/>
         <files mask="a00252.html"/>
@@ -3006,9 +3004,9 @@ ${load}</script>
         <files mask="a00265.html"/>
         <files mask="a00265.js"/>
         <files mask="a00266.html"/>
+        <files mask="a00266.js"/>
         <files mask="a00267.html"/>
         <files mask="a00268.html"/>
-        <files mask="a00268.js"/>
         <files mask="a00269.html"/>
         <files mask="a00269.js"/>
         <files mask="a00270.html"/>
@@ -3026,16 +3024,16 @@ ${load}</script>
         <files mask="a00276.html"/>
         <files mask="a00276.js"/>
         <files mask="a00277.html"/>
+        <files mask="a00277.js"/>
         <files mask="a00278.html"/>
-        <files mask="a00278.js"/>
         <files mask="a00279.html"/>
         <files mask="a00279.js"/>
         <files mask="a00280.html"/>
+        <files mask="a00280.js"/>
         <files mask="a00281.html"/>
         <files mask="a00282.html"/>
         <files mask="a00283.html"/>
         <files mask="a00284.html"/>
-        <files mask="a00284.js"/>
         <files mask="a00285.html"/>
         <files mask="a00285.js"/>
         <files mask="a00286.html"/>
@@ -3043,11 +3041,13 @@ ${load}</script>
         <files mask="a00287.html"/>
         <files mask="a00287.js"/>
         <files mask="a00288.html"/>
+        <files mask="a00288.js"/>
         <files mask="a00289.html"/>
         <files mask="a00290.html"/>
-        <files mask="a00290.js"/>
         <files mask="a00291.html"/>
-        <files mask="a00293.html"/>
+        <files mask="a00291.js"/>
+        <files mask="a00292.html"/>
+        <files mask="a00294.html"/>
         <files mask="arm_logo.png"/>
         <files mask="bc_s.png"/>
         <files mask="bdwn.png"/>

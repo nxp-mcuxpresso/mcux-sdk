@@ -1,11 +1,4 @@
 # Copy variable into project config.cmake to use software component
-#set.board.evkbmimxrt1060
-#  # description: Board_project_template evkbmimxrt1060
-#  set(CONFIG_USE_BOARD_Project_Template_evkbmimxrt1060 true)
-
-#  # description: XIP Board Driver
-#  set(CONFIG_USE_driver_xip_board_evkbmimxrt1060 true)
-
 #set.board.evkcmimxrt1060
 #  # description: Board_project_template evkcmimxrt1060
 #  set(CONFIG_USE_BOARD_Project_Template_evkcmimxrt1060 true)
@@ -20,6 +13,13 @@
 #  # description: XIP Board Driver
 #  set(CONFIG_USE_driver_xip_board_evkmimxrt1060 true)
 
+#set.board.evkbmimxrt1060
+#  # description: Board_project_template evkbmimxrt1060
+#  set(CONFIG_USE_BOARD_Project_Template_evkbmimxrt1060 true)
+
+#  # description: XIP Board Driver
+#  set(CONFIG_USE_driver_xip_board_evkbmimxrt1060 true)
+
 #set.middleware.wireless.framework
 #  # description: Middleware wireless framework_sec_lib
 #  set(CONFIG_USE_middleware_wireless_framework_sec_lib true)
@@ -29,6 +29,9 @@
 
 #  # description: Middleware wireless framework_platform_coex
 #  set(CONFIG_USE_middleware_wireless_framework_platform_coex_rt1060 true)
+
+#  # description: Middleware wireless framework_platform_internal_flash
+#  set(CONFIG_USE_middleware_wireless_framework_platform_internal_flash_rt1060 true)
 
 #  # description: Middleware wireless framework_board_lp
 #  set(CONFIG_USE_middleware_wireless_framework_board_lp_MIMXRT1062 true)
@@ -56,6 +59,9 @@
 
 #  # description: Middleware wireless framework_rpmsg_config
 #  set(CONFIG_USE_middleware_wireless_framework_rpmsg_config true)
+
+#  # description: Middleware wireless framework_mbedtls_config
+#  set(CONFIG_USE_middleware_wireless_framework_mbedtls_config_rt1060 true)
 
 #  # description: Middleware wireless framework platform ot coex
 #  set(CONFIG_USE_middleware_wireless_framework_platform_rt_ot_coex true)
@@ -102,9 +108,6 @@
 #  # description: Middleware wireless framework_sbtsnoop_nxp_ble_port
 #  set(CONFIG_USE_middleware_wireless_framework_sbtsnoop_nxp_ble_port true)
 
-#  # description: Middleware wireless framework_fwk_debug
-#  set(CONFIG_USE_middleware_wireless_framework_fwk_debug true)
-
 #  # description: Middleware wireless framework_linkscripts_kw45
 #  set(CONFIG_USE_middleware_wireless_framework_linkscripts_kw45 true)
 
@@ -129,6 +132,9 @@
 #  # description: Middleware wireless framework_PDUM
 #  set(CONFIG_USE_middleware_wireless_framework_PDUM true)
 
+#  # description: Middleware wireless framework_PDUM rt1060
+#  set(CONFIG_USE_middleware_wireless_framework_PDUM_rt1060 true)
+
 #  # description: Middleware wireless framework_markdown
 #  set(CONFIG_USE_middleware_wireless_framework_markdown true)
 
@@ -150,6 +156,15 @@
 #  # description: Middleware wireless fwk_lfs_mflash
 #  set(CONFIG_USE_middleware_wireless_framework_fsabstraction_littlefs true)
 
+#  # description: Single wire output debug
+#  set(CONFIG_USE_middleware_wireless_framework_swo_dbg true)
+
+#  # description: Middleware wireless framework_settings
+#  set(CONFIG_USE_middleware_wireless_framework_settings true)
+
+#  # description: Middleware wireless framework_settings
+#  set(CONFIG_USE_middleware_wireless_framework_NVS true)
+
 #  # description: Middleware wireless framework_platform
 #  set(CONFIG_USE_middleware_wireless_framework_platform_rt1060 true)
 
@@ -164,6 +179,15 @@
 
 #  # description: Middleware wireless framework_platform_ota
 #  set(CONFIG_USE_middleware_wireless_framework_platform_ota_rt1060 true)
+
+#  # description: Middleware wireless framework_platform_ics
+#  set(CONFIG_USE_middleware_wireless_framework_platform_ics_rt1060 true)
+
+#  # description: Middleware wireless framework_mws
+#  set(CONFIG_USE_middleware_wireless_framework_MWS true)
+
+#  # description: Middleware wireless framework_mws intercore
+#  set(CONFIG_USE_middleware_wireless_framework_MWS_Intercore true)
 
 #  # description: Middleware wireless framework_platform_mws
 #  set(CONFIG_USE_middleware_wireless_framework_platform_mws_rt1060 true)
@@ -183,6 +207,12 @@
 #  # description: Middleware wireless framework_platform_lowpower_timer
 #  set(CONFIG_USE_middleware_wireless_framework_platform_lowpower_timer_rt1060 true)
 
+#  # description: Middleware wireless framework_platform_reset
+#  set(CONFIG_USE_middleware_wireless_framework_platform_reset_rt1060 true)
+
+#  # description: Middleware wireless framework_sec_lib_mbedtls
+#  set(CONFIG_USE_middleware_wireless_framework_sec_lib_mbedtls_m7 true)
+
 #  # description: Middleware wireless framework_sec_lib_sss
 #  set(CONFIG_USE_middleware_wireless_framework_sec_lib_sss_m7 true)
 
@@ -191,6 +221,12 @@
 
 #  # description: Middleware wireless framework_sbtsnoop
 #  set(CONFIG_USE_middleware_wireless_framework_sbtsnoop true)
+
+#  # description: Middleware wireless framework_fwk_debug
+#  set(CONFIG_USE_middleware_wireless_framework_fwk_debug true)
+
+#  # description: Middleware wireless sensors
+#  set(CONFIG_USE_middleware_wireless_Sensors true)
 
 #  # description: FreeRTOS heap for framework mem_manager
 #  set(CONFIG_USE_middleware_wireless_freertos_heap true)
@@ -1317,161 +1353,6 @@
 #  # description: Voice intelligent technology library for Cortex M7
 #  set(CONFIG_USE_middleware_vit_cm7 true)
 
-#set.middleware.eiq
-#  # description: Flatbuffers library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_flatbuffers true)
-
-#  # description: Gemmlowp library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_gemmlowp true)
-
-#  # description: Ruy library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_ruy true)
-
-#  # description: General Purpose FFT (Fast Fourier/Cosine/Sine Transform) Package
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_fft2d true)
-
-#  # description: A mixed-radix Fast Fourier Transform library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_kissfft true)
-
-#  # description: Xtensa HiFi4 NN library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_xa_nnlib_hifi4 true)
-
-#  # description: Utilities for Glow NN compiler.
-#  set(CONFIG_USE_middleware_eiq_glow true)
-
-#  # description: CMSIS-NN library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_cmsis_nn true)
-
-#  # description: TensorFlow Lite Micro library with reference kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_reference true)
-
-#  # description: TensorFlow Lite Micro library with CMSIS-NN kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn true)
-
-#  # description: TensorFlow Lite Micro library binary with core specific kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_binary true)
-
-#  # description: TensorFlow Lite Micro library with CMSIS-NN and Ethos-U kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn_ethosu true)
-
-#  # description: TensorFlow Lite Micro library header files
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_headers true)
-
-#  # description: TensorFlow Lite Micro library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro true)
-
-#  # description: TensorFlow Lite Micro word detection library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_examples_microspeech true)
-
-#  # description: DeepViewRT Runtime library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_nnlib true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_modelrunner_server true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_modelrunner_server_flash true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_flatcc true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_json true)
-
-#  # description: DeepViewRT modelrunner server library
-#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_stb true)
-
-#set.middleware.azure_rtos
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx_template true)
-
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr_template true)
-
-#  # description: Real Time Operating System Kernel
-#  set(CONFIG_USE_middleware_azure_rtos_tx_lib true)
-
-#  # description: Real Time Operating System Kernel
-#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr_lib true)
-
-#  # description: Real Time Operating System Kernel
-#  set(CONFIG_USE_middleware_azure_rtos_txm_lib true)
-
-#  # description: A file system based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_fx_template true)
-
-#  # description: A file system based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_fx_lib true)
-
-#  # description: A GUI library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_gx_lib true)
-
-#  # description: A network protocol stack based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_nxd_template true)
-
-#  # description: A network protocol stack based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_nxd_lib true)
-
-#  # description: A USB library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_ux_template true)
-
-#  # description: Azure RTOS USBX Host Controller EHCI
-#  set(CONFIG_USE_middleware_azure_rtos_ux_ehci true)
-
-#  # description: Azure RTOS USBX Host Controller OHCI
-#  set(CONFIG_USE_middleware_azure_rtos_ux_ohci true)
-
-#  # description: Azure RTOS USBX Host Controller IP3516
-#  set(CONFIG_USE_middleware_azure_rtos_ux_ip3516 true)
-
-#  # description: Azure RTOS USBX Device Controller IP3511
-#  set(CONFIG_USE_middleware_azure_rtos_ux_ip3511 true)
-
-#  # description: Azure RTOS USBX Device Controller for i.MX RT
-#  set(CONFIG_USE_middleware_azure_rtos_ux_dci true)
-
-#  # description: A USB library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_ux_lib true)
-
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx true)
-
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr true)
-
-#  # description: Azure RTOS Core
-#  set(CONFIG_USE_middleware_azure_rtos_tx_sp true)
-
-#  # description: A file system based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_fx true)
-
-#  # description: A file system based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_fx_sp true)
-
-#  # description: A GUI library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_gx true)
-
-#  # description: LevelX provides NAND and NOR flash wear leveling facilities to embedded applications
-#  set(CONFIG_USE_middleware_azure_rtos_lx true)
-
-#  # description: A network protocol stack based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_nxd true)
-
-#  # description: A network protocol stack based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_nxd_sp true)
-
-#  # description: Azure NetX Duo driver based on i.MXRT series
-#  set(CONFIG_USE_middleware_netxduo_imxrt true)
-
-#  # description: A USB library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_ux true)
-
-#  # description: A USB library based on azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_ux_sp true)
-
-#  # description: A software package that connects to the IoT Hub through Azure RTOS
-#  set(CONFIG_USE_middleware_azure_rtos_azure_iot true)
-
 #set.middleware.edgefast_bluetooth
 #  # description: edgefast_bluetooth configuration template for LE audio
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_le_audio_config_template true)
@@ -1502,6 +1383,12 @@
 
 #  # description: edgefast_bluetooth le_audio.tmap
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_le_audio_tmap true)
+
+#  # description: edgefast_bluetooth le_audio.gmap
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_le_audio_gmap true)
+
+#  # description: edgefast_bluetooth le_audio.pbp
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_le_audio_pbp true)
 
 #  # description: edgefast_bluetooth PAL configuration template
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_config_template true)
@@ -1667,6 +1554,155 @@
 
 #  # description: BLE libraries for bt_ble Host stack
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_ble_ethermind_lib_lc3_cm7f true)
+
+#set.middleware.eiq
+#  # description: Flatbuffers library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_flatbuffers true)
+
+#  # description: Gemmlowp library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_gemmlowp true)
+
+#  # description: Ruy library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_ruy true)
+
+#  # description: General Purpose FFT (Fast Fourier/Cosine/Sine Transform) Package
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_fft2d true)
+
+#  # description: A mixed-radix Fast Fourier Transform library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_kissfft true)
+
+#  # description: Utilities for Glow NN compiler.
+#  set(CONFIG_USE_middleware_eiq_glow true)
+
+#  # description: CMSIS-NN library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_cmsis_nn true)
+
+#  # description: TensorFlow Lite Micro library with reference kernel implementations
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_reference true)
+
+#  # description: TensorFlow Lite Micro library with CMSIS-NN kernel implementations
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn true)
+
+#  # description: TensorFlow Lite Micro library binary with core specific kernel implementations
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_binary true)
+
+#  # description: TensorFlow Lite Micro library header files
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_headers true)
+
+#  # description: TensorFlow Lite Micro library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro true)
+
+#  # description: TensorFlow Lite Micro word detection library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_examples_microspeech true)
+
+#  # description: DeepViewRT Runtime library
+#  set(CONFIG_USE_middleware_eiq_deepviewrt_nnlib true)
+
+#  # description: DeepViewRT modelrunner server library
+#  set(CONFIG_USE_middleware_eiq_deepviewrt_modelrunner_server true)
+
+#  # description: DeepViewRT modelrunner server library
+#  set(CONFIG_USE_middleware_eiq_deepviewrt_modelrunner_server_flash true)
+
+#  # description: DeepViewRT modelrunner server library
+#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_flatcc true)
+
+#  # description: DeepViewRT modelrunner server library
+#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_json true)
+
+#  # description: DeepViewRT modelrunner server library
+#  set(CONFIG_USE_middleware_eiq_deepviewrt_deps_stb true)
+
+#set.middleware.azure_rtos
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx_template true)
+
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr_template true)
+
+#  # description: Real Time Operating System Kernel
+#  set(CONFIG_USE_middleware_azure_rtos_tx_lib true)
+
+#  # description: Real Time Operating System Kernel
+#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr_lib true)
+
+#  # description: Real Time Operating System Kernel
+#  set(CONFIG_USE_middleware_azure_rtos_txm_lib true)
+
+#  # description: A file system based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_fx_template true)
+
+#  # description: A file system based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_fx_lib true)
+
+#  # description: A GUI library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_gx_lib true)
+
+#  # description: A network protocol stack based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_nxd_template true)
+
+#  # description: A network protocol stack based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_nxd_lib true)
+
+#  # description: A USB library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_ux_template true)
+
+#  # description: Azure RTOS USBX Host Controller EHCI
+#  set(CONFIG_USE_middleware_azure_rtos_ux_ehci true)
+
+#  # description: Azure RTOS USBX Host Controller OHCI
+#  set(CONFIG_USE_middleware_azure_rtos_ux_ohci true)
+
+#  # description: Azure RTOS USBX Host Controller IP3516
+#  set(CONFIG_USE_middleware_azure_rtos_ux_ip3516 true)
+
+#  # description: Azure RTOS USBX Device Controller IP3511
+#  set(CONFIG_USE_middleware_azure_rtos_ux_ip3511 true)
+
+#  # description: Azure RTOS USBX Device Controller for i.MX RT
+#  set(CONFIG_USE_middleware_azure_rtos_ux_dci true)
+
+#  # description: A USB library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_ux_lib true)
+
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx true)
+
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx_mgr true)
+
+#  # description: Azure RTOS Core
+#  set(CONFIG_USE_middleware_azure_rtos_tx_sp true)
+
+#  # description: A file system based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_fx true)
+
+#  # description: A file system based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_fx_sp true)
+
+#  # description: A GUI library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_gx true)
+
+#  # description: LevelX provides NAND and NOR flash wear leveling facilities to embedded applications
+#  set(CONFIG_USE_middleware_azure_rtos_lx true)
+
+#  # description: A network protocol stack based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_nxd true)
+
+#  # description: A network protocol stack based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_nxd_sp true)
+
+#  # description: Azure NetX Duo driver based on i.MXRT series
+#  set(CONFIG_USE_middleware_netxduo_imxrt true)
+
+#  # description: A USB library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_ux true)
+
+#  # description: A USB library based on azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_ux_sp true)
+
+#  # description: A software package that connects to the IoT Hub through Azure RTOS
+#  set(CONFIG_USE_middleware_azure_rtos_azure_iot true)
 
 #set.middleware.wireless.wpa_supplicant
 #  # description: Wpa supplicant rtos

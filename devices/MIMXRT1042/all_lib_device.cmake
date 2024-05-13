@@ -969,6 +969,12 @@
 #  # description: edgefast_bluetooth le_audio.tmap
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_le_audio_tmap true)
 
+#  # description: edgefast_bluetooth le_audio.gmap
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_le_audio_gmap true)
+
+#  # description: edgefast_bluetooth le_audio.pbp
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_le_audio_pbp true)
+
 #  # description: edgefast_bluetooth PAL configuration template
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_config_template true)
 
@@ -1150,9 +1156,6 @@
 #  # description: A mixed-radix Fast Fourier Transform library
 #  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_kissfft true)
 
-#  # description: Xtensa HiFi4 NN library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_xa_nnlib_hifi4 true)
-
 #  # description: Utilities for Glow NN compiler.
 #  set(CONFIG_USE_middleware_eiq_glow true)
 
@@ -1167,9 +1170,6 @@
 
 #  # description: TensorFlow Lite Micro library binary with core specific kernel implementations
 #  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_binary true)
-
-#  # description: TensorFlow Lite Micro library with CMSIS-NN and Ethos-U kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn_ethosu true)
 
 #  # description: TensorFlow Lite Micro library header files
 #  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_headers true)

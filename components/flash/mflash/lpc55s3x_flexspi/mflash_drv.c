@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2020, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -60,7 +60,7 @@ int32_t mflash_drv_page_program(uint32_t page_addr, uint32_t *data)
 /* API - Read data */
 int32_t mflash_drv_read(uint32_t addr, uint32_t *buffer, uint32_t len)
 {
-    memcpy(buffer, (void *)addr, len);
+    (void)memcpy(buffer, (void *)addr, len);
 
     return kStatus_Success;
 }
