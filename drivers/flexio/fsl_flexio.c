@@ -114,13 +114,19 @@ void FLEXIO_Init(FLEXIO_Type *base, const flexio_config_t *userConfig)
     FLEXIO_Reset(base);
 
     ctrlReg = base->CTRL;
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     ctrlReg &= ~(FLEXIO_CTRL_DOZEN_MASK | FLEXIO_CTRL_DBGE_MASK | FLEXIO_CTRL_FASTACC_MASK | FLEXIO_CTRL_FLEXEN_MASK);
+#else
+    ctrlReg &= ~(FLEXIO_CTRL_DBGE_MASK | FLEXIO_CTRL_FASTACC_MASK | FLEXIO_CTRL_FLEXEN_MASK);
+#endif
     ctrlReg |= (FLEXIO_CTRL_DBGE(userConfig->enableInDebug) | FLEXIO_CTRL_FASTACC(userConfig->enableFastAccess) |
                 FLEXIO_CTRL_FLEXEN(userConfig->enableFlexio));
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     if (!userConfig->enableInDoze)
     {
         ctrlReg |= FLEXIO_CTRL_DOZEN_MASK;
     }
+#endif
 
     base->CTRL = ctrlReg;
 }
@@ -160,7 +166,9 @@ void FLEXIO_GetDefaultConfig(flexio_config_t *userConfig)
     (void)memset(userConfig, 0, sizeof(*userConfig));
 
     userConfig->enableFlexio     = true;
+#if !(defined(FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT) && (FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT == 0))
     userConfig->enableInDoze     = false;
+#endif
     userConfig->enableInDebug    = true;
     userConfig->enableFastAccess = false;
 }
