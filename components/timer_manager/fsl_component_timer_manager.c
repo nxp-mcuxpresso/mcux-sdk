@@ -107,11 +107,11 @@ typedef struct _timer_handle_struct_t
 /*! @brief State structure for timer manager. */
 typedef struct _timermanager_state
 {
-    uint32_t mUsInTimerInterval;         /*!< Timer intervl in microseconds */
-    uint32_t mUsActiveInTimerInterval;   /*!< Timer active intervl in microseconds */
-    uint32_t previousTimeInUs;           /*!< Previous timer count in microseconds */
-    timer_handle_struct_t *timerHead;    /*!< Timer list head */
-    TIMER_HANDLE_DEFINE(halTimerHandle); /*!< Timer handle buffer */
+    uint32_t mUsInTimerInterval;                  /*!< Timer intervl in microseconds */
+    uint32_t mUsActiveInTimerInterval;            /*!< Timer active intervl in microseconds */
+    uint32_t previousTimeInUs;                    /*!< Previous timer count in microseconds */
+    timer_handle_struct_t *timerHead;             /*!< Timer list head */
+    TIMER_HANDLE_DEFINE(halTimerHandle);          /*!< Timer handle buffer */
 #if (defined(TM_ENABLE_TIME_STAMP) && (TM_ENABLE_TIME_STAMP > 0U))
     TIME_STAMP_HANDLE_DEFINE(halTimeStampHandle); /*!< Time stamp handle buffer */
 #endif
@@ -314,9 +314,12 @@ TIMER_MANAGER_STATIC void TimersUpdate(bool updateRemainingUs, bool updateOnlyPo
 
 /*! -------------------------------------------------------------------------
  * \brief  Internal process of Timer Task
+ * \param[in] isInTaskContext TimerManagerTaskProcess can be called from other contexts than TimerManager task's, in
+ *                            such case, the active timers will be ignored as their callbacks must be called from
+ *                            TimerManager task context.
  * \return
  *---------------------------------------------------------------------------*/
-static void TimerManagerTaskProcess(void)
+static void TimerManagerTaskProcess(bool isInTaskContext)
 {
     uint8_t timerType;
     timer_state_t state;
@@ -342,8 +345,9 @@ static void TimerManagerTaskProcess(void)
 
         if (kTimerStateActive_c == state)
         {
-            /* This timer is active. Decrement it's countdown.. */
-            if (0U >= th->remainingUs)
+            /* Active timers expiration will be processed only in the TimerManager task context
+             * this is to ensure the timers callbacks are called only in the task context */
+            if ((0U >= th->remainingUs) && (isInTaskContext == true))
             {
                 /* If this is an interval timer, restart it. Otherwise, mark it as inactive. */
                 if (0U != (timerType & (uint32_t)(kTimerModeSingleShot)))
@@ -447,7 +451,7 @@ static void TimersUpdateSyncTask(uint32_t remainingUs)
 static void TimersUpdateDirectSync(uint32_t remainingUs)
 {
     TimersCheckAndUpdate(remainingUs);
-    TimerManagerTaskProcess();
+    TimerManagerTaskProcess(false);
 }
 
 /*! -------------------------------------------------------------------------
@@ -491,7 +495,7 @@ void TimerManagerTask(void *param)
         {
 #endif
 #endif
-        TimerManagerTaskProcess();
+        TimerManagerTaskProcess(true);
 
 #if defined(OSA_USED)
 #if (defined(TM_COMMON_TASK_ENABLE) && (TM_COMMON_TASK_ENABLE > 0U))
@@ -648,12 +652,18 @@ void TM_Deinit(void)
  */
 void TM_ExitLowpower(void)
 {
+    uint32_t remainingUs;
+
 #if (defined(TM_ENABLE_LOW_POWER_TIMER) && (TM_ENABLE_LOW_POWER_TIMER > 0U))
     HAL_TimerExitLowpower((hal_timer_handle_t)s_timermanager.halTimerHandle);
 #endif
 #if (defined(TM_ENABLE_TIME_STAMP) && (TM_ENABLE_TIME_STAMP > 0U))
     HAL_TimeStampExitLowpower(s_timermanager.halTimerHandle);
 #endif
+
+    remainingUs = HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
+    TimersUpdateSyncTask(remainingUs);
+    s_timermanager.previousTimeInUs = remainingUs;
 }
 
 /*!
@@ -662,6 +672,15 @@ void TM_ExitLowpower(void)
  */
 void TM_EnterLowpower(void)
 {
+    uint32_t remainingUs;
+
+    /* Sync directly the timer manager ressources while bypassing the task
+     * This allows to update the timer manager ressources (timebase, timers, ...) under masked interrupts
+     * and make sure all timers are processed correctly */
+    remainingUs = HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
+    TimersUpdateDirectSync(remainingUs);
+    s_timermanager.previousTimeInUs = remainingUs;
+
 #if (defined(TM_ENABLE_LOW_POWER_TIMER) && (TM_ENABLE_LOW_POWER_TIMER > 0U))
     HAL_TimerEnterLowpower((hal_timer_handle_t)s_timermanager.halTimerHandle);
 #endif
@@ -758,10 +777,24 @@ uint64_t TM_GetTimestamp(void)
 timer_status_t TM_Open(timer_handle_t timerHandle)
 {
     timer_handle_struct_t *timerState = timerHandle;
+    timer_handle_struct_t *th;
     assert(sizeof(timer_handle_struct_t) == TIMER_HANDLE_SIZE);
     assert(timerHandle);
     TIMER_ENTER_CRITICAL();
+    th = s_timermanager.timerHead;
+    while (th != NULL)
+    {
+        /* Determine if timer element is already in list */
+        if (th == timerState)
+        {
+            assert(0);
+            TIMER_EXIT_CRITICAL();
+            return kStatus_TimerSuccess;
+        }
+        th = th->next;
+    }
     TimerSetTimerStatus(timerState, (uint8_t)kTimerStateInactive_c);
+
     if (NULL == s_timermanager.timerHead)
     {
         timerState->next         = NULL;

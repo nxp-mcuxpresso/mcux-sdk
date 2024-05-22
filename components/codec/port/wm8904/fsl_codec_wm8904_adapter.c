@@ -28,38 +28,31 @@
         kCODEC_SupportRecordChannelRight1 | kCODEC_SupportRecordChannelRight2 | kCODEC_SupportRecordChannelRight3
 
 /*! @brief wm8904 map protocol */
-#define HAL_WM8904_MAP_PROTOCOL(protocol)                      \
-    ((protocol) == kCODEC_BusI2S ?                             \
-         kWM8904_ProtocolI2S :                                 \
-         (protocol) == kCODEC_BusLeftJustified ?               \
-         kWM8904_ProtocolLeftJustified :                       \
-         (protocol) == kCODEC_BusRightJustified ?              \
-         kWM8904_ProtocolRightJustified :                      \
-         (protocol) == kCODEC_BusPCMA ? kWM8904_ProtocolPCMA : \
-                                        (protocol) == kCODEC_BusPCMB ? kWM8904_ProtocolPCMB : kWM8904_ProtocolI2S)
+#define HAL_WM8904_MAP_PROTOCOL(protocol)                                      \
+    ((protocol) == kCODEC_BusI2S            ? kWM8904_ProtocolI2S :            \
+     (protocol) == kCODEC_BusLeftJustified  ? kWM8904_ProtocolLeftJustified :  \
+     (protocol) == kCODEC_BusRightJustified ? kWM8904_ProtocolRightJustified : \
+     (protocol) == kCODEC_BusPCMA           ? kWM8904_ProtocolPCMA :           \
+     (protocol) == kCODEC_BusPCMB           ? kWM8904_ProtocolPCMB :           \
+                                              kWM8904_ProtocolI2S)
 
 /*! @brief wm8904 map module */
-#define HAL_WM8904_MAP_MODULE(module)                                        \
-    ((module) == kCODEC_ModuleADC ?                                          \
-         kWM8904_ModuleADC :                                                 \
-         (module) == kCODEC_ModuleDAC ?                                      \
-         kWM8904_ModuleDAC :                                                 \
-         (module) == kCODEC_ModulePGA ? kWM8904_ModulePGA :                  \
-                                        (module) == kCODEC_ModuleHeadphone ? \
-                                        kWM8904_ModuleHeadphone :            \
-                                        (module) == kCODEC_ModuleLineout ? kWM8904_ModuleLineout : kWM8904_ModuleADC)
+#define HAL_WM8904_MAP_MODULE(module)                               \
+    ((module) == kCODEC_ModuleADC       ? kWM8904_ModuleADC :       \
+     (module) == kCODEC_ModuleDAC       ? kWM8904_ModuleDAC :       \
+     (module) == kCODEC_ModulePGA       ? kWM8904_ModulePGA :       \
+     (module) == kCODEC_ModuleHeadphone ? kWM8904_ModuleHeadphone : \
+     (module) == kCODEC_ModuleLineout   ? kWM8904_ModuleLineout :   \
+                                          kWM8904_ModuleADC)
 
 /*! @brief wm8904 map protocol */
-#define HAL_WM8904_MAP_SAMPLERATE(sampleRATE)          \
-    ((sampleRATE) == kCODEC_AudioSampleRate8KHz ?      \
-         kWM8904_SampleRate8kHz :                      \
-         (sampleRATE) == kCODEC_AudioSampleRate12KHz ? \
-         kWM8904_SampleRate12kHz :                     \
-         (sampleRATE) == kCODEC_AudioSampleRate16KHz ? \
-         kWM8904_SampleRate16kHz :                     \
-         (sampleRATE) == kCODEC_AudioSampleRate24KHz ? \
-         kWM8904_SampleRate24kHz :                     \
-         (sampleRATE) == kCODEC_AudioSampleRate32KHz ? kWM8904_SampleRate32kHz : kWM8904_SampleRate48kHz)
+#define HAL_WM8904_MAP_SAMPLERATE(sampleRATE)                                \
+    ((sampleRATE) == kCODEC_AudioSampleRate8KHz  ? kWM8904_SampleRate8kHz :  \
+     (sampleRATE) == kCODEC_AudioSampleRate12KHz ? kWM8904_SampleRate12kHz : \
+     (sampleRATE) == kCODEC_AudioSampleRate16KHz ? kWM8904_SampleRate16kHz : \
+     (sampleRATE) == kCODEC_AudioSampleRate24KHz ? kWM8904_SampleRate24kHz : \
+     (sampleRATE) == kCODEC_AudioSampleRate32KHz ? kWM8904_SampleRate32kHz : \
+                                                   kWM8904_SampleRate48kHz)
 
 /*******************************************************************************
  * Prototypes
@@ -156,7 +149,7 @@ status_t HAL_CODEC_WM8904_SetVolume(void *handle, uint32_t playChannel, uint32_t
     {
         mappedVolume = (volume * (WM8904_DAC_MAX_VOLUME - 0U)) / 100U;
         ret          = WM8904_SetDACVolume((wm8904_handle_t *)((uint32_t)(((codec_handle_t *)handle)->codecDevHandle)),
-                                  (uint8_t)mappedVolume);
+                                           (uint8_t)mappedVolume);
         if (ret != kStatus_Success)
         {
             return ret;

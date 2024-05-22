@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
- * All rights reserved.
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -25,8 +24,14 @@ static const IRQn_Type s_pintIRQ[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS +
 /*! @brief Callback function array for SECPINT(s). */
 static pint_cb_t s_secpintCallback[FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS];
 #else
+
+#if defined(FSL_FEATURE_PINT_INTERRUPT_COMBINE) && (FSL_FEATURE_PINT_INTERRUPT_COMBINE == 1)
+/*! @brief Irq number array */
+static const IRQn_Type s_pintIRQ[1] = PINT_IRQS;
+#else
 /*! @brief Irq number array */
 static const IRQn_Type s_pintIRQ[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS] = PINT_IRQS;
+#endif /* FSL_FEATURE_PINT_INTERRUPT_COMBINE */
 #endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
 
 /*! @brief Callback function array for PINT(s). */
@@ -561,7 +566,7 @@ void PINT_EnableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
 
 #if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
     /* Get the right security pint irq index in array */
-    if (base == SECPINT)
+    if ((base == SECPINT) && ((uint32_t)pintIdx < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS))
     {
         pintIdx =
             (pint_pin_int_t)(uint32_t)((uint32_t)pintIdx + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS);

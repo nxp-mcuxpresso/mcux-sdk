@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_PORT_H_
-#define _FSL_PORT_H_
+#ifndef FSL_PORT_H_
+#define FSL_PORT_H_
 
 #include "fsl_common.h"
 
@@ -676,4 +676,4 @@ static inline void PORT_ClearAllHighEFTDetectors(PORT_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_PORT_H_ */
+#endif /* FSL_PORT_H_ */

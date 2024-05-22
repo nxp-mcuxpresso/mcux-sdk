@@ -174,11 +174,11 @@ serial_manager_status_t Serial_PortBleWuWrite(serial_handle_t serialHandle, uint
 serial_manager_status_t Serial_PortBleWuRead(serial_handle_t serialHandle, uint8_t *buffer, uint32_t length);
 serial_manager_status_t Serial_PortBleWuCancelWrite(serial_handle_t serialHandle);
 serial_manager_status_t Serial_PortBleWuInstallTxCallback(serial_handle_t serialHandle,
-                                                            serial_manager_callback_t callback,
-                                                            void *callbackParam);
+                                                          serial_manager_callback_t callback,
+                                                          void *callbackParam);
 serial_manager_status_t Serial_PortBleWuInstallRxCallback(serial_handle_t serialHandle,
-                                                            serial_manager_callback_t callback,
-                                                            void *callbackParam);
+                                                          serial_manager_callback_t callback,
+                                                          void *callbackParam);
 void Serial_PortBleWuIsrFunction(serial_handle_t serialHandle);
 #endif
 

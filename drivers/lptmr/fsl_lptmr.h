@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_LPTMR_H_
-#define _FSL_LPTMR_H_
+#ifndef FSL_LPTMR_H_
+#define FSL_LPTMR_H_
 
 #include "fsl_common.h"
 
@@ -371,4 +371,4 @@ static inline void LPTMR_StopTimer(LPTMR_Type *base)
 
 /*! @}*/
 
-#endif /* _FSL_LPTMR_H_ */
+#endif /* FSL_LPTMR_H_ */

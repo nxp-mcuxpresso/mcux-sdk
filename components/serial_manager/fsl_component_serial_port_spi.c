@@ -406,8 +406,8 @@ serial_manager_status_t Serial_SpiMasterWrite(serial_handle_t serialHandle, uint
 
     serialSpiMasterHandle = (serial_spi_master_state_t *)serialHandle;
 
-    mastetTransfer.txData = buffer;
-    mastetTransfer.rxData = NULL;
+    mastetTransfer.txData   = buffer;
+    mastetTransfer.rxData   = NULL;
     mastetTransfer.dataSize = (size_t)length;
     return (serial_manager_status_t)HAL_SpiMasterTransferBlocking(
         ((hal_spi_master_handle_t)&serialSpiMasterHandle->spiMasterHandleBuffer[0]), &mastetTransfer);
@@ -422,9 +422,9 @@ serial_manager_status_t Serial_SpiMasterRead(serial_handle_t serialHandle, uint8
     assert(buffer);
     assert(length);
 
-    serialSpiMasterHandle = (serial_spi_master_state_t *)serialHandle;
-    masterReceiver.txData = NULL;
-    masterReceiver.rxData = buffer;
+    serialSpiMasterHandle   = (serial_spi_master_state_t *)serialHandle;
+    masterReceiver.txData   = NULL;
+    masterReceiver.rxData   = buffer;
     masterReceiver.dataSize = (size_t)length;
     return (serial_manager_status_t)HAL_SpiMasterTransferBlocking(
         ((hal_spi_master_handle_t)&serialSpiMasterHandle->spiMasterHandleBuffer[0]), &masterReceiver);

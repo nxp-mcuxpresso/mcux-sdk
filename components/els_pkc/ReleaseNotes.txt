@@ -1,0 +1,97 @@
+CLNS SDK (1.7.0) Release Notes
+
+- Release: RW61x_PRC
+- Version: CLNS_SDK_1.7.0
+- Date:    2023-09-15
+- Link to Nexus RepositoryManager: https://nl-nxrm.sw.nxp.com/service/rest/repository/browse/cccs-releases-raw/
+- Link to Bitbucket: tags/sdk_v1.7.0_prc
+- Compiler: ARMCLANG keilmdk 533
+--- Test Target:   
+   - RW610 A0 Sample
+--- CLNS memory consumption: static_library/RW61x/libclns.a
+    TEXT  RO    RW ZI TOTAL_CONSUMPTION
+    83816 24421 0  0  108237
+
+--- New Features 
+   - MISRA C-2012 mandatory and required violations resolved
+   - mcuxClHash component reworked and split into mcuxClHash and (new) mcuxClHashModes components
+   - Fixed build system bug which caused that feature flag NXPCL_FEATURE_ELS_LINK_BASE_ADDRESS was not removed from file ip_platform.h
+   - Prevent compiler optimization in function mcuxClMemory_copy which changed byte access to (unaligned) word access
+   - mcuxClEls_Ecc_Keygen_Sign_Verify_example buffer alignment fixed
+   
+--- Features:
+   - Components included: mcuxClAead, mcuxClAeadModes, mcuxClAes, mcuxClCipher, mcuxClCipherModes, mcuxClCore,
+   mcuxClEcc, mcuxClEls, mcuxClExample, mcuxClHash, mcuxClHashModes, mcuxClKey, mcuxClMac, mcuxClMacModes, mcuxClMath, mcuxClMemory,
+   mcuxClPadding, mcuxClPkc, mcuxClPrng, mcuxClPsaDriver, mcuxClRandom, mcuxClRandomModes, mcuxClRsa, mcuxClSession,
+   mcuxClTrng, mcuxCsslCPreProcessor, mcuxCsslDataIntegrity, mcuxCsslFlowProtection, mcuxCsslMemory, mcuxCsslParamIntegrity, mcuxCsslSecureCounter
+
+--- Known Issues Limitations:
+   - platform_specific_headers.h: 
+      #include "fsl_device_registers.h" 
+      // #include "RW610.h" 
+      // #include "RW610_features.h" 
+      // #include "system_RW610.h"
+   - Cert-C / Coverity static analysis violations to be cleaned up 
+   - When MCUXCLECC_STATUS_RNG_ERROR or MCUXCLRSA_STATUS_RNG_ERROR is returned the security counter is not guaranteed to be balanced properly
+
+- Release: MCXN_PRC
+- Version: CLNS_SDK_1.7.0
+- Date:    2023-09-15
+- Link to Nexus RepositoryManager: https://nl-nxrm.sw.nxp.com/service/rest/repository/browse/cccs-releases-raw/
+- Link to Bitbucket: tags/sdk_v1.7.0_prc
+- Compiler: IAR Compiler v.8.40.1
+--- Test Target:   
+   - MCXN sample
+--- CLNS memory consumption: static_library/mcxn/libclns.a
+    TEXT  RO    RW ZI TOTAL_CONSUMPTION
+    72506 19752 0  0  92258
+
+
+--- New Features: 
+   - Maintenance release
+   - mcuxClHash component reworked and split into mcuxClHash and (new) mcuxClHashModes components
+   - Fixed build system bug which caused that feature flag NXPCL_FEATURE_ELS_LINK_BASE_ADDRESS was not removed from file ip_platform.h
+   - Prevent compiler optimization in function mcuxClMemory_copy which changed byte access to (unaligned) word access
+   - mcuxClEls_Ecc_Keygen_Sign_Verify_example buffer alignment fixed
+   
+--- Features:
+   - Components included: mcuxClAead, mcuxClAeadModes, mcuxClAes, mcuxClCipher, mcuxClCipherModes, mcuxClCore,
+   mcuxClEcc, mcuxClEls, mcuxClExample, mcuxClHash, mcuxClHashModes, mcuxClKey, mcuxClMac, mcuxClMacModes, mcuxClMath, mcuxClMemory,
+   mcuxClOsccaPkc, mcuxClOsccaSm3, mcuxClPadding, mcuxClPkc, mcuxClPrng, mcuxClRandom, mcuxClRandomModes, mcuxClRsa, mcuxClSession,
+   mcuxClTrng, mcuxCsslCPreProcessor, mcuxCsslDataIntegrity, mcuxCsslFlowProtection, mcuxCsslMemory, mcuxCsslParamIntegrity, mcuxCsslSecureCounter
+
+--- Known Issues Limitations: 
+   - par_els_semaphore_master tests failed due to test issues (reading MASTER ID SFR from ELS "secure" BASE in non-secure mode, missing exception/fault handling when exceptions/faults occur in non-secure)
+   - Cert-C / Coverity static analysis violations to be cleaned up 
+   - When MCUXCLECC_STATUS_RNG_ERROR or MCUXCLRSA_STATUS_RNG_ERROR is returned the security counter is not guaranteed to be balanced
+
+- Release: LPC_PRC
+- Version: CLNS_SDK_1.7.0
+- Date:    2023-09-15
+- Link to Nexus RepositoryManager: https://nl-nxrm.sw.nxp.com/service/rest/repository/browse/cccs-releases-raw/
+- Link to Bitbucket: tags/sdk_v1.7.0_prc
+- Compiler: IAR Compiler v.8.40.1
+--- Test Target:   
+   - LPC55S36_sample
+--- CLNS memory consumption: static_library/lpc/libclns.a
+    TEXT  RO    RW ZI TOTAL_CONSUMPTION
+    61878 19136  0 4  81018
+
+ 
+--- New Features: 
+   - Maintenance release
+   - mcuxClHash component reworked and split into mcuxClHash and (new) mcuxClHashModes components
+   - Fixed build system bug which caused that feature flag NXPCL_FEATURE_ELS_LINK_BASE_ADDRESS was not removed from file ip_platform.h
+   - Prevent compiler optimization in function mcuxClMemory_copy which changed byte access to (unaligned) word access
+   - mcuxClEls_Ecc_Keygen_Sign_Verify_example buffer alignment fixed
+   
+--- Features:
+   - Components included: mcuxClAead, mcuxClAeadModes, mcuxClAes, mcuxClCipher, mcuxClCipherModes, mcuxClCore,
+   mcuxClEcc, mcuxClEls, mcuxClExample, mcuxClHash, mcuxClHashModes, mcuxClKey, mcuxClMac, mcuxClMacModes, mcuxClMath, mcuxClMemory,
+   mcuxClPadding, mcuxClPkc, mcuxClPrng, mcuxClRandom, mcuxClRandomModes, mcuxClRsa, mcuxClSession,
+   mcuxCsslCPreProcessor, mcuxCsslDataIntegrity, mcuxCsslFlowProtection, mcuxCsslMemory, mcuxCsslParamIntegrity, mcuxCsslSecureCounter
+
+--- Known Issues Limitations:
+   - Negative tests which try to provoke an uninitialized PRNG error had to be disabled since ELS_ITERATIVE_SEEDING inherently always initalizes the PRNG (sim_random_ncGenerate_negative, par_ecc_pkc_keygen_rng_error, par_ecc_pkc_sign_rng_error)
+   - Cert-C / Coverity static analysis violations to be cleaned up 
+   - When MCUXCLECC_STATUS_RNG_ERROR or MCUXCLRSA_STATUS_RNG_ERROR is returned the security counter is not guaranteed to be balanced

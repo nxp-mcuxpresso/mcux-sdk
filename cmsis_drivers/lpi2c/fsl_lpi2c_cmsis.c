@@ -25,7 +25,7 @@
      (defined(RTE_I2C4) && RTE_I2C4 && defined(LPI2C4)) || (defined(RTE_I2C5) && RTE_I2C5 && defined(LPI2C5)) || \
      (defined(RTE_I2C6) && RTE_I2C6 && defined(LPI2C6)))
 
-#define ARM_LPI2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (2))
+#define ARM_LPI2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (4))
 
 /*
  * ARMCC does not support split the data section automatically, so the driver
@@ -70,11 +70,11 @@ typedef struct _cmsis_lpi2c_interrupt_driver_state
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
 typedef const struct _cmsis_lpi2c_edma_resource
 {
-    DMA_Type *txEdmaBase;              /*!< EDMA peripheral base address for Tx.  */
+    void *txEdmaBase;              /*!< EDMA peripheral base address for Tx.  */
     uint32_t txEdmaChannel;            /*!< EDMA channel for Tx                   */
     uint16_t txDmaRequest; /*!< Tx EDMA request source.               */
 
-    DMA_Type *rxEdmaBase;              /*!< EDMA peripheral base address for Rx.  */
+    void *rxEdmaBase;              /*!< EDMA peripheral base address for Rx.  */
     uint32_t rxEdmaChannel;            /*!< EDMA channel for Rx                   */
     uint16_t rxDmaRequest; /*!< Rx EDMA request source.               */
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
@@ -168,9 +168,9 @@ static int32_t LPI2C_Master_EdmaInitialize(ARM_I2C_SignalEvent_t cb_event, cmsis
 
 #if defined(FSL_FEATURE_EDMA_HAS_CHANNEL_MUX) && FSL_FEATURE_EDMA_HAS_CHANNEL_MUX
         EDMA_SetChannelMux(lpi2c->edmaResource->txEdmaBase, lpi2c->edmaResource->txEdmaChannel,
-                           lpi2c->edmaResource->txDmaRequest);
+                           (int32_t)lpi2c->edmaResource->txDmaRequest);
         EDMA_SetChannelMux(lpi2c->edmaResource->rxEdmaBase, lpi2c->edmaResource->rxEdmaChannel,
-                           lpi2c->edmaResource->rxDmaRequest);
+                           (int32_t)lpi2c->edmaResource->rxDmaRequest);
 #endif
         /* Create master_edma_handle */
         LPI2C_MasterCreateEDMAHandle(lpi2c->resource->base, lpi2c->master_edma_handle, lpi2c->edmaRxHandle,

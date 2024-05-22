@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, 2020 NXP
+ * Copyright 2018, 2020, 2023 NXP
  * All rights reserved.
  *
  *
@@ -36,9 +36,8 @@
  * By Default, Minimal heap size is set to 4 bytes (unlikely enough to have application work correctly)
  */
 #if !defined(MinimalHeapSize_c)
-#define MinimalHeapSize_c        (uint32_t)4
+#define MinimalHeapSize_c (uint32_t)4
 #endif
-
 
 /*!
  * @brief Configures the memory manager light enable.
@@ -204,6 +203,29 @@ typedef enum mem_alloc_test_status
 } mem_alloc_test_status_t;
 #endif
 
+#ifdef MEM_STATISTICS
+#define MML_INTERNAL_STRUCT_SZ (2 * sizeof(uint32_t) + 48)
+#else
+#define MML_INTERNAL_STRUCT_SZ (2 * sizeof(uint32_t))
+#endif
+
+#define AREA_FLAGS_POOL_NOT_SHARED (1u << 0)
+#define AREA_FLAGS_VALID_MASK      (AREA_FLAGS_POOL_NOT_SHARED)
+#define AREA_FLAGS_RFFU            ~(AREA_FLAGS_VALID_MASK)
+
+/**@brief Memory user config. */
+typedef struct _mem_area_cfg_s memAreaCfg_t;
+struct _mem_area_cfg_s
+{
+    memAreaCfg_t *next;     /*< Next registered RAM area descriptor. */
+    void *start_address;    /*< Start address of RAM area. */
+    void *end_address;      /*< Size of registered RAM area. */
+    uint16_t flags;         /*< BIT(0) AREA_FLAGS_POOL_NOT_SHARED means not member of default pool, other bits RFFU */
+    uint16_t reserved;      /*< 16 bit padding */
+    uint32_t low_watermark; /*< lowest level of number of free bytes */
+    uint8_t internal_ctx[MML_INTERNAL_STRUCT_SZ]; /* Placeholder for internal allocator data */
+};
+
 /*****************************************************************************
 ******************************************************************************
 * Public memory declarations
@@ -323,6 +345,66 @@ void *MEM_BufferRealloc(void *buffer, uint32_t new_size);
  */
 uint32_t MEM_GetHeapUpperLimit(void);
 
+#if defined(gMemManagerLight) && (gMemManagerLight > 0)
+/*!
+ * @brief Get the address after the last allocated block in area defined by id.
+ *
+ * @param[in] id       0 means memHeap, other values depend on number of registered areas
+ *
+ * @retval UpperLimit  Return the address after the last allocated block if MemManagerLight is used.
+ * @retval 0           Return 0 in case of the legacy MemManager.
+ */
+uint32_t MEM_GetHeapUpperLimitByAreaId(uint8_t id);
+#endif
+
+/*!
+ * @brief Get the free space low watermark.
+ *
+ * @retval FreeHeapSize  Return the heap space low water mark free if MemManagerLight is used.
+ * @retval 0             Return 0 in case of the legacy MemManager.
+ */
+uint32_t MEM_GetFreeHeapSizeLowWaterMark(void);
+
+/*!
+ * @brief Get the free space low watermark.
+ *
+ * @param area_id       Selected area Id
+ *
+ * @retval             Return the heap space low water mark free if MemManagerLight is used.
+ * @retval 0           Return 0 in case of the legacy MemManager.
+ */
+uint32_t MEM_GetFreeHeapSizeLowWaterMarkByAreaId(uint8_t area_id);
+
+/*!
+ * @brief Reset the free space low watermark.
+ *
+ * @retval FreeHeapSize  Return the heap space low water mark free at the time it was reset
+ *                       if MemManagerLight is used.
+ * @retval 0             Return 0 in case of the legacy MemManager.
+ */
+uint32_t MEM_ResetFreeHeapSizeLowWaterMark(void);
+
+/*!
+ * @brief Reset the free space low watermark.
+ *
+ * @param area_id       Selected area Id
+ *
+ * @retval FreeHeapSize  Return the heap space low water mark free at the time it was reset
+ *                       if MemManagerLight is used.
+ * @retval 0             Return 0 in case of the legacy MemManager.
+ */
+uint32_t MEM_ResetFreeHeapSizeLowWaterMarkByAreaId(uint8_t area_id);
+
+/*!
+ * @brief Get the free space in the heap for a area id.
+ *
+ * @param area_id        area_id whose available size is requested (0 means generic pool)
+ *
+ * @retval FreeHeapSize  Return the free space in the heap if MemManagerLight is used.
+ * @retval 0             Return 0 in case of the legacy MemManager.
+ */
+uint32_t MEM_GetFreeHeapSizeByAreaId(uint8_t area_id);
+
 /*!
  * @brief Get the free space in the heap.
  *
@@ -374,6 +456,35 @@ void MEM_Trace(void);
 #if defined(gMemManagerLight) && (gMemManagerLight == 1)
 void *MEM_CallocAlt(size_t len, size_t val);
 #endif /*gMemManagerLight == 1*/
+
+#if defined(gMemManagerLight) && (gMemManagerLight > 0)
+/*!
+ * @brief Function to register additional areas to allocate memory from.
+ *
+ * @param[in]  area_desc memAreaCfg_t structure defining start address and end address of area.
+ *             This atructure may not be in rodata becasue the next field and internal private
+ *             context are reserved in this structure. If NULL defines the default memHeap area.
+ * @param[out] area_id pointer to return id of area. Required if allocation from specific pool
+ *             is required.
+ * @param[in]  flags BIT(0) means that allocations can be performed in pool only explicitly and
+ *             it is not a member of the default pool (id 0). Invalid for initial registration call.
+ * @return   kStatus_MemSuccess if success,  kStatus_MemInitError otherwise.
+ *
+ */
+mem_status_t MEM_RegisterExtendedArea(memAreaCfg_t *area_desc, uint8_t *area_id, uint16_t flags);
+
+/*!
+ * @brief Function to unregister an extended area
+ *
+ * @param[in]  area_id must be different from 0 (main heap).
+ *
+ * @return   kStatus_MemSuccess if success,
+ *           kStatus_MemFreeError if area_id is 0 or area not found or still has buffers in use.
+ *
+ */
+mem_status_t MEM_UnRegisterExtendedArea(uint8_t area_id);
+
+#endif
 
 #if defined(__cplusplus)
 }

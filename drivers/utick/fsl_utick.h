@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_UTICK_H_
-#define _FSL_UTICK_H_
+#ifndef FSL_UTICK_H_
+#define FSL_UTICK_H_
 
 #include "fsl_common.h"
 /*!
@@ -115,4 +115,4 @@ void UTICK_HandleIRQ(UTICK_Type *base, utick_callback_t cb);
 
 /*! @}*/
 
-#endif /* _FSL_UTICK_H_ */
+#endif /* FSL_UTICK_H_ */

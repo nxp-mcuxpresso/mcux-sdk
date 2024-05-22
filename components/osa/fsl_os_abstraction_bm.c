@@ -82,7 +82,7 @@ typedef struct Semaphore
     uint32_t timeout;    /*!< Timeout to wait in milliseconds                  */
 #endif
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
-    task_handler_t waitingTask; /*!< Handler to the waiting task                      */
+    task_handler_t waitingTask;     /*!< Handler to the waiting task                      */
 #endif
     volatile uint8_t isWaiting;     /*!< Is any task waiting for a timeout on this object */
     volatile uint8_t semCount;      /*!< The count value of the object                    */
@@ -93,8 +93,8 @@ typedef struct Semaphore
 typedef struct Mutex
 {
 #if (defined(FSL_OSA_BM_TIMEOUT_ENABLE) && (FSL_OSA_BM_TIMEOUT_ENABLE > 0U))
-    uint32_t time_start; /*!< The time to start timeout                       */
-    uint32_t timeout;    /*!< Timeout to wait in milliseconds                 */
+    uint32_t time_start;        /*!< The time to start timeout                       */
+    uint32_t timeout;           /*!< Timeout to wait in milliseconds                 */
 #endif
     volatile uint8_t isWaiting; /*!< Is any task waiting for a timeout on this mutex */
     volatile uint8_t isLocked;  /*!< Is the object locked or not                     */
@@ -109,10 +109,10 @@ typedef struct Event
     uint32_t timeout;             /*!< Timeout to wait in milliseconds                  */
     volatile event_flags_t flags; /*!< The flags status                                 */
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
-    task_handler_t waitingTask; /*!< Handler to the waiting task                      */
+    task_handler_t waitingTask;   /*!< Handler to the waiting task                      */
 #endif
-    uint8_t autoClear;          /*!< Auto clear or manual clear                       */
-    volatile uint8_t isWaiting; /*!< Is any task waiting for a timeout on this event  */
+    uint8_t autoClear;            /*!< Auto clear or manual clear                       */
+    volatile uint8_t isWaiting;   /*!< Is any task waiting for a timeout on this event  */
 } event_t;
 
 /*! @brief Type for a message queue */
@@ -125,11 +125,11 @@ typedef struct MsgQueue
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
     task_handler_t waitingTask; /*!< Handler to the waiting task          */
 #endif
-    uint8_t *queueMem; /*!< Points to the queue memory           */
-    uint16_t number;   /*!< The number of messages in the queue  */
-    uint16_t max;      /*!< The max number of queue messages     */
-    uint16_t head;     /*!< Index of the next message to be read */
-    uint16_t tail;     /*!< Index of the next place to write to  */
+    uint8_t *queueMem;          /*!< Points to the queue memory           */
+    uint16_t number;            /*!< The number of messages in the queue  */
+    uint16_t max;               /*!< The max number of queue messages     */
+    uint16_t head;              /*!< Index of the next message to be read */
+    uint16_t tail;              /*!< Index of the next place to write to  */
 } msg_queue_t;
 
 /*! @brief Type for a message queue handler */
@@ -177,7 +177,6 @@ const uint8_t gUseRtos_c = USE_RTOS; /* USE_RTOS = 0 for BareMetal and 1 for OS 
 *************************************************************************************
 ********************************************************************************** */
 static osa_state_t s_osaState;
-
 /*! *********************************************************************************
 *************************************************************************************
 * Public functions
@@ -189,13 +188,13 @@ static osa_state_t s_osaState;
  * Description   : Reserves the requested amount of memory in bytes.
  *
  *END**************************************************************************/
-void *OSA_MemoryAllocate(uint32_t length)
+void *OSA_MemoryAllocate(uint32_t memLength)
 {
-    void *p = (void *)malloc(length);
+    void *p = (void *)malloc(memLength);
 
     if (NULL != p)
     {
-        (void)memset(p, 0, length);
+        (void)memset(p, 0, memLength);
     }
 
     return p;
@@ -259,6 +258,30 @@ void OSA_DisableIRQGlobal(void)
 
     /* update counter*/
     s_osaState.interruptDisableCount++;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : OSA_DisableScheduler
+ * Description   : Disable the scheduling of any task
+ * This function will disable the scheduling of any task
+ *
+ *END**************************************************************************/
+void OSA_DisableScheduler(void)
+{
+    /* No need to do something in baremetal as preemption can not occur */
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : OSA_EnableScheduler
+ * Description   : Enable the scheduling of any task
+ * This function will enable the scheduling of any task
+ *
+ *END**************************************************************************/
+void OSA_EnableScheduler(void)
+{
+    /* No need to do something in baremetal as preemption can not occur */
 }
 
 /*FUNCTION**********************************************************************
@@ -651,9 +674,10 @@ osa_status_t OSA_SemaphoreWait(osa_semaphore_handle_t semaphoreHandle, uint32_t 
     pSemStruct->waitingTask = OSA_TaskGetCurrentHandle();
 #endif
 #endif
+
+    OSA_EnterCritical(&regPrimask);
     if (0U != pSemStruct->semCount)
     {
-        OSA_EnterCritical(&regPrimask);
         pSemStruct->semCount--;
         pSemStruct->isWaiting = 0U;
         OSA_ExitCritical(regPrimask);
@@ -664,6 +688,7 @@ osa_status_t OSA_SemaphoreWait(osa_semaphore_handle_t semaphoreHandle, uint32_t 
         if (0U == millisec)
         {
             /* If timeout is 0 and semaphore is not available, return kStatus_OSA_Timeout. */
+            OSA_ExitCritical(regPrimask);
             return KOSA_StatusTimeout;
         }
 #if (defined(FSL_OSA_BM_TIMEOUT_ENABLE) && (FSL_OSA_BM_TIMEOUT_ENABLE > 0U))
@@ -674,7 +699,6 @@ osa_status_t OSA_SemaphoreWait(osa_semaphore_handle_t semaphoreHandle, uint32_t 
             currentTime = OSA_TimeGetMsec();
             if (pSemStruct->timeout < OSA_TimeDiff(pSemStruct->time_start, currentTime))
             {
-                OSA_EnterCritical(&regPrimask);
                 pSemStruct->isWaiting = 0U;
                 OSA_ExitCritical(regPrimask);
                 return KOSA_StatusTimeout;
@@ -683,9 +707,7 @@ osa_status_t OSA_SemaphoreWait(osa_semaphore_handle_t semaphoreHandle, uint32_t 
         else if (millisec != osaWaitForever_c) /* If don't wait forever, start the timer */
         {
             /* Start the timeout counter */
-            OSA_EnterCritical(&regPrimask);
-            pSemStruct->isWaiting = 1U;
-            OSA_ExitCritical(regPrimask);
+            pSemStruct->isWaiting  = 1U;
             pSemStruct->time_start = OSA_TimeGetMsec();
             pSemStruct->timeout    = millisec;
         }
@@ -698,7 +720,7 @@ osa_status_t OSA_SemaphoreWait(osa_semaphore_handle_t semaphoreHandle, uint32_t 
 #endif
         }
     }
-
+    OSA_ExitCritical(regPrimask);
     return KOSA_StatusIdle;
 }
 /*FUNCTION**********************************************************************
@@ -718,7 +740,7 @@ osa_status_t OSA_SemaphorePost(osa_semaphore_handle_t semaphoreHandle)
 
     /* check whether max value is reached */
     if (((KOSA_CountingSemaphore == pSemStruct->semaphoreType) &&
-         (0xFFU == pSemStruct->semCount)) || /* For counting semaphore: the max value is 0xFF */
+         (0xFFU == pSemStruct->semCount)) ||                   /* For counting semaphore: the max value is 0xFF */
         ((0x01U == pSemStruct->semCount) &&
          (KOSA_BinarySemaphore == pSemStruct->semaphoreType))) /* For binary semaphore: the max value is 0x01   */
     {
@@ -1037,6 +1059,9 @@ osa_status_t OSA_EventWait(osa_event_handle_t eventHandle,
         if (1U == pEventStruct->autoClear)
         {
             pEventStruct->flags &= ~flagsToWait;
+#if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
+            pEventStruct->waitingTask->haveToRun = 0U;
+#endif
         }
         retVal = KOSA_StatusSuccess;
     }
@@ -1474,3 +1499,11 @@ void SysTick_Handler(void)
     s_osaState.tickCounter++;
 }
 #endif
+
+void OSA_UpdateSysTickCounter(uint32_t corr)
+{
+#if (FSL_OSA_BM_TIMER_CONFIG != FSL_OSA_BM_TIMER_NONE)
+    s_osaState.tickCounter += corr;
+#else
+#endif
+}

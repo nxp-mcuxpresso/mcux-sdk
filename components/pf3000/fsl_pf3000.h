@@ -112,22 +112,22 @@ typedef enum _pf3000_module
 /*! @brief PF3000 Interrupt Source definition. */
 enum _pf3000_interrupt_source
 {
-    kPF3000_IntSrcPwrOn      = 0x1U,  /* Power on. */
-    kPF3000_IntSrcLowVoltage = 0x2U,  /* Low-voltage. */
-    kPF3000_IntSrcTherm110   = 0x4U,  /* Die temperature crosses 110C interrupt source. */
-    kPF3000_IntSrcTherm120   = 0x8U,  /* Die temperature crosses 120C interrupt source. */
-    kPF3000_IntSrcTherm125   = 0x10U, /* Die temperature crosses 125C interrupt source. */
-    kPF3000_IntSrcTherm130   = 0x20U, /* Die temperature crosses 130C interrupt source. */
+    kPF3000_IntSrcPwrOn      = 0x1U,                 /* Power on. */
+    kPF3000_IntSrcLowVoltage = 0x2U,                 /* Low-voltage. */
+    kPF3000_IntSrcTherm110   = 0x4U,                 /* Die temperature crosses 110C interrupt source. */
+    kPF3000_IntSrcTherm120   = 0x8U,                 /* Die temperature crosses 120C interrupt source. */
+    kPF3000_IntSrcTherm125   = 0x10U,                /* Die temperature crosses 125C interrupt source. */
+    kPF3000_IntSrcTherm130   = 0x20U,                /* Die temperature crosses 130C interrupt source. */
 
-    kPF3000_IntSrcSw1aCurrentLimit = 0x1U << 8U,  /* Switch1A current limit interrupt source. */
-    kPF3000_IntSrcSw1bCurrentLimit = 0x2U << 8U,  /* Switch1B current limit interrupt source. */
-    kPF3000_IntSrcSw2CurrentLimit  = 0x8U << 8U,  /* Switch2  current limit interrupt source. */
-    kPF3000_IntSrcSw3CurrentLimit  = 0x10U << 8U, /* Switch3  current limit interrupt source. */
+    kPF3000_IntSrcSw1aCurrentLimit = 0x1U << 8U,     /* Switch1A current limit interrupt source. */
+    kPF3000_IntSrcSw1bCurrentLimit = 0x2U << 8U,     /* Switch1B current limit interrupt source. */
+    kPF3000_IntSrcSw2CurrentLimit  = 0x8U << 8U,     /* Switch2  current limit interrupt source. */
+    kPF3000_IntSrcSw3CurrentLimit  = 0x10U << 8U,    /* Switch3  current limit interrupt source. */
 
-    kPF3000_IntSrcSwBstCurrentLimit = 0x1U << 16U,  /* Switch Boost  current limit interrupt source. */
-    kPF3000_IntSrcVpwrVoltageLimit  = 0x4U << 16U,  /* VPWR overvoltage interrupt source. */
-    kPF3000_IntSrcOtpAutoFuseDone   = 0x40U << 16U, /* OTP auto fuse blow interrupt source. */
-    kPF3000_IntSrcOtpError          = 0x80U << 16U, /* OTP error interrupt source. */
+    kPF3000_IntSrcSwBstCurrentLimit = 0x1U << 16U,   /* Switch Boost  current limit interrupt source. */
+    kPF3000_IntSrcVpwrVoltageLimit  = 0x4U << 16U,   /* VPWR overvoltage interrupt source. */
+    kPF3000_IntSrcOtpAutoFuseDone   = 0x40U << 16U,  /* OTP auto fuse blow interrupt source. */
+    kPF3000_IntSrcOtpError          = 0x80U << 16U,  /* OTP error interrupt source. */
 
     kPF3000_IntSrcLdo1CurrentLimit   = 0x1U << 24U,  /* LDO1 current limit interrupt source. */
     kPF3000_IntSrcLdo2CurrentLimit   = 0x2U << 24U,  /* LDO2 current limit interrupt source. */

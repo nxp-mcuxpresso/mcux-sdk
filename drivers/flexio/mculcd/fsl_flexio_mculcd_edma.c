@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019,2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -460,8 +460,12 @@ status_t FLEXIO_MCULCD_TransferEDMA(FLEXIO_MCULCD_Type *base,
         /* Setup DMA to transfer data.  */
         /* Assert the nCS. */
         FLEXIO_MCULCD_StartTransfer(base);
-        /* Send the command. */
-        FLEXIO_MCULCD_WriteCommandBlocking(base, xfer->command);
+
+        if (!xfer->dataOnly)
+        {
+            /* Send the command. */
+            FLEXIO_MCULCD_WriteCommandBlocking(base, xfer->command);
+        }
 
         /* Setup the DMA configuration. */
         FLEXIO_MCULCD_EDMAConfig(base, handle);

@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_CTIMER_H_
-#define _FSL_CTIMER_H_
+#ifndef FSL_CTIMER_H_
+#define FSL_CTIMER_H_
 
 #include "fsl_common.h"
 
@@ -679,4 +679,4 @@ static inline void CTIMER_SetShadowValue(CTIMER_Type *base, ctimer_match_t match
 
 /*! @}*/
 
-#endif /* _FSL_CTIMER_H_ */
+#endif /* FSL_CTIMER_H_ */

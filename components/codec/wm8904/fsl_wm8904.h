@@ -268,13 +268,13 @@ typedef struct _wm8904_config
     wm8904_audio_format_t format;         /*!< Audio format */
     uint32_t mclk_HZ;                     /*!< MCLK frequency value */
 
-    uint16_t recordSource;       /*!< record source */
-    uint16_t recordChannelLeft;  /*!< record channel */
-    uint16_t recordChannelRight; /*!< record channel */
-    uint16_t playSource;         /*!< play source */
+    uint16_t recordSource;                /*!< record source */
+    uint16_t recordChannelLeft;           /*!< record channel */
+    uint16_t recordChannelRight;          /*!< record channel */
+    uint16_t playSource;                  /*!< play source */
 
-    uint8_t slaveAddress;         /*!< code device slave address */
-    codec_i2c_config_t i2cConfig; /*!< i2c bus configuration */
+    uint8_t slaveAddress;                 /*!< code device slave address */
+    codec_i2c_config_t i2cConfig;         /*!< i2c bus configuration */
 } wm8904_config_t;
 
 /*! @brief wm8904 codec handler

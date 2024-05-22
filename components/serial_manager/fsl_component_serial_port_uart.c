@@ -146,7 +146,8 @@ static void Serial_UartCallback(hal_uart_handle_t handle, hal_uart_status_t stat
         {
             serialMsg.buffer = &serialUartHandle->rx.readBuffer[0];
             serialMsg.length = sizeof(serialUartHandle->rx.readBuffer);
-            serialUartHandle->rx.callback(serialUartHandle->rx.callbackParam, &serialMsg, kStatus_SerialManager_Success);
+            serialUartHandle->rx.callback(serialUartHandle->rx.callbackParam, &serialMsg,
+                                          kStatus_SerialManager_Success);
         }
     }
     else if ((hal_uart_status_t)kStatus_HAL_UartTxIdle == status)
@@ -158,7 +159,8 @@ static void Serial_UartCallback(hal_uart_handle_t handle, hal_uart_status_t stat
             {
                 serialMsg.buffer = serialUartHandle->tx.buffer;
                 serialMsg.length = serialUartHandle->tx.length;
-                serialUartHandle->tx.callback(serialUartHandle->tx.callbackParam, &serialMsg, kStatus_SerialManager_Success);
+                serialUartHandle->tx.callback(serialUartHandle->tx.callbackParam, &serialMsg,
+                                              kStatus_SerialManager_Success);
             }
         }
     }
@@ -340,7 +342,8 @@ serial_manager_status_t Serial_UartCancelWrite(serial_handle_t serialHandle)
         {
             serialMsg.buffer = serialUartHandle->tx.buffer;
             serialMsg.length = serialUartHandle->tx.length;
-            serialUartHandle->tx.callback(serialUartHandle->tx.callbackParam, &serialMsg, kStatus_SerialManager_Canceled);
+            serialUartHandle->tx.callback(serialUartHandle->tx.callbackParam, &serialMsg,
+                                          kStatus_SerialManager_Canceled);
         }
     }
     return kStatus_SerialManager_Success;
@@ -627,7 +630,8 @@ serial_manager_status_t Serial_UartDmaCancelWrite(serial_handle_t serialHandle)
         {
             serialMsg.buffer = serialUartHandle->tx.buffer;
             serialMsg.length = serialUartHandle->tx.length;
-            serialUartHandle->tx.callback(serialUartHandle->tx.callbackParam, &serialMsg, kStatus_SerialManager_Canceled);
+            serialUartHandle->tx.callback(serialUartHandle->tx.callbackParam, &serialMsg,
+                                          kStatus_SerialManager_Canceled);
         }
     }
     return kStatus_SerialManager_Success;

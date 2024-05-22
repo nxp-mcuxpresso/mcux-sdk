@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_WWDT_H_
-#define _FSL_WWDT_H_
+#ifndef FSL_WWDT_H_
+#define FSL_WWDT_H_
 
 #include "fsl_common.h"
 
@@ -273,4 +273,4 @@ void WWDT_Refresh(WWDT_Type *base);
 
 /*! @}*/
 
-#endif /* _FSL_WWDT_H_ */
+#endif /* FSL_WWDT_H_ */

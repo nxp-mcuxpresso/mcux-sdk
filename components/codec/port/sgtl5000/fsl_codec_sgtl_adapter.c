@@ -24,20 +24,15 @@
     kCODEC_SupportPlayChannelLeft0 | kCODEC_SupportPlayChannelRight0 | kCODEC_SupportPlayChannelLeft1 | \
         kCODEC_SupportPlayChannelRight1 | kCODEC_SupportPlayChannelLeft2 | kCODEC_SupportPlayChannelRight2
 /*! @brief sgtl map module */
-#define HAL_SGTL_MAP_MODULE(module)                     \
-    ((module) == (uint32_t)kCODEC_ModuleADC ?           \
-         kSGTL_ModuleADC :                              \
-         (module) == (uint32_t)kCODEC_ModuleDAC ?       \
-         kSGTL_ModuleDAC :                              \
-         (module) == (uint32_t)kCODEC_ModuleHeadphone ? \
-         kSGTL_ModuleHP :                               \
-         (module) == (uint32_t)kCODEC_ModuleI2SIn ?     \
-         kSGTL_ModuleI2SIN :                            \
-         (module) == (uint32_t)kCODEC_ModuleI2SOut ?    \
-         kSGTL_ModuleI2SOUT :                           \
-         (module) == (uint32_t)kCODEC_ModuleLinein ?    \
-         kSGTL_ModuleLineIn :                           \
-         (module) == (uint32_t)kCODEC_ModuleLineout ? kSGTL_ModuleLineOut : kSGTL_ModuleMicin)
+#define HAL_SGTL_MAP_MODULE(module)                                       \
+    ((module) == (uint32_t)kCODEC_ModuleADC       ? kSGTL_ModuleADC :     \
+     (module) == (uint32_t)kCODEC_ModuleDAC       ? kSGTL_ModuleDAC :     \
+     (module) == (uint32_t)kCODEC_ModuleHeadphone ? kSGTL_ModuleHP :      \
+     (module) == (uint32_t)kCODEC_ModuleI2SIn     ? kSGTL_ModuleI2SIN :   \
+     (module) == (uint32_t)kCODEC_ModuleI2SOut    ? kSGTL_ModuleI2SOUT :  \
+     (module) == (uint32_t)kCODEC_ModuleLinein    ? kSGTL_ModuleLineIn :  \
+     (module) == (uint32_t)kCODEC_ModuleLineout   ? kSGTL_ModuleLineOut : \
+                                                    kSGTL_ModuleMicin)
 
 /*******************************************************************************
  * Prototypes

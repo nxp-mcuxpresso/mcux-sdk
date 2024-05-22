@@ -135,35 +135,31 @@ typedef enum _timer_status
     kStatus_TimerOutOfRange = 3, /*!< Out Of Range */
     kStatus_TimerError      = 4, /*!< Fail */
 } timer_status_t;
-
 #endif
 
 /**@brief Timer modes. */
-typedef enum _timer_mode
-{
-    kTimerModeSingleShot     = 0x01U, /**< The timer will expire only once. */
-    kTimerModeIntervalTimer  = 0x02U, /**< The timer will restart each time it expires. */
-    kTimerModeSetMinuteTimer = 0x04U, /**< The timer will one minute timer. */
-    kTimerModeSetSecondTimer = 0x08U, /**< The timer will one second timer. */
-    kTimerModeLowPowerTimer  = 0x10U, /**< The timer will low power mode timer. */
-    kTimerModeSetMicrosTimer = 0x20U, /**< The timer will low power mode timer with microsecond unit. */
-} timer_mode_t;
+#define kTimerModeSingleShot     0x01U /**< The timer will expire only once. */
+#define kTimerModeIntervalTimer  0x02U /**< The timer will restart each time it expires. */
+#define kTimerModeSetMinuteTimer 0x04U /**< The timer will one minute timer. */
+#define kTimerModeSetSecondTimer 0x08U /**< The timer will one second timer. */
+#define kTimerModeLowPowerTimer  0x10U /**< The timer will low power mode timer. */
+#define kTimerModeSetMicrosTimer 0x20U /**< The timer will low power mode timer with microsecond unit. */
 
 /**@brief Timer config. */
 typedef struct _timer_config
 {
-    uint32_t srcClock_Hz; /**< The timer source clock frequency. */
-    uint8_t instance;     /*!< Hardware timer module instance, for example: if you want use FTM0,then the instance
-                               is configured to 0, if you want use FTM2 hardware timer, then configure the instance
-                               to 2, detail information please refer to the SOC corresponding RM. Invalid instance
-                               value will cause initialization failure. */
+    uint32_t srcClock_Hz;   /**< The timer source clock frequency. */
+    uint8_t instance;       /*!< Hardware timer module instance, for example: if you want use FTM0,then the instance
+                                 is configured to 0, if you want use FTM2 hardware timer, then configure the instance
+                                 to 2, detail information please refer to the SOC corresponding RM. Invalid instance
+                                 value will cause initialization failure. */
 
     uint8_t clockSrcSelect; /*!< Select clock source. It is timer clock select, if the lptmr does not
                                  to use the default clock source*/
 
 #if (defined(TM_ENABLE_TIME_STAMP) && (TM_ENABLE_TIME_STAMP > 0U))
-    uint32_t timeStampSrcClock_Hz; /**< The timer stamp source clock frequency. */
-    uint8_t timeStampInstance;     /**< Hardware timer module instance. This instance for time stamp */
+    uint32_t timeStampSrcClock_Hz;   /**< The timer stamp source clock frequency. */
+    uint8_t timeStampInstance;       /**< Hardware timer module instance. This instance for time stamp */
 
     uint8_t timeStampClockSrcSelect; /*!< Select clock source. It is timer clock select, if the lptmr
                                         does not to use the default clock source*/

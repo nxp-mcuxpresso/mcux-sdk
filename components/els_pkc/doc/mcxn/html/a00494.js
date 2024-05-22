@@ -1,0 +1,6 @@
+var a00494 =
+[
+    [ "MCUXCLOSCCAPKC_PKCPACKARGS2", "a00494.html#aba1b2e7258d3f4a2080b728cc7f91eaf", null ],
+    [ "MCUXCLOSCCAPKC_PKC_RAM_BASEADDR", "a00494.html#abf92a6a0dd052e3ae6ca7a9929ebb7a7", null ],
+    [ "MCUXCLOSCCAPKC_WORD_SIZE", "a00494.html#a33bcea3ff2387d7065f0565f17c9038e", null ]
+];
