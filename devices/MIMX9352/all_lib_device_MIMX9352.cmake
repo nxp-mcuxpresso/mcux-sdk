@@ -4,6 +4,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Driver/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpi2c
     ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpuart
+    ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/iuart
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy
@@ -13,12 +14,20 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/srtm
     ${CMAKE_CURRENT_LIST_DIR}/../../components/srtm/port
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/SOEM
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/silicon_id
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/silicon_id/socs/imx93
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cache/xcache
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcan
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lptmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rgpio
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/igpio
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpt
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rdc
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rdc_sema42
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iuart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpi2c
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/mu
