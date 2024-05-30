@@ -7,6 +7,8 @@
 
 #ifndef _FSL_CLOCK_H_
 #define _FSL_CLOCK_H_
+
+#ifndef CONFIG_CLOCK_CONTROL_IMX_SCMI
 #include "hal_clock.h"
 #include "fsl_common.h"
 
@@ -1263,5 +1265,7 @@ extern volatile uint32_t g_clockSourceFreq[kCLOCK_LdbPll + 1];
  * @return Clock frequency value in hertz
  */
 uint32_t CLOCK_GetIpFreq(clock_root_t name);
+
+#endif
 
 #endif
