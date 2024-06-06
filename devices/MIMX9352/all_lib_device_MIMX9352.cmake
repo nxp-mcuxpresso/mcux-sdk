@@ -24,12 +24,12 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lptmr
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rgpio
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/igpio
-    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpt
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rdc
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rdc_sema42
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iuart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpi2c
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pcal6524
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/mu
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pdm
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sai
