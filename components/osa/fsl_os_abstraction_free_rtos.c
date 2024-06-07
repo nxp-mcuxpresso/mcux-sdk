@@ -50,6 +50,11 @@
 #define MSEC_TO_TICK(msec) \
     (((uint32_t)(msec) + 500uL / (uint32_t)configTICK_RATE_HZ) * (uint32_t)configTICK_RATE_HZ / 1000uL)
 #define TICKS_TO_MSEC(tick) ((uint32_t)((uint64_t)(tick)*1000uL / (uint64_t)configTICK_RATE_HZ))
+
+#define OSA_MEM_MAGIC_NUMBER (12345U)
+#define OSA_MEM_SIZE_ALIGN(var, alignbytes) \
+    ((unsigned int)((var) + ((alignbytes)-1U)) & (unsigned int)(~(unsigned int)((alignbytes)-1U)))
+
 /************************************************************************************
 *************************************************************************************
 * Private type definitions
@@ -81,6 +86,13 @@ typedef struct _osa_state
     uint32_t interruptDisableCount;
 } osa_state_t;
 
+/*! @brief Definition structure contains allocated memory information.*/
+typedef struct _osa_mem_align_control_block
+{
+    uint16_t identifier; /*!< Identifier for the memory control block. */
+    uint16_t offset;     /*!< offset from aligned address to real address */
+} osa_mem_align_cb_t;
+
 /*! *********************************************************************************
 *************************************************************************************
 * Private prototypes
@@ -101,6 +113,20 @@ void startup_task(void *argument);
 const uint8_t gUseRtos_c = USE_RTOS; /* USE_RTOS = 0 for BareMetal and 1 for OS */
 
 static osa_state_t s_osaState = {0};
+
+/* Allocate the memory for the heap. */
+#if (defined(FSL_OSA_ALLOCATED_HEAP) && (FSL_OSA_ALLOCATED_HEAP > 0U))
+#if defined(configAPPLICATION_ALLOCATED_HEAP) && (configAPPLICATION_ALLOCATED_HEAP)
+#if defined(DATA_SECTION_IS_CACHEABLE) && (DATA_SECTION_IS_CACHEABLE)
+extern uint8_t ucHeap[configTOTAL_HEAP_SIZE];
+AT_NONCACHEABLE_SECTION_ALIGN(uint8_t ucHeap[configTOTAL_HEAP_SIZE], 4);
+#else
+extern uint8_t ucHeap[configTOTAL_HEAP_SIZE];
+SDK_ALIGN(uint8_t ucHeap[configTOTAL_HEAP_SIZE], 4);
+#endif /* DATA_SECTION_IS_CACHEABLE */
+#endif /* configAPPLICATION_ALLOCATED_HEAP */
+#endif /* FSL_OSA_ALLOCATED_HEAP */
+
 /*! *********************************************************************************
 *************************************************************************************
 * Private memory declarations
@@ -120,6 +146,8 @@ static osa_state_t s_osaState = {0};
  *END**************************************************************************/
 void *OSA_MemoryAllocate(uint32_t memLength)
 {
+#if defined(configSUPPORT_DYNAMIC_ALLOCATION) && (configSUPPORT_DYNAMIC_ALLOCATION > 0)
+
     void *p = (void *)pvPortMalloc(memLength);
 
     if (NULL != p)
@@ -128,6 +156,9 @@ void *OSA_MemoryAllocate(uint32_t memLength)
     }
 
     return p;
+#else
+    return NULL;
+#endif
 }
 
 /*FUNCTION**********************************************************************
@@ -138,7 +169,70 @@ void *OSA_MemoryAllocate(uint32_t memLength)
  *END**************************************************************************/
 void OSA_MemoryFree(void *p)
 {
+#if defined(configSUPPORT_DYNAMIC_ALLOCATION) && (configSUPPORT_DYNAMIC_ALLOCATION > 0)
     vPortFree(p);
+#endif
+}
+
+void *OSA_MemoryAllocateAlign(uint32_t memLength, uint32_t alignbytes)
+{
+    osa_mem_align_cb_t *p_cb = NULL;
+    uint32_t alignedsize;
+
+    /* Check overflow. */
+    alignedsize = (uint32_t)(unsigned int)OSA_MEM_SIZE_ALIGN(memLength, alignbytes);
+    if (alignedsize < memLength)
+    {
+        return NULL;
+    }
+
+    if (alignedsize > 0xFFFFFFFFU - alignbytes - sizeof(osa_mem_align_cb_t))
+    {
+        return NULL;
+    }
+
+    alignedsize += alignbytes + (uint32_t)sizeof(osa_mem_align_cb_t);
+
+    union
+    {
+        void *pointer_value;
+        uintptr_t unsigned_value;
+    } p_align_addr, p_addr;
+
+    p_addr.pointer_value = OSA_MemoryAllocate(alignedsize);
+
+    if (p_addr.pointer_value == NULL)
+    {
+        return NULL;
+    }
+
+    p_align_addr.unsigned_value = OSA_MEM_SIZE_ALIGN(p_addr.unsigned_value + sizeof(osa_mem_align_cb_t), alignbytes);
+
+    p_cb             = (osa_mem_align_cb_t *)(p_align_addr.unsigned_value - 4U);
+    p_cb->identifier = OSA_MEM_MAGIC_NUMBER;
+    p_cb->offset     = (uint16_t)(p_align_addr.unsigned_value - p_addr.unsigned_value);
+
+    return p_align_addr.pointer_value;
+}
+
+void OSA_MemoryFreeAlign(void *p)
+{
+    union
+    {
+        void *pointer_value;
+        uintptr_t unsigned_value;
+    } p_free;
+    p_free.pointer_value = p;
+    osa_mem_align_cb_t *p_cb = (osa_mem_align_cb_t *)(p_free.unsigned_value - 4U);
+
+    if (p_cb->identifier != OSA_MEM_MAGIC_NUMBER)
+    {
+        return;
+    }
+
+    p_free.unsigned_value = p_free.unsigned_value - p_cb->offset;
+
+    OSA_MemoryFree(p_free.pointer_value);
 }
 
 void OSA_EnterCritical(uint32_t *sr)
@@ -292,7 +386,7 @@ osa_status_t OSA_TaskCreate(osa_task_handle_t taskHandle, const osa_task_def_t *
                         (uint32_t)((uint16_t)thread_def->stacksize / sizeof(portSTACK_TYPE)), /* task stack size */
                         (task_param_t)task_param,                      /* optional task startup argument */
                         PRIORITY_OSA_TO_RTOS((thread_def->tpriority)), /* initial priority */
-                        thread_def->tstack,    /*Array to use as the task's stack*/
+                        (StackType_t *) thread_def->tstack,    /*Array to use as the task's stack*/
                         (StaticTask_t *)((uint8_t *)(taskHandle) + sizeof(osa_freertos_task_t))/*Variable to hold the task's data structure*/
                         );
       if(xHandle != NULL)
@@ -1251,3 +1345,33 @@ void OSA_Start(void)
     vTaskStartScheduler();
 }
 #endif
+
+/**
+ * Warning: Needs to be implemented
+ */
+#if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
+osa_status_t OSA_TaskNotifyGet(osa_notify_time_ms_t waitTime_ms)
+{
+    return KOSA_StatusError;
+}
+#endif
+
+/**
+ * Warning: Needs to be implemented
+ */
+#if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
+osa_status_t OSA_TaskNotifyPost(osa_task_handle_t taskHandle)
+{
+    return KOSA_StatusError;
+}
+#endif
+
+/**
+ * Warning: Needs to be implemented
+ */
+osa_semaphore_count_t OSA_SemaphoreGetCount(osa_semaphore_handle_t semaphoreHandle)
+{
+    assert(false);
+
+    return 0;
+}

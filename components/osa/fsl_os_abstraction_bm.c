@@ -44,6 +44,10 @@
 #define OS_ASSERT(condition) (void)(condition);
 #endif
 
+#define OSA_MEM_MAGIC_NUMBER (12345U)
+#define OSA_MEM_SIZE_ALIGN(var, alignbytes) \
+    ((unsigned int)((var) + ((alignbytes)-1U)) & (unsigned int)(~(unsigned int)((alignbytes)-1U)))
+
 /************************************************************************************
 *************************************************************************************
 * Private type definitions
@@ -152,6 +156,13 @@ typedef struct _osa_state
 #endif
 } osa_state_t;
 
+/*! @brief Definition structure contains allocated memory information.*/
+typedef struct _osa_mem_align_control_block
+{
+    uint16_t identifier; /*!< Identifier for the memory control block. */
+    uint16_t offset;     /*!< offset from aligned address to real address */
+} osa_mem_align_cb_t;
+
 /*! *********************************************************************************
 *************************************************************************************
 * Private prototypes
@@ -209,6 +220,67 @@ void *OSA_MemoryAllocate(uint32_t memLength)
 void OSA_MemoryFree(void *p)
 {
     free(p);
+}
+
+void *OSA_MemoryAllocateAlign(uint32_t memLength, uint32_t alignbytes)
+{
+    osa_mem_align_cb_t *p_cb = NULL;
+    uint32_t alignedsize;
+
+    /* Check overflow. */
+    alignedsize = (uint32_t)(unsigned int)OSA_MEM_SIZE_ALIGN(memLength, alignbytes);
+    if (alignedsize < memLength)
+    {
+        return NULL;
+    }
+
+    if (alignedsize > 0xFFFFFFFFU - alignbytes - sizeof(osa_mem_align_cb_t))
+    {
+        return NULL;
+    }
+
+    alignedsize += alignbytes + (uint32_t)sizeof(osa_mem_align_cb_t);
+
+    union
+    {
+        void *pointer_value;
+        uintptr_t unsigned_value;
+    } p_align_addr, p_addr;
+
+    p_addr.pointer_value = OSA_MemoryAllocate(alignedsize);
+
+    if (p_addr.pointer_value == NULL)
+    {
+        return NULL;
+    }
+
+    p_align_addr.unsigned_value = OSA_MEM_SIZE_ALIGN(p_addr.unsigned_value + sizeof(osa_mem_align_cb_t), alignbytes);
+
+    p_cb             = (osa_mem_align_cb_t *)(p_align_addr.unsigned_value - 4U);
+    p_cb->identifier = OSA_MEM_MAGIC_NUMBER;
+    p_cb->offset     = (uint16_t)(p_align_addr.unsigned_value - p_addr.unsigned_value);
+
+    return p_align_addr.pointer_value;
+}
+
+void OSA_MemoryFreeAlign(void *p)
+{
+    union
+    {
+        void *pointer_value;
+        uintptr_t unsigned_value;
+    } p_free;
+    p_free.pointer_value = p;
+    osa_mem_align_cb_t *p_cb = (osa_mem_align_cb_t *)(p_free.unsigned_value - 4U);
+
+    if (p_cb->identifier != OSA_MEM_MAGIC_NUMBER)
+    {
+        return;
+    }
+
+    p_free.unsigned_value = p_free.unsigned_value - p_cb->offset;
+
+    OSA_MemoryFree(p_free.pointer_value);
 }
 
 void OSA_EnterCritical(uint32_t *sr)
@@ -1378,7 +1450,7 @@ void OSA_InstallIntHandler(uint32_t IRQNumber, void (*handler)(void))
 #if (defined(FSL_OSA_MAIN_FUNC_ENABLE) && (FSL_OSA_MAIN_FUNC_ENABLE > 0U))
 static OSA_TASK_DEFINE(main_task, gMainThreadPriority_c, 1, gMainThreadStackSize_c, 0);
 
-void main(void)
+int main(void)
 {
     OSA_Init();
 
@@ -1389,6 +1461,7 @@ void main(void)
     (void)OSA_TaskCreate((osa_task_handle_t)s_osaState.mainTaskHandle, OSA_TASK(main_task), NULL);
 
     OSA_Start();
+    return 0;
 }
 #endif /*(defined(FSL_OSA_MAIN_FUNC_ENABLE) && (FSL_OSA_MAIN_FUNC_ENABLE > 0U))*/
 #endif /* FSL_OSA_TASK_ENABLE */
@@ -1506,4 +1579,34 @@ void OSA_UpdateSysTickCounter(uint32_t corr)
     s_osaState.tickCounter += corr;
 #else
 #endif
+}
+
+/**
+ * Warning: Needs to be implemented
+ */
+#if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
+osa_status_t OSA_TaskNotifyGet(osa_notify_time_ms_t waitTime_ms)
+{
+    return KOSA_StatusError;
+}
+#endif
+
+/**
+ * Warning: Needs to be implemented
+ */
+#if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
+osa_status_t OSA_TaskNotifyPost(osa_task_handle_t taskHandle)
+{
+    return KOSA_StatusError;
+}
+#endif
+
+/**
+ * Warning: Needs to be implemented
+ */
+osa_semaphore_count_t OSA_SemaphoreGetCount(osa_semaphore_handle_t semaphoreHandle)
+{
+    assert(false);
+
+    return 0;
 }
