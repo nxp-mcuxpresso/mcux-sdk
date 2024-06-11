@@ -5,7 +5,9 @@
  */
 
 #include "fsl_netc_endpoint.h"
+#if (defined(FSL_FEATURE_NETC_HAS_ERRATA_051130) && FSL_FEATURE_NETC_HAS_ERRATA_051130)
 #include "fsl_netc_timer.h"
+#endif
 #if defined(FSL_FEATURE_NETC_HAS_ERRATA_051587) && FSL_FEATURE_NETC_HAS_ERRATA_051587
 #include <math.h>
 #endif
@@ -659,6 +661,15 @@ status_t EP_Init(ep_handle_t *handle, uint8_t *macAddr, const ep_config_t *confi
 #else
         result = EP_TxPortTGSEnable(handle, config->port.enableTg);
 #endif
+    }
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
+
+    if (siNum == 0U)
+    {
+        result = NETC_SocPreInitVsi(&handle->hw, config->si);
     }
     return result;
 }

@@ -195,7 +195,9 @@ status_t NETC_PortConfigEthMac(NETC_ETH_LINK_Type *base, const netc_port_ethmac_
     reg = NETC_ETH_LINK_PM0_COMMAND_CONFIG_TX_EN_MASK | NETC_ETH_LINK_PM0_COMMAND_CONFIG_RX_EN_MASK |
           NETC_ETH_LINK_PM0_COMMAND_CONFIG_TS_MODE(config->txTsSelect) |
           NETC_ETH_LINK_PM0_COMMAND_CONFIG_TS_PNT(config->isTsPointPhy) |
+#if defined(NETC_ETH_LINK_PM0_COMMAND_CONFIG_HD_FCEN_MASK)
           NETC_ETH_LINK_PM0_COMMAND_CONFIG_HD_FCEN(config->enableHalfDuplexFlowCtrl) |
+#endif
           NETC_ETH_LINK_PM0_COMMAND_CONFIG_TXP(config->enTxPad);
     base->PM0_COMMAND_CONFIG = reg;
     base->PM1_COMMAND_CONFIG = reg;

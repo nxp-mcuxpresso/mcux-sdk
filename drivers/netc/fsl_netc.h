@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -50,7 +50,7 @@
  */
 
 /*! @brief Driver Version */
-#define FSL_NETC_DRIVER_VERSION (MAKE_VERSION(2, 6, 1))
+#define FSL_NETC_DRIVER_VERSION (MAKE_VERSION(2, 7, 2))
 
 /*! @brief Macro to divides an address into a low 32 bits and a possible high 32 bits */
 #define NETC_ADDR_LOW_32BIT(x)  ((uint32_t)(x)&0xFFFFFFFFU)
@@ -3717,6 +3717,7 @@ typedef struct _netc_bdr_config
 typedef enum _netc_psi_msg_flags_t
 {
     kNETC_PsiRxMsgFromVsi1Flag = 0x2,     /*!< Message receive interrupt enable, initiated by VSI1. */
+    kNETC_PsiRxMsgFromVsi2Flag = 0x4,     /*!< Message receive interrupt enable, initiated by VSI2. */
     kNETC_PsiFLRFromVsi1Flag   = 0x20000, /*!< Function level reset interrupt enable, initiated by VSI1. */
 } netc_psi_msg_flags_t;
 
@@ -3735,6 +3736,7 @@ typedef enum _netc_vsi_msg_flags
 typedef enum _netc_vsi_number
 {
     kNETC_Vsi1 = 0x1 << 1U,
+    kNETC_Vsi2 = 0x1 << 2U,
     /* Reserved for multiple VSIs. */
 } netc_vsi_number_t;
 

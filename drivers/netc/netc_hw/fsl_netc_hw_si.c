@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -229,11 +229,11 @@ void NETC_SIGetDiscardStatistic(ENETC_SI_Type *base, netc_si_discard_statistic_t
 {
     uint8_t rxRingNum =
         (uint8_t)((base->SICAPR0 & ENETC_SI_SICAPR0_NUM_RX_BDR_MASK) >> ENETC_SI_SICAPR0_NUM_RX_BDR_SHIFT);
-    assert(rxRingNum <= 10U);
+    assert(rxRingNum <= ARRAY_SIZE(base->BDR));
 
     statistic->programError = base->SIUPECTR;
     statistic->busError     = base->SIUNSBECTR;
-    for (uint32_t i = 0; i < 14U; i++)
+    for (uint32_t i = 0; i < ARRAY_SIZE(statistic->lackBD); i++)
     {
         if (i < rxRingNum)
         {

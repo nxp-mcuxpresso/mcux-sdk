@@ -243,6 +243,12 @@ typedef void *(*ep_rx_alloc_cb_t)(ep_handle_t *handle, uint8_t ring, uint32_t le
 /*! @brief Defines the EP Rx memory buffer free function pointer. */
 typedef void (*ep_rx_free_cb_t)(ep_handle_t *handle, uint8_t ring, void *address, void *userData);
 
+/*! @brief Callback for getting link status */
+typedef status_t (*ep_get_link_status_cb_t)(ep_handle_t *handle, uint8_t *link);
+
+/*! @brief Callback for getting link speed */
+typedef status_t (*ep_get_link_speed_cb_t)(ep_handle_t *handle, netc_hw_mii_speed_t *speed, netc_hw_mii_duplex_t *duplex);
+
 /*! @brief Configuration for the endpoint handle. */
 typedef struct _ep_config
 {
@@ -316,6 +322,12 @@ struct _ep_handle
     uint8_t unicastHashCount[64];                             /*!< Unicast hash index collisions counter. */
     uint8_t multicastHashCount[64];                           /*!< Multicast hash index collisions counter. */
     uint8_t vlanHashCount[64];                                /*!< VLAN hash index collisions counter. */
+    uint8_t macFilterCount[64];                               /*!< mac address filter index collisions counter. */
+    uint8_t vlanFilterCount[64];                              /*!< vlan address filter index collisions counter. */
+    ep_get_link_status_cb_t getLinkStatus;                    /*!< Callback to get link status */
+    ep_get_link_speed_cb_t getLinkSpeed;                      /*!< Callback to get link speed */
+    uint16_t vsiBitMapNotifyLinkStatus;                       /*!< VSI bit map for link status notify */
+    uint16_t vsiBitMapNotifyLinkSpeed;                        /*!< VSI bit map for link speed notify */
 };
 
 /*! @} */ // end of netc_ep_config

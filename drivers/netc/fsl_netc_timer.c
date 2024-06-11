@@ -163,13 +163,13 @@ void NETC_TimerStartAlarm(netc_timer_handle_t *handle, netc_timer_alarm_index_t 
 {
     if (alarmId == kNETC_TimerAlarm1)
     {
-        handle->hw.base->TMR_ALARM1_L = (uint32_t)nanosecond;
-        handle->hw.base->TMR_ALARM1_H = (uint32_t)(nanosecond >> 32U);
+        handle->hw.base->TMR_ALARMM[0].TMR_ALARM_L = (uint32_t)nanosecond;
+        handle->hw.base->TMR_ALARMM[0].TMR_ALARM_H = (uint32_t)(nanosecond >> 32U);
     }
     else
     {
-        handle->hw.base->TMR_ALARM2_L = (uint32_t)nanosecond;
-        handle->hw.base->TMR_ALARM2_H = (uint32_t)(nanosecond >> 32U);
+        handle->hw.base->TMR_ALARMM[1].TMR_ALARM_L = (uint32_t)nanosecond;
+        handle->hw.base->TMR_ALARMM[1].TMR_ALARM_H = (uint32_t)(nanosecond >> 32U);
     }
 }
 
@@ -177,11 +177,11 @@ void NETC_TimerStopAlarm(netc_timer_handle_t *handle, netc_timer_alarm_index_t a
 {
     if (alarmId == kNETC_TimerAlarm1)
     {
-        handle->hw.base->TMR_ALARM1_L = 0;
+        handle->hw.base->TMR_ALARMM[0].TMR_ALARM_L = 0;
     }
     else
     {
-        handle->hw.base->TMR_ALARM2_L = 0;
+        handle->hw.base->TMR_ALARMM[1].TMR_ALARM_L = 0;
     }
 }
 
@@ -317,13 +317,13 @@ status_t NETC_TimerReadExtPulseCaptureTime(netc_timer_handle_t *handle,
     {
         if (extTrigId == kNETC_TimerExtTrig1)
         {
-            timeLow  = handle->hw.base->TMR_ETTS1_L;
-            timeHigh = handle->hw.base->TMR_ETTS1_H;
+            timeLow  = handle->hw.base->TMR_ETTSN[0].TMR_ETTS_L;
+            timeHigh = handle->hw.base->TMR_ETTSN[0].TMR_ETTS_H;
         }
         else
         {
-            timeLow  = handle->hw.base->TMR_ETTS2_L;
-            timeHigh = handle->hw.base->TMR_ETTS2_H;
+            timeLow  = handle->hw.base->TMR_ETTSN[1].TMR_ETTS_L;
+            timeHigh  = handle->hw.base->TMR_ETTSN[1].TMR_ETTS_H;
         }
         *nanosecond = ((uint64_t)timeHigh << 32U) + timeLow;
         result      = kStatus_Success;
