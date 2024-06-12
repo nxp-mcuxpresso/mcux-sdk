@@ -163,13 +163,29 @@ void NETC_TimerStartAlarm(netc_timer_handle_t *handle, netc_timer_alarm_index_t 
 {
     if (alarmId == kNETC_TimerAlarm1)
     {
+#if defined(ENETC_PF_TMR_TMR_ALARM_L_ALARM_L_MASK) && ENETC_PF_TMR_TMR_ALARM_L_ALARM_L_MASK
         handle->hw.base->TMR_ALARMM[0].TMR_ALARM_L = (uint32_t)nanosecond;
+#else
+        handle->hw.base->TMR_ALARM1_L = (uint32_t)nanosecond;
+#endif
+#if defined(ENETC_PF_TMR_TMR_ALARM_H_ALARM_H_MASK) && ENETC_PF_TMR_TMR_ALARM_H_ALARM_H_MASK
         handle->hw.base->TMR_ALARMM[0].TMR_ALARM_H = (uint32_t)(nanosecond >> 32U);
+#else
+        handle->hw.base->TMR_ALARM1_H = (uint32_t)(nanosecond >> 32U);
+#endif
     }
     else
     {
+#if defined(ENETC_PF_TMR_TMR_ALARM_L_ALARM_L_MASK) && ENETC_PF_TMR_TMR_ALARM_L_ALARM_L_MASK
         handle->hw.base->TMR_ALARMM[1].TMR_ALARM_L = (uint32_t)nanosecond;
+#else
+        handle->hw.base->TMR_ALARM2_L = (uint32_t)nanosecond;
+#endif
+#if defined(ENETC_PF_TMR_TMR_ALARM_H_ALARM_H_MASK) && ENETC_PF_TMR_TMR_ALARM_H_ALARM_H_MASK
         handle->hw.base->TMR_ALARMM[1].TMR_ALARM_H = (uint32_t)(nanosecond >> 32U);
+#else
+        handle->hw.base->TMR_ALARM2_H = (uint32_t)(nanosecond >> 32U);
+#endif
     }
 }
 
@@ -177,11 +193,19 @@ void NETC_TimerStopAlarm(netc_timer_handle_t *handle, netc_timer_alarm_index_t a
 {
     if (alarmId == kNETC_TimerAlarm1)
     {
+#if defined(ENETC_PF_TMR_TMR_ALARM_L_ALARM_L_MASK) && ENETC_PF_TMR_TMR_ALARM_L_ALARM_L_MASK
         handle->hw.base->TMR_ALARMM[0].TMR_ALARM_L = 0;
+#else
+        handle->hw.base->TMR_ALARM1_L = 0;
+#endif
     }
     else
     {
+#if defined(ENETC_PF_TMR_TMR_ALARM_L_ALARM_L_MASK) && ENETC_PF_TMR_TMR_ALARM_L_ALARM_L_MASK
         handle->hw.base->TMR_ALARMM[1].TMR_ALARM_L = 0;
+#else
+        handle->hw.base->TMR_ALARM2_L = 0;
+#endif
     }
 }
 
@@ -317,13 +341,29 @@ status_t NETC_TimerReadExtPulseCaptureTime(netc_timer_handle_t *handle,
     {
         if (extTrigId == kNETC_TimerExtTrig1)
         {
+#if defined (ENETC_PF_TMR_TMR_ETTS_L_ETTS_L_MASK) && ENETC_PF_TMR_TMR_ETTS_L_ETTS_L_MASK
             timeLow  = handle->hw.base->TMR_ETTSN[0].TMR_ETTS_L;
+#else
+            timeLow  = handle->hw.base->TMR_ETTS1_L;
+#endif
+#if defined (ENETC_PF_TMR_TMR_ETTS_H_ETTS_H_MASK) && ENETC_PF_TMR_TMR_ETTS_H_ETTS_H_MASK
             timeHigh = handle->hw.base->TMR_ETTSN[0].TMR_ETTS_H;
+#else
+            timeHigh = handle->hw.base->TMR_ETTS1_H;
+#endif
         }
         else
         {
+#if defined (ENETC_PF_TMR_TMR_ETTS_L_ETTS_L_MASK) && ENETC_PF_TMR_TMR_ETTS_L_ETTS_L_MASK
             timeLow  = handle->hw.base->TMR_ETTSN[1].TMR_ETTS_L;
+#else
+            timeLow  = handle->hw.base->TMR_ETTS2_L;
+#endif
+#if defined (ENETC_PF_TMR_TMR_ETTS_H_ETTS_H_MASK) && ENETC_PF_TMR_TMR_ETTS_H_ETTS_H_MASK
             timeHigh  = handle->hw.base->TMR_ETTSN[1].TMR_ETTS_H;
+#else
+            timeHigh = handle->hw.base->TMR_ETTS2_H;
+#endif
         }
         *nanosecond = ((uint64_t)timeHigh << 32U) + timeLow;
         result      = kStatus_Success;
