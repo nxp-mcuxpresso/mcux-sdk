@@ -1487,11 +1487,11 @@ message("driver_netc_rt1180 component is included from ${CMAKE_CURRENT_LIST_FILE
 if((CONFIG_DEVICE_ID STREQUAL MIMXRT1189xxxxx) AND CONFIG_USE_driver_netc)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../platform/drivers/netc/socs/imxrt1180/fsl_netc_soc.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/netc/socs/imxrt1180/fsl_netc_soc.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../platform/drivers/netc/socs/imxrt1180/.
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/netc/socs/imxrt1180/.
 )
 
 else()
