@@ -333,7 +333,7 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
     for (osrTemp = 4U; osrTemp <= 32U; osrTemp++)
     {
         /* calculate the temporary sbr value   */
-        sbrTemp = (uint16_t)((srcClock_Hz * 10U / (config->baudRate_Bps * (uint32_t)osrTemp) + 5U) / 10U);
+        sbrTemp = (uint16_t)((srcClock_Hz * 2U / (config->baudRate_Bps * (uint32_t)osrTemp) + 1U) / 2U);
         /*set sbrTemp to 1 if the sourceClockInHz can not satisfy the desired baud rate*/
         if (sbrTemp == 0U)
         {
@@ -665,7 +665,7 @@ status_t LPUART_SetBaudRate(LPUART_Type *base, uint32_t baudRate_Bps, uint32_t s
     for (osrTemp = 4U; osrTemp <= 32U; osrTemp++)
     {
         /* calculate the temporary sbr value   */
-        sbrTemp = (uint16_t)((srcClock_Hz * 10U / (baudRate_Bps * (uint32_t)osrTemp) + 5U) / 10U);
+        sbrTemp = (uint16_t)((srcClock_Hz * 2U / (baudRate_Bps * (uint32_t)osrTemp) + 1U) / 2U);
         /*set sbrTemp to 1 if the sourceClockInHz can not satisfy the desired baud rate*/
         if (sbrTemp == 0U)
         {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2023 NXP
+ * Copyright 2018-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -431,7 +431,7 @@ status_t I3C_MasterCheckAndClearError(I3C_Type *base, uint32_t status)
     return result;
 }
 
-static status_t I3C_MasterWaitForCtrlDone(I3C_Type *base, bool waitIdle)
+status_t I3C_MasterWaitForCtrlDone(I3C_Type *base, bool waitIdle)
 {
     status_t result = kStatus_Success;
     uint32_t status, errStatus;
@@ -795,7 +795,12 @@ void I3C_GetDefaultConfig(i3c_config_t *config)
  */
 void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_Hz)
 {
+    assert(config->slowClock_Hz >= 1000000U);
+
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || \
+    !(defined(FSL_FEATURE_I3C_HAS_NO_RESET) && FSL_FEATURE_I3C_HAS_NO_RESET)
     uint32_t instance = I3C_GetInstance(base);
+#endif
     uint32_t configValue;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -818,14 +823,18 @@ void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_H
                     I3C_MCONFIG_HKEEP(config->hKeep) | I3C_MCONFIG_ODSTOP(config->enableOpenDrainStop) |
                     I3C_MCONFIG_ODHPP(config->enableOpenDrainHigh);
 
+#if defined(FSL_FEATURE_I3C_HAS_START_SCL_DELAY) && FSL_FEATURE_I3C_HAS_START_SCL_DELAY
+    base->MCONFIG_EXT = I3C_MCONFIG_EXT_I3C_CAS_DEL(config->startSclDelay) | I3C_MCONFIG_EXT_I3C_CASR_DEL(config->restartSclDelay);
+#endif
+
     I3C_MasterSetWatermarks(base, kI3C_TxTriggerUntilOneLessThanFull, kI3C_RxTriggerOnNotEmpty, true, true);
 
     I3C_MasterSetBaudRate(base, &config->baudRate_Hz, sourceClock_Hz);
 
 #if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
     uint8_t matchCount;
-    /* Caculate bus available condition match value for current slow clock, count value provides 1us.*/
-    matchCount = (uint8_t)(config->slowClock_Hz / 1000000UL);
+    /* Calculate bus available condition match value for current slow clock, count value provides 1us.*/
+    matchCount = (uint8_t)(config->slowClock_Hz / 1000000UL) - 1U;
 #endif
 
     configValue = base->SCONFIG;
@@ -904,6 +913,8 @@ void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_H
  */
 void I3C_MasterGetDefaultConfig(i3c_master_config_t *masterConfig)
 {
+    (void)memset(masterConfig, 0, sizeof(*masterConfig));
+
     masterConfig->enableMaster                 = kI3C_MasterOn;
     masterConfig->disableTimeout               = false;
     masterConfig->hKeep                        = kI3C_MasterHighKeeperNone;
@@ -928,7 +939,11 @@ void I3C_MasterGetDefaultConfig(i3c_master_config_t *masterConfig)
  */
 void I3C_MasterInit(I3C_Type *base, const i3c_master_config_t *masterConfig, uint32_t sourceClock_Hz)
 {
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || \
+    !(defined(FSL_FEATURE_I3C_HAS_NO_RESET) && FSL_FEATURE_I3C_HAS_NO_RESET)
     uint32_t instance = I3C_GetInstance(base);
+#endif
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate the clock. */
     CLOCK_EnableClock(kI3cClocks[instance]);
@@ -941,6 +956,10 @@ void I3C_MasterInit(I3C_Type *base, const i3c_master_config_t *masterConfig, uin
     base->MCONFIG = I3C_MCONFIG_MSTENA(masterConfig->enableMaster) | I3C_MCONFIG_DISTO(masterConfig->disableTimeout) |
                     I3C_MCONFIG_HKEEP(masterConfig->hKeep) | I3C_MCONFIG_ODSTOP(masterConfig->enableOpenDrainStop) |
                     I3C_MCONFIG_ODHPP(masterConfig->enableOpenDrainHigh);
+
+#if defined(FSL_FEATURE_I3C_HAS_START_SCL_DELAY) && FSL_FEATURE_I3C_HAS_START_SCL_DELAY
+    base->MCONFIG_EXT = I3C_MCONFIG_EXT_I3C_CAS_DEL(masterConfig->startSclDelay) | I3C_MCONFIG_EXT_I3C_CASR_DEL(masterConfig->restartSclDelay);
+#endif
 
     I3C_MasterSetWatermarks(base, kI3C_TxTriggerUntilOneLessThanFull, kI3C_RxTriggerOnNotEmpty, true, true);
 
@@ -1788,6 +1807,32 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
         rxTermOps = kI3C_RxTermLastByte;
     }
 
+    if (0UL != (transfer->flags & (uint32_t)kI3C_TransferStartWithBroadcastAddr))
+    {
+        if (0UL != (transfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
+        {
+            return kStatus_InvalidArgument;
+        }
+
+        if (0UL != (transfer->flags & (uint32_t)kI3C_TransferRepeatedStartFlag))
+        {
+            return kStatus_InvalidArgument;
+        }
+
+        /* Issue 0x7E as start. */
+        result = I3C_MasterStart(base, transfer->busType, 0x7E, kI3C_Write);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+
+        result = I3C_MasterWaitForCtrlDone(base, false);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+    }
+
     if (0UL == (transfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
     {
         if ((direction == kI3C_Read) && (rxTermOps == kI3C_RxAutoTerm))
@@ -2319,6 +2364,32 @@ static status_t I3C_InitTransferStateMachine(I3C_Type *base, i3c_master_handle_t
         direction = (0UL != xfer->subaddressSize) ? kI3C_Write : xfer->direction;
     }
 
+    if (0UL != (xfer->flags & (uint32_t)kI3C_TransferStartWithBroadcastAddr))
+    {
+        if (0UL != (xfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
+        {
+            return kStatus_InvalidArgument;
+        }
+
+        if (0UL != (xfer->flags & (uint32_t)kI3C_TransferRepeatedStartFlag))
+        {
+            return kStatus_InvalidArgument;
+        }
+
+        /* Issue 0x7E as start. */
+        result = I3C_MasterStart(base, xfer->busType, 0x7E, kI3C_Write);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+
+        result = I3C_MasterWaitForCtrlDone(base, false);
+        if (result != kStatus_Success)
+        {
+            return result;
+        }
+    }
+
     /* Handle no start option. */
     if (0U != (xfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
     {
@@ -2357,9 +2428,13 @@ static status_t I3C_InitTransferStateMachine(I3C_Type *base, i3c_master_handle_t
     {
         handle->state = (uint8_t)kSendCommandState;
     }
-    else
+    else if (xfer->dataSize != 0U)
     {
         handle->state = (uint8_t)kTransferDataState;
+    }
+    else
+    {
+        handle->state = (uint8_t)kStopState;
     }
 
     if ((handle->remainingBytes < 256U) && (direction == kI3C_Read))
@@ -2543,10 +2618,10 @@ void I3C_MasterTransferAbort(I3C_Type *base, i3c_master_handle_t *handle)
  */
 void I3C_MasterTransferHandleIRQ(I3C_Type *base, void *intHandle)
 {
-    bool isDone;
-    status_t result;
-
     i3c_master_handle_t *handle = (i3c_master_handle_t *)intHandle;
+    status_t result;
+    bool isDone;
+
     /* Don't do anything if we don't have a valid handle. */
     if (NULL == handle)
     {
@@ -2649,10 +2724,14 @@ void I3C_SlaveGetDefaultConfig(i3c_slave_config_t *slaveConfig)
 void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32_t slowClock_Hz)
 {
     assert(NULL != slaveConfig);
-    assert(0UL != slowClock_Hz);
+    assert(slowClock_Hz >= 1000000U);
 
     uint32_t configValue;
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || \
+    !(defined(FSL_FEATURE_I3C_HAS_NO_RESET) && FSL_FEATURE_I3C_HAS_NO_RESET)
     uint32_t instance = I3C_GetInstance(base);
+#endif
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate the clock. */
     CLOCK_EnableClock(kI3cClocks[instance]);
@@ -2665,8 +2744,8 @@ void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32
 
 #if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
     uint8_t matchCount;
-    /* Caculate bus available condition match value for current slow clock, count value provides 1us.*/
-    matchCount = (uint8_t)(slowClock_Hz / 1000000UL);
+    /* Calculate bus available condition match value for current slow clock, count value provides 1us.*/
+    matchCount = (uint8_t)(slowClock_Hz / 1000000UL) - 1U;
 #endif
 
     configValue = base->SCONFIG;
@@ -3437,5 +3516,14 @@ void I3C2_DriverIRQHandler(void);
 void I3C2_DriverIRQHandler(void)
 {
     I3C_CommonIRQHandler(I3C2, 2);
+}
+#endif
+
+#if defined(I3C3)
+/* Implementation of I3C3 handler named in startup code. */
+void I3C3_DriverIRQHandler(void);
+void I3C3_DriverIRQHandler(void)
+{
+    I3C_CommonIRQHandler(I3C3, 3);
 }
 #endif
