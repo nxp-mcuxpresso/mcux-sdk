@@ -1,6 +1,5 @@
 /*
- * Copyright 2020 NXP
- * All rights reserved.
+ * Copyright 2020, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -30,7 +29,8 @@ typedef enum _i3c_master_transfer_mode
 typedef struct _i3c_master_adapter_resource
 {
     I3C_Type *base;                       /*!< I3C master base address. */
-    uint32_t clockInHz;                   /*!< I3C master clock frequency. */
+    uint32_t clockInHz;                   /*!< I3C module clock frequency. */
+    uint32_t slowClockInHz;               /*!< I3C slow clock frequency. */
     i3c_master_transfer_mode_t transMode; /*!< I3C master transfer mode. */
 } i3c_master_adapter_resource_t;
 
@@ -39,7 +39,7 @@ typedef struct _i3c_device_adapter_resource
 {
     I3C_Type *base;                         /*!< I3C device base address. */
     uint32_t clockInHz;                     /*!< I3C device clock frequency. */
-    i3c_slave_transfer_callback_t callback; /*!< i3c device transfer callback function. */
+    i3c_slave_transfer_callback_t callback; /*!< I3C device transfer callback function. */
 } i3c_device_adapter_resource_t;
 
 /*******************************************************************************

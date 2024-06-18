@@ -1,5 +1,5 @@
 /*
- * Copyright 2022,2023 NXP
+ * Copyright 2022-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -464,15 +464,15 @@ typedef struct _TRDC_MRC_Type
 } TRDC_MRC_Type;
 
 /*!@brief TRDC base address convert macro */
-#define TRDC_GENERAL_BASE(base)      ((TRDC_General_Type *)((uint32_t)(uint32_t *)(base)))
-#define TRDC_FLW_BASE(base)          ((TRDC_FLW_Type *)(((uint32_t)(uint32_t *)(base) + TRDC_FLW_OFFSET)))
-#define TRDC_DOMAIN_ERROR_BASE(base) ((TRDC_DomainError_Type *)(((uint32_t)(uint32_t *)(base) + TRDC_DOMAIN_ERROR_OFFSET)))
+#define TRDC_GENERAL_BASE(base)      ((TRDC_General_Type *)((base)))
+#define TRDC_FLW_BASE(base)          ((TRDC_FLW_Type *)(((uint32_t)(uintptr_t)(base) + (uint32_t)TRDC_FLW_OFFSET)))
+#define TRDC_DOMAIN_ERROR_BASE(base) ((TRDC_DomainError_Type *)(((uint32_t)(uintptr_t)(base) + (uint32_t)TRDC_DOMAIN_ERROR_OFFSET)))
 #define TRDC_DOMAIN_ASSIGNMENT_BASE(base) \
-    ((TRDC_DomainAssignment_Type *)(((uint32_t)(uint32_t *)(base) + TRDC_DOMAIN_ASSIGNMENT_OFFSET)))
+    ((TRDC_DomainAssignment_Type *)(((uint32_t)(uintptr_t)(base) + (uint32_t)TRDC_DOMAIN_ASSIGNMENT_OFFSET)))
 #define TRDC_MBC_BASE(base, instance) \
-    ((TRDC_MBC_Type *)((uint32_t)(uint32_t *)(base) + TRDC_MBC_OFFSET(base) + (instance) * TRDC_MBC_ARRAY_STEP))
+    ((TRDC_MBC_Type *)((uint32_t)(uintptr_t)(base) + (uint32_t)TRDC_MBC_OFFSET(base) + (instance) * (uint32_t)TRDC_MBC_ARRAY_STEP))
 #define TRDC_MRC_BASE(base, instance) \
-    ((TRDC_MRC_Type *)((uint32_t)(uint32_t *)(base) + TRDC_MRC_OFFSET(base) + (instance) * TRDC_MRC_ARRAY_STEP))
+    ((TRDC_MRC_Type *)((uint32_t)(uintptr_t)(base) + (uint32_t)TRDC_MRC_OFFSET(base) + (instance) * (uint32_t)TRDC_MRC_ARRAY_STEP))
 
 #ifdef __cplusplus
 extern "C" {

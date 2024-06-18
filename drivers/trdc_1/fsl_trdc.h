@@ -1,5 +1,5 @@
 /*
- * Copyright 2022,2023 NXP
+ * Copyright 2022-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,7 +19,7 @@
 /******************************************************************************
  * Definitions
  *****************************************************************************/
-#define FSL_TRDC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_TRDC_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 
 #if defined(FSL_FEATURE_TRDC_HAS_GENERAL_CONFIG) && FSL_FEATURE_TRDC_HAS_GENERAL_CONFIG
 /* Hardware configuration definitions */
@@ -484,7 +484,7 @@ void TRDC_Init(TRDC_Type *base);
  * @param base TRDC peripheral base address.
  */
 void TRDC_Deinit(TRDC_Type *base);
-/* @} */
+/*! @} */
 
 #if defined(FSL_FEATURE_TRDC_HAS_GENERAL_CONFIG) && FSL_FEATURE_TRDC_HAS_GENERAL_CONFIG
 /*!
@@ -512,7 +512,7 @@ static inline uint8_t TRDC_GetCurrentMasterDomainId(TRDC_Type *base)
  * @param config Pointer to the structure to get the configuration.
  */
 void TRDC_GetHardwareConfig(TRDC_Type *base, trdc_hardware_config_t *config);
-/* @} */
+/*! @} */
 #endif
 
 #if defined(FSL_FEATURE_TRDC_HAS_DOMAIN_ASSIGNMENT) && FSL_FEATURE_TRDC_HAS_DOMAIN_ASSIGNMENT
@@ -721,7 +721,7 @@ static inline uint64_t TRDC_GetActiveMasterPidMap(TRDC_Type *base)
  * @param pidConfig Pointer to the configuration structure.
  */
 void TRDC_SetPid(TRDC_Type *base, uint8_t master, const trdc_pid_config_t *pidConfig);
-/* @} */
+/*! @} */
 #endif
 
 #if defined(FSL_FEATURE_TRDC_HAS_GENERAL_CONFIG) && FSL_FEATURE_TRDC_HAS_GENERAL_CONFIG
@@ -763,7 +763,7 @@ void TRDC_GetDefaultIDAUConfig(trdc_idau_config_t *idauConfiguration);
  * @param domainAssignment Pointer to the configuration structure.
  */
 void TRDC_SetIDAU(TRDC_Type *base, const trdc_idau_config_t *idauConfiguration);
-/* @} */
+/*! @} */
 #endif
 
 #if defined(FSL_FEATURE_TRDC_HAS_FLW) && FSL_FEATURE_TRDC_HAS_FLW
@@ -852,7 +852,7 @@ void TRDC_GetDefaultFlashLogicalWindowConfig(trdc_flw_config_t *flwConfiguration
  * @param flwConfiguration Pointer to the configuration structure.
  */
 void TRDC_SetFlashLogicalWindow(TRDC_Type *base, const trdc_flw_config_t *flwConfiguration);
-/* @} */
+/*! @} */
 #endif
 
 #if defined(FSL_FEATURE_TRDC_HAS_DOMAIN_ERROR) && FSL_FEATURE_TRDC_HAS_DOMAIN_ERROR
@@ -890,7 +890,7 @@ status_t TRDC_GetAndClearFirstDomainError(TRDC_Type *base, trdc_domain_error_t *
  *         access violation is captured, this function returns the kStatus_NoData.
  */
 status_t TRDC_GetAndClearFirstSpecificDomainError(TRDC_Type *base, trdc_domain_error_t *error, uint8_t domainId);
-/* @} */
+/*! @} */
 #endif
 
 #if defined(FSL_FEATURE_TRDC_HAS_MRC) && FSL_FEATURE_TRDC_HAS_MRC
@@ -1004,7 +1004,7 @@ void TRDC_MrcDomainNseClear(TRDC_Type *base, uint8_t mrcIdx, uint16_t domainMask
  * @param config Pointer to region descriptor configuration structure.
  */
 void TRDC_MrcSetRegionDescriptorConfig(TRDC_Type *base, const trdc_mrc_region_descriptor_config_t *config);
-/* @} */
+/*! @} */
 #endif
 
 #if defined(FSL_FEATURE_TRDC_HAS_MBC) && FSL_FEATURE_TRDC_HAS_MBC
@@ -1117,7 +1117,7 @@ void TRDC_MbcSetMemoryAccessConfig(TRDC_Type *base,
  * @param config Pointer to memory block configuration structure.
  */
 void TRDC_MbcSetMemoryBlockConfig(TRDC_Type *base, const trdc_mbc_memory_block_config_t *config);
-/* @} */
+/*! @} */
 #endif
 
 #if defined(__cplusplus)

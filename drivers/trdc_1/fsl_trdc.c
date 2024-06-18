@@ -1,5 +1,5 @@
 /*
- * Copyright 2022,2023 NXP
+ * Copyright 2022-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -13,7 +13,7 @@
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
-#define FSL_COMPONENT_ID "platform.drivers.trdc1"
+#define FSL_COMPONENT_ID "platform.drivers.trdc"
 #endif
 
 /* The memory increment definition in byte of MBC and MRC configuration registers */
@@ -99,7 +99,7 @@ void TRDC_GetMbcHardwareConfig(TRDC_Type *base,
 {
     assert(NULL != config);
 #if defined(TRDC_MBC_COUNT) && TRDC_MBC_COUNT
-    assert(mbcIdx < TRDC_MBC_COUNT);
+    assert(mbcIdx < (uint8_t)TRDC_MBC_COUNT);
 #else
     assert(mbcIdx < (uint8_t)((TRDC_GENERAL_BASE(base)->TRDC_HWCFG0 & TRDC_TRDC_HWCFG0_NMBC_MASK) >>
                               TRDC_TRDC_HWCFG0_NMBC_SHIFT));

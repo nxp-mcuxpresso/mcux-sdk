@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -51,12 +51,13 @@ status_t P3T1755_ReadTemperature(p3t1755_handle_t *handle, double *temperature)
 {
     status_t result = kStatus_Success;
     uint8_t data[2];
+    uint16_t temp;
 
     result = P3T1755_ReadReg(handle, P3T1755_TEMPERATURE_REG, &data[0], 2);
     if (result == kStatus_Success)
     {
-        *temperature = (double)((((uint16_t)data[0] << 8U) | (uint16_t)data[1]) >> 4U);
-        *temperature = *temperature * 0.0625;
+        temp = (((uint16_t)data[0] << 8U) | (uint16_t)data[1]) >> 4U;
+        *temperature = (double)temp * 0.0625;
     }
 
     return result;

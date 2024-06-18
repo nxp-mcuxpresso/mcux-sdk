@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief VBAT driver version 2.3.0. */
 #define FSL_VBAT_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
-/*@}*/
+/*! @} */
 
 #if !defined(VBAT_LDORAMC_RET_MASK)
 #define VBAT_LDORAMC_RET_MASK   (0xF00U)

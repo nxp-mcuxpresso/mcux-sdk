@@ -101,6 +101,7 @@ void SPC_SetLowPowerRequestConfig(SPC_Type *base, const spc_lowpower_request_con
     base->LPREQ_CFG = reg;
 }
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT) && FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT)
 /*!
  * brief Configures VDD Core Glitch detector, including ripple counter selection, timeout value and so on.
  *
@@ -124,6 +125,7 @@ void SPC_ConfigVddCoreGlitchDetector(SPC_Type *base, const spc_vdd_core_glitch_d
 
     base->VDD_CORE_GLITCH_DETECT_SC = reg;
 }
+#endif
 
 /*!
  * brief Set SRAM operate voltage.
@@ -198,11 +200,13 @@ status_t SPC_SetActiveModeBandgapModeConfig(SPC_Type *base, spc_bandgap_mode_t m
         }
 #endif /* FSL_FEATURE_MCX_SPC_HAS_DCDC */
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT) && FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT)
         /* state of GLITCH_DETECT_DISABLE will be ignored if bandgap is disabled. */
         if ((base->ACTIVE_CFG & SPC_ACTIVE_CFG_GLITCH_DETECT_DISABLE_MASK) == 0UL)
         {
             return kStatus_SPC_BandgapModeWrong;
         }
+#endif
 #if defined(FSL_FEATURE_SPC_HAS_CORELDO_VDD_DS) && FSL_FEATURE_SPC_HAS_CORELDO_VDD_DS
         if ((base->ACTIVE_CFG & SPC_ACTIVE_CFG_CORELDO_VDD_DS_MASK) ==
             SPC_ACTIVE_CFG_CORELDO_VDD_DS(kSPC_CoreLDO_NormalDriveStrength))
@@ -271,11 +275,13 @@ status_t SPC_SetLowPowerModeBandgapmodeConfig(SPC_Type *base, spc_bandgap_mode_t
             return kStatus_SPC_BandgapModeWrong;
         }
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT) && FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT)
         /* state of GLITCH_DETECT_DISABLE will be ignored if bandgap is disabled. */
         if ((base->LP_CFG & SPC_LP_CFG_GLITCH_DETECT_DISABLE_MASK) == 0UL)
         {
             return kStatus_SPC_BandgapModeWrong;
         }
+#endif
     }
 
     reg &= ~SPC_LP_CFG_BGMODE_MASK;
@@ -1490,7 +1496,7 @@ status_t SPC_SetActiveModeRegulatorsConfig(SPC_Type *base, const spc_active_mode
 {
     assert(config != NULL);
 
-    status_t status;
+    status_t status = kStatus_Success;
     bool bandgapConfigured = false;
     spc_bandgap_mode_t curBandgapMode = SPC_GetActiveModeBandgapMode(base);
 

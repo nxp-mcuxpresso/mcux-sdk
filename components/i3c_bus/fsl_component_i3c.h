@@ -250,17 +250,17 @@ struct _i2c_device_control_info
 typedef void (*i3c_dev_ibi_handler_t)(i3c_device_t *dev, const void *ibiData, uint32_t ibiLen);
 struct _i3c_device_ibi_info
 {
-    uint32_t maxPayloadLength;        /*!< maximum IBI payload length. */
-    bool enabled;                     /*!< is IBI enabled. */
+    uint32_t maxPayloadLength;        /*!< Maximum IBI payload length. */
+    bool enabled;                     /*!< Is IBI enabled. */
     i3c_dev_ibi_handler_t ibiHandler; /*!< IBI handler when device registers IBI. */
 };
 
 /*! @brief I3C bus mode definition. */
 typedef enum _i3c_bus_mode
 {
-    kI3C_Bus_PureMode,       /*!< only I3C devices are connected to the bus */
-    kI3C_Bus_MixedMode_Fast, /*!<  I2C devices with 50ns spike filter are present on bus */
-    kI3C_Bus_MixedMode_Slow, /*!<  I2C devices without 50ns spike filter are present on bus */
+    kI3C_Bus_PureMode,       /*!< Only I3C devices are connected to the bus */
+    kI3C_Bus_MixedMode_Fast, /*!< I2C devices with 50ns spike filter are present on bus */
+    kI3C_Bus_MixedMode_Slow, /*!< I2C devices without 50ns spike filter are present on bus */
 } i3c_bus_mode_t;
 
 /*! @brief I3C address slot status in address pool. */

@@ -795,6 +795,8 @@ void I3C_GetDefaultConfig(i3c_config_t *config)
  */
 void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_Hz)
 {
+    assert(config->slowClock_Hz >= 1000000U);
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || \
     !(defined(FSL_FEATURE_I3C_HAS_NO_RESET) && FSL_FEATURE_I3C_HAS_NO_RESET)
     uint32_t instance = I3C_GetInstance(base);
@@ -821,7 +823,7 @@ void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_H
                     I3C_MCONFIG_HKEEP(config->hKeep) | I3C_MCONFIG_ODSTOP(config->enableOpenDrainStop) |
                     I3C_MCONFIG_ODHPP(config->enableOpenDrainHigh);
 
-#ifdef I3C_MCONFIG_EXT_I3C_CAS_DEL_MASK
+#if defined(FSL_FEATURE_I3C_HAS_START_SCL_DELAY) && FSL_FEATURE_I3C_HAS_START_SCL_DELAY
     base->MCONFIG_EXT = I3C_MCONFIG_EXT_I3C_CAS_DEL(config->startSclDelay) | I3C_MCONFIG_EXT_I3C_CASR_DEL(config->restartSclDelay);
 #endif
 
@@ -831,8 +833,8 @@ void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_H
 
 #if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
     uint8_t matchCount;
-    /* Caculate bus available condition match value for current slow clock, count value provides 1us.*/
-    matchCount = (uint8_t)(config->slowClock_Hz / 1000000UL);
+    /* Calculate bus available condition match value for current slow clock, count value provides 1us.*/
+    matchCount = (uint8_t)(config->slowClock_Hz / 1000000UL) - 1U;
 #endif
 
     configValue = base->SCONFIG;
@@ -955,7 +957,7 @@ void I3C_MasterInit(I3C_Type *base, const i3c_master_config_t *masterConfig, uin
                     I3C_MCONFIG_HKEEP(masterConfig->hKeep) | I3C_MCONFIG_ODSTOP(masterConfig->enableOpenDrainStop) |
                     I3C_MCONFIG_ODHPP(masterConfig->enableOpenDrainHigh);
 
-#ifdef I3C_MCONFIG_EXT_I3C_CAS_DEL_MASK
+#if defined(FSL_FEATURE_I3C_HAS_START_SCL_DELAY) && FSL_FEATURE_I3C_HAS_START_SCL_DELAY
     base->MCONFIG_EXT = I3C_MCONFIG_EXT_I3C_CAS_DEL(masterConfig->startSclDelay) | I3C_MCONFIG_EXT_I3C_CASR_DEL(masterConfig->restartSclDelay);
 #endif
 
@@ -2426,9 +2428,13 @@ static status_t I3C_InitTransferStateMachine(I3C_Type *base, i3c_master_handle_t
     {
         handle->state = (uint8_t)kSendCommandState;
     }
-    else
+    else if (xfer->dataSize != 0U)
     {
         handle->state = (uint8_t)kTransferDataState;
+    }
+    else
+    {
+        handle->state = (uint8_t)kStopState;
     }
 
     if ((handle->remainingBytes < 256U) && (direction == kI3C_Read))
@@ -2608,14 +2614,14 @@ void I3C_MasterTransferAbort(I3C_Type *base, i3c_master_handle_t *handle)
  * note This function does not need to be called unless you are reimplementing the
  *  nonblocking API's interrupt handler routines to add special functionality.
  * param base The I3C peripheral base address.
- * param handle Pointer to the I3C master driver handle.
+ * param intHandle Pointer to the I3C master driver handle.
  */
 void I3C_MasterTransferHandleIRQ(I3C_Type *base, void *intHandle)
 {
-    bool isDone;
-    status_t result;
-
     i3c_master_handle_t *handle = (i3c_master_handle_t *)intHandle;
+    status_t result;
+    bool isDone;
+
     /* Don't do anything if we don't have a valid handle. */
     if (NULL == handle)
     {
@@ -2718,7 +2724,7 @@ void I3C_SlaveGetDefaultConfig(i3c_slave_config_t *slaveConfig)
 void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32_t slowClock_Hz)
 {
     assert(NULL != slaveConfig);
-    assert(0UL != slowClock_Hz);
+    assert(slowClock_Hz >= 1000000U);
 
     uint32_t configValue;
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || \
@@ -2738,8 +2744,8 @@ void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32
 
 #if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
     uint8_t matchCount;
-    /* Caculate bus available condition match value for current slow clock, count value provides 1us.*/
-    matchCount = (uint8_t)(slowClock_Hz / 1000000UL);
+    /* Calculate bus available condition match value for current slow clock, count value provides 1us.*/
+    matchCount = (uint8_t)(slowClock_Hz / 1000000UL) - 1U;
 #endif
 
     configValue = base->SCONFIG;
@@ -3391,7 +3397,7 @@ static void I3C_SlaveTransferHandleRxReady(I3C_Type *base,
  * note This function does not need to be called unless you are reimplementing the
  *  non blocking API's interrupt handler routines to add special functionality.
  * param base The I3C peripheral base address.
- * param handle Pointer to #i3c_slave_handle_t structure which stores the transfer state.
+ * param intHandle Pointer to #i3c_slave_handle_t structure which stores the transfer state.
  */
 void I3C_SlaveTransferHandleIRQ(I3C_Type *base, void *intHandle)
 {

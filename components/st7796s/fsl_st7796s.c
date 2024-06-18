@@ -10,12 +10,12 @@
 #define ST7796S_ERROR_CHECK(x)      \
     do                              \
     {                               \
-        status_t ret = x;           \
+        status_t ret = (x);         \
         if (ret != kStatus_Success) \
         {                           \
             return ret;             \
         }                           \
-    } while (0)
+    } while (false)
 
 #define ST7796S_CMD_SWRESET (0x01U)
 #define ST7796S_CMD_SLPIN   (0x10U)
@@ -91,14 +91,14 @@ static status_t ST7796S_PresetDriver(st7796s_handle_t *handle, st7796s_driver_pr
     const uint8_t *preset_ptr;
     uint16_t preset_len;
 
-    switch (preset)
+    if (kST7796S_DriverPresetLCDPARS035 == preset)
     {
-        case kST7796S_DriverPresetLCDPARS035:
-            preset_ptr = s_st7796s_driver_preset_pars035;
-            preset_len = ARRAY_SIZE(s_st7796s_driver_preset_pars035);
-            break;
-        default:
-            return kStatus_InvalidArgument;
+        preset_ptr = s_st7796s_driver_preset_pars035;
+        preset_len = ARRAY_SIZE(s_st7796s_driver_preset_pars035);
+    }
+    else
+    {
+        return kStatus_InvalidArgument;
     }
 
     uint16_t i = 0;
@@ -107,8 +107,8 @@ static status_t ST7796S_PresetDriver(st7796s_handle_t *handle, st7796s_driver_pr
     {
         uint8_t param_len = preset_ptr[i];
 
-        ST7796S_ERROR_CHECK(ST7796S_WriteCommand(handle, preset_ptr[i + 1], &preset_ptr[i + 2], param_len));
-        i += param_len + 2; /* Next = parameter length + command byte + length itself */
+        ST7796S_ERROR_CHECK(ST7796S_WriteCommand(handle, preset_ptr[i + 1u], &preset_ptr[i + 2u], param_len));
+        i += ((uint16_t)param_len + 2u); /* Next = parameter length + command byte + length itself */
     }
 
     return kStatus_Success;
@@ -189,7 +189,7 @@ status_t ST7796S_EnableDisplay(st7796s_handle_t *handle, bool enable)
 
 status_t ST7796S_SetPixelFormat(st7796s_handle_t *handle, st7796s_pixel_format_t pixelFormat)
 {
-    uint8_t pixel_fmt = pixelFormat;
+    uint8_t pixel_fmt = (uint8_t)pixelFormat;
     ST7796S_ERROR_CHECK(ST7796S_WriteCommand(handle, ST7796S_CMD_COLMOD, &pixel_fmt, 0x01U));
 
     return kStatus_Success;
@@ -219,17 +219,17 @@ status_t ST7796S_SelectArea(st7796s_handle_t *handle, uint16_t startX, uint16_t 
 {
     uint8_t tx_buf[4];
 
-    tx_buf[0] = (startX >> 0x08U) & 0xFFU;
-    tx_buf[1] = startX & 0xFFU;
-    tx_buf[2] = (endX >> 0x08U) & 0xFFU;
-    tx_buf[3] = endX & 0xFFU;
+    tx_buf[0] = (uint8_t)(startX >> 0x08U) & 0xFFU;
+    tx_buf[1] = (uint8_t)startX & 0xFFU;
+    tx_buf[2] = (uint8_t)(endX >> 0x08U) & 0xFFU;
+    tx_buf[3] = (uint8_t)endX & 0xFFU;
 
     ST7796S_ERROR_CHECK(ST7796S_WriteCommand(handle, ST7796S_CMD_CASET, tx_buf, 4U));
 
-    tx_buf[0] = (startY >> 0x08U) & 0xFFU;
-    tx_buf[1] = startY & 0xFFU;
-    tx_buf[2] = (endY >> 0x08U) & 0xFFU;
-    tx_buf[3] = endY & 0xFFU;
+    tx_buf[0] = (uint8_t)(startY >> 0x08U) & 0xFFU;
+    tx_buf[1] = (uint8_t)startY & 0xFFU;
+    tx_buf[2] = (uint8_t)(endY >> 0x08U) & 0xFFU;
+    tx_buf[3] = (uint8_t)endY & 0xFFU;
 
     ST7796S_ERROR_CHECK(ST7796S_WriteCommand(handle, ST7796S_CMD_RASET, tx_buf, 4U));
 
@@ -244,10 +244,10 @@ status_t ST7796S_Config(st7796s_handle_t *handle, const st7796s_config_t *config
 
     uint8_t tx_buf[1];
 
-    tx_buf[0] = config->orientationMode;
+    tx_buf[0] = (uint8_t)config->orientationMode;
     if (!config->bgrFilter)
     {
-        tx_buf[0] &= ~0x08U;
+        tx_buf[0] &= (uint8_t)(~0x08U);
     }
 
     if (config->flipDisplay)
@@ -271,7 +271,7 @@ status_t ST7796S_Config(st7796s_handle_t *handle, const st7796s_config_t *config
 
 status_t ST7796S_WritePixels(st7796s_handle_t *handle, uint16_t *pixels, uint32_t len)
 {
-    ST7796S_ERROR_CHECK(handle->xferOps->writeMemory(handle->xferOpsData, ST7796S_CMD_RAMWR, pixels, len * 2));
+    ST7796S_ERROR_CHECK(handle->xferOps->writeMemory(handle->xferOpsData, ST7796S_CMD_RAMWR, pixels, len * 2u));
 
     return kStatus_Success;
 }

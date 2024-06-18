@@ -21,10 +21,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Driver version. */
 #define FSL_ERM_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 1U))
-/*@}*/
+/*! @} */
 
 /*******************************************************************************
  * APIs
@@ -47,7 +47,7 @@ void EIM_Init(EIM_Type *base);
  */
 void EIM_Deinit(EIM_Type *base);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name functional

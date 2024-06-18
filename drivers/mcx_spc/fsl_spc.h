@@ -19,10 +19,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-/*! @brief SPC driver version 2.2.1. */
-#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
-/*@}*/
+/*! @{ */
+/*! @brief SPC driver version 2.3.0. */
+#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @} */
 
 #define SPC_EVD_CFG_REG_EVDISO_SHIFT   0UL
 #define SPC_EVD_CFG_REG_EVDLPISO_SHIFT 8UL
@@ -254,6 +254,7 @@ typedef enum _spc_low_voltage_level_select
     kSPC_LowVoltageSafeLevel   = 0x1U, /*!< Trip point set to Safe level. */
 } spc_low_voltage_level_select_t;
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT) && FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT)
 /*!
  * @brief Used to select output of 4-bit ripple counter is used to monitor a glitch on VDD core.
  */
@@ -268,6 +269,7 @@ typedef enum _spc_vdd_core_glitch_ripple_counter_select
     kSPC_selectBit3Of4bitRippleCounter = 0x3U, /*!< Select bit-3 of 4-bit Ripple Counter
                                                     to detect glitch on VDD Core. */
 } spc_vdd_core_glitch_ripple_counter_select_t;
+#endif
 
 /*!
  * @brief The list of the operating voltage for the SRAM's read/write timing margin.
@@ -279,6 +281,7 @@ typedef enum _spc_sram_operate_voltage
     kSPC_sramOperateAt1P2V = 0x3U, /*!< SRAM configured for 1.2V operation. */
 } spc_sram_operate_voltage_t;
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT) && FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT)
 /*!
  * @brief The configuration of VDD Core glitch detector.
  */
@@ -290,6 +293,7 @@ typedef struct _spc_vdd_core_glitch_detector_config
     bool enableReset;          /*!< Used to enable/disable POR/LVD reset that caused by CORE VDD glitch detect error. */
     bool enableInterrupt;      /*!< Used to enable/disable hardware interrupt if CORE VDD glitch detect error. */
 } spc_vdd_core_glitch_detector_config_t;
+#endif
 
 typedef struct _spc_sram_voltage_config
 {
@@ -611,7 +615,7 @@ static inline void SPC_ClearPowerDomainLowPowerRequestFlag(SPC_Type *base, spc_p
     base->PD_STATUS[(uint8_t)powerDomainId] |= SPC_PD_STATUS_PD_LP_REQ_MASK;
 }
 
-/* @} */
+/*! @} */
 
 #if (defined(FSL_FEATURE_MCX_SPC_HAS_SRAMRETLDO_REG) && FSL_FEATURE_MCX_SPC_HAS_SRAMRETLDO_REG)
 /*!
@@ -663,7 +667,7 @@ static inline void SPC_RetainSRAMArray(SPC_Type *base, uint8_t mask)
     base->SRAMRETLDO_CNTRL |= SPC_SRAMRETLDO_CNTRL_SRAM_RET_EN(mask);
 }
 
-/* @} */
+/*! @} */
 #endif /* FSL_FEATURE_MCX_SPC_HAS_SRAMRETLDO_REG */
 
 /*!
@@ -680,7 +684,7 @@ static inline void SPC_RetainSRAMArray(SPC_Type *base, uint8_t mask)
  */
 void SPC_SetLowPowerRequestConfig(SPC_Type *base, const spc_lowpower_request_config_t *config);
 
-/* @} */
+/*! @} */
 
 #if (defined(FSL_FEATURE_MCX_SPC_HAS_CFG_REG) && FSL_FEATURE_MCX_SPC_HAS_CFG_REG)
 /*!
@@ -734,9 +738,10 @@ static inline void SPC_EnableIntegratedPowerSwitchAutomatically(SPC_Type *base, 
     base->CFG = tmp32;
 }
 
-/* @} */
+/*! @} */
 #endif /* FSL_FEATURE_MCX_SPC_HAS_CFG_REG */
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT) && FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT)
 /*!
  * @name VDD Core Glitch Detector Control APIs
  * @{
@@ -813,7 +818,8 @@ static inline bool SPC_CheckVddCoreVoltageGlitchResetControlState(SPC_Type *base
     return ((base->VDD_CORE_GLITCH_DETECT_SC & SPC_VDD_CORE_GLITCH_DETECT_SC_LOCK_MASK) != 0UL);
 }
 
-/* @}  */
+/*! @} */
+#endif
 
 /*!
  * @name SRAM Control APIs
@@ -828,7 +834,7 @@ static inline bool SPC_CheckVddCoreVoltageGlitchResetControlState(SPC_Type *base
  */
 void SPC_SetSRAMOperateVoltage(SPC_Type *base, const spc_sram_voltage_config_t *config);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Active Mode configuration
@@ -936,6 +942,7 @@ static inline void SPC_SetActiveModeVoltageTrimDelay(SPC_Type *base, uint16_t de
  */
 status_t SPC_SetActiveModeRegulatorsConfig(SPC_Type *base, const spc_active_mode_regulators_config_t *config);
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT) && FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT)
 /*!
  * @brief Disables/Enables VDD Core Glitch Detect in Active mode.
  *
@@ -958,6 +965,7 @@ static inline void SPC_DisableActiveModeVddCoreGlitchDetect(SPC_Type *base, bool
         base->ACTIVE_CFG &= ~SPC_ACTIVE_CFG_GLITCH_DETECT_DISABLE_MASK;
     }
 }
+#endif
 
 /*!
  * @brief Enables analog modules in active mode.
@@ -995,7 +1003,7 @@ static inline uint32_t SPC_GetActiveModeEnabledAnalogModules(SPC_Type *base)
     return base->ACTIVE_CFG1;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Low Power mode configuration
@@ -1181,6 +1189,7 @@ static inline void SPC_SetLowPowerWakeUpDelay(SPC_Type *base, uint16_t delay)
  */
 status_t SPC_SetLowPowerModeRegulatorsConfig(SPC_Type *base, const spc_lowpower_mode_regulators_config_t *config);
 
+#if !(defined(FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT) && FSL_FEATURE_MCX_SPC_HAS_NO_GLITCH_DETECT)
 /*!
  * @brief Disable/Enable VDD Core Glitch Detect in low power mode.
  *
@@ -1203,6 +1212,7 @@ static inline void SPC_DisableLowPowerModeVddCoreGlitchDetect(SPC_Type *base, bo
         base->LP_CFG &= ~SPC_LP_CFG_GLITCH_DETECT_DISABLE_MASK;
     }
 }
+#endif
 
 /*!
  * @brief Enables analog modules in low power modes.
@@ -1240,7 +1250,7 @@ static inline uint32_t SPC_GetLowPowerModeEnabledAnalogModules(SPC_Type *base)
     return base->LP_CFG1;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Voltage Detect Status
@@ -1268,7 +1278,7 @@ static inline void SPC_ClearVoltageDetectStatusFlag(SPC_Type *base, uint8_t mask
     base->VD_STAT |= mask;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Voltage Detect configuration for Core voltage domain.
@@ -1383,7 +1393,7 @@ status_t SPC_EnableActiveModeCoreHighVoltageDetect(SPC_Type *base, bool enable);
 status_t SPC_EnableLowPowerModeCoreHighVoltageDetect(SPC_Type *base, bool enable);
 #endif /* FSL_FEATURE_MCX_SPC_HAS_COREVDD_HVD */
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Voltage detect configuration for System Voltage domain
@@ -1502,7 +1512,7 @@ status_t SPC_EnableLowPowerModeSystemHighVoltageDetect(SPC_Type *base, bool enab
  */
 status_t SPC_EnableLowPowerModeSystemLowVoltageDetect(SPC_Type *base, bool enable);
 
-/* @} */
+/*! @} */
 
 #if (defined(FSL_FEATURE_MCX_SPC_HAS_IOVDD_VD) && FSL_FEATURE_MCX_SPC_HAS_IOVDD_VD)
 /*!
@@ -1619,7 +1629,7 @@ status_t SPC_EnableLowPowerModeIOHighVoltageDetect(SPC_Type *base, bool enable);
  */
 status_t SPC_EnableLowPowerModeIOLowVoltageDetect(SPC_Type *base, bool enable);
 
-/* @} */
+/*! @} */
 
 #endif /* FSL_FEATURE_MCX_SPC_HAS_IOVDD_VD */
 
@@ -1652,7 +1662,7 @@ static inline uint8_t SPC_GetExternalDomainsStatus(SPC_Type *base)
     return (uint8_t)(base->EVD_CFG >> SPC_EVD_CFG_REG_EVDSTAT_SHIFT);
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Set CORE LDO Regulator
@@ -2027,7 +2037,7 @@ static inline spc_sys_ldo_drive_strength_t SPC_GetLowPowerModeSystemLDORegulator
 {
     return (spc_sys_ldo_drive_strength_t)(uint32_t)((base->LP_CFG & SPC_LP_CFG_SYSLDO_VDD_DS_MASK) >> SPC_LP_CFG_SYSLDO_VDD_DS_SHIFT);
 }
-/* @} */
+/*! @} */
 #endif /* FSL_FEATURE_MCX_SPC_HAS_SYS_LDO */
 
 #if (defined(FSL_FEATURE_MCX_SPC_HAS_DCDC) && FSL_FEATURE_MCX_SPC_HAS_DCDC)
@@ -2211,7 +2221,7 @@ static inline spc_dcdc_drive_strength_t SPC_GetLowPowerModeDCDCRegulatorDriveStr
     return (spc_dcdc_drive_strength_t)((base->LP_CFG & SPC_LP_CFG_DCDC_VDD_DS_MASK) >> SPC_LP_CFG_DCDC_VDD_DS_SHIFT);
 }
 
-/* @} */
+/*! @} */
 #endif /* FSL_FEATURE_MCX_SPC_HAS_DCDC */
 
 #if defined(__cplusplus)
