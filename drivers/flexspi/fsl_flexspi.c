@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022, 2023 NXP
+ * Copyright 2016-2022, 2023-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -67,6 +67,10 @@ enum
 /*! @brief Typedef for interrupt handler. */
 typedef void (*flexspi_isr_t)(FLEXSPI_Type *base, flexspi_handle_t *handle);
 
+#if defined(FLEXSPI_RSTS)
+#define FLEXSPI_RESETS_ARRAY FLEXSPI_RSTS
+#endif 
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -99,10 +103,9 @@ static const clock_ip_name_t s_flexspiClock[] = FLEXSPI_CLOCKS;
 static flexspi_handle_t *s_flexspiHandle[ARRAY_SIZE(s_flexspiBases)];
 #endif
 
-#if defined(FSL_FEATURE_FLEXSPI_HAS_RESET) && FSL_FEATURE_FLEXSPI_HAS_RESET
-/*! @brief Pointers to FLEXSPI resets for each instance. */
-static const reset_ip_name_t s_flexspiResets[] = FLEXSPI_RSTS;
-#endif
+#if defined(FLEXSPI_RESETS_ARRAY)
+static const reset_ip_name_t s_flexspiResets[] = FLEXSPI_RESETS_ARRAY;
+#endif /* defined(FLEXSPI_RESETS_ARRAY) */
 
 #if defined(FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ) && FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ
 /*! @brief Pointer to flexspi IRQ handler. */
@@ -134,7 +137,7 @@ uint32_t FLEXSPI_GetInstance(FLEXSPI_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_flexspiBases); instance++)
     {
-        if (s_flexspiBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_flexspiBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }
@@ -262,10 +265,10 @@ void FLEXSPI_Init(FLEXSPI_Type *base, const flexspi_config_t *config)
     (void)CLOCK_EnableClock(s_flexspiClock[FLEXSPI_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
-#if defined(FSL_FEATURE_FLEXSPI_HAS_RESET) && FSL_FEATURE_FLEXSPI_HAS_RESET
+#if defined(FLEXSPI_RESETS_ARRAY)
     /* Reset the FLEXSPI module */
     RESET_PeripheralReset(s_flexspiResets[FLEXSPI_GetInstance(base)]);
-#endif
+#endif /* defined(FLEXSPI_RESETS_ARRAY) */
 
     /* Reset peripheral before configuring it. */
     base->MCR0 &= ~FLEXSPI_MCR0_MDIS_MASK;
