@@ -137,7 +137,7 @@ uint32_t FLEXSPI_GetInstance(FLEXSPI_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_flexspiBases); instance++)
     {
-        if (MSDK_REG_SECURE_ADDR(s_flexspiBases[instance]) == MSDK_REG_SECURE_ADDR(base))
+        if (s_flexspiBases[instance] == base)
         {
             break;
         }
