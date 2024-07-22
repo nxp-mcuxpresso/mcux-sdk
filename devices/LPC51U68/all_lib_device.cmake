@@ -172,6 +172,9 @@
 #  # description: Component mem_manager_light
 #  set(CONFIG_USE_component_mem_manager_light true)
 
+#  # description: Component mem_manager_freertos
+#  set(CONFIG_USE_component_mem_manager_freertos true)
+
 #  # description: Driver mma8451q
 #  set(CONFIG_USE_driver_mma8451q true)
 
@@ -253,7 +256,7 @@
 #  # description: I2C Driver
 #  set(CONFIG_USE_driver_flexcomm_i2c true)
 
-#  # description: I2C Driver
+#  # description: FLEXCOMM I2C FreeRTOS Driver
 #  set(CONFIG_USE_driver_flexcomm_i2c_freertos true)
 
 #  # description: I2S Driver
@@ -295,13 +298,13 @@
 #  # description: SPI Driver
 #  set(CONFIG_USE_driver_flexcomm_spi true)
 
-#  # description: SPI Driver
+#  # description: FLEXCOMM SPI FreeRTOS Driver
 #  set(CONFIG_USE_driver_flexcomm_spi_freertos true)
 
 #  # description: USART Driver
 #  set(CONFIG_USE_driver_flexcomm_usart true)
 
-#  # description: USART Driver
+#  # description: FLEXCOMM USART FreeRTOS Driver
 #  set(CONFIG_USE_driver_flexcomm_usart_freertos true)
 
 #  # description: UTICK Driver
@@ -403,7 +406,10 @@
 #  # description: FreeRTOS heap 5
 #  set(CONFIG_USE_middleware_freertos-kernel_heap_5 true)
 
-#  # description: FreeRTOS MPU wrappers
+#  # description: new V2 FreeRTOS MPU wrappers introduced in V10.6.0
+#  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers_v2 true)
+
+#  # description: old FreeRTOS MPU wrappers used before V10.6.0
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
 #set.middleware.sdmmc
@@ -481,6 +487,9 @@
 #  set(CONFIG_USE_middleware_usb_host_common_header true)
 
 #set.component.osa
+#  # description: Component osa_zephyr
+#  set(CONFIG_USE_component_osa_zephyr true)
+
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)
 

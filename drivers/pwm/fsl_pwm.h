@@ -20,7 +20,7 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*! @{ */
-#define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 8, 3)) /*!< Version 2.8.3 */
+#define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 8, 4)) /*!< Version 2.8.4 */
 /*! @} */
 
 /*! Number of bits per submodule for software output control */

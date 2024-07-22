@@ -23,7 +23,7 @@
  * @{
  */
 /*! @brief MU driver version. */
-#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
+#define FSL_MU_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*! @} */
 
 #define MU_CORE_INTR(intr) ((uint32_t)(intr) << 0U)
@@ -48,6 +48,11 @@
 #define MU_GET_TX_FLAG(flags)   (((uint32_t)(flags) >> 20U) & 0xFUL)
 #define MU_GET_RX_FLAG(flags)   (((uint32_t)(flags) >> 24U) & 0xFUL)
 #define MU_GET_GI_FLAG(flags)   (((uint32_t)(flags) >> 28U) & 0xFUL)
+
+/* General Purpose Interrupts count. */
+#ifndef FSL_FEATURE_MU_GPI_COUNT
+#define FSL_FEATURE_MU_GPI_COUNT 4U
+#endif
 
 /*!
  * @brief MU status flags.
@@ -227,7 +232,7 @@ typedef enum _mu_msg_reg_index
     kMU_MsgReg3,     /*!< Message register 3. */
 } mu_msg_reg_index_t;
 
-#if (defined(FSL_FEATURE_MU_NO_BOOT) && (0 != FSL_FEATURE_MU_NO_BOOT))
+#if (defined(FSL_FEATURE_MU_HAS_BOOT) && (0 == FSL_FEATURE_MU_HAS_BOOT))
 /*!
  * @brief The other core boot mode.
  */
@@ -237,6 +242,101 @@ typedef enum _mu_core_boot_mode
 } mu_core_boot_mode_t;
 #endif
 
+/*!
+ * @brief MU general purpose interrupts
+ */
+typedef enum _mu_general_purpose_interrupt
+{
+    kMU_GeneralPurposeInterrupt0  = 1UL << 0U,  /*!< General purpose interrupt 0  */
+    kMU_GeneralPurposeInterrupt1  = 1UL << 1U,  /*!< General purpose interrupt 1  */
+    kMU_GeneralPurposeInterrupt2  = 1UL << 2U,  /*!< General purpose interrupt 2  */
+    kMU_GeneralPurposeInterrupt3  = 1UL << 3U,  /*!< General purpose interrupt 3  */
+#if (FSL_FEATURE_MU_GPI_COUNT > 4U)
+    kMU_GeneralPurposeInterrupt4  = 1UL << 4U,  /*!< General purpose interrupt 4  */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 5U)
+    kMU_GeneralPurposeInterrupt5  = 1UL << 5U,  /*!< General purpose interrupt 5  */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 6U)
+    kMU_GeneralPurposeInterrupt6  = 1UL << 6U,  /*!< General purpose interrupt 6  */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 7U)
+    kMU_GeneralPurposeInterrupt7  = 1UL << 7U,  /*!< General purpose interrupt 7  */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 8U)
+    kMU_GeneralPurposeInterrupt8  = 1UL << 8U,  /*!< General purpose interrupt 8  */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 9U)
+    kMU_GeneralPurposeInterrupt9  = 1UL << 9U,  /*!< General purpose interrupt 9  */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 10U)
+    kMU_GeneralPurposeInterrupt10 = 1UL << 10U, /*!< General purpose interrupt 10 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 11U)
+    kMU_GeneralPurposeInterrupt11 = 1UL << 11U, /*!< General purpose interrupt 11 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 12U)
+    kMU_GeneralPurposeInterrupt12 = 1UL << 12U, /*!< General purpose interrupt 12 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 13U)
+    kMU_GeneralPurposeInterrupt13 = 1UL << 13U, /*!< General purpose interrupt 13 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 14U)
+    kMU_GeneralPurposeInterrupt14 = 1UL << 14U, /*!< General purpose interrupt 14 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 15U)
+    kMU_GeneralPurposeInterrupt15 = 1UL << 15U, /*!< General purpose interrupt 15 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 16U)
+    kMU_GeneralPurposeInterrupt16 = 1UL << 16U, /*!< General purpose interrupt 16 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 17U)
+    kMU_GeneralPurposeInterrupt17 = 1UL << 17U, /*!< General purpose interrupt 17 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 18U)
+    kMU_GeneralPurposeInterrupt18 = 1UL << 18U, /*!< General purpose interrupt 18 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 19U)
+    kMU_GeneralPurposeInterrupt19 = 1UL << 19U, /*!< General purpose interrupt 19 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 20U)
+    kMU_GeneralPurposeInterrupt20 = 1UL << 20U, /*!< General purpose interrupt 20 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 21U)
+    kMU_GeneralPurposeInterrupt21 = 1UL << 21U, /*!< General purpose interrupt 21 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 22U)
+    kMU_GeneralPurposeInterrupt22 = 1UL << 22U, /*!< General purpose interrupt 22 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 23U)
+    kMU_GeneralPurposeInterrupt23 = 1UL << 23U, /*!< General purpose interrupt 23 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 24U)
+    kMU_GeneralPurposeInterrupt24 = 1UL << 24U, /*!< General purpose interrupt 24 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 25U)
+    kMU_GeneralPurposeInterrupt25 = 1UL << 25U, /*!< General purpose interrupt 25 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 26U)
+    kMU_GeneralPurposeInterrupt26 = 1UL << 26U, /*!< General purpose interrupt 26 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 27U)
+    kMU_GeneralPurposeInterrupt27 = 1UL << 27U, /*!< General purpose interrupt 27 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 28U)
+    kMU_GeneralPurposeInterrupt28 = 1UL << 28U, /*!< General purpose interrupt 28 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 29U)
+    kMU_GeneralPurposeInterrupt29 = 1UL << 29U, /*!< General purpose interrupt 29 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 30U)
+    kMU_GeneralPurposeInterrupt30 = 1UL << 30U, /*!< General purpose interrupt 30 */
+#endif
+#if (FSL_FEATURE_MU_GPI_COUNT > 31U)
+    kMU_GeneralPurposeInterrupt31 = 1UL << 31U, /*!< General purpose interrupt 31 */
+#endif
+} mu_general_purpose_interrupt_t;
+
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -244,6 +344,20 @@ typedef enum _mu_core_boot_mode
 #if defined(__cplusplus)
 extern "C" {
 #endif
+
+/*!
+ * @name MU instance.
+ * @{
+ */
+
+/*!
+ * @brief Get the MU instance index.
+ *
+ * @param base MU peripheral base address.
+ * @return MU instance index.
+ */
+uint32_t MU_GetInstance(MU_Type *base);
+/*! @} */
 
 /*!
  * @name MU initialization.
@@ -449,6 +563,8 @@ static inline uint32_t MU_GetCoreStatusFlags(MU_Type *base)
  * }
  * @endcode
  *
+ * If there are more than 4 general purpose interrupts, use @ref MU_GetGeneralPurposeStatusFlags.
+ *
  * @param base MU peripheral base address.
  * @return      Bit mask of the MU status flags, see _mu_status_flags.
  */
@@ -464,6 +580,8 @@ uint32_t MU_GetStatusFlags(MU_Type *base);
  * Clear general interrupt 0 and general interrupt 1 pending flags.
  * MU_ClearStatusFlags(base, kMU_GenInt0Flag | kMU_GenInt1Flag);
  * @endcode
+ *
+ * If there are more than 4 general purpose interrupts, use @ref MU_ClearGeneralPurposeStatusFlags.
  *
  * @param base MU peripheral base address.
  * @param flags Bit mask of the MU status flags. See _mu_status_flags. Only the
@@ -521,6 +639,8 @@ static inline void MU_ClearStatusFlags(MU_Type *base, uint32_t flags)
  * MU_EnableInterrupts(base, kMU_GenInt0InterruptEnable | kMU_Tx0EmptyInterruptEnable);
  * @endcode
  *
+ * If there are more than 4 general purpose interrupts, use @ref MU_EnableGeneralPurposeInterrupts.
+ *
  * @param base MU peripheral base address.
  * @param interrupts  Bit mask of the MU interrupts. See _mu_interrupt_enable.
  */
@@ -574,6 +694,8 @@ static inline void MU_EnableInterrupts(MU_Type *base, uint32_t interrupts)
  *    Disable general interrupt 0 and TX0 empty interrupt.
  * MU_DisableInterrupts(base, kMU_GenInt0InterruptEnable | kMU_Tx0EmptyInterruptEnable);
  * @endcode
+ *
+ * If there are more than 4 general purpose interrupts, use @ref MU_DisableGeneralPurposeInterrupts.
  *
  * @param base MU peripheral base address.
  * @param interrupts  Bit mask of the MU interrupts. See _mu_interrupt_enable.
@@ -635,6 +757,8 @@ static inline void MU_DisableInterrupts(MU_Type *base, uint32_t interrupts)
  * }
  * @endcode
  *
+ * If there are more than 4 general purpose interrupts, use @ref MU_TriggerGeneralPurposeInterrupts.
+ *
  * @param base MU peripheral base address.
  * @param interrupts Bit mask of the interrupts to trigger. See _mu_interrupt_trigger.
  * @retval kStatus_Success    Interrupts have been triggered successfully.
@@ -673,11 +797,137 @@ static inline void MU_ClearNmi(MU_Type *base)
 /*! @} */
 
 /*!
+ * @name MU general purpose interrupt
+ * @{
+ */
+
+/*!
+ * @brief Enables the MU general purpose interrupts.
+ *
+ * This function enables the MU general purpose interrupts. The interrupts
+ * to enable should be passed in as bit mask of @ref mu_general_purpose_interrupt_t.
+ * The function @ref MU_EnableInterrupts only support general interrupt 0~3,
+ * this function supports all general interrupts.
+ *
+ * For example, to enable general purpose interrupt 0 and 3, use like this:
+ * @code
+   MU_EnableGeneralPurposeInterrupts(MU, kMU_GeneralPurposeInterrupt0 | kMU_GeneralPurposeInterrupt3);
+   @endcode
+ *
+ * @param base MU peripheral base address.
+ * @param interrupts  Bit mask of the MU general purpose interrupts,
+ * see @ref mu_general_purpose_interrupt_t.
+ */
+static inline void MU_EnableGeneralPurposeInterrupts(MU_Type *base, uint32_t interrupts)
+{
+    base->GIER |= interrupts;
+}
+
+/*!
+ * @brief Disables the MU general purpose interrupts.
+ *
+ * This function disables the MU general purpose interrupts. The interrupts
+ * to disable should be passed in as bit mask of @ref mu_general_purpose_interrupt_t.
+ * The function @ref MU_DisableInterrupts only support general interrupt 0~3,
+ * this function supports all general interrupts.
+ *
+ * For example, to disable general purpose interrupt 0 and 3, use like this:
+ * @code
+   MU_EnableGeneralPurposeInterrupts(MU, kMU_GeneralPurposeInterrupt0 | kMU_GeneralPurposeInterrupt3);
+   @endcode
+ *
+ * @param base MU peripheral base address.
+ * @param interrupts  Bit mask of the MU general purpose interrupts.
+ * see @ref mu_general_purpose_interrupt_t.
+ */
+static inline void MU_DisableGeneralPurposeInterrupts(MU_Type *base, uint32_t interrupts)
+{
+    base->GIER &= ~interrupts;
+}
+
+/*!
+ * @brief Gets the MU general purpose interrupt status flags.
+ *
+ * This function returns the bit mask of the MU general purpose interrupt status flags.
+ * @ref MU_GetStatusFlags can only get general purpose interrupt status 0~3,
+ * this function can get all general purpose interrupts status.
+ *
+ * This example shows to check whether general purpose interrupt 0 and 3 happened.
+ *
+ * @code
+   uint32_t flags;
+   flags = MU_GetGeneralPurposeStatusFlags(base);
+   if (kMU_GeneralPurposeInterrupt0 & flags)
+   {
+   }
+   if (kMU_GeneralPurposeInterrupt3 & flags)
+   {
+   }
+   @endcode
+ *
+ * @param base MU peripheral base address.
+ * @return      Bit mask of the MU general purpose interrupt status flags.
+ */
+static inline uint32_t MU_GetGeneralPurposeStatusFlags(MU_Type *base)
+{
+    return base->GSR;
+}
+
+/*!
+ * @brief Clear the MU general purpose interrupt status flags.
+ *
+ * This function clears the specific MU general purpose interrupt status flags. The flags to clear should
+ * be passed in as bit mask. mu_general_purpose_interrupt_t_mu_status_flags.
+ *
+ * Example to clear general purpose interrupt 0 and general interrupt 1 pending flags.
+ * @code
+   MU_ClearGeneralPurposeStatusFlags(base, kMU_GeneralPurposeInterrupt0 | kMU_GeneralPurposeInterrupt1);
+   @endcode
+ *
+ * @param base MU peripheral base address.
+ * @param flags Bit mask of the MU general purpose interrupt status flags.
+ * See @ref mu_general_purpose_interrupt_t.
+ */
+static inline void MU_ClearGeneralPurposeStatusFlags(MU_Type *base, uint32_t flags)
+{
+    base->GSR = flags;
+}
+
+/*!
+ * @brief Triggers general purpose interrupts to the other core.
+ *
+ * This function triggers the specific general purpose interrupts to the other core.
+ * The interrupts to trigger are passed in as bit mask. See @ref mu_general_purpose_interrupt_t.
+ * The MU should not trigger an interrupt to the other core when the previous interrupt
+ * has not been processed by the other core. This function checks whether the
+ * previous interrupts have been processed. If not, it returns an error.
+ *
+ * @code
+   status_t status;
+   status = MU_TriggerGeneralPurposeInterrupts(base, kMU_GeneralPurposeInterrupt0 | kMU_GeneralPurposeInterrupt2);
+
+   if (kStatus_Success != status)
+   {
+        Previous general purpose interrupt 0 or general purpose interrupt 2
+        has not been processed by the other core.
+   }
+   @endcode
+ *
+ * @param base MU peripheral base address.
+ * @param interrupts Bit mask of the interrupts to trigger. See @ref mu_general_purpose_interrupt_t.
+ * @retval kStatus_Success    Interrupts have been triggered successfully.
+ * @retval kStatus_Fail       Previous interrupts have not been accepted.
+ */
+status_t MU_TriggerGeneralPurposeInterrupts(MU_Type *base, uint32_t interrupts);
+
+/*! @} */
+
+/*!
  * @name MU misc functions
  * @{
  */
 
-#if !(defined(FSL_FEATURE_MU_NO_BOOT) && (0 != FSL_FEATURE_MU_NO_BOOT))
+#if !(defined(FSL_FEATURE_MU_HAS_BOOT) && (0 == FSL_FEATURE_MU_HAS_BOOT))
 /*!
  * @brief Boots the other core.
  *
@@ -687,9 +937,9 @@ static inline void MU_ClearNmi(MU_Type *base)
  * @param mode The other core boot mode.
  */
 void MU_BootOtherCore(MU_Type *base, mu_core_boot_mode_t mode);
-#endif /* FSL_FEATURE_MU_NO_BOOT */
+#endif /* FSL_FEATURE_MU_HAS_BOOT */
 
-#if !(defined(FSL_FEATURE_MU_NO_RSTH) && (0 != FSL_FEATURE_MU_NO_RSTH))
+#if !(defined(FSL_FEATURE_MU_HAS_RSTH) && (0 == FSL_FEATURE_MU_HAS_RSTH))
 /*!
  * @brief Holds the other core reset.
  *
@@ -698,7 +948,7 @@ void MU_BootOtherCore(MU_Type *base, mu_core_boot_mode_t mode);
  * @param base MU peripheral base address.
  */
 void MU_HoldOtherCoreReset(MU_Type *base);
-#endif /* FSL_FEATURE_MU_NO_RSTH */
+#endif /* FSL_FEATURE_MU_HAS_RSTH */
 
 /*!
  * @brief Resets the MU for both A side and B side.
@@ -744,7 +994,7 @@ static inline void MU_SetClockOnOtherCoreEnable(MU_Type *base, bool enable)
 }
 #endif
 
-#if !(defined(FSL_FEATURE_MU_NO_HR) && FSL_FEATURE_MU_NO_HR)
+#if !(defined(FSL_FEATURE_MU_HAS_HR) && (FSL_FEATURE_MU_HAS_HR == 0))
 /*!
  * @brief Hardware reset the other core.
  *
@@ -772,9 +1022,9 @@ static inline void MU_SetClockOnOtherCoreEnable(MU_Type *base, bool enable)
  * for some platforms. waitReset is only available for platforms that
  * FSL_FEATURE_MU_NO_CORE_STATUS not defined as 1 and
  * FSL_FEATURE_MU_HAS_RESET_ASSERT_INT not defined as 0. holdReset is only available
- * for platforms that FSL_FEATURE_MU_NO_RSTH not defined as 1.
- * bootMode is only available for platforms that FSL_FEATURE_MU_NO_BOOT not
- * defined as 1.
+ * for platforms that FSL_FEATURE_MU_HAS_RSTH not defined as 0.
+ * bootMode is only available for platforms that FSL_FEATURE_MU_HAS_BOOT not
+ * defined as 0.
  *
  * @param base MU peripheral base address.
  * @param waitReset Wait the other core enters reset. Only work when there is CSSR0[RAIP]
@@ -791,7 +1041,7 @@ static inline void MU_SetClockOnOtherCoreEnable(MU_Type *base, bool enable)
  *                 parameter is useless.
  */
 void MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset, mu_core_boot_mode_t bootMode);
-#endif /* FSL_FEATURE_MU_NO_HR */
+#endif /* FSL_FEATURE_MU_HAS_HR */
 
 #if (defined(FSL_FEATURE_MU_HAS_HRM) && FSL_FEATURE_MU_HAS_HRM)
 /*!

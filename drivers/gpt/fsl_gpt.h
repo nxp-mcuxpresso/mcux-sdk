@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_GPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+#define FSL_GPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
 /*! @} */
 
 /*!
@@ -187,6 +187,26 @@ static inline void GPT_SoftwareReset(GPT_Type *base)
  */
 static inline void GPT_SetClockSource(GPT_Type *base, gpt_clock_source_t gptClkSource)
 {
+#if defined(FSL_FEATURE_GPT_HAS_ERRATA_3777) && FSL_FEATURE_GPT_HAS_ERRATA_3777
+    uint32_t regCR;
+    uint32_t regIR;
+
+    /* Step1: Disable GPT. */
+    base->CR &= ~GPT_CR_EN_MASK;
+
+    /* Step2: Disable interrupts. Backup IR register first. */
+    regIR = base->IR;
+    base->IR = 0U;
+
+    /* Step3: Configure Output Mode to unconnected or disconnected. Backup CR register first. */
+    regCR = base->CR & (GPT_CR_OM1_MASK | GPT_CR_OM2_MASK | GPT_CR_OM3_MASK | GPT_CR_IM1_MASK | GPT_CR_IM2_MASK);
+    base->CR &= ~(GPT_CR_OM1_MASK | GPT_CR_OM2_MASK | GPT_CR_OM3_MASK);
+
+    /* Step4: Disable Input Capture Modes. */
+    base->CR &= ~(GPT_CR_IM1_MASK | GPT_CR_IM2_MASK);
+#endif
+
+    /* Step5: Set clock source. */
     if (gptClkSource == kGPT_ClockSource_Osc)
     {
         base->CR = (base->CR & ~GPT_CR_CLKSRC_MASK) | GPT_CR_EN_24M_MASK | GPT_CR_CLKSRC(gptClkSource);
@@ -195,6 +215,20 @@ static inline void GPT_SetClockSource(GPT_Type *base, gpt_clock_source_t gptClkS
     {
         base->CR = (base->CR & ~(GPT_CR_CLKSRC_MASK | GPT_CR_EN_24M_MASK)) | GPT_CR_CLKSRC(gptClkSource);
     }
+
+#if defined(FSL_FEATURE_GPT_HAS_ERRATA_3777) && FSL_FEATURE_GPT_HAS_ERRATA_3777
+    /* Step6: Clear Status register. */
+    base->SR = GPT_SR_OF1_MASK | GPT_SR_OF2_MASK | GPT_SR_OF3_MASK |
+               GPT_SR_IF1_MASK | GPT_SR_IF2_MASK | GPT_SR_ROV_MASK;
+
+    /* Step7: Main Counter and Prescaler Counter are reset to 0 after GPT is enabled. Restore backup value. */
+    base->CR |= GPT_CR_ENMOD_MASK;
+    base->CR |= regCR;
+    base->IR |= regIR;
+
+    /* Step8: Enable GPT. */
+    base->CR |= GPT_CR_EN_MASK;
+#endif
 }
 
 /*!

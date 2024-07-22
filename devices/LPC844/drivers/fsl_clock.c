@@ -470,17 +470,21 @@ uint32_t CLOCK_GetSystemPLLInClockRate(void)
 {
     uint32_t freq = 0U;
 
-    switch ((SYSCON->SYSPLLCLKSEL & SYSCON_SYSPLLCLKSEL_SEL_MASK))
+    switch ((SYSCON->SYSPLLCLKSEL))
     {
+        /* source from fro div clock */
         case 0x03U:
             freq = CLOCK_GetFroFreq() >> 1U;
             break;
+        /* source from the fro clock */
         case 0x00U:
             freq = CLOCK_GetFroFreq();
             break;
+        /* source from external clock in */
         case 0x01U:
             freq = CLOCK_GetExtClkFreq();
             break;
+        /* source from watchdog oscillator */
         case 0x02U:
             freq = CLOCK_GetWdtOscFreq();
             break;
@@ -530,7 +534,7 @@ void CLOCK_InitSystemPll(const clock_sys_pll_t *config)
     SYSCON->PDRUNCFG |= SYSCON_PDRUNCFG_SYSPLL_PD_MASK;
 
     /*set system pll clock source select register */
-    syspllclkseltmp = (SYSCON->SYSPLLCLKSEL & (~SYSCON_SYSPLLCLKSEL_SEL_MASK)) | (uint32_t)config->src;
+    syspllclkseltmp = (SYSCON->SYSPLLCLKSEL & (~SYSCON_SYSPLLCLKSEL_SEL_MASK)) | (uint32_t)(config->src);
     SYSCON->SYSPLLCLKSEL |= syspllclkseltmp;
     /* system pll clock source update */
     CLOCK_UpdateClkSrc((volatile uint32_t *)(&(SYSCON->SYSPLLCLKUEN)), SYSCON_SYSPLLCLKSEL_SEL_MASK);
@@ -644,8 +648,8 @@ void CLOCK_InitWdtOsc(clock_wdt_analog_freq_t wdtOscFreq, uint32_t wdtOscDiv)
 
     wdtOscCtrl &= ~(SYSCON_WDTOSCCTRL_DIVSEL_MASK | SYSCON_WDTOSCCTRL_FREQSEL_MASK);
 
-    wdtOscCtrl |=
-        SYSCON_WDTOSCCTRL_DIVSEL((wdtOscDiv >> 1U) - 1U) | SYSCON_WDTOSCCTRL_FREQSEL(CLK_WDT_OSC_GET_REG(wdtOscFreq));
+    wdtOscCtrl |= SYSCON_WDTOSCCTRL_DIVSEL((wdtOscDiv >> 1U) - 1U) |
+                  SYSCON_WDTOSCCTRL_FREQSEL(CLK_WDT_OSC_GET_REG((uint32_t)wdtOscFreq));
 
     SYSCON->WDTOSCCTRL = wdtOscCtrl;
 
@@ -688,4 +692,25 @@ void CLOCK_SetFroOutClkSrc(clock_fro_src_t src)
         /* Update clock source */
         CLOCK_UpdateClkSrc((volatile uint32_t *)(&(SYSCON->FRODIRECTCLKUEN)), SYSCON_FRODIRECTCLKUEN_ENA_MASK);
     }
+}
+
+/*! brief  Set the flash wait states for the input freuqency.
+ * param   iFreq   : Input frequency
+ */
+void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t iFreq)
+{
+    uint32_t num_wait_states;
+    if (iFreq <= 24000000UL)
+    {
+        /* [0 - 24 MHz] */
+        num_wait_states = 0UL;
+    }
+    else
+    {
+        /* Above 24 MHz */
+        num_wait_states = 1UL;
+    }
+
+    FLASH_CTRL->FLASHCFG =
+        ((FLASH_CTRL->FLASHCFG & ~FLASH_CTRL_FLASHCFG_FLASHTIM_MASK) | FLASH_CTRL_FLASHCFG_FLASHTIM(num_wait_states));
 }

@@ -561,9 +561,8 @@ static int32_t I2C_Slave_InterruptTransmit(const uint8_t *data, uint32_t num, cm
     status = I2C_SlaveTransferNonBlocking(i2c->resource->base, &(i2c->handle->slave_handle),
                                           (uint32_t)kI2C_SlaveCompletionEvent);
 
-    i2c->handle->slave_handle.transfer.txData =
-        (uint8_t *)data;                             /*Pointer to buffer with data to transmit to I2C Master*/
-    i2c->handle->slave_handle.transfer.txSize = num; /*Number of data bytes to transmit*/
+    i2c->handle->slave_handle.transfer.txData = data; /*Pointer to buffer with data to transmit to I2C Master*/
+    i2c->handle->slave_handle.transfer.txSize = num;  /*Number of data bytes to transmit*/
     i2c->handle->slave_handle.transfer.transferredCount =
         0U; /*Number of bytes actually transferred since start or last repeated start. */
 

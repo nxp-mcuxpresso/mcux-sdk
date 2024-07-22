@@ -50,6 +50,11 @@
 #define MSEC_TO_TICK(msec) \
     (((uint32_t)(msec) + 500uL / (uint32_t)configTICK_RATE_HZ) * (uint32_t)configTICK_RATE_HZ / 1000uL)
 #define TICKS_TO_MSEC(tick) ((uint32_t)((uint64_t)(tick)*1000uL / (uint64_t)configTICK_RATE_HZ))
+
+#define OSA_MEM_MAGIC_NUMBER (12345U)
+#define OSA_MEM_SIZE_ALIGN(var, alignbytes) \
+    ((unsigned int)((var) + ((alignbytes)-1U)) & (unsigned int)(~(unsigned int)((alignbytes)-1U)))
+
 /************************************************************************************
 *************************************************************************************
 * Private type definitions
@@ -63,7 +68,7 @@ typedef struct osa_freertos_task
 
 typedef struct _osa_event_struct
 {
-    EventGroupHandle_t handle; /* The event handle */
+    EventGroupHandle_t eventHandle; /* The event handle */
     uint8_t autoClear;         /*!< Auto clear or manual clear   */
 } osa_event_struct_t;
 
@@ -80,6 +85,13 @@ typedef struct _osa_state
     int32_t basePriorityNesting;
     uint32_t interruptDisableCount;
 } osa_state_t;
+
+/*! @brief Definition structure contains allocated memory information.*/
+typedef struct _osa_mem_align_control_block
+{
+    uint16_t identifier; /*!< Identifier for the memory control block. */
+    uint16_t offset;     /*!< offset from aligned address to real address */
+} osa_mem_align_cb_t;
 
 /*! *********************************************************************************
 *************************************************************************************
@@ -101,6 +113,20 @@ void startup_task(void *argument);
 const uint8_t gUseRtos_c = USE_RTOS; /* USE_RTOS = 0 for BareMetal and 1 for OS */
 
 static osa_state_t s_osaState = {0};
+
+/* Allocate the memory for the heap. */
+#if (defined(FSL_OSA_ALLOCATED_HEAP) && (FSL_OSA_ALLOCATED_HEAP > 0U))
+#if defined(configAPPLICATION_ALLOCATED_HEAP) && (configAPPLICATION_ALLOCATED_HEAP)
+#if defined(DATA_SECTION_IS_CACHEABLE) && (DATA_SECTION_IS_CACHEABLE)
+extern uint8_t ucHeap[configTOTAL_HEAP_SIZE];
+AT_NONCACHEABLE_SECTION_ALIGN(uint8_t ucHeap[configTOTAL_HEAP_SIZE], 4);
+#else
+extern uint8_t ucHeap[configTOTAL_HEAP_SIZE];
+SDK_ALIGN(uint8_t ucHeap[configTOTAL_HEAP_SIZE], 4);
+#endif /* DATA_SECTION_IS_CACHEABLE */
+#endif /* configAPPLICATION_ALLOCATED_HEAP */
+#endif /* FSL_OSA_ALLOCATED_HEAP */
+
 /*! *********************************************************************************
 *************************************************************************************
 * Private memory declarations
@@ -120,6 +146,8 @@ static osa_state_t s_osaState = {0};
  *END**************************************************************************/
 void *OSA_MemoryAllocate(uint32_t memLength)
 {
+#if defined(configSUPPORT_DYNAMIC_ALLOCATION) && (configSUPPORT_DYNAMIC_ALLOCATION > 0)
+
     void *p = (void *)pvPortMalloc(memLength);
 
     if (NULL != p)
@@ -128,6 +156,9 @@ void *OSA_MemoryAllocate(uint32_t memLength)
     }
 
     return p;
+#else
+    return NULL;
+#endif
 }
 
 /*FUNCTION**********************************************************************
@@ -138,7 +169,70 @@ void *OSA_MemoryAllocate(uint32_t memLength)
  *END**************************************************************************/
 void OSA_MemoryFree(void *p)
 {
+#if defined(configSUPPORT_DYNAMIC_ALLOCATION) && (configSUPPORT_DYNAMIC_ALLOCATION > 0)
     vPortFree(p);
+#endif
+}
+
+void *OSA_MemoryAllocateAlign(uint32_t memLength, uint32_t alignbytes)
+{
+    osa_mem_align_cb_t *p_cb = NULL;
+    uint32_t alignedsize;
+
+    /* Check overflow. */
+    alignedsize = (uint32_t)(unsigned int)OSA_MEM_SIZE_ALIGN(memLength, alignbytes);
+    if (alignedsize < memLength)
+    {
+        return NULL;
+    }
+
+    if (alignedsize > 0xFFFFFFFFU - alignbytes - sizeof(osa_mem_align_cb_t))
+    {
+        return NULL;
+    }
+
+    alignedsize += alignbytes + (uint32_t)sizeof(osa_mem_align_cb_t);
+
+    union
+    {
+        void *pointer_value;
+        uintptr_t unsigned_value;
+    } p_align_addr, p_addr;
+
+    p_addr.pointer_value = OSA_MemoryAllocate(alignedsize);
+
+    if (p_addr.pointer_value == NULL)
+    {
+        return NULL;
+    }
+
+    p_align_addr.unsigned_value = OSA_MEM_SIZE_ALIGN(p_addr.unsigned_value + sizeof(osa_mem_align_cb_t), alignbytes);
+
+    p_cb             = (osa_mem_align_cb_t *)(p_align_addr.unsigned_value - 4U);
+    p_cb->identifier = OSA_MEM_MAGIC_NUMBER;
+    p_cb->offset     = (uint16_t)(p_align_addr.unsigned_value - p_addr.unsigned_value);
+
+    return p_align_addr.pointer_value;
+}
+
+void OSA_MemoryFreeAlign(void *p)
+{
+    union
+    {
+        void *pointer_value;
+        uintptr_t unsigned_value;
+    } p_free;
+    p_free.pointer_value = p;
+    osa_mem_align_cb_t *p_cb = (osa_mem_align_cb_t *)(p_free.unsigned_value - 4U);
+
+    if (p_cb->identifier != OSA_MEM_MAGIC_NUMBER)
+    {
+        return;
+    }
+
+    p_free.unsigned_value = p_free.unsigned_value - p_cb->offset;
+
+    OSA_MemoryFree(p_free.pointer_value);
 }
 
 void OSA_EnterCritical(uint32_t *sr)
@@ -717,11 +811,11 @@ osa_status_t OSA_EventCreate(osa_event_handle_t eventHandle, uint8_t autoClear)
     
 #if (defined(configSUPPORT_STATIC_ALLOCATION) && (configSUPPORT_STATIC_ALLOCATION > 0U)) && \
     !((defined(configSUPPORT_DYNAMIC_ALLOCATION) && (configSUPPORT_DYNAMIC_ALLOCATION > 0U)))
-    pEventStruct->handle = xEventGroupCreateStatic((StaticEventGroup_t *)(void *)((uint8_t *)(eventHandle) + sizeof(osa_event_struct_t)));
+    pEventStruct->eventHandle = xEventGroupCreateStatic((StaticEventGroup_t *)(void *)((uint8_t *)(eventHandle) + sizeof(osa_event_struct_t)));
 #else    
-    pEventStruct->handle = xEventGroupCreate();
+    pEventStruct->eventHandle = xEventGroupCreate();
 #endif
-    if (NULL != pEventStruct->handle)
+    if (NULL != pEventStruct->eventHandle)
     {
         pEventStruct->autoClear = autoClear;
     }
@@ -746,16 +840,16 @@ osa_status_t OSA_EventSet(osa_event_handle_t eventHandle, osa_event_flags_t flag
     assert(NULL != eventHandle);
     osa_event_struct_t *pEventStruct = (osa_event_struct_t *)eventHandle;
 
-    if (NULL == pEventStruct->handle)
+    if (NULL == pEventStruct->eventHandle)
     {
         return KOSA_StatusError;
     }
     if (0U != __get_IPSR())
     {
 #if (configUSE_TRACE_FACILITY == 1)
-        result = xEventGroupSetBitsFromISR(pEventStruct->handle, (event_flags_t)flagsToSet, &taskToWake);
+        result = xEventGroupSetBitsFromISR(pEventStruct->eventHandle, (event_flags_t)flagsToSet, &taskToWake);
 #else
-        result = xEventGroupSetBitsFromISR((void *)pEventStruct->handle, (event_flags_t)flagsToSet, &taskToWake);
+        result = xEventGroupSetBitsFromISR((void *)pEventStruct->eventHandle, (event_flags_t)flagsToSet, &taskToWake);
 #endif
         assert(pdPASS == result);
         (void)result;
@@ -763,7 +857,7 @@ osa_status_t OSA_EventSet(osa_event_handle_t eventHandle, osa_event_flags_t flag
     }
     else
     {
-        (void)xEventGroupSetBits(pEventStruct->handle, (event_flags_t)flagsToSet);
+        (void)xEventGroupSetBits(pEventStruct->eventHandle, (event_flags_t)flagsToSet);
     }
 
     (void)result;
@@ -782,7 +876,7 @@ osa_status_t OSA_EventClear(osa_event_handle_t eventHandle, osa_event_flags_t fl
     assert(NULL != eventHandle);
     osa_event_struct_t *pEventStruct = (osa_event_struct_t *)eventHandle;
 
-    if (NULL == pEventStruct->handle)
+    if (NULL == pEventStruct->eventHandle)
     {
         return KOSA_StatusError;
     }
@@ -790,14 +884,14 @@ osa_status_t OSA_EventClear(osa_event_handle_t eventHandle, osa_event_flags_t fl
     if (0U != __get_IPSR())
     {
 #if (configUSE_TRACE_FACILITY == 1)
-        (void)xEventGroupClearBitsFromISR(pEventStruct->handle, (event_flags_t)flagsToClear);
+        (void)xEventGroupClearBitsFromISR(pEventStruct->eventHandle, (event_flags_t)flagsToClear);
 #else
-        (void)xEventGroupClearBitsFromISR((void *)pEventStruct->handle, (event_flags_t)flagsToClear);
+        (void)xEventGroupClearBitsFromISR((void *)pEventStruct->eventHandle, (event_flags_t)flagsToClear);
 #endif
     }
     else
     {
-        (void)xEventGroupClearBits(pEventStruct->handle, (event_flags_t)flagsToClear);
+        (void)xEventGroupClearBits(pEventStruct->eventHandle, (event_flags_t)flagsToClear);
     }
     return KOSA_StatusSuccess;
 }
@@ -817,7 +911,7 @@ osa_status_t OSA_EventGet(osa_event_handle_t eventHandle, osa_event_flags_t flag
     osa_event_struct_t *pEventStruct = (osa_event_struct_t *)eventHandle;
     EventBits_t eventFlags;
 
-    if (NULL == pEventStruct->handle)
+    if (NULL == pEventStruct->eventHandle)
     {
         return KOSA_StatusError;
     }
@@ -829,11 +923,11 @@ osa_status_t OSA_EventGet(osa_event_handle_t eventHandle, osa_event_flags_t flag
 
     if (0U != __get_IPSR())
     {
-        eventFlags = xEventGroupGetBitsFromISR(pEventStruct->handle);
+        eventFlags = xEventGroupGetBitsFromISR(pEventStruct->eventHandle);
     }
     else
     {
-        eventFlags = xEventGroupGetBits(pEventStruct->handle);
+        eventFlags = xEventGroupGetBits(pEventStruct->eventHandle);
     }
 
     *pFlagsOfEvent = (osa_event_flags_t)eventFlags & flagsMask;
@@ -870,7 +964,7 @@ osa_status_t OSA_EventWait(osa_event_handle_t eventHandle,
 
     /* Clean FreeRTOS cotrol flags */
     flagsToWait = flagsToWait & 0x00FFFFFFU;
-    if (NULL == pEventStruct->handle)
+    if (NULL == pEventStruct->eventHandle)
     {
         return KOSA_StatusError;
     }
@@ -887,7 +981,7 @@ osa_status_t OSA_EventWait(osa_event_handle_t eventHandle,
 
     clearMode = (pEventStruct->autoClear != 0U) ? pdTRUE : pdFALSE;
 
-    flagsSave = xEventGroupWaitBits(pEventStruct->handle, (event_flags_t)flagsToWait, clearMode, (BaseType_t)waitAll,
+    flagsSave = xEventGroupWaitBits(pEventStruct->eventHandle, (event_flags_t)flagsToWait, clearMode, (BaseType_t)waitAll,
                                     timeoutTicks);
 
     flagsSave &= (event_flags_t)flagsToWait;
@@ -919,11 +1013,11 @@ osa_status_t OSA_EventDestroy(osa_event_handle_t eventHandle)
     assert(NULL != eventHandle);
     osa_event_struct_t *pEventStruct = (osa_event_struct_t *)eventHandle;
 
-    if (NULL == pEventStruct->handle)
+    if (NULL == pEventStruct->eventHandle)
     {
         return KOSA_StatusError;
     }
-    vEventGroupDelete(pEventStruct->handle);
+    vEventGroupDelete(pEventStruct->eventHandle);
     return KOSA_StatusSuccess;
 }
 

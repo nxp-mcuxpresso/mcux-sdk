@@ -9,6 +9,7 @@
 #ifndef _FSL_OS_ABSTRACTION_H_
 #define _FSL_OS_ABSTRACTION_H_
 
+#ifndef __ZEPHYR__
 #ifndef SDK_COMPONENT_DEPENDENCY_FSL_COMMON
 #define SDK_COMPONENT_DEPENDENCY_FSL_COMMON (1U)
 #endif
@@ -122,6 +123,8 @@ typedef enum _osa_status
 #include "fsl_os_abstraction_free_rtos.h"
 #elif defined(FSL_RTOS_THREADX)
 #include "fsl_os_abstraction_threadx.h"
+#elif defined(__ZEPHYR__)
+#include "fsl_os_abstraction_zephyr.h"
 #else
 #include "fsl_os_abstraction_bm.h"
 #endif
@@ -135,7 +138,7 @@ extern const uint8_t gUseRtos_c;
 #if (defined(GENERIC_LIST_LIGHT) && (GENERIC_LIST_LIGHT > 0U))
 #if (defined(configSUPPORT_STATIC_ALLOCATION) && (configSUPPORT_STATIC_ALLOCATION > 0U)) && \
     !((defined(configSUPPORT_DYNAMIC_ALLOCATION) && (configSUPPORT_DYNAMIC_ALLOCATION > 0U)))
-#define OSA_TASK_HANDLE_SIZE (132U)
+#define OSA_TASK_HANDLE_SIZE (150U)
 #else
 #define OSA_TASK_HANDLE_SIZE (12U)
 #endif
@@ -167,12 +170,19 @@ extern const uint8_t gUseRtos_c;
 #define OSA_MSGQ_HANDLE_SIZE (4U)
 #endif
 #define OSA_MSG_HANDLE_SIZE   (0U)
+#if (defined(configSUPPORT_STATIC_ALLOCATION) && (configSUPPORT_STATIC_ALLOCATION > 0U)) && \
+    !((defined(configSUPPORT_DYNAMIC_ALLOCATION) && (configSUPPORT_DYNAMIC_ALLOCATION > 0U)))
+#define OSA_TIMER_HANDLE_SIZE (48U)
+#else
 #define OSA_TIMER_HANDLE_SIZE (4U)
+#endif
 #elif defined(SDK_OS_UCOSII)
 #define USE_RTOS (1)
 #elif defined(SDK_OS_UCOSIII)
 #define USE_RTOS (1)
 #elif defined(FSL_RTOS_THREADX)
+#define USE_RTOS (1)
+#elif defined(__ZEPHYR__)
 #define USE_RTOS (1)
 #else
 #define USE_RTOS (0)
@@ -477,6 +487,30 @@ void *OSA_MemoryAllocate(uint32_t memLength);
  *
  */
 void OSA_MemoryFree(void *p);
+
+/*!
+ * @brief Reserves the requested amount of memory in bytes.
+ *
+ * The function is used to reserve the requested amount of memory in bytes and initializes it to 0.
+ * The function allocates some extra memory to ensure that the return address is aligned on a alignbytes boundary
+ * and that the memory size is a multiple of alignbytes.
+ *
+ * @param memLength Amount of bytes to reserve.
+ * @param alignbytes Bytes boundary.
+ *
+ * @return Pointer to the reserved memory. NULL if memory can't be allocated.
+ */
+void *OSA_MemoryAllocateAlign(uint32_t memLength, uint32_t alignbytes);
+
+/*!
+ * @brief Frees the memory previously reserved.
+ *
+ * The function is used to free the memory block previously reserved.
+ *
+ * @param p Pointer to the start of the memory block previously reserved.
+ *
+ */
+void OSA_MemoryFreeAlign(void *p);
 
 /*!
  * @brief Enter critical with nesting mode.
@@ -1061,4 +1095,7 @@ void OSA_InstallIntHandler(uint32_t IRQNumber, void (*handler)(void));
 }
 #endif
 /*! @}*/
+#else
+#include "fsl_os_abstraction_zephyr.h"
+#endif /* ! __ZEPHYR__ */
 #endif

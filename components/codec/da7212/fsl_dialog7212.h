@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief CLOCK driver version 2.3.0. */
-#define FSL_DA7212_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+#define FSL_DA7212_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*! @} */
 
 /*! @brief da7212 handle size */

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2020, 2023 NXP
+ * Copyright 2016 - 2020, 2023-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -769,6 +769,23 @@ void USB1_IRQHandler(void)
     SDK_ISR_EXIT_BARRIER;
 }
 #endif /* SERIAL_PORT_USB_CDC_USB1_IRQ_HANDLER_DISABLE */
+#ifndef SERIAL_PORT_USB_CDC_USB_IRQ_HANDLER_DISABLE
+void USB_IRQHandler(void);
+void USB_IRQHandler(void)
+{
+    serial_usb_cdc_state_t *serialUsbCdc = s_UsbCdcHead;
+
+    while (NULL != serialUsbCdc)
+    {
+        if (((uint8_t)kSerialManager_UsbControllerLpcIp3511Hs0 == serialUsbCdc->instance))
+        {
+            USB_DeviceLpcIp3511IsrFunction(serialUsbCdc->deviceHandle);
+        }
+        serialUsbCdc = serialUsbCdc->next;
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif /* SERIAL_PORT_USB_CDC_USB_IRQ_HANDLER_DISABLE */
 #endif
 
 static void USB_DeviceIsrEnable(serial_usb_cdc_state_t *serialUsbCdc)
@@ -882,21 +899,7 @@ serial_manager_status_t Serial_UsbCdcWrite(serial_handle_t serialHandle, uint8_t
     {
         return kStatus_SerialManager_Busy;
     }
-
-#if (defined(USB_CDC_SERIAL_MANAGER_RUN_NO_HOST) && (USB_CDC_SERIAL_MANAGER_RUN_NO_HOST == 1))
-    /* Prevents SerialManager_Write from blocking when no USB Host is attached */
-    if ((serialUsbCdc->attach == 0U))
-    {
-        return kStatus_SerialManager_NotConnected;
-    }
-
-    /* Prevents SerialManager_Write from blocking when USB Host is attached but CDC terminal is closed */
-    if ((serialUsbCdc->attach == 1U) && (serialUsbCdc->startTransactions == 0U))
-    {
-        return kStatus_SerialManager_NotConnected;
-    }
-#endif /* USB_CDC_SERIAL_MANAGER_RUN_NO_HOST == 1 */
-
+    
     serialUsbCdc->tx.busy          = 1U;
     serialUsbCdc->tx.waiting4Prime = 0U;
 
@@ -1020,6 +1023,18 @@ serial_manager_status_t Serial_UsbCdcInstallRxCallback(serial_handle_t serialHan
     serialUsbCdc->rx.callbackParam = callbackParam;
 
     return kStatus_SerialManager_Success;
+}
+
+serial_manager_status_t Serial_UsbCdcGetConnectedStatus(serial_handle_t serialHandle)
+{
+#if (defined(USB_CDC_SERIAL_MANAGER_RUN_NO_HOST) && (USB_CDC_SERIAL_MANAGER_RUN_NO_HOST == 1))
+    serial_usb_cdc_state_t *serialUsbCdc;
+    assert(serialHandle);
+    serialUsbCdc = (serial_usb_cdc_state_t *)serialHandle;
+    return ((serialUsbCdc->attach == 1U) && (serialUsbCdc->startTransactions == 1U)) ? kStatus_SerialManager_Success : kStatus_SerialManager_NotConnected;
+#else/* USB_CDC_SERIAL_MANAGER_RUN_NO_HOST == 1 */
+    return kStatus_SerialManager_Success;
+#endif
 }
 
 void Serial_UsbCdcIsrFunction(serial_handle_t serialHandle)

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2023 NXP
+ * Copyright 2016-2020, 2023-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -86,9 +86,9 @@ void ACMP_Init(CMP_Type *base, const acmp_config_t *config)
      */
     tmp32 = (base->C0 & (~(CMP_C0_PMODE_MASK | CMP_C0_INVT_MASK | CMP_C0_COS_MASK | CMP_C0_OPE_MASK |
 #if defined(FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT) && (FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT == 1U)
-                            CMP_C0_HYSTCTR_MASK |
-#endif /* FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT */                           
-                            CMP_C0_CFx_MASK)));
+                           CMP_C0_HYSTCTR_MASK |
+#endif /* FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT */
+                           CMP_C0_CFx_MASK)));
 #if defined(FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT) && (FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT == 1U)
     tmp32 &= ~CMP_C0_OFFSET_MASK;
 #endif /* FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT */
@@ -108,7 +108,7 @@ void ACMP_Init(CMP_Type *base, const acmp_config_t *config)
     {
         tmp32 |= CMP_C0_OPE_MASK;
     }
-#if defined (FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT) && (FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT == 1U)
+#if defined(FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT) && (FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT == 1U)
     tmp32 |= CMP_C0_HYSTCTR(config->hysteresisMode);
 #endif /* FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT */
 #if defined(FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT) && (FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT == 1U)
@@ -279,6 +279,7 @@ void ACMP_EnableDMA(CMP_Type *base, bool enable)
     }
 }
 
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_WINDOW_MODE) && (FSL_FEATURE_ACMP_HAS_NO_WINDOW_MODE == 1U))
 /*!
  * brief Enables or disables window mode.
  *
@@ -299,6 +300,7 @@ void ACMP_EnableWindowMode(CMP_Type *base, bool enable)
         base->C0 &= ~(CMP_C0_WE_MASK | CMP_C0_CFx_MASK);
     }
 }
+#endif /* !(defined(FSL_FEATURE_ACMP_HAS_NO_WINDOW_MODE) && (FSL_FEATURE_ACMP_HAS_NO_WINDOW_MODE == 1U)) */
 
 /*!
  * brief Configures the filter.
@@ -326,12 +328,18 @@ void ACMP_SetFilterConfig(CMP_Type *base, const acmp_filter_config_t *config)
     /* CMPx_C0
      * Set control bit. Avoid clearing status flags at the same time.
      */
-    uint32_t tmp32 = (base->C0 & (~(CMP_C0_FILTER_CNT_MASK | CMP_C0_FPR_MASK | CMP_C0_SE_MASK | CMP_C0_CFx_MASK)));
+    uint32_t tmp32 = (base->C0 & (~(CMP_C0_FILTER_CNT_MASK | CMP_C0_FPR_MASK |
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_C0_SE_BIT) && (FSL_FEATURE_ACMP_HAS_NO_C0_SE_BIT == 1U))
+                                    CMP_C0_SE_MASK |
+#endif /* FSL_FEATURE_ACMP_HAS_NO_C0_SE_BIT */
+                                    CMP_C0_CFx_MASK)));
 
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_C0_SE_BIT) && (FSL_FEATURE_ACMP_HAS_NO_C0_SE_BIT == 1U))
     if (config->enableSample)
     {
         tmp32 |= CMP_C0_SE_MASK;
     }
+#endif /* FSL_FEATURE_ACMP_HAS_NO_C0_SE_BIT */
     tmp32 |= (CMP_C0_FILTER_CNT(config->filterCount) | CMP_C0_FPR(config->filterPeriod));
     base->C0 = tmp32;
 }
@@ -395,6 +403,7 @@ void ACMP_SetDACConfig(CMP_Type *base, const acmp_dac_config_t *config)
     base->C1 = tmp32;
 }
 
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U))
 /*!
  * brief Configures the round robin mode.
  *
@@ -483,6 +492,7 @@ void ACMP_ClearRoundRobinStatusFlags(CMP_Type *base, uint32_t mask)
     tmp32 |= (mask << CMP_C2_CH0F_SHIFT);
     base->C2 = tmp32;
 }
+#endif /* !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U)) */
 
 /*!
  * brief Enables interrupts.
@@ -509,6 +519,7 @@ void ACMP_EnableInterrupts(CMP_Type *base, uint32_t mask)
     }
     base->C0 = tmp32;
 
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U))
     /* CMPx_C2
      * Set round robin interrupt enable flag.
      */
@@ -519,6 +530,7 @@ void ACMP_EnableInterrupts(CMP_Type *base, uint32_t mask)
         tmp32    = ((tmp32 | CMP_C2_RRIE_MASK) & ~CMP_C2_CHnF_MASK);
         base->C2 = tmp32;
     }
+#endif /* !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U)) */
 }
 
 /*!
@@ -546,6 +558,7 @@ void ACMP_DisableInterrupts(CMP_Type *base, uint32_t mask)
     }
     base->C0 = tmp32;
 
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U))
     /* CMPx_C2
      * Clear round robin interrupt enable flag.
      */
@@ -556,6 +569,7 @@ void ACMP_DisableInterrupts(CMP_Type *base, uint32_t mask)
         tmp32 &= ~(CMP_C2_RRIE_MASK | CMP_C2_CHnF_MASK);
         base->C2 = tmp32;
     }
+#endif /* !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U)) */
 }
 
 /*!
@@ -632,6 +646,7 @@ void ACMP_SetDiscreteModeConfig(CMP_Type *base, const acmp_discrete_mode_config_
     {
         tmp32 |= CMP_C3_NCHCTEN_MASK;
     }
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN) && (FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN == 1U))
     if (config->enableResistorDivider)
     {
         tmp32 |= CMP_C3_RDIVE_MASK;
@@ -641,6 +656,7 @@ void ACMP_SetDiscreteModeConfig(CMP_Type *base, const acmp_discrete_mode_config_
              | CMP_C3_ACSAT(config->sampleTime)    /* Sample time period. */
              | CMP_C3_ACPH1TC(config->phase1Time)  /* Phase 1 sample time. */
              | CMP_C3_ACPH2TC(config->phase2Time); /* Phase 2 sample time. */
+#endif /* !(defined(FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN) && (FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN == 1U)) */
 
     base->C3 = tmp32;
 }
@@ -659,11 +675,14 @@ void ACMP_GetDefaultDiscreteModeConfig(acmp_discrete_mode_config_t *config)
 
     config->enablePositiveChannelDiscreteMode = false;
     config->enableNegativeChannelDiscreteMode = false;
-    config->enableResistorDivider             = false;
-    config->clockSource                       = kACMP_DiscreteClockSlow;
-    config->sampleTime                        = kACMP_DiscreteSampleTimeAs1T;
-    config->phase1Time                        = kACMP_DiscretePhaseTimeAlt0;
-    config->phase2Time                        = kACMP_DiscretePhaseTimeAlt0;
+
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN) && (FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN == 1U))
+    config->enableResistorDivider = false;
+    config->clockSource           = kACMP_DiscreteClockSlow;
+    config->sampleTime            = kACMP_DiscreteSampleTimeAs1T;
+    config->phase1Time            = kACMP_DiscretePhaseTimeAlt0;
+    config->phase2Time            = kACMP_DiscretePhaseTimeAlt0;
+#endif /* !(defined(FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN) && (FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN == 1U)) */
 }
 
 #endif /* FSL_FEATURE_ACMP_HAS_C3_REG */

@@ -11,13 +11,13 @@
 **
 **     Reference manual:    MIMXRT685 User manual Rev. 0.95 11 November 2019
 **     Version:             rev. 2.0, 2019-11-12
-**     Build:               b231010
+**     Build:               b240327
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT685S_cm33
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -41,8 +41,8 @@
  * CMSIS Peripheral Access Layer for MIMXRT685S_cm33
  */
 
-#ifndef _MIMXRT685S_CM33_H_
-#define _MIMXRT685S_CM33_H_                      /**< Symbol preventing repeated inclusion */
+#if !defined(MIMXRT685S_CM33_H_)
+#define MIMXRT685S_CM33_H_                       /**< Symbol preventing repeated inclusion */
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
@@ -14080,13 +14080,19 @@ typedef struct {
 /** Interrupt vectors for the FLEXSPI peripheral type */
 #define FLEXSPI_IRQS                             { FLEXSPI_IRQn }
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-/** FlexSPI AMBA address. */
+/** FlexSPI AMBA base address. */
 #define FlexSPI_AMBA_BASE                        (0x18000000u)
-/** FlexSPI AMBA address */
+/** FlexSPI AMBA end address. */
+#define FlexSPI_AMBA_END                         (0x1FFFFFFFu)
+/** FlexSPI AMBA base address */
 #define FlexSPI_AMBA_BASE_NS                     (0x08000000u)
+/** FlexSPI AMBA end address */
+#define FlexSPI_AMBA_END_NS                      (0x0FFFFFFFu)
 #else
-/** FlexSPI AMBA address. */
+/** FlexSPI AMBA base address. */
 #define FlexSPI_AMBA_BASE                        (0x08000000u)
+/** FlexSPI AMBA end address. */
+#define FlexSPI_AMBA_END                         (0x0FFFFFFFu)
 #endif
 
 
@@ -45193,5 +45199,5 @@ typedef struct {
  */ /* end of group SDK_Compatibility_Symbols */
 
 
-#endif  /* _MIMXRT685S_CM33_H_ */
+#endif  /* MIMXRT685S_CM33_H_ */
 

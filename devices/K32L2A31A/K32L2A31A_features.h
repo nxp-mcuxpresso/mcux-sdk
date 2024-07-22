@@ -1,15 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2019-10-30
-**     Build:               b210913
+**     Build:               b240301
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -1598,11 +1596,6 @@
 #define FSL_FEATURE_TSI_HAS_END_OF_SCAN_DMA_ENABLE (1)
 /* @brief Number of TSI channels. */
 #define FSL_FEATURE_TSI_CHANNEL_COUNT (16)
-
-/* TSTMR module features */
-
-/* @brief TSTMR clock frequency is 1MHZ. */
-#define FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_1MHZ (1)
 
 /* USB module features */
 

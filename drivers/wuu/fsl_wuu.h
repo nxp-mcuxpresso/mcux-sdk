@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 NXP.
+ * Copyright 2019-2024 NXP.
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,8 +18,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines WUU driver version 2.3.0. */
-#define FSL_WUU_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief Defines WUU driver version 2.4.0. */
+#define FSL_WUU_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*! @} */
 
 /*!
@@ -134,6 +134,14 @@ extern "C" {
  * @param config   Pointer to wuu_external_wakeup_pin_config_t structure.
  */
 void WUU_SetExternalWakeUpPinsConfig(WUU_Type *base, uint8_t pinIndex, const wuu_external_wakeup_pin_config_t *config);
+
+/*!
+ * @brief Disable and clear external wakeup pin settings.
+ * 
+ * @param base MUU peripheral base address.
+ * @param pinIndex The index of the external input pin.
+ */
+void WUU_ClearExternalWakeupPinsConfig(WUU_Type *base, uint8_t pinIndex);
 
 /*!
  * @brief Gets External Wakeup pin flags.

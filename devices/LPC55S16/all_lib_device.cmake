@@ -193,6 +193,9 @@
 #  # description: Component mem_manager_light
 #  set(CONFIG_USE_component_mem_manager_light true)
 
+#  # description: Component mem_manager_freertos
+#  set(CONFIG_USE_component_mem_manager_freertos true)
+
 #  # description: Driver mma8451q
 #  set(CONFIG_USE_driver_mma8451q true)
 
@@ -298,7 +301,7 @@
 #  # description: I2C Driver
 #  set(CONFIG_USE_driver_flexcomm_i2c true)
 
-#  # description: I2C Driver
+#  # description: FLEXCOMM I2C FreeRTOS Driver
 #  set(CONFIG_USE_driver_flexcomm_i2c_freertos true)
 
 #  # description: I2S Driver
@@ -349,7 +352,7 @@
 #  # description: SPI Driver
 #  set(CONFIG_USE_driver_flexcomm_spi true)
 
-#  # description: SPI Driver
+#  # description: FLEXCOMM SPI FreeRTOS Driver
 #  set(CONFIG_USE_driver_flexcomm_spi_freertos true)
 
 #  # description: SYSCTL Driver
@@ -358,7 +361,7 @@
 #  # description: USART Driver
 #  set(CONFIG_USE_driver_flexcomm_usart true)
 
-#  # description: USART Driver
+#  # description: FLEXCOMM USART FreeRTOS Driver
 #  set(CONFIG_USE_driver_flexcomm_usart_freertos true)
 
 #  # description: UTICK Driver
@@ -435,34 +438,6 @@
 #  # description: CMSIS-NN Library
 #  set(CONFIG_USE_CMSIS_NN_Source true)
 
-#set.middleware.fatfs
-#  # description: FatFs template MMC
-#  set(CONFIG_USE_middleware_fatfs_template_mmc true)
-
-#  # description: FatFs template NAND
-#  set(CONFIG_USE_middleware_fatfs_template_nand true)
-
-#  # description: FatFs template RAM
-#  set(CONFIG_USE_middleware_fatfs_template_ram true)
-
-#  # description: FatFs template SD
-#  set(CONFIG_USE_middleware_fatfs_template_sd true)
-
-#  # description: FatFs template SDSPI
-#  set(CONFIG_USE_middleware_fatfs_template_sdspi true)
-
-#  # description: FatFs template USB
-#  set(CONFIG_USE_middleware_fatfs_template_usb true)
-
-#  # description: FatFs
-#  set(CONFIG_USE_middleware_fatfs true)
-
-#  # description: FatFs_RAM
-#  set(CONFIG_USE_middleware_fatfs_ram true)
-
-#  # description: FatFs_USB
-#  set(CONFIG_USE_middleware_fatfs_usb true)
-
 #set.middleware.freertos-kernel
 #  # description: FreeRTOS NXP extension
 #  set(CONFIG_USE_middleware_freertos-kernel_extension true)
@@ -494,7 +469,10 @@
 #  # description: FreeRTOS heap 5
 #  set(CONFIG_USE_middleware_freertos-kernel_heap_5 true)
 
-#  # description: FreeRTOS MPU wrappers
+#  # description: new V2 FreeRTOS MPU wrappers introduced in V10.6.0
+#  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers_v2 true)
+
+#  # description: old FreeRTOS MPU wrappers used before V10.6.0
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
 #  # description: FreeRTOS cm33 TrustZone secure port
@@ -507,8 +485,14 @@
 #  # description: lwIP Template
 #  set(CONFIG_USE_middleware_lwip_template true)
 
+#  # description: Empty ethernet interface
+#  set(CONFIG_USE_middleware_lwip_empty_ethernetif true)
+
 #  # description: lwIP - A Lightweight TCP/IP Stack
 #  set(CONFIG_USE_middleware_lwip true)
+
+#  # description: EtherCAT EOE ethernet interface
+#  set(CONFIG_USE_middleware_lwip_eoe_ethernetif true)
 
 #  # description: USB network layer
 #  set(CONFIG_USE_middleware_lwip_usb_ethernetif true)
@@ -574,6 +558,12 @@
 
 #  # description: els_pkc config
 #  set(CONFIG_USE_middleware_mbedtls_els_pkc_config true)
+
+#  # description: mbedTLS test suite
+#  set(CONFIG_USE_middleware_mbedtls_tests true)
+
+#  # description: mbedTLS 3rdparty code
+#  set(CONFIG_USE_middleware_mbedtls_3rdparty true)
 
 #  # description: mbedTLS port library for KPSDK
 #  set(CONFIG_USE_middleware_mbedtls_port_ksdk true)
@@ -657,6 +647,9 @@
 #  # description: Middleware usb host cdc
 #  set(CONFIG_USE_middleware_usb_host_cdc true)
 
+#  # description: Middleware usb host cdc_ecm
+#  set(CONFIG_USE_middleware_usb_host_cdc_ecm true)
+
 #  # description: Middleware usb host cdc_rndis
 #  set(CONFIG_USE_middleware_usb_host_cdc_rndis true)
 
@@ -686,6 +679,28 @@
 
 #  # description: Middleware usb host stack
 #  set(CONFIG_USE_middleware_usb_host_stack true)
+
+#set.component.osa
+#  # description: Component osa_zephyr
+#  set(CONFIG_USE_component_osa_zephyr true)
+
+#  # description: Component common_task
+#  set(CONFIG_USE_component_common_task true)
+
+#  # description: Component osa_bm
+#  set(CONFIG_USE_component_osa_bm true)
+
+#  # description: Component osa_free_rtos
+#  set(CONFIG_USE_component_osa_free_rtos true)
+
+#  # description: Component osa
+#  set(CONFIG_USE_component_osa true)
+
+#  # description: Component osa interface
+#  set(CONFIG_USE_component_osa_interface true)
+
+#  # description: Component osa thread
+#  set(CONFIG_USE_component_osa_thread true)
 
 #set.middleware.azure_rtos
 #  # description: Azure RTOS Core
@@ -778,24 +793,21 @@
 #  # description: A software package that connects to the IoT Hub through Azure RTOS
 #  set(CONFIG_USE_middleware_azure_rtos_azure_iot true)
 
-#set.component.osa
-#  # description: Component common_task
-#  set(CONFIG_USE_component_common_task true)
+#set.middleware.fatfs
+#  # description: FatFs
+#  set(CONFIG_USE_middleware_fatfs true)
 
-#  # description: Component osa_bm
-#  set(CONFIG_USE_component_osa_bm true)
+#  # description: FatFs_RAM
+#  set(CONFIG_USE_middleware_fatfs_ram true)
 
-#  # description: Component osa_free_rtos
-#  set(CONFIG_USE_component_osa_free_rtos true)
+#  # description: FatFs template RAM
+#  set(CONFIG_USE_middleware_fatfs_template_ram true)
 
-#  # description: Component osa
-#  set(CONFIG_USE_component_osa true)
+#  # description: FatFs template USB
+#  set(CONFIG_USE_middleware_fatfs_template_usb true)
 
-#  # description: Component osa interface
-#  set(CONFIG_USE_component_osa_interface true)
-
-#  # description: Component osa thread
-#  set(CONFIG_USE_component_osa_thread true)
+#  # description: FatFs_USB
+#  set(CONFIG_USE_middleware_fatfs_usb true)
 
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.

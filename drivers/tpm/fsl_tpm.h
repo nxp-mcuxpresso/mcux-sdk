@@ -29,8 +29,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief TPM driver version 2.2.3. */
-#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
+/*! @brief TPM driver version 2.3.1. */
+#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*! @} */
 
 /*! @brief Help macro to get the max counter value */
@@ -345,6 +345,13 @@ typedef enum _tpm_status_flags
     kTPM_TimeOverflowFlag = (1U << 8)  /*!< Time overflow flag */
 } tpm_status_flags_t;
 
+/*! 
+ * @brief TPM callback function pointer
+ *
+ * @param base   TPM peripheral base address.
+ */
+typedef void (*tpm_callback_t)(TPM_Type *base);
+
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -357,6 +364,14 @@ extern "C" {
  * @name Initialization and deinitialization
  * @{
  */
+
+/*!
+ * @brief Gets the instance from the base address
+ *
+ * @param base TPM peripheral base address
+ * @return The TPM instance
+ */
+uint32_t TPM_GetInstance(TPM_Type *base);
 
 /*!
  * @brief Ungates the TPM clock and configures the peripheral for basic operation.
@@ -706,6 +721,17 @@ void TPM_DisableInterrupts(TPM_Type *base, uint32_t mask);
  *         enumeration ::tpm_interrupt_enable_t
  */
 uint32_t TPM_GetEnabledInterrupts(TPM_Type *base);
+
+/*!
+ * @brief Register callback.
+ * 
+ * If channel or overflow interrupt is enabled by the user, then a callback can be registered
+ * which will be invoked when the interrupt is triggered.
+ *
+ * @param base       TPM peripheral base address
+ * @param callback   Callback function
+ */
+void TPM_RegisterCallBack(TPM_Type *base, tpm_callback_t callback);
 
 /*! @}*/
 

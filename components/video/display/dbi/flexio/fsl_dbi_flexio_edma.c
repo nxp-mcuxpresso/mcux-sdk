@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2020,2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -117,6 +117,7 @@ status_t DBI_FLEXIO_EDMA_WriteMemory(void *dbiXferHandle, uint32_t command, cons
         xfer.mode                = kFLEXIO_MCULCD_WriteArray;
         xfer.dataAddrOrSameValue = (uint32_t)(const uint8_t *)data;
         xfer.dataSize            = len_byte;
+        xfer.dataOnly            = false;
 
         status = FLEXIO_MCULCD_TransferEDMA(flexioLCD, &xferHandle->flexioHandle, &xfer);
     }
@@ -155,6 +156,7 @@ status_t DBI_FLEXIO_EDMA_ReadMemory(void *dbiXferHandle, uint32_t command, void 
         xfer.mode                = kFLEXIO_MCULCD_ReadArray;
         xfer.dataAddrOrSameValue = (uint32_t)(uint8_t *)data;
         xfer.dataSize            = len_byte;
+        xfer.dataOnly            = false;
 
         status = FLEXIO_MCULCD_TransferEDMA(flexioLCD, &xferHandle->flexioHandle, &xfer);
     }

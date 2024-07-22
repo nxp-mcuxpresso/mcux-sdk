@@ -354,7 +354,7 @@ uint32_t MEM_GetHeapUpperLimit(void);
  * @retval UpperLimit  Return the address after the last allocated block if MemManagerLight is used.
  * @retval 0           Return 0 in case of the legacy MemManager.
  */
-uint32_t MEM_GetHeapUpperLimitByAreaId(uint8_t id);
+uint32_t MEM_GetHeapUpperLimitByAreaId(uint8_t area_id);
 #endif
 
 /*!
@@ -471,7 +471,7 @@ void *MEM_CallocAlt(size_t len, size_t val);
  * @return   kStatus_MemSuccess if success,  kStatus_MemInitError otherwise.
  *
  */
-mem_status_t MEM_RegisterExtendedArea(memAreaCfg_t *area_desc, uint8_t *area_id, uint16_t flags);
+mem_status_t MEM_RegisterExtendedArea(memAreaCfg_t *area_desc, uint8_t *p_area_id, uint16_t flags);
 
 /*!
  * @brief Function to unregister an extended area

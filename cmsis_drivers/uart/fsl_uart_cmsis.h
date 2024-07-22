@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013-2016 ARM Limited. All rights reserved.
  * Copyright (c) 2016, Freescale Semiconductor, Inc. Not a Contribution.
- * Copyright 2016-2017,2020 NXP. Not a Contribution.
+ * Copyright 2016-2017,2020,2023 NXP. Not a Contribution.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -58,6 +58,15 @@ extern ARM_DRIVER_USART Driver_USART4;
 #if defined(UART5) && defined(RTE_USART5) && RTE_USART5
 extern ARM_DRIVER_USART Driver_USART5;
 #endif /* UART5 */
+
+#if (FSL_FEATURE_SOC_LPUART_COUNT == 3) && (FSL_FEATURE_SOC_UART_COUNT == 2)
+#if defined(UART0) && defined(RTE_USART3) && RTE_USART3
+extern ARM_DRIVER_USART Driver_USART3;
+#endif /* UART0 */
+#if defined(UART1) && defined(RTE_USART4) && RTE_USART4
+extern ARM_DRIVER_USART Driver_USART4;
+#endif /* UART1 */
+#endif
 
 /* USART Driver state flags */
 #define USART_FLAG_UNINIT     (0UL)

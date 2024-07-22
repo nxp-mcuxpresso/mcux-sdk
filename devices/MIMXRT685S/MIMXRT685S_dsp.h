@@ -7,13 +7,13 @@
 **     Compiler:            Xtensa Compiler
 **     Reference manual:    MIMXRT685 User manual Rev. 0.95 11 November 2019
 **     Version:             rev. 2.0, 2019-11-12
-**     Build:               b231010
+**     Build:               b240327
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT685S_dsp
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -37,8 +37,8 @@
  * Peripheral Access Layer for MIMXRT685S_dsp
  */
 
-#ifndef _MIMXRT685S_DSP_H_
-#define _MIMXRT685S_DSP_H_                       /**< Symbol preventing repeated inclusion */
+#if !defined(MIMXRT685S_DSP_H_)
+#define MIMXRT685S_DSP_H_                        /**< Symbol preventing repeated inclusion */
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
@@ -8083,8 +8083,10 @@ typedef struct {
 #define FLEXSPI_BASE_PTRS                        { FLEXSPI }
 /** Interrupt vectors for the FLEXSPI peripheral type */
 #define FLEXSPI_IRQS                             { FLEXSPI_IRQn }
-/* FlexSPI AMBA address. */
+/* FlexSPI AMBA base address. */
 #define FlexSPI_AMBA_BASE                       (0x08000000U)
+/* FlexSPI AMBA end address. */
+#define FlexSPI_AMBA_END                        (0x0FFFFFFFU)
 /* FlexSPI ASFM address. */
 #define FlexSPI_ASFM_BASE                        (0x00000000U)
 /* Base Address of AHB address space mapped to IP RX FIFO. */
@@ -34150,5 +34152,5 @@ typedef struct {
  */ /* end of group SDK_Compatibility_Symbols */
 
 
-#endif  /* _MIMXRT685S_DSP_H_ */
+#endif  /* MIMXRT685S_DSP_H_ */
 

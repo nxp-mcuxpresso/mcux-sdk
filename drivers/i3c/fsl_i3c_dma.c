@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -15,16 +15,17 @@
 #define FSL_COMPONENT_ID "platform.drivers.i3c_dma"
 #endif
 
+#define WIDTH_1_BYTE 1U
+#define WIDTH_2_BYTE 2U
+#define WIDTH_4_BYTE 4U
+
 /*! @brief States for the state machine used by transactional APIs. */
 enum _i3c_dma_transfer_states
 {
     kIdleState = 0,
     kIBIWonState,
     kSlaveStartState,
-    kSendCommandState,
     kWaitRepeatedStartCompleteState,
-    kTransmitDataState,
-    kReceiveDataState,
     kStopState,
     kWaitForCompletionState,
     kAddressMatchState,
@@ -72,13 +73,11 @@ enum _i3c_dma_flag_constants
 static I3C_Type *const kI3cBases[] = I3C_BASE_PTRS;
 
 /*! @brief DMA linked transfer descriptor. */
-DMA_ALLOCATE_LINK_DESCRIPTORS(static s_dma_table, ARRAY_SIZE(kI3cBases));
+SDK_ALIGN(dma_descriptor_t static s_dma_table[ARRAY_SIZE(kI3cBases)][2], FSL_FEATURE_DMA_LINK_DESCRIPTOR_ALIGN_SIZE);
 
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-static void I3C_MasterRunDMATransfer(
-    I3C_Type *base, i3c_master_dma_handle_t *handle, void *data, size_t dataSize, i3c_direction_t direction);
 
 /*******************************************************************************
  * Code
@@ -86,49 +85,339 @@ static void I3C_MasterRunDMATransfer(
 static void I3C_MasterTransferDMACallbackRx(dma_handle_t *dmaHandle, void *param, bool transferDone, uint32_t tcds)
 {
     i3c_master_dma_handle_t *i3cHandle = (i3c_master_dma_handle_t *)param;
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
+    uint32_t leftDataSize = i3cHandle->transfer.dataSize - i3cHandle->transDataSize;
+    uint32_t instance     = I3C_GetInstance(i3cHandle->base);
+    uint32_t unitDataLen;
+#endif
 
     if (transferDone)
     {
-        /* Read last data byte */
-        i3cHandle->base->MCTRL |= I3C_MCTRL_RDTERM(1U);
-        size_t rxCount = 0U;
-        while (rxCount == 0U)
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
+        if (leftDataSize > 0U)
         {
-            I3C_MasterGetFifoCounts(i3cHandle->base, &rxCount, NULL);
-        };
-        *(uint8_t *)((uint32_t)((uint32_t *)i3cHandle->transfer.data) + i3cHandle->transfer.dataSize - 1U) =
-            (uint8_t)i3cHandle->base->MRDATAB;
+            if (leftDataSize >= 6U)
+            {
+                unitDataLen = 6;
+            }
+            else if (leftDataSize >= 4U)
+            {
+                I3C_MasterSetWatermarks(i3cHandle->base, kI3C_TxTriggerOnEmpty, kI3C_RxTriggerUntilOneHalfOrMore, false,
+                                        false);
+                unitDataLen = 4;
+            }
+            else if (leftDataSize >= 2U)
+            {
+                I3C_MasterSetWatermarks(i3cHandle->base, kI3C_TxTriggerOnEmpty, kI3C_RxTriggerUntilOneQuarterOrMore,
+                                        false, false);
+                unitDataLen = 2;
+            }
+            else
+            {
+                I3C_MasterSetWatermarks(i3cHandle->base, kI3C_TxTriggerOnEmpty, kI3C_RxTriggerOnNotEmpty, false, false);
+                unitDataLen = 1;
+            }
 
-        /* Disable I3C Rx DMA */
-        i3cHandle->base->MDATACTRL &= ~I3C_MDMACTRL_DMAFB_MASK;
+            DMA_SetupDescriptor(
+                &s_dma_table[instance][0],
+                DMA_CHANNEL_XFER(true, false, true, false, sizeof(uint8_t), kDMA_AddressInterleave0xWidth,
+                                 kDMA_AddressInterleave1xWidth, unitDataLen),
+                (void *)(uint32_t *)(uint32_t)&i3cHandle->base->MRDATAB,
+                (uint8_t *)i3cHandle->transfer.data + i3cHandle->transDataSize, NULL);
+            DMA_SetChannelConfig(i3cHandle->rxDmaHandle->base, i3cHandle->rxDmaHandle->channel, NULL, true);
+            DMA_SubmitChannelDescriptor(i3cHandle->rxDmaHandle, &s_dma_table[instance][0]);
+            DMA_StartTransfer(i3cHandle->rxDmaHandle);
+            i3cHandle->transDataSize += unitDataLen;
+        }
+        else
+        {
+#endif
+            /* Read last data byte */
+            i3cHandle->base->MCTRL |= I3C_MCTRL_RDTERM(1U);
 
-        i3cHandle->state = (uint8_t)kStopState;
-        I3C_MasterTransferDMAHandleIRQ(i3cHandle->base, i3cHandle);
+            i3cHandle->state = (uint8_t)kStopState;
+            I3C_MasterTransferDMAHandleIRQ(i3cHandle->base, i3cHandle);
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
+        }
+#endif
     }
 }
+
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
+static void I3C_MasterSetDMATxLoop(I3C_Type *base, i3c_master_dma_handle_t *handle, void *data, size_t dataSize)
+{
+    uint32_t address  = (uint32_t)&base->MWDATAH;
+    uint32_t instance = I3C_GetInstance(base);
+
+    if (dataSize == 1U)
+    {
+        DMA_SetupDescriptor(&s_dma_table[instance][0],
+                            DMA_CHANNEL_XFER(false, false, true, false, WIDTH_1_BYTE, kDMA_AddressInterleave1xWidth,
+                                             kDMA_AddressInterleave0xWidth, 1U),
+                            (uint8_t *)data + handle->transDataSize, (void *)(uint32_t *)(uint32_t)&base->MWDATABE,
+                            NULL);
+    }
+    else if (dataSize == 2U)
+    {
+        DMA_SetupDescriptor(&s_dma_table[instance][0],
+                            DMA_CHANNEL_XFER(false, false, true, false, WIDTH_2_BYTE, kDMA_AddressInterleave1xWidth,
+                                             kDMA_AddressInterleave0xWidth, 2U),
+                            (uint8_t *)data + handle->transDataSize, (void *)(uint32_t *)(uint32_t)&base->MWDATAHE,
+                            NULL);
+    }
+    else if (dataSize <= 8U)
+    {
+        (void)memset(&handle->workaroundBuff[0], 0, sizeof(handle->workaroundBuff));
+        for (uint32_t i = 0; i < dataSize - 1U; i += 2U)
+        {
+            (void)memcpy((void *)&handle->workaroundBuff[i * 2U], (void *)((uint8_t *)data + handle->transDataSize + i),
+                         2);
+        }
+
+        DMA_SetupDescriptor(&s_dma_table[instance][0],
+                            DMA_CHANNEL_XFER(true, false, false, false, WIDTH_4_BYTE, kDMA_AddressInterleave1xWidth,
+                                             kDMA_AddressInterleave0xWidth, ((dataSize - 1U) / 2U) * 4U),
+                            &handle->workaroundBuff[0], (void *)(uint8_t *)address, &s_dma_table[instance][1]);
+
+        if ((dataSize % 2U) != 0U)
+        {
+            (void)memcpy((void *)&handle->workaroundBuff[((dataSize - 1U) / 2U) * 4U],
+                         (void *)((uint8_t *)data + handle->transDataSize + dataSize - 1U), 1);
+            DMA_SetupDescriptor(&s_dma_table[instance][1],
+                                DMA_CHANNEL_XFER(false, false, true, false, WIDTH_1_BYTE, kDMA_AddressInterleave1xWidth,
+                                                 kDMA_AddressInterleave0xWidth, 1U),
+                                &handle->workaroundBuff[((dataSize - 1U) / 2U) * 4U],
+                                (void *)(uint32_t *)(uint32_t)&base->MWDATABE, NULL);
+        }
+        else
+        {
+            DMA_SetupDescriptor(&s_dma_table[instance][1],
+                                DMA_CHANNEL_XFER(false, false, true, false, WIDTH_2_BYTE, kDMA_AddressInterleave1xWidth,
+                                                 kDMA_AddressInterleave0xWidth, 2U),
+                                &handle->workaroundBuff[((dataSize - 1U) / 2U) * 4U],
+                                (void *)(uint32_t *)(uint32_t)&base->MWDATAHE, NULL);
+        }
+    }
+    else
+    {
+        (void)memset(&handle->workaroundBuff[0], 0, sizeof(handle->workaroundBuff));
+        for (uint32_t i = 0; i <= 6U; i += 2U)
+        {
+            (void)memcpy((void *)&handle->workaroundBuff[i * 2U], (void *)((uint8_t *)data + handle->transDataSize + i),
+                         2);
+        }
+        DMA_SetupDescriptor(&s_dma_table[instance][0],
+                            DMA_CHANNEL_XFER(true, false, true, false, WIDTH_4_BYTE, kDMA_AddressInterleave1xWidth,
+                                             kDMA_AddressInterleave0xWidth, 16U),
+                            (void *)&handle->workaroundBuff[0], (void *)(uint32_t *)address, NULL);
+    }
+    handle->transDataSize += ((dataSize <= 8U) ? dataSize : 8U);
+    DMA_SetChannelConfig(handle->txDmaHandle->base, handle->txDmaHandle->channel, NULL, true);
+    DMA_SubmitChannelDescriptor(handle->txDmaHandle, &s_dma_table[instance][0]);
+    DMA_StartTransfer(handle->txDmaHandle);
+}
+#endif
 
 static void I3C_MasterTransferDMACallbackTx(dma_handle_t *dmaHandle, void *param, bool transferDone, uint32_t tcds)
 {
     i3c_master_dma_handle_t *i3cHandle = (i3c_master_dma_handle_t *)param;
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
+    uint32_t leftBytes = i3cHandle->transferCount - i3cHandle->transDataSize;
+#endif
 
     if (transferDone)
     {
-        /* Disable I3C Tx DMA */
-        i3cHandle->base->MDATACTRL &= ~I3C_MDMACTRL_DMATB_MASK;
-        i3cHandle->state = (uint8_t)kStopState;
-
-        size_t txCount = 0U;
-        do
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
+        if (leftBytes > 0U)
         {
-            I3C_MasterGetFifoCounts(i3cHandle->base, NULL, &txCount);
-        } while (txCount != 0U);
-        I3C_MasterTransferDMAHandleIRQ(i3cHandle->base, i3cHandle);
+            I3C_MasterSetDMATxLoop(i3cHandle->base, i3cHandle, i3cHandle->transfer.data, leftBytes);
+        }
+        else
+        {
+#endif
+            i3cHandle->base->MDATACTRL &= ~I3C_MDMACTRL_DMATB_MASK;
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
+        }
+#endif
     }
 }
-/*!
- * brief Prepares the transfer state machine and fills in the command buffer.
- * param handle Master nonblocking driver handle.
- */
+
+static void I3C_MasterSetTxDMA(
+    I3C_Type *base, i3c_master_dma_handle_t *handle, dma_channel_config_t *txChannelConfig, void *data, size_t dataSize)
+{
+    uint32_t instance;
+    uint32_t address;
+
+    if (handle->transfer.busType == kI3C_TypeI3CDdr)
+    {
+        instance = I3C_GetInstance(base);
+
+#if defined(FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG) && (FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG)
+        address = (uint32_t)&base->MWDATAB;
+#else
+        address = (uint32_t)&base->MWDATAB1;
+#endif
+        DMA_PrepareChannelTransfer(txChannelConfig, data, (void *)(uint32_t *)address,
+                                   DMA_CHANNEL_XFER(false, false, false, false, 1U, kDMA_AddressInterleave1xWidth,
+                                                    kDMA_AddressInterleave0xWidth, dataSize),
+                                   kDMA_MemoryToPeripheral, NULL, NULL);
+    }
+    else
+    {
+        if (dataSize == 1U)
+        {
+            address = (uint32_t)&base->MWDATABE;
+            DMA_PrepareChannelTransfer(txChannelConfig, data, (void *)(uint32_t *)address,
+                                       DMA_CHANNEL_XFER(false, false, true, false, 1U, kDMA_AddressInterleave1xWidth,
+                                                        kDMA_AddressInterleave0xWidth, dataSize),
+                                       kDMA_MemoryToPeripheral, NULL, NULL);
+        }
+        else
+        {
+            instance = I3C_GetInstance(base);
+
+#if defined(FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG) && (FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG)
+            address = (uint32_t)&base->MWDATAB;
+#else
+            address = (uint32_t)&base->MWDATAB1;
+#endif
+            DMA_PrepareChannelTransfer(txChannelConfig, data, (void *)(uint32_t *)address,
+                                       DMA_CHANNEL_XFER(true, false, false, false, 1U, kDMA_AddressInterleave1xWidth,
+                                                        kDMA_AddressInterleave0xWidth, dataSize - 1U),
+                                       kDMA_MemoryToPeripheral, NULL, &(s_dma_table[instance][0]));
+
+            address = (uint32_t)&base->MWDATABE;
+            DMA_SetupDescriptor(&(s_dma_table[instance][0]),
+                                DMA_CHANNEL_XFER(false, false, true, false, 1u, kDMA_AddressInterleave1xWidth,
+                                                 kDMA_AddressInterleave0xWidth, 1U),
+                                (uint8_t *)data + dataSize - 1U, (void *)(uint32_t *)address, NULL);
+        }
+    }
+}
+
+static void I3C_MasterRunDMATransfer(I3C_Type *base, i3c_master_dma_handle_t *handle, i3c_direction_t direction)
+{
+    void *data         = handle->transfer.data;
+    size_t dataSize    = handle->transfer.dataSize;
+    bool isEnableTxDMA = false;
+    bool isEnableRxDMA = false;
+    uint32_t instance  = I3C_GetInstance(base);
+    dma_channel_config_t txChannelConfig;
+    uint32_t address;
+    uint32_t width;
+
+    handle->transferCount = dataSize;
+
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
+    I3C_MasterSetWatermarks(base, kI3C_TxTriggerOnEmpty, kI3C_RxTriggerUntilThreeQuarterOrMore, false, false);
+#endif
+
+    if (direction == kI3C_Write)
+    {
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
+        if (handle->subaddressCount != 0U)
+        {
+            data     = &handle->subaddressBuffer[0];
+            dataSize = handle->subaddressCount;
+
+            handle->transferCount += dataSize;
+            handle->transDataSize = 0;
+            I3C_MasterSetDMATxLoop(base, handle, data, dataSize);
+        }
+        else
+        {
+            handle->transDataSize = 0;
+            I3C_MasterSetDMATxLoop(base, handle, data, dataSize);
+        }
+#else
+        if ((handle->subaddressCount != 0U) && (handle->transfer.dataSize != 0U))
+        {
+            instance = I3C_GetInstance(base);
+#if defined(FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG) && (FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG)
+            address = (uint32_t)&base->MWDATAB;
+#else
+            address = (uint32_t)&base->MWDATAB1;
+#endif
+            DMA_PrepareChannelTransfer(&txChannelConfig, &handle->subaddressBuffer[0], (void *)(uint32_t *)address,
+                                       DMA_CHANNEL_XFER(true, false, false, false, 1U, kDMA_AddressInterleave1xWidth,
+                                                        kDMA_AddressInterleave0xWidth, handle->subaddressCount),
+                                       kDMA_MemoryToPeripheral, NULL, &(s_dma_table[instance][0]));
+
+            if (handle->transfer.dataSize == 1U)
+            {
+                address = (uint32_t)&base->MWDATABE;
+                DMA_SetupDescriptor(&(s_dma_table[instance][0]),
+                                    DMA_CHANNEL_XFER(false, false, true, false, 1U, kDMA_AddressInterleave1xWidth,
+                                                     kDMA_AddressInterleave0xWidth, 1U),
+                                    (uint8_t *)handle->transfer.data + handle->transfer.dataSize - 1U,
+                                    (void *)(uint32_t *)address, NULL);
+            }
+            else
+            {
+                DMA_SetupDescriptor(&(s_dma_table[instance][0]),
+                                    DMA_CHANNEL_XFER(true, false, false, false, 1U, kDMA_AddressInterleave1xWidth,
+                                                     kDMA_AddressInterleave0xWidth, handle->transfer.dataSize - 1U),
+                                    (uint8_t *)handle->transfer.data, (void *)(uint32_t *)address,
+                                    &(s_dma_table[instance][1]));
+
+                address = (uint32_t)&base->MWDATABE;
+                DMA_SetupDescriptor(&(s_dma_table[instance][1]),
+                                    DMA_CHANNEL_XFER(false, false, true, false, 1U, kDMA_AddressInterleave1xWidth,
+                                                     kDMA_AddressInterleave0xWidth, 1U),
+                                    (uint8_t *)handle->transfer.data + handle->transfer.dataSize - 1U,
+                                    (void *)(uint32_t *)address, NULL);
+            }
+        }
+        else
+        {
+            data     = (handle->subaddressCount != 0U) ? (&handle->subaddressBuffer[0]) : handle->transfer.data;
+            dataSize = (handle->subaddressCount != 0U) ? handle->subaddressCount : handle->transfer.dataSize;
+
+            I3C_MasterSetTxDMA(base, handle, &txChannelConfig, data, dataSize);
+        }
+
+        (void)DMA_SubmitChannelTransfer(handle->txDmaHandle, &txChannelConfig);
+        DMA_StartTransfer(handle->txDmaHandle);
+#endif
+        isEnableTxDMA = true;
+        width         = 2U;
+    }
+    else
+    {
+        if (handle->subaddressCount != 0U)
+        {
+            I3C_MasterSetTxDMA(base, handle, &txChannelConfig, &handle->subaddressBuffer[0], handle->subaddressCount);
+            (void)DMA_SubmitChannelTransfer(handle->txDmaHandle, &txChannelConfig);
+            DMA_StartTransfer(handle->txDmaHandle);
+            isEnableTxDMA = true;
+            /* I3C-DMA issue occurs for Tx bytes > 7, here can use width = 1. */
+            /* width = 2U; */
+        }
+
+        address = (uint32_t)&base->MRDATAB;
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
+        DMA_SetupDescriptor(&s_dma_table[instance][0],
+                            DMA_CHANNEL_XFER(true, false, true, false, sizeof(uint8_t), kDMA_AddressInterleave0xWidth,
+                                             kDMA_AddressInterleave1xWidth, (dataSize < 6U) ? dataSize : 6U),
+                            (uint32_t *)address, (uint32_t *)data, NULL);
+        handle->transDataSize = (dataSize < 6U) ? dataSize : 6U;
+
+        DMA_SetChannelConfig(handle->rxDmaHandle->base, handle->rxDmaHandle->channel, NULL, true);
+        DMA_SubmitChannelDescriptor(handle->rxDmaHandle, &(s_dma_table[instance][0]));
+#else
+        dma_transfer_config_t xferConfig;
+        DMA_PrepareTransfer(&xferConfig, (uint32_t *)address, data, sizeof(uint8_t), dataSize, kDMA_PeripheralToMemory,
+                            NULL);
+        (void)DMA_SubmitTransfer(handle->rxDmaHandle, &xferConfig);
+#endif
+        DMA_StartTransfer(handle->rxDmaHandle);
+        isEnableRxDMA = true;
+        width         = 1U;
+    }
+
+    I3C_MasterEnableDMA(base, isEnableTxDMA, isEnableRxDMA, width);
+}
+
 static status_t I3C_MasterInitTransferStateMachineDMA(I3C_Type *base, i3c_master_dma_handle_t *handle)
 {
     i3c_master_transfer_t *xfer = &handle->transfer;
@@ -145,119 +434,55 @@ static status_t I3C_MasterInitTransferStateMachineDMA(I3C_Type *base, i3c_master
         }
     }
 
-    /* Start condition shall be ommited, switch directly to next phase */
-    if (xfer->dataSize == 0U)
+    if (xfer->busType != kI3C_TypeI3CDdr)
     {
-        handle->state = (uint8_t)kStopState;
+        direction = (0UL != xfer->subaddressSize) ? kI3C_Write : xfer->direction;
+    }
+
+    /* For combination of write address and read data, need to do ReSTART after write. */
+    if ((xfer->subaddressSize != 0U) && (direction == kI3C_Read))
+    {
+        if ((handle->transfer.busType != kI3C_TypeI3CDdr) && (0UL != xfer->dataSize))
+        {
+            handle->state = (uint8_t)kWaitRepeatedStartCompleteState;
+        }
+    }
+    else
+    {
+        handle->state = (uint8_t)kWaitForCompletionState;
     }
 
     /* Handle no start option. */
     if (0U != (xfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
     {
-        /* No need to send start flag, directly go to send command or data */
-        if (xfer->subaddressSize > 0UL)
+        /* No need to send start flag, directly go to send command or data. */
+        if (direction == kI3C_Write)
         {
-            handle->state = (uint8_t)kSendCommandState;
+            /* Prepare the DMA Tx/Rx in advance. */
+            I3C_MasterRunDMATransfer(base, handle, direction);
         }
         else
         {
-            if (direction == kI3C_Write)
-            {
-                /* Next state, send data. */
-                handle->state = (uint8_t)kTransmitDataState;
-            }
-            else
-            {
-                /* Only support write with no stop signal. */
-                return kStatus_InvalidArgument;
-            }
+            /* Only support write with no START signal. */
+            return kStatus_InvalidArgument;
         }
     }
     else
     {
-        if (xfer->subaddressSize != 0U)
+        /* Prepare the DMA Tx/Rx in advance. */
+        I3C_MasterRunDMATransfer(base, handle, direction);
+
+        if (0U != (xfer->flags & (uint32_t)kI3C_TransferRepeatedStartFlag))
         {
-            handle->state = (uint8_t)kSendCommandState;
+            result = I3C_MasterRepeatedStart(base, xfer->busType, xfer->slaveAddress, direction);
         }
         else
         {
-            if (handle->transfer.direction == kI3C_Write)
-            {
-                handle->state = (uint8_t)kTransmitDataState;
-            }
-            else if (handle->transfer.direction == kI3C_Read)
-            {
-                handle->state = (uint8_t)kReceiveDataState;
-            }
-            else
-            {
-                return kStatus_InvalidArgument;
-            }
-        }
-
-        if (handle->transfer.direction == kI3C_Read)
-        {
-            I3C_MasterRunDMATransfer(base, handle, xfer->data, xfer->dataSize - 1U, kI3C_Read);
-        }
-
-        if (handle->state != (uint8_t)kStopState)
-        {
-            /* If repeated start is requested, send repeated start. */
-            if (0U != (xfer->flags & (uint32_t)kI3C_TransferRepeatedStartFlag))
-            {
-                result = I3C_MasterRepeatedStart(base, xfer->busType, xfer->slaveAddress, direction);
-            }
-            else /* For normal transfer, send start. */
-            {
-                result = I3C_MasterStart(base, xfer->busType, xfer->slaveAddress, direction);
-            }
+            result = I3C_MasterStart(base, xfer->busType, xfer->slaveAddress, direction);
         }
     }
 
-    I3C_MasterTransferDMAHandleIRQ(base, handle);
     return result;
-}
-
-static void I3C_MasterRunDMATransfer(
-    I3C_Type *base, i3c_master_dma_handle_t *handle, void *data, size_t dataSize, i3c_direction_t direction)
-{
-    dma_transfer_config_t xferConfig;
-    uint32_t address;
-    bool isEnableTxDMA = false;
-    bool isEnableRxDMA = false;
-    uint32_t width;
-
-    handle->transferCount = dataSize;
-
-    switch (direction)
-    {
-        case kI3C_Write:
-            address = (uint32_t)&base->MWDATAB1;
-            DMA_PrepareTransfer(&xferConfig, data, (uint32_t *)address, sizeof(uint8_t), dataSize,
-                                kDMA_MemoryToPeripheral, NULL);
-            (void)DMA_SubmitTransfer(handle->txDmaHandle, &xferConfig);
-            DMA_StartTransfer(handle->txDmaHandle);
-            isEnableTxDMA = true;
-            width         = 2U;
-            break;
-
-        case kI3C_Read:
-            address = (uint32_t)&base->MRDATAB;
-            DMA_PrepareTransfer(&xferConfig, (uint32_t *)address, data, sizeof(uint8_t), dataSize,
-                                kDMA_PeripheralToMemory, NULL);
-            (void)DMA_SubmitTransfer(handle->rxDmaHandle, &xferConfig);
-            DMA_StartTransfer(handle->rxDmaHandle);
-            isEnableRxDMA = true;
-            width         = 1U;
-            break;
-
-        default:
-            /* This should never happen */
-            assert(0);
-            break;
-    }
-
-    I3C_MasterEnableDMA(base, isEnableTxDMA, isEnableRxDMA, width);
 }
 
 static status_t I3C_MasterRunTransferStateMachineDMA(I3C_Type *base, i3c_master_dma_handle_t *handle, bool *isDone)
@@ -370,41 +595,11 @@ static status_t I3C_MasterRunTransferStateMachineDMA(I3C_Type *base, i3c_master_
                 }
                 break;
 
-            case (uint8_t)kSendCommandState:
-                /* Calculate command count and put into command buffer. */
-                if (xfer->dataSize == 0U)
-                {
-                    *isDone = true;
-                }
-
-                I3C_MasterRunDMATransfer(base, handle, handle->subaddressBuffer, handle->subaddressCount, kI3C_Write);
-
-                if ((xfer->direction == kI3C_Read) || (0UL == xfer->dataSize))
-                {
-                    if (0UL == xfer->dataSize)
-                    {
-                        handle->state = (uint8_t)kWaitForCompletionState;
-                    }
-                    else
-                    {
-                        /* xfer->dataSize != 0U, xfer->direction = kI3C_Read */
-                        handle->state = (uint8_t)kWaitRepeatedStartCompleteState;
-                    }
-                }
-                else
-                {
-                    /* Next state, transfer data. */
-                    handle->state = (uint8_t)kTransmitDataState;
-                }
-
-                state_complete = true;
-                break;
-
             case (uint8_t)kWaitRepeatedStartCompleteState:
-                /* We stay in this state until the maste complete. */
+                /* We stay in this state until the master complete. */
                 if (0UL != (status & (uint32_t)kI3C_MasterCompleteFlag))
                 {
-                    handle->state = (uint8_t)kReceiveDataState;
+                    handle->state = (uint8_t)kWaitForCompletionState;
                     /* Send repeated start and slave address. */
                     result = I3C_MasterRepeatedStart(base, xfer->busType, xfer->slaveAddress, kI3C_Read);
                 }
@@ -412,22 +607,8 @@ static status_t I3C_MasterRunTransferStateMachineDMA(I3C_Type *base, i3c_master_
                 state_complete = true;
                 break;
 
-            case (uint8_t)kTransmitDataState:
-                I3C_MasterRunDMATransfer(base, handle, xfer->data, xfer->dataSize, kI3C_Write);
-                handle->state = (uint8_t)kWaitForCompletionState;
-
-                state_complete = true;
-                break;
-
-            case (uint8_t)kReceiveDataState:
-                /* Do DMA read. */
-                handle->state = (uint8_t)kWaitForCompletionState;
-
-                state_complete = true;
-                break;
-
             case (uint8_t)kWaitForCompletionState:
-                /* We stay in this state until the maste complete. */
+                /* We stay in this state until the master complete. */
                 if (0UL != (status & (uint32_t)kI3C_MasterCompleteFlag))
                 {
                     handle->state = (uint8_t)kStopState;
@@ -442,6 +623,8 @@ static status_t I3C_MasterRunTransferStateMachineDMA(I3C_Type *base, i3c_master_
                 /* Only issue a stop transition if the caller requested it. */
                 if (0UL == (xfer->flags & (uint32_t)kI3C_TransferNoStopFlag))
                 {
+                    handle->base->MDATACTRL &= ~I3C_MDMACTRL_DMAFB_MASK;
+
                     if (xfer->busType == kI3C_TypeI3CDdr)
                     {
                         I3C_MasterEmitRequest(base, kI3C_RequestForceExit);
@@ -525,8 +708,10 @@ status_t I3C_MasterTransferDMA(I3C_Type *base, i3c_master_dma_handle_t *handle, 
     assert(NULL != handle);
     assert(NULL != transfer);
     assert(transfer->subaddressSize <= sizeof(transfer->subaddress));
+
     i3c_master_state_t masterState = I3C_MasterGetState(base);
-    bool checkDdrState             = false;
+    bool checkDdrState;
+    status_t result;
 
     /* Return busy if another transaction is in progress. */
     if (handle->state != (uint8_t)kIdleState)
@@ -559,7 +744,11 @@ status_t I3C_MasterTransferDMA(I3C_Type *base, i3c_master_dma_handle_t *handle, 
     base->MDATACTRL |= I3C_MDATACTRL_FLUSHTB_MASK | I3C_MDATACTRL_FLUSHFB_MASK;
 
     /* Generate commands to send. */
-    (void)I3C_MasterInitTransferStateMachineDMA(base, handle);
+    result = I3C_MasterInitTransferStateMachineDMA(base, handle);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
 
     /* Enable I3C internal IRQ sources. NVIC IRQ was enabled in CreateHandle() */
     I3C_MasterEnableInterrupts(base, (uint32_t)(kMasterDMAIrqFlags));
@@ -575,9 +764,8 @@ status_t I3C_MasterTransferDMA(I3C_Type *base, i3c_master_dma_handle_t *handle, 
 void I3C_MasterTransferDMAHandleIRQ(I3C_Type *base, void *i3cHandle)
 {
     i3c_master_dma_handle_t *handle = (i3c_master_dma_handle_t *)i3cHandle;
-
-    bool isDone;
     status_t result;
+    bool isDone;
 
     /* Don't do anything if we don't have a valid handle. */
     if (NULL == handle)
@@ -594,8 +782,6 @@ void I3C_MasterTransferDMAHandleIRQ(I3C_Type *base, void *i3cHandle)
 
     if (isDone || (result != kStatus_Success))
     {
-        /* XXX need to handle data that may be in rx fifo below watermark level? */
-
         /* XXX handle error, terminate xfer */
         if ((result == kStatus_I3C_Nak) || (result == kStatus_I3C_IBIWon))
         {
@@ -781,36 +967,37 @@ static void I3C_SlavePrepareTxDMA(I3C_Type *base, i3c_slave_dma_handle_t *handle
     {
         uint32_t instance = I3C_GetInstance(base);
 
+#ifdef I3C_SWDATAB1_DATA_MASK
         txFifoBase = (uint32_t *)(uint32_t)&base->SWDATAB1;
+#else
+        txFifoBase = (uint32_t *)(uint32_t)&base->SWDATAB;
+#endif
         DMA_PrepareChannelTransfer(&txChannelConfig, xfer->txData, (void *)txFifoBase,
                                    DMA_CHANNEL_XFER(true, false, false, false, 1u, kDMA_AddressInterleave1xWidth,
                                                     kDMA_AddressInterleave0xWidth, xfer->txDataSize - 1U),
-                                   kDMA_MemoryToPeripheral, NULL, &(s_dma_table[instance]));
+                                   kDMA_MemoryToPeripheral, NULL, &(s_dma_table[instance][0]));
 
         txFifoBase = (uint32_t *)(uint32_t)&base->SWDATABE;
-        DMA_SetupDescriptor(&(s_dma_table[instance]),
-                          DMA_CHANNEL_XFER(false, false, true, false, 1u, kDMA_AddressInterleave1xWidth,
-                                           kDMA_AddressInterleave0xWidth, 1U),
-                          xfer->txData + xfer->txDataSize - 1U, txFifoBase, NULL);
+        DMA_SetupDescriptor(&(s_dma_table[instance][0]),
+                            DMA_CHANNEL_XFER(false, false, true, false, 1u, kDMA_AddressInterleave1xWidth,
+                                             kDMA_AddressInterleave0xWidth, 1U),
+                            xfer->txData + xfer->txDataSize - 1U, txFifoBase, NULL);
     }
     (void)DMA_SubmitChannelTransfer(handle->txDmaHandle, &txChannelConfig);
-
     DMA_StartTransfer(handle->txDmaHandle);
 }
 
 static void I3C_SlavePrepareRxDMA(I3C_Type *base, i3c_slave_dma_handle_t *handle)
 {
-    dma_channel_config_t rxChannelConfig;
     uint32_t *rxFifoBase           = (uint32_t *)(uint32_t)&base->SRDATAB;
     i3c_slave_dma_transfer_t *xfer = &handle->transfer;
+    dma_channel_config_t rxChannelConfig;
 
     DMA_PrepareChannelTransfer(&rxChannelConfig, (void *)rxFifoBase, xfer->rxData,
                                DMA_CHANNEL_XFER(false, true, true, false, 1u, kDMA_AddressInterleave0xWidth,
                                                 kDMA_AddressInterleave1xWidth, xfer->rxDataSize),
                                kDMA_PeripheralToMemory, NULL, NULL);
-
     (void)DMA_SubmitChannelTransfer(handle->rxDmaHandle, &rxChannelConfig);
-
     DMA_StartTransfer(handle->rxDmaHandle);
 }
 
@@ -842,19 +1029,18 @@ status_t I3C_SlaveTransferDMA(I3C_Type *base,
     bool txDmaEn = false, rxDmaEn = false;
     uint32_t width;
 
-    if (handle->isBusy == true)
+    if (handle->isBusy)
     {
         return kStatus_I3C_Busy;
     }
+
     /* Clear all flags. */
     I3C_SlaveClearErrorStatusFlags(base, (uint32_t)kSlaveErrorFlags);
     I3C_SlaveClearStatusFlags(base, (uint32_t)kSlaveClearFlags);
     /* Reset fifos. These flags clear automatically. */
     base->SDATACTRL |= I3C_SDATACTRL_FLUSHTB_MASK | I3C_SDATACTRL_FLUSHFB_MASK;
 
-    handle->transfer = *transfer;
-
-    /* Set up event mask. */
+    handle->transfer  = *transfer;
     handle->eventMask = eventMask;
 
     if ((transfer->txData != NULL) && (transfer->txDataSize != 0U))
@@ -884,11 +1070,11 @@ status_t I3C_SlaveTransferDMA(I3C_Type *base,
 
 void I3C_SlaveTransferDMAHandleIRQ(I3C_Type *base, void *i3cHandle)
 {
+    i3c_slave_dma_handle_t *handle = (i3c_slave_dma_handle_t *)i3cHandle;
+    i3c_slave_dma_transfer_t *xfer;
     uint32_t flags;
     uint32_t errFlags;
-    i3c_slave_dma_transfer_t *xfer;
 
-    i3c_slave_dma_handle_t *handle = (i3c_slave_dma_handle_t *)i3cHandle;
     /* Check for a valid handle in case of a spurious interrupt. */
     if (NULL == handle)
     {
@@ -937,7 +1123,7 @@ void I3C_SlaveTransferDMAHandleIRQ(I3C_Type *base, void *i3cHandle)
 
     if (0UL != (flags & (uint32_t)kI3C_SlaveBusStopFlag))
     {
-        if (handle->isBusy == true)
+        if (handle->isBusy)
         {
             xfer->event            = (uint32_t)kI3C_SlaveCompletionEvent;
             xfer->completionStatus = kStatus_Success;
@@ -964,6 +1150,11 @@ void I3C_SlaveTransferDMAHandleIRQ(I3C_Type *base, void *i3cHandle)
             handle->callback(base, xfer, handle->userData);
         }
     }
+
+    if (0UL != (flags & (uint32_t)kI3C_SlaveBusHDRModeFlag))
+    {
+        handle->isBusy = true;
+    }
 }
 
 /*!
@@ -974,7 +1165,7 @@ void I3C_SlaveTransferDMAHandleIRQ(I3C_Type *base, void *i3cHandle)
  */
 void I3C_SlaveTransferAbortDMA(I3C_Type *base, i3c_slave_dma_handle_t *handle)
 {
-    if (handle->isBusy != false)
+    if (handle->isBusy)
     {
         DMA_AbortTransfer(handle->txDmaHandle);
         DMA_AbortTransfer(handle->rxDmaHandle);

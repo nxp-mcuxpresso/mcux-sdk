@@ -18,17 +18,17 @@
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-static void IMXRT600_EnterLowPowerMode(uint8_t stateIndex,
+static void PM_DEV_EnterLowPowerMode(uint8_t stateIndex,
                                        pm_resc_mask_t *pSoftRescMask,
                                        pm_resc_group_t *pSysRescGroup);
-static void IMXRT600_CleanExitLowPowerMode(void);
-static void iMXRT600_EnablePeripheralsDeepSleep(pm_resc_mask_t *pSoftRescMask,
+static void PM_DEV_CleanExitLowPowerMode(void);
+static void PM_DEV_EnablePeripheralsDeepSleep(pm_resc_mask_t *pSoftRescMask,
                                                 pm_resc_group_t *pSysRescGroup,
                                                 uint32_t *enabledResources);
-static void iMXRT600_DisablePeripheralsSleep(pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup);
+static void PM_DEV_DisablePeripheralsSleep(pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup);
 
 #if (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER)
-static status_t IMXRT600_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable);
+static status_t PM_DEV_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable);
 #endif /* FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER */
 /*******************************************************************************
  * Variables
@@ -123,11 +123,11 @@ const pm_device_option_t g_devicePMOption = {
             },
         },
     .stateCount = PM_LP_STATE_COUNT,
-    .enter      = IMXRT600_EnterLowPowerMode,
-    .clean      = IMXRT600_CleanExitLowPowerMode,
+    .enter      = PM_DEV_EnterLowPowerMode,
+    .clean      = PM_DEV_CleanExitLowPowerMode,
 
 #if (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER)
-    .manageWakeupSource = IMXRT600_ManageWakeupSource,
+    .manageWakeupSource = PM_DEV_ManageWakeupSource,
 #endif /* FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER */
 };
 
@@ -209,7 +209,7 @@ static const uint32_t enResSRAMs[RESC_GROUP_SRAMS_SIZE] = {
     [kResc_SRAM29_256KB - RESC_GROUP_SRAMS_START] = SYSCTL0_PDSLEEPCFG2_SRAM_IF29_APD_MASK,
 };
 
-static void iMXRT600_EnablePeripheralsDeepSleep(pm_resc_mask_t *pSoftRescMask,
+static void PM_DEV_EnablePeripheralsDeepSleep(pm_resc_mask_t *pSoftRescMask,
                                                 pm_resc_group_t *pSysRescGroup,
                                                 uint32_t *enabledResources)
 {
@@ -275,7 +275,7 @@ static void iMXRT600_EnablePeripheralsDeepSleep(pm_resc_mask_t *pSoftRescMask,
     enabledResources[0] |= SYSCTL0_PDSLEEPCFG0_RBB_PD_MASK;
 }
 
-static void iMXRT600_DisablePeripheralsSleep(pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup)
+static void PM_DEV_DisablePeripheralsSleep(pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup)
 {
     uint32_t rescMask;
     uint32_t rescGroup;
@@ -364,7 +364,7 @@ static void iMXRT600_DisablePeripheralsSleep(pm_resc_mask_t *pSoftRescMask, pm_r
     POWER_ApplyPD();
 }
 
-static void IMXRT600_EnterLowPowerMode(uint8_t stateIndex,
+static void PM_DEV_EnterLowPowerMode(uint8_t stateIndex,
                                        pm_resc_mask_t *pSoftRescMask,
                                        pm_resc_group_t *pSysRescGroup)
 {
@@ -379,13 +379,13 @@ static void IMXRT600_EnterLowPowerMode(uint8_t stateIndex,
             /*
              * Change SYSPDRUNCFG depending on constraints, POWER_EnablePD/Power_DisablePD then POWER_ApplyPD
              */
-            iMXRT600_DisablePeripheralsSleep(pSoftRescMask, pSysRescGroup);
+            PM_DEV_DisablePeripheralsSleep(pSoftRescMask, pSysRescGroup);
             break;
         case PM_LP_STATE_DEEP_SLEEP:
             /*
              * Change SYSPDSLEEPCFG depending on constraints
              */
-            iMXRT600_EnablePeripheralsDeepSleep(pSoftRescMask, pSysRescGroup, enabledResources);
+            PM_DEV_EnablePeripheralsDeepSleep(pSoftRescMask, pSysRescGroup, enabledResources);
             break;
         case PM_LP_STATE_DEEP_POWER_DOWN:
             /*
@@ -403,12 +403,12 @@ static void IMXRT600_EnterLowPowerMode(uint8_t stateIndex,
     POWER_EnterPowerMode((power_mode_cfg_t)stateIndex, enabledResources);
 }
 
-static void IMXRT600_CleanExitLowPowerMode(void)
+static void PM_DEV_CleanExitLowPowerMode(void)
 {
     /* Do nothing. */
 }
 
-static status_t IMXRT600_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable)
+static status_t PM_DEV_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable)
 {
     uint32_t irqn;
     uint32_t misc;

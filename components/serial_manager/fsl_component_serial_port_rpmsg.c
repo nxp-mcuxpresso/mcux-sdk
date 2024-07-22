@@ -232,8 +232,8 @@ serial_manager_status_t Serial_RpmsgRead(serial_handle_t serialHandle, uint8_t *
 
     serialRpmsgHandle = (serial_rpmsg_state_t *)serialHandle;
 
-    serialRpmsgHandle->rx.data = buffer;
-    serialRpmsgHandle->rx.len = length;
+    serialRpmsgHandle->rx.data  = buffer;
+    serialRpmsgHandle->rx.len   = length;
     serialRpmsgHandle->rx.sofar = 0;
 
     while (serialRpmsgHandle->rx.sofar < serialRpmsgHandle->rx.len)

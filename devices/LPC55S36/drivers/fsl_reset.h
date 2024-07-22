@@ -37,86 +37,86 @@
  */
 typedef enum _SYSCON_RSTn
 {
-    kROM_RST_SHIFT_RSTn        = (0 | (1U)),  /**< ROM reset control       .*/
-    kSRAM_CTRL1_RST_SHIFT_RSTn = (0 | (3U)),  /**< SRAM Controller 1 reset control       .*/
-    kSRAM_CTRL2_RST_SHIFT_RSTn = (0 | (4U)),  /**< SRAM Controller 2 reset control       .*/
-    kSRAM_CTRL3_RST_SHIFT_RSTn = (0 | (5U)),  /**< SRAM Controller 3 reset control       .*/
-    kSRAM_CTRL4_RST_SHIFT_RSTn = (0 | (6U)),  /**< SRAM Controller 4 reset control       .*/
-    kFLASH_RST_SHIFT_RSTn      = (0 | (7U)),  /**< FLASH reset control     .*/
-    kFMC_RST_SHIFT_RSTn        = (0 | (8U)),  /**< FMC reset control       .*/
-    kFLEXSPI_RST_SHIFT_RSTn    = (0 | (10U)), /**< FLEXSPI reset control   .*/
-    kMUX_RST_SHIFT_RSTn        = (0 | (11U)), /**< MUX reset control       .*/
-    kIOCON_RST_SHIFT_RSTn      = (0 | (13U)), /**< IOCON reset control     .*/
-    kGPIO0_RST_SHIFT_RSTn      = (0 | (14U)), /**< GPIO0 reset control     .*/
-    kGPIO1_RST_SHIFT_RSTn      = (0 | (15U)), /**< GPIO1 reset control     .*/
-    kGPIO2_RST_SHIFT_RSTn      = (0 | (16U)), /**< GPIO2 reset control     .*/
-    kGPIO3_RST_SHIFT_RSTn      = (0 | (17U)), /**< GPIO3 reset control     .*/
-    kPINT_RST_SHIFT_RSTn       = (0 | (18U)), /**< PINT reset control      .*/
-    kGINT_RST_SHIFT_RSTn       = (0 | (19U)), /**< GINT reset control      .*/
-    kDMA0_RST_SHIFT_RSTn       = (0 | (20U)), /**< DMA0 reset control      .*/
-    kCRC_RST_SHIFT_RSTn        = (0 | (21U)), /**< CRC reset control    .*/
-    kWWDT_RST_SHIFT_RSTn       = (0 | (22U)), /**< WWDT reset control      .*/
-    kRTC_RST_SHIFT_RSTn        = (0 | (23U)), /**< RTC reset control       .*/
-    kMAILBOX_RST_SHIFT_RSTn    = (0 | (26U)), /**< MAILBOX reset control   .*/
-    kADC0_RST_SHIFT_RSTn       = (0 | (27U)), /**< ADC0 reset control      .*/
-    kADC1_RST_SHIFT_RSTn       = (0 | (28U)), /**< ADC1 reset control      .*/
-    kDAC0_RST_SHIFT_RSTn       = (0 | (29U)), /**< DAC0 reset control      .*/
+    kROM_RST_SHIFT_RSTn        = (0 | (1U)),          /**< ROM reset control       .*/
+    kSRAM_CTRL1_RST_SHIFT_RSTn = (0 | (3U)),          /**< SRAM Controller 1 reset control       .*/
+    kSRAM_CTRL2_RST_SHIFT_RSTn = (0 | (4U)),          /**< SRAM Controller 2 reset control       .*/
+    kSRAM_CTRL3_RST_SHIFT_RSTn = (0 | (5U)),          /**< SRAM Controller 3 reset control       .*/
+    kSRAM_CTRL4_RST_SHIFT_RSTn = (0 | (6U)),          /**< SRAM Controller 4 reset control       .*/
+    kFLASH_RST_SHIFT_RSTn      = (0 | (7U)),          /**< FLASH reset control     .*/
+    kFMC_RST_SHIFT_RSTn        = (0 | (8U)),          /**< FMC reset control       .*/
+    kFLEXSPI_RST_SHIFT_RSTn    = (0 | (10U)),         /**< FLEXSPI reset control   .*/
+    kMUX_RST_SHIFT_RSTn        = (0 | (11U)),         /**< MUX reset control       .*/
+    kIOCON_RST_SHIFT_RSTn      = (0 | (13U)),         /**< IOCON reset control     .*/
+    kGPIO0_RST_SHIFT_RSTn      = (0 | (14U)),         /**< GPIO0 reset control     .*/
+    kGPIO1_RST_SHIFT_RSTn      = (0 | (15U)),         /**< GPIO1 reset control     .*/
+    kGPIO2_RST_SHIFT_RSTn      = (0 | (16U)),         /**< GPIO2 reset control     .*/
+    kGPIO3_RST_SHIFT_RSTn      = (0 | (17U)),         /**< GPIO3 reset control     .*/
+    kPINT_RST_SHIFT_RSTn       = (0 | (18U)),         /**< PINT reset control      .*/
+    kGINT_RST_SHIFT_RSTn       = (0 | (19U)),         /**< GINT reset control      .*/
+    kDMA0_RST_SHIFT_RSTn       = (0 | (20U)),         /**< DMA0 reset control      .*/
+    kCRC_RST_SHIFT_RSTn        = (0 | (21U)),         /**< CRC reset control    .*/
+    kWWDT_RST_SHIFT_RSTn       = (0 | (22U)),         /**< WWDT reset control      .*/
+    kRTC_RST_SHIFT_RSTn        = (0 | (23U)),         /**< RTC reset control       .*/
+    kMAILBOX_RST_SHIFT_RSTn    = (0 | (26U)),         /**< MAILBOX reset control   .*/
+    kADC0_RST_SHIFT_RSTn       = (0 | (27U)),         /**< ADC0 reset control      .*/
+    kADC1_RST_SHIFT_RSTn       = (0 | (28U)),         /**< ADC1 reset control      .*/
+    kDAC0_RST_SHIFT_RSTn       = (0 | (29U)),         /**< DAC0 reset control      .*/
 
-    kMRT_RST_SHIFT_RSTn      = (0x10000 | (0U)),  /**< MRT reset control       .*/
-    kOSTIMER_RST_SHIFT_RSTn  = (0x10000 | (1U)),  /**< OSTIMER reset control   .*/
-    kSCT_RST_SHIFT_RSTn      = (0x10000 | (2U)),  /**< SCT reset control       .*/
-    kMCAN_RST_SHIFT_RSTn     = (0x10000 | (7U)),  /**< MCAN reset control      .*/
-    kUTICK_RST_SHIFT_RSTn    = (0x10000 | (10U)), /**< UTICK reset control     .*/
-    kFC0_RST_SHIFT_RSTn      = (0x10000 | (11U)), /**< FC0 reset control       .*/
-    kFC1_RST_SHIFT_RSTn      = (0x10000 | (12U)), /**< FC1 reset control       .*/
-    kFC2_RST_SHIFT_RSTn      = (0x10000 | (13U)), /**< FC2 reset control       .*/
-    kFC3_RST_SHIFT_RSTn      = (0x10000 | (14U)), /**< FC3 reset control       .*/
-    kFC4_RST_SHIFT_RSTn      = (0x10000 | (15U)), /**< FC4 reset control       .*/
-    kFC5_RST_SHIFT_RSTn      = (0x10000 | (16U)), /**< FC5 reset control       .*/
-    kFC6_RST_SHIFT_RSTn      = (0x10000 | (17U)), /**< FC6 reset control       .*/
-    kFC7_RST_SHIFT_RSTn      = (0x10000 | (18U)), /**< FC7 reset control       .*/
-    kDMIC_RST_SHIFT_RSTn     = (0x10000 | (19U)), /**< DMIC reset control      .*/
-    kCTIMER2_RST_SHIFT_RSTn  = (0x10000 | (22U)), /**< TIMER2 reset control    .*/
-    kUSB0_DEV_RST_SHIFT_RSTn = (0x10000 | (25U)), /**< USB0_DEV reset control  .*/
-    kCTIMER0_RST_SHIFT_RSTn  = (0x10000 | (26U)), /**< TIMER0 reset control    .*/
-    kCTIMER1_RST_SHIFT_RSTn  = (0x10000 | (27U)), /**< TIMER1 reset control    .*/
+    kMRT_RST_SHIFT_RSTn      = (0x10000 | (0U)),      /**< MRT reset control       .*/
+    kOSTIMER_RST_SHIFT_RSTn  = (0x10000 | (1U)),      /**< OSTIMER reset control   .*/
+    kSCT_RST_SHIFT_RSTn      = (0x10000 | (2U)),      /**< SCT reset control       .*/
+    kMCAN_RST_SHIFT_RSTn     = (0x10000 | (7U)),      /**< MCAN reset control      .*/
+    kUTICK_RST_SHIFT_RSTn    = (0x10000 | (10U)),     /**< UTICK reset control     .*/
+    kFC0_RST_SHIFT_RSTn      = (0x10000 | (11U)),     /**< FC0 reset control       .*/
+    kFC1_RST_SHIFT_RSTn      = (0x10000 | (12U)),     /**< FC1 reset control       .*/
+    kFC2_RST_SHIFT_RSTn      = (0x10000 | (13U)),     /**< FC2 reset control       .*/
+    kFC3_RST_SHIFT_RSTn      = (0x10000 | (14U)),     /**< FC3 reset control       .*/
+    kFC4_RST_SHIFT_RSTn      = (0x10000 | (15U)),     /**< FC4 reset control       .*/
+    kFC5_RST_SHIFT_RSTn      = (0x10000 | (16U)),     /**< FC5 reset control       .*/
+    kFC6_RST_SHIFT_RSTn      = (0x10000 | (17U)),     /**< FC6 reset control       .*/
+    kFC7_RST_SHIFT_RSTn      = (0x10000 | (18U)),     /**< FC7 reset control       .*/
+    kDMIC_RST_SHIFT_RSTn     = (0x10000 | (19U)),     /**< DMIC reset control      .*/
+    kCTIMER2_RST_SHIFT_RSTn  = (0x10000 | (22U)),     /**< TIMER2 reset control    .*/
+    kUSB0_DEV_RST_SHIFT_RSTn = (0x10000 | (25U)),     /**< USB0_DEV reset control  .*/
+    kCTIMER0_RST_SHIFT_RSTn  = (0x10000 | (26U)),     /**< TIMER0 reset control    .*/
+    kCTIMER1_RST_SHIFT_RSTn  = (0x10000 | (27U)),     /**< TIMER1 reset control    .*/
 
-    kDMA1_RST_SHIFT_RSTn       = (0x20000 | (1U)),  /**< DMA1 reset control      .*/
-    kCMP_RST_SHIFT_RSTn        = (0x20000 | (2U)),  /**< CMP reset control      .*/
-    kFREQME_RST_SHIFT_RSTn     = (0x20000 | (8U)),  /**< FREQME reset control    .*/
-    kCDOG_RST_SHIFT_RSTn       = (0x20000 | (11U)), /**< Code Watchdog reset control */
-    kRNG_RST_SHIFT_RSTn        = (0x20000 | (13U)), /**< RNG reset control       .*/
-    kSYSCTL_RST_SHIFT_RSTn     = (0x20000 | (15U)), /**< SYSCTL reset control    .*/
-    kUSB0HMR_RST_SHIFT_RSTn    = (0x20000 | (16U)), /**< USB0HMR reset control    */
-    kUSB0HSL_RST_SHIFT_RSTn    = (0x20000 | (17U)), /**< USB0HSL reset control     */
-    kCSS_RST_SHIFT_RSTn        = (0x20000 | (18U)), /**< CSS reset control       .*/
-    kPOWERQUAD_RST_SHIFT_RSTn  = (0x20000 | (19U)), /**< PowerQuad reset control        .*/
-    kCTIMER3_RST_SHIFT_RSTn    = (0x20000 | (21U)), /**< TIMER3 reset control    .*/
-    kCTIMER4_RST_SHIFT_RSTn    = (0x20000 | (22U)), /**< TIMER4 reset control    .*/
-    kPUF_RST_SHIFT_RSTn        = (0x20000 | (23U)), /**< PUF reset control */
-    kPKC_RST_SHIFT_RSTn        = (0x20000 | (24U)), /**< PKC reset control       .*/
-    kANACTRL_RST_SHIFT_RSTn    = (0x20000 | (27U)), /**< ANACTRL reset control   .*/
-    kHSLSPI_RST_SHIFT_RSTn     = (0x20000 | (28U)), /**< HS LSPI reset control    */
-    kGPIOSEC_RST_SHIFT_RSTn    = (0x20000 | (29U)), /**< GPIO_SEC reset control  .*/
-    kGPIOSECINT_RST_SHIFT_RSTn = (0x20000 | (30U)), /**< GPIO secure int reset control  .*/
+    kDMA1_RST_SHIFT_RSTn         = (0x20000 | (1U)),  /**< DMA1 reset control      .*/
+    kCMP_RST_SHIFT_RSTn          = (0x20000 | (2U)),  /**< CMP reset control      .*/
+    kFREQME_RST_SHIFT_RSTn       = (0x20000 | (8U)),  /**< FREQME reset control    .*/
+    kCDOG_RST_SHIFT_RSTn         = (0x20000 | (11U)), /**< Code Watchdog reset control */
+    kRNG_RST_SHIFT_RSTn          = (0x20000 | (13U)), /**< RNG reset control       .*/
+    kSYSCTL_RST_SHIFT_RSTn       = (0x20000 | (15U)), /**< SYSCTL reset control    .*/
+    kUSB0HMR_RST_SHIFT_RSTn      = (0x20000 | (16U)), /**< USB0HMR reset control    */
+    kUSB0HSL_RST_SHIFT_RSTn      = (0x20000 | (17U)), /**< USB0HSL reset control     */
+    kCSS_RST_SHIFT_RSTn          = (0x20000 | (18U)), /**< CSS reset control       .*/
+    kPOWERQUAD_RST_SHIFT_RSTn    = (0x20000 | (19U)), /**< PowerQuad reset control        .*/
+    kCTIMER3_RST_SHIFT_RSTn      = (0x20000 | (21U)), /**< TIMER3 reset control    .*/
+    kCTIMER4_RST_SHIFT_RSTn      = (0x20000 | (22U)), /**< TIMER4 reset control    .*/
+    kPUF_RST_SHIFT_RSTn          = (0x20000 | (23U)), /**< PUF reset control */
+    kPKC_RST_SHIFT_RSTn          = (0x20000 | (24U)), /**< PKC reset control       .*/
+    kANACTRL_RST_SHIFT_RSTn      = (0x20000 | (27U)), /**< ANACTRL reset control   .*/
+    kHSLSPI_RST_SHIFT_RSTn       = (0x20000 | (28U)), /**< HS LSPI reset control    */
+    kGPIOSEC_RST_SHIFT_RSTn      = (0x20000 | (29U)), /**< GPIO_SEC reset control  .*/
+    kGPIO_SEC_INT_RST_SHIFT_RSTn = (0x20000 | (30U)), /**< GPIO secure int reset control  .*/
 
-    kI3C0_RST_SHIFT_RSTn   = (0x30000 | (0U)),  /**< I3C0 reset control      .*/
-    kENC0_RST_SHIFT_RSTn   = (0x30000 | (3U)),  /**< ENC0 reset control      .*/
-    kENC1_RST_SHIFT_RSTn   = (0x30000 | (4U)),  /**< ENC1 reset control      .*/
-    kPWM0_RST_SHIFT_RSTn   = (0x30000 | (5U)),  /**< PWM0 reset control      .*/
-    kPWM1_RST_SHIFT_RSTn   = (0x30000 | (6U)),  /**< PWM1 reset control      .*/
-    kAOI0_RST_SHIFT_RSTn   = (0x30000 | (7U)),  /**< AOI0 reset control      .*/
-    kAOI1_RST_SHIFT_RSTn   = (0x30000 | (8U)),  /**< AOI1 reset control      .*/
-    kFTM0_RST_SHIFT_RSTn   = (0x30000 | (9U)),  /**< FTM0 reset control      .*/
-    kDAC1_RST_SHIFT_RSTn   = (0x30000 | (10U)), /**< DAC1 reset control      .*/
-    kDAC2_RST_SHIFT_RSTn   = (0x30000 | (11U)), /**< DAC2 reset control      .*/
-    kOPAMP0_RST_SHIFT_RSTn = (0x30000 | (12U)), /**< OPAMP0 reset control    .*/
-    kOPAMP1_RST_SHIFT_RSTn = (0x30000 | (13U)), /**< OPAMP1 reset control    .*/
-    kOPAMP2_RST_SHIFT_RSTn = (0x30000 | (14U)), /**< OPAMP2 reset control    .*/
-    kHSCMP0_RST_SHIFT_RSTn = (0x30000 | (15U)), /**< HSCMP0 reset control    .*/
-    kHSCMP1_RST_SHIFT_RSTn = (0x30000 | (16U)), /**< HSCMP1 reset control    .*/
-    kHSCMP2_RST_SHIFT_RSTn = (0x30000 | (17U)), /**< HSCMP2 reset control    .*/
-    kVREF_RST_SHIFT_RSTn   = (0x30000 | (18U)), /**< VREF reset control      .*/
+    kI3C0_RST_SHIFT_RSTn   = (0x30000 | (0U)),        /**< I3C0 reset control      .*/
+    kENC0_RST_SHIFT_RSTn   = (0x30000 | (3U)),        /**< ENC0 reset control      .*/
+    kENC1_RST_SHIFT_RSTn   = (0x30000 | (4U)),        /**< ENC1 reset control      .*/
+    kPWM0_RST_SHIFT_RSTn   = (0x30000 | (5U)),        /**< PWM0 reset control      .*/
+    kPWM1_RST_SHIFT_RSTn   = (0x30000 | (6U)),        /**< PWM1 reset control      .*/
+    kAOI0_RST_SHIFT_RSTn   = (0x30000 | (7U)),        /**< AOI0 reset control      .*/
+    kAOI1_RST_SHIFT_RSTn   = (0x30000 | (8U)),        /**< AOI1 reset control      .*/
+    kFTM0_RST_SHIFT_RSTn   = (0x30000 | (9U)),        /**< FTM0 reset control      .*/
+    kDAC1_RST_SHIFT_RSTn   = (0x30000 | (10U)),       /**< DAC1 reset control      .*/
+    kDAC2_RST_SHIFT_RSTn   = (0x30000 | (11U)),       /**< DAC2 reset control      .*/
+    kOPAMP0_RST_SHIFT_RSTn = (0x30000 | (12U)),       /**< OPAMP0 reset control    .*/
+    kOPAMP1_RST_SHIFT_RSTn = (0x30000 | (13U)),       /**< OPAMP1 reset control    .*/
+    kOPAMP2_RST_SHIFT_RSTn = (0x30000 | (14U)),       /**< OPAMP2 reset control    .*/
+    kHSCMP0_RST_SHIFT_RSTn = (0x30000 | (15U)),       /**< HSCMP0 reset control    .*/
+    kHSCMP1_RST_SHIFT_RSTn = (0x30000 | (16U)),       /**< HSCMP1 reset control    .*/
+    kHSCMP2_RST_SHIFT_RSTn = (0x30000 | (17U)),       /**< HSCMP2 reset control    .*/
+    kVREF_RST_SHIFT_RSTn   = (0x30000 | (18U)),       /**< VREF reset control      .*/
 } SYSCON_RSTn_t;
 
 /** Array initializers with peripheral reset bits **/
@@ -227,8 +227,8 @@ typedef enum _SYSCON_RSTn
     {                                              \
         kAOI0_RST_SHIFT_RSTn, kAOI1_RST_SHIFT_RSTn \
     } /* Reset bits for AOI peripheral */
-#define DAC_RSTS                                   \
-    {                                              \
+#define DAC_RSTS                                                         \
+    {                                                                    \
         kDAC0_RST_SHIFT_RSTn, kDAC1_RST_SHIFT_RSTn, kDAC2_RST_SHIFT_RSTn \
     } /* Reset bits for DAC peripheral */
 #define OPAMP_RSTS                                                             \
@@ -247,10 +247,14 @@ typedef enum _SYSCON_RSTn
     {                       \
         kPUF_RST_SHIFT_RSTn \
     } /* Reset bits for PUF peripheral */
+#define RTC_RSTS            \
+    {                       \
+        kRTC_RST_SHIFT_RSTn \
+    } /* Reset bits for PUF peripheral */
 typedef SYSCON_RSTn_t reset_ip_name_t;
 #define USB0HSL_RSTS USB0HSL_RST
 #define USB0HMR_RSTS USB0HMR_RST
-#define USB0D_RSTS USB0D_RST
+#define USB0D_RSTS   USB0D_RST
 
 /*******************************************************************************
  * API

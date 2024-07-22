@@ -37,49 +37,49 @@
  */
 typedef enum _SYSCON_RSTn
 {
-    kROM_RST_SHIFT_RSTn     = 0 | 1U,  /**< ROM reset control */
-    kSRAM1_RST_SHIFT_RSTn   = 0 | 3U,  /**< SRAM1 reset control */
-    kSRAM2_RST_SHIFT_RSTn   = 0 | 4U,  /**< SRAM2 reset control */
-    kSRAM3_RST_SHIFT_RSTn   = 0 | 5U,  /**< SRAM3 reset control */
-    kSRAM4_RST_SHIFT_RSTn   = 0 | 6U,  /**< SRAM4 reset control */
-    kFLASH_RST_SHIFT_RSTn   = 0 | 7U,  /**< Flash controller reset control */
-    kFMC_RST_SHIFT_RSTn     = 0 | 8U,  /**< Flash accelerator reset control */
-    kSPIFI_RST_SHIFT_RSTn   = 0 | 10U, /**< SPIFI reset control */
-    kMUX0_RST_SHIFT_RSTn    = 0 | 11U, /**< Input mux0 reset control */
-    kIOCON_RST_SHIFT_RSTn   = 0 | 13U, /**< IOCON reset control */
-    kGPIO0_RST_SHIFT_RSTn   = 0 | 14U, /**< GPIO0 reset control */
-    kGPIO1_RST_SHIFT_RSTn   = 0 | 15U, /**< GPIO1 reset control */
-    kGPIO2_RST_SHIFT_RSTn   = 0 | 16U, /**< GPIO2 reset control */
-    kGPIO3_RST_SHIFT_RSTn   = 0 | 17U, /**< GPIO3 reset control */
-    kPINT_RST_SHIFT_RSTn    = 0 | 18U, /**< Pin interrupt (PINT) reset control */
-    kGINT_RST_SHIFT_RSTn    = 0 | 19U, /**< Grouped interrupt (PINT) reset control. */
-    kDMA0_RST_SHIFT_RSTn    = 0 | 20U, /**< DMA reset control */
-    kCRC_RST_SHIFT_RSTn     = 0 | 21U, /**< CRC reset control */
-    kWWDT_RST_SHIFT_RSTn    = 0 | 22U, /**< Watchdog timer reset control */
-    kRTC_RST_SHIFT_RSTn     = 0 | 23U, /**< RTC reset control */
-    kMAILBOX_RST_SHIFT_RSTn = 0 | 26U, /**< Mailbox reset control */
-    kADC0_RST_SHIFT_RSTn    = 0 | 27U, /**< ADC0 reset control */
+    kROM_RST_SHIFT_RSTn     = 0 | 1U,          /**< ROM reset control */
+    kSRAM1_RST_SHIFT_RSTn   = 0 | 3U,          /**< SRAM1 reset control */
+    kSRAM2_RST_SHIFT_RSTn   = 0 | 4U,          /**< SRAM2 reset control */
+    kSRAM3_RST_SHIFT_RSTn   = 0 | 5U,          /**< SRAM3 reset control */
+    kSRAM4_RST_SHIFT_RSTn   = 0 | 6U,          /**< SRAM4 reset control */
+    kFLASH_RST_SHIFT_RSTn   = 0 | 7U,          /**< Flash controller reset control */
+    kFMC_RST_SHIFT_RSTn     = 0 | 8U,          /**< Flash accelerator reset control */
+    kSPIFI_RST_SHIFT_RSTn   = 0 | 10U,         /**< SPIFI reset control */
+    kMUX0_RST_SHIFT_RSTn    = 0 | 11U,         /**< Input mux0 reset control */
+    kIOCON_RST_SHIFT_RSTn   = 0 | 13U,         /**< IOCON reset control */
+    kGPIO0_RST_SHIFT_RSTn   = 0 | 14U,         /**< GPIO0 reset control */
+    kGPIO1_RST_SHIFT_RSTn   = 0 | 15U,         /**< GPIO1 reset control */
+    kGPIO2_RST_SHIFT_RSTn   = 0 | 16U,         /**< GPIO2 reset control */
+    kGPIO3_RST_SHIFT_RSTn   = 0 | 17U,         /**< GPIO3 reset control */
+    kPINT_RST_SHIFT_RSTn    = 0 | 18U,         /**< Pin interrupt (PINT) reset control */
+    kGINT_RST_SHIFT_RSTn    = 0 | 19U,         /**< Grouped interrupt (PINT) reset control. */
+    kDMA0_RST_SHIFT_RSTn    = 0 | 20U,         /**< DMA reset control */
+    kCRC_RST_SHIFT_RSTn     = 0 | 21U,         /**< CRC reset control */
+    kWWDT_RST_SHIFT_RSTn    = 0 | 22U,         /**< Watchdog timer reset control */
+    kRTC_RST_SHIFT_RSTn     = 0 | 23U,         /**< RTC reset control */
+    kMAILBOX_RST_SHIFT_RSTn = 0 | 26U,         /**< Mailbox reset control */
+    kADC0_RST_SHIFT_RSTn    = 0 | 27U,         /**< ADC0 reset control */
 
-    kMRT_RST_SHIFT_RSTn      = 65536 | 0U,  /**< Multi-rate timer (MRT) reset control */
-    kOSTIMER0_RST_SHIFT_RSTn = 65536 | 1U,  /**< OSTimer0 reset control */
-    kSCT0_RST_SHIFT_RSTn     = 65536 | 2U,  /**< SCTimer/PWM 0 (SCT0) reset control */
-    kSCTIPU_RST_SHIFT_RSTn   = 65536 | 6U,  /**< SCTIPU reset control */
-    kUTICK_RST_SHIFT_RSTn    = 65536 | 10U, /**< Micro-tick timer reset control */
-    kFC0_RST_SHIFT_RSTn      = 65536 | 11U, /**< Flexcomm Interface 0 reset control */
-    kFC1_RST_SHIFT_RSTn      = 65536 | 12U, /**< Flexcomm Interface 1 reset control */
-    kFC2_RST_SHIFT_RSTn      = 65536 | 13U, /**< Flexcomm Interface 2 reset control */
-    kFC3_RST_SHIFT_RSTn      = 65536 | 14U, /**< Flexcomm Interface 3 reset control */
-    kFC4_RST_SHIFT_RSTn      = 65536 | 15U, /**< Flexcomm Interface 4 reset control */
-    kFC5_RST_SHIFT_RSTn      = 65536 | 16U, /**< Flexcomm Interface 5 reset control */
-    kFC6_RST_SHIFT_RSTn      = 65536 | 17U, /**< Flexcomm Interface 6 reset control */
-    kFC7_RST_SHIFT_RSTn      = 65536 | 18U, /**< Flexcomm Interface 7 reset control */
-    kCTIMER2_RST_SHIFT_RSTn  = 65536 | 22U, /**< CTimer 2 reset control */
-    kUSB0D_RST_SHIFT_RSTn    = 65536 | 25U, /**< USB0 Device reset control */
-    kCTIMER0_RST_SHIFT_RSTn  = 65536 | 26U, /**< CTimer 0 reset control */
-    kCTIMER1_RST_SHIFT_RSTn  = 65536 | 27U, /**< CTimer 1 reset control */
-    kPVT_RST_SHIFT_RSTn      = 65536 | 28U, /**< PVT reset control */
-    kEZHA_RST_SHIFT_RSTn     = 65536 | 30U, /**< EZHA reset control */
-    kEZHB_RST_SHIFT_RSTn     = 65536 | 31U, /**< EZHB reset control */
+    kMRT_RST_SHIFT_RSTn      = 65536 | 0U,     /**< Multi-rate timer (MRT) reset control */
+    kOSTIMER0_RST_SHIFT_RSTn = 65536 | 1U,     /**< OSTimer0 reset control */
+    kSCT0_RST_SHIFT_RSTn     = 65536 | 2U,     /**< SCTimer/PWM 0 (SCT0) reset control */
+    kSCTIPU_RST_SHIFT_RSTn   = 65536 | 6U,     /**< SCTIPU reset control */
+    kUTICK_RST_SHIFT_RSTn    = 65536 | 10U,    /**< Micro-tick timer reset control */
+    kFC0_RST_SHIFT_RSTn      = 65536 | 11U,    /**< Flexcomm Interface 0 reset control */
+    kFC1_RST_SHIFT_RSTn      = 65536 | 12U,    /**< Flexcomm Interface 1 reset control */
+    kFC2_RST_SHIFT_RSTn      = 65536 | 13U,    /**< Flexcomm Interface 2 reset control */
+    kFC3_RST_SHIFT_RSTn      = 65536 | 14U,    /**< Flexcomm Interface 3 reset control */
+    kFC4_RST_SHIFT_RSTn      = 65536 | 15U,    /**< Flexcomm Interface 4 reset control */
+    kFC5_RST_SHIFT_RSTn      = 65536 | 16U,    /**< Flexcomm Interface 5 reset control */
+    kFC6_RST_SHIFT_RSTn      = 65536 | 17U,    /**< Flexcomm Interface 6 reset control */
+    kFC7_RST_SHIFT_RSTn      = 65536 | 18U,    /**< Flexcomm Interface 7 reset control */
+    kCTIMER2_RST_SHIFT_RSTn  = 65536 | 22U,    /**< CTimer 2 reset control */
+    kUSB0D_RST_SHIFT_RSTn    = 65536 | 25U,    /**< USB0 Device reset control */
+    kCTIMER0_RST_SHIFT_RSTn  = 65536 | 26U,    /**< CTimer 0 reset control */
+    kCTIMER1_RST_SHIFT_RSTn  = 65536 | 27U,    /**< CTimer 1 reset control */
+    kPVT_RST_SHIFT_RSTn      = 65536 | 28U,    /**< PVT reset control */
+    kEZHA_RST_SHIFT_RSTn     = 65536 | 30U,    /**< EZHA reset control */
+    kEZHB_RST_SHIFT_RSTn     = 65536 | 31U,    /**< EZHB reset control */
 
     kDMA1_RST_SHIFT_RSTn       = 131072 | 1U,  /**< DMA1 reset control */
     kCMP_RST_SHIFT_RSTn        = 131072 | 2U,  /**< CMP reset control */
@@ -169,9 +169,9 @@ typedef enum _SYSCON_RSTn
     {                       \
         kOTP_RST_SHIFT_RSTn \
     } /* Reset bits for OTP peripheral */
-#define PINT_RSTS            \
-    {                        \
-        kPINT_RST_SHIFT_RSTn \
+#define PINT_RSTS                                        \
+    {                                                    \
+        kPINT_RST_SHIFT_RSTn, kGPIOSECINT_RST_SHIFT_RSTn \
     } /* Reset bits for PINT peripheral */
 #define RNG_RSTS            \
     {                       \
@@ -251,12 +251,12 @@ typedef enum _SYSCON_RSTn
     } /* Reset bits for PUF peripheral */
 typedef SYSCON_RSTn_t reset_ip_name_t;
 #define USB1RAM_RSTS USB1RAM_RST
-#define USB1H_RSTS USB1H_RST
-#define USB1D_RSTS USB1D_RST
+#define USB1H_RSTS   USB1H_RST
+#define USB1D_RSTS   USB1D_RST
 #define USB0HSL_RSTS USB0HSL_RST
 #define USB0HMR_RSTS USB0HMR_RST
-#define USB0D_RSTS USB0D_RST
-#define SDIO_RSTS SDIO_RST
+#define USB0D_RSTS   USB0D_RST
+#define SDIO_RSTS    SDIO_RST
 
 /*******************************************************************************
  * API

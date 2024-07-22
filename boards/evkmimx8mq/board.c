@@ -1,6 +1,5 @@
 /*
- * Copyright 2017-2018 NXP
- * All rights reserved.
+ * Copyright 2017-2018,2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -12,6 +11,10 @@
 #include "pin_mux.h"
 #include "board.h"
 #include "fsl_clock.h"
+#if defined(BOARD_USE_PCA6416A) && BOARD_USE_PCA6416A
+#include "fsl_pca6416a.h"
+#endif /* BOARD_USE_PCA6416A */
+
 
 /*******************************************************************************
  * Variables
@@ -179,3 +182,97 @@ void BOARD_RdcInit(void)
     CLOCK_ControlGate(kCLOCK_AudioPll2Gate, kCLOCK_ClockNeededAll); /* Enable the CCGR gate for AudioPLL2 in Domain 1 */
     CLOCK_ControlGate(kCLOCK_VideoPll1Gate, kCLOCK_ClockNeededAll); /* Enable the CCGR gate for VideoPLL1 in Domain 1 */
 }
+
+#if defined(SDK_I2C_BASED_COMPONENT_USED) && SDK_I2C_BASED_COMPONENT_USED
+void BOARD_I2C_Init(I2C_Type *base, uint32_t clkSrc_Hz)
+{
+    i2c_master_config_t i2cConfig = {0};
+
+    I2C_MasterGetDefaultConfig(&i2cConfig);
+    I2C_MasterInit(base, &i2cConfig, clkSrc_Hz);
+}
+
+status_t BOARD_I2C_Send(I2C_Type *base,
+                        uint8_t deviceAddress,
+                        uint32_t subAddress,
+                        uint8_t subaddressSize,
+                        uint8_t *txBuff,
+                        uint8_t txBuffSize)
+{
+    i2c_master_transfer_t masterXfer;
+
+    /* Prepare transfer structure. */
+    masterXfer.slaveAddress   = deviceAddress;
+    masterXfer.direction      = kI2C_Write;
+    masterXfer.subaddress     = subAddress;
+    masterXfer.subaddressSize = subaddressSize;
+    masterXfer.data           = txBuff;
+    masterXfer.dataSize       = txBuffSize;
+    masterXfer.flags          = kI2C_TransferDefaultFlag;
+
+    return I2C_MasterTransferBlocking(base, &masterXfer);
+}
+
+status_t BOARD_I2C_Receive(I2C_Type *base,
+                           uint8_t deviceAddress,
+                           uint32_t subAddress,
+                           uint8_t subaddressSize,
+                           uint8_t *rxBuff,
+                           uint8_t rxBuffSize)
+{
+    i2c_master_transfer_t masterXfer;
+
+    /* Prepare transfer structure. */
+    masterXfer.slaveAddress   = deviceAddress;
+    masterXfer.subaddress     = subAddress;
+    masterXfer.subaddressSize = subaddressSize;
+    masterXfer.data           = rxBuff;
+    masterXfer.dataSize       = rxBuffSize;
+    masterXfer.direction      = kI2C_Read;
+    masterXfer.flags          = kI2C_TransferDefaultFlag;
+
+    return I2C_MasterTransferBlocking(base, &masterXfer);
+}
+#endif /* SDK_I2C_BASED_COMPONENT_USED */
+
+#if defined(BOARD_USE_PCA6416A) && BOARD_USE_PCA6416A
+void BOARD_PCA6416A_I2C_Init(void)
+{
+    BOARD_I2C_Init(BOARD_PCA6416A_I2C, BOARD_PCA6416A_I2C_CLOCK_FREQ);
+}
+
+status_t BOARD_PCA6416A_I2C_Send(uint8_t deviceAddress,
+                                 uint32_t subAddress,
+                                 uint8_t subAddressSize,
+                                 const uint8_t *txBuff,
+                                 uint8_t txBuffSize,
+                                 uint32_t flags)
+{
+    return BOARD_I2C_Send(BOARD_PCA6416A_I2C, deviceAddress, subAddress, subAddressSize, (uint8_t *)txBuff,
+                            txBuffSize);
+}
+
+status_t BOARD_PCA6416A_I2C_Receive(uint8_t deviceAddress,
+                                    uint32_t subAddress,
+                                    uint8_t subAddressSize,
+                                    uint8_t *rxBuff,
+                                    uint8_t rxBuffSize,
+                                    uint32_t flags)
+{
+    return BOARD_I2C_Receive(BOARD_PCA6416A_I2C, deviceAddress, subAddress, subAddressSize, rxBuff, 
+                             rxBuffSize);
+}
+
+void BOARD_InitPCA6416A(pca6416a_handle_t *handle)
+{
+    BOARD_PCA6416A_I2C_Init();
+
+    static const pca6416a_config_t config = {
+        .i2cAddr         = BOARD_PCA6416A_I2C_ADDR,
+        .I2C_SendFunc    = BOARD_PCA6416A_I2C_Send,
+        .I2C_ReceiveFunc = BOARD_PCA6416A_I2C_Receive,
+    };
+
+    PCA6416A_Init(handle, &config);
+}   
+#endif /* BOARD_USE_PCA6416A. */

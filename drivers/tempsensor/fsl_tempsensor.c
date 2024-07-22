@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 NXP
+ * Copyright 2020-2023 NXP
  * All rights reserved.
  *
  *
@@ -44,10 +44,10 @@ static float s_Ts25c;
  * param base TMPSNS base pointer
  * param config Pointer to configuration structure.
  */
-
 void TMPSNS_Init(TMPSNS_Type *base, const tmpsns_config_t *config)
 {
     assert(NULL != config);
+
     uint32_t controlVal = 0x00U;
     uint32_t temp;
 
@@ -56,35 +56,75 @@ void TMPSNS_Init(TMPSNS_Type *base, const tmpsns_config_t *config)
         10;
     s_Ts25c = (float)temp;
 
+    /* Reset Tempsensor first. */
+#if defined(FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE) && FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE
+    controlVal = TMPSNS_AIReadAccess((uint32_t) & (base->CTRL1));
+#else
+    controlVal  = base->CTRL1;
+#endif /* defined(FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE) && FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE */
+
+    controlVal |= (TMPSNS_CTRL1_PWD_MASK | TMPSNS_CTRL1_PWD_FULL_MASK);
+    controlVal &= (~(TMPSNS_CTRL1_START_MASK | TMPSNS_CTRL1_FINISH_IE_MASK | TMPSNS_CTRL1_LOW_TEMP_IE_MASK |
+                     TMPSNS_CTRL1_HIGH_TEMP_IE_MASK | TMPSNS_CTRL1_PANIC_TEMP_IE_MASK | TMPSNS_CTRL1_FREQ_MASK));
+
+#if defined(FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE) && FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE
+    TMPSNS_AIWriteAccess((uint32_t) & (base->CTRL1), controlVal);
+#else
+    base->CTRL1 = controlVal;
+#endif /* defined(FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE) && FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE */
+
+    /* Set alarm temperature */
+    TMPSNS_SetTempAlarm(base, config->highAlarmTemp, kTEMPMON_HighAlarmMode);
+    TMPSNS_SetTempAlarm(base, config->panicAlarmTemp, kTEMPMON_PanicAlarmMode);
+    TMPSNS_SetTempAlarm(base, config->lowAlarmTemp, kTEMPMON_LowAlarmMode);
+
+#if defined(FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE) && FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE
+    controlVal = TMPSNS_AIReadAccess((uint32_t) & (base->CTRL1));
+#else
+    controlVal  = base->CTRL1;
+#endif /* defined(FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE) && FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE */
+
+    /* Enable finish interrupt status */
+    controlVal |= TMPSNS_CTRL1_FINISH_IE_MASK;
+
     if (config->measureMode == kTEMPSENSOR_SingleMode)
     {
-        controlVal = TMPSNS_CTRL1_FREQ(0x00U);
+        controlVal |= TMPSNS_CTRL1_FREQ(0x00U);
     }
     else if (config->measureMode == kTEMPSENSOR_ContinuousMode)
     {
-        controlVal = TMPSNS_CTRL1_FREQ(config->frequency);
+        controlVal |= TMPSNS_CTRL1_FREQ(config->frequency);
     }
     else
     {
         ; /* Intentional empty for MISRA C-2012 rule 15.7*/
     }
 
-    /* Enable finish interrupt status */
-    controlVal |= TMPSNS_CTRL1_FINISH_IE_MASK;
 #if defined(FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE) && FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE
-    /* Power up the temperature sensor */
-    controlVal &= ~TMPSNS_CTRL1_PWD_MASK;
-    TMPSNS_AIWriteAccess((uint32_t) & (base->CTRL1), controlVal);
-#else
-    base->CTRL1 |= controlVal;
-    /* Power up the temperature sensor */
-    base->CTRL1 &= ~TMPSNS_CTRL1_PWD_MASK;
-#endif
+    uint32_t statusVal;
 
-    /* Set alarm temperature */
-    TMPSNS_SetTempAlarm(base, config->highAlarmTemp, kTEMPMON_HighAlarmMode);
-    TMPSNS_SetTempAlarm(base, config->panicAlarmTemp, kTEMPMON_PanicAlarmMode);
-    TMPSNS_SetTempAlarm(base, config->lowAlarmTemp, kTEMPMON_LowAlarmMode);
+    /* Power up the temperature sensor */
+    controlVal &= (~(TMPSNS_CTRL1_PWD_MASK | TMPSNS_CTRL1_PWD_FULL_MASK));
+
+    TMPSNS_AIWriteAccess((uint32_t) & (base->CTRL1), controlVal);
+
+    /* Read STATUS0 value */
+    statusVal = TMPSNS_AIReadAccess((uint32_t) & (base->STATUS0));
+
+    /* Clear interrupt status flags. */
+    TMPSNS_AIWriteAccess((uint32_t) & (base->STATUS0),
+                         (statusVal | TMPSNS_STATUS0_HIGH_TEMP_MASK | TMPSNS_STATUS0_LOW_TEMP_MASK |
+                          TMPSNS_STATUS0_PANIC_TEMP_MASK | TMPSNS_STATUS0_FINISH_MASK));
+#else
+    base->CTRL1 = controlVal;
+
+    /* Power up the temperature sensor */
+    base->CTRL1 &= (~(TMPSNS_CTRL1_PWD_MASK | TMPSNS_CTRL1_PWD_FULL_MASK));
+
+    /* Clear interrupt status flags. */
+    base->STATUS0 = (TMPSNS_STATUS0_HIGH_TEMP_MASK | TMPSNS_STATUS0_LOW_TEMP_MASK | TMPSNS_STATUS0_PANIC_TEMP_MASK |
+                     TMPSNS_STATUS0_FINISH_MASK);
+#endif /* defined(FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE) && FSL_FEATURE_TMPSNS_HAS_AI_INTERFACE */
 }
 
 /*!

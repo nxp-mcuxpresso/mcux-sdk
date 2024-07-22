@@ -382,6 +382,7 @@ hal_gpio_status_t HAL_GpioSetTriggerMode(hal_gpio_handle_t gpioHandle, hal_gpio_
     {
         GPIO_SetPinInterruptConfig(GPIO, gpioStateHandle->pin.port, gpioStateHandle->pin.pin, &triggerConfig);
         GPIO_PinEnableInterrupt(GPIO, gpioStateHandle->pin.port, gpioStateHandle->pin.pin, 0);
+        NVIC_SetPriority(GPIO_INTA_IRQn, HAL_GPIO_ISR_PRIORITY);
         NVIC_EnableIRQ(GPIO_INTA_IRQn);
     }
     else

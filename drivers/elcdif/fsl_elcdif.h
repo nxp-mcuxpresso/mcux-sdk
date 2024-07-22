@@ -27,7 +27,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eLCDIF driver version */
-#define FSL_ELCDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
+#define FSL_ELCDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
 /*! @} */
 
 /* All IRQ flags in CTRL1 register. */

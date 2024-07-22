@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023~2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -45,23 +45,23 @@
 /*! @brief
  * Definition of power domains' setpoint map.
  */
-#define PM_RT1170_MEGAMIX_SETPOINT_MAP    (0xF800U) // MEGAMIX will be powered off from setpoint 11 to setpoint 15.
-#define PM_RT1170_DISPLAYMIX_SETPOINT_MAP (0xF800U) // DISPLAYMIX will be powered off from setpoint 11 to setpoint 15.
-#define PM_RT1170_WAKEUPMIX_SETPOINT_MAP  (0xF800U) // MEGAMIX will be powered off from setpoint 11 to setpoint 15.
-#define PM_RT1170_LPSRMIX_SETPOINT_MAP    (0x0000U) // LPSRMIX powered on for all setpoint.
+#define PM_DEV_MEGAMIX_SETPOINT_MAP    (0xF800U) // MEGAMIX will be powered off from setpoint 11 to setpoint 15.
+#define PM_DEV_DISPLAYMIX_SETPOINT_MAP (0xF800U) // DISPLAYMIX will be powered off from setpoint 11 to setpoint 15.
+#define PM_DEV_WAKEUPMIX_SETPOINT_MAP  (0xF800U) // MEGAMIX will be powered off from setpoint 11 to setpoint 15.
+#define PM_DEV_LPSRMIX_SETPOINT_MAP    (0x0000U) // LPSRMIX powered on for all setpoint.
 
 /*!
  * @brief Definition of DCDC's setpoint map.
  */
-#define PM_RT1170_DCDC_ENABLE_SETPOINT_MAP (0x7FFU) // DCDC will be powered off from setpoint 11 to setpoint 15.
-#define PM_RT1170_DCDC_DIG_ENABLE_SETPOINT_MAP \
+#define PM_DEV_DCDC_ENABLE_SETPOINT_MAP (0x7FFU) // DCDC will be powered off from setpoint 11 to setpoint 15.
+#define PM_DEV_DCDC_DIG_ENABLE_SETPOINT_MAP \
     (0x7FFU)                                        // DCDC_DIG will be powered off from setpoint 11 to
                                                     // setpoint 15.
-#define PM_RT1170_DCDC_LP_MODE_SETPOINT_MAP (0x0U)  // DCDC_LP_MODE will be disabled from all setpoint.
-#define PM_RT1170_DCDC_STANDBY_SETPOINT_MAP \
+#define PM_DEV_DCDC_LP_MODE_SETPOINT_MAP (0x0U)  // DCDC_LP_MODE will be disabled from all setpoint.
+#define PM_DEV_DCDC_STANDBY_SETPOINT_MAP \
     (0x7FFU)                                        // DCDC standby mode will be disabled from setpoint 11 to
                                                     // setpoint 15.
-#define PM_RT1170_DCDC_LP_MODE_STANDBY_SETPOINT_MAP \
+#define PM_DEV_DCDC_LP_MODE_STANDBY_SETPOINT_MAP \
     (0x0U)                                          // Disable standby request from GPC to enter LP mode
                                                     // for all setpoints.S
 
@@ -69,57 +69,57 @@
  * @brief Definition of bandgap's setpoint map.
  *
  */
-#define PM_RT1170_BANDGAP_EN_SETPOINT_MAP      (0xFFFFU) // Bandgap is enabled for all setpoints.
-#define PM_RT1170_BANDGAP_STANDBY_SETPOINT_MAP (0xFFFFU) // Bandgap standby mode is disabled for all setpoints.
+#define PM_DEV_BANDGAP_EN_SETPOINT_MAP      (0xFFFFU) // Bandgap is enabled for all setpoints.
+#define PM_DEV_BANDGAP_STANDBY_SETPOINT_MAP (0xFFFFU) // Bandgap standby mode is disabled for all setpoints.
 
 /*!
  * @brief Definition of FBB's setpoint map.
  */
-#define PM_RT1170_FBB_EN_SETPOINT_MAP      (0xEU)    // FBB is enabled from setpoint 1 to setpoint 3.
-#define PM_RT1170_FBB_STANDBY_SETPOINT_MAP (0xFFFFU) // FBB standby mode is disabled for all setpoints.
+#define PM_DEV_FBB_EN_SETPOINT_MAP      (0xEU)    // FBB is enabled from setpoint 1 to setpoint 3.
+#define PM_DEV_FBB_STANDBY_SETPOINT_MAP (0xFFFFU) // FBB standby mode is disabled for all setpoints.
 
 /*!
  * @brief Definition of RBBs' setpoint map.
  */
-#define PM_RT1170_RBB_SOC_EN_SETPOINT_MAP      (0x500U)  // RBB_SOC is enabled for setpoint 8 and setpoint 10.
-#define PM_RT1170_RBB_SOC_STANDBY_SETPOINT_MAP (0xFFFFU) // RBB_SOC standby mode is disabled for all setpoints.
-#define PM_RT1170_RBB_LPSR_EN_SETPOINT_MAP \
+#define PM_DEV_RBB_SOC_EN_SETPOINT_MAP      (0x500U)  // RBB_SOC is enabled for setpoint 8 and setpoint 10.
+#define PM_DEV_RBB_SOC_STANDBY_SETPOINT_MAP (0xFFFFU) // RBB_SOC standby mode is disabled for all setpoints.
+#define PM_DEV_RBB_LPSR_EN_SETPOINT_MAP \
     (0x8500U) // RBB_LPSR is enabled for setpoint 8, setpoint10 and setpoint 15, ToDo.
-#define PM_RT1170_RBB_LPSR_STANDBY_SETPOINT_MAP (0xFFFFU) // RBB_LPSR standby mode is disabled for all setpoints.
+#define PM_DEV_RBB_LPSR_STANDBY_SETPOINT_MAP (0xFFFFU) // RBB_LPSR standby mode is disabled for all setpoints.
 
 /*!
  * @brief Definition of LDOs' setpoint map.
  */
-#define PM_RT1170_PLL_LDO_EN_SETPOINT_MAP      (0x7FU)   // PLL_LDO is enabled from setpoint 0 to setpoint 6.
-#define PM_RT1170_PLL_LDO_STANDBY_SETPOINT_MAP (0xFFFFU) // PLL_LDO standby mode is disabled for all setpoints.
-#define PM_RT1170_LPSR_ANA_LDO_EN_SETPOINT_MAP (0xF800U) // LPSR_ANA_DO is enabled from setpoint 11 to setpoint 15.
-#define PM_RT1170_LPSR_ANA_LDO_STANDBY_SETPOINT_MAP \
+#define PM_DEV_PLL_LDO_EN_SETPOINT_MAP      (0x7FU)   // PLL_LDO is enabled from setpoint 0 to setpoint 6.
+#define PM_DEV_PLL_LDO_STANDBY_SETPOINT_MAP (0xFFFFU) // PLL_LDO standby mode is disabled for all setpoints.
+#define PM_DEV_LPSR_ANA_LDO_EN_SETPOINT_MAP (0xF800U) // LPSR_ANA_DO is enabled from setpoint 11 to setpoint 15.
+#define PM_DEV_LPSR_ANA_LDO_STANDBY_SETPOINT_MAP \
     (0xFFFFU)                                            // LPSR_ANA_LDO standby mode is disabled for all setpoints.
-#define PM_RT1170_LPSR_ANA_LDO_LP_MODE_SETPOINT_MAP \
+#define PM_DEV_LPSR_ANA_LDO_LP_MODE_SETPOINT_MAP \
     (0xFFFFU)                                            // LPSR_ANA_LDO lowpower mode is disabled for all setpoints.
-#define PM_RT1170_LPSR_ANA_LDO_TRACKING_EN_SETPOINT_MAP \
-    (~PM_RT1170_LPSR_ANA_LDO_EN_SETPOINT_MAP)            // LPSR_ANA_DO tracking is enabled
+#define PM_DEV_LPSR_ANA_LDO_TRACKING_EN_SETPOINT_MAP \
+    ((uint32_t)(~PM_DEV_LPSR_ANA_LDO_EN_SETPOINT_MAP))            // LPSR_ANA_DO tracking is enabled
                                                          // from setpoint 0 to setpoint 10.
-#define PM_RT1170_LPSR_ANA_LDO_BYPASS_EN_SETPOINT_MAP \
-    (~PM_RT1170_LPSR_ANA_LDO_EN_SETPOINT_MAP)            // LPSR_ANA_DO bypass is enabled from
+#define PM_DEV_LPSR_ANA_LDO_BYPASS_EN_SETPOINT_MAP \
+    ((uint32_t)(~PM_DEV_LPSR_ANA_LDO_EN_SETPOINT_MAP))            // LPSR_ANA_DO bypass is enabled from
                                                          // setpoint 0 to setpoint 10.
-#define PM_RT1170_LPSR_DIG_LDO_EN_SETPOINT_MAP \
-    (0xF81C)                                             // LPSR_DIG_DO is enabled from setpoint 2 to setpoint 4,
+#define PM_DEV_LPSR_DIG_LDO_EN_SETPOINT_MAP \
+    (0xF81CU)                                             // LPSR_DIG_DO is enabled from setpoint 2 to setpoint 4,
                                                          // and setpoint 11 to setpoint 15.
-#define PM_RT1170_LPSR_DIG_LDO_STANDBY_SETPOINT_MAP (0xFFFFU) // LPSR_DIG_DO standby mode is disabled for all setpoints.
-#define PM_RT1170_LPSR_DIG_LDO_LP_MODE_SETPOINT_MAP \
+#define PM_DEV_LPSR_DIG_LDO_STANDBY_SETPOINT_MAP (0xFFFFU) // LPSR_DIG_DO standby mode is disabled for all setpoints.
+#define PM_DEV_LPSR_DIG_LDO_LP_MODE_SETPOINT_MAP \
     (0xFFFFU)                                 // LPSR_DIG_DO lowpower mode is disabled for all setpoints.
-#define PM_RT1170_LPSR_DIG_LDO_TRACKING_EN_SETPOINT_MAP \
-    (~PM_RT1170_LPSR_DIG_LDO_EN_SETPOINT_MAP) // LPSR_DIG_DO tracking is enabled
+#define PM_DEV_LPSR_DIG_LDO_TRACKING_EN_SETPOINT_MAP \
+    ((uint32_t)(~PM_DEV_LPSR_DIG_LDO_EN_SETPOINT_MAP)) // LPSR_DIG_DO tracking is enabled
                                               // from setpoint 0 to setpoint 1,
                                               // and setpoint 5 to setpoint 10.
-#define PM_RT1170_LPSR_DIG_LDO_BYPASS_EN_SETPOINT_MAP \
-    (~PM_RT1170_LPSR_DIG_LDO_EN_SETPOINT_MAP) // LPSR_DIG_DO bypass is enabled from
+#define PM_DEV_LPSR_DIG_LDO_BYPASS_EN_SETPOINT_MAP \
+    ((uint32_t)(~PM_DEV_LPSR_DIG_LDO_EN_SETPOINT_MAP)) // LPSR_DIG_DO bypass is enabled from
                                               // setpoint 0 to setpoint 1,
                                               // and setpoint 5 to setpoint 10.
 
 /* clang-format off */
-#define PM_RT1170_CM7_COMPATIBLE_SETPOINT_MAP                           \
+#define PM_DEV_CM7_COMPATIBLE_SETPOINT_MAP                           \
 {{NA , SP1, SP2, SP3, SP0, SP4, SP5, SP6, SP7, SP8, SP9, SP10, SP11, SP12, SP13, SP14, SP15}, \
 {SP1 ,   1,   0,   0,   0,   0,   0,   0,   0,   0,   0,    0,    0,    0,    0,    0,    0}, \
 {SP2 ,   1,   1,   0,   0,   0,   0,   0,   0,   0,   0,    0,    0,    0,    0,    0,    0}, \
@@ -141,16 +141,16 @@
 
 #if defined(__CC_ARM) || defined(__ARMCC_VERSION)
 extern uint32_t __Vectors[];
-#define PM_RT1170_VECTOR_TABLE ((uint32_t)__Vectors)
+#define PM_DEV_VECTOR_TABLE ((uint32_t)__Vectors)
 #elif defined(__MCUXPRESSO)
 extern uint32_t __Vectors[];
-#define PM_RT1170_VECTOR_TABLE ((uint32_t)__Vectors)
+#define PM_DEV_VECTOR_TABLE ((uint32_t)__Vectors)
 #elif defined(__ICCARM__)
 extern uint32_t __VECTOR_TABLE[];
-#define PM_RT1170_VECTOR_TABLE ((uint32_t)__VECTOR_TABLE)
+#define PM_DEV_VECTOR_TABLE ((uint32_t)__VECTOR_TABLE)
 #elif defined(__GNUC__)
 extern uint32_t __VECTOR_TABLE[];
-#define PM_RT1170_VECTOR_TABLE ((uint32_t)__VECTOR_TABLE)
+#define PM_DEV_VECTOR_TABLE ((uint32_t)__VECTOR_TABLE)
 #endif
 
 #elif __CORTEX_M == 4
@@ -159,7 +159,7 @@ extern uint32_t __VECTOR_TABLE[];
 #define CURRENT_STBY_CORE_NAME kGPC_CM7Core
 
 /* clang-format off */
-    #define PM_RT1170_CM4_COMPATIBLE_SETPOINT_MAP                           \
+    #define PM_DEV_CM4_COMPATIBLE_SETPOINT_MAP                           \
     {{NA , SP1, SP2, SP3, SP0, SP4, SP5, SP6, SP7, SP8, SP9, SP10, SP11, SP12, SP13, SP14, SP15}, \
     {SP1 ,   1,   0,   0,   0,   0,   0,   0,   0,   0,   0,    0,    0,    0,    0,    0,    0}, \
     {SP2 ,   1,   1,   0,   0,   0,   0,   0,   0,   0,   0,    0,    0,    0,    0,    0,    0}, \
@@ -184,27 +184,27 @@ extern uint32_t __VECTOR_TABLE[];
  * Prototypes
  ******************************************************************************/
 #if __CORTEX_M == 7
-static inline void RT1170_SetClockSourcesControlBySetpoint(void);
-static inline void RT1170_SetCore0PlatformSetpointMap(GPC_CPU_MODE_CTRL_Type *base);
-static inline void RT1170_SetPowerDomainsControlBySetpoint(void);
-static inline void RT1170_SetPowerSupplyControlBySetpoint(void);
-static inline void RT1170_SetSRCControlMode(void);
-static inline void RT1170_SetSetpointTransitionFlow(void);
-static inline void RT1170_SetStandbyTransitionFlow(void);
+static inline void PM_DEV_SetClockSourcesControlBySetpoint(void);
+static inline void PM_DEV_SetCore0PlatformSetpointMap(GPC_CPU_MODE_CTRL_Type *base);
+static inline void PM_DEV_SetPowerDomainsControlBySetpoint(void);
+static inline void PM_DEV_SetPowerSupplyControlBySetpoint(void);
+static inline void PM_DEV_SetSRCControlMode(void);
+static inline void PM_DEV_SetSetpointTransitionFlow(void);
+static inline void PM_DEV_SetStandbyTransitionFlow(void);
 #endif /* __CORTEX_M == 7 */
 
 #if __CORTEX_M == 4
-static inline void RT1170_SetCore1PlatformSetpointMap(GPC_CPU_MODE_CTRL_Type *base);
+static inline void PM_DEV_SetCore1PlatformSetpointMap(GPC_CPU_MODE_CTRL_Type *base);
 #endif /* __CORTEX_M == 4 */
 
-static inline uint8_t RT1170_FindOperateMode(uint32_t rescIndex, pm_resc_group_t *pSysRescGroup);
-static inline void RT1170_SetSleepTransitionFlow(void);
+static inline uint8_t PM_DEV_FindOperateMode(uint32_t rescIndex, pm_resc_group_t *pSysRescGroup);
+static inline void PM_DEV_SetSleepTransitionFlow(void);
 
-static void RT1170_PreparePowerSetting(void);
-static void RT1170_EnterPowerState(uint8_t stateIndex, pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup);
+static void PM_DEV_PreparePowerSetting(void);
+static void PM_DEV_EnterPowerState(uint8_t stateIndex, pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup);
 #if (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER)
-static status_t RT1170_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable);
-static bool RT1170_IsWakeupSource(pm_wakeup_source_t *ws);
+static status_t PM_DEV_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable);
+static bool PM_DEV_IsWakeupSource(pm_wakeup_source_t *ws);
 #endif /* (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) */
 
 /*******************************************************************************
@@ -212,6 +212,7 @@ static bool RT1170_IsWakeupSource(pm_wakeup_source_t *ws);
  ******************************************************************************/
 
 #if __CORTEX_M == 7
+extern const uint16_t g_clockSourceSpMapping[29U];
 const uint16_t g_clockSourceSpMapping[29U] = {
     0xFFFFU, /*!< Clock Source OSCPLL0: 16MHz RC OSC output, turn on in all setpoints. */
     0x0000U, /*!< Clock Source OSCPLL1: 48MHz RC OSC output, turn off in all setpoints. */
@@ -330,11 +331,11 @@ static dcdc_standby_mode_1P0_target_vol_t g_dcdcStandby1P0Voltage[16U] = {
 };
 
 static const dcdc_setpoint_config_t g_dcdcSpConfig = {
-    .enableDCDCMap              = PM_RT1170_DCDC_ENABLE_SETPOINT_MAP,
-    .enableDigLogicMap          = PM_RT1170_DCDC_DIG_ENABLE_SETPOINT_MAP,
-    .lowpowerMap                = PM_RT1170_DCDC_LP_MODE_SETPOINT_MAP,
-    .standbyMap                 = PM_RT1170_DCDC_STANDBY_SETPOINT_MAP,
-    .standbyLowpowerMap         = PM_RT1170_DCDC_LP_MODE_STANDBY_SETPOINT_MAP,
+    .enableDCDCMap              = PM_DEV_DCDC_ENABLE_SETPOINT_MAP,
+    .enableDigLogicMap          = PM_DEV_DCDC_DIG_ENABLE_SETPOINT_MAP,
+    .lowpowerMap                = PM_DEV_DCDC_LP_MODE_SETPOINT_MAP,
+    .standbyMap                 = PM_DEV_DCDC_STANDBY_SETPOINT_MAP,
+    .standbyLowpowerMap         = PM_DEV_DCDC_LP_MODE_STANDBY_SETPOINT_MAP,
     .buckVDD1P8TargetVoltage    = g_dcdcBuckMode1P8Voltage,
     .buckVDD1P0TargetVoltage    = g_dcdcBuckMode1P0Voltage,
     .standbyVDD1P8TargetVoltage = g_dcdcStandby1P8Voltage,
@@ -813,12 +814,12 @@ const pm_device_option_t g_devicePMOption = {
             },
         },
     .stateCount = 17U,
-    .prepare    = RT1170_PreparePowerSetting,
-    .enter      = RT1170_EnterPowerState,
+    .prepare    = PM_DEV_PreparePowerSetting,
+    .enter      = PM_DEV_EnterPowerState,
     .clean      = NULL,
 #if (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER)
-    .manageWakeupSource = RT1170_ManageWakeupSource,
-    .isWakeupSource     = RT1170_IsWakeupSource,
+    .manageWakeupSource = PM_DEV_ManageWakeupSource,
+    .isWakeupSource     = PM_DEV_IsWakeupSource,
 #endif /* (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) */
 };
 
@@ -829,27 +830,28 @@ const pm_device_option_t g_devicePMOption = {
 /*!
  * @brief Find operate mode to set.
  */
-static inline uint8_t RT1170_FindOperateMode(uint32_t rescIndex, pm_resc_group_t *pSysRescGroup)
+static inline uint8_t PM_DEV_FindOperateMode(uint32_t rescIndex, pm_resc_group_t *pSysRescGroup)
 {
-    uint8_t u8Tmp = (pSysRescGroup->groupSlice[rescIndex / 8UL] >> (4UL * (rescIndex % 8UL))) & 0xFUL;
+    uint32_t u32Tmp = (pSysRescGroup->groupSlice[rescIndex / 8UL] >> (4UL * (rescIndex % 8UL))) & 0xFUL;
 
     // Find first set, that is the operate mode to set.
-    u8Tmp |= (u8Tmp >> 1U);
-    u8Tmp |= (u8Tmp >> 2U);
+    u32Tmp |= (u32Tmp >> 1U);
+    u32Tmp |= (u32Tmp >> 2U);
 
-    return ((u8Tmp + 1U) >> 1U);
+    return (uint8_t)(uint32_t)((u32Tmp + 1UL) >> 1UL);
 }
 
 #if __CORTEX_M == 7
 /*!
+
  * @brief Configure setpoint mapping for CM7.
  */
-static inline void RT1170_SetCore0PlatformSetpointMap(GPC_CPU_MODE_CTRL_Type *base)
+static inline void PM_DEV_SetCore0PlatformSetpointMap(GPC_CPU_MODE_CTRL_Type *base)
 {
     uint8_t i, j;
     uint32_t u32Tmp;
 
-    uint8_t coreSetpointMap[17U][17U] = PM_RT1170_CM7_COMPATIBLE_SETPOINT_MAP;
+    uint32_t coreSetpointMap[17U][17U] = PM_DEV_CM7_COMPATIBLE_SETPOINT_MAP;
 
     // Enable CPU sleep hold.
     GPC_CM_EnableCpuSleepHold(base, true);
@@ -868,7 +870,7 @@ static inline void RT1170_SetCore0PlatformSetpointMap(GPC_CPU_MODE_CTRL_Type *ba
 /*!
  * @brief Set clock source controlled by setpoint, CM7 is responsible for set this.
  */
-static inline void RT1170_SetClockSourcesControlBySetpoint(void)
+static inline void PM_DEV_SetClockSourcesControlBySetpoint(void)
 {
     // 1. Clock sources implement setpoint control scheme.
     // Set OSC_PLL's control mode as software mode.
@@ -893,15 +895,15 @@ static inline void RT1170_SetClockSourcesControlBySetpoint(void)
     ANADIG_PLL->PLL_AUDIO_CTRL &= ~ANADIG_PLL_PLL_AUDIO_CTRL_PLL_AUDIO_CONTROL_MODE_MASK;
     ANADIG_PLL->PLL_VIDEO_CTRL &= ~ANADIG_PLL_PLL_VIDEO_CTRL_PLL_VIDEO_CONTROL_MODE_MASK;
 
-    clock_name_t clockSourceName = kCLOCK_OscRc16M;
-    for (clockSourceName = kCLOCK_OscRc16M; clockSourceName <= kCLOCK_VideoPllOut; clockSourceName++)
+    uint8_t clockSourceName = (uint8_t)kCLOCK_OscRc16M;
+    for (clockSourceName = (uint8_t)kCLOCK_OscRc16M; clockSourceName <= (uint8_t)kCLOCK_VideoPllOut; clockSourceName++)
     {
         if (!CLOCK_OSCPLL_IsSetPointImplemented((clock_name_t)clockSourceName))
         {
             assert(0);
         }
         // keep clock source init state aligned with set point 0 state.
-        if ((g_clockSourceSpMapping[(uint8_t)clockSourceName] & 0x1) == 0)
+        if ((g_clockSourceSpMapping[(uint8_t)clockSourceName] & (uint16_t)0x1U) == (uint16_t)0U)
         {
             CCM->OSCPLL[(uint8_t)clockSourceName].DIRECT = 0;
         }
@@ -910,12 +912,12 @@ static inline void RT1170_SetClockSourcesControlBySetpoint(void)
             CCM->OSCPLL[(uint8_t)clockSourceName].DIRECT = 1;
         }
         // All clock sources except OSC_RC 16M are turned off in standby mode.
-        uint32_t standbyValue = 0UL;
-        if (clockSourceName == kCLOCK_OscRc16M)
+        uint16_t standbyValue = 0U;
+        if ((clock_name_t)clockSourceName == kCLOCK_OscRc16M)
         {
             standbyValue = 0xFFFFU;
         }
-        CLOCK_OSCPLL_ControlBySetPointMode(clockSourceName, g_clockSourceSpMapping[(uint8_t)clockSourceName],
+        CLOCK_OSCPLL_ControlBySetPointMode((clock_name_t)clockSourceName, g_clockSourceSpMapping[(uint8_t)clockSourceName],
                                            standbyValue);
     }
 
@@ -946,20 +948,20 @@ static inline void RT1170_SetClockSourcesControlBySetpoint(void)
  * @brief Set power domains controlled by setpoint, including MEGAMIX, DISPLAYMIX, and WANEMIX, CM7 is responsible for
  * set this
  */
-static inline void RT1170_SetPowerDomainsControlBySetpoint(void)
+static inline void PM_DEV_SetPowerDomainsControlBySetpoint(void)
 {
     pgmc_bpc_setpoint_mode_option_t bpcSetpointOption = {
         .stateSave = false,
         .powerOff  = true,
     };
     //    a. MEGAMIX settings.
-    PGMC_BPC_ControlPowerDomainBySetPointMode(PGMC_BPC0, PM_RT1170_MEGAMIX_SETPOINT_MAP, &bpcSetpointOption);
+    PGMC_BPC_ControlPowerDomainBySetPointMode(PGMC_BPC0, PM_DEV_MEGAMIX_SETPOINT_MAP, &bpcSetpointOption);
     //    b. DISPLAYMIX settings.
-    PGMC_BPC_ControlPowerDomainBySetPointMode(PGMC_BPC1, PM_RT1170_DISPLAYMIX_SETPOINT_MAP, &bpcSetpointOption);
+    PGMC_BPC_ControlPowerDomainBySetPointMode(PGMC_BPC1, PM_DEV_DISPLAYMIX_SETPOINT_MAP, &bpcSetpointOption);
     //    c. WANEMIX settings.
-    PGMC_BPC_ControlPowerDomainBySetPointMode(PGMC_BPC2, PM_RT1170_WAKEUPMIX_SETPOINT_MAP, &bpcSetpointOption);
+    PGMC_BPC_ControlPowerDomainBySetPointMode(PGMC_BPC2, PM_DEV_WAKEUPMIX_SETPOINT_MAP, &bpcSetpointOption);
     //    d. LPSRMIX settings.
-    PGMC_BPC_ControlPowerDomainBySetPointMode(PGMC_BPC3, PM_RT1170_LPSRMIX_SETPOINT_MAP, &bpcSetpointOption);
+    PGMC_BPC_ControlPowerDomainBySetPointMode(PGMC_BPC3, PM_DEV_LPSRMIX_SETPOINT_MAP, &bpcSetpointOption);
 
     pgmc_bpc_cpu_power_mode_option_t bpcCpuModeOption = {
         .stateSave    = false,
@@ -975,7 +977,7 @@ static inline void RT1170_SetPowerDomainsControlBySetpoint(void)
  * @brief Set power supply controlled by setpoint, including DCDC and internal LPSR LDOs, CM7 is responsible
  * for set this.
  */
-static inline void RT1170_SetPowerSupplyControlBySetpoint(void)
+static inline void PM_DEV_SetPowerSupplyControlBySetpoint(void)
 {
     //    a. Set DCDC controlled by setpoint.
     DCDC_SetPointInit(DCDC, &g_dcdcSpConfig);
@@ -987,77 +989,77 @@ static inline void RT1170_SetPowerSupplyControlBySetpoint(void)
 
     //    b. Set LDOs in LPSR domain controlled by setpoint.
     //     i. Set PLL_LDO controlled by setpoint.
-    PMU_GPCEnableLdo(kPMU_PllLdo, PM_RT1170_PLL_LDO_EN_SETPOINT_MAP);
-    PMU_GPCEnableLdoStandbyMode(kPMU_PllLdo, PM_RT1170_PLL_LDO_STANDBY_SETPOINT_MAP);
+    PMU_GPCEnableLdo(kPMU_PllLdo, PM_DEV_PLL_LDO_EN_SETPOINT_MAP);
+    PMU_GPCEnableLdoStandbyMode(kPMU_PllLdo, PM_DEV_PLL_LDO_STANDBY_SETPOINT_MAP);
     PMU_SetPllLdoControlMode(ANADIG_PMU, kPMU_GPCMode);
 
     //     ii. Set LPSR_DIG LDO controlled by setpoint
 
-    PMU_GPCEnableLdo(kPMU_LpsrDigLdo, PM_RT1170_LPSR_DIG_LDO_EN_SETPOINT_MAP);
-    PMU_GPCEnableLdoStandbyMode(kPMU_LpsrDigLdo, PM_RT1170_LPSR_DIG_LDO_STANDBY_SETPOINT_MAP);
-    PMU_GPCSetLdoOperateMode(kPMU_LpsrDigLdo, PM_RT1170_LPSR_DIG_LDO_LP_MODE_SETPOINT_MAP, kPMU_HighPowerMode);
-    PMU_GPCEnableLdoTrackingMode(kPMU_LpsrDigLdo, PM_RT1170_LPSR_DIG_LDO_TRACKING_EN_SETPOINT_MAP);
-    PMU_GPCEnableLdoBypassMode(kPMU_LpsrDigLdo, PM_RT1170_LPSR_DIG_LDO_BYPASS_EN_SETPOINT_MAP);
+    PMU_GPCEnableLdo(kPMU_LpsrDigLdo, PM_DEV_LPSR_DIG_LDO_EN_SETPOINT_MAP);
+    PMU_GPCEnableLdoStandbyMode(kPMU_LpsrDigLdo, PM_DEV_LPSR_DIG_LDO_STANDBY_SETPOINT_MAP);
+    PMU_GPCSetLdoOperateMode(kPMU_LpsrDigLdo, PM_DEV_LPSR_DIG_LDO_LP_MODE_SETPOINT_MAP, kPMU_HighPowerMode);
+    PMU_GPCEnableLdoTrackingMode(kPMU_LpsrDigLdo, PM_DEV_LPSR_DIG_LDO_TRACKING_EN_SETPOINT_MAP);
+    PMU_GPCEnableLdoBypassMode(kPMU_LpsrDigLdo, PM_DEV_LPSR_DIG_LDO_BYPASS_EN_SETPOINT_MAP);
     for (uint8_t i = 0U; i < 16U; i++)
     {
-        PMU_GPCSetLpsrDigLdoTargetVoltage(1U << i, g_lpsrDigLdoTargetVoltage[i]);
+        PMU_GPCSetLpsrDigLdoTargetVoltage(1UL << i, g_lpsrDigLdoTargetVoltage[i]);
     }
     PMU_SetLpsrDigLdoControlMode(ANADIG_LDO_SNVS, kPMU_GPCMode);
 
     //     iii. Set LPSR_ANA LDO controlled by setpoint.
-    PMU_GPCEnableLdo(kPMU_LpsrAnaLdo, PM_RT1170_LPSR_ANA_LDO_EN_SETPOINT_MAP);
-    PMU_GPCEnableLdoStandbyMode(kPMU_LpsrAnaLdo, PM_RT1170_LPSR_ANA_LDO_STANDBY_SETPOINT_MAP);
-    PMU_GPCSetLdoOperateMode(kPMU_LpsrAnaLdo, PM_RT1170_LPSR_ANA_LDO_LP_MODE_SETPOINT_MAP, kPMU_HighPowerMode);
-    PMU_GPCEnableLdoTrackingMode(kPMU_LpsrAnaLdo, PM_RT1170_LPSR_ANA_LDO_TRACKING_EN_SETPOINT_MAP);
-    PMU_GPCEnableLdoBypassMode(kPMU_LpsrAnaLdo, PM_RT1170_LPSR_ANA_LDO_BYPASS_EN_SETPOINT_MAP);
+    PMU_GPCEnableLdo(kPMU_LpsrAnaLdo, PM_DEV_LPSR_ANA_LDO_EN_SETPOINT_MAP);
+    PMU_GPCEnableLdoStandbyMode(kPMU_LpsrAnaLdo, PM_DEV_LPSR_ANA_LDO_STANDBY_SETPOINT_MAP);
+    PMU_GPCSetLdoOperateMode(kPMU_LpsrAnaLdo, PM_DEV_LPSR_ANA_LDO_LP_MODE_SETPOINT_MAP, kPMU_HighPowerMode);
+    PMU_GPCEnableLdoTrackingMode(kPMU_LpsrAnaLdo, PM_DEV_LPSR_ANA_LDO_TRACKING_EN_SETPOINT_MAP);
+    PMU_GPCEnableLdoBypassMode(kPMU_LpsrAnaLdo, PM_DEV_LPSR_ANA_LDO_BYPASS_EN_SETPOINT_MAP);
     PMU_SetLpsrAnaLdoControlMode(ANADIG_LDO_SNVS, kPMU_GPCMode);
 }
 
 /*!
  * @brief Set reset slices's control mode, CM7 is responsible for set this.
  */
-static inline void RT1170_SetSRCControlMode(void)
+static inline void PM_DEV_SetSRCControlMode(void)
 {
     SRC_ClearGlobalSystemResetStatus(SRC, 0xFFFFFFFFUL);
     //    a. Reset slice corresponding to MEGA is controlled by setpoint.
     SRC_EnableSetPointTransferReset(SRC, kSRC_MegaSlice, true);
-    SRC_SetSliceSetPointConfig(SRC, kSRC_MegaSlice, PM_RT1170_MEGAMIX_SETPOINT_MAP);
+    SRC_SetSliceSetPointConfig(SRC, kSRC_MegaSlice, PM_DEV_MEGAMIX_SETPOINT_MAP);
     //    b. Reset slice corresponding to DISPLAY is controlled by setpoint.
     SRC_EnableSetPointTransferReset(SRC, kSRC_DisplaySlice, true);
-    SRC_SetSliceSetPointConfig(SRC, kSRC_DisplaySlice, PM_RT1170_DISPLAYMIX_SETPOINT_MAP);
+    SRC_SetSliceSetPointConfig(SRC, kSRC_DisplaySlice, PM_DEV_DISPLAYMIX_SETPOINT_MAP);
     //    c. Reset slice corresponding to WAKEUP is controlled by setpoint.
     SRC_EnableSetPointTransferReset(SRC, kSRC_WakeUpSlice, true);
-    SRC_SetSliceSetPointConfig(SRC, kSRC_WakeUpSlice, PM_RT1170_WAKEUPMIX_SETPOINT_MAP);
+    SRC_SetSliceSetPointConfig(SRC, kSRC_WakeUpSlice, PM_DEV_WAKEUPMIX_SETPOINT_MAP);
     //    d. Reset slice corresponding to LPSR is controlled by setpoint.
     SRC_EnableSetPointTransferReset(SRC, kSRC_LpsrSlice, true);
-    SRC_SetSliceSetPointConfig(SRC, kSRC_LpsrSlice, PM_RT1170_LPSRMIX_SETPOINT_MAP);
+    SRC_SetSliceSetPointConfig(SRC, kSRC_LpsrSlice, PM_DEV_LPSRMIX_SETPOINT_MAP);
     //    e. Reset slice corresponding to Cortex-M4 platform is controlled by entering of suspend mode.
-    SRC_SetAssignList(SRC, kSRC_M4CoreSlice, kSRC_CM4Core);
-    SRC_SetSliceDomainModeConfig(SRC, kSRC_M4CoreSlice, kSRC_Cpu1SuspendModeAssertReset);
+    SRC_SetAssignList(SRC, kSRC_M4CoreSlice, (uint32_t)kSRC_CM4Core);
+    SRC_SetSliceDomainModeConfig(SRC, kSRC_M4CoreSlice, (uint32_t)kSRC_Cpu1SuspendModeAssertReset);
     SRC_EnableDomainModeTransferReset(SRC, kSRC_M4CoreSlice, true);
     //    f. Reset slice corresponding to Cortex-M7 platform is controlled by entering of suspend mode.
-    SRC_SetAssignList(SRC, kSRC_M7CoreSlice, kSRC_CM7Core);
-    SRC_SetSliceDomainModeConfig(SRC, kSRC_M7CoreSlice, kSRC_Cpu0SuspendModeAssertReset);
+    SRC_SetAssignList(SRC, kSRC_M7CoreSlice, (uint32_t)kSRC_CM7Core);
+    SRC_SetSliceDomainModeConfig(SRC, kSRC_M7CoreSlice, (uint32_t)kSRC_Cpu0SuspendModeAssertReset);
     SRC_EnableDomainModeTransferReset(SRC, kSRC_M7CoreSlice, true);
     //    g. Reset slice corresponding to CM4 Debug is controlled by entering of suspend mode.
-    SRC_SetAssignList(SRC, kSRC_M4DebugSlice, kSRC_CM4Core);
-    SRC_SetSliceDomainModeConfig(SRC, kSRC_M4DebugSlice, kSRC_Cpu1SuspendModeAssertReset);
+    SRC_SetAssignList(SRC, kSRC_M4DebugSlice, (uint32_t)kSRC_CM4Core);
+    SRC_SetSliceDomainModeConfig(SRC, kSRC_M4DebugSlice, (uint32_t)kSRC_Cpu1SuspendModeAssertReset);
     SRC_EnableDomainModeTransferReset(SRC, kSRC_M4DebugSlice, true);
     //    h. Reset slice corresponding to CM7 Debug is controlled by entering of suspend mode.
-    SRC_SetAssignList(SRC, kSRC_M7DebugSlice, kSRC_CM7Core);
-    SRC_SetSliceDomainModeConfig(SRC, kSRC_M7DebugSlice, kSRC_Cpu0SuspendModeAssertReset);
+    SRC_SetAssignList(SRC, kSRC_M7DebugSlice, (uint32_t)kSRC_CM7Core);
+    SRC_SetSliceDomainModeConfig(SRC, kSRC_M7DebugSlice, (uint32_t)kSRC_Cpu0SuspendModeAssertReset);
     SRC_EnableDomainModeTransferReset(SRC, kSRC_M7DebugSlice, true);
     //    i. Reset slice corresponding to USBPHY1 and USBPHY2 is controlled by WAKEUP domain's setpoint request.
     SRC_EnableSetPointTransferReset(SRC, kSRC_Usbphy1Slice, true);
-    SRC_SetSliceSetPointConfig(SRC, kSRC_Usbphy1Slice, PM_RT1170_WAKEUPMIX_SETPOINT_MAP);
+    SRC_SetSliceSetPointConfig(SRC, kSRC_Usbphy1Slice, PM_DEV_WAKEUPMIX_SETPOINT_MAP);
     SRC_EnableSetPointTransferReset(SRC, kSRC_Usbphy2Slice, true);
-    SRC_SetSliceSetPointConfig(SRC, kSRC_Usbphy2Slice, PM_RT1170_WAKEUPMIX_SETPOINT_MAP);
+    SRC_SetSliceSetPointConfig(SRC, kSRC_Usbphy2Slice, PM_DEV_WAKEUPMIX_SETPOINT_MAP);
 }
 
 /*!
  * @brief Set setpoint transition flow, CM7 is responsible for this.
  */
-static inline void RT1170_SetSetpointTransitionFlow(void)
+static inline void PM_DEV_SetSetpointTransitionFlow(void)
 {
     gpc_tran_step_config_t transferStepConfig = {
         .stepCount  = 0UL,
@@ -1141,7 +1143,7 @@ static inline void RT1170_SetSetpointTransitionFlow(void)
 /*!
  * @brief Set standby transition flow, CM7 is responsible for this.
  */
-static inline void RT1170_SetStandbyTransitionFlow(void)
+static inline void PM_DEV_SetStandbyTransitionFlow(void)
 {
     gpc_tran_step_config_t transferStepConfig = {
         .stepCount  = 0UL,
@@ -1204,12 +1206,12 @@ static inline void RT1170_SetStandbyTransitionFlow(void)
 /*!
  * @brief Configure setpoint mapping for CM4.
  */
-static inline void RT1170_SetCore1PlatformSetpointMap(GPC_CPU_MODE_CTRL_Type *base)
+static inline void PM_DEV_SetCore1PlatformSetpointMap(GPC_CPU_MODE_CTRL_Type *base)
 {
     uint8_t i, j;
     uint32_t u32Tmp;
 
-    uint8_t coreSetpointMap[17U][17U] = PM_RT1170_CM4_COMPATIBLE_SETPOINT_MAP;
+    uint32_t coreSetpointMap[17U][17U] = PM_DEV_CM4_COMPATIBLE_SETPOINT_MAP;
 
     // Enable CPU sleep hold.
     GPC_CM_EnableCpuSleepHold(base, true);
@@ -1229,7 +1231,7 @@ static inline void RT1170_SetCore1PlatformSetpointMap(GPC_CPU_MODE_CTRL_Type *ba
 /*!
  * @brief Set CPU mode transition flow.
  */
-static inline void RT1170_SetSleepTransitionFlow(void)
+static inline void PM_DEV_SetSleepTransitionFlow(void)
 {
     gpc_tran_step_config_t transferStepConfig = {
         .stepCount  = 0UL,
@@ -1324,60 +1326,60 @@ static inline void RT1170_SetSleepTransitionFlow(void)
 #endif /* __CORTEX_M */
 }
 
-static void RT1170_PreparePowerSetting(void)
+static void PM_DEV_PreparePowerSetting(void)
 {
 #if __CORTEX_M == 7
     // 1. Control clock sources via setpoint.
-    RT1170_SetClockSourcesControlBySetpoint();
+    PM_DEV_SetClockSourcesControlBySetpoint();
 
     // 2. Control power domains via setpoint.
-    RT1170_SetPowerDomainsControlBySetpoint();
+    PM_DEV_SetPowerDomainsControlBySetpoint();
 
     // 3. Control power supply via setpoint.
-    RT1170_SetPowerSupplyControlBySetpoint();
+    PM_DEV_SetPowerSupplyControlBySetpoint();
 
     // 4. Control bandgap via GPC, CM7 is responsible for this.
-    PMU_GPCEnableBandgap(ANADIG_PMU, PM_RT1170_BANDGAP_EN_SETPOINT_MAP);
-    PMU_GPCEnableBandgapStandbyMode(ANADIG_PMU, PM_RT1170_BANDGAP_STANDBY_SETPOINT_MAP);
+    PMU_GPCEnableBandgap(ANADIG_PMU, PM_DEV_BANDGAP_EN_SETPOINT_MAP);
+    PMU_GPCEnableBandgapStandbyMode(ANADIG_PMU, PM_DEV_BANDGAP_STANDBY_SETPOINT_MAP);
     PMU_SetBandgapControlMode(ANADIG_PMU, kPMU_GPCMode);
 
     // 5. Control body bias via GPC, CM7 is responsible for this.
     /* Check if FBB need to be enabled in OverDrive(OD) mode.
        Note: FUSE could not be read out if OTP memory is powered off.*/
-    if (((OCOTP->FUSEN[7].FUSE & 0x10U) >> 4U) != 1)
+    if (((OCOTP->FUSEN[7].FUSE & 0x10UL) >> 4UL) != 1UL)
     {
-        PMU_GPCEnableBodyBias(kPMU_FBB_CM7, PM_RT1170_FBB_EN_SETPOINT_MAP);
+        PMU_GPCEnableBodyBias(kPMU_FBB_CM7, PM_DEV_FBB_EN_SETPOINT_MAP);
     }
     else
     {
         PMU_GPCEnableBodyBias(kPMU_FBB_CM7, 0);
     }
-    PMU_GPCEnableBodyBiasStandbyMode(kPMU_FBB_CM7, PM_RT1170_FBB_STANDBY_SETPOINT_MAP);
+    PMU_GPCEnableBodyBiasStandbyMode(kPMU_FBB_CM7, PM_DEV_FBB_STANDBY_SETPOINT_MAP);
     PMU_SetBodyBiasControlMode(ANADIG_PMU, kPMU_FBB_CM7, kPMU_GPCMode);
 
-    PMU_GPCEnableBodyBias(kPMU_RBB_SOC, PM_RT1170_RBB_SOC_EN_SETPOINT_MAP);
-    PMU_GPCEnableBodyBiasStandbyMode(kPMU_RBB_SOC, PM_RT1170_RBB_SOC_STANDBY_SETPOINT_MAP);
+    PMU_GPCEnableBodyBias(kPMU_RBB_SOC, PM_DEV_RBB_SOC_EN_SETPOINT_MAP);
+    PMU_GPCEnableBodyBiasStandbyMode(kPMU_RBB_SOC, PM_DEV_RBB_SOC_STANDBY_SETPOINT_MAP);
     PMU_SetBodyBiasControlMode(ANADIG_PMU, kPMU_RBB_SOC, kPMU_GPCMode);
 
-    PMU_GPCEnableBodyBias(kPMU_RBB_LPSR, PM_RT1170_RBB_LPSR_EN_SETPOINT_MAP);
-    PMU_GPCEnableBodyBiasStandbyMode(kPMU_RBB_LPSR, PM_RT1170_RBB_LPSR_STANDBY_SETPOINT_MAP);
+    PMU_GPCEnableBodyBias(kPMU_RBB_LPSR, PM_DEV_RBB_LPSR_EN_SETPOINT_MAP);
+    PMU_GPCEnableBodyBiasStandbyMode(kPMU_RBB_LPSR, PM_DEV_RBB_LPSR_STANDBY_SETPOINT_MAP);
     PMU_SetBodyBiasControlMode(ANADIG_PMU, kPMU_RBB_LPSR, kPMU_GPCMode);
 
     // 6. Set setpoint mapping for CM7 platforms.
-    RT1170_SetCore0PlatformSetpointMap(GPC_CPU_MODE_CTRL_0);
+    PM_DEV_SetCore0PlatformSetpointMap(GPC_CPU_MODE_CTRL_0);
 
     // 7. Configure SRC
-    RT1170_SetSRCControlMode();
+    PM_DEV_SetSRCControlMode();
 
     // 8. Set setpoint transfer steps, CM7 is responsible for this.
-    RT1170_SetSetpointTransitionFlow();
+    PM_DEV_SetSetpointTransitionFlow();
 
     // 9. Set standby request steps.
-    RT1170_SetStandbyTransitionFlow();
+    PM_DEV_SetStandbyTransitionFlow();
 
     // 10. Save vector offset register.
     IOMUXC_LPSR_GPR->GPR26 &= ~IOMUXC_LPSR_GPR_GPR26_CM7_INIT_VTOR_MASK;
-    IOMUXC_LPSR_GPR->GPR26 |= IOMUXC_LPSR_GPR_GPR26_CM7_INIT_VTOR(PM_RT1170_VECTOR_TABLE >> 7);
+    IOMUXC_LPSR_GPR->GPR26 |= IOMUXC_LPSR_GPR_GPR26_CM7_INIT_VTOR(PM_DEV_VECTOR_TABLE >> 7);
 
     // 11. Power off cpu platform when domain enters suspend mode.
     PGMC_CPC_CORE_PowerOffByCpuPowerMode(PGMC_CPC0, kPGMC_SuspendMode);
@@ -1395,12 +1397,12 @@ static void RT1170_PreparePowerSetting(void)
 
 #if __CORTEX_M == 4
     // Set setpoint mapping for all core platforms.
-    RT1170_SetCore1PlatformSetpointMap(GPC_CPU_MODE_CTRL_1);
+    PM_DEV_SetCore1PlatformSetpointMap(GPC_CPU_MODE_CTRL_1);
     PGMC_CPC_CORE_PowerOffByCpuPowerMode(PGMC_CPC1, kPGMC_SuspendMode);
 #endif
 
     // Set Sleep and WAKEUP steps.
-    RT1170_SetSleepTransitionFlow();
+    PM_DEV_SetSleepTransitionFlow();
 
     // Mask all wakeup interrupts by default for all platform.
     for (uint8_t i = 0U; i < 8U; i++)
@@ -1420,7 +1422,7 @@ static void RT1170_PreparePowerSetting(void)
     // TODO: Cpu mode trigger data saving by SSARC.
 }
 
-static void RT1170_EnterPowerState(uint8_t stateIndex, pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup)
+static void PM_DEV_EnterPowerState(uint8_t stateIndex, pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup)
 {
     assert(pSoftRescMask != NULL);
     assert(pSysRescGroup != NULL);
@@ -1435,9 +1437,9 @@ static void RT1170_EnterPowerState(uint8_t stateIndex, pm_resc_mask_t *pSoftResc
     else
     {
         // 1. Get CPU mode to transit based on application request.
-        if (pSoftRescMask->rescMask[0] & (1UL << kResc_CPU_PLATFORM))
+        if ((pSoftRescMask->rescMask[0] & (1UL << kResc_CPU_PLATFORM)) != 0UL)
         {
-            switch (RT1170_FindOperateMode(kResc_CPU_PLATFORM, pSysRescGroup))
+            switch (PM_DEV_FindOperateMode((uint32_t)kResc_CPU_PLATFORM, pSysRescGroup))
             {
                 case PM_RESOURCE_FULL_ON:
                     // In case of application request PM_RESC_CORE_DOMAIN_RUN.
@@ -1495,7 +1497,7 @@ static void RT1170_EnterPowerState(uint8_t stateIndex, pm_resc_mask_t *pSoftResc
             GPC_CM_ClearStandbyModeRequest(CURRENT_GPC_INSTANCE, kGPC_StopMode);
             GPC_CM_ClearStandbyModeRequest(CURRENT_GPC_INSTANCE, kGPC_SuspendMode);
 
-            if (RT1170_FindOperateMode(kResc_STBY_REQ, pSysRescGroup) != PM_RESOURCE_FULL_ON)
+            if (PM_DEV_FindOperateMode((uint32_t)kResc_STBY_REQ, pSysRescGroup) != PM_RESOURCE_FULL_ON)
             {
                 // If not request to de-assert standby request, assert standby request when CPU entering selected CPU
                 // mode.
@@ -1520,27 +1522,27 @@ static void RT1170_EnterPowerState(uint8_t stateIndex, pm_resc_mask_t *pSoftResc
 }
 
 #if (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER)
-static status_t RT1170_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable)
+static status_t PM_DEV_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable)
 {
     uint32_t irqId = 0UL;
     irqId          = PM_DECODE_WAKEUP_SOURCE_ID(ws->wsId);
     if (enable)
     {
         // Enabled selected wakeup source, including enable it in NVIC and GPC.
-        EnableIRQ((IRQn_Type)irqId);
+        (void)EnableIRQ((IRQn_Type)irqId);
         GPC_CM_EnableIrqWakeup(CURRENT_GPC_INSTANCE, irqId, true);
     }
     else
     {
         // Disable selected wakeup source, including disable it in NVIC and GPC.
-        DisableIRQ((IRQn_Type)irqId);
+        (void)DisableIRQ((IRQn_Type)irqId);
         GPC_CM_EnableIrqWakeup(CURRENT_GPC_INSTANCE, irqId, false);
     }
 
     return kStatus_Success;
 }
 
-static bool RT1170_IsWakeupSource(pm_wakeup_source_t *ws)
+static bool PM_DEV_IsWakeupSource(pm_wakeup_source_t *ws)
 {
     uint32_t irqId = 0UL;
     bool ret       = false;

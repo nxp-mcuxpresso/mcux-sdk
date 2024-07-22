@@ -46,6 +46,9 @@
 #  # description: Utility assert_lite
 #  set(CONFIG_USE_utility_assert_lite true)
 
+#  # description: Utility str
+#  set(CONFIG_USE_utility_str true)
+
 #  # description: Component lpc_crc_adapter
 #  set(CONFIG_USE_component_lpc_crc_adapter true)
 
@@ -217,6 +220,9 @@
 #  set(CONFIG_USE_CMSIS_NN_Source true)
 
 #set.component.osa
+#  # description: Component osa_zephyr
+#  set(CONFIG_USE_component_osa_zephyr true)
+
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)
 

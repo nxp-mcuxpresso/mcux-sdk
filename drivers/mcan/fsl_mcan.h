@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief MCAN driver version. */
-#define FSL_MCAN_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+#define FSL_MCAN_DRIVER_VERSION (MAKE_VERSION(2, 4, 2))
 /*! @} */
 
 #ifndef MCAN_RETRY_TIMES
@@ -340,6 +340,19 @@ typedef struct _mcan_timing_config
 #endif
 } mcan_timing_config_t;
 
+/*! @brief MCAN bit timing parameter configuration structure. */
+typedef struct _mcan_timing_param
+{
+    uint32_t busLength;         /*!< Maximum Bus length in meter. */
+    uint32_t propTxRx;          /*!< Transceiver propagation delay in nanosecond. */
+    uint32_t nominalbaudRate;   /*!< Baud rate of Arbitration phase in bps. */
+    uint32_t nominalSP;         /*!< Sample point of Arbitration phase, range in 10 ~ 990, 800 means 80%. */
+#if (defined(FSL_FEATURE_CAN_SUPPORT_CANFD) && FSL_FEATURE_CAN_SUPPORT_CANFD)
+    uint32_t databaudRate;      /*!< Baud rate of Data phase in bps. */
+    uint32_t dataSP;            /*!< Sample point of Data phase, range in 0 ~ 1000, 800 means 80%. */
+#endif
+} mcan_timing_param_t;
+
 /*! @brief MCAN Message RAM related configuration structure. */
 typedef struct _mcan_memory_config
 {
@@ -548,6 +561,40 @@ static inline uint32_t MCAN_GetMsgRAMBase(CAN_Type *base)
 bool MCAN_CalculateImprovedTimingValues(uint32_t baudRate, uint32_t sourceClock_Hz, mcan_timing_config_t *pconfig);
 
 /*!
+ * @brief Calculates the specified timing values for classical CAN with user-defined settings.
+ *
+ *  User can specify baudrates, sample point position, bus length, and transceiver propagation
+ *  delay. This example shows how to set up the mcan_timing_param_t parameters and how to call
+ *  the this function by passing in these parameters.
+ *  @code
+ *   mcan_timing_config_t timing_config;
+ *   mcan_timing_param_t timing_param;
+ *   timing_param.busLength = 1U;
+ *   timing_param.propTxRx = 230U;
+ *   timing_param.nominalbaudRate = 500000U;
+ *   timing_param.nominalSP = 800U;
+ *   MCAN_CalculateSpecifiedTimingValues(MCAN_CLK_FREQ, &timing_config, &timing_param);
+ *  @endcode
+ *
+ *  Note that due to integer division will sacrifice the precision, actual sample point may not
+ *  equal to expected. If actual sample point is not in allowed 2% range, this function will
+ *  return false. So it is better to select higher source clock when baudrate is relatively high.
+ *  This will ensure more time quanta and higher precision of sample point.
+ *  Parameter busLength and propTxRx are optional and intended to verify whether propagation
+ *  delay is too long to corrupt sample point. User can set these parameter zero if you do not
+ *  want to consider this factor.
+ * 
+ * @param sourceClock_Hz The Source clock data speed in bps.
+ * @param pconfig Pointer to the MCAN timing configuration structure.
+ * @param config Pointer to the MCAN timing parameters structure.
+ *
+ * @return TRUE if timing configuration found, FALSE if failed to find configuration
+ */
+bool MCAN_CalculateSpecifiedTimingValues(uint32_t sourceClock_Hz,
+                                         mcan_timing_config_t *pconfig,
+                                         const mcan_timing_param_t *pParamConfig);
+
+/*!
  * @brief Sets the MCAN protocol arbitration phase timing characteristic.
  *
  * This function gives user settings to CAN bus timing characteristic.
@@ -590,6 +637,44 @@ bool MCAN_FDCalculateImprovedTimingValues(uint32_t baudRate,
                                           uint32_t baudRateFD,
                                           uint32_t sourceClock_Hz,
                                           mcan_timing_config_t *pconfig);
+
+/*!
+ * @brief Calculates the specified timing values for CANFD with user-defined settings.
+ *
+ *  User can specify baudrates, sample point position, bus length, and transceiver propagation
+ *  delay. This example shows how to set up the mcan_timing_param_t parameters and how to call
+ *  the this function by passing in these parameters.
+ *  @code
+ *   mcan_timing_config_t timing_config;
+ *   mcan_timing_param_t timing_param;
+ *   timing_param.busLength = 1U;
+ *   timing_param.propTxRx = 230U;
+ *   timing_param.nominalbaudRate = 500000U;
+ *   timing_param.nominalSP = 800U;
+ *   timing_param.databaudRate = 4000000U;
+ *   timing_param.dataSP = 700U;
+ *   MCAN_FDCalculateSpecifiedTimingValues(MCAN_CLK_FREQ, &timing_config, &timing_param);
+ *  @endcode
+ *
+ *  Note that due to integer division will sacrifice the precision, actual sample point may not
+ *  equal to expected. So it is better to select higher source clock when baudrate is relatively
+ *  high. Select higher nominal baudrate when source clock is relatively high because large clock
+ *  predivider will lead to less time quanta in data phase. This function will set predivider in
+ *  arbitration phase equal to data phase. These methods will ensure more time quanta and higher
+ *  precision of sample point.
+ *  Parameter busLength and propTxRx are optional and intended to verify whether propagation
+ *  delay is too long to corrupt sample point. User can set these parameter zero if you do not
+ *  want to consider this factor.
+ * 
+ * @param sourceClock_Hz The Source clock data speed in bps.
+ * @param pconfig Pointer to the MCAN timing configuration structure.
+ * @param config Pointer to the MCAN timing parameters structure.
+ *
+ * @return TRUE if timing configuration found, FALSE if failed to find configuration
+ */
+bool MCAN_FDCalculateSpecifiedTimingValues(uint32_t sourceClock_Hz,
+                                           mcan_timing_config_t *pconfig,
+                                           const mcan_timing_param_t *pParamConfig);
 
 /*!
  * @brief Set Baud Rate of MCAN FD mode.

@@ -172,31 +172,31 @@ void GPC_CM_RequestRunModeSetPointTransition(GPC_CPU_MODE_CTRL_Type *base, uint8
  * This function configures which set point is allowed when CPU enters RUN/WAIT/STOP/SUSPEND. If there are multiple
  * setpoints, use:
  * code
- *    map = kkGPC_SetPoint0 | kGPC_SetPoint1 | ... | kGPC_SetPoint15;
+ *    setpoint_map = kGPC_SetPoint0 | kGPC_SetPoint1 | ... | kGPC_SetPoint15;
  * encode
  *
  * param base GPC CPU module base address.
  * param mode CPU mode. Refer to "gpc_cpu_mode_t".
- * param map Map value of the set point. Refer to "_gpc_setpoint_map".
+ * param setpoint_map Map value of the set point. Refer to "_gpc_setpoint_map".
  */
-void GPC_CM_SetCpuModeSetPointMapping(GPC_CPU_MODE_CTRL_Type *base, gpc_cpu_mode_t mode, uint32_t map)
+void GPC_CM_SetCpuModeSetPointMapping(GPC_CPU_MODE_CTRL_Type *base, gpc_cpu_mode_t mode, uint32_t setpoint_map)
 {
     /* Ensure the allowed set point is in the accessible range (0-15). */
-    map = map & 0xFFFFUL;
+    setpoint_map = setpoint_map & 0xFFFFUL;
 
     switch (mode)
     {
         case kGPC_RunMode:
-            base->CM_RUN_MODE_MAPPING = map;
+            base->CM_RUN_MODE_MAPPING = setpoint_map;
             break;
         case kGPC_WaitMode:
-            base->CM_WAIT_MODE_MAPPING = map;
+            base->CM_WAIT_MODE_MAPPING = setpoint_map;
             break;
         case kGPC_StopMode:
-            base->CM_STOP_MODE_MAPPING = map;
+            base->CM_STOP_MODE_MAPPING = setpoint_map;
             break;
         case kGPC_SuspendMode:
-            base->CM_SUSPEND_MODE_MAPPING = map;
+            base->CM_SUSPEND_MODE_MAPPING = setpoint_map;
             break;
         default:
             assert(false);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ~ 2022 NXP
+ * Copyright 2021 ~ 2022, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -239,18 +239,18 @@ static status_t PF5020_MaskInterrupts(pf5020_handle_t *handle, uint64_t interrup
         {
             if ((tmp64 & (uint64_t)kPF5020_ILIM_Ldo1IlimInterrupt) != 0ULL)
             {
-                tmp64 &= (uint64_t)(~kPF5020_ILIM_Ldo1IlimInterrupt);
+                tmp64 &= (uint64_t)(~(uint64_t)kPF5020_ILIM_Ldo1IlimInterrupt);
                 status = PF5020_WriteReg(handle, PF5020_LDO_ILIM_MASK, enableMask ? 0U : 1U);
             }
             if ((tmp64 & (uint64_t)kPF5020_UV_Ldo1UvInterrupt) != 0ULL)
             {
-                tmp64 &= (uint64_t)(~kPF5020_UV_Ldo1UvInterrupt);
+                tmp64 &= (uint64_t)(~(uint64_t)kPF5020_UV_Ldo1UvInterrupt);
                 status = PF5020_WriteReg(handle, PF5020_LDO_UV_MASK, enableMask ? 0U : 1U);
             }
 
             if ((tmp64 & (uint64_t)kPF5020_OV_Ldo1OvInterrupt) != 0UL)
             {
-                tmp64 &= (uint64_t)(~kPF5020_OV_Ldo1OvInterrupt);
+                tmp64 &= (uint64_t)(~(uint64_t)kPF5020_OV_Ldo1OvInterrupt);
                 status = PF5020_WriteReg(handle, PF5020_LDO_OV_MASK, enableMask ? 0U : 1U);
             }
             if (status == kStatus_Success)
@@ -2029,19 +2029,19 @@ status_t PF5020_ClearInterruptStatus(pf5020_handle_t *handle, uint64_t interrupt
             if ((tmp64 & (uint64_t)kPF5020_ILIM_Ldo1IlimInterrupt) != 0ULL)
             {
                 status = PF5020_WriteReg(handle, PF5020_LDO_ILIM_INT, 1U);
-                tmp64 &= (uint64_t)~kPF5020_ILIM_Ldo1IlimInterrupt;
+                tmp64 &= (uint64_t)(~(uint64_t)kPF5020_ILIM_Ldo1IlimInterrupt);
             }
 
             if ((tmp64 & (uint64_t)kPF5020_UV_Ldo1UvInterrupt) != 0ULL)
             {
                 status = PF5020_WriteReg(handle, PF5020_LDO_UV_INT, 1U);
-                tmp64 &= (uint64_t)~kPF5020_UV_Ldo1UvInterrupt;
+                tmp64 &= (uint64_t)(~(uint64_t)kPF5020_UV_Ldo1UvInterrupt);
             }
 
             if ((tmp64 & (uint64_t)kPF5020_OV_Ldo1OvInterrupt) != 0ULL)
             {
                 status = PF5020_WriteReg(handle, PF5020_LDO_OV_INT, 1U);
-                tmp64 &= (uint64_t)~kPF5020_OV_Ldo1OvInterrupt;
+                tmp64 &= (uint64_t)(~(uint64_t)kPF5020_OV_Ldo1OvInterrupt);
             }
 
             tmp8 = (uint8_t)(tmp64 >> (8ULL * i)) & (0xFFU);

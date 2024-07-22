@@ -20,8 +20,8 @@
 /*******************************************************************************
  * Definitations
  ******************************************************************************/
-/* Used for 32byte aligned */
-#define STCD_ADDR(address) (edma_tcd_t *)(((uint32_t)(address) + 32U) & ~0x1FU)
+/* Used for edma_tcd_t size aligned */
+#define STCD_ADDR(address) (edma_tcd_t *)(((uint32_t)(address) + sizeof(edma_tcd_t)) & ~(sizeof(edma_tcd_t) - 1U))
 
 /*<! Structure definition for uart_edma_private_handle_t. The structure is private. */
 typedef struct _spdif_edma_private_handle
@@ -128,7 +128,11 @@ static void SPDIF_RxEDMACallback(edma_handle_t *handle, void *userData, bool don
 
 static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_config_t *config, uint32_t rightChannel)
 {
+#if defined(FSL_EDMA_DRIVER_EDMA4) && FSL_EDMA_DRIVER_EDMA4
+    edma_tcd_t *tcdRegs = handle->tcdBase;
+#else
     edma_tcd_t *tcdRegs = (edma_tcd_t *)(uint32_t)&handle->base->TCD[handle->channel];
+#endif
     uint32_t primask;
     uint16_t csr;
     int8_t currentTcd;
@@ -159,16 +163,105 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
     /* Calculate index of previous TCD */
     previousTcd = (currentTcd != 0x00) ? (currentTcd - 0x01) : (handle->tcdSize - 0x01);
     /* Configure current TCD block. */
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+    EDMA_TcdResetExt(handle->base, &handle->tcdPool[currentTcd]);
+    EDMA_TcdSetTransferConfigExt(handle->base, &handle->tcdPool[currentTcd], config, NULL);
+    /* Set channel link */
+    EDMA_TcdSetChannelLinkExt(handle->base, &handle->tcdPool[currentTcd], kEDMA_MinorLink, rightChannel);
+    EDMA_TcdSetChannelLinkExt(handle->base, &handle->tcdPool[currentTcd], kEDMA_MajorLink, rightChannel);
+#else
     EDMA_TcdReset(&handle->tcdPool[currentTcd]);
     EDMA_TcdSetTransferConfig(&handle->tcdPool[currentTcd], config, NULL);
     /* Set channel link */
     EDMA_TcdSetChannelLink(&handle->tcdPool[currentTcd], kEDMA_MinorLink, rightChannel);
     EDMA_TcdSetChannelLink(&handle->tcdPool[currentTcd], kEDMA_MajorLink, rightChannel);
+#endif
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+    /* Enable major interrupt */
+    EDMA_TCD_CSR((&handle->tcdPool[currentTcd]), EDMA_TCD_TYPE(handle->base)) |= DMA_CSR_INTMAJOR_MASK;
+    /* Link current TCD with next TCD for identification of current TCD */
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+    EDMA_TCD_DLAST_SGA((&handle->tcdPool[currentTcd]), EDMA_TCD_TYPE(handle->base)) =
+        MEMORY_ConvertMemoryMapAddress((uint32_t)&handle->tcdPool[nextTcd], kMEMORY_Local2DMA);
+#else
+    EDMA_TCD_DLAST_SGA((&handle->tcdPool[currentTcd]), EDMA_TCD_TYPE(handle->base)) = (uint32_t)&handle->tcdPool[nextTcd];
+#endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
+    /* Chain from previous descriptor unless tcd pool size is 1(this descriptor is its own predecessor). */
+    if (currentTcd != previousTcd)
+    {
+        /* Enable scatter/gather feature in the previous TCD block. */
+        csr = (EDMA_TCD_CSR((&handle->tcdPool[previousTcd]), EDMA_TCD_TYPE(handle->base)) | (uint16_t)DMA_CSR_ESG_MASK) & ~(uint16_t)DMA_CSR_DREQ_MASK;
+        EDMA_TCD_CSR((&handle->tcdPool[previousTcd]), EDMA_TCD_TYPE(handle->base)) = csr;
+        /*
+            Check if the TCD block in the registers is the previous one (points to current TCD block). It
+            is used to check if the previous TCD linked has been loaded in TCD register. If so, it need to
+            link the TCD register in case link the current TCD with the dead chain when TCD loading occurs
+            before link the previous TCD block.
+        */
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+        if (EDMA_TCD_DLAST_SGA(tcdRegs, EDMA_TCD_TYPE(handle->base)) ==
+            MEMORY_ConvertMemoryMapAddress((uint32_t)&handle->tcdPool[currentTcd], kMEMORY_Local2DMA))
+#else
+        if (EDMA_TCD_DLAST_SGA(tcdRegs, EDMA_TCD_TYPE(handle->base)) == (uint32_t)&handle->tcdPool[currentTcd])
+#endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
+        {
+            /* Enable scatter/gather also in the TCD registers. */
+            csr = (EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) | (uint16_t)DMA_CSR_ESG_MASK) & ~(uint16_t)DMA_CSR_DREQ_MASK;
+            /* Must write the CSR register one-time, because the transfer maybe finished anytime. */
+            EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) = csr;
+            /*
+                It is very important to check the ESG bit!
+                Because this hardware design: if DONE bit is set, the ESG bit can not be set. So it can
+                be used to check if the dynamic TCD link operation is successful. If ESG bit is not set
+                and the DLAST_SGA is not the next TCD address(it means the dynamic TCD link succeed and
+                the current TCD block has been loaded into TCD registers), it means transfer finished
+                and TCD link operation fail, so must install TCD content into TCD registers and enable
+                transfer again. And if ESG is set, it means transfer has notfinished, so TCD dynamic
+                link succeed.
+            */
+            if ((EDMA_TCD_CSR(tcdRegs, EDMA_TCD_TYPE(handle->base)) & DMA_CSR_ESG_MASK) != 0x00U)
+            {
+                return kStatus_Success;
+            }
+            /*
+                Check whether the current TCD block is already loaded in the TCD registers. It is another
+                condition when ESG bit is not set: it means the dynamic TCD link succeed and the current
+                TCD block has been loaded into TCD registers.
+            */
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+            if (EDMA_TCD_DLAST_SGA(tcdRegs, EDMA_TCD_TYPE(handle->base)) ==
+                MEMORY_ConvertMemoryMapAddress((uint32_t)&handle->tcdPool[nextTcd], kMEMORY_Local2DMA))
+#else
+            if (EDMA_TCD_DLAST_SGA(tcdRegs, EDMA_TCD_TYPE(handle->base)) == (uint32_t)&handle->tcdPool[nextTcd])
+#endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
+            {
+                return kStatus_Success;
+            }
+            /*
+                If go to this, means the previous transfer finished, and the DONE bit is set.
+                So shall configure TCD registers.
+            */
+        }
+        else if (EDMA_TCD_DLAST_SGA(tcdRegs, EDMA_TCD_TYPE(handle->base)) != 0x00U)
+        {
+            /* The current TCD block has been linked successfully. */
+            return kStatus_Success;
+        }
+        else
+        {
+            /*
+                DLAST_SGA is 0 and it means the first submit transfer, so shall configure
+                TCD registers.
+            */
+        }
+    }
+#else
     /* Enable major interrupt */
     handle->tcdPool[currentTcd].CSR |= DMA_CSR_INTMAJOR_MASK;
     /* Link current TCD with next TCD for identification of current TCD */
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-    handle->tcdPool[currentTcd].DLAST_SGA = MEMORY_ConvertMemoryMapAddress((uint32_t)&handle->tcdPool[nextTcd], kMEMORY_Local2DMA);
+    handle->tcdPool[currentTcd].DLAST_SGA =
+        MEMORY_ConvertMemoryMapAddress((uint32_t)&handle->tcdPool[nextTcd], kMEMORY_Local2DMA);
 #else
     handle->tcdPool[currentTcd].DLAST_SGA = (uint32_t)&handle->tcdPool[nextTcd];
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
@@ -185,7 +278,8 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
             before link the previous TCD block.
         */
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-        if (tcdRegs->DLAST_SGA == MEMORY_ConvertMemoryMapAddress((uint32_t)&handle->tcdPool[currentTcd], kMEMORY_Local2DMA))
+        if (tcdRegs->DLAST_SGA ==
+            MEMORY_ConvertMemoryMapAddress((uint32_t)&handle->tcdPool[currentTcd], kMEMORY_Local2DMA))
 #else
         if (tcdRegs->DLAST_SGA == (uint32_t)&handle->tcdPool[currentTcd])
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
@@ -214,7 +308,8 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
                 TCD block has been loaded into TCD registers.
             */
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
-            if (tcdRegs->DLAST_SGA == MEMORY_ConvertMemoryMapAddress((uint32_t)&handle->tcdPool[nextTcd], kMEMORY_Local2DMA))
+            if (tcdRegs->DLAST_SGA ==
+                MEMORY_ConvertMemoryMapAddress((uint32_t)&handle->tcdPool[nextTcd], kMEMORY_Local2DMA))
 #else
             if (tcdRegs->DLAST_SGA == (uint32_t)&handle->tcdPool[nextTcd])
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
@@ -239,17 +334,21 @@ static status_t SPDIF_SubmitTransfer(edma_handle_t *handle, const edma_transfer_
             */
         }
     }
+#endif /* FSL_EDMA_DRIVER_EDMA4 */
     /* There is no live chain, TCD block need to be installed in TCD registers. */
     EDMA_InstallTCD(handle->base, handle->channel, &handle->tcdPool[currentTcd]);
     /* Enable channel request again. */
-    if ((handle->flags & 0x80U) != 0x00U)
+#if defined EDMA_TRANSFER_ENABLED_MASK && EDMA_TRANSFER_ENABLED_MASK
+    if ((handle->flags & EDMA_TRANSFER_ENABLED_MASK) != 0x00U)
+
     {
-        handle->base->SERQ = DMA_SERQ_SERQ(handle->channel);
+        EDMA_EnableChannelRequest(handle->base, handle->channel);
     }
     else
     {
         ; /* Intentional empty */
     }
+#endif
 
     return kStatus_Success;
 }
@@ -417,7 +516,6 @@ status_t SPDIF_TransferSendEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle, s
 
     /* Start DMA transfer */
     EDMA_StartTransfer(handle->dmaLeftHandle);
-    EDMA_StartTransfer(handle->dmaRightHandle);
 
     /* Enable DMA enable bit */
     SPDIF_EnableDMA(base, kSPDIF_TxDMAEnable, true);
@@ -489,7 +587,6 @@ status_t SPDIF_TransferReceiveEDMA(SPDIF_Type *base, spdif_edma_handle_t *handle
 
     /* Start DMA transfer */
     EDMA_StartTransfer(handle->dmaLeftHandle);
-    EDMA_StartTransfer(handle->dmaRightHandle);
 
     /* Enable DMA enable bit */
     SPDIF_EnableDMA(base, kSPDIF_RxDMAEnable, true);

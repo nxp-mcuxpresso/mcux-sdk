@@ -1,5 +1,5 @@
 /*
- *  Copyright 2021-2023 NXP
+ *  Copyright 2021-2024 NXP
  *  All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-3-Clause
@@ -27,8 +27,5 @@
  *     WIFI_IW612_BOARD_MURATA_2EL_M2
  */
 #ifndef NOT_DEFINE_DEFAULT_WIFI_MODULE
-#define WIFI_IW416_BOARD_AW_AM510_USD
+#define WIFI_IW416_BOARD_MURATA_1XK_USD
 #endif
-
-#include "wifi_bt_module_config.h"
-#include "wifi_config.h"

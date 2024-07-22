@@ -58,6 +58,9 @@
 #  # description: Utility debug_console_lite
 #  set(CONFIG_USE_utility_debug_console_lite true)
 
+#  # description: PRINCE Driver
+#  set(CONFIG_USE_driver_prince true)
+
 #  # description: DMIC DMA Driver
 #  set(CONFIG_USE_driver_dmic_dma true)
 
@@ -217,6 +220,9 @@
 #  # description: Component mem_manager_light
 #  set(CONFIG_USE_component_mem_manager_light true)
 
+#  # description: Component mem_manager_freertos
+#  set(CONFIG_USE_component_mem_manager_freertos true)
+
 #  # description: mflash file
 #  set(CONFIG_USE_component_mflash_file true)
 
@@ -355,9 +361,6 @@
 #  # description: I2C Driver
 #  set(CONFIG_USE_driver_flexcomm_i2c true)
 
-#  # description: I2C Driver
-#  set(CONFIG_USE_driver_flexcomm_i2c_freertos true)
-
 #  # description: I2S Driver
 #  set(CONFIG_USE_driver_flexcomm_i2s true)
 
@@ -369,6 +372,9 @@
 
 #  # description: INPUTMUX Driver
 #  set(CONFIG_USE_driver_inputmux true)
+
+#  # description: iped Driver
+#  set(CONFIG_USE_driver_iped true)
 
 #  # description: itrc Driver
 #  set(CONFIG_USE_driver_itrc true)
@@ -415,16 +421,13 @@
 #  # description: SPI Driver
 #  set(CONFIG_USE_driver_flexcomm_spi true)
 
-#  # description: SPI Driver
-#  set(CONFIG_USE_driver_flexcomm_spi_freertos true)
-
 #  # description: SYSCTL Driver
 #  set(CONFIG_USE_driver_sysctl true)
 
 #  # description: USART Driver
 #  set(CONFIG_USE_driver_flexcomm_usart true)
 
-#  # description: USART Driver
+#  # description: FLEXCOMM USART FreeRTOS Driver
 #  set(CONFIG_USE_driver_flexcomm_usart_freertos true)
 
 #  # description: UTICK Driver
@@ -516,34 +519,6 @@
 #  # description: CMSIS-NN Library
 #  set(CONFIG_USE_CMSIS_NN_Source true)
 
-#set.middleware.fatfs
-#  # description: FatFs template MMC
-#  set(CONFIG_USE_middleware_fatfs_template_mmc true)
-
-#  # description: FatFs template NAND
-#  set(CONFIG_USE_middleware_fatfs_template_nand true)
-
-#  # description: FatFs template RAM
-#  set(CONFIG_USE_middleware_fatfs_template_ram true)
-
-#  # description: FatFs template SD
-#  set(CONFIG_USE_middleware_fatfs_template_sd true)
-
-#  # description: FatFs template SDSPI
-#  set(CONFIG_USE_middleware_fatfs_template_sdspi true)
-
-#  # description: FatFs template USB
-#  set(CONFIG_USE_middleware_fatfs_template_usb true)
-
-#  # description: FatFs
-#  set(CONFIG_USE_middleware_fatfs true)
-
-#  # description: FatFs_RAM
-#  set(CONFIG_USE_middleware_fatfs_ram true)
-
-#  # description: FatFs_USB
-#  set(CONFIG_USE_middleware_fatfs_usb true)
-
 #set.middleware.freertos-kernel
 #  # description: FreeRTOS NXP extension
 #  set(CONFIG_USE_middleware_freertos-kernel_extension true)
@@ -575,7 +550,10 @@
 #  # description: FreeRTOS heap 5
 #  set(CONFIG_USE_middleware_freertos-kernel_heap_5 true)
 
-#  # description: FreeRTOS MPU wrappers
+#  # description: new V2 FreeRTOS MPU wrappers introduced in V10.6.0
+#  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers_v2 true)
+
+#  # description: old FreeRTOS MPU wrappers used before V10.6.0
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
 #  # description: FreeRTOS cm33 TrustZone secure port
@@ -592,8 +570,14 @@
 #  # description: lwIP Template
 #  set(CONFIG_USE_middleware_lwip_template true)
 
+#  # description: Empty ethernet interface
+#  set(CONFIG_USE_middleware_lwip_empty_ethernetif true)
+
 #  # description: lwIP - A Lightweight TCP/IP Stack
 #  set(CONFIG_USE_middleware_lwip true)
+
+#  # description: EtherCAT EOE ethernet interface
+#  set(CONFIG_USE_middleware_lwip_eoe_ethernetif true)
 
 #  # description: USB network layer
 #  set(CONFIG_USE_middleware_lwip_usb_ethernetif true)
@@ -606,6 +590,9 @@
 
 #  # description: lwIP HTTP Server Implementation
 #  set(CONFIG_USE_middleware_lwip_apps_httpsrv true)
+
+#  # description: lwIP HTTPS Server Implementation
+#  set(CONFIG_USE_middleware_lwip_apps_httpssrv true)
 
 #  # description: lwIP mDNS Implementation
 #  set(CONFIG_USE_middleware_lwip_apps_mdns true)
@@ -762,6 +749,15 @@
 #  # description: erpc_doc
 #  set(CONFIG_USE_middleware_multicore_erpc_doc true)
 
+#  # description: erpc_zephyr
+#  set(CONFIG_USE_middleware_multicore_erpc_zephyr true)
+
+#  # description: erpc_java
+#  set(CONFIG_USE_middleware_multicore_erpc_java true)
+
+#  # description: erpc_examples
+#  set(CONFIG_USE_middleware_multicore_erpc_examples true)
+
 #  # description: eRPC
 #  set(CONFIG_USE_middleware_multicore_erpc true)
 
@@ -780,6 +776,21 @@
 
 #  # description: els_pkc config
 #  set(CONFIG_USE_middleware_mbedtls_els_pkc_config true)
+
+#  # description: mbedTLS test suite
+#  set(CONFIG_USE_middleware_mbedtls_tests true)
+
+#  # description: mbedTLS 3rdparty code
+#  set(CONFIG_USE_middleware_mbedtls_3rdparty true)
+
+#  # description: mbedTLS port library for ELS and PKC
+#  set(CONFIG_USE_middleware_mbedtls_port_els_pkc true)
+
+#  # description: mbedTLS port library for ELS
+#  set(CONFIG_USE_middleware_mbedtls_port_els true)
+
+#  # description: mbedTLS library
+#  set(CONFIG_USE_middleware_mbedtls true)
 
 #set.middleware.sdmmc
 #  # description: Middleware sdmmc common
@@ -861,6 +872,9 @@
 #  # description: Middleware usb host cdc
 #  set(CONFIG_USE_middleware_usb_host_cdc true)
 
+#  # description: Middleware usb host cdc_ecm
+#  set(CONFIG_USE_middleware_usb_host_cdc_ecm true)
+
 #  # description: Middleware usb host cdc_rndis
 #  set(CONFIG_USE_middleware_usb_host_cdc_rndis true)
 
@@ -887,6 +901,245 @@
 
 #  # description: Middleware usb host stack
 #  set(CONFIG_USE_middleware_usb_host_stack true)
+
+#set.component.els_pkc
+#  # description: Component els_pkc.core
+#  set(CONFIG_USE_component_els_pkc_core true)
+
+#  # description: Component els_header_only
+#  set(CONFIG_USE_component_els_pkc_els_header_only true)
+
+#  # description: Component els_pkc.pre_processor
+#  set(CONFIG_USE_component_els_pkc_pre_processor true)
+
+#  # description: Component els_pkc.data_integrity
+#  set(CONFIG_USE_component_els_pkc_data_integrity true)
+
+#  # description: Component els_pkc.secure_counter
+#  set(CONFIG_USE_component_els_pkc_secure_counter true)
+
+#  # description: Component els_pkc toolchain
+#  set(CONFIG_USE_component_els_pkc_toolchain true)
+
+#  # description: Component els_pkc.doc.lpc
+#  set(CONFIG_USE_component_els_pkc_doc_lpc true)
+
+#  # description: Component els_pkc static_lib LPC
+#  set(CONFIG_USE_component_els_pkc_static_lib_lpc true)
+
+#  # description: Component els pkc common
+#  set(CONFIG_USE_component_els_pkc_common true)
+
+#  # description: Component els_pkc.aead
+#  set(CONFIG_USE_component_els_pkc_aead true)
+
+#  # description: Component els_pkc.aead_modes
+#  set(CONFIG_USE_component_els_pkc_aead_modes true)
+
+#  # description: Component aes
+#  set(CONFIG_USE_component_els_pkc_aes true)
+
+#  # description: Component buffer
+#  set(CONFIG_USE_component_els_pkc_buffer true)
+
+#  # description: Component els_pkc.cipher
+#  set(CONFIG_USE_component_els_pkc_cipher true)
+
+#  # description: Component els_pkc.cipher
+#  set(CONFIG_USE_component_els_pkc_cipher_modes true)
+
+#  # description: Component crc
+#  set(CONFIG_USE_component_els_pkc_crc true)
+
+#  # description: Component els_pkc.ecc_deterministic
+#  set(CONFIG_USE_component_els_pkc_ecc_deterministic true)
+
+#  # description: Component els_pkc.ecc
+#  set(CONFIG_USE_component_els_pkc_ecc true)
+
+#  # description: Component els_pkc els_common
+#  set(CONFIG_USE_component_els_pkc_els_common true)
+
+#  # description: Component els_pkc standalone_gdet
+#  set(CONFIG_USE_component_els_pkc_standalone_gdet true)
+
+#  # description: Component els
+#  set(CONFIG_USE_component_els_pkc_els true)
+
+#  # description: Component glikey
+#  set(CONFIG_USE_component_els_pkc_glikey true)
+
+#  # description: Component els_pkc.hash
+#  set(CONFIG_USE_component_els_pkc_hash true)
+
+#  # description: Component els_pkc.hashmodes
+#  set(CONFIG_USE_component_els_pkc_hashmodes true)
+
+#  # description: Component els_pkc.hmac
+#  set(CONFIG_USE_component_els_pkc_hmac true)
+
+#  # description: Component els_pkc.key_derivation
+#  set(CONFIG_USE_component_els_pkc_key_derivation true)
+
+#  # description: Component els_pkc.key
+#  set(CONFIG_USE_component_els_pkc_key true)
+
+#  # description: Component els_pkc.mac
+#  set(CONFIG_USE_component_els_pkc_mac true)
+
+#  # description: Component els_pkc.mac_modes
+#  set(CONFIG_USE_component_els_pkc_mac_modes true)
+
+#  # description: Component els_pkc.math
+#  set(CONFIG_USE_component_els_pkc_math true)
+
+#  # description: Component els_pkc.memory
+#  set(CONFIG_USE_component_els_pkc_memory true)
+
+#  # description: Component els_pkc.oscca
+#  set(CONFIG_USE_component_els_pkc_oscca true)
+
+#  # description: Component els_pkc.oscca_aeadmodes
+#  set(CONFIG_USE_component_els_pkc_oscca_aeadmodes true)
+
+#  # description: Component els_pkc.oscca_ciphermodes
+#  set(CONFIG_USE_component_els_pkc_oscca_ciphermodes true)
+
+#  # description: Component els_pkc.oscca_macmodes
+#  set(CONFIG_USE_component_els_pkc_oscca_macmodes true)
+
+#  # description: Component els_pkc.oscca_pkc
+#  set(CONFIG_USE_component_els_pkc_oscca_pkc true)
+
+#  # description: Component els_pkc.oscca_randommodes
+#  set(CONFIG_USE_component_els_pkc_oscca_randommodes true)
+
+#  # description: Component els_pkc.oscca_safo
+#  set(CONFIG_USE_component_els_pkc_oscca_safo true)
+
+#  # description: Component els_pkc.oscca_sm2
+#  set(CONFIG_USE_component_els_pkc_oscca_sm2 true)
+
+#  # description: Component els_pkc.oscca_sm3
+#  set(CONFIG_USE_component_els_pkc_oscca_sm3 true)
+
+#  # description: Component els_pkc.oscca_sm4
+#  set(CONFIG_USE_component_els_pkc_oscca_sm4 true)
+
+#  # description: Component els_pkc.padding
+#  set(CONFIG_USE_component_els_pkc_padding true)
+
+#  # description: Component pkc
+#  set(CONFIG_USE_component_els_pkc_pkc true)
+
+#  # description: Component prng
+#  set(CONFIG_USE_component_els_pkc_prng true)
+
+#  # description: Component els_pkc.random
+#  set(CONFIG_USE_component_els_pkc_random true)
+
+#  # description: Component els_pkc.random_modes_hmacdrbg
+#  set(CONFIG_USE_component_els_pkc_random_modes_hmacdrbg true)
+
+#  # description: Component els_pkc.random_modes
+#  set(CONFIG_USE_component_els_pkc_random_modes true)
+
+#  # description: Component els_pkc.random_modes_ctr
+#  set(CONFIG_USE_component_els_pkc_random_modes_ctr true)
+
+#  # description: Component els_pkc.rsa_oaep
+#  set(CONFIG_USE_component_els_pkc_rsa_oaep true)
+
+#  # description: Component els_pkc.rsa
+#  set(CONFIG_USE_component_els_pkc_rsa true)
+
+#  # description: Component els_pkc.session
+#  set(CONFIG_USE_component_els_pkc_session true)
+
+#  # description: Component els_pkc.signature
+#  set(CONFIG_USE_component_els_pkc_signature true)
+
+#  # description: Component els_pkc.trng
+#  set(CONFIG_USE_component_els_pkc_trng true)
+
+#  # description: Component els_pkc.trng.type_els
+#  set(CONFIG_USE_component_els_pkc_trng_type_els true)
+
+#  # description: Component els_pkc.trng.type_rng4
+#  set(CONFIG_USE_component_els_pkc_trng_type_rng4 true)
+
+#  # description: Component els_pkc.flow_protection
+#  set(CONFIG_USE_component_els_pkc_flow_protection true)
+
+#  # description: Component els_pkc.param_integrity
+#  set(CONFIG_USE_component_els_pkc_param_integrity true)
+
+#  # description: Component els_pkc of Crypto Lib
+#  set(CONFIG_USE_component_els_pkc true)
+
+#  # description: Component els_pkc_lpc
+#  set(CONFIG_USE_component_els_pkc_platform_lpc true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_memory true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_flow_protection true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_rsa true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_random_modes true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_mac_modes true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_key true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_hmac true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_hash_modes true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_els true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_ecc true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_aead true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_cipher_modes true)
+
+#set.component.osa
+#  # description: Component osa_zephyr
+#  set(CONFIG_USE_component_osa_zephyr true)
+
+#  # description: Component common_task
+#  set(CONFIG_USE_component_common_task true)
+
+#  # description: Component osa_bm
+#  set(CONFIG_USE_component_osa_bm true)
+
+#  # description: Component osa_free_rtos
+#  set(CONFIG_USE_component_osa_free_rtos true)
+
+#  # description: Component osa
+#  set(CONFIG_USE_component_osa true)
+
+#  # description: Component osa interface
+#  set(CONFIG_USE_component_osa_interface true)
+
+#  # description: Component osa thread
+#  set(CONFIG_USE_component_osa_thread true)
 
 #set.middleware.azure_rtos
 #  # description: Azure RTOS Core
@@ -979,27 +1232,25 @@
 #  # description: A software package that connects to the IoT Hub through Azure RTOS
 #  set(CONFIG_USE_middleware_azure_rtos_azure_iot true)
 
-#set.component.osa
-#  # description: Component common_task
-#  set(CONFIG_USE_component_common_task true)
+#set.middleware.fatfs
+#  # description: FatFs
+#  set(CONFIG_USE_middleware_fatfs true)
 
-#  # description: Component osa_bm
-#  set(CONFIG_USE_component_osa_bm true)
+#  # description: FatFs_RAM
+#  set(CONFIG_USE_middleware_fatfs_ram true)
 
-#  # description: Component osa_free_rtos
-#  set(CONFIG_USE_component_osa_free_rtos true)
+#  # description: FatFs template RAM
+#  set(CONFIG_USE_middleware_fatfs_template_ram true)
 
-#  # description: Component osa
-#  set(CONFIG_USE_component_osa true)
+#  # description: FatFs template USB
+#  set(CONFIG_USE_middleware_fatfs_template_usb true)
 
-#  # description: Component osa interface
-#  set(CONFIG_USE_component_osa_interface true)
-
-#  # description: Component osa thread
-#  set(CONFIG_USE_component_osa_thread true)
+#  # description: FatFs_USB
+#  set(CONFIG_USE_middleware_fatfs_usb true)
 
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/els_pkc
   ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/littlefs
@@ -1023,6 +1274,7 @@ include(set_CMSIS_DSP_Lib OPTIONAL)
 include(set_CMSIS OPTIONAL)
 include(set_device_LPC55S36 OPTIONAL)
 include(set_component_osa OPTIONAL)
+include(set_component_els_pkc OPTIONAL)
 include(set_middleware_azure_rtos OPTIONAL)
 include(set_middleware_fatfs OPTIONAL)
 include(set_middleware_freertos-kernel OPTIONAL)

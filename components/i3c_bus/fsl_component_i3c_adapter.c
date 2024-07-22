@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, 2022-2023 NXP
+ * Copyright 2020, 2022-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -216,6 +216,9 @@ static status_t I3C_MasterAdapterInit(i3c_device_t *master)
     masterConfig.dcr                          = master->info.dcr;
     masterConfig.bcr                          = master->info.bcr;
     masterConfig.hdrMode                      = master->info.hdrMode;
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
+    masterConfig.slowClock_Hz                 = masterResource->slowClockInHz;
+#endif
 
     masterPrivate                  = malloc(sizeof(i3c_master_adapter_private_t));
     masterControlInfo->privateData = masterPrivate;
@@ -468,7 +471,7 @@ static status_t I3C_MasterAdapterTransmitCCC(i3c_device_t *master, i3c_ccc_cmd_t
         xfer.dataSize     = cmd->dataSize;
         xfer.direction    = cmd->isRead ? kI3C_Read : kI3C_Write;
         xfer.busType      = kI3C_TypeI3CSdr;
-        xfer.flags        = (uint32_t)kI3C_TransferRepeatedStartFlag | kI3C_TransferDisableRxTermFlag;
+        xfer.flags        = (uint32_t)kI3C_TransferRepeatedStartFlag | (uint32_t)kI3C_TransferDisableRxTermFlag;
         result            = I3CMasterAdapterTransfer(base, &xfer, transMode);
         if (result != kStatus_Success)
         {

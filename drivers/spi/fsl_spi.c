@@ -38,7 +38,7 @@ typedef void (*spi_isr_t)(SPI_Type *base, spi_master_handle_t *spiHandle);
  * @param buffer The data bytes to send
  * @param size The number of data bytes to send
  */
-static void SPI_WriteNonBlocking(SPI_Type *base, uint8_t *buffer, size_t size);
+static void SPI_WriteNonBlocking(SPI_Type *base, const uint8_t *buffer, size_t size);
 
 /*!
  * @brief Receive a buffer of data bytes in non-blocking way.
@@ -146,7 +146,7 @@ void SPI_SetDummyData(SPI_Type *base, uint8_t dummyData)
     g_spiDummyData[instance] = dummyData;
 }
 
-static void SPI_WriteNonBlocking(SPI_Type *base, uint8_t *buffer, size_t size)
+static void SPI_WriteNonBlocking(SPI_Type *base, const uint8_t *buffer, size_t size)
 {
     uint32_t i            = 0;
     uint8_t bytesPerFrame = 1U;

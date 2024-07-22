@@ -13,13 +13,13 @@
 **
 **     Reference manual:    IMXRT1024RM Rev.1, 02/2021 | IMXRT102XSRM Rev.0
 **     Version:             rev. 1.0, 2021-08-10
-**     Build:               b230724
+**     Build:               b240326
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1024
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -43,8 +43,8 @@
  * CMSIS Peripheral Access Layer for MIMXRT1024
  */
 
-#ifndef _MIMXRT1024_H_
-#define _MIMXRT1024_H_                           /**< Symbol preventing repeated inclusion */
+#if !defined(MIMXRT1024_H_)
+#define MIMXRT1024_H_                            /**< Symbol preventing repeated inclusion */
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
@@ -20181,8 +20181,10 @@ typedef struct {
 #define FLEXSPI_BASE_PTRS                        { FLEXSPI }
 /** Interrupt vectors for the FLEXSPI peripheral type */
 #define FLEXSPI_IRQS                             { FLEXSPI_IRQn }
-/* FlexSPI AMBA address. */
+/* FlexSPI AMBA base address. */
 #define FlexSPI_AMBA_BASE                       (0x60000000U)
+/* FlexSPI AMBA end address. */
+#define FlexSPI_AMBA_END                        (0x7F7FFFFFU)
 /* FlexSPI ASFM address. */
 #define FlexSPI_ASFM_BASE                        (0x60000000U)
 /* Base Address of AHB address space mapped to IP RX FIFO. */
@@ -46310,5 +46312,5 @@ typedef struct {
  */ /* end of group SDK_Compatibility_Symbols */
 
 
-#endif  /* _MIMXRT1024_H_ */
+#endif  /* MIMXRT1024_H_ */
 

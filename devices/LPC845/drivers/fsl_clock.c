@@ -693,3 +693,24 @@ void CLOCK_SetFroOutClkSrc(clock_fro_src_t src)
         CLOCK_UpdateClkSrc((volatile uint32_t *)(&(SYSCON->FRODIRECTCLKUEN)), SYSCON_FRODIRECTCLKUEN_ENA_MASK);
     }
 }
+
+/*! brief  Set the flash wait states for the input freuqency.
+ * param   iFreq   : Input frequency
+ */
+void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t iFreq)
+{
+    uint32_t num_wait_states;
+    if (iFreq <= 24000000UL)
+    {
+        /* [0 - 24 MHz] */
+        num_wait_states = 0UL;
+    }
+    else
+    {
+        /* Above 24 MHz */
+        num_wait_states = 1UL;
+    }
+
+    FLASH_CTRL->FLASHCFG =
+        ((FLASH_CTRL->FLASHCFG & ~FLASH_CTRL_FLASHCFG_FLASHTIM_MASK) | FLASH_CTRL_FLASHCFG_FLASHTIM(num_wait_states));
+}

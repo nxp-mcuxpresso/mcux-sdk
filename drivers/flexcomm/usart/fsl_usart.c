@@ -276,8 +276,18 @@ void USART_Deinit(USART_Type *base)
 {
     /* Check arguments */
     assert(NULL != base);
-    while (0U == (base->STAT & USART_STAT_TXIDLE_MASK))
+
+    /* Don't wait for TX idle when peripheral is disabled. */
+    if ((base->CFG & (USART_CFG_ENABLE_MASK)) != 0U)
     {
+#if UART_RETRY_TIMES
+        uint32_t waitTimes = UART_RETRY_TIMES;
+        while ((0U == (base->STAT & USART_STAT_TXIDLE_MASK)) && (--waitTimes != 0U))
+#else
+        while (0U == (base->STAT & USART_STAT_TXIDLE_MASK))
+#endif
+        {
+        }
     }
     /* Disable interrupts, disable dma requests, disable peripheral */
     base->FIFOINTENCLR = USART_FIFOINTENCLR_TXERR_MASK | USART_FIFOINTENCLR_RXERR_MASK | USART_FIFOINTENCLR_TXLVL_MASK |
@@ -822,24 +832,27 @@ status_t USART_TransferSendNonBlocking(USART_Type *base, usart_handle_t *handle,
         return kStatus_InvalidArgument;
     }
 
+    uint32_t globalMask = DisableGlobalIRQ();
+
     /* Return error if current TX busy. */
     if ((uint8_t)kUSART_TxBusy == handle->txState)
     {
+        EnableGlobalIRQ(globalMask);
         return kStatus_USART_TxBusy;
     }
     else
     {
-        /* Disable IRQ when configuring transfer handle, in case interrupt occurs during the process and messes up the
-         * handle value. */
-        uint32_t interruptMask = USART_GetEnabledInterrupts(base);
-        USART_DisableInterrupts(base, interruptMask);
+        handle->txState       = (uint8_t)kUSART_TxBusy;
+        uint32_t usartMask = USART_GetEnabledInterrupts(base);
+        USART_DisableInterrupts(base, usartMask);
+        EnableGlobalIRQ(globalMask);
+
         handle->txData        = xfer->txData;
         handle->txDataSize    = xfer->dataSize;
         handle->txDataSizeAll = xfer->dataSize;
-        handle->txState       = (uint8_t)kUSART_TxBusy;
-        /* Enable transmiter interrupt and the previously disabled interrupt. */
-        USART_EnableInterrupts(base, interruptMask | (uint32_t)kUSART_TxLevelInterruptEnable);
+        USART_EnableInterrupts(base, usartMask | (uint32_t)kUSART_TxLevelInterruptEnable);
     }
+
     return kStatus_Success;
 }
 
@@ -931,7 +944,6 @@ status_t USART_TransferReceiveNonBlocking(USART_Type *base,
     size_t bytesToReceive;
     /* How many bytes currently have received. */
     size_t bytesCurrentReceived;
-    uint32_t interruptMask = 0U;
 
     /* Check arguments */
     assert(!((NULL == base) || (NULL == handle) || (NULL == xfer)));
@@ -952,6 +964,8 @@ status_t USART_TransferReceiveNonBlocking(USART_Type *base,
         base->CTL |= (uint32_t)USART_CTL_ADDRDET_MASK;
     }
 
+    uint32_t globalMask = DisableGlobalIRQ();
+
     /* How to get data:
        1. If RX ring buffer is not enabled, then save xfer->data and xfer->dataSize
           to uart handle, enable interrupt to store received data to xfer->data. When
@@ -963,19 +977,21 @@ status_t USART_TransferReceiveNonBlocking(USART_Type *base,
           to this empty space and trigger callback when finished. */
     if ((uint8_t)kUSART_RxBusy == handle->rxState)
     {
+        EnableGlobalIRQ(globalMask);
         return kStatus_USART_RxBusy;
     }
     else
     {
+        handle->rxState       = (uint8_t)kUSART_RxBusy;
+        uint32_t usartMask = USART_GetEnabledInterrupts(base);
+        USART_DisableInterrupts(base, usartMask);
+        EnableGlobalIRQ(globalMask);
+
         bytesToReceive       = xfer->dataSize;
         bytesCurrentReceived = 0U;
         /* If RX ring buffer is used. */
         if (handle->rxRingBuffer != NULL)
         {
-            /* Disable IRQ, protect ring buffer. */
-            interruptMask = USART_GetEnabledInterrupts(base);
-            USART_DisableInterrupts(base, interruptMask);
-
             /* How many bytes in RX ring buffer currently. */
             bytesToCopy = USART_TransferGetRxRingBufferLength(handle);
             if (bytesToCopy != 0U)
@@ -1004,42 +1020,42 @@ status_t USART_TransferReceiveNonBlocking(USART_Type *base,
                 handle->rxData        = xfer->rxData + bytesCurrentReceived;
                 handle->rxDataSize    = bytesToReceive;
                 handle->rxDataSizeAll = xfer->dataSize;
-                handle->rxState       = (uint8_t)kUSART_RxBusy;
             }
-            /* Re-enable IRQ. */
-            USART_EnableInterrupts(base, interruptMask);
-            /* Call user callback since all data are received. */
-            if (0U == bytesToReceive)
+            else
             {
-                if (handle->callback != NULL)
-                {
-                    handle->callback(base, handle, kStatus_USART_RxIdle, handle->userData);
-                }
+                handle->rxState = (uint8_t)kUSART_RxIdle;
             }
         }
         /* Ring buffer not used. */
         else
         {
-            /* Disable IRQ when configuring transfer handle, in case interrupt occurs during the process and messes up
-             * the handle value. */
-            interruptMask = USART_GetEnabledInterrupts(base);
-            USART_DisableInterrupts(base, interruptMask);
             handle->rxData        = xfer->rxData + bytesCurrentReceived;
             handle->rxDataSize    = bytesToReceive;
             handle->rxDataSizeAll = bytesToReceive;
-            handle->rxState       = (uint8_t)kUSART_RxBusy;
 
             /* Enable RX interrupt. */
             base->FIFOINTENSET = USART_FIFOINTENSET_RXLVL_MASK;
-            /* Re-enable IRQ. */
-            USART_EnableInterrupts(base, interruptMask);
         }
+
+        /* Re-enable USART IRQ. */
+        USART_EnableInterrupts(base, usartMask);
+
         /* Return the how many bytes have read. */
         if (receivedBytes != NULL)
         {
             *receivedBytes = bytesCurrentReceived;
         }
+
+        /* When using ring buffer and we received everything, call user callback. */
+        if (handle->rxRingBuffer != NULL && bytesToReceive == 0U)
+        {
+            if (handle->callback != NULL)
+            {
+                handle->callback(base, handle, kStatus_USART_RxIdle, handle->userData);
+            }
+        }
     }
+
     return kStatus_Success;
 }
 

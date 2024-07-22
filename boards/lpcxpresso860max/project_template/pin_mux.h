@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -87,41 +87,12 @@ void BOARD_InitLEDsPins(void); /* Function assigned for the Cortex-M0P */
 #define IOCON_PIO_CLKDIV0 0x00u      /*!<@brief IOCONCLKDIV0 */
 #define IOCON_PIO_HYS_EN 0x20u       /*!<@brief Enable hysteresis */
 #define IOCON_PIO_INV_DI 0x00u       /*!<@brief Input not invert */
-#define IOCON_PIO_MODE_PULLUP 0x10u  /*!<@brief Selects pull-up function */
+#define IOCON_PIO_MODE_INACT 0x00u   /*!<@brief No addition pin function */
 #define IOCON_PIO_OD_DI 0x00u        /*!<@brief Disables Open-drain function */
 #define IOCON_PIO_SMODE_BYPASS 0x00u /*!<@brief Bypass input filter */
 
-/*! @name PIO1_17 (number 37), P3[13]/P1_17-TARGET_TX_DEBUG
-  @{ */
-
-/* Symbols to be used with GPIO driver */
-/*!
- * @brief GPIO peripheral base pointer */
-#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_GPIO GPIO
-/*!
- * @brief GPIO pin mask */
-#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_GPIO_PIN_MASK (1U << 17U)
-/*!
- * @brief PORT device index: 1 */
-#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PORT 1U
-/*!
- * @brief PORT pin number */
-#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PIN 17U
-/*!
- * @brief PORT pin mask */
-#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PIN_MASK (1U << 17U)
-/* @} */
-
 /*! @name PIO1_16 (number 36), P3[14]/P1_16-TARGET_RX_DEBUG
   @{ */
-
-/* Symbols to be used with GPIO driver */
-/*!
- * @brief GPIO peripheral base pointer */
-#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_GPIO GPIO
-/*!
- * @brief GPIO pin mask */
-#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_GPIO_PIN_MASK (1U << 16U)
 /*!
  * @brief PORT device index: 1 */
 #define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_PORT 1U
@@ -131,6 +102,19 @@ void BOARD_InitLEDsPins(void); /* Function assigned for the Cortex-M0P */
 /*!
  * @brief PORT pin mask */
 #define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_RX_PIN_MASK (1U << 16U)
+/* @} */
+
+/*! @name PIO1_17 (number 37), P3[13]/P1_17-TARGET_TX_DEBUG
+  @{ */
+/*!
+ * @brief PORT device index: 1 */
+#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PORT 1U
+/*!
+ * @brief PORT pin number */
+#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PIN 17U
+/*!
+ * @brief PORT pin mask */
+#define BOARD_INITDEBUG_UARTPINS_DEBUG_UART_TX_PIN_MASK (1U << 17U)
 /* @} */
 
 /*!
@@ -172,6 +156,18 @@ void BOARD_InitDEBUG_UARTPins(void); /* Function assigned for the Cortex-M0P */
 #define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_SWDIO_PIN_MASK (1U << 2U)
 /* @} */
 
+/*! @name RESET (number 5), SW3/J5[6]/P3[4]/U4[3]/TARGET_nRESET-P0_5
+  @{ */
+/*!
+ * @brief PORT device index: 0 */
+#define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_RESETN_PORT 0U
+/*!
+ * @brief PORT pin number */
+#define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_RESETN_PIN 5U
+/*!
+ * @brief PORT pin mask */
+#define BOARD_INITSWD_DEBUGPINS_DEBUG_SWD_RESETN_PIN_MASK (1U << 5U)
+/* @} */
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.

@@ -10,13 +10,13 @@
 **
 **     Reference manual:    iMXRT500RM Rev.1, 07/2022
 **     Version:             rev. 5.0, 2020-08-27
-**     Build:               b231101
+**     Build:               b240327
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT595S_cm33
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -20727,19 +20727,31 @@ typedef struct {
 /** Interrupt vectors for the FLEXSPI peripheral type */
 #define FLEXSPI_IRQS                             { FLEXSPI0_FLEXSPI1_IRQn, FLEXSPI0_FLEXSPI1_IRQn }
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-/** FlexSPI0 AMBA address */
+/** FlexSPI0 AMBA base address */
 #define FlexSPI0_AMBA_BASE                        (0x18000000u)
-/** FlexSPI1 AMBA address */
+/** FlexSPI0 AMBA end address */
+#define FlexSPI0_AMBA_END                         (0x1FFFFFFFu)
+/** FlexSPI1 AMBA base address */
 #define FlexSPI1_AMBA_BASE                        (0x38000000u)
-/** FlexSPI0 AMBA address */
+/** FlexSPI1 AMBA end address */
+#define FlexSPI1_AMBA_END                         (0x3FFFFFFFu)
+/** FlexSPI0 AMBA base address */
 #define FlexSPI0_AMBA_BASE_NS                     (0x08000000U)
-/** FlexSPI1 AMBA address */
+/** FlexSPI0 AMBA end address */
+#define FlexSPI0_AMBA_END_NS                      (0x0FFFFFFFU)
+/** FlexSPI1 AMBA base address */
 #define FlexSPI1_AMBA_BASE_NS                     (0x28000000U)
+/** FlexSPI1 AMBA end address */
+#define FlexSPI1_AMBA_END_NS                      (0x2FFFFFFFU)
 #else
-/** FlexSPI0 AMBA address */
+/** FlexSPI0 AMBA base address */
 #define FlexSPI0_AMBA_BASE                        (0x08000000U)
-/** FlexSPI1 AMBA address */
+/** FlexSPI0 AMBA end address */
+#define FlexSPI0_AMBA_END                         (0x0FFFFFFFU)
+/** FlexSPI1 AMBA base address */
 #define FlexSPI1_AMBA_BASE                        (0x28000000U)
+/** FlexSPI1 AMBA end address */
+#define FlexSPI1_AMBA_END                         (0x2FFFFFFFU)
 #endif
 
 

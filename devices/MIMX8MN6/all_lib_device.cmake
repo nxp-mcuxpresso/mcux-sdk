@@ -1,11 +1,11 @@
 # Copy variable into project config.cmake to use software component
-#set.board.evkmimx8mn
-#  # description: Board_project_template evkmimx8mn
-#  set(CONFIG_USE_BOARD_Project_Template_evkmimx8mn true)
-
 #set.board.evkmimx8mnddr3l
 #  # description: Board_project_template evkmimx8mnddr3l
 #  set(CONFIG_USE_BOARD_Project_Template_evkmimx8mnddr3l true)
+
+#set.board.evkmimx8mn
+#  # description: Board_project_template evkmimx8mn
+#  set(CONFIG_USE_BOARD_Project_Template_evkmimx8mn true)
 
 #set.device.MIMX8MN6
 #  # description: Middleware baremetal
@@ -122,7 +122,7 @@
 #  # description: ECSPI Driver
 #  set(CONFIG_USE_driver_ecspi true)
 
-#  # description: ECSPI Freertos Driver
+#  # description: ECSPI FreeRTOS Driver
 #  set(CONFIG_USE_driver_ecspi_freertos true)
 
 #  # description: GPC Driver
@@ -269,7 +269,10 @@
 #  # description: FreeRTOS heap 5
 #  set(CONFIG_USE_middleware_freertos-kernel_heap_5 true)
 
-#  # description: FreeRTOS MPU wrappers
+#  # description: new V2 FreeRTOS MPU wrappers introduced in V10.6.0
+#  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers_v2 true)
+
+#  # description: old FreeRTOS MPU wrappers used before V10.6.0
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
 #set.middleware.multicore
@@ -302,6 +305,9 @@
 
 #  # description: RPMsg-Lite FreeRTOS for evkmimx8mn board
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_freertos_config true)
+
+#  # description: RPMsg-Lite Zephyr environment sources
+#  set(CONFIG_USE_middleware_multicore_rpmsg_lite_zephyr true)
 
 #  # description: RPMsg-Lite
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite true)

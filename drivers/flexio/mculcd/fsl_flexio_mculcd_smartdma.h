@@ -20,10 +20,10 @@
  * Definitions
  ******************************************************************************/
 
-/*! @{ */
+/*@{*/
 /*! @brief FlexIO MCULCD SMARTDMA driver version. */
-#define FSL_FLEXIO_MCULCD_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
-/*! @} */
+#define FSL_FLEXIO_MCULCD_SMARTDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+/*@}*/
 
 /*! @brief SMARTDMA transfer size should be multiple of 64 bytes. */
 #define FLEXIO_MCULCD_SMARTDMA_TX_LEN_ALIGN 64U

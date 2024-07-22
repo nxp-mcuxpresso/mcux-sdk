@@ -13,13 +13,13 @@
 **
 **     Reference manual:    IMXRT1040RM Rev.1, 09/2022
 **     Version:             rev. 0.1, 2021-07-20
-**     Build:               b230821
+**     Build:               b240326
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1041
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -41,8 +41,8 @@
  * CMSIS Peripheral Access Layer for MIMXRT1041
  */
 
-#ifndef _MIMXRT1041_H_
-#define _MIMXRT1041_H_                           /**< Symbol preventing repeated inclusion */
+#if !defined(MIMXRT1041_H_)
+#define MIMXRT1041_H_                            /**< Symbol preventing repeated inclusion */
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
@@ -22315,16 +22315,20 @@ typedef struct {
 #define FLEXSPI_BASE_PTRS                        { FLEXSPI, (FLEXSPI_Type *)0u, FLEXSPI2 }
 /** Interrupt vectors for the FLEXSPI peripheral type */
 #define FLEXSPI_IRQS                             { FLEXSPI_IRQn, NotAvail_IRQn, FLEXSPI2_IRQn }
-/* FlexSPI AMBA address. */
+/* FlexSPI AMBA base address. */
 #define FlexSPI_AMBA_BASE                       (0x60000000U)
+/* FlexSPI AMBA end address. */
+#define FlexSPI_AMBA_END                        (0x6FFFFFFFU)
 /* FlexSPI ASFM address. */
 #define FlexSPI_ASFM_BASE                        (0x60000000U)
 /* Base Address of AHB address space mapped to IP RX FIFO. */
 #define FlexSPI_ARDF_BASE                        (0x7FC00000U)
 /* Base Address of AHB address space mapped to IP TX FIFO. */
 #define FlexSPI_ATDF_BASE                        (0x7F800000U)
-/* FlexSPI2 AMBA address. */
+/* FlexSPI2 AMBA base address. */
 #define FlexSPI2_AMBA_BASE                       (0x70000000U)
+/* FlexSPI2 AMBA end address. */
+#define FlexSPI2_AMBA_END                        (0x7EFFFFFFU)
 /* FlexSPI ASFM address. */
 #define FlexSPI2_ASFM_BASE                       (0x70000000U)
 /* Base Address of AHB address space mapped to IP RX FIFO. */
@@ -49396,5 +49400,5 @@ typedef struct {
  */ /* end of group SDK_Compatibility_Symbols */
 
 
-#endif  /* _MIMXRT1041_H_ */
+#endif  /* MIMXRT1041_H_ */
 

@@ -9,7 +9,7 @@
     <definition extID="platform.drivers.common.MKM34ZA5"/>
     <definition extID="mcuxpresso"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2150_middleware_nxp_mmcau_MKM34ZA5_manifest_v3_14" name="MCUXpressoSDK2150_middleware_nxp_mmcau_MKM34ZA5_manifest_v3_14" version="2.15.0" revision="2.15.0"/>
+  <ksdk id="MCUXpressoSDK216000_middleware_nxp_mmcau_MKM34ZA5_manifest_v3_14" name="MCUXpressoSDK216000_middleware_nxp_mmcau_MKM34ZA5_manifest_v3_14" version="2.16.000" revision="2.16.000"/>
   <components>
     <component id="middleware.mmcau.mmcau_files.MKM34ZA5" name="mmcau" brief="MMCAU security function library source files" version="2.0.4" full_name="Kinetis MMCAU security function library source files" category="MMCAU Security/MMCAU library" user_visible="false" type="middleware" package_base_path=".././" project_base_path="mmcau">
       <dependencies>

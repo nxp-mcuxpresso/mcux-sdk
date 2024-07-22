@@ -635,6 +635,15 @@ void FTM_DisableInterrupts(FTM_Type *base, uint32_t mask);
  */
 uint32_t FTM_GetEnabledInterrupts(FTM_Type *base);
 
+/*!
+ * @brief Gets the instance from the base address
+ *
+ * @param base FTM peripheral base address
+ *
+ * @return The FTM instance
+ */
+uint32_t FTM_GetInstance(FTM_Type *base);
+
 /*! @}*/
 
 /*!

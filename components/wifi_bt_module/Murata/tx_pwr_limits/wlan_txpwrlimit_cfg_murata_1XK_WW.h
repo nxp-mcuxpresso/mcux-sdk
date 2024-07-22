@@ -37,6 +37,9 @@
  *  SOFTWARE.
  */
 
+#ifndef _WLAN_TXPWRLIMIT_CFG_MURATA_1XK_WW_H_
+#define _WLAN_TXPWRLIMIT_CFG_MURATA_1XK_WW_H_
+
 #define WLAN_REGION_CODE "WW"
 
 static wlan_chanlist_t chanlist_2g_cfg = {.num_chans = 13,
@@ -162,7 +165,7 @@ static wlan_chanlist_t chanlist_2g_cfg = {.num_chans = 13,
                                               [53] = {0},
                                           }};
 
-#ifdef CONFIG_5GHz_SUPPORT
+#if CONFIG_5GHz_SUPPORT
 static wlan_chanlist_t chanlist_5g_cfg = {.num_chans = 25,
                                           .chan_info = {
                                               [0] =
@@ -533,7 +536,7 @@ static wifi_txpwrlimit_t tx_pwrlimit_2g_cfg = {
         [39] = {0},
     }};
 
-#ifdef CONFIG_5GHz_SUPPORT
+#if CONFIG_5GHz_SUPPORT
 static wifi_txpwrlimit_t tx_pwrlimit_5g_cfg = {
     .subband           = (wifi_SubBand_t)0x00,
     .num_chans         = 25,
@@ -830,3 +833,5 @@ static wifi_txpwrlimit_t tx_pwrlimit_5g_cfg = {
         [39] = {0},
     }};
 #endif /* CONFIG_5GHz_SUPPORT */
+
+#endif /* _WLAN_TXPWRLIMIT_CFG_MURATA_1XK_WW_H_ */

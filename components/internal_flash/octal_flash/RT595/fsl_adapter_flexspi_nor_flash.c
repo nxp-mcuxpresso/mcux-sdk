@@ -83,7 +83,9 @@
 *************************************************************************************
 ********************************************************************************** */
 __WEAK_FUNC void flash_reset_config(void);
-
+__WEAK_FUNC void flash_reset_config(void)
+{
+}
 /*!*********************************************************************************
 *************************************************************************************
 * Public memory declarations
@@ -91,7 +93,7 @@ __WEAK_FUNC void flash_reset_config(void);
 ********************************************************************************** */
 static FLEXSPI_Type *s_flexspiBase[] = FLEXSPI_BASE_PTRS;
 
-flexspi_device_config_t deviceconfig = {
+static flexspi_device_config_t deviceconfig = {
     .flexspiRootClk       = 99000000,
     .flashSize            = FLASH_SIZE,
     .CSIntervalUnit       = kFLEXSPI_CsIntervalUnit1SckCycle,
@@ -269,7 +271,7 @@ static status_t flexspi_nor_wait_bus_busy(FLEXSPI_Type *base, bool enableOctal)
 
     return status;
 }
-status_t flexspi_nor_enable_octal_mode(FLEXSPI_Type *base)
+static status_t flexspi_nor_enable_octal_mode(FLEXSPI_Type *base)
 {
     flexspi_transfer_t flashXfer;
     status_t status;
@@ -305,7 +307,7 @@ status_t flexspi_nor_enable_octal_mode(FLEXSPI_Type *base)
 static void flexspi_nor_invalid_flexspi_cache(void)
 {
     CACHE64_CTRL0->CCR |= CACHE64_CTRL_CCR_INVW0_MASK | CACHE64_CTRL_CCR_INVW1_MASK | CACHE64_CTRL_CCR_GO_MASK;
-    while (CACHE64_CTRL0->CCR & CACHE64_CTRL_CCR_GO_MASK)
+    while (0 != (CACHE64_CTRL0->CCR & CACHE64_CTRL_CCR_GO_MASK))
     {
     }
     CACHE64_CTRL0->CCR &= ~(CACHE64_CTRL_CCR_INVW0_MASK | CACHE64_CTRL_CCR_INVW1_MASK);
@@ -550,7 +552,7 @@ hal_flash_status_t HAL_FlashProgram(uint32_t dest, uint32_t size, uint8_t *pData
 
         FLEXSPI_SoftwareReset(base);
         /*SDK_DelayAtLeastUs(2U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);*/
-        for (uint32_t i = 0; i < 500; i++)
+        for (uint32_t i = 0; i < 500U; i++)
         {
             __NOP();
         }
@@ -648,7 +650,7 @@ hal_flash_status_t HAL_FlashEraseSector(uint32_t dest, uint32_t size)
         /* Do software reset. */
         FLEXSPI_SoftwareReset(base);
         /*SDK_DelayAtLeastUs(2U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);*/
-        for (uint32_t i = 0; i < 500; i++)
+        for (uint32_t i = 0; i < 500U; i++)
         {
             __NOP();
         }
@@ -755,4 +757,22 @@ hal_flash_status_t HAL_FlashSetProperty(hal_flash_property_tag_t property, uint3
 hal_flash_status_t HAL_FlashGetSecurityState(hal_flash_security_state_t *state)
 {
     return kStatus_HAL_Flash_Success;
+}
+
+/*!
+ * \brief  Read data from FLASH with ECC Fault detection enabled.
+ *
+ *  Note : BusFault is not raised, just SoC indication
+ *
+ * @param scr             The address of the Flash location to be read
+ * @param size            The number of bytes to be read
+ * @param pData           Pointer to the data to be read from Flash
+ *
+ * @retval #kStatus_HAL_Flash_Success API was executed successfully.
+ *         #kStatus_HAL_Flash_EccError if ECC Fault error got raised
+ *
+ */
+hal_flash_status_t HAL_FlashReadCheckEccFaults(uint32_t src, uint32_t size, uint8_t *pData)
+{
+    return kStatus_HAL_Flash_NotSupport;
 }

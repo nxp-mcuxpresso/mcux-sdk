@@ -22,8 +22,13 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_PDM_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 1)) /*!< Version 2.6.1 */
+#define FSL_PDM_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 6, 3)) /*!< Version 2.6.3 */
 /*! @} */
+
+/*! @brief the PDM enable position When calling PDM_TransferReceiveEDMA */
+#ifndef MCUX_SDK_PDM_EDMA_PDM_ENABLE_INTERNAL
+#define MCUX_SDK_PDM_EDMA_PDM_ENABLE_INTERNAL 1U
+#endif
 
 /*! @brief PDM edma handler */
 typedef struct _pdm_edma_handle pdm_edma_handle_t;
@@ -147,6 +152,8 @@ void PDM_TransferSetChannelConfigEDMA(PDM_Type *base,
  * @note This interface returns immediately after the transfer initiates. Call
  * the PDM_GetReceiveRemainingBytes to poll the transfer status and check whether the PDM transfer is finished.
  *
+ * Mcaro MCUX_SDK_PDM_EDMA_PDM_ENABLE_INTERNAL can control whether PDM is enabled internally or externally.
+ * 
  * 1. Scatter gather case:
  * This functio support dynamic scatter gather and staic scatter gather,
  * a. for the dynamic scatter gather case:

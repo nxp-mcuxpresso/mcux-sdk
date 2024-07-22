@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023 NXP
+ * Copyright 2017-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -212,8 +212,6 @@ static status_t hashcrypt_get_key_from_unaligned_src(uint8_t *dest, const uint8_
  */
 __STATIC_FORCEINLINE void hashcrypt_sha_ldm_stm_16_words(HASHCRYPT_Type *base, const uint32_t *src)
 {
-    /* Data Synchronization Barrier */
-    __DSB();
     /*
     typedef struct _one_block
     {
@@ -226,15 +224,8 @@ __STATIC_FORCEINLINE void hashcrypt_sha_ldm_stm_16_words(HASHCRYPT_Type *base, c
     *ldst = lsrc[1];
     */
 
-    /* Data Synchronization Barrier prevent compiler from reordering memory write when -O2 or higher is used. */
-    /* The address is passed to the crypto engine for hashing below, therefore out   */
-    /* of order memory write due to compiler optimization must be prevented. */
-    __DSB();
-
     base->MEMADDR = HASHCRYPT_MEMADDR_BASE(src);
     base->MEMCTRL = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(1);
-
-    __DSB();
 }
 
 /*!
@@ -681,6 +672,11 @@ static void hashcrypt_sha_one_block(HASHCRYPT_Type *base, const uint8_t *blk)
     }
     /* feed INDATA (and ALIASes). use STM instruction. */
     hashcrypt_sha_ldm_stm_16_words(base, actBlk);
+
+    /* wait for DIGEST computation. */
+    while (0U == (base->STATUS & HASHCRYPT_STATUS_DIGEST_MASK))
+    {
+    }
 }
 
 /*!

@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 1.0.0. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(1, 0, 0))
+/*! @brief power driver version 2.0.1. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /* Power mode configuration API parameter */

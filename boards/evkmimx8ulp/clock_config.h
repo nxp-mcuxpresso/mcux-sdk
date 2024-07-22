@@ -10,6 +10,13 @@
 #include "fsl_common.h"
 #include "fsl_upower.h"
 
+/*!
+ * @brief This function executes default configuration of clocks.
+ *
+ */
+void BOARD_InitBootClocks(void);
+
+
 /*******************************************************************************
  * DEFINITION
  ******************************************************************************/

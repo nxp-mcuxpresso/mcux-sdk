@@ -47,8 +47,8 @@ struct _spi_dma_handle
     uint32_t state;              /*!< Internal state of SPI DMA transfer */
     size_t transferSize;         /*!< Bytes need to be transfer */
     uint32_t instance;           /*!< Index of SPI instance*/
-    uint8_t *txNextData;         /*!< The pointer of next time tx data*/
-    uint8_t *txEndData;          /*!< The pointer of end of data*/
+    const uint8_t *txNextData;   /*!< The pointer of next time tx data*/
+    const uint8_t *txEndData;    /*!< The pointer of end of data*/
     uint8_t *rxNextData;         /*!< The pointer of next time rx data*/
     uint8_t *rxEndData;          /*!< The pointer of end of rx data*/
     uint32_t dataBytesEveryTime; /*!< Bytes in a time for DMA transfer, default is DMA_MAX_TRANSFER_COUNT */

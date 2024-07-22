@@ -179,7 +179,7 @@ static hal_audio_status_t HAL_AudioCommonInit(hal_audio_handle_t handle,
         i2sConfig.sckPol = false;
     }
 
-    switch (config->msaterSlave)
+    switch (config->masterSlave)
     {
         case kHAL_AudioMaster:
             i2sConfig.masterSlave = kI2S_MasterSlaveNormalMaster;

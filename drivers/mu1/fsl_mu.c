@@ -23,11 +23,10 @@
  * Variables
  ******************************************************************************/
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if (defined(MU_CLOCKS))
 /*! @brief Pointers to mu clocks for each instance. */
 static const clock_ip_name_t s_muClocks[] = MU_CLOCKS;
-
-/*! @brief Pointers to mu bases for each instance. */
-static MU_Type *const s_muBases[] = MU_BASE_PTRS;
+#endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if defined(MU_RESETS_ARRAY)
@@ -35,11 +34,13 @@ static MU_Type *const s_muBases[] = MU_BASE_PTRS;
 static const reset_ip_name_t s_muResets[] = MU_RESETS_ARRAY;
 #endif
 
+/*! @brief Pointers to mu bases for each instance. */
+static MU_Type *const s_muBases[] = MU_BASE_PTRS;
+
 /******************************************************************************
  * Code
  *****************************************************************************/
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-static uint32_t MU_GetInstance(MU_Type *base)
+uint32_t MU_GetInstance(MU_Type *base)
 {
     uint32_t instance;
 
@@ -56,7 +57,6 @@ static uint32_t MU_GetInstance(MU_Type *base)
 
     return instance;
 }
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*!
  * brief Initializes the MU module.
@@ -68,7 +68,9 @@ static uint32_t MU_GetInstance(MU_Type *base)
 void MU_Init(MU_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if (defined(MU_CLOCKS))
     (void)CLOCK_EnableClock(s_muClocks[MU_GetInstance(base)]);
+#endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if defined(MU_RESETS_ARRAY)
@@ -86,7 +88,9 @@ void MU_Init(MU_Type *base)
 void MU_Deinit(MU_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if (defined(MU_CLOCKS))
     (void)CLOCK_DisableClock(s_muClocks[MU_GetInstance(base)]);
+#endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
@@ -227,18 +231,49 @@ uint32_t MU_GetStatusFlags(MU_Type *base)
  */
 status_t MU_TriggerInterrupts(MU_Type *base, uint32_t interrupts)
 {
-    status_t status;
     uint32_t localInerrupts = MU_GET_GI_INTR(interrupts);
-    uint32_t gcr            = base->GCR;
+
+    return MU_TriggerGeneralPurposeInterrupts(base, localInerrupts);
+}
+
+/*
+ * brief Triggers general purpose interrupts to the other core.
+ *
+ * This function triggers the specific general purpose interrupts to the other core.
+ * The interrupts to trigger are passed in as bit mask. See mu_general_purpose_interrupt_t.
+ * The MU should not trigger an interrupt to the other core when the previous interrupt
+ * has not been processed by the other core. This function checks whether the
+ * previous interrupts have been processed. If not, it returns an error.
+ *
+ * code
+   status_t status;
+   status = MU_TriggerGeneralPurposeInterrupts(base, kMU_GeneralPurposeInterrupt0 | kMU_GeneralPurposeInterrupt2);
+
+   if (kStatus_Success != status)
+   {
+        Previous general purpose interrupt 0 or general purpose interrupt 2
+        has not been processed by the other core.
+   }
+   endcode
+ *
+ * param base MU peripheral base address.
+ * param interrupts Bit mask of the interrupts to trigger. See mu_general_purpose_interrupt_t.
+ * retval kStatus_Success    Interrupts have been triggered successfully.
+ * retval kStatus_Fail       Previous interrupts have not been accepted.
+ */
+status_t MU_TriggerGeneralPurposeInterrupts(MU_Type *base, uint32_t interrupts)
+{
+    status_t status;
+    uint32_t gcr = base->GCR;
 
     /* Previous interrupt has not been accepted. */
-    if (0U != (gcr & localInerrupts))
+    if (0U != (gcr & interrupts))
     {
         status = kStatus_Fail;
     }
     else
     {
-        base->GCR = (gcr | localInerrupts);
+        base->GCR = (gcr | interrupts);
         status    = kStatus_Success;
     }
 
@@ -269,7 +304,11 @@ status_t MU_TriggerNmi(MU_Type *base)
     }
     else
     {
-        base->CCR0 = (ccr0 & ~MU_CCR0_HR_MASK) | MU_CCR0_NMI_MASK;
+#if !(defined(FSL_FEATURE_MU_HAS_HR) && (FSL_FEATURE_MU_HAS_HR == 0))
+        ccr0 &= ~MU_CCR0_HR_MASK;
+#endif
+
+        base->CCR0 = ccr0 | MU_CCR0_NMI_MASK;
         status     = kStatus_Success;
     }
 
@@ -277,7 +316,7 @@ status_t MU_TriggerNmi(MU_Type *base)
 }
 #endif /* FSL_FEATURE_MU_NO_NMI */
 
-#if !(defined(FSL_FEATURE_MU_NO_BOOT) && (0 != FSL_FEATURE_MU_NO_BOOT))
+#if !(defined(FSL_FEATURE_MU_HAS_BOOT) && (0 == FSL_FEATURE_MU_HAS_BOOT))
 /*!
  * brief Boots the other core.
  *
@@ -288,17 +327,25 @@ status_t MU_TriggerNmi(MU_Type *base)
  */
 void MU_BootOtherCore(MU_Type *base, mu_core_boot_mode_t mode)
 {
-    uint32_t ccr0 = base->CCR0;
+    uint32_t ccr0;
+
+#if defined(FSL_FEATURE_MU_HAS_BOOT_BY_INSTANCEn)
+    assert(FSL_FEATURE_MU_HAS_BOOT_BY_INSTANCEn(base) != 0);
+#endif
+
+    ccr0 = base->CCR0;
 
 #if !(defined(FSL_FEATURE_MU_NO_NMI) && (0 != FSL_FEATURE_MU_NO_NMI))
     ccr0 &= ~MU_CCR0_NMI_MASK;
 #endif
 
-#if !(defined(FSL_FEATURE_MU_NO_HR) && (0 != FSL_FEATURE_MU_NO_HR))
+#if !(defined(FSL_FEATURE_MU_HAS_HR) && (0 == FSL_FEATURE_MU_HAS_HR))
+    /* Don't need to check whether the instance support it, always clear it. */
     ccr0 &= ~MU_CCR0_HR_MASK;
 #endif
 
-#if !(defined(FSL_FEATURE_MU_NO_RSTH) && (0 != FSL_FEATURE_MU_NO_RSTH))
+#if !(defined(FSL_FEATURE_MU_HAS_RSTH) && (0 == FSL_FEATURE_MU_HAS_RSTH))
+    /* Don't need to check whether the MU instance support RSTH, always clear the bit. */
     ccr0 &= ~MU_CCR0_RSTH_MASK;
 #endif
 
@@ -306,9 +353,9 @@ void MU_BootOtherCore(MU_Type *base, mu_core_boot_mode_t mode)
 
     base->CCR0 = ccr0;
 }
-#endif /* FSL_FEATURE_MU_NO_BOOT */
+#endif /* FSL_FEATURE_MU_HAS_BOOT */
 
-#if !(defined(FSL_FEATURE_MU_NO_RSTH) && (0 != FSL_FEATURE_MU_NO_RSTH))
+#if !(defined(FSL_FEATURE_MU_HAS_RSTH) && (0 == FSL_FEATURE_MU_HAS_RSTH))
 /*
  * brief Holds the other core reset.
  *
@@ -318,7 +365,14 @@ void MU_BootOtherCore(MU_Type *base, mu_core_boot_mode_t mode)
  */
 void MU_HoldOtherCoreReset(MU_Type *base)
 {
-    uint32_t ccr0 = base->CCR0;
+    uint32_t ccr0;
+
+#if defined(FSL_FEATURE_MU_HAS_RSTH_BY_INSTANCEn)
+    /* The MU instance must support the feature. */
+    assert(FSL_FEATURE_MU_HAS_RSTH_BY_INSTANCEn(base) != 0);
+#endif
+
+    ccr0 = base->CCR0;
 
 #if !(defined(FSL_FEATURE_MU_NO_NMI) && (0 != FSL_FEATURE_MU_NO_NMI))
     ccr0 &= ~MU_CCR0_NMI_MASK;
@@ -328,9 +382,9 @@ void MU_HoldOtherCoreReset(MU_Type *base)
 
     base->CCR0 = ccr0;
 }
-#endif /* FSL_FEATURE_MU_NO_RSTH */
+#endif /* FSL_FEATURE_MU_HAS_RSTH */
 
-#if !(defined(FSL_FEATURE_MU_NO_HR) && FSL_FEATURE_MU_NO_HR)
+#if !(defined(FSL_FEATURE_MU_HAS_HR) && (FSL_FEATURE_MU_HAS_HR == 0))
 /*!
  * brief Hardware reset the other core.
  *
@@ -370,12 +424,23 @@ void MU_HoldOtherCoreReset(MU_Type *base)
  */
 void MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset, mu_core_boot_mode_t bootMode)
 {
-#if (defined(FSL_FEATURE_MU_NO_BOOT) && (0 != FSL_FEATURE_MU_NO_BOOT))
+#if defined(FSL_FEATURE_MU_HAS_HR_BY_INSTANCEn)
+    assert(FSL_FEATURE_MU_HAS_HR_BY_INSTANCEn(base) != 0);
+#endif
+
+#if (defined(FSL_FEATURE_MU_HAS_BOOT) && (0 == FSL_FEATURE_MU_HAS_BOOT))
     assert(bootMode == kMU_CoreBootModeDummy);
 #endif
 
-#if (defined(FSL_FEATURE_MU_NO_RSTH) && (0 != FSL_FEATURE_MU_NO_RSTH))
+#if (defined(FSL_FEATURE_MU_HAS_RSTH) && (0 == FSL_FEATURE_MU_HAS_RSTH))
     assert(holdReset == false);
+#endif
+
+#if defined(FSL_FEATURE_MU_HAS_RSTH_BY_INSTANCEn)
+    if (FSL_FEATURE_MU_HAS_RSTH_BY_INSTANCEn(base) == 0)
+    {
+        assert(holdReset == false);
+    }
 #endif
 
 #if (defined(FSL_FEATURE_MU_NO_CORE_STATUS) && (0 != FSL_FEATURE_MU_NO_CORE_STATUS))
@@ -390,18 +455,26 @@ void MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset, mu
     ccr0 &= ~MU_CCR0_NMI_MASK;
 #endif /* FSL_FEATURE_MU_NO_NMI */
 
-#if !(defined(FSL_FEATURE_MU_NO_BOOT) && (0 != FSL_FEATURE_MU_NO_BOOT))
-    ccr0 &= ~MU_CCR0_BOOT_MASK;
-    ccr0 |= MU_CCR0_BOOT(bootMode);
-#endif /* FSL_FEATURE_MU_NO_BOOT */
+#if !(defined(FSL_FEATURE_MU_HAS_BOOT) && (0 == FSL_FEATURE_MU_HAS_BOOT))
+#if defined(FSL_FEATURE_MU_HAS_BOOT_BY_INSTANCEn)
+    if (FSL_FEATURE_MU_HAS_BOOT_BY_INSTANCEn(base) != 0)
+#endif
+    {
+        ccr0 &= ~MU_CCR0_BOOT_MASK;
+        ccr0 |= MU_CCR0_BOOT(bootMode);
+    }
+#endif /* FSL_FEATURE_MU_HAS_BOOT */
 
-#if !(defined(FSL_FEATURE_MU_NO_RSTH) && (0 != FSL_FEATURE_MU_NO_RSTH))
+#if !(defined(FSL_FEATURE_MU_HAS_RSTH) && (0 == FSL_FEATURE_MU_HAS_RSTH))
     ccr0 &= ~MU_CCR0_RSTH_MASK;
+    /* Don't need check whether the instance support hold reset, it is already
+     * checked at the begining of this function.
+     */
     if (holdReset)
     {
         ccr0 |= MU_CCR0_RSTH_MASK;
     }
-#endif /* FSL_FEATURE_MU_NO_RSTH */
+#endif /* FSL_FEATURE_MU_HAS_RSTH */
 
 #if !(defined(FSL_FEATURE_MU_NO_CORE_STATUS) && (0 != FSL_FEATURE_MU_NO_CORE_STATUS))
 #if !(defined(FSL_FEATURE_MU_HAS_RESET_ASSERT_INT) && (FSL_FEATURE_MU_HAS_RESET_ASSERT_INT == 0))
@@ -426,13 +499,13 @@ void MU_HardwareResetOtherCore(MU_Type *base, bool waitReset, bool holdReset, mu
 #endif /* FSL_FEATURE_MU_HAS_RESET_ASSERT_INT */
 #endif /* FSL_FEATURE_MU_NO_CORE_STATUS */
 
-#if !(defined(FSL_FEATURE_MU_NO_RSTH) && (0 != FSL_FEATURE_MU_NO_RSTH))
+#if !(defined(FSL_FEATURE_MU_HAS_RSTH) && (0 == FSL_FEATURE_MU_HAS_RSTH))
         if (!holdReset)
         {
             /* Clear CCR[HR]. */
             base->CCR0 = ccr0;
         }
-#endif /* FSL_FEATURE_MU_NO_RSTH */
+#endif /* FSL_FEATURE_MU_HAS_RSTH */
     }
 }
-#endif /* FSL_FEATURE_MU_NO_HR */
+#endif /* FSL_FEATURE_MU_HAS_HR */

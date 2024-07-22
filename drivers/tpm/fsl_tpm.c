@@ -46,29 +46,23 @@
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-/*!
- * @brief Gets the instance from the base address
- *
- * @param base TPM peripheral base address
- *
- * @return The TPM instance
- */
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-static uint32_t TPM_GetInstance(TPM_Type *base);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to TPM bases for each instance. */
 static TPM_Type *const s_tpmBases[] = TPM_BASE_PTRS;
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to TPM clocks for each instance. */
 static const clock_ip_name_t s_tpmClocks[] = TPM_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+/* Array of TPM callback function pointer. */
+static tpm_callback_t s_tpmCallback[ARRAY_SIZE(s_tpmBases)];
+
+/* Array to map TPM instance to IRQ number. */
+static const IRQn_Type s_tpmIRQ[] = TPM_IRQS;
 
 #if defined(TPM_RESETS_ARRAY)
 /* Reset array */
@@ -78,8 +72,13 @@ static const reset_ip_name_t s_tpmResets[] = TPM_RESETS_ARRAY;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-static uint32_t TPM_GetInstance(TPM_Type *base)
+/*!
+ * brief Gets the instance from the base address
+ *
+ * param base TPM peripheral base address
+ * return The TPM instance
+ */
+uint32_t TPM_GetInstance(TPM_Type *base)
 {
     uint32_t instance;
     uint32_t tpmArrayCount = (sizeof(s_tpmBases) / sizeof(s_tpmBases[0]));
@@ -102,7 +101,6 @@ static uint32_t TPM_GetInstance(TPM_Type *base)
 
     return instance;
 }
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*!
  * brief Ungates the TPM clock and configures the peripheral for basic operation.
@@ -134,8 +132,14 @@ void TPM_Init(TPM_Type *base, const tpm_config_t *config)
     base->SC = TPM_SC_PS(config->prescale);
 #if !(defined(FSL_FEATURE_TPM_HAS_NO_CONF) && FSL_FEATURE_TPM_HAS_NO_CONF)
     /* Setup the counter operation */
-    base->CONF = TPM_CONF_DOZEEN(config->enableDoze) | TPM_CONF_GTBEEN(config->useGlobalTimeBase) |
-                 TPM_CONF_GTBSYNC(config->syncGlobalTimeBase) | TPM_CONF_CROT(config->enableReloadOnTrigger) |
+    base->CONF = TPM_CONF_DOZEEN(config->enableDoze) |
+#if defined(FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN) && FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN
+                 TPM_CONF_GTBEEN(config->useGlobalTimeBase) |
+#endif
+#if defined(FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC) && FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC
+                 TPM_CONF_GTBSYNC(config->syncGlobalTimeBase) |
+#endif
+                 TPM_CONF_CROT(config->enableReloadOnTrigger) |
                  TPM_CONF_CSOT(config->enableStartOnTrigger) | TPM_CONF_CSOO(config->enableStopOnOverflow) |
 #if defined(FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER) && FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER
                  TPM_CONF_CPOT(config->enablePauseOnTrigger) |
@@ -1092,3 +1096,49 @@ uint32_t TPM_GetEnabledInterrupts(TPM_Type *base)
 
     return enabledInterrupts;
 }
+
+/*!
+ * brief Register callback.
+ * 
+ * If channel or overflow interrupt is enabled by the user, then a callback can be registered
+ * which will be invoked when the interrupt is triggered.
+ *
+ * param base       TPM peripheral base address
+ * param callback   Callback function
+ */
+void TPM_RegisterCallBack(TPM_Type *base, tpm_callback_t callback)
+{
+    uint32_t instance;
+
+    instance = TPM_GetInstance(base);
+
+    /* Create TPM callback instance. */
+    s_tpmCallback[instance] = callback;
+
+    /* Enable IRQ. */
+    (void)EnableIRQ(s_tpmIRQ[instance]);
+}
+
+#if defined(TPM0)
+void TPM0_DriverIRQHandler(void);
+void TPM0_DriverIRQHandler(void)
+{
+    if (NULL != s_tpmCallback[0])
+    {
+        s_tpmCallback[0](TPM0);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif
+
+#if defined(TPM1)
+void TPM1_DriverIRQHandler(void);
+void TPM1_DriverIRQHandler(void)
+{
+    if (NULL != s_tpmCallback[1])
+    {
+        s_tpmCallback[1](TPM1);
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif

@@ -26,6 +26,12 @@ typedef void (*BOARD_SetRunModeFunc)(
 extern "C" {
 #endif /* __cplusplus*/
 
+/*!
+ * @brief This function executes default configuration of clocks.
+ *
+ */
+void BOARD_InitBootClocks(void);
+
 void BOARD_BootClockVLPR(void);
 void BOARD_BootClockRUN(void);
 void BOARD_BootClockHSRUN(void);

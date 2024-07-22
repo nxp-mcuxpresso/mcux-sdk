@@ -1,43 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1170-EVK_manifest_v3_14" name="2.15.0 GitHub SDK" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1170-EVK_manifest_v3_14" name="SDK Version Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
 
   <externalDefinitions>
     <definition extID="isi_qmc_dgc"/>
     <definition extID="evkbmimxrt1170"/>
     <definition extID="middleware.usb.host.stack.MIMXRT1176"/>
+    <definition extID="middleware.usb.device.controller.driver.MIMXRT1176"/>
+    <definition extID="middleware.maestro_framework.MIMXRT1176"/>
     <definition extID="middleware.wifi.MIMXRT1176"/>
     <definition extID="middleware.freertos-kernel.MIMXRT1176"/>
-    <definition extID="middleware.maestro_framework.MIMXRT1176"/>
     <definition extID="middleware.multicore.erpc.MIMXRT1176"/>
     <definition extID="middleware.multicore.MIMXRT1176"/>
-    <definition extID="middleware.wireless.framework.function_lib.MIMXRT1176"/>
-    <definition extID="middleware.wireless.framework.nvm.MIMXRT1176"/>
-    <definition extID="middleware.wireless.framework.common.MIMXRT1176"/>
     <definition extID="middleware.azure_rtos.tx.MIMXRT1176"/>
     <definition extID="middleware.azure_rtos.tx.sp.MIMXRT1176"/>
     <definition extID="middleware.usb.device.cdc.external.MIMXRT1176"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK2150" name="MCUXpresso SDK2150" version="2.15.0" revision="2.15.0"/>
+  <ksdk id="MCUXpressoSDK216000" name="MCUXpresso SDK216000" version="2.16.000" revision="2.16.000"/>
   <manifest_includes>
     <manifest_include path="../../examples/evkmimxrt1170/evkmimxrt1170_example_manifest_v3_14.xml"/>
+    <manifest_include path="../../middleware/maestro/manifests/middleware_nxp_maestro_audio_framework_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wifi_nxp/manifests/middleware_nxp_wifi_MIMXRT1176_manifest_v3_14.xml"/>
-    <manifest_include path="../../middleware/fatfs/manifests/middleware_elm_chan_fatfs_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../rtos/freertos/freertos-kernel/manifests/middleware_amazon_freertos_kernel_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/littlefs/manifests/middleware_christopher_haster_littlefs_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/lwip/manifests/middleware_adam_dunkels_lwip_MIMXRT1176_manifest_v3_14.xml"/>
-    <manifest_include path="../../middleware/maestro/manifests/middleware_nxp_maestro_audio_framework_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/mcuboot_opensource/manifests/middleware_mcuboot_opensource_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../middleware/mmcau/manifests/middleware_nxp_mmcau_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/multicore/manifests/middleware_nxp_multicore_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/mbedtls/manifests/middleware_arm_mbedtls_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/sdmmc/manifests/middleware_nxp_sd_mmc_sdio_card_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/usb/manifests/middleware_nxp_usb_MIMXRT1176_manifest_v3_14.xml"/>
-    <manifest_include path="../../middleware/vit/manifests/middleware_nxp_voice_intelligent_technology_MIMXRT1176_manifest_v3_14.xml"/>
+    <manifest_include path="../../middleware/edgefast_bluetooth/manifests/middleware_nxp_edgefast_bluetooth_pal_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/eiq/manifests/middleware_nxp_eiq_machine_learning_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../rtos/azure-rtos/manifests/middleware_microsoft_azure_rtos_MIMXRT1176_manifest_v3_14.xml"/>
-    <manifest_include path="../../middleware/edgefast_bluetooth/manifests/middleware_nxp_edgefast_bluetooth_pal_MIMXRT1176_manifest_v3_14.xml"/>
-    <manifest_include path="../../middleware/wireless/framework/manifests/middleware_nxp_conn_fwk_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wireless/wpa_supplicant-rtos/manifests/middleware_nxp_wifi_wpa_supplicant_MIMXRT1176_manifest_v3_14.xml"/>
+    <manifest_include path="../../middleware/fatfs/manifests/middleware_elm_chan_fatfs_MIMXRT1176_manifest_v3_14.xml"/>
+    <manifest_include path="../../middleware/vit/manifests/middleware_nxp_voice_intelligent_technology_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/voice_seeker/manifests/middleware_nxp_voiceseeker_no_aec_MIMXRT1176_manifest_v3_14.xml"/>
   </manifest_includes>
   <compilers>
@@ -48,7 +45,7 @@
     <slave_role id="M7SLAVE" name="Cortex-M7 acts as slave by default"/>
   </core_slave_roles_definitions>
   <toolchainSettings>
-    <toolchainSetting id="com.nxp.mcuxpresso" name="mcuxpresso" version="11.8.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" toolchain="mcuxpresso">
+    <toolchainSetting id="com.nxp.mcuxpresso" name="mcuxpresso" version="11.10.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" toolchain="mcuxpresso">
       <option id="gnu.cpp.compiler.option.optimization.flags" type="string" user_name="">
         <value>-fno-common</value>
       </option>
@@ -70,8 +67,8 @@
     </toolchainSetting>
   </toolchainSettings>
   <toolchains>
-    <toolchain id="armgcc" name="GCC_ARM_Embedded_10-2021.10" version="12.2" full_name="GCC ARM Embedded 10-2021.10" compiler="compiler_gcc" type="armgcc" vendor="GCC ARM Embedded" vendor_url="http://launchpad.net/gcc-arm-embedded"/>
-    <toolchain id="mcuxpresso" name="MCUXpresso_IDE" version="11.8.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" type="mcuxpresso" vendor="NXP Semiconductors" vendor_url="http://www.nxp.com">
+    <toolchain id="armgcc" name="GCC_ARM_Embedded_13-2023.10" version="13.2.1" full_name="GCC ARM Embedded 13-2023.10" compiler="compiler_gcc" type="armgcc" vendor="GCC ARM Embedded" vendor_url="https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads"/>
+    <toolchain id="mcuxpresso" name="MCUXpresso_IDE" version="11.10.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" type="mcuxpresso" vendor="NXP Semiconductors" vendor_url="http://www.nxp.com">
       <debug>
         <debug_configuration id="com.crt.advproject.config.exe.release" name="Release Configuration" probe="LinkServer">
           <scripts>
@@ -378,7 +375,7 @@ ${load}</script>
         <files mask="mcux_config.cmake"/>
       </source>
     </component>
-    <component id="CMSIS_Include_core_cm.MIMXRT1176" name="CMSIS_Include_CM" brief="CMSIS-CORE for Cortex-M, ARMv8-M, ARMv8.1-M" version="5.5.0" full_name="CMSIS Include For Cortex-M, ARMv8-M, ARMv8.1-M" category="CMSIS/CORE" user_visible="true" type="CMSIS_Include" package_base_path="../CMSIS/Core/Include" project_base_path="CMSIS">
+    <component id="CMSIS_Include_core_cm.MIMXRT1176" name="CMSIS_Include_CM" brief="CMSIS-CORE for Cortex-M, ARMv8-M, ARMv8.1-M" version="5.9.0" full_name="CMSIS Include For Cortex-M, ARMv8-M, ARMv8.1-M" category="CMSIS/CORE" user_visible="true" type="CMSIS_Include" package_base_path="../CMSIS/Core/Include" project_base_path="CMSIS">
       <dependencies>
         <device_dependency value="MIMXRT1176xxxxx"/>
       </dependencies>
@@ -426,11 +423,13 @@ ${load}</script>
     <files mask="BasicMathFunctionsF16.c"/>
     <files mask="arm_abs_f16.c"/>
     <files mask="arm_abs_f32.c"/>
+    <files mask="arm_abs_f64.c"/>
     <files mask="arm_abs_q15.c"/>
     <files mask="arm_abs_q31.c"/>
     <files mask="arm_abs_q7.c"/>
     <files mask="arm_add_f16.c"/>
     <files mask="arm_add_f32.c"/>
+    <files mask="arm_add_f64.c"/>
     <files mask="arm_add_q15.c"/>
     <files mask="arm_add_q31.c"/>
     <files mask="arm_add_q7.c"/>
@@ -444,16 +443,19 @@ ${load}</script>
     <files mask="arm_clip_q7.c"/>
     <files mask="arm_dot_prod_f16.c"/>
     <files mask="arm_dot_prod_f32.c"/>
+    <files mask="arm_dot_prod_f64.c"/>
     <files mask="arm_dot_prod_q15.c"/>
     <files mask="arm_dot_prod_q31.c"/>
     <files mask="arm_dot_prod_q7.c"/>
     <files mask="arm_mult_f16.c"/>
     <files mask="arm_mult_f32.c"/>
+    <files mask="arm_mult_f64.c"/>
     <files mask="arm_mult_q15.c"/>
     <files mask="arm_mult_q31.c"/>
     <files mask="arm_mult_q7.c"/>
     <files mask="arm_negate_f16.c"/>
     <files mask="arm_negate_f32.c"/>
+    <files mask="arm_negate_f64.c"/>
     <files mask="arm_negate_q15.c"/>
     <files mask="arm_negate_q31.c"/>
     <files mask="arm_negate_q7.c"/>
@@ -462,6 +464,7 @@ ${load}</script>
     <files mask="arm_not_u8.c"/>
     <files mask="arm_offset_f16.c"/>
     <files mask="arm_offset_f32.c"/>
+    <files mask="arm_offset_f64.c"/>
     <files mask="arm_offset_q15.c"/>
     <files mask="arm_offset_q31.c"/>
     <files mask="arm_offset_q7.c"/>
@@ -470,6 +473,7 @@ ${load}</script>
     <files mask="arm_or_u8.c"/>
     <files mask="arm_scale_f16.c"/>
     <files mask="arm_scale_f32.c"/>
+    <files mask="arm_scale_f64.c"/>
     <files mask="arm_scale_q15.c"/>
     <files mask="arm_scale_q31.c"/>
     <files mask="arm_scale_q7.c"/>
@@ -478,6 +482,7 @@ ${load}</script>
     <files mask="arm_shift_q7.c"/>
     <files mask="arm_sub_f16.c"/>
     <files mask="arm_sub_f32.c"/>
+    <files mask="arm_sub_f64.c"/>
     <files mask="arm_sub_q15.c"/>
     <files mask="arm_sub_q31.c"/>
     <files mask="arm_sub_q7.c"/>
@@ -508,14 +513,18 @@ ${load}</script>
     <files mask="arm_cmplx_dot_prod_q31.c"/>
     <files mask="arm_cmplx_mag_f16.c"/>
     <files mask="arm_cmplx_mag_f32.c"/>
+    <files mask="arm_cmplx_mag_f64.c"/>
+    <files mask="arm_cmplx_mag_fast_q15.c"/>
     <files mask="arm_cmplx_mag_q15.c"/>
     <files mask="arm_cmplx_mag_q31.c"/>
     <files mask="arm_cmplx_mag_squared_f16.c"/>
     <files mask="arm_cmplx_mag_squared_f32.c"/>
+    <files mask="arm_cmplx_mag_squared_f64.c"/>
     <files mask="arm_cmplx_mag_squared_q15.c"/>
     <files mask="arm_cmplx_mag_squared_q31.c"/>
     <files mask="arm_cmplx_mult_cmplx_f16.c"/>
     <files mask="arm_cmplx_mult_cmplx_f32.c"/>
+    <files mask="arm_cmplx_mult_cmplx_f64.c"/>
     <files mask="arm_cmplx_mult_cmplx_q15.c"/>
     <files mask="arm_cmplx_mult_cmplx_q31.c"/>
     <files mask="arm_cmplx_mult_real_f16.c"/>
@@ -540,15 +549,22 @@ ${load}</script>
     <files mask="arm_canberra_distance_f32.c"/>
     <files mask="arm_chebyshev_distance_f16.c"/>
     <files mask="arm_chebyshev_distance_f32.c"/>
+    <files mask="arm_chebyshev_distance_f64.c"/>
     <files mask="arm_cityblock_distance_f16.c"/>
     <files mask="arm_cityblock_distance_f32.c"/>
+    <files mask="arm_cityblock_distance_f64.c"/>
     <files mask="arm_correlation_distance_f16.c"/>
     <files mask="arm_correlation_distance_f32.c"/>
     <files mask="arm_cosine_distance_f16.c"/>
     <files mask="arm_cosine_distance_f32.c"/>
+    <files mask="arm_cosine_distance_f64.c"/>
     <files mask="arm_dice_distance.c"/>
+    <files mask="arm_dtw_distance_f32.c"/>
+    <files mask="arm_dtw_init_window_q7.c"/>
+    <files mask="arm_dtw_path_f32.c"/>
     <files mask="arm_euclidean_distance_f16.c"/>
     <files mask="arm_euclidean_distance_f32.c"/>
+    <files mask="arm_euclidean_distance_f64.c"/>
     <files mask="arm_hamming_distance.c"/>
     <files mask="arm_jaccard_distance.c"/>
     <files mask="arm_jensenshannon_distance_f16.c"/>
@@ -563,10 +579,15 @@ ${load}</script>
     <files mask="arm_yule_distance.c"/>
     <files mask="FastMathFunctions.c"/>
     <files mask="FastMathFunctionsF16.c"/>
+    <files mask="arm_atan2_f16.c"/>
+    <files mask="arm_atan2_f32.c"/>
+    <files mask="arm_atan2_q15.c"/>
+    <files mask="arm_atan2_q31.c"/>
     <files mask="arm_cos_f32.c"/>
     <files mask="arm_cos_q15.c"/>
     <files mask="arm_cos_q31.c"/>
     <files mask="arm_divide_q15.c"/>
+    <files mask="arm_divide_q31.c"/>
     <files mask="arm_sin_f32.c"/>
     <files mask="arm_sin_q15.c"/>
     <files mask="arm_sin_q31.c"/>
@@ -574,9 +595,13 @@ ${load}</script>
     <files mask="arm_sqrt_q31.c"/>
     <files mask="arm_vexp_f16.c"/>
     <files mask="arm_vexp_f32.c"/>
+    <files mask="arm_vexp_f64.c"/>
     <files mask="arm_vinverse_f16.c"/>
     <files mask="arm_vlog_f16.c"/>
     <files mask="arm_vlog_f32.c"/>
+    <files mask="arm_vlog_f64.c"/>
+    <files mask="arm_vlog_q15.c"/>
+    <files mask="arm_vlog_q31.c"/>
     <files mask="FilteringFunctions.c"/>
     <files mask="FilteringFunctionsF16.c"/>
     <files mask="arm_biquad_cascade_df1_32x64_init_q31.c"/>
@@ -621,6 +646,7 @@ ${load}</script>
     <files mask="arm_conv_q7.c"/>
     <files mask="arm_correlate_f16.c"/>
     <files mask="arm_correlate_f32.c"/>
+    <files mask="arm_correlate_f64.c"/>
     <files mask="arm_correlate_fast_opt_q15.c"/>
     <files mask="arm_correlate_fast_q15.c"/>
     <files mask="arm_correlate_fast_q31.c"/>
@@ -639,10 +665,12 @@ ${load}</script>
     <files mask="arm_fir_decimate_q31.c"/>
     <files mask="arm_fir_f16.c"/>
     <files mask="arm_fir_f32.c"/>
+    <files mask="arm_fir_f64.c"/>
     <files mask="arm_fir_fast_q15.c"/>
     <files mask="arm_fir_fast_q31.c"/>
     <files mask="arm_fir_init_f16.c"/>
     <files mask="arm_fir_init_f32.c"/>
+    <files mask="arm_fir_init_f64.c"/>
     <files mask="arm_fir_init_q15.c"/>
     <files mask="arm_fir_init_q31.c"/>
     <files mask="arm_fir_init_q7.c"/>
@@ -706,6 +734,9 @@ ${load}</script>
     <files mask="arm_spline_interp_init_f32.c"/>
     <files mask="MatrixFunctions.c"/>
     <files mask="MatrixFunctionsF16.c"/>
+    <files mask="arm_householder_f16.c"/>
+    <files mask="arm_householder_f32.c"/>
+    <files mask="arm_householder_f64.c"/>
     <files mask="arm_mat_add_f16.c"/>
     <files mask="arm_mat_add_f32.c"/>
     <files mask="arm_mat_add_q15.c"/>
@@ -723,6 +754,7 @@ ${load}</script>
     <files mask="arm_mat_cmplx_trans_q31.c"/>
     <files mask="arm_mat_init_f16.c"/>
     <files mask="arm_mat_init_f32.c"/>
+    <files mask="arm_mat_init_f64.c"/>
     <files mask="arm_mat_init_q15.c"/>
     <files mask="arm_mat_init_q31.c"/>
     <files mask="arm_mat_inverse_f16.c"/>
@@ -735,9 +767,13 @@ ${load}</script>
     <files mask="arm_mat_mult_f64.c"/>
     <files mask="arm_mat_mult_fast_q15.c"/>
     <files mask="arm_mat_mult_fast_q31.c"/>
+    <files mask="arm_mat_mult_opt_q31.c"/>
     <files mask="arm_mat_mult_q15.c"/>
     <files mask="arm_mat_mult_q31.c"/>
     <files mask="arm_mat_mult_q7.c"/>
+    <files mask="arm_mat_qr_f16.c"/>
+    <files mask="arm_mat_qr_f32.c"/>
+    <files mask="arm_mat_qr_f64.c"/>
     <files mask="arm_mat_scale_f16.c"/>
     <files mask="arm_mat_scale_f32.c"/>
     <files mask="arm_mat_scale_q15.c"/>
@@ -795,14 +831,31 @@ ${load}</script>
     <files mask="StatisticsFunctionsF16.c"/>
     <files mask="arm_absmax_f16.c"/>
     <files mask="arm_absmax_f32.c"/>
+    <files mask="arm_absmax_f64.c"/>
+    <files mask="arm_absmax_no_idx_f16.c"/>
+    <files mask="arm_absmax_no_idx_f32.c"/>
+    <files mask="arm_absmax_no_idx_f64.c"/>
+    <files mask="arm_absmax_no_idx_q15.c"/>
+    <files mask="arm_absmax_no_idx_q31.c"/>
+    <files mask="arm_absmax_no_idx_q7.c"/>
     <files mask="arm_absmax_q15.c"/>
     <files mask="arm_absmax_q31.c"/>
     <files mask="arm_absmax_q7.c"/>
     <files mask="arm_absmin_f16.c"/>
     <files mask="arm_absmin_f32.c"/>
+    <files mask="arm_absmin_f64.c"/>
+    <files mask="arm_absmin_no_idx_f16.c"/>
+    <files mask="arm_absmin_no_idx_f32.c"/>
+    <files mask="arm_absmin_no_idx_f64.c"/>
+    <files mask="arm_absmin_no_idx_q15.c"/>
+    <files mask="arm_absmin_no_idx_q31.c"/>
+    <files mask="arm_absmin_no_idx_q7.c"/>
     <files mask="arm_absmin_q15.c"/>
     <files mask="arm_absmin_q31.c"/>
     <files mask="arm_absmin_q7.c"/>
+    <files mask="arm_accumulate_f16.c"/>
+    <files mask="arm_accumulate_f32.c"/>
+    <files mask="arm_accumulate_f64.c"/>
     <files mask="arm_entropy_f16.c"/>
     <files mask="arm_entropy_f32.c"/>
     <files mask="arm_entropy_f64.c"/>
@@ -815,23 +868,43 @@ ${load}</script>
     <files mask="arm_logsumexp_f32.c"/>
     <files mask="arm_max_f16.c"/>
     <files mask="arm_max_f32.c"/>
+    <files mask="arm_max_f64.c"/>
     <files mask="arm_max_no_idx_f16.c"/>
     <files mask="arm_max_no_idx_f32.c"/>
+    <files mask="arm_max_no_idx_f64.c"/>
+    <files mask="arm_max_no_idx_q15.c"/>
+    <files mask="arm_max_no_idx_q31.c"/>
+    <files mask="arm_max_no_idx_q7.c"/>
     <files mask="arm_max_q15.c"/>
     <files mask="arm_max_q31.c"/>
     <files mask="arm_max_q7.c"/>
     <files mask="arm_mean_f16.c"/>
     <files mask="arm_mean_f32.c"/>
+    <files mask="arm_mean_f64.c"/>
     <files mask="arm_mean_q15.c"/>
     <files mask="arm_mean_q31.c"/>
     <files mask="arm_mean_q7.c"/>
     <files mask="arm_min_f16.c"/>
     <files mask="arm_min_f32.c"/>
+    <files mask="arm_min_f64.c"/>
+    <files mask="arm_min_no_idx_f16.c"/>
+    <files mask="arm_min_no_idx_f32.c"/>
+    <files mask="arm_min_no_idx_f64.c"/>
+    <files mask="arm_min_no_idx_q15.c"/>
+    <files mask="arm_min_no_idx_q31.c"/>
+    <files mask="arm_min_no_idx_q7.c"/>
     <files mask="arm_min_q15.c"/>
     <files mask="arm_min_q31.c"/>
     <files mask="arm_min_q7.c"/>
+    <files mask="arm_mse_f16.c"/>
+    <files mask="arm_mse_f32.c"/>
+    <files mask="arm_mse_f64.c"/>
+    <files mask="arm_mse_q15.c"/>
+    <files mask="arm_mse_q31.c"/>
+    <files mask="arm_mse_q7.c"/>
     <files mask="arm_power_f16.c"/>
     <files mask="arm_power_f32.c"/>
+    <files mask="arm_power_f64.c"/>
     <files mask="arm_power_q15.c"/>
     <files mask="arm_power_q31.c"/>
     <files mask="arm_power_q7.c"/>
@@ -841,10 +914,12 @@ ${load}</script>
     <files mask="arm_rms_q31.c"/>
     <files mask="arm_std_f16.c"/>
     <files mask="arm_std_f32.c"/>
+    <files mask="arm_std_f64.c"/>
     <files mask="arm_std_q15.c"/>
     <files mask="arm_std_q31.c"/>
     <files mask="arm_var_f16.c"/>
     <files mask="arm_var_f32.c"/>
+    <files mask="arm_var_f64.c"/>
     <files mask="arm_var_q15.c"/>
     <files mask="arm_var_q31.c"/>
     <files mask="SupportFunctions.c"/>
@@ -855,17 +930,26 @@ ${load}</script>
     <files mask="arm_bubble_sort_f32.c"/>
     <files mask="arm_copy_f16.c"/>
     <files mask="arm_copy_f32.c"/>
+    <files mask="arm_copy_f64.c"/>
     <files mask="arm_copy_q15.c"/>
     <files mask="arm_copy_q31.c"/>
     <files mask="arm_copy_q7.c"/>
+    <files mask="arm_f16_to_f64.c"/>
     <files mask="arm_f16_to_float.c"/>
     <files mask="arm_f16_to_q15.c"/>
+    <files mask="arm_f64_to_f16.c"/>
+    <files mask="arm_f64_to_float.c"/>
+    <files mask="arm_f64_to_q15.c"/>
+    <files mask="arm_f64_to_q31.c"/>
+    <files mask="arm_f64_to_q7.c"/>
     <files mask="arm_fill_f16.c"/>
     <files mask="arm_fill_f32.c"/>
+    <files mask="arm_fill_f64.c"/>
     <files mask="arm_fill_q15.c"/>
     <files mask="arm_fill_q31.c"/>
     <files mask="arm_fill_q7.c"/>
     <files mask="arm_float_to_f16.c"/>
+    <files mask="arm_float_to_f64.c"/>
     <files mask="arm_float_to_q15.c"/>
     <files mask="arm_float_to_q31.c"/>
     <files mask="arm_float_to_q7.c"/>
@@ -874,12 +958,15 @@ ${load}</script>
     <files mask="arm_merge_sort_f32.c"/>
     <files mask="arm_merge_sort_init_f32.c"/>
     <files mask="arm_q15_to_f16.c"/>
+    <files mask="arm_q15_to_f64.c"/>
     <files mask="arm_q15_to_float.c"/>
     <files mask="arm_q15_to_q31.c"/>
     <files mask="arm_q15_to_q7.c"/>
+    <files mask="arm_q31_to_f64.c"/>
     <files mask="arm_q31_to_float.c"/>
     <files mask="arm_q31_to_q15.c"/>
     <files mask="arm_q31_to_q7.c"/>
+    <files mask="arm_q7_to_f64.c"/>
     <files mask="arm_q7_to_float.c"/>
     <files mask="arm_q7_to_q15.c"/>
     <files mask="arm_q7_to_q31.c"/>
@@ -928,6 +1015,14 @@ ${load}</script>
     <files mask="arm_dct4_init_q31.c"/>
     <files mask="arm_dct4_q15.c"/>
     <files mask="arm_dct4_q31.c"/>
+    <files mask="arm_mfcc_f16.c"/>
+    <files mask="arm_mfcc_f32.c"/>
+    <files mask="arm_mfcc_init_f16.c"/>
+    <files mask="arm_mfcc_init_f32.c"/>
+    <files mask="arm_mfcc_init_q15.c"/>
+    <files mask="arm_mfcc_init_q31.c"/>
+    <files mask="arm_mfcc_q15.c"/>
+    <files mask="arm_mfcc_q31.c"/>
     <files mask="arm_rfft_f32.c"/>
     <files mask="arm_rfft_fast_f16.c"/>
     <files mask="arm_rfft_fast_f32.c"/>
@@ -940,6 +1035,47 @@ ${load}</script>
     <files mask="arm_rfft_init_q31.c"/>
     <files mask="arm_rfft_q15.c"/>
     <files mask="arm_rfft_q31.c"/>
+    <files mask="WindowFunctions.c"/>
+    <files mask="arm_bartlett_f32.c"/>
+    <files mask="arm_bartlett_f64.c"/>
+    <files mask="arm_blackman_harris_92db_f32.c"/>
+    <files mask="arm_blackman_harris_92db_f64.c"/>
+    <files mask="arm_hamming_f32.c"/>
+    <files mask="arm_hamming_f64.c"/>
+    <files mask="arm_hanning_f32.c"/>
+    <files mask="arm_hanning_f64.c"/>
+    <files mask="arm_hft116d_f32.c"/>
+    <files mask="arm_hft116d_f64.c"/>
+    <files mask="arm_hft144d_f32.c"/>
+    <files mask="arm_hft144d_f64.c"/>
+    <files mask="arm_hft169d_f32.c"/>
+    <files mask="arm_hft169d_f64.c"/>
+    <files mask="arm_hft196d_f32.c"/>
+    <files mask="arm_hft196d_f64.c"/>
+    <files mask="arm_hft223d_f32.c"/>
+    <files mask="arm_hft223d_f64.c"/>
+    <files mask="arm_hft248d_f32.c"/>
+    <files mask="arm_hft248d_f64.c"/>
+    <files mask="arm_hft90d_f32.c"/>
+    <files mask="arm_hft90d_f64.c"/>
+    <files mask="arm_hft95_f32.c"/>
+    <files mask="arm_hft95_f64.c"/>
+    <files mask="arm_nuttall3_f32.c"/>
+    <files mask="arm_nuttall3_f64.c"/>
+    <files mask="arm_nuttall3a_f32.c"/>
+    <files mask="arm_nuttall3a_f64.c"/>
+    <files mask="arm_nuttall3b_f32.c"/>
+    <files mask="arm_nuttall3b_f64.c"/>
+    <files mask="arm_nuttall4_f32.c"/>
+    <files mask="arm_nuttall4_f64.c"/>
+    <files mask="arm_nuttall4a_f32.c"/>
+    <files mask="arm_nuttall4a_f64.c"/>
+    <files mask="arm_nuttall4b_f32.c"/>
+    <files mask="arm_nuttall4b_f64.c"/>
+    <files mask="arm_nuttall4c_f32.c"/>
+    <files mask="arm_nuttall4c_f64.c"/>
+    <files mask="arm_welch_f32.c"/>
+    <files mask="arm_welch_f64.c"/>
   </source>
   <source relative_path="./" type="c_include">
     <files mask="Driver_CAN.h"/>
@@ -967,29 +1103,13 @@ ${load}</script>
     <files mask="CMSIS.yml"/>
     <files mask="CMSIS_v2.yml"/>
     <files mask="CMSIS_v3.yml"/>
-    <files mask="arm_bitreversal2.S"/>
+    <files mask="README.md"/>
   </source>
   <source relative_path="./" type="doc">
     <files mask="LICENSE.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
   </source>
 </component>-->
-    <component id="CMSIS_DSP_Include.MIMXRT1176" name="CMSIS_DSP_Library_Header" brief="CMSIS-DSP Library Header" version="1.9.0" full_name="CMSIS DSP Library Header" category="CMSIS/DSP" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/DSP" project_base_path="CMSIS/DSP">
+    <component id="CMSIS_DSP_Include.MIMXRT1176" name="CMSIS_DSP_Library_Header" brief="CMSIS-DSP Library Header" version="1.15.0" full_name="CMSIS DSP Library Header" category="CMSIS/DSP" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/DSP" project_base_path="CMSIS/DSP">
       <dependencies>
         <device_dependency value="MIMXRT1176xxxxx"/>
       </dependencies>
@@ -998,11 +1118,11 @@ ${load}</script>
       </source>
       <source relative_path="Include" type="c_include">
         <files mask="arm_common_tables.h"/>
-        <files mask="arm_const_structs.h"/>
-        <files mask="arm_math.h"/>
         <files mask="arm_common_tables_f16.h"/>
+        <files mask="arm_const_structs.h"/>
         <files mask="arm_const_structs_f16.h"/>
         <files mask="arm_helium_utils.h"/>
+        <files mask="arm_math.h"/>
         <files mask="arm_math_f16.h"/>
         <files mask="arm_math_memory.h"/>
         <files mask="arm_math_types.h"/>
@@ -1021,6 +1141,7 @@ ${load}</script>
         <files mask="complex_math_functions_f16.h"/>
         <files mask="controller_functions.h"/>
         <files mask="controller_functions_f16.h"/>
+        <files mask="debug.h"/>
         <files mask="distance_functions.h"/>
         <files mask="distance_functions_f16.h"/>
         <files mask="fast_math_functions.h"/>
@@ -1031,6 +1152,7 @@ ${load}</script>
         <files mask="interpolation_functions_f16.h"/>
         <files mask="matrix_functions.h"/>
         <files mask="matrix_functions_f16.h"/>
+        <files mask="matrix_utils.h"/>
         <files mask="none.h"/>
         <files mask="quaternion_math_functions.h"/>
         <files mask="statistics_functions.h"/>
@@ -1043,6 +1165,7 @@ ${load}</script>
         <files mask="transform_functions.h"/>
         <files mask="transform_functions_f16.h"/>
         <files mask="utils.h"/>
+        <files mask="window_functions.h"/>
       </source>
       <source relative_path="PrivateInclude" type="c_include">
         <files mask="arm_sorting.h"/>
@@ -1057,7 +1180,7 @@ ${load}</script>
         <include_path relative_path="PrivateInclude" type="c_include"/>
       </include_paths>
     </component>
-    <component id="CMSIS_DSP_Source.MIMXRT1176" name="CMSIS_DSP_Library_Source" brief="CMSIS-DSP Library" version="1.9.0" full_name="CMSIS DSP Library Source" category="CMSIS/DSP" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/DSP" project_base_path="CMSIS/DSP">
+    <component id="CMSIS_DSP_Source.MIMXRT1176" name="CMSIS_DSP_Library_Source" brief="CMSIS-DSP Library" version="1.15.0" full_name="CMSIS DSP Library Source" category="CMSIS/DSP" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/DSP" project_base_path="CMSIS/DSP">
       <defines>
         <define name="DISABLEFLOAT16" value=""/>
       </defines>
@@ -1069,11 +1192,11 @@ ${load}</script>
       </source>
       <source relative_path="Include" type="c_include">
         <files mask="arm_common_tables.h"/>
-        <files mask="arm_const_structs.h"/>
-        <files mask="arm_math.h"/>
         <files mask="arm_common_tables_f16.h"/>
+        <files mask="arm_const_structs.h"/>
         <files mask="arm_const_structs_f16.h"/>
         <files mask="arm_helium_utils.h"/>
+        <files mask="arm_math.h"/>
         <files mask="arm_math_f16.h"/>
         <files mask="arm_math_memory.h"/>
         <files mask="arm_math_types.h"/>
@@ -1092,6 +1215,7 @@ ${load}</script>
         <files mask="complex_math_functions_f16.h"/>
         <files mask="controller_functions.h"/>
         <files mask="controller_functions_f16.h"/>
+        <files mask="debug.h"/>
         <files mask="distance_functions.h"/>
         <files mask="distance_functions_f16.h"/>
         <files mask="fast_math_functions.h"/>
@@ -1102,6 +1226,7 @@ ${load}</script>
         <files mask="interpolation_functions_f16.h"/>
         <files mask="matrix_functions.h"/>
         <files mask="matrix_functions_f16.h"/>
+        <files mask="matrix_utils.h"/>
         <files mask="none.h"/>
         <files mask="quaternion_math_functions.h"/>
         <files mask="statistics_functions.h"/>
@@ -1114,6 +1239,7 @@ ${load}</script>
         <files mask="transform_functions.h"/>
         <files mask="transform_functions_f16.h"/>
         <files mask="utils.h"/>
+        <files mask="window_functions.h"/>
       </source>
       <source relative_path="PrivateInclude" type="c_include">
         <files mask="arm_sorting.h"/>
@@ -1126,10 +1252,12 @@ ${load}</script>
       </source>
       <source exclude="true" relative_path="Source/BasicMathFunctions" type="src">
         <files mask="arm_abs_f32.c"/>
+        <files mask="arm_abs_f64.c"/>
         <files mask="arm_abs_q15.c"/>
         <files mask="arm_abs_q31.c"/>
         <files mask="arm_abs_q7.c"/>
         <files mask="arm_add_f32.c"/>
+        <files mask="arm_add_f64.c"/>
         <files mask="arm_add_q15.c"/>
         <files mask="arm_add_q31.c"/>
         <files mask="arm_add_q7.c"/>
@@ -1141,14 +1269,17 @@ ${load}</script>
         <files mask="arm_clip_q31.c"/>
         <files mask="arm_clip_q7.c"/>
         <files mask="arm_dot_prod_f32.c"/>
+        <files mask="arm_dot_prod_f64.c"/>
         <files mask="arm_dot_prod_q15.c"/>
         <files mask="arm_dot_prod_q31.c"/>
         <files mask="arm_dot_prod_q7.c"/>
         <files mask="arm_mult_f32.c"/>
+        <files mask="arm_mult_f64.c"/>
         <files mask="arm_mult_q15.c"/>
         <files mask="arm_mult_q31.c"/>
         <files mask="arm_mult_q7.c"/>
         <files mask="arm_negate_f32.c"/>
+        <files mask="arm_negate_f64.c"/>
         <files mask="arm_negate_q15.c"/>
         <files mask="arm_negate_q31.c"/>
         <files mask="arm_negate_q7.c"/>
@@ -1156,6 +1287,7 @@ ${load}</script>
         <files mask="arm_not_u32.c"/>
         <files mask="arm_not_u8.c"/>
         <files mask="arm_offset_f32.c"/>
+        <files mask="arm_offset_f64.c"/>
         <files mask="arm_offset_q15.c"/>
         <files mask="arm_offset_q31.c"/>
         <files mask="arm_offset_q7.c"/>
@@ -1163,6 +1295,7 @@ ${load}</script>
         <files mask="arm_or_u32.c"/>
         <files mask="arm_or_u8.c"/>
         <files mask="arm_scale_f32.c"/>
+        <files mask="arm_scale_f64.c"/>
         <files mask="arm_scale_q15.c"/>
         <files mask="arm_scale_q31.c"/>
         <files mask="arm_scale_q7.c"/>
@@ -1170,6 +1303,7 @@ ${load}</script>
         <files mask="arm_shift_q31.c"/>
         <files mask="arm_shift_q7.c"/>
         <files mask="arm_sub_f32.c"/>
+        <files mask="arm_sub_f64.c"/>
         <files mask="arm_sub_q15.c"/>
         <files mask="arm_sub_q31.c"/>
         <files mask="arm_sub_q7.c"/>
@@ -1218,12 +1352,16 @@ ${load}</script>
         <files mask="arm_cmplx_dot_prod_q15.c"/>
         <files mask="arm_cmplx_dot_prod_q31.c"/>
         <files mask="arm_cmplx_mag_f32.c"/>
+        <files mask="arm_cmplx_mag_f64.c"/>
+        <files mask="arm_cmplx_mag_fast_q15.c"/>
         <files mask="arm_cmplx_mag_q15.c"/>
         <files mask="arm_cmplx_mag_q31.c"/>
         <files mask="arm_cmplx_mag_squared_f32.c"/>
+        <files mask="arm_cmplx_mag_squared_f64.c"/>
         <files mask="arm_cmplx_mag_squared_q15.c"/>
         <files mask="arm_cmplx_mag_squared_q31.c"/>
         <files mask="arm_cmplx_mult_cmplx_f32.c"/>
+        <files mask="arm_cmplx_mult_cmplx_f64.c"/>
         <files mask="arm_cmplx_mult_cmplx_q15.c"/>
         <files mask="arm_cmplx_mult_cmplx_q31.c"/>
         <files mask="arm_cmplx_mult_real_f32.c"/>
@@ -1261,11 +1399,18 @@ ${load}</script>
         <files mask="arm_braycurtis_distance_f32.c"/>
         <files mask="arm_canberra_distance_f32.c"/>
         <files mask="arm_chebyshev_distance_f32.c"/>
+        <files mask="arm_chebyshev_distance_f64.c"/>
         <files mask="arm_cityblock_distance_f32.c"/>
+        <files mask="arm_cityblock_distance_f64.c"/>
         <files mask="arm_correlation_distance_f32.c"/>
         <files mask="arm_cosine_distance_f32.c"/>
+        <files mask="arm_cosine_distance_f64.c"/>
         <files mask="arm_dice_distance.c"/>
+        <files mask="arm_dtw_distance_f32.c"/>
+        <files mask="arm_dtw_init_window_q7.c"/>
+        <files mask="arm_dtw_path_f32.c"/>
         <files mask="arm_euclidean_distance_f32.c"/>
+        <files mask="arm_euclidean_distance_f64.c"/>
         <files mask="arm_hamming_distance.c"/>
         <files mask="arm_jaccard_distance.c"/>
         <files mask="arm_jensenshannon_distance_f32.c"/>
@@ -1277,8 +1422,8 @@ ${load}</script>
         <files mask="arm_sokalsneath_distance.c"/>
         <files mask="arm_yule_distance.c"/>
         <files mask="arm_braycurtis_distance_f16.c"/>
-        <files mask="arm_canberra_distance_f16.c"/>
         <files mask="arm_chebyshev_distance_f16.c"/>
+        <files mask="arm_canberra_distance_f16.c"/>
         <files mask="arm_cityblock_distance_f16.c"/>
         <files mask="arm_correlation_distance_f16.c"/>
         <files mask="arm_cosine_distance_f16.c"/>
@@ -1291,17 +1436,26 @@ ${load}</script>
         <files mask="FastMathFunctionsF16.c"/>
       </source>
       <source exclude="true" relative_path="Source/FastMathFunctions" type="src">
+        <files mask="arm_atan2_f32.c"/>
+        <files mask="arm_atan2_q15.c"/>
+        <files mask="arm_atan2_q31.c"/>
         <files mask="arm_cos_f32.c"/>
         <files mask="arm_cos_q15.c"/>
         <files mask="arm_cos_q31.c"/>
         <files mask="arm_divide_q15.c"/>
+        <files mask="arm_divide_q31.c"/>
         <files mask="arm_sin_f32.c"/>
         <files mask="arm_sin_q15.c"/>
         <files mask="arm_sin_q31.c"/>
         <files mask="arm_sqrt_q15.c"/>
         <files mask="arm_sqrt_q31.c"/>
         <files mask="arm_vexp_f32.c"/>
+        <files mask="arm_vexp_f64.c"/>
         <files mask="arm_vlog_f32.c"/>
+        <files mask="arm_vlog_f64.c"/>
+        <files mask="arm_vlog_q15.c"/>
+        <files mask="arm_vlog_q31.c"/>
+        <files mask="arm_atan2_f16.c"/>
         <files mask="arm_vexp_f16.c"/>
         <files mask="arm_vinverse_f16.c"/>
         <files mask="arm_vlog_f16.c"/>
@@ -1346,6 +1500,7 @@ ${load}</script>
         <files mask="arm_conv_q31.c"/>
         <files mask="arm_conv_q7.c"/>
         <files mask="arm_correlate_f32.c"/>
+        <files mask="arm_correlate_f64.c"/>
         <files mask="arm_correlate_fast_opt_q15.c"/>
         <files mask="arm_correlate_fast_q15.c"/>
         <files mask="arm_correlate_fast_q31.c"/>
@@ -1363,9 +1518,11 @@ ${load}</script>
         <files mask="arm_fir_decimate_q15.c"/>
         <files mask="arm_fir_decimate_q31.c"/>
         <files mask="arm_fir_f32.c"/>
+        <files mask="arm_fir_f64.c"/>
         <files mask="arm_fir_fast_q15.c"/>
         <files mask="arm_fir_fast_q31.c"/>
         <files mask="arm_fir_init_f32.c"/>
+        <files mask="arm_fir_init_f64.c"/>
         <files mask="arm_fir_init_q15.c"/>
         <files mask="arm_fir_init_q31.c"/>
         <files mask="arm_fir_init_q7.c"/>
@@ -1446,6 +1603,8 @@ ${load}</script>
         <files mask="MatrixFunctionsF16.c"/>
       </source>
       <source exclude="true" relative_path="Source/MatrixFunctions" type="src">
+        <files mask="arm_householder_f32.c"/>
+        <files mask="arm_householder_f64.c"/>
         <files mask="arm_mat_add_f32.c"/>
         <files mask="arm_mat_add_q15.c"/>
         <files mask="arm_mat_add_q31.c"/>
@@ -1458,6 +1617,7 @@ ${load}</script>
         <files mask="arm_mat_cmplx_trans_q15.c"/>
         <files mask="arm_mat_cmplx_trans_q31.c"/>
         <files mask="arm_mat_init_f32.c"/>
+        <files mask="arm_mat_init_f64.c"/>
         <files mask="arm_mat_init_q15.c"/>
         <files mask="arm_mat_init_q31.c"/>
         <files mask="arm_mat_inverse_f32.c"/>
@@ -1468,9 +1628,12 @@ ${load}</script>
         <files mask="arm_mat_mult_f64.c"/>
         <files mask="arm_mat_mult_fast_q15.c"/>
         <files mask="arm_mat_mult_fast_q31.c"/>
+        <files mask="arm_mat_mult_opt_q31.c"/>
         <files mask="arm_mat_mult_q15.c"/>
         <files mask="arm_mat_mult_q31.c"/>
         <files mask="arm_mat_mult_q7.c"/>
+        <files mask="arm_mat_qr_f32.c"/>
+        <files mask="arm_mat_qr_f64.c"/>
         <files mask="arm_mat_scale_f32.c"/>
         <files mask="arm_mat_scale_q15.c"/>
         <files mask="arm_mat_scale_q31.c"/>
@@ -1491,12 +1654,14 @@ ${load}</script>
         <files mask="arm_mat_vec_mult_q15.c"/>
         <files mask="arm_mat_vec_mult_q31.c"/>
         <files mask="arm_mat_vec_mult_q7.c"/>
+        <files mask="arm_householder_f16.c"/>
         <files mask="arm_mat_add_f16.c"/>
         <files mask="arm_mat_cholesky_f16.c"/>
         <files mask="arm_mat_cmplx_mult_f16.c"/>
         <files mask="arm_mat_cmplx_trans_f16.c"/>
         <files mask="arm_mat_init_f16.c"/>
         <files mask="arm_mat_inverse_f16.c"/>
+        <files mask="arm_mat_qr_f16.c"/>
         <files mask="arm_mat_mult_f16.c"/>
         <files mask="arm_mat_scale_f16.c"/>
         <files mask="arm_mat_solve_lower_triangular_f16.c"/>
@@ -1512,8 +1677,8 @@ ${load}</script>
         <files mask="arm_quaternion2rotation_f32.c"/>
         <files mask="arm_quaternion_conjugate_f32.c"/>
         <files mask="arm_quaternion_inverse_f32.c"/>
-        <files mask="arm_quaternion_norm_f32.c"/>
         <files mask="arm_quaternion_normalize_f32.c"/>
+        <files mask="arm_quaternion_norm_f32.c"/>
         <files mask="arm_quaternion_product_f32.c"/>
         <files mask="arm_quaternion_product_single_f32.c"/>
         <files mask="arm_rotation2quaternion_f32.c"/>
@@ -1546,13 +1711,27 @@ ${load}</script>
       </source>
       <source exclude="true" relative_path="Source/StatisticsFunctions" type="src">
         <files mask="arm_absmax_f32.c"/>
+        <files mask="arm_absmax_f64.c"/>
+        <files mask="arm_absmax_no_idx_f32.c"/>
+        <files mask="arm_absmax_no_idx_f64.c"/>
+        <files mask="arm_absmax_no_idx_q15.c"/>
+        <files mask="arm_absmax_no_idx_q31.c"/>
+        <files mask="arm_absmax_no_idx_q7.c"/>
         <files mask="arm_absmax_q15.c"/>
         <files mask="arm_absmax_q31.c"/>
         <files mask="arm_absmax_q7.c"/>
         <files mask="arm_absmin_f32.c"/>
+        <files mask="arm_absmin_f64.c"/>
+        <files mask="arm_absmin_no_idx_f32.c"/>
+        <files mask="arm_absmin_no_idx_f64.c"/>
+        <files mask="arm_absmin_no_idx_q15.c"/>
+        <files mask="arm_absmin_no_idx_q31.c"/>
+        <files mask="arm_absmin_no_idx_q7.c"/>
         <files mask="arm_absmin_q15.c"/>
         <files mask="arm_absmin_q31.c"/>
         <files mask="arm_absmin_q7.c"/>
+        <files mask="arm_accumulate_f32.c"/>
+        <files mask="arm_accumulate_f64.c"/>
         <files mask="arm_entropy_f32.c"/>
         <files mask="arm_entropy_f64.c"/>
         <files mask="arm_kullback_leibler_f32.c"/>
@@ -1560,19 +1739,37 @@ ${load}</script>
         <files mask="arm_logsumexp_dot_prod_f32.c"/>
         <files mask="arm_logsumexp_f32.c"/>
         <files mask="arm_max_f32.c"/>
+        <files mask="arm_max_f64.c"/>
         <files mask="arm_max_no_idx_f32.c"/>
+        <files mask="arm_max_no_idx_f64.c"/>
+        <files mask="arm_max_no_idx_q15.c"/>
+        <files mask="arm_max_no_idx_q31.c"/>
+        <files mask="arm_max_no_idx_q7.c"/>
         <files mask="arm_max_q15.c"/>
         <files mask="arm_max_q31.c"/>
         <files mask="arm_max_q7.c"/>
         <files mask="arm_mean_f32.c"/>
+        <files mask="arm_mean_f64.c"/>
         <files mask="arm_mean_q15.c"/>
         <files mask="arm_mean_q31.c"/>
         <files mask="arm_mean_q7.c"/>
         <files mask="arm_min_f32.c"/>
+        <files mask="arm_min_f64.c"/>
+        <files mask="arm_min_no_idx_f32.c"/>
+        <files mask="arm_min_no_idx_f64.c"/>
+        <files mask="arm_min_no_idx_q15.c"/>
+        <files mask="arm_min_no_idx_q31.c"/>
+        <files mask="arm_min_no_idx_q7.c"/>
         <files mask="arm_min_q15.c"/>
         <files mask="arm_min_q31.c"/>
         <files mask="arm_min_q7.c"/>
+        <files mask="arm_mse_f32.c"/>
+        <files mask="arm_mse_f64.c"/>
+        <files mask="arm_mse_q15.c"/>
+        <files mask="arm_mse_q31.c"/>
+        <files mask="arm_mse_q7.c"/>
         <files mask="arm_power_f32.c"/>
+        <files mask="arm_power_f64.c"/>
         <files mask="arm_power_q15.c"/>
         <files mask="arm_power_q31.c"/>
         <files mask="arm_power_q7.c"/>
@@ -1580,13 +1777,18 @@ ${load}</script>
         <files mask="arm_rms_q15.c"/>
         <files mask="arm_rms_q31.c"/>
         <files mask="arm_std_f32.c"/>
+        <files mask="arm_std_f64.c"/>
         <files mask="arm_std_q15.c"/>
         <files mask="arm_std_q31.c"/>
         <files mask="arm_var_f32.c"/>
+        <files mask="arm_var_f64.c"/>
         <files mask="arm_var_q15.c"/>
         <files mask="arm_var_q31.c"/>
         <files mask="arm_absmax_f16.c"/>
+        <files mask="arm_absmax_no_idx_f16.c"/>
         <files mask="arm_absmin_f16.c"/>
+        <files mask="arm_absmin_no_idx_f16.c"/>
+        <files mask="arm_accumulate_f16.c"/>
         <files mask="arm_entropy_f16.c"/>
         <files mask="arm_kullback_leibler_f16.c"/>
         <files mask="arm_logsumexp_dot_prod_f16.c"/>
@@ -1595,6 +1797,8 @@ ${load}</script>
         <files mask="arm_max_no_idx_f16.c"/>
         <files mask="arm_mean_f16.c"/>
         <files mask="arm_min_f16.c"/>
+        <files mask="arm_min_no_idx_f16.c"/>
+        <files mask="arm_mse_f16.c"/>
         <files mask="arm_power_f16.c"/>
         <files mask="arm_rms_f16.c"/>
         <files mask="arm_std_f16.c"/>
@@ -1609,13 +1813,20 @@ ${load}</script>
         <files mask="arm_bitonic_sort_f32.c"/>
         <files mask="arm_bubble_sort_f32.c"/>
         <files mask="arm_copy_f32.c"/>
+        <files mask="arm_copy_f64.c"/>
         <files mask="arm_copy_q15.c"/>
         <files mask="arm_copy_q31.c"/>
         <files mask="arm_copy_q7.c"/>
+        <files mask="arm_f64_to_float.c"/>
+        <files mask="arm_f64_to_q31.c"/>
+        <files mask="arm_f64_to_q15.c"/>
+        <files mask="arm_f64_to_q7.c"/>
         <files mask="arm_fill_f32.c"/>
+        <files mask="arm_fill_f64.c"/>
         <files mask="arm_fill_q15.c"/>
         <files mask="arm_fill_q31.c"/>
         <files mask="arm_fill_q7.c"/>
+        <files mask="arm_float_to_f64.c"/>
         <files mask="arm_float_to_q15.c"/>
         <files mask="arm_float_to_q31.c"/>
         <files mask="arm_float_to_q7.c"/>
@@ -1623,12 +1834,15 @@ ${load}</script>
         <files mask="arm_insertion_sort_f32.c"/>
         <files mask="arm_merge_sort_f32.c"/>
         <files mask="arm_merge_sort_init_f32.c"/>
+        <files mask="arm_q15_to_f64.c"/>
         <files mask="arm_q15_to_float.c"/>
         <files mask="arm_q15_to_q31.c"/>
         <files mask="arm_q15_to_q7.c"/>
+        <files mask="arm_q31_to_f64.c"/>
         <files mask="arm_q31_to_float.c"/>
         <files mask="arm_q31_to_q15.c"/>
         <files mask="arm_q31_to_q7.c"/>
+        <files mask="arm_q7_to_f64.c"/>
         <files mask="arm_q7_to_float.c"/>
         <files mask="arm_q7_to_q15.c"/>
         <files mask="arm_q7_to_q31.c"/>
@@ -1641,6 +1855,8 @@ ${load}</script>
         <files mask="arm_copy_f16.c"/>
         <files mask="arm_f16_to_float.c"/>
         <files mask="arm_f16_to_q15.c"/>
+        <files mask="arm_f16_to_f64.c"/>
+        <files mask="arm_f64_to_f16.c"/>
         <files mask="arm_fill_f16.c"/>
         <files mask="arm_float_to_f16.c"/>
         <files mask="arm_q15_to_f16.c"/>
@@ -1653,7 +1869,6 @@ ${load}</script>
       <source exclude="true" relative_path="Source/TransformFunctions" type="src">
         <files mask="arm_bitreversal.c"/>
         <files mask="arm_bitreversal2.c"/>
-        <files mask="arm_bitreversal2.S"/>
         <files mask="arm_cfft_f32.c"/>
         <files mask="arm_cfft_f64.c"/>
         <files mask="arm_cfft_init_f32.c"/>
@@ -1681,6 +1896,12 @@ ${load}</script>
         <files mask="arm_dct4_init_q31.c"/>
         <files mask="arm_dct4_q15.c"/>
         <files mask="arm_dct4_q31.c"/>
+        <files mask="arm_mfcc_f32.c"/>
+        <files mask="arm_mfcc_init_f32.c"/>
+        <files mask="arm_mfcc_init_q15.c"/>
+        <files mask="arm_mfcc_init_q31.c"/>
+        <files mask="arm_mfcc_q15.c"/>
+        <files mask="arm_mfcc_q31.c"/>
         <files mask="arm_rfft_f32.c"/>
         <files mask="arm_rfft_fast_f32.c"/>
         <files mask="arm_rfft_fast_f64.c"/>
@@ -1697,10 +1918,57 @@ ${load}</script>
         <files mask="arm_cfft_radix2_f16.c"/>
         <files mask="arm_cfft_radix2_init_f16.c"/>
         <files mask="arm_cfft_radix4_f16.c"/>
-        <files mask="arm_cfft_radix4_init_f16.c"/>
         <files mask="arm_cfft_radix8_f16.c"/>
+        <files mask="arm_mfcc_f16.c"/>
+        <files mask="arm_cfft_radix4_init_f16.c"/>
+        <files mask="arm_mfcc_init_f16.c"/>
         <files mask="arm_rfft_fast_f16.c"/>
         <files mask="arm_rfft_fast_init_f16.c"/>
+      </source>
+      <source relative_path="Source/WindowFunctions" type="src">
+        <files mask="WindowFunctions.c"/>
+      </source>
+      <source exclude="true" relative_path="Source/WindowFunctions" type="src">
+        <files mask="arm_bartlett_f32.c"/>
+        <files mask="arm_bartlett_f64.c"/>
+        <files mask="arm_blackman_harris_92db_f32.c"/>
+        <files mask="arm_blackman_harris_92db_f64.c"/>
+        <files mask="arm_hamming_f32.c"/>
+        <files mask="arm_hamming_f64.c"/>
+        <files mask="arm_hanning_f32.c"/>
+        <files mask="arm_hanning_f64.c"/>
+        <files mask="arm_hft116d_f32.c"/>
+        <files mask="arm_hft116d_f64.c"/>
+        <files mask="arm_hft144d_f32.c"/>
+        <files mask="arm_hft144d_f64.c"/>
+        <files mask="arm_hft169d_f32.c"/>
+        <files mask="arm_hft169d_f64.c"/>
+        <files mask="arm_hft196d_f32.c"/>
+        <files mask="arm_hft196d_f64.c"/>
+        <files mask="arm_hft223d_f32.c"/>
+        <files mask="arm_hft223d_f64.c"/>
+        <files mask="arm_hft248d_f32.c"/>
+        <files mask="arm_hft248d_f64.c"/>
+        <files mask="arm_hft90d_f32.c"/>
+        <files mask="arm_hft90d_f64.c"/>
+        <files mask="arm_hft95_f32.c"/>
+        <files mask="arm_hft95_f64.c"/>
+        <files mask="arm_nuttall3a_f32.c"/>
+        <files mask="arm_nuttall3a_f64.c"/>
+        <files mask="arm_nuttall3b_f32.c"/>
+        <files mask="arm_nuttall3b_f64.c"/>
+        <files mask="arm_nuttall3_f32.c"/>
+        <files mask="arm_nuttall3_f64.c"/>
+        <files mask="arm_nuttall4a_f32.c"/>
+        <files mask="arm_nuttall4a_f64.c"/>
+        <files mask="arm_nuttall4b_f32.c"/>
+        <files mask="arm_nuttall4b_f64.c"/>
+        <files mask="arm_nuttall4c_f32.c"/>
+        <files mask="arm_nuttall4c_f64.c"/>
+        <files mask="arm_nuttall4_f32.c"/>
+        <files mask="arm_nuttall4_f64.c"/>
+        <files mask="arm_welch_f32.c"/>
+        <files mask="arm_welch_f64.c"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="CMSIS_DSP_Source.cmake" hidden="true"/>
@@ -1970,7 +2238,7 @@ ${load}</script>
         <include_path relative_path="Include" type="c_include"/>
       </include_paths>
     </component>
-    <component id="CMSIS_Device_API_OSTick.MIMXRT1176" name="CMSIS_Device_API_OSTick" brief="Device interrupt controller interface" version="1.0.1" full_name="CMSIS Device API OSTick" category="Device/OS Tick" user_visible="false" type="CMSIS_driver" package_base_path="../CMSIS/RTOS2/Include" project_base_path="CMSIS/RTOS2/Include">
+    <component id="CMSIS_Device_API_OSTick.MIMXRT1176" name="CMSIS_Device_API_OSTick" brief="Device interrupt controller interface" version="1.0.2" full_name="CMSIS Device API OSTick" category="Device/OS Tick" user_visible="false" type="CMSIS_driver" package_base_path="../CMSIS/RTOS2/Include" project_base_path="CMSIS/RTOS2/Include">
       <dependencies>
         <device_dependency value="MIMXRT1176xxxxx"/>
       </dependencies>
@@ -2024,7 +2292,7 @@ ${load}</script>
         <files mask="utilities_misc_utilities.MIMXRT1176.cmake" hidden="true"/>
       </source>
     </component>
-    <!--<component id="container.middleware.mbedtls.unused_files.MIMXRT1176" name="unused_files" version="2.28.5" package_base_path="../middleware/mbedtls" project_base_path="mbedtls">
+    <!--<component id="container.middleware.mbedtls.unused_files.MIMXRT1176" name="unused_files" version="2.28.8" package_base_path="../middleware/mbedtls" project_base_path="mbedtls">
   <source exclude="true" relative_path="./" type="other">
     <files mask="issue_template.md" hidden="true"/>
     <files mask="pull_request_template.md" hidden="true"/>
@@ -2036,7 +2304,10 @@ ${load}</script>
     <files mask=".gitignore" hidden="true"/>
     <files mask=".gitignore" hidden="true"/>
     <files mask="Makefile" hidden="true"/>
-    <files mask="Makefile" hidden="true"/>
+    <files mask="mbedcrypto.pc.in" hidden="true"/>
+    <files mask="mbedtls.pc.in" hidden="true"/>
+    <files mask="mbedx509.pc.in" hidden="true"/>
+    <files mask="README.md" hidden="true"/>
     <files mask="README.md" hidden="true"/>
     <files mask="fuzz_client.options" hidden="true"/>
     <files mask="fuzz_dtlsclient.options" hidden="true"/>
@@ -2048,14 +2319,12 @@ ${load}</script>
     <files mask="fuzz_x509crt.options" hidden="true"/>
     <files mask="fuzz_x509csr.options" hidden="true"/>
     <files mask="config.pl" hidden="true"/>
-    <files mask="find-mem-leak.cocci" hidden="true"/>
     <files mask="generate_errors.pl" hidden="true"/>
     <files mask="generate_features.pl" hidden="true"/>
     <files mask="generate_query_config.pl" hidden="true"/>
     <files mask="generate_visualc_files.pl" hidden="true"/>
     <files mask="massif_max.pl" hidden="true"/>
     <files mask="rename.pl" hidden="true"/>
-    <files mask="rm-calloc-cast.cocci" hidden="true"/>
     <files mask="error.fmt" hidden="true"/>
     <files mask="query_config.fmt" hidden="true"/>
     <files mask="version_features.fmt" hidden="true"/>
@@ -2098,8 +2367,6 @@ ${load}</script>
     <files mask="test_suite_aes.ofb.data" hidden="true"/>
     <files mask="test_suite_aes.rest.data" hidden="true"/>
     <files mask="test_suite_aes.xts.data" hidden="true"/>
-    <files mask="test_suite_all.data" hidden="true"/>
-    <files mask="test_suite_all.function" hidden="true"/>
     <files mask="test_suite_arc4.data" hidden="true"/>
     <files mask="test_suite_arc4.function" hidden="true"/>
     <files mask="test_suite_aria.data" hidden="true"/>
@@ -2228,6 +2495,10 @@ ${load}</script>
     <files mask="test_suite_psa_crypto_hash.function" hidden="true"/>
     <files mask="test_suite_psa_crypto_init.data" hidden="true"/>
     <files mask="test_suite_psa_crypto_init.function" hidden="true"/>
+    <files mask="test_suite_psa_crypto_low_hash.function" hidden="true"/>
+    <files mask="test_suite_psa_crypto_low_hash.generated.data" hidden="true"/>
+    <files mask="test_suite_psa_crypto_memory.data" hidden="true"/>
+    <files mask="test_suite_psa_crypto_memory.function" hidden="true"/>
     <files mask="test_suite_psa_crypto_metadata.data" hidden="true"/>
     <files mask="test_suite_psa_crypto_metadata.function" hidden="true"/>
     <files mask="test_suite_psa_crypto_not_supported.function" hidden="true"/>
@@ -2260,6 +2531,8 @@ ${load}</script>
     <files mask="test_suite_ssl.function" hidden="true"/>
     <files mask="test_suite_ssl_decrypt.function" hidden="true"/>
     <files mask="test_suite_ssl_decrypt.misc.data" hidden="true"/>
+    <files mask="test_suite_test_helpers.data" hidden="true"/>
+    <files mask="test_suite_test_helpers.function" hidden="true"/>
     <files mask="test_suite_timing.data" hidden="true"/>
     <files mask="test_suite_timing.function" hidden="true"/>
     <files mask="test_suite_version.data" hidden="true"/>
@@ -2296,6 +2569,7 @@ ${load}</script>
     <files mask="load_roots.vcxproj" hidden="true"/>
     <files mask="mbedTLS.sln" hidden="true"/>
     <files mask="mbedTLS.vcxproj" hidden="true"/>
+    <files mask="metatest.vcxproj" hidden="true"/>
     <files mask="mini_client.vcxproj" hidden="true"/>
     <files mask="mpi_demo.vcxproj" hidden="true"/>
     <files mask="pem2der.vcxproj" hidden="true"/>
@@ -2347,6 +2621,8 @@ ${load}</script>
     <files mask="CMakeLists.txt" hidden="true"/>
     <files mask="CMakeLists.txt" hidden="true"/>
     <files mask="CMakeLists.txt" hidden="true"/>
+    <files mask="CMakeLists.txt" hidden="true"/>
+    <files mask="CMakeLists.txt" hidden="true"/>
     <files mask="dh_prime.txt" hidden="true"/>
     <files mask="rsa_priv.txt" hidden="true"/>
     <files mask="rsa_pub.txt" hidden="true"/>
@@ -2387,6 +2663,8 @@ ${load}</script>
   </source>
   <source exclude="true" relative_path="./" type="script">
     <files mask="conf.py" hidden="true"/>
+    <files mask="JoinPaths.cmake" hidden="true"/>
+    <files mask="demo_common.sh" hidden="true"/>
     <files mask="dlopen_demo.sh" hidden="true"/>
     <files mask="generate_cpp_dummy_build.sh" hidden="true"/>
     <files mask="udp_proxy_wrapper.sh" hidden="true"/>
@@ -2409,8 +2687,12 @@ ${load}</script>
     <files mask="asymmetric_key_data.py" hidden="true"/>
     <files mask="build_tree.py" hidden="true"/>
     <files mask="c_build_helper.py" hidden="true"/>
+    <files mask="c_parsing_helper.py" hidden="true"/>
+    <files mask="c_wrapper_generator.py" hidden="true"/>
+    <files mask="crypto_data_tests.py" hidden="true"/>
     <files mask="crypto_knowledge.py" hidden="true"/>
     <files mask="macro_collector.py" hidden="true"/>
+    <files mask="psa_information.py" hidden="true"/>
     <files mask="psa_storage.py" hidden="true"/>
     <files mask="test_case.py" hidden="true"/>
     <files mask="test_data_generation.py" hidden="true"/>
@@ -2433,10 +2715,14 @@ ${load}</script>
     <files mask="generate-afl-tests.sh" hidden="true"/>
     <files mask="generate_bignum_tests.py" hidden="true"/>
     <files mask="generate_psa_tests.py" hidden="true"/>
+    <files mask="generate_psa_wrappers.py" hidden="true"/>
+    <files mask="generate_server9_bad_saltlen.py" hidden="true"/>
     <files mask="generate_test_code.py" hidden="true"/>
     <files mask="list-identifiers.sh" hidden="true"/>
     <files mask="list_internal_identifiers.py" hidden="true"/>
     <files mask="psa_collect_statuses.py" hidden="true"/>
+    <files mask="run-metatests.sh" hidden="true"/>
+    <files mask="run_demos.py" hidden="true"/>
     <files mask="scripts_path.py" hidden="true"/>
     <files mask="set_psa_test_dependencies.py" hidden="true"/>
     <files mask="test_config_script.py" hidden="true"/>
@@ -2446,6 +2732,7 @@ ${load}</script>
     <files mask="travis-log-failure.sh" hidden="true"/>
   </source>
   <source exclude="true" relative_path="./" type="src">
+    <files mask="wince_main.c" hidden="true"/>
     <files mask="crypt_and_hash.c" hidden="true"/>
     <files mask="common.c" hidden="true"/>
     <files mask="fuzz_client.c" hidden="true"/>
@@ -2498,6 +2785,7 @@ ${load}</script>
     <files mask="ssl_test_lib.c" hidden="true"/>
     <files mask="benchmark.c" hidden="true"/>
     <files mask="dlopen.c" hidden="true"/>
+    <files mask="metatest.c" hidden="true"/>
     <files mask="query_compile_time_config.c" hidden="true"/>
     <files mask="query_config.c" hidden="true"/>
     <files mask="selftest.c" hidden="true"/>
@@ -2516,7 +2804,10 @@ ${load}</script>
     <files mask="helpers.c" hidden="true"/>
     <files mask="psa_crypto_helpers.c" hidden="true"/>
     <files mask="psa_exercise_key.c" hidden="true"/>
+    <files mask="psa_memory_poisoning_wrappers.c" hidden="true"/>
+    <files mask="psa_test_wrappers.c" hidden="true"/>
     <files mask="random.c" hidden="true"/>
+    <files mask="test_memory.c" hidden="true"/>
     <files mask="threading_helpers.c" hidden="true"/>
   </source>
 </component>-->
@@ -2524,16 +2815,19 @@ ${load}</script>
       <dependencies>
         <device_dependency value="MIMXRT1176xxxxx"/>
       </dependencies>
-      <source condition="middleware.usb.host.stack.MIMXRT1176" relative_path="./" type="doc">
+      <source condition="middleware.usb.host.stack.MIMXRT1176 middleware.usb.device.controller.driver.MIMXRT1176" relative_path="./" type="doc">
         <files mask="MCUXpresso SDK USB Stack User's Guide.pdf"/>
       </source>
-      <source relative_path="./" type="doc">
-        <files mask="MCUXpresso SDK USB Stack OTG Reference Manual.pdf"/>
+      <source condition="middleware.usb.host.stack.MIMXRT1176" relative_path="./" type="doc">
         <files mask="MCUXpresso SDK USB Stack Host Reference Manual.pdf"/>
         <files mask="MCUXpresso SDK USB Stack Composite Host User's Guide.pdf"/>
+      </source>
+      <source condition="middleware.usb.device.controller.driver.MIMXRT1176" relative_path="./" type="doc">
+        <files mask="MCUXpresso SDK USB Stack Device Reference Manual.pdf"/>
+        <files mask="MCUXpresso SDK USB Stack Composite Device User's Guide.pdf"/>
+      </source>
+      <source relative_path="./" type="doc">
         <files mask="Enable More USB Examples on M4 Core for RT1170 or M7 Core for RT1180.pdf"/>
-        <files mask="MCUXpresso SDK USB Type-C PD Stack Reference Manual.pdf"/>
-        <files mask="MCUXpresso SDK USB Type-C Power Delivery Stack User's Guide.pdf"/>
       </source>
     </component>
     <component id="component.power_manager_docs.MIMXRT1176" name="power_manager_docs" brief="Power Manager component documentation" version="2.0.0" full_name="Power Manager component documentation" category="Device/SDK Drivers" user_visible="true" type="documentation" package_base_path="../components/power_manager" project_base_path="component/power_manager">
@@ -2605,6 +2899,23 @@ ${load}</script>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="driver_mx25r_flash.MIMXRT1176.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.osa_zephyr.MIMXRT1176" name="osa_zephyr" brief="Component osa_zephyr" version="1.0.0" full_name="Component osa_zephyr" category="NXP Component/OS Abstraction Layer" user_visible="true" type="software_component" package_base_path="../components/osa" project_base_path="component/osa">
+      <dependencies>
+        <device_dependency value="MIMXRT1176xxxxx"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_os_abstraction_zephyr.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_os_abstraction_zephyr.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_osa_zephyr.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
@@ -2717,6 +3028,18 @@ ${load}</script>
         <include_path relative_path="incl" type="c_include"/>
       </include_paths>
     </component>
+    <component id="docs.Edgefast.MIMXRT1176" name="Edgefast" brief="Docs edgefast bluetooth" version="1.0.0" full_name="Docs edgefast bluetooth" category="docs/Edgefast" user_visible="true" type="documentation" package_base_path="../docs/wireless/bluetooth/edgefast_bluetooth" project_base_path="wireless/Edgefast">
+      <dependencies>
+        <device_dependency value="MIMXRT1176xxxxx"/>
+      </dependencies>
+      <source relative_path="./" type="doc">
+        <files mask="MCUXSDKEFBP_Abstraction Layer User Guide.pdf"/>
+        <files mask="Hardware Rework Guide for EdgeFast BT PAL.pdf"/>
+        <files mask="EFBTPALAPIRM.pdf"/>
+        <files mask="Enabling Additional Edgefast BT PAL Examples on M4 core for RT1170.pdf"/>
+        <files mask="Enabling Additional Edgefast BT PAL Examples on M4 core for RT1170.pdf"/>
+      </source>
+    </component>
     <component id="docs.eiq.MIMXRT1176" name="eiq" brief="Docs eiq" version="1.0.0" full_name="Docs eiq" category="docs/eiq" user_visible="true" type="documentation" package_base_path="../middleware/eiq/doc" project_base_path="EIQ">
       <dependencies>
         <device_dependency value="MIMXRT1176xxxxx"/>
@@ -2738,15 +3061,15 @@ ${load}</script>
         <files mask="MCUXpresso SDK Azure RTOS Release Notes.pdf"/>
       </source>
     </component>
-    <component id="docs.Edgefast.MIMXRT1176" name="Edgefast" brief="Docs edgefast bluetooth" version="1.0.0" full_name="Docs edgefast bluetooth" category="docs/Edgefast" user_visible="true" type="documentation" package_base_path="../docs/wireless/bluetooth/edgefast_bluetooth" project_base_path="wireless/Edgefast">
+    <component id="docs.maestro.MIMXRT1176" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.7.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
       <dependencies>
-        <device_dependency value="MIMXRT1176xxxxx"/>
+        <all>
+          <component_dependency value="middleware.maestro_framework.MIMXRT1176"/>
+          <device_dependency value="MIMXRT1176xxxxx"/>
+        </all>
       </dependencies>
       <source relative_path="./" type="doc">
-        <files mask="Hardware Rework Guide for EdgeFast BT PAL.pdf"/>
-        <files mask="EFBTPALAPIRM.pdf"/>
-        <files mask="Enabling Additional Edgefast BT PAL Examples on M4 core for RT1170.pdf"/>
-        <files mask="Enabling Additional Edgefast BT PAL Examples on M4 core for RT1170.pdf"/>
+        <files mask="Maestro_Release_Notes.pdf"/>
       </source>
     </component>
     <component id="project_template.MIMXRT1176.MIMXRT1176" name="MIMXRT1176" brief="Devices_project_template MIMXRT1176" version="1.0.0" full_name="Devices_project_template MIMXRT1176" category="Board Support/SDK Project Template" user_visible="true" type="project_template" package_base_path="../devices/MIMXRT1176/project_template" project_base_path="board">
@@ -2924,7 +3247,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.sai_edma.MIMXRT1176" name="sai_edma" brief="SAI EDMA Driver" version="2.7.0" full_name="SAI EDMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/sai" project_base_path="drivers">
+    <component id="platform.drivers.sai_edma.MIMXRT1176" name="sai_edma" brief="SAI EDMA Driver" version="2.7.1" full_name="SAI EDMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/sai" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.edma.MIMXRT1176"/>
@@ -2945,7 +3268,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpi2c_edma.MIMXRT1176" name="i2c_edma" brief="LPI2C Driver" version="2.4.1" full_name="LPI2C Edma Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpi2c" project_base_path="drivers">
+    <component id="platform.drivers.lpi2c_edma.MIMXRT1176" name="i2c_edma" brief="LPI2C Driver" version="2.4.2" full_name="LPI2C Edma Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpi2c" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.edma.MIMXRT1176"/>
@@ -2966,7 +3289,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpi2c_cmsis.MIMXRT1176" name="lpi2c_cmsis" brief="LPI2C CMSIS Driver" version="2.4.0" full_name="LPI2C CMSIS Driver" category="CMSIS Driver/I2C" user_visible="true" type="CMSIS_driver" package_base_path="../cmsis_drivers/lpi2c" project_base_path="drivers">
+    <component id="platform.drivers.lpi2c_cmsis.MIMXRT1176" name="lpi2c_cmsis" brief="LPI2C CMSIS Driver" version="2.5.0" full_name="LPI2C CMSIS Driver" category="CMSIS Driver/I2C" user_visible="true" type="CMSIS_driver" package_base_path="../cmsis_drivers/lpi2c" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpi2c_edma.MIMXRT1176"/>
@@ -2989,7 +3312,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpspi_edma.MIMXRT1176" name="lpspi_edma" brief="LPSPI Driver" version="2.4.2" full_name="LPSPI Edma Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers">
+    <component id="platform.drivers.lpspi_edma.MIMXRT1176" name="lpspi_edma" brief="LPSPI Driver" version="2.4.4" full_name="LPSPI Edma Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.edma.MIMXRT1176"/>
@@ -3054,7 +3377,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpuart_cmsis.MIMXRT1176" name="lpuart_cmsis" brief="LPUART CMSIS Driver" version="2.5.0" full_name="LPUART CMSIS Driver" category="CMSIS Driver/USART" user_visible="true" type="CMSIS_driver" package_base_path="../cmsis_drivers/lpuart" project_base_path="drivers">
+    <component id="platform.drivers.lpuart_cmsis.MIMXRT1176" name="lpuart_cmsis" brief="LPUART CMSIS Driver" version="2.6.0" full_name="LPUART CMSIS Driver" category="CMSIS Driver/USART" user_visible="true" type="CMSIS_driver" package_base_path="../cmsis_drivers/lpuart" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpuart_edma.MIMXRT1176"/>
@@ -3149,15 +3472,10 @@ ${load}</script>
         <all>
           <component_dependency value="component.lpuart_adapter.MIMXRT1176"/>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
+          <component_dependency value="utility.str.MIMXRT1176"/>
           <device_dependency value="MIMXRT1176xxxxx"/>
         </all>
       </dependencies>
-      <source relative_path="str" project_relative_path="./" type="src">
-        <files mask="fsl_str.c"/>
-      </source>
-      <source relative_path="str" project_relative_path="./" type="c_include">
-        <files mask="fsl_str.h"/>
-      </source>
       <source relative_path="debug_console_lite" project_relative_path="./" type="src">
         <files mask="fsl_debug_console.c"/>
       </source>
@@ -3168,7 +3486,6 @@ ${load}</script>
         <files mask="utility_debug_console_lite.MIMXRT1176.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="str" project_relative_path="./" type="c_include"/>
         <include_path relative_path="debug_console_lite" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
@@ -3235,7 +3552,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.elcdif.MIMXRT1176" name="elcdif" brief="ELCDIF Driver" version="2.0.6" full_name="ELCDIF Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/elcdif" project_base_path="drivers">
+    <component id="platform.drivers.elcdif.MIMXRT1176" name="elcdif" brief="ELCDIF Driver" version="2.0.7" full_name="ELCDIF Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/elcdif" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.memory.MIMXRT1176"/>
@@ -3277,7 +3594,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.enet_qos.MIMXRT1176" name="enet_qos" brief="ENET QoS Driver" version="2.6.2" full_name="ENET QoS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/enet_qos" project_base_path="drivers">
+    <component id="platform.drivers.enet_qos.MIMXRT1176" name="enet_qos" brief="ENET QoS Driver" version="2.6.3" full_name="ENET QoS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/enet_qos" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.memory.MIMXRT1176"/>
@@ -3375,7 +3692,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flexio_i2s_edma.MIMXRT1176" name="flexio_i2s_edma" brief="FLEXIO I2S EDMA Driver" version="2.1.7" full_name="FLEXIO I2S EDMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexio/i2s" project_base_path="drivers">
+    <component id="platform.drivers.flexio_i2s_edma.MIMXRT1176" name="flexio_i2s_edma" brief="FLEXIO I2S EDMA Driver" version="2.1.8" full_name="FLEXIO I2S EDMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexio/i2s" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.edma.MIMXRT1176"/>
@@ -3459,7 +3776,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.pdm_edma.MIMXRT1176" name="pdm_edma" brief="PDM EDMA Driver" version="2.6.1" full_name="PDM EDMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/pdm" project_base_path="drivers">
+    <component id="platform.drivers.pdm_edma.MIMXRT1176" name="pdm_edma" brief="PDM EDMA Driver" version="2.6.3" full_name="PDM EDMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/pdm" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.edma.MIMXRT1176"/>
@@ -3480,7 +3797,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.edma.MIMXRT1176" name="edma" brief="EDMA Driver" version="2.4.3" full_name="EDMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/edma" project_base_path="drivers">
+    <component id="platform.drivers.edma.MIMXRT1176" name="edma" brief="EDMA Driver" version="2.4.4" full_name="EDMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/edma" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.memory.MIMXRT1176"/>
@@ -3566,7 +3883,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.spdif_edma.MIMXRT1176" name="spdif_edma" brief="SPDIF EDMA Driver" version="2.0.6" full_name="SPDIF EDMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/spdif" project_base_path="drivers">
+    <component id="platform.drivers.spdif_edma.MIMXRT1176" name="spdif_edma" brief="SPDIF EDMA Driver" version="2.0.8" full_name="SPDIF EDMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/spdif" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.edma.MIMXRT1176"/>
@@ -3793,14 +4110,20 @@ ${load}</script>
         <files mask="a00100.js"/>
         <files mask="a00101.html"/>
         <files mask="a00101.js"/>
-        <files mask="a00102.html"/>
-        <files mask="a00102.js"/>
+        <files mask="a00314.html"/>
+        <files mask="a00314.js"/>
+        <files mask="a00315.html"/>
+        <files mask="a00315.js"/>
+        <files mask="a00316.html"/>
+        <files mask="a00317.html"/>
         <files mask="a00318.html"/>
         <files mask="a00318.js"/>
         <files mask="a00319.html"/>
         <files mask="a00319.js"/>
         <files mask="a00320.html"/>
+        <files mask="a00320.js"/>
         <files mask="a00321.html"/>
+        <files mask="a00321.js"/>
         <files mask="a00322.html"/>
         <files mask="a00322.js"/>
         <files mask="a00323.html"/>
@@ -3826,32 +4149,29 @@ ${load}</script>
         <files mask="a00333.html"/>
         <files mask="a00333.js"/>
         <files mask="a00334.html"/>
-        <files mask="a00334.js"/>
         <files mask="a00335.html"/>
-        <files mask="a00335.js"/>
         <files mask="a00336.html"/>
         <files mask="a00336.js"/>
         <files mask="a00337.html"/>
         <files mask="a00337.js"/>
         <files mask="a00338.html"/>
+        <files mask="a00338.js"/>
         <files mask="a00339.html"/>
         <files mask="a00340.html"/>
-        <files mask="a00340.js"/>
         <files mask="a00341.html"/>
         <files mask="a00341.js"/>
         <files mask="a00342.html"/>
-        <files mask="a00342.js"/>
         <files mask="a00343.html"/>
-        <files mask="a00343.js"/>
         <files mask="a00344.html"/>
+        <files mask="a00344.js"/>
         <files mask="a00345.html"/>
-        <files mask="a00345.js"/>
         <files mask="a00346.html"/>
-        <files mask="a00346.js"/>
         <files mask="a00347.html"/>
+        <files mask="a00347.js"/>
         <files mask="a00348.html"/>
         <files mask="a00348.js"/>
         <files mask="a00349.html"/>
+        <files mask="a00349.js"/>
         <files mask="a00350.html"/>
         <files mask="a00350.js"/>
         <files mask="a00351.html"/>
@@ -3863,53 +4183,47 @@ ${load}</script>
         <files mask="a00354.html"/>
         <files mask="a00354.js"/>
         <files mask="a00355.html"/>
-        <files mask="a00355.js"/>
         <files mask="a00356.html"/>
-        <files mask="a00356.js"/>
         <files mask="a00357.html"/>
-        <files mask="a00357.js"/>
         <files mask="a00358.html"/>
         <files mask="a00359.html"/>
         <files mask="a00360.html"/>
+        <files mask="a00360.js"/>
         <files mask="a00361.html"/>
         <files mask="a00362.html"/>
+        <files mask="a00362.js"/>
         <files mask="a00363.html"/>
         <files mask="a00363.js"/>
         <files mask="a00364.html"/>
+        <files mask="a00364.js"/>
         <files mask="a00365.html"/>
         <files mask="a00365.js"/>
         <files mask="a00366.html"/>
         <files mask="a00366.js"/>
         <files mask="a00367.html"/>
-        <files mask="a00367.js"/>
         <files mask="a00368.html"/>
-        <files mask="a00368.js"/>
         <files mask="a00369.html"/>
         <files mask="a00369.js"/>
         <files mask="a00370.html"/>
+        <files mask="a00370.js"/>
         <files mask="a00371.html"/>
+        <files mask="a00371.js"/>
         <files mask="a00372.html"/>
         <files mask="a00372.js"/>
         <files mask="a00373.html"/>
         <files mask="a00373.js"/>
         <files mask="a00374.html"/>
-        <files mask="a00374.js"/>
         <files mask="a00375.html"/>
         <files mask="a00375.js"/>
         <files mask="a00376.html"/>
         <files mask="a00376.js"/>
         <files mask="a00377.html"/>
+        <files mask="a00377.js"/>
         <files mask="a00378.html"/>
         <files mask="a00378.js"/>
         <files mask="a00379.html"/>
         <files mask="a00379.js"/>
-        <files mask="a00380.html"/>
-        <files mask="a00380.js"/>
         <files mask="a00381.html"/>
-        <files mask="a00381.js"/>
-        <files mask="a00382.html"/>
-        <files mask="a00382.js"/>
-        <files mask="a00384.html"/>
         <files mask="arm_logo.png"/>
         <files mask="bc_s.png"/>
         <files mask="bdwn.png"/>
@@ -4403,7 +4717,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="CMSIS_NN_Source.MIMXRT1176" name="CMSIS_NN_Library_Source" brief="CMSIS-NN Library" version="3.0.0" full_name="CMSIS NN Library Source" category="CMSIS/NN" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/NN" project_base_path="CMSIS/NN">
+    <component id="CMSIS_NN_Source.MIMXRT1176" name="CMSIS_NN_Library_Source" brief="CMSIS-NN Library" version="5.0.0" full_name="CMSIS NN Library Source" category="CMSIS/NN" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/NN" project_base_path="CMSIS/NN">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_DSP_Source.MIMXRT1176"/>
@@ -4414,20 +4728,26 @@ ${load}</script>
         <files mask="README.md" hidden="true"/>
       </source>
       <source relative_path="Include" type="c_include">
-        <files mask="arm_nn_tables.h"/>
-        <files mask="arm_nn_types.h"/>
         <files mask="arm_nnfunctions.h"/>
         <files mask="arm_nnsupportfunctions.h"/>
+        <files mask="arm_nn_math_types.h"/>
+        <files mask="arm_nn_tables.h"/>
+        <files mask="arm_nn_types.h"/>
+      </source>
+      <source relative_path="Include/Internal" type="c_include">
+        <files mask="arm_nn_compiler.h"/>
       </source>
       <source relative_path="Source/ActivationFunctions" type="src">
-        <files mask="arm_nn_activations_q15.c"/>
-        <files mask="arm_nn_activations_q7.c"/>
+        <files mask="arm_nn_activation_s16.c"/>
         <files mask="arm_relu6_s8.c"/>
         <files mask="arm_relu_q15.c"/>
         <files mask="arm_relu_q7.c"/>
       </source>
       <source relative_path="Source/BasicMathFunctions" type="src">
+        <files mask="arm_elementwise_add_s16.c"/>
         <files mask="arm_elementwise_add_s8.c"/>
+        <files mask="arm_elementwise_mul_s16.c"/>
+        <files mask="arm_elementwise_mul_s16_s8.c"/>
         <files mask="arm_elementwise_mul_s8.c"/>
       </source>
       <source relative_path="Source/ConcatenationFunctions" type="src">
@@ -4437,77 +4757,97 @@ ${load}</script>
         <files mask="arm_concatenation_s8_z.c"/>
       </source>
       <source relative_path="Source/ConvolutionFunctions" type="src">
-        <files mask="arm_convolve_1x1_HWC_q7_fast_nonsquare.c"/>
+        <files mask="arm_convolve_1x1_s4.c"/>
+        <files mask="arm_convolve_1x1_s4_fast.c"/>
+        <files mask="arm_convolve_1x1_s8.c"/>
         <files mask="arm_convolve_1x1_s8_fast.c"/>
         <files mask="arm_convolve_1_x_n_s8.c"/>
-        <files mask="arm_convolve_HWC_q15_basic.c"/>
-        <files mask="arm_convolve_HWC_q15_fast.c"/>
-        <files mask="arm_convolve_HWC_q15_fast_nonsquare.c"/>
-        <files mask="arm_convolve_HWC_q7_basic.c"/>
-        <files mask="arm_convolve_HWC_q7_basic_nonsquare.c"/>
-        <files mask="arm_convolve_HWC_q7_fast.c"/>
-        <files mask="arm_convolve_HWC_q7_fast_nonsquare.c"/>
-        <files mask="arm_convolve_HWC_q7_RGB.c"/>
+        <files mask="arm_convolve_fast_s16.c"/>
+        <files mask="arm_convolve_get_buffer_sizes_s16.c"/>
+        <files mask="arm_convolve_get_buffer_sizes_s4.c"/>
+        <files mask="arm_convolve_get_buffer_sizes_s8.c"/>
+        <files mask="arm_convolve_s16.c"/>
+        <files mask="arm_convolve_s4.c"/>
         <files mask="arm_convolve_s8.c"/>
+        <files mask="arm_convolve_wrapper_s16.c"/>
+        <files mask="arm_convolve_wrapper_s4.c"/>
         <files mask="arm_convolve_wrapper_s8.c"/>
         <files mask="arm_depthwise_conv_3x3_s8.c"/>
+        <files mask="arm_depthwise_conv_fast_s16.c"/>
+        <files mask="arm_depthwise_conv_get_buffer_sizes_s16.c"/>
+        <files mask="arm_depthwise_conv_get_buffer_sizes_s4.c"/>
+        <files mask="arm_depthwise_conv_get_buffer_sizes_s8.c"/>
+        <files mask="arm_depthwise_conv_s16.c"/>
+        <files mask="arm_depthwise_conv_s4.c"/>
+        <files mask="arm_depthwise_conv_s4_opt.c"/>
         <files mask="arm_depthwise_conv_s8.c"/>
         <files mask="arm_depthwise_conv_s8_opt.c"/>
-        <files mask="arm_depthwise_conv_u8_basic_ver1.c"/>
+        <files mask="arm_depthwise_conv_wrapper_s16.c"/>
+        <files mask="arm_depthwise_conv_wrapper_s4.c"/>
         <files mask="arm_depthwise_conv_wrapper_s8.c"/>
-        <files mask="arm_depthwise_separable_conv_HWC_q7.c"/>
-        <files mask="arm_depthwise_separable_conv_HWC_q7_nonsquare.c"/>
         <files mask="arm_nn_depthwise_conv_s8_core.c"/>
-        <files mask="arm_nn_mat_mult_kernel_q7_q15.c"/>
-        <files mask="arm_nn_mat_mult_kernel_q7_q15_reordered.c"/>
+        <files mask="arm_nn_mat_mult_kernel_s4_s16.c"/>
         <files mask="arm_nn_mat_mult_kernel_s8_s16.c"/>
-        <files mask="arm_nn_mat_mult_kernel_s8_s16_reordered.c"/>
         <files mask="arm_nn_mat_mult_s8.c"/>
+        <files mask="arm_transpose_conv_get_buffer_sizes_s8.c"/>
+        <files mask="arm_transpose_conv_s8.c"/>
       </source>
       <source relative_path="Source/FullyConnectedFunctions" type="src">
-        <files mask="arm_fully_connected_mat_q7_vec_q15.c"/>
-        <files mask="arm_fully_connected_mat_q7_vec_q15_opt.c"/>
-        <files mask="arm_fully_connected_q15.c"/>
-        <files mask="arm_fully_connected_q15_opt.c"/>
-        <files mask="arm_fully_connected_q7.c"/>
-        <files mask="arm_fully_connected_q7_opt.c"/>
+        <files mask="arm_fully_connected_get_buffer_sizes_s16.c"/>
+        <files mask="arm_fully_connected_get_buffer_sizes_s8.c"/>
+        <files mask="arm_fully_connected_s16.c"/>
+        <files mask="arm_fully_connected_s4.c"/>
         <files mask="arm_fully_connected_s8.c"/>
+        <files mask="arm_vector_sum_s8.c"/>
+      </source>
+      <source relative_path="Source/LSTMFunctions" type="src">
+        <files mask="arm_lstm_unidirectional_s8_s16.c"/>
       </source>
       <source relative_path="Source/NNSupportFunctions" type="src">
         <files mask="arm_nntables.c"/>
-        <files mask="arm_nn_accumulate_q7_to_q15.c"/>
-        <files mask="arm_nn_add_q7.c"/>
         <files mask="arm_nn_depthwise_conv_nt_t_padded_s8.c"/>
+        <files mask="arm_nn_depthwise_conv_nt_t_s16.c"/>
         <files mask="arm_nn_depthwise_conv_nt_t_s8.c"/>
+        <files mask="arm_nn_lstm_calculate_gate_s8_s16.c"/>
+        <files mask="arm_nn_lstm_step_s8_s16.c"/>
+        <files mask="arm_nn_lstm_update_cell_state_s16.c"/>
+        <files mask="arm_nn_lstm_update_output_s8_s16.c"/>
+        <files mask="arm_nn_mat_mult_nt_t_s4.c"/>
         <files mask="arm_nn_mat_mult_nt_t_s8.c"/>
+        <files mask="arm_nn_mat_mult_nt_t_s8_s32.c"/>
         <files mask="arm_nn_mat_mul_core_1x_s8.c"/>
         <files mask="arm_nn_mat_mul_core_4x_s8.c"/>
-        <files mask="arm_nn_mult_q15.c"/>
-        <files mask="arm_nn_mult_q7.c"/>
+        <files mask="arm_nn_mat_mul_kernel_s16.c"/>
+        <files mask="arm_nn_vec_mat_mult_t_s16.c"/>
+        <files mask="arm_nn_vec_mat_mult_t_s4.c"/>
         <files mask="arm_nn_vec_mat_mult_t_s8.c"/>
         <files mask="arm_nn_vec_mat_mult_t_svdf_s8.c"/>
-        <files mask="arm_q7_to_q15_no_shift.c"/>
-        <files mask="arm_q7_to_q15_reordered_no_shift.c"/>
-        <files mask="arm_q7_to_q15_reordered_with_offset.c"/>
+        <files mask="arm_nn_vec_mat_mul_result_acc_s8.c"/>
         <files mask="arm_q7_to_q15_with_offset.c"/>
+        <files mask="arm_s8_to_s16_unordered_with_offset.c"/>
       </source>
       <source relative_path="Source/PoolingFunctions" type="src">
+        <files mask="arm_avgpool_get_buffer_sizes_s16.c"/>
+        <files mask="arm_avgpool_get_buffer_sizes_s8.c"/>
+        <files mask="arm_avgpool_s16.c"/>
         <files mask="arm_avgpool_s8.c"/>
+        <files mask="arm_max_pool_s16.c"/>
         <files mask="arm_max_pool_s8.c"/>
-        <files mask="arm_pool_q7_HWC.c"/>
       </source>
       <source relative_path="Source/ReshapeFunctions" type="src">
         <files mask="arm_reshape_s8.c"/>
       </source>
       <source relative_path="Source/SoftmaxFunctions" type="src">
-        <files mask="arm_softmax_q15.c"/>
-        <files mask="arm_softmax_q7.c"/>
+        <files mask="arm_nn_softmax_common_s8.c"/>
+        <files mask="arm_softmax_s16.c"/>
         <files mask="arm_softmax_s8.c"/>
+        <files mask="arm_softmax_s8_s16.c"/>
         <files mask="arm_softmax_u8.c"/>
-        <files mask="arm_softmax_with_batch_q7.c"/>
       </source>
       <source relative_path="Source/SVDFunctions" type="src">
+        <files mask="arm_svdf_get_buffer_sizes_s8.c"/>
         <files mask="arm_svdf_s8.c"/>
+        <files mask="arm_svdf_state_s16_s8.c"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="CMSIS_NN_Source.cmake" hidden="true"/>
@@ -4663,15 +5003,10 @@ ${load}</script>
         <all>
           <component_dependency value="component.serial_manager.MIMXRT1176"/>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
+          <component_dependency value="utility.str.MIMXRT1176"/>
           <device_dependency value="MIMXRT1176xxxxx"/>
         </all>
       </dependencies>
-      <source relative_path="str" project_relative_path="./" type="src">
-        <files mask="fsl_str.c"/>
-      </source>
-      <source relative_path="str" project_relative_path="./" type="c_include">
-        <files mask="fsl_str.h"/>
-      </source>
       <source relative_path="debug_console" project_relative_path="./" type="src">
         <files mask="fsl_debug_console.c"/>
       </source>
@@ -4683,7 +5018,6 @@ ${load}</script>
         <files mask="utility_debug_console.MIMXRT1176.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="str" project_relative_path="./" type="c_include"/>
         <include_path relative_path="debug_console" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
@@ -4707,7 +5041,7 @@ ${load}</script>
         <files mask="UM11443-NXP-Wi-Fi-and-Bluetooth-Debug-Feature-Configuration-Guide-for-i.MX-RT-Platforms.pdf"/>
       </source>
       <source relative_path="Release Notes" type="doc">
-        <files mask="NXP-Wireless-Features-and-Release-Notes-for-i.MX-RT.pdf"/>
+        <files mask="RN00174-Wireless-SoC-features-and-release-notes-for-FreeRTOS.pdf"/>
       </source>
     </component>
     <component id="docs.FreeRTOS.MIMXRT1176" name="FreeRTOS documentation" brief="FreeRTOS documentation" version="1.0.0" full_name="FreeRTOS documentation" category="docs/FreeRTOS" user_visible="true" type="documentation" package_base_path="../docs/FreeRTOS" project_base_path="FreeRTOS">
@@ -4721,17 +5055,6 @@ ${load}</script>
         <files mask="Getting Started with MCUXpressoSDK and FreeRTOS OS.pdf"/>
       </source>
     </component>
-    <component id="docs.maestro.MIMXRT1176" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.7.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
-      <dependencies>
-        <all>
-          <component_dependency value="middleware.maestro_framework.MIMXRT1176"/>
-          <device_dependency value="MIMXRT1176xxxxx"/>
-        </all>
-      </dependencies>
-      <source relative_path="./" type="doc">
-        <files mask="Maestro_Release_Notes.pdf"/>
-      </source>
-    </component>
     <component id="docs.multicore.erpc.MIMXRT1176" name="docs_multicore_erpc" brief="embedded Remote Procedure (eRPC) documentation" version="1.11.0" full_name="embedded Remote Procedure (eRPC) documentation" category="docs/erpc" user_visible="true" type="documentation" package_base_path="../middleware/multicore/docs" project_base_path="docs">
       <dependencies>
         <all>
@@ -4743,7 +5066,7 @@ ${load}</script>
         <files mask="eRPC Getting Started User's Guide.pdf"/>
       </source>
     </component>
-    <component id="docs.multicore.MIMXRT1176" name="docs_multicore" brief="Collection of Multicore SDK documentation" version="2.14.0" full_name="Multicore SDK documentation" category="docs/multicore" user_visible="true" type="documentation" package_base_path="../middleware/multicore/docs" project_base_path="docs">
+    <component id="docs.multicore.MIMXRT1176" name="docs_multicore" brief="Collection of Multicore SDK documentation" version="2.16.0" full_name="Multicore SDK documentation" category="docs/multicore" user_visible="true" type="documentation" package_base_path="../middleware/multicore/docs" project_base_path="docs">
       <dependencies>
         <all>
           <any_of>
@@ -5223,7 +5546,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="driver.dialog7212.MIMXRT1176" name="dialog7212" brief="Driver dialog7212" version="2.3.0" full_name="Driver dialog7212" category="Device/SDK Drivers" user_visible="true" type="software_component" package_base_path="../components/codec/da7212" project_base_path="codec">
+    <component id="driver.dialog7212.MIMXRT1176" name="dialog7212" brief="Driver dialog7212" version="2.3.1" full_name="Driver dialog7212" category="Device/SDK Drivers" user_visible="true" type="software_component" package_base_path="../components/codec/da7212" project_base_path="codec">
       <defines>
         <define name="SDK_I2C_BASED_COMPONENT_USED" value="1"/>
         <define name="BOARD_USE_CODEC" value="1"/>
@@ -5476,7 +5799,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="driver.gt911.MIMXRT1176" name="gt911" brief="Driver gt911" version="1.0.3" full_name="Driver gt911" category="Device/SDK Drivers" user_visible="false" type="board_component" package_base_path="../components/gt911" project_base_path="touchpanel">
+    <component id="driver.gt911.MIMXRT1176" name="gt911" brief="Driver gt911" version="1.0.4" full_name="Driver gt911" category="Device/SDK Drivers" user_visible="false" type="board_component" package_base_path="../components/gt911" project_base_path="touchpanel">
       <defines>
         <define name="SDK_I2C_BASED_COMPONENT_USED" value="1"/>
       </defines>
@@ -5520,7 +5843,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="driver.ili9341.MIMXRT1176" name="ili9341" brief="Driver ili9341" version="1.0.2" full_name="Driver ili9341" category="Device/SDK Drivers" user_visible="true" type="board_component" package_base_path="../components/ili9341" project_base_path="lcd">
+    <component id="driver.ili9341.MIMXRT1176" name="ili9341" brief="Driver ili9341" version="1.0.2" full_name="Driver ili9341" category="Device/SDK Drivers" user_visible="true" type="board_component" package_base_path="../components/ili9341" project_base_path="lcdc">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -5755,12 +6078,36 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="component.messaging.MIMXRT1176" name="messaging" brief="Component messaging" version="1.0.0" full_name="Component messaging" category="Device/SDK Drivers" user_visible="true" type="other" package_base_path="../components/messaging" project_base_path="component/messaging">
+    <component id="component.mem_manager_freertos.MIMXRT1176" name="mem_manager_freertos" brief="Component mem_manager_freertos" version="1.0.0" full_name="Component mem_manager_freertos" category="Device/SDK Drivers" user_visible="true" type="software_component" package_base_path="../components/mem_manager" project_base_path="component/mem_manager">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
+          <component_dependency value="middleware.freertos-kernel.MIMXRT1176"/>
+          <device_dependency value="MIMXRT1176xxxxx"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_component_mem_manager.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_component_mem_manager_freertos.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_mem_manager_freertos.MIMXRT1176.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.messaging.MIMXRT1176" name="messaging" brief="Component messaging" version="1.0.0" full_name="Component messaging" category="Device/SDK Drivers" user_visible="true" type="other" package_base_path="../components/messaging" project_base_path="component/messaging">
+      <dependencies>
+        <all>
+          <any_of>
+            <component_dependency value="component.mem_manager_light.MIMXRT1176"/>
+            <component_dependency value="component.mem_manager_freertos.MIMXRT1176"/>
+          </any_of>
+          <component_dependency value="platform.drivers.common.MIMXRT1176"/>
           <component_dependency value="component.lists.MIMXRT1176"/>
-          <component_dependency value="component.mem_manager_light.MIMXRT1176"/>
           <device_dependency value="MIMXRT1176xxxxx"/>
         </all>
       </dependencies>
@@ -5890,29 +6237,6 @@ ${load}</script>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="driver_mma8451q.MIMXRT1176.cmake" hidden="true"/>
-      </source>
-      <include_paths>
-        <include_path relative_path="./" type="c_include"/>
-      </include_paths>
-    </component>
-    <component id="component.nvm_adapter.MIMXRT1176" name="nvm_adapter" brief="Component nvm_adapter" version="1.0.0" full_name="NVM Adapter" category="Device/SDK Utilities" user_visible="false" type="utilities" package_base_path="../components/nvm" project_base_path="component/nvm">
-      <dependencies>
-        <all>
-          <component_dependency value="platform.drivers.common.MIMXRT1176"/>
-          <component_dependency value="middleware.wireless.framework.function_lib.MIMXRT1176"/>
-          <component_dependency value="middleware.wireless.framework.nvm.MIMXRT1176"/>
-          <component_dependency value="middleware.wireless.framework.common.MIMXRT1176"/>
-          <device_dependency value="MIMXRT1176xxxxx"/>
-        </all>
-      </dependencies>
-      <source relative_path="./" type="c_include">
-        <files mask="nvm_adapter.h"/>
-      </source>
-      <source relative_path="./" type="src">
-        <files mask="nvm_adapter.c"/>
-      </source>
-      <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="component_nvm_adapter.MIMXRT1176.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
@@ -6469,6 +6793,9 @@ ${load}</script>
       </include_paths>
     </component>
     <component id="component.gpt_adapter.MIMXRT1176" name="gpt_adapter" brief="Component gpt_adapter" version="1.0.0" full_name="Component gpt_adapter" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/timer" project_base_path="component/timer">
+      <defines>
+        <define name="TIMER_PORT_TYPE_GPT" value="1"/>
+      </defines>
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -6490,6 +6817,9 @@ ${load}</script>
       </include_paths>
     </component>
     <component id="component.pit_adapter.MIMXRT1176" name="pit_adapter" brief="Component pit_adapter" version="1.0.0" full_name="Component pit_adapter" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/timer" project_base_path="component/timer">
+      <defines>
+        <define name="TIMER_PORT_TYPE_PIT" value="1"/>
+      </defines>
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -6653,7 +6983,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.common.MIMXRT1176" name="common" brief="COMMON Driver" version="2.4.0" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
+    <component id="platform.drivers.common.MIMXRT1176" name="common" brief="COMMON Driver" version="2.4.1" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.clock.MIMXRT1176"/>
@@ -6680,7 +7010,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.acmp.MIMXRT1176" name="acmp" brief="ACMP Driver" version="2.1.0" full_name="ACMP Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/acmp" project_base_path="drivers">
+    <component id="platform.drivers.acmp.MIMXRT1176" name="acmp" brief="ACMP Driver" version="2.3.0" full_name="ACMP Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/acmp" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -6760,7 +7090,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.cdog.MIMXRT1176" name="cdog" brief="cdog Driver" version="2.1.2" full_name="cdog Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/cdog" project_base_path="drivers">
+    <component id="platform.drivers.cdog.MIMXRT1176" name="cdog" brief="cdog Driver" version="2.1.3" full_name="cdog Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/cdog" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -6880,7 +7210,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flexcan.MIMXRT1176" name="flexcan" brief="FLEXCAN Driver" version="2.11.4" full_name="FLEXCAN Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexcan" project_base_path="drivers">
+    <component id="platform.drivers.flexcan.MIMXRT1176" name="flexcan" brief="FLEXCAN Driver" version="2.11.6" full_name="FLEXCAN Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexcan" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -7000,7 +7330,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flexio_spi.MIMXRT1176" name="flexio_spi" brief="FLEXIO SPI Driver" version="2.3.3" full_name="FLEXIO SPI Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexio/spi" project_base_path="drivers">
+    <component id="platform.drivers.flexio_spi.MIMXRT1176" name="flexio_spi" brief="FLEXIO SPI Driver" version="2.3.4" full_name="FLEXIO SPI Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexio/spi" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.flexio.MIMXRT1176"/>
@@ -7081,7 +7411,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.gpt.MIMXRT1176" name="gpt" brief="GPT Driver" version="2.0.4" full_name="GPT Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/gpt" project_base_path="drivers">
+    <component id="platform.drivers.gpt.MIMXRT1176" name="gpt" brief="GPT Driver" version="2.0.5" full_name="GPT Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/gpt" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -7221,7 +7551,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpi2c.MIMXRT1176" name="i2c" brief="LPI2C Driver" version="2.5.2" full_name="LPI2C Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpi2c" project_base_path="drivers">
+    <component id="platform.drivers.lpi2c.MIMXRT1176" name="i2c" brief="LPI2C Driver" version="2.5.4" full_name="LPI2C Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpi2c" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -7241,7 +7571,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpi2c_freertos.MIMXRT1176" name="i2c_freertos" brief="LPI2C Driver" version="2.3.2" full_name="LPI2C Freerto Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpi2c" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpi2c_freertos.MIMXRT1176" name="i2c_freertos" brief="LPI2C FreeRTOS Driver" version="2.3.2" full_name="LPI2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MIMXRT1176/drivers" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpi2c.MIMXRT1176"/>
@@ -7262,7 +7592,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpspi.MIMXRT1176" name="lpspi" brief="LPSPI Driver" version="2.6.6" full_name="LPSPI Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers">
+    <component id="platform.drivers.lpspi.MIMXRT1176" name="lpspi" brief="LPSPI Driver" version="2.6.8" full_name="LPSPI Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -7282,7 +7612,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpspi_freertos.MIMXRT1176" name="lpspi_freertos" brief="LPSPI Driver" version="2.3.1" full_name="LPSPI Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpspi_freertos.MIMXRT1176" name="lpspi_freertos" brief="LPSPI FreeRTOS Driver" version="2.3.1" full_name="LPSPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MIMXRT1176/drivers" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpspi.MIMXRT1176"/>
@@ -7303,7 +7633,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpuart.MIMXRT1176" name="lpuart" brief="LPUART Driver" version="2.7.6" full_name="LPUART Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpuart" project_base_path="drivers">
+    <component id="platform.drivers.lpuart.MIMXRT1176" name="lpuart" brief="LPUART Driver" version="2.8.2" full_name="LPUART Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpuart" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -7323,7 +7653,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpuart_freertos.MIMXRT1176" name="lpuart_freertos" brief="LPUART Driver" version="2.5.0" full_name="LPUART Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpuart" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpuart_freertos.MIMXRT1176" name="lpuart_freertos" brief="LPUART Freertos Driver" version="2.5.0" full_name="LPUART Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MIMXRT1176/drivers" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpuart.MIMXRT1176"/>
@@ -7344,7 +7674,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.mecc.MIMXRT1176" name="mecc" brief="MECC Driver" version="2.0.2" full_name="MECC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/mecc" project_base_path="drivers">
+    <component id="platform.drivers.mecc.MIMXRT1176" name="mecc" brief="MECC Driver" version="2.1.0" full_name="MECC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/mecc" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -7467,7 +7797,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.pit.MIMXRT1176" name="pit" brief="PIT Driver" version="2.0.4" full_name="PIT Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/pit" project_base_path="drivers">
+    <component id="platform.drivers.pit.MIMXRT1176" name="pit" brief="PIT Driver" version="2.0.5" full_name="PIT Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/pit" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -7507,7 +7837,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.pwm.MIMXRT1176" name="pwm" brief="PWM Driver" version="2.8.3" full_name="PWM Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/pwm" project_base_path="drivers">
+    <component id="platform.drivers.pwm.MIMXRT1176" name="pwm" brief="PWM Driver" version="2.8.4" full_name="PWM Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/pwm" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -7760,7 +8090,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.spdif.MIMXRT1176" name="spdif" brief="SPDIF Driver" version="2.0.6" full_name="SPDIF Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/spdif" project_base_path="drivers">
+    <component id="platform.drivers.spdif.MIMXRT1176" name="spdif" brief="SPDIF Driver" version="2.0.7" full_name="SPDIF Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/spdif" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -7800,7 +8130,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.tempsensor.MIMXRT1176" name="tempsensor" brief="TEMPSENSOR Driver" version="2.1.1" full_name="TEMPSENSOR Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/tempsensor" project_base_path="drivers">
+    <component id="platform.drivers.tempsensor.MIMXRT1176" name="tempsensor" brief="TEMPSENSOR Driver" version="2.1.2" full_name="TEMPSENSOR Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/tempsensor" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -7958,7 +8288,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.gpc_3.MIMXRT1176" name="gpc" brief="GPC Driver" version="2.3.0" full_name="GPC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MIMXRT1176/drivers" project_base_path="drivers">
+    <component id="platform.drivers.gpc_3.MIMXRT1176" name="gpc" brief="GPC Driver" version="2.3.1" full_name="GPC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MIMXRT1176/drivers" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -8078,7 +8408,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.clock.MIMXRT1176" name="clock" brief="Clock Driver" version="2.5.4" full_name="Clock Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MIMXRT1176/drivers" project_base_path="drivers">
+    <component id="platform.drivers.clock.MIMXRT1176" name="clock" brief="Clock Driver" version="2.5.5" full_name="Clock Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MIMXRT1176/drivers" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
@@ -8211,7 +8541,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="driver.fbdev.MIMXRT1176" name="fbdev" brief="Driver fbdev" version="1.0.3" full_name="Driver fbdev" category="Device/SDK Drivers" user_visible="true" type="software_component" package_base_path="../components/video/display/fbdev" project_base_path="video">
+    <component id="driver.fbdev.MIMXRT1176" name="fbdev" brief="Driver fbdev" version="1.0.4" full_name="Driver fbdev" category="Device/SDK Drivers" user_visible="true" type="software_component" package_base_path="../components/video/display/fbdev" project_base_path="video">
       <dependencies>
         <all>
           <component_dependency value="driver.dc-fb-common.MIMXRT1176"/>
@@ -8227,6 +8557,28 @@ ${load}</script>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="driver_fbdev.MIMXRT1176.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="driver.display-rpi.MIMXRT1176" name="display-rpi" brief="Driver display-rpi" version="1.0.0" full_name="Driver display-rpi" category="Device/SDK Drivers" user_visible="true" type="board_component" package_base_path="../components/video/display/rpi" project_base_path="video">
+      <dependencies>
+        <all>
+          <component_dependency value="driver.display-common.MIMXRT1176"/>
+          <component_dependency value="driver.display-mipi-dsi-cmd.MIMXRT1176"/>
+          <board_dependency value="evkbmimxrt1170"/>
+          <device_dependency value="MIMXRT1176xxxxx"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_rpi.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_rpi.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_display-rpi.MIMXRT1176.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>

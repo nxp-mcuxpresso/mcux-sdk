@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2020, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -24,22 +24,28 @@ int32_t mflash_drv_init(void)
     status_t result;
 
     result = FLASH_Init(&g_flash_instance);
-    if (result != kStatus_Success)
-        return result;
+    if (result == kStatus_Success)
+	{
+        result = FLASH_GetProperty(&g_flash_instance, kFLASH_PropertyPflashBlockBaseAddr, &g_pflashBlockBase);
+	}
 
-    result = FLASH_GetProperty(&g_flash_instance, kFLASH_PropertyPflashBlockBaseAddr, &g_pflashBlockBase);
-    if (result != kStatus_Success)
-        return result;
+    
+    if (result == kStatus_Success)
+	{
+        result = FLASH_GetProperty(&g_flash_instance, kFLASH_PropertyPflashSectorSize, &g_pflashSectorSize);
+	}
 
-    result = FLASH_GetProperty(&g_flash_instance, kFLASH_PropertyPflashSectorSize, &g_pflashSectorSize);
-    if (result != kStatus_Success)
-        return result;
+    
+    if (result == kStatus_Success)
+	{
+        result = FLASH_GetProperty(&g_flash_instance, kFLASH_PropertyPflashTotalSize, &g_pflashTotalSize);
+	}
 
-    result = FLASH_GetProperty(&g_flash_instance, kFLASH_PropertyPflashTotalSize, &g_pflashTotalSize);
-    if (result != kStatus_Success)
-        return result;
-
-    result = FLASH_GetProperty(&g_flash_instance, kFLASH_PropertyPflashPageSize, &g_pflashPageSize);
+    
+    if (result == kStatus_Success)
+	{
+        result = FLASH_GetProperty(&g_flash_instance, kFLASH_PropertyPflashPageSize, &g_pflashPageSize);
+	}
 
     return result;
 }
@@ -47,19 +53,33 @@ int32_t mflash_drv_init(void)
 /* API - Erase single sector */
 int32_t mflash_drv_sector_erase(uint32_t sector_addr)
 {
+	status_t result;
     if (0 == mflash_drv_is_sector_aligned(sector_addr))
-        return kStatus_InvalidArgument;
+    {
+        result = kStatus_InvalidArgument;		
+    }
+    else 
+    {
+        result = FLASH_Erase(&g_flash_instance, sector_addr, MFLASH_SECTOR_SIZE, (uint32_t)kFLASH_ApiEraseKey);
+    }
 
-    return FLASH_Erase(&g_flash_instance, sector_addr, MFLASH_SECTOR_SIZE, kFLASH_ApiEraseKey);
+    return result;
 }
 
 /* API - Page program */
 int32_t mflash_drv_page_program(uint32_t page_addr, uint32_t *data)
 {
+    status_t result;
     if (0 == mflash_drv_is_page_aligned(page_addr))
-        return kStatus_InvalidArgument;
-
-    return FLASH_Program(&g_flash_instance, page_addr, (uint8_t *)data, MFLASH_PAGE_SIZE);
+    {
+        result = kStatus_InvalidArgument;		
+    }
+    else 
+    {
+        result = FLASH_Program(&g_flash_instance, page_addr, (uint8_t *)data, MFLASH_PAGE_SIZE);
+    }
+	
+    return result;
 }
 
 /* Internal - check FLASH status to avoid hardfault */
@@ -86,27 +106,29 @@ int32_t mflash_drv_is_readable(uint32_t addr)
                       FLASH_READMODE_MARGIN(g_flash_instance.modeConfig.readSingleWord.readMarginLevel) |
                       FLASH_READMODE_DMACC(g_flash_instance.modeConfig.readSingleWord.readDmaccWord);
     FLASH->CMD = 3;
-    while (!(FLASH->INT_STATUS & FLASH_INT_STATUS_DONE_MASK))
-        ;
+    while ((FLASH->INT_STATUS & FLASH_INT_STATUS_DONE_MASK) == 0UL)
+    {
+		//Wait for STATUS DONE flag
+    }
     result = FLASH->INT_STATUS;
 
     /* Report failure in case of errors */
     result_mask = FLASH_INT_STATUS_FAIL_MASK | FLASH_INT_STATUS_ERR_MASK | FLASH_INT_STATUS_ECC_ERR_MASK;
-    if (result_mask & result)
-        return kStatus_Fail;
 
-    return kStatus_Success;
+    return (result_mask & result) == 0UL ? kStatus_Success : kStatus_Fail;
 }
 
 /* API - Read data */
 int32_t mflash_drv_read(uint32_t addr, uint32_t *buffer, uint32_t len)
 {
-    if (mflash_drv_is_readable(addr) != 0)
-        return kStatus_Fail;
+	status_t result = kStatus_Fail;
+    if (mflash_drv_is_readable(addr) == 0)
+    {
+		(void)memcpy((void *)buffer, (void *)addr, len);
+        result = kStatus_Success;
+    }
 
-    memcpy(buffer, (void *)addr, len);
-
-    return kStatus_Success;
+    return result;
 }
 
 /* API - Get pointer to FLASH region */
@@ -114,7 +136,9 @@ void *mflash_drv_phys2log(uint32_t addr, uint32_t len)
 {
 #if 0
     if (mflash_drv_is_readable(addr) != 0)
+    {
         return NULL;
+    }
 #endif
 
     /* FLASH is directly mapped in the address space */

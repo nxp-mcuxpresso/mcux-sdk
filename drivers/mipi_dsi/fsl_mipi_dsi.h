@@ -1,7 +1,5 @@
 /*
- * Copyright 2017, 2019-2023 NXP
- * All rights reserved.
- *
+ * Copyright 2017,2019-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -23,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 6))
+#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*! @} */
 
 /* The max APB transfer size. */
@@ -39,6 +37,19 @@ enum
         MAKE_STATUS((int32_t)kStatusGroup_MIPI_DSI, 2),                        /*!< Error report package received. */
     kStatus_DSI_NotSupported = MAKE_STATUS((int32_t)kStatusGroup_MIPI_DSI, 3), /*!< The transfer type not supported. */
 };
+
+#if defined(FSL_FEATURE_MIPI_DSI_HOST_DBI_HAS_PIXEL_FORMAT) && FSL_FEATURE_MIPI_DSI_HOST_DBI_HAS_PIXEL_FORMAT
+/*! @brief MIPI DBI pixel format. */
+typedef enum _dsi_dbi_pixel_format
+{
+    kDSI_DbiNoMapping = 0U, /*!< No pixel to bit mapping. */
+    kDSI_DbiRGB888 = 1U, /*!< Send data to interface as RGB888 format. */
+    kDSI_DbiRGB666 = 2U, /*!< Send data to interface as RGB666 format. */
+    kDSI_DbiRGB565 = 3U, /*!< Send data to interface as RGB565 format. */
+    kDSI_DbiRGB444 = 4U, /*!< Send data to interface as RGB444 format. */
+    kDSI_DbiRGB332 = 5U, /*!< Send data to interface as RGB332 format. */
+} dsi_dbi_pixel_format_t;
+#endif
 
 /*! @brief MIPI DSI controller configuration. */
 typedef struct _dsi_config
@@ -214,6 +225,18 @@ enum _dsi_host_status
     kDSI_HostTearTriggerReceived  = (1UL << 17U), /*!< Tear effect trigger receive. */
     kDSI_HostAckTriggerReceived   = (1UL << 18U), /*!< Acknowledge trigger message received. */
 };
+
+#if defined(FSL_FEATURE_MIPI_DSI_HOST_HAS_SEPARATE_ULPS_CTRL) && FSL_FEATURE_MIPI_DSI_HOST_HAS_SEPARATE_ULPS_CTRL
+/*! @brief _dsi_ulps_status Status of APB to packet interface. */
+enum
+{
+    kDSI_ClockLaneUlpsEnable  = (1U << 0U), /*!< Clock lane in ULPS mode. */
+    kDSI_DataLane0UlpsEnable  = (1U << 1U), /*!< Data lane 0 in ULPS mode. */
+    kDSI_DataLane1UlpsEnable  = (1U << 2U), /*!< Data lane 1 in ULPS mode. */
+    kDSI_DataLane2UlpsEnable  = (1U << 3U), /*!< Data lane 2 in ULPS mode. */
+    kDSI_DataLane3UlpsEnable  = (1U << 4U), /*!< Data lane 3 in ULPS mode. */
+};
+#endif
 
 /*! @brief _dsi_interrupt DSI interrupt. */
 enum
@@ -484,6 +507,34 @@ void DSI_DeinitDphy(MIPI_DSI_HOST_Type *base);
  */
 void DSI_GetDphyDefaultConfig(dsi_dphy_config_t *config, uint32_t txHsBitClk_Hz, uint32_t txEscClk_Hz);
 
+#if defined(FSL_FEATURE_MIPI_DSI_HOST_HAS_SEPARATE_ULPS_CTRL) && FSL_FEATURE_MIPI_DSI_HOST_HAS_SEPARATE_ULPS_CTRL
+/*!
+ * @brief Sets the ULPS status for one clock lane and 4 data lanes.
+ *
+ * Use status in _dsi_ulps_status as OR'ed mask value for ulpsStatus. Release the
+ * lanes from ULPS state before transfer.
+ *
+ * @param base MIPI DSI host peripheral base address.
+ * @param ulpsStatus The ULPS status to set to the bus.
+ */
+static inline void DSI_SetUlpsStatus(MIPI_DSI_HOST_Type *base, uint8_t ulpsStatus)
+{
+    base->ULPS_ENABLE = (uint32_t)ulpsStatus;
+}
+
+/*!
+ * @brief Gets the ULPS status for one clock lane and 4 data lanes.
+ *
+ *
+ * @param base MIPI DSI host peripheral base address.
+ * @return The current ULPS status.
+ */
+static inline uint8_t DSI_GetUlpsStatus(MIPI_DSI_HOST_Type *base)
+{
+    return (uint8_t)base->ULPS_ACTIVE;
+}
+#endif
+
 /*! @} */
 
 /*!
@@ -532,6 +583,39 @@ static inline void DSI_GetAndClearInterruptStatus(MIPI_DSI_HOST_Type *base, uint
 {
     *intGroup2 = base->IRQ_STATUS2;
     *intGroup1 = base->IRQ_STATUS;
+}
+/*! @} */
+
+/*!
+ * @name MIPI DSI DBI
+ * @{
+ */
+
+/*!
+ * @brief Configure the DBI pixel FIFO send level.
+ *
+ * This controls the level at which the DBI Host bridge begins sending pixels
+ *
+ * @param base MIPI DSI host peripheral base address.
+ * @param sendLevel Send level value set to register.
+ */
+static inline void DSI_SetDbiPixelFifoSendLevel(MIPI_DSI_HOST_Type *base, uint16_t sendLevel)
+{
+    base->CFG_DBI_PIXEL_FIFO_SEND_LEVEL = (uint32_t)sendLevel;
+}
+
+/*!
+ * @brief Configure the DBI pixel payload size.
+ *
+ * Configures maximum number of pixels that should be sent as one DSI packet.
+ * Recommended to be evenly divisible by the line size (in pixels).
+ *
+ * @param base MIPI DSI host peripheral base address.
+ * @param payloadSize Payload size value set to register.
+ */
+static inline void DSI_SetDbiPixelPayloadSize(MIPI_DSI_HOST_Type *base, uint16_t payloadSize)
+{
+    base->CFG_DBI_PIXEL_PAYLOAD_SIZE = (uint32_t)payloadSize;
 }
 
 /*! @} */

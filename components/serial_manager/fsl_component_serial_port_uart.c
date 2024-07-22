@@ -426,10 +426,6 @@ serial_manager_status_t Serial_UartExitLowpower(serial_handle_t serialHandle)
     assert(kStatus_HAL_UartSuccess == uartstatus);
     (void)uartstatus;
 
-#if (defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
-    status = Serial_UartEnableReceiving(serialUartHandle);
-#endif
-
     return status;
 }
 

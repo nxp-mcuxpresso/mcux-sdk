@@ -458,7 +458,7 @@ status_t I3C_BusMasterCreate(i3c_device_t *masterDev,
     if (!masterControlInfo->isSecondary)
     {
         bus->currentMaster = masterDev;
-        /*Add masterDev to bus i3c device list */
+        /* Add masterDev to bus i3c device list */
         I3C_BusAddI3CDev(bus, masterDev);
 
         /* Execute reset DAA CCC command to reset all i3c device dynamic address */

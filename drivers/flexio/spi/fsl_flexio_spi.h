@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief FlexIO SPI driver version. */
-#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
+#define FSL_FLEXIO_SPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 4))
 /*! @} */
 
 #ifndef FLEXIO_SPI_DUMMYDATA
@@ -152,7 +152,7 @@ typedef struct _flexio_spi_slave_config
 /*! @brief Define FlexIO SPI transfer structure. */
 typedef struct _flexio_spi_transfer
 {
-    uint8_t *txData; /*!< Send buffer. */
+    const uint8_t *txData; /*!< Send buffer. */
     uint8_t *rxData; /*!< Receive buffer. */
     size_t dataSize; /*!< Transfer bytes. */
     uint8_t flags;   /*!< FlexIO SPI control flag, MSB first  or LSB first. */
@@ -179,7 +179,7 @@ typedef void (*flexio_spi_slave_transfer_callback_t)(FLEXIO_SPI_Type *base,
 /*! @brief Define FlexIO SPI handle structure. */
 struct _flexio_spi_master_handle
 {
-    uint8_t *txData;                                /*!< Transfer buffer. */
+    const uint8_t *txData;                          /*!< Transfer buffer. */
     uint8_t *rxData;                                /*!< Receive buffer. */
     size_t transferSize;                            /*!< Total bytes to be transferred. */
     volatile size_t txRemainingBytes;               /*!< Send data remaining in bytes. */

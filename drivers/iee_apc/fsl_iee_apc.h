@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021, NXP
+ * Copyright 2020-2021,2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,17 +21,19 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief IEE_APC driver version. Version 2.0.1.
+/*! @brief IEE_APC driver version. Version 2.0.2.
  *
- * Current version: 2.0.1
+ * Current version: 2.0.2
  *
  * Change log:
  * - Version 2.0.0
  *   - Initial version
  * - Version 2.0.1
  *   - Fixed MISRA issues.
+ * - Version 2.0.2
+ *   - Update to newer version of implementation in HW.
  */
-#define FSL_IEE_APC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_IEE_APC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*! @} */
 
 /*! @brief APC IEE regions. */
@@ -91,6 +93,37 @@ void IEE_APC_GlobalDisable(IEE_APC_Type *base);
  */
 status_t IEE_APC_SetRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, uint32_t startAddr, uint32_t endAddr);
 
+
+#if !(defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u))
+/*!
+ * @brief Lock the APC IEE configuration.
+ *
+ * This function locks writting to APC IEE encryption region setting registers.
+ * Only system reset can clear Lock bit
+ *
+ * @param base APC IEE peripheral address.
+ * @param region Selection of the APC IEE region to be locked.
+ * @param domain The ID is driven by TRDC
+ */
+status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, uint8_t domain);
+#endif /* !(defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)) */
+
+#if !(defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u))
+/*!
+ * @brief Set access control of the APC IEE.
+ *
+ * This function configure APC IEE encryption region access control settings.
+ *
+ * @param base APC IEE peripheral address.
+ * @param region Selection of the APC IEE region to be locked.
+ * @param allowNonSecure Allow nonsecure mode access
+ * @param allowUser Allow user mode access
+ */
+status_t IEE_APC_SetAccessControl(IEE_APC_Type *base, iee_apc_region_t region, bool allowNonSecure, bool allowUser);
+#endif /* !(defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)) */
+
+
+#if defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)
 /*!
  * @brief Lock the LPSR GPR and APC IEE configuration.
  *
@@ -99,9 +132,10 @@ status_t IEE_APC_SetRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, ui
  *
  * @param base APC IEE peripheral address.
  * @param region Selection of the APC IEE region to be locked.
- * @param domain
+ * @param domain Core domain ID
  */
 status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, iee_apc_domain_t domain);
+#endif
 
 /*!
  * @brief Enable the IEE encryption/decryption and can lock this setting.
@@ -112,6 +146,18 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
  * @param region Selection of the APC IEE region to be enabled.
  */
 void IEE_APC_RegionEnable(IEE_APC_Type *base, iee_apc_region_t region);
+
+#if !(defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u))
+/*!
+ * @brief Disable the IEE encryption/decryption for specific region.
+ *
+ * This function disables encryption/decryption by writting to IOMUXC LPSR GPR.
+ *
+ * @param base APC IEE peripheral address.
+ * @param region Selection of the APC IEE region to be enabled.
+ */
+void IEE_APC_RegionDisable(IEE_APC_Type *base, iee_apc_region_t region);
+#endif /* !(defined(FSL_FEATURE_IEE_APC_USE_GPR) && (FSL_FEATURE_IEE_APC_USE_GPR > 0u)) */
 
 #if defined(__cplusplus)
 }

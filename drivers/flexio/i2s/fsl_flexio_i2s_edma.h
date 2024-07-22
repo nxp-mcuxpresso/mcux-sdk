@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief FlexIO I2S EDMA driver version 2.1.7. */
-#define FSL_FLEXIO_I2S_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 7))
+/*! @brief FlexIO I2S EDMA driver version 2.1.8. */
+#define FSL_FLEXIO_I2S_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 8))
 /*! @} */
 
 typedef struct _flexio_i2s_edma_handle flexio_i2s_edma_handle_t;

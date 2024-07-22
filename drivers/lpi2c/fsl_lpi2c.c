@@ -1021,7 +1021,6 @@ status_t LPI2C_MasterTransferBlocking(LPI2C_Type *base, lpi2c_master_transfer_t 
     assert(transfer->subaddressSize <= sizeof(transfer->subaddress));
 
     status_t result = kStatus_Success;
-    status_t ret    = kStatus_Success;
     uint16_t commandBuffer[7];
     uint32_t cmdCount = 0U;
 
@@ -1129,11 +1128,7 @@ status_t LPI2C_MasterTransferBlocking(LPI2C_Type *base, lpi2c_master_transfer_t 
         {
             if ((transfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U)
             {
-                ret = LPI2C_MasterStop(base);
-                if (kStatus_Success != ret)
-                {
-                    result = ret;
-                }
+                (void)LPI2C_MasterStop(base);
             }
         }
     }
@@ -2581,6 +2576,24 @@ void LPI2C6_DriverIRQHandler(void);
 void LPI2C6_DriverIRQHandler(void)
 {
     LPI2C_CommonIRQHandler(LPI2C6, 6U);
+}
+#endif
+
+#if defined(LPI2C7)
+/* Implementation of LPI2C7 handler named in startup code. */
+void LPI2C7_DriverIRQHandler(void);
+void LPI2C7_DriverIRQHandler(void)
+{
+    LPI2C_CommonIRQHandler(LPI2C7, 7U);
+}
+#endif
+
+#if defined(LPI2C8)
+/* Implementation of LPI2C8 handler named in startup code. */
+void LPI2C8_DriverIRQHandler(void);
+void LPI2C8_DriverIRQHandler(void)
+{
+    LPI2C_CommonIRQHandler(LPI2C8, 8U);
 }
 #endif
 

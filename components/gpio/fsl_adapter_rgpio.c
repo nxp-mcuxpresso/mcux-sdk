@@ -62,6 +62,12 @@ static void HAL_GpioInterruptHandle(uint32_t intNum)
     hal_gpio_state_t *head = s_GpioHead;
     uint32_t portIntFlags  = 0U;
 
+    /* rgpio instantiates from the array 1st member. */
+    if (Rgpio_IRQn[0] != NotAvail_IRQn)
+    {
+        intNum = intNum - 1U;
+    }
+
     while (NULL != head)
     {
         portIntFlags =
@@ -83,45 +89,59 @@ static void HAL_GpioInterruptHandle(uint32_t intNum)
 /*!
  * @brief Interrupt service fuction of switch.
  */
+#if (FSL_FEATURE_SOC_RGPIO_COUNT > 0U)
 void GPIO1_0_IRQHandler(void);
 void GPIO1_0_IRQHandler(void)
 {
     HAL_GpioInterruptHandle(1);
     SDK_ISR_EXIT_BARRIER;
 }
+#endif
 
+#if (FSL_FEATURE_SOC_RGPIO_COUNT > 1U)
 void GPIO2_0_IRQHandler(void);
 void GPIO2_0_IRQHandler(void)
 {
     HAL_GpioInterruptHandle(2);
     SDK_ISR_EXIT_BARRIER;
 }
+#endif
+
+#if (FSL_FEATURE_SOC_RGPIO_COUNT > 2U)
 void GPIO3_0_IRQHandler(void);
 void GPIO3_0_IRQHandler(void)
 {
     HAL_GpioInterruptHandle(3);
     SDK_ISR_EXIT_BARRIER;
 }
+#endif
 
+#if (FSL_FEATURE_SOC_RGPIO_COUNT > 3U)
 void GPIO4_IRQHandler(void);
 void GPIO4_IRQHandler(void)
 {
     HAL_GpioInterruptHandle(4);
     SDK_ISR_EXIT_BARRIER;
 }
+#endif
+
+#if (FSL_FEATURE_SOC_RGPIO_COUNT > 4U)
 void GPIO5_IRQHandler(void);
 void GPIO5_IRQHandler(void)
 {
     HAL_GpioInterruptHandle(5);
     SDK_ISR_EXIT_BARRIER;
 }
+#endif
 
+#if (FSL_FEATURE_SOC_RGPIO_COUNT > 5U)
 void GPIO6_IRQHandler(void);
 void GPIO6_IRQHandler(void)
 {
     HAL_GpioInterruptHandle(6);
     SDK_ISR_EXIT_BARRIER;
 }
+#endif
 
 static hal_gpio_status_t HAL_GpioConflictSearch(hal_gpio_state_t *head, uint8_t gpio_port, uint8_t pin)
 {

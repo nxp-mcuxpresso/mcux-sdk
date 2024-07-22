@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2023 NXP
+ * Copyright 2016-2020, 2023-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,21 +22,26 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief ACMP driver version 2.1.0. */
-#define FSL_ACMP_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 0U))
+/*! @brief ACMP driver version 2.3.0. */
+#define FSL_ACMP_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*! @} */
 
 /*! @brief The mask of status flags cleared by writing 1. */
-#define CMP_C0_CFx_MASK  (CMP_C0_CFR_MASK | CMP_C0_CFF_MASK)
+#define CMP_C0_CFx_MASK (CMP_C0_CFR_MASK | CMP_C0_CFF_MASK)
+
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U))
 #define CMP_C1_CHNn_MASK 0xFF0000U /* C1_CHN0 - C1_CHN7. */
 #define CMP_C2_CHnF_MASK 0xFF0000U /* C2_CH0F - C2_CH7F. */
+#endif /* !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U)) */
 
 /*! @brief Interrupt enable/disable mask. */
 enum _acmp_interrupt_enable
 {
     kACMP_OutputRisingInterruptEnable  = (1U << 0U), /*!< Enable the interrupt when comparator outputs rising. */
     kACMP_OutputFallingInterruptEnable = (1U << 1U), /*!< Enable the interrupt when comparator outputs falling. */
-    kACMP_RoundRobinInterruptEnable    = (1U << 2U), /*!< Enable the Round-Robin interrupt. */
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U))
+    kACMP_RoundRobinInterruptEnable = (1U << 2U),    /*!< Enable the Round-Robin interrupt. */
+#endif /* !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U)) */
 };
 
 /*! @brief Status flag mask. */
@@ -61,7 +66,7 @@ typedef enum _acmp_offset_mode
     kACMP_OffsetLevel0 = 0U, /*!< The comparator hard block output has level 0 offset internally. */
     kACMP_OffsetLevel1 = 1U, /*!< The comparator hard block output has level 1 offset internally. */
 } acmp_offset_mode_t;
-#endif /* FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT */
+#endif                       /* FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT */
 
 /*!
  * @brief Comparator hard block hysteresis control.
@@ -90,14 +95,16 @@ typedef enum _acmp_port_input
     kACMP_PortInputFromDAC = 0U, /*!< Port input from the 8-bit DAC output. */
     kACMP_PortInputFromMux = 1U, /*!< Port input from the analog 8-1 mux. */
 } acmp_port_input_t;
-#endif /* FSL_FEATURE_ACMP_HAS_C1_INPSEL_BIT */
+#endif                           /* FSL_FEATURE_ACMP_HAS_C1_INPSEL_BIT */
 
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U))
 /*! @brief Fixed mux port. */
 typedef enum _acmp_fixed_port
 {
     kACMP_FixedPlusPort  = 0U, /*!< Only the inputs to the Minus port are swept in each round. */
     kACMP_FixedMinusPort = 1U, /*!< Only the inputs to the Plus port are swept in each round. */
 } acmp_fixed_port_t;
+#endif /* !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U)) */
 
 #if defined(FSL_FEATURE_ACMP_HAS_C1_DMODE_BIT) && (FSL_FEATURE_ACMP_HAS_C1_DMODE_BIT == 1U)
 /*! @brief Internal DAC's work mode. */
@@ -106,7 +113,7 @@ typedef enum _acmp_dac_work_mode
     kACMP_DACWorkLowSpeedMode  = 0U, /*!< DAC is selected to work in low speed and low power mode. */
     kACMP_DACWorkHighSpeedMode = 1U, /*!< DAC is selected to work in high speed high power mode. */
 } acmp_dac_work_mode_t;
-#endif /* FSL_FEATURE_ACMP_HAS_C1_DMODE_BIT */
+#endif                               /* FSL_FEATURE_ACMP_HAS_C1_DMODE_BIT */
 
 /*! @brief Configuration for ACMP. */
 typedef struct _acmp_config
@@ -144,7 +151,9 @@ typedef struct _acmp_channel_config
 /*! @brief Configuration for filter. */
 typedef struct _acmp_filter_config
 {
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_C0_SE_BIT) && (FSL_FEATURE_ACMP_HAS_NO_C0_SE_BIT == 1U))
     bool enableSample;     /*!< Using external SAMPLE as sampling clock input, or using divided bus clock. */
+#endif                     /* FSL_FEATURE_ACMP_HAS_NO_C0_SE_BIT */
     uint32_t filterCount;  /*!< Filter Sample Count. Available range is 1-7, 0 would cause the filter disabled. */
     uint32_t filterPeriod; /*!< Filter Sample Period. The divider to bus clock. Available range is 0-255. */
 } acmp_filter_config_t;
@@ -164,6 +173,7 @@ typedef struct _acmp_dac_config
 #endif /* FSL_FEATURE_ACMP_HAS_C1_DMODE_BIT */
 } acmp_dac_config_t;
 
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U))
 /*! @brief Configuration for round robin mode. */
 typedef struct _acmp_round_robin_config
 {
@@ -174,9 +184,10 @@ typedef struct _acmp_round_robin_config
     uint32_t sampleClockCount;   /*!< Specifies how many round-robin clock cycles(0~3) later the sample takes place. */
     uint32_t delayModulus;       /*!< Comparator and DAC initialization delay modulus. */
 } acmp_round_robin_config_t;
+#endif /* !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U)) */
 
 #if defined(FSL_FEATURE_ACMP_HAS_C3_REG) && (FSL_FEATURE_ACMP_HAS_C3_REG == 1U)
-
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN) && (FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN == 1U))
 /*! @brief Discrete mode clock selection. */
 typedef enum _acmp_discrete_clock_source
 {
@@ -216,6 +227,7 @@ typedef enum _acmp_discrete_phase_time
     kACMP_DiscretePhaseTimeAlt6 = 6U, /*!< The phase x active in one sampling selection 6. */
     kACMP_DiscretePhaseTimeAlt7 = 7U, /*!< The phase x active in one sampling selection 7. */
 } acmp_discrete_phase_time_t;
+#endif /* !(defined(FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN) && (FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN == 1U)) */
 
 /*! @brief Configuration for discrete mode. */
 typedef struct _acmp_discrete_mode_config
@@ -224,6 +236,7 @@ typedef struct _acmp_discrete_mode_config
                                                  mode is used. */
     bool enableNegativeChannelDiscreteMode; /*!< Negative Channel Continuous Mode Enable. By default, the continuous
                                                  mode is used. */
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN) && (FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN == 1U))
     bool enableResistorDivider; /*!< Resistor Divider Enable is used to enable the resistor divider for the inputs when
                                      they come from 3v domain and their values are above 1.8v. */
     acmp_discrete_clock_source_t clockSource; /*!< Select the clock source in order to generate the requiried timing for
@@ -231,6 +244,7 @@ typedef struct _acmp_discrete_mode_config
     acmp_discrete_sample_time_t sampleTime;   /*!< Select the ACMP total sampling time period. */
     acmp_discrete_phase_time_t phase1Time;    /*!< Select the ACMP phase 1 sampling time. */
     acmp_discrete_phase_time_t phase2Time;    /*!< Select the ACMP phase 2 sampling time. */
+#endif /* !(defined(FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN) && (FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN == 1U)) */
 } acmp_discrete_mode_config_t;
 
 #endif /* FSL_FEATURE_ACMP_HAS_C3_REG */
@@ -346,6 +360,7 @@ void ACMP_SetChannelConfig(CMP_Type *base, const acmp_channel_config_t *config);
  */
 void ACMP_EnableDMA(CMP_Type *base, bool enable);
 
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_WINDOW_MODE) && (FSL_FEATURE_ACMP_HAS_NO_WINDOW_MODE == 1U))
 /*!
  * @brief Enables or disables window mode.
  *
@@ -353,6 +368,7 @@ void ACMP_EnableDMA(CMP_Type *base, bool enable);
  * @param enable True to enable window mode.
  */
 void ACMP_EnableWindowMode(CMP_Type *base, bool enable);
+#endif /* !(defined(FSL_FEATURE_ACMP_HAS_NO_WINDOW_MODE) && (FSL_FEATURE_ACMP_HAS_NO_WINDOW_MODE == 1U)) */
 
 /*!
  * @brief Configures the filter.
@@ -393,6 +409,7 @@ void ACMP_SetFilterConfig(CMP_Type *base, const acmp_filter_config_t *config);
  */
 void ACMP_SetDACConfig(CMP_Type *base, const acmp_dac_config_t *config);
 
+#if !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U))
 /*!
  * @brief Configures the round robin mode.
  *
@@ -454,6 +471,7 @@ static inline uint32_t ACMP_GetRoundRobinResult(CMP_Type *base)
 {
     return ((base->C2 & CMP_C2_ACOn_MASK) >> CMP_C2_ACOn_SHIFT);
 }
+#endif /* !(defined(FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE) && (FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE == 1U)) */
 
 /*! @} */
 

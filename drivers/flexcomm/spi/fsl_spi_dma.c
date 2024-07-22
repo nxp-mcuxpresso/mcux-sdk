@@ -352,7 +352,7 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
                 DMA_CreateDescriptor(&s_spi_descriptor_table[instance], &tmp_xfercfg, &s_txLastWord[instance],
                                      (uint32_t *)address, NULL);
             }
-            DMA_PrepareTransfer(&xferConfig, xfer->txData, (uint32_t *)address, bytesPerFrame, firstTimeSize,
+            DMA_PrepareTransfer(&xferConfig, (void *)xfer->txData, (uint32_t *)address, bytesPerFrame, firstTimeSize,
                                 kDMA_MemoryToPeripheral, nextDesc);
 
             /* Disable interrupts for first descriptor to avoid calling callback twice. */
@@ -616,7 +616,7 @@ static void SPI_TxDMACallback(dma_handle_t *handle, void *userData, bool transfe
         dma_transfer_config_t xferConfig = {0};
         DMA_PrepareTransfer(&xferConfig, (uint8_t *)spiHandle->txNextData, (uint32_t *)(writeAddress), bytesPerFrame,
                             nextDataSize, kDMA_MemoryToPeripheral, nextDesc);
-        spiHandle->txNextData   = (uint8_t *)(spiHandle->txNextData + nextDataSize);
+        spiHandle->txNextData   = (spiHandle->txNextData + nextDataSize);
         xferConfig.xfercfg.intA = thisTimeIntFlag;
         xferConfig.xfercfg.intB = false;
         result                  = DMA_SubmitTransfer(spiHandle->txHandle, &xferConfig);

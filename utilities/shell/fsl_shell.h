@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -65,6 +65,11 @@
 /*! @brief Macro to set shell task stack size. */
 #ifndef SHELL_TASK_STACK_SIZE
 #define SHELL_TASK_STACK_SIZE (1000U)
+#endif
+
+/*! @brief Whether print copyright. */
+#ifndef SHELL_PRINT_COPYRIGHT
+#define SHELL_PRINT_COPYRIGHT (1U)
 #endif
 
 /*! @brief Shell status */

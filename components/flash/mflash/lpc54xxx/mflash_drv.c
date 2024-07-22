@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2020, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -38,7 +38,7 @@ static spifi_command_t command[COMMAND_NUM] = {
 /* Wait until command finishes */
 static inline void mflash_drv_check_if_finish(void)
 {
-    uint8_t val = 0;
+    uint8_t val = 0U;
     do
     {
         SPIFI_SetCommand(MFLASH_SPIFI, &command[GET_STATUS]);
@@ -46,7 +46,7 @@ static inline void mflash_drv_check_if_finish(void)
         {
         }
         val = SPIFI_ReadDataByte(MFLASH_SPIFI);
-    } while (val & 0x1);
+    } while ((val & 0x1U) != 0U);
 }
 
 static void mflash_drv_read_mode(void)
@@ -219,7 +219,7 @@ int32_t mflash_drv_read(uint32_t addr, uint32_t *buffer, uint32_t len)
 /* API - Get pointer to FLASH region */
 void *mflash_drv_phys2log(uint32_t addr, uint32_t len)
 {
-    uint32_t last_addr = addr + (len != 0 ? len - 1 : 0);
+    uint32_t last_addr = addr + (len != 0UL ? len - 1UL : 0UL);
 
     if (last_addr > (FSL_FEATURE_SPIFI_END_ADDR - FSL_FEATURE_SPIFI_START_ADDR))
     {
@@ -239,7 +239,7 @@ uint32_t mflash_drv_log2phys(void *ptr, uint32_t len)
         return MFLASH_INVALID_ADDRESS;
     }
 
-    if (log_addr + len > FSL_FEATURE_SPIFI_END_ADDR + 1)
+    if (log_addr + len > FSL_FEATURE_SPIFI_END_ADDR + 1UL)
     {
         return MFLASH_INVALID_ADDRESS;
     }

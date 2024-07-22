@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 NXP
+ * Copyright 2019-2021, 2023 NXP
  * All rights reserved.
  *
  *
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Driver version 2.0.2. */
-#define FSL_MECC_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 2U))
+/*! @brief Driver version 2.1.0. */
+#define FSL_MECC_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 0U))
 /*! @} */
 /*! @brief Error codes for the MECC driver. */
 enum
@@ -38,41 +38,41 @@ enum
  */
 enum
 {
-    kMECC_SingleError0InterruptEnable =
-        MECC_ERR_SIG_EN_SINGLE_ERR0_SIG_EN_MASK, /*!< Single Bit Error On Ocram Bank0 interrupt enable.*/
-    kMECC_SingleError1InterruptEnable =
-        MECC_ERR_SIG_EN_SINGLE_ERR1_SIG_EN_MASK, /*!< Single Bit Error On Ocram Bank1 interrupt enable*/
-    kMECC_SingleError2InterruptEnable =
-        MECC_ERR_SIG_EN_SINGLE_ERR2_SIG_EN_MASK, /*!< Single Bit Error On Ocram Bank2 interrupt enable*/
-    kMECC_SingleError3InterruptEnable =
-        MECC_ERR_SIG_EN_SINGLE_ERR3_SIG_EN_MASK, /*!< Single Bit Error On Ocram Bank3 interrupt enable*/
+    kMECC_SingleError0InterruptEnable = MECC_ERR_SIG_EN_SINGLE_ERR0_SIG_EN_MASK, /*!< Single Bit Error On Ocram Bank0
+                                                                                        interrupt enable.*/
+    kMECC_SingleError1InterruptEnable = MECC_ERR_SIG_EN_SINGLE_ERR1_SIG_EN_MASK, /*!< Single Bit Error On Ocram Bank1
+                                                                                        interrupt enable*/
+    kMECC_SingleError2InterruptEnable = MECC_ERR_SIG_EN_SINGLE_ERR2_SIG_EN_MASK, /*!< Single Bit Error On Ocram Bank2
+                                                                                        interrupt enable*/
+    kMECC_SingleError3InterruptEnable = MECC_ERR_SIG_EN_SINGLE_ERR3_SIG_EN_MASK, /*!< Single Bit Error On Ocram Bank3
+                                                                                        interrupt enable*/
 
-    kMECC_MultiError0InterruptEnable =
-        MECC_ERR_SIG_EN_MULTI_ERR0_SIG_EN_MASK, /*!< Multiple Bits Error On Ocram Bank0 interrupt enable*/
-    kMECC_MultiError1InterruptEnable =
-        MECC_ERR_SIG_EN_MULTI_ERR1_SIG_EN_MASK, /*!< Multiple Bits Error On Ocram Bank1 interrupt enable*/
-    kMECC_MultiError2InterruptEnable =
-        MECC_ERR_SIG_EN_MULTI_ERR2_SIG_EN_MASK, /*!< Multiple Bits Error On Ocram Bank2 interrupt enable*/
-    kMECC_MultiError3InterruptEnable =
-        MECC_ERR_SIG_EN_MULTI_ERR3_SIG_EN_MASK, /*!< Multiple Bits Error On Ocram Bank3 interrupt enable*/
+    kMECC_MultiError0InterruptEnable = MECC_ERR_SIG_EN_MULTI_ERR0_SIG_EN_MASK, /*!< Multiple Bits Error On Ocram Bank0
+                                                                                        interrupt enable*/
+    kMECC_MultiError1InterruptEnable = MECC_ERR_SIG_EN_MULTI_ERR1_SIG_EN_MASK, /*!< Multiple Bits Error On Ocram Bank1
+                                                                                        interrupt enable*/
+    kMECC_MultiError2InterruptEnable = MECC_ERR_SIG_EN_MULTI_ERR2_SIG_EN_MASK, /*!< Multiple Bits Error On Ocram Bank2
+                                                                                        interrupt enable*/
+    kMECC_MultiError3InterruptEnable = MECC_ERR_SIG_EN_MULTI_ERR3_SIG_EN_MASK, /*!< Multiple Bits Error On Ocram Bank3
+                                                                                        interrupt enable*/
 
-    kMECC_StrobeError0InterruptEnable =
-        MECC_ERR_SIG_EN_STRB_ERR0_SIG_EN_MASK, /*!< AXI Strobe Error On Ocram Bank0 interrupt enable*/
-    kMECC_StrobeError1InterruptEnable =
-        MECC_ERR_SIG_EN_STRB_ERR1_SIG_EN_MASK, /*!< AXI Strobe Error On Ocram Bank1 interrupt enable*/
-    kMECC_StrobeError2InterruptEnable =
-        MECC_ERR_SIG_EN_STRB_ERR2_SIG_EN_MASK, /*!< AXI Strobe Error On Ocram Bank2 interrupt enable*/
-    kMECC_StrobeError3InterruptEnable =
-        MECC_ERR_SIG_EN_STRB_ERR3_SIG_EN_MASK, /*!< AXI Strobe Error On Ocram Bank3 interrupt enable*/
+    kMECC_StrobeError0InterruptEnable = MECC_ERR_SIG_EN_STRB_ERR0_SIG_EN_MASK, /*!< AXI Strobe Error On Ocram Bank0
+                                                                                        interrupt enable*/
+    kMECC_StrobeError1InterruptEnable = MECC_ERR_SIG_EN_STRB_ERR1_SIG_EN_MASK, /*!< AXI Strobe Error On Ocram Bank1
+                                                                                        interrupt enable*/
+    kMECC_StrobeError2InterruptEnable = MECC_ERR_SIG_EN_STRB_ERR2_SIG_EN_MASK, /*!< AXI Strobe Error On Ocram Bank2
+                                                                                        interrupt enable*/
+    kMECC_StrobeError3InterruptEnable = MECC_ERR_SIG_EN_STRB_ERR3_SIG_EN_MASK, /*!< AXI Strobe Error On Ocram Bank3
+                                                                                        interrupt enable*/
 
-    kMECC_AccessError0InterruptEnable =
-        MECC_ERR_SIG_EN_ADDR_ERR0_SIG_EN_MASK, /*!< Ocram Access Error On Bank0 interrupt enable*/
-    kMECC_AccessError1InterruptEnable =
-        MECC_ERR_SIG_EN_ADDR_ERR1_SIG_EN_MASK, /*!< Ocram Access Error On Bank1 interrupt enable*/
-    kMECC_AccessError2InterruptEnable =
-        MECC_ERR_SIG_EN_ADDR_ERR2_SIG_EN_MASK, /*!< Ocram Access Error On Bank2 interrupt enable*/
-    kMECC_AccessError3InterruptEnable =
-        MECC_ERR_SIG_EN_ADDR_ERR3_SIG_EN_MASK, /*!< Ocram Access Error On Bank3 interrupt enable*/
+    kMECC_AccessError0InterruptEnable = MECC_ERR_SIG_EN_ADDR_ERR0_SIG_EN_MASK, /*!< Ocram Access Error On Bank0
+                                                                                        interrupt enable*/
+    kMECC_AccessError1InterruptEnable = MECC_ERR_SIG_EN_ADDR_ERR1_SIG_EN_MASK, /*!< Ocram Access Error On Bank1
+                                                                                        interrupt enable*/
+    kMECC_AccessError2InterruptEnable = MECC_ERR_SIG_EN_ADDR_ERR2_SIG_EN_MASK, /*!< Ocram Access Error On Bank2
+                                                                                        interrupt enable*/
+    kMECC_AccessError3InterruptEnable = MECC_ERR_SIG_EN_ADDR_ERR3_SIG_EN_MASK, /*!< Ocram Access Error On Bank3
+                                                                                        interrupt enable*/
 
     kMECC_AllInterruptsEnable = 0xFFFF, /*!< all  interrupts enable */
 };
@@ -84,41 +84,41 @@ enum
  */
 enum
 {
-    kMECC_SingleError0InterruptStatusEnable =
-        MECC_ERR_STAT_EN_SINGLE_ERR0_STAT_EN_MASK, /*!< Single Bit Error On Ocram Bank0 interrupt status enable.*/
-    kMECC_SingleError1InterruptStatusEnable =
-        MECC_ERR_STAT_EN_SINGLE_ERR1_STAT_EN_MASK, /*!< Single Bit Error On Ocram Bank1 interrupt status enable*/
-    kMECC_SingleError2InterruptStatusEnable =
-        MECC_ERR_STAT_EN_SINGLE_ERR2_STAT_EN_MASK, /*!< Single Bit Error On Ocram Bank2 interrupt status enable*/
-    kMECC_SingleError3InterruptStatusEnable =
-        MECC_ERR_STAT_EN_SINGLE_ERR3_STAT_EN_MASK, /*!< Single Bit Error On Ocram Bank3 interrupt status enable*/
+    kMECC_SingleError0InterruptStatusEnable = MECC_ERR_STAT_EN_SINGLE_ERR0_STAT_EN_MASK, /*!< Single Bit Error On Ocram
+                                                                                        Bank0 interrupt status enable.*/
+    kMECC_SingleError1InterruptStatusEnable = MECC_ERR_STAT_EN_SINGLE_ERR1_STAT_EN_MASK, /*!< Single Bit Error On Ocram
+                                                                                        Bank1 interrupt status enable*/
+    kMECC_SingleError2InterruptStatusEnable = MECC_ERR_STAT_EN_SINGLE_ERR2_STAT_EN_MASK, /*!< Single Bit Error On Ocram
+                                                                                        Bank2 interrupt status enable*/
+    kMECC_SingleError3InterruptStatusEnable = MECC_ERR_STAT_EN_SINGLE_ERR3_STAT_EN_MASK, /*!< Single Bit Error On Ocram
+                                                                                        Bank3 interrupt status enable*/
 
-    kMECC_MultiError0InterruptStatusEnable =
-        MECC_ERR_STAT_EN_MULTI_ERR0_STAT_EN_MASK, /*!< Multiple Bits Error On Ocram Bank0 interrupt status enable*/
-    kMECC_MultiError1InterruptStatusEnable =
-        MECC_ERR_STAT_EN_MULTI_ERR1_STAT_EN_MASK, /*!< Multiple Bits Error On Ocram Bank1 interrupt status enable*/
-    kMECC_MultiError2InterruptStatusEnable =
-        MECC_ERR_STAT_EN_MULTI_ERR2_STAT_EN_MASK, /*!< Multiple Bits Error On Ocram Bank2 interrupt status enable*/
-    kMECC_MultiError3InterruptStatusEnable =
-        MECC_ERR_STAT_EN_MULTI_ERR3_STAT_EN_MASK, /*!< Multiple Bits Error On Ocram Bank3 interrupt status enable*/
+    kMECC_MultiError0InterruptStatusEnable = MECC_ERR_STAT_EN_MULTI_ERR0_STAT_EN_MASK, /*!< Multiple Bits Error On Ocram
+                                                                                        Bank0 interrupt status enable*/
+    kMECC_MultiError1InterruptStatusEnable = MECC_ERR_STAT_EN_MULTI_ERR1_STAT_EN_MASK, /*!< Multiple Bits Error On Ocram
+                                                                                        Bank1 interrupt status enable*/
+    kMECC_MultiError2InterruptStatusEnable = MECC_ERR_STAT_EN_MULTI_ERR2_STAT_EN_MASK, /*!< Multiple Bits Error On Ocram
+                                                                                        Bank2 interrupt status enable*/
+    kMECC_MultiError3InterruptStatusEnable = MECC_ERR_STAT_EN_MULTI_ERR3_STAT_EN_MASK, /*!< Multiple Bits Error On Ocram
+                                                                                        Bank3 interrupt status enable*/
 
-    kMECC_StrobeError0InterruptStatusEnable =
-        MECC_ERR_STAT_EN_STRB_ERR0_STAT_EN_MASK, /*!< AXI Strobe Error On Ocram Bank0 interrupt status enable*/
-    kMECC_StrobeError1InterruptStatusEnable =
-        MECC_ERR_STAT_EN_STRB_ERR1_STAT_EN_MASK, /*!< AXI Strobe Error On Ocram Bank1 interrupt status enable*/
-    kMECC_StrobeError2InterruptStatusEnable =
-        MECC_ERR_STAT_EN_STRB_ERR2_STAT_EN_MASK, /*!< AXI Strobe Error On Ocram Bank2 interrupt status enable*/
-    kMECC_StrobeError3InterruptStatusEnable =
-        MECC_ERR_STAT_EN_STRB_ERR3_STAT_EN_MASK, /*!< AXI Strobe Error On Ocram Bank3 interrupt status enable*/
+    kMECC_StrobeError0InterruptStatusEnable = MECC_ERR_STAT_EN_STRB_ERR0_STAT_EN_MASK, /*!< AXI Strobe Error On Ocram
+                                                                                        Bank0 interrupt status enable*/
+    kMECC_StrobeError1InterruptStatusEnable = MECC_ERR_STAT_EN_STRB_ERR1_STAT_EN_MASK, /*!< AXI Strobe Error On Ocram
+                                                                                        Bank1 interrupt status enable*/
+    kMECC_StrobeError2InterruptStatusEnable = MECC_ERR_STAT_EN_STRB_ERR2_STAT_EN_MASK, /*!< AXI Strobe Error On Ocram
+                                                                                        Bank2 interrupt status enable*/
+    kMECC_StrobeError3InterruptStatusEnable = MECC_ERR_STAT_EN_STRB_ERR3_STAT_EN_MASK, /*!< AXI Strobe Error On Ocram
+                                                                                        Bank3 interrupt status enable*/
 
-    kMECC_AccessError0InterruptStatusEnable =
-        MECC_ERR_STAT_EN_ADDR_ERR0_STAT_EN_MASK, /*!< Ocram Access Error On Bank0 interrupt status enable*/
-    kMECC_AccessError1InterruptStatusEnable =
-        MECC_ERR_STAT_EN_ADDR_ERR1_STAT_EN_MASK, /*!< Ocram Access Error On Bank1 interrupt status enable*/
-    kMECC_AccessError2InterruptStatusEnable =
-        MECC_ERR_STAT_EN_ADDR_ERR2_STAT_EN_MASK, /*!< Ocram Access Error On Bank2 interrupt status enable*/
-    kMECC_AccessError3InterruptStatusEnable =
-        MECC_ERR_STAT_EN_ADDR_ERR3_STAT_EN_MASK, /*!< Ocram Access Error On Bank3 interrupt status enable*/
+    kMECC_AccessError0InterruptStatusEnable = MECC_ERR_STAT_EN_ADDR_ERR0_STAT_EN_MASK, /*!< Ocram Access Error On Bank0
+                                                                                            interrupt status enable*/
+    kMECC_AccessError1InterruptStatusEnable = MECC_ERR_STAT_EN_ADDR_ERR1_STAT_EN_MASK, /*!< Ocram Access Error On Bank1
+                                                                                            interrupt status enable*/
+    kMECC_AccessError2InterruptStatusEnable = MECC_ERR_STAT_EN_ADDR_ERR2_STAT_EN_MASK, /*!< Ocram Access Error On Bank2
+                                                                                            interrupt status enable*/
+    kMECC_AccessError3InterruptStatusEnable = MECC_ERR_STAT_EN_ADDR_ERR3_STAT_EN_MASK, /*!< Ocram Access Error On Bank3
+                                                                                            interrupt status enable*/
 
     kMECC_AllInterruptsStatusEnable = 0xFFFF, /*!< all  interrupts enable */
 };
@@ -130,32 +130,32 @@ enum
  */
 enum
 {
-    kMECC_SingleError0InterruptFlag =
-        MECC_ERR_STATUS_SINGLE_ERR0_MASK, /*!< Single Bit Error On Ocram Bank0 interrupt flag*/
-    kMECC_SingleError1InterruptFlag =
-        MECC_ERR_STATUS_SINGLE_ERR1_MASK, /*!< Single Bit Error On Ocram Bank1 interrupt flag*/
-    kMECC_SingleError2InterruptFlag =
-        MECC_ERR_STATUS_SINGLE_ERR2_MASK, /*!< Single Bit Error On Ocram Bank2 interrupt flag*/
-    kMECC_SingleError3InterruptFlag =
-        MECC_ERR_STATUS_SINGLE_ERR3_MASK, /*!< Single Bit Error On Ocram Bank3 interrupt flag*/
+    kMECC_SingleError0InterruptFlag = MECC_ERR_STATUS_SINGLE_ERR0_MASK, /*!< Single Bit Error On Ocram
+                                                                            Bank0 interrupt flag*/
+    kMECC_SingleError1InterruptFlag = MECC_ERR_STATUS_SINGLE_ERR1_MASK, /*!< Single Bit Error On Ocram
+                                                                            Bank1 interrupt flag*/
+    kMECC_SingleError2InterruptFlag = MECC_ERR_STATUS_SINGLE_ERR2_MASK, /*!< Single Bit Error On Ocram
+                                                                            Bank2 interrupt flag*/
+    kMECC_SingleError3InterruptFlag = MECC_ERR_STATUS_SINGLE_ERR3_MASK, /*!< Single Bit Error On Ocram
+                                                                            Bank3 interrupt flag*/
 
-    kMECC_MultiError0InterruptFlag =
-        MECC_ERR_STATUS_MULTI_ERR0_MASK, /*!< Multiple Bits Error On Ocram Bank0 interrupt flag*/
-    kMECC_MultiError1InterruptFlag =
-        MECC_ERR_STATUS_MULTI_ERR1_MASK, /*!< Multiple Bits Error On Ocram Bank1 interrupt flag*/
-    kMECC_MultiError2InterruptFlag =
-        MECC_ERR_STATUS_MULTI_ERR2_MASK, /*!< Multiple Bits Error On Ocram Bank2 interrupt flag*/
-    kMECC_MultiError3InterruptFlag =
-        MECC_ERR_STATUS_MULTI_ERR3_MASK, /*!< Multiple Bits Error On Ocram Bank3 interrupt flag*/
+    kMECC_MultiError0InterruptFlag = MECC_ERR_STATUS_MULTI_ERR0_MASK, /*!< Multiple Bits Error On Ocram
+                                                                            Bank0 interrupt flag*/
+    kMECC_MultiError1InterruptFlag = MECC_ERR_STATUS_MULTI_ERR1_MASK, /*!< Multiple Bits Error On Ocram
+                                                                            Bank1 interrupt flag*/
+    kMECC_MultiError2InterruptFlag = MECC_ERR_STATUS_MULTI_ERR2_MASK, /*!< Multiple Bits Error On Ocram
+                                                                            Bank2 interrupt flag*/
+    kMECC_MultiError3InterruptFlag = MECC_ERR_STATUS_MULTI_ERR3_MASK, /*!< Multiple Bits Error On Ocram
+                                                                            Bank3 interrupt flag*/
 
-    kMECC_StrobeError0InterruptFlag =
-        MECC_ERR_STATUS_STRB_ERR0_MASK, /*!< AXI Strobe Error On Ocram Bank0 interrupt flag*/
-    kMECC_StrobeError1InterruptFlag =
-        MECC_ERR_STATUS_STRB_ERR1_MASK, /*!< AXI Strobe Error On Ocram Bank1 interrupt flag*/
-    kMECC_StrobeError2InterruptFlag =
-        MECC_ERR_STATUS_STRB_ERR2_MASK, /*!< AXI Strobe Error On Ocram Bank2 interrupt flag*/
-    kMECC_StrobeError3InterruptFlag =
-        MECC_ERR_STATUS_STRB_ERR3_MASK, /*!< AXI Strobe Error On Ocram Bank3 interrupt flag*/
+    kMECC_StrobeError0InterruptFlag = MECC_ERR_STATUS_STRB_ERR0_MASK, /*!< AXI Strobe Error On Ocram
+                                                                            Bank0 interrupt flag*/
+    kMECC_StrobeError1InterruptFlag = MECC_ERR_STATUS_STRB_ERR1_MASK, /*!< AXI Strobe Error On Ocram
+                                                                            Bank1 interrupt flag*/
+    kMECC_StrobeError2InterruptFlag = MECC_ERR_STATUS_STRB_ERR2_MASK, /*!< AXI Strobe Error On Ocram
+                                                                            Bank2 interrupt flag*/
+    kMECC_StrobeError3InterruptFlag = MECC_ERR_STATUS_STRB_ERR3_MASK, /*!< AXI Strobe Error On Ocram
+                                                                            Bank3 interrupt flag*/
 
     kMECC_AccessError0InterruptFlag = MECC_ERR_STATUS_ADDR_ERR0_MASK, /*!< Ocram Access Error On Bank0 interrupt flag*/
     kMECC_AccessError1InterruptFlag = MECC_ERR_STATUS_ADDR_ERR1_MASK, /*!< Ocram Access Error On Bank1 interrupt flag*/
@@ -174,21 +174,49 @@ enum
     kMECC_OcramBank3 = 3U, /*!< ocram bank number 3: ocram_base_address+0x20*i+0x18 */
 };
 
-/*! @brief MECC instance */
-enum
+/*!
+ * @brief Pending flags for OCRAM wait and pipeline enable.
+ * @anchor mecc_pending_flag_t.
+ */
+enum _mecc_pending_flag
 {
-    kMECC_Instance0 = 0U, /*!< Peripheral MECC1 base */
-    kMECC_Instance1 = 1U, /*!< Peripheral MECC2 base */
+    kMECC_ReadDataWaitPendingFlag = 0x1U,       /*!< Indicate an update pending status for read data wait. */
+    kMECC_ReadAddrPipelinePendingFlag = 0x2U,   /*!< Indicate an update pending status for read address pipeline. */
+    kMECC_WriteDataPipelinePendingFlag = 0x4U,  /*!< Indicate an update pending status for write data pipeline. */
+    kMECC_WriteAddrPipelinePendingFlag = 0x8U,  /*!< Indicate an update pending status for write address pipeline. */
+
+    kMECC_AllPendingFlags = 0xFU,   /*!< Indicate all pending status flags. */
 };
 
-/*! @brief MECC user configuration.*/
+/*! @brief MECC user configuration.
+ * @note Ocram1StartAddress, Ocram1EndAddress, Ocram2StartAddress, Ocram2EndAddress are removed since 2.1.0 version;
+ * This changes will cause compile error for applications which use MECC driver before 2.1.0 version;
+ * To resolve compile error please use *startAddress* and *endAddress* as instead.
+*/
 typedef struct _mecc_config
 {
     bool enableMecc;             /*!< Enable the MECC function. */
-    uint32_t Ocram1StartAddress; /*!< Ocram 1 start address. */
-    uint32_t Ocram1EndAddress;   /*!< Ocram 1 end address. */
-    uint32_t Ocram2StartAddress; /*!< Ocram 2 start address. */
-    uint32_t Ocram2EndAddress;   /*!< Ocram 2 end address. */
+    uint32_t startAddress;       /*!< Start address of corresponding OCRAM memory region to enable ECC. */
+    uint32_t endAddress;         /*!< end address of corresponding OCRAM memory region to enable ECC. */
+    /*! uint32_t Ocram1StartAddress;  Ocram 1 start address, deprecated since 2.1.0 */
+    /*! uint32_t Ocram1EndAddress;    Ocram 1 end address, deprecated since 2.1.0 */
+    /*! uint32_t Ocram2StartAddress;  Ocram 2 start address, deprecated since 2.1.0. */
+    /*! uint32_t Ocram2EndAddress;    Ocram 2 end address, deprecated since 2.1.0 */
+    bool enableReadDataWait;        /*!< If enabled, 1-cycle wait state will be inserted into each read access:
+                                        - \b true Enable read data wait;
+                                        - \b false Disable read data wait. */
+    bool enableReadAddrPipeline;    /*!< If enabled, the read address will be registered before
+                                        can be applied to memory cell:
+                                        - \b true Enable Read address pipeline;
+                                        - \b false Disable Read address pipeline. */
+    bool enableWriteDataPipeline;   /*!< If enabled, the write data will be registered before
+                                        can be applied to memory cell:
+                                        - \b true Enable write data pipeline;
+                                        - \b false Disable write data pipeline. */
+    bool enableWriteAddrPipeline;   /*!< If enabled, write address will be registered before
+                                        can be applied to memory cell:
+                                        - \b true Enable write address pipeline;
+                                        - \b false Disable write address pipeline. */
 } mecc_config_t;
 
 /*! @brief MECC ocram single error information, including single error address, ECC code, error data and error bit
@@ -385,6 +413,17 @@ status_t MECC_GetSingleErrorInfo(MECC_Type *base, mecc_single_error_info_t *info
  */
 status_t MECC_GetMultiErrorInfo(MECC_Type *base, mecc_multi_error_info_t *info, uint8_t banknumber);
 
+/*!
+ * @brief Get pending flags for OCRAM wait and pipeline enable.
+ * 
+ * @param base MECC base address.
+ * 
+ * @return Pending flags, should be the OR'ed value of @ref mecc_pending_flag_t.
+ */
+static inline uint32_t MECC_GetPendingFlags(MECC_Type *base)
+{
+    return base->PENDING_STAT;
+}
 /*! @}*/
 
 #if defined(__cplusplus)

@@ -26,7 +26,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_TSTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
+#define FSL_TSTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
                                                          /*! @} */
 
 /*******************************************************************************
@@ -53,10 +53,16 @@ static inline uint64_t TSTMR_ReadTimeStamp(TSTMR_Type *base)
 {
     uint32_t reg_l;
     uint32_t reg_h;
-    
+    uint32_t regPrimask = DisableGlobalIRQ();
+    /* A complete read operation should include both TSTMR LOW and HIGH reads. If a HIGH read does not follow a LOW
+     * read, then any other Time Stamp value read will be locked at a fixed value. The TSTMR LOW read should occur
+     * first, followed by the TSTMR HIGH read.
+     * */
     reg_l = base->L;
     __DMB();
     reg_h = base->H;
+
+    EnableGlobalIRQ(regPrimask);
 
     return (uint64_t)reg_l | (((uint64_t)reg_h) << 32U);
 }
@@ -70,18 +76,16 @@ static inline uint64_t TSTMR_ReadTimeStamp(TSTMR_Type *base)
  * @param base      TSTMR peripheral base address.
  * @param delayInUs Delay value in microseconds.
  */
-static inline void TSTMR_DelayUs(TSTMR_Type *base, uint32_t delayInUs)
+static inline void TSTMR_DelayUs(TSTMR_Type *base, uint64_t delayInUs)
 {
+#if defined(TSTMR_CLOCK_FREQUENCY_MHZ)
     uint64_t startTime = TSTMR_ReadTimeStamp(base);
-#if defined(FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_1MHZ) && FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_1MHZ
-    while (TSTMR_ReadTimeStamp(base) - startTime < delayInUs)
-#elif defined(FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_8MHZ) && FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_8MHZ
-    while (TSTMR_ReadTimeStamp(base) - startTime < 8 * delayInUs)
+    while (TSTMR_ReadTimeStamp(base) - startTime < TSTMR_CLOCK_FREQUENCY_MHZ * delayInUs)
+    {
+    }
 #else
     assert(0);
 #endif
-    {
-    }
 }
 
 #if defined(__cplusplus)

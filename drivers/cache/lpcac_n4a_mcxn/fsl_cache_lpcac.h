@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,10 +19,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief cache driver version */
-#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
-/*! @} */
+#define FSL_CACHE_LPCAC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*@}*/
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -60,7 +60,7 @@ static inline void L1CACHE_DisableCodeCache(void)
  */
 static inline void L1CACHE_InvalidateCodeCache(void)
 {
-    SYSCON->LPCAC_CTRL &= ~SYSCON_LPCAC_CTRL_CLR_LPCAC_MASK;
+    SYSCON->LPCAC_CTRL |= SYSCON_LPCAC_CTRL_CLR_LPCAC_MASK;
 }
 
 /*!
@@ -173,7 +173,7 @@ static inline void L1CACHE_DisableXOMControl(void)
 }
 #endif
 
-/*! @} */
+/*@}*/
 
 #if defined(__cplusplus)
 }

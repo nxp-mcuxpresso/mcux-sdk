@@ -8,6 +8,8 @@
 #ifndef _SDMMC_CONFIG_H_
 #define _SDMMC_CONFIG_H_
 
+#include "fsl_common.h"
+
 #ifdef SD_ENABLED
 #include "fsl_sd.h"
 #endif

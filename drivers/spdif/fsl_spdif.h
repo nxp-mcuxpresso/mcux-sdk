@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 6)) /*!< Version 2.0.6 */
+#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 7)) /*!< Version 2.0.7 */
 /*! @} */
 
 /*! @brief SPDIF return status*/
@@ -325,7 +325,11 @@ static inline uint32_t SPDIF_GetStatusFlag(SPDIF_Type *base)
  */
 static inline void SPDIF_ClearStatusFlags(SPDIF_Type *base, uint32_t mask)
 {
+#if defined FSL_FEATURE_SPDIF_HAS_NO_SIC_REGISTER && FSL_FEATURE_SPDIF_HAS_NO_SIC_REGISTER
+    base->SIS = mask;
+#else
     base->SIC = mask;
+#endif
 }
 
 /*! @} */

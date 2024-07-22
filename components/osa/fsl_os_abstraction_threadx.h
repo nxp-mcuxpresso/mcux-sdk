@@ -1,5 +1,5 @@
 /*! *********************************************************************************
- * Copyright 2020 NXP
+ * Copyright 2020, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -34,14 +34,16 @@
 #define OSA_MSGQ_HANDLE_SIZE sizeof(TX_QUEUE)
 
 /*! @brief OSA timer handle size. */
-#define OSA_TIMER_HANDLE_SIZE sizeof(TX_TIMER)
+#define OSA_TIMER_HANDLE_SIZE (sizeof(TX_TIMER) + 2 * sizeof(int))
 
 /*!
  * @brief To provide unified task priority for upper layer, OSA layer makes conversion.
  */
-#define PRIORITY_OSA_TO_THREAD(osa_prio)    ((UINT)TX_MAX_PRIORITIES - (osa_prio)-2U)
-#define PRIORITY_THREAD_TO_OSA(thread_prio) ((UINT)TX_MAX_PRIORITIES - (thread_prio)-2U)
 
-/*! @} */
+#define PRIORITY_OSA_TO_THREAD(osa_prio) \
+    (((TX_MAX_PRIORITIES - 1U) * osa_prio) / (OSA_TASK_PRIORITY_MIN - OSA_TASK_PRIORITY_MAX))
+#define PRIORITY_THREAD_TO_OSA(rtos_prio)                                               \
+    ((rtos_prio * ((OSA_TASK_PRIORITY_MIN - OSA_TASK_PRIORITY_MAX)) )/ \
+     (TX_MAX_PRIORITIES - 1U))
 
 #endif /* __FSL_OS_ABSTRACTION_THREADX_H__ */

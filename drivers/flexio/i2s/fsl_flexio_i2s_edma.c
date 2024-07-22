@@ -16,8 +16,8 @@
 /*******************************************************************************
  * Definitations
  ******************************************************************************/
-/* Used for 32byte aligned */
-#define STCD_ADDR(address) (edma_tcd_t *)(((uint32_t)(address) + 32U) & ~0x1FU)
+/* Used for edma_tcd_t size aligned */
+#define STCD_ADDR(address) (edma_tcd_t *)(((uint32_t)(address) + sizeof(edma_tcd_t)) & ~(sizeof(edma_tcd_t) - 1U))
 
 /*<! Structure definition for flexio_i2s_edma_private_handle_t. The structure is private. */
 typedef struct _flexio_i2s_edma_private_handle
@@ -261,12 +261,21 @@ status_t FLEXIO_I2S_TransferSendEDMA(FLEXIO_I2S_Type *base,
     handle->transferSize[handle->queueUser]   = xfer->dataSize;
     handle->queueUser                         = (handle->queueUser + 1U) % FLEXIO_I2S_XFER_QUEUE_SIZE;
 
+#if defined FSL_FEATURE_EDMA_HAS_ERRATA_51327 && FSL_FEATURE_EDMA_HAS_ERRATA_51327
+    /* Prepare edma configure */
+    EDMA_PrepareTransfer(&config, xfer->data, handle->bytesPerFrame, (uint32_t *)destAddr, handle->bytesPerFrame,
+                         8U, xfer->dataSize, kEDMA_MemoryToPeripheral);
+
+    /* Store the initially configured eDMA minor byte transfer count into the FLEXIO I2S handle */
+    handle->nbytes = 8U;
+#else
     /* Prepare edma configure */
     EDMA_PrepareTransfer(&config, xfer->data, handle->bytesPerFrame, (uint32_t *)destAddr, handle->bytesPerFrame,
                          handle->bytesPerFrame, xfer->dataSize, kEDMA_MemoryToPeripheral);
 
     /* Store the initially configured eDMA minor byte transfer count into the FLEXIO I2S handle */
     handle->nbytes = handle->bytesPerFrame;
+#endif
 
     (void)EDMA_SubmitTransfer(handle->dmaHandle, &config);
 
@@ -325,12 +334,21 @@ status_t FLEXIO_I2S_TransferReceiveEDMA(FLEXIO_I2S_Type *base,
     handle->transferSize[handle->queueUser]   = xfer->dataSize;
     handle->queueUser                         = (handle->queueUser + 1U) % FLEXIO_I2S_XFER_QUEUE_SIZE;
 
+#if defined FSL_FEATURE_EDMA_HAS_ERRATA_51327 && FSL_FEATURE_EDMA_HAS_ERRATA_51327
+    /* Prepare edma configure */
+    EDMA_PrepareTransfer(&config, (uint32_t *)srcAddr, handle->bytesPerFrame, xfer->data, handle->bytesPerFrame,
+                         8U, xfer->dataSize, kEDMA_PeripheralToMemory);
+
+    /* Store the initially configured eDMA minor byte transfer count into the FLEXIO I2S handle */
+    handle->nbytes = 8U;
+#else
     /* Prepare edma configure */
     EDMA_PrepareTransfer(&config, (uint32_t *)srcAddr, handle->bytesPerFrame, xfer->data, handle->bytesPerFrame,
                          handle->bytesPerFrame, xfer->dataSize, kEDMA_PeripheralToMemory);
 
     /* Store the initially configured eDMA minor byte transfer count into the FLEXIO I2S handle */
     handle->nbytes = handle->bytesPerFrame;
+#endif
 
     (void)EDMA_SubmitTransfer(handle->dmaHandle, &config);
 

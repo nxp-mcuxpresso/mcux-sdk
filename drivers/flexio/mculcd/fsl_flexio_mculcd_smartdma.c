@@ -195,6 +195,10 @@ status_t FLEXIO_MCULCD_TransferCreateHandleSMARTDMA(FLEXIO_MCULCD_Type *base,
     /* The shifter interrupt is used by the SMARTDMA. */
     FLEXIO_EnableShifterStatusInterrupts(base->flexioBase, (1UL << FLEXIO_MCULCD_SMARTDMA_TX_END_SHIFTER));
 
+#if (defined(SMARTDMA_USE_FLEXIO_SHIFTER_DMA) && SMARTDMA_USE_FLEXIO_SHIFTER_DMA)
+    FLEXIO_EnableShifterStatusDMA(base->flexioBase, 1UL, true);
+#endif
+
     return kStatus_Success;
 }
 

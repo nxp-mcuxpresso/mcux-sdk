@@ -1,0 +1,10 @@
+<#-- Create additional, part family specific symbols that are required-->
+<#assign SYMBOLS_FILE = "symbols_${chipFamily}.ldt">
+<#include SYMBOLS_FILE ignore_missing=true>
+
+
+    /*** littleFS configuration Start ***/
+    EDGEFAST_BT_LITTLEFS_STORAGE_START_ADDRESS = __base_LITTLEFS_FLASH_region;
+    EDGEFAST_BT_LITTLEFS_STORAGE_SECTOR_SIZE = 0x1000;  /* 4k flash sector size */
+    EDGEFAST_BT_LITTLEFS_STORAGE_MAX_SECTORS = (__top_LITTLEFS_FLASH_region - EDGEFAST_BT_LITTLEFS_STORAGE_START_ADDRESS) / EDGEFAST_BT_LITTLEFS_STORAGE_SECTOR_SIZE;
+    /*** littleFS configuration End ***/

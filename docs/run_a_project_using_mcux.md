@@ -13,24 +13,31 @@ This section describes the steps required to configure MCUXpresso IDE to build, 
 # :two:Build an example application
 To build an example application, follow these steps. 
 
-If you are using MCUXpresso IDE version 11.5.0, please follow below first step:
+The step 1 differs according to the version of MCUXpresso IDE. If you are using MCUXpresso IDE version above 11.5.0, please follow below first step:
 
 1. Right-click the empty space in the **Installed SDKs** view to show the menus, select **Import local SDK Git repository** and input the root folder of west workspace(mcuxsdk), then IDE will be able to recognize all boards support in local GitHub SDK repository.
     ![Import local directory](Getting_Started/images/mcux_import_local_repository.png)
+    ![Import local git](Getting_Started/images/mcux_import_local_git_repo.png)
+    ![Default manifests core](Getting_Started/images/mcux_default_manifests_core_folder.png)
     ![Local github repositories](Getting_Started/images/mcux_github_repository.png)
 
-**When you are using IDE version older than 11.5.0, you need to copy the board manifest file from the `examples/manifests` folder to the root folder of west workspace(mcuxsdk) to explore MCUXpresso IDE build and debug for example application of specified board.** 
+As shown in above picture, the default manifests folder chosen by IDE is **core/manifests**, with the setting IDE will list the latest and newest board support in MCUXpresso SDK. If you want to have the full board support(such as FRDM-K64F), please follow below guidance to manually switch to the **examples/manifests** folder:
+![Change manifests to examples](Getting_Started/images/mcux_change_manifests_examples_folder.png)
+![Manifests examples](Getting_Started/images/mcux_manifests_folder_examples.png)
 
-    *Take EVK-MIMXRT1020 as an example, copy EVK-MIMXRT1020_manifest_v3_8.xml file in `manifests` folder to the repository root directory.*
 
-Then you could follow below first step to import:
+Else if you are using IDE version older than 11.5.0, you need to refer to below step 1. 
 
-1. Drag and drop the repository into the **Installed SDKs** view to install the MCUXpresso SDK. In the window that
+1. Copy the board manifest file from the `examples/manifests` folder to the root folder of west workspace(mcuxsdk) to explore MCUXpresso IDE build and debug for example application of specified board. Then you drag and drop the west workspace into the **Installed SDKs** view to install the MCUXpresso SDK. In the window that
 appears, click the **OK** button and wait until the import has finished.
+
+    
+        *Take FRDM-K28FA as an example, copy FRDM-K28FA_manifest_v3_8.xml file in `manifests` folder to the repository root directory.*
 
     ![Install SDK](Getting_Started/images/mcux_install_a_sdk.png)
 
-The below steps for import, build and run an example are same for different IDE versions.
+
+The other steps for import, build and run an example are same for different IDE versions.
 
 2. On the **Quickstart Panel**, click **Import SDK example(s)….**
 

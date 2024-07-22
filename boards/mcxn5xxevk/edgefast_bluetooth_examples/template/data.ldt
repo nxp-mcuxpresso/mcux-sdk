@@ -1,0 +1,6 @@
+        <#if memory.name=="SRAM_DTC">
+        *fsl_adapter_flexspi_nor_flash.o(.text*)
+        *fsl_flexspi.o(.text*)
+        *NV_Flash.o(.text*)
+        *mflash_drv.o(.text*)
+        </#if>

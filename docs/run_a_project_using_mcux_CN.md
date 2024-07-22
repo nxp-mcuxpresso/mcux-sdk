@@ -13,14 +13,23 @@
     
     建议工作区的位置放在SDK的west工作区目录之外。
 
-## 2. 将选定的开发板清单文件复制到SDK的west工作仓库目录
-将选定的开发板清单文件（manifest）从 `examples/manifests` 目录复制到 west 工作仓库 (mcuxsdk) 目录，是开始探索 MCUXpresso IDE 编译和调试GitHub MCUXpresso SDK开发板示例应用的第一步。
-
-*以EVK-MIMXRT1020为例，将位于west工作仓库`examples/manifests`目录下的EVK-MIMXRT1020_manifest_v3_8.xml文件复制到west工作仓库目录。*
-
 # :two: 编译示例应用程序
 要编译示例应用程序，请按照以下步骤操作。
-1. 将west工作仓库目录直接拖拽到 **Installed SDKs** 视图开始 MCUXpresso SDK的加载安装。在识别窗口跳出后，单击**OK** 按钮并等待加载完成，安装完成后的EVK-MIMXRT1020开发板SDK会显示在**Installed SDKs** 区域。
+
+步骤一根据IDE的版本不同而有所不同。如果您使用的IDE版本高于11.5.0，步骤一如下：
+1. 在**Installed SDKs** 视图的空白位置单击鼠标右键，在弹出的菜单栏中选择**Import local SDK Git Repository**.然后在弹出的对话框中输入west工作仓库目录，然后IDE会识别west工作仓库目录下所有的开发板支持。
+    ![Import local directory](Getting_Started/images/mcux_import_local_repository.png)
+    ![Import local git](Getting_Started/images/mcux_import_local_git_repo.png)
+    ![Default manifests core](Getting_Started/images/mcux_default_manifests_core_folder.png)
+    ![Local github repositories](Getting_Started/images/mcux_github_repository.png)
+如上图所示，选择west工作区后，IDE默认使用的manifests文件夹是**core/manifests**，使用这个设置IDE会列出本地GitHub SDK仓库中最新的开发板支持。如果您希望使用全套的开发板支持（例如FRDM-K64F），请参考以下步骤手动切换manifests文件夹到**examples/manifests**。
+![Change manifests to examples](Getting_Started/images/mcux_change_manifests_examples_folder.png)
+![Manifests examples](Getting_Started/images/mcux_manifests_folder_examples.png)
+
+如果您使用的IDE版本低于11.5.0，您需要参考的步骤一如下：
+1. 将选定的开发板清单文件（manifest）从 `examples/manifests` 目录复制到 west 工作仓库 (mcuxsdk) 目录。然后将west工作仓库目录直接拖拽到 **Installed SDKs** 视图开始 MCUXpresso SDK的加载安装。在识别窗口跳出后，单击**OK** 按钮并等待加载完成，安装完成后的开发板SDK会显示在**Installed SDKs** 区域。
+   
+   *以FRDM-K28FA为例，将位于west工作仓库`examples/manifests`目录下的FRDM-K28FA_manifest_v3_8.xml文件复制到west工作仓库目录。*
 
     ![安装SDK](Getting_Started/images/mcux_install_a_sdk.png)
 2. 在 **Quickstart Panel** 上，单击 **Import SDK example(s)....**来导入开发板SDK。

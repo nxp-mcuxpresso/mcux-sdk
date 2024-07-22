@@ -27,7 +27,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief PMC 0 driver version */
-#define FSL_PMC0_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_PMC0_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)
 /*! @} */
 
 /*!
@@ -159,7 +159,7 @@ enum _pmc0_status_flags
     kPMC0_CoreRegulatorVoltLevelFlag = PMC0_STATUS_COREVLF_MASK, /*!< Core Regulator Voltage Level Flag, sets when core
                                                                     regulator voltage level is changing (not stable). */
     kPMC0_SramFlag =
-        PMC0_STATUS_SRAMF_MASK, /*!< SRAM Flag, sets when a change mode request is being processed in the SRAMs. */
+        PMC0_STATUS_SRAMF_MASK,    /*!< SRAM Flag, sets when a change mode request is being processed in the SRAMs. */
     kPMC0_PMC1VoltageSourceFlag =
         PMC0_STATUS_PMC1VSRC_MASK, /*!< This flag indicates what is the voltage source selected to supply the PMC 1
                                         and where the sense point of the PMC 1's LVD/HVD is placed. '0' means internal
@@ -336,14 +336,14 @@ static inline void PMC0_ConfigureHsrunMode(const pmc0_hsrun_mode_config_t *confi
     assert(config->coreRegulatorVoltLevel <= CORE_REGULATOR_VOLT_LEVEL_MAX);
 
     /* Wait until COREVLF is cleared. */
-    while (PMC0->STATUS & PMC0_STATUS_COREVLF_MASK)
+    while ((PMC0->STATUS & PMC0_STATUS_COREVLF_MASK) == PMC0_STATUS_COREVLF_MASK)
     {
     }
 
-    PMC0->HSRUN = (*((const uint32_t *)config)) & (PMC0_HSRUN_COREREGVL_MASK | PMC0_HSRUN_FBBEN_MASK);
+    PMC0->HSRUN = (*((const uint32_t *)((const void *)config))) & (PMC0_HSRUN_COREREGVL_MASK | PMC0_HSRUN_FBBEN_MASK);
 
     /* Wait until COREVLF is cleared. */
-    while (PMC0->STATUS & PMC0_STATUS_COREVLF_MASK)
+    while ((PMC0->STATUS & PMC0_STATUS_COREVLF_MASK) == PMC0_STATUS_COREVLF_MASK)
     {
     }
 }
@@ -367,14 +367,14 @@ static inline void PMC0_ConfigureRunMode(const pmc0_run_mode_config_t *config)
     assert(config->coreRegulatorVoltLevel <= CORE_REGULATOR_VOLT_LEVEL_MAX);
 
     /* Wait until COREVLF is cleared. */
-    while (PMC0->STATUS & PMC0_STATUS_COREVLF_MASK)
+    while ((PMC0->STATUS & PMC0_STATUS_COREVLF_MASK) == PMC0_STATUS_COREVLF_MASK)
     {
     }
 
-    PMC0->RUN = (*((const uint32_t *)config)) & PMC0_RUN_COREREGVL_MASK;
+    PMC0->RUN = (*((const uint32_t *)((const void *)config))) & PMC0_RUN_COREREGVL_MASK;
 
     /* Wait until COREVLF is cleared. */
-    while (PMC0->STATUS & PMC0_STATUS_COREVLF_MASK)
+    while ((PMC0->STATUS & PMC0_STATUS_COREVLF_MASK) == PMC0_STATUS_COREVLF_MASK)
     {
     }
 }
@@ -398,7 +398,7 @@ static inline void PMC0_ConfigureVlprMode(const pmc0_vlpr_mode_config_t *config)
     assert(config);
     assert(config->coreRegulatorVoltLevel <= CORE_REGULATOR_VOLT_LEVEL_MAX);
 
-    PMC0->VLPR = (*((const uint32_t *)config)) &
+    PMC0->VLPR = (*((const uint32_t *)((const void *)config))) &
                  (PMC0_VLPR_ARRAYREG_MASK | PMC0_VLPR_COREREG_MASK | PMC0_VLPR_MONLVD_MASK | PMC0_VLPR_MONLVD_MASK |
                   PMC0_VLPR_FBGHP_MASK | PMC0_VLPR_COREREGVL_MASK | PMC0_VLPR_RBBEN_MASK);
 }
@@ -421,7 +421,7 @@ static inline void PMC0_ConfigureStopMode(const pmc0_stop_mode_config_t *config)
     assert(config);
     assert(config->coreRegulatorVoltLevel <= CORE_REGULATOR_VOLT_LEVEL_MAX);
 
-    PMC0->STOP = (*((const uint32_t *)config)) & PMC0_STOP_COREREGVL_MASK;
+    PMC0->STOP = (*((const uint32_t *)((const void *)config))) & PMC0_STOP_COREREGVL_MASK;
 }
 
 /*!
@@ -443,7 +443,7 @@ static inline void PMC0_ConfigureVlpsMode(const pmc0_vlps_mode_config_t *config)
     assert(config);
     assert(config->coreRegulatorVoltLevel <= CORE_REGULATOR_VOLT_LEVEL_MAX);
 
-    PMC0->VLPS = (*((const uint32_t *)config)) &
+    PMC0->VLPS = (*((const uint32_t *)((const void *)config))) &
                  (PMC0_VLPS_ARRAYREG_MASK | PMC0_VLPS_COREREG_MASK | PMC0_VLPS_MONLVD_MASK | PMC0_VLPS_MONLVD_MASK |
                   PMC0_VLPS_FBGHP_MASK | PMC0_VLPS_COREREGVL_MASK | PMC0_VLPS_RBBEN_MASK);
 }
@@ -467,7 +467,7 @@ static inline void PMC0_ConfigureLlsMode(const pmc0_lls_mode_config_t *config)
     assert(config);
     assert(config->coreRegulatorVoltLevel <= CORE_REGULATOR_VOLT_LEVEL_MAX);
 
-    PMC0->LLS = (*((const uint32_t *)config)) &
+    PMC0->LLS = (*((const uint32_t *)((const void *)config))) &
                 (PMC0_LLS_ARRAYREG_MASK | PMC0_LLS_COREREG_MASK | PMC0_LLS_MONLVD_MASK | PMC0_LLS_MONLVD_MASK |
                  PMC0_LLS_FBGHP_MASK | PMC0_LLS_COREREGVL_MASK | PMC0_LLS_RBBEN_MASK);
 }
@@ -492,7 +492,7 @@ static inline void PMC0_ConfigureVllsMode(const pmc0_vlls_mode_config_t *config)
 {
     assert(config);
 
-    PMC0->VLLS = (*((const uint32_t *)config)) &
+    PMC0->VLLS = (*((const uint32_t *)((const void *)config))) &
                  (PMC0_VLLS_ARRAYREG_MASK | PMC0_VLLS_MONLVD_MASK | PMC0_VLLS_MONLVD_MASK | PMC0_VLLS_FBGHP_MASK);
 }
 
@@ -522,7 +522,7 @@ static inline uint32_t PMC0_GetPMC0PowerModeStatusFlags(void)
  */
 static inline bool PMC0_GetPMC0PowerTransitionStatus(void)
 {
-    if (PMC0_PM_STAT_PMC0TRANPM_MASK & PMC0->PM_STAT)
+    if ((PMC0_PM_STAT_PMC0TRANPM_MASK & PMC0->PM_STAT) == PMC0_PM_STAT_PMC0TRANPM_MASK)
     {
         return true;
     }
@@ -558,7 +558,7 @@ static inline uint32_t PMC0_GetPMC1PowerModeStatusFlags(void)
  */
 static inline bool PMC0_GetPMC1PowerTransitionStatus(void)
 {
-    if (PMC0_PM_STAT_PMC1TRANPM_MASK & PMC0->PM_STAT)
+    if ((PMC0_PM_STAT_PMC1TRANPM_MASK & PMC0->PM_STAT) == PMC0_PM_STAT_PMC1TRANPM_MASK)
     {
         return true;
     }
@@ -792,9 +792,9 @@ static inline void PMC0_SetBiasConfig(const pmc0_bias_config_t *config)
 {
     assert(NULL != config);
 
-    PMC0->BCTRL =
-        (*((uint32_t *)config)) & (PMC0_BCTRL_RBBNLEVEL_MASK | PMC0_BCTRL_RBBPLEVEL_MASK | PMC0_BCTRL_RBBPDDIS_MASK |
-                                   PMC0_BCTRL_FBBNLEVEL_MASK | PMC0_BCTRL_FBBPLEVEL_MASK);
+    PMC0->BCTRL = (*((const uint32_t *)((const void *)config))) &
+                  (PMC0_BCTRL_RBBNLEVEL_MASK | PMC0_BCTRL_RBBPLEVEL_MASK | PMC0_BCTRL_RBBPDDIS_MASK |
+                   PMC0_BCTRL_FBBNLEVEL_MASK | PMC0_BCTRL_FBBPLEVEL_MASK);
 }
 
 /*!
@@ -807,9 +807,8 @@ static inline void PMC0_SetBiasConfig(const pmc0_bias_config_t *config)
  * PMC0_SRAM_PD[i] = 1'b1 - PMC 0 SRAM bank i is in ASD or ARRAY_SHUTDOWN during all modes,
  * except VLLS. During VLLS is in POWER_DOWN mode.
  *
- * Example
+ * Example: Enable band 0 and 1 in ASD or ARRAY_SHUTDOWN during all modes except VLLS
  * @code
- *     // Enable band 0 and 1 in ASD or ARRAY_SHUTDOWN during all modes except VLLS
  *     PMC0_ConfigureSramBankPowerDown(0x3U);
  * @endcode
  *
@@ -818,14 +817,14 @@ static inline void PMC0_SetBiasConfig(const pmc0_bias_config_t *config)
 static inline void PMC0_ConfigureSramBankPowerDown(uint32_t bankMask)
 {
     /* Wait until SRAMF is cleared. */
-    while (PMC0->STATUS & PMC0_STATUS_SRAMF_MASK)
+    while ((PMC0->STATUS & PMC0_STATUS_SRAMF_MASK) == PMC0_STATUS_SRAMF_MASK)
     {
     }
 
     PMC0->SRAMCTRL_0 = PMC0_SRAMCTRL_0_SRAM_PD(bankMask);
 
     /* Wait until SRAMF is cleared. */
-    while (PMC0->STATUS & PMC0_STATUS_SRAMF_MASK)
+    while ((PMC0->STATUS & PMC0_STATUS_SRAMF_MASK) == PMC0_STATUS_SRAMF_MASK)
     {
     }
 }
@@ -840,9 +839,8 @@ static inline void PMC0_ConfigureSramBankPowerDown(uint32_t bankMask)
  * PMC0_SRAM_PDS[i] = 1'b1 - PMC 0 SRAM bank i is in ASD or ARRAY_SHUTDOWN mode during
  * STOP, VLPS and LLS modes. During VLLS is in POWER_DOWN mode.
  *
- * Example
+ * Example: Enable band 0 and 1 in ASD or ARRAY_SHUTDOWN during STOP, VLPS and LLS modes
  * @code
- *     // Enable band 0 and 1 in ASD or ARRAY_SHUTDOWN during STOP, VLPS and LLS modes
  *     PMC0_ConfigureSramBankPowerDownStopMode(0x3U);
  * @endcode
  *
@@ -862,9 +860,8 @@ static inline void PMC0_ConfigureSramBankPowerDownStopMode(uint32_t bankMask)
  * PMC0_SRAM_STDY[i] = 1'b0 - PMC 0 SRAM bank i is not affected.
  * PMC0_SRAM_STDY[i] = 1'b1 - PMC 0 SRAM bank i is in STANDBY mode during all modes (except VLLS and LLS).
  *
- * Example
+ * Example: Enable band 0 and 1 in STANDBY mode except VLLS and LLS
  * @code
- *     // Enable band 0 and 1 in STANDBY mode except VLLS and LLS
  *     PMC0_ConfigureSramBankPowerDownStandbyMode(0x3U);
  * @endcode
  *

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2020,2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -12,6 +12,9 @@
 
 /*
  * Change Log:
+ *
+ * 1.0.4:
+ *   - Added new return status for coordinate not ready to indicate invalid data.
  *
  * 1.0.3:
  *   - Fixed MISRA 2012 issues.
@@ -41,7 +44,8 @@
 /*! @brief Error code definition. */
 enum _touch_status
 {
-    kStatus_TOUCHPANEL_NotTouched = MAKE_STATUS(kStatusGroup_TOUCH_PANEL, 0) /*!< No touch happen. */
+    kStatus_TOUCHPANEL_NotTouched = MAKE_STATUS(kStatusGroup_TOUCH_PANEL, 0), /*!< No touch happen. */
+    kStatus_TOUCHPANEL_NotReady = MAKE_STATUS(kStatusGroup_TOUCH_PANEL, 1), /*!< Coordinate not ready, data invalid. */
 };
 
 /*! @brief Touch point definition. */

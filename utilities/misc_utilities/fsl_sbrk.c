@@ -1,15 +1,14 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2022 NXP
+ * Copyright 2016-2019, 2022, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #if defined(__GNUC__)
-#include <stdio.h>
 #include <errno.h>
 #include <stdint.h>
-#include <sys/types.h>
+#include <stddef.h>
 #endif
 
 #if defined(__GNUC__)
@@ -21,14 +20,14 @@
  * memory allocation failed. This function changes to compare __HeapLimit with
  * heap end.
  */
-caddr_t _sbrk(int incr);
-caddr_t _sbrk(int incr)
+void * _sbrk(ptrdiff_t incr);
+void * _sbrk(ptrdiff_t incr)
 {
     extern char end __asm("end");
     extern char heap_limit __asm("__HeapLimit");
     static char *heap_end;
     char *prev_heap_end;
-    caddr_t ret;
+    void *ret;
 
     if (heap_end == NULL)
     {
@@ -41,13 +40,13 @@ caddr_t _sbrk(int incr)
     {
         errno = ENOMEM;
 
-        ret = (caddr_t)-1;
+        ret = (void *)-1;
     }
     else
     {
         heap_end = (char *)((uintptr_t)heap_end + (uintptr_t)incr);
 
-        ret = (caddr_t)prev_heap_end;
+        ret = (void *)prev_heap_end;
     }
 
     return ret;

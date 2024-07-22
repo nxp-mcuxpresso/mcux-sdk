@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2023 NXP
+ * Copyright 2018-2024 NXP
  * All rights reserved.
  *
  *
@@ -627,10 +627,10 @@ static void SerialManager_Task(void *param)
 #endif
 #endif
         {
-            (void)SerialManager_StartWriting(serHandle);
 #if defined(OSA_USED)
 #if (defined(SERIAL_MANAGER_USE_COMMON_TASK) && (SERIAL_MANAGER_USE_COMMON_TASK > 0U))
 #else
+                    (void)SerialManager_StartWriting(serHandle);
                     primask = DisableGlobalIRQ();
                     serHandle->serialManagerState[SERIAL_EVENT_DATA_START_SEND]--;
                     EnableGlobalIRQ(primask);
@@ -787,10 +787,7 @@ static void SerialManager_TxCallback(void *callbackParam,
 
 #endif /* SERIAL_MANAGER_USE_COMMON_TASK */
 #else  /* OSA_USED && SERIAL_MANAGER_TASK_HANDLE_TX */
-        if (kSerialManager_TransmissionBlocking == writeHandle->transfer.mode)
-        {
-            (void)SerialManager_StartWriting(serHandle);
-        }
+       (void)SerialManager_StartWriting(serHandle);
 #endif /* OSA_USED && SERIAL_MANAGER_TASK_HANDLE_TX */
 
         writeHandle->transfer.soFar  = message->length;
@@ -1028,17 +1025,9 @@ static serial_manager_status_t SerialManager_Write(serial_write_handle_t writeHa
 {
     serial_manager_write_handle_t *serialWriteHandle;
     serial_manager_handle_t *serHandle;
-
-#if (defined(OSA_USED) && defined(SERIAL_MANAGER_TASK_HANDLE_TX) && (SERIAL_MANAGER_TASK_HANDLE_TX == 1))
-#if (defined(SERIAL_MANAGER_USE_COMMON_TASK) && (SERIAL_MANAGER_USE_COMMON_TASK > 0U))
-    /* Need to support common_task. */
-#else  /* SERIAL_MANAGER_USE_COMMON_TASK */
-    /* Do nothing. */
-#endif /* SERIAL_MANAGER_USE_COMMON_TASK */
-#else  /* OSA_USED && SERIAL_MANAGER_TASK_HANDLE_TX */
+#if (defined(SERIAL_PORT_TYPE_USBCDC) && (SERIAL_PORT_TYPE_USBCDC > 0U))
     serial_manager_status_t status = kStatus_SerialManager_Success;
-#endif /* OSA_USED && SERIAL_MANAGER_TASK_HANDLE_TX */
-
+#endif /* SERIAL_PORT_TYPE_USBCDC */ 
     uint32_t primask;
     uint8_t isEmpty = 0U;
 
@@ -1073,30 +1062,37 @@ static serial_manager_status_t SerialManager_Write(serial_write_handle_t writeHa
 
     if (0U != isEmpty)
     {
+#if (defined(SERIAL_PORT_TYPE_USBCDC) && (SERIAL_PORT_TYPE_USBCDC > 0U))
+    if (serHandle->serialPortType == kSerialPort_UsbCdc)
+    {
+        status = Serial_UsbCdcGetConnectedStatus((serial_handle_t)&serHandle->lowLevelhandleBuffer[0]);
+        if (status == kStatus_SerialManager_NotConnected)
+        {
+            SerialManager_RemoveHead(&serHandle->runningWriteHandleHead);
+            serialWriteHandle->transfer.buffer = NULL;
+            serialWriteHandle->transfer.length = 0U;
+            return status;
+        }
+    }
+#endif /* SERIAL_PORT_TYPE_USBCDC */    
 #if (defined(OSA_USED) && defined(SERIAL_MANAGER_TASK_HANDLE_TX) && (SERIAL_MANAGER_TASK_HANDLE_TX == 1))
 #if (defined(SERIAL_MANAGER_USE_COMMON_TASK) && (SERIAL_MANAGER_USE_COMMON_TASK > 0U))
         /* Need to support common_task. */
 #else  /* SERIAL_MANAGER_USE_COMMON_TASK */
-        primask = DisableGlobalIRQ();
-        serHandle->serialManagerState[SERIAL_EVENT_DATA_START_SEND]++;
-        EnableGlobalIRQ(primask);
-        (void)OSA_SemaphorePost((osa_semaphore_handle_t)serHandle->serSemaphore);
-
+        if ((kSerialManager_TransmissionBlocking == mode) && (0U == gUseRtos_c))
+        {
+            (void)SerialManager_StartWriting(serHandle);
+        }
+        else
+        {
+            primask = DisableGlobalIRQ();
+            serHandle->serialManagerState[SERIAL_EVENT_DATA_START_SEND]++;
+            EnableGlobalIRQ(primask);
+            (void)OSA_SemaphorePost((osa_semaphore_handle_t)serHandle->serSemaphore);
+        }
 #endif /* SERIAL_MANAGER_USE_COMMON_TASK */
 #else  /* OSA_USED && SERIAL_MANAGER_TASK_HANDLE_TX */
-        status = SerialManager_StartWriting(serHandle);
-        if ((serial_manager_status_t)kStatus_SerialManager_Success != status)
-        {
-#if (defined(USB_CDC_SERIAL_MANAGER_RUN_NO_HOST) && (USB_CDC_SERIAL_MANAGER_RUN_NO_HOST == 1))
-            if (status == kStatus_SerialManager_NotConnected)
-            {
-                SerialManager_RemoveHead(&serHandle->runningWriteHandleHead);
-                serialWriteHandle->transfer.buffer = 0U;
-                serialWriteHandle->transfer.length = 0U;
-            }
-#endif /* USB_CDC_SERIAL_MANAGER_RUN_NO_HOST == 1 */
-            return status;
-        }
+        (void)SerialManager_StartWriting(serHandle);
 #endif /* OSA_USED && SERIAL_MANAGER_TASK_HANDLE_TX */
     }
 
@@ -1284,7 +1280,11 @@ serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const s
 {
     serial_manager_handle_t *serHandle;
     serial_manager_status_t status = kStatus_SerialManager_Error;
-
+#if (defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
+#if (defined(OSA_USED) && !(defined(SERIAL_MANAGER_USE_COMMON_TASK) && (SERIAL_MANAGER_USE_COMMON_TASK > 0U)))
+    osa_task_def_t serTaskConfig;
+#endif
+#endif
     assert(NULL != serialConfig);
 
     assert(NULL != serialHandle);
@@ -1318,13 +1318,18 @@ serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const s
     {
         return kStatus_SerialManager_Error;
     }
-
-    if (KOSA_StatusSuccess != OSA_TaskCreate((osa_task_handle_t)serHandle->taskId, OSA_TASK(SerialManager_Task), serHandle))
+    (void)memcpy(&serTaskConfig, OSA_TASK(SerialManager_Task), sizeof(osa_task_def_t));
+    if (serialConfig->serialTaskConfig != NULL)
+    {
+        (void)memcpy(&serTaskConfig, serialConfig->serialTaskConfig, sizeof(osa_task_def_t));
+        serTaskConfig.pthread = (OSA_TASK(SerialManager_Task))->pthread;
+        serTaskConfig.tname = (OSA_TASK(SerialManager_Task))->tname;
+    }
+    if (KOSA_StatusSuccess != OSA_TaskCreate((osa_task_handle_t)serHandle->taskId,(const osa_task_def_t *)&serTaskConfig, serHandle))
     {
         return kStatus_SerialManager_Error;
     }
 #endif
-
 #endif
 
 #endif
@@ -1629,7 +1634,7 @@ serial_manager_status_t SerialManager_CloseWriteHandle(serial_write_handle_t wri
         serialHandle->openedWriteHandleCount--;
     }
     EnableGlobalIRQ(primask);
-#if (defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING) && (DEBUG_CONSOLE_TRANSFER_NON_BLOCKING > 0U))
+#if (defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
     (void)memset(writeHandle, 0, SERIAL_MANAGER_WRITE_HANDLE_SIZE);
 #else
     (void)memset(writeHandle, 0, SERIAL_MANAGER_WRITE_BLOCK_HANDLE_SIZE);
@@ -1701,7 +1706,7 @@ serial_manager_status_t SerialManager_CloseReadHandle(serial_read_handle_t readH
     primask                            = DisableGlobalIRQ();
     serialHandle->openedReadHandleHead = NULL;
     EnableGlobalIRQ(primask);
-#if (defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING) && (DEBUG_CONSOLE_TRANSFER_NON_BLOCKING > 0U))
+#if (defined(SERIAL_MANAGER_NON_BLOCKING_MODE) && (SERIAL_MANAGER_NON_BLOCKING_MODE > 0U))
     (void)memset(readHandle, 0, SERIAL_MANAGER_READ_HANDLE_SIZE);
 #else
     (void)memset(readHandle, 0, SERIAL_MANAGER_READ_BLOCK_HANDLE_SIZE);
