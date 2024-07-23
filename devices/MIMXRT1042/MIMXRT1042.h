@@ -1118,8 +1118,6 @@ typedef enum _dma_request_source
     kDmaRequestMuxCAN3              = 11|0x100U,   /**< CAN3 */
     kDmaRequestMuxLPSPI1Rx          = 13|0x100U,   /**< LPSPI1 Receive */
     kDmaRequestMuxLPSPI1Tx          = 14|0x100U,   /**< LPSPI1 Transmit */
-    kDmaRequestMuxLPSPI3Rx          = 15|0x100U,   /**< LPSPI3 Receive */
-    kDmaRequestMuxLPSPI3Tx          = 16|0x100U,   /**< LPSPI3 Transmit */
     kDmaRequestMuxLPI2C1            = 17|0x100U,   /**< LPI2C1 */
     kDmaRequestMuxLPI2C3            = 18|0x100U,   /**< LPI2C3 */
     kDmaRequestMuxSai1Rx            = 19|0x100U,   /**< SAI1 Receive */
@@ -1178,6 +1176,8 @@ typedef enum _dma_request_source
     kDmaRequestMuxLCDIF             = 76|0x100U,   /**< LCDIF */
     kDmaRequestMuxLPSPI2Rx          = 77|0x100U,   /**< LPSPI2 Receive */
     kDmaRequestMuxLPSPI2Tx          = 78|0x100U,   /**< LPSPI2 Transmit */
+    kDmaRequestMuxLPSPI3Rx          = 79|0x100U,   /**< LPSPI3 Receive */
+    kDmaRequestMuxLPSPI3Tx          = 80|0x100U,   /**< LPSPI3 Transmit */
     kDmaRequestMuxLPI2C2            = 81|0x100U,   /**< LPI2C2 */
     kDmaRequestMuxLPI2C4            = 82|0x100U,   /**< LPI2C4 */
     kDmaRequestMuxSai3Rx            = 83|0x100U,   /**< SAI3 Receive */
