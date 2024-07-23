@@ -394,7 +394,7 @@ psa_status_t mcuxClPsaDriver_psa_driver_wrapper_createClKey(
 MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 {
     psa_key_location_t location =
-        PSA_KEY_LIFETIME_GET_LOCATION( attributes->core.lifetime );
+        PSA_KEY_LIFETIME_GET_LOCATION( psa_get_key_lifetime(attributes) );
 
     if(out_key_descriptor == NULL)
     {
@@ -441,7 +441,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 
     keyTypeDesc.info = NULL;
     MCUX_CSSL_ANALYSIS_START_PATTERN_SWITCH_STATEMENT_RETURN_TERMINATION()
-    switch(attributes->core.type) {
+    switch(psa_get_key_type(attributes)) {
         case PSA_KEY_TYPE_AES:
             switch(mcuxClKey_getLoadedKeyLength(out_key_descriptor)) {
                 case 16u:
@@ -489,7 +489,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
         case PSA_KEY_TYPE_ECC_KEY_PAIR(PSA_ECC_FAMILY_MONTGOMERY):
         case PSA_KEY_TYPE_ECC_KEY_PAIR(PSA_ECC_FAMILY_TWISTED_EDWARDS):
             keyTypeDesc.algoId = MCUXCLKEY_ALGO_ID_ECC_SHWS_GFP + MCUXCLKEY_ALGO_ID_KEY_PAIR; // not really needed for ECC operation for now
-            keyTypeDesc.size = ((mcuxClKey_Size_t) attributes->core.bits + 7u) / 8u; // not really needed for ECC operation for now
+            keyTypeDesc.size = ((mcuxClKey_Size_t) psa_get_key_bits(attributes)  + 7u) / 8u; // not really needed for ECC operation for now
             MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST_QUALIFIER("Const must be discarded to initialize the generic structure member.")
             keyTypeDesc.info = (void *) mcuxClPsaDriver_psa_driver_wrapper_getEccDomainParams(attributes);
             MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST_QUALIFIER()
@@ -500,7 +500,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
         case PSA_KEY_TYPE_ECC_PUBLIC_KEY(PSA_ECC_FAMILY_MONTGOMERY):
         case PSA_KEY_TYPE_ECC_PUBLIC_KEY(PSA_ECC_FAMILY_TWISTED_EDWARDS):
             keyTypeDesc.algoId = MCUXCLKEY_ALGO_ID_ECC_SHWS_GFP + MCUXCLKEY_ALGO_ID_PUBLIC_KEY;
-            keyTypeDesc.size = ((mcuxClKey_Size_t) attributes->core.bits + 7u) / 8u;
+            keyTypeDesc.size = ((mcuxClKey_Size_t) psa_get_key_bits(attributes) + 7u) / 8u;
             MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST_QUALIFIER("Const must be discarded to initialize the generic structure member.")
             keyTypeDesc.info = (void *) mcuxClPsaDriver_psa_driver_wrapper_getEccDomainParams(attributes);
             MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST_QUALIFIER()
@@ -510,13 +510,13 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
         case PSA_KEY_TYPE_RSA_KEY_PAIR:
             // for now only keys in LOCAL_STORAGE are supported
             keyTypeDesc.algoId = MCUXCLKEY_ALGO_ID_RSA;
-            keyTypeDesc.size = ((mcuxClKey_Size_t) attributes->core.bits + 7u) / 8u;
+            keyTypeDesc.size = ((mcuxClKey_Size_t) psa_get_key_bits(attributes) + 7u) / 8u;
 
             if( MCUXCLKEY_LOADSTATUS_MEMORY != mcuxClKey_getLoadStatus(out_key_descriptor) )
             {
                 return PSA_ERROR_NOT_SUPPORTED;
             }
-            if((attributes->core.type & PSA_KEY_TYPE_CATEGORY_FLAG_PAIR) == PSA_KEY_TYPE_CATEGORY_FLAG_PAIR)
+            if((psa_get_key_type(attributes) & PSA_KEY_TYPE_CATEGORY_FLAG_PAIR) == PSA_KEY_TYPE_CATEGORY_FLAG_PAIR)
             {
                 keyTypeDesc.algoId |= MCUXCLKEY_ALGO_ID_KEY_PAIR;
             }
@@ -615,16 +615,10 @@ psa_status_t mcuxClPsaDriver_psa_driver_wrapper_key_generate(
 MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 {
     psa_status_t status = PSA_ERROR_CORRUPTION_DETECTED;
-    psa_key_type_t type = attributes->core.type;
+    psa_key_type_t type = psa_get_key_type(attributes);
     psa_key_location_t location =
-        PSA_KEY_LIFETIME_GET_LOCATION(attributes->core.lifetime);
-
-    if((attributes->domain_parameters == NULL) &&
-        (attributes->domain_parameters_size != 0u))
-    {
-        return PSA_ERROR_INVALID_ARGUMENT;
-    }
-
+        PSA_KEY_LIFETIME_GET_LOCATION(psa_get_key_lifetime(attributes));
+    
     /* Step 1:
        Allocate storage for a key to be generated
     */
@@ -741,11 +735,11 @@ const mcuxClEcc_Weier_DomainParams_t* mcuxClPsaDriver_psa_driver_wrapper_getEccD
 MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 {
     MCUX_CSSL_ANALYSIS_START_PATTERN_SWITCH_STATEMENT_RETURN_TERMINATION()
-    switch(attributes->core.type)
+    switch(psa_get_key_type(attributes))
     {
         case PSA_KEY_TYPE_ECC_KEY_PAIR(PSA_ECC_FAMILY_SECP_R1):
         case PSA_KEY_TYPE_ECC_PUBLIC_KEY(PSA_ECC_FAMILY_SECP_R1):
-            switch((uint32_t)(MCUXCLPSADRIVER_BITS_TO_BYTES((uint32_t)attributes->core.bits))) {
+            switch((uint32_t)(MCUXCLPSADRIVER_BITS_TO_BYTES((uint32_t)psa_get_key_bits(attributes)))) {
                 case MCUXCLKEY_SIZE_192:
                     return &mcuxClEcc_Weier_DomainParams_secp192r1;
                 case MCUXCLKEY_SIZE_224:
@@ -761,7 +755,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
             }
         case PSA_KEY_TYPE_ECC_KEY_PAIR(PSA_ECC_FAMILY_SECP_K1):
         case PSA_KEY_TYPE_ECC_PUBLIC_KEY(PSA_ECC_FAMILY_SECP_K1):
-            switch((uint32_t)(MCUXCLPSADRIVER_BITS_TO_BYTES((uint32_t)attributes->core.bits))) {
+            switch((uint32_t)(MCUXCLPSADRIVER_BITS_TO_BYTES((uint32_t)psa_get_key_bits(attributes)))) {
                 case MCUXCLKEY_SIZE_192:
                     return &mcuxClEcc_Weier_DomainParams_secp192k1;
                 case MCUXCLKEY_SIZE_224:
@@ -773,7 +767,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
             }
         case PSA_KEY_TYPE_ECC_KEY_PAIR(PSA_ECC_FAMILY_BRAINPOOL_P_R1):
         case PSA_KEY_TYPE_ECC_PUBLIC_KEY(PSA_ECC_FAMILY_BRAINPOOL_P_R1):
-            switch((uint32_t)(MCUXCLPSADRIVER_BITS_TO_BYTES((uint32_t)attributes->core.bits))) {
+            switch((uint32_t)(MCUXCLPSADRIVER_BITS_TO_BYTES((uint32_t)psa_get_key_bits(attributes)))) {
                 case MCUXCLKEY_SIZE_160:
                     return &mcuxClEcc_Weier_DomainParams_brainpoolP160r1;
                 case MCUXCLKEY_SIZE_192:
@@ -914,7 +908,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
                     (sizeof(uint32_t))];
     if(PSA_ALG_IS_ECDH(alg))
     {
-        if (!PSA_KEY_TYPE_IS_ECC_KEY_PAIR(attributes->core.type))
+        if (!PSA_KEY_TYPE_IS_ECC_KEY_PAIR(psa_get_key_type(attributes)))
         {
             return PSA_ERROR_INVALID_ARGUMENT;
         }
@@ -930,11 +924,6 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
         //For Montgomery curves
         if(PSA_ECC_FAMILY_MONTGOMERY == curve)
         {
-            if(attributes->domain_parameters_size != 0u)
-            {
-                return PSA_ERROR_INVALID_ARGUMENT;
-            }
-
             /* Curve448 */
             if(MCUXCLECC_MONTDH_CURVE448_SIZE_PRIVATEKEY == privateKeySize)
             {
@@ -1124,11 +1113,6 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
         /* For Weierstrass curves, curve_parameters are defined in mcuxClEcc_Constants.h */
         else if((PSA_ECC_FAMILY_SECP_R1 == curve) || (PSA_ECC_FAMILY_SECP_K1 == curve) || (PSA_ECC_FAMILY_BRAINPOOL_P_R1 == curve))
         {
-            if(attributes->domain_parameters_size != 0u)
-            {
-                return PSA_ERROR_INVALID_ARGUMENT;
-            }
-
             if ((peer_key_length & 1u) == 0u) {
                 return PSA_ERROR_INVALID_ARGUMENT;
             }
@@ -1276,7 +1260,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     }
     else if (PSA_ALG_IS_FFDH(alg))
     {
-        if (!PSA_KEY_TYPE_IS_DH_KEY_PAIR(attributes->core.type))
+        if (!PSA_KEY_TYPE_IS_DH_KEY_PAIR(psa_get_key_type(attributes)))
         {
             return PSA_ERROR_INVALID_ARGUMENT;
         }

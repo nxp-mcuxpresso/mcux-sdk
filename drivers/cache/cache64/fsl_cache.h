@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2021, 2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief cache driver version. */
-#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
+#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
 /*! @} */
 
 /*! @brief cache line size. */
@@ -138,7 +138,7 @@ void CACHE64_InvalidateCache(CACHE64_CTRL_Type *base);
  * @brief Invalidates cache by range.
  *
  * @param address The physical address of cache.
- * @param size_byte size of the memory to be invalidated.
+ * @param size_byte size of the memory to be invalidated, should be larger than 0.
  * @note Address and size should be aligned to "CACHE64_LINESIZE_BYTE".
  * The startAddr here will be forced to align to CACHE64_LINESIZE_BYTE if
  * startAddr is not aligned. For the size_byte, application should make sure the
@@ -158,7 +158,7 @@ void CACHE64_CleanCache(CACHE64_CTRL_Type *base);
  * @brief Cleans cache by range.
  *
  * @param address The physical address of cache.
- * @param size_byte size of the memory to be cleaned.
+ * @param size_byte size of the memory to be cleaned, should be larger than 0.
  * @note Address and size should be aligned to "CACHE64_LINESIZE_BYTE".
  * The startAddr here will be forced to align to CACHE64_LINESIZE_BYTE if
  * startAddr is not aligned. For the size_byte, application should make sure the
@@ -178,7 +178,7 @@ void CACHE64_CleanInvalidateCache(CACHE64_CTRL_Type *base);
  * @brief Cleans and invalidate cache by range.
  *
  * @param address The physical address of cache.
- * @param size_byte size of the memory to be Cleaned and Invalidated.
+ * @param size_byte size of the memory to be Cleaned and Invalidated, should be larger than 0.
  * @note Address and size should be aligned to "CACHE64_LINESIZE_BYTE".
  * The startAddr here will be forced to align to CACHE64_LINESIZE_BYTE if
  * startAddr is not aligned. For the size_byte, application should make sure the
@@ -209,7 +209,7 @@ void CACHE64_EnableWriteBuffer(CACHE64_CTRL_Type *base, bool enable);
  * @brief Invalidates instruction cache by range.
  *
  * @param address The physical address.
- * @param size_byte size of the memory to be invalidated.
+ * @param size_byte size of the memory to be invalidated, should be larger than 0.
  * @note Address and size should be aligned to CACHE64_LINESIZE_BYTE due to the cache operation unit
  * FSL_FEATURE_CACHE64_CTRL_LINESIZE_BYTE. The startAddr here will be forced to align to the cache line
  * size if startAddr is not aligned. For the size_byte, application should make sure the
@@ -224,7 +224,7 @@ static inline void ICACHE_InvalidateByRange(uint32_t address, uint32_t size_byte
  * @brief Invalidates data cache by range.
  *
  * @param address The physical address.
- * @param size_byte size of the memory to be invalidated.
+ * @param size_byte size of the memory to be invalidated, should be larger than 0.
  * @note Address and size should be aligned to CACHE64_LINESIZE_BYTE due to the cache operation unit
  * FSL_FEATURE_CACHE64_CTRL_LINESIZE_BYTE. The startAddr here will be forced to align to the cache line
  * size if startAddr is not aligned. For the size_byte, application should make sure the
@@ -239,7 +239,7 @@ static inline void DCACHE_InvalidateByRange(uint32_t address, uint32_t size_byte
  * @brief Clean data cache by range.
  *
  * @param address The physical address.
- * @param size_byte size of the memory to be cleaned.
+ * @param size_byte size of the memory to be cleaned, should be larger than 0.
  * @note Address and size should be aligned to CACHE64_LINESIZE_BYTE due to the cache operation unit
  * FSL_FEATURE_CACHE64_CTRL_LINESIZE_BYTE. The startAddr here will be forced to align to the cache line
  * size if startAddr is not aligned. For the size_byte, application should make sure the
@@ -254,7 +254,7 @@ static inline void DCACHE_CleanByRange(uint32_t address, uint32_t size_byte)
  * @brief Cleans and Invalidates data cache by range.
  *
  * @param address The physical address.
- * @param size_byte size of the memory to be Cleaned and Invalidated.
+ * @param size_byte size of the memory to be Cleaned and Invalidated, should be larger than 0.
  * @note Address and size should be aligned to CACHE64_LINESIZE_BYTE due to the cache operation unit
  * FSL_FEATURE_CACHE64_CTRL_LINESIZE_BYTE. The startAddr here will be forced to align to the cache line
  * size if startAddr is not aligned. For the size_byte, application should make sure the

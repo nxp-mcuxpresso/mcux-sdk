@@ -14,7 +14,7 @@
 !!GlobalInfo
 product: Peripherals v14.0
 processor: MIMXRT1189xxxxx
-package_id: MIMXRT1189XVM8B
+package_id: MIMXRT1189CVM8B
 mcu_data: ksdk2_0
 processor_version: 0.15.9
 functionalGroups:

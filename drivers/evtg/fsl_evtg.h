@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief EVTG driver version. */
 #define FSL_EVTG_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1. */
-/*@}*/
+/*! @} */
 
 /*! @brief EVTG instance index. */
 typedef enum _evtg_index

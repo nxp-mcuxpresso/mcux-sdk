@@ -33,9 +33,9 @@
 #define PSA_CMD_TAG_SIGNATURE           0x5EU
 
 // Algorithms used in EL2GO blobs
-#define BLOB_SIGN_ALGORITHM_CMAC        0x01U
-#define BLOB_WRAP_ALGORITHM_RFC3394     0x01U
-#define BLOB_WRAP_ALGORITHM_AES_CBC     0x02U
+#define BLOB_SIGN_ALGORITHM_CMAC    0x01U
+#define BLOB_WRAP_ALGORITHM_RFC3394 0x01U
+#define BLOB_WRAP_ALGORITHM_AES_CBC 0x02U
 
 // PSA command context
 typedef struct psa_cmd_s
@@ -87,7 +87,7 @@ static psa_status_t unpad_iso7816d4(uint8_t *data, size_t *data_size)
 {
     psa_status_t psa_status = PSA_SUCCESS;
 
-    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(data_size != NULL && *data_size > 0, PSA_ERROR_INVALID_ARGUMENT,
+    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(data_size != NULL && *data_size > 0u, PSA_ERROR_INVALID_ARGUMENT,
                                          "iso_7816_unpad failed, null data");
 
     uint32_t count = *data_size - 1u;
@@ -181,7 +181,7 @@ static int get_len(const unsigned char **p, const unsigned char *end, size_t *le
             case 4:
                 if ((end - *p) < 5)
                 {
-                  return (PSA_ERROR_INVALID_ARGUMENT);
+                    return (PSA_ERROR_INVALID_ARGUMENT);
                 }
 
                 *len = ((size_t)(*p)[1] << 24) | ((size_t)(*p)[2] << 16) | ((size_t)(*p)[3] << 8) | (*p)[4];
@@ -317,8 +317,8 @@ static psa_status_t free_key_in_slot_handler(mcuxClEls_KeyIndex_t slot_id)
 {
     if (slot_handler_array[slot_id].busy != 0u)
     {
-        slot_handler_array[slot_id].key_id          = MBEDTLS_SVC_KEY_ID_INIT;
-        slot_handler_array[slot_id].storage         = STORAGE_TEMP_KEY;
+        slot_handler_array[slot_id].key_id  = MBEDTLS_SVC_KEY_ID_INIT;
+        slot_handler_array[slot_id].storage = STORAGE_TEMP_KEY;
         mbedtls_free(slot_handler_array[slot_id].public_key);
         slot_handler_array[slot_id].public_key      = NULL;
         slot_handler_array[slot_id].public_key_size = 0U;
@@ -329,8 +329,11 @@ static psa_status_t free_key_in_slot_handler(mcuxClEls_KeyIndex_t slot_id)
     return PSA_ERROR_DOES_NOT_EXIST;
 }
 
-static void save_key_in_slot_handler(
-    mcuxClEls_KeyIndex_t slot_id, mbedtls_svc_key_id_t key_id, uint8_t storage, uint8_t *public_key, size_t public_key_size)
+static void save_key_in_slot_handler(mcuxClEls_KeyIndex_t slot_id,
+                                     mbedtls_svc_key_id_t key_id,
+                                     uint8_t storage,
+                                     uint8_t *public_key,
+                                     size_t public_key_size)
 {
     (void)free_key_in_slot_handler(slot_id);
 
@@ -349,7 +352,8 @@ static psa_status_t get_slot_from_key_id(mbedtls_svc_key_id_t key_id, mcuxClEls_
     *slot_id = 0U;
     for (mcuxClEls_KeyIndex_t slot_id_i = 0U; slot_id_i < MCUXCLELS_KEY_SLOTS; slot_id_i++)
     {
-        if ((slot_handler_array[slot_id_i].busy != 0u) && (mbedtls_svc_key_id_equal(slot_handler_array[slot_id_i].key_id, key_id) != 0) &&
+        if ((slot_handler_array[slot_id_i].busy != 0u) &&
+            (mbedtls_svc_key_id_equal(slot_handler_array[slot_id_i].key_id, key_id) != 0) &&
             (all_keys || (slot_handler_array[slot_id_i].storage == STORAGE_FINAL_KEY)))
         {
             *slot_id = slot_id_i;
@@ -369,7 +373,7 @@ psa_status_t mcuxClPsaDriver_Oracle_Utils_GetPublicKeyFromHandler(mbedtls_svc_ke
                                                                   size_t *public_key_size)
 {
     mcuxClEls_KeyIndex_t slot_id = 0U;
-    psa_status_t psa_status = PSA_ERROR_DOES_NOT_EXIST;
+    psa_status_t psa_status      = PSA_ERROR_DOES_NOT_EXIST;
 
     psa_status = mcuxClPsaDriver_Oracle_Utils_GetSlotFromKeyId(key_id, &slot_id);
     PSA_DRIVER_SUCCESS_OR_EXIT_MSG("Error in getting the slot from the key ID");
@@ -460,7 +464,6 @@ static psa_status_t execute_kdelete_step(mbedtls_svc_key_id_t key_id, const key_
     psa_status = get_slot_from_key_id(target_key_id, &target_key_slot, true);
     PSA_DRIVER_SUCCESS_OR_EXIT_MSG("No keyslot found for target key ID");
 
-
     psa_status = mcuxClPsaDriver_Oracle_ElsUtils_KeyDelete(target_key_slot);
     PSA_DRIVER_SUCCESS_OR_EXIT_MSG("Error in key deletion");
     psa_status = free_key_in_slot_handler(target_key_slot);
@@ -510,7 +513,7 @@ psa_status_t mcuxClPsaDriver_Oracle_Utils_RemoveKeyFromEls(mbedtls_svc_key_id_t 
     // In case at least one key in ELS has the associated key_id, the function the psa_status
     // will be set to PSA_SUCCESS after the successful deletion of the key
     mcuxClEls_KeyIndex_t slot_id = 0U;
-    psa_status_t psa_status = PSA_ERROR_DOES_NOT_EXIST;
+    psa_status_t psa_status      = PSA_ERROR_DOES_NOT_EXIST;
 
     psa_status = mcuxClPsaDriver_Oracle_Utils_GetSlotFromKeyId(key_id, &slot_id);
     PSA_DRIVER_SUCCESS_OR_EXIT_MSG("Error in getting slot from key id");
@@ -524,14 +527,14 @@ exit:
 }
 
 psa_status_t mcuxClPsaDriver_Oracle_Utils_ExecuteElsDecryptCbc(uint8_t *psa_external_blob,
-                                                              size_t psa_external_blob_size,
-                                                              uint8_t **key_data,
-                                                              size_t  *key_size,
-                                                              mcuxClEls_KeyIndex_t enc_key_slot)
+                                                               size_t psa_external_blob_size,
+                                                               uint8_t **key_data,
+                                                               size_t *key_size,
+                                                               mcuxClEls_KeyIndex_t enc_key_slot)
 {
     psa_status_t psa_status = PSA_SUCCESS;
 
-    uint8_t *decrypted_key = NULL;
+    uint8_t *decrypted_key      = NULL;
     size_t decrypted_key_length = 0;
 
     psa_cmd_t psa_cmd;
@@ -540,7 +543,7 @@ psa_status_t mcuxClPsaDriver_Oracle_Utils_ExecuteElsDecryptCbc(uint8_t *psa_exte
 
     // ISO7816-4 padding ensures ciphertext and plaintext having the same length
     decrypted_key_length = psa_cmd.keyincmd_size;
-    decrypted_key = mbedtls_calloc(1, decrypted_key_length);
+    decrypted_key        = mbedtls_calloc(1, decrypted_key_length);
     PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(decrypted_key != NULL, PSA_ERROR_INSUFFICIENT_MEMORY,
                                          "Insufficient memory for decrypted key allocation");
 
@@ -553,12 +556,13 @@ psa_status_t mcuxClPsaDriver_Oracle_Utils_ExecuteElsDecryptCbc(uint8_t *psa_exte
     PSA_DRIVER_SUCCESS_OR_EXIT_MSG("Error,  unpad_iso7816d4 failed");
 
     // Hand over ownership of the decrypted key
-    *key_size = decrypted_key_length;
-    *key_data = decrypted_key;
+    *key_size     = decrypted_key_length;
+    *key_data     = decrypted_key;
     decrypted_key = NULL;
 
 exit:
-    if (decrypted_key != NULL) {
+    if (decrypted_key != NULL)
+    {
         mbedtls_platform_zeroize(decrypted_key, decrypted_key_length);
     }
     mbedtls_free(decrypted_key);
@@ -573,7 +577,7 @@ psa_status_t mcuxClPsaDriver_Oracle_Utils_ExecuteElsKeyIn(mbedtls_svc_key_id_t k
 {
     psa_status_t psa_status = PSA_SUCCESS;
 
-    uint8_t* public_key = NULL;
+    uint8_t *public_key = NULL;
 
     psa_cmd_t psa_cmd;
     psa_status = parse_psa_import_command(psa_import_blob, psa_import_blob_size, &psa_cmd);
@@ -608,7 +612,8 @@ psa_status_t mcuxClPsaDriver_Oracle_Utils_ExecuteElsKeyIn(mbedtls_svc_key_id_t k
         PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(public_key != NULL, PSA_ERROR_INSUFFICIENT_MEMORY,
                                              "Insufficient memory for public key allocation");
 
-        psa_status = mcuxClPsaDriver_Oracle_ElsUtils_EccKeyGen(key_gen_options, *target_key_slot, keyProperties, public_key);
+        psa_status =
+            mcuxClPsaDriver_Oracle_ElsUtils_EccKeyGen(key_gen_options, *target_key_slot, keyProperties, public_key);
         PSA_DRIVER_SUCCESS_OR_EXIT_MSG("mcuxClPsaDriver_Oracle_ElsUtils_EccKeyGen failed");
     }
 
@@ -622,9 +627,9 @@ exit:
 }
 
 psa_status_t mcuxClPsaDriver_Oracle_Utils_ValidateBlobAttributes(const psa_key_attributes_t *attributes,
-                                                                const uint8_t *psa_import_blob,
-                                                                size_t psa_import_blob_size,
-                                                                mcuxClEls_KeyIndex_t auth_key_slot)
+                                                                 const uint8_t *psa_import_blob,
+                                                                 size_t psa_import_blob_size,
+                                                                 mcuxClEls_KeyIndex_t auth_key_slot)
 {
     psa_status_t psa_status = PSA_SUCCESS;
 
@@ -641,67 +646,71 @@ psa_status_t mcuxClPsaDriver_Oracle_Utils_ValidateBlobAttributes(const psa_key_a
     // Attention: Permitted algorithm can be 0 (PSA_ALG_NONE for X.509/Binary)
     // Attention: Permitted usage can be 0 (PSA_KEY_USAGE_NONE for static public keys)
 
-    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(psa_get_key_type(attributes) != (psa_key_type_t)0, 
-                                         PSA_ERROR_INVALID_ARGUMENT, "Invalid input key_type");
+    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(psa_get_key_type(attributes) != (psa_key_type_t)0, PSA_ERROR_INVALID_ARGUMENT,
+                                         "Invalid input key_type");
 
-    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(psa_get_key_bits(attributes) != (size_t)0, 
-                                         PSA_ERROR_INVALID_ARGUMENT, "Invalid input key_length");
+    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(psa_get_key_bits(attributes) != (size_t)0, PSA_ERROR_INVALID_ARGUMENT,
+                                         "Invalid input key_length");
 
     PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(psa_get_key_lifetime(attributes) != (psa_key_lifetime_t)0,
                                          PSA_ERROR_INVALID_ARGUMENT, "Invalid input key_lifetime");
 
     // Validate blob PSA attributes
-    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(
-        MBEDTLS_SVC_KEY_ID_GET_KEY_ID(psa_get_key_id(attributes)) == 
-            MBEDTLS_SVC_KEY_ID_GET_KEY_ID(psa_get_key_id(&psa_cmd.attributes)),
-        PSA_ERROR_INVALID_ARGUMENT, "provided key_id does not match with blob key_id");
+    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(MBEDTLS_SVC_KEY_ID_GET_KEY_ID(psa_get_key_id(attributes)) ==
+                                             MBEDTLS_SVC_KEY_ID_GET_KEY_ID(psa_get_key_id(&psa_cmd.attributes)),
+                                         PSA_ERROR_INVALID_ARGUMENT, "provided key_id does not match with blob key_id");
 
     PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(
-        psa_get_key_algorithm(attributes) == psa_get_key_algorithm(&psa_cmd.attributes),
-        PSA_ERROR_INVALID_ARGUMENT, "provided permitted_alg does not match with blob permitted_alg");
+        psa_get_key_algorithm(attributes) == psa_get_key_algorithm(&psa_cmd.attributes), PSA_ERROR_INVALID_ARGUMENT,
+        "provided permitted_alg does not match with blob permitted_alg");
 
     PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(
-        psa_get_key_usage_flags(attributes) == psa_get_key_usage_flags(&psa_cmd.attributes),
-        PSA_ERROR_INVALID_ARGUMENT, "provided key_usage does not match with blob key_usage");
+        psa_get_key_usage_flags(attributes) == psa_get_key_usage_flags(&psa_cmd.attributes), PSA_ERROR_INVALID_ARGUMENT,
+        "provided key_usage does not match with blob key_usage");
 
-    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(
-        psa_get_key_type(attributes) == psa_get_key_type(&psa_cmd.attributes),
-        PSA_ERROR_INVALID_ARGUMENT, "provided key_type does not match with blob key_type");
+    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(psa_get_key_type(attributes) == psa_get_key_type(&psa_cmd.attributes),
+                                         PSA_ERROR_INVALID_ARGUMENT,
+                                         "provided key_type does not match with blob key_type");
 
-    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(
-        psa_get_key_bits(attributes) == psa_get_key_bits(&psa_cmd.attributes),
-        PSA_ERROR_INVALID_ARGUMENT, "provided key_length does not match with blob key_length");
+    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(psa_get_key_bits(attributes) == psa_get_key_bits(&psa_cmd.attributes),
+                                         PSA_ERROR_INVALID_ARGUMENT,
+                                         "provided key_length does not match with blob key_length");
 
-    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(
-        psa_get_key_lifetime(attributes) == psa_get_key_lifetime(&psa_cmd.attributes),
-        PSA_ERROR_INVALID_ARGUMENT, "provided key_lifetime does not match with blob key_lifetime");
+    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(psa_get_key_lifetime(attributes) == psa_get_key_lifetime(&psa_cmd.attributes),
+                                         PSA_ERROR_INVALID_ARGUMENT,
+                                         "provided key_lifetime does not match with blob key_lifetime");
 
     // Validate blob lifetime and wrapping parameters
     psa_key_location_t location = PSA_KEY_LIFETIME_GET_LOCATION(psa_get_key_lifetime(attributes));
-    if (MCUXCLPSADRIVER_IS_S50_BLOB_STORAGE(location)) {
+    if (MCUXCLPSADRIVER_IS_S50_BLOB_STORAGE(location))
+    {
         PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(NXP_DIE_EL2GOIMPORT_KEK_SK_ID == psa_cmd.wrapping_key_id,
-            PSA_ERROR_INVALID_ARGUMENT, "Unknown blob wrapping_key_id");
+                                             PSA_ERROR_INVALID_ARGUMENT, "Unknown blob wrapping_key_id");
         PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(BLOB_WRAP_ALGORITHM_RFC3394 == psa_cmd.wrapping_algorithm,
-            PSA_ERROR_INVALID_ARGUMENT, "Unknown blob wrapping_algorithm");
-    } else if (MCUXCLPSADRIVER_IS_S50_ENC_STORAGE(location)) {
+                                             PSA_ERROR_INVALID_ARGUMENT, "Unknown blob wrapping_algorithm");
+    }
+    else if (MCUXCLPSADRIVER_IS_S50_ENC_STORAGE(location))
+    {
         PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(NXP_DIE_EL2GOIMPORTTFM_KEK_SK_ID == psa_cmd.wrapping_key_id,
-            PSA_ERROR_INVALID_ARGUMENT, "Unknown blob wrapping_key_id");
+                                             PSA_ERROR_INVALID_ARGUMENT, "Unknown blob wrapping_key_id");
         // We only support AES CBC wrapping via PSA
         PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(BLOB_WRAP_ALGORITHM_AES_CBC == psa_cmd.wrapping_algorithm,
-            PSA_ERROR_INVALID_ARGUMENT, "Unknown blob wrapping_algorithm");
-    } else {
+                                             PSA_ERROR_INVALID_ARGUMENT, "Unknown blob wrapping_algorithm");
+    }
+    else
+    {
         PSA_DRIVER_EXIT_STATUS_MSG(PSA_ERROR_INVALID_ARGUMENT, "Unknown blob key_lifetime")
     }
 
     // Validate signature parameters
     PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(NXP_DIE_EL2GOIMPORT_AUTH_SK_ID == psa_cmd.signature_key_id,
-        PSA_ERROR_INVALID_ARGUMENT, "Unknown blob signature_key_id");
+                                         PSA_ERROR_INVALID_ARGUMENT, "Unknown blob signature_key_id");
 
     PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(BLOB_SIGN_ALGORITHM_CMAC == psa_cmd.signature_algorithm,
-        PSA_ERROR_INVALID_ARGUMENT, "Unknown blob signature_algorithm");
+                                         PSA_ERROR_INVALID_ARGUMENT, "Unknown blob signature_algorithm");
 
-    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(CMAC_BLOCK_SIZE == psa_cmd.signature_size,
-        PSA_ERROR_INVALID_ARGUMENT, "Invalid blob CMAC size");
+    PSA_DRIVER_ASSERT_OR_EXIT_STATUS_MSG(CMAC_BLOCK_SIZE == psa_cmd.signature_size, PSA_ERROR_INVALID_ARGUMENT,
+                                         "Invalid blob CMAC size");
 
     // We do allocate enough memory here to also fit the padding into the buffer. This is achieved implicitly because
     // the blob size used here still includes the CMAC. The CMAC, however is excluded from the data to be signed and

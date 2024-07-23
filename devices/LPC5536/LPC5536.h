@@ -11,13 +11,13 @@
 **
 **     Reference manual:    LPC55S3x Reference Manual Rev. DraftG, 07/2021
 **     Version:             rev. 1.1, 2021-08-04
-**     Build:               b230608
+**     Build:               b240326
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC5536
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -41,8 +41,8 @@
  * CMSIS Peripheral Access Layer for LPC5536
  */
 
-#ifndef _LPC5536_H_
-#define _LPC5536_H_                              /**< Symbol preventing repeated inclusion */
+#if !defined(LPC5536_H_)
+#define LPC5536_H_                               /**< Symbol preventing repeated inclusion */
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
@@ -259,14 +259,14 @@ typedef enum IRQn {
  */
 typedef enum _dma_request_source
 {
-    kDma0RequestFLEXSPIRX           = 0U,          /**< FlexSPI RX */
+    kDma0RequestFLEXSPIRX           = 0U,          /**< Unused DMA request 0 (DMA channel reserved for DMA trigger of FlexSPI RX) */
     kDma1RequestUnusedDMARequest0   = 0U,          /**< Unused DMA request 0 */
-    kDma0RequestFLEXSPITX           = 1U,          /**< FlexSPI TX */
+    kDma0RequestFLEXSPITX           = 1U,          /**< Unused DMA request 1 (DMA channel reserved for DMA trigger of FlexSPI TX) */
     kDma1RequestUnusedDMARequest1   = 1U,          /**< Unused DMA request 1 */
-    kDma0RequestHSSPIRX             = 2U,          /**< HS_SPI RX(Flexcomm Interface 8 RX) */
-    kDma1RequestHSLSPIRX            = 2U,          /**< High Speed SPI RX( */
-    kDma0RequestHSSPITX             = 3U,          /**< HS_SPI TX(Flexcomm Interface 8 TX) */
-    kDma1RequestHSLSPITX            = 3U,          /**< High Speed SPI TX( */
+    kDma0RequestHSSPIRX             = 2U,          /**< Flexcomm Interface 8 RX/High Speed SPI RX */
+    kDma1RequestHSLSPIRX            = 2U,          /**< Flexcomm Interface 8 RX/High Speed SPI RX */
+    kDma0RequestHSSPITX             = 3U,          /**< Flexcomm Interface 8 TX/High Speed SPI TX */
+    kDma1RequestHSLSPITX            = 3U,          /**< Flexcomm Interface 8 TX/High Speed SPI TX */
     kDma0RequestFlexcomm0Rx         = 4U,          /**< Flexcomm Interface 0 RX/I2C Slave */
     kDma1RequestFlexcomm0Rx         = 4U,          /**< Flexcomm Interface 0 RX */
     kDma0RequestFlexcomm0Tx         = 5U,          /**< Flexcomm Interface 0 TX/I2C Master */
@@ -280,17 +280,17 @@ typedef enum _dma_request_source
     kDma0RequestFlexcomm3Tx         = 9U,          /**< Flexcomm Interface 3 TX/I2C Master */
     kDma1RequestFlexcomm3Tx         = 9U,          /**< Flexcomm Interface 3 TX */
     kDma0RequestFlexcomm2Rx         = 10U,         /**< Flexcomm Interface 2 RX/I2C Slave */
-    kDma1RequestDmic0Ch0            = 10U,         /**< DMIC0 CH0 */
+    kDma1RequestDmic0Ch0            = 10U,         /**< DMIC0 Channel 0 */
     kDma0RequestFlexcomm2Tx         = 11U,         /**< Flexcomm Interface 2 TX/I2C Master */
-    kDma1RequestDmic0Ch1            = 11U,         /**< DMIC0 CH1 */
+    kDma1RequestDmic0Ch1            = 11U,         /**< DMIC0 Channel 1 */
     kDma0RequestFlexcomm4Rx         = 12U,         /**< Flexcomm Interface 4 RX/I2C Slave */
     kDma1RequestI3c0Rx              = 12U,         /**< I3C0 RX */
     kDma0RequestFlexcomm4Tx         = 13U,         /**< Flexcomm Interface 4 TX/I2C Master */
     kDma1RequestI3c0Tx              = 13U,         /**< I3C0 TX */
     kDma0RequestFlexcomm5Rx         = 14U,         /**< Flexcomm Interface 5 RX/I2C Slave */
-    kDma1RequestFLEXSPIRX           = 14U,         /**< FlexSpi RX */
+    kDma1RequestFLEXSPIRX           = 14U,         /**< Unused DMA request 14 (DMA channel reserved for DMA trigger of FlexSPI RX) */
     kDma0RequestFlexcomm5Tx         = 15U,         /**< Flexcomm Interface 5 TX/I2C Master */
-    kDma1RequestFLEXSPITX           = 15U,         /**< FlexSpi TX */
+    kDma1RequestFLEXSPITX           = 15U,         /**< Unused DMA request 15 (DMA channel reserved for DMA trigger of FlexSPI TX) */
     kDma0RequestFlexcomm6Rx         = 16U,         /**< Flexcomm Interface 6 RX/I2C Slave */
     kDma0RequestFlexcomm6Tx         = 17U,         /**< Flexcomm Interface 6 TX/I2C Master */
     kDma0RequestFlexcomm7Rx         = 18U,         /**< Flexcomm Interface 7 RX/I2C Slave */
@@ -298,8 +298,8 @@ typedef enum _dma_request_source
     kDma0RequestDAC0                = 20U,         /**< DAC0 */
     kDma0RequestADC0FIFO0           = 21U,         /**< ADC0 FIFO 0 */
     kDma0RequestADC0FIFO1           = 22U,         /**< ADC0 FIFO 1 */
-    kDma0RequestDMIC0CH0            = 23U,         /**< DMIC0 channel0 */
-    kDma0RequestDMIC0CH1            = 24U,         /**< DMIC0 channel1 */
+    kDma0RequestDMIC0CH0            = 23U,         /**< DMIC0 channel 0 */
+    kDma0RequestDMIC0CH1            = 24U,         /**< DMIC0 channel 1 */
     kDma0RequestI3C0RX              = 25U,         /**< I3C0 RX */
     kDma0RequestI3C0TX              = 26U,         /**< I3C0 TX */
     kDma0RequestADC1FIFO0           = 27U,         /**< ADC1 FIFO 0 */
@@ -311,22 +311,22 @@ typedef enum _dma_request_source
     kDma0RequestUnusedDMARequest33  = 33U,         /**< Unused DMA request 33 */
     kDma0RequestUnusedDMARequest34  = 34U,         /**< Unused DMA request 34 */
     kDma0RequestUnusedDMARequest35  = 35U,         /**< Unused DMA request 35 */
-    kDma0RequestUnassignedDMARequest36 = 36U,      /**< Unassigned DMA request 36(but required for FlexPWM0_req_capt0) */
-    kDma0RequestUnassignedDMARequest37 = 37U,      /**< Unassigned DMA request 37(but required for FlexPWM0_req_capt1) */
-    kDma0RequestUnassignedDMARequest38 = 38U,      /**< Unassigned DMA request 38(but required for FlexPWM0_req_capt2) */
-    kDma0RequestUnassignedDMARequest39 = 39U,      /**< Unassigned DMA request 39(but required for FlexPWM0_req_capt3) */
-    kDma0RequestUnassignedDMARequest40 = 40U,      /**< Unassigned DMA request 40(but required for FlexPWM0_req_val0) */
-    kDma0RequestUnassignedDMARequest41 = 41U,      /**< Unassigned DMA request 41(but required for FlexPWM0_req_val1) */
-    kDma0RequestUnassignedDMARequest42 = 42U,      /**< Unassigned DMA request 42(but required for FlexPWM0_req_val2) */
-    kDma0RequestUnassignedDMARequest43 = 43U,      /**< Unassigned DMA request 43(but required for FlexPWM0_req_val3) */
-    kDma0RequestUnassignedDMARequest44 = 44U,      /**< Unassigned DMA request 44(but required for FlexPWM1_req_capt0) */
-    kDma0RequestUnassignedDMARequest45 = 45U,      /**< Unassigned DMA request 45(but required for FlexPWM1_req_capt1) */
-    kDma0RequestUnassignedDMARequest46 = 46U,      /**< Unassigned DMA request 46(but required for FlexPWM1_req_capt2) */
-    kDma0RequestUnassignedDMARequest47 = 47U,      /**< Unassigned DMA request 47(but required for FlexPWM1_req_capt3) */
-    kDma0RequestUnassignedDMARequest48 = 48U,      /**< Unassigned DMA request 48(but required for FlexPWM1_req_val0) */
-    kDma0RequestUnassignedDMARequest49 = 49U,      /**< Unassigned DMA request 49(but required for FlexPWM1_req_val1) */
-    kDma0RequestUnassignedDMARequest50 = 50U,      /**< Unassigned DMA request 50(but required for FlexPWM1_req_val2) */
-    kDma0RequestUnassignedDMARequest51 = 51U,      /**< Unassigned DMA request 51(but required for FlexPWM1_req_val3) */
+    kDma0RequestUnassignedDMARequest36 = 36U,      /**< Unused DMA request 36 (DMA channel reserved for DMA trigger of FlexPWM0 Read Capture 0) */
+    kDma0RequestUnassignedDMARequest37 = 37U,      /**< Unused DMA request 37 (DMA channel reserved for DMA trigger of FlexPWM0 Read Capture 1) */
+    kDma0RequestUnassignedDMARequest38 = 38U,      /**< Unused DMA request 38 (DMA channel reserved for DMA trigger of FlexPWM0 Read Capture 2) */
+    kDma0RequestUnassignedDMARequest39 = 39U,      /**< Unused DMA request 39 (DMA channel reserved for DMA trigger of FlexPWM0 Read Capture 3) */
+    kDma0RequestUnassignedDMARequest40 = 40U,      /**< Unused DMA request 40 (DMA channel reserved for DMA trigger of FlexPWM0 Write Value 0) */
+    kDma0RequestUnassignedDMARequest41 = 41U,      /**< Unused DMA request 41 (DMA channel reserved for DMA trigger of FlexPWM0 Write Value 1) */
+    kDma0RequestUnassignedDMARequest42 = 42U,      /**< Unused DMA request 42 (DMA channel reserved for DMA trigger of FlexPWM0 Write Value 2) */
+    kDma0RequestUnassignedDMARequest43 = 43U,      /**< Unused DMA request 43 (DMA channel reserved for DMA trigger of FlexPWM0 Write Value 3) */
+    kDma0RequestUnassignedDMARequest44 = 44U,      /**< Unused DMA request 44 (DMA channel reserved for DMA trigger of FlexPWM1 Read Capture 0) */
+    kDma0RequestUnassignedDMARequest45 = 45U,      /**< Unused DMA request 45 (DMA channel reserved for DMA trigger of FlexPWM1 Read Capture 1) */
+    kDma0RequestUnassignedDMARequest46 = 46U,      /**< Unused DMA request 46 (DMA channel reserved for DMA trigger of FlexPWM1 Read Capture 2) */
+    kDma0RequestUnassignedDMARequest47 = 47U,      /**< Unused DMA request 47 (DMA channel reserved for DMA trigger of FlexPWM1 Read Capture 3) */
+    kDma0RequestUnassignedDMARequest48 = 48U,      /**< Unused DMA request 48 (DMA channel reserved for DMA trigger of FlexPWM1 Write Value 0) */
+    kDma0RequestUnassignedDMARequest49 = 49U,      /**< Unused DMA request 49 (DMA channel reserved for DMA trigger of FlexPWM1 Write Value 1) */
+    kDma0RequestUnassignedDMARequest50 = 50U,      /**< Unused DMA request 50 (DMA channel reserved for DMA trigger of FlexPWM1 Write Value 2) */
+    kDma0RequestUnassignedDMARequest51 = 51U,      /**< Unused DMA request 51 (DMA channel reserved for DMA trigger of FlexPWM1 Write Value 3) */
 } dma_request_source_t;
 
 /* @} */
@@ -15036,13 +15036,19 @@ typedef struct {
 /** Interrupt vectors for the FLEXSPI peripheral type */
 #define FLEXSPI_IRQS                             { FlexSPI0_IRQn }
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-/** FlexSPI0 AMBA address */
+/** FlexSPI0 AMBA base address */
 #define FlexSPI0_AMBA_BASE                        (0x18000000u)
-/** FlexSPI0 AMBA address */
+/** FlexSPI0 AMBA end address */
+#define FlexSPI0_AMBA_END                         (0x1FFFFFFFu)
+/** FlexSPI0 AMBA base address */
 #define FlexSPI0_AMBA_BASE_NS                     (0x08000000u)
+/** FlexSPI0 AMBA end address */
+#define FlexSPI0_AMBA_END_NS                      (0x0FFFFFFFu)
 #else
-/** FlexSPI0 AMBA address */
+/** FlexSPI0 AMBA base address */
 #define FlexSPI0_AMBA_BASE                        (0x08000000u)
+/** FlexSPI0 AMBA end address */
+#define FlexSPI0_AMBA_END                         (0x0FFFFFFFu)
 #endif
 
 
@@ -50599,5 +50605,5 @@ static inline uint32_t Chip_GetVersion(void)
  */ /* end of group SDK_Compatibility_Symbols */
 
 
-#endif  /* _LPC5536_H_ */
+#endif  /* LPC5536_H_ */
 

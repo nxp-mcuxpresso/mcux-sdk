@@ -286,7 +286,7 @@ typedef struct memory_context_struct
 typedef struct api_memory_region_interface
 {
     status_t (*init)(mem_attribute_t *attr);
-#if ROM_API_HAS_FEATURE_MEM_READ
+#if (defined(ROM_API_HAS_FEATURE_MEM_READ) && ROM_API_HAS_FEATURE_MEM_READ)
     status_t (*read)(mem_attribute_t *attr, uint32_t addr, uint32_t leth, uint8_t *buf);
 #endif
     status_t (*write)(mem_attribute_t *attr, uint32_t addr, uint32_t len, const uint8_t *buf);

@@ -334,8 +334,8 @@ status_t CLOCK_SetupOsc32KClocking(uint32_t id)
 
     VBAT0->OSCCTLA =
         (VBAT0->OSCCTLA & ~(VBAT_OSCCTLA_MODE_EN_MASK | VBAT_OSCCTLA_CAP_SEL_EN_MASK | VBAT_OSCCTLA_OSC_EN_MASK)) |
-        VBAT_OSCCTLA_MODE_EN(0x2) | VBAT_OSCCTLA_OSC_EN_MASK | VBAT_OSCCTLA_OSC_EN_MASK;
-    VBAT0->OSCCTLB = VBAT_OSCCTLB_INVERSE(0xDFF7E);
+        VBAT_OSCCTLA_MODE_EN(0x0) | VBAT_OSCCTLA_CAP_SEL_EN_MASK | VBAT_OSCCTLA_OSC_EN_MASK;
+    VBAT0->OSCCTLB = VBAT_OSCCTLB_INVERSE(0xFFF7E);
     /* Wait for STATUSA[OSC_RDY] to set. */
     while ((VBAT0->STATUSA & VBAT_STATUSA_OSC_RDY_MASK) == 0U)
     {
@@ -538,15 +538,15 @@ void CLOCK_SetPll1MonitorMode(scg_pll1_monitor_mode_t mode)
 status_t CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz, run_mode_t mode)
 {
     uint32_t num_wait_states_added = 3UL; /* Default 3 additional wait states */
-    switch (mode)
+    switch ((uint32_t)mode)
     {
-        case kMD_Mode:
+        case (uint32_t)kMD_Mode:
         {
-            if (system_freq_hz > 50000000)
+            if (system_freq_hz > 50000000U)
             {
                 return kStatus_Fail;
             }
-            if (system_freq_hz > 24000000)
+            if (system_freq_hz > 24000000U)
             {
                 num_wait_states_added = 1U;
             }
@@ -556,17 +556,17 @@ status_t CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz, run_mode_t m
             }
             break;
         }
-        case kSD_Mode:
+        case (uint32_t)kSD_Mode:
         {
-            if (system_freq_hz > 100000000)
+            if (system_freq_hz > 100000000U)
             {
                 return kStatus_Fail;
             }
-            if (system_freq_hz > 64000000)
+            if (system_freq_hz > 64000000U)
             {
                 num_wait_states_added = 2U;
             }
-            else if (system_freq_hz > 36000000)
+            else if (system_freq_hz > 36000000U)
             {
                 num_wait_states_added = 1U;
             }
@@ -576,21 +576,21 @@ status_t CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz, run_mode_t m
             }
             break;
         }
-        case kOD_Mode:
+        case (uint32_t)kOD_Mode:
         {
-            if (system_freq_hz > 150000000)
+            if (system_freq_hz > 150000000U)
             {
                 return kStatus_Fail;
             }
-            if (system_freq_hz > 100000000)
+            if (system_freq_hz > 100000000U)
             {
                 num_wait_states_added = 3U;
             }
-            else if (system_freq_hz > 64000000)
+            else if (system_freq_hz > 64000000U)
             {
                 num_wait_states_added = 2U;
             }
-            else if (system_freq_hz > 36000000)
+            else if (system_freq_hz > 36000000U)
             {
                 num_wait_states_added = 1U;
             }
@@ -598,7 +598,11 @@ status_t CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz, run_mode_t m
             {
                 num_wait_states_added = 0U;
             }
+            break;
         }
+        default:
+            num_wait_states_added = 0U;
+            break;
     }
 
     /* additional wait-states are added */
@@ -1734,6 +1738,9 @@ uint32_t CLOCK_GetWdtClkFreq(uint32_t id)
             case 2U:
                 freq = CLOCK_GetClk1MFreq();
                 break;
+            case 3U:
+                freq = CLOCK_GetClk1MFreq();
+                break;
             default:
                 freq = 0U;
                 break;
@@ -2455,11 +2462,11 @@ static uint32_t CLOCK_GetLposcFreq(void)
 
     switch ((RTC0->CTRL & RTC_CTRL_CLK_SEL_MASK) >> RTC_CTRL_CLK_SEL_SHIFT)
     {
+        case 0U:
+            freq = CLOCK_GetClk16KFreq((uint32_t)kCLOCK_Clk16KToVbat);
+            break;
         case 1U:
             freq = CLOCK_GetOsc32KFreq((uint32_t)kCLOCK_Osc32kToVbat);
-            break;
-        case 2U:
-            freq = CLOCK_GetClk16KFreq((uint32_t)kCLOCK_Clk16KToVbat);
             break;
         default:
             freq = 0U;
@@ -3118,13 +3125,12 @@ status_t CLOCK_FIRCAutoTrimWithSOF(void)
     CLOCK_SetSysOscMonitorMode(kSCG_SysOscMonitorDisable);
 
     firc_trim_config_t fircAutoTrimConfig = {
-        .trimMode = kSCG_FircTrimUpdate,        /* FIRC trim is enabled and trim value update is enabled */
-        .trimSrc  = kSCG_FircTrimSrcUsb0,       /* Trim source is USB0 start of frame (1kHz) */
-        .trimDiv  = 1U,                         /* Divided value */
-        .trimCoar = 0U,                         /* Trim value, see Reference Manual for more information */
-        .trimFine = 0U,                         /* Trim value, see Reference Manual for more information */
+        .trimMode = kSCG_FircTrimUpdate,  /* FIRC trim is enabled and trim value update is enabled */
+        .trimSrc  = kSCG_FircTrimSrcUsb0, /* Trim source is USB0 start of frame (1kHz) */
+        .trimDiv  = 1U,                   /* Divided value */
+        .trimCoar = 0U,                   /* Trim value, see Reference Manual for more information */
+        .trimFine = 0U,                   /* Trim value, see Reference Manual for more information */
     };
-    CLOCK_FROHFTrimConfig(fircAutoTrimConfig);
 
-    return (status_t)kStatus_Success;
+    return CLOCK_FROHFTrimConfig(fircAutoTrimConfig);
 }

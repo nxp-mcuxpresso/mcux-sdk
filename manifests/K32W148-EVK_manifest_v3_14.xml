@@ -9,7 +9,7 @@
     <definition extID="middleware.multicore.rpmsg_lite.freertos.config.k32w148evk.K32W1480"/>
     <definition extID="middleware.wireless.framework.rpmsg_config.K32W1480"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK215000" name="MCUXpresso SDK215000" version="2.15.000" revision="2.15.000"/>
+  <ksdk id="MCUXpressoSDK216000" name="MCUXpresso SDK216000" version="2.16.000" revision="2.16.000"/>
   <manifest_includes>
     <manifest_include path="../../examples/k32w148evk/k32w148evk_example_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/littlefs/manifests/middleware_christopher_haster_littlefs_K32W1480_manifest_v3_14.xml"/>
@@ -26,7 +26,7 @@
     <compiler id="compiler_gcc" name="gcc" type="gcc"/>
   </compilers>
   <toolchainSettings>
-    <toolchainSetting id="com.nxp.mcuxpresso" name="mcuxpresso" version="11.8.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" toolchain="mcuxpresso">
+    <toolchainSetting id="com.nxp.mcuxpresso" name="mcuxpresso" version="11.10.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" toolchain="mcuxpresso">
       <option id="gnu.cpp.compiler.option.optimization.flags" type="string" user_name="">
         <value>-fno-common</value>
       </option>
@@ -48,8 +48,8 @@
     </toolchainSetting>
   </toolchainSettings>
   <toolchains>
-    <toolchain id="armgcc" name="GCC_ARM_Embedded_10-2021.10" version="12.2" full_name="GCC ARM Embedded 10-2021.10" compiler="compiler_gcc" type="armgcc" vendor="GCC ARM Embedded" vendor_url="http://launchpad.net/gcc-arm-embedded"/>
-    <toolchain id="mcuxpresso" name="MCUXpresso_IDE" version="11.8.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" type="mcuxpresso" vendor="NXP Semiconductors" vendor_url="http://www.nxp.com">
+    <toolchain id="armgcc" name="GCC_ARM_Embedded_13-2023.10" version="13.2.1" full_name="GCC ARM Embedded 13-2023.10" compiler="compiler_gcc" type="armgcc" vendor="GCC ARM Embedded" vendor_url="https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads"/>
+    <toolchain id="mcuxpresso" name="MCUXpresso_IDE" version="11.10.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" type="mcuxpresso" vendor="NXP Semiconductors" vendor_url="http://www.nxp.com">
       <debug>
         <debug_configuration id="com.crt.advproject.config.exe.release" name="Release Configuration" probe="LinkServer">
           <scripts>
@@ -218,7 +218,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="device.K32W1480_startup_wireless.K32W1480" name="Wireless start up code" brief="Wireless start up code" version="1.0.0" full_name="Wireless exmple start up" category="K32W1480_startup_wireless/K32W1480_startup_wireless" user_visible="false" type="middleware" package_base_path="../devices/K32W1480" project_base_path="startup">
+    <component id="device.K32W1480_startup_wireless.K32W1480" name="Wireless start up code" brief="Wireless start up code" version="1.0.0" full_name="Wireless example start up" category="K32W1480_startup_wireless/K32W1480_startup_wireless" user_visible="false" type="middleware" package_base_path="../devices/K32W1480" project_base_path="startup">
       <dependencies>
         <device_dependency value="K32W1480xxxA"/>
       </dependencies>
@@ -310,7 +310,7 @@ ${load}</script>
         <files mask="mcux_config.cmake"/>
       </source>
     </component>
-    <component id="CMSIS_Include_core_cm.K32W1480" name="CMSIS_Include_CM" brief="CMSIS-CORE for Cortex-M, ARMv8-M, ARMv8.1-M" version="5.5.0" full_name="CMSIS Include For Cortex-M, ARMv8-M, ARMv8.1-M" category="CMSIS/CORE" user_visible="true" type="CMSIS_Include" package_base_path="../CMSIS/Core/Include" project_base_path="CMSIS">
+    <component id="CMSIS_Include_core_cm.K32W1480" name="CMSIS_Include_CM" brief="CMSIS-CORE for Cortex-M, ARMv8-M, ARMv8.1-M" version="5.9.0" full_name="CMSIS Include For Cortex-M, ARMv8-M, ARMv8.1-M" category="CMSIS/CORE" user_visible="true" type="CMSIS_Include" package_base_path="../CMSIS/Core/Include" project_base_path="CMSIS">
       <dependencies>
         <device_dependency value="K32W1480xxxA"/>
       </dependencies>
@@ -353,11 +353,13 @@ ${load}</script>
     <files mask="BasicMathFunctionsF16.c"/>
     <files mask="arm_abs_f16.c"/>
     <files mask="arm_abs_f32.c"/>
+    <files mask="arm_abs_f64.c"/>
     <files mask="arm_abs_q15.c"/>
     <files mask="arm_abs_q31.c"/>
     <files mask="arm_abs_q7.c"/>
     <files mask="arm_add_f16.c"/>
     <files mask="arm_add_f32.c"/>
+    <files mask="arm_add_f64.c"/>
     <files mask="arm_add_q15.c"/>
     <files mask="arm_add_q31.c"/>
     <files mask="arm_add_q7.c"/>
@@ -371,16 +373,19 @@ ${load}</script>
     <files mask="arm_clip_q7.c"/>
     <files mask="arm_dot_prod_f16.c"/>
     <files mask="arm_dot_prod_f32.c"/>
+    <files mask="arm_dot_prod_f64.c"/>
     <files mask="arm_dot_prod_q15.c"/>
     <files mask="arm_dot_prod_q31.c"/>
     <files mask="arm_dot_prod_q7.c"/>
     <files mask="arm_mult_f16.c"/>
     <files mask="arm_mult_f32.c"/>
+    <files mask="arm_mult_f64.c"/>
     <files mask="arm_mult_q15.c"/>
     <files mask="arm_mult_q31.c"/>
     <files mask="arm_mult_q7.c"/>
     <files mask="arm_negate_f16.c"/>
     <files mask="arm_negate_f32.c"/>
+    <files mask="arm_negate_f64.c"/>
     <files mask="arm_negate_q15.c"/>
     <files mask="arm_negate_q31.c"/>
     <files mask="arm_negate_q7.c"/>
@@ -389,6 +394,7 @@ ${load}</script>
     <files mask="arm_not_u8.c"/>
     <files mask="arm_offset_f16.c"/>
     <files mask="arm_offset_f32.c"/>
+    <files mask="arm_offset_f64.c"/>
     <files mask="arm_offset_q15.c"/>
     <files mask="arm_offset_q31.c"/>
     <files mask="arm_offset_q7.c"/>
@@ -397,6 +403,7 @@ ${load}</script>
     <files mask="arm_or_u8.c"/>
     <files mask="arm_scale_f16.c"/>
     <files mask="arm_scale_f32.c"/>
+    <files mask="arm_scale_f64.c"/>
     <files mask="arm_scale_q15.c"/>
     <files mask="arm_scale_q31.c"/>
     <files mask="arm_scale_q7.c"/>
@@ -405,6 +412,7 @@ ${load}</script>
     <files mask="arm_shift_q7.c"/>
     <files mask="arm_sub_f16.c"/>
     <files mask="arm_sub_f32.c"/>
+    <files mask="arm_sub_f64.c"/>
     <files mask="arm_sub_q15.c"/>
     <files mask="arm_sub_q31.c"/>
     <files mask="arm_sub_q7.c"/>
@@ -435,14 +443,18 @@ ${load}</script>
     <files mask="arm_cmplx_dot_prod_q31.c"/>
     <files mask="arm_cmplx_mag_f16.c"/>
     <files mask="arm_cmplx_mag_f32.c"/>
+    <files mask="arm_cmplx_mag_f64.c"/>
+    <files mask="arm_cmplx_mag_fast_q15.c"/>
     <files mask="arm_cmplx_mag_q15.c"/>
     <files mask="arm_cmplx_mag_q31.c"/>
     <files mask="arm_cmplx_mag_squared_f16.c"/>
     <files mask="arm_cmplx_mag_squared_f32.c"/>
+    <files mask="arm_cmplx_mag_squared_f64.c"/>
     <files mask="arm_cmplx_mag_squared_q15.c"/>
     <files mask="arm_cmplx_mag_squared_q31.c"/>
     <files mask="arm_cmplx_mult_cmplx_f16.c"/>
     <files mask="arm_cmplx_mult_cmplx_f32.c"/>
+    <files mask="arm_cmplx_mult_cmplx_f64.c"/>
     <files mask="arm_cmplx_mult_cmplx_q15.c"/>
     <files mask="arm_cmplx_mult_cmplx_q31.c"/>
     <files mask="arm_cmplx_mult_real_f16.c"/>
@@ -467,15 +479,22 @@ ${load}</script>
     <files mask="arm_canberra_distance_f32.c"/>
     <files mask="arm_chebyshev_distance_f16.c"/>
     <files mask="arm_chebyshev_distance_f32.c"/>
+    <files mask="arm_chebyshev_distance_f64.c"/>
     <files mask="arm_cityblock_distance_f16.c"/>
     <files mask="arm_cityblock_distance_f32.c"/>
+    <files mask="arm_cityblock_distance_f64.c"/>
     <files mask="arm_correlation_distance_f16.c"/>
     <files mask="arm_correlation_distance_f32.c"/>
     <files mask="arm_cosine_distance_f16.c"/>
     <files mask="arm_cosine_distance_f32.c"/>
+    <files mask="arm_cosine_distance_f64.c"/>
     <files mask="arm_dice_distance.c"/>
+    <files mask="arm_dtw_distance_f32.c"/>
+    <files mask="arm_dtw_init_window_q7.c"/>
+    <files mask="arm_dtw_path_f32.c"/>
     <files mask="arm_euclidean_distance_f16.c"/>
     <files mask="arm_euclidean_distance_f32.c"/>
+    <files mask="arm_euclidean_distance_f64.c"/>
     <files mask="arm_hamming_distance.c"/>
     <files mask="arm_jaccard_distance.c"/>
     <files mask="arm_jensenshannon_distance_f16.c"/>
@@ -490,10 +509,15 @@ ${load}</script>
     <files mask="arm_yule_distance.c"/>
     <files mask="FastMathFunctions.c"/>
     <files mask="FastMathFunctionsF16.c"/>
+    <files mask="arm_atan2_f16.c"/>
+    <files mask="arm_atan2_f32.c"/>
+    <files mask="arm_atan2_q15.c"/>
+    <files mask="arm_atan2_q31.c"/>
     <files mask="arm_cos_f32.c"/>
     <files mask="arm_cos_q15.c"/>
     <files mask="arm_cos_q31.c"/>
     <files mask="arm_divide_q15.c"/>
+    <files mask="arm_divide_q31.c"/>
     <files mask="arm_sin_f32.c"/>
     <files mask="arm_sin_q15.c"/>
     <files mask="arm_sin_q31.c"/>
@@ -501,9 +525,13 @@ ${load}</script>
     <files mask="arm_sqrt_q31.c"/>
     <files mask="arm_vexp_f16.c"/>
     <files mask="arm_vexp_f32.c"/>
+    <files mask="arm_vexp_f64.c"/>
     <files mask="arm_vinverse_f16.c"/>
     <files mask="arm_vlog_f16.c"/>
     <files mask="arm_vlog_f32.c"/>
+    <files mask="arm_vlog_f64.c"/>
+    <files mask="arm_vlog_q15.c"/>
+    <files mask="arm_vlog_q31.c"/>
     <files mask="FilteringFunctions.c"/>
     <files mask="FilteringFunctionsF16.c"/>
     <files mask="arm_biquad_cascade_df1_32x64_init_q31.c"/>
@@ -548,6 +576,7 @@ ${load}</script>
     <files mask="arm_conv_q7.c"/>
     <files mask="arm_correlate_f16.c"/>
     <files mask="arm_correlate_f32.c"/>
+    <files mask="arm_correlate_f64.c"/>
     <files mask="arm_correlate_fast_opt_q15.c"/>
     <files mask="arm_correlate_fast_q15.c"/>
     <files mask="arm_correlate_fast_q31.c"/>
@@ -566,10 +595,12 @@ ${load}</script>
     <files mask="arm_fir_decimate_q31.c"/>
     <files mask="arm_fir_f16.c"/>
     <files mask="arm_fir_f32.c"/>
+    <files mask="arm_fir_f64.c"/>
     <files mask="arm_fir_fast_q15.c"/>
     <files mask="arm_fir_fast_q31.c"/>
     <files mask="arm_fir_init_f16.c"/>
     <files mask="arm_fir_init_f32.c"/>
+    <files mask="arm_fir_init_f64.c"/>
     <files mask="arm_fir_init_q15.c"/>
     <files mask="arm_fir_init_q31.c"/>
     <files mask="arm_fir_init_q7.c"/>
@@ -633,6 +664,9 @@ ${load}</script>
     <files mask="arm_spline_interp_init_f32.c"/>
     <files mask="MatrixFunctions.c"/>
     <files mask="MatrixFunctionsF16.c"/>
+    <files mask="arm_householder_f16.c"/>
+    <files mask="arm_householder_f32.c"/>
+    <files mask="arm_householder_f64.c"/>
     <files mask="arm_mat_add_f16.c"/>
     <files mask="arm_mat_add_f32.c"/>
     <files mask="arm_mat_add_q15.c"/>
@@ -650,6 +684,7 @@ ${load}</script>
     <files mask="arm_mat_cmplx_trans_q31.c"/>
     <files mask="arm_mat_init_f16.c"/>
     <files mask="arm_mat_init_f32.c"/>
+    <files mask="arm_mat_init_f64.c"/>
     <files mask="arm_mat_init_q15.c"/>
     <files mask="arm_mat_init_q31.c"/>
     <files mask="arm_mat_inverse_f16.c"/>
@@ -662,9 +697,13 @@ ${load}</script>
     <files mask="arm_mat_mult_f64.c"/>
     <files mask="arm_mat_mult_fast_q15.c"/>
     <files mask="arm_mat_mult_fast_q31.c"/>
+    <files mask="arm_mat_mult_opt_q31.c"/>
     <files mask="arm_mat_mult_q15.c"/>
     <files mask="arm_mat_mult_q31.c"/>
     <files mask="arm_mat_mult_q7.c"/>
+    <files mask="arm_mat_qr_f16.c"/>
+    <files mask="arm_mat_qr_f32.c"/>
+    <files mask="arm_mat_qr_f64.c"/>
     <files mask="arm_mat_scale_f16.c"/>
     <files mask="arm_mat_scale_f32.c"/>
     <files mask="arm_mat_scale_q15.c"/>
@@ -722,14 +761,31 @@ ${load}</script>
     <files mask="StatisticsFunctionsF16.c"/>
     <files mask="arm_absmax_f16.c"/>
     <files mask="arm_absmax_f32.c"/>
+    <files mask="arm_absmax_f64.c"/>
+    <files mask="arm_absmax_no_idx_f16.c"/>
+    <files mask="arm_absmax_no_idx_f32.c"/>
+    <files mask="arm_absmax_no_idx_f64.c"/>
+    <files mask="arm_absmax_no_idx_q15.c"/>
+    <files mask="arm_absmax_no_idx_q31.c"/>
+    <files mask="arm_absmax_no_idx_q7.c"/>
     <files mask="arm_absmax_q15.c"/>
     <files mask="arm_absmax_q31.c"/>
     <files mask="arm_absmax_q7.c"/>
     <files mask="arm_absmin_f16.c"/>
     <files mask="arm_absmin_f32.c"/>
+    <files mask="arm_absmin_f64.c"/>
+    <files mask="arm_absmin_no_idx_f16.c"/>
+    <files mask="arm_absmin_no_idx_f32.c"/>
+    <files mask="arm_absmin_no_idx_f64.c"/>
+    <files mask="arm_absmin_no_idx_q15.c"/>
+    <files mask="arm_absmin_no_idx_q31.c"/>
+    <files mask="arm_absmin_no_idx_q7.c"/>
     <files mask="arm_absmin_q15.c"/>
     <files mask="arm_absmin_q31.c"/>
     <files mask="arm_absmin_q7.c"/>
+    <files mask="arm_accumulate_f16.c"/>
+    <files mask="arm_accumulate_f32.c"/>
+    <files mask="arm_accumulate_f64.c"/>
     <files mask="arm_entropy_f16.c"/>
     <files mask="arm_entropy_f32.c"/>
     <files mask="arm_entropy_f64.c"/>
@@ -742,23 +798,43 @@ ${load}</script>
     <files mask="arm_logsumexp_f32.c"/>
     <files mask="arm_max_f16.c"/>
     <files mask="arm_max_f32.c"/>
+    <files mask="arm_max_f64.c"/>
     <files mask="arm_max_no_idx_f16.c"/>
     <files mask="arm_max_no_idx_f32.c"/>
+    <files mask="arm_max_no_idx_f64.c"/>
+    <files mask="arm_max_no_idx_q15.c"/>
+    <files mask="arm_max_no_idx_q31.c"/>
+    <files mask="arm_max_no_idx_q7.c"/>
     <files mask="arm_max_q15.c"/>
     <files mask="arm_max_q31.c"/>
     <files mask="arm_max_q7.c"/>
     <files mask="arm_mean_f16.c"/>
     <files mask="arm_mean_f32.c"/>
+    <files mask="arm_mean_f64.c"/>
     <files mask="arm_mean_q15.c"/>
     <files mask="arm_mean_q31.c"/>
     <files mask="arm_mean_q7.c"/>
     <files mask="arm_min_f16.c"/>
     <files mask="arm_min_f32.c"/>
+    <files mask="arm_min_f64.c"/>
+    <files mask="arm_min_no_idx_f16.c"/>
+    <files mask="arm_min_no_idx_f32.c"/>
+    <files mask="arm_min_no_idx_f64.c"/>
+    <files mask="arm_min_no_idx_q15.c"/>
+    <files mask="arm_min_no_idx_q31.c"/>
+    <files mask="arm_min_no_idx_q7.c"/>
     <files mask="arm_min_q15.c"/>
     <files mask="arm_min_q31.c"/>
     <files mask="arm_min_q7.c"/>
+    <files mask="arm_mse_f16.c"/>
+    <files mask="arm_mse_f32.c"/>
+    <files mask="arm_mse_f64.c"/>
+    <files mask="arm_mse_q15.c"/>
+    <files mask="arm_mse_q31.c"/>
+    <files mask="arm_mse_q7.c"/>
     <files mask="arm_power_f16.c"/>
     <files mask="arm_power_f32.c"/>
+    <files mask="arm_power_f64.c"/>
     <files mask="arm_power_q15.c"/>
     <files mask="arm_power_q31.c"/>
     <files mask="arm_power_q7.c"/>
@@ -768,10 +844,12 @@ ${load}</script>
     <files mask="arm_rms_q31.c"/>
     <files mask="arm_std_f16.c"/>
     <files mask="arm_std_f32.c"/>
+    <files mask="arm_std_f64.c"/>
     <files mask="arm_std_q15.c"/>
     <files mask="arm_std_q31.c"/>
     <files mask="arm_var_f16.c"/>
     <files mask="arm_var_f32.c"/>
+    <files mask="arm_var_f64.c"/>
     <files mask="arm_var_q15.c"/>
     <files mask="arm_var_q31.c"/>
     <files mask="SupportFunctions.c"/>
@@ -782,17 +860,26 @@ ${load}</script>
     <files mask="arm_bubble_sort_f32.c"/>
     <files mask="arm_copy_f16.c"/>
     <files mask="arm_copy_f32.c"/>
+    <files mask="arm_copy_f64.c"/>
     <files mask="arm_copy_q15.c"/>
     <files mask="arm_copy_q31.c"/>
     <files mask="arm_copy_q7.c"/>
+    <files mask="arm_f16_to_f64.c"/>
     <files mask="arm_f16_to_float.c"/>
     <files mask="arm_f16_to_q15.c"/>
+    <files mask="arm_f64_to_f16.c"/>
+    <files mask="arm_f64_to_float.c"/>
+    <files mask="arm_f64_to_q15.c"/>
+    <files mask="arm_f64_to_q31.c"/>
+    <files mask="arm_f64_to_q7.c"/>
     <files mask="arm_fill_f16.c"/>
     <files mask="arm_fill_f32.c"/>
+    <files mask="arm_fill_f64.c"/>
     <files mask="arm_fill_q15.c"/>
     <files mask="arm_fill_q31.c"/>
     <files mask="arm_fill_q7.c"/>
     <files mask="arm_float_to_f16.c"/>
+    <files mask="arm_float_to_f64.c"/>
     <files mask="arm_float_to_q15.c"/>
     <files mask="arm_float_to_q31.c"/>
     <files mask="arm_float_to_q7.c"/>
@@ -801,12 +888,15 @@ ${load}</script>
     <files mask="arm_merge_sort_f32.c"/>
     <files mask="arm_merge_sort_init_f32.c"/>
     <files mask="arm_q15_to_f16.c"/>
+    <files mask="arm_q15_to_f64.c"/>
     <files mask="arm_q15_to_float.c"/>
     <files mask="arm_q15_to_q31.c"/>
     <files mask="arm_q15_to_q7.c"/>
+    <files mask="arm_q31_to_f64.c"/>
     <files mask="arm_q31_to_float.c"/>
     <files mask="arm_q31_to_q15.c"/>
     <files mask="arm_q31_to_q7.c"/>
+    <files mask="arm_q7_to_f64.c"/>
     <files mask="arm_q7_to_float.c"/>
     <files mask="arm_q7_to_q15.c"/>
     <files mask="arm_q7_to_q31.c"/>
@@ -855,6 +945,14 @@ ${load}</script>
     <files mask="arm_dct4_init_q31.c"/>
     <files mask="arm_dct4_q15.c"/>
     <files mask="arm_dct4_q31.c"/>
+    <files mask="arm_mfcc_f16.c"/>
+    <files mask="arm_mfcc_f32.c"/>
+    <files mask="arm_mfcc_init_f16.c"/>
+    <files mask="arm_mfcc_init_f32.c"/>
+    <files mask="arm_mfcc_init_q15.c"/>
+    <files mask="arm_mfcc_init_q31.c"/>
+    <files mask="arm_mfcc_q15.c"/>
+    <files mask="arm_mfcc_q31.c"/>
     <files mask="arm_rfft_f32.c"/>
     <files mask="arm_rfft_fast_f16.c"/>
     <files mask="arm_rfft_fast_f32.c"/>
@@ -867,6 +965,47 @@ ${load}</script>
     <files mask="arm_rfft_init_q31.c"/>
     <files mask="arm_rfft_q15.c"/>
     <files mask="arm_rfft_q31.c"/>
+    <files mask="WindowFunctions.c"/>
+    <files mask="arm_bartlett_f32.c"/>
+    <files mask="arm_bartlett_f64.c"/>
+    <files mask="arm_blackman_harris_92db_f32.c"/>
+    <files mask="arm_blackman_harris_92db_f64.c"/>
+    <files mask="arm_hamming_f32.c"/>
+    <files mask="arm_hamming_f64.c"/>
+    <files mask="arm_hanning_f32.c"/>
+    <files mask="arm_hanning_f64.c"/>
+    <files mask="arm_hft116d_f32.c"/>
+    <files mask="arm_hft116d_f64.c"/>
+    <files mask="arm_hft144d_f32.c"/>
+    <files mask="arm_hft144d_f64.c"/>
+    <files mask="arm_hft169d_f32.c"/>
+    <files mask="arm_hft169d_f64.c"/>
+    <files mask="arm_hft196d_f32.c"/>
+    <files mask="arm_hft196d_f64.c"/>
+    <files mask="arm_hft223d_f32.c"/>
+    <files mask="arm_hft223d_f64.c"/>
+    <files mask="arm_hft248d_f32.c"/>
+    <files mask="arm_hft248d_f64.c"/>
+    <files mask="arm_hft90d_f32.c"/>
+    <files mask="arm_hft90d_f64.c"/>
+    <files mask="arm_hft95_f32.c"/>
+    <files mask="arm_hft95_f64.c"/>
+    <files mask="arm_nuttall3_f32.c"/>
+    <files mask="arm_nuttall3_f64.c"/>
+    <files mask="arm_nuttall3a_f32.c"/>
+    <files mask="arm_nuttall3a_f64.c"/>
+    <files mask="arm_nuttall3b_f32.c"/>
+    <files mask="arm_nuttall3b_f64.c"/>
+    <files mask="arm_nuttall4_f32.c"/>
+    <files mask="arm_nuttall4_f64.c"/>
+    <files mask="arm_nuttall4a_f32.c"/>
+    <files mask="arm_nuttall4a_f64.c"/>
+    <files mask="arm_nuttall4b_f32.c"/>
+    <files mask="arm_nuttall4b_f64.c"/>
+    <files mask="arm_nuttall4c_f32.c"/>
+    <files mask="arm_nuttall4c_f64.c"/>
+    <files mask="arm_welch_f32.c"/>
+    <files mask="arm_welch_f64.c"/>
   </source>
   <source relative_path="./" type="c_include">
     <files mask="Driver_CAN.h"/>
@@ -894,29 +1033,13 @@ ${load}</script>
     <files mask="CMSIS.yml"/>
     <files mask="CMSIS_v2.yml"/>
     <files mask="CMSIS_v3.yml"/>
-    <files mask="arm_bitreversal2.S"/>
+    <files mask="README.md"/>
   </source>
   <source relative_path="./" type="doc">
     <files mask="LICENSE.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
   </source>
 </component>-->
-    <component id="CMSIS_DSP_Include.K32W1480" name="CMSIS_DSP_Library_Header" brief="CMSIS-DSP Library Header" version="1.9.0" full_name="CMSIS DSP Library Header" category="CMSIS/DSP" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/DSP" project_base_path="CMSIS/DSP">
+    <component id="CMSIS_DSP_Include.K32W1480" name="CMSIS_DSP_Library_Header" brief="CMSIS-DSP Library Header" version="1.15.0" full_name="CMSIS DSP Library Header" category="CMSIS/DSP" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/DSP" project_base_path="CMSIS/DSP">
       <dependencies>
         <device_dependency value="K32W1480xxxA"/>
       </dependencies>
@@ -925,11 +1048,11 @@ ${load}</script>
       </source>
       <source relative_path="Include" type="c_include">
         <files mask="arm_common_tables.h"/>
-        <files mask="arm_const_structs.h"/>
-        <files mask="arm_math.h"/>
         <files mask="arm_common_tables_f16.h"/>
+        <files mask="arm_const_structs.h"/>
         <files mask="arm_const_structs_f16.h"/>
         <files mask="arm_helium_utils.h"/>
+        <files mask="arm_math.h"/>
         <files mask="arm_math_f16.h"/>
         <files mask="arm_math_memory.h"/>
         <files mask="arm_math_types.h"/>
@@ -948,6 +1071,7 @@ ${load}</script>
         <files mask="complex_math_functions_f16.h"/>
         <files mask="controller_functions.h"/>
         <files mask="controller_functions_f16.h"/>
+        <files mask="debug.h"/>
         <files mask="distance_functions.h"/>
         <files mask="distance_functions_f16.h"/>
         <files mask="fast_math_functions.h"/>
@@ -958,6 +1082,7 @@ ${load}</script>
         <files mask="interpolation_functions_f16.h"/>
         <files mask="matrix_functions.h"/>
         <files mask="matrix_functions_f16.h"/>
+        <files mask="matrix_utils.h"/>
         <files mask="none.h"/>
         <files mask="quaternion_math_functions.h"/>
         <files mask="statistics_functions.h"/>
@@ -970,6 +1095,7 @@ ${load}</script>
         <files mask="transform_functions.h"/>
         <files mask="transform_functions_f16.h"/>
         <files mask="utils.h"/>
+        <files mask="window_functions.h"/>
       </source>
       <source relative_path="PrivateInclude" type="c_include">
         <files mask="arm_sorting.h"/>
@@ -984,7 +1110,7 @@ ${load}</script>
         <include_path relative_path="PrivateInclude" type="c_include"/>
       </include_paths>
     </component>
-    <component id="CMSIS_DSP_Source.K32W1480" name="CMSIS_DSP_Library_Source" brief="CMSIS-DSP Library" version="1.9.0" full_name="CMSIS DSP Library Source" category="CMSIS/DSP" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/DSP" project_base_path="CMSIS/DSP">
+    <component id="CMSIS_DSP_Source.K32W1480" name="CMSIS_DSP_Library_Source" brief="CMSIS-DSP Library" version="1.15.0" full_name="CMSIS DSP Library Source" category="CMSIS/DSP" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/DSP" project_base_path="CMSIS/DSP">
       <defines>
         <define name="DISABLEFLOAT16" value=""/>
       </defines>
@@ -996,11 +1122,11 @@ ${load}</script>
       </source>
       <source relative_path="Include" type="c_include">
         <files mask="arm_common_tables.h"/>
-        <files mask="arm_const_structs.h"/>
-        <files mask="arm_math.h"/>
         <files mask="arm_common_tables_f16.h"/>
+        <files mask="arm_const_structs.h"/>
         <files mask="arm_const_structs_f16.h"/>
         <files mask="arm_helium_utils.h"/>
+        <files mask="arm_math.h"/>
         <files mask="arm_math_f16.h"/>
         <files mask="arm_math_memory.h"/>
         <files mask="arm_math_types.h"/>
@@ -1019,6 +1145,7 @@ ${load}</script>
         <files mask="complex_math_functions_f16.h"/>
         <files mask="controller_functions.h"/>
         <files mask="controller_functions_f16.h"/>
+        <files mask="debug.h"/>
         <files mask="distance_functions.h"/>
         <files mask="distance_functions_f16.h"/>
         <files mask="fast_math_functions.h"/>
@@ -1029,6 +1156,7 @@ ${load}</script>
         <files mask="interpolation_functions_f16.h"/>
         <files mask="matrix_functions.h"/>
         <files mask="matrix_functions_f16.h"/>
+        <files mask="matrix_utils.h"/>
         <files mask="none.h"/>
         <files mask="quaternion_math_functions.h"/>
         <files mask="statistics_functions.h"/>
@@ -1041,6 +1169,7 @@ ${load}</script>
         <files mask="transform_functions.h"/>
         <files mask="transform_functions_f16.h"/>
         <files mask="utils.h"/>
+        <files mask="window_functions.h"/>
       </source>
       <source relative_path="PrivateInclude" type="c_include">
         <files mask="arm_sorting.h"/>
@@ -1053,10 +1182,12 @@ ${load}</script>
       </source>
       <source exclude="true" relative_path="Source/BasicMathFunctions" type="src">
         <files mask="arm_abs_f32.c"/>
+        <files mask="arm_abs_f64.c"/>
         <files mask="arm_abs_q15.c"/>
         <files mask="arm_abs_q31.c"/>
         <files mask="arm_abs_q7.c"/>
         <files mask="arm_add_f32.c"/>
+        <files mask="arm_add_f64.c"/>
         <files mask="arm_add_q15.c"/>
         <files mask="arm_add_q31.c"/>
         <files mask="arm_add_q7.c"/>
@@ -1068,14 +1199,17 @@ ${load}</script>
         <files mask="arm_clip_q31.c"/>
         <files mask="arm_clip_q7.c"/>
         <files mask="arm_dot_prod_f32.c"/>
+        <files mask="arm_dot_prod_f64.c"/>
         <files mask="arm_dot_prod_q15.c"/>
         <files mask="arm_dot_prod_q31.c"/>
         <files mask="arm_dot_prod_q7.c"/>
         <files mask="arm_mult_f32.c"/>
+        <files mask="arm_mult_f64.c"/>
         <files mask="arm_mult_q15.c"/>
         <files mask="arm_mult_q31.c"/>
         <files mask="arm_mult_q7.c"/>
         <files mask="arm_negate_f32.c"/>
+        <files mask="arm_negate_f64.c"/>
         <files mask="arm_negate_q15.c"/>
         <files mask="arm_negate_q31.c"/>
         <files mask="arm_negate_q7.c"/>
@@ -1083,6 +1217,7 @@ ${load}</script>
         <files mask="arm_not_u32.c"/>
         <files mask="arm_not_u8.c"/>
         <files mask="arm_offset_f32.c"/>
+        <files mask="arm_offset_f64.c"/>
         <files mask="arm_offset_q15.c"/>
         <files mask="arm_offset_q31.c"/>
         <files mask="arm_offset_q7.c"/>
@@ -1090,6 +1225,7 @@ ${load}</script>
         <files mask="arm_or_u32.c"/>
         <files mask="arm_or_u8.c"/>
         <files mask="arm_scale_f32.c"/>
+        <files mask="arm_scale_f64.c"/>
         <files mask="arm_scale_q15.c"/>
         <files mask="arm_scale_q31.c"/>
         <files mask="arm_scale_q7.c"/>
@@ -1097,6 +1233,7 @@ ${load}</script>
         <files mask="arm_shift_q31.c"/>
         <files mask="arm_shift_q7.c"/>
         <files mask="arm_sub_f32.c"/>
+        <files mask="arm_sub_f64.c"/>
         <files mask="arm_sub_q15.c"/>
         <files mask="arm_sub_q31.c"/>
         <files mask="arm_sub_q7.c"/>
@@ -1145,12 +1282,16 @@ ${load}</script>
         <files mask="arm_cmplx_dot_prod_q15.c"/>
         <files mask="arm_cmplx_dot_prod_q31.c"/>
         <files mask="arm_cmplx_mag_f32.c"/>
+        <files mask="arm_cmplx_mag_f64.c"/>
+        <files mask="arm_cmplx_mag_fast_q15.c"/>
         <files mask="arm_cmplx_mag_q15.c"/>
         <files mask="arm_cmplx_mag_q31.c"/>
         <files mask="arm_cmplx_mag_squared_f32.c"/>
+        <files mask="arm_cmplx_mag_squared_f64.c"/>
         <files mask="arm_cmplx_mag_squared_q15.c"/>
         <files mask="arm_cmplx_mag_squared_q31.c"/>
         <files mask="arm_cmplx_mult_cmplx_f32.c"/>
+        <files mask="arm_cmplx_mult_cmplx_f64.c"/>
         <files mask="arm_cmplx_mult_cmplx_q15.c"/>
         <files mask="arm_cmplx_mult_cmplx_q31.c"/>
         <files mask="arm_cmplx_mult_real_f32.c"/>
@@ -1188,11 +1329,18 @@ ${load}</script>
         <files mask="arm_braycurtis_distance_f32.c"/>
         <files mask="arm_canberra_distance_f32.c"/>
         <files mask="arm_chebyshev_distance_f32.c"/>
+        <files mask="arm_chebyshev_distance_f64.c"/>
         <files mask="arm_cityblock_distance_f32.c"/>
+        <files mask="arm_cityblock_distance_f64.c"/>
         <files mask="arm_correlation_distance_f32.c"/>
         <files mask="arm_cosine_distance_f32.c"/>
+        <files mask="arm_cosine_distance_f64.c"/>
         <files mask="arm_dice_distance.c"/>
+        <files mask="arm_dtw_distance_f32.c"/>
+        <files mask="arm_dtw_init_window_q7.c"/>
+        <files mask="arm_dtw_path_f32.c"/>
         <files mask="arm_euclidean_distance_f32.c"/>
+        <files mask="arm_euclidean_distance_f64.c"/>
         <files mask="arm_hamming_distance.c"/>
         <files mask="arm_jaccard_distance.c"/>
         <files mask="arm_jensenshannon_distance_f32.c"/>
@@ -1204,8 +1352,8 @@ ${load}</script>
         <files mask="arm_sokalsneath_distance.c"/>
         <files mask="arm_yule_distance.c"/>
         <files mask="arm_braycurtis_distance_f16.c"/>
-        <files mask="arm_canberra_distance_f16.c"/>
         <files mask="arm_chebyshev_distance_f16.c"/>
+        <files mask="arm_canberra_distance_f16.c"/>
         <files mask="arm_cityblock_distance_f16.c"/>
         <files mask="arm_correlation_distance_f16.c"/>
         <files mask="arm_cosine_distance_f16.c"/>
@@ -1218,17 +1366,26 @@ ${load}</script>
         <files mask="FastMathFunctionsF16.c"/>
       </source>
       <source exclude="true" relative_path="Source/FastMathFunctions" type="src">
+        <files mask="arm_atan2_f32.c"/>
+        <files mask="arm_atan2_q15.c"/>
+        <files mask="arm_atan2_q31.c"/>
         <files mask="arm_cos_f32.c"/>
         <files mask="arm_cos_q15.c"/>
         <files mask="arm_cos_q31.c"/>
         <files mask="arm_divide_q15.c"/>
+        <files mask="arm_divide_q31.c"/>
         <files mask="arm_sin_f32.c"/>
         <files mask="arm_sin_q15.c"/>
         <files mask="arm_sin_q31.c"/>
         <files mask="arm_sqrt_q15.c"/>
         <files mask="arm_sqrt_q31.c"/>
         <files mask="arm_vexp_f32.c"/>
+        <files mask="arm_vexp_f64.c"/>
         <files mask="arm_vlog_f32.c"/>
+        <files mask="arm_vlog_f64.c"/>
+        <files mask="arm_vlog_q15.c"/>
+        <files mask="arm_vlog_q31.c"/>
+        <files mask="arm_atan2_f16.c"/>
         <files mask="arm_vexp_f16.c"/>
         <files mask="arm_vinverse_f16.c"/>
         <files mask="arm_vlog_f16.c"/>
@@ -1273,6 +1430,7 @@ ${load}</script>
         <files mask="arm_conv_q31.c"/>
         <files mask="arm_conv_q7.c"/>
         <files mask="arm_correlate_f32.c"/>
+        <files mask="arm_correlate_f64.c"/>
         <files mask="arm_correlate_fast_opt_q15.c"/>
         <files mask="arm_correlate_fast_q15.c"/>
         <files mask="arm_correlate_fast_q31.c"/>
@@ -1290,9 +1448,11 @@ ${load}</script>
         <files mask="arm_fir_decimate_q15.c"/>
         <files mask="arm_fir_decimate_q31.c"/>
         <files mask="arm_fir_f32.c"/>
+        <files mask="arm_fir_f64.c"/>
         <files mask="arm_fir_fast_q15.c"/>
         <files mask="arm_fir_fast_q31.c"/>
         <files mask="arm_fir_init_f32.c"/>
+        <files mask="arm_fir_init_f64.c"/>
         <files mask="arm_fir_init_q15.c"/>
         <files mask="arm_fir_init_q31.c"/>
         <files mask="arm_fir_init_q7.c"/>
@@ -1373,6 +1533,8 @@ ${load}</script>
         <files mask="MatrixFunctionsF16.c"/>
       </source>
       <source exclude="true" relative_path="Source/MatrixFunctions" type="src">
+        <files mask="arm_householder_f32.c"/>
+        <files mask="arm_householder_f64.c"/>
         <files mask="arm_mat_add_f32.c"/>
         <files mask="arm_mat_add_q15.c"/>
         <files mask="arm_mat_add_q31.c"/>
@@ -1385,6 +1547,7 @@ ${load}</script>
         <files mask="arm_mat_cmplx_trans_q15.c"/>
         <files mask="arm_mat_cmplx_trans_q31.c"/>
         <files mask="arm_mat_init_f32.c"/>
+        <files mask="arm_mat_init_f64.c"/>
         <files mask="arm_mat_init_q15.c"/>
         <files mask="arm_mat_init_q31.c"/>
         <files mask="arm_mat_inverse_f32.c"/>
@@ -1395,9 +1558,12 @@ ${load}</script>
         <files mask="arm_mat_mult_f64.c"/>
         <files mask="arm_mat_mult_fast_q15.c"/>
         <files mask="arm_mat_mult_fast_q31.c"/>
+        <files mask="arm_mat_mult_opt_q31.c"/>
         <files mask="arm_mat_mult_q15.c"/>
         <files mask="arm_mat_mult_q31.c"/>
         <files mask="arm_mat_mult_q7.c"/>
+        <files mask="arm_mat_qr_f32.c"/>
+        <files mask="arm_mat_qr_f64.c"/>
         <files mask="arm_mat_scale_f32.c"/>
         <files mask="arm_mat_scale_q15.c"/>
         <files mask="arm_mat_scale_q31.c"/>
@@ -1418,12 +1584,14 @@ ${load}</script>
         <files mask="arm_mat_vec_mult_q15.c"/>
         <files mask="arm_mat_vec_mult_q31.c"/>
         <files mask="arm_mat_vec_mult_q7.c"/>
+        <files mask="arm_householder_f16.c"/>
         <files mask="arm_mat_add_f16.c"/>
         <files mask="arm_mat_cholesky_f16.c"/>
         <files mask="arm_mat_cmplx_mult_f16.c"/>
         <files mask="arm_mat_cmplx_trans_f16.c"/>
         <files mask="arm_mat_init_f16.c"/>
         <files mask="arm_mat_inverse_f16.c"/>
+        <files mask="arm_mat_qr_f16.c"/>
         <files mask="arm_mat_mult_f16.c"/>
         <files mask="arm_mat_scale_f16.c"/>
         <files mask="arm_mat_solve_lower_triangular_f16.c"/>
@@ -1439,8 +1607,8 @@ ${load}</script>
         <files mask="arm_quaternion2rotation_f32.c"/>
         <files mask="arm_quaternion_conjugate_f32.c"/>
         <files mask="arm_quaternion_inverse_f32.c"/>
-        <files mask="arm_quaternion_norm_f32.c"/>
         <files mask="arm_quaternion_normalize_f32.c"/>
+        <files mask="arm_quaternion_norm_f32.c"/>
         <files mask="arm_quaternion_product_f32.c"/>
         <files mask="arm_quaternion_product_single_f32.c"/>
         <files mask="arm_rotation2quaternion_f32.c"/>
@@ -1473,13 +1641,27 @@ ${load}</script>
       </source>
       <source exclude="true" relative_path="Source/StatisticsFunctions" type="src">
         <files mask="arm_absmax_f32.c"/>
+        <files mask="arm_absmax_f64.c"/>
+        <files mask="arm_absmax_no_idx_f32.c"/>
+        <files mask="arm_absmax_no_idx_f64.c"/>
+        <files mask="arm_absmax_no_idx_q15.c"/>
+        <files mask="arm_absmax_no_idx_q31.c"/>
+        <files mask="arm_absmax_no_idx_q7.c"/>
         <files mask="arm_absmax_q15.c"/>
         <files mask="arm_absmax_q31.c"/>
         <files mask="arm_absmax_q7.c"/>
         <files mask="arm_absmin_f32.c"/>
+        <files mask="arm_absmin_f64.c"/>
+        <files mask="arm_absmin_no_idx_f32.c"/>
+        <files mask="arm_absmin_no_idx_f64.c"/>
+        <files mask="arm_absmin_no_idx_q15.c"/>
+        <files mask="arm_absmin_no_idx_q31.c"/>
+        <files mask="arm_absmin_no_idx_q7.c"/>
         <files mask="arm_absmin_q15.c"/>
         <files mask="arm_absmin_q31.c"/>
         <files mask="arm_absmin_q7.c"/>
+        <files mask="arm_accumulate_f32.c"/>
+        <files mask="arm_accumulate_f64.c"/>
         <files mask="arm_entropy_f32.c"/>
         <files mask="arm_entropy_f64.c"/>
         <files mask="arm_kullback_leibler_f32.c"/>
@@ -1487,19 +1669,37 @@ ${load}</script>
         <files mask="arm_logsumexp_dot_prod_f32.c"/>
         <files mask="arm_logsumexp_f32.c"/>
         <files mask="arm_max_f32.c"/>
+        <files mask="arm_max_f64.c"/>
         <files mask="arm_max_no_idx_f32.c"/>
+        <files mask="arm_max_no_idx_f64.c"/>
+        <files mask="arm_max_no_idx_q15.c"/>
+        <files mask="arm_max_no_idx_q31.c"/>
+        <files mask="arm_max_no_idx_q7.c"/>
         <files mask="arm_max_q15.c"/>
         <files mask="arm_max_q31.c"/>
         <files mask="arm_max_q7.c"/>
         <files mask="arm_mean_f32.c"/>
+        <files mask="arm_mean_f64.c"/>
         <files mask="arm_mean_q15.c"/>
         <files mask="arm_mean_q31.c"/>
         <files mask="arm_mean_q7.c"/>
         <files mask="arm_min_f32.c"/>
+        <files mask="arm_min_f64.c"/>
+        <files mask="arm_min_no_idx_f32.c"/>
+        <files mask="arm_min_no_idx_f64.c"/>
+        <files mask="arm_min_no_idx_q15.c"/>
+        <files mask="arm_min_no_idx_q31.c"/>
+        <files mask="arm_min_no_idx_q7.c"/>
         <files mask="arm_min_q15.c"/>
         <files mask="arm_min_q31.c"/>
         <files mask="arm_min_q7.c"/>
+        <files mask="arm_mse_f32.c"/>
+        <files mask="arm_mse_f64.c"/>
+        <files mask="arm_mse_q15.c"/>
+        <files mask="arm_mse_q31.c"/>
+        <files mask="arm_mse_q7.c"/>
         <files mask="arm_power_f32.c"/>
+        <files mask="arm_power_f64.c"/>
         <files mask="arm_power_q15.c"/>
         <files mask="arm_power_q31.c"/>
         <files mask="arm_power_q7.c"/>
@@ -1507,13 +1707,18 @@ ${load}</script>
         <files mask="arm_rms_q15.c"/>
         <files mask="arm_rms_q31.c"/>
         <files mask="arm_std_f32.c"/>
+        <files mask="arm_std_f64.c"/>
         <files mask="arm_std_q15.c"/>
         <files mask="arm_std_q31.c"/>
         <files mask="arm_var_f32.c"/>
+        <files mask="arm_var_f64.c"/>
         <files mask="arm_var_q15.c"/>
         <files mask="arm_var_q31.c"/>
         <files mask="arm_absmax_f16.c"/>
+        <files mask="arm_absmax_no_idx_f16.c"/>
         <files mask="arm_absmin_f16.c"/>
+        <files mask="arm_absmin_no_idx_f16.c"/>
+        <files mask="arm_accumulate_f16.c"/>
         <files mask="arm_entropy_f16.c"/>
         <files mask="arm_kullback_leibler_f16.c"/>
         <files mask="arm_logsumexp_dot_prod_f16.c"/>
@@ -1522,6 +1727,8 @@ ${load}</script>
         <files mask="arm_max_no_idx_f16.c"/>
         <files mask="arm_mean_f16.c"/>
         <files mask="arm_min_f16.c"/>
+        <files mask="arm_min_no_idx_f16.c"/>
+        <files mask="arm_mse_f16.c"/>
         <files mask="arm_power_f16.c"/>
         <files mask="arm_rms_f16.c"/>
         <files mask="arm_std_f16.c"/>
@@ -1536,13 +1743,20 @@ ${load}</script>
         <files mask="arm_bitonic_sort_f32.c"/>
         <files mask="arm_bubble_sort_f32.c"/>
         <files mask="arm_copy_f32.c"/>
+        <files mask="arm_copy_f64.c"/>
         <files mask="arm_copy_q15.c"/>
         <files mask="arm_copy_q31.c"/>
         <files mask="arm_copy_q7.c"/>
+        <files mask="arm_f64_to_float.c"/>
+        <files mask="arm_f64_to_q31.c"/>
+        <files mask="arm_f64_to_q15.c"/>
+        <files mask="arm_f64_to_q7.c"/>
         <files mask="arm_fill_f32.c"/>
+        <files mask="arm_fill_f64.c"/>
         <files mask="arm_fill_q15.c"/>
         <files mask="arm_fill_q31.c"/>
         <files mask="arm_fill_q7.c"/>
+        <files mask="arm_float_to_f64.c"/>
         <files mask="arm_float_to_q15.c"/>
         <files mask="arm_float_to_q31.c"/>
         <files mask="arm_float_to_q7.c"/>
@@ -1550,12 +1764,15 @@ ${load}</script>
         <files mask="arm_insertion_sort_f32.c"/>
         <files mask="arm_merge_sort_f32.c"/>
         <files mask="arm_merge_sort_init_f32.c"/>
+        <files mask="arm_q15_to_f64.c"/>
         <files mask="arm_q15_to_float.c"/>
         <files mask="arm_q15_to_q31.c"/>
         <files mask="arm_q15_to_q7.c"/>
+        <files mask="arm_q31_to_f64.c"/>
         <files mask="arm_q31_to_float.c"/>
         <files mask="arm_q31_to_q15.c"/>
         <files mask="arm_q31_to_q7.c"/>
+        <files mask="arm_q7_to_f64.c"/>
         <files mask="arm_q7_to_float.c"/>
         <files mask="arm_q7_to_q15.c"/>
         <files mask="arm_q7_to_q31.c"/>
@@ -1568,6 +1785,8 @@ ${load}</script>
         <files mask="arm_copy_f16.c"/>
         <files mask="arm_f16_to_float.c"/>
         <files mask="arm_f16_to_q15.c"/>
+        <files mask="arm_f16_to_f64.c"/>
+        <files mask="arm_f64_to_f16.c"/>
         <files mask="arm_fill_f16.c"/>
         <files mask="arm_float_to_f16.c"/>
         <files mask="arm_q15_to_f16.c"/>
@@ -1580,7 +1799,6 @@ ${load}</script>
       <source exclude="true" relative_path="Source/TransformFunctions" type="src">
         <files mask="arm_bitreversal.c"/>
         <files mask="arm_bitreversal2.c"/>
-        <files mask="arm_bitreversal2.S"/>
         <files mask="arm_cfft_f32.c"/>
         <files mask="arm_cfft_f64.c"/>
         <files mask="arm_cfft_init_f32.c"/>
@@ -1608,6 +1826,12 @@ ${load}</script>
         <files mask="arm_dct4_init_q31.c"/>
         <files mask="arm_dct4_q15.c"/>
         <files mask="arm_dct4_q31.c"/>
+        <files mask="arm_mfcc_f32.c"/>
+        <files mask="arm_mfcc_init_f32.c"/>
+        <files mask="arm_mfcc_init_q15.c"/>
+        <files mask="arm_mfcc_init_q31.c"/>
+        <files mask="arm_mfcc_q15.c"/>
+        <files mask="arm_mfcc_q31.c"/>
         <files mask="arm_rfft_f32.c"/>
         <files mask="arm_rfft_fast_f32.c"/>
         <files mask="arm_rfft_fast_f64.c"/>
@@ -1624,10 +1848,57 @@ ${load}</script>
         <files mask="arm_cfft_radix2_f16.c"/>
         <files mask="arm_cfft_radix2_init_f16.c"/>
         <files mask="arm_cfft_radix4_f16.c"/>
-        <files mask="arm_cfft_radix4_init_f16.c"/>
         <files mask="arm_cfft_radix8_f16.c"/>
+        <files mask="arm_mfcc_f16.c"/>
+        <files mask="arm_cfft_radix4_init_f16.c"/>
+        <files mask="arm_mfcc_init_f16.c"/>
         <files mask="arm_rfft_fast_f16.c"/>
         <files mask="arm_rfft_fast_init_f16.c"/>
+      </source>
+      <source relative_path="Source/WindowFunctions" type="src">
+        <files mask="WindowFunctions.c"/>
+      </source>
+      <source exclude="true" relative_path="Source/WindowFunctions" type="src">
+        <files mask="arm_bartlett_f32.c"/>
+        <files mask="arm_bartlett_f64.c"/>
+        <files mask="arm_blackman_harris_92db_f32.c"/>
+        <files mask="arm_blackman_harris_92db_f64.c"/>
+        <files mask="arm_hamming_f32.c"/>
+        <files mask="arm_hamming_f64.c"/>
+        <files mask="arm_hanning_f32.c"/>
+        <files mask="arm_hanning_f64.c"/>
+        <files mask="arm_hft116d_f32.c"/>
+        <files mask="arm_hft116d_f64.c"/>
+        <files mask="arm_hft144d_f32.c"/>
+        <files mask="arm_hft144d_f64.c"/>
+        <files mask="arm_hft169d_f32.c"/>
+        <files mask="arm_hft169d_f64.c"/>
+        <files mask="arm_hft196d_f32.c"/>
+        <files mask="arm_hft196d_f64.c"/>
+        <files mask="arm_hft223d_f32.c"/>
+        <files mask="arm_hft223d_f64.c"/>
+        <files mask="arm_hft248d_f32.c"/>
+        <files mask="arm_hft248d_f64.c"/>
+        <files mask="arm_hft90d_f32.c"/>
+        <files mask="arm_hft90d_f64.c"/>
+        <files mask="arm_hft95_f32.c"/>
+        <files mask="arm_hft95_f64.c"/>
+        <files mask="arm_nuttall3a_f32.c"/>
+        <files mask="arm_nuttall3a_f64.c"/>
+        <files mask="arm_nuttall3b_f32.c"/>
+        <files mask="arm_nuttall3b_f64.c"/>
+        <files mask="arm_nuttall3_f32.c"/>
+        <files mask="arm_nuttall3_f64.c"/>
+        <files mask="arm_nuttall4a_f32.c"/>
+        <files mask="arm_nuttall4a_f64.c"/>
+        <files mask="arm_nuttall4b_f32.c"/>
+        <files mask="arm_nuttall4b_f64.c"/>
+        <files mask="arm_nuttall4c_f32.c"/>
+        <files mask="arm_nuttall4c_f64.c"/>
+        <files mask="arm_nuttall4_f32.c"/>
+        <files mask="arm_nuttall4_f64.c"/>
+        <files mask="arm_welch_f32.c"/>
+        <files mask="arm_welch_f64.c"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="CMSIS_DSP_Source.cmake" hidden="true"/>
@@ -1897,7 +2168,7 @@ ${load}</script>
         <include_path relative_path="Include" type="c_include"/>
       </include_paths>
     </component>
-    <component id="CMSIS_Device_API_OSTick.K32W1480" name="CMSIS_Device_API_OSTick" brief="Device interrupt controller interface" version="1.0.1" full_name="CMSIS Device API OSTick" category="Device/OS Tick" user_visible="false" type="CMSIS_driver" package_base_path="../CMSIS/RTOS2/Include" project_base_path="CMSIS/RTOS2/Include">
+    <component id="CMSIS_Device_API_OSTick.K32W1480" name="CMSIS_Device_API_OSTick" brief="Device interrupt controller interface" version="1.0.2" full_name="CMSIS Device API OSTick" category="Device/OS Tick" user_visible="false" type="CMSIS_driver" package_base_path="../CMSIS/RTOS2/Include" project_base_path="CMSIS/RTOS2/Include">
       <dependencies>
         <device_dependency value="K32W1480xxxA"/>
       </dependencies>
@@ -1951,7 +2222,7 @@ ${load}</script>
         <files mask="utility_incbin.K32W1480.cmake" hidden="true"/>
       </source>
     </component>
-    <!--<component id="container.middleware.mbedtls.unused_files.K32W1480" name="unused_files" version="2.28.5" package_base_path="../middleware/mbedtls" project_base_path="mbedtls">
+    <!--<component id="container.middleware.mbedtls.unused_files.K32W1480" name="unused_files" version="2.28.8" package_base_path="../middleware/mbedtls" project_base_path="mbedtls">
   <source exclude="true" relative_path="./" type="other">
     <files mask="issue_template.md" hidden="true"/>
     <files mask="pull_request_template.md" hidden="true"/>
@@ -1963,7 +2234,10 @@ ${load}</script>
     <files mask=".gitignore" hidden="true"/>
     <files mask=".gitignore" hidden="true"/>
     <files mask="Makefile" hidden="true"/>
-    <files mask="Makefile" hidden="true"/>
+    <files mask="mbedcrypto.pc.in" hidden="true"/>
+    <files mask="mbedtls.pc.in" hidden="true"/>
+    <files mask="mbedx509.pc.in" hidden="true"/>
+    <files mask="README.md" hidden="true"/>
     <files mask="README.md" hidden="true"/>
     <files mask="fuzz_client.options" hidden="true"/>
     <files mask="fuzz_dtlsclient.options" hidden="true"/>
@@ -1975,14 +2249,12 @@ ${load}</script>
     <files mask="fuzz_x509crt.options" hidden="true"/>
     <files mask="fuzz_x509csr.options" hidden="true"/>
     <files mask="config.pl" hidden="true"/>
-    <files mask="find-mem-leak.cocci" hidden="true"/>
     <files mask="generate_errors.pl" hidden="true"/>
     <files mask="generate_features.pl" hidden="true"/>
     <files mask="generate_query_config.pl" hidden="true"/>
     <files mask="generate_visualc_files.pl" hidden="true"/>
     <files mask="massif_max.pl" hidden="true"/>
     <files mask="rename.pl" hidden="true"/>
-    <files mask="rm-calloc-cast.cocci" hidden="true"/>
     <files mask="error.fmt" hidden="true"/>
     <files mask="query_config.fmt" hidden="true"/>
     <files mask="version_features.fmt" hidden="true"/>
@@ -2025,8 +2297,6 @@ ${load}</script>
     <files mask="test_suite_aes.ofb.data" hidden="true"/>
     <files mask="test_suite_aes.rest.data" hidden="true"/>
     <files mask="test_suite_aes.xts.data" hidden="true"/>
-    <files mask="test_suite_all.data" hidden="true"/>
-    <files mask="test_suite_all.function" hidden="true"/>
     <files mask="test_suite_arc4.data" hidden="true"/>
     <files mask="test_suite_arc4.function" hidden="true"/>
     <files mask="test_suite_aria.data" hidden="true"/>
@@ -2155,6 +2425,10 @@ ${load}</script>
     <files mask="test_suite_psa_crypto_hash.function" hidden="true"/>
     <files mask="test_suite_psa_crypto_init.data" hidden="true"/>
     <files mask="test_suite_psa_crypto_init.function" hidden="true"/>
+    <files mask="test_suite_psa_crypto_low_hash.function" hidden="true"/>
+    <files mask="test_suite_psa_crypto_low_hash.generated.data" hidden="true"/>
+    <files mask="test_suite_psa_crypto_memory.data" hidden="true"/>
+    <files mask="test_suite_psa_crypto_memory.function" hidden="true"/>
     <files mask="test_suite_psa_crypto_metadata.data" hidden="true"/>
     <files mask="test_suite_psa_crypto_metadata.function" hidden="true"/>
     <files mask="test_suite_psa_crypto_not_supported.function" hidden="true"/>
@@ -2187,6 +2461,8 @@ ${load}</script>
     <files mask="test_suite_ssl.function" hidden="true"/>
     <files mask="test_suite_ssl_decrypt.function" hidden="true"/>
     <files mask="test_suite_ssl_decrypt.misc.data" hidden="true"/>
+    <files mask="test_suite_test_helpers.data" hidden="true"/>
+    <files mask="test_suite_test_helpers.function" hidden="true"/>
     <files mask="test_suite_timing.data" hidden="true"/>
     <files mask="test_suite_timing.function" hidden="true"/>
     <files mask="test_suite_version.data" hidden="true"/>
@@ -2223,6 +2499,7 @@ ${load}</script>
     <files mask="load_roots.vcxproj" hidden="true"/>
     <files mask="mbedTLS.sln" hidden="true"/>
     <files mask="mbedTLS.vcxproj" hidden="true"/>
+    <files mask="metatest.vcxproj" hidden="true"/>
     <files mask="mini_client.vcxproj" hidden="true"/>
     <files mask="mpi_demo.vcxproj" hidden="true"/>
     <files mask="pem2der.vcxproj" hidden="true"/>
@@ -2274,6 +2551,8 @@ ${load}</script>
     <files mask="CMakeLists.txt" hidden="true"/>
     <files mask="CMakeLists.txt" hidden="true"/>
     <files mask="CMakeLists.txt" hidden="true"/>
+    <files mask="CMakeLists.txt" hidden="true"/>
+    <files mask="CMakeLists.txt" hidden="true"/>
     <files mask="dh_prime.txt" hidden="true"/>
     <files mask="rsa_priv.txt" hidden="true"/>
     <files mask="rsa_pub.txt" hidden="true"/>
@@ -2314,6 +2593,8 @@ ${load}</script>
   </source>
   <source exclude="true" relative_path="./" type="script">
     <files mask="conf.py" hidden="true"/>
+    <files mask="JoinPaths.cmake" hidden="true"/>
+    <files mask="demo_common.sh" hidden="true"/>
     <files mask="dlopen_demo.sh" hidden="true"/>
     <files mask="generate_cpp_dummy_build.sh" hidden="true"/>
     <files mask="udp_proxy_wrapper.sh" hidden="true"/>
@@ -2336,8 +2617,12 @@ ${load}</script>
     <files mask="asymmetric_key_data.py" hidden="true"/>
     <files mask="build_tree.py" hidden="true"/>
     <files mask="c_build_helper.py" hidden="true"/>
+    <files mask="c_parsing_helper.py" hidden="true"/>
+    <files mask="c_wrapper_generator.py" hidden="true"/>
+    <files mask="crypto_data_tests.py" hidden="true"/>
     <files mask="crypto_knowledge.py" hidden="true"/>
     <files mask="macro_collector.py" hidden="true"/>
+    <files mask="psa_information.py" hidden="true"/>
     <files mask="psa_storage.py" hidden="true"/>
     <files mask="test_case.py" hidden="true"/>
     <files mask="test_data_generation.py" hidden="true"/>
@@ -2360,10 +2645,14 @@ ${load}</script>
     <files mask="generate-afl-tests.sh" hidden="true"/>
     <files mask="generate_bignum_tests.py" hidden="true"/>
     <files mask="generate_psa_tests.py" hidden="true"/>
+    <files mask="generate_psa_wrappers.py" hidden="true"/>
+    <files mask="generate_server9_bad_saltlen.py" hidden="true"/>
     <files mask="generate_test_code.py" hidden="true"/>
     <files mask="list-identifiers.sh" hidden="true"/>
     <files mask="list_internal_identifiers.py" hidden="true"/>
     <files mask="psa_collect_statuses.py" hidden="true"/>
+    <files mask="run-metatests.sh" hidden="true"/>
+    <files mask="run_demos.py" hidden="true"/>
     <files mask="scripts_path.py" hidden="true"/>
     <files mask="set_psa_test_dependencies.py" hidden="true"/>
     <files mask="test_config_script.py" hidden="true"/>
@@ -2373,6 +2662,7 @@ ${load}</script>
     <files mask="travis-log-failure.sh" hidden="true"/>
   </source>
   <source exclude="true" relative_path="./" type="src">
+    <files mask="wince_main.c" hidden="true"/>
     <files mask="crypt_and_hash.c" hidden="true"/>
     <files mask="common.c" hidden="true"/>
     <files mask="fuzz_client.c" hidden="true"/>
@@ -2425,6 +2715,7 @@ ${load}</script>
     <files mask="ssl_test_lib.c" hidden="true"/>
     <files mask="benchmark.c" hidden="true"/>
     <files mask="dlopen.c" hidden="true"/>
+    <files mask="metatest.c" hidden="true"/>
     <files mask="query_compile_time_config.c" hidden="true"/>
     <files mask="query_config.c" hidden="true"/>
     <files mask="selftest.c" hidden="true"/>
@@ -2443,7 +2734,10 @@ ${load}</script>
     <files mask="helpers.c" hidden="true"/>
     <files mask="psa_crypto_helpers.c" hidden="true"/>
     <files mask="psa_exercise_key.c" hidden="true"/>
+    <files mask="psa_memory_poisoning_wrappers.c" hidden="true"/>
+    <files mask="psa_test_wrappers.c" hidden="true"/>
     <files mask="random.c" hidden="true"/>
+    <files mask="test_memory.c" hidden="true"/>
     <files mask="threading_helpers.c" hidden="true"/>
   </source>
 </component>-->
@@ -2521,6 +2815,168 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
+    <component id="component.psa_crypto_driver.osal.K32W1480" name="psa_crypto_driver osal" brief="OS Abstraction Layer for PSA crypto driver" version="1.0.0" full_name="PSA crypto driver osal layer" category="psa_crypto_driver/psa_crypto_driver_osal" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="K32W1480xxxA"/>
+      </dependencies>
+      <source relative_path="osal" type="c_include">
+        <files mask="osal_mutex.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_osal.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="osal" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.oracle.K32W1480" name="psa_crypto_driver els_pkc_oracle" brief="Oracle of PSA crypto driver for els_pkc" version="1.0.0" full_name="Oracle of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="K32W1480xxxA"/>
+      </dependencies>
+      <source relative_path="els_pkc/oracle/inc" type="c_include">
+        <files mask="mcuxClPsaDriver_Oracle_Interface_builtin_key_ids.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Interface_key_locations.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Macros.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Utils.h"/>
+      </source>
+      <source relative_path="els_pkc/oracle/src" type="src">
+        <files mask="mcuxClPsaDriver_Oracle.c"/>
+        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.c"/>
+        <files mask="mcuxClPsaDriver_Oracle_Utils.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_oracle.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/oracle/inc" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.common.K32W1480" name="psa_crypto_driver els_pkc_common" brief="Common files of PSA crypto driver for els_pkc" version="1.0.0" full_name="Common files of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_common" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="K32W1480xxxA"/>
+      </dependencies>
+      <source relative_path="els_pkc/include/common" type="c_include">
+        <files mask="mcux_psa_els_pkc_common_init.h"/>
+        <files mask="mcux_psa_els_pkc_entropy.h"/>
+      </source>
+      <source relative_path="els_pkc/src/common" type="src">
+        <files mask="mcux_psa_els_pkc_common_init.c"/>
+        <files mask="mcux_psa_els_pkc_entropy.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_common.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/include/common" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.transparent.K32W1480" name="psa_crypto_driver els_pkc_transparent" brief="Transparent part of PSA crypto driver for els_pkc" version="1.0.0" full_name="Transparent part of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypt_dri_els_pkc_trans" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="K32W1480xxxA"/>
+      </dependencies>
+      <source relative_path="els_pkc/include/transparent" type="c_include">
+        <files mask="mcux_psa_els_pkc_aead.h"/>
+        <files mask="mcux_psa_els_pkc_asymmetric_signature.h"/>
+        <files mask="mcux_psa_els_pkc_cipher.h"/>
+        <files mask="mcux_psa_els_pkc_hash.h"/>
+        <files mask="mcux_psa_els_pkc_init.h"/>
+        <files mask="mcux_psa_els_pkc_key_generation.h"/>
+        <files mask="mcux_psa_els_pkc_mac.h"/>
+      </source>
+      <source relative_path="els_pkc/src/transparent" type="src">
+        <files mask="mcux_psa_els_pkc_aead.c"/>
+        <files mask="mcux_psa_els_pkc_asymmetric_signature.c"/>
+        <files mask="mcux_psa_els_pkc_cipher.c"/>
+        <files mask="mcux_psa_els_pkc_hash.c"/>
+        <files mask="mcux_psa_els_pkc_init.c"/>
+        <files mask="mcux_psa_els_pkc_key_generation.c"/>
+        <files mask="mcux_psa_els_pkc_mac.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_transparent.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/include/transparent" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.opaque.K32W1480" name="psa_crypto_driver els_pkc_opaque" brief="Opaque part of PSA crypto driver for els_pkc" version="1.0.0" full_name="Opaque part of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_dri_els_pkc_opaque" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="K32W1480xxxA"/>
+      </dependencies>
+      <source relative_path="els_pkc/include/opaque" type="c_include">
+        <files mask="mcux_psa_els_pkc_opaque_aead.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_asymmetric_signature.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_cipher.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_init.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_key_generation.h"/>
+        <files mask="mcux_psa_els_pkc_opaque_mac.h"/>
+      </source>
+      <source relative_path="els_pkc/src/opaque" type="src">
+        <files mask="mcux_psa_els_pkc_opaque_aead.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_asymmetric_signature.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_cipher.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_init.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_key_generation.c"/>
+        <files mask="mcux_psa_els_pkc_opaque_mac.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_opaque.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/include/opaque" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.ele_s200.common.K32W1480" name="psa_crypto_driver_ele_s200_common" brief="Common files of PSA crypto driver for ele_s200" version="1.0.0" full_name="Common files of PSA crypto driver for ele_s200" category="psa_crypto_driver/psa_crypto_dri_ele_s200_common" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="K32W1480xxxA"/>
+      </dependencies>
+      <source relative_path="ele_s200/include/common" type="c_include">
+        <files mask="mcux_psa_s2xx_common_init.h"/>
+        <files mask="mcux_psa_s2xx_entropy.h"/>
+      </source>
+      <source relative_path="ele_s200/src/common" type="src">
+        <files mask="mcux_psa_s2xx_common_init.c"/>
+        <files mask="mcux_psa_s2xx_entropy.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_ele_s200_common.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="ele_s200/include/common" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.ele_s200.transparent.K32W1480" name="psa_crypto_driver ele_s200_transparent" brief="Transparent part of PSA crypto driver for ele_s200" version="1.0.0" full_name="Transparent part of PSA crypto driver for ele_s200" category="psa_crypto_driver/psa_crypto_dri_ele_s200_trans" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="K32W1480xxxA"/>
+      </dependencies>
+      <source relative_path="ele_s200/include/transparent" type="c_include">
+        <files mask="mcux_psa_s2xx_aead.h"/>
+        <files mask="mcux_psa_s2xx_cipher.h"/>
+        <files mask="mcux_psa_s2xx_hash.h"/>
+        <files mask="mcux_psa_s2xx_init.h"/>
+        <files mask="mcux_psa_s2xx_mac.h"/>
+      </source>
+      <source relative_path="ele_s200/src/transparent" type="src">
+        <files mask="mcux_psa_s2xx_aead.c"/>
+        <files mask="mcux_psa_s2xx_cipher.c"/>
+        <files mask="mcux_psa_s2xx_hash.c"/>
+        <files mask="mcux_psa_s2xx_init.c"/>
+        <files mask="mcux_psa_s2xx_mac.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_ele_s200_transparent.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="ele_s200/include/transparent" type="c_include"/>
+      </include_paths>
+    </component>
+    <!--<component id="container.component.psa_crypto_driver.unused_files.K32W1480" name="unused_files" version="1.0.0" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+  <source exclude="true" relative_path="./" type="doc">
+    <files mask="CMakeLists.txt" hidden="true"/>
+    <files mask="CMakeLists.txt" hidden="true"/>
+  </source>
+</component>-->
     <component id="docs.Common.K32W1480" name="Common" brief="Docs common" version="1.0.0" full_name="Docs common" category="docs/Common" user_visible="true" type="documentation" package_base_path="../docs/wireless/Common" project_base_path="wireless/Common">
       <dependencies>
         <device_dependency value="K32W1480xxxA"/>
@@ -2910,7 +3366,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpi2c_edma.K32W1480" name="i2c_edma" brief="LPI2C Driver" version="2.4.1" full_name="LPI2C Edma Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpi2c" project_base_path="drivers">
+    <component id="platform.drivers.lpi2c_edma.K32W1480" name="i2c_edma" brief="LPI2C Driver" version="2.4.2" full_name="LPI2C Edma Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpi2c" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.dma3.K32W1480"/>
@@ -2931,7 +3387,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpspi_edma.K32W1480" name="lpspi_edma" brief="LPSPI Driver" version="2.4.3" full_name="LPSPI Edma Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers">
+    <component id="platform.drivers.lpspi_edma.K32W1480" name="lpspi_edma" brief="LPSPI Driver" version="2.4.4" full_name="LPSPI Edma Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.dma3.K32W1480"/>
@@ -3238,82 +3694,78 @@ ${load}</script>
         <files mask="a00042.js"/>
         <files mask="a00043.html"/>
         <files mask="a00043.js"/>
-        <files mask="a00044.html"/>
-        <files mask="a00044.js"/>
+        <files mask="a00130.html"/>
+        <files mask="a00130.js"/>
+        <files mask="a00131.html"/>
+        <files mask="a00132.html"/>
+        <files mask="a00132.js"/>
+        <files mask="a00133.html"/>
+        <files mask="a00133.js"/>
         <files mask="a00134.html"/>
         <files mask="a00134.js"/>
         <files mask="a00135.html"/>
         <files mask="a00136.html"/>
         <files mask="a00136.js"/>
         <files mask="a00137.html"/>
-        <files mask="a00137.js"/>
         <files mask="a00138.html"/>
-        <files mask="a00138.js"/>
         <files mask="a00139.html"/>
+        <files mask="a00139.js"/>
         <files mask="a00140.html"/>
         <files mask="a00140.js"/>
         <files mask="a00141.html"/>
         <files mask="a00141.js"/>
         <files mask="a00142.html"/>
+        <files mask="a00142.js"/>
         <files mask="a00143.html"/>
         <files mask="a00143.js"/>
         <files mask="a00144.html"/>
         <files mask="a00144.js"/>
         <files mask="a00145.html"/>
         <files mask="a00145.js"/>
-        <files mask="a00146.html"/>
-        <files mask="a00146.js"/>
         <files mask="a00147.html"/>
-        <files mask="a00147.js"/>
-        <files mask="a00148.html"/>
-        <files mask="a00148.js"/>
-        <files mask="a00149.html"/>
-        <files mask="a00149.js"/>
-        <files mask="a00150.html"/>
-        <files mask="a00150.js"/>
         <files mask="arm_logo.png"/>
         <files mask="bc_s.png"/>
         <files mask="bdwn.png"/>
         <files mask="closed.png"/>
         <files mask="customdoxygen.css"/>
         <files mask="debug_console_overview.jpg"/>
-        <files mask="dir_19c8831a7dff3e89f5e20fd2b589386f.html"/>
-        <files mask="dir_1b4453916e2f506160b20e336067ba7c.html"/>
-        <files mask="dir_20e63633dc9c2a86d2996657101ff68b.html"/>
-        <files mask="dir_21f4199a2d6fb007ab5649b7d47adf8b.html"/>
-        <files mask="dir_2b087ca4c3439f27fd69570194195692.html"/>
-        <files mask="dir_3a07f1e459168119aa990ac792593538.html"/>
-        <files mask="dir_4a835e80516dd4612ca079f1cef99854.html"/>
-        <files mask="dir_4e666ef1c0b900174bb18fac9f216451.html"/>
-        <files mask="dir_5213893cf87bd4dd966af4f64f264fe8.html"/>
-        <files mask="dir_5e29c46aca2c55db66a5b070763c618e.html"/>
-        <files mask="dir_643c9dc69f2a1fe1bd0ebc4fc6cc556e.html"/>
-        <files mask="dir_6847e2f7d1d126d784dbade1b8a74e79.html"/>
-        <files mask="dir_6be20c7274a2af0fc3ec3c7a4735715a.html"/>
-        <files mask="dir_7a501b7f85dbbf965438dec8332a9825.html"/>
-        <files mask="dir_7a98516ae4c8d5871c9875852e443156.html"/>
-        <files mask="dir_7cec866c769481ddc3cc178f10b89db6.html"/>
-        <files mask="dir_87653fa99773d60331ec6d3beee601e9.html"/>
-        <files mask="dir_88912b6654bed22808614dd8c400476d.html"/>
-        <files mask="dir_8f5e0e755cdeded545780a08ca4c85fd.html"/>
-        <files mask="dir_921298ee2cb81f302aa0d4ec2872de2e.html"/>
-        <files mask="dir_93441ff314b45347fe01a9830533e7a8.html"/>
-        <files mask="dir_9739a969b02da8f703bebb520489d030.html"/>
-        <files mask="dir_9ae3ea951c6f9e03d97d4d2610c50912.html"/>
-        <files mask="dir_9b1ac5d63b6d206880964f33184384fc.html"/>
-        <files mask="dir_a556a5030edd1b726d63c62e4fb990b9.html"/>
-        <files mask="dir_a64fd7198d18395bde1d8bfa3cbec323.html"/>
-        <files mask="dir_a67292bd216c53b9f7d47b1c27115f2b.html"/>
-        <files mask="dir_b1774033541dc654173665416f3dc345.html"/>
-        <files mask="dir_b1c72d1c085b0a7fc87dbbdf4e4d5dac.html"/>
-        <files mask="dir_be09aff69186f65261607b8c9500eb07.html"/>
-        <files mask="dir_d575f51817720d9579836b46b3403428.html"/>
-        <files mask="dir_d8306195e8f276c2fa8136e518f510a8.html"/>
-        <files mask="dir_df3d502a11ebcf3828b76717eba77cb9.html"/>
-        <files mask="dir_e7bf9bb5a7957aec6c58330e73bdd257.html"/>
-        <files mask="dir_eb512e9cef01f62f34fb2e4f714c6f65.html"/>
-        <files mask="dir_eeec64e1c1eac238eb1b637702925aec.html"/>
-        <files mask="dir_f5ba60a9c28ed41be48a33679b472f66.html"/>
+        <files mask="dir_011caa1066507d4e5f17cbf5609be178.html"/>
+        <files mask="dir_118a08563ff6792cc76fa87e8adb8f60.html"/>
+        <files mask="dir_14e1f923c9ab661413afe5c69791796f.html"/>
+        <files mask="dir_1c87087fe7f38f0cc1ade534e59285dd.html"/>
+        <files mask="dir_22eead78af4144eab534ccda3e304bd0.html"/>
+        <files mask="dir_285dfe777d4c36a731117772eba9f926.html"/>
+        <files mask="dir_287eb67e6707f3b1164a6dae32236144.html"/>
+        <files mask="dir_31832ddefaaf82af07b48c628435ec4d.html"/>
+        <files mask="dir_37ea206754600fcfaf605fbd85072a5d.html"/>
+        <files mask="dir_393dd06882b4d73d4dbbd43ca3ecc7cb.html"/>
+        <files mask="dir_39c31cd41c757278d4cdd6663e5ff43c.html"/>
+        <files mask="dir_3a0bb4955a6f35ccce75fe900136fdbb.html"/>
+        <files mask="dir_3dded393e5195814741161625babcd77.html"/>
+        <files mask="dir_3e6bf87472eb67fb6592f2bbf11483e3.html"/>
+        <files mask="dir_40fe32d88482aaa0653317d50102c57b.html"/>
+        <files mask="dir_4cd1cf6079e432efe54e5cc9b84d40e0.html"/>
+        <files mask="dir_56c4446e790a42237766f8ffec7c70b8.html"/>
+        <files mask="dir_66f793e29f5bbc270541854e6ef623a4.html"/>
+        <files mask="dir_68e35a575ba5c2a7d2d3c3823f9fbf6f.html"/>
+        <files mask="dir_6c80042a04513d506286a261cb8ee7bc.html"/>
+        <files mask="dir_80b66214db2a6f2c1ded5a4e13f75cf0.html"/>
+        <files mask="dir_83ef8262af940851b32994e0128187ae.html"/>
+        <files mask="dir_886ceb6feb657c1c45c31dd8542ca401.html"/>
+        <files mask="dir_8f632f67344f4605cbf6297924e25094.html"/>
+        <files mask="dir_905f676be7ef38b727ef2f5909c2a743.html"/>
+        <files mask="dir_9a888ffca9a21649fb34da3661f9ae2a.html"/>
+        <files mask="dir_a2abb56d8215ba7dfb2c54b3cd170dfc.html"/>
+        <files mask="dir_a5072b5e1dec47151bc98863221b7dd9.html"/>
+        <files mask="dir_aa2d1e5ce5272f6f099fcd5be6559508.html"/>
+        <files mask="dir_b3f55caf06ab95fa8ba679020d78115d.html"/>
+        <files mask="dir_b5b308ac62861bc4b2456a408032d998.html"/>
+        <files mask="dir_da0ae1d978a3a0ccc7f5ecb821ec0631.html"/>
+        <files mask="dir_e6427ec33c60a8cdb72396a2bb007480.html"/>
+        <files mask="dir_ec31e0f695c09e1526ccc8f6473a8242.html"/>
+        <files mask="dir_fa03fc5fbe977bd17ebbc5dce79baa36.html"/>
+        <files mask="dir_feea9bb09048d78028916eb8f918b8c6.html"/>
+        <files mask="dir_ffb88c0edd500e08ba1b01bd507c856d.html"/>
         <files mask="doxygen.css"/>
         <files mask="doxygen.png"/>
         <files mask="dynsections.js"/>
@@ -3632,7 +4084,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="CMSIS_NN_Source.K32W1480" name="CMSIS_NN_Library_Source" brief="CMSIS-NN Library" version="3.0.0" full_name="CMSIS NN Library Source" category="CMSIS/NN" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/NN" project_base_path="CMSIS/NN">
+    <component id="CMSIS_NN_Source.K32W1480" name="CMSIS_NN_Library_Source" brief="CMSIS-NN Library" version="5.0.0" full_name="CMSIS NN Library Source" category="CMSIS/NN" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/NN" project_base_path="CMSIS/NN">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_DSP_Source.K32W1480"/>
@@ -3643,20 +4095,26 @@ ${load}</script>
         <files mask="README.md" hidden="true"/>
       </source>
       <source relative_path="Include" type="c_include">
-        <files mask="arm_nn_tables.h"/>
-        <files mask="arm_nn_types.h"/>
         <files mask="arm_nnfunctions.h"/>
         <files mask="arm_nnsupportfunctions.h"/>
+        <files mask="arm_nn_math_types.h"/>
+        <files mask="arm_nn_tables.h"/>
+        <files mask="arm_nn_types.h"/>
+      </source>
+      <source relative_path="Include/Internal" type="c_include">
+        <files mask="arm_nn_compiler.h"/>
       </source>
       <source relative_path="Source/ActivationFunctions" type="src">
-        <files mask="arm_nn_activations_q15.c"/>
-        <files mask="arm_nn_activations_q7.c"/>
+        <files mask="arm_nn_activation_s16.c"/>
         <files mask="arm_relu6_s8.c"/>
         <files mask="arm_relu_q15.c"/>
         <files mask="arm_relu_q7.c"/>
       </source>
       <source relative_path="Source/BasicMathFunctions" type="src">
+        <files mask="arm_elementwise_add_s16.c"/>
         <files mask="arm_elementwise_add_s8.c"/>
+        <files mask="arm_elementwise_mul_s16.c"/>
+        <files mask="arm_elementwise_mul_s16_s8.c"/>
         <files mask="arm_elementwise_mul_s8.c"/>
       </source>
       <source relative_path="Source/ConcatenationFunctions" type="src">
@@ -3666,77 +4124,97 @@ ${load}</script>
         <files mask="arm_concatenation_s8_z.c"/>
       </source>
       <source relative_path="Source/ConvolutionFunctions" type="src">
-        <files mask="arm_convolve_1x1_HWC_q7_fast_nonsquare.c"/>
+        <files mask="arm_convolve_1x1_s4.c"/>
+        <files mask="arm_convolve_1x1_s4_fast.c"/>
+        <files mask="arm_convolve_1x1_s8.c"/>
         <files mask="arm_convolve_1x1_s8_fast.c"/>
         <files mask="arm_convolve_1_x_n_s8.c"/>
-        <files mask="arm_convolve_HWC_q15_basic.c"/>
-        <files mask="arm_convolve_HWC_q15_fast.c"/>
-        <files mask="arm_convolve_HWC_q15_fast_nonsquare.c"/>
-        <files mask="arm_convolve_HWC_q7_basic.c"/>
-        <files mask="arm_convolve_HWC_q7_basic_nonsquare.c"/>
-        <files mask="arm_convolve_HWC_q7_fast.c"/>
-        <files mask="arm_convolve_HWC_q7_fast_nonsquare.c"/>
-        <files mask="arm_convolve_HWC_q7_RGB.c"/>
+        <files mask="arm_convolve_fast_s16.c"/>
+        <files mask="arm_convolve_get_buffer_sizes_s16.c"/>
+        <files mask="arm_convolve_get_buffer_sizes_s4.c"/>
+        <files mask="arm_convolve_get_buffer_sizes_s8.c"/>
+        <files mask="arm_convolve_s16.c"/>
+        <files mask="arm_convolve_s4.c"/>
         <files mask="arm_convolve_s8.c"/>
+        <files mask="arm_convolve_wrapper_s16.c"/>
+        <files mask="arm_convolve_wrapper_s4.c"/>
         <files mask="arm_convolve_wrapper_s8.c"/>
         <files mask="arm_depthwise_conv_3x3_s8.c"/>
+        <files mask="arm_depthwise_conv_fast_s16.c"/>
+        <files mask="arm_depthwise_conv_get_buffer_sizes_s16.c"/>
+        <files mask="arm_depthwise_conv_get_buffer_sizes_s4.c"/>
+        <files mask="arm_depthwise_conv_get_buffer_sizes_s8.c"/>
+        <files mask="arm_depthwise_conv_s16.c"/>
+        <files mask="arm_depthwise_conv_s4.c"/>
+        <files mask="arm_depthwise_conv_s4_opt.c"/>
         <files mask="arm_depthwise_conv_s8.c"/>
         <files mask="arm_depthwise_conv_s8_opt.c"/>
-        <files mask="arm_depthwise_conv_u8_basic_ver1.c"/>
+        <files mask="arm_depthwise_conv_wrapper_s16.c"/>
+        <files mask="arm_depthwise_conv_wrapper_s4.c"/>
         <files mask="arm_depthwise_conv_wrapper_s8.c"/>
-        <files mask="arm_depthwise_separable_conv_HWC_q7.c"/>
-        <files mask="arm_depthwise_separable_conv_HWC_q7_nonsquare.c"/>
         <files mask="arm_nn_depthwise_conv_s8_core.c"/>
-        <files mask="arm_nn_mat_mult_kernel_q7_q15.c"/>
-        <files mask="arm_nn_mat_mult_kernel_q7_q15_reordered.c"/>
+        <files mask="arm_nn_mat_mult_kernel_s4_s16.c"/>
         <files mask="arm_nn_mat_mult_kernel_s8_s16.c"/>
-        <files mask="arm_nn_mat_mult_kernel_s8_s16_reordered.c"/>
         <files mask="arm_nn_mat_mult_s8.c"/>
+        <files mask="arm_transpose_conv_get_buffer_sizes_s8.c"/>
+        <files mask="arm_transpose_conv_s8.c"/>
       </source>
       <source relative_path="Source/FullyConnectedFunctions" type="src">
-        <files mask="arm_fully_connected_mat_q7_vec_q15.c"/>
-        <files mask="arm_fully_connected_mat_q7_vec_q15_opt.c"/>
-        <files mask="arm_fully_connected_q15.c"/>
-        <files mask="arm_fully_connected_q15_opt.c"/>
-        <files mask="arm_fully_connected_q7.c"/>
-        <files mask="arm_fully_connected_q7_opt.c"/>
+        <files mask="arm_fully_connected_get_buffer_sizes_s16.c"/>
+        <files mask="arm_fully_connected_get_buffer_sizes_s8.c"/>
+        <files mask="arm_fully_connected_s16.c"/>
+        <files mask="arm_fully_connected_s4.c"/>
         <files mask="arm_fully_connected_s8.c"/>
+        <files mask="arm_vector_sum_s8.c"/>
+      </source>
+      <source relative_path="Source/LSTMFunctions" type="src">
+        <files mask="arm_lstm_unidirectional_s8_s16.c"/>
       </source>
       <source relative_path="Source/NNSupportFunctions" type="src">
         <files mask="arm_nntables.c"/>
-        <files mask="arm_nn_accumulate_q7_to_q15.c"/>
-        <files mask="arm_nn_add_q7.c"/>
         <files mask="arm_nn_depthwise_conv_nt_t_padded_s8.c"/>
+        <files mask="arm_nn_depthwise_conv_nt_t_s16.c"/>
         <files mask="arm_nn_depthwise_conv_nt_t_s8.c"/>
+        <files mask="arm_nn_lstm_calculate_gate_s8_s16.c"/>
+        <files mask="arm_nn_lstm_step_s8_s16.c"/>
+        <files mask="arm_nn_lstm_update_cell_state_s16.c"/>
+        <files mask="arm_nn_lstm_update_output_s8_s16.c"/>
+        <files mask="arm_nn_mat_mult_nt_t_s4.c"/>
         <files mask="arm_nn_mat_mult_nt_t_s8.c"/>
+        <files mask="arm_nn_mat_mult_nt_t_s8_s32.c"/>
         <files mask="arm_nn_mat_mul_core_1x_s8.c"/>
         <files mask="arm_nn_mat_mul_core_4x_s8.c"/>
-        <files mask="arm_nn_mult_q15.c"/>
-        <files mask="arm_nn_mult_q7.c"/>
+        <files mask="arm_nn_mat_mul_kernel_s16.c"/>
+        <files mask="arm_nn_vec_mat_mult_t_s16.c"/>
+        <files mask="arm_nn_vec_mat_mult_t_s4.c"/>
         <files mask="arm_nn_vec_mat_mult_t_s8.c"/>
         <files mask="arm_nn_vec_mat_mult_t_svdf_s8.c"/>
-        <files mask="arm_q7_to_q15_no_shift.c"/>
-        <files mask="arm_q7_to_q15_reordered_no_shift.c"/>
-        <files mask="arm_q7_to_q15_reordered_with_offset.c"/>
+        <files mask="arm_nn_vec_mat_mul_result_acc_s8.c"/>
         <files mask="arm_q7_to_q15_with_offset.c"/>
+        <files mask="arm_s8_to_s16_unordered_with_offset.c"/>
       </source>
       <source relative_path="Source/PoolingFunctions" type="src">
+        <files mask="arm_avgpool_get_buffer_sizes_s16.c"/>
+        <files mask="arm_avgpool_get_buffer_sizes_s8.c"/>
+        <files mask="arm_avgpool_s16.c"/>
         <files mask="arm_avgpool_s8.c"/>
+        <files mask="arm_max_pool_s16.c"/>
         <files mask="arm_max_pool_s8.c"/>
-        <files mask="arm_pool_q7_HWC.c"/>
       </source>
       <source relative_path="Source/ReshapeFunctions" type="src">
         <files mask="arm_reshape_s8.c"/>
       </source>
       <source relative_path="Source/SoftmaxFunctions" type="src">
-        <files mask="arm_softmax_q15.c"/>
-        <files mask="arm_softmax_q7.c"/>
+        <files mask="arm_nn_softmax_common_s8.c"/>
+        <files mask="arm_softmax_s16.c"/>
         <files mask="arm_softmax_s8.c"/>
+        <files mask="arm_softmax_s8_s16.c"/>
         <files mask="arm_softmax_u8.c"/>
-        <files mask="arm_softmax_with_batch_q7.c"/>
       </source>
       <source relative_path="Source/SVDFunctions" type="src">
+        <files mask="arm_svdf_get_buffer_sizes_s8.c"/>
         <files mask="arm_svdf_s8.c"/>
+        <files mask="arm_svdf_state_s16_s8.c"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="CMSIS_NN_Source.cmake" hidden="true"/>
@@ -3907,7 +4385,7 @@ ${load}</script>
         <include_path relative_path="str" project_relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="docs.multicore.K32W1480" name="docs_multicore" brief="Collection of Multicore SDK documentation" version="2.14.0" full_name="Multicore SDK documentation" category="docs/multicore" user_visible="true" type="documentation" package_base_path="../middleware/multicore/docs" project_base_path="docs">
+    <component id="docs.multicore.K32W1480" name="docs_multicore" brief="Collection of Multicore SDK documentation" version="2.16.0" full_name="Multicore SDK documentation" category="docs/multicore" user_visible="true" type="documentation" package_base_path="../middleware/multicore/docs" project_base_path="docs">
       <dependencies>
         <all>
           <component_dependency value="middleware.multicore.K32W1480"/>
@@ -3919,7 +4397,7 @@ ${load}</script>
         <files mask="Getting Started with Multicore SDK (MCSDK).pdf"/>
       </source>
     </component>
-    <component id="platform.drivers.common.K32W1480" name="common" brief="COMMON Driver" version="2.4.0" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
+    <component id="platform.drivers.common.K32W1480" name="common" brief="COMMON Driver" version="2.4.1" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.clock.K32W1480"/>
@@ -3986,7 +4464,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.dma3.K32W1480" name="dma" brief="EDMA Driver" version="2.3.0" full_name="EDMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/dma3" project_base_path="drivers">
+    <component id="platform.drivers.dma3.K32W1480" name="dma" brief="EDMA Driver" version="2.3.1" full_name="EDMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/dma3" project_base_path="drivers">
       <dependencies>
         <device_dependency value="K32W1480xxxA"/>
       </dependencies>
@@ -4188,7 +4666,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpcmp.K32W1480" name="lpcmp" brief="LPCMP Driver" version="2.1.1" full_name="LPCMP Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpcmp" project_base_path="drivers">
+    <component id="platform.drivers.lpcmp.K32W1480" name="lpcmp" brief="LPCMP Driver" version="2.1.3" full_name="LPCMP Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpcmp" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.K32W1480"/>
@@ -4228,7 +4706,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpi2c.K32W1480" name="i2c" brief="LPI2C Driver" version="2.5.2" full_name="LPI2C Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpi2c" project_base_path="drivers">
+    <component id="platform.drivers.lpi2c.K32W1480" name="i2c" brief="LPI2C Driver" version="2.5.4" full_name="LPI2C Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpi2c" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.K32W1480"/>
@@ -4248,7 +4726,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpi2c_freertos.K32W1480" name="i2c_freertos" brief="LPI2C Driver" version="2.3.2" full_name="LPI2C Freerto Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpi2c" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpi2c_freertos.K32W1480" name="i2c_freertos" brief="LPI2C FreeRTOS Driver" version="2.3.2" full_name="LPI2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/K32W1480/drivers" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpi2c.K32W1480"/>
@@ -4289,7 +4767,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpspi.K32W1480" name="lpspi" brief="LPSPI Driver" version="2.6.7" full_name="LPSPI Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers">
+    <component id="platform.drivers.lpspi.K32W1480" name="lpspi" brief="LPSPI Driver" version="2.6.8" full_name="LPSPI Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.K32W1480"/>
@@ -4309,7 +4787,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpspi_freertos.K32W1480" name="lpspi_freertos" brief="LPSPI Driver" version="2.3.1" full_name="LPSPI Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpspi_freertos.K32W1480" name="lpspi_freertos" brief="LPSPI FreeRTOS Driver" version="2.3.1" full_name="LPSPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/K32W1480/drivers" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpspi.K32W1480"/>
@@ -4350,7 +4828,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpuart.K32W1480" name="lpuart" brief="LPUART Driver" version="2.7.7" full_name="LPUART Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpuart" project_base_path="drivers">
+    <component id="platform.drivers.lpuart.K32W1480" name="lpuart" brief="LPUART Driver" version="2.8.2" full_name="LPUART Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpuart" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.K32W1480"/>
@@ -4370,7 +4848,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpuart_freertos.K32W1480" name="lpuart_freertos" brief="LPUART Driver" version="2.5.0" full_name="LPUART Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpuart" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpuart_freertos.K32W1480" name="lpuart_freertos" brief="LPUART Freertos Driver" version="2.5.0" full_name="LPUART Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/K32W1480/drivers" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpuart.K32W1480"/>
@@ -4428,7 +4906,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.port.K32W1480" name="port" brief="PORT Driver" version="2.4.1" full_name="PORT Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/port" project_base_path="drivers">
+    <component id="platform.drivers.port.K32W1480" name="port" brief="PORT Driver" version="2.5.0" full_name="PORT Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/port" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.K32W1480"/>
@@ -4525,7 +5003,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.tstmr.K32W1480" name="tstmr" brief="TSTMR Driver" version="2.0.1" full_name="TSTMR Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/tstmr" project_base_path="drivers">
+    <component id="platform.drivers.tstmr.K32W1480" name="tstmr" brief="TSTMR Driver" version="2.0.2" full_name="TSTMR Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/tstmr" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.K32W1480"/>
@@ -4582,7 +5060,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.elemu.K32W1480" name="elemu" brief="ELE MU Driver" version="2.0.0" full_name="ELE MU Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/elemu" project_base_path="drivers">
+    <component id="platform.drivers.elemu.K32W1480" name="elemu" brief="ELE MU Driver" version="2.1.0" full_name="ELE MU Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/elemu" project_base_path="drivers">
       <dependencies>
         <device_dependency value="K32W1480xxxA"/>
       </dependencies>
@@ -4639,7 +5117,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.spc.K32W1480" name="spc" brief="SPC Driver" version="2.3.0" full_name="SPC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/spc" project_base_path="drivers">
+    <component id="platform.drivers.spc.K32W1480" name="spc" brief="SPC Driver" version="2.4.0" full_name="SPC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/spc" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.K32W1480"/>
@@ -4659,7 +5137,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.wuu.K32W1480" name="wuu" brief="WUU Driver" version="2.3.0" full_name="WUU Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/wuu" project_base_path="drivers">
+    <component id="platform.drivers.wuu.K32W1480" name="wuu" brief="WUU Driver" version="2.4.0" full_name="WUU Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/wuu" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.K32W1480"/>
@@ -4716,7 +5194,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.syspm.K32W1480" name="syspm" brief="SYSPM Driver" version="2.1.0" full_name="SYSPM Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/syspm" project_base_path="drivers">
+    <component id="platform.drivers.syspm.K32W1480" name="syspm" brief="SYSPM Driver" version="2.2.0" full_name="SYSPM Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/syspm" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.K32W1480"/>
@@ -4776,7 +5254,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.i3c.K32W1480" name="i3c" brief="I3C Driver" version="2.10.9" full_name="I3C Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/i3c" project_base_path="drivers">
+    <component id="platform.drivers.i3c.K32W1480" name="i3c" brief="I3C Driver" version="2.12.0" full_name="I3C Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/i3c" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.K32W1480"/>
@@ -5354,6 +5832,9 @@ ${load}</script>
       </include_paths>
     </component>
     <component id="component.lpit_adapter.K32W1480" name="lpit_adapter" brief="Component lpit_adapter" version="1.0.0" full_name="Component lpit_adapter" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/timer" project_base_path="component/timer">
+      <defines>
+        <define name="TIMER_PORT_TYPE_LPIT" value="1"/>
+      </defines>
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.K32W1480"/>
@@ -5375,6 +5856,9 @@ ${load}</script>
       </include_paths>
     </component>
     <component id="component.lptmr_adapter.K32W1480" name="lptmr_adapter" brief="Component lptmr_adapter" version="1.0.0" full_name="Component lptmr_adapter" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/timer" project_base_path="component/timer">
+      <defines>
+        <define name="TIMER_PORT_TYPE_LPTMR" value="1"/>
+      </defines>
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.K32W1480"/>
@@ -5396,6 +5880,9 @@ ${load}</script>
       </include_paths>
     </component>
     <component id="component.tpm_adapter.K32W1480" name="tpm_adapter" brief="Component tpm_adapter" version="1.0.0" full_name="Component tpm_adapter" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/timer" project_base_path="component/timer">
+      <defines>
+        <define name="TIMER_PORT_TYPE_TMP" value="1"/>
+      </defines>
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.K32W1480"/>
@@ -5944,6 +6431,46 @@ ${load}</script>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.osal.frtos.K32W1480" name="psa_crypto_driver osal_frtos" brief="OS Abstraction Layer for PSA crypto driver on FreeRTOS" version="1.0.0" full_name="PSA crypto driver osal layer for FreeRTOS" category="psa_crypto_driver/psa_crypto_driver_osal_frtos" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <all>
+          <component_dependency value="component.psa_crypto_driver.osal.K32W1480"/>
+          <device_dependency value="K32W1480xxxA"/>
+        </all>
+      </dependencies>
+      <source relative_path="osal/frtos" type="src">
+        <files mask="osal_mutex.c"/>
+      </source>
+      <source relative_path="osal/frtos" type="c_include">
+        <files mask="osal_mutex_platform.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_osal_frtos.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="osal/frtos" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.osal.baremetal.K32W1480" name="psa_crypto_driver osal_baremetal" brief="OS Abstraction Layer for PSA crypto driver on bare metal" version="1.0.0" full_name="PSA crypto driver osal layer for bare metal implementations" category="psa_crypto_driver/psa_crypto_driver_osal_baremetal" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <all>
+          <component_dependency value="component.psa_crypto_driver.osal.K32W1480"/>
+          <device_dependency value="K32W1480xxxA"/>
+        </all>
+      </dependencies>
+      <source relative_path="osal/baremetal" type="src">
+        <files mask="osal_mutex.c"/>
+      </source>
+      <source relative_path="osal/baremetal" type="c_include">
+        <files mask="osal_mutex_platform.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_osal_baremetal.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="osal/baremetal" type="c_include"/>
       </include_paths>
     </component>
     <component id="driver.romapi.K32W1480" name="ROMAPI" brief="ROMAPI Driver" version="1.2.0" full_name="ROMAPI Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/K32W1480/drivers" project_base_path="drivers">
@@ -6680,270 +7207,6 @@ ${load}</script>
       <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide" type="doc">
         <files mask="index.html"/>
       </source>
-      <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/KW45_K32W1_BLEDAUG_files" type="image">
-        <files mask="GUID-0046B3CC-7239-4F44-93F6-67589284B175-high.png"/>
-        <files mask="GUID-01648218-1A04-4D42-AB0F-3CA7B8FE4F17-high.png"/>
-        <files mask="GUID-0473007C-1060-451F-8BF4-24C6DB0AA488-high.png"/>
-        <files mask="GUID-06F55208-DB51-4C59-9F89-9BB584D4991F-high.png"/>
-        <files mask="GUID-0A715F91-6D44-4877-A0F8-0BF3DA8EA08B-high.png"/>
-        <files mask="GUID-10F9FEFF-D02A-4386-9777-C66858DF4372-high.png"/>
-        <files mask="GUID-120195E0-9951-486F-840B-D9B83C53A52D-high.png"/>
-        <files mask="GUID-25CB6659-C4F3-42E0-BA34-70639BE31082-high.png"/>
-        <files mask="GUID-28D720DD-3ACE-4C7B-863F-0BF23D026F85-high.png"/>
-        <files mask="GUID-2AE84B9F-8E46-44C0-B45D-0F6C5E2D1B8E-high.png"/>
-        <files mask="GUID-2E0427C4-DC34-4346-83CE-B6FA18C090F4-high.png"/>
-        <files mask="GUID-3125FF4D-FC38-4E96-86B9-782FE6C0EA13-high.png"/>
-        <files mask="GUID-340A47C5-A49F-4F43-BC98-0AC42E5CC88A-high.png"/>
-        <files mask="GUID-3B643A71-EC3C-4B15-87AC-37AFF195232A-high.png"/>
-        <files mask="GUID-41D3DC0F-714A-4848-95D3-F9D8EF155B9E-high.png"/>
-        <files mask="GUID-45929BD8-F538-4962-8654-10E88CD2B71F-high.png"/>
-        <files mask="GUID-46FDBAD0-37F5-4430-8CF4-3455D275D3C0-high.png"/>
-        <files mask="GUID-48A84F59-09A0-4503-AC25-8DDDE2EE6AB9-high.png"/>
-        <files mask="GUID-4A884AE9-F797-4ECB-8CD7-05C0BA45DE92-high.png"/>
-        <files mask="GUID-4AF3CA61-F1C4-4B22-928B-F2723CC5A579-high.png"/>
-        <files mask="GUID-4B63DD38-36BD-42B8-A813-15F3A7FD64B9-high.png"/>
-        <files mask="GUID-53449D1C-2CE8-48E6-979D-EF259444D5CD-high.png"/>
-        <files mask="GUID-5A9C1512-E987-489A-AED9-2C32911D7333-high.png"/>
-        <files mask="GUID-5C04B7C6-7839-4A70-8536-ECE7DB78F4A0-high.png"/>
-        <files mask="GUID-5E7B9E55-1842-46BA-8976-772E2E0E47CC-high.png"/>
-        <files mask="GUID-65820267-CF4D-46EA-995F-657E30BAB468-high.jpg"/>
-        <files mask="GUID-6674053E-F6B6-4D55-810A-F669364C1E20-high.png"/>
-        <files mask="GUID-70AA23C7-B9D2-47A1-82F5-073F7EE2B16D-high.png"/>
-        <files mask="GUID-71C6081E-127D-4677-97DC-F113708C1933-high.png"/>
-        <files mask="GUID-733055E8-8EB3-4B83-BA24-610BB549DE7C-high.png"/>
-        <files mask="GUID-7446B502-6B31-4D7F-A179-8A4B2132DA29-high.png"/>
-        <files mask="GUID-75570285-811C-440C-A72D-EC580AE1CBE0-high.png"/>
-        <files mask="GUID-7E8146A1-0F2F-44E0-AB62-BD058D9F5C51-high.png"/>
-        <files mask="GUID-9286221F-A1EE-499E-A869-424851E6138B-high.png"/>
-        <files mask="GUID-943D4CB0-329F-4A59-A44A-87924D98000E-high.png"/>
-        <files mask="GUID-98AF0B6F-F905-4E48-A18F-7C1969F9B16B-high.png"/>
-        <files mask="GUID-9A2973FD-75BD-400B-8AA9-0A9B18270118-high.png"/>
-        <files mask="GUID-9AAC7548-A323-44D8-99E6-F26F4C5D6123-high.png"/>
-        <files mask="GUID-9CFF78DB-CFE2-4727-B004-CC825CF9742E-high.png"/>
-        <files mask="GUID-A694B25F-9FD4-4CA0-8E5E-6B6F94614375-high.png"/>
-        <files mask="GUID-AB6F02D9-4940-4A91-862B-EB061194CAE7-high.png"/>
-        <files mask="GUID-ABECAFEC-A899-4EA5-A08F-8EC4CD61B024-high.png"/>
-        <files mask="GUID-AC8F8C8B-189F-469E-B26B-D3F4810740E9-high.jpg"/>
-        <files mask="GUID-B414FAE3-A8C5-4ADF-BD6A-06AB102DA669-high.png"/>
-        <files mask="GUID-B7A77D62-D0B6-4B76-856D-44354C1A0E88-high.png"/>
-        <files mask="GUID-B978D556-8BC1-4983-A6F4-48D69D55A7FF-high.png"/>
-        <files mask="GUID-BE523B80-CC6F-4EE5-9923-1C14351AF435-high.png"/>
-        <files mask="GUID-BF3211F9-662A-4026-80C9-EB516F731471-high.png"/>
-        <files mask="GUID-C9DD30DF-10DC-4021-9718-DE5B447C4A29-high.png"/>
-        <files mask="GUID-CB18F9B4-54B9-49C6-8DAB-00488B14755E-high.png"/>
-        <files mask="GUID-D6297DDD-95BB-49C5-BFEA-E4F0D8B0C1B2-high.png"/>
-        <files mask="GUID-D71F3A48-A99E-4547-9806-A22CC34BDFBF-high.png"/>
-        <files mask="GUID-D7B60969-9E41-4F6C-B2CD-D03340FC7969-high.png"/>
-        <files mask="GUID-D9DE0DA3-19F1-43A3-8134-E717A955B576-high.png"/>
-        <files mask="GUID-DF1DAAD3-E2C7-4734-B597-7D2A8027A983-high.png"/>
-        <files mask="GUID-E56305EE-EB4A-4F19-9137-712D5EA746CA-high.png"/>
-        <files mask="GUID-E592A200-56D2-400C-9DFA-97A0EC0E4887-high.png"/>
-        <files mask="GUID-E80E89FA-F74A-4DC3-97EC-A985AAFA8B6F-high.png"/>
-        <files mask="GUID-E86C5694-4EC4-4DAA-AB06-0C8FC0CCC23E-high.png"/>
-        <files mask="GUID-EFF476C2-96A4-48CA-9460-1B856E95F1F9-high.png"/>
-        <files mask="GUID-F39AB1E2-C2FA-4648-A30C-BC21E459F38A-high.png"/>
-        <files mask="GUID-F75F79BB-7332-4735-B3BA-AE1AB7E682B6-high.jpg"/>
-        <files mask="GUID-F7ACA502-8080-4E4B-8355-A02024B8E648-high.png"/>
-        <files mask="GUID-F83F9207-E20D-4577-B817-988A91D5862A-high.png"/>
-        <files mask="GUID-FC90FD6F-41A4-4959-B2F5-8BE9A56C432E-high.png"/>
-        <files mask="GUID-FE6B14F4-2B08-474F-89E3-FFFCBDD7CEA8-high.png"/>
-        <files mask="ISHPUBLILLUSTRATIONMISSING-low.jpg"/>
-        <files mask="book.png"/>
-        <files mask="email.png"/>
-        <files mask="minus.png"/>
-        <files mask="next.png"/>
-        <files mask="plus.png"/>
-        <files mask="previous.png"/>
-        <files mask="print.png"/>
-        <files mask="space.png"/>
-        <files mask="tab_active.png"/>
-        <files mask="topic.png"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/KW45_K32W1_BLEDAUG_files" type="doc">
-        <files mask="GUID-02967DA1-8499-4CC2-92CC-F6050273001D.html"/>
-        <files mask="GUID-048C22D8-9A14-49E9-B162-25FECD29BA42.html"/>
-        <files mask="GUID-0652C8C0-3837-4E45-A63B-A4AC26770C1F.html"/>
-        <files mask="GUID-077954E6-B76F-4D50-A0DD-DDA7F7B4B696.html"/>
-        <files mask="GUID-08BF7A59-E102-4D42-BE33-55E86A54CDE8.html"/>
-        <files mask="GUID-0906B387-AEF0-44BF-B8EE-AFA501571419.html"/>
-        <files mask="GUID-09FE9DE5-E7A9-430B-A019-4C41A36ABB0A.html"/>
-        <files mask="GUID-0AAF09C2-6DD5-496D-92FF-1BFCB3E8B36A.html"/>
-        <files mask="GUID-0C7C77F9-B048-4B66-BC36-A121ABDAAE52.html"/>
-        <files mask="GUID-0C8AF4BC-9CA4-4C6E-9ED3-8CDB3DFBFF3E.html"/>
-        <files mask="GUID-0D3C7748-DEFD-4EE7-AB8F-A7BE626CDD1E.html"/>
-        <files mask="GUID-0DBF8EF2-6288-423A-A035-B0E5B7A33311.html"/>
-        <files mask="GUID-0DD905F7-12D4-48ED-A279-774B61405882.html"/>
-        <files mask="GUID-0DEBAFFA-EE5D-4113-9451-5790CB818D33.html"/>
-        <files mask="GUID-100376F4-B659-4619-AA29-3C97550C45F7.html"/>
-        <files mask="GUID-10346B2D-DB32-459B-80E2-7DD9D7EC862D.html"/>
-        <files mask="GUID-1198C642-A9CD-4976-A3C3-08DFF888701C.html"/>
-        <files mask="GUID-124A8481-4E81-45F9-9915-27A8F790919D.html"/>
-        <files mask="GUID-137E3159-AF7B-477E-A0FD-52329BD8E01B.html"/>
-        <files mask="GUID-13F224BD-B57D-4A39-AB16-8F6EFFCAA17E.html"/>
-        <files mask="GUID-1494FED7-7DDB-4D3A-BA98-891523F88506.html"/>
-        <files mask="GUID-15C6D62A-3123-46C4-95BD-1ABC029BA6C4.html"/>
-        <files mask="GUID-1A10EBA7-F9FA-4262-B338-742D351FEA4A.html"/>
-        <files mask="GUID-1B785008-95E1-4646-A241-9FC143A293D1.html"/>
-        <files mask="GUID-223EEE57-AFE7-4A01-92DA-6669A6340251.html"/>
-        <files mask="GUID-25C196C9-F5D3-47B7-9F9C-806E351FE461.html"/>
-        <files mask="GUID-27EAE2BC-0FBD-4E09-A316-D7B8E03D27A5.html"/>
-        <files mask="GUID-2A63612A-D3F3-4BE6-9260-2AF43153CF60.html"/>
-        <files mask="GUID-2C62D02E-23B8-4012-A26B-CD7DA2DFDE6D.html"/>
-        <files mask="GUID-2D1EF8BB-8C52-47CB-996C-6B7A2455896C.html"/>
-        <files mask="GUID-2DF921DA-87B5-4151-8E50-C443B2F120C4.html"/>
-        <files mask="GUID-2F3F9090-4E90-484B-97DC-88159452B50C.html"/>
-        <files mask="GUID-303ED1F3-C462-4188-A8AD-A5619A8738E7.html"/>
-        <files mask="GUID-32E04DD2-FA96-412C-9930-4CC5D7E1D2D3.html"/>
-        <files mask="GUID-33BD06FF-BAD5-4DAE-B5ED-74EA379B39CE.html"/>
-        <files mask="GUID-34FE0667-D847-4D18-BB12-3BA5FAE443C7.html"/>
-        <files mask="GUID-350D2403-6321-4A6B-920D-FAD49D7D21C7.html"/>
-        <files mask="GUID-3679BDFA-6489-4F6D-9517-6734F0EA0327.html"/>
-        <files mask="GUID-36850A01-5889-4ED6-9A20-4CE6838D19A3.html"/>
-        <files mask="GUID-39F94A6E-7B86-4539-B510-693BB58FB5A5.html"/>
-        <files mask="GUID-3C940120-E56B-4E76-9DD5-6CA1C4A6BB7C.html"/>
-        <files mask="GUID-3CF8294A-A7AF-49BA-A44D-158F10B4D8DA.html"/>
-        <files mask="GUID-40A3CB6C-9139-42B4-83B9-117067BB9D79.html"/>
-        <files mask="GUID-41265172-F1FA-45A2-ADCC-C40F4DD98FCE.html"/>
-        <files mask="GUID-482FC999-B199-4EBA-90F2-6150B55C545D.html"/>
-        <files mask="GUID-48D5335C-3D2C-424A-A792-86E3FAA40B29.html"/>
-        <files mask="GUID-49C14290-FDF5-4A7C-B50E-52E4138B27F8.html"/>
-        <files mask="GUID-4AAC1818-C606-4CAC-A6E9-603E76A417E1.html"/>
-        <files mask="GUID-4F667834-B242-4A99-8206-9BC62D0190B2.html"/>
-        <files mask="GUID-52737028-80D1-4677-8CA6-E8A8552CB10F.html"/>
-        <files mask="GUID-546CA50C-91BF-46B5-B6CA-C802158C53B5.html"/>
-        <files mask="GUID-54CFAD79-8645-488D-8A91-D8509C78FC5C.html"/>
-        <files mask="GUID-552138B1-1EDC-41F8-BA3F-CA07BD107BE1.html"/>
-        <files mask="GUID-56C80BBD-BC39-4CFE-8B82-E072709546BA.html"/>
-        <files mask="GUID-580074D7-5C40-44FE-96C8-D28FC5261116.html"/>
-        <files mask="GUID-59C819D5-4DAA-40D3-BC4C-0F230FB4BF5F.html"/>
-        <files mask="GUID-59CBF560-0E99-415B-9A6D-E61C3BC7354B.html"/>
-        <files mask="GUID-5CF81659-E394-40C7-9A21-88F18744157D.html"/>
-        <files mask="GUID-5E2A3BBF-1710-4D12-8FC3-4A6BF586E6F8.html"/>
-        <files mask="GUID-5E3687D8-2005-4DF7-A5BC-8686461B2D2B.html"/>
-        <files mask="GUID-645BE5EE-9DE9-4D4A-9C8E-9C9E960F70E6.html"/>
-        <files mask="GUID-6460831B-31EE-41F6-809C-D602A5F72E10.html"/>
-        <files mask="GUID-68A22057-94A6-486C-BDA1-19CECBF2EB27.html"/>
-        <files mask="GUID-69DCE941-B29B-445D-AF65-13DA7D71E88A.html"/>
-        <files mask="GUID-6A79DC36-EEB9-4649-BEB4-A226B5AD42D8.html"/>
-        <files mask="GUID-6CF0CDCB-08F2-454E-B6AC-D6B724D9EC9B.html"/>
-        <files mask="GUID-6D4DFB53-8CB9-4B3A-9DFF-DB97E374F78F.html"/>
-        <files mask="GUID-6F7513A9-0179-46E2-ABA8-E5B9D88EED79.html"/>
-        <files mask="GUID-7068193A-571B-476C-BC31-507155B1B3C7.html"/>
-        <files mask="GUID-717F6AD9-B8FD-4A29-A294-028F5899A9CB.html"/>
-        <files mask="GUID-729FBDA2-D436-4310-92C5-C7992BA45621.html"/>
-        <files mask="GUID-7567BDAC-EA06-421F-9D3E-052C94679982.html"/>
-        <files mask="GUID-7582E387-7D25-4C3A-9969-070CEA561AF7.html"/>
-        <files mask="GUID-76DE9774-D2EF-4E89-AA4D-AB873796E8F4.html"/>
-        <files mask="GUID-77546E2C-FDDD-4DAB-B291-41524FF1DCFE.html"/>
-        <files mask="GUID-77E76719-2781-442F-A442-AA78D9069633.html"/>
-        <files mask="GUID-79C350CF-4641-4906-9406-89C406F199D2.html"/>
-        <files mask="GUID-7A0AB301-D25F-4A60-9D7F-738124CAF6CA.html"/>
-        <files mask="GUID-7AB12807-D9E8-4BEB-BBF8-376AD7DB88D2.html"/>
-        <files mask="GUID-7ADD097C-0346-4FC2-A81E-302C81C71098.html"/>
-        <files mask="GUID-7C433D9A-C282-4B7C-A3F0-2D3766B3B52E.html"/>
-        <files mask="GUID-7C8BD910-7B61-429D-886A-BAACD2C1623D.html"/>
-        <files mask="GUID-7DB9216E-EFEA-45C8-BC4A-1B08BAA63A85.html"/>
-        <files mask="GUID-7EFBBFF6-1D87-4041-A0C6-41FADADD7244.html"/>
-        <files mask="GUID-7F9F0173-C31E-4B32-9561-4ED02E468C5B.html"/>
-        <files mask="GUID-81034103-218A-4624-AFEB-34DA0B65F71B.html"/>
-        <files mask="GUID-810AAB47-70C2-47D0-ABCC-AFBA98BD31CA.html"/>
-        <files mask="GUID-8200E8F8-4312-45F4-B5A1-6A1D8A217C81.html"/>
-        <files mask="GUID-84AB0FCE-6242-4A79-9E48-A4D7D75F128F.html"/>
-        <files mask="GUID-84FCCF67-CA4F-4286-A634-B741666AFEC2.html"/>
-        <files mask="GUID-8620231D-6451-4889-9CA7-949D1C18055A.html"/>
-        <files mask="GUID-86731431-6405-4817-A877-6D98656D31DD.html"/>
-        <files mask="GUID-877111E5-C10D-4F52-9DA7-1BFB151CD922.html"/>
-        <files mask="GUID-88B1CC48-7A5E-4F67-9639-6C1EF9BD53B7.html"/>
-        <files mask="GUID-899312BF-1D02-407F-BC82-4AE6237549E4.html"/>
-        <files mask="GUID-8B3F70B9-A089-46F5-9F78-2CF73E0A22DE.html"/>
-        <files mask="GUID-8C99907A-6C31-44FA-AAEE-20A64035017A.html"/>
-        <files mask="GUID-8CA2723A-1A5B-4479-A125-B18103A01491.html"/>
-        <files mask="GUID-8DFD7CDC-DACF-48D2-A869-79601AFC812F.html"/>
-        <files mask="GUID-8F080E21-002D-4792-8F78-5F53875877BE.html"/>
-        <files mask="GUID-8F381BCE-B305-43C5-BF59-6BFCBA066FB9.html"/>
-        <files mask="GUID-9145E405-0D78-4424-8787-4B875969F9D3.html"/>
-        <files mask="GUID-92A22DF6-C692-4865-B537-FE73D410AC26.html"/>
-        <files mask="GUID-950C18BB-8FE1-4C18-B969-FAD3E8678F72.html"/>
-        <files mask="GUID-96CF969A-64A4-4498-8286-819BBCB014D5.html"/>
-        <files mask="GUID-971630B5-BDF9-4CA6-AADD-97DD3A9748A2.html"/>
-        <files mask="GUID-97BB1293-3FAA-4EEB-B612-BFE31AC0ACDE.html"/>
-        <files mask="GUID-9AF41F1B-5555-41EA-8C07-3CA385EDA567.html"/>
-        <files mask="GUID-9C123C3B-F7A4-4F73-954C-A6EDAC6BB00A.html"/>
-        <files mask="GUID-9C27B7B7-1CB3-45CF-A319-C67598DD0745.html"/>
-        <files mask="GUID-A08D9760-0800-4186-B5E6-B8FD07568B50.html"/>
-        <files mask="GUID-A0CC13D8-4774-4408-B1FE-4983DF1028F8.html"/>
-        <files mask="GUID-A22F5414-4823-498D-A3AE-A15E400C3106.html"/>
-        <files mask="GUID-A6CC4F66-3801-4E2A-A5E3-76208020316D.html"/>
-        <files mask="GUID-A826B865-3DCE-4993-ACC6-9F2F72414BCF.html"/>
-        <files mask="GUID-A967D62D-A223-4D74-8D24-3CD1003CF757.html"/>
-        <files mask="GUID-A9CB8620-9303-481E-908C-AE4C959B4D16.html"/>
-        <files mask="GUID-AC548E33-4769-49CF-A270-35706985010C.html"/>
-        <files mask="GUID-AF3350F9-9E7B-46B5-8FA6-60E56E588401.html"/>
-        <files mask="GUID-B23ED4DB-F2CD-4F33-955D-B6415F4034C1.html"/>
-        <files mask="GUID-B2A25525-7666-4F94-91C7-593F1E0FE96C.html"/>
-        <files mask="GUID-B333FD81-34BE-472C-97A0-2674D2C575F3.html"/>
-        <files mask="GUID-B53EE3DD-572F-432A-B8AF-D77D3107026F.html"/>
-        <files mask="GUID-B624B9C1-7F03-46C5-BC13-D1924474BEB8.html"/>
-        <files mask="GUID-B78805BB-B458-49A2-88E3-81FE16166678.html"/>
-        <files mask="GUID-B8E878E2-930F-46D1-A62A-12F4659FF0D8.html"/>
-        <files mask="GUID-BB2DD40D-1FA0-4FFF-A427-D14B09859E59.html"/>
-        <files mask="GUID-BC20E349-D576-4ABC-905B-150BF78279F7.html"/>
-        <files mask="GUID-BE06C117-875F-4045-9BB4-074BB443E196.html"/>
-        <files mask="GUID-BEFF33E7-7001-4216-BDAD-4562532ACD68.html"/>
-        <files mask="GUID-BF0D4370-6060-429E-A59C-EF5D50D85B81.html"/>
-        <files mask="GUID-C46E4765-799E-45C6-AE74-1F431ABE88D9.html"/>
-        <files mask="GUID-C4CF8341-71C0-478A-B47B-DBAAD3E20200.html"/>
-        <files mask="GUID-CA079D00-53E8-4F68-AEC1-41DECA5FD169.html"/>
-        <files mask="GUID-CACA3D80-DB08-408F-9526-E92F654289EC.html"/>
-        <files mask="GUID-CC7E27F2-3E1D-47D7-8905-B56FEB09F490.html"/>
-        <files mask="GUID-CDBDF8EF-CCED-44DA-A15B-4F0EB62DC404.html"/>
-        <files mask="GUID-D02FE332-37D2-40A7-A096-9A95FEDA6BC1.html"/>
-        <files mask="GUID-D515D36C-B460-426D-8A58-211A5C277C15.html"/>
-        <files mask="GUID-D6693AA8-B87D-42FF-B324-EF2F85FE82D7.html"/>
-        <files mask="GUID-D7FF720F-6ACA-4730-BCBE-4A8F85BD752C.html"/>
-        <files mask="GUID-DBB0C58E-1B2C-4011-B819-2DA37208AF44.html"/>
-        <files mask="GUID-DBED9E7C-3F82-4773-A28F-32D579FF399C.html"/>
-        <files mask="GUID-DEED66ED-D478-4747-A5CF-9AABC1AF2D51.html"/>
-        <files mask="GUID-E1999558-3E8C-4EEE-BB76-785D42189BCC.html"/>
-        <files mask="GUID-E79E3E2F-3D09-4E2D-B21B-70727E0650EE.html"/>
-        <files mask="GUID-EA11D553-35FC-4A59-8DDE-7D52A25E6020.html"/>
-        <files mask="GUID-EC76816F-EFB8-438B-B657-D2029F54D743.html"/>
-        <files mask="GUID-EC885C8E-97E4-4EDB-B9F5-34CA1DF2D800.html"/>
-        <files mask="GUID-F024BA75-7EF8-46A9-8D42-89800CBD904E.html"/>
-        <files mask="GUID-F0D61A70-3948-4144-89D1-A77F7499DF81.html"/>
-        <files mask="GUID-F25A0615-4C67-40A8-82C0-3E93D1B4A3B4.html"/>
-        <files mask="GUID-F8027011-FA5D-4C08-97DB-90925F6581C1.html"/>
-        <files mask="GUID-F9254A3F-BF67-4D07-BDD9-A360217B12BD.html"/>
-        <files mask="GUID-FA908840-56C0-4DA3-B899-C8A64E0A2065.html"/>
-        <files mask="GUID-FEE59A46-D17C-4859-8256-74A874F47F5F.html"/>
-        <files mask="GUID-FF337579-A629-4C6F-85ED-82CC06C4BB9A.html"/>
-        <files mask="GUID-FF6E7286-8C66-4CBD-9007-543422BDB8C3.html"/>
-        <files mask="GUID-FFB75FC6-FA08-4483-A833-6B010129E82E.html"/>
-        <files mask="commonltr.css"/>
-        <files mask="commonrtl.css"/>
-        <files mask="header.html"/>
-        <files mask="indexlist.css"/>
-        <files mask="indexpage.html"/>
-        <files mask="search.html"/>
-        <files mask="start.html"/>
-        <files mask="stylesheet.css"/>
-        <files mask="toc.html"/>
-        <files mask="webhelplayout.css"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/KW45_K32W1_BLEDAUG_files" type="script">
-        <files mask="WebhelpMenu.js"/>
-        <files mask="docnavigation.js"/>
-        <files mask="index.js"/>
-        <files mask="search.js"/>
-        <files mask="searchdata.js"/>
-        <files mask="searchlabels.js"/>
-        <files mask="toc.js"/>
-      </source>
-      <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/KW45_K32W1_BLEDAUG_files" type="other">
-        <files mask="dita.list"/>
-        <files mask="dita.xml.properties"/>
-        <files mask="favicon.ico"/>
-      </source>
       <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive" type="xml">
         <files mask="context-help-map.xml"/>
         <files mask="index.xml"/>
@@ -6959,8 +7222,9 @@ ${load}</script>
       <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive" type="other">
         <files mask="indexterms.properties"/>
       </source>
-      <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive" type="image">
-        <files mask="nxp-logo.png"/>
+      <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive/css" type="doc">
+        <files mask="commonltr.css"/>
+        <files mask="commonrtl.css"/>
       </source>
       <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive/images" type="image">
         <files mask="3.png"/>
@@ -7012,6 +7276,7 @@ ${load}</script>
         <files mask="transfer.png"/>
       </source>
       <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive/images" type="other">
+        <files mask="FRDM-MCXW71.svg"/>
         <files mask="K32W148-EVK-IMG.svg"/>
         <files mask="KW45B41Z-EVK-IMG.svg"/>
         <files mask="complete.PNG"/>
@@ -7117,24 +7382,24 @@ ${load}</script>
         <files mask="tooltip.css"/>
       </source>
       <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive/oxygen-webhelp/app/nav-links/json" type="script">
-        <files mask="GUID-13F224BD-B57D-4A39-AB16-8F6EFFCAA17E-d962e1321.js"/>
-        <files mask="GUID-1494FED7-7DDB-4D3A-BA98-891523F88506-d962e1427.js"/>
-        <files mask="GUID-15C6D62A-3123-46C4-95BD-1ABC029BA6C4-d962e462.js"/>
-        <files mask="GUID-1B785008-95E1-4646-A241-9FC143A293D1-d962e681.js"/>
-        <files mask="GUID-40A3CB6C-9139-42B4-83B9-117067BB9D79-d962e357.js"/>
-        <files mask="GUID-56C80BBD-BC39-4CFE-8B82-E072709546BA-d962e1089.js"/>
-        <files mask="GUID-580074D7-5C40-44FE-96C8-D28FC5261116-d962e1204.js"/>
-        <files mask="GUID-59C819D5-4DAA-40D3-BC4C-0F230FB4BF5F-d962e216.js"/>
-        <files mask="GUID-77546E2C-FDDD-4DAB-B291-41524FF1DCFE-d962e975.js"/>
-        <files mask="GUID-7AB12807-D9E8-4BEB-BBF8-376AD7DB88D2-d962e786.js"/>
-        <files mask="GUID-84AB0FCE-6242-4A79-9E48-A4D7D75F128F-d962e891.js"/>
-        <files mask="GUID-899312BF-1D02-407F-BC82-4AE6237549E4-d962e102.js"/>
-        <files mask="GUID-D515D36C-B460-426D-8A58-211A5C277C15-d962e334.js"/>
-        <files mask="GUID-EA11D553-35FC-4A59-8DDE-7D52A25E6020-d962e1568.js"/>
-        <files mask="GUID-FF6E7286-8C66-4CBD-9007-543422BDB8C3-d962e597.js"/>
+        <files mask="GUID-13F224BD-B57D-4A39-AB16-8F6EFFCAA17E-d967e1342.js"/>
+        <files mask="GUID-1494FED7-7DDB-4D3A-BA98-891523F88506-d967e1448.js"/>
+        <files mask="GUID-15C6D62A-3123-46C4-95BD-1ABC029BA6C4-d967e483.js"/>
+        <files mask="GUID-1B785008-95E1-4646-A241-9FC143A293D1-d967e702.js"/>
+        <files mask="GUID-40A3CB6C-9139-42B4-83B9-117067BB9D79-d967e378.js"/>
+        <files mask="GUID-56C80BBD-BC39-4CFE-8B82-E072709546BA-d967e1110.js"/>
+        <files mask="GUID-580074D7-5C40-44FE-96C8-D28FC5261116-d967e1225.js"/>
+        <files mask="GUID-59C819D5-4DAA-40D3-BC4C-0F230FB4BF5F-d967e237.js"/>
+        <files mask="GUID-77546E2C-FDDD-4DAB-B291-41524FF1DCFE-d967e996.js"/>
+        <files mask="GUID-7AB12807-D9E8-4BEB-BBF8-376AD7DB88D2-d967e807.js"/>
+        <files mask="GUID-84AB0FCE-6242-4A79-9E48-A4D7D75F128F-d967e912.js"/>
+        <files mask="GUID-899312BF-1D02-407F-BC82-4AE6237549E4-d967e102.js"/>
+        <files mask="GUID-D515D36C-B460-426D-8A58-211A5C277C15-d967e355.js"/>
+        <files mask="GUID-EA11D553-35FC-4A59-8DDE-7D52A25E6020-d967e1588.js"/>
+        <files mask="GUID-FF6E7286-8C66-4CBD-9007-543422BDB8C3-d967e618.js"/>
         <files mask="nav-links.js"/>
-        <files mask="topic_0125ad6e-f84f-488e-ac55-8d71182a83a6-d962e1788.js"/>
-        <files mask="topic_ad826d91-41f6-43da-8c49-b40eddc8c001-d962e1683.js"/>
+        <files mask="topic_0125ad6e-f84f-488e-ac55-8d71182a83a6-d967e1808.js"/>
+        <files mask="topic_ad826d91-41f6-43da-8c49-b40eddc8c001-d967e1703.js"/>
       </source>
       <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive/oxygen-webhelp/app/options" type="script">
         <files mask="options.js"/>
@@ -7233,9 +7498,15 @@ ${load}</script>
       </source>
       <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive/oxygen-webhelp/template" type="doc">
         <files mask="light.css"/>
+        <files mask="nxp.css"/>
+      </source>
+      <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive/oxygen-webhelp/template" type="other">
+        <files mask="nxp-logo.svg"/>
       </source>
       <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive/topics" type="doc">
         <files mask="Acronyms.html"/>
+        <files mask="Decision-Based_Advertising_Filtering_feature.html"/>
+        <files mask="FRDM_MCXW71_platform.html"/>
         <files mask="K32W148-EVK_platform.html"/>
         <files mask="advertising_data.html"/>
         <files mask="ancs_client.html"/>
@@ -7270,6 +7541,7 @@ ${load}</script>
         <files mask="implemented_stack_features_513.html"/>
         <files mask="introduction.html"/>
         <files mask="kw45b41z-evk_platform.html"/>
+        <files mask="legal_information.html"/>
         <files mask="low-power_extended_advertising_peripheral_and_exte.html"/>
         <files mask="low-power_temperature_sensor_and_collector.html"/>
         <files mask="note_source_code.html"/>
@@ -12503,25 +12775,23 @@ ${load}</script>
       <source relative_path="html/AN13974 - Bluetooth Low Energy Localization Application Note/webhelp-responsive" type="other">
         <files mask="indexterms.properties"/>
       </source>
-      <source relative_path="html/AN13974 - Bluetooth Low Energy Localization Application Note/webhelp-responsive" type="image">
-        <files mask="nxp-logo.png"/>
-      </source>
-      <source relative_path="html/AN13974 - Bluetooth Low Energy Localization Application Note/webhelp-responsive/images" type="image">
-        <files mask="Fig6_Localization_Reader_trigger_distance_measurement.png"/>
-        <files mask="Figure3.png"/>
-        <files mask="Figure4.png"/>
-        <files mask="Figure5.png"/>
-        <files mask="Figure5_Localization_User_Device_TriggerDistMeasurement.png"/>
-        <files mask="Figure_3_Localization_Reader_application_start.png"/>
-        <files mask="Figure_4_Localization_User_Device_application_start.png"/>
-        <files mask="image2.png"/>
-        <files mask="image3.png"/>
+      <source relative_path="html/AN13974 - Bluetooth Low Energy Localization Application Note/webhelp-responsive/css" type="doc">
+        <files mask="commonltr.css"/>
+        <files mask="commonrtl.css"/>
       </source>
       <source relative_path="html/AN13974 - Bluetooth Low Energy Localization Application Note/webhelp-responsive/images" type="other">
+        <files mask="FRDM-MCXW71.svg"/>
+        <files mask="Image8.svg"/>
         <files mask="K32W148-EVK-IMG.svg"/>
         <files mask="KW45B41Z-EVK-IMG.svg"/>
         <files mask="KW45B41Z-LOC-TOP-IMG.svg"/>
-        <files mask="image1.jpeg"/>
+      </source>
+      <source relative_path="html/AN13974 - Bluetooth Low Energy Localization Application Note/webhelp-responsive/images" type="image">
+        <files mask="Fig6_Localization_Reader_trigger_distance_measurement.png"/>
+        <files mask="Figure4.png"/>
+        <files mask="Figure5.png"/>
+        <files mask="Figure5_Localization_User_Device_TriggerDistMeasurement.png"/>
+        <files mask="image2.png"/>
       </source>
       <source relative_path="html/AN13974 - Bluetooth Low Energy Localization Application Note/webhelp-responsive/oxygen-webhelp/app" type="script">
         <files mask="config.js"/>
@@ -12625,12 +12895,9 @@ ${load}</script>
       </source>
       <source relative_path="html/AN13974 - Bluetooth Low Energy Localization Application Note/webhelp-responsive/oxygen-webhelp/app/nav-links/json" type="script">
         <files mask="nav-links.js"/>
-        <files mask="topic_7dfcfae3-9c40-44f5-b1e4-5b29e7ea5b41-d256e294.js"/>
-        <files mask="topic_7dfcfae3-9c40-44f5-b1e4-5b29e7ea5b41-d267e254.js"/>
-        <files mask="topic_87a048b7-8116-4e84-9b7f-49382a95df56-d256e163.js"/>
-        <files mask="topic_87a048b7-8116-4e84-9b7f-49382a95df56-d267e123.js"/>
-        <files mask="topic_f07a50ee-1c05-4f0a-9bd5-58ff8676c470-d256e99.js"/>
-        <files mask="topic_f07a50ee-1c05-4f0a-9bd5-58ff8676c470-d267e59.js"/>
+        <files mask="topic_7dfcfae3-9c40-44f5-b1e4-5b29e7ea5b41-d260e233.js"/>
+        <files mask="topic_87a048b7-8116-4e84-9b7f-49382a95df56-d260e102.js"/>
+        <files mask="topic_f07a50ee-1c05-4f0a-9bd5-58ff8676c470-d260e59.js"/>
       </source>
       <source relative_path="html/AN13974 - Bluetooth Low Energy Localization Application Note/webhelp-responsive/oxygen-webhelp/app/options" type="script">
         <files mask="options.js"/>
@@ -12729,6 +12996,10 @@ ${load}</script>
       </source>
       <source relative_path="html/AN13974 - Bluetooth Low Energy Localization Application Note/webhelp-responsive/oxygen-webhelp/template" type="doc">
         <files mask="light.css"/>
+        <files mask="nxp.css"/>
+      </source>
+      <source relative_path="html/AN13974 - Bluetooth Low Energy Localization Application Note/webhelp-responsive/oxygen-webhelp/template" type="other">
+        <files mask="nxp-logo.svg"/>
       </source>
       <source relative_path="html/AN13974 - Bluetooth Low Energy Localization Application Note/webhelp-responsive/topics" type="doc">
         <files mask="acronyms_and_abbreviations.html"/>
@@ -12738,6 +13009,7 @@ ${load}</script>
         <files mask="demo_functionality_overview.html"/>
         <files mask="deploying_bluetooth_low_energy_localization_applic.html"/>
         <files mask="introduction.html"/>
+        <files mask="legal_information.html"/>
         <files mask="localization_reader.html"/>
         <files mask="localization_user_device.html"/>
         <files mask="revision_history.html"/>

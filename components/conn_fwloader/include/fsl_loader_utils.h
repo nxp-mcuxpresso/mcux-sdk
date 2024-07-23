@@ -93,12 +93,12 @@ typedef uint32_t fsl_nboot_status_t;
 #define kNBOOT_RootKey_Revoked (0xBBu)
 
 /*! @brief The size of the root of trust key table hash. */
-#define NBOOT_ROOT_ROTKH_SIZE_IN_WORD (12)
-#define NBOOT_ROOT_ROTKH_SIZE_IN_BYTE (NBOOT_ROOT_ROTKH_SIZE_IN_WORD * 4)
+#define NBOOT_ROOT_ROTKH_SIZE_IN_WORD (12U)
+#define NBOOT_ROOT_ROTKH_SIZE_IN_BYTE (NBOOT_ROOT_ROTKH_SIZE_IN_WORD * 4U)
 
 /*! @brief The size of PKC Blob. */
-#define NBOOT_PCK_BLOB_SIZE_IN_WORD (12)
-#define NBOOT_PCK_BLOB_SIZE_IN_BYTE (NBOOT_PCK_BLOB_SIZE_IN_WORD * 4)
+#define NBOOT_PCK_BLOB_SIZE_IN_WORD (12U)
+#define NBOOT_PCK_BLOB_SIZE_IN_BYTE (NBOOT_PCK_BLOB_SIZE_IN_WORD * 4U)
 
 /*!
  * @brief NBOOT type specifying the elliptic curve to be used

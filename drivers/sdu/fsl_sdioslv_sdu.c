@@ -35,10 +35,10 @@ static inline status_t SDIOSLV_GetScratchRegisterAddr(sdioslv_func_t fun_num,
 /*!
  * @brief Signals the following 4 events to the host
  *
- * * SDU_FN_CARD_C2H_INTEVENT0_CIS_CARD_RDY_MASK // Firmware sets this bit after CIS table is initialized
- * * SDU_FN_CARD_C2H_INTEVENT0_IO_READY_MASK // Firmware
- * * SDU_FN_CARD_C2H_INTEVENT0_Q0_DNLD_CARD_RDY_MASK // Firmware sets this bit when ready to receive data.
- * * SDU_FN_CARD_C2H_INTEVENT0_Q0_UPLD_CARD_RDY_MASK // Firmware sets this bit when ready to transmit data.
+ * * SDU_FN_CARD_C2H_INTEVENT0_CIS_CARD_RDY_MASK (Firmware sets this bit after CIS table is initialized)
+ * * SDU_FN_CARD_C2H_INTEVENT0_IO_READY_MASK (Firmware)
+ * * SDU_FN_CARD_C2H_INTEVENT0_Q0_DNLD_CARD_RDY_MASK (Firmware sets this bit when ready to receive data.)
+ * * SDU_FN_CARD_C2H_INTEVENT0_Q0_UPLD_CARD_RDY_MASK (Firmware sets this bit when ready to transmit data.)
  * * SDU_FN_CARD_C2H_INTEVENT0_CMD_PORT_DNLD_RDY_MASK
  * * SDU_FN_CARD_C2H_INTEVENT0_CMD_PORT_UPLD_RDY_MASK
  *
@@ -47,12 +47,12 @@ static inline status_t SDIOSLV_GetScratchRegisterAddr(sdioslv_func_t fun_num,
  */
 static inline void SDIOSLV_SetIntEvent(SDU_FN_CARD_Type *base, uint8_t mask)
 {
-     uint8_t temp = base->C2H_INTEVENT0 & ~(SDU_FN_CARD_C2H_INTEVENT0_IO_READY_MASK
+     uint8_t temp = (uint8_t)(base->C2H_INTEVENT0 & ~(SDU_FN_CARD_C2H_INTEVENT0_IO_READY_MASK
                                            | SDU_FN_CARD_C2H_INTEVENT0_CIS_CARD_RDY_MASK
                                            | SDU_FN_CARD_C2H_INTEVENT0_Q0_UPLD_CARD_RDY_MASK
                                            | SDU_FN_CARD_C2H_INTEVENT0_Q0_DNLD_CARD_RDY_MASK
                                            | SDU_FN_CARD_C2H_INTEVENT0_CMD_PORT_DNLD_RDY_MASK
-                                           | SDU_FN_CARD_C2H_INTEVENT0_CMD_PORT_UPLD_RDY_MASK);
+                                           | SDU_FN_CARD_C2H_INTEVENT0_CMD_PORT_UPLD_RDY_MASK));
 
     // INTEVENT0 is the poll register of the driver
     base->C2H_INTEVENT0 = temp | mask;
@@ -81,16 +81,16 @@ void SDIOSLV_Init0(void)
     set_iomux(20, 15);
 
     // via Abhijit
-    rmw2(&MCI_IO_MUX->FSEL, MCI_IO_MUX_FSEL_SEL_SDIO_MASK, MCI_IO_MUX_FSEL_SEL_SDIO_SHIFT, 1);
+    rmw2(&MCI_IO_MUX->FSEL, MCI_IO_MUX_FSEL_SEL_SDIO_MASK, MCI_IO_MUX_FSEL_SEL_SDIO_SHIFT, 1U);
 
     // 0 means we don't use standard defns (i.e. wireless). If you use standard defs
     // then you need to comply totally with the standard (Microsoft et al). Left at
     // 0, our driver performs the function.
-    rmwb(sdu_fbr_fnN_fn_code(1), sdu_fbr_fnN_fn_code_code_HI, sdu_fbr_fnN_fn_code_code_LO, 0);
+    rmwb(sdu_fbr_fnN_fn_code(1U), sdu_fbr_fnN_fn_code_code_HI, sdu_fbr_fnN_fn_code_code_LO, 0U);
 
-    rmwb(sdu_fbr_fnN_fn_code(2), sdu_fbr_fnN_fn_code_code_HI, sdu_fbr_fnN_fn_code_code_LO, 0);
+    rmwb(sdu_fbr_fnN_fn_code(2U), sdu_fbr_fnN_fn_code_code_HI, sdu_fbr_fnN_fn_code_code_LO, 0U);
 
-    rmwb(sdu_fbr_fnN_fn_code(3), sdu_fbr_fnN_fn_code_code_HI, sdu_fbr_fnN_fn_code_code_LO, 0);
+    rmwb(sdu_fbr_fnN_fn_code(3U), sdu_fbr_fnN_fn_code_code_HI, sdu_fbr_fnN_fn_code_code_LO, 0U);
 }
 
 /*!
@@ -107,26 +107,32 @@ status_t SDIOSLV_Init1(SDU_FN_CARD_Type *base, sdio_slave_config_t *config)
 {
     uint8_t reg;
 
-    if ((config->cmd_tx_format > 2) || (config->cmd_rd_format > 1))
-        return kStatus_Fail;
+    if ((config->cmd_tx_format > 2U) || (config->cmd_rd_format > 1U))
+    {
+        return (status_t)kStatus_Fail;
+    }
 
-    if ((config->data_tx_format > 2) || (config->data_rd_format > 2))
-        return kStatus_Fail;
+    if ((config->data_tx_format > 2U) || (config->data_rd_format > 2U))
+    {
+        return (status_t)kStatus_Fail;
+    }
 
-    if (!(config->cis_table_callback))
-        return kStatus_Fail;
+    if (config->cis_table_callback == NULL)
+    {
+        return (status_t)kStatus_Fail;
+    }
 
     // Enable CMD5 R4 FN bypass and configure with only 1 FN
     // Otherwise FN number would only be set when bootstrap is SDIO_BOOT_MODE
     reg = SDU_FN0_CARD->CARD_CTRL5;
-    reg &= ~(SDU_FN0_CARD_CARD_CTRL5_CMD5_R4_FN_BYPASS_EN_MASK | SDU_FN0_CARD_CARD_CTRL5_CMD5_R4_FN_BYPASS_VAL_MASK);
-    reg |= SDU_FN0_CARD_CARD_CTRL5_CMD5_R4_FN_BYPASS_VAL(1);
-    reg |= (1 << SDU_FN0_CARD_CARD_CTRL5_CMD5_R4_FN_BYPASS_EN_SHIFT);
+    reg &= ~(uint8_t)(SDU_FN0_CARD_CARD_CTRL5_CMD5_R4_FN_BYPASS_EN_MASK | SDU_FN0_CARD_CARD_CTRL5_CMD5_R4_FN_BYPASS_VAL_MASK);
+    reg |= SDU_FN0_CARD_CARD_CTRL5_CMD5_R4_FN_BYPASS_VAL(1U);
+    reg |= (uint8_t)(1U << SDU_FN0_CARD_CARD_CTRL5_CMD5_R4_FN_BYPASS_EN_SHIFT);
     SDU_FN0_CARD->CARD_CTRL5 = reg;
 
-    REG32(&base->PKT_RD_BITMAP0) = 0;
-    REG32(&base->PKT_WR_BITMAP0) = 0;
-    base->FN_CARD_INTMASK = config->cpu_num;
+    REG32(&base->PKT_RD_BITMAP0) = 0U;
+    REG32(&base->PKT_WR_BITMAP0) = 0U;
+    base->FN_CARD_INTMASK = (uint8_t)config->cpu_num;
 
     // Enable Interrupts
     base->CARD_INTMASK0 = SDU_FN_CARD_CARD_INTSTATUS0_Q0_DNLD_CARD_INT_MASK
@@ -138,7 +144,7 @@ status_t SDIOSLV_Init1(SDU_FN_CARD_Type *base, sdio_slave_config_t *config)
 
     // Cargo cult: Toggle INTSTATUS0_Q0_DNLD_CARD_INT_MASK, taken from SDK driver
     REG8(&base->CARD_INTSTATUS0) = SDU_FN_CARD_CARD_INTSTATUS0_Q0_DNLD_CARD_INT_MASK;
-    REG8(&base->CARD_INTSTATUS0) = 0;
+    REG8(&base->CARD_INTSTATUS0) = 0U;
 
     // Default setting ISR bit clear after read
     base->CARD_INTRSR0 = SDU_FN_CARD_CARD_INTSTATUS0_Q0_DNLD_CARD_INT_MASK
@@ -163,8 +169,8 @@ status_t SDIOSLV_Init1(SDU_FN_CARD_Type *base, sdio_slave_config_t *config)
     // 0 means we don't use standard defns (i.e. wireless). If you use standard defs
     // then you need to comply totally with the standard (Microsoft et al). Left at
     // 0, our driver performs the function.
-    SDU_FBR_CARD->FN_CODE &= ~(SDU_FBR_CARD_FN_CODE_CODE_MASK);
-    SDU_FBR_CARD->FN_CODE |= SDU_FBR_CARD_FN_CODE_CODE(0x0);
+    SDU_FBR_CARD->FN_CODE &= ~(uint8_t)(SDU_FBR_CARD_FN_CODE_CODE_MASK);
+    SDU_FBR_CARD->FN_CODE |= SDU_FBR_CARD_FN_CODE_CODE(0x0U);
 
     // Indicate to host IO_READY and that the CIS table is initialized
 
@@ -172,9 +178,9 @@ status_t SDIOSLV_Init1(SDU_FN_CARD_Type *base, sdio_slave_config_t *config)
                             | SDU_FN_CARD_C2H_INTEVENT0_CIS_CARD_RDY_MASK);
 
     // If this is set to 1, IO_READY and CARD_READY status will be 0.
-    SDU_FN0_CARD->DEV_SLEEP = SDU_FN0_CARD_DEV_SLEEP_DEV_SLEEP(0);
+    SDU_FN0_CARD->DEV_SLEEP = SDU_FN0_CARD_DEV_SLEEP_DEV_SLEEP(0U);
 
-    return kStatus_Success;
+    return (status_t)kStatus_Success;
 }
 
 /*!
@@ -193,16 +199,16 @@ status_t SDIOSLV_SendCmdNonBlocking(sdioslv_sdu_regmap_t *regmap, uint8_t *data_
 {
     sdioslv_sdu_regmap_t *sdu_fsr = NULL;
 
-    if (!regmap || !data_addr || !data_len)
+    if ((regmap == NULL) || (data_addr == NULL) || (data_len == 0U))
     {
-        return kStatus_InvalidArgument;
+        return (status_t)kStatus_InvalidArgument;
     }
 
     sdu_fsr                    = regmap;
     sdu_fsr->CmdPortSqReadBase = (uint32_t)data_addr;
     sdu_fsr->CmdPortRdLen      = data_len;
-    sdu_fsr->CardToHostEvent   = SDIO_CCR_CS_CmdUpLdRdy;
-    return kStatus_Success;
+    sdu_fsr->CardToHostEvent   = (uint16_t)SDIO_CCR_CS_CmdUpLdRdy;
+    return (status_t)kStatus_Success;
 }
 
 /*!
@@ -220,14 +226,14 @@ status_t SDIOSLV_RefillCmdBuffer(sdioslv_sdu_regmap_t *regmap, uint8_t *data_add
 {
     sdioslv_sdu_regmap_t *sdu_fsr = NULL;
 
-    if (!regmap || !data_addr)
+    if ((regmap == NULL) || (data_addr == NULL))
     {
         return kStatus_Fail;
     }
 
     sdu_fsr                     = regmap;
     sdu_fsr->CmdPortSqWriteBase = (uint32_t)data_addr;
-    sdu_fsr->CardToHostEvent    = SDIO_CCR_CS_CmdDnLdRdy;
+    sdu_fsr->CardToHostEvent    = (uint16_t)SDIO_CCR_CS_CmdDnLdRdy;
     return kStatus_Success;
 }
 
@@ -245,27 +251,27 @@ status_t SDIOSLV_RefillCmdBuffer(sdioslv_sdu_regmap_t *regmap, uint8_t *data_add
  * @retval #kStatus_InvalidArgument Invalid argument.
  * @retval #kStatus_SDIOSLV_SendFull all data slots are occupied, application
  */
-status_t SDIOSLV_SendDataNonBlocking(sdioslv_sdu_regmap_t *regmap, sdioslv_port_t port, uint8_t *data_addr, uint16_t data_len)
+status_t SDIOSLV_SendDataNonBlocking(sdioslv_sdu_regmap_t *regmap, sdioslv_port_t tx_port, uint8_t *data_addr, uint16_t data_len)
 {
     sdioslv_sdu_regmap_t *sdu_fsr = NULL;
 
-    if (!regmap || !data_addr || !data_len)
+    if ((regmap == NULL) || (data_addr == NULL) || (data_len == 0U))
     {
-        return kStatus_InvalidArgument;
+        return (status_t)kStatus_InvalidArgument;
     }
 
-    if (port >= SDU_USED_PORT_NUM)
+    if ((uint8_t)tx_port >= (uint8_t)SDU_USED_PORT_NUM)
     {
-        return kStatus_SDIOSLV_SendFull;
+        return (status_t)kStatus_SDIOSLV_SendFull;
     }
 
     sdu_fsr                  = regmap;
-    sdu_fsr->RdIdx           = port;
+    sdu_fsr->RdIdx           = (uint8_t)tx_port;
     sdu_fsr->SqReadBase      = (uint32_t)data_addr;
-    sdu_fsr->RdLen[port]  = data_len;
-    sdu_fsr->RdBitMap        = (uint32_t)(1 << port);
-    sdu_fsr->CardToHostEvent = SDIO_CCR_CS_UpLdRdy;
-    return kStatus_Success;
+    sdu_fsr->RdLen[tx_port]  = data_len;
+    sdu_fsr->RdBitMap        = ((uint32_t)1U << (uint32_t)tx_port);
+    sdu_fsr->CardToHostEvent = (uint16_t)SDIO_CCR_CS_UpLdRdy;
+    return (status_t)kStatus_Success;
 }
 
 /*!
@@ -284,21 +290,21 @@ status_t SDIOSLV_RefillDataBuffer(sdioslv_sdu_regmap_t *regmap, sdioslv_port_t p
 {
     sdioslv_sdu_regmap_t *sdu_fsr = NULL;
 
-    if (!regmap || !data_addr)
+    if ((regmap == NULL) || (data_addr == NULL))
     {
         return kStatus_Fail;
     }
 
-    if (port >= SDU_USED_PORT_NUM)
+    if ((uint32_t)port >= (uint32_t)SDU_USED_PORT_NUM)
     {
         return kStatus_Fail;
     }
 
     sdu_fsr                  = regmap;
-    sdu_fsr->WrIdx           = port;
+    sdu_fsr->WrIdx           = (uint8_t)port;
     sdu_fsr->SqWriteBase     = (uint32_t)data_addr;
-    sdu_fsr->WrBitMap        = (uint32_t)(1 << port);
-    sdu_fsr->CardToHostEvent = SDIO_CCR_CS_DnLdRdy;
+    sdu_fsr->WrBitMap        = (uint32_t)((uint32_t)1U << (uint32_t)port);
+    sdu_fsr->CardToHostEvent = (uint16_t)SDIO_CCR_CS_DnLdRdy;
     return kStatus_Success;
 }
 
@@ -315,7 +321,7 @@ sdioslv_bus_speed_t SDIOSLV_GetBusSpeed(void)
     uint8_t reg_val = 0;
 
     reg_val = SDU_REGS8(SDIO_FUNC0_BSS);
-    reg_val = (reg_val & SDIO_FUNC0_BSS_MODE_MASK) >> SDIO_FUNC0_BSS_MODE_BIT;
+    reg_val = (reg_val & (uint8_t)SDIO_FUNC0_BSS_MODE_MASK) >> SDIO_FUNC0_BSS_MODE_BIT;
 
     return (sdioslv_bus_speed_t)reg_val;
 }
@@ -330,15 +336,17 @@ sdioslv_bus_speed_t SDIOSLV_GetBusSpeed(void)
  */
 uint32_t SDIOSLV_GetBlockSize(uint8_t fn_num)
 {
-    uint8_t fun_num;
-    uint32_t block_size = 0;
+    uint32_t fun_num;
+    uint32_t block_size = 0U;
 
-    fun_num  = fn_num + 1;
-    block_size = SDU_REGS8(SDU_SDIO_CFG_BASE + 0x8 + (fun_num << 4));
-    block_size |= SDU_REGS8(SDU_SDIO_CFG_BASE + 0x9 + (((fun_num << 4) & 0x01) << 8));
+    fun_num  = (uint32_t)(fn_num + 1U);
+    block_size = SDU_REGS8(SDU_SDIO_CFG_BASE + 0x8U + (fun_num << 4U));
+    block_size |= SDU_REGS8(SDU_SDIO_CFG_BASE + 0x9U + (((fun_num << 4U) & 0x01U) << 8U));
 
-    if (!block_size)
-        block_size = 512;
+    if (block_size == 0U)
+    {
+        block_size = 512U;
+    }
 
     return block_size;
 }
@@ -366,7 +374,9 @@ status_t SDIOSLV_ReadScratchRegister(sdioslv_func_t fun_num,
     ret = SDIOSLV_GetScratchRegisterAddr(fun_num, group, offset, &reg_addr);
 
     if (ret == kStatus_Success)
+    {
         SDU_READ_REGS8(reg_addr, *value);
+    }
 
     return ret;
 }
@@ -394,7 +404,9 @@ status_t SDIOSLV_WriteScratchRegister(sdioslv_func_t fun_num,
     ret = SDIOSLV_GetScratchRegisterAddr(fun_num, group, offset, &reg_addr);
 
     if (ret == kStatus_Success)
+    {
         SDU_WRITE_REGS8(reg_addr, value);
+    }
 
     return ret;
 }
@@ -418,23 +430,36 @@ static inline status_t SDIOSLV_GetScratchRegisterAddr(sdioslv_func_t fun_num,
                                                       sdioslv_scratch_offset_t offset,
                                                       uint32_t *reg_addr)
 {
+    status_t status = kStatus_Success;
     switch (group)
     {
         case kSDIOSLV_ScratchGroup0:
             if (offset == kSDIOSLV_ScratchOffset0)
-                *reg_addr = 0xD4;
+            {
+                *reg_addr = 0xD4U;
+            }
             else if (offset == kSDIOSLV_ScratchOffset1)
-                *reg_addr = 0xD5;
+            {
+                *reg_addr = 0xD5U;
+            }
             else
-                return kStatus_Fail;
+            {
+                status = kStatus_Fail;
+            }
             break;
         case kSDIOSLV_ScratchGroup1:
             if (offset == kSDIOSLV_ScratchOffset0)
-                *reg_addr = 0xB0;
+            {
+                *reg_addr = 0xB0U;
+            }
             else if (offset == kSDIOSLV_ScratchOffset1)
-                *reg_addr = 0xB1;
+            {
+                *reg_addr = 0xB1U;
+            }
             else
-                return kStatus_Fail;
+            {
+                status = kStatus_Fail;
+            }
             break;
         case kSDIOSLV_ScratchGroup2:
         case kSDIOSLV_ScratchGroup3:
@@ -442,10 +467,16 @@ static inline status_t SDIOSLV_GetScratchRegisterAddr(sdioslv_func_t fun_num,
         case kSDIOSLV_ScratchGroup5:
         case kSDIOSLV_ScratchGroup6:
         case kSDIOSLV_ScratchGroup7:
-            *reg_addr = SDU_SCRATCH2_OFFSET0_ADDR + (group - 2) * 4 + offset;
+            *reg_addr = (uint32_t)SDU_SCRATCH2_OFFSET0_ADDR + (uint32_t)(((uint32_t)group - 2U) * 4U) + (uint32_t)offset;
             break;
         default:
-            return kStatus_Fail;
+            status = kStatus_Fail;
+            break;
+    }
+
+    if(status != kStatus_Success)
+    {
+        return status;
     }
 
     switch (fun_num)
@@ -457,13 +488,19 @@ static inline status_t SDIOSLV_GetScratchRegisterAddr(sdioslv_func_t fun_num,
         case kSDIOSLV_FunctionNum5:
         case kSDIOSLV_FunctionNum6:
         case kSDIOSLV_FunctionNum7:
-            *reg_addr |= (fun_num << 8);
+            *reg_addr |= ((uint32_t)fun_num << 8U);
             break;
         default:
-            return kStatus_Fail;
+            status = kStatus_Fail;
+            break;
+    }
+
+    if(status != kStatus_Success)
+    {
+        return status;
     }
 
     *reg_addr += SDU_SDIO_CFG_BASE;
 
-    return kStatus_Success;
+    return status;
 }

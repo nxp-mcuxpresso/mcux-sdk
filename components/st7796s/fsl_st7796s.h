@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -75,8 +75,12 @@ typedef struct _st7796s_config
 /*! @brief ST7796S driver handle structure */
 typedef struct _st7796s_handle
 {
-    const dbi_xfer_ops_t *xferOps;              /*!< Bus transfer operations. */
-    void *xferOpsData;                          /*!< Data used for transfer operations. */
+#if MCUX_DBI_LEGACY
+    const dbi_xfer_ops_t *xferOps; /*!< Bus transfer operations. */
+    void *xferOpsData;             /*!< Data used for transfer operations. */
+#else
+    dbi_iface_t *dbiIface; /*!< DBI interface handle. */
+#endif
     st7796s_orientation_mode_t orientationMode; /*!< Current orientation mode */
 } st7796s_handle_t;
 
@@ -88,6 +92,7 @@ typedef struct _st7796s_handle
 extern "C" {
 #endif
 
+#if MCUX_DBI_LEGACY
 /*!
  * @brief Initialize ST7796S controller.
  *
@@ -108,6 +113,24 @@ status_t ST7796S_Init(st7796s_handle_t *handle,
                       const st7796s_config_t *config,
                       const dbi_xfer_ops_t *xferOps,
                       void *xferOpsData);
+#else
+/*!
+ * @brief Initialize ST7796S controller.
+ *
+ * This function performs a software reset and initialize the display driver using
+ * a preset configuration. This function does not turn on the display, application
+ * could perform the @ref ST7796S_EnableDisplay later after filling the frame buffer.
+ *
+ * @param handle ST7796S handle structure.
+ * @param config Pointer to the panel configuration structure.
+ * @param dbiIface DBI interface handle.
+ *
+ * @return This function returns kStatus_Success after successfully initialized.
+ *         Appropriate kStatus_ prefixed errors will be given when an error occurred.
+ *         Please refer to the corresponding modules for an specific error coding.
+ */
+status_t ST7796S_Init(st7796s_handle_t *handle, const st7796s_config_t *config, dbi_iface_t *dbiIface);
+#endif
 
 /*!
  * @brief Invert or restore display color.
@@ -228,6 +251,7 @@ status_t ST7796S_SelectArea(st7796s_handle_t *handle, uint16_t startX, uint16_t 
  */
 status_t ST7796S_WritePixels(st7796s_handle_t *handle, uint16_t *pixels, uint32_t len);
 
+#if MCUX_DBI_LEGACY
 /*!
  * @brief Set the memory access done callback.
  *
@@ -238,6 +262,7 @@ status_t ST7796S_WritePixels(st7796s_handle_t *handle, uint16_t *pixels, uint32_
  * @param userData Parameter of @ref dbi_mem_done_callback_t.
  */
 void ST7796S_SetMemoryDoneCallback(st7796s_handle_t *handle, dbi_mem_done_callback_t callback, void *userData);
+#endif
 
 #if defined(__cplusplus)
 }

@@ -158,7 +158,7 @@ status_t PHY_KSZ8041_SetLinkSpeedDuplex(phy_handle_t *handle, phy_speed_t speed,
  */
 status_t PHY_KSZ8041_EnableLoopback(phy_handle_t *handle, phy_loop_t mode, phy_speed_t speed, bool enable);
 
-/* @} */
+/*! @} */
 
 #if defined(__cplusplus)
 }

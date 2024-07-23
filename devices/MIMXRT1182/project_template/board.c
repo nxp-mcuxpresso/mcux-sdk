@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -17,6 +17,8 @@
 #endif /* SDK_NETC_USED */
 #include "fsl_iomuxc.h"
 #include "fsl_cache.h"
+#include "fsl_ele_base_api.h"
+#include "fsl_dcdc.h"
 
 /*******************************************************************************
  * Definitions
@@ -273,7 +275,7 @@ void BOARD_ConfigMPU(void)
      *     1             1           1           1              Normal             shareable       outer and inner write
      *                                                                                             back write/read acllocate
      *     2             x           0           0              Device             not shareable
-     *   Above are normal use settings, if your want to see more details or want to config different inner/outter cache
+     *   Above are normal use settings, if your want to see more details or want to config different inner/outer cache
      * policy, please refer to Table 4-55 /4-56 in arm cortex-M7 generic user guide <dui0646b_cortex_m7_dgug.pdf>
      *
      * param SubRegionDisable  Sub-region disable field. 0=sub-region is enabled, 1=sub-region is disabled.
@@ -779,6 +781,56 @@ void BOARD_FlexspiClockSafeConfig(void)
 {
     /* Move FLEXSPI clock source to OSC_RC_24M to avoid instruction/data fetch issue in XIP when updating PLL. */
     BOARD_SetFlexspiClock(FLEXSPI1, 0U, 1U);
+}
+
+/* This function is used to set EdgeLock clock via safe method */
+void EdgeLock_SetClock(uint8_t mux, uint8_t div)
+{
+    if ((CLOCK_GetRootClockDiv(kCLOCK_Root_Edgelock) != (uint32_t)div) ||
+        (CLOCK_GetRootClockMux(kCLOCK_Root_Edgelock) != (uint32_t)mux))
+    {
+        status_t sts;
+        uint32_t ele_clk_mhz;
+
+        clock_root_config_t rootCfg = {
+            .div      = div,
+            .mux      = mux,
+            .clockOff = false,
+        };
+
+        do
+        {
+            sts = ELE_BaseAPI_ClockChangeStart(MU_RT_S3MUA);
+        } while (sts != kStatus_Success);
+
+        CLOCK_SetRootClock(kCLOCK_Root_Edgelock, &rootCfg);
+
+        ele_clk_mhz = CLOCK_GetRootClockFreq(kCLOCK_Root_Edgelock) / 1000000UL;
+        do
+        {
+            sts = ELE_BaseAPI_ClockChangeFinish(MU_RT_S3MUA, ele_clk_mhz, 0);
+        } while (sts != kStatus_Success);
+    }
+}
+
+/* This function is used to set DCDC output voltage via safe method */
+void DCDC_SetVoltage(uint8_t core, uint8_t targetVoltage)
+{
+    /*
+     * When GDET is enabled, it is required to work with special ELE FW, which
+     * support ELE API VOLTAGE_CHANGE_START and VOLTAGE_CHANGE_FINISH, and
+     * DCDC voltage setting must be guarded with VOLTAGE_CHANGE_START and
+     * VOLTAGE_CHANGE_FINISH.
+     *
+     * For those ELE FW or ELE ROM, which doesn't support ELE API VOLTAGE_CHANGE_START
+     * and VOLTAGE_CHANGE_FINISH, there is no side effect to send such API command,
+     * since ELE just responde with ERROR and ingore the API command.
+     */
+    ELE_BaseAPI_VoltageChangeStart(MU_RT_S3MUA);
+
+    DCDC_SetVDD1P0BuckModeTargetVoltage(DCDC, (dcdc_core_slice_t)core, (dcdc_1P0_target_vol_t)targetVoltage);
+
+    ELE_BaseAPI_VoltageChangeFinish(MU_RT_S3MUA);
 }
 
 #if defined(SDK_NETC_USED) && SDK_NETC_USED

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -16,7 +16,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I3C DMA driver version. */
-#define FSL_I3C_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
+#define FSL_I3C_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 6))
 /*@}*/
 
 /*!
@@ -60,6 +60,10 @@ struct _i3c_master_dma_handle
     uint8_t *ibiBuff;                   /*!< Pointer to IBI buffer to keep ibi bytes. */
     size_t ibiPayloadSize;              /*!< IBI payload size. */
     i3c_ibi_type_t ibiType;             /*!< IBI type. */
+#if defined(FSL_FEATURE_I3C_HAS_ERRATA_052123) && (FSL_FEATURE_I3C_HAS_ERRATA_052123)
+    uint32_t transDataSize;             /*!< Transferred data size. */
+    uint8_t workaroundBuff[16];         /*!< Workaround buffer to store temporary data. */
+#endif
 };
 
 /*! @} */

@@ -174,15 +174,13 @@ if (CONFIG_USE_utility_debug_console_lite)
 
 message("utility_debug_console_lite component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_iuart_adapter AND (CONFIG_DEVICE_ID STREQUAL MIMX8MQ6xxxJZ OR CONFIG_DEVICE_ID STREQUAL MIMX8MQ6xxxHZ) AND CONFIG_USE_driver_common)
+if(CONFIG_USE_component_iuart_adapter AND (CONFIG_DEVICE_ID STREQUAL MIMX8MQ6xxxJZ OR CONFIG_DEVICE_ID STREQUAL MIMX8MQ6xxxHZ) AND CONFIG_USE_driver_common AND CONFIG_USE_utility_str)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str/fsl_str.c
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite/fsl_debug_console.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
 )
 
@@ -341,15 +339,13 @@ if (CONFIG_USE_utility_debug_console)
 
 message("utility_debug_console component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_serial_manager AND CONFIG_USE_driver_common)
+if(CONFIG_USE_component_serial_manager AND CONFIG_USE_driver_common AND CONFIG_USE_utility_str)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str/fsl_str.c
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console/fsl_debug_console.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
 )
 
@@ -428,6 +424,30 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_cmsis_iuart.MIMX8MQ6 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_pca6416a)
+# Add set(CONFIG_USE_driver_pca6416a true) in config.cmake to use this component
+
+message("driver_pca6416a component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/pca6416a/fsl_pca6416a.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/pca6416a/.
+)
+
+else()
+
+message(SEND_ERROR "driver_pca6416a.MIMX8MQ6 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -750,6 +770,30 @@ endif()
 endif()
 
 
+if (CONFIG_USE_component_mem_manager_freertos)
+# Add set(CONFIG_USE_component_mem_manager_freertos true) in config.cmake to use this component
+
+message("component_mem_manager_freertos component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND CONFIG_USE_middleware_freertos-kernel)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/mem_manager/fsl_component_mem_manager_freertos.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/mem_manager/.
+)
+
+else()
+
+message(SEND_ERROR "component_mem_manager_freertos.MIMX8MQ6 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_component_panic)
 # Add set(CONFIG_USE_component_panic true) in config.cmake to use this component
 
@@ -927,6 +971,15 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_GPT=1
+  )
+
+endif()
 
 else()
 
@@ -1106,11 +1159,11 @@ message("driver_ecspi_freertos component is included from ${CMAKE_CURRENT_LIST_F
 if(CONFIG_USE_driver_ecspi AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ecspi/fsl_ecspi_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_ecspi_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ecspi/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -1202,11 +1255,11 @@ message("driver_ii2c_freertos component is included from ${CMAKE_CURRENT_LIST_FI
 if(CONFIG_USE_driver_ii2c AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ii2c/fsl_i2c_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_i2c_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ii2c/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -1274,11 +1327,11 @@ message("driver_iuart_freertos component is included from ${CMAKE_CURRENT_LIST_F
 if(CONFIG_USE_driver_iuart AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iuart/fsl_uart_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_uart_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iuart/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()

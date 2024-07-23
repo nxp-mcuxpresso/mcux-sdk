@@ -315,7 +315,7 @@ static status_t mflash_dir_lookup(mflash_fs_t *fs, char *path, mflash_dir_record
     uint32_t file_count     = fs->header.file_count;
     mflash_dir_record_t *dr = fs->records;
 
-    for (uint32_t i = 0; i < file_count; i++)
+    for (uint32_t i = 0u; i < file_count; i++)
     {
         if (dir_path_match(dr, path))
         {
@@ -370,13 +370,13 @@ static status_t mflash_format_internal(mflash_fs_t *fs,
     total_sectors += dir_sectors;
 
     /* Check whether the filestytem fits into the given FLASH area */
-    if ((0U != fs_size_limit) && (fs_size_limit < total_sectors * MFLASH_SECTOR_SIZE))
+    if ((0u != fs_size_limit) && (fs_size_limit < total_sectors * MFLASH_SECTOR_SIZE))
     {
         return kStatus_OutOfRange;
     }
 
     /* Erase the whole FLASH area to be occupied by the filesystem */
-    for (uint32_t i = 0; i < total_sectors; i++)
+    for (uint32_t i = 0u; i < total_sectors; i++)
     {
         status = mflash_fs_sector_erase(fs, i * MFLASH_SECTOR_SIZE);
         if (status != kStatus_Success)
@@ -386,13 +386,13 @@ static status_t mflash_format_internal(mflash_fs_t *fs,
     }
 
     /* Clear the page buffer and set inital values for offsets */
-    memset(page_buf, MFLASH_BLANK_PATTERN, MFLASH_PAGE_SIZE);
+    (void)memset(page_buf, (int)MFLASH_BLANK_PATTERN, MFLASH_PAGE_SIZE);
     dir_offset  = file_count * sizeof(mflash_dir_record_t) + sizeof(mflash_fs_header_t);
     file_offset = total_sectors * MFLASH_SECTOR_SIZE;
 
     /* Create directory entries in reverse order so that programming of the page containing the dir header is the last
      * step */
-    for (int fi = file_count; 0 != fi--;)
+    for (uint32_t fi = file_count; 0u != fi--;)
     {
         /* Check for enough space for the directory record */
         assert(dir_offset >= sizeof(mflash_dir_record_t));
@@ -420,7 +420,7 @@ static status_t mflash_format_internal(mflash_fs_t *fs,
             }
 
             /* Clear the page buffer */
-            memset(page_buf, MFLASH_BLANK_PATTERN, MFLASH_PAGE_SIZE);
+            (void)memset(page_buf, (int)MFLASH_BLANK_PATTERN, MFLASH_PAGE_SIZE);
         }
     }
 
@@ -476,7 +476,7 @@ static status_t mflash_template_match(mflash_fs_t *fs, const mflash_file_t *dir_
 {
     status_t status;
 
-    for (const mflash_file_t *dt = dir_template; (NULL != dt->path) && ('\0' != dt->path[0]) && (0U != dt->max_size);
+    for (const mflash_file_t *dt = dir_template; (NULL != dt->path) && ('\0' != dt->path[0]) && (0u != dt->max_size);
          dt++)
     {
         mflash_dir_record_t dr;
@@ -595,8 +595,8 @@ static status_t mflash_file_save_internal(
             copy_size = MFLASH_PAGE_SIZE;
         }
 
-        memset(page_buf, MFLASH_BLANK_PATTERN, MFLASH_PAGE_SIZE);
-        memcpy(page_buf, copy_ptr, copy_size);
+        (void)memset(page_buf, (int)MFLASH_BLANK_PATTERN, MFLASH_PAGE_SIZE);
+        (void)memcpy(page_buf, copy_ptr, copy_size);
 
         /* Data offset is off by sizeof(mflash_file_meta_t) as this structure occupies the very beginning of the first
          * page */
@@ -614,8 +614,8 @@ static status_t mflash_file_save_internal(
         copy_size = MFLASH_PAGE_SIZE - sizeof(mflash_file_meta_t);
     }
 
-    memset(page_buf, MFLASH_BLANK_PATTERN, MFLASH_PAGE_SIZE);
-    memcpy((uint8_t *)page_buf + sizeof(mflash_file_meta_t), data, copy_size);
+    (void)memset(page_buf, (int)MFLASH_BLANK_PATTERN, MFLASH_PAGE_SIZE);
+    (void)memcpy((uint8_t *)page_buf + sizeof(mflash_file_meta_t), data, copy_size);
 
     /* Set file metadata */
     mflash_file_meta_t *meta = (mflash_file_meta_t *)page_buf;
@@ -641,7 +641,7 @@ status_t mflash_file_save(char *path, uint8_t *data, uint32_t size)
         return kStatus_InvalidArgument;
     }
 
-    if ((data == NULL) && (size != 0U))
+    if ((data == NULL) && (size != 0u))
     {
         return kStatus_InvalidArgument;
     }

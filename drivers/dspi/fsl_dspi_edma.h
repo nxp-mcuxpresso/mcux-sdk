@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief DSPI EDMA driver version 2.2.5 */
-#define FSL_DSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 5))
+/*! @brief DSPI EDMA driver version 2.2.6 */
+#define FSL_DSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 6))
 /*! @} */
 
 /*! @brief DSPI EDMA max transfer data size calculate
@@ -83,7 +83,7 @@ struct _dspi_master_edma_handle
     uint8_t nbytes;         /*!< eDMA minor byte transfer count initially configured. */
     volatile uint8_t state; /*!< DSPI transfer state, see @ref _dspi_transfer_state.*/
 
-    const uint8_t *volatile txData;                  /*!< Send buffer. */
+    const uint8_t *volatile txData; /*!< Send buffer. */
     uint8_t *volatile rxData;                  /*!< Receive buffer. */
     volatile size_t remainingSendByteCount;    /*!< A number of bytes remaining to send.*/
     volatile size_t remainingReceiveByteCount; /*!< A number of bytes remaining to receive.*/

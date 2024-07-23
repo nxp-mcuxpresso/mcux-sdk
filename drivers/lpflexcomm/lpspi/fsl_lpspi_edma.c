@@ -183,7 +183,7 @@ static void LPSPI_PrepareTransferEDMA(LPSPI_Type *base)
 /*!
  * brief LPSPI master config transfer parameter using eDMA.
  *
- * This function is preparing to transfers data using eDMA. 
+ * This function is preparing to transfers data using eDMA.
  *
  * param base LPSPI peripheral base address.
  * param handle pointer to lpspi_master_edma_handle_t structure which stores the transfer state.
@@ -260,7 +260,7 @@ status_t LPSPI_MasterTransferPrepareEDMALite(LPSPI_Type *base, lpspi_master_edma
  * is transferred, the callback function is called.
  *
  * Note:
- * This API is only for transfer through DMA without configuration. 
+ * This API is only for transfer through DMA without configuration.
  * Before calling this API, you must call LPSPI_MasterTransferPrepareEDMALite to configure it once.
  * The transfer data size should be an integer multiple of bytesPerFrame if bytesPerFrame is less than or equal to 4.
  * For bytesPerFrame greater than 4:
@@ -449,8 +449,20 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
         transferConfigTx.destAddr        = (uint32_t)txAddr + addrOffset;
         transferConfigTx.majorLoopCounts = 1;
 
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+        EDMA_TcdResetExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_extraBytes);
+        if (handle->isPcsContinuous)
+        {
+            EDMA_TcdSetTransferConfigExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_extraBytes,
+                                         &transferConfigTx, softwareTCD_pcsContinuous);
+        }
+        else
+        {
+            EDMA_TcdSetTransferConfigExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_extraBytes,
+                                         &transferConfigTx, NULL);
+        }
+#else
         EDMA_TcdReset(softwareTCD_extraBytes);
-
         if (handle->isPcsContinuous)
         {
             EDMA_TcdSetTransferConfig(softwareTCD_extraBytes, &transferConfigTx, softwareTCD_pcsContinuous);
@@ -459,6 +471,7 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
         {
             EDMA_TcdSetTransferConfig(softwareTCD_extraBytes, &transferConfigTx, NULL);
         }
+#endif
     }
 
     if (handle->isPcsContinuous)
@@ -476,8 +489,14 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
         transferConfigTx.minorLoopBytes   = 4;
         transferConfigTx.majorLoopCounts  = 1;
 
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+        EDMA_TcdResetExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_pcsContinuous);
+        EDMA_TcdSetTransferConfigExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_pcsContinuous,
+                                     &transferConfigTx, NULL);
+#else
         EDMA_TcdReset(softwareTCD_pcsContinuous);
         EDMA_TcdSetTransferConfig(softwareTCD_pcsContinuous, &transferConfigTx, NULL);
+#endif
     }
 
     if (handle->txData != NULL)
@@ -576,12 +595,12 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
 status_t LPSPI_MasterTransferEDMA(LPSPI_Type *base, lpspi_master_edma_handle_t *handle, lpspi_transfer_t *transfer)
 {
     status_t status = kStatus_Fail;
-    status = LPSPI_MasterTransferPrepareEDMALite(base, handle, transfer->configFlags);
-    if(kStatus_Success != status)
+    status          = LPSPI_MasterTransferPrepareEDMALite(base, handle, transfer->configFlags);
+    if (kStatus_Success != status)
     {
-       return status;
+        return status;
     }
-    return LPSPI_MasterTransferEDMALite(base,handle,transfer);
+    return LPSPI_MasterTransferEDMALite(base, handle, transfer);
 }
 
 static void EDMA_LpspiMasterCallback(edma_handle_t *edmaHandle,
@@ -953,8 +972,14 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
             transferConfigTx.destAddr        = (uint32_t)txAddr + addrOffset;
             transferConfigTx.majorLoopCounts = 1;
 
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+            EDMA_TcdResetExt(handle->edmaTxDataToTxRegHandle->base, softwareTCD_extraBytes);
+            EDMA_TcdSetTransferConfigExt(handle->edmaTxDataToTxRegHandle->base, softwareTCD_extraBytes,
+                                         &transferConfigTx, NULL);
+#else
             EDMA_TcdReset(softwareTCD_extraBytes);
             EDMA_TcdSetTransferConfig(softwareTCD_extraBytes, &transferConfigTx, NULL);
+#endif
         }
 
         transferConfigTx.srcAddr         = (uint32_t)(handle->txData);

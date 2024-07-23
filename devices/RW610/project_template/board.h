@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, NXP
+ * Copyright 2024, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -28,6 +28,8 @@ extern "C" {
  * @brief 	Initialize board specific settings.
  */
 void BOARD_InitDebugConsole(void);
+void BOARD_ClockPreConfig(void);
+void BOARD_ClockPostConfig(void);
 
 #if defined(__cplusplus)
 }

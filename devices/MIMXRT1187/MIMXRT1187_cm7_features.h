@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 0.1, 2021-03-09
-**     Build:               b240102
+**     Build:               b240417
 **
 **     Abstract:
 **         Chip specific module features.
@@ -93,14 +93,10 @@
 #define FSL_FEATURE_SOC_PWM_COUNT (4)
 /* @brief RGPIO availability on the SoC. */
 #define FSL_FEATURE_SOC_RGPIO_COUNT (6)
-/* @brief ROMC availability on the SoC. */
-#define FSL_FEATURE_SOC_ROMC_COUNT (1)
 /* @brief SEMA42 availability on the SoC. */
 #define FSL_FEATURE_SOC_SEMA42_COUNT (2)
 /* @brief SEMC availability on the SoC. */
 #define FSL_FEATURE_SOC_SEMC_COUNT (1)
-/* @brief SFA availability on the SoC. */
-#define FSL_FEATURE_SOC_SFA_COUNT (1)
 /* @brief SINC availability on the SoC. */
 #define FSL_FEATURE_SOC_SINC_COUNT (3)
 /* @brief SPDIF availability on the SoC. */
@@ -202,6 +198,14 @@
 #define FSL_FEATURE_LPADC_CFG_TPRICTRL_BITFIELD_WIDTH (2)
 /* @brief Has compare function enable (bitfield CMDHn[CMPEN]). */
 #define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
+/* @brief Buffer size of temperature sensor (CMDHa[LOOP] value to be set in process of calculate the temperature). */
+#define FSL_FEATURE_LPADC_TEMP_SENS_BUFFER_SIZE (2U)
+/* @brief Temperature sensor parameter A (slope). */
+#define FSL_FEATURE_LPADC_TEMP_PARAMETER_SLOP (789.2)
+/* @brief Temperature sensor parameter B (offset). */
+#define FSL_FEATURE_LPADC_TEMP_PARAMETER_OFFSET (319.2)
+/* @brief Temperature sensor parameter ALPHA (Alpha). */
+#define FSL_FEATURE_LPADC_TEMP_PARAMETER_ALPHA (11.2)
 
 /* AOI module features */
 
@@ -274,6 +278,13 @@
 /* @brief Has more than 64 MBs. */
 #define FSL_FEATURE_FLEXCAN_HAS_MORE_THAN_64_MB (1)
 
+/* SCB module features */
+
+/* @brief L1 ICACHE line size in byte. */
+#define FSL_FEATURE_L1ICACHE_LINESIZE_BYTE (32)
+/* @brief L1 DCACHE line size in byte. */
+#define FSL_FEATURE_L1DCACHE_LINESIZE_BYTE (32)
+
 /* ACMP module features */
 
 /* @brief Has CMP_C3. */
@@ -294,6 +305,14 @@
 #define FSL_FEATURE_ACMP_HAS_C2_RRE_BIT (0)
 /* @brief Has C0 HYSTCTR Bit */
 #define FSL_FEATURE_ACMP_HAS_C0_HYSTCTR_BIT (0)
+/* @brief If support round-robin mode */
+#define FSL_FEATURE_ACMP_HAS_NO_ROUNDROBIN_MODE (0)
+/* @brief If support 3v domain */
+#define FSL_FEATURE_ACMP_HAS_NO_3V_DOMAIN (0)
+/* @brief If support window mode */
+#define FSL_FEATURE_ACMP_HAS_NO_WINDOW_MODE (0)
+/* @brief If support filter mode */
+#define FSL_FEATURE_ACMP_HAS_NO_FILTER_MODE (0)
 
 /* DAC12 module features */
 
@@ -381,10 +400,14 @@
     (((x) == DMA3) ? (0) : (-1)))
 /* @brief Has register bit field CH_SBR[INSTR]. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_ACCESS_TYPE (1)
+/* @brief Whether has prot register. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_PROT_REGISTERn(x) (0)
 /* @brief Instance has register bit field CH_SBR[INSTR]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_ACCESS_TYPEn(x) \
     (((x) == DMA4) ? (1) : \
     (((x) == DMA3) ? (0) : (-1)))
+/* @brief Whether has MP channel mux. */
+#define FSL_FEATURE_EDMA_INSTANCE_HAS_MP_CHANNEL_MUXn(x) (0)
 /* @brief Has register bit fields CH_MATTR[WCACHE], CH_MATTR[RCACHE]. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_MEMORY_ATTRIBUTE (1)
 /* @brief Instance has register CH_MATTR. */
@@ -409,6 +432,8 @@
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_TRANSFER_MODEn(x) \
     (((x) == DMA4) ? (1) : \
     (((x) == DMA3) ? (0) : (-1)))
+/* @brief edma5 has different tcd type. */
+#define FSL_FEATURE_EDMA_TCD_TYPEn(x) (0)
 /* @brief Has no register bit fields CH_SBR[SEC]. */
 #define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_SEC (0)
 
@@ -416,7 +441,9 @@
 
 /* @brief Is affected by errata with ID 051383 (Quadrature decoder CTRL[DMAEN] bit can not be cleared by SW). */
 #define FSL_FEATURE_EQDC_HAS_ERRATA_051383 (1)
-/* @brief soc does not have compare interrupt. */
+/* @brief If EQDC CTRL2 register has EMIP bit field. */
+#define FSL_FEATURE_EQDC_CTRL2_HAS_EMIP_BIT_FIELD (0)
+/* @brief If has compare interrupt. */
 #define FSL_FEATURE_EQDC_HAS_NO_COMPARE_INTERRUPT (1)
 
 /* EWM module features */
@@ -485,6 +512,8 @@
 #define FSL_FEATURE_FLEXSPI_HAS_NO_STS0_DATALEARNPHASEB (1)
 /* @brief FlexSPI has no MCR2 SCKBDIFFOPT bit */
 #define FSL_FEATURE_FLEXSPI_HAS_NO_MCR2_SCKBDIFFOPT (0)
+/* @brief FlexSPI AHB RX buffer size (byte) */
+#define FSL_FEATURE_FLEXSPI_AHB_RX_BUFFER_SIZEn(x) (4096)
 
 /* I3C module features */
 
@@ -549,8 +578,12 @@
 #define FSL_FEATURE_LPTMR_CNR_WIDTH_IS_32B (1)
 /* @brief Has timer DMA request enable (register bit CSR[TDRE]). */
 #define FSL_FEATURE_LPTMR_HAS_CSR_TDRE (1)
+/* @brief Do not has prescaler clock source 0. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_0_SUPPORT (0)
 /* @brief Do not has prescaler clock source 1. */
 #define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_1_SUPPORT (1)
+/* @brief Do not has prescaler clock source 2. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_2_SUPPORT (0)
 /* @brief Do not has prescaler clock source 3. */
 #define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_3_SUPPORT (1)
 
@@ -632,9 +665,11 @@
 /* SYSPM module features */
 
 /* @brief Temperature sensor parameter A (slope). */
-#define FSL_FEATURE_SYSPM_HAS_PMCR_DCIFSH (0)
+#define FSL_FEATURE_SYSPM_HAS_PMCR_DCIFSH (1)
 /* @brief Temperature sensor parameter B (offset). */
-#define FSL_FEATURE_SYSPM_HAS_PMCR_RICTR (0)
+#define FSL_FEATURE_SYSPM_HAS_PMCR_RICTR (1)
+/* @brief Number of PMCR registers signals number of performance monitors available in single SYSPM instance. */
+#define FSL_FEATURE_SYSPM_PMCR_COUNT (1)
 
 /* MEMORY module features */
 
@@ -685,6 +720,8 @@
 #define FSL_FEATURE_MU_HAS_HR (0)
 /* @brief MU supports hardware reset by instance */
 #define FSL_FEATURE_MU_HAS_HR_BY_INSTANCEn(x) (0)
+/* @brief The number of general purpose interrupts supported by MU. */
+#define FSL_FEATURE_MU_GPI_COUNT (4)
 
 /* NETC module features */
 
@@ -799,6 +836,8 @@
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELB (1)
 /* @brief If (e)FlexPWM has module capture functionality on X channels (inputs). */
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
+/* @brief Is affected by errata with ID 51989. */
+#define FSL_FEATURE_PWM_HAS_ERRATA_51989 (1)
 
 /* RGPIO module features */
 
@@ -864,13 +903,6 @@
 #define FSL_FEATURE_SAI_HAS_FIFO (1)
 /* @brief Support synchronous with another SAI. */
 #define FSL_FEATURE_SAI_HAS_SYNC_WITH_ANOTHER_SAI (0)
-
-/* SCB module features */
-
-/* @brief L1 ICACHE line size in byte. */
-#define FSL_FEATURE_L1ICACHE_LINESIZE_BYTE (32)
-/* @brief L1 DCACHE line size in byte. */
-#define FSL_FEATURE_L1DCACHE_LINESIZE_BYTE (32)
 
 /* SEMA42 module features */
 
@@ -977,6 +1009,10 @@
 #define FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT (1)
 /* @brief Whether 32 bits counter has effect. */
 #define FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x) (1)
+/* @brief Has global time base enable. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
+/* @brief Has global time base sync. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
 
 /* TRDC module features */
 
@@ -1001,11 +1037,6 @@
 #define FSL_FEATURE_TRDC_HAS_DOMAIN_ERROR (1)
 /* @brief TRDC instance has TRDC_FLW_CTL. */
 #define FSL_FEATURE_TRDC_HAS_FLW (1)
-
-/* TSTMR module features */
-
-/* @brief TSTMR clock frequency is 24MHZ. */
-#define FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_24MHZ (1)
 
 /* USBPHY module features */
 

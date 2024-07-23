@@ -799,7 +799,6 @@ static void SRTM_SaiSdmaAdapter_InitSAI(srtm_sai_sdma_adapter_t handle, srtm_aud
     if (dir == SRTM_AudioDirTx)
     {
         SDMA_CreateHandle(&handle->txDmaHandle, handle->dma, handle->txConfig.dmaChannel, &handle->txConfig.txcontext);
-
 #if (defined(SRTM_SINGLE_SDMA_MULTI_FIFO_SCRIPT) && SRTM_SINGLE_SDMA_MULTI_FIFO_SCRIPT)
         if (rtm->format >= (uint8_t)SRTM_Audio_DSD8bits) /* DSD mode, need enable SDMA multi fifo */
         {

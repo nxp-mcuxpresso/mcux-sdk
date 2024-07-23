@@ -873,6 +873,10 @@ static int32_t LPUART_EdmaPowerControl(ARM_POWER_STATE state, cmsis_lpuart_edma_
             /* Set up EDMA setting. */
             EDMA_CreateHandle(lpuart->rxHandle, dmaResource->rxEdmaBase, dmaResource->rxEdmaChannel);
             EDMA_CreateHandle(lpuart->txHandle, dmaResource->txEdmaBase, dmaResource->txEdmaChannel);
+#if defined(FSL_FEATURE_EDMA_HAS_CHANNEL_MUX) && FSL_FEATURE_EDMA_HAS_CHANNEL_MUX
+            EDMA_SetChannelMux(dmaResource->txEdmaBase, dmaResource->txEdmaChannel, (int32_t)dmaResource->txDmaRequest);
+            EDMA_SetChannelMux(dmaResource->rxEdmaBase, dmaResource->rxEdmaChannel, (int32_t)dmaResource->rxDmaRequest);
+#endif
 
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
             DMAMUX_SetSource(dmaResource->rxDmamuxBase, dmaResource->rxEdmaChannel, (int32_t)dmaResource->rxDmaRequest);

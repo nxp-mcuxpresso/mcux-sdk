@@ -580,12 +580,12 @@ status_t FFR_CustKeystoreWrite(flash_config_t *config, ffr_key_store_t *pKeyStor
  */
 status_t FFR_GetUUID(flash_config_t *config, uint8_t *uuid);
 
-/*@}*/
+/*! @} */
 
 #ifdef __cplusplus
 }
 #endif
 
-/*@}*/
+/*! @} */
 
 #endif /*! FSL_FLASH_FFR_H_ */

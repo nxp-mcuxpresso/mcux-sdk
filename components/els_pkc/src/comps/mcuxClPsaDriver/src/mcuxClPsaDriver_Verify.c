@@ -58,8 +58,8 @@ static psa_status_t mcuxClPsaDriver_psa_driver_wrapper_verify_internal(
       return PSA_ERROR_NOT_SUPPORTED;
     }
 
-    if((PSA_KEY_TYPE_IS_KEY_PAIR(attributes->core.type) != true)
-        && (PSA_KEY_TYPE_IS_PUBLIC_KEY(attributes->core.type) != true))
+    if((PSA_KEY_TYPE_IS_KEY_PAIR(psa_get_key_type(attributes)) != true)
+        && (PSA_KEY_TYPE_IS_PUBLIC_KEY(psa_get_key_type(attributes)) != true))
     {
         /* Invalid key type detected, The response shall be  PSA_ERROR_NOT_SUPPORTED */
         return PSA_ERROR_NOT_SUPPORTED;
@@ -130,7 +130,7 @@ static psa_status_t mcuxClPsaDriver_psa_driver_wrapper_verify_internal(
         return PSA_ERROR_GENERIC_ERROR;
       }
 
-      if (PSA_KEY_TYPE_IS_PUBLIC_KEY(attributes->core.type) != true)
+      if (PSA_KEY_TYPE_IS_PUBLIC_KEY(psa_get_key_type(attributes)) != true)
       {
         /* check and skip the version tag */
         if(PSA_SUCCESS != mcuxClPsaDriver_psa_driver_wrapper_der_updatePointerTag(&pDerData, 0x02u))
@@ -354,7 +354,7 @@ static psa_status_t mcuxClPsaDriver_psa_driver_wrapper_verify_internal(
 
       /* Decode as described in ANSI X9.62
          Octet String to Elliptic Curve Point Conversion */
-      if (PSA_KEY_TYPE_IS_PUBLIC_KEY(attributes->core.type) == true)
+      if (PSA_KEY_TYPE_IS_PUBLIC_KEY(psa_get_key_type(attributes)) == true)
       {
         if(pKeyData == NULL)
         {

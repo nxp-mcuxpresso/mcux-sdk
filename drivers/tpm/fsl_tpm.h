@@ -28,10 +28,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief TPM driver version 2.3.1. */
 #define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief Help macro to get the max counter value */
 #define TPM_MAX_COUNTER_VALUE(x) ((1U != (uint8_t)FSL_FEATURE_TPM_HAS_32BIT_COUNTERn(x)) ? 0xFFFFU : 0xFFFFFFFFU)

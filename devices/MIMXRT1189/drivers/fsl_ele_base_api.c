@@ -23,6 +23,11 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
+static status_t nvm_storage_handle_req_baseapi(S3MU_Type *mu, uint32_t *buf, uint32_t wordCount)
+{
+    return kStatus_Fail;
+}
+
 /*!
  * brief Get response from MU
  *
@@ -35,7 +40,7 @@
  * return Status kStatus_Success if success, kStatus_Fail if fail
  * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
  */
-static status_t ele_mu_get_response(S3MU_Type *mu, uint32_t *buf)
+static status_t ele_mu_get_response_baseapi(S3MU_Type *mu, uint32_t *buf)
 {
     status_t status                 = kStatus_Fail;
     uint32_t rmsg[MSG_RESPONSE_MAX] = {0u};
@@ -53,6 +58,14 @@ static status_t ele_mu_get_response(S3MU_Type *mu, uint32_t *buf)
         {
             (void)memcpy((void *)buf, (void *)msg, (uint32_t)(msg->hdr_byte.size * sizeof(uint32_t)));
             break;
+        }
+        else if (msg->hdr_byte.tag == MSG_TAG_CMD)
+        {
+            status = nvm_storage_handle_req_baseapi(mu, rmsg, msg->hdr_byte.size);
+            if (status != kStatus_Success)
+            {
+                break;
+            }
         }
         else
         {
@@ -91,7 +104,7 @@ status_t ELE_BaseAPI_Ping(S3MU_Type *mu)
     }
 
     /* Wait for response from Security Sub-System */
-    status = ele_mu_get_response(mu, rmsg);
+    status = ele_mu_get_response_baseapi(mu, rmsg);
     if (status != kStatus_Success)
     {
         return status;
@@ -135,7 +148,7 @@ status_t ELE_BaseAPI_GetFwVersion(S3MU_Type *mu, uint32_t *EleFwVersion)
     }
 
     /* Wait for response from Security Sub-System */
-    status = ele_mu_get_response(mu, rmsg);
+    status = ele_mu_get_response_baseapi(mu, rmsg);
     if (status != kStatus_Success)
     {
         return status;
@@ -180,7 +193,7 @@ status_t ELE_BaseAPI_EnableAPC(S3MU_Type *mu)
     }
 
     /* Wait for response from Security Sub-System */
-    status = ele_mu_get_response(mu, rmsg);
+    status = ele_mu_get_response_baseapi(mu, rmsg);
     if (status != kStatus_Success)
     {
         return status;
@@ -229,7 +242,7 @@ status_t ELE_BaseAPI_ForwardLifecycle(S3MU_Type *mu, uint32_t Lifecycle)
     }
 
     /* Wait for response from Security Sub-System */
-    status = ele_mu_get_response(mu, rmsg);
+    status = ele_mu_get_response_baseapi(mu, rmsg);
     if (status != kStatus_Success)
     {
         return status;
@@ -271,7 +284,7 @@ status_t ELE_BaseAPI_ClockChangeStart(S3MU_Type *mu)
     }
 
     /* Wait for response from Security Sub-System */
-    status = ele_mu_get_response(mu, rmsg);
+    status = ele_mu_get_response_baseapi(mu, rmsg);
     if (status != kStatus_Success)
     {
         return status;
@@ -318,7 +331,7 @@ status_t ELE_BaseAPI_ClockChangeFinish(S3MU_Type *mu, uint8_t NewClockRateELE, u
     }
 
     /* Wait for response from Security Sub-System */
-    status = ele_mu_get_response(mu, rmsg);
+    status = ele_mu_get_response_baseapi(mu, rmsg);
     if (status != kStatus_Success)
     {
         return status;
@@ -326,6 +339,90 @@ status_t ELE_BaseAPI_ClockChangeFinish(S3MU_Type *mu, uint8_t NewClockRateELE, u
 
     /* Check that response corresponds to the sent command */
     if (rmsg[0] == CLOCK_CHANGE_FINISH_RESPONSE_HDR && rmsg[1] == RESPONSE_SUCCESS)
+    {
+        return kStatus_Success;
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+}
+
+/*!
+ * brief Start the voltage change process
+ *
+ * param mu MU peripheral base address
+ *
+ * return Status kStatus_Success if success, kStatus_Fail if fail
+ * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
+ */
+status_t ELE_BaseAPI_VoltageChangeStart(S3MU_Type *mu)
+{
+    status_t status                          = kStatus_Fail;
+    uint32_t tmsg[VOLTAGE_CHANGE_START_SIZE] = {0u};
+    uint32_t rmsg[S3MU_RR_COUNT]             = {0u};
+
+    /****************** Voltage change start message ***********************/
+    tmsg[0] = VOLTAGE_CHANGE_START; // Voltage Change Start Command Header
+
+    /* Send message Security Sub-System */
+    status = S3MU_SendMessage(mu, tmsg, VOLTAGE_CHANGE_START_SIZE);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+
+    /* Wait for response from Security Sub-System */
+    status = ele_mu_get_response_baseapi(mu, rmsg);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+
+    /* Check that response corresponds to the sent command */
+    if ((rmsg[0] == VOLTAGE_CHANGE_START_RESPONSE_HDR) && (rmsg[1] == RESPONSE_SUCCESS))
+    {
+        return kStatus_Success;
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+}
+
+/*!
+ * brief Finish the voltage change process
+ *
+ * param mu MU peripheral base address
+ *
+ * return Status kStatus_Success if success, kStatus_Fail if fail
+ * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
+ */
+status_t ELE_BaseAPI_VoltageChangeFinish(S3MU_Type *mu)
+{
+    status_t status                           = kStatus_Fail;
+    uint32_t tmsg[VOLTAGE_CHANGE_FINISH_SIZE] = {0u};
+    uint32_t rmsg[S3MU_RR_COUNT]              = {0u};
+
+    /****************** Voltage change finish message ***********************/
+    tmsg[0] = VOLTAGE_CHANGE_FINISH; // Voltage Change finish Command Header
+
+    /* Send message Security Sub-System */
+    status = S3MU_SendMessage(mu, tmsg, VOLTAGE_CHANGE_FINISH_SIZE);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+
+    /* Wait for response from Security Sub-System */
+    status = ele_mu_get_response_baseapi(mu, rmsg);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+
+    /* Check that response corresponds to the sent command */
+    if ((rmsg[0] == VOLTAGE_CHANGE_FINISH_RESPONSE_HDR) && (rmsg[1] == RESPONSE_SUCCESS))
     {
         return kStatus_Success;
     }
@@ -363,7 +460,7 @@ status_t ELE_BaseAPI_GetFwStatus(S3MU_Type *mu, uint32_t *EleFwStatus)
     }
 
     /* Wait for response from Security Sub-System */
-    status = ele_mu_get_response(mu, rmsg);
+    status = ele_mu_get_response_baseapi(mu, rmsg);
     if (status != kStatus_Success)
     {
         return status;
@@ -414,7 +511,7 @@ status_t ELE_BaseAPI_EnableOtfad(S3MU_Type *mu, uint8_t OtfadID)
     }
 
     /* Wait for response from Security Sub-System */
-    status = ele_mu_get_response(mu, rmsg);
+    status = ele_mu_get_response_baseapi(mu, rmsg);
     if (status != kStatus_Success)
     {
         return status;
@@ -461,7 +558,7 @@ status_t ELE_BaseAPI_ReleaseRDC(S3MU_Type *mu, uint32_t RdcID, uint32_t CoreID)
     }
 
     /* Wait for response from Security Sub-System */
-    status = ele_mu_get_response(mu, rmsg);
+    status = ele_mu_get_response_baseapi(mu, rmsg);
     if (status != kStatus_Success)
     {
         return status;
@@ -505,7 +602,7 @@ status_t ELE_BaseAPI_StartRng(S3MU_Type *mu)
     }
 
     /* Wait for response from Security Sub-System */
-    status = ele_mu_get_response(mu, rmsg);
+    status = ele_mu_get_response_baseapi(mu, rmsg);
     if (status != kStatus_Success)
     {
         return status;

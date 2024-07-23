@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 - 2021 NXP
+ * Copyright 2019 - 2021, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,8 +39,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.5.1. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
+/*! @brief CLOCK driver version 2.5.3. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 3))
 
 /* analog pll definition */
 #define CCM_ANALOG_PLL_BYPASS_SHIFT         (16U)

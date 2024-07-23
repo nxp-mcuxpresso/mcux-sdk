@@ -1,7 +1,9 @@
 /*
 ** ###################################################################
-**     Processors:          MIMX9352CVUXK_cm33
-**                          MIMX9352DVUXM_cm33
+**     Processors:          MIMX9352AVTXM_cm33
+**                          MIMX9352CVVXM_cm33
+**                          MIMX9352DVVXM_cm33
+**                          MIMX9352XVVXM_cm33
 **
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
@@ -9,7 +11,7 @@
 **
 **     Reference manual:    IMX93RM, Internal, November. 2021
 **     Version:             rev. 1.0, 2021-11-16
-**     Build:               b220830
+**     Build:               b231019
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -17,9 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2023 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

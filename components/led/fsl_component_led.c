@@ -141,7 +141,7 @@ static led_list_t s_ledList;
 static led_status_t LED_SetStatus(led_state_t *ledState, led_color_t color, uint32_t threshold)
 {
 #if (defined(LED_USE_CONFIGURE_STRUCTURE) && (LED_USE_CONFIGURE_STRUCTURE > 0U))
-    led_pin_config_t *ledRgbPin;
+    const led_pin_config_t *ledRgbPin;
 #else
     led_pin_t *ledRgbPin;
 #endif
@@ -152,7 +152,7 @@ static led_status_t LED_SetStatus(led_state_t *ledState, led_color_t color, uint
     ledState->expiryPeriodCount = s_ledList.periodCount + threshold;
 
 #if (defined(LED_USE_CONFIGURE_STRUCTURE) && (LED_USE_CONFIGURE_STRUCTURE > 0U))
-    ledRgbPin = (led_pin_config_t *)(const void *)&ledState->pinsConfig->ledRgb;
+    ledRgbPin = (const led_pin_config_t *)(const void *)&ledState->pinsConfig->ledRgb;
 #else
     ledRgbPin = (led_pin_t *)ledState->pins;
 #endif
@@ -336,7 +336,7 @@ static void LED_TimerEvent(void *param)
 led_status_t LED_Init(led_handle_t ledHandle, const led_config_t *ledConfig)
 {
     led_state_t *ledState;
-    led_pin_config_t *ledRgbConfigPin;
+    const led_pin_config_t *ledRgbConfigPin;
 #if (defined(LED_USE_CONFIGURE_STRUCTURE) && (LED_USE_CONFIGURE_STRUCTURE > 0U))
 #else
     hal_gpio_pin_config_t controlPin;
@@ -393,7 +393,7 @@ led_status_t LED_Init(led_handle_t ledHandle, const led_config_t *ledConfig)
 
     assert(s_ledList.ledState);
     ledState->settingColor = (led_color_t)kLED_White;
-    ledRgbConfigPin        = (led_pin_config_t *)(const void *)&ledConfig->ledRgb;
+    ledRgbConfigPin        = (const led_pin_config_t *)(const void *)&ledConfig->ledRgb;
 
 #if (defined(LED_USE_CONFIGURE_STRUCTURE) && (LED_USE_CONFIGURE_STRUCTURE > 0U))
     ledState->pinsConfig = ledConfig;

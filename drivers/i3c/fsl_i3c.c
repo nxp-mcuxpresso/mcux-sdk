@@ -767,8 +767,10 @@ void I3C_GetDefaultConfig(i3c_config_t *config)
     config->baudRate_Hz.i2cBaud          = 400000U;
     config->baudRate_Hz.i3cPushPullBaud  = 12500000U;
     config->baudRate_Hz.i3cOpenDrainBaud = 2500000U;
-    config->masterDynamicAddress         = 0x0AU;    /* Default master dynamic address. */
-    config->slowClock_Hz                 = 1000000U; /* Default slow timer clock 1MHz. */
+    config->masterDynamicAddress         = 0x0AU; /* Default master dynamic address. */
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
+    config->slowClock_Hz                 = 0; /* Not update the Soc default setting. */
+#endif
     config->enableSlave                  = true;
     config->vendorID                     = 0x11BU;
 #if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND)
@@ -795,8 +797,6 @@ void I3C_GetDefaultConfig(i3c_config_t *config)
  */
 void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_Hz)
 {
-    assert(config->slowClock_Hz >= 1000000U);
-
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || \
     !(defined(FSL_FEATURE_I3C_HAS_NO_RESET) && FSL_FEATURE_I3C_HAS_NO_RESET)
     uint32_t instance = I3C_GetInstance(base);
@@ -832,9 +832,21 @@ void I3C_Init(I3C_Type *base, const i3c_config_t *config, uint32_t sourceClock_H
     I3C_MasterSetBaudRate(base, &config->baudRate_Hz, sourceClock_Hz);
 
 #if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
+    assert((config->slowClock_Hz >= 1000000U) || (config->slowClock_Hz == 0U));
+
     uint8_t matchCount;
-    /* Calculate bus available condition match value for current slow clock, count value provides 1us.*/
-    matchCount = (uint8_t)(config->slowClock_Hz / 1000000UL) - 1U;
+    /* Set as (slowClk(MHz) - 1) to generate 1us clock cycle. Controller uses it to count 100us timeout. Target uses it as IBI request to drive SDA low.
+       Note: Use BAMATCH = 1 to generate 1us clock cycle if slow clock is 1MHz. The value of 0 would not give a correct match indication. */
+    if (config->slowClock_Hz != 0U)
+    {
+        matchCount = (uint8_t)(config->slowClock_Hz / 1000000UL) - 1U;
+        matchCount = (matchCount == 0U) ? 1U : matchCount;
+    }
+    else
+    {
+        /* BAMATCH has default value based on Soc default slow clock after reset, using this default value when slowClock_Hz is 0. */
+        matchCount = (uint8_t)((base->SCONFIG & I3C_SCONFIG_BAMATCH_MASK) >> I3C_SCONFIG_BAMATCH_SHIFT);
+    }
 #endif
 
     configValue = base->SCONFIG;
@@ -964,6 +976,26 @@ void I3C_MasterInit(I3C_Type *base, const i3c_master_config_t *masterConfig, uin
     I3C_MasterSetWatermarks(base, kI3C_TxTriggerUntilOneLessThanFull, kI3C_RxTriggerOnNotEmpty, true, true);
 
     I3C_MasterSetBaudRate(base, &masterConfig->baudRate_Hz, sourceClock_Hz);
+
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
+    assert((masterConfig->slowClock_Hz >= 1000000U) || (masterConfig->slowClock_Hz == 0U));
+
+    uint32_t configValue;
+    uint8_t matchCount;
+
+    /* BAMATCH has default value based on Soc default slow clock after reset, using this default value when slowClock_Hz is 0. */
+    if (masterConfig->slowClock_Hz != 0U)
+    {
+        /* Set as (slowClk(MHz) - 1) to generate 1us clock cycle for 100us timeout. Note: Use BAMATCH = 1 to generate 1us clock cycle
+           if slow clock is 1MHz. The value of 0 would not give a correct match indication. */
+        matchCount = (uint8_t)(masterConfig->slowClock_Hz / 1000000UL) - 1U;
+        matchCount = (matchCount == 0U) ? 1U : matchCount;
+
+        configValue = base->SCONFIG & I3C_SCONFIG_BAMATCH_MASK;
+        configValue |= I3C_SCONFIG_BAMATCH(matchCount);
+        base->SCONFIG = configValue;
+    }
+#endif
 }
 
 /*!
@@ -1617,7 +1649,7 @@ status_t I3C_MasterProcessDAASpecifiedBaudrate(I3C_Type *base,
         {
             I3C_MasterGetFifoCounts(base, &rxCount, NULL);
 
-            if ((0UL != (status & (uint32_t)kI3C_MasterRxReadyFlag)) && (rxCount != 0U))
+            if (rxCount != 0U)
             {
                 rxBuffer[rxSize++] = (uint8_t)(base->MRDATAB & I3C_MRDATAB_VALUE_MASK);
             }
@@ -2720,11 +2752,12 @@ void I3C_SlaveGetDefaultConfig(i3c_slave_config_t *slaveConfig)
  * param slaveConfig User provided peripheral configuration. Use I3C_SlaveGetDefaultConfig() to get a set of
  * defaults that you can override.
  * param slowClock_Hz Frequency in Hertz of the I3C slow clock. Used to calculate the bus match condition values.
+ * If FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH defines as 1, this parameter is useless.
  */
 void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32_t slowClock_Hz)
 {
     assert(NULL != slaveConfig);
-    assert(slowClock_Hz >= 1000000U);
+    assert((slowClock_Hz >= 1000000U) || (slowClock_Hz == 0U));
 
     uint32_t configValue;
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) || \
@@ -2744,8 +2777,18 @@ void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32
 
 #if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
     uint8_t matchCount;
-    /* Calculate bus available condition match value for current slow clock, count value provides 1us.*/
-    matchCount = (uint8_t)(slowClock_Hz / 1000000UL) - 1U;
+    /* Set as (slowClk(MHz) - 1) to generate 1us clock cycle for IBI request to drive SDA low. Note: Use BAMATCH = 1 to
+       generate 1us clock cycle if slow clock is 1MHz. The value of 0 would not give a correct match indication. */
+    if (slowClock_Hz != 0U)
+    {
+        matchCount = (uint8_t)(slowClock_Hz / 1000000UL) - 1U;
+        matchCount = (matchCount == 0U) ? 1U : matchCount;
+    }
+    else
+    {
+        /* BAMATCH has default value based on Soc default slow clock after reset, using this default value when slowClock_Hz is 0. */
+        matchCount = (uint8_t)((base->SCONFIG & I3C_SCONFIG_BAMATCH_MASK) >> I3C_SCONFIG_BAMATCH_SHIFT);
+    }
 #endif
 
     configValue = base->SCONFIG;

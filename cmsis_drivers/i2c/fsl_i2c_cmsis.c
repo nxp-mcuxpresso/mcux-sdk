@@ -284,7 +284,7 @@ static int32_t I2C_Master_DmaGetDataCount(cmsis_i2c_dma_driver_state_t *i2c)
     size_t cnt; /* The number of currently transferred data bytes */
 
     (void)I2C_MasterTransferGetCountDMA(i2c->resource->base, i2c->master_dma_handle, &cnt);
-    return cnt;
+    return (int32_t)cnt;
 }
 
 static int32_t I2C_Master_DmaControl(uint32_t control, uint32_t arg, cmsis_i2c_dma_driver_state_t *i2c)
@@ -411,7 +411,7 @@ static int32_t I2C_Master_DmaPowerControl(ARM_POWER_STATE state, cmsis_i2c_dma_d
             }
             CLOCK_EnableClock(s_i2cClocks[I2C_GetInstance(i2c->resource->base)]);
             i2c->resource->base->C1 = I2C_C1_IICEN(1);
-            i2c->flags |= I2C_FLAG_POWER;
+            i2c->flags |= (uint8_t)I2C_FLAG_POWER;
             break;
 
         default:

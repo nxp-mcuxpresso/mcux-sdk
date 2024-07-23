@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -8,6 +8,7 @@
 #include "wifi_bt_config.h"
 #include "pin_mux.h"
 #include "fsl_gpio.h"
+#include "wifi_config.h"
 
 /*******************************************************************************
  * Definitions
@@ -65,10 +66,7 @@ void BOARD_WIFI_BT_Config(void *card, sdio_int_t cardInt)
     BOARD_SDIO_Config(card, NULL, BOARD_SDMMC_SDIO_HOST_IRQ_PRIORITY, cardInt);
     ((sdio_card_t *)card)->usrParam.pwr = NULL;
 
-#ifdef WIFI_BT_USE_M2_INTERFACE
-    ((sdio_card_t *)card)->usrParam.pwr = NULL;
-    BOARD_InitPinsM2();
-#endif
-
+#if !defined(COEX_APP_SUPPORT) || (defined(COEX_APP_SUPPORT) && !defined(CONFIG_WIFI_IND_DNLD))
     BOARD_WIFI_BT_Enable(false);
+#endif
 }

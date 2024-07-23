@@ -21,10 +21,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LPUART EDMA driver version. */
 #define FSL_LPUART_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
-/*@}*/
+/*! @} */
 
 /* Forward declaration of the handle typedef. */
 typedef struct _lpuart_edma_handle lpuart_edma_handle_t;
@@ -178,7 +178,7 @@ status_t LPUART_TransferGetReceiveCountEDMA(LPUART_Type *base, lpuart_edma_handl
  */
 void LPUART_TransferEdmaHandleIRQ(uint32_t instance, void *lpuartEdmaHandle);
 
-/*@}*/
+/*! @} */
 
 #if defined(__cplusplus)
 }

@@ -383,9 +383,9 @@ static int32_t mflash_drv_sector_erase_internal(uint32_t sector_addr)
 int32_t mflash_drv_sector_erase(uint32_t sector_addr)
 {
     if (0 == mflash_drv_is_sector_aligned(sector_addr))
-	{
+    {
         return kStatus_InvalidArgument;
-	}
+    }
 
     return mflash_drv_sector_erase_internal(sector_addr);
 }
@@ -424,9 +424,9 @@ static int32_t mflash_drv_page_program_internal(uint32_t page_addr, uint32_t *da
 int32_t mflash_drv_page_program(uint32_t page_addr, uint32_t *data)
 {
     if (0 == mflash_drv_is_page_aligned(page_addr))
-	{
+    {
         return kStatus_InvalidArgument;
-	}
+    }
 
     return mflash_drv_page_program_internal(page_addr, data);
 }
@@ -461,9 +461,9 @@ int32_t mflash_drv_read(uint32_t addr, uint32_t *buffer, uint32_t len)
 {
     /* Check alignment */
     if (((uint32_t)buffer % 4) || (len % 4))
-	{
+    {
         return kStatus_InvalidArgument;
-	}
+    }
 
     return mflash_drv_read_internal(addr, buffer, len);
 }
@@ -478,9 +478,9 @@ void *mflash_drv_phys2log(uint32_t addr, uint32_t len)
 uint32_t mflash_drv_log2phys(void *ptr, uint32_t len)
 {
     if ((uint32_t)ptr < MFLASH_BASE_ADDRESS)
-	{
+    {
         return kStatus_InvalidArgument;
-	}
+    }
 
     return ((uint32_t)ptr - MFLASH_BASE_ADDRESS);
 }

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2021-08-03
-**     Build:               b240116
+**     Build:               b240410
 **
 **     Abstract:
 **         Chip specific module features.
@@ -43,8 +43,6 @@
 #define FSL_FEATURE_SOC_EIM_COUNT (1)
 /* @brief EMVSIM availability on the SoC. */
 #define FSL_FEATURE_SOC_EMVSIM_COUNT (2)
-/* @brief ENC availability on the SoC. */
-#define FSL_FEATURE_SOC_ENC_COUNT (2)
 /* @brief EVTG availability on the SoC. */
 #define FSL_FEATURE_SOC_EVTG_COUNT (1)
 /* @brief EWM availability on the SoC. */
@@ -109,6 +107,8 @@
 #define FSL_FEATURE_SOC_PWM_COUNT (1)
 /* @brief PUF availability on the SoC. */
 #define FSL_FEATURE_SOC_PUF_COUNT (4)
+/* @brief QDC availability on the SoC. */
+#define FSL_FEATURE_SOC_QDC_COUNT (2)
 /* @brief RTC availability on the SoC. */
 #define FSL_FEATURE_SOC_RTC_COUNT (1)
 /* @brief SCG availability on the SoC. */
@@ -435,21 +435,10 @@
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_TRANSFER_MODEn(x) (0)
 /* @brief Has no register bit fields CH_SBR[SEC]. */
 #define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_SEC (0)
+/* @brief edma5 has different tcd type. */
+#define FSL_FEATURE_EDMA_TCD_TYPEn(x) (0)
 /* @brief Number of DMA channels with asynchronous request capability. (Valid only for eDMA modules.) */
 #define FSL_FEATURE_EDMA_ASYNCHRO_REQUEST_CHANNEL_COUNT (16)
-
-/* ENC module features */
-
-/* @brief Has no simultaneous PHASEA and PHASEB change interrupt (register bit field CTRL2[SABIE] and CTRL2[SABIRQ]). */
-#define FSL_FEATURE_ENC_HAS_NO_CTRL2_SAB_INT (0)
-/* @brief Has register CTRL3. */
-#define FSL_FEATURE_ENC_HAS_CTRL3 (1)
-/* @brief Has register LASTEDGE or LASTEDGEH. */
-#define FSL_FEATURE_ENC_HAS_LASTEDGE (1)
-/* @brief Has register POSDPERBFR, POSDPERH, or POSDPER. */
-#define FSL_FEATURE_ENC_HAS_POSDPER (1)
-/* @brief Has bitfiled FILT[FILT_PRSC]. */
-#define FSL_FEATURE_ENC_HAS_FILT_PRSC (1)
 
 /* EVTG module features */
 
@@ -495,6 +484,8 @@
 #define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ATDFEN (0)
 /* @brief FlexSPI DMA needs multiple DES to transfer */
 #define FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES (1)
+/* @brief FlexSPI AHB RX buffer size (byte) */
+#define FSL_FEATURE_FLEXSPI_AHB_RX_BUFFER_SIZEn(x) (2048)
 
 /* GPIO module features */
 
@@ -679,7 +670,7 @@
 /* @brief PDM Has no FIR_RDY Bitfield In PDM STAT Register */
 #define FSL_FEATURE_PDM_HAS_NO_FIR_RDY (1)
 /* @brief PDM Has no DOZEN Bitfield In PDM CTRL_1 Register */
-#define FSL_FEATURE_PDM_HAS_NO_DOZEN (1)
+#define FSL_FEATURE_PDM_HAS_NO_DOZEN (0)
 /* @brief PDM Has DEC_BYPASS Bitfield In PDM CTRL_2 Register */
 #define FSL_FEATURE_PDM_HAS_DECIMATION_FILTER_BYPASS (0)
 /* @brief PDM Has DC_OUT_CTRL */
@@ -733,6 +724,8 @@
 #define FSL_FEATURE_PORT_SUPPORT_DIFFERENT_VOLTAGE_RANGE (1)
 /* @brief Has EFT detect (registers EDFR, EDIER and EDCR). */
 #define FSL_FEATURE_PORT_SUPPORT_EFT (1)
+/* @brief Function 0 is GPIO. */
+#define FSL_FEATURE_PORT_PCR_MUX_GPIO (0)
 /* @brief Has drive strength control (register bit PCR[DSE]). */
 #define FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH (1)
 /* @brief Defines width of PCR[MUX] field. */
@@ -787,6 +780,19 @@
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELB (1)
 /* @brief If (e)FlexPWM has module capture functionality on X channels (inputs). */
 #define FSL_FEATURE_PWM_HAS_CAPTURE_ON_CHANNELX (1)
+
+/* QDC module features */
+
+/* @brief Has no simultaneous PHASEA and PHASEB change interrupt (register bit field CTRL2[SABIE] and CTRL2[SABIRQ]). */
+#define FSL_FEATURE_QDC_HAS_NO_CTRL2_SAB_INT (0)
+/* @brief Has register CTRL3. */
+#define FSL_FEATURE_QDC_HAS_CTRL3 (1)
+/* @brief Has register LASTEDGE or LASTEDGEH. */
+#define FSL_FEATURE_QDC_HAS_LASTEDGE (1)
+/* @brief Has register POSDPERBFR, POSDPERH, or POSDPER. */
+#define FSL_FEATURE_QDC_HAS_POSDPER (1)
+/* @brief Has bitfiled FILT[FILT_PRSC]. */
+#define FSL_FEATURE_QDC_HAS_FILT_PRSC (1)
 
 /* RTC module features */
 
@@ -898,6 +904,8 @@
 #define FSL_FEATURE_MCX_SPC_HAS_CNTRL_REG (1)
 /* @brief Has DPDOWN_PULLDOWN_DISABLE */
 #define FSL_FEATURE_MCX_SPC_HAS_DPDOWN_PULLDOWN_DISABLE_BIT (1)
+/* @brief Has BLEED_EN */
+#define FSL_FEATURE_MCX_SPC_HAS_DCDC_CFG_BLEED_EN (1)
 
 /* SYSCON module features */
 

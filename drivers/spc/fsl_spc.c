@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, 2021-2023 NXP
+ * Copyright 2019, 2021-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -430,14 +430,17 @@ status_t SPC_EnableLowPowerModeCoreLowVoltageDetect(SPC_Type *base, bool enable)
  */
 void SPC_SetSystemVDDLowVoltageLevel(SPC_Type *base, spc_low_voltage_level_select_t level)
 {
+    (void)level;
+    (void)base;
+
+    /*
     uint32_t reg;
 
     reg = base->VD_SYS_CFG;
-    /* Before changing voltage level, must disable low voltage detect interrupt and reset. */
     base->VD_SYS_CFG &= ~(SPC_VD_SYS_CFG_LVDRE_MASK | SPC_VD_SYS_CFG_LVDIE_MASK);
     reg |= SPC_VD_SYS_CFG_LVSEL(level);
 
-    base->VD_SYS_CFG = reg;
+    base->VD_SYS_CFG = reg; */
 }
 
 /*!
@@ -464,8 +467,9 @@ void SPC_SetSystemVoltageDetectConfig(SPC_Type *base, const spc_system_voltage_d
 
     base->VD_SYS_CFG = reg;
 
-    /* Set trip voltage level. */
-    SPC_SetSystemVDDLowVoltageLevel(base, config->level);
+    (void)(config->level);
+    
+    /* SPC_SetSystemVDDLowVoltageLevel(base, config->level); */
 }
 
 /*!

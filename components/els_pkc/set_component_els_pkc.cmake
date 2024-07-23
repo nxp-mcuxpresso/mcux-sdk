@@ -86,6 +86,46 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 endif()
 
 
+if (CONFIG_USE_component_els_pkc_doc_lpc)
+# Add set(CONFIG_USE_component_els_pkc_doc_lpc true) in config.cmake to use this component
+
+message("component_els_pkc_doc_lpc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL LPC55S36))
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_doc_lpc dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_doc_mcxn)
+# Add set(CONFIG_USE_component_els_pkc_doc_mcxn true) in config.cmake to use this component
+
+message("component_els_pkc_doc_mcxn component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MCXN546 OR CONFIG_DEVICE_ID STREQUAL MCXN547 OR CONFIG_DEVICE_ID STREQUAL MCXN946 OR CONFIG_DEVICE_ID STREQUAL MCXN947 OR CONFIG_DEVICE_ID STREQUAL MCXN235 OR CONFIG_DEVICE_ID STREQUAL MCXN236))
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_doc_mcxn dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_component_els_pkc_doc_rw61x)
 # Add set(CONFIG_USE_component_els_pkc_doc_rw61x true) in config.cmake to use this component
 
@@ -106,6 +146,26 @@ endif()
 endif()
 
 
+if (CONFIG_USE_component_els_pkc_static_lib_mcxn)
+# Add set(CONFIG_USE_component_els_pkc_static_lib_mcxn true) in config.cmake to use this component
+
+message("component_els_pkc_static_lib_mcxn component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MCXN546 OR CONFIG_DEVICE_ID STREQUAL MCXN547 OR CONFIG_DEVICE_ID STREQUAL MCXN946 OR CONFIG_DEVICE_ID STREQUAL MCXN947 OR CONFIG_DEVICE_ID STREQUAL MCXN235 OR CONFIG_DEVICE_ID STREQUAL MCXN236))
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_static_lib_mcxn dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_component_els_pkc_static_lib_rw61x)
 # Add set(CONFIG_USE_component_els_pkc_static_lib_rw61x true) in config.cmake to use this component
 
@@ -120,6 +180,26 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "component_els_pkc_static_lib_rw61x dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_static_lib_lpc)
+# Add set(CONFIG_USE_component_els_pkc_static_lib_lpc true) in config.cmake to use this component
+
+message("component_els_pkc_static_lib_lpc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL LPC55S36))
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_static_lib_lpc dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -156,7 +236,7 @@ if (CONFIG_USE_component_els_pkc_aead)
 
 message("component_els_pkc_aead component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_els AND CONFIG_USE_component_els_pkc_buffer)
+if(CONFIG_USE_component_els_pkc_aes AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_els AND CONFIG_USE_component_els_pkc_buffer)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClAead/src/mcuxClAead.c
@@ -491,31 +571,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_component_els_pkc_standalone_keyManagement)
-# Add set(CONFIG_USE_component_els_pkc_standalone_keyManagement true) in config.cmake to use this component
-
-message("component_els_pkc_standalone_keyManagement component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_component_els_pkc_memory)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClEls/src/mcuxClEls_KeyManagement.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./.
-  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClEls/inc
-)
-
-else()
-
-message(SEND_ERROR "component_els_pkc_standalone_keyManagement dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_component_els_pkc_standalone_gdet)
 # Add set(CONFIG_USE_component_els_pkc_standalone_gdet true) in config.cmake to use this component
 
@@ -546,7 +601,7 @@ if (CONFIG_USE_component_els_pkc_els)
 
 message("component_els_pkc_els component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_els_pkc_els_header_only AND CONFIG_USE_component_els_pkc_els_common AND CONFIG_USE_component_els_pkc_standalone_keyManagement AND CONFIG_USE_component_els_pkc_hash AND CONFIG_USE_component_els_pkc_core AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_key AND CONFIG_USE_component_els_pkc_mac_modes AND CONFIG_USE_component_els_pkc_aead_modes AND CONFIG_USE_component_els_pkc_data_integrity AND CONFIG_USE_component_els_pkc_cipher_modes)
+if(CONFIG_USE_component_els_pkc_els_header_only AND CONFIG_USE_component_els_pkc_els_common AND CONFIG_USE_component_els_pkc_hash AND CONFIG_USE_component_els_pkc_core AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_key AND CONFIG_USE_component_els_pkc_mac_modes AND CONFIG_USE_component_els_pkc_aead_modes AND CONFIG_USE_component_els_pkc_data_integrity AND CONFIG_USE_component_els_pkc_cipher_modes)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClEls/src/mcuxClEls_Aead.c
@@ -557,6 +612,7 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClEls/src/mcuxClEls_Hmac.c
   ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClEls/src/mcuxClEls_Kdf.c
   ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClEls/src/mcuxClEls_Rng.c
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClEls/src/mcuxClEls_KeyManagement.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
@@ -1281,7 +1337,7 @@ if (CONFIG_USE_component_els_pkc_psa_driver)
 
 message("component_els_pkc_psa_driver component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_els_pkc_buffer AND (CONFIG_USE_component_els_pkc_platform_rw61x))
+if(CONFIG_USE_component_els_pkc_buffer AND (CONFIG_USE_component_els_pkc_platform_mcxn OR CONFIG_USE_component_els_pkc_platform_rw61x))
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClPsaDriver/src/mcuxClPsaDriver_Aead.c
@@ -1688,7 +1744,7 @@ if (CONFIG_USE_component_els_pkc)
 
 message("component_els_pkc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_els_pkc_els AND CONFIG_USE_component_els_pkc_pkc AND CONFIG_USE_component_els_pkc_trng AND ((CONFIG_USE_component_els_pkc_platform_rw61x AND CONFIG_USE_component_els_pkc_doc_rw61x AND CONFIG_USE_component_els_pkc_static_lib_rw61x AND (CONFIG_DEVICE_ID STREQUAL RW610 OR CONFIG_DEVICE_ID STREQUAL RW612))))
+if(CONFIG_USE_component_els_pkc_els AND CONFIG_USE_component_els_pkc_pkc AND CONFIG_USE_component_els_pkc_trng AND ((CONFIG_USE_component_els_pkc_platform_lpc AND CONFIG_USE_component_els_pkc_doc_lpc AND CONFIG_USE_component_els_pkc_static_lib_lpc AND (CONFIG_DEVICE_ID STREQUAL LPC55S36)) OR (CONFIG_USE_component_els_pkc_platform_mcxn AND CONFIG_USE_component_els_pkc_doc_mcxn AND CONFIG_USE_component_els_pkc_static_lib_mcxn AND (CONFIG_DEVICE_ID STREQUAL MCXN546 OR CONFIG_DEVICE_ID STREQUAL MCXN547 OR CONFIG_DEVICE_ID STREQUAL MCXN946 OR CONFIG_DEVICE_ID STREQUAL MCXN947 OR CONFIG_DEVICE_ID STREQUAL MCXN235 OR CONFIG_DEVICE_ID STREQUAL MCXN236)) OR (CONFIG_USE_component_els_pkc_platform_rw61x AND CONFIG_USE_component_els_pkc_doc_rw61x AND CONFIG_USE_component_els_pkc_static_lib_rw61x AND (CONFIG_DEVICE_ID STREQUAL RW610 OR CONFIG_DEVICE_ID STREQUAL RW612))))
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/./.
@@ -1704,12 +1760,61 @@ endif()
 endif()
 
 
+if (CONFIG_USE_component_els_pkc_platform_mcxn)
+# Add set(CONFIG_USE_component_els_pkc_platform_mcxn true) in config.cmake to use this component
+
+message("component_els_pkc_platform_mcxn component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_els_pkc AND CONFIG_USE_component_els_pkc_random_modes_ctr AND ((CONFIG_USE_component_els_pkc_trng_type_els AND (CONFIG_DEVICE_ID STREQUAL MCXN546 OR CONFIG_DEVICE_ID STREQUAL MCXN547 OR CONFIG_DEVICE_ID STREQUAL MCXN946 OR CONFIG_DEVICE_ID STREQUAL MCXN947 OR CONFIG_DEVICE_ID STREQUAL MCXN235 OR CONFIG_DEVICE_ID STREQUAL MCXN236))))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/mcxn/mcux_els.c
+  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/mcxn/mcux_pkc.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/mcxn
+  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/mcxn/inc
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_platform_mcxn dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_platform_rw61x_inf_header_only)
+# Add set(CONFIG_USE_component_els_pkc_platform_rw61x_inf_header_only true) in config.cmake to use this component
+
+message("component_els_pkc_platform_rw61x_inf_header_only component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL RW610 OR CONFIG_DEVICE_ID STREQUAL RW612))
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/rw61x
+  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/rw61x/inc
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_platform_rw61x_inf_header_only dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_component_els_pkc_platform_rw61x_interface_files)
 # Add set(CONFIG_USE_component_els_pkc_platform_rw61x_interface_files true) in config.cmake to use this component
 
 message("component_els_pkc_platform_rw61x_interface_files component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if((CONFIG_DEVICE_ID STREQUAL RW610 OR CONFIG_DEVICE_ID STREQUAL RW612))
+if(CONFIG_USE_component_els_pkc_platform_rw61x_inf_header_only AND (CONFIG_DEVICE_ID STREQUAL RW610 OR CONFIG_DEVICE_ID STREQUAL RW612))
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/rw61x/mcux_els.c
@@ -1719,7 +1824,6 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/./.
   ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/rw61x
-  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/rw61x/inc
 )
 
 else()
@@ -1736,7 +1840,7 @@ if (CONFIG_USE_component_els_pkc_platform_rw61x_standalone_clib_gdet_sensor)
 
 message("component_els_pkc_platform_rw61x_standalone_clib_gdet_sensor component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if((CONFIG_DEVICE_ID STREQUAL RW610 OR CONFIG_DEVICE_ID STREQUAL RW612) AND CONFIG_USE_component_els_pkc_els_header_only AND CONFIG_USE_component_els_pkc_els_common AND CONFIG_USE_component_els_pkc_standalone_keyManagement AND CONFIG_USE_component_els_pkc_standalone_gdet AND CONFIG_USE_component_els_pkc_platform_rw61x_interface_files AND CONFIG_USE_component_els_pkc_buffer)
+if((CONFIG_DEVICE_ID STREQUAL RW610 OR CONFIG_DEVICE_ID STREQUAL RW612) AND CONFIG_USE_component_els_pkc_els_header_only AND CONFIG_USE_component_els_pkc_els_common AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_standalone_gdet AND CONFIG_USE_component_els_pkc_platform_rw61x_inf_header_only AND CONFIG_USE_component_els_pkc_buffer)
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/./.
@@ -1773,77 +1877,57 @@ endif()
 endif()
 
 
+if (CONFIG_USE_component_els_pkc_platform_lpc)
+# Add set(CONFIG_USE_component_els_pkc_platform_lpc true) in config.cmake to use this component
+
+message("component_els_pkc_platform_lpc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL LPC55S36) AND CONFIG_USE_component_els_pkc AND CONFIG_USE_component_els_pkc_standalone_gdet)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/lpc/mcux_els.c
+  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/lpc/mcux_pkc.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/lpc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/lpc/inc
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_platform_lpc dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_component_els_pkc_examples)
 # Add set(CONFIG_USE_component_els_pkc_examples true) in config.cmake to use this component
 
 message("component_els_pkc_examples component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els AND CONFIG_USE_component_els_pkc_pkc AND CONFIG_USE_component_els_pkc)
+if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els AND CONFIG_USE_component_els_pkc_pkc AND CONFIG_USE_component_els_pkc_random_modes AND CONFIG_USE_component_els_pkc AND CONFIG_USE_component_els_pkc_examples_aead AND CONFIG_USE_component_els_pkc_examples_cipher_modes AND CONFIG_USE_component_els_pkc_examples_ecc AND CONFIG_USE_component_els_pkc_examples_els AND CONFIG_USE_component_els_pkc_examples_hash_modes AND CONFIG_USE_component_els_pkc_examples_hmac AND CONFIG_USE_component_els_pkc_examples_key AND CONFIG_USE_component_els_pkc_examples_mac_modes AND CONFIG_USE_component_els_pkc_examples_rsa AND CONFIG_USE_component_els_pkc_examples_flow_protection AND CONFIG_USE_component_els_pkc_examples_memory AND ((CONFIG_USE_component_els_pkc_examples_random_modes AND (CONFIG_DEVICE_ID STREQUAL MCXN546 OR CONFIG_DEVICE_ID STREQUAL MCXN547 OR CONFIG_DEVICE_ID STREQUAL MCXN946 OR CONFIG_DEVICE_ID STREQUAL MCXN947 OR CONFIG_DEVICE_ID STREQUAL MCXN235 OR CONFIG_DEVICE_ID STREQUAL MCXN236 OR CONFIG_DEVICE_ID STREQUAL RW610 OR CONFIG_DEVICE_ID STREQUAL RW612)) OR (CONFIG_DEVICE_ID STREQUAL LPC55S36)))
+
+else()
+
+message(SEND_ERROR "component_els_pkc_examples dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_examples_memory)
+# Add set(CONFIG_USE_component_els_pkc_examples_memory true) in config.cmake to use this component
+
+message("component_els_pkc_examples_memory component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClAeadModes/mcuxClAeadModes_Els_Ccm_Aes128_Multipart_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClAeadModes/mcuxClAeadModes_Els_Ccm_Aes128_Oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClAeadModes/mcuxClAeadModes_Els_Gcm_Aes128_Oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Cbc_Aes128_Multipart_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Cbc_Aes128_Oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Cbc_Aes128_Oneshot_PaddingZero_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Ctr_Aes128_Multipart_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Ctr_Aes128_Oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Ecb_Aes128_Multipart_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Ecb_Aes128_Multipart_PaddingPKCS7_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Ecb_Aes128_Oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Ecb_Aes128_Oneshot_PaddingPKCS7_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Ecb_Aes128_Oneshot_PaddingZero_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEcc/mcuxClEcc_EdDSA_Ed25519ctx_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEcc/mcuxClEcc_EdDSA_Ed25519ph_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEcc/mcuxClEcc_EdDSA_Ed25519_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEcc/mcuxClEcc_EdDSA_GenerateSignature_Ed25519_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEcc/mcuxClEcc_EdDSA_VerifySignature_Ed25519_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEcc/mcuxClEcc_MontDH_Curve25519_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEcc/mcuxClEcc_MontDH_Curve448_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Cipher_Aes128_Cbc_Encrypt_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Cipher_Aes128_Ecb_Encrypt_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Common_Get_Info_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Ecc_Keygen_Sign_Verify_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Hash_HW_Security_Counter_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Hash_Sha224_One_Block_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Hash_Sha256_One_Block_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Hash_Sha384_One_Block_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Hash_Sha512_One_Block_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Rng_Prng_Get_Random_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Tls_Master_Key_Session_Keys_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha1_longMsgOneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha1_oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha1_streaming_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha224_oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha256_longMsgOneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha256_oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha256_streaming_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha384_oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha512_224_oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha512_256_oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha512_256_streaming_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha512_oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHmac/mcuxClHmac_Els_Oneshot_External_Key_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHmac/mcuxClHmac_Sw_Multipart_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHmac/mcuxClHmac_Sw_Oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClKey/mcuxClKey_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClMacModes/mcuxClMacModes_Els_Cbcmac_Aes128_Oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClMacModes/mcuxClMacModes_Els_Cbcmac_Aes256_Multipart_PaddingZero_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClMacModes/mcuxClMacModes_Els_Cmac_Aes128_Oneshot_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandom/mcuxClRandom_PRNG_Patch_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandomModes/mcuxClRandomModes_CtrDrbg_AES256_DRG3_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandomModes/mcuxClRandomModes_CtrDrbg_AES256_DRG4_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandomModes/mcuxClRandomModes_CtrDrbg_AES256_ELS_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandomModes/mcuxClRandomModes_Different_Sessions_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandomModes/mcuxClRandomModes_ELS_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandomModes/mcuxClRandomModes_PatchMode_CtrDrbg_AES256_DRG3_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandomModes/mcuxClRandomModes_TestMode_CtrDrbg_AES256_DRG4_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRsa/mcuxClRsa_sign_NoEncode_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRsa/mcuxClRsa_sign_pss_sha2_256_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRsa/mcuxClRsa_verify_NoVerify_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRsa/mcuxClRsa_verify_pssverify_sha2_256_example.c
-  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslFlowProtection/mcuxCsslFlowProtection_example.c
   ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslMemory/mcuxCsslMemory_Clear_example.c
   ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslMemory/mcuxCsslMemory_Compare_example.c
   ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslMemory/mcuxCsslMemory_Copy_example.c
@@ -1860,7 +1944,366 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 
 else()
 
-message(SEND_ERROR "component_els_pkc_examples dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+message(SEND_ERROR "component_els_pkc_examples_memory dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_examples_flow_protection)
+# Add set(CONFIG_USE_component_els_pkc_examples_flow_protection true) in config.cmake to use this component
+
+message("component_els_pkc_examples_flow_protection component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslFlowProtection/mcuxCsslFlowProtection_example.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslFlowProtection/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslMemory/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClExample/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClBuffer/inc
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_examples_flow_protection dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_examples_rsa)
+# Add set(CONFIG_USE_component_els_pkc_examples_rsa true) in config.cmake to use this component
+
+message("component_els_pkc_examples_rsa component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRsa/mcuxClRsa_sign_NoEncode_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRsa/mcuxClRsa_sign_pss_sha2_256_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRsa/mcuxClRsa_verify_NoVerify_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRsa/mcuxClRsa_verify_pssverify_sha2_256_example.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslFlowProtection/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslMemory/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClExample/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClBuffer/inc
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_examples_rsa dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_examples_random_modes)
+# Add set(CONFIG_USE_component_els_pkc_examples_random_modes true) in config.cmake to use this component
+
+message("component_els_pkc_examples_random_modes component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandomModes/mcuxClRandomModes_CtrDrbg_AES256_DRG3_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandomModes/mcuxClRandomModes_CtrDrbg_AES256_DRG4_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandomModes/mcuxClRandomModes_CtrDrbg_AES256_ELS_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandomModes/mcuxClRandomModes_Different_Sessions_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandomModes/mcuxClRandomModes_PatchMode_CtrDrbg_AES256_DRG3_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandomModes/mcuxClRandomModes_TestMode_CtrDrbg_AES256_DRG4_example.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslFlowProtection/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslMemory/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClExample/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClBuffer/inc
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_examples_random_modes dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_examples_mac_modes)
+# Add set(CONFIG_USE_component_els_pkc_examples_mac_modes true) in config.cmake to use this component
+
+message("component_els_pkc_examples_mac_modes component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els AND CONFIG_USE_component_els_pkc_mac)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClMacModes/mcuxClMacModes_Els_Cbcmac_Aes128_Oneshot_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClMacModes/mcuxClMacModes_Els_Cbcmac_Aes256_Multipart_PaddingZero_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClMacModes/mcuxClMacModes_Els_Cmac_Aes128_Oneshot_example.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslFlowProtection/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslMemory/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClExample/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClBuffer/inc
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_examples_mac_modes dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_examples_key)
+# Add set(CONFIG_USE_component_els_pkc_examples_key true) in config.cmake to use this component
+
+message("component_els_pkc_examples_key component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClKey/mcuxClKey_example.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslFlowProtection/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslMemory/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClExample/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClBuffer/inc
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_examples_key dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_examples_hmac)
+# Add set(CONFIG_USE_component_els_pkc_examples_hmac true) in config.cmake to use this component
+
+message("component_els_pkc_examples_hmac component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHmac/mcuxClHmac_Els_Oneshot_External_Key_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHmac/mcuxClHmac_Sw_Multipart_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHmac/mcuxClHmac_Sw_Oneshot_example.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslFlowProtection/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslMemory/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClExample/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClBuffer/inc
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_examples_hmac dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_examples_hash_modes)
+# Add set(CONFIG_USE_component_els_pkc_examples_hash_modes true) in config.cmake to use this component
+
+message("component_els_pkc_examples_hash_modes component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha1_longMsgOneshot_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha1_oneshot_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha1_streaming_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha224_oneshot_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha256_longMsgOneshot_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha256_oneshot_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha256_streaming_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha384_oneshot_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha512_224_oneshot_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha512_256_oneshot_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha512_256_streaming_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClHashModes/mcuxClHashModes_sha512_oneshot_example.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslFlowProtection/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslMemory/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClExample/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClBuffer/inc
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_examples_hash_modes dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_examples_els)
+# Add set(CONFIG_USE_component_els_pkc_examples_els true) in config.cmake to use this component
+
+message("component_els_pkc_examples_els component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Cipher_Aes128_Cbc_Encrypt_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Cipher_Aes128_Ecb_Encrypt_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Common_Get_Info_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Ecc_Keygen_Sign_Verify_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Hash_HW_Security_Counter_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Hash_Sha224_One_Block_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Hash_Sha256_One_Block_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Hash_Sha384_One_Block_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Hash_Sha512_One_Block_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Rng_Prng_Get_Random_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEls/mcuxClEls_Tls_Master_Key_Session_Keys_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClRandomModes/mcuxClRandomModes_ELS_example.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslFlowProtection/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslMemory/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClExample/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClBuffer/inc
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_examples_els dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_examples_ecc)
+# Add set(CONFIG_USE_component_els_pkc_examples_ecc true) in config.cmake to use this component
+
+message("component_els_pkc_examples_ecc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEcc/mcuxClEcc_EdDSA_Ed25519ctx_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEcc/mcuxClEcc_EdDSA_Ed25519ph_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEcc/mcuxClEcc_EdDSA_Ed25519_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEcc/mcuxClEcc_EdDSA_GenerateSignature_Ed25519_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEcc/mcuxClEcc_EdDSA_VerifySignature_Ed25519_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEcc/mcuxClEcc_MontDH_Curve25519_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClEcc/mcuxClEcc_MontDH_Curve448_example.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslFlowProtection/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslMemory/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClExample/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClBuffer/inc
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_examples_ecc dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_examples_aead)
+# Add set(CONFIG_USE_component_els_pkc_examples_aead true) in config.cmake to use this component
+
+message("component_els_pkc_examples_aead component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els AND CONFIG_USE_component_els_pkc_padding)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClAeadModes/mcuxClAeadModes_Els_Ccm_Aes128_Multipart_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClAeadModes/mcuxClAeadModes_Els_Ccm_Aes128_Oneshot_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClAeadModes/mcuxClAeadModes_Els_Gcm_Aes128_Oneshot_example.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslFlowProtection/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslMemory/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClExample/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClBuffer/inc
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_examples_aead dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_els_pkc_examples_cipher_modes)
+# Add set(CONFIG_USE_component_els_pkc_examples_cipher_modes true) in config.cmake to use this component
+
+message("component_els_pkc_examples_cipher_modes component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Cbc_Aes128_Multipart_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Cbc_Aes128_Oneshot_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Cbc_Aes128_Oneshot_PaddingZero_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Ctr_Aes128_Multipart_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Ctr_Aes128_Oneshot_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Ecb_Aes128_Multipart_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Ecb_Aes128_Multipart_PaddingPKCS7_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Ecb_Aes128_Oneshot_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Ecb_Aes128_Oneshot_PaddingPKCS7_example.c
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxClCipherModes/mcuxClCipherModes_Els_Ecb_Aes128_Oneshot_PaddingZero_example.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/./.
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslFlowProtection/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./examples/mcuxCsslMemory/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClExample/inc
+  ${CMAKE_CURRENT_LIST_DIR}/./src/comps/mcuxClBuffer/inc
+)
+
+else()
+
+message(SEND_ERROR "component_els_pkc_examples_cipher_modes dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

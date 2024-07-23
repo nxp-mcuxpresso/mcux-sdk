@@ -199,6 +199,7 @@
 #define BOARD_MIPI_PANEL_TOUCH_INT_PORT       3
 #define BOARD_MIPI_PANEL_TOUCH_INT_PIN        19
 
+/* BT HCI UART */
 #define BOARD_BT_UART_INSTANCE 0
 #define BOARD_BT_UART_BASEADDR USART0
 #define BOARD_BT_UART_BAUDRATE 3000000
@@ -210,6 +211,13 @@
 #define BOARD_BT_UART_IRQ         FLEXCOMM0_IRQn
 #define BOARD_BT_UART_IRQ_HANDLER FLEXCOMM0_IRQHandler
 #define BOARD_BT_UART_CLKSRC      kCLOCK_Flexcomm0
+#define BOARD_BT_UART_C2H_IRQ     GPIO_INTA_IRQn
+#define BOARD_BT_UART_C2H_GPIO    GPIO
+#define BOARD_BT_UART_C2H_PORT    (0U)
+#define BOARD_BT_UART_C2H_PIN     (17U)
+#define BOARD_BT_UART_H2C_GPIO    GPIO
+#define BOARD_BT_UART_H2C_PORT    (1U)
+#define BOARD_BT_UART_H2C_PIN     (3U)
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */

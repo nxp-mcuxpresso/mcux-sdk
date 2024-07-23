@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 NXP
+ * Copyright 2019-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -25,11 +25,11 @@
 #define ENET_QOS_FIFOSIZE_UNIT (256U)
 /*! @brief ENET half-dulpex default IPG. */
 #define ENET_QOS_HALFDUPLEX_DEFAULTIPG (4U)
-/*! @breif ENET miminum ring length. */
+/*! @brief ENET miminum ring length. */
 #define ENET_QOS_MIN_RINGLEN (4U)
-/*! @breif ENET wakeup filter numbers. */
+/*! @brief ENET wakeup filter numbers. */
 #define ENET_QOS_WAKEUPFILTER_NUM (8U)
-/*! @breif Requried systime timer frequency. */
+/*! @brief Requried systime timer frequency. */
 #define ENET_QOS_SYSTIME_REQUIRED_CLK_MHZ (50U)
 /*! @brief Ethernet VLAN tag length. */
 #define ENET_QOS_FRAME_VLAN_TAGLEN 4U
@@ -82,8 +82,10 @@ static status_t ENET_QOS_PollStatusFlag(volatile uint32_t *regAddr, uint32_t mas
  *
  * @param base ENET peripheral base address.
  * @param config ENET Mac configuration.
+ * @retval kStatus_Success         ENET DMA controller has been configured successfully.
+ * @retval kStatus_InvalidArgument Could not set the provided configuration.
  */
-static void ENET_QOS_SetDMAControl(ENET_QOS_Type *base, const enet_qos_config_t *config);
+static status_t ENET_QOS_SetDMAControl(ENET_QOS_Type *base, const enet_qos_config_t *config);
 
 /*!
  * @brief Set ENET MAC controller with the configuration.
@@ -91,11 +93,13 @@ static void ENET_QOS_SetDMAControl(ENET_QOS_Type *base, const enet_qos_config_t 
  * @param base ENET peripheral base address.
  * @param config ENET Mac configuration.
  * @param macAddr ENET six-byte mac address.
+ * @retval kStatus_Success         ENET MAC controller has been configured successfully.
+ * @retval kStatus_InvalidArgument Could not set the provided configuration.
  */
-static void ENET_QOS_SetMacControl(ENET_QOS_Type *base,
-                                   const enet_qos_config_t *config,
-                                   uint8_t *macAddr,
-                                   uint8_t macCount);
+static status_t ENET_QOS_SetMacControl(ENET_QOS_Type *base,
+                                       const enet_qos_config_t *config,
+                                       uint8_t *macAddr,
+                                       uint8_t macCount);
 /*!
  * @brief Set ENET MTL with the configuration.
  *
@@ -166,6 +170,15 @@ static void ENET_QOS_StoreRxFrameTime(ENET_QOS_Type *base,
  */
 static inline bool ENET_QOS_TxDirtyRingAvailable(enet_qos_tx_dirty_ring_t *txDirtyRing);
 
+/*!
+ * @brief Check if the given MII configuration is valid and allowed.
+ *
+ * @param mode MII mode
+ * @param speed MII speed
+ * @retval true if configuration is valid, false otherwise
+ */
+static inline bool ENET_QOS_IsMIIConfigValid(enet_qos_mii_mode_t mode, enet_qos_mii_speed_t speed);
+
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -180,6 +193,9 @@ static enet_qos_isr_t s_enetqosIsr;
 
 /*! @brief Pointers to enet handles for each instance. */
 static enet_qos_handle_t *s_ENETHandle[ARRAY_SIZE(s_enetqosBases)] = {NULL};
+
+/*! @brief Arrays of enet state structures for each instance. */
+static enet_qos_state_t s_enetStates[ARRAY_SIZE(s_enetqosBases)] = {{}};
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to enet clocks for each instance. */
@@ -255,13 +271,18 @@ static uint32_t ENET_QOS_ReverseBits(uint32_t value)
     return (value >> 24U) | ((value >> 8U) & 0xFF00UL) | ((value & 0xFF00UL) << 8U) | (value << 24U);
 }
 
-static void ENET_QOS_SetDMAControl(ENET_QOS_Type *base, const enet_qos_config_t *config)
+static status_t ENET_QOS_SetDMAControl(ENET_QOS_Type *base, const enet_qos_config_t *config)
 {
     assert(config != NULL);
 
     uint8_t index;
     uint32_t reg;
     uint32_t burstLen;
+
+    if (!ENET_QOS_IsMIIConfigValid(config->miiMode, config->miiSpeed))
+    {
+        return kStatus_InvalidArgument;
+    }
 
     if (kENET_QOS_RmiiMode == config->miiMode)
     {
@@ -273,8 +294,10 @@ static void ENET_QOS_SetDMAControl(ENET_QOS_Type *base, const enet_qos_config_t 
         /* Enable enet qos clock. */
         ENET_QOS_EnableClock(true);
     }
+
     /* Set MII mode*/
     ENET_QOS_SetSYSControl(config->miiMode);
+    s_enetStates[ENET_QOS_GetInstance(base)].miiMode = config->miiMode;
 
     /* Reset first, The reset bit will automatically be cleared after complete. */
     base->DMA_MODE |= ENET_QOS_DMA_MODE_SWR_MASK;
@@ -321,6 +344,8 @@ static void ENET_QOS_SetDMAControl(ENET_QOS_Type *base, const enet_qos_config_t 
         reg = base->DMA_CH[index].DMA_CHX_RX_CTRL & ~ENET_QOS_DMA_CHX_RX_CTRL_RxPBL_MASK;
         base->DMA_CH[index].DMA_CHX_RX_CTRL = reg | ENET_QOS_DMA_CHX_RX_CTRL_RxPBL(burstLen & 0x3FU);
     }
+
+    return kStatus_Success;
 }
 
 static void ENET_QOS_SetMTL(ENET_QOS_Type *base, const enet_qos_config_t *config)
@@ -391,14 +416,19 @@ static void ENET_QOS_SetMTL(ENET_QOS_Type *base, const enet_qos_config_t *config
     }
 }
 
-static void ENET_QOS_SetMacControl(ENET_QOS_Type *base,
-                                   const enet_qos_config_t *config,
-                                   uint8_t *macAddr,
-                                   uint8_t macCount)
+static status_t ENET_QOS_SetMacControl(ENET_QOS_Type *base,
+                                       const enet_qos_config_t *config,
+                                       uint8_t *macAddr,
+                                       uint8_t macCount)
 {
     assert(config != NULL);
 
     uint32_t reg = 0;
+
+    if (!ENET_QOS_IsMIIConfigValid(config->miiMode, config->miiSpeed))
+    {
+        return kStatus_InvalidArgument;
+    }
 
     /* Set Macaddr */
     /* The dma channel 0 is set as to which the rx packet
@@ -551,6 +581,8 @@ static void ENET_QOS_SetMacControl(ENET_QOS_Type *base,
     base->MAC_MMC_IPC_RX_INTERRUPT_MASK = 0xFFFFFFFFU;
     base->MAC_MMC_FPE_RX_INTERRUPT_MASK = 0xFFFFFFFFU;
     base->MAC_MMC_FPE_TX_INTERRUPT_MASK = 0xFFFFFFFFU;
+
+    return kStatus_Success;
 }
 
 static status_t ENET_QOS_TxDescriptorsInit(ENET_QOS_Type *base,
@@ -806,6 +838,21 @@ static void ENET_QOS_StoreRxFrameTime(ENET_QOS_Type *base,
     ts->nanosecond = nanosecond;
 }
 
+static inline bool ENET_QOS_IsMIIConfigValid(enet_qos_mii_mode_t mode, enet_qos_mii_speed_t speed)
+{
+    /* Errata ERR050539: ENET_QOS does not support RMII 10Mbps mode */
+#if defined(MIMXRT1171_SERIES) || defined(MIMXRT1172_SERIES) || defined(MIMXRT1173_cm7_SERIES) ||         \
+    defined(MIMXRT1173_cm4_SERIES) || defined(MIMXRT1175_cm7_SERIES) || defined(MIMXRT1175_cm4_SERIES) || \
+    defined(MIMXRT1176_cm7_SERIES) || defined(MIMXRT1176_cm4_SERIES)
+    if ((kENET_QOS_RmiiMode == mode) && (kENET_QOS_MiiSpeed10M == speed))
+    {
+        return false;
+    }
+#endif /* MIMXRT117x_SERIES */
+
+    return true;
+}
+
 uint32_t ENET_QOS_GetInstance(ENET_QOS_Type *base)
 {
     uint32_t instance;
@@ -876,7 +923,7 @@ status_t ENET_QOS_Up(
     ENET_QOS_Type *base, const enet_qos_config_t *config, uint8_t *macAddr, uint8_t macCount, uint32_t refclkSrc_Hz)
 {
     assert(config != NULL);
-    status_t result = kStatus_Success;
+    status_t result;
 
     /* Initializes the ENET MDIO. */
     ENET_QOS_SetSMI(base, refclkSrc_Hz);
@@ -885,7 +932,7 @@ status_t ENET_QOS_Up(
     ENET_QOS_SetMTL(base, config);
 
     /* Initializes the ENET MAC with basic function. */
-    ENET_QOS_SetMacControl(base, config, macAddr, macCount);
+    result = ENET_QOS_SetMacControl(base, config, macAddr, macCount);
 
     return result;
 }
@@ -918,9 +965,17 @@ status_t ENET_QOS_Init(
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     /* Initializes the ENET DMA with basic function. */
-    ENET_QOS_SetDMAControl(base, config);
+    result = ENET_QOS_SetDMAControl(base, config);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
 
-    (void)ENET_QOS_Up(base, config, macAddr, macCount, refclkSrc_Hz);
+    result = ENET_QOS_Up(base, config, macAddr, macCount, refclkSrc_Hz);
+    if (result != kStatus_Success)
+    {
+        return result;
+    }
 
     if (config->ptpConfig != NULL)
     {
@@ -1048,7 +1103,7 @@ void ENET_QOS_Deinit(ENET_QOS_Type *base)
  * note This function is do all tx/rx descriptors initialization. Because this API
  *  read all interrupt registers first and then set the interrupt flag for all descriptos,
  * if the interrupt register is set. so the descriptor initialization should be called
- * after ENET_QOS_Init(), ENET_QOS_EnableInterrupts() and ENET_QOS_CreateHandle()(if transactional APIs
+ * after ENET_QOS_Init(), ENET_QOS_EnableInterrupts() and ENET_QOS_CreateHandler()(if transactional APIs
  * are used).
  *
  * param base  ENET peripheral base address.
@@ -1684,6 +1739,35 @@ void ENET_QOS_LeaveMulticastGroup(ENET_QOS_Type *base, uint8_t *address)
 }
 
 /*!
+ * brief Sets the ENET MII speed and duplex.
+ *
+ * This API is provided to dynamically change the speed and duplex for MAC.
+ *
+ * param base  ENET peripheral base address.
+ * param speed The speed of the RMII mode.
+ * param duplex The duplex of the RMII mode.
+ * return kStatus_Success          The ENET MII speed and duplex has been set successfully.
+ * return kStatus_InvalidArgument  Could not set the desired ENET MII speed and duplex combination.
+ */
+status_t ENET_QOS_SetMII(ENET_QOS_Type *base, enet_qos_mii_speed_t speed, enet_qos_mii_duplex_t duplex)
+{
+    uint32_t reg = base->MAC_CONFIGURATION & ~(ENET_QOS_MAC_CONFIGURATION_DM_MASK | ENET_QOS_MAC_CONFIGURATION_PS_MASK |
+                                               ENET_QOS_MAC_CONFIGURATION_FES_MASK);
+    enet_qos_mii_mode_t configured_mode = s_enetStates[ENET_QOS_GetInstance(base)].miiMode;
+
+    if (!ENET_QOS_IsMIIConfigValid(configured_mode, speed))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    reg |= ENET_QOS_MAC_CONFIGURATION_DM(duplex) | (uint32_t)speed;
+
+    base->MAC_CONFIGURATION = reg;
+
+    return kStatus_Success;
+}
+
+/*!
  * brief Sets the ENET SMI(serial management interface)- MII management interface.
  *
  * param base  ENET peripheral base address.
@@ -2135,6 +2219,7 @@ static void ENET_QOS_DropFrame(ENET_QOS_Type *base, enet_qos_handle_t *handle, u
     rxDescTail = MEMORY_ConvertMemoryMapAddress(rxDescTail, kMEMORY_Local2DMA);
 #endif
     base->DMA_CH[channel].DMA_CHX_RXDESC_TAIL_PTR = rxDescTail;
+    base->DMA_CH[channel].DMA_CHX_RX_CTRL |= ENET_QOS_DMA_CHX_RX_CTRL_SR_MASK;
 }
 
 /*!
@@ -2390,6 +2475,7 @@ status_t ENET_QOS_ReadFrame(ENET_QOS_Type *base,
         rxDescTail = MEMORY_ConvertMemoryMapAddress(rxDescTail, kMEMORY_Local2DMA);
 #endif
         base->DMA_CH[channel].DMA_CHX_RXDESC_TAIL_PTR = rxDescTail;
+        base->DMA_CH[channel].DMA_CHX_RX_CTRL |= ENET_QOS_DMA_CHX_RX_CTRL_SR_MASK;
     }
 
     return result;
@@ -2566,14 +2652,13 @@ static void ENET_QOS_ConfigTxDescriptor(enet_qos_tx_bd_struct_t *txDesc, enet_qo
     txDesc->buff1Addr = (uint32_t)(uintptr_t)(uint8_t *)config->buffer1;
     txDesc->buff2Addr = (uint32_t)(uintptr_t)(uint8_t *)config->buffer2;
 #endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
-    txDesc->buffLen   = control;
+    txDesc->buffLen = control;
 
     /* Make sure all fields of descriptor are written before setting ownership */
     __DMB();
 
-    control = ENET_QOS_TXDESCRIP_RD_FL(config->framelen) |
-              ENET_QOS_TXDESCRIP_RD_CIC(config->txOffloadOps) | ENET_QOS_TXDESCRIP_RD_LDFD(config->flag) |
-              ENET_QOS_TXDESCRIP_RD_OWN_MASK;
+    control = ENET_QOS_TXDESCRIP_RD_FL(config->framelen) | ENET_QOS_TXDESCRIP_RD_CIC(config->txOffloadOps) |
+              ENET_QOS_TXDESCRIP_RD_LDFD(config->flag) | ENET_QOS_TXDESCRIP_RD_OWN_MASK;
 
     txDesc->controlStat = control;
 
@@ -2697,10 +2782,13 @@ status_t ENET_QOS_SendFrame(ENET_QOS_Type *base,
     uint32_t primask;
     uint32_t txDescTail;
 
-    if (txOffloadOps != kENET_QOS_TxOffloadDisable)
-    {
-        assert(((uint32_t)FSL_FEATURE_ENET_QOS_TX_OFFLOAD_QUEUE_SUPPORT_BITMAP & ((uint32_t)1U << channel)) != 0U);
-    }
+#if (!defined(FSL_FEATURE_ENET_QOS_TX_OFFLOAD_QUEUE_SUPPORT_BITMAP)) || \
+    (FSL_FEATURE_ENET_QOS_TX_OFFLOAD_QUEUE_SUPPORT_BITMAP == 0)
+    assert(txOffloadOps == kENET_QOS_TxOffloadDisable);
+#else
+    assert((txOffloadOps == kENET_QOS_TxOffloadDisable) ||
+           (((uint32_t)FSL_FEATURE_ENET_QOS_TX_OFFLOAD_QUEUE_SUPPORT_BITMAP & ((uint32_t)1U << channel)) != 0U));
+#endif /* FSL_FEATURE_ENET_QOS_TX_OFFLOAD_QUEUE_SUPPORT_BITMAP == 0 */
 
     if (length > 2U * ENET_QOS_TXDESCRIP_RD_BL1_MASK)
     {
@@ -2720,10 +2808,10 @@ status_t ENET_QOS_SendFrame(ENET_QOS_Type *base,
     txDirty->context = context;
 
     /* Fill the descriptor. */
-    txDescConfig.framelen  = length;
-    txDescConfig.flag      = kENET_QOS_FirstLastFlag;
-    txDescConfig.intEnable = true;
-    txDescConfig.tsEnable  = isNeedTs;
+    txDescConfig.framelen     = length;
+    txDescConfig.flag         = kENET_QOS_FirstLastFlag;
+    txDescConfig.intEnable    = true;
+    txDescConfig.tsEnable     = isNeedTs;
     txDescConfig.txOffloadOps = txOffloadOps;
 
     if (length <= ENET_QOS_TXDESCRIP_RD_BL1_MASK)
@@ -2879,6 +2967,9 @@ status_t ENET_QOS_GetRxFrame(ENET_QOS_Type *base,
     {
         if ((rxDesc->control & ENET_QOS_RXDESCRIP_WR_OWN_MASK) != 0U)
         {
+            /* There is at least one buffer owned by DMA. Make sure reception is enabled. */
+            base->DMA_CH[channel].DMA_CHX_RX_CTRL |= ENET_QOS_DMA_CHX_RX_CTRL_SR_MASK;
+
             result = kStatus_ENET_QOS_RxFrameEmpty;
             break;
         }
@@ -3149,6 +3240,7 @@ status_t ENET_QOS_GetRxFrame(ENET_QOS_Type *base,
             rxDescTail = MEMORY_ConvertMemoryMapAddress(rxDescTail, kMEMORY_Local2DMA);
 #endif
             base->DMA_CH[channel].DMA_CHX_RXDESC_TAIL_PTR = rxDescTail;
+            base->DMA_CH[channel].DMA_CHX_RX_CTRL |= ENET_QOS_DMA_CHX_RX_CTRL_SR_MASK;
         }
         else
         {

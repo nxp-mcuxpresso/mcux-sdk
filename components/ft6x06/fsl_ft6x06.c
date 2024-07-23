@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -31,6 +31,7 @@ typedef struct _ft6x06_touch_data
 #define TOUCH_POINT_GET_X(T)     ((((T).XH & 0x0f) << 8) | (T).XL)
 #define TOUCH_POINT_GET_Y(T)     ((((T).YH & 0x0f) << 8) | (T).YL)
 
+#if FT6X06_USE_CMSIS_DRIVER
 void FT6X06_EventHandler(ft6x06_handle_t *handle, uint32_t i2c_event)
 {
     handle->i2c_event          = i2c_event;
@@ -49,7 +50,9 @@ static uint32_t FT_6X06_WaitEvent(ft6x06_handle_t *handle)
 
     return i2c_event;
 }
+#endif /* FT6X06_USE_CMSIS_DRIVER */
 
+#if (FT6X06_USE_CMSIS_DRIVER)
 status_t FT6X06_Init(ft6x06_handle_t *handle, ARM_DRIVER_I2C *i2c_driver)
 {
     status_t status = kStatus_Success;
@@ -83,6 +86,20 @@ status_t FT6X06_Init(ft6x06_handle_t *handle, ARM_DRIVER_I2C *i2c_driver)
 
     return status;
 }
+#else  /* !FT6X06_USE_CMSIS_DRIVER */
+status_t FT6X06_Init(ft6x06_handle_t *handle, const ft6x06_config_t *config)
+{
+    assert(handle != NULL);
+
+    handle->I2C_SendFunc    = config->I2C_SendFunc;
+    handle->I2C_ReceiveFunc = config->I2C_ReceiveFunc;
+    /* clear transfer structure and buffer */
+    memset(handle->touch_buf, 0, FT6X06_TOUCH_DATA_LEN);
+
+    /* set device mode to normal operation */
+    return handle->I2C_SendFunc(FT6X06_I2C_ADDRESS, 0, 1, (const uint8_t[]){0U}, 1);
+}
+#endif /* FT6X06_USE_CMSIS_DRIVER */
 
 status_t FT6X06_Denit(ft6x06_handle_t *handle)
 {
@@ -93,10 +110,13 @@ status_t FT6X06_Denit(ft6x06_handle_t *handle)
         return kStatus_InvalidArgument;
     }
 
+#if FT6X06_USE_CMSIS_DRIVER
     handle->i2c_driver = NULL;
+#endif /* FT6X06_USE_CMSIS_DRIVER */
     return kStatus_Success;
 }
 
+#if FT6X06_USE_CMSIS_DRIVER
 status_t FT6X06_ReadTouchData(ft6x06_handle_t *handle)
 {
     status_t status = kStatus_Success;
@@ -131,6 +151,13 @@ status_t FT6X06_ReadTouchData(ft6x06_handle_t *handle)
 
     return status;
 }
+#else  /* !FT6X06_USE_CMSIS_DRIVER */
+status_t FT6X06_ReadTouchData(ft6x06_handle_t *handle)
+{
+    return handle->I2C_ReceiveFunc(FT6X06_I2C_ADDRESS, F6X06_TOUCH_DATA_SUBADDR, 1, handle->touch_buf,
+                                   FT6X06_TOUCH_DATA_LEN);
+}
+#endif /* FT6X06_USE_CMSIS_DRIVER */
 
 status_t FT6X06_GetSingleTouch(ft6x06_handle_t *handle, touch_event_t *touch_event, int *touch_x, int *touch_y)
 {

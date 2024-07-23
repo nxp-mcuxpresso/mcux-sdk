@@ -250,6 +250,9 @@
 #  set(CONFIG_USE_CMSIS_NN_Source true)
 
 #set.component.osa
+#  # description: Component osa_zephyr
+#  set(CONFIG_USE_component_osa_zephyr true)
+
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)
 

@@ -66,7 +66,7 @@ static inline void I2S_DisableDMAInterrupts(i2s_dma_handle_t *handle);
 static inline void I2S_EnableDMAInterrupts(i2s_dma_handle_t *handle);
 static void I2S_TxEnableDMA(I2S_Type *base, bool enable);
 static void I2S_RxEnableDMA(I2S_Type *base, bool enable);
-static uint16_t I2S_GetTransferBytes(volatile i2s_transfer_t *transfer);
+static uint16_t I2S_GetTransferBytes(i2s_dma_handle_t *handle, volatile i2s_transfer_t *transfer);
 static status_t I2S_StartTransferDMA(I2S_Type *base, i2s_dma_handle_t *handle);
 static void I2S_AddTransferDMA(I2S_Type *base, i2s_dma_handle_t *handle);
 
@@ -405,17 +405,17 @@ static void I2S_RxEnableDMA(I2S_Type *base, bool enable)
     }
 }
 
-static uint16_t I2S_GetTransferBytes(volatile i2s_transfer_t *transfer)
+static uint16_t I2S_GetTransferBytes(i2s_dma_handle_t *handle, volatile i2s_transfer_t *transfer)
 {
     assert(transfer != NULL);
 
     uint16_t transferBytes;
 
-    if (transfer->dataSize >= (2UL * DMA_MAX_TRANSFER_BYTES))
+    if (transfer->dataSize >= (2UL * (DMA_MAX_TRANSFER_COUNT * handle->bytesPerFrame)))
     {
-        transferBytes = DMA_MAX_TRANSFER_BYTES;
+        transferBytes = ( DMA_MAX_TRANSFER_COUNT * handle->bytesPerFrame);
     }
-    else if (transfer->dataSize > DMA_MAX_TRANSFER_BYTES)
+    else if (transfer->dataSize > ( DMA_MAX_TRANSFER_COUNT * handle->bytesPerFrame))
     {
         transferBytes = (uint16_t)(transfer->dataSize / 2U);
         if ((transferBytes % 4U) != 0U)
@@ -639,7 +639,7 @@ static status_t I2S_StartTransferDMA(I2S_Type *base, i2s_dma_handle_t *handle)
     uint32_t instance                       = I2S_GetInstance(base);
     i2s_dma_private_handle_t *privateHandle = &(s_DmaPrivateHandle[instance]);
     volatile i2s_transfer_t *transfer       = &(privateHandle->descriptorQueue[privateHandle->queueDescriptor]);
-    uint16_t transferBytes                  = I2S_GetTransferBytes(transfer);
+    uint16_t transferBytes                  = I2S_GetTransferBytes(handle, transfer);
     uint32_t i                              = 0U;
     uint32_t xferConfig                     = 0U;
     uint32_t *srcAddr = NULL, *destAddr = NULL, srcInc = 4UL, destInc = 4UL;
@@ -760,7 +760,7 @@ static void I2S_AddTransferDMA(I2S_Type *base, i2s_dma_handle_t *handle)
         privateHandle->descriptor = (privateHandle->descriptor + 1U) % DMA_DESCRIPTORS;
         nextDescriptor            = &(s_DmaDescriptors[(instance * DMA_DESCRIPTORS) + privateHandle->descriptor]);
 
-        transferBytes                                                 = I2S_GetTransferBytes(transfer);
+        transferBytes                                                 = I2S_GetTransferBytes(handle, transfer);
         privateHandle->enqueuedBytes[privateHandle->enqueuedBytesEnd] = transferBytes;
         privateHandle->enqueuedBytesEnd = (privateHandle->enqueuedBytesEnd + 1U) % DMA_DESCRIPTORS;
 

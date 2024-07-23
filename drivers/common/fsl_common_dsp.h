@@ -90,6 +90,8 @@
 /* Macros for compatibility. */
 #define NVIC_SetPriorityGrouping(value) do {} while(0)
 #define NVIC_GetPriorityGrouping() do {} while(0)
+#define NVIC_SetPriority(irq, value) do {} while(0)
+#define NVIC_GetPriority(irq) do {} while(0)
 #define NVIC_EnableIRQ(value) do {} while(0)
 #define NVIC_GetEnableIRQ(value) do {} while(0)
 #define NVIC_DisableIRQ(value) do {} while(0)

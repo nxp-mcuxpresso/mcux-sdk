@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -203,6 +203,7 @@ static void LPUART_WriteNonBlocking16bit(LPUART_Type *base, const uint16_t *data
         base->DATA = data[i];
     }
 }
+
 static void LPUART_ReadNonBlocking(LPUART_Type *base, uint8_t *data, size_t length)
 {
     assert(NULL != data);
@@ -296,7 +297,7 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
     for (osrTemp = 4U; osrTemp <= 32U; osrTemp++)
     {
         /* calculate the temporary sbr value   */
-        sbrTemp = (uint16_t)((srcClock_Hz * 10U / (config->baudRate_Bps * (uint32_t)osrTemp) + 5U) / 10U);
+        sbrTemp = (uint16_t)((srcClock_Hz * 2U / (config->baudRate_Bps * (uint32_t)osrTemp) + 1U) / 2U);
         /*set sbrTemp to 1 if the sourceClockInHz can not satisfy the desired baud rate*/
         if (sbrTemp == 0U)
         {
@@ -306,10 +307,14 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
         {
             sbrTemp = LPUART_BAUD_SBR_MASK;
         }
+        else
+        {
+            /* For MISRA 15.7 */
+        }
         /* Calculate the baud rate based on the temporary OSR and SBR values */
         calculatedBaud = (srcClock_Hz / ((uint32_t)osrTemp * (uint32_t)sbrTemp));
         tempDiff       = calculatedBaud > config->baudRate_Bps ? (calculatedBaud - config->baudRate_Bps) :
-                                                           (config->baudRate_Bps - calculatedBaud);
+                                                                 (config->baudRate_Bps - calculatedBaud);
 
         if (tempDiff <= baudDiff)
         {
@@ -630,7 +635,7 @@ status_t LPUART_SetBaudRate(LPUART_Type *base, uint32_t baudRate_Bps, uint32_t s
     for (osrTemp = 4U; osrTemp <= 32U; osrTemp++)
     {
         /* calculate the temporary sbr value   */
-        sbrTemp = (uint16_t)((srcClock_Hz * 10U / (baudRate_Bps * (uint32_t)osrTemp) + 5U) / 10U);
+        sbrTemp = (uint16_t)((srcClock_Hz * 2U / (baudRate_Bps * (uint32_t)osrTemp) + 1U) / 2U);
         /*set sbrTemp to 1 if the sourceClockInHz can not satisfy the desired baud rate*/
         if (sbrTemp == 0U)
         {
@@ -640,6 +645,11 @@ status_t LPUART_SetBaudRate(LPUART_Type *base, uint32_t baudRate_Bps, uint32_t s
         {
             sbrTemp = LPUART_BAUD_SBR_MASK;
         }
+        else
+        {
+            /* For MISRA 15.7 */
+        }
+
         /* Calculate the baud rate based on the temporary OSR and SBR values */
         calculatedBaud = srcClock_Hz / ((uint32_t)osrTemp * (uint32_t)sbrTemp);
 
@@ -789,16 +799,16 @@ void LPUART_EnableInterrupts(LPUART_Type *base, uint32_t mask)
     /* Check int enable bits in base->FIFO */
 
     s_atomicOldInt = DisableGlobalIRQ();
-    base->FIFO = (base->FIFO & ~(LPUART_FIFO_TXOF_MASK | LPUART_FIFO_RXUF_MASK)) |
+    base->FIFO     = (base->FIFO & ~(LPUART_FIFO_TXOF_MASK | LPUART_FIFO_RXUF_MASK)) |
                  (mask & (LPUART_FIFO_TXOFE_MASK | LPUART_FIFO_RXUFE_MASK));
     EnableGlobalIRQ(s_atomicOldInt);
-    
+
     /* Clear bit 9 and bit 8 from mask */
     mask &= ~((uint32_t)kLPUART_TxFifoOverflowInterruptEnable | (uint32_t)kLPUART_RxFifoUnderflowInterruptEnable);
 #endif
 
     /* Check int enable bits in base->CTRL */
-    s_atomicOldInt = DisableGlobalIRQ(); 
+    s_atomicOldInt = DisableGlobalIRQ();
     base->CTRL |= mask;
     EnableGlobalIRQ(s_atomicOldInt);
 }
@@ -841,24 +851,24 @@ void LPUART_DisableInterrupts(LPUART_Type *base, uint32_t mask)
     baudRegMask |= ((mask << 8U) & LPUART_BAUD_RXEDGIE_MASK);
     /* Clear bit 6 from mask */
     mask &= ~(uint32_t)kLPUART_RxActiveEdgeInterruptEnable;
-    
-    s_atomicOldInt = DisableGlobalIRQ(); 
+
+    s_atomicOldInt = DisableGlobalIRQ();
     base->BAUD &= ~baudRegMask;
     EnableGlobalIRQ(s_atomicOldInt);
 
 #if defined(FSL_FEATURE_LPUART_HAS_FIFO) && FSL_FEATURE_LPUART_HAS_FIFO
     /* Check int enable bits in base->FIFO */
-    
+
     s_atomicOldInt = DisableGlobalIRQ();
-    base->FIFO = (base->FIFO & ~(LPUART_FIFO_TXOF_MASK | LPUART_FIFO_RXUF_MASK)) &
-                ~(mask & (LPUART_FIFO_TXOFE_MASK | LPUART_FIFO_RXUFE_MASK));
-    EnableGlobalIRQ(s_atomicOldInt);     
+    base->FIFO     = (base->FIFO & ~(LPUART_FIFO_TXOF_MASK | LPUART_FIFO_RXUF_MASK)) &
+                 ~(mask & (LPUART_FIFO_TXOFE_MASK | LPUART_FIFO_RXUFE_MASK));
+    EnableGlobalIRQ(s_atomicOldInt);
     /* Clear bit 9 and bit 8 from mask */
     mask &= ~((uint32_t)kLPUART_TxFifoOverflowInterruptEnable | (uint32_t)kLPUART_RxFifoUnderflowInterruptEnable);
 #endif
 
     /* Clear int enable bits in base->CTRL */
-    s_atomicOldInt = DisableGlobalIRQ(); 
+    s_atomicOldInt = DisableGlobalIRQ();
     base->CTRL &= ~mask;
     EnableGlobalIRQ(s_atomicOldInt);
 }
@@ -993,8 +1003,8 @@ status_t LPUART_ClearStatusFlags(LPUART_Type *base, uint32_t mask)
         /* Get the FIFO register value and mask the rx/tx FIFO flush bits and the status bits that can be W1C in case
            they are written 1 accidentally. */
         temp = (uint32_t)base->FIFO;
-        temp &= (uint32_t)(
-            ~(LPUART_FIFO_TXFLUSH_MASK | LPUART_FIFO_RXFLUSH_MASK | LPUART_FIFO_TXOF_MASK | LPUART_FIFO_RXUF_MASK));
+        temp &= (uint32_t)(~(LPUART_FIFO_TXFLUSH_MASK | LPUART_FIFO_RXFLUSH_MASK | LPUART_FIFO_TXOF_MASK |
+                             LPUART_FIFO_RXUF_MASK));
         temp |= (mask << 16U) & (LPUART_FIFO_TXOF_MASK | LPUART_FIFO_RXUF_MASK);
         base->FIFO = temp;
     }
@@ -1095,7 +1105,7 @@ status_t LPUART_WriteBlocking16bit(LPUART_Type *base, const uint16_t *data, size
     assert(NULL != data);
 
     const uint16_t *dataAddress = data;
-    size_t transferSize        = length;
+    size_t transferSize         = length;
 
 #if UART_RETRY_TIMES
     uint32_t waitTimes;
@@ -1420,6 +1430,7 @@ void LPUART_TransferCreateHandle(LPUART_Type *base,
     /* Initial seven data bits flag */
     handle->isSevenDataBits = isSevenDataBits;
 #endif
+    handle->is16bitData = false;
 
     /* Save the handle in global variables to support the double weak mechanism. */
     LP_FLEXCOMM_SetIRQHandler(LPUART_GetInstance(base), handler.lpflexcomm_handler, handle, LP_FLEXCOMM_PERIPH_LPUART);
@@ -1454,8 +1465,15 @@ void LPUART_TransferStartRingBuffer(LPUART_Type *base,
     assert(NULL != ringBuffer);
 
     /* Setup the ring buffer address */
-    handle->rxRingBuffer     = ringBuffer;
-    handle->rxRingBufferSize = ringBufferSize;
+    handle->rxRingBuffer = ringBuffer;
+    if (!handle->is16bitData)
+    {
+        handle->rxRingBufferSize = ringBufferSize;
+    }
+    else
+    {
+        handle->rxRingBufferSize = ringBufferSize / 2U;
+    }
     handle->rxRingBufferHead = 0U;
     handle->rxRingBufferTail = 0U;
 
@@ -1528,7 +1546,14 @@ status_t LPUART_TransferSendNonBlocking(LPUART_Type *base, lpuart_handle_t *hand
     }
     else
     {
-        handle->txData        = xfer->txData;
+        if (!handle->is16bitData)
+        {
+            handle->txData = xfer->txData;
+        }
+        else
+        {
+            handle->txData16 = xfer->txData16;
+        }
         handle->txDataSize    = xfer->dataSize;
         handle->txDataSizeAll = xfer->dataSize;
         handle->txState       = (uint8_t)kLPUART_TxBusy;
@@ -1699,7 +1724,14 @@ status_t LPUART_TransferReceiveNonBlocking(LPUART_Type *base,
                 /* Copy data from ring buffer to user memory. */
                 for (i = 0U; i < bytesToCopy; i++)
                 {
-                    xfer->rxData[bytesCurrentReceived] = handle->rxRingBuffer[handle->rxRingBufferTail];
+                    if (!handle->is16bitData)
+                    {
+                        xfer->rxData[bytesCurrentReceived] = handle->rxRingBuffer[handle->rxRingBufferTail];
+                    }
+                    else
+                    {
+                        xfer->rxData16[bytesCurrentReceived] = handle->rxRingBuffer16[handle->rxRingBufferTail];
+                    }
                     bytesCurrentReceived++;
 
                     /* Wrap to 0. Not use modulo (%) because it might be large and slow. */
@@ -1718,7 +1750,14 @@ status_t LPUART_TransferReceiveNonBlocking(LPUART_Type *base,
             if (0U != bytesToReceive)
             {
                 /* No data in ring buffer, save the request to LPUART handle. */
-                handle->rxData        = &xfer->rxData[bytesCurrentReceived];
+                if (!handle->is16bitData)
+                {
+                    handle->rxData = &xfer->rxData[bytesCurrentReceived];
+                }
+                else
+                {
+                    handle->rxData16 = &xfer->rxData16[bytesCurrentReceived];
+                }
                 handle->rxDataSize    = bytesToReceive;
                 handle->rxDataSizeAll = xfer->dataSize;
                 handle->rxState       = (uint8_t)kLPUART_RxBusy;
@@ -1743,7 +1782,14 @@ status_t LPUART_TransferReceiveNonBlocking(LPUART_Type *base,
         /* Ring buffer not used. */
         else
         {
-            handle->rxData        = &xfer->rxData[bytesCurrentReceived];
+            if (!handle->is16bitData)
+            {
+                handle->rxData = &xfer->rxData[bytesCurrentReceived];
+            }
+            else
+            {
+                handle->rxData16 = &xfer->rxData16[bytesCurrentReceived];
+            }
             handle->rxDataSize    = bytesToReceive;
             handle->rxDataSizeAll = bytesToReceive;
             handle->rxState       = (uint8_t)kLPUART_RxBusy;
@@ -1882,8 +1928,8 @@ void LPUART_TransferHandleIRQ(uint32_t instance, void *irqHandle)
             }
             else
             {
-                LPUART_ReadNonBlocking16bit(base, (uint16_t *)handle->rxData, tempCount);
-                handle->rxData = &handle->rxData[tempCount * 2];
+                LPUART_ReadNonBlocking16bit(base, handle->rxData16, tempCount);
+                handle->rxData16 = &handle->rxData16[tempCount];
             }
             handle->rxDataSize -= tempCount;
             count -= tempCount;
@@ -1950,8 +1996,8 @@ void LPUART_TransferHandleIRQ(uint32_t instance, void *irqHandle)
             }
             else
             {
-                LPUART_ReadNonBlocking16bit(base, (uint16_t *)handle->rxData, tempCount);
-                handle->rxData = &handle->rxData[tempCount * 2];
+                LPUART_ReadNonBlocking16bit(base, handle->rxData16, tempCount);
+                handle->rxData16 = &handle->rxData16[tempCount];
             }
             handle->rxDataSize -= tempCount;
             count -= tempCount;
@@ -2006,10 +2052,24 @@ void LPUART_TransferHandleIRQ(uint32_t instance, void *irqHandle)
                 }
                 else
                 {
-                    handle->rxRingBuffer[tpmRxRingBufferHead] = (uint8_t)tpmData;
+                    if (!handle->is16bitData)
+                    {
+                        handle->rxRingBuffer[tpmRxRingBufferHead] = (uint8_t)tpmData;
+                    }
+                    else
+                    {
+                        handle->rxRingBuffer16[tpmRxRingBufferHead] = (uint16_t)(tpmData & 0x3FFU);
+                    }
                 }
 #else
-                handle->rxRingBuffer[tpmRxRingBufferHead] = (uint8_t)tpmData;
+                if (!handle->is16bitData)
+                {
+                    handle->rxRingBuffer[tpmRxRingBufferHead] = (uint8_t)tpmData;
+                }
+                else
+                {
+                    handle->rxRingBuffer16[tpmRxRingBufferHead] = (uint16_t)(tpmData & 0x3FFU);
+                }
 #endif
 
                 /* Increase handle->rxRingBufferHead. */
@@ -2065,8 +2125,8 @@ void LPUART_TransferHandleIRQ(uint32_t instance, void *irqHandle)
             }
             else
             {
-                LPUART_WriteNonBlocking16bit(base, (uint16_t *)handle->txData, tempCount);
-                handle->txData = &handle->txData[tempCount * 2];
+                LPUART_WriteNonBlocking16bit(base, handle->txData16, tempCount);
+                handle->txData16 = &handle->txData16[tempCount];
             }
             handle->txDataSize -= tempCount;
             count -= tempCount;

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2021-03-16
-**     Build:               b240314
+**     Build:               b240325
 **
 **     Abstract:
 **         Chip specific module features.
@@ -327,6 +327,8 @@
 #define FSL_FEATURE_FLEXSPI_SUPPORT_SEPERATE_RXCLKSRC_PORTB (1)
 /* @brief FlexSPI support sample clock source or source_b selection */
 #define FSL_FEATURE_FLEXSPI_SUPPORT_RXCLKSRC_DIFF (1)
+/* @brief FlexSPI AHB RX buffer size (byte) */
+#define FSL_FEATURE_FLEXSPI_AHB_RX_BUFFER_SIZEn(x) (2048)
 
 /* ADC module features */
 
@@ -356,8 +358,10 @@
 
 /* INPUTMUX module features */
 
-/* @brief Number of channels */
+/* @brief Inputmux has DMA Request Enable */
 #define FSL_FEATURE_INPUTMUX_HAS_SIGNAL_ENA (1)
+/* @brief Inputmux has channel mux control */
+#define FSL_FEATURE_INPUTMUX_HAS_CHANNEL_MUX (0)
 
 /* MEMORY module features */
 

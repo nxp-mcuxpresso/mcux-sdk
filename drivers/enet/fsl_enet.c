@@ -9,6 +9,10 @@
 #if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
 #include "fsl_cache.h"
 #endif /* FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL */
+#if defined(FSL_FEATURE_ENET_HAS_RSTCTL) && (FSL_FEATURE_ENET_HAS_RSTCTL > 0)
+#include "fsl_reset.h"
+#endif /* FSL_FEATURE_ENET_HAS_RSTCTL */
+#include <stddef.h>
 
 /*******************************************************************************
  * Definitions
@@ -56,7 +60,7 @@ const clock_ip_name_t s_enetExtraClock[] = ENET_EXTRA_CLOCKS;
 
 #if defined(FSL_FEATURE_ENET_HAS_RSTCTL) && (FSL_FEATURE_ENET_HAS_RSTCTL > 0)
 #if defined(ENET_RESETS_ARRAY)
-const reset_ip_name_t s_enetResets[] = ENET_RESETS_ARRAY;
+static const reset_ip_name_t s_enetResets[] = ENET_RESETS_ARRAY;
 #else
 #error "FSL_FEATURE_ENET_HAS_RSTCTL is set but reset names are not provided."
 #endif /* ENET_RESETS_ARRAY */
@@ -395,7 +399,7 @@ void ENET_Deinit(ENET_Type *base)
 #if defined(FSL_FEATURE_ENET_HAS_RSTCTL) && (FSL_FEATURE_ENET_HAS_RSTCTL > 0)
 void ENET_ResetHardware(void)
 {
-    int reset;
+    size_t reset;
 
     for (reset = 0; reset < ARRAY_SIZE(s_enetResets); reset++)
     {

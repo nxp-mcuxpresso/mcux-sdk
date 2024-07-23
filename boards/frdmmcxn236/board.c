@@ -156,12 +156,31 @@ status_t BOARD_Codec_I2C_Send(
                             txBuffSize);
 }
 
+void BOARD_Camera_I2C_Init(void)
+{
+    LP_FLEXCOMM_Init(BOARD_CAMERA_I2C_INSTANCE, LP_FLEXCOMM_PERIPH_LPI2C);
+    BOARD_LPI2C_Init(BOARD_CAMERA_I2C_BASEADDR, BOARD_CAMERA_I2C_CLOCK_FREQ);
+}
+
 status_t BOARD_Codec_I2C_Receive(
     uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, uint8_t *rxBuff, uint8_t rxBuffSize)
 {
     return BOARD_LPI2C_Receive(BOARD_CODEC_I2C_BASEADDR, deviceAddress, subAddress, subAddressSize, rxBuff, rxBuffSize);
 }
 
+status_t BOARD_Camera_I2C_SendSCCB(
+    uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, const uint8_t *txBuff, uint8_t txBuffSize)
+{
+    return BOARD_LPI2C_SendSCCB(BOARD_CAMERA_I2C_BASEADDR, deviceAddress, subAddress, subAddressSize, (uint8_t *)txBuff,
+                                txBuffSize);
+}
+
+status_t BOARD_Camera_I2C_ReceiveSCCB(
+    uint8_t deviceAddress, uint32_t subAddress, uint8_t subAddressSize, uint8_t *rxBuff, uint8_t rxBuffSize)
+{
+    return BOARD_LPI2C_ReceiveSCCB(BOARD_CAMERA_I2C_BASEADDR, deviceAddress, subAddress, subAddressSize, rxBuff,
+                                   rxBuffSize);
+}
 #endif /* SDK_I2C_BASED_COMPONENT_USED */
 
 /* Update Active mode voltage for OverDrive mode. */

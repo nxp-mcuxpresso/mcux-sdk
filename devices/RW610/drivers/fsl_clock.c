@@ -23,8 +23,6 @@
 #define CLOCK_KHZ(freq) ((freq)*1000UL)
 #define CLOCK_MHZ(freq) (CLOCK_KHZ(freq) * 1000UL)
 
-#define CLOCK_DTRNG_BUSY_RETRY (100000U)
-
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -120,22 +118,6 @@ static void CLOCK_DelayUs(uint32_t us)
 
     instNum = ((SystemCoreClock + 999999UL) / 1000000UL) * us;
     CLOCK_Delay((instNum + 2U) / 3U);
-}
-
-static void CLOCK_WaitDtrngIdle(void)
-{
-    uint32_t retry = 0U;
-
-    /* Confirm if ELS is running */
-    if (((CLKCTL0->PSCCTL0 & CLKCTL0_PSCCTL0_ELS_MASK) != 0U) &&
-        ((RSTCTL0->PRSTCTL0 & RSTCTL0_PRSTCTL0_ELS_MASK) == 0U) && ((ELS->ELS_CTRL & ELS_ELS_CTRL_ELS_EN_MASK) != 0U))
-    {
-        while (((ELS->ELS_STATUS & ELS_ELS_STATUS_DTRNG_BUSY_MASK) != 0U) && (retry < CLOCK_DTRNG_BUSY_RETRY))
-        {
-            retry++;
-            CLOCK_DelayUs(1U);
-        }
-    }
 }
 
 /*! @brief  Return Frequency of t3pll_mci_48_60m_irc
@@ -332,11 +314,6 @@ void CLOCK_DisableClock(clock_ip_name_t clk)
     }
     else if (((uint32_t)clk & SYS_CLK_GATE_FLAG_MASK) != 0U)
     {
-        if (clk == kCLOCK_T3PllMci256mClk)
-        {
-            /* Must wait DTRNG to be idle to avoid wrong TRNG result */
-            CLOCK_WaitDtrngIdle();
-        }
         SYSCTL2->SOURCE_CLK_GATE |= SYS_CLK_GATE_BIT_MASK(clk);
     }
     else
@@ -454,6 +431,28 @@ void CLOCK_SetClkDiv(clock_div_name_t name, uint32_t divider)
         {
         }
     }
+}
+
+/*! brief  Return Frequency of selected clock
+ *  return Frequency of selected clock
+ */
+uint32_t CLOCK_GetFreq(clock_name_t clockName)
+{
+    uint32_t freq;
+    switch (clockName)
+    {
+        case kCLOCK_CoreSysClk:
+        case kCLOCK_BusClk:
+            freq = CLOCK_GetCoreSysClkFreq();
+            break;
+        case kCLOCK_MclkClk:
+            freq = CLOCK_GetMclkClkFreq();
+            break;
+        default:
+            freq = 0U;
+            break;
+    }
+    return freq;
 }
 
 /*! @brief  Return Frequency of High-Freq output of FRO
@@ -1333,8 +1332,6 @@ void CLOCK_DeinitT3RefClk(void)
 {
     /* Ensure SystemCoreClock is up to date for accurate CLOCK_DelayUs() */
     SystemCoreClockUpdate();
-    /* Must wait DTRNG to be idle to avoid wrong TRNG result */
-    CLOCK_WaitDtrngIdle();
     /* Gate all T3 output clocks */
     SYSCTL2->SOURCE_CLK_GATE |=
         SYSCTL2_SOURCE_CLK_GATE_T3PLL_MCI_48_60M_IRC_CG_MASK | SYSCTL2_SOURCE_CLK_GATE_T3PLL_MCI_256M_CG_MASK |

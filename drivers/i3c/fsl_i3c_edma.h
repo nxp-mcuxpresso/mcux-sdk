@@ -14,10 +14,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief I3C EDMA driver version. */
 #define FSL_I3C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 9))
-/*@}*/
+/*! @} */
 
 /*!
  * @addtogroup i3c_master_edma_driver
@@ -125,7 +125,7 @@ extern "C" {
  */
 
 /*! @name Master DMA */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Create a new handle for the I3C master DMA APIs.
@@ -196,7 +196,7 @@ void I3C_MasterTransferAbortEDMA(I3C_Type *base, i3c_master_edma_handle_t *handl
  * @param i3cHandle Pointer to the I3C master DMA driver handle.
  */
 void I3C_MasterTransferEDMAHandleIRQ(I3C_Type *base, void *i3cHandle);
-/*@}*/
+/*! @} */
 
 /*! @} */
 
@@ -206,7 +206,7 @@ void I3C_MasterTransferEDMAHandleIRQ(I3C_Type *base, void *i3cHandle);
  */
 
 /*! @name Slave DMA */
-/*@{*/
+/*! @{ */
 /*!
  * @brief Create a new handle for the I3C slave DMA APIs.
  *
@@ -269,7 +269,7 @@ void I3C_SlaveTransferAbortEDMA(I3C_Type *base, i3c_slave_edma_handle_t *handle)
  * @param i3cHandle Pointer to the I3C slave DMA driver handle.
  */
 void I3C_SlaveTransferEDMAHandleIRQ(I3C_Type *base, void *i3cHandle);
-/*@}*/
+/*! @} */
 
 /*! @} */
 #if defined(__cplusplus)

@@ -58,6 +58,17 @@ endif()
 endif()
 
 
+if (CONFIG_USE_driver_rtt_template)
+# Add set(CONFIG_USE_driver_rtt_template true) in config.cmake to use this component
+
+message("driver_rtt_template component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+add_config_file(${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/template/SEGGER_RTT_Conf.h ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/template driver_rtt_template.MCXA156)
+
+
+endif()
+
+
 if (CONFIG_USE_component_mflash_common)
 # Add set(CONFIG_USE_component_mflash_common true) in config.cmake to use this component
 
@@ -83,17 +94,6 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/p3t1755/.
 )
-
-
-endif()
-
-
-if (CONFIG_USE_driver_rtt_template)
-# Add set(CONFIG_USE_driver_rtt_template true) in config.cmake to use this component
-
-message("driver_rtt_template component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-add_config_file(${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/template/SEGGER_RTT_Conf.h ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/template driver_rtt_template.MCXA156)
 
 
 endif()
@@ -1334,11 +1334,11 @@ message("driver_lpspi_freertos component is included from ${CMAKE_CURRENT_LIST_F
 if(CONFIG_USE_driver_lpspi AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpspi/fsl_lpspi_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpspi_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpspi/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -1382,11 +1382,11 @@ message("driver_lpuart_freertos component is included from ${CMAKE_CURRENT_LIST_
 if(CONFIG_USE_driver_lpuart AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart/fsl_lpuart_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpuart_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -1430,11 +1430,11 @@ message("driver_lpi2c_freertos component is included from ${CMAKE_CURRENT_LIST_F
 if(CONFIG_USE_driver_lpi2c AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpi2c/fsl_lpi2c_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpi2c_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpi2c/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -1802,6 +1802,37 @@ endif()
 endif()
 
 
+if (CONFIG_USE_driver_rtt)
+# Add set(CONFIG_USE_driver_rtt true) in config.cmake to use this component
+
+message("driver_rtt component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_rtt_template)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT_printf.c
+)
+
+if((CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux))
+  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+      ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/Syscalls/SEGGER_RTT_Syscalls_GCC.c
+  )
+endif()
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT
+)
+
+else()
+
+message(SEND_ERROR "driver_rtt.MCXA156 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_component_mflash_mcxa)
 # Add set(CONFIG_USE_component_mflash_mcxa true) in config.cmake to use this component
 
@@ -1856,6 +1887,10 @@ if (CONFIG_USE_driver_dbi)
 message("driver_dbi component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
 if(CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dbi/fsl_dbi.c
+)
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dbi/.
@@ -2225,7 +2260,7 @@ if (CONFIG_USE_component_messaging)
 
 message("component_messaging component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_common AND CONFIG_USE_component_lists AND CONFIG_USE_component_mem_manager_light)
+if(CONFIG_USE_driver_common AND CONFIG_USE_component_lists AND (CONFIG_USE_component_mem_manager_light OR CONFIG_USE_component_mem_manager_freertos))
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../components/messaging/fsl_component_messaging.c
@@ -2286,6 +2321,30 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "component_mem_manager_light.MCXA156 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_mem_manager_freertos)
+# Add set(CONFIG_USE_component_mem_manager_freertos true) in config.cmake to use this component
+
+message("component_mem_manager_freertos component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND CONFIG_USE_middleware_freertos-kernel)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/mem_manager/fsl_component_mem_manager_freertos.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/mem_manager/.
+)
+
+else()
+
+message(SEND_ERROR "component_mem_manager_freertos.MCXA156 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -2508,6 +2567,15 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
 
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_CTIMER=1
+  )
+
+endif()
+
 else()
 
 message(SEND_ERROR "component_ctimer_adapter.MCXA156 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
@@ -2532,6 +2600,15 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
 
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_LPTMR=1
+  )
+
+endif()
+
 else()
 
 message(SEND_ERROR "component_lptmr_adapter.MCXA156 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
@@ -2555,6 +2632,15 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_OSTIMER=1
+  )
+
+endif()
 
 else()
 
@@ -2772,37 +2858,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "BOARD_Project_Template_frdmmcxa156_a8974.MCXA156 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_rtt)
-# Add set(CONFIG_USE_driver_rtt true) in config.cmake to use this component
-
-message("driver_rtt component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_rtt_template)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT/SEGGER_RTT_printf.c
-)
-
-if((CONFIG_TOOLCHAIN STREQUAL armgcc OR CONFIG_TOOLCHAIN STREQUAL mcux))
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/Syscalls/SEGGER_RTT_Syscalls_GCC.c
-  )
-endif()
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/RTT
-)
-
-else()
-
-message(SEND_ERROR "driver_rtt.MCXA156 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

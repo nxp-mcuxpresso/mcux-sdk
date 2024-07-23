@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2020, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -368,14 +368,14 @@ static int32_t mflash_drv_page_program_internal(uint32_t page_addr, uint32_t *da
 
     uint32_t freq_orig;
     uint32_t div_orig;
-    uint32_t div_restore = 0;
+    uint32_t div_restore = 0UL;
 
     uint32_t primask = __get_PRIMASK();
     __asm("cpsid i");
 
     /* CLOCK_GetClockRootFreq may be executed from FLASH, called here, avoid calling it later on */
     freq_orig = CLOCK_GetClockRootFreq(kCLOCK_FlexspiClkRoot);
-    if (freq_orig > 100000000)
+    if (freq_orig > 100000000UL)
     {
         /* It is necessary to slow down the clock below 50 MHz DDR for programming operation */
         uint32_t div_prog;
@@ -383,10 +383,10 @@ static int32_t mflash_drv_page_program_internal(uint32_t page_addr, uint32_t *da
         uint32_t freq_in;
 
         div_orig    = CLOCK_GetDiv(kCLOCK_FlexspiDiv); /* Backup currect div setting */
-        freq_in     = freq_orig * (div_orig + 1);      /* Calculate input clock */
-        div_prog    = (freq_in - 1) / 100000000;       /* Calculate divider to get below 50 MHz DDR */
-        freq_prog   = freq_in / (div_prog + 1);        /* Calculate frequency used during programming */
-        div_restore = 1;                               /* Set this to restore to original clock settings afterwards */
+        freq_in     = freq_orig * (div_orig + 1UL);      /* Calculate input clock */
+        div_prog    = (freq_in - 1UL) / 100000000UL;       /* Calculate divider to get below 50 MHz DDR */
+        freq_prog   = freq_in / (div_prog + 1UL);        /* Calculate frequency used during programming */
+        div_restore = 1UL;                               /* Set this to restore to original clock settings afterwards */
 
         /* Wait for bus to be idle before changing flash configuration. */
         while (!FLEXSPI_GetBusIdleStatus(MFLASH_FLEXSPI))
@@ -413,7 +413,7 @@ static int32_t mflash_drv_page_program_internal(uint32_t page_addr, uint32_t *da
 
     status = flexspi_nor_flash_page_program(MFLASH_FLEXSPI, page_addr, data);
 
-    if (div_restore != 0)
+    if (div_restore != 0UL)
     {
         /* Wait for bus to be idle before changing flash configuration. */
         while (!FLEXSPI_GetBusIdleStatus(MFLASH_FLEXSPI))

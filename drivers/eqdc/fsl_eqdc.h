@@ -17,7 +17,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define FSL_EQDC_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
+#define FSL_EQDC_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 
 /*! @brief W1C bits in EQDC CTRL registers. */
 #define EQDC_CTRL_W1C_FLAGS (EQDC_CTRL_HIRQ_MASK | EQDC_CTRL_XIRQ_MASK | EQDC_CTRL_WDIRQ_MASK)

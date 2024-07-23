@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
-/*! @brief VBAT driver version 2.3.0. */
-#define FSL_VBAT_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
-/*! @} */
+/*@{*/
+/*! @brief VBAT driver version 2.3.1. */
+#define FSL_VBAT_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+/*@}*/
 
 #if !defined(VBAT_LDORAMC_RET_MASK)
 #define VBAT_LDORAMC_RET_MASK   (0xF00U)
@@ -533,7 +533,7 @@ static inline void VBAT_EnableCrystalOsc32k(VBAT_Type *base, bool enable)
 
         /* Polling status register to check clock is ready. */
         while ((base->STATUSA & VBAT_STATUSA_OSC_RDY_MASK) == 0UL)
-            ;
+        {}
     }
     else
     {
@@ -592,7 +592,7 @@ static inline void VBAT_AdjustCrystalOsc32kAmplifierGain(VBAT_Type *base, uint8_
 static inline void VBAT_AdjustCrystalOsc32kAmplifierGain(VBAT_Type *base, uint8_t coarse)
 {
     base->OSCCTLA = (base->OSCCTLA & ~VBAT_OSCCTLA_COARSE_AMP_GAIN_MASK) | (VBAT_OSCCTLA_COARSE_AMP_GAIN(coarse));
-    base->OSCCTLB = (base->OSCCTLB & ~VBAT_OSCCTLA_COARSE_AMP_GAIN_MASK) | (VBAT_OSCCTLA_COARSE_AMP_GAIN(~coarse));        
+    base->OSCCTLB = (base->OSCCTLB & ~VBAT_OSCCTLA_COARSE_AMP_GAIN_MASK) | (VBAT_OSCCTLA_COARSE_AMP_GAIN(~(uint32_t)coarse));        
 }
 
 #endif /*  */
@@ -972,7 +972,7 @@ static inline void VBAT_SwitchVBATModuleSupplyActiveMode(VBAT_Type *base, vbat_i
  */
 static inline vbat_internal_module_supply_t VBAT_GetVBATModuleSupply(VBAT_Type *base)
 {
-    return (vbat_internal_module_supply_t)(base->SWICTLA & VBAT_SWICTLA_SWI_EN_MASK);
+    return (vbat_internal_module_supply_t)(uint8_t)(base->SWICTLA & VBAT_SWICTLA_SWI_EN_MASK);
 }
 
 /*!

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -102,11 +102,11 @@
 #define AT_ALWAYS_ON_DATA(var)      var @"AlwaysOnData"
 #define AT_ALWAYS_ON_DATA_INIT(var) var @"AlwaysOnData.init"
 #elif (defined(__CC_ARM) || defined(__ARMCC_VERSION))
-#define AT_ALWAYS_ON_DATA(var)      __attribute__((section("AlwaysOnData"), zero_init)) var
+#define AT_ALWAYS_ON_DATA(var)      __attribute__((section(".bss.AlwaysOnData"))) var
 #define AT_ALWAYS_ON_DATA_INIT(var) __attribute__((section("AlwaysOnData.init"))) var
 #elif (defined(__GNUC__))
-#define AT_ALWAYS_ON_DATA(var)      __attribute__((section("AlwaysOnData"))) var
-#define AT_ALWAYS_ON_DATA_INIT(var) __attribute__((section("AlwaysOnData.init"))) var
+#define AT_ALWAYS_ON_DATA(var)      __attribute__((section(".AlwaysOnData"))) var
+#define AT_ALWAYS_ON_DATA_INIT(var) __attribute__((section(".AlwaysOnData.init"))) var
 #else
 #error Toolchain not supported.
 #endif /* defined(__ICCARM__) */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2020, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -34,7 +34,7 @@ static void iflash_prepare(void)
         fmu_fstat = FMU0->FSTAT;
     }
 
-    if (fmu_fstat & IFLASH_ERROR_STAT_FLAGS)
+    if ((fmu_fstat & IFLASH_ERROR_STAT_FLAGS) != 0UL)
     {
         FMU0->FSTAT = IFLASH_ERROR_STAT_FLAGS;
     }
@@ -50,7 +50,7 @@ static status_t iflash_launch_command(bool pe_command, uint8_t pe_type)
 
         while ((fmu_fstat & FMU_FSTAT_PEWEN_MASK) != FMU_FSTAT_PEWEN(pe_type))
         {
-            if (fmu_fstat & FMU_FSTAT_CCIF_MASK)
+            if ((fmu_fstat & FMU_FSTAT_CCIF_MASK) != 0UL)
             {
                 return kStatus_Fail;
             }
@@ -72,7 +72,7 @@ static status_t iflash_finish_command(bool pe_command)
 
         while ((fmu_fstat & FMU_FSTAT_PERDY_MASK) != FMU_FSTAT_PERDY(1))
         {
-            if (fmu_fstat & FMU_FSTAT_CCIF_MASK)
+            if ((fmu_fstat & FMU_FSTAT_CCIF_MASK) != 0UL)
             {
                 return kStatus_Fail;
             }
@@ -85,7 +85,7 @@ static status_t iflash_finish_command(bool pe_command)
 
     fmu_fstat = FMU0->FSTAT;
 
-    while ((fmu_fstat & FMU_FSTAT_CCIF_MASK) == 0U)
+    while ((fmu_fstat & FMU_FSTAT_CCIF_MASK) == 0UL)
     {
         fmu_fstat = FMU0->FSTAT;
     }
@@ -106,13 +106,13 @@ int32_t mflash_drv_sector_erase(uint32_t sector_addr)
     status_t ret;
     uint32_t primask;
 
-    if ((sector_addr % MFLASH_SECTOR_SIZE) != 0)
+    if ((sector_addr % MFLASH_SECTOR_SIZE) != 0UL)
     {
         return kStatus_InvalidArgument;
     }
 
     primask = __get_PRIMASK();
-    __asm("cpsid i");
+    __disable_irq();
 
     iflash_prepare();
 
@@ -127,17 +127,17 @@ int32_t mflash_drv_sector_erase(uint32_t sector_addr)
     }
 
     *(uint32_t *)(sector_addr)        = 0UL;
-    *(uint32_t *)(sector_addr + 0x04) = 0UL;
-    *(uint32_t *)(sector_addr + 0x08) = 0UL;
-    *(uint32_t *)(sector_addr + 0x0C) = 0UL;
+    *(uint32_t *)(sector_addr + 0x04UL) = 0UL;
+    *(uint32_t *)(sector_addr + 0x08UL) = 0UL;
+    *(uint32_t *)(sector_addr + 0x0CUL) = 0UL;
 
     ret = iflash_finish_command(true);
 
 cleanup:
 
-    if (primask == 0)
+    if (primask == 0UL)
     {
-        __asm("cpsie i");
+        __enable_irq();
     }
 
     /* Flush pipeline to allow pending interrupts take place
@@ -152,13 +152,13 @@ int32_t mflash_drv_page_program(uint32_t page_addr, uint32_t *data)
     status_t ret;
     uint32_t primask;
 
-    if ((page_addr % MFLASH_PAGE_SIZE) != 0)
+    if ((page_addr % MFLASH_PAGE_SIZE) != 0UL)
     {
         return kStatus_InvalidArgument;
     }
 
     primask = __get_PRIMASK();
-    __asm("cpsid i");
+    __disable_irq();
 
     iflash_prepare();
 
@@ -171,18 +171,18 @@ int32_t mflash_drv_page_program(uint32_t page_addr, uint32_t *data)
         goto cleanup;
     }
 
-    for (uint32_t i = 0; i < MFLASH_PAGE_SIZE; i += 4)
+    for (uint32_t i = 0UL; i < MFLASH_PAGE_SIZE; i += 4UL)
     {
-        *(uint32_t *)(page_addr + i) = ((uint32_t *)data)[i / 4];
+        *(uint32_t *)(page_addr + i) = ((uint32_t *)data)[i / 4UL];
     }
 
     ret = iflash_finish_command(true);
 
 cleanup:
 
-    if (primask == 0)
+    if (primask == 0UL)
     {
-        __asm("cpsie i");
+        __enable_irq();
     }
 
     /* Flush pipeline to allow pending interrupts take place
@@ -192,18 +192,18 @@ cleanup:
     return ret;
 }
 
-status_t mflash_drv_phrase_program(uint32_t phrase_addr, uint32_t *data)
+int32_t mflash_drv_phrase_program(uint32_t phrase_addr, uint32_t *data)
 {
     status_t ret;
     uint32_t primask;
 
-    if ((phrase_addr % MFLASH_PHRASE_SIZE) != 0)
+    if ((phrase_addr % MFLASH_PHRASE_SIZE) != 0UL)
     {
         return kStatus_InvalidArgument;
     }
 
     primask = __get_PRIMASK();
-    __asm("cpsid i");
+    __disable_irq();
 
     iflash_prepare();
 
@@ -216,18 +216,18 @@ status_t mflash_drv_phrase_program(uint32_t phrase_addr, uint32_t *data)
         goto cleanup;
     }
 
-    for (uint32_t i = 0; i < MFLASH_PHRASE_SIZE; i += 4)
+    for (uint32_t i = 0UL; i < MFLASH_PHRASE_SIZE; i += 4UL)
     {
-        *(uint32_t *)(phrase_addr + i) = ((uint32_t *)data)[i / 4];
+        *(uint32_t *)(phrase_addr + i) = ((uint32_t *)data)[i / 4UL];
     }
 
     ret = iflash_finish_command(true);
 
 cleanup:
 
-    if (primask == 0)
+    if (primask == 0UL)
     {
-        __asm("cpsie i");
+        __enable_irq();
     }
 
     /* Flush pipeline to allow pending interrupts take place
@@ -239,7 +239,7 @@ cleanup:
 
 int32_t mflash_drv_read(uint32_t addr, uint32_t *buffer, uint32_t len)
 {
-    memcpy(buffer, (void *)addr, len);
+    (void)memcpy((void *)buffer, (void *)addr, len);
     return kStatus_Success;
 }
 

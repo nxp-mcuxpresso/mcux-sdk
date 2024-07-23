@@ -177,26 +177,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 endif()
 
 
-if (CONFIG_USE_utility_crypto_benchmark)
-# Add set(CONFIG_USE_utility_crypto_benchmark true) in config.cmake to use this component
-
-message("utility_crypto_benchmark component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/crypto_benchmark/crypto_benchmark.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/crypto_benchmark/crypto_benchmark_hash.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/crypto_benchmark/crypto_benchmark_mac.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/crypto_benchmark/crypto_benchmark_aes.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/crypto_benchmark/.
-)
-
-
-endif()
-
-
 if (CONFIG_USE_DEVICES_Project_Template_MIMXRT1189)
 # Add set(CONFIG_USE_DEVICES_Project_Template_MIMXRT1189 true) in config.cmake to use this component
 
@@ -692,15 +672,13 @@ if (CONFIG_USE_utility_debug_console_lite)
 
 message("utility_debug_console_lite component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_lpuart_adapter AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1189xxxxx) AND CONFIG_USE_driver_common)
+if(CONFIG_USE_component_lpuart_adapter AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1189xxxxx) AND CONFIG_USE_driver_common AND CONFIG_USE_utility_str)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str/fsl_str.c
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite/fsl_debug_console.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
 )
 
@@ -990,15 +968,13 @@ if (CONFIG_USE_utility_debug_console)
 
 message("utility_debug_console component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_serial_manager AND CONFIG_USE_driver_common)
+if(CONFIG_USE_component_serial_manager AND CONFIG_USE_driver_common AND CONFIG_USE_utility_str)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str/fsl_str.c
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console/fsl_debug_console.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
 )
 
@@ -1046,6 +1022,10 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
 )
 
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
+)
+
 else()
 
 message(SEND_ERROR "utility_assert_lite.MIMXRT1189 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
@@ -1064,6 +1044,10 @@ if(CONFIG_USE_utility_debug_console AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -1093,6 +1077,102 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "utility_notifier.MIMXRT1189 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_lpi2c_freertos)
+# Add set(CONFIG_USE_driver_lpi2c_freertos true) in config.cmake to use this component
+
+message("driver_lpi2c_freertos component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_lpi2c AND CONFIG_USE_middleware_freertos-kernel)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpi2c_freertos.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
+)
+
+else()
+
+message(SEND_ERROR "driver_lpi2c_freertos.MIMXRT1189 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_lpspi_freertos)
+# Add set(CONFIG_USE_driver_lpspi_freertos true) in config.cmake to use this component
+
+message("driver_lpspi_freertos component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_lpspi AND CONFIG_USE_middleware_freertos-kernel)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpspi_freertos.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
+)
+
+else()
+
+message(SEND_ERROR "driver_lpspi_freertos.MIMXRT1189 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_lpuart_freertos)
+# Add set(CONFIG_USE_driver_lpuart_freertos true) in config.cmake to use this component
+
+message("driver_lpuart_freertos component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_lpuart AND CONFIG_USE_middleware_freertos-kernel)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpuart_freertos.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
+)
+
+else()
+
+message(SEND_ERROR "driver_lpuart_freertos.MIMXRT1189 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_sysctr)
+# Add set(CONFIG_USE_driver_sysctr true) in config.cmake to use this component
+
+message("driver_sysctr component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MIMXRT1189xxxxx) AND CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sysctr/fsl_sysctr.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sysctr/.
+)
+
+else()
+
+message(SEND_ERROR "driver_sysctr.MIMXRT1189 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -1487,11 +1567,11 @@ message("driver_netc_rt1180 component is included from ${CMAKE_CURRENT_LIST_FILE
 if((CONFIG_DEVICE_ID STREQUAL MIMXRT1189xxxxx) AND CONFIG_USE_driver_netc)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/netc/socs/imxrt1180/fsl_netc_soc.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../platform/drivers/netc/socs/imxrt1180/fsl_netc_soc.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/netc/socs/imxrt1180/.
+  ${CMAKE_CURRENT_LIST_DIR}/../../platform/drivers/netc/socs/imxrt1180/.
 )
 
 else()
@@ -1599,30 +1679,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_driver_lpuart_freertos)
-# Add set(CONFIG_USE_driver_lpuart_freertos true) in config.cmake to use this component
-
-message("driver_lpuart_freertos component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_lpuart AND CONFIG_USE_middleware_freertos-kernel)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart/fsl_lpuart_freertos.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart/.
-)
-
-else()
-
-message(SEND_ERROR "driver_lpuart_freertos.MIMXRT1189 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_driver_lptmr)
 # Add set(CONFIG_USE_driver_lptmr true) in config.cmake to use this component
 
@@ -1671,30 +1727,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_driver_lpspi_freertos)
-# Add set(CONFIG_USE_driver_lpspi_freertos true) in config.cmake to use this component
-
-message("driver_lpspi_freertos component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_lpspi AND CONFIG_USE_middleware_freertos-kernel)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpspi/fsl_lpspi_freertos.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpspi/.
-)
-
-else()
-
-message(SEND_ERROR "driver_lpspi_freertos.MIMXRT1189 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_driver_lpit)
 # Add set(CONFIG_USE_driver_lpit true) in config.cmake to use this component
 
@@ -1737,30 +1769,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_lpi2c.MIMXRT1189 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_lpi2c_freertos)
-# Add set(CONFIG_USE_driver_lpi2c_freertos true) in config.cmake to use this component
-
-message("driver_lpi2c_freertos component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_lpi2c AND CONFIG_USE_middleware_freertos-kernel)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpi2c/fsl_lpi2c_freertos.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpi2c/.
-)
-
-else()
-
-message(SEND_ERROR "driver_lpi2c_freertos.MIMXRT1189 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -2649,6 +2657,15 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
 
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_GPT=1
+  )
+
+endif()
+
 else()
 
 message(SEND_ERROR "component_gpt_adapter.MIMXRT1189 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
@@ -2672,6 +2689,15 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_LPIT=1
+  )
+
+endif()
 
 else()
 
@@ -2697,6 +2723,15 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
 
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_LPTMR=1
+  )
+
+endif()
+
 else()
 
 message(SEND_ERROR "component_lptmr_adapter.MIMXRT1189 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
@@ -2720,6 +2755,15 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_TMP=1
+  )
+
+endif()
 
 else()
 
@@ -3781,42 +3825,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "component_audio_sai_edma_adapter.MIMXRT1189 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_utility_crypto_benchmark_port_ele_s400)
-# Add set(CONFIG_USE_utility_crypto_benchmark_port_ele_s400 true) in config.cmake to use this component
-
-message("utility_crypto_benchmark_port_ele_s400 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_s3mu AND CONFIG_USE_component_ele_crypto)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/crypto_benchmark/port/ele_s400/ele_init.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/crypto_benchmark/port/ele_s400/sha.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/crypto_benchmark/port/ele_s400/mac.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/crypto_benchmark/port/ele_s400/aes.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/crypto_benchmark/port/ele_s400
-)
-
-if(CONFIG_USE_COMPONENT_CONFIGURATION)
-  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
-
-  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
-    -DBENCHMARK_PLATFORM_CONFIG=1
-  )
-
-endif()
-
-else()
-
-message(SEND_ERROR "utility_crypto_benchmark_port_ele_s400.MIMXRT1189 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

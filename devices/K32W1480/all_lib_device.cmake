@@ -296,7 +296,7 @@
 #  # description: LPI2C Driver
 #  set(CONFIG_USE_driver_lpi2c true)
 
-#  # description: LPI2C Driver
+#  # description: LPI2C FreeRTOS Driver
 #  set(CONFIG_USE_driver_lpi2c_freertos true)
 
 #  # description: LPIT Driver
@@ -305,7 +305,7 @@
 #  # description: LPSPI Driver
 #  set(CONFIG_USE_driver_lpspi true)
 
-#  # description: LPSPI Driver
+#  # description: LPSPI FreeRTOS Driver
 #  set(CONFIG_USE_driver_lpspi_freertos true)
 
 #  # description: LPTMR Driver
@@ -314,7 +314,7 @@
 #  # description: LPUART Driver
 #  set(CONFIG_USE_driver_lpuart true)
 
-#  # description: LPUART Driver
+#  # description: LPUART Freertos Driver
 #  set(CONFIG_USE_driver_lpuart_freertos true)
 
 #  # description: MCM Driver
@@ -600,6 +600,9 @@
 #  # description: mbedTLS test suite
 #  set(CONFIG_USE_middleware_mbedtls_tests true)
 
+#  # description: mbedTLS 3rdparty code
+#  set(CONFIG_USE_middleware_mbedtls_3rdparty true)
+
 #  # description: mbedTLS port library for SSSAPI
 #  set(CONFIG_USE_middleware_mbedtls_port_sssapi true)
 
@@ -627,6 +630,9 @@
 
 #  # description: Multicore Manager for k32w148evk board
 #  set(CONFIG_USE_middleware_multicore_mcmgr_k32w1 true)
+
+#  # description: RPMsg-Lite Zephyr environment sources
+#  set(CONFIG_USE_middleware_multicore_rpmsg_lite_zephyr true)
 
 #  # description: RPMsg-Lite
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite true)
@@ -674,7 +680,10 @@
 #  # description: FreeRTOS heap 5
 #  set(CONFIG_USE_middleware_freertos-kernel_heap_5 true)
 
-#  # description: FreeRTOS MPU wrappers
+#  # description: new V2 FreeRTOS MPU wrappers introduced in V10.6.0
+#  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers_v2 true)
+
+#  # description: old FreeRTOS MPU wrappers used before V10.6.0
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
 #  # description: FreeRTOS cm33 TrustZone secure port
@@ -702,6 +711,34 @@
 #  # description: Component osa interface
 #  set(CONFIG_USE_component_osa_interface true)
 
+#set.component.psa_crypto_driver
+#  # description: OS Abstraction Layer for PSA crypto driver
+#  set(CONFIG_USE_component_psa_crypto_driver_osal true)
+
+#  # description: Oracle of PSA crypto driver for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_oracle true)
+
+#  # description: Common files of PSA crypto driver for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_common true)
+
+#  # description: Transparent part of PSA crypto driver for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_transparent true)
+
+#  # description: Opaque part of PSA crypto driver for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_opaque true)
+
+#  # description: Common files of PSA crypto driver for ele_s200
+#  set(CONFIG_USE_component_psa_crypto_driver_ele_s200_common true)
+
+#  # description: Transparent part of PSA crypto driver for ele_s200
+#  set(CONFIG_USE_component_psa_crypto_driver_ele_s200_transparent true)
+
+#  # description: OS Abstraction Layer for PSA crypto driver on FreeRTOS
+#  set(CONFIG_USE_component_psa_crypto_driver_osal_frtos true)
+
+#  # description: OS Abstraction Layer for PSA crypto driver on bare metal
+#  set(CONFIG_USE_component_psa_crypto_driver_osal_baremetal true)
+
 #set.middleware.secure-subsystem
 #  # description: Secure subsytem files unused by projects
 #  set(CONFIG_USE_middleware_secure-subsystem_unused_files true)
@@ -715,12 +752,15 @@
 #  # description: Secure subsystem library for elemu
 #  set(CONFIG_USE_middleware_secure-subsystem_elemu true)
 
+#  # description: Loadable FW for ELE S200
+#  set(CONFIG_USE_middleware_secure-subsystem_firmware true)
+
 #  # description: Secure subsystem helpers for ELEMU use in KW45 K4W1
 #  set(CONFIG_USE_middleware_secure-subsystem_elemu_port_kw45_k4w1 true)
 
 #set.middleware.wireless.framework
 #  # description: Middleware wireless framework_cmake
-#  set(CONFIG_USE_middleware_wireless_framework_CMake_connected_mcu true)
+#  set(CONFIG_USE_middleware_wireless_framework_CMake_connected_mcu_kw45_k32w1 true)
 
 #  # description: Middleware wireless framework_fsci
 #  set(CONFIG_USE_middleware_wireless_framework_FSCI true)
@@ -730,9 +770,6 @@
 
 #  # description: Middleware wireless framework_common
 #  set(CONFIG_USE_middleware_wireless_framework_Common true)
-
-#  # description: Middleware wireless framework_rng
-#  set(CONFIG_USE_middleware_wireless_framework_RNG true)
 
 #  # description: Middleware wireless framework_rng_mbedtls
 #  set(CONFIG_USE_middleware_wireless_framework_RNG_mbedtls true)
@@ -809,9 +846,6 @@
 #  # description: Middleware wireless framework_settings
 #  set(CONFIG_USE_middleware_wireless_framework_settings true)
 
-#  # description: Middleware wireless framework_settings
-#  set(CONFIG_USE_middleware_wireless_framework_NVS true)
-
 #  # description: Middleware wireless framework_sec_lib
 #  set(CONFIG_USE_middleware_wireless_framework_sec_lib true)
 
@@ -826,6 +860,12 @@
 
 #  # description: Middleware wireless framework_platform_internal_flash
 #  set(CONFIG_USE_middleware_wireless_framework_platform_internal_flash_connected_mcu true)
+
+#  # description: Middleware wireless framework_platform_rng
+#  set(CONFIG_USE_middleware_wireless_framework_platform_rng_connected_mcu true)
+
+#  # description: Middleware wireless framework_platform_zb
+#  set(CONFIG_USE_middleware_wireless_framework_platform_zb_connected_mcu true)
 
 #  # description: Middleware wireless framework_board_lp
 #  set(CONFIG_USE_middleware_wireless_framework_board_lp_kw45_k32w1 true)
@@ -845,14 +885,14 @@
 #  # description: Middleware wireless framework_lfs_config
 #  set(CONFIG_USE_middleware_wireless_framework_lfs_config_connected_mcu true)
 
+#  # description: Middleware wireless framework_platform_fpga
+#  set(CONFIG_USE_middleware_wireless_framework_platform_fpga_connected_mcu true)
+
 #  # description: Middleware wireless framework matter config
 #  set(CONFIG_USE_middleware_wireless_framework_matter_config_kw45_k32w1 true)
 
 #  # description: Middleware wireless framework init config
 #  set(CONFIG_USE_middleware_wireless_framework_init_config_kw45_k32w1 true)
-
-#  # description: Middleware wireless framework_rpmsg_config
-#  set(CONFIG_USE_middleware_wireless_framework_rpmsg_config true)
 
 #  # description: Middleware wireless framework_mbedtls_config
 #  set(CONFIG_USE_middleware_wireless_framework_mbedtls_config_connected_mcu true)
@@ -860,8 +900,14 @@
 #  # description: Middleware wireless framework platform ot coex
 #  set(CONFIG_USE_middleware_wireless_framework_platform_rt_ot_coex true)
 
+#  # description: Middleware wireless framework_rng
+#  set(CONFIG_USE_middleware_wireless_framework_RNG true)
+
 #  # description: Middleware wireless framework_otaSupport
 #  set(CONFIG_USE_middleware_wireless_framework_OtaSupport true)
+
+#  # description: Middleware wireless framework_otaSupport
+#  set(CONFIG_USE_middleware_wireless_framework_OtaSupport_Internal true)
 
 #  # description: Middleware wireless framework_sbtsnoop
 #  set(CONFIG_USE_middleware_wireless_framework_sbtsnoop true)
@@ -895,6 +941,12 @@
 
 #  # description: Middleware wireless KeyStorage
 #  set(CONFIG_USE_middleware_wireless_framework_keystorage true)
+
+#  # description: Middleware wireless framework_NVS
+#  set(CONFIG_USE_middleware_wireless_framework_NVS true)
+
+#  # description: Middleware wireless framework_NVS
+#  set(CONFIG_USE_middleware_wireless_framework_NVS_Internal true)
 
 #  # description: Middleware wireless framework_platform
 #  set(CONFIG_USE_middleware_wireless_framework_platform_connected_mcu true)
@@ -984,7 +1036,16 @@
 #  # description: Middleware wireless ieee 802.15.4 source for PHY platform
 #  set(CONFIG_USE_middleware_wireless_ieee_802_15_4_PHY_platform_K32W1480 true)
 
+#  # description: Middleware wireless ieee 802.15.4 for mac split lib file
+#  set(CONFIG_USE_middleware_wireless_ieee_802_15_4_lib_mac_split true)
+
 #set.middleware.wireless.zigbee
+#  # description: middleware wireless zigbee cmake infrastructure
+#  set(CONFIG_USE_middleware_wireless_zigbee_cmake true)
+
+#  # description: middleware wireless zigbee markdown documentation
+#  set(CONFIG_USE_middleware_wireless_zigbee_doc true)
+
 #  # description: middleware wireless zigbee all libs
 #  set(CONFIG_USE_middleware_wireless_zigbee_core_all_libs true)
 
@@ -1006,8 +1067,17 @@
 #  # description: Middleware wireless zigbee examples
 #  set(CONFIG_USE_middleware_wireless_zigbee_examples true)
 
+#  # description: Middleware wireless zigbee platform common
+#  set(CONFIG_USE_middleware_wireless_zigbee_platform_common true)
+
 #  # description: Middleware wireless zigbee platform
 #  set(CONFIG_USE_middleware_wireless_zigbee_platform_k32w1 true)
+
+#  # description: Middleware wireless zigbee platform RW612
+#  set(CONFIG_USE_middleware_wireless_zigbee_platform_rw612 true)
+
+#  # description: middleware wireless zigbee all RW612 libs
+#  set(CONFIG_USE_middleware_wireless_zigbee_libs_rw612 true)
 
 #  # description: Middleware wireless zigbee platform
 #  set(CONFIG_USE_middleware_wireless_zigbee_platform_ncp_host true)
@@ -1037,12 +1107,14 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
   ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
   ${CMAKE_CURRENT_LIST_DIR}/../../components/power_manager/devices/K32W1480
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/psa_crypto_driver
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/littlefs
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/bluetooth
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/framework
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/framework/boards/kw45_k32w1/K32W1480
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/zigbee
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
   ${CMAKE_CURRENT_LIST_DIR}/../KW45B41Z83/drivers
@@ -1058,6 +1130,7 @@ include(set_CMSIS_DSP_Lib OPTIONAL)
 include(set_CMSIS OPTIONAL)
 include(set_device_K32W1480 OPTIONAL)
 include(set_component_osa OPTIONAL)
+include(set_component_psa_crypto_driver OPTIONAL)
 include(set_middleware_wireless OPTIONAL)
 include(set_middleware_freertos-kernel OPTIONAL)
 include(set_middleware_littlefs OPTIONAL)

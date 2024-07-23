@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_LCDIC_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+#define FSL_LCDIC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
 
 /*! @brief Delay used in LCDIC_ResetState
@@ -31,6 +31,9 @@
 #ifndef LCDIC_RESET_STATE_DELAY
 #define LCDIC_RESET_STATE_DELAY 130u
 #endif
+
+/* Max data send or receive in one TRX. */
+#define LCDIC_MAX_BYTE_PER_TRX (1UL << 18U)
 
 /*! @brief LCDIC mode. */
 typedef enum _lcdic_mode
@@ -753,6 +756,53 @@ status_t LCDIC_TransferCreateHandle(LCDIC_Type *base,
  * @retval kStatus_Busy LCDIC driver is busy with another transfer.
  */
 status_t LCDIC_TransferNonBlocking(LCDIC_Type *base, lcdic_handle_t *handle, lcdic_xfer_t *xfer);
+
+/*!
+ * @brief Send command using interrupt-driven way.
+ *
+ * @param base LCDIC peripheral base address.
+ * @param handle Pointer to the lcdic_handle_t structure to store the transfer state.
+ * @param cmd Command to send.
+ * @retval kStatus_Success Command sent successfully.
+ * @retval kStatus_Busy LCDIC driver is busy with another transfer.
+ */
+status_t LCDIC_SendCommandNonBlocking(LCDIC_Type *base, lcdic_handle_t *handle, uint8_t cmd);
+
+/*!
+ * @brief Send repeat data using interrupt-driven way.
+ *
+ * @param base LCDIC peripheral base address.
+ * @param handle Pointer to the lcdic_handle_t structure to store the transfer state.
+ * @param xfer LCDIC transfer structure.
+ * @retval kStatus_Success Successfully start a transfer.
+ * @retval kStatus_InvalidArgument Input argument is invalid.
+ * @retval kStatus_Busy LCDIC driver is busy with another transfer.
+ */
+status_t LCDIC_SendRepeatDataNonBlocking(LCDIC_Type *base, lcdic_handle_t *handle, const lcdic_repeat_tx_xfer_t *xfer);
+
+/*!
+ * @brief Send data array using interrupt-driven way.
+ *
+ * @param base LCDIC peripheral base address.
+ * @param handle Pointer to the lcdic_handle_t structure to store the transfer state.
+ * @param xfer LCDIC transfer structure.
+ * @retval kStatus_Success Successfully start a transfer.
+ * @retval kStatus_InvalidArgument Input argument is invalid.
+ * @retval kStatus_Busy LCDIC driver is busy with another transfer.
+ */
+status_t LCDIC_SendDataArrayNonBlocking(LCDIC_Type *base, lcdic_handle_t *handle, const lcdic_tx_xfer_t *xfer);
+
+/*!
+ * @brief Read data array using interrupt-driven way.
+ *
+ * @param base LCDIC peripheral base address.
+ * @param handle Pointer to the lcdic_handle_t structure to store the transfer state.
+ * @param xfer LCDIC transfer structure.
+ * @retval kStatus_Success Successfully start a transfer.
+ * @retval kStatus_InvalidArgument Input argument is invalid.
+ * @retval kStatus_Busy LCDIC driver is busy with another transfer.
+ */
+status_t LCDIC_ReadDataArrayNonBlocking(LCDIC_Type *base, lcdic_handle_t *handle, const lcdic_rx_xfer_t *xfer);
 
 /*!
  * @brief LCDIC IRQ handler function.

@@ -514,15 +514,15 @@ if (CONFIG_USE_middleware_secure-subsystem)
 
 message("middleware_secure-subsystem component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_middleware_secure-subsystem_mu AND CONFIG_USE_middleware_secure-subsystem_elemu_port_kw45_k4w1 AND CONFIG_USE_middleware_secure-subsystem_elemu)
+if(CONFIG_USE_middleware_secure-subsystem_mu AND CONFIG_USE_middleware_secure-subsystem_elemu)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/src/sscp/fsl_sss_sscp.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/src/sscp/fsl_sss_sscp.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/inc
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/port/ksdk
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/inc
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/port/ksdk
 )
 
 else()
@@ -1077,11 +1077,11 @@ message("driver_lpi2c_freertos component is included from ${CMAKE_CURRENT_LIST_F
 if(CONFIG_USE_driver_lpi2c AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpi2c/fsl_lpi2c_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpi2c_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpi2c/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -1149,11 +1149,11 @@ message("driver_lpspi_freertos component is included from ${CMAKE_CURRENT_LIST_F
 if(CONFIG_USE_driver_lpspi AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpspi/fsl_lpspi_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpspi_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpspi/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -1221,11 +1221,11 @@ message("driver_lpuart_freertos component is included from ${CMAKE_CURRENT_LIST_
 if(CONFIG_USE_driver_lpuart AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart/fsl_lpuart_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpuart_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -2241,6 +2241,15 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
 
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_LPIT=1
+  )
+
+endif()
+
 else()
 
 message(SEND_ERROR "component_lpit_adapter.K32W1480 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
@@ -2265,6 +2274,15 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
 
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_LPTMR=1
+  )
+
+endif()
+
 else()
 
 message(SEND_ERROR "component_lptmr_adapter.K32W1480 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
@@ -2288,6 +2306,15 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_TMP=1
+  )
+
+endif()
 
 else()
 
@@ -2904,11 +2931,11 @@ message("middleware_secure-subsystem_mu component is included from ${CMAKE_CURRE
 if(CONFIG_USE_middleware_secure-subsystem)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/src/sscp/fsl_sscp_mu.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/src/sscp/fsl_sscp_mu.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/inc
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/inc
 )
 
 else()
@@ -2928,12 +2955,12 @@ message("middleware_secure-subsystem_elemu component is included from ${CMAKE_CU
 if(CONFIG_USE_middleware_secure-subsystem_mu AND CONFIG_USE_driver_elemu)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/src/sscp/fsl_sss_mgmt.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/src/sscp/fsl_sss_mgmt.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/inc/elemu
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/inc
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/inc/elemu
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/inc
 )
 
 if(CONFIG_USE_COMPONENT_CONFIGURATION)
@@ -2955,6 +2982,35 @@ endif()
 endif()
 
 
+if (CONFIG_USE_middleware_secure-subsystem_firmware)
+# Add set(CONFIG_USE_middleware_secure-subsystem_firmware true) in config.cmake to use this component
+
+message("middleware_secure-subsystem_firmware component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_middleware_secure-subsystem_mu AND CONFIG_USE_driver_elemu)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/firmware
+)
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DELEMU_HAS_LOADABLE_FW
+  )
+
+endif()
+
+else()
+
+message(SEND_ERROR "middleware_secure-subsystem_firmware.K32W1480 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_middleware_secure-subsystem_elemu_port_kw45_k4w1)
 # Add set(CONFIG_USE_middleware_secure-subsystem_elemu_port_kw45_k4w1 true) in config.cmake to use this component
 
@@ -2963,17 +3019,17 @@ message("middleware_secure-subsystem_elemu_port_kw45_k4w1 component is included 
 if(CONFIG_USE_middleware_secure-subsystem_elemu)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/port/kw45_k4w1/sss_aes.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/port/kw45_k4w1/sss_aes_cmac.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/port/kw45_k4w1/sss_ccm.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/port/kw45_k4w1/sss_ecdh.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/port/kw45_k4w1/sss_hmac_sha256.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/port/kw45_k4w1/sss_init.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/port/kw45_k4w1/sss_sha256.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/port/kw45_k4w1/sss_aes.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/port/kw45_k4w1/sss_aes_cmac.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/port/kw45_k4w1/sss_ccm.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/port/kw45_k4w1/sss_ecdh.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/port/kw45_k4w1/sss_hmac_sha256.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/port/kw45_k4w1/sss_init.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/port/kw45_k4w1/sss_sha256.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../middleware/secure-subsystem/port/kw45_k4w1
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/secure-subsystem/port/kw45_k4w1
 )
 
 else()

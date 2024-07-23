@@ -14,6 +14,10 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.ocotp"
+#endif
 
 /* All error masks in STATUS1 register except for SEC (Single error correction)
    When new error masks are added this macro needs to be updated */
@@ -119,7 +123,7 @@ static void otp_clear_status(void)
 status_t OCOTP_OtpInit(void)
 {
     CLOCK_EnableClock(kCLOCK_Otp);
-    RESET_PeripheralReset(kOTP_RST_SHIFT_RSTn);
+    RESET_ClearPeripheralReset(kOTP_RST_SHIFT_RSTn);
 
     /* Bring SOC OTP out of reset */
     SOC_OTP_CTRL->OTP_POR_B = SOC_OTP_CTRL_OTP_POR_B_OTP_POR_B_MASK;
@@ -136,9 +140,7 @@ status_t OCOTP_OtpDeinit(void)
     if (status == kStatus_Success)
     {
         OCOTP->OTP_PDN = OCOTP_OTP_PDN_PDN_MASK;
-
         CLOCK_DisableClock(kCLOCK_Otp);
-        RESET_SetPeripheralReset(kOTP_RST_SHIFT_RSTn);
     }
 
     SOC_OTP_CTRL->OTP_POR_B = 0U;

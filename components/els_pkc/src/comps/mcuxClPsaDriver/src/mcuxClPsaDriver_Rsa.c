@@ -418,19 +418,23 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 
     /* Public exponent */
     mcuxClRsa_KeyEntry_t pubEKey = {0};
+/* Comemnted as domain paramters have been changed and currently driver wrappers don't have the capability to get these parameters */
+#if 0    
     if(NULL == attributes->domain_parameters)
     {
+#endif      
         MCUX_CSSL_ANALYSIS_START_SUPPRESS_DISCARD_CONST_QUALIFIER("Const must be discarded to initialize the generic structure member.")
         pubEKey.pKeyEntryData = (uint8_t *)defaultExponent;
         MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_DISCARD_CONST_QUALIFIER()
         pubEKey.keyEntryLength = 3u;
+#if 0
     }
     else
     {
         pubEKey.pKeyEntryData = (uint8_t*) attributes->domain_parameters;
         pubEKey.keyEntryLength = attributes->domain_parameters_size;
     }
-
+#endif
 
     /* Key type structures */
     mcuxClKey_TypeDescriptor_t type;

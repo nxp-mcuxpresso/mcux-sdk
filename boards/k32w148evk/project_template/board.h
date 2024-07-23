@@ -36,7 +36,7 @@
 #define BOARD_LPSPI_PCS_FOR_INIT     kLPSPI_Pcs0
 #define BOARD_LPSPI_PCS_FOR_TRANSFER kLPSPI_MasterPcs0
 #define BOARD_LPSPI_MRCC_CLK_DIV     1U
-#define BOARD_LPSPI_NOR_BAUDRATE     4000000U
+#define BOARD_LPSPI_NOR_BAUDRATE     24000000U
 
 /*! @brief The TPM channel used for board */
 #define BOARD_TPM_CHANNEL 0U

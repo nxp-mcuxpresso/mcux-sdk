@@ -16,15 +16,15 @@
  * this platform can erase/program the flash memory by smaller block (actually page size).
  */
 #ifndef MFLASH_SECTOR_SIZE
-#define MFLASH_SECTOR_SIZE (512)
+#define MFLASH_SECTOR_SIZE (512U)
 #endif
 
 #ifndef MFLASH_PAGE_SIZE
-#define MFLASH_PAGE_SIZE (512)
+#define MFLASH_PAGE_SIZE (512U)
 #endif
 
 #ifndef MFLASH_BASE_ADDRESS
-#define MFLASH_BASE_ADDRESS (0)
+#define MFLASH_BASE_ADDRESS (0U)
 #endif
 
 #define MFLASH_PAGE_INTEGRITY_CHECKS (1)

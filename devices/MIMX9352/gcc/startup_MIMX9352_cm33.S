@@ -4,13 +4,11 @@
 /*            MIMX9352_cm33                                                  */
 /*  @version: 1.0                                                            */
 /*  @date:    2021-11-16                                                     */
-/*  @build:   b220830                                                        */
+/*  @build:   b231019                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
-/* Copyright 2016-2022 NXP                                                   */
-/* All rights reserved.                                                      */
-/*                                                                           */
+/* Copyright 2016-2023 NXP                                                   */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
 /*****************************************************************************/
 /* Version: GCC for ARM Embedded Processors                                  */
@@ -123,7 +121,7 @@ __isr_vector:
     .long   WDOG4_IRQHandler                                /* Watchdog 4 Interrupt */
     .long   WDOG5_IRQHandler                                /* Watchdog 5 Interrupt */
     .long   Reserved98_IRQHandler                           /* WAKEUPMIX TRDC transfer error interrupt */
-    .long   Reserved99_IRQHandler                           /* TempSensor interrupt */
+    .long   TEMPMON_IRQHandler                              /* TempSensor interrupt */
     .long   Reserved100_IRQHandler                          /* Reserved interrupt */
     .long   Reserved101_IRQHandler                          /* Reserved interrupt */
     .long   uSDHC1_IRQHandler                               /* ultra Secure Digital Host Controller interrupt 1 */
@@ -315,6 +313,11 @@ __isr_vector:
     .text
     .thumb
 
+#if defined (__cplusplus)
+#ifdef __REDLIB__
+#error Redlib does not support C++
+#endif
+#endif
 /* Reset Handler */
 
     .thumb_func
@@ -386,27 +389,23 @@ Reset_Handler:
     blt    .LC2
 #endif /* __STARTUP_CLEAR_BSS */
 
-/* Add stack / heap initializaiton */
+/* TCM initializaiton in case of ECC error */
     movs    r0, 0
     ldr     r1, =__HeapBase
-    ldr     r2, =__HeapLimit
+    ldr     r2, =__StackTop
 .LC3:
     cmp     r1, r2
     itt     lt
     strlt   r0, [r1], #4
     blt     .LC3
-
-    ldr     r1, =__StackLimit
-    ldr     r2, =__StackTop
-.LC4:
-    cmp     r1, r2
-    itt     lt
-    strlt   r0, [r1], #4
-    blt     .LC4
-/*End of stack / heap initializaiton */
+/* End of TCM initializaiton */
     cpsie   i               /* Unmask interrupts */
 #ifndef __START
+#ifdef __REDLIB__
+#define __START __main
+#else
 #define __START _start
+#endif
 #endif
 #ifndef __ATOLLIC__
     ldr   r0,=__START
@@ -1656,7 +1655,7 @@ LPUART8_IRQHandler:
     def_irq_handler    WDOG4_IRQHandler
     def_irq_handler    WDOG5_IRQHandler
     def_irq_handler    Reserved98_IRQHandler
-    def_irq_handler    Reserved99_IRQHandler
+    def_irq_handler    TEMPMON_IRQHandler
     def_irq_handler    Reserved100_IRQHandler
     def_irq_handler    Reserved101_IRQHandler
     def_irq_handler    uSDHC1_DriverIRQHandler

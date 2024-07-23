@@ -212,10 +212,10 @@
             kCLOCK_Pwm1_Sm0, kCLOCK_Pwm1_Sm1, kCLOCK_Pwm1_Sm2, kCLOCK_Pwm1_Sm3 \
         }                                                                      \
     }
-/*! @brief Clock ip name array for ENC. */
-#define ENC_CLOCKS               \
+/*! @brief Clock ip name array for QDC. */
+#define QDC_CLOCKS               \
     {                            \
-        kCLOCK_Enc0, kCLOCK_Enc1 \
+        kCLOCK_Qdc0, kCLOCK_Qdc1 \
     }
 /*! @brief Clock ip name array for FLEXIO. */
 #define FLEXIO_CLOCKS \
@@ -296,6 +296,11 @@
 #define SINC_CLOCKS \
     {               \
         kCLOCK_Sinc \
+    }
+/*! @brief Clock ip name array for SEMA42 */
+#define SEMA42_CLOCKS \
+    {                 \
+        kCLOCK_Sema42 \
     }
 /*! @brief Clock gate name used for CLOCK_EnableClock/CLOCK_DisableClock. */
 /*------------------------------------------------------------------------------
@@ -446,8 +451,8 @@ typedef enum _clock_ip_name
     kCLOCK_I3c1        = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 1),  /*!< Clock gate name: I3c1. */
     kCLOCK_Sinc        = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 2),  /*!< Clock gate name: Sinc. */
     kCLOCK_CoolFlux    = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 3),  /*!< Clock gate name: CoolFlux. */
-    kCLOCK_Enc0        = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 4),  /*!< Clock gate name: Enc0. */
-    kCLOCK_Enc1        = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 5),  /*!< Clock gate name: Enc1. */
+    kCLOCK_Qdc0        = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 4),  /*!< Clock gate name: Qdc0. */
+    kCLOCK_Qdc1        = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 5),  /*!< Clock gate name: Qdc1. */
     kCLOCK_Pwm0        = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 6),  /*!< Clock gate name: Pwm0. */
     kCLOCK_Pwm1        = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 7),  /*!< Clock gate name: Pwm1. */
     kCLOCK_Evtg        = CLK_GATE_DEFINE(AHB_CLK_CTRL3, 8),  /*!< Clock gate name: Evtg. */
@@ -934,7 +939,7 @@ typedef enum _clock_attach_id
     kCLK_16K2_to_WDT1   = MUX_A(CM_WDT1CLKSEL, 0),               /*!< Attach FRO16K clock 2 to WDT1. */
     kFRO_HF_DIV_to_WDT1 = MUX_A(CM_WDT1CLKSEL, 1),               /*!< Attach FRO_HF_DIV to WDT1. */
     kCLK_1M_to_WDT1     = MUX_A(CM_WDT1CLKSEL, 2),               /*!< Attach clk_1m to WDT1. */
-    kNONE_to_WDT1       = MUX_A(CM_WDT1CLKSEL, 3),               /*!< Attach NONE to WDT1. */
+    kCLK_1M_2_to_WDT1   = MUX_A(CM_WDT1CLKSEL, 3),               /*!< Attach clk_1m to WDT1. */
 
     kCLK_16K2_to_OSTIMER = MUX_A(CM_OSTIMERCLKSEL, 0),           /*!< Attach clk_16k[2] to OSTIMER. */
     kXTAL32K2_to_OSTIMER = MUX_A(CM_OSTIMERCLKSEL, 1),           /*!< Attach xtal32k[2] to OSTIMER. */
@@ -1391,9 +1396,6 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
     uint32_t index = CLK_GATE_ABSTRACT_REG_OFFSET(clk);
     uint32_t bit   = CLK_GATE_ABSTRACT_BITS_SHIFT(clk);
 
-    if (clk == kCLOCK_None)
-        return;
-
     if (index == (uint32_t)REG_PWM0SUBCTL)
     {
         SYSCON->PWM0SUBCTL |= (1UL << bit);
@@ -1419,9 +1421,6 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
 {
     uint32_t index = CLK_GATE_ABSTRACT_REG_OFFSET(clk);
     uint32_t bit   = CLK_GATE_ABSTRACT_BITS_SHIFT(clk);
-
-    if (clk == kCLOCK_None)
-        return;
 
     if (index == (uint32_t)REG_PWM0SUBCTL)
     {

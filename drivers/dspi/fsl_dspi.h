@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief DSPI driver version 2.2.6. */
+/*! @brief DSPI driver version 2.2.5. */
 #define FSL_DSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 6))
 /*! @} */
 
@@ -345,7 +345,7 @@ typedef struct _dspi_transfer
 /*! @brief DSPI half-duplex(master) transfer structure */
 typedef struct _dspi_half_duplex_transfer
 {
-    const uint8_t *txData;/*!< Send buffer */
+    const uint8_t *txData; /*!< Send buffer */
     uint8_t *rxData;      /*!< Receive buffer */
     size_t txDataSize;    /*!< Transfer bytes for transmit */
     size_t rxDataSize;    /*!< Transfer bytes */
@@ -368,7 +368,7 @@ struct _dspi_master_handle
         isPcsActiveAfterTransfer;   /*!< Indicates whether the PCS signal is active after the last frame transfer.*/
     volatile bool isThereExtraByte; /*!< Indicates whether there are extra bytes.*/
 
-    const uint8_t *volatile txData;            /*!< Send buffer. */
+    const uint8_t *volatile txData; /*!< Send buffer. */
     uint8_t *volatile rxData;                  /*!< Receive buffer. */
     volatile size_t remainingSendByteCount;    /*!< A number of bytes remaining to send.*/
     volatile size_t remainingReceiveByteCount; /*!< A number of bytes remaining to receive.*/

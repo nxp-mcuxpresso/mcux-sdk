@@ -1388,6 +1388,11 @@ void EDMA_AbortTransfer(edma_handle_t *handle)
     /* Cancel all next TCD transfer. */
     handle->base->CH[handle->channel].TCD_DLAST_SGA = 0;
 
+    /* clear the TCD_CITER_ELINKNO and TCD_BITER_ELINKNO to make sure the TCD register in a correct
+     * state for next calling of EDMA_SubmitTransfer */
+    handle->base->CH[handle->channel].TCD_CITER_ELINKNO = 0;
+    handle->base->CH[handle->channel].TCD_BITER_ELINKNO = 0;
+
     /* Handle the tcd */
     if (handle->tcdPool != NULL)
     {

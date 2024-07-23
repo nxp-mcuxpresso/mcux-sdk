@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,10 +19,14 @@
  * Definitions
  *******************************************************************************/
 /*! @name Version */
-/*@{*/
-/*! @brief Defines ELE Crypto version 2.9.0.
+/*! @{ */
+/*! @brief Defines ELE Crypto version 2.10.0.
  *
  * Change log:
+ *
+ * - Version 2.10.0
+ *   - Add support for updated Fast MAC
+ *   - Add RNG reseed option to ELE_RngGetRandom()
  *
  * - Version 2.9.0
  *   - Add option for user to specify a key ID in ELE_GenerateKey()
@@ -81,8 +85,8 @@
  * - Version 2.0.0
  *   - initial version
  */
-#define FSL_ELE_CRYPTO_VERSION (MAKE_VERSION(2, 9, 0))
-/*@}*/
+#define FSL_ELE_CRYPTO_VERSION (MAKE_VERSION(2, 10, 0))
+/*! @} */
 
 enum
 {
@@ -415,6 +419,79 @@ typedef struct _ele_mac
     mac_mode_t mode;         /*!< Mode identifier Refer to mac_mode_t */
 } ele_mac_t;
 
+/**
+ * FastMAC-specific definitions for the 'Fast MAC Proceed' command
+ * flags to be OR'd together as per the user's needs. See FastMAC documentation
+ * for specifics.
+ */
+
+/*!< Preload msg buffer 0. */
+#define FAST_MAC_PRELOAD_BUFF_0 (0x00000001u)
+/*!< Preload msg buffer 1. */
+#define FAST_MAC_PRELOAD_BUFF_1 (0x00000002u)
+/*!< Preload msg buffer 2. */
+#define FAST_MAC_PRELOAD_BUFF_2 (0x00000004u)
+/*!< Preload msg buffer 3. */
+#define FAST_MAC_PRELOAD_BUFF_3 (0x00000008u)
+
+/*!< HMAC proceed over msg buffer 0. */
+#define FAST_MAC_PROCEED_BUFF_0 (0x00000010u)
+/*!< HMAC proceed over msg buffer 1. */
+#define FAST_MAC_PROCEED_BUFF_1 (0x00000020u)
+/*!< HMAC proceed over msg buffer 2. */
+#define FAST_MAC_PROCEED_BUFF_2 (0x00000040u)
+/*!< HMAC proceed over msg buffer 3. */
+#define FAST_MAC_PROCEED_BUFF_3 (0x00000080u)
+/*!< HMAC proceed all four buffers. */
+#define FAST_MAC_PROCEED_ALL_BUFF \
+    (FAST_MAC_PROCEED_BUFF_0 | FAST_MAC_PROCEED_BUFF_1 | FAST_MAC_PROCEED_BUFF_2 | FAST_MAC_PROCEED_BUFF_3)
+
+/*!< Verify internally. When this flag is set while also utilizing preloading, ELE assumes that Message address field
+is a concatenation of message and expected HMAC. Message = (message || expected_HMAC). At the end of the HMAC
+computation, ELE will compare expteced_HMAC with the calculated HMAC and report the status. In this scenario, message
+size API input must be size of message + size of expected HMAC in bytes. */
+#define FAST_MAC_VERIFY_INTERNALLY (0x00000100u)
+
+/*!< One shot mode. One shot: Do not use preload mechanism. When this flag is set, Message field is the message,
+and MAC field is the output buffer or expected HMAC buffer depending on verify internally flag */
+#define FAST_MAC_ONE_SHOT (0x00000200u)
+
+/*!< Use key 0 for the specified message. */
+#define FAST_MAC_USE_KEY_0 (0x00000000u)
+/*!< Use key 1 for the specified message. */
+#define FAST_MAC_USE_KEY_1 (0x00000400u)
+
+/*!< HMAC trunctation to 8 Bytes. */
+#define FAST_MAC_TRUNCATE_08B (0x00000800u)
+/*!< HMAC trunctation to 16 Bytes. */
+#define FAST_MAC_TRUNCATE_16B (0x00001000u)
+/*!< HMAC trunctation to 24 Bytes. */
+#define FAST_MAC_TRUNCATE_24B (0x00001800u)
+/*!< HMAC trunctation to 32 Bytes (no truncation done). */
+#define FAST_MAC_TRUNCATE_32B (0x00003800u)
+
+/*!< Check buffer 0 internal verification status returned by ELE_FastMacProceed(). Returns 1 if verification success. */
+#define FAST_MAC_CHECK_VERIFICATION_SUCCESS_BUF_0(x) ((uint32_t)x & 0x01)
+/*!< Check buffer 1 internal verification status returned by ELE_FastMacProceed(). Returns 1 if verification success. */
+#define FAST_MAC_CHECK_VERIFICATION_SUCCESS_BUF_1(x) (((uint32_t)x & 0x02) >> 1)
+/*!< Check buffer 2 internal verification status returned by ELE_FastMacProceed(). Returns 1 if verification success. */
+#define FAST_MAC_CHECK_VERIFICATION_SUCCESS_BUF_2(x) (((uint32_t)x & 0x04) >> 2)
+/*!< Check buffer 3 internal verification status returned by ELE_FastMacProceed(). Returns 1 if verification success. */
+#define FAST_MAC_CHECK_VERIFICATION_SUCCESS_BUF_3(x) (((uint32_t)x & 0x08) >> 3)
+/*!< Check oneshot internal verification status returned by ELE_FastMacProceed(). Returns 1 if verification success. */
+#define FAST_MAC_CHECK_VERIFICATION_SUCCESS_ONESHOT(x) (((uint32_t)x & 0x80) >> 7)
+
+/*!< Check buffer 0 internal verification status returned by ELE_FastMacProceed(). Returns 1 if verification failure. */
+#define FAST_MAC_CHECK_VERIFICATION_FAILURE_BUF_0(x) ((uint32_t)x & 0x0100 >> 8)
+/*!< Check buffer 1 internal verification status returned by ELE_FastMacProceed(). Returns 1 if verification failure. */
+#define FAST_MAC_CHECK_VERIFICATION_FAILURE_BUF_1(x) (((uint32_t)x & 0x0200) >> 9)
+/*!< Check buffer 2 internal verification status returned by ELE_FastMacProceed(). Returns 1 if verification failure. */
+#define FAST_MAC_CHECK_VERIFICATION_FAILURE_BUF_2(x) (((uint32_t)x & 0x0400) >> 10)
+/*!< Check buffer 3 internal verification status returned by ELE_FastMacProceed(). Returns 1 if verification failure. */
+#define FAST_MAC_CHECK_VERIFICATION_FAILURE_BUF_3(x) (((uint32_t)x & 0x0800) >> 11)
+/*!< Check oneshot internal verification status returned by ELE_FastMacProceed(). Returns 1 if verification failure. */
+#define FAST_MAC_CHECK_VERIFICATION_FAILURE_ONESHOT(x) (((uint32_t)x & 0x8000) >> 15)
+
 /*!
  *@}
  */ /* end of ele_crypto_mac */
@@ -527,6 +604,14 @@ typedef struct _ele_data_storage
  * @addtogroup ele_crypto_generic
  * @{
  */
+
+/*! @brief RNG reseed flags */
+typedef enum _rng_reseed_flag_t
+{
+    kNoReseed          = 0x0u, /*!< Do not reseed RNG */
+    kReseedNonBlocking = 0x1u, /*!< If ELE is not ready to reseed, return failure */
+    kReseedBlocking    = 0x2u, /*!< If ELE is not ready to reseed, wait until ready */
+} rng_reseed_flag_t;
 
 /*! @brief AES generic cipher algo  */
 typedef enum _generic_cipher_algo_t
@@ -902,6 +987,59 @@ typedef enum _ele_trng_csal_state_t
 /*!
  *@}
  */ /* end of ele_rng */
+
+/*******************************************************************************
+ * BBSM (Battery-Backed Security Module)
+ ******************************************************************************/
+/*!
+ * @addtogroup ele_bbsm
+ * @{
+ */
+
+/*! @brief ELE BBSM Alert level policy */
+typedef enum _ele_bbsm_policy_t
+{
+    kELE_BBSM_Alert1_BBSM_log_event   = 0x1u,        /*!< ELE will log an event */
+    kELE_BBSM_Alert1_BBSM_abort       = 0x2u,        /*!< ELE will abort */
+    kELE_BBSM_Alert1_BBSM_irq         = 0x4u,        /*!< ELE will trigger an interrupt to user core */
+    kELE_BBSM_Alert1_BBSM_disable_sab = 0x8u,        /*!< ELE will disable crypto sensitive services (SAB) */
+
+    kELE_BBSM_Alert2_BBSM_log_event   = 0x1u << 4u,  /*!< ELE will log an event */
+    kELE_BBSM_Alert2_BBSM_abort       = 0x2u << 4u,  /*!< ELE will abort */
+    kELE_BBSM_Alert2_BBSM_irq         = 0x4u << 4u,  /*!< ELE will trigger an interrupt to user core */
+    kELE_BBSM_Alert2_BBSM_disable_sab = 0x8u << 4u,  /*!< ELE will disable crypto sensitive services (SAB) */
+
+    kELE_BBSM_Alert3_BBSM_log_event   = 0x1u << 8u,  /*!< ELE will log an event */
+    kELE_BBSM_Alert3_BBSM_abort       = 0x2u << 8u,  /*!< ELE will abort */
+    kELE_BBSM_Alert3_BBSM_irq         = 0x4u << 8u,  /*!< ELE will trigger an interrupt to user core */
+    kELE_BBSM_Alert3_BBSM_disable_sab = 0x8u << 8u,  /*!< ELE will disable crypto sensitive services (SAB) */
+
+    kELE_BBSM_Alert4_BBSM_log_event   = 0x1u << 12u, /*!< ELE will log an event */
+    kELE_BBSM_Alert4_BBSM_abort       = 0x2u << 12u, /*!< ELE will abort */
+    kELE_BBSM_Alert4_BBSM_irq         = 0x4u << 12u, /*!< ELE will trigger an interrupt to user core */
+    kELE_BBSM_Alert4_BBSM_disable_sab = 0x8u << 12u, /*!< ELE will disable crypto sensitive services (SAB) */
+} ele_bbsm_policy_t;
+
+/*!
+ *@}
+ */ /* end of ele_bbsm */
+/*******************************************************************************
+ * Get Event
+ ******************************************************************************/
+/*!
+ * @addtogroup ele_event
+ * @{
+ */
+
+#define ELE_MAX_EVENTS 8u /* Maximum capacity of the event buffer  */
+typedef struct _ele_events_t
+{
+    uint32_t event[ELE_MAX_EVENTS]; /*!< Events buffer */
+} ele_events_t;
+
+/*!
+ *@}
+ */ /* end of ele_event */
 /*******************************************************************************
  * API
  *******************************************************************************/
@@ -1192,11 +1330,12 @@ status_t ELE_Mac(S3MU_Type *mu, ele_mac_t *conf, uint32_t *verify_status, uint16
  * @param mu MU peripheral base address
  * @param output pointer to output buffer where to store random number
  * @param size size of requested random data
+ * @param reseed_flag option to reseed the DRBG instance
  *
  * @return Status kStatus_Success if success, kStatus_Fail if fail
  * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
  */
-status_t ELE_RngGetRandom(S3MU_Type *mu, uint32_t *output, size_t size);
+status_t ELE_RngGetRandom(S3MU_Type *mu, uint32_t *output, size_t size, rng_reseed_flag_t reseed_flag);
 
 /*!
  * @brief Open and Create Key Store
@@ -1856,14 +1995,15 @@ status_t ELE_ClockChangeStart(S3MU_Type *mu);
 status_t ELE_ClockChangeFinish(S3MU_Type *mu, uint8_t NewClockRateELE, uint8_t NewClockRateCM33);
 
 /*!
- * brief Fast Mac Start
+ * @brief Fast Mac Start
  *
  * This command is used to enter in "Fast MAC" operation mode. This is the first step of the fast MAC API.
  * During this step, ELE will copy key into internal memory in order to accelerate future usage of the key.
- * ELE will also enter in a special mode where only Fast MAC will be accepted. All other requested will be rejected.
+ * ELE will also enter in a special mode where only Fast MAC will be accepted. All other commands will be rejected.
  *
- * @param mu MU peripheral base address
- * @param Pointer to key data. The key size is hardcoded to 256 bits. Other key sizes are not supproted.
+ * @param base MU peripheral base address
+ * @param key  Pointer to key data buffer, which is expected to be 64 Bytes long consisting of two 256 bit keys.
+ *             The key size is hardcoded to 256 bits and other key sizes are not supported.
  *
  * @return Status kStatus_Success if success, kStatus_Fail if fail
  * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
@@ -1871,23 +2011,35 @@ status_t ELE_ClockChangeFinish(S3MU_Type *mu, uint8_t NewClockRateELE, uint8_t N
 status_t ELE_FastMacStart(S3MU_Type *mu, const uint8_t *key);
 
 /*!
- * brief Fast Mac Proceed
+ * @brief Fast Mac Proceed
  *
  * This command is used to proceed with a Fast MAC generation. The user gives as input the message buffer and size,
  * and ELE output to the User's MAC buffer the computed MAC. ELE use the key given in Start API.
  *
- * @param mu MU peripheral base address
- * @param msg pointer where input message data can be found
+ * @param base MU peripheral base address.
+ * @param msg pointer where input message data can be found.
  * @param mac pointer to a buffer where the MAC data are written by ELE.
- * @param msgSize size of message in bytes
+ *            If doing a OneShot operation with internal verification enabled,
+ *            this buffer must hold the expected MAC value.
+ * @param msgSize size of message in bytes. If doing a Preload operation with
+ *                internal verification enabled, this must be the length of the
+ *                input message + the length of the concatenated expected MAC.
+ *                @note If oneshot, limit is UIN16_MAX, otherwise 512 Bytes.
+ * @param flags the flags specifying Fast MAC Proceed behavior.
+ *              See the FAST_MAC_* macros in ele_crypto.h.
+ * @param verifStatus returns the verification status after MAC computation if
+ *                    the internal verification flag was enabled. May be NULL.
+ *                    See the FAST_MAC_CHECK_VERIFICATION_* macros for
+ *                    checking the returned status.
  *
  * @return Status kStatus_Success if success, kStatus_Fail if fail
  * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
  */
-status_t ELE_FastMacProceed(S3MU_Type *mu, const uint8_t *msg, uint8_t *mac, uint32_t msgSize);
+status_t ELE_FastMacProceed(
+    S3MU_Type *mu, const uint8_t *msg, uint8_t *mac, uint16_t msgSize, uint16_t flags, uint32_t *verifStatus);
 
 /*!
- * brief Fast Mac End
+ * @brief Fast Mac End
  *
  * This command is used to exit from "Fast MAC" mode.
  *
@@ -1958,6 +2110,71 @@ status_t ELE_ImportKey(S3MU_Type *mu,
                        bool sync,
                        bool monotonic,
                        uint32_t *keyID);
+
+/*!
+ * @brief Write BBSM
+ *
+ * This function is used to program Battery-Backed Security Module registers inside ELE.
+ * For the BBSM registers description, please refer to Secure Reference Manual.
+ *
+ * @param mu MU peripheral base address
+ * @param offset Offset of the register to perform the operation
+ * @param value value to be written into BBSM register
+ *
+ * @return Status kStatus_Success if success, kStatus_Fail if fail
+ * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
+ */
+status_t ELE_WriteBbsm(S3MU_Type *mu, uint32_t offset, uint32_t value);
+
+/*!
+ * @brief Read BBSM
+ *
+ * This function is used to read Battery-Backed Security Module registers inside ELE
+ * For the BBSM registers description, please refer to Secure Reference Manual.
+ *
+ * @param mu MU peripheral base address
+ * @param offset Offset of the register to perform the operation
+ * @param value address of 4B (word) buffer where read value from BBSM register is returned
+ *
+ * @return Status kStatus_Success if success, kStatus_Fail if fail
+ * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
+ */
+status_t ELE_ReadBbsm(S3MU_Type *mu, uint32_t offset, uint32_t *value);
+
+/*!
+ * @brief Set BBSM policy
+ *
+ * This function is used to set policy for Battery-Backed Security Module in case of events
+ *
+ * @param mu MU peripheral base address
+ * @param policy_mask policy to be set (refer to ele_bbsm_policy_t)
+ *
+ * @return Status kStatus_Success if success, kStatus_Fail if fail
+ * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
+ */
+status_t ELE_SetPolicyBbsm(S3MU_Type *mu, uint32_t alert_mask);
+
+/*!
+ * @brief Set ELE Get Event
+ *
+ * This function is used to retrieve any singular event that has occurred since the FW has started.
+ * A singular event occurs when the second word of a response to any request is different from ELE_SUCCESS.
+ * That includes commands with failure response as well as commands with successful response containing an indication
+ * (i.e. warning response).
+ *
+ * The events are stored by ELE in a fixed sized buffer. When the capacity of the buffer is exceeded, new occurring
+ * events are lost.
+ *
+ * The event buffer is systematically returned in full to the requester independently of the actual numbers of events
+ * stored
+ *
+ * @param mu MU peripheral base address
+ * @param events Events buffer (refer to ele_events_t)
+ *
+ * @return Status kStatus_Success if success, kStatus_Fail if fail
+ * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
+ */
+status_t ELE_GetEvent(S3MU_Type *mu, ele_events_t *events);
 
 #if defined(__cplusplus)
 }

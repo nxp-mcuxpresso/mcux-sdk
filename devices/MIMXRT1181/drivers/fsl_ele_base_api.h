@@ -47,6 +47,14 @@
 #define CLOCK_CHANGE_FINISH_SIZE                                           (0x2u)
 #define CLOCK_CHANGE_FINISH_RESPONSE_HDR                                   (0xe1110206u)
 
+#define VOLTAGE_CHANGE_START                                               (0x17120106u)
+#define VOLTAGE_CHANGE_START_SIZE                                          (0x1u)
+#define VOLTAGE_CHANGE_START_RESPONSE_HDR                                  (0xe1120206u)
+
+#define VOLTAGE_CHANGE_FINISH                                              (0x17130106u)
+#define VOLTAGE_CHANGE_FINISH_SIZE                                         (0x1u)
+#define VOLTAGE_CHANGE_FINISH_RESPONSE_HDR                                 (0xe1130206u)
+
 #define GET_FW_STATUS                                                      (0x17C50106u)
 #define GET_FW_STATUS_SIZE                                                 (0x1u)
 #define GET_FW_STATUS_RESPONSE_HDR                                         (0xe1C50306u)
@@ -78,14 +86,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Defines ELE Base API version 1.0.0.
- *
- * Change log:
- *
- * - Version 1.0.0
- *   - initial version
- */
-#define FSL_ELE_BASE_API_DRIVER_VERSION (MAKE_VERSION(1, 0, 0))
+/*! @brief Defines ELE Base API version 1.0.1.*/
+#define FSL_ELE_BASE_API_DRIVER_VERSION (MAKE_VERSION(1, 0, 1))
 /*@}*/
 
 
@@ -229,6 +231,26 @@ status_t ELE_BaseAPI_ClockChangeStart(S3MU_Type *mu);
  * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
  */
 status_t ELE_BaseAPI_ClockChangeFinish(S3MU_Type *mu, uint8_t NewClockRateELE, uint8_t NewClockRateCM33);
+
+/*!
+ * @brief Start the voltage change process
+ *
+ * @param mu MU peripheral base address
+ *
+ * @return Status kStatus_Success if success, kStatus_Fail if fail
+ * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
+ */
+status_t ELE_BaseAPI_VoltageChangeStart(S3MU_Type *mu);
+
+/*!
+ * @brief Finish the voltage change process
+ *
+ * @param mu MU peripheral base address
+ *
+ * @return Status kStatus_Success if success, kStatus_Fail if fail
+ * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
+ */
+status_t ELE_BaseAPI_VoltageChangeFinish(S3MU_Type *mu);
 
 #if defined(__cplusplus)
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2023 NXP
+ * Copyright 2016-2020, 2023-2024 NXP
  * All rights reserved.
  *
  *
@@ -22,8 +22,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*! @{ */
-/*! @brief LPCMP driver version 2.1.2. */
-#define FSL_LPCMP_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+/*! @brief LPCMP driver version 2.1.3. */
+#define FSL_LPCMP_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*! @} */
 
 #define LPCMP_CCR1_COUTA_CFG_MASK  (LPCMP_CCR1_COUTA_OWEN_MASK | LPCMP_CCR1_COUTA_OW_MASK)

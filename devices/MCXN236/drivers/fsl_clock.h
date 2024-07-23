@@ -1142,9 +1142,6 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
     uint32_t index = CLK_GATE_ABSTRACT_REG_OFFSET(clk);
     uint32_t bit   = CLK_GATE_ABSTRACT_BITS_SHIFT(clk);
 
-    if (clk == kCLOCK_None)
-        return;
-
     if (index == (uint32_t)REG_PWM0SUBCTL)
     {
         SYSCON->PWM0SUBCTL |= (1UL << bit);
@@ -1170,9 +1167,6 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
 {
     uint32_t index = CLK_GATE_ABSTRACT_REG_OFFSET(clk);
     uint32_t bit   = CLK_GATE_ABSTRACT_BITS_SHIFT(clk);
-
-    if (clk == kCLOCK_None)
-        return;
 
     if (index == (uint32_t)REG_PWM0SUBCTL)
     {

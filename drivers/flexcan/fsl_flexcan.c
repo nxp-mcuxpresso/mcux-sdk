@@ -462,6 +462,7 @@ void FLEXCAN_EnterFreezeMode(CAN_Type *base)
     /* Step4: to check FLTCONF in ESR1 register */
     if (0U == (base->ESR1 & CAN_ESR1_FLTCONF_BUSOFF))
     {
+        /* Error Active and Error Passive state */
         /* Step5B: Set Halt bits. */
         base->MCR |= CAN_MCR_HALT_MASK;
 
@@ -472,9 +473,40 @@ void FLEXCAN_EnterFreezeMode(CAN_Type *base)
         {
             u32TimeoutCount--;
         }
+
+        /* Merge ERRATA_9595 and ERRATA_8341 because both errata exist on some platform. */
+        if (0U == u32TimeoutCount)
+        {
+            /* backup MCR and IMASK register. */
+            u32TempMCR    = base->MCR;
+            u32TempIMASK1 = base->IMASK1;
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER)) && (FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER > 0)
+            u32TempIMASK2 = base->IMASK2;
+#endif
+            /* Set the Soft Reset bit ((SOFTRST) in the MCR.*/
+            base->MCR |= CAN_MCR_SOFTRST_MASK;
+
+            /* Poll the MCR register until the Soft Reset (SOFTRST) bit is cleared, timeout need more than 178
+             * CAN bit length, so 20 multiply timeout is enough. */
+            u32TimeoutCount = (uint32_t)FLEXCAN_WAIT_TIMEOUT * 20U;
+            while ((CAN_MCR_SOFTRST_MASK == (base->MCR & CAN_MCR_SOFTRST_MASK)) && (u32TimeoutCount > 0U))
+            {
+                u32TimeoutCount--;
+            }
+
+            /* Reconfig MCR. */
+            base->MCR = u32TempMCR;
+
+            /* Reconfig IMASK. */
+            base->IMASK1 = u32TempIMASK1;
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER)) && (FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER > 0)
+            base->IMASK2 = u32TempIMASK2;
+#endif
+        }
     }
     else
     {
+        /* Bus Off state */
         /* backup MCR and IMASK register. Errata document not descript it, but we need backup for step 8A and 9A. */
         u32TempMCR    = base->MCR;
         u32TempIMASK1 = base->IMASK1;

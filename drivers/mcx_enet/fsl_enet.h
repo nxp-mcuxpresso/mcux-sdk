@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*@}*/
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */
@@ -58,19 +58,19 @@
 /*! @brief Defines for read format. */
 #define ENET_TXDESCRIP_RD_BL1_MASK  (0x3fffU)
 #define ENET_TXDESCRIP_RD_BL2_MASK  (ENET_TXDESCRIP_RD_BL1_MASK << 16)
-#define ENET_TXDESCRIP_RD_BL1(n)    ((uint32_t)(n)&ENET_TXDESCRIP_RD_BL1_MASK)
-#define ENET_TXDESCRIP_RD_BL2(n)    (((uint32_t)(n)&ENET_TXDESCRIP_RD_BL1_MASK) << 16)
+#define ENET_TXDESCRIP_RD_BL1(n)    ((uint32_t)(n) & ENET_TXDESCRIP_RD_BL1_MASK)
+#define ENET_TXDESCRIP_RD_BL2(n)    (((uint32_t)(n) & ENET_TXDESCRIP_RD_BL1_MASK) << 16)
 #define ENET_TXDESCRIP_RD_TTSE_MASK (1UL << 30)
 #define ENET_TXDESCRIP_RD_IOC_MASK  (1UL << 31)
 
 #define ENET_TXDESCRIP_RD_FL_MASK   (0x7FFFU)
-#define ENET_TXDESCRIP_RD_FL(n)     ((uint32_t)(n)&ENET_TXDESCRIP_RD_FL_MASK)
-#define ENET_TXDESCRIP_RD_CIC(n)    (((uint32_t)(n)&0x3U) << 16)
+#define ENET_TXDESCRIP_RD_FL(n)     ((uint32_t)(n) & ENET_TXDESCRIP_RD_FL_MASK)
+#define ENET_TXDESCRIP_RD_CIC(n)    (((uint32_t)(n) & 0x3U) << 16)
 #define ENET_TXDESCRIP_RD_TSE_MASK  (1UL << 18)
-#define ENET_TXDESCRIP_RD_SLOT(n)   (((uint32_t)(n)&0x0fU) << 19)
-#define ENET_TXDESCRIP_RD_SAIC(n)   (((uint32_t)(n)&0x07U) << 23)
-#define ENET_TXDESCRIP_RD_CPC(n)    (((uint32_t)(n)&0x03U) << 26)
-#define ENET_TXDESCRIP_RD_LDFD(n)   (((uint32_t)(n)&0x03U) << 28)
+#define ENET_TXDESCRIP_RD_SLOT(n)   (((uint32_t)(n) & 0x0fU) << 19)
+#define ENET_TXDESCRIP_RD_SAIC(n)   (((uint32_t)(n) & 0x07U) << 23)
+#define ENET_TXDESCRIP_RD_CPC(n)    (((uint32_t)(n) & 0x03U) << 26)
+#define ENET_TXDESCRIP_RD_LDFD(n)   (((uint32_t)(n) & 0x03U) << 28)
 #define ENET_TXDESCRIP_RD_LD_MASK   (1UL << 28)
 #define ENET_TXDESCRIP_RD_FD_MASK   (1UL << 29)
 #define ENET_TXDESCRIP_RD_CTXT_MASK (1UL << 30)
@@ -198,11 +198,11 @@ typedef enum _enet_special_config
     /**************************MTL************************************/
     kENET_StoreAndForward = 0x0002U, /*!< The Rx/Tx store and forward enable. */
     /***********************MAC****************************************/
-    kENET_PromiscuousEnable  = 0x0004U, /*!< The promiscuous enabled. */
-    kENET_FlowControlEnable  = 0x0008U, /*!< The flow control enabled. */
-    kENET_BroadCastRxDisable = 0x0010U, /*!< The broadcast disabled. */
-    kENET_MulticastAllEnable = 0x0020U, /*!< All multicast are passed. */
-    kENET_8023AS2KPacket     = 0x0040U, /*!< 8023as support for 2K packets. */
+    kENET_PromiscuousEnable       = 0x0004U, /*!< The promiscuous enabled. */
+    kENET_FlowControlEnable       = 0x0008U, /*!< The flow control enabled. */
+    kENET_BroadCastRxDisable      = 0x0010U, /*!< The broadcast disabled. */
+    kENET_MulticastAllEnable      = 0x0020U, /*!< All multicast are passed. */
+    kENET_8023AS2KPacket          = 0x0040U, /*!< 8023as support for 2K packets. */
     kENET_RxChecksumOffloadEnable = 0x0080U, /*!< The Rx checksum offload enabled. */
 } enet_special_config_t;
 
@@ -314,15 +314,15 @@ typedef enum _enet_vlan_strip
     kENET_VlanNotStrip = 0x0U, /*!< Not strip frame. */
     kENET_VlanFilterPassStrip, /*!< Strip if VLAN filter passes. */
     kENET_VlanFilterFailStrip, /*!< Strip if VLAN filter fails. */
-    kENET_VlanAlwaysStrip, /*!< Always strip. */
+    kENET_VlanAlwaysStrip,     /*!< Always strip. */
 } enet_vlan_strip_t;
 
 /*! @brief Ethernet VLAN Tx channels. */
 typedef enum _enet_vlan_tx_channel
 {
     kENET_VlanTagAllChannels = 0xFFU, /*!< VLAN tag is inserted for every packets transmitted by the MAC. */
-    kENET_VlanTagChannel0 = 0x0U, /*!< VLAN tag is inserted for the frames transmitted by channel 0. */
-    kENET_VlanTagChannel1, /*!< VLAN tag is inserted for the frames transmitted by channel 1. */
+    kENET_VlanTagChannel0    = 0x0U,  /*!< VLAN tag is inserted for the frames transmitted by channel 0. */
+    kENET_VlanTagChannel1,            /*!< VLAN tag is inserted for the frames transmitted by channel 1. */
 } enet_vlan_tx_channel_t;
 
 /*! @brief Defines the receive descriptor structure
@@ -380,7 +380,7 @@ typedef struct _enet_ptp_config
     bool ptp1588V2Enable;               /*!< ptp 1588 version 2 is used. */
     enet_ts_rollover_type_t tsRollover; /*!< 1588 time nanosecond rollover. */
 } enet_ptp_config_t;
-#endif /* ENET_PTP1588FEATURE_REQUIRED */
+#endif                                  /* ENET_PTP1588FEATURE_REQUIRED */
 
 /*! @brief Defines the ENET PTP time stamp structure. */
 typedef struct _enet_ptp_time
@@ -598,7 +598,7 @@ typedef struct _enet_vlan_tag
 /*! @brief Ethernet VLAN configuration for Tx. */
 typedef struct _enet_vlan_tx_config
 {
-    bool txDescVlan; /*!< Use VLAN configuration in Tx descriptor. */
+    bool txDescVlan;     /*!< Use VLAN configuration in Tx descriptor. */
     enet_vlan_tag_t tag; /*!< VLAN Tag. */
     enet_vlan_ops_t ops; /*!< VLAN operations. */
 } enet_vlan_tx_config_t;
@@ -606,15 +606,15 @@ typedef struct _enet_vlan_tx_config
 /*! @brief Ethernet VLAN control. */
 typedef struct _enet_vlan_ctrl
 {
-    bool svlanEnable : 1; /*!< The MAC transmitter and receiver consider the S-VLAN packets. */
-    bool vlanInverseMatch : 1; /*!< True: Marks frames without matching as match, False: Marks matched frames. */
-    bool vidComparison : 1; /*!< Only takes VLAN VID as match. */
+    bool svlanEnable : 1;          /*!< The MAC transmitter and receiver consider the S-VLAN packets. */
+    bool vlanInverseMatch : 1;     /*!< True: Marks frames without matching as match, False: Marks matched frames. */
+    bool vidComparison : 1;        /*!< Only takes VLAN VID as match. */
     bool disableVlanTypeCheck : 1; /*!< Not check C-VLAN and S-VLAN. */
-    bool doubleVlanEnable : 1; /*!< Enable the inner VLAN operations. */
+    bool doubleVlanEnable : 1;     /*!< Enable the inner VLAN operations. */
     bool innerVlanFilterMatch : 1; /*!< Takes Inner VLAN as match. */
-    bool outerTagInRxStatus : 1; /*!< Set outer VLAN in Rx Status. */
-    bool innerTagInRxStatus : 1; /*!< Set inner VLAN in Rx Status. */
-    enet_vlan_tag_t rxVlanTag; /*!< VLAN tag for Rx match. */
+    bool outerTagInRxStatus : 1;   /*!< Set outer VLAN in Rx Status. */
+    bool innerTagInRxStatus : 1;   /*!< Set inner VLAN in Rx Status. */
+    enet_vlan_tag_t rxVlanTag;     /*!< VLAN tag for Rx match. */
     enet_vlan_strip_t rxOuterVlanStrip; /*!< Outer VLAN Rx strip operation. */
     enet_vlan_strip_t rxInnerVlanStrip; /*!< Inner VLAN Rx strip operation. */
 } enet_vlan_ctrl_t;

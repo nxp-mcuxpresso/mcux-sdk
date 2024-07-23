@@ -148,7 +148,7 @@
 #  # description: I2C Driver
 #  set(CONFIG_USE_driver_i2c true)
 
-#  # description: I2C Driver
+#  # description: I2C FreeRTOS Driver
 #  set(CONFIG_USE_driver_i2c_freertos true)
 
 #  # description: IRTC Driver
@@ -163,7 +163,7 @@
 #  # description: LPUART Driver
 #  set(CONFIG_USE_driver_lpuart true)
 
-#  # description: LPUART Driver
+#  # description: LPUART Freertos Driver
 #  set(CONFIG_USE_driver_lpuart_freertos true)
 
 #  # description: MMAU Driver
@@ -202,7 +202,7 @@
 #  # description: SPI Driver
 #  set(CONFIG_USE_driver_spi true)
 
-#  # description: SPI Driver
+#  # description: SPI FreeRTOS Driver
 #  set(CONFIG_USE_driver_spi_freertos true)
 
 #  # description: SYSMPU Driver
@@ -211,7 +211,7 @@
 #  # description: UART Driver
 #  set(CONFIG_USE_driver_uart true)
 
-#  # description: UART Driver
+#  # description: UART FreeRTOS Driver
 #  set(CONFIG_USE_driver_uart_freertos true)
 
 #  # description: VREF Driver
@@ -316,7 +316,10 @@
 #  # description: FreeRTOS heap 5
 #  set(CONFIG_USE_middleware_freertos-kernel_heap_5 true)
 
-#  # description: FreeRTOS MPU wrappers
+#  # description: new V2 FreeRTOS MPU wrappers introduced in V10.6.0
+#  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers_v2 true)
+
+#  # description: old FreeRTOS MPU wrappers used before V10.6.0
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
 #set.middleware.mmcau

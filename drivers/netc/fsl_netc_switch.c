@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -920,10 +920,10 @@ status_t SWT_ReceiveFrame(swt_handle_t *handle, netc_frame_struct_t *frame, netc
     status_t result         = kStatus_Success;
     netc_rx_bdr_t *rxBdRing = NULL;
     netc_rx_bd_t *rxDesc    = NULL;
-    uint16_t index;
-    uint16_t buffNum = 0;
-    void *newBuff;
+    uint32_t buffNum        = 0;
     uint8_t rxBdRingIdx;
+    uint16_t index;
+    void *newBuff;
 
     if (handle->cfg.enUseMgmtRxBdRing)
     {
@@ -957,7 +957,12 @@ status_t SWT_ReceiveFrame(swt_handle_t *handle, netc_frame_struct_t *frame, netc
         {
             result = kStatus_NETC_RxFrameError;
         }
-        else if ((netc_host_reason_t)rxDesc->writeback.hr != kNETC_TimestampResp)
+        else if ((netc_host_reason_t)rxDesc->writeback.hr == kNETC_TimestampResp)
+        {
+            /* Get Transmit Timestamp Reference Response messages, use special API to receive this information. */
+            return kStatus_NETC_RxTsrResp;
+        }
+        else
         {
             if ((netc_host_reason_t)rxDesc->writeback.hr == kNETC_RegularFrame)
             {
@@ -1012,17 +1017,16 @@ status_t SWT_ReceiveFrame(swt_handle_t *handle, netc_frame_struct_t *frame, netc
                 index++;
             } while (--buffNum != 0U);
         }
-        else
-        {
-            /* Get Transmit Timestamp Reference Response messages, no need prepare new Rx buffer */
-            return kStatus_NETC_RxTsrResp;
-        }
     }
 
-    result = EP_ReceiveFrameCommon(handle->epHandle, rxBdRing, rxBdRingIdx, frame, attr, (result != kStatus_Success),
-                                   handle->cfg.rxCacheMaintain);
+    if (result != kStatus_Success)
+    {
+        frame->length = 0;
+        EP_DropFrame(handle->epHandle, rxBdRing, rxBdRingIdx);
+        return result;
+    }
 
-    return result;
+    return EP_ReceiveFrameCommon(handle->epHandle, rxBdRing, rxBdRingIdx, frame, attr, handle->cfg.rxCacheMaintain);
 }
 
 static status_t SWT_GetIdleCmdBDRing(swt_handle_t *handle, netc_cbdr_handle_t *cdbrHandle)

@@ -119,13 +119,18 @@ void LPCMP_Init(LPCMP_Type *base, const lpcmp_config_t *config)
 
 #if !(defined(FSL_FEATURE_LPCMP_HAS_NO_CCR0_CMP_STOP_EN) && FSL_FEATURE_LPCMP_HAS_NO_CCR0_CMP_STOP_EN)
     /* CCR0 register. */
-    if (config->enableStopMode)
+#if defined(FSL_FEATURE_LPCMP_INSTANCE_SUPPORT_CCR0_CMP_STOP_ENn)
+    if (1U == FSL_FEATURE_LPCMP_INSTANCE_SUPPORT_CCR0_CMP_STOP_ENn(base))
+#endif /* FSL_FEATURE_LPCMP_INSTANCE_SUPPORT_CCR0_CMP_STOP_ENn */
     {
-        base->CCR0 |= LPCMP_CCR0_CMP_STOP_EN_MASK;
-    }
-    else
-    {
-        base->CCR0 &= ~LPCMP_CCR0_CMP_STOP_EN_MASK;
+        if (config->enableStopMode)
+        {
+            base->CCR0 |= LPCMP_CCR0_CMP_STOP_EN_MASK;
+        }
+        else
+        {
+            base->CCR0 &= ~LPCMP_CCR0_CMP_STOP_EN_MASK;
+        }
     }
 #endif /* !(defined(FSL_FEATURE_LPCMP_HAS_NO_CCR0_CMP_STOP_EN) && FSL_FEATURE_LPCMP_HAS_NO_CCR0_CMP_STOP_EN) */
 

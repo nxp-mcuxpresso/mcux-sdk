@@ -20,10 +20,10 @@
  * Definitions
  **********************************************************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LPSPI EDMA driver version. */
-#define FSL_LPSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
-/*@}*/
+#define FSL_LPSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @} */
 
 /*!
  * @brief Forward declaration of the _lpspi_master_edma_handle typedefs.
@@ -77,7 +77,7 @@ struct _lpspi_master_edma_handle
     volatile uint8_t bytesLastRead;    /*!< Bytes for last read RDR. */
     volatile bool isThereExtraRxBytes; /*!< Is there extra RX byte. */
 
-    uint8_t *volatile txData;             /*!< Send buffer. */
+    const uint8_t *volatile txData;                 /*!< Send buffer. */
     uint8_t *volatile rxData;             /*!< Receive buffer. */
     volatile size_t txRemainingByteCount; /*!< Number of bytes remaining to send.*/
     volatile size_t rxRemainingByteCount; /*!< Number of bytes remaining to receive.*/
@@ -122,7 +122,7 @@ struct _lpspi_slave_edma_handle
 
     uint8_t nbytes; /*!< eDMA minor byte transfer count initially configured. */
 
-    uint8_t *volatile txData;             /*!< Send buffer. */
+    const uint8_t *volatile txData;                /*!< Send buffer. */
     uint8_t *volatile rxData;             /*!< Receive buffer. */
     volatile size_t txRemainingByteCount; /*!< Number of bytes remaining to send.*/
     volatile size_t rxRemainingByteCount; /*!< Number of bytes remaining to receive.*/
@@ -214,7 +214,9 @@ status_t LPSPI_MasterTransferEDMA(LPSPI_Type *base, lpspi_master_edma_handle_t *
  * @retval kStatus_Success          Execution successfully.
  * @retval kStatus_LPSPI_Busy       The LPSPI device is busy.
  */
-status_t LPSPI_MasterTransferPrepareEDMALite(LPSPI_Type *base, lpspi_master_edma_handle_t *handle, uint32_t configFlags);
+status_t LPSPI_MasterTransferPrepareEDMALite(LPSPI_Type *base,
+                                             lpspi_master_edma_handle_t *handle,
+                                             uint32_t configFlags);
 
 /*!
  * @brief LPSPI master transfer data using eDMA without configs.

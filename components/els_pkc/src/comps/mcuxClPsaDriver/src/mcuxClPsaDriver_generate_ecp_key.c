@@ -48,10 +48,6 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     //For Montgomery curves
     if(curve == PSA_ECC_FAMILY_MONTGOMERY)
     {
-        if(attributes->domain_parameters_size != 0u)
-        {
-            return PSA_ERROR_INVALID_ARGUMENT;
-        }
         /* Setup one session to be used by all functions called */
         mcuxClSession_Descriptor_t session;
         //Byte length of a Curve448
@@ -254,10 +250,6 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     //For Weierstrass curves, curve_parameters have defined in mcuxClEcc_Types.c
     else if((curve == PSA_ECC_FAMILY_SECP_R1) || (curve == PSA_ECC_FAMILY_SECP_K1) || (curve == PSA_ECC_FAMILY_BRAINPOOL_P_R1))
     {
-        if(attributes->domain_parameters_size != 0u)
-        {
-            return PSA_ERROR_INVALID_ARGUMENT;
-        }
 
         const mcuxClEcc_Weier_DomainParams_t* curveParamData = mcuxClPsaDriver_psa_driver_wrapper_getEccDomainParams(attributes);
         if(NULL == curveParamData)

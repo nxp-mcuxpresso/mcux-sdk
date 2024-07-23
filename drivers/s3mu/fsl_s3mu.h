@@ -19,7 +19,7 @@
  * Definitions
  *******************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Defines S3MU driver version 2.0.1.
  *
  * Change log:
@@ -30,7 +30,7 @@
  *   - initial version
  */
 #define FSL_S3MU_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
-/*@}*/
+/*! @} */
 
 #define MU_MSG_HEADER_SIZE (1U)
 

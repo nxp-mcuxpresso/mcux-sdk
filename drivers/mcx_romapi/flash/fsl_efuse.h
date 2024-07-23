@@ -101,12 +101,12 @@ status_t EFUSE_Read(uint32_t addr, uint32_t *data);
  */
 status_t EFUSE_Program(uint32_t addr, uint32_t data);
 
-/*@}*/
+/*! @} */
 
 #ifdef __cplusplus
 }
 #endif
 
-/*@}*/
+/*! @} */
 
 #endif /*! FSL_EFUSE_H_ */

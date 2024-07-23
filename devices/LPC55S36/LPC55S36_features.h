@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2021-08-04
-**     Build:               b231016
+**     Build:               b240322
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -101,7 +101,7 @@
     /* @brief PUF availability on the SoC. */
     #define FSL_FEATURE_SOC_PUF_COUNT (1)
     /* @brief RTC availability on the SoC. */
-    #define FSL_FEATURE_SOC_RTC_COUNT (2)
+    #define FSL_FEATURE_SOC_RTC_COUNT (1)
     /* @brief SCT availability on the SoC. */
     #define FSL_FEATURE_SOC_SCT_COUNT (1)
     /* @brief SPI availability on the SoC. */
@@ -194,7 +194,7 @@
     /* @brief PUF availability on the SoC. */
     #define FSL_FEATURE_SOC_PUF_COUNT (1)
     /* @brief RTC availability on the SoC. */
-    #define FSL_FEATURE_SOC_RTC_COUNT (2)
+    #define FSL_FEATURE_SOC_RTC_COUNT (1)
     /* @brief SCT availability on the SoC. */
     #define FSL_FEATURE_SOC_SCT_COUNT (1)
     /* @brief SPI availability on the SoC. */
@@ -368,6 +368,8 @@
 #define FSL_FEATURE_ANALOG_NUM_OF_VREF_SRC (3)
 /* @brief Has internal reference current options. */
 #define FSL_FEATURE_LPDAC_HAS_INTERNAL_REFERENCE_CURRENT (1)
+/* @brief Support Period trigger mode DAC (bitfield IER[PTGCOCO_IE]). */
+#define FSL_FEATURE_LPDAC_HAS_PERIODIC_TRIGGER_MODE (1)
 
 /* DMA module features */
 
@@ -549,6 +551,8 @@
 #define FSL_FEATURE_FLEXSPI_HAS_NO_AHB_PARALLEL_MODE (1)
 /* @brief FLEXSPI support address shift. */
 #define FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT (0)
+/* @brief FlexSPI AHB RX buffer size (byte) */
+#define FSL_FEATURE_FLEXSPI_AHB_RX_BUFFER_SIZEn(x) (2048)
 
 /* GINT module features */
 

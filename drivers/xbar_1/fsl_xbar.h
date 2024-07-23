@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,12 +21,18 @@
 
 #define FSL_XBAR_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 
+#if defined(FSL_FEATURE_XBAR_REG_WIDTH) && (FSL_FEATURE_XBAR_REG_WIDTH == 32)
+typedef uint32_t xbar_reg_t;
+#else
+typedef uint16_t xbar_reg_t;
+#endif
+
 /*!
  * @brief Find the instance index from base address and register offset mappings.
  */
 typedef struct
 {
-    volatile uint16_t *baseAddr; /* Peripheral base address. */
+    volatile xbar_reg_t *baseAddr; /* Peripheral base address. */
     uint16_t regSelOffset;       /* SEL register offset in peripheral. */
     uint16_t regSelNum;          /* SEL register number in peripheral. */
     uint16_t regCtrlOffset;      /* CTRL register offset in peripheral. */

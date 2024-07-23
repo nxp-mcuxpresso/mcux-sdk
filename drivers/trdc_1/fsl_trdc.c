@@ -13,7 +13,7 @@
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
-#define FSL_COMPONENT_ID "platform.drivers.trdc"
+#define FSL_COMPONENT_ID "platform.drivers.trdc1"
 #endif
 
 /* The memory increment definition in byte of MBC and MRC configuration registers */

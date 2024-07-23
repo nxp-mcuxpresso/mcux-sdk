@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 NXP
+ * Copyright 2020-2022,2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -538,7 +538,7 @@ void DSI_SetDpiConfig(const MIPI_DSI_Type *base,
     assert(NULL != config);
 
     /* coefficient DPI event size to number of DSI bytes. */
-    uint32_t coff = (numLanes * dsiHsBitClkFreq_Hz) / (dpiPixelClkFreq_Hz * 8U);
+    float coff = ((float)numLanes * (float)dsiHsBitClkFreq_Hz) / ((float)dpiPixelClkFreq_Hz * 8.0);
 
     DSI_HOST_DPI_INTFC_Type *dpi = base->dpi;
 
@@ -586,9 +586,9 @@ void DSI_SetDpiConfig(const MIPI_DSI_Type *base,
         dpi->HSYNC_POLARITY = 0x00U;
     }
 
-    dpi->HFP                   = config->hfp * coff - DSI_HFP_OVERHEAD_BYTE;
-    dpi->HBP                   = config->hbp * coff - DSI_HBP_OVERHEAD_BYTE;
-    dpi->HSA                   = config->hsw * coff - DSI_HSA_OVERHEAD_BYTE;
+    dpi->HFP                   = (uint32_t)((float)config->hfp * coff - (float)DSI_HFP_OVERHEAD_BYTE);
+    dpi->HBP                   = (uint32_t)((float)config->hbp * coff - (float)DSI_HBP_OVERHEAD_BYTE);
+    dpi->HSA                   = (uint32_t)((float)config->hsw * coff - (float)DSI_HSA_OVERHEAD_BYTE);
     dpi->PIXEL_FIFO_SEND_LEVEL = config->pixelPayloadSize;
 
     dpi->VBP = config->vbp;

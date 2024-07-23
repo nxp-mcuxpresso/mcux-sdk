@@ -396,11 +396,13 @@ static void TimerManagerTaskProcess(bool isInTaskContext)
             (0U == s_timermanager.timerHardwareIsRunning))
         {
             regPrimask = DisableGlobalIRQ();
-            if (HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle) >
+            previousBeforeEnableTimeInUs =
+                HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
+            if (previousBeforeEnableTimeInUs >
                 s_timermanager.previousTimeInUs)
             {
                 TimersUpdate(true, false,
-                             (HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle) -
+                             (previousBeforeEnableTimeInUs -
                               s_timermanager.previousTimeInUs));
             }
             HAL_TimerDisable((hal_timer_handle_t)s_timermanager.halTimerHandle);

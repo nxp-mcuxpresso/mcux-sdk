@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,7 +19,12 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-
+typedef struct _lpspi_memory_config
+{
+    uint32_t bytesInPageSize;      /*!< Page size in byte of Serial NOR */
+    uint32_t bytesInSectorSize;    /*!< Minimun Sector size in byte supported by Serial NOR */
+    uint32_t bytesInMemorySize;    /*!< Memory size in byte of Serial NOR */
+} lpspi_memory_config_t;
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -27,6 +32,17 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*!
+ * @brief Erase page.
+ *
+ * @note Not all device support to erase page.
+ 
+ * @param handle    The NOR Flash handler.
+ * @param address   The start address to be erased.
+ * @retval execution status
+ */
+status_t Nor_Flash_Erase_Page(nor_handle_t *handle, uint32_t address);
 
 /*!
  * @brief Erase 4K block.

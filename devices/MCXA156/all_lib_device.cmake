@@ -13,14 +13,14 @@
 #  # description: Utilities which is needed for particular toolchain like the SBRK function required to address limitation between HEAP and STACK in GCC toolchain library.
 #  set(CONFIG_USE_utilities_misc_utilities true)
 
+#  # description: RTT template configuration
+#  set(CONFIG_USE_driver_rtt_template true)
+
 #  # description: mflash common
 #  set(CONFIG_USE_component_mflash_common true)
 
 #  # description: Driver p3t1755
 #  set(CONFIG_USE_driver_p3t1755 true)
-
-#  # description: RTT template configuration
-#  set(CONFIG_USE_driver_rtt_template true)
 
 #  # description: Devices_project_template MCXA156
 #  set(CONFIG_USE_DEVICES_Project_Template_MCXA156 true)
@@ -175,19 +175,19 @@
 #  # description: LPSPI Driver
 #  set(CONFIG_USE_driver_lpspi true)
 
-#  # description: LPSPI Driver
+#  # description: LPSPI FreeRTOS Driver
 #  set(CONFIG_USE_driver_lpspi_freertos true)
 
 #  # description: LPUART Driver
 #  set(CONFIG_USE_driver_lpuart true)
 
-#  # description: LPUART Driver
+#  # description: LPUART Freertos Driver
 #  set(CONFIG_USE_driver_lpuart_freertos true)
 
 #  # description: LPI2C Driver
 #  set(CONFIG_USE_driver_lpi2c true)
 
-#  # description: LPI2C Driver
+#  # description: LPI2C FreeRTOS Driver
 #  set(CONFIG_USE_driver_lpi2c_freertos true)
 
 #  # description: LPTMR Driver
@@ -234,6 +234,9 @@
 
 #  # description: PORT Driver
 #  set(CONFIG_USE_driver_port true)
+
+#  # description: SEGGER Real Time Transfer(RTT)
+#  set(CONFIG_USE_driver_rtt true)
 
 #  # description: mflash mcxa
 #  set(CONFIG_USE_component_mflash_mcxa true)
@@ -288,6 +291,9 @@
 
 #  # description: Component mem_manager_light
 #  set(CONFIG_USE_component_mem_manager_light true)
+
+#  # description: Component mem_manager_freertos
+#  set(CONFIG_USE_component_mem_manager_freertos true)
 
 #  # description: Component panic
 #  set(CONFIG_USE_component_panic true)
@@ -345,9 +351,6 @@
 
 #  # description: BOARD_Project_Template frdmmcxa156_a8974
 #  set(CONFIG_USE_BOARD_Project_Template_frdmmcxa156_a8974 true)
-
-#  # description: SEGGER Real Time Transfer(RTT)
-#  set(CONFIG_USE_driver_rtt true)
 
 #set.CMSIS
 #  # description: CMSIS-CORE for Cortex-M, ARMv8-M, ARMv8.1-M
@@ -424,6 +427,9 @@
 #  # description: TinyCrypt fork in MCUBoot repository
 #  set(CONFIG_USE_middleware_mcuboot_tinycrypt true)
 
+#  # description: Encrypted XIP abstraction for MCUBoot
+#  set(CONFIG_USE_middleware_mcuboot_encrypted_xip true)
+
 #  # description: MCUBoot's subset of MbedTLS for ASN.1 parsing
 #  set(CONFIG_USE_middleware_mcuboot_mbedtls-asn1 true)
 
@@ -433,31 +439,6 @@
 #set.middleware.littlefs
 #  # description: littlefs
 #  set(CONFIG_USE_middleware_littlefs true)
-
-#set.middleware.fatfs
-#  # description: FatFs template MMC
-#  set(CONFIG_USE_middleware_fatfs_template_mmc true)
-
-#  # description: FatFs template NAND
-#  set(CONFIG_USE_middleware_fatfs_template_nand true)
-
-#  # description: FatFs template RAM
-#  set(CONFIG_USE_middleware_fatfs_template_ram true)
-
-#  # description: FatFs template SD
-#  set(CONFIG_USE_middleware_fatfs_template_sd true)
-
-#  # description: FatFs template SDSPI
-#  set(CONFIG_USE_middleware_fatfs_template_sdspi true)
-
-#  # description: FatFs template USB
-#  set(CONFIG_USE_middleware_fatfs_template_usb true)
-
-#  # description: FatFs
-#  set(CONFIG_USE_middleware_fatfs true)
-
-#  # description: FatFs_RAM
-#  set(CONFIG_USE_middleware_fatfs_ram true)
 
 #set.middleware.usb
 #  # description: USB device phydcd config header
@@ -545,7 +526,10 @@
 #  # description: FreeRTOS heap 5
 #  set(CONFIG_USE_middleware_freertos-kernel_heap_5 true)
 
-#  # description: FreeRTOS MPU wrappers
+#  # description: new V2 FreeRTOS MPU wrappers introduced in V10.6.0
+#  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers_v2 true)
+
+#  # description: old FreeRTOS MPU wrappers used before V10.6.0
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
 #set.component.osa
@@ -566,6 +550,16 @@
 
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)
+
+#set.middleware.fatfs
+#  # description: FatFs
+#  set(CONFIG_USE_middleware_fatfs true)
+
+#  # description: FatFs_RAM
+#  set(CONFIG_USE_middleware_fatfs_ram true)
+
+#  # description: FatFs template RAM
+#  set(CONFIG_USE_middleware_fatfs_template_ram true)
 
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.

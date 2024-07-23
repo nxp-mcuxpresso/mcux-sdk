@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief IEE_APC driver version. Version 2.0.2.
  *
  * Current version: 2.0.2
@@ -34,7 +34,7 @@
  *   - Update to newer version of implementation in HW.
  */
 #define FSL_IEE_APC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
-/*@}*/
+/*! @} */
 
 /*! @brief APC IEE regions. */
 typedef enum _iee_apc_region

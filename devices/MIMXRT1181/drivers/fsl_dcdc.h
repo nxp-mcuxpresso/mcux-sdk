@@ -349,6 +349,16 @@ static inline void DCDC_SetVDD1P0LowPowerModeTargetVoltage(DCDC_Type *base,
         assert(0);
     }
 
+    /*
+     * REG0[STS_DC_OK] should be checked after 3 rising edge of 32K clock,
+     * so wait 4 cycles of 32K clock, maximum 123us.
+     */
+#if (__CORTEX_M == 7)
+    SDK_DelayAtLeastUs(123, CLOCK_GetRootClockFreq(kCLOCK_Root_M7));
+#else
+    SDK_DelayAtLeastUs(123, CLOCK_GetRootClockFreq(kCLOCK_Root_M33));
+#endif
+
     while (DCDC_REG0_STS_DC_OK_MASK != (DCDC_REG0_STS_DC_OK_MASK & base->REG0))
     {
     }
@@ -413,6 +423,16 @@ static inline void DCDC_SetVDD1P0BuckModeTargetVoltage(DCDC_Type *base,
     {
         assert(0);
     }
+
+    /*
+     * REG0[STS_DC_OK] should be checked after 3 rising edge of 32K clock,
+     * so wait 4 cycles of 32K clock, maximum 123us.
+     */
+#if (__CORTEX_M == 7)
+    SDK_DelayAtLeastUs(123, CLOCK_GetRootClockFreq(kCLOCK_Root_M7));
+#else
+    SDK_DelayAtLeastUs(123, CLOCK_GetRootClockFreq(kCLOCK_Root_M33));
+#endif
 
     while (DCDC_REG0_STS_DC_OK_MASK != (DCDC_REG0_STS_DC_OK_MASK & base->REG0))
     {
@@ -529,10 +549,6 @@ static inline void DCDC_SetVDD1P8TargetVoltage(DCDC_Type *base,
     else
     {
         assert(0);
-    }
-
-    while (DCDC_REG0_STS_DC_OK_MASK != (DCDC_REG0_STS_DC_OK_MASK & base->REG0))
-    {
     }
 }
 

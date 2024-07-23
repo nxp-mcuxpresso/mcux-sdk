@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1187,20 +1187,21 @@ status_t ELE_Mac(S3MU_Type *mu, ele_mac_t *conf, uint32_t *verify_status, uint16
  * param mu MU peripheral base address
  * param output pointer to output buffer where to store random number
  * param size size of requested random data
+ * param reseed_flag option to reseed the DRBG instance
  *
  * return Status kStatus_Success if success, kStatus_Fail if fail
  * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
  */
-status_t ELE_RngGetRandom(S3MU_Type *mu, uint32_t *output, size_t size)
+status_t ELE_RngGetRandom(S3MU_Type *mu, uint32_t *output, size_t size, rng_reseed_flag_t reseed_flag)
 {
     status_t status                    = kStatus_Fail;
     uint32_t tmsg[GET_RNG_RANDOM_SIZE] = {0u};
     uint32_t rmsg[S3MU_RR_COUNT]       = {0u};
 
-    tmsg[0] = GET_RNG_RANDOM;               // GET_RNG_RANDOM Command Header
-    tmsg[1] = 0u;                           // Output buffer MSB (unused)
-    tmsg[2] = ADD_OFFSET((uint32_t)output); // Output buffer
-    tmsg[3] = size;                         // Size of requested data
+    tmsg[0] = GET_RNG_RANDOM;                    // GET_RNG_RANDOM Command Header
+    tmsg[1] = (uint16_t)reseed_flag << SHIFT_16; // Reseed flag
+    tmsg[2] = ADD_OFFSET((uint32_t)output);      // Output buffer
+    tmsg[3] = size;                              // Size of requested data
 
     /* Send message Security Sub-System */
     status = S3MU_SendMessage(mu, tmsg, GET_RNG_RANDOM_SIZE);
@@ -4092,10 +4093,11 @@ status_t ELE_ClockChangeFinish(S3MU_Type *mu, uint8_t NewClockRateELE, uint8_t N
  * During this step, ELE will copy key into internal memory in order to accelerate future usage of the key.
  * ELE will also enter in a special mode where only Fast MAC will be accepted. All other commands will be rejected.
  *
- * @param base MU peripheral base address
- * @param Pointer to key data. The key size is hardcoded to 256 bits. Other key sizes are not supproted.
+ * param base MU peripheral base address
+ * param key  Pointer to key data buffer, which is expected to be 64 Bytes long consisting of two 256 bit keys.
+ *            The key size is hardcoded to 256 bits and other key sizes are not supported.
  *
- * @return Status kStatus_Success if success, kStatus_Fail if fail
+ * return Status kStatus_Success if success, kStatus_Fail if fail
  * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
  */
 status_t ELE_FastMacStart(S3MU_Type *mu, const uint8_t *key)
@@ -4138,15 +4140,27 @@ status_t ELE_FastMacStart(S3MU_Type *mu, const uint8_t *key)
  * This command is used to proceed with a Fast MAC generation. The user gives as input the message buffer and size,
  * and ELE output to the User's MAC buffer the computed MAC. ELE use the key given in Start API.
  *
- * @param base MU peripheral base address
- * @param msg pointer where input message data can be found
- * @param mac pointer to a buffer where the MAC data are written by ELE.
- * @param msgSize size of message in bytes
+ * param base MU peripheral base address.
+ * param msg pointer where input message data can be found.
+ * param mac pointer to a buffer where the MAC data are written by ELE.
+ *           If doing a OneShot operation with internal verification enabled,
+ *           this buffer must hold the expected MAC value.
+ * param msgSize size of message in bytes. If doing a Preload operation with
+ *               internal verification enabled, this must be the length of the
+ *               input message + the length of the concatenated expected MAC.
+ *               note: If oneshot, limit is UIN16_MAX, otherwise 512 Bytes.
+ * param flags the flags specifying Fast MAC Proceed behavior.
+ *             See the FAST_MAC_* macros in ele_crypto.h.
+ * param verifStatus returns the verification status after MAC computation if
+ *                   the internal verification flag was enabled. May be NULL.
+ *                   See the FAST_MAC_CHECK_VERIFICATION_* macros for
+ *                   checking the returned status.
  *
- * @return Status kStatus_Success if success, kStatus_Fail if fail
+ * return Status kStatus_Success if success, kStatus_Fail if fail
  * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
  */
-status_t ELE_FastMacProceed(S3MU_Type *mu, const uint8_t *msg, uint8_t *mac, uint32_t msgSize)
+status_t ELE_FastMacProceed(
+    S3MU_Type *mu, const uint8_t *msg, uint8_t *mac, uint16_t msgSize, uint16_t flags, uint32_t *verifStatus)
 {
     status_t status                      = kStatus_Fail;
     uint32_t tmsg[FAST_MAC_PROCEED_SIZE] = {0u};
@@ -4155,7 +4169,7 @@ status_t ELE_FastMacProceed(S3MU_Type *mu, const uint8_t *msg, uint8_t *mac, uin
     tmsg[0] = FAST_MAC_PROCEED;          // FAST_MAC_PROCEED Command Header
     tmsg[1] = ADD_OFFSET((uint32_t)msg); // Message address
     tmsg[2] = ADD_OFFSET((uint32_t)mac); // output Mac buffer address
-    tmsg[3] = msgSize;
+    tmsg[3] = ((uint32_t)flags << 16u) | (uint32_t)msgSize;
 
     /* Send message Security Sub-System */
     status = S3MU_SendMessage(mu, tmsg, FAST_MAC_PROCEED_SIZE);
@@ -4170,6 +4184,12 @@ status_t ELE_FastMacProceed(S3MU_Type *mu, const uint8_t *msg, uint8_t *mac, uin
     {
         return status;
     }
+
+    if (NULL != verifStatus)
+    {
+        *verifStatus = rmsg[2];
+    }
+
     /* Check that response corresponds to the sent command */
     if (rmsg[0] == FAST_MAC_PROCEED_RESPONSE_HDR && rmsg[1] == RESPONSE_SUCCESS)
     {
@@ -4189,9 +4209,9 @@ status_t ELE_FastMacProceed(S3MU_Type *mu, const uint8_t *msg, uint8_t *mac, uin
  *
  * This command is used to exit from "Fast MAC" mode.
  *
- * @param base MU peripheral base address
+ * param base MU peripheral base address
  *
- * @return Status kStatus_Success if success, kStatus_Fail if fail
+ * return Status kStatus_Success if success, kStatus_Fail if fail
  * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
  */
 status_t ELE_FastMacEnd(S3MU_Type *mu)
@@ -4562,6 +4582,205 @@ status_t ELE_ImportKey(S3MU_Type *mu,
         /* Save the returned key ID on success */
         *keyID = rmsg[2];
 
+        return kStatus_Success;
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+}
+
+/*!
+ * brief Write BBSM
+ *
+ * This function is used to program Battery-Backed Security Module registers inside ELE
+ *
+ * param mu MU peripheral base address
+ * param offset Offset of the register to perform the operation
+ * param value value to be written into BBSM register
+ *
+ * return Status kStatus_Success if success, kStatus_Fail if fail
+ * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
+ */
+status_t ELE_WriteBbsm(S3MU_Type *mu, uint32_t offset, uint32_t value)
+{
+    status_t status                  = kStatus_Fail;
+    uint32_t tmsg[PROGRAM_BBSM_SIZE] = {0u};
+    uint32_t rmsg[S3MU_RR_COUNT]     = {0u};
+
+    /****************** BBSM program ELE message ***********************/
+    tmsg[0] = PROGRAM_BBSM;          // Program BBSM Command Header
+    tmsg[1] = PROGRAM_BBSM_WRITE_OP; // Write operation
+    tmsg[2] = offset;                // Register offset
+    tmsg[3] = value;                 // New register value to be written
+    /* Send message Security Sub-System */
+    status = S3MU_SendMessage(mu, tmsg, PROGRAM_BBSM_SIZE);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+
+    /* Wait for response from Security Sub-System */
+    status = ele_mu_get_response(mu, rmsg);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+
+    /* Check that response corresponds to the sent command */
+    if (rmsg[0] == PROGRAM_BBSM_RESPONSE_HDR && rmsg[1] == RESPONSE_SUCCESS)
+    {
+        return kStatus_Success;
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+}
+
+/*!
+ * brief Read BBSM
+ *
+ * This function is used to read Battery-Backed Security Module registers inside ELE
+ *
+ * param mu MU peripheral base address
+ * param offset Offset of the register to perform the operation
+ * param value value read from BBSM register
+ *
+ * return Status kStatus_Success if success, kStatus_Fail if fail
+ * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
+ */
+status_t ELE_ReadBbsm(S3MU_Type *mu, uint32_t offset, uint32_t *value)
+{
+    status_t status                  = kStatus_Fail;
+    uint32_t tmsg[PROGRAM_BBSM_SIZE] = {0u};
+    uint32_t rmsg[S3MU_RR_COUNT]     = {0u};
+
+    /****************** BBSM program ELE message ***********************/
+    tmsg[0] = PROGRAM_BBSM;         // Program BBSM Command Header
+    tmsg[1] = PROGRAM_BBSM_READ_OP; // Write operation
+    tmsg[2] = offset;               // Register offset
+    tmsg[3] = 0u;                   // Unused when read
+    /* Send message Security Sub-System */
+    status = S3MU_SendMessage(mu, tmsg, PROGRAM_BBSM_SIZE);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+
+    /* Wait for response from Security Sub-System */
+    status = ele_mu_get_response(mu, rmsg);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+
+    /* Check that response corresponds to the sent command */
+    if (rmsg[0] == PROGRAM_BBSM_RESPONSE_HDR && rmsg[1] == RESPONSE_SUCCESS)
+    {
+        *value = rmsg[2u];
+        return kStatus_Success;
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+}
+
+/*!
+ * brief Set BBSM policy
+ *
+ * This function is used to set policy for Battery-Backed Security Module in case of events
+ *
+ * param mu MU peripheral base address
+ * param policy_mask policy to be set (refer to ele_bbsm_policy_t)
+ *
+ * return Status kStatus_Success if success, kStatus_Fail if fail
+ * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
+ */
+status_t ELE_SetPolicyBbsm(S3MU_Type *mu, uint32_t policy_mask)
+{
+    status_t status                  = kStatus_Fail;
+    uint32_t tmsg[PROGRAM_BBSM_SIZE] = {0u};
+    uint32_t rmsg[S3MU_RR_COUNT]     = {0u};
+
+    /****************** BBSM program ELE message ***********************/
+    tmsg[0] = PROGRAM_BBSM;                                      // Program BBSM Command Header
+    tmsg[1] = policy_mask << SHIFT_16 | PROGRAM_BBSM_SET_POLICY; // Write operation
+    tmsg[2] = 0u;                                                // Unused when setting policy
+    tmsg[3] = 0u;                                                // Unused when setting policy
+    /* Send message Security Sub-System */
+    status = S3MU_SendMessage(mu, tmsg, PROGRAM_BBSM_SIZE);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+
+    /* Wait for response from Security Sub-System */
+    status = ele_mu_get_response(mu, rmsg);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+
+    /* Check that response corresponds to the sent command */
+    if (rmsg[0] == PROGRAM_BBSM_RESPONSE_HDR && rmsg[1] == RESPONSE_SUCCESS)
+    {
+        return kStatus_Success;
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+}
+
+/*!
+ * brief Set ELE Get Event
+ *
+ * This function is used to retrieve any singular event that has occurred since the FW has started.
+ * A singular event occurs when the second word of a response to any request is different from ELE_SUCCESS.
+ * That includes commands with failure response as well as commands with successful response containing an indication
+ * (i.e. warning response).
+ *
+ * The events are stored by ELE in a fixed sized buffer. When the capacity of the buffer is exceeded, new occurring
+ * events are lost.
+ *
+ * The event buffer is systematically returned in full to the requester independently of the actual numbers of events
+ * stored
+ *
+ * param mu MU peripheral base address
+ * param events Events buffer (refer to ele_events_t)
+ *
+ * return Status kStatus_Success if success, kStatus_Fail if fail
+ * Possible errors: kStatus_S3MU_InvalidArgument, kStatus_S3MU_AgumentOutOfRange
+ */
+status_t ELE_GetEvent(S3MU_Type *mu, ele_events_t *events)
+{
+    status_t status                   = kStatus_Fail;
+    uint32_t tmsg[GET_EVENT_SIZE]     = {0u};
+    uint32_t rmsg[GET_EVENT_RSP_SIZE] = {0u};
+
+    /****************** BBSM program ELE message ***********************/
+    tmsg[0] = GET_EVENT; // Get Event Command Header
+
+    /* Send message Security Sub-System */
+    status = S3MU_SendMessage(mu, tmsg, GET_EVENT_SIZE);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+
+    /* Wait for response from Security Sub-System */
+    status = ele_mu_get_response(mu, rmsg);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+
+    /* Check that response corresponds to the sent command */
+    if (rmsg[0] == GET_EVENT_RESPONSE_HDR && rmsg[1] == RESPONSE_SUCCESS)
+    {
+        memcpy(events, &rmsg[3u], ELE_MAX_EVENTS);
         return kStatus_Success;
     }
     else

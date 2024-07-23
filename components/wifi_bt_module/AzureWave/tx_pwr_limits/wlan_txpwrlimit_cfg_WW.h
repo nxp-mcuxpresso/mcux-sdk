@@ -154,7 +154,7 @@ static wlan_chanlist_t chanlist_2g_cfg = {13,
                                            [52] = {0},
                                            [53] = {0}}};
 
-#ifdef CONFIG_5GHz_SUPPORT
+#if CONFIG_5GHz_SUPPORT
 static wlan_chanlist_t chanlist_5g_cfg = {25,
                                           {[0] =
                                                {
@@ -498,7 +498,7 @@ static wifi_txpwrlimit_t tx_pwrlimit_2g_cfg =
             },
 };
 
-#ifdef CONFIG_5GHz_SUPPORT
+#if CONFIG_5GHz_SUPPORT
 static wifi_txpwrlimit_t
     tx_pwrlimit_5g_cfg =
         {
@@ -1111,7 +1111,7 @@ static wifi_txpwrlimit_t tx_pwrlimit_2g_cfg =
             },
 };
 
-#ifdef CONFIG_5GHz_SUPPORT
+#if CONFIG_5GHz_SUPPORT
 static wifi_txpwrlimit_t
     tx_pwrlimit_5g_cfg =
         {
@@ -2131,7 +2131,7 @@ static wifi_txpwrlimit_t
 #endif /* CONFIG_5GHz_SUPPORT */
 #endif /* CONFIG_11AC */
 
-#ifdef CONFIG_11AX
+#if CONFIG_11AX
 
 #define MAX_2G_RU_PWR_CHANNELS 26
 #define MAX_5G_RU_PWR_CHANNELS 69

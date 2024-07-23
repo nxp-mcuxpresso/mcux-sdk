@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2024 NXP
  *
  * All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
-/*! @brief lower_component_name driver version 2.1.3. */
-#define FSL_SINC_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
-/*@}*/
+/*! @{ */
+/*! @brief lower_component_name driver version 2.1.4. */
+#define FSL_SINC_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
+/*! @} */
 #if defined(FSL_FEATURE_SINC_CHANNEL_COUNT)
 #define SINC_CHANNEL_COUNT (FSL_FEATURE_SINC_CHANNEL_COUNT)
 #else
@@ -1191,7 +1191,7 @@ static inline void SINC_SetChannelAltDmaSource(SINC_Type *base,
                                                sinc_alternate_dma_source_t altDmaSource)
 {
     base->CHANNEL[(uint8_t)chId].CACFR =
-        base->CHANNEL[(uint8_t)chId].CACFR & ~SINC_CACFR_ADMASEL_MASK | SINC_CACFR_ADMASEL(altDmaSource);
+        ((base->CHANNEL[(uint8_t)chId].CACFR & ~SINC_CACFR_ADMASEL_MASK) | SINC_CACFR_ADMASEL(altDmaSource));
 }
 #endif /* (defined(FSL_FEATURE_SINC_CACFR_HAS_ADMASEL) && FSL_FEATURE_SINC_CACFR_HAS_ADMASEL) */
 

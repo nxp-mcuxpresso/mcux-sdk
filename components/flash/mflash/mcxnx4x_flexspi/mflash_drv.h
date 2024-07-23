@@ -12,11 +12,11 @@
 /* Flash constants */
 
 #ifndef MFLASH_SECTOR_SIZE
-#define MFLASH_SECTOR_SIZE (4096)
+#define MFLASH_SECTOR_SIZE (4096U)
 #endif
 
 #ifndef MFLASH_PAGE_SIZE
-#define MFLASH_PAGE_SIZE (256)
+#define MFLASH_PAGE_SIZE (256U)
 #endif
 
 #ifndef FLASH_USE_CUSTOM_FCB
@@ -24,7 +24,7 @@
 #endif
 
 #ifndef MFLASH_BASE_ADDRESS
-#define MFLASH_BASE_ADDRESS (0x80000000)
+#define MFLASH_BASE_ADDRESS (0x80000000U)
 #endif
 
 

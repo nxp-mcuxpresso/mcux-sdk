@@ -72,9 +72,10 @@ status_t SDU_InstallCallback(sdu_for_write_type_t type, sdu_callback_t callback)
  */
 status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_len);
 
-status_t SDU_RecvCmd();
-status_t SDU_RecvData();
+status_t SDU_RecvCmd(void);
+status_t SDU_RecvData(void);
 
+void SDU_DriverIRQHandler(void);
 
 #if defined(__cplusplus)
 }

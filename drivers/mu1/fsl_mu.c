@@ -23,11 +23,10 @@
  * Variables
  ******************************************************************************/
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if (defined(MU_CLOCKS))
 /*! @brief Pointers to mu clocks for each instance. */
 static const clock_ip_name_t s_muClocks[] = MU_CLOCKS;
-
-/*! @brief Pointers to mu bases for each instance. */
-static MU_Type *const s_muBases[] = MU_BASE_PTRS;
+#endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if defined(MU_RESETS_ARRAY)
@@ -35,11 +34,13 @@ static MU_Type *const s_muBases[] = MU_BASE_PTRS;
 static const reset_ip_name_t s_muResets[] = MU_RESETS_ARRAY;
 #endif
 
+/*! @brief Pointers to mu bases for each instance. */
+static MU_Type *const s_muBases[] = MU_BASE_PTRS;
+
 /******************************************************************************
  * Code
  *****************************************************************************/
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-static uint32_t MU_GetInstance(MU_Type *base)
+uint32_t MU_GetInstance(MU_Type *base)
 {
     uint32_t instance;
 
@@ -56,7 +57,6 @@ static uint32_t MU_GetInstance(MU_Type *base)
 
     return instance;
 }
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*!
  * brief Initializes the MU module.
@@ -68,7 +68,9 @@ static uint32_t MU_GetInstance(MU_Type *base)
 void MU_Init(MU_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if (defined(MU_CLOCKS))
     (void)CLOCK_EnableClock(s_muClocks[MU_GetInstance(base)]);
+#endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if defined(MU_RESETS_ARRAY)
@@ -86,7 +88,9 @@ void MU_Init(MU_Type *base)
 void MU_Deinit(MU_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if (defined(MU_CLOCKS))
     (void)CLOCK_DisableClock(s_muClocks[MU_GetInstance(base)]);
+#endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
@@ -227,18 +231,49 @@ uint32_t MU_GetStatusFlags(MU_Type *base)
  */
 status_t MU_TriggerInterrupts(MU_Type *base, uint32_t interrupts)
 {
-    status_t status;
     uint32_t localInerrupts = MU_GET_GI_INTR(interrupts);
-    uint32_t gcr            = base->GCR;
+
+    return MU_TriggerGeneralPurposeInterrupts(base, localInerrupts);
+}
+
+/*
+ * brief Triggers general purpose interrupts to the other core.
+ *
+ * This function triggers the specific general purpose interrupts to the other core.
+ * The interrupts to trigger are passed in as bit mask. See mu_general_purpose_interrupt_t.
+ * The MU should not trigger an interrupt to the other core when the previous interrupt
+ * has not been processed by the other core. This function checks whether the
+ * previous interrupts have been processed. If not, it returns an error.
+ *
+ * code
+   status_t status;
+   status = MU_TriggerGeneralPurposeInterrupts(base, kMU_GeneralPurposeInterrupt0 | kMU_GeneralPurposeInterrupt2);
+
+   if (kStatus_Success != status)
+   {
+        Previous general purpose interrupt 0 or general purpose interrupt 2
+        has not been processed by the other core.
+   }
+   endcode
+ *
+ * param base MU peripheral base address.
+ * param interrupts Bit mask of the interrupts to trigger. See mu_general_purpose_interrupt_t.
+ * retval kStatus_Success    Interrupts have been triggered successfully.
+ * retval kStatus_Fail       Previous interrupts have not been accepted.
+ */
+status_t MU_TriggerGeneralPurposeInterrupts(MU_Type *base, uint32_t interrupts)
+{
+    status_t status;
+    uint32_t gcr = base->GCR;
 
     /* Previous interrupt has not been accepted. */
-    if (0U != (gcr & localInerrupts))
+    if (0U != (gcr & interrupts))
     {
         status = kStatus_Fail;
     }
     else
     {
-        base->GCR = (gcr | localInerrupts);
+        base->GCR = (gcr | interrupts);
         status    = kStatus_Success;
     }
 

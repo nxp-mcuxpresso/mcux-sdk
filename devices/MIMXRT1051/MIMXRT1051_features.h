@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2018-11-16
-**     Build:               b231024
+**     Build:               b240322
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -404,6 +404,8 @@
 #define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ATDFEN (0)
 /* @brief FlexSPI has no STS0 DATALEARNPHASEB bit */
 #define FSL_FEATURE_FLEXSPI_HAS_NO_STS0_DATALEARNPHASEB (1)
+/* @brief FlexSPI AHB RX buffer size (byte) */
+#define FSL_FEATURE_FLEXSPI_AHB_RX_BUFFER_SIZEn(x) (1024)
 
 /* GPC module features */
 

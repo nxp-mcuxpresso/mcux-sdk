@@ -21,10 +21,10 @@
  *****************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Driver version 2.1.0. */
 #define FSL_MECC_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 0U))
-/*@}*/
+/*! @} */
 /*! @brief Error codes for the MECC driver. */
 enum
 {
@@ -275,7 +275,7 @@ void MECC_Deinit(MECC_Type *base);
  */
 void MECC_GetDefaultConfig(mecc_config_t *config);
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Status
@@ -325,7 +325,7 @@ static inline void MECC_DisableInterruptStatus(MECC_Type *base, uint32_t mask)
     base->ERR_STAT_EN &= ~mask;
 }
 
-/* @} */
+/*! @} */
 
 /*!
  * @name Interrupts
@@ -353,7 +353,7 @@ static inline void MECC_DisableInterrupts(MECC_Type *base, uint32_t mask)
 {
     base->ERR_SIG_EN &= ~mask;
 }
-/* @} */
+/*! @} */
 
 /*!
  * @name functional

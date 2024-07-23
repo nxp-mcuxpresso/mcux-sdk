@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 NXP
+ * Copyright 2021, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*! @{ */
-#define FSL_LCDIC_DMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_LCDIC_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
 
 /* Forward declaration of the handle typedef. */
@@ -102,6 +102,30 @@ status_t LCDIC_TransferCreateHandleDMA(LCDIC_Type *base,
  * @retval kStatus_Busy LCDIC is not idle, is running another transfer.
  */
 status_t LCDIC_TransferDMA(LCDIC_Type *base, lcdic_dma_handle_t *handle, const lcdic_xfer_t *xfer);
+
+/*!
+ * @brief Send data array using DMA.
+ *
+ * @param base LCDIC peripheral base address.
+ * @param handle Pointer to the lcdic_handle_t structure to store the transfer state.
+ * @param xfer LCDIC transfer structure.
+ * @retval kStatus_Success Successfully start a transfer.
+ * @retval kStatus_InvalidArgument Input argument is invalid.
+ * @retval kStatus_Busy LCDIC driver is busy with another transfer.
+ */
+status_t LCDIC_SendDataArrayDMA(LCDIC_Type *base, lcdic_dma_handle_t *handle, const lcdic_tx_xfer_t *xfer);
+
+/*!
+ * @brief Read data array using DMA.
+ *
+ * @param base LCDIC peripheral base address.
+ * @param handle Pointer to the lcdic_handle_t structure to store the transfer state.
+ * @param xfer LCDIC transfer structure.
+ * @retval kStatus_Success Successfully start a transfer.
+ * @retval kStatus_InvalidArgument Input argument is invalid.
+ * @retval kStatus_Busy LCDIC driver is busy with another transfer.
+ */
+status_t LCDIC_ReadDataArrayDMA(LCDIC_Type *base, lcdic_dma_handle_t *handle, const lcdic_rx_xfer_t *xfer);
 
 /*!
  * @brief LCDIC IRQ handler function work with DMA transactional APIs.

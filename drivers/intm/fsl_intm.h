@@ -20,10 +20,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief INTM driver version. */
 #define FSL_INTM_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief Interrupt monitors. */
 typedef enum _intm_monitor

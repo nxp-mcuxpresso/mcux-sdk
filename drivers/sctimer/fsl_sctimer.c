@@ -727,10 +727,10 @@ status_t SCTIMER_SetupCaptureAction(SCT_Type *base,
         {
             /* Set bit to enable event */
             temp                              = base->CAPCTRL_ACCESS16BIT[s_currentMatchhigh].CAPCTRLL;
-            base->CAPCTRL[s_currentMatchhigh] = temp | ((uint32_t)((uint32_t)(1UL << event) << 16U) & 0xFFFF000U);
+            base->CAPCTRL[s_currentMatchhigh] = temp | ((uint32_t)((uint32_t)(1UL << event) << 16U) & 0xFFFF0000U);
             /* Set this resource to be a capture rather than match */
             temp          = base->REGMODE_ACCESS16BIT.REGMODEL;
-            base->REGMODE = temp | ((uint32_t)((uint32_t)(1UL << s_currentMatchhigh) << 16U) & 0xFFFF000U);
+            base->REGMODE = temp | ((uint32_t)((uint32_t)(1UL << s_currentMatchhigh) << 16U) & 0xFFFF0000U);
 
             /* Return the match register number */
             *captureRegister = s_currentMatchhigh;

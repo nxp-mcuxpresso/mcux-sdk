@@ -82,6 +82,9 @@
 #  # description: Utility debug_console
 #  set(CONFIG_USE_utility_debug_console true)
 
+#  # description: DSPI FreeRTOS Driver
+#  set(CONFIG_USE_driver_dspi_freertos true)
+
 #  # description: DSPI CMSIS Driver
 #  set(CONFIG_USE_driver_cmsis_dspi true)
 
@@ -174,6 +177,9 @@
 
 #  # description: Component mem_manager_light
 #  set(CONFIG_USE_component_mem_manager_light true)
+
+#  # description: Component mem_manager_freertos
+#  set(CONFIG_USE_component_mem_manager_freertos true)
 
 #  # description: Driver mma8451q
 #  set(CONFIG_USE_driver_mma8451q true)
@@ -277,9 +283,6 @@
 #  # description: DSPI Driver
 #  set(CONFIG_USE_driver_dspi true)
 
-#  # description: DSPI Driver
-#  set(CONFIG_USE_driver_dspi_freertos true)
-
 #  # description: EDMA Driver
 #  set(CONFIG_USE_driver_edma true)
 
@@ -301,7 +304,7 @@
 #  # description: I2C Driver
 #  set(CONFIG_USE_driver_i2c true)
 
-#  # description: I2C Driver
+#  # description: I2C FreeRTOS Driver
 #  set(CONFIG_USE_driver_i2c_freertos true)
 
 #  # description: LLWU Driver
@@ -313,7 +316,7 @@
 #  # description: LPUART Driver
 #  set(CONFIG_USE_driver_lpuart true)
 
-#  # description: LPUART Driver
+#  # description: LPUART Freertos Driver
 #  set(CONFIG_USE_driver_lpuart_freertos true)
 
 #  # description: PDB Driver
@@ -349,7 +352,7 @@
 #  # description: UART Driver
 #  set(CONFIG_USE_driver_uart true)
 
-#  # description: UART Driver
+#  # description: UART FreeRTOS Driver
 #  set(CONFIG_USE_driver_uart_freertos true)
 
 #  # description: VREF Driver
@@ -429,37 +432,6 @@
 #  # description: CMSIS-NN Library
 #  set(CONFIG_USE_CMSIS_NN_Source true)
 
-#set.middleware.fatfs
-#  # description: FatFs template MMC
-#  set(CONFIG_USE_middleware_fatfs_template_mmc true)
-
-#  # description: FatFs template NAND
-#  set(CONFIG_USE_middleware_fatfs_template_nand true)
-
-#  # description: FatFs template RAM
-#  set(CONFIG_USE_middleware_fatfs_template_ram true)
-
-#  # description: FatFs template SD
-#  set(CONFIG_USE_middleware_fatfs_template_sd true)
-
-#  # description: FatFs template SDSPI
-#  set(CONFIG_USE_middleware_fatfs_template_sdspi true)
-
-#  # description: FatFs template USB
-#  set(CONFIG_USE_middleware_fatfs_template_usb true)
-
-#  # description: FatFs
-#  set(CONFIG_USE_middleware_fatfs true)
-
-#  # description: FatFs_RAM
-#  set(CONFIG_USE_middleware_fatfs_ram true)
-
-#  # description: FatFs_SDSPI
-#  set(CONFIG_USE_middleware_fatfs_sdspi true)
-
-#  # description: FatFs_USB
-#  set(CONFIG_USE_middleware_fatfs_usb true)
-
 #set.middleware.freertos-kernel
 #  # description: FreeRTOS NXP extension
 #  set(CONFIG_USE_middleware_freertos-kernel_extension true)
@@ -485,7 +457,10 @@
 #  # description: FreeRTOS heap 5
 #  set(CONFIG_USE_middleware_freertos-kernel_heap_5 true)
 
-#  # description: FreeRTOS MPU wrappers
+#  # description: new V2 FreeRTOS MPU wrappers introduced in V10.6.0
+#  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers_v2 true)
+
+#  # description: old FreeRTOS MPU wrappers used before V10.6.0
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
 #set.middleware.multicore
@@ -591,6 +566,15 @@
 #  # description: erpc_doc
 #  set(CONFIG_USE_middleware_multicore_erpc_doc true)
 
+#  # description: erpc_zephyr
+#  set(CONFIG_USE_middleware_multicore_erpc_zephyr true)
+
+#  # description: erpc_java
+#  set(CONFIG_USE_middleware_multicore_erpc_java true)
+
+#  # description: erpc_examples
+#  set(CONFIG_USE_middleware_multicore_erpc_examples true)
+
 #  # description: eRPC
 #  set(CONFIG_USE_middleware_multicore_erpc true)
 
@@ -686,6 +670,9 @@
 #  # description: Middleware usb host cdc
 #  set(CONFIG_USE_middleware_usb_host_cdc true)
 
+#  # description: Middleware usb host cdc_ecm
+#  set(CONFIG_USE_middleware_usb_host_cdc_ecm true)
+
 #  # description: Middleware usb host cdc_rndis
 #  set(CONFIG_USE_middleware_usb_host_cdc_rndis true)
 
@@ -749,6 +736,9 @@
 
 
 #set.component.osa
+#  # description: Component osa_zephyr
+#  set(CONFIG_USE_component_osa_zephyr true)
+
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)
 
@@ -763,6 +753,28 @@
 
 #  # description: Component osa interface
 #  set(CONFIG_USE_component_osa_interface true)
+
+#set.middleware.fatfs
+#  # description: FatFs
+#  set(CONFIG_USE_middleware_fatfs true)
+
+#  # description: FatFs_RAM
+#  set(CONFIG_USE_middleware_fatfs_ram true)
+
+#  # description: FatFs_SDSPI
+#  set(CONFIG_USE_middleware_fatfs_sdspi true)
+
+#  # description: FatFs template RAM
+#  set(CONFIG_USE_middleware_fatfs_template_ram true)
+
+#  # description: FatFs template SDSPI
+#  set(CONFIG_USE_middleware_fatfs_template_sdspi true)
+
+#  # description: FatFs template USB
+#  set(CONFIG_USE_middleware_fatfs_template_usb true)
+
+#  # description: FatFs_USB
+#  set(CONFIG_USE_middleware_fatfs_usb true)
 
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.

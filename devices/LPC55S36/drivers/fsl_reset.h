@@ -247,6 +247,10 @@ typedef enum _SYSCON_RSTn
     {                       \
         kPUF_RST_SHIFT_RSTn \
     } /* Reset bits for PUF peripheral */
+#define RTC_RSTS            \
+    {                       \
+        kRTC_RST_SHIFT_RSTn \
+    } /* Reset bits for PUF peripheral */
 typedef SYSCON_RSTn_t reset_ip_name_t;
 #define USB0HSL_RSTS USB0HSL_RST
 #define USB0HMR_RSTS USB0HMR_RST

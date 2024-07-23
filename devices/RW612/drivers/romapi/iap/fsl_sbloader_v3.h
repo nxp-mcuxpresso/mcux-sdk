@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, NXP Semiconductor, Inc.
- * Copyright 2021, 2023 NXP
+ * Copyright 2021,2023-2024 NXP
  * All rights reserved.
  *
  *
@@ -34,7 +34,9 @@
 #ifndef _loader_v3_h
 #define _loader_v3_h
 
+#include "fsl_common.h"
 #include <stdint.h>
+
 
 //! @addtogroup sbloader
 //! @{
@@ -58,6 +60,36 @@ typedef struct _ldr_Context_v3 ldr_Context_v3_t;
 
 //! Function pointer definition for all loader action functions.
 typedef status_t (*pLdrFnc_v3_t)(ldr_Context_v3_t *content);
+
+enum _bl_status_groups
+{
+    kStatusGroup_SBLoader = 101u,
+};
+
+enum _sbloader_status
+{
+    kStatusRomLdrSectionOverrun = MAKE_STATUS(kStatusGroup_SBLoader, 0),
+    kStatusRomLdrSignature = MAKE_STATUS(kStatusGroup_SBLoader, 1),
+    kStatusRomLdrSectionLength = MAKE_STATUS(kStatusGroup_SBLoader, 2),
+    kStatusRomLdrUnencryptedOnly = MAKE_STATUS(kStatusGroup_SBLoader, 3),
+    kStatusRomLdrEOFReached = MAKE_STATUS(kStatusGroup_SBLoader, 4),
+    kStatusRomLdrChecksum = MAKE_STATUS(kStatusGroup_SBLoader, 5),
+    kStatusRomLdrCrc32Error = MAKE_STATUS(kStatusGroup_SBLoader, 6),
+    kStatusRomLdrUnknownCommand = MAKE_STATUS(kStatusGroup_SBLoader, 7),
+    kStatusRomLdrIdNotFound = MAKE_STATUS(kStatusGroup_SBLoader, 8),
+    kStatusRomLdrDataUnderrun = MAKE_STATUS(kStatusGroup_SBLoader, 9),
+    kStatusRomLdrJumpReturned = MAKE_STATUS(kStatusGroup_SBLoader, 10),
+    kStatusRomLdrCallFailed = MAKE_STATUS(kStatusGroup_SBLoader, 11),
+    kStatusRomLdrKeyNotFound = MAKE_STATUS(kStatusGroup_SBLoader, 12),
+    kStatusRomLdrSecureOnly = MAKE_STATUS(kStatusGroup_SBLoader, 13),
+    kStatusRomLdrResetReturned = MAKE_STATUS(kStatusGroup_SBLoader, 14),
+
+    kStatusRomLdrRollbackBlocked = MAKE_STATUS(kStatusGroup_SBLoader, 15),
+    kStatusRomLdrInvalidSectionMacCount = MAKE_STATUS(kStatusGroup_SBLoader, 16),
+    kStatusRomLdrUnexpectedCommand = MAKE_STATUS(kStatusGroup_SBLoader, 17),
+    kStatusRomLdrBadSBKEK = MAKE_STATUS(kStatusGroup_SBLoader, 18),
+    kStatusRomLdrPendingJumpCommand = MAKE_STATUS(kStatusGroup_SBLoader, 19),
+};
 
 //! sb3 section definitions
 

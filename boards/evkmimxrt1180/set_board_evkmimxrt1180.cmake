@@ -60,15 +60,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 endif()
 
-if(CONFIG_USE_COMPONENT_CONFIGURATION)
-  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
-
-  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
-    -DXIP_BOOT_HEADER_ENABLE=1
-  )
-
-endif()
-
 else()
 
 message(SEND_ERROR "BOARD_Project_Template_evkmimxrt1180 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")

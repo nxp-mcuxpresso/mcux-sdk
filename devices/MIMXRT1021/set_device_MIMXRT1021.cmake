@@ -52,6 +52,19 @@ add_config_file(${CMAKE_CURRENT_LIST_DIR}/../../components/rtt/template/SEGGER_R
 endif()
 
 
+if (CONFIG_USE_component_mflash_common)
+# Add set(CONFIG_USE_component_mflash_common true) in config.cmake to use this component
+
+message("component_mflash_common component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/.
+)
+
+
+endif()
+
+
 if (CONFIG_USE_driver_nand_flash-common)
 # Add set(CONFIG_USE_driver_nand_flash-common true) in config.cmake to use this component
 
@@ -72,19 +85,6 @@ message("driver_nor_flash-common component is included from ${CMAKE_CURRENT_LIST
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/nor/.
-)
-
-
-endif()
-
-
-if (CONFIG_USE_component_mflash_common)
-# Add set(CONFIG_USE_component_mflash_common true) in config.cmake to use this component
-
-message("component_mflash_common component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/.
 )
 
 
@@ -462,15 +462,13 @@ if (CONFIG_USE_utility_debug_console_lite)
 
 message("utility_debug_console_lite component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_lpuart_adapter AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1021xxxxx) AND CONFIG_USE_driver_common)
+if(CONFIG_USE_component_lpuart_adapter AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1021xxxxx) AND CONFIG_USE_driver_common AND CONFIG_USE_utility_str)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str/fsl_str.c
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite/fsl_debug_console.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
 )
 
@@ -868,15 +866,13 @@ if (CONFIG_USE_utility_debug_console)
 
 message("utility_debug_console component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_serial_manager AND CONFIG_USE_driver_common)
+if(CONFIG_USE_component_serial_manager AND CONFIG_USE_driver_common AND CONFIG_USE_utility_str)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str/fsl_str.c
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console/fsl_debug_console.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
 )
 
@@ -945,6 +941,83 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_cmsis_enet.MIMXRT1021 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_mflash_file)
+# Add set(CONFIG_USE_component_mflash_file true) in config.cmake to use this component
+
+message("component_mflash_file component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_mflash_rt1020)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mflash_file.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/.
+)
+
+else()
+
+message(SEND_ERROR "component_mflash_file.MIMXRT1021 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_mflash_dummy)
+# Add set(CONFIG_USE_component_mflash_dummy true) in config.cmake to use this component
+
+message("component_mflash_dummy component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_mflash_file)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mflash_dummy.c
+)
+
+else()
+
+message(SEND_ERROR "component_mflash_dummy.MIMXRT1021 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_mflash_rt1020)
+# Add set(CONFIG_USE_component_mflash_rt1020 true) in config.cmake to use this component
+
+message("component_mflash_rt1020 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_mflash_common AND (CONFIG_BOARD STREQUAL evkmimxrt1020) AND CONFIG_USE_driver_flexspi AND CONFIG_USE_driver_cache_armv7_m7)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mimxrt1021/mflash_drv.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mimxrt1021/.
+)
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DMFLASH_FILE_BASEADDR=5767168
+  )
+
+endif()
+
+else()
+
+message(SEND_ERROR "component_mflash_rt1020.MIMXRT1021 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -1819,77 +1892,24 @@ endif()
 endif()
 
 
-if (CONFIG_USE_component_mflash_file)
-# Add set(CONFIG_USE_component_mflash_file true) in config.cmake to use this component
+if (CONFIG_USE_component_mem_manager_freertos)
+# Add set(CONFIG_USE_component_mem_manager_freertos true) in config.cmake to use this component
 
-message("component_mflash_file component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+message("component_mem_manager_freertos component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_mflash_rt1020)
+if(CONFIG_USE_driver_common AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mflash_file.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/mem_manager/fsl_component_mem_manager_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/.
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/mem_manager/.
 )
 
 else()
 
-message(SEND_ERROR "component_mflash_file.MIMXRT1021 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_component_mflash_dummy)
-# Add set(CONFIG_USE_component_mflash_dummy true) in config.cmake to use this component
-
-message("component_mflash_dummy component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_component_mflash_file)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mflash_dummy.c
-)
-
-else()
-
-message(SEND_ERROR "component_mflash_dummy.MIMXRT1021 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_component_mflash_rt1020)
-# Add set(CONFIG_USE_component_mflash_rt1020 true) in config.cmake to use this component
-
-message("component_mflash_rt1020 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_component_mflash_common AND (CONFIG_BOARD STREQUAL evkmimxrt1020) AND CONFIG_USE_driver_flexspi AND CONFIG_USE_driver_cache_armv7_m7)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mimxrt1021/mflash_drv.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mimxrt1021/.
-)
-
-if(CONFIG_USE_COMPONENT_CONFIGURATION)
-  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
-
-  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
-    -DMFLASH_FILE_BASEADDR=5767168
-  )
-
-endif()
-
-else()
-
-message(SEND_ERROR "component_mflash_rt1020.MIMXRT1021 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+message(SEND_ERROR "component_mem_manager_freertos.MIMXRT1021 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -2359,6 +2379,15 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
 
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_GPT=1
+  )
+
+endif()
+
 else()
 
 message(SEND_ERROR "component_gpt_adapter.MIMXRT1021 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
@@ -2382,6 +2411,15 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_PIT=1
+  )
+
+endif()
 
 else()
 
@@ -3277,11 +3315,11 @@ message("driver_lpi2c_freertos component is included from ${CMAKE_CURRENT_LIST_F
 if(CONFIG_USE_driver_lpi2c AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpi2c/fsl_lpi2c_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpi2c_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpi2c/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -3325,11 +3363,11 @@ message("driver_lpspi_freertos component is included from ${CMAKE_CURRENT_LIST_F
 if(CONFIG_USE_driver_lpspi AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpspi/fsl_lpspi_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpspi_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpspi/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -3373,11 +3411,11 @@ message("driver_lpuart_freertos component is included from ${CMAKE_CURRENT_LIST_
 if(CONFIG_USE_driver_lpuart AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart/fsl_lpuart_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpuart_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()

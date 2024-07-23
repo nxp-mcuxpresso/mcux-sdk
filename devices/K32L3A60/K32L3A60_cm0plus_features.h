@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2019-04-22
-**     Build:               b231123
+**     Build:               b240301
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -814,6 +814,8 @@
 #define FSL_FEATURE_LPCMP_HAS_ROUNDROBIN_MODE (0)
 /* @brief Has window mode (related to existence of CCR1.WINDOW_CLS). */
 #define FSL_FEATURE_LPCMP_HAS_WINDOW_CONTROL (0)
+/* @brief Has no CCR0 CMP_STOP_EN bitfield. */
+#define FSL_FEATURE_LPCMP_HAS_NO_CCR0_CMP_STOP_EN (0)
 
 /* LPDAC module features */
 
@@ -844,6 +846,10 @@
 #define FSL_FEATURE_LPSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
 /* @brief Has CCR1 (related to existence of registers CCR1). */
 #define FSL_FEATURE_LPSPI_HAS_CCR1 (0)
+/* @brief Has no PCSCFG bit in CFGR1 register */
+#define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
+/* @brief Has no WIDTH bits in TCR register */
+#define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
 
 /* LPTMR module features */
 
@@ -853,8 +859,12 @@
 #define FSL_FEATURE_LPTMR_CNR_WIDTH_IS_32B (1)
 /* @brief Has timer DMA request enable (register bit CSR[TDRE]). */
 #define FSL_FEATURE_LPTMR_HAS_CSR_TDRE (1)
+/* @brief Do not has prescaler clock source 0. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_0_SUPPORT (0)
 /* @brief Do not has prescaler clock source 1. */
 #define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_1_SUPPORT (0)
+/* @brief Do not has prescaler clock source 2. */
+#define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_2_SUPPORT (0)
 /* @brief Do not has prescaler clock source 3. */
 #define FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_3_SUPPORT (0)
 
@@ -1575,11 +1585,6 @@
 
 /* No feature definitions */
 
-/* TSTMR module features */
-
-/* @brief TSTMR clock frequency is 1MHZ. */
-#define FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_1MHZ (1)
-
 /* USB module features */
 
 /* @brief KHCI module instance count */
@@ -1633,6 +1638,8 @@
 #define FSL_FEATURE_USDHC_REGISTER_HOST_CTRL_CAP_HAS_NO_RETUNING_TIME_COUNTER (1)
 /* @brief Has no VSELECT bit in VEND_SPEC register */
 #define FSL_FEATURE_USDHC_HAS_NO_VOLTAGE_SELECT (0)
+/* @brief Has no VS18 bit in HOST_CTRL_CAP register */
+#define FSL_FEATURE_USDHC_HAS_NO_VS18 (0)
 
 /* VREF module features */
 

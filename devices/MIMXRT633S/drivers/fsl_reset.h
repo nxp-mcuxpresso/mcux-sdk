@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.2.0. */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief reset driver version 2.2.1. */
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 /*!
@@ -155,6 +155,10 @@ typedef enum _RSTCTL_RSTn
     {                        \
         kMRT0_RST_SHIFT_RSTn \
     } /* Reset bits for MRT peripheral */
+#define MU_RSTS            \
+    {                      \
+        kMU_RST_SHIFT_RSTn \
+    } /* Reset bits for MU peripheral */
 #define PINT_RSTS            \
     {                        \
         kPINT_RST_SHIFT_RSTn \

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 NXP
+ * Copyright 2019-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -28,8 +28,8 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief SPC driver version 2.3.0. */
-#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief SPC driver version 2.4.0. */
+#define FSL_SPC_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*! @} */
 
 /*!
@@ -343,7 +343,7 @@ typedef struct _spc_core_voltage_detect_config
 typedef struct _spc_system_voltage_detect_config
 {
     spc_voltage_detect_option_t option;   /*!< System VDD Voltage Detect option. */
-    spc_low_voltage_level_select_t level; /*!< System VDD low-voltage selection. */
+    spc_low_voltage_level_select_t level; /*!< @deprecated, reserved for all devices, will removed in next release. */
 } spc_system_voltage_detect_config_t;
 
 /*!
@@ -1137,6 +1137,8 @@ status_t SPC_EnableLowPowerModeCoreLowVoltageDetect(SPC_Type *base, bool enable)
  * This function selects the system VDD low-voltage level. Changing system VDD low-voltage level
  * must be done after disabling the System VDD low voltage reset and interrupt.
  *
+ * @deprecated In latest RM, reserved for all devices, will removed in next release.
+ * 
  * @param base SPC peripheral base address.
  * @param level System VDD Low-Voltage level selection.
  */

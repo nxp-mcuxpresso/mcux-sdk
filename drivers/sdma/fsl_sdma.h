@@ -31,6 +31,10 @@
 #define SDMA_DRIVER_LOAD_RAM_SCRIPT (1)
 #endif
 
+#ifndef SDMA_DRIVER_LOAD_RAM_SCRIPT
+#define SDMA_DRIVER_LOAD_RAM_SCRIPT (1)
+#endif
+
 /*! @brief SDMA transfer configuration */
 typedef enum _sdma_transfer_size
 {

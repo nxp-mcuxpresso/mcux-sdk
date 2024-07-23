@@ -1,0 +1,1 @@
+*(EXCLUDE_FILE(*fsl_adapter_flexspi_hyper_nor_flash.o *fsl_adapter_flexspi_hyper_flash_config.o  *fsl_clock.o  *fsl_flexspi.o *mflash_drv.o) .text*)

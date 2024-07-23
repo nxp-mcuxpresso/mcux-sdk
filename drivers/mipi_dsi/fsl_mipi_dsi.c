@@ -1,7 +1,5 @@
 /*
- * Copyright 2017, 2019-2023 NXP
- * All rights reserved.
- *
+ * Copyright 2017, 2019-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -74,7 +72,7 @@
 #define DPHY_PD_REG PD_DPHY
 #endif
 
-#if defined(DSI_RSTS)
+#if defined(MIPI_DSI_RSTS)
 #define DSI_RESETS_ARRAY MIPI_DSI_RSTS
 #endif
 
@@ -535,7 +533,7 @@ void DSI_SetDpiConfig(MIPI_DSI_HOST_Type *base,
     assert(NULL != config);
 
     /* coefficient DPI event size to number of DSI bytes. */
-    uint32_t coff = (numLanes * dsiHsBitClkFreq_Hz) / (dpiPixelClkFreq_Hz * 8U);
+    float coff = ((float)numLanes * (float)dsiHsBitClkFreq_Hz) / ((float)dpiPixelClkFreq_Hz * 8);
 
 #if (defined(FSL_FEATURE_MIPI_DSI_HOST_HAS_PXL2DPI) && FSL_FEATURE_MIPI_DSI_HOST_HAS_PXL2DPI)
     SOC_MIPI_DSI_SetPixelDpiMap(base, (uint32_t)config->dpiColorCoding);
@@ -580,17 +578,30 @@ void DSI_SetDpiConfig(MIPI_DSI_HOST_Type *base,
         base->CFG_DPI_HSYNC_POLARITY = 0x00U;
     }
 
-    base->CFG_DPI_HFP                   = config->hfp * coff - DSI_HFP_OVERHEAD_BYTE;
-    base->CFG_DPI_HBP                   = config->hbp * coff - DSI_HBP_OVERHEAD_BYTE;
-    base->CFG_DPI_HSA                   = config->hsw * coff - DSI_HSA_OVERHEAD_BYTE;
-    base->CFG_DPI_PIXEL_FIFO_SEND_LEVEL = config->pixelPayloadSize;
+    base->CFG_DPI_HFP                   = (uint32_t)((float)config->hfp * coff - (float)DSI_HFP_OVERHEAD_BYTE);
+    base->CFG_DPI_HBP                   = (uint32_t)((float)config->hbp * coff - (float)DSI_HBP_OVERHEAD_BYTE);
+    base->CFG_DPI_HSA                   = (uint32_t)((float)config->hsw * coff - (float)DSI_HSA_OVERHEAD_BYTE);
 
+    base->CFG_DPI_PIXEL_FIFO_SEND_LEVEL = config->pixelPayloadSize;
     base->CFG_DPI_VBP = config->vbp;
     base->CFG_DPI_VFP = config->vfp;
 
     base->CFG_DPI_VACTIVE = config->panelHeight - 1UL;
     base->CFG_DPI_VC      = config->virtualChannel;
 }
+
+#if defined(FSL_FEATURE_MIPI_DSI_HOST_DBI_HAS_PIXEL_FORMAT) && FSL_FEATURE_MIPI_DSI_HOST_DBI_HAS_PIXEL_FORMAT
+/*!
+ * brief Configure the DBI pixel format.
+ *
+ * param base MIPI DSI host peripheral base address.
+ * param format of the pixel.
+ */
+void DSI_SetDbiPixelFormat(MIPI_DSI_HOST_Type *base, dsi_dbi_pixel_format_t format)
+{
+    base->CFG_DBI_PIXEL_FORMAT = (uint32_t)format;
+}
+#endif
 
 /*!
  * brief Initializes the D-PHY
@@ -672,6 +683,13 @@ uint32_t DSI_InitDphy(MIPI_DSI_HOST_Type *base, const dsi_dphy_config_t *config,
 
     /* Power up the DPHY. */
     base->DPHY_PD_REG = 0U;
+
+#if defined(FSL_FEATURE_MIPI_DSI_HOST_HAS_PHY_RDY) && FSL_FEATURE_MIPI_DSI_HOST_HAS_PHY_RDY
+    /* Wait for host DPHY ready. */
+    while (0UL == base->PHY_RDY)
+    {
+    }
+#endif
 
 #if !((defined(FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL) && (FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL)))
     return outputPllFreq;

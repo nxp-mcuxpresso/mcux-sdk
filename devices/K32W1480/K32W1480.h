@@ -8,7 +8,7 @@
 **
 **     Reference manual:    Rev. 2, Jan. 6, 2022
 **     Version:             rev. 1.0, 2021-01-18
-**     Build:               b240227
+**     Build:               b240414
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for K32W1480
@@ -42997,6 +42997,9 @@ typedef struct {
   /** Array initializer of TSTMR peripheral base pointers */
   #define TSTMR_BASE_PTRS                          { TSTMR0 }
 #endif
+/* Extra definition */
+#define TSTMR_CLOCK_FREQUENCY_MHZ                (1U)
+
 
 /*!
  * @}

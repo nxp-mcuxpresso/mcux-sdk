@@ -25,9 +25,9 @@
 #endif
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_TSTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
-                                                         /*@}*/
+                                                         /*! @} */
 
 /*******************************************************************************
  * API
@@ -78,18 +78,14 @@ static inline uint64_t TSTMR_ReadTimeStamp(TSTMR_Type *base)
  */
 static inline void TSTMR_DelayUs(TSTMR_Type *base, uint64_t delayInUs)
 {
+#if defined(TSTMR_CLOCK_FREQUENCY_MHZ)
     uint64_t startTime = TSTMR_ReadTimeStamp(base);
-#if defined(FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_1MHZ) && FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_1MHZ
-    while (TSTMR_ReadTimeStamp(base) - startTime < delayInUs)
-#elif defined(FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_8MHZ) && FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_8MHZ
-    while (TSTMR_ReadTimeStamp(base) - startTime < 8U * delayInUs)
-#elif defined(FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_24MHZ) && FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_24MHZ
-    while (TSTMR_ReadTimeStamp(base) - startTime < 24U * delayInUs)
+    while (TSTMR_ReadTimeStamp(base) - startTime < TSTMR_CLOCK_FREQUENCY_MHZ * delayInUs)
+    {
+    }
 #else
     assert(0);
 #endif
-    {
-    }
 }
 
 #if defined(__cplusplus)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2020, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -13,7 +13,7 @@
 #include "fsl_flexspi_nor_flash.h"
 #include "pin_mux.h"
 
-#define FLASH_BASE_ADDR 0x80000000
+#define FLASH_BASE_ADDR 0x80000000UL
 
 #if FLASH_USE_CUSTOM_FCB
 /* fcb for w45q64 */
@@ -64,12 +64,16 @@ int32_t mflash_drv_init(void)
 
     result = FLEXSPI_NorFlash_GetConfig(0, &flashConfig, &option);
     if (result != kStatus_Success)
+    {
         return result;
+    }
 #endif
 
     result = FLEXSPI_NorFlash_Init(0, &flashConfig);
     if (result != kStatus_Success)
+    {
         return result;
+    }
 
     return result;
 }
@@ -83,7 +87,7 @@ int32_t mflash_drv_sector_erase(uint32_t sector_addr)
     if (0 == mflash_drv_is_sector_aligned(sector_addr))
         return kStatus_InvalidArgument;
 
-    __asm("cpsid i");
+    __disable_irq();
     
     status = FLEXSPI_NorFlash_Erase(0, (flexspi_nor_config_t *)&flashConfig, sector_addr,
                                   flashConfig.sectorSize);
@@ -91,9 +95,9 @@ int32_t mflash_drv_sector_erase(uint32_t sector_addr)
     DCACHE_InvalidateByRange(MFLASH_BASE_ADDRESS + sector_addr, MFLASH_SECTOR_SIZE);
 
     
-    if (primask == 0)
+    if (primask == 0U)
     {
-        __asm("cpsie i");
+        __enable_irq();
     }
 
     /* Flush pipeline to allow pending interrupts take place
@@ -112,7 +116,7 @@ int32_t mflash_drv_page_program(uint32_t page_addr, uint32_t *data)
     if (0 == mflash_drv_is_page_aligned(page_addr))
         return kStatus_InvalidArgument;
 
-    __asm("cpsid i");
+    __disable_irq();
 
     status = FLEXSPI_NorFlash_ProgramPage(0, &flashConfig, page_addr, (uint32_t *)data);
     
@@ -121,7 +125,7 @@ int32_t mflash_drv_page_program(uint32_t page_addr, uint32_t *data)
             
     if (primask == 0)
     {
-        __asm("cpsie i");
+        __enable_irq();
     }
 
     /* Flush pipeline to allow pending interrupts take place

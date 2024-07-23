@@ -342,7 +342,7 @@ static void KSDK_SPI_MasterDMACallback(SPI_Type *base, spi_dma_handle_t *handle,
         event = ARM_SPI_EVENT_TRANSFER_COMPLETE;
     }
 
-    if ((uint8_t)kStatus_SPI_Error == status)
+    if (kStatus_SPI_Error == status)
     {
         event = ARM_SPI_EVENT_DATA_LOST;
     }
@@ -361,7 +361,7 @@ static void KSDK_SPI_SlaveDMACallback(SPI_Type *base, spi_dma_handle_t *handle, 
         event = ARM_SPI_EVENT_TRANSFER_COMPLETE;
     }
 
-    if ((uint8_t)kStatus_SPI_Error == status)
+    if (kStatus_SPI_Error == status)
     {
         event = ARM_SPI_EVENT_DATA_LOST;
     }

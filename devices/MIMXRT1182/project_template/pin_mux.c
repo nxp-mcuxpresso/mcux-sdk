@@ -13,8 +13,8 @@
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
 product: Pins v15.0
-processor: MIMXRT1189xxxxx
-package_id: MIMXRT1189CVM8B
+processor: MIMXRT1182xxxxx
+package_id: MIMXRT1182CVM8B
 mcu_data: ksdk2_0
 processor_version: 0.15.9
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********

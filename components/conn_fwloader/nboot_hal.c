@@ -133,11 +133,11 @@ static fsl_nboot_status_t nboot_hal_get_root_auth_parms(fsl_nboot_context_t *con
         parms->soc_lifecycle = (fsl_nboot_soc_lifecycle_t)set_antipole(get_lifecycle_state());
         status               = kStatus_NBOOT_Success;
     } while (false);
-
-    if ((status != kStatus_NBOOT_Success) && (parms != NULL))
-    {
-        (void)memset(parms, 0, sizeof(*parms));
-    }
+	
+	if (status != kStatus_NBOOT_Success)
+	{
+	    (void)memset(parms, 0, sizeof(*parms));
+	}
 
     return status;
 }
@@ -161,70 +161,74 @@ static fsl_nboot_status_t nboot_hal_get_rotkh(uint32_t *rotkh, uint32_t rotkhSiz
 {
     /* No need to check the input arguments for this inline functions. */
     assert(rotkh);
-    assert(rotkhSize == NBOOT_ROOT_ROTKH_SIZE_IN_BYTE);
+    assert(rotkhSize == (uint32_t)NBOOT_ROOT_ROTKH_SIZE_IN_BYTE);
 
     fsl_nboot_status_t status = kStatus_NBOOT_Success;
 
     /* root key hash fixed in Flash memory */
 #ifdef USE_ENG_CERTIFICATE
-    rotkh[0]  = 0xd0cfb419;
-    rotkh[1]  = 0x4037ee3c;
-    rotkh[2]  = 0xde74393e;
-    rotkh[3]  = 0x0156d0a3;
-    rotkh[4]  = 0x373b8677;
-    rotkh[5]  = 0x6b6aee3d;
-    rotkh[6]  = 0x619b459e;
-    rotkh[7]  = 0xfa33f31d;
-    rotkh[8]  = 0x00000000;
-    rotkh[9]  = 0x00000000;
-    rotkh[10] = 0x00000000;
-    rotkh[11] = 0x00000000;
+    rotkh[0]  = 0xd0cfb419U;
+    rotkh[1]  = 0x4037ee3cU;
+    rotkh[2]  = 0xde74393eU;
+    rotkh[3]  = 0x0156d0a3U;
+    rotkh[4]  = 0x373b8677U;
+    rotkh[5]  = 0x6b6aee3dU;
+    rotkh[6]  = 0x619b459eU;
+    rotkh[7]  = 0xfa33f31dU;
+    rotkh[8]  = 0x00000000U;
+    rotkh[9]  = 0x00000000U;
+    rotkh[10] = 0x00000000U;
+    rotkh[11] = 0x00000000U;
 #else
-    if ((get_chip_revision() == 0))
+    if ((get_chip_revision() == 0U))
     {
-        rotkh[0]  = 0x60DFBEE6;
-        rotkh[1]  = 0x8799305F;
-        rotkh[2]  = 0xBA9E4AE6;
-        rotkh[3]  = 0x1908394F;
-        rotkh[4]  = 0x7AC4F934;
-        rotkh[5]  = 0xEF76BF41;
-        rotkh[6]  = 0x2E27796E;
-        rotkh[7]  = 0x94DB19A0;
-        rotkh[8]  = 0x00000000;
-        rotkh[9]  = 0x00000000;
-        rotkh[10] = 0x00000000;
-        rotkh[11] = 0x00000000;
+        rotkh[0]  = 0x60DFBEE6U;
+        rotkh[1]  = 0x8799305FU;
+        rotkh[2]  = 0xBA9E4AE6U;
+        rotkh[3]  = 0x1908394FU;
+        rotkh[4]  = 0x7AC4F934U;
+        rotkh[5]  = 0xEF76BF41U;
+        rotkh[6]  = 0x2E27796EU;
+        rotkh[7]  = 0x94DB19A0U;
+        rotkh[8]  = 0x00000000U;
+        rotkh[9]  = 0x00000000U;
+        rotkh[10] = 0x00000000U;
+        rotkh[11] = 0x00000000U;
     }
-    else if ((get_chip_revision() == 1))
+    else if ((get_chip_revision() == 1U))
     {
-        rotkh[0]  = 0x9C758C58;
-        rotkh[1]  = 0x0A5CCEAA;
-        rotkh[2]  = 0x850DAD41;
-        rotkh[3]  = 0x1371EEBA;
-        rotkh[4]  = 0xB7874851;
-        rotkh[5]  = 0x53C5BA44;
-        rotkh[6]  = 0xF236F964;
-        rotkh[7]  = 0x3320ECDF;
-        rotkh[8]  = 0x00000000;
-        rotkh[9]  = 0x00000000;
-        rotkh[10] = 0x00000000;
-        rotkh[11] = 0x00000000;
+        rotkh[0]  = 0x9C758C58U;
+        rotkh[1]  = 0x0A5CCEAAU;
+        rotkh[2]  = 0x850DAD41U;
+        rotkh[3]  = 0x1371EEBAU;
+        rotkh[4]  = 0xB7874851U;
+        rotkh[5]  = 0x53C5BA44U;
+        rotkh[6]  = 0xF236F964U;
+        rotkh[7]  = 0x3320ECDFU;
+        rotkh[8]  = 0x00000000U;
+        rotkh[9]  = 0x00000000U;
+        rotkh[10] = 0x00000000U;
+        rotkh[11] = 0x00000000U;
     }
-    else if ((get_chip_revision() == 2))
+    else if ((get_chip_revision() == 2U))
     {
-        rotkh[0]  = 0xE7C7E9BB;
-        rotkh[1]  = 0x12C8C535;
-        rotkh[2]  = 0x37E61148;
-        rotkh[3]  = 0x2BE7F18C;
-        rotkh[4]  = 0x8F0E3094;
-        rotkh[5]  = 0xB2BA7F32;
-        rotkh[6]  = 0xEC9B4ECB;
-        rotkh[7]  = 0xAD9FC941;
-        rotkh[8]  = 0x00000000;
-        rotkh[9]  = 0x00000000;
-        rotkh[10] = 0x00000000;
-        rotkh[11] = 0x00000000;
+        rotkh[0]  = 0xE7C7E9BBU;
+        rotkh[1]  = 0x12C8C535U;
+        rotkh[2]  = 0x37E61148U;
+        rotkh[3]  = 0x2BE7F18CU;
+        rotkh[4]  = 0x8F0E3094U;
+        rotkh[5]  = 0xB2BA7F32U;
+        rotkh[6]  = 0xEC9B4ECBU;
+        rotkh[7]  = 0xAD9FC941U;
+        rotkh[8]  = 0x00000000U;
+        rotkh[9]  = 0x00000000U;
+        rotkh[10] = 0x00000000U;
+        rotkh[11] = 0x00000000U;
     }
+	else
+	{
+	    ; /* none to do */
+	}
 #endif
     return status;
 }
@@ -243,7 +247,7 @@ static inline fsl_nboot_status_t nboot_hal_get_pck_blob(uint8_t *pckBlob, uint32
 {
     /* No need to check the input arguments for this inline functions. */
     assert(pckBlob);
-    assert(pckBlobSize == NBOOT_PCK_BLOB_SIZE_IN_BYTE);
+    assert(pckBlobSize == (uint32_t)NBOOT_PCK_BLOB_SIZE_IN_BYTE);
 
     fsl_nboot_status_t status = kStatus_NBOOT_Fail;
     status_t otpStatus    = kStatus_Fail;
@@ -291,7 +295,7 @@ fsl_nboot_status_t nboot_hal_get_sb3_manifest_params(fsl_nboot_context_t *contex
         status = kStatus_NBOOT_Success;
     } while (false);
 
-    if ((status != kStatus_NBOOT_Success) && (parms != NULL))
+    if (status != kStatus_NBOOT_Success)
     {
         (void)memset(parms, 0, sizeof(*parms));
     }

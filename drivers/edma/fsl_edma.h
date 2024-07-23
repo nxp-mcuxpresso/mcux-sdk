@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 3)) /*!< Version 2.4.3. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 4)) /*!< Version 2.4.4. */
 /*! @} */
 
 /*! @brief Compute the offset unit from DCHPRI3 */

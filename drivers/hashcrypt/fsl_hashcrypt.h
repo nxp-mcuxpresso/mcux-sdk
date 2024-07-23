@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023 NXP
+ * Copyright 2017-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,9 +26,9 @@ enum _hashcrypt_status
  */
 /*! @name Driver version */
 /*! @{ */
-/*! @brief HASHCRYPT driver version. Version 2.2.14.
+/*! @brief HASHCRYPT driver version. Version 2.2.15.
  *
- * Current version: 2.2.14
+ * Current version: 2.2.15
  *
  * Change log:
  * - Version 2.0.0
@@ -92,8 +92,10 @@ enum _hashcrypt_status
  * SCA protection
  * - Version 2.2.14
  *   - Modify function hashcrypt_get_data() to prevent issue with unaligned access
+ * - Version 2.2.15
+ *    - Add wait on DIGEST BIT inside hashcrypt_sha_one_block() to fix issues with some optimization flags
  */
-#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 2, 14))
+#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 2, 15))
 /*! @} */
 
 /*! @brief Algorithm definitions correspond with the values for Mode field in Control register !*/

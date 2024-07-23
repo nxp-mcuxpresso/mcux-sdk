@@ -16,8 +16,8 @@
 /*******************************************************************************
  * Definitations
  ******************************************************************************/
-/* Used for 32byte aligned */
-#define STCD_ADDR(address) (edma_tcd_t *)(((uint32_t)(address) + 32U) & ~0x1FU)
+/* Used for edma_tcd_t size aligned */
+#define STCD_ADDR(address) (edma_tcd_t *)(((uint32_t)(address) + sizeof(edma_tcd_t)) & ~(sizeof(edma_tcd_t) - 1U))
 
 /*<! Structure definition for flexio_i2s_edma_private_handle_t. The structure is private. */
 typedef struct _flexio_i2s_edma_private_handle

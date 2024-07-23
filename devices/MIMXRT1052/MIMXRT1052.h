@@ -13,13 +13,13 @@
 **
 **     Reference manual:    IMXRT1050RM Rev.5, 07/2021 | IMXRT1050SRM Rev.2
 **     Version:             rev. 1.4, 2021-08-10
-**     Build:               b230725
+**     Build:               b240326
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1052
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -53,8 +53,8 @@
  * CMSIS Peripheral Access Layer for MIMXRT1052
  */
 
-#ifndef _MIMXRT1052_H_
-#define _MIMXRT1052_H_                           /**< Symbol preventing repeated inclusion */
+#if !defined(MIMXRT1052_H_)
+#define MIMXRT1052_H_                            /**< Symbol preventing repeated inclusion */
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
@@ -21923,8 +21923,10 @@ typedef struct {
 #define FLEXSPI_BASE_PTRS                        { FLEXSPI }
 /** Interrupt vectors for the FLEXSPI peripheral type */
 #define FLEXSPI_IRQS                             { FLEXSPI_IRQn }
-/* FlexSPI AMBA address. */
+/* FlexSPI AMBA base address. */
 #define FlexSPI_AMBA_BASE                       (0x60000000U)
+/* FlexSPI AMBA end address. */
+#define FlexSPI_AMBA_END                        (0x7F7FFFFFU)
 /* FlexSPI ASFM address. */
 #define FlexSPI_ASFM_BASE                        (0x00000000U)
 /* Base Address of AHB address space mapped to IP RX FIFO. */
@@ -43022,6 +43024,7 @@ typedef struct {
 
 #define TMR_CSCTRL_OFLAG_MASK                    (0x100U)
 #define TMR_CSCTRL_OFLAG_SHIFT                   (8U)
+/*! OFLAG - Output flag */
 #define TMR_CSCTRL_OFLAG(x)                      (((uint16_t)(((uint16_t)(x)) << TMR_CSCTRL_OFLAG_SHIFT)) & TMR_CSCTRL_OFLAG_MASK)
 
 #define TMR_CSCTRL_UP_MASK                       (0x200U)
@@ -52694,5 +52697,5 @@ typedef struct {
  */ /* end of group SDK_Compatibility_Symbols */
 
 
-#endif  /* _MIMXRT1052_H_ */
+#endif  /* MIMXRT1052_H_ */
 

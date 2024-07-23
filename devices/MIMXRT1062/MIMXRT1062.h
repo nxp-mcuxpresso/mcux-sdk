@@ -19,13 +19,13 @@
 **
 **     Reference manual:    IMXRT1060RM Rev.3, 07/2021 | IMXRT106XSRM Rev.0
 **     Version:             rev. 1.4, 2022-03-25
-**     Build:               b230724
+**     Build:               b240326
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1062
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -57,8 +57,8 @@
  * CMSIS Peripheral Access Layer for MIMXRT1062
  */
 
-#ifndef _MIMXRT1062_H_
-#define _MIMXRT1062_H_                           /**< Symbol preventing repeated inclusion */
+#if !defined(MIMXRT1062_H_)
+#define MIMXRT1062_H_                            /**< Symbol preventing repeated inclusion */
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
@@ -4163,12 +4163,12 @@ typedef struct {
 typedef struct {
   __IO uint32_t MCR;                               /**< Module Configuration Register, offset: 0x0 */
   __IO uint32_t CTRL1;                             /**< Control 1 Register, offset: 0x4 */
-  __IO uint32_t TIMER;                             /**< Free Running Timer Register..Free Running Timer, offset: 0x8 */
+  __IO uint32_t TIMER;                             /**< Free Running Timer, offset: 0x8 */
        uint8_t RESERVED_0[4];
   __IO uint32_t RXMGMASK;                          /**< Rx Mailboxes Global Mask Register, offset: 0x10 */
-  __IO uint32_t RX14MASK;                          /**< Rx Buffer 14 Mask Register..Rx 14 Mask Register, offset: 0x14 */
-  __IO uint32_t RX15MASK;                          /**< Rx Buffer 15 Mask Register..Rx 15 Mask Register, offset: 0x18 */
-  __IO uint32_t ECR;                               /**< Error Counter Register..Error Counter, offset: 0x1C */
+  __IO uint32_t RX14MASK;                          /**< Rx 14 Mask Register, offset: 0x14 */
+  __IO uint32_t RX15MASK;                          /**< Rx 15 Mask Register, offset: 0x18 */
+  __IO uint32_t ECR;                               /**< Error Counter, offset: 0x1C */
   __IO uint32_t ESR1;                              /**< Error and Status 1 Register, offset: 0x20 */
   __IO uint32_t IMASK2;                            /**< Interrupt Masks 2 Register, offset: 0x24 */
   __IO uint32_t IMASK1;                            /**< Interrupt Masks 1 Register, offset: 0x28 */
@@ -4547,7 +4547,7 @@ typedef struct {
 #define CAN_CTRL1_PRESDIV(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_CTRL1_PRESDIV_SHIFT)) & CAN_CTRL1_PRESDIV_MASK)
 /*! @} */
 
-/*! @name TIMER - Free Running Timer Register..Free Running Timer */
+/*! @name TIMER - Free Running Timer */
 /*! @{ */
 
 #define CAN_TIMER_TIMER_MASK                     (0xFFFFU)
@@ -4568,7 +4568,7 @@ typedef struct {
 #define CAN_RXMGMASK_MG(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_RXMGMASK_MG_SHIFT)) & CAN_RXMGMASK_MG_MASK)
 /*! @} */
 
-/*! @name RX14MASK - Rx Buffer 14 Mask Register..Rx 14 Mask Register */
+/*! @name RX14MASK - Rx 14 Mask Register */
 /*! @{ */
 
 #define CAN_RX14MASK_RX14M_MASK                  (0xFFFFFFFFU)
@@ -4580,7 +4580,7 @@ typedef struct {
 #define CAN_RX14MASK_RX14M(x)                    (((uint32_t)(((uint32_t)(x)) << CAN_RX14MASK_RX14M_SHIFT)) & CAN_RX14MASK_RX14M_MASK)
 /*! @} */
 
-/*! @name RX15MASK - Rx Buffer 15 Mask Register..Rx 15 Mask Register */
+/*! @name RX15MASK - Rx 15 Mask Register */
 /*! @{ */
 
 #define CAN_RX15MASK_RX15M_MASK                  (0xFFFFFFFFU)
@@ -4592,7 +4592,7 @@ typedef struct {
 #define CAN_RX15MASK_RX15M(x)                    (((uint32_t)(((uint32_t)(x)) << CAN_RX15MASK_RX15M_SHIFT)) & CAN_RX15MASK_RX15M_MASK)
 /*! @} */
 
-/*! @name ECR - Error Counter Register..Error Counter */
+/*! @name ECR - Error Counter */
 /*! @{ */
 
 #define CAN_ECR_TXERRCNT_MASK                    (0xFFU)
@@ -23479,16 +23479,20 @@ typedef struct {
 #define FLEXSPI_BASE_PTRS                        { FLEXSPI, (FLEXSPI_Type *)0u, FLEXSPI2 }
 /** Interrupt vectors for the FLEXSPI peripheral type */
 #define FLEXSPI_IRQS                             { FLEXSPI_IRQn, NotAvail_IRQn, FLEXSPI2_IRQn }
-/* FlexSPI AMBA address. */
+/* FlexSPI AMBA base address. */
 #define FlexSPI_AMBA_BASE                       (0x60000000U)
+/* FlexSPI AMBA end address. */
+#define FlexSPI_AMBA_END                        (0x6FFFFFFFU)
 /* FlexSPI ASFM address. */
 #define FlexSPI_ASFM_BASE                        (0x60000000U)
 /* Base Address of AHB address space mapped to IP RX FIFO. */
 #define FlexSPI_ARDF_BASE                        (0x7FC00000U)
 /* Base Address of AHB address space mapped to IP TX FIFO. */
 #define FlexSPI_ATDF_BASE                        (0x7F800000U)
-/* FlexSPI2 AMBA address. */
+/* FlexSPI2 AMBA base address. */
 #define FlexSPI2_AMBA_BASE                       (0x70000000U)
+/* FlexSPI2 AMBA end address. */
+#define FlexSPI2_AMBA_END                        (0x7EFFFFFFU)
 /* FlexSPI ASFM address. */
 #define FlexSPI2_ASFM_BASE                       (0x70000000U)
 /* Base Address of AHB address space mapped to IP RX FIFO. */
@@ -48515,9 +48519,9 @@ typedef struct {
 /** USBNC - Register Layout Typedef */
 typedef struct {
        uint8_t RESERVED_0[2048];
-  __IO uint32_t USB_OTGn_CTRL;                     /**< USB OTG1 Control Register..USB OTG2 Control Register, offset: 0x800 */
+  __IO uint32_t USB_OTGn_CTRL;                     /**< USB OTG1 Control Register, offset: 0x800 */
        uint8_t RESERVED_1[20];
-  __IO uint32_t USB_OTGn_PHY_CTRL_0;               /**< OTG1 UTMI PHY Control 0 Register..OTG2 UTMI PHY Control 0 Register, offset: 0x818 */
+  __IO uint32_t USB_OTGn_PHY_CTRL_0;               /**< OTG1 UTMI PHY Control 0 Register, offset: 0x818 */
 } USBNC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -48529,7 +48533,7 @@ typedef struct {
  * @{
  */
 
-/*! @name USB_OTGn_CTRL - USB OTG1 Control Register..USB OTG2 Control Register */
+/*! @name USB_OTGn_CTRL - USB OTG1 Control Register */
 /*! @{ */
 
 #define USBNC_USB_OTGn_CTRL_OVER_CUR_DIS_MASK    (0x80U)
@@ -48613,7 +48617,7 @@ typedef struct {
 #define USBNC_USB_OTGn_CTRL_WIR(x)               (((uint32_t)(((uint32_t)(x)) << USBNC_USB_OTGn_CTRL_WIR_SHIFT)) & USBNC_USB_OTGn_CTRL_WIR_MASK)
 /*! @} */
 
-/*! @name USB_OTGn_PHY_CTRL_0 - OTG1 UTMI PHY Control 0 Register..OTG2 UTMI PHY Control 0 Register */
+/*! @name USB_OTGn_PHY_CTRL_0 - OTG1 UTMI PHY Control 0 Register */
 /*! @{ */
 
 #define USBNC_USB_OTGn_PHY_CTRL_0_UTMI_CLK_VLD_MASK (0x80000000U)
@@ -54981,5 +54985,5 @@ typedef struct {
  */ /* end of group SDK_Compatibility_Symbols */
 
 
-#endif  /* _MIMXRT1062_H_ */
+#endif  /* MIMXRT1062_H_ */
 

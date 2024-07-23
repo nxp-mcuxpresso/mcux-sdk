@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -360,7 +360,7 @@ void PM_EnterLowPower(uint64_t duration)
                 }
 
                 /* Start low power timer if needed */
-                if (s_pmHandle->timerStart != NULL)
+                if ((s_pmHandle->timerStart != NULL) && (duration != 0UL))
                 {
                     s_pmHandle->timerStart(duration - (s_pmHandle->deviceOption->states[stateIndex].exitLatency));
                 }

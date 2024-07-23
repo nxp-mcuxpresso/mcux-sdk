@@ -107,8 +107,8 @@ typedef enum _SYSCON_RSTn
     kI3C1_RST_SHIFT_RSTn         = 196608 | 1U,  /**< I3C1 reset control */
     kSINC_RST_SHIFT_RSTn         = 196608 | 2U,  /**< SINC reset control */
     kCOOLFLUX_RST_SHIFT_RSTn     = 196608 | 3U,  /**< CoolFlux reset control */
-    kENC0_RST_SHIFT_RSTn         = 196608 | 4U,  /**< ENC0 reset control */
-    kENC1_RST_SHIFT_RSTn         = 196608 | 5U,  /**< ENC1 reset control */
+    kQDC0_RST_SHIFT_RSTn         = 196608 | 4U,  /**< QDC0 reset control */
+    kQDC1_RST_SHIFT_RSTn         = 196608 | 5U,  /**< QDC1 reset control */
     kPWM0_RST_SHIFT_RSTn         = 196608 | 6U,  /**< PWM0 reset control */
     kPWM1_RST_SHIFT_RSTn         = 196608 | 7U,  /**< PWM1 reset control */
     kAOI0_RST_SHIFT_RSTn         = 196608 | 8U,  /**< AOI0 reset control */

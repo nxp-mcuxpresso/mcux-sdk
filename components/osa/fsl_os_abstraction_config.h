@@ -41,4 +41,8 @@
 #define FSL_OSA_BM_TIMEOUT_ENABLE 0U
 #endif
 
+#ifndef FSL_OSA_ALLOCATED_HEAP
+#define FSL_OSA_ALLOCATED_HEAP (1U)
+#endif
+
 #endif /* _FSL_OS_ABSTRACTION_CONFIG_H_ */

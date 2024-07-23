@@ -1069,7 +1069,7 @@ static serial_manager_status_t SerialManager_Write(serial_write_handle_t writeHa
         if (status == kStatus_SerialManager_NotConnected)
         {
             SerialManager_RemoveHead(&serHandle->runningWriteHandleHead);
-            serialWriteHandle->transfer.buffer = 0U;
+            serialWriteHandle->transfer.buffer = NULL;
             serialWriteHandle->transfer.length = 0U;
             return status;
         }
@@ -1318,12 +1318,12 @@ serial_manager_status_t SerialManager_Init(serial_handle_t serialHandle, const s
     {
         return kStatus_SerialManager_Error;
     }
-    (void)memcpy(&serTaskConfig, (osa_task_def_t *)OSA_TASK(SerialManager_Task), sizeof(osa_task_def_t));
+    (void)memcpy(&serTaskConfig, OSA_TASK(SerialManager_Task), sizeof(osa_task_def_t));
     if (serialConfig->serialTaskConfig != NULL)
     {
         (void)memcpy(&serTaskConfig, serialConfig->serialTaskConfig, sizeof(osa_task_def_t));
-        serTaskConfig.pthread = ((osa_task_def_t *)OSA_TASK(SerialManager_Task))->pthread;
-        serTaskConfig.tname = ((osa_task_def_t *)OSA_TASK(SerialManager_Task))->tname;
+        serTaskConfig.pthread = (OSA_TASK(SerialManager_Task))->pthread;
+        serTaskConfig.tname = (OSA_TASK(SerialManager_Task))->tname;
     }
     if (KOSA_StatusSuccess != OSA_TaskCreate((osa_task_handle_t)serHandle->taskId,(const osa_task_def_t *)&serTaskConfig, serHandle))
     {

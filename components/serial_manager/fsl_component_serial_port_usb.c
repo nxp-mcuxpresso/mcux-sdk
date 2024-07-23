@@ -769,6 +769,23 @@ void USB1_IRQHandler(void)
     SDK_ISR_EXIT_BARRIER;
 }
 #endif /* SERIAL_PORT_USB_CDC_USB1_IRQ_HANDLER_DISABLE */
+#ifndef SERIAL_PORT_USB_CDC_USB_IRQ_HANDLER_DISABLE
+void USB_IRQHandler(void);
+void USB_IRQHandler(void)
+{
+    serial_usb_cdc_state_t *serialUsbCdc = s_UsbCdcHead;
+
+    while (NULL != serialUsbCdc)
+    {
+        if (((uint8_t)kSerialManager_UsbControllerLpcIp3511Hs0 == serialUsbCdc->instance))
+        {
+            USB_DeviceLpcIp3511IsrFunction(serialUsbCdc->deviceHandle);
+        }
+        serialUsbCdc = serialUsbCdc->next;
+    }
+    SDK_ISR_EXIT_BARRIER;
+}
+#endif /* SERIAL_PORT_USB_CDC_USB_IRQ_HANDLER_DISABLE */
 #endif
 
 static void USB_DeviceIsrEnable(serial_usb_cdc_state_t *serialUsbCdc)

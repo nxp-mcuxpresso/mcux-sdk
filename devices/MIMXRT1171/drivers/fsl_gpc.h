@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief GPC driver version 2.3.0. */
-#define FSL_GPC_RIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief GPC driver version 2.3.1. */
+#define FSL_GPC_RIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*! @}*/
 
 #define GPC_RESERVED_USE_MACRO 0xFFFFFFFFU
@@ -469,18 +469,18 @@ void GPC_CM_RequestRunModeSetPointTransition(GPC_CPU_MODE_CTRL_Type *base, uint8
  *
  * This function configures which set point is allowed after current set point. If there are multiple setpoints, use:
  * @code
- *    map = kkGPC_SetPoint0 | kGPC_SetPoint1 | ... | kGPC_SetPoint15;
+ *    setpoint_map = kGPC_SetPoint0 | kGPC_SetPoint1 | ... | kGPC_SetPoint15;
  * @endcode
  *
  * @param base GPC CPU module base address.
  * @param setPoint Set point index, available range is 0-15.
- * @param map Map value of the set point. Refer to "_gpc_setpoint_map".
+ * @param setpoint_map Map value of the set point. Refer to "_gpc_setpoint_map".
  */
-static inline void GPC_CM_SetSetPointMapping(GPC_CPU_MODE_CTRL_Type *base, uint32_t setPoint, uint32_t map)
+static inline void GPC_CM_SetSetPointMapping(GPC_CPU_MODE_CTRL_Type *base, uint32_t setPoint, uint32_t setpoint_map)
 {
     assert(setPoint < 16UL);
 
-    base->CM_SP_MAPPING[setPoint] = (map & 0xFFFFUL);
+    base->CM_SP_MAPPING[setPoint] = (setpoint_map & 0xFFFFUL);
 }
 
 /*!
@@ -489,14 +489,14 @@ static inline void GPC_CM_SetSetPointMapping(GPC_CPU_MODE_CTRL_Type *base, uint3
  * This function configures which set point is allowed when CPU enters RUN/WAIT/STOP/SUSPEND. If there are multiple
  * setpoints, use:
  * @code
- *    map = kkGPC_SetPoint0 | kGPC_SetPoint1 | ... | kGPC_SetPoint15;
+ *    setpoint_map = kGPC_SetPoint0 | kGPC_SetPoint1 | ... | kGPC_SetPoint15;
  * @endcode
  *
  * @param base GPC CPU module base address.
  * @param mode CPU mode. Refer to "gpc_cpu_mode_t".
- * @param map Map value of the set point. Refer to "_gpc_setpoint_map".
+ * @param setpoint_map Map value of the set point. Refer to "_gpc_setpoint_map".
  */
-void GPC_CM_SetCpuModeSetPointMapping(GPC_CPU_MODE_CTRL_Type *base, gpc_cpu_mode_t mode, uint32_t map);
+void GPC_CM_SetCpuModeSetPointMapping(GPC_CPU_MODE_CTRL_Type *base, gpc_cpu_mode_t mode, uint32_t setpoint_map);
 
 /*!
  * @brief Request the chip into standby mode.

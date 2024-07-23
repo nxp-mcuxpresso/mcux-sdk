@@ -49,11 +49,9 @@
 #define ROM_SDIO_PID0 0x0208UL
 #define ROM_SDIO_PID1 0x0209UL
 
-const uint32_t SD_CIS_DATA0_FN0;
-const uint32_t SD_CIS_DATA0_FN0 = 0x800u;
+static const uint32_t SD_CIS_DATA0_FN0 = 0x800u;
 
-const uint32_t SD_CIS_DATA0_FN1;
-const uint32_t SD_CIS_DATA0_FN1 = 0x880u;
+static const uint32_t SD_CIS_DATA0_FN1 = 0x880u;
 
 /** Type command */
 #define SDU_TYPE_CMD (1U)
@@ -209,25 +207,24 @@ static sdioslv_sdu_ctrl_t sdu_ctrl;
 #define BIT(n) (1U << (n))
 #endif
 
-#define SDU_DBG_LEVEL_WARN BIT(3)
-#define SDU_DBG_LEVEL_ERROR BIT(2)
-#define SDU_DBG_LEVEL_DEBUG BIT(1)
-#define SDU_DBG_LEVEL_DUMP BIT(0)
+#define SDU_DBG_LEVEL_WARN BIT(3U)
+#define SDU_DBG_LEVEL_ERROR BIT(2U)
+#define SDU_DBG_LEVEL_DEBUG BIT(1U)
+#define SDU_DBG_LEVEL_DUMP BIT(0U)
 
-uint32_t sdu_dbg_level;
-uint32_t sdu_dbg_level = SDU_DBG_LEVEL_WARN | SDU_DBG_LEVEL_ERROR;
+static uint32_t sdu_dbg_level = SDU_DBG_LEVEL_WARN | SDU_DBG_LEVEL_ERROR;
 
 #define sdu_e(_fmt_, ...) \
-    if ((sdu_dbg_level & (uint32_t)(SDU_DBG_LEVEL_ERROR)) != 0U) \
+    if (((uint32_t)(sdu_dbg_level) & (uint32_t)(SDU_DBG_LEVEL_ERROR)) != 0U) \
         {(void)PRINTF("[SDU]Error: " _fmt_ "\n\r", ##__VA_ARGS__);}
 #define sdu_w(_fmt_, ...) \
-    if ((sdu_dbg_level & (uint32_t)(SDU_DBG_LEVEL_WARN)) != 0U) \
+    if (((uint32_t)(sdu_dbg_level) & (uint32_t)(SDU_DBG_LEVEL_WARN)) != 0U) \
         {(void)PRINTF("[SDU]Warn: " _fmt_ "\n\r", ##__VA_ARGS__);}
 
 #define CONFIG_ADAPTER_SDU_DEBUG
 #ifdef CONFIG_ADAPTER_SDU_DEBUG
 #define sdu_d(_fmt_, ...) \
-    if ((sdu_dbg_level & (uint32_t)(SDU_DBG_LEVEL_DEBUG)) != 0U) \
+    if (((uint32_t)(sdu_dbg_level) & (uint32_t)(SDU_DBG_LEVEL_DEBUG)) != 0U) \
         {(void)PRINTF("[SDU]Debug: " _fmt_ "\n\r", ##__VA_ARGS__);}
 #else
 #define sdu_d(_fmt_, ...)
@@ -307,14 +304,14 @@ static status_t SDU_InitData(uint32_t used_fun_num, sdioslv_int_cpu_num_t cpu_nu
     sdioslv_fun_ctrl_t *fun_ctrl;
     OSA_SR_ALLOC();
 
-    if (used_fun_num > SDU_MAX_FUNCTION_NUM)
+    if (used_fun_num > (uint32_t)SDU_MAX_FUNCTION_NUM)
     {
-        return kStatus_InvalidArgument;
+        return (status_t)kStatus_InvalidArgument;
     }
 	
     if (sdu_ctrl.initialized != 0U)
     {
-        return kStatus_Success;
+        return (status_t)kStatus_Success;
     }
 	
     OSA_ENTER_CRITICAL();
@@ -326,19 +323,19 @@ static status_t SDU_InitData(uint32_t used_fun_num, sdioslv_int_cpu_num_t cpu_nu
             break;
         }
         /* OSA_MemoryAllocate() sets contents of allocated memory to be zero */
-        fun_ctrl->regmap = (sdioslv_sdu_regmap_t *)(SDU_SDIO_CFG_BASE + (uint32_t)(SDIO_CCR_FUNC_OFFSET * (fun_num + 1U)));
+        fun_ctrl->regmap = (sdioslv_sdu_regmap_t *)((uint32_t)SDU_SDIO_CFG_BASE + (uint32_t)(SDIO_CCR_FUNC_OFFSET *(uint32_t)(fun_num + 1U)));
         sdu_ctrl.func_ctrl[fun_num] = fun_ctrl;
     }
 
     if (fun_num < used_fun_num)
     {
-        while(fun_num > 0)
+        while(fun_num > 0U)
         {
-            OSA_MemoryFree(sdu_ctrl.func_ctrl[fun_num - 1]);
+            OSA_MemoryFree(sdu_ctrl.func_ctrl[fun_num - 1U]);
             fun_num--;
         }
         OSA_EXIT_CRITICAL();
-        return kStatus_Fail;
+        return (status_t)kStatus_Fail;
     }
 
     SDU_REGS8_SETBITS(SDIO_CCR_FUNC0_CARD_INT_MSK, cpu_num);
@@ -347,7 +344,7 @@ static status_t SDU_InitData(uint32_t used_fun_num, sdioslv_int_cpu_num_t cpu_nu
     sdu_ctrl.cpu_num      = (uint8_t)cpu_num;
     sdu_ctrl.initialized  = 1;
     OSA_EXIT_CRITICAL();
-    return kStatus_Success;
+    return (status_t)kStatus_Success;
 }
 
 /*!
@@ -404,8 +401,8 @@ static sdioslv_handle_t SDU_CreateHandle(sdioslv_handle_config_t *config)
         return NULL;
     }
 	
-    if ((config->cpu_num != kSDIOSLV_INT_CPUNum1) && (config->cpu_num != kSDIOSLV_INT_CPUNum2) &&
-        (config->cpu_num != kSDIOSLV_INT_CPUNum3))
+    if ((config->cpu_num != (uint8_t)kSDIOSLV_INT_CPUNum1) && (config->cpu_num != (uint8_t)kSDIOSLV_INT_CPUNum2) &&
+        (config->cpu_num != (uint8_t)kSDIOSLV_INT_CPUNum3))
     {
         return NULL;
     }
@@ -479,7 +476,7 @@ static status_t SDU_InnerInit(void)
     rc = SDU_InitData(SDU_USED_FUN_NUM, SDU_INT_CPU_NUM);
     if (rc != kStatus_Success)
     {
-        sdu_e("Fail to initialize SDU: %d\r\n", rc);
+        sdu_e("Fail to initialize SDU: %d\r\n", (uint32_t)rc);
         return rc;
     }
     config.fun_num        = 1;
@@ -573,7 +570,7 @@ static status_t SDU_InnerInit(void)
     ctrl_sdu.handle = SDU_CreateHandle(&config);
     if (ctrl_sdu.handle == NULL)
     {
-        sdu_e("Fail to create handle for function %d: %d\r\n", config.fun_num);
+        sdu_e("Fail to create handle for function %d\r\n", config.fun_num);
         rc = kStatus_Fail;
         goto done;
     }
@@ -613,7 +610,7 @@ static void SDU_CmdCallback(
     switch (status)
     {
         case (status_t)kStatus_SDIOSLV_FuncRequestBuffer:
-            SDU_RefillCmdBuffer(ctrl);
+            (void)SDU_RefillCmdBuffer(ctrl);
             break;
         case (status_t)kStatus_SDIOSLV_FuncReadComplete:
             cmd_event_buf = (sdu_buffer_t *)buffer->user_data;
@@ -634,7 +631,7 @@ static void SDU_CmdCallback(
             }
             else
             {
-                sdu_e("%s: Unknown cmd_event_buf=%p buffer=%p.\n\r", __func__, status, cmd_event_buf, buffer);
+                sdu_e("%s: Unknown cmd_event_buf=%p buffer=%p.\n\r", __func__, cmd_event_buf, buffer);
             }
             break;
         default:
@@ -782,23 +779,23 @@ static void SDU_TransferTask(void *param)
 static void SDU_LoopbackRecvCmdHandler(void *tlv, size_t tlv_sz)
 {
     assert(NULL != tlv);
-    assert(0 != tlv_sz);
+    assert(0U != tlv_sz);
 
     sdu_d("RecvCmd len: %d", tlv_sz);
     SDU_dump_hex(sdu_dbg_level, tlv, tlv_sz);
 
-    SDU_Send(SDU_TYPE_FOR_READ_CMD, (uint8_t *)tlv, tlv_sz + CRC_LEN);
+    (void)SDU_Send(SDU_TYPE_FOR_READ_CMD, (uint8_t *)tlv, (uint16_t)(tlv_sz + CRC_LEN));
 }
 
 static void SDU_LoopbackRecvDataHandler(void *tlv, size_t tlv_sz)
 {
     assert(NULL != tlv);
-    assert(0 != tlv_sz);
+    assert(0U != tlv_sz);
 
     sdu_d("RecvData len: %d\r\n", tlv_sz);
     SDU_dump_hex(sdu_dbg_level, tlv, tlv_sz);
 
-    SDU_Send(SDU_TYPE_FOR_READ_DATA, (uint8_t *)tlv, tlv_sz + CRC_LEN);
+    (void)SDU_Send(SDU_TYPE_FOR_READ_DATA, (uint8_t *)tlv, (uint16_t)(tlv_sz + CRC_LEN));
 }
 #endif
 
@@ -1005,7 +1002,7 @@ static inline void SDU_ProcessDataUpLdOvr(sdioslv_fun_ctrl_t *fun_ctrl)
 
     for (i = 0; i < fun_ctrl->config.used_port_num; i++)
     {
-        if ((rd_bit_map & (1U << i)) == 0U)
+        if ((rd_bit_map & ((uint32_t)(1U << i))) == 0U)
         {
             port_ctrl = &fun_ctrl->data_port[SDU_PORT_FOR_READ][i];
             if ((port_ctrl->valid == 0U) || (port_ctrl->occupied == 0U))
@@ -1055,7 +1052,7 @@ static inline void SDU_ProcessDataDnLdOvr(sdioslv_fun_ctrl_t *fun_ctrl)
 
     for (i = 0; i < (uint32_t)fun_ctrl->config.used_port_num; i++)
     {
-        if ((wr_bit_map & (1U << i)) == 0U)
+        if ((wr_bit_map & (uint32_t)(1U << i)) == (uint32_t)0U)
         {
             port_ctrl = &fun_ctrl->data_port[SDU_PORT_FOR_WRITE][i];
             if ((port_ctrl->valid == 0U) || (port_ctrl->occupied == 0U))
@@ -1095,11 +1092,12 @@ static status_t SDU_SendCmdNonBlocking(sdioslv_handle_t handle, transfer_buffer_
 {
     sdioslv_fun_ctrl_t *fun_ctrl;
     sdioslv_port_ctrl_t *port_ctrl;
+
     OSA_SR_ALLOC();
 
     if ((handle == NULL) || (buffer == NULL))
     {
-        return kStatus_InvalidArgument;    	
+        return (status_t)kStatus_InvalidArgument;
     }
 
     OSA_ENTER_CRITICAL();
@@ -1109,13 +1107,13 @@ static status_t SDU_SendCmdNonBlocking(sdioslv_handle_t handle, transfer_buffer_
     if (port_ctrl->valid == 0U)
     {
         OSA_EXIT_CRITICAL();
-        return kStatus_Fail;
+        return (status_t)kStatus_Fail;
     }
 
     if (port_ctrl->occupied != 0U )
     {
         OSA_EXIT_CRITICAL();
-        return kStatus_SDIOSLV_CmdPending;
+        return (status_t)kStatus_SDIOSLV_CmdPending;
     }
 
     port_ctrl->buffer          = buffer;
@@ -1125,11 +1123,11 @@ static status_t SDU_SendCmdNonBlocking(sdioslv_handle_t handle, transfer_buffer_
         port_ctrl->buffer		   = NULL;
         port_ctrl->occupied 	   = 0;
         OSA_EXIT_CRITICAL();
-        return kStatus_InvalidArgument;
+        return (status_t)kStatus_InvalidArgument;
     }
 
     OSA_EXIT_CRITICAL();
-    return kStatus_Success;
+    return (status_t)kStatus_Success;
 }
 
 /*!
@@ -1152,14 +1150,14 @@ static status_t SDU_RefillCmdBuffer(sdu_ctrl_t *ctrl)
 
     if ((ctrl == NULL) || (ctrl->handle == NULL))
     {
-        return kStatus_InvalidArgument;
+        return (status_t)kStatus_InvalidArgument;
     }
 	
     sdu_node_buf = (sdu_buffer_t *)LIST_RemoveHead(&ctrl->cmd_free_buffer[SDU_PORT_FOR_WRITE]);
     if (sdu_node_buf == NULL)
     {
         sdu_e("%s: No cmd free buffer for cmd_buf!\r\n", __FUNCTION__);
-        return kStatus_NoData;
+        return (status_t)kStatus_NoData;
     }
     sdu_node_buf->buffer.data_len  = 0;
     sdu_node_buf->buffer.user_data = (uint32_t)sdu_node_buf;
@@ -1182,19 +1180,19 @@ static status_t SDU_RefillCmdBuffer(sdu_ctrl_t *ctrl)
     port_ctrl->occupied         = 1;
     if (SDIOSLV_RefillCmdBuffer(fun_ctrl->regmap, port_ctrl->buffer->data_addr) != kStatus_Success)
     {
-        sdu_e("%s: SDIOSLV_RefillCmdBuffer %x fail!\r\n", __FUNCTION__);
+        sdu_e("%s: SDIOSLV_RefillCmdBuffer fail!\r\n", __FUNCTION__);
         port_ctrl->buffer		   = NULL;
         port_ctrl->occupied 	   = 0;
         goto refill_cmd_err;
     }
 
     OSA_EXIT_CRITICAL();
-    return kStatus_Success;
+    return (status_t)kStatus_Success;
 
 refill_cmd_err:
     OSA_EXIT_CRITICAL();
     (void)LIST_AddTail(&ctrl->cmd_free_buffer[SDU_PORT_FOR_WRITE], &sdu_node_buf->link);
-    return kStatus_Fail;
+    return (status_t)kStatus_Fail;
 }
 
 /*!
@@ -1221,7 +1219,7 @@ static status_t SDU_SendDataNonBlocking(sdioslv_handle_t handle, transfer_buffer
 
     if ((handle == NULL) || (buffer == NULL))
     {
-        return kStatus_InvalidArgument;
+        return (status_t)kStatus_InvalidArgument;
     }
 	
     OSA_ENTER_CRITICAL();
@@ -1230,7 +1228,7 @@ static status_t SDU_SendDataNonBlocking(sdioslv_handle_t handle, transfer_buffer
     if (tx_port >= fun_ctrl->config.used_port_num)
     {
         OSA_EXIT_CRITICAL();
-        return kStatus_SDIOSLV_SendFull;
+        return (status_t)kStatus_SDIOSLV_SendFull;
     }
     port_ctrl = &fun_ctrl->data_port[SDU_PORT_FOR_READ][tx_port];
 
@@ -1241,14 +1239,14 @@ static status_t SDU_SendDataNonBlocking(sdioslv_handle_t handle, transfer_buffer
         port_ctrl->buffer		   = NULL;
         port_ctrl->occupied 	   = 0;
         OSA_EXIT_CRITICAL();
-        return kStatus_InvalidArgument;
+        return (status_t)kStatus_InvalidArgument;
     }
 
     OSA_EXIT_CRITICAL();
 #if 0
     SDU_AdjustAvailDataPort(fun_ctrl);
 #endif
-    return kStatus_Success;
+    return (status_t)kStatus_Success;
 }
 
 /*!
@@ -1272,19 +1270,19 @@ static status_t SDU_RefillDataBuffer(sdu_ctrl_t *ctrl, sdioslv_port_t port)
 
     if ((ctrl == NULL) || (ctrl->handle == NULL))
     {
-        return kStatus_InvalidArgument;
+        return (status_t)kStatus_InvalidArgument;
     }
 	
-    if (port >= SDU_MAX_PORT_NUM)
+    if ((uint32_t)port >= SDU_MAX_PORT_NUM)
     {
-        return kStatus_InvalidArgument;
+        return (status_t)kStatus_InvalidArgument;
     }
 	
     data_buf = (sdu_buffer_t *)LIST_RemoveHead(&ctrl->data_free_buffer);
     if (data_buf == NULL)
     {
         sdu_e("%s: No free buffer for data_buf!\r\n", __FUNCTION__);
-        return kStatus_NoData;
+        return (status_t)kStatus_NoData;
     }
 	
     data_buf->buffer.data_len  = 0;
@@ -1308,19 +1306,19 @@ static status_t SDU_RefillDataBuffer(sdu_ctrl_t *ctrl, sdioslv_port_t port)
     port_ctrl->occupied      = 1;
     if (SDIOSLV_RefillDataBuffer(fun_ctrl->regmap, port, port_ctrl->buffer->data_addr) != kStatus_Success)
     {
-        sdu_e("%s: SDIOSLV_RefillDataBuffer on port %x fail!\r\n", __FUNCTION__);
+        sdu_e("%s: SDIOSLV_RefillDataBuffer on port %x fail!\r\n", __FUNCTION__, port);
         port_ctrl->buffer		   = NULL;
         port_ctrl->occupied 	   = 0;
         goto refill_data_err;
     }
 
     OSA_EXIT_CRITICAL();
-    return kStatus_Success;
+    return (status_t)kStatus_Success;
 
 refill_data_err:
     OSA_EXIT_CRITICAL();
     (void)LIST_AddTail(&ctrl->data_free_buffer, &data_buf->link);
-    return kStatus_Fail;
+    return (status_t)kStatus_Fail;
 }
 
 /*!
@@ -1341,7 +1339,7 @@ static status_t SDU_RefillFreePortsDataBuffer(sdu_ctrl_t *ctrl)
     if (ctrl_sdu.sdu_state != SDU_INITIALIZED)
     {
         sdu_e("%s: return for sdu_state %d!\r\n", __FUNCTION__, ctrl_sdu.sdu_state);
-        return kStatus_Fail;
+        return (status_t)kStatus_Fail;
     }
 
     OSA_ENTER_CRITICAL();
@@ -1350,14 +1348,14 @@ static status_t SDU_RefillFreePortsDataBuffer(sdu_ctrl_t *ctrl)
     wr_bit_map = sdu_fsr->WrBitMap;
     for (i = 0; i < (uint32_t)fun_ctrl->config.used_port_num; i++)
     {
-        if ((wr_bit_map & (1U << i)) == 0U)
+        if ((wr_bit_map & (uint32_t)(1U << i)) == (uint32_t)0U)
         {
             (void)SDU_RefillDataBuffer(&ctrl_sdu, (sdioslv_port_t)i);
         }
     }
 
     OSA_EXIT_CRITICAL();
-    return kStatus_Success;
+    return (status_t)kStatus_Success;
 }
 
 static status_t SDU_RecvCmdProcess(void)
@@ -1383,7 +1381,7 @@ static status_t SDU_RecvCmdProcess(void)
     else
     {
         sdu_d("%s: SDIO hdr: len=%d type=%d!\r\n", __FUNCTION__, sdio_hdr->len, sdio_hdr->type);
-        if (ctrl_sdu.sdu_cb_fn[SDU_TYPE_FOR_WRITE_CMD] != 0U)
+        if (ctrl_sdu.sdu_cb_fn[SDU_TYPE_FOR_WRITE_CMD] != NULL)
         {
             //memcpy(data_addr, cmd_rcv->buffer.data_addr + sizeof(sdio_header_t), MIN(sdio_hdr->len, data_size));
             ctrl_sdu.sdu_cb_fn[SDU_TYPE_FOR_WRITE_CMD](cmd_rcv->buffer.data_addr + sizeof(sdio_header_t), sdio_hdr->len - sizeof(sdio_header_t) - CRC_LEN);
@@ -1404,13 +1402,13 @@ static status_t SDU_RecvCmdProcess(void)
     return ret;
 }
 
-status_t SDU_RecvCmd()
+status_t SDU_RecvCmd(void)
 {
     osa_event_flags_t ev = 0;
     osa_status_t status = KOSA_StatusSuccess;
     status_t ret = kStatus_Fail;
 
-    while(1)
+    while(true)
     {
         status = OSA_EventWait((osa_event_handle_t)(ctrl_sdu.event), SDU_CMD_RECEIVED, 0U, osaWaitForever_c, &ev);
 
@@ -1474,14 +1472,14 @@ static status_t SDU_RecvDataProcess(void)
     return ret;
 }
 
-status_t SDU_RecvData()
+status_t SDU_RecvData(void)
 {
     osa_event_flags_t ev = 0;
     osa_status_t status = KOSA_StatusSuccess;
     status_t ret = kStatus_Fail;
     uint32_t succ_count = 0;
 
-	while(1)
+	while(true)
 	{
 	    status = OSA_EventWait((osa_event_handle_t)(ctrl_sdu.event), SDU_DATA_RECEIVED, 0U, osaWaitForever_c, &ev);
 
@@ -1538,19 +1536,19 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
     status_t status = kStatus_Fail;
     sdio_header_t *sdio_hdr = NULL;
 
-    if ((data_addr == NULL) || (data_len == 0))
+    if ((data_addr == NULL) || (data_len == 0U))
     {
-        return kStatus_InvalidArgument;
+        return (status_t)kStatus_InvalidArgument;
     }
 
     if (type >= SDU_TYPE_FOR_READ_MAX)
     {
-	    return kStatus_InvalidArgument;
+        return (status_t)kStatus_InvalidArgument;
     }
 
     if (SDU_IsLinkUp() != true)
     {
-        return kStatus_Fail;
+        return (status_t)kStatus_Fail;
     }
 	
     switch (type)
@@ -1581,14 +1579,14 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
         }
 		
         sdu_d("%s: NO free_buffer for type %d!\r\n", __FUNCTION__, type);
-        return kStatus_NoData;
+        return (status_t)kStatus_NoData;
     }
 
     if (data_len + sizeof(sdio_header_t) > send_buffer->buffer.data_size)
     {
         sdu_e("%s: data_len(%u) + sdiohdr(%lu) > buffersize(%u)!\r\n", __FUNCTION__,
             data_len, sizeof(sdio_header_t), send_buffer->buffer.data_size);
-        return kStatus_InvalidArgument;
+        return (status_t)kStatus_InvalidArgument;
     }
 
     sdio_hdr = (sdio_header_t *)(send_buffer->buffer.data_addr);
@@ -1620,7 +1618,7 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
         case SDU_TYPE_FOR_READ_CMD:
             (void)LIST_AddTail(&ctrl_sdu.cmd_q[SDU_PORT_FOR_READ], &send_buffer->link);
             status = SDU_SendCmdNonBlocking(ctrl_sdu.handle, &send_buffer->buffer);
-            if ((status == kStatus_Success) || (status == (status_t)kStatus_SDIOSLV_CmdPending))
+            if ((status == (status_t)kStatus_Success) || (status == (status_t)kStatus_SDIOSLV_CmdPending))
             {
                 sdu_d("%s: %d SendCmdNonBlocking ok 0x%x!\r\n", __FUNCTION__, type, status);
             }
@@ -1629,13 +1627,13 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
                 sdu_e("%s: %d SendCmdNonBlocking fail 0x%x!\r\n", __FUNCTION__, type, status);
                 (void)LIST_RemoveElement(&send_buffer->link);
                 (void)LIST_AddTail(&ctrl_sdu.cmd_free_buffer[SDU_PORT_FOR_READ], &send_buffer->link);
-                return kStatus_Fail;
+                return (status_t)kStatus_Fail;
             }
             break;
         case SDU_TYPE_FOR_READ_EVENT:
             (void)LIST_AddTail(&ctrl_sdu.event_q, &send_buffer->link);
             status = SDU_SendCmdNonBlocking(ctrl_sdu.handle, &send_buffer->buffer);
-            if ((status == kStatus_Success) || (status == (status_t)kStatus_SDIOSLV_CmdPending))
+            if ((status == (status_t)kStatus_Success) || (status == (status_t)kStatus_SDIOSLV_CmdPending))
             {
                 sdu_d("%s: %d SendCmdNonBlocking ok 0x%x!\r\n", __FUNCTION__, type, status);
             }
@@ -1644,13 +1642,13 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
                 sdu_e("%s: %d SendCmdNonBlocking fail 0x%x!\r\n", __FUNCTION__, type, status);
                 (void)LIST_RemoveElement(&send_buffer->link);
                 (void)LIST_AddTail(&ctrl_sdu.event_free_buffer, &send_buffer->link);
-                return kStatus_Fail;
+                return (status_t)kStatus_Fail;
             }
             break;
         case SDU_TYPE_FOR_READ_DATA:
             (void)LIST_AddTail(&ctrl_sdu.data_q[SDU_PORT_FOR_READ], &send_buffer->link);
             status = SDU_SendDataNonBlocking(ctrl_sdu.handle, &send_buffer->buffer);
-            if ((status == kStatus_Success) || (status == (status_t)kStatus_SDIOSLV_SendFull))
+            if ((status == (status_t)kStatus_Success) || (status == (status_t)kStatus_SDIOSLV_SendFull))
             {
                 sdu_d("%s: SendDataNonBlocking ok 0x%x!\r\n", __FUNCTION__, status);
             }
@@ -1659,7 +1657,7 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
                 sdu_e("%s: SendDataNonBlocking fail 0x%x!\r\n", __FUNCTION__, status);
                 (void)LIST_RemoveElement(&send_buffer->link);
                 (void)LIST_AddTail(&ctrl_sdu.data_free_buffer, &send_buffer->link);
-                return kStatus_Fail;
+                return (status_t)kStatus_Fail;
             }
             break;
         default:
@@ -1667,7 +1665,7 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
             break;
     }
 
-    return kStatus_Success;
+    return (status_t)kStatus_Success;
 }
 
 
@@ -1676,10 +1674,9 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
  *
  * @param void None.
  */
-uint32_t g_SDU_IRQHandler_cnt;
-uint32_t g_SDU_IRQHandler_cnt = 0;
+static uint32_t g_SDU_IRQHandler_cnt = 0;
 
-void SDU_SLV_IRQHandler(void)
+static void SDU_SLV_IRQHandler(void)
 {
     sdioslv_fun_ctrl_t *fun_ctrl;
     sdioslv_sdu_regmap_t *sdu_fsr;
@@ -1700,30 +1697,30 @@ void SDU_SLV_IRQHandler(void)
             if ((int_status & (uint32_t)SDIO_CCR_CIC_CmdUpLdOvr) != 0U)
             {
                 SDU_ProcessCmdUpLdOvr(fun_ctrl);
-                sdu_fsr->CardIntStatus &= ~(SDIO_CCR_CIC_CmdUpLdOvr);
+                sdu_fsr->CardIntStatus &= ~((uint32_t)SDIO_CCR_CIC_CmdUpLdOvr);
             }
 
             if (((int_status & (uint32_t)SDIO_CCR_CIC_CmdDnLdOvr) != 0U) && ((crc_err & (uint32_t)SDIO_CCR_HOST_DnLdCRC_err) == 0U))
             {
                 SDU_ProcessCmdDnLdOvr(fun_ctrl);
-                sdu_fsr->CardIntStatus &= ~(SDIO_CCR_CIC_CmdDnLdOvr);
+                sdu_fsr->CardIntStatus &= ~((uint32_t)SDIO_CCR_CIC_CmdDnLdOvr);
             }
 
             if ((int_status & (uint32_t)SDIO_CCR_CIC_UpLdOvr) != 0U)
             {
                 SDU_ProcessDataUpLdOvr(fun_ctrl);
-                sdu_fsr->CardIntStatus &= ~(SDIO_CCR_CIC_UpLdOvr);
+                sdu_fsr->CardIntStatus &= ~((uint32_t)SDIO_CCR_CIC_UpLdOvr);
             }
 
             if (((int_status & (uint32_t)SDIO_CCR_CIC_DnLdOvr) != 0U) && ((crc_err & (uint32_t)SDIO_CCR_HOST_DnLdCRC_err) == 0U))
             {
                 SDU_ProcessDataDnLdOvr(fun_ctrl);
-                sdu_fsr->CardIntStatus &= ~(SDIO_CCR_CIC_DnLdOvr);
+                sdu_fsr->CardIntStatus &= ~((uint32_t)SDIO_CCR_CIC_DnLdOvr);
             }
 
-            if (int_status & SDIO_CCR_CIC_PwrUp)
+            if ((int_status & ((uint32_t)SDIO_CCR_CIC_PwrUp)) != 0U)
             {
-                sdu_fsr->CardIntStatus &= ~(SDIO_CCR_CIC_PwrUp);
+                sdu_fsr->CardIntStatus &= ~((uint32_t)SDIO_CCR_CIC_PwrUp);
             }
         }
     }
@@ -1733,7 +1730,6 @@ void SDU_DriverIRQHandler(void)
 {
     SDU_SLV_IRQHandler();
 }
-
 
 static void SDU_GetDefaultCISTable(const uint32_t SDU_BASE)
 {
@@ -1905,7 +1901,7 @@ status_t SDU_Init(void)
     os_ClearPendingISR(SDU_IRQn);
     /* Interrupt must be maskable by FreeRTOS critical section */
     NVIC_SetPriority(SDU_IRQn, 2);
-    os_InterruptMaskSet(SDU_IRQn);
+    (void)os_InterruptMaskSet(SDU_IRQn);
 
     rc = SDU_SetFwReady();
     if (kStatus_Success != rc)
@@ -1917,8 +1913,8 @@ status_t SDU_Init(void)
     ctrl_sdu.sdu_state = SDU_INITIALIZED;
 
 #ifdef CONFIG_SDIO_TEST_LOOPBACK
-    SDU_InstallCallback(SDU_TYPE_FOR_WRITE_CMD, SDU_LoopbackRecvCmdHandler);
-    SDU_InstallCallback(SDU_TYPE_FOR_WRITE_DATA, SDU_LoopbackRecvDataHandler);
+    (void)SDU_InstallCallback(SDU_TYPE_FOR_WRITE_CMD, SDU_LoopbackRecvCmdHandler);
+    (void)SDU_InstallCallback(SDU_TYPE_FOR_WRITE_DATA, SDU_LoopbackRecvDataHandler);
 #endif
 
 done:
@@ -1963,6 +1959,6 @@ status_t SDU_InstallCallback(sdu_for_write_type_t type, sdu_callback_t callback)
 
     ctrl_sdu.sdu_cb_fn[type] = callback;
 
-    return kStatus_Success;
+    return (status_t)kStatus_Success;
 }
 

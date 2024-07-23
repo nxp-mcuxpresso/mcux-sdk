@@ -298,7 +298,7 @@ enum
     kFLEXSPIMiscOffset_UseValidTimeForAllFreq   = 7U, /*!< Bit for DLLCR settings under all modes */
 };
 
-/*@}*/
+/*! @} */
 
 /*! @brief Manufacturer ID */
 enum

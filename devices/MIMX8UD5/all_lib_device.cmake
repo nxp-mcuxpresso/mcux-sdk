@@ -173,6 +173,9 @@
 #  # description: Component mem_manager_light
 #  set(CONFIG_USE_component_mem_manager_light true)
 
+#  # description: Component mem_manager_freertos
+#  set(CONFIG_USE_component_mem_manager_freertos true)
+
 #  # description: Component panic
 #  set(CONFIG_USE_component_panic true)
 
@@ -311,7 +314,7 @@
 #  # description: LPI2C Driver
 #  set(CONFIG_USE_driver_lpi2c true)
 
-#  # description: LPI2C Driver
+#  # description: LPI2C FreeRTOS Driver
 #  set(CONFIG_USE_driver_lpi2c_freertos true)
 
 #  # description: LPIT Driver
@@ -320,7 +323,7 @@
 #  # description: LPSPI Driver
 #  set(CONFIG_USE_driver_lpspi true)
 
-#  # description: LPSPI Driver
+#  # description: LPSPI FreeRTOS Driver
 #  set(CONFIG_USE_driver_lpspi_freertos true)
 
 #  # description: LPTMR Driver
@@ -329,7 +332,7 @@
 #  # description: LPUART Driver
 #  set(CONFIG_USE_driver_lpuart true)
 
-#  # description: LPUART Driver
+#  # description: LPUART Freertos Driver
 #  set(CONFIG_USE_driver_lpuart_freertos true)
 
 #  # description: MIPI DSI Driver
@@ -524,7 +527,10 @@
 #  # description: FreeRTOS heap 5
 #  set(CONFIG_USE_middleware_freertos-kernel_heap_5 true)
 
-#  # description: FreeRTOS MPU wrappers
+#  # description: new V2 FreeRTOS MPU wrappers introduced in V10.6.0
+#  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers_v2 true)
+
+#  # description: old FreeRTOS MPU wrappers used before V10.6.0
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
 #  # description: FreeRTOS cm33 TrustZone secure port
@@ -539,6 +545,12 @@
 
 #  # description: els_pkc config
 #  set(CONFIG_USE_middleware_mbedtls_els_pkc_config true)
+
+#  # description: mbedTLS test suite
+#  set(CONFIG_USE_middleware_mbedtls_tests true)
+
+#  # description: mbedTLS 3rdparty code
+#  set(CONFIG_USE_middleware_mbedtls_3rdparty true)
 
 #set.middleware.mmcau
 #  # description: MMCAU security function library source files
@@ -665,6 +677,15 @@
 #  # description: erpc_doc
 #  set(CONFIG_USE_middleware_multicore_erpc_doc true)
 
+#  # description: erpc_zephyr
+#  set(CONFIG_USE_middleware_multicore_erpc_zephyr true)
+
+#  # description: erpc_java
+#  set(CONFIG_USE_middleware_multicore_erpc_java true)
+
+#  # description: erpc_examples
+#  set(CONFIG_USE_middleware_multicore_erpc_examples true)
+
 #  # description: eRPC
 #  set(CONFIG_USE_middleware_multicore_erpc true)
 
@@ -677,10 +698,16 @@
 #  # description: RPMsg-Lite for evkmimx8ulp fusion dsp baremetal application
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_imx8ulp_fusionf1_bm true)
 
+#  # description: RPMsg-Lite Zephyr environment sources
+#  set(CONFIG_USE_middleware_multicore_rpmsg_lite_zephyr true)
+
 #  # description: RPMsg-Lite
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite true)
 
 #set.component.osa
+#  # description: Component osa_zephyr
+#  set(CONFIG_USE_component_osa_zephyr true)
+
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)
 

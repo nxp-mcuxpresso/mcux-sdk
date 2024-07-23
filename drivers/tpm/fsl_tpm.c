@@ -132,8 +132,14 @@ void TPM_Init(TPM_Type *base, const tpm_config_t *config)
     base->SC = TPM_SC_PS(config->prescale);
 #if !(defined(FSL_FEATURE_TPM_HAS_NO_CONF) && FSL_FEATURE_TPM_HAS_NO_CONF)
     /* Setup the counter operation */
-    base->CONF = TPM_CONF_DOZEEN(config->enableDoze) | TPM_CONF_GTBEEN(config->useGlobalTimeBase) |
-                 TPM_CONF_GTBSYNC(config->syncGlobalTimeBase) | TPM_CONF_CROT(config->enableReloadOnTrigger) |
+    base->CONF = TPM_CONF_DOZEEN(config->enableDoze) |
+#if defined(FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN) && FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN
+                 TPM_CONF_GTBEEN(config->useGlobalTimeBase) |
+#endif
+#if defined(FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC) && FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC
+                 TPM_CONF_GTBSYNC(config->syncGlobalTimeBase) |
+#endif
+                 TPM_CONF_CROT(config->enableReloadOnTrigger) |
                  TPM_CONF_CSOT(config->enableStartOnTrigger) | TPM_CONF_CSOO(config->enableStopOnOverflow) |
 #if defined(FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER) && FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER
                  TPM_CONF_CPOT(config->enablePauseOnTrigger) |

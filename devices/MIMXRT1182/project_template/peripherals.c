@@ -14,7 +14,7 @@
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
 product: Peripherals v8.0
-processor: MIMXRT1189xxxxx
+processor: MIMXRT1182xxxxx
 mcu_data: ksdk2_0
 processor_version: 0.0.0
 functionalGroups:

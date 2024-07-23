@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief DMA driver version */
-#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 1)) /*!< Version 2.5.1. */
+#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 3)) /*!< Version 2.5.3. */
 /*! @} */
 
 /*! @brief DMA max transfer size */
@@ -486,6 +486,7 @@ void DMA_SetChannelConfig(DMA_Type *base, uint32_t channel, dma_channel_trigger_
 static inline uint32_t DMA_SetChannelXferConfig(
     bool reload, bool clrTrig, bool intA, bool intB, uint8_t width, uint8_t srcInc, uint8_t dstInc, uint32_t bytes)
 {
+    assert(((uint32_t)bytes / (uint32_t)width) <= DMA_MAX_TRANSFER_COUNT);
     return (DMA_CHANNEL_XFERCFG_CFGVALID_MASK | DMA_CHANNEL_XFERCFG_RELOAD(reload) |
             DMA_CHANNEL_XFERCFG_CLRTRIG(clrTrig) | DMA_CHANNEL_XFERCFG_SETINTA(intA) |
             DMA_CHANNEL_XFERCFG_SETINTB(intB) |

@@ -13,7 +13,7 @@
 #endif
 
 /* clang-format off */
-#if defined(XIP_EXTERNAL_FLASH) && (XIP_BOOT_HEADER_ENABLE == 1) && \
+#if defined(XIP_EXTERNAL_FLASH) && (XIP_EXTERNAL_FLASH == 1) && \
     defined(XIP_BOOT_HEADER_ENABLE) && (XIP_BOOT_HEADER_ENABLE == 1)
 /* clang-format on */
 

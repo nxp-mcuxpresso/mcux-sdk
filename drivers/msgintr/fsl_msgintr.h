@@ -14,10 +14,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief MSGINTR driver version. */
 #define FSL_MSGINTR_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
-/*@}*/
+/*! @} */
 
 #define FSL_MSGINTR_CHANNEL_NUM (3U)
 

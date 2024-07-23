@@ -381,7 +381,7 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
                 }
             } /* End of TX FIFO fill while loop */
         }
-        else /* Optimized for bits/frame less than or equal to one byte. */
+        else  /* Optimized for bits/frame less than or equal to one byte. */
         {
             while ((uint32_t)kDSPI_TxFifoFillRequestFlag ==
                    (DSPI_GetStatusFlags(base) & (uint32_t)kDSPI_TxFifoFillRequestFlag))
@@ -496,8 +496,8 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
                 bufferIndex = handle->remainingSendByteCount;
             }
 
-            uint32_t tmpLastCommand = handle->lastCommand;
-            const uint8_t *tmpTxData      = handle->txData;
+            uint32_t tmpLastCommand  = handle->lastCommand;
+            const uint8_t *tmpTxData = handle->txData;
 
             if (handle->bitsPerFrame <= 8U)
             {
@@ -553,9 +553,13 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
         transferConfigB.destOffset       = 0;
         transferConfigB.minorLoopBytes   = 4;
         transferConfigB.majorLoopCounts  = 1;
-
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+        EDMA_TcdResetExt(handle->edmaIntermediaryToTxRegHandle->base, softwareTCD);
+        EDMA_TcdSetTransferConfigExt(handle->edmaIntermediaryToTxRegHandle->base, softwareTCD, &transferConfigB, NULL);
+#else
         EDMA_TcdReset(softwareTCD);
         EDMA_TcdSetTransferConfig(softwareTCD, &transferConfigB, NULL);
+#endif
     }
 
     /*User_Send_Buffer(txData) to PUSHR register. */
@@ -684,9 +688,14 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
         transferConfigB.destOffset       = 0;
         transferConfigB.minorLoopBytes   = 4;
         transferConfigB.majorLoopCounts  = 1;
-
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+        EDMA_TcdResetExt(handle->edmaTxDataToIntermediaryHandle->base, softwareTCD);
+        EDMA_TcdSetTransferConfigExt(handle->edmaTxDataToIntermediaryHandle->base,
+                                     (const edma_transfer_config_t *)(uint32_t)&transferConfigB, NULL);
+#else
         EDMA_TcdReset(softwareTCD);
         EDMA_TcdSetTransferConfig(softwareTCD, (const edma_transfer_config_t *)(uint32_t)&transferConfigB, NULL);
+#endif
     }
 
     tmpRemainingSendByteCount = handle->remainingSendByteCount;
@@ -787,8 +796,14 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
         transferConfigC.minorLoopBytes   = 4;
         transferConfigC.majorLoopCounts  = 1;
 
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+        EDMA_TcdResetExt(handle->edmaIntermediaryToTxRegHandle->base, softwareTCD);
+        EDMA_TcdSetTransferConfigExt(handle->edmaIntermediaryToTxRegHandle->base,
+                                     (const edma_transfer_config_t *)(uint32_t)&transferConfigC, NULL);
+#else
         EDMA_TcdReset(softwareTCD);
         EDMA_TcdSetTransferConfig(softwareTCD, (const edma_transfer_config_t *)(uint32_t)&transferConfigC, NULL);
+#endif
     }
 
     tmpRemainingSendByteCount = handle->remainingSendByteCount;
@@ -1264,7 +1279,7 @@ status_t DSPI_SlaveTransferEDMA(SPI_Type *base, dspi_slave_edma_handle_t *handle
                 }
             } /* End of TX FIFO fill while loop */
         }
-        else /* Optimized for bits/frame less than or equal to one byte. */
+        else  /* Optimized for bits/frame less than or equal to one byte. */
         {
             while ((uint32_t)kDSPI_TxFifoFillRequestFlag ==
                    (DSPI_GetStatusFlags(base) & (uint32_t)kDSPI_TxFifoFillRequestFlag))

@@ -40,8 +40,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief CLOCK driver version 2.3.0. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -242,6 +242,14 @@
 #define PMU_TUPLE_MUX(reg, choice) (((reg)&0xFFCU) | ((choice) << 12U) | PMU_TUPLE_MUX_AVAIL)
 #define PMU_TUPLE_REG(base, tuple) ((volatile uint32_t *)(((uint32_t)(base)) + ((uint32_t)(tuple)&0xFFCU)))
 #define PMU_TUPLE_SEL(tuple)       (((uint32_t)(tuple) >> 12U) & 0x3U)
+
+/*! @brief Clock name used to get clock frequency. */
+typedef enum _clock_name
+{
+    kCLOCK_CoreSysClk,       /*!< Core clock  (aka HCLK)                                 */
+    kCLOCK_BusClk,           /*!< Bus clock (AHB/APB clock, aka HCLK)                    */
+    kCLOCK_MclkClk,          /*!< MCLK, to MCLK pin                                      */
+} clock_name_t;
 
 /*!
  * @brief Peripheral clock name difinition used for
@@ -691,6 +699,11 @@ void CLOCK_AttachClk(clock_attach_id_t connection);
  * @param   divider     : Value to be divided.
  */
 void CLOCK_SetClkDiv(clock_div_name_t name, uint32_t divider);
+
+/*! @brief  Return Frequency of selected clock
+ *  @return Frequency of selected clock
+ */
+uint32_t CLOCK_GetFreq(clock_name_t clockName);
 
 /*! @brief  Return Input frequency for the Fractional baud rate generator
  *  @return Input Frequency for FRG

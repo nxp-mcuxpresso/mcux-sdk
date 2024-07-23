@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -56,9 +56,10 @@ status_t Nor_Flash_Init(nor_config_t *config, nor_handle_t *handle)
 
     uint32_t baudRate   = BOARD_GetNorFlashBaudrate();
     status_t initStatus = kStatus_Fail;
+    lpspi_memory_config_t *memConfig = (lpspi_memory_config_t *)(config->memControlConfig);
 
-    handle->bytesInSectorSize = 256U;
-    handle->bytesInPageSize   = 256U;
+    handle->bytesInSectorSize = memConfig->bytesInSectorSize;
+    handle->bytesInPageSize   = memConfig->bytesInPageSize;
     handle->driverBaseAddr    = BOARD_GetLpspiForNorFlash();
 
     do
@@ -213,13 +214,15 @@ status_t Nor_Flash_Program(nor_handle_t *handle, uint32_t address, uint8_t *buff
 }
 
 /*!
- * @brief Erase sector.
+ * @brief Erase page.
  *
+ * @note Not all device support to erase page.
+
  * @param handle    The NOR Flash handler.
  * @param address   The start address to be erased.
  * @retval execution status
  */
-status_t Nor_Flash_Erase_Sector(nor_handle_t *handle, uint32_t address)
+status_t Nor_Flash_Erase_Page(nor_handle_t *handle, uint32_t address)
 {
     assert(handle);
 
@@ -237,6 +240,58 @@ status_t Nor_Flash_Erase_Sector(nor_handle_t *handle, uint32_t address)
     }
 
     status = LPSPI_MemErase(address, kSize_ErasePage, blocking, base);
+
+    return status;
+}
+
+/*!
+ * @brief Erase sector.
+ *
+ * @param handle    The NOR Flash handler.
+ * @param address   The start address to be erased.
+ * @retval execution status
+ */
+status_t Nor_Flash_Erase_Sector(nor_handle_t *handle, uint32_t address)
+{
+    assert(handle);
+
+    LPSPI_Type *base = (LPSPI_Type *)handle->driverBaseAddr;
+
+    assert(base);
+
+    eraseOptions_t tmpEraseOption = kSize_Erase4K;
+    status_t status = kStatus_Fail;
+
+    bool blocking = true;
+
+    if (handle->deviceSpecific != NULL)
+    {
+        blocking = (*(bool *)(handle->deviceSpecific));
+    }
+
+    switch (handle->bytesInSectorSize)
+    {
+        case 4096UL:
+        {
+            tmpEraseOption = kSize_Erase4K;
+            break;
+        }
+        case 32768UL:
+        {
+            tmpEraseOption = kSize_Erase32K;
+            break;
+        }
+        case 65536UL:
+        {
+            tmpEraseOption = kSize_Erase64K;
+            break;
+        }
+        default:
+        {
+            return kStatus_OutOfRange;
+        }
+    }
+    status = LPSPI_MemErase(address, tmpEraseOption, blocking, base);
 
     return status;
 }

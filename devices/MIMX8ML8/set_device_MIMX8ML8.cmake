@@ -403,15 +403,13 @@ if (CONFIG_USE_utility_debug_console_lite)
 
 message("utility_debug_console_lite component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_iuart_adapter AND (CONFIG_DEVICE_ID STREQUAL MIMX8ML8xxxLZ OR CONFIG_DEVICE_ID STREQUAL MIMX8ML8xxxKZ) AND CONFIG_USE_driver_common)
+if(CONFIG_USE_component_iuart_adapter AND (CONFIG_DEVICE_ID STREQUAL MIMX8ML8xxxLZ OR CONFIG_DEVICE_ID STREQUAL MIMX8ML8xxxKZ) AND CONFIG_USE_driver_common AND CONFIG_USE_utility_str)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str/fsl_str.c
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite/fsl_debug_console.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
 )
 
@@ -590,15 +588,13 @@ if (CONFIG_USE_utility_debug_console)
 
 message("utility_debug_console component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_serial_manager AND CONFIG_USE_driver_common)
+if(CONFIG_USE_component_serial_manager AND CONFIG_USE_driver_common AND CONFIG_USE_utility_str)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str/fsl_str.c
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console/fsl_debug_console.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
 )
 
@@ -1234,11 +1230,11 @@ message("driver_ecspi_freertos component is included from ${CMAKE_CURRENT_LIST_F
 if(CONFIG_USE_driver_ecspi AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ecspi/fsl_ecspi_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_ecspi_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ecspi/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -1378,11 +1374,11 @@ message("driver_ii2c_freertos component is included from ${CMAKE_CURRENT_LIST_FI
 if(CONFIG_USE_driver_ii2c AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ii2c/fsl_i2c_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_i2c_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ii2c/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -1450,11 +1446,11 @@ message("driver_iuart_freertos component is included from ${CMAKE_CURRENT_LIST_F
 if(CONFIG_USE_driver_iuart AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iuart/fsl_uart_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_uart_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iuart/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()

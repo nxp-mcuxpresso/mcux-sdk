@@ -16,8 +16,8 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-/* Used for 32byte aligned */
-#define STCD_ADDR(address) (edma_tcd_t *)(((uint32_t)(address) + 32UL) & ~0x1FU)
+/* Used for edma_tcd_t size aligned */
+#define STCD_ADDR(address) (edma_tcd_t *)(((uint32_t)(address) + sizeof(edma_tcd_t)) & ~(sizeof(edma_tcd_t) - 1U))
 
 static I2S_Type *const s_saiBases[] = I2S_BASE_PTRS;
 /* Only support 2 and 4 channel */
@@ -464,10 +464,17 @@ status_t SAI_TransferSendEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_tra
         EDMA_PrepareTransferConfig(&config, xfer->data, (uint32_t)handle->bytesPerFrame, (int16_t)srcOffset,
                                    (uint32_t *)destAddr, (uint32_t)handle->bytesPerFrame, (int16_t)destOffset,
                                    (uint32_t)2U * handle->bytesPerFrame, xfer->dataSize);
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+        EDMA_TcdSetTransferConfigExt(handle->dmaHandle->base, currentTCD, &config, NULL);
+        EDMA_TcdSetMinorOffsetConfigExt(handle->dmaHandle->base, currentTCD, &minorOffset);
+        EDMA_TcdEnableInterruptsExt(handle->dmaHandle->base, currentTCD, (uint32_t)kEDMA_MajorInterruptEnable);
+        EDMA_TcdEnableAutoStopRequestExt(handle->dmaHandle->base, currentTCD, true);
+#else
         EDMA_TcdSetTransferConfig(currentTCD, &config, NULL);
         EDMA_TcdSetMinorOffsetConfig(currentTCD, &minorOffset);
         EDMA_TcdEnableInterrupts(currentTCD, (uint32_t)kEDMA_MajorInterruptEnable);
         EDMA_TcdEnableAutoStopRequest(currentTCD, true);
+#endif
         EDMA_InstallTCD(handle->dmaHandle->base, handle->dmaHandle->channel, currentTCD);
     }
     /* Store the initially configured eDMA minor byte transfer count into the SAI handle */
@@ -589,10 +596,17 @@ status_t SAI_TransferReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
         EDMA_PrepareTransferConfig(&config, (uint32_t *)srcAddr, (uint32_t)handle->bytesPerFrame, (int16_t)srcOffset,
                                    xfer->data, (uint32_t)handle->bytesPerFrame, (int16_t)destOffset,
                                    (uint32_t)2U * handle->bytesPerFrame, xfer->dataSize);
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+        EDMA_TcdSetTransferConfigExt(handle->dmaHandle->base, currentTCD, &config, NULL);
+        EDMA_TcdSetMinorOffsetConfigExt(handle->dmaHandle->base, currentTCD, &minorOffset);
+        EDMA_TcdEnableInterruptsExt(handle->dmaHandle->base, currentTCD, (uint32_t)kEDMA_MajorInterruptEnable);
+        EDMA_TcdEnableAutoStopRequestExt(handle->dmaHandle->base, currentTCD, true);
+#else
         EDMA_TcdSetTransferConfig(currentTCD, &config, NULL);
         EDMA_TcdSetMinorOffsetConfig(currentTCD, &minorOffset);
         EDMA_TcdEnableInterrupts(currentTCD, (uint32_t)kEDMA_MajorInterruptEnable);
         EDMA_TcdEnableAutoStopRequest(currentTCD, true);
+#endif
         EDMA_InstallTCD(handle->dmaHandle->base, handle->dmaHandle->channel, currentTCD);
     }
 
@@ -683,6 +697,23 @@ status_t SAI_TransferSendLoopEDMA(I2S_Type *base,
                              handle->bytesPerFrame, (uint32_t)handle->count * handle->bytesPerFrame, transfer->dataSize,
                              kEDMA_MemoryToPeripheral);
 
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+        if (i == (loopTransferCount - 1U))
+        {
+            EDMA_TcdSetTransferConfigExt(handle->dmaHandle->base, &currentTCD[tcdIndex], &config, &currentTCD[0U]);
+            EDMA_TcdEnableInterruptsExt(handle->dmaHandle->base, &currentTCD[tcdIndex],
+                                        (uint32_t)kEDMA_MajorInterruptEnable);
+            handle->state = (uint32_t)kSAI_BusyLoopTransfer;
+            break;
+        }
+        else
+        {
+            EDMA_TcdSetTransferConfigExt(handle->dmaHandle->base, &currentTCD[tcdIndex], &config,
+                                         &currentTCD[tcdIndex + 1U]);
+            EDMA_TcdEnableInterruptsExt(handle->dmaHandle->base, &currentTCD[tcdIndex],
+                                        (uint32_t)kEDMA_MajorInterruptEnable);
+        }
+#else
         if (i == (loopTransferCount - 1U))
         {
             EDMA_TcdSetTransferConfig(&currentTCD[tcdIndex], &config, &currentTCD[0U]);
@@ -695,6 +726,7 @@ status_t SAI_TransferSendLoopEDMA(I2S_Type *base,
             EDMA_TcdSetTransferConfig(&currentTCD[tcdIndex], &config, &currentTCD[tcdIndex + 1U]);
             EDMA_TcdEnableInterrupts(&currentTCD[tcdIndex], (uint32_t)kEDMA_MajorInterruptEnable);
         }
+#endif
 
         tcdIndex = tcdIndex + 1U;
     }
@@ -767,6 +799,23 @@ status_t SAI_TransferReceiveLoopEDMA(I2S_Type *base,
                              (uint32_t)handle->count * handle->bytesPerFrame, transfer->dataSize,
                              kEDMA_PeripheralToMemory);
 
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+        if (i == (loopTransferCount - 1U))
+        {
+            EDMA_TcdSetTransferConfigExt(handle->dmaHandle->base, &currentTCD[tcdIndex], &config, &currentTCD[0U]);
+            EDMA_TcdEnableInterruptsExt(handle->dmaHandle->base, &currentTCD[tcdIndex],
+                                        (uint32_t)kEDMA_MajorInterruptEnable);
+            handle->state = (uint32_t)kSAI_BusyLoopTransfer;
+            break;
+        }
+        else
+        {
+            EDMA_TcdSetTransferConfigExt(handle->dmaHandle->base, &currentTCD[tcdIndex], &config,
+                                         &currentTCD[tcdIndex + 1U]);
+            EDMA_TcdEnableInterruptsExt(handle->dmaHandle->base, &currentTCD[tcdIndex],
+                                        (uint32_t)kEDMA_MajorInterruptEnable);
+        }
+#else
         if (i == (loopTransferCount - 1U))
         {
             EDMA_TcdSetTransferConfig(&currentTCD[tcdIndex], &config, &currentTCD[0U]);
@@ -779,6 +828,7 @@ status_t SAI_TransferReceiveLoopEDMA(I2S_Type *base,
             EDMA_TcdSetTransferConfig(&currentTCD[tcdIndex], &config, &currentTCD[tcdIndex + 1U]);
             EDMA_TcdEnableInterrupts(&currentTCD[tcdIndex], (uint32_t)kEDMA_MajorInterruptEnable);
         }
+#endif
 
         tcdIndex = tcdIndex + 1U;
     }

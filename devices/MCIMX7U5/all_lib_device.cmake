@@ -166,6 +166,9 @@
 #  # description: Component mem_manager_light
 #  set(CONFIG_USE_component_mem_manager_light true)
 
+#  # description: Component mem_manager_freertos
+#  set(CONFIG_USE_component_mem_manager_freertos true)
+
 #  # description: Component panic
 #  set(CONFIG_USE_component_panic true)
 
@@ -186,6 +189,9 @@
 
 #  # description: Component serial_manager_spi
 #  set(CONFIG_USE_component_serial_manager_spi true)
+
+#  # description: Component serial_manager_usb_cdc
+#  set(CONFIG_USE_component_serial_manager_usb_cdc true)
 
 #  # description: Component serial_manager_virtual
 #  set(CONFIG_USE_component_serial_manager_virtual true)
@@ -283,7 +289,7 @@
 #  # description: LPI2C Driver
 #  set(CONFIG_USE_driver_lpi2c true)
 
-#  # description: LPI2C Driver
+#  # description: LPI2C FreeRTOS Driver
 #  set(CONFIG_USE_driver_lpi2c_freertos true)
 
 #  # description: LPIT Driver
@@ -292,7 +298,7 @@
 #  # description: LPSPI Driver
 #  set(CONFIG_USE_driver_lpspi true)
 
-#  # description: LPSPI Driver
+#  # description: LPSPI FreeRTOS Driver
 #  set(CONFIG_USE_driver_lpspi_freertos true)
 
 #  # description: LPTMR Driver
@@ -301,7 +307,7 @@
 #  # description: LPUART Driver
 #  set(CONFIG_USE_driver_lpuart true)
 
-#  # description: LPUART Driver
+#  # description: LPUART Freertos Driver
 #  set(CONFIG_USE_driver_lpuart_freertos true)
 
 #  # description: LTC Driver
@@ -445,7 +451,10 @@
 #  # description: FreeRTOS heap 5
 #  set(CONFIG_USE_middleware_freertos-kernel_heap_5 true)
 
-#  # description: FreeRTOS MPU wrappers
+#  # description: new V2 FreeRTOS MPU wrappers introduced in V10.6.0
+#  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers_v2 true)
+
+#  # description: old FreeRTOS MPU wrappers used before V10.6.0
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
 #set.middleware.mbedtls
@@ -454,6 +463,12 @@
 
 #  # description: els_pkc config
 #  set(CONFIG_USE_middleware_mbedtls_els_pkc_config true)
+
+#  # description: mbedTLS test suite
+#  set(CONFIG_USE_middleware_mbedtls_tests true)
+
+#  # description: mbedTLS 3rdparty code
+#  set(CONFIG_USE_middleware_mbedtls_3rdparty true)
 
 #  # description: mbedTLS port library for KPSDK
 #  set(CONFIG_USE_middleware_mbedtls_port_ksdk true)
@@ -589,6 +604,15 @@
 #  # description: erpc_doc
 #  set(CONFIG_USE_middleware_multicore_erpc_doc true)
 
+#  # description: erpc_zephyr
+#  set(CONFIG_USE_middleware_multicore_erpc_zephyr true)
+
+#  # description: erpc_java
+#  set(CONFIG_USE_middleware_multicore_erpc_java true)
+
+#  # description: erpc_examples
+#  set(CONFIG_USE_middleware_multicore_erpc_examples true)
+
 #  # description: eRPC
 #  set(CONFIG_USE_middleware_multicore_erpc true)
 
@@ -603,6 +627,9 @@
 
 #  # description: RPMsg-Lite FreeRTOS for evkmcimx7ulp board
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_freertos_config_imx7ulp_m4 true)
+
+#  # description: RPMsg-Lite Zephyr environment sources
+#  set(CONFIG_USE_middleware_multicore_rpmsg_lite_zephyr true)
 
 #  # description: RPMsg-Lite
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite true)
@@ -629,49 +656,100 @@
 #  # description: USB device hsdcd config header
 #  set(CONFIG_USE_middleware_usb_hsdcd_config_header true)
 
+#  # description: USB device ehci config header
+#  set(CONFIG_USE_middleware_usb_device_ehci_config_header true)
+
 #  # description: Middleware usb common_header
 #  set(CONFIG_USE_middleware_usb_common_header true)
 
 #  # description: Middleware usb device common_header
 #  set(CONFIG_USE_middleware_usb_device_common_header true)
 
+#  # description: Middleware usb device ehci
+#  set(CONFIG_USE_middleware_usb_device_ehci true)
+
 #  # description: Middleware usb phy
 #  set(CONFIG_USE_middleware_usb_phy true)
+
+#  # description: Middleware usb device stack external
+#  set(CONFIG_USE_middleware_usb_device_stack_external true)
+
+#  # description: Middleware usb device audio external
+#  set(CONFIG_USE_middleware_usb_device_audio_external true)
+
+#  # description: Middleware usb device cdc external
+#  set(CONFIG_USE_middleware_usb_device_cdc_external true)
+
+#  # description: Middleware usb device cdc rndis external
+#  set(CONFIG_USE_middleware_usb_device_cdc_rndis_external true)
+
+#  # description: Middleware usb device hid external
+#  set(CONFIG_USE_middleware_usb_device_hid_external true)
+
+#  # description: Middleware usb device dfu external
+#  set(CONFIG_USE_middleware_usb_device_dfu_external true)
+
+#  # description: Middleware usb device msd external
+#  set(CONFIG_USE_middleware_usb_device_msd_external true)
+
+#  # description: Middleware usb device phdc external
+#  set(CONFIG_USE_middleware_usb_device_phdc_external true)
+
+#  # description: Middleware usb device video external
+#  set(CONFIG_USE_middleware_usb_device_video_external true)
+
+#  # description: Middleware usb device ccid external
+#  set(CONFIG_USE_middleware_usb_device_ccid_external true)
+
+#  # description: Middleware usb device printer external
+#  set(CONFIG_USE_middleware_usb_device_printer_external true)
+
+#  # description: Middleware usb device controller driver
+#  set(CONFIG_USE_middleware_usb_device_controller_driver true)
+
+#  # description: Middleware usb host ehci
+#  set(CONFIG_USE_middleware_usb_host_ehci true)
+
+#  # description: Middleware usb host audio
+#  set(CONFIG_USE_middleware_usb_host_audio true)
+
+#  # description: Middleware usb host cdc
+#  set(CONFIG_USE_middleware_usb_host_cdc true)
+
+#  # description: Middleware usb host cdc_ecm
+#  set(CONFIG_USE_middleware_usb_host_cdc_ecm true)
+
+#  # description: Middleware usb host cdc_rndis
+#  set(CONFIG_USE_middleware_usb_host_cdc_rndis true)
+
+#  # description: Middleware usb host hid
+#  set(CONFIG_USE_middleware_usb_host_hid true)
+
+#  # description: Middleware usb host msd
+#  set(CONFIG_USE_middleware_usb_host_msd true)
+
+#  # description: Middleware usb host video
+#  set(CONFIG_USE_middleware_usb_host_video true)
+
+#  # description: Middleware usb host phdc
+#  set(CONFIG_USE_middleware_usb_host_phdc true)
+
+#  # description: Middleware usb host printer
+#  set(CONFIG_USE_middleware_usb_host_printer true)
 
 #  # description: Middleware usb host common_header
 #  set(CONFIG_USE_middleware_usb_host_common_header true)
 
+#  # description: USB host ehci config header
+#  set(CONFIG_USE_middleware_usb_host_ehci_config_header true)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#  # description: Middleware usb host stack
+#  set(CONFIG_USE_middleware_usb_host_stack true)
 
 #set.component.osa
+#  # description: Component osa_zephyr
+#  set(CONFIG_USE_component_osa_zephyr true)
+
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)
 

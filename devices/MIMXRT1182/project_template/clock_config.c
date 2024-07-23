@@ -19,8 +19,8 @@
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
 product: Clocks v13.0
-processor: MIMXRT1189xxxxx
-package_id: MIMXRT1189CVM8B
+processor: MIMXRT1182xxxxx
+package_id: MIMXRT1182CVM8B
 mcu_data: ksdk2_0
 processor_version: 0.0.0
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
@@ -65,24 +65,6 @@ __attribute__((weak)) void BOARD_FlexspiClockSafeConfig(void)
  *END**************************************************************************/
 __attribute__((weak)) void BOARD_SetFlexspiClock(FLEXSPI_Type *base, uint8_t src, uint32_t divider)
 {
-    if (FLEXSPI1 == base)
-    {
-        CCM->CLOCK_ROOT[kCLOCK_Root_Flexspi1].CONTROL = CCM_CLOCK_ROOT_CONTROL_MUX(src) | CCM_CLOCK_ROOT_CONTROL_DIV(divider - 1);
-        __DSB();
-        __ISB();
-        (void)CCM->CLOCK_ROOT[kCLOCK_Root_Flexspi1].CONTROL;
-    }
-    else if (FLEXSPI2 == base)
-    {
-        CCM->CLOCK_ROOT[kCLOCK_Root_Flexspi2].CONTROL = CCM_CLOCK_ROOT_CONTROL_MUX(src) | CCM_CLOCK_ROOT_CONTROL_DIV(divider - 1);
-        __DSB();
-        __ISB();
-        (void)CCM->CLOCK_ROOT[kCLOCK_Root_Flexspi2].CONTROL;
-    }
-    else
-    {
-        return;
-    }
 }
 
 /*FUNCTION**********************************************************************
@@ -90,36 +72,23 @@ __attribute__((weak)) void BOARD_SetFlexspiClock(FLEXSPI_Type *base, uint8_t src
  * Function Name : EdgeLock_SetClock
  * Description   : Set EdgeLock clock via safe method
  * Note          : It requires specific sequence to change edgelock clock source,
-                   otherwise the soc behavior is unpredictable.
+ *                 otherwise the soc behavior is unpredictable.
  *END**************************************************************************/
-void EdgeLock_SetClock(uint8_t mux, uint8_t div)
+__attribute__((weak)) void EdgeLock_SetClock(uint8_t mux, uint8_t div)
 {
-    if ((CLOCK_GetRootClockDiv(kCLOCK_Root_Edgelock) != (uint32_t)div) ||
-        (CLOCK_GetRootClockMux(kCLOCK_Root_Edgelock) != (uint32_t)mux))
-    {
-        status_t sts;
-        uint32_t ele_clk_mhz;
-
-        clock_root_config_t rootCfg = {
-            .div      = div,
-            .mux      = mux,
-            .clockOff = false,
-        };
-
-        do
-        {
-            sts = ELE_BaseAPI_ClockChangeStart(MU_RT_S3MUA);
-        } while (sts != kStatus_Success);
-
-        CLOCK_SetRootClock(kCLOCK_Root_Edgelock, &rootCfg);
-
-        ele_clk_mhz = CLOCK_GetRootClockFreq(kCLOCK_Root_Edgelock) / 1000000UL;
-        do
-        {
-            sts = ELE_BaseAPI_ClockChangeFinish(MU_RT_S3MUA, ele_clk_mhz, 0);
-        } while (sts != kStatus_Success);
-    }
 }
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : DCDC_SetVoltage
+ * Description   : Set DCDC voltage via safe method
+ * Note          : It requires specific sequence to change DCDC voltage when GDET
+ *                 is enabled, otherwise the soc behavior is unpredictable.
+ *END**************************************************************************/
+__attribute__((weak)) void DCDC_SetVoltage(uint8_t core, uint8_t targetVoltage)
+{
+}
+
 
 /*******************************************************************************
  ************************ BOARD_InitBootClocks function ************************
@@ -275,8 +244,8 @@ settings:
 - {id: CCM.CLOCK_ROOT18.DIV.scale, value: '3', locked: true}
 - {id: CCM.CLOCK_ROOT18.MUX.sel, value: ANADIG_PLL.SYS_PLL3_DIV2_CLK}
 - {id: CCM.CLOCK_ROOT19.MUX.sel, value: ANADIG_PLL.SYS_PLL3_DIV2_CLK}
-- {id: CCM.CLOCK_ROOT2.DIV.scale, value: '5', locked: true}
-- {id: CCM.CLOCK_ROOT2.MUX.sel, value: ANADIG_PLL.SYS_PLL1_CLK}
+- {id: CCM.CLOCK_ROOT2.DIV.scale, value: '2', locked: true}
+- {id: CCM.CLOCK_ROOT2.MUX.sel, value: ANADIG_OSC.OSC_RC_400M}
 - {id: CCM.CLOCK_ROOT20.MUX.sel, value: ANADIG_PLL.SYS_PLL3_DIV2_CLK}
 - {id: CCM.CLOCK_ROOT21.DIV.scale, value: '3', locked: true}
 - {id: CCM.CLOCK_ROOT21.MUX.sel, value: ANADIG_PLL.SYS_PLL3_PFD0_CLK}
@@ -435,14 +404,17 @@ void BOARD_BootClockRUN(void)
 #endif
 
 #if (__CORTEX_M == 33)
+    /* When FlexSPI2 is used, CM33 root clock must be higher than 1/4
+       of FlexSPI2 root clock, so set it to OSC RC 400M(but not OSC RC 24M)
+       firstly as common setting */
     rootCfg.mux = kCLOCK_M33_ClockRoot_MuxOscRc400M;
     rootCfg.div = 2;
     CLOCK_SetRootClock(kCLOCK_Root_M33, &rootCfg);
 #endif
 
 #if (__CORTEX_M == 7)
-    DCDC_SetVDD1P0BuckModeTargetVoltage(DCDC, kDCDC_CORE0, kDCDC_1P0Target1P1V);
-    DCDC_SetVDD1P0BuckModeTargetVoltage(DCDC, kDCDC_CORE1, kDCDC_1P0Target1P1V);
+    DCDC_SetVoltage(kDCDC_CORE0, kDCDC_1P0Target1P1V);
+    DCDC_SetVoltage(kDCDC_CORE1, kDCDC_1P0Target1P1V);
     /* FBB need to be enabled in OverDrive(OD) mode */
     PMU_EnableFBB(ANADIG_PMU, true);
 #endif
@@ -519,7 +491,7 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetRootClock(kCLOCK_Root_M33, &rootCfg);
 #endif
 
-    /* Configure EDGELOCK using ROSC400M */
+    /* Configure EDGELOCK using OSC_RC_400M */
     EdgeLock_SetClock(kCLOCK_EDGELOCK_ClockRoot_MuxOscRc400M, 2);
 
     /* Configure BUS_AON using SYS_PLL2_CLK */

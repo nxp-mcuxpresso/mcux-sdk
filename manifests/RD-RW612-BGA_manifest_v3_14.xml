@@ -14,30 +14,32 @@
     <definition extID="middleware.wireless.framework.common.RW612"/>
     <definition extID="middleware.usb.device.cdc.external.RW612"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK215000" name="MCUXpresso SDK215000" version="2.15.000" revision="2.15.000"/>
+  <ksdk id="MCUXpressoSDK216000" name="MCUXpresso SDK216000" version="2.16.000" revision="2.16.000"/>
   <manifest_includes>
     <manifest_include path="../../examples/rdrw612bga/rdrw612bga_example_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wireless/manifests/middleware_nxp_ieee_802_15_4_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wireless/framework/manifests/middleware_nxp_conn_fwk_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wifi_nxp/manifests/middleware_nxp_wifi_RW612_manifest_v3_14.xml"/>
-    <manifest_include path="../../middleware/fatfs/manifests/middleware_elm_chan_fatfs_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../rtos/freertos/freertos-kernel/manifests/middleware_amazon_freertos_kernel_RW612_manifest_v3_14.xml"/>
-    <manifest_include path="../../middleware/vit/manifests/middleware_nxp_voice_intelligent_technology_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/littlefs/manifests/middleware_christopher_haster_littlefs_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/lwip/manifests/middleware_adam_dunkels_lwip_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/maestro/manifests/middleware_nxp_maestro_audio_framework_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/mcuboot_opensource/manifests/middleware_mcuboot_opensource_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/mbedtls/manifests/middleware_arm_mbedtls_RW612_manifest_v3_14.xml"/>
+    <manifest_include path="../../middleware/sdmmc/manifests/middleware_nxp_sd_mmc_sdio_card_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/usb/manifests/middleware_nxp_usb_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/edgefast_bluetooth/manifests/middleware_nxp_edgefast_bluetooth_pal_RW612_manifest_v3_14.xml"/>
+    <manifest_include path="../../middleware/wireless/zigbee/manifests/middleware_nxp_zigbee_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wireless/wpa_supplicant-rtos/manifests/middleware_nxp_wifi_wpa_supplicant_RW612_manifest_v3_14.xml"/>
+    <manifest_include path="../../middleware/fatfs/manifests/middleware_elm_chan_fatfs_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/voice_seeker/manifests/middleware_nxp_voiceseeker_no_aec_RW612_manifest_v3_14.xml"/>
+    <manifest_include path="../../middleware/vit/manifests/middleware_nxp_voice_intelligent_technology_RW612_manifest_v3_14.xml"/>
   </manifest_includes>
   <compilers>
     <compiler id="compiler_gcc" name="gcc" type="gcc"/>
   </compilers>
   <toolchainSettings>
-    <toolchainSetting id="com.nxp.mcuxpresso" name="mcuxpresso" version="11.8.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" toolchain="mcuxpresso">
+    <toolchainSetting id="com.nxp.mcuxpresso" name="mcuxpresso" version="11.10.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" toolchain="mcuxpresso">
       <option id="gnu.cpp.compiler.option.optimization.flags" type="string" user_name="">
         <value>-fno-common</value>
       </option>
@@ -59,8 +61,8 @@
     </toolchainSetting>
   </toolchainSettings>
   <toolchains>
-    <toolchain id="armgcc" name="GCC_ARM_Embedded_10-2021.10" version="12.2" full_name="GCC ARM Embedded 10-2021.10" compiler="compiler_gcc" type="armgcc" vendor="GCC ARM Embedded" vendor_url="http://launchpad.net/gcc-arm-embedded"/>
-    <toolchain id="mcuxpresso" name="MCUXpresso_IDE" version="11.8.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" type="mcuxpresso" vendor="NXP Semiconductors" vendor_url="http://www.nxp.com">
+    <toolchain id="armgcc" name="GCC_ARM_Embedded_13-2023.10" version="13.2.1" full_name="GCC ARM Embedded 13-2023.10" compiler="compiler_gcc" type="armgcc" vendor="GCC ARM Embedded" vendor_url="https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads"/>
+    <toolchain id="mcuxpresso" name="MCUXpresso_IDE" version="11.10.0" full_name="MCUXpresso IDE" compiler="compiler_gcc" type="mcuxpresso" vendor="NXP Semiconductors" vendor_url="http://www.nxp.com">
       <debug>
         <debug_configuration id="com.crt.advproject.config.exe.release" name="Release Configuration" probe="LinkServer">
           <scripts>
@@ -546,7 +548,7 @@ ${load}</script>
         <files mask="mcux_config.cmake"/>
       </source>
     </component>
-    <component id="CMSIS_Include_core_cm.RW612" name="CMSIS_Include_CM" brief="CMSIS-CORE for Cortex-M, ARMv8-M, ARMv8.1-M" version="5.5.0" full_name="CMSIS Include For Cortex-M, ARMv8-M, ARMv8.1-M" category="CMSIS/CORE" user_visible="true" type="CMSIS_Include" package_base_path="../CMSIS/Core/Include" project_base_path="CMSIS">
+    <component id="CMSIS_Include_core_cm.RW612" name="CMSIS_Include_CM" brief="CMSIS-CORE for Cortex-M, ARMv8-M, ARMv8.1-M" version="5.9.0" full_name="CMSIS Include For Cortex-M, ARMv8-M, ARMv8.1-M" category="CMSIS/CORE" user_visible="true" type="CMSIS_Include" package_base_path="../CMSIS/Core/Include" project_base_path="CMSIS">
       <dependencies>
         <device_dependency value="RW612"/>
       </dependencies>
@@ -589,11 +591,13 @@ ${load}</script>
     <files mask="BasicMathFunctionsF16.c"/>
     <files mask="arm_abs_f16.c"/>
     <files mask="arm_abs_f32.c"/>
+    <files mask="arm_abs_f64.c"/>
     <files mask="arm_abs_q15.c"/>
     <files mask="arm_abs_q31.c"/>
     <files mask="arm_abs_q7.c"/>
     <files mask="arm_add_f16.c"/>
     <files mask="arm_add_f32.c"/>
+    <files mask="arm_add_f64.c"/>
     <files mask="arm_add_q15.c"/>
     <files mask="arm_add_q31.c"/>
     <files mask="arm_add_q7.c"/>
@@ -607,16 +611,19 @@ ${load}</script>
     <files mask="arm_clip_q7.c"/>
     <files mask="arm_dot_prod_f16.c"/>
     <files mask="arm_dot_prod_f32.c"/>
+    <files mask="arm_dot_prod_f64.c"/>
     <files mask="arm_dot_prod_q15.c"/>
     <files mask="arm_dot_prod_q31.c"/>
     <files mask="arm_dot_prod_q7.c"/>
     <files mask="arm_mult_f16.c"/>
     <files mask="arm_mult_f32.c"/>
+    <files mask="arm_mult_f64.c"/>
     <files mask="arm_mult_q15.c"/>
     <files mask="arm_mult_q31.c"/>
     <files mask="arm_mult_q7.c"/>
     <files mask="arm_negate_f16.c"/>
     <files mask="arm_negate_f32.c"/>
+    <files mask="arm_negate_f64.c"/>
     <files mask="arm_negate_q15.c"/>
     <files mask="arm_negate_q31.c"/>
     <files mask="arm_negate_q7.c"/>
@@ -625,6 +632,7 @@ ${load}</script>
     <files mask="arm_not_u8.c"/>
     <files mask="arm_offset_f16.c"/>
     <files mask="arm_offset_f32.c"/>
+    <files mask="arm_offset_f64.c"/>
     <files mask="arm_offset_q15.c"/>
     <files mask="arm_offset_q31.c"/>
     <files mask="arm_offset_q7.c"/>
@@ -633,6 +641,7 @@ ${load}</script>
     <files mask="arm_or_u8.c"/>
     <files mask="arm_scale_f16.c"/>
     <files mask="arm_scale_f32.c"/>
+    <files mask="arm_scale_f64.c"/>
     <files mask="arm_scale_q15.c"/>
     <files mask="arm_scale_q31.c"/>
     <files mask="arm_scale_q7.c"/>
@@ -641,6 +650,7 @@ ${load}</script>
     <files mask="arm_shift_q7.c"/>
     <files mask="arm_sub_f16.c"/>
     <files mask="arm_sub_f32.c"/>
+    <files mask="arm_sub_f64.c"/>
     <files mask="arm_sub_q15.c"/>
     <files mask="arm_sub_q31.c"/>
     <files mask="arm_sub_q7.c"/>
@@ -671,14 +681,18 @@ ${load}</script>
     <files mask="arm_cmplx_dot_prod_q31.c"/>
     <files mask="arm_cmplx_mag_f16.c"/>
     <files mask="arm_cmplx_mag_f32.c"/>
+    <files mask="arm_cmplx_mag_f64.c"/>
+    <files mask="arm_cmplx_mag_fast_q15.c"/>
     <files mask="arm_cmplx_mag_q15.c"/>
     <files mask="arm_cmplx_mag_q31.c"/>
     <files mask="arm_cmplx_mag_squared_f16.c"/>
     <files mask="arm_cmplx_mag_squared_f32.c"/>
+    <files mask="arm_cmplx_mag_squared_f64.c"/>
     <files mask="arm_cmplx_mag_squared_q15.c"/>
     <files mask="arm_cmplx_mag_squared_q31.c"/>
     <files mask="arm_cmplx_mult_cmplx_f16.c"/>
     <files mask="arm_cmplx_mult_cmplx_f32.c"/>
+    <files mask="arm_cmplx_mult_cmplx_f64.c"/>
     <files mask="arm_cmplx_mult_cmplx_q15.c"/>
     <files mask="arm_cmplx_mult_cmplx_q31.c"/>
     <files mask="arm_cmplx_mult_real_f16.c"/>
@@ -703,15 +717,22 @@ ${load}</script>
     <files mask="arm_canberra_distance_f32.c"/>
     <files mask="arm_chebyshev_distance_f16.c"/>
     <files mask="arm_chebyshev_distance_f32.c"/>
+    <files mask="arm_chebyshev_distance_f64.c"/>
     <files mask="arm_cityblock_distance_f16.c"/>
     <files mask="arm_cityblock_distance_f32.c"/>
+    <files mask="arm_cityblock_distance_f64.c"/>
     <files mask="arm_correlation_distance_f16.c"/>
     <files mask="arm_correlation_distance_f32.c"/>
     <files mask="arm_cosine_distance_f16.c"/>
     <files mask="arm_cosine_distance_f32.c"/>
+    <files mask="arm_cosine_distance_f64.c"/>
     <files mask="arm_dice_distance.c"/>
+    <files mask="arm_dtw_distance_f32.c"/>
+    <files mask="arm_dtw_init_window_q7.c"/>
+    <files mask="arm_dtw_path_f32.c"/>
     <files mask="arm_euclidean_distance_f16.c"/>
     <files mask="arm_euclidean_distance_f32.c"/>
+    <files mask="arm_euclidean_distance_f64.c"/>
     <files mask="arm_hamming_distance.c"/>
     <files mask="arm_jaccard_distance.c"/>
     <files mask="arm_jensenshannon_distance_f16.c"/>
@@ -726,10 +747,15 @@ ${load}</script>
     <files mask="arm_yule_distance.c"/>
     <files mask="FastMathFunctions.c"/>
     <files mask="FastMathFunctionsF16.c"/>
+    <files mask="arm_atan2_f16.c"/>
+    <files mask="arm_atan2_f32.c"/>
+    <files mask="arm_atan2_q15.c"/>
+    <files mask="arm_atan2_q31.c"/>
     <files mask="arm_cos_f32.c"/>
     <files mask="arm_cos_q15.c"/>
     <files mask="arm_cos_q31.c"/>
     <files mask="arm_divide_q15.c"/>
+    <files mask="arm_divide_q31.c"/>
     <files mask="arm_sin_f32.c"/>
     <files mask="arm_sin_q15.c"/>
     <files mask="arm_sin_q31.c"/>
@@ -737,9 +763,13 @@ ${load}</script>
     <files mask="arm_sqrt_q31.c"/>
     <files mask="arm_vexp_f16.c"/>
     <files mask="arm_vexp_f32.c"/>
+    <files mask="arm_vexp_f64.c"/>
     <files mask="arm_vinverse_f16.c"/>
     <files mask="arm_vlog_f16.c"/>
     <files mask="arm_vlog_f32.c"/>
+    <files mask="arm_vlog_f64.c"/>
+    <files mask="arm_vlog_q15.c"/>
+    <files mask="arm_vlog_q31.c"/>
     <files mask="FilteringFunctions.c"/>
     <files mask="FilteringFunctionsF16.c"/>
     <files mask="arm_biquad_cascade_df1_32x64_init_q31.c"/>
@@ -784,6 +814,7 @@ ${load}</script>
     <files mask="arm_conv_q7.c"/>
     <files mask="arm_correlate_f16.c"/>
     <files mask="arm_correlate_f32.c"/>
+    <files mask="arm_correlate_f64.c"/>
     <files mask="arm_correlate_fast_opt_q15.c"/>
     <files mask="arm_correlate_fast_q15.c"/>
     <files mask="arm_correlate_fast_q31.c"/>
@@ -802,10 +833,12 @@ ${load}</script>
     <files mask="arm_fir_decimate_q31.c"/>
     <files mask="arm_fir_f16.c"/>
     <files mask="arm_fir_f32.c"/>
+    <files mask="arm_fir_f64.c"/>
     <files mask="arm_fir_fast_q15.c"/>
     <files mask="arm_fir_fast_q31.c"/>
     <files mask="arm_fir_init_f16.c"/>
     <files mask="arm_fir_init_f32.c"/>
+    <files mask="arm_fir_init_f64.c"/>
     <files mask="arm_fir_init_q15.c"/>
     <files mask="arm_fir_init_q31.c"/>
     <files mask="arm_fir_init_q7.c"/>
@@ -869,6 +902,9 @@ ${load}</script>
     <files mask="arm_spline_interp_init_f32.c"/>
     <files mask="MatrixFunctions.c"/>
     <files mask="MatrixFunctionsF16.c"/>
+    <files mask="arm_householder_f16.c"/>
+    <files mask="arm_householder_f32.c"/>
+    <files mask="arm_householder_f64.c"/>
     <files mask="arm_mat_add_f16.c"/>
     <files mask="arm_mat_add_f32.c"/>
     <files mask="arm_mat_add_q15.c"/>
@@ -886,6 +922,7 @@ ${load}</script>
     <files mask="arm_mat_cmplx_trans_q31.c"/>
     <files mask="arm_mat_init_f16.c"/>
     <files mask="arm_mat_init_f32.c"/>
+    <files mask="arm_mat_init_f64.c"/>
     <files mask="arm_mat_init_q15.c"/>
     <files mask="arm_mat_init_q31.c"/>
     <files mask="arm_mat_inverse_f16.c"/>
@@ -898,9 +935,13 @@ ${load}</script>
     <files mask="arm_mat_mult_f64.c"/>
     <files mask="arm_mat_mult_fast_q15.c"/>
     <files mask="arm_mat_mult_fast_q31.c"/>
+    <files mask="arm_mat_mult_opt_q31.c"/>
     <files mask="arm_mat_mult_q15.c"/>
     <files mask="arm_mat_mult_q31.c"/>
     <files mask="arm_mat_mult_q7.c"/>
+    <files mask="arm_mat_qr_f16.c"/>
+    <files mask="arm_mat_qr_f32.c"/>
+    <files mask="arm_mat_qr_f64.c"/>
     <files mask="arm_mat_scale_f16.c"/>
     <files mask="arm_mat_scale_f32.c"/>
     <files mask="arm_mat_scale_q15.c"/>
@@ -958,14 +999,31 @@ ${load}</script>
     <files mask="StatisticsFunctionsF16.c"/>
     <files mask="arm_absmax_f16.c"/>
     <files mask="arm_absmax_f32.c"/>
+    <files mask="arm_absmax_f64.c"/>
+    <files mask="arm_absmax_no_idx_f16.c"/>
+    <files mask="arm_absmax_no_idx_f32.c"/>
+    <files mask="arm_absmax_no_idx_f64.c"/>
+    <files mask="arm_absmax_no_idx_q15.c"/>
+    <files mask="arm_absmax_no_idx_q31.c"/>
+    <files mask="arm_absmax_no_idx_q7.c"/>
     <files mask="arm_absmax_q15.c"/>
     <files mask="arm_absmax_q31.c"/>
     <files mask="arm_absmax_q7.c"/>
     <files mask="arm_absmin_f16.c"/>
     <files mask="arm_absmin_f32.c"/>
+    <files mask="arm_absmin_f64.c"/>
+    <files mask="arm_absmin_no_idx_f16.c"/>
+    <files mask="arm_absmin_no_idx_f32.c"/>
+    <files mask="arm_absmin_no_idx_f64.c"/>
+    <files mask="arm_absmin_no_idx_q15.c"/>
+    <files mask="arm_absmin_no_idx_q31.c"/>
+    <files mask="arm_absmin_no_idx_q7.c"/>
     <files mask="arm_absmin_q15.c"/>
     <files mask="arm_absmin_q31.c"/>
     <files mask="arm_absmin_q7.c"/>
+    <files mask="arm_accumulate_f16.c"/>
+    <files mask="arm_accumulate_f32.c"/>
+    <files mask="arm_accumulate_f64.c"/>
     <files mask="arm_entropy_f16.c"/>
     <files mask="arm_entropy_f32.c"/>
     <files mask="arm_entropy_f64.c"/>
@@ -978,23 +1036,43 @@ ${load}</script>
     <files mask="arm_logsumexp_f32.c"/>
     <files mask="arm_max_f16.c"/>
     <files mask="arm_max_f32.c"/>
+    <files mask="arm_max_f64.c"/>
     <files mask="arm_max_no_idx_f16.c"/>
     <files mask="arm_max_no_idx_f32.c"/>
+    <files mask="arm_max_no_idx_f64.c"/>
+    <files mask="arm_max_no_idx_q15.c"/>
+    <files mask="arm_max_no_idx_q31.c"/>
+    <files mask="arm_max_no_idx_q7.c"/>
     <files mask="arm_max_q15.c"/>
     <files mask="arm_max_q31.c"/>
     <files mask="arm_max_q7.c"/>
     <files mask="arm_mean_f16.c"/>
     <files mask="arm_mean_f32.c"/>
+    <files mask="arm_mean_f64.c"/>
     <files mask="arm_mean_q15.c"/>
     <files mask="arm_mean_q31.c"/>
     <files mask="arm_mean_q7.c"/>
     <files mask="arm_min_f16.c"/>
     <files mask="arm_min_f32.c"/>
+    <files mask="arm_min_f64.c"/>
+    <files mask="arm_min_no_idx_f16.c"/>
+    <files mask="arm_min_no_idx_f32.c"/>
+    <files mask="arm_min_no_idx_f64.c"/>
+    <files mask="arm_min_no_idx_q15.c"/>
+    <files mask="arm_min_no_idx_q31.c"/>
+    <files mask="arm_min_no_idx_q7.c"/>
     <files mask="arm_min_q15.c"/>
     <files mask="arm_min_q31.c"/>
     <files mask="arm_min_q7.c"/>
+    <files mask="arm_mse_f16.c"/>
+    <files mask="arm_mse_f32.c"/>
+    <files mask="arm_mse_f64.c"/>
+    <files mask="arm_mse_q15.c"/>
+    <files mask="arm_mse_q31.c"/>
+    <files mask="arm_mse_q7.c"/>
     <files mask="arm_power_f16.c"/>
     <files mask="arm_power_f32.c"/>
+    <files mask="arm_power_f64.c"/>
     <files mask="arm_power_q15.c"/>
     <files mask="arm_power_q31.c"/>
     <files mask="arm_power_q7.c"/>
@@ -1004,10 +1082,12 @@ ${load}</script>
     <files mask="arm_rms_q31.c"/>
     <files mask="arm_std_f16.c"/>
     <files mask="arm_std_f32.c"/>
+    <files mask="arm_std_f64.c"/>
     <files mask="arm_std_q15.c"/>
     <files mask="arm_std_q31.c"/>
     <files mask="arm_var_f16.c"/>
     <files mask="arm_var_f32.c"/>
+    <files mask="arm_var_f64.c"/>
     <files mask="arm_var_q15.c"/>
     <files mask="arm_var_q31.c"/>
     <files mask="SupportFunctions.c"/>
@@ -1018,17 +1098,26 @@ ${load}</script>
     <files mask="arm_bubble_sort_f32.c"/>
     <files mask="arm_copy_f16.c"/>
     <files mask="arm_copy_f32.c"/>
+    <files mask="arm_copy_f64.c"/>
     <files mask="arm_copy_q15.c"/>
     <files mask="arm_copy_q31.c"/>
     <files mask="arm_copy_q7.c"/>
+    <files mask="arm_f16_to_f64.c"/>
     <files mask="arm_f16_to_float.c"/>
     <files mask="arm_f16_to_q15.c"/>
+    <files mask="arm_f64_to_f16.c"/>
+    <files mask="arm_f64_to_float.c"/>
+    <files mask="arm_f64_to_q15.c"/>
+    <files mask="arm_f64_to_q31.c"/>
+    <files mask="arm_f64_to_q7.c"/>
     <files mask="arm_fill_f16.c"/>
     <files mask="arm_fill_f32.c"/>
+    <files mask="arm_fill_f64.c"/>
     <files mask="arm_fill_q15.c"/>
     <files mask="arm_fill_q31.c"/>
     <files mask="arm_fill_q7.c"/>
     <files mask="arm_float_to_f16.c"/>
+    <files mask="arm_float_to_f64.c"/>
     <files mask="arm_float_to_q15.c"/>
     <files mask="arm_float_to_q31.c"/>
     <files mask="arm_float_to_q7.c"/>
@@ -1037,12 +1126,15 @@ ${load}</script>
     <files mask="arm_merge_sort_f32.c"/>
     <files mask="arm_merge_sort_init_f32.c"/>
     <files mask="arm_q15_to_f16.c"/>
+    <files mask="arm_q15_to_f64.c"/>
     <files mask="arm_q15_to_float.c"/>
     <files mask="arm_q15_to_q31.c"/>
     <files mask="arm_q15_to_q7.c"/>
+    <files mask="arm_q31_to_f64.c"/>
     <files mask="arm_q31_to_float.c"/>
     <files mask="arm_q31_to_q15.c"/>
     <files mask="arm_q31_to_q7.c"/>
+    <files mask="arm_q7_to_f64.c"/>
     <files mask="arm_q7_to_float.c"/>
     <files mask="arm_q7_to_q15.c"/>
     <files mask="arm_q7_to_q31.c"/>
@@ -1091,6 +1183,14 @@ ${load}</script>
     <files mask="arm_dct4_init_q31.c"/>
     <files mask="arm_dct4_q15.c"/>
     <files mask="arm_dct4_q31.c"/>
+    <files mask="arm_mfcc_f16.c"/>
+    <files mask="arm_mfcc_f32.c"/>
+    <files mask="arm_mfcc_init_f16.c"/>
+    <files mask="arm_mfcc_init_f32.c"/>
+    <files mask="arm_mfcc_init_q15.c"/>
+    <files mask="arm_mfcc_init_q31.c"/>
+    <files mask="arm_mfcc_q15.c"/>
+    <files mask="arm_mfcc_q31.c"/>
     <files mask="arm_rfft_f32.c"/>
     <files mask="arm_rfft_fast_f16.c"/>
     <files mask="arm_rfft_fast_f32.c"/>
@@ -1103,6 +1203,47 @@ ${load}</script>
     <files mask="arm_rfft_init_q31.c"/>
     <files mask="arm_rfft_q15.c"/>
     <files mask="arm_rfft_q31.c"/>
+    <files mask="WindowFunctions.c"/>
+    <files mask="arm_bartlett_f32.c"/>
+    <files mask="arm_bartlett_f64.c"/>
+    <files mask="arm_blackman_harris_92db_f32.c"/>
+    <files mask="arm_blackman_harris_92db_f64.c"/>
+    <files mask="arm_hamming_f32.c"/>
+    <files mask="arm_hamming_f64.c"/>
+    <files mask="arm_hanning_f32.c"/>
+    <files mask="arm_hanning_f64.c"/>
+    <files mask="arm_hft116d_f32.c"/>
+    <files mask="arm_hft116d_f64.c"/>
+    <files mask="arm_hft144d_f32.c"/>
+    <files mask="arm_hft144d_f64.c"/>
+    <files mask="arm_hft169d_f32.c"/>
+    <files mask="arm_hft169d_f64.c"/>
+    <files mask="arm_hft196d_f32.c"/>
+    <files mask="arm_hft196d_f64.c"/>
+    <files mask="arm_hft223d_f32.c"/>
+    <files mask="arm_hft223d_f64.c"/>
+    <files mask="arm_hft248d_f32.c"/>
+    <files mask="arm_hft248d_f64.c"/>
+    <files mask="arm_hft90d_f32.c"/>
+    <files mask="arm_hft90d_f64.c"/>
+    <files mask="arm_hft95_f32.c"/>
+    <files mask="arm_hft95_f64.c"/>
+    <files mask="arm_nuttall3_f32.c"/>
+    <files mask="arm_nuttall3_f64.c"/>
+    <files mask="arm_nuttall3a_f32.c"/>
+    <files mask="arm_nuttall3a_f64.c"/>
+    <files mask="arm_nuttall3b_f32.c"/>
+    <files mask="arm_nuttall3b_f64.c"/>
+    <files mask="arm_nuttall4_f32.c"/>
+    <files mask="arm_nuttall4_f64.c"/>
+    <files mask="arm_nuttall4a_f32.c"/>
+    <files mask="arm_nuttall4a_f64.c"/>
+    <files mask="arm_nuttall4b_f32.c"/>
+    <files mask="arm_nuttall4b_f64.c"/>
+    <files mask="arm_nuttall4c_f32.c"/>
+    <files mask="arm_nuttall4c_f64.c"/>
+    <files mask="arm_welch_f32.c"/>
+    <files mask="arm_welch_f64.c"/>
   </source>
   <source relative_path="./" type="c_include">
     <files mask="Driver_CAN.h"/>
@@ -1130,29 +1271,13 @@ ${load}</script>
     <files mask="CMSIS.yml"/>
     <files mask="CMSIS_v2.yml"/>
     <files mask="CMSIS_v3.yml"/>
-    <files mask="arm_bitreversal2.S"/>
+    <files mask="README.md"/>
   </source>
   <source relative_path="./" type="doc">
     <files mask="LICENSE.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
-    <files mask="CMakeLists.txt"/>
   </source>
 </component>-->
-    <component id="CMSIS_DSP_Include.RW612" name="CMSIS_DSP_Library_Header" brief="CMSIS-DSP Library Header" version="1.9.0" full_name="CMSIS DSP Library Header" category="CMSIS/DSP" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/DSP" project_base_path="CMSIS/DSP">
+    <component id="CMSIS_DSP_Include.RW612" name="CMSIS_DSP_Library_Header" brief="CMSIS-DSP Library Header" version="1.15.0" full_name="CMSIS DSP Library Header" category="CMSIS/DSP" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/DSP" project_base_path="CMSIS/DSP">
       <dependencies>
         <device_dependency value="RW612"/>
       </dependencies>
@@ -1161,11 +1286,11 @@ ${load}</script>
       </source>
       <source relative_path="Include" type="c_include">
         <files mask="arm_common_tables.h"/>
-        <files mask="arm_const_structs.h"/>
-        <files mask="arm_math.h"/>
         <files mask="arm_common_tables_f16.h"/>
+        <files mask="arm_const_structs.h"/>
         <files mask="arm_const_structs_f16.h"/>
         <files mask="arm_helium_utils.h"/>
+        <files mask="arm_math.h"/>
         <files mask="arm_math_f16.h"/>
         <files mask="arm_math_memory.h"/>
         <files mask="arm_math_types.h"/>
@@ -1184,6 +1309,7 @@ ${load}</script>
         <files mask="complex_math_functions_f16.h"/>
         <files mask="controller_functions.h"/>
         <files mask="controller_functions_f16.h"/>
+        <files mask="debug.h"/>
         <files mask="distance_functions.h"/>
         <files mask="distance_functions_f16.h"/>
         <files mask="fast_math_functions.h"/>
@@ -1194,6 +1320,7 @@ ${load}</script>
         <files mask="interpolation_functions_f16.h"/>
         <files mask="matrix_functions.h"/>
         <files mask="matrix_functions_f16.h"/>
+        <files mask="matrix_utils.h"/>
         <files mask="none.h"/>
         <files mask="quaternion_math_functions.h"/>
         <files mask="statistics_functions.h"/>
@@ -1206,6 +1333,7 @@ ${load}</script>
         <files mask="transform_functions.h"/>
         <files mask="transform_functions_f16.h"/>
         <files mask="utils.h"/>
+        <files mask="window_functions.h"/>
       </source>
       <source relative_path="PrivateInclude" type="c_include">
         <files mask="arm_sorting.h"/>
@@ -1220,7 +1348,7 @@ ${load}</script>
         <include_path relative_path="PrivateInclude" type="c_include"/>
       </include_paths>
     </component>
-    <component id="CMSIS_DSP_Source.RW612" name="CMSIS_DSP_Library_Source" brief="CMSIS-DSP Library" version="1.9.0" full_name="CMSIS DSP Library Source" category="CMSIS/DSP" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/DSP" project_base_path="CMSIS/DSP">
+    <component id="CMSIS_DSP_Source.RW612" name="CMSIS_DSP_Library_Source" brief="CMSIS-DSP Library" version="1.15.0" full_name="CMSIS DSP Library Source" category="CMSIS/DSP" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/DSP" project_base_path="CMSIS/DSP">
       <defines>
         <define name="DISABLEFLOAT16" value=""/>
       </defines>
@@ -1232,11 +1360,11 @@ ${load}</script>
       </source>
       <source relative_path="Include" type="c_include">
         <files mask="arm_common_tables.h"/>
-        <files mask="arm_const_structs.h"/>
-        <files mask="arm_math.h"/>
         <files mask="arm_common_tables_f16.h"/>
+        <files mask="arm_const_structs.h"/>
         <files mask="arm_const_structs_f16.h"/>
         <files mask="arm_helium_utils.h"/>
+        <files mask="arm_math.h"/>
         <files mask="arm_math_f16.h"/>
         <files mask="arm_math_memory.h"/>
         <files mask="arm_math_types.h"/>
@@ -1255,6 +1383,7 @@ ${load}</script>
         <files mask="complex_math_functions_f16.h"/>
         <files mask="controller_functions.h"/>
         <files mask="controller_functions_f16.h"/>
+        <files mask="debug.h"/>
         <files mask="distance_functions.h"/>
         <files mask="distance_functions_f16.h"/>
         <files mask="fast_math_functions.h"/>
@@ -1265,6 +1394,7 @@ ${load}</script>
         <files mask="interpolation_functions_f16.h"/>
         <files mask="matrix_functions.h"/>
         <files mask="matrix_functions_f16.h"/>
+        <files mask="matrix_utils.h"/>
         <files mask="none.h"/>
         <files mask="quaternion_math_functions.h"/>
         <files mask="statistics_functions.h"/>
@@ -1277,6 +1407,7 @@ ${load}</script>
         <files mask="transform_functions.h"/>
         <files mask="transform_functions_f16.h"/>
         <files mask="utils.h"/>
+        <files mask="window_functions.h"/>
       </source>
       <source relative_path="PrivateInclude" type="c_include">
         <files mask="arm_sorting.h"/>
@@ -1289,10 +1420,12 @@ ${load}</script>
       </source>
       <source exclude="true" relative_path="Source/BasicMathFunctions" type="src">
         <files mask="arm_abs_f32.c"/>
+        <files mask="arm_abs_f64.c"/>
         <files mask="arm_abs_q15.c"/>
         <files mask="arm_abs_q31.c"/>
         <files mask="arm_abs_q7.c"/>
         <files mask="arm_add_f32.c"/>
+        <files mask="arm_add_f64.c"/>
         <files mask="arm_add_q15.c"/>
         <files mask="arm_add_q31.c"/>
         <files mask="arm_add_q7.c"/>
@@ -1304,14 +1437,17 @@ ${load}</script>
         <files mask="arm_clip_q31.c"/>
         <files mask="arm_clip_q7.c"/>
         <files mask="arm_dot_prod_f32.c"/>
+        <files mask="arm_dot_prod_f64.c"/>
         <files mask="arm_dot_prod_q15.c"/>
         <files mask="arm_dot_prod_q31.c"/>
         <files mask="arm_dot_prod_q7.c"/>
         <files mask="arm_mult_f32.c"/>
+        <files mask="arm_mult_f64.c"/>
         <files mask="arm_mult_q15.c"/>
         <files mask="arm_mult_q31.c"/>
         <files mask="arm_mult_q7.c"/>
         <files mask="arm_negate_f32.c"/>
+        <files mask="arm_negate_f64.c"/>
         <files mask="arm_negate_q15.c"/>
         <files mask="arm_negate_q31.c"/>
         <files mask="arm_negate_q7.c"/>
@@ -1319,6 +1455,7 @@ ${load}</script>
         <files mask="arm_not_u32.c"/>
         <files mask="arm_not_u8.c"/>
         <files mask="arm_offset_f32.c"/>
+        <files mask="arm_offset_f64.c"/>
         <files mask="arm_offset_q15.c"/>
         <files mask="arm_offset_q31.c"/>
         <files mask="arm_offset_q7.c"/>
@@ -1326,6 +1463,7 @@ ${load}</script>
         <files mask="arm_or_u32.c"/>
         <files mask="arm_or_u8.c"/>
         <files mask="arm_scale_f32.c"/>
+        <files mask="arm_scale_f64.c"/>
         <files mask="arm_scale_q15.c"/>
         <files mask="arm_scale_q31.c"/>
         <files mask="arm_scale_q7.c"/>
@@ -1333,6 +1471,7 @@ ${load}</script>
         <files mask="arm_shift_q31.c"/>
         <files mask="arm_shift_q7.c"/>
         <files mask="arm_sub_f32.c"/>
+        <files mask="arm_sub_f64.c"/>
         <files mask="arm_sub_q15.c"/>
         <files mask="arm_sub_q31.c"/>
         <files mask="arm_sub_q7.c"/>
@@ -1381,12 +1520,16 @@ ${load}</script>
         <files mask="arm_cmplx_dot_prod_q15.c"/>
         <files mask="arm_cmplx_dot_prod_q31.c"/>
         <files mask="arm_cmplx_mag_f32.c"/>
+        <files mask="arm_cmplx_mag_f64.c"/>
+        <files mask="arm_cmplx_mag_fast_q15.c"/>
         <files mask="arm_cmplx_mag_q15.c"/>
         <files mask="arm_cmplx_mag_q31.c"/>
         <files mask="arm_cmplx_mag_squared_f32.c"/>
+        <files mask="arm_cmplx_mag_squared_f64.c"/>
         <files mask="arm_cmplx_mag_squared_q15.c"/>
         <files mask="arm_cmplx_mag_squared_q31.c"/>
         <files mask="arm_cmplx_mult_cmplx_f32.c"/>
+        <files mask="arm_cmplx_mult_cmplx_f64.c"/>
         <files mask="arm_cmplx_mult_cmplx_q15.c"/>
         <files mask="arm_cmplx_mult_cmplx_q31.c"/>
         <files mask="arm_cmplx_mult_real_f32.c"/>
@@ -1424,11 +1567,18 @@ ${load}</script>
         <files mask="arm_braycurtis_distance_f32.c"/>
         <files mask="arm_canberra_distance_f32.c"/>
         <files mask="arm_chebyshev_distance_f32.c"/>
+        <files mask="arm_chebyshev_distance_f64.c"/>
         <files mask="arm_cityblock_distance_f32.c"/>
+        <files mask="arm_cityblock_distance_f64.c"/>
         <files mask="arm_correlation_distance_f32.c"/>
         <files mask="arm_cosine_distance_f32.c"/>
+        <files mask="arm_cosine_distance_f64.c"/>
         <files mask="arm_dice_distance.c"/>
+        <files mask="arm_dtw_distance_f32.c"/>
+        <files mask="arm_dtw_init_window_q7.c"/>
+        <files mask="arm_dtw_path_f32.c"/>
         <files mask="arm_euclidean_distance_f32.c"/>
+        <files mask="arm_euclidean_distance_f64.c"/>
         <files mask="arm_hamming_distance.c"/>
         <files mask="arm_jaccard_distance.c"/>
         <files mask="arm_jensenshannon_distance_f32.c"/>
@@ -1440,8 +1590,8 @@ ${load}</script>
         <files mask="arm_sokalsneath_distance.c"/>
         <files mask="arm_yule_distance.c"/>
         <files mask="arm_braycurtis_distance_f16.c"/>
-        <files mask="arm_canberra_distance_f16.c"/>
         <files mask="arm_chebyshev_distance_f16.c"/>
+        <files mask="arm_canberra_distance_f16.c"/>
         <files mask="arm_cityblock_distance_f16.c"/>
         <files mask="arm_correlation_distance_f16.c"/>
         <files mask="arm_cosine_distance_f16.c"/>
@@ -1454,17 +1604,26 @@ ${load}</script>
         <files mask="FastMathFunctionsF16.c"/>
       </source>
       <source exclude="true" relative_path="Source/FastMathFunctions" type="src">
+        <files mask="arm_atan2_f32.c"/>
+        <files mask="arm_atan2_q15.c"/>
+        <files mask="arm_atan2_q31.c"/>
         <files mask="arm_cos_f32.c"/>
         <files mask="arm_cos_q15.c"/>
         <files mask="arm_cos_q31.c"/>
         <files mask="arm_divide_q15.c"/>
+        <files mask="arm_divide_q31.c"/>
         <files mask="arm_sin_f32.c"/>
         <files mask="arm_sin_q15.c"/>
         <files mask="arm_sin_q31.c"/>
         <files mask="arm_sqrt_q15.c"/>
         <files mask="arm_sqrt_q31.c"/>
         <files mask="arm_vexp_f32.c"/>
+        <files mask="arm_vexp_f64.c"/>
         <files mask="arm_vlog_f32.c"/>
+        <files mask="arm_vlog_f64.c"/>
+        <files mask="arm_vlog_q15.c"/>
+        <files mask="arm_vlog_q31.c"/>
+        <files mask="arm_atan2_f16.c"/>
         <files mask="arm_vexp_f16.c"/>
         <files mask="arm_vinverse_f16.c"/>
         <files mask="arm_vlog_f16.c"/>
@@ -1509,6 +1668,7 @@ ${load}</script>
         <files mask="arm_conv_q31.c"/>
         <files mask="arm_conv_q7.c"/>
         <files mask="arm_correlate_f32.c"/>
+        <files mask="arm_correlate_f64.c"/>
         <files mask="arm_correlate_fast_opt_q15.c"/>
         <files mask="arm_correlate_fast_q15.c"/>
         <files mask="arm_correlate_fast_q31.c"/>
@@ -1526,9 +1686,11 @@ ${load}</script>
         <files mask="arm_fir_decimate_q15.c"/>
         <files mask="arm_fir_decimate_q31.c"/>
         <files mask="arm_fir_f32.c"/>
+        <files mask="arm_fir_f64.c"/>
         <files mask="arm_fir_fast_q15.c"/>
         <files mask="arm_fir_fast_q31.c"/>
         <files mask="arm_fir_init_f32.c"/>
+        <files mask="arm_fir_init_f64.c"/>
         <files mask="arm_fir_init_q15.c"/>
         <files mask="arm_fir_init_q31.c"/>
         <files mask="arm_fir_init_q7.c"/>
@@ -1609,6 +1771,8 @@ ${load}</script>
         <files mask="MatrixFunctionsF16.c"/>
       </source>
       <source exclude="true" relative_path="Source/MatrixFunctions" type="src">
+        <files mask="arm_householder_f32.c"/>
+        <files mask="arm_householder_f64.c"/>
         <files mask="arm_mat_add_f32.c"/>
         <files mask="arm_mat_add_q15.c"/>
         <files mask="arm_mat_add_q31.c"/>
@@ -1621,6 +1785,7 @@ ${load}</script>
         <files mask="arm_mat_cmplx_trans_q15.c"/>
         <files mask="arm_mat_cmplx_trans_q31.c"/>
         <files mask="arm_mat_init_f32.c"/>
+        <files mask="arm_mat_init_f64.c"/>
         <files mask="arm_mat_init_q15.c"/>
         <files mask="arm_mat_init_q31.c"/>
         <files mask="arm_mat_inverse_f32.c"/>
@@ -1631,9 +1796,12 @@ ${load}</script>
         <files mask="arm_mat_mult_f64.c"/>
         <files mask="arm_mat_mult_fast_q15.c"/>
         <files mask="arm_mat_mult_fast_q31.c"/>
+        <files mask="arm_mat_mult_opt_q31.c"/>
         <files mask="arm_mat_mult_q15.c"/>
         <files mask="arm_mat_mult_q31.c"/>
         <files mask="arm_mat_mult_q7.c"/>
+        <files mask="arm_mat_qr_f32.c"/>
+        <files mask="arm_mat_qr_f64.c"/>
         <files mask="arm_mat_scale_f32.c"/>
         <files mask="arm_mat_scale_q15.c"/>
         <files mask="arm_mat_scale_q31.c"/>
@@ -1654,12 +1822,14 @@ ${load}</script>
         <files mask="arm_mat_vec_mult_q15.c"/>
         <files mask="arm_mat_vec_mult_q31.c"/>
         <files mask="arm_mat_vec_mult_q7.c"/>
+        <files mask="arm_householder_f16.c"/>
         <files mask="arm_mat_add_f16.c"/>
         <files mask="arm_mat_cholesky_f16.c"/>
         <files mask="arm_mat_cmplx_mult_f16.c"/>
         <files mask="arm_mat_cmplx_trans_f16.c"/>
         <files mask="arm_mat_init_f16.c"/>
         <files mask="arm_mat_inverse_f16.c"/>
+        <files mask="arm_mat_qr_f16.c"/>
         <files mask="arm_mat_mult_f16.c"/>
         <files mask="arm_mat_scale_f16.c"/>
         <files mask="arm_mat_solve_lower_triangular_f16.c"/>
@@ -1675,8 +1845,8 @@ ${load}</script>
         <files mask="arm_quaternion2rotation_f32.c"/>
         <files mask="arm_quaternion_conjugate_f32.c"/>
         <files mask="arm_quaternion_inverse_f32.c"/>
-        <files mask="arm_quaternion_norm_f32.c"/>
         <files mask="arm_quaternion_normalize_f32.c"/>
+        <files mask="arm_quaternion_norm_f32.c"/>
         <files mask="arm_quaternion_product_f32.c"/>
         <files mask="arm_quaternion_product_single_f32.c"/>
         <files mask="arm_rotation2quaternion_f32.c"/>
@@ -1709,13 +1879,27 @@ ${load}</script>
       </source>
       <source exclude="true" relative_path="Source/StatisticsFunctions" type="src">
         <files mask="arm_absmax_f32.c"/>
+        <files mask="arm_absmax_f64.c"/>
+        <files mask="arm_absmax_no_idx_f32.c"/>
+        <files mask="arm_absmax_no_idx_f64.c"/>
+        <files mask="arm_absmax_no_idx_q15.c"/>
+        <files mask="arm_absmax_no_idx_q31.c"/>
+        <files mask="arm_absmax_no_idx_q7.c"/>
         <files mask="arm_absmax_q15.c"/>
         <files mask="arm_absmax_q31.c"/>
         <files mask="arm_absmax_q7.c"/>
         <files mask="arm_absmin_f32.c"/>
+        <files mask="arm_absmin_f64.c"/>
+        <files mask="arm_absmin_no_idx_f32.c"/>
+        <files mask="arm_absmin_no_idx_f64.c"/>
+        <files mask="arm_absmin_no_idx_q15.c"/>
+        <files mask="arm_absmin_no_idx_q31.c"/>
+        <files mask="arm_absmin_no_idx_q7.c"/>
         <files mask="arm_absmin_q15.c"/>
         <files mask="arm_absmin_q31.c"/>
         <files mask="arm_absmin_q7.c"/>
+        <files mask="arm_accumulate_f32.c"/>
+        <files mask="arm_accumulate_f64.c"/>
         <files mask="arm_entropy_f32.c"/>
         <files mask="arm_entropy_f64.c"/>
         <files mask="arm_kullback_leibler_f32.c"/>
@@ -1723,19 +1907,37 @@ ${load}</script>
         <files mask="arm_logsumexp_dot_prod_f32.c"/>
         <files mask="arm_logsumexp_f32.c"/>
         <files mask="arm_max_f32.c"/>
+        <files mask="arm_max_f64.c"/>
         <files mask="arm_max_no_idx_f32.c"/>
+        <files mask="arm_max_no_idx_f64.c"/>
+        <files mask="arm_max_no_idx_q15.c"/>
+        <files mask="arm_max_no_idx_q31.c"/>
+        <files mask="arm_max_no_idx_q7.c"/>
         <files mask="arm_max_q15.c"/>
         <files mask="arm_max_q31.c"/>
         <files mask="arm_max_q7.c"/>
         <files mask="arm_mean_f32.c"/>
+        <files mask="arm_mean_f64.c"/>
         <files mask="arm_mean_q15.c"/>
         <files mask="arm_mean_q31.c"/>
         <files mask="arm_mean_q7.c"/>
         <files mask="arm_min_f32.c"/>
+        <files mask="arm_min_f64.c"/>
+        <files mask="arm_min_no_idx_f32.c"/>
+        <files mask="arm_min_no_idx_f64.c"/>
+        <files mask="arm_min_no_idx_q15.c"/>
+        <files mask="arm_min_no_idx_q31.c"/>
+        <files mask="arm_min_no_idx_q7.c"/>
         <files mask="arm_min_q15.c"/>
         <files mask="arm_min_q31.c"/>
         <files mask="arm_min_q7.c"/>
+        <files mask="arm_mse_f32.c"/>
+        <files mask="arm_mse_f64.c"/>
+        <files mask="arm_mse_q15.c"/>
+        <files mask="arm_mse_q31.c"/>
+        <files mask="arm_mse_q7.c"/>
         <files mask="arm_power_f32.c"/>
+        <files mask="arm_power_f64.c"/>
         <files mask="arm_power_q15.c"/>
         <files mask="arm_power_q31.c"/>
         <files mask="arm_power_q7.c"/>
@@ -1743,13 +1945,18 @@ ${load}</script>
         <files mask="arm_rms_q15.c"/>
         <files mask="arm_rms_q31.c"/>
         <files mask="arm_std_f32.c"/>
+        <files mask="arm_std_f64.c"/>
         <files mask="arm_std_q15.c"/>
         <files mask="arm_std_q31.c"/>
         <files mask="arm_var_f32.c"/>
+        <files mask="arm_var_f64.c"/>
         <files mask="arm_var_q15.c"/>
         <files mask="arm_var_q31.c"/>
         <files mask="arm_absmax_f16.c"/>
+        <files mask="arm_absmax_no_idx_f16.c"/>
         <files mask="arm_absmin_f16.c"/>
+        <files mask="arm_absmin_no_idx_f16.c"/>
+        <files mask="arm_accumulate_f16.c"/>
         <files mask="arm_entropy_f16.c"/>
         <files mask="arm_kullback_leibler_f16.c"/>
         <files mask="arm_logsumexp_dot_prod_f16.c"/>
@@ -1758,6 +1965,8 @@ ${load}</script>
         <files mask="arm_max_no_idx_f16.c"/>
         <files mask="arm_mean_f16.c"/>
         <files mask="arm_min_f16.c"/>
+        <files mask="arm_min_no_idx_f16.c"/>
+        <files mask="arm_mse_f16.c"/>
         <files mask="arm_power_f16.c"/>
         <files mask="arm_rms_f16.c"/>
         <files mask="arm_std_f16.c"/>
@@ -1772,13 +1981,20 @@ ${load}</script>
         <files mask="arm_bitonic_sort_f32.c"/>
         <files mask="arm_bubble_sort_f32.c"/>
         <files mask="arm_copy_f32.c"/>
+        <files mask="arm_copy_f64.c"/>
         <files mask="arm_copy_q15.c"/>
         <files mask="arm_copy_q31.c"/>
         <files mask="arm_copy_q7.c"/>
+        <files mask="arm_f64_to_float.c"/>
+        <files mask="arm_f64_to_q31.c"/>
+        <files mask="arm_f64_to_q15.c"/>
+        <files mask="arm_f64_to_q7.c"/>
         <files mask="arm_fill_f32.c"/>
+        <files mask="arm_fill_f64.c"/>
         <files mask="arm_fill_q15.c"/>
         <files mask="arm_fill_q31.c"/>
         <files mask="arm_fill_q7.c"/>
+        <files mask="arm_float_to_f64.c"/>
         <files mask="arm_float_to_q15.c"/>
         <files mask="arm_float_to_q31.c"/>
         <files mask="arm_float_to_q7.c"/>
@@ -1786,12 +2002,15 @@ ${load}</script>
         <files mask="arm_insertion_sort_f32.c"/>
         <files mask="arm_merge_sort_f32.c"/>
         <files mask="arm_merge_sort_init_f32.c"/>
+        <files mask="arm_q15_to_f64.c"/>
         <files mask="arm_q15_to_float.c"/>
         <files mask="arm_q15_to_q31.c"/>
         <files mask="arm_q15_to_q7.c"/>
+        <files mask="arm_q31_to_f64.c"/>
         <files mask="arm_q31_to_float.c"/>
         <files mask="arm_q31_to_q15.c"/>
         <files mask="arm_q31_to_q7.c"/>
+        <files mask="arm_q7_to_f64.c"/>
         <files mask="arm_q7_to_float.c"/>
         <files mask="arm_q7_to_q15.c"/>
         <files mask="arm_q7_to_q31.c"/>
@@ -1804,6 +2023,8 @@ ${load}</script>
         <files mask="arm_copy_f16.c"/>
         <files mask="arm_f16_to_float.c"/>
         <files mask="arm_f16_to_q15.c"/>
+        <files mask="arm_f16_to_f64.c"/>
+        <files mask="arm_f64_to_f16.c"/>
         <files mask="arm_fill_f16.c"/>
         <files mask="arm_float_to_f16.c"/>
         <files mask="arm_q15_to_f16.c"/>
@@ -1816,7 +2037,6 @@ ${load}</script>
       <source exclude="true" relative_path="Source/TransformFunctions" type="src">
         <files mask="arm_bitreversal.c"/>
         <files mask="arm_bitreversal2.c"/>
-        <files mask="arm_bitreversal2.S"/>
         <files mask="arm_cfft_f32.c"/>
         <files mask="arm_cfft_f64.c"/>
         <files mask="arm_cfft_init_f32.c"/>
@@ -1844,6 +2064,12 @@ ${load}</script>
         <files mask="arm_dct4_init_q31.c"/>
         <files mask="arm_dct4_q15.c"/>
         <files mask="arm_dct4_q31.c"/>
+        <files mask="arm_mfcc_f32.c"/>
+        <files mask="arm_mfcc_init_f32.c"/>
+        <files mask="arm_mfcc_init_q15.c"/>
+        <files mask="arm_mfcc_init_q31.c"/>
+        <files mask="arm_mfcc_q15.c"/>
+        <files mask="arm_mfcc_q31.c"/>
         <files mask="arm_rfft_f32.c"/>
         <files mask="arm_rfft_fast_f32.c"/>
         <files mask="arm_rfft_fast_f64.c"/>
@@ -1860,10 +2086,57 @@ ${load}</script>
         <files mask="arm_cfft_radix2_f16.c"/>
         <files mask="arm_cfft_radix2_init_f16.c"/>
         <files mask="arm_cfft_radix4_f16.c"/>
-        <files mask="arm_cfft_radix4_init_f16.c"/>
         <files mask="arm_cfft_radix8_f16.c"/>
+        <files mask="arm_mfcc_f16.c"/>
+        <files mask="arm_cfft_radix4_init_f16.c"/>
+        <files mask="arm_mfcc_init_f16.c"/>
         <files mask="arm_rfft_fast_f16.c"/>
         <files mask="arm_rfft_fast_init_f16.c"/>
+      </source>
+      <source relative_path="Source/WindowFunctions" type="src">
+        <files mask="WindowFunctions.c"/>
+      </source>
+      <source exclude="true" relative_path="Source/WindowFunctions" type="src">
+        <files mask="arm_bartlett_f32.c"/>
+        <files mask="arm_bartlett_f64.c"/>
+        <files mask="arm_blackman_harris_92db_f32.c"/>
+        <files mask="arm_blackman_harris_92db_f64.c"/>
+        <files mask="arm_hamming_f32.c"/>
+        <files mask="arm_hamming_f64.c"/>
+        <files mask="arm_hanning_f32.c"/>
+        <files mask="arm_hanning_f64.c"/>
+        <files mask="arm_hft116d_f32.c"/>
+        <files mask="arm_hft116d_f64.c"/>
+        <files mask="arm_hft144d_f32.c"/>
+        <files mask="arm_hft144d_f64.c"/>
+        <files mask="arm_hft169d_f32.c"/>
+        <files mask="arm_hft169d_f64.c"/>
+        <files mask="arm_hft196d_f32.c"/>
+        <files mask="arm_hft196d_f64.c"/>
+        <files mask="arm_hft223d_f32.c"/>
+        <files mask="arm_hft223d_f64.c"/>
+        <files mask="arm_hft248d_f32.c"/>
+        <files mask="arm_hft248d_f64.c"/>
+        <files mask="arm_hft90d_f32.c"/>
+        <files mask="arm_hft90d_f64.c"/>
+        <files mask="arm_hft95_f32.c"/>
+        <files mask="arm_hft95_f64.c"/>
+        <files mask="arm_nuttall3a_f32.c"/>
+        <files mask="arm_nuttall3a_f64.c"/>
+        <files mask="arm_nuttall3b_f32.c"/>
+        <files mask="arm_nuttall3b_f64.c"/>
+        <files mask="arm_nuttall3_f32.c"/>
+        <files mask="arm_nuttall3_f64.c"/>
+        <files mask="arm_nuttall4a_f32.c"/>
+        <files mask="arm_nuttall4a_f64.c"/>
+        <files mask="arm_nuttall4b_f32.c"/>
+        <files mask="arm_nuttall4b_f64.c"/>
+        <files mask="arm_nuttall4c_f32.c"/>
+        <files mask="arm_nuttall4c_f64.c"/>
+        <files mask="arm_nuttall4_f32.c"/>
+        <files mask="arm_nuttall4_f64.c"/>
+        <files mask="arm_welch_f32.c"/>
+        <files mask="arm_welch_f64.c"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="CMSIS_DSP_Source.cmake" hidden="true"/>
@@ -2133,7 +2406,7 @@ ${load}</script>
         <include_path relative_path="Include" type="c_include"/>
       </include_paths>
     </component>
-    <component id="CMSIS_Device_API_OSTick.RW612" name="CMSIS_Device_API_OSTick" brief="Device interrupt controller interface" version="1.0.1" full_name="CMSIS Device API OSTick" category="Device/OS Tick" user_visible="false" type="CMSIS_driver" package_base_path="../CMSIS/RTOS2/Include" project_base_path="CMSIS/RTOS2/Include">
+    <component id="CMSIS_Device_API_OSTick.RW612" name="CMSIS_Device_API_OSTick" brief="Device interrupt controller interface" version="1.0.2" full_name="CMSIS Device API OSTick" category="Device/OS Tick" user_visible="false" type="CMSIS_driver" package_base_path="../CMSIS/RTOS2/Include" project_base_path="CMSIS/RTOS2/Include">
       <dependencies>
         <device_dependency value="RW612"/>
       </dependencies>
@@ -2221,7 +2494,7 @@ ${load}</script>
         <include_path relative_path="template" type="c_include"/>
       </include_paths>
     </component>
-    <!--<component id="container.middleware.mbedtls.unused_files.RW612" name="unused_files" version="2.28.5" package_base_path="../middleware/mbedtls" project_base_path="mbedtls">
+    <!--<component id="container.middleware.mbedtls.unused_files.RW612" name="unused_files" version="2.28.8" package_base_path="../middleware/mbedtls" project_base_path="mbedtls">
   <source exclude="true" relative_path="./" type="other">
     <files mask="issue_template.md" hidden="true"/>
     <files mask="pull_request_template.md" hidden="true"/>
@@ -2233,7 +2506,10 @@ ${load}</script>
     <files mask=".gitignore" hidden="true"/>
     <files mask=".gitignore" hidden="true"/>
     <files mask="Makefile" hidden="true"/>
-    <files mask="Makefile" hidden="true"/>
+    <files mask="mbedcrypto.pc.in" hidden="true"/>
+    <files mask="mbedtls.pc.in" hidden="true"/>
+    <files mask="mbedx509.pc.in" hidden="true"/>
+    <files mask="README.md" hidden="true"/>
     <files mask="README.md" hidden="true"/>
     <files mask="fuzz_client.options" hidden="true"/>
     <files mask="fuzz_dtlsclient.options" hidden="true"/>
@@ -2245,14 +2521,12 @@ ${load}</script>
     <files mask="fuzz_x509crt.options" hidden="true"/>
     <files mask="fuzz_x509csr.options" hidden="true"/>
     <files mask="config.pl" hidden="true"/>
-    <files mask="find-mem-leak.cocci" hidden="true"/>
     <files mask="generate_errors.pl" hidden="true"/>
     <files mask="generate_features.pl" hidden="true"/>
     <files mask="generate_query_config.pl" hidden="true"/>
     <files mask="generate_visualc_files.pl" hidden="true"/>
     <files mask="massif_max.pl" hidden="true"/>
     <files mask="rename.pl" hidden="true"/>
-    <files mask="rm-calloc-cast.cocci" hidden="true"/>
     <files mask="error.fmt" hidden="true"/>
     <files mask="query_config.fmt" hidden="true"/>
     <files mask="version_features.fmt" hidden="true"/>
@@ -2295,8 +2569,6 @@ ${load}</script>
     <files mask="test_suite_aes.ofb.data" hidden="true"/>
     <files mask="test_suite_aes.rest.data" hidden="true"/>
     <files mask="test_suite_aes.xts.data" hidden="true"/>
-    <files mask="test_suite_all.data" hidden="true"/>
-    <files mask="test_suite_all.function" hidden="true"/>
     <files mask="test_suite_arc4.data" hidden="true"/>
     <files mask="test_suite_arc4.function" hidden="true"/>
     <files mask="test_suite_aria.data" hidden="true"/>
@@ -2425,6 +2697,10 @@ ${load}</script>
     <files mask="test_suite_psa_crypto_hash.function" hidden="true"/>
     <files mask="test_suite_psa_crypto_init.data" hidden="true"/>
     <files mask="test_suite_psa_crypto_init.function" hidden="true"/>
+    <files mask="test_suite_psa_crypto_low_hash.function" hidden="true"/>
+    <files mask="test_suite_psa_crypto_low_hash.generated.data" hidden="true"/>
+    <files mask="test_suite_psa_crypto_memory.data" hidden="true"/>
+    <files mask="test_suite_psa_crypto_memory.function" hidden="true"/>
     <files mask="test_suite_psa_crypto_metadata.data" hidden="true"/>
     <files mask="test_suite_psa_crypto_metadata.function" hidden="true"/>
     <files mask="test_suite_psa_crypto_not_supported.function" hidden="true"/>
@@ -2457,6 +2733,8 @@ ${load}</script>
     <files mask="test_suite_ssl.function" hidden="true"/>
     <files mask="test_suite_ssl_decrypt.function" hidden="true"/>
     <files mask="test_suite_ssl_decrypt.misc.data" hidden="true"/>
+    <files mask="test_suite_test_helpers.data" hidden="true"/>
+    <files mask="test_suite_test_helpers.function" hidden="true"/>
     <files mask="test_suite_timing.data" hidden="true"/>
     <files mask="test_suite_timing.function" hidden="true"/>
     <files mask="test_suite_version.data" hidden="true"/>
@@ -2493,6 +2771,7 @@ ${load}</script>
     <files mask="load_roots.vcxproj" hidden="true"/>
     <files mask="mbedTLS.sln" hidden="true"/>
     <files mask="mbedTLS.vcxproj" hidden="true"/>
+    <files mask="metatest.vcxproj" hidden="true"/>
     <files mask="mini_client.vcxproj" hidden="true"/>
     <files mask="mpi_demo.vcxproj" hidden="true"/>
     <files mask="pem2der.vcxproj" hidden="true"/>
@@ -2544,6 +2823,8 @@ ${load}</script>
     <files mask="CMakeLists.txt" hidden="true"/>
     <files mask="CMakeLists.txt" hidden="true"/>
     <files mask="CMakeLists.txt" hidden="true"/>
+    <files mask="CMakeLists.txt" hidden="true"/>
+    <files mask="CMakeLists.txt" hidden="true"/>
     <files mask="dh_prime.txt" hidden="true"/>
     <files mask="rsa_priv.txt" hidden="true"/>
     <files mask="rsa_pub.txt" hidden="true"/>
@@ -2584,6 +2865,8 @@ ${load}</script>
   </source>
   <source exclude="true" relative_path="./" type="script">
     <files mask="conf.py" hidden="true"/>
+    <files mask="JoinPaths.cmake" hidden="true"/>
+    <files mask="demo_common.sh" hidden="true"/>
     <files mask="dlopen_demo.sh" hidden="true"/>
     <files mask="generate_cpp_dummy_build.sh" hidden="true"/>
     <files mask="udp_proxy_wrapper.sh" hidden="true"/>
@@ -2606,8 +2889,12 @@ ${load}</script>
     <files mask="asymmetric_key_data.py" hidden="true"/>
     <files mask="build_tree.py" hidden="true"/>
     <files mask="c_build_helper.py" hidden="true"/>
+    <files mask="c_parsing_helper.py" hidden="true"/>
+    <files mask="c_wrapper_generator.py" hidden="true"/>
+    <files mask="crypto_data_tests.py" hidden="true"/>
     <files mask="crypto_knowledge.py" hidden="true"/>
     <files mask="macro_collector.py" hidden="true"/>
+    <files mask="psa_information.py" hidden="true"/>
     <files mask="psa_storage.py" hidden="true"/>
     <files mask="test_case.py" hidden="true"/>
     <files mask="test_data_generation.py" hidden="true"/>
@@ -2630,10 +2917,14 @@ ${load}</script>
     <files mask="generate-afl-tests.sh" hidden="true"/>
     <files mask="generate_bignum_tests.py" hidden="true"/>
     <files mask="generate_psa_tests.py" hidden="true"/>
+    <files mask="generate_psa_wrappers.py" hidden="true"/>
+    <files mask="generate_server9_bad_saltlen.py" hidden="true"/>
     <files mask="generate_test_code.py" hidden="true"/>
     <files mask="list-identifiers.sh" hidden="true"/>
     <files mask="list_internal_identifiers.py" hidden="true"/>
     <files mask="psa_collect_statuses.py" hidden="true"/>
+    <files mask="run-metatests.sh" hidden="true"/>
+    <files mask="run_demos.py" hidden="true"/>
     <files mask="scripts_path.py" hidden="true"/>
     <files mask="set_psa_test_dependencies.py" hidden="true"/>
     <files mask="test_config_script.py" hidden="true"/>
@@ -2643,6 +2934,7 @@ ${load}</script>
     <files mask="travis-log-failure.sh" hidden="true"/>
   </source>
   <source exclude="true" relative_path="./" type="src">
+    <files mask="wince_main.c" hidden="true"/>
     <files mask="crypt_and_hash.c" hidden="true"/>
     <files mask="common.c" hidden="true"/>
     <files mask="fuzz_client.c" hidden="true"/>
@@ -2695,6 +2987,7 @@ ${load}</script>
     <files mask="ssl_test_lib.c" hidden="true"/>
     <files mask="benchmark.c" hidden="true"/>
     <files mask="dlopen.c" hidden="true"/>
+    <files mask="metatest.c" hidden="true"/>
     <files mask="query_compile_time_config.c" hidden="true"/>
     <files mask="query_config.c" hidden="true"/>
     <files mask="selftest.c" hidden="true"/>
@@ -2713,7 +3006,10 @@ ${load}</script>
     <files mask="helpers.c" hidden="true"/>
     <files mask="psa_crypto_helpers.c" hidden="true"/>
     <files mask="psa_exercise_key.c" hidden="true"/>
+    <files mask="psa_memory_poisoning_wrappers.c" hidden="true"/>
+    <files mask="psa_test_wrappers.c" hidden="true"/>
     <files mask="random.c" hidden="true"/>
+    <files mask="test_memory.c" hidden="true"/>
     <files mask="threading_helpers.c" hidden="true"/>
   </source>
 </component>-->
@@ -2859,6 +3155,50 @@ ${load}</script>
         <include_path relative_path="els_pkc/include/opaque" type="c_include"/>
       </include_paths>
     </component>
+    <component id="component.psa_crypto_driver.ele_s200.common.RW612" name="psa_crypto_driver_ele_s200_common" brief="Common files of PSA crypto driver for ele_s200" version="1.0.0" full_name="Common files of PSA crypto driver for ele_s200" category="psa_crypto_driver/psa_crypto_dri_ele_s200_common" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="ele_s200/include/common" type="c_include">
+        <files mask="mcux_psa_s2xx_common_init.h"/>
+        <files mask="mcux_psa_s2xx_entropy.h"/>
+      </source>
+      <source relative_path="ele_s200/src/common" type="src">
+        <files mask="mcux_psa_s2xx_common_init.c"/>
+        <files mask="mcux_psa_s2xx_entropy.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_ele_s200_common.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="ele_s200/include/common" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.ele_s200.transparent.RW612" name="psa_crypto_driver ele_s200_transparent" brief="Transparent part of PSA crypto driver for ele_s200" version="1.0.0" full_name="Transparent part of PSA crypto driver for ele_s200" category="psa_crypto_driver/psa_crypto_dri_ele_s200_trans" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="ele_s200/include/transparent" type="c_include">
+        <files mask="mcux_psa_s2xx_aead.h"/>
+        <files mask="mcux_psa_s2xx_cipher.h"/>
+        <files mask="mcux_psa_s2xx_hash.h"/>
+        <files mask="mcux_psa_s2xx_init.h"/>
+        <files mask="mcux_psa_s2xx_mac.h"/>
+      </source>
+      <source relative_path="ele_s200/src/transparent" type="src">
+        <files mask="mcux_psa_s2xx_aead.c"/>
+        <files mask="mcux_psa_s2xx_cipher.c"/>
+        <files mask="mcux_psa_s2xx_hash.c"/>
+        <files mask="mcux_psa_s2xx_init.c"/>
+        <files mask="mcux_psa_s2xx_mac.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_ele_s200_transparent.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="ele_s200/include/transparent" type="c_include"/>
+      </include_paths>
+    </component>
     <!--<component id="container.component.psa_crypto_driver.unused_files.RW612" name="unused_files" version="1.0.0" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
   <source exclude="true" relative_path="./" type="doc">
     <files mask="CMakeLists.txt" hidden="true"/>
@@ -2901,6 +3241,7 @@ ${load}</script>
         <files mask="mcuxClEls_mapping.h"/>
         <files mask="mcuxClEls_Rng.h"/>
         <files mask="mcuxClEls_Types.h"/>
+        <files mask="mcuxClEls_KeyManagement.h"/>
       </source>
       <source relative_path="src/comps/mcuxClEls/inc/internal" type="c_include">
         <files mask="mcuxClEls_Internal.h"/>
@@ -3088,25 +3429,9 @@ ${load}</script>
         <files mask="wlan_txpwrlimit_cfg_WW_rw610.h"/>
       </source>
       <source relative_path="Murata/tx_pwr_limits" type="c_include">
-        <files mask="wlan_txpwrlimit_cfg_murata_1XK_CA.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_1XK_EU.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_1XK_JP.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_1XK_US.h"/>
         <files mask="wlan_txpwrlimit_cfg_murata_1XK_WW.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_1ZM_CA.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_1ZM_EU.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_1ZM_JP.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_1ZM_US.h"/>
         <files mask="wlan_txpwrlimit_cfg_murata_1ZM_WW.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_2DS_CA.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_2DS_EU.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_2DS_JP.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_2DS_US.h"/>
         <files mask="wlan_txpwrlimit_cfg_murata_2DS_WW.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_2EL_CA_RU_Tx_power.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_2EL_EU_RU_Tx_power.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_2EL_JP_RU_Tx_power.h"/>
-        <files mask="wlan_txpwrlimit_cfg_murata_2EL_US_RU_Tx_power.h"/>
         <files mask="wlan_txpwrlimit_cfg_murata_2EL_WW.h"/>
       </source>
       <source relative_path="u-blox/tx_pwr_limits" type="c_include">
@@ -3222,7 +3547,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.ocotp.RW612" name="ocotp" brief="OCOTP Driver" version="2.0.0" full_name="OCOTP Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers">
+    <component id="platform.drivers.ocotp.RW612" name="ocotp" brief="OCOTP Driver" version="2.2.1" full_name="OCOTP Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
@@ -3283,7 +3608,24 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.clock.RW612" name="clock" brief="Clock Driver" version="2.1.3" full_name="Clock Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers">
+    <component id="platform.drivers.cns_io_mux.RW612" name="io_mux" brief="IO_MUX Driver" version="2.2.0" full_name="CNS_IO_MUX Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_io_mux.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_cns_io_mux.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.clock.RW612" name="clock" brief="Clock Driver" version="2.3.0" full_name="Clock Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
@@ -3298,6 +3640,46 @@ ${load}</script>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="driver_clock.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.power.RW612" name="power" brief="Power driver" version="2.5.0" full_name="Driver power" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_power.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_power.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_power.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.reset.RW612" name="reset" brief="Reset Driver" version="2.1.1" full_name="Reset Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_reset.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_reset.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_reset.RW612.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
@@ -3371,7 +3753,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpc_dma.RW612" name="dma" brief="DMA Driver" version="2.5.1" full_name="DMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpc_dma" project_base_path="drivers">
+    <component id="platform.drivers.lpc_dma.RW612" name="dma" brief="DMA Driver" version="2.5.3" full_name="DMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpc_dma" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.memory.RW612"/>
@@ -3457,7 +3839,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flexcomm_i2s_dma.RW612" name="flexcomm_i2s_dma" brief="I2S Driver" version="2.3.2" full_name="FLEXCOMM I2S DMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexcomm/i2s" project_base_path="drivers">
+    <component id="platform.drivers.flexcomm_i2s_dma.RW612" name="flexcomm_i2s_dma" brief="I2S Driver" version="2.3.3" full_name="FLEXCOMM I2S DMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexcomm/i2s" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpc_dma.RW612"/>
@@ -3478,7 +3860,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lcdic_dma.RW612" name="lcdic_dma" brief="LCDIC DMA Driver" version="2.0.0" full_name="LCDIC DMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lcdic" project_base_path="drivers">
+    <component id="platform.drivers.lcdic_dma.RW612" name="lcdic_dma" brief="LCDIC DMA Driver" version="2.1.0" full_name="LCDIC DMA Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lcdic" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpc_dma.RW612"/>
@@ -3543,13 +3925,14 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flash_config.rdrw612bga.RW612" name="flash_config" brief="flash config block" version="2.0.0" full_name="Flash config" category="Device/SDK Drivers" user_visible="true" type="board_component" package_base_path="../boards/rdrw612bga/flash_config" project_base_path="flash_config">
+    <component id="platform.drivers.flash_config.frdmrw612.RW612" name="flash_config" brief="flash config block" version="2.0.0" full_name="Flash config" category="Device/SDK Drivers" user_visible="true" type="board_component" package_base_path="../boards/frdmrw612/flash_config" project_base_path="flash_config">
       <defines>
         <define name="BOOT_HEADER_ENABLE" value="1"/>
       </defines>
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
+          <board_dependency value="frdmrw612"/>
           <device_dependency value="RW612"/>
         </all>
       </dependencies>
@@ -3560,7 +3943,7 @@ ${load}</script>
         <files mask="flash_config.h"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="driver_flash_config_rdrw612bga.RW612.cmake" hidden="true"/>
+        <files mask="driver_flash_config_frdmrw612.RW612.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
@@ -3659,21 +4042,27 @@ ${load}</script>
         <files mask="a00045.js"/>
         <files mask="a00046.html"/>
         <files mask="a00046.js"/>
-        <files mask="a00047.html"/>
-        <files mask="a00047.js"/>
-        <files mask="a00048.html"/>
-        <files mask="a00048.js"/>
-        <files mask="a00049.html"/>
-        <files mask="a00049.js"/>
+        <files mask="a00159.html"/>
+        <files mask="a00160.html"/>
+        <files mask="a00160.js"/>
+        <files mask="a00161.html"/>
+        <files mask="a00162.html"/>
+        <files mask="a00162.js"/>
+        <files mask="a00163.html"/>
+        <files mask="a00163.js"/>
+        <files mask="a00164.html"/>
         <files mask="a00165.html"/>
+        <files mask="a00165.js"/>
         <files mask="a00166.html"/>
         <files mask="a00166.js"/>
         <files mask="a00167.html"/>
+        <files mask="a00167.js"/>
         <files mask="a00168.html"/>
         <files mask="a00168.js"/>
         <files mask="a00169.html"/>
         <files mask="a00169.js"/>
         <files mask="a00170.html"/>
+        <files mask="a00170.js"/>
         <files mask="a00171.html"/>
         <files mask="a00171.js"/>
         <files mask="a00172.html"/>
@@ -3701,28 +4090,16 @@ ${load}</script>
         <files mask="a00183.html"/>
         <files mask="a00183.js"/>
         <files mask="a00184.html"/>
-        <files mask="a00184.js"/>
         <files mask="a00185.html"/>
-        <files mask="a00185.js"/>
         <files mask="a00186.html"/>
-        <files mask="a00186.js"/>
         <files mask="a00187.html"/>
         <files mask="a00187.js"/>
         <files mask="a00188.html"/>
-        <files mask="a00188.js"/>
         <files mask="a00189.html"/>
         <files mask="a00189.js"/>
         <files mask="a00190.html"/>
-        <files mask="a00191.html"/>
+        <files mask="a00190.js"/>
         <files mask="a00192.html"/>
-        <files mask="a00193.html"/>
-        <files mask="a00193.js"/>
-        <files mask="a00194.html"/>
-        <files mask="a00195.html"/>
-        <files mask="a00195.js"/>
-        <files mask="a00196.html"/>
-        <files mask="a00196.js"/>
-        <files mask="a00198.html"/>
         <files mask="arm_logo.png"/>
         <files mask="bc_s.png"/>
         <files mask="bdwn.png"/>
@@ -4124,23 +4501,6 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.cns_io_mux.RW612" name="io_mux" brief="IO_MUX Driver" version="2.0.0" full_name="CNS_IO_MUX Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers">
-      <dependencies>
-        <all>
-          <component_dependency value="platform.drivers.common.RW612"/>
-          <device_dependency value="RW612"/>
-        </all>
-      </dependencies>
-      <source relative_path="./" type="c_include">
-        <files mask="fsl_io_mux.h"/>
-      </source>
-      <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="driver_cns_io_mux.RW612.cmake" hidden="true"/>
-      </source>
-      <include_paths>
-        <include_path relative_path="./" type="c_include"/>
-      </include_paths>
-    </component>
     <component id="platform.drivers.inputmux_connections.RW612" name="inputmux_connections" brief="Inputmux_connections Driver" version="2.0.1" full_name="Inputmux_connections Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers">
       <dependencies>
         <all>
@@ -4209,26 +4569,6 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.power.RW612" name="power" brief="Power driver" version="2.3.0" full_name="Driver power" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers">
-      <dependencies>
-        <all>
-          <component_dependency value="platform.drivers.common.RW612"/>
-          <device_dependency value="RW612"/>
-        </all>
-      </dependencies>
-      <source relative_path="./" type="c_include">
-        <files mask="fsl_power.h"/>
-      </source>
-      <source relative_path="./" type="src">
-        <files mask="fsl_power.c"/>
-      </source>
-      <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="driver_power.RW612.cmake" hidden="true"/>
-      </source>
-      <include_paths>
-        <include_path relative_path="./" type="c_include"/>
-      </include_paths>
-    </component>
     <component id="device.RW612_system.RW612" name="RW612_system" brief="Device RW612_system" version="1.0.0" full_name="Device RW612_system" category="Device/CMSIS" user_visible="true" type="CMSIS_Include" package_base_path="../devices/RW612" project_base_path="device">
       <dependencies>
         <all>
@@ -4269,7 +4609,7 @@ ${load}</script>
         <files mask="device_RW612_startup.RW612.cmake" hidden="true"/>
       </source>
     </component>
-    <component id="CMSIS_NN_Source.RW612" name="CMSIS_NN_Library_Source" brief="CMSIS-NN Library" version="3.0.0" full_name="CMSIS NN Library Source" category="CMSIS/NN" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/NN" project_base_path="CMSIS/NN">
+    <component id="CMSIS_NN_Source.RW612" name="CMSIS_NN_Library_Source" brief="CMSIS-NN Library" version="5.0.0" full_name="CMSIS NN Library Source" category="CMSIS/NN" user_visible="true" type="CMSIS_driver" package_base_path="../CMSIS/NN" project_base_path="CMSIS/NN">
       <dependencies>
         <all>
           <component_dependency value="CMSIS_DSP_Source.RW612"/>
@@ -4280,20 +4620,26 @@ ${load}</script>
         <files mask="README.md" hidden="true"/>
       </source>
       <source relative_path="Include" type="c_include">
-        <files mask="arm_nn_tables.h"/>
-        <files mask="arm_nn_types.h"/>
         <files mask="arm_nnfunctions.h"/>
         <files mask="arm_nnsupportfunctions.h"/>
+        <files mask="arm_nn_math_types.h"/>
+        <files mask="arm_nn_tables.h"/>
+        <files mask="arm_nn_types.h"/>
+      </source>
+      <source relative_path="Include/Internal" type="c_include">
+        <files mask="arm_nn_compiler.h"/>
       </source>
       <source relative_path="Source/ActivationFunctions" type="src">
-        <files mask="arm_nn_activations_q15.c"/>
-        <files mask="arm_nn_activations_q7.c"/>
+        <files mask="arm_nn_activation_s16.c"/>
         <files mask="arm_relu6_s8.c"/>
         <files mask="arm_relu_q15.c"/>
         <files mask="arm_relu_q7.c"/>
       </source>
       <source relative_path="Source/BasicMathFunctions" type="src">
+        <files mask="arm_elementwise_add_s16.c"/>
         <files mask="arm_elementwise_add_s8.c"/>
+        <files mask="arm_elementwise_mul_s16.c"/>
+        <files mask="arm_elementwise_mul_s16_s8.c"/>
         <files mask="arm_elementwise_mul_s8.c"/>
       </source>
       <source relative_path="Source/ConcatenationFunctions" type="src">
@@ -4303,77 +4649,97 @@ ${load}</script>
         <files mask="arm_concatenation_s8_z.c"/>
       </source>
       <source relative_path="Source/ConvolutionFunctions" type="src">
-        <files mask="arm_convolve_1x1_HWC_q7_fast_nonsquare.c"/>
+        <files mask="arm_convolve_1x1_s4.c"/>
+        <files mask="arm_convolve_1x1_s4_fast.c"/>
+        <files mask="arm_convolve_1x1_s8.c"/>
         <files mask="arm_convolve_1x1_s8_fast.c"/>
         <files mask="arm_convolve_1_x_n_s8.c"/>
-        <files mask="arm_convolve_HWC_q15_basic.c"/>
-        <files mask="arm_convolve_HWC_q15_fast.c"/>
-        <files mask="arm_convolve_HWC_q15_fast_nonsquare.c"/>
-        <files mask="arm_convolve_HWC_q7_basic.c"/>
-        <files mask="arm_convolve_HWC_q7_basic_nonsquare.c"/>
-        <files mask="arm_convolve_HWC_q7_fast.c"/>
-        <files mask="arm_convolve_HWC_q7_fast_nonsquare.c"/>
-        <files mask="arm_convolve_HWC_q7_RGB.c"/>
+        <files mask="arm_convolve_fast_s16.c"/>
+        <files mask="arm_convolve_get_buffer_sizes_s16.c"/>
+        <files mask="arm_convolve_get_buffer_sizes_s4.c"/>
+        <files mask="arm_convolve_get_buffer_sizes_s8.c"/>
+        <files mask="arm_convolve_s16.c"/>
+        <files mask="arm_convolve_s4.c"/>
         <files mask="arm_convolve_s8.c"/>
+        <files mask="arm_convolve_wrapper_s16.c"/>
+        <files mask="arm_convolve_wrapper_s4.c"/>
         <files mask="arm_convolve_wrapper_s8.c"/>
         <files mask="arm_depthwise_conv_3x3_s8.c"/>
+        <files mask="arm_depthwise_conv_fast_s16.c"/>
+        <files mask="arm_depthwise_conv_get_buffer_sizes_s16.c"/>
+        <files mask="arm_depthwise_conv_get_buffer_sizes_s4.c"/>
+        <files mask="arm_depthwise_conv_get_buffer_sizes_s8.c"/>
+        <files mask="arm_depthwise_conv_s16.c"/>
+        <files mask="arm_depthwise_conv_s4.c"/>
+        <files mask="arm_depthwise_conv_s4_opt.c"/>
         <files mask="arm_depthwise_conv_s8.c"/>
         <files mask="arm_depthwise_conv_s8_opt.c"/>
-        <files mask="arm_depthwise_conv_u8_basic_ver1.c"/>
+        <files mask="arm_depthwise_conv_wrapper_s16.c"/>
+        <files mask="arm_depthwise_conv_wrapper_s4.c"/>
         <files mask="arm_depthwise_conv_wrapper_s8.c"/>
-        <files mask="arm_depthwise_separable_conv_HWC_q7.c"/>
-        <files mask="arm_depthwise_separable_conv_HWC_q7_nonsquare.c"/>
         <files mask="arm_nn_depthwise_conv_s8_core.c"/>
-        <files mask="arm_nn_mat_mult_kernel_q7_q15.c"/>
-        <files mask="arm_nn_mat_mult_kernel_q7_q15_reordered.c"/>
+        <files mask="arm_nn_mat_mult_kernel_s4_s16.c"/>
         <files mask="arm_nn_mat_mult_kernel_s8_s16.c"/>
-        <files mask="arm_nn_mat_mult_kernel_s8_s16_reordered.c"/>
         <files mask="arm_nn_mat_mult_s8.c"/>
+        <files mask="arm_transpose_conv_get_buffer_sizes_s8.c"/>
+        <files mask="arm_transpose_conv_s8.c"/>
       </source>
       <source relative_path="Source/FullyConnectedFunctions" type="src">
-        <files mask="arm_fully_connected_mat_q7_vec_q15.c"/>
-        <files mask="arm_fully_connected_mat_q7_vec_q15_opt.c"/>
-        <files mask="arm_fully_connected_q15.c"/>
-        <files mask="arm_fully_connected_q15_opt.c"/>
-        <files mask="arm_fully_connected_q7.c"/>
-        <files mask="arm_fully_connected_q7_opt.c"/>
+        <files mask="arm_fully_connected_get_buffer_sizes_s16.c"/>
+        <files mask="arm_fully_connected_get_buffer_sizes_s8.c"/>
+        <files mask="arm_fully_connected_s16.c"/>
+        <files mask="arm_fully_connected_s4.c"/>
         <files mask="arm_fully_connected_s8.c"/>
+        <files mask="arm_vector_sum_s8.c"/>
+      </source>
+      <source relative_path="Source/LSTMFunctions" type="src">
+        <files mask="arm_lstm_unidirectional_s8_s16.c"/>
       </source>
       <source relative_path="Source/NNSupportFunctions" type="src">
         <files mask="arm_nntables.c"/>
-        <files mask="arm_nn_accumulate_q7_to_q15.c"/>
-        <files mask="arm_nn_add_q7.c"/>
         <files mask="arm_nn_depthwise_conv_nt_t_padded_s8.c"/>
+        <files mask="arm_nn_depthwise_conv_nt_t_s16.c"/>
         <files mask="arm_nn_depthwise_conv_nt_t_s8.c"/>
+        <files mask="arm_nn_lstm_calculate_gate_s8_s16.c"/>
+        <files mask="arm_nn_lstm_step_s8_s16.c"/>
+        <files mask="arm_nn_lstm_update_cell_state_s16.c"/>
+        <files mask="arm_nn_lstm_update_output_s8_s16.c"/>
+        <files mask="arm_nn_mat_mult_nt_t_s4.c"/>
         <files mask="arm_nn_mat_mult_nt_t_s8.c"/>
+        <files mask="arm_nn_mat_mult_nt_t_s8_s32.c"/>
         <files mask="arm_nn_mat_mul_core_1x_s8.c"/>
         <files mask="arm_nn_mat_mul_core_4x_s8.c"/>
-        <files mask="arm_nn_mult_q15.c"/>
-        <files mask="arm_nn_mult_q7.c"/>
+        <files mask="arm_nn_mat_mul_kernel_s16.c"/>
+        <files mask="arm_nn_vec_mat_mult_t_s16.c"/>
+        <files mask="arm_nn_vec_mat_mult_t_s4.c"/>
         <files mask="arm_nn_vec_mat_mult_t_s8.c"/>
         <files mask="arm_nn_vec_mat_mult_t_svdf_s8.c"/>
-        <files mask="arm_q7_to_q15_no_shift.c"/>
-        <files mask="arm_q7_to_q15_reordered_no_shift.c"/>
-        <files mask="arm_q7_to_q15_reordered_with_offset.c"/>
+        <files mask="arm_nn_vec_mat_mul_result_acc_s8.c"/>
         <files mask="arm_q7_to_q15_with_offset.c"/>
+        <files mask="arm_s8_to_s16_unordered_with_offset.c"/>
       </source>
       <source relative_path="Source/PoolingFunctions" type="src">
+        <files mask="arm_avgpool_get_buffer_sizes_s16.c"/>
+        <files mask="arm_avgpool_get_buffer_sizes_s8.c"/>
+        <files mask="arm_avgpool_s16.c"/>
         <files mask="arm_avgpool_s8.c"/>
+        <files mask="arm_max_pool_s16.c"/>
         <files mask="arm_max_pool_s8.c"/>
-        <files mask="arm_pool_q7_HWC.c"/>
       </source>
       <source relative_path="Source/ReshapeFunctions" type="src">
         <files mask="arm_reshape_s8.c"/>
       </source>
       <source relative_path="Source/SoftmaxFunctions" type="src">
-        <files mask="arm_softmax_q15.c"/>
-        <files mask="arm_softmax_q7.c"/>
+        <files mask="arm_nn_softmax_common_s8.c"/>
+        <files mask="arm_softmax_s16.c"/>
         <files mask="arm_softmax_s8.c"/>
+        <files mask="arm_softmax_s8_s16.c"/>
         <files mask="arm_softmax_u8.c"/>
-        <files mask="arm_softmax_with_batch_q7.c"/>
       </source>
       <source relative_path="Source/SVDFunctions" type="src">
+        <files mask="arm_svdf_get_buffer_sizes_s8.c"/>
         <files mask="arm_svdf_s8.c"/>
+        <files mask="arm_svdf_state_s16_s8.c"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="CMSIS_NN_Source.cmake" hidden="true"/>
@@ -4462,7 +4828,7 @@ ${load}</script>
         <include_path relative_path="RTX/Config" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.common.RW612" name="common" brief="COMMON Driver" version="2.4.0" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
+    <component id="platform.drivers.common.RW612" name="common" brief="COMMON Driver" version="2.4.1" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.reset.RW612"/>
@@ -4962,6 +5328,10 @@ ${load}</script>
             <component_dependency value="component.osa_bm.RW612"/>
             <component_dependency value="component.osa_free_rtos.RW612"/>
           </any_of>
+          <any_of>
+            <component_dependency value="component.mflash.rdrw610.RW612"/>
+            <component_dependency value="component.mflash.frdmrw612.RW612"/>
+          </any_of>
           <component_dependency value="platform.drivers.ocotp.RW612"/>
           <device_dependency value="RW612"/>
         </all>
@@ -4981,15 +5351,12 @@ ${load}</script>
         <files mask="life_cycle.c"/>
       </source>
       <source relative_path="./" type="doc">
-        <files mask="readme_rc.txt"/>
+        <files mask="readme.txt"/>
       </source>
       <source relative_path="script" type="script">
         <files mask="fw_bin2c_conv.py"/>
       </source>
       <source relative_path="fw_bin" type="binary">
-        <files mask="rw61x_sb_wifi_a1.bin"/>
-        <files mask="rw61x_sb_ble_a1.bin"/>
-        <files mask="rw61x_sb_ble_15d4_combo_a1.bin"/>
         <files mask="rw61x_sb_wifi_a2.bin"/>
         <files mask="rw61x_sb_ble_a2.bin"/>
         <files mask="rw61x_sb_ble_15d4_combo_a2.bin"/>
@@ -6534,6 +6901,7 @@ ${load}</script>
     <component id="component.els_pkc.aead.RW612" name="els_pkc.aead" brief="Component els_pkc.aead" version="1.9.0" full_name="Component els_pkc.aead" category="els_pkc/els_pkc_aead" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
       <dependencies>
         <all>
+          <component_dependency value="component.els_pkc.aes.RW612"/>
           <component_dependency value="component.els_pkc.session.RW612"/>
           <component_dependency value="component.els_pkc.els.RW612"/>
           <component_dependency value="component.els_pkc.buffer.RW612"/>
@@ -6963,27 +7331,6 @@ ${load}</script>
         <include_path relative_path="src/comps/mcuxClEls/inc/internal" type="c_include"/>
       </include_paths>
     </component>
-    <component id="component.els_pkc.standalone_keyManagement.RW612" name="els_pkc.standalone_keyMgmt" brief="Component els_pkc standalone_keyManagement" version="1.9.0" full_name="Component els_pkc standalone_keyManagement" category="els_pkc/els_pkc_standalone_keyManagement" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
-      <dependencies>
-        <all>
-          <component_dependency value="component.els_pkc.memory.RW612"/>
-          <device_dependency value="RW612"/>
-        </all>
-      </dependencies>
-      <source relative_path="src/comps/mcuxClEls/src" type="src">
-        <files mask="mcuxClEls_KeyManagement.c"/>
-      </source>
-      <source relative_path="src/comps/mcuxClEls/inc" type="c_include">
-        <files mask="mcuxClEls_KeyManagement.h"/>
-      </source>
-      <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="component_els_pkc_standalone_keyManagement.cmake" hidden="true"/>
-      </source>
-      <include_paths>
-        <include_path relative_path="./" type="c_include"/>
-        <include_path relative_path="src/comps/mcuxClEls/inc/" type="c_include"/>
-      </include_paths>
-    </component>
     <component id="component.els_pkc.standalone_gdet.RW612" name="els_pkc.standalone_gdet" brief="Component els_pkc standalone_gdet" version="1.9.0" full_name="Component els_pkc standalone_dget" category="els_pkc/els_pkc_standalone_gdetr" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
       <dependencies>
         <all>
@@ -7013,7 +7360,6 @@ ${load}</script>
         <all>
           <component_dependency value="component.els_pkc.els_header_only.RW612"/>
           <component_dependency value="component.els_pkc.els_common.RW612"/>
-          <component_dependency value="component.els_pkc.standalone_keyManagement.RW612"/>
           <component_dependency value="component.els_pkc.hash.RW612"/>
           <component_dependency value="component.els_pkc.core.RW612"/>
           <component_dependency value="component.els_pkc.session.RW612"/>
@@ -7034,6 +7380,7 @@ ${load}</script>
         <files mask="mcuxClEls_Hmac.c"/>
         <files mask="mcuxClEls_Kdf.c"/>
         <files mask="mcuxClEls_Rng.c"/>
+        <files mask="mcuxClEls_KeyManagement.c"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="component_els_pkc_els.cmake" hidden="true"/>
@@ -8400,27 +8747,21 @@ ${load}</script>
         <include_path relative_path="src/inc" type="c_include"/>
       </include_paths>
     </component>
-    <component id="component.els_pkc.platform.rw61x_interface_files.RW612" name="els_pkc_rw61x_interface_files" brief="Component els_pkc for RW61x interface files" version="1.9.0" full_name="els_pkc_rw61x_interface_files" category="els_pkc/els_pkc_platform" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+    <component id="component.els_pkc.platform.rw61x_inf_header_only.RW612" name="els_pkc_rw61x_inf_header_only" brief="Component els_pkc for RW61x header inf files" version="1.9.0" full_name="els_pkc_rw61x_inf_header_only" category="els_pkc/els_pkc_platform" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
       <dependencies>
         <device_dependency value="RW612"/>
       </dependencies>
       <source relative_path="src/platforms/rw61x" type="c_include">
         <files mask="platform_specific_headers.h"/>
         <files mask="mcuxClConfig.h"/>
-        <files mask="mcux_els.h"/>
-        <files mask="mcux_pkc.h"/>
       </source>
       <source relative_path="src/platforms/rw61x/inc" type="c_include">
         <files mask="ip_css_constants.h"/>
         <files mask="ip_css_design_configuration.h"/>
         <files mask="ip_platform.h"/>
       </source>
-      <source relative_path="src/platforms/rw61x" type="src">
-        <files mask="mcux_els.c"/>
-        <files mask="mcux_pkc.c"/>
-      </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="component_els_pkc_platform_rw61x_interface_files.cmake" hidden="true"/>
+        <files mask="component_els_pkc_platform_rw61x_inf_header_only.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
@@ -8428,14 +8769,37 @@ ${load}</script>
         <include_path relative_path="src/platforms/rw61x/inc" type="c_include"/>
       </include_paths>
     </component>
+    <component id="component.els_pkc.platform.rw61x_interface_files.RW612" name="els_pkc_rw61x_interface_files" brief="Component els_pkc for RW61x interface files" version="1.9.0" full_name="els_pkc_rw61x_interface_files" category="els_pkc/els_pkc_platform" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+      <dependencies>
+        <all>
+          <component_dependency value="component.els_pkc.platform.rw61x_inf_header_only.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="src/platforms/rw61x" type="src">
+        <files mask="mcux_els.c"/>
+        <files mask="mcux_pkc.c"/>
+      </source>
+      <source relative_path="src/platforms/rw61x" type="c_include">
+        <files mask="mcux_els.h"/>
+        <files mask="mcux_pkc.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_els_pkc_platform_rw61x_interface_files.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="src/platforms/rw61x" type="c_include"/>
+      </include_paths>
+    </component>
     <component id="component.els_pkc.platform.rw61x_standalone_clib_gdet_sensor.RW612" name="els_pkc_rw61x_minimal_interface" brief="Component els_pkc for standalone clib-interface of Gdet sensor" version="1.9.0" full_name="els_pkc_rw61x_standalone_clib_gdet_sensor" category="els_pkc/els_pkc_platform" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
       <dependencies>
         <all>
           <component_dependency value="component.els_pkc.els_header_only.RW612"/>
           <component_dependency value="component.els_pkc.els_common.RW612"/>
-          <component_dependency value="component.els_pkc.standalone_keyManagement.RW612"/>
+          <component_dependency value="component.els_pkc.memory.RW612"/>
           <component_dependency value="component.els_pkc.standalone_gdet.RW612"/>
-          <component_dependency value="component.els_pkc.platform.rw61x_interface_files.RW612"/>
+          <component_dependency value="component.els_pkc.platform.rw61x_inf_header_only.RW612"/>
           <component_dependency value="component.els_pkc.buffer.RW612"/>
           <device_dependency value="RW612"/>
         </all>
@@ -8481,49 +8845,226 @@ ${load}</script>
           <component_dependency value="component.els_pkc.memory.RW612"/>
           <component_dependency value="component.els_pkc.els.RW612"/>
           <component_dependency value="component.els_pkc.pkc.RW612"/>
+          <component_dependency value="component.els_pkc.random_modes.RW612"/>
           <component_dependency value="component.els_pkc.RW612"/>
+          <component_dependency value="component.els_pkc.examples_aead.RW612"/>
+          <component_dependency value="component.els_pkc.examples_cipher_modes.RW612"/>
+          <component_dependency value="component.els_pkc.examples_ecc.RW612"/>
+          <component_dependency value="component.els_pkc.examples_els.RW612"/>
+          <component_dependency value="component.els_pkc.examples_hash_modes.RW612"/>
+          <component_dependency value="component.els_pkc.examples_hmac.RW612"/>
+          <component_dependency value="component.els_pkc.examples_key.RW612"/>
+          <component_dependency value="component.els_pkc.examples_mac_modes.RW612"/>
+          <component_dependency value="component.els_pkc.examples_rsa.RW612"/>
+          <component_dependency value="component.els_pkc.examples_flow_protection.RW612"/>
+          <component_dependency value="component.els_pkc.examples_memory.RW612"/>
+          <component_dependency value="component.els_pkc.examples_random_modes.RW612"/>
           <device_dependency value="RW612"/>
         </all>
       </dependencies>
-      <source relative_path="examples/mcuxClAeadModes" type="src">
-        <files mask="mcuxClAeadModes_Els_Ccm_Aes128_Multipart_example.c"/>
-        <files mask="mcuxClAeadModes_Els_Ccm_Aes128_Oneshot_example.c"/>
-        <files mask="mcuxClAeadModes_Els_Gcm_Aes128_Oneshot_example.c"/>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_els_pkc_examples.cmake" hidden="true"/>
       </source>
-      <source relative_path="examples/mcuxClCipherModes" type="src">
-        <files mask="mcuxClCipherModes_Els_Cbc_Aes128_Multipart_example.c"/>
-        <files mask="mcuxClCipherModes_Els_Cbc_Aes128_Oneshot_example.c"/>
-        <files mask="mcuxClCipherModes_Els_Cbc_Aes128_Oneshot_PaddingZero_example.c"/>
-        <files mask="mcuxClCipherModes_Els_Ctr_Aes128_Multipart_example.c"/>
-        <files mask="mcuxClCipherModes_Els_Ctr_Aes128_Oneshot_example.c"/>
-        <files mask="mcuxClCipherModes_Els_Ecb_Aes128_Multipart_example.c"/>
-        <files mask="mcuxClCipherModes_Els_Ecb_Aes128_Multipart_PaddingPKCS7_example.c"/>
-        <files mask="mcuxClCipherModes_Els_Ecb_Aes128_Oneshot_example.c"/>
-        <files mask="mcuxClCipherModes_Els_Ecb_Aes128_Oneshot_PaddingPKCS7_example.c"/>
-        <files mask="mcuxClCipherModes_Els_Ecb_Aes128_Oneshot_PaddingZero_example.c"/>
+    </component>
+    <component id="component.els_pkc.examples_memory.RW612" name="els_pkc_test_memory" brief="Component els_pkc_test" version="1.9.0" full_name="Component els_pkc_test" category="els_pkc/els_pkc_examples_memory" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+      <dependencies>
+        <all>
+          <component_dependency value="component.els_pkc.flow_protection.RW612"/>
+          <component_dependency value="component.els_pkc.session.RW612"/>
+          <component_dependency value="component.els_pkc.memory.RW612"/>
+          <component_dependency value="component.els_pkc.els.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="examples/mcuxCsslMemory" type="src">
+        <files mask="mcuxCsslMemory_Clear_example.c"/>
+        <files mask="mcuxCsslMemory_Compare_example.c"/>
+        <files mask="mcuxCsslMemory_Copy_example.c"/>
+        <files mask="mcuxCsslMemory_Set_example.c"/>
       </source>
-      <source relative_path="examples/mcuxClEcc" type="src">
-        <files mask="mcuxClEcc_EdDSA_Ed25519ctx_example.c"/>
-        <files mask="mcuxClEcc_EdDSA_Ed25519ph_example.c"/>
-        <files mask="mcuxClEcc_EdDSA_Ed25519_example.c"/>
-        <files mask="mcuxClEcc_EdDSA_GenerateSignature_Ed25519_example.c"/>
-        <files mask="mcuxClEcc_EdDSA_VerifySignature_Ed25519_example.c"/>
-        <files mask="mcuxClEcc_MontDH_Curve25519_example.c"/>
-        <files mask="mcuxClEcc_MontDH_Curve448_example.c"/>
+      <source relative_path="examples/mcuxCsslMemory/inc" type="c_include">
+        <files mask="mcuxCsslMemory_Examples.h"/>
       </source>
-      <source relative_path="examples/mcuxClEls" type="src">
-        <files mask="mcuxClEls_Cipher_Aes128_Cbc_Encrypt_example.c"/>
-        <files mask="mcuxClEls_Cipher_Aes128_Ecb_Encrypt_example.c"/>
-        <files mask="mcuxClEls_Common_Get_Info_example.c"/>
-        <files mask="mcuxClEls_Ecc_Keygen_Sign_Verify_example.c"/>
-        <files mask="mcuxClEls_Hash_HW_Security_Counter_example.c"/>
-        <files mask="mcuxClEls_Hash_Sha224_One_Block_example.c"/>
-        <files mask="mcuxClEls_Hash_Sha256_One_Block_example.c"/>
-        <files mask="mcuxClEls_Hash_Sha384_One_Block_example.c"/>
-        <files mask="mcuxClEls_Hash_Sha512_One_Block_example.c"/>
-        <files mask="mcuxClEls_Rng_Prng_Get_Random_example.c"/>
-        <files mask="mcuxClEls_Tls_Master_Key_Session_Keys_example.c"/>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_els_pkc_examples_memory.cmake" hidden="true"/>
       </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslFlowProtection/inc/" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslMemory/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClExample/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClBuffer/inc/" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.els_pkc.examples_flow_protection.RW612" name="els_pkc_test_flow_protection" brief="Component els_pkc_test" version="1.9.0" full_name="Component els_pkc_test" category="els_pkc/els_pkc_examples_flow_protection" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+      <dependencies>
+        <all>
+          <component_dependency value="component.els_pkc.flow_protection.RW612"/>
+          <component_dependency value="component.els_pkc.session.RW612"/>
+          <component_dependency value="component.els_pkc.memory.RW612"/>
+          <component_dependency value="component.els_pkc.els.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="examples/mcuxCsslFlowProtection" type="src">
+        <files mask="mcuxCsslFlowProtection_example.c"/>
+      </source>
+      <source relative_path="examples/mcuxCsslFlowProtection/inc" type="c_include">
+        <files mask="mcuxCsslExamples.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_els_pkc_examples_flow_protection.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslFlowProtection/inc/" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslMemory/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClExample/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClBuffer/inc/" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.els_pkc.examples_rsa.RW612" name="els_pkc_test_rsa" brief="Component els_pkc_test" version="1.9.0" full_name="Component els_pkc_test" category="els_pkc/els_pkc_examples_rsa" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+      <dependencies>
+        <all>
+          <component_dependency value="component.els_pkc.flow_protection.RW612"/>
+          <component_dependency value="component.els_pkc.session.RW612"/>
+          <component_dependency value="component.els_pkc.memory.RW612"/>
+          <component_dependency value="component.els_pkc.els.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="examples/mcuxClRsa" type="src">
+        <files mask="mcuxClRsa_sign_NoEncode_example.c"/>
+        <files mask="mcuxClRsa_sign_pss_sha2_256_example.c"/>
+        <files mask="mcuxClRsa_verify_NoVerify_example.c"/>
+        <files mask="mcuxClRsa_verify_pssverify_sha2_256_example.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_els_pkc_examples_rsa.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslFlowProtection/inc/" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslMemory/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClExample/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClBuffer/inc/" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.els_pkc.examples_random_modes.RW612" name="els_pkc_test_random_modes" brief="Component els_pkc_test" version="1.9.0" full_name="Component els_pkc_test" category="els_pkc/els_pkc_examples_random_modes" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+      <dependencies>
+        <all>
+          <component_dependency value="component.els_pkc.flow_protection.RW612"/>
+          <component_dependency value="component.els_pkc.session.RW612"/>
+          <component_dependency value="component.els_pkc.memory.RW612"/>
+          <component_dependency value="component.els_pkc.els.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="examples/mcuxClRandomModes" type="src">
+        <files mask="mcuxClRandomModes_CtrDrbg_AES256_DRG3_example.c"/>
+        <files mask="mcuxClRandomModes_CtrDrbg_AES256_DRG4_example.c"/>
+        <files mask="mcuxClRandomModes_CtrDrbg_AES256_ELS_example.c"/>
+        <files mask="mcuxClRandomModes_Different_Sessions_example.c"/>
+        <files mask="mcuxClRandomModes_PatchMode_CtrDrbg_AES256_DRG3_example.c"/>
+        <files mask="mcuxClRandomModes_TestMode_CtrDrbg_AES256_DRG4_example.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_els_pkc_examples_random_modes.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslFlowProtection/inc/" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslMemory/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClExample/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClBuffer/inc/" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.els_pkc.examples_mac_modes.RW612" name="els_pkc_test_mac_modes" brief="Component els_pkc_test" version="1.9.0" full_name="Component els_pkc_test" category="els_pkc/els_pkc_examples_mac_modes" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+      <dependencies>
+        <all>
+          <component_dependency value="component.els_pkc.flow_protection.RW612"/>
+          <component_dependency value="component.els_pkc.session.RW612"/>
+          <component_dependency value="component.els_pkc.memory.RW612"/>
+          <component_dependency value="component.els_pkc.els.RW612"/>
+          <component_dependency value="component.els_pkc.mac.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="examples/mcuxClMacModes" type="src">
+        <files mask="mcuxClMacModes_Els_Cbcmac_Aes128_Oneshot_example.c"/>
+        <files mask="mcuxClMacModes_Els_Cbcmac_Aes256_Multipart_PaddingZero_example.c"/>
+        <files mask="mcuxClMacModes_Els_Cmac_Aes128_Oneshot_example.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_els_pkc_examples_mac_modes.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslFlowProtection/inc/" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslMemory/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClExample/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClBuffer/inc/" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.els_pkc.examples_key.RW612" name="els_pkc_test_key" brief="Component els_pkc_test" version="1.9.0" full_name="Component els_pkc_test" category="els_pkc/els_pkc_examples_key" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+      <dependencies>
+        <all>
+          <component_dependency value="component.els_pkc.flow_protection.RW612"/>
+          <component_dependency value="component.els_pkc.session.RW612"/>
+          <component_dependency value="component.els_pkc.memory.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="examples/mcuxClKey" type="src">
+        <files mask="mcuxClKey_example.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_els_pkc_examples_key.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslFlowProtection/inc/" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslMemory/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClExample/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClBuffer/inc/" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.els_pkc.examples_hmac.RW612" name="els_pkc_test_hmac" brief="Component els_pkc_test" version="1.9.0" full_name="Component els_pkc_test" category="els_pkc/els_pkc_examples_hmac" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+      <dependencies>
+        <all>
+          <component_dependency value="component.els_pkc.flow_protection.RW612"/>
+          <component_dependency value="component.els_pkc.session.RW612"/>
+          <component_dependency value="component.els_pkc.memory.RW612"/>
+          <component_dependency value="component.els_pkc.els.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="examples/mcuxClHmac" type="src">
+        <files mask="mcuxClHmac_Els_Oneshot_External_Key_example.c"/>
+        <files mask="mcuxClHmac_Sw_Multipart_example.c"/>
+        <files mask="mcuxClHmac_Sw_Oneshot_example.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_els_pkc_examples_hmac.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslFlowProtection/inc/" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslMemory/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClExample/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClBuffer/inc/" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.els_pkc.examples_hash_modes.RW612" name="els_pkc_test_hash_modes" brief="Component els_pkc_test" version="1.9.0" full_name="Component els_pkc_test" category="els_pkc/els_pkc_examples_hash_modes" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+      <dependencies>
+        <all>
+          <component_dependency value="component.els_pkc.flow_protection.RW612"/>
+          <component_dependency value="component.els_pkc.session.RW612"/>
+          <component_dependency value="component.els_pkc.memory.RW612"/>
+          <component_dependency value="component.els_pkc.els.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
       <source relative_path="examples/mcuxClHashModes" type="src">
         <files mask="mcuxClHashModes_sha1_longMsgOneshot_example.c"/>
         <files mask="mcuxClHashModes_sha1_oneshot_example.c"/>
@@ -8538,51 +9079,42 @@ ${load}</script>
         <files mask="mcuxClHashModes_sha512_256_streaming_example.c"/>
         <files mask="mcuxClHashModes_sha512_oneshot_example.c"/>
       </source>
-      <source relative_path="examples/mcuxClHmac" type="src">
-        <files mask="mcuxClHmac_Els_Oneshot_External_Key_example.c"/>
-        <files mask="mcuxClHmac_Sw_Multipart_example.c"/>
-        <files mask="mcuxClHmac_Sw_Oneshot_example.c"/>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_els_pkc_examples_hash_modes.cmake" hidden="true"/>
       </source>
-      <source relative_path="examples/mcuxClKey" type="src">
-        <files mask="mcuxClKey_example.c"/>
-      </source>
-      <source relative_path="examples/mcuxClMacModes" type="src">
-        <files mask="mcuxClMacModes_Els_Cbcmac_Aes128_Oneshot_example.c"/>
-        <files mask="mcuxClMacModes_Els_Cbcmac_Aes256_Multipart_PaddingZero_example.c"/>
-        <files mask="mcuxClMacModes_Els_Cmac_Aes128_Oneshot_example.c"/>
-      </source>
-      <source relative_path="examples/mcuxClRandom" type="src">
-        <files mask="mcuxClRandom_PRNG_Patch_example.c"/>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslFlowProtection/inc/" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslMemory/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClExample/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClBuffer/inc/" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.els_pkc.examples_els.RW612" name="els_pkc_test_els" brief="Component els_pkc_test" version="1.9.0" full_name="Component els_pkc_test" category="els_pkc/els_pkc_examples_els" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+      <dependencies>
+        <all>
+          <component_dependency value="component.els_pkc.flow_protection.RW612"/>
+          <component_dependency value="component.els_pkc.session.RW612"/>
+          <component_dependency value="component.els_pkc.memory.RW612"/>
+          <component_dependency value="component.els_pkc.els.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="examples/mcuxClEls" type="src">
+        <files mask="mcuxClEls_Cipher_Aes128_Cbc_Encrypt_example.c"/>
+        <files mask="mcuxClEls_Cipher_Aes128_Ecb_Encrypt_example.c"/>
+        <files mask="mcuxClEls_Common_Get_Info_example.c"/>
+        <files mask="mcuxClEls_Ecc_Keygen_Sign_Verify_example.c"/>
+        <files mask="mcuxClEls_Hash_HW_Security_Counter_example.c"/>
+        <files mask="mcuxClEls_Hash_Sha224_One_Block_example.c"/>
+        <files mask="mcuxClEls_Hash_Sha256_One_Block_example.c"/>
+        <files mask="mcuxClEls_Hash_Sha384_One_Block_example.c"/>
+        <files mask="mcuxClEls_Hash_Sha512_One_Block_example.c"/>
+        <files mask="mcuxClEls_Rng_Prng_Get_Random_example.c"/>
+        <files mask="mcuxClEls_Tls_Master_Key_Session_Keys_example.c"/>
       </source>
       <source relative_path="examples/mcuxClRandomModes" type="src">
-        <files mask="mcuxClRandomModes_CtrDrbg_AES256_DRG3_example.c"/>
-        <files mask="mcuxClRandomModes_CtrDrbg_AES256_DRG4_example.c"/>
-        <files mask="mcuxClRandomModes_CtrDrbg_AES256_ELS_example.c"/>
-        <files mask="mcuxClRandomModes_Different_Sessions_example.c"/>
         <files mask="mcuxClRandomModes_ELS_example.c"/>
-        <files mask="mcuxClRandomModes_PatchMode_CtrDrbg_AES256_DRG3_example.c"/>
-        <files mask="mcuxClRandomModes_TestMode_CtrDrbg_AES256_DRG4_example.c"/>
-      </source>
-      <source relative_path="examples/mcuxClRsa" type="src">
-        <files mask="mcuxClRsa_sign_NoEncode_example.c"/>
-        <files mask="mcuxClRsa_sign_pss_sha2_256_example.c"/>
-        <files mask="mcuxClRsa_verify_NoVerify_example.c"/>
-        <files mask="mcuxClRsa_verify_pssverify_sha2_256_example.c"/>
-      </source>
-      <source relative_path="examples/mcuxCsslFlowProtection" type="src">
-        <files mask="mcuxCsslFlowProtection_example.c"/>
-      </source>
-      <source relative_path="examples/mcuxCsslFlowProtection/inc" type="c_include">
-        <files mask="mcuxCsslExamples.h"/>
-      </source>
-      <source relative_path="examples/mcuxCsslMemory" type="src">
-        <files mask="mcuxCsslMemory_Clear_example.c"/>
-        <files mask="mcuxCsslMemory_Compare_example.c"/>
-        <files mask="mcuxCsslMemory_Copy_example.c"/>
-        <files mask="mcuxCsslMemory_Set_example.c"/>
-      </source>
-      <source relative_path="examples/mcuxCsslMemory/inc" type="c_include">
-        <files mask="mcuxCsslMemory_Examples.h"/>
       </source>
       <source relative_path="src/comps/mcuxClExample/inc" type="c_include">
         <files mask="mcuxClExample_ELS_Helper.h"/>
@@ -8593,7 +9125,97 @@ ${load}</script>
         <files mask="mcuxClExample_Session_Helper.h"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="component_els_pkc_examples.cmake" hidden="true"/>
+        <files mask="component_els_pkc_examples_els.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslFlowProtection/inc/" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslMemory/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClExample/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClBuffer/inc/" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.els_pkc.examples_ecc.RW612" name="els_pkc_test_ecc" brief="Component els_pkc_test" version="1.9.0" full_name="Component els_pkc_test" category="els_pkc/els_pkc_examples_ecc" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+      <dependencies>
+        <all>
+          <component_dependency value="component.els_pkc.flow_protection.RW612"/>
+          <component_dependency value="component.els_pkc.session.RW612"/>
+          <component_dependency value="component.els_pkc.memory.RW612"/>
+          <component_dependency value="component.els_pkc.els.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="examples/mcuxClEcc" type="src">
+        <files mask="mcuxClEcc_EdDSA_Ed25519ctx_example.c"/>
+        <files mask="mcuxClEcc_EdDSA_Ed25519ph_example.c"/>
+        <files mask="mcuxClEcc_EdDSA_Ed25519_example.c"/>
+        <files mask="mcuxClEcc_EdDSA_GenerateSignature_Ed25519_example.c"/>
+        <files mask="mcuxClEcc_EdDSA_VerifySignature_Ed25519_example.c"/>
+        <files mask="mcuxClEcc_MontDH_Curve25519_example.c"/>
+        <files mask="mcuxClEcc_MontDH_Curve448_example.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_els_pkc_examples_ecc.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslFlowProtection/inc/" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslMemory/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClExample/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClBuffer/inc/" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.els_pkc.examples_aead.RW612" name="els_pkc_test_aead" brief="Component els_pkc_test" version="1.9.0" full_name="Component els_pkc_test" category="els_pkc/els_pkc_examples_aead" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+      <dependencies>
+        <all>
+          <component_dependency value="component.els_pkc.flow_protection.RW612"/>
+          <component_dependency value="component.els_pkc.session.RW612"/>
+          <component_dependency value="component.els_pkc.memory.RW612"/>
+          <component_dependency value="component.els_pkc.els.RW612"/>
+          <component_dependency value="component.els_pkc.padding.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="examples/mcuxClAeadModes" type="src">
+        <files mask="mcuxClAeadModes_Els_Ccm_Aes128_Multipart_example.c"/>
+        <files mask="mcuxClAeadModes_Els_Ccm_Aes128_Oneshot_example.c"/>
+        <files mask="mcuxClAeadModes_Els_Gcm_Aes128_Oneshot_example.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_els_pkc_examples_aead.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslFlowProtection/inc/" type="c_include"/>
+        <include_path relative_path="examples/mcuxCsslMemory/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClExample/inc/" type="c_include"/>
+        <include_path relative_path="src/comps/mcuxClBuffer/inc/" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.els_pkc.examples_cipher_modes.RW612" name="els_pkc_test_cipher" brief="Component els_pkc_test" version="1.9.0" full_name="Component els_pkc_test" category="els_pkc/els_pkc_examples_cipher" user_visible="false" type="software_component" package_base_path="../components/els_pkc" project_base_path="component/els_pkc">
+      <dependencies>
+        <all>
+          <component_dependency value="component.els_pkc.flow_protection.RW612"/>
+          <component_dependency value="component.els_pkc.session.RW612"/>
+          <component_dependency value="component.els_pkc.memory.RW612"/>
+          <component_dependency value="component.els_pkc.els.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="examples/mcuxClCipherModes" type="src">
+        <files mask="mcuxClCipherModes_Els_Cbc_Aes128_Multipart_example.c"/>
+        <files mask="mcuxClCipherModes_Els_Cbc_Aes128_Oneshot_example.c"/>
+        <files mask="mcuxClCipherModes_Els_Cbc_Aes128_Oneshot_PaddingZero_example.c"/>
+        <files mask="mcuxClCipherModes_Els_Ctr_Aes128_Multipart_example.c"/>
+        <files mask="mcuxClCipherModes_Els_Ctr_Aes128_Oneshot_example.c"/>
+        <files mask="mcuxClCipherModes_Els_Ecb_Aes128_Multipart_example.c"/>
+        <files mask="mcuxClCipherModes_Els_Ecb_Aes128_Multipart_PaddingPKCS7_example.c"/>
+        <files mask="mcuxClCipherModes_Els_Ecb_Aes128_Oneshot_example.c"/>
+        <files mask="mcuxClCipherModes_Els_Ecb_Aes128_Oneshot_PaddingPKCS7_example.c"/>
+        <files mask="mcuxClCipherModes_Els_Ecb_Aes128_Oneshot_PaddingZero_example.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_els_pkc_examples_cipher_modes.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
@@ -8700,6 +9322,29 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
+    <component id="driver.gt911.RW612" name="gt911" brief="Driver gt911" version="1.0.4" full_name="Driver gt911" category="Device/SDK Drivers" user_visible="false" type="board_component" package_base_path="../components/gt911" project_base_path="touchpanel">
+      <defines>
+        <define name="SDK_I2C_BASED_COMPONENT_USED" value="1"/>
+      </defines>
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_gt911.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_gt911.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_gt911.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
     <component id="driver.ft6x06.RW612" name="ft6x06" brief="Driver ft6x06" version="1.0.0" full_name="Driver ft6x06" category="Device/SDK Drivers" user_visible="false" type="board_component" package_base_path="../components/ft6x06" project_base_path="touchpanel">
       <dependencies>
         <all>
@@ -8763,7 +9408,147 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="driver.ili9341.RW612" name="ili9341" brief="Driver ili9341" version="1.0.2" full_name="Driver ili9341" category="Device/SDK Drivers" user_visible="true" type="board_component" package_base_path="../components/ili9341" project_base_path="lcd">
+    <component id="driver.dbi_lpc_spi_dma.RW612" name="dbi_lpc_spi_dma" brief="Driver dbi_lpc_spi_dma" version="1.0.0" full_name="Driver dbi_lpc_spi_dma" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/video/display/dbi/lpc_spi" project_base_path="video">
+      <dependencies>
+        <all>
+          <component_dependency value="driver.dbi.RW612"/>
+          <component_dependency value="platform.drivers.flexcomm_spi_dma.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_dbi_spi_dma.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_dbi_spi_dma.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_dbi_lpc_spi_dma.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="driver.dbi_lcdic_dma.RW612" name="dbi_lcdic_dma" brief="Driver dbi_lcdic_dma" version="1.0.0" full_name="Driver dbi_lcdic_dma" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/video/display/dbi/lcdic" project_base_path="video">
+      <dependencies>
+        <all>
+          <component_dependency value="driver.dbi.RW612"/>
+          <component_dependency value="platform.drivers.lcdic_dma.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_dbi_lcdic_dma.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_dbi_lcdic_dma.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_dbi_lcdic_dma.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="driver.dbi.RW612" name="dbi" brief="Driver dbi" version="1.0.0" full_name="Driver dbi" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/video/display/dbi" project_base_path="video">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_dbi.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_dbi.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_dbi.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="driver.dc-fb-dbi.RW612" name="dc-fb-dbi" brief="Driver dc-fb-dbi" version="1.0.0" full_name="Driver dc-fb-dbi" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/video/display/dc/dbi" project_base_path="video">
+      <dependencies>
+        <all>
+          <component_dependency value="driver.dc-fb-common.RW612"/>
+          <component_dependency value="driver.dbi.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_dc_fb_dbi.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_dc_fb_dbi.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_dc-fb-dbi.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="driver.dc-fb-common.RW612" name="dc-fb-common" brief="Driver dc-fb-common" version="1.0.0" full_name="Driver dc-fb-common" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/video/display/dc" project_base_path="video">
+      <dependencies>
+        <all>
+          <component_dependency value="driver.video-common.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_dc_fb.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_dc-fb-common.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="driver.video-common.RW612" name="video-common" brief="Driver video-common" version="1.1.0" full_name="Driver video-common" category="Device/SDK Drivers" user_visible="true" type="software_component" package_base_path="../components/video" project_base_path="video">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_video_common.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_video_common.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_video-common.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="driver.st7796s.RW612" name="st7796s" brief="Driver st7796s" version="1.0.0" full_name="Driver st7796s" category="Device/SDK Drivers" user_visible="true" type="board_component" package_base_path="../components/st7796s" project_base_path="lcdc">
+      <dependencies>
+        <all>
+          <component_dependency value="driver.dbi.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_st7796s.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_st7796s.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_st7796s.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="driver.ili9341.RW612" name="ili9341" brief="Driver ili9341" version="1.0.2" full_name="Driver ili9341" category="Device/SDK Drivers" user_visible="true" type="board_component" package_base_path="../components/ili9341" project_base_path="lcdc">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
@@ -9025,7 +9810,10 @@ ${load}</script>
     <component id="component.mflash_file.RW612" name="mflash file" brief="mflash file" version="1.0.0" full_name="statically allocated file system for mflash" category="Device/SDK Drivers" user_visible="false" type="software_component" package_base_path="../components/flash/mflash" project_base_path="flash/mflash">
       <dependencies>
         <all>
-          <component_dependency value="component.mflash.rdrw610.RW612"/>
+          <any_of>
+            <component_dependency value="component.mflash.rdrw610.RW612"/>
+            <component_dependency value="component.mflash.frdmrw612.RW612"/>
+          </any_of>
           <device_dependency value="RW612"/>
         </all>
       </dependencies>
@@ -9080,6 +9868,32 @@ ${load}</script>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="component_mflash_rdrw610.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.mflash.frdmrw612.RW612" name="mflash frdmrw612" brief="mflash frdmrw612" version="1.0.0" full_name="mflash frdmrw612" category="Device/SDK Drivers" user_visible="true" type="software_component" package_base_path="../components/flash/mflash/frdmrw612" project_base_path="flash/mflash/frdmrw612">
+      <defines>
+        <define name="MFLASH_FILE_BASEADDR" value="7340032"/>
+      </defines>
+      <dependencies>
+        <all>
+          <component_dependency value="component.mflash.common.RW612"/>
+          <component_dependency value="platform.drivers.flexspi.RW612"/>
+          <component_dependency value="platform.drivers.cache_cache64.RW612"/>
+          <board_dependency value="frdmrw612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="mflash_drv.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="mflash_drv.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_mflash_frdmrw612.RW612.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
@@ -9371,7 +10185,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="component.wireless_imu_adapter.RW612" name="wireless_imu_adapter" brief="Component wireless_imu_adapter" version="1.0.0" full_name="wireless_imu_adapter" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/rpmsg" project_base_path="component/rpmsg">
+    <component id="component.wireless_imu_adapter.RW612" name="wireless_imu_adapter" brief="Component wireless_imu_adapter" version="1.0.0" full_name="wireless_imu_adapter" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/imu_adapter" project_base_path="component/imu_adapter">
       <defines>
         <define name="FSL_OSA_TASK_ENABLE" value="1"/>
       </defines>
@@ -9388,12 +10202,11 @@ ${load}</script>
         </all>
       </dependencies>
       <source relative_path="./" type="c_include">
-        <files mask="fsl_adapter_rpmsg.h"/>
-        <files mask="fsl_adapter_rfcommon.h"/>
-        <files mask="fsl_adapter_rfimu.h"/>
+        <files mask="fsl_adapter_imu_common.h"/>
+        <files mask="fsl_adapter_imu.h"/>
       </source>
       <source relative_path="./" type="src">
-        <files mask="fsl_adapter_rfimu.c"/>
+        <files mask="fsl_adapter_imu.c"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="component_wireless_imu_adapter.RW612.cmake" hidden="true"/>
@@ -9729,6 +10542,9 @@ ${load}</script>
       </include_paths>
     </component>
     <component id="component.ctimer_adapter.RW612" name="ctimer_adapter" brief="Component ctimer_adapter" version="1.0.0" full_name="Component ctimer_adapter" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/timer" project_base_path="component/timer">
+      <defines>
+        <define name="TIMER_PORT_TYPE_CTIMER" value="1"/>
+      </defines>
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
@@ -9750,6 +10566,9 @@ ${load}</script>
       </include_paths>
     </component>
     <component id="component.mrt_adapter.RW612" name="mrt_adapter" brief="Component mrt_adapter" version="1.0.0" full_name="Component mrt_adapter" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/timer" project_base_path="component/timer">
+      <defines>
+        <define name="TIMER_PORT_TYPE_MRT" value="1"/>
+      </defines>
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
@@ -9771,6 +10590,9 @@ ${load}</script>
       </include_paths>
     </component>
     <component id="component.ostimer_adapter.RW612" name="ostimer_adapter" brief="Component ostimer_adapter" version="1.0.0" full_name="Component ostimer_adapter" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/timer" project_base_path="component/timer">
+      <defines>
+        <define name="TIMER_PORT_TYPE_OSTIMER" value="1"/>
+      </defines>
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
@@ -10013,8 +10835,11 @@ ${load}</script>
     <component id="platform.drivers.smartcard_usim.RW612" name="smartcard_usim" brief="SMARTCARD USIM Driver" version="2.3.0" full_name="SMARTCARD USIM Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/smartcard" project_base_path="drivers">
       <dependencies>
         <all>
+          <any_of>
+            <board_dependency value="rdrw612bga"/>
+            <board_dependency value="frdmrw612"/>
+          </any_of>
           <component_dependency value="platform.drivers.common.RW612"/>
-          <board_dependency value="rdrw612bga"/>
           <device_dependency value="RW612"/>
         </all>
       </dependencies>
@@ -10038,9 +10863,12 @@ ${load}</script>
       </defines>
       <dependencies>
         <all>
+          <any_of>
+            <board_dependency value="rdrw612bga"/>
+            <board_dependency value="frdmrw612"/>
+          </any_of>
           <component_dependency value="platform.drivers.smartcard_usim.RW612"/>
           <component_dependency value="platform.drivers.common.RW612"/>
-          <board_dependency value="rdrw612bga"/>
           <device_dependency value="RW612"/>
         </all>
       </dependencies>
@@ -10057,7 +10885,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.cache_cache64.RW612" name="cache" brief="CACHE Driver" version="2.0.6" full_name="CACHE Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/cache/cache64" project_base_path="drivers">
+    <component id="platform.drivers.cache_cache64.RW612" name="cache" brief="CACHE Driver" version="2.0.7" full_name="CACHE Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/cache/cache64" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
@@ -10077,7 +10905,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.cdog.RW612" name="cdog" brief="cdog Driver" version="2.1.2" full_name="cdog Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/cdog" project_base_path="drivers">
+    <component id="platform.drivers.cdog.RW612" name="cdog" brief="cdog Driver" version="2.1.3" full_name="cdog Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/cdog" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
@@ -10218,7 +11046,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flexcomm_i2c_freertos.RW612" name="i2c_freertos" brief="I2C Driver" version="2.0.8" full_name="FLEXCOMM I2C FREERTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexcomm/i2c" project_base_path="drivers/freertos">
+    <component id="platform.drivers.flexcomm_i2c_freertos.RW612" name="i2c_freertos" brief="FLEXCOMM I2C FreeRTOS Driver" version="2.0.8" full_name="FLEXCOMM I2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.flexcomm.RW612"/>
@@ -10303,7 +11131,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lcdic.RW612" name="lcdic" brief="LCDIC Driver" version="2.0.3" full_name="LCDIC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lcdic" project_base_path="drivers">
+    <component id="platform.drivers.lcdic.RW612" name="lcdic" brief="LCDIC Driver" version="2.1.0" full_name="LCDIC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lcdic" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
@@ -10450,26 +11278,6 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.reset.RW612" name="reset" brief="Reset Driver" version="2.1.2" full_name="Reset Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers">
-      <dependencies>
-        <all>
-          <component_dependency value="platform.drivers.common.RW612"/>
-          <device_dependency value="RW612"/>
-        </all>
-      </dependencies>
-      <source relative_path="./" type="c_include">
-        <files mask="fsl_reset.h"/>
-      </source>
-      <source relative_path="./" type="src">
-        <files mask="fsl_reset.c"/>
-      </source>
-      <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="driver_reset.RW612.cmake" hidden="true"/>
-      </source>
-      <include_paths>
-        <include_path relative_path="./" type="c_include"/>
-      </include_paths>
-    </component>
     <component id="platform.drivers.lpc_rtc.RW612" name="lpc_rtc" brief="RTC Driver" version="2.2.0" full_name="RTC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpc_rtc" project_base_path="drivers">
       <dependencies>
         <all>
@@ -10490,7 +11298,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.sctimer.RW612" name="sctimer" brief="SCT Driver" version="2.5.0" full_name="SCT Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/sctimer" project_base_path="drivers">
+    <component id="platform.drivers.sctimer.RW612" name="sctimer" brief="SCT Driver" version="2.5.1" full_name="SCT Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/sctimer" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
@@ -10531,7 +11339,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flexcomm_spi_freertos.RW612" name="spi_freertos" brief="SPI Driver" version="2.1.0" full_name="FLEXCOMM SPI FREERTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexcomm/spi" project_base_path="drivers/freertos">
+    <component id="platform.drivers.flexcomm_spi_freertos.RW612" name="spi_freertos" brief="FLEXCOMM SPI FreeRTOS Driver" version="2.1.0" full_name="FLEXCOMM SPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.flexcomm.RW612"/>
@@ -10554,7 +11362,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.trng.RW612" name="trng" brief="TRNG Driver" version="2.0.15" full_name="TRNG Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/trng" project_base_path="drivers">
+    <component id="platform.drivers.trng.RW612" name="trng" brief="TRNG Driver" version="2.0.16" full_name="TRNG Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/trng" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
@@ -10574,7 +11382,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flexcomm_usart_freertos.RW612" name="usart_freertos" brief="USART Driver" version="2.6.0" full_name="FLEXCOMM USART FREERTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexcomm/usart" project_base_path="drivers/freertos">
+    <component id="platform.drivers.flexcomm_usart_freertos.RW612" name="usart_freertos" brief="FLEXCOMM USART FreeRTOS Driver" version="2.7.0" full_name="FLEXCOMM USART FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.flexcomm.RW612"/>
@@ -10596,7 +11404,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flexcomm_usart.RW612" name="usart" brief="USART Driver" version="2.8.3" full_name="FLEXCOMM USART Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexcomm/usart" project_base_path="drivers">
+    <component id="platform.drivers.flexcomm_usart.RW612" name="usart" brief="USART Driver" version="2.8.4" full_name="FLEXCOMM USART Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexcomm/usart" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.flexcomm.RW612"/>
@@ -10653,6 +11461,30 @@ ${load}</script>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="driver_wwdt.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="platform.drivers.flash_config.rdrw612bga.RW612" name="flash_config" brief="flash config block" version="2.0.0" full_name="Flash config" category="Device/SDK Drivers" user_visible="true" type="board_component" package_base_path="../boards/rdrw612bga/flash_config" project_base_path="flash_config">
+      <defines>
+        <define name="BOOT_HEADER_ENABLE" value="1"/>
+      </defines>
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.RW612"/>
+          <board_dependency value="rdrw612bga"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="src">
+        <files mask="flash_config.c"/>
+      </source>
+      <source relative_path="./" type="c_include">
+        <files mask="flash_config.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_flash_config_rdrw612bga.RW612.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>

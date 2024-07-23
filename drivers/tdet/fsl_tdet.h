@@ -21,7 +21,7 @@
  *******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief Defines TDET driver version 2.1.0.
  *
  * Change log:
@@ -31,7 +31,7 @@
  *   - Initial version
  */
 #define FSL_TDET_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
-/*@}*/
+/*! @} */
 
 /*!
  * @brief TDET Update Mode.

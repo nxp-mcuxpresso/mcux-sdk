@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2020,2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -86,20 +86,32 @@ status_t GT911_Init(gt911_handle_t *handle, const gt911_config_t *config)
     handle->pullResetPinFunc = config->pullResetPinFunc;
 
     /* Reset the panel and set the I2C address mode. */
-    config->intPinFunc(kGT911_IntPinPullDown);
-    config->pullResetPinFunc(false);
+    if (NULL != config->intPinFunc)
+    {
+        config->intPinFunc(kGT911_IntPinPullDown);
+    }
+    if (NULL != config->pullResetPinFunc)
+    {
+        config->pullResetPinFunc(false);
+    }
 
     /* >= 10ms. */
     handle->timeDelayMsFunc(20);
 
     if (kGT911_I2cAddrAny == config->i2cAddrMode)
     {
-        config->pullResetPinFunc(true);
+        if (NULL != config->pullResetPinFunc)
+        {
+            config->pullResetPinFunc(true);
+        }
 
         /* >= 55ms */
         handle->timeDelayMsFunc(55);
 
-        config->intPinFunc(kGT911_IntPinInput);
+        if (NULL != config->intPinFunc)
+        {
+            config->intPinFunc(kGT911_IntPinInput);
+        }
 
         /* Try address 0 */
         handle->i2cAddr = GT911_I2C_ADDRESS0;
@@ -182,16 +194,23 @@ status_t GT911_Init(gt911_handle_t *handle, const gt911_config_t *config)
     handle->resolutionY = ((uint16_t)gt911Config[GT911_REG_YH - GT911_CONFIG_ADDR]) << 8U;
     handle->resolutionY += gt911Config[GT911_REG_YL - GT911_CONFIG_ADDR];
 
-    gt911Config[GT911_REG_TOUCH_NUM - GT911_CONFIG_ADDR] = (config->touchPointNum) & 0x0FU;
+    /* Only update the firmware if necessary. */
+    if ((gt911Config[GT911_REG_TOUCH_NUM - GT911_CONFIG_ADDR] & 0x0F) != (config->touchPointNum & 0x0FU) ||
+        (gt911Config[GT911_REG_MODULE_SWITCH1 - GT911_CONFIG_ADDR] & GT911_MODULE_SWITCH_INT_MASK) !=
+            (uint8_t)(config->intTrigMode))
+    {
+        gt911Config[GT911_REG_TOUCH_NUM - GT911_CONFIG_ADDR] = (config->touchPointNum) & 0x0FU;
+        gt911Config[GT911_REG_MODULE_SWITCH1 - GT911_CONFIG_ADDR] &= (uint8_t)(~GT911_MODULE_SWITCH_INT_MASK);
+        gt911Config[GT911_REG_MODULE_SWITCH1 - GT911_CONFIG_ADDR] |= (uint8_t)(config->intTrigMode);
 
-    gt911Config[GT911_REG_MODULE_SWITCH1 - GT911_CONFIG_ADDR] &= (uint8_t)(~GT911_MODULE_SWITCH_INT_MASK);
-    gt911Config[GT911_REG_MODULE_SWITCH1 - GT911_CONFIG_ADDR] |= (uint8_t)(config->intTrigMode);
+        gt911Config[GT911_CONFIG_SIZE - 2U] = GT911_GetFirmwareCheckSum(gt911Config);
+        gt911Config[GT911_CONFIG_SIZE - 1U] = 1U; /* Mark the firmware as valid. */
 
-    gt911Config[GT911_CONFIG_SIZE - 2U] = GT911_GetFirmwareCheckSum(gt911Config);
-    gt911Config[GT911_CONFIG_SIZE - 1U] = 1U; /* Mark the firmware as valid. */
+        status = handle->I2C_SendFunc(handle->i2cAddr, GT911_CONFIG_ADDR, GT911_REG_ADDR_SIZE, gt911Config,
+                                      GT911_CONFIG_SIZE);
+    }
 
-    return handle->I2C_SendFunc(handle->i2cAddr, GT911_CONFIG_ADDR, GT911_REG_ADDR_SIZE, gt911Config,
-                                GT911_CONFIG_SIZE);
+    return status;
 }
 
 status_t GT911_Deinit(gt911_handle_t *handle)
@@ -225,6 +244,10 @@ static status_t GT911_ReadRawTouchData(gt911_handle_t *handle, uint8_t *touchPoi
         /* Must set the status register to 0 after read. */
         gt911Stat = 0;
         status    = handle->I2C_SendFunc(handle->i2cAddr, GT911_REG_STAT, GT911_REG_ADDR_SIZE, &gt911Stat, 1);
+    }
+    else
+    {
+        status = kStatus_TOUCHPANEL_NotReady;
     }
 
     return status;

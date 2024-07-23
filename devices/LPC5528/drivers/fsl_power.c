@@ -424,7 +424,7 @@ void POWER_EnterDeepSleep(uint32_t exclude_from_pd,
                           uint64_t wakeup_interrupts,
                           uint32_t hardware_wake_ctrl)
 {
-    LPC_LOWPOWER_T lv_low_power_mode_cfg; /* Low Power Mode configuration structure */
+    static LPC_LOWPOWER_T lv_low_power_mode_cfg; /* Low Power Mode configuration structure */
     uint32_t cpu0_nmi_enable;
     uint32_t cpu0_int_enable_0;
     uint32_t cpu0_int_enable_1;

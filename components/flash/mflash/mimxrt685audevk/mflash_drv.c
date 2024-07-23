@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 NXP
+ * Copyright 2017-2021, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -328,8 +328,34 @@ static status_t flexspi_nor_flash_page_program(FLEXSPI_Type *base, uint32_t dstA
     return status;
 }
 
+static status_t flexspi_nor_read_data(FLEXSPI_Type *base, uint32_t startAddress, uint32_t *buffer, uint32_t length)
+{
+    status_t status;
+    flexspi_transfer_t flashXfer;
+    uint32_t readAddress = startAddress;
+
+    /* Read page. */
+    flashXfer.deviceAddress = readAddress;
+    flashXfer.port          = FLASH_PORT;
+    flashXfer.cmdType       = kFLEXSPI_Read;
+    flashXfer.SeqNumber     = 1;
+    flashXfer.seqIndex      = NOR_CMD_LUT_SEQ_IDX_READ_FAST_QUAD;
+    flashXfer.data          = buffer;
+    flashXfer.dataSize      = length;
+
+    status = FLEXSPI_TransferBlocking(base, &flashXfer);
+
+    if (status == kStatus_Success)
+    {
+        status = flexspi_nor_wait_bus_busy(base);
+    }
+
+    return status;
+}
+
 static int32_t mflash_drv_init_internal(void)
 {
+    status_t status  = kStatus_Success;
     uint32_t primask = __get_PRIMASK();
 
     __asm("cpsid i");
@@ -356,24 +382,28 @@ static int32_t mflash_drv_init_internal(void)
     /* Update LUT table. */
     FLEXSPI_UpdateLUT(MFLASH_FLEXSPI, 0, customLUT, CUSTOM_LUT_LENGTH);
 
-    flexspi_nor_enable_quad_mode(MFLASH_FLEXSPI);
+    status = flexspi_nor_enable_quad_mode(MFLASH_FLEXSPI);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
 
     /* Invalidate cache. */
     do
     {
         CACHE64->CCR |= CACHE64_CTRL_CCR_INVW0_MASK | CACHE64_CTRL_CCR_INVW1_MASK | CACHE64_CTRL_CCR_GO_MASK;
-        while (CACHE64->CCR & CACHE64_CTRL_CCR_GO_MASK)
+        while ((CACHE64->CCR & CACHE64_CTRL_CCR_GO_MASK) != 0U)
         {
         }
         CACHE64->CCR &= ~(CACHE64_CTRL_CCR_INVW0_MASK | CACHE64_CTRL_CCR_INVW1_MASK);
-    } while (0);
+    } while (false);
 
-    if (primask == 0)
+    if (primask == 0U)
     {
         __asm("cpsie i");
     }
 
-    return kStatus_Success;
+    return status;
 }
 
 /* API - initialize 'mflash' */
@@ -395,7 +425,7 @@ static int32_t mflash_drv_sector_erase_internal(uint32_t sector_addr)
 
     DCACHE_InvalidateByRange(MFLASH_BASE_ADDRESS + sector_addr, MFLASH_SECTOR_SIZE);
 
-    if (primask == 0)
+    if (primask == 0U)
     {
         __asm("cpsie i");
     }
@@ -433,7 +463,32 @@ static int32_t mflash_drv_page_program_internal(uint32_t page_addr, uint32_t *da
 
     DCACHE_InvalidateByRange(MFLASH_BASE_ADDRESS + page_addr, MFLASH_PAGE_SIZE);
 
-    if (primask == 0)
+    if (primask == 0U)
+    {
+        __asm("cpsie i");
+    }
+
+    /* Flush pipeline to allow pending interrupts take place
+     * before starting next loop */
+    __ISB();
+
+    return status;
+}
+
+/* Internal - read data */
+static int32_t mflash_drv_read_internal(uint32_t addr, uint32_t *buffer, uint32_t len)
+{
+    uint32_t primask = __get_PRIMASK();
+
+    __asm("cpsid i");
+
+    status_t status;
+    status = flexspi_nor_read_data(MFLASH_FLEXSPI, addr, buffer, len);
+
+    /* Do software reset. */
+    FLEXSPI_SoftwareReset(MFLASH_FLEXSPI);
+
+    if (primask == 0U)
     {
         __asm("cpsie i");
     }
@@ -460,8 +515,11 @@ int32_t mflash_drv_page_program(uint32_t page_addr, uint32_t *data)
 /* API - Read data */
 int32_t mflash_drv_read(uint32_t addr, uint32_t *buffer, uint32_t len)
 {
-    memcpy(buffer, (void *)(addr + MFLASH_BASE_ADDRESS), len);
-    return kStatus_Success;
+    /* Check alignment */
+    if ((((uint32_t)buffer % 4) != 0UL) || ((len % 4) != 0UL))
+        return kStatus_InvalidArgument;
+
+    return mflash_drv_read_internal(addr, buffer, len);
 }
 
 /* API - Get pointer to FLASH region */

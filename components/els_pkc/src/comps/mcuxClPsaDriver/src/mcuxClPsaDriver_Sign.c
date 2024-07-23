@@ -172,7 +172,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
              */
             MCUX_CSSL_ANALYSIS_START_SUPPRESS_CAST_OF_COMPOSITE_EXPRESSION("PSA macros come from external library outside our control")
             if((PSA_ALG_IS_ECDSA(alg) != true)
-                || (MCUXCLPSADRIVER_PSA_KEY_TYPE_ECC_GET_FAMILY(attributes->core.type) != PSA_ECC_FAMILY_SECP_R1)
+                || (MCUXCLPSADRIVER_PSA_KEY_TYPE_ECC_GET_FAMILY(psa_get_key_type(attributes)) != PSA_ECC_FAMILY_SECP_R1)
                 || (MCUXCLPSADRIVER_PSA_ALG_SIGN_GET_HASH(alg) != PSA_ALG_SHA_256))
             MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CAST_OF_COMPOSITE_EXPRESSION()
             {
@@ -254,8 +254,8 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
              */
             MCUX_CSSL_ANALYSIS_START_SUPPRESS_CAST_OF_COMPOSITE_EXPRESSION("PSA macros come from external library outside our control")
             if((PSA_ALG_IS_ECDSA(alg) != true)
-                || (MCUXCLPSADRIVER_PSA_KEY_TYPE_ECC_GET_FAMILY(attributes->core.type) != PSA_ECC_FAMILY_SECP_R1)
-                || attributes->core.bits != 256u)
+                || (MCUXCLPSADRIVER_PSA_KEY_TYPE_ECC_GET_FAMILY(psa_get_key_type(attributes)) != PSA_ECC_FAMILY_SECP_R1)
+                || psa_get_key_bits(attributes) != 256u)
             MCUX_CSSL_ANALYSIS_STOP_SUPPRESS_CAST_OF_COMPOSITE_EXPRESSION()
             {
                 status = PSA_ERROR_NOT_SUPPORTED;
@@ -334,7 +334,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     }
 
     //for signature it must be a key pair
-    if(PSA_KEY_TYPE_IS_KEY_PAIR(attributes->core.type) != true)
+    if(PSA_KEY_TYPE_IS_KEY_PAIR(psa_get_key_type(attributes)) != true)
     {
       return PSA_ERROR_INVALID_ARGUMENT;
     }

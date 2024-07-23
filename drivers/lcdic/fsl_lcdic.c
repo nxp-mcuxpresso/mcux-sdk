@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -509,7 +509,7 @@ status_t LCDIC_PrepareSendRepeatData(LCDIC_Type *base, const lcdic_repeat_tx_xfe
     status_t status;
     lcdic_trx_cmd_t trxCmd = {0};
 
-    if (0U == xfer->dataLen)
+    if ((0U == xfer->dataLen) || (xfer->dataLen > LCDIC_MAX_BYTE_PER_TRX))
     {
         status = kStatus_InvalidArgument;
     }
@@ -569,7 +569,7 @@ status_t LCDIC_PrepareSendDataArray(LCDIC_Type *base,
     lcdic_trx_cmd_t trxCmd = {0};
     uint32_t dataLen       = xfer->dataLen;
 
-    if (0u == dataLen)
+    if ((0U == dataLen) || (xfer->dataLen > LCDIC_MAX_BYTE_PER_TRX))
     {
         status = kStatus_InvalidArgument;
     }
@@ -639,7 +639,7 @@ status_t LCDIC_PrepareReadDataArray(LCDIC_Type *base,
     lcdic_trx_cmd_t trxCmd = {0};
     uint32_t dataLen       = xfer->dataLen;
 
-    if (0u == dataLen)
+    if ((0U == dataLen) || (xfer->dataLen > LCDIC_MAX_BYTE_PER_TRX))
     {
         return kStatus_InvalidArgument;
     }
@@ -948,6 +948,156 @@ status_t LCDIC_TransferNonBlocking(LCDIC_Type *base, lcdic_handle_t *handle, lcd
             status = kStatus_InvalidArgument;
             break;
     }
+
+    if (status == kStatus_Success)
+    {
+        LCDIC_EnableInterrupts(base, interrupts);
+    }
+    else
+    {
+        handle->xferInProgress = false;
+    }
+
+    return status;
+}
+
+/*
+ * brief Send command using interrupt-driven way.
+ *
+ * param base LCDIC peripheral base address.
+ * param cmd Command to send.
+ * retval kStatus_Success Command sent successfully.
+ */
+status_t LCDIC_SendCommandNonBlocking(LCDIC_Type *base, lcdic_handle_t *handle, uint8_t cmd)
+{
+    if (handle->xferInProgress)
+    {
+        return kStatus_Busy;
+    }
+
+    handle->xferInProgress = true;
+    handle->xferMode       = kLCDIC_XferCmdOnly;
+
+    (void)LCDIC_PrepareSendCommand(base, cmd);
+    LCDIC_EnableInterrupts(base, (uint32_t)kLCDIC_CmdDoneInterrupt);
+
+    return kStatus_Success;
+}
+
+/*
+ * brief Send repeat data using interrupt-driven way.
+ *
+ * param base LCDIC peripheral base address.
+ * param xfer Pointer to the transfer configuration.
+ * retval kStatus_Success Sent successfully.
+ * retval kStatus_Timeout Timeout happened.
+ * retval kStatus_InvalidArgument Invalid argument.
+ */
+status_t LCDIC_SendRepeatDataNonBlocking(LCDIC_Type *base, lcdic_handle_t *handle, const lcdic_repeat_tx_xfer_t *xfer)
+{
+    status_t status = kStatus_Success;
+    uint32_t interrupts;
+
+    if (handle->xferInProgress)
+    {
+        return kStatus_Busy;
+    }
+
+    handle->xferInProgress = true;
+    handle->xferMode       = kLCDIC_XferSendRepeatData;
+
+    status     = LCDIC_PrepareSendRepeatData(base, xfer);
+    interrupts = (uint32_t)kLCDIC_CmdDoneInterrupt | (uint32_t)kLCDIC_TeTimeoutInterrupt |
+                 (uint32_t)kLCDIC_CmdTimeoutInterrupt;
+
+    if (status == kStatus_Success)
+    {
+        LCDIC_EnableInterrupts(base, interrupts);
+    }
+    else
+    {
+        handle->xferInProgress = false;
+    }
+
+    return status;
+}
+
+/*
+ * brief Send data array using interrupt-driven way.
+ *
+ * param base LCDIC peripheral base address.
+ * param xfer Pointer to the transfer configuration.
+ * retval kStatus_Success Sent successfully.
+ * retval kStatus_Timeout Timeout happened.
+ * retval kStatus_InvalidArgument Invalid argument.
+ */
+status_t LCDIC_SendDataArrayNonBlocking(LCDIC_Type *base, lcdic_handle_t *handle, const lcdic_tx_xfer_t *xfer)
+{
+    status_t status = kStatus_Success;
+    uint32_t interrupts;
+    uint32_t xferSizeWordAligned  = 0U;
+    uint8_t xferSizeWordUnaligned = 0U;
+    uint32_t wordUnalignedData    = 0U;
+
+    if (handle->xferInProgress)
+    {
+        return kStatus_Busy;
+    }
+
+    handle->xferInProgress = true;
+    handle->xferMode       = kLCDIC_XferSendDataArray;
+
+    status = LCDIC_PrepareSendDataArray(base, xfer, &xferSizeWordAligned, &xferSizeWordUnaligned,
+                                        &wordUnalignedData);
+    handle->txData                = xfer->txData;
+    handle->xferSizeWordUnaligned = xferSizeWordUnaligned;
+    handle->xferSizeWordAligned   = xferSizeWordAligned;
+    handle->tmpData               = wordUnalignedData;
+    interrupts                    = (uint32_t)kLCDIC_CmdDoneInterrupt | (uint32_t)kLCDIC_TeTimeoutInterrupt |
+                 (uint32_t)kLCDIC_CmdTimeoutInterrupt | (uint32_t)kLCDIC_TxThresholdInterrupt;
+
+    if (status == kStatus_Success)
+    {
+        LCDIC_EnableInterrupts(base, interrupts);
+    }
+    else
+    {
+        handle->xferInProgress = false;
+    }
+
+    return status;
+}
+
+/*
+ * brief Read data array using interrupt-driven way.
+ *
+ * param base LCDIC peripheral base address.
+ * param xfer Pointer to the transfer configuration.
+ * retval kStatus_Success Sent successfully.
+ * retval kStatus_Timeout Timeout happened.
+ * retval kStatus_InvalidArgument Invalid argument.
+ */
+status_t LCDIC_ReadDataArrayNonBlocking(LCDIC_Type *base, lcdic_handle_t *handle, const lcdic_rx_xfer_t *xfer)
+{
+    status_t status = kStatus_Success;
+    uint32_t interrupts;
+    uint32_t xferSizeWordAligned  = 0U;
+    uint8_t xferSizeWordUnaligned = 0U;
+
+    if (handle->xferInProgress)
+    {
+        return kStatus_Busy;
+    }
+
+    handle->xferInProgress = true;
+    handle->xferMode       = kLCDIC_XferReceiveDataArray;
+
+    status = LCDIC_PrepareReadDataArray(base, xfer, &xferSizeWordAligned, &xferSizeWordUnaligned);
+    handle->rxData                = xfer->rxData;
+    handle->xferSizeWordUnaligned = xferSizeWordUnaligned;
+    handle->xferSizeWordAligned   = xferSizeWordAligned;
+    interrupts                    = (uint32_t)kLCDIC_TeTimeoutInterrupt | (uint32_t)kLCDIC_CmdTimeoutInterrupt |
+                 (uint32_t)kLCDIC_RxThresholdInterrupt;
 
     if (status == kStatus_Success)
     {

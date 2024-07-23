@@ -312,7 +312,7 @@ MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 const mcuxClMac_ModeDescriptor_t * mcuxClPsaDriver_psa_driver_wrapper_mac_getMode(const psa_key_attributes_t *attributes, psa_algorithm_t alg)
 MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 {
-    if(attributes->core.type == PSA_KEY_TYPE_AES)
+    if(psa_get_key_type(attributes) == PSA_KEY_TYPE_AES)
     {
         MCUX_CSSL_ANALYSIS_START_PATTERN_SWITCH_STATEMENT_RETURN_TERMINATION()
         switch(PSA_ALG_FULL_LENGTH_MAC(alg))
@@ -320,7 +320,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
             //AES based algorithms and paddings
             case PSA_ALG_CMAC:
                 /* Special case added, where CMAC with key size 192 bits is not supported by ELS, check added to do SW fallback. */
-                if (192u == attributes->core.bits)
+                if (192u == psa_get_key_bits(attributes))
                 {
                     return NULL;
                 }

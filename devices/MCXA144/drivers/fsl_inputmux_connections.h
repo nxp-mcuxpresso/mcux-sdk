@@ -3060,6 +3060,10 @@ typedef enum _inputmux_connection_t
     kINPUTMUX_Lpuart2ToExtTrigger  = 11U + (EXT_TRIG0_REG << PMUX_SHIFT),
     kINPUTMUX_Lpuart3ToExtTrigger  = 12U + (EXT_TRIG0_REG << PMUX_SHIFT),
     kINPUTMUX_Lpuart4ToExtTrigger  = 13U + (EXT_TRIG0_REG << PMUX_SHIFT),
+    kINPUTMUX_Aoi1Out0ToExtTrigger = 14U + (EXT_TRIG0_REG << PMUX_SHIFT),
+    kINPUTMUX_Aoi1Out1ToExtTrigger = 15U + (EXT_TRIG0_REG << PMUX_SHIFT),
+    kINPUTMUX_Aoi1Out2ToExtTrigger = 16U + (EXT_TRIG0_REG << PMUX_SHIFT),
+    kINPUTMUX_Aoi1Out3ToExtTrigger = 17U + (EXT_TRIG0_REG << PMUX_SHIFT),
 
     /*!< LPI2C0 trigger input connections. */
     kINPUTMUX_Aoi0Out0ToLpi2c0Trigger           = 2U + (LPI2C0_TRIG_REG << PMUX_SHIFT),

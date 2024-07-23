@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 NXP
+ * Copyright 2020-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -32,7 +32,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief Defines the driver version. */
-#define FSL_ENET_QOS_DRIVER_VERSION (MAKE_VERSION(2, 6, 2))
+#define FSL_ENET_QOS_DRIVER_VERSION (MAKE_VERSION(2, 6, 4))
 /*! @} */
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */
@@ -76,19 +76,19 @@
 /*! @brief Defines for read format. */
 #define ENET_QOS_TXDESCRIP_RD_BL1_MASK  (0x3fffUL)
 #define ENET_QOS_TXDESCRIP_RD_BL2_MASK  (ENET_QOS_TXDESCRIP_RD_BL1_MASK << 16U)
-#define ENET_QOS_TXDESCRIP_RD_BL1(n)    ((uint32_t)(n)&ENET_QOS_TXDESCRIP_RD_BL1_MASK)
-#define ENET_QOS_TXDESCRIP_RD_BL2(n)    (((uint32_t)(n)&ENET_QOS_TXDESCRIP_RD_BL1_MASK) << 16)
+#define ENET_QOS_TXDESCRIP_RD_BL1(n)    ((uint32_t)(n) & ENET_QOS_TXDESCRIP_RD_BL1_MASK)
+#define ENET_QOS_TXDESCRIP_RD_BL2(n)    (((uint32_t)(n) & ENET_QOS_TXDESCRIP_RD_BL1_MASK) << 16)
 #define ENET_QOS_TXDESCRIP_RD_TTSE_MASK (1UL << 30UL)
 #define ENET_QOS_TXDESCRIP_RD_IOC_MASK  (1UL << 31UL)
 
 #define ENET_QOS_TXDESCRIP_RD_FL_MASK   (0x7FFFUL)
-#define ENET_QOS_TXDESCRIP_RD_FL(n)     ((uint32_t)(n)&ENET_QOS_TXDESCRIP_RD_FL_MASK)
-#define ENET_QOS_TXDESCRIP_RD_CIC(n)    (((uint32_t)(n)&0x3U) << 16U)
+#define ENET_QOS_TXDESCRIP_RD_FL(n)     ((uint32_t)(n) & ENET_QOS_TXDESCRIP_RD_FL_MASK)
+#define ENET_QOS_TXDESCRIP_RD_CIC(n)    (((uint32_t)(n) & 0x3U) << 16U)
 #define ENET_QOS_TXDESCRIP_RD_TSE_MASK  (1UL << 18U)
-#define ENET_QOS_TXDESCRIP_RD_SLOT(n)   (((uint32_t)(n)&0x0fU) << 19U)
-#define ENET_QOS_TXDESCRIP_RD_SAIC(n)   (((uint32_t)(n)&0x07U) << 23U)
-#define ENET_QOS_TXDESCRIP_RD_CPC(n)    (((uint32_t)(n)&0x03U) << 26U)
-#define ENET_QOS_TXDESCRIP_RD_LDFD(n)   (((uint32_t)(n)&0x03U) << 28U)
+#define ENET_QOS_TXDESCRIP_RD_SLOT(n)   (((uint32_t)(n) & 0x0fU) << 19U)
+#define ENET_QOS_TXDESCRIP_RD_SAIC(n)   (((uint32_t)(n) & 0x07U) << 23U)
+#define ENET_QOS_TXDESCRIP_RD_CPC(n)    (((uint32_t)(n) & 0x03U) << 26U)
+#define ENET_QOS_TXDESCRIP_RD_LDFD(n)   (((uint32_t)(n) & 0x03U) << 28U)
 #define ENET_QOS_TXDESCRIP_RD_LD_MASK   (1UL << 28U)
 #define ENET_QOS_TXDESCRIP_RD_FD_MASK   (1UL << 29U)
 #define ENET_QOS_TXDESCRIP_RD_CTXT_MASK (1UL << 30U)
@@ -111,7 +111,7 @@
 /*! @name Defines some Ethernet parameters. */
 /*! @{ */
 #ifndef ENET_QOS_RING_NUM_MAX
-#define ENET_QOS_RING_NUM_MAX (5U) /*!< The Maximum number of tx/rx descriptor rings. */
+#define ENET_QOS_RING_NUM_MAX (5U)          /*!< The Maximum number of tx/rx descriptor rings. */
 #endif
 #define ENET_QOS_FRAME_MAX_FRAMELEN (1518U) /*!< Default maximum Ethernet frame size. */
 #define ENET_QOS_FCS_LEN            (4U)    /*!< Ethernet FCS length. */
@@ -170,7 +170,7 @@ typedef enum _enet_qos_mii_speed
     kENET_QOS_MiiSpeed1000M =
         ENET_QOS_MAC_CONFIGURATION_PS(0U) | ENET_QOS_MAC_CONFIGURATION_FES(0U), /*!< Speed 1000 Mbps. */
     kENET_QOS_MiiSpeed2500M =
-        ENET_QOS_MAC_CONFIGURATION_PS(0U) | ENET_QOS_MAC_CONFIGURATION_FES(1U) /*!< Speed 2500 Mbps. */
+        ENET_QOS_MAC_CONFIGURATION_PS(0U) | ENET_QOS_MAC_CONFIGURATION_FES(1U)  /*!< Speed 2500 Mbps. */
 } enet_qos_mii_speed_t;
 
 /*! @brief Defines the half or full duplex for the MII data interface. */
@@ -408,9 +408,10 @@ typedef enum _enet_qos_rxp_dma_chn
 /*! @brief Define the Tx checksum offload options. */
 typedef enum _enet_qos_tx_offload
 {
-    kENET_QOS_TxOffloadDisable = 0U, /*!< Disable Tx checksum offload. */
+    kENET_QOS_TxOffloadDisable  = 0U, /*!< Disable Tx checksum offload. */
     kENET_QOS_TxOffloadIPHeader = 1U, /*!< Enable IP header checksum calculation and insertion. */
-    kENET_QOS_TxOffloadIPHeaderPlusPayload = 2U, /*!< Enable IP header and payload checksum calculation and insertion. */
+    kENET_QOS_TxOffloadIPHeaderPlusPayload =
+        2U,                           /*!< Enable IP header and payload checksum calculation and insertion. */
     kENET_QOS_TxOffloadAll = 3U, /*!< Enable IP header, payload and pseudo header checksum calculation and insertion. */
 } enet_qos_tx_offload_t;
 
@@ -447,15 +448,15 @@ typedef struct _enet_qos_tx_bd_struct
 /*! @brief Defines the Tx BD configuration structure. */
 typedef struct _enet_qos_tx_bd_config_struct
 {
-    void *buffer1;           /*!< The first buffer address in the descriptor. */
-    uint32_t bytes1;         /*!< The bytes in the fist buffer. */
-    void *buffer2;           /*!< The second buffer address in the descriptor. */
-    uint32_t bytes2;         /*!< The bytes in the second buffer. */
-    uint32_t framelen;       /*!< The length of the frame to be transmitted. */
-    bool intEnable;          /*!< Interrupt enable flag. */
-    bool tsEnable;           /*!< The timestamp enable. */
+    void *buffer1;                      /*!< The first buffer address in the descriptor. */
+    uint32_t bytes1;                    /*!< The bytes in the fist buffer. */
+    void *buffer2;                      /*!< The second buffer address in the descriptor. */
+    uint32_t bytes2;                    /*!< The bytes in the second buffer. */
+    uint32_t framelen;                  /*!< The length of the frame to be transmitted. */
+    bool intEnable;                     /*!< Interrupt enable flag. */
+    bool tsEnable;                      /*!< The timestamp enable. */
     enet_qos_tx_offload_t txOffloadOps; /*!< The Tx checksum offload option. */
-    enet_qos_desc_flag flag; /*!< The flag of this tx desciriptor, see "enet_qos_desc_flag". */
+    enet_qos_desc_flag flag;            /*!< The flag of this tx desciriptor, see "enet_qos_desc_flag". */
 } enet_qos_tx_bd_config_struct_t;
 
 /*! @brief Defines the ENET PTP time stamp structure. */
@@ -674,6 +675,17 @@ struct _enet_qos_handle
     enet_qos_rx_alloc_callback_t rxBuffAlloc; /*!< Callback to alloc memory, must be provided for zero-copy Rx. */
     enet_qos_rx_free_callback_t rxBuffFree;   /*!< Callback to free memory, must be provided for zero-copy Rx. */
 };
+
+/*! @brief Defines the ENET state structure.
+ *
+ * @note The structure contains saved state for the instance.
+ * It could be stored in enet_qos_handle_t, but that's used
+ * only with the transactional API.
+ */
+typedef struct _enet_qos_state
+{
+    enet_qos_mii_mode_t miiMode; /*!< MII mode. */
+} enet_qos_state_t;
 
 /*! @brief Defines the frame buffer structure. */
 typedef struct _enet_qos_buffer_struct
@@ -915,15 +927,10 @@ void ENET_QOS_StartRxTx(ENET_QOS_Type *base, uint8_t txRingNum, uint8_t rxRingNu
  * @param base  ENET peripheral base address.
  * @param speed The speed of the RMII mode.
  * @param duplex The duplex of the RMII mode.
+ * @return kStatus_Success          The ENET MII speed and duplex has been set successfully.
+ * @return kStatus_InvalidArgument  Could not set the desired ENET MII speed and duplex combination.
  */
-static inline void ENET_QOS_SetMII(ENET_QOS_Type *base, enet_qos_mii_speed_t speed, enet_qos_mii_duplex_t duplex)
-{
-    uint32_t reg = base->MAC_CONFIGURATION & ~(ENET_QOS_MAC_CONFIGURATION_DM_MASK | ENET_QOS_MAC_CONFIGURATION_PS_MASK |
-                                               ENET_QOS_MAC_CONFIGURATION_FES_MASK);
-    reg |= ENET_QOS_MAC_CONFIGURATION_DM(duplex) | (uint32_t)speed;
-
-    base->MAC_CONFIGURATION = reg;
-}
+status_t ENET_QOS_SetMII(ENET_QOS_Type *base, enet_qos_mii_speed_t speed, enet_qos_mii_duplex_t duplex);
 
 /*!
  * @brief Sets the ENET SMI(serial management interface)- MII management interface.

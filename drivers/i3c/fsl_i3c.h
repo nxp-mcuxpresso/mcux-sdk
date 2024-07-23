@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 11, 1))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 12, 0))
 /*! @} */
 
 /*! @brief Timeout times for waiting flag. */
@@ -311,6 +311,9 @@ typedef struct _i3c_master_config
     bool enableOpenDrainStop;         /*!< Whether to emit open-drain speed STOP. */
     bool enableOpenDrainHigh;         /*!< Enable Open-Drain High to be 1 PPBAUD count for i3c messages, or 1 ODBAUD. */
     i3c_baudrate_hz_t baudRate_Hz;    /*!< Desired baud rate settings. */
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
+    uint32_t slowClock_Hz;            /*!< Slow clock frequency. */
+#endif
 #if defined(FSL_FEATURE_I3C_HAS_START_SCL_DELAY) && FSL_FEATURE_I3C_HAS_START_SCL_DELAY
     i3c_start_scl_delay_t startSclDelay; /*!< I3C SCL delay after START. */
     i3c_start_scl_delay_t restartSclDelay; /*!< I3C SCL delay after Repeated START. */
@@ -638,7 +641,9 @@ typedef struct _i3c_config
     i3c_start_scl_delay_t restartSclDelay; /*!< I3C SCL delay after Repeated START. */
 #endif
     uint8_t masterDynamicAddress;     /*!< Main master dynamic address configuration. */
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
     uint32_t slowClock_Hz;            /*!< Slow clock frequency for time control. */
+#endif
     uint32_t maxWriteLength;          /*!< Maximum write length. */
     uint32_t maxReadLength;           /*!< Maximum read length. */
     bool enableSlave;                 /*!< Whether to enable slave. */
@@ -1465,6 +1470,7 @@ void I3C_SlaveGetDefaultConfig(i3c_slave_config_t *slaveConfig);
  * @param slaveConfig User provided peripheral configuration. Use I3C_SlaveGetDefaultConfig() to get a set of
  * defaults that you can override.
  * @param slowClock_Hz Frequency in Hertz of the I3C slow clock. Used to calculate the bus match condition values.
+ * If FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH defines as 1, this parameter is useless.
  */
 void I3C_SlaveInit(I3C_Type *base, const i3c_slave_config_t *slaveConfig, uint32_t slowClock_Hz);
 

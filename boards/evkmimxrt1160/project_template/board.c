@@ -338,7 +338,7 @@ void BOARD_ConfigMPU(void)
      *     1             1           1           1              Normal             shareable       outer and inner write
      * back write/read acllocate
      *     2             x           0           0              Device              not shareable
-     *  Above are normal use settings, if your want to see more details or want to config different inner/outter cache
+     *  Above are normal use settings, if your want to see more details or want to config different inner/outer cache
      * policy.
      *  please refer to Table 4-55 /4-56 in arm cortex-M7 generic user guide <dui0646b_cortex_m7_dgug.pdf>
      * param SubRegionDisable  Sub-region disable field. 0=sub-region is enabled, 1=sub-region is disabled.

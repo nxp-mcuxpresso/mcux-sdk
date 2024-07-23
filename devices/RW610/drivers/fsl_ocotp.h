@@ -19,10 +19,11 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+
 /*! @name Driver version */
 /*@{*/
-/*! @brief OCOTP driver version 2.2.0. */
-#define FSL_OCOTP_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief OCOTP driver version 2.2.1. */
+#define FSL_OCOTP_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 /*! @brief OCOTP unique ID length. */

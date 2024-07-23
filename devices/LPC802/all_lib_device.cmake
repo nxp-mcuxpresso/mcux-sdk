@@ -46,6 +46,9 @@
 #  # description: Utility assert_lite
 #  set(CONFIG_USE_utility_assert_lite true)
 
+#  # description: Utility str
+#  set(CONFIG_USE_utility_str true)
+
 #  # description: Component lpc_crc_adapter
 #  set(CONFIG_USE_component_lpc_crc_adapter true)
 
@@ -57,6 +60,15 @@
 
 #  # description: Component lists
 #  set(CONFIG_USE_component_lists true)
+
+#  # description: Component log
+#  set(CONFIG_USE_component_log true)
+
+#  # description: Component log backend debug console lite
+#  set(CONFIG_USE_component_log_backend_debugconsole_lite true)
+
+#  # description: Component log backend ring buffer
+#  set(CONFIG_USE_component_log_backend_ringbuffer true)
 
 #  # description: Component mem_manager
 #  set(CONFIG_USE_component_mem_manager true)
@@ -75,6 +87,9 @@
 
 #  # description: Component software_rng_adapter
 #  set(CONFIG_USE_component_software_rng_adapter true)
+
+#  # description: Utility shell
+#  set(CONFIG_USE_utility_shell true)
 
 #  # description: Component ctimer_adapter
 #  set(CONFIG_USE_component_ctimer_adapter true)
@@ -208,6 +223,9 @@
 #  set(CONFIG_USE_CMSIS_NN_Source true)
 
 #set.component.osa
+#  # description: Component osa_zephyr
+#  set(CONFIG_USE_component_osa_zephyr true)
+
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)
 

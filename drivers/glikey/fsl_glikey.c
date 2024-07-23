@@ -103,12 +103,14 @@ status_t GLIKEY_CheckLock(GLIKEY_Type *base)
     return kStatus_GLIKEY_NotLocked;
 }
 
+#if defined(GLIKEY_VERSION_FSM_CONFIG)
 status_t GLIKEY_GetVersion(GLIKEY_Type *base, uint32_t *result)
 {
     *result = ((GLIKEY_Type *)base)->VERSION;
 
     return kStatus_Success;
 }
+#endif
 
 status_t GLIKEY_SyncReset(GLIKEY_Type *base)
 {

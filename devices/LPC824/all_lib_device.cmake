@@ -49,6 +49,9 @@
 #  # description: Device LPC824_system
 #  set(CONFIG_USE_device_LPC824_system true)
 
+#  # description: Utility str
+#  set(CONFIG_USE_utility_str true)
+
 #  # description: Component button
 #  set(CONFIG_USE_component_button true)
 
@@ -217,6 +220,9 @@
 #  set(CONFIG_USE_CMSIS_NN_Source true)
 
 #set.component.osa
+#  # description: Component osa_zephyr
+#  set(CONFIG_USE_component_osa_zephyr true)
+
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)
 

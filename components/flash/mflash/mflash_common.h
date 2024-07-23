@@ -18,8 +18,8 @@
 
 #define MFLASH_INVALID_ADDRESS (UINT32_MAX)
 
-#define mflash_drv_is_page_aligned(x)   (((x) % (MFLASH_PAGE_SIZE)) == 0)
-#define mflash_drv_is_sector_aligned(x) (((x) % (MFLASH_SECTOR_SIZE)) == 0)
+#define mflash_drv_is_page_aligned(x)   (((x) % (MFLASH_PAGE_SIZE)) == 0U)
+#define mflash_drv_is_sector_aligned(x) (((x) % (MFLASH_SECTOR_SIZE)) == 0U)
 
 /*
  * The addresses of FLASH locations used by APIs below may not correspond with the addresses space, especially when

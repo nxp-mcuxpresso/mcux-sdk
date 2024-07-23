@@ -15,10 +15,10 @@
  */
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief FlexCOMM driver version. */
 #define FSL_LP_FLEXCOMM_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
-/*@}*/
+/*! @} */
 
 /*! @brief LP_FLEXCOMM peripheral modes. */
 typedef enum
@@ -83,6 +83,6 @@ void LP_FLEXCOMM_SetIRQHandler(uint32_t instance,
 }
 #endif
 
-/*@}*/
+/*! @} */
 
 #endif /* FSL_LP_FLEXCOMM_H_*/

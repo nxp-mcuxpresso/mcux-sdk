@@ -449,15 +449,13 @@ if (CONFIG_USE_utility_debug_console_lite)
 
 message("utility_debug_console_lite component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_lpuart_adapter AND (CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_common)
+if(CONFIG_USE_component_lpuart_adapter AND (CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_common AND CONFIG_USE_utility_str)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str/fsl_str.c
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite/fsl_debug_console.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console_lite
 )
 
@@ -614,6 +612,270 @@ endif()
 endif()
 
 
+if (CONFIG_USE_driver_sai_edma)
+# Add set(CONFIG_USE_driver_sai_edma true) in config.cmake to use this component
+
+message("driver_sai_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_edma4 AND CONFIG_USE_driver_sai AND (CONFIG_DEVICE_ID STREQUAL MCXN547))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sai/fsl_sai_edma.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sai/.
+)
+
+else()
+
+message(SEND_ERROR "driver_sai_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_lpuart_edma)
+# Add set(CONFIG_USE_driver_lpuart_edma true) in config.cmake to use this component
+
+message("driver_lpuart_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_edma4 AND (CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_lpflexcomm)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpuart/fsl_lpuart_edma.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpuart/.
+)
+
+else()
+
+message(SEND_ERROR "driver_lpuart_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_lpspi_edma)
+# Add set(CONFIG_USE_driver_lpspi_edma true) in config.cmake to use this component
+
+message("driver_lpspi_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_edma4 AND CONFIG_USE_driver_lpspi AND (CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_lpflexcomm)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpspi/fsl_lpspi_edma.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpspi/.
+)
+
+else()
+
+message(SEND_ERROR "driver_lpspi_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_lpi2c_edma)
+# Add set(CONFIG_USE_driver_lpi2c_edma true) in config.cmake to use this component
+
+message("driver_lpi2c_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_edma4 AND CONFIG_USE_driver_lpi2c AND (CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_lpflexcomm)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpi2c/fsl_lpi2c_edma.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpi2c/.
+)
+
+else()
+
+message(SEND_ERROR "driver_lpi2c_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_cmsis_lpuart)
+# Add set(CONFIG_USE_driver_cmsis_lpuart true) in config.cmake to use this component
+
+message("driver_cmsis_lpuart component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_lpuart_edma AND (CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_lpuart AND CONFIG_USE_CMSIS_Driver_Include_USART AND CONFIG_USE_RTE_Device)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpuart/fsl_lpuart_cmsis.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpuart/.
+)
+
+else()
+
+message(SEND_ERROR "driver_cmsis_lpuart.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_cmsis_lpspi)
+# Add set(CONFIG_USE_driver_cmsis_lpspi true) in config.cmake to use this component
+
+message("driver_cmsis_lpspi component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_lpspi_edma AND (CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_lpspi AND CONFIG_USE_CMSIS_Driver_Include_SPI AND CONFIG_USE_RTE_Device)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpspi/fsl_lpspi_cmsis.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpspi/.
+)
+
+else()
+
+message(SEND_ERROR "driver_cmsis_lpspi.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_cmsis_lpi2c)
+# Add set(CONFIG_USE_driver_cmsis_lpi2c true) in config.cmake to use this component
+
+message("driver_cmsis_lpi2c component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_lpi2c_edma AND (CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_lpi2c AND CONFIG_USE_CMSIS_Driver_Include_I2C AND CONFIG_USE_RTE_Device)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpi2c/fsl_lpi2c_cmsis.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpi2c/.
+)
+
+else()
+
+message(SEND_ERROR "driver_cmsis_lpi2c.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_flexcan_edma)
+# Add set(CONFIG_USE_driver_flexcan_edma true) in config.cmake to use this component
+
+message("driver_flexcan_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_edma4 AND CONFIG_USE_driver_flexcan AND (CONFIG_DEVICE_ID STREQUAL MCXN547))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcan/fsl_flexcan_edma.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcan/.
+)
+
+else()
+
+message(SEND_ERROR "driver_flexcan_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_flexio_spi_edma)
+# Add set(CONFIG_USE_driver_flexio_spi_edma true) in config.cmake to use this component
+
+message("driver_flexio_spi_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_edma4 AND CONFIG_USE_driver_flexio_spi AND (CONFIG_DEVICE_ID STREQUAL MCXN547))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexio/spi/fsl_flexio_spi_edma.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexio/spi/.
+)
+
+else()
+
+message(SEND_ERROR "driver_flexio_spi_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_flexio_uart_edma)
+# Add set(CONFIG_USE_driver_flexio_uart_edma true) in config.cmake to use this component
+
+message("driver_flexio_uart_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_edma4 AND CONFIG_USE_driver_flexio_uart AND (CONFIG_DEVICE_ID STREQUAL MCXN547))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexio/uart/fsl_flexio_uart_edma.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexio/uart/.
+)
+
+else()
+
+message(SEND_ERROR "driver_flexio_uart_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_pdm_edma)
+# Add set(CONFIG_USE_driver_pdm_edma true) in config.cmake to use this component
+
+message("driver_pdm_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_edma4 AND CONFIG_USE_driver_pdm AND (CONFIG_DEVICE_ID STREQUAL MCXN547))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pdm/fsl_pdm_edma.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pdm/.
+)
+
+else()
+
+message(SEND_ERROR "driver_pdm_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_utility_notifier)
 # Add set(CONFIG_USE_utility_notifier true) in config.cmake to use this component
 
@@ -723,6 +985,10 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
 )
 
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
+)
+
 else()
 
 message(SEND_ERROR "utility_assert.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
@@ -741,6 +1007,10 @@ if(CONFIG_USE_utility_debug_console_lite AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/fsl_assert.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert/.
 )
 
 else()
@@ -781,15 +1051,13 @@ if (CONFIG_USE_utility_debug_console)
 
 message("utility_debug_console component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_serial_manager AND CONFIG_USE_driver_common)
+if(CONFIG_USE_component_serial_manager AND CONFIG_USE_driver_common AND CONFIG_USE_utility_str)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str/fsl_str.c
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console/fsl_debug_console.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../utilities/str
   ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
 )
 
@@ -1106,6 +1374,30 @@ endif()
 endif()
 
 
+if (CONFIG_USE_driver_sema42)
+# Add set(CONFIG_USE_driver_sema42 true) in config.cmake to use this component
+
+message("driver_sema42 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sema42/fsl_sema42.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sema42/.
+)
+
+else()
+
+message(SEND_ERROR "driver_sema42.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_driver_sctimer)
 # Add set(CONFIG_USE_driver_sctimer true) in config.cmake to use this component
 
@@ -1148,30 +1440,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_sai.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_sai_edma)
-# Add set(CONFIG_USE_driver_sai_edma true) in config.cmake to use this component
-
-message("driver_sai_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_sai AND (CONFIG_DEVICE_ID STREQUAL MCXN547))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sai/fsl_sai_edma.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sai/.
-)
-
-else()
-
-message(SEND_ERROR "driver_sai_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -1389,30 +1657,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_pdm.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_pdm_edma)
-# Add set(CONFIG_USE_driver_pdm_edma true) in config.cmake to use this component
-
-message("driver_pdm_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_pdm AND (CONFIG_DEVICE_ID STREQUAL MCXN547))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pdm/fsl_pdm_edma.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pdm/.
-)
-
-else()
-
-message(SEND_ERROR "driver_pdm_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -1661,30 +1905,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_driver_cmsis_lpuart)
-# Add set(CONFIG_USE_driver_cmsis_lpuart true) in config.cmake to use this component
-
-message("driver_cmsis_lpuart component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_lpuart AND CONFIG_USE_CMSIS_Driver_Include_USART AND CONFIG_USE_RTE_Device)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpuart/fsl_lpuart_cmsis.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpuart/.
-)
-
-else()
-
-message(SEND_ERROR "driver_cmsis_lpuart.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_driver_lptmr)
 # Add set(CONFIG_USE_driver_lptmr true) in config.cmake to use this component
 
@@ -1703,54 +1923,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_lptmr.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_cmsis_lpspi)
-# Add set(CONFIG_USE_driver_cmsis_lpspi true) in config.cmake to use this component
-
-message("driver_cmsis_lpspi component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_lpspi AND CONFIG_USE_CMSIS_Driver_Include_SPI AND CONFIG_USE_RTE_Device)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpspi/fsl_lpspi_cmsis.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpspi/.
-)
-
-else()
-
-message(SEND_ERROR "driver_cmsis_lpspi.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_cmsis_lpi2c)
-# Add set(CONFIG_USE_driver_cmsis_lpi2c true) in config.cmake to use this component
-
-message("driver_cmsis_lpi2c component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_lpi2c AND CONFIG_USE_CMSIS_Driver_Include_I2C AND CONFIG_USE_RTE_Device)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpi2c/fsl_lpi2c_cmsis.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../cmsis_drivers/lpi2c/.
-)
-
-else()
-
-message(SEND_ERROR "driver_cmsis_lpi2c.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -1781,30 +1953,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_driver_lpuart_edma)
-# Add set(CONFIG_USE_driver_lpuart_edma true) in config.cmake to use this component
-
-message("driver_lpuart_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_lpflexcomm)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpuart/fsl_lpuart_edma.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpuart/.
-)
-
-else()
-
-message(SEND_ERROR "driver_lpuart_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_driver_lpspi)
 # Add set(CONFIG_USE_driver_lpspi true) in config.cmake to use this component
 
@@ -1823,30 +1971,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_lpspi.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_lpspi_edma)
-# Add set(CONFIG_USE_driver_lpspi_edma true) in config.cmake to use this component
-
-message("driver_lpspi_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_lpflexcomm)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpspi/fsl_lpspi_edma.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpspi/.
-)
-
-else()
-
-message(SEND_ERROR "driver_lpspi_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -1877,30 +2001,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_driver_lpi2c_edma)
-# Add set(CONFIG_USE_driver_lpi2c_edma true) in config.cmake to use this component
-
-message("driver_lpi2c_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_lpflexcomm)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpi2c/fsl_lpi2c_edma.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpi2c/.
-)
-
-else()
-
-message(SEND_ERROR "driver_lpi2c_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_driver_lpflexcomm_lpuart_freertos)
 # Add set(CONFIG_USE_driver_lpflexcomm_lpuart_freertos true) in config.cmake to use this component
 
@@ -1909,11 +2009,11 @@ message("driver_lpflexcomm_lpuart_freertos component is included from ${CMAKE_CU
 if(CONFIG_USE_driver_common AND CONFIG_USE_driver_lpflexcomm AND CONFIG_USE_driver_lpuart AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/fsl_lpuart_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpuart_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -1933,11 +2033,11 @@ message("driver_lpflexcomm_lpspi_freertos component is included from ${CMAKE_CUR
 if(CONFIG_USE_driver_common AND CONFIG_USE_driver_lpflexcomm AND CONFIG_USE_driver_lpspi AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/fsl_lpspi_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpspi_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -1957,11 +2057,11 @@ message("driver_lpflexcomm_lpi2c_freertos component is included from ${CMAKE_CUR
 if(CONFIG_USE_driver_common AND CONFIG_USE_driver_lpflexcomm AND CONFIG_USE_driver_lpi2c AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/fsl_lpi2c_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpi2c_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -2309,30 +2409,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_driver_flexio_uart_edma)
-# Add set(CONFIG_USE_driver_flexio_uart_edma true) in config.cmake to use this component
-
-message("driver_flexio_uart_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_flexio_uart AND (CONFIG_DEVICE_ID STREQUAL MCXN547))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexio/uart/fsl_flexio_uart_edma.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexio/uart/.
-)
-
-else()
-
-message(SEND_ERROR "driver_flexio_uart_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_driver_flexio_spi)
 # Add set(CONFIG_USE_driver_flexio_spi true) in config.cmake to use this component
 
@@ -2351,30 +2427,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_flexio_spi.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_flexio_spi_edma)
-# Add set(CONFIG_USE_driver_flexio_spi_edma true) in config.cmake to use this component
-
-message("driver_flexio_spi_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_flexio_spi AND (CONFIG_DEVICE_ID STREQUAL MCXN547))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexio/spi/fsl_flexio_spi_edma.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexio/spi/.
-)
-
-else()
-
-message(SEND_ERROR "driver_flexio_spi_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -2477,30 +2529,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_driver_flexcan_edma)
-# Add set(CONFIG_USE_driver_flexcan_edma true) in config.cmake to use this component
-
-message("driver_flexcan_edma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_flexcan AND (CONFIG_DEVICE_ID STREQUAL MCXN547))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcan/fsl_flexcan_edma.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcan/.
-)
-
-else()
-
-message(SEND_ERROR "driver_flexcan_edma.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_driver_ewm)
 # Add set(CONFIG_USE_driver_ewm true) in config.cmake to use this component
 
@@ -2573,24 +2601,24 @@ endif()
 endif()
 
 
-if (CONFIG_USE_driver_enc)
-# Add set(CONFIG_USE_driver_enc true) in config.cmake to use this component
+if (CONFIG_USE_driver_qdc)
+# Add set(CONFIG_USE_driver_qdc true) in config.cmake to use this component
 
-message("driver_enc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+message("driver_qdc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
 if((CONFIG_DEVICE_ID STREQUAL MCXN547) AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/enc/fsl_enc.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/qdc/fsl_qdc.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/enc/.
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/qdc/.
 )
 
 else()
 
-message(SEND_ERROR "driver_enc.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+message(SEND_ERROR "driver_qdc.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -2959,6 +2987,10 @@ message("driver_dbi component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
 if(CONFIG_USE_driver_common)
 
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dbi/fsl_dbi.c
+)
+
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dbi/.
 )
@@ -3116,6 +3148,15 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
 
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_CTIMER=1
+  )
+
+endif()
+
 else()
 
 message(SEND_ERROR "component_ctimer_adapter.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
@@ -3139,6 +3180,15 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_LPTMR=1
+  )
+
+endif()
 
 else()
 
@@ -3164,6 +3214,15 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
 
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_MRT=1
+  )
+
+endif()
+
 else()
 
 message(SEND_ERROR "component_mrt_adapter.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
@@ -3187,6 +3246,15 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_OSTIMER=1
+  )
+
+endif()
 
 else()
 
@@ -3562,198 +3630,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_driver_phy-device-rtl8211f)
-# Add set(CONFIG_USE_driver_phy-device-rtl8211f true) in config.cmake to use this component
-
-message("driver_phy-device-rtl8211f component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_phy-common)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyrtl8211f/fsl_phyrtl8211f.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyrtl8211f/.
-)
-
-else()
-
-message(SEND_ERROR "driver_phy-device-rtl8211f.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_phy-device-ksz8081)
-# Add set(CONFIG_USE_driver_phy-device-ksz8081 true) in config.cmake to use this component
-
-message("driver_phy-device-ksz8081 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_phy-common)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyksz8081/fsl_phyksz8081.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyksz8081/.
-)
-
-else()
-
-message(SEND_ERROR "driver_phy-device-ksz8081.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_phy-device-dp83848)
-# Add set(CONFIG_USE_driver_phy-device-dp83848 true) in config.cmake to use this component
-
-message("driver_phy-device-dp83848 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_phy-common)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phydp83848/fsl_phydp83848.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phydp83848/.
-)
-
-else()
-
-message(SEND_ERROR "driver_phy-device-dp83848.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_phy-device-ksz8041)
-# Add set(CONFIG_USE_driver_phy-device-ksz8041 true) in config.cmake to use this component
-
-message("driver_phy-device-ksz8041 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_phy-common)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyksz8041/fsl_phyksz8041.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyksz8041/.
-)
-
-else()
-
-message(SEND_ERROR "driver_phy-device-ksz8041.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_phy-device-ar8031)
-# Add set(CONFIG_USE_driver_phy-device-ar8031 true) in config.cmake to use this component
-
-message("driver_phy-device-ar8031 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_phy-common)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyar8031/fsl_phyar8031.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyar8031/.
-)
-
-else()
-
-message(SEND_ERROR "driver_phy-device-ar8031.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_phy-device-lan8720a)
-# Add set(CONFIG_USE_driver_phy-device-lan8720a true) in config.cmake to use this component
-
-message("driver_phy-device-lan8720a component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_phy-common)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phylan8720a/fsl_phylan8720a.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phylan8720a/.
-)
-
-else()
-
-message(SEND_ERROR "driver_phy-device-lan8720a.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_phy-device-vsc8541)
-# Add set(CONFIG_USE_driver_phy-device-vsc8541 true) in config.cmake to use this component
-
-message("driver_phy-device-vsc8541 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_phy-common)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyvsc8541/fsl_phyvsc8541.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyvsc8541/.
-)
-
-else()
-
-message(SEND_ERROR "driver_phy-device-vsc8541.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_phy-device-rtl8201)
-# Add set(CONFIG_USE_driver_phy-device-rtl8201 true) in config.cmake to use this component
-
-message("driver_phy-device-rtl8201 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_phy-common)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyrtl8201/fsl_phyrtl8201.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyrtl8201/.
-)
-
-else()
-
-message(SEND_ERROR "driver_phy-device-rtl8201.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_driver_phy-device-lan8741)
 # Add set(CONFIG_USE_driver_phy-device-lan8741 true) in config.cmake to use this component
 
@@ -3892,6 +3768,30 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "component_mem_manager_light.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_mem_manager_freertos)
+# Add set(CONFIG_USE_component_mem_manager_freertos true) in config.cmake to use this component
+
+message("component_mem_manager_freertos component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND CONFIG_USE_middleware_freertos-kernel)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/mem_manager/fsl_component_mem_manager_freertos.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/mem_manager/.
+)
+
+else()
+
+message(SEND_ERROR "component_mem_manager_freertos.MCXN547 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

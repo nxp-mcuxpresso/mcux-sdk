@@ -115,7 +115,7 @@ static wlan_chanlist_t chanlist_2g_cfg = {
         },
 };
 
-#ifdef CONFIG_5GHz_SUPPORT
+#if CONFIG_5GHz_SUPPORT
 static wlan_chanlist_t chanlist_5g_cfg = {
     .num_chans = 25,
 
@@ -272,7 +272,7 @@ static wlan_chanlist_t chanlist_5g_cfg = {
 };
 #endif /* CONFIG_5GHz_SUPPORT */
 
-#ifdef CONFIG_COMPRESS_TX_PWTBL
+#if CONFIG_COMPRESS_TX_PWTBL
 
 static const t_u8 rg_table_fc[] = {
     0x01, 0x00, 0xee, 0x01, 0x06, 0x00, 0x57, 0x57, 0x00, 0x00, 0x00, 0x00, 0x06, 0x02, 0x5b, 0x00, 0xf0, 0xf0,
@@ -445,7 +445,7 @@ static wifi_txpwrlimit_t tx_pwrlimit_2g_cfg =
             },
 };
 
-#ifdef CONFIG_5GHz_SUPPORT
+#if CONFIG_5GHz_SUPPORT
 static wifi_txpwrlimit_t
     tx_pwrlimit_5g_cfg =
         {
@@ -1058,7 +1058,7 @@ static wifi_txpwrlimit_t tx_pwrlimit_2g_cfg =
             },
 };
 
-#ifdef CONFIG_5GHz_SUPPORT
+#if CONFIG_5GHz_SUPPORT
 static wifi_txpwrlimit_t
     tx_pwrlimit_5g_cfg =
         {
@@ -2265,7 +2265,7 @@ static wifi_txpwrlimit_t tx_pwrlimit_2g_cfg = {
         },
 };
 
-#ifdef CONFIG_5GHz_SUPPORT
+#if CONFIG_5GHz_SUPPORT
 static wifi_txpwrlimit_t tx_pwrlimit_5g_cfg = {
     .subband   = (wifi_SubBand_t)0x00,
     .num_chans = 39,
@@ -2777,8 +2777,8 @@ static wifi_txpwrlimit_t tx_pwrlimit_5g_cfg = {
 #endif /* CONFIG_11AX */
 #endif /* CONFIG_COMPRESS_TX_PWTBL */
 
-#ifdef CONFIG_11AX
-#ifdef CONFIG_COMPRESS_RU_TX_PWTBL
+#if CONFIG_11AX
+#if CONFIG_COMPRESS_RU_TX_PWTBL
 const static uint8_t rutxpowerlimit_cfg_set[] = {
     0x6d, 0x02, 0x65, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x01, 0x09, 0x09, 0x09, 0x09, 0x09,
     0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09,
@@ -2845,7 +2845,7 @@ const static wlan_rutxpwrlimit_t rutxpowerlimit_2g_cfg_set = {
     .rupwrlimit_config[25] = {.start_freq = 2407, .width = 40, .chan_num = 13, .ruPower = {-4, -1, 2, 5, 8, 0}},
 };
 
-#ifdef CONFIG_5GHz_SUPPORT
+#if CONFIG_5GHz_SUPPORT
 const static wlan_rutxpwrlimit_t rutxpowerlimit_5g_cfg_set = {
     .num_chans            = MAX_5G_RU_PWR_CHANNELS,
     .rupwrlimit_config[0] = {.start_freq = 5000, .width = 20, .chan_num = 36, .ruPower = {-1, 2, 5, 8, 0, 0}},

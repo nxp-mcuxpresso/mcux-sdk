@@ -134,7 +134,7 @@ uint32_t ECSPI_GetInstance(ECSPI_Type *base)
     return instance;
 }
 
-static void ECSPI_WriteNonBlocking(ECSPI_Type *base,const uint32_t *buffer, size_t size)
+static void ECSPI_WriteNonBlocking(ECSPI_Type *base, const uint32_t *buffer, size_t size)
 {
     size_t i = 0U;
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2022, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -968,7 +968,7 @@ static bool LPSPI_MasterTransferWriteAllTxData(LPSPI_Type *base,
         /*Wait until TX FIFO is not full*/
 #if SPI_RETRY_TIMES
         uint32_t waitTimes = SPI_RETRY_TIMES;
-        while (LPSPI_GetTxFifoCount(base) == fifo_size) && ((--waitTimes) != 0U))
+        while ((LPSPI_GetTxFifoCount(base) == fifo_size) && ((--waitTimes) != 0U))
 #else
         while (LPSPI_GetTxFifoCount(base) == fifo_size)
 #endif

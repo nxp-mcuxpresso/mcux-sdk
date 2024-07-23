@@ -22,9 +22,9 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 #define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 7)) /*!< Version 2.0.7 */
-/*@}*/
+/*! @} */
 
 /*! @brief SPDIF return status*/
 enum

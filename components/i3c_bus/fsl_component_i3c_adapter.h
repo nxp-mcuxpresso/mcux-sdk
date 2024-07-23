@@ -30,7 +30,9 @@ typedef struct _i3c_master_adapter_resource
 {
     I3C_Type *base;                       /*!< I3C master base address. */
     uint32_t clockInHz;                   /*!< I3C module clock frequency. */
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
     uint32_t slowClockInHz;               /*!< I3C slow clock frequency. */
+#endif
     i3c_master_transfer_mode_t transMode; /*!< I3C master transfer mode. */
 } i3c_master_adapter_resource_t;
 

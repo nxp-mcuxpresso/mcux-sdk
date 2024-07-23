@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -67,7 +67,7 @@ static void LPSPI_SetOnePcsPolarity(LPSPI_Type *base,
  * @brief Combine the write data for 1 byte to 4 bytes.
  * This is not a public API.
  */
-static uint32_t LPSPI_CombineWriteData(uint8_t *txData, uint8_t bytesEachWrite, bool isByteSwap);
+static uint32_t LPSPI_CombineWriteData(const uint8_t *txData, uint8_t bytesEachWrite, bool isByteSwap);
 
 /*!
  * @brief Separate the read data for 1 byte to 4 bytes.
@@ -203,7 +203,6 @@ void LPSPI_MasterInit(LPSPI_Type *base, const lpspi_master_config_t *masterConfi
 
     if(LP_FLEXCOMM_GetBaseAddress(instance) != 0U)
     {
-      
 #if !(defined(LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER) && LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER)
     /* initialize flexcomm to LPSPI mode */
         status_t status = LP_FLEXCOMM_Init(LPSPI_GetInstance(base), LP_FLEXCOMM_PERIPH_LPSPI);
@@ -212,11 +211,9 @@ void LPSPI_MasterInit(LPSPI_Type *base, const lpspi_master_config_t *masterConfi
             assert(false);
         }
 #endif /* LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER */
-        
     }
     else
     {
-        
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 
         /* Enable LPSPI clock */
@@ -227,7 +224,6 @@ void LPSPI_MasterInit(LPSPI_Type *base, const lpspi_master_config_t *masterConfi
 #endif
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-        
     }
 
     /* Disable LPSPI first */
@@ -321,7 +317,6 @@ void LPSPI_SlaveInit(LPSPI_Type *base, const lpspi_slave_config_t *slaveConfig)
 
     if(LP_FLEXCOMM_GetBaseAddress(instance) != 0U)
     {
-      
 #if !(defined(LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER) && LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER)
     /* initialize flexcomm to LPSPI mode */
         status_t status = LP_FLEXCOMM_Init(LPSPI_GetInstance(base), LP_FLEXCOMM_PERIPH_LPSPI);
@@ -330,11 +325,9 @@ void LPSPI_SlaveInit(LPSPI_Type *base, const lpspi_slave_config_t *slaveConfig)
             assert(false);
         }
 #endif /* LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER */
-        
     }
     else
     {
-        
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 
         /* Enable LPSPI clock */
@@ -345,7 +338,6 @@ void LPSPI_SlaveInit(LPSPI_Type *base, const lpspi_slave_config_t *slaveConfig)
 #endif
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-        
     }
     
     LPSPI_SetMasterSlaveMode(base, kLPSPI_Slave);
@@ -422,14 +414,15 @@ void LPSPI_Reset(LPSPI_Type *base)
  */
 void LPSPI_Deinit(LPSPI_Type *base)
 {
-
     uint32_t instance = LPSPI_GetInstance(base);
 
     /* Reset to default value */
     LPSPI_Reset(base);
     if(LP_FLEXCOMM_GetBaseAddress(instance) != 0U)
     {
+#if !(defined(LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER) && LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER)
         LP_FLEXCOMM_Deinit(instance);
+#endif
     }
     else
     {        
@@ -443,9 +436,6 @@ void LPSPI_Deinit(LPSPI_Type *base)
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
     }
-#if !(defined(LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER) && LPFLEXCOMM_INIT_NOT_USED_IN_DRIVER)
-    LP_FLEXCOMM_Deinit(LPSPI_GetInstance(base));
-#endif
 }
 
 static void LPSPI_SetOnePcsPolarity(LPSPI_Type *base,
@@ -941,7 +931,7 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
     bool isByteSwap = ((transfer->configFlags & (uint32_t)kLPSPI_MasterByteSwap) != 0U);
     uint8_t bytesEachWrite;
     uint8_t bytesEachRead;
-    uint8_t *txData               = transfer->txData;
+    const uint8_t *txData         = transfer->txData;
     uint8_t *rxData               = transfer->rxData;
     uint8_t dummyData             = g_lpspiDummyData[LPSPI_GetInstance(base)];
     uint32_t readData             = 0U;
@@ -2082,7 +2072,7 @@ void LPSPI_SlaveTransferHandleIRQ(uint32_t instance, lpspi_slave_handle_t *handl
     }
 }
 
-static uint32_t LPSPI_CombineWriteData(uint8_t *txData, uint8_t bytesEachWrite, bool isByteSwap)
+static uint32_t LPSPI_CombineWriteData(const uint8_t *txData, uint8_t bytesEachWrite, bool isByteSwap)
 {
     assert(txData != NULL);
 
@@ -2265,6 +2255,7 @@ static bool LPSPI_TxFifoReady(LPSPI_Type *base)
     return true;
 }
 
+void LPSPI_CommonIRQHandler(LPSPI_Type *base, uint32_t instance);
 void LPSPI_CommonIRQHandler(LPSPI_Type *base, uint32_t instance)
 {
     assert(s_lpspiHandle[instance] != NULL);

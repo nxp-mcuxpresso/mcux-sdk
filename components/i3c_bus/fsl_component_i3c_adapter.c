@@ -216,7 +216,9 @@ static status_t I3C_MasterAdapterInit(i3c_device_t *master)
     masterConfig.dcr                          = master->info.dcr;
     masterConfig.bcr                          = master->info.bcr;
     masterConfig.hdrMode                      = master->info.hdrMode;
+#if !(defined(FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH) && FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH)
     masterConfig.slowClock_Hz                 = masterResource->slowClockInHz;
+#endif
 
     masterPrivate                  = malloc(sizeof(i3c_master_adapter_private_t));
     masterControlInfo->privateData = masterPrivate;

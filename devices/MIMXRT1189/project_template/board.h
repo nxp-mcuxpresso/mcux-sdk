@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2021-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -96,6 +96,9 @@
 #define BOARD_SWT_PORT1_PHY_ADDR (0x05U)
 #define BOARD_SWT_PORT2_PHY_ADDR (0x04U)
 #define BOARD_SWT_PORT3_PHY_ADDR (0x07U)
+
+/*! @brief The Ethernet PHY type of the board */
+#define BOARD_USE_NETC_PHY_RTL8201
 
 /* USB PHY condfiguration */
 #define BOARD_USB_PHY_D_CAL     (0x07U)
@@ -203,6 +206,8 @@ void BOARD_FlexspiClockSafeConfig(void);
 AT_QUICKACCESS_SECTION_CODE(void BOARD_SetFlexspiClock(FLEXSPI_Type *base, uint8_t src, uint32_t divider));
 AT_QUICKACCESS_SECTION_CODE(void BOARD_DeinitFlash(FLEXSPI_Type *base));
 AT_QUICKACCESS_SECTION_CODE(void BOARD_InitFlash(FLEXSPI_Type *base));
+void EdgeLock_SetClock(uint8_t mux, uint8_t div);
+void DCDC_SetVoltage(uint8_t core, uint8_t targetVoltage);
 
 void BOARD_NETC_Init(void);
 #if defined(__cplusplus)

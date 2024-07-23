@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -74,6 +74,7 @@ static status_t ST7796S_WriteCommand(st7796s_handle_t *handle,
                                      const uint8_t *params,
                                      uint8_t param_len)
 {
+#if MCUX_DBI_LEGACY
     ST7796S_ERROR_CHECK(handle->xferOps->writeCommand(handle->xferOpsData, command));
 
     for (uint8_t i = 0; i < param_len; i++)
@@ -84,6 +85,9 @@ static status_t ST7796S_WriteCommand(st7796s_handle_t *handle,
     }
 
     return kStatus_Success;
+#else
+    return DBI_IFACE_WriteCmdData(handle->dbiIface, command, params, param_len);
+#endif
 }
 
 static status_t ST7796S_PresetDriver(st7796s_handle_t *handle, st7796s_driver_preset_t preset)
@@ -137,13 +141,21 @@ static status_t ST7796S_SleepMode(st7796s_handle_t *handle, bool sleep)
     return ST7796S_WriteCommand(handle, slp_cmd, NULL, 0);
 }
 
+#if MCUX_DBI_LEGACY
 status_t ST7796S_Init(st7796s_handle_t *handle,
                       const st7796s_config_t *config,
                       const dbi_xfer_ops_t *xferOps,
                       void *xferOpsData)
+#else
+status_t ST7796S_Init(st7796s_handle_t *handle, const st7796s_config_t *config, dbi_iface_t *dbiIface)
+#endif
 {
+#if MCUX_DBI_LEGACY
     handle->xferOps     = xferOps;
     handle->xferOpsData = xferOpsData;
+#else
+    handle->dbiIface = dbiIface;
+#endif
 
     ST7796S_ERROR_CHECK(ST7796S_SoftwareReset(handle));
     ST7796S_ERROR_CHECK(ST7796S_PresetDriver(handle, config->driverPreset));
@@ -271,12 +283,18 @@ status_t ST7796S_Config(st7796s_handle_t *handle, const st7796s_config_t *config
 
 status_t ST7796S_WritePixels(st7796s_handle_t *handle, uint16_t *pixels, uint32_t len)
 {
+#if MCUX_DBI_LEGACY
     ST7796S_ERROR_CHECK(handle->xferOps->writeMemory(handle->xferOpsData, ST7796S_CMD_RAMWR, pixels, len * 2u));
+#else
+    ST7796S_ERROR_CHECK(DBI_IFACE_WriteMemory(handle->dbiIface, (const uint8_t *)pixels, len * 2u));
+#endif
 
     return kStatus_Success;
 }
 
+#if MCUX_DBI_LEGACY
 void ST7796S_SetMemoryDoneCallback(st7796s_handle_t *handle, dbi_mem_done_callback_t callback, void *userData)
 {
     handle->xferOps->setMemoryDoneCallback(handle->xferOpsData, callback, userData);
 }
+#endif

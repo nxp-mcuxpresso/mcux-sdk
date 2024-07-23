@@ -135,14 +135,14 @@ static psa_status_t mcuxClPsaDriver_psa_driver_wrapper_aead_decrypt_internal(
     if(mcuxClPsaDriver_psa_driver_wrapper_aead_isAlgSupported(attributes))
     {
         /* Validate given sizes */
-        uint32_t needed_output_size = MCUXCLPSADRIVER_PSA_AEAD_DECRYPT_OUTPUT_SIZE(attributes->core.type, alg, ciphertext_length);
+        uint32_t needed_output_size = MCUXCLPSADRIVER_PSA_AEAD_DECRYPT_OUTPUT_SIZE(psa_get_key_type(attributes), alg, ciphertext_length);
         if(plaintext_size < needed_output_size)
         {
             return PSA_ERROR_BUFFER_TOO_SMALL;
         }
 
         /* Validate given key */
-        if((PSA_KEY_USAGE_DECRYPT != (PSA_KEY_USAGE_DECRYPT & attributes->core.policy.usage))
+        if((PSA_KEY_USAGE_DECRYPT != (PSA_KEY_USAGE_DECRYPT & psa_get_key_usage_flags(attributes)))
             || !mcuxClPsaDriver_psa_driver_wrapper_aead_doesKeyPolicySupportAlg(attributes, alg))
         {
             return PSA_ERROR_NOT_PERMITTED;
@@ -297,7 +297,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     if(mcuxClPsaDriver_psa_driver_wrapper_aead_isAlgSupported(attributes))
     {
         /* Validate given key */
-        if((PSA_KEY_USAGE_DECRYPT != (PSA_KEY_USAGE_DECRYPT & attributes->core.policy.usage))
+        if((PSA_KEY_USAGE_DECRYPT != (PSA_KEY_USAGE_DECRYPT & psa_get_key_usage_flags(attributes)))
             || !mcuxClPsaDriver_psa_driver_wrapper_aead_doesKeyPolicySupportAlg(attributes, alg))
         {
             return PSA_ERROR_NOT_PERMITTED;
@@ -312,7 +312,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 
         /* Initialize the operation */
         operation->alg = alg;
-        operation->key_type = attributes->core.type;
+        operation->key_type = psa_get_key_type(attributes);
         operation->is_encrypt = 0u;
         operation->ad_remaining = 0u;
         operation->body_remaining = 0u;
@@ -381,14 +381,14 @@ static psa_status_t mcuxClPsaDriver_psa_driver_wrapper_aead_encrypt_internal(
     if(mcuxClPsaDriver_psa_driver_wrapper_aead_isAlgSupported(attributes))
     {
         /* Validate given sizes */
-        uint32_t needed_output_size = MCUXCLPSADRIVER_PSA_AEAD_ENCRYPT_OUTPUT_SIZE(attributes->core.type, alg, plaintext_length);
+        uint32_t needed_output_size = MCUXCLPSADRIVER_PSA_AEAD_ENCRYPT_OUTPUT_SIZE(psa_get_key_type(attributes), alg, plaintext_length);
         if(ciphertext_size < needed_output_size)
         {
             return PSA_ERROR_BUFFER_TOO_SMALL;
         }
 
         /* Validate given key */
-        if((PSA_KEY_USAGE_ENCRYPT != (PSA_KEY_USAGE_ENCRYPT & attributes->core.policy.usage))
+        if((PSA_KEY_USAGE_ENCRYPT != (PSA_KEY_USAGE_ENCRYPT & psa_get_key_usage_flags(attributes)))
             || !mcuxClPsaDriver_psa_driver_wrapper_aead_doesKeyPolicySupportAlg(attributes, alg))
         {
             return PSA_ERROR_NOT_PERMITTED;
@@ -515,7 +515,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     if(mcuxClPsaDriver_psa_driver_wrapper_aead_isAlgSupported(attributes))
     {
         /* Validate given key */
-        if((PSA_KEY_USAGE_ENCRYPT != (PSA_KEY_USAGE_ENCRYPT & attributes->core.policy.usage))
+        if((PSA_KEY_USAGE_ENCRYPT != (PSA_KEY_USAGE_ENCRYPT & psa_get_key_usage_flags(attributes)))
             || !mcuxClPsaDriver_psa_driver_wrapper_aead_doesKeyPolicySupportAlg(attributes, alg))
         {
             return PSA_ERROR_NOT_PERMITTED;
@@ -523,7 +523,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 
         /* Initialize the operation */        
         operation->alg = alg;
-        operation->key_type = attributes->core.type;
+        operation->key_type = psa_get_key_type(attributes);
         operation->is_encrypt = 1u;
         operation->ad_remaining = 0u;
         operation->body_remaining = 0u;

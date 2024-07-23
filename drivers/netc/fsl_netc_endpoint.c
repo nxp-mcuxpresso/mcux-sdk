@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -1162,7 +1162,7 @@ static void EP_GetRxFrameAttribute(ep_handle_t *handle, netc_rx_bd_t *rxDesc, ne
     }
 }
 
-static void EP_DropFrame(ep_handle_t *handle, netc_rx_bdr_t *rxBdRing, uint8_t ring)
+void EP_DropFrame(ep_handle_t *handle, netc_rx_bdr_t *rxBdRing, uint8_t ring)
 {
     netc_rx_bd_t *rxDesc;
     uint64_t rxDmaBuff;
@@ -1317,7 +1317,6 @@ status_t EP_ReceiveFrameCommon(ep_handle_t *handle,
                                uint8_t ring,
                                netc_frame_struct_t *frame,
                                netc_frame_attr_t *attr,
-                               bool isDrop,
                                bool rxCacheMaintain)
 {
     status_t result      = kStatus_Success;
@@ -1328,14 +1327,6 @@ status_t EP_ReceiveFrameCommon(ep_handle_t *handle,
     uint16_t index;
     void *newBuff;
     bool isLastBd;
-
-    if (isDrop)
-    {
-        /* Reset the buffer array length. */
-        frame->length = 0;
-        EP_DropFrame(handle, rxBdRing, ring);
-        return result;
-    }
 
     /* Get the Rx frame information from first BD */
     rxDesc = &rxBdRing->bdBase[rxBdRing->index];
@@ -1410,20 +1401,18 @@ status_t EP_ReceiveFrameCommon(ep_handle_t *handle,
 
 status_t EP_ReceiveFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t *frame, netc_frame_attr_t *attr)
 {
-    assert(handle != NULL);
-    assert(handle->cfg.rxZeroCopy);
-    assert(frame != NULL);
+    assert((handle != NULL) && (frame != NULL) && (handle->cfg.rxZeroCopy));
 
     status_t result         = kStatus_Success;
     netc_rx_bdr_t *rxBdRing = NULL;
     netc_rx_bd_t *rxDesc    = NULL;
-    uint32_t buffNum        = 0U;
+    uint32_t buffNum        = 0;
     uint16_t index;
     void *newBuff;
 
     if (ring >= handle->cfg.rxRingUse)
     {
-        /* Rx BD ring index is out of range */
+        /* Rx BD ring index is out of range. */
         return kStatus_InvalidArgument;
     }
     rxBdRing = &handle->rxBdRing[ring];
@@ -1443,7 +1432,12 @@ status_t EP_ReceiveFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t 
         {
             result = kStatus_NETC_RxFrameError;
         }
-        else if ((netc_host_reason_t)rxDesc->writeback.hr != kNETC_TimestampResp)
+        else if ((netc_host_reason_t)rxDesc->writeback.hr == kNETC_TimestampResp)
+        {
+            /* Get Transmit Timestamp Reference Response messages, use special API to receive this information. */
+            return kStatus_NETC_RxTsrResp;
+        }
+        else
         {
             if ((netc_host_reason_t)rxDesc->writeback.hr != kNETC_RegularFrame)
             {
@@ -1498,15 +1492,16 @@ status_t EP_ReceiveFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t 
                 index++;
             } while (--buffNum != 0U);
         }
-        else
-        {
-            /* Get Transmit Timestamp Reference Response messages */
-            return kStatus_NETC_RxTsrResp;
-        }
     }
-    result = EP_ReceiveFrameCommon(handle, rxBdRing, ring, frame, attr, (result != kStatus_Success),
-                                   handle->cfg.rxCacheMaintain);
-    return result;
+
+    if (result != kStatus_Success)
+    {
+        frame->length = 0;
+        EP_DropFrame(handle, rxBdRing, ring);
+        return result;
+    }
+
+    return EP_ReceiveFrameCommon(handle, rxBdRing, ring, frame, attr, handle->cfg.rxCacheMaintain);
 }
 
 status_t EP_CmdBDRInit(ep_handle_t *handle, const netc_cmd_bdr_config_t *config)

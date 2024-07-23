@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023we NXP
+ * Copyright 2019-2023, 2024 NXP
  * All rights reserved.
  *
  *
@@ -3227,12 +3227,22 @@ static status_t FLEXSPI_NOR_ProbeCommandMode(nor_handle_t *handle, flexspi_mem_c
                           kFLEXSPI_4PAD, 24),
           FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_4PAD, 8, kFLEXSPI_Command_READ_SDR, kFLEXSPI_4PAD, 0xFF),
           0, 0}},
+        /* Read SFDP LUT sequence in 4d-4d-4d mode. */
+        {{FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DDR, kFLEXSPI_4PAD, kSerialFlash_ReadSFDP, kFLEXSPI_Command_RADDR_DDR,
+                          kFLEXSPI_4PAD, 24),
+          FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_4PAD, 8, kFLEXSPI_Command_READ_DDR, kFLEXSPI_4PAD, 0xFF),
+          0, 0}},
+        /* Read SFDP LUT sequence in 8s-8s-8s mode. */
+        {{FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_8PAD, kSerialFlash_ReadSFDP, kFLEXSPI_Command_RADDR_SDR,
+                          kFLEXSPI_8PAD, 32),
+          FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_8PAD, 20, kFLEXSPI_Command_READ_SDR, kFLEXSPI_8PAD, 0xFF),
+          0, 0}},  
         /* Read SFDP LUT sequence in 8d-8d-8d mode. */
         {{FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, kSerialFlash_ReadSFDP, kFLEXSPI_Command_RADDR_DDR,
                           kFLEXSPI_8PAD, 21),
             FLEXSPI_LUT_SEQ(
         kFLEXSPI_Command_READ_DDR, kFLEXSPI_8PAD, 0xFF, kFLEXSPI_Command_STOP, kFLEXSPI_1PAD, 0),
-          0, 0}}
+          0, 0}},
     };
     /* Zero initialization */
     FLEXSPI_NOR_Memset(&sfdp_header, 0, sizeof(sfdp_header));
@@ -3345,6 +3355,9 @@ static status_t FLEXSPI_NOR_ProbeCommandMode(nor_handle_t *handle, flexspi_mem_c
                         tbl.basic_flash_param_tbl.mode_8_8_info.mode_8s_8s_8s_disable_seq = 0x01U;
                     }
 
+                    FLEXSPI_UpdateLUT((FLEXSPI_Type *)handle->driverBaseAddr, NOR_CMD_LUT_SEQ_IDX_READ_SFDP * 4U,
+                          (const uint32_t *)(const void *)&k_sdfp_lut[0], 4);
+
                     /* Check standard SPI mode depending on signature */
                     status = FLEXSPI_NOR_ReadSFDP((FLEXSPI_Type *)handle->driverBaseAddr, 0,
                                                   (uint32_t *)(void *)&sfdp_header, sizeof(sfdp_header));
@@ -3436,6 +3449,11 @@ static status_t FLEXSPI_NOR_GenerateConfigBlockUsingSFDP(nor_handle_t *handle, f
 
     do
     {
+        if ((config->queryPads == config->commandPads) && (config->commandPads == kFLEXSPI_8PAD))
+        {
+            status = kStatus_Success;
+            break;
+        }
         /* Probe current command mode and retore standard SPI protocol(1-1-1 mode) */
         status = FLEXSPI_NOR_ProbeCommandMode(handle, config);
         if (status != kStatus_Success)

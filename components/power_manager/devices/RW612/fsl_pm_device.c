@@ -18,11 +18,11 @@
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-static void RW61X_EnterLowPowerMode(uint8_t stateIndex, pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup);
-static void RW61X_CleanExitLowPowerMode(void);
+static void PM_DEV_EnterLowPowerMode(uint8_t stateIndex, pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup);
+static void PM_DEV_CleanExitLowPowerMode(void);
 
 #if (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER)
-static status_t RW61X_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable);
+static status_t PM_DEV_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable);
 #endif /* FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER */
 
 /*******************************************************************************
@@ -83,7 +83,7 @@ const pm_device_option_t g_devicePMOption = {
             },
             /* PM2 */
             {
-                .exitLatency = 2000U, /* 625us plus some margin */
+                .exitLatency = 2000U, /* 320us plus some margin */
                 .fixConstraintsMask =
                     {
                         .rescMask[0] = 0x00000002UL,
@@ -95,7 +95,7 @@ const pm_device_option_t g_devicePMOption = {
             },
             /* PM3 */
             {
-                .exitLatency = 40000U, /* 33ms plus some margin */
+                .exitLatency = 8000U, /* 5ms plus some margin */
                 .fixConstraintsMask =
                     {
                         .rescMask[0] = 0x30555FF6UL,
@@ -119,11 +119,11 @@ const pm_device_option_t g_devicePMOption = {
             },
         },
     .stateCount = 5U,
-    .enter      = RW61X_EnterLowPowerMode,
-    .clean      = RW61X_CleanExitLowPowerMode,
+    .enter      = PM_DEV_EnterLowPowerMode,
+    .clean      = PM_DEV_CleanExitLowPowerMode,
 
 #if (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER)
-    .manageWakeupSource = RW61X_ManageWakeupSource,
+    .manageWakeupSource = PM_DEV_ManageWakeupSource,
 #endif /* FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER */
 };
 
@@ -133,7 +133,7 @@ static const uint32_t s_sramMask[] = {0x3FU, 0x40U, 0x80U, 0x300U, 0x3C00, 0x7C0
 /*******************************************************************************
  * Code
  ******************************************************************************/
-static void RW61X_GetSleepConfig(pm_resc_mask_t *pSoftRescMask,
+static void PM_DEV_GetSleepConfig(pm_resc_mask_t *pSoftRescMask,
                                  pm_resc_group_t *pSysRescGroup,
                                  power_sleep_config_t *cfg)
 {
@@ -222,7 +222,7 @@ static void RW61X_GetSleepConfig(pm_resc_mask_t *pSoftRescMask,
     }
 }
 
-static void RW61X_EnterLowPowerMode(uint8_t stateIndex, pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup)
+static void PM_DEV_EnterLowPowerMode(uint8_t stateIndex, pm_resc_mask_t *pSoftRescMask, pm_resc_group_t *pSysRescGroup)
 {
     power_sleep_config_t slpCfg = {0U};
 
@@ -239,19 +239,19 @@ static void RW61X_EnterLowPowerMode(uint8_t stateIndex, pm_resc_mask_t *pSoftRes
             break;
 
         default:
-            RW61X_GetSleepConfig(pSoftRescMask, pSysRescGroup, &slpCfg);
+            PM_DEV_GetSleepConfig(pSoftRescMask, pSysRescGroup, &slpCfg);
             (void)POWER_EnterPowerMode(stateIndex, &slpCfg);
             break;
     }
 }
 
-static void RW61X_CleanExitLowPowerMode(void)
+static void PM_DEV_CleanExitLowPowerMode(void)
 {
     /* Do nothing. */
 }
 
 #if (defined(FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER) && FSL_PM_SUPPORT_WAKEUP_SOURCE_MANAGER)
-static void RW61X_EnableWakeupSource(IRQn_Type source, uint32_t misc)
+static void PM_DEV_EnableWakeupSource(IRQn_Type source, uint32_t misc)
 {
     if (source == PIN0_INT_IRQn)
     {
@@ -272,7 +272,7 @@ static void RW61X_EnableWakeupSource(IRQn_Type source, uint32_t misc)
     POWER_EnableWakeup(source);
 }
 
-static void RW61X_DisableWakeupSource(IRQn_Type source, uint32_t misc)
+static void PM_DEV_DisableWakeupSource(IRQn_Type source, uint32_t misc)
 {
     if (source == PIN0_INT_IRQn)
     {
@@ -293,7 +293,7 @@ static void RW61X_DisableWakeupSource(IRQn_Type source, uint32_t misc)
     POWER_DisableWakeup(source);
 }
 
-static status_t RW61X_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable)
+static status_t PM_DEV_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable)
 {
     uint32_t irqn;
     uint32_t misc;
@@ -303,11 +303,11 @@ static status_t RW61X_ManageWakeupSource(pm_wakeup_source_t *ws, bool enable)
 
     if (enable)
     {
-        RW61X_EnableWakeupSource((IRQn_Type)irqn, misc);
+        PM_DEV_EnableWakeupSource((IRQn_Type)irqn, misc);
     }
     else
     {
-        RW61X_DisableWakeupSource((IRQn_Type)irqn, misc);
+        PM_DEV_DisableWakeupSource((IRQn_Type)irqn, misc);
     }
     return kStatus_Success;
 }

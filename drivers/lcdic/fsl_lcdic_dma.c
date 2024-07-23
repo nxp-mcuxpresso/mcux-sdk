@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022 NXP
+ * Copyright 2021-2022, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -655,6 +655,80 @@ status_t LCDIC_TransferDMA(LCDIC_Type *base, lcdic_dma_handle_t *handle, const l
             status = kStatus_InvalidArgument;
             break;
     }
+
+    if (status != kStatus_Success)
+    {
+        handle->xferInProgress = false;
+    }
+
+    return status;
+}
+
+/*
+ * brief Send data array using DMA.
+ *
+ * param base LCDIC peripheral base address.
+ * param handle Pointer to the lcdic_handle_t structure to store the transfer state.
+ * param xfer LCDIC transfer structure.
+ * retval kStatus_Success Successfully start a transfer.
+ * retval kStatus_InvalidArgument Input argument is invalid.
+ * retval kStatus_Busy LCDIC driver is busy with another transfer.
+ */
+status_t LCDIC_SendDataArrayDMA(LCDIC_Type *base, lcdic_dma_handle_t *handle, const lcdic_tx_xfer_t *xfer)
+{
+    status_t status = kStatus_InvalidArgument;
+
+    if (NULL == handle->txDmaHandle)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    if (handle->xferInProgress)
+    {
+        return kStatus_Busy;
+    }
+
+    handle->xferInProgress = true;
+    handle->xferMode       = kLCDIC_XferSendDataArray;
+
+    status = LCDIC_TransferSendDataArrayDMA(base, handle, xfer);
+
+    if (status != kStatus_Success)
+    {
+        handle->xferInProgress = false;
+    }
+
+    return status;
+}
+
+/*
+ * brief Read data array using DMA.
+ *
+ * param base LCDIC peripheral base address.
+ * param handle Pointer to the lcdic_handle_t structure to store the transfer state.
+ * param xfer LCDIC transfer structure.
+ * retval kStatus_Success Successfully start a transfer.
+ * retval kStatus_InvalidArgument Input argument is invalid.
+ * retval kStatus_Busy LCDIC driver is busy with another transfer.
+ */
+status_t LCDIC_ReadDataArrayDMA(LCDIC_Type *base, lcdic_dma_handle_t *handle, const lcdic_rx_xfer_t *xfer)
+{
+    status_t status = kStatus_InvalidArgument;
+
+    if (NULL == handle->rxDmaHandle) /* read mode but no RX DMA handle. */
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    if (handle->xferInProgress)
+    {
+        return kStatus_Busy;
+    }
+
+    handle->xferInProgress = true;
+    handle->xferMode       = kLCDIC_XferReceiveDataArray;
+
+    status = LCDIC_TransferReceiveDataArrayDMA(base, handle, xfer);
 
     if (status != kStatus_Success)
     {

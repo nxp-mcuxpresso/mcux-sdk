@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2021-01-18
-**     Build:               b240227
+**     Build:               b240414
 **
 **     Abstract:
 **         Chip specific module features.
@@ -619,8 +619,12 @@
     (((x) == TPM0) ? (1) : \
     (((x) == TPM1) ? (1) : \
     (((x) == TPM2) ? (0) : (-1))))
+/* @brief Has global time base enable. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_EN (1)
 /* @brief Has counter pause on trigger. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER (1)
+/* @brief Has global time base sync. */
+#define FSL_FEATURE_TPM_HAS_GLOBAL_TIME_BASE_SYNC (1)
 /* @brief Has external trigger selection. */
 #define FSL_FEATURE_TPM_HAS_EXTERNAL_TRIGGER_SELECTION (1)
 /* @brief Has TPM_COMBINE register. */
@@ -631,9 +635,9 @@
 #define FSL_FEATURE_TPM_HAS_POL (1)
 /* @brief Whether POL register has effect. */
 #define FSL_FEATURE_TPM_POL_HAS_EFFECTn(x) \
+    (((x) == TPM2) ? (0) : \
     (((x) == TPM0) ? (1) : \
-    (((x) == TPM1) ? (1) : \
-    (((x) == TPM2) ? (0) : (-1))))
+    (((x) == TPM1) ? (1) : (-1))))
 /* @brief Has TPM_FILTER register. */
 #define FSL_FEATURE_TPM_HAS_FILTER (1)
 /* @brief Whether FILTER register has effect. */
@@ -642,9 +646,9 @@
 #define FSL_FEATURE_TPM_HAS_QDCTRL (1)
 /* @brief Whether QDCTRL register has effect. */
 #define FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(x) \
+    (((x) == TPM2) ? (0) : \
     (((x) == TPM0) ? (1) : \
-    (((x) == TPM1) ? (1) : \
-    (((x) == TPM2) ? (0) : (-1))))
+    (((x) == TPM1) ? (1) : (-1))))
 /* @brief Has pause level select. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT (1)
 /* @brief Whether 32 bits counter has effect. */
@@ -653,11 +657,6 @@
 /* TRGMUX module features */
 
 /* No feature definitions */
-
-/* TSTMR module features */
-
-/* @brief TSTMR clock frequency is 1MHZ. */
-#define FSL_FEATURE_TSTMR_CLOCK_FREQUENCY_1MHZ (1)
 
 /* VREF module features */
 

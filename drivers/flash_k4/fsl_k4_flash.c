@@ -77,6 +77,9 @@ status_t FLASH_Init(flash_config_t *config)
 #elif (defined(CPU_KW47B42ZB7AFTA_cm33_core0))
         config->msf1Config[0].flashDesc.totalSize =
             FLASH_FEATURE_PFLASH0_BLOCK_COUNT * FLASH_FEATURE_PFLASH0_BLOCK_SIZE;
+#elif (defined(CPU_MCXW716CMFTA) || (CPU_MCXW716CMFPA) || (CPU_MCXW716AMFTA) || (CPU_MCXW716AMFPA))
+        config->msf1Config[0].flashDesc.totalSize =
+            FLASH_FEATURE_PFLASH0_BLOCK_COUNT * FLASH_FEATURE_PFLASH0_BLOCK_SIZE;
 #else
 #error "No valid CPU defined!"
 #endif
@@ -106,6 +109,14 @@ status_t FLASH_Init(flash_config_t *config)
         config->msf1Config[1].ifrDesc.pflashIfr0Start   = FLASH_FEATURE_PFLASH1_IFR0_START_ADDRESS;
         config->msf1Config[1].ifrDesc.pflashIfr0MemSize = 0U;
 #elif (defined(CPU_KW47B42ZB7AFTA_cm33_core0))
+        config->msf1Config[1].flashDesc.blockBase  = FLASH_FEATURE_PFLASH1_START_ADDRESS;
+        config->msf1Config[1].flashDesc.blockCount = FLASH_FEATURE_PFLASH1_BLOCK_COUNT;
+        config->msf1Config[1].flashDesc.totalSize =
+            FLASH_FEATURE_PFLASH1_BLOCK_COUNT * FLASH_FEATURE_PFLASH1_BLOCK_SIZE;
+
+        config->msf1Config[1].ifrDesc.pflashIfr0Start   = FLASH_FEATURE_PFLASH1_IFR0_START_ADDRESS;
+        config->msf1Config[1].ifrDesc.pflashIfr0MemSize = FLASH_FEATURE_PFLASH1_IFR0_SIZE;
+#elif (defined(CPU_MCXW716CMFTA) || (CPU_MCXW716CMFPA) || (CPU_MCXW716AMFTA) || (CPU_MCXW716AMFPA))
         config->msf1Config[1].flashDesc.blockBase  = FLASH_FEATURE_PFLASH1_START_ADDRESS;
         config->msf1Config[1].flashDesc.blockCount = FLASH_FEATURE_PFLASH1_BLOCK_COUNT;
         config->msf1Config[1].flashDesc.totalSize =

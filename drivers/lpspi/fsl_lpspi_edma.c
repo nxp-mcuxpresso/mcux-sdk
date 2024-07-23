@@ -500,8 +500,20 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
         transferConfigTx.destAddr        = (uint32_t)txAddr + addrOffset;
         transferConfigTx.majorLoopCounts = 1;
 
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+        EDMA_TcdResetExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_extraBytes);
+        if (handle->isPcsContinuous)
+        {
+            EDMA_TcdSetTransferConfigExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_extraBytes,
+                                         &transferConfigTx, softwareTCD_pcsContinuous);
+        }
+        else
+        {
+            EDMA_TcdSetTransferConfigExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_extraBytes,
+                                         &transferConfigTx, NULL);
+        }
+#else
         EDMA_TcdReset(softwareTCD_extraBytes);
-
         if (handle->isPcsContinuous)
         {
             EDMA_TcdSetTransferConfig(softwareTCD_extraBytes, &transferConfigTx, softwareTCD_pcsContinuous);
@@ -510,6 +522,7 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
         {
             EDMA_TcdSetTransferConfig(softwareTCD_extraBytes, &transferConfigTx, NULL);
         }
+#endif
     }
 
     if (handle->isPcsContinuous)
@@ -528,8 +541,14 @@ status_t LPSPI_MasterTransferEDMALite(LPSPI_Type *base, lpspi_master_edma_handle
         transferConfigTx.minorLoopBytes   = 4;
         transferConfigTx.majorLoopCounts  = 1;
 
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+        EDMA_TcdResetExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_pcsContinuous);
+        EDMA_TcdSetTransferConfigExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_pcsContinuous,
+                                     &transferConfigTx, NULL);
+#else
         EDMA_TcdReset(softwareTCD_pcsContinuous);
         EDMA_TcdSetTransferConfig(softwareTCD_pcsContinuous, &transferConfigTx, NULL);
+#endif
     }
 
     if (handle->txData != NULL)
@@ -1119,8 +1138,14 @@ status_t LPSPI_SlaveTransferEDMA(LPSPI_Type *base, lpspi_slave_edma_handle_t *ha
             transferConfigTx.destAddr        = (uint32_t)txAddr + addrOffset;
             transferConfigTx.majorLoopCounts = 1;
 
+#if defined FSL_EDMA_DRIVER_EDMA4 && FSL_EDMA_DRIVER_EDMA4
+            EDMA_TcdResetExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_extraBytes);
+            EDMA_TcdSetTransferConfigExt(handle->edmaRxRegToRxDataHandle->base, softwareTCD_extraBytes,
+                                         &transferConfigTx, NULL);
+#else
             EDMA_TcdReset(softwareTCD_extraBytes);
             EDMA_TcdSetTransferConfig(softwareTCD_extraBytes, &transferConfigTx, NULL);
+#endif
         }
 
         transferConfigTx.srcAddr         = (uint32_t)(handle->txData);

@@ -18,6 +18,13 @@
 extern "C" {
 #endif /* __cplusplus*/
 
+/*!
+ * @brief This function executes default configuration of clocks.
+ *
+ */
+void BOARD_InitBootClocks(void);
+
+
 void BOARD_BootClockRUN(void);
 
 #if defined(__cplusplus)

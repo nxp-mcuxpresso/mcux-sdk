@@ -24,6 +24,9 @@
 /* ================================================================================ */
 /* ================             Peripheral declaration             ================ */
 /* ================================================================================ */
+#if (defined(CDOG0))
+#define CDOG CDOG0
+#endif
 
 // Define base address of ELS
 #define ELS_SFR_BASE            ELS         ///< base of ELS SFRs
@@ -38,7 +41,7 @@
 #define PKC_SFR_SUFFIX_POS      _SHIFT      ///< sfr field name suffix for bit position
 
 // PKC_RAM base address is not defined in any header file
-#define PKC_RAM_ADDR  ((uint32_t)0x400B3000u)
+#define PKC_RAM_ADDR  ((uint32_t)0x500B3000u)
 #define PKC_WORD_SIZE  8u
 #define PKC_RAM_SIZE  ((uint32_t)0x1000u)
 
@@ -85,5 +88,4 @@
 extern void * ip_css_base;
 #define ELS_SFR_BASE           ((S50_Type *) ip_css_base)
 #endif /* NXPCL_FEATURE_ELS_LINK_BASE_ADDRESS */
-
 #endif

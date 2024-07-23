@@ -21,20 +21,20 @@
  ******************************************************************************/
 
 #define SDU_INT_CPU_NUM   kSDIOSLV_INT_CPUNum3
-#define SDU_USED_FUN_NUM  1
-#define SDU_USED_PORT_NUM 32
+#define SDU_USED_FUN_NUM  1U
+#define SDU_USED_PORT_NUM 32U
 
 /*! @brief Maximum functions supported by SDU */
-#define SDU_MAX_FUNCTION_NUM 7
+#define SDU_MAX_FUNCTION_NUM 7U
 
 /*! @brief Maximum data ports supported by SDU per function */
-#define SDU_MAX_PORT_NUM 32
+#define SDU_MAX_PORT_NUM (32U)
 
-#define sdu_fbr_fnN_base(FN)    (SDU_FN0_CARD_BASE + 0x10 + (0x10 * FN))
-#define sdu_fbr_fnN_fn_code(FN) (sdu_fbr_fnN_base(FN) + 0x0)
+#define sdu_fbr_fnN_base(FN)    (SDU_FN0_CARD_BASE + 0x10U + (0x10U * (FN)))
+#define sdu_fbr_fnN_fn_code(FN) (sdu_fbr_fnN_base(FN) + 0x0U)
 
-#define sdu_fbr_fnN_fn_code_code_HI 3
-#define sdu_fbr_fnN_fn_code_code_LO 0
+#define sdu_fbr_fnN_fn_code_code_HI 3U
+#define sdu_fbr_fnN_fn_code_code_LO 0U
 
 
 /*! @brief MACRO used to access register of SDU */
@@ -49,76 +49,76 @@
 #define SDU_REGS8_CLRBITS(reg, val) (SDU_REGS8(reg) = (uint8_t)(SDU_REGS8(reg) & ~(val)))
 
 /*! @brief Address of scratch register (group 2, offset 0) within function */
-#define SDU_SCRATCH2_OFFSET0_ADDR 0xE8
+#define SDU_SCRATCH2_OFFSET0_ADDR 0xE8U
 
 /*! @brief SDU SDIO configuration base (SDU_FN0_CARD_BASE defined in device) */
 #define SDU_SDIO_CFG_BASE SDU_FN0_CARD_BASE
 
 /*! @brief Address offset of CCR between two functions */
-#define SDIO_CCR_FUNC_OFFSET 0x00000100
+#define SDIO_CCR_FUNC_OFFSET 0x00000100U
 
 /*! @brief SDIO I/O Enable */
-#define SDIO_IO_ENABLE (SDU_SDIO_CFG_BASE + 0x02)
+#define SDIO_IO_ENABLE (SDU_SDIO_CFG_BASE + 0x02U)
 
 /*! @brief SDIO Bus Speed Select */
-#define SDIO_FUNC0_BSS              (SDU_SDIO_CFG_BASE + 0x13)
-#define SDIO_FUNC0_BSS_SUPPORT_MASK 0x1
-#define SDIO_FUNC0_BSS_MODE_BIT     0x1
-#define SDIO_FUNC0_BSS_MODE_MASK    0xE
+#define SDIO_FUNC0_BSS              (SDU_SDIO_CFG_BASE + 0x13U)
+#define SDIO_FUNC0_BSS_SUPPORT_MASK 0x1U
+#define SDIO_FUNC0_BSS_MODE_BIT     0x1U
+#define SDIO_FUNC0_BSS_MODE_MASK    0xEU
 
 /*! @brief Interrupt mask register for function 0 */
-#define SDIO_CCR_FUNC0_CARD_INT_MSK (SDU_SDIO_CFG_BASE + 0x91)
+#define SDIO_CCR_FUNC0_CARD_INT_MSK (SDU_SDIO_CFG_BASE + 0x91U)
 
 /*! @brief Bit Def. Host Transfer Status (HostTransferStatus) */
-#define SDIO_CCR_HOST_DnLdReStart (1 << 0)
-#define SDIO_CCR_HOST_UpLdReStart (1 << 1)
-#define SDIO_CCR_HOST_DnLdCRC_err (1 << 2)
+#define SDIO_CCR_HOST_DnLdReStart (1U << 0U)
+#define SDIO_CCR_HOST_UpLdReStart (1U << 1U)
+#define SDIO_CCR_HOST_DnLdCRC_err (1U << 2U)
 
 /*! @brief Bit Def. Card To Host Interrupt Event (CardToHostEvent) */
-#define SDIO_CCR_CS_DnLdRdy    (1 << 0)
-#define SDIO_CCR_CS_UpLdRdy    (1 << 1)
-#define SDIO_CCR_CS_ReadCISRdy (1 << 2)
-#define SDIO_CCR_CS_CmdUpLdRdy (1 << 6)
-#define SDIO_CCR_CS_CmdDnLdRdy (1 << 7)
+#define SDIO_CCR_CS_DnLdRdy    (1U << 0U)
+#define SDIO_CCR_CS_UpLdRdy    (1U << 1U)
+#define SDIO_CCR_CS_ReadCISRdy (1U << 2U)
+#define SDIO_CCR_CS_CmdUpLdRdy (1U << 6U)
+#define SDIO_CCR_CS_CmdDnLdRdy (1U << 7U)
 
 /*! @brief Bit Def. Card Interrupt Mask (CardIntMask) */
-#define SDIO_CCR_CIM_DnLdOvr    (1 << 0)
-#define SDIO_CCR_CIM_UpLdOvr    (1 << 1)
-#define SDIO_CCR_CIM_Abort      (1 << 2)
-#define SDIO_CCR_CIM_PwrDn      (1 << 3)
-#define SDIO_CCR_CIM_PwrUp      (1 << 4)
-#define SDIO_CCR_CIM_CmdUpLdOvr (1 << 10)
-#define SDIO_CCR_CIM_CmdDnLdOvr (1 << 11)
+#define SDIO_CCR_CIM_DnLdOvr    (1U << 0U)
+#define SDIO_CCR_CIM_UpLdOvr    (1U << 1U)
+#define SDIO_CCR_CIM_Abort      (1U << 2U)
+#define SDIO_CCR_CIM_PwrDn      (1U << 3U)
+#define SDIO_CCR_CIM_PwrUp      (1U << 4U)
+#define SDIO_CCR_CIM_CmdUpLdOvr (1U << 10U)
+#define SDIO_CCR_CIM_CmdDnLdOvr (1U << 11U)
 
-#define SDIO_CCR_CIM_MASK 0x0C07
+#define SDIO_CCR_CIM_MASK 0x0C07U
 
 /*! @brief Bit Def. Card Interrupt Status (CardIntStatus) */
-#define SDIO_CCR_CIC_DnLdOvr    (1 << 0)
-#define SDIO_CCR_CIC_UpLdOvr    (1 << 1)
-#define SDIO_CCR_CIC_Abort      (1 << 2)
-#define SDIO_CCR_CIC_PwrDn      (1 << 3)
-#define SDIO_CCR_CIC_PwrUp      (1 << 4)
-#define SDIO_CCR_CIC_CmdUpLdOvr (1 << 10)
-#define SDIO_CCR_CIC_CmdDnLdOvr (1 << 11)
+#define SDIO_CCR_CIC_DnLdOvr    ((uint32_t)1U << 0U)
+#define SDIO_CCR_CIC_UpLdOvr    ((uint32_t)1U << 1U)
+#define SDIO_CCR_CIC_Abort      ((uint32_t)1U << 2U)
+#define SDIO_CCR_CIC_PwrDn      ((uint32_t)1U << 3U)
+#define SDIO_CCR_CIC_PwrUp      ((uint32_t)1U << 4U)
+#define SDIO_CCR_CIC_CmdUpLdOvr ((uint32_t)1U << 10U)
+#define SDIO_CCR_CIC_CmdDnLdOvr ((uint32_t)1U << 11U)
 #define SDIO_CCR_CIC_ALL \
     (SDIO_CCR_CIC_DnLdOvr | SDIO_CCR_CIC_UpLdOvr | SDIO_CCR_CIC_CmdUpLdOvr | SDIO_CCR_CIC_CmdDnLdOvr)
 
-#define SDIO_CCR_CIC_MASK 0x0C1F
+#define SDIO_CCR_CIC_MASK 0x0C1FU
 
 /*! @brief Bit Def. Default setting ISR bit clear after read (CardIntMode) */
-#define CARD_INT_MODE_MSK 0x00000C03
+#define CARD_INT_MODE_MSK 0x00000C03U
 
 /*! @brief Bit Def. Command port configuration register (CmdPortConfig) */
-#define CMD_TX_LEN_BIT_OFFSET (0)
-#define CMD_RD_LEN_BIT_OFFSET (2)
+#define CMD_TX_LEN_BIT_OFFSET (0U)
+#define CMD_RD_LEN_BIT_OFFSET (2U)
 
 /*! @brief Bit Def. Config2 register (Config2) */
-#define CONFIG2_ASYNC_INT           (1 << 3)
-#define CONFIG2_CMD53_NEW_MODE      (1 << 8)
-#define CONFIG2_DNLD_RDY_AUTO_RESET (1 << 10)
-#define CONFIG2_UPLD_RDY_AUTO_RESET (1 << 11)
-#define CONFIG2_TX_LEN_BIT_OFFSET   (12)
-#define CONFIG2_RD_LEN_BIT_OFFSET   (14)
+#define CONFIG2_ASYNC_INT           (1U << 3U)
+#define CONFIG2_CMD53_NEW_MODE      (1U << 8U)
+#define CONFIG2_DNLD_RDY_AUTO_RESET (1U << 10U)
+#define CONFIG2_UPLD_RDY_AUTO_RESET (1U << 11U)
+#define CONFIG2_TX_LEN_BIT_OFFSET   (12U)
+#define CONFIG2_RD_LEN_BIT_OFFSET   (14U)
 
 #define CONFIG2_DEFAULT_SETTING \
     (CONFIG2_ASYNC_INT | CONFIG2_CMD53_NEW_MODE | CONFIG2_DNLD_RDY_AUTO_RESET | CONFIG2_UPLD_RDY_AUTO_RESET)
@@ -147,90 +147,90 @@ enum _sdioslv_status
 /*! @brief SDIO card function number */
 typedef enum _sdioslv_int_cpu_num
 {
-    kSDIOSLV_INT_CPUNum1 = 1, /*!< sdio interrupt to CPU1 */
-    kSDIOSLV_INT_CPUNum2 = 2, /*!< sdio interrupt to CPU2 */
-    kSDIOSLV_INT_CPUNum3 = 4, /*!< sdio interrupt to CPU3 */
+    kSDIOSLV_INT_CPUNum1 = 1U, /*!< sdio interrupt to CPU1 */
+    kSDIOSLV_INT_CPUNum2 = 2U, /*!< sdio interrupt to CPU2 */
+    kSDIOSLV_INT_CPUNum3 = 4U, /*!< sdio interrupt to CPU3 */
 } sdioslv_int_cpu_num_t;
 
 /*! @brief SDIO card function number */
 typedef enum _sdioslv_func_num
 {
-    kSDIOSLV_FunctionNum1 = 1, /*!< sdio function1 */
-    kSDIOSLV_FunctionNum2 = 2, /*!< sdio function2 */
-    kSDIOSLV_FunctionNum3 = 3, /*!< sdio function3 */
-    kSDIOSLV_FunctionNum4 = 4, /*!< sdio function4 */
-    kSDIOSLV_FunctionNum5 = 5, /*!< sdio function5 */
-    kSDIOSLV_FunctionNum6 = 6, /*!< sdio function6 */
-    kSDIOSLV_FunctionNum7 = 7, /*!< sdio function7 */
+    kSDIOSLV_FunctionNum1 = 1U, /*!< sdio function1 */
+    kSDIOSLV_FunctionNum2 = 2U, /*!< sdio function2 */
+    kSDIOSLV_FunctionNum3 = 3U, /*!< sdio function3 */
+    kSDIOSLV_FunctionNum4 = 4U, /*!< sdio function4 */
+    kSDIOSLV_FunctionNum5 = 5U, /*!< sdio function5 */
+    kSDIOSLV_FunctionNum6 = 6U, /*!< sdio function6 */
+    kSDIOSLV_FunctionNum7 = 7U, /*!< sdio function7 */
 } sdioslv_func_t;
 
 /*! @brief SDIO port number (per function) */
 typedef enum _sdioslv_port_num
 {
-    kSDIOSLV_DataPortNum0  = 0,  /*!< sdio dataport0 */
-    kSDIOSLV_DataPortNum1  = 1,  /*!< sdio dataport1 */
-    kSDIOSLV_DataPortNum2  = 2,  /*!< sdio dataport2 */
-    kSDIOSLV_DataPortNum3  = 3,  /*!< sdio dataport3 */
-    kSDIOSLV_DataPortNum4  = 4,  /*!< sdio dataport4 */
-    kSDIOSLV_DataPortNum5  = 5,  /*!< sdio dataport5 */
-    kSDIOSLV_DataPortNum6  = 6,  /*!< sdio dataport6 */
-    kSDIOSLV_DataPortNum7  = 7,  /*!< sdio dataport7 */
-    kSDIOSLV_DataPortNum8  = 8,  /*!< sdio dataport8 */
-    kSDIOSLV_DataPortNum9  = 9,  /*!< sdio dataport9 */
-    kSDIOSLV_DataPortNum10 = 10, /*!< sdio dataport10 */
-    kSDIOSLV_DataPortNum11 = 11, /*!< sdio dataport11 */
-    kSDIOSLV_DataPortNum12 = 12, /*!< sdio dataport12 */
-    kSDIOSLV_DataPortNum13 = 13, /*!< sdio dataport13 */
-    kSDIOSLV_DataPortNum14 = 14, /*!< sdio dataport14 */
-    kSDIOSLV_DataPortNum15 = 15, /*!< sdio dataport15 */
-    kSDIOSLV_DataPortNum16 = 16, /*!< sdio dataport16 */
-    kSDIOSLV_DataPortNum17 = 17, /*!< sdio dataport17 */
-    kSDIOSLV_DataPortNum18 = 18, /*!< sdio dataport18 */
-    kSDIOSLV_DataPortNum19 = 19, /*!< sdio dataport19 */
-    kSDIOSLV_DataPortNum20 = 20, /*!< sdio dataport20 */
-    kSDIOSLV_DataPortNum21 = 21, /*!< sdio dataport21 */
-    kSDIOSLV_DataPortNum22 = 22, /*!< sdio dataport22 */
-    kSDIOSLV_DataPortNum23 = 23, /*!< sdio dataport23 */
-    kSDIOSLV_DataPortNum24 = 24, /*!< sdio dataport24 */
-    kSDIOSLV_DataPortNum25 = 25, /*!< sdio dataport25 */
-    kSDIOSLV_DataPortNum26 = 26, /*!< sdio dataport26 */
-    kSDIOSLV_DataPortNum27 = 27, /*!< sdio dataport27 */
-    kSDIOSLV_DataPortNum28 = 28, /*!< sdio dataport28 */
-    kSDIOSLV_DataPortNum29 = 29, /*!< sdio dataport29 */
-    kSDIOSLV_DataPortNum30 = 30, /*!< sdio dataport30 */
-    kSDIOSLV_DataPortNum31 = 31, /*!< sdio dataport31 */
-    kSDIOSLV_CmdPortNum0   = 32, /*!< sdio cmdport0 */
+    kSDIOSLV_DataPortNum0  = 0U,  /*!< sdio dataport0 */
+    kSDIOSLV_DataPortNum1  = 1U,  /*!< sdio dataport1 */
+    kSDIOSLV_DataPortNum2  = 2U,  /*!< sdio dataport2 */
+    kSDIOSLV_DataPortNum3  = 3U,  /*!< sdio dataport3 */
+    kSDIOSLV_DataPortNum4  = 4U,  /*!< sdio dataport4 */
+    kSDIOSLV_DataPortNum5  = 5U,  /*!< sdio dataport5 */
+    kSDIOSLV_DataPortNum6  = 6U,  /*!< sdio dataport6 */
+    kSDIOSLV_DataPortNum7  = 7U,  /*!< sdio dataport7 */
+    kSDIOSLV_DataPortNum8  = 8U,  /*!< sdio dataport8 */
+    kSDIOSLV_DataPortNum9  = 9U,  /*!< sdio dataport9 */
+    kSDIOSLV_DataPortNum10 = 10U, /*!< sdio dataport10 */
+    kSDIOSLV_DataPortNum11 = 11U, /*!< sdio dataport11 */
+    kSDIOSLV_DataPortNum12 = 12U, /*!< sdio dataport12 */
+    kSDIOSLV_DataPortNum13 = 13U, /*!< sdio dataport13 */
+    kSDIOSLV_DataPortNum14 = 14U, /*!< sdio dataport14 */
+    kSDIOSLV_DataPortNum15 = 15U, /*!< sdio dataport15 */
+    kSDIOSLV_DataPortNum16 = 16U, /*!< sdio dataport16 */
+    kSDIOSLV_DataPortNum17 = 17U, /*!< sdio dataport17 */
+    kSDIOSLV_DataPortNum18 = 18U, /*!< sdio dataport18 */
+    kSDIOSLV_DataPortNum19 = 19U, /*!< sdio dataport19 */
+    kSDIOSLV_DataPortNum20 = 20U, /*!< sdio dataport20 */
+    kSDIOSLV_DataPortNum21 = 21U, /*!< sdio dataport21 */
+    kSDIOSLV_DataPortNum22 = 22U, /*!< sdio dataport22 */
+    kSDIOSLV_DataPortNum23 = 23U, /*!< sdio dataport23 */
+    kSDIOSLV_DataPortNum24 = 24U, /*!< sdio dataport24 */
+    kSDIOSLV_DataPortNum25 = 25U, /*!< sdio dataport25 */
+    kSDIOSLV_DataPortNum26 = 26U, /*!< sdio dataport26 */
+    kSDIOSLV_DataPortNum27 = 27U, /*!< sdio dataport27 */
+    kSDIOSLV_DataPortNum28 = 28U, /*!< sdio dataport28 */
+    kSDIOSLV_DataPortNum29 = 29U, /*!< sdio dataport29 */
+    kSDIOSLV_DataPortNum30 = 30U, /*!< sdio dataport30 */
+    kSDIOSLV_DataPortNum31 = 31U, /*!< sdio dataport31 */
+    kSDIOSLV_CmdPortNum0   = 32U, /*!< sdio cmdport0 */
 } sdioslv_port_t;
 
 /*! @brief SDIO Bus Speed */
 typedef enum _sdioslv_bus_speed
 {
-    kSDIOSLV_SDR12_MODE  = 0, /*!< SDR12 mode  => 25Mhz */
-    kSDIOSLV_SDR25_MODE  = 1, /*!< SDR25 mode  => 50Mhz */
-    kSDIOSLV_SDR50_MODE  = 2, /*!< SDR50 mode  => 100Mhz */
-    kSDIOSLV_SDR104_MODE = 3, /*!< SDR104 mode => 208Mhz */
+    kSDIOSLV_SDR12_MODE  = 0U, /*!< SDR12 mode  => 25Mhz */
+    kSDIOSLV_SDR25_MODE  = 1U, /*!< SDR25 mode  => 50Mhz */
+    kSDIOSLV_SDR50_MODE  = 2U, /*!< SDR50 mode  => 100Mhz */
+    kSDIOSLV_SDR104_MODE = 3U, /*!< SDR104 mode => 208Mhz */
 } sdioslv_bus_speed_t;
 
 /*! @brief Scratch register group */
 typedef enum _sdioslv_scratch_group
 {
-    kSDIOSLV_ScratchGroup0 = 0, /*!< sdio scratch1 in FW18 0xnD4 n:1..7 16 bits */
-    kSDIOSLV_ScratchGroup1 = 1, /*!< sdio scratch2 in FW18 0xnB0 n:1..7 16 bits */
-    kSDIOSLV_ScratchGroup2 = 2, /*!< sdio scratch group 2 in SDU 0xnE8 n:1..7 32 bits */
-    kSDIOSLV_ScratchGroup3 = 3, /*!< sdio scratch group 3 in SDU 0xnEC n:1..7 32 bits */
-    kSDIOSLV_ScratchGroup4 = 4, /*!< sdio scratch group 4 in SDU 0xnF0 n:1..7 32 bits */
-    kSDIOSLV_ScratchGroup5 = 5, /*!< sdio scratch group 5 in SDU 0xnF4 n:1..7 32 bits */
-    kSDIOSLV_ScratchGroup6 = 6, /*!< sdio scratch group 6 in SDU 0xnF8 n:1..7 32 bits */
-    kSDIOSLV_ScratchGroup7 = 7, /*!< sdio scratch group 7 in SDU 0xnFC n:1..7 32 bits */
+    kSDIOSLV_ScratchGroup0 = 0U, /*!< sdio scratch1 in FW18 0xnD4 n:1..7 16 bits */
+    kSDIOSLV_ScratchGroup1 = 1U, /*!< sdio scratch2 in FW18 0xnB0 n:1..7 16 bits */
+    kSDIOSLV_ScratchGroup2 = 2U, /*!< sdio scratch group 2 in SDU 0xnE8 n:1..7 32 bits */
+    kSDIOSLV_ScratchGroup3 = 3U, /*!< sdio scratch group 3 in SDU 0xnEC n:1..7 32 bits */
+    kSDIOSLV_ScratchGroup4 = 4U, /*!< sdio scratch group 4 in SDU 0xnF0 n:1..7 32 bits */
+    kSDIOSLV_ScratchGroup5 = 5U, /*!< sdio scratch group 5 in SDU 0xnF4 n:1..7 32 bits */
+    kSDIOSLV_ScratchGroup6 = 6U, /*!< sdio scratch group 6 in SDU 0xnF8 n:1..7 32 bits */
+    kSDIOSLV_ScratchGroup7 = 7U, /*!< sdio scratch group 7 in SDU 0xnFC n:1..7 32 bits */
 } sdioslv_scratch_group_t;
 
 /*! @brief Scratch register offset in a group */
 typedef enum _sdioslv_scratch_offset
 {
-    kSDIOSLV_ScratchOffset0 = 0, /*!< sdio scratchoffset0 */
-    kSDIOSLV_ScratchOffset1 = 1, /*!< sdio scratchoffset1 */
-    kSDIOSLV_ScratchOffset3 = 3, /*!< sdio scratchoffset2 */
-    kSDIOSLV_ScratchOffset4 = 4, /*!< sdio scratchoffset3 */
+    kSDIOSLV_ScratchOffset0 = 0U, /*!< sdio scratchoffset0 */
+    kSDIOSLV_ScratchOffset1 = 1U, /*!< sdio scratchoffset1 */
+    kSDIOSLV_ScratchOffset3 = 3U, /*!< sdio scratchoffset2 */
+    kSDIOSLV_ScratchOffset4 = 4U, /*!< sdio scratchoffset3 */
 } sdioslv_scratch_offset_t;
 
 
@@ -404,7 +404,7 @@ status_t SDIOSLV_RefillCmdBuffer(sdioslv_sdu_regmap_t *regmap, uint8_t *data_add
  * @retval #kStatus_InvalidArgument Invalid argument.
  * @retval #kStatus_SDIOSLV_SendFull all data slots are occupied, application
  */
-status_t SDIOSLV_SendDataNonBlocking(sdioslv_sdu_regmap_t *regmap, sdioslv_port_t port, uint8_t *data_addr, uint16_t data_len);
+status_t SDIOSLV_SendDataNonBlocking(sdioslv_sdu_regmap_t *regmap, sdioslv_port_t tx_port, uint8_t *data_addr, uint16_t data_len);
 
 /*!
  * @brief SDIOSLV provide receive data buffer.

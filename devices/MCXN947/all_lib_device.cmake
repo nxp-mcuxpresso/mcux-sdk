@@ -1,36 +1,11 @@
 # Copy variable into project config.cmake to use software component
-#set.board.mcxn9xxevk
-#  # description: Board_project_template mcxn9xxevk
-#  set(CONFIG_USE_BOARD_Project_Template_mcxn9xxevk true)
-
 #set.board.frdmmcxn947
 #  # description: Board_project_template frdmmcxn947
 #  set(CONFIG_USE_BOARD_Project_Template_frdmmcxn947 true)
 
-#set.middleware.maestro_framework
-#  # description: maestro_framework template
-#  set(CONFIG_USE_middleware_maestro_framework_template true)
-
-#  # description: MCU Maestro Audio Framework Doc
-#  set(CONFIG_USE_middleware_maestro_framework_doc true)
-
-#  # description: MCU Maestro Audio Framework Codecs
-#  set(CONFIG_USE_middleware_maestro_framework_codecs true)
-
-#  # description: MCU Maestro Audio Framework Streamer Core
-#  set(CONFIG_USE_middleware_maestro_framework true)
-
-#  # description: MCU Maestro Audio Framework Opus
-#  set(CONFIG_USE_middleware_maestro_framework_opus true)
-
-#  # description: MCU Maestro Audio Framework Opusfile
-#  set(CONFIG_USE_middleware_maestro_framework_opusfile true)
-
-#  # description: MCU Maestro Audio Framework Ogg
-#  set(CONFIG_USE_middleware_maestro_framework_ogg true)
-
-#  # description: MCU Maestro Audio Framework ASRC
-#  set(CONFIG_USE_middleware_maestro_framework_asrc true)
+#set.board.mcxn9xxevk
+#  # description: Board_project_template mcxn9xxevk
+#  set(CONFIG_USE_BOARD_Project_Template_mcxn9xxevk true)
 
 #set.device.MCXN947
 #  # description: Middleware baremetal
@@ -42,7 +17,7 @@
 #  # description: Utilities which is needed for particular toolchain like the SBRK function required to address limitation between HEAP and STACK in GCC toolchain library.
 #  set(CONFIG_USE_utilities_misc_utilities true)
 
-#  # description: Utilities unity
+#  # description: Simple Unit Testing for C
 #  set(CONFIG_USE_utilities_unity true)
 
 #  # description: RTT template configuration
@@ -117,6 +92,39 @@
 #  # description: TRDC Driver
 #  set(CONFIG_USE_driver_trdc_1 true)
 
+#  # description: SAI EDMA Driver
+#  set(CONFIG_USE_driver_sai_edma true)
+
+#  # description: LPUART EDMA Driver
+#  set(CONFIG_USE_driver_lpuart_edma true)
+
+#  # description: LPSPI EDMA Driver
+#  set(CONFIG_USE_driver_lpspi_edma true)
+
+#  # description: LPI2C EDMA Driver
+#  set(CONFIG_USE_driver_lpi2c_edma true)
+
+#  # description: LPUART CMSIS Driver
+#  set(CONFIG_USE_driver_cmsis_lpuart true)
+
+#  # description: LPSPI CMSIS Driver
+#  set(CONFIG_USE_driver_cmsis_lpspi true)
+
+#  # description: LPI2C CMSIS Driver
+#  set(CONFIG_USE_driver_cmsis_lpi2c true)
+
+#  # description: FLEXCAN Driver
+#  set(CONFIG_USE_driver_flexcan_edma true)
+
+#  # description: FLEXIO SPI EDMA Driver
+#  set(CONFIG_USE_driver_flexio_spi_edma true)
+
+#  # description: FLEXIO UART EDMA Driver
+#  set(CONFIG_USE_driver_flexio_uart_edma true)
+
+#  # description: PDM EDMA Driver
+#  set(CONFIG_USE_driver_pdm_edma true)
+
 #  # description: Utility notifier
 #  set(CONFIG_USE_utility_notifier true)
 
@@ -180,14 +188,14 @@
 #  # description: SMARTCARD EMVSIM Driver
 #  set(CONFIG_USE_driver_smartcard_emvsim true)
 
+#  # description: SEMA42 Driver
+#  set(CONFIG_USE_driver_sema42 true)
+
 #  # description: SCT Driver
 #  set(CONFIG_USE_driver_sctimer true)
 
 #  # description: SAI Driver
 #  set(CONFIG_USE_driver_sai true)
-
-#  # description: SAI EDMA Driver
-#  set(CONFIG_USE_driver_sai_edma true)
 
 #  # description: Reset Driver
 #  set(CONFIG_USE_driver_reset true)
@@ -215,9 +223,6 @@
 
 #  # description: PDM Driver
 #  set(CONFIG_USE_driver_pdm true)
-
-#  # description: PDM EDMA Driver
-#  set(CONFIG_USE_driver_pdm_edma true)
 
 #  # description: OSTimer Driver
 #  set(CONFIG_USE_driver_ostimer true)
@@ -252,43 +257,25 @@
 #  # description: MAILBOX Driver
 #  set(CONFIG_USE_driver_mailbox true)
 
-#  # description: LPUART CMSIS Driver
-#  set(CONFIG_USE_driver_cmsis_lpuart true)
-
 #  # description: LPTMR Driver
 #  set(CONFIG_USE_driver_lptmr true)
-
-#  # description: LPSPI CMSIS Driver
-#  set(CONFIG_USE_driver_cmsis_lpspi true)
-
-#  # description: LPI2C CMSIS Driver
-#  set(CONFIG_USE_driver_cmsis_lpi2c true)
 
 #  # description: LPUART Driver
 #  set(CONFIG_USE_driver_lpuart true)
 
-#  # description: LPUART EDMA Driver
-#  set(CONFIG_USE_driver_lpuart_edma true)
-
 #  # description: LPSPI Driver
 #  set(CONFIG_USE_driver_lpspi true)
-
-#  # description: LPSPI EDMA Driver
-#  set(CONFIG_USE_driver_lpspi_edma true)
 
 #  # description: LPI2C Driver
 #  set(CONFIG_USE_driver_lpi2c true)
 
-#  # description: LPI2C EDMA Driver
-#  set(CONFIG_USE_driver_lpi2c_edma true)
-
-#  # description: lpflexcomm LPUART driver
+#  # description: LPFLEXCOMM LPUART FreeRTOS Driver
 #  set(CONFIG_USE_driver_lpflexcomm_lpuart_freertos true)
 
-#  # description: LPSPI FreeRTOS driver
+#  # description: LPFLEXCOMM LPSPI FreeRTOS Driver
 #  set(CONFIG_USE_driver_lpflexcomm_lpspi_freertos true)
 
-#  # description: LPI2C Driver
+#  # description: LPFLEXCOMM LPI2C FreeRTOS Driver
 #  set(CONFIG_USE_driver_lpflexcomm_lpi2c_freertos true)
 
 #  # description: LPFLEXCOMM Driver
@@ -333,14 +320,8 @@
 #  # description: FLEXIO UART Driver
 #  set(CONFIG_USE_driver_flexio_uart true)
 
-#  # description: FLEXIO UART EDMA Driver
-#  set(CONFIG_USE_driver_flexio_uart_edma true)
-
 #  # description: FLEXIO SPI Driver
 #  set(CONFIG_USE_driver_flexio_spi true)
-
-#  # description: FLEXIO SPI EDMA Driver
-#  set(CONFIG_USE_driver_flexio_spi_edma true)
 
 #  # description: FLEXIO MCULCD Driver
 #  set(CONFIG_USE_driver_flexio_mculcd true)
@@ -354,9 +335,6 @@
 #  # description: FLEXCAN Driver
 #  set(CONFIG_USE_driver_flexcan true)
 
-#  # description: FLEXCAN Driver
-#  set(CONFIG_USE_driver_flexcan_edma true)
-
 #  # description: EWM Driver
 #  set(CONFIG_USE_driver_ewm true)
 
@@ -366,8 +344,8 @@
 #  # description: ERM Driver
 #  set(CONFIG_USE_driver_erm true)
 
-#  # description: ENC Driver
-#  set(CONFIG_USE_driver_enc true)
+#  # description: QDC Driver
+#  set(CONFIG_USE_driver_qdc true)
 
 #  # description: EIM Driver
 #  set(CONFIG_USE_driver_eim true)
@@ -398,6 +376,12 @@
 
 #  # description: TRDC SOC Driver
 #  set(CONFIG_USE_driver_trdc_soc true)
+
+#  # description: Component power manager core level
+#  set(CONFIG_USE_component_power_manager_core true)
+
+#  # description: Component power manager Device Level
+#  set(CONFIG_USE_component_power_manager_MCXN94x true)
 
 #  # description: Driver camera-receiver-common
 #  set(CONFIG_USE_driver_camera-receiver-common true)
@@ -486,30 +470,6 @@
 #  # description: Component pwm_ctimer_adapter
 #  set(CONFIG_USE_component_pwm_ctimer_adapter true)
 
-#  # description: Driver phy-device-rtl8211f
-#  set(CONFIG_USE_driver_phy-device-rtl8211f true)
-
-#  # description: Driver phy-device-ksz8081
-#  set(CONFIG_USE_driver_phy-device-ksz8081 true)
-
-#  # description: Driver phy-device-dp83848
-#  set(CONFIG_USE_driver_phy-device-dp83848 true)
-
-#  # description: Driver phy-device-ksz8041
-#  set(CONFIG_USE_driver_phy-device-ksz8041 true)
-
-#  # description: Driver phy-device-ar8031
-#  set(CONFIG_USE_driver_phy-device-ar8031 true)
-
-#  # description: Driver phy-device-lan8720a
-#  set(CONFIG_USE_driver_phy-device-lan8720a true)
-
-#  # description: Driver phy-device-vsc8541
-#  set(CONFIG_USE_driver_phy-device-vsc8541 true)
-
-#  # description: Driver phy-device-rtl8201
-#  set(CONFIG_USE_driver_phy-device-rtl8201 true)
-
 #  # description: Driver phy-device-lan8741
 #  set(CONFIG_USE_driver_phy-device-lan8741 true)
 
@@ -527,6 +487,9 @@
 
 #  # description: Component mem_manager_light
 #  set(CONFIG_USE_component_mem_manager_light true)
+
+#  # description: Component mem_manager_freertos
+#  set(CONFIG_USE_component_mem_manager_freertos true)
 
 #  # description: Component log
 #  set(CONFIG_USE_component_log true)
@@ -654,11 +617,11 @@
 #  # description: Component sai_edma_adapter
 #  set(CONFIG_USE_component_audio_sai_edma_adapter true)
 
-#  # description: BOARD_Project_Template mcxn9xxevk_a8974
-#  set(CONFIG_USE_BOARD_Project_Template_mcxn9xxevk_a8974 true)
-
 #  # description: BOARD_Project_Template frdmmcxn947_a8974
 #  set(CONFIG_USE_BOARD_Project_Template_frdmmcxn947_a8974 true)
+
+#  # description: BOARD_Project_Template mcxn9xxevk_a8974
+#  set(CONFIG_USE_BOARD_Project_Template_mcxn9xxevk_a8974 true)
 
 #set.CMSIS
 #  # description: CMSIS-CORE for Cortex-M, ARMv8-M, ARMv8.1-M
@@ -759,7 +722,10 @@
 #  # description: FreeRTOS heap 5
 #  set(CONFIG_USE_middleware_freertos-kernel_heap_5 true)
 
-#  # description: FreeRTOS MPU wrappers
+#  # description: new V2 FreeRTOS MPU wrappers introduced in V10.6.0
+#  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers_v2 true)
+
+#  # description: old FreeRTOS MPU wrappers used before V10.6.0
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
 #  # description: FreeRTOS cm33 TrustZone secure port
@@ -786,6 +752,9 @@
 
 #  # description: Middleware usb host cdc
 #  set(CONFIG_USE_middleware_usb_host_cdc true)
+
+#  # description: Middleware usb host cdc_ecm
+#  set(CONFIG_USE_middleware_usb_host_cdc_ecm true)
 
 #  # description: Middleware usb host cdc_rndis
 #  set(CONFIG_USE_middleware_usb_host_cdc_rndis true)
@@ -942,6 +911,9 @@
 #  # description: Multicore SDK
 #  set(CONFIG_USE_middleware_multicore true)
 
+#  # description: RPMsg-Lite Zephyr environment sources
+#  set(CONFIG_USE_middleware_multicore_rpmsg_lite_zephyr true)
+
 #  # description: RPMsg-Lite
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite true)
 
@@ -1062,6 +1034,15 @@
 #  # description: erpc_doc
 #  set(CONFIG_USE_middleware_multicore_erpc_doc true)
 
+#  # description: erpc_zephyr
+#  set(CONFIG_USE_middleware_multicore_erpc_zephyr true)
+
+#  # description: erpc_java
+#  set(CONFIG_USE_middleware_multicore_erpc_java true)
+
+#  # description: erpc_examples
+#  set(CONFIG_USE_middleware_multicore_erpc_examples true)
+
 #  # description: eRPC
 #  set(CONFIG_USE_middleware_multicore_erpc true)
 
@@ -1093,6 +1074,15 @@
 #  # description: mcuboot
 #  set(CONFIG_USE_middleware_mcuboot true)
 
+#  # description: TinyCrypt fork in MCUBoot repository
+#  set(CONFIG_USE_middleware_mcuboot_tinycrypt true)
+
+#  # description: Encrypted XIP abstraction for MCUBoot
+#  set(CONFIG_USE_middleware_mcuboot_encrypted_xip true)
+
+#  # description: MCUBoot's subset of MbedTLS for ASN.1 parsing
+#  set(CONFIG_USE_middleware_mcuboot_mbedtls-asn1 true)
+
 #  # description: mcuboot
 #  set(CONFIG_USE_middleware_mcuboot_bootutil true)
 
@@ -1106,7 +1096,10 @@
 #  # description: mbedTLS test suite
 #  set(CONFIG_USE_middleware_mbedtls_tests true)
 
-#  # description: mbedTLS port library for PKC
+#  # description: mbedTLS 3rdparty code
+#  set(CONFIG_USE_middleware_mbedtls_3rdparty true)
+
+#  # description: mbedTLS port library for ELS and PKC
 #  set(CONFIG_USE_middleware_mbedtls_port_els_pkc true)
 
 #  # description: mbedTLS port library for ELS
@@ -1115,12 +1108,43 @@
 #  # description: mbedTLS library
 #  set(CONFIG_USE_middleware_mbedtls true)
 
+#set.middleware.maestro_framework
+#  # description: maestro_framework template
+#  set(CONFIG_USE_middleware_maestro_framework_template true)
+
+#  # description: MCU Maestro Audio Framework Doc
+#  set(CONFIG_USE_middleware_maestro_framework_doc true)
+
+#  # description: MCU Maestro Audio Framework Codecs
+#  set(CONFIG_USE_middleware_maestro_framework_codecs true)
+
+#  # description: MCU Maestro Audio Framework Streamer Core
+#  set(CONFIG_USE_middleware_maestro_framework true)
+
+#  # description: MCU Maestro Audio Framework Opus
+#  set(CONFIG_USE_middleware_maestro_framework_opus true)
+
+#  # description: MCU Maestro Audio Framework Opusfile
+#  set(CONFIG_USE_middleware_maestro_framework_opusfile true)
+
+#  # description: MCU Maestro Audio Framework Ogg
+#  set(CONFIG_USE_middleware_maestro_framework_ogg true)
+
+#  # description: MCU Maestro Audio Framework ASRC
+#  set(CONFIG_USE_middleware_maestro_framework_asrc true)
+
 #set.middleware.lwip
 #  # description: lwIP Template
 #  set(CONFIG_USE_middleware_lwip_template true)
 
+#  # description: Empty ethernet interface
+#  set(CONFIG_USE_middleware_lwip_empty_ethernetif true)
+
 #  # description: lwIP - A Lightweight TCP/IP Stack
 #  set(CONFIG_USE_middleware_lwip true)
+
+#  # description: EtherCAT EOE ethernet interface
+#  set(CONFIG_USE_middleware_lwip_eoe_ethernetif true)
 
 #  # description: MCX ethernet interface
 #  set(CONFIG_USE_middleware_lwip_mcx_ethernetif true)
@@ -1171,43 +1195,9 @@
 #  # description: littlefs
 #  set(CONFIG_USE_middleware_littlefs true)
 
-#set.middleware.fatfs
-#  # description: FatFs template MMC
-#  set(CONFIG_USE_middleware_fatfs_template_mmc true)
-
-#  # description: FatFs template NAND
-#  set(CONFIG_USE_middleware_fatfs_template_nand true)
-
-#  # description: FatFs template RAM
-#  set(CONFIG_USE_middleware_fatfs_template_ram true)
-
-#  # description: FatFs template SD
-#  set(CONFIG_USE_middleware_fatfs_template_sd true)
-
-#  # description: FatFs template SDSPI
-#  set(CONFIG_USE_middleware_fatfs_template_sdspi true)
-
-#  # description: FatFs template USB
-#  set(CONFIG_USE_middleware_fatfs_template_usb true)
-
-#  # description: FatFs
-#  set(CONFIG_USE_middleware_fatfs true)
-
-#  # description: FatFs_MMC
-#  set(CONFIG_USE_middleware_fatfs_mmc true)
-
-#  # description: FatFs_RAM
-#  set(CONFIG_USE_middleware_fatfs_ram true)
-
-#  # description: FatFs_SD
-#  set(CONFIG_USE_middleware_fatfs_sd true)
-
-#  # description: FatFs_USB
-#  set(CONFIG_USE_middleware_fatfs_usb true)
-
 #set.middleware.wifi
-#  # description: NXP WLAN common files
-#  set(CONFIG_USE_middleware_wifi_common_files true)
+#  # description: Template configuration file to be edited by user.
+#  set(CONFIG_USE_middleware_wifi_wifi_bt_config_template true)
 
 #  # description: NXP Wi-Fi Interface Abstraction Layer
 #  set(CONFIG_USE_middleware_wifi_fwdnld_intf_abs true)
@@ -1215,8 +1205,29 @@
 #  # description: Template configuration file to be edited by user.
 #  set(CONFIG_USE_middleware_wifi_template true)
 
+#  # description: NXP WLAN OSA
+#  set(CONFIG_USE_middleware_wifi_osa_free_rtos true)
+
+#  # description: NXP WLAN OSA
+#  set(CONFIG_USE_middleware_wifi_osa_thread true)
+
+#  # description: NXP WLAN OSA
+#  set(CONFIG_USE_middleware_wifi_osa true)
+
+#  # description: NXP WLAN common files
+#  set(CONFIG_USE_middleware_wifi_common_files true)
+
 #  # description: NXP WLAN f/w dnld driver
 #  set(CONFIG_USE_middleware_wifi_fwdnld true)
+
+#  # description: NXP WLAN OSA
+#  set(CONFIG_USE_middleware_wifi_net_free_rtos true)
+
+#  # description: NXP WLAN OSA
+#  set(CONFIG_USE_middleware_wifi_net_thread true)
+
+#  # description: NXP WLAN OSA
+#  set(CONFIG_USE_middleware_wifi_net true)
 
 #  # description: NXP Wi-Fi driver
 #  set(CONFIG_USE_middleware_wifi_wifidriver true)
@@ -1233,24 +1244,86 @@
 #  # description: Middlware Wi-Fi CLI
 #  set(CONFIG_USE_middleware_wifi_cli true)
 
+#  # description: Middlware Wi-Fi WMCRYPTO
+#  set(CONFIG_USE_middleware_wifi_wmcrypto true)
+
+#  # description: Middlware Wi-Fi WMTIME
+#  set(CONFIG_USE_middleware_wifi_wmtime true)
+
+#  # description: Middlware Wi-Fi WPS
+#  set(CONFIG_USE_middleware_wifi_wps true)
+
+#  # description: Middlware Wi-Fi NCP_SUPP_WMCRYPTO
+#  set(CONFIG_USE_middleware_wifi_ncp_supp_wmcrypto true)
+
+#  # description: Middlware Wi-Fi Location Service
+#  set(CONFIG_USE_middleware_wifi_wls true)
+
 #  # description: Edgefast Wi-Fi NXP is a blocking layer for Wi-Fi NXP
 #  set(CONFIG_USE_middleware_edgefast_wifi_nxp true)
+
+#set.component.osa
+#  # description: Component osa_zephyr
+#  set(CONFIG_USE_component_osa_zephyr true)
+
+#  # description: Component osa_bm
+#  set(CONFIG_USE_component_osa_bm true)
+
+#  # description: Component osa_free_rtos
+#  set(CONFIG_USE_component_osa_free_rtos true)
+
+#  # description: Component osa
+#  set(CONFIG_USE_component_osa true)
+
+#  # description: Component osa interface
+#  set(CONFIG_USE_component_osa_interface true)
+
+#  # description: Component osa thread
+#  set(CONFIG_USE_component_osa_thread true)
+
+#  # description: Component common_task
+#  set(CONFIG_USE_component_common_task true)
+
+#set.component.psa_crypto_driver
+#  # description: OS Abstraction Layer for PSA crypto driver
+#  set(CONFIG_USE_component_psa_crypto_driver_osal true)
+
+#  # description: Oracle of PSA crypto driver for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_oracle true)
+
+#  # description: Common files of PSA crypto driver for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_common true)
+
+#  # description: Transparent part of PSA crypto driver for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_transparent true)
+
+#  # description: Opaque part of PSA crypto driver for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_opaque true)
+
+#  # description: Common files of PSA crypto driver for ele_s200
+#  set(CONFIG_USE_component_psa_crypto_driver_ele_s200_common true)
+
+#  # description: Transparent part of PSA crypto driver for ele_s200
+#  set(CONFIG_USE_component_psa_crypto_driver_ele_s200_transparent true)
+
+#  # description: OS Abstraction Layer for PSA crypto driver on FreeRTOS
+#  set(CONFIG_USE_component_psa_crypto_driver_osal_frtos true)
+
+#  # description: OS Abstraction Layer for PSA crypto driver on bare metal
+#  set(CONFIG_USE_component_psa_crypto_driver_osal_baremetal true)
 
 #set.component.els_pkc
 #  # description: Component els_pkc.core
 #  set(CONFIG_USE_component_els_pkc_core true)
 
-#  # description: Component els_pkc.data_integrity
-#  set(CONFIG_USE_component_els_pkc_data_integrity true)
-
 #  # description: Component els_header_only
 #  set(CONFIG_USE_component_els_pkc_els_header_only true)
 
-#  # description: Component els_pkc.padding
-#  set(CONFIG_USE_component_els_pkc_padding true)
-
 #  # description: Component els_pkc.pre_processor
 #  set(CONFIG_USE_component_els_pkc_pre_processor true)
+
+#  # description: Component els_pkc.data_integrity
+#  set(CONFIG_USE_component_els_pkc_data_integrity true)
 
 #  # description: Component els_pkc.secure_counter
 #  set(CONFIG_USE_component_els_pkc_secure_counter true)
@@ -1276,11 +1349,20 @@
 #  # description: Component aes
 #  set(CONFIG_USE_component_els_pkc_aes true)
 
+#  # description: Component buffer
+#  set(CONFIG_USE_component_els_pkc_buffer true)
+
 #  # description: Component els_pkc.cipher
 #  set(CONFIG_USE_component_els_pkc_cipher true)
 
 #  # description: Component els_pkc.cipher
 #  set(CONFIG_USE_component_els_pkc_cipher_modes true)
+
+#  # description: Component crc
+#  set(CONFIG_USE_component_els_pkc_crc true)
+
+#  # description: Component els_pkc.ecc_deterministic
+#  set(CONFIG_USE_component_els_pkc_ecc_deterministic true)
 
 #  # description: Component els_pkc.ecc
 #  set(CONFIG_USE_component_els_pkc_ecc true)
@@ -1288,14 +1370,14 @@
 #  # description: Component els_pkc els_common
 #  set(CONFIG_USE_component_els_pkc_els_common true)
 
-#  # description: Component els_pkc standalone_keyManagement
-#  set(CONFIG_USE_component_els_pkc_standalone_keyManagement true)
-
 #  # description: Component els_pkc standalone_gdet
 #  set(CONFIG_USE_component_els_pkc_standalone_gdet true)
 
 #  # description: Component els
 #  set(CONFIG_USE_component_els_pkc_els true)
+
+#  # description: Component glikey
+#  set(CONFIG_USE_component_els_pkc_glikey true)
 
 #  # description: Component els_pkc.hash
 #  set(CONFIG_USE_component_els_pkc_hash true)
@@ -1303,14 +1385,17 @@
 #  # description: Component els_pkc.hashmodes
 #  set(CONFIG_USE_component_els_pkc_hashmodes true)
 
+#  # description: Component els_pkc.hmac
+#  set(CONFIG_USE_component_els_pkc_hmac true)
+
+#  # description: Component els_pkc.key_derivation
+#  set(CONFIG_USE_component_els_pkc_key_derivation true)
+
 #  # description: Component els_pkc.key
 #  set(CONFIG_USE_component_els_pkc_key true)
 
 #  # description: Component els_pkc.mac
 #  set(CONFIG_USE_component_els_pkc_mac true)
-
-#  # description: Component els_pkc.hmac
-#  set(CONFIG_USE_component_els_pkc_hmac true)
 
 #  # description: Component els_pkc.mac_modes
 #  set(CONFIG_USE_component_els_pkc_mac_modes true)
@@ -1321,11 +1406,38 @@
 #  # description: Component els_pkc.memory
 #  set(CONFIG_USE_component_els_pkc_memory true)
 
+#  # description: Component els_pkc.oscca
+#  set(CONFIG_USE_component_els_pkc_oscca true)
+
+#  # description: Component els_pkc.oscca_aeadmodes
+#  set(CONFIG_USE_component_els_pkc_oscca_aeadmodes true)
+
+#  # description: Component els_pkc.oscca_ciphermodes
+#  set(CONFIG_USE_component_els_pkc_oscca_ciphermodes true)
+
+#  # description: Component els_pkc.oscca_macmodes
+#  set(CONFIG_USE_component_els_pkc_oscca_macmodes true)
+
 #  # description: Component els_pkc.oscca_pkc
 #  set(CONFIG_USE_component_els_pkc_oscca_pkc true)
 
+#  # description: Component els_pkc.oscca_randommodes
+#  set(CONFIG_USE_component_els_pkc_oscca_randommodes true)
+
+#  # description: Component els_pkc.oscca_safo
+#  set(CONFIG_USE_component_els_pkc_oscca_safo true)
+
+#  # description: Component els_pkc.oscca_sm2
+#  set(CONFIG_USE_component_els_pkc_oscca_sm2 true)
+
 #  # description: Component els_pkc.oscca_sm3
 #  set(CONFIG_USE_component_els_pkc_oscca_sm3 true)
+
+#  # description: Component els_pkc.oscca_sm4
+#  set(CONFIG_USE_component_els_pkc_oscca_sm4 true)
+
+#  # description: Component els_pkc.padding
+#  set(CONFIG_USE_component_els_pkc_padding true)
 
 #  # description: Component pkc
 #  set(CONFIG_USE_component_els_pkc_pkc true)
@@ -1333,8 +1445,14 @@
 #  # description: Component prng
 #  set(CONFIG_USE_component_els_pkc_prng true)
 
+#  # description: Component els_pkc_psa_driver
+#  set(CONFIG_USE_component_els_pkc_psa_driver true)
+
 #  # description: Component els_pkc.random
 #  set(CONFIG_USE_component_els_pkc_random true)
+
+#  # description: Component els_pkc.random_modes_hmacdrbg
+#  set(CONFIG_USE_component_els_pkc_random_modes_hmacdrbg true)
 
 #  # description: Component els_pkc.random_modes
 #  set(CONFIG_USE_component_els_pkc_random_modes true)
@@ -1342,11 +1460,17 @@
 #  # description: Component els_pkc.random_modes_ctr
 #  set(CONFIG_USE_component_els_pkc_random_modes_ctr true)
 
+#  # description: Component els_pkc.rsa_oaep
+#  set(CONFIG_USE_component_els_pkc_rsa_oaep true)
+
 #  # description: Component els_pkc.rsa
 #  set(CONFIG_USE_component_els_pkc_rsa true)
 
 #  # description: Component els_pkc.session
 #  set(CONFIG_USE_component_els_pkc_session true)
+
+#  # description: Component els_pkc.signature
+#  set(CONFIG_USE_component_els_pkc_signature true)
 
 #  # description: Component els_pkc.trng
 #  set(CONFIG_USE_component_els_pkc_trng true)
@@ -1371,6 +1495,88 @@
 
 #  # description: Component els_pkc_test
 #  set(CONFIG_USE_component_els_pkc_examples true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_memory true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_flow_protection true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_rsa true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_random_modes true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_mac_modes true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_key true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_hmac true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_hash_modes true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_els true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_ecc true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_aead true)
+
+#  # description: Component els_pkc_test
+#  set(CONFIG_USE_component_els_pkc_examples_cipher_modes true)
+
+#set.middleware.eiq
+#  # description: Flatbuffers library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_flatbuffers true)
+
+#  # description: Gemmlowp library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_gemmlowp true)
+
+#  # description: Ruy library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_ruy true)
+
+#  # description: General Purpose FFT (Fast Fourier/Cosine/Sine Transform) Package
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_fft2d true)
+
+#  # description: A mixed-radix Fast Fourier Transform library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_kissfft true)
+
+#  # description: CMSIS-NN library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_cmsis_nn true)
+
+#  # description: TensorFlow Lite Micro library with reference kernel implementations
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_reference true)
+
+#  # description: TensorFlow Lite Micro library with CMSIS-NN kernel implementations
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn true)
+
+#  # description: TensorFlow Lite Micro library binary with core specific kernel implementations
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_binary true)
+
+#  # description: Neutron library binary
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_neutron_lib_binary true)
+
+#  # description: Neutron kernel implementations for TensorFlow Lite Micro
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_neutron true)
+
+#  # description: TensorFlow Lite Micro library header files
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_headers true)
+
+#  # description: TensorFlow Lite Micro library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro true)
+
+#  # description: TensorFlow Lite Micro word detection library
+#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_examples_microspeech true)
+
+#  # description: Multimedia Processing Pipelines Library
+#  set(CONFIG_USE_middleware_eiq_mpp true)
 
 #set.middleware.edgefast_bluetooth
 #  # description: edgefast_bluetooth configuration template for LE audio
@@ -1403,8 +1609,17 @@
 #  # description: edgefast_bluetooth le_audio.tmap
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_le_audio_tmap true)
 
+#  # description: edgefast_bluetooth le_audio.gmap
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_le_audio_gmap true)
+
+#  # description: edgefast_bluetooth le_audio.pbp
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_le_audio_pbp true)
+
 #  # description: edgefast_bluetooth PAL configuration template
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_config_template true)
+
+#  # description: edgefast_bluetooth ind_reset
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_controller_ind_reset true)
 
 #  # description: edgefast_bluetooth liblc3codec
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_liblc3codec true)
@@ -1565,58 +1780,6 @@
 #  # description: BLE libraries for bt_ble Host stack
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_ble_ethermind_lib_lc3_cm33 true)
 
-#set.middleware.eiq
-#  # description: Flatbuffers library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_flatbuffers true)
-
-#  # description: Gemmlowp library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_gemmlowp true)
-
-#  # description: Ruy library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_ruy true)
-
-#  # description: General Purpose FFT (Fast Fourier/Cosine/Sine Transform) Package
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_fft2d true)
-
-#  # description: A mixed-radix Fast Fourier Transform library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_kissfft true)
-
-#  # description: Xtensa HiFi4 NN library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_xa_nnlib_hifi4 true)
-
-#  # description: Multimedia Processing Pipelines Library
-#  set(CONFIG_USE_middleware_eiq_mpp true)
-
-#  # description: CMSIS-NN library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_cmsis_nn true)
-
-#  # description: TensorFlow Lite Micro library with reference kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_reference true)
-
-#  # description: TensorFlow Lite Micro library with CMSIS-NN kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn true)
-
-#  # description: TensorFlow Lite Micro library binary with core specific kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_binary true)
-
-#  # description: TensorFlow Lite Micro library with CMSIS-NN and Ethos-U kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_cmsis_nn_ethosu true)
-
-#  # description: Neutron library binary
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_neutron_lib_binary true)
-
-#  # description: TensorFlow Lite Micro library with Neutron kernel implementations
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_neutron true)
-
-#  # description: TensorFlow Lite Micro library header files
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_headers true)
-
-#  # description: TensorFlow Lite Micro library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro true)
-
-#  # description: TensorFlow Lite Micro word detection library
-#  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_examples_microspeech true)
-
 #set.middleware.azure_rtos
 #  # description: Azure RTOS Core
 #  set(CONFIG_USE_middleware_azure_rtos_tx_template true)
@@ -1708,29 +1871,44 @@
 #  # description: A software package that connects to the IoT Hub through Azure RTOS
 #  set(CONFIG_USE_middleware_azure_rtos_azure_iot true)
 
-#set.component.osa
-#  # description: Component osa_bm
-#  set(CONFIG_USE_component_osa_bm true)
+#set.middleware.fatfs
+#  # description: FatFs
+#  set(CONFIG_USE_middleware_fatfs true)
 
-#  # description: Component osa_free_rtos
-#  set(CONFIG_USE_component_osa_free_rtos true)
+#  # description: FatFs_MMC
+#  set(CONFIG_USE_middleware_fatfs_mmc true)
 
-#  # description: Component osa
-#  set(CONFIG_USE_component_osa true)
+#  # description: FatFs_RAM
+#  set(CONFIG_USE_middleware_fatfs_ram true)
 
-#  # description: Component osa interface
-#  set(CONFIG_USE_component_osa_interface true)
+#  # description: FatFs_SD
+#  set(CONFIG_USE_middleware_fatfs_sd true)
 
-#  # description: Component osa thread
-#  set(CONFIG_USE_component_osa_thread true)
+#  # description: FatFs template MMC
+#  set(CONFIG_USE_middleware_fatfs_template_mmc true)
 
-#  # description: Component common_task
-#  set(CONFIG_USE_component_common_task true)
+#  # description: FatFs template RAM
+#  set(CONFIG_USE_middleware_fatfs_template_ram true)
+
+#  # description: FatFs template SD
+#  set(CONFIG_USE_middleware_fatfs_template_sd true)
+
+#  # description: FatFs template USB
+#  set(CONFIG_USE_middleware_fatfs_template_usb true)
+
+#  # description: FatFs_USB
+#  set(CONFIG_USE_middleware_fatfs_usb true)
+
+#set.middleware.wireless.wpa_supplicant
+#  # description: Wpa supplicant rtos
+#  set(CONFIG_USE_middleware_wireless_wpa_supplicant_rtos true)
 
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
   ${CMAKE_CURRENT_LIST_DIR}/../../components/els_pkc
   ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/power_manager/devices/MCXN947
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/psa_crypto_driver
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/edgefast_bluetooth
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
@@ -1743,6 +1921,7 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/sdmmc
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wifi_nxp
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/wpa_supplicant-rtos
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
   ${CMAKE_CURRENT_LIST_DIR}/drivers
@@ -1760,6 +1939,7 @@ include(set_CMSIS_DSP_Lib OPTIONAL)
 include(set_CMSIS OPTIONAL)
 include(set_component_osa OPTIONAL)
 include(set_component_els_pkc OPTIONAL)
+include(set_component_psa_crypto_driver OPTIONAL)
 include(set_middleware_azure_rtos OPTIONAL)
 include(set_middleware_edgefast_bluetooth OPTIONAL)
 include(set_middleware_wifi OPTIONAL)
@@ -1774,3 +1954,4 @@ include(set_middleware_mcuboot OPTIONAL)
 include(set_middleware_multicore OPTIONAL)
 include(set_middleware_sdmmc OPTIONAL)
 include(set_middleware_usb OPTIONAL)
+include(set_middleware_wireless_wpa_supplicant OPTIONAL)

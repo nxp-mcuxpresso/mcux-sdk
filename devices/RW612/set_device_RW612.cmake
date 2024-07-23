@@ -313,6 +313,26 @@ endif()
 endif()
 
 
+if (CONFIG_USE_driver_cns_io_mux)
+# Add set(CONFIG_USE_driver_cns_io_mux true) in config.cmake to use this component
+
+message("driver_cns_io_mux component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND (CONFIG_DEVICE_ID STREQUAL RW612))
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
+)
+
+else()
+
+message(SEND_ERROR "driver_cns_io_mux.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_driver_clock)
 # Add set(CONFIG_USE_driver_clock true) in config.cmake to use this component
 
@@ -331,6 +351,54 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_clock.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_power)
+# Add set(CONFIG_USE_driver_power true) in config.cmake to use this component
+
+message("driver_power component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND (CONFIG_DEVICE_ID STREQUAL RW612))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_power.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
+)
+
+else()
+
+message(SEND_ERROR "driver_power.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_reset)
+# Add set(CONFIG_USE_driver_reset true) in config.cmake to use this component
+
+message("driver_reset component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND (CONFIG_DEVICE_ID STREQUAL RW612))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_reset.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
+)
+
+else()
+
+message(SEND_ERROR "driver_reset.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -610,19 +678,19 @@ endif()
 endif()
 
 
-if (CONFIG_USE_driver_flash_config_rdrw612bga)
-# Add set(CONFIG_USE_driver_flash_config_rdrw612bga true) in config.cmake to use this component
+if (CONFIG_USE_driver_flash_config_frdmrw612)
+# Add set(CONFIG_USE_driver_flash_config_frdmrw612 true) in config.cmake to use this component
 
-message("driver_flash_config_rdrw612bga component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+message("driver_flash_config_frdmrw612 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_common)
+if(CONFIG_USE_driver_common AND (CONFIG_BOARD STREQUAL frdmrw612))
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../boards/rdrw612bga/flash_config/flash_config.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../boards/frdmrw612/flash_config/flash_config.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../boards/rdrw612bga/flash_config/.
+  ${CMAKE_CURRENT_LIST_DIR}/../../boards/frdmrw612/flash_config/.
 )
 
 if(CONFIG_USE_COMPONENT_CONFIGURATION)
@@ -636,7 +704,7 @@ endif()
 
 else()
 
-message(SEND_ERROR "driver_flash_config_rdrw612bga.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+message(SEND_ERROR "driver_flash_config_frdmrw612.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -657,26 +725,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_memory.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_cns_io_mux)
-# Add set(CONFIG_USE_driver_cns_io_mux true) in config.cmake to use this component
-
-message("driver_cns_io_mux component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_common AND (CONFIG_DEVICE_ID STREQUAL RW612))
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
-)
-
-else()
-
-message(SEND_ERROR "driver_cns_io_mux.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -730,30 +778,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_romapi.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_driver_power)
-# Add set(CONFIG_USE_driver_power true) in config.cmake to use this component
-
-message("driver_power component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_common AND (CONFIG_DEVICE_ID STREQUAL RW612))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_power.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
-)
-
-else()
-
-message(SEND_ERROR "driver_power.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -1288,7 +1312,7 @@ if (CONFIG_USE_driver_conn_fwloader)
 
 message("driver_conn_fwloader component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_ocotp AND (CONFIG_USE_component_osa_bm OR CONFIG_USE_component_osa_free_rtos))
+if(CONFIG_USE_driver_ocotp AND (CONFIG_USE_component_osa_bm OR CONFIG_USE_component_osa_free_rtos) AND (CONFIG_USE_component_mflash_rdrw610 OR CONFIG_USE_component_mflash_frdmrw612))
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/fsl_loader.c
@@ -1440,6 +1464,39 @@ endif()
 endif()
 
 
+if (CONFIG_USE_driver_gt911)
+# Add set(CONFIG_USE_driver_gt911 true) in config.cmake to use this component
+
+message("driver_gt911 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/gt911/fsl_gt911.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/gt911/.
+)
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DSDK_I2C_BASED_COMPONENT_USED=1
+  )
+
+endif()
+
+else()
+
+message(SEND_ERROR "driver_gt911.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_driver_ft6x06)
 # Add set(CONFIG_USE_driver_ft6x06 true) in config.cmake to use this component
 
@@ -1506,6 +1563,170 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "component_flexcomm_i2c_adapter.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_dbi_lpc_spi_dma)
+# Add set(CONFIG_USE_driver_dbi_lpc_spi_dma true) in config.cmake to use this component
+
+message("driver_dbi_lpc_spi_dma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_dbi AND CONFIG_USE_driver_flexcomm_spi_dma)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dbi/lpc_spi/fsl_dbi_spi_dma.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dbi/lpc_spi/.
+)
+
+else()
+
+message(SEND_ERROR "driver_dbi_lpc_spi_dma.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_dbi_lcdic_dma)
+# Add set(CONFIG_USE_driver_dbi_lcdic_dma true) in config.cmake to use this component
+
+message("driver_dbi_lcdic_dma component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_dbi AND CONFIG_USE_driver_lcdic_dma)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dbi/lcdic/fsl_dbi_lcdic_dma.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dbi/lcdic/.
+)
+
+else()
+
+message(SEND_ERROR "driver_dbi_lcdic_dma.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_dbi)
+# Add set(CONFIG_USE_driver_dbi true) in config.cmake to use this component
+
+message("driver_dbi component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dbi/fsl_dbi.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dbi/.
+)
+
+else()
+
+message(SEND_ERROR "driver_dbi.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_dc-fb-dbi)
+# Add set(CONFIG_USE_driver_dc-fb-dbi true) in config.cmake to use this component
+
+message("driver_dc-fb-dbi component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_dc-fb-common AND CONFIG_USE_driver_dbi)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dc/dbi/fsl_dc_fb_dbi.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dc/dbi/.
+)
+
+else()
+
+message(SEND_ERROR "driver_dc-fb-dbi.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_dc-fb-common)
+# Add set(CONFIG_USE_driver_dc-fb-common true) in config.cmake to use this component
+
+message("driver_dc-fb-common component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_video-common)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/video/display/dc/.
+)
+
+else()
+
+message(SEND_ERROR "driver_dc-fb-common.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_video-common)
+# Add set(CONFIG_USE_driver_video-common true) in config.cmake to use this component
+
+message("driver_video-common component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/video/fsl_video_common.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/video/.
+)
+
+else()
+
+message(SEND_ERROR "driver_video-common.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_st7796s)
+# Add set(CONFIG_USE_driver_st7796s true) in config.cmake to use this component
+
+message("driver_st7796s component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_dbi)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/st7796s/fsl_st7796s.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/st7796s/.
+)
+
+else()
+
+message(SEND_ERROR "driver_st7796s.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -1805,7 +2026,7 @@ if (CONFIG_USE_component_mflash_file)
 
 message("component_mflash_file component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_mflash_rdrw610)
+if(CONFIG_USE_component_mflash_rdrw610 OR CONFIG_USE_component_mflash_frdmrw612)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mflash_file.c
@@ -1871,6 +2092,39 @@ endif()
 else()
 
 message(SEND_ERROR "component_mflash_rdrw610.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_mflash_frdmrw612)
+# Add set(CONFIG_USE_component_mflash_frdmrw612 true) in config.cmake to use this component
+
+message("component_mflash_frdmrw612 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_component_mflash_common AND (CONFIG_BOARD STREQUAL frdmrw612) AND CONFIG_USE_driver_flexspi AND CONFIG_USE_driver_cache_cache64)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/frdmrw612/mflash_drv.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/frdmrw612/.
+)
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DMFLASH_FILE_BASEADDR=7340032
+  )
+
+endif()
+
+else()
+
+message(SEND_ERROR "component_mflash_frdmrw612.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -2110,11 +2364,11 @@ message("component_wireless_imu_adapter component is included from ${CMAKE_CURRE
 if(CONFIG_USE_driver_common AND CONFIG_USE_driver_gdma AND CONFIG_USE_driver_imu AND (CONFIG_USE_component_osa_bm OR CONFIG_USE_component_osa_free_rtos))
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/rpmsg/fsl_adapter_rfimu.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/imu_adapter/fsl_adapter_imu.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/rpmsg/.
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/imu_adapter/.
 )
 
 if(CONFIG_USE_COMPONENT_CONFIGURATION)
@@ -2533,6 +2787,15 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
 
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_CTIMER=1
+  )
+
+endif()
+
 else()
 
 message(SEND_ERROR "component_ctimer_adapter.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
@@ -2557,6 +2820,15 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
 
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_MRT=1
+  )
+
+endif()
+
 else()
 
 message(SEND_ERROR "component_mrt_adapter.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
@@ -2580,6 +2852,15 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/timer/.
 )
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DTIMER_PORT_TYPE_OSTIMER=1
+  )
+
+endif()
 
 else()
 
@@ -2855,7 +3136,7 @@ if (CONFIG_USE_driver_smartcard_usim)
 
 message("driver_smartcard_usim component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if((CONFIG_DEVICE_ID STREQUAL RW612) AND (CONFIG_BOARD STREQUAL rdrw612bga) AND CONFIG_USE_driver_common)
+if((CONFIG_DEVICE_ID STREQUAL RW612) AND (CONFIG_BOARD STREQUAL rdrw612bga OR CONFIG_BOARD STREQUAL frdmrw612) AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../drivers/smartcard/fsl_smartcard_usim.c
@@ -2879,7 +3160,7 @@ if (CONFIG_USE_driver_smartcard_phy_usim)
 
 message("driver_smartcard_phy_usim component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_smartcard_usim AND (CONFIG_DEVICE_ID STREQUAL RW612) AND (CONFIG_BOARD STREQUAL rdrw612bga) AND CONFIG_USE_driver_common)
+if(CONFIG_USE_driver_smartcard_usim AND (CONFIG_DEVICE_ID STREQUAL RW612) AND (CONFIG_BOARD STREQUAL rdrw612bga OR CONFIG_BOARD STREQUAL frdmrw612) AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../drivers/smartcard/fsl_smartcard_phy_usim.c
@@ -3107,11 +3388,11 @@ message("driver_flexcomm_i2c_freertos component is included from ${CMAKE_CURRENT
 if(CONFIG_USE_driver_flexcomm AND CONFIG_USE_driver_common AND CONFIG_USE_driver_flexcomm_i2c AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcomm/i2c/fsl_i2c_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_i2c_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcomm/i2c/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -3368,30 +3649,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_driver_reset)
-# Add set(CONFIG_USE_driver_reset true) in config.cmake to use this component
-
-message("driver_reset component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_common AND (CONFIG_DEVICE_ID STREQUAL RW612))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_reset.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
-)
-
-else()
-
-message(SEND_ERROR "driver_reset.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_driver_lpc_rtc)
 # Add set(CONFIG_USE_driver_lpc_rtc true) in config.cmake to use this component
 
@@ -3472,11 +3729,11 @@ message("driver_flexcomm_spi_freertos component is included from ${CMAKE_CURRENT
 if(CONFIG_USE_driver_flexcomm AND CONFIG_USE_driver_common AND CONFIG_USE_driver_flexcomm_spi AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcomm/spi/fsl_spi_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_spi_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcomm/spi/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -3520,11 +3777,11 @@ message("driver_flexcomm_usart_freertos component is included from ${CMAKE_CURRE
 if(CONFIG_USE_driver_flexcomm AND CONFIG_USE_driver_flexcomm_usart AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcomm/usart/fsl_usart_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_usart_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/flexcomm/usart/.
+  ${CMAKE_CURRENT_LIST_DIR}/drivers/.
 )
 
 else()
@@ -3603,6 +3860,39 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_wwdt.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_driver_flash_config_rdrw612bga)
+# Add set(CONFIG_USE_driver_flash_config_rdrw612bga true) in config.cmake to use this component
+
+message("driver_flash_config_rdrw612bga component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND (CONFIG_BOARD STREQUAL rdrw612bga))
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../boards/rdrw612bga/flash_config/flash_config.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../boards/rdrw612bga/flash_config/.
+)
+
+if(CONFIG_USE_COMPONENT_CONFIGURATION)
+  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
+
+  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
+    -DBOOT_HEADER_ENABLE=1
+  )
+
+endif()
+
+else()
+
+message(SEND_ERROR "driver_flash_config_rdrw612bga.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

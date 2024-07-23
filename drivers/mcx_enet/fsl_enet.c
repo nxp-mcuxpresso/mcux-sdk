@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -42,7 +42,7 @@
 #define ENET_HEAD_AVBTYPE_OFFSET (16)
 
 /*! @brief Binary rollover mode count convert */
-#define ENET_BINARY_ROLLOVER_SCALE(x) (uint32_t)((uint64_t)(x)*46566U / 100000U)
+#define ENET_BINARY_ROLLOVER_SCALE(x) (uint32_t)((uint64_t)(x) * 46566U / 100000U)
 
 /*******************************************************************************
  * Prototypes
@@ -912,9 +912,10 @@ void ENET_CreateHandler(ENET_Type *base,
             pbl = (base->DMA_CH[count].DMA_CHX_TX_CTRL & ENET_DMA_CH_DMA_CHX_TX_CTRL_TxPBL_MASK) >>
                   ENET_DMA_CH_DMA_CHX_TX_CTRL_TxPBL_SHIFT;
             pbl = ((base->DMA_CH[count].DMA_CHX_CTRL & ENET_DMA_CH_DMA_CHX_CTRL_PBLx8_MASK) != 0U) ? (8U * pbl) : pbl;
-            txFifoSize = (uint32_t)pow(
-                (double)2, (double)(uint32_t)(((base->MAC_HW_FEAT[1] & ENET_MAC_HW_FEAT_TXFIFOSIZE_MASK) >> ENET_MAC_HW_FEAT_TXFIFOSIZE_SHIFT) +
-                    7U));
+            txFifoSize                     = (uint32_t)pow((double)2,
+                                                           (double)(uint32_t)(((base->MAC_HW_FEAT[1] & ENET_MAC_HW_FEAT_TXFIFOSIZE_MASK) >>
+                                                           ENET_MAC_HW_FEAT_TXFIFOSIZE_SHIFT) +
+                                                          7U));
             handle->txLenLimitation[count] = txFifoSize - (pbl + 6U) * (32U / 8U);
         }
 
@@ -1160,7 +1161,8 @@ void ENET_EnterPowerDown(ENET_Type *base, uint32_t *wakeFilter)
  */
 status_t ENET_SetVlanCtrl(ENET_Type *base, enet_vlan_ctrl_t *control)
 {
-    uint32_t vl = (control->rxVlanTag.pcp << 13U) | (control->rxVlanTag.dei << 12U) | control->rxVlanTag.vid;
+    uint32_t vl = (((uint32_t)control->rxVlanTag.pcp) << 13U) | (((uint32_t)control->rxVlanTag.dei) << 12U) |
+                  (uint32_t)control->rxVlanTag.vid;
     uint32_t vlanCtrl;
 
     if ((control->innerVlanFilterMatch) && (!control->doubleVlanEnable))
@@ -1168,11 +1170,16 @@ status_t ENET_SetVlanCtrl(ENET_Type *base, enet_vlan_ctrl_t *control)
         return kStatus_Fail;
     }
 
-    vlanCtrl = ENET_MAC_VLAN_TAG_CTRL_VL(vl) | ENET_MAC_VLAN_TAG_CTRL_ETV(control->vidComparison) |  ENET_MAC_VLAN_TAG_CTRL_VTIM(control->vlanInverseMatch) |
-               ENET_MAC_VLAN_TAG_CTRL_ESVL(control->svlanEnable) | ENET_MAC_VLAN_TAG_CTRL_DOVLTC(control->disableVlanTypeCheck) |
-               ENET_MAC_VLAN_TAG_CTRL_EVLS(control->rxOuterVlanStrip) | ENET_MAC_VLAN_TAG_CTRL_EIVLS(control->rxInnerVlanStrip) |
-               ENET_MAC_VLAN_TAG_CTRL_EDVLP(control->doubleVlanEnable) | ENET_MAC_VLAN_TAG_CTRL_ERIVLT(control->innerVlanFilterMatch) |
-               ENET_MAC_VLAN_TAG_CTRL_EVLRXS(control->outerTagInRxStatus) | ENET_MAC_VLAN_TAG_CTRL_EIVLRXS(control->innerTagInRxStatus);
+    vlanCtrl = ENET_MAC_VLAN_TAG_CTRL_VL(vl) | ENET_MAC_VLAN_TAG_CTRL_ETV(control->vidComparison) |
+               ENET_MAC_VLAN_TAG_CTRL_VTIM(control->vlanInverseMatch) |
+               ENET_MAC_VLAN_TAG_CTRL_ESVL(control->svlanEnable) |
+               ENET_MAC_VLAN_TAG_CTRL_DOVLTC(control->disableVlanTypeCheck) |
+               ENET_MAC_VLAN_TAG_CTRL_EVLS(control->rxOuterVlanStrip) |
+               ENET_MAC_VLAN_TAG_CTRL_EIVLS(control->rxInnerVlanStrip) |
+               ENET_MAC_VLAN_TAG_CTRL_EDVLP(control->doubleVlanEnable) |
+               ENET_MAC_VLAN_TAG_CTRL_ERIVLT(control->innerVlanFilterMatch) |
+               ENET_MAC_VLAN_TAG_CTRL_EVLRXS(control->outerTagInRxStatus) |
+               ENET_MAC_VLAN_TAG_CTRL_EIVLRXS(control->innerTagInRxStatus);
 
     if (control->rxVlanTag.tpid == kENET_StanSvlan)
     {
@@ -1192,7 +1199,8 @@ status_t ENET_SetVlanCtrl(ENET_Type *base, enet_vlan_ctrl_t *control)
  */
 status_t ENET_SetTxOuterVlan(ENET_Type *base, enet_vlan_tx_config_t *config, enet_vlan_tx_channel_t channel)
 {
-    uint32_t vlt = (config->tag.pcp << 13U) | (config->tag.dei << 12U) | config->tag.vid;
+    uint32_t vlt =
+        (((uint32_t)config->tag.pcp) << 13U) | (((uint32_t)config->tag.dei) << 12U) | (uint32_t)config->tag.vid;
     uint32_t vlanConfig = ENET_MAC_VLAN_INCL_VLTI(config->txDescVlan) | ENET_MAC_VLAN_INCL_CSVL(config->tag.tpid) |
                           ENET_MAC_VLAN_INCL_VLC(config->ops) | ENET_MAC_VLAN_INCL_VLT(vlt);
 
@@ -1213,8 +1221,8 @@ status_t ENET_SetTxOuterVlan(ENET_Type *base, enet_vlan_tx_config_t *config, ene
         }
 
         /* Clear and status ans reset the power down. */
-        base->MAC_VLAN_INCL |= ENET_MAC_VLAN_INCL_CBTI_MASK | ENET_MAC_VLAN_INCL_RDWR_MASK |
-                               ENET_MAC_VLAN_INCL_ADDR(channel) | vlanConfig;
+        base->MAC_VLAN_INCL |=
+            ENET_MAC_VLAN_INCL_CBTI_MASK | ENET_MAC_VLAN_INCL_RDWR_MASK | ENET_MAC_VLAN_INCL_ADDR(channel) | vlanConfig;
 
         while ((base->MAC_VLAN_INCL & ENET_MAC_VLAN_INCL_BUSY_MASK) != 0U)
         {
@@ -1239,9 +1247,11 @@ status_t ENET_SetTxOuterVlan(ENET_Type *base, enet_vlan_tx_config_t *config, ene
  */
 status_t ENET_SetTxInnerVlan(ENET_Type *base, enet_vlan_tx_config_t *config)
 {
-    uint32_t vlt = (config->tag.pcp << 13U) | (config->tag.dei << 12U) | config->tag.vid;
-    uint32_t vlanConfig = ENET_MAC_INNER_VLAN_INCL_VLTI(config->txDescVlan) | ENET_MAC_INNER_VLAN_INCL_CSVL(config->tag.tpid) |
-                          ENET_MAC_INNER_VLAN_INCL_VLC(config->ops) | ENET_MAC_INNER_VLAN_INCL_VLT(vlt);
+    uint32_t vlt =
+        (((uint32_t)config->tag.pcp) << 13U) | (((uint32_t)config->tag.dei) << 12U) | (uint32_t)config->tag.vid;
+    uint32_t vlanConfig = ENET_MAC_INNER_VLAN_INCL_VLTI(config->txDescVlan) |
+                          ENET_MAC_INNER_VLAN_INCL_CSVL(config->tag.tpid) | ENET_MAC_INNER_VLAN_INCL_VLC(config->ops) |
+                          ENET_MAC_INNER_VLAN_INCL_VLT(vlt);
 
     /* S-VLAN should be enabled first. */
     if ((config->tag.tpid == kENET_StanSvlan) && ((base->MAC_VLAN_TAG_CTRL & ENET_MAC_VLAN_TAG_CTRL_ESVL_MASK) == 0U))
@@ -1250,7 +1260,7 @@ status_t ENET_SetTxInnerVlan(ENET_Type *base, enet_vlan_tx_config_t *config)
     }
 
     /* Double VLAN should be enabled first for inner VLAN. */
-    if((base->MAC_VLAN_TAG_CTRL & ENET_MAC_VLAN_TAG_CTRL_EDVLP_MASK) == 0U)
+    if ((base->MAC_VLAN_TAG_CTRL & ENET_MAC_VLAN_TAG_CTRL_EDVLP_MASK) == 0U)
     {
         return kStatus_Fail;
     }
@@ -1687,7 +1697,7 @@ static inline void ENET_GetRxFrameErr(enet_rx_bd_struct_t *rxDesc, enet_rx_frame
     };
     union _frame_error error;
 
-    error.data = ENET_FRAME_RX_ERROR_BITS(rxDesc->rdes3);
+    error.data    = ENET_FRAME_RX_ERROR_BITS(rxDesc->rdes3);
     *rxFrameError = error.frameError;
 }
 

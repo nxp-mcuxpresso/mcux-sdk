@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 NXP
+ * Copyright 2019-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -16,9 +16,6 @@
 #define MESSAGING_TAG_REPLY   (0x0Cu)
 #define STATIC_CHECK_BITS     (0xD7u)
 
-#if defined(K32W232H_SERIES) || defined(K32L4A_SERIES)
-#define ELEMU_HAS_LOADABLE_FW (0x1u)
-#endif /*defined(K32W232H_SERIES) || defined(K32L4A_SERIES)*/
 enum
 {
     kStatus_ELEMU_AgumentOutOfRange =
@@ -69,7 +66,6 @@ status_t ELEMU_LP_WakeupPathInit(ELEMU_Type *mu);
 
 #if (defined(ELEMU_HAS_LOADABLE_FW) && ELEMU_HAS_LOADABLE_FW)
 status_t ELEMU_loadFw(ELEMU_Type *mu, uint32_t image[]);
-status_t ELEMU_loadFwLocal(ELEMU_Type *mu);
 #endif /* ELEMU_HAS_LOADABLE_FW */
 
 #endif /* __ELEMU_DRIVER_H__ */

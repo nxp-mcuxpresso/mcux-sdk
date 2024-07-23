@@ -12,7 +12,6 @@
 #include "wlan.h"
 #include "wifi.h"
 #include "wm_net.h"
-#include <wm_os.h>
 #include "dhcp-server.h"
 #include <stdio.h>
 #include "event_groups.h"

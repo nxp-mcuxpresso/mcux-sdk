@@ -1,5 +1,5 @@
 /*
- * Copyright 2021, 2023 NXP
+ * Copyright 2021, 2023-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -67,7 +67,7 @@ typedef enum _RSTCTL_RSTn
     kSECURE_GPIO_RST_SHIFT_RSTn  = (RST_CTL0_PSCCTL1 << 8) | 24U,  /**< Security GPIO reset control */
     kENET_IPG_RST_SHIFT_RSTn     = (RST_CTL0_PSCCTL1 << 8) | 25U,  /**< ENET_IPG reset control */
     kENET_IPG_S_RST_SHIFT_RSTn   = (RST_CTL0_PSCCTL1 << 8) | 26U,  /**< ENET_IPG_S reset control */
-    kTRNG_RST_SHIFT_RSTn         = (RST_CTL0_PSCCTL1 << 8) | 27U,  /**< ENET_IPG_S reset control */
+    kTRNG_RST_SHIFT_RSTn         = (RST_CTL0_PSCCTL1 << 8) | 27U,  /**< TRNG reset control */
 
     kUTICK_RST_SHIFT_RSTn   = (RST_CTL0_PSCCTL2 << 8) | 0U,        /**< Micro-tick timer reset control */
     kWWDT_RST_SHIFT_RSTn    = (RST_CTL0_PSCCTL2 << 8) | 1U,        /**< Windowed Watchdog timer reset control */

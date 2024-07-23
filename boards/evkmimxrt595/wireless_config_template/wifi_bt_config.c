@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -9,6 +9,7 @@
 #include "fsl_power.h"
 #include "pin_mux.h"
 #include "fsl_gpio.h"
+#include "wifi_config.h"
 
 /*******************************************************************************
  * Definitions
@@ -116,20 +117,9 @@ void BOARD_WIFI_BT_Config(void *card, sdio_int_t cardInt)
 
     NVIC_SetPriority(BOARD_WIFI_BT_M2_SLOT_HOST_IRQ, BOARD_SDMMC_SDIO_HOST_IRQ_PRIORITY);
 
-    RESET_ClearPeripheralReset(kHSGPIO0_RST_SHIFT_RSTn);
-    RESET_ClearPeripheralReset(kHSGPIO3_RST_SHIFT_RSTn);
-    RESET_ClearPeripheralReset(kHSGPIO4_RST_SHIFT_RSTn);
-
-    /* Configure 32K OSC clock. */
-    CLOCK_EnableOsc32K(true);               /* Enable 32KHz Oscillator clock */
-    CLOCK_EnableClock(kCLOCK_Rtc);          /* Enable the RTC peripheral clock */
-    RTC->CTRL &= ~RTC_CTRL_SWRESET_MASK;    /* Make sure the reset bit is cleared */
-    RTC->CTRL &= ~RTC_CTRL_RTC_OSC_PD_MASK; /* The RTC Oscillator is powered up */
-
-    BOARD_InitPinsM2();
 #elif defined(WIFI_BT_USE_USD_INTERFACE)
     BOARD_SDIO_Config(card, NULL, BOARD_SDMMC_SDIO_HOST_IRQ_PRIORITY, cardInt);
-    BOARD_InitPinsSD();
 #endif
+
     BOARD_WIFI_BT_Enable(false);
 }

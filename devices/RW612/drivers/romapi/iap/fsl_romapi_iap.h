@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022,2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -192,7 +192,7 @@ typedef struct iap_api_interface_struct
     status_t (*mem_config)(api_core_context_t *ctx, uint32_t *buf, uint32_t memoryId);
     status_t (*mem_erase_all)(api_core_context_t *ctx, uint32_t memoryId);
     status_t (*sbloader_init)(api_core_context_t *ctx);
-    status_t (*sbloader_pump)(api_core_context_t *ctx, uint8_t *data, uint32_t length);
+    status_t (*sbloader_pump)(api_core_context_t *ctx, const uint8_t *data, uint32_t length);
     status_t (*sbloader_finalize)(api_core_context_t *ctx);
 } iap_api_interface_t;
 
@@ -244,7 +244,7 @@ status_t iap_mem_flush(api_core_context_t *coreCtx);
 status_t iap_sbloader_init(api_core_context_t *ctx);
 
 //!@brief Handle the SB data stream
-status_t iap_sbloader_pump(api_core_context_t *ctx, uint8_t *data, uint32_t length);
+status_t iap_sbloader_pump(api_core_context_t *ctx, const uint8_t *data, uint32_t length);
 
 //!@brief Finish the sbloader handling
 status_t iap_sbloader_finalize(api_core_context_t *ctx);

@@ -477,10 +477,10 @@ status_t FLEXSPI_NorFlash_CommandXfer(uint32_t instance, flexspi_xfer_t *xfer)
 /*!
  * @brief Configure FlexSPI Lookup table
  */
-status_t FLEXSPI_NorFlash_UpdateLut(uint32_t instance, uint32_t seqIndex, const uint32_t *lutBase, uint32_t numberOfSeq)
+status_t FLEXSPI_NorFlash_UpdateLut(uint32_t instance, uint32_t seqIndex, const uint32_t *lutBase, uint32_t seqNumber)
 {
     assert(BOOTLOADER_API_TREE_POINTER);
-    return BOOTLOADER_API_TREE_POINTER->flexspiNorDriver->update_lut(instance, seqIndex, lutBase, numberOfSeq);
+    return BOOTLOADER_API_TREE_POINTER->flexspiNorDriver->update_lut(instance, seqIndex, lutBase, seqNumber);
 }
 
 /*!
@@ -541,8 +541,9 @@ status_t EFUSE_Program(uint32_t addr, uint32_t data)
     status_t status;
     bool is_hvd_enabled = false;
 
+    /* Workaround for ROM Errata ERR052108 */
     /* Disable SYS_HVD */
-    if (0 != (SPC0->ACTIVE_CFG & SPC_ACTIVE_CFG_SYS_HVDE_MASK))
+    if (0U != (SPC0->ACTIVE_CFG & SPC_ACTIVE_CFG_SYS_HVDE_MASK))
     {
         is_hvd_enabled = true;
         SPC0->ACTIVE_CFG &= ~SPC_ACTIVE_CFG_SYS_HVDE_MASK;

@@ -623,6 +623,15 @@ void BOARD_SetTrdcGlobalConfig(void)
         mbcBlockConfig.memoryBlockIdx = 48U;             /* MBC2_DOM7_MEM0_BLK_CFG_W48 */
         TRDC_MbcSetMemoryBlockConfig(TRDC, &mbcBlockConfig);
 
+        /* non secure state can access CGC0 (Pbridge0, slot 47) for HIFI4 DSP */
+        mbcBlockConfig.memoryAccessControlSelect = TRDC_MBC_ACCESS_CONTROL_POLICY_ALL_INDEX;
+        mbcBlockConfig.nseEnable                 = true; /* non secure state can access the block for HIFI4 DSP */
+        mbcBlockConfig.mbcIdx                    = 2U;   /* MBC2 */
+        mbcBlockConfig.domainIdx                 = 2U;   /* MBC2_DOM2 */
+        mbcBlockConfig.slaveMemoryIdx            = 0U;   /* MBC2_DOM2_MEM0 */
+        mbcBlockConfig.memoryBlockIdx            = 47U;  /* MBC2_DOM2_MEM0_BLK_CFG_W47 */
+        TRDC_MbcSetMemoryBlockConfig(TRDC, &mbcBlockConfig);
+
         /* non secure state can access PCC1(PBridge1 slot 17) and ADC1(PBridge1 slot 34) for cortex-A35 */
         mbcBlockConfig.memoryAccessControlSelect = TRDC_MBC_ACCESS_CONTROL_POLICY_ALL_INDEX;
         mbcBlockConfig.nseEnable                 = true; /* non secure state can access the block for cortex-A35 */

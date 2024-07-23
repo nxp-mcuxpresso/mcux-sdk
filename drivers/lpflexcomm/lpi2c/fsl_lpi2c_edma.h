@@ -16,10 +16,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LPI2C EDMA driver version. */
-#define FSL_LPI2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
-/*@}*/
+#define FSL_LPI2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @} */
 
 /*!
  * @addtogroup lpi2c_master_edma_driver
@@ -80,7 +80,7 @@ extern "C" {
  */
 
 /*! @name Master DMA */
-/*@{*/
+/*! @{ */
 
 /*!
  * @brief Create a new handle for the LPI2C master DMA APIs.
@@ -147,7 +147,7 @@ status_t LPI2C_MasterTransferGetCountEDMA(LPI2C_Type *base, lpi2c_master_edma_ha
  */
 status_t LPI2C_MasterTransferAbortEDMA(LPI2C_Type *base, lpi2c_master_edma_handle_t *handle);
 
-/*@}*/
+/*! @} */
 
 /*! @} */
 

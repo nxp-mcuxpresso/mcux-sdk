@@ -46,6 +46,9 @@
 #  # description: LPI2C Driver
 #  set(CONFIG_USE_driver_lpi2c_edma true)
 
+#  # description: SAI EDMA Driver
+#  set(CONFIG_USE_driver_sai_edma true)
+
 #  # description: LPSPI Driver
 #  set(CONFIG_USE_driver_lpspi_edma true)
 
@@ -169,6 +172,9 @@
 #  # description: Component mem_manager_light
 #  set(CONFIG_USE_component_mem_manager_light true)
 
+#  # description: Component mem_manager_freertos
+#  set(CONFIG_USE_component_mem_manager_freertos true)
+
 #  # description: Driver mma8451q
 #  set(CONFIG_USE_driver_mma8451q true)
 
@@ -280,7 +286,7 @@
 #  # description: LPI2C Driver
 #  set(CONFIG_USE_driver_lpi2c true)
 
-#  # description: LPI2C Driver
+#  # description: LPI2C FreeRTOS Driver
 #  set(CONFIG_USE_driver_lpi2c_freertos true)
 
 #  # description: LPIT Driver
@@ -289,7 +295,7 @@
 #  # description: LPSPI Driver
 #  set(CONFIG_USE_driver_lpspi true)
 
-#  # description: LPSPI Driver
+#  # description: LPSPI FreeRTOS Driver
 #  set(CONFIG_USE_driver_lpspi_freertos true)
 
 #  # description: LPTMR Driver
@@ -298,7 +304,7 @@
 #  # description: LPUART Driver
 #  set(CONFIG_USE_driver_lpuart true)
 
-#  # description: LPUART Driver
+#  # description: LPUART Freertos Driver
 #  set(CONFIG_USE_driver_lpuart_freertos true)
 
 #  # description: MSMC Driver
@@ -312,9 +318,6 @@
 
 #  # description: RTC Driver
 #  set(CONFIG_USE_driver_rtc true)
-
-#  # description: SAI EDMA Driver
-#  set(CONFIG_USE_driver_sai_edma true)
 
 #  # description: SAI Driver
 #  set(CONFIG_USE_driver_sai true)
@@ -426,37 +429,6 @@
 #  # description: CMSIS-NN Library
 #  set(CONFIG_USE_CMSIS_NN_Source true)
 
-#set.middleware.fatfs
-#  # description: FatFs template MMC
-#  set(CONFIG_USE_middleware_fatfs_template_mmc true)
-
-#  # description: FatFs template NAND
-#  set(CONFIG_USE_middleware_fatfs_template_nand true)
-
-#  # description: FatFs template RAM
-#  set(CONFIG_USE_middleware_fatfs_template_ram true)
-
-#  # description: FatFs template SD
-#  set(CONFIG_USE_middleware_fatfs_template_sd true)
-
-#  # description: FatFs template SDSPI
-#  set(CONFIG_USE_middleware_fatfs_template_sdspi true)
-
-#  # description: FatFs template USB
-#  set(CONFIG_USE_middleware_fatfs_template_usb true)
-
-#  # description: FatFs
-#  set(CONFIG_USE_middleware_fatfs true)
-
-#  # description: FatFs_MMC
-#  set(CONFIG_USE_middleware_fatfs_mmc true)
-
-#  # description: FatFs_RAM
-#  set(CONFIG_USE_middleware_fatfs_ram true)
-
-#  # description: FatFs_SD
-#  set(CONFIG_USE_middleware_fatfs_sd true)
-
 #set.middleware.freertos-kernel
 #  # description: FreeRTOS NXP extension
 #  set(CONFIG_USE_middleware_freertos-kernel_extension true)
@@ -482,7 +454,10 @@
 #  # description: FreeRTOS heap 5
 #  set(CONFIG_USE_middleware_freertos-kernel_heap_5 true)
 
-#  # description: FreeRTOS MPU wrappers
+#  # description: new V2 FreeRTOS MPU wrappers introduced in V10.6.0
+#  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers_v2 true)
+
+#  # description: old FreeRTOS MPU wrappers used before V10.6.0
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
 #set.middleware.multicore
@@ -600,6 +575,15 @@
 #  # description: erpc_doc
 #  set(CONFIG_USE_middleware_multicore_erpc_doc true)
 
+#  # description: erpc_zephyr
+#  set(CONFIG_USE_middleware_multicore_erpc_zephyr true)
+
+#  # description: erpc_java
+#  set(CONFIG_USE_middleware_multicore_erpc_java true)
+
+#  # description: erpc_examples
+#  set(CONFIG_USE_middleware_multicore_erpc_examples true)
+
 #  # description: eRPC
 #  set(CONFIG_USE_middleware_multicore_erpc true)
 
@@ -620,6 +604,9 @@
 
 #  # description: RPMsg-Lite FreeRTOS for frdmk32l3a6 board
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_freertos_config_k32l3a6 true)
+
+#  # description: RPMsg-Lite Zephyr environment sources
+#  set(CONFIG_USE_middleware_multicore_rpmsg_lite_zephyr true)
 
 #  # description: RPMsg-Lite
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite true)
@@ -688,6 +675,12 @@
 
 #  # description: els_pkc config
 #  set(CONFIG_USE_middleware_mbedtls_els_pkc_config true)
+
+#  # description: mbedTLS test suite
+#  set(CONFIG_USE_middleware_mbedtls_tests true)
+
+#  # description: mbedTLS 3rdparty code
+#  set(CONFIG_USE_middleware_mbedtls_3rdparty true)
 
 #  # description: mbedTLS port library for KPSDK
 #  set(CONFIG_USE_middleware_mbedtls_port_ksdk true)
@@ -776,6 +769,9 @@
 
 
 #set.component.osa
+#  # description: Component osa_zephyr
+#  set(CONFIG_USE_component_osa_zephyr true)
+
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)
 
@@ -790,6 +786,28 @@
 
 #  # description: Component osa interface
 #  set(CONFIG_USE_component_osa_interface true)
+
+#set.middleware.fatfs
+#  # description: FatFs
+#  set(CONFIG_USE_middleware_fatfs true)
+
+#  # description: FatFs_MMC
+#  set(CONFIG_USE_middleware_fatfs_mmc true)
+
+#  # description: FatFs_RAM
+#  set(CONFIG_USE_middleware_fatfs_ram true)
+
+#  # description: FatFs_SD
+#  set(CONFIG_USE_middleware_fatfs_sd true)
+
+#  # description: FatFs template MMC
+#  set(CONFIG_USE_middleware_fatfs_template_mmc true)
+
+#  # description: FatFs template RAM
+#  set(CONFIG_USE_middleware_fatfs_template_ram true)
+
+#  # description: FatFs template SD
+#  set(CONFIG_USE_middleware_fatfs_template_sd true)
 
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.

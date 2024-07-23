@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022,2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -85,7 +85,7 @@ status_t iap_sbloader_init(api_core_context_t *ctx)
     return IAP_API_TREE->sbloader_init(ctx);
 }
 
-status_t iap_sbloader_pump(api_core_context_t *ctx, uint8_t *data, uint32_t length)
+status_t iap_sbloader_pump(api_core_context_t *ctx, const uint8_t *data, uint32_t length)
 {
     assert(IAP_API_TREE);
     return IAP_API_TREE->sbloader_pump(ctx, data, length);

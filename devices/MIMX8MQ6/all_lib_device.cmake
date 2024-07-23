@@ -58,6 +58,9 @@
 #  # description: UART CMSIS Driver
 #  set(CONFIG_USE_driver_cmsis_iuart true)
 
+#  # description: IO expander PCA6416A driver
+#  set(CONFIG_USE_driver_pca6416a true)
+
 #  # description: Component button
 #  set(CONFIG_USE_component_button true)
 
@@ -93,6 +96,9 @@
 
 #  # description: Component mem_manager_light
 #  set(CONFIG_USE_component_mem_manager_light true)
+
+#  # description: Component mem_manager_freertos
+#  set(CONFIG_USE_component_mem_manager_freertos true)
 
 #  # description: Component panic
 #  set(CONFIG_USE_component_panic true)
@@ -133,7 +139,7 @@
 #  # description: ECSPI Driver
 #  set(CONFIG_USE_driver_ecspi true)
 
-#  # description: ECSPI Freertos Driver
+#  # description: ECSPI FreeRTOS Driver
 #  set(CONFIG_USE_driver_ecspi_freertos true)
 
 #  # description: GPT Driver
@@ -274,7 +280,10 @@
 #  # description: FreeRTOS heap 5
 #  set(CONFIG_USE_middleware_freertos-kernel_heap_5 true)
 
-#  # description: FreeRTOS MPU wrappers
+#  # description: new V2 FreeRTOS MPU wrappers introduced in V10.6.0
+#  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers_v2 true)
+
+#  # description: old FreeRTOS MPU wrappers used before V10.6.0
 #  set(CONFIG_USE_middleware_freertos-kernel_mpu_wrappers true)
 
 #set.middleware.multicore
@@ -308,6 +317,9 @@
 #  # description: RPMsg-Lite FreeRTOS for evkmimx8mq board
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite_freertos_config true)
 
+#  # description: RPMsg-Lite Zephyr environment sources
+#  set(CONFIG_USE_middleware_multicore_rpmsg_lite_zephyr true)
+
 #  # description: RPMsg-Lite
 #  set(CONFIG_USE_middleware_multicore_rpmsg_lite true)
 
@@ -325,6 +337,9 @@
 #  set(CONFIG_USE_middleware_usb_device_common_header true)
 
 #set.component.osa
+#  # description: Component osa_zephyr
+#  set(CONFIG_USE_component_osa_zephyr true)
+
 #  # description: Component common_task
 #  set(CONFIG_USE_component_common_task true)
 

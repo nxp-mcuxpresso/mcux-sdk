@@ -26,15 +26,24 @@
 #endif /* PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER */
 #endif /* PRINTF */
 
+/**
+ * @brief Converts a little-endian order uint8_t array to a 32-bit unsigned int.
+ * @note Implementation is platform independent.
+ * @param[in]       src : pointer to a 4 byte little-endian order
+ * uint8_t buffer that will be converted to an unsigned integer
+ */
+#define PSA_DRIVER_LITTLE_ENDIAN_FROM_U8_TO_U32(src)                                                     \
+    ((((uint32_t)((const uint8_t *)(src))[0]) << 0u) | (((uint32_t)((const uint8_t *)(src))[1]) << 8u) | \
+     (((uint32_t)((const uint8_t *)(src))[2]) << 16u) | (((uint32_t)((const uint8_t *)(src))[3]) << 24u))
 
 #ifndef PSA_DRIVER_ERROR
-#define PSA_DRIVER_ERROR(...)                          \
-    for (;;)                                           \
-    {                                                  \
+#define PSA_DRIVER_ERROR(...)                                \
+    for (;;)                                                 \
+    {                                                        \
         (void)PRINTF("ERROR: %s L#%d ", __func__, __LINE__); \
         (void)PRINTF(__VA_ARGS__);                           \
         (void)PRINTF("\r\n");                                \
-        break;                                         \
+        break;                                               \
     }
 #endif /* PSA_DRIVER_ERROR */
 
@@ -50,8 +59,7 @@
         goto exit;                          \
     }
 
-#define PSA_DRIVER_SUCCESS_OR_EXIT() \
-    PSA_DRIVER_SUCCESS_OR_EXIT_MSG("psa_status is not success but [0x%x]", psa_status)
+#define PSA_DRIVER_SUCCESS_OR_EXIT() PSA_DRIVER_SUCCESS_OR_EXIT_MSG("psa_status is not success but [0x%x]", psa_status)
 
 #define PSA_DRIVER_SET_STATUS_SUCCESS_AND_EXIT() \
     psa_status = PSA_SUCCESS;                    \

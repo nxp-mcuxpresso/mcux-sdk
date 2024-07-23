@@ -355,7 +355,7 @@ void BOARD_BootClockRUN(void)
     {
     }
 
-    /* Swicth both core, M7 Systick and Bus_Lpsr to OscRC48MDiv2 first */
+    /* Switch both core, M7 Systick and Bus_Lpsr to OscRC48MDiv2 first */
 #if __CORTEX_M == 7
     rootCfg.mux = kCLOCK_M7_ClockRoot_MuxOscRc48MDiv2;
     rootCfg.div = 1;
@@ -1170,7 +1170,7 @@ void BOARD_BootClockRUN_800M(void)
     {
     }
 
-    /* Swicth both core, M7 Systick and Bus_Lpsr to OscRC48MDiv2 first */
+    /* Switch both core, M7 Systick and Bus_Lpsr to OscRC48MDiv2 first */
 #if __CORTEX_M == 7
     rootCfg.mux = kCLOCK_M7_ClockRoot_MuxOscRc48MDiv2;
     rootCfg.div = 1;

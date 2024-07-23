@@ -154,23 +154,27 @@
  * @brief MCM cache register access info defines.
  */
 #if defined(MCM_PLACR_CFCC_MASK)
-#define MCM_CACHE_CLEAR_MASK  MCM_PLACR_CFCC_MASK
-#define MCM_CACHE_CLEAR_SHIFT MCM_PLACR_CFCC_SHIFT
-#if defined(MCM0)
-#define MCM0_CACHE_REG MCM0->PLACR
-#elif defined(MCM) && (!defined(MCM1))
-#define MCM0_CACHE_REG MCM->PLACR
-#endif
-#if defined(MCM1)
-#define MCM1_CACHE_REG MCM1->PLACR
-#elif defined(MCM) && (!defined(MCM0))
-#define MCM1_CACHE_REG MCM->PLACR
-#endif
+	#define MCM_CACHE_CLEAR_MASK  MCM_PLACR_CFCC_MASK
+	#define MCM_CACHE_CLEAR_SHIFT MCM_PLACR_CFCC_SHIFT
 #else
-#define MCM_CACHE_CLEAR_MASK  INVALID_REG_MASK
-#define MCM_CACHE_CLEAR_SHIFT INVALID_REG_SHIFT
-#define MCM0_CACHE_REG        (INVALID_REG_ADDRESS)
-#define MCM1_CACHE_REG        (INVALID_REG_ADDRESS)
+	#define MCM_CACHE_CLEAR_MASK  INVALID_REG_MASK
+	#define MCM_CACHE_CLEAR_SHIFT INVALID_REG_SHIFT
+#endif
+
+#if defined(MCM0)
+	#define MCM0_CACHE_REG MCM0->PLACR
+#elif defined(MCM) && (!defined(MCM1))
+	#define MCM0_CACHE_REG MCM->PLACR
+#else 
+	#define MCM0_CACHE_REG        (INVALID_REG_ADDRESS)
+#endif
+
+#if defined(MCM1)
+	#define MCM1_CACHE_REG MCM1->PLACR
+#elif defined(MCM) && (!defined(MCM0))
+	#define MCM1_CACHE_REG MCM->PLACR
+#else
+	#define MCM1_CACHE_REG        (INVALID_REG_ADDRESS)
 #endif
 
 /*!

@@ -46,7 +46,9 @@ static status_t trigger_rng_init(void)
   }
   
   return result;
-#endif
+#else
+  return kStatus_Success;
+#endif  
 }
      
 /** \defgroup psa_entropy PSA driver entry points for entropy collection

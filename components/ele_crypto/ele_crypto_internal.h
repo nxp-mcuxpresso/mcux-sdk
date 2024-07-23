@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -85,9 +85,9 @@
 #define CLOSE_RNG_SESSION_SIZE         (0x2u)
 #define CLOSE_RNG_SESSION_RESPONSE_HDR (0xe1210207u)
 
-#define GET_RNG_RANDOM              (0x17220407u)
+#define GET_RNG_RANDOM              (0x17CD0407u)
 #define GET_RNG_RANDOM_SIZE         (0x4u)
-#define GET_RNG_RANDOM_RESPONSE_HDR (0xe1220207u)
+#define GET_RNG_RANDOM_RESPONSE_HDR (0xe1CD0207u)
 
 #define START_RNG              (0x17a30106u)
 #define START_RNG_SIZE         (0x1u)
@@ -112,7 +112,7 @@
 
 #define FAST_MAC_PROCEED_SIZE         (0x4u)
 #define FAST_MAC_PROCEED              (0x17d10407u)
-#define FAST_MAC_PROCEED_RESPONSE_HDR (0xe1d10207u)
+#define FAST_MAC_PROCEED_RESPONSE_HDR (0xe1d10307u)
 
 #define FAST_MAC_END_SIZE         (0x1u)
 #define FAST_MAC_END              (0x17d20107u)
@@ -284,7 +284,6 @@
 #define SEND_SIGNED_SIZE         (0x3u)
 #define SEND_SIGNED_RESPONSE_HDR (0xe1000306u)
 
-
 #define GET_TRNG_STATE              (0x17a40106u)
 #define GET_TRNG_STATE_SIZE         (0x1u)
 #define GET_TRNG_STATE_RESPONSE_HDR (0xe1a40306u)
@@ -341,6 +340,18 @@
 #define IMPORT_KEY              (0x174f0706u)
 #define IMPORT_KEY_SIZE         (0x7u)
 #define IMPORT_KEY_RESPONSE_HDR (0xe14f0306u)
+
+#define PROGRAM_BBSM              (0x17bb0406u)
+#define PROGRAM_BBSM_SIZE         (0x4u)
+#define PROGRAM_BBSM_RESPONSE_HDR (0xe1bb0306u)
+#define PROGRAM_BBSM_WRITE_OP     (0x71u)
+#define PROGRAM_BBSM_READ_OP      (0x6au)
+#define PROGRAM_BBSM_SET_POLICY   (0xcau)
+
+#define GET_EVENT              (0x17a20106u)
+#define GET_EVENT_SIZE         (0x1u)
+#define GET_EVENT_RSP_SIZE     (0xcu)
+#define GET_EVENT_RESPONSE_HDR (0xe1a20c06u)
 
 /* Key Import flag shifts */
 #define IMPORT_KEY_GROUP_AUTO_FLAG_SHIFT (2u)

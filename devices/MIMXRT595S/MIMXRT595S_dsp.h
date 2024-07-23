@@ -6,13 +6,13 @@
 **     Compiler:            Xtensa Compiler
 **     Reference manual:    iMXRT500RM Rev.1, 07/2022
 **     Version:             rev. 5.0, 2020-08-27
-**     Build:               b231101
+**     Build:               b240327
 **
 **     Abstract:
 **         Peripheral Access Layer for MIMXRT595S_dsp
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -14099,10 +14099,14 @@ typedef struct {
 #define FLEXSPI_BASE_ADDRS                       { FLEXSPI0_BASE, FLEXSPI1_BASE }
 /** Array initializer of FLEXSPI peripheral base pointers */
 #define FLEXSPI_BASE_PTRS                        { FLEXSPI0, FLEXSPI1 }
-/* FlexSPI0 AMBA address. */
+/* FlexSPI0 AMBA base address. */
 #define FlexSPI0_AMBA_BASE                       (0x08000000U)
-/* FlexSPI1 AMBA address. */
+/* FlexSPI0 AMBA end address. */
+#define FlexSPI0_AMBA_END                        (0x0FFFFFFFU)
+/* FlexSPI1 AMBA base address. */
 #define FlexSPI1_AMBA_BASE                       (0x28000000U)
+/* FlexSPI1 AMBA end address. */
+#define FlexSPI1_AMBA_END                        (0x2FFFFFFFU)
 
 
 /*!

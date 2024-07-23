@@ -99,7 +99,10 @@ void mscm_flash_prefetch_speculation_enable(ftfx_cache_config_t *config, bool en
 void fmc_flash_prefetch_speculation_clear(ftfx_cache_config_t *config);
 #endif /* FLASH_PREFETCH_SPECULATION_IS_CONTROLLED_BY_FMC */
 
-#if FTFx_DRIVER_IS_FLASH_RESIDENT
+#if FTFx_DRIVER_IS_FLASH_RESIDENT && \
+       (FLASH_CACHE_IS_CONTROLLED_BY_MCM || FLASH_CACHE_IS_CONTROLLED_BY_MSCM || \
+        FLASH_CACHE_IS_CONTROLLERD_BY_FMC || FLASH_PREFETCH_SPECULATION_IS_CONTROLLED_BY_MSCM || \
+        FLASH_PREFETCH_SPECULATION_IS_CONTROLLED_BY_FMC)
 static void ftfx_common_bit_operation_command_sequence(
     ftfx_cache_config_t *config, FTFx_REG32_ACCESS_TYPE base, uint32_t bitMask, uint32_t bitShift, uint32_t bitValue);
 #endif /* FTFx_DRIVER_IS_FLASH_RESIDENT */
@@ -367,7 +370,10 @@ static void ftfx_copy_common_bit_operation_to_ram(uint32_t *ftfxCommonBitOperati
 }
 #endif /* FTFx_DRIVER_IS_FLASH_RESIDENT && FLASH_IS_CACHE_INVALIDATION_AVAILABLE */
 
-#if FTFx_DRIVER_IS_FLASH_RESIDENT
+#if FTFx_DRIVER_IS_FLASH_RESIDENT && \
+       (FLASH_CACHE_IS_CONTROLLED_BY_MCM || FLASH_CACHE_IS_CONTROLLED_BY_MSCM || \
+        FLASH_CACHE_IS_CONTROLLED_BY_FMC || FLASH_PREFETCH_SPECULATION_IS_CONTROLLED_BY_MSCM || \
+        FLASH_PREFETCH_SPECULATION_IS_CONTROLLED_BY_FMC)
 static void ftfx_common_bit_operation_command_sequence(
     ftfx_cache_config_t *config, FTFx_REG32_ACCESS_TYPE base, uint32_t bitMask, uint32_t bitShift, uint32_t bitValue)
 {

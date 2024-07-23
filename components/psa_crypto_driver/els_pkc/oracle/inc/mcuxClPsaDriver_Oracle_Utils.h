@@ -32,9 +32,9 @@
 #define NXP_DIE_EL2GOIMPORTTFM_KEK_SK_ID 0x7FFF816FU
 #define NXP_DIE_EL2GOIMPORT_AUTH_SK_ID   0x7FFF8170U
 
-#define NXP_DIE_EL2GOPUBLIC_MK_SK_SLOT   0x06U
-#define NXP_DIE_EL2GOCONN_AUTH_PRK_ID    0x7FFF816CU
-#define NXP_DIE_EL2GOATTEST_AUTH_PRK_ID  0x7FFF8174U
+#define NXP_DIE_EL2GOPUBLIC_MK_SK_SLOT  0x06U
+#define NXP_DIE_EL2GOCONN_AUTH_PRK_ID   0x7FFF816CU
+#define NXP_DIE_EL2GOATTEST_AUTH_PRK_ID 0x7FFF8174U
 
 typedef enum key_recipe_operation_t
 {
@@ -98,7 +98,6 @@ typedef struct css_key_slot_handler_s
 
 extern css_key_slot_handler_t slot_handler_array[MCUXCLELS_KEY_SLOTS];
 
-
 /**
  * @brief Calculate the size of a key recipe.
  * @param[in] recipe the recipe to determine the size of
@@ -117,7 +116,7 @@ static inline size_t mcuxClPsaDriver_Oracle_Utils_GetRecipeSize(const key_recipe
  * @retval PSA_SUCCESS                 The operation was succesful
  * @retval PSA_ERROR_DOES_NOT_EXIST    There is no slot associated with key id
  */
-psa_status_t mcuxClPsaDriver_Oracle_Utils_GetSlotFromKeyId(mbedtls_svc_key_id_t key_id, uint32_t *slot_id);
+psa_status_t mcuxClPsaDriver_Oracle_Utils_GetSlotFromKeyId(mbedtls_svc_key_id_t key_id, mcuxClEls_KeyIndex_t *slot_id);
 
 /**
  * @brief Gets the public key associated with key id
@@ -191,9 +190,9 @@ psa_status_t mcuxClPsaDriver_Oracle_Utils_ExecuteElsKeyIn(mbedtls_svc_key_id_t k
  * @retval PSA_ERROR_INVALID_ARGUMENT  Argument validation failed
  */
 psa_status_t mcuxClPsaDriver_Oracle_Utils_ValidateBlobAttributes(const psa_key_attributes_t *attributes,
-                                                                const uint8_t *psa_import_blob,
-                                                                size_t psa_import_blob_size,
-                                                                mcuxClEls_KeyIndex_t auth_key_slot);
+                                                                 const uint8_t *psa_import_blob,
+                                                                 size_t psa_import_blob_size,
+                                                                 mcuxClEls_KeyIndex_t auth_key_slot);
 
 /**
  * @brief Parses psa_import_external_blob and decrypts it.
@@ -208,8 +207,8 @@ psa_status_t mcuxClPsaDriver_Oracle_Utils_ValidateBlobAttributes(const psa_key_a
  * @retval PSA_ERROR_INVALID_ARGUMENT  Argument validation failed
  */
 psa_status_t mcuxClPsaDriver_Oracle_Utils_ExecuteElsDecryptCbc(uint8_t *psa_external_blob,
-                                                              size_t psa_external_blob_size,
-                                                              uint8_t **key_data,
-                                                              size_t *key_size,
-                                                              mcuxClEls_KeyIndex_t enc_key_slot);
+                                                               size_t psa_external_blob_size,
+                                                               uint8_t **key_data,
+                                                               size_t *key_size,
+                                                               mcuxClEls_KeyIndex_t enc_key_slot);
 #endif //_MCUXCLPSADRIVER_ORACLE_UTILS_

@@ -1,0 +1,5 @@
+var a00743 =
+[
+    [ "MCUXCLBUFFER_USE_OBJECT", "a00743.html#ga85034de8f2101add06e8d4763bb2216d", null ],
+    [ "MCUXCLBUFFER_USE_POINTER", "a00743.html#ga98960703c96d974f33e9c87ff9ad8556", null ]
+];
