@@ -8976,7 +8976,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpflexcomm_lpi2c_freertos.MCXN236" name="lpi2c_freertos" brief="LPI2C Driver" version="2.0.0" full_name="FLEXCOMM LPI2C FREERTOS Driver" devices="MCXN236" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpflexcomm" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpflexcomm_lpi2c_freertos.MCXN236" name="lpi2c_freertos" brief="LPI2C Driver" version="2.0.0" full_name="FLEXCOMM LPI2C FREERTOS Driver" devices="MCXN236" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpflexcomm/lpi2c" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MCXN236"/>
@@ -9018,7 +9018,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpflexcomm_lpspi_freertos.MCXN236" name="lpspi_freertos" brief="LPSPI FreeRTOS driver" version="2.0.0" full_name="LPFLEXCOMM LPSPI FREERTOS Driver" devices="MCXN236" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpflexcomm" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpflexcomm_lpspi_freertos.MCXN236" name="lpspi_freertos" brief="LPSPI FreeRTOS driver" version="2.0.0" full_name="LPFLEXCOMM LPSPI FREERTOS Driver" devices="MCXN236" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpflexcomm/lpspi" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MCXN236"/>
@@ -9060,7 +9060,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpflexcomm_lpuart_freertos.MCXN236" name="lpuart_freertos" brief="lpflexcomm LPUART driver" version="2.0.0" full_name="LPFLEXCOMM LPUART FREERTOS Driver" devices="MCXN236" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpflexcomm" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpflexcomm_lpuart_freertos.MCXN236" name="lpuart_freertos" brief="lpflexcomm LPUART driver" version="2.0.0" full_name="LPFLEXCOMM LPUART FREERTOS Driver" devices="MCXN236" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpflexcomm/lpuart" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MCXN236"/>

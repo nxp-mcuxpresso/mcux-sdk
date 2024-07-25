@@ -4146,7 +4146,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.ecspi_freertos.MIMX8ML8" name="ecspi_freertos" brief="ECSPI FreeRTOS Driver" version="2.2.0" full_name="ECSPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MIMX8ML8/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.ecspi_freertos.MIMX8ML8" name="ecspi_freertos" brief="ECSPI FreeRTOS Driver" version="2.2.0" full_name="ECSPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/ecspi" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <any_of>
@@ -4282,7 +4282,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.ii2c_freertos.MIMX8ML8" name="i2c_freertos" brief="I2C Freertos Driver" version="2.0.7" full_name="I2C Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MIMX8ML8/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.ii2c_freertos.MIMX8ML8" name="i2c_freertos" brief="I2C Freertos Driver" version="2.0.7" full_name="I2C Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/ii2c" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <any_of>
@@ -4346,7 +4346,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.iuart_freertos.MIMX8ML8" name="iuart_freertos" brief="IUART Freertos Driver" version="2.1.1" full_name="IUART Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MIMX8ML8/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.iuart_freertos.MIMX8ML8" name="iuart_freertos" brief="IUART Freertos Driver" version="2.1.1" full_name="IUART Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/iuart" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <any_of>

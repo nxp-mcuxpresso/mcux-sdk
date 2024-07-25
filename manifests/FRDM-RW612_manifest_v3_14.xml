@@ -11043,7 +11043,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flexcomm_i2c_freertos.RW612" name="i2c_freertos" brief="FLEXCOMM I2C FreeRTOS Driver" version="2.0.8" full_name="FLEXCOMM I2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.flexcomm_i2c_freertos.RW612" name="i2c_freertos" brief="FLEXCOMM I2C FreeRTOS Driver" version="2.0.8" full_name="FLEXCOMM I2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexcomm/i2c" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.flexcomm.RW612"/>
@@ -11336,7 +11336,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flexcomm_spi_freertos.RW612" name="spi_freertos" brief="FLEXCOMM SPI FreeRTOS Driver" version="2.1.0" full_name="FLEXCOMM SPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.flexcomm_spi_freertos.RW612" name="spi_freertos" brief="FLEXCOMM SPI FreeRTOS Driver" version="2.1.0" full_name="FLEXCOMM SPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexcomm/spi" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.flexcomm.RW612"/>
@@ -11379,7 +11379,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flexcomm_usart_freertos.RW612" name="usart_freertos" brief="FLEXCOMM USART FreeRTOS Driver" version="2.7.0" full_name="FLEXCOMM USART FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/RW612/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.flexcomm_usart_freertos.RW612" name="usart_freertos" brief="FLEXCOMM USART FreeRTOS Driver" version="2.7.0" full_name="FLEXCOMM USART FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexcomm/usart" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.flexcomm.RW612"/>

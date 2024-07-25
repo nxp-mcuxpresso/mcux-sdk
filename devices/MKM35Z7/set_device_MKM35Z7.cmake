@@ -1211,7 +1211,7 @@ message("driver_i2c_freertos component is included from ${CMAKE_CURRENT_LIST_FIL
 if(CONFIG_USE_driver_i2c AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_i2c_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/i2c/fsl_i2c_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
@@ -1331,7 +1331,7 @@ message("driver_lpuart_freertos component is included from ${CMAKE_CURRENT_LIST_
 if(CONFIG_USE_driver_lpuart AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpuart_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart/fsl_lpuart_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
@@ -1639,7 +1639,7 @@ message("driver_spi_freertos component is included from ${CMAKE_CURRENT_LIST_FIL
 if(CONFIG_USE_driver_spi AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_spi_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/spi/fsl_spi_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
@@ -1711,7 +1711,7 @@ message("driver_uart_freertos component is included from ${CMAKE_CURRENT_LIST_FI
 if(CONFIG_USE_driver_uart AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_uart_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/uart/fsl_uart_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC

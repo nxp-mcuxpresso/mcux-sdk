@@ -10570,7 +10570,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flexcomm_usart_freertos.LPC55S36" name="usart_freertos" brief="FLEXCOMM USART FreeRTOS Driver" version="2.7.0" full_name="FLEXCOMM USART FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/LPC55S36/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.flexcomm_usart_freertos.LPC55S36" name="usart_freertos" brief="FLEXCOMM USART FreeRTOS Driver" version="2.7.0" full_name="FLEXCOMM USART FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/flexcomm/usart" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.flexcomm.LPC55S36"/>

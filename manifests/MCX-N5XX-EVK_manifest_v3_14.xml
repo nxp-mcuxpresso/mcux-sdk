@@ -5691,7 +5691,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpflexcomm_lpuart_freertos.MCXN547" name="lpuart_freertos" brief="LPFLEXCOMM LPUART FreeRTOS Driver" version="2.0.0" full_name="LPFLEXCOMM LPUART FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MCXN547/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpflexcomm_lpuart_freertos.MCXN547" name="lpuart_freertos" brief="LPFLEXCOMM LPUART FreeRTOS Driver" version="2.0.0" full_name="LPFLEXCOMM LPUART FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpflexcomm/lpuart" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MCXN547"/>
@@ -5714,7 +5714,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpflexcomm_lpspi_freertos.MCXN547" name="lpspi_freertos" brief="LPFLEXCOMM LPSPI FreeRTOS Driver" version="2.0.0" full_name="LPFLEXCOMM LPSPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MCXN547/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpflexcomm_lpspi_freertos.MCXN547" name="lpspi_freertos" brief="LPFLEXCOMM LPSPI FreeRTOS Driver" version="2.0.0" full_name="LPFLEXCOMM LPSPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpflexcomm/lpspi" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MCXN547"/>
@@ -5737,7 +5737,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpflexcomm_lpi2c_freertos.MCXN547" name="lpi2c_freertos" brief="LPFLEXCOMM LPI2C FreeRTOS Driver" version="2.0.0" full_name="LPFLEXCOMM LPI2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MCXN547/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpflexcomm_lpi2c_freertos.MCXN547" name="lpi2c_freertos" brief="LPFLEXCOMM LPI2C FreeRTOS Driver" version="2.0.0" full_name="LPFLEXCOMM LPI2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpflexcomm/lpi2c" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MCXN547"/>

@@ -1336,7 +1336,7 @@ message("driver_ii2c_freertos component is included from ${CMAKE_CURRENT_LIST_FI
 if(CONFIG_USE_driver_ii2c AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_i2c_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ii2c/fsl_i2c_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
@@ -1408,7 +1408,7 @@ message("driver_iuart_freertos component is included from ${CMAKE_CURRENT_LIST_F
 if(CONFIG_USE_driver_iuart AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_uart_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iuart/fsl_uart_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC

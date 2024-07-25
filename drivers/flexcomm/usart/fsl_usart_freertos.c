@@ -142,6 +142,7 @@ int USART_RTOS_Init(usart_rtos_handle_t *handle, usart_handle_t *t_handle, const
     defcfg.parityMode   = cfg->parity;
     defcfg.enableTx     = true;
     defcfg.enableRx     = true;
+    defcfg.enableHardwareFlowControl = cfg->enableHardwareFlowControl;
 
     status = USART_Init(handle->base, &defcfg, cfg->srcclk);
     if (status != kStatus_Success)

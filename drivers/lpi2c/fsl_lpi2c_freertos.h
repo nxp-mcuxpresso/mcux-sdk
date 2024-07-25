@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef FSL_LPI2C_FREERTOS_H__
-#define FSL_LPI2C_FREERTOS_H__
+#ifndef __FSL_LPI2C_FREERTOS_H__
+#define __FSL_LPI2C_FREERTOS_H__
 
 #include "FreeRTOS.h"
 #include "portable.h"
@@ -104,4 +104,4 @@ status_t LPI2C_RTOS_Transfer(lpi2c_rtos_handle_t *handle, lpi2c_master_transfer_
  * @}
  */
 
-#endif /* FSL_LPI2C_FREERTOS_H__ */
+#endif /* __FSL_LPI2C_FREERTOS_H__ */

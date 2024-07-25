@@ -2009,7 +2009,7 @@ message("driver_lpflexcomm_lpuart_freertos component is included from ${CMAKE_CU
 if(CONFIG_USE_driver_common AND CONFIG_USE_driver_lpflexcomm AND CONFIG_USE_driver_lpuart AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpuart_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpuart/fsl_lpuart_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
@@ -2033,7 +2033,7 @@ message("driver_lpflexcomm_lpspi_freertos component is included from ${CMAKE_CUR
 if(CONFIG_USE_driver_common AND CONFIG_USE_driver_lpflexcomm AND CONFIG_USE_driver_lpspi AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpspi_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpspi/fsl_lpspi_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
@@ -2057,7 +2057,7 @@ message("driver_lpflexcomm_lpi2c_freertos component is included from ${CMAKE_CUR
 if(CONFIG_USE_driver_common AND CONFIG_USE_driver_lpflexcomm AND CONFIG_USE_driver_lpi2c AND CONFIG_USE_middleware_freertos-kernel)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/drivers/fsl_lpi2c_freertos.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpflexcomm/lpi2c/fsl_lpi2c_freertos.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC

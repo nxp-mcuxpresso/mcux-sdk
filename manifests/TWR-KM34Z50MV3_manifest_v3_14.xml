@@ -3797,7 +3797,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.i2c_freertos.MKM34ZA5" name="i2c_freertos" brief="I2C FreeRTOS Driver" version="2.0.9" full_name="I2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MKM34ZA5/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.i2c_freertos.MKM34ZA5" name="i2c_freertos" brief="I2C FreeRTOS Driver" version="2.0.9" full_name="I2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/i2c" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.i2c.MKM34ZA5"/>
@@ -4075,7 +4075,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.spi_freertos.MKM34ZA5" name="spi_freertos" brief="SPI FreeRTOS Driver" version="2.1.1" full_name="SPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MKM34ZA5/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.spi_freertos.MKM34ZA5" name="spi_freertos" brief="SPI FreeRTOS Driver" version="2.1.1" full_name="SPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/spi" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.spi.MKM34ZA5"/>
@@ -4136,7 +4136,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.uart_freertos.MKM34ZA5" name="uart_freertos" brief="UART FreeRTOS Driver" version="2.5.0" full_name="UART FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MKM34ZA5/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.uart_freertos.MKM34ZA5" name="uart_freertos" brief="UART FreeRTOS Driver" version="2.5.0" full_name="UART FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/uart" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.uart.MKM34ZA5"/>

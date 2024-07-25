@@ -7219,7 +7219,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpi2c_freertos.MIMXRT1166" name="i2c_freertos" brief="LPI2C FreeRTOS Driver" version="2.3.2" full_name="LPI2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MIMXRT1166/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpi2c_freertos.MIMXRT1166" name="i2c_freertos" brief="LPI2C FreeRTOS Driver" version="2.3.2" full_name="LPI2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpi2c" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpi2c.MIMXRT1166"/>
@@ -7260,7 +7260,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpspi_freertos.MIMXRT1166" name="lpspi_freertos" brief="LPSPI FreeRTOS Driver" version="2.3.1" full_name="LPSPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MIMXRT1166/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpspi_freertos.MIMXRT1166" name="lpspi_freertos" brief="LPSPI FreeRTOS Driver" version="2.3.1" full_name="LPSPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpspi.MIMXRT1166"/>
@@ -7301,7 +7301,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpuart_freertos.MIMXRT1166" name="lpuart_freertos" brief="LPUART Freertos Driver" version="2.5.0" full_name="LPUART Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MIMXRT1166/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpuart_freertos.MIMXRT1166" name="lpuart_freertos" brief="LPUART Freertos Driver" version="2.5.0" full_name="LPUART Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpuart" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpuart.MIMXRT1166"/>

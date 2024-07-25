@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef FSL_USART_FREERTOS_H__
-#define FSL_USART_FREERTOS_H__
+#ifndef __FSL_USART_FREERTOS_H__
+#define __FSL_USART_FREERTOS_H__
 
 #include "fsl_usart.h"
 #include <FreeRTOS.h>
@@ -25,10 +25,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief USART FreeRTOS driver version. */
-#define FSL_USART_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 6, 0))
-/*! @} */
+#define FSL_USART_FREERTOS_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
+/*@}*/
 
 /*! @brief FLEX USART configuration structure */
 struct rtos_usart_config
@@ -40,6 +40,7 @@ struct rtos_usart_config
     usart_stop_bit_count_t stopbits; /*!< Number of stop bits to use */
     uint8_t *buffer;                 /*!< Buffer for background reception */
     uint32_t buffer_size;            /*!< Size of buffer for background reception */
+    bool enableHardwareFlowControl;  /*!< Enable hardware control RTS/CTS */
 };
 
 /*! @brief FLEX USART FreeRTOS handle */
@@ -121,7 +122,7 @@ int USART_RTOS_Send(usart_rtos_handle_t *handle, uint8_t *buffer, uint32_t lengt
  */
 int USART_RTOS_Receive(usart_rtos_handle_t *handle, uint8_t *buffer, uint32_t length, size_t *received);
 
-/*! @} */
+/* @} */
 
 #if defined(__cplusplus)
 }
@@ -129,4 +130,4 @@ int USART_RTOS_Receive(usart_rtos_handle_t *handle, uint8_t *buffer, uint32_t le
 
 /*! @}*/
 
-#endif /* FSL_USART_FREERTOS_H__ */
+#endif /* __FSL_USART_FREERTOS_H__ */

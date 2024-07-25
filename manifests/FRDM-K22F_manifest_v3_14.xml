@@ -3476,7 +3476,7 @@ ${load}</script>
         <files mask="Getting Started with MCUXpressoSDK and FreeRTOS OS.pdf"/>
       </source>
     </component>
-    <component id="platform.drivers.dspi_freertos.MK22F51212" name="dspi_freertos" brief="DSPI FreeRTOS Driver" version="2.2.5" full_name="DSPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MK22F51212/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.dspi_freertos.MK22F51212" name="dspi_freertos" brief="DSPI FreeRTOS Driver" version="2.2.5" full_name="DSPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/dspi" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.dspi.MK22F51212"/>
@@ -5315,7 +5315,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.i2c_freertos.MK22F51212" name="i2c_freertos" brief="I2C FreeRTOS Driver" version="2.0.9" full_name="I2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MK22F51212/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.i2c_freertos.MK22F51212" name="i2c_freertos" brief="I2C FreeRTOS Driver" version="2.0.9" full_name="I2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/i2c" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.i2c.MK22F51212"/>
@@ -5396,7 +5396,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpuart_freertos.MK22F51212" name="lpuart_freertos" brief="LPUART Freertos Driver" version="2.5.0" full_name="LPUART Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MK22F51212/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpuart_freertos.MK22F51212" name="lpuart_freertos" brief="LPUART Freertos Driver" version="2.5.0" full_name="LPUART Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpuart" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpuart.MK22F51212"/>
@@ -5634,7 +5634,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.uart_freertos.MK22F51212" name="uart_freertos" brief="UART FreeRTOS Driver" version="2.5.0" full_name="UART FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MK22F51212/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.uart_freertos.MK22F51212" name="uart_freertos" brief="UART FreeRTOS Driver" version="2.5.0" full_name="UART FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/uart" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.uart.MK22F51212"/>

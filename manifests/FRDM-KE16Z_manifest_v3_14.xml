@@ -4679,7 +4679,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpi2c_freertos.MKE16Z4" name="i2c_freertos" brief="LPI2C FreeRTOS Driver" version="2.3.2" full_name="LPI2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MKE16Z4/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpi2c_freertos.MKE16Z4" name="i2c_freertos" brief="LPI2C FreeRTOS Driver" version="2.3.2" full_name="LPI2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpi2c" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <any_of>
@@ -4749,7 +4749,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpspi_freertos.MKE16Z4" name="lpspi_freertos" brief="LPSPI FreeRTOS Driver" version="2.3.1" full_name="LPSPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MKE16Z4/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpspi_freertos.MKE16Z4" name="lpspi_freertos" brief="LPSPI FreeRTOS Driver" version="2.3.1" full_name="LPSPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpspi" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <any_of>
@@ -4819,7 +4819,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpuart_freertos.MKE16Z4" name="lpuart_freertos" brief="LPUART Freertos Driver" version="2.5.0" full_name="LPUART Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/MKE16Z4/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpuart_freertos.MKE16Z4" name="lpuart_freertos" brief="LPUART Freertos Driver" version="2.5.0" full_name="LPUART Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpuart" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <any_of>

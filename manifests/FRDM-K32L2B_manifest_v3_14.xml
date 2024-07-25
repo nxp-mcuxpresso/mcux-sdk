@@ -4850,7 +4850,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.i2c_freertos.K32L2B31A" name="i2c_freertos" brief="I2C FreeRTOS Driver" version="2.0.9" full_name="I2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/K32L2B31A/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.i2c_freertos.K32L2B31A" name="i2c_freertos" brief="I2C FreeRTOS Driver" version="2.0.9" full_name="I2C FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/i2c" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.i2c.K32L2B31A"/>
@@ -4931,7 +4931,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.lpuart_freertos.K32L2B31A" name="lpuart_freertos" brief="LPUART Freertos Driver" version="2.5.0" full_name="LPUART Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/K32L2B31A/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.lpuart_freertos.K32L2B31A" name="lpuart_freertos" brief="LPUART Freertos Driver" version="2.5.0" full_name="LPUART Freertos Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/lpuart" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpuart.K32L2B31A"/>
@@ -5129,7 +5129,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.spi_freertos.K32L2B31A" name="spi_freertos" brief="SPI FreeRTOS Driver" version="2.1.1" full_name="SPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/K32L2B31A/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.spi_freertos.K32L2B31A" name="spi_freertos" brief="SPI FreeRTOS Driver" version="2.1.1" full_name="SPI FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/spi" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.spi.K32L2B31A"/>
@@ -5190,7 +5190,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.uart_freertos.K32L2B31A" name="uart_freertos" brief="UART FreeRTOS Driver" version="2.5.0" full_name="UART FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../devices/K32L2B31A/drivers" project_base_path="drivers/freertos">
+    <component id="platform.drivers.uart_freertos.K32L2B31A" name="uart_freertos" brief="UART FreeRTOS Driver" version="2.5.0" full_name="UART FreeRTOS Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/uart" project_base_path="drivers/freertos">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.uart.K32L2B31A"/>
