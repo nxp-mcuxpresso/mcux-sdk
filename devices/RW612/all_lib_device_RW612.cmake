@@ -76,7 +76,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/edgefast_bluetooth
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/edgefast_wifi
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/edgefast_wifi
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/fatfs
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/littlefs
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/lwip

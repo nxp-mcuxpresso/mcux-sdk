@@ -90,7 +90,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/utick
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wwdt
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/edgefast_wifi
+    ${CMAKE_CURRENT_LIST_DIR}/../../../components/edgefast_wifi
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/common/audio
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/tensorflow-lite

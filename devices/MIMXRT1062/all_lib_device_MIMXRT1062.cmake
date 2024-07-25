@@ -97,7 +97,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbara
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/xbarb
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware
-    ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/edgefast_wifi
+    ${CMAKE_CURRENT_LIST_DIR}/../../../components/edgefast_wifi
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/tensorflow-lite
     ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/eiq/tensorflow-lite/third_party/cmsis
