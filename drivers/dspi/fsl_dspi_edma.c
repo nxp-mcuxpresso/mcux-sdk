@@ -161,7 +161,7 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
 
     uint32_t instance                = DSPI_GetInstance(base);
     uint16_t wordToSend              = 0;
-    uint8_t dummyData                = DSPI_GetDummyDataInstance(base);
+    uint16_t dummyData               = DSPI_GetDummyDataInstance(base);
     uint8_t dataAlreadyFed           = 0;
     uint8_t dataFedMax               = 2;
     uint32_t tmpMCR                  = 0;
@@ -279,7 +279,7 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
                 }
                 else
                 {
-                    wordToSend = (((uint16_t)dummyData << 8U) | (uint16_t)dummyData);
+                    wordToSend = dummyData;
                 }
                 handle->lastCommand = (handle->lastCommand & 0xffff0000U) | wordToSend;
                 handle->command     = handle->lastCommand;
@@ -295,7 +295,7 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
                 }
                 else
                 {
-                    wordToSend = (((uint16_t)dummyData << 8U) | (uint16_t)dummyData);
+                    wordToSend = dummyData;
                 }
                 handle->command = (handle->command & 0xffff0000U) | wordToSend;
             }
@@ -346,7 +346,7 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
                     }
                     else
                     {
-                        wordToSend = (((uint16_t)dummyData << 8U) | (uint16_t)dummyData);
+                        wordToSend = dummyData;
                     }
                     handle->remainingSendByteCount = 0;
                     base->PUSHR                    = (handle->lastCommand & 0xffff0000U) | wordToSend;
@@ -363,7 +363,7 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
                     }
                     else
                     {
-                        wordToSend = (((uint16_t)dummyData << 8U) | (uint16_t)dummyData);
+                        wordToSend = dummyData;
                     }
                     handle->remainingSendByteCount -= 2U;
                     base->PUSHR = (handle->command & 0xffff0000U) | wordToSend;
@@ -513,14 +513,7 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
         }
         else
         {
-            if (handle->bitsPerFrame <= 8U)
-            {
-                wordToSend = dummyData;
-            }
-            else
-            {
-                wordToSend = (((uint16_t)dummyData << 8U) | (uint16_t)dummyData);
-            }
+            wordToSend = dummyData;
             handle->lastCommand = (handle->lastCommand & 0xffff0000U) | wordToSend;
         }
     }
@@ -1219,7 +1212,7 @@ status_t DSPI_SlaveTransferEDMA(SPI_Type *base, dspi_slave_edma_handle_t *handle
     handle->totalByteCount            = transfer->dataSize;
 
     uint32_t wordToSend    = 0;
-    uint8_t dummyData      = DSPI_GetDummyDataInstance(base);
+    uint16_t dummyData     = DSPI_GetDummyDataInstance(base);
     uint8_t dataAlreadyFed = 0;
     uint8_t dataFedMax     = 2;
 
@@ -1262,7 +1255,7 @@ status_t DSPI_SlaveTransferEDMA(SPI_Type *base, dspi_slave_edma_handle_t *handle
                 }
                 else
                 {
-                    wordToSend = ((uint32_t)dummyData << 8U) | dummyData;
+                    wordToSend = dummyData;
                 }
                 handle->remainingSendByteCount -= 2U; /* decrement remainingSendByteCount by 2 */
                 base->PUSHR_SLAVE = wordToSend;
@@ -1373,14 +1366,7 @@ status_t DSPI_SlaveTransferEDMA(SPI_Type *base, dspi_slave_edma_handle_t *handle
         {
             transferConfigC.srcAddr   = (uint32_t)(&handle->txBuffIfNull);
             transferConfigC.srcOffset = 0;
-            if (handle->bitsPerFrame <= 8U)
-            {
-                handle->txBuffIfNull = dummyData;
-            }
-            else
-            {
-                handle->txBuffIfNull = ((uint32_t)dummyData << 8U) | dummyData;
-            }
+            handle->txBuffIfNull = dummyData;
         }
 
         transferConfigC.srcTransferSize = kEDMA_TransferSize1Bytes;
