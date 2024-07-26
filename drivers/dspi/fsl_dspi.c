@@ -115,7 +115,7 @@ static dspi_master_isr_t s_dspiMasterIsr;
 static dspi_slave_isr_t s_dspiSlaveIsr;
 
 /* @brief Dummy data for each instance. This data is used when user's tx buffer is NULL*/
-volatile uint8_t g_dspiDummyData[ARRAY_SIZE(s_dspiBases)] = {0};
+volatile uint16_t g_dspiDummyData[ARRAY_SIZE(s_dspiBases)] = {0};
 /**********************************************************************************************************************
  * Code
  *********************************************************************************************************************/
@@ -150,20 +150,20 @@ uint32_t DSPI_GetInstance(SPI_Type *base)
  *
  * param base DSPI peripheral base address.
  */
-uint8_t DSPI_GetDummyDataInstance(SPI_Type *base)
+uint16_t DSPI_GetDummyDataInstance(SPI_Type *base)
 {
-    uint8_t instance = g_dspiDummyData[DSPI_GetInstance(base)];
+    uint16_t instance = g_dspiDummyData[DSPI_GetInstance(base)];
 
     return instance;
 }
 
-/*!
- * brief Set up the dummy data.
- *
- * param base DSPI peripheral address.
- * param dummyData Data to be transferred when tx buffer is NULL.
- */
 void DSPI_SetDummyData(SPI_Type *base, uint8_t dummyData)
+{
+    uint32_t instance         = DSPI_GetInstance(base);
+    g_dspiDummyData[instance] = (((uint16_t)dummyData << 8U) | (uint16_t)dummyData);
+}
+
+void DSPI_SetDummyData16Bit(SPI_Type *base, uint16_t dummyData)
 {
     uint32_t instance         = DSPI_GetInstance(base);
     g_dspiDummyData[instance] = dummyData;
@@ -888,7 +888,7 @@ status_t DSPI_MasterTransferBlocking(SPI_Type *base, dspi_transfer_t *transfer)
 
     uint16_t wordToSend   = 0;
     uint16_t wordReceived = 0;
-    uint8_t dummyData     = DSPI_GetDummyDataInstance(base);
+    uint16_t dummyData     = DSPI_GetDummyDataInstance(base);
     uint8_t bitsPerFrame;
 
     uint32_t command;
@@ -1849,7 +1849,7 @@ static void DSPI_SlaveTransferFillUpTxFifo(SPI_Type *base, dspi_slave_handle_t *
     assert(NULL != handle);
 
     uint16_t transmitData = 0;
-    uint8_t dummyPattern  = DSPI_GetDummyDataInstance(base);
+    uint16_t dummyPattern  = DSPI_GetDummyDataInstance(base);
 
     /* Service the transmitter, if transmit buffer provided, transmit the data,
      * else transmit dummy pattern
@@ -2001,7 +2001,7 @@ void DSPI_SlaveTransferHandleIRQ(SPI_Type *base, dspi_slave_handle_t *handle)
 {
     assert(NULL != handle);
 
-    uint8_t dummyPattern = DSPI_GetDummyDataInstance(base);
+    uint16_t dummyPattern = DSPI_GetDummyDataInstance(base);
     uint32_t dataReceived;
     uint32_t dataSend                     = 0;
     uint32_t tmpRemainingReceiveByteCount = 0;
