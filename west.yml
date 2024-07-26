@@ -10,7 +10,7 @@ manifest:
     remote: nxp-mcuxpresso
   projects:
   - name: mcux-sdk-examples
-    revision: MCUX_2.16.000
+    revision: fc18ff0c12ba90fe71714eaa4244717efa18c61c
     path: examples
   - name: FreeRTOS-Kernel
     revision: MCUX_2.16.000
@@ -124,7 +124,7 @@ manifest:
     revision: MCUX_2.16.000
   - name: mcux-sdk-middleware-connectivity-framework
     path: middleware/wireless/framework
-    revision: MCUX_2.16.000
+    revision: MCUX_2.16.000_UpdRev0
     remote: nxp
   - name: mcux-sdk-middleware-bluetooth-controller
     revision: MCUX_2.16.000
