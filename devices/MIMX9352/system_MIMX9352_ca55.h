@@ -1,12 +1,17 @@
 /*
 ** ###################################################################
 **     Processors:          MIMX9352AVTXM_ca55
-**                          MIMX9352CVUXK_ca55
-**                          MIMX9352DVUXM_ca55
+**                          MIMX9352CVVXM_ca55
+**                          MIMX9352DVVXM_ca55
+**                          MIMX9352XVVXM_ca55
+**
+**     Compilers:           GNU C Compiler
+**                          IAR ANSI C/C++ Compiler for ARM
+**                          Keil ARM C/C++ Compiler
 **
 **     Reference manual:    IMX93RM, Internal, November. 2021
 **     Version:             rev. 1.0, 2021-11-16
-**     Build:               b221019
+**     Build:               b240718
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -14,9 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
-**     All rights reserved.
-**
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -32,16 +35,15 @@
 /*!
  * @file MIMX9352_ca55
  * @version 1.0
- * @date 2021-11-16
+ * @date 180724
  * @brief Device specific configuration file for MIMX9352_ca55 (header file)
  *
  * Provides a system configuration function and a global variable that contains
  * the system frequency. It configures the device and initializes the oscillator
  * (PLL) that is part of the microcontroller device.
  */
-
 #ifndef _SYSTEM_MIMX9352_ca55_H_
-#define _SYSTEM_MIMX9352_ca55_H_                 /**< Symbol preventing repeated inclusion */
+#define _SYSTEM_MIMX9352_ca55_H_                    /**< Symbol preventing repeated inclusion */
 
 #ifdef __cplusplus
 extern "C" {
