@@ -1,15 +1,3 @@
-# The west manifest file (west.yml) for MCUXpresso SDK overall delivery.
-#
-# The per-workspace west configuration file, ${workspace_path}/.west/config,
-# specifies the path of the project containing this manifest file, the
-# path is relative to the workspace location ${workspace_path}.
-#
-#     [manifest]
-#     path = core
-#
-# See the west documentation for more information:
-#
-# https://docs.zephyrproject.org/latest/guides/west/index.html
 manifest:
   remotes:
   - name: nxpmicro
@@ -24,16 +12,16 @@ manifest:
     path: core
   projects:
   - name: mcux-sdk-examples
-    revision: 567747d8e460b3b677bcf0ed3b119f4fdc3386c7
+    revision: MCUX_2.6.15_K32W0
     path: examples
     remote: nxp-mcuxpresso
   - name: mcux-sdk-middleware-connectivity-framework
-    revision: b5380f902609005111c0545476833b9f94d2694d
+    revision: MCUX_2.6.15_K32W0
     path: middleware/wireless/framework
     remote: nxp
   - name: mcux-sdk-middleware-bluetooth-controller
     path: middleware/wireless/ble_controller
-    revision: 469b73d5b42a8b7077eb1334aa1fc985fc902207
+    revision: MCUX_2.6.15_K32W0
     remote: nxp
   - name: mcux-sdk-middleware-bluetooth-host
     path: middleware/wireless/bluetooth
@@ -41,11 +29,11 @@ manifest:
     remote: nxp
   - name: mcux-sdk-middleware-ieee_802.15.4
     path: middleware/wireless/ieee-802.15.4
-    revision: c7ea1af78df4342930c70e6eab6f5dc543204e30
+    revision: MCUX_2.6.15_K32W0
     remote: nxp
   - name: mcux-sdk-middleware-zigbee
     path: middleware/wireless/zigbee
-    revision: ae221683648919ddbd5f2472cb9b8f832ef72292
+    revision: MCUX_2.6.15_K32W0
     remote: nxp-mcuxpresso
   - name: amazon-freertos
     path: rtos/amazon-freertos
