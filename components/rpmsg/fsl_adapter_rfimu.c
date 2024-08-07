@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2021, 2024 NXP
  * All rights reserved.
  *
  *
@@ -62,10 +62,6 @@
 /*******************************************************************************
  * Declaration
  ******************************************************************************/
-#ifdef __ZEPHYR__
-const uint8_t gUseRtos_c = 1;
-#endif
-
 /*! IMU handle instance for each IMU link */
 static hal_imu_handle_t imuHandleCh[kIMU_LinkMax];
 
