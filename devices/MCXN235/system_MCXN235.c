@@ -2,6 +2,7 @@
 ** ###################################################################
 **     Processors:          MCXN235VDF
 **                          MCXN235VNL
+**                          MCXN235VPB
 **
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
@@ -10,7 +11,7 @@
 **
 **     Reference manual:    MCXN23XRM
 **     Version:             rev. 1.0, 2023-10-01
-**     Build:               b240307
+**     Build:               b240807
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -80,12 +81,14 @@ __attribute__ ((weak)) void SystemInit (void) {
 
   SYSCON->NVM_CTRL &= ~SYSCON_NVM_CTRL_DIS_MBECC_ERR_DATA_MASK; /* enables bus error on multi-bit ECC error for data */
 
+#if !defined(__ZEPHYR__)
 #if defined(__MCUXPRESSO)
     extern void(*const g_pfnVectors[]) (void);
     SCB->VTOR = (uint32_t) &g_pfnVectors;
 #else
     extern void *__Vectors;
     SCB->VTOR = (uint32_t) &__Vectors;
+#endif
 #endif
 
     /* enable the flash cache LPCAC */

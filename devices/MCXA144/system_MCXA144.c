@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA144VLL
+**     Processors:          MCXA144VFT
+**                          MCXA144VLH
+**                          MCXA144VLL
 **                          MCXA144VMP
 **                          MCXA144VPJ
 **
@@ -11,7 +13,7 @@
 **
 **     Reference manual:    MCXA18 User manual
 **     Version:             rev. 1.0, 2022-03-29
-**     Build:               b240328
+**     Build:               b240807
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -75,6 +77,7 @@ __attribute__ ((weak)) void SystemInit (void) {
 
   SCB->NSACR |= ((3UL << 0) | (3UL << 10));   /* enable CP0, CP1, CP10, CP11 Non-secure Access */
 
+#if !defined(__ZEPHYR__)
 #if defined(__MCUXPRESSO)
     extern void(*const g_pfnVectors[]) (void);
     SCB->VTOR = (uint32_t) &g_pfnVectors;
@@ -82,6 +85,8 @@ __attribute__ ((weak)) void SystemInit (void) {
     extern void *__Vectors;
     SCB->VTOR = (uint32_t) &__Vectors;
 #endif
+#endif
+
     /* Enable the LPCAC */
     SYSCON->LPCAC_CTRL |= SYSCON_LPCAC_CTRL_LPCAC_MEM_REQ_MASK;
     SYSCON->LPCAC_CTRL &= ~SYSCON_LPCAC_CTRL_DIS_LPCAC_MASK;

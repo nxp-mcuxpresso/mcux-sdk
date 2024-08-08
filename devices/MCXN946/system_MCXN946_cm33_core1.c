@@ -2,6 +2,7 @@
 ** ###################################################################
 **     Processors:          MCXN946VDF_cm33_core1
 **                          MCXN946VNL_cm33_core1
+**                          MCXN946VPB_cm33_core1
 **
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
@@ -10,7 +11,7 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 2.0, 2023-02-01
-**     Build:               b231219
+**     Build:               b240807
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,7 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -77,6 +78,7 @@ __attribute__ ((weak)) void SystemInit (void) {
 
   SYSCON->NVM_CTRL &= ~SYSCON_NVM_CTRL_DIS_MBECC_ERR_DATA_MASK; /* enables bus error on multi-bit ECC error for data */
 
+#if !defined(__ZEPHYR__)
 #if defined(__MCUXPRESSO)
     extern void(*const g_pfnVectors[]) (void);
     SCB->VTOR = (uint32_t) &g_pfnVectors;
@@ -84,6 +86,8 @@ __attribute__ ((weak)) void SystemInit (void) {
     extern void *__Vectors;
     SCB->VTOR = (uint32_t) &__Vectors;
 #endif
+#endif
+
     /* enable the flash cache LPCAC */
     SYSCON->LPCAC_CTRL &= ~SYSCON_LPCAC_CTRL_DIS_LPCAC_MASK;
 

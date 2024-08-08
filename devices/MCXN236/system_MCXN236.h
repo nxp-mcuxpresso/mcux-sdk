@@ -2,6 +2,7 @@
 ** ###################################################################
 **     Processors:          MCXN236VDF
 **                          MCXN236VNL
+**                          MCXN236VPB
 **
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
@@ -10,7 +11,7 @@
 **
 **     Reference manual:    MCXN23XRM
 **     Version:             rev. 1.0, 2023-10-01
-**     Build:               b240307
+**     Build:               b240807
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

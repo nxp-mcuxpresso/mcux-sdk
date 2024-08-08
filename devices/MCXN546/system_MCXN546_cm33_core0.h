@@ -2,6 +2,7 @@
 ** ###################################################################
 **     Processors:          MCXN546VDF_cm33_core0
 **                          MCXN546VNL_cm33_core0
+**                          MCXN546VPB_cm33_core0
 **
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
@@ -10,7 +11,7 @@
 **
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 2.0, 2023-02-01
-**     Build:               b231219
+**     Build:               b240807
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,7 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
