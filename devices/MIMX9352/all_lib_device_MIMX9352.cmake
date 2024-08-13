@@ -22,7 +22,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpi2c
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pcal6524
-    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/mu
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/mu1
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/pdm
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sai
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sema42
@@ -64,7 +64,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(middleware_freertos-kernel_MIMX9352)
 #    include(CMSIS_Driver_Include_I2C OPTIONAL)
 #    include(utility_assert_lite)
-#    include(driver_mu)
+#    include(driver_mu1)
 #    include(driver_clock)
 #    include(utility_debug_console)
 #    include(device_CMSIS)

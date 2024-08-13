@@ -19,6 +19,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tpm
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpi2c
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/lpuart
+    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/mu1
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rgpio
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sai
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
@@ -51,6 +52,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_rgpio)
 #    include(driver_lpuart)
 #    include(driver_mdio-enet)
+#    include(driver_mu1)
 #    include(driver_phy-device-rtl8211f)
 #    include(driver_sai)
 #    include(middleware_freertos-kernel_aarch64)
