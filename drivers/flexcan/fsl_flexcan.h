@@ -213,10 +213,14 @@
      (uint32_t)kFLEXCAN_ErrorIntFlag | FLEXCAN_MEMORY_ERROR_INIT_FLAG)
 #endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_PN_MODE) && FSL_FEATURE_FLEXCAN_HAS_PN_MODE)
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT)
 #define FLEXCAN_WAKE_UP_FLAG \
     ((uint32_t)kFLEXCAN_WakeUpIntFlag | (uint64_t)kFLEXCAN_PNMatchIntFlag | (uint64_t)kFLEXCAN_PNTimeoutIntFlag)
+#endif
 #else
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT)
 #define FLEXCAN_WAKE_UP_FLAG ((uint32_t)kFLEXCAN_WakeUpIntFlag)
+#endif
 #endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
 #define FLEXCAN_MEMORY_ERROR_INIT_FLAG ((uint64_t)kFLEXCAN_AllMemoryErrorFlag)
@@ -287,12 +291,14 @@ typedef enum _flexcan_clock_source
     kFLEXCAN_ClkSrc1    = 0x1U, /*!< FlexCAN Protocol Engine clock selected by user as SRC == 1. */
 } flexcan_clock_source_t;
 
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_WAKSRC_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_WAKSRC_SUPPORT)
 /*! @brief FlexCAN wake up source. */
 typedef enum _flexcan_wake_up_source
 {
     kFLEXCAN_WakeupSrcUnfiltered = 0x0U, /*!< FlexCAN uses unfiltered Rx input to detect edge. */
     kFLEXCAN_WakeupSrcFiltered   = 0x1U, /*!< FlexCAN uses filtered Rx input to detect edge. */
 } flexcan_wake_up_source_t;
+#endif
 
 /*! @brief FlexCAN Rx Fifo Filter type. */
 typedef enum _flexcan_rx_fifo_filter_type
@@ -397,7 +403,9 @@ enum _flexcan_interrupt_enable
     kFLEXCAN_ErrorInterruptEnable     = CAN_CTRL1_ERRMSK_MASK,  /*!< CAN Error interrupt, use bit 14. */
     kFLEXCAN_TxWarningInterruptEnable = CAN_CTRL1_TWRNMSK_MASK, /*!< Tx Warning interrupt, use bit 11. */
     kFLEXCAN_RxWarningInterruptEnable = CAN_CTRL1_RWRNMSK_MASK, /*!< Rx Warning interrupt, use bit 10. */
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT)
     kFLEXCAN_WakeUpInterruptEnable    = CAN_MCR_WAKMSK_MASK,    /*!< Self Wake Up interrupt, use bit 26. */
+#endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE) && FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE)
     kFLEXCAN_FDErrorInterruptEnable = CAN_CTRL2_ERRMSK_FAST_MASK, /*!< CAN FD Error interrupt, use bit 31. */
 #endif
@@ -418,12 +426,18 @@ enum _flexcan_interrupt_enable
     kFLEXCAN_ERxFifoDataAvlInterruptEnable = FLEXCAN_EFIFO_INT_MASK(CAN_ERFIER_ERFDAIE_MASK),
 #endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_HANCEI_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_HANCEI_SUPPORT)
     /*! Host Access With Non-Correctable Errors interrupt, use high word bit 0. */
     kFLEXCAN_HostAccessNCErrorInterruptEnable = FLEXCAN_MECR_INT_MASK(CAN_MECR_HANCEI_MSK_MASK),
+#endif
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_FANCEI_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_FANCEI_SUPPORT)
     /*! FlexCAN Access With Non-Correctable Errors interrupt, use high word bit 2. */
     kFLEXCAN_FlexCanAccessNCErrorInterruptEnable = FLEXCAN_MECR_INT_MASK(CAN_MECR_FANCEI_MSK_MASK),
+#endif
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_CEI_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_CEI_SUPPORT)
     /*! Host or FlexCAN Access With Correctable Errors interrupt, use high word bit 3. */
     kFLEXCAN_HostOrFlexCanCErrorInterruptEnable = FLEXCAN_MECR_INT_MASK(CAN_MECR_CEI_MSK_MASK),
+#endif
 #endif
 };
 
@@ -450,7 +464,9 @@ enum _flexcan_flags
     kFLEXCAN_ReceivingFlag        = CAN_ESR1_RX_MASK,      /*!< FlexCAN In Reception Status. */
     kFLEXCAN_BusOffIntFlag        = CAN_ESR1_BOFFINT_MASK, /*!< Bus Off Interrupt Flag. */
     kFLEXCAN_ErrorIntFlag         = CAN_ESR1_ERRINT_MASK,  /*!< CAN Error Interrupt Flag. */
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT)
     kFLEXCAN_WakeUpIntFlag        = CAN_ESR1_WAKINT_MASK,  /*!< Self Wake-Up Interrupt Flag. */
+#endif
     kFLEXCAN_ErrorFlag =
         (uint32_t)(/*!< All FlexCAN Read Clear Error Status. */
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE) && FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE)
@@ -745,11 +761,15 @@ typedef struct _flexcan_config
         };
     };
     flexcan_clock_source_t clkSrc;      /*!< Clock source for FlexCAN Protocol Engine. */
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_WAKSRC_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_WAKSRC_SUPPORT)
     flexcan_wake_up_source_t wakeupSrc; /*!< Wake up source selection. */
+#endif
     uint8_t maxMbNum;                   /*!< The maximum number of Message Buffers used by user. */
     bool enableLoopBack;                /*!< Enable or Disable Loop Back Self Test Mode. */
     bool enableTimerSync;               /*!< Enable or Disable Timer Synchronization. */
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT)
     bool enableSelfWakeup;              /*!< Enable or Disable Self Wakeup Mode. */
+#endif
     bool enableIndividMask;             /*!< Enable or Disable Rx Individual Mask and Queue feature. */
     bool disableSelfReception;          /*!< Enable or Disable Self Reflection. */
     bool enableListenOnlyMode;          /*!< Enable or Disable Listen Only Mode. */
@@ -1666,9 +1686,10 @@ static inline void FLEXCAN_EnableInterrupts(CAN_Type *base, uint32_t mask)
 #endif
 {
     uint32_t primask = DisableGlobalIRQ();
-
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT)
     /* Solve Self Wake Up interrupt. */
     base->MCR |= (uint32_t)(mask & (uint32_t)kFLEXCAN_WakeUpInterruptEnable);
+#endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE) && FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE)
     if (0 != FSL_FEATURE_FLEXCAN_INSTANCE_HAS_FLEXIBLE_DATA_RATEn(base))
@@ -1719,8 +1740,10 @@ static inline void FLEXCAN_DisableInterrupts(CAN_Type *base, uint32_t mask)
 {
     uint32_t primask = DisableGlobalIRQ();
 
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT)
     /* Solve Wake Up Interrupt. */
     base->MCR &= ~(uint32_t)(mask & (uint32_t)kFLEXCAN_WakeUpInterruptEnable);
+#endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE) && FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE)
     if (0 != FSL_FEATURE_FLEXCAN_INSTANCE_HAS_FLEXIBLE_DATA_RATEn(base))

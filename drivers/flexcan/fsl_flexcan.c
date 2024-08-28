@@ -1002,9 +1002,13 @@ void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *pConfig, uint32_t sour
     mcrTemp = (mcrTemp & ~CAN_MCR_MAXMB_MASK) | CAN_MCR_MAXMB((uint32_t)pConfig->maxMbNum - 1U);
 
     /* Enable Self Wake Up Mode and configure the wake up source. */
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT)
     mcrTemp = (pConfig->enableSelfWakeup) ? (mcrTemp | CAN_MCR_SLFWAK_MASK) : (mcrTemp & ~CAN_MCR_SLFWAK_MASK);
+#endif
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_WAKSRC_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_WAKSRC_SUPPORT)
     mcrTemp = (kFLEXCAN_WakeupSrcFiltered == pConfig->wakeupSrc) ? (mcrTemp | CAN_MCR_WAKSRC_MASK) :
                                                                    (mcrTemp & ~CAN_MCR_WAKSRC_MASK);
+#endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_PN_MODE) && FSL_FEATURE_FLEXCAN_HAS_PN_MODE)
     /* Enable Pretended Networking Mode? When Pretended Networking mode is set, Self Wake Up feature must be disabled.*/
     mcrTemp = (pConfig->enablePretendedeNetworking) ? ((mcrTemp & ~CAN_MCR_SLFWAK_MASK) | CAN_MCR_PNET_EN_MASK) :
@@ -1270,8 +1274,12 @@ void FLEXCAN_GetDefaultConfig(flexcan_config_t *pConfig)
     pConfig->maxMbNum             = 16;
     pConfig->enableLoopBack       = false;
     pConfig->enableTimerSync      = true;
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT)
     pConfig->enableSelfWakeup     = false;
+#endif
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_WAKSRC_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_WAKSRC_SUPPORT)
     pConfig->wakeupSrc            = kFLEXCAN_WakeupSrcUnfiltered;
+#endif
     pConfig->enableIndividMask    = false;
     pConfig->disableSelfReception = false;
     pConfig->enableListenOnlyMode = false;
@@ -3545,16 +3553,24 @@ void FLEXCAN_TransferCreateHandle(CAN_Type *base,
     {
         FLEXCAN_EnableInterrupts(
             base, (uint32_t)kFLEXCAN_BusOffInterruptEnable | (uint32_t)kFLEXCAN_ErrorInterruptEnable |
-                      (uint32_t)kFLEXCAN_RxWarningInterruptEnable | (uint32_t)kFLEXCAN_TxWarningInterruptEnable |
-                      (uint32_t)kFLEXCAN_WakeUpInterruptEnable
+                      (uint32_t)kFLEXCAN_RxWarningInterruptEnable | (uint32_t)kFLEXCAN_TxWarningInterruptEnable
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT)
+                      |(uint32_t)kFLEXCAN_WakeUpInterruptEnable
+#endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_PN_MODE) && FSL_FEATURE_FLEXCAN_HAS_PN_MODE)
                       | (uint64_t)kFLEXCAN_PNMatchWakeUpInterruptEnable |
                       (uint64_t)kFLEXCAN_PNTimeoutWakeUpInterruptEnable
 #endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
-                      | (uint64_t)kFLEXCAN_HostAccessNCErrorInterruptEnable |
-                      (uint64_t)kFLEXCAN_FlexCanAccessNCErrorInterruptEnable |
-                      (uint64_t)kFLEXCAN_HostOrFlexCanCErrorInterruptEnable
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_HANCEI_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_HANCEI_SUPPORT)
+                    | (uint64_t)kFLEXCAN_HostAccessNCErrorInterruptEnable |
+#endif
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_FANCEI_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_FANCEI_SUPPORT)
+                    (uint64_t)kFLEXCAN_FlexCanAccessNCErrorInterruptEnable |
+#endif
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_CEI_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_CEI_SUPPORT)
+                    (uint64_t)kFLEXCAN_HostOrFlexCanCErrorInterruptEnable
+#endif
 #endif
         );
     }
@@ -3562,16 +3578,24 @@ void FLEXCAN_TransferCreateHandle(CAN_Type *base,
     {
         FLEXCAN_DisableInterrupts(
             base, (uint32_t)kFLEXCAN_BusOffInterruptEnable | (uint32_t)kFLEXCAN_ErrorInterruptEnable |
-                      (uint32_t)kFLEXCAN_RxWarningInterruptEnable | (uint32_t)kFLEXCAN_TxWarningInterruptEnable |
-                      (uint32_t)kFLEXCAN_WakeUpInterruptEnable
+                      (uint32_t)kFLEXCAN_RxWarningInterruptEnable | (uint32_t)kFLEXCAN_TxWarningInterruptEnable
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT)
+                      |(uint32_t)kFLEXCAN_WakeUpInterruptEnable
+#endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_PN_MODE) && FSL_FEATURE_FLEXCAN_HAS_PN_MODE)
                       | (uint64_t)kFLEXCAN_PNMatchWakeUpInterruptEnable |
                       (uint64_t)kFLEXCAN_PNTimeoutWakeUpInterruptEnable
 #endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
-                      | (uint64_t)kFLEXCAN_HostAccessNCErrorInterruptEnable |
-                      (uint64_t)kFLEXCAN_FlexCanAccessNCErrorInterruptEnable |
-                      (uint64_t)kFLEXCAN_HostOrFlexCanCErrorInterruptEnable
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_HANCEI_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_HANCEI_SUPPORT)
+                    | (uint64_t)kFLEXCAN_HostAccessNCErrorInterruptEnable |
+#endif
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_FANCEI_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_FANCEI_SUPPORT)
+                    (uint64_t)kFLEXCAN_FlexCanAccessNCErrorInterruptEnable |
+#endif
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_CEI_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_CEI_SUPPORT)
+                    (uint64_t)kFLEXCAN_HostOrFlexCanCErrorInterruptEnable
+#endif
 #endif
         );
     }
@@ -4266,7 +4290,11 @@ static bool FLEXCAN_CheckUnhandleInterruptEvents(CAN_Type *base)
     bool fgRet = false;
 
     if (0U == (FLEXCAN_GetStatusFlags(base) &
-               (FLEXCAN_ERROR_AND_STATUS_INIT_FLAG | FLEXCAN_WAKE_UP_FLAG | FLEXCAN_MEMORY_ENHANCED_RX_FIFO_INIT_FLAG)))
+               (FLEXCAN_ERROR_AND_STATUS_INIT_FLAG
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT)
+               | FLEXCAN_WAKE_UP_FLAG
+#endif
+               | FLEXCAN_MEMORY_ENHANCED_RX_FIFO_INIT_FLAG)))
     {
         /* If no error, wake_up or enhanced RX FIFO status, Checking whether exist MB interrupt status and legacy RX
          * FIFO interrupt status */
@@ -4759,11 +4787,13 @@ void FLEXCAN_TransferHandleIRQ(CAN_Type *base, flexcan_handle_t *handle)
             /* Clear FlexCAN Error and Status Interrupt. */
             FLEXCAN_ClearStatusFlags(base, FLEXCAN_ERROR_AND_STATUS_INIT_FLAG);
         }
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT)
         else if (0U != (result & FLEXCAN_WAKE_UP_FLAG))
         {
             status = kStatus_FLEXCAN_WakeUp;
             FLEXCAN_ClearStatusFlags(base, FLEXCAN_WAKE_UP_FLAG);
         }
+#endif
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
         else if (0U != (FLEXCAN_EFIFO_STATUS_UNMASK(result & FLEXCAN_MEMORY_ENHANCED_RX_FIFO_INIT_FLAG) & base->ERFIER))
         {
