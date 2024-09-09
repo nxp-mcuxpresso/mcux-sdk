@@ -2095,30 +2095,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_component_flexspi_nor_flash_adapter_rt1170)
-# Add set(CONFIG_USE_component_flexspi_nor_flash_adapter_rt1170 true) in config.cmake to use this component
-
-message("component_flexspi_nor_flash_adapter_rt1170 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_BOARD STREQUAL evkmimxrt1170) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_flexspi)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/internal_flash/mimxrt1170/fsl_adapter_flexspi_nor_flash.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/internal_flash/.
-)
-
-else()
-
-message(SEND_ERROR "component_flexspi_nor_flash_adapter_rt1170.MIMXRT1176 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_component_flexspi_nor_flash_adapter_rt1170evkb)
 # Add set(CONFIG_USE_component_flexspi_nor_flash_adapter_rt1170evkb true) in config.cmake to use this component
 
@@ -2388,7 +2364,7 @@ if (CONFIG_USE_component_mflash_file)
 
 message("component_mflash_file component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_mflash_rt1170 OR CONFIG_USE_component_mflash_mimxrt1170evkb)
+if(CONFIG_USE_component_mflash_mimxrt1170evkb)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mflash_file.c
@@ -2421,39 +2397,6 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
 else()
 
 message(SEND_ERROR "component_mflash_dummy.MIMXRT1176 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_component_mflash_rt1170)
-# Add set(CONFIG_USE_component_mflash_rt1170 true) in config.cmake to use this component
-
-message("component_mflash_rt1170 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_component_mflash_common AND (CONFIG_BOARD STREQUAL evkmimxrt1170) AND CONFIG_USE_driver_flexspi AND (CONFIG_USE_driver_cache_armv7_m7 OR CONFIG_USE_driver_cache_lmem))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mimxrt1170/mflash_drv.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/flash/mflash/mimxrt1170/.
-)
-
-if(CONFIG_USE_COMPONENT_CONFIGURATION)
-  message("===>Import configuration from ${CMAKE_CURRENT_LIST_FILE}")
-
-  target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PUBLIC
-    -DMFLASH_FILE_BASEADDR=14221312
-  )
-
-endif()
-
-else()
-
-message(SEND_ERROR "component_mflash_rt1170.MIMXRT1176 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -2511,6 +2454,30 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "driver_mma8451q.MIMXRT1176 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
+if (CONFIG_USE_component_nvm_adapter)
+# Add set(CONFIG_USE_component_nvm_adapter true) in config.cmake to use this component
+
+message("component_nvm_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if(CONFIG_USE_driver_common AND CONFIG_USE_middleware_wireless_framework_function_lib AND CONFIG_USE_middleware_wireless_framework_NVM AND CONFIG_USE_middleware_wireless_framework_Common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/nvm/nvm_adapter.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/nvm/.
+)
+
+else()
+
+message(SEND_ERROR "component_nvm_adapter.MIMXRT1176 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -2994,7 +2961,7 @@ if (CONFIG_USE_component_gpt_time_stamp_adapter)
 
 message("component_gpt_time_stamp_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if((CONFIG_BOARD STREQUAL evkbmimxrt1170 OR CONFIG_BOARD STREQUAL evkmimxrt1170) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_gpt)
+if((CONFIG_BOARD STREQUAL evkbmimxrt1170) AND CONFIG_USE_driver_common AND CONFIG_USE_driver_gpt)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../components/time_stamp/fsl_adapter_gpt_time_stamp.c
@@ -4465,7 +4432,7 @@ if (CONFIG_USE_driver_smartcard_emvsim)
 
 message("driver_smartcard_emvsim component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if((CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx) AND ((CONFIG_BOARD STREQUAL evkmimxrt1170 OR CONFIG_BOARD STREQUAL evkbmimxrt1170)) AND CONFIG_USE_driver_common)
+if((CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx) AND ((CONFIG_BOARD STREQUAL evkbmimxrt1170)) AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../drivers/smartcard/fsl_smartcard_emvsim.c
@@ -4489,7 +4456,7 @@ if (CONFIG_USE_driver_smartcard_phy_emvsim)
 
 message("driver_smartcard_phy_emvsim component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_smartcard_emvsim AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx) AND ((CONFIG_BOARD STREQUAL evkmimxrt1170 OR CONFIG_BOARD STREQUAL evkbmimxrt1170)) AND CONFIG_USE_driver_common)
+if(CONFIG_USE_driver_smartcard_emvsim AND (CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx) AND ((CONFIG_BOARD STREQUAL evkbmimxrt1170)) AND CONFIG_USE_driver_common)
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../drivers/smartcard/fsl_smartcard_phy_emvsim.c

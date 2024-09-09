@@ -1023,8 +1023,14 @@
 #  # description: OS Abstraction Layer for PSA crypto driver
 #  set(CONFIG_USE_component_psa_crypto_driver_osal true)
 
-#  # description: Oracle of PSA crypto driver for els_pkc
-#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_oracle true)
+#  # description: Threading Alt implementation for mbedtls layer via PSA crypto driver
+#  set(CONFIG_USE_component_psa_crypto_driver_mbedtls_thread_alt true)
+
+#  # description: Key Recipes for rw61x for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_oracle_rw61x true)
+
+#  # description: Key Recipes for mcxn for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_oracle_mcxn true)
 
 #  # description: Common files of PSA crypto driver for els_pkc
 #  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_common true)
@@ -1087,6 +1093,12 @@
 
 #  # description: lwIP - A Lightweight TCP/IP Stack
 #  set(CONFIG_USE_middleware_lwip true)
+
+#  # description: lwIP System Abstraction Layer using either FreeRTOS dynamic memory allocation APIs or bare-metal
+#  set(CONFIG_USE_middleware_lwip_sys_arch_dynamic true)
+
+#  # description: Experimental lwIP System Abstraction Layer using FreeRTOS static memory allocation APIs - it is not supported and not guaranteed to work, also might be removed in future
+#  set(CONFIG_USE_middleware_lwip_sys_arch_static true)
 
 #  # description: NETC ethernet interface
 #  set(CONFIG_USE_middleware_lwip_netc_ethernetif true)

@@ -14,7 +14,7 @@
     <definition extID="middleware.wireless.framework.common.RW612"/>
     <definition extID="middleware.usb.device.cdc.external.RW612"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK216000" name="MCUXpresso SDK216000" version="2.16.000" revision="2.16.000"/>
+  <ksdk id="MCUXpressoSDK216100" name="MCUXpresso SDK216100" version="2.16.100" revision="2.16.100"/>
   <manifest_includes>
     <manifest_include path="../../examples/rdrw612bga/rdrw612bga_example_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wireless/manifests/middleware_nxp_ieee_802_15_4_RW612_manifest_v3_14.xml"/>
@@ -3057,27 +3057,52 @@ ${load}</script>
         <include_path relative_path="osal" type="c_include"/>
       </include_paths>
     </component>
-    <component id="component.psa_crypto_driver.els_pkc.oracle.RW612" name="psa_crypto_driver els_pkc_oracle" brief="Oracle of PSA crypto driver for els_pkc" version="1.0.0" full_name="Oracle of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+    <component id="component.psa_crypto_driver.mbedtls_thread_alt.RW612" name="psa_crypto_driver mbedtls_threading_alt" brief="Threading Alt implementation for mbedtls layer via PSA crypto driver" version="1.0.0" full_name="PSA crypto driver threading alt layer for mbedtls threading based" category="psa_crypto_driver/psa_dri_mbed_thrd_alt" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
       <dependencies>
         <device_dependency value="RW612"/>
       </dependencies>
-      <source relative_path="els_pkc/oracle/inc" type="c_include">
-        <files mask="mcuxClPsaDriver_Oracle_Interface_builtin_key_ids.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_Interface_key_locations.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_Macros.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_Utils.h"/>
+      <source relative_path="mbedtls_thread_alt" type="src">
+        <files mask="threading_alt.c"/>
       </source>
-      <source relative_path="els_pkc/oracle/src" type="src">
-        <files mask="mcuxClPsaDriver_Oracle.c"/>
-        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.c"/>
-        <files mask="mcuxClPsaDriver_Oracle_Utils.c"/>
+      <source relative_path="mbedtls_thread_alt" type="c_include">
+        <files mask="threading_alt.h"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="component_psa_crypto_driver_els_pkc_oracle.cmake" hidden="true"/>
+        <files mask="component_psa_crypto_driver_mbedtls_thread_alt.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="els_pkc/oracle/inc" type="c_include"/>
+        <include_path relative_path="mbedtls_thread_alt" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.oracle.rw61x.RW612" name="psa_crypto_driver els_pkc_oracle_rw61x" brief="Key Recipes for rw61x for els_pkc" version="1.0.0" full_name="Key Recipes for rw61x for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="els_pkc/oracle/platforms/rw61x" type="c_include">
+        <files mask="mcuxClPsaDriver_Oracle_KeyRecipes.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_oracle_rw61x.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/oracle/platforms/rw61x" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.oracle.mcxn.RW612" name="psa_crypto_driver els_pkc_oracle_mxcn" brief="Key Recipes for mcxn for els_pkc" version="1.0.0" full_name="Key Recipes for mcxn for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="els_pkc/oracle/platforms/mcxn" type="c_include">
+        <files mask="mcuxClPsaDriver_Oracle_KeyRecipes.h"/>
+      </source>
+      <source relative_path="els_pkc/oracle/platforms/mcxn" type="src">
+        <files mask="mcuxClPsaDriver_Oracle_KeyRecipes_Utils.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_oracle_mcxn.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/oracle/platforms/mcxn" type="c_include"/>
       </include_paths>
     </component>
     <component id="component.psa_crypto_driver.els_pkc.common.RW612" name="psa_crypto_driver els_pkc_common" brief="Common files of PSA crypto driver for els_pkc" version="1.0.0" full_name="Common files of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_common" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
@@ -3469,6 +3494,23 @@ ${load}</script>
         <files mask="Hardware Rework Guide for EdgeFast BT PAL.pdf"/>
         <files mask="EFBTPALAPIRM.pdf"/>
       </source>
+    </component>
+    <component id="driver.p3t1755.RW612" name="p3t1755" brief="Driver p3t1755" version="2.0.0" full_name="Driver p3t1755" category="Device/SDK Drivers" user_visible="true" type="board_component" package_base_path="../components/sensor/p3t1755" project_base_path="component/p3t1755">
+      <dependencies>
+        <device_dependency value="RW612"/>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_p3t1755.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_p3t1755.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_p3t1755.RW612.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
     </component>
     <component id="project_template.RW612.RW612" name="RW612" brief="Devices_project_template RW612" version="1.0.0" full_name="Devices_project_template RW612" category="Board Support/SDK Project Template" user_visible="true" type="project_template" package_base_path="../devices/RW612/project_template" project_base_path="board">
       <dependencies>
@@ -4828,7 +4870,7 @@ ${load}</script>
         <include_path relative_path="RTX/Config" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.common.RW612" name="common" brief="COMMON Driver" version="2.4.1" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
+    <component id="platform.drivers.common.RW612" name="common" brief="COMMON Driver" version="2.4.2" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.reset.RW612"/>
@@ -5361,11 +5403,44 @@ ${load}</script>
         <files mask="rw61x_sb_ble_a2.bin"/>
         <files mask="rw61x_sb_ble_15d4_combo_a2.bin"/>
       </source>
+      <source relative_path="fw_bin/inc" type="asm_include">
+        <files mask="nbu_15_4.bin.inc"/>
+        <files mask="nbu_15_4_mfg.bin.inc"/>
+        <files mask="nbu_15_4_raw_cpu2_15d4.bin.inc"/>
+        <files mask="nbu_15_4_sb.bin.inc"/>
+        <files mask="nbu_15_4_sb_mfg.bin.inc"/>
+        <files mask="rw610_sb_ble.bin.inc"/>
+        <files mask="rw610_sb_ble_15d4_combo.bin.inc"/>
+        <files mask="rw610_sb_mfg_fw_ble_15d4_combo.bin.inc"/>
+        <files mask="rw610_sb_wifi.bin.inc"/>
+        <files mask="rw610n_mfg_fw_cpu2_ble.bin.inc"/>
+        <files mask="rw610n_sb_mfg_fw_cpu2.bin.inc"/>
+        <files mask="rw610w_mfg_fw_cpu1.bin.inc"/>
+        <files mask="rw610w_sb_mfg_fw_cpu1.bin.inc"/>
+        <files mask="rw61x_sb_ble_15d4_combo_a2.bin.inc"/>
+        <files mask="rw61x_sb_ble_a2.bin.inc"/>
+        <files mask="rw61x_sb_wifi_a2.bin.inc"/>
+        <files mask="rw61xn_combo_raw_cpu2_ble_15_4_combo_a2.bin.inc"/>
+        <files mask="rw61xn_raw_cpu2_ble_a2.bin.inc"/>
+        <files mask="rw61xn_raw_cpu2_ble_zb_combo.bin.inc"/>
+        <files mask="rw61xn_sb_mfg_fw_cpu2_ble_a2.bin.inc"/>
+        <files mask="rw61xn_sb_mfg_fw_cpu2_combo_a2.bin.inc"/>
+        <files mask="rw61xw_raw_cpu1_a2.bin.inc"/>
+        <files mask="rw61xw_raw_cpu1_a2_vdllv2.bin.inc"/>
+        <files mask="rw61xw_sb_mfg_fw_cpu1_a2.bin.inc"/>
+      </source>
+      <source relative_path="fw_bin/rw61x" type="src">
+        <files mask="rw61x_cpu1.c"/>
+        <files mask="rw61x_cpu2.c"/>
+      </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="driver_conn_fwloader.RW612.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="include" type="c_include"/>
+        <include_path relative_path="fw_bin" type="c_include"/>
+        <include_path relative_path="fw_bin/inc" type="c_include"/>
+        <include_path relative_path="fw_bin/rw61x" type="c_include"/>
       </include_paths>
     </component>
     <component id="component.lpc_crc_adapter.RW612" name="lpc_crc_adapter" brief="Component lpc_crc_adapter" version="1.0.0" full_name="Component lpc_crc_adapter" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/crc" project_base_path="component/crc">
@@ -5472,6 +5547,32 @@ ${load}</script>
       </source>
       <include_paths>
         <include_path relative_path="osal/baremetal" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.oracle.RW612" name="psa_crypto_driver els_pkc_oracle" brief="Oracle of PSA crypto driver for els_pkc" version="1.0.0" full_name="Oracle of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <all>
+          <component_dependency value="component.psa_crypto_driver.els_pkc.oracle.rw61x.RW612"/>
+          <device_dependency value="RW612"/>
+        </all>
+      </dependencies>
+      <source relative_path="els_pkc/oracle/inc" type="c_include">
+        <files mask="mcuxClPsaDriver_Oracle_Interface_builtin_key_ids.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Interface_key_locations.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Macros.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Utils.h"/>
+      </source>
+      <source relative_path="els_pkc/oracle/src" type="src">
+        <files mask="mcuxClPsaDriver_Oracle.c"/>
+        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.c"/>
+        <files mask="mcuxClPsaDriver_Oracle_Utils.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_oracle.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/oracle/inc" type="c_include"/>
       </include_paths>
     </component>
     <component id="component.els_pkc.doc.rw61x.RW612" name="els_pkc.doc.rw61x" brief="Component els_pkc.doc.rw61x" version="1.9.0" full_name="Component els_pkc.doc.rw61x" category="els_pkc/doc" user_visible="true" type="software_component" package_base_path="../components/els_pkc/" project_base_path="component/els_pkc/">
@@ -10885,7 +10986,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.cache_cache64.RW612" name="cache" brief="CACHE Driver" version="2.0.7" full_name="CACHE Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/cache/cache64" project_base_path="drivers">
+    <component id="platform.drivers.cache_cache64.RW612" name="cache" brief="CACHE Driver" version="2.0.8" full_name="CACHE Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/cache/cache64" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>

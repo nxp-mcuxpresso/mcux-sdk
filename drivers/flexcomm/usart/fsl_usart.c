@@ -58,7 +58,7 @@ uint32_t USART_GetInstance(USART_Type *base)
 
     for (i = 0; i < (uint32_t)FSL_FEATURE_SOC_USART_COUNT; i++)
     {
-        if ((uint32_t)base == s_usartBaseAddrs[i])
+        if (MSDK_REG_SECURE_ADDR((uint32_t)base) == MSDK_REG_SECURE_ADDR(s_usartBaseAddrs[i]))
         {
             break;
         }

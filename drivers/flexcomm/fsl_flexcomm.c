@@ -86,7 +86,7 @@ uint32_t FLEXCOMM_GetInstance(void *base)
 
     for (i = 0U; i < (uint32_t)FSL_FEATURE_SOC_FLEXCOMM_COUNT; i++)
     {
-        if ((uintptr_t)(uint8_t*)base == s_flexcommBaseAddrs[i])
+        if (MSDK_REG_SECURE_ADDR((uintptr_t)(uint8_t*)base) == MSDK_REG_SECURE_ADDR(s_flexcommBaseAddrs[i]))
         {
             break;
         }

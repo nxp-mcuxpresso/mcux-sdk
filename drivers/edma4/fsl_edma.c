@@ -76,7 +76,7 @@ static uint32_t EDMA_GetInstance(EDMA_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_edmaBases); instance++)
     {
-        if (s_edmaBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_edmaBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

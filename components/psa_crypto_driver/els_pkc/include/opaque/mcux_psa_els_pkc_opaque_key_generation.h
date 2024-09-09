@@ -1,6 +1,5 @@
 /*
  * Copyright 2023 NXP
- * All rights reserved.
  *
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -111,11 +110,11 @@ size_t els_pkc_opaque_size_function(const psa_key_attributes_t *attributes,
 /*!
  * \brief Return the buffer size required by driver for storing key.
  *
- * \param[in] key_id the PSA key id of a built-in key
+ * \param[in]  attributes defines the attributes associated with the key
  * \retval key_buffer_length is the required number of bytes required as 
  *         key_buffer. size_t on success. 0 on failure
  */
-size_t els_pkc_opaque_size_function_key_buff_size(mbedtls_svc_key_id_t key_id);
+size_t els_pkc_opaque_size_function_key_buff_size(const psa_key_attributes_t *attributes);
 
 
 psa_status_t els_pkc_opaque_get_builtin_key(psa_drv_slot_number_t slot_number,

@@ -133,7 +133,7 @@ uint32_t UART_GetInstance(UART_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < uartArrayCount; instance++)
     {
-        if (s_uartBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_uartBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

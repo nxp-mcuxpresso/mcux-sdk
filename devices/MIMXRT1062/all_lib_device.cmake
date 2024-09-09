@@ -6,13 +6,6 @@
 #  # description: XIP Board Driver
 #  set(CONFIG_USE_driver_xip_board_evkcmimxrt1060 true)
 
-#set.board.evkmimxrt1060
-#  # description: Board_project_template evkmimxrt1060
-#  set(CONFIG_USE_BOARD_Project_Template_evkmimxrt1060 true)
-
-#  # description: XIP Board Driver
-#  set(CONFIG_USE_driver_xip_board_evkmimxrt1060 true)
-
 #set.board.evkbmimxrt1060
 #  # description: Board_project_template evkbmimxrt1060
 #  set(CONFIG_USE_BOARD_Project_Template_evkbmimxrt1060 true)
@@ -20,30 +13,165 @@
 #  # description: XIP Board Driver
 #  set(CONFIG_USE_driver_xip_board_evkbmimxrt1060 true)
 
-#set.middleware.maestro_framework
-#  # description: maestro_framework template
-#  set(CONFIG_USE_middleware_maestro_framework_template true)
+#set.middleware.wireless.framework
+#  # description: Middleware wireless framework_sec_lib
+#  set(CONFIG_USE_middleware_wireless_framework_sec_lib true)
 
-#  # description: MCU Maestro Audio Framework Doc
-#  set(CONFIG_USE_middleware_maestro_framework_doc true)
+#  # description: Middleware wireless framework board base
+#  set(CONFIG_USE_middleware_wireless_framework_board_base_MIMXRT1062 true)
 
-#  # description: MCU Maestro Audio Framework Codecs
-#  set(CONFIG_USE_middleware_maestro_framework_codecs true)
+#  # description: Middleware wireless framework_platform_common
+#  set(CONFIG_USE_middleware_wireless_framework_platform_common_rt1060 true)
 
-#  # description: MCU Maestro Audio Framework Streamer Core
-#  set(CONFIG_USE_middleware_maestro_framework true)
+#  # description: Middleware wireless framework_platform_coex
+#  set(CONFIG_USE_middleware_wireless_framework_platform_coex_rt1060 true)
 
-#  # description: MCU Maestro Audio Framework Opus
-#  set(CONFIG_USE_middleware_maestro_framework_opus true)
+#  # description: Middleware wireless framework_platform_internal_flash
+#  set(CONFIG_USE_middleware_wireless_framework_platform_internal_flash_rt1060 true)
 
-#  # description: MCU Maestro Audio Framework Opusfile
-#  set(CONFIG_USE_middleware_maestro_framework_opusfile true)
+#  # description: Middleware wireless framework_platform_rng
+#  set(CONFIG_USE_middleware_wireless_framework_platform_rng_rt1060 true)
 
-#  # description: MCU Maestro Audio Framework Ogg
-#  set(CONFIG_USE_middleware_maestro_framework_ogg true)
+#  # description: Middleware wireless framework_platform_zb
+#  set(CONFIG_USE_middleware_wireless_framework_platform_zb_rt1060 true)
 
-#  # description: MCU Maestro Audio Framework ASRC
-#  set(CONFIG_USE_middleware_maestro_framework_asrc true)
+#  # description: Middleware wireless framework_board_lp
+#  set(CONFIG_USE_middleware_wireless_framework_board_lp_MIMXRT1062 true)
+
+#  # description: Middleware wireless framework_board_dcdc
+#  set(CONFIG_USE_middleware_wireless_framework_board_dcdc_MIMXRT1062 true)
+
+#  # description: Middleware wireless framework_board_platform
+#  set(CONFIG_USE_middleware_wireless_framework_board_platform_MIMXRT1062 true)
+
+#  # description: Middleware wireless framework_board_comp
+#  set(CONFIG_USE_middleware_wireless_framework_board_comp_MIMXRT1062 true)
+
+#  # description: Middleware wireless framework_board_extflash
+#  set(CONFIG_USE_middleware_wireless_framework_board_extflash_MIMXRT1062 true)
+
+#  # description: Middleware wireless framework_lfs_config
+#  set(CONFIG_USE_middleware_wireless_framework_lfs_config_rt1060 true)
+
+#  # description: Middleware wireless framework_platform_fpga
+#  set(CONFIG_USE_middleware_wireless_framework_platform_fpga_rt1060 true)
+
+#  # description: Middleware wireless framework matter config
+#  set(CONFIG_USE_middleware_wireless_framework_matter_config_MIMXRT1062 true)
+
+#  # description: Middleware wireless framework init config
+#  set(CONFIG_USE_middleware_wireless_framework_init_config_MIMXRT1062 true)
+
+#  # description: Middleware wireless framework_mbedtls_config
+#  set(CONFIG_USE_middleware_wireless_framework_mbedtls_config_rt1060 true)
+
+#  # description: Middleware wireless framework platform ot coex
+#  set(CONFIG_USE_middleware_wireless_framework_platform_rt_ot_coex true)
+
+#  # description: Middleware wireless framework_cmake
+#  set(CONFIG_USE_middleware_wireless_framework_CMake_rt1060_MIMXRT1062 true)
+
+#  # description: Middleware wireless framework_fsci
+#  set(CONFIG_USE_middleware_wireless_framework_FSCI true)
+
+#  # description: Middleware wireless HWParameter
+#  set(CONFIG_USE_middleware_wireless_HWParameter true)
+
+#  # description: Middleware wireless framework_common
+#  set(CONFIG_USE_middleware_wireless_framework_Common true)
+
+#  # description: Middleware wireless framework_rng_mbedtls
+#  set(CONFIG_USE_middleware_wireless_framework_RNG_mbedtls true)
+
+#  # description: Middleware wireless framework_sec_lib_cryptolib_src
+#  set(CONFIG_USE_middleware_wireless_framework_sec_lib_cryptolib_src true)
+
+#  # description: Middleware wireless framework_function_lib
+#  set(CONFIG_USE_middleware_wireless_framework_function_lib true)
+
+#  # description: Middleware wireless framework_module_info
+#  set(CONFIG_USE_middleware_wireless_framework_module_info true)
+
+#  # description: Middleware wireless framework_nvm
+#  set(CONFIG_USE_middleware_wireless_framework_NVM true)
+
+#  # description: Middleware wireless framework_nv_fsci
+#  set(CONFIG_USE_middleware_wireless_framework_NV_FSCI true)
+
+#  # description: Middleware wireless framework_otaServerSupport
+#  set(CONFIG_USE_middleware_wireless_framework_OtaServerSupport true)
+
+#  # description: Middleware wireless framework_sbtsnoop_ethermind_port
+#  set(CONFIG_USE_middleware_wireless_framework_sbtsnoop_ethermind_port true)
+
+#  # description: Middleware wireless framework_sbtsnoop_nxp_ble_port
+#  set(CONFIG_USE_middleware_wireless_framework_sbtsnoop_nxp_ble_port true)
+
+#  # description: Middleware wireless framework_linkscripts_kw45
+#  set(CONFIG_USE_middleware_wireless_framework_linkscripts_kw45 true)
+
+#  # description: Middleware wireless framework_linkscripts_mcxw34xevk
+#  set(CONFIG_USE_middleware_wireless_framework_linkscripts_mcxw34xevk true)
+
+#  # description: Middleware wireless framework_linkscript_bootloader_kw45
+#  set(CONFIG_USE_middleware_wireless_framework_linkscript_bootloader_kw45 true)
+
+#  # description: Middleware wireless framework_linkscript_warmboot_kw45
+#  set(CONFIG_USE_middleware_wireless_framework_linkscript_warmboot_kw45 true)
+
+#  # description: Middleware wireless HDI
+#  set(CONFIG_USE_middleware_wireless_HDI true)
+
+#  # description: Middleware wireless IPC
+#  set(CONFIG_USE_middleware_wireless_IPC true)
+
+#  # description: Middleware wireless framework_PDM
+#  set(CONFIG_USE_middleware_wireless_framework_PDM true)
+
+#  # description: Middleware wireless framework_PDUM
+#  set(CONFIG_USE_middleware_wireless_framework_PDUM true)
+
+#  # description: Middleware wireless framework_PDUM rt1060
+#  set(CONFIG_USE_middleware_wireless_framework_PDUM_rt1060 true)
+
+#  # description: Middleware wireless framework_markdown
+#  set(CONFIG_USE_middleware_wireless_framework_markdown true)
+
+#  # description: Middleware wireless framework_SFC
+#  set(CONFIG_USE_middleware_wireless_framework_SFC true)
+
+#  # description: Middleware wireless framework_FactoryDataProvider
+#  set(CONFIG_USE_middleware_wireless_framework_FactoryDataProvider true)
+
+#  # description: Middleware wireless framework_filesytem
+#  set(CONFIG_USE_middleware_wireless_framework_filesystem true)
+
+#  # description: Middleware wireless fwk_lfs_mflash
+#  set(CONFIG_USE_middleware_wireless_framework_fsabstraction_littlefs true)
+
+#  # description: Single wire output debug
+#  set(CONFIG_USE_middleware_wireless_framework_swo_dbg true)
+
+#  # description: Middleware wireless framework_settings
+#  set(CONFIG_USE_middleware_wireless_framework_settings true)
+
+#  # description: Middleware wireless framework_sbtsnoop
+#  set(CONFIG_USE_middleware_wireless_framework_sbtsnoop true)
+
+#  # description: Middleware wireless framework_fwk_debug
+#  set(CONFIG_USE_middleware_wireless_framework_fwk_debug true)
+
+#  # description: FreeRTOS heap for framework mem_manager
+#  set(CONFIG_USE_middleware_wireless_freertos_heap true)
+
+#  # description: Middleware wireless fsabstraction
+#  set(CONFIG_USE_middleware_wireless_framework_fsabstraction true)
+
+#  # description: Middleware wireless FileCache
+#  set(CONFIG_USE_middleware_wireless_framework_filecache true)
+
+#  # description: Middleware wireless KeyStorage
+#  set(CONFIG_USE_middleware_wireless_framework_keystorage true)
 
 #set.device.MIMXRT1062
 #  # description: Middleware baremetal
@@ -268,9 +396,6 @@
 #  # description: Driver ili9341
 #  set(CONFIG_USE_driver_ili9341 true)
 
-#  # description: Component flexspi_nor_flash_adapter_rt1060
-#  set(CONFIG_USE_component_flexspi_nor_flash_adapter_rt1060 true)
-
 #  # description: Component flexspi_nor_flash_adapter_rt1060evkb
 #  set(CONFIG_USE_component_flexspi_nor_flash_adapter_rt1060evkb true)
 
@@ -318,6 +443,9 @@
 
 #  # description: Driver mma8451q
 #  set(CONFIG_USE_driver_mma8451q true)
+
+#  # description: Component nvm_adapter
+#  set(CONFIG_USE_component_nvm_adapter true)
 
 #  # description: Component panic
 #  set(CONFIG_USE_component_panic true)
@@ -793,6 +921,12 @@
 #  # description: lwIP - A Lightweight TCP/IP Stack
 #  set(CONFIG_USE_middleware_lwip true)
 
+#  # description: lwIP System Abstraction Layer using either FreeRTOS dynamic memory allocation APIs or bare-metal
+#  set(CONFIG_USE_middleware_lwip_sys_arch_dynamic true)
+
+#  # description: Experimental lwIP System Abstraction Layer using FreeRTOS static memory allocation APIs - it is not supported and not guaranteed to work, also might be removed in future
+#  set(CONFIG_USE_middleware_lwip_sys_arch_static true)
+
 #  # description: Kinetis ethernet interface
 #  set(CONFIG_USE_middleware_lwip_kinetis_ethernetif true)
 
@@ -841,6 +975,31 @@
 #  # description: lwIP UDP Echo Raw API contrib
 #  set(CONFIG_USE_middleware_lwip_contrib_udpecho_raw true)
 
+#set.middleware.maestro_framework
+#  # description: maestro_framework template
+#  set(CONFIG_USE_middleware_maestro_framework_template true)
+
+#  # description: MCU Maestro Audio Framework Doc
+#  set(CONFIG_USE_middleware_maestro_framework_doc true)
+
+#  # description: MCU Maestro Audio Framework Codecs
+#  set(CONFIG_USE_middleware_maestro_framework_codecs true)
+
+#  # description: MCU Maestro Audio Framework Streamer Core
+#  set(CONFIG_USE_middleware_maestro_framework true)
+
+#  # description: MCU Maestro Audio Framework Opus
+#  set(CONFIG_USE_middleware_maestro_framework_opus true)
+
+#  # description: MCU Maestro Audio Framework Opusfile
+#  set(CONFIG_USE_middleware_maestro_framework_opusfile true)
+
+#  # description: MCU Maestro Audio Framework Ogg
+#  set(CONFIG_USE_middleware_maestro_framework_ogg true)
+
+#  # description: MCU Maestro Audio Framework ASRC
+#  set(CONFIG_USE_middleware_maestro_framework_asrc true)
+
 #set.middleware.mcuboot
 #  # description: mcuboot
 #  set(CONFIG_USE_middleware_mcuboot true)
@@ -860,126 +1019,6 @@
 #set.middleware.multicore
 #  # description: Multicore SDK
 #  set(CONFIG_USE_middleware_multicore true)
-
-#  # description: eRPC
-#  set(CONFIG_USE_middleware_multicore_erpc_common true)
-
-#  # description: eRPC_arbitrator
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_arbitrator true)
-
-#  # description: eRPC_client
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_client true)
-
-#  # description: eRPC_server
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_server true)
-
-#  # description: eRPC_rpmsg_tty_rtos_remote_c_wrapper
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_rpmsg_tty_rtos_remote_c_wrapper true)
-
-#  # description: eRPC_mu_c_wrapper
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_mu_c_wrapper true)
-
-#  # description: eRPC_rpmsg_lite_master_c_wrapper
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_rpmsg_lite_master_c_wrapper true)
-
-#  # description: eRPC_rpmsg_lite_remote_c_wrapper
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_rpmsg_lite_remote_c_wrapper true)
-
-#  # description: eRPC_rpmsg_lite_rtos_master_c_wrapper
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_rpmsg_lite_rtos_master_c_wrapper true)
-
-#  # description: eRPC_rpmsg_lite_rtos_remote_c_wrapper
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_rpmsg_lite_rtos_remote_c_wrapper true)
-
-#  # description: eRPC_dspi_master_c_wrapper
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_dspi_master_c_wrapper true)
-
-#  # description: eRPC_dspi_slave_c_wrapper
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_dspi_slave_c_wrapper true)
-
-#  # description: eRPC_spi_master_c_wrapper
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_spi_master_c_wrapper true)
-
-#  # description: eRPC_spi_slave_c_wrapper
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_spi_slave_c_wrapper true)
-
-#  # description: eRPC_lpspi_slave_c_wrapper
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_lpspi_slave_c_wrapper true)
-
-#  # description: eRPC_i2c_slave_c_wrapper
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_i2c_slave_c_wrapper true)
-
-#  # description: eRPC_lpi2c_slave_c_wrapper
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_lpi2c_slave_c_wrapper true)
-
-#  # description: eRPC_mu_transport
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_mu_transport true)
-
-#  # description: eRPC_mu_rtos_transport
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_mu_rtos_transport true)
-
-#  # description: eRPC_rpmsg_lite_transport
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_rpmsg_lite_transport true)
-
-#  # description: eRPC_rpmsg_lite_rtos_transport
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_rpmsg_lite_rtos_transport true)
-
-#  # description: eRPC_rpmsg_tty_rtos_transport
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_rpmsg_tty_rtos_transport true)
-
-#  # description: eRPC_uart_cmsis_transport
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_uart_cmsis_transport true)
-
-#  # description: eRPC_dspi_master_transport
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_dspi_master_transport true)
-
-#  # description: eRPC_dspi_slave_transport
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_dspi_slave_transport true)
-
-#  # description: eRPC_spi_master_transport
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_spi_master_transport true)
-
-#  # description: eRPC_spi_slave_transport
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_spi_slave_transport true)
-
-#  # description: eRPC_lpspi_slave_transport
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_lpspi_slave_transport true)
-
-#  # description: eRPC_i2c_slave_transport
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_i2c_slave_transport true)
-
-#  # description: eRPC_lpi2c_slave_transport
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_lpi2c_slave_transport true)
-
-#  # description: eRPC_port_freertos
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_port_freertos true)
-
-#  # description: eRPC_port_stdlib
-#  set(CONFIG_USE_middleware_multicore_erpc_eRPC_port_stdlib true)
-
-#  # description: erpc_doc
-#  set(CONFIG_USE_middleware_multicore_erpc_doc true)
-
-#  # description: erpc_zephyr
-#  set(CONFIG_USE_middleware_multicore_erpc_zephyr true)
-
-#  # description: erpc_java
-#  set(CONFIG_USE_middleware_multicore_erpc_java true)
-
-#  # description: erpc_examples
-#  set(CONFIG_USE_middleware_multicore_erpc_examples true)
-
-#  # description: eRPC
-#  set(CONFIG_USE_middleware_multicore_erpc true)
-
-#  # description: erpc multiprocessor examples common files
-#  set(CONFIG_USE_middleware_multicore_erpc_common_multiprocessor true)
-
-#  # description: erpc multiprocessor matrix_multiply_client examples common files
-#  set(CONFIG_USE_middleware_multicore_erpc_common_multiprocessor_matrix_multiply_client true)
-
-#  # description: erpc multiprocessor matrix_multiply_server examples common files
-#  set(CONFIG_USE_middleware_multicore_erpc_common_multiprocessor_matrix_multiply_server true)
 
 #set.middleware.mbedtls
 #  # description: mbedTLS Template
@@ -1563,6 +1602,8 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/vit
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wifi_nxp
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/framework
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/wpa_supplicant-rtos
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
@@ -1573,13 +1614,11 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkbmimxrt1060
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkcmimxrt1060
-  ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt1060
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/voice_seeker
 )
 
 include(set_board_evkbmimxrt1060 OPTIONAL)
 include(set_board_evkcmimxrt1060 OPTIONAL)
-include(set_board_evkmimxrt1060 OPTIONAL)
 include(set_CMSIS_DSP_Lib OPTIONAL)
 include(set_CMSIS OPTIONAL)
 include(set_device_MIMXRT1062 OPTIONAL)
@@ -1600,4 +1639,5 @@ include(set_middleware_sdmmc OPTIONAL)
 include(set_middleware_usb OPTIONAL)
 include(set_middleware_vit OPTIONAL)
 include(set_middleware_voice_seeker OPTIONAL)
+include(set_middleware_wireless_framework OPTIONAL)
 include(set_middleware_wireless_wpa_supplicant OPTIONAL)

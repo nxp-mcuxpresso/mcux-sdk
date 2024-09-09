@@ -1434,7 +1434,7 @@ void OSA_InstallIntHandler(uint32_t IRQNumber, void (*handler)(void))
     _Pragma("diag_suppress = Pm138")
 #endif
 #if defined(ENABLE_RAM_VECTOR_TABLE)
-        (void) InstallIRQHandler((IRQn_Type)IRQNumber, (uint32_t) * (uint32_t *)&handler);
+        (void) InstallIRQHandler((IRQn_Type)IRQNumber, (uint32_t)handler);
 #endif /* ENABLE_RAM_VECTOR_TABLE. */
 #if defined(__IAR_SYSTEMS_ICC__)
     _Pragma("diag_remark = PM138")

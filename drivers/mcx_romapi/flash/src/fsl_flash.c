@@ -6,6 +6,7 @@
  *
  */
 
+#include "fsl_efuse.h"
 #include "fsl_flash.h"
 #include "fsl_flash_ffr.h"
 #include "fsl_flexspi_nor_flash.h"

@@ -1,6 +1,5 @@
 /*
  * Copyright 2024 NXP
- * All rights reserved.
  *
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -56,17 +55,6 @@ psa_status_t ele_get_entropy(uint32_t flags, size_t *estimate_bits, uint8_t *out
     {
         status = PSA_ERROR_INVALID_ARGUMENT;
         goto end;
-    }
-
-    /*
-     * The order of functions in psa_crypto_init() is not correct as
-     * driver init is called after call to random number generator. To
-     * avoid circular dependency add initialization here.
-     */
-    status = CRYPTO_InitHardware();
-    if (status != PSA_SUCCESS)
-    {
-        return status;
     }
 
 #if defined(MBEDTLS_THREADING_C)

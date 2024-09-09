@@ -318,8 +318,10 @@ status_t CLOCK_SetupOsc32KClocking(uint32_t id)
 
     VBAT0->OSCCTLA =
         (VBAT0->OSCCTLA & ~(VBAT_OSCCTLA_MODE_EN_MASK | VBAT_OSCCTLA_CAP_SEL_EN_MASK | VBAT_OSCCTLA_OSC_EN_MASK)) |
-        VBAT_OSCCTLA_MODE_EN(0x0) | VBAT_OSCCTLA_CAP_SEL_EN_MASK | VBAT_OSCCTLA_OSC_EN_MASK;
-    VBAT0->OSCCTLB = VBAT_OSCCTLB_INVERSE(0xFFF7E);
+        VBAT_OSCCTLA_MODE_EN(0x0) | VBAT_OSCCTLA_CAP_SEL_EN_MASK | VBAT_OSCCTLA_OSC_EN_MASK |
+        VBAT_OSCCTLA_EXTAL_CAP_SEL(0x6) | VBAT_OSCCTLA_XTAL_CAP_SEL(0x6) | VBAT_OSCCTLA_CAP_SEL_EN(1) |
+        VBAT_OSCCTLA_COARSE_AMP_GAIN(2);
+    VBAT0->OSCCTLB = VBAT_OSCCTLB_INVERSE(0xF9976);
     /* Wait for STATUSA[OSC_RDY] to set. */
     while ((VBAT0->STATUSA & VBAT_STATUSA_OSC_RDY_MASK) == 0U)
     {
@@ -1031,7 +1033,6 @@ uint32_t CLOCK_GetLPFlexCommClkFreq(uint32_t id)
     return freq / ((SYSCON->FLEXCOMMCLKDIV[id] & 0xffU) + 1U);
 }
 
-
 /* Get SYSTEM PLL0 Clk */
 /*! brief  Return Frequency of PLL0
  *  return Frequency of PLL0
@@ -1450,8 +1451,8 @@ uint32_t CLOCK_GetCmpRRClkFreq(uint32_t id)
             break;
     }
 
-    div = ((id == 0U) ? ((SYSCON->CMP0RRCLKDIV & SYSCON_CMP0RRCLKDIV_DIV_MASK) + 1U) : 
-              ((SYSCON->CMP1RRCLKDIV & SYSCON_CMP1RRCLKDIV_DIV_MASK) + 1U));
+    div = ((id == 0U) ? ((SYSCON->CMP0RRCLKDIV & SYSCON_CMP0RRCLKDIV_DIV_MASK) + 1U) :
+                        ((SYSCON->CMP1RRCLKDIV & SYSCON_CMP1RRCLKDIV_DIV_MASK) + 1U));
 
     return freq / div;
 }

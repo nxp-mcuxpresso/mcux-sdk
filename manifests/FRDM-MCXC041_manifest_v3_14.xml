@@ -4,7 +4,7 @@
   <externalDefinitions>
     <definition extID="middleware.freertos-kernel.MCXC041"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK216000" name="MCUXpresso SDK216000" version="2.16.000" revision="2.16.000"/>
+  <ksdk id="MCUXpressoSDK216100" name="MCUXpresso SDK216100" version="2.16.100" revision="2.16.100"/>
   <manifest_includes>
     <manifest_include path="../../examples/frdmmcxc041/frdmmcxc041_example_manifest_v3_14.xml"/>
     <manifest_include path="../../rtos/freertos/freertos-kernel/manifests/middleware_amazon_freertos_kernel_MCXC041_manifest_v3_14.xml"/>
@@ -4117,7 +4117,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.common.MCXC041" name="common" brief="COMMON Driver" version="2.4.1" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
+    <component id="platform.drivers.common.MCXC041" name="common" brief="COMMON Driver" version="2.4.2" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.clock.MCXC041"/>

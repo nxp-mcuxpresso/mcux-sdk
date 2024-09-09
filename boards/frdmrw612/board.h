@@ -86,7 +86,7 @@
 #endif
 #define BOARD_SW2_GPIO_PORT 0U
 #ifndef BOARD_SW2_GPIO_PIN
-#define BOARD_SW2_GPIO_PIN 25U
+#define BOARD_SW2_GPIO_PIN 11U
 #endif
 
 #define BOARD_ENET0_PHY_ADDRESS (0x02U)

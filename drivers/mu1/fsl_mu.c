@@ -47,7 +47,7 @@ uint32_t MU_GetInstance(MU_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0U; instance < (sizeof(s_muBases) / sizeof(s_muBases[0])); instance++)
     {
-        if (s_muBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_muBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

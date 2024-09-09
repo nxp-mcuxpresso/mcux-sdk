@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, 2023 NXP
+ * Copyright 2016-2021, 2023-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,10 +27,21 @@ static CACHE64_CTRL_Type *const s_cache64ctrlBases[] = CACHE64_CTRL_BASE_PTRS;
 static CACHE64_POLSEL_Type *const s_cache64polselBases[] = CACHE64_POLSEL_BASE_PTRS;
 #endif
 
-/* Array of CACHE64 physical memory base address. */
+#if (defined(CACHE64_CTRL_PHYMEM_BASE_ALIAS_COUNT))
+#define CACHE64_PHYMEM_COLUM_COUNT CACHE64_CTRL_PHYMEM_BASE_ALIAS_COUNT
+/* Array of CACHE64 physical memory base address, 
+  it is a 2D array, the row indicate cache instance,
+  the column indicate the alias of one instance.  */
+static uint32_t const s_cache64PhymemBases[FSL_FEATURE_SOC_CACHE64_CTRL_COUNT][CACHE64_PHYMEM_COLUM_COUNT] = CACHE64_CTRL_PHYMEM_BASES;
+/* Array of CACHE64 physical size base address, 
+  it is a 2D array, the row indicate cache instance,
+  the column indicate the alias of one instance.  */
+static uint32_t const s_cache64PhymemSizes[FSL_FEATURE_SOC_CACHE64_CTRL_COUNT][CACHE64_PHYMEM_COLUM_COUNT] = CACHE64_CTRL_PHYMEM_SIZES;
+#else
+#define CACHE64_PHYMEM_COLUM_COUNT 1
 static uint32_t const s_cache64PhymemBases[] = CACHE64_CTRL_PHYMEM_BASES;
-/* Array of CACHE64 physical memory size. */
 static uint32_t const s_cache64PhymemSizes[] = CACHE64_CTRL_PHYMEM_SIZES;
+#endif
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 #ifdef CACHE64_CLOCKS
@@ -38,6 +49,8 @@ static uint32_t const s_cache64PhymemSizes[] = CACHE64_CTRL_PHYMEM_SIZES;
 static const clock_ip_name_t s_cache64Clocks[] = CACHE64_CLOCKS;
 #endif
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+volatile uint8_t g_cache64MemPhyAliasId = 0U;
 
 /*******************************************************************************
  * Code
@@ -55,7 +68,7 @@ uint32_t CACHE64_GetInstance(CACHE64_POLSEL_Type *base)
 
     for (i = 0; i < ARRAY_SIZE(s_cache64polselBases); i++)
     {
-        if (base == s_cache64polselBases[i])
+        if (MSDK_REG_SECURE_ADDR(base) == MSDK_REG_SECURE_ADDR(s_cache64polselBases[i]))
         {
             break;
         }
@@ -75,18 +88,28 @@ uint32_t CACHE64_GetInstance(CACHE64_POLSEL_Type *base)
  */
 uint32_t CACHE64_GetInstanceByAddr(uint32_t address)
 {
-    uint32_t i;
+    uint32_t i = 0UL;
+    uint32_t phyMemBase[FSL_FEATURE_SOC_CACHE64_CTRL_COUNT][CACHE64_PHYMEM_COLUM_COUNT];
+    uint32_t phyMemSize[FSL_FEATURE_SOC_CACHE64_CTRL_COUNT][CACHE64_PHYMEM_COLUM_COUNT];
+    memcpy(phyMemBase, s_cache64PhymemBases, sizeof(s_cache64PhymemBases));
+    memcpy(phyMemSize, s_cache64PhymemSizes, sizeof(s_cache64PhymemSizes));
 
-    for (i = 0; i < ARRAY_SIZE(s_cache64ctrlBases); i++)
+    while(i < ARRAY_SIZE(s_cache64ctrlBases))
     {
-        if ((address >= s_cache64PhymemBases[i]) &&
-            (address < (s_cache64PhymemBases[i] + s_cache64PhymemSizes[i] - 0x01U)))
+        g_cache64MemPhyAliasId = 0U;
+        while(g_cache64MemPhyAliasId < CACHE64_PHYMEM_COLUM_COUNT)
         {
-            break;
+            if ((MSDK_REG_SECURE_ADDR(address) >= MSDK_REG_SECURE_ADDR(phyMemBase[i][g_cache64MemPhyAliasId])) && (MSDK_REG_SECURE_ADDR(address) < MSDK_REG_SECURE_ADDR(phyMemBase[i][g_cache64MemPhyAliasId] + phyMemSize[i][g_cache64MemPhyAliasId] - 0x01U)))
+            {
+                return i;
+            }
+            g_cache64MemPhyAliasId++;
         }
+        i++;
     }
-
-    return i;
+		
+    assert(false);
+    return 0xFFFFFFFFUL;
 }
 
 #if (defined(FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT) && (FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT > 0))
@@ -142,9 +165,11 @@ status_t CACHE64_Init(CACHE64_POLSEL_Type *base, const cache64_config_t *config)
  */
 void CACHE64_GetDefaultConfig(cache64_config_t *config)
 {
+    uint32_t phyMemSize[FSL_FEATURE_SOC_CACHE64_CTRL_COUNT][CACHE64_PHYMEM_COLUM_COUNT];
+    memcpy(phyMemSize, s_cache64PhymemSizes, sizeof(s_cache64PhymemSizes));
     (void)memset(config, 0, sizeof(cache64_config_t));
 
-    config->boundaryAddr[0] = s_cache64PhymemSizes[0];
+    config->boundaryAddr[0] = phyMemSize[0][g_cache64MemPhyAliasId];
     config->policy[0]       = kCACHE64_PolicyWriteBack;
 }
 #endif
@@ -215,20 +240,24 @@ void CACHE64_InvalidateCacheByRange(uint32_t address, uint32_t size_byte)
 {
     if (size_byte > 0UL)
     {
-        uint32_t endAddr = address + size_byte - 0x01U;
+        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size_byte - 0x01U);
         uint32_t pccReg  = 0;
         /* Align address to cache line size. */
-        uint32_t startAddr = address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U);
+        uint32_t startAddr = MSDK_REG_SECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
         uint32_t instance  = CACHE64_GetInstanceByAddr(address);
         uint32_t endLim;
         CACHE64_CTRL_Type *base;
+        uint32_t phyMemBase[FSL_FEATURE_SOC_CACHE64_CTRL_COUNT][CACHE64_PHYMEM_COLUM_COUNT];
+        uint32_t phyMemSize[FSL_FEATURE_SOC_CACHE64_CTRL_COUNT][CACHE64_PHYMEM_COLUM_COUNT];
+        memcpy(phyMemBase, s_cache64PhymemBases, sizeof(s_cache64PhymemBases));
+        memcpy(phyMemSize, s_cache64PhymemSizes, sizeof(s_cache64PhymemSizes));
 
         if (instance >= ARRAY_SIZE(s_cache64ctrlBases))
         {
             return;
         }
         base    = s_cache64ctrlBases[instance];
-        endLim  = s_cache64PhymemBases[instance] + s_cache64PhymemSizes[instance] - 0x01U;
+        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
         endAddr = endAddr > endLim ? endLim : endAddr;
 
         /* Set the invalidate by line command and use the physical address. */
@@ -281,20 +310,24 @@ void CACHE64_CleanCacheByRange(uint32_t address, uint32_t size_byte)
 {
     if (size_byte > 0UL)
     {
-        uint32_t endAddr = address + size_byte - 0x01U;
+        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size_byte - 0x01U);
         uint32_t pccReg  = 0;
         /* Align address to cache line size. */
-        uint32_t startAddr = address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U);
+        uint32_t startAddr = MSDK_REG_SECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
         uint32_t instance  = CACHE64_GetInstanceByAddr(address);
         uint32_t endLim;
         CACHE64_CTRL_Type *base;
+        uint32_t phyMemBase[FSL_FEATURE_SOC_CACHE64_CTRL_COUNT][CACHE64_PHYMEM_COLUM_COUNT];
+        uint32_t phyMemSize[FSL_FEATURE_SOC_CACHE64_CTRL_COUNT][CACHE64_PHYMEM_COLUM_COUNT];
+        memcpy(phyMemBase, s_cache64PhymemBases, sizeof(s_cache64PhymemBases));
+        memcpy(phyMemSize, s_cache64PhymemSizes, sizeof(s_cache64PhymemSizes));
 
         if (instance >= ARRAY_SIZE(s_cache64ctrlBases))
         {
             return;
         }
         base    = s_cache64ctrlBases[instance];
-        endLim  = s_cache64PhymemBases[instance] + s_cache64PhymemSizes[instance] - 0x01U;
+        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
         endAddr = endAddr > endLim ? endLim : endAddr;
 
         /* Set the push by line command. */
@@ -349,20 +382,24 @@ void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte)
 {
     if (size_byte > 0UL)
     {
-        uint32_t endAddr = address + size_byte - 0x01U;
+        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size_byte - 0x01U);
         uint32_t pccReg  = 0;
         /* Align address to cache line size. */
-        uint32_t startAddr = address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U);
+        uint32_t startAddr = MSDK_REG_SECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
         uint32_t instance  = CACHE64_GetInstanceByAddr(address);
         uint32_t endLim;
         CACHE64_CTRL_Type *base;
+        uint32_t phyMemBase[FSL_FEATURE_SOC_CACHE64_CTRL_COUNT][CACHE64_PHYMEM_COLUM_COUNT];
+        uint32_t phyMemSize[FSL_FEATURE_SOC_CACHE64_CTRL_COUNT][CACHE64_PHYMEM_COLUM_COUNT];
+        memcpy(phyMemBase, s_cache64PhymemBases, sizeof(s_cache64PhymemBases));
+        memcpy(phyMemSize, s_cache64PhymemSizes, sizeof(s_cache64PhymemSizes));
 
         if (instance >= ARRAY_SIZE(s_cache64ctrlBases))
         {
             return;
         }
         base    = s_cache64ctrlBases[instance];
-        endLim  = s_cache64PhymemBases[instance] + s_cache64PhymemSizes[instance] - 0x01U;
+        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
         endAddr = endAddr > endLim ? endLim : endAddr;
 
         /* Set the push by line command. */

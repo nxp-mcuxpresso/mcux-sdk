@@ -168,7 +168,7 @@ static uint32_t SEMC_GetInstance(SEMC_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0UL; instance < ARRAY_SIZE(s_semcBases); instance++)
     {
-        if (s_semcBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_semcBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

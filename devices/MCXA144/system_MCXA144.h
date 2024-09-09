@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA144VLL
+**     Processors:          MCXA144VFT
+**                          MCXA144VLH
+**                          MCXA144VLL
 **                          MCXA144VMP
 **                          MCXA144VPJ
 **
@@ -11,7 +13,7 @@
 **
 **     Reference manual:    MCXA18 User manual
 **     Version:             rev. 1.0, 2022-03-29
-**     Build:               b240110
+**     Build:               b240807
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that

@@ -160,7 +160,7 @@ uint32_t LPSPI_GetInstance(LPSPI_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_lpspiBases); instance++)
     {
-        if (s_lpspiBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_lpspiBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

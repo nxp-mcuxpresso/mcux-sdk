@@ -2,17 +2,18 @@
 ** ###################################################################
 **     Processors:          MCXN946VDF_cm33_core0
 **                          MCXN946VNL_cm33_core0
+**                          MCXN946VPB_cm33_core0
 **
 **     Compiler:            GNU C Compiler
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 1.0, 2021-08-03
-**     Build:               b231116
+**     Build:               b240612
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

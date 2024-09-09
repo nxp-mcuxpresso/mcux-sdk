@@ -130,7 +130,7 @@ uint32_t LPI2C_GetInstance(LPI2C_Type *base)
     uint32_t instance;
     for (instance = 0U; instance < ARRAY_SIZE(kLpi2cBases); ++instance)
     {
-        if (kLpi2cBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(kLpi2cBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

@@ -49,7 +49,7 @@ static uint32_t PIT_GetInstance(PIT_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_pitBases); instance++)
     {
-        if (s_pitBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_pitBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

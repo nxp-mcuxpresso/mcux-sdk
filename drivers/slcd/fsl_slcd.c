@@ -54,7 +54,7 @@ static uint32_t SLCD_GetInstance(LCD_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_slcdBases); instance++)
     {
-        if (s_slcdBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_slcdBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

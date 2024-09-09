@@ -25,20 +25,38 @@
 #  # description: Middleware wireless ble_host_ae_component_mcux lib
 #  set(CONFIG_USE_middleware_wireless_ble_host_AE_component_lib_mcux true)
 
+#  # description: Middleware wireless ble_host_ae_component_armgcc lib
+#  set(CONFIG_USE_middleware_wireless_ble_host_AE_component_lib_armgcc true)
+
 #  # description: Middleware wireless ble_host_ae_central_component_mcux lib
 #  set(CONFIG_USE_middleware_wireless_ble_host_AE_central_component_lib_mcux true)
+
+#  # description: Middleware wireless ble_host_ae_central_component_armgcc lib
+#  set(CONFIG_USE_middleware_wireless_ble_host_AE_central_component_lib_armgcc true)
 
 #  # description: Middleware wireless ble_host_ae_peripheral_component_mcux lib
 #  set(CONFIG_USE_middleware_wireless_ble_host_AE_peripheral_component_lib_mcux true)
 
+#  # description: Middleware wireless ble_host_ae_peripheral_component_armgcc lib
+#  set(CONFIG_USE_middleware_wireless_ble_host_AE_peripheral_component_lib_armgcc true)
+
 #  # description: Middleware wireless ble_host_component_lib_mcux
 #  set(CONFIG_USE_middleware_wireless_ble_host_component_lib_mcux true)
+
+#  # description: Middleware wireless ble_host_component_lib_armgcc
+#  set(CONFIG_USE_middleware_wireless_ble_host_component_lib_armgcc true)
 
 #  # description: Middleware wireless ble_host_central_component_mcux lib
 #  set(CONFIG_USE_middleware_wireless_ble_host_central_component_lib_mcux true)
 
+#  # description: Middleware wireless ble_host_central_component_armgcc lib
+#  set(CONFIG_USE_middleware_wireless_ble_host_central_component_lib_armgcc true)
+
 #  # description: Middleware wireless ble_host_peripheral_component_mcux lib
 #  set(CONFIG_USE_middleware_wireless_ble_host_peripheral_component_lib_mcux true)
+
+#  # description: Middleware wireless ble_host_peripheral_component_armgcc lib
+#  set(CONFIG_USE_middleware_wireless_ble_host_peripheral_component_lib_armgcc true)
 
 #  # description: Middleware wireless ble_host_interface
 #  set(CONFIG_USE_middleware_wireless_ble_host_interface true)
@@ -64,6 +82,9 @@
 #  # description: Middleware wireless ble_fsci_source_handover
 #  set(CONFIG_USE_middleware_wireless_ble_fsci_source_handover true)
 
+#  # description: Middleware wireless ble_fsci_source_channel_sounding
+#  set(CONFIG_USE_middleware_wireless_ble_fsci_source_channel_sounding true)
+
 #  # description: Middleware wireless ble_fsci_host
 #  set(CONFIG_USE_middleware_wireless_ble_fsci_host true)
 
@@ -72,6 +93,9 @@
 
 #  # description: Middleware wireless lib_ble_handover_mcux lib
 #  set(CONFIG_USE_middleware_wireless_ble_host_handover_component_lib_mcux true)
+
+#  # description: Middleware wireless lib_ble_handover_armgcc lib
+#  set(CONFIG_USE_middleware_wireless_ble_host_handover_component_lib_armgcc true)
 
 #  # description: Middleware wireless auto
 #  set(CONFIG_USE_middleware_wireless_auto true)
@@ -130,6 +154,9 @@
 #  # description: Middleware wireless xcvr_gen40_driver
 #  set(CONFIG_USE_middleware_wireless_XCVR_driver true)
 
+#  # description: Middleware wireless xcvr_gen45_driver
+#  set(CONFIG_USE_middleware_wireless_XCVR_GEN45_driver_workaround true)
+
 #  # description: Wireless seclib_file for matter
 #  set(CONFIG_USE_wireless_wireless_seclib_file true)
 
@@ -138,6 +165,9 @@
 
 #  # description: Middleware wireless ble_host_matter_component_lib_mcux
 #  set(CONFIG_USE_middleware_wireless_ble_host_matter_component_lib_mcux true)
+
+#  # description: Middleware wireless ble_host_matter_component_lib_armgcc
+#  set(CONFIG_USE_middleware_wireless_ble_host_matter_component_lib_armgcc true)
 
 #  # description: Middleware wireless ble_init_matter
 #  set(CONFIG_USE_middleware_wireless_ble_init_matter true)
@@ -1096,7 +1126,6 @@
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
   ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/power_manager/devices/MCXW716C
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/littlefs
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore

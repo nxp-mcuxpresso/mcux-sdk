@@ -185,7 +185,7 @@ uint32_t ENET_GetInstance(ENET_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_enetBases); instance++)
     {
-        if (s_enetBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_enetBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

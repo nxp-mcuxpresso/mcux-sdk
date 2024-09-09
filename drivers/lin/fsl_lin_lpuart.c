@@ -295,7 +295,7 @@ static uint32_t LIN_LPUART_GetInstance(LPUART_Type *base)
     /* $Branch Coverage Justification$ $ref lin_lpuart_c_ref_1$ */
     for (instance = 0; instance <= ((uint32_t)FSL_FEATURE_SOC_LPUART_COUNT - 1UL); instance++)
     {
-        if (g_linLpuartBase[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(g_linLpuartBase[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

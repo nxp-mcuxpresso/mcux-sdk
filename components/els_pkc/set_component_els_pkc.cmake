@@ -86,26 +86,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 endif()
 
 
-if (CONFIG_USE_component_els_pkc_doc_lpc)
-# Add set(CONFIG_USE_component_els_pkc_doc_lpc true) in config.cmake to use this component
-
-message("component_els_pkc_doc_lpc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL LPC55S36))
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./.
-)
-
-else()
-
-message(SEND_ERROR "component_els_pkc_doc_lpc dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_component_els_pkc_doc_mcxn)
 # Add set(CONFIG_USE_component_els_pkc_doc_mcxn true) in config.cmake to use this component
 
@@ -180,26 +160,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "component_els_pkc_static_lib_rw61x dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_component_els_pkc_static_lib_lpc)
-# Add set(CONFIG_USE_component_els_pkc_static_lib_lpc true) in config.cmake to use this component
-
-message("component_els_pkc_static_lib_lpc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL LPC55S36))
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./.
-)
-
-else()
-
-message(SEND_ERROR "component_els_pkc_static_lib_lpc dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -1744,7 +1704,7 @@ if (CONFIG_USE_component_els_pkc)
 
 message("component_els_pkc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_els_pkc_els AND CONFIG_USE_component_els_pkc_pkc AND CONFIG_USE_component_els_pkc_trng AND ((CONFIG_USE_component_els_pkc_platform_lpc AND CONFIG_USE_component_els_pkc_doc_lpc AND CONFIG_USE_component_els_pkc_static_lib_lpc AND (CONFIG_DEVICE_ID STREQUAL LPC55S36)) OR (CONFIG_USE_component_els_pkc_platform_mcxn AND CONFIG_USE_component_els_pkc_doc_mcxn AND CONFIG_USE_component_els_pkc_static_lib_mcxn AND (CONFIG_DEVICE_ID STREQUAL MCXN546 OR CONFIG_DEVICE_ID STREQUAL MCXN547 OR CONFIG_DEVICE_ID STREQUAL MCXN946 OR CONFIG_DEVICE_ID STREQUAL MCXN947 OR CONFIG_DEVICE_ID STREQUAL MCXN235 OR CONFIG_DEVICE_ID STREQUAL MCXN236)) OR (CONFIG_USE_component_els_pkc_platform_rw61x AND CONFIG_USE_component_els_pkc_doc_rw61x AND CONFIG_USE_component_els_pkc_static_lib_rw61x AND (CONFIG_DEVICE_ID STREQUAL RW610 OR CONFIG_DEVICE_ID STREQUAL RW612))))
+if(CONFIG_USE_component_els_pkc_els AND CONFIG_USE_component_els_pkc_pkc AND CONFIG_USE_component_els_pkc_trng AND ((CONFIG_USE_component_els_pkc_platform_mcxn AND CONFIG_USE_component_els_pkc_doc_mcxn AND CONFIG_USE_component_els_pkc_static_lib_mcxn AND (CONFIG_DEVICE_ID STREQUAL MCXN546 OR CONFIG_DEVICE_ID STREQUAL MCXN547 OR CONFIG_DEVICE_ID STREQUAL MCXN946 OR CONFIG_DEVICE_ID STREQUAL MCXN947 OR CONFIG_DEVICE_ID STREQUAL MCXN235 OR CONFIG_DEVICE_ID STREQUAL MCXN236)) OR (CONFIG_USE_component_els_pkc_platform_rw61x AND CONFIG_USE_component_els_pkc_doc_rw61x AND CONFIG_USE_component_els_pkc_static_lib_rw61x AND (CONFIG_DEVICE_ID STREQUAL RW610 OR CONFIG_DEVICE_ID STREQUAL RW612))))
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/./.
@@ -1877,39 +1837,12 @@ endif()
 endif()
 
 
-if (CONFIG_USE_component_els_pkc_platform_lpc)
-# Add set(CONFIG_USE_component_els_pkc_platform_lpc true) in config.cmake to use this component
-
-message("component_els_pkc_platform_lpc component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if((CONFIG_DEVICE_ID STREQUAL LPC55S36) AND CONFIG_USE_component_els_pkc AND CONFIG_USE_component_els_pkc_standalone_gdet)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/lpc/mcux_els.c
-  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/lpc/mcux_pkc.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./.
-  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/lpc
-  ${CMAKE_CURRENT_LIST_DIR}/./src/platforms/lpc/inc
-)
-
-else()
-
-message(SEND_ERROR "component_els_pkc_platform_lpc dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_component_els_pkc_examples)
 # Add set(CONFIG_USE_component_els_pkc_examples true) in config.cmake to use this component
 
 message("component_els_pkc_examples component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els AND CONFIG_USE_component_els_pkc_pkc AND CONFIG_USE_component_els_pkc_random_modes AND CONFIG_USE_component_els_pkc AND CONFIG_USE_component_els_pkc_examples_aead AND CONFIG_USE_component_els_pkc_examples_cipher_modes AND CONFIG_USE_component_els_pkc_examples_ecc AND CONFIG_USE_component_els_pkc_examples_els AND CONFIG_USE_component_els_pkc_examples_hash_modes AND CONFIG_USE_component_els_pkc_examples_hmac AND CONFIG_USE_component_els_pkc_examples_key AND CONFIG_USE_component_els_pkc_examples_mac_modes AND CONFIG_USE_component_els_pkc_examples_rsa AND CONFIG_USE_component_els_pkc_examples_flow_protection AND CONFIG_USE_component_els_pkc_examples_memory AND ((CONFIG_USE_component_els_pkc_examples_random_modes AND (CONFIG_DEVICE_ID STREQUAL MCXN546 OR CONFIG_DEVICE_ID STREQUAL MCXN547 OR CONFIG_DEVICE_ID STREQUAL MCXN946 OR CONFIG_DEVICE_ID STREQUAL MCXN947 OR CONFIG_DEVICE_ID STREQUAL MCXN235 OR CONFIG_DEVICE_ID STREQUAL MCXN236 OR CONFIG_DEVICE_ID STREQUAL RW610 OR CONFIG_DEVICE_ID STREQUAL RW612)) OR (CONFIG_DEVICE_ID STREQUAL LPC55S36)))
+if(CONFIG_USE_component_els_pkc_flow_protection AND CONFIG_USE_component_els_pkc_session AND CONFIG_USE_component_els_pkc_memory AND CONFIG_USE_component_els_pkc_els AND CONFIG_USE_component_els_pkc_pkc AND CONFIG_USE_component_els_pkc_random_modes AND CONFIG_USE_component_els_pkc AND CONFIG_USE_component_els_pkc_examples_aead AND CONFIG_USE_component_els_pkc_examples_cipher_modes AND CONFIG_USE_component_els_pkc_examples_ecc AND CONFIG_USE_component_els_pkc_examples_els AND CONFIG_USE_component_els_pkc_examples_hash_modes AND CONFIG_USE_component_els_pkc_examples_hmac AND CONFIG_USE_component_els_pkc_examples_key AND CONFIG_USE_component_els_pkc_examples_mac_modes AND CONFIG_USE_component_els_pkc_examples_rsa AND CONFIG_USE_component_els_pkc_examples_flow_protection AND CONFIG_USE_component_els_pkc_examples_memory AND ((CONFIG_USE_component_els_pkc_examples_random_modes AND (CONFIG_DEVICE_ID STREQUAL MCXN546 OR CONFIG_DEVICE_ID STREQUAL MCXN547 OR CONFIG_DEVICE_ID STREQUAL MCXN946 OR CONFIG_DEVICE_ID STREQUAL MCXN947 OR CONFIG_DEVICE_ID STREQUAL MCXN235 OR CONFIG_DEVICE_ID STREQUAL MCXN236 OR CONFIG_DEVICE_ID STREQUAL RW610 OR CONFIG_DEVICE_ID STREQUAL RW612))))
 
 else()
 

@@ -37,7 +37,7 @@ static uint32_t GPT_GetInstance(GPT_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0U; instance < ARRAY_SIZE(s_gptBases); instance++)
     {
-        if (s_gptBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_gptBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

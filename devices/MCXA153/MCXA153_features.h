@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2022-03-29
-**     Build:               b240428
+**     Build:               b240704
 **
 **     Abstract:
 **         Chip specific module features.
@@ -296,6 +296,8 @@
 #define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_SEC (1)
 /* @brief edma5 has different tcd type. */
 #define FSL_FEATURE_EDMA_TCD_TYPEn(x) (0)
+/* @brief Number of DMA channels with asynchronous request capability. (Valid only for eDMA modules.) */
+#define FSL_FEATURE_EDMA_ASYNCHRO_REQUEST_CHANNEL_COUNT (4)
 
 /* PWM module features */
 

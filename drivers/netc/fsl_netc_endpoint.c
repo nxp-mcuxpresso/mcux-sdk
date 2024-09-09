@@ -901,7 +901,7 @@ status_t EP_SendFrame(ep_handle_t *handle, uint8_t ring, netc_frame_struct_t *fr
     {
         if ((opt->flags & (uint32_t)kEP_TX_OPT_START_TIME) != 0U)
         {
-            txDesc[0].standard.flags = NETC_SI_TXDESCRIP_RD_FLQ(0x2U) | NETC_SI_TXDESCRIP_RD_TSE_MASK |
+            txDesc[0].standard.flags = NETC_SI_TXDESCRIP_RD_FL(0x2U) | NETC_SI_TXDESCRIP_RD_TSE_MASK |
                                        NETC_SI_TXDESCRIP_RD_TXSTART(opt->timestamp);
         }
         if ((opt->flags & (uint32_t)kEP_TX_OPT_VLAN_INSERT) != 0U)

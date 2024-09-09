@@ -9,16 +9,6 @@
 #  # description: XMCD Driver
 #  set(CONFIG_USE_driver_xmcd_evkbmimxrt1170 true)
 
-#set.board.evkmimxrt1170
-#  # description: XIP Board Driver
-#  set(CONFIG_USE_driver_xip_board_evkmimxrt1170 true)
-
-#  # description: XMCD Driver
-#  set(CONFIG_USE_driver_xmcd_evkmimxrt1170 true)
-
-#  # description: Board_project_template evkmimxrt1170
-#  set(CONFIG_USE_BOARD_Project_Template_evkmimxrt1170 true)
-
 #set.middleware.maestro_framework
 #  # description: maestro_framework template
 #  set(CONFIG_USE_middleware_maestro_framework_template true)
@@ -300,9 +290,6 @@
 #  # description: Driver ili9341
 #  set(CONFIG_USE_driver_ili9341 true)
 
-#  # description: Component flexspi_nor_flash_adapter_rt1170
-#  set(CONFIG_USE_component_flexspi_nor_flash_adapter_rt1170 true)
-
 #  # description: Component flexspi_nor_flash_adapter_rt1170evkb
 #  set(CONFIG_USE_component_flexspi_nor_flash_adapter_rt1170evkb true)
 
@@ -342,14 +329,14 @@
 #  # description: dummy file for overwriting mflash when dowloading
 #  set(CONFIG_USE_component_mflash_dummy true)
 
-#  # description: mflash rt1170
-#  set(CONFIG_USE_component_mflash_rt1170 true)
-
 #  # description: mflash mimxrt1170evkb
 #  set(CONFIG_USE_component_mflash_mimxrt1170evkb true)
 
 #  # description: Driver mma8451q
 #  set(CONFIG_USE_driver_mma8451q true)
+
+#  # description: Component nvm_adapter
+#  set(CONFIG_USE_component_nvm_adapter true)
 
 #  # description: Component panic
 #  set(CONFIG_USE_component_panic true)
@@ -887,6 +874,12 @@
 
 #  # description: lwIP - A Lightweight TCP/IP Stack
 #  set(CONFIG_USE_middleware_lwip true)
+
+#  # description: lwIP System Abstraction Layer using either FreeRTOS dynamic memory allocation APIs or bare-metal
+#  set(CONFIG_USE_middleware_lwip_sys_arch_dynamic true)
+
+#  # description: Experimental lwIP System Abstraction Layer using FreeRTOS static memory allocation APIs - it is not supported and not guaranteed to work, also might be removed in future
+#  set(CONFIG_USE_middleware_lwip_sys_arch_static true)
 
 #  # description: Enet ethernet interface
 #  set(CONFIG_USE_middleware_lwip_enet_ethernetif true)
@@ -1562,6 +1555,196 @@
 #  # description: BLE libraries for bt_ble Host stack
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_ble_ethermind_lib_lc3_cm7f true)
 
+#set.middleware.wireless.framework
+#  # description: Middleware wireless framework_sec_lib
+#  set(CONFIG_USE_middleware_wireless_framework_sec_lib true)
+
+#  # description: Middleware wireless framework board base
+#  set(CONFIG_USE_middleware_wireless_framework_board_base_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_platform_common
+#  set(CONFIG_USE_middleware_wireless_framework_platform_common_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_platform_coex
+#  set(CONFIG_USE_middleware_wireless_framework_platform_coex_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_platform_internal_flash
+#  set(CONFIG_USE_middleware_wireless_framework_platform_internal_flash_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_platform_rng
+#  set(CONFIG_USE_middleware_wireless_framework_platform_rng_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_platform_zb
+#  set(CONFIG_USE_middleware_wireless_framework_platform_zb_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_board_lp
+#  set(CONFIG_USE_middleware_wireless_framework_board_lp_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_board_dcdc
+#  set(CONFIG_USE_middleware_wireless_framework_board_dcdc_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_board_platform
+#  set(CONFIG_USE_middleware_wireless_framework_board_platform_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_board_comp
+#  set(CONFIG_USE_middleware_wireless_framework_board_comp_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_board_extflash
+#  set(CONFIG_USE_middleware_wireless_framework_board_extflash_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_lfs_config
+#  set(CONFIG_USE_middleware_wireless_framework_lfs_config_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_platform_fpga
+#  set(CONFIG_USE_middleware_wireless_framework_platform_fpga_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework matter config
+#  set(CONFIG_USE_middleware_wireless_framework_matter_config_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework init config
+#  set(CONFIG_USE_middleware_wireless_framework_init_config_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_mbedtls_config
+#  set(CONFIG_USE_middleware_wireless_framework_mbedtls_config_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework platform ot coex
+#  set(CONFIG_USE_middleware_wireless_framework_platform_rt_ot_coex true)
+
+#  # description: Middleware wireless framework_cmake
+#  set(CONFIG_USE_middleware_wireless_framework_CMake_MIMXRT1176_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_fsci
+#  set(CONFIG_USE_middleware_wireless_framework_FSCI true)
+
+#  # description: Middleware wireless HWParameter
+#  set(CONFIG_USE_middleware_wireless_HWParameter true)
+
+#  # description: Middleware wireless framework_common
+#  set(CONFIG_USE_middleware_wireless_framework_Common true)
+
+#  # description: Middleware wireless framework_rng_mbedtls
+#  set(CONFIG_USE_middleware_wireless_framework_RNG_mbedtls true)
+
+#  # description: Middleware wireless framework_sec_lib_cryptolib_src
+#  set(CONFIG_USE_middleware_wireless_framework_sec_lib_cryptolib_src true)
+
+#  # description: Middleware wireless framework_function_lib
+#  set(CONFIG_USE_middleware_wireless_framework_function_lib true)
+
+#  # description: Middleware wireless framework_module_info
+#  set(CONFIG_USE_middleware_wireless_framework_module_info true)
+
+#  # description: Middleware wireless framework_nvm
+#  set(CONFIG_USE_middleware_wireless_framework_NVM true)
+
+#  # description: Middleware wireless framework_nv_fsci
+#  set(CONFIG_USE_middleware_wireless_framework_NV_FSCI true)
+
+#  # description: Middleware wireless framework_otaServerSupport
+#  set(CONFIG_USE_middleware_wireless_framework_OtaServerSupport true)
+
+#  # description: Middleware wireless framework_sbtsnoop_ethermind_port
+#  set(CONFIG_USE_middleware_wireless_framework_sbtsnoop_ethermind_port true)
+
+#  # description: Middleware wireless framework_sbtsnoop_nxp_ble_port
+#  set(CONFIG_USE_middleware_wireless_framework_sbtsnoop_nxp_ble_port true)
+
+#  # description: Middleware wireless framework_linkscripts_kw45
+#  set(CONFIG_USE_middleware_wireless_framework_linkscripts_kw45 true)
+
+#  # description: Middleware wireless framework_linkscripts_mcxw34xevk
+#  set(CONFIG_USE_middleware_wireless_framework_linkscripts_mcxw34xevk true)
+
+#  # description: Middleware wireless framework_linkscript_bootloader_kw45
+#  set(CONFIG_USE_middleware_wireless_framework_linkscript_bootloader_kw45 true)
+
+#  # description: Middleware wireless framework_linkscript_warmboot_kw45
+#  set(CONFIG_USE_middleware_wireless_framework_linkscript_warmboot_kw45 true)
+
+#  # description: Middleware wireless HDI
+#  set(CONFIG_USE_middleware_wireless_HDI true)
+
+#  # description: Middleware wireless IPC
+#  set(CONFIG_USE_middleware_wireless_IPC true)
+
+#  # description: Middleware wireless framework_PDM
+#  set(CONFIG_USE_middleware_wireless_framework_PDM true)
+
+#  # description: Middleware wireless framework_PDUM
+#  set(CONFIG_USE_middleware_wireless_framework_PDUM true)
+
+#  # description: Middleware wireless framework_PDUM MIMXRT1176
+#  set(CONFIG_USE_middleware_wireless_framework_PDUM_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_markdown
+#  set(CONFIG_USE_middleware_wireless_framework_markdown true)
+
+#  # description: Middleware wireless framework_SFC
+#  set(CONFIG_USE_middleware_wireless_framework_SFC true)
+
+#  # description: Middleware wireless framework_FactoryDataProvider
+#  set(CONFIG_USE_middleware_wireless_framework_FactoryDataProvider true)
+
+#  # description: Middleware wireless framework_filesytem
+#  set(CONFIG_USE_middleware_wireless_framework_filesystem true)
+
+#  # description: Middleware wireless fwk_lfs_mflash
+#  set(CONFIG_USE_middleware_wireless_framework_fsabstraction_littlefs true)
+
+#  # description: Single wire output debug
+#  set(CONFIG_USE_middleware_wireless_framework_swo_dbg true)
+
+#  # description: Middleware wireless framework_settings
+#  set(CONFIG_USE_middleware_wireless_framework_settings true)
+
+#  # description: Middleware wireless framework_platform_common
+#  set(CONFIG_USE_middleware_wireless_framework_platform_common_rt1170 true)
+
+#  # description: Middleware wireless framework_platform_coex
+#  set(CONFIG_USE_middleware_wireless_framework_platform_coex_rt1170 true)
+
+#  # description: Middleware wireless framework_platform_internal_flash
+#  set(CONFIG_USE_middleware_wireless_framework_platform_internal_flash_rt1170 true)
+
+#  # description: Middleware wireless framework_platform_rng
+#  set(CONFIG_USE_middleware_wireless_framework_platform_rng_rt1170 true)
+
+#  # description: Middleware wireless framework_platform_zb
+#  set(CONFIG_USE_middleware_wireless_framework_platform_zb_rt1170 true)
+
+#  # description: Middleware wireless framework_lfs_config
+#  set(CONFIG_USE_middleware_wireless_framework_lfs_config_rt1170 true)
+
+#  # description: Middleware wireless framework_platform_fpga
+#  set(CONFIG_USE_middleware_wireless_framework_platform_fpga_rt1170 true)
+
+#  # description: Middleware wireless framework_mbedtls_config
+#  set(CONFIG_USE_middleware_wireless_framework_mbedtls_config_rt1170 true)
+
+#  # description: Middleware wireless framework_cmake
+#  set(CONFIG_USE_middleware_wireless_framework_CMake_rt1170_MIMXRT1176 true)
+
+#  # description: Middleware wireless framework_PDUM rt1170
+#  set(CONFIG_USE_middleware_wireless_framework_PDUM_rt1170 true)
+
+#  # description: Middleware wireless framework_sbtsnoop
+#  set(CONFIG_USE_middleware_wireless_framework_sbtsnoop true)
+
+#  # description: Middleware wireless framework_fwk_debug
+#  set(CONFIG_USE_middleware_wireless_framework_fwk_debug true)
+
+#  # description: FreeRTOS heap for framework mem_manager
+#  set(CONFIG_USE_middleware_wireless_freertos_heap true)
+
+#  # description: Middleware wireless fsabstraction
+#  set(CONFIG_USE_middleware_wireless_framework_fsabstraction true)
+
+#  # description: Middleware wireless FileCache
+#  set(CONFIG_USE_middleware_wireless_framework_filecache true)
+
+#  # description: Middleware wireless KeyStorage
+#  set(CONFIG_USE_middleware_wireless_framework_keystorage true)
+
 #set.middleware.eiq
 #  # description: Flatbuffers library
 #  set(CONFIG_USE_middleware_eiq_tensorflow_lite_micro_third_party_flatbuffers true)
@@ -1754,6 +1937,8 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/usb
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/vit
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wifi_nxp
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless
+  ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/framework
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/wireless/wpa_supplicant-rtos
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/azure-rtos
   ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
@@ -1765,12 +1950,10 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/xip
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkbmimxrt1170
-  ${CMAKE_CURRENT_LIST_DIR}/../../boards/evkmimxrt1170
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/voice_seeker
 )
 
 include(set_board_evkbmimxrt1170 OPTIONAL)
-include(set_board_evkmimxrt1170 OPTIONAL)
 include(set_CMSIS_DSP_Lib OPTIONAL)
 include(set_CMSIS OPTIONAL)
 include(set_device_MIMXRT1176 OPTIONAL)
@@ -1792,4 +1975,5 @@ include(set_middleware_sdmmc OPTIONAL)
 include(set_middleware_usb OPTIONAL)
 include(set_middleware_vit OPTIONAL)
 include(set_middleware_voice_seeker OPTIONAL)
+include(set_middleware_wireless_framework OPTIONAL)
 include(set_middleware_wireless_wpa_supplicant OPTIONAL)

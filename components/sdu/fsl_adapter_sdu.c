@@ -274,7 +274,7 @@ static inline void SDU_dump_hex(uint32_t level, const void *data, unsigned len)
 	{
         return;
 	}
-	
+
     (void)PRINTF("**** Dump @ %p Len: %d ****\n\r", data, len);
     while (i < len)
     {
@@ -308,12 +308,12 @@ static status_t SDU_InitData(uint32_t used_fun_num, sdioslv_int_cpu_num_t cpu_nu
     {
         return (status_t)kStatus_InvalidArgument;
     }
-	
+
     if (sdu_ctrl.initialized != 0U)
     {
         return (status_t)kStatus_Success;
     }
-	
+
     OSA_ENTER_CRITICAL();
     for (fun_num = 0; fun_num < used_fun_num; fun_num++)
     {
@@ -382,6 +382,7 @@ static void SDU_DeinitData(void)
  * @retval !NULL Created handle pointer.
  * @retval NULL Fail to create handle.
  */
+
 static sdioslv_handle_t SDU_CreateHandle(sdioslv_handle_config_t *config)
 {
     uint8_t fun_num;
@@ -400,7 +401,7 @@ static sdioslv_handle_t SDU_CreateHandle(sdioslv_handle_config_t *config)
     {
         return NULL;
     }
-	
+
     if ((config->cpu_num != (uint8_t)kSDIOSLV_INT_CPUNum1) && (config->cpu_num != (uint8_t)kSDIOSLV_INT_CPUNum2) &&
         (config->cpu_num != (uint8_t)kSDIOSLV_INT_CPUNum3))
     {
@@ -411,24 +412,24 @@ static sdioslv_handle_t SDU_CreateHandle(sdioslv_handle_config_t *config)
     {
         return NULL;
     }
-	
+
     if ((config->data_tx_format > 2U) || (config->data_rd_format > 2U))
     {
         return NULL;
     }
-	
+
     if ((config->cmd_callback == NULL) || (config->data_callback == NULL))
     {
         return NULL;
     }
-	
+
     OSA_ENTER_CRITICAL();
     fun_ctrl = sdu_ctrl.func_ctrl[fun_num - 1U];
     if (fun_ctrl == NULL)
     {
         goto create_err;
     }
-	
+
     sdu_fsr = fun_ctrl->regmap;
     sdu_fsr->RdBitMap			= 0;
     sdu_fsr->WrBitMap			= 0;
@@ -590,7 +591,7 @@ done:
     {
         SDU_DeinitData();
     }
-	
+
     return rc;
 }
 
@@ -813,7 +814,7 @@ static void SDU_RecvTask(void *param)
             {
                 (void)SDU_RecvCmdProcess();
             }
-			
+
             if ((ev & SDU_DATA_RECEIVED) != 0U)
             {
 			    (void)SDU_RecvDataProcess();
@@ -838,7 +839,7 @@ static bool SDU_IsLinkUp(void)
     {
         return true;
     }
-	
+
     return false;
 }
 
@@ -915,7 +916,7 @@ static inline void SDU_ProcessCmdUpLdOvr(sdioslv_fun_ctrl_t *fun_ctrl)
 
     if ((port_ctrl->valid == 0U) || (port_ctrl->occupied == 0U))
     {
-        return;    
+        return;
     }
 
     fun_ctrl->config.cmd_callback(kStatus_SDIOSLV_FuncSendComplete, (sdioslv_func_t)fun_ctrl->config.fun_num,
@@ -969,7 +970,7 @@ static inline void SDU_ProcessCmdDnLdOvr(sdioslv_fun_ctrl_t *fun_ctrl)
     {
     	return;
     }
-       
+
     fun_ctrl->config.cmd_callback(kStatus_SDIOSLV_FuncReadComplete, (sdioslv_func_t)fun_ctrl->config.fun_num,
                                   kSDIOSLV_CmdPortNum0, port_ctrl->buffer, fun_ctrl->config.cmd_user_data);
 
@@ -1152,7 +1153,7 @@ static status_t SDU_RefillCmdBuffer(sdu_ctrl_t *ctrl)
     {
         return (status_t)kStatus_InvalidArgument;
     }
-	
+
     sdu_node_buf = (sdu_buffer_t *)LIST_RemoveHead(&ctrl->cmd_free_buffer[SDU_PORT_FOR_WRITE]);
     if (sdu_node_buf == NULL)
     {
@@ -1175,7 +1176,7 @@ static status_t SDU_RefillCmdBuffer(sdu_ctrl_t *ctrl)
     {
         goto refill_cmd_err;
     }
-	
+
     port_ctrl->buffer           = &(sdu_node_buf->buffer);
     port_ctrl->occupied         = 1;
     if (SDIOSLV_RefillCmdBuffer(fun_ctrl->regmap, port_ctrl->buffer->data_addr) != kStatus_Success)
@@ -1221,7 +1222,7 @@ static status_t SDU_SendDataNonBlocking(sdioslv_handle_t handle, transfer_buffer
     {
         return (status_t)kStatus_InvalidArgument;
     }
-	
+
     OSA_ENTER_CRITICAL();
     fun_ctrl = (sdioslv_fun_ctrl_t *)handle;
     tx_port  = fun_ctrl->curr_data_tx_port;
@@ -1272,19 +1273,19 @@ static status_t SDU_RefillDataBuffer(sdu_ctrl_t *ctrl, sdioslv_port_t port)
     {
         return (status_t)kStatus_InvalidArgument;
     }
-	
+
     if ((uint32_t)port >= SDU_MAX_PORT_NUM)
     {
         return (status_t)kStatus_InvalidArgument;
     }
-	
+
     data_buf = (sdu_buffer_t *)LIST_RemoveHead(&ctrl->data_free_buffer);
     if (data_buf == NULL)
     {
         sdu_e("%s: No free buffer for data_buf!\r\n", __FUNCTION__);
         return (status_t)kStatus_NoData;
     }
-	
+
     data_buf->buffer.data_len  = 0;
     data_buf->buffer.user_data = (uint32_t)data_buf;
 
@@ -1296,12 +1297,12 @@ static status_t SDU_RefillDataBuffer(sdu_ctrl_t *ctrl, sdioslv_port_t port)
     {
         goto refill_data_err;
     }
-	
+
     if (port_ctrl->occupied != 0U)
     {
         goto refill_data_err;
     }
-	
+
     port_ctrl->buffer        = &(data_buf->buffer);
     port_ctrl->occupied      = 1;
     if (SDIOSLV_RefillDataBuffer(fun_ctrl->regmap, port, port_ctrl->buffer->data_addr) != kStatus_Success)
@@ -1500,7 +1501,7 @@ status_t SDU_RecvData(void)
 	                    ctrl_sdu.stat.err_tx_data_call_cb++;
 	                }
 	            }
-				
+
 	            if (succ_count != 0U)
 	            {
 	                return ret;
@@ -1550,7 +1551,7 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
     {
         return (status_t)kStatus_Fail;
     }
-	
+
     switch (type)
     {
         case SDU_TYPE_FOR_READ_CMD:
@@ -1577,7 +1578,7 @@ status_t SDU_Send(sdu_for_read_type_t type, uint8_t *data_addr, uint16_t data_le
         {
             ctrl_sdu.stat.drop_tx_cmd++;
         }
-		
+
         sdu_d("%s: NO free_buffer for type %d!\r\n", __FUNCTION__, type);
         return (status_t)kStatus_NoData;
     }
@@ -1922,7 +1923,6 @@ done:
     {
         SDU_InnerDeinit();
     }
-
     sdu_d("Leave %s: sdu_state=%d rc=0x%x.\r\n", __FUNCTION__, ctrl_sdu.sdu_state, rc);
     OSA_EXIT_CRITICAL();
     return rc;
@@ -1962,3 +1962,20 @@ status_t SDU_InstallCallback(sdu_for_write_type_t type, sdu_callback_t callback)
     return (status_t)kStatus_Success;
 }
 
+status_t SDU_EnterPowerDown(void)
+{
+    (void)SDU_ClrFwReady();
+    SDU_InnerDeinit();
+
+    return (status_t)kStatus_Success;
+}
+
+status_t SDU_ExitPowerDown(void)
+{
+    (void)SDU_SDIOSLVInit();
+    (void)SDU_InnerInit();
+    (void)SDU_SetFwReady();
+    ctrl_sdu.sdu_state = SDU_INITIALIZED;
+
+    return (status_t)kStatus_Success;
+}

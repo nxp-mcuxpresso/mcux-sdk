@@ -59,7 +59,7 @@ uint32_t DMIC_GetInstance(DMIC_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_dmicBases); instance++)
     {
-        if (s_dmicBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_dmicBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

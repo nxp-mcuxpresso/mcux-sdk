@@ -17,7 +17,7 @@
     <definition extID="middleware.multicore.rpmsg_lite.kw45b41zloc_nbu_bm.KW45B41Z83"/>
     <definition extID="middleware.wireless.framework.rpmsg_config.KW45B41Z83"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK216000" name="MCUXpresso SDK216000" version="2.16.000" revision="2.16.000"/>
+  <ksdk id="MCUXpressoSDK216100" name="MCUXpresso SDK216100" version="2.16.100" revision="2.16.100"/>
   <manifest_includes>
     <manifest_include path="../../examples/kw45b41zevk/kw45b41zevk_example_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/littlefs/manifests/middleware_christopher_haster_littlefs_KW45B41Z83_manifest_v3_14.xml"/>
@@ -237,7 +237,7 @@ ${load}</script>
         <files mask="device_KW45B41Z83_startup_wireless.cmake" hidden="true"/>
       </source>
     </component>
-    <component id="wireless.wireless_clock_pin_mux_file.KW45B41Z83" name="Wireless clock_pin_mux_file for matter" brief="Wireless clock_pin_mux_file for matter" version="1.0.0" full_name="Wireless common clock_pin_mux_file" category="wireless_clock_pin_mux_file/wireless_clock_pin_mux_file" user_visible="false" type="middleware" package_base_path="../middleware/wireless/framework/boards/kw45_k32w1/KW45B41Z83_LOC" project_base_path="board">
+    <component id="wireless.wireless_clock_pin_mux_file.KW45B41Z83" name="Wireless clock_pin_mux_file for matter" brief="Wireless clock_pin_mux_file for matter" version="1.0.0" full_name="Wireless common clock_pin_mux_file" category="wireless_clock_pin_mux_file/wireless_clock_pin_mux_file" user_visible="false" type="middleware" package_base_path="../middleware/wireless/framework/boards/kw45_k32w1/KW45B41Z83" project_base_path="board">
       <dependencies>
         <device_dependency value="KW45B41Z83xxxA"/>
       </dependencies>
@@ -2837,27 +2837,52 @@ ${load}</script>
         <include_path relative_path="osal" type="c_include"/>
       </include_paths>
     </component>
-    <component id="component.psa_crypto_driver.els_pkc.oracle.KW45B41Z83" name="psa_crypto_driver els_pkc_oracle" brief="Oracle of PSA crypto driver for els_pkc" version="1.0.0" full_name="Oracle of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+    <component id="component.psa_crypto_driver.mbedtls_thread_alt.KW45B41Z83" name="psa_crypto_driver mbedtls_threading_alt" brief="Threading Alt implementation for mbedtls layer via PSA crypto driver" version="1.0.0" full_name="PSA crypto driver threading alt layer for mbedtls threading based" category="psa_crypto_driver/psa_dri_mbed_thrd_alt" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
       <dependencies>
         <device_dependency value="KW45B41Z83xxxA"/>
       </dependencies>
-      <source relative_path="els_pkc/oracle/inc" type="c_include">
-        <files mask="mcuxClPsaDriver_Oracle_Interface_builtin_key_ids.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_Interface_key_locations.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_Macros.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_Utils.h"/>
+      <source relative_path="mbedtls_thread_alt" type="src">
+        <files mask="threading_alt.c"/>
       </source>
-      <source relative_path="els_pkc/oracle/src" type="src">
-        <files mask="mcuxClPsaDriver_Oracle.c"/>
-        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.c"/>
-        <files mask="mcuxClPsaDriver_Oracle_Utils.c"/>
+      <source relative_path="mbedtls_thread_alt" type="c_include">
+        <files mask="threading_alt.h"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="component_psa_crypto_driver_els_pkc_oracle.cmake" hidden="true"/>
+        <files mask="component_psa_crypto_driver_mbedtls_thread_alt.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="els_pkc/oracle/inc" type="c_include"/>
+        <include_path relative_path="mbedtls_thread_alt" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.oracle.rw61x.KW45B41Z83" name="psa_crypto_driver els_pkc_oracle_rw61x" brief="Key Recipes for rw61x for els_pkc" version="1.0.0" full_name="Key Recipes for rw61x for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="KW45B41Z83xxxA"/>
+      </dependencies>
+      <source relative_path="els_pkc/oracle/platforms/rw61x" type="c_include">
+        <files mask="mcuxClPsaDriver_Oracle_KeyRecipes.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_oracle_rw61x.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/oracle/platforms/rw61x" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.oracle.mcxn.KW45B41Z83" name="psa_crypto_driver els_pkc_oracle_mxcn" brief="Key Recipes for mcxn for els_pkc" version="1.0.0" full_name="Key Recipes for mcxn for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="KW45B41Z83xxxA"/>
+      </dependencies>
+      <source relative_path="els_pkc/oracle/platforms/mcxn" type="c_include">
+        <files mask="mcuxClPsaDriver_Oracle_KeyRecipes.h"/>
+      </source>
+      <source relative_path="els_pkc/oracle/platforms/mcxn" type="src">
+        <files mask="mcuxClPsaDriver_Oracle_KeyRecipes_Utils.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_oracle_mcxn.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/oracle/platforms/mcxn" type="c_include"/>
       </include_paths>
     </component>
     <component id="component.psa_crypto_driver.els_pkc.common.KW45B41Z83" name="psa_crypto_driver els_pkc_common" brief="Common files of PSA crypto driver for els_pkc" version="1.0.0" full_name="Common files of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_common" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
@@ -3305,7 +3330,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="device.KW45B41Z83_utility.kw45b41zevk.KW45B41Z83" name="utility" brief="utilitiy for KW45B41Z83" version="1.0.0" full_name="utility" category="Device/SDK Utilities" user_visible="true" type="utilities" package_base_path="../devices/KW45B41Z83/utilities" project_base_path="board">
+    <component id="device.KW45B41Z83_utility.kw45b41zloc.KW45B41Z83" name="utility" brief="utilitiy for KW45B41Z83" version="1.0.0" full_name="utility" category="Device/SDK Utilities" user_visible="true" type="utilities" package_base_path="../devices/KW45B41Z83/utilities" project_base_path="board">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpadc.KW45B41Z83"/>
@@ -3320,7 +3345,7 @@ ${load}</script>
         <files mask="board_utility.c"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="device_KW45B41Z83_utility_kw45b41zevk.KW45B41Z83.cmake" hidden="true"/>
+        <files mask="device_KW45B41Z83_utility_kw45b41zloc.KW45B41Z83.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
@@ -3736,80 +3761,230 @@ ${load}</script>
         <files mask="a00043.js"/>
         <files mask="a00044.html"/>
         <files mask="a00044.js"/>
-        <files mask="a00134.html"/>
-        <files mask="a00135.html"/>
-        <files mask="a00136.html"/>
-        <files mask="a00136.js"/>
-        <files mask="a00137.html"/>
-        <files mask="a00137.js"/>
-        <files mask="a00138.html"/>
-        <files mask="a00138.js"/>
-        <files mask="a00139.html"/>
-        <files mask="a00140.html"/>
-        <files mask="a00140.js"/>
-        <files mask="a00141.html"/>
-        <files mask="a00142.html"/>
-        <files mask="a00143.html"/>
-        <files mask="a00143.js"/>
-        <files mask="a00144.html"/>
-        <files mask="a00144.js"/>
-        <files mask="a00145.html"/>
-        <files mask="a00145.js"/>
-        <files mask="a00146.html"/>
-        <files mask="a00146.js"/>
-        <files mask="a00147.html"/>
-        <files mask="a00147.js"/>
-        <files mask="a00148.html"/>
-        <files mask="a00148.js"/>
-        <files mask="a00149.html"/>
-        <files mask="a00149.js"/>
-        <files mask="a00151.html"/>
+        <files mask="a00045.html"/>
+        <files mask="a00045.js"/>
+        <files mask="a00046.html"/>
+        <files mask="a00046.js"/>
+        <files mask="a00047.html"/>
+        <files mask="a00047.js"/>
+        <files mask="a00048.html"/>
+        <files mask="a00048.js"/>
+        <files mask="a00049.html"/>
+        <files mask="a00049.js"/>
+        <files mask="a00050.html"/>
+        <files mask="a00050.js"/>
+        <files mask="a00051.html"/>
+        <files mask="a00051.js"/>
+        <files mask="a00052.html"/>
+        <files mask="a00052.js"/>
+        <files mask="a00053.html"/>
+        <files mask="a00053.js"/>
+        <files mask="a00054.html"/>
+        <files mask="a00054.js"/>
+        <files mask="a00055.html"/>
+        <files mask="a00055.js"/>
+        <files mask="a00056.html"/>
+        <files mask="a00056.js"/>
+        <files mask="a00057.html"/>
+        <files mask="a00058.html"/>
+        <files mask="a00059.html"/>
+        <files mask="a00060.html"/>
+        <files mask="a00061.html"/>
+        <files mask="a00062.html"/>
+        <files mask="a00063.html"/>
+        <files mask="a00064.html"/>
+        <files mask="a00065.html"/>
+        <files mask="a00065.js"/>
+        <files mask="a00066.html"/>
+        <files mask="a00066.js"/>
+        <files mask="a00067.html"/>
+        <files mask="a00067.js"/>
+        <files mask="a00068.html"/>
+        <files mask="a00068.js"/>
+        <files mask="a00069.html"/>
+        <files mask="a00069.js"/>
+        <files mask="a00070.html"/>
+        <files mask="a00070.js"/>
+        <files mask="a00071.html"/>
+        <files mask="a00071.js"/>
+        <files mask="a00072.html"/>
+        <files mask="a00072.js"/>
+        <files mask="a00073.html"/>
+        <files mask="a00073.js"/>
+        <files mask="a00074.html"/>
+        <files mask="a00074.js"/>
+        <files mask="a00075.html"/>
+        <files mask="a00075.js"/>
+        <files mask="a00076.html"/>
+        <files mask="a00076.js"/>
+        <files mask="a00077.html"/>
+        <files mask="a00077.js"/>
+        <files mask="a00078.html"/>
+        <files mask="a00078.js"/>
+        <files mask="a00079.html"/>
+        <files mask="a00079.js"/>
+        <files mask="a00080.html"/>
+        <files mask="a00080.js"/>
+        <files mask="a00081.html"/>
+        <files mask="a00081.js"/>
+        <files mask="a00082.html"/>
+        <files mask="a00082.js"/>
+        <files mask="a00240.html"/>
+        <files mask="a00241.html"/>
+        <files mask="a00242.html"/>
+        <files mask="a00242.js"/>
+        <files mask="a00243.html"/>
+        <files mask="a00243.js"/>
+        <files mask="a00244.html"/>
+        <files mask="a00244.js"/>
+        <files mask="a00245.html"/>
+        <files mask="a00245.js"/>
+        <files mask="a00246.html"/>
+        <files mask="a00246.js"/>
+        <files mask="a00247.html"/>
+        <files mask="a00248.html"/>
+        <files mask="a00248.js"/>
+        <files mask="a00249.html"/>
+        <files mask="a00249.js"/>
+        <files mask="a00250.html"/>
+        <files mask="a00250.js"/>
+        <files mask="a00251.html"/>
+        <files mask="a00252.html"/>
+        <files mask="a00253.html"/>
+        <files mask="a00253.js"/>
+        <files mask="a00254.html"/>
+        <files mask="a00254.js"/>
+        <files mask="a00255.html"/>
+        <files mask="a00255.js"/>
+        <files mask="a00256.html"/>
+        <files mask="a00256.js"/>
+        <files mask="a00257.html"/>
+        <files mask="a00257.js"/>
+        <files mask="a00258.html"/>
+        <files mask="a00258.js"/>
+        <files mask="a00259.html"/>
+        <files mask="a00259.js"/>
+        <files mask="a00260.html"/>
+        <files mask="a00260.js"/>
+        <files mask="a00261.html"/>
+        <files mask="a00262.html"/>
+        <files mask="a00262.js"/>
+        <files mask="a00263.html"/>
+        <files mask="a00263.js"/>
+        <files mask="a00264.html"/>
+        <files mask="a00264.js"/>
+        <files mask="a00265.html"/>
+        <files mask="a00265.js"/>
+        <files mask="a00266.html"/>
+        <files mask="a00266.js"/>
+        <files mask="a00267.html"/>
+        <files mask="a00267.js"/>
+        <files mask="a00268.html"/>
+        <files mask="a00268.js"/>
+        <files mask="a00269.html"/>
+        <files mask="a00269.js"/>
+        <files mask="a00270.html"/>
+        <files mask="a00270.js"/>
+        <files mask="a00271.html"/>
+        <files mask="a00271.js"/>
+        <files mask="a00272.html"/>
+        <files mask="a00272.js"/>
+        <files mask="a00273.html"/>
+        <files mask="a00273.js"/>
+        <files mask="a00274.html"/>
+        <files mask="a00274.js"/>
+        <files mask="a00275.html"/>
+        <files mask="a00275.js"/>
+        <files mask="a00276.html"/>
+        <files mask="a00276.js"/>
+        <files mask="a00277.html"/>
+        <files mask="a00277.js"/>
+        <files mask="a00279.html"/>
         <files mask="arm_logo.png"/>
         <files mask="bc_s.png"/>
         <files mask="bdwn.png"/>
         <files mask="closed.png"/>
         <files mask="customdoxygen.css"/>
         <files mask="debug_console_overview.jpg"/>
-        <files mask="dir_011caa1066507d4e5f17cbf5609be178.html"/>
-        <files mask="dir_118a08563ff6792cc76fa87e8adb8f60.html"/>
-        <files mask="dir_14e1f923c9ab661413afe5c69791796f.html"/>
-        <files mask="dir_1522b9e800e5bcad811d94e26df5738e.html"/>
-        <files mask="dir_1c87087fe7f38f0cc1ade534e59285dd.html"/>
-        <files mask="dir_22eead78af4144eab534ccda3e304bd0.html"/>
-        <files mask="dir_285dfe777d4c36a731117772eba9f926.html"/>
-        <files mask="dir_287eb67e6707f3b1164a6dae32236144.html"/>
-        <files mask="dir_31832ddefaaf82af07b48c628435ec4d.html"/>
-        <files mask="dir_37ea206754600fcfaf605fbd85072a5d.html"/>
-        <files mask="dir_393dd06882b4d73d4dbbd43ca3ecc7cb.html"/>
-        <files mask="dir_39c31cd41c757278d4cdd6663e5ff43c.html"/>
-        <files mask="dir_3a0bb4955a6f35ccce75fe900136fdbb.html"/>
-        <files mask="dir_3dded393e5195814741161625babcd77.html"/>
-        <files mask="dir_3e6bf87472eb67fb6592f2bbf11483e3.html"/>
-        <files mask="dir_40fe32d88482aaa0653317d50102c57b.html"/>
-        <files mask="dir_4cd1cf6079e432efe54e5cc9b84d40e0.html"/>
-        <files mask="dir_56c4446e790a42237766f8ffec7c70b8.html"/>
-        <files mask="dir_66f793e29f5bbc270541854e6ef623a4.html"/>
-        <files mask="dir_68e35a575ba5c2a7d2d3c3823f9fbf6f.html"/>
-        <files mask="dir_6c80042a04513d506286a261cb8ee7bc.html"/>
-        <files mask="dir_80b66214db2a6f2c1ded5a4e13f75cf0.html"/>
-        <files mask="dir_83ef8262af940851b32994e0128187ae.html"/>
-        <files mask="dir_886ceb6feb657c1c45c31dd8542ca401.html"/>
-        <files mask="dir_8f632f67344f4605cbf6297924e25094.html"/>
-        <files mask="dir_905f676be7ef38b727ef2f5909c2a743.html"/>
-        <files mask="dir_9a888ffca9a21649fb34da3661f9ae2a.html"/>
-        <files mask="dir_a2abb56d8215ba7dfb2c54b3cd170dfc.html"/>
-        <files mask="dir_a5072b5e1dec47151bc98863221b7dd9.html"/>
-        <files mask="dir_aa2d1e5ce5272f6f099fcd5be6559508.html"/>
-        <files mask="dir_b3f55caf06ab95fa8ba679020d78115d.html"/>
-        <files mask="dir_b5b308ac62861bc4b2456a408032d998.html"/>
-        <files mask="dir_da0ae1d978a3a0ccc7f5ecb821ec0631.html"/>
-        <files mask="dir_e0f247af8fe88a32503d583f7f3d27dd.html"/>
-        <files mask="dir_e6427ec33c60a8cdb72396a2bb007480.html"/>
-        <files mask="dir_ec31e0f695c09e1526ccc8f6473a8242.html"/>
-        <files mask="dir_fa03fc5fbe977bd17ebbc5dce79baa36.html"/>
-        <files mask="dir_fb4fadadcd630c83eeb1e50f94df9908.html"/>
-        <files mask="dir_feea9bb09048d78028916eb8f918b8c6.html"/>
-        <files mask="dir_ffb88c0edd500e08ba1b01bd507c856d.html"/>
+        <files mask="dir_028e6a7c0316a508a40a4af1c91ab09c.html"/>
+        <files mask="dir_03539e9bf34fd65c5e6da2760226d874.html"/>
+        <files mask="dir_07b86ffc266b39efa5bbdc0e9fdb330a.html"/>
+        <files mask="dir_0876fd8360dfcb758fb1cc67e2d75329.html"/>
+        <files mask="dir_0c267f045edb9b0ef64e9a860fd099c4.html"/>
+        <files mask="dir_18eda99a8be7f680d830ce4dc9ba42dc.html"/>
+        <files mask="dir_1c43cffaad1113e88427deb622f79103.html"/>
+        <files mask="dir_20a30dff5145d917f6c5f8c5fb0461c0.html"/>
+        <files mask="dir_22079caf1b6ec07bdc8341292c4d2bfe.html"/>
+        <files mask="dir_24d773129451c3fce97605b6e8c21df6.html"/>
+        <files mask="dir_2795757a0106c91488b4d539ecf9baca.html"/>
+        <files mask="dir_2ee1c7079a14f85d7858aea2e50cd5f1.html"/>
+        <files mask="dir_3426deb2dd7b86c400852d77edf21315.html"/>
+        <files mask="dir_3e7373aaf69ac1c80fbcaaa6d3a5e6aa.html"/>
+        <files mask="dir_409f97388efe006bc3438b95e9edef48.html"/>
+        <files mask="dir_444a70473d94875dbb4d8eb059b6f200.html"/>
+        <files mask="dir_4de29b6c1a955c1cd0791d86cb7f39d8.html"/>
+        <files mask="dir_50c0f6d3977876a8fb6acc75ece63018.html"/>
+        <files mask="dir_5347681e5ea399508981120a22b013b8.html"/>
+        <files mask="dir_56e9549c18ccd5ece44d454a65df54c5.html"/>
+        <files mask="dir_58e102d2449f7b3d87d5edc08313c5d7.html"/>
+        <files mask="dir_5b4d17cef729f4d885118c384797319b.html"/>
+        <files mask="dir_5bd569035a2d81dcd1ad64cfa33d58c9.html"/>
+        <files mask="dir_5d6e4f2795b67e334f2610356d02c870.html"/>
+        <files mask="dir_6091d5e4d99993f0ed5a632340387767.html"/>
+        <files mask="dir_633a86e6a6658f734e800b79d508ae19.html"/>
+        <files mask="dir_645a6fd142504b70264962515b956c1a.html"/>
+        <files mask="dir_6a948925e81c4a66634d76c9f12d650a.html"/>
+        <files mask="dir_709ebcf44602e0261380c2004f815fb0.html"/>
+        <files mask="dir_72495dc56d68d813dfb71396576d4290.html"/>
+        <files mask="dir_743e37ee7ecc12c94c0d261f5b921011.html"/>
+        <files mask="dir_775677d08ff8e145b89ad0d7b82c73c5.html"/>
+        <files mask="dir_7ac0bfc132cac1a5157e99849929797e.html"/>
+        <files mask="dir_7b19bd8c092834523e70782e52013e1a.html"/>
+        <files mask="dir_7e10c28399b01a8ec0177b47832f5af2.html"/>
+        <files mask="dir_7e45e31100f7f9524737350519bc1e27.html"/>
+        <files mask="dir_7e54905a8523af8ff4222cbb27bdafec.html"/>
+        <files mask="dir_7f0d048aba2ff0ee4d753657887649a8.html"/>
+        <files mask="dir_81cd625641a90df482300fc494d26ddb.html"/>
+        <files mask="dir_83c4f67939b2e50b6dc50fe3fc259b2d.html"/>
+        <files mask="dir_848ba48fec923bc3c0bf8c7926036968.html"/>
+        <files mask="dir_85132458850dfa36542849bbc17c7993.html"/>
+        <files mask="dir_85f5f2e4cc5264ac7f1fd14d8eaab8ad.html"/>
+        <files mask="dir_86d9a831f63be91f319399014155e1a5.html"/>
+        <files mask="dir_87205c9a939183536b4a6eb5daafd6bf.html"/>
+        <files mask="dir_89fd88b21369a8fc685427310a5a5fe7.html"/>
+        <files mask="dir_8f5c973d26740daab895a32d43886c59.html"/>
+        <files mask="dir_93c235c0dbb1c2d60c8d22c7fa15351a.html"/>
+        <files mask="dir_941917524c95f00c85ae4653cfaa2b49.html"/>
+        <files mask="dir_9579539eaf64520a9c0e36a6a6de49ca.html"/>
+        <files mask="dir_95bc3e7ac98e4e44438a28d0eb625bbb.html"/>
+        <files mask="dir_96cefa23536c68b3da13bbebf03b475a.html"/>
+        <files mask="dir_9986937d5c2d55a7e5d1d4820166229f.html"/>
+        <files mask="dir_9d68a78282ebc70c2e05ee1f171dd960.html"/>
+        <files mask="dir_a1a4400e3fc7463c1d5b4420aebfebf4.html"/>
+        <files mask="dir_a343a3e9cbb710280ccd0de2056b945d.html"/>
+        <files mask="dir_a619c3f5e1bcdc73106a059b3163c45d.html"/>
+        <files mask="dir_a7783dd1e77003151de6ca32f81c6d45.html"/>
+        <files mask="dir_ad0dfdd4e93d9c9dad11827e912be2b9.html"/>
+        <files mask="dir_af2eb411b7ba9e775529c2c86d487433.html"/>
+        <files mask="dir_af64a37811d11b55a64c8aa7ca3de2cf.html"/>
+        <files mask="dir_b07b1803b08e3bfa8752acf7d436415b.html"/>
+        <files mask="dir_b1c03c584dc84f3f7667d569a16f41a9.html"/>
+        <files mask="dir_b1c4d21f93a7826ef4aed70b30552b97.html"/>
+        <files mask="dir_b5759f6cd324301c8d375e44421eccc5.html"/>
+        <files mask="dir_bebc14e255be79244de9e03d794361f1.html"/>
+        <files mask="dir_c40c443a376df1bc90d73c3b618643fe.html"/>
+        <files mask="dir_c5a52a81292cf9a5167198f4f346d6d9.html"/>
+        <files mask="dir_c5bf07533f33a69744818ab6a64ef131.html"/>
+        <files mask="dir_d0b0cea4c1afa919405231e98537b73c.html"/>
+        <files mask="dir_d9f10522caeb6cb5822a80c0081c44ab.html"/>
+        <files mask="dir_dc1d449a1b08d9860d0e8ab656677732.html"/>
+        <files mask="dir_df8f935d7745a121a706b7ac980ff9e0.html"/>
+        <files mask="dir_e47d2a5b37e95950e42a18b5143358a0.html"/>
+        <files mask="dir_ea5f9633cc51d3e2a6a258aee7e636f0.html"/>
+        <files mask="dir_ea982a4a90bbf64c8a612131ad2f0fcb.html"/>
+        <files mask="dir_f30550e2433a9e3eaf19043f7ead6787.html"/>
+        <files mask="dir_f56145bed55f68185a10cc6f6830cfad.html"/>
+        <files mask="dir_f7e99b515278d57327e2df3b2ab543bb.html"/>
         <files mask="doxygen.css"/>
         <files mask="doxygen.png"/>
         <files mask="dynsections.js"/>
@@ -3845,7 +4020,18 @@ ${load}</script>
         <files mask="navtreeindex11.js"/>
         <files mask="navtreeindex12.js"/>
         <files mask="navtreeindex13.js"/>
+        <files mask="navtreeindex14.js"/>
+        <files mask="navtreeindex15.js"/>
+        <files mask="navtreeindex16.js"/>
+        <files mask="navtreeindex17.js"/>
+        <files mask="navtreeindex18.js"/>
+        <files mask="navtreeindex19.js"/>
         <files mask="navtreeindex2.js"/>
+        <files mask="navtreeindex20.js"/>
+        <files mask="navtreeindex21.js"/>
+        <files mask="navtreeindex22.js"/>
+        <files mask="navtreeindex23.js"/>
+        <files mask="navtreeindex24.js"/>
         <files mask="navtreeindex3.js"/>
         <files mask="navtreeindex4.js"/>
         <files mask="navtreeindex5.js"/>
@@ -3910,8 +4096,14 @@ ${load}</script>
         <files mask="all_76.js"/>
         <files mask="all_77.html"/>
         <files mask="all_77.js"/>
+        <files mask="all_78.html"/>
+        <files mask="all_78.js"/>
+        <files mask="all_79.html"/>
+        <files mask="all_79.js"/>
         <files mask="classes_5f.html"/>
         <files mask="classes_5f.js"/>
+        <files mask="classes_62.html"/>
+        <files mask="classes_62.js"/>
         <files mask="classes_63.html"/>
         <files mask="classes_63.js"/>
         <files mask="classes_65.html"/>
@@ -3920,12 +4112,22 @@ ${load}</script>
         <files mask="classes_66.js"/>
         <files mask="classes_67.html"/>
         <files mask="classes_67.js"/>
+        <files mask="classes_68.html"/>
+        <files mask="classes_68.js"/>
+        <files mask="classes_69.html"/>
+        <files mask="classes_69.js"/>
         <files mask="classes_6c.html"/>
         <files mask="classes_6c.js"/>
+        <files mask="classes_6d.html"/>
+        <files mask="classes_6d.js"/>
         <files mask="classes_6e.html"/>
         <files mask="classes_6e.js"/>
+        <files mask="classes_6f.html"/>
+        <files mask="classes_6f.js"/>
         <files mask="classes_70.html"/>
         <files mask="classes_70.js"/>
+        <files mask="classes_72.html"/>
+        <files mask="classes_72.js"/>
         <files mask="classes_73.html"/>
         <files mask="classes_73.js"/>
         <files mask="classes_74.html"/>
@@ -3937,6 +4139,8 @@ ${load}</script>
         <files mask="close.png"/>
         <files mask="enums_5f.html"/>
         <files mask="enums_5f.js"/>
+        <files mask="enums_62.html"/>
+        <files mask="enums_62.js"/>
         <files mask="enums_63.html"/>
         <files mask="enums_63.js"/>
         <files mask="enums_65.html"/>
@@ -3945,12 +4149,22 @@ ${load}</script>
         <files mask="enums_66.js"/>
         <files mask="enums_67.html"/>
         <files mask="enums_67.js"/>
+        <files mask="enums_68.html"/>
+        <files mask="enums_68.js"/>
+        <files mask="enums_69.html"/>
+        <files mask="enums_69.js"/>
         <files mask="enums_6c.html"/>
         <files mask="enums_6c.js"/>
+        <files mask="enums_6d.html"/>
+        <files mask="enums_6d.js"/>
         <files mask="enums_6e.html"/>
         <files mask="enums_6e.js"/>
+        <files mask="enums_6f.html"/>
+        <files mask="enums_6f.js"/>
         <files mask="enums_70.html"/>
         <files mask="enums_70.js"/>
+        <files mask="enums_72.html"/>
+        <files mask="enums_72.js"/>
         <files mask="enums_73.html"/>
         <files mask="enums_73.js"/>
         <files mask="enums_74.html"/>
@@ -3959,8 +4173,16 @@ ${load}</script>
         <files mask="enums_76.js"/>
         <files mask="enums_77.html"/>
         <files mask="enums_77.js"/>
+        <files mask="enumvalues_64.html"/>
+        <files mask="enumvalues_64.js"/>
+        <files mask="enumvalues_65.html"/>
+        <files mask="enumvalues_65.js"/>
         <files mask="enumvalues_6b.html"/>
         <files mask="enumvalues_6b.js"/>
+        <files mask="enumvalues_6c.html"/>
+        <files mask="enumvalues_6c.js"/>
+        <files mask="functions_62.html"/>
+        <files mask="functions_62.js"/>
         <files mask="functions_63.html"/>
         <files mask="functions_63.js"/>
         <files mask="functions_64.html"/>
@@ -3971,10 +4193,18 @@ ${load}</script>
         <files mask="functions_66.js"/>
         <files mask="functions_67.html"/>
         <files mask="functions_67.js"/>
+        <files mask="functions_68.html"/>
+        <files mask="functions_68.js"/>
+        <files mask="functions_69.html"/>
+        <files mask="functions_69.js"/>
         <files mask="functions_6c.html"/>
         <files mask="functions_6c.js"/>
+        <files mask="functions_6d.html"/>
+        <files mask="functions_6d.js"/>
         <files mask="functions_6e.html"/>
         <files mask="functions_6e.js"/>
+        <files mask="functions_6f.html"/>
+        <files mask="functions_6f.js"/>
         <files mask="functions_70.html"/>
         <files mask="functions_70.js"/>
         <files mask="functions_72.html"/>
@@ -3987,6 +4217,8 @@ ${load}</script>
         <files mask="functions_76.js"/>
         <files mask="functions_77.html"/>
         <files mask="functions_77.js"/>
+        <files mask="groups_62.html"/>
+        <files mask="groups_62.js"/>
         <files mask="groups_63.html"/>
         <files mask="groups_63.js"/>
         <files mask="groups_64.html"/>
@@ -3997,10 +4229,16 @@ ${load}</script>
         <files mask="groups_66.js"/>
         <files mask="groups_67.html"/>
         <files mask="groups_67.js"/>
+        <files mask="groups_69.html"/>
+        <files mask="groups_69.js"/>
         <files mask="groups_6c.html"/>
         <files mask="groups_6c.js"/>
+        <files mask="groups_6d.html"/>
+        <files mask="groups_6d.js"/>
         <files mask="groups_6e.html"/>
         <files mask="groups_6e.js"/>
+        <files mask="groups_6f.html"/>
+        <files mask="groups_6f.js"/>
         <files mask="groups_70.html"/>
         <files mask="groups_70.js"/>
         <files mask="groups_72.html"/>
@@ -4030,16 +4268,28 @@ ${load}</script>
         <files mask="search_l.png"/>
         <files mask="search_m.png"/>
         <files mask="search_r.png"/>
+        <files mask="typedefs_62.html"/>
+        <files mask="typedefs_62.js"/>
         <files mask="typedefs_63.html"/>
         <files mask="typedefs_63.js"/>
         <files mask="typedefs_65.html"/>
         <files mask="typedefs_65.js"/>
         <files mask="typedefs_66.html"/>
         <files mask="typedefs_66.js"/>
+        <files mask="typedefs_68.html"/>
+        <files mask="typedefs_68.js"/>
+        <files mask="typedefs_69.html"/>
+        <files mask="typedefs_69.js"/>
         <files mask="typedefs_6c.html"/>
         <files mask="typedefs_6c.js"/>
         <files mask="typedefs_6e.html"/>
         <files mask="typedefs_6e.js"/>
+        <files mask="typedefs_6f.html"/>
+        <files mask="typedefs_6f.js"/>
+        <files mask="typedefs_70.html"/>
+        <files mask="typedefs_70.js"/>
+        <files mask="typedefs_72.html"/>
+        <files mask="typedefs_72.js"/>
         <files mask="typedefs_73.html"/>
         <files mask="typedefs_73.js"/>
         <files mask="typedefs_74.html"/>
@@ -4088,6 +4338,10 @@ ${load}</script>
         <files mask="variables_76.js"/>
         <files mask="variables_77.html"/>
         <files mask="variables_77.js"/>
+        <files mask="variables_78.html"/>
+        <files mask="variables_78.js"/>
+        <files mask="variables_79.html"/>
+        <files mask="variables_79.js"/>
       </source>
     </component>
     <component id="utility.debug_console.KW45B41Z83" name="debug_console" brief="Utility debug_console" version="1.0.1" full_name="Utility debug_console" category="Device/SDK Utilities" user_visible="true" type="utilities" package_base_path="../utilities" project_base_path="utilities">
@@ -4526,7 +4780,7 @@ ${load}</script>
         <files mask="Getting Started with Multicore SDK (MCSDK).pdf"/>
       </source>
     </component>
-    <component id="platform.drivers.common.KW45B41Z83" name="common" brief="COMMON Driver" version="2.4.1" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
+    <component id="platform.drivers.common.KW45B41Z83" name="common" brief="COMMON Driver" version="2.4.2" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.clock.KW45B41Z83"/>
@@ -16368,7 +16622,7 @@ ${load}</script>
         <files mask="void_host_taskhandler_void__args.html"/>
       </source>
     </component>
-    <component id="device.KW45B41Z83_utility.kw45b41zloc.KW45B41Z83" name="utility" brief="utilitiy for KW45B41Z83" version="1.0.0" full_name="utility" category="Device/SDK Utilities" user_visible="true" type="utilities" package_base_path="../devices/KW45B41Z83/utilities" project_base_path="board">
+    <component id="device.KW45B41Z83_utility.kw45b41zevk.KW45B41Z83" name="utility" brief="utilitiy for KW45B41Z83" version="1.0.0" full_name="utility" category="Device/SDK Utilities" user_visible="true" type="utilities" package_base_path="../devices/KW45B41Z83/utilities" project_base_path="board">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.lpadc.KW45B41Z83"/>
@@ -16383,7 +16637,7 @@ ${load}</script>
         <files mask="board_utility.c"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="device_KW45B41Z83_utility_kw45b41zloc.KW45B41Z83.cmake" hidden="true"/>
+        <files mask="device_KW45B41Z83_utility_kw45b41zevk.KW45B41Z83.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>

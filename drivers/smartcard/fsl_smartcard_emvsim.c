@@ -58,7 +58,7 @@ static uint32_t smartcard_emvsim_GetInstance(EMVSIM_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < emvsimArrayCount; instance++)
     {
-        if (s_emvsimBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_emvsimBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

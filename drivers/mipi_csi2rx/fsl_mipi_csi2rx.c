@@ -200,7 +200,7 @@ uint32_t CSI2RX_GetInstance(MIPI_CSI2RX_Type *base)
 
     for (i = 0U; i < ARRAY_SIZE(s_csi2rxBaseAddrs); i++)
     {
-        if ((uint32_t)base == s_csi2rxBaseAddrs[i])
+        if (MSDK_REG_SECURE_ADDR((uint32_t)base) == MSDK_REG_SECURE_ADDR(s_csi2rxBaseAddrs[i]))
         {
             return i;
         }

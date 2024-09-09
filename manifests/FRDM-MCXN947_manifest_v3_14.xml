@@ -15,7 +15,7 @@
     <definition extID="middleware.azure_rtos.tx.MCXN947"/>
     <definition extID="middleware.azure_rtos.tx.sp.MCXN947"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK216000" name="MCUXpresso SDK216000" version="2.16.000" revision="2.16.000"/>
+  <ksdk id="MCUXpressoSDK216100" name="MCUXpresso SDK216100" version="2.16.100" revision="2.16.100"/>
   <manifest_includes>
     <manifest_include path="../../examples/frdmmcxn947/frdmmcxn947_example_manifest_v3_14.xml"/>
     <manifest_include path="../../rtos/freertos/freertos-kernel/manifests/middleware_amazon_freertos_kernel_MCXN947_manifest_v3_14.xml"/>
@@ -143,6 +143,7 @@ ${load}</script>
       </memory>
       <total_memory flash_size_kb="2048" ram_size_kb="512"/>
       <package id="MCXN947VDF" name="MCXN947VDF"/>
+      <package id="MCXN947VPB" name="MCXN947VPB"/>
       <package id="MCXN947VNL" name="MCXN947VNL"/>
       <evaluation_boards>
         <evaluation_board name="frdmmcxn947"/>
@@ -2975,27 +2976,52 @@ ${load}</script>
         <include_path relative_path="osal" type="c_include"/>
       </include_paths>
     </component>
-    <component id="component.psa_crypto_driver.els_pkc.oracle.MCXN947" name="psa_crypto_driver els_pkc_oracle" brief="Oracle of PSA crypto driver for els_pkc" version="1.0.0" full_name="Oracle of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+    <component id="component.psa_crypto_driver.mbedtls_thread_alt.MCXN947" name="psa_crypto_driver mbedtls_threading_alt" brief="Threading Alt implementation for mbedtls layer via PSA crypto driver" version="1.0.0" full_name="PSA crypto driver threading alt layer for mbedtls threading based" category="psa_crypto_driver/psa_dri_mbed_thrd_alt" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
       <dependencies>
         <device_dependency value="MCXN947"/>
       </dependencies>
-      <source relative_path="els_pkc/oracle/inc" type="c_include">
-        <files mask="mcuxClPsaDriver_Oracle_Interface_builtin_key_ids.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_Interface_key_locations.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_Macros.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_Utils.h"/>
+      <source relative_path="mbedtls_thread_alt" type="src">
+        <files mask="threading_alt.c"/>
       </source>
-      <source relative_path="els_pkc/oracle/src" type="src">
-        <files mask="mcuxClPsaDriver_Oracle.c"/>
-        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.c"/>
-        <files mask="mcuxClPsaDriver_Oracle_Utils.c"/>
+      <source relative_path="mbedtls_thread_alt" type="c_include">
+        <files mask="threading_alt.h"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="component_psa_crypto_driver_els_pkc_oracle.cmake" hidden="true"/>
+        <files mask="component_psa_crypto_driver_mbedtls_thread_alt.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="els_pkc/oracle/inc" type="c_include"/>
+        <include_path relative_path="mbedtls_thread_alt" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.oracle.rw61x.MCXN947" name="psa_crypto_driver els_pkc_oracle_rw61x" brief="Key Recipes for rw61x for els_pkc" version="1.0.0" full_name="Key Recipes for rw61x for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="MCXN947"/>
+      </dependencies>
+      <source relative_path="els_pkc/oracle/platforms/rw61x" type="c_include">
+        <files mask="mcuxClPsaDriver_Oracle_KeyRecipes.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_oracle_rw61x.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/oracle/platforms/rw61x" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.oracle.mcxn.MCXN947" name="psa_crypto_driver els_pkc_oracle_mxcn" brief="Key Recipes for mcxn for els_pkc" version="1.0.0" full_name="Key Recipes for mcxn for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="MCXN947"/>
+      </dependencies>
+      <source relative_path="els_pkc/oracle/platforms/mcxn" type="c_include">
+        <files mask="mcuxClPsaDriver_Oracle_KeyRecipes.h"/>
+      </source>
+      <source relative_path="els_pkc/oracle/platforms/mcxn" type="src">
+        <files mask="mcuxClPsaDriver_Oracle_KeyRecipes_Utils.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_oracle_mcxn.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/oracle/platforms/mcxn" type="c_include"/>
       </include_paths>
     </component>
     <component id="component.psa_crypto_driver.els_pkc.common.MCXN947" name="psa_crypto_driver els_pkc_common" brief="Common files of PSA crypto driver for els_pkc" version="1.0.0" full_name="Common files of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_common" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
@@ -4767,7 +4793,7 @@ ${load}</script>
         <include_path relative_path="RTX/Config" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.common.MCXN947" name="common" brief="COMMON Driver" version="2.4.1" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
+    <component id="platform.drivers.common.MCXN947" name="common" brief="COMMON Driver" version="2.4.2" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.reset.MCXN947"/>
@@ -5925,6 +5951,29 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
+    <component id="platform.drivers.iped.MCXN947" name="iped" brief="iped Driver" version="2.3.0" full_name="iped Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/iped" project_base_path="drivers">
+      <dependencies>
+        <all>
+          <component_dependency value="platform.drivers.common.MCXN947"/>
+          <component_dependency value="component.els_pkc.MCXN947"/>
+          <component_dependency value="platform.drivers.flashiap.MCXN947"/>
+          <component_dependency value="platform.drivers.memInterface.MCXN947"/>
+          <device_dependency value="MCXN947"/>
+        </all>
+      </dependencies>
+      <source relative_path="./" type="c_include">
+        <files mask="fsl_iped.h"/>
+      </source>
+      <source relative_path="./" type="src">
+        <files mask="fsl_iped.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="driver_iped.MCXN947.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./" type="c_include"/>
+      </include_paths>
+    </component>
     <component id="platform.drivers.irtc.MCXN947" name="rtc" brief="IRTC Driver" version="2.3.1" full_name="IRTC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/irtc" project_base_path="drivers">
       <dependencies>
         <all>
@@ -6427,7 +6476,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.cache_cache64.MCXN947" name="cache" brief="CACHE Driver" version="2.0.7" full_name="CACHE Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/cache/cache64" project_base_path="drivers">
+    <component id="platform.drivers.cache_cache64.MCXN947" name="cache" brief="CACHE Driver" version="2.0.8" full_name="CACHE Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/cache/cache64" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MCXN947"/>
@@ -8088,6 +8137,32 @@ ${load}</script>
       </source>
       <include_paths>
         <include_path relative_path="osal/baremetal" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.oracle.MCXN947" name="psa_crypto_driver els_pkc_oracle" brief="Oracle of PSA crypto driver for els_pkc" version="1.0.0" full_name="Oracle of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <all>
+          <component_dependency value="component.psa_crypto_driver.els_pkc.oracle.mcxn.MCXN947"/>
+          <device_dependency value="MCXN947"/>
+        </all>
+      </dependencies>
+      <source relative_path="els_pkc/oracle/inc" type="c_include">
+        <files mask="mcuxClPsaDriver_Oracle_Interface_builtin_key_ids.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Interface_key_locations.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Macros.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Utils.h"/>
+      </source>
+      <source relative_path="els_pkc/oracle/src" type="src">
+        <files mask="mcuxClPsaDriver_Oracle.c"/>
+        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.c"/>
+        <files mask="mcuxClPsaDriver_Oracle_Utils.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_oracle.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/oracle/inc" type="c_include"/>
       </include_paths>
     </component>
     <component id="component.els_pkc.doc.mcxn.MCXN947" name="els_pkc.doc.mcxn" brief="Component els_pkc.doc.mcxn" version="1.9.0" full_name="Component els_pkc.doc.mcxn" category="els_pkc/doc" user_visible="true" type="software_component" package_base_path="../components/els_pkc/" project_base_path="component/els_pkc/">

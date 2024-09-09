@@ -241,6 +241,53 @@ psa_status_t mcuxClPsaDriver_Oracle_GetBuiltinKeyBuffer(psa_key_attributes_t *at
                                                        size_t *key_buffer_length);
 MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
 
+/**
+    @brief Oracle function for freeing storage for a key that will be created by the psa driver
+
+    This function requests to free storage space from the Oracle for a key that was earlier reserved.
+    This may be needed in case there is failure in a subsequenet operation in key generation and space
+    reserved by oracle for a key needs to be freed to prevent memory leakage.
+
+    @retval PSA_SUCCESS                 The operation was succesful
+    @retval PSA_ERROR_NOT_SUPPORTED     The Oracle shall never return this error code
+    @retval PSA_ERROR_GENERIC_ERROR     The operation failed (other error codes can be used as well if more specific)
+
+*/
+psa_status_t mcuxClPsaDriver_Oracle_FreeKey( mcuxClKey_Descriptor_t   *pKey );
+
+/**
+    @brief Oracle function for generating a s50 key. 
+
+    This function generates a random S50 Key using Key exchange.
+    Ideally this function should be part of PSA driver.
+
+    @retval PSA_SUCCESS                 The operation was succesful
+    @retval PSA_ERROR_NOT_SUPPORTED     The Oracle shall never return this error code
+    @retval PSA_ERROR_GENERIC_ERROR     The operation failed (other error codes can be used as well if more specific)
+
+*/
+psa_status_t mcuxClPsaDriver_Oracle_generate_s50_random_key(
+    const psa_key_attributes_t *attributes,
+    mcuxClEls_KeyIndex_t *key_index_private_key);
+
+
+/**
+ * @brief Oracle function for determine the size required for a key buffer for a key to be generated within ELS slot.
+ *
+ * The size of the data required to store a key is not necessarily the same as the size of the date supplied when
+ * importing a key.
+ *
+ * @param[in] attributes defines the attributes associated with the input buffer
+ * @param[out] key_buffer_length is the required number of bytes required as key_buffer
+ *
+ * @retval PSA_SUCCESS                          The operation was succesful
+ * @retval PSA_ERROR_NOT_SUPPORTED              The lifetime is not supported, meaning that fallback functions will be
+ * executed by Oracle
+ * @retval PSA_ERROR_INSUFFICIENT_MEMORY        The key_buffer size is not enough to include data to be stored
+ */
+psa_status_t mcuxClPsaDriver_Oracle_GetKeyBufferSize(const psa_key_attributes_t *attributes,
+                                                     size_t *key_buffer_length);
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

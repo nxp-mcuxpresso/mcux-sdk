@@ -179,7 +179,7 @@ static uint32_t PXP_GetInstance(PXP_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_pxpBases); instance++)
     {
-        if (s_pxpBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_pxpBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

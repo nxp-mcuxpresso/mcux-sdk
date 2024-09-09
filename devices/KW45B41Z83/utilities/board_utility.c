@@ -69,6 +69,7 @@ void BOARD_InitAdc(void)
     {
         vref_config_t vrefConfig;
         lpadc_config_t mLpadcConfigStruct;
+
         VREF_GetDefaultConfig(&vrefConfig);
         /* Initialize the VREF mode. */
         VREF_Init(VREF0, &vrefConfig);
@@ -168,7 +169,7 @@ void BOARD_AdcSwTrigger(uint32_t channel)
     mLpadcTriggerConfigStruct.enableHardwareTrigger = false;
     LPADC_SetConvTriggerConfig(LPADC_BASE, 0U, &mLpadcTriggerConfigStruct); /* Configurate the trigger0. */
 
-    LPADC_DoSoftwareTrigger(LPADC_BASE, 1U);                                /* 1U is trigger0 mask. */
+    LPADC_DoSoftwareTrigger(LPADC_BASE, 1U); /* 1U is trigger0 mask. */
 }
 
 /*!
@@ -189,24 +190,27 @@ float BOARD_GetTemperature(void)
     {
         if (triggerState != BOARD_AdcTriggerTemperature)
         {
-            /* Ensure to not be in an infinite while loop as LPADC_GetConvResult will always return false if nothing has been trigger */
+            /* Ensure to not be in an infinite while loop as LPADC_GetConvResult will always return false if nothing has
+             * been trigger */
             break;
         }
 
-        while(!LPADC_GetConvResult(LPADC_BASE, &mLpadcResultConfigStruct, 0U));
+        while (!LPADC_GetConvResult(LPADC_BASE, &mLpadcResultConfigStruct, 0U))
+            ;
 
         Vbe1 = (mLpadcResultConfigStruct.convValue) >> g_LpadcResultShift;
 
-        while(!LPADC_GetConvResult(LPADC_BASE, &mLpadcResultConfigStruct, 0U));
+        while (!LPADC_GetConvResult(LPADC_BASE, &mLpadcResultConfigStruct, 0U))
+            ;
 
         Vbe8 = (mLpadcResultConfigStruct.convValue) >> g_LpadcResultShift;
         /* Final temperature = A*[alpha*(Vbe8-Vbe1)/(Vbe8 + alpha*(Vbe8-Vbe1))] - B. */
         temperature = parameterSlope * (parameterAlpha * ((float)Vbe8 - (float)Vbe1) /
                                         ((float)Vbe8 + parameterAlpha * ((float)Vbe8 - (float)Vbe1))) -
-            parameterOffset;
+                      parameterOffset;
 
         triggerState = BOARD_AdcTriggerNone;
-    } while(false);
+    } while (false);
 
     return temperature;
 }
@@ -228,11 +232,13 @@ int8_t BOARD_GetBatteryLevel(void)
     {
         if (triggerState != BOARD_AdcTriggerBattery)
         {
-            /* Ensure to not be in an infinite while loop as LPADC_GetConvResult will always return false if nothing has been trigger */
+            /* Ensure to not be in an infinite while loop as LPADC_GetConvResult will always return false if nothing has
+             * been trigger */
             break;
         }
 
-        while(!LPADC_GetConvResult(LPADC_BASE, &mLpadcResultConfigStruct, 0U));
+        while (!LPADC_GetConvResult(LPADC_BASE, &mLpadcResultConfigStruct, 0U))
+            ;
 
         adcValSample = (mLpadcResultConfigStruct.convValue) >> g_LpadcResultShift;
 
@@ -249,13 +255,13 @@ int8_t BOARD_GetBatteryLevel(void)
         if (adcValSample < adcValBattEmpty)
         {
             /* Return 0 if the adc sample value is lower than the adc value of the empty battery voltage */
-           break;
+            break;
         }
 
         /* Calculate the battery level percent */
         batLvl = 100U * (adcValSample - adcValBattEmpty) / (adcValBattFull - adcValBattEmpty);
 
-    } while(false);
+    } while (false);
 
     return ((batLvl <= 100U) ? batLvl : 100U);
 }

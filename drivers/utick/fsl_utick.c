@@ -70,7 +70,7 @@ static uint32_t UTICK_GetInstance(UTICK_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_utickBases); instance++)
     {
-        if (s_utickBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_utickBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

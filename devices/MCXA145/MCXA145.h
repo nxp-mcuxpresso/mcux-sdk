@@ -1,6 +1,8 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA145VLL
+**     Processors:          MCXA145VFT
+**                          MCXA145VLH
+**                          MCXA145VLL
 **                          MCXA145VMP
 **                          MCXA145VPJ
 **
@@ -11,7 +13,7 @@
 **
 **     Reference manual:    MCXA18 User manual
 **     Version:             rev. 1.0, 2022-03-29
-**     Build:               b240403
+**     Build:               b240627
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA145
@@ -280,8 +282,8 @@ typedef enum _dma_request_source
     kDma0RequestMuxGpio2PinEventRequest0 = 62U,    /**< GPIO2 Pin event request 0 */
     kDma0RequestMuxGpio3PinEventRequest0 = 63U,    /**< GPIO3 Pin event request 0 */
     kDma0RequestMuxGpio4PinEventRequest0 = 64U,    /**< GPIO4 Pin event request 0 */
-    kDma0RequestMuxQdc0             = 65U,         /**< DMA request for new buffered value  */
-    kDma0RequestMuxQdc1             = 66U,         /**< DMA request for new buffered value  */
+    kDma0RequestMuxQdc0             = 65U,         /**< QDC0 DMA request for new buffered value  */
+    kDma0RequestMuxQdc1             = 66U,         /**< QDC1 DMA request for new buffered value  */
     kDma0RequestMuxFlexIO0ShiftRegister0Request = 71U, /**< FlexIO0 Shifter0 Status DMA request OR Timer0 Status DMA request */
     kDma0RequestMuxFlexIO0ShiftRegister1Request = 72U, /**< FlexIO0 Shifter1 Status DMA request OR Timer1 Status DMA request */
     kDma0RequestMuxFlexIO0ShiftRegister2Request = 73U, /**< FlexIO0 Shifter2 Status DMA request OR Timer2 Status DMA request */
@@ -18522,6 +18524,7 @@ typedef struct {
  *  0b0100111..PWM1_SM2_MUX_TRIG1 input is selected
  *  0b0101000..Reserved
  *  0b0101001..Reserved
+ *  0b0111111..Reserved(NO Clock)
  *  *..
  */
 #define INPUTMUX_FREQMEAS_REF_INP(x)             (((uint32_t)(((uint32_t)(x)) << INPUTMUX_FREQMEAS_REF_INP_SHIFT)) & INPUTMUX_FREQMEAS_REF_INP_MASK)
@@ -18575,6 +18578,7 @@ typedef struct {
  *  0b0100111..PWM1_SM2_MUX_TRIG1 input is selected
  *  0b0101000..Reserved
  *  0b0101001..Reserved
+ *  0b0111111..Reserved(NO Clock)
  *  *..
  */
 #define INPUTMUX_FREQMEAS_TAR_INP(x)             (((uint32_t)(((uint32_t)(x)) << INPUTMUX_FREQMEAS_TAR_INP_SHIFT)) & INPUTMUX_FREQMEAS_TAR_INP_MASK)
@@ -32752,7 +32756,6 @@ typedef struct {
  *  0b01..Regulate to mid voltage (1.0 V)
  *  0b10..Regulate to normal voltage (1.1 V)
  *  0b11..Reserved
- *  0b11..Reserved
  */
 #define SPC_ACTIVE_CFG_CORELDO_VDD_LVL(x)        (((uint32_t)(((uint32_t)(x)) << SPC_ACTIVE_CFG_CORELDO_VDD_LVL_SHIFT)) & SPC_ACTIVE_CFG_CORELDO_VDD_LVL_MASK)
 
@@ -32826,7 +32829,6 @@ typedef struct {
  *  0b01..Mid voltage (1.0 V)
  *  0b10..Normal voltage (1.1 V)
  *  0b11..Reserved
- *  0b11..Overdrive voltage (1.15 V)
  */
 #define SPC_LP_CFG_CORELDO_VDD_LVL(x)            (((uint32_t)(((uint32_t)(x)) << SPC_LP_CFG_CORELDO_VDD_LVL_SHIFT)) & SPC_LP_CFG_CORELDO_VDD_LVL_MASK)
 

@@ -192,6 +192,23 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 endif()
 
 
+if (CONFIG_USE_driver_p3t1755)
+# Add set(CONFIG_USE_driver_p3t1755 true) in config.cmake to use this component
+
+message("driver_p3t1755 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/sensor/p3t1755/fsl_p3t1755.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/sensor/p3t1755/.
+)
+
+
+endif()
+
+
 if (CONFIG_USE_DEVICES_Project_Template_RW612)
 # Add set(CONFIG_USE_DEVICES_Project_Template_RW612 true) in config.cmake to use this component
 
@@ -1319,10 +1336,15 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/fsl_loader_utils.c
   ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/nboot_hal.c
   ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/life_cycle.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/fw_bin/rw61x/rw61x_cpu1.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/fw_bin/rw61x/rw61x_cpu2.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/include
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/fw_bin
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/fw_bin/inc
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/fw_bin/rw61x
 )
 
 else()

@@ -61,7 +61,7 @@ static uint32_t XBARA_GetInstance(XBARA_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_xbaraBases); instance++)
     {
-        if (s_xbaraBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_xbaraBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

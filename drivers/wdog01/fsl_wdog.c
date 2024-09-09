@@ -34,7 +34,7 @@ static uint32_t WDOG_GetInstance(WDOG_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_wdogBases); instance++)
     {
-        if (s_wdogBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_wdogBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

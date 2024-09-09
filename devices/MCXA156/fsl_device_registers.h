@@ -13,7 +13,8 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MCXA156VLL) || defined(CPU_MCXA156VMP) || defined(CPU_MCXA156VPJ))
+#if (defined(CPU_MCXA156VFT) || defined(CPU_MCXA156VLH) || defined(CPU_MCXA156VLL) || \
+    defined(CPU_MCXA156VMP) || defined(CPU_MCXA156VPJ))
 
 #define MCXA156_SERIES
 
