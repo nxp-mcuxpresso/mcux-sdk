@@ -4,6 +4,7 @@ message("driver_netc component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/fsl_netc_endpoint.c
+    ${CMAKE_CURRENT_LIST_DIR}/fsl_netc_timer.c
     ${CMAKE_CURRENT_LIST_DIR}/fsl_netc_ierb.c
     ${CMAKE_CURRENT_LIST_DIR}/fsl_netc_mdio.c
     ${CMAKE_CURRENT_LIST_DIR}/netc_hw/fsl_netc_hw.c
