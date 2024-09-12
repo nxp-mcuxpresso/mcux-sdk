@@ -30,13 +30,12 @@ extern "C" {
     (((index) << EDMA_REGISTER_INDEX_SHIFT) |\
     ((access) << EDMA_REGISTER_ACCESS_SHIFT))
 
-/* common MP-related registers */
+/* register indexes */
 #define EDMA_MP_CS_INDEX 0
 #define EDMA_MP_ES_INDEX 1
 #define EDMA_MP_INT_INDEX 2
 #define EDMA_MP_HRS_INDEX 3
 #define EDMA_MP_CH_GRPRI_INDEX 4
-/* common TCD-related registers */
 #define EDMA_TCD_CH_CSR_INDEX 5
 #define EDMA_TCD_CH_ES_INDEX 6
 #define EDMA_TCD_CH_INT_INDEX 7
@@ -53,12 +52,10 @@ extern "C" {
 #define EDMA_TCD_DLAST_SGA_INDEX 18
 #define EDMA_TCD_CSR_INDEX 19
 #define EDMA_TCD_BITER_INDEX 20
-/* non-common MP-related registers */
 #define EDMA_MP_INT_LOW_INDEX 21
 #define EDMA_MP_INT_HIGH_INDEX 22
 #define EDMA_MP_HRS_LOW_INDEX 23
 #define EDMA_MP_HRS_HIGH_INDEX 24
-/* non-common TCD-related registers */
 #define EDMA_TCD_CH_MUX_INDEX 25
 #define EDMA_TCD_CH_MATTR_INDEX 26
 
