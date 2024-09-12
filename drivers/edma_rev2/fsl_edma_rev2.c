@@ -53,7 +53,7 @@ static uint32_t EDMA_GetChannelRegBase(edma_config_t *cfg, int channel, uint32_t
 {
     uint32_t index = EDMA_REG_INDEX(reg);
 
-    if (reg == EDMA_MP_CH_GRPRI) {
+    if (reg == EDMA_MP_CH_GRPRI || reg == EDMA_MP_CH_MUX) {
         return cfg->regmap + cfg->registerLayout[index] + channel * 0x4;
     } else {
         return EDMA_GetChannelBase(cfg, channel) + cfg->registerLayout[index];
@@ -118,6 +118,8 @@ uint32_t EDMA_MPRegRead(edma_config_t *cfg, uint32_t reg)
 
 status_t EDMA_SetChannelMux(edma_config_t *cfg, int channel, uint32_t mux)
 {
+    uint32_t muxReg;
+
     if (channel >= cfg->channels) {
         return kStatus_InvalidArgument;
     }
@@ -126,11 +128,17 @@ status_t EDMA_SetChannelMux(edma_config_t *cfg, int channel, uint32_t mux)
         return kStatus_EDMA_InvalidConfiguration;
     }
 
-    if (EDMA_ChannelRegRead(cfg, channel, EDMA_TCD_CH_MUX) != 0 && mux != 0) {
+    if (cfg->flags & EDMA_HAS_MP_MUX_FLAG) {
+        muxReg = EDMA_MP_CH_MUX;
+    } else {
+        muxReg = EDMA_TCD_CH_MUX;
+    }
+
+    if (EDMA_ChannelRegRead(cfg, channel, muxReg) != 0 && mux != 0) {
         return kStatus_Busy;
     }
 
-    EDMA_ChannelRegWrite(cfg, channel, EDMA_TCD_CH_MUX, mux);
+    EDMA_ChannelRegWrite(cfg, channel, muxReg, mux);
 
     return kStatus_Success;
 }

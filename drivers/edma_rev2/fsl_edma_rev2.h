@@ -16,6 +16,7 @@ extern "C" {
 /* flag macros */
 #define EDMA_HAS_CH_MUX_FLAG EDMA_BIT(0)
 #define EDMA_ALLOWS_128B_TRANSFER_FLAG EDMA_BIT(1)
+#define EDMA_HAS_MP_MUX_FLAG EDMA_BIT(2)
 
 /* internal utility macros */
 #define EDMA_BIT(x) (1 << (x))
@@ -58,6 +59,7 @@ extern "C" {
 #define EDMA_MP_HRS_HIGH_INDEX 24
 #define EDMA_TCD_CH_MUX_INDEX 25
 #define EDMA_TCD_CH_MATTR_INDEX 26
+#define EDMA_MP_CH_MUX_INDEX 27
 
 /* utility macros - for external and internal usage */
 #define EDMA_HAS_MUX(cfg) ((cfg)->flags & EDMA_HAS_CH_MUX_FLAG)
@@ -115,6 +117,7 @@ extern "C" {
 #define EDMA_MP_INT_HIGH EDMA_REGISTER_MAKE(EDMA_MP_INT_HIGH_INDEX, kEDMA_RegAccess32)
 #define EDMA_MP_HRS_LOW EDMA_REGISTER_MAKE(EDMA_MP_HRS_LOW_INDEX, kEDMA_RegAccess32)
 #define EDMA_MP_HRS_HIGH EDMA_REGISTER_MAKE(EDMA_MP_HRS_HIGH_INDEX, kEDMA_RegAccess32)
+#define EDMA_MP_CH_MUX EDMA_REGISTER_MAKE(EDMA_MP_CH_MUX_INDEX, kEDMA_RegAccess32)
 /* non-common TCD-related registers */
 #define EDMA_TCD_CH_MUX EDMA_REGISTER_MAKE(EDMA_TCD_CH_MUX_INDEX, kEDMA_RegAccess32)
 #define EDMA_TCD_CH_MATTR EDMA_REGISTER_MAKE(EDMA_TCD_CH_MATTR_INDEX, kEDMA_RegAccess16)
