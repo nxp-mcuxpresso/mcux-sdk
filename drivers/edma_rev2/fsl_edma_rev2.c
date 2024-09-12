@@ -250,6 +250,14 @@ status_t EDMA_ConfigureTransfer(edma_config_t *cfg, int channel,
     EDMA_ChannelRegWrite(cfg, channel, EDMA_TCD_BITER, EDMA_TCD_BITER_ELINKNO(biter));
     EDMA_ChannelRegWrite(cfg, channel, EDMA_TCD_NBYTES, EDMA_TCD_NBYTES_MLOFFNO(burstSize));
 
+    if (cfg->flags & EDMA_HAS_64BIT_TCD_FLAG) {
+        /* EDMA version has 64-bit TCD but 64-bit addresses are not currently
+         * supported by the API. Pad higher 32 bits with 0s.
+         */
+        EDMA_ChannelRegWrite(cfg, channel, EDMA_TCD_SADDR_HIGH, 0x0);
+        EDMA_ChannelRegWrite(cfg, channel, EDMA_TCD_DADDR_HIGH, 0x0);
+    }
+
     /* clean registers to make sure there's no leftover config */
     EDMA_ChannelRegWrite(cfg, channel, EDMA_TCD_CSR, 0);
 
