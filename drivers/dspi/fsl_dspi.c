@@ -20,8 +20,10 @@
 /*! @brief Typedef for master interrupt handler. */
 typedef void (*dspi_master_isr_t)(SPI_Type *base, dspi_master_handle_t *handle);
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*! @brief Typedef for slave interrupt handler. */
 typedef void (*dspi_slave_isr_t)(SPI_Type *base, dspi_slave_handle_t *handle);
+#endif
 
 /*******************************************************************************
  * Prototypes
@@ -53,18 +55,22 @@ static void DSPI_MasterTransferFillUpTxFifo(SPI_Type *base, dspi_master_handle_t
  */
 static void DSPI_MasterTransferComplete(SPI_Type *base, dspi_master_handle_t *handle);
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief Slave fill up the TX FIFO with data.
  * This is not a public API.
  */
 static void DSPI_SlaveTransferFillUpTxFifo(SPI_Type *base, dspi_slave_handle_t *handle);
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief Slave finish up a transfer.
  * It would call back if there is callback function and set the state to idle.
  * This is not a public API.
  */
 static void DSPI_SlaveTransferComplete(SPI_Type *base, dspi_slave_handle_t *handle);
+#endif
 
 /*!
  * @brief DSPI common interrupt handler.
@@ -111,8 +117,10 @@ static void *g_dspiHandle[ARRAY_SIZE(s_dspiBases)];
 /*! @brief Pointer to master IRQ handler for each instance. */
 static dspi_master_isr_t s_dspiMasterIsr;
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*! @brief Pointer to slave IRQ handler for each instance. */
 static dspi_slave_isr_t s_dspiSlaveIsr;
+#endif
 
 /* @brief Dummy data for each instance. This data is used when user's tx buffer is NULL*/
 volatile uint8_t g_dspiDummyData[ARRAY_SIZE(s_dspiBases)] = {0};
@@ -285,6 +293,7 @@ void DSPI_MasterGetDefaultConfig(dspi_master_config_t *masterConfig)
     masterConfig->samplePoint                = kDSPI_SckToSin0Clock;
 }
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * brief DSPI slave configuration.
  *
@@ -342,7 +351,9 @@ void DSPI_SlaveInit(SPI_Type *base, const dspi_slave_config_t *slaveConfig)
 
     DSPI_StartTransfer(base);
 }
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * brief Sets the dspi_slave_config_t structure to a default value.
  *
@@ -373,6 +384,7 @@ void DSPI_SlaveGetDefaultConfig(dspi_slave_config_t *slaveConfig)
     slaveConfig->enableModifiedTimingFormat = false;
     slaveConfig->samplePoint                = kDSPI_SckToSin0Clock;
 }
+#endif
 
 /*!
  * brief De-initializes the DSPI peripheral. Call this API to disable the DSPI clock.
@@ -787,6 +799,7 @@ void DSPI_MasterWriteCommandDataBlocking(SPI_Type *base, uint32_t data)
     }
 }
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * brief Writes data into the data buffer in slave mode, waits till data was transmitted, and returns.
  *
@@ -815,6 +828,7 @@ void DSPI_SlaveWriteDataBlocking(SPI_Type *base, uint32_t data)
     {
     }
 }
+#endif
 
 /*!
  * brief Enables the DSPI interrupts.
@@ -1707,6 +1721,7 @@ void DSPI_MasterTransferHandleIRQ(SPI_Type *base, dspi_master_handle_t *handle)
 }
 
 /*Transactional APIs -- Slave*/
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * brief Initializes the DSPI slave handle.
  *
@@ -1733,7 +1748,9 @@ void DSPI_SlaveTransferCreateHandle(SPI_Type *base,
     handle->callback = callback;
     handle->userData = userData;
 }
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * brief DSPI slave transfers data using an interrupt.
  *
@@ -1800,11 +1817,13 @@ status_t DSPI_SlaveTransferNonBlocking(SPI_Type *base, dspi_slave_handle_t *hand
         /* RX FIFO overflow request enable */
         DSPI_EnableInterrupts(base, (uint32_t)kDSPI_RxFifoOverflowInterruptEnable);
     }
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_RSER_TFUF_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_RSER_TFUF_SUPPORT)
     if (NULL != handle->txData)
     {
         /* TX FIFO underflow request enable */
         DSPI_EnableInterrupts(base, (uint32_t)kDSPI_TxFifoUnderflowInterruptEnable);
     }
+#endif
 
     DSPI_StartTransfer(base);
 
@@ -1813,7 +1832,9 @@ status_t DSPI_SlaveTransferNonBlocking(SPI_Type *base, dspi_slave_handle_t *hand
 
     return kStatus_Success;
 }
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * brief Gets the slave transfer count.
  *
@@ -1843,7 +1864,9 @@ status_t DSPI_SlaveTransferGetCount(SPI_Type *base, dspi_slave_handle_t *handle,
     *count = handle->totalByteCount - handle->remainingReceiveByteCount;
     return kStatus_Success;
 }
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 static void DSPI_SlaveTransferFillUpTxFifo(SPI_Type *base, dspi_slave_handle_t *handle)
 {
     assert(NULL != handle);
@@ -1931,15 +1954,21 @@ static void DSPI_SlaveTransferFillUpTxFifo(SPI_Type *base, dspi_slave_handle_t *
         DSPI_ClearStatusFlags(base, (uint32_t)kDSPI_TxFifoFillRequestFlag);
     }
 }
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 static void DSPI_SlaveTransferComplete(SPI_Type *base, dspi_slave_handle_t *handle)
 {
     assert(NULL != handle);
 
     /* Disable interrupt requests */
     DSPI_DisableInterrupts(
-        base, ((uint32_t)kDSPI_TxFifoUnderflowInterruptEnable | (uint32_t)kDSPI_TxFifoFillRequestInterruptEnable |
-               (uint32_t)kDSPI_RxFifoOverflowInterruptEnable | (uint32_t)kDSPI_RxFifoDrainRequestInterruptEnable));
+        base, (
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_RSER_TFUF_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_RSER_TFUF_SUPPORT)
+        (uint32_t)kDSPI_TxFifoUnderflowInterruptEnable |
+#endif
+        (uint32_t)kDSPI_TxFifoFillRequestInterruptEnable |
+        (uint32_t)kDSPI_RxFifoOverflowInterruptEnable | (uint32_t)kDSPI_RxFifoDrainRequestInterruptEnable));
 
     /* The transfer is complete. */
     handle->txData                    = NULL;
@@ -1964,7 +1993,9 @@ static void DSPI_SlaveTransferComplete(SPI_Type *base, dspi_slave_handle_t *hand
         handle->callback(base, handle, status, handle->userData);
     }
 }
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * brief DSPI slave aborts a transfer using an interrupt.
  *
@@ -1981,14 +2012,20 @@ void DSPI_SlaveTransferAbort(SPI_Type *base, dspi_slave_handle_t *handle)
 
     /* Disable interrupt requests */
     DSPI_DisableInterrupts(
-        base, ((uint32_t)kDSPI_TxFifoUnderflowInterruptEnable | (uint32_t)kDSPI_TxFifoFillRequestInterruptEnable |
+        base, (
+#if !(defined(FSL_FEATURE_FLEXCAN_HAS_NO_RSER_TFUF_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_NO_RSER_TFUF_SUPPORT)
+        (uint32_t)kDSPI_TxFifoUnderflowInterruptEnable |
+#endif
+        (uint32_t)kDSPI_TxFifoFillRequestInterruptEnable |
                (uint32_t)kDSPI_RxFifoOverflowInterruptEnable | (uint32_t)kDSPI_RxFifoDrainRequestInterruptEnable));
 
     handle->state                     = (uint8_t)kDSPI_Idle;
     handle->remainingSendByteCount    = 0;
     handle->remainingReceiveByteCount = 0;
 }
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * brief DSPI Master IRQ handler function.
  *
@@ -2145,6 +2182,7 @@ void DSPI_SlaveTransferHandleIRQ(SPI_Type *base, dspi_slave_handle_t *handle)
         return;
     }
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SR_TFUF_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SR_TFUF_SUPPORT)
     /* Catch tx fifo underflow conditions, service only if tx under flow interrupt enabled */
     if (0U != (DSPI_GetStatusFlags(base) & (uint32_t)kDSPI_TxFifoUnderflowFlag))
     {
@@ -2159,6 +2197,7 @@ void DSPI_SlaveTransferHandleIRQ(SPI_Type *base, dspi_slave_handle_t *handle)
             handle->errorCount++;
         }
     }
+#endif
 
     /* Catch rx fifo overflow conditions, service only if rx over flow interrupt enabled */
     if (0U != (DSPI_GetStatusFlags(base) & (uint32_t)kDSPI_RxFifoOverflowFlag))
@@ -2175,6 +2214,7 @@ void DSPI_SlaveTransferHandleIRQ(SPI_Type *base, dspi_slave_handle_t *handle)
         }
     }
 }
+#endif
 
 static void DSPI_CommonIRQHandler(SPI_Type *base, void *param)
 {
@@ -2182,10 +2222,12 @@ static void DSPI_CommonIRQHandler(SPI_Type *base, void *param)
     {
         s_dspiMasterIsr(base, (dspi_master_handle_t *)param);
     }
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
     else
     {
         s_dspiSlaveIsr(base, (dspi_slave_handle_t *)param);
     }
+#endif
     SDK_ISR_EXIT_BARRIER;
 }
 

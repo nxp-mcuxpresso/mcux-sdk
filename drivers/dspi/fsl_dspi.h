@@ -47,13 +47,18 @@ enum _dspi_flags
 {
     kDSPI_TxCompleteFlag         = (int)SPI_SR_TCF_MASK, /*!< Transfer Complete Flag. */
     kDSPI_EndOfQueueFlag         = SPI_SR_EOQF_MASK,     /*!< End of Queue Flag.*/
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SR_TFUF_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SR_TFUF_SUPPORT)
     kDSPI_TxFifoUnderflowFlag    = SPI_SR_TFUF_MASK,     /*!< Transmit FIFO Underflow Flag.*/
+#endif
     kDSPI_TxFifoFillRequestFlag  = SPI_SR_TFFF_MASK,     /*!< Transmit FIFO Fill Flag.*/
     kDSPI_RxFifoOverflowFlag     = SPI_SR_RFOF_MASK,     /*!< Receive FIFO Overflow Flag.*/
     kDSPI_RxFifoDrainRequestFlag = SPI_SR_RFDF_MASK,     /*!< Receive FIFO Drain Flag.*/
     kDSPI_TxAndRxStatusFlag      = SPI_SR_TXRXS_MASK,    /*!< The module is in Stopped/Running state.*/
-    kDSPI_AllStatusFlag          = (int)(SPI_SR_TCF_MASK | SPI_SR_EOQF_MASK | SPI_SR_TFUF_MASK | SPI_SR_TFFF_MASK |
-                                SPI_SR_RFOF_MASK | SPI_SR_RFDF_MASK | SPI_SR_TXRXS_MASK) /*!< All statuses above.*/
+    kDSPI_AllStatusFlag          = (int)(SPI_SR_TCF_MASK | SPI_SR_EOQF_MASK |
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SR_TFUF_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SR_TFUF_SUPPORT)
+                                SPI_SR_TFUF_MASK |
+#endif
+                                SPI_SR_TFFF_MASK | SPI_SR_RFOF_MASK | SPI_SR_RFDF_MASK | SPI_SR_TXRXS_MASK) /*!< All statuses above.*/
 };
 
 /*! @brief DSPI interrupt source.*/
@@ -61,11 +66,16 @@ enum _dspi_interrupt_enable
 {
     kDSPI_TxCompleteInterruptEnable         = (int)SPI_RSER_TCF_RE_MASK, /*!< TCF  interrupt enable.*/
     kDSPI_EndOfQueueInterruptEnable         = SPI_RSER_EOQF_RE_MASK,     /*!< EOQF interrupt enable.*/
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_RSER_TFUF_RE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_RSER_TFUF_RE_SUPPORT)
     kDSPI_TxFifoUnderflowInterruptEnable    = SPI_RSER_TFUF_RE_MASK,     /*!< TFUF interrupt enable.*/
+#endif
     kDSPI_TxFifoFillRequestInterruptEnable  = SPI_RSER_TFFF_RE_MASK,     /*!< TFFF interrupt enable, DMA disable.*/
     kDSPI_RxFifoOverflowInterruptEnable     = SPI_RSER_RFOF_RE_MASK,     /*!< RFOF interrupt enable.*/
     kDSPI_RxFifoDrainRequestInterruptEnable = SPI_RSER_RFDF_RE_MASK,     /*!< RFDF interrupt enable, DMA disable.*/
-    kDSPI_AllInterruptEnable = (int)(SPI_RSER_TCF_RE_MASK | SPI_RSER_EOQF_RE_MASK | SPI_RSER_TFUF_RE_MASK |
+    kDSPI_AllInterruptEnable = (int)(SPI_RSER_TCF_RE_MASK | SPI_RSER_EOQF_RE_MASK |
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_RSER_TFUF_RE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_RSER_TFUF_RE_SUPPORT)
+                                     SPI_RSER_TFUF_RE_MASK |
+#endif
                                      SPI_RSER_TFFF_RE_MASK | SPI_RSER_RFOF_RE_MASK | SPI_RSER_RFDF_RE_MASK)
     /*!< All above interrupts enable.*/
 };
@@ -201,14 +211,18 @@ enum _dspi_transfer_config_flag_for_master
     /*!< Indicates whether the PCS signal is active after the last frame transfer.*/
 };
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 #define DSPI_SLAVE_CTAR_SHIFT (0U)    /*!< DSPI slave CTAR shift macro; used internally. */
 #define DSPI_SLAVE_CTAR_MASK  (0x07U) /*!< DSPI slave CTAR mask macro; used internally. */
+#endif
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*! @brief Use this enumeration for the DSPI slave transfer configFlags. */
 enum _dspi_transfer_config_flag_for_slave
 {
     kDSPI_SlaveCtar0 = 0U << DSPI_SLAVE_CTAR_SHIFT, /*!< DSPI slave transfer use CTAR0 setting.
                                                          DSPI slave can only use PCS0. */
 };
+#endif
 
 /*! @brief DSPI transfer state, which is used for DSPI transactional API state machine. */
 enum _dspi_transfer_state
@@ -269,6 +283,7 @@ typedef struct _dspi_master_config
                                                  Format. It's valid only when CPHA=0. */
 } dspi_master_config_t;
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*! @brief DSPI slave ctar configuration structure.*/
 typedef struct _dspi_slave_ctar_config
 {
@@ -277,7 +292,9 @@ typedef struct _dspi_slave_ctar_config
     dspi_clock_phase_t cpha;    /*!< Clock phase. */
                                 /*!< Slave only supports MSB and does not support LSB.*/
 } dspi_slave_ctar_config_t;
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*! @brief DSPI slave configuration structure.*/
 typedef struct _dspi_slave_config
 {
@@ -294,16 +311,19 @@ typedef struct _dspi_slave_config
     dspi_master_sample_point_t samplePoint; /*!< Controls when the module master samples SIN in the Modified Transfer
                                                Format. It's valid only when CPHA=0. */
 } dspi_slave_config_t;
+#endif
 
 /*!
  * @brief Forward declaration of the @ref _dspi_master_handle typedefs.
  */
 typedef struct _dspi_master_handle dspi_master_handle_t; /*!< The master handle. */
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief Forward declaration of the @ref _dspi_slave_handle typedefs.
  */
 typedef struct _dspi_slave_handle dspi_slave_handle_t; /*!< The slave handle. */
+#endif
 
 /*!
  * @brief Completion callback function pointer type.
@@ -317,6 +337,8 @@ typedef void (*dspi_master_transfer_callback_t)(SPI_Type *base,
                                                 dspi_master_handle_t *handle,
                                                 status_t status,
                                                 void *userData);
+
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief Completion callback function pointer type.
  *
@@ -329,6 +351,7 @@ typedef void (*dspi_slave_transfer_callback_t)(SPI_Type *base,
                                                dspi_slave_handle_t *handle,
                                                status_t status,
                                                void *userData);
+#endif
 
 /*! @brief DSPI master/slave transfer structure.*/
 typedef struct _dspi_transfer
@@ -380,6 +403,7 @@ struct _dspi_master_handle
     void *userData;                           /*!< Callback user data. */
 };
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*! @brief DSPI slave transfer handle structure used for the transactional API. */
 struct _dspi_slave_handle
 {
@@ -399,6 +423,7 @@ struct _dspi_slave_handle
     dspi_slave_transfer_callback_t callback; /*!< Completion callback. */
     void *userData;                          /*!< Callback user data. */
 };
+#endif
 
 /**********************************************************************************************************************
  * API
@@ -457,6 +482,7 @@ void DSPI_MasterInit(SPI_Type *base, const dspi_master_config_t *masterConfig, u
  */
 void DSPI_MasterGetDefaultConfig(dspi_master_config_t *masterConfig);
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief DSPI slave configuration.
  *
@@ -478,7 +504,9 @@ void DSPI_MasterGetDefaultConfig(dspi_master_config_t *masterConfig);
  * @param slaveConfig Pointer to the structure @ref dspi_master_config_t.
  */
 void DSPI_SlaveInit(SPI_Type *base, const dspi_slave_config_t *slaveConfig);
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief Sets the @ref dspi_slave_config_t structure to a default value.
  *
@@ -493,6 +521,7 @@ void DSPI_SlaveInit(SPI_Type *base, const dspi_slave_config_t *slaveConfig);
  * @param slaveConfig Pointer to the @ref dspi_slave_config_t structure.
  */
 void DSPI_SlaveGetDefaultConfig(dspi_slave_config_t *slaveConfig);
+#endif
 
 /*!
  * @brief De-initializes the DSPI peripheral. Call this API to disable the DSPI clock.
@@ -657,10 +686,12 @@ static inline uint32_t DSPI_MasterGetTxRegisterAddress(SPI_Type *base)
  * @param base DSPI peripheral address.
  * @return The DSPI slave PUSHR data register address.
  */
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 static inline uint32_t DSPI_SlaveGetTxRegisterAddress(SPI_Type *base)
 {
     return (uint32_t) & (base->PUSHR_SLAVE);
 }
+#endif
 
 /*!
  * @brief Gets the DSPI POPR data register address for the DMA operation.
@@ -998,6 +1029,7 @@ static inline uint32_t DSPI_MasterGetFormattedCommand(dspi_command_data_config_t
  */
 void DSPI_MasterWriteCommandDataBlocking(SPI_Type *base, uint32_t data);
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief Writes data into the data buffer in slave mode.
  *
@@ -1010,7 +1042,9 @@ static inline void DSPI_SlaveWriteData(SPI_Type *base, uint32_t data)
 {
     base->PUSHR_SLAVE = data;
 }
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief Writes data into the data buffer in slave mode, waits till data was transmitted, and returns.
  *
@@ -1021,6 +1055,7 @@ static inline void DSPI_SlaveWriteData(SPI_Type *base, uint32_t data)
  * @param data The data to send.
  */
 void DSPI_SlaveWriteDataBlocking(SPI_Type *base, uint32_t data);
+#endif
 
 /*!
  * @brief Reads data from the data buffer.
@@ -1152,6 +1187,7 @@ void DSPI_MasterTransferAbort(SPI_Type *base, dspi_master_handle_t *handle);
  */
 void DSPI_MasterTransferHandleIRQ(SPI_Type *base, dspi_master_handle_t *handle);
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief Initializes the DSPI slave handle.
  *
@@ -1167,7 +1203,9 @@ void DSPI_SlaveTransferCreateHandle(SPI_Type *base,
                                     dspi_slave_handle_t *handle,
                                     dspi_slave_transfer_callback_t callback,
                                     void *userData);
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief DSPI slave transfers data using an interrupt.
  *
@@ -1180,7 +1218,9 @@ void DSPI_SlaveTransferCreateHandle(SPI_Type *base,
  * @return status of status_t.
  */
 status_t DSPI_SlaveTransferNonBlocking(SPI_Type *base, dspi_slave_handle_t *handle, dspi_transfer_t *transfer);
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief Gets the slave transfer count.
  *
@@ -1192,7 +1232,9 @@ status_t DSPI_SlaveTransferNonBlocking(SPI_Type *base, dspi_slave_handle_t *hand
  * @return status of status_t.
  */
 status_t DSPI_SlaveTransferGetCount(SPI_Type *base, dspi_slave_handle_t *handle, size_t *count);
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief DSPI slave aborts a transfer using an interrupt.
  *
@@ -1202,7 +1244,9 @@ status_t DSPI_SlaveTransferGetCount(SPI_Type *base, dspi_slave_handle_t *handle,
  * @param handle Pointer to the @ref _dspi_slave_handle structure which stores the transfer state.
  */
 void DSPI_SlaveTransferAbort(SPI_Type *base, dspi_slave_handle_t *handle);
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief DSPI Master IRQ handler function.
  *
@@ -1212,6 +1256,7 @@ void DSPI_SlaveTransferAbort(SPI_Type *base, dspi_slave_handle_t *handle);
  * @param handle Pointer to the @ref _dspi_slave_handle structure which stores the transfer state.
  */
 void DSPI_SlaveTransferHandleIRQ(SPI_Type *base, dspi_slave_handle_t *handle);
+#endif
 
 /*!
  * brief Dummy data for each instance.

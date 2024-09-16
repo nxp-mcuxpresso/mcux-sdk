@@ -38,10 +38,12 @@
  */
 typedef struct _dspi_master_edma_handle dspi_master_edma_handle_t;
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief Forward declaration of the DSPI eDMA slave handle typedefs.
  */
 typedef struct _dspi_slave_edma_handle dspi_slave_edma_handle_t;
+#endif
 
 /*!
  * @brief Completion callback function pointer type.
@@ -55,6 +57,7 @@ typedef void (*dspi_master_edma_transfer_callback_t)(SPI_Type *base,
                                                      dspi_master_edma_handle_t *handle,
                                                      status_t status,
                                                      void *userData);
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief Completion callback function pointer type.
  *
@@ -67,6 +70,7 @@ typedef void (*dspi_slave_edma_transfer_callback_t)(SPI_Type *base,
                                                     dspi_slave_edma_handle_t *handle,
                                                     status_t status,
                                                     void *userData);
+#endif
 
 /*! @brief DSPI master eDMA transfer handle structure used for the transactional API. */
 struct _dspi_master_edma_handle
@@ -102,6 +106,7 @@ struct _dspi_master_edma_handle
     edma_tcd_t dspiSoftwareTCD[2]; /*!<SoftwareTCD , internal used*/
 };
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*! @brief DSPI slave eDMA transfer handle structure used for the transactional API.*/
 struct _dspi_slave_edma_handle
 {
@@ -127,6 +132,7 @@ struct _dspi_slave_edma_handle
     edma_handle_t *edmaRxRegToRxDataHandle; /*!<edma_handle_t handle point used for RxReg to RxData buff*/
     edma_handle_t *edmaTxDataToTxRegHandle; /*!<edma_handle_t handle point used for TxData to TxReg*/
 };
+#endif
 
 /***********************************************************************************************************************
  * API
@@ -221,6 +227,7 @@ void DSPI_MasterTransferAbortEDMA(SPI_Type *base, dspi_master_edma_handle_t *han
  */
 status_t DSPI_MasterTransferGetCountEDMA(SPI_Type *base, dspi_master_edma_handle_t *handle, size_t *count);
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief Initializes the DSPI slave eDMA handle.
  *
@@ -246,7 +253,9 @@ void DSPI_SlaveTransferCreateHandleEDMA(SPI_Type *base,
                                         void *userData,
                                         edma_handle_t *edmaRxRegToRxDataHandle,
                                         edma_handle_t *edmaTxDataToTxRegHandle);
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief DSPI slave transfer data using eDMA.
  *
@@ -265,7 +274,9 @@ void DSPI_SlaveTransferCreateHandleEDMA(SPI_Type *base,
  * @return status of status_t.
  */
 status_t DSPI_SlaveTransferEDMA(SPI_Type *base, dspi_slave_edma_handle_t *handle, dspi_transfer_t *transfer);
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief DSPI slave aborts a transfer which is using eDMA.
  *
@@ -275,7 +286,9 @@ status_t DSPI_SlaveTransferEDMA(SPI_Type *base, dspi_slave_edma_handle_t *handle
  * @param handle A pointer to the @ref _dspi_slave_edma_handle structure which stores the transfer state.
  */
 void DSPI_SlaveTransferAbortEDMA(SPI_Type *base, dspi_slave_edma_handle_t *handle);
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief Gets the slave eDMA transfer count.
  *
@@ -287,6 +300,7 @@ void DSPI_SlaveTransferAbortEDMA(SPI_Type *base, dspi_slave_edma_handle_t *handl
  * @return status of status_t.
  */
 status_t DSPI_SlaveTransferGetCountEDMA(SPI_Type *base, dspi_slave_edma_handle_t *handle, size_t *count);
+#endif
 
 /*!@}*/
 

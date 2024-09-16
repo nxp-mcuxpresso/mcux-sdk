@@ -26,6 +26,7 @@ typedef struct _dspi_master_edma_private_handle
     dspi_master_edma_handle_t *handle; /*!< dspi_master_edma_handle_t handle */
 } dspi_master_edma_private_handle_t;
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief Structure definition for dspi_slave_edma_private_handle_t. The structure is private.
  */
@@ -34,6 +35,7 @@ typedef struct _dspi_slave_edma_private_handle
     SPI_Type *base;                   /*!< DSPI peripheral base address. */
     dspi_slave_edma_handle_t *handle; /*!< dspi_master_edma_handle_t handle */
 } dspi_slave_edma_private_handle_t;
+#endif
 
 /***********************************************************************************************************************
  * Prototypes
@@ -47,6 +49,7 @@ static void EDMA_DspiMasterCallback(edma_handle_t *edmaHandle,
                                     bool transferDone,
                                     uint32_t tcds);
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * @brief EDMA_DspiSlaveCallback after the DSPI slave transfer completed by using EDMA.
  * This is not a public API.
@@ -55,6 +58,7 @@ static void EDMA_DspiSlaveCallback(edma_handle_t *edmaHandle,
                                    void *g_dspiEdmaPrivateHandle,
                                    bool transferDone,
                                    uint32_t tcds);
+#endif
 
 /***********************************************************************************************************************
  * Variables
@@ -62,7 +66,9 @@ static void EDMA_DspiSlaveCallback(edma_handle_t *edmaHandle,
 
 /*! @brief Pointers to dspi edma handles for each instance. */
 static dspi_master_edma_private_handle_t s_dspiMasterEdmaPrivateHandle[FSL_FEATURE_SOC_DSPI_COUNT];
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 static dspi_slave_edma_private_handle_t s_dspiSlaveEdmaPrivateHandle[FSL_FEATURE_SOC_DSPI_COUNT];
+#endif
 
 /***********************************************************************************************************************
  * Code
@@ -1101,6 +1107,7 @@ status_t DSPI_MasterTransferGetCountEDMA(SPI_Type *base, dspi_master_edma_handle
     return kStatus_Success;
 }
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * brief Initializes the DSPI slave eDMA handle.
  *
@@ -1145,7 +1152,9 @@ void DSPI_SlaveTransferCreateHandleEDMA(SPI_Type *base,
     handle->edmaRxRegToRxDataHandle = edmaRxRegToRxDataHandle;
     handle->edmaTxDataToTxRegHandle = edmaTxDataToTxRegHandle;
 }
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * brief DSPI slave transfer data using eDMA.
  *
@@ -1463,7 +1472,9 @@ status_t DSPI_SlaveTransferEDMA(SPI_Type *base, dspi_slave_edma_handle_t *handle
 
     return kStatus_Success;
 }
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 static void EDMA_DspiSlaveCallback(edma_handle_t *edmaHandle,
                                    void *g_dspiEdmaPrivateHandle,
                                    bool transferDone,
@@ -1486,7 +1497,9 @@ static void EDMA_DspiSlaveCallback(edma_handle_t *edmaHandle,
                                                 kStatus_Success, dspiEdmaPrivateHandle->handle->userData);
     }
 }
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * brief DSPI slave aborts a transfer which is using eDMA.
  *
@@ -1508,7 +1521,9 @@ void DSPI_SlaveTransferAbortEDMA(SPI_Type *base, dspi_slave_edma_handle_t *handl
 
     handle->state = (uint8_t)kDSPI_Idle;
 }
+#endif
 
+#if !(defined(FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT) && FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT)
 /*!
  * brief Gets the slave eDMA transfer count.
  *
@@ -1544,3 +1559,4 @@ status_t DSPI_SlaveTransferGetCountEDMA(SPI_Type *base, dspi_slave_edma_handle_t
 
     return kStatus_Success;
 }
+#endif
