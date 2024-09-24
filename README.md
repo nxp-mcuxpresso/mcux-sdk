@@ -34,7 +34,6 @@ This mcux-sdk project/repo provides the fundamental support for all NXP hot part
 **The project is also the main repository to achieve the whole SDK delivery**, it contains the [west.yml](https://github.com/NXPmicro/mcux-sdk/blob/main/west.yml) which keeps description and revision for other projects in the overall MCUXpresso delivery. Not all MCUXpresso SDK middleware are available in this MCUXpresso SDK Github delivery, checking west.yml for each release you will see the available middleware included in the release. The superset of available middlewares is listed as below for your information:
 - RTOS
   - [FreeRTOS-Kernel](https://github.com/nxp-mcuxpresso/FreeRTOS-Kernel)
-  - [Azure RTOS](https://github.com/NXP/azure-rtos)
 - Middleware
   - [Sdmmc](https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-sdmmc)
   - [Multicore(erpc, rpmsg-lite)](https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-multicore)
